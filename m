@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FCBFCAC
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 17:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88CAEFCE7
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 17:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726030AbfD3PWK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Apr 2019 11:22:10 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:44966 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbfD3PWK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Apr 2019 11:22:10 -0400
-Received: by mail-vs1-f66.google.com with SMTP id j184so8188949vsd.11;
-        Tue, 30 Apr 2019 08:22:09 -0700 (PDT)
+        id S1726015AbfD3Pa2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Apr 2019 11:30:28 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:33042 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725995AbfD3Pa2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Apr 2019 11:30:28 -0400
+Received: by mail-vs1-f65.google.com with SMTP id s11so8273953vsn.0;
+        Tue, 30 Apr 2019 08:30:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=R2svcNMtHHNUl5TnbjQhyWeAeujJoUOh21meiL4jUDk=;
-        b=ieWy6vjERj+fT4MVZ6h+LYnBbOg+jeJKUDjQagNEF6qAg8D3uiXafCsjA1Q4S0r+8D
-         c/xc69Amvm2dtJnXuGRTPyupt5V3OQFvQC7Rsi/5NjmVtRJS+e6bbfQ3ScO4YuuiA5DG
-         pAAoni9ltUilxb2Bit6KRJNHgCc7z25iQ004t4hpuh1gN8wUMebG0MpuWrF1MD5zYnVw
-         Gx6Ns9hvv7nCf5UwPLUEzDG7DRBo6JbY3gYiSzEj9XidcO15e9NokI/UqS+6zZN3UKPz
-         A3BcuPYxLm+mHZ22OxeY3bjw9aDAZFuK2dNlAIK2Dj6nUXFOeKbwVOfwLyhJRoa51QTi
-         dE0A==
-X-Gm-Message-State: APjAAAUkATzEKVefNM1pZR+zYYlBy+tzmDXJlzUpXrzFQZlNAMWqRQjZ
-        EdXvvJZ06PEXyl/v+PaRBfQEPFGNN0Gj68Le2WY=
-X-Google-Smtp-Source: APXvYqycXJCO1qpyG1TRYg64mS4XPWpfu87kuLjylx9qIE9m6qABJUJRWshJoHBNSshdedCHIIp22ogarKfu6mjneAo=
-X-Received: by 2002:a67:ba07:: with SMTP id l7mr8481280vsn.11.1556637728763;
- Tue, 30 Apr 2019 08:22:08 -0700 (PDT)
+        bh=J3XpssCaaRIdY7okL1peQ2px2hJ+XExe2uf8ZFq4b1Q=;
+        b=d2YO5yQI1d9ZCS6DdnetE/XMChMVM3fQ9MPPhvYhHoafe9arRw8RurXx7Eow14WhZA
+         /E2SZKEco7Bu1/X5Jij1lxLsMz6FdjaYCELuB4xow6Qmr1lZjBsfucR7irEikmmCj1o9
+         SUo46BGfPEZ/UzQFEruvsxEtbbaNdgxM3i77QZZVi0YcBew6eIO96DP+G+fHRTcBEZpp
+         y03KQJb1iPsromu13l1/oV9CQ9W525/5oOgdegA4e7Q8OStzqlePSuQ3OZbPpv6g99gj
+         ccy19N1CLKlUGyKwf026+cWLf6LtCKmVUYDh0K5s9WcT42EDK7nl0gqb9OqpkUsk01Dh
+         n/Aw==
+X-Gm-Message-State: APjAAAVkM9OMJewWMMabFqQ/Ue2Vi395rgW4Zbz3SEhNxkhQ/yfCVH57
+        n4qLS6rY+h23reW3MGFMkvsMDaO/TEzL9jxcdvphzkbH
+X-Google-Smtp-Source: APXvYqwZIP/Hv2ipeHx0fPMI4fny2wArCoXj0oVTs0i9ek3R+/gp4gAkcJ0ix2h/lnbLkzxNJyxT507o1S4duct3byc=
+X-Received: by 2002:a67:ba07:: with SMTP id l7mr8510846vsn.11.1556638227276;
+ Tue, 30 Apr 2019 08:30:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190430132309.12473-1-chris.brandt@renesas.com> <20190430132309.12473-7-chris.brandt@renesas.com>
-In-Reply-To: <20190430132309.12473-7-chris.brandt@renesas.com>
+References: <20190430132309.12473-1-chris.brandt@renesas.com> <20190430132309.12473-8-chris.brandt@renesas.com>
+In-Reply-To: <20190430132309.12473-8-chris.brandt@renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 30 Apr 2019 17:21:57 +0200
-Message-ID: <CAMuHMdWzN_1XmO8w_otDseJ+bxk+AKNouk-ycPPyM2XWMWritQ@mail.gmail.com>
-Subject: Re: [PATCH 6/7] ARM: dts: r7s9210-rza2mevb: Add Ethernet support
+Date:   Tue, 30 Apr 2019 17:30:15 +0200
+Message-ID: <CAMuHMdUSqFQXfbrp9_PxY1a0ieH8AWr6Dh-SY1ULzOXd2h0-Xg@mail.gmail.com>
+Subject: Re: [PATCH 7/7] ARM: dts: r7s9210-rza2mevb: Add SDHI support
 To:     Chris Brandt <chris.brandt@renesas.com>
 Cc:     Simon Horman <horms@verge.net.au>,
         Rob Herring <robh+dt@kernel.org>,
@@ -50,25 +50,13 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Chris,
-
 On Tue, Apr 30, 2019 at 3:33 PM Chris Brandt <chris.brandt@renesas.com> wrote:
-> The RZ/A2M EVB sub board has 2 Ethernet jacks on it.
->
-> Set switch SW6_4        to ON to use Ethernet Ch-0
-> Set switch SW6_5        to ON to use Ethernet Ch-1
+> The RZ/A2M EVB supports 2 SD card slots. A micro SD slot on the CPU
+> board, and a full SD card slot on the sub board.
 >
 > Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
 
-Thanks for your patch!
-
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> --- a/arch/arm/boot/dts/r7s9210-rza2mevb.dts
-> +++ b/arch/arm/boot/dts/r7s9210-rza2mevb.dts
-
-Perhaps you want to add an "ethernet0" alias, so U-Boot can find the
-device-node and add an appropriate "local-mac-address" property?
 
 Gr{oetje,eeting}s,
 
