@@ -2,87 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B022EF372
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 11:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC57F942
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 14:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbfD3Jrm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Apr 2019 05:47:42 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:34575 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726012AbfD3Jrm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Apr 2019 05:47:42 -0400
-Received: by mail-wm1-f67.google.com with SMTP id b67so1919186wmg.1
-        for <linux-i2c@vger.kernel.org>; Tue, 30 Apr 2019 02:47:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Fn5ZvF6ltaEO/lfTX4VKdpMTpkniAkIQRod6AzKe1rU=;
-        b=QUjHJs1bHrjfwd8JfzsPC3JX9yrBRVJoPdAHQVnpKHjhIAzq9/sYw8OhDQUWBeLbb6
-         gHtd5AjPIwI+/P5X5B5LOdedb6Fo6sPQ2ZpsN2yUJUV8mAIhViXmUGtQMONKm2m9Yv/o
-         pbv5vDKLfb/PBYUGEbJ8AjW7bgOEGHzZQYsFGr1Z1Wg4my/3XM6HM502qWk6E/IBscrU
-         9K8qc8pFVl6lPsbw+f4q5MCA9I0ECzKf0Mb7ly6Fl67K5Md9Jt+nFdD5Be+SzMHKcADJ
-         B4uFwNH6l7H7voG02C1FK6krZoXeiXMvoz/gxK1F7YvaN0zZvoAgEfzyqkq7KwZWMjo6
-         vZjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Fn5ZvF6ltaEO/lfTX4VKdpMTpkniAkIQRod6AzKe1rU=;
-        b=uOOMLZN1FnUAeypDeyJA04InoqKMTWbBOsiSQSV4NCZtUk64fOI0QaNgQrMFpNO+vW
-         0EfRrcdW97XRwRFuSvI3uXlcYp4M3vciwxc16YNCbeLQSy52GQuVewziEpFhzi9WyTt+
-         8CQn3+6LyzlRyPW/AiuHDeUNJukYLEKsn0B+R7/6Wj94DCHOXXngrBm0447kJ0ncbwDT
-         mEZ1Juz3jqsI9WCOf5qtA2tOpeYFzjE6j4722SRBdrAXN/TOlU73ieHE7K7v3Tu3URnM
-         ekyauRaDfBzydUQ6ze6iOXCtbtwdxGUd9o7bgPa2QddoVyPj+QtD9U8XzlIkYmnpq1yx
-         Ji8w==
-X-Gm-Message-State: APjAAAXJwAAXp+hWo2/170FCNqcgkNStEyXqvPuFdhtVuGJkxePpB0jg
-        9F+43pIhPSGLCmgZWlvqBsjDWS2TdpUEXkDi
-X-Google-Smtp-Source: APXvYqyJ3bYH6x5Krc67uTAiKWx3zIrQFByJtvz/Yf/U7wAx8omfyeWY/YeCVF+O7PYEc/YQhv6yyQ==
-X-Received: by 2002:a1c:4602:: with SMTP id t2mr2437438wma.120.1556617660443;
-        Tue, 30 Apr 2019 02:47:40 -0700 (PDT)
-Received: from sudo.home ([2a01:cb1d:112:6f00:1ca3:6afc:30c:1068])
-        by smtp.gmail.com with ESMTPSA id p17sm2235819wrg.92.2019.04.30.02.47.39
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Apr 2019 02:47:39 -0700 (PDT)
-From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
-To:     linux-i2c@vger.kernel.org
-Cc:     wsa@the-dreams.de, masahisa.kojima@linaro.org,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Subject: [PATCH] i2c: synquacer: fix enumeration of slave devices
-Date:   Tue, 30 Apr 2019 11:47:34 +0200
-Message-Id: <20190430094734.21414-1-ard.biesheuvel@linaro.org>
-X-Mailer: git-send-email 2.20.1
+        id S1727695AbfD3Mu5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Apr 2019 08:50:57 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36873 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726166AbfD3Muz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Apr 2019 08:50:55 -0400
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <sha@pengutronix.de>)
+        id 1hLSDe-00022T-2M; Tue, 30 Apr 2019 14:50:46 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <sha@pengutronix.de>)
+        id 1hLSDb-0001O9-43; Tue, 30 Apr 2019 14:50:43 +0200
+Date:   Tue, 30 Apr 2019 14:50:43 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Chuanhua Han <chuanhua.han@nxp.com>
+Cc:     shawnguo@kernel.org, leoyang.li@nxp.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, festevam@gmail.com, linux-imx@nxp.com,
+        wsa+renesas@sang-engineering.com, u.kleine-koenig@pengutronix.de,
+        eha@deif.com, linux@rempel-privat.de, l.stach@pengutronix.de,
+        peda@axentia.se, sumit.batra@nxp.com
+Subject: Re: [PATCH 1/2] i2c: imx: I2C Driver doesn't consider I2C_IPGCLK_SEL
+ RCW bit when using ls1046a SoC
+Message-ID: <20190430125043.weqwzim4gpsvtkfe@pengutronix.de>
+References: <20190430044719.30720-1-chuanhua.han@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190430044719.30720-1-chuanhua.han@nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 14:47:42 up 42 days, 23:58, 86 users,  load average: 1.11, 1.13,
+ 1.10
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The I2C host driver for SynQuacer fails to populate the of_node and
-ACPI companion fields of the struct i2c_adapter it instantiates,
-resulting in enumeration of the subordinate I2C bus to fail.
+On Tue, Apr 30, 2019 at 12:47:18PM +0800, Chuanhua Han wrote:
+> The current kernel driver does not consider I2C_IPGCLK_SEL (424 bit
+> of RCW) in deciding  i2c_clk_rate in function i2c_imx_set_clk()
+> { 0 Platform clock/4, 1 Platform clock/2}.
+> 
+> When using ls1046a SoC, this populates incorrect value in IBFD register
+> if I2C_IPGCLK_SEL = 0, which generates half of the desired Clock.
+> 
+> Therefore, if ls1046a SoC is used, we need to set the i2c clock
+> according to the corresponding RCW.
 
-Fixes: 0d676a6c4390 ("i2c: add support for Socionext SynQuacer I2C controller")
-Cc: <stable@vger.kernel.org> # v4.19+
-Signed-off-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
----
- drivers/i2c/busses/i2c-synquacer.c | 2 ++
- 1 file changed, 2 insertions(+)
+So the clock driver reports the wrong clock. Please fix the clock driver
+then.
 
-diff --git a/drivers/i2c/busses/i2c-synquacer.c b/drivers/i2c/busses/i2c-synquacer.c
-index d18b0941b71a..f14d4b3fab44 100644
---- a/drivers/i2c/busses/i2c-synquacer.c
-+++ b/drivers/i2c/busses/i2c-synquacer.c
-@@ -597,6 +597,8 @@ static int synquacer_i2c_probe(struct platform_device *pdev)
- 	i2c->adapter = synquacer_i2c_ops;
- 	i2c_set_adapdata(&i2c->adapter, i2c);
- 	i2c->adapter.dev.parent = &pdev->dev;
-+	i2c->adapter.dev.of_node = pdev->dev.of_node;
-+	ACPI_COMPANION_SET(&i2c->adapter.dev, ACPI_COMPANION(&pdev->dev));
- 	i2c->adapter.nr = pdev->id;
- 	init_completion(&i2c->completion);
- 
+Sascha
+
 -- 
-2.20.1
-
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
