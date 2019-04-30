@@ -2,147 +2,181 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38649100AC
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 22:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149CE101C1
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 23:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726418AbfD3UQl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Apr 2019 16:16:41 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:33053 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726030AbfD3UQl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Apr 2019 16:16:41 -0400
-Received: by mail-lj1-f196.google.com with SMTP id f23so14036666ljc.0;
-        Tue, 30 Apr 2019 13:16:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=B8reHkuIqjZZzeoD65y6KLq1gTHu9jNtA3g0IFRbx/c=;
-        b=uYDaBudsEZvTpxVhkVz4jHPYJhET0ZEnzxU/AVJ9EBN9ApoCiqiuackPf23wUUQqZu
-         /MMpphf/5GImubqoQoMp2z8DJ2QdWMQMQMrSjHQNKeB+VOcuDyAazY9fUmibDoP5WnNV
-         /a5bDzIJN5EbEDWuNzU2sgsw41v0iWwLLoe3NblwHq+Zo6+AKJq+RQq1hABOvl64+lmM
-         oz2gDsyDywL9v3zZQFG+078DqALNBotcXU0TRv7i7zgeaP/kGgmOXQ5iKQtK88X1eDCG
-         +wenayQ+dzRmtdKpW2iEgHFgk5Rib8Q0YIenEWAGV/tjGDRn+kah4Via/L86BGMkbiAp
-         lr9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=B8reHkuIqjZZzeoD65y6KLq1gTHu9jNtA3g0IFRbx/c=;
-        b=MaKlNeqmBeVx4q518xQUWrj/GXYdI8bMqrp/6q+Ek9wDntFQ4LSk2eMtAIbiTdC6nc
-         XJZpvdFCNZ4xiII/KRQGQs9vdeEHvkBdX3cEttaPs6SsW6818Q59qYK/K/Be2QXS+4o8
-         JKN0xjCgDKVvF5oU03OfWmL9OopODjmcapjRRGomb37sebjyEiIR+NO0FFCr3r6iyPwJ
-         AiL4kYstcAdClcIbMy1UX7ttrM3xcFWahBC5IHSlPuBAz1HgXHrRjV8nL02VWKtQoIRY
-         lxjg79D+ryWIRNnl2B9y30Lgy6BgHhj5NgV4gTB5uuCJZ7tn/T1a6oHlgU+eb3mEpSW5
-         5FIA==
-X-Gm-Message-State: APjAAAVIUHhtM5bIgAsc3t8EyNcpQxfjP6g3CpXfZbjG62KheVUIIH/z
-        0gWqbjiq1MN0Nejmra5jEXMeMGjcIRY=
-X-Google-Smtp-Source: APXvYqyo+jG2w3BDdgmT0B3aMuxzZVO8jkOL+oCFKXrGF+pOZC/fnkaMYvRNdRkf8brE/cJPrxwFeQ==
-X-Received: by 2002:a2e:5c49:: with SMTP id q70mr7728889ljb.16.1556655398352;
-        Tue, 30 Apr 2019 13:16:38 -0700 (PDT)
-Received: from [192.168.88.248] ([77.222.156.95])
-        by smtp.gmail.com with ESMTPSA id x25sm4222882ljj.95.2019.04.30.13.16.36
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Apr 2019 13:16:37 -0700 (PDT)
-Subject: Re: [PATCH RFT] i2c: designware: ratelimit 'transfer when suspended'
- errors
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <20190424161632.4994-1-wsa+renesas@sang-engineering.com>
- <1a8172c8-3d2e-1897-88dd-d86aa0130ed8@gmail.com>
- <56faab09-c2ec-047a-886e-669d0a106e7b@redhat.com>
-From:   skidnik <skidnik@gmail.com>
-Message-ID: <39b2ddc1-0f96-8977-f57f-840025aff4f2@gmail.com>
-Date:   Tue, 30 Apr 2019 23:15:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <56faab09-c2ec-047a-886e-669d0a106e7b@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1726612AbfD3VYe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Apr 2019 17:24:34 -0400
+Received: from mail-eopbgr20056.outbound.protection.outlook.com ([40.107.2.56]:29437
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726048AbfD3VYe (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 30 Apr 2019 17:24:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WcG9tKEREUX4INHzyaf5ixzH/r2uvK7+5Rcb8yyWIK0=;
+ b=qDmDOVJu2aAiqQeQqt2spClUWuFuhpPmsqRDARZ1xHBNvWtyagEKb05i5uBQBJ4I8OSRX/nutDUPoVOII54ioXnwG6cOONOEsRtDsXnTosEpfqF6/FSmVD0ITP1/3eQa41dXnXq/WMvcx42p2G1heFluQgcvWnVTuWCJ2IFdKog=
+Received: from AM6PR05MB5224.eurprd05.prod.outlook.com (20.177.196.210) by
+ AM6PR05MB5702.eurprd05.prod.outlook.com (20.178.86.89) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.10; Tue, 30 Apr 2019 21:24:29 +0000
+Received: from AM6PR05MB5224.eurprd05.prod.outlook.com
+ ([fe80::61f4:6de4:5401:5f56]) by AM6PR05MB5224.eurprd05.prod.outlook.com
+ ([fe80::61f4:6de4:5401:5f56%2]) with mapi id 15.20.1856.008; Tue, 30 Apr 2019
+ 21:24:29 +0000
+From:   Vadim Pasternak <vadimp@mellanox.com>
+To:     Asmaa Mnebhi <Asmaa@mellanox.com>,
+        "minyard@acm.org" <minyard@acm.org>,
+        "wsa@the-dreams.de" <wsa@the-dreams.de>,
+        Michael Shych <michaelsh@mellanox.com>
+CC:     Asmaa Mnebhi <Asmaa@mellanox.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: RE: [PATCH v4 0/1] Add support for IPMB driver
+Thread-Topic: [PATCH v4 0/1] Add support for IPMB driver
+Thread-Index: AQHU/35gob0SSpnmDUiPba8AHw4raaZVL7ug
+Date:   Tue, 30 Apr 2019 21:24:29 +0000
+Message-ID: <AM6PR05MB5224FCACBD4EF55F3890EC6AA23A0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+References: <cover.1556645340.git.Asmaa@mellanox.com>
+In-Reply-To: <cover.1556645340.git.Asmaa@mellanox.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=vadimp@mellanox.com; 
+x-originating-ip: [84.108.218.72]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0c4b7f41-a2fb-4daf-d986-08d6cdb23b1d
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:AM6PR05MB5702;
+x-ms-traffictypediagnostic: AM6PR05MB5702:
+x-microsoft-antispam-prvs: <AM6PR05MB5702298C9D61861EF9ECD327A23A0@AM6PR05MB5702.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 00235A1EEF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(346002)(136003)(396003)(39860400002)(376002)(13464003)(199004)(189003)(14454004)(476003)(110136005)(256004)(53936002)(186003)(2501003)(6246003)(55016002)(66066001)(26005)(11346002)(2201001)(14444005)(446003)(86362001)(6506007)(53546011)(5660300002)(7696005)(102836004)(478600001)(68736007)(6436002)(9686003)(4326008)(486006)(8936002)(76176011)(74316002)(229853002)(33656002)(8676002)(52536014)(99286004)(3846002)(7736002)(305945005)(2906002)(66446008)(76116006)(66556008)(66946007)(66476007)(71200400001)(71190400001)(6636002)(64756008)(25786009)(73956011)(54906003)(6116002)(81156014)(316002)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR05MB5702;H:AM6PR05MB5224.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: mellanox.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: D7xE1IIPqT+xjPRab9M55SfmOm980C+ZnonqepN7SVPhyd+ryhL+ElT8qQO93K921CmKAgg+ApSyMhufrCBY6gvxcX/qiegozODAcB8hEIISq7ppLBtQj3qMv4fkEFIEM1aK/qValJGupNcTFfYQ6PJ20Z80sHbtFNjNZfaz/ETwY3oK1Y5kEZf5BnkVb3dm6aXsJP89K3f2BfC+oiZzoPPVU8TUES08JgQTH98nq7EFKa9CkPARjc9Beap3PGkrzo3BcflbTvj6YitwBoDMwoBeABsdoBeMQF8h9sD8pA7Ykj+8Zkv5AT9zyxsFdcQWX4by0w+x0Rru08RT97h1YzCwMrgft3DoKsZQ87MFNGSvyIR3tJ3ly3olo6WbGAsy980PmH9Zq9wLUeMe2MFXOJxDYRB8M6gXkaVnfKTJbfI=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c4b7f41-a2fb-4daf-d986-08d6cdb23b1d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2019 21:24:29.6256
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB5702
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 4/30/19 5:09 PM, Hans de Goede wrote:
-> Hi,
-> 
-> On 4/25/19 9:21 PM, skidnik wrote:
->> On 4/24/19 7:16 PM, Wolfram Sang wrote:
->>> There are two problems with dev_err() here. One: It is not ratelimited.
->>> Two: We don't see which driver tried to transfer something with a
->>> suspended adapter. Switch to dev_WARN_ONCE to fix both issues. Drawback
->>> is that we don't see if multiple drivers are trying to transfer while
->>> suspended. They need to be discovered one after the other now. This is
->>> better than a high CPU load because a really broken driver might try to
->>> resend endlessly.
->>>
->>> Link: https://bugs.archlinux.org/task/62391
->>> Fixes: 275154155538 ("i2c: designware: Do not allow i2c_dw_xfer() 
->>> calls while suspended")
->>> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->>> ---
->>>
->>> skdnik: Would you be so kind and test this patch? I can only 
->>> build-test here.
->>>
->>> I have a prototype to fix the similar issue in the core, but this 
->>> needs more
->>> testing first, so I am sending this one out already.
->>>
->>>   drivers/i2c/busses/i2c-designware-master.c | 3 +--
->>>   1 file changed, 1 insertion(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/i2c/busses/i2c-designware-master.c 
->>> b/drivers/i2c/busses/i2c-designware-master.c
->>> index bb8e3f149979..d464799e40a3 100644
->>> --- a/drivers/i2c/busses/i2c-designware-master.c
->>> +++ b/drivers/i2c/busses/i2c-designware-master.c
->>> @@ -426,8 +426,7 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct 
->>> i2c_msg msgs[], int num)
->>>       pm_runtime_get_sync(dev->dev);
->>> -    if (dev->suspended) {
->>> -        dev_err(dev->dev, "Error %s call while suspended\n", __func__);
->>> +    if (dev_WARN_ONCE(dev->dev, dev->suspended, "Transfer while 
->>> suspended\n")) {
->>>           ret = -ESHUTDOWN;
->>>           goto done_nolock;
->>>       }
->>>
->> This solves system journal flooding, but I still have one core under 
->> full load after resume from hibernation. The touchpad attached to that 
->> bus works perfectly fine after resume.
-> 
-> Ah, this is on a resume from hibernate, in that case I think this patch 
-> will fix this:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=c8afd03486c26accdda4846e5561aa3f8e862a9d 
-> 
-> 
-> Can you build a kernel with that patch added?
-> 
-> Regards,
-> 
-> Hans
-> 
-Built linux-5.1.0-rc7 (linux-mainline PKGBUILD from aur) with both 
-patches applied.
 
-This has fixed the issue. After resume from hibernation idle CPU usage 
-goes back to normal (around 1%). The i2c_designware related error 
-doesn't appear in kernel log.
 
-I'm going to report back to Archlinux bug tracker that the issue has 
-been fixed. Please can you tell which kernel release will have these 
-fixes so that I can provide relevant information.
+> -----Original Message-----
+> From: Asmaa Mnebhi <Asmaa@mellanox.com>
+> Sent: Tuesday, April 30, 2019 8:59 PM
+> To: minyard@acm.org; wsa@the-dreams.de; Vadim Pasternak
+> <vadimp@mellanox.com>; Michael Shych <michaelsh@mellanox.com>
+> Cc: Asmaa Mnebhi <Asmaa@mellanox.com>; linux-kernel@vger.kernel.org;
+> linux-i2c@vger.kernel.org
+> Subject: [PATCH v4 0/1] Add support for IPMB driver
+>=20
+> Thank you for your feedback Vadim. I have addressed your comments.
 
-Thanks for the great work, regards
-skidnik
+Hi Asmaa,
+
+Thank you for your comments and added doc.
+
+>=20
+> 1) You are correct. This driver is not specific to Mellanox so I have rem=
+oved the
+> Mellanox attribute.
+>=20
+> 2) I have added a documentation file called IPMB.txt which explains how t=
+his
+> module works and how it should be instantiated. It is very similar to the=
+ existing
+> linux i2c-slave-eeprom module.
+>=20
+> The HW for my testing works as follows:
+> A BMC is connected to a Satellite MC via I2C (I2C is equivalent to IPMB).=
+ The
+> BMC initiates the IPMB requests and sends them via I2C.
+> Obviously the BMC needs its own driver to do this which I haven't include=
+d in this
+> code. We have no intent of upstreaming that at the moment.
+
+I believe you are going to do it at some point, right?
+
+> This ipmb-dev-int driver is to be loaded and instantiated on the Satellit=
+e MC to
+> be able to receive IPMB requests. These IPMB request messages will be pic=
+ked
+> up by a user space program such (in my case it is OpenIPMI) to handle the
+> request and generate a response.
+> The response will be then passed from the user program back to kernel spa=
+ce.
+> Then this driver would send that response back to the BMC.
+>=20
+> 3) You asked the following:
+>=20
+> "Is it expected to be zero in vaid case?"
+> The 8 least significant bits of the sum is always expected to be 0 in the=
+ case
+> where the checksum is valid. I have added a comment for clarifications.
+
+
+>=20
+> "why do you need this cast?"
+> buf[++ipmb_dev_p->msg_idx]=3D(u8)(client->addr<<1)
+> This is because client->addr is of type unsigned short which is
+> 2 bytes so it is safer to typecast it to u8 (u8* buf)
+
+Better, if you can avoid cast.
+Would compiler warn if you use for example
+rol16(client->addr, 1) & GENMASK(7, 0);
+or something like it?
+
+
+>=20
+> "It could be only single ipmb-dev within the system? Couldn't it be few, =
+like
+> master/slave for example?"
+> My understanding of your question is that: what if we have multiple insta=
+nces of
+> ipmb-dev-int, that we register it under different addresses?
+> This driver only works as a slave so it will only be instantiated once on=
+ the
+> Satellite MC under one slave address.
+
+I mentioned some config like:
+BMC1 (master)  -- busA --|
+			Satellite
+BMC2 (standby)	-- busB --|=20
+
+Since this is not Mellanox specific driver, maybe it would be good to suppo=
+rt
+multiple instances of it.
+
+>=20
+> Asmaa Mnebhi (1):
+>   Add support for IPMB driver
+>=20
+>  Documentation/IPMB.txt           |  53 ++++++
+>  drivers/char/ipmi/Kconfig        |   8 +
+>  drivers/char/ipmi/Makefile       |   1 +
+>  drivers/char/ipmi/ipmb_dev_int.c | 381
+> +++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 443 insertions(+)
+>  create mode 100644 Documentation/IPMB.txt  create mode 100644
+> drivers/char/ipmi/ipmb_dev_int.c
+>=20
+> --
+> 2.1.2
+
