@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C290FF0CE
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 09:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DEF0F1D1
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 10:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726119AbfD3HAI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Apr 2019 03:00:08 -0400
-Received: from mail-eopbgr80054.outbound.protection.outlook.com ([40.107.8.54]:49399
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        id S1726129AbfD3IK0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Apr 2019 04:10:26 -0400
+Received: from mail-eopbgr70050.outbound.protection.outlook.com ([40.107.7.50]:44438
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725554AbfD3HAH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 30 Apr 2019 03:00:07 -0400
+        id S1725790AbfD3IKZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 30 Apr 2019 04:10:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sWodjOc56GxoRXJ7b11rcRr8UAVFM0lQ1Ry7eKPeeLM=;
- b=eZMoWDLFzYyks9u5PeskXeGo0vSL2+rM75BGqOh3YBE5DDUJOXP1tSk0zXESe6lRLH7WF/PTwtJXUj02U6IFoUTgyyfyLTLKCsxSQZanr0nrumi3dnRFXMhKzSE5JhmvPVKNp7YifKIVxUyRbqvDuGKP1Q7lLynNUNQLUl/zPIk=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3913.eurprd04.prod.outlook.com (52.134.65.143) with Microsoft SMTP
+ bh=AQJcd1V092CHp5ZYUf0tzBNQVT8V4YjiRfdDANKslUY=;
+ b=Gw4OwmuDgkqtYmRAFeQCEGCPoDkdH5gc6lC6ZM/0+FBioI7lgELe3iOzqgy/c26QtcF73Hfl9msLGFMsmCk7liwLieTWvp4cIZ5H6viotjfdZ8GqJuEVkWaVDqES0aL6Xm3Q1Q81OdJrjMOHpdth04mFqZ3ODEC3z3V6wsKUXHE=
+Received: from AM0PR04MB4211.eurprd04.prod.outlook.com (52.134.92.158) by
+ AM0PR04MB6354.eurprd04.prod.outlook.com (10.255.182.79) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.10; Tue, 30 Apr 2019 07:00:02 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::e8ca:4f6b:e43:c170]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::e8ca:4f6b:e43:c170%3]) with mapi id 15.20.1856.008; Tue, 30 Apr 2019
- 07:00:02 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Aisheng Dong <aisheng.dong@nxp.com>,
+ 15.20.1835.13; Tue, 30 Apr 2019 08:10:21 +0000
+Received: from AM0PR04MB4211.eurprd04.prod.outlook.com
+ ([fe80::8cda:4e52:8e87:8f0e]) by AM0PR04MB4211.eurprd04.prod.outlook.com
+ ([fe80::8cda:4e52:8e87:8f0e%2]) with mapi id 15.20.1835.018; Tue, 30 Apr 2019
+ 08:10:21 +0000
+From:   Aisheng Dong <aisheng.dong@nxp.com>
+To:     Anson Huang <anson.huang@nxp.com>,
         "shawnguo@kernel.org" <shawnguo@kernel.org>,
         "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>,
@@ -35,81 +35,56 @@ To:     Aisheng Dong <aisheng.dong@nxp.com>,
         <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: [PATCH] i2c: imx-lpi2c: Use __maybe_unused instead of #if
+Subject: RE: [PATCH] i2c: imx-lpi2c: Use __maybe_unused instead of #if
  CONFIG_PM_SLEEP
 Thread-Topic: [PATCH] i2c: imx-lpi2c: Use __maybe_unused instead of #if
  CONFIG_PM_SLEEP
-Thread-Index: AQHU/yJVTGic+X2v4ESo316NmJN4TA==
-Date:   Tue, 30 Apr 2019 07:00:02 +0000
-Message-ID: <1556607314-32401-1-git-send-email-Anson.Huang@nxp.com>
-Accept-Language: en-US
+Thread-Index: AQHU/yJVTGic+X2v4ESo316NmJN4TKZUWBXw
+Date:   Tue, 30 Apr 2019 08:10:21 +0000
+Message-ID: <AM0PR04MB42114EDECD01526E128A323E803A0@AM0PR04MB4211.eurprd04.prod.outlook.com>
+References: <1556607314-32401-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1556607314-32401-1-git-send-email-Anson.Huang@nxp.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.7.4
-x-clientproxiedby: HK0PR03CA0049.apcprd03.prod.outlook.com
- (2603:1096:203:52::13) To DB3PR0402MB3916.eurprd04.prod.outlook.com
- (2603:10a6:8:10::18)
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
+ smtp.mailfrom=aisheng.dong@nxp.com; 
 x-originating-ip: [119.31.174.66]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4c36baed-b0ed-4d30-20f7-08d6cd39779b
+x-ms-office365-filtering-correlation-id: 2cc87847-e464-47dd-8801-08d6cd434a48
 x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3913;
-x-ms-traffictypediagnostic: DB3PR0402MB3913:
-x-microsoft-antispam-prvs: <DB3PR0402MB3913FCFB62D55930AB342259F53A0@DB3PR0402MB3913.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:AM0PR04MB6354;
+x-ms-traffictypediagnostic: AM0PR04MB6354:
+x-microsoft-antispam-prvs: <AM0PR04MB6354723F0293EF858A80BC63803A0@AM0PR04MB6354.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
 x-forefront-prvs: 00235A1EEF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(346002)(376002)(136003)(39850400004)(366004)(189003)(199004)(81166006)(305945005)(25786009)(52116002)(14454004)(316002)(64756008)(110136005)(99286004)(14444005)(8676002)(256004)(66476007)(66556008)(66446008)(8936002)(73956011)(81156014)(66946007)(7736002)(50226002)(68736007)(97736004)(478600001)(53936002)(71200400001)(2201001)(86362001)(6436002)(4326008)(2616005)(476003)(486006)(6486002)(71190400001)(186003)(66066001)(2906002)(26005)(6512007)(6116002)(3846002)(5660300002)(386003)(2501003)(6506007)(36756003)(102836004);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3913;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(396003)(376002)(39860400002)(366004)(136003)(199004)(189003)(52536014)(64756008)(2201001)(6436002)(99286004)(8676002)(71190400001)(7696005)(86362001)(486006)(229853002)(44832011)(71200400001)(8936002)(2906002)(26005)(9686003)(186003)(7736002)(68736007)(5660300002)(25786009)(74316002)(305945005)(66066001)(110136005)(66556008)(53546011)(256004)(55016002)(73956011)(6246003)(316002)(478600001)(66476007)(53936002)(102836004)(76176011)(4744005)(3846002)(4326008)(97736004)(6116002)(33656002)(2501003)(6506007)(11346002)(81166006)(14454004)(446003)(476003)(81156014)(66446008)(76116006)(66946007);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB6354;H:AM0PR04MB4211.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: cQZ/y2g4Ao7edhl43KTfUF/Z2+id2uSMNeSz3OYjNyfxvezUsFYIs7Fx0HGfg7iKoF5ClgIox2Fy4HvkGF/zSlCqDfAlhOKtyu4VYt3Z3whbuWJ+UzwhaKxR0nV3DqADyk4C6F6XYGHSQubKWMfacUugfEoxkbbM3ivBcC/F2HeUvikeZ+OOEKv877zV0EmFWrRC2L/N1z0tIlOttrWXMZyJ9FJtip3W6lwFr9dPeuGLWlT/EfhjmiaCFcF23wrgZDUa7Qce0O4yR3q/DrTdOy2Z7PinSX02GF0TCM73ECxfiB4F3XVInTFB2TOoAmR106oJVHvDDBduclfC6yutUr4WcHC4DWCcHxPtM7IkBoGRWs6FNA9uLch2UbZXU1/rCQroh+AjnfGVaPlw5dgvmuVY01v1cfy/tpONv/al6bw=
+x-microsoft-antispam-message-info: W0aCUfl0nWOamvaZJW8tWNNbLYPfyq54qqmBYgDQDt4hS/ursHVrQd4fMI2M9vEpBdtME6BOcZduD5oWiZvyeW+aj/JzKn3c6iOw6n2oC5WDCPGgJmO+AY7nhJrS3YYHEPSM0xIm3/8005x+wQ1EqmPockqETHEl04xbGSnEYT8CBND+xNJtuFzk+bCxEQMO2BXzdTmSuymqKmoK+cCwEk13kkEB1LvCoy29iUEKlVzJw9iwwtBglG0sVV83tD7aR0PIbFuxcCmfQ26yTesdNGYFpyOSl8D3nh9xnL4J/IOp9X39ypa6gJfhhfupLUmJcMiUFmW5KmJl4lYSs2GLM8nzoD0avC/czIxfMVP5s0122wQGmer4yioiX15tjmLHw3G163Jet+HXAm3hda7IfuFET7pONTppVzq2k8zROUk=
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c36baed-b0ed-4d30-20f7-08d6cd39779b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2019 07:00:02.7402
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2cc87847-e464-47dd-8801-08d6cd434a48
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2019 08:10:21.1283
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3913
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6354
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-VXNlIF9fbWF5YmVfdW51c2VkIGZvciBwb3dlciBtYW5hZ2VtZW50IHJlbGF0ZWQgZnVuY3Rpb25z
-DQppbnN0ZWFkIG9mICNpZiBDT05GSUdfUE1fU0xFRVAgdG8gc2ltcGx5IHRoZSBjb2RlLg0KDQpT
-aWduZWQtb2ZmLWJ5OiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCi0tLQ0KIGRy
-aXZlcnMvaTJjL2J1c3Nlcy9pMmMtaW14LWxwaTJjLmMgfCAxMSArKystLS0tLS0tLQ0KIDEgZmls
-ZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDggZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQg
-YS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWlteC1scGkyYy5jIGIvZHJpdmVycy9pMmMvYnVzc2Vz
-L2kyYy1pbXgtbHBpMmMuYw0KaW5kZXggMDZjNGM3Ni4uZGMwMGZhYiAxMDA2NDQNCi0tLSBhL2Ry
-aXZlcnMvaTJjL2J1c3Nlcy9pMmMtaW14LWxwaTJjLmMNCisrKyBiL2RyaXZlcnMvaTJjL2J1c3Nl
-cy9pMmMtaW14LWxwaTJjLmMNCkBAIC02MzksOCArNjM5LDcgQEAgc3RhdGljIGludCBscGkyY19p
-bXhfcmVtb3ZlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQogCXJldHVybiAwOw0KIH0N
-CiANCi0jaWZkZWYgQ09ORklHX1BNX1NMRUVQDQotc3RhdGljIGludCBscGkyY19ydW50aW1lX3N1
-c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQ0KK3N0YXRpYyBpbnQgX19tYXliZV91bnVzZWQgbHBp
-MmNfcnVudGltZV9zdXNwZW5kKHN0cnVjdCBkZXZpY2UgKmRldikNCiB7DQogCXN0cnVjdCBscGky
-Y19pbXhfc3RydWN0ICpscGkyY19pbXggPSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsNCiANCkBAIC02
-NTAsNyArNjQ5LDcgQEAgc3RhdGljIGludCBscGkyY19ydW50aW1lX3N1c3BlbmQoc3RydWN0IGRl
-dmljZSAqZGV2KQ0KIAlyZXR1cm4gMDsNCiB9DQogDQotc3RhdGljIGludCBscGkyY19ydW50aW1l
-X3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQorc3RhdGljIGludCBfX21heWJlX3VudXNlZCBs
-cGkyY19ydW50aW1lX3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQogew0KIAlzdHJ1Y3QgbHBp
-MmNfaW14X3N0cnVjdCAqbHBpMmNfaW14ID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQogCWludCBy
-ZXQ7DQpAQCAtNjcxLDEwICs2NzAsNiBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGRldl9wbV9vcHMg
-bHBpMmNfcG1fb3BzID0gew0KIAlTRVRfUlVOVElNRV9QTV9PUFMobHBpMmNfcnVudGltZV9zdXNw
-ZW5kLA0KIAkJCSAgIGxwaTJjX3J1bnRpbWVfcmVzdW1lLCBOVUxMKQ0KIH07DQotI2RlZmluZSBJ
-TVhfTFBJMkNfUE0gICAgICAoJmxwaTJjX3BtX29wcykNCi0jZWxzZQ0KLSNkZWZpbmUgSU1YX0xQ
-STJDX1BNICAgICAgTlVMTA0KLSNlbmRpZg0KIA0KIHN0YXRpYyBzdHJ1Y3QgcGxhdGZvcm1fZHJp
-dmVyIGxwaTJjX2lteF9kcml2ZXIgPSB7DQogCS5wcm9iZSA9IGxwaTJjX2lteF9wcm9iZSwNCkBA
-IC02ODIsNyArNjc3LDcgQEAgc3RhdGljIHN0cnVjdCBwbGF0Zm9ybV9kcml2ZXIgbHBpMmNfaW14
-X2RyaXZlciA9IHsNCiAJLmRyaXZlciA9IHsNCiAJCS5uYW1lID0gRFJJVkVSX05BTUUsDQogCQku
-b2ZfbWF0Y2hfdGFibGUgPSBscGkyY19pbXhfb2ZfbWF0Y2gsDQotCQkucG0gPSBJTVhfTFBJMkNf
-UE0sDQorCQkucG0gPSAmbHBpMmNfcG1fb3BzLA0KIAl9LA0KIH07DQogDQotLSANCjIuNy40DQoN
-Cg==
+PiBGcm9tOiBBbnNvbiBIdWFuZw0KPiBTZW50OiBUdWVzZGF5LCBBcHJpbCAzMCwgMjAxOSAzOjAw
+IFBNDQo+IFN1YmplY3Q6IFtQQVRDSF0gaTJjOiBpbXgtbHBpMmM6IFVzZSBfX21heWJlX3VudXNl
+ZCBpbnN0ZWFkIG9mICNpZg0KPiBDT05GSUdfUE1fU0xFRVANCj4gDQo+IFVzZSBfX21heWJlX3Vu
+dXNlZCBmb3IgcG93ZXIgbWFuYWdlbWVudCByZWxhdGVkIGZ1bmN0aW9ucyBpbnN0ZWFkIG9mICNp
+Zg0KPiBDT05GSUdfUE1fU0xFRVAgdG8gc2ltcGx5IHRoZSBjb2RlLg0KPiANCj4gU2lnbmVkLW9m
+Zi1ieTogQW5zb24gSHVhbmcgPEFuc29uLkh1YW5nQG54cC5jb20+DQoNCkFja2VkLWJ5OiBEb25n
+IEFpc2hlbmcgPGFpc2hlbmcuZG9uZ0BueHAuY29tPg0KDQpSZWdhcmRzDQpEb25nIEFpc2hlbmcN
+Cg0K
