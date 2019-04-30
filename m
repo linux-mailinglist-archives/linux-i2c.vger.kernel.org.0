@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4611FBDD
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 16:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AD5FBE9
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 16:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726220AbfD3OsF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Apr 2019 10:48:05 -0400
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:40822 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726053AbfD3OsE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Apr 2019 10:48:04 -0400
-Received: by mail-ua1-f68.google.com with SMTP id u34so2981334uau.7;
-        Tue, 30 Apr 2019 07:48:04 -0700 (PDT)
+        id S1726559AbfD3Ox3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Apr 2019 10:53:29 -0400
+Received: from mail-ua1-f66.google.com ([209.85.222.66]:41185 "EHLO
+        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbfD3Ox3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Apr 2019 10:53:29 -0400
+Received: by mail-ua1-f66.google.com with SMTP id s30so1620727uas.8;
+        Tue, 30 Apr 2019 07:53:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8+rRX7GygNe6MDjmpx3rsTWh3phJueY5lQuNv8Fto7w=;
-        b=uSQConNMT6RmoBGRLvVWJCsNS+6gCEsfsI4fT1vNvzEyDMd2uwPDsrHvolcEmyERBf
-         Tlqb/Zaohgh831KXW3S3KqcB1n7SlbWM6xf2DJfy7GJ0Kfaj3y6hO+PQXmZUY6sT4Dtx
-         srUSwPh+FBxW9eTQZ6wUXIDcywr7TgT/gXQvAsJvG1SF7qURAxlVkohBumKHura9w2hT
-         i5PIksE1LNjGPfsdki6IVCbcohZxQ4e6bNosV9fmetn3xyhsWA+G+Y10ObWB6vZXaO8w
-         6ngZ4eehNJK5OOXDryQ1cYZucroGQbpz83EofYUgY5IImHdgK0xaweGYxB9UiO+qiJpI
-         VYiw==
-X-Gm-Message-State: APjAAAUWqxLbWRo/Z4KkbKZGCW9eLAjvPQs8G6MGebe4hu6RchfhtyHf
-        mJrAkR59B53ICXyyVRd1i6+UZHnBH2OsWOVz4T0=
-X-Google-Smtp-Source: APXvYqzlSe8XbOyJS6Sv+jJkkDi9AcK9wNd7rPtLuB7mRS2JI79hJeEa1MtQse82af6LeEI/cjr4Eqmm5JDtiEkAmf4=
-X-Received: by 2002:ab0:7797:: with SMTP id x23mr3928188uar.28.1556635683820;
- Tue, 30 Apr 2019 07:48:03 -0700 (PDT)
+        bh=pTLeDmf40HKyuygAD04IjYkWSGll1fsdZzZH9HwXX+w=;
+        b=g2UWEuLiOrM+pijkQRVZo9+nkREwNOSluuEV3GQ6mH/MYCGGiyLevyXCmYptmxxhT/
+         sSZAVzBydEF/lSgsbxmej97lowHXMTHkiwo+OVJzN3JtuCPXYRkaVfa7rLwUfAm25zBm
+         S3EUOnDTsEH1Pna/mvKLQQ26CywKqAzILoDDaUmQsBXm5zt3x8dzEHPxXPfRJfssr2CR
+         yIvs9L9RXNIaJ0LA6FZRKXQ9Tsfgh/S/6zCx5vGhs3ihrPuV4Us3/qpVfd5HHZy0mexQ
+         f/2ZLKGCc8c8hCfdHUwLrVg7U7EyCHPtr6sWX0Qe2h79/QUuUtwui2wbmZEh36g/qFdZ
+         gscg==
+X-Gm-Message-State: APjAAAUqt7TNsKBt0O5RhIXa8ihIqPHGhwED0/+9cDb7MpGvBHFDt3Fk
+        w2gvErnEcHaXnBkzxKhgc9uoNeHKnCt6QcoAzaI=
+X-Google-Smtp-Source: APXvYqwF0Zbtifq6u8tBBo2RW3XLYNv7pCPith08+k0vO8l3qrEdgc5Ka0pNcs3HfC21rFBjLCYphaQSO9o1caCaH5o=
+X-Received: by 2002:a9f:352a:: with SMTP id o39mr6828806uao.78.1556636008367;
+ Tue, 30 Apr 2019 07:53:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190430132309.12473-1-chris.brandt@renesas.com> <20190430132309.12473-4-chris.brandt@renesas.com>
-In-Reply-To: <20190430132309.12473-4-chris.brandt@renesas.com>
+References: <20190430132309.12473-1-chris.brandt@renesas.com> <20190430132309.12473-6-chris.brandt@renesas.com>
+In-Reply-To: <20190430132309.12473-6-chris.brandt@renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 30 Apr 2019 16:47:52 +0200
-Message-ID: <CAMuHMdVK3AZ2LK0Tz70tnFbBsDC3FOHuSMR9ujU43jr15fZrqA@mail.gmail.com>
-Subject: Re: [PATCH 3/7] dt-bindings: i2c: riic: document r7s9210 support
+Date:   Tue, 30 Apr 2019 16:53:17 +0200
+Message-ID: <CAMuHMdXYfemNCfzci9fAcPWpdHOeKJNkTirrrB+97t5Aj2Bzxg@mail.gmail.com>
+Subject: Re: [PATCH 5/7] ARM: dts: r7s9210: Add SDHI support
 To:     Chris Brandt <chris.brandt@renesas.com>
 Cc:     Simon Horman <horms@verge.net.au>,
         Rob Herring <robh+dt@kernel.org>,
@@ -50,9 +50,8 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 3:36 PM Chris Brandt <chris.brandt@renesas.com> wrote:
-> Document support for the R7S9210 (RZ/A2) SoC. Also explicitly document
-> bindings for the R7S72100 (RZ/A1) SoC.
+On Tue, Apr 30, 2019 at 3:33 PM Chris Brandt <chris.brandt@renesas.com> wrote:
+> Add SDHI support for the R7S9210 (RZ/A2) SoC.
 >
 > Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
 
