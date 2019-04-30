@@ -2,99 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79428FB56
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 16:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02779FB84
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 16:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727179AbfD3OXx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Apr 2019 10:23:53 -0400
-Received: from mga12.intel.com ([192.55.52.136]:15074 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726303AbfD3OXw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 30 Apr 2019 10:23:52 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Apr 2019 07:23:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,414,1549958400"; 
-   d="scan'208";a="144871779"
-Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.154])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Apr 2019 07:23:49 -0700
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Keijo Vaara <ferdasyn@rocketmail.com>,
-        linux-input@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] i2c: Prevent runtime suspend of adapter when Host Notify is required
-Date:   Tue, 30 Apr 2019 17:23:22 +0300
-Message-Id: <20190430142322.15013-1-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726166AbfD3Oau (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Apr 2019 10:30:50 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:37265 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725942AbfD3Oau (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Apr 2019 10:30:50 -0400
+Received: by mail-vs1-f68.google.com with SMTP id w13so8115383vsc.4;
+        Tue, 30 Apr 2019 07:30:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iRfsMFI2dH1qoYhEbME9nsh6N6EQWZKZKVcQzhfJBfM=;
+        b=gEQtt4mBunytloUkh1AB/1T86Hzq4XAgRruUY6PNpJWxVTgVSfYVkNLrduaFci45n/
+         1eMFA/E0xNcqiapiSKWCP09y/pTTh8HU/gQplRnGduMmzn07yHGGXd+rJd6UdqH/TcND
+         TS2xjQDphS5EmPBcCuorjRzPDE4do6DqJrihaLwUQnbJGncXYURP9+RCNMz0xLjIbfr/
+         CsMV5C5BnwqnY5G/mYCNQkTdlFY/8liOd/XR+YIq1Uft/n5PcdWpYHdHIAvpAl+b9Vom
+         ycXYSI2pPo48gSx3fsXCOPgMKKyRwF9w04egCkNhHq+lQYWGtQQCZ2gzzuTcKpvRZB+9
+         suDw==
+X-Gm-Message-State: APjAAAW08u026xNuCH2rh2tx3cCocIfUk6VPQe3HagOCBcLIZVlBbH/j
+        c0dfHP98T2uyNY8RkexPIzfyPLMSG492vaItfOM=
+X-Google-Smtp-Source: APXvYqzTgPvlFQMpxmmo0yJlPLIMj1LIOvrfNlOa6i8nfSo//vzWZRrxaPTM5Vigt9MQWffSpsEcgpQ6cDRB8g9HgpU=
+X-Received: by 2002:a05:6102:113:: with SMTP id z19mr5493512vsq.166.1556634649735;
+ Tue, 30 Apr 2019 07:30:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190430132309.12473-1-chris.brandt@renesas.com> <20190430132309.12473-2-chris.brandt@renesas.com>
+In-Reply-To: <20190430132309.12473-2-chris.brandt@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 30 Apr 2019 16:30:38 +0200
+Message-ID: <CAMuHMdUeuxRNFPW-XVy_JnEpaoMHXZM7v_FPjXQ7xnrGtvFu4A@mail.gmail.com>
+Subject: Re: [PATCH 1/7] ARM: dts: r7s9210: Add RSPI
+To:     Chris Brandt <chris.brandt@renesas.com>
+Cc:     Simon Horman <horms@verge.net.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Multiple users have reported their Synaptics touchpad has stopped
-working between v4.20.1 and v4.20.2 when using SMBus interface.
+On Tue, Apr 30, 2019 at 3:34 PM Chris Brandt <chris.brandt@renesas.com> wrote:
+> Add RSPI support for RZ/A2 SoC.
+>
+> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
 
-The culprit for this appeared to be commit c5eb1190074c ("PCI / PM: Allow
-runtime PM without callback functions") that fixed the runtime PM for
-i2c-i801 SMBus adapter. Those Synaptics touchpad are using i2c-i801
-for SMBus communication and testing showed they are able to get back
-working by preventing the runtime suspend of adapter.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Normally when i2c-i801 SMBus adapter transmits with the client it resumes
-before operation and autosuspends after.
+Gr{oetje,eeting}s,
 
-However, if client requires SMBus Host Notify protocol, what those
-Synaptics touchpads do, then the host adapter must not go to runtime
-suspend since then it cannot process incoming SMBus Host Notify commands
-the client may send.
+                        Geert
 
-Fix this by keeping I2C/SMBus adapter active in case client requires
-Host Notify.
-
-Reported-by: Keijo Vaara <ferdasyn@rocketmail.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=203297
-Fixes: c5eb1190074c ("PCI / PM: Allow runtime PM without callback functions")
-Cc: stable@vger.kernel.org # v4.20+
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
-Keijo: could you test this does it fix the issue you reported? This is
-practically the same diff I sent earlier what you probably haven't tested yet.
-I wanted to send a commitable fix in case it works since I'll be out of
-office in a few coming days.
----
- drivers/i2c/i2c-core-base.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 38af18645133..8149c9e32b69 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -327,6 +327,8 @@ static int i2c_device_probe(struct device *dev)
- 
- 		if (client->flags & I2C_CLIENT_HOST_NOTIFY) {
- 			dev_dbg(dev, "Using Host Notify IRQ\n");
-+			/* Keep adapter active when Host Notify is required */
-+			pm_runtime_get_sync(&client->adapter->dev);
- 			irq = i2c_smbus_host_notify_to_irq(client);
- 		} else if (dev->of_node) {
- 			irq = of_irq_get_byname(dev->of_node, "irq");
-@@ -431,6 +433,8 @@ static int i2c_device_remove(struct device *dev)
- 	device_init_wakeup(&client->dev, false);
- 
- 	client->irq = client->init_irq;
-+	if (client->flags & I2C_CLIENT_HOST_NOTIFY)
-+		pm_runtime_put(&client->adapter->dev);
- 
- 	return status;
- }
 -- 
-2.20.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
