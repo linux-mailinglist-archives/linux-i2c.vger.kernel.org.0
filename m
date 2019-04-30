@@ -2,118 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C7AFD19
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 17:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3B1FD66
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2019 18:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726150AbfD3PnF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Apr 2019 11:43:05 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:46424 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbfD3PnE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Apr 2019 11:43:04 -0400
-Received: by mail-oi1-f196.google.com with SMTP id d62so5748041oib.13;
-        Tue, 30 Apr 2019 08:43:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AoX+I432QQxxlKFEhrHPIkG45LFW4z5n+eTjo4qg/pg=;
-        b=fuQlWpUcKOwVjnkw1I7fqFtB4+4QWdMXNYNGuJLFLXbUTNC+zKnz8+hyV44Z2miymA
-         wtgdhpC1tFVjb6vFncu/zDK5IwEq2Jo0PafsGW/DNhkx/eyY7FPZVIS/Tch48F3GRVdo
-         xL5NFcS8Wj0xaH14QOtQs154Fc1WtMMiBot7cwzkxNeuvXrX1ddvbMQOmhk0JD2vdPFm
-         /fJMC4/ZrZY/HJAle0yiqckyDqYHbJ9bI64ttw+MDiUVmeRJqvn2ypMsfbYF3kRpGJYm
-         5tLatS7Be9xqaUU3teBmQsPjNV7z784JJ6W3MzVklPt3uLLbZ55ANWdtesKgwj2Hl7Xo
-         G0Og==
-X-Gm-Message-State: APjAAAVgDo9RO76avV6GKC97LkVAIejI7sOrfPOWQXEg07eP+TGvXSit
-        X26Ga+3o6M/ISzmEvy8sUcaGXq4yqTIzxCEQEprJLQ==
-X-Google-Smtp-Source: APXvYqyAYo6r1DdXN/rjG4yyp08YAtg4XguUpxKXTiDi5AD26pkuacjSGcDFehoH3aH3n+s2HRH0dnE9n4mfkzWrbMU=
-X-Received: by 2002:aca:b841:: with SMTP id i62mr3675255oif.103.1556638983470;
- Tue, 30 Apr 2019 08:43:03 -0700 (PDT)
+        id S1726053AbfD3QDn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Apr 2019 12:03:43 -0400
+Received: from mail-eopbgr1400121.outbound.protection.outlook.com ([40.107.140.121]:2272
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726048AbfD3QDn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 30 Apr 2019 12:03:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector1-renesas-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WL910Zm3vbAVF4hEiB9Gn9Auqa/HBef4dYo8tgno/h0=;
+ b=NAKsiPdl7XAGlMJLzQYfjRzY7WHjUibfXE756k4JeagvFS7iZOqijvKwiLPdfNg5v5Vf6fZOQp08T3nyT+66x1wVfGKJrMmcHfGcmh3A81QJI5EmvU9Sd4aABYhq8/U+mr4lVssO3uCt8eQQ6JnMfX2iEfmI/8feUSv780JqLZ0=
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
+ TY1PR01MB1738.jpnprd01.prod.outlook.com (52.133.162.10) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1835.12; Tue, 30 Apr 2019 16:03:39 +0000
+Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
+ ([fe80::99cf:c94c:d11f:c2f0%5]) with mapi id 15.20.1835.018; Tue, 30 Apr 2019
+ 16:03:39 +0000
+From:   Chris Brandt <Chris.Brandt@renesas.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Simon Horman <horms@verge.net.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH 6/7] ARM: dts: r7s9210-rza2mevb: Add Ethernet support
+Thread-Topic: [PATCH 6/7] ARM: dts: r7s9210-rza2mevb: Add Ethernet support
+Thread-Index: AQHU/1fmL3U0ISDuWUqmKHJ9vTOOFKZU0jaAgAAI7RA=
+Date:   Tue, 30 Apr 2019 16:03:39 +0000
+Message-ID: <TY1PR01MB156277831BBAD3BF0E0EE52D8A3A0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+References: <20190430132309.12473-1-chris.brandt@renesas.com>
+ <20190430132309.12473-7-chris.brandt@renesas.com>
+ <CAMuHMdWzN_1XmO8w_otDseJ+bxk+AKNouk-ycPPyM2XWMWritQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdWzN_1XmO8w_otDseJ+bxk+AKNouk-ycPPyM2XWMWritQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chris.Brandt@renesas.com; 
+x-originating-ip: [75.60.247.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2b73dc88-d31b-4dda-6bba-08d6cd85691c
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:TY1PR01MB1738;
+x-ms-traffictypediagnostic: TY1PR01MB1738:
+x-microsoft-antispam-prvs: <TY1PR01MB1738A5433FFEA7C9C50BEC038A3A0@TY1PR01MB1738.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 00235A1EEF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(39860400002)(346002)(136003)(376002)(396003)(189003)(199004)(6246003)(7696005)(102836004)(14454004)(229853002)(55016002)(68736007)(9686003)(3846002)(6506007)(305945005)(8676002)(72206003)(6116002)(4744005)(53936002)(4326008)(7736002)(25786009)(2906002)(52536014)(316002)(54906003)(33656002)(26005)(6916009)(81156014)(8936002)(11346002)(446003)(73956011)(66066001)(478600001)(66946007)(76116006)(76176011)(66556008)(71200400001)(256004)(66476007)(64756008)(66446008)(99286004)(6436002)(486006)(186003)(74316002)(5660300002)(81166006)(476003)(71190400001)(97736004)(86362001);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1738;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: tU37aG7YWDXoA7U0ZCvi+VQ1w5539fF7xLzbKf4vHYHmOyeWwzsi6j5GKlq64HLt4i93GycMJsnTZO7wmDDcyNQBadxRnoms0jpKx4laKBIF8kyO/FNcr7OGLzAhG61sxo3nPyjGkx2dmRoG1ShxmcEjJchHQYzSAIRkJHO9HeB/yudF0BSS7aVaWZvCB3zpFZ9SZR8FeSW+IvAWNvT13sh35X15eqFeM4H3iDu2FieGkeiPUrREHIpjM9nj3GiC8+SS6NggcbR4kUy2e5SQ85DWLADqvBIvQ/FBde7gRUMU9q1vNFOb0my5rv1yDFBEKft3TkXq0DZ8XukH0FHRM0qsJdlp8jyNsTc9Cm8YsgN/ZwrN/5vwBjPajcUZ7J3BtFoP68MfgZYudPbwkHHmsmCDwusYSzxzi9UgGzca5mU=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20190430142322.15013-1-jarkko.nikula@linux.intel.com>
-In-Reply-To: <20190430142322.15013-1-jarkko.nikula@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 30 Apr 2019 17:42:52 +0200
-Message-ID: <CAJZ5v0gimPdVY8FbzNPZQK=pMGzynpxJqUR_ypSh9OTAsObfrw@mail.gmail.com>
-Subject: Re: [PATCH] i2c: Prevent runtime suspend of adapter when Host Notify
- is required
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Keijo Vaara <ferdasyn@rocketmail.com>,
-        linux-input@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b73dc88-d31b-4dda-6bba-08d6cd85691c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2019 16:03:39.5197
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1738
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 4:23 PM Jarkko Nikula
-<jarkko.nikula@linux.intel.com> wrote:
->
-> Multiple users have reported their Synaptics touchpad has stopped
-> working between v4.20.1 and v4.20.2 when using SMBus interface.
->
-> The culprit for this appeared to be commit c5eb1190074c ("PCI / PM: Allow
-> runtime PM without callback functions") that fixed the runtime PM for
-> i2c-i801 SMBus adapter. Those Synaptics touchpad are using i2c-i801
-> for SMBus communication and testing showed they are able to get back
-> working by preventing the runtime suspend of adapter.
->
-> Normally when i2c-i801 SMBus adapter transmits with the client it resumes
-> before operation and autosuspends after.
->
-> However, if client requires SMBus Host Notify protocol, what those
-> Synaptics touchpads do, then the host adapter must not go to runtime
-> suspend since then it cannot process incoming SMBus Host Notify commands
-> the client may send.
->
-> Fix this by keeping I2C/SMBus adapter active in case client requires
-> Host Notify.
->
-> Reported-by: Keijo Vaara <ferdasyn@rocketmail.com>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=203297
-> Fixes: c5eb1190074c ("PCI / PM: Allow runtime PM without callback functions")
-> Cc: stable@vger.kernel.org # v4.20+
-> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Or please let me know if you want me to take this.
-
-> ---
-> Keijo: could you test this does it fix the issue you reported? This is
-> practically the same diff I sent earlier what you probably haven't tested yet.
-> I wanted to send a commitable fix in case it works since I'll be out of
-> office in a few coming days.
-> ---
->  drivers/i2c/i2c-core-base.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 38af18645133..8149c9e32b69 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -327,6 +327,8 @@ static int i2c_device_probe(struct device *dev)
->
->                 if (client->flags & I2C_CLIENT_HOST_NOTIFY) {
->                         dev_dbg(dev, "Using Host Notify IRQ\n");
-> +                       /* Keep adapter active when Host Notify is required */
-> +                       pm_runtime_get_sync(&client->adapter->dev);
->                         irq = i2c_smbus_host_notify_to_irq(client);
->                 } else if (dev->of_node) {
->                         irq = of_irq_get_byname(dev->of_node, "irq");
-> @@ -431,6 +433,8 @@ static int i2c_device_remove(struct device *dev)
->         device_init_wakeup(&client->dev, false);
->
->         client->irq = client->init_irq;
-> +       if (client->flags & I2C_CLIENT_HOST_NOTIFY)
-> +               pm_runtime_put(&client->adapter->dev);
->
->         return status;
->  }
-> --
-> 2.20.1
->
+SGkgR2VlcnQsDQoNCk9uIFR1ZSwgQXByIDMwLCAyMDE5IDEsIEdlZXJ0IFV5dHRlcmhvZXZlbiB3
+cm90ZToNCj4gUGVyaGFwcyB5b3Ugd2FudCB0byBhZGQgYW4gImV0aGVybmV0MCIgYWxpYXMsIHNv
+IFUtQm9vdCBjYW4gZmluZCB0aGUNCj4gZGV2aWNlLW5vZGUgYW5kIGFkZCBhbiBhcHByb3ByaWF0
+ZSAibG9jYWwtbWFjLWFkZHJlc3MiIHByb3BlcnR5Pw0KDQpTaW5jZSBJIGhhdmUgMiBFdGhlcm5l
+dHMsIHdvdWxkIHlvdXIgcmVjb21tZW5kYXRpb24gYmUgSSBhZGQgYW4gYWxpYXMgZm9yDQplYWNo
+Pw0KDQpIb25lc3RseSwgSSd2ZSBuZXZlciBkb25lIGl0IHRoYXQgd2F5LiBJdCBoYXMgYWx3YXlz
+IGJlZW4gdGhhdCB1LWJvb3QgDQpwcmVsb2FkcyB0aGUgTUFDIGFkZHJlc3MgcmVnaXN0ZXJzIGFu
+ZCB0aGVuIHRoZSBzaF9ldGggZHJpdmVyIGp1c3QgdXNlcyANCndoYXQncyBhbHJlYWR5IGxvYWRl
+ZC4NCkJ1dCwgaWYgdXNpbmcgRFQgaXMgdGhlIG1vcmUgcmVjb21tZW5kZWQgbWV0aG9kLCBJIGNh
+biBtaWdyYXRlIHRvd2FyZHMNCnRoYXQuDQoNClRoYW5rcywNCkNocmlzDQoNCg==
