@@ -2,112 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A42411DC6
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 May 2019 17:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A23D41202A
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 May 2019 18:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728349AbfEBPdA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 May 2019 11:33:00 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:41036 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729291AbfEBPc7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 May 2019 11:32:59 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x42FOkwL028384;
-        Thu, 2 May 2019 10:32:52 -0500
-Authentication-Results: ppops.net;
-        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
-Received: from mail4.cirrus.com ([87.246.98.35])
-        by mx0a-001ae601.pphosted.com with ESMTP id 2s6xhv34q3-1;
-        Thu, 02 May 2019 10:32:52 -0500
-Received: from EDIEX01.ad.cirrus.com (ediex01.ad.cirrus.com [198.61.84.80])
-        by mail4.cirrus.com (Postfix) with ESMTP id 2ADCD611C8AF;
-        Thu,  2 May 2019 10:34:36 -0500 (CDT)
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 2 May
- 2019 16:32:51 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
- Transport; Thu, 2 May 2019 16:32:51 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5734E44;
-        Thu,  2 May 2019 16:32:51 +0100 (BST)
-Date:   Thu, 2 May 2019 16:32:51 +0100
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-CC:     Sasha Levin <sashal@kernel.org>, <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>, <stable@vger.kernel.org>
-Subject: Re: [PATCH] i2c: Prevent runtime suspend of adapter when Host Notify
- is required
-Message-ID: <20190502153251.GG81578@ediswmail.ad.cirrus.com>
-References: <20190430142322.15013-1-jarkko.nikula@linux.intel.com>
- <20190430155637.1B45E21743@mail.kernel.org>
- <7f989564-e994-5be6-02da-2838639efe59@linux.intel.com>
+        id S1726567AbfEBQ3S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 May 2019 12:29:18 -0400
+Received: from sauhun.de ([88.99.104.3]:55620 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726303AbfEBQ3R (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 2 May 2019 12:29:17 -0400
+Received: from localhost (p5486CF77.dip0.t-ipconnect.de [84.134.207.119])
+        by pokefinder.org (Postfix) with ESMTPSA id 2D3BF2CF690;
+        Thu,  2 May 2019 18:29:15 +0200 (CEST)
+Date:   Thu, 2 May 2019 18:29:14 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, skidnik <skidnik@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH RFT] i2c: designware: ratelimit 'transfer when suspended'
+ errors
+Message-ID: <20190502162914.GA11535@kunai>
+References: <20190424161632.4994-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="J2SCkAp4GZ/dPZZf"
 Content-Disposition: inline
-In-Reply-To: <7f989564-e994-5be6-02da-2838639efe59@linux.intel.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905020103
+In-Reply-To: <20190424161632.4994-1-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, May 02, 2019 at 03:32:24PM +0300, Jarkko Nikula wrote:
-> On 4/30/19 6:56 PM, Sasha Levin wrote:
-> >This commit has been processed because it contains a "Fixes:" tag,
-> >fixing commit: c5eb1190074c PCI / PM: Allow runtime PM without callback functions.
-> >
-> >The bot has tested the following trees: v5.0.10, v4.19.37.
-> >
-> >v5.0.10: Build OK!
-> >v4.19.37: Failed to apply! Possible dependencies:
-> >     6f108dd70d30 ("i2c: Clear client->irq in i2c_device_remove")
-> >     93b6604c5a66 ("i2c: Allow recovery of the initial IRQ by an I2C client device.")
-> >
-> >
-> >How should we proceed with this patch?
-> >
-> There's also dependency to commit
-> b9bb3fdf4e87 ("i2c: Remove unnecessary call to irq_find_mapping")
-> 
-> Without it 93b6604c5a66 doesn't apply.
-> 
-> Otherwise my patch don't have dependency into these so I can have
-> another version for 4.19 if needed.
-> 
-> I got impression from the mail thread for 6f108dd70d30 that it could
-> be also stable material but cannot really judge.
-> 
-> Charles: does your commits b9bb3fdf4e87 and 6f108dd70d30 with the
-> fix 93b6604c5a66 qualify for 4.19? (background: my fix doesn't apply
-> without them but doesn't depend on them).
-> 
 
-b9bb3fdf4e87 ("i2c: Remove unnecessary call to irq_find_mapping")
+--J2SCkAp4GZ/dPZZf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I don't think this one would make sense to backport it's not
-fixing any issues it just removes a redundant call. The call just
-repeats work it does no harm.
+On Wed, Apr 24, 2019 at 06:16:32PM +0200, Wolfram Sang wrote:
+> There are two problems with dev_err() here. One: It is not ratelimited.
+> Two: We don't see which driver tried to transfer something with a
+> suspended adapter. Switch to dev_WARN_ONCE to fix both issues. Drawback
+> is that we don't see if multiple drivers are trying to transfer while
+> suspended. They need to be discovered one after the other now. This is
+> better than a high CPU load because a really broken driver might try to
+> resend endlessly.
+>=20
+> Link: https://bugs.archlinux.org/task/62391
+> Fixes: 275154155538 ("i2c: designware: Do not allow i2c_dw_xfer() calls w=
+hile suspended")
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-6f108dd70d30 ("i2c: Clear client->irq in i2c_device_remove")
-93b6604c5a66 ("i2c: Allow recovery of the initial IRQ by an I2C client device.")
+Applied to for-current-fixed, thanks!
 
-These two are much more of a grey area, they do fix an actual
-issue, although that issue only happens when you unbind and
-rebind both an I2C device and the device providing its IRQs. A
-couple of us have been trying to look for a better fix as well
-which further complicates matters.
 
-I would suggest you just backport your patch and leave these
-ones. As evidenced by the fixup patch there is a slight chance
-of regressions from backporting this fix and the issue it
-fixes is clearly not something people are normally hitting.
+--J2SCkAp4GZ/dPZZf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Charles
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzLGtYACgkQFA3kzBSg
+KbaSrg//dMkuxn7hTSFYPxUA/UxmqfAmhFcRp8ceOAhqiI7xvuPFlqridTi4jBN/
+VI134YslZ/pArL8bi9xfdAfQS/YFQ11kx6TSHODXWI3FbKwOPaEPvcfrvDsXuDZL
+kbOQKucHZuvGiCwpYj+q9VRxHMVWG9rkW6qNuSRG1k0t9JKMgDtpNdGqtklaejtB
+XrlDd7SAhG8rzH6Da/DX8JDR09MVpBYd+6RwdDnZpnz7nb/kPurKbEjc7aATUoCk
+w5gCi3IHLfCmP7z+4VNNNDixork0FqWuDlRTRQdAxUswBDvSZK9jSFVoAl7VmBqP
+RNDBUaVvQzdWavWDcZo3af04m/AUU8k8Mft3w8Qgf2Bmm1r1NEwkAvsb9V/CfbfH
+cvNaZB5uNVwXtL2QO55PeRtsga1q5ukl8VJZ4+TSGNvW0mVhE2nFQtzz25YM6Ajz
+h79+sCn9M4WPRx4PAE1MhjaQ4ksiIMnFMX+0fmTaCDPfwuV1eUXqygqLKSGJO4J/
+KMjFrKJ1vva8CqLXEAatgSBiqbMPQB3VzK1sq15GOekQKo1FhtV1NAKYgnRji4nd
+cR+yQu9Vpa5tZox1mbv6JO7x6DtrvkrRA17NGsCu/Elr2xZnWOadB34SG7PiJnat
+DtL2/4Ryff6p10dUmIjAjK0V6KlejhbZVfmu3CqihwqrsH7IwGg=
+=YJdQ
+-----END PGP SIGNATURE-----
+
+--J2SCkAp4GZ/dPZZf--
