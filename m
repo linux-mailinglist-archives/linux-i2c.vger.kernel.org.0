@@ -2,147 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A1811AA8
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 May 2019 16:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A42411DC6
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 May 2019 17:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbfEBOBz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 May 2019 10:01:55 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:4669 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726197AbfEBOBz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 May 2019 10:01:55 -0400
-Received-SPF: Pass (esa3.microchip.iphmx.com: domain of
-  Ludovic.Desroches@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Ludovic.Desroches@microchip.com";
-  x-sender="Ludovic.Desroches@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa3.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Ludovic.Desroches@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa3.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Ludovic.Desroches@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-X-IronPort-AV: E=Sophos;i="5.60,421,1549954800"; 
-   d="scan'208";a="31761172"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 02 May 2019 07:01:54 -0700
-Received: from localhost (10.10.76.4) by chn-sv-exch07.mchp-main.com
- (10.10.76.108) with Microsoft SMTP Server id 14.3.352.0; Thu, 2 May 2019
- 07:01:53 -0700
-Date:   Thu, 2 May 2019 16:01:16 +0200
-From:   Ludovic Desroches <ludovic.desroches@microchip.com>
-To:     Raag Jadav <raagjadav@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <alexandre.belloni@bootlin.com>,
-        <linux-i2c@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] i2c: at91: handle TXRDY interrupt spam
-Message-ID: <20190502140116.rim72idpgvq4h4vc@M43218.corp.atmel.com>
-Mail-Followup-To: Raag Jadav <raagjadav@gmail.com>,
-        linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <1556005008-6318-1-git-send-email-raagjadav@gmail.com>
- <20190429090005.f6ydghzu5n5yruav@M43218.corp.atmel.com>
- <20190429223332.GA3908@pc>
+        id S1728349AbfEBPdA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 May 2019 11:33:00 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:41036 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729291AbfEBPc7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 May 2019 11:32:59 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x42FOkwL028384;
+        Thu, 2 May 2019 10:32:52 -0500
+Authentication-Results: ppops.net;
+        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from mail4.cirrus.com ([87.246.98.35])
+        by mx0a-001ae601.pphosted.com with ESMTP id 2s6xhv34q3-1;
+        Thu, 02 May 2019 10:32:52 -0500
+Received: from EDIEX01.ad.cirrus.com (ediex01.ad.cirrus.com [198.61.84.80])
+        by mail4.cirrus.com (Postfix) with ESMTP id 2ADCD611C8AF;
+        Thu,  2 May 2019 10:34:36 -0500 (CDT)
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 2 May
+ 2019 16:32:51 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Thu, 2 May 2019 16:32:51 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5734E44;
+        Thu,  2 May 2019 16:32:51 +0100 (BST)
+Date:   Thu, 2 May 2019 16:32:51 +0100
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+CC:     Sasha Levin <sashal@kernel.org>, <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>, <stable@vger.kernel.org>
+Subject: Re: [PATCH] i2c: Prevent runtime suspend of adapter when Host Notify
+ is required
+Message-ID: <20190502153251.GG81578@ediswmail.ad.cirrus.com>
+References: <20190430142322.15013-1-jarkko.nikula@linux.intel.com>
+ <20190430155637.1B45E21743@mail.kernel.org>
+ <7f989564-e994-5be6-02da-2838639efe59@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20190429223332.GA3908@pc>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <7f989564-e994-5be6-02da-2838639efe59@linux.intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905020103
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 04:03:32AM +0530, Raag Jadav wrote:
-> External E-Mail
+On Thu, May 02, 2019 at 03:32:24PM +0300, Jarkko Nikula wrote:
+> On 4/30/19 6:56 PM, Sasha Levin wrote:
+> >This commit has been processed because it contains a "Fixes:" tag,
+> >fixing commit: c5eb1190074c PCI / PM: Allow runtime PM without callback functions.
+> >
+> >The bot has tested the following trees: v5.0.10, v4.19.37.
+> >
+> >v5.0.10: Build OK!
+> >v4.19.37: Failed to apply! Possible dependencies:
+> >     6f108dd70d30 ("i2c: Clear client->irq in i2c_device_remove")
+> >     93b6604c5a66 ("i2c: Allow recovery of the initial IRQ by an I2C client device.")
+> >
+> >
+> >How should we proceed with this patch?
+> >
+> There's also dependency to commit
+> b9bb3fdf4e87 ("i2c: Remove unnecessary call to irq_find_mapping")
 > 
+> Without it 93b6604c5a66 doesn't apply.
 > 
-> On Mon, Apr 29, 2019 at 11:00:05AM +0200, Ludovic Desroches wrote:
-> > Hello Raag,
-> > 
-> > On Tue, Apr 23, 2019 at 01:06:48PM +0530, Raag Jadav wrote:
-> > > External E-Mail
-> > > 
-> > > 
-> > > Performing i2c write operation while SDA or SCL line is held
-> > > or grounded by slave device, we go into infinite at91_twi_write_next_byte
-> > > loop with TXRDY interrupt spam.
-> > 
-> > Sorry but I am not sure to have the full picture, the controller is in
-> > slave or master mode?
-> > 
-> > SVREAD is only used in slave mode. When SVREAD is set, it means that a read
-> > access is performed and your issue concerns the write operation.
-> > 
-> > Regards
-> > 
-> > Ludovic
+> Otherwise my patch don't have dependency into these so I can have
+> another version for 4.19 if needed.
 > 
-> Yes, even though the datasheet suggests that SVREAD is irrelevant in master mode,
-> TXRDY and SVREAD are the only ones being set in status register upon reproducing the issue.
-> Couldn't think of a better way to handle such strange behaviour.
-> Any suggestions would be appreciated.
+> I got impression from the mail thread for 6f108dd70d30 that it could
+> be also stable material but cannot really judge.
+> 
+> Charles: does your commits b9bb3fdf4e87 and 6f108dd70d30 with the
+> fix 93b6604c5a66 qualify for 4.19? (background: my fix doesn't apply
+> without them but doesn't depend on them).
+> 
 
-I have the confirmation that you can't rely on the SVREAD flag when in
-master mode. This flag should always have the same value.
+b9bb3fdf4e87 ("i2c: Remove unnecessary call to irq_find_mapping")
 
-I am trying to understand what could lead to your situation. Can you
-give me more details. What kind of device it is? What does lead to this
-situation? Does it happen randomly or not?
+I don't think this one would make sense to backport it's not
+fixing any issues it just removes a redundant call. The call just
+repeats work it does no harm.
 
-Regards
+6f108dd70d30 ("i2c: Clear client->irq in i2c_device_remove")
+93b6604c5a66 ("i2c: Allow recovery of the initial IRQ by an I2C client device.")
 
-Ludovic
+These two are much more of a grey area, they do fix an actual
+issue, although that issue only happens when you unbind and
+rebind both an I2C device and the device providing its IRQs. A
+couple of us have been trying to look for a better fix as well
+which further complicates matters.
 
-> 
-> Cheers,
-> Raag
-> 
-> > 
-> > > 
-> > > Signed-off-by: Raag Jadav <raagjadav@gmail.com>
-> > > ---
-> > >  drivers/i2c/busses/i2c-at91.c | 6 +++++-
-> > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/i2c/busses/i2c-at91.c b/drivers/i2c/busses/i2c-at91.c
-> > > index 3f3e8b3..b2f5fdb 100644
-> > > --- a/drivers/i2c/busses/i2c-at91.c
-> > > +++ b/drivers/i2c/busses/i2c-at91.c
-> > > @@ -72,6 +72,7 @@
-> > >  #define	AT91_TWI_TXCOMP		BIT(0)	/* Transmission Complete */
-> > >  #define	AT91_TWI_RXRDY		BIT(1)	/* Receive Holding Register Ready */
-> > >  #define	AT91_TWI_TXRDY		BIT(2)	/* Transmit Holding Register Ready */
-> > > +#define	AT91_TWI_SVREAD		BIT(3)	/* Slave Read */
-> > >  #define	AT91_TWI_OVRE		BIT(6)	/* Overrun Error */
-> > >  #define	AT91_TWI_UNRE		BIT(7)	/* Underrun Error */
-> > >  #define	AT91_TWI_NACK		BIT(8)	/* Not Acknowledged */
-> > > @@ -571,7 +572,10 @@ static irqreturn_t atmel_twi_interrupt(int irq, void *dev_id)
-> > >  		at91_disable_twi_interrupts(dev);
-> > >  		complete(&dev->cmd_complete);
-> > >  	} else if (irqstatus & AT91_TWI_TXRDY) {
-> > > -		at91_twi_write_next_byte(dev);
-> > > +		if ((status & AT91_TWI_SVREAD) && (dev->buf_len == 0))
-> > > +			at91_twi_write(dev, AT91_TWI_IDR, AT91_TWI_TXRDY);
-> > > +		else
-> > > +			at91_twi_write_next_byte(dev);
-> > >  	}
-> > >  
-> > >  	/* catch error flags */
-> > > -- 
-> > > 2.7.4
-> > > 
-> > > 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+I would suggest you just backport your patch and leave these
+ones. As evidenced by the fixup patch there is a slight chance
+of regressions from backporting this fix and the issue it
+fixes is clearly not something people are normally hitting.
+
+Thanks,
+Charles
