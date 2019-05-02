@@ -2,130 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3866B1089D
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 May 2019 15:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2E3114D3
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 May 2019 10:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726648AbfEAN7g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 May 2019 09:59:36 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:39400 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726572AbfEAN7g (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 May 2019 09:59:36 -0400
-Received: by mail-ed1-f67.google.com with SMTP id e24so3862255edq.6
-        for <linux-i2c@vger.kernel.org>; Wed, 01 May 2019 06:59:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=83sr06AgQn1jRuIcaK5X1yiTVGSuWSOa0kQfrlePHUU=;
-        b=AIfZImryGTkNdlWMCuRcUg1+XcKtnv7sF9q5fd/P4RBvwaN2AaGlQ0QGXVGaDQLn2C
-         U4Ocgpe61xoDDxJ8qCJluZzBzVd2mZuZopjJ7lvuGtKUhp1/uqPOipUwwke5OR4XzFN9
-         uiiaABN51+v2qDWCoz6EGujlfLGJ8+c5KBYcfnFDcCajq90/u3zugjDzQ//6kRONakPx
-         9zwoCae9bwdHVZSmdnkBitR8YHn/vYXcApIq7VXiwhY0vHgw9oodUZ5/Diw6HWeX7uGz
-         vC/MpZTsl1tgdwz0dLC8daRB4yoJUMIrgDg0YgTWa3RFLgTOKL8iGT1tIPRlXP65HAZD
-         PCKw==
-X-Gm-Message-State: APjAAAUc6xJrgNTB7hWHD+kiLZvOm2bFvv+u8xIO2ieA+j0BdjPVHpht
-        bwnAjwdTKVaydf7DWt5gXUV/gw==
-X-Google-Smtp-Source: APXvYqxYKS4Vj/3QRBYncxCJHhAbkZPzU6Aw3dd6oWUSeaR4tEWi+YnJej2mPcJsYcIRjaiZMMtc7g==
-X-Received: by 2002:a50:f706:: with SMTP id g6mr12436994edn.187.1556719174404;
-        Wed, 01 May 2019 06:59:34 -0700 (PDT)
-Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
-        by smtp.gmail.com with ESMTPSA id d8sm6812919ejb.19.2019.05.01.06.59.33
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 May 2019 06:59:33 -0700 (PDT)
-Subject: Re: [PATCH RFT] i2c: designware: ratelimit 'transfer when suspended'
- errors
-To:     skidnik <skidnik@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <20190424161632.4994-1-wsa+renesas@sang-engineering.com>
- <1a8172c8-3d2e-1897-88dd-d86aa0130ed8@gmail.com>
- <56faab09-c2ec-047a-886e-669d0a106e7b@redhat.com>
- <39b2ddc1-0f96-8977-f57f-840025aff4f2@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <231dde8f-0e5b-0d88-abf6-544ccc4d2390@redhat.com>
-Date:   Wed, 1 May 2019 15:59:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726687AbfEBIIC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 May 2019 04:08:02 -0400
+Received: from sonic310-13.consmr.mail.bf2.yahoo.com ([74.6.135.123]:36480
+        "EHLO sonic310-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726684AbfEBIIB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 May 2019 04:08:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1556784480; bh=eqPLWwwRqRVmzP2YKccqgKJef102gkry4Z7Y3+dSxpU=; h=Date:From:To:Cc:In-Reply-To:References:Subject:From:Subject; b=a54Ac64R6FQZoKZfwg4EGrzpULSchLC4M/3V5A0ntvSlJtUEWkaoesIogY0i7Yr5bxFOPZ4bsTlkBNc+pueyj7wEObCrDGyV5gRm6E/OmZe26xEVsj1osIOMSXN4/l6fgx0hHhaugsNNdo/XfgrVQL9a6HtzGgRmEmq1UK4zk9L0kgmhn3+nmmCIDuyEiiK90HlQIWrbPQZzVZ3tMYt8z3ZGp3LqDuoh/5NB0qW0LFKjsgLHSA37bYFY01jJTMsCVlhfgwypWwyAMU27jU0Qzh7iBTdeWb7qxQk/mh6+TAqlnLykUEv0DM/hnVZvWnz2xMXwxmHCfmT3tNgyPuZoDg==
+X-YMail-OSG: 7RoG7rAVM1lVcMBwOFiMzuVHlXnke1Jh.1NnEcWAeIOHaSSoAuW8QxaWKMU_QM.
+ b.NKhsTu.eUxYSaEXcxNzoDsyVW1yATu3URu8Sqx4jo5xr.pY1hEAmB9BiffJCQzUQxP9byJ5HAD
+ APcJLTxCu7UKHzal7MAUpuPe6zp1geIx3GuFGoQCNW.UVXnAFa3akW6.0Jx3I4XIogNafhlihnMT
+ 5cyNYutPf8j.BxsG_Ns5O5IkkP.K1D1329WFSJPac51.Mor2mNxqIXAUG8dxjTHN0mfOKHIY7CQT
+ RumQHgEEzTD5fpYttrlfnInTj23GtkG3gquhbw2Gw91ax8VudufNsdNAFh5xAMHFa_5WIiXJ6YdK
+ E7WE1R0KSJ7muX_MNRT6juK_YLtYoZSEwUmpWIRjzVHF0UhyGPh0.fBgF1fZXYSaSNGhtNnb3dqn
+ ncPvioX_39bqIHAPvsqqMi80Fv.YirXTNgX6D614l8sSvHt9EwoYB8dqxRKCqZ009X4If6l4ZL6e
+ N4MNOUbjuVQZNcfgfnHbybnbRqL1xWTOzQ99OoRZRzc0AAadEh.PZi2RmYIc0yBe7XTSLHmyUlTz
+ wgqK4QSOTnUp8O4nVEshTHd9phqtPZiKWc_XCxoK1QEFKGaqS267R4w7PErcflg7F6XRcch5ZvdF
+ Bz_QiyIEXcae7tv68lNgTrgyMy7A3cGCvG5xnmlfWn0etQ4wguhZNr8mRSKP3oxtzAJxH9lbh12H
+ aPx2OyUvQN.32CETmpsl0fiB2sY0xqe594uHAZVR8uC_zcDmj42apPsJKee_0A4hzFDsVHSLBxVq
+ oX.xtqlPfrhrRx8gNL9Y5wBIkUwcnn4QlyrzLsw1smkpfd8omcmEGuA9nSr2YOFitsIoi07IH2Ji
+ HrJuzotoRYKAVD3RiaHhByjLS9Esj3fambpf3edxup6hLSNYvLdLpJfUjUbQwZbIAi.ZRbu2IoV.
+ cKkTLFXRN3EyAJkbtXr9XUCI8BGi5v67teOkpDbR6oRlSEYR1c2Ytbxqcm9s6CgHtVuKm5UtO48g
+ meYV8JH9GkQwxhEdMXwK88VDr.Q8VAuWr7LS9_epkCmbuBTWSvQuY20_rOOoqBkZzw0yV4medu7v
+ ZUVT.q4bS6_wg1XYIFCANZsDj0t5BETj1SB9sOXHTYPF5SfALO0.d_lu0yMzAV59F4F.HisQk4.N
+ Z2Z0S5gUZLtAQH1.6dwIQ6jAX.bGly2U_fS.gbJ6Q7nYBTeLTZQ--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.bf2.yahoo.com with HTTP; Thu, 2 May 2019 08:08:00 +0000
+Date:   Thu, 2 May 2019 08:07:58 +0000 (UTC)
+From:   Keijo Vaara <ferdasyn@rocketmail.com>
+To:     linux-i2c@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-input@vger.kernel.org,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, stable@vger.kernel.org
+Message-ID: <1541197134.3231703.1556784478268@mail.yahoo.com>
+In-Reply-To: <20190430142322.15013-1-jarkko.nikula@linux.intel.com>
+References: <20190430142322.15013-1-jarkko.nikula@linux.intel.com>
+Subject: Re: [PATCH] i2c: Prevent runtime suspend of adapter when Host
+ Notify is required
 MIME-Version: 1.0
-In-Reply-To: <39b2ddc1-0f96-8977-f57f-840025aff4f2@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: WebService/1.1.13554 YMailNorrin Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+On Tue, Apr 30, 2019 at 4:23 PM Jarkko Nikula
+<jarkko.nikula@linux.intel.com> wrote:
+>
+> ---
+> Keijo: could you test this does it fix the issue you reported? This is
+> practically the same diff I sent earlier what you probably haven't tested=
+ yet.
+> I wanted to send a commitable fix in case it works since I'll be out of
+> office in a few coming days.
+> ---
+>=C2=A0 drivers/i2c/i2c-core-base.c | 4 ++++
+>=C2=A0 1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 38af18645133..8149c9e32b69 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -327,6 +327,8 @@ static int i2c_device_probe(struct device *dev)
+>
+>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if (client->flags =
+& I2C_CLIENT_HOST_NOTIFY) {
+>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 dev_dbg(dev, "Using Host Notify IRQ\n");
+> +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 /* Keep adapter active when Host Notify is required */
+> +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 pm_runtime_get_sync(&client->adapter->dev);
+>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 irq =3D i2c_smbus_host_notify_to_irq(client);
+>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 } else if (dev->of=
+_node) {
+>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 irq =3D of_irq_get_byname(dev->of_node, "irq");
+> @@ -431,6 +433,8 @@ static int i2c_device_remove(struct device *dev)
+>=C2=A0 =C2=A0 =C2=A0 =C2=A0 device_init_wakeup(&client->dev, false);
+>
+>=C2=A0 =C2=A0 =C2=A0 =C2=A0 client->irq =3D client->init_irq;
+> +=C2=A0 =C2=A0 =C2=A0 if (client->flags & I2C_CLIENT_HOST_NOTIFY)
+> +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 pm_runtime_put(&client-=
+>adapter->dev);
+>
+>=C2=A0 =C2=A0 =C2=A0 =C2=A0 return status;
+>=C2=A0 }
+> --
+> 2.20.1
+>
 
-On 30-04-19 22:15, skidnik wrote:
-> On 4/30/19 5:09 PM, Hans de Goede wrote:
->> Hi,
->>
->> On 4/25/19 9:21 PM, skidnik wrote:
->>> On 4/24/19 7:16 PM, Wolfram Sang wrote:
->>>> There are two problems with dev_err() here. One: It is not ratelimited.
->>>> Two: We don't see which driver tried to transfer something with a
->>>> suspended adapter. Switch to dev_WARN_ONCE to fix both issues. Drawback
->>>> is that we don't see if multiple drivers are trying to transfer while
->>>> suspended. They need to be discovered one after the other now. This is
->>>> better than a high CPU load because a really broken driver might try to
->>>> resend endlessly.
->>>>
->>>> Link: https://bugs.archlinux.org/task/62391
->>>> Fixes: 275154155538 ("i2c: designware: Do not allow i2c_dw_xfer() calls while suspended")
->>>> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->>>> ---
->>>>
->>>> skdnik: Would you be so kind and test this patch? I can only build-test here.
->>>>
->>>> I have a prototype to fix the similar issue in the core, but this needs more
->>>> testing first, so I am sending this one out already.
->>>>
->>>>   drivers/i2c/busses/i2c-designware-master.c | 3 +--
->>>>   1 file changed, 1 insertion(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
->>>> index bb8e3f149979..d464799e40a3 100644
->>>> --- a/drivers/i2c/busses/i2c-designware-master.c
->>>> +++ b/drivers/i2c/busses/i2c-designware-master.c
->>>> @@ -426,8 +426,7 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
->>>>       pm_runtime_get_sync(dev->dev);
->>>> -    if (dev->suspended) {
->>>> -        dev_err(dev->dev, "Error %s call while suspended\n", __func__);
->>>> +    if (dev_WARN_ONCE(dev->dev, dev->suspended, "Transfer while suspended\n")) {
->>>>           ret = -ESHUTDOWN;
->>>>           goto done_nolock;
->>>>       }
->>>>
->>> This solves system journal flooding, but I still have one core under full load after resume from hibernation. The touchpad attached to that bus works perfectly fine after resume.
->>
->> Ah, this is on a resume from hibernate, in that case I think this patch will fix this:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=c8afd03486c26accdda4846e5561aa3f8e862a9d
->>
->> Can you build a kernel with that patch added?
->>
->> Regards,
->>
->> Hans
->>
-> Built linux-5.1.0-rc7 (linux-mainline PKGBUILD from aur) with both patches applied.
-> 
-> This has fixed the issue. After resume from hibernation idle CPU usage goes back to normal (around 1%). The i2c_designware related error doesn't appear in kernel log.
-> 
-> I'm going to report back to Archlinux bug tracker that the issue has been fixed. Please can you tell which kernel release will have these fixes so that I can provide relevant information.
-
-The patch is scheduled for inclusion into 5.2 and it has a Cc: stable,
-so it will get backported to older kernels like the 5.1.x and 5.0.x releases
-once it is merged into Linus' tree.
-
-Regards,
-
-Hans
+Thanks guys, I've tested the patch and can confirm it fixes the issue.
