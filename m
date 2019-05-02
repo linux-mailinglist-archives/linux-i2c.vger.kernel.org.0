@@ -2,67 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AD8123DE
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 May 2019 23:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA11123F0
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 May 2019 23:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726390AbfEBVHb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 May 2019 17:07:31 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:46658 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbfEBVHb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 May 2019 17:07:31 -0400
-Received: by mail-ot1-f68.google.com with SMTP id 77so3421250otu.13;
-        Thu, 02 May 2019 14:07:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Obuf5qyX6CajeeftWl43YvfiHOhkexQ4ZWmFLo5kxC4=;
-        b=MGKW9S5T3u9PeIyayz1eBiPEvbJoIrUWnqkFSCOWrtmxJLIAXp+xJS9ON7yj7jF20f
-         H8zniAf3r+TONBNrdzU1Mg5MuuLeUrP3iBtrTVE6f0Ca7VQYqwKFQlO9ml1ig7bcml6l
-         oytf4HZ0XUvFSZIsRRA7j6v2oh0k7v99ijwI+W9vGWjOHkF4gZvM3pdrXp+uexcfSXKZ
-         tQJQIAGGoYJztWGb7JQBWmX4vRdNlAYKKgcPWh091vCP5wTOQ3ydTf+e7i2Fmlj0tnM1
-         DpMT6C7NfjlZ7LBUv6qF6Cq9IvXiNifd/XL1RIaGZ+ypH1QmSrp0yjn+o6WZTz/eHe+s
-         ftNA==
-X-Gm-Message-State: APjAAAVU0CHKjPeFpTNAtjO6eA4Zr91SGcbtYA5Kj1F7ER2DxLw6/gyC
-        19lMyYjCCHl1mpSgi7/lpw==
-X-Google-Smtp-Source: APXvYqwzY9DthBC1o8kD7qfujr4W8vud7ywuAIdAaWx053P6Wp28eq0EKI/IMavMPdHDZvxetuR3VA==
-X-Received: by 2002:a05:6830:20c4:: with SMTP id z4mr1657790otq.27.1556831250474;
-        Thu, 02 May 2019 14:07:30 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q26sm23285otk.74.2019.05.02.14.07.29
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 May 2019 14:07:29 -0700 (PDT)
-Date:   Thu, 2 May 2019 16:07:29 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chris Brandt <chris.brandt@renesas.com>
-Cc:     Simon Horman <horms@verge.net.au>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Chris Brandt <chris.brandt@renesas.com>
-Subject: Re: [PATCH 3/7] dt-bindings: i2c: riic: document r7s9210 support
-Message-ID: <20190502210729.GA10850@bogus>
-References: <20190430132309.12473-1-chris.brandt@renesas.com>
- <20190430132309.12473-4-chris.brandt@renesas.com>
+        id S1726193AbfEBVOu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 May 2019 17:14:50 -0400
+Received: from mail-eopbgr20083.outbound.protection.outlook.com ([40.107.2.83]:14588
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726030AbfEBVOu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 2 May 2019 17:14:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JxMqPFVD5F1NVwXHQXY7T6Dor29b+UiLfTZduVllgCg=;
+ b=HMFfqZ2dSMeB7XynS4K1pXEo8y1qJPPuUELSsAQVWjGqVpafVJG45vS0oEm7giTmOzlYk4a5Q5IosM/iyAXFxURXaNxZT2R6IqjBgel6eLLJCTeA75+uKe65Z0cf/Y4iDfoOIwrdbfCwN92rccUBKC6bsxVM+kaLyzLqCm761tI=
+Received: from AM6PR05MB5224.eurprd05.prod.outlook.com (20.177.196.210) by
+ AM6PR05MB6311.eurprd05.prod.outlook.com (20.179.5.16) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.11; Thu, 2 May 2019 21:14:46 +0000
+Received: from AM6PR05MB5224.eurprd05.prod.outlook.com
+ ([fe80::61f4:6de4:5401:5f56]) by AM6PR05MB5224.eurprd05.prod.outlook.com
+ ([fe80::61f4:6de4:5401:5f56%2]) with mapi id 15.20.1856.008; Thu, 2 May 2019
+ 21:14:46 +0000
+From:   Vadim Pasternak <vadimp@mellanox.com>
+To:     Asmaa Mnebhi <Asmaa@mellanox.com>,
+        "minyard@acm.org" <minyard@acm.org>
+CC:     "wsa@the-dreams.de" <wsa@the-dreams.de>,
+        Michael Shych <michaelsh@mellanox.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: RE: [PATCH v4 0/1] Add support for IPMB driver
+Thread-Topic: [PATCH v4 0/1] Add support for IPMB driver
+Thread-Index: AQHU/35gob0SSpnmDUiPba8AHw4raaZVL7uggAL0uwCAABz5AIAADgcAgAAH90A=
+Date:   Thu, 2 May 2019 21:14:46 +0000
+Message-ID: <AM6PR05MB522465330E2C594B0309AE78A2340@AM6PR05MB5224.eurprd05.prod.outlook.com>
+References: <cover.1556645340.git.Asmaa@mellanox.com>
+ <AM6PR05MB5224FCACBD4EF55F3890EC6AA23A0@AM6PR05MB5224.eurprd05.prod.outlook.com>
+ <VI1PR05MB62392EDC0FD3C960519C91ABDA340@VI1PR05MB6239.eurprd05.prod.outlook.com>
+ <20190502194954.GJ6623@minyard.net>
+ <VI1PR05MB6239E3C9B9BBBA226DCFDD12DA340@VI1PR05MB6239.eurprd05.prod.outlook.com>
+In-Reply-To: <VI1PR05MB6239E3C9B9BBBA226DCFDD12DA340@VI1PR05MB6239.eurprd05.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=vadimp@mellanox.com; 
+x-originating-ip: [84.108.218.72]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a23a4258-c815-42fa-ac94-08d6cf433432
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:AM6PR05MB6311;
+x-ms-traffictypediagnostic: AM6PR05MB6311:
+x-microsoft-antispam-prvs: <AM6PR05MB631106C797E903425913B877A2340@AM6PR05MB6311.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0025434D2D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(136003)(346002)(376002)(366004)(39860400002)(189003)(199004)(66066001)(66946007)(66446008)(6116002)(3846002)(66476007)(52536014)(66556008)(73956011)(2906002)(33656002)(25786009)(5660300002)(4326008)(8676002)(64756008)(305945005)(76116006)(68736007)(8936002)(81156014)(11346002)(446003)(229853002)(476003)(81166006)(6436002)(86362001)(102836004)(26005)(6506007)(4744005)(486006)(186003)(7696005)(478600001)(316002)(76176011)(110136005)(14454004)(256004)(54906003)(99286004)(7736002)(9686003)(71190400001)(74316002)(71200400001)(53936002)(55016002)(6246003)(2501003);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR05MB6311;H:AM6PR05MB5224.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: mellanox.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 3Ppx/RLi4my40WJ5skjXabGxQsBpM384DhjXSYEcvXATthvGSD7yHf+PUqWmXQkkI6Vsy/sSwz2AEr1oN54Ep8wK8mYS0A9aSEGTeWxPCgConSuJ1bcJ07KMB+oCFDkI15cFZO1N5qo8jN3mPFvkROwCF6Fpy+X4Tm4MepFuoAK2vQzwvEigmkO4PtpJoIFw2gimtcVGMwAHhol0KJ9a5oS/gUsqX3KW0d8kSsPq5r9Hyg0TSILTDoAu+12ykbj1Rd0FLHXp400HKCwx9z58A7m25kA052Jv//DHy1FQaO6atHeuz6RX4Z2YtlAyGZDp+16ztwQ0R0ZjKaAx4WHe5x1mavWUPpGsEVHtdq+V+12VjKtTJ1aouCW+Az9yyl9oXe+xzfsjfCD7sth7nCiyQnZCmsqL3ydrp/rD/TjPljw=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190430132309.12473-4-chris.brandt@renesas.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a23a4258-c815-42fa-ac94-08d6cf433432
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2019 21:14:46.4187
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB6311
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 30 Apr 2019 08:23:05 -0500, Chris Brandt wrote:
-> Document support for the R7S9210 (RZ/A2) SoC. Also explicitly document
-> bindings for the R7S72100 (RZ/A1) SoC.
-> 
-> Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-riic.txt | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
+ [...]
+> >
+> > >>Better, if you can avoid cast.
+> > >>Would compiler warn if you use for example rol16(client->addr, 1) &
+> GENMASK(7, 0); or something like it?
+> > I thought it wouldn't be too much of an issue to use typecast here sinc=
+e other
+> existing ipmi drivers use typecasting: bt-bmc.c, kcs_bmc_aspeed.c,
+> kcs_bmc_npcm7xx.c all use (u8) typecasting.
+> > But if you really think it is worth it, I could do that.
+> > I just think it is not as straight forward to read this code as using a=
+ simple
+> typecast. Some might wonder why a GENMASK is needed in this case.
+> >
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Hi Asmaa,
+
+I will not insist in case it's OK with maintainers.
+
+ [...]
