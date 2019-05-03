@@ -2,55 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 159DB133D5
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 May 2019 21:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753D9135AD
+	for <lists+linux-i2c@lfdr.de>; Sat,  4 May 2019 00:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbfECTFE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 May 2019 15:05:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59248 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726755AbfECTFE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 3 May 2019 15:05:04 -0400
-Subject: Re: [PULL REQUEST] i2c for 5.1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556910303;
-        bh=Gsh8RpP3mlGpu7c9JmVJW1HXfhaCc8nkocADJKtHlWw=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=jOXyhfPzHsJV/OqMRxln53js/5XiXtwad9fMm3zCq2OJLJprtz7o9aZg3rviyPVHj
-         /qMVU+RUD7mSJBH2WBn90T8MdGvHnNVzOdQRIYpegWspMs6DVMSRW70hevBjBSDfLF
-         uzzeP9gPeLxq5ltJDbe0u1zSNUd5qd9bAs2A2g4M=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20190503162138.GA7676@kunai>
-References: <20190503162138.GA7676@kunai>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20190503162138.GA7676@kunai>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git
- i2c/for-current-fixed
-X-PR-Tracked-Commit-Id: 72bfcee11cf89509795c56b0e40a3785ab00bbdd
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 82463436a7fa40345c6febf0baa4c954af506ca6
-Message-Id: <155691030371.24034.10570742928000347312.pr-tracker-bot@kernel.org>
-Date:   Fri, 03 May 2019 19:05:03 +0000
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        id S1726348AbfECWev (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 May 2019 18:34:51 -0400
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:44153 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726276AbfECWev (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 May 2019 18:34:51 -0400
+Received: from Internal Mail-Server by MTLPINE2 (envelope-from asmaa@mellanox.com)
+        with ESMTPS (AES256-SHA encrypted); 4 May 2019 01:34:48 +0300
+Received: from farm-1.mtbu.labs.mlnx (farm-1.mtbu.labs.mlnx [10.15.2.31])
+        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id x43MYlNL021876;
+        Fri, 3 May 2019 18:34:47 -0400
+Received: (from asmaa@localhost)
+        by farm-1.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id x43MYkmc002591;
+        Fri, 3 May 2019 18:34:46 -0400
+From:   Asmaa Mnebhi <Asmaa@mellanox.com>
+To:     minyard@acm.org, wsa@the-dreams.de, vadimp@mellanox.com,
+        michaelsh@mellanox.com
+Cc:     Asmaa Mnebhi <Asmaa@mellanox.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH v6 0/1] Add support for IPMB driver
+Date:   Fri,  3 May 2019 18:34:40 -0400
+Message-Id: <cover.1556921955.git.Asmaa@mellanox.com>
+X-Mailer: git-send-email 2.1.2
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Fri, 3 May 2019 18:21:42 +0200:
+Hi Vadim,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current-fixed
+I apologize I forgot to address your previous comment concerning
+the ACPI table. I have added the ACPI device id as well as documented
+it for whomever wants to use either the ACPI table or device tree.
+I did not need that for my testing due to our internal build tools/
+code structure.
+But I have tested with the device tree and ACPI table as well and
+it works fine.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/82463436a7fa40345c6febf0baa4c954af506ca6
+I have addressed your comment concerning using macros instead of magic numbers.
 
-Thank you!
+Also, since both you and Corey suggest to not use typecasting,
+I will probably change it to GENMASK in my next update. I am waiting
+for one more advocate against typecasting!
+
+Asmaa Mnebhi (1):
+  Add support for IPMB driver
+
+ Documentation/IPMB.txt           | 103 ++++++++++
+ drivers/char/ipmi/Kconfig        |   8 +
+ drivers/char/ipmi/Makefile       |   1 +
+ drivers/char/ipmi/ipmb_dev_int.c | 397 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 509 insertions(+)
+ create mode 100644 Documentation/IPMB.txt
+ create mode 100644 drivers/char/ipmi/ipmb_dev_int.c
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.1.2
+
