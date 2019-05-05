@@ -2,93 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F4813E2A
-	for <lists+linux-i2c@lfdr.de>; Sun,  5 May 2019 09:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DE313EE3
+	for <lists+linux-i2c@lfdr.de>; Sun,  5 May 2019 12:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725792AbfEEHb1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 5 May 2019 03:31:27 -0400
-Received: from mail-eopbgr10062.outbound.protection.outlook.com ([40.107.1.62]:23182
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726299AbfEEHb0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 5 May 2019 03:31:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MfLf56mpcxAI8moVFjmOnI2IMinlkiMF81F+gLwt5Uk=;
- b=Bl2Y0fvzwGfRij1UYyops/kBVQ7QF+t1ORXzTNi0I1eF0jRVxFeBxQa9Xjg1TiqzS/UnddtjFFZHRPSSyujXXiLEvy0dsQ1/VjnrYZz2dtWIvhjS386FispbQ0jExGDIu0VaL1nl/DlSJQWX3bM9GGe5Qg1nVW2QOlq8paT4f0w=
-Received: from AM0PR04MB4211.eurprd04.prod.outlook.com (52.134.92.158) by
- AM0PR04MB6531.eurprd04.prod.outlook.com (20.179.254.80) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.12; Sun, 5 May 2019 07:31:21 +0000
-Received: from AM0PR04MB4211.eurprd04.prod.outlook.com
- ([fe80::c415:3cab:a042:2e13]) by AM0PR04MB4211.eurprd04.prod.outlook.com
- ([fe80::c415:3cab:a042:2e13%6]) with mapi id 15.20.1856.012; Sun, 5 May 2019
- 07:31:21 +0000
-From:   Aisheng Dong <aisheng.dong@nxp.com>
-To:     Anson Huang <anson.huang@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "eha@deif.com" <eha@deif.com>,
-        "linux@rempel-privat.de" <linux@rempel-privat.de>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        "peda@axentia.se" <peda@axentia.se>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH] i2c: imx: Use __maybe_unused instead of #if CONFIG_PM
-Thread-Topic: [PATCH] i2c: imx: Use __maybe_unused instead of #if CONFIG_PM
-Thread-Index: AQHVAvMW5SvMlMIW0UqHU1fqWG2/GKZcIvPw
-Date:   Sun, 5 May 2019 07:31:21 +0000
-Message-ID: <AM0PR04MB4211C748DF192A56F3FE8E8280370@AM0PR04MB4211.eurprd04.prod.outlook.com>
-References: <1557026820-29428-1-git-send-email-Anson.Huang@nxp.com>
-In-Reply-To: <1557026820-29428-1-git-send-email-Anson.Huang@nxp.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=aisheng.dong@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e95af9b3-8f04-4353-a4f6-08d6d12babb6
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:AM0PR04MB6531;
-x-ms-traffictypediagnostic: AM0PR04MB6531:
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-microsoft-antispam-prvs: <AM0PR04MB653166279D949C0E5F686D4080370@AM0PR04MB6531.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1468;
-x-forefront-prvs: 00286C0CA6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(366004)(346002)(376002)(39860400002)(136003)(199004)(189003)(73956011)(66476007)(66556008)(64756008)(66446008)(7416002)(68736007)(8936002)(486006)(446003)(102836004)(52536014)(44832011)(7696005)(6506007)(26005)(110136005)(76176011)(11346002)(476003)(186003)(53546011)(74316002)(4744005)(99286004)(33656002)(256004)(25786009)(6436002)(71200400001)(2501003)(55016002)(71190400001)(66946007)(7736002)(2906002)(6246003)(53936002)(5660300002)(66066001)(3846002)(6116002)(316002)(8676002)(2201001)(86362001)(76116006)(81166006)(81156014)(305945005)(14454004)(478600001)(9686003)(4326008)(229853002)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB6531;H:AM0PR04MB4211.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 49tJXGwS5bJgSWkiS0Tilug1NKBAxjWIdeeBhti8tdYynXFyTE5F+f0DBHamuviEvNeDGKc7o2tC+NK/wROCzmiEhIgrMnRucms8cggDARuMYkCUBq1QoR6Bem2RhhUJ+z+mqKz8l0CSq3wqdL8RMpByYCwVCSbiQzdJzdlJuK8rsMr7SD0qZsmz2EVTz61Evb+iXRHvorlKJ5BSn+TNR0CTS+nqJY7TLkovQvahLZX0IudI9qunmFrpSMzvH5uwocXuU1Nd4HwZ5tiTtZ7Y0z7n95AuKnT4IUQGBRpPe4hkBcoidVHPDTOOpFwVKc0aeS66S9zt1ruxT6y+NSzkNoDwxjzI9Woq8J2A6EV8PxhmPbCkhEFX7l3BI1+Q2u6L5QizoNd75hCKa7eqIwYKG2+ZDHFNCuGqK6Dxq/uNI0o=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727534AbfEEKgs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Sun, 5 May 2019 06:36:48 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:44855 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726310AbfEEKgr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 May 2019 06:36:47 -0400
+Received: from [192.168.1.166] ([37.4.249.152]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MFsIZ-1hWnPk1SaV-00HNC5; Sun, 05 May 2019 12:36:31 +0200
+Subject: Re: [PATCH] i2c: bcm2835: Model Divider in CCF
+To:     Annaliese McDermond <nh6z@nh6z.net>, eric@anholt.net,
+        f.fainelli@gmail.com, wsa@the-dreams.de, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     team@nwdigitalradio.com
+References: <20190505034339.30778-1-nh6z@nh6z.net>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=stefan.wahren@i2se.com; keydata=
+ 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 AQ==
+Message-ID: <610c7594-85c9-72db-63a6-6e632e9586aa@i2se.com>
+Date:   Sun, 5 May 2019 12:36:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e95af9b3-8f04-4353-a4f6-08d6d12babb6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 May 2019 07:31:21.3067
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6531
+In-Reply-To: <20190505034339.30778-1-nh6z@nh6z.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
+X-Provags-ID: V03:K1:fSFLx1EKsH1RU19dSH8BuitqL/gkJOccFK5iU2M9Vg4bSmuIoBL
+ DAL4kMS7hEZnefHb/kEUfBEgDqjoYkmafPIMJzphBCwzh4w75tqT0Mvu0UpbhCX6sQPgHns
+ GJuPw9JSGyfS8I9Gt54cyUSnR2htgT8Gko1gXNnsAb1dBjSJYAvVNZmBnEJecHwdAbc41Jh
+ GdVWKUWwrG/Cni3SXi6fQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wqeAoax5wFc=:2A8iUXIKIsry2fj1+adPiS
+ Y4ttrYvA/VAXYni9DOB2IW3B+TxHmuk/NtJ74SZJxId3r65w0AMAhJysxA+SpKc7fnuCXy2a+
+ DPtEQFx85pkgM6bnTex/WFFDkfUMBB2wWcIPIPAFnffLobTmUhvDQb+/Ey3VPijh6L3KRO7k7
+ wIfDIW/FG+boSUCfn6OygnCJ4wwlhIWCaqMvlV27mLUcsZTld5sSKBR+UiE3Br93PP2KUe3AI
+ i9h9lIQ3FAgqDIfL2qRAZcgsRO05p0DB7p9MtCXjhU39ALZS3IUaYUxVNTnabAi/byKNpEndo
+ vvqhSd3TYyWmtfQ+fgQcsxQfBZ6BQTcBDolcXa26IkPwEIUw8ZtHDayh0jOK8Forf7UJ5m0oX
+ 0805pl3dc1zK7ZDkMNHPsxg46xK9sKyNYdOwxlOR0YsL6OnRwSCXzWaQHq2WfGAfZaB66032x
+ T7S1RJhiRIoLkLST18sOG55KvoLzq37mEI8TZTdbr7TIxMVEpKXt2fYVqYVbv3L6onh3NNu//
+ QQdh4RP4rJGPQ3tEocMhX+Q1HzdhR36n/TCoBV6RQ17q4UhbSg4i9IvuvahPnhgEGEB7SbWGo
+ Ym0pOhydUcppi8EJCbVd9F8mnDZL3iyRigSYad3iogS0azd4IVQvwqsubOlGAtHV/fEBVb/hc
+ TQxyPY/4cPvt9C/UGTJ51Z5Ta2mHG9EWwbKno24CQcI7qY7WoQQ5jkNwnV0BqhQ1e6dzdvAW6
+ EFX3BNXeyJJmTYLez6l/vzXBCuFPENJH7d8GMDeTbVDK318RDYT8rT7uksc=
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PiBGcm9tOiBBbnNvbiBIdWFuZw0KPiBTZW50OiBTdW5kYXksIE1heSA1LCAyMDE5IDExOjMyIEFN
-DQo+IFN1YmplY3Q6IFtQQVRDSF0gaTJjOiBpbXg6IFVzZSBfX21heWJlX3VudXNlZCBpbnN0ZWFk
-IG9mICNpZiBDT05GSUdfUE0NCj4gDQo+IFVzZSBfX21heWJlX3VudXNlZCBmb3IgcnVudGltZSBQ
-TSByZWxhdGVkIGZ1bmN0aW9ucyBpbnN0ZWFkIG9mICNpZg0KPiBDT05GSUdfUE0gdG8gc2ltcGx5
-IHRoZSBjb2RlLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogQW5zb24gSHVhbmcgPEFuc29uLkh1YW5n
-QG54cC5jb20+DQoNClJldmlld2VkLWJ5OiBEb25nIEFpc2hlbmcgPGFpc2hlbmcuZG9uZ0BueHAu
-Y29tPg0KDQpSZWdhcmRzDQpEb25nIEFpc2hlbmcNCg==
+Hi Annaliese,
+
+Am 05.05.19 um 05:43 schrieb Annaliese McDermond:
+> Model the I2C bus clock divider as a part of the Core Clock Framework.
+> Primarily this removes the clk_get_rate() call from each transfer.
+> This call causes problems for slave drivers that themselves have
+> internal clock components that are controlled by an I2C interface.
+> When the slave's internal clock component is prepared, the prepare
+> lock is obtained, and it makes calls to the I2C subsystem to
+> command the hardware to activate the clock.  In order to perform
+> the I2C transfer, this driver sets the divider, which requires
+> it to get the parent clock rate, which it does with clk_get_rate().
+> Unfortunately, this function will try to take the clock prepare
+> lock, which is already held by the slave's internal clock calls
+> creating a deadlock.
+
+i think i understand the problem, but could you please explain the
+specific use case where this happend?
+
+I suspect bcm2835 is not the only platform which is affected, so it
+would be better to fix this in general.
+
+Regards
+
+Stefan
+
+
