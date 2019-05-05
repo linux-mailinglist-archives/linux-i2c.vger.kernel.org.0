@@ -2,124 +2,133 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DE313EE3
-	for <lists+linux-i2c@lfdr.de>; Sun,  5 May 2019 12:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDBA13F80
+	for <lists+linux-i2c@lfdr.de>; Sun,  5 May 2019 15:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727534AbfEEKgs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Sun, 5 May 2019 06:36:48 -0400
-Received: from mout.kundenserver.de ([212.227.126.135]:44855 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726310AbfEEKgr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 May 2019 06:36:47 -0400
-Received: from [192.168.1.166] ([37.4.249.152]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MFsIZ-1hWnPk1SaV-00HNC5; Sun, 05 May 2019 12:36:31 +0200
-Subject: Re: [PATCH] i2c: bcm2835: Model Divider in CCF
-To:     Annaliese McDermond <nh6z@nh6z.net>, eric@anholt.net,
-        f.fainelli@gmail.com, wsa@the-dreams.de, linux-i2c@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     team@nwdigitalradio.com
-References: <20190505034339.30778-1-nh6z@nh6z.net>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- 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 AQ==
-Message-ID: <610c7594-85c9-72db-63a6-6e632e9586aa@i2se.com>
-Date:   Sun, 5 May 2019 12:36:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727647AbfEENA1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 5 May 2019 09:00:27 -0400
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:57819 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726524AbfEENA1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 May 2019 09:00:27 -0400
+X-Greylist: delayed 339 seconds by postgrey-1.27 at vger.kernel.org; Sun, 05 May 2019 09:00:26 EDT
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id B5D3C349;
+        Sun,  5 May 2019 08:54:44 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Sun, 05 May 2019 08:54:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=RY3wovewi9AvozTWYkB4FWTt5Os
+        MI612SS/7SLmA00I=; b=sKoHSDFC4U1j8E+IMSPFPx/unJ+RbHJ5gRKl8AXW6vk
+        ZcGav9zLALkBl7Q4HzDEXe0vp5Bdb2GuEOUAPlzkA2DiuqsShcZw2DSj4vmBhbu3
+        cmwqEPJlfMB079giOcAkRpNJ4pQtPhs+P9yORKyr3gEEjaJAwdOa75yG4Bzew8ik
+        vyRa9A8oFVIb7wOFTHrWPjnW4XCsx73ZnF+OcUt3P2F0D5qqyvdVgNJlDcH220pZ
+        MPmU+JbjpjnpUuu4L3p6wO+Uqx7eWc3HIZvFe8s5PJtAor0FPIIFdWCLac8OwfEt
+        rwrB4tPM32JD30VC0RVUi0mvoH9dzYBjvxR/cI6Ageg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=RY3wov
+        ewi9AvozTWYkB4FWTt5OsMI612SS/7SLmA00I=; b=vQT+zCk4tWCTp4TM1joTIK
+        ViCNfmr67XPydHBB+FvTHV/rzBPHBaVD2L3dn4Wz7TcneaVbE67keesPk9XgfSk/
+        BmdH4ZsVeE30yb6hJCILzB+aRilV9PgyGeS90tJ5MxPz/VHXIWkFDgZGDY+nFs2e
+        pBOtw6JoJ/Rz8W9rrXe1J3SbtMNX6IMnsdUbcFrRDeaAnNPoMrLFYJoROsgn8GaV
+        hyagBlR0s9tYpdDTx0k3j75yiE50amEcOQRjVS8DFSgEGec7irekLDRiJEbnsZbT
+        27CzDNDz18NhJSCS65LZwixbkpuaINXPXZYeEfMhoPhkJbWwSBpba0jarWWPY5Tw
+        ==
+X-ME-Sender: <xms:E93OXF05a0rjy0VguIUTnLiWOsI2x-iHavNLErtJB076f2rqWlmyCA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrjeehgdeifecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrddutd
+    ejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhenucev
+    lhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:E93OXDEi3bPadcCxpiQ_LaVGq3lL3nM12txPocyldSs6KSnc1CXrGw>
+    <xmx:E93OXCPSd2IjiznJIZfzig2THJs_8C1PMhGAHOFis-n1qgiA4qXk1Q>
+    <xmx:E93OXJuBkYRI2hWTdWeTraInwz-67cCYhFvxDCbBMnxpXVMD_egeBw>
+    <xmx:FN3OXEEohXIMIAxRrdlQIaK4K_QeI7S_EfX1GQIZs1IrBgCDcsntgg>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id A8EAEE4122;
+        Sun,  5 May 2019 08:54:42 -0400 (EDT)
+Date:   Sun, 5 May 2019 14:54:40 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa@the-dreams.de>, stable@vger.kernel.org
+Subject: Re: [PATCH] i2c: Prevent runtime suspend of adapter when Host Notify
+ is required
+Message-ID: <20190505125440.GA25640@kroah.com>
+References: <20190430142322.15013-1-jarkko.nikula@linux.intel.com>
+ <20190430155637.1B45E21743@mail.kernel.org>
+ <7f989564-e994-5be6-02da-2838639efe59@linux.intel.com>
+ <20190502153251.GG81578@ediswmail.ad.cirrus.com>
 MIME-Version: 1.0
-In-Reply-To: <20190505034339.30778-1-nh6z@nh6z.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Content-Language: en-US
-X-Provags-ID: V03:K1:fSFLx1EKsH1RU19dSH8BuitqL/gkJOccFK5iU2M9Vg4bSmuIoBL
- DAL4kMS7hEZnefHb/kEUfBEgDqjoYkmafPIMJzphBCwzh4w75tqT0Mvu0UpbhCX6sQPgHns
- GJuPw9JSGyfS8I9Gt54cyUSnR2htgT8Gko1gXNnsAb1dBjSJYAvVNZmBnEJecHwdAbc41Jh
- GdVWKUWwrG/Cni3SXi6fQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wqeAoax5wFc=:2A8iUXIKIsry2fj1+adPiS
- Y4ttrYvA/VAXYni9DOB2IW3B+TxHmuk/NtJ74SZJxId3r65w0AMAhJysxA+SpKc7fnuCXy2a+
- DPtEQFx85pkgM6bnTex/WFFDkfUMBB2wWcIPIPAFnffLobTmUhvDQb+/Ey3VPijh6L3KRO7k7
- wIfDIW/FG+boSUCfn6OygnCJ4wwlhIWCaqMvlV27mLUcsZTld5sSKBR+UiE3Br93PP2KUe3AI
- i9h9lIQ3FAgqDIfL2qRAZcgsRO05p0DB7p9MtCXjhU39ALZS3IUaYUxVNTnabAi/byKNpEndo
- vvqhSd3TYyWmtfQ+fgQcsxQfBZ6BQTcBDolcXa26IkPwEIUw8ZtHDayh0jOK8Forf7UJ5m0oX
- 0805pl3dc1zK7ZDkMNHPsxg46xK9sKyNYdOwxlOR0YsL6OnRwSCXzWaQHq2WfGAfZaB66032x
- T7S1RJhiRIoLkLST18sOG55KvoLzq37mEI8TZTdbr7TIxMVEpKXt2fYVqYVbv3L6onh3NNu//
- QQdh4RP4rJGPQ3tEocMhX+Q1HzdhR36n/TCoBV6RQ17q4UhbSg4i9IvuvahPnhgEGEB7SbWGo
- Ym0pOhydUcppi8EJCbVd9F8mnDZL3iyRigSYad3iogS0azd4IVQvwqsubOlGAtHV/fEBVb/hc
- TQxyPY/4cPvt9C/UGTJ51Z5Ta2mHG9EWwbKno24CQcI7qY7WoQQ5jkNwnV0BqhQ1e6dzdvAW6
- EFX3BNXeyJJmTYLez6l/vzXBCuFPENJH7d8GMDeTbVDK318RDYT8rT7uksc=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190502153251.GG81578@ediswmail.ad.cirrus.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Annaliese,
+On Thu, May 02, 2019 at 04:32:51PM +0100, Charles Keepax wrote:
+> On Thu, May 02, 2019 at 03:32:24PM +0300, Jarkko Nikula wrote:
+> > On 4/30/19 6:56 PM, Sasha Levin wrote:
+> > >This commit has been processed because it contains a "Fixes:" tag,
+> > >fixing commit: c5eb1190074c PCI / PM: Allow runtime PM without callback functions.
+> > >
+> > >The bot has tested the following trees: v5.0.10, v4.19.37.
+> > >
+> > >v5.0.10: Build OK!
+> > >v4.19.37: Failed to apply! Possible dependencies:
+> > >     6f108dd70d30 ("i2c: Clear client->irq in i2c_device_remove")
+> > >     93b6604c5a66 ("i2c: Allow recovery of the initial IRQ by an I2C client device.")
+> > >
+> > >
+> > >How should we proceed with this patch?
+> > >
+> > There's also dependency to commit
+> > b9bb3fdf4e87 ("i2c: Remove unnecessary call to irq_find_mapping")
+> > 
+> > Without it 93b6604c5a66 doesn't apply.
+> > 
+> > Otherwise my patch don't have dependency into these so I can have
+> > another version for 4.19 if needed.
+> > 
+> > I got impression from the mail thread for 6f108dd70d30 that it could
+> > be also stable material but cannot really judge.
+> > 
+> > Charles: does your commits b9bb3fdf4e87 and 6f108dd70d30 with the
+> > fix 93b6604c5a66 qualify for 4.19? (background: my fix doesn't apply
+> > without them but doesn't depend on them).
+> > 
+> 
+> b9bb3fdf4e87 ("i2c: Remove unnecessary call to irq_find_mapping")
+> 
+> I don't think this one would make sense to backport it's not
+> fixing any issues it just removes a redundant call. The call just
+> repeats work it does no harm.
+> 
+> 6f108dd70d30 ("i2c: Clear client->irq in i2c_device_remove")
+> 93b6604c5a66 ("i2c: Allow recovery of the initial IRQ by an I2C client device.")
+> 
+> These two are much more of a grey area, they do fix an actual
+> issue, although that issue only happens when you unbind and
+> rebind both an I2C device and the device providing its IRQs. A
+> couple of us have been trying to look for a better fix as well
+> which further complicates matters.
+> 
+> I would suggest you just backport your patch and leave these
+> ones. As evidenced by the fixup patch there is a slight chance
+> of regressions from backporting this fix and the issue it
+> fixes is clearly not something people are normally hitting.
 
-Am 05.05.19 um 05:43 schrieb Annaliese McDermond:
-> Model the I2C bus clock divider as a part of the Core Clock Framework.
-> Primarily this removes the clk_get_rate() call from each transfer.
-> This call causes problems for slave drivers that themselves have
-> internal clock components that are controlled by an I2C interface.
-> When the slave's internal clock component is prepared, the prepare
-> lock is obtained, and it makes calls to the I2C subsystem to
-> command the hardware to activate the clock.  In order to perform
-> the I2C transfer, this driver sets the divider, which requires
-> it to get the parent clock rate, which it does with clk_get_rate().
-> Unfortunately, this function will try to take the clock prepare
-> lock, which is already held by the slave's internal clock calls
-> creating a deadlock.
+I've queued all of these up now, as they make sense to have for 4.19.y.
 
-i think i understand the problem, but could you please explain the
-specific use case where this happend?
+thanks,
 
-I suspect bcm2835 is not the only platform which is affected, so it
-would be better to fix this in general.
-
-Regards
-
-Stefan
-
-
+greg k-h
