@@ -2,69 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A8814FD7
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 17:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA581503C
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 17:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbfEFPQz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 May 2019 11:16:55 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52786 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726236AbfEFPQz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 6 May 2019 11:16:55 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5A4E8ACFB;
-        Mon,  6 May 2019 15:16:54 +0000 (UTC)
-Date:   Mon, 6 May 2019 17:16:52 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 2/2] eeprom: ee1004: Deal with nack on page selection
-Message-ID: <20190506171652.3ba909de@endymion>
-In-Reply-To: <04843f27-bb0f-d631-32c8-80cd122b7399@linux.intel.com>
-References: <20190506151539.69ee75e8@endymion>
-        <20190506151656.47494e56@endymion>
-        <04843f27-bb0f-d631-32c8-80cd122b7399@linux.intel.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726347AbfEFP3g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 May 2019 11:29:36 -0400
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:53899 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725994AbfEFP3g (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 May 2019 11:29:36 -0400
+Received: from Internal Mail-Server by MTLPINE2 (envelope-from asmaa@mellanox.com)
+        with ESMTPS (AES256-SHA encrypted); 6 May 2019 18:29:34 +0300
+Received: from farm-1.mtbu.labs.mlnx (farm-1.mtbu.labs.mlnx [10.15.2.31])
+        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id x46FTWJm030965;
+        Mon, 6 May 2019 11:29:32 -0400
+Received: (from asmaa@localhost)
+        by farm-1.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id x46FTVgX025135;
+        Mon, 6 May 2019 11:29:31 -0400
+From:   Asmaa Mnebhi <Asmaa@mellanox.com>
+To:     minyard@acm.org, wsa@the-dreams.de, vadimp@mellanox.com,
+        michaelsh@mellanox.com
+Cc:     Asmaa Mnebhi <Asmaa@mellanox.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH v7 0/1] Add support for IPMB driver
+Date:   Mon,  6 May 2019 11:29:28 -0400
+Message-Id: <cover.1557156354.git.Asmaa@mellanox.com>
+X-Mailer: git-send-email 2.1.2
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 6 May 2019 17:03:20 +0300, Jarkko Nikula wrote:
-> On 5/6/19 4:16 PM, Jean Delvare wrote:
-> > Some EE1004 implementations will not properly ack page selection
-> > commands. They still set the page correctly, so there is no actual
-> > error. Deal with this case gracefully by checking the currently
-> > selected page after we receive a nack. If the page is set right then
-> > we can continue.
-> > 
-> > Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> > Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >   drivers/misc/eeprom/ee1004.c |   12 +++++++++++-
-> >   1 file changed, 11 insertions(+), 1 deletion(-)
->
-> Does Dreamcat4 deserve reported and tested by tags here? I guess 
-> anonymous address is fine with those tags?
+Hi Vadim,
 
-My assumption is that someone who posts anonymously in the first place
-has no desire to be credited for anything or even mentioned anywhere.
+I have addressed your comments:
+1) removed typecasting and replaced it with a macro to get the 8 bit
+address. I think it is more readable this way.
+2) added space
 
-> (I re-tested these two patches on top of v5.1 and they make decode-dimms 
-> working on a machine with 2-4 * Crucial DD4 dimms)
+Thank you for your feedback!
 
-Thank you very much.
+Asmaa Mnebhi (1):
+  Add support for IPMB driver
+
+ Documentation/IPMB.txt           | 103 ++++++++++
+ drivers/char/ipmi/Kconfig        |   8 +
+ drivers/char/ipmi/Makefile       |   1 +
+ drivers/char/ipmi/ipmb_dev_int.c | 399 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 511 insertions(+)
+ create mode 100644 Documentation/IPMB.txt
+ create mode 100644 drivers/char/ipmi/ipmb_dev_int.c
 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.1.2
+
