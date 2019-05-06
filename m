@@ -2,124 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D82C14AE5
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 15:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CABF414B6F
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 16:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725853AbfEFN3d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 May 2019 09:29:33 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:55766 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725852AbfEFN3d (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 6 May 2019 09:29:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=iqK/8epn5ls+IZG0UVMrU/nhCwJXFn7xBX1PC/hdTw8=; b=Xi4GnazFzWujEyL0+B6GoxfPXw
-        yypf4DnisTvFQyII2YxI8Dq+6W1uRpKc+dxsYsBsa+Dpv2j+og2+nHKl5eyc96I8rPF6SecgNg+qv
-        dnTngDKXOw4HfSo1EdOyX4oJ89lR64yLS2wQ4mZE13dQi9ckbzmSoJ8oR4rkGq2lWWRs=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1hNdgK-00051K-MA; Mon, 06 May 2019 15:29:24 +0200
-Date:   Mon, 6 May 2019 15:29:24 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sagar Shrikant Kadam <sagar.kadam@sifive.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, palmer@sifive.com,
-        paul.walmsley@sifive.com, peter@korsgaard.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 v1 3/3] i2c-ocores: sifive: add polling mode
- workaround for FU540-C000 SoC.
-Message-ID: <20190506132924.GD15291@lunn.ch>
-References: <1557147240-29551-1-git-send-email-sagar.kadam@sifive.com>
- <1557147240-29551-4-git-send-email-sagar.kadam@sifive.com>
+        id S1726394AbfEFOCv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 May 2019 10:02:51 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:39314 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbfEFOCu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 May 2019 10:02:50 -0400
+Received: from penelope.horms.nl (ip4dab7138.direct-adsl.nl [77.171.113.56])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id 1F19725AED5;
+        Tue,  7 May 2019 00:02:48 +1000 (AEST)
+Received: by penelope.horms.nl (Postfix, from userid 7100)
+        id 0706CE21327; Mon,  6 May 2019 16:02:46 +0200 (CEST)
+Date:   Mon, 6 May 2019 16:02:45 +0200
+From:   Simon Horman <horms@verge.net.au>
+To:     Chris Brandt <chris.brandt@renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 0/7] dts: r7s9210: Add RZ/A2 devices
+Message-ID: <20190506140245.obsc5g44uvh6awxb@verge.net.au>
+References: <20190430132309.12473-1-chris.brandt@renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1557147240-29551-4-git-send-email-sagar.kadam@sifive.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20190430132309.12473-1-chris.brandt@renesas.com>
+Organisation: Horms Solutions BV
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
->  /*
->   * 'process_lock' exists because ocores_process() and ocores_process_timeout()
-> @@ -239,8 +240,13 @@ static irqreturn_t ocores_isr(int irq, void *dev_id)
->  	struct ocores_i2c *i2c = dev_id;
->  	u8 stat = oc_getreg(i2c, OCI2C_STATUS);
->  
-> -	if (!(stat & OCI2C_STAT_IF))
-> +	if (i2c->flags && SIFIVE_FLAG_POLL) {
+On Tue, Apr 30, 2019 at 08:23:02AM -0500, Chris Brandt wrote:
+> So while I added RZ/A2 drivers a while back, I never actually added them
+> all to the device tree.
+> 
+> This series adds everything that is currently supported.
+> 
+> Chris Brandt (7):
+>   ARM: dts: r7s9210: Add RSPI
+>   ARM: dts: r7s9210: Add Ethernet support
+>   dt-bindings: i2c: riic: document r7s9210 support
+>   ARM: dts: r7s9210: Add RIIC support
+>   ARM: dts: r7s9210: Add SDHI support
+>   ARM: dts: r7s9210-rza2mevb: Add Ethernet support
+>   ARM: dts: r7s9210-rza2mevb: Add SDHI support
 
-Do you really want && here?
+Thanks Chris,
 
-> +		if (stat & OCI2C_STAT_IF)
-> +			if (!(stat & OCI2C_STAT_BUSY))
-> +				return IRQ_NONE;
-> +	} else if (!(stat & OCI2C_STAT_IF)) {
->  		return IRQ_NONE;
-> +	}
->  
->  	ocores_process(i2c, stat);
->  
-> @@ -356,6 +362,11 @@ static void ocores_process_polling(struct ocores_i2c *i2c)
->  		ret = ocores_isr(-1, i2c);
->  		if (ret == IRQ_NONE)
->  			break; /* all messages have been transferred */
-> +		else {
-> +			if (i2c->flags && SIFIVE_FLAG_POLL)
-
-And here?
-
-> +				if (i2c->state == STATE_DONE)
-> +					break;
-> +		}
->  	}
->  }
->  
-> @@ -406,7 +417,7 @@ static int ocores_xfer(struct i2c_adapter *adap,
->  {
->  	struct ocores_i2c *i2c = i2c_get_adapdata(adap);
->  
-> -	if (i2c->flags & OCORES_FLAG_POLL)
-> +	if ((i2c->flags & OCORES_FLAG_POLL) || (i2c->flags & SIFIVE_FLAG_POLL))
-
-You can combine this
-
-if ((i2c->flags & (OCORES_FLAG_POLL | SIFIVE_FLAG_POLL))
-
->  		return ocores_xfer_polling(adap, msgs, num);
->  	return ocores_xfer_core(i2c, msgs, num, false);
->  }
-> @@ -597,6 +608,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
->  {
->  	struct ocores_i2c *i2c;
->  	struct ocores_i2c_platform_data *pdata;
-> +	const struct of_device_id *match;
->  	struct resource *res;
->  	int irq;
->  	int ret;
-> @@ -678,13 +690,21 @@ static int ocores_i2c_probe(struct platform_device *pdev)
->  
->  	irq = platform_get_irq(pdev, 0);
->  	if (irq == -ENXIO) {
-> -		i2c->flags |= OCORES_FLAG_POLL;
-> +		/*
-> +		 * Set a SIFIVE_FLAG_POLL to enable workaround for FU540
-> +		 * in polling mode interface of i2c-ocore driver.
-> +		 */
-> +		match = of_match_node(ocores_i2c_match, pdev->dev.of_node);
-> +		if (match && (long)match->data == TYPE_SIFIVE_REV0)
-> +			i2c->flags |= SIFIVE_FLAG_POLL;
-> +		else
-> +			i2c->flags |= OCORES_FLAG_POLL;
-
-Please take a look at the whole code, and consider if it is better to
-set both SIFIVE_FLAG_POLL and OCORES_FLAG_POLL. Maybe rename
-SIFIVE_FLAG_POLL to OCORES_FLAG_BROKEN_IRQ_BIT?
-
-Thanks
-	Andrew
+I have applied the dts patches for inclusion in v5.3.
+Please consider a follow-up patch to add an alias as
+per Geert's feedback on the Ethernet support patch.
