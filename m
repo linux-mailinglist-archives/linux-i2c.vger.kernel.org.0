@@ -2,84 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F5C14A5A
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 14:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B49914AA7
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 15:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726037AbfEFMzi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 May 2019 08:55:38 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:55727 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725852AbfEFMzi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 6 May 2019 08:55:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=BgoSaHcSVXeUVaFDGwlvfT0vdS0WcIHzaajAD/u3L3U=; b=Q6xiMyQ3DRmztW7tLFke5nxDPs
-        moHuR1ihA/uJVKKZ+h6SOxFgybRSOYuvPuvFTFi7nYmUB4w5BNEXV5FP7QYdcqc8AHEIEtJ00cxPo
-        /t6oxbTjyYW24CWKqlegJGmQfEJ3z5OzlHUFM+SA9vhrEHjcjrmU5mZ9gcZbFKwpSPMA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1hNd9P-0004hc-JZ; Mon, 06 May 2019 14:55:23 +0200
-Date:   Mon, 6 May 2019 14:55:23 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ruslan Babayev <ruslan@babayev.com>
-Cc:     linux@armlinux.org.uk, f.fainelli@gmail.com, hkallweit1@gmail.com,
-        mika.westerberg@linux.intel.com, wsa@the-dreams.de,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-acpi@vger.kernel.org, xe-linux-external@cisco.com
-Subject: Re: [PATCH net-next 2/2] net: phy: sfp: enable i2c-bus detection on
- ACPI based systems
-Message-ID: <20190506125523.GA15291@lunn.ch>
-References: <20190505220524.37266-3-ruslan@babayev.com>
+        id S1726034AbfEFNPm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 May 2019 09:15:42 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55776 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725886AbfEFNPm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 6 May 2019 09:15:42 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 391F7AF08;
+        Mon,  6 May 2019 13:15:40 +0000 (UTC)
+Date:   Mon, 6 May 2019 15:15:39 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH 1/2] eeprom: ee1004: Move selected page detection to a
+ separate function
+Message-ID: <20190506151539.69ee75e8@endymion>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190505220524.37266-3-ruslan@babayev.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, May 05, 2019 at 03:05:23PM -0700, Ruslan Babayev wrote:
-> Lookup I2C adapter using the "i2c-bus" device property on ACPI based
-> systems similar to how it's done with DT.
-> 
-> An example DSD describing an SFP on an ACPI based system:
-> 
-> Device (SFP0)
-> {
->     Name (_HID, "PRP0001")
->     Name (_DSD, Package ()
->     {
->         ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
->         Package () {
->             Package () { "compatible", "sff,sfp" },
->             Package () { "i2c-bus", \_SB.PCI0.RP01.I2C.MUX.CH0 },
->         },
->     })
-> }
+No functional change, this is in preparation for future needs.
 
-Hi Ruslan
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/misc/eeprom/ee1004.c |   31 +++++++++++++++++++++----------
+ 1 file changed, 21 insertions(+), 10 deletions(-)
 
-So this gives you the I2C bus. But what about the 6 GPIOs? And the
-maximum power property? You are defining the ACPI interface which from
-now on everybody has to follow. So it would be good to make it
-complete. ACPI also seems to be poorly documented. There does not
-appear to be anything like Documentation/devicetree. So having one
-patch, with a good commit message, which implements everything makes
-it easier for those that follow.
+--- linux-5.0.orig/drivers/misc/eeprom/ee1004.c	2019-05-06 11:23:14.833319076 +0200
++++ linux-5.0/drivers/misc/eeprom/ee1004.c	2019-05-06 11:56:58.478375343 +0200
+@@ -57,6 +57,24 @@ MODULE_DEVICE_TABLE(i2c, ee1004_ids);
+ 
+ /*-------------------------------------------------------------------------*/
+ 
++static int ee1004_get_current_page(void)
++{
++	int err;
++
++	err = i2c_smbus_read_byte(ee1004_set_page[0]);
++	if (err == -ENXIO) {
++		/* Nack means page 1 is selected */
++		return 1;
++	}
++	if (err < 0) {
++		/* Anything else is a real error, bail out */
++		return err;
++	}
++
++	/* Ack means page 0 is selected, returned value meaningless */
++	return 0;
++}
++
+ static ssize_t ee1004_eeprom_read(struct i2c_client *client, char *buf,
+ 				  unsigned int offset, size_t count)
+ {
+@@ -190,17 +208,10 @@ static int ee1004_probe(struct i2c_clien
+ 	}
+ 
+ 	/* Remember current page to avoid unneeded page select */
+-	err = i2c_smbus_read_byte(ee1004_set_page[0]);
+-	if (err == -ENXIO) {
+-		/* Nack means page 1 is selected */
+-		ee1004_current_page = 1;
+-	} else if (err < 0) {
+-		/* Anything else is a real error, bail out */
++	err = ee1004_get_current_page();
++	if (err < 0)
+ 		goto err_clients;
+-	} else {
+-		/* Ack means page 0 is selected, returned value meaningless */
+-		ee1004_current_page = 0;
+-	}
++	ee1004_current_page = err;
+ 	dev_dbg(&client->dev, "Currently selected page: %d\n",
+ 		ee1004_current_page);
+ 	mutex_unlock(&ee1004_bus_lock);
 
-This appears to be enough to get a very minimal SFP instantiated. But
-then what?  How are you using it? How do you instantiate a Phylink
-instance for the MAC? How do you link the SFP to the Phylink?
 
-Before accepting this patch, i would like to know more about the
-complete solution.
-
-Thanks
-	Andrew
+-- 
+Jean Delvare
+SUSE L3 Support
