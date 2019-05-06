@@ -2,80 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB74E14966
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 14:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3772914A4A
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 14:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725883AbfEFMQD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 May 2019 08:16:03 -0400
-Received: from mga09.intel.com ([134.134.136.24]:36033 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725856AbfEFMQD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 6 May 2019 08:16:03 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 May 2019 05:16:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,437,1549958400"; 
-   d="scan'208";a="321937001"
-Received: from mylly.fi.intel.com (HELO [10.237.72.57]) ([10.237.72.57])
-  by orsmga005.jf.intel.com with ESMTP; 06 May 2019 05:16:00 -0700
-Subject: Re: [decode-dimms] Crucial Ballistix BLS2K16G4D30AESB, cannot decode
- / understand timings
-To:     Dreamcat4 <dreamcat4@gmail.com>, Jean Delvare <jdelvare@suse.de>
-Cc:     linux-i2c@vger.kernel.org
-References: <CAN39uTqhOxGSFvPsvZawBD-7kPLo9j0ONNYNyADXP9yqqwHEfA@mail.gmail.com>
- <20190411211239.440d71f1@endymion>
- <CAN39uTrd4zw+mWa=zSjZF+zNH-B1B2+YwO_4913FDP56iQNb9w@mail.gmail.com>
- <20190412164325.0b410662@endymion>
- <CAN39uTpx+daGd1w6k=sKQMQzUSJqvQxYLaD96fszap2=w63qVg@mail.gmail.com>
- <20190412204203.69f4a4be@endymion>
- <f1e9c190-7956-25c3-8e99-3a2ec100fd1a@linux.intel.com>
- <20190415152441.451c0e66@endymion>
- <CAN39uTqWDpRYOyHWfcEMoamPPuFJXFZwgYpMVDM4-aTz5yicOw@mail.gmail.com>
- <20190416165946.48059d1c@endymion>
- <8052f568-32ab-7104-b9bb-7bcb07179a6c@linux.intel.com>
- <20190417174002.651974bd@endymion>
- <06a90410-851f-618c-c203-ed3fc414ea18@linux.intel.com>
- <20190419203909.2b8991a1@endymion>
- <CAN39uTp_NTiUB_ZbhZkYQia3-YC0on_A5g87mt8T4uBYsKkb9Q@mail.gmail.com>
- <20190419223118.28b70421@endymion>
- <bf2a2dce-694c-db9b-e91e-deae4051d44b@linux.intel.com>
- <20190506110646.55cfc6ca@endymion>
- <CAN39uTojOZg-LYs9JOxAart2gPU37VQpvfB6PDoVvypPfcSWLg@mail.gmail.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <dfa9a609-002b-2853-53c1-616d3e248c08@linux.intel.com>
-Date:   Mon, 6 May 2019 15:16:00 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <CAN39uTojOZg-LYs9JOxAart2gPU37VQpvfB6PDoVvypPfcSWLg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726145AbfEFMyZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 May 2019 08:54:25 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:44767 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725883AbfEFMyZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 May 2019 08:54:25 -0400
+Received: by mail-pl1-f195.google.com with SMTP id d3so2323423plj.11
+        for <linux-i2c@vger.kernel.org>; Mon, 06 May 2019 05:54:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=from:to:subject:date:message-id;
+        bh=mCH1PNSxZO8UcLFwRskob8mKkP1s690Icm959QBwtxU=;
+        b=Pa0zYFaooyEYnq8TNhjhsXUlNZTUn09rsJ8MbLtbutJ3aBNJVK6GoB0Ieeo+ivQPKH
+         c29gKxZLq9jfmaUkDPJXGoeQHFZ+BqEepzvbmCpuhplKrHOfsUx5dtQ2hoWnuP3KSMmi
+         3MQrQ34bAG4govn9tRpYpXMp4e+AIB/LMZZy1ddaiJJL3MkeNGe/nFKNsR+1CxPEQgz4
+         M1D8ORQk6cXBjqrBe0oduIqsMaZvCY0bSEx1GxZ4JiISvRxvYjeJnlcfs/i8rRRkSG6j
+         nlv88TJUpQauJaa04VxyQrfrXjIRfJHUolR7Wt1P1ld8gBk+MTDanS7ULH4jCR6an06c
+         GhDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=mCH1PNSxZO8UcLFwRskob8mKkP1s690Icm959QBwtxU=;
+        b=Jg75qSEIn75o84vmH6YAmsO86xgYhnDQ80w0ZRXp9yk5SqzWAkb10yJN0kssqg5lR+
+         H3j5tgIHE4C+ejsts7MHEXYODjC871SD+66RonnfvO9ZcyPxl/SXwMQhI3Ci2XUAYt88
+         EyRPfoPcjFH5gISz3rzZfwKESrO4yYZxIcrEhwIEIF1hdP5jbe9GvpeMUASg2FDEYU4/
+         frKgBElRX5WboSr2xuU65yrlkR7KLX2OQTuFiw/X91fQpcYQzx4OGk/p56QvR+NHCvua
+         DpbnfL3SaRyqYhG6k9q3spX3/2z7HACvW9pqfyxz3QVhSh9CBH7BuUDSayL2omgAIOZQ
+         aYBA==
+X-Gm-Message-State: APjAAAUOL5DqdU4HypWVD1aSNrjQLpwWpwlekBAxHN5OqvaiGbB6w3DW
+        Q89a9qm2BBGUcRiqt8f/10O3Sw==
+X-Google-Smtp-Source: APXvYqzA7OlsB9Sxuwz64C70xfdtuDDDGNwfRbcLFQfRJu2C+ztVPX59gkK/uUwSuBXaxJYg8WdB9g==
+X-Received: by 2002:a17:902:2dc3:: with SMTP id p61mr31847462plb.308.1557147264714;
+        Mon, 06 May 2019 05:54:24 -0700 (PDT)
+Received: from buildserver-90.open-silicon.com ([114.143.65.226])
+        by smtp.googlemail.com with ESMTPSA id p81sm18031132pfa.26.2019.05.06.05.54.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 06 May 2019 05:54:24 -0700 (PDT)
+From:   Sagar Shrikant Kadam <sagar.kadam@sifive.com>
+To:     robh+dt@kernel.org, mark.rutland@arm.com, palmer@sifive.com,
+        paul.walmsley@sifive.com, sagar.kadam@sifive.com,
+        peter@korsgaard.com, andrew@lunn.ch, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 v1 0/3] Add dt bindings to support I2C on sifive devices and a fix for polling mode i2c transfers.
+Date:   Mon,  6 May 2019 18:23:57 +0530
+Message-Id: <1557147240-29551-1-git-send-email-sagar.kadam@sifive.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 5/6/19 12:15 PM, Dreamcat4 wrote:
-> Hi Jean,
-> Here is the output you requested
-> 
-> [root:~] # sudo modprobe i2c-i801
-> [root:~] # sudo i2cdetect -l
-> i2c-1    i2c           NVIDIA i2c adapter 5 at 1:00.0      I2C adapter
-> i2c-2    smbus         SMBus I801 adapter at f000          SMBus adapter
-> i2c-0    i2c           NVIDIA i2c adapter 4 at 1:00.0      I2C adapter
-> [root:~] # i2cset 2 0x36 0x00 0x00
-> WARNING! This program can confuse your I2C bus, cause data loss and worse!
-> I will write to device file /dev/i2c-2, chip address 0x36, data address
-> 0x00, data 0x00, mode byte.
-> Continue? [Y/n] y
-> Error: Write failed
-> [root:~] 1 #
-> 
-Same error here.
+The patch is based on mainline v5.1 and is intended to add DT-bindings for Opencore based I2C device 
+support in FU540 SoC, available on HiFive unleashed board (Rev A00), and also provide a workaround to 
+make I2C polling mode interface work with FU540 chipsets.
+
+The polling mode workaround patch fixes the CPU stall issue, when-ever i2c transfer are initiated 
+
+This workaround checks if it's a FU540 chipset based on device tree information, and check's for open
+core's IF(interrupt flag) and TIP flags to break from the polling loop upon completion of transfer.
+
+To test the patch, a PMOD-AD2 sensor is connected to HiFive Unleashed board over J1 connector, and 
+appropriate device node is added into board specific device tree as per the information provided in 
+dt-bindings in Documentation/devicetree/bindings/i2c/i2c-sifive.txt.
+Without this workaround, the CPU stall's infinitely.
+
+Busybox i2c utilities used to verify workaround : i2cdetect, i2cdump, i2cset, i2cget
+
+
+Sagar Shrikant Kadam (3):
+  dt-bindings: i2c: add documentation for adding SiFive I2C driver
+  i2c-ocore: sifive: add support for i2c device on FU540-c000 SoC.
+  i2c-ocores: sifive: add polling mode workaround for FU540-C000 SoC.
+
+ .../devicetree/bindings/i2c/i2c-sifive.txt         | 29 +++++++++++++++++++
+ drivers/i2c/busses/i2c-ocores.c                    | 33 +++++++++++++++++++---
+ 2 files changed, 58 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-sifive.txt
 
 -- 
-Jarkko
+1.9.1
+
