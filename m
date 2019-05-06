@@ -2,136 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48643142B9
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 00:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7245814434
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 06:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727754AbfEEWOR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 5 May 2019 18:14:17 -0400
-Received: from rcdn-iport-7.cisco.com ([173.37.86.78]:41031 "EHLO
-        rcdn-iport-7.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727232AbfEEWOR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 May 2019 18:14:17 -0400
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0D7AgDJXc9c/4wNJK1lHAEBAQQBAQc?=
- =?us-ascii?q?EAQGBZYIRgToBMiizfRCEbYIIIzgTAQMBAQQBAQIBAm0ohXhSgT8SgyKCC6p?=
- =?us-ascii?q?sM4hjgUUUgR6GeIRWF4F/gRGDUIomBJI9gQyTaQmCC1aRYydulFqMG5URgWY?=
- =?us-ascii?q?hgVYzGggbFYMngkaOKx8DMJE/AQE?=
-X-IronPort-AV: E=Sophos;i="5.60,435,1549929600"; 
-   d="scan'208";a="550888719"
-Received: from alln-core-7.cisco.com ([173.36.13.140])
-  by rcdn-iport-7.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 05 May 2019 22:07:09 +0000
-Received: from tusi.cisco.com (tusi.cisco.com [172.24.98.27])
-        by alln-core-7.cisco.com (8.15.2/8.15.2) with ESMTP id x45M76du003095;
-        Sun, 5 May 2019 22:07:08 GMT
-From:   Ruslan Babayev <ruslan@babayev.com>
-To:     linux@armlinux.org.uk, andrew@lunn.ch, f.fainelli@gmail.com,
-        hkallweit1@gmail.com, mika.westerberg@linux.intel.com,
-        wsa@the-dreams.de
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-acpi@vger.kernel.org, xe-linux-external@cisco.com
-Subject: [PATCH net-next 2/2] net: phy: sfp: enable i2c-bus detection on ACPI based systems
-Date:   Sun,  5 May 2019 15:05:23 -0700
-Message-Id: <20190505220524.37266-3-ruslan@babayev.com>
-X-Mailer: git-send-email 2.17.1
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 172.24.98.27, tusi.cisco.com
-X-Outbound-Node: alln-core-7.cisco.com
+        id S1725785AbfEFE74 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 May 2019 00:59:56 -0400
+Received: from mga14.intel.com ([192.55.52.115]:15384 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725710AbfEFE74 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 6 May 2019 00:59:56 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 May 2019 21:59:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,435,1549958400"; 
+   d="scan'208";a="171060683"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 05 May 2019 21:59:51 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 06 May 2019 07:59:51 +0300
+Date:   Mon, 6 May 2019 07:59:51 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Ruslan Babayev <ruslan@babayev.com>
+Cc:     linux@armlinux.org.uk, andrew@lunn.ch, f.fainelli@gmail.com,
+        hkallweit1@gmail.com, wsa@the-dreams.de, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        xe-linux-external@cisco.com
+Subject: Re: [PATCH net-next 2/2] net: phy: sfp: enable i2c-bus detection on
+ ACPI based systems
+Message-ID: <20190506045951.GB2895@lahna.fi.intel.com>
+References: <20190505220524.37266-3-ruslan@babayev.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190505220524.37266-3-ruslan@babayev.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Lookup I2C adapter using the "i2c-bus" device property on ACPI based
-systems similar to how it's done with DT.
+On Sun, May 05, 2019 at 03:05:23PM -0700, Ruslan Babayev wrote:
+> Lookup I2C adapter using the "i2c-bus" device property on ACPI based
+> systems similar to how it's done with DT.
+> 
+> An example DSD describing an SFP on an ACPI based system:
+> 
+> Device (SFP0)
+> {
+>     Name (_HID, "PRP0001")
+>     Name (_DSD, Package ()
+>     {
+>         ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+>         Package () {
+>             Package () { "compatible", "sff,sfp" },
+>             Package () { "i2c-bus", \_SB.PCI0.RP01.I2C.MUX.CH0 },
 
-An example DSD describing an SFP on an ACPI based system:
-
-Device (SFP0)
-{
-    Name (_HID, "PRP0001")
-    Name (_DSD, Package ()
-    {
-        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-        Package () {
-            Package () { "compatible", "sff,sfp" },
-            Package () { "i2c-bus", \_SB.PCI0.RP01.I2C.MUX.CH0 },
-        },
-    })
-}
-
-Signed-off-by: Ruslan Babayev <ruslan@babayev.com>
-Cc: xe-linux-external@cisco.com
----
- drivers/net/phy/sfp.c | 33 +++++++++++++++++++++++++--------
- 1 file changed, 25 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-index d4635c2178d1..7a6c8df8899b 100644
---- a/drivers/net/phy/sfp.c
-+++ b/drivers/net/phy/sfp.c
-@@ -9,6 +9,7 @@
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/of.h>
-+#include <linux/acpi.h>
- #include <linux/phy.h>
- #include <linux/platform_device.h>
- #include <linux/rtnetlink.h>
-@@ -1783,6 +1784,7 @@ static int sfp_probe(struct platform_device *pdev)
- {
- 	const struct sff_data *sff;
- 	struct sfp *sfp;
-+	struct i2c_adapter *i2c = NULL;
- 	bool poll = false;
- 	int irq, err, i;
- 
-@@ -1801,7 +1803,6 @@ static int sfp_probe(struct platform_device *pdev)
- 	if (pdev->dev.of_node) {
- 		struct device_node *node = pdev->dev.of_node;
- 		const struct of_device_id *id;
--		struct i2c_adapter *i2c;
- 		struct device_node *np;
- 
- 		id = of_match_node(sfp_of_match, node);
-@@ -1818,14 +1819,30 @@ static int sfp_probe(struct platform_device *pdev)
- 
- 		i2c = of_find_i2c_adapter_by_node(np);
- 		of_node_put(np);
--		if (!i2c)
--			return -EPROBE_DEFER;
--
--		err = sfp_i2c_configure(sfp, i2c);
--		if (err < 0) {
--			i2c_put_adapter(i2c);
--			return err;
-+	} else if (ACPI_COMPANION(&pdev->dev)) {
-+		struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-+		struct fwnode_handle *fw = acpi_fwnode_handle(adev);
-+		struct fwnode_reference_args args;
-+		struct acpi_handle *acpi_handle;
-+		int ret;
-+
-+		ret = acpi_node_get_property_reference(fw, "i2c-bus", 0, &args);
-+		if (ACPI_FAILURE(ret) || !is_acpi_device_node(args.fwnode)) {
-+			dev_err(&pdev->dev, "missing 'i2c-bus' property\n");
-+			return -ENODEV;
- 		}
-+
-+		acpi_handle = ACPI_HANDLE_FWNODE(args.fwnode);
-+		i2c = i2c_acpi_find_adapter_by_handle(acpi_handle);
-+	}
-+
-+	if (!i2c)
-+		return -EPROBE_DEFER;
-+
-+	err = sfp_i2c_configure(sfp, i2c);
-+	if (err < 0) {
-+		i2c_put_adapter(i2c);
-+		return err;
- 	}
- 
- 	for (i = 0; i < GPIO_MAX; i++)
--- 
-2.17.1
-
+Hmm, ACPI has I2cSerialBusV2() resource for this purpose. Why you are not
+using that?
