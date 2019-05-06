@@ -2,58 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CABF414B6F
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 16:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A8114B71
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2019 16:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726394AbfEFOCv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 May 2019 10:02:51 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:39314 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbfEFOCu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 May 2019 10:02:50 -0400
-Received: from penelope.horms.nl (ip4dab7138.direct-adsl.nl [77.171.113.56])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 1F19725AED5;
-        Tue,  7 May 2019 00:02:48 +1000 (AEST)
-Received: by penelope.horms.nl (Postfix, from userid 7100)
-        id 0706CE21327; Mon,  6 May 2019 16:02:46 +0200 (CEST)
-Date:   Mon, 6 May 2019 16:02:45 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Chris Brandt <chris.brandt@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 0/7] dts: r7s9210: Add RZ/A2 devices
-Message-ID: <20190506140245.obsc5g44uvh6awxb@verge.net.au>
-References: <20190430132309.12473-1-chris.brandt@renesas.com>
+        id S1726128AbfEFODh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 May 2019 10:03:37 -0400
+Received: from mga12.intel.com ([192.55.52.136]:48642 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726094AbfEFODg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 6 May 2019 10:03:36 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 May 2019 07:03:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,438,1549958400"; 
+   d="scan'208";a="321973271"
+Received: from mylly.fi.intel.com (HELO [10.237.72.57]) ([10.237.72.57])
+  by orsmga005.jf.intel.com with ESMTP; 06 May 2019 07:03:21 -0700
+Subject: Re: [PATCH 2/2] eeprom: ee1004: Deal with nack on page selection
+To:     Jean Delvare <jdelvare@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20190506151539.69ee75e8@endymion>
+ <20190506151656.47494e56@endymion>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <04843f27-bb0f-d631-32c8-80cd122b7399@linux.intel.com>
+Date:   Mon, 6 May 2019 17:03:20 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190430132309.12473-1-chris.brandt@renesas.com>
-Organisation: Horms Solutions BV
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190506151656.47494e56@endymion>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 08:23:02AM -0500, Chris Brandt wrote:
-> So while I added RZ/A2 drivers a while back, I never actually added them
-> all to the device tree.
+On 5/6/19 4:16 PM, Jean Delvare wrote:
+> Some EE1004 implementations will not properly ack page selection
+> commands. They still set the page correctly, so there is no actual
+> error. Deal with this case gracefully by checking the currently
+> selected page after we receive a nack. If the page is set right then
+> we can continue.
 > 
-> This series adds everything that is currently supported.
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>   drivers/misc/eeprom/ee1004.c |   12 +++++++++++-
+>   1 file changed, 11 insertions(+), 1 deletion(-)
 > 
-> Chris Brandt (7):
->   ARM: dts: r7s9210: Add RSPI
->   ARM: dts: r7s9210: Add Ethernet support
->   dt-bindings: i2c: riic: document r7s9210 support
->   ARM: dts: r7s9210: Add RIIC support
->   ARM: dts: r7s9210: Add SDHI support
->   ARM: dts: r7s9210-rza2mevb: Add Ethernet support
->   ARM: dts: r7s9210-rza2mevb: Add SDHI support
+Does Dreamcat4 deserve reported and tested by tags here? I guess 
+anonymous address is fine with those tags?
 
-Thanks Chris,
+(I re-tested these two patches on top of v5.1 and they make decode-dimms 
+working on a machine with 2-4 * Crucial DD4 dimms)
 
-I have applied the dts patches for inclusion in v5.3.
-Please consider a follow-up patch to add an alias as
-per Geert's feedback on the Ethernet support patch.
+-- 
+Jarkko
