@@ -2,118 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF301614C
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2019 11:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3EE16213
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2019 12:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726511AbfEGJqW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 May 2019 05:46:22 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:42910 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726249AbfEGJqW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 May 2019 05:46:22 -0400
-Received: by mail-lf1-f68.google.com with SMTP id w23so11332606lfc.9;
-        Tue, 07 May 2019 02:46:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=D8a9oNQdj9sLJi+F+nMv/MThx6/XEnKYS+mGh47evN0=;
-        b=RpdJ2K2vxo1jWmpNoQaV0ZwYm0EpykGsmQpfdSE6egrM5eJDsHBZeYua0jFLOqB8Qc
-         qP7YbPwDn45z2U+BU4nkpArGTvT4k0/9BYcaWPK8iS1GhthbVeEBq3Vxc6edZI1UiEdu
-         4SY4+tvur+HuIfOl1hvj8+wgRGMnpmjNs/QplqmX3UWgDgtE1j1Ewwp5I2xeh35QEB3E
-         +OME9+w6MdXeL/6qz/wqZT1HnRW/U7dxCmQ6N45WQFloU5XzH3H5PRIBjoqlrhWaeOhL
-         H4fzstia9T07SnclSY8VhLQFkBaGlHzS2z5cgeyRD3hoisQ68Zi/7WEjzxoIU4bPf9bl
-         yRVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=D8a9oNQdj9sLJi+F+nMv/MThx6/XEnKYS+mGh47evN0=;
-        b=a3HkL7Bwwb3I4I5/jChBQtr0EQMuqicrKyRBRdSlGf+2T5EdH394209tq9VcWvYzeY
-         kWg4brTna3VLsGt3V6FadlxCsOEwahfVzAUcHAA5nnzLQ/MMOEPFS3MtayfBqj+G8KvD
-         2/yFK56VzSmjjmKUhK7A6JhKaJMH62kBSEUW+rr3AJ911kFBVxvA5TtxrYIKPZgcE4cp
-         BXJK3oA4/5hvWi4+a0KyAhnZL+/C4ZuyDlVSpsxbFZdjYtrwmwiLoYH26x9SW2xM15ds
-         PL99C4ar31NUqQtItIWXvvv+Q8Kv2KPt7G1joJm8zGb+id82iADKu+Iy2wp8wArVJj69
-         t+lA==
-X-Gm-Message-State: APjAAAVHRpEuLXH640e3MASFnLz3wDNvFfRcVZ9cGaHoxd2eTuKRIGG/
-        QZsCzMHKT0EYHA+vWupIrZkDldYA
-X-Google-Smtp-Source: APXvYqzLziWk+NPBxeyV+TCjsY781CuWWPdyHmFKdCUA3piyO9FUbxtTSRvYZvZKnJW8bIaMQf7xig==
-X-Received: by 2002:a19:a40f:: with SMTP id q15mr14682357lfc.121.1557222380205;
-        Tue, 07 May 2019 02:46:20 -0700 (PDT)
-Received: from mobilestation ([5.164.217.122])
-        by smtp.gmail.com with ESMTPSA id y20sm3257665lfe.8.2019.05.07.02.46.18
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 07 May 2019 02:46:19 -0700 (PDT)
-Date:   Tue, 7 May 2019 12:46:16 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Peter Korsgaard <peter.korsgaard@barco.com>,
-        Serge Semin <Sergey.Semin@t-platforms.ru>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/3] i2c-mux-gpio: Split plat- and dt-specific code up
-Message-ID: <20190507094615.xrmuaokro3ll4ghg@mobilestation>
-References: <20190424123414.25311-1-fancer.lancer@gmail.com>
- <20190425232028.9333-1-fancer.lancer@gmail.com>
- <20190507090210.hn6vgcjg2q6tysbp@mobilestation>
- <689e1a7b-8544-6bbf-2fa1-a5845895a917@axentia.se>
+        id S1726265AbfEGKkn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 May 2019 06:40:43 -0400
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:35608 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725844AbfEGKkn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 May 2019 06:40:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=JcsFUl7CHtmmwrs51FmIWdyRtiT3Wl9CxTGXiiAUYec=; b=mPaCfQeHR6JOJpSd6Hq+AJ5ub
+        3BLhIrQEjNLDuLkxG5+L8XTsPrJlxLrYCYfQUk3mlQ4iAQiG2+SvPVFD5veUHwFdE0FJ7Sbr221Gg
+        fARQLR2jtCIGMed5NPNDNWqlo0vRQjlRs+nLZKHpow92zqlOtz0X0bV9TUmJI3+gkUHyE2S3jsLg/
+        D7bL3ty0LHo0jp1ScAcdPN8SmSrWwj2/L+OyLmIHelffdbkIQmzvSRQj5tQQEkBtFZcU8JDE4PrGJ
+        vt3gPMAzwgpsFVEMoE0A3g4LRgTIfL0zQFZrBw57ohrp9kCuKxS8LMyog1/NvExVDsT89qs7E3Zru
+        23kPfarOw==;
+Received: from shell.armlinux.org.uk ([2001:4d48:ad52:3201:5054:ff:fe00:4ec]:55712)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1hNxWT-0002o7-SO; Tue, 07 May 2019 11:40:34 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.89)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1hNxWO-0001kd-Ou; Tue, 07 May 2019 11:40:28 +0100
+Date:   Tue, 7 May 2019 11:40:28 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Ruslan Babayev <ruslan@babayev.com>, andrew@lunn.ch,
+        f.fainelli@gmail.com, hkallweit1@gmail.com, wsa@the-dreams.de,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-acpi@vger.kernel.org, xe-linux-external@cisco.com
+Subject: Re: [PATCH net-next 2/2] net: phy: sfp: enable i2c-bus detection on
+ ACPI based systems
+Message-ID: <20190507104028.zf34wxr7hgwdwa64@shell.armlinux.org.uk>
+References: <20190505220524.37266-3-ruslan@babayev.com>
+ <20190506045951.GB2895@lahna.fi.intel.com>
+ <871s1bv4aw.fsf@babayev.com>
+ <20190507092946.GS2895@lahna.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <689e1a7b-8544-6bbf-2fa1-a5845895a917@axentia.se>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190507092946.GS2895@lahna.fi.intel.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Peter
-
-On Tue, May 07, 2019 at 09:17:38AM +0000, Peter Rosin wrote:
-> On 2019-05-07 11:02, Serge Semin wrote:
-> > Hello folks,
+On Tue, May 07, 2019 at 12:29:46PM +0300, Mika Westerberg wrote:
+> On Mon, May 06, 2019 at 11:14:15AM -0700, Ruslan Babayev wrote:
 > > 
-> > Any updates on this patchset status? I haven't got any comment on v2, but
-> > instead a notification about the status change was sent to me:
+> > Mika Westerberg writes:
 > > 
-> >> * linux-i2c: [v2,1/3] i2c-mux-gpio: Unpin a platform-based device initialization
-> >>     - http://patchwork.ozlabs.org/patch/1091120/
-> >>     - for: Linux I2C development
-> >>    was: New
-> >>    now: Superseded
-> >>
-> >> * linux-i2c: [v2,2/3] i2c-mux-gpio: Unpin the platform-specific GPIOs request code
-> >>     - http://patchwork.ozlabs.org/patch/1091122/
-> >>     - for: Linux I2C development
-> >>    was: New
-> >>    now: Superseded
-> >>
-> >> * linux-i2c: [v2,3/3] i2c-mux-gpio: Create of-based GPIOs request method
-> >>     - http://patchwork.ozlabs.org/patch/1091121/
-> >>     - for: Linux I2C development
-> >>    was: New
-> >>    now: Superseded
+> > > On Sun, May 05, 2019 at 03:05:23PM -0700, Ruslan Babayev wrote:
+> > >> Lookup I2C adapter using the "i2c-bus" device property on ACPI based
+> > >> systems similar to how it's done with DT.
+> > >> 
+> > >> An example DSD describing an SFP on an ACPI based system:
+> > >> 
+> > >> Device (SFP0)
+> > >> {
+> > >>     Name (_HID, "PRP0001")
+> > >>     Name (_DSD, Package ()
+> > >>     {
+> > >>         ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+> > >>         Package () {
+> > >>             Package () { "compatible", "sff,sfp" },
+> > >>             Package () { "i2c-bus", \_SB.PCI0.RP01.I2C.MUX.CH0 },
+> > >
+> > > Hmm, ACPI has I2cSerialBusV2() resource for this purpose. Why you are not
+> > > using that?
 > > 
-> > I may misunderstand something, but how come the v2 patchset switched to be superseded
-> > while it is the last patchset version I've sent?
+> > I am not an ACPI expert, but my understanding is I2cSerialBusV2() is
+> > used for slave connections. I am trying to reference an I2C controller
+> > here.
 > 
-> That was my mistake. Patchwork got confused when v2 was sent as a reply to
-> something in the v1 tree, and marked all 8 patches as "v2". Then I in turn
-> got confused by that, and changed status on the wrong set. Sorry!
-> 
-> So, thanks for the heads up, it should be fixed now.
-> 
-> As for comments on the patches, I'm personally buried in work and others
-> may have the merge window to focus on...
-> 
-> Cheers,
-> Peter
+> Ah, the device itself is not sitting on an I2C bus? In that case I
+> agree, I2CSerialBusV2() is not correct here.
 
-No worries. Glad everything is clear now. Thanks for the quick response.
+There are several possibilities:
 
-Regarding the patchset comments. Lets wait for the merge window being closed.
-Then if no comments will have been received in one-two weeks after that I'll
-ping this patchset mailing-list again .)
+- Identifying information in EEPROM-like device at 0x50.
+- Optional diagnostics information and measurements at 0x51.
+- Optional network PHY at some other address.
 
-Cheers,
--Sergey
+Hence, we need access to the bus to be able to parse the EEPROM without
+interfering with the AT24 driver that would otherwise bind to it, to
+be able to read the diagnostics, and to probe for the network PHY
+without needing to have a big table of module vendors/descriptions to
+PHY information (and therefore limiting our SFP support to only
+"approved" known modules (which, common with big-name switches, pisses
+users off and is widely seen as a vendor lock-in measure.)
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+According to speedtest.net: 11.9Mbps down 500kbps up
