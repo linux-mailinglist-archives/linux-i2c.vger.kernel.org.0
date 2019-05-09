@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8081C1844C
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 May 2019 06:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2061918459
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 May 2019 06:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725872AbfEIEHx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 May 2019 00:07:53 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:41370 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725767AbfEIEHx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 May 2019 00:07:53 -0400
-Received: by mail-ed1-f65.google.com with SMTP id m4so731366edd.8
-        for <linux-i2c@vger.kernel.org>; Wed, 08 May 2019 21:07:51 -0700 (PDT)
+        id S1725845AbfEIEXs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 May 2019 00:23:48 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:35024 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725774AbfEIEXr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 May 2019 00:23:47 -0400
+Received: by mail-pf1-f196.google.com with SMTP id t87so601282pfa.2
+        for <linux-i2c@vger.kernel.org>; Wed, 08 May 2019 21:23:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id;
         bh=rcSJ7jMxGzSyHBuvTtybXntBxEii0S3igF/TJN9iQIM=;
-        b=QPVRsbDGwbwOKduzLxNA/St9KZmC5Ae8sNTu9LmM5AJtu04sEiBz5fJHFNo9UD7hEs
-         8G3lxwQrInn/dkSYjdxreFZgNxIeYPSNjMEBtRQywrH2lwnTRpD0jktriN4AEzzrKN6Y
-         /kzkwF2nNfxFDwopA0LPJWgKdvEgYnlRe74bw=
+        b=OgWLtWdzXyiFLfdZWXjU6oUQyEbWzNrIBgpaNF2imc3orAYhSfxENDT/pQIrWt2LXs
+         lX4jIbDxCZeAURP5vw1tPE/9VkATES4l2airRsgDJDa1SHhMhVNvkZjQOW4yTDoizpVt
+         zpxsvy1YPBHntCWQtWgdf6xw/LOHPo+EdfZn8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
         bh=rcSJ7jMxGzSyHBuvTtybXntBxEii0S3igF/TJN9iQIM=;
-        b=K83LPU/WbmDMxfD3+CbjHzxIB6ex9EwZZ4cGl9RSdBFtgUda5JG3YBwLfytVxPz53S
-         hRhS6u18gwoQmhjmg8ntvYySDqcIYSm1je5Lk22aW5A11u+Pqcy0DotQyaOFKlGP87XK
-         1qXYJ2BO8vsBQSoeRFIan6N4ZCvGrpKM8viraIBFo4oAlbsU8cZAU4szY2grx1oQ+5io
-         Q6l5L4udlMzx6s5Z757jrWaO8kghI9F0XP/EeHpi+hInLPZgkuqNZ0KXw7defs2M4vlQ
-         61lDgFwWhUuWNwJprfbrZNhL1cKMmdogEG2LMVNBCePtnOznLjEC27M2DUrxBxggPH2S
-         h0vA==
-X-Gm-Message-State: APjAAAWPll86hb3IA23XeUzdDSXfR8bE8U1ZMoXZMxn7HkkyAAscahDS
-        HMFQSJkDNQkXfkFXZQ66CUivbQ==
-X-Google-Smtp-Source: APXvYqxcOrc5gd9eDfHxiUPAuBj3NuxKGu9eRVP6WLM+z/Zwia0Xcd911wSrmY3vokbdinZ67Lp8+w==
-X-Received: by 2002:a50:930e:: with SMTP id m14mr1438356eda.93.1557374870816;
-        Wed, 08 May 2019 21:07:50 -0700 (PDT)
+        b=s+EhySLDkMtqIwjTkd+fL0Xc9+EG2wxWjzFFqmXVGG/2cHsFoVNLS4AOUfhcpT37Pj
+         q+4YAlfizVp/YkT6ZoIWjUKDDgoOK5+MXX0aFk3Rk1LuXLuJL9X4cyOhKhEy88l6O/Jk
+         NvjL7uaU2JJg/merUo4sPEn9hA0zWyNJIwIVyjHESiomZDJGwu1/aynCUp74PpsFK1j3
+         atvSwtznuaOICtspjbLJTApO5ee05ae1E5a6qaTmP+fj6L/S5X5iC8e8hFd80Aj7Thuc
+         /8zDDIFAK2Fbn5+mtGNxh61N9LpD2Z2Ovy4dfWdjbNQVR/3iwxspzEHGyfEOGlSr7bj/
+         MNSA==
+X-Gm-Message-State: APjAAAVhnjh+UlwQE9gHFNhA23ptTUJ72PElusHluyRsxXo1ubj1XpYO
+        QkmSsdrcGEr+vGYjpF41JnXsHQ==
+X-Google-Smtp-Source: APXvYqwpelRZDsRfFPpgs0RyfRJ//3WYRBNMvrKAp2Xdj+PZigfjMW7TqYieOosXHwh4cqCL7lawQw==
+X-Received: by 2002:a65:64d9:: with SMTP id t25mr2813367pgv.130.1557375826686;
+        Wed, 08 May 2019 21:23:46 -0700 (PDT)
 Received: from rayagonda.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id a61sm257424edf.8.2019.05.08.21.07.45
+        by smtp.gmail.com with ESMTPSA id l65sm1313352pfb.7.2019.05.08.21.23.43
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 08 May 2019 21:07:49 -0700 (PDT)
+        Wed, 08 May 2019 21:23:45 -0700 (PDT)
 From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 To:     Wolfram Sang <wsa@the-dreams.de>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>
@@ -49,8 +49,8 @@ Cc:     linux-i2c@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
         Michael Cheng <ccheng@broadcom.com>,
         Srinath Mannam <srinath.mannam@broadcom.com>
 Subject: [PATCH 1/1] i2c: iproc: Add multi byte read-write support for slave mode
-Date:   Thu,  9 May 2019 09:35:17 +0530
-Message-Id: <1557374717-14603-1-git-send-email-rayagonda.kokatanur@broadcom.com>
+Date:   Thu,  9 May 2019 09:51:48 +0530
+Message-Id: <1557375708-14830-1-git-send-email-rayagonda.kokatanur@broadcom.com>
 X-Mailer: git-send-email 1.9.1
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
