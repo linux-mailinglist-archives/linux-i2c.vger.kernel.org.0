@@ -2,310 +2,340 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E40A618EB6
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 May 2019 19:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02DF192AC
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 May 2019 21:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbfEIRKt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 May 2019 13:10:49 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:39931 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726805AbfEIRKt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 May 2019 13:10:49 -0400
-Received: by mail-pf1-f195.google.com with SMTP id z26so1646591pfg.6
-        for <linux-i2c@vger.kernel.org>; Thu, 09 May 2019 10:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rnsWVEfgES/Bm159b334TIA+Lzx3hSfjZ0w87I9bQpM=;
-        b=Xmt6jd5kZjEFHYo8bmyvt5K2iPweMXr3BM1BRlGnco9hx6yAkaL1VXDwGBcyNrQadZ
-         vsJLjVx5lW2ddUCRiilG0U98ddLAYbutWpOCm50QELXaB7rIrGiJ7d/VKIIMHQIBHwsM
-         VeVsYZ5P3h7Y5KEO3v7BFGqfmKIu/x+m1EGtM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rnsWVEfgES/Bm159b334TIA+Lzx3hSfjZ0w87I9bQpM=;
-        b=X967sEEJ67DdGs9DqEBF3FWh2sCpQvkBWeUzF/y9/UPdpSH9jp9pv4G/KaSxHJ/Khq
-         2jBv8KzLgeVgItlF+uDR3zFN3rjMC3ViBPbi9mp1+ybixbeG499dI4Rg/fxEbZ7eZ0L4
-         P7gGds3I91KHf9eqyGZ4dvmaAIQCHQQlJpleFoGE0CfYwf6s7sBjOmEBXq6yXnFtkAoq
-         ppPj02edYGQE/uZjPZJqxYdJ8CWzoyJ7Qi1LIBApkNDGFD8YL0H1fSJNwy4ROEtDvaQH
-         3Idzm16Nm9u+UccJYXPeAGWT8apUC3Uzb0KI17FUZmi2Q5jRR9aVpQnZP0PtK7RxCQEb
-         aFKA==
-X-Gm-Message-State: APjAAAUHArTtiRAzD9qpYaZulYaUDKIV27h5S+rJm41Nj06d3LZ4okca
-        bghX2Uj3ucdmff/0cmKhmgNhtg==
-X-Google-Smtp-Source: APXvYqwRPX/rCd8h7TvqaXjNIW4dIOyUxz6wGxf46umtlRJt4ZDtxqxP+VPrJJTtB92JWoet/hirSA==
-X-Received: by 2002:a63:5b58:: with SMTP id l24mr6862966pgm.139.1557421848309;
-        Thu, 09 May 2019 10:10:48 -0700 (PDT)
-Received: from [10.136.8.252] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id x4sm3696708pfm.19.2019.05.09.10.10.46
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 May 2019 10:10:47 -0700 (PDT)
-Subject: Re: [PATCH 1/1] i2c: iproc: Add multi byte read-write support for
- slave mode
-To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-i2c@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Michael Cheng <ccheng@broadcom.com>,
-        Srinath Mannam <srinath.mannam@broadcom.com>
-References: <1557375708-14830-1-git-send-email-rayagonda.kokatanur@broadcom.com>
- <508d6d50-29a6-dfa7-8e25-b64fa2cbbb8a@broadcom.com>
- <CAHO=5PGpY6g01w7DO7JYrx3WPMtjhp9jwaQmiM15jv+x=+oNaw@mail.gmail.com>
-From:   Ray Jui <ray.jui@broadcom.com>
-Message-ID: <3f3938ea-3710-99ef-4f35-433cb7156e05@broadcom.com>
-Date:   Thu, 9 May 2019 10:10:45 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726620AbfEITMA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 May 2019 15:12:00 -0400
+Received: from sauhun.de ([88.99.104.3]:35258 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726716AbfEITL7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 9 May 2019 15:11:59 -0400
+Received: from localhost (p54B33113.dip0.t-ipconnect.de [84.179.49.19])
+        by pokefinder.org (Postfix) with ESMTPSA id 3C6412E3571;
+        Thu,  9 May 2019 21:11:56 +0200 (CEST)
+Date:   Thu, 9 May 2019 21:11:55 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for 5.2
+Message-ID: <20190509191132.GA9306@kunai>
 MIME-Version: 1.0
-In-Reply-To: <CAHO=5PGpY6g01w7DO7JYrx3WPMtjhp9jwaQmiM15jv+x=+oNaw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yrj/dFKFPuw6o+aM"
+Content-Disposition: inline
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
+--yrj/dFKFPuw6o+aM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 5/9/2019 10:03 AM, Rayagonda Kokatanur wrote:
-> No change,  it's just duplicate, please ignore. 
-> 
-> I am not able to find my patch over network , I tried sending second
-> time by setting plain text mode,  but still it's not visible.
-> 
+Linus,
 
-I can see your patch from the linux-i2c mailing list:
-https://patchwork.ozlabs.org/project/linux-i2c/list/
+I2C has for you:
 
-> Best regards 
-> Rayagonda
-> 
-> On Thu, May 9, 2019, 9:58 PM Ray Jui <ray.jui@broadcom.com
-> <mailto:ray.jui@broadcom.com> wrote:
-> 
->     Why is the email sent twice? What has changed?
-> 
->     On 5/8/2019 9:21 PM, Rayagonda Kokatanur wrote:
->     > Add multiple byte read-write support for slave mode.
->     >
->     > Signed-off-by: Rayagonda Kokatanur
->     <rayagonda.kokatanur@broadcom.com
->     <mailto:rayagonda.kokatanur@broadcom.com>>
->     > Signed-off-by: Srinath Mannam <srinath.mannam@broadcom.com
->     <mailto:srinath.mannam@broadcom.com>>
->     > ---
->     >  drivers/i2c/busses/i2c-bcm-iproc.c | 117
->     +++++++++++++++++--------------------
->     >  1 file changed, 53 insertions(+), 64 deletions(-)
->     >
->     > diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c
->     b/drivers/i2c/busses/i2c-bcm-iproc.c
->     > index a845b8d..2c7f145 100644
->     > --- a/drivers/i2c/busses/i2c-bcm-iproc.c
->     > +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
->     > @@ -165,12 +165,6 @@ enum i2c_slave_read_status {
->     >       I2C_SLAVE_RX_END,
->     >  };
->     > 
->     > -enum i2c_slave_xfer_dir {
->     > -     I2C_SLAVE_DIR_READ = 0,
->     > -     I2C_SLAVE_DIR_WRITE,
->     > -     I2C_SLAVE_DIR_NONE,
->     > -};
->     > -
->     >  enum bus_speed_index {
->     >       I2C_SPD_100K = 0,
->     >       I2C_SPD_400K,
->     > @@ -203,7 +197,6 @@ struct bcm_iproc_i2c_dev {
->     >       struct i2c_msg *msg;
->     > 
->     >       struct i2c_client *slave;
->     > -     enum i2c_slave_xfer_dir xfer_dir;
->     > 
->     >       /* bytes that have been transferred */
->     >       unsigned int tx_bytes;
->     > @@ -219,7 +212,8 @@ struct bcm_iproc_i2c_dev {
->     >               | BIT(IS_M_RX_THLD_SHIFT))
->     > 
->     >  #define ISR_MASK_SLAVE (BIT(IS_S_START_BUSY_SHIFT)\
->     > -             | BIT(IS_S_RX_EVENT_SHIFT) | BIT(IS_S_RD_EVENT_SHIFT))
->     > +             | BIT(IS_S_RX_EVENT_SHIFT) | BIT(IS_S_RD_EVENT_SHIFT)\
->     > +             | BIT(IS_S_TX_UNDERRUN_SHIFT))
->     > 
->     >  static int bcm_iproc_i2c_reg_slave(struct i2c_client *slave);
->     >  static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave);
->     > @@ -297,15 +291,11 @@ static void bcm_iproc_i2c_slave_init(
->     >       /* clear all pending slave interrupts */
->     >       iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, ISR_MASK_SLAVE);
->     > 
->     > -     /* Enable interrupt register for any READ event */
->     > -     val = BIT(IE_S_RD_EVENT_SHIFT);
->     >       /* Enable interrupt register to indicate a valid byte in
->     receive fifo */
->     > -     val |= BIT(IE_S_RX_EVENT_SHIFT);
->     > +     val = BIT(IE_S_RX_EVENT_SHIFT);
->     >       /* Enable interrupt register for the Slave BUSY command */
->     >       val |= BIT(IE_S_START_BUSY_SHIFT);
->     >       iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
->     > -
->     > -     iproc_i2c->xfer_dir = I2C_SLAVE_DIR_NONE;
->     >  }
->     > 
->     >  static void bcm_iproc_i2c_check_slave_status(
->     > @@ -314,8 +304,11 @@ static void bcm_iproc_i2c_check_slave_status(
->     >       u32 val;
->     > 
->     >       val = iproc_i2c_rd_reg(iproc_i2c, S_CMD_OFFSET);
->     > -     val = (val >> S_CMD_STATUS_SHIFT) & S_CMD_STATUS_MASK;
->     > +     /* status is valid only when START_BUSY is cleared after it
->     was set */
->     > +     if (val & BIT(S_CMD_START_BUSY_SHIFT))
->     > +             return;
->     > 
->     > +     val = (val >> S_CMD_STATUS_SHIFT) & S_CMD_STATUS_MASK;
->     >       if (val == S_CMD_STATUS_TIMEOUT) {
->     >               dev_err(iproc_i2c->device, "slave random stretch
->     time timeout\n");
->     > 
->     > @@ -327,70 +320,66 @@ static void bcm_iproc_i2c_check_slave_status(
->     >  }
->     > 
->     >  static bool bcm_iproc_i2c_slave_isr(struct bcm_iproc_i2c_dev
->     *iproc_i2c,
->     > -                             u32 status)
->     > +                                 u32 status)
->     >  {
->     > -     u8 value;
->     >       u32 val;
->     > -     u32 rd_status;
->     > -     u32 tmp;
->     > +     u8 value, rx_status;
->     > 
->     > -     /* Start of transaction. check address and populate the
->     direction */
->     > -     if (iproc_i2c->xfer_dir == I2C_SLAVE_DIR_NONE) {
->     > -             tmp = iproc_i2c_rd_reg(iproc_i2c, S_RX_OFFSET);
->     > -             rd_status = (tmp >> S_RX_STATUS_SHIFT) &
->     S_RX_STATUS_MASK;
->     > -             /* This condition checks whether the request is a
->     new request */
->     > -             if (((rd_status == I2C_SLAVE_RX_START) &&
->     > -                     (status & BIT(IS_S_RX_EVENT_SHIFT))) ||
->     > -                     ((rd_status == I2C_SLAVE_RX_END) &&
->     > -                     (status & BIT(IS_S_RD_EVENT_SHIFT)))) {
->     > -
->     > -                     /* Last bit is W/R bit.
->     > -                      * If 1 then its a read request(by master).
->     > -                      */
->     > -                     iproc_i2c->xfer_dir = tmp &
->     SLAVE_READ_WRITE_BIT_MASK;
->     > -                     if (iproc_i2c->xfer_dir == I2C_SLAVE_DIR_WRITE)
->     > -                             i2c_slave_event(iproc_i2c->slave,
->     > -                                     I2C_SLAVE_READ_REQUESTED,
->     &value);
->     > -                     else
->     > -                             i2c_slave_event(iproc_i2c->slave,
->     > +     /* Slave RX byte receive */
->     > +     if (status & BIT(IS_S_RX_EVENT_SHIFT)) {
->     > +             val = iproc_i2c_rd_reg(iproc_i2c, S_RX_OFFSET);
->     > +             rx_status = (val >> S_RX_STATUS_SHIFT) &
->     S_RX_STATUS_MASK;
->     > +             if (rx_status == I2C_SLAVE_RX_START) {
->     > +                     /* Start of SMBUS for Master write */
->     > +                     i2c_slave_event(iproc_i2c->slave,
->     >                                       I2C_SLAVE_WRITE_REQUESTED,
->     &value);
->     > -             }
->     > -     }
->     > 
->     > -     /* read request from master */
->     > -     if ((status & BIT(IS_S_RD_EVENT_SHIFT)) &&
->     > -             (iproc_i2c->xfer_dir == I2C_SLAVE_DIR_WRITE)) {
->     > -             i2c_slave_event(iproc_i2c->slave,
->     > -                     I2C_SLAVE_READ_PROCESSED, &value);
->     > -             iproc_i2c_wr_reg(iproc_i2c, S_TX_OFFSET, value);
->     > +                     val = iproc_i2c_rd_reg(iproc_i2c, S_RX_OFFSET);
->     > +                     value = (u8)((val >> S_RX_DATA_SHIFT) &
->     S_RX_DATA_MASK);
->     > +                     i2c_slave_event(iproc_i2c->slave,
->     > +                                     I2C_SLAVE_WRITE_RECEIVED,
->     &value);
->     > +             } else if (status & BIT(IS_S_RD_EVENT_SHIFT)) {
->     > +                     /* Start of SMBUS for Master Read */
->     > +                     i2c_slave_event(iproc_i2c->slave,
->     > +                                     I2C_SLAVE_READ_REQUESTED,
->     &value);
->     > +                     iproc_i2c_wr_reg(iproc_i2c, S_TX_OFFSET, value);
->     > 
->     > -             val = BIT(S_CMD_START_BUSY_SHIFT);
->     > -             iproc_i2c_wr_reg(iproc_i2c, S_CMD_OFFSET, val);
->     > -     }
->     > +                     val = BIT(S_CMD_START_BUSY_SHIFT);
->     > +                     iproc_i2c_wr_reg(iproc_i2c, S_CMD_OFFSET, val);
->     > 
->     > -     /* write request from master */
->     > -     if ((status & BIT(IS_S_RX_EVENT_SHIFT)) &&
->     > -             (iproc_i2c->xfer_dir == I2C_SLAVE_DIR_READ)) {
->     > -             val = iproc_i2c_rd_reg(iproc_i2c, S_RX_OFFSET);
->     > -             /* Its a write request by Master to Slave.
->     > -              * We read data present in receive FIFO
->     > -              */
->     > -             value = (u8)((val >> S_RX_DATA_SHIFT) & S_RX_DATA_MASK);
->     > +                     /*
->     > +                      * Enable interrupt for TX FIFO becomes
->     empty and
->     > +                      * less than PKT_LENGTH bytes were output on
->     the SMBUS
->     > +                      */
->     > +                     val = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
->     > +                     val |= BIT(IE_S_TX_UNDERRUN_SHIFT);
->     > +                     iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
->     > +             } else {
->     > +                     /* Master write other than start */
->     > +                     value = (u8)((val >> S_RX_DATA_SHIFT) &
->     S_RX_DATA_MASK);
->     > +                     i2c_slave_event(iproc_i2c->slave,
->     > +                                     I2C_SLAVE_WRITE_RECEIVED,
->     &value);
->     > +             }
->     > +     } else if (status & BIT(IS_S_TX_UNDERRUN_SHIFT)) {
->     > +             /* Master read other than start */
->     >               i2c_slave_event(iproc_i2c->slave,
->     > -                     I2C_SLAVE_WRITE_RECEIVED, &value);
->     > -
->     > -             /* check the status for the last byte of the
->     transaction */
->     > -             rd_status = (val >> S_RX_STATUS_SHIFT) &
->     S_RX_STATUS_MASK;
->     > -             if (rd_status == I2C_SLAVE_RX_END)
->     > -                     iproc_i2c->xfer_dir = I2C_SLAVE_DIR_NONE;
->     > +                             I2C_SLAVE_READ_PROCESSED, &value);
->     > 
->     > -             dev_dbg(iproc_i2c->device, "\nread value = 0x%x\n",
->     value);
->     > +             iproc_i2c_wr_reg(iproc_i2c, S_TX_OFFSET, value);
->     > +             val = BIT(S_CMD_START_BUSY_SHIFT);
->     > +             iproc_i2c_wr_reg(iproc_i2c, S_CMD_OFFSET, val);
->     >       }
->     > 
->     >       /* Stop */
->     >       if (status & BIT(IS_S_START_BUSY_SHIFT)) {
->     >               i2c_slave_event(iproc_i2c->slave, I2C_SLAVE_STOP,
->     &value);
->     > -             iproc_i2c->xfer_dir = I2C_SLAVE_DIR_NONE;
->     > +             /*
->     > +              * Enable interrupt for TX FIFO becomes empty and
->     > +              * less than PKT_LENGTH bytes were output on the SMBUS
->     > +              */
->     > +             val = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
->     > +             val &= ~BIT(IE_S_TX_UNDERRUN_SHIFT);
->     > +             iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
->     >       }
->     > 
->     >       /* clear interrupt status */
->     >
-> 
+* API for late atomic transfers (e.g. to shut down via PMIC). We have a
+  seperate callback now which is called under clearly defined
+  conditions. In-kernel users are converted, too.
+* new driver for the AMD PCIe MP2 I2C controller
+* large refactoring for at91 and bcm-iproc (both gain slave support
+  due to this)
+* and a good share of various driver improvements anf fixes
+
+Please pull.
+
+Thanks,
+
+   Wolfram
+
+
+The following changes since commit 79a3aaa7b82e3106be97842dedfd8429248896e6:
+
+  Linux 5.1-rc3 (2019-03-31 14:39:29 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-5.2
+
+for you to fetch changes up to e6ae3ca27477226eae77cc00d5fad89d7ce64aea:
+
+  dt-bindings: i2c: riic: document r7s9210 support (2019-05-03 16:53:31 +0200)
+
+----------------------------------------------------------------
+Adamski, Krzysztof (Nokia - PL/Wroclaw) (1):
+      i2c: axxia: use auto cmd for last message
+
+Andy Shevchenko (1):
+      i2c: at91: Convert to use struct i2c_timings
+
+Anson Huang (1):
+      i2c: imx-lpi2c: Use __maybe_unused instead of #if CONFIG_PM_SLEEP
+
+Bartosz Golaszewski (1):
+      MAINTAINERS: change my e-mail address for at24
+
+Bich HEMON (2):
+      dt-bindings: i2c: stm32: remove extra spaces
+      dt-bindings: i2c: stm32: update optional properties for stm32h7/stm32mp1
+
+Bjorn Helgaas (1):
+      i2c: isch: Remove unnecessary acpi.h include
+
+Chris Brandt (1):
+      dt-bindings: i2c: riic: document r7s9210 support
+
+Dan Carpenter (1):
+      i2c: nomadik: remove an unnecessary NULL check in nmk_i2c_remove()
+
+Elie Morisse (1):
+      i2c: Add drivers for the AMD PCIe MP2 I2C controller
+
+Fabien Parent (1):
+      dt-bindings: i2c: i2c-mtk: add support for MT8516
+
+Geert Uytterhoeven (2):
+      dt-bindings: at24: add Renesas R1EX24016
+      i2c: riic: Add Runtime PM support
+
+Gustavo A. R. Silva (1):
+      i2c: mux: demux-pinctrl: use struct_size() in devm_kzalloc()
+
+Juergen Fitschen (3):
+      i2c: at91: segregate master mode specific code from probe and init func
+      i2c: at91: split driver into core and master file
+      i2c: at91: added slave mode support
+
+Michael Cheng (1):
+      i2c: iproc: Add support for more master error status
+
+Nicolas Le Bayon (1):
+      i2c: i2c-stm32f7: improve loopback in timing algorithm
+
+Phil Edworthy (2):
+      dt: snps,designware-i2c: Add clock bindings documentation
+      i2c: designware: Add support for an interface clock
+
+Pu Wen (1):
+      i2c-piix4: Add Hygon Dhyana SMBus support
+
+Qii Wang (5):
+      i2c: mediatek: Add offsets array for new i2c registers
+      dt-bindings: i2c: Add Mediatek MT8183 i2c binding
+      i2c: mediatek: Add arb clock in i2c driver
+      i2c: mediatek: Add i2c and apdma sync in i2c driver
+      i2c: mediatek: Add i2c support for MediaTek MT8183
+
+Ray Jui (2):
+      dt-bindings: i2c: iproc: make 'interrupts' optional
+      i2c: iproc: Change driver to use 'BIT' macro
+
+Rayagonda Kokatanur (4):
+      i2c: iproc: add polling support
+      i2c: iproc: use wrapper for read/write access
+      dt-bindings: i2c: iproc: add "brcm, iproc-nic-i2c" compatible string
+      i2c: iproc: add NIC I2C support
+
+Robert Shearman (3):
+      i2c: mux: pca954x: remove support for unused platform data
+      i2c: mux: pca9541: remove support for unused platform data
+      i2c: mux: pca954x: allow management of device idle state via sysfs
+
+Shreesha Rajashekar (2):
+      i2c: iproc: Extend I2C read up to 255 bytes
+      i2c: iproc: Add slave mode support
+
+Wolfram Sang (21):
+      i2c: rcar: sanity check for minimal DMA length
+      i2c: rcar: let DMA enable routine return success status
+      i2c: rcar: wait for data empty before starting DMA
+      i2c: apply coding style for struct i2c_adapter
+      i2c: brcmstb: remove unused struct member
+      i2c: core: remove use of in_atomic()
+      i2c: core: use I2C locking behaviour also for SMBUS
+      i2c: core: introduce callbacks for atomic transfers
+      i2c: mux: populate the new *_atomic callbacks
+      i2c: demux: handle the new atomic callbacks
+      i2c: omap: Add the master_xfer_atomic hook
+      i2c: tegra-bpmp: convert to use new atomic callbacks
+      i2c: ocores: refactor setup for polling
+      i2c: ocores: enable atomic xfers
+      i2c: stu300: use xfer_atomic callback to bail out early
+      i2c: algo: bit: add flag to whitelist atomic transfers
+      i2c: gpio: flag atomic capability if possible
+      Merge tag 'at24-v5.2-updates-for-wolfram' of git://git.kernel.org/.../brgl/linux into i2c/for-5.2
+      Merge branch 'i2c-mux/for-next' of https://github.com/peda-r/i2c-mux into i2c/for-5.2
+      i2c: core: ratelimit 'transfer when suspended' errors
+      i2c: core: apply 'is_suspended' check for SMBus, too
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Alexander Sverdlin (1):
+      (Rev.) i2c: axxia: use auto cmd for last message
+
+Andrew Lunn (2):
+      (Rev.) i2c: ocores: enable atomic xfers
+      (Rev.) i2c: ocores: refactor setup for polling
+
+Andy Shevchenko (1):
+      (Rev.) i2c: apply coding style for struct i2c_adapter
+
+Chris Brandt (1):
+      (Test) i2c: riic: Add Runtime PM support
+
+Geert Uytterhoeven (3):
+      (Rev.) dt-bindings: i2c: riic: document r7s9210 support
+      (Rev.) i2c: rcar: let DMA enable routine return success status
+      (Rev.) i2c: rcar: sanity check for minimal DMA length
+
+Jarkko Nikula (2):
+      (Test) i2c: designware: Add support for an interface clock
+      (Rev.) dt: snps,designware-i2c: Add clock bindings documentation
+
+Jean Delvare (2):
+      (Rev.) i2c-piix4: Add Hygon Dhyana SMBus support
+      (Rev.) i2c: isch: Remove unnecessary acpi.h include
+
+Linus Walleij (2):
+      (Rev.) i2c: gpio: flag atomic capability if possible
+      (Rev.) i2c: stu300: use xfer_atomic callback to bail out early
+
+Matthias Brugger (5):
+      (Rev.) i2c: mediatek: Add i2c support for MediaTek MT8183
+      (Rev.) i2c: mediatek: Add i2c and apdma sync in i2c driver
+      (Rev.) i2c: mediatek: Add arb clock in i2c driver
+      (Rev.) dt-bindings: i2c: Add Mediatek MT8183 i2c binding
+      (Rev.) i2c: mediatek: Add offsets array for new i2c registers
+
+Mukesh Ojha (1):
+      (Rev.) i2c: isch: Remove unnecessary acpi.h include
+
+Nicolas Boichat (3):
+      (Rev.) i2c: mediatek: Add i2c support for MediaTek MT8183
+      (Rev.) i2c: mediatek: Add i2c and apdma sync in i2c driver
+      (Rev.) i2c: mediatek: Add arb clock in i2c driver
+
+Niklas S??derlund (1):
+      (Rev.) i2c: riic: Add Runtime PM support
+
+Peter Rosin (1):
+      (Rev.) i2c: mux: populate the new *_atomic callbacks
+
+Pierre-Yves MORDRET (3):
+      (Rev.) dt-bindings: i2c: stm32: update optional properties for stm32h7/stm32mp1
+      (Rev.) dt-bindings: i2c: stm32: remove extra spaces
+      (Rev.) i2c: i2c-stm32f7: improve loopback in timing algorithm
+
+Rob Herring (5):
+      (Rev.) dt-bindings: i2c: riic: document r7s9210 support
+      (Rev.) dt-bindings: i2c: Add Mediatek MT8183 i2c binding
+      (Rev.) dt-bindings: i2c: iproc: add "brcm, iproc-nic-i2c" compatible string
+      (Rev.) dt-bindings: i2c: iproc: make 'interrupts' optional
+      (Rev.) dt: snps,designware-i2c: Add clock bindings documentation
+
+Simon Horman (8):
+      (Rev.) i2c: core: apply 'is_suspended' check for SMBus, too
+      (Rev.) i2c: core: ratelimit 'transfer when suspended' errors
+      (Rev.) i2c: tegra-bpmp: convert to use new atomic callbacks
+      (Rev.) i2c: omap: Add the master_xfer_atomic hook
+      (Rev.) i2c: apply coding style for struct i2c_adapter
+      (Rev.) i2c: rcar: wait for data empty before starting DMA
+      (Rev.) i2c: rcar: let DMA enable routine return success status
+      (Rev.) i2c: rcar: sanity check for minimal DMA length
+
+Stefan Lengfeld (2):
+      (Test) i2c: core: introduce callbacks for atomic transfers
+      (Test) i2c: core: remove use of in_atomic()
+
+Timo Alho (1):
+      (Rev.) i2c: tegra-bpmp: convert to use new atomic callbacks
+
+ .../ABI/testing/sysfs-bus-i2c-devices-pca954x      |  20 +
+ Documentation/devicetree/bindings/eeprom/at24.txt  |   1 +
+ .../devicetree/bindings/i2c/brcm,iproc-i2c.txt     |  17 +-
+ .../devicetree/bindings/i2c/i2c-designware.txt     |   9 +
+ .../devicetree/bindings/i2c/i2c-mt65xx.txt         |   5 +-
+ Documentation/devicetree/bindings/i2c/i2c-riic.txt |   5 +-
+ .../devicetree/bindings/i2c/i2c-stm32.txt          |  37 +-
+ Documentation/i2c/busses/i2c-amd-mp2               |  23 +
+ Documentation/i2c/busses/i2c-piix4                 |   2 +
+ MAINTAINERS                                        |  13 +-
+ drivers/i2c/algos/i2c-algo-bit.c                   |  22 +-
+ drivers/i2c/busses/Kconfig                         |  25 +
+ drivers/i2c/busses/Makefile                        |   5 +
+ drivers/i2c/busses/i2c-amd-mp2-pci.c               | 483 +++++++++++++
+ drivers/i2c/busses/i2c-amd-mp2-plat.c              | 367 ++++++++++
+ drivers/i2c/busses/i2c-amd-mp2.h                   | 219 ++++++
+ drivers/i2c/busses/i2c-at91-core.c                 | 376 ++++++++++
+ .../i2c/busses/{i2c-at91.c => i2c-at91-master.c}   | 480 +------------
+ drivers/i2c/busses/i2c-at91-slave.c                | 143 ++++
+ drivers/i2c/busses/i2c-at91.h                      | 174 +++++
+ drivers/i2c/busses/i2c-axxia.c                     |  57 +-
+ drivers/i2c/busses/i2c-bcm-iproc.c                 | 764 +++++++++++++++++----
+ drivers/i2c/busses/i2c-brcmstb.c                   |   1 -
+ drivers/i2c/busses/i2c-designware-common.c         |  18 +-
+ drivers/i2c/busses/i2c-designware-core.h           |   2 +
+ drivers/i2c/busses/i2c-designware-platdrv.c        |   5 +
+ drivers/i2c/busses/i2c-gpio.c                      |   2 +
+ drivers/i2c/busses/i2c-imx-lpi2c.c                 |  11 +-
+ drivers/i2c/busses/i2c-isch.c                      |   1 -
+ drivers/i2c/busses/i2c-mt65xx.c                    | 255 +++++--
+ drivers/i2c/busses/i2c-nomadik.c                   |   3 +-
+ drivers/i2c/busses/i2c-ocores.c                    |  16 +-
+ drivers/i2c/busses/i2c-omap.c                      |  76 +-
+ drivers/i2c/busses/i2c-piix4.c                     |  15 +-
+ drivers/i2c/busses/i2c-rcar.c                      |  30 +-
+ drivers/i2c/busses/i2c-riic.c                      |  43 +-
+ drivers/i2c/busses/i2c-stm32f7.c                   |   4 +
+ drivers/i2c/busses/i2c-stu300.c                    |  25 +-
+ drivers/i2c/busses/i2c-tegra-bpmp.c                |  25 +-
+ drivers/i2c/i2c-core-base.c                        |  23 +-
+ drivers/i2c/i2c-core-smbus.c                       |  29 +-
+ drivers/i2c/i2c-core.h                             |  36 +
+ drivers/i2c/i2c-mux.c                              |   6 +
+ drivers/i2c/muxes/i2c-demux-pinctrl.c              |   6 +-
+ drivers/i2c/muxes/i2c-mux-pca9541.c                |   8 +-
+ drivers/i2c/muxes/i2c-mux-pca954x.c                | 106 ++-
+ include/linux/i2c-algo-bit.h                       |   1 +
+ include/linux/i2c.h                                |  41 +-
+ include/linux/platform_data/pca954x.h              |  48 --
+ 49 files changed, 3151 insertions(+), 932 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-pca954x
+ create mode 100644 Documentation/i2c/busses/i2c-amd-mp2
+ create mode 100644 drivers/i2c/busses/i2c-amd-mp2-pci.c
+ create mode 100644 drivers/i2c/busses/i2c-amd-mp2-plat.c
+ create mode 100644 drivers/i2c/busses/i2c-amd-mp2.h
+ create mode 100644 drivers/i2c/busses/i2c-at91-core.c
+ rename drivers/i2c/busses/{i2c-at91.c => i2c-at91-master.c} (65%)
+ create mode 100644 drivers/i2c/busses/i2c-at91-slave.c
+ create mode 100644 drivers/i2c/busses/i2c-at91.h
+ delete mode 100644 include/linux/platform_data/pca954x.h
+
+--yrj/dFKFPuw6o+aM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzUe10ACgkQFA3kzBSg
+KbYh7w/+P7EgsTY2Lf++2poJw4YFJKPynb1vBRZSZ99IaEUevz/k92CT3/d5U2kB
+XV56CRJu/IohVSWrh+w2OvBBJxe5dMxy+MjmQhrBn1a1xDAsjmMFNEDajpXd+iZO
+vXy0bEKxvkwTCgN2ZOkSSRLp2lcX2RbwEbAfs0aC2gS1NJVz+m4EUok1eiwkaNHN
+g+deGclLltvo/AK6pPeSqX3ojy7GeOr9yvWvmM7UUAKP48UrwwPTBPVf65XRRRpa
+GE14tOOuDpRIzKiZk+6+w/JHVAXP04UquC1zl9nuUVAL71aJtOyp0uhj8e5G6Znz
+aGF0X5ED6aRPULVDxCdCzC8z96f7h89Zh0RIJyLYTbc0aw4opjy1Gxh4hvDWIDn4
+Uz3E9H7AWVy0gTk5C9xxRtZQ6ArCOH0JWrY1M3i5+K87Mc5f9TNYdTPcWVCtZTUq
+pccKk28fXk6vG4haLFIYKBZtVQWW8LbzeMoMz5VUVkS5lrc1CRAOxEOgwDvoOV2Q
+QlH/DPMjZ8wak+MDxjCfUYrBsK5xLYhOPs3GaHQBc+Y/Up6JjIsEwonmvbLYhLDv
+0Bo8a0zxD/kuVeLH2IfMuawEWSbyDuHh2zx/ix2vBOn6LVqAcVIyOFiiUSq1I8Qg
+54sVms8iWIqhRl+BA2tieZr3gyrGQm+pt4vvvHGnvfdcWeYQG48=
+=xSPh
+-----END PGP SIGNATURE-----
+
+--yrj/dFKFPuw6o+aM--
