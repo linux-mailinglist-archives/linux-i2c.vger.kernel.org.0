@@ -2,29 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E74931994C
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 May 2019 10:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE761995B
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 May 2019 10:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726964AbfEJIJ6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 May 2019 04:09:58 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40572 "EHLO mx1.suse.de"
+        id S1727070AbfEJIM3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 May 2019 04:12:29 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41590 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726936AbfEJIJ6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 10 May 2019 04:09:58 -0400
+        id S1726984AbfEJIM1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 10 May 2019 04:12:27 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id D06A6AF1F;
-        Fri, 10 May 2019 08:09:56 +0000 (UTC)
-Date:   Fri, 10 May 2019 10:09:55 +0200
+        by mx1.suse.de (Postfix) with ESMTP id 1A2D1AF41;
+        Fri, 10 May 2019 08:12:26 +0000 (UTC)
+Date:   Fri, 10 May 2019 10:12:24 +0200
 From:   Jean Delvare <jdelvare@suse.de>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     <linux-kernel@vger.kernel.org>, Wolfram Sang <wsa@the-dreams.de>,
-        <linux-i2c@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH 3/3] i2c: i801: avoid panic if ioreamp fails
-Message-ID: <20190510100955.497a1a57@endymion>
-In-Reply-To: <20190510030320.109154-3-wangkefeng.wang@huawei.com>
-References: <20190510030320.109154-1-wangkefeng.wang@huawei.com>
-        <20190510030320.109154-3-wangkefeng.wang@huawei.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vignesh R <vigneshr@ti.com>,
+        Eddie James <eajames@linux.vnet.ibm.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        Karthikeyan Ramasubramanian <kramasub@codeaurora.org>,
+        Juergen Fitschen <jfi@ssv-embedded.de>,
+        Elie Morisse <syniurge@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: Allow selecting BCM2835 I2C controllers on
+ ARCH_BRCMSTB
+Message-ID: <20190510101224.3cd5d0f9@endymion>
+In-Reply-To: <20190509210438.28223-1-f.fainelli@gmail.com>
+References: <20190509210438.28223-1-f.fainelli@gmail.com>
 Organization: SUSE Linux
 X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
@@ -35,49 +46,35 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Kefeng,
-
-On Fri, 10 May 2019 11:03:20 +0800, Kefeng Wang wrote:
-> If ioremap fails, NULL pointer dereference will happen and
-> leading to a kernel panic when access the virtual address
-> in check_signature().
+On Thu,  9 May 2019 14:04:36 -0700, Florian Fainelli wrote:
+> From: Kamal Dasu <kdasu.kdev@gmail.com>
 > 
-> Fix it by check the return value of ioremap.
+> ARCH_BRCMSTB platforms have the BCM2835 I2C controllers, allow
+> selecting the i2c-bcm2835 driver on such platforms.
 > 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Wolfram Sang <wsa@the-dreams.de>
-> Cc: linux-i2c@vger.kernel.org
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->  drivers/i2c/busses/i2c-i801.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  drivers/i2c/busses/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index 679c6c41f64b..fc6ccb8aba17 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1068,7 +1068,10 @@ static void __init input_apanel_init(void)
->  	void __iomem *bios;
->  	const void __iomem *p;
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 26186439db6b..7277c1051ca2 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -435,7 +435,7 @@ config I2C_AXXIA
 >  
-> -	bios = ioremap(0xF0000, 0x10000); /* Can't fail */
-> +	bios = ioremap(0xF0000, 0x10000);
-> +	if (!base)
+>  config I2C_BCM2835
+>  	tristate "Broadcom BCM2835 I2C controller"
+> -	depends on ARCH_BCM2835
+> +	depends on ARCH_BCM2835 || ARCH_BRCMSTB
+>  	help
+>  	  If you say yes to this option, support will be included for the
+>  	  BCM2835 I2C controller.
 
-That would be "if (!bios)". Please don't send patches without at least
-test-building the result.
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-We don't need this anyway. The comment says it can't fail, so why
-bother checking for a condition which will never happen?
-
-> +		return -ENOMEM;
-> +
->  	p = bios_signature(bios);
->  	if (p) {
->  		/* just use the first address */
-
-
+Thanks,
 -- 
 Jean Delvare
 SUSE L3 Support
