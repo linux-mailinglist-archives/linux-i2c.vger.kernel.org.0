@@ -2,54 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CA819512
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 May 2019 00:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5701196D0
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 May 2019 04:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727256AbfEIWPQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 May 2019 18:15:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42386 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726715AbfEIWPP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 9 May 2019 18:15:15 -0400
-Subject: Re: [PULL REQUEST] i2c for 5.2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557440115;
-        bh=qgyq7+yLpLnKg1MIv7N9dI3jFfUpFYJPDgorlRE2EYs=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=RokjB1+Ntin/7xx2vnGBtx6GTUFwN91fbDGbAlOVgMsZhejdZjFy0smhOuKZQ6So4
-         7fxAO+bI/hS0mp9GkCNZ6rJg0JPiRH5YZutsMzvqNQxnYYct/Fk2Q+1+VoNzLW7jEW
-         1LJLO/UxhjRRy5l8Z/pE/9DSRnEjY3xVMMQ0Of30=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20190509191132.GA9306@kunai>
-References: <20190509191132.GA9306@kunai>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20190509191132.GA9306@kunai>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-5.2
-X-PR-Tracked-Commit-Id: e6ae3ca27477226eae77cc00d5fad89d7ce64aea
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 45182e4e1f8ac04708ca7508c51d9103f07d81ab
-Message-Id: <155744011521.23477.7035277562607237397.pr-tracker-bot@kernel.org>
-Date:   Thu, 09 May 2019 22:15:15 +0000
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        id S1726947AbfEJCyJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 May 2019 22:54:09 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:58082 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726944AbfEJCyJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 9 May 2019 22:54:09 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id E06B1C6B32C2F792A9C6;
+        Fri, 10 May 2019 10:54:06 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
+ 14.3.439.0; Fri, 10 May 2019 10:53:58 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Wolfram Sang <wsa@the-dreams.de>, <linux-i2c@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH 3/3] i2c: i801: avoid panic if ioreamp fails
+Date:   Fri, 10 May 2019 11:03:20 +0800
+Message-ID: <20190510030320.109154-3-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190510030320.109154-1-wangkefeng.wang@huawei.com>
+References: <20190510030320.109154-1-wangkefeng.wang@huawei.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Thu, 9 May 2019 21:11:55 +0200:
+If ioremap fails, NULL pointer dereference will happen and
+leading to a kernel panic when access the virtual address
+in check_signature().
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-5.2
+Fix it by check the return value of ioremap.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/45182e4e1f8ac04708ca7508c51d9103f07d81ab
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Wolfram Sang <wsa@the-dreams.de>
+Cc: linux-i2c@vger.kernel.org
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ drivers/i2c/busses/i2c-i801.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thank you!
-
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 679c6c41f64b..fc6ccb8aba17 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1068,7 +1068,10 @@ static void __init input_apanel_init(void)
+ 	void __iomem *bios;
+ 	const void __iomem *p;
+ 
+-	bios = ioremap(0xF0000, 0x10000); /* Can't fail */
++	bios = ioremap(0xF0000, 0x10000);
++	if (!base)
++		return -ENOMEM;
++
+ 	p = bios_signature(bios);
+ 	if (p) {
+ 		/* just use the first address */
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.20.1
+
