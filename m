@@ -2,81 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A176619D34
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 May 2019 14:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742471A633
+	for <lists+linux-i2c@lfdr.de>; Sat, 11 May 2019 03:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727210AbfEJM1A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 May 2019 08:27:00 -0400
-Received: from mail-it1-f177.google.com ([209.85.166.177]:35203 "EHLO
-        mail-it1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727071AbfEJM1A (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 May 2019 08:27:00 -0400
-Received: by mail-it1-f177.google.com with SMTP id u186so8862651ith.0
-        for <linux-i2c@vger.kernel.org>; Fri, 10 May 2019 05:27:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=R1gypFlr3IldIGaG92jpg22WD/9Lc/LsKC4OUYz/+xQ=;
-        b=pcB5oUkyDJFzFHJ0v7Q1zE2WFYQzbzISkr+O2drmLLcwueYgTbCwTPlu1cMM8zGct9
-         a/UXfnbefg3Yl8EI6ro7cA+PWa1b652uic+voBqbzHRsy62+y9hHRIaqsbHy2quhY4fh
-         2AGAzmVDXJpHhdsIf5c8O/sc1WLi4NgTbQvyzA/zJtPEOA5AYIrhLewYytNaJdQwwiii
-         xoBx96OTn7Cl7AVCvFdb91ScZGabi/yWafMq51a0Z8LRN9D7fbAC9cAxm+GkJHuCY9+X
-         bzU2y1ElMFj+dcVbWUWtAXpRUfsoffcWzeeZirVUlJJPs/fSUo1AmaMQq9YGu2K6d9h1
-         5SWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=R1gypFlr3IldIGaG92jpg22WD/9Lc/LsKC4OUYz/+xQ=;
-        b=mMa3LXOEf0C2Wp7vnoYquLjKHv4WgPgr3QiWMtQOINWoafvZ3zXm0sl8GUGzDz1iWi
-         42u60YE1trNTuRbPWfOWaozidij75cjXyiRFNa/HXqq4mDBjlfYUxwvy29qJqD6u4aV7
-         NZq0mAEvcGQPiBV6aR+P7MR8oXC2aPHopDRKg03nBek9F8h8JvCOd7aHj2chCDs71+eZ
-         vX2iAowiVd7ZkzZxTpsFMar4Ix4RzeEtucBengOz5i3i6vPzIpD1KuQCxDhFIkVXOf7U
-         97OzeBvLlgiNmYpbacznsCdbJemTtwzHKRNOVGoMsIKcy7O99vHuCtB9aFAwWsGl0b3Q
-         sRYw==
-X-Gm-Message-State: APjAAAXdMaaNk9A/FMq+a/ERnNgi8h3oyilvsi0CV3wTe1nbsRxqinIQ
-        VbA+dp4wTua8mwWqyEX/PYxCGEx7oCjIoPwTnDAJcQ==
-X-Google-Smtp-Source: APXvYqyDx3/r2jVSiDa1Olz57SehRf7j9AJMKWOrdM5mn+Oa2EAxJJLseT3e3YgGSjrY8IiYckwcgJ9WYUoMATplkBs=
-X-Received: by 2002:a24:6b4e:: with SMTP id v75mr7143271itc.74.1557491219611;
- Fri, 10 May 2019 05:26:59 -0700 (PDT)
+        id S1728293AbfEKBeU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 May 2019 21:34:20 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:7190 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728064AbfEKBeU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 10 May 2019 21:34:20 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 1E36C22EF0B83997152F;
+        Sat, 11 May 2019 09:34:18 +0800 (CST)
+Received: from [127.0.0.1] (10.177.19.180) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Sat, 11 May 2019
+ 09:34:09 +0800
+Subject: Re: [PATCH 3/3] i2c: i801: avoid panic if ioreamp fails
+To:     Jean Delvare <jdelvare@suse.de>
+CC:     <linux-kernel@vger.kernel.org>, Wolfram Sang <wsa@the-dreams.de>,
+        <linux-i2c@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
+References: <20190510030320.109154-1-wangkefeng.wang@huawei.com>
+ <20190510030320.109154-3-wangkefeng.wang@huawei.com>
+ <20190510100955.497a1a57@endymion>
+ <164bb498-35dc-b226-4adb-3d743f4790a1@huawei.com>
+ <20190510141833.2cb3d108@endymion>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+Message-ID: <b76a3c35-015f-8ecb-0dd1-1329ee93e637@huawei.com>
+Date:   Sat, 11 May 2019 09:32:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.1
 MIME-Version: 1.0
-References: <20190426132532.10598-1-brgl@bgdev.pl> <20190503131432.GA24385@kunai>
-In-Reply-To: <20190503131432.GA24385@kunai>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 10 May 2019 14:26:48 +0200
-Message-ID: <CAMRc=McuS7_n5YvWn6MqZbdsaLgYWMNr6_XEvN9mgpRqBLPXnQ@mail.gmail.com>
-Subject: Re: [GIT PULL] at24: updates for v5.2
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190510141833.2cb3d108@endymion>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.177.19.180]
+X-CFilter-Loop: Reflected
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-pt., 3 maj 2019 o 15:14 Wolfram Sang <wsa@the-dreams.de> napisa=C5=82(a):
+
+On 2019/5/10 20:18, Jean Delvare wrote:
+> On Fri, 10 May 2019 17:35:46 +0800, Kefeng Wang wrote:
+>> On 2019/5/10 16:09, Jean Delvare wrote:
+>>> We don't need this anyway. The comment says it can't fail, so why
+>>> bother checking for a condition which will never happen?  
+>> The ioremap could fails due to no memory, our inner test robot(enable FAULT_INJECTION)
+>>
+>> find this issue.
+> The code only runs on x86 where this specific memory segment is
+> standardized for the purpose. That's how we know it "can't fail".
 >
-> On Fri, Apr 26, 2019 at 03:25:32PM +0200, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> >
-> > Hi Wolfram,
-> >
-> > please pull the following at24 updates for v5.2. Details are in the
-> > signed tag.
->
-> Pulled, thanks!
->
-> > Bartosz Golaszewski (1):
-> >       MAINTAINERS: change my e-mail address for at24
->
-> This patch was never on a list, or? May be a mileage thing, I prefer to
-> send out even those patches. But as I said, everything pulled...
+> That being said, maybe it could fail for other reasons (internal kernel
+> bug, or bogus BIOS maybe), and I don't care adding the check
+> anyway, as this code path is not performance critical.
+Got it , please ignore it.
 >
 
-No, I didn't see the need to have this reviewed, but sure, for the
-future I'll send out even e-mail changes.
-
-Bart
