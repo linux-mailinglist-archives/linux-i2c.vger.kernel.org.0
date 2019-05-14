@@ -2,130 +2,180 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D85D81BED8
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 May 2019 22:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC281C521
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 May 2019 10:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726220AbfEMU4S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 May 2019 16:56:18 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:43513 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726179AbfEMU4S (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 May 2019 16:56:18 -0400
-Received: by mail-oi1-f195.google.com with SMTP id t187so7142904oie.10;
-        Mon, 13 May 2019 13:56:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mcXl3kCKb5KgymSfUTp36sQGmUpApKFd35PSjLLza2s=;
-        b=ZRy9KrMMUi03FUGU+K65kfdDhPQ71eZFL+HnqvRFx+LkZ7wtfzFOwKsT9DK0+hNP5C
-         FrhylP1HHCIj40hpvXzi/ReBAJAsX58NZQHPEceo09z5oU7Z3mq/2se2LlzFoTL43PZy
-         gD1nwxLdZLquGG+sIR9Pl9Ye26nyXgUt6HKcUdF0j9aE4bjwDs3qkLJ83DpCE9PXMJ87
-         gAuas9MS99KFFs50fnsdix8lHx84q4eNGmn2zEGDMtzaC4N7V8Vh2Mj8lX8rXCzpOt2f
-         JZkAm/oBVCDQAGPPQgnkuPS/c7tNu7UEvxgmK9b6+z6T/VW/HMPk/GnD1GPQb+5CaZ2M
-         8k0w==
-X-Gm-Message-State: APjAAAXmyqT2Rat1Mwgnc4ENct2kqeOcDoq0JVaXDxoW+d0uvWfCE4gh
-        DZjDbZZnsDr/us6dhlJ1Cg==
-X-Google-Smtp-Source: APXvYqzIsXcXQJgcJ9Z3I5TOGeERLXFISQjzhCutcR9o7qybv7IPuw5Qz8r2lvriy6XfNBbt3ZoU0Q==
-X-Received: by 2002:aca:c202:: with SMTP id s2mr742556oif.91.1557780977251;
-        Mon, 13 May 2019 13:56:17 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id m203sm5706301oib.45.2019.05.13.13.56.16
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 13 May 2019 13:56:16 -0700 (PDT)
-Date:   Mon, 13 May 2019 15:56:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sagar Shrikant Kadam <sagar.kadam@sifive.com>
-Cc:     mark.rutland@arm.com, peter@korsgaard.com, andrew@lunn.ch,
-        palmer@sifive.com, paul.walmsley@sifive.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 v2 1/3] dt-bindings: i2c: extend existing opencore
- bindings.
-Message-ID: <20190513205615.GA5844@bogus>
-References: <1557242108-13580-1-git-send-email-sagar.kadam@sifive.com>
- <1557242108-13580-2-git-send-email-sagar.kadam@sifive.com>
+        id S1726107AbfENIn3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 May 2019 04:43:29 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:53075 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726039AbfENIn3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 May 2019 04:43:29 -0400
+Received-SPF: Pass (esa3.microchip.iphmx.com: domain of
+  Ludovic.Desroches@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
+  envelope-from="Ludovic.Desroches@microchip.com";
+  x-sender="Ludovic.Desroches@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa3.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
+  envelope-from="Ludovic.Desroches@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa3.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Ludovic.Desroches@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+X-IronPort-AV: E=Sophos;i="5.60,468,1549954800"; 
+   d="scan'208";a="33227185"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 14 May 2019 01:43:28 -0700
+Received: from localhost (10.10.76.4) by chn-sv-exch02.mchp-main.com
+ (10.10.76.38) with Microsoft SMTP Server id 14.3.352.0; Tue, 14 May 2019
+ 01:43:28 -0700
+Date:   Tue, 14 May 2019 10:42:54 +0200
+From:   Ludovic Desroches <ludovic.desroches@microchip.com>
+To:     Raag Jadav <raagjadav@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <alexandre.belloni@bootlin.com>,
+        <linux-i2c@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] i2c: at91: handle TXRDY interrupt spam
+Message-ID: <20190514084254.zc526whem6yxfu7l@M43218.corp.atmel.com>
+Mail-Followup-To: Raag Jadav <raagjadav@gmail.com>,
+        linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <1556005008-6318-1-git-send-email-raagjadav@gmail.com>
+ <20190429090005.f6ydghzu5n5yruav@M43218.corp.atmel.com>
+ <20190429223332.GA3908@pc>
+ <20190502140116.rim72idpgvq4h4vc@M43218.corp.atmel.com>
+ <20190503235851.GA4242@pc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1557242108-13580-2-git-send-email-sagar.kadam@sifive.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190503235851.GA4242@pc>
+User-Agent: NeoMutt/20180716
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, May 07, 2019 at 08:45:06PM +0530, Sagar Shrikant Kadam wrote:
-> Add FU540-C000 specific device tree bindings to already
-> available i2-ocores file. This device is available on
-> HiFive Unleashed Rev A00 board.
+On Sat, May 04, 2019 at 05:28:51AM +0530, Raag Jadav wrote:
+> On Thu, May 02, 2019 at 04:01:16PM +0200, Ludovic Desroches wrote:
+> > On Tue, Apr 30, 2019 at 04:03:32AM +0530, Raag Jadav wrote:
+> > > External E-Mail
+> > > 
+> > > 
+> > > On Mon, Apr 29, 2019 at 11:00:05AM +0200, Ludovic Desroches wrote:
+> > > > Hello Raag,
+> > > > 
+> > > > On Tue, Apr 23, 2019 at 01:06:48PM +0530, Raag Jadav wrote:
+> > > > > External E-Mail
+> > > > > 
+> > > > > 
+> > > > > Performing i2c write operation while SDA or SCL line is held
+> > > > > or grounded by slave device, we go into infinite at91_twi_write_next_byte
+> > > > > loop with TXRDY interrupt spam.
+> > > > 
+> > > > Sorry but I am not sure to have the full picture, the controller is in
+> > > > slave or master mode?
+> > > > 
+> > > > SVREAD is only used in slave mode. When SVREAD is set, it means that a read
+> > > > access is performed and your issue concerns the write operation.
+> > > > 
+> > > > Regards
+> > > > 
+> > > > Ludovic
+> > > 
+> > > Yes, even though the datasheet suggests that SVREAD is irrelevant in master mode,
+> > > TXRDY and SVREAD are the only ones being set in status register upon reproducing the issue.
+> > > Couldn't think of a better way to handle such strange behaviour.
+> > > Any suggestions would be appreciated.
+> > 
+> > I have the confirmation that you can't rely on the SVREAD flag when in
+> > master mode. This flag should always have the same value.
+> > 
+> > I am trying to understand what could lead to your situation. Can you
+> > give me more details. What kind of device it is? What does lead to this
+> > situation? Does it happen randomly or not?
 > 
-> Signed-off-by: Sagar Shrikant Kadam <sagar.kadam@sifive.com>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-ocores.txt | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+> One of the sama5d2 based board I worked on, was having trouble complete its boot
+> because of a faulty i2c device, which was randomly holding down the SDA line
+> on i2c write operation, not allowing the controller to complete its transmission,
+> causing a massive TXRDY interrupt spam, ultimately hanging the processor.
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> index 17bef9a..f6bcf90 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> @@ -2,6 +2,7 @@ Device tree configuration for i2c-ocores
->  
->  Required properties:
->  - compatible      : "opencores,i2c-ocores" or "aeroflexgaisler,i2cmst"
-> +                    "sifive,fu540-c000-i2c" or "sifive,i2c0"
+> Another strange observation was that SVREAD was being set in the status register
+> along with TXRDY, every time I reproduced the issue.
+> You can reproduce it by simply grounding the SDA line and performing i2c write
+> on the bus.
 
-If this is Opencores IP, does it really follow the Sifive versioning 
-convention? If so, please reference sifive-blocks-ip-versioning.txt 
-(which appears to have missed going upstream). Also, referencing the IP 
-repository would be good too. If this IP block doesn't follow the same 
-convention, then don't try using it for this binding.
+Thanks for the details, I'll discussed it with hw guys but expect some
+dealy as I'll be off next 2 weeks.
 
->  - reg             : bus address start and address range size of device
->  - interrupts      : interrupt number
->  - clocks          : handle to the controller clock; see the note below.
-> @@ -67,3 +68,22 @@ or
->  			reg = <0x60>;
->  		};
->  	};
-> +or
+Regards
 
-Just a new compatible isn't really a reason to add an example.
+Ludovic
 
-> +	/*
-> +	  An Opencore based I2C node in FU540-C000 chip from SiFive
-> +	  This chip has a hardware erratum for broken IRQ
-> +	  so it's recommended not to define interrupt in the device node
-
-Then interrupts needs to be optional.
-
-> +	*/
-> +	i2c@10030000 {
-> +			compatible = "sifive,i2c0","sifive,fu540-c000-i2c";
-> +			reg = <0x0 0x10030000 0x0 0x1000>;
-> +			reg-names = "i2c-control";
-
-Not doucmented.
-
-> +			clocks = <&tlclk>;
-> +			clock-frequency = <100000>;
-> +
-> +			reg-shift = <2>;
-> +			reg-io-width = <1>;
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +	};
-> -- 
-> 1.9.1
 > 
+> Note that NACK, LOCK or TXCOMP are never set as the transmission never completes.
+> I'm not sure why slave bits are being set in master mode,
+> but it's been working reliably for me.
 > 
-> -- 
-> The information transmitted is intended only for the person or entity to 
-> which it is addressed and may contain confidential and/or privileged 
-> material. If you are not the intended recipient of this message please do 
-> not read, copy, use or disclose this communication and notify the sender 
-> immediately. It should be noted that any review, retransmission, 
-> dissemination or other use of, or taking action or reliance upon, this 
-> information by persons or entities other than the intended recipient is 
-> prohibited.
+> This patch doesn't recover the SDA line. It just prevents the processor from
+> getting hanged in case of i2c bus lockup.
+> 
+> Cheers,
+> Raag
+> 
+> > 
+> > Regards
+> > 
+> > Ludovic
+> > 
+> > > 
+> > > Cheers,
+> > > Raag
+> > > 
+> > > > 
+> > > > > 
+> > > > > Signed-off-by: Raag Jadav <raagjadav@gmail.com>
+> > > > > ---
+> > > > >  drivers/i2c/busses/i2c-at91.c | 6 +++++-
+> > > > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/drivers/i2c/busses/i2c-at91.c b/drivers/i2c/busses/i2c-at91.c
+> > > > > index 3f3e8b3..b2f5fdb 100644
+> > > > > --- a/drivers/i2c/busses/i2c-at91.c
+> > > > > +++ b/drivers/i2c/busses/i2c-at91.c
+> > > > > @@ -72,6 +72,7 @@
+> > > > >  #define	AT91_TWI_TXCOMP		BIT(0)	/* Transmission Complete */
+> > > > >  #define	AT91_TWI_RXRDY		BIT(1)	/* Receive Holding Register Ready */
+> > > > >  #define	AT91_TWI_TXRDY		BIT(2)	/* Transmit Holding Register Ready */
+> > > > > +#define	AT91_TWI_SVREAD		BIT(3)	/* Slave Read */
+> > > > >  #define	AT91_TWI_OVRE		BIT(6)	/* Overrun Error */
+> > > > >  #define	AT91_TWI_UNRE		BIT(7)	/* Underrun Error */
+> > > > >  #define	AT91_TWI_NACK		BIT(8)	/* Not Acknowledged */
+> > > > > @@ -571,7 +572,10 @@ static irqreturn_t atmel_twi_interrupt(int irq, void *dev_id)
+> > > > >  		at91_disable_twi_interrupts(dev);
+> > > > >  		complete(&dev->cmd_complete);
+> > > > >  	} else if (irqstatus & AT91_TWI_TXRDY) {
+> > > > > -		at91_twi_write_next_byte(dev);
+> > > > > +		if ((status & AT91_TWI_SVREAD) && (dev->buf_len == 0))
+> > > > > +			at91_twi_write(dev, AT91_TWI_IDR, AT91_TWI_TXRDY);
+> > > > > +		else
+> > > > > +			at91_twi_write_next_byte(dev);
+> > > > >  	}
+> > > > >  
+> > > > >  	/* catch error flags */
+> > > > > -- 
+> > > > > 2.7.4
+> > > > > 
+> > > > > 
+> > > 
+> > > _______________________________________________
+> > > linux-arm-kernel mailing list
+> > > linux-arm-kernel@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> > > 
