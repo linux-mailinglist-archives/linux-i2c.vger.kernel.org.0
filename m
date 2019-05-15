@@ -2,114 +2,136 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EC71D090
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 May 2019 22:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FEF1F729
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 May 2019 17:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726580AbfENUZp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 May 2019 16:25:45 -0400
-Received: from mx.0dd.nl ([5.2.79.48]:48406 "EHLO mx.0dd.nl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726563AbfENUZp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 14 May 2019 16:25:45 -0400
-X-Greylist: delayed 516 seconds by postgrey-1.27 at vger.kernel.org; Tue, 14 May 2019 16:25:44 EDT
-Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx.0dd.nl (Postfix) with ESMTPS id 1435E5FE1C;
-        Tue, 14 May 2019 22:17:08 +0200 (CEST)
-Authentication-Results: mx.0dd.nl;
-        dkim=pass (2048-bit key; secure) header.d=vdorst.com header.i=@vdorst.com header.b="lyYv9cZE";
-        dkim-atps=neutral
-Received: from www (www.vdorst.com [192.168.2.222])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.vdorst.com (Postfix) with ESMTPSA id CEFC61A92E2D;
-        Tue, 14 May 2019 22:17:07 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com CEFC61A92E2D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
-        s=default; t=1557865027;
-        bh=ph/cfyZvJX84dLFWtvOoqwfCWQcPYdXd6Vt/9T0LVrY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lyYv9cZEStmZV0va+IZj3unPfTfWk+3jOh7csKkIAp0QjhdCcbANa9Hf/h42UsYP5
-         2Ey44ak3dEoQDL7Ymkwq4NIp+rby/7NB+CSZKhDyCZKZFjkHV15y7MXGGDxgVFpNCL
-         ij5a7zuQZEGAH4mfW8AN9cOtAKA9i5tyPG4CPuthXN1RQNYc6NEh5TO+i63ibZv0nh
-         nklcQ9dyVzd2tubRf52A9FmCwHhXWwdbYM7oo86MOWI2ThAvA/vkj/h+8R/mzmwqrA
-         GQVmoTQVVH95bV0AUnMapB1Q8WjMlGaH6gBi/wo9ymzvGVgszESa3rU7Gw0KOCzQYb
-         205YDA6D+vYdg==
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1]) by
- www.vdorst.com (Horde Framework) with HTTPS; Tue, 14 May 2019 20:17:07 +0000
-Date:   Tue, 14 May 2019 20:17:07 +0000
-Message-ID: <20190514201707.Horde.U89D9pGdUCpiYMizuoPLBJS@www.vdorst.com>
-From:   =?utf-8?b?UmVuw6k=?= van Dorst <opensource@vdorst.com>
-To:     Stefan Roese <sr@denx.de>
-Cc:     linux-i2c@vger.kernel.org, Steven Liu <steven_liu@mediatek.com>,
-        Jan Breuer <jan.breuer@jaybee.cz>,
-        John Crispin <john@phrozen.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH v2] i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C
- driver
-User-Agent: Horde Application Framework 5
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        id S1727225AbfEOPJm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 May 2019 11:09:42 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:56392 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726572AbfEOPJm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 May 2019 11:09:42 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4FF8Atg026402;
+        Wed, 15 May 2019 17:09:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=9sDHCBobyGwN5zX9QrGG4fMjtEr0teqvHD1XBP671OE=;
+ b=vs8iIGizAr8EZcpEPvULzixNjpcbcuSJOC5vtbzzWdw7a0/5BZYjzGufuG8RfIzQcBw1
+ uGIh2sEdKRSCj8W2h1bxTJC7ajb3KG4CRqba25GHYF67xZoovwvHFGRuMH//dvE0NPup
+ ShlIpJeh5pqDYMW67fGQchXaKv4qgMe1++YWb4qxSTkcJ6YZF9f16fQWw9fzMKVN+4uI
+ WgGvTacKmjS4EoHLSV/iBUKNiZCr/hTK9BvTpDTPxnvwz2SlKbVd/ZdpE4xvFfJpkSEj
+ lx2bDETNO4RKcA3AbAsCvydmgwwD6rM/QzvQK6FmTLVv8mTEeTkcODHBJiya0gQEWC+c 3Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2sdn9g1m3w-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Wed, 15 May 2019 17:09:27 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 51BC238;
+        Wed, 15 May 2019 15:09:24 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2E6EF29E7;
+        Wed, 15 May 2019 15:09:24 +0000 (GMT)
+Received: from localhost (10.75.127.45) by SFHDAG5NODE3.st.com (10.75.127.15)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 15 May 2019 17:09:23
+ +0200
+From:   Fabrice Gasnier <fabrice.gasnier@st.com>
+To:     <wsa@the-dreams.de>, <pierre-yves.mordret@st.com>
+CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] i2c: i2c-stm32f7: fix the get_irq error cases
+Date:   Wed, 15 May 2019 17:09:09 +0200
+Message-ID: <1557932949-15912-1-git-send-email-fabrice.gasnier@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG7NODE1.st.com (10.75.127.19) To SFHDAG5NODE3.st.com
+ (10.75.127.15)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-15_10:,,
+ signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Quoting Stefan Roese <sr@denx.de>:
+During probe, return the "get_irq" error value instead of -EINVAL which
+allows the driver to be deferred probed if needed.
+Fix also the case where of_irq_get() returns a negative value.
+Note :
+On failure of_irq_get() returns 0 or a negative value while
+platform_get_irq() returns a negative value.
 
-> This patch adds a driver for the I2C controller found on the MediaTek
-> MT7621/7628/7688 SoC's. The base version of this driver was done by
-> Steven Liu (according to the copyright and MODULE_AUTHOR lines). It
-> can be found in the OpenWRT repositories (v4.14 at the time I looked).
->
-> The base driver had many issues, which are disccussed here:
->
-> https://en.forum.labs.mediatek.com/t/openwrt-15-05-loads-non-working-i2c-kernel-module-for-mt7688/1286/3
->
-> 1From this link an enhanced driver version (complete rewrite, mayor
-> changes: support clock stretching, repeated start, ACK handling and
-> unlimited message length) from Jan Breuer can be found here:
->
-> https://gist.github.com/j123b567/9b555b635c2b4069d716b24198546954
->
-> This patch now adds this enhanced I2C driver to mainline.
->
-> Changes by Stefan Roese for upstreaming:
-> - Add devicetree bindings
-> - checkpatch clean
-> - Use module_platform_driver()
-> - Minor cosmetic enhancements
->
-> Signed-off-by: Stefan Roese <sr@denx.de>
-> Cc: Steven Liu <steven_liu@mediatek.com>
-> Cc: Jan Breuer <jan.breuer@jaybee.cz>
-> Cc: John Crispin <john@phrozen.org>
-> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> v2:
-> - Configure I2C controller to open-drain instead of push-pull, as
-> noticed and suggested by Jan (misleading bit description)
->
-Hi Stefan,
+Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
 
-I am using the openwrt version for a while on my Ubiquity ER-X-SFP  
-router on top of the net-next tree.
-But I was unable to readout the SFP module because i2c message size  
-limit of 64 bytes.
-Without additional patches my console was spamming me with -EOPNOTSUPP  
-because SFP code tries to read +90 bytes in one go.
+Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+---
+ drivers/i2c/busses/i2c-stm32f7.c | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
-With this driver the sfp code can readout the module successfully.
-
-Both the SFP module and the GPIO expander on the bus are working.
-
-Tested-by: René van Dorst <opensource@vdorst.com>
-
-Greats,
-
-René
-
+diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+index 4284fc9..14fb105 100644
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -25,7 +25,6 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+-#include <linux/of_irq.h>
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/pinctrl/consumer.h>
+@@ -1812,15 +1811,14 @@ static struct i2c_algorithm stm32f7_i2c_algo = {
+ 
+ static int stm32f7_i2c_probe(struct platform_device *pdev)
+ {
+-	struct device_node *np = pdev->dev.of_node;
+ 	struct stm32f7_i2c_dev *i2c_dev;
+ 	const struct stm32f7_i2c_setup *setup;
+ 	struct resource *res;
+-	u32 irq_error, irq_event, clk_rate, rise_time, fall_time;
++	u32 clk_rate, rise_time, fall_time;
+ 	struct i2c_adapter *adap;
+ 	struct reset_control *rst;
+ 	dma_addr_t phy_addr;
+-	int ret;
++	int irq_error, irq_event, ret;
+ 
+ 	i2c_dev = devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
+ 	if (!i2c_dev)
+@@ -1832,16 +1830,20 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
+ 		return PTR_ERR(i2c_dev->base);
+ 	phy_addr = (dma_addr_t)res->start;
+ 
+-	irq_event = irq_of_parse_and_map(np, 0);
+-	if (!irq_event) {
+-		dev_err(&pdev->dev, "IRQ event missing or invalid\n");
+-		return -EINVAL;
++	irq_event = platform_get_irq(pdev, 0);
++	if (irq_event < 0) {
++		if (irq_event != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "Failed to get IRQ event: %d\n",
++				irq_event);
++		return irq_event;
+ 	}
+ 
+-	irq_error = irq_of_parse_and_map(np, 1);
+-	if (!irq_error) {
+-		dev_err(&pdev->dev, "IRQ error missing or invalid\n");
+-		return -EINVAL;
++	irq_error = platform_get_irq(pdev, 1);
++	if (irq_error < 0) {
++		if (irq_error != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "Failed to get IRQ error: %d\n",
++				irq_error);
++		return irq_error;
+ 	}
+ 
+ 	i2c_dev->clk = devm_clk_get(&pdev->dev, NULL);
+-- 
+2.7.4
 
