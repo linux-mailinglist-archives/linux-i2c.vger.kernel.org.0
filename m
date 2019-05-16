@@ -2,89 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2159205CC
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 May 2019 13:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6991A206F1
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 May 2019 14:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727708AbfEPLk0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 May 2019 07:40:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48554 "EHLO mail.kernel.org"
+        id S1727069AbfEPMbd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 May 2019 08:31:33 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:37204 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726889AbfEPLkX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 16 May 2019 07:40:23 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 21F94216F4;
-        Thu, 16 May 2019 11:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558006822;
-        bh=PXifvUHuuQK85JMTllo051teFNdbF1ONRuJwNs8C5bk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GXfuqfmamnjARqxFxA6wUg5uszLFM2FYm5K/Oh2qt/w+uyKZT35TGf6aQP3sVSS3h
-         UUz9sr0H6vNEeekt4JJtyHcBYqCWiJ2EFirYG98R0HYd2zgSFocTKYx0AQUaLtIn8r
-         g5nJG61yT/s4LQ2dSFH/PGj0hfuJ0VHkIgBMT7gU=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        skidnik <skidnik@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 31/34] i2c: designware: ratelimit 'transfer when suspended' errors
-Date:   Thu, 16 May 2019 07:39:28 -0400
-Message-Id: <20190516113932.8348-31-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190516113932.8348-1-sashal@kernel.org>
-References: <20190516113932.8348-1-sashal@kernel.org>
+        id S1726955AbfEPMbd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 16 May 2019 08:31:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=8xq/AtLnhhHzaEV7B7DQtMaLbospcYCiDyDYIDbl+EM=; b=2FkCg+QJQNemfvntMoY/Sg2hMR
+        Es9XwCnKNwndQo+A6WrRG5rz/xlK+Qsws4mgav7Mjtd6IqnpBtwer1SzXie7pUP3pIl9icMIJRfM4
+        rjVfOUlzl6zwAErRc6zFfEeUB3JWyORiOyLHCnNeLrMqPtFZMAFuEqcrxOXG2F5eZ22A=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
+        (envelope-from <andrew@lunn.ch>)
+        id 1hRFXc-0002lz-VF; Thu, 16 May 2019 14:31:21 +0200
+Date:   Thu, 16 May 2019 14:31:20 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Sagar Shrikant Kadam <sagar.kadam@sifive.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, peter@korsgaard.com,
+        palmer@sifive.com, paul.walmsley@sifive.com,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] i2c-ocores: sifive: add polling mode workaround
+ for FU540-C000 SoC
+Message-ID: <20190516123120.GB14298@lunn.ch>
+References: <1557983320-14461-1-git-send-email-sagar.kadam@sifive.com>
+ <1557983320-14461-4-git-send-email-sagar.kadam@sifive.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1557983320-14461-4-git-send-email-sagar.kadam@sifive.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> @@ -682,13 +693,24 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+>  
+>  	irq = platform_get_irq(pdev, 0);
+>  	if (irq == -ENXIO) {
+> -		i2c->flags |= OCORES_FLAG_POLL;
+> +		/*
+> +		 * Set a OCORES_FLAG_BROKEN_IRQ to enable workaround for
+> +		 * FU540-C000 SoC in polling mode interface of i2c-ocore driver.
+> +		 * Else enable default polling mode interface for SIFIVE/OCORE
+> +		 * device types.
+> +		 */
+> +		match = of_match_node(ocores_i2c_match, pdev->dev.of_node);
+> +		if (match && (long)match->data ==
+> +				(TYPE_SIFIVE_REV0 | OCORES_FLAG_BROKEN_IRQ))
 
-[ Upstream commit 6bac9bc273cdab6157ad7a2ead09400aabfc445b ]
+This looks wrong. You added:
 
-There are two problems with dev_err() here. One: It is not ratelimited.
-Two: We don't see which driver tried to transfer something with a
-suspended adapter. Switch to dev_WARN_ONCE to fix both issues. Drawback
-is that we don't see if multiple drivers are trying to transfer while
-suspended. They need to be discovered one after the other now. This is
-better than a high CPU load because a really broken driver might try to
-resend endlessly.
++       {
++               .compatible = "sifive,fu540-c000-i2c",
++               .data = (void *)TYPE_SIFIVE_REV0,
++       },
++       {
++               .compatible = "sifive,i2c0",
++               .data = (void *)TYPE_SIFIVE_REV0,
++       },
 
-Link: https://bugs.archlinux.org/task/62391
-Fixes: 275154155538 ("i2c: designware: Do not allow i2c_dw_xfer() calls while suspended")
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Reported-by: skidnik <skidnik@gmail.com>
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: skidnik <skidnik@gmail.com>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-designware-master.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+So match->data just has TYPE_SIFIVE_REV0.
 
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index bb8e3f1499796..d464799e40a30 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -426,8 +426,7 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- 
- 	pm_runtime_get_sync(dev->dev);
- 
--	if (dev->suspended) {
--		dev_err(dev->dev, "Error %s call while suspended\n", __func__);
-+	if (dev_WARN_ONCE(dev->dev, dev->suspended, "Transfer while suspended\n")) {
- 		ret = -ESHUTDOWN;
- 		goto done_nolock;
- 	}
--- 
-2.20.1
+> +			i2c->flags |= OCORES_FLAG_BROKEN_IRQ;
+> +		else
+> +			i2c->flags |= OCORES_FLAG_POLL;
 
+These two don't need to be exclusive. It makes more sense to say
+SIFIVE needs to poll and it its IRQ is broken. A lot of your other
+changes then go away.
+
+       Andrew
