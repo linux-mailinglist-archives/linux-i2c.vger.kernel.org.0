@@ -2,39 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C828721C8F
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2019 19:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B144921C92
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2019 19:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728451AbfEQRfU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 May 2019 13:35:20 -0400
-Received: from sauhun.de ([88.99.104.3]:54494 "EHLO pokefinder.org"
+        id S1728554AbfEQRfo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 May 2019 13:35:44 -0400
+Received: from sauhun.de ([88.99.104.3]:54516 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727769AbfEQRfU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 17 May 2019 13:35:20 -0400
+        id S1728551AbfEQRfn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 17 May 2019 13:35:43 -0400
 Received: from localhost (p54B33248.dip0.t-ipconnect.de [84.179.50.72])
-        by pokefinder.org (Postfix) with ESMTPSA id A91052C047A;
-        Fri, 17 May 2019 19:35:17 +0200 (CEST)
-Date:   Fri, 17 May 2019 19:35:17 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id C23F42C047A;
+        Fri, 17 May 2019 19:35:41 +0200 (CEST)
+Date:   Fri, 17 May 2019 19:35:41 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
-        Kieran Bingham <kieran@ksquared.org.uk>
+        Kieran Bingham <kieran@ksquared.org.uk>,
+        Peter Rosin <peda@axentia.se>
 Subject: Re: [PATCH v8 1/3] i2c: core: improve return value handling of
  i2c_new_device and i2c_new_dummy
-Message-ID: <20190517173517.GA11396@kunai>
+Message-ID: <20190517173541.GB11396@kunai>
 References: <20190516211310.22277-1-wsa+renesas@sang-engineering.com>
  <20190516211310.22277-2-wsa+renesas@sang-engineering.com>
- <5cdbe188-6c0b-1ba9-d4a1-2d836c1e9652@axentia.se>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VbJkn9YxBvnuCH5J"
+        protocol="application/pgp-signature"; boundary="qcHopEYAB45HaUaB"
 Content-Disposition: inline
-In-Reply-To: <5cdbe188-6c0b-1ba9-d4a1-2d836c1e9652@axentia.se>
+In-Reply-To: <20190516211310.22277-2-wsa+renesas@sang-engineering.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -42,43 +39,47 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---VbJkn9YxBvnuCH5J
+--qcHopEYAB45HaUaB
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, May 16, 2019 at 11:13:08PM +0200, Wolfram Sang wrote:
+> From: Heiner Kallweit <hkallweit1@gmail.com>
+>=20
+> Currently i2c_new_device and i2c_new_dummy return just NULL in error
+> case although they have more error details internally. Therefore move
+> the functionality into new functions returning detailed errors and
+> add wrappers for compatibility with the current API.
+>=20
+> This allows to use these functions with detailed error codes within
+> the i2c core or for API extensions.
+>=20
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> [wsa: rename new functions and fix minor kdoc issues]
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Applied to for-current, thanks everyone!
 
 
-> The only nit I can find is that you could perhaps sweep the patches
-> with sed 's/i2c /I2C /'. But that is indeed a nit, so if you're in
-> a hurry...
-
-Valid point. I'd like to fix it as a seperate patch, though. One reason
-is that it is needed in far more places in this file, too. The main
-reason is that I don't want to introduce some stupid last minute typo
-after all these reviews.
-
-> Reviewed-by: Peter Rosin <peda@axentia.se>
-
-Thanks!
-
-
---VbJkn9YxBvnuCH5J
+--qcHopEYAB45HaUaB
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlze8NEACgkQFA3kzBSg
-KbYctg/+MAKXjXe1wi3qF2Zpu4B8Lcut6YSTUyP/EtDR4x0u7euOX1r0KhcXyMUT
-sJ0ueRef3IG/8NKZI3ygS8TiXt7XdsEpO+EUjhu+Z2EtKAREESysEV2k5Fv9JM6x
-DYxXIp0xoIAtesYs1nbTGMf/dQfp3RGyzuDRi1EuWS4Sa9QYxppd6C8SDp6HWWVf
-4IWnnuGVlSiHLWpSaqCYMVBX1DdSQJubmlkCKbGKWU1PJBfhFiGcJxFUD68DtMTZ
-fffT5P7nujgWFYU3iexzYBllXtJQf/2jG7NVFiATnkK2uL2MW5LGi7Ny6fo4MmFR
-jGXYzx16zrltU7MwxQBuqATzYgLudbeOltre90uDXisHqgXsYx40QlzT2rSTaPbE
-uxNSbi2qPfwWMG1qra6qHANX9J7JKmak9o64RH19qS8tMA0SoFDguYg8js9f8lDX
-ua+g+GDjeFgzhlNBf7VzZSjwx/U3GmyGRRIbWOJ1phbU00IegsYgusZ3BxCkow4v
-vQfXD2eP74UlzMiuIBFrxCeJc7V2W7RHw3GUfQgAZc8nvGtatebU2eGTl3zxUJGI
-KECQGABYf494Xf/dNklWTXLPF78KqZQ+ShZBBInbb0CP2CYkcybSsghhlsFiY6Uv
-j0wkNKDNKB0X58Ux36sMcsQUR7EhEPQAfzIwbX72fdfncjwbjpY=
-=hRm/
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlze8O0ACgkQFA3kzBSg
+Kbbu5A//eP9J8YEq0BQSvXME65SQ+LVA5cSRKKgt0fuWgQpDY1P/uWz0ZW1e+lGE
+5Z4xM+VIkUoGeEj+jvqhFzSOgdgbZ8vkFbkV1wnqkya7AbohJ/CF6GYYYJCaJ7vd
+IIXKMQ9bEe46DEq8/asVTdm+kmDthjHjaQIzNOB4V2mKDcGrCYxpS+YcVUAlKOVN
+jiUL4Q4GvhwAEO7j3m6gcLUytb3oH7PqvSqnX+x2mcs7HailG9oL70W+nwJJIHlB
+HhdlmrJnpaDnymccD8H7n1K7Nkdnt4nCUvZ/2HctRrEP4Qb0q1ztNK9OOo2JDyZ6
+cM8NMfeghPZehAfSGag9MZKAJSU20zsmXpR4JLx4D4ZH4toyIAREz1HJxgI+/q3e
+surQFZ/Oi5kyPjzhPvLUK+P1OsyRIIdQV8Iqz/nZLq1HrXpuC71zCofEZFvb+8pB
+Ebcd/BZgzQrBANAVFafx+FKOW3dGL9/7yAJ0tHDuG4MV+enF0jVu/y4vDVU5MhjI
+KqY036UNwjqL5hIRjgg/Mo4TOBom/y2HNsrIToT+gogYA9ssT25aOHcyJ8bFf8Jl
+3PyyksyQnN7B6RtEHL7TG5GiFNK6upH6yO3r4eAOAAGNRjNr0Oo2bprLZks+Cgup
+62uAKD+e10CEQlk9MG5qjv32R+MxlpXKvDfGheW6GWnWkxl5zzg=
+=UD7H
 -----END PGP SIGNATURE-----
 
---VbJkn9YxBvnuCH5J--
+--qcHopEYAB45HaUaB--
