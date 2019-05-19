@@ -2,54 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C61A2287D
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2019 21:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753EB228CA
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2019 22:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727848AbfESTPW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 19 May 2019 15:15:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39802 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726622AbfESTPW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 19 May 2019 15:15:22 -0400
-Subject: Re: [PULL REQUEST] i2c for 5.2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558293321;
-        bh=cdoS4jhaSaN2PKHWUIgEcVvEzctc6XllgRQPoE5L9+Y=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=cSYBugrvxY3RKzu4cPpEh0fgjA9y8M0UDoDnqSsCVCUKe0G59VcEBoGEGmNo17hyr
-         ssYU3kSMuOjUy64BKtjrS+vNKzrZ95T+rQmoL0MCsovlTTFspmqEW7ad8NHjrjgGZ8
-         hpSY9aDeCJ/LJo6UNJVicF2DpHQebiZGnjzty3lA=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20190518110057.GA8674@kunai>
-References: <20190518110057.GA8674@kunai>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20190518110057.GA8674@kunai>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-X-PR-Tracked-Commit-Id: b8f5fe3bc5b9318d95770a09a480c31aced20cd2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f23d8719e76fd32828ae6f1b55e4659144467742
-Message-Id: <155829332175.24875.6358770579395958283.pr-tracker-bot@kernel.org>
-Date:   Sun, 19 May 2019 19:15:21 +0000
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        id S1727741AbfESUkW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 19 May 2019 16:40:22 -0400
+Received: from mail-wr1-f41.google.com ([209.85.221.41]:36229 "EHLO
+        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727866AbfESUkV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 May 2019 16:40:21 -0400
+Received: by mail-wr1-f41.google.com with SMTP id s17so12315286wru.3
+        for <linux-i2c@vger.kernel.org>; Sun, 19 May 2019 13:40:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sg8ed2q+lhuAK9+Mk+OYXgpMTiIhPvCyFel37fn9zCY=;
+        b=JlgVrj59D+Pab/X/1I4fSB0dKZMKC6agTXDLCWkLtC2ZzGD7WhjSjiuOKOyFtd0dnM
+         dvfgp06ueceAPHHb2JlGDwNr8S6zWfzsthqvnTZau54enq5fV/Xr4M90HStYygRP6h/3
+         OhyZ6DsoJ8Bjll9SWID1lD06RuVeEpdVHIxh0qIEk+QK+WFLEULuSFTYzGx6KZVeHCFC
+         WIP4U2FGrPJBC4UUI3/AFbMpBGeoLbH4VbCQVaCWL3DGcQHyxVMG2hg3OPx3r50PV/N5
+         jcsfTW19MBDNMAeO8VJ5F26C1HV5gwD6k4DPv6BtBRaTza+wllRoqIVcKMD86mC8eNoi
+         H9aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sg8ed2q+lhuAK9+Mk+OYXgpMTiIhPvCyFel37fn9zCY=;
+        b=tcPXwvanMghBYKOe3JJ7z0gUCzWopwFfY9hq1bto2kfkk+XS2YtMnSfj1Tlbp0T9V/
+         MZzCciCxkTadXvBxOKtJJS4+mN9BvfMEZlWU22FVG3Hw0z42pulef0wkT+nWhCl/aYIV
+         X1mw4GwLEzH/0q1B/+LMPLBZ4CCN4FDexrF56iEVqES9Y9Tt0Y/IUKyfLGyLfLzd0cmN
+         kVZ5kcpxitqbdhaYBNKsd9SzBx2/gLCIwyspHxUVUgGMKqF+NFhuL0f/bC+fsvsZq8BU
+         R9C6JMi026JdebKXtRBMq9l/MygS+o6EKca5FmN94j3uy1wmj2F1e8wWaenDXlCAzjoZ
+         z0Rw==
+X-Gm-Message-State: APjAAAWb4wvA1CLvQ6JC5bxvZWbjhvIWUFxSgl8xjtTUMauphE0HiB1p
+        WiE5823XBd1S3EITIA4JO/7sQUsEVmE=
+X-Google-Smtp-Source: APXvYqza4uzMgs9BPwMCPxl1b3mfhj62LzgTH+Kd/01KnCo8mMeACSfDX+Fz/0ja55aLLwZo6yjkNQ==
+X-Received: by 2002:adf:ec8e:: with SMTP id z14mr14780797wrn.198.1558298419745;
+        Sun, 19 May 2019 13:40:19 -0700 (PDT)
+Received: from debian-brgl.home ([2a01:cb1d:af:5b00:6d6c:8493:1ab5:dad7])
+        by smtp.gmail.com with ESMTPSA id d17sm8710814wrw.18.2019.05.19.13.40.18
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 19 May 2019 13:40:18 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH 0/2] at24: use devm_i2c_new_dummy_device()
+Date:   Sun, 19 May 2019 22:40:10 +0200
+Message-Id: <20190519204012.31861-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Sat, 18 May 2019 13:01:01 +0200:
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+I see Linus pulled the new helper, so here's a patch using it in at24
+and also a small code tweak for better readability.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f23d8719e76fd32828ae6f1b55e4659144467742
+Bartosz Golaszewski (2):
+  eeprom: at24: use devm_i2c_new_dummy_device()
+  eeprom: at24: drop unnecessary label
 
-Thank you!
+ drivers/misc/eeprom/at24.c | 65 ++++++++++++--------------------------
+ 1 file changed, 21 insertions(+), 44 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.21.0
+
