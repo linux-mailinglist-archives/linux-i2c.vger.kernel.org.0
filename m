@@ -2,55 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E947228D0
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2019 22:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63045228CC
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2019 22:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730135AbfESUkY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S1727935AbfESUkY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Sun, 19 May 2019 16:40:24 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39692 "EHLO
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:42934 "EHLO
         mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbfESUkW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 May 2019 16:40:22 -0400
-Received: by mail-wr1-f68.google.com with SMTP id w8so12291719wrl.6
-        for <linux-i2c@vger.kernel.org>; Sun, 19 May 2019 13:40:21 -0700 (PDT)
+        with ESMTP id S1730135AbfESUkX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 May 2019 16:40:23 -0400
+Received: by mail-wr1-f68.google.com with SMTP id l2so12280625wrb.9
+        for <linux-i2c@vger.kernel.org>; Sun, 19 May 2019 13:40:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UooUaXL2Sqm5XmPHx+kyjXtSn9qjvEx6duezW6FeIgw=;
-        b=0nnq4zMi2VD+iWt+eEQ/49TXPPCiBeXwPMFlGoMAfV8ZcNtiSOvG2wozg17WbnICMk
-         5vZDK2FS4RmLDOUx3JydW4v4/uEB9G+4JDaX4zmVRpnJHuzeNTaOV0ZnSmeo5lJovZsd
-         MDN7gNc7rqgDTzGkuI6YYMliWi0qOE1KE7PjSYJyC3CfyXM/sWz52EUHAsEQnCttFjm8
-         R3sDhdDIDZffXnqhDpLkrJB0xuzbJ98JNqiP/7ev53TdUBNp4SQMgfcV8vSpII80c7oN
-         mM0jUARnz1I5+J4uZA/7TDxcuuG6iUotEr5DHSUZrVqBsGprMyhRbK7yPSDZkff9wdYg
-         uaNA==
+        bh=6x9tLLZyCwnCAX+GJk12XwSqLElSQBbeJyIsX2nc458=;
+        b=XJRiVciIsUWVDrNMrW1f6XsyFamquHktXNRmVL8EIZI2YAzvQnUvOeGSGU2TzpMbrb
+         xsnJq/ZjFKG1RVOcK/b0+ym4gq4gwZvCVPkkgAhZRKnU+EOMoz8RB/XL8qzAZtvqYAev
+         TyKuQFHXkSQpa7+haxju9gLhRxCFoedS4N5M3darfbp6KTf6BjUd2OFBVygsF3lIZJYS
+         P5ZA8UaubWL2QCCfdijan0JlXRCLNo4TaVhpQNgHT/1y1gpzv++O8SPyJNpYu4koCGPN
+         SR7CgLldgqlnLj3iJaSBvMm24sfS5FK+Lu60FRxmj7qTNo6PbNIBF2tyU6Oa338+Zunk
+         Zd0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UooUaXL2Sqm5XmPHx+kyjXtSn9qjvEx6duezW6FeIgw=;
-        b=dzssToBpLPmrNtxwkfSw+xfxaTy7Wy0tSlIJ0i7+k9l9nSwWVT5Fb5ZF91GsKntAl7
-         LlH2ZIuIS1S9bDS4MBHFsnuNVpKONbGc1LNl96E+hl/xjpWh1I3Hnc9rrLjQuKS15VOB
-         G4S7pvVI1cIhHWvcWFNfH8EFxoNuJqvTNLnA+iCXYzSSsRKkJxszvDwtFpUb4qDzxYOz
-         p4gLeqGKRHy+IPX5ciXrWa0/ZpO7UCFTnEFXW8FVyNcCfZPjIY1jz+tf+aZveBN7Gi7m
-         x/YdAEf3b+hebHFN/lwERZQ4Zo5hsc0FeXRH6flCkiGJOzzoEn7ayNyNT8hSMeez+xnf
-         LO7g==
-X-Gm-Message-State: APjAAAXgNrOzGBDX7sMxFMSVPGzd4rxM08hjIgSUJ5mQL5jd8joP7S8J
-        7M27oSJH3qp9uFRfAORaemG1UinthY8=
-X-Google-Smtp-Source: APXvYqwUtNocXFJFFHcWvp9TPyyDKdoNGMpiBUYbofA3MZFqSlQg3pS0tDBtzhwrIhzmr1e1Q/Wp3g==
-X-Received: by 2002:adf:8367:: with SMTP id 94mr17329865wrd.179.1558298420607;
-        Sun, 19 May 2019 13:40:20 -0700 (PDT)
+        bh=6x9tLLZyCwnCAX+GJk12XwSqLElSQBbeJyIsX2nc458=;
+        b=GUWR3gI4ZaIuv5GJsBrzJfysD2zLUSjekMKgiuITG3YxHUomPMJPnyaLMYQ5u6W+l9
+         FhANwj+ITUTf5iYgUVrqs82ja6hxbfteD1qIXB5VsSU6GHWebtwk0z1jax+87Rpy/aqr
+         /WYEczi9YRYjJt56f3WEgEAY01UG+jzjK+UmEKQj+qN2diENq+YdRkIJPvYjteZAIAgN
+         CcyuNASKGAfTRji8BoPI+xyDVkKVCDRVRGKeLC1QAelo7Z6Rix9O8FDUFyYSktCDWjEA
+         8gosbySsK1kVFTJSvQ06hLkRZkPQDpI3hpBBdHQKRDtDNbu9Ys5j6cJzAp+Xd8jNa9aa
+         3iTg==
+X-Gm-Message-State: APjAAAWZAiq4c0Fxx+ZZZ7E+Nnk6BF4DIKaxpfzTF1EuAyLXfFBQRvkw
+        xUm3yx3dRiHCd5gwq+fDZio+12tdjGA=
+X-Google-Smtp-Source: APXvYqxlnep6mwSqRSFVcg68NOG3PJCftzlPi3kkT2LB4iSiI8vMltNEDTJ0UDW/W7VIBKewVaUVqA==
+X-Received: by 2002:adf:cd0d:: with SMTP id w13mr42171181wrm.38.1558298421471;
+        Sun, 19 May 2019 13:40:21 -0700 (PDT)
 Received: from debian-brgl.home ([2a01:cb1d:af:5b00:6d6c:8493:1ab5:dad7])
-        by smtp.gmail.com with ESMTPSA id d17sm8710814wrw.18.2019.05.19.13.40.19
+        by smtp.gmail.com with ESMTPSA id d17sm8710814wrw.18.2019.05.19.13.40.20
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
         Sun, 19 May 2019 13:40:20 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH 1/2] eeprom: at24: use devm_i2c_new_dummy_device()
-Date:   Sun, 19 May 2019 22:40:11 +0200
-Message-Id: <20190519204012.31861-2-brgl@bgdev.pl>
+Subject: [PATCH 2/2] eeprom: at24: drop unnecessary label
+Date:   Sun, 19 May 2019 22:40:12 +0200
+Message-Id: <20190519204012.31861-3-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190519204012.31861-1-brgl@bgdev.pl>
 References: <20190519204012.31861-1-brgl@bgdev.pl>
@@ -63,96 +63,84 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Now that it's upstream, use the resource managed version
-of i2c_new_dummy().
+If we move the nvmem registration above the pm enable calls and the
+test read, we can drop the error label and make the code more readable
+as there's now only a single place where we must call
+pm_runtime_disable() in error path.
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- drivers/misc/eeprom/at24.c | 28 ++++++----------------------
- 1 file changed, 6 insertions(+), 22 deletions(-)
+ drivers/misc/eeprom/at24.c | 43 ++++++++++++++++----------------------
+ 1 file changed, 18 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 63aa541c9608..9ea196f0749f 100644
+index 9ea196f0749f..0bc0a45fb98e 100644
 --- a/drivers/misc/eeprom/at24.c
 +++ b/drivers/misc/eeprom/at24.c
-@@ -507,14 +507,6 @@ static const struct at24_chip_data *at24_get_chip_data(struct device *dev)
- 	return cdata;
- }
- 
--static void at24_remove_dummy_clients(struct at24_data *at24)
--{
--	int i;
--
--	for (i = 1; i < at24->num_addresses; i++)
--		i2c_unregister_device(at24->client[i].client);
--}
--
- static int at24_make_dummy_client(struct at24_data *at24, unsigned int index,
- 				  struct regmap_config *regmap_config)
- {
-@@ -527,8 +519,8 @@ static int at24_make_dummy_client(struct at24_data *at24, unsigned int index,
- 	dev = &base_client->dev;
- 	addr = base_client->addr + index;
- 
--	dummy_client = i2c_new_dummy(base_client->adapter,
--				     base_client->addr + index);
-+	dummy_client = devm_i2c_new_dummy_device(dev, base_client->adapter,
-+						 base_client->addr + index);
- 	if (!dummy_client) {
- 		dev_err(dev, "address 0x%02x unavailable\n", addr);
- 		return -EADDRINUSE;
-@@ -693,10 +685,8 @@ static int at24_probe(struct i2c_client *client)
- 	/* use dummy devices for multiple-address chips */
- 	for (i = 1; i < num_addresses; i++) {
- 		err = at24_make_dummy_client(at24, i, &regmap_config);
--		if (err) {
--			at24_remove_dummy_clients(at24);
-+		if (err)
+@@ -689,23 +689,6 @@ static int at24_probe(struct i2c_client *client)
  			return err;
--		}
  	}
  
- 	i2c_set_clientdata(client, at24);
-@@ -713,7 +703,7 @@ static int at24_probe(struct i2c_client *client)
- 	pm_runtime_idle(dev);
- 	if (err) {
- 		err = -ENODEV;
--		goto err_clients;
-+		goto err_runtime_pm;
- 	}
- 
+-	i2c_set_clientdata(client, at24);
+-
+-	/* enable runtime pm */
+-	pm_runtime_set_active(dev);
+-	pm_runtime_enable(dev);
+-
+-	/*
+-	 * Perform a one-byte test read to verify that the
+-	 * chip is functional.
+-	 */
+-	err = at24_read(at24, 0, &test_byte, 1);
+-	pm_runtime_idle(dev);
+-	if (err) {
+-		err = -ENODEV;
+-		goto err_runtime_pm;
+-	}
+-
  	nvmem_config.name = dev_name(dev);
-@@ -733,7 +723,7 @@ static int at24_probe(struct i2c_client *client)
+ 	nvmem_config.dev = dev;
+ 	nvmem_config.read_only = !writable;
+@@ -721,9 +704,24 @@ static int at24_probe(struct i2c_client *client)
+ 	nvmem_config.size = byte_len;
+ 
  	at24->nvmem = devm_nvmem_register(dev, &nvmem_config);
- 	if (IS_ERR(at24->nvmem)) {
- 		err = PTR_ERR(at24->nvmem);
--		goto err_clients;
-+		goto err_runtime_pm;
+-	if (IS_ERR(at24->nvmem)) {
+-		err = PTR_ERR(at24->nvmem);
+-		goto err_runtime_pm;
++	if (IS_ERR(at24->nvmem))
++		return PTR_ERR(at24->nvmem);
++
++	i2c_set_clientdata(client, at24);
++
++	/* enable runtime pm */
++	pm_runtime_set_active(dev);
++	pm_runtime_enable(dev);
++
++	/*
++	 * Perform a one-byte test read to verify that the
++	 * chip is functional.
++	 */
++	err = at24_read(at24, 0, &test_byte, 1);
++	pm_runtime_idle(dev);
++	if (err) {
++		pm_runtime_disable(dev);
++		return -ENODEV;
  	}
  
  	dev_info(dev, "%u byte %s EEPROM, %s, %u bytes/write\n",
-@@ -742,8 +732,7 @@ static int at24_probe(struct i2c_client *client)
+@@ -731,11 +729,6 @@ static int at24_probe(struct i2c_client *client)
+ 		 writable ? "writable" : "read-only", at24->write_max);
  
  	return 0;
- 
--err_clients:
--	at24_remove_dummy_clients(at24);
-+err_runtime_pm:
- 	pm_runtime_disable(dev);
- 
- 	return err;
-@@ -751,11 +740,6 @@ static int at24_probe(struct i2c_client *client)
+-
+-err_runtime_pm:
+-	pm_runtime_disable(dev);
+-
+-	return err;
+ }
  
  static int at24_remove(struct i2c_client *client)
- {
--	struct at24_data *at24;
--
--	at24 = i2c_get_clientdata(client);
--
--	at24_remove_dummy_clients(at24);
- 	pm_runtime_disable(&client->dev);
- 	pm_runtime_set_suspended(&client->dev);
- 
 -- 
 2.21.0
 
