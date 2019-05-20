@@ -2,109 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F3E23B88
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2019 17:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA1323BE8
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2019 17:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733087AbfETPFP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 May 2019 11:05:15 -0400
-Received: from sauhun.de ([88.99.104.3]:51558 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730766AbfETPFP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 20 May 2019 11:05:15 -0400
-Received: from localhost (p54B333DA.dip0.t-ipconnect.de [84.179.51.218])
-        by pokefinder.org (Postfix) with ESMTPSA id 3853E2C2761;
-        Mon, 20 May 2019 17:05:11 +0200 (CEST)
-Date:   Mon, 20 May 2019 17:05:10 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        x86@kernel.org, linux-acpi@vger.kernel.org,
-        linux-edac@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, xen-devel@lists.xenproject.org,
-        platform-driver-x86@vger.kernel.org, devel@driverdev.osuosl.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        devel@acpica.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 10/10] docs: fix broken documentation links
-Message-ID: <20190520150510.GA2606@kunai>
-References: <cover.1558362030.git.mchehab+samsung@kernel.org>
- <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
+        id S2388099AbfETPUT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 May 2019 11:20:19 -0400
+Received: from mail-ua1-f67.google.com ([209.85.222.67]:41669 "EHLO
+        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388065AbfETPUS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 May 2019 11:20:18 -0400
+Received: by mail-ua1-f67.google.com with SMTP id l14so649387uah.8
+        for <linux-i2c@vger.kernel.org>; Mon, 20 May 2019 08:20:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yPkishA3no+/g/FV605XOJKWtbVRtxVgWtFS2JQZ9bI=;
+        b=Kxtt3uvgicFdIlOHphmgzeg6qcwksSg5x8b5fBlKAUoEtJbeq4uW+PNn4F5YAmMzyr
+         uqFFhbY+un+kGiRRgCgL8MghZdTl4kLYe1ufn/CfBNiWyoYHwrRGgMA09rA6e9ix2WMk
+         9sEpQr8fsWkqi7WNU3NXS9rylbV39+uq3sCw3ZpuGTkms4ijpxsGjO6FyoWtt5OL26EV
+         RmgW9ZjVg/r34Cpggv32pOk/8Kik6hQliDvpmui4EcqGKnrIJvH/MCa3VX2Caz4uq/54
+         4WGxty5+Ktsb3Z/m30o44gwsWigfGOM1GAh9Sg1WWp3W3R9KO+sG0qNvKHkLME5eVU8M
+         MpLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yPkishA3no+/g/FV605XOJKWtbVRtxVgWtFS2JQZ9bI=;
+        b=dpxneFTG3Fgh8HFuUfkULSzaBjlAbYQuqBDxWBZ7aCbERHGCjvhWJZtSxjub30Lj4I
+         eCgij3IpuPlRSg5c2nQyCWtVlVBVTWqhbKCy2GdzcQnwONuEjtfaq01VUBHpGc5UPz3C
+         8Ji4YjNEzRJgvmgnIGeM2FWiTBNaigb1zIBn2uSNhm0u9/Yi7dEU+V8kcc9V2QnkfOhM
+         ILMuo+PCiLfjxOBQxYyamaxhBjJcIxjqa+LNlKgaKChiBlXIY+0MT5Wwm3l9x0tWK6TK
+         Dt4mugdippWD84q0sqS8l2xIBlQvzQIsOUIuMTAl9zUmcEQRzHPak6kv0UulMGVpJb66
+         bnZQ==
+X-Gm-Message-State: APjAAAU6oOKfZISb9kAhmuIm+OrxSh92VqB8a2AQuQfBFVZ/+r2MYUxc
+        ntw+Sap78/3pIJbRpxpRdJ17hied0rPi0B7w/+GTZw==
+X-Google-Smtp-Source: APXvYqyUiE88Q5DbYY6MW6gAUlfOMNSWJ4PSpYDD0G5KebJp1+15Ue04rR+q2oWWqyNgk8/ayaSUM7mZwfLYVH9RSRs=
+X-Received: by 2002:a9f:2b0c:: with SMTP id p12mr28323739uaj.143.1558365617913;
+ Mon, 20 May 2019 08:20:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6c2NcOVqGQ03X4Wi"
-Content-Disposition: inline
-In-Reply-To: <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1558361478-4381-1-git-send-email-sagar.kadam@sifive.com>
+ <1558361478-4381-4-git-send-email-sagar.kadam@sifive.com> <20190520145216.GD22024@lunn.ch>
+In-Reply-To: <20190520145216.GD22024@lunn.ch>
+From:   Sagar Kadam <sagar.kadam@sifive.com>
+Date:   Mon, 20 May 2019 20:50:06 +0530
+Message-ID: <CAARK3HnG4qg64cc_fjffxGp5EVTLdmWdkMVDx3YvK=coGAuqHw@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] i2c-ocores: sifive: add polling mode workaround
+ for FU540-C000 SoC.
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, peter@korsgaard.com,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, May 20, 2019 at 8:22 PM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> On Mon, May 20, 2019 at 07:41:18PM +0530, Sagar Shrikant Kadam wrote:
+> > The i2c-ocore driver already has a polling mode interface.But it needs
+> > a workaround for FU540 Chipset on HiFive unleashed board (RevA00).
+> > There is an erratum in FU540 chip that prevents interrupt driven i2c
+> > transfers from working, and also the I2C controller's interrupt bit
+> > cannot be cleared if set, due to this the existing i2c polling mode
+> > interface added in mainline earlier doesn't work, and CPU stall's
+> > infinitely, when-ever i2c transfer is initiated.
+> >
+> > Ref:previous polling mode support in mainline
+> >
+> >       commit 69c8c0c0efa8 ("i2c: ocores: add polling interface")
+> >
+> > The workaround / fix under OCORES_FLAG_BROKEN_IRQ is particularly for
+> > FU540-COOO SoC.
+> >
+> > Signed-off-by: Sagar Shrikant Kadam <sagar.kadam@sifive.com>
+>
+> Much better, thanks.
+My pleasure Andrew.
+Appreciate your timely review and response.
 
---6c2NcOVqGQ03X4Wi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+>
+>     Andrew
 
-On Mon, May 20, 2019 at 11:47:39AM -0300, Mauro Carvalho Chehab wrote:
-> Mostly due to x86 and acpi conversion, several documentation
-> links are still pointing to the old file. Fix them.
->=20
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-
-Thanks, didn't notice that.
-
->  Documentation/i2c/instantiating-devices          |  2 +-
-
-=2E..
-
-> diff --git a/Documentation/i2c/instantiating-devices b/Documentation/i2c/=
-instantiating-devices
-> index 0d85ac1935b7..5a3e2f331e8c 100644
-> --- a/Documentation/i2c/instantiating-devices
-> +++ b/Documentation/i2c/instantiating-devices
-> @@ -85,7 +85,7 @@ Method 1c: Declare the I2C devices via ACPI
->  -------------------------------------------
-> =20
->  ACPI can also describe I2C devices. There is special documentation for t=
-his
-> -which is currently located at Documentation/acpi/enumeration.txt.
-> +which is currently located at Documentation/firmware-guide/acpi/enumerat=
-ion.rst.
-> =20
-> =20
->  Method 2: Instantiate the devices explicitly
-
-For this I2C part:
-
-Reviewed-by: Wolfram Sang <wsa@the-dreams.de>
-
-
---6c2NcOVqGQ03X4Wi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlziwiIACgkQFA3kzBSg
-Kbb/+hAArOEJ2RcuEqvOP7Ge80J7VxtEVTCR0sWRFg/7cpRGLnwf1qLSAUlfAJYj
-fUhZ9ANfeB4Y4ZltOPwJ34KNtZy/kYzYyoy/WgiNfJUrf+s7auOF+dMXRvBe8VyX
-v/pHpAMzTf8rtNkaESOahPExL1lgrI2dShZa3Mxofm2eb3Kam0OJRr6Cvj7mA/Rq
-PHq1QUlG+Y3hZdvAHjQ6GN6wr+pNnhqeSSAd3BZg5MZQpPRiaK+C4tPkqOD/TNwX
-9+iPJTMPhWsdei4UO1POHGCOclFatxkPOQm9JjsTD1h1lEJK7Afs1cTCd0crwpzW
-nQuj+MSjKTqcOwQ4hF1x6PwlbJm4Hq/+r6b50UsnQYai6pt7Khp9OISmYTxPQhgI
-8aXZbjsMB3k9ebYulULGdF0f3p/IPoqneTUf3yi5OxNbhJ8eyNcQ4l35MP9hEyYb
-H/9a/G4GXP7CLyCtKd53OtNeE1tTF4zGKIhe7v9OInHolA3gLx1R1rxiBeQB+XyA
-NO/4FdEIZ1QWAyl7m1aWBtYpar2uvFyEhZWG3sVhZYsA9dQNBfgzFSu60wus7hy4
-D9FxYijaEnHZvPivrTwfcp8ittAvsIrM3xANcOhWXEU6eC6w0KX15QiiyPQUbssL
-H3fPVUBxQlwicyY98Dvh7eJmnD1WEsMcDmDI5RqrAxhdD/bxbN0=
-=b4+p
------END PGP SIGNATURE-----
-
---6c2NcOVqGQ03X4Wi--
+Thanks,
+Sagar
