@@ -2,55 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFE024091
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2019 20:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0822324092
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2019 20:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbfETSjk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 May 2019 14:39:40 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45674 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbfETSjj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 May 2019 14:39:39 -0400
-Received: by mail-pf1-f196.google.com with SMTP id s11so7625554pfm.12;
-        Mon, 20 May 2019 11:39:39 -0700 (PDT)
+        id S1726575AbfETSjl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 May 2019 14:39:41 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:34347 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725601AbfETSjl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 May 2019 14:39:41 -0400
+Received: by mail-pg1-f195.google.com with SMTP id c13so7193729pgt.1;
+        Mon, 20 May 2019 11:39:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=PZ/tbcFcCvHOSqEDz47sYlToMZ2Jk0dbzOiy+eRO5oU=;
-        b=JicZLJLc7jIXqI88XOZcdgN5TXsjQ3T6CP4gdnV1/wQCIq76FIqPutTsBccpkk/nkP
-         mMQ5MPuzb2GfapCogvNWb01r299RXx1yHch888LkrjLHwO7KJf1u9xKZieHQ2CkqHU6H
-         EOhgUr3KRscSzOQUKgFi7k2JFjcn5HGflestELyFcZPHArhq/YxbS7aTFHtd6S+6/tW2
-         XR8rkRRqDMb21M15cqJpoAcbKrnjijQFD243sjyQUSt5M9vKt8T6NcLhONsQIf3HlX9v
-         2pg5Z/I5PoC/y1LBAT+YmS7JD/0ItrgZANCdG1miRx2UQIEsnhhsy1IwA9eIvLuThVmD
-         8P6Q==
+        bh=ZNeknb8PGKUKLTWwoHkpexxbNOhtv1U320+t2geunDU=;
+        b=XQpa+iKRqFGDkGMUxnwiTI4jcMagDJtTt2zUXinzlS/yfIxm13IF7gU3PRCrnb4xM2
+         +w+tQ6kI4L/JtskDeif8gDnWUaDFgKcBdh8s4wmAPNJA53GGGICbvtymsdodcfPUmGQ0
+         DUra2RiLvSd2y9D+i/vn6+voFQmboz0I8FOZRFxiYk6KJdhfetGyyx9XNDtgvheQOQyV
+         imx2mTzN/XnnVMu8/A77EBZHwZxYftYHT0aB87gqqA8ZSLMuPTz+Ma3iiUzuZvwfsn/c
+         jXJx6G2YyfHTWPX5rly5ym75I4A8NYJJe+lbRybmDYTuwSrXh3AgksH/2ZLPA8DRTsZf
+         ukhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=PZ/tbcFcCvHOSqEDz47sYlToMZ2Jk0dbzOiy+eRO5oU=;
-        b=gJ9Ugga39Rw4Kgg2EHn1drojx4bFPNR7yYr/bjIBh37wlQMXjgbbvo4icY0BACWZ+j
-         OCClei3QLt1EnoRZAmC8fo16AaAPSnsAxouPWbbOV/f/S0ndRzmPUWE2P+hVhbm24CId
-         qYsKZvzmur0nJ8Arc/GwKghi5a/plu5ARZWbpIkMjVrMB1hM1zYq79A/WyZTR2/EojwL
-         TNtlPhA3G8hpZrUFe0J4J9DVyN1yLc+V8d8mnJK+EDpna4nlvnFUvLGytw4PNZgZHj8f
-         hhIouHrrCLqZSV6tsLnvZPGHJJGEIJqSWMVwy9zClGmb6dImHrKFyfA2vLK9q3JmJaYu
-         DAWQ==
-X-Gm-Message-State: APjAAAVFaCbppd3f95jlR1LBJ6xweNzXHi8Y+hwQQ3BENwQgGGv668f3
-        bfYc6dNpipdpJQxdWfJxuPE=
-X-Google-Smtp-Source: APXvYqzo5z0Pr7G9cVCeJIsivJDr8TrF7qaKOQDH2aRg8W/vIlYkiYD/eFaHCHEiM1c9e4Wwx1BX+g==
-X-Received: by 2002:a62:4607:: with SMTP id t7mr82834358pfa.138.1558377578988;
-        Mon, 20 May 2019 11:39:38 -0700 (PDT)
+        bh=ZNeknb8PGKUKLTWwoHkpexxbNOhtv1U320+t2geunDU=;
+        b=VfLa+7nA9MDcW8xmuy5hv8xAd7JeOIr02th+FmKT6eLeCol3t0I6PJwFeuCqKdEnDh
+         +1acjeYWhb1W5UR88sRbJQa5uRZJ5pwolm7XsVlYcCItxitEXPVm3JhBr1mbmZ7mumko
+         Axz9MKtyZzN9K2IGFj4tm4TlJ5I8A5HgZ0wd5YxQ0e6xZaA+AwHYx3SUxCOsL97KMxg8
+         QySD1H8lBoggjSNBWiMFfiURY9sz1acK5TcK0wFElyIUJT2ZcgzHjcKb41Lsw0l5Qvvz
+         8SgJ7iA2TYvAzVrroR4ukDdkSAXFlcrkmPuCj+z1ojdfH2dIY/1JwhA4Al5iKQWRHT+u
+         oWeA==
+X-Gm-Message-State: APjAAAVrebFNr/dMK1QU5R0mMJk8dTQ6rt7M+qf/CyujIlh/ZFUZaOAB
+        /Yg025OTTjkFxn1ffVYbZZZXqQovnJs=
+X-Google-Smtp-Source: APXvYqypWz5ne83xcaprjSZ7xvdhZ+uNXhfnYWjzOsB97iMBn4kwA27hajkJ0KXVsBk71Yd+mqa6HQ==
+X-Received: by 2002:a62:4e86:: with SMTP id c128mr81377582pfb.39.1558377579972;
+        Mon, 20 May 2019 11:39:39 -0700 (PDT)
 Received: from ajayg.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id o20sm22321288pgj.70.2019.05.20.11.39.37
+        by smtp.gmail.com with ESMTPSA id o20sm22321288pgj.70.2019.05.20.11.39.39
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 May 2019 11:39:38 -0700 (PDT)
+        Mon, 20 May 2019 11:39:39 -0700 (PDT)
 From:   Ajay Gupta <ajaykuee@gmail.com>
 X-Google-Original-From: Ajay Gupta <ajayg@nvidia.com>
 To:     heikki.krogerus@linux.intel.com, wsa@the-dreams.de
 Cc:     linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
         Ajay Gupta <ajayg@nvidia.com>
-Subject: [PATCH v2 2/5] i2c: nvidia-gpu: add runtime pm support
-Date:   Mon, 20 May 2019 11:37:47 -0700
-Message-Id: <20190520183750.2932-3-ajayg@nvidia.com>
+Subject: [PATCH v2 3/5] usb: typec: ucsi: ccg: enable runtime pm support
+Date:   Mon, 20 May 2019 11:37:48 -0700
+Message-Id: <20190520183750.2932-4-ajayg@nvidia.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190520183750.2932-1-ajayg@nvidia.com>
 References: <20190520183750.2932-1-ajayg@nvidia.com>
@@ -61,86 +61,159 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Ajay Gupta <ajayg@nvidia.com>
 
-Enable runtime pm support with autosuspend delay of three second.
-This is to make sure I2C client device Cypress CCGx has completed
-all transaction.
+The change enables runtime pm support to UCSI CCG driver.
+ucsi_send_command() is used in resume path and so exported
+ucsi_send_command() symbol in ucsi.c for modular build.
 
 Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
 ---
-Changes from v1->v2: None
+Changes from v1->v2 : None
 
- drivers/i2c/busses/i2c-nvidia-gpu.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ drivers/usb/typec/ucsi/ucsi.c     |  1 +
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 60 +++++++++++++++++++++++++++++++
+ 2 files changed, 61 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-index 2d9561ec2320..af445590041b 100644
---- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-+++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-@@ -176,6 +176,7 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *adap,
- 	 * The controller supports maximum 4 byte read due to known
- 	 * limitation of sending STOP after every read.
- 	 */
-+	pm_runtime_get_sync(i2cd->dev);
- 	for (i = 0; i < num; i++) {
- 		if (msgs[i].flags & I2C_M_RD) {
- 			/* program client address before starting read */
-@@ -211,6 +212,8 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *adap,
- 		goto exit;
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 7850b851cecd..e9454134d399 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -206,6 +206,7 @@ int ucsi_send_command(struct ucsi *ucsi, struct ucsi_control *ctrl,
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(ucsi_send_command);
+ 
+ /* -------------------------------------------------------------------------- */
+ 
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index 9d46aa9e4e35..cc7094ecda2d 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -14,6 +14,8 @@
+ #include <linux/module.h>
+ #include <linux/pci.h>
+ #include <linux/platform_device.h>
++#include <linux/pm.h>
++#include <linux/pm_runtime.h>
+ 
+ #include <asm/unaligned.h>
+ #include "ucsi.h"
+@@ -210,6 +212,7 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
+ 	if (quirks && quirks->max_read_len)
+ 		max_read_len = quirks->max_read_len;
+ 
++	pm_runtime_get_sync(uc->dev);
+ 	while (rem_len > 0) {
+ 		msgs[1].buf = &data[len - rem_len];
+ 		rlen = min_t(u16, rem_len, max_read_len);
+@@ -218,12 +221,14 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
+ 		status = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+ 		if (status < 0) {
+ 			dev_err(uc->dev, "i2c_transfer failed %d\n", status);
++			pm_runtime_put_sync(uc->dev);
+ 			return status;
+ 		}
+ 		rab += rlen;
+ 		rem_len -= rlen;
  	}
  
-+	pm_runtime_mark_last_busy(i2cd->dev);
-+	pm_runtime_put_autosuspend(i2cd->dev);
- 	return i;
- exit:
- 	if (send_stop) {
-@@ -218,6 +221,8 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *adap,
- 		if (status2 < 0)
- 			dev_err(i2cd->dev, "i2c stop failed %d\n", status2);
- 	}
-+	pm_runtime_mark_last_busy(i2cd->dev);
-+	pm_runtime_put_autosuspend(i2cd->dev);
- 	return status;
++	pm_runtime_put_sync(uc->dev);
+ 	return 0;
  }
  
-@@ -337,6 +342,11 @@ static int gpu_i2c_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		goto del_adapter;
+@@ -249,13 +254,16 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
+ 	msgs[0].len = len + sizeof(rab);
+ 	msgs[0].buf = buf;
+ 
++	pm_runtime_get_sync(uc->dev);
+ 	status = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+ 	if (status < 0) {
+ 		dev_err(uc->dev, "i2c_transfer failed %d\n", status);
++		pm_runtime_put_sync(uc->dev);
+ 		kfree(buf);
+ 		return status;
  	}
  
-+	pm_runtime_set_autosuspend_delay(&pdev->dev, 3000);
-+	pm_runtime_use_autosuspend(&pdev->dev);
-+	pm_runtime_put_autosuspend(&pdev->dev);
-+	pm_runtime_allow(&pdev->dev);
++	pm_runtime_put_sync(uc->dev);
+ 	kfree(buf);
+ 	return 0;
+ }
+@@ -1134,6 +1142,10 @@ static int ucsi_ccg_probe(struct i2c_client *client,
+ 	if (status)
+ 		dev_err(uc->dev, "cannot create sysfs group: %d\n", status);
+ 
++	pm_runtime_set_active(uc->dev);
++	pm_runtime_enable(uc->dev);
++	pm_runtime_idle(uc->dev);
 +
  	return 0;
- 
- del_adapter:
-@@ -350,10 +360,16 @@ static void gpu_i2c_remove(struct pci_dev *pdev)
- {
- 	struct gpu_i2c_dev *i2cd = dev_get_drvdata(&pdev->dev);
- 
-+	pm_runtime_get_noresume(i2cd->dev);
- 	i2c_del_adapter(&i2cd->adapter);
- 	pci_free_irq_vectors(pdev);
  }
  
-+static int gpu_i2c_suspend(struct device *dev)
+@@ -1143,6 +1155,7 @@ static int ucsi_ccg_remove(struct i2c_client *client)
+ 
+ 	cancel_work_sync(&uc->work);
+ 	ucsi_unregister_ppm(uc->ucsi);
++	pm_runtime_disable(uc->dev);
+ 	free_irq(uc->irq, uc);
+ 	sysfs_remove_group(&uc->dev->kobj, &ucsi_ccg_attr_group);
+ 
+@@ -1155,9 +1168,56 @@ static const struct i2c_device_id ucsi_ccg_device_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, ucsi_ccg_device_id);
+ 
++static int ucsi_ccg_suspend(struct device *dev)
 +{
 +	return 0;
 +}
 +
- static __maybe_unused int gpu_i2c_resume(struct device *dev)
- {
- 	struct gpu_i2c_dev *i2cd = dev_get_drvdata(dev);
-@@ -362,7 +378,8 @@ static __maybe_unused int gpu_i2c_resume(struct device *dev)
- 	return 0;
- }
- 
--static UNIVERSAL_DEV_PM_OPS(gpu_i2c_driver_pm, NULL, gpu_i2c_resume, NULL);
-+static UNIVERSAL_DEV_PM_OPS(gpu_i2c_driver_pm, gpu_i2c_suspend, gpu_i2c_resume,
-+			    NULL);
- 
- static struct pci_driver gpu_i2c_driver = {
- 	.name		= "nvidia-gpu",
++static int ucsi_ccg_resume(struct device *dev)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	struct ucsi_ccg *uc = i2c_get_clientdata(client);
++	struct ucsi *ucsi = uc->ucsi;
++	struct ucsi_control c;
++	int ret;
++
++	/* restore UCSI notification enable mask */
++	UCSI_CMD_SET_NTFY_ENABLE(c, UCSI_ENABLE_NTFY_ALL);
++	ret = ucsi_send_command(ucsi, &c, NULL, 0);
++	if (ret < 0) {
++		dev_err(uc->dev, "%s: failed to set notification enable - %d\n",
++			__func__, ret);
++	}
++	return 0;
++}
++
++static int ucsi_ccg_runtime_suspend(struct device *dev)
++{
++	return 0;
++}
++
++static int ucsi_ccg_runtime_resume(struct device *dev)
++{
++	return 0;
++}
++
++static int ucsi_ccg_runtime_idle(struct device *dev)
++{
++	return 0;
++}
++
++static const struct dev_pm_ops ucsi_ccg_pm = {
++	.suspend = ucsi_ccg_suspend,
++	.resume = ucsi_ccg_resume,
++	.runtime_suspend = ucsi_ccg_runtime_suspend,
++	.runtime_resume = ucsi_ccg_runtime_resume,
++	.runtime_idle = ucsi_ccg_runtime_idle,
++};
++
+ static struct i2c_driver ucsi_ccg_driver = {
+ 	.driver = {
+ 		.name = "ucsi_ccg",
++		.pm = &ucsi_ccg_pm,
+ 	},
+ 	.probe = ucsi_ccg_probe,
+ 	.remove = ucsi_ccg_remove,
 -- 
 2.17.1
 
