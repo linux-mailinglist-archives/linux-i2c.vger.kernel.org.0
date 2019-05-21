@@ -2,68 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B0A24A65
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 10:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A5024A75
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 10:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbfEUIah (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 May 2019 04:30:37 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:35470 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbfEUIah (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 May 2019 04:30:37 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x4L8UTgE081198;
-        Tue, 21 May 2019 03:30:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1558427429;
-        bh=anAC+RiLGY1eFGuqe7OQK4ugd+CY1NDoHG/Q9t3xrBk=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=PDEwcZNWxzqmsW5ZnXblHDi2VPTOTCWyqoU06TNUBaTBNwKJ8dc2BK6ajueJUkuhh
-         UKXCYzYzNM/PXlFmHrkAljwQ/ftbx4+E6nNkQ+IzSzWSJgr8dImstrMXgLdjMdqqoR
-         75GKXMRZvmRizio+bJW3GPiYVxN0Yml+bStdptio=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x4L8UTVg076446
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 May 2019 03:30:29 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 21
- May 2019 03:30:29 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 21 May 2019 03:30:29 -0500
-Received: from [172.24.190.172] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x4L8URLj100261;
-        Tue, 21 May 2019 03:30:28 -0500
-Subject: Re: [PATCH 2/8] MAINTAINERS: add I2C DT bindings to DaVinci platform
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <linux-i2c@vger.kernel.org>, Kevin Hilman <khilman@kernel.org>
-References: <20190521082137.2889-1-wsa@the-dreams.de>
- <20190521082137.2889-3-wsa@the-dreams.de>
-From:   Sekhar Nori <nsekhar@ti.com>
-Message-ID: <d969bea7-73fc-862b-de3a-1d761adc1ce9@ti.com>
-Date:   Tue, 21 May 2019 14:00:27 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726417AbfEUIdw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 May 2019 04:33:52 -0400
+Received: from mx2.suse.de ([195.135.220.15]:56274 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726006AbfEUIdv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 21 May 2019 04:33:51 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 7017BAB9D;
+        Tue, 21 May 2019 08:33:50 +0000 (UTC)
+From:   Andreas Schwab <schwab@suse.de>
+To:     Sagar Shrikant Kadam <sagar.kadam@sifive.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, peter@korsgaard.com,
+        andrew@lunn.ch, palmer@sifive.com, paul.walmsley@sifive.com,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] i2c-ocores: sifive: add polling mode workaround for FU540-C000 SoC.
+References: <1558361478-4381-1-git-send-email-sagar.kadam@sifive.com>
+        <1558361478-4381-4-git-send-email-sagar.kadam@sifive.com>
+X-Yow:  I can see you GUYS an' GALS need a LOT of HELP...You're all very
+ STUPID!!  I used to be STUPID, too..before I started watching UHF-TV!!
+Date:   Tue, 21 May 2019 10:33:48 +0200
+In-Reply-To: <1558361478-4381-4-git-send-email-sagar.kadam@sifive.com> (Sagar
+        Shrikant Kadam's message of "Mon, 20 May 2019 19:41:18 +0530")
+Message-ID: <mvm7eakjjf7.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20190521082137.2889-3-wsa@the-dreams.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 21/05/19 1:51 PM, Wolfram Sang wrote:
-> Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-> Cc: Sekhar Nori <nsekhar@ti.com>
-> Cc: Kevin Hilman <khilman@kernel.org>
+On Mai 20 2019, Sagar Shrikant Kadam <sagar.kadam@sifive.com> wrote:
 
-Acked-by: Sekhar Nori <nsekhar@ti.com>
+> The i2c-ocore driver already has a polling mode interface.But it needs
+> a workaround for FU540 Chipset on HiFive unleashed board (RevA00).
+> There is an erratum in FU540 chip that prevents interrupt driven i2c
+> transfers from working, and also the I2C controller's interrupt bit
+> cannot be cleared if set, due to this the existing i2c polling mode
+> interface added in mainline earlier doesn't work, and CPU stall's
+> infinitely, when-ever i2c transfer is initiated.
+>
+> Ref:previous polling mode support in mainline
+>
+> 	commit 69c8c0c0efa8 ("i2c: ocores: add polling interface")
+>
+> The workaround / fix under OCORES_FLAG_BROKEN_IRQ is particularly for
+> FU540-COOO SoC.
 
-Thanks
-Sekhar
+After commit dd7dbf0eb090 this no longer fits.
+
+Andreas.
+
+-- 
+Andreas Schwab, SUSE Labs, schwab@suse.de
+GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
+"And now for something completely different."
