@@ -2,64 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A5024A75
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 10:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E244524ADA
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 10:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726417AbfEUIdw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 May 2019 04:33:52 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56274 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726006AbfEUIdv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 21 May 2019 04:33:51 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 7017BAB9D;
-        Tue, 21 May 2019 08:33:50 +0000 (UTC)
-From:   Andreas Schwab <schwab@suse.de>
-To:     Sagar Shrikant Kadam <sagar.kadam@sifive.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, peter@korsgaard.com,
-        andrew@lunn.ch, palmer@sifive.com, paul.walmsley@sifive.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] i2c-ocores: sifive: add polling mode workaround for FU540-C000 SoC.
-References: <1558361478-4381-1-git-send-email-sagar.kadam@sifive.com>
-        <1558361478-4381-4-git-send-email-sagar.kadam@sifive.com>
-X-Yow:  I can see you GUYS an' GALS need a LOT of HELP...You're all very
- STUPID!!  I used to be STUPID, too..before I started watching UHF-TV!!
-Date:   Tue, 21 May 2019 10:33:48 +0200
-In-Reply-To: <1558361478-4381-4-git-send-email-sagar.kadam@sifive.com> (Sagar
-        Shrikant Kadam's message of "Mon, 20 May 2019 19:41:18 +0530")
-Message-ID: <mvm7eakjjf7.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+        id S1726448AbfEUIxf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 May 2019 04:53:35 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:40889 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726429AbfEUIxe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 May 2019 04:53:34 -0400
+Received: by mail-io1-f67.google.com with SMTP id s20so13294065ioj.7
+        for <linux-i2c@vger.kernel.org>; Tue, 21 May 2019 01:53:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0WTLMFKkLUN0R2VYo2s52FuJddz43lvf89DbG6rO7g0=;
+        b=f0wy8Jgw4OePrhSb+uhjdHPIcYaf94LsDLObsmWgcRRGwprT+MFwYrfsYtifaDDl7Q
+         +EijPvIDfoUForSDn9CGCgptmFY+FfpRZOIdzz5s/WLap14TkHuTKCu3ri2H/CW4EWya
+         b5R8hlW/yKna8jXe1rjJ1XqCdw7VAjBnoLtWHt148Uz3zI5YCe+3HQX0HUiQDSVcMH0l
+         Xs7l3P9TJnCLusmhbpIO70CDJGsOKVbEZpqxkQ9afsjs3BXGgI+LtdhpzQHWBW9zxb80
+         D5V2c78mYOltjZ6n5Fs47AObDtY91lqjLUMJ6+MqH6iKzPgQpg3irZuDSvZj0E2xubEe
+         OjJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0WTLMFKkLUN0R2VYo2s52FuJddz43lvf89DbG6rO7g0=;
+        b=JB3Y7QGyGO7Vw76aB1cU0etjJ5q3TJdTaMa7sKyA/Iw/N3PnPddNq+s45kXH3Vlfxi
+         zodxg1vsc6xXrTuulTrtbPtvodOjGOQT5wTjfa3iJ+YSEtnkJXmOgNPUTj5LOA046BC8
+         uoFbdSPVaP9MW3e2bYCns3vN0VA9hu40KI4B4HQd/hApp8xuJ0M7YcY4gJle7yVvp9vn
+         fA0QxrDYKbuqXSe0cYvysZWOZiZaWHeqJZPhVj163pJL4tXWFvjY6Ww4jyMSnAG9dl/D
+         Urlvn149R5Vi5N1jQ18l8oECxsKwRApDKiKMAcv0wrKZ7c+3Rda+2ikrkylFboJQvicG
+         /ABg==
+X-Gm-Message-State: APjAAAUomWx1MobNZEnH6R0pKSy8+uYfFG/Bt7210Z/OxaPaEPp4Ulnb
+        ocoMtVNi4rHl5BkJCAVDmorNYKYye5TVzd3RRvP4uA==
+X-Google-Smtp-Source: APXvYqxowIZJEKCvn9zlEa54stTzsKBZRQuqwpelBfsdNv9od56pW1pvcCFx0lySUeXz8aWSKtdrXCW4KzGHUbNyGkU=
+X-Received: by 2002:a5e:9411:: with SMTP id q17mr10206625ioj.65.1558428814158;
+ Tue, 21 May 2019 01:53:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20190521013350.8426-1-masahisa.kojima@linaro.org>
+In-Reply-To: <20190521013350.8426-1-masahisa.kojima@linaro.org>
+From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Date:   Tue, 21 May 2019 10:53:22 +0200
+Message-ID: <CAKv+Gu_Zcgr_9i-nX2pYp2SPJ0h6GHsKQ+3BUnRn4CnFsWxEPg@mail.gmail.com>
+Subject: Re: [PATCH] i2c: synquacer: fix synquacer_i2c_doxfer() return value
+To:     Masahisa Kojima <masahisa.kojima@linaro.org>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Satoru Okamoto <okamoto.satoru@socionext.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mai 20 2019, Sagar Shrikant Kadam <sagar.kadam@sifive.com> wrote:
-
-> The i2c-ocore driver already has a polling mode interface.But it needs
-> a workaround for FU540 Chipset on HiFive unleashed board (RevA00).
-> There is an erratum in FU540 chip that prevents interrupt driven i2c
-> transfers from working, and also the I2C controller's interrupt bit
-> cannot be cleared if set, due to this the existing i2c polling mode
-> interface added in mainline earlier doesn't work, and CPU stall's
-> infinitely, when-ever i2c transfer is initiated.
+On Tue, 21 May 2019 at 03:35, Masahisa Kojima
+<masahisa.kojima@linaro.org> wrote:
 >
-> Ref:previous polling mode support in mainline
+> master_xfer should return the number of messages successfully
+> processed.
 >
-> 	commit 69c8c0c0efa8 ("i2c: ocores: add polling interface")
+> Fixes: 0d676a6c4390 ("i2c: add support for Socionext SynQuacer I2C controller")
+> Cc: <stable@vger.kernel.org> # v4.19+
+> Signed-off-by: Okamoto Satoru <okamoto.satoru@socionext.com>
+> Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
+
+Acked-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+
+> ---
+>  drivers/i2c/busses/i2c-synquacer.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> The workaround / fix under OCORES_FLAG_BROKEN_IRQ is particularly for
-> FU540-COOO SoC.
-
-After commit dd7dbf0eb090 this no longer fits.
-
-Andreas.
-
--- 
-Andreas Schwab, SUSE Labs, schwab@suse.de
-GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-"And now for something completely different."
+> diff --git a/drivers/i2c/busses/i2c-synquacer.c b/drivers/i2c/busses/i2c-synquacer.c
+> index f14d4b3fab44..f724c8e6b360 100644
+> --- a/drivers/i2c/busses/i2c-synquacer.c
+> +++ b/drivers/i2c/busses/i2c-synquacer.c
+> @@ -351,7 +351,7 @@ static int synquacer_i2c_doxfer(struct synquacer_i2c *i2c,
+>         /* wait 2 clock periods to ensure the stop has been through the bus */
+>         udelay(DIV_ROUND_UP(2 * 1000, i2c->speed_khz));
+>
+> -       return 0;
+> +       return ret;
+>  }
+>
+>  static irqreturn_t synquacer_i2c_isr(int irq, void *dev_id)
+> --
+> 2.14.2
+>
