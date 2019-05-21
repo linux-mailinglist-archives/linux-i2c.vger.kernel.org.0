@@ -2,106 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B50D24DF9
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 13:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0288A24EE9
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 14:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbfEULhG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 May 2019 07:37:06 -0400
-Received: from mga07.intel.com ([134.134.136.100]:32829 "EHLO mga07.intel.com"
+        id S1726953AbfEUM0d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 May 2019 08:26:33 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:41818 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726296AbfEULhG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 21 May 2019 07:37:06 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 May 2019 04:37:05 -0700
-X-ExtLoop1: 1
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 21 May 2019 04:37:02 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 21 May 2019 14:37:01 +0300
-Date:   Tue, 21 May 2019 14:37:01 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     wsa@the-dreams.de, linux-i2c@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benjamin.tissoires@redhat.com, jbroadus@gmail.com,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH 4/5] i2c: core: Move ACPI gpio IRQ handling into
- i2c_acpi_get_irq
-Message-ID: <20190521113701.GY2781@lahna.fi.intel.com>
-References: <20190520084936.10590-1-ckeepax@opensource.cirrus.com>
- <20190520084936.10590-5-ckeepax@opensource.cirrus.com>
+        id S1726900AbfEUM0c (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 21 May 2019 08:26:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=0mp9IGuJ3Sba8b9fR+6tWUov/QuJqjVhBmqHDQ3pzM8=; b=pVMWY6YLZuSWdCF0NUCOf+T/4b
+        IzgHFe9g/LNBC+jDeiu+v0sBF6za3FrUwvZOk0QVHgKgxSE4XBjxJv/kvLd0uY3EMeeEWIeGFlf/Y
+        ATKEHJ3pAx/iVyBMwL6X5LD+4vCmRsAa4ZPxZHl+qzot47BQt9S/A39dkL2r/hi9nMhw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
+        (envelope-from <andrew@lunn.ch>)
+        id 1hT3qg-0001vx-70; Tue, 21 May 2019 14:26:30 +0200
+Date:   Tue, 21 May 2019 14:26:30 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, Peter Korsgaard <peter@korsgaard.com>
+Subject: Re: [PATCH 4/6] MAINTAINERS: add DT bindings to i2c-ocores
+Message-ID: <20190521122630.GB6577@lunn.ch>
+References: <20190521081509.2586-1-wsa@the-dreams.de>
+ <20190521081509.2586-5-wsa@the-dreams.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190520084936.10590-5-ckeepax@opensource.cirrus.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190521081509.2586-5-wsa@the-dreams.de>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 20, 2019 at 09:49:35AM +0100, Charles Keepax wrote:
-> It makes sense to contain all the ACPI IRQ handling in a single helper
-> function.
-> 
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+On Tue, May 21, 2019 at 10:15:07AM +0200, Wolfram Sang wrote:
+> Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Andrew Lunn <andrew@lunn.ch>
 > ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Note that this one is somewhat interesting, it seems the search
-> through the resource list is done against the companion device
-> of the adapter but the GPIO search is done against the companion
-> device of the client. It feels to me like these really should
-> be done on the same device, and certainly this is what SPI
-> does (both against the equivalent of the adapter). Perhaps
-> someone with more ACPI knowledge than myself could comment?
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cd5cc61a98ac..4dd1a31c2667 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11730,6 +11730,7 @@ M:	Peter Korsgaard <peter@korsgaard.com>
+>  M:	Andrew Lunn <andrew@lunn.ch>
+>  L:	linux-i2c@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+>  F:	Documentation/i2c/busses/i2c-ocores
+>  F:	drivers/i2c/busses/i2c-ocores.c
+>  F:	include/linux/platform_data/i2c-ocores.h
 
-What GPIO search you mean? I did not find any ACPI specific GPIO lookup
-in the i2c-core-acpi/base files.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-> Thanks,
-> Charles
-> 
->  drivers/i2c/i2c-core-acpi.c | 3 +++
->  drivers/i2c/i2c-core-base.c | 4 ----
->  2 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> index e332760bf9ebc..0c882d956e9a4 100644
-> --- a/drivers/i2c/i2c-core-acpi.c
-> +++ b/drivers/i2c/i2c-core-acpi.c
-> @@ -164,6 +164,9 @@ int i2c_acpi_get_irq(struct i2c_client *client, int *irq)
-
-Maybe worth adding kernel-doc explaining what the function does if it
-does not have already.
-
->  
->  	acpi_dev_free_resource_list(&resource_list);
->  
-> +	if (*irq < 0)
-> +		*irq = acpi_dev_gpio_irq_get(ACPI_COMPANION(&client->dev), 0);
-> +
->  	return 0;
->  }
->  
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index c1afa17a76bfc..f958b50c78c04 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -336,10 +336,6 @@ static int i2c_device_probe(struct device *dev)
->  				irq = of_irq_get(dev->of_node, 0);
->  		} else if (ACPI_COMPANION(dev)) {
->  			i2c_acpi_get_irq(client, &irq);
-
-I think we should check and handle possible error here.
-
-> -
-> -			if (irq == -ENOENT)
-> -				irq = acpi_dev_gpio_irq_get(ACPI_COMPANION(dev),
-> -							    0);
->  		}
->  		if (irq == -EPROBE_DEFER)
->  			return irq;
-> -- 
-> 2.11.0
+    Andrew
