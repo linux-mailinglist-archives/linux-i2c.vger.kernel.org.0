@@ -2,83 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE44B245A9
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 03:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7352467C
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 05:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727099AbfEUBfk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 May 2019 21:35:40 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:44203 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727022AbfEUBfk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 May 2019 21:35:40 -0400
-Received: by mail-pl1-f196.google.com with SMTP id c5so7550024pll.11
-        for <linux-i2c@vger.kernel.org>; Mon, 20 May 2019 18:35:40 -0700 (PDT)
+        id S1726348AbfEUDtJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 May 2019 23:49:09 -0400
+Received: from mail-vk1-f193.google.com ([209.85.221.193]:45768 "EHLO
+        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727047AbfEUDtG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 May 2019 23:49:06 -0400
+Received: by mail-vk1-f193.google.com with SMTP id r23so4434205vkd.12
+        for <linux-i2c@vger.kernel.org>; Mon, 20 May 2019 20:49:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=gb0yL9y2PsgXv4WkLnp+y0ZvUFalduQd+9R0GCqrRt8=;
-        b=aPaYQvTdfXoDsxffozfBVMLrNC6CfQoqAEeXj3RyJEKRtqYr3cGwN778STMweLrGsS
-         9mXUBby7aD4IhxKORduCe9wtYdc8dVjYHekFffs/jpDxab5caXTWmZ2Gg1b41GCk9QTu
-         +I1YhquIi1zTTpJnbYS5H5ffiWfWLzjYyVIcyiP5aaXgtDAFxqimvYv4ses3gqLPUN0y
-         lM29y8sZpSOv5m3xm5rHEA2MfLmfg24HLJiLbQhQ6HZ2EsdYWFjbZ/OBlJZFm6/GBGJ7
-         dIDCP2/35Gq8YcgjyxbG8kZDUVKImdeKf9jAE059kf7lJUOBXun1DCwJ/Le19uatZNnf
-         i68w==
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1VJfytKtR9301TV4yIigfBHhzzdmP/kCJaWly5NeECw=;
+        b=Tip/FqOiERotBvWP2/5JdfK5MKgkhbOetw5IpnGG6GB1rCsnDF4eLROn4GeoYTMCSg
+         dEugoOTBsKD2q3zQZ3GPRZMxCRNPWm7AA811r/wN7dy3L+ZGu04kVRLLfu3zStBqr+EV
+         HSiqCWR2bmAQpBSUDlTc/RiYF+ctH2wm1aFsi5c3JJ5XrpNTgyjQHbYDOF9r6Va9z6YM
+         N94YjJOiv2urqeIs7ORU0FStujqPeKkLb/QcVTJZgoPj7Z4I8GExrb25Ba0XaA1A0KiE
+         uztqjl3nwthDFJ0BseEzxoCQ7073q0I1Mi7pPu3O6lAb5EdhVPGK+jC/nitcmkHtsqdr
+         j2jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=gb0yL9y2PsgXv4WkLnp+y0ZvUFalduQd+9R0GCqrRt8=;
-        b=nJK1/FTRlhLz7owjBi4+hTz/p/JtkvDIQSLOoMAMvAr/hxvH1BfA6FYsvs1kGmnNLG
-         LnNukxxhMaK1SESH3RQESxUCR0BWWqp16DiZ9l8OJztAfP0A65gfh18y0pHm/RB694/B
-         +1ruUW21jJrA+LAf5u/DEdPqiNx4xpUqA12DHZb/nxW/laz3S8xInVFbbDWnyBpYzP2c
-         h2yQy3F4FLhQ2R/MXikaIWchEXWnx7kZ09qZpszY4oFq1z7bzggY6aibaj/8d86HNevd
-         qzdy/Hq914hFv1Mp5tbnVA0N47jlb8JJXXcUlHlcxKbFWEo/sjzwDmyfIQFiNm0pMFlK
-         /Zlg==
-X-Gm-Message-State: APjAAAUqGXLNdQSre5+mwi1wzrAsJnd7w7tZVRbD/cmR9R2tnT02VlQ/
-        mOPvu0ju521DEAdWhe8YNF0wutX+rCw=
-X-Google-Smtp-Source: APXvYqxFvYhB8iec4KLUGC0uHxfaamJc6Vg/MyONFtLNPddBKFlolINF2mRmLHGEvBeDjnUKUgAxCg==
-X-Received: by 2002:a17:902:7044:: with SMTP id h4mr18487738plt.219.1558402539873;
-        Mon, 20 May 2019 18:35:39 -0700 (PDT)
-Received: from localhost ([121.95.100.191])
-        by smtp.gmail.com with ESMTPSA id q17sm31958773pfq.74.2019.05.20.18.35.38
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 20 May 2019 18:35:39 -0700 (PDT)
-From:   Masahisa Kojima <masahisa.kojima@linaro.org>
-To:     linux-i2c@vger.kernel.org, ard.biesheuvel@linaro.org
-Cc:     okamoto.satoru@socionext.com,
-        Masahisa Kojima <masahisa.kojima@linaro.org>
-Subject: [PATCH] i2c: synquacer: fix synquacer_i2c_doxfer() return value
-Date:   Tue, 21 May 2019 10:33:50 +0900
-Message-Id: <20190521013350.8426-1-masahisa.kojima@linaro.org>
-X-Mailer: git-send-email 2.14.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1VJfytKtR9301TV4yIigfBHhzzdmP/kCJaWly5NeECw=;
+        b=f+l78yyCOTm94FHCeiVZWRnFvMnoFBJr9uux4sYcWyxcsw0bKslRXUh4Yc82F/6GaN
+         +cekG0N9c804dqTGfykhhtEKIojV5UfNJxFlUpDn2mXyJAmDijY/TtbZWhMwPb5SPMVQ
+         uGGHAVeb8AfFNs7AqzulEEknqOG6J0fpCdUhEebNJ4MhfPDbgZsZdrrGZj4z+AH8u3Uh
+         ZnAQN0EPI+m+qe27qtHtmy8ILvqmQiQHyWJjCIIY093mHKbuMqcu+H8s43JTUw0P02Q/
+         RCiyhtk6bPGIby3246YYSW0YLH8Lj2IG40rNCzy6Jj5JE2q/vBsqeb/rFe5n9EtIIo+U
+         SqVA==
+X-Gm-Message-State: APjAAAUs45Zbm43UDjLOSR7+ICF3GgjGwawAmiwmifLj/vpUHnwgP051
+        CW8+fk8Tufv2SadGCDdgLARQ+ABirSWzxMmkKzudXA==
+X-Google-Smtp-Source: APXvYqwQ65FRNGritwePEx9wWUtaVGZcdGrhdKHmI16kPdoGImAc/AQd+++yJLNFjIZklQ1Umq8LWsXocXHX7KpUscE=
+X-Received: by 2002:a1f:ae4b:: with SMTP id x72mr9339745vke.10.1558410545214;
+ Mon, 20 May 2019 20:49:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <1558361478-4381-1-git-send-email-sagar.kadam@sifive.com>
+ <1558361478-4381-2-git-send-email-sagar.kadam@sifive.com> <CAL_Jsq+6uL+wqi=5cp1X9JdBfmLDzGz5UjwfqKCCESyhsemnhQ@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+6uL+wqi=5cp1X9JdBfmLDzGz5UjwfqKCCESyhsemnhQ@mail.gmail.com>
+From:   Sagar Kadam <sagar.kadam@sifive.com>
+Date:   Tue, 21 May 2019 09:18:53 +0530
+Message-ID: <CAARK3HkkjOzubSQzHc5aMy8yyZaBwn6AuFJ-yMLdQDK6Vh7vdw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] dt-bindings: i2c: extend existing opencore bindings.
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, Andrew Lunn <andrew@lunn.ch>,
+        peter@korsgaard.com, devicetree@vger.kernel.org,
+        Palmer Dabbelt <palmer@sifive.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-master_xfer should return the number of messages successfully
-processed.
+Hi Rob,
 
-Fixes: 0d676a6c4390 ("i2c: add support for Socionext SynQuacer I2C controller")
-Cc: <stable@vger.kernel.org> # v4.19+
-Signed-off-by: Okamoto Satoru <okamoto.satoru@socionext.com>
-Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
----
- drivers/i2c/busses/i2c-synquacer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-synquacer.c b/drivers/i2c/busses/i2c-synquacer.c
-index f14d4b3fab44..f724c8e6b360 100644
---- a/drivers/i2c/busses/i2c-synquacer.c
-+++ b/drivers/i2c/busses/i2c-synquacer.c
-@@ -351,7 +351,7 @@ static int synquacer_i2c_doxfer(struct synquacer_i2c *i2c,
- 	/* wait 2 clock periods to ensure the stop has been through the bus */
- 	udelay(DIV_ROUND_UP(2 * 1000, i2c->speed_khz));
- 
--	return 0;
-+	return ret;
- }
- 
- static irqreturn_t synquacer_i2c_isr(int irq, void *dev_id)
--- 
-2.14.2
+On Mon, May 20, 2019 at 8:07 PM Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Mon, May 20, 2019 at 9:12 AM Sagar Shrikant Kadam
+> <sagar.kadam@sifive.com> wrote:
+> >
+> > Add FU540-C000 specific device tree bindings to already
+> > available i2-ocores file. This device is available on
+> > HiFive Unleashed Rev A00 board. Move interrupt and interrupt
+> > parents under optional property list as these can be optional.
+> >
+> > The FU540-C000 SoC from sifive, has an Opencore's I2C block
+> > reimplementation.
+> >
+> > The DT compatibility string for this IP is present in HDL and available at.
+> > https://github.com/sifive/sifive-blocks/blob/master/src/main/scala/devices/i2c/I2C.scala#L73
+> >
+> > Signed-off-by: Sagar Shrikant Kadam <sagar.kadam@sifive.com>
+> > ---
+> >  Documentation/devicetree/bindings/i2c/i2c-ocores.txt | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> > index 17bef9a..b73960e 100644
+> > --- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> > +++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> > @@ -2,8 +2,11 @@ Device tree configuration for i2c-ocores
+> >
+> >  Required properties:
+> >  - compatible      : "opencores,i2c-ocores" or "aeroflexgaisler,i2cmst"
+> > +                    "sifive,fu540-c000-i2c" or "sifive,i2c0".
+>
+> It's not an OR because both are required. Please reformat to 1 valid
+> combination per line.
+Yes, will rectify it in V6.
 
+> > +                   for Opencore based I2C IP block reimplemented in
+> > +                   FU540-C000 SoC.Please refer sifive-blocks-ip-versioning.txt
+> > +                   for additional details.
+> >  - reg             : bus address start and address range size of device
+> > -- interrupts      : interrupt number
+> >  - clocks          : handle to the controller clock; see the note below.
+> >                      Mutually exclusive with opencores,ip-clock-frequency
+> >  - opencores,ip-clock-frequency: frequency of the controller clock in Hz;
+> > @@ -12,6 +15,8 @@ Required properties:
+> >  - #size-cells     : should be <0>
+> >
+> >  Optional properties:
+> > +- interrupt-parent: handle to interrupt controller.
+>
+> Drop this. interrupt-parent is implied.
+>
+Sure, will exclude it in v6.
+
+> > +- interrupts      : interrupt number.
+> >  - clock-frequency : frequency of bus clock in Hz; see the note below.
+> >                      Defaults to 100 KHz when the property is not specified
+> >  - reg-shift       : device register offsets are shifted by this value
+> > --
+> > 1.9.1
+> >
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+Thanks,
+Sagar
