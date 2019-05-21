@@ -2,126 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1D425052
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 15:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2873425057
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 15:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728055AbfEUNdE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 May 2019 09:33:04 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:37648 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726995AbfEUNdD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 May 2019 09:33:03 -0400
-Received: by mail-pl1-f194.google.com with SMTP id p15so8472842pll.4
-        for <linux-i2c@vger.kernel.org>; Tue, 21 May 2019 06:33:03 -0700 (PDT)
+        id S1726900AbfEUNdS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 May 2019 09:33:18 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:32928 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727976AbfEUNdS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 May 2019 09:33:18 -0400
+Received: by mail-pf1-f196.google.com with SMTP id z28so9121714pfk.0
+        for <linux-i2c@vger.kernel.org>; Tue, 21 May 2019 06:33:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sifive.com; s=google;
-        h=from:to:subject:date:message-id;
-        bh=6DhNXUXvjOx5TdLJG046rhe1p/zFy9SRsFvLrb3LWAY=;
-        b=S7QjycdUhRwSZortZ4EL6ZO0RapptH+4FI6NLggI3kDl5jIRR9t2VtWQ0ZwxayAbKr
-         MwpfA5hW7RZHgM95EWdEHj9vjZfPfOD+1rN893a8xfMzJvoSIG+Arva07zAxi2XyubQm
-         E6+wDekbmus6Zf1BFBUYL5fis5wa+ybZgMgHJkZbAWpaUaT3eU3Fjcs1lRmjL2qCsk0V
-         DKdPZYPjtoOxk0hAHarIaE3Kbenw789Gx2y5SAfQvrludnt1YckX/9cCt8i2KoTovDjb
-         H0y2UqJpADasHcsIcggS2isUgahHgSFRlhCkkJ7r4dxNWOiocJVHFTkbyHaBufTVEj69
-         uOag==
+        h=from:to:subject:date:message-id:in-reply-to:references;
+        bh=1nncQI8i+UzrmjnlsMRQHRUYfFHMZeTgvwjX0KHzdBA=;
+        b=f26zEdbOr6/dfMG4dZ18wDImXn+s/c9tAyneJjTEQ8q4wwuCQOoRV0s9WNWLE5TY/+
+         6FPXNnznDxFmhxUkuG206BsU1sCn29p1+zIGX1OiapFO5QTKyhVUB7T9pxTo1gsoMxF2
+         snSehzN5j/TwJbSUF0HFLSHe70+I34quFmDL9NC7ctWrpgKRM5kX9le0izOaUO0GdYXR
+         mMkX6faXXaiQrFZAn4GgylFDFlhz239Tc/xJouGdAs3uTuibqre29yXkcDaro6ZLYGHQ
+         xpC2SE/ixcmNRq47e4XR/hQxVwhh5a5TW2CE8szYNM5qHM1UgCbBRXhYawPXuRhmT061
+         AogA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=6DhNXUXvjOx5TdLJG046rhe1p/zFy9SRsFvLrb3LWAY=;
-        b=aDiK3pyWnY2/wtKVe2KqUudfofQfb3OAbZaplQzd1IKUYUCd3UaVH5GNgcTqHGpKo7
-         7StdVakbEPjGXZu8dehhB2GCX86yTirmeJz9MZj/1zfEI9ae2TZwxnyyQlcluPVQaeDu
-         x2xQypDweUL6C6wHkvuI3afqUYCWjGWA7AKCiI4uYouLAkLilahHCxBlp3QsBEbBTv1k
-         y2E+eIO3twHLneYysSLIeIv9LQ64QjjgapJGcNjCLU8AJiXXkhe1FVn5zbXftT6CfUa3
-         EwAQZe8FsjoYi8l05odrAB3MJ6hKNsXuX8AliS+QSse6W0hp/rM5LWIfBVXUgUBO9IXF
-         9Wzw==
-X-Gm-Message-State: APjAAAUN06/Vl3wqizcxM7HcTqmxHzsHGyonjYBQH0DQiUyqXqorEAD+
-        3VXLjWORW8AwKanm40TRhVd1QQ==
-X-Google-Smtp-Source: APXvYqyAjZ5acKN8+o7pqrj3tahQQc6YSy7LvT8KCU7b2OQClCwcHqK3rZuDV4SHB1yXbH6zwRvxiA==
-X-Received: by 2002:a17:902:3103:: with SMTP id w3mr7828797plb.187.1558445582924;
-        Tue, 21 May 2019 06:33:02 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references;
+        bh=1nncQI8i+UzrmjnlsMRQHRUYfFHMZeTgvwjX0KHzdBA=;
+        b=DZz6awQWkh7jwE7YodRgBu1CwtKkwxKLlySSUwd8zbNH7fRkTxVGvDA1No/i8iCZN7
+         6DZobJJ0yUqtn7UG0Al/pNP8M16fs2AWyRdhlDc5uBcEUglcb1TtQzhQj+yYQH3GznP4
+         0vP87BI1srrkNwjk5xJj26Uh7FKsprLrwFLQUgbzco4RZCtNKr/QgBSn09/+RgsSwFu3
+         9nSwZLl0rBYvdbDns3bd/2aBvnheuGcfalGHfFDgDFaDeY9Tlzhs7bqyj3weLZl7+Pca
+         R9I8MLzL2BI82ZrF0mDrjbDU3vssRxvpOqVu7Q6I57Q0vXtByzgd0D5xh7Zu9B98ujcW
+         ijvw==
+X-Gm-Message-State: APjAAAUXtkXIkR3I3gjRGRAsoqhUA/hchXB00MvWcEOSn9tliKNjuc0m
+        m0JCnJFiHdwqLPHamiSQLctHip1TDdiQWw==
+X-Google-Smtp-Source: APXvYqz+cNDOns4a+HlYUkMCadstIOBWgdjWKopWeJjmo4sMLBkDSX21RNmLsVKKcrIEMBu95K3+Og==
+X-Received: by 2002:a65:628b:: with SMTP id f11mr78696250pgv.95.1558445597973;
+        Tue, 21 May 2019 06:33:17 -0700 (PDT)
 Received: from buildserver-90.open-silicon.com ([114.143.65.226])
-        by smtp.googlemail.com with ESMTPSA id d15sm65368906pfm.186.2019.05.21.06.32.59
+        by smtp.googlemail.com with ESMTPSA id d15sm65368906pfm.186.2019.05.21.06.33.14
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 21 May 2019 06:33:02 -0700 (PDT)
+        Tue, 21 May 2019 06:33:17 -0700 (PDT)
 From:   Sagar Shrikant Kadam <sagar.kadam@sifive.com>
 To:     robh+dt@kernel.org, mark.rutland@arm.com, peter@korsgaard.com,
         andrew@lunn.ch, palmer@sifive.com, paul.walmsley@sifive.com,
         sagar.kadam@sifive.com, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 0/3] Extend dt bindings to support I2C on sifive devices and a fix broken IRQ in polling mode.
-Date:   Tue, 21 May 2019 19:02:51 +0530
-Message-Id: <1558445574-16471-1-git-send-email-sagar.kadam@sifive.com>
+Subject: [PATCH v6 1/3] dt-bindings: i2c: extend existing opencore bindings.
+Date:   Tue, 21 May 2019 19:02:52 +0530
+Message-Id: <1558445574-16471-2-git-send-email-sagar.kadam@sifive.com>
 X-Mailer: git-send-email 1.9.1
+In-Reply-To: <1558445574-16471-1-git-send-email-sagar.kadam@sifive.com>
+References: <1558445574-16471-1-git-send-email-sagar.kadam@sifive.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The patch is based on mainline v5.2-rc1 and extends DT-bindings for Opencore based I2C IP block reimplemented 
-in FU540 SoC, available on HiFive unleashed board (Rev A00), and also provides a workaround for broken IRQ
-which affects the already available I2C polling mode interface in mainline, for FU540-C000 chipsets. 
+Reformatted compatibility strings to one valid combination on
+each line.
+Add FU540-C000 specific device tree bindings to already available
+i2-ocores file. This device is available on
+HiFive Unleashed Rev A00 board. Move interrupt under optional
+property list as this can be optional.
 
-The polling mode workaround patch fixes the CPU stall issue, when-ever i2c transfer are initiated.
+The FU540-C000 SoC from sifive, has an Opencore's I2C block
+reimplementation.
 
-This workaround checks if it's a FU540 chipset based on device tree information, and check's for open
-core's IF(interrupt flag) and BUSY flags to break from the polling loop upon completion of transfer.
+The DT compatibility string for this IP is present in HDL and available at.
+https://github.com/sifive/sifive-blocks/blob/master/src/main/scala/devices/i2c/I2C.scala#L73
 
-To test the patch, a PMOD-AD2 sensor is connected to HiFive Unleashed board over J1 connector, and 
-appropriate device node is added into board specific device tree as per the information provided in 
-dt-bindings in Documentation/devicetree/bindings/i2c/i2c-sifive.txt.
-Without this workaround, the CPU stall's infinitely.
+Signed-off-by: Sagar Shrikant Kadam <sagar.kadam@sifive.com>
+---
+ Documentation/devicetree/bindings/i2c/i2c-ocores.txt | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Busybox i2c utilities used to verify workaround : i2cdetect, i2cdump, i2cset, i2cget
-
-
-Patch History:
-V5<->V6:
--Incorporated suggestions on v5 patch as follows:
--Reformatted compatibility strings in dt doc with one valid combination on each line.
--Removed interrupt-parents from optional property list. 
--With rebase to v5.2-rc1, the v5 variant of polling workaround PATCH becomes in-compatible.
- Till kernel v5.1 the polling mode was enabled based on i2c->flags, wherease in kernel v5.2-rc1 polling mode is set as
- master transfer algorithim at probe time itself, and i2c->flags checks are removed.
--Modified v5 to check for SiFive device type in polling function and include the workaround/fix for broken IRQ.
-
-v4<->V5:
--Removed un-necessary checks of OCORES_FLAG_BROKEN_IRQ.
-
-V3<->V4:
--Incorporated suggestions on v3 patch as follows:
--OCORES_FLAG_BROKEN_IRQ BIT position rectified.
--Updated BORKEN_IRQ flag checks such that if sifive device (Fu540-C000) is identified,then use polling mode as IRQ is broken.
-
-V2<->V3:
--Incorporated review comments on v2 patch as follows:
--Rectified compatibility string sequence with the most specific one at the first (dt bindings). 
--Moved interrupts and interrupt-parent under optional property list (dt-bindings).
--Updated reference to sifive-blocks-ip-versioning.txt and URL to IP repository used (dt-bindings).
--Removed example for i2c0 device node from binding doc (dt-bindings).
--Included sifive,i2c0 device under compatibility table in i2c-ocores driver (i2c-ocores).
--Updated polling mode hooks for SoC specific fix to handle broken IRQ (i2c-ocores).
-
-
-V1<->V2:
--Incorporate review comments from Andrew
--Extend dt bindings into i2c-ocores.txt instead of adding new file
--Rename SIFIVE_FLAG_POLL to OCORES_FLAG_BROKEN_IRQ
-
-V1:
--Update dt bindings for sifive i2c devices
--Fix broken IRQ affecting i2c polling mode interface.
-
-
-
-Sagar Shrikant Kadam (3):
-  dt-bindings: i2c: extend existing opencore bindings.
-  i2c-ocores: sifive: add support for i2c device on FU540-c000 SoC.
-  i2c-ocores: sifive: add polling mode workaround for FU540-C000 SoC.
-
- .../devicetree/bindings/i2c/i2c-ocores.txt         |  9 ++++-
- drivers/i2c/busses/i2c-ocores.c                    | 47 +++++++++++++++++++---
- 2 files changed, 49 insertions(+), 7 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+index 17bef9a..6ac062c 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
++++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+@@ -1,9 +1,13 @@
+ Device tree configuration for i2c-ocores
+ 
+ Required properties:
+-- compatible      : "opencores,i2c-ocores" or "aeroflexgaisler,i2cmst"
++- compatible      : "opencores,i2c-ocores",
++		    "aeroflexgaisler,i2cmst",
++                    "sifive,fu540-c000-i2c","sifive,i2c0".
++		    For Opencore based I2C IP block reimplemented in
++		    FU540-C000 SoC.Please refer sifive-blocks-ip-versioning.txt
++		    for additional details.
+ - reg             : bus address start and address range size of device
+-- interrupts      : interrupt number
+ - clocks          : handle to the controller clock; see the note below.
+                     Mutually exclusive with opencores,ip-clock-frequency
+ - opencores,ip-clock-frequency: frequency of the controller clock in Hz;
+@@ -12,6 +16,7 @@ Required properties:
+ - #size-cells     : should be <0>
+ 
+ Optional properties:
++- interrupts      : interrupt number.
+ - clock-frequency : frequency of bus clock in Hz; see the note below.
+                     Defaults to 100 KHz when the property is not specified
+ - reg-shift       : device register offsets are shifted by this value
 -- 
 1.9.1
 
