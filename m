@@ -2,25 +2,25 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF7424A21
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 10:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC1224A23
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2019 10:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbfEUIVs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S1726344AbfEUIVs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Tue, 21 May 2019 04:21:48 -0400
-Received: from sauhun.de ([88.99.104.3]:32992 "EHLO pokefinder.org"
+Received: from sauhun.de ([88.99.104.3]:32996 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726344AbfEUIVr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 21 May 2019 04:21:47 -0400
+        id S1726347AbfEUIVs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 21 May 2019 04:21:48 -0400
 Received: from localhost (p54B334E1.dip0.t-ipconnect.de [84.179.52.225])
-        by pokefinder.org (Postfix) with ESMTPSA id 541112C7789;
+        by pokefinder.org (Postfix) with ESMTPSA id B34E02C77FB;
         Tue, 21 May 2019 10:21:46 +0200 (CEST)
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH 5/8] MAINTAINERS: add I2C DT bindings to Rockchip platform
-Date:   Tue, 21 May 2019 10:21:34 +0200
-Message-Id: <20190521082137.2889-6-wsa@the-dreams.de>
+        Patrice Chotard <patrice.chotard@st.com>
+Subject: [PATCH 6/8] MAINTAINERS: add I2C DT bindings to STI architecture
+Date:   Tue, 21 May 2019 10:21:35 +0200
+Message-Id: <20190521082137.2889-7-wsa@the-dreams.de>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190521082137.2889-1-wsa@the-dreams.de>
 References: <20190521082137.2889-1-wsa@the-dreams.de>
@@ -32,23 +32,23 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: Patrice Chotard <patrice.chotard@st.com>
 ---
  MAINTAINERS | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 1a60cd98aad5..09f32866bdef 100644
+index 09f32866bdef..cce1173be35c 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2145,6 +2145,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- L:	linux-rockchip@lists.infradead.org
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git
+@@ -2281,6 +2281,7 @@ M:	Patrice Chotard <patrice.chotard@st.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ W:	http://www.stlinux.com
  S:	Maintained
-+F:	Documentation/devicetree/bindings/i2c/i2c-rk3x.txt
- F:	arch/arm/boot/dts/rk3*
- F:	arch/arm/boot/dts/rv1108*
- F:	arch/arm/mach-rockchip/
++F:	Documentation/devicetree/bindings/i2c/i2c-st.txt
+ F:	arch/arm/mach-sti/
+ F:	arch/arm/boot/dts/sti*
+ F:	drivers/char/hw_random/st-rng.c
 -- 
 2.19.1
 
