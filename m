@@ -2,256 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E65269EE
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 May 2019 20:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2187D26D47
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 May 2019 21:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729619AbfEVSdo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 May 2019 14:33:44 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:43380 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729642AbfEVSdo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 May 2019 14:33:44 -0400
-Received: by mail-pl1-f195.google.com with SMTP id gn7so1468479plb.10;
-        Wed, 22 May 2019 11:33:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=BhC9WeOPHtKzs6wF/OAOSfwtaNdebLL5sTld3iXl2vA=;
-        b=u4UVkg2qDwlJs0wutP15S/yEDnSRvjLFKvMXuG50ItWQg6l9czyfVvSfq66iI8rS30
-         FdQPsjNufE+neb4C1mU4tGxRM18rLTpAIYxYUebQkFbBeWU0bXILiycRxZU4mSCF+BIY
-         TE6F2aj6ZZtYdjCbByb+z/PHTtk4y/oisgvk5G32HPDaFVILHJ6lCsl61JaEZUcI3g3Q
-         ml6k91j67m21yHA2RVbxB3iUFGxIzhjBlW34jyvoBsqkZ5Uaa1Veybv+b68h1i4Gboei
-         zSnCDknBdqoBPZM3MWdd1r7oFb/udC4JvZU7RbqDLpr36P9WTWWPdluVx06ot+RQH6U9
-         2EUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=BhC9WeOPHtKzs6wF/OAOSfwtaNdebLL5sTld3iXl2vA=;
-        b=ZwXQzXQzKSBYcw6FYb+eNegtv9TTwkZ4hpLJzrL6G9ieRnEBKiTNMgHlwqE3YiVYBP
-         6RAVQYf48baDLKm0eqeRSlAMHIOpfMXMWrev9WJS//tsHG/BQnzeGbdObMNvGxjof5ne
-         fMsvNXieDayE3VwJZo+G3AO8f83Lfr4P60z93rfJut7vOX8pXgJ8fwPhMoGCM5gpWX0O
-         VIHWzlfjzv/geH8+Bqp/xIV3TTJaBnDdKu+vNRlI05bxKpUwtYhWnNr8UDaX8zc8m1Kn
-         ZXjiDa5oOoEkUSkPNPLCCQwAxtTV+vNP1dAIz3S3mzTmgckLLc9IFOJBAOfjzve92DBL
-         O0cw==
-X-Gm-Message-State: APjAAAUruQv0PlCcuYnjW1uL5tHNhaqrSiHUH8SkU2G495dLZoSUr+RU
-        xVqT3h4Dj0GQWDn4QZ6eEUw=
-X-Google-Smtp-Source: APXvYqyuRpl17Tc/hzadvQGMSbZ69rhjVIhec/Fiw4ulJqhce5s3pg9qU3IKhYH6lQOFOSgZeTSXFQ==
-X-Received: by 2002:a17:902:f081:: with SMTP id go1mr44935634plb.211.1558550022639;
-        Wed, 22 May 2019 11:33:42 -0700 (PDT)
-Received: from ajayg.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id c76sm46138294pfc.43.2019.05.22.11.33.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 May 2019 11:33:41 -0700 (PDT)
-From:   Ajay Gupta <ajaykuee@gmail.com>
-X-Google-Original-From: Ajay Gupta <ajayg@nvidia.com>
-To:     heikki.krogerus@linux.intel.com, wsa@the-dreams.de
-Cc:     linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Ajay Gupta <ajayg@nvidia.com>
-Subject: [PATCH v3 5/5] usb: typec: ucsi: ccg: add runtime pm workaround
-Date:   Wed, 22 May 2019 11:31:42 -0700
-Message-Id: <20190522183142.11061-6-ajayg@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190522183142.11061-1-ajayg@nvidia.com>
-References: <20190522183142.11061-1-ajayg@nvidia.com>
-X-NVConfidentiality: public
+        id S1732783AbfEVT3P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 May 2019 15:29:15 -0400
+Received: from alln-iport-2.cisco.com ([173.37.142.89]:60596 "EHLO
+        alln-iport-2.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729466AbfEVT3N (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 May 2019 15:29:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=872; q=dns/txt; s=iport;
+  t=1558553353; x=1559762953;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=7SE77wYHwG03Jg767C9KD7YEVTpFF93beEhebDVXgsk=;
+  b=Pgc5nO/B5QduzV2bx2BYXK2YBG+Fca+iIqw9Ix47FzBg32YIIbTc63OG
+   pL05PgoJEr+3EeSFc1dJNYQMSVfp8xT6PMmkxgF9UG8sHjAMZlTrdNEqx
+   YHIoWxTt2QuRo6S3+tuLZFitWFSJyBgqtP0RTyISUewLkuRBVMQDBDepQ
+   Q=;
+IronPort-PHdr: =?us-ascii?q?9a23=3A91kOnh1nNqOGU1H3smDT+zVfbzU7u7jyIg8e44?=
+ =?us-ascii?q?YmjLQLaKm44pD+JxGDt+51ggrPWoPWo7JfhuzavrqoeFRI4I3J8TgZdYBUER?=
+ =?us-ascii?q?oMiMEYhQslVcCEA2XwLeXhaGoxG8ERHFI=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0AGAACyoeVc/5FdJa1lGQEBAQEBAQE?=
+ =?us-ascii?q?BAQEBAQcBAQEBAQGBUQQBAQEBAQsBgT1QA4E+IAQLKAqHUAOEUooigleJQI1?=
+ =?us-ascii?q?pgS6BJANUCQEBAQwBAS0CAQGEQAKCMSM0CQ4BAwEBBAEBAgEEbRwMhUoBAQE?=
+ =?us-ascii?q?DARIoBgEBNwEECwIBCBEEAQEfECERHQgCBAENBQgahGsDDg8BAp0dAoE1iF+?=
+ =?us-ascii?q?CIIJ5AQEFhQUNC4IPCRSBIAGLUBeBf4ERRoJMPoIagioCgzqCJo1SjSqNADk?=
+ =?us-ascii?q?JAoINjyWDfJYyjF2IS40KAgQCBAUCDgEBBYFPOIFXcBU7gmwTgXwMFxSDOIp?=
+ =?us-ascii?q?TcoEpjCYBgSABAQ?=
+X-IronPort-AV: E=Sophos;i="5.60,500,1549929600"; 
+   d="scan'208";a="277582125"
+Received: from rcdn-core-9.cisco.com ([173.37.93.145])
+  by alln-iport-2.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 22 May 2019 19:29:10 +0000
+Received: from XCH-ALN-015.cisco.com (xch-aln-015.cisco.com [173.36.7.25])
+        by rcdn-core-9.cisco.com (8.15.2/8.15.2) with ESMTPS id x4MJTAuj015185
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=FAIL);
+        Wed, 22 May 2019 19:29:10 GMT
+Received: from xhs-aln-001.cisco.com (173.37.135.118) by XCH-ALN-015.cisco.com
+ (173.36.7.25) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 22 May
+ 2019 14:29:10 -0500
+Received: from xhs-rtp-002.cisco.com (64.101.210.229) by xhs-aln-001.cisco.com
+ (173.37.135.118) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 22 May
+ 2019 14:29:09 -0500
+Received: from NAM04-SN1-obe.outbound.protection.outlook.com (64.101.32.56) by
+ xhs-rtp-002.cisco.com (64.101.210.229) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Wed, 22 May 2019 15:29:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cisco.onmicrosoft.com;
+ s=selector2-cisco-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UjOytL2SZyled10Jhx6GRQspP79SXFzPuQxJZJLshvw=;
+ b=LKU3TDroV/PO4t2iA73ti+T1gDw9tl/ZKS4mlvVFKCR8Vd18y0/nMLunLE3ZfVPlcuuDfg0yG5zipXNOw4XwiQucLz/dTc+Ga6qQBBtARe9hgV6wuSpuocxiEwuWPu+QpA//5yR4/Kb6vZzmYTnO7m0PEBfdS/qJSZrdow7bEQ0=
+Received: from BYAPR11MB3383.namprd11.prod.outlook.com (20.177.186.96) by
+ BYAPR11MB2999.namprd11.prod.outlook.com (20.177.224.160) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.15; Wed, 22 May 2019 19:29:06 +0000
+Received: from BYAPR11MB3383.namprd11.prod.outlook.com
+ ([fe80::a116:fc59:1ebf:5843]) by BYAPR11MB3383.namprd11.prod.outlook.com
+ ([fe80::a116:fc59:1ebf:5843%5]) with mapi id 15.20.1922.017; Wed, 22 May 2019
+ 19:29:06 +0000
+From:   "Ruslan Babayev (fib)" <fib@cisco.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        "20190505220524.37266-2-ruslan@babayev.com" 
+        <20190505220524.37266-2-ruslan@babayev.com>
+CC:     "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "wsa@the-dreams.de" <wsa@the-dreams.de>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>
+Subject: Re: [PATCH RFC v2 net-next 2/2] net: phy: sfp: enable i2c-bus
+ detection on ACPI based systems
+Thread-Topic: [PATCH RFC v2 net-next 2/2] net: phy: sfp: enable i2c-bus
+ detection on ACPI based systems
+Thread-Index: AQHVBG1FwjU1WTeEMUumoWKXpb9bbKZe8vkAgAAKMLqAGKLmaw==
+Date:   Wed, 22 May 2019 19:29:06 +0000
+Message-ID: <BYAPR11MB33837495646A3A0BB23AD1B4AD000@BYAPR11MB3383.namprd11.prod.outlook.com>
+References: <20190505220524.37266-2-ruslan@babayev.com>
+ <20190507003557.40648-3-ruslan@babayev.com>,<20190507023812.GA12262@lunn.ch>,<BYAPR11MB3383B74F06254EDA7157D314AD310@BYAPR11MB3383.namprd11.prod.outlook.com>
+In-Reply-To: <BYAPR11MB3383B74F06254EDA7157D314AD310@BYAPR11MB3383.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=fib@cisco.com; 
+x-originating-ip: [128.107.241.180]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 96dadade-eb8c-4153-f8fe-08d6deebc1b4
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR11MB2999;
+x-ms-traffictypediagnostic: BYAPR11MB2999:
+x-ld-processed: 5ae1af62-9505-4097-a69a-c1553ef7840e,ExtAddr
+x-microsoft-antispam-prvs: <BYAPR11MB2999AE4E49B1EBD6A2A69F14AD000@BYAPR11MB2999.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 0045236D47
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(376002)(346002)(396003)(39860400002)(366004)(199004)(189003)(2906002)(6116002)(3846002)(86362001)(2501003)(4326008)(25786009)(256004)(53936002)(107886003)(4744005)(71200400001)(71190400001)(478600001)(6246003)(476003)(446003)(11346002)(14454004)(486006)(99286004)(66066001)(76176011)(102836004)(26005)(54906003)(53546011)(186003)(7696005)(6506007)(33656002)(316002)(229853002)(68736007)(8676002)(5660300002)(81156014)(81166006)(76116006)(110136005)(66476007)(55016002)(66446008)(7736002)(8936002)(74316002)(66556008)(64756008)(9686003)(305945005)(7416002)(6436002)(66946007)(52536014)(73956011);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR11MB2999;H:BYAPR11MB3383.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: cisco.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: VhDXBxD8aPmjkSX3Du5aBnPtuYS5e5SsqABmO44W4ouq1+9mLk7Kc8gWNeEs5Wd9Wm8UN1d7cKxZECrld+/bPyh8jB1je+niLDkqXbJZsLuRV0Lvqv9LPkryxFvcZjueEIuZhY55LaWFrnqNzOtHBQ5+oc5JHkpS6a8w4nMZn2qLgngBqoVKmxwi/ubb74TlqoDK6hb1Ttqg7v+JtbXYqNLZ5hx4NG70rzV4r9s50Msz/Y56XYKQtpwAtE6WwcS210npMxdfGaZ0aUWXlRGriEpbGieh98hTd1aTs6o0q5uScw5GgZP9VaE8Igp3ORhmaV7wjQtvjpjTti4TAXKPTTDi49LSeDOnEhwPUy04GojvYWF+uOVaBxH998+dtbhpkHjAdST5nsp/dat1eeihSXaJZ+3HsEm5uZrxj2iqm4A=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96dadade-eb8c-4153-f8fe-08d6deebc1b4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2019 19:29:06.6628
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5ae1af62-9505-4097-a69a-c1553ef7840e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fib@cisco.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB2999
+X-OriginatorOrg: cisco.com
+X-Outbound-SMTP-Client: 173.36.7.25, xch-aln-015.cisco.com
+X-Outbound-Node: rcdn-core-9.cisco.com
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Ajay Gupta <ajayg@nvidia.com>
+Hi Andrew,
 
-Cypress USB Type-C CCGx controller firmware version 3.1.10
-(which is being used in many NVIDIA GPU cards) has known issue of
-not triggering interrupt when a USB device is hot plugged to runtime
-resume the controller. If any GPU card gets latest kernel with runtime
-pm support but does not get latest fixed firmware then also it should
-continue to work and therefore a workaround is required to check for
-any connector change event.
+Just wanted to follow up on the patch. Does it look good? Do you have any o=
+ther feedback, concerns with this patch?
 
-The workaround is that i2c bus driver will call pm_request_resume()
-to runtime resume ucsi_ccg driver. CCG driver will call the ISR
-for any connector change event for NVIDIA GPU card and only if it has
-old CCG firmware with the known issue.
+Thanks,
+Ruslan
 
-Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
----
-Changes from v2->v3: None
+________________________________________
+From: Ruslan Babayev (fib)
+Sent: Monday, May 6, 2019 8:15 PM
+To: Andrew Lunn; 20190505220524.37266-2-ruslan@babayev.com
+Cc: linux@armlinux.org.uk; f.fainelli@gmail.com; hkallweit1@gmail.com; mika=
+.westerberg@linux.intel.com; wsa@the-dreams.de; davem@davemloft.net; netdev=
+@vger.kernel.org; linux-kernel@vger.kernel.org; linux-i2c@vger.kernel.org; =
+linux-acpi@vger.kernel.org; xe-linux-external(mailer list)
+Subject: Re: [PATCH RFC v2 net-next 2/2] net: phy: sfp: enable i2c-bus dete=
+ction on ACPI based systems
 
- drivers/usb/typec/ucsi/ucsi_ccg.c | 80 +++++++++++++++++++++++++++++--
- 1 file changed, 76 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index b15bc6c29c46..a5b81c011148 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -109,12 +109,21 @@ struct version_format {
- 	__le16 build;
- 	u8 patch;
- 	u8 ver;
-+#define CCG_VERSION_PATCH(x) ((x) << 16)
-+#define CCG_VERSION(x)	((x) << 24)
- #define CCG_VERSION_MIN_SHIFT (0)
- #define CCG_VERSION_MIN_MASK (0xf << CCG_VERSION_MIN_SHIFT)
- #define CCG_VERSION_MAJ_SHIFT (4)
- #define CCG_VERSION_MAJ_MASK (0xf << CCG_VERSION_MAJ_SHIFT)
- } __packed;
- 
-+/*
-+ * Firmware version 3.1.10 or earlier, built for NVIDIA has known issue
-+ * of missing interrupt when a device is connected for runtime resume
-+ */
-+#define CCG_FW_BUILD_NVIDIA	(('n' << 8) | 'v')
-+#define CCG_OLD_FW_VERSION	(CCG_VERSION(0x31) | CCG_VERSION_PATCH(10))
-+
- struct version_info {
- 	struct version_format base;
- 	struct version_format app;
-@@ -172,6 +181,7 @@ struct ucsi_ccg {
- 	struct ccg_dev_info info;
- 	/* version info for boot, primary and secondary */
- 	struct version_info version[FW2 + 1];
-+	u32 fw_version;
- 	/* CCG HPI communication flags */
- 	unsigned long flags;
- #define RESET_PENDING	0
-@@ -185,6 +195,8 @@ struct ucsi_ccg {
- 
- 	/* fw build with vendor information */
- 	u16 fw_build;
-+	bool run_isr; /* flag to call ISR routine during resume */
-+	struct work_struct pm_work;
- };
- 
- static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
-@@ -212,6 +224,18 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
- 	if (quirks && quirks->max_read_len)
- 		max_read_len = quirks->max_read_len;
- 
-+	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
-+	    uc->fw_version <= CCG_OLD_FW_VERSION) {
-+		mutex_lock(&uc->lock);
-+		/*
-+		 * Do not schedule pm_work to run ISR in
-+		 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
-+		 * since we are already in ISR path.
-+		 */
-+		uc->run_isr = false;
-+		mutex_unlock(&uc->lock);
-+	}
-+
- 	pm_runtime_get_sync(uc->dev);
- 	while (rem_len > 0) {
- 		msgs[1].buf = &data[len - rem_len];
-@@ -254,6 +278,18 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
- 	msgs[0].len = len + sizeof(rab);
- 	msgs[0].buf = buf;
- 
-+	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
-+	    uc->fw_version <= CCG_OLD_FW_VERSION) {
-+		mutex_lock(&uc->lock);
-+		/*
-+		 * Do not schedule pm_work to run ISR in
-+		 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
-+		 * since we are already in ISR path.
-+		 */
-+		uc->run_isr = false;
-+		mutex_unlock(&uc->lock);
-+	}
-+
- 	pm_runtime_get_sync(uc->dev);
- 	status = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
- 	if (status < 0) {
-@@ -383,6 +419,13 @@ static irqreturn_t ccg_irq_handler(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
-+static void ccg_pm_workaround_work(struct work_struct *pm_work)
-+{
-+	struct ucsi_ccg *uc = container_of(pm_work, struct ucsi_ccg, pm_work);
-+
-+	ucsi_notify(uc->ucsi);
-+}
-+
- static int get_fw_info(struct ucsi_ccg *uc)
- {
- 	int err;
-@@ -392,6 +435,9 @@ static int get_fw_info(struct ucsi_ccg *uc)
- 	if (err < 0)
- 		return err;
- 
-+	uc->fw_version = CCG_VERSION(uc->version[FW2].app.ver) |
-+			CCG_VERSION_PATCH(uc->version[FW2].app.patch);
-+
- 	err = ccg_read(uc, CCGX_RAB_DEVICE_MODE, (u8 *)(&uc->info),
- 		       sizeof(uc->info));
- 	if (err < 0)
-@@ -740,11 +786,12 @@ static bool ccg_check_fw_version(struct ucsi_ccg *uc, const char *fw_name,
- 	}
- 
- 	/* compare input version with FWCT version */
--	cur_version = le16_to_cpu(app->build) | app->patch << 16 |
--			app->ver << 24;
-+	cur_version = le16_to_cpu(app->build) | CCG_VERSION_PATCH(app->patch) |
-+			CCG_VERSION(app->ver);
- 
--	new_version = le16_to_cpu(fw_cfg.app.build) | fw_cfg.app.patch << 16 |
--			fw_cfg.app.ver << 24;
-+	new_version = le16_to_cpu(fw_cfg.app.build) |
-+			CCG_VERSION_PATCH(fw_cfg.app.patch) |
-+			CCG_VERSION(fw_cfg.app.ver);
- 
- 	if (!ccg_check_vendor_version(uc, app, &fw_cfg))
- 		goto out_release_firmware;
-@@ -1084,8 +1131,10 @@ static int ucsi_ccg_probe(struct i2c_client *client,
- 	uc->ppm.sync = ucsi_ccg_sync;
- 	uc->dev = dev;
- 	uc->client = client;
-+	uc->run_isr = true;
- 	mutex_init(&uc->lock);
- 	INIT_WORK(&uc->work, ccg_update_firmware);
-+	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
- 
- 	/* Only fail FW flashing when FW build information is not provided */
- 	status = device_property_read_u16(dev, "ccgx,firmware-build",
-@@ -1153,6 +1202,7 @@ static int ucsi_ccg_remove(struct i2c_client *client)
- {
- 	struct ucsi_ccg *uc = i2c_get_clientdata(client);
- 
-+	cancel_work_sync(&uc->pm_work);
- 	cancel_work_sync(&uc->work);
- 	ucsi_unregister_ppm(uc->ucsi);
- 	pm_runtime_disable(uc->dev);
-@@ -1183,6 +1233,28 @@ static int ucsi_ccg_runtime_suspend(struct device *dev)
- 
- static int ucsi_ccg_runtime_resume(struct device *dev)
- {
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct ucsi_ccg *uc = i2c_get_clientdata(client);
-+	bool schedule = true;
-+
-+	/*
-+	 * Firmware version 3.1.10 or earlier, built for NVIDIA has known issue
-+	 * of missing interrupt when a device is connected for runtime resume.
-+	 * Schedule a work to call ISR as a workaround.
-+	 */
-+	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
-+	    uc->fw_version <= CCG_OLD_FW_VERSION) {
-+		mutex_lock(&uc->lock);
-+		if (!uc->run_isr) {
-+			uc->run_isr = true;
-+			schedule = false;
-+		}
-+		mutex_unlock(&uc->lock);
-+
-+		if (schedule)
-+			schedule_work(&uc->pm_work);
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.17.1
+> As i said before, i know ~0 about ACPI. Does devm_gpiod_get() just
+> work for ACPI?
+> Thanks
+>        Andrew
 
+It does.
+
+Regards,
+Ruslan
