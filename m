@@ -2,104 +2,147 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AF4269E4
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 May 2019 20:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C29269E6
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 May 2019 20:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729562AbfEVSdi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 May 2019 14:33:38 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:39339 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        id S1728272AbfEVSdj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 May 2019 14:33:39 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33538 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
         with ESMTP id S1729483AbfEVSdi (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 May 2019 14:33:38 -0400
-Received: by mail-pg1-f195.google.com with SMTP id w22so1740418pgi.6;
-        Wed, 22 May 2019 11:33:37 -0700 (PDT)
+Received: by mail-pg1-f194.google.com with SMTP id h17so1760396pgv.0;
+        Wed, 22 May 2019 11:33:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=RCB+Wwrfoeojn5OomtnKLYYAzLMm3Cgy7bczJAntCUM=;
-        b=R32O6tuRCC5QThL92wCGsKdhHKTRtXhVp4CXxU+bqj8rJqxH6p5e4Or1NrrPz2EuDR
-         QXKNq5im6lCnsncx1XglgqXsqEnU2fuY+z0UC1zngjyPD+vHBCjCLq8ge1GaDQM/Gd0n
-         KCK6GJll4oxC8iTxeIQ5YdgsUPUXRByck6FJNhmYZ4IOMKYOzAiqbWO+hb1ZeEuFcWDc
-         uwRqjZIrMFU/e7hOStzmlngIKDrA7Cfo6HDY3d3eNofg6XpZcoqdKktzADDWWHPlEAPW
-         3/z60kIppAyYTxu5IJlXih8mUS7TK8d0v5gWqyXvJBzJ9zrejQdzR/WU1zeAI3gyLUu4
-         dNQA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=+s+DmZIyyyo+qkPPae5sUO6k73P9MlEz1b0ln8T2CEM=;
+        b=r+8UnKWWKQu3xDRM6dqq6H2tx3R1LmjWojpjKqrUh6GPjkJUY6MZoP6748LjDguJCc
+         2E5RbdyAJn98t0m91DEX/iVmGS6TXVVGp5frSHuMhkdlyDCPo3NJl142OJsa9FWk8Ojj
+         lhoQDHuFMtcElYn4Qq6ndtAplQDO9SAn7vG+QQw8wgpWLkfln2XUwKhNvjIuwDJwKRvm
+         UR6FPDcPdOqOFduxfl/1KkuwbWHR2S14P0d6RkJSINwfm8F77rxPyWee0KUMNaCr2L1A
+         UOWnHrrDpIer9G4ZCJBQkK2CESnWQw/30JhYPl1WZ2LI07Gj18WoEOqADXlOXAfYoTg/
+         6ZZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=RCB+Wwrfoeojn5OomtnKLYYAzLMm3Cgy7bczJAntCUM=;
-        b=YTESJ3lEWQb1JyEMVIeD5kOScwmdwb/v531Ga2/B3tozWJ9A7vIynjrjOeMzEyi7E0
-         GRh+RwWiKOdYAdN9mUfZHpYTzALlV5NVXDBZBCKfp+tyAw5lVxqWQo3LuQlB2PeKQAGU
-         P+GlCDBSjJkVIsWid845hl9bFCp50CMmASwRmZEodTXXs9Fj6Yp9kY17jNGU7teuRsXl
-         au1vwYmxiOCO1oTCnNDgTx0yKkNkYq3ODznWz6znTrOtsSgdTF73i/7J7PG4+vO2SwzD
-         3YBiXU0bB/AuDUw4OP3KYC5+/R2oihzHK9wvDLtkIF5C3een1mzvsnPPGbFQL8PMd1Ho
-         7GmA==
-X-Gm-Message-State: APjAAAXhWLu1gW2N8WPVr9LjePicwsLLeVUf1mhgesEa2dSToXNqBs5A
-        RT3xoc4OQaekzpflQwAP0Ms=
-X-Google-Smtp-Source: APXvYqz6YawLK0+5f+iauXtOgiHzgCAaEjrrezzVp8j4EabNZLP8/g7efWglnpHsQZ0yEJCsA4IVuw==
-X-Received: by 2002:a62:4ed8:: with SMTP id c207mr98395058pfb.241.1558550017231;
-        Wed, 22 May 2019 11:33:37 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=+s+DmZIyyyo+qkPPae5sUO6k73P9MlEz1b0ln8T2CEM=;
+        b=ic7NFKQO5wQvDNZUIxeZrAX6806CdBNG7B2bLG8vusROZMgjG1XkP+svSNcERIupB0
+         XzZTNrl+lqMbNqlZj9yRidkLk0yejnqf1irvqvbXcGECTueRVwmeGtTYszDd+Vw++Qax
+         c43O5Co//7hYWxfiNKB3HRvVUQEeMZ1iINoyztA1bjhk6/x6NyIp2w8aklqLLuZazb11
+         EOX4MU+AoTaXjS0QXAIjQE/ZMlu6gERL0orK8pDrOoNjZdicUdQQ4aaN/eFLPPUhRE+q
+         f3JgT4CLCaGypArNkLbT7TM04BZhzYdzqkLHdmZwqu2ak1QpttPf/BO7CEL9I+L7P+J1
+         ke+w==
+X-Gm-Message-State: APjAAAUx8C/tInix8/bAa97VNNsmzeX4RQJQpqwAX5KEDSNaoTHttvkm
+        s81ZMyB1ojgKhQqnpeMWgS5wr/61ITQ=
+X-Google-Smtp-Source: APXvYqy126bYA6YOJMC0w/jX7oEZuowWtzQPG1iadAoJ5sDno3uSMLsYfnkBphFc+dHo4NW4r9QIMA==
+X-Received: by 2002:aa7:8683:: with SMTP id d3mr52001783pfo.145.1558550018258;
+        Wed, 22 May 2019 11:33:38 -0700 (PDT)
 Received: from ajayg.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id c76sm46138294pfc.43.2019.05.22.11.33.35
+        by smtp.gmail.com with ESMTPSA id c76sm46138294pfc.43.2019.05.22.11.33.37
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 May 2019 11:33:36 -0700 (PDT)
+        Wed, 22 May 2019 11:33:37 -0700 (PDT)
 From:   Ajay Gupta <ajaykuee@gmail.com>
 X-Google-Original-From: Ajay Gupta <ajayg@nvidia.com>
 To:     heikki.krogerus@linux.intel.com, wsa@the-dreams.de
 Cc:     linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
         Ajay Gupta <ajayg@nvidia.com>
-Subject: [PATCH v3 0/5] usb: typec: ucsi: ccg: add runtime pm support
-Date:   Wed, 22 May 2019 11:31:37 -0700
-Message-Id: <20190522183142.11061-1-ajayg@nvidia.com>
+Subject: [PATCH v3 1/5] i2c: nvidia-gpu: refactor master_xfer
+Date:   Wed, 22 May 2019 11:31:38 -0700
+Message-Id: <20190522183142.11061-2-ajayg@nvidia.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190522183142.11061-1-ajayg@nvidia.com>
+References: <20190522183142.11061-1-ajayg@nvidia.com>
 X-NVConfidentiality: public
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Heikki and Wolfram
+From: Ajay Gupta <ajayg@nvidia.com>
 
-These patches add support for runtime power management for UCSI CCGx driver.
-I have tested them with NVIDIA GPU card which has i2c interface to talk to
-CCG controller. I have added runtime pm support for the i2c bus driver as well.
+Added a local variable "send_stop" to simplify "goto" statements.
 
-Third version (v3) of patches fix comments from Heikki on adding common function
-in ucsi.c which can be used by both ucsi_ccg and ucsi_acpi.
+The "send_stop" handles below two case
+1) When first i2c start fails and so i2c stop is not sent before
+exiting
 
-First patch refactors master_xfer() of i2c driver fixing comment from Wolfram.
-Second and third patch add support for runtime pm in i2c bus driver and UCSI CCGx
-driver.
+2) When i2c stop failed after all transfers and we do not need to
+send another stop before exiting.
 
-Last two patches add workaround for an old version of ccg firmware
-which has known issue of missing interrupt when a device is connected
-to runtime resume the ccg controller. The workaround is needed because
-if a GPU card doesn't get new firmware but gets new kernel then also it
-should continue to work. The workaround is to request runtime resume of
-i2c client which is UCSI Cypress CCGx driver. CCG driver will call the ISR
-for any connector change event only if NVIDIA GPU has old CCG firmware with
-the known issue.
+Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
+---
+Changes from v2->v3: None
 
-All the five patches should go together since ucsi_ccg driver is dependent
-on i2c driver for runtime pm wokaround. I would prefer it to go through
-usb-tree since usb ucsi_ccg driver is the main driver getting runtime pm
-functionality with the series.
+ drivers/i2c/busses/i2c-nvidia-gpu.c | 27 ++++++++++++++++-----------
+ 1 file changed, 16 insertions(+), 11 deletions(-)
 
-Thanks
-Ajay
-
-Ajay Gupta (5):
-  i2c: nvidia-gpu: refactor master_xfer
-  i2c: nvidia-gpu: add runtime pm support
-  usb: typec: ucsi: ccg: enable runtime pm support
-  i2c: nvidia-gpu: resume ccgx i2c client
-  usb: typec: ucsi: ccg: add runtime pm workaround
-
- drivers/i2c/busses/i2c-nvidia-gpu.c |  60 ++++++++++----
- drivers/usb/typec/ucsi/ucsi.c       |  10 +++
- drivers/usb/typec/ucsi/ucsi.h       |   1 +
- drivers/usb/typec/ucsi/ucsi_ccg.c   | 118 +++++++++++++++++++++++++++-
- 4 files changed, 169 insertions(+), 20 deletions(-)
-
+diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
+index 1c8f708f212b..2d9561ec2320 100644
+--- a/drivers/i2c/busses/i2c-nvidia-gpu.c
++++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
+@@ -169,6 +169,7 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *adap,
+ {
+ 	struct gpu_i2c_dev *i2cd = i2c_get_adapdata(adap);
+ 	int status, status2;
++	bool send_stop = true;
+ 	int i, j;
+ 
+ 	/*
+@@ -182,37 +183,41 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *adap,
+ 			/* gpu_i2c_read has implicit start */
+ 			status = gpu_i2c_read(i2cd, msgs[i].buf, msgs[i].len);
+ 			if (status < 0)
+-				goto stop;
++				goto exit;
+ 		} else {
+ 			u8 addr = i2c_8bit_addr_from_msg(msgs + i);
+ 
+ 			status = gpu_i2c_start(i2cd);
+ 			if (status < 0) {
+ 				if (i == 0)
+-					return status;
+-				goto stop;
++					send_stop = false;
++				goto exit;
+ 			}
+ 
+ 			status = gpu_i2c_write(i2cd, addr);
+ 			if (status < 0)
+-				goto stop;
++				goto exit;
+ 
+ 			for (j = 0; j < msgs[i].len; j++) {
+ 				status = gpu_i2c_write(i2cd, msgs[i].buf[j]);
+ 				if (status < 0)
+-					goto stop;
++					goto exit;
+ 			}
+ 		}
+ 	}
+ 	status = gpu_i2c_stop(i2cd);
+-	if (status < 0)
+-		return status;
++	if (status < 0) {
++		send_stop = false;
++		goto exit;
++	}
+ 
+ 	return i;
+-stop:
+-	status2 = gpu_i2c_stop(i2cd);
+-	if (status2 < 0)
+-		dev_err(i2cd->dev, "i2c stop failed %d\n", status2);
++exit:
++	if (send_stop) {
++		status2 = gpu_i2c_stop(i2cd);
++		if (status2 < 0)
++			dev_err(i2cd->dev, "i2c stop failed %d\n", status2);
++	}
+ 	return status;
+ }
+ 
 -- 
 2.17.1
 
