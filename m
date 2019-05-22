@@ -2,55 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C29269E6
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 May 2019 20:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB64269E8
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 May 2019 20:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728272AbfEVSdj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 May 2019 14:33:39 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33538 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729483AbfEVSdi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 May 2019 14:33:38 -0400
-Received: by mail-pg1-f194.google.com with SMTP id h17so1760396pgv.0;
-        Wed, 22 May 2019 11:33:38 -0700 (PDT)
+        id S1729576AbfEVSdk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 May 2019 14:33:40 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40577 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729483AbfEVSdk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 May 2019 14:33:40 -0400
+Received: by mail-pf1-f196.google.com with SMTP id u17so1765175pfn.7;
+        Wed, 22 May 2019 11:33:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=+s+DmZIyyyo+qkPPae5sUO6k73P9MlEz1b0ln8T2CEM=;
-        b=r+8UnKWWKQu3xDRM6dqq6H2tx3R1LmjWojpjKqrUh6GPjkJUY6MZoP6748LjDguJCc
-         2E5RbdyAJn98t0m91DEX/iVmGS6TXVVGp5frSHuMhkdlyDCPo3NJl142OJsa9FWk8Ojj
-         lhoQDHuFMtcElYn4Qq6ndtAplQDO9SAn7vG+QQw8wgpWLkfln2XUwKhNvjIuwDJwKRvm
-         UR6FPDcPdOqOFduxfl/1KkuwbWHR2S14P0d6RkJSINwfm8F77rxPyWee0KUMNaCr2L1A
-         UOWnHrrDpIer9G4ZCJBQkK2CESnWQw/30JhYPl1WZ2LI07Gj18WoEOqADXlOXAfYoTg/
-         6ZZQ==
+        bh=YoK+jgaU1pOd7oo6QR907tculPG9SXxwXBTXzfSOuBU=;
+        b=iVQsKyeUq9yL72EEQ5/lIWNKVEYgwxL46XN72hG1z90cliDdCSSaFbPRYr7i2UvzhV
+         c2/sTQ672TaJNo2sEsO3aUsTVep/rFYYD/zVRDzfrmaXYTCqBVdrmq7o+CgmW482gI0P
+         ItEcFRbWySaEkXHksrenbAh92Ylir10djOsh+YgaLwQ1Fo0NJS03yITVMeRyaEKL3x6B
+         l1zFW3Bi6KNObiNjbAwPQDVrvtHbYOg7B4gaAY4f3If9MhILgxY6gmYqD1VtHztyiZCW
+         WsyfHc2uBSgEy2ctPijhVZzKvArlg8KeXqokRHRfy3hKOBLsxHRtpFfsPPTcRdCqHnxP
+         +n6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=+s+DmZIyyyo+qkPPae5sUO6k73P9MlEz1b0ln8T2CEM=;
-        b=ic7NFKQO5wQvDNZUIxeZrAX6806CdBNG7B2bLG8vusROZMgjG1XkP+svSNcERIupB0
-         XzZTNrl+lqMbNqlZj9yRidkLk0yejnqf1irvqvbXcGECTueRVwmeGtTYszDd+Vw++Qax
-         c43O5Co//7hYWxfiNKB3HRvVUQEeMZ1iINoyztA1bjhk6/x6NyIp2w8aklqLLuZazb11
-         EOX4MU+AoTaXjS0QXAIjQE/ZMlu6gERL0orK8pDrOoNjZdicUdQQ4aaN/eFLPPUhRE+q
-         f3JgT4CLCaGypArNkLbT7TM04BZhzYdzqkLHdmZwqu2ak1QpttPf/BO7CEL9I+L7P+J1
-         ke+w==
-X-Gm-Message-State: APjAAAUx8C/tInix8/bAa97VNNsmzeX4RQJQpqwAX5KEDSNaoTHttvkm
-        s81ZMyB1ojgKhQqnpeMWgS5wr/61ITQ=
-X-Google-Smtp-Source: APXvYqy126bYA6YOJMC0w/jX7oEZuowWtzQPG1iadAoJ5sDno3uSMLsYfnkBphFc+dHo4NW4r9QIMA==
-X-Received: by 2002:aa7:8683:: with SMTP id d3mr52001783pfo.145.1558550018258;
-        Wed, 22 May 2019 11:33:38 -0700 (PDT)
+        bh=YoK+jgaU1pOd7oo6QR907tculPG9SXxwXBTXzfSOuBU=;
+        b=hO9zt7scV33R3on5Cev3UMwJTkz5YwExmGQaiHMOH/XXhgxXFvTfe2FeV7miJ2cMpX
+         4KJNKU4NgdpD9Ff6YJ6r40Dwb0t9YpJZRszd+zw2uqJnP4LpXAwKIwcQLXL5S31IIqbz
+         VvhFQmhzvrE3tGVXQNS18hmthB3BO28O0LV3BkYmQpwKBJ87UMXo1y3/v7atKqy4H22k
+         zl5NmQZ4ErxUqm6wbLbgMqGUM2FqCWnguq0U1MAcY3dzWdhvJwNOuhSznUp1gmPVChGb
+         Mv3e5VEKy5jc9FbAlbqbB1dYIBtaMzUtyYQlD/zjntG7OwCM8sVj5hk3n0gu/QieN2ca
+         YobA==
+X-Gm-Message-State: APjAAAUYVi31F06WiWFl7cbqeBcfRchDlH0/AfVq7fZ8iID8wCWE32AB
+        Uu/PCVmwvb9/LYtoieYlIKc=
+X-Google-Smtp-Source: APXvYqx/BBjjG2Eu83fRK1vK1iv/YqOnWWwzLpg801zivaQ+9i7m+QApV1UJub6N+MTqG4oSwpqA3Q==
+X-Received: by 2002:a62:ed09:: with SMTP id u9mr98806615pfh.23.1558550019516;
+        Wed, 22 May 2019 11:33:39 -0700 (PDT)
 Received: from ajayg.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id c76sm46138294pfc.43.2019.05.22.11.33.37
+        by smtp.gmail.com with ESMTPSA id c76sm46138294pfc.43.2019.05.22.11.33.38
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 May 2019 11:33:37 -0700 (PDT)
+        Wed, 22 May 2019 11:33:38 -0700 (PDT)
 From:   Ajay Gupta <ajaykuee@gmail.com>
 X-Google-Original-From: Ajay Gupta <ajayg@nvidia.com>
 To:     heikki.krogerus@linux.intel.com, wsa@the-dreams.de
 Cc:     linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
         Ajay Gupta <ajayg@nvidia.com>
-Subject: [PATCH v3 1/5] i2c: nvidia-gpu: refactor master_xfer
-Date:   Wed, 22 May 2019 11:31:38 -0700
-Message-Id: <20190522183142.11061-2-ajayg@nvidia.com>
+Subject: [PATCH v3 2/5] i2c: nvidia-gpu: add runtime pm support
+Date:   Wed, 22 May 2019 11:31:39 -0700
+Message-Id: <20190522183142.11061-3-ajayg@nvidia.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190522183142.11061-1-ajayg@nvidia.com>
 References: <20190522183142.11061-1-ajayg@nvidia.com>
@@ -62,87 +62,88 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Ajay Gupta <ajayg@nvidia.com>
 
-Added a local variable "send_stop" to simplify "goto" statements.
-
-The "send_stop" handles below two case
-1) When first i2c start fails and so i2c stop is not sent before
-exiting
-
-2) When i2c stop failed after all transfers and we do not need to
-send another stop before exiting.
+Enable runtime pm support with autosuspend delay of three second.
+This is to make sure I2C client device Cypress CCGx has completed
+all transaction.
 
 Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
 ---
-Changes from v2->v3: None
+Changes from v1->v2:
+	- Added __maybe_unused in gpu_i2c_suspend to avoid
+	warning when CONFIG_PM is disabled. 
 
- drivers/i2c/busses/i2c-nvidia-gpu.c | 27 ++++++++++++++++-----------
- 1 file changed, 16 insertions(+), 11 deletions(-)
+ drivers/i2c/busses/i2c-nvidia-gpu.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-index 1c8f708f212b..2d9561ec2320 100644
+index 2d9561ec2320..28fee85135ac 100644
 --- a/drivers/i2c/busses/i2c-nvidia-gpu.c
 +++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-@@ -169,6 +169,7 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *adap,
- {
- 	struct gpu_i2c_dev *i2cd = i2c_get_adapdata(adap);
- 	int status, status2;
-+	bool send_stop = true;
- 	int i, j;
- 
- 	/*
-@@ -182,37 +183,41 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *adap,
- 			/* gpu_i2c_read has implicit start */
- 			status = gpu_i2c_read(i2cd, msgs[i].buf, msgs[i].len);
- 			if (status < 0)
--				goto stop;
-+				goto exit;
- 		} else {
- 			u8 addr = i2c_8bit_addr_from_msg(msgs + i);
- 
- 			status = gpu_i2c_start(i2cd);
- 			if (status < 0) {
- 				if (i == 0)
--					return status;
--				goto stop;
-+					send_stop = false;
-+				goto exit;
- 			}
- 
- 			status = gpu_i2c_write(i2cd, addr);
- 			if (status < 0)
--				goto stop;
-+				goto exit;
- 
- 			for (j = 0; j < msgs[i].len; j++) {
- 				status = gpu_i2c_write(i2cd, msgs[i].buf[j]);
- 				if (status < 0)
--					goto stop;
-+					goto exit;
- 			}
- 		}
+@@ -176,6 +176,7 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *adap,
+ 	 * The controller supports maximum 4 byte read due to known
+ 	 * limitation of sending STOP after every read.
+ 	 */
++	pm_runtime_get_sync(i2cd->dev);
+ 	for (i = 0; i < num; i++) {
+ 		if (msgs[i].flags & I2C_M_RD) {
+ 			/* program client address before starting read */
+@@ -211,6 +212,8 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *adap,
+ 		goto exit;
  	}
- 	status = gpu_i2c_stop(i2cd);
--	if (status < 0)
--		return status;
-+	if (status < 0) {
-+		send_stop = false;
-+		goto exit;
-+	}
  
++	pm_runtime_mark_last_busy(i2cd->dev);
++	pm_runtime_put_autosuspend(i2cd->dev);
  	return i;
--stop:
--	status2 = gpu_i2c_stop(i2cd);
--	if (status2 < 0)
--		dev_err(i2cd->dev, "i2c stop failed %d\n", status2);
-+exit:
-+	if (send_stop) {
-+		status2 = gpu_i2c_stop(i2cd);
-+		if (status2 < 0)
-+			dev_err(i2cd->dev, "i2c stop failed %d\n", status2);
-+	}
+ exit:
+ 	if (send_stop) {
+@@ -218,6 +221,8 @@ static int gpu_i2c_master_xfer(struct i2c_adapter *adap,
+ 		if (status2 < 0)
+ 			dev_err(i2cd->dev, "i2c stop failed %d\n", status2);
+ 	}
++	pm_runtime_mark_last_busy(i2cd->dev);
++	pm_runtime_put_autosuspend(i2cd->dev);
  	return status;
  }
  
+@@ -337,6 +342,11 @@ static int gpu_i2c_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		goto del_adapter;
+ 	}
+ 
++	pm_runtime_set_autosuspend_delay(&pdev->dev, 3000);
++	pm_runtime_use_autosuspend(&pdev->dev);
++	pm_runtime_put_autosuspend(&pdev->dev);
++	pm_runtime_allow(&pdev->dev);
++
+ 	return 0;
+ 
+ del_adapter:
+@@ -350,10 +360,16 @@ static void gpu_i2c_remove(struct pci_dev *pdev)
+ {
+ 	struct gpu_i2c_dev *i2cd = dev_get_drvdata(&pdev->dev);
+ 
++	pm_runtime_get_noresume(i2cd->dev);
+ 	i2c_del_adapter(&i2cd->adapter);
+ 	pci_free_irq_vectors(pdev);
+ }
+ 
++static __maybe_unused int gpu_i2c_suspend(struct device *dev)
++{
++	return 0;
++}
++
+ static __maybe_unused int gpu_i2c_resume(struct device *dev)
+ {
+ 	struct gpu_i2c_dev *i2cd = dev_get_drvdata(dev);
+@@ -362,7 +378,8 @@ static __maybe_unused int gpu_i2c_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static UNIVERSAL_DEV_PM_OPS(gpu_i2c_driver_pm, NULL, gpu_i2c_resume, NULL);
++static UNIVERSAL_DEV_PM_OPS(gpu_i2c_driver_pm, gpu_i2c_suspend, gpu_i2c_resume,
++			    NULL);
+ 
+ static struct pci_driver gpu_i2c_driver = {
+ 	.name		= "nvidia-gpu",
 -- 
 2.17.1
 
