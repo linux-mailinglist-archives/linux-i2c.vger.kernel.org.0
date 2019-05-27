@@ -2,44 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A7A2BA82
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 May 2019 21:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05022BA95
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 May 2019 21:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727120AbfE0TGU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 May 2019 15:06:20 -0400
-Received: from sauhun.de ([88.99.104.3]:35954 "EHLO pokefinder.org"
+        id S1727350AbfE0TPh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 May 2019 15:15:37 -0400
+Received: from sauhun.de ([88.99.104.3]:36064 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726931AbfE0TGU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 27 May 2019 15:06:20 -0400
+        id S1726801AbfE0TPh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 27 May 2019 15:15:37 -0400
 Received: from localhost (p5486CF59.dip0.t-ipconnect.de [84.134.207.89])
-        by pokefinder.org (Postfix) with ESMTPSA id E71772C04C2;
-        Mon, 27 May 2019 21:06:17 +0200 (CEST)
-Date:   Mon, 27 May 2019 21:06:17 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id EE0C02C04C2;
+        Mon, 27 May 2019 21:15:34 +0200 (CEST)
+Date:   Mon, 27 May 2019 21:15:34 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Anson Huang <anson.huang@nxp.com>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "eha@deif.com" <eha@deif.com>,
-        "linux@rempel-privat.de" <linux@rempel-privat.de>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        "peda@axentia.se" <peda@axentia.se>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH] i2c: imx: Use __maybe_unused instead of #if CONFIG_PM
-Message-ID: <20190527190617.GC8808@kunai>
-References: <1557026820-29428-1-git-send-email-Anson.Huang@nxp.com>
+To:     Annaliese McDermond <nh6z@nh6z.net>
+Cc:     Eric Anholt <eric@anholt.net>, stefan.wahren@i2se.com,
+        f.fainelli@gmail.com, swarren@wwwdotorg.org,
+        linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, team@nwdigitalradio.com
+Subject: Re: [PATCH v2] i2c: bcm2835: Model Divider in CCF
+Message-ID: <20190527191534.GD8808@kunai>
+References: <20190508071227.18609-1-nh6z@nh6z.net>
+ <4174B26B-4E3A-4CCA-A5ED-BE62A3B5E66A@nh6z.net>
+ <20190516075848.GA1033@kunai>
+ <2E6EDCD1-E0B1-4859-BD75-EF411D3D4C6B@nh6z.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LwW0XdcUbUexiWVK"
+        protocol="application/pgp-signature"; boundary="rz+pwK2yUstbofK6"
 Content-Disposition: inline
-In-Reply-To: <1557026820-29428-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <2E6EDCD1-E0B1-4859-BD75-EF411D3D4C6B@nh6z.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -47,38 +39,54 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LwW0XdcUbUexiWVK
+--rz+pwK2yUstbofK6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, May 05, 2019 at 03:31:55AM +0000, Anson Huang wrote:
-> Use __maybe_unused for runtime PM related functions instead
-> of #if CONFIG_PM to simply the code.
+Annaliese,
+
+> Thank you very much for your response.
+
+You are welcome.
+> I was also similarly nervous about a clock provider being outside of=20
+> drivers/clk, especially since one of the instances of that I wrote.
 >=20
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> When writing this, there was a certain logic to putting this inside of
+> clk-bcm2835.c instead.  Eric may like this approach better because there
+> will probably be more code reuse of some of the dividers he uses in that
+> driver. =20
 
-Applied to for-next, thanks!
+Regardless which solution is favoured, I am going to apply this patch in
+a minute:
 
+http://patchwork.ozlabs.org/patch/1097688/
 
---LwW0XdcUbUexiWVK
+It enables this driver for ARCH_BRCMSTB. So, the solution should work
+for this as well. (I don't know any of these platforms well)
+
+Regards,
+
+   Wolfram
+
+--rz+pwK2yUstbofK6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzsNSkACgkQFA3kzBSg
-KbYqkQ//bc++1BsW2mcNsRYs3x+wn7q33xEltFS/Z+l6e7RdQVqrbo6J9choQYao
-8P7UHRFbYv8P/DtFXQIG4kiVtq0ERHpzQu6FAn6UX3QaKhgk86/AEoYIsq6CwLKD
-w57KoElNhrBz3uLl6/jjRVwRM7xUZ2A3c2QCBu1J+J0Pe6iPDvU59EuoS71bv4Ye
-w+w/1bMmL/RuZQ2zCB1rnyzTGjUHSIhNpsbQnZ8xeRXeFfmuMy5V6jE5sXE5Dbkg
-jTAiEkH/l9hAOnSWLFJSSkNpWO42dRBdSRiTbEM9ToMX9DBzCpaqeZyFXRHKrfXQ
-TTLbIZfn/5Eek3kg2WtaZp7y85M6sjR84eURdcKfOSmmIEGSWjubXoSoaLzZdPfM
-SJReS6LxzeQDHNSZmbavdylmke1Cru8wH7E6bqShililnycrAe1TwBG9Gh/HEYu5
-uSiqtPsURs+Lg8IOy1hbMoexCWFstG7y7FgzzVwLB6Pwe6WLlVRRdN1kDb1lnnYJ
-tna9+IFQdpY22udjjjv/+a/L/PgT1lby1/zhVvBKu8tLhLclh6m9jm05ov9OaE49
-TkM5052NAD+uDrMamDOkKXQX33dinDehP/WmVyItEbgIWbe0HvGXaH+HBVlVKvrs
-Skipi7i5xJUIOINUg0kjZa9+w1BVMfXFqQJNHbP14NAcbcPzZz0=
-=BAhy
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzsN1YACgkQFA3kzBSg
+Kbb1dw//QS+QQ+6Ka2TybGbcATjH7NybVWBniOTptTCbQCN311faU5s1tZX8Sgpo
+Ljx4Y59PQRKdaB6LoIjl9d8lHA3LaMfRg/vMij5g552liEl6eWp8KOBlVUEsBAVU
+DYkU9sNnEcFT48PyM5fzQLtPTcYUFlfbs5VSXzGDqQzliUNzMkdGIfWNTYtgYtRO
+ckLUDRc7ALC/QZ3y7WEJqr/goaAZV2+2ao5D7jAe3Eu30ZvqrVlLCHPf+vtFDUJ5
+6P3FzeGRTvLHzxhW5Segip1iEyMNOjLuZvc0+fXgOyLND1DDVrO9cws7j7u9pyhl
+zl2Ot2xAOF3nEVnkxcpTAsEx9m07cW95wOhSTUDcW/IEIEqrlp1krlqqIoy8mWN3
+wT2Gnno+g8Wr/It5BC26Ei3WaW+ZLqFQxyePxrdFqG28/60qLBKaKGsHyCNFh9D/
+SSwHqEfwRs9QkUQTA1pKaMZIFsrJg2AVL44CuPpcS+xTcUowyFI7tBJ+t2OogGrh
+2qPFfgUpRkD4EoxKiZCcGwaEtY5qcDXZOWUWo4tTBUopXIbeLhaEva1U0Yc28Kx2
+/+PRal68slAZt31SP5f+FcxXfq6fb/RIOR6VRS2R69ooyxj1/2tCZcxTgvJ07h1+
+3XkG3WfsyjKjYuKHq4YKabkaQ2t5pXhAw3IOJdhoKLGrOylyryk=
+=u+lI
 -----END PGP SIGNATURE-----
 
---LwW0XdcUbUexiWVK--
+--rz+pwK2yUstbofK6--
