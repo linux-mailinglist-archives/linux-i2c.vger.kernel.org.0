@@ -2,44 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DE42BAA6
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 May 2019 21:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636C42BAAB
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 May 2019 21:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726837AbfE0TV7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 May 2019 15:21:59 -0400
-Received: from sauhun.de ([88.99.104.3]:36148 "EHLO pokefinder.org"
+        id S1727368AbfE0TZq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 May 2019 15:25:46 -0400
+Received: from sauhun.de ([88.99.104.3]:36198 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726484AbfE0TV7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 27 May 2019 15:21:59 -0400
+        id S1726484AbfE0TZq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 27 May 2019 15:25:46 -0400
 Received: from localhost (p5486CF59.dip0.t-ipconnect.de [84.134.207.89])
-        by pokefinder.org (Postfix) with ESMTPSA id 2F9372C04C2;
-        Mon, 27 May 2019 21:21:57 +0200 (CEST)
-Date:   Mon, 27 May 2019 21:21:56 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 155E12C7C9F;
+        Mon, 27 May 2019 21:25:45 +0200 (CEST)
+Date:   Mon, 27 May 2019 21:25:44 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Vignesh R <vigneshr@ti.com>,
-        Eddie James <eajames@linux.vnet.ibm.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        Karthikeyan Ramasubramanian <kramasub@codeaurora.org>,
-        Juergen Fitschen <jfi@ssv-embedded.de>,
-        Elie Morisse <syniurge@gmail.com>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: Allow selecting BCM2835 I2C controllers on
- ARCH_BRCMSTB
-Message-ID: <20190527192156.GF8808@kunai>
-References: <20190509210438.28223-1-f.fainelli@gmail.com>
+To:     Vadim Pasternak <vadimp@mellanox.com>
+Cc:     linux-i2c@vger.kernel.org, michaels@mellanox.com
+Subject: Re: [PATCH v1 i2c] i2c: mlxcpld: Fix wrong initialization order in
+ probe
+Message-ID: <20190527192544.GG8808@kunai>
+References: <20190516171541.7760-1-vadimp@mellanox.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dWYAkE0V1FpFQHQ3"
+        protocol="application/pgp-signature"; boundary="df+09Je9rNq3P+GE"
 Content-Disposition: inline
-In-Reply-To: <20190509210438.28223-1-f.fainelli@gmail.com>
+In-Reply-To: <20190516171541.7760-1-vadimp@mellanox.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -47,41 +34,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---dWYAkE0V1FpFQHQ3
+--df+09Je9rNq3P+GE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 09, 2019 at 02:04:36PM -0700, Florian Fainelli wrote:
-> From: Kamal Dasu <kdasu.kdev@gmail.com>
+On Thu, May 16, 2019 at 05:15:41PM +0000, Vadim Pasternak wrote:
+> Fix wrong order in probing routine initialization - field `base_addr'
+> is used before it's initialized. Move assignment of 'priv->base_addr`
+> to the beginning, prior the call to mlxcpld_i2c_read_comm().
+> Wrong order caused the first read of capability register to be executed
+> at wrong offset 0x0 instead of 0x2000. By chance it was a "good
+> garbage" at 0x0 offset.
 >=20
-> ARCH_BRCMSTB platforms have the BCM2835 I2C controllers, allow
-> selecting the i2c-bcm2835 driver on such platforms.
->=20
-> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Fixes: 313ce648b5a4 ("i2c: mlxcpld: Add support for extended transaction =
+length for i2c-mlxcpld")
+> Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
 
-Applied to for-next, thanks!
+Applied to for-current and added a stable tag, thanks!
 
 
---dWYAkE0V1FpFQHQ3
+--df+09Je9rNq3P+GE
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzsONQACgkQFA3kzBSg
-KbYiRQ//Rt13LD4OiH6Oi2ARvnFvTNUEFodH7gJfdfIQqEGg6uTRfRJMdh9pPFgN
-SbhXmxB0Jy9J65kG06L1OZoPmsykZOvlxdcdXU8/OOUALe7Uz/P9UW4stPAb+PE6
-Qpa7i50R/Sl8xaDxNFXw2pjHdOU/dO4zFkw+pGaGXB8YxxtiVp2ZBebBD3dtsgGv
-PEDxTmcFwC2xv7eLBVXE+rEbpAu8QB5EwijobxMUdGjl7x0z3T0Adb2HRY0FviQH
-TxX06BfENtqiZAiLKSLsGj4jxdb1YrrCVeleBZMu0nFpgrZmemVMrysfSPbm9EAB
-GHcAG6QYx82EDuosRui3BcJ7ZKu5tDp9nlv04p8MCikem5PG0oNQYHSrt46ghvVb
-ahSaT3qMC7VuzkRrJapraLKtjVaMfM4b8B/zyLOV1B9ZTMhO82o9R+XEUWRO0rXl
-TpTF/Lk0hwj0ZtgQMB+uL2SqdwaxjRm/ZBbRyEalURESBJ28DjuBBd70S7Na5107
-pDqZvCyC0dv3y8g/t1QL5Z5BAh+GvqtbXBLJJsSWftJl3/MscpeZiRk8xEENjPX5
-rzeDtYUHab+XxCwG/rEiJXQNt3B7S5lAzQPASpzhootAjFxKy+qlroORnZ1tmy1S
-fnzI/jTN4KIGJSWSV4RjW2dFeo+L4q2g5bglwqDJ6e+fI6DHils=
-=wyGP
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzsObgACgkQFA3kzBSg
+KbbSJg/8D32wIeyPK97PVBUaEdooaHc5krotdll02IDHwR2BZzleQ6ug2vO2zDFC
+LgMgVpH5uYysllYastKjsqukXyQImdFFI1TA2D2dyK4zC/j5YmuerZTBakcN/Msx
+gjWBaIlQqepHx79BVp/3hWiaKq0DUSJu/y20xfB6NCUS5dzOtteopRanJ6sW6B/p
+QNoyyhQV1doOXmq7ISA8Jg8XE03PCypWwwW9+jn+/vEPCp7C2nhXJEDorn+GxcZu
+K1QZ0nQfGpPKRu7rnzdCp2n+x8JnIcr8jz/dxOwd1BlCc46oPQxMeBLkjS9jH6J9
+og5/5XGku0KErDOiHKOrXF5wIQ7lUFTq2cJ2bw0G5PDBtcjenO26v185rlHtoQE3
+KVJr1F9GuUPvRdAnql5yIeBXxMXRX6p0sRxQTCaLbXlf5MYhcWKONRyau471pvta
+7jddn+1qOvEFHnnQwtonxoZ9Qta2hpEserHy2UnW6bHmIGafd4cpNA7C9i0fHbB4
+3BGsm5NGMslnghHNN6tTvllPl/IpKyKr2sfUgK5aoAguaPb14A0xffVjTs26+4Fg
+bmDt+aPtlf/EB9AHIBMgsLYK4twB/PMvQ0c4e6+OA79kJVzWql5dIhktvvvIxzsB
+9u958bNgCGsaLz8g4IaD5eJy94JSkj6c9Xt9mgSuOWxe+vGBfZs=
+=CvrW
 -----END PGP SIGNATURE-----
 
---dWYAkE0V1FpFQHQ3--
+--df+09Je9rNq3P+GE--
