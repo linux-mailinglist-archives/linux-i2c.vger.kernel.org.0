@@ -2,36 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A05022BA95
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 May 2019 21:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C8A2BAA4
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 May 2019 21:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727350AbfE0TPh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 May 2019 15:15:37 -0400
-Received: from sauhun.de ([88.99.104.3]:36064 "EHLO pokefinder.org"
+        id S1726839AbfE0TVD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 May 2019 15:21:03 -0400
+Received: from sauhun.de ([88.99.104.3]:36120 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726801AbfE0TPh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 27 May 2019 15:15:37 -0400
+        id S1726484AbfE0TVD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 27 May 2019 15:21:03 -0400
 Received: from localhost (p5486CF59.dip0.t-ipconnect.de [84.134.207.89])
-        by pokefinder.org (Postfix) with ESMTPSA id EE0C02C04C2;
-        Mon, 27 May 2019 21:15:34 +0200 (CEST)
-Date:   Mon, 27 May 2019 21:15:34 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 3FDF32C04C2;
+        Mon, 27 May 2019 21:21:01 +0200 (CEST)
+Date:   Mon, 27 May 2019 21:21:00 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Annaliese McDermond <nh6z@nh6z.net>
-Cc:     Eric Anholt <eric@anholt.net>, stefan.wahren@i2se.com,
-        f.fainelli@gmail.com, swarren@wwwdotorg.org,
-        linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, team@nwdigitalradio.com
-Subject: Re: [PATCH v2] i2c: bcm2835: Model Divider in CCF
-Message-ID: <20190527191534.GD8808@kunai>
-References: <20190508071227.18609-1-nh6z@nh6z.net>
- <4174B26B-4E3A-4CCA-A5ED-BE62A3B5E66A@nh6z.net>
- <20190516075848.GA1033@kunai>
- <2E6EDCD1-E0B1-4859-BD75-EF411D3D4C6B@nh6z.net>
+To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-i2c@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Ray Jui <ray.jui@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michael Cheng <ccheng@broadcom.com>,
+        Srinath Mannam <srinath.mannam@broadcom.com>
+Subject: Re: [PATCH 1/1] i2c: iproc: Add multi byte read-write support for
+ slave mode
+Message-ID: <20190527192100.GE8808@kunai>
+References: <1557375708-14830-1-git-send-email-rayagonda.kokatanur@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rz+pwK2yUstbofK6"
+        protocol="application/pgp-signature"; boundary="a+b56+3nqLzpiR9O"
 Content-Disposition: inline
-In-Reply-To: <2E6EDCD1-E0B1-4859-BD75-EF411D3D4C6B@nh6z.net>
+In-Reply-To: <1557375708-14830-1-git-send-email-rayagonda.kokatanur@broadcom.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -39,54 +40,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---rz+pwK2yUstbofK6
+--a+b56+3nqLzpiR9O
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Annaliese,
-
-> Thank you very much for your response.
-
-You are welcome.
-> I was also similarly nervous about a clock provider being outside of=20
-> drivers/clk, especially since one of the instances of that I wrote.
+On Thu, May 09, 2019 at 09:51:48AM +0530, Rayagonda Kokatanur wrote:
+> Add multiple byte read-write support for slave mode.
 >=20
-> When writing this, there was a certain logic to putting this inside of
-> clk-bcm2835.c instead.  Eric may like this approach better because there
-> will probably be more code reuse of some of the dividers he uses in that
-> driver. =20
+> Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+> Signed-off-by: Srinath Mannam <srinath.mannam@broadcom.com>
 
-Regardless which solution is favoured, I am going to apply this patch in
-a minute:
+Applied to for-next, thanks!
 
-http://patchwork.ozlabs.org/patch/1097688/
+But please quote only relevant parts of the message.
 
-It enables this driver for ARCH_BRCMSTB. So, the solution should work
-for this as well. (I don't know any of these platforms well)
 
-Regards,
-
-   Wolfram
-
---rz+pwK2yUstbofK6
+--a+b56+3nqLzpiR9O
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzsN1YACgkQFA3kzBSg
-Kbb1dw//QS+QQ+6Ka2TybGbcATjH7NybVWBniOTptTCbQCN311faU5s1tZX8Sgpo
-Ljx4Y59PQRKdaB6LoIjl9d8lHA3LaMfRg/vMij5g552liEl6eWp8KOBlVUEsBAVU
-DYkU9sNnEcFT48PyM5fzQLtPTcYUFlfbs5VSXzGDqQzliUNzMkdGIfWNTYtgYtRO
-ckLUDRc7ALC/QZ3y7WEJqr/goaAZV2+2ao5D7jAe3Eu30ZvqrVlLCHPf+vtFDUJ5
-6P3FzeGRTvLHzxhW5Segip1iEyMNOjLuZvc0+fXgOyLND1DDVrO9cws7j7u9pyhl
-zl2Ot2xAOF3nEVnkxcpTAsEx9m07cW95wOhSTUDcW/IEIEqrlp1krlqqIoy8mWN3
-wT2Gnno+g8Wr/It5BC26Ei3WaW+ZLqFQxyePxrdFqG28/60qLBKaKGsHyCNFh9D/
-SSwHqEfwRs9QkUQTA1pKaMZIFsrJg2AVL44CuPpcS+xTcUowyFI7tBJ+t2OogGrh
-2qPFfgUpRkD4EoxKiZCcGwaEtY5qcDXZOWUWo4tTBUopXIbeLhaEva1U0Yc28Kx2
-/+PRal68slAZt31SP5f+FcxXfq6fb/RIOR6VRS2R69ooyxj1/2tCZcxTgvJ07h1+
-3XkG3WfsyjKjYuKHq4YKabkaQ2t5pXhAw3IOJdhoKLGrOylyryk=
-=u+lI
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzsOJgACgkQFA3kzBSg
+KbYZRw/8CG7Z1Z+wBxrrtn0OUKmMjvE9o6yvimMMlpJTX9+vVXBFIgCPOELjwRZI
+ydW2rzDKmVA7ja8aVDAFvyihe4P5m3NoVlWcVVRT9bMalZ+mxKuz/zE08n6Ibfc6
+Qz1yBDbA/Ruw9RtTvKDeEe9AHagPS4HU1THsxNUgZRX+tx+9gsfW+IgCme4Ny5VG
+THgV1O+zuY2ot3ZYHURajeshnPu/n1IDamds/K9Tj9JXVtiheaFDjD64quytfmlN
+J3VaQuddtrNUmf+bJqof2Rbcg01Kel15bJqgYYitbCB+nn1Tl/0jfR2gYg3LLUB6
+uAyG3Qz0Dz4v/r+Vw/XyVzp2Iv30XLfH8TW6XAltIR2BIeG/GcyUKbD8eOsq7kU2
+rrvbJP6FnA+M3PRF/CHdV0om9XswSwoLA/LqKYvu8uhFy9+pc9kvX97kMpMqh5tO
+qj1Ds+u3usWz6BxIwkF86q7qsP9ysfrt96pkkkYPXZ4A5Kni48Dhr0GiBXDciq2p
+CTztLh79Y72s3EK5L7VTwYWlqCMMmn4A8e1jWw74/+sQoK+1YPXAB+/1rPjaxSoq
+VCCVHbYLTsorY9AocLTFcmZyhhvj/3Ia8wbaYfie8q7EI3EQKoTGhqi1yRZ/zv02
+EXj3uz/p9PM5U0w+vlYpal+ptqSxP2UvavMRCxot250+cHDwtlc=
+=uWM3
 -----END PGP SIGNATURE-----
 
---rz+pwK2yUstbofK6--
+--a+b56+3nqLzpiR9O--
