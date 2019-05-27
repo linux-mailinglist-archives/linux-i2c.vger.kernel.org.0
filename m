@@ -2,132 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E03B2B65B
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 May 2019 15:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2EE2B84F
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 May 2019 17:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726504AbfE0NZx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 May 2019 09:25:53 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:35260 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726274AbfE0NZx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 May 2019 09:25:53 -0400
-Received: by mail-vs1-f68.google.com with SMTP id q13so10528616vso.2
-        for <linux-i2c@vger.kernel.org>; Mon, 27 May 2019 06:25:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TnqAkKZ/K76fAJWhEEPhgphkdIHfqKGIyyQzSf7jGME=;
-        b=BbvtYWZg5ZkOTgXuU5uOKiPR9P+u1cNbjMcHQ0bPb8azbm/FfT4yBlauUVp3em1+1j
-         WZu5L2UC9NKmnUmn7T7BTBAkJkeohU1meVLncwtcXjZrLZoknxGGqRxPxtBjRmJLoFoP
-         i3PW+wuEJ4ShMtK0rWFE0ub1VEasVVK0DhewCXLc3hefACh3/1FYsoXBXrva2Azu8hRm
-         63DpSp63Q2YukGWqGo/GUAUWjYsFjdj0kbxyGZ1jOfCgwHmbAbV9s4XNQJQLVRBKGMUS
-         BpJqJsQk397yx+u6FjnmkEcDWJpZPd2qe7q/l06gW94TTsb9RmCOS5IFXIpZpnE2Sd2F
-         RNjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TnqAkKZ/K76fAJWhEEPhgphkdIHfqKGIyyQzSf7jGME=;
-        b=fqgutyAei5nA45Ju6hDOOaMVxH4wfUblXWvKJ9WegeRW6iP9fDA9Tn8V1hgeJQ82tO
-         4pO1jyJO/ZPdCZ4edqLGCd4aKPyMZhIEO9WcpkT+lM+88oDl2wY/h1y/qToUVN6wJqI9
-         zo/lYLQhp06cJvbYXEKICbE1tiHaO54Sotg2rczx6MOH3j9eI6QBE9pEjAT4chd4VFF8
-         z3MNmg6pw/3Hyu12GnnB+jqrECTmXCPhQD6DB8r7EB5T9RRba/Rslzq1GnZQmwLPJp+c
-         NSP/K69ycb+QlLkUb0iTx0vnJ2gEI7w3kbW/deRSWCfPD1GbBgYmHfqE/cp6ixY7FIDO
-         AaIQ==
-X-Gm-Message-State: APjAAAWh2QiNB9CBrnSuw8o/e6sgkorTIrtqxHJTIy+0XEHoFMMAo8P8
-        Uy9X2v7nsiyD90Xkz1wJ50dCWKtUDkOoyB/1HI9Wdw==
-X-Google-Smtp-Source: APXvYqy4tUwxlDxM4P+E2AZD0QtkW0gxj57YCASYDfSgwOAeG101rQ0S+ov4VOwe/SZeF71qMCMhrXm9O39FqYVPGhM=
-X-Received: by 2002:a67:f057:: with SMTP id q23mr57437576vsm.116.1558963552162;
- Mon, 27 May 2019 06:25:52 -0700 (PDT)
+        id S1726517AbfE0PUI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 May 2019 11:20:08 -0400
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:57512 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726996AbfE0PUC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 May 2019 11:20:02 -0400
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4RFJFZq030079;
+        Mon, 27 May 2019 10:19:34 -0500
+Authentication-Results: ppops.net;
+        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from mail4.cirrus.com ([87.246.98.35])
+        by mx0b-001ae601.pphosted.com with ESMTP id 2sq24q28p5-1;
+        Mon, 27 May 2019 10:19:33 -0500
+Received: from EDIEX01.ad.cirrus.com (ediex01.ad.cirrus.com [198.61.84.80])
+        by mail4.cirrus.com (Postfix) with ESMTP id 8867A611C8AC;
+        Mon, 27 May 2019 10:20:24 -0500 (CDT)
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Mon, 27 May
+ 2019 16:19:32 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Mon, 27 May 2019 16:19:32 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7A0ED44;
+        Mon, 27 May 2019 16:19:32 +0100 (BST)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <wsa@the-dreams.de>, <mika.westerberg@linux.intel.com>
+CC:     <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>, <linux-i2c@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <benjamin.tissoires@redhat.com>, <jbroadus@gmail.com>,
+        <patches@opensource.cirrus.com>
+Subject: [PATCH v2 1/6] i2c: core: Allow whole core to use i2c_dev_irq_from_resources
+Date:   Mon, 27 May 2019 16:19:27 +0100
+Message-ID: <20190527151932.14310-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-References: <1558515574-11155-1-git-send-email-sagar.kadam@sifive.com>
- <1558515574-11155-2-git-send-email-sagar.kadam@sifive.com> <20190524204012.GA2580@bogus>
-In-Reply-To: <20190524204012.GA2580@bogus>
-From:   Sagar Kadam <sagar.kadam@sifive.com>
-Date:   Mon, 27 May 2019 18:55:41 +0530
-Message-ID: <CAARK3H=qGkKodSdMe+e9N6A-t1cZoiJLatZfcv+A1G1Zuw5VVQ@mail.gmail.com>
-Subject: Re: [PATCH v7 1/3] dt-bindings: i2c: extend existing opencore bindings.
-To:     Rob Herring <robh@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, peter@korsgaard.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=516 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905270108
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Rob,
+Remove the static from i2c_dev_irq_from _resources so that other parts
+of the core code can use this helper function.
 
-On Sat, May 25, 2019 at 2:10 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Wed, May 22, 2019 at 02:29:32PM +0530, Sagar Shrikant Kadam wrote:
-> > Reformatted compatibility strings to one valid combination on
-> > each line.
-> > Add FU540-C000 specific device tree bindings to already available
-> > i2-ocores file. This device is available on
-> > HiFive Unleashed Rev A00 board. Move interrupt under optional
-> > property list as this can be optional.
-> >
-> > The FU540-C000 SoC from sifive, has an Opencore's I2C block
-> > reimplementation.
-> >
-> > The DT compatibility string for this IP is present in HDL and available at.
-> > https://github.com/sifive/sifive-blocks/blob/master/src/main/scala/devices/i2c/I2C.scala#L73
-> >
-> > Signed-off-by: Sagar Shrikant Kadam <sagar.kadam@sifive.com>
-> > ---
-> >  Documentation/devicetree/bindings/i2c/i2c-ocores.txt | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> > index 17bef9a..db96951 100644
-> > --- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> > +++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> > @@ -1,9 +1,13 @@
-> >  Device tree configuration for i2c-ocores
-> >
-> >  Required properties:
-> > -- compatible      : "opencores,i2c-ocores" or "aeroflexgaisler,i2cmst"
-> > +- compatible      : "opencores,i2c-ocores",
-> > +                    "aeroflexgaisler,i2cmst",
-> > +                    "sifive,fu540-c000-i2c","sifive,i2c0".
->
-> space needed                                   ^
->
-> And drop the end of line commas and period.
->
->
-> > +                    For Opencore based I2C IP block reimplemented in
-> > +                    FU540-C000 SoC.Please refer sifive-blocks-ip-versioning.txt
->
-> And here too.
->
-> And 'refer to'
-I will incorporate the changes you have suggested.
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+
+Patch new since v1, factored out from Use available IRQ helper
+functions.
 
 Thanks,
-Sagar Kadam
->
-> > +                    for additional details.
-> >  - reg             : bus address start and address range size of device
-> > -- interrupts      : interrupt number
-> >  - clocks          : handle to the controller clock; see the note below.
-> >                      Mutually exclusive with opencores,ip-clock-frequency
-> >  - opencores,ip-clock-frequency: frequency of the controller clock in Hz;
-> > @@ -12,6 +16,7 @@ Required properties:
-> >  - #size-cells     : should be <0>
-> >
-> >  Optional properties:
-> > +- interrupts      : interrupt number.
-> >  - clock-frequency : frequency of bus clock in Hz; see the note below.
-> >                      Defaults to 100 KHz when the property is not specified
-> >  - reg-shift       : device register offsets are shifted by this value
-> > --
-> > 1.9.1
-> >
+Charles
+
+ drivers/i2c/i2c-core-base.c | 4 ++--
+ drivers/i2c/i2c-core.h      | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index d389d4fb0623a..84bf11b25a120 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -687,8 +687,8 @@ static void i2c_dev_set_name(struct i2c_adapter *adap,
+ 		     i2c_encode_flags_to_addr(client));
+ }
+ 
+-static int i2c_dev_irq_from_resources(const struct resource *resources,
+-				      unsigned int num_resources)
++int i2c_dev_irq_from_resources(const struct resource *resources,
++			       unsigned int num_resources)
+ {
+ 	struct irq_data *irqd;
+ 	int i;
+diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
+index c88cfef813431..8f3a08dc73a25 100644
+--- a/drivers/i2c/i2c-core.h
++++ b/drivers/i2c/i2c-core.h
+@@ -28,6 +28,8 @@ extern struct list_head	__i2c_board_list;
+ extern int		__i2c_first_dynamic_bus_num;
+ 
+ int i2c_check_7bit_addr_validity_strict(unsigned short addr);
++int i2c_dev_irq_from_resources(const struct resource *resources,
++			       unsigned int num_resources);
+ 
+ /*
+  * We only allow atomic transfers for very late communication, e.g. to send
+-- 
+2.11.0
+
