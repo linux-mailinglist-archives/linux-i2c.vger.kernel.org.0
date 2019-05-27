@@ -2,268 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F337C2B910
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 May 2019 18:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3D22BA4F
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 May 2019 20:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbfE0Q0n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 May 2019 12:26:43 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:40493 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726517AbfE0Q0n (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 May 2019 12:26:43 -0400
-Received: by mail-pg1-f193.google.com with SMTP id d30so9344312pgm.7
-        for <linux-i2c@vger.kernel.org>; Mon, 27 May 2019 09:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GCuK3p21FWh8C1jBpeKRVhZCNmJ3Duy5wpqV3XNIhVs=;
-        b=U2YsqyHk2DfBKBpH9uI2gnxYK3Gs1/2299Hnfr7zbQcDMHv/AREw5ncX/9pCt6v6uP
-         8Inkaplt43pYazSA4lq28wo9pjZK7yyTsJdg+fhjEe9l8f57qDm0PLAbe8q+JWpj//IE
-         WESawLPI3p5Ge0awjWek1a3u9u+WfZkEd8IaU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=GCuK3p21FWh8C1jBpeKRVhZCNmJ3Duy5wpqV3XNIhVs=;
-        b=l22xGZz65knfJwlax06NtEajRMmRjplAGfFoRTSAR6CpzIMPxU5eYZ7ZMG6s36X6xd
-         o2E5AnDcInLwsIh0jYW9k1OTOvmb735WQD2YjxpxR2q38gojjedPUd/oopmzo7caoQFQ
-         F6bQRgVUyHcejIljbqoKZQ8B0mqZVIGiRDvJS6rjFcd96r4MyEWQsl3FQGa8/e+N2JoK
-         ZDvezmLsVdtOW/iyrgxGMh6jLYOsx7oFUt425Y1Rqqp4FCtHvJ62eIuFFKVAKK0Q1MZX
-         hAssHIFUoDwCN5vFgsZ0VpCTGpHzAA9U4/oC8PmWqiEage0XkDSp622eEwO2GwXaRzaz
-         Mt4w==
-X-Gm-Message-State: APjAAAX17oKc9pGhO6Dvnyz97PA+j6oz1obfEfQ4fkwqb4vJ6/juBTXR
-        niaLraDgwDp7fGaX8Gc98T82Cw==
-X-Google-Smtp-Source: APXvYqwwfVCYWGhx+DD80Zs0gpD98qN9kd89HRShl17IHi2nfdS1mx1UrunJ69FFyvDwConZzQ91Pw==
-X-Received: by 2002:aa7:8f16:: with SMTP id x22mr67499207pfr.202.1558974402435;
-        Mon, 27 May 2019 09:26:42 -0700 (PDT)
-Received: from [10.136.8.252] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id h14sm9859513pgj.8.2019.05.27.09.26.40
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 27 May 2019 09:26:41 -0700 (PDT)
-Subject: Re: [PATCH 1/1] i2c: iproc: Add multi byte read-write support for
- slave mode
-To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-i2c@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Michael Cheng <ccheng@broadcom.com>,
-        Srinath Mannam <srinath.mannam@broadcom.com>
-References: <1557375708-14830-1-git-send-email-rayagonda.kokatanur@broadcom.com>
-From:   Ray Jui <ray.jui@broadcom.com>
-Message-ID: <7e073311-fff6-736a-5ae2-a29ceac25f3b@broadcom.com>
-Date:   Mon, 27 May 2019 09:26:38 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726657AbfE0Srr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 May 2019 14:47:47 -0400
+Received: from sauhun.de ([88.99.104.3]:35778 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726598AbfE0Srq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 27 May 2019 14:47:46 -0400
+Received: from localhost (p5486CF59.dip0.t-ipconnect.de [84.134.207.89])
+        by pokefinder.org (Postfix) with ESMTPSA id 5876B2C04C2;
+        Mon, 27 May 2019 20:47:44 +0200 (CEST)
+Date:   Mon, 27 May 2019 20:47:43 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Ruslan Babayev <ruslan@babayev.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        xe-linux-external@cisco.com, linux-i2c@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 1/2] i2c: acpi: export
+ i2c_acpi_find_adapter_by_handle
+Message-ID: <20190527184743.GA8808@kunai>
+References: <20190505193435.3248-1-ruslan@babayev.com>
+ <20190525005302.27164-1-ruslan@babayev.com>
 MIME-Version: 1.0
-In-Reply-To: <1557375708-14830-1-git-send-email-rayagonda.kokatanur@broadcom.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+QahgC5+KEYLbs62"
+Content-Disposition: inline
+In-Reply-To: <20190525005302.27164-1-ruslan@babayev.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Rayagonda,
 
-On 5/8/2019 9:21 PM, Rayagonda Kokatanur wrote:
-> Add multiple byte read-write support for slave mode.
-> 
-> Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-> Signed-off-by: Srinath Mannam <srinath.mannam@broadcom.com>
-> ---
->  drivers/i2c/busses/i2c-bcm-iproc.c | 117 +++++++++++++++++--------------------
->  1 file changed, 53 insertions(+), 64 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-> index a845b8d..2c7f145 100644
-> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
-> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-> @@ -165,12 +165,6 @@ enum i2c_slave_read_status {
->  	I2C_SLAVE_RX_END,
->  };
->  
-> -enum i2c_slave_xfer_dir {
-> -	I2C_SLAVE_DIR_READ = 0,
-> -	I2C_SLAVE_DIR_WRITE,
-> -	I2C_SLAVE_DIR_NONE,
-> -};
-> -
->  enum bus_speed_index {
->  	I2C_SPD_100K = 0,
->  	I2C_SPD_400K,
-> @@ -203,7 +197,6 @@ struct bcm_iproc_i2c_dev {
->  	struct i2c_msg *msg;
->  
->  	struct i2c_client *slave;
-> -	enum i2c_slave_xfer_dir xfer_dir;
->  
->  	/* bytes that have been transferred */
->  	unsigned int tx_bytes;
-> @@ -219,7 +212,8 @@ struct bcm_iproc_i2c_dev {
->  		| BIT(IS_M_RX_THLD_SHIFT))
->  
->  #define ISR_MASK_SLAVE (BIT(IS_S_START_BUSY_SHIFT)\
-> -		| BIT(IS_S_RX_EVENT_SHIFT) | BIT(IS_S_RD_EVENT_SHIFT))
-> +		| BIT(IS_S_RX_EVENT_SHIFT) | BIT(IS_S_RD_EVENT_SHIFT)\
-> +		| BIT(IS_S_TX_UNDERRUN_SHIFT))
->  
->  static int bcm_iproc_i2c_reg_slave(struct i2c_client *slave);
->  static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave);
-> @@ -297,15 +291,11 @@ static void bcm_iproc_i2c_slave_init(
->  	/* clear all pending slave interrupts */
->  	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, ISR_MASK_SLAVE);
->  
-> -	/* Enable interrupt register for any READ event */
-> -	val = BIT(IE_S_RD_EVENT_SHIFT);
->  	/* Enable interrupt register to indicate a valid byte in receive fifo */
-> -	val |= BIT(IE_S_RX_EVENT_SHIFT);
-> +	val = BIT(IE_S_RX_EVENT_SHIFT);
->  	/* Enable interrupt register for the Slave BUSY command */
->  	val |= BIT(IE_S_START_BUSY_SHIFT);
->  	iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
-> -
-> -	iproc_i2c->xfer_dir = I2C_SLAVE_DIR_NONE;
->  }
->  
->  static void bcm_iproc_i2c_check_slave_status(
-> @@ -314,8 +304,11 @@ static void bcm_iproc_i2c_check_slave_status(
->  	u32 val;
->  
->  	val = iproc_i2c_rd_reg(iproc_i2c, S_CMD_OFFSET);
-> -	val = (val >> S_CMD_STATUS_SHIFT) & S_CMD_STATUS_MASK;
-> +	/* status is valid only when START_BUSY is cleared after it was set */
-> +	if (val & BIT(S_CMD_START_BUSY_SHIFT))
-> +		return;
->  
-> +	val = (val >> S_CMD_STATUS_SHIFT) & S_CMD_STATUS_MASK;
->  	if (val == S_CMD_STATUS_TIMEOUT) {
->  		dev_err(iproc_i2c->device, "slave random stretch time timeout\n");
->  
-> @@ -327,70 +320,66 @@ static void bcm_iproc_i2c_check_slave_status(
->  }
->  
->  static bool bcm_iproc_i2c_slave_isr(struct bcm_iproc_i2c_dev *iproc_i2c,
-> -				u32 status)
-> +				    u32 status)
->  {
-> -	u8 value;
->  	u32 val;
-> -	u32 rd_status;
-> -	u32 tmp;
-> +	u8 value, rx_status;
->  
-> -	/* Start of transaction. check address and populate the direction */
-> -	if (iproc_i2c->xfer_dir == I2C_SLAVE_DIR_NONE) {
-> -		tmp = iproc_i2c_rd_reg(iproc_i2c, S_RX_OFFSET);
-> -		rd_status = (tmp >> S_RX_STATUS_SHIFT) & S_RX_STATUS_MASK;
-> -		/* This condition checks whether the request is a new request */
-> -		if (((rd_status == I2C_SLAVE_RX_START) &&
-> -			(status & BIT(IS_S_RX_EVENT_SHIFT))) ||
-> -			((rd_status == I2C_SLAVE_RX_END) &&
-> -			(status & BIT(IS_S_RD_EVENT_SHIFT)))) {
-> -
-> -			/* Last bit is W/R bit.
-> -			 * If 1 then its a read request(by master).
-> -			 */
-> -			iproc_i2c->xfer_dir = tmp & SLAVE_READ_WRITE_BIT_MASK;
-> -			if (iproc_i2c->xfer_dir == I2C_SLAVE_DIR_WRITE)
-> -				i2c_slave_event(iproc_i2c->slave,
-> -					I2C_SLAVE_READ_REQUESTED, &value);
-> -			else
-> -				i2c_slave_event(iproc_i2c->slave,
-> +	/* Slave RX byte receive */
-> +	if (status & BIT(IS_S_RX_EVENT_SHIFT)) {
-> +		val = iproc_i2c_rd_reg(iproc_i2c, S_RX_OFFSET);
-> +		rx_status = (val >> S_RX_STATUS_SHIFT) & S_RX_STATUS_MASK;
-> +		if (rx_status == I2C_SLAVE_RX_START) {
-> +			/* Start of SMBUS for Master write */
-> +			i2c_slave_event(iproc_i2c->slave,
->  					I2C_SLAVE_WRITE_REQUESTED, &value);
-> -		}
-> -	}
->  
-> -	/* read request from master */
-> -	if ((status & BIT(IS_S_RD_EVENT_SHIFT)) &&
-> -		(iproc_i2c->xfer_dir == I2C_SLAVE_DIR_WRITE)) {
-> -		i2c_slave_event(iproc_i2c->slave,
-> -			I2C_SLAVE_READ_PROCESSED, &value);
-> -		iproc_i2c_wr_reg(iproc_i2c, S_TX_OFFSET, value);
-> +			val = iproc_i2c_rd_reg(iproc_i2c, S_RX_OFFSET);
-> +			value = (u8)((val >> S_RX_DATA_SHIFT) & S_RX_DATA_MASK);
-> +			i2c_slave_event(iproc_i2c->slave,
-> +					I2C_SLAVE_WRITE_RECEIVED, &value);
-> +		} else if (status & BIT(IS_S_RD_EVENT_SHIFT)) {
-> +			/* Start of SMBUS for Master Read */
-> +			i2c_slave_event(iproc_i2c->slave,
-> +					I2C_SLAVE_READ_REQUESTED, &value);
-> +			iproc_i2c_wr_reg(iproc_i2c, S_TX_OFFSET, value);
->  
-> -		val = BIT(S_CMD_START_BUSY_SHIFT);
-> -		iproc_i2c_wr_reg(iproc_i2c, S_CMD_OFFSET, val);
-> -	}
-> +			val = BIT(S_CMD_START_BUSY_SHIFT);
-> +			iproc_i2c_wr_reg(iproc_i2c, S_CMD_OFFSET, val);
->  
-> -	/* write request from master */
-> -	if ((status & BIT(IS_S_RX_EVENT_SHIFT)) &&
-> -		(iproc_i2c->xfer_dir == I2C_SLAVE_DIR_READ)) {
-> -		val = iproc_i2c_rd_reg(iproc_i2c, S_RX_OFFSET);
-> -		/* Its a write request by Master to Slave.
-> -		 * We read data present in receive FIFO
-> -		 */
-> -		value = (u8)((val >> S_RX_DATA_SHIFT) & S_RX_DATA_MASK);
-> +			/*
-> +			 * Enable interrupt for TX FIFO becomes empty and
-> +			 * less than PKT_LENGTH bytes were output on the SMBUS
-> +			 */
-> +			val = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
-> +			val |= BIT(IE_S_TX_UNDERRUN_SHIFT);
-> +			iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
-> +		} else {
-> +			/* Master write other than start */
-> +			value = (u8)((val >> S_RX_DATA_SHIFT) & S_RX_DATA_MASK);
-> +			i2c_slave_event(iproc_i2c->slave,
-> +					I2C_SLAVE_WRITE_RECEIVED, &value);
-> +		}
-> +	} else if (status & BIT(IS_S_TX_UNDERRUN_SHIFT)) {
-> +		/* Master read other than start */
->  		i2c_slave_event(iproc_i2c->slave,
-> -			I2C_SLAVE_WRITE_RECEIVED, &value);
-> -
-> -		/* check the status for the last byte of the transaction */
-> -		rd_status = (val >> S_RX_STATUS_SHIFT) & S_RX_STATUS_MASK;
-> -		if (rd_status == I2C_SLAVE_RX_END)
-> -			iproc_i2c->xfer_dir = I2C_SLAVE_DIR_NONE;
-> +				I2C_SLAVE_READ_PROCESSED, &value);
->  
-> -		dev_dbg(iproc_i2c->device, "\nread value = 0x%x\n", value);
-> +		iproc_i2c_wr_reg(iproc_i2c, S_TX_OFFSET, value);
-> +		val = BIT(S_CMD_START_BUSY_SHIFT);
-> +		iproc_i2c_wr_reg(iproc_i2c, S_CMD_OFFSET, val);
->  	}
->  
->  	/* Stop */
->  	if (status & BIT(IS_S_START_BUSY_SHIFT)) {
->  		i2c_slave_event(iproc_i2c->slave, I2C_SLAVE_STOP, &value);
-> -		iproc_i2c->xfer_dir = I2C_SLAVE_DIR_NONE;
-> +		/*
-> +		 * Enable interrupt for TX FIFO becomes empty and
-> +		 * less than PKT_LENGTH bytes were output on the SMBUS
-> +		 */
-> +		val = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
-> +		val &= ~BIT(IE_S_TX_UNDERRUN_SHIFT);
-> +		iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
->  	}
->  
->  	/* clear interrupt status */
-> 
+--+QahgC5+KEYLbs62
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This was already reviewed internally. I just reviewed it again and it
-looks fine to me. Thanks.
+On Fri, May 24, 2019 at 05:53:01PM -0700, Ruslan Babayev wrote:
+> This allows drivers to lookup i2c adapters on ACPI based systems similar =
+to
+> of_get_i2c_adapter_by_node() with DT based systems.
+>=20
+> Signed-off-by: Ruslan Babayev <ruslan@babayev.com>
+> Cc: xe-linux-external@cisco.com
 
-Reviewed-by: Ray Jui <ray.jui@broadcom.com>
+Please have a look how your patches look in my inbox:
+
+May 05 Ruslan Babayev  ( 129) [PATCH] net: phy: sfp: enable i2c-bus detecti=
+on on ACPI based systems
+May 05 Ruslan Babayev  (  65) =E2=94=9C=E2=94=80>[PATCH 1/2] i2c: acpi: exp=
+ort i2c_acpi_find_adapter_by_handle
+May 24 Ruslan Babayev  (  65) =E2=94=94=E2=94=80>[PATCH net-next v2 1/2] i2=
+c: acpi: export i2c_acpi_find_adapter_by_handle
+May 05 Ruslan Babayev  (  65) [PATCH net-next 1/2] i2c: acpi: export i2c_ac=
+pi_find_adapter_by_handle
+May 06 Ruslan Babayev  (   3) =E2=94=9C=E2=94=80>[PATCH RFC v2 net-next] En=
+able SFP support on ACPI
+May 06 Ruslan Babayev  (  65) =E2=94=9C=E2=94=80>[PATCH RFC v2 net-next 1/2=
+] i2c: acpi: export i2c_acpi_find_adapter_by_handle
+May 06 Ruslan Babayev  ( 120) =E2=94=94=E2=94=80>[PATCH RFC v2 net-next 2/2=
+] net: phy: sfp: enable i2c-bus detection on ACPI based systems
+May 07 Ruslan Babayev  ( 154)   =E2=94=94=E2=94=80&=E2=94=80>
+May 07 Ruslan Babayev  (  10)     =E2=94=94=E2=94=80>
+May 22 Ruslan Babayev  (  29)       =E2=94=94=E2=94=80>
+May 05 Ruslan Babayev  (  93) [PATCH net-next 2/2] net: phy: sfp: enable i2=
+c-bus detection on ACPI based systems
+May 06 Ruslan Babayev  (  25) =E2=94=9C=E2=94=80&=E2=94=80>
+May 06 Ruslan Babayev  (  99) =E2=94=94=E2=94=80&=E2=94=80>
+
+This is highly confusing, and super hard to find out which patches belong
+together. v2 2/2 seems even missing. Please resend this as a new series wit=
+hout
+any in-reply-to, and a fresh cover-letter, so I know which one to apply to =
+my
+tree.
+
+Thanks,
+
+   Wolfram
+
+
+--+QahgC5+KEYLbs62
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzsMMsACgkQFA3kzBSg
+KbbJUw//ZjfgfbIi9s/dvsxSUH0zdiFzpTrxw/kK6vz8DoMVEvB7gZTQn+AGU9SX
+7rDxALpNLwpC6k6IYkDT1SW7FBxMHw3yMBVahyXTlZaTAIOW/iS2yctgCBLlVs+1
+zbGPIoEXobAY5kPgeb5ibpesN1UxmTBQOubp31RmOp87PInFCpo3czzvPhRxyCOs
+nWXSaTVGvkoLzBmLXcz1awje7FimsUHUPI3GITobxGXVl+6l2whN/a69hbgHRhpL
+5HbxaXt11oMTYI0QVBJ03Aqlu22nxZbW/YZV7P5cwrn7KaST04/8HTVxLhegPhog
+pQH3M9Gp/ANChZ3+EqFe3IVWakj6tkZRUluL3kp1qNagVJ+aGeOurJgtoubXRXVc
+hxOPPSrtHB90dWV+H/AieEIPwc7NFgbn6fOs4JLNGCvtc6ylEk/Yu6rFFIj9OuWN
+ndtK5RZLKXfjvuYptxnTX8hK1o74YAnrJ0YwmYiWi7gq14fSxQjcL6OHHJM8rVks
+zKHg2nA/2ikX9N6a+6TX3VkJkf9yPZb88S41onQuCfysW+tlmDYW9r4Nxp0U91bw
+vKs/uwsnzIY/ezGr3v8u82vqzyejMi3/ABqFiO+tlC4TNQj5wqZhiE/FXBZi30J5
+p/xcN6Pj8cNtAYWcPSd2kzBuLdqT9SF1XHRdMbtItkHYMJ3WIAo=
+=rpQu
+-----END PGP SIGNATURE-----
+
+--+QahgC5+KEYLbs62--
