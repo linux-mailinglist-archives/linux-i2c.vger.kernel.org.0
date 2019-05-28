@@ -2,182 +2,552 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD7A2BDAB
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2019 05:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4725B2BE7E
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2019 07:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728098AbfE1DW2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 May 2019 23:22:28 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:39041 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728030AbfE1DWR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 May 2019 23:22:17 -0400
-Received: by mail-pl1-f195.google.com with SMTP id g9so7698869plm.6
-        for <linux-i2c@vger.kernel.org>; Mon, 27 May 2019 20:22:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=babayev.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zwLDAOoAiJhJGWHnpjoGzTroKs7erV0/y81Ksl3GxMc=;
-        b=MfCs7Q+Y8y+WP+HVnLCgKfYNMTsQ6xJsDW6nBwd3rFzhcpYIFsXYCoxB4JnBCXH8Ij
-         rsBW0txsZp/KK3pYuAqVA6DRxJ7YPF31ahUgs5nmIv9cHM0NFVKSGVpYOadGvmzRL6j6
-         +F0qRhAipJ//dsDtGs97S7/tbeAwQHFLzFvBM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zwLDAOoAiJhJGWHnpjoGzTroKs7erV0/y81Ksl3GxMc=;
-        b=TIVGmutaElNGcSxC0Uhhcz1XdA5TBSH1lnrXQ/f/980Z85wMuxsw7kf8t5ZZ7cYSuZ
-         HJ6v1XDqhC9PjfWbsIdliGUHlALLhZg+qEk6suAy11RrzCYh53duMSWKY3Uf7sSU1F3v
-         dEdxMs22neeX/LFDABsX7bhPmjDzGo/iebXsPhqnyArLwwgIFvQ/SC3VCr5L1CLforNB
-         nYInpGEQEb76k1Pc/RTTmSQUYmZ5MozPh7L2sM20suQTg5PDvx+onP/otqem9F3WLl73
-         Kclm71QDMGG6XmD/8F2TKxKg2rJ6RutRae3RAZpHKCHxQW5+3IC6tI5Uiam0mty88VcK
-         XRCQ==
-X-Gm-Message-State: APjAAAV6C8GC9XJPZDiWZyahOuRjzJbOJAjiPBhkRVysTXa7phB5rI63
-        b2SAaoevOgEaSFaq30rSHCELDA==
-X-Google-Smtp-Source: APXvYqyyN46JsYQFB/LoW3Y4vQ7cOWzwH+r5JQT+xMzgGeypgdVJBIbYt62twwrP7frHfDEjWigD0Q==
-X-Received: by 2002:a17:902:3064:: with SMTP id u91mr23397819plb.244.1559013737001;
-        Mon, 27 May 2019 20:22:17 -0700 (PDT)
-Received: from p50.cisco.com ([128.107.241.177])
-        by smtp.gmail.com with ESMTPSA id h71sm933042pje.11.2019.05.27.20.22.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 27 May 2019 20:22:16 -0700 (PDT)
-From:   Ruslan Babayev <ruslan@babayev.com>
-To:     mika.westerberg@linux.intel.com, wsa@the-dreams.de,
-        linux@armlinux.org.uk, andrew@lunn.ch, f.fainelli@gmail.com,
-        hkallweit1@gmail.com, davem@davemloft.net
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        xe-linux-external@cisco.com
-Subject: [net-next,v3 2/2] net: phy: sfp: enable i2c-bus detection on ACPI based systems
-Date:   Mon, 27 May 2019 20:22:13 -0700
-Message-Id: <20190528032213.19839-3-ruslan@babayev.com>
-X-Mailer: git-send-email 2.19.2
-In-Reply-To: <20190528032213.19839-1-ruslan@babayev.com>
-References: <20190528032213.19839-1-ruslan@babayev.com>
+        id S1726693AbfE1FMi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 May 2019 01:12:38 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:51334 "EHLO mx1.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726269AbfE1FMi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 28 May 2019 01:12:38 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id 5C1A64F78F;
+        Tue, 28 May 2019 07:12:35 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id TLidtlU9D63U; Tue, 28 May 2019 07:12:27 +0200 (CEST)
+Subject: Re: [PATCH v2] i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C driver
+From:   Stefan Roese <sr@denx.de>
+To:     linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Steven Liu <steven_liu@mediatek.com>,
+        Jan Breuer <jan.breuer@jaybee.cz>,
+        John Crispin <john@phrozen.org>
+References: <20190506105746.16397-1-sr@denx.de>
+Message-ID: <c43fac92-aa5e-b2db-6667-08c12cdced67@denx.de>
+Date:   Tue, 28 May 2019 07:12:25 +0200
 MIME-Version: 1.0
+In-Reply-To: <20190506105746.16397-1-sr@denx.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Lookup I2C adapter using the "i2c-bus" device property on ACPI based
-systems similar to how it's done with DT.
+Hi Wolfram,
 
-An example DSD describing an SFP on an ACPI based system:
+On 06.05.19 12:57, Stefan Roese wrote:
+> This patch adds a driver for the I2C controller found on the MediaTek
+> MT7621/7628/7688 SoC's. The base version of this driver was done by
+> Steven Liu (according to the copyright and MODULE_AUTHOR lines). It
+> can be found in the OpenWRT repositories (v4.14 at the time I looked).
+> 
+> The base driver had many issues, which are disccussed here:
+> 
+> https://en.forum.labs.mediatek.com/t/openwrt-15-05-loads-non-working-i2c-kernel-module-for-mt7688/1286/3
+> 
+>  From this link an enhanced driver version (complete rewrite, mayor
+> changes: support clock stretching, repeated start, ACK handling and
+> unlimited message length) from Jan Breuer can be found here:
+> 
+> https://gist.github.com/j123b567/9b555b635c2b4069d716b24198546954
+> 
+> This patch now adds this enhanced I2C driver to mainline.
+> 
+> Changes by Stefan Roese for upstreaming:
+> - Add devicetree bindings
+> - checkpatch clean
+> - Use module_platform_driver()
+> - Minor cosmetic enhancements
+> 
+> Signed-off-by: Stefan Roese <sr@denx.de>
+> Cc: Steven Liu <steven_liu@mediatek.com>
+> Cc: Jan Breuer <jan.breuer@jaybee.cz>
+> Cc: John Crispin <john@phrozen.org>
+> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> v2:
+> - Configure I2C controller to open-drain instead of push-pull, as
+>    noticed and suggested by Jan (misleading bit description)
 
-Device (SFP0)
-{
-    Name (_HID, "PRP0001")
-    Name (_CRS, ResourceTemplate()
-    {
-        GpioIo(Exclusive, PullDefault, 0, 0, IoRestrictionNone,
-               "\\_SB.PCI0.RP01.GPIO", 0, ResourceConsumer)
-            { 0, 1, 2, 3, 4 }
-    })
-    Name (_DSD, Package ()
-    {
-        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-        Package () {
-            Package () { "compatible", "sff,sfp" },
-            Package () { "i2c-bus", \_SB.PCI0.RP01.I2C.MUX.CH0 },
-            Package () { "maximum-power-milliwatt", 1000 },
-            Package () { "tx-disable-gpios", Package () { ^SFP0, 0, 0, 1} },
-            Package () { "reset-gpio",       Package () { ^SFP0, 0, 1, 1} },
-            Package () { "mod-def0-gpios",   Package () { ^SFP0, 0, 2, 1} },
-            Package () { "tx-fault-gpios",   Package () { ^SFP0, 0, 3, 0} },
-            Package () { "los-gpios",        Package () { ^SFP0, 0, 4, 1} },
-        },
-    })
-}
+Any updates on this?
 
-Device (PHY0)
-{
-    Name (_HID, "PRP0001")
-    Name (_DSD, Package ()
-    {
-        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-        Package () {
-            Package () { "compatible", "ethernet-phy-ieee802.3-c45" },
-            Package () { "sfp", \_SB.PCI0.RP01.SFP0 },
-            Package () { "managed", "in-band-status" },
-            Package () { "phy-mode", "sgmii" },
-        },
-    })
-}
+Thanks,
+Stefan
+  
+>   .../devicetree/bindings/i2c/i2c-mt7621.txt    |  25 ++
+>   drivers/i2c/busses/Kconfig                    |   8 +
+>   drivers/i2c/busses/Makefile                   |   1 +
+>   drivers/i2c/busses/i2c-mt7621.c               | 385 ++++++++++++++++++
+>   4 files changed, 419 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/i2c/i2c-mt7621.txt
+>   create mode 100644 drivers/i2c/busses/i2c-mt7621.c
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt7621.txt b/Documentation/devicetree/bindings/i2c/i2c-mt7621.txt
+> new file mode 100644
+> index 000000000000..bc36f0eb94cd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mt7621.txt
+> @@ -0,0 +1,25 @@
+> +MediaTek MT7621/MT7628 I2C master controller
+> +
+> +Required properties:
+> +
+> +- compatible: Should be one of the following:
+> +  - "mediatek,mt7621-i2c": for MT7621/MT7628/MT7688 platforms
+> +- #address-cells: should be 1.
+> +- #size-cells: should be 0.
+> +- reg: Address and length of the register set for the device
+> +- resets: phandle to the reset controller asserting this device in
+> +          reset
+> +  See ../reset/reset.txt for details.
+> +
+> +Optional properties :
+> +
+> +Example:
+> +
+> +i2c: i2c@900 {
+> +	compatible = "mediatek,mt7621-i2c";
+> +	reg = <0x900 0x100>;
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +	resets = <&rstctrl 16>;
+> +	reset-names = "i2c";
+> +};
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index f8979abb9a19..fa6c85d4b378 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -886,6 +886,14 @@ config I2C_RK3X
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called i2c-rk3x.
+>   
+> +config I2C_MT7621
+> +	tristate "MT7621/MT7628 I2C Controller"
+> +	depends on (RALINK && (SOC_MT7620 || SOC_MT7621)) || COMPILE_TEST
+> +	select OF_I2C
+> +	help
+> +	  Say Y here to include support for I2C controller in the
+> +	  MediaTek MT7621/MT7628 SoCs.
+> +
+>   config HAVE_S3C2410_I2C
+>   	bool
+>   	help
+> diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+> index 5f0cb6915969..7d3fc2456ce8 100644
+> --- a/drivers/i2c/busses/Makefile
+> +++ b/drivers/i2c/busses/Makefile
+> @@ -72,6 +72,7 @@ obj-$(CONFIG_I2C_LPC2K)		+= i2c-lpc2k.o
+>   obj-$(CONFIG_I2C_MESON)		+= i2c-meson.o
+>   obj-$(CONFIG_I2C_MPC)		+= i2c-mpc.o
+>   obj-$(CONFIG_I2C_MT65XX)	+= i2c-mt65xx.o
+> +obj-$(CONFIG_I2C_MT7621)	+= i2c-mt7621.o
+>   obj-$(CONFIG_I2C_MV64XXX)	+= i2c-mv64xxx.o
+>   obj-$(CONFIG_I2C_MXS)		+= i2c-mxs.o
+>   obj-$(CONFIG_I2C_NOMADIK)	+= i2c-nomadik.o
+> diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
+> new file mode 100644
+> index 000000000000..fcacbfbc8c47
+> --- /dev/null
+> +++ b/drivers/i2c/busses/i2c-mt7621.c
+> @@ -0,0 +1,385 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * drivers/i2c/busses/i2c-mt7621.c
+> + *
+> + * Copyright (C) 2013 Steven Liu <steven_liu@mediatek.com>
+> + * Copyright (C) 2016 Michael Lee <igvtee@gmail.com>
+> + * Copyright (C) 2018 Jan Breuer <jan.breuer@jaybee.cz>
+> + *
+> + * Improve driver for i2cdetect from i2c-tools to detect i2c devices on the bus.
+> + * (C) 2014 Sittisak <sittisaks@hotmail.com>
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/i2c.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/reset.h>
+> +
+> +#define REG_SM0CFG2_REG		0x28
+> +#define REG_SM0CTL0_REG		0x40
+> +#define REG_SM0CTL1_REG		0x44
+> +#define REG_SM0D0_REG		0x50
+> +#define REG_SM0D1_REG		0x54
+> +#define REG_PINTEN_REG		0x5C
+> +#define REG_PINTST_REG		0x60
+> +#define REG_PINTCL_REG		0x64
+> +
+> +/* REG_SM0CFG2_REG */
+> +#define SM0CFG2_IS_AUTOMODE	BIT(0)
+> +
+> +/* REG_SM0CTL0_REG */
+> +#define SM0CTL0_ODRAIN		BIT(31)
+> +#define SM0CTL0_CLK_DIV_MASK	(0x7FF << 16)
+> +#define SM0CTL0_CLK_DIV_MAX	0x7ff
+> +#define SM0CTL0_CS_STATUS       BIT(4)
+> +#define SM0CTL0_SCL_STATE       BIT(3)
+> +#define SM0CTL0_SDA_STATE       BIT(2)
+> +#define SM0CTL0_EN              BIT(1)
+> +#define SM0CTL0_SCL_STRETCH     BIT(0)
+> +
+> +/* REG_SM0CTL1_REG */
+> +#define SM0CTL1_ACK_MASK	(0xFF << 16)
+> +#define SM0CTL1_PGLEN_MASK	(0x7 << 8)
+> +#define SM0CTL1_PGLEN(x)	(((x - 1) << 8) & SM0CTL1_PGLEN_MASK)
+> +#define SM0CTL1_READ		(5 << 4)
+> +#define SM0CTL1_READ_LAST	(4 << 4)
+> +#define SM0CTL1_STOP		(3 << 4)
+> +#define SM0CTL1_WRITE		(2 << 4)
+> +#define SM0CTL1_START		(1 << 4)
+> +#define SM0CTL1_MODE_MASK	(0x7 << 4)
+> +#define SM0CTL1_TRI		BIT(0)
+> +
+> +/* timeout waiting for I2C devices to respond (clock streching) */
+> +#define TIMEOUT_MS              1000
+> +#define DELAY_INTERVAL_US       100
+> +
+> +struct mtk_i2c {
+> +	void __iomem *base;
+> +	struct device *dev;
+> +	struct i2c_adapter adap;
+> +	u32 cur_clk;
+> +	u32 clk_div;
+> +	u32 flags;
+> +};
+> +
+> +static void mtk_i2c_w32(struct mtk_i2c *i2c, u32 val, unsigned int reg)
+> +{
+> +	iowrite32(val, i2c->base + reg);
+> +}
+> +
+> +static u32 mtk_i2c_r32(struct mtk_i2c *i2c, unsigned int reg)
+> +{
+> +	return ioread32(i2c->base + reg);
+> +}
+> +
+> +static int poll_down_timeout(void __iomem *addr, u32 mask)
+> +{
+> +	unsigned long timeout = jiffies + msecs_to_jiffies(TIMEOUT_MS);
+> +	int current_delay = 1;
+> +
+> +	do {
+> +		if (!(readl_relaxed(addr) & mask))
+> +			return 0;
+> +
+> +		if (current_delay > 0 && current_delay < 10)
+> +			udelay(current_delay);
+> +		else if (current_delay >= 10)
+> +			usleep_range(current_delay, current_delay + 50);
+> +
+> +		current_delay *= current_delay;
+> +		if (current_delay > DELAY_INTERVAL_US)
+> +			current_delay = DELAY_INTERVAL_US;
+> +	} while (time_before(jiffies, timeout));
+> +
+> +	return (readl_relaxed(addr) & mask) ? -EAGAIN : 0;
+> +}
+> +
+> +static int mtk_i2c_wait_idle(struct mtk_i2c *i2c)
+> +{
+> +	int ret;
+> +
+> +	ret = poll_down_timeout(i2c->base + REG_SM0CTL1_REG, SM0CTL1_TRI);
+> +	if (ret < 0)
+> +		dev_dbg(i2c->dev, "idle err(%d)\n", ret);
+> +
+> +	return ret;
+> +}
+> +
+> +static void mtk_i2c_reset(struct mtk_i2c *i2c)
+> +{
+> +	int ret;
+> +
+> +	ret = device_reset(i2c->adap.dev.parent);
+> +	if (ret)
+> +		dev_err(i2c->dev, "I2C reset failed!\n");
+> +
+> +	barrier();
+> +	/*
+> +	 * Don't set SM0CTL0_ODRAIN as its bit meaning is inverted. To
+> +	 * configure open-drain mode, this bit needs to be cleared.
+> +	 */
+> +	mtk_i2c_w32(i2c, ((i2c->clk_div << 16) & SM0CTL0_CLK_DIV_MASK) |
+> +		    SM0CTL0_EN | SM0CTL0_SCL_STRETCH, REG_SM0CTL0_REG);
+> +	mtk_i2c_w32(i2c, 0, REG_SM0CFG2_REG);
+> +}
+> +
+> +static void mtk_i2c_dump_reg(struct mtk_i2c *i2c)
+> +{
+> +	dev_dbg(i2c->dev,
+> +		"SM0CFG2 %08x, SM0CTL0 %08x, SM0CTL1 %08x, SM0D0 %08x, SM0D1 %08x\n",
+> +		mtk_i2c_r32(i2c, REG_SM0CFG2_REG),
+> +		mtk_i2c_r32(i2c, REG_SM0CTL0_REG),
+> +		mtk_i2c_r32(i2c, REG_SM0CTL1_REG),
+> +		mtk_i2c_r32(i2c, REG_SM0D0_REG),
+> +		mtk_i2c_r32(i2c, REG_SM0D1_REG));
+> +}
+> +
+> +static int mtk_i2c_check_ack(struct mtk_i2c *i2c, u32 expected)
+> +{
+> +	u32 ack = readl_relaxed(i2c->base + REG_SM0CTL1_REG);
+> +	u32 ack_expected = (expected << 16) & SM0CTL1_ACK_MASK;
+> +
+> +	return ((ack & ack_expected) == ack_expected) ? 0 : -ENXIO;
+> +}
+> +
+> +static int mtk_i2c_master_start(struct mtk_i2c *i2c)
+> +{
+> +	mtk_i2c_w32(i2c, SM0CTL1_START | SM0CTL1_TRI, REG_SM0CTL1_REG);
+> +	return mtk_i2c_wait_idle(i2c);
+> +}
+> +
+> +static int mtk_i2c_master_stop(struct mtk_i2c *i2c)
+> +{
+> +	mtk_i2c_w32(i2c, SM0CTL1_STOP | SM0CTL1_TRI, REG_SM0CTL1_REG);
+> +	return mtk_i2c_wait_idle(i2c);
+> +}
+> +
+> +static int mtk_i2c_master_cmd(struct mtk_i2c *i2c, u32 cmd, int page_len)
+> +{
+> +	mtk_i2c_w32(i2c, cmd | SM0CTL1_TRI | SM0CTL1_PGLEN(page_len),
+> +		    REG_SM0CTL1_REG);
+> +	return mtk_i2c_wait_idle(i2c);
+> +}
+> +static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+> +		int num)
+> +{
+> +	struct mtk_i2c *i2c;
+> +	struct i2c_msg *pmsg;
+> +	u16 addr;
+> +	int i, j, ret, len, page_len;
+> +	u32 cmd;
+> +	u32 data[2];
+> +
+> +	i2c = i2c_get_adapdata(adap);
+> +
+> +	for (i = 0; i < num; i++) {
+> +		pmsg = &msgs[i];
+> +
+> +		dev_dbg(i2c->dev, "addr: 0x%x, len: %d, flags: 0x%x\n",
+> +				pmsg->addr, pmsg->len, pmsg->flags);
+> +
+> +		/* wait hardware idle */
+> +		ret = mtk_i2c_wait_idle(i2c);
+> +		if (ret)
+> +			goto err_timeout;
+> +
+> +		/* start sequence */
+> +		ret = mtk_i2c_master_start(i2c);
+> +		if (ret)
+> +			goto err_timeout;
+> +
+> +		/* write address */
+> +		if (pmsg->flags & I2C_M_TEN) {
+> +			/* 10 bits address */
+> +			addr = 0xf0 | ((pmsg->addr >> 7) & 0x06);
+> +			addr |= (pmsg->addr & 0xff) << 8;
+> +			if (pmsg->flags & I2C_M_RD)
+> +				addr |= 1;
+> +			mtk_i2c_w32(i2c, addr, REG_SM0D0_REG);
+> +			ret = mtk_i2c_master_cmd(i2c, SM0CTL1_WRITE, 2);
+> +			if (ret)
+> +				goto err_timeout;
+> +		} else {
+> +			/* 7 bits address */
+> +			addr = pmsg->addr << 1;
+> +			if (pmsg->flags & I2C_M_RD)
+> +				addr |= 1;
+> +			mtk_i2c_w32(i2c, addr, REG_SM0D0_REG);
+> +			ret = mtk_i2c_master_cmd(i2c, SM0CTL1_WRITE, 1);
+> +			if (ret)
+> +				goto err_timeout;
+> +		}
+> +
+> +		/* check address ACK */
+> +		if (!(pmsg->flags & I2C_M_IGNORE_NAK)) {
+> +			ret = mtk_i2c_check_ack(i2c, BIT(0));
+> +			if (ret)
+> +				goto err_ack;
+> +		}
+> +
+> +		/* transfer data */
+> +		j = 0;
+> +		for (len = pmsg->len; len > 0; len -= 8) {
+> +			page_len = (len >= 8) ? 8 : len;
+> +
+> +			if (pmsg->flags & I2C_M_RD) {
+> +				cmd = (len > 8) ?
+> +					SM0CTL1_READ : SM0CTL1_READ_LAST;
+> +			} else {
+> +				memcpy(data, &pmsg->buf[j], page_len);
+> +				mtk_i2c_w32(i2c, data[0], REG_SM0D0_REG);
+> +				mtk_i2c_w32(i2c, data[1], REG_SM0D1_REG);
+> +				cmd = SM0CTL1_WRITE;
+> +			}
+> +
+> +			ret = mtk_i2c_master_cmd(i2c, cmd, page_len);
+> +			if (ret)
+> +				goto err_timeout;
+> +
+> +			if (pmsg->flags & I2C_M_RD) {
+> +				data[0] = mtk_i2c_r32(i2c, REG_SM0D0_REG);
+> +				data[1] = mtk_i2c_r32(i2c, REG_SM0D1_REG);
+> +				memcpy(&pmsg->buf[j], data, page_len);
+> +			} else {
+> +				if (!(pmsg->flags & I2C_M_IGNORE_NAK)) {
+> +					ret = mtk_i2c_check_ack(
+> +						i2c, (1 << page_len) - 1);
+> +					if (ret)
+> +						goto err_ack;
+> +				}
+> +			}
+> +			j += 8;
+> +		}
+> +	}
+> +
+> +	ret = mtk_i2c_master_stop(i2c);
+> +	if (ret)
+> +		goto err_timeout;
+> +
+> +	/* the return value is number of executed messages */
+> +	ret = i;
+> +
+> +	return ret;
+> +
+> +err_ack:
+> +	ret = mtk_i2c_master_stop(i2c);
+> +	if (ret)
+> +		goto err_timeout;
+> +	return -ENXIO;
+> +
+> +err_timeout:
+> +	mtk_i2c_dump_reg(i2c);
+> +	mtk_i2c_reset(i2c);
+> +	return ret;
+> +}
+> +
+> +static u32 mtk_i2c_func(struct i2c_adapter *a)
+> +{
+> +	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+> +}
+> +
+> +static const struct i2c_algorithm mtk_i2c_algo = {
+> +	.master_xfer	= mtk_i2c_master_xfer,
+> +	.functionality	= mtk_i2c_func,
+> +};
+> +
+> +static const struct of_device_id i2c_mtk_dt_ids[] = {
+> +	{ .compatible = "mediatek,mt7621-i2c" },
+> +	{ /* sentinel */ }
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, i2c_mtk_dt_ids);
+> +
+> +static void mtk_i2c_init(struct mtk_i2c *i2c)
+> +{
+> +	i2c->clk_div = 40000000 / i2c->cur_clk - 1;
+> +	if (i2c->clk_div < 99)
+> +		i2c->clk_div = 99;
+> +	if (i2c->clk_div > SM0CTL0_CLK_DIV_MAX)
+> +		i2c->clk_div = SM0CTL0_CLK_DIV_MAX;
+> +
+> +	mtk_i2c_reset(i2c);
+> +}
+> +
+> +static int mtk_i2c_probe(struct platform_device *pdev)
+> +{
+> +	struct resource *res;
+> +	struct mtk_i2c *i2c;
+> +	struct i2c_adapter *adap;
+> +	const struct of_device_id *match;
+> +	int ret;
+> +
+> +	match = of_match_device(i2c_mtk_dt_ids, &pdev->dev);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res) {
+> +		dev_err(&pdev->dev, "no memory resource found\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	i2c = devm_kzalloc(&pdev->dev, sizeof(struct mtk_i2c), GFP_KERNEL);
+> +	if (!i2c)
+> +		return -ENOMEM;
+> +
+> +	i2c->base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(i2c->base))
+> +		return PTR_ERR(i2c->base);
+> +
+> +	i2c->dev = &pdev->dev;
+> +
+> +	if (of_property_read_u32(pdev->dev.of_node,
+> +				"clock-frequency", &i2c->cur_clk))
+> +		i2c->cur_clk = 100000;
+> +
+> +	adap = &i2c->adap;
+> +	adap->owner = THIS_MODULE;
+> +	adap->class = I2C_CLASS_HWMON | I2C_CLASS_SPD;
+> +	adap->algo = &mtk_i2c_algo;
+> +	adap->retries = 3;
+> +	adap->dev.parent = &pdev->dev;
+> +	i2c_set_adapdata(adap, i2c);
+> +	adap->dev.of_node = pdev->dev.of_node;
+> +	strlcpy(adap->name, dev_name(&pdev->dev), sizeof(adap->name));
+> +
+> +	platform_set_drvdata(pdev, i2c);
+> +
+> +	mtk_i2c_init(i2c);
+> +
+> +	ret = i2c_add_adapter(adap);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "failed to add adapter\n");
+> +		return ret;
+> +	}
+> +
+> +	dev_info(&pdev->dev, "clock %u kHz\n", i2c->cur_clk/1000);
+> +
+> +	return ret;
+> +}
+> +
+> +static int mtk_i2c_remove(struct platform_device *pdev)
+> +{
+> +	struct mtk_i2c *i2c = platform_get_drvdata(pdev);
+> +
+> +	i2c_del_adapter(&i2c->adap);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver mtk_i2c_driver = {
+> +	.probe		= mtk_i2c_probe,
+> +	.remove		= mtk_i2c_remove,
+> +	.driver		= {
+> +		.owner	= THIS_MODULE,
+> +		.name	= "i2c-mt7621",
+> +		.of_match_table = i2c_mtk_dt_ids,
+> +	},
+> +};
+> +
+> +module_platform_driver(mtk_i2c_driver);
+> +
+> +MODULE_AUTHOR("Steven Liu <steven_liu@mediatek.com>");
+> +MODULE_DESCRIPTION("MT7621 I2C host driver");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:MT7621-I2C");
+> 
 
-Signed-off-by: Ruslan Babayev <ruslan@babayev.com>
-Cc: xe-linux-external@cisco.com
----
- drivers/net/phy/sfp.c | 33 +++++++++++++++++++++++++--------
- 1 file changed, 25 insertions(+), 8 deletions(-)
+Viele Grüße,
+Stefan
 
-diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-index d4635c2178d1..7a6c8df8899b 100644
---- a/drivers/net/phy/sfp.c
-+++ b/drivers/net/phy/sfp.c
-@@ -9,6 +9,7 @@
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/of.h>
-+#include <linux/acpi.h>
- #include <linux/phy.h>
- #include <linux/platform_device.h>
- #include <linux/rtnetlink.h>
-@@ -1783,6 +1784,7 @@ static int sfp_probe(struct platform_device *pdev)
- {
- 	const struct sff_data *sff;
- 	struct sfp *sfp;
-+	struct i2c_adapter *i2c = NULL;
- 	bool poll = false;
- 	int irq, err, i;
- 
-@@ -1801,7 +1803,6 @@ static int sfp_probe(struct platform_device *pdev)
- 	if (pdev->dev.of_node) {
- 		struct device_node *node = pdev->dev.of_node;
- 		const struct of_device_id *id;
--		struct i2c_adapter *i2c;
- 		struct device_node *np;
- 
- 		id = of_match_node(sfp_of_match, node);
-@@ -1818,14 +1819,30 @@ static int sfp_probe(struct platform_device *pdev)
- 
- 		i2c = of_find_i2c_adapter_by_node(np);
- 		of_node_put(np);
--		if (!i2c)
--			return -EPROBE_DEFER;
--
--		err = sfp_i2c_configure(sfp, i2c);
--		if (err < 0) {
--			i2c_put_adapter(i2c);
--			return err;
-+	} else if (ACPI_COMPANION(&pdev->dev)) {
-+		struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-+		struct fwnode_handle *fw = acpi_fwnode_handle(adev);
-+		struct fwnode_reference_args args;
-+		struct acpi_handle *acpi_handle;
-+		int ret;
-+
-+		ret = acpi_node_get_property_reference(fw, "i2c-bus", 0, &args);
-+		if (ACPI_FAILURE(ret) || !is_acpi_device_node(args.fwnode)) {
-+			dev_err(&pdev->dev, "missing 'i2c-bus' property\n");
-+			return -ENODEV;
- 		}
-+
-+		acpi_handle = ACPI_HANDLE_FWNODE(args.fwnode);
-+		i2c = i2c_acpi_find_adapter_by_handle(acpi_handle);
-+	}
-+
-+	if (!i2c)
-+		return -EPROBE_DEFER;
-+
-+	err = sfp_i2c_configure(sfp, i2c);
-+	if (err < 0) {
-+		i2c_put_adapter(i2c);
-+		return err;
- 	}
- 
- 	for (i = 0; i < GPIO_MAX; i++)
 -- 
-2.19.2
-
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-51 Fax: (+49)-8142-66989-80 Email: sr@denx.de
