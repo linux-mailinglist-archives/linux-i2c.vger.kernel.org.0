@@ -2,217 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5ED2C4D5
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2019 12:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A87AD2C534
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2019 13:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726553AbfE1Kxg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 May 2019 06:53:36 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:36610 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726282AbfE1Kxf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 May 2019 06:53:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=s7Qw7kQV3M0frNbNWezoUvaapeqqE6aYTrGr7FdZM5c=; b=rX/5Do4CZpbXbTJOC7kJolbxR
-        4IgEzkBAK8yyKiy3C5V2bt7VoYIzRKFHNPCDqeIcwRKvhgtHkS1b7QCE3qz6R9kQW0q798ze192DZ
-        n0wHeYCmiTD5pYfKoPY3MQ2gPXu9SnE4nCuYPUbUgZn434qeHqCrAMTKYpN0/CTN/q3MbCUCAPt/5
-        XpJJgkCgcMkNR9H6kMxdqFCURTBkPKqtcxjlQ8yKfXcPWM8Jm0c4KkCZ/kRgBj6nT5pD9cuu1ee8z
-        uE9ejfd+XN17eqsrVPLs5vG8mWfO5iRgekI993vaE3llOCPqlh9m3ORvotmh+teH6sRpWhZptLfJ3
-        fsBonmyvQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52672)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1hVZjT-0005FX-O9; Tue, 28 May 2019 11:53:27 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.89)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1hVZjP-0003Yf-J9; Tue, 28 May 2019 11:53:23 +0100
-Date:   Tue, 28 May 2019 11:53:23 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Ruslan Babayev <ruslan@babayev.com>
-Cc:     mika.westerberg@linux.intel.com, wsa@the-dreams.de, andrew@lunn.ch,
-        f.fainelli@gmail.com, hkallweit1@gmail.com, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        xe-linux-external@cisco.com
-Subject: Re: [net-next,v3 2/2] net: phy: sfp: enable i2c-bus detection on
- ACPI based systems
-Message-ID: <20190528105323.ty6pxxvsh6ccz2l6@shell.armlinux.org.uk>
-References: <20190528032213.19839-1-ruslan@babayev.com>
- <20190528032213.19839-3-ruslan@babayev.com>
+        id S1726418AbfE1LOX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 May 2019 07:14:23 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:44280 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726345AbfE1LOX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 May 2019 07:14:23 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4SB9FKR016551;
+        Tue, 28 May 2019 06:13:10 -0500
+Authentication-Results: ppops.net;
+        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from mail1.cirrus.com (mail1.cirrus.com [141.131.3.20])
+        by mx0a-001ae601.pphosted.com with ESMTP id 2sq340k99g-1;
+        Tue, 28 May 2019 06:13:10 -0500
+Received: from EDIEX01.ad.cirrus.com (unknown [198.61.84.80])
+        by mail1.cirrus.com (Postfix) with ESMTP id 8C146611C8C0;
+        Tue, 28 May 2019 06:13:09 -0500 (CDT)
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Tue, 28 May
+ 2019 12:13:08 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Tue, 28 May 2019 12:13:08 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D534745;
+        Tue, 28 May 2019 12:13:08 +0100 (BST)
+Date:   Tue, 28 May 2019 12:13:08 +0100
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+CC:     <wsa@the-dreams.de>, <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>, <linux-i2c@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <benjamin.tissoires@redhat.com>, <jbroadus@gmail.com>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH v2 2/6] i2c: acpi: Use available IRQ helper functions
+Message-ID: <20190528111308.GF28362@ediswmail.ad.cirrus.com>
+References: <20190527151932.14310-1-ckeepax@opensource.cirrus.com>
+ <20190527151932.14310-2-ckeepax@opensource.cirrus.com>
+ <20190528103028.GA2781@lahna.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20190528032213.19839-3-ruslan@babayev.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190528103028.GA2781@lahna.fi.intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=889 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905280073
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 27, 2019 at 08:22:13PM -0700, Ruslan Babayev wrote:
-> Lookup I2C adapter using the "i2c-bus" device property on ACPI based
-> systems similar to how it's done with DT.
+On Tue, May 28, 2019 at 01:30:28PM +0300, Mika Westerberg wrote:
+> On Mon, May 27, 2019 at 04:19:28PM +0100, Charles Keepax wrote:
+> >  static int i2c_acpi_get_info(struct acpi_device *adev,
+> >  			     struct i2c_board_info *info,
+> >  			     struct i2c_adapter *adapter,
+> >  			     acpi_handle *adapter_handle)
+> >  {
+> >  	struct list_head resource_list;
+> > -	struct resource_entry *entry;
+> >  	struct i2c_acpi_lookup lookup;
+> > +	int irq = -ENOENT;
+> >  	int ret;
+> >  
+> >  	memset(&lookup, 0, sizeof(lookup));
+> > @@ -176,16 +187,13 @@ static int i2c_acpi_get_info(struct acpi_device *adev,
+> >  
+> >  	/* Then fill IRQ number if any */
+> >  	INIT_LIST_HEAD(&resource_list);
+> > -	ret = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
+> > +	ret = acpi_dev_get_resources(adev, &resource_list,
+> > +				     i2c_acpi_add_resource, &irq);
+> >  	if (ret < 0)
+> >  		return -EINVAL;
+> >  
+> > -	resource_list_for_each_entry(entry, &resource_list) {
+> > -		if (resource_type(entry->res) == IORESOURCE_IRQ) {
+> > -			info->irq = entry->res->start;
+> > -			break;
+> > -		}
+> > -	}
+> > +	if (irq >= 0)
 > 
-> An example DSD describing an SFP on an ACPI based system:
+> Since 0 is not valid IRQ, I think this should be written like:
 > 
-> Device (SFP0)
-> {
->     Name (_HID, "PRP0001")
->     Name (_CRS, ResourceTemplate()
->     {
->         GpioIo(Exclusive, PullDefault, 0, 0, IoRestrictionNone,
->                "\\_SB.PCI0.RP01.GPIO", 0, ResourceConsumer)
->             { 0, 1, 2, 3, 4 }
->     })
->     Name (_DSD, Package ()
->     {
->         ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
->         Package () {
->             Package () { "compatible", "sff,sfp" },
->             Package () { "i2c-bus", \_SB.PCI0.RP01.I2C.MUX.CH0 },
->             Package () { "maximum-power-milliwatt", 1000 },
->             Package () { "tx-disable-gpios", Package () { ^SFP0, 0, 0, 1} },
->             Package () { "reset-gpio",       Package () { ^SFP0, 0, 1, 1} },
->             Package () { "mod-def0-gpios",   Package () { ^SFP0, 0, 2, 1} },
->             Package () { "tx-fault-gpios",   Package () { ^SFP0, 0, 3, 0} },
->             Package () { "los-gpios",        Package () { ^SFP0, 0, 4, 1} },
->         },
->     })
-> }
-> 
-> Device (PHY0)
-> {
->     Name (_HID, "PRP0001")
->     Name (_DSD, Package ()
->     {
->         ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
->         Package () {
->             Package () { "compatible", "ethernet-phy-ieee802.3-c45" },
->             Package () { "sfp", \_SB.PCI0.RP01.SFP0 },
->             Package () { "managed", "in-band-status" },
->             Package () { "phy-mode", "sgmii" },
->         },
->     })
-> }
-> 
-> Signed-off-by: Ruslan Babayev <ruslan@babayev.com>
-> Cc: xe-linux-external@cisco.com
-
-Looks mostly fine to me, thanks.  A few comments below, mostly minor.
-The way we handle the non-DT and non-ACPI case needs addressing though.
-
-> ---
->  drivers/net/phy/sfp.c | 33 +++++++++++++++++++++++++--------
->  1 file changed, 25 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-> index d4635c2178d1..7a6c8df8899b 100644
-> --- a/drivers/net/phy/sfp.c
-> +++ b/drivers/net/phy/sfp.c
-> @@ -9,6 +9,7 @@
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/of.h>
-> +#include <linux/acpi.h>
->  #include <linux/phy.h>
->  #include <linux/platform_device.h>
->  #include <linux/rtnetlink.h>
-
-These includes are arranged in alphabetical order, is there a reason
-why we need acpi.h out of order here?
-
-> @@ -1783,6 +1784,7 @@ static int sfp_probe(struct platform_device *pdev)
->  {
->  	const struct sff_data *sff;
->  	struct sfp *sfp;
-> +	struct i2c_adapter *i2c = NULL;
-
-Please move this one line above, I think that will be neater.
-
-I'm also debating whether we should have it initialised to null - see
-below.
-
->  	bool poll = false;
->  	int irq, err, i;
->  
-> @@ -1801,7 +1803,6 @@ static int sfp_probe(struct platform_device *pdev)
->  	if (pdev->dev.of_node) {
->  		struct device_node *node = pdev->dev.of_node;
->  		const struct of_device_id *id;
-> -		struct i2c_adapter *i2c;
->  		struct device_node *np;
->  
->  		id = of_match_node(sfp_of_match, node);
-> @@ -1818,14 +1819,30 @@ static int sfp_probe(struct platform_device *pdev)
->  
->  		i2c = of_find_i2c_adapter_by_node(np);
->  		of_node_put(np);
-> -		if (!i2c)
-> -			return -EPROBE_DEFER;
-> -
-> -		err = sfp_i2c_configure(sfp, i2c);
-> -		if (err < 0) {
-> -			i2c_put_adapter(i2c);
-> -			return err;
-> +	} else if (ACPI_COMPANION(&pdev->dev)) {
-> +		struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-> +		struct fwnode_handle *fw = acpi_fwnode_handle(adev);
-> +		struct fwnode_reference_args args;
-> +		struct acpi_handle *acpi_handle;
-> +		int ret;
-> +
-> +		ret = acpi_node_get_property_reference(fw, "i2c-bus", 0, &args);
-> +		if (ACPI_FAILURE(ret) || !is_acpi_device_node(args.fwnode)) {
-> +			dev_err(&pdev->dev, "missing 'i2c-bus' property\n");
-> +			return -ENODEV;
->  		}
-> +
-> +		acpi_handle = ACPI_HANDLE_FWNODE(args.fwnode);
-> +		i2c = i2c_acpi_find_adapter_by_handle(acpi_handle);
-> +	}
-
-If we don't have DT, and we don't have ACPI, there isn't a way that
-we can find the I2C adapter, so I think we probably ought to fail the
-probe here, rather than...
-
-> +
-> +	if (!i2c)
-> +		return -EPROBE_DEFER;
-
-deferring in that case.  So, basically:
-
-	struct i2c_adapter *i2c;
-
-	if (pdev->dev.of_node) {
-		...
-	} else if (ACPI_COMPANION(&pdev->dev)) {
-		...
-	} else {
-		return -EINVAL;
-	}
-
-	if (!i2c)
-		return -EPROBE_DEFER;
-
-> +
-> +	err = sfp_i2c_configure(sfp, i2c);
-> +	if (err < 0) {
-> +		i2c_put_adapter(i2c);
-> +		return err;
->  	}
->  
->  	for (i = 0; i < GPIO_MAX; i++)
-> -- 
-> 2.19.2
-> 
+> 	if (irg > 0)
 > 
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+Yeah sorry thought IRQs were like GPIOs where 0 is a valid
+number, will update the patches.
+
+Thanks,
+Charles
+> > +		info->irq = irq;
+> >  
+> >  	acpi_dev_free_resource_list(&resource_list);
+> >  
+> > -- 
+> > 2.11.0
