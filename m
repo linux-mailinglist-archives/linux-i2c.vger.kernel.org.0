@@ -2,112 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D70DE2E294
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2019 18:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5F32E2C2
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2019 19:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726311AbfE2Qyj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 May 2019 12:54:39 -0400
-Received: from gateway22.websitewelcome.com ([192.185.47.79]:13280 "EHLO
-        gateway22.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726140AbfE2Qyj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 May 2019 12:54:39 -0400
-X-Greylist: delayed 1425 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 May 2019 12:54:39 EDT
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id E38D6397A
-        for <linux-i2c@vger.kernel.org>; Wed, 29 May 2019 11:30:53 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id W1TZhkeN32PzOW1TZh6u7O; Wed, 29 May 2019 11:30:53 -0500
-X-Authority-Reason: nr=8
-Received: from [189.250.47.159] (port=50828 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.91)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hW1TY-001z7k-O5; Wed, 29 May 2019 11:30:52 -0500
-Date:   Wed, 29 May 2019 11:30:52 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] eeprom: at24: use struct_size() in devm_kzalloc()
-Message-ID: <20190529163052.GA29158@embeddedor>
+        id S1726005AbfE2RDJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 May 2019 13:03:09 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:34458 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725948AbfE2RDI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 May 2019 13:03:08 -0400
+Received: by mail-ot1-f66.google.com with SMTP id l17so2790649otq.1
+        for <linux-i2c@vger.kernel.org>; Wed, 29 May 2019 10:03:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=w5R2Tst2s7tEETC5HjzVcuxNpQo69R9uTgohCbePuhc=;
+        b=vMpThCPJyuzr2hY/tDrPnqfGRX5lv2Hs0ZRVBfiFeB36HyvGabhbVDQXnJoLNz4fII
+         zK6ORqPN2Aap5oIKqxQPXr+/PuBOa8XsssKpcCMErySTY/fOuJCDQ4yZSfevuxvb386l
+         0KNU2m0AesS5W8ILkw3zdEjMyr50FuOM1Jo2HTwoSiW6rS+/jwdKo2e90kV5rFl+Trqf
+         KEt08e8GKuvsdYI/ggocSPH9wZ9DzQLMnuMKzuJDEYE28sPZqKdQvtwu+xXB/Fgl2Kri
+         3cVDOVN16mksGVzb59Z5v5PtUDm6IUtLPNrumHOKT8zafRLIicIMk8HIZHPXgvDLGygG
+         yhtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=w5R2Tst2s7tEETC5HjzVcuxNpQo69R9uTgohCbePuhc=;
+        b=pxLjB1ys+srCruWTwJ4VeiJAmPXjqT2WihYjdXq8R1R4bX+OvxLzvGYL751X8f1JHM
+         n0pZZNZZ+8SA8CIymYOWXd8DVR0xuYpgfggtc5S9WGXmM66VDMGu41rcvDCYNjHoD0o+
+         C3sxXyU2GUmxcUh18i6Tz2WcxUKOvIvi+wiXS1WihXhltk6uMg3B6NfDYghKQTy1w9mg
+         7ikqnrf03hu+KJlVTZSXY+nKc4iffHBg/2CkHyHa6JJZHzFQtFMOBkU6bSVroo78FCXR
+         7dlBLCrBjKuLwNtMnPmNsMB2EyuFczj8vleMcYEdfwg4wcwQlYkL7YX9jguen8bHcv2n
+         wSVA==
+X-Gm-Message-State: APjAAAVPg1RQtyYYwumw6sH0bSLwOB2X+UOgIKLjI5dA/lxLDCpT6yNn
+        b+VHvdEhewgf9re0aGCITK1jRBrSs6Ss9xn1KvE=
+X-Google-Smtp-Source: APXvYqzh6fvQEoM+T97BijbLf9LU5u9pth/LU0ZEtwNQxtBdiz3pbfiV0fMqAQpqCXKowhcGbonEYYMr3tPyghT183E=
+X-Received: by 2002:a9d:6c16:: with SMTP id f22mr34290508otq.182.1559149388062;
+ Wed, 29 May 2019 10:03:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.250.47.159
-X-Source-L: No
-X-Exim-ID: 1hW1TY-001z7k-O5
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [189.250.47.159]:50828
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 8
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Received: by 2002:a8a:495:0:0:0:0:0 with HTTP; Wed, 29 May 2019 10:03:07 -0700 (PDT)
+Reply-To: mrdavidkekeli01@gmail.com
+From:   "Mr.David Keller" <kezia.colee@gmail.com>
+Date:   Wed, 29 May 2019 17:03:07 +0000
+Message-ID: <CAKxAmb4=KudTpPV4WknN0RHmqzDWeZOu642TWvkRCdQuPhnDyw@mail.gmail.com>
+Subject: My Greeting
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-One of the more common cases of allocation size calculations is finding
-the size of a structure that has a zero-sized array at the end, along
-with memory for some number of elements for that array. For example:
-
-struct foo {
-    int stuff;
-    struct boo entry[];
-};
-
-size = sizeof(struct foo) + count * sizeof(struct boo);
-instance = devm_kzalloc(dev, size, GFP_KERNEL);
-
-Instead of leaving these open-coded and prone to type mistakes, we can
-now use the new struct_size() helper:
-
-instance = devm_kzalloc(dev, struct_size(instance, entry, count), GFP_KERNEL);
-
-Notice that, in this case, variable at24_size is not necessary, hence it
-is removed.
-
-This code was detected with the help of Coccinelle.
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/misc/eeprom/at24.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index ba8e73812644..78ba6b1917a8 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -568,7 +568,6 @@ static int at24_probe(struct i2c_client *client)
- 	unsigned int i, num_addresses;
- 	struct at24_data *at24;
- 	struct regmap *regmap;
--	size_t at24_size;
- 	bool writable;
- 	u8 test_byte;
- 	int err;
-@@ -652,8 +651,8 @@ static int at24_probe(struct i2c_client *client)
- 	if (IS_ERR(regmap))
- 		return PTR_ERR(regmap);
- 
--	at24_size = sizeof(*at24) + num_addresses * sizeof(struct at24_client);
--	at24 = devm_kzalloc(dev, at24_size, GFP_KERNEL);
-+	at24 = devm_kzalloc(dev, struct_size(at24, client, num_addresses),
-+			    GFP_KERNEL);
- 	if (!at24)
- 		return -ENOMEM;
- 
--- 
-2.21.0
-
+My Greeting, Did you receive the letter i sent to you.Please answer
+me.Best Regard,Mr.David Keller.
