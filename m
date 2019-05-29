@@ -2,72 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 125EA2E1B3
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2019 17:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4741E2E26E
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2019 18:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726925AbfE2Px4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 May 2019 11:53:56 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:39404 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727132AbfE2Pxz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 29 May 2019 11:53:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=im4MQHdQK9abJhFH96Zbr5c+k47agNl/ENbT8u/aulo=; b=h6PS64mrTgGbG4Ret1T5AIq1SJ
-        qHzYF0KVZCnABwd26ouHy3ZvILTLsxHkVtScmLehUBNV89GfAYMmnYIN31/q+rAaVxVxch1BfhByN
-        2UvZUV41MEuFMLA4xnOneyoI72Z27dGowbwwN8RN8JF+KYyuRRSvsvVVft/pw0UQz79U=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1hW0te-0000n6-6j; Wed, 29 May 2019 17:53:46 +0200
-Date:   Wed, 29 May 2019 17:53:46 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sagar Shrikant Kadam <sagar.kadam@sifive.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, peter@korsgaard.com,
-        palmer@sifive.com, paul.walmsley@sifive.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 3/3] i2c-ocores: sifive: add polling mode workaround
- for FU540-C000 SoC.
-Message-ID: <20190529155346.GA18059@lunn.ch>
-References: <1559104047-13920-1-git-send-email-sagar.kadam@sifive.com>
- <1559104047-13920-4-git-send-email-sagar.kadam@sifive.com>
+        id S1726605AbfE2Qmv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 May 2019 12:42:51 -0400
+Received: from gateway20.websitewelcome.com ([192.185.59.4]:12130 "EHLO
+        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726062AbfE2Qmv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 May 2019 12:42:51 -0400
+X-Greylist: delayed 1353 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 May 2019 12:42:50 EDT
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 1E189400D7F24
+        for <linux-i2c@vger.kernel.org>; Wed, 29 May 2019 10:19:56 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id W1JIhA0I42qH7W1JIhNlBx; Wed, 29 May 2019 11:20:16 -0500
+X-Authority-Reason: nr=8
+Received: from [189.250.47.159] (port=50504 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.91)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hW1JH-001tk6-Fz; Wed, 29 May 2019 11:20:15 -0500
+Date:   Wed, 29 May 2019 11:20:14 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Peter Rosin <peda@axentia.se>, Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] i2c: mux: Use struct_size() in devm_kzalloc()
+Message-ID: <20190529162014.GA27389@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1559104047-13920-4-git-send-email-sagar.kadam@sifive.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.47.159
+X-Source-L: No
+X-Exim-ID: 1hW1JH-001tk6-Fz
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [189.250.47.159]:50504
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 3
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, May 29, 2019 at 09:57:27AM +0530, Sagar Shrikant Kadam wrote:
-> The i2c-ocore driver already has a polling mode interface.But it needs
-> a workaround for FU540 Chipset on HiFive unleashed board (RevA00).
-> There is an erratum in FU540 chip that prevents interrupt driven i2c
-> transfers from working, and also the I2C controller's interrupt bit
-> cannot be cleared if set, due to this the existing i2c polling mode
-> interface added in mainline earlier doesn't work, and CPU stall's
-> infinitely, when-ever i2c transfer is initiated.
-> 
-> Ref:
-> 	commit dd7dbf0eb090 ("i2c: ocores: refactor setup for polling")
-> 
-> The workaround / fix under OCORES_FLAG_BROKEN_IRQ is particularly for
-> FU540-COOO SoC.
-> 
-> The polling function identifies a SiFive device based on the device node
-> and enables the workaround.
-> 
-> Signed-off-by: Sagar Shrikant Kadam <sagar.kadam@sifive.com>
+One of the more common cases of allocation size calculations is finding
+the size of a structure that has a zero-sized array at the end, along
+with memory for some number of elements for that array. For example:
 
-Hi Sagar
+struct foo {
+    int stuff;
+    struct boo entry[];
+};
 
-When you repost, you are supposed to add any reviewed-by, or acked-by
-tags you received.
+instance = devm_kzalloc(dev, sizeof(struct foo) + count * sizeof(struct boo), GFP_KERNEL);
 
-     Andrew
+Instead of leaving these open-coded and prone to type mistakes, we can
+now use the new struct_size() helper:
+
+instance = devm_kzalloc(dev, struct_size(instance, entry, count), GFP_KERNEL);
+
+This code was detected with the help of Coccinelle.
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/i2c/i2c-mux.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
+index 603252fa1284..8d5e4c6fdd8e 100644
+--- a/drivers/i2c/i2c-mux.c
++++ b/drivers/i2c/i2c-mux.c
+@@ -243,8 +243,7 @@ struct i2c_mux_core *i2c_mux_alloc(struct i2c_adapter *parent,
+ {
+ 	struct i2c_mux_core *muxc;
+ 
+-	muxc = devm_kzalloc(dev, sizeof(*muxc)
+-			    + max_adapters * sizeof(muxc->adapter[0])
++	muxc = devm_kzalloc(dev, struct_size(muxc, adapter, max_adapters)
+ 			    + sizeof_priv, GFP_KERNEL);
+ 	if (!muxc)
+ 		return NULL;
+-- 
+2.21.0
+
