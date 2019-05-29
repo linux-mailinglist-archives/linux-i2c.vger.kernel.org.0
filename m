@@ -2,182 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4732D1DD
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2019 01:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D622D40D
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2019 05:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727846AbfE1XCk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 May 2019 19:02:40 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:42031 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727841AbfE1XCh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 May 2019 19:02:37 -0400
-Received: by mail-pg1-f196.google.com with SMTP id 33so94671pgv.9
-        for <linux-i2c@vger.kernel.org>; Tue, 28 May 2019 16:02:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=babayev.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TApL13/IWHA6p9W6T8SV9xqxLEQgsxufxiO/2MDfUXk=;
-        b=ZJOaWquNqgKZhJQs1PTXJ/31Y1TjjQ9lC9SHCR217UhvWrr4xvnjYN4WTtKJ2Nw7fc
-         oMG1hpBNCnR1QJ5xZK0IarzmvhJG1zAVTZMoIecQ5gD3T4291/3xM8jhLP6dbHvQH2LC
-         FPIFnrlGT5Vckw16/MfPBp5A2TPLouNKttnEs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TApL13/IWHA6p9W6T8SV9xqxLEQgsxufxiO/2MDfUXk=;
-        b=udIKYvPWBN0L241a+lPOjlmHcl5op/3FpBhM+7t+3OPTCc9oRc9nnpFIac7fUzJWjJ
-         LHZmLChhU8xeiZ6L0JJlIGCMjpD/GFSewwldL2ol7BAmyFUPERIB2y2LKJhBcje5BPrb
-         9zjjdN/RR3XnkTlpNGV36aS9Gb5USx35s0gNEMIN4NL9W5p0Fy0DRTA7dKmSXRFmItMz
-         mEricXvmYjDesVn2BZXmqcASfuycwyC55/XzG5wJAsJ3Megqp7utLOUVuheZ0k+TIF9T
-         PqdC/8FA/fZY0kldIIgtGV6FqGWoDYFEXRxF7ES0yf0RzDrzsWS/+VnNGjI/258WE23q
-         6WKA==
-X-Gm-Message-State: APjAAAX60cyfaTpvt339QCtjRVmIRF1Y7y9QG5OnddXylAPwcnYpiro9
-        /xR7qCPH7ylAafppe19VF/eJ0A==
-X-Google-Smtp-Source: APXvYqy9yJ3BtjJVCvwuUdO32bTMEQjQdREbeUgAJAa4cyo80WRBRVUwmVf36AEon+bBBhIOd6wDhw==
-X-Received: by 2002:aa7:8f16:: with SMTP id x22mr76577654pfr.202.1559084557329;
-        Tue, 28 May 2019 16:02:37 -0700 (PDT)
-Received: from p50.cisco.com ([128.107.241.183])
-        by smtp.gmail.com with ESMTPSA id p16sm27028196pfq.153.2019.05.28.16.02.35
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 16:02:36 -0700 (PDT)
-From:   Ruslan Babayev <ruslan@babayev.com>
-To:     mika.westerberg@linux.intel.com, wsa@the-dreams.de,
-        linux@armlinux.org.uk, andrew@lunn.ch, f.fainelli@gmail.com,
-        hkallweit1@gmail.com, davem@davemloft.net
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        xe-linux-external@cisco.com
-Subject: [net-next,v4 2/2] net: phy: sfp: enable i2c-bus detection on ACPI based systems
-Date:   Tue, 28 May 2019 16:02:33 -0700
-Message-Id: <20190528230233.26772-3-ruslan@babayev.com>
-X-Mailer: git-send-email 2.19.2
-In-Reply-To: <20190528230233.26772-1-ruslan@babayev.com>
-References: <20190528230233.26772-1-ruslan@babayev.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1725828AbfE2DB7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 May 2019 23:01:59 -0400
+Received: from smtp103.ord1d.emailsrvr.com ([184.106.54.103]:57828 "EHLO
+        smtp103.ord1d.emailsrvr.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725816AbfE2DB6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 May 2019 23:01:58 -0400
+Received: from smtp5.relay.ord1d.emailsrvr.com (localhost [127.0.0.1])
+        by smtp5.relay.ord1d.emailsrvr.com (SMTP Server) with ESMTP id 13CC9A019D;
+        Tue, 28 May 2019 23:01:58 -0400 (EDT)
+X-SMTPDoctor-Processed: csmtpprox beta
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=g001.emailsrvr.com;
+        s=20190322-9u7zjiwi; t=1559098918;
+        bh=dxk1NY8pRsVPWLjcp9o/Cvrv9iSK3H0mNb52VECozys=;
+        h=Subject:From:Date:To:From;
+        b=HVOZ521Hl7QMWUqq7mUULr8MvIxEYZto7hio+0rsM/MyRNWrTfM2GvLl0Vryk41b7
+         6gnJhRBPsnx9Wx1monqXJIgvFgNtVG1X4oGti3cC/xsNkPfRBXu3ruHG7cMWAQkxpO
+         Z5WpSL8rO6/+GiDK5KJMtjY7WnRMjjGNkIoYNyEA=
+X-Auth-ID: mcdermj@xenotropic.com
+X-Auth-ID: mcdermj@xenotropic.com
+Received: by smtp5.relay.ord1d.emailsrvr.com (Authenticated sender: mcdermj-AT-xenotropic.com) with ESMTPSA id 2231CA00AB;
+        Tue, 28 May 2019 23:01:57 -0400 (EDT)
+X-Sender-Id: mcdermj@xenotropic.com
+Received: from [10.0.3.33] (c-73-96-52-102.hsd1.or.comcast.net [73.96.52.102])
+        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
+        by 0.0.0.0:465 (trex/5.7.12);
+        Tue, 28 May 2019 23:01:58 -0400
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH v2] i2c: bcm2835: Model Divider in CCF
+From:   Annaliese McDermond <nh6z@nh6z.net>
+In-Reply-To: <716a7b8a-c2f8-a3c4-0b3a-be3cb26a6c12@i2se.com>
+Date:   Tue, 28 May 2019 20:01:56 -0700
+Cc:     eric@anholt.net, f.fainelli@gmail.com, wsa@the-dreams.de,
+        swarren@wwwdotorg.org, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, team@nwdigitalradio.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <ACF57AF2-51C9-4884-BC65-126221CDAB5B@nh6z.net>
+References: <20190508071227.18609-1-nh6z@nh6z.net>
+ <716a7b8a-c2f8-a3c4-0b3a-be3cb26a6c12@i2se.com>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Lookup I2C adapter using the "i2c-bus" device property on ACPI based
-systems similar to how it's done with DT.
 
-An example DSD describing an SFP on an ACPI based system:
 
-Device (SFP0)
-{
-    Name (_HID, "PRP0001")
-    Name (_CRS, ResourceTemplate()
-    {
-        GpioIo(Exclusive, PullDefault, 0, 0, IoRestrictionNone,
-               "\\_SB.PCI0.RP01.GPIO", 0, ResourceConsumer)
-            { 0, 1, 2, 3, 4 }
-    })
-    Name (_DSD, Package ()
-    {
-        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-        Package () {
-            Package () { "compatible", "sff,sfp" },
-            Package () { "i2c-bus", \_SB.PCI0.RP01.I2C.MUX.CH0 },
-            Package () { "maximum-power-milliwatt", 1000 },
-            Package () { "tx-disable-gpios", Package () { ^SFP0, 0, 0, 1} },
-            Package () { "reset-gpio",       Package () { ^SFP0, 0, 1, 1} },
-            Package () { "mod-def0-gpios",   Package () { ^SFP0, 0, 2, 1} },
-            Package () { "tx-fault-gpios",   Package () { ^SFP0, 0, 3, 0} },
-            Package () { "los-gpios",        Package () { ^SFP0, 0, 4, 1} },
-        },
-    })
-}
+> On May 28, 2019, at 12:52 AM, Stefan Wahren <stefan.wahren@i2se.com> =
+wrote:
+>=20
+> Hi Annaliese,
+>=20
+> thank you for mention that we have multiple I2C interfaces.
+>=20
+> On 08.05.19 09:12, Annaliese McDermond wrote:
+>> +
+>> +static struct clk *bcm2835_i2c_register_div(struct device *dev,
+>> +					const char *mclk_name,
+>> +					struct bcm2835_i2c_dev *i2c_dev)
+>> +{
+>> +	struct clk_init_data init;
+>> +	struct clk_bcm2835_i2c *priv;
+>> +	const char *devname =3D dev_name(dev);
+>> +
+>> +	init.ops =3D &clk_bcm2835_i2c_ops;
+>> +	init.name =3D "bcm2835-i2c";
+>=20
+> Does this work intentionally in case i2c-0 and i2c-1 are used at the
+> same time?
 
-Device (PHY0)
-{
-    Name (_HID, "PRP0001")
-    Name (_DSD, Package ()
-    {
-        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-        Package () {
-            Package () { "compatible", "ethernet-phy-ieee802.3-c45" },
-            Package () { "sfp", \_SB.PCI0.RP01.SFP0 },
-            Package () { "managed", "in-band-status" },
-            Package () { "phy-mode", "sgmii" },
-        },
-    })
-}
+It should work fine.  The clocks are all registered separately and =
+passed
+the pointer to the struct device for the interface.  This keeps it
+accessing the correct registers and such.
 
-Signed-off-by: Ruslan Babayev <ruslan@babayev.com>
-Cc: xe-linux-external@cisco.com
----
- drivers/net/phy/sfp.c | 35 +++++++++++++++++++++++++++--------
- 1 file changed, 27 insertions(+), 8 deletions(-)
+> Please also check the output of /sys/kernel/debug/clk/clk_summary
 
-diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-index d4635c2178d1..554acc869c25 100644
---- a/drivers/net/phy/sfp.c
-+++ b/drivers/net/phy/sfp.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <linux/acpi.h>
- #include <linux/ctype.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
-@@ -1782,6 +1783,7 @@ static void sfp_cleanup(void *data)
- static int sfp_probe(struct platform_device *pdev)
- {
- 	const struct sff_data *sff;
-+	struct i2c_adapter *i2c;
- 	struct sfp *sfp;
- 	bool poll = false;
- 	int irq, err, i;
-@@ -1801,7 +1803,6 @@ static int sfp_probe(struct platform_device *pdev)
- 	if (pdev->dev.of_node) {
- 		struct device_node *node = pdev->dev.of_node;
- 		const struct of_device_id *id;
--		struct i2c_adapter *i2c;
- 		struct device_node *np;
- 
- 		id = of_match_node(sfp_of_match, node);
-@@ -1818,14 +1819,32 @@ static int sfp_probe(struct platform_device *pdev)
- 
- 		i2c = of_find_i2c_adapter_by_node(np);
- 		of_node_put(np);
--		if (!i2c)
--			return -EPROBE_DEFER;
--
--		err = sfp_i2c_configure(sfp, i2c);
--		if (err < 0) {
--			i2c_put_adapter(i2c);
--			return err;
-+	} else if (has_acpi_companion(&pdev->dev)) {
-+		struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-+		struct fwnode_handle *fw = acpi_fwnode_handle(adev);
-+		struct fwnode_reference_args args;
-+		struct acpi_handle *acpi_handle;
-+		int ret;
-+
-+		ret = acpi_node_get_property_reference(fw, "i2c-bus", 0, &args);
-+		if (ACPI_FAILURE(ret) || !is_acpi_device_node(args.fwnode)) {
-+			dev_err(&pdev->dev, "missing 'i2c-bus' property\n");
-+			return -ENODEV;
- 		}
-+
-+		acpi_handle = ACPI_HANDLE_FWNODE(args.fwnode);
-+		i2c = i2c_acpi_find_adapter_by_handle(acpi_handle);
-+	} else {
-+		return -EINVAL;
-+	}
-+
-+	if (!i2c)
-+		return -EPROBE_DEFER;
-+
-+	err = sfp_i2c_configure(sfp, i2c);
-+	if (err < 0) {
-+		i2c_put_adapter(i2c);
-+		return err;
- 	}
- 
- 	for (i = 0; i < GPIO_MAX; i++)
--- 
-2.19.2
+They=E2=80=99ll come up with the same name in the current code in the =
+debug
+output.  I agree this is mildly confusing and I=E2=80=99ll spin another =
+version
+of the patch to give them unique clock names in clk_summary.
 
+> Regards
+> Stefan
+>=20
+
+--
+Annaliese McDermonod
+nh6z@nh6z.net=
