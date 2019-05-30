@@ -2,121 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 476802EFCD
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2019 05:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C2B2F047
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2019 06:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731960AbfE3D5u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 May 2019 23:57:50 -0400
-Received: from mail-vk1-f193.google.com ([209.85.221.193]:35181 "EHLO
-        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730526AbfE3D5n (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 May 2019 23:57:43 -0400
-Received: by mail-vk1-f193.google.com with SMTP id k1so484214vkb.2
-        for <linux-i2c@vger.kernel.org>; Wed, 29 May 2019 20:57:43 -0700 (PDT)
+        id S1731102AbfE3ECZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 May 2019 00:02:25 -0400
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:6226 "EHLO
+        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388150AbfE3ECW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 May 2019 00:02:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=knP9Vdv/W9CTVqFRXbGhRDZ6S1C60rRcw9hZ+qG6uSI=;
-        b=ZmldDBEPfCONxwpTJVlWszmR8g7AW3et6y0xSLMruEMwOdIXeFddd9HCltth1r5kBq
-         sDmq/yoFJM4MFKOePC7YAmmgfC8izwuEcBf3KTDHbJ99AlgawtpYCSFgM5RZ37t9vZUs
-         +gdp2UcLBPc52KiKo7mgT+3g6dVnVVf7oGVyiwRrIIt/ba8D1RvMyk4j2jJIS6ujOoVR
-         eMGNd3hOH5HEfSsLm0lhb1cvkymfrTbiL0NQppS2PmtPQFUdaOd/jHeC1x0/ORUzLoGR
-         GC15E5eo6rdxNB3PtMZUtQMFQRWQGQ3Ic4s8MW002f2OYbeW0rzhq8A52kaa/Vj6RPkP
-         ISpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=knP9Vdv/W9CTVqFRXbGhRDZ6S1C60rRcw9hZ+qG6uSI=;
-        b=pGGDzlmYDW7lye7H7udy5/iw6wh/eVlAsYfu1LxlPWF2rhEZ2C+YnHsBSFy6TVIqS+
-         iLPOcAUyOuRG0Miq/E6mTaS2qGVYrVaPIQk4X0lUrS6ra/ER1RLQ9yxU8Vt606bCkidc
-         vhKSEU+Zi1vSmU9+8i3/dICs9EVb3qwll7Gc6yJ2neZfhCxhpa5O5V7qaSoUf8SyUH5z
-         LT3ngFAl2Q5VUDxJc1VvBYB8aittZvHTdb3eP0aekl/Sha4uzioQH3HDadHPnmdnd2W1
-         gnkCfPtTbLgG42u+KXoEBb+BEB72YTU2iOs3mhAJjB1U2DICBd1pUARfmYMaH0gOE2o/
-         ZLwg==
-X-Gm-Message-State: APjAAAXdOchsq3kH+nSytXTgSTkzrVN0j9b7C2MxXMkDAxxqq8OMkxce
-        IjyIkFVHbYQ4sBO0FFTTGH4YP3mk2AMGlciR8DV+OA==
-X-Google-Smtp-Source: APXvYqwgq0hw9LUvz5cuuDP/OzdFkdA/aey96P69lz2u1TwLNK5+B/g6I0a75Filrgu8sfxR+q3gaQnmfYsUlBgRxyQ=
-X-Received: by 2002:a1f:e043:: with SMTP id x64mr548839vkg.74.1559188662612;
- Wed, 29 May 2019 20:57:42 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1559188941; x=1590724941;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=UkRYNR5hm0gc7X8fxqjNJQmr3n5Ab3tDm3l1W9pl4Bw=;
+  b=W98FsN7u+uCMaZmEJeuY//BVPO9DY4FRBfJ3Hx77kb2QEbdgKN1rMghY
+   bHjOg+WrOT69K23mYXqkh65CIom9I5wWqzYQpxoZW/kp8gxE+vEliyxBl
+   2zXW/jStey7QStRjvDC5ytNo2ft00BJDDHBZTYYDeA02PU9uV/hmO8wMz
+   s=;
+X-IronPort-AV: E=Sophos;i="5.60,529,1549929600"; 
+   d="scan'208";a="768214243"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-168cbb73.us-west-2.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 30 May 2019 04:02:19 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-2c-168cbb73.us-west-2.amazon.com (Postfix) with ESMTPS id 0630FA2204;
+        Thu, 30 May 2019 04:02:18 +0000 (UTC)
+Received: from EX13D05UWB002.ant.amazon.com (10.43.161.50) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 30 May 2019 04:02:18 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX13D05UWB002.ant.amazon.com (10.43.161.50) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 30 May 2019 04:02:18 +0000
+Received: from localhost (10.94.220.85) by mail-relay.amazon.com
+ (10.43.61.243) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Thu, 30 May 2019 04:02:17 +0000
+Date:   Wed, 29 May 2019 21:02:17 -0700
+From:   Eduardo Valentin <eduval@amazon.com>
+To:     "Wang, Haiyue" <haiyue.wang@linux.intel.com>
+CC:     Eduardo Valentin <eduval@amazon.com>, <wsa@the-dreams.de>,
+        <brendanhiggins@google.com>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
+        <jarkko.nikula@linux.intel.com>, <andriy.shevchenko@intel.com>,
+        <jae.hyun.yoo@linux.intel.com>
+Subject: Re: [PATCH i2c/slave-mqueue v5] i2c: slave-mqueue: add a slave
+ backend to receive and queue messages
+Message-ID: <20190530040217.GB17772@u40b0340c692b58f6553c.ant.amazon.com>
+References: <1524503192-4176-1-git-send-email-haiyue.wang@linux.intel.com>
+ <20190523220345.GA3417@u40b0340c692b58f6553c.ant.amazon.com>
+ <35a9d066-c732-cb00-04a5-438c948915ae@linux.intel.com>
+ <20190524173353.GA6428@u40b0340c692b58f6553c.ant.amazon.com>
+ <bf1e8f0b-5bd0-fb43-c19b-9487603b9ee3@linux.intel.com>
+ <20190529231100.GA18339@u40b0340c692b58f6553c.ant.amazon.com>
+ <75cb9514-bb3a-9c3b-05df-0c3517bd775a@linux.intel.com>
 MIME-Version: 1.0
-References: <1559104047-13920-1-git-send-email-sagar.kadam@sifive.com> <1559104047-13920-2-git-send-email-sagar.kadam@sifive.com>
-In-Reply-To: <1559104047-13920-2-git-send-email-sagar.kadam@sifive.com>
-From:   Sagar Kadam <sagar.kadam@sifive.com>
-Date:   Thu, 30 May 2019 09:27:31 +0530
-Message-ID: <CAARK3Hm0F+6qAh5LYbqnfn5LeDyptyBy+_DZxAxxFg5bhe8Uxg@mail.gmail.com>
-Subject: Re: [PATCH v8 1/3] dt-bindings: i2c: extend existing opencore bindings.
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, peter@korsgaard.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <75cb9514-bb3a-9c3b-05df-0c3517bd775a@linux.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Rob,
+On Thu, May 30, 2019 at 09:33:34AM +0800, Wang, Haiyue wrote:
+> 
+> 在 2019-05-30 07:11, Eduardo Valentin 写道:
+> >>>>>>+
+> >>>>>>+	case I2C_SLAVE_WRITE_RECEIVED:
+> >>>>>>+		if (msg->len < MQ_MSGBUF_SIZE) {
+> >>>>>>+			msg->buf[msg->len++] = *val;
+> >>>>>Do we need to lock the accesses to msg->buf? how about to msg->len?
+> >>>this code goes access and modify data here, e.g. msg->len and msg->buf.
+> >>>
+> >>>On this case (I2C_SLAVE_WRITE_RECEIVED), this code wont protect access.
+> >>>
+> >>>This can cause concurrence issues if you receive an IRQ when the user
+> >>>is on your bin_read().
+> >>User will not touch 'msg = mq->curr;', just touch 'msg =
+> >>&mq->queue[mq->out];'
+> >What happens if mq->curr == mq->queue[mq->out]?
+> >
+> 1. The Read will check.
+> 
+> +	spin_lock_irqsave(&mq->lock, flags);
+> +	if (mq->out != mq->in) {
+> +		msg = &mq->queue[mq->out];
+> 
+> 2. Flush the oldeast message. ^_^
+> 
+> +	case I2C_SLAVE_STOP:
+> +		if (unlikely(mq->truncated || msg->len < 2))
+> +			break;
+> +
+> +		spin_lock(&mq->lock);
+> +		mq->in = MQ_QUEUE_NEXT(mq->in);
+> +		mq->curr = &mq->queue[mq->in];
+> +		mq->curr->len = 0;
+> +
+> +		/* Flush the oldest message */
+> +		if (mq->out == mq->in)
+> +			mq->out = MQ_QUEUE_NEXT(mq->out);
 
-Please let me know if this patch is as per your requirements/comments
-you mentioned earlier.
+Yeah, I see. We keep on dropping messages (old ones) when the queue is full...
 
-Thanks & Regards,
-Sagar Kadam
-On Wed, May 29, 2019 at 9:57 AM Sagar Shrikant Kadam
-<sagar.kadam@sifive.com> wrote:
->
-> Reformatted compatibility strings to one valid combination on
-> each line.
-> Add FU540-C000 specific device tree bindings to already available
-> i2-ocores file. This device is available on
-> HiFive Unleashed Rev A00 board. Move interrupt under optional
-> property list as this can be optional.
->
-> The FU540-C000 SoC from sifive, has an Opencore's I2C block
-> reimplementation.
->
-> The DT compatibility string for this IP is present in HDL and available at.
-> https://github.com/sifive/sifive-blocks/blob/master/src/main/scala/devices/i2c/I2C.scala#L73
->
-> Signed-off-by: Sagar Shrikant Kadam <sagar.kadam@sifive.com>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-ocores.txt | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> index 17bef9a..6b25a80 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> @@ -1,9 +1,13 @@
->  Device tree configuration for i2c-ocores
->
->  Required properties:
-> -- compatible      : "opencores,i2c-ocores" or "aeroflexgaisler,i2cmst"
-> +- compatible      : "opencores,i2c-ocores"
-> +                    "aeroflexgaisler,i2cmst"
-> +                    "sifive,fu540-c000-i2c", "sifive,i2c0"
-> +                    For Opencore based I2C IP block reimplemented in
-> +                    FU540-C000 SoC. Please refer to sifive-blocks-ip-versioning.txt
-> +                    for additional details.
->  - reg             : bus address start and address range size of device
-> -- interrupts      : interrupt number
->  - clocks          : handle to the controller clock; see the note below.
->                      Mutually exclusive with opencores,ip-clock-frequency
->  - opencores,ip-clock-frequency: frequency of the controller clock in Hz;
-> @@ -12,6 +16,7 @@ Required properties:
->  - #size-cells     : should be <0>
->
->  Optional properties:
-> +- interrupts      : interrupt number.
->  - clock-frequency : frequency of bus clock in Hz; see the note below.
->                      Defaults to 100 KHz when the property is not specified
->  - reg-shift       : device register offsets are shifted by this value
-> --
-> 1.9.1
->
+> +		spin_unlock(&mq->lock);
+> 
+
+-- 
+All the best,
+Eduardo Valentin
