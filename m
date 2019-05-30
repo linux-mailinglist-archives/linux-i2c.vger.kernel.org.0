@@ -2,111 +2,229 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77909303AD
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2019 22:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F26303C2
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2019 23:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbfE3U7T (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 May 2019 16:59:19 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:51173 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725440AbfE3U7T (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 May 2019 16:59:19 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9494D8365B
-        for <linux-i2c@vger.kernel.org>; Fri, 31 May 2019 08:59:16 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1559249956;
-        bh=vYvCiteI1Kp7faMs6jomFZfgYQobeGhqvCgWsLGRlrw=;
-        h=From:To:Subject:Date:References;
-        b=PYGBsgkQE6g/yaOEAZgdPL09pA940HgFsJNtlcXL3m5GOM44Fs3SjZqAEvK7juPrP
-         SZnedf0v7V8SQy3S4Deq/sOONdTYHnPbjBaRBGlClTtIW0pbS5ljT4ekq7hOs5C+i2
-         AtFueeoG4IPMQQaCAMlgj3Gcl5Kzw/cJHV+UOyN0agt9PhGQO8iN/E869HMSlV0Vgs
-         fNSvNq6pSTe8+OHi6jWCttsFXTwBw0CmOOWq+KEcsmOfM8QF0NdzSJbYgCOltUMqu1
-         uMxhHvNiHGow+blkuFDajemB9okPSoBs+aR7IoaVLrhYO85AfudzZeOhnOL0y1j6P4
-         2V5QTt2YuUSNw==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5cf044240000>; Fri, 31 May 2019 08:59:16 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1156.6; Fri, 31 May 2019 08:59:11 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1156.000; Fri, 31 May 2019 08:59:11 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i2c: pca: Fix GPIO lookup code
-Thread-Topic: [PATCH] i2c: pca: Fix GPIO lookup code
-Thread-Index: AQHVFyW1EiHej+T5HkG5ceqFqpt4tw==
-Date:   Thu, 30 May 2019 20:59:10 +0000
-Message-ID: <7f417ef2ae6d49f89828655272292978@svr-chch-ex1.atlnz.lc>
-References: <20190530202424.13937-1-linus.walleij@linaro.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [2001:df5:b000:22:3a2c:4aff:fe70:2b02]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726485AbfE3VE0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 May 2019 17:04:26 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:45959 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726079AbfE3VE0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 May 2019 17:04:26 -0400
+Received: by mail-wr1-f68.google.com with SMTP id b18so5052917wrq.12
+        for <linux-i2c@vger.kernel.org>; Thu, 30 May 2019 14:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4n/Tw7kLf37QyLXRTIq7cfmxSIDo8u+JEuE4VLAhb6Y=;
+        b=HXIzftDnZvvgLo9BVoKgJkpYr7rgDZTsFHCAYfFHvqQhs20I1cymFicrH7rdhpImE3
+         Qe2kuLgwQ5IxjVl6rVqaSqReNKWPlrcfhp2sxFlUmQqYbZ5kPKa1HFJ3RqGSPbnpC1/y
+         vEmuHpLugJ9IwxuCqVYB4OnglaocFcsvFyCUJsKNqdUQ2hPWU+XF3PUeXMM/s0SJr6mD
+         /L8BcNX++5gAXKoTqdHxI6vxbphEC1DGXx3DJ5un8zRj1etydNRndMa4gBsGzaKAk4j8
+         oDzxXjPIHKDLbqNpELRA9vPi7KaNnNQQjgDSvsbAwuSofyHE75mHa4O0DIFx3URlSQe7
+         FDzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4n/Tw7kLf37QyLXRTIq7cfmxSIDo8u+JEuE4VLAhb6Y=;
+        b=fTA+F1szYGydiAZa3pLiIVw8BMpvqWoDamQkM99Lb0yco/OYSMji7iqRGv5WMid4OD
+         JhT//LubKPLZBRN9gAs9mJsZNPAwMyN3IREI+GYTY1gFmkWpDR7ZbIGqSGfAHozUkYFw
+         JnqJ2nvfsccO+rAXvq6ia1MDEYFRXe4kWYzKzkwrBxsKdYc5CTa82QHgPXMGDL0vTXwC
+         lc8varNgPzBBMnY5wZPBqw1DUdrFoEAg1ZNUpp5wP9U/0Osu5BX7MJJnlCWP9lYfG4yX
+         ZaVaXP8rcR3YSYMEGMPjc3edl5Og7C854fRDfcX7YtCl0zDtern1/kuV5/AN3Y2o9xl9
+         K2+Q==
+X-Gm-Message-State: APjAAAW832zCPWNVJ+4X7VJt4yqkF0M04uK7HyFOEyumbUr9Ek61BtVm
+        zizAywUxJEpFqXMDtRJg5E4PqA==
+X-Google-Smtp-Source: APXvYqwE2a9pBAeSUDZeDCw0Qc6+fLOReSUaeW59FXLobRJlgyAHrjqMBhu1/YtTLxTb2t2shHUyRg==
+X-Received: by 2002:a5d:694c:: with SMTP id r12mr4076876wrw.214.1559250264499;
+        Thu, 30 May 2019 14:04:24 -0700 (PDT)
+Received: from localhost.localdomain (catv-89-135-96-219.catv.broadband.hu. [89.135.96.219])
+        by smtp.gmail.com with ESMTPSA id a124sm5982638wmh.3.2019.05.30.14.04.22
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 30 May 2019 14:04:23 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Doug Anderson <dianders@chromium.org>
+Subject: [PATCH] i2c: mux: arb-gpio: Rewrite to use GPIO descriptors
+Date:   Thu, 30 May 2019 23:04:21 +0200
+Message-Id: <20190530210421.24941-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Linus,=0A=
-=0A=
-On 31/05/19 8:24 AM, Linus Walleij wrote:=0A=
-> The devm_gpiod_request_gpiod() call will add "-gpios" to=0A=
-> any passed connection ID before looking it up.=0A=
-> =0A=
-> I do not think the reset GPIO on this platform is named=0A=
-> "reset-gpios-gpios" but rather "reset-gpios" in the device=0A=
-> tree, so fix this up so that we get a proper reset GPIO=0A=
-> handle.=0A=
-> =0A=
-> Also drop the inclusion of the legacy GPIO header.=0A=
-> =0A=
-> Fixes: 0e8ce93bdceb ("i2c: pca-platform: add devicetree awareness")=0A=
-> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>=0A=
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>=0A=
-=0A=
-Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>=0A=
-=0A=
-Thanks.=0A=
-=0A=
-> ---=0A=
->   drivers/i2c/busses/i2c-pca-platform.c | 3 +--=0A=
->   1 file changed, 1 insertion(+), 2 deletions(-)=0A=
-> =0A=
-> diff --git a/drivers/i2c/busses/i2c-pca-platform.c b/drivers/i2c/busses/i=
-2c-pca-platform.c=0A=
-> index de3fe6e828cb..f50afa8e3cba 100644=0A=
-> --- a/drivers/i2c/busses/i2c-pca-platform.c=0A=
-> +++ b/drivers/i2c/busses/i2c-pca-platform.c=0A=
-> @@ -21,7 +21,6 @@=0A=
->   #include <linux/platform_device.h>=0A=
->   #include <linux/i2c-algo-pca.h>=0A=
->   #include <linux/platform_data/i2c-pca-platform.h>=0A=
-> -#include <linux/gpio.h>=0A=
->   #include <linux/gpio/consumer.h>=0A=
->   #include <linux/io.h>=0A=
->   #include <linux/of.h>=0A=
-> @@ -173,7 +172,7 @@ static int i2c_pca_pf_probe(struct platform_device *p=
-dev)=0A=
->   	i2c->adap.dev.parent =3D &pdev->dev;=0A=
->   	i2c->adap.dev.of_node =3D np;=0A=
->   =0A=
-> -	i2c->gpio =3D devm_gpiod_get_optional(&pdev->dev, "reset-gpios", GPIOD_=
-OUT_LOW);=0A=
-> +	i2c->gpio =3D devm_gpiod_get_optional(&pdev->dev, "reset", GPIOD_OUT_LO=
-W);=0A=
->   	if (IS_ERR(i2c->gpio))=0A=
->   		return PTR_ERR(i2c->gpio);=0A=
->   =0A=
-> =0A=
-=0A=
+Instead of complex code picking GPIOs out of the device tree
+and keeping track of polarity for each GPIO line, use descriptors
+and pull polarity handling into the gpiolib.
+
+We look for "our-claim" and "their-claim" since the gpiolib
+code will try e.g. "our-claim-gpios" and "our-claim-gpio" in
+turn to locate these GPIO lines from the device tree.
+
+Cc: Doug Anderson <dianders@chromium.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/i2c/muxes/i2c-arb-gpio-challenge.c | 75 ++++++----------------
+ 1 file changed, 21 insertions(+), 54 deletions(-)
+
+diff --git a/drivers/i2c/muxes/i2c-arb-gpio-challenge.c b/drivers/i2c/muxes/i2c-arb-gpio-challenge.c
+index 812b8cff265f..a2c876117ba9 100644
+--- a/drivers/i2c/muxes/i2c-arb-gpio-challenge.c
++++ b/drivers/i2c/muxes/i2c-arb-gpio-challenge.c
+@@ -15,12 +15,11 @@
+  */
+ 
+ #include <linux/delay.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/kernel.h>
+ #include <linux/i2c.h>
+ #include <linux/i2c-mux.h>
+ #include <linux/module.h>
+-#include <linux/of_gpio.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
+@@ -28,22 +27,16 @@
+ /**
+  * struct i2c_arbitrator_data - Driver data for I2C arbitrator
+  *
+- * @our_gpio: GPIO we'll use to claim.
+- * @our_gpio_release: 0 if active high; 1 if active low; AKA if the GPIO ==
+- *   this then consider it released.
+- * @their_gpio: GPIO that the other side will use to claim.
+- * @their_gpio_release: 0 if active high; 1 if active low; AKA if the GPIO ==
+- *   this then consider it released.
++ * @our_gpio: GPIO descriptor we'll use to claim.
++ * @their_gpio: GPIO descriptor that the other side will use to claim.
+  * @slew_delay_us: microseconds to wait for a GPIO to go high.
+  * @wait_retry_us: we'll attempt another claim after this many microseconds.
+  * @wait_free_us: we'll give up after this many microseconds.
+  */
+ 
+ struct i2c_arbitrator_data {
+-	int our_gpio;
+-	int our_gpio_release;
+-	int their_gpio;
+-	int their_gpio_release;
++	struct gpio_desc *our_gpio;
++	struct gpio_desc *their_gpio;
+ 	unsigned int slew_delay_us;
+ 	unsigned int wait_retry_us;
+ 	unsigned int wait_free_us;
+@@ -64,15 +57,15 @@ static int i2c_arbitrator_select(struct i2c_mux_core *muxc, u32 chan)
+ 	stop_time = jiffies + usecs_to_jiffies(arb->wait_free_us) + 1;
+ 	do {
+ 		/* Indicate that we want to claim the bus */
+-		gpio_set_value(arb->our_gpio, !arb->our_gpio_release);
++		gpiod_set_value(arb->our_gpio, 1);
+ 		udelay(arb->slew_delay_us);
+ 
+ 		/* Wait for the other master to release it */
+ 		stop_retry = jiffies + usecs_to_jiffies(arb->wait_retry_us) + 1;
+ 		while (time_before(jiffies, stop_retry)) {
+-			int gpio_val = !!gpio_get_value(arb->their_gpio);
++			int gpio_val = gpiod_get_value(arb->their_gpio);
+ 
+-			if (gpio_val == arb->their_gpio_release) {
++			if (!gpio_val) {
+ 				/* We got it, so return */
+ 				return 0;
+ 			}
+@@ -81,13 +74,13 @@ static int i2c_arbitrator_select(struct i2c_mux_core *muxc, u32 chan)
+ 		}
+ 
+ 		/* It didn't release, so give up, wait, and try again */
+-		gpio_set_value(arb->our_gpio, arb->our_gpio_release);
++		gpiod_set_value(arb->our_gpio, 0);
+ 
+ 		usleep_range(arb->wait_retry_us, arb->wait_retry_us * 2);
+ 	} while (time_before(jiffies, stop_time));
+ 
+ 	/* Give up, release our claim */
+-	gpio_set_value(arb->our_gpio, arb->our_gpio_release);
++	gpiod_set_value(arb->our_gpio, 0);
+ 	udelay(arb->slew_delay_us);
+ 	dev_err(muxc->dev, "Could not claim bus, timeout\n");
+ 	return -EBUSY;
+@@ -103,7 +96,7 @@ static int i2c_arbitrator_deselect(struct i2c_mux_core *muxc, u32 chan)
+ 	const struct i2c_arbitrator_data *arb = i2c_mux_priv(muxc);
+ 
+ 	/* Release the bus and wait for the other master to notice */
+-	gpio_set_value(arb->our_gpio, arb->our_gpio_release);
++	gpiod_set_value(arb->our_gpio, 0);
+ 	udelay(arb->slew_delay_us);
+ 
+ 	return 0;
+@@ -116,8 +109,7 @@ static int i2c_arbitrator_probe(struct platform_device *pdev)
+ 	struct device_node *parent_np;
+ 	struct i2c_mux_core *muxc;
+ 	struct i2c_arbitrator_data *arb;
+-	enum of_gpio_flags gpio_flags;
+-	unsigned long out_init;
++	struct gpio_desc *dummy;
+ 	int ret;
+ 
+ 	/* We only support probing from device tree; no platform_data */
+@@ -138,43 +130,18 @@ static int i2c_arbitrator_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, muxc);
+ 
+-	/* Request GPIOs */
+-	ret = of_get_named_gpio_flags(np, "our-claim-gpio", 0, &gpio_flags);
+-	if (!gpio_is_valid(ret)) {
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(dev, "Error getting our-claim-gpio\n");
+-		return ret;
+-	}
+-	arb->our_gpio = ret;
+-	arb->our_gpio_release = !!(gpio_flags & OF_GPIO_ACTIVE_LOW);
+-	out_init = (gpio_flags & OF_GPIO_ACTIVE_LOW) ?
+-		GPIOF_OUT_INIT_HIGH : GPIOF_OUT_INIT_LOW;
+-	ret = devm_gpio_request_one(dev, arb->our_gpio, out_init,
+-				    "our-claim-gpio");
+-	if (ret) {
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(dev, "Error requesting our-claim-gpio\n");
+-		return ret;
+-	}
++	/* Request GPIOs, our GPIO as unclaimed to begin with */
++	arb->our_gpio = devm_gpiod_get(dev, "our-claim", GPIOD_OUT_LOW);
++	if (IS_ERR(arb->our_gpio))
++		return PTR_ERR(arb->our_gpio);
+ 
+-	ret = of_get_named_gpio_flags(np, "their-claim-gpios", 0, &gpio_flags);
+-	if (!gpio_is_valid(ret)) {
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(dev, "Error getting their-claim-gpio\n");
+-		return ret;
+-	}
+-	arb->their_gpio = ret;
+-	arb->their_gpio_release = !!(gpio_flags & OF_GPIO_ACTIVE_LOW);
+-	ret = devm_gpio_request_one(dev, arb->their_gpio, GPIOF_IN,
+-				    "their-claim-gpio");
+-	if (ret) {
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(dev, "Error requesting their-claim-gpio\n");
+-		return ret;
+-	}
++	arb->their_gpio = devm_gpiod_get(dev, "their-claim", GPIOD_IN);
++	if (IS_ERR(arb->their_gpio))
++		return PTR_ERR(arb->their_gpio);
+ 
+ 	/* At the moment we only support a single two master (us + 1 other) */
+-	if (gpio_is_valid(of_get_named_gpio(np, "their-claim-gpios", 1))) {
++	dummy = devm_gpiod_get_index_optional(dev, "their-claim", 1, GPIOD_IN);
++	if (dummy && !IS_ERR(dummy)) {
+ 		dev_err(dev, "Only one other master is supported\n");
+ 		return -EINVAL;
+ 	}
+-- 
+2.20.1
+
