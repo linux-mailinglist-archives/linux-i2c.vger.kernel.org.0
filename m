@@ -2,50 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7592FAE0
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2019 13:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F412FAFF
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2019 13:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725897AbfE3L1e (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 May 2019 07:27:34 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:41462 "EHLO
+        id S1726852AbfE3Lgn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 May 2019 07:36:43 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:41109 "EHLO
         mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725440AbfE3L1e (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 May 2019 07:27:34 -0400
-Received: by mail-lf1-f66.google.com with SMTP id 136so4728984lfa.8;
-        Thu, 30 May 2019 04:27:32 -0700 (PDT)
+        with ESMTP id S1726065AbfE3Lgm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 May 2019 07:36:42 -0400
+Received: by mail-lf1-f66.google.com with SMTP id 136so4750029lfa.8;
+        Thu, 30 May 2019 04:36:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=JENy3lopc80MuuiSTYnGTbQpOx3WqOUAndzP5hkjx4w=;
-        b=ZmxKCWRrz772eNoIL9TX0K3sGashtoYX5uOJp2C3SxKFtNwWHviuIyyVM27VV8EUAc
-         6JzDONOGIMSpa91cqdy1Ia28gt5UpF1DM36qH5Zi29Dnbeh1EuaEEDSvzcM4RGQWiK+o
-         s9kiRxd+55flyoBu43by+e7FpZ7KmYGy+/GpyXHB+VjfTihSbh+pHhHOrh59aMNJsrn3
-         9wAngvmmzrwFM/FYwMHPid+RxbUhoONswax/4cQ1MgWJMpgzNJFh9vkhcRuV/e/yjER5
-         A0iSX12zYze0fOuKcKdYHul/g53iy7DrtYePXCPsVO14kxWmI7DeUhTk2tYClGOWjge5
-         zEOQ==
+        bh=oEF/ywkpwzyXdp32mRceU7ioagbppOL/tUNLr/bCKp8=;
+        b=QEU1+NezxGHtIr28TVARywmZg9hUS3PGpriHim+cVtRwL/W2XtNppYGgfYoMHF72zJ
+         h3LOJqrQMP770oWHxrfVYn2RmwqNe/N6stwVIf58U3m1Lu7S1SBIcBdhZlPE6faZbKXZ
+         LwEBeHn/nMpfA/3cuPklxecot2loPcfSMJlXSSj/kE73Jc+i3uJhA7+2jLXKd5zrm3YM
+         ckUeT9huzoAnDSyUyT2RrJhnUUWNk29CbhwE7XuWWuD/fvU+90gtmY6O8GWOfw9eOFTh
+         0M9a7Hv97z4xfD8NrjYx4cu3W1YQTLCTOYmYM/Cid8bPv/Oetxscp4mxx4Y9kqv/Kgm8
+         lEsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=JENy3lopc80MuuiSTYnGTbQpOx3WqOUAndzP5hkjx4w=;
-        b=iPkslVXGN79rc0pngp/J6KSXZCAB9GVyiU9QjAV81+AbGyaO8FmmRyUjO5K697EpF+
-         2MQPwIQI76wrieGoH3a9hSpME297WeTnu5CABq/HxMxrJxdxWa6dTBPSbnhMo0qG+AWm
-         eCyj4je4Eg+gknTI1WqN52O6aK0470qF4FVRZZNQWgJGclIiKEOWlVcvTywLdDw+xNQf
-         PeMrDawThJ94qO8XVrn9BQlnI+CfnhojU3+tjI9u27qEEEQnYp9eVOJZh5FR7Hb693jF
-         EocaOeZQQgj8TTY7WGpSEKNuWu4bEehA8Lwy+xtxEsCApbT++zqGJSx2TsuO6S3u47JT
-         so0w==
-X-Gm-Message-State: APjAAAWZAo+NCvX0M5r52MocUK8uGe/CJW/5IbaLhEb7tRF4q1tbjrLK
-        lrKibOa3nIQA+6y+hAu6dxkq2HKS
-X-Google-Smtp-Source: APXvYqwTSfyXXvpfDT8aiAY/fiws1afRBScx7FfoqwY3K0Gu+QtxuoAsy0swpn2Y4fWUmFFcH92JfQ==
-X-Received: by 2002:a19:7905:: with SMTP id u5mr1815085lfc.117.1559215652093;
-        Thu, 30 May 2019 04:27:32 -0700 (PDT)
+        bh=oEF/ywkpwzyXdp32mRceU7ioagbppOL/tUNLr/bCKp8=;
+        b=W4qy+RAQn8iwgwzNSsr5kpKuZPzS5RAIrrMoSAQgQ2SKOnVt0Co9AiYw1XpH1ds4Cc
+         YuUNelpKvdlmJiFcaF9/cHG7camBRpPzoMQ+Zu22SQw45QWu8tMOQ1PNkVsKRKbXltzD
+         oFl+FrIn0UvLfuRH9r+zHYVwGeKwmj8PtNGRRSlmzSxAcCuL9XC/R4KM6I28qOjFyPq3
+         SWjhIxtpYSsG7OIUq+5qjCtrFiGX7cc1vGFeoEuOUzklYvkSWQLHhFZYYqAf3t9MoMMd
+         QdUa7qkkJ3lsKLeHc4xP5gAFH9Aig0o81NTRr1glOpCDLqosGbC86XTLFGG6tgIYAwHM
+         tkfA==
+X-Gm-Message-State: APjAAAXGtMQdqXNKc4uQ5ToAYjEqL5/ijhnRmKGKN3zTESC0U5WRAdvb
+        53UMvCOzmFGkZOgCVjp28QzNRKUj
+X-Google-Smtp-Source: APXvYqxVnboaMVCWDp5xI2htvEZX2PPYC8bvapApOlk4UlewjeaslCV/Rmb5lhl1/WrzSjVrW3pprQ==
+X-Received: by 2002:ac2:5310:: with SMTP id c16mr1850010lfh.119.1559216200941;
+        Thu, 30 May 2019 04:36:40 -0700 (PDT)
 Received: from [192.168.2.145] ([94.29.35.141])
-        by smtp.googlemail.com with ESMTPSA id u13sm440578lfm.16.2019.05.30.04.27.30
+        by smtp.googlemail.com with ESMTPSA id l25sm444919lfk.57.2019.05.30.04.36.39
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 May 2019 04:27:31 -0700 (PDT)
-Subject: Re: [PATCH V1] i2c: busses: tegra: Add suspend-resume support
+        Thu, 30 May 2019 04:36:40 -0700 (PDT)
+Subject: Re: [PATCH V2] drivers: i2c: tegra: fix checkpatch defects
 To:     Bitan Biswas <bbiswas@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         Thierry Reding <treding@nvidia.com>,
@@ -55,14 +55,14 @@ To:     Bitan Biswas <bbiswas@nvidia.com>,
 Cc:     Shardar Mohammed <smohammed@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Mantravadi Karthik <mkarthik@nvidia.com>
-References: <1559195718-6693-1-git-send-email-bbiswas@nvidia.com>
+References: <1559196850-7007-1-git-send-email-bbiswas@nvidia.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <c8bad04b-67ef-bcdf-04df-4aa61271e81c@gmail.com>
-Date:   Thu, 30 May 2019 14:27:30 +0300
+Message-ID: <e9e3d8b0-a76a-81a9-1110-2d07ba1c787f@gmail.com>
+Date:   Thu, 30 May 2019 14:36:39 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <1559195718-6693-1-git-send-email-bbiswas@nvidia.com>
+In-Reply-To: <1559196850-7007-1-git-send-email-bbiswas@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -71,75 +71,27 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-30.05.2019 8:55, Bitan Biswas пишет:
-> Post suspend I2C registers have power on reset values. Before any
-> transfer initialize I2C registers to prevent I2C transfer timeout
-> and implement suspend and resume callbacks needed. Fix below errors
-> post suspend:
-> 
-> 1) Tegra I2C transfer timeout during jetson tx2 resume:
-> 
-> [   27.520613] pca953x 1-0074: calling pca953x_resume+0x0/0x1b0 @ 2939, parent: i2c-1
-> [   27.633623] tegra-i2c 3160000.i2c: i2c transfer timed out
-> [   27.639162] pca953x 1-0074: Unable to sync registers 0x3-0x5. -110
-> [   27.645336] pca953x 1-0074: Failed to sync GPIO dir registers: -110
-> [   27.651596] PM: dpm_run_callback(): pca953x_resume+0x0/0x1b0 returns -110
-> [   27.658375] pca953x 1-0074: pca953x_resume+0x0/0x1b0 returned -110 after 127152 usecs
-> [   27.666194] PM: Device 1-0074 failed to resume: error -110
-> 
-> 2) Tegra I2C transfer timeout error on jetson Xavier post resume.
-> 
+30.05.2019 9:14, Bitan Biswas пишет:
+> Fix checkpatch.pl warning(s)/error(s)/check(s) in i2c-tegra.c
+> except for BUG/BUG_ON checks
+
+Please turn the BUG_ON's into WARN_ON's. The machine won't go on fire,
+hence there is absolutely no good reason in making system unusable on a
+software bug. BUG_ON may be more useful for development, but not for a
+casual daily usage.
+
 > Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
 > ---
->  drivers/i2c/busses/i2c-tegra.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-> index ebaa78d..f6a377f 100644
-> --- a/drivers/i2c/busses/i2c-tegra.c
-> +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -1687,9 +1687,33 @@ static int tegra_i2c_remove(struct platform_device *pdev)
->  }
->  
->  #ifdef CONFIG_PM_SLEEP
-> +static int tegra_i2c_suspend(struct device *dev)
-> +{
-> +	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
-> +
-> +	i2c_mark_adapter_suspended(&i2c_dev->adapter);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tegra_i2c_resume(struct device *dev)
-> +{
-> +	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	i2c_lock_bus(&i2c_dev->adapter, I2C_LOCK_ROOT_ADAPTER);
-> +	ret = tegra_i2c_init(i2c_dev, false);
-> +	i2c_unlock_bus(&i2c_dev->adapter, I2C_LOCK_ROOT_ADAPTER);
 
-Why the locking is needed here?
+> @@ -1034,7 +1038,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+>  	u32 *buffer = NULL;
+>  	int err = 0;
+>  	bool dma;
+> -	u16 xfer_time = 100;
+> +	u16 xfer_tm = 100;
 
-> +	if (!ret)
-> +		i2c_mark_adapter_resumed(&i2c_dev->adapter);
-> +
-> +       return ret;
+What's wrong with the "time"? I'm finding the "xfer_tm" as a very
+unintuitive naming.
 
-A very minor nit.. will be a bit more straightforward to write this as:
-
-	int err;
-
-	err = tegra_i2c_init(i2c_dev, false);
-	if (err)
-		return err;
-
-	i2c_mark_adapter_resumed(&i2c_dev->adapter);
-
-	return 0;
-
-It is always cleaner to return 0 on success.
-
---
+-- 
 Dmitry
