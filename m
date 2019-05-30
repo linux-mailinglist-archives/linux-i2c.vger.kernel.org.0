@@ -2,114 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C2B2F047
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2019 06:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353102F74B
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2019 07:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731102AbfE3ECZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 May 2019 00:02:25 -0400
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:6226 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388150AbfE3ECW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 May 2019 00:02:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1559188941; x=1590724941;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=UkRYNR5hm0gc7X8fxqjNJQmr3n5Ab3tDm3l1W9pl4Bw=;
-  b=W98FsN7u+uCMaZmEJeuY//BVPO9DY4FRBfJ3Hx77kb2QEbdgKN1rMghY
-   bHjOg+WrOT69K23mYXqkh65CIom9I5wWqzYQpxoZW/kp8gxE+vEliyxBl
-   2zXW/jStey7QStRjvDC5ytNo2ft00BJDDHBZTYYDeA02PU9uV/hmO8wMz
-   s=;
-X-IronPort-AV: E=Sophos;i="5.60,529,1549929600"; 
-   d="scan'208";a="768214243"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-168cbb73.us-west-2.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 30 May 2019 04:02:19 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2c-168cbb73.us-west-2.amazon.com (Postfix) with ESMTPS id 0630FA2204;
-        Thu, 30 May 2019 04:02:18 +0000 (UTC)
-Received: from EX13D05UWB002.ant.amazon.com (10.43.161.50) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 30 May 2019 04:02:18 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D05UWB002.ant.amazon.com (10.43.161.50) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 30 May 2019 04:02:18 +0000
-Received: from localhost (10.94.220.85) by mail-relay.amazon.com
- (10.43.61.243) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Thu, 30 May 2019 04:02:17 +0000
-Date:   Wed, 29 May 2019 21:02:17 -0700
-From:   Eduardo Valentin <eduval@amazon.com>
-To:     "Wang, Haiyue" <haiyue.wang@linux.intel.com>
-CC:     Eduardo Valentin <eduval@amazon.com>, <wsa@the-dreams.de>,
-        <brendanhiggins@google.com>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
-        <jarkko.nikula@linux.intel.com>, <andriy.shevchenko@intel.com>,
-        <jae.hyun.yoo@linux.intel.com>
-Subject: Re: [PATCH i2c/slave-mqueue v5] i2c: slave-mqueue: add a slave
- backend to receive and queue messages
-Message-ID: <20190530040217.GB17772@u40b0340c692b58f6553c.ant.amazon.com>
-References: <1524503192-4176-1-git-send-email-haiyue.wang@linux.intel.com>
- <20190523220345.GA3417@u40b0340c692b58f6553c.ant.amazon.com>
- <35a9d066-c732-cb00-04a5-438c948915ae@linux.intel.com>
- <20190524173353.GA6428@u40b0340c692b58f6553c.ant.amazon.com>
- <bf1e8f0b-5bd0-fb43-c19b-9487603b9ee3@linux.intel.com>
- <20190529231100.GA18339@u40b0340c692b58f6553c.ant.amazon.com>
- <75cb9514-bb3a-9c3b-05df-0c3517bd775a@linux.intel.com>
+        id S1726728AbfE3Fz0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 May 2019 01:55:26 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:15712 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725961AbfE3Fz0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 May 2019 01:55:26 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cef704c0000>; Wed, 29 May 2019 22:55:24 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Wed, 29 May 2019 22:55:25 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Wed, 29 May 2019 22:55:25 -0700
+Received: from HQMAIL102.nvidia.com (172.18.146.10) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 30 May
+ 2019 05:55:25 +0000
+Received: from HQMAIL103.nvidia.com (172.20.187.11) by HQMAIL102.nvidia.com
+ (172.18.146.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 30 May
+ 2019 05:55:24 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL103.nvidia.com
+ (172.20.187.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 30 May 2019 05:55:24 +0000
+Received: from dhcp-10-19-65-14.client.nvidia.com (Not Verified[10.19.65.14]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5cef704a0001>; Wed, 29 May 2019 22:55:24 -0700
+From:   Bitan Biswas <bbiswas@nvidia.com>
+To:     Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>,
+        "Bitan Biswas" <bbiswas@nvidia.com>
+Subject: [PATCH V1] i2c: busses: tegra: Add suspend-resume support
+Date:   Wed, 29 May 2019 22:55:18 -0700
+Message-ID: <1559195718-6693-1-git-send-email-bbiswas@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <75cb9514-bb3a-9c3b-05df-0c3517bd775a@linux.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1559195725; bh=EPpj67COYGBhlkWdKr0QIR/atWxow2EbLdfTiuxH0u4=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=dtfcl42/jEs/OXvHlq4hBtfPuB3IDVKkqtZfI4Ftr9JxH50H7V46TkhmITkqasE+E
+         pMufthNmo6PssZsCRY5rvx/8QcH9rcpJ/epYtgsDMj0doWmg6AAsCUBsRlBCDFmplG
+         5fXvPLY9I/+cBh6tIp3EGJk58ZXMJExWnnrLKL6uEcCQaeCWmF7jA6PJCJHvjIywTA
+         QIrbwOzpguAeDvEWbnCXvZp2oPjrCwUytpZPHkQ5bJgSO1pCMGZ70vLOm7E3ZR7bHr
+         mu96qnxP/IP0iVYnk4iS2DC9WhpnEQJuHydfF+SAWOPMDbLk2O2tJYe5GdMYBZcvwn
+         w6xC3/2wOx7hw==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, May 30, 2019 at 09:33:34AM +0800, Wang, Haiyue wrote:
-> 
-> 在 2019-05-30 07:11, Eduardo Valentin 写道:
-> >>>>>>+
-> >>>>>>+	case I2C_SLAVE_WRITE_RECEIVED:
-> >>>>>>+		if (msg->len < MQ_MSGBUF_SIZE) {
-> >>>>>>+			msg->buf[msg->len++] = *val;
-> >>>>>Do we need to lock the accesses to msg->buf? how about to msg->len?
-> >>>this code goes access and modify data here, e.g. msg->len and msg->buf.
-> >>>
-> >>>On this case (I2C_SLAVE_WRITE_RECEIVED), this code wont protect access.
-> >>>
-> >>>This can cause concurrence issues if you receive an IRQ when the user
-> >>>is on your bin_read().
-> >>User will not touch 'msg = mq->curr;', just touch 'msg =
-> >>&mq->queue[mq->out];'
-> >What happens if mq->curr == mq->queue[mq->out]?
-> >
-> 1. The Read will check.
-> 
-> +	spin_lock_irqsave(&mq->lock, flags);
-> +	if (mq->out != mq->in) {
-> +		msg = &mq->queue[mq->out];
-> 
-> 2. Flush the oldeast message. ^_^
-> 
-> +	case I2C_SLAVE_STOP:
-> +		if (unlikely(mq->truncated || msg->len < 2))
-> +			break;
-> +
-> +		spin_lock(&mq->lock);
-> +		mq->in = MQ_QUEUE_NEXT(mq->in);
-> +		mq->curr = &mq->queue[mq->in];
-> +		mq->curr->len = 0;
-> +
-> +		/* Flush the oldest message */
-> +		if (mq->out == mq->in)
-> +			mq->out = MQ_QUEUE_NEXT(mq->out);
+Post suspend I2C registers have power on reset values. Before any
+transfer initialize I2C registers to prevent I2C transfer timeout
+and implement suspend and resume callbacks needed. Fix below errors
+post suspend:
 
-Yeah, I see. We keep on dropping messages (old ones) when the queue is full...
+1) Tegra I2C transfer timeout during jetson tx2 resume:
 
-> +		spin_unlock(&mq->lock);
-> 
+[   27.520613] pca953x 1-0074: calling pca953x_resume+0x0/0x1b0 @ 2939, parent: i2c-1
+[   27.633623] tegra-i2c 3160000.i2c: i2c transfer timed out
+[   27.639162] pca953x 1-0074: Unable to sync registers 0x3-0x5. -110
+[   27.645336] pca953x 1-0074: Failed to sync GPIO dir registers: -110
+[   27.651596] PM: dpm_run_callback(): pca953x_resume+0x0/0x1b0 returns -110
+[   27.658375] pca953x 1-0074: pca953x_resume+0x0/0x1b0 returned -110 after 127152 usecs
+[   27.666194] PM: Device 1-0074 failed to resume: error -110
 
+2) Tegra I2C transfer timeout error on jetson Xavier post resume.
+
+Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index ebaa78d..f6a377f 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -1687,9 +1687,33 @@ static int tegra_i2c_remove(struct platform_device *pdev)
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
++static int tegra_i2c_suspend(struct device *dev)
++{
++	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
++
++	i2c_mark_adapter_suspended(&i2c_dev->adapter);
++
++	return 0;
++}
++
++static int tegra_i2c_resume(struct device *dev)
++{
++	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
++	int ret;
++
++	i2c_lock_bus(&i2c_dev->adapter, I2C_LOCK_ROOT_ADAPTER);
++	ret = tegra_i2c_init(i2c_dev, false);
++	i2c_unlock_bus(&i2c_dev->adapter, I2C_LOCK_ROOT_ADAPTER);
++	if (!ret)
++		i2c_mark_adapter_resumed(&i2c_dev->adapter);
++
++       return ret;
++}
++
+ static const struct dev_pm_ops tegra_i2c_pm = {
+ 	SET_RUNTIME_PM_OPS(tegra_i2c_runtime_suspend, tegra_i2c_runtime_resume,
+ 			   NULL)
++	SET_SYSTEM_SLEEP_PM_OPS(tegra_i2c_suspend, tegra_i2c_resume)
+ };
+ #define TEGRA_I2C_PM	(&tegra_i2c_pm)
+ #else
 -- 
-All the best,
-Eduardo Valentin
+2.7.4
+
