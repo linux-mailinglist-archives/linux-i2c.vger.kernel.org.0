@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F92D2F3D1
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2019 06:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847E42EE68
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2019 05:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbfE3Eci (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 May 2019 00:32:38 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:51115 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729509AbfE3DNe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 May 2019 23:13:34 -0400
+        id S1731971AbfE3DrC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 May 2019 23:47:02 -0400
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:49247 "EHLO
+        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730035AbfE3Dqz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 May 2019 23:46:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1559186013; x=1590722013;
+  t=1559188013; x=1590724013;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=BQVuOlTLIt7kOletp8svIa6+869Kfh+6ig9xKiK7qRU=;
-  b=chmgD6Ad6p3gY+6ev17PM38i0xMW8xmddLjKZQJQbCAlRTrNRu1jokp4
-   PVWSjCf6SfONJ5mbP2ysiNFE/rfD15K1TLSnr2RqSBPoMRdXuhLZJ4ZSG
-   qvUHFEvLuDFJCUr/hjQi0aQf+oykBQB3QhM0eUgDV+DCrKLDUkVvLj/H9
-   c=;
+  bh=fX9RTwrLezaSqCitXN9CP/VbwMXQ8Q/tGsSADw7/86Q=;
+  b=dT9eFpGyid6ydok/K2qmrin/scIfXo4O129l1/T+syH7jBPk/es66DvH
+   9otA530hwEQHyJOBFPO/GS7eVoy8zT3lWGDK7DY+6ivDY3kAxZwXY8h4e
+   BZiU9o8n1Bvt8msMQhSCmaG/e0dLtfzVh6BK4aPTNeNUZR4PFumoXVBBB
+   g=;
 X-IronPort-AV: E=Sophos;i="5.60,529,1549929600"; 
-   d="scan'208";a="677127364"
-Received: from sea3-co-svc-lb6-vlan3.sea.amazon.com (HELO email-inbound-relay-2a-69849ee2.us-west-2.amazon.com) ([10.47.22.38])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 30 May 2019 03:13:31 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2a-69849ee2.us-west-2.amazon.com (Postfix) with ESMTPS id 3E6DEA21C0;
-        Thu, 30 May 2019 03:13:31 +0000 (UTC)
-Received: from EX13D04UEA002.ant.amazon.com (10.43.61.61) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 30 May 2019 03:13:30 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D04UEA002.ant.amazon.com (10.43.61.61) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 30 May 2019 03:13:30 +0000
+   d="scan'208";a="768213302"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1d-2c665b5d.us-east-1.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 30 May 2019 03:46:53 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1d-2c665b5d.us-east-1.amazon.com (Postfix) with ESMTPS id 3D049A2105;
+        Thu, 30 May 2019 03:46:49 +0000 (UTC)
+Received: from EX13D06UWC002.ant.amazon.com (10.43.162.205) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 30 May 2019 03:46:49 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
+ EX13D06UWC002.ant.amazon.com (10.43.162.205) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 30 May 2019 03:46:49 +0000
 Received: from localhost (10.94.220.85) by mail-relay.amazon.com
- (10.43.61.243) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Thu, 30 May 2019 03:13:30 +0000
-Date:   Wed, 29 May 2019 20:13:30 -0700
+ (10.43.162.232) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Thu, 30 May 2019 03:46:48 +0000
+Date:   Wed, 29 May 2019 20:46:48 -0700
 From:   Eduardo Valentin <eduval@amazon.com>
 To:     Haiyue Wang <haiyue.wang@linux.intel.com>
 CC:     <wsa@the-dreams.de>, <brendanhiggins@google.com>,
@@ -46,7 +46,7 @@ CC:     <wsa@the-dreams.de>, <brendanhiggins@google.com>,
         <andriy.shevchenko@intel.com>, <jae.hyun.yoo@linux.intel.com>
 Subject: Re: [PATCH i2c/slave-mqueue v5] i2c: slave-mqueue: add a slave
  backend to receive and queue messages
-Message-ID: <20190530031330.GA5890@u40b0340c692b58f6553c.ant.amazon.com>
+Message-ID: <20190530034648.GA17772@u40b0340c692b58f6553c.ant.amazon.com>
 References: <1524503192-4176-1-git-send-email-haiyue.wang@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -111,6 +111,9 @@ On Tue, Apr 24, 2018 at 01:06:32AM +0800, Haiyue Wang wrote:
 > +Like MCTP (Management Component Transport Protocol) and IPMB (Intelligent
 > +Platform Management Bus), they both require that the userspace can receive
 > +messages from i2c dirvers under slave mode.
+
+s/dirvers/drivers/g
+
 > +
 > +This I2C slave mqueue (message queue) backend is used to receive and queue
 > +messages from the remote i2c intelligent device; and it will add the target
@@ -232,6 +235,9 @@ On Tue, Apr 24, 2018 at 01:06:32AM +0800, Haiyue Wang wrote:
 > +config I2C_SLAVE_MQUEUE_MESSAGE_SIZE
 > +	int "The message size of I2C mqueue slave"
 > +	default 120
+
+Can you please add a help entry here?
+
 > +
 > +config I2C_SLAVE_MQUEUE_QUEUE_SIZE
 > +	int "The queue size of I2C mqueue slave"
@@ -239,6 +245,10 @@ On Tue, Apr 24, 2018 at 01:06:32AM +0800, Haiyue Wang wrote:
 > +	help
 > +	  This number MUST be power of 2.
 > +
+
+Shouldnt the two above depend on I2C_SLAVE_MQUEUE?
+
+
 > +config I2C_SLAVE_MQUEUE
 > +	tristate "I2C mqueue (message queue) slave driver"
 > +	select I2C_SLAVE_MQUEUE_MESSAGE_SIZE
@@ -464,10 +474,10 @@ On Tue, Apr 24, 2018 at 01:06:32AM +0800, Haiyue Wang wrote:
 > +	{ }
 > +};
 > +MODULE_DEVICE_TABLE(i2c, i2c_slave_mqueue_id);
+
+Also, can we have device tree support for this driver?
+
 > +
-
-Can we have this driver supporting device tree based probing?
-
 > +static struct i2c_driver i2c_slave_mqueue_driver = {
 > +	.driver = {
 > +		.name	= "i2c-slave-mqueue",
