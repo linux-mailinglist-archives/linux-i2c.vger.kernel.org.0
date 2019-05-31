@@ -2,106 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B55D030927
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2019 09:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED4F30A6B
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2019 10:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726797AbfEaHKh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 31 May 2019 03:10:37 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:44473 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726158AbfEaHKh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 May 2019 03:10:37 -0400
-Received: by mail-oi1-f195.google.com with SMTP id e189so235500oib.11
-        for <linux-i2c@vger.kernel.org>; Fri, 31 May 2019 00:10:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1I0X96D3v1HYQYxv798SWRpkNTAm3dJbfOYoFu1vcjc=;
-        b=mSXDop0s5jN9NAe1GtBRtMt2K1Xz8vR4sOEqaJjRU0qsqm+fGGNcJY4sW6OFh3g4+M
-         z+Ka+XE9L9QeSAnO8qPi0FRJV7b5YoM6dbLCIOBz2UluV16H1LVVUx9EPHd7mvpxzsLE
-         iyR0itn1OLelG55R8FoUg4ETdeaZxCjcPemNEeTCXpyUnTk9w6j9s11T+TufKbFFcmO8
-         owyBKDuikuu13vU2pfMpR5dxvsixreNuXplAG5v18FwnUzDGkYHtZmkBSG8v3WCEctm9
-         rs0rBYchC4Y28raKI51OL/9Q67GE4tObzU87TzN8Qpq14dapwtjDUOkvhvWqniB985/W
-         GDOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1I0X96D3v1HYQYxv798SWRpkNTAm3dJbfOYoFu1vcjc=;
-        b=rtBRcEm5KKhRqaN/hcvTyCWDp8k474lRz+4Y4dQ/zkpRI3VuwwC58+qQ0TPVcqojal
-         4gZDWHTfk5goz/v339lq/ZK5qqCAGU+9ynfh0cfa5CvTni7mlayp9v+wYmdBi/dAnp9c
-         Yq5WcYvholGPCJ1Ixc3Y+9wqRTTFnikHmnJ+22qgNNtcuEQ2v+lOdnTTIJ3hQgMIJD0G
-         JgTMXoP6LzA7vEj3ghVMI9tNsJnElyvSOndvQLIkBJ2dNRPXVfrk5ZFhyJnRe9kZ/s4l
-         DNDLHgFW/EYMTdkWKkmuHpSWEi7lKzsTjQ8SWfr9el9FbSOjtIJOstWBHiUOn4oITwN0
-         MHPg==
-X-Gm-Message-State: APjAAAXC5cMKExNQePYen+H0HEUV38OIHjW30cZABEdjXkL6ln4CqSK4
-        vTM8Ty6ERcu7QlZm+MZpYthW0gWKbR+Eaxu0b7e5Vw==
-X-Google-Smtp-Source: APXvYqx7dnoXyXJ7rtNWycS5fX8T7GoEYq1ka5JDOo1LDAyBzDixHD27yR05izUVitFa1RBQW0H6BNO3Z7yPSCqiUio=
-X-Received: by 2002:aca:6cc1:: with SMTP id h184mr370801oic.170.1559286636457;
- Fri, 31 May 2019 00:10:36 -0700 (PDT)
+        id S1726240AbfEaIhJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 31 May 2019 04:37:09 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:17795 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726002AbfEaIhJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 May 2019 04:37:09 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cf0e7b40000>; Fri, 31 May 2019 01:37:08 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Fri, 31 May 2019 01:37:08 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Fri, 31 May 2019 01:37:08 -0700
+Received: from [10.21.132.148] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 May
+ 2019 08:37:07 +0000
+Subject: Re: [PATCH] i2c: tegra: Avoid error message on deferred probe
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+CC:     <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>
+References: <20190527102939.7616-1-thierry.reding@gmail.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <8106bcc4-6417-1c43-99af-18056d8d51df@nvidia.com>
+Date:   Fri, 31 May 2019 09:37:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20190529145954.14500-1-yuehaibing@huawei.com>
-In-Reply-To: <20190529145954.14500-1-yuehaibing@huawei.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Fri, 31 May 2019 09:10:25 +0200
-Message-ID: <CAMpxmJVDk1whp+YJXJO7QZKOR0e_EkU4TakJqRei0xF5Ay_Log@mail.gmail.com>
-Subject: Re: [PATCH -next] eeprom: at24: Remove set but not used variable 'addr'
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190527102939.7616-1-thierry.reding@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1559291828; bh=trN/OTWlYTfpcvHfKy8yOeMWA2H3/turqmywvBWtSjU=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=fk+UOAi8RXQzWdFH9XGNV3J1qLMavAOr+w/HVzJDxjTTitzd3UucBMEyB4VoMPS2j
+         jeuuiknzdkqPelMf/z07oDAMnhzLGAM/yf/wp2KCfLDaNLr3f2YSmtPavMrmVtU2pK
+         LYS1uGAN0tXKCT7w9ozR3WuMKzBf6g/xmpzV+QfhrMSvMD8oXNLUKaD7QsJAr5mPsR
+         anLAP0ZxKDcPbd425BLRIrdAlx6fP9jubVA5Di8o6BqnAO1FWUVCsDzr+FRNJ1A9Cj
+         hPZ1JSUYsC8wIWBgPyxavWLKAfqDgBUdtHhW6QEdAibP4I2AyAbp3s2Q0ea7pOM+mj
+         BJ31sDaIZ3kVQ==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-=C5=9Br., 29 maj 2019 o 17:00 YueHaibing <yuehaibing@huawei.com> napisa=C5=
-=82(a):
->
-> Fixes gcc '-Wunused-but-set-variable' warning:
->
-> drivers/misc/eeprom/at24.c: In function at24_make_dummy_client:
-> drivers/misc/eeprom/at24.c:514:21: warning: variable addr set but not use=
-d [-Wunused-but-set-variable]
->
-> It's not used since commit e7308628d0ae ("eeprom:
-> at24: use devm_i2c_new_dummy_device()")
->
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+
+On 27/05/2019 11:29, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> If the driver defers probe because of a missing clock, avoid outputting
+> an error message. The clock will show up eventually.
+> 
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
->  drivers/misc/eeprom/at24.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-> index ba8e73812644..fa730bb342e8 100644
-> --- a/drivers/misc/eeprom/at24.c
-> +++ b/drivers/misc/eeprom/at24.c
-> @@ -511,13 +511,11 @@ static int at24_make_dummy_client(struct at24_data =
-*at24, unsigned int index,
->                                   struct regmap_config *regmap_config)
->  {
->         struct i2c_client *base_client, *dummy_client;
-> -       unsigned short int addr;
->         struct regmap *regmap;
->         struct device *dev;
->
->         base_client =3D at24->client[0].client;
->         dev =3D &base_client->dev;
-> -       addr =3D base_client->addr + index;
->
->         dummy_client =3D devm_i2c_new_dummy_device(dev, base_client->adap=
-ter,
->                                                  base_client->addr + inde=
-x);
-> --
-> 2.17.1
->
->
+>  drivers/i2c/busses/i2c-tegra.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index ebaa78d17d6e..6bfd5297f425 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -1517,7 +1517,9 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+>  
+>  	div_clk = devm_clk_get(&pdev->dev, "div-clk");
+>  	if (IS_ERR(div_clk)) {
+> -		dev_err(&pdev->dev, "missing controller clock\n");
+> +		if (PTR_ERR(div_clk) != -EPROBE_DEFER)
+> +			dev_err(&pdev->dev, "missing controller clock\n");
+> +
+>  		return PTR_ERR(div_clk);
+>  	}
 
-Applied, thanks!
+Acked-by: Jon Hunter <jonathanh@nvidia.com>
 
-Bart
+Cheers
+Jon
+
+-- 
+nvpublic
