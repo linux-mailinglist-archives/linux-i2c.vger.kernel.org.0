@@ -2,79 +2,123 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 593B5308F6
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2019 08:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D12930925
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2019 09:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbfEaGsp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 31 May 2019 02:48:45 -0400
-Received: from sauhun.de ([88.99.104.3]:39252 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726330AbfEaGsp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 31 May 2019 02:48:45 -0400
-Received: from localhost (unknown [91.64.182.124])
-        by pokefinder.org (Postfix) with ESMTPSA id 3B15F2C2761;
-        Fri, 31 May 2019 08:48:43 +0200 (CEST)
-Date:   Fri, 31 May 2019 08:48:42 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ruslan Babayev <ruslan@babayev.com>,
-        linux@armlinux.org.uk, f.fainelli@gmail.com, hkallweit1@gmail.com,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [net-next,v4 0/2] Enable SFP on ACPI based systems
-Message-ID: <20190531064842.GA1058@kunai>
-References: <20190528230233.26772-1-ruslan@babayev.com>
- <20190529094818.GF2781@lahna.fi.intel.com>
- <20190529155132.GZ18059@lunn.ch>
- <20190531062740.GQ2781@lahna.fi.intel.com>
+        id S1726483AbfEaHKS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 31 May 2019 03:10:18 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:34202 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725963AbfEaHKS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 May 2019 03:10:18 -0400
+Received: by mail-ot1-f68.google.com with SMTP id l17so8228881otq.1
+        for <linux-i2c@vger.kernel.org>; Fri, 31 May 2019 00:10:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SOmVWYigVGsToAZpGfMDTQAnehJ0f9re7zn6YJSQLfU=;
+        b=ZT3pn2ikV0jHN4MRBiHkiYL3yJyW5FsKEpezrCbovLUh9a6uA6vZ4QV6bC9OnQjq7L
+         O5kZ1nnU8f5Rx6CQZiKSMH+rP4AK23uv5ZoxI1giu6dIBVV1SoZiPhF+ieImzqn3sujy
+         dPTLCtHFrwbLzSxetRbpLhsGR5JjOv9v6sInLDSTns8bZpGLF0utWrjelvG8fi0CVzwr
+         BiM0e+Pq6hJQ4DOiCWOQOMdwaK0k2ZZI7LUDVvPs80wMPDqO9Bs0GaFvNOsuZz6yZx84
+         MiG+/MA3ul/j77G/90TiTEWxgCRNO/nezpetzB9fLv3HCSMv6siUAfltRqQVvtvpkYlx
+         vm8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SOmVWYigVGsToAZpGfMDTQAnehJ0f9re7zn6YJSQLfU=;
+        b=n3MNkRx48Sp7k74Rme4DTy+PTpGtpo0/jrHEnxyg2Gd6ztlDd8/lqxS1bLCS+U2xkU
+         NDWuCixx3nVqTxU0z8D6U0TgrYx+k1I/uYPVlP0ySX5t/9telPr653zozI0MWCWSur71
+         bTD/D2cwK62LrXOS65UiR80c0dvyJKYp5mme3/ZuhJtM0csvk35gNmuk7WaTPguAsV+h
+         b4mN5UpCDlYLTM1ZPUSHDp4grEMZL5IOB+D0WtknLb7ERqPq5DIBFJR8apJHThEsfCFc
+         YHTiGSl1kRYPQrsXajokUbWNM5YHLV6Dkzao8j5w0KAee08UqJQkugO93er8TTUR3X5N
+         vwxg==
+X-Gm-Message-State: APjAAAWFWQRTDIBzgdtGkaIYIYsbKTajJoyT/ivMjEH//ree2uImtndq
+        XUY32226mUacVo69LVuLlTJ0JicZ7TtwsWJAWWHCdg==
+X-Google-Smtp-Source: APXvYqyRXwcncc9wKbYIrRZ44NAbKVsWaJ0j9o3Ps+2zQPp0tmPC5rbaCeAv9MpbLcmDl4VcxeUoZ+6MRXl9Scj9iCs=
+X-Received: by 2002:a9d:5cb:: with SMTP id 69mr684652otd.292.1559286617625;
+ Fri, 31 May 2019 00:10:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6c2NcOVqGQ03X4Wi"
-Content-Disposition: inline
-In-Reply-To: <20190531062740.GQ2781@lahna.fi.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190529163052.GA29158@embeddedor>
+In-Reply-To: <20190529163052.GA29158@embeddedor>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Fri, 31 May 2019 09:10:06 +0200
+Message-ID: <CAMpxmJV_RQ-V8DMfsOSqRjY_HAys4cpmppUCffCwDWCrFchmLQ@mail.gmail.com>
+Subject: Re: [PATCH] eeprom: at24: use struct_size() in devm_kzalloc()
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+=C5=9Br., 29 maj 2019 o 18:30 Gustavo A. R. Silva <gustavo@embeddedor.com>
+napisa=C5=82(a):
+>
+> One of the more common cases of allocation size calculations is finding
+> the size of a structure that has a zero-sized array at the end, along
+> with memory for some number of elements for that array. For example:
+>
+> struct foo {
+>     int stuff;
+>     struct boo entry[];
+> };
+>
+> size =3D sizeof(struct foo) + count * sizeof(struct boo);
+> instance =3D devm_kzalloc(dev, size, GFP_KERNEL);
+>
+> Instead of leaving these open-coded and prone to type mistakes, we can
+> now use the new struct_size() helper:
+>
+> instance =3D devm_kzalloc(dev, struct_size(instance, entry, count), GFP_K=
+ERNEL);
+>
+> Notice that, in this case, variable at24_size is not necessary, hence it
+> is removed.
+>
+> This code was detected with the help of Coccinelle.
+>
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> ---
+>  drivers/misc/eeprom/at24.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index ba8e73812644..78ba6b1917a8 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -568,7 +568,6 @@ static int at24_probe(struct i2c_client *client)
+>         unsigned int i, num_addresses;
+>         struct at24_data *at24;
+>         struct regmap *regmap;
+> -       size_t at24_size;
+>         bool writable;
+>         u8 test_byte;
+>         int err;
+> @@ -652,8 +651,8 @@ static int at24_probe(struct i2c_client *client)
+>         if (IS_ERR(regmap))
+>                 return PTR_ERR(regmap);
+>
+> -       at24_size =3D sizeof(*at24) + num_addresses * sizeof(struct at24_=
+client);
+> -       at24 =3D devm_kzalloc(dev, at24_size, GFP_KERNEL);
+> +       at24 =3D devm_kzalloc(dev, struct_size(at24, client, num_addresse=
+s),
+> +                           GFP_KERNEL);
+>         if (!at24)
+>                 return -ENOMEM;
+>
+> --
+> 2.21.0
+>
 
---6c2NcOVqGQ03X4Wi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-
-> > Are you happy for the i2c patch to be merged via net-next?
->=20
-> Yes, that's fine my me.
->=20
-> Wolfram do you have any objections?
-
-That's fine with me, I'd like an immutable branch, though. There are
-likely other changes to i2c.h coming and that would avoid merge
-conflicts.
-
-
---6c2NcOVqGQ03X4Wi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzwzkYACgkQFA3kzBSg
-KbYLThAAj7STTMVCIs8F5pQc2CL/VG7m9jE8g45Y2UsC2GalXogsowIOtAJydg9l
-Ix5+g9neYnFPj6Kvct20SxzQPtjxZXhn+hStBHTx6AN30pXXywAA1QisHNp4LLSk
-6eSsE57svbMqOTtF7HGZeEheocvcDDr8NbTLWFuUOuHJnumSWWSOFtHFGIynZEa6
-agL05yQJ2mWQ33ydA6mq8JqB/kYaajsuAPmM4YxaxReshoRxOXOCduvkWk7q8QqI
-SlcJZCmccTypcIUxsp1gETxbBScYdcVtd/ZKR5sdxApbWW6OFJMq6DYfg2Cp1ZOw
-dSoQBesfighJL0cI0/M291OLRZeJFi4rzJW5ZT0zGadCFiSsGDoJVag5EWVsfl9L
-8dkW7eEusUeUk7rwMFNqEa/0ZZanN+DwgDEgEbQI2Si06neTiSflRBtwvWNjDF7i
-Wey4mpYZkl4Gem46VPzOk0PbVnnvy3jwXtuMMB61C8jX+sDfI/ESHNWBiADvDkgH
-TPdBhRheUUeJZnxDQc8rbqyeZU6URG+AO6gaDNBozJr/GNKRpGHz1iciPUl60rE+
-2tfFqWnEgEkWuEwUqFw9e+ZdayGV1bEiIt3r77g4UdzldwS/JzfubncU5XmZX04R
-7MrWtxJYl3zXkvlRh+K1xgdN+Ys8L/WJxPq3OdybHR3lBsaBEc4=
-=la6d
------END PGP SIGNATURE-----
-
---6c2NcOVqGQ03X4Wi--
+Bart
