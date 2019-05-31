@@ -2,196 +2,348 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1F331585
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2019 21:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695F231744
+	for <lists+linux-i2c@lfdr.de>; Sat,  1 Jun 2019 00:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727367AbfEaTm5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 31 May 2019 15:42:57 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:14386 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727147AbfEaTm5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 May 2019 15:42:57 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cf183bd0000>; Fri, 31 May 2019 12:42:53 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 31 May 2019 12:42:54 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 31 May 2019 12:42:54 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 May
- 2019 19:42:53 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 May
- 2019 19:42:53 +0000
-Received: from NAM03-DM3-obe.outbound.protection.outlook.com (104.47.41.52) by
- HQMAIL109.nvidia.com (172.20.187.15) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Fri, 31 May 2019 19:42:53 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com (20.177.125.216) by
- BYAPR12MB3493.namprd12.prod.outlook.com (20.178.196.219) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.16; Fri, 31 May 2019 19:42:51 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::54a2:b360:f53:6aa]) by BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::54a2:b360:f53:6aa%6]) with mapi id 15.20.1922.021; Fri, 31 May 2019
- 19:42:51 +0000
-From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Wolfram Sang <wsa@the-dreams.de>, Ajay Gupta <ajaykuee@gmail.com>
-CC:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: RE: [PATCH v3 2/5] i2c: nvidia-gpu: add runtime pm support
-Thread-Topic: [PATCH v3 2/5] i2c: nvidia-gpu: add runtime pm support
-Thread-Index: AQHVEMzkPx3E/+mRIUKvJ8Fh+C4XEaZ8RkoAgARYKyCABRGrUA==
-Date:   Fri, 31 May 2019 19:42:50 +0000
-Message-ID: <BYAPR12MB2727F7FA5B11E9DC776A1ABCDC190@BYAPR12MB2727.namprd12.prod.outlook.com>
-References: <20190522183142.11061-1-ajayg@nvidia.com>
- <20190522183142.11061-3-ajayg@nvidia.com> <20190525195630.GB12538@kunai>
- <BYAPR12MB2727D18CBA3BACC667F253C6DC1E0@BYAPR12MB2727.namprd12.prod.outlook.com>
-In-Reply-To: <BYAPR12MB2727D18CBA3BACC667F253C6DC1E0@BYAPR12MB2727.namprd12.prod.outlook.com>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-05-28T14:25:49.8703516Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic;
- Sensitivity=Unrestricted
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ajayg@nvidia.com; 
-x-originating-ip: [216.228.112.22]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 02a25ee7-c528-4384-0a32-08d6e6002ace
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:BYAPR12MB3493;
-x-ms-traffictypediagnostic: BYAPR12MB3493:
-x-microsoft-antispam-prvs: <BYAPR12MB349362E3DD17A23BB930F5C9DC190@BYAPR12MB3493.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 00540983E2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(366004)(396003)(376002)(346002)(136003)(13464003)(189003)(199004)(64756008)(71200400001)(9686003)(6116002)(2906002)(66556008)(66446008)(66476007)(73956011)(71190400001)(66946007)(55016002)(14444005)(66066001)(6436002)(6506007)(52536014)(256004)(7736002)(305945005)(3846002)(99286004)(11346002)(33656002)(186003)(486006)(5660300002)(316002)(446003)(476003)(6246003)(54906003)(478600001)(76116006)(74316002)(102836004)(110136005)(76176011)(86362001)(68736007)(53546011)(229853002)(81166006)(7696005)(25786009)(8676002)(53936002)(8936002)(81156014)(14454004)(4326008)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB3493;H:BYAPR12MB2727.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 624IfehF/LggOG6tCXCmDV+wzvqshLKUI4yKsmAhYO+Sej4B/CkkDMocSnBXyTmKpOsHrSg8cX44q9hZD77Rvaqvn3/OO4u6KW20fod2v1HmLuJX16VvW7fnhcMPresW71k1zyGgncWK2uYPC/T/Zrrrs5E2a0/VVHnqhrZiQwD7TRXzVtkblUYkxMXhXgpaepEpSw3VBfm+wfxchHRHZGWqFgaQ4s6ipUPvrR9zyOED2Lp+GHcQae1qEuB0ze9AiQvsxpcYf1+vjV3ETMwhSXSSrYtgCfAAuH05v3mlTlWM6ES6kzGgHyNrFJu8vk7/6NV3GbHkSMfzYxarfX37qlwF+dt4qq17X28S5MV1skSu14QXcIC7ucBrQedhxF3nU1653oLTDRtF6CMLuPafdzFSt7yoTPtjOqFjqJN40Rc=
+        id S1726483AbfEaWiE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 31 May 2019 18:38:04 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:33176 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726559AbfEaWiE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 May 2019 18:38:04 -0400
+Received: by mail-wr1-f66.google.com with SMTP id d9so7488845wrx.0
+        for <linux-i2c@vger.kernel.org>; Fri, 31 May 2019 15:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XpL9+CuMZBi/PiTWMj4WheLdJA+o5zN9TKoGXQCpv7A=;
+        b=fEc00Nzeoc0J0lUjfVX1AZE3zEU9BbJ89fVuxoSdGcnJY4TP4Rw09JPhZdvCvZME6s
+         UjFHl34wdX3BPjD+ypY8qPIX+m2h8DNXCASviwwbT3hyHiLAvZ40q6ZUM6JoTerjfqZz
+         IQxsy1A3n6VmlptkXbPRDxBcOkOwDoY5JwcG7uxjMlkXcnz1fcQuIneApX+b62gmrbS8
+         HN1tGSSiFm35ddTc0ritVm9+TB45GnburjqGSmzV8qiN423A5RLxHj0uWnWoCmj6U8td
+         0uaYB0Y8keAYlbilIgxD9OiPpgFsCzA8mm9fVirx4gb2r4sTcxJ94bM2laaoqex/5P5F
+         MMVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XpL9+CuMZBi/PiTWMj4WheLdJA+o5zN9TKoGXQCpv7A=;
+        b=GgrGgsUsGp6icWcq+gb6aWUCWs5hnKAxCZNGsTLghSfbRtEPlmskXc9fS9ZBhfWl5o
+         gDFZmhkD56WQ40ZuIm3eJq0NatA0I4Oir1RYch9UJgLVzGWnhu3OstayDO9Bu9Ooypu8
+         ob6bRjQxU6pjHjZJEscwhrBUpTEZsfxo4nEKGw41i8dfxPi5h+1kLPMxfowEKmwMulbO
+         +vtcW66fFdmOCSL3AvstBw4Mvb2iAtVeauBqUV/Vb6X4yBhQa5sBqZwBfq4knHmhfhWn
+         04PbQxMzi/srHJXncUkxVzyzWfV8LiM/OHERA+vjOwwzOvIP6N+450AFaG14gRmbsijo
+         /dPw==
+X-Gm-Message-State: APjAAAVmq1JJciFX5x9AuX3OUpASJUTphzIWglOLL8dsEpvCUGzy/mHC
+        1cSEltzEQkEMZbPsA9fJxdCTOQ==
+X-Google-Smtp-Source: APXvYqzS8z++Gc9llPACviQcGyNABM2ReUHD4ityogHgigddUjqpLZBdKqzw9RK+1aMWrezwxvs+0A==
+X-Received: by 2002:adf:9022:: with SMTP id h31mr7591206wrh.46.1559342281979;
+        Fri, 31 May 2019 15:38:01 -0700 (PDT)
+Received: from localhost.localdomain (catv-89-135-96-219.catv.broadband.hu. [89.135.96.219])
+        by smtp.gmail.com with ESMTPSA id w185sm7501956wma.39.2019.05.31.15.38.00
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 31 May 2019 15:38:00 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>, arm@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: [PATCH] i2c: iop: Use GPIO descriptors
+Date:   Sat,  1 Jun 2019 00:37:56 +0200
+Message-Id: <20190531223756.1861-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02a25ee7-c528-4384-0a32-08d6e6002ace
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2019 19:42:51.0809
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ajayg@nvidia.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3493
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1559331773; bh=GH5X9RQ+ObGIiGX4bGy2aqFfuGIisPVG2em/dlAH7Vw=;
-        h=X-PGP-Universal:From:To:CC:Subject:Thread-Topic:Thread-Index:Date:
-         Message-ID:References:In-Reply-To:Accept-Language:X-MS-Has-Attach:
-         X-MS-TNEF-Correlator:msip_labels:authentication-results:
-         x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-microsoft-antispam:
-         x-ms-traffictypediagnostic:x-microsoft-antispam-prvs:
-         x-ms-oob-tlc-oobclassifiers:x-forefront-prvs:
-         x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam-message-info:
-         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=EXe22w9NS1s94ix3ZbnuFaknuz04AhwtU8DjHTV2O0v3rEgSn6ekjl+FjnnO2ol6N
-         JOxCQFAN19mBkbIxhxkRFjOFbasSCtqqtvUEwKTrDuTYn4e9WxonoHxoqcAQPdsjGr
-         uR3vV0B/FITcvf+WXWuL5EQSr0ndWHRpAOpCgWCc9OY8NripCXid33YtP+T86IDSgB
-         RIIBAEkwoy2ZyMF15X+Wl8le9FRZgAgIuhjptr4Z5q1cN4+RrTWGRdCpouGG/lJuwo
-         ktAPeRnoWu5wRHWBk9kb008RXY/QKktOdNrDAbvNXJWc71tI6OxBfFc/ovnKy2Xkgp
-         nY2GKQKvM1Kpg==
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+The IOP3xx has some elaborate code to directly slam the
+GPIO lines multiplexed with I2C down low before enablement,
+apparently a workaround for a hardware bug found in the
+early chips.
 
-> > -----Original Message-----
-> > From: linux-usb-owner@vger.kernel.org <linux-usb-
-> owner@vger.kernel.org>
-> > On Behalf Of Wolfram Sang
-> > Sent: Saturday, May 25, 2019 12:57 PM
-> > To: Ajay Gupta <ajaykuee@gmail.com>
-> > Cc: heikki.krogerus@linux.intel.com; linux-usb@vger.kernel.org; linux-
-> > i2c@vger.kernel.org; Ajay Gupta <ajayg@nvidia.com>
-> > Subject: Re: [PATCH v3 2/5] i2c: nvidia-gpu: add runtime pm support
-> >
-> >
-> > > @@ -211,6 +212,8 @@ static int gpu_i2c_master_xfer(struct i2c_adapter
-> > *adap,
-> > >  		goto exit;
-> > >  	}
-> > >
-> > > +	pm_runtime_mark_last_busy(i2cd->dev);
-> > > +	pm_runtime_put_autosuspend(i2cd->dev);
-> > >  	return i;
-> > >  exit:
-> > >  	if (send_stop) {
-> > > @@ -218,6 +221,8 @@ static int gpu_i2c_master_xfer(struct i2c_adapter
-> > *adap,
-> > >  		if (status2 < 0)
-> > >  			dev_err(i2cd->dev, "i2c stop failed %d\n", status2);
-> > >  	}
-> > > +	pm_runtime_mark_last_busy(i2cd->dev);
-> > > +	pm_runtime_put_autosuspend(i2cd->dev);
-> >
-> > Maybe another worthwhile refactorization possible here? The exit code
-> path
-> > and 'all good' code path look very similar.
-> > This can be done incrementally, though. I think for now it is okay.
-> Thanks for suggestion. Yes , it is possible to refactor a bit further her=
-e.
->=20
-> > > +static __maybe_unused int gpu_i2c_suspend(struct device *dev) {
-> > > +	return 0;
-> > > +}
-> >
-> > Why do we need this?
-> I2C function of PCI bus remains in D0 (lspci output) without this functio=
-n.
+After consulting the developer documentation for IOP80321
+and IOP80331 I can clearly see that this may be useful for
+IOP80321 family (mach-iop32x) but it is highly dubious for
+any 80331 series or later chip: in these chips the lines
+are not multiplexed for UARTs.
 
-Do you still see any issue with gpu_i2c_suspend()?
+We convert the code to pass optional GPIO descriptors
+and register these only on the 80321-based boards where
+it makes sense, optionally obtain them in the driver and
+use the gpiod_set_raw_value() to ascertain the line gets
+driven low when needed.
 
-Thanks
-Ajay
-> nvpublic
->=20
-> Following document also seems to insist on this.
-> " For this to work, the device's driver has to provide a
-> pm->runtime_suspend() callback "
->=20
-> Documentation/power/pci.txt
-> "First, a PCI device is put into a low-power state, or suspended, with th=
-e help
-> of pm_schedule_suspend() or pm_runtime_suspend() which for PCI devices
-> call
-> pci_pm_runtime_suspend() to do the actual job.  For this to work, the
-> device's
-> driver has to provide a pm->runtime_suspend() callback (see below), which
-> is
-> run by pci_pm_runtime_suspend() as the first action. If the driver's call=
-back
-> returns successfully, the device's standard configuration registers are s=
-aved,
-> the device is prepared to generate wakeup signals and, finally, it is put=
- into
-> the target low-power state."
->=20
-> Thanks
-> Ajay
-> > nvpublic
+The GPIO driver does not give the GPIO chip a reasonable
+label so the patch also adds that so that these machine
+descriptor tables can be used.
+
+Cc: arm@kernel.org
+Cc: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ARM SoC mainatiners: looking for a handshake ACK on this
+so Wolfram can merge it into the I2C subsystem.
+
+Dan Williams: I have seen that you were patching IOP3xx code
+in 2007, so maybe you remember something about this.
+---
+ arch/arm/include/asm/hardware/iop3xx.h |  2 ++
+ arch/arm/mach-iop32x/em7210.c          |  3 +++
+ arch/arm/mach-iop32x/glantank.c        |  3 +++
+ arch/arm/mach-iop32x/iq31244.c         |  3 +++
+ arch/arm/mach-iop32x/iq80321.c         |  3 +++
+ arch/arm/mach-iop32x/n2100.c           |  2 ++
+ arch/arm/plat-iop/i2c.c                | 24 +++++++++++++++++++
+ drivers/gpio/gpio-iop.c                |  1 +
+ drivers/i2c/busses/i2c-iop3xx.c        | 32 +++++++++++++++++---------
+ drivers/i2c/busses/i2c-iop3xx.h        |  2 ++
+ 10 files changed, 64 insertions(+), 11 deletions(-)
+
+diff --git a/arch/arm/include/asm/hardware/iop3xx.h b/arch/arm/include/asm/hardware/iop3xx.h
+index 2594a95ff19a..a15d08160e8f 100644
+--- a/arch/arm/include/asm/hardware/iop3xx.h
++++ b/arch/arm/include/asm/hardware/iop3xx.h
+@@ -305,6 +305,8 @@ extern struct platform_device iop3xx_dma_1_channel;
+ extern struct platform_device iop3xx_aau_channel;
+ extern struct platform_device iop3xx_i2c0_device;
+ extern struct platform_device iop3xx_i2c1_device;
++extern struct gpiod_lookup_table iop3xx_i2c0_gpio_lookup;
++extern struct gpiod_lookup_table iop3xx_i2c1_gpio_lookup;
+ 
+ #endif
+ 
+diff --git a/arch/arm/mach-iop32x/em7210.c b/arch/arm/mach-iop32x/em7210.c
+index 77e1ff057303..d2bcbac6b7f2 100644
+--- a/arch/arm/mach-iop32x/em7210.c
++++ b/arch/arm/mach-iop32x/em7210.c
+@@ -24,6 +24,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/i2c.h>
+ #include <linux/gpio.h>
++#include <linux/gpio/machine.h>
+ #include <mach/hardware.h>
+ #include <linux/io.h>
+ #include <linux/irq.h>
+@@ -211,6 +212,8 @@ static void __init em7210_init_machine(void)
+ {
+ 	register_iop32x_gpio();
+ 	platform_device_register(&em7210_serial_device);
++	gpiod_add_lookup_table(&iop3xx_i2c0_gpio_lookup);
++	gpiod_add_lookup_table(&iop3xx_i2c1_gpio_lookup);
+ 	platform_device_register(&iop3xx_i2c0_device);
+ 	platform_device_register(&iop3xx_i2c1_device);
+ 	platform_device_register(&em7210_flash_device);
+diff --git a/arch/arm/mach-iop32x/glantank.c b/arch/arm/mach-iop32x/glantank.c
+index 547b2342d61a..4c4995007d17 100644
+--- a/arch/arm/mach-iop32x/glantank.c
++++ b/arch/arm/mach-iop32x/glantank.c
+@@ -25,6 +25,7 @@
+ #include <linux/i2c.h>
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
++#include <linux/gpio/machine.h>
+ #include <mach/hardware.h>
+ #include <asm/irq.h>
+ #include <asm/mach/arch.h>
+@@ -189,6 +190,8 @@ static void glantank_power_off(void)
+ static void __init glantank_init_machine(void)
+ {
+ 	register_iop32x_gpio();
++	gpiod_add_lookup_table(&iop3xx_i2c0_gpio_lookup);
++	gpiod_add_lookup_table(&iop3xx_i2c1_gpio_lookup);
+ 	platform_device_register(&iop3xx_i2c0_device);
+ 	platform_device_register(&iop3xx_i2c1_device);
+ 	platform_device_register(&glantank_flash_device);
+diff --git a/arch/arm/mach-iop32x/iq31244.c b/arch/arm/mach-iop32x/iq31244.c
+index 0e1392b20d18..56a64ffd3824 100644
+--- a/arch/arm/mach-iop32x/iq31244.c
++++ b/arch/arm/mach-iop32x/iq31244.c
+@@ -26,6 +26,7 @@
+ #include <linux/mtd/physmap.h>
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
++#include <linux/gpio/machine.h>
+ #include <mach/hardware.h>
+ #include <asm/cputype.h>
+ #include <asm/irq.h>
+@@ -285,6 +286,8 @@ void ep80219_power_off(void)
+ static void __init iq31244_init_machine(void)
+ {
+ 	register_iop32x_gpio();
++	gpiod_add_lookup_table(&iop3xx_i2c0_gpio_lookup);
++	gpiod_add_lookup_table(&iop3xx_i2c1_gpio_lookup);
+ 	platform_device_register(&iop3xx_i2c0_device);
+ 	platform_device_register(&iop3xx_i2c1_device);
+ 	platform_device_register(&iq31244_flash_device);
+diff --git a/arch/arm/mach-iop32x/iq80321.c b/arch/arm/mach-iop32x/iq80321.c
+index 66782ff1f46a..02abbf9efd54 100644
+--- a/arch/arm/mach-iop32x/iq80321.c
++++ b/arch/arm/mach-iop32x/iq80321.c
+@@ -23,6 +23,7 @@
+ #include <linux/mtd/physmap.h>
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
++#include <linux/gpio/machine.h>
+ #include <mach/hardware.h>
+ #include <asm/irq.h>
+ #include <asm/mach/arch.h>
+@@ -172,6 +173,8 @@ static struct platform_device iq80321_serial_device = {
+ static void __init iq80321_init_machine(void)
+ {
+ 	register_iop32x_gpio();
++	gpiod_add_lookup_table(&iop3xx_i2c0_gpio_lookup);
++	gpiod_add_lookup_table(&iop3xx_i2c1_gpio_lookup);
+ 	platform_device_register(&iop3xx_i2c0_device);
+ 	platform_device_register(&iop3xx_i2c1_device);
+ 	platform_device_register(&iq80321_flash_device);
+diff --git a/arch/arm/mach-iop32x/n2100.c b/arch/arm/mach-iop32x/n2100.c
+index 23e8c93515d4..c780b6e82ad9 100644
+--- a/arch/arm/mach-iop32x/n2100.c
++++ b/arch/arm/mach-iop32x/n2100.c
+@@ -31,6 +31,7 @@
+ #include <linux/reboot.h>
+ #include <linux/io.h>
+ #include <linux/gpio.h>
++#include <linux/gpio/machine.h>
+ #include <mach/hardware.h>
+ #include <asm/irq.h>
+ #include <asm/mach/arch.h>
+@@ -345,6 +346,7 @@ device_initcall(n2100_request_gpios);
+ static void __init n2100_init_machine(void)
+ {
+ 	register_iop32x_gpio();
++	gpiod_add_lookup_table(&iop3xx_i2c0_gpio_lookup);
+ 	platform_device_register(&iop3xx_i2c0_device);
+ 	platform_device_register(&n2100_flash_device);
+ 	platform_device_register(&n2100_serial_device);
+diff --git a/arch/arm/plat-iop/i2c.c b/arch/arm/plat-iop/i2c.c
+index 88215ad031a2..bac20f7f5f8a 100644
+--- a/arch/arm/plat-iop/i2c.c
++++ b/arch/arm/plat-iop/i2c.c
+@@ -19,6 +19,7 @@
+ #include <linux/tty.h>
+ #include <linux/serial_core.h>
+ #include <linux/io.h>
++#include <linux/gpio/machine.h>
+ #include <asm/pgtable.h>
+ #include <asm/page.h>
+ #include <asm/mach/map.h>
+@@ -37,6 +38,29 @@
+ #define IRQ_IOP3XX_I2C_1	IRQ_IOP33X_I2C_1
+ #endif
+ 
++/*
++ * Each of the I2C busses have corresponding GPIO lines, and the driver
++ * need to access these directly to drive the bus low at times.
++ */
++
++struct gpiod_lookup_table iop3xx_i2c0_gpio_lookup = {
++	.dev_id = "IOP3xx-I2C.0",
++	.table = {
++		GPIO_LOOKUP("gpio-iop", 7, "scl", GPIO_ACTIVE_HIGH),
++		GPIO_LOOKUP("gpio-iop", 6, "sda", GPIO_ACTIVE_HIGH),
++		{ }
++	},
++};
++
++struct gpiod_lookup_table iop3xx_i2c1_gpio_lookup = {
++	.dev_id = "IOP3xx-I2C.1",
++	.table = {
++		GPIO_LOOKUP("gpio-iop", 5, "scl", GPIO_ACTIVE_HIGH),
++		GPIO_LOOKUP("gpio-iop", 4, "sda", GPIO_ACTIVE_HIGH),
++		{ }
++	},
++};
++
+ static struct resource iop3xx_i2c0_resources[] = {
+ 	[0] = {
+ 		.start	= 0xfffff680,
+diff --git a/drivers/gpio/gpio-iop.c b/drivers/gpio/gpio-iop.c
+index 11b77d868c89..e9546d6c7451 100644
+--- a/drivers/gpio/gpio-iop.c
++++ b/drivers/gpio/gpio-iop.c
+@@ -40,6 +40,7 @@ static int iop3xx_gpio_probe(struct platform_device *pdev)
+ 
+ 	gc->base = 0;
+ 	gc->owner = THIS_MODULE;
++	gc->label = "gpio-iop";
+ 
+ 	return devm_gpiochip_add_data(&pdev->dev, gc, NULL);
+ }
+diff --git a/drivers/i2c/busses/i2c-iop3xx.c b/drivers/i2c/busses/i2c-iop3xx.c
+index a34cb3848280..eafc1a4d8656 100644
+--- a/drivers/i2c/busses/i2c-iop3xx.c
++++ b/drivers/i2c/busses/i2c-iop3xx.c
+@@ -38,7 +38,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/i2c.h>
+ #include <linux/io.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ 
+ #include "i2c-iop3xx.h"
+ 
+@@ -71,17 +71,16 @@ iop3xx_i2c_enable(struct i2c_algo_iop3xx_data *iop3xx_adap)
+ 
+ 	/*
+ 	 * Every time unit enable is asserted, GPOD needs to be cleared
+-	 * on IOP3XX to avoid data corruption on the bus.
++	 * on IOP3XX to avoid data corruption on the bus. We use the
++	 * gpiod_set_raw_value() to make sure the 0 hits the hardware
++	 * GPOD register. These descriptors are only passed along to
++	 * the device if this is necessary.
+ 	 */
+-#if defined(CONFIG_ARCH_IOP32X) || defined(CONFIG_ARCH_IOP33X)
+-	if (iop3xx_adap->id == 0) {
+-		gpio_set_value(7, 0);
+-		gpio_set_value(6, 0);
+-	} else {
+-		gpio_set_value(5, 0);
+-		gpio_set_value(4, 0);
+-	}
+-#endif
++	if (iop3xx_adap->gpio_scl)
++		gpiod_set_raw_value(iop3xx_adap->gpio_scl, 0);
++	if (iop3xx_adap->gpio_sda)
++		gpiod_set_raw_value(iop3xx_adap->gpio_sda, 0);
++
+ 	/* NB SR bits not same position as CR IE bits :-( */
+ 	iop3xx_adap->SR_enabled =
+ 		IOP3XX_ISR_ALD | IOP3XX_ISR_BERRD |
+@@ -434,6 +433,17 @@ iop3xx_i2c_probe(struct platform_device *pdev)
+ 		goto free_adapter;
+ 	}
+ 
++	adapter_data->gpio_scl = devm_gpiod_get_optional(&pdev->dev,
++							 "scl",
++							 GPIOD_ASIS);
++	if (IS_ERR(adapter_data->gpio_scl))
++		return PTR_ERR(adapter_data->gpio_scl);
++	adapter_data->gpio_sda = devm_gpiod_get_optional(&pdev->dev,
++							 "sda",
++							 GPIOD_ASIS);
++	if (IS_ERR(adapter_data->gpio_sda))
++		return PTR_ERR(adapter_data->gpio_sda);
++
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	if (!res) {
+ 		ret = -ENODEV;
+diff --git a/drivers/i2c/busses/i2c-iop3xx.h b/drivers/i2c/busses/i2c-iop3xx.h
+index 2d6929c2bd92..231897838386 100644
+--- a/drivers/i2c/busses/i2c-iop3xx.h
++++ b/drivers/i2c/busses/i2c-iop3xx.h
+@@ -98,6 +98,8 @@ struct i2c_algo_iop3xx_data {
+ 	spinlock_t lock;
+ 	u32 SR_enabled, SR_received;
+ 	int id;
++	struct gpio_desc *gpio_scl;
++	struct gpio_desc *gpio_sda;
+ };
+ 
+ #endif /* I2C_IOP3XX_H */
+-- 
+2.20.1
 
