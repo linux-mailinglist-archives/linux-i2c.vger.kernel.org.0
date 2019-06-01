@@ -2,31 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1168B31BBA
-	for <lists+linux-i2c@lfdr.de>; Sat,  1 Jun 2019 14:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D11B31BBB
+	for <lists+linux-i2c@lfdr.de>; Sat,  1 Jun 2019 14:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726134AbfFAMoH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 1 Jun 2019 08:44:07 -0400
-Received: from sauhun.de ([88.99.104.3]:49718 "EHLO pokefinder.org"
+        id S1726197AbfFAMr3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 1 Jun 2019 08:47:29 -0400
+Received: from sauhun.de ([88.99.104.3]:49746 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726109AbfFAMoG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 1 Jun 2019 08:44:06 -0400
+        id S1726134AbfFAMr3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 1 Jun 2019 08:47:29 -0400
 Received: from localhost (unknown [91.64.182.124])
-        by pokefinder.org (Postfix) with ESMTPSA id 69D762C54BC;
-        Sat,  1 Jun 2019 14:44:05 +0200 (CEST)
-Date:   Sat, 1 Jun 2019 14:44:05 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 675B32C54BC;
+        Sat,  1 Jun 2019 14:47:27 +0200 (CEST)
+Date:   Sat, 1 Jun 2019 14:47:26 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Vadim Pasternak <vadimp@mellanox.com>
-Cc:     linux-i2c@vger.kernel.org, michaelsh@mellanox.com
-Subject: Re: [PATCH v1 i2c-next] i2c: mlxcpld: prevent devices from being
- unbounded from driver via sysfs
-Message-ID: <20190601124404.GA11008@kunai>
-References: <20190529141636.6043-1-vadimp@mellanox.com>
+To:     David Miller <davem@davemloft.net>
+Cc:     ruslan@babayev.com, mika.westerberg@linux.intel.com,
+        linux@armlinux.org.uk, andrew@lunn.ch, f.fainelli@gmail.com,
+        hkallweit1@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [net-next,v4 0/2] Enable SFP on ACPI based systems
+Message-ID: <20190601124726.GB11008@kunai>
+References: <20190528230233.26772-1-ruslan@babayev.com>
+ <20190530.112759.2023290429676344968.davem@davemloft.net>
+ <20190531125751.GB951@kunai>
+ <20190531.112208.2148170988874389736.davem@davemloft.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fdj2RfSjLxBAspz7"
+        protocol="application/pgp-signature"; boundary="0eh6TmSyL6TZE2Uz"
 Content-Disposition: inline
-In-Reply-To: <20190529141636.6043-1-vadimp@mellanox.com>
+In-Reply-To: <20190531.112208.2148170988874389736.davem@davemloft.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -34,37 +40,37 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---fdj2RfSjLxBAspz7
+--0eh6TmSyL6TZE2Uz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 
-> 'i2c_mlxcpld' is a platform drivers and it registered via
-> platform_driver_probe() and can be bound to devices only once, upon
-> registration.
+> I already put other changes into net-next and also just merged 'net'
+> into 'net-next' and pushed that out to git.kernel.org, so I don't know
+> how I can still do that for you.
 
-?? No, it isn't. If it was, the driver core would have prevented these
-attributes (post 2009 kernels at least).
+Okay, it is just one patch. I will apply it to my tree as well. Should
+be good enough.
 
 
---fdj2RfSjLxBAspz7
+--0eh6TmSyL6TZE2Uz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzycxAACgkQFA3kzBSg
-Kbal+A//YuEmK108rMiR1JxDxv1zhRwO/HnTAg348wa/UOACg4wEQblHRDj7Tlxa
-fELy7hPb+IYI3R+so4b2bqmQDIUTFHf8W48TcNlROLXGeaq5obBBBhSND1v7w/64
-ZD/8reOmtUieiNFP161PshnN/nGwwiZ06ipundDiLNgeOvDwryBZunYrgTarg/QW
-0GCCivW9UJ9IxsxlT+mnmKKarP7UuHTF4p5ZkkKrVLZnIsMpdkw7hv8Itb7AX5h/
-7WQ+Ikp8O/TyjLzdQbC3GEtDDBC+nuO5TI57W8ScPRlWQLzvqhGBgKpM3qJ6ivHk
-RBCih8xhKp6E/+vQxDOVGvNk38bPNuxEbnEGdri138D/nkXOUit9/nGfaKl/w1dd
-bwCgO4NGTQS24XidmpSo7mYhbRgxeIb9p07vtZJlcfzdBcFXCTUJ1AzF4W2RVp/O
-qoOhnX8qF/07Ng2ia6EWVxR+D4RJXz9tv0594I1K3O1xjHALGlzDIxcu4f7ViyqP
-1mO4OXJNFbBa6uXPTqbCjGvzILe61Yrtgnf1bqs1O5Fs/zdTJLP3mvTUwKcNXw3S
-OAhzKt0Ya9+OTtm/kUzEAEn4zHtoe6QlfvllAQpnTP3X9OBy4rcrnCu2V9R/eapZ
-0nFbE5/dlM7Yj2ijv01wPXtgGRCDfMI6bpkQ7pk2a6jKk74n5Ls=
-=XEP5
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzyc94ACgkQFA3kzBSg
+Kba1Xg//aW4eaS0Z0rjf0K6tZgQP/48mTRKsBSGJbqDaoTdMP4K0tJjB8hmIvCzL
+LLS5ydN6/w5izMs4NF3SpyrvU7AXTUwVj8ikR7PEZogYdD2vd2MBQYfdPOWwbQXC
+WMghLuaGV/6OBoS3f13yjm+yrdVv5cVzwZI7abdgbIR2QEz+wKHaYnmyUbu+YRzH
+itWmNRtFsiTYhJv+DKZrjz6HzbK+F9zKVNU03nt0coIAFmiYDxCBM23wzacMH56p
+KtnW1RvsYId7x+Rbvk9I6c9YNJ8Rt+ttHOJwDOebY54jfQQt/2K+guhTEi+SDMm9
+gjsH1XbZyhj6I9hr4aaK8jAf6n8gmUtqvO78rKKmXJ5WbIo80Vc1/7aUykKk+2yv
+te3Yyiwqj8la57z6x64CtfeA6irEIj9tVXuKslNxJwguR8k/kqDIO5f0qawfi7Ti
+ZYxOC/JG2dnWp5Y/Cea1oM5b5J2JMIiCYpe84k4rosqaHUgJhjAO1VhhUpJhiYVD
+rtyfjdKqAUqx0sQo/K1Cji04QnMWJgDbiwaCCtsoEqScUV/JLj1efLn+r4VoP1BD
+u+69vxyf4hHGoeDK1qvjwbKxHToPjkI+NqsPSqGQCBJJvIkXG7QXQZWROJZ2OcBX
+SdGkrtvqKSz1Nr0QzGfjdEDm7Qrka31s+dxeKcDGvc85mSyLOaw=
+=i+6S
 -----END PGP SIGNATURE-----
 
---fdj2RfSjLxBAspz7--
+--0eh6TmSyL6TZE2Uz--
