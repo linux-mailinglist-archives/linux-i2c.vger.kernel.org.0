@@ -2,32 +2,29 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CE931B95
-	for <lists+linux-i2c@lfdr.de>; Sat,  1 Jun 2019 13:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8878631B98
+	for <lists+linux-i2c@lfdr.de>; Sat,  1 Jun 2019 13:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726109AbfFALkQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 1 Jun 2019 07:40:16 -0400
-Received: from sauhun.de ([88.99.104.3]:49342 "EHLO pokefinder.org"
+        id S1726142AbfFALkg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 1 Jun 2019 07:40:36 -0400
+Received: from sauhun.de ([88.99.104.3]:49354 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726134AbfFALkQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 1 Jun 2019 07:40:16 -0400
+        id S1726134AbfFALkf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 1 Jun 2019 07:40:35 -0400
 Received: from localhost (unknown [91.64.182.124])
-        by pokefinder.org (Postfix) with ESMTPSA id 280422C54BC;
-        Sat,  1 Jun 2019 13:40:14 +0200 (CEST)
-Date:   Sat, 1 Jun 2019 13:40:13 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 34A202C54BC
+        for <linux-i2c@vger.kernel.org>; Sat,  1 Jun 2019 13:40:34 +0200 (CEST)
+Date:   Sat, 1 Jun 2019 13:40:33 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 5/8] MAINTAINERS: add I2C DT bindings to Rockchip platform
-Message-ID: <20190601114013.GB1993@kunai>
-References: <20190521082137.2889-1-wsa@the-dreams.de>
- <20190521082137.2889-6-wsa@the-dreams.de>
- <2847662.8Nn05j9K3f@phil>
+To:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 0/6] i2c: add DT binding docs to MAINTAINERS
+Message-ID: <20190601114033.GC1993@kunai>
+References: <20190521081509.2586-1-wsa@the-dreams.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EuxKj2iCbKjpUGkD"
+        protocol="application/pgp-signature"; boundary="8NvZYKFJsRX2Djef"
 Content-Disposition: inline
-In-Reply-To: <2847662.8Nn05j9K3f@phil>
+In-Reply-To: <20190521081509.2586-1-wsa@the-dreams.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -35,38 +32,36 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---EuxKj2iCbKjpUGkD
+--8NvZYKFJsRX2Djef
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+On Tue, May 21, 2019 at 10:15:03AM +0200, Wolfram Sang wrote:
+> Some I2C drivers entries in MAINTAINERS miss their DT bindings docs.
+> This series fixes that. Because they are all dedicated I2C drivers
+> entries, I suggest I pick them up via my I2C tree.
 
-> not sure if you want me to apply this or just want to pick it up
-> yourself (I don't have a hard preference here). In any case, if you
-> want to pick it up, it is obviously
-
-I wrote in the cover-letter that I prefer individual trees, but it was
-obviously a bad place to put this information :) I applied all of them
-now to my tree.
+Series applied to for-current!
 
 
---EuxKj2iCbKjpUGkD
+--8NvZYKFJsRX2Djef
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzyZB0ACgkQFA3kzBSg
-Kba11Q/5AV9hlZwLtWZWE/tE2Uv19SMgNFUfEG77ztCK9v7CC8Q7R25f4Apo874p
-q0dpNtr+s6B1e0RitDSIWcLIq5rselMu0pAreLoVYQg26JFDgycX7CC4g44yP//z
-acFmPlvFCbV0PxruHdHj8cW68q1d8zKxz74ovjhmulXxFGSsHv6jpCDPGMi0naZ1
-ZcGBzJSQ9G9niEFBghCganhjQijT8qkkHEQeo1TbZpk2Lttg9MsYKy8kis7m8Poo
-tHPUl+PxtaweRqyMaiqpST5EIM4w/EMpghsvYte89XatCX+cXlxIfj6Cng19rIgl
-zPeYw2Iz8caf5ZzenoJeNl9GluoiCoNkgzQ44ebKY9+bgsxj0da5m6vBjLwFdjHC
-FUKENYNt8KZOIGV5Mlzkf1j/baeqCdjYB+BbZY4yIjk806pIGnLxXh1z7tTAQUaS
-VlQ2VQBfhuRMIsRJ/fpcKzUwqIehaUV2CjuCbbcpjdl+vlmHEIxMOYzFzTO61UD3
-seILueIOKuTLtqGEusyaYq6qlpEgxumHXnshTHQsZgJudqwWSKFwWsIcnkTEiHRg
-d3+u/L4ddYbuLcqmcFedIGD+EwAJDOIqLGnsQtHZNSk1ZKBdDIB/rnv9lsm08hC8
-te4hoVIU2/hQFSg1h5Ag5ptj1IAVmVlaH+qAkZrHvye85jpih1A=
-=jkah
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzyZDEACgkQFA3kzBSg
+KbZC0RAAndMtxn+Yq1Eem6mmDmrEV+P0dyHfGAy6Cpfg7CNpi7Y4Rsk6pLbkk5+F
+bh+XgEXKw78QGa9nqFesfcKNLN+hvSc10UcZCI0ndsA2dwEXeErfO1RlE/3XDK1m
+0sgnTf75777J1JjulY+JHhQ4erhbLRqQ1fFBglzDSIWn9beQ3rOdw28XkTXaRRZg
+O6GNbBQs44LuO8qq4jfGsaFYqRKyBLbKJDmDxoTksjvguBW9E6BDI6cdz8bLS8n/
+REOTkqCuzFq+Y3qieYU/cnJDj35SZ3Ajukuk+htiVzhZHgHM852giNv8JDC5ICtA
+PYks5tB0fU2Wf7AEWh+5DOe9n8YG6HYbMfCJ++GsPwQqsN6tJfLzIHiBfeaRJQ6Y
+XnTR+dtkx6Z43TyF9+lHxqVipsPovl64Niuci3l/CcewphGE4Cp9cHlDrZ+UprgK
+hP1jVHJ5NacIRT/IpD+6y4W3VudH6TYp2OXuOrFn0OfJvhkWLAcCC/uqxGfxJTaI
+kvJ54ymqaawiV6Pdv+/UA1krIYvR60KuCIUTUbqDqFAuH0MHVARFfEV6ccg2TDYd
+mfs4ndHxOG8s+YdlgrTA7/QqvrPwFW8MzsRi08zIWGgHNEAuaCSNm9Z0LU8Egy/h
+Al7X1SVKYMsl34Nbc0T5Wq0/oxWO6E4Kj1jHGF7eSboZuJKlZYw=
+=xhWi
 -----END PGP SIGNATURE-----
 
---EuxKj2iCbKjpUGkD--
+--8NvZYKFJsRX2Djef--
