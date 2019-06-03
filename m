@@ -2,49 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F371232AB5
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2019 10:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF49132AB6
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2019 10:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727255AbfFCIZW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Jun 2019 04:25:22 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:50941 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727463AbfFCIZW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Jun 2019 04:25:22 -0400
-X-Originating-IP: 92.137.69.152
-Received: from localhost (alyon-656-1-672-152.w92-137.abo.wanadoo.fr [92.137.69.152])
-        (Authenticated sender: gregory.clement@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id DD53A40018;
-        Mon,  3 Jun 2019 08:25:19 +0000 (UTC)
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 3/6] MAINTAINERS: add DT bindings to i2c-mv64xxx
-In-Reply-To: <20190601113625.GA1993@kunai>
-References: <20190521081509.2586-1-wsa@the-dreams.de> <20190521081509.2586-4-wsa@the-dreams.de> <87blznlzcp.fsf@FE-laptop> <20190601113625.GA1993@kunai>
-Date:   Mon, 03 Jun 2019 10:25:19 +0200
-Message-ID: <878sujkrdc.fsf@FE-laptop>
+        id S1727512AbfFCIZk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Jun 2019 04:25:40 -0400
+Received: from sauhun.de ([88.99.104.3]:35870 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727463AbfFCIZk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 3 Jun 2019 04:25:40 -0400
+Received: from localhost (unknown [88.128.80.57])
+        by pokefinder.org (Postfix) with ESMTPSA id E8FDC2CF690;
+        Mon,  3 Jun 2019 10:25:37 +0200 (CEST)
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>
+Subject: [PATCH 0/5] i2c: improve main header file
+Date:   Mon,  3 Jun 2019 10:25:30 +0200
+Message-Id: <20190603082535.1566-1-wsa@the-dreams.de>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Wolfram Sang <wsa@the-dreams.de> writes:
+While working with i2c.h, I stumbled over some issues often enough to
+finally fix them. I couldn't test all of the changes (e.g. all
+I2C_CLIENT_* flags), but there is no code change involved (otherwise
+it is a bug). buildbot is happy, too.
 
->> Acked-by Gregory CLEMENT <gregory.clement@bootlin.com>
->
-> Hint: You forgot the ':', so patchwork didn't pick it up. I use
-> keyboard macros for tags, maybe you like it as well.
->
+Looking forward to comments.
 
-Sorry for this, I usually use a keyboard macro for such tags, but not
-this time, thinking that I could do it by hand, I was wrong!
+Wolfram Sang (5):
+  i2c: headers: don't use 'dev' as adapter variable
+  i2c: headers: always have a named variable in arguments
+  i2c: core: always have a named variable in arguments
+  i2c: headers: update docs about I2C_CLIENT_*
+  i2c: headers: reformat header comment and update copyright
 
-Gregory
+ drivers/i2c/i2c-core-base.c |  4 +-
+ include/linux/i2c.h         | 87 +++++++++++++++++--------------------
+ 2 files changed, 43 insertions(+), 48 deletions(-)
 
 -- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.19.1
+
