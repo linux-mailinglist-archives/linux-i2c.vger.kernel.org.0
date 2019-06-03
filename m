@@ -2,280 +2,436 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2111D33A1B
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2019 23:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFC233ACC
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 00:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726216AbfFCVsW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Jun 2019 17:48:22 -0400
-Received: from sauhun.de ([88.99.104.3]:40958 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726076AbfFCVsW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 3 Jun 2019 17:48:22 -0400
-Received: from localhost (p5486CC42.dip0.t-ipconnect.de [84.134.204.66])
-        by pokefinder.org (Postfix) with ESMTPSA id DD4AA2CF690;
-        Mon,  3 Jun 2019 23:08:44 +0200 (CEST)
-Date:   Mon, 3 Jun 2019 23:08:44 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Khalil Blaiech <kblaiech@mellanox.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        David Woods <dwoods@mellanox.com>, linux-i2c@vger.kernel.org,
-        arm-soc <arm@kernel.org>, Vadim Pasternak <vadimp@mellanox.com>,
-        Michael Shych <michaelsh@mellanox.com>
-Subject: Re: [PATCH v5 1/2] i2c: i2c-mlx: I2C SMBus driver for Mellanox
- BlueField SoC
-Message-ID: <20190603210844.GA3795@kunai>
-References: <cover.1553887255.git.kblaiech@mellanox.com>
- <a544f56367316bd13ba015b879a5efaf1f18d19f.1553887256.git.kblaiech@mellanox.com>
+        id S1726141AbfFCWI2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Jun 2019 18:08:28 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:50183 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726773AbfFCWI1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Jun 2019 18:08:27 -0400
+Received: by mail-wm1-f67.google.com with SMTP id f204so8782809wme.0
+        for <linux-i2c@vger.kernel.org>; Mon, 03 Jun 2019 15:08:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dpgg5uxmbeNRaEe85CeogYmO9X8ugq0tC4oT2YMZB6o=;
+        b=U6ZhAVLTjozLdQqMKKcT5yM3SwFxt1iNTFc6zxXkcHKHMMXbHU2MhKMOM4E04yRWuj
+         IWMHz4Gztt+MmR7cJbioTlzWU53dLr72gKN8eQcxacfhMs2FqkZIQmeV+InPl9V9Gk+B
+         y3GkkCpeHjvqmCbz0NrLVNFCylmaNP8Ax0Vk4yTJkxP7zdcJdiI7ldAX1nVuGmPPLThm
+         HdIz60zoWbH2q60U+DFMgBWQhGsx/VtKL+RG+gjg4wBwz0q16JwthPxNs6OMw/cj5L8F
+         tv9p+6LX/awRjRuk0bGSUVHOzncs7jujJZvoHYbXDrqsEFMpSWVGLZq/GyALBThN6usC
+         kimw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dpgg5uxmbeNRaEe85CeogYmO9X8ugq0tC4oT2YMZB6o=;
+        b=KxFWxHUJgnIPMiv8KkiQbKI/iVxUwhBU/BQaLwrpYsp59VWxHHC2BxBOyRh0bJ1MYD
+         BpVNHD88oWMJ3VCmvPteZPlx0B2xXbf646PYGkV/sUg+x2g64Zc3A21vHnVbDhTn1EJ6
+         XLxpUbRX1WzpH8Lyd5bcfx4lJxUtLdnFjADSMLe3UkjVvyCNj73daYL72dtPk4Zcbtcq
+         4XU7u8yvlMkh//ymwF7k3fZT4br5RSkprRouJGiNzorGM9VrhabJ2BTK5BwXfia9um4D
+         diNhx9iLgaA94jNOvQIvGjdMWbm2GvDXVRPZX6IP+fVCnHK87O8C1S6K0kj4d+SUthxz
+         wL9A==
+X-Gm-Message-State: APjAAAVx6ExIYGYmaEjZbBVkaNhaQlXgslxgHF5HckjKKrC4LZBAkxu3
+        2dwrtqhDBayjhsLnM/E51Bx/7w==
+X-Google-Smtp-Source: APXvYqyMvqwKctnP3IMhK1JoZQ70leVAwnfbRsSrM+y2g9k26+02nkG/OijsIpg7hlqTPvIQ4A6pBg==
+X-Received: by 2002:a05:600c:21c6:: with SMTP id x6mr3832325wmj.102.1559599704122;
+        Mon, 03 Jun 2019 15:08:24 -0700 (PDT)
+Received: from localhost.localdomain (catv-89-135-96-219.catv.broadband.hu. [89.135.96.219])
+        by smtp.gmail.com with ESMTPSA id h17sm13237573wrq.79.2019.06.03.15.08.22
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 03 Jun 2019 15:08:22 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>
+Subject: [PATCH v3] i2c: mux/i801: Switch to use descriptor passing
+Date:   Tue,  4 Jun 2019 00:08:19 +0200
+Message-Id: <20190603220819.31701-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7JfCtLOvnd9MIVvH"
-Content-Disposition: inline
-In-Reply-To: <a544f56367316bd13ba015b879a5efaf1f18d19f.1553887256.git.kblaiech@mellanox.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+This switches the i801 GPIO mux to use GPIO descriptors for
+handling the GPIO lines. The previous hack which was reaching
+inside the GPIO chips etc cannot live on. We pass descriptors
+along with the GPIO mux device at creation instead.
 
---7JfCtLOvnd9MIVvH
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The GPIO mux was only used by way of platform data with a
+platform device from one place in the kernel: the i801 i2c bus
+driver. Let's just associate the GPIO descriptor table with
+the actual device like everyone else and dynamically create
+a descriptor table passed along with the GPIO i2c mux.
 
-Hi Khalil,
+This enables simplification of the GPIO i2c mux driver to
+use only the descriptor API and the OF probe path gets
+simplified in the process.
 
-I am sorry for the long wait. An illness made a mess out of my schedule.
+The i801 driver was registering the GPIO i2c mux with
+PLATFORM_DEVID_AUTO which would make it hard to predict the
+device name and assign the descriptor table properly, but
+this seems to be a mistake to begin with: all of the
+GPIO mux devices are hardcoded to look up GPIO lines from
+the "gpio_ich" GPIO chip. If there are more than one mux,
+there is certainly more than one gpio chip as well, and
+then we have more serious problems. Switch to
+PLATFORM_DEVID_NONE instead. There can be only one.
 
-On Fri, Mar 29, 2019 at 03:40:28PM -0400, Khalil Blaiech wrote:
-> Added BlueField I2C driver to offer master and slave support for
-> Mellanox BlueField SoCs.  The driver implements an SMBus adapter
-> and interfaces to multiple busses that can be probed using both
-> ACPI and Device Tree infrastructures.
->=20
-> Signed-off-by: Khalil Blaiech <kblaiech@mellanox.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Peter Rosin <peda@axentia.se>
+Cc: Jean Delvare <jdelvare@suse.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v2->v3:
+- Reorder variable declarations to inverse christmas tree.
+- Stash away GPIO lookup table reference and make sure to
+  remove it on deletion and on error path.
+- Insert some nasty FIXME comments about poking around
+  in gpiolib internals.
+ChangeLog v1->v2:
+- Found some unused vars when compiling for DT, mea culpa.
 
-Are you or one of the authors willing to maintain this driver? Then, a
-MAINTAINERS entry would be great.
+Folks, you surely see what I am trying to do. Would
+appreciate help fixing any bugs (it compiles).
+---
+ drivers/i2c/busses/i2c-i801.c              |  37 +++++--
+ drivers/i2c/muxes/i2c-mux-gpio.c           | 115 ++++++---------------
+ include/linux/platform_data/i2c-mux-gpio.h |   7 --
+ 3 files changed, 60 insertions(+), 99 deletions(-)
 
-Please run 'checkpatch --strict' on this patch. I think the extra checks
-make all sense here.
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 679c6c41f64b..4e1ca34e00d8 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -107,7 +107,7 @@
+ #include <linux/pm_runtime.h>
+ 
+ #if IS_ENABLED(CONFIG_I2C_MUX_GPIO) && defined CONFIG_DMI
+-#include <linux/gpio.h>
++#include <linux/gpio/machine.h>
+ #include <linux/platform_data/i2c-mux-gpio.h>
+ #endif
+ 
+@@ -274,6 +274,7 @@ struct i801_priv {
+ #if IS_ENABLED(CONFIG_I2C_MUX_GPIO) && defined CONFIG_DMI
+ 	const struct i801_mux_config *mux_drvdata;
+ 	struct platform_device *mux_pdev;
++	struct gpiod_lookup_table *lookup;
+ #endif
+ 	struct platform_device *tco_pdev;
+ 
+@@ -1258,7 +1259,8 @@ static int i801_add_mux(struct i801_priv *priv)
+ 	struct device *dev = &priv->adapter.dev;
+ 	const struct i801_mux_config *mux_config;
+ 	struct i2c_mux_gpio_platform_data gpio_data;
+-	int err;
++	struct gpiod_lookup_table *lookup;
++	int err, i;
+ 
+ 	if (!priv->mux_drvdata)
+ 		return 0;
+@@ -1270,17 +1272,36 @@ static int i801_add_mux(struct i801_priv *priv)
+ 	gpio_data.values = mux_config->values;
+ 	gpio_data.n_values = mux_config->n_values;
+ 	gpio_data.classes = mux_config->classes;
+-	gpio_data.gpio_chip = mux_config->gpio_chip;
+-	gpio_data.gpios = mux_config->gpios;
+-	gpio_data.n_gpios = mux_config->n_gpios;
+ 	gpio_data.idle = I2C_MUX_GPIO_NO_IDLE;
+ 
+-	/* Register the mux device */
++	/* Register GPIO descriptor lookup table */
++	lookup = devm_kzalloc(dev,
++			      struct_size(lookup, table, mux_config->n_gpios),
++			      GFP_KERNEL);
++	if (!lookup)
++		return -ENOMEM;
++	lookup->dev_id = "i2c-mux-gpio";
++	for (i = 0; i < mux_config->n_gpios; i++) {
++		lookup->table[i].chip_label = mux_config->gpio_chip;
++		lookup->table[i].chip_hwnum = mux_config->gpios[i];
++		lookup->table[i].con_id = NULL;
++	}
++	gpiod_add_lookup_table(lookup);
++	priv->lookup = lookup;
++
++	/*
++	 * Register the mux device, we use PLATFORM_DEVID_NONE here
++	 * because since we are referring to the GPIO chip by name we are
++	 * anyways in deep trouble if there is more than one of these
++	 * devices, and there should likely only be one platform controller
++	 * hub.
++	 */
+ 	priv->mux_pdev = platform_device_register_data(dev, "i2c-mux-gpio",
+-				PLATFORM_DEVID_AUTO, &gpio_data,
++				PLATFORM_DEVID_NONE, &gpio_data,
+ 				sizeof(struct i2c_mux_gpio_platform_data));
+ 	if (IS_ERR(priv->mux_pdev)) {
+ 		err = PTR_ERR(priv->mux_pdev);
++		gpiod_remove_lookup_table(lookup);
+ 		priv->mux_pdev = NULL;
+ 		dev_err(dev, "Failed to register i2c-mux-gpio device\n");
+ 		return err;
+@@ -1293,6 +1314,8 @@ static void i801_del_mux(struct i801_priv *priv)
+ {
+ 	if (priv->mux_pdev)
+ 		platform_device_unregister(priv->mux_pdev);
++	if (priv->lookup)
++		gpiod_remove_lookup_table(priv->lookup);
+ }
+ 
+ static unsigned int i801_get_adapter_class(struct i801_priv *priv)
+diff --git a/drivers/i2c/muxes/i2c-mux-gpio.c b/drivers/i2c/muxes/i2c-mux-gpio.c
+index 13882a2a4f60..b9578f668fb2 100644
+--- a/drivers/i2c/muxes/i2c-mux-gpio.c
++++ b/drivers/i2c/muxes/i2c-mux-gpio.c
+@@ -14,13 +14,14 @@
+ #include <linux/platform_device.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
+-#include <linux/gpio.h>
++#include <linux/bits.h>
++#include <linux/gpio/consumer.h>
++/* FIXME: stop poking around inside gpiolib */
+ #include "../../gpio/gpiolib.h"
+-#include <linux/of_gpio.h>
+ 
+ struct gpiomux {
+ 	struct i2c_mux_gpio_platform_data data;
+-	unsigned gpio_base;
++	int ngpios;
+ 	struct gpio_desc **gpios;
+ };
+ 
+@@ -30,7 +31,7 @@ static void i2c_mux_gpio_set(const struct gpiomux *mux, unsigned val)
+ 
+ 	values[0] = val;
+ 
+-	gpiod_set_array_value_cansleep(mux->data.n_gpios, mux->gpios, NULL,
++	gpiod_set_array_value_cansleep(mux->ngpios, mux->gpios, NULL,
+ 				       values);
+ }
+ 
+@@ -52,12 +53,6 @@ static int i2c_mux_gpio_deselect(struct i2c_mux_core *muxc, u32 chan)
+ 	return 0;
+ }
+ 
+-static int match_gpio_chip_by_label(struct gpio_chip *chip,
+-					      void *data)
+-{
+-	return !strcmp(chip->label, data);
+-}
+-
+ #ifdef CONFIG_OF
+ static int i2c_mux_gpio_probe_dt(struct gpiomux *mux,
+ 					struct platform_device *pdev)
+@@ -65,8 +60,8 @@ static int i2c_mux_gpio_probe_dt(struct gpiomux *mux,
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct device_node *adapter_np, *child;
+ 	struct i2c_adapter *adapter;
+-	unsigned *values, *gpios;
+-	int i = 0, ret;
++	unsigned *values;
++	int i = 0;
+ 
+ 	if (!np)
+ 		return -ENODEV;
+@@ -103,29 +98,6 @@ static int i2c_mux_gpio_probe_dt(struct gpiomux *mux,
+ 	if (of_property_read_u32(np, "idle-state", &mux->data.idle))
+ 		mux->data.idle = I2C_MUX_GPIO_NO_IDLE;
+ 
+-	mux->data.n_gpios = of_gpio_named_count(np, "mux-gpios");
+-	if (mux->data.n_gpios < 0) {
+-		dev_err(&pdev->dev, "Missing mux-gpios property in the DT.\n");
+-		return -EINVAL;
+-	}
+-
+-	gpios = devm_kcalloc(&pdev->dev,
+-			     mux->data.n_gpios, sizeof(*mux->data.gpios),
+-			     GFP_KERNEL);
+-	if (!gpios) {
+-		dev_err(&pdev->dev, "Cannot allocate gpios array");
+-		return -ENOMEM;
+-	}
+-
+-	for (i = 0; i < mux->data.n_gpios; i++) {
+-		ret = of_get_named_gpio(np, "mux-gpios", i);
+-		if (ret < 0)
+-			return ret;
+-		gpios[i] = ret;
+-	}
+-
+-	mux->data.gpios = gpios;
+-
+ 	return 0;
+ }
+ #else
+@@ -142,8 +114,8 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
+ 	struct gpiomux *mux;
+ 	struct i2c_adapter *parent;
+ 	struct i2c_adapter *root;
+-	unsigned initial_state, gpio_base;
+-	int i, ret;
++	unsigned initial_state;
++	int i, ngpios, ret;
+ 
+ 	mux = devm_kzalloc(&pdev->dev, sizeof(*mux), GFP_KERNEL);
+ 	if (!mux)
+@@ -158,29 +130,19 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
+ 			sizeof(mux->data));
+ 	}
+ 
+-	/*
+-	 * If a GPIO chip name is provided, the GPIO pin numbers provided are
+-	 * relative to its base GPIO number. Otherwise they are absolute.
+-	 */
+-	if (mux->data.gpio_chip) {
+-		struct gpio_chip *gpio;
+-
+-		gpio = gpiochip_find(mux->data.gpio_chip,
+-				     match_gpio_chip_by_label);
+-		if (!gpio)
+-			return -EPROBE_DEFER;
+-
+-		gpio_base = gpio->base;
+-	} else {
+-		gpio_base = 0;
++	ngpios = gpiod_count(&pdev->dev, NULL);
++	if (!ngpios) {
++		dev_err(&pdev->dev, "no gpios provided\n");
++		return -EINVAL;
+ 	}
++	mux->ngpios = ngpios;
+ 
+ 	parent = i2c_get_adapter(mux->data.parent);
+ 	if (!parent)
+ 		return -EPROBE_DEFER;
+ 
+ 	muxc = i2c_mux_alloc(parent, &pdev->dev, mux->data.n_values,
+-			     mux->data.n_gpios * sizeof(*mux->gpios), 0,
++			     ngpios * sizeof(*mux->gpios), 0,
+ 			     i2c_mux_gpio_select, NULL);
+ 	if (!muxc) {
+ 		ret = -ENOMEM;
+@@ -194,7 +156,6 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
+ 	root = i2c_root_adapter(&parent->dev);
+ 
+ 	muxc->mux_locked = true;
+-	mux->gpio_base = gpio_base;
+ 
+ 	if (mux->data.idle != I2C_MUX_GPIO_NO_IDLE) {
+ 		initial_state = mux->data.idle;
+@@ -203,34 +164,28 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
+ 		initial_state = mux->data.values[0];
+ 	}
+ 
+-	for (i = 0; i < mux->data.n_gpios; i++) {
++	for (i = 0; i < ngpios; i++) {
+ 		struct device *gpio_dev;
+-		struct gpio_desc *gpio_desc;
+-
+-		ret = gpio_request(gpio_base + mux->data.gpios[i], "i2c-mux-gpio");
+-		if (ret) {
+-			dev_err(&pdev->dev, "Failed to request GPIO %d\n",
+-				mux->data.gpios[i]);
+-			goto err_request_gpio;
+-		}
+-
+-		ret = gpio_direction_output(gpio_base + mux->data.gpios[i],
+-					    initial_state & (1 << i));
+-		if (ret) {
+-			dev_err(&pdev->dev,
+-				"Failed to set direction of GPIO %d to output\n",
+-				mux->data.gpios[i]);
+-			i++;	/* gpio_request above succeeded, so must free */
+-			goto err_request_gpio;
++		struct gpio_desc *gpiod;
++		enum gpiod_flags flag;
++
++		if (initial_state & BIT(i))
++			flag = GPIOD_OUT_HIGH;
++		else
++			flag = GPIOD_OUT_LOW;
++		gpiod = devm_gpiod_get_index(&pdev->dev, NULL, i, flag);
++		if (IS_ERR(gpiod)) {
++			ret = PTR_ERR(gpiod);
++			goto alloc_failed;
+ 		}
+ 
+-		gpio_desc = gpio_to_desc(gpio_base + mux->data.gpios[i]);
+-		mux->gpios[i] = gpio_desc;
++		mux->gpios[i] = gpiod;
+ 
+ 		if (!muxc->mux_locked)
+ 			continue;
+ 
+-		gpio_dev = &gpio_desc->gdev->dev;
++		/* FIXME: find a proper way to access the GPIO device */
++		gpio_dev = &gpiod->gdev->dev;
+ 		muxc->mux_locked = i2c_root_adapter(gpio_dev) == root;
+ 	}
+ 
+@@ -253,10 +208,6 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
+ 
+ add_adapter_failed:
+ 	i2c_mux_del_adapters(muxc);
+-	i = mux->data.n_gpios;
+-err_request_gpio:
+-	for (; i > 0; i--)
+-		gpio_free(gpio_base + mux->data.gpios[i - 1]);
+ alloc_failed:
+ 	i2c_put_adapter(parent);
+ 
+@@ -266,14 +217,8 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
+ static int i2c_mux_gpio_remove(struct platform_device *pdev)
+ {
+ 	struct i2c_mux_core *muxc = platform_get_drvdata(pdev);
+-	struct gpiomux *mux = i2c_mux_priv(muxc);
+-	int i;
+ 
+ 	i2c_mux_del_adapters(muxc);
+-
+-	for (i = 0; i < mux->data.n_gpios; i++)
+-		gpio_free(mux->gpio_base + mux->data.gpios[i]);
+-
+ 	i2c_put_adapter(muxc->parent);
+ 
+ 	return 0;
+diff --git a/include/linux/platform_data/i2c-mux-gpio.h b/include/linux/platform_data/i2c-mux-gpio.h
+index 4406108201fe..28f288eed652 100644
+--- a/include/linux/platform_data/i2c-mux-gpio.h
++++ b/include/linux/platform_data/i2c-mux-gpio.h
+@@ -22,10 +22,6 @@
+  *	position
+  * @n_values: Number of multiplexer positions (busses to instantiate)
+  * @classes: Optional I2C auto-detection classes
+- * @gpio_chip: Optional GPIO chip name; if set, GPIO pin numbers are given
+- *	relative to the base GPIO number of that chip
+- * @gpios: Array of GPIO numbers used to control MUX
+- * @n_gpios: Number of GPIOs used to control MUX
+  * @idle: Bitmask to write to MUX when idle or GPIO_I2CMUX_NO_IDLE if not used
+  */
+ struct i2c_mux_gpio_platform_data {
+@@ -34,9 +30,6 @@ struct i2c_mux_gpio_platform_data {
+ 	const unsigned *values;
+ 	int n_values;
+ 	const unsigned *classes;
+-	char *gpio_chip;
+-	const unsigned *gpios;
+-	int n_gpios;
+ 	unsigned idle;
+ };
+ 
+-- 
+2.20.1
 
-My code checkers say this, please check:
-
-    CPPCHECK
-drivers/i2c/busses/i2c-mlx.c:474:17: warning: 'io' is of type 'void *'. Whe=
-n using void pointers in calculations, the behaviour is undefined. [arithOp=
-erationsOnVoidPointer]
- writel(val, io + reg);
-                ^
-drivers/i2c/busses/i2c-mlx.c:479:18: warning: 'io' is of type 'void *'. Whe=
-n using void pointers in calculations, the behaviour is undefined. [arithOp=
-erationsOnVoidPointer]
- return readl(io + reg);
-                 ^
-drivers/i2c/busses/i2c-mlx.c:667:19: warning: Shifting signed 32-bit value =
-by 31 bits is undefined behaviour [shiftTooManyBitsSigned]
- command |=3D 0x1   << MASTER_LOCK_BIT_OFF;
-                  ^
-drivers/i2c/busses/i2c-mlx.c:1975:26: warning: Shifting signed 32-bit value=
- by 31 bits is undefined behaviour [shiftTooManyBitsSigned]
- control32 |=3D 0          << SLAVE_LOCK_BIT_OFF;
-                         ^
-
-  CC      drivers/i2c/busses/i2c-mlx.o
-drivers/i2c/busses/i2c-mlx.c: In function =E2=80=98mlx_slave_enable=E2=80=
-=99:
-drivers/i2c/busses/i2c-mlx.c:1582:7: warning: variable =E2=80=98exist=E2=80=
-=99 set but not used [-Wunused-but-set-variable]
-
-> ---
->  drivers/i2c/busses/Kconfig   |   13 +
->  drivers/i2c/busses/Makefile  |    1 +
->  drivers/i2c/busses/i2c-mlx.c | 2513 ++++++++++++++++++++++++++++++++++++=
-++++++
-
-This driver is huge and I am willing to assist with the I2C parts.
-However, there are some generic Kernel coding issues which I'd like to
-be sorted out first. I am adding two more people from Mellanox who are
-active in the I2C world, maybe they can help out here. No offence, yet I
-have to delegate such things to focus on I2C parts because my spare time
-is very limited.
-
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + *  Mellanox i2c bus driver
-> + *
-> + *  Copyright (C) 2019 Mellanox Technologies, Ltd.
-> + *
-> + *  This program is free software; you can redistribute it and/or modify
-> + *  it under the terms of the GNU General Public License v2.0 as publish=
-ed
-> + *  by the Free Software Foundation.
-> + *
-> + *  This program is distributed in the hope that it will be useful,
-> + *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> + *  GNU General Public License for more details.
-
-You can skip this, you have a SPDX identifier already. It doesn't match
-with the MODULE_LICENSE at the end, though!
-
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/err.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/string.h>
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/acpi.h>
-> +#include <linux/mutex.h>
-> +
-> +#define MLX_I2C_DRIVER_NAME        "i2c-mlx"
-
-This is unused.
-
-> +#define MLX_I2C_DRIVER_VERSION     "1.0"
-
-We don't use this anymore.
-
-> +#define MLX_I2C_DRIVER_DESCRIPTION "Mellanox I2C bus driver"
-> +
-> +#define MLX_I2C_BLUEFIELD1_COMPAT   "mellanox,i2c-mlxbf1"
-> +#define MLX_I2C_BLUEFIELD2_COMPAT   "mellanox,i2c-mlxbf2"
-> +
-> +#define MLX_I2C_BLUEFIELD1_ACPIHID  "MLNXBF03"
-> +#define MLX_I2C_BLUEFIELD2_ACPIHID  "MLNXBF23"
-
-I think those defines are not needed, see later.
-
-> +
-> +#define I2C_SMBUS_INVALID       0xff
-> +#ifndef I2C_FUNC_SMBUS_HOST_NOTIFY
-
-?? In what case is this not defined?
-
-> +#define I2C_FUNC_SMBUS_HOST_NOTIFY      0x10000000
-> +#endif
-> +
-> +#define I2C_SMBUS_MAX           3
-> +
-> +/* Defines what functionality is present */
-> +#define MLX_I2C_FUNC_SMBUS_BLOCK \
-> +	(I2C_FUNC_SMBUS_BLOCK_DATA | I2C_FUNC_SMBUS_BLOCK_PROC_CALL)
-> +
-> +#define MLX_I2C_FUNC_SMBUS_DEFAULT \
-> +	(I2C_FUNC_SMBUS_BYTE      | I2C_FUNC_SMBUS_BYTE_DATA | \
-> +	 I2C_FUNC_SMBUS_WORD_DATA | I2C_FUNC_SMBUS_I2C_BLOCK | \
-> +	 I2C_FUNC_SMBUS_PROC_CALL | I2C_FUNC_SMBUS_HOST_NOTIFY)
-> +
-> +#define MLX_I2C_FUNC_ALL \
-> +	(MLX_I2C_FUNC_SMBUS_DEFAULT | MLX_I2C_FUNC_SMBUS_BLOCK | \
-> +	 I2C_FUNC_SMBUS_QUICK | I2C_FUNC_SLAVE)
-> +
-> +/*
-> + * TYU Shared resources in BlueField 1
-> + */
-> +
-> +#define BLUEFIELD1_TYU_COALESCE_ADDR    0x02801300
-> +#define BLUEFIELD1_TYU_COALESCE_SIZE    0x010
-> +
-> +#define BLUEFIELD1_TYU_GPIO_ADDR        0x02802000
-> +#define BLUEFIELD1_TYU_GPIO_SIZE        0x100
-> +
-> +#define BLUEFIELD1_TYU_COREPLL_ADDR     0x02800358
-> +#define BLUEFIELD1_TYU_COREPLL_SIZE     0x008
-> +
-> +/*
-> + * TYU Shared resources in BlueField 2
-> + */
-> +
-> +#define BLUEFIELD2_TYU_COALESCE_ADDR    0x02801680
-> +#define BLUEFIELD2_TYU_COALESCE_SIZE    0x010
-> +
-> +#define BLUEFIELD2_TYU_GPIO_ADDR        0x02802000 /* FIXME */
-> +#define BLUEFIELD2_TYU_GPIO_SIZE        0x100 /* FIXME */
-
-So, what about this FIXME?
-
-=2E.. (skipping a lot of lines)
-
-
-> +static int mlx_i2c_of_probe(struct device *dev, struct mlx_i2c_priv *pri=
-v)
-> +{
-> +	int bus_id =3D -1;
-> +	int error;
-> +
-> +	if (dev->of_node) {
-> +		error =3D device_property_read_string(dev, "compatible",
-> +						    &priv->compat);
-> +		if (error)
-> +			return -EINVAL;
-> +
-> +		if (!strcmp(priv->compat, i2c_bf1_compat))
-> +			priv->devtype =3D MLX_I2C_BLUEFIELD1;
-> +		else if (!strcmp(priv->compat, i2c_bf2_compat))
-> +			priv->devtype =3D MLX_I2C_BLUEFIELD2;
-
-Why don't you populate the .data-member of the struct of_device_id and
-use then of_device_get_match_data() to get the devtype or some config
-data? I guess something similar could be done for ACPI. Then, you also
-wouldn't need #defines for the compatible string.
-
-> +
-> +		bus_id =3D of_alias_get_id(dev->of_node, "i2c");
-> +		if (bus_id >=3D 0)
-> +			priv->bus =3D bus_id;
-> +	}
-> +
-> +	if (WARN(bus_id < 0, "couldn't get bus id"))
-> +		return bus_id;
-> +
-> +	return 0;
-> +}
-> +MODULE_LICENSE("GPL");
-
-This doesn't match the SPDX identifier!
-
-And from a glimpse, there are more generic things to be found in there.
-It will also be helpful to check recent reviews of new drivers and check
-if the issues found there are also relevant here.
-
-So, my impression is that this driver is not bad, yet it needs a general
-review first. With Mellanox being such a large contributor to the Kernel
-(cool!), I hope we can find some assistance "internally".
-
-Thanks and kind regards,
-
-   Wolfram
-
-
---7JfCtLOvnd9MIVvH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz1jFIACgkQFA3kzBSg
-KbbzmA//VBXYFq2Vxm2ebgbTUV9LBkL1U3a33bZvCHTYNCWQl+ZaItUINhzC8iVI
-SGpjN64MW99JLm0LrSCeEbaAoziHun26/XrXjBIXOngmQD4Wy7FpUUGe3NF891qZ
-bxE1teKqml7PbqroQyf8RKEhqsxifVWG5ecGq6wo2ZxhWoGGAUT1nlfNr+SCV1hn
-oXxMd06eA3DemajgL7NEcOSYoEZo3ECCVDpaRa0HAk0p2G7ruJCe/JBT5ljipK9B
-7oA8GjwUDMxOCijAKJk2w0rYm5zeTzIcXdQVXyIkpiowTxFYHSbgnuNk+8CqHoJO
-46FMTIgiRgLbep/s9JlVNQjp9sBuiMZ5GU32Rso4tfh/1D5satn79W5smOiMM2X8
-+7M6j5D8pCmuex8qIY+l0q8Gbyan9OweH8PomZD8gkvuEV8U0p6LMDfKOlgTGh6b
-ogNV+/blGjvAeGUwOlaO49Qj4IDhKpVQjfz4UF2To7rtteDwhVyL5MxXZ858Ucbp
-RetugAilGjrVsjrhGW/J1BTbJLiAsbG5cdm477/YXx9/jINpHAHqcw8lQ7F8L8eR
-LLzYRFrW7l7bET/9QwEk0MRzko1A2MgFy25EyTjapwdlttOSzYtNNrT/lOJ9ysV9
-4zFy2P2qF9XDRJyoSOf7Yv7PfPYkdUVqTq2Jd4XoiuufzseqYPg=
-=0/aR
------END PGP SIGNATURE-----
-
---7JfCtLOvnd9MIVvH--
