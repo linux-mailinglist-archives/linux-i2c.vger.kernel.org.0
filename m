@@ -2,162 +2,158 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6D532EF3
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2019 13:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D23C331D6
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2019 16:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbfFCLvI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Jun 2019 07:51:08 -0400
-Received: from mga12.intel.com ([192.55.52.136]:23333 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726269AbfFCLvI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 3 Jun 2019 07:51:08 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Jun 2019 04:51:08 -0700
-X-ExtLoop1: 1
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 03 Jun 2019 04:51:05 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 03 Jun 2019 14:51:04 +0300
-Date:   Mon, 3 Jun 2019 14:51:04 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v2] i2c: mux/i801: Switch to use descriptor passing
-Message-ID: <20190603115104.GD2781@lahna.fi.intel.com>
-References: <20190530210604.25559-1-linus.walleij@linaro.org>
+        id S1728901AbfFCOP6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Jun 2019 10:15:58 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38940 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726968AbfFCOP6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Jun 2019 10:15:58 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x53EDeFI032907;
+        Mon, 3 Jun 2019 10:15:51 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2sw43tun8x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Jun 2019 10:15:51 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x53EE1Nr034829;
+        Mon, 3 Jun 2019 10:15:49 -0400
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2sw43tun85-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Jun 2019 10:15:49 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x538Iq6F010304;
+        Mon, 3 Jun 2019 08:20:50 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma01dal.us.ibm.com with ESMTP id 2suh090b8n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Jun 2019 08:20:50 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x53EFla719268064
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 3 Jun 2019 14:15:47 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2DFEB136053;
+        Mon,  3 Jun 2019 14:15:47 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 32C2D136055;
+        Mon,  3 Jun 2019 14:15:46 +0000 (GMT)
+Received: from [9.80.195.63] (unknown [9.80.195.63])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  3 Jun 2019 14:15:45 +0000 (GMT)
+Subject: Re: [PATCH] i2c: fsi: Create busses for all ports
+To:     "Oliver O'Halloran" <oohall@gmail.com>, linux-i2c@vger.kernel.org
+Cc:     openbmc@lists.ozlabs.org, Eddie James <eajames@linux.vnet.ibm.com>
+References: <20190603055714.7203-1-oohall@gmail.com>
+From:   Eddie James <eajames@linux.ibm.com>
+Message-ID: <e546c15f-07a9-656a-ce11-4f9a24795d9a@linux.ibm.com>
+Date:   Mon, 3 Jun 2019 09:15:45 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190530210604.25559-1-linus.walleij@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190603055714.7203-1-oohall@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-03_11:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906030100
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, May 30, 2019 at 11:06:04PM +0200, Linus Walleij wrote:
-> This switches the i801 GPIO mux to use GPIO descriptors for
-> handling the GPIO lines. The previous hack which was reaching
-> inside the GPIO chips etc cannot live on. We pass descriptors
-> along with the GPIO mux device at creation instead.
-> 
-> The GPIO mux was only used by way of platform data with a
-> platform device from one place in the kernel: the i801 i2c bus
-> driver. Let's just associate the GPIO descriptor table with
-> the actual device like everyone else and dynamically create
-> a descriptor table passed along with the GPIO i2c mux.
-> 
-> This enables simplification of the GPIO i2c mux driver to
-> use only the descriptor API and the OF probe path gets
-> simplified in the process.
-> 
-> The i801 driver was registering the GPIO i2c mux with
-> PLATFORM_DEVID_AUTO which would make it hard to predict the
-> device name and assign the descriptor table properly, but
-> this seems to be a mistake to begin with: all of the
-> GPIO mux devices are hardcoded to look up GPIO lines from
-> the "gpio_ich" GPIO chip. If there are more than one mux,
-> there is certainly more than one gpio chip as well, and
-> then we have more serious problems. Switch to
-> PLATFORM_DEVID_NONE instead. There can be only one.
-> 
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Peter Rosin <peda@axentia.se>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+
+On 6/3/19 12:57 AM, Oliver O'Halloran wrote:
+> Currently we only create an I2C bus for the ports listed in the
+> device-tree for that master. There's no real reason for this since
+> we can discover the number of ports the master supports by looking
+> at the port_max field of the status register.
+>
+> This patch re-works the bus add logic so that we always create buses
+> for each port, unless the bus is marked as unavailable in the DT. This
+> is useful since it ensures that all the buses provided by the CFAM I2C
+> master are accessible to debug tools.
+>
+> Cc: Eddie James <eajames@linux.vnet.ibm.com>
+> Signed-off-by: Oliver O'Halloran <oohall@gmail.com>
 > ---
-> ChangeLog v1->v2:
-> - Found some unused vars when compiling for DT, mea culpa.
-> 
-> Folks, you surely see what I am trying to do. Would
-> appreciate help fixing any bugs (it compiles).
-
-Heh, I think this looks good in general. I have a couple of minor
-comments, though.
-
-Also I have never used the mux part of this driver so probably can't
-test this without help from someone who knows how it is supposed to
-work.
-
-> ---
->  drivers/i2c/busses/i2c-i801.c              |  31 ++++--
->  drivers/i2c/muxes/i2c-mux-gpio.c           | 113 +++++----------------
->  include/linux/platform_data/i2c-mux-gpio.h |   7 --
->  3 files changed, 53 insertions(+), 98 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index 679c6c41f64b..5bf5e16df888 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -107,7 +107,7 @@
->  #include <linux/pm_runtime.h>
->  
->  #if IS_ENABLED(CONFIG_I2C_MUX_GPIO) && defined CONFIG_DMI
-> -#include <linux/gpio.h>
-> +#include <linux/gpio/machine.h>
->  #include <linux/platform_data/i2c-mux-gpio.h>
->  #endif
->  
-> @@ -1259,6 +1259,8 @@ static int i801_add_mux(struct i801_priv *priv)
->  	const struct i801_mux_config *mux_config;
->  	struct i2c_mux_gpio_platform_data gpio_data;
->  	int err;
-> +	struct gpiod_lookup_table *lookup;
-> +	int i;
-
-It looks better if you arrange these like:
-
-  	struct i2c_mux_gpio_platform_data gpio_data;
-	struct gpiod_lookup_table *lookup;
- 	int err, i;
-
->  
->  	if (!priv->mux_drvdata)
->  		return 0;
-> @@ -1270,14 +1272,31 @@ static int i801_add_mux(struct i801_priv *priv)
->  	gpio_data.values = mux_config->values;
->  	gpio_data.n_values = mux_config->n_values;
->  	gpio_data.classes = mux_config->classes;
-> -	gpio_data.gpio_chip = mux_config->gpio_chip;
-> -	gpio_data.gpios = mux_config->gpios;
-> -	gpio_data.n_gpios = mux_config->n_gpios;
->  	gpio_data.idle = I2C_MUX_GPIO_NO_IDLE;
->  
-> -	/* Register the mux device */
-> +	/* Register GPIO descriptor lookup table */
-> +	lookup = devm_kzalloc(dev,
-> +			      struct_size(lookup, table, mux_config->n_gpios),
-> +			      GFP_KERNEL);
-> +	if (!lookup)
-> +		return -ENOMEM;
-> +	lookup->dev_id = "i2c-mux-gpio";
-> +	for (i = 0; i < mux_config->n_gpios; i++) {
-> +		lookup->table[i].chip_label = mux_config->gpio_chip;
-> +		lookup->table[i].chip_hwnum = mux_config->gpios[i];
-> +		lookup->table[i].con_id = NULL;
+>   drivers/i2c/busses/i2c-fsi.c | 30 +++++++++++++++++++++++++-----
+>   1 file changed, 25 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-fsi.c b/drivers/i2c/busses/i2c-fsi.c
+> index 1e2be2219a60..59a76c6e31ad 100644
+> --- a/drivers/i2c/busses/i2c-fsi.c
+> +++ b/drivers/i2c/busses/i2c-fsi.c
+> @@ -658,13 +658,27 @@ static const struct i2c_algorithm fsi_i2c_algorithm = {
+>   	.functionality = fsi_i2c_functionality,
+>   };
+>
+> +static device_node *fsi_i2c_find_port_of_node(struct device_node *master,
+> +					      int port)
+> +{
+> +	struct device_node *np;
+> +
+> +	for_each_child_of_node(fsi, np) {
+> +		rc = of_property_read_u32(np, "reg", &port_no);
+> +		if (!rc && port_no == port)
+> +			return np;
 > +	}
-> +	gpiod_add_lookup_table(lookup);
+> +
+> +	return NULL;
+> +}
+> +
+>   static int fsi_i2c_probe(struct device *dev)
+>   {
+>   	struct fsi_i2c_master *i2c;
+>   	struct fsi_i2c_port *port;
+>   	struct device_node *np;
+> +	u32 port_no, ports, stat;
+>   	int rc;
+> -	u32 port_no;
+>
+>   	i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
+>   	if (!i2c)
+> @@ -678,10 +692,16 @@ static int fsi_i2c_probe(struct device *dev)
+>   	if (rc)
+>   		return rc;
+>
+> -	/* Add adapter for each i2c port of the master. */
+> -	for_each_available_child_of_node(dev->of_node, np) {
+> -		rc = of_property_read_u32(np, "reg", &port_no);
+> -		if (rc || port_no > USHRT_MAX)
+> +	rc = fsi_i2c_read_reg(i2c->fsi, I2C_FSI_STAT, &state);
+> +	if (rc)
+> +		return rc;
+> +
+> +	ports = FIELD_GET(I2C_STAT_MAX_PORT, stat);
+> +	dev_dbg(dev, "I2C master has %d ports\n", ports);
 
-I wonder if we need to call gpiod_remove_lookup_table() in
-i801_del_mux()? Also it seems to leak if the below function fails.
+
+Thanks for the patch Oliver. This looks great except some older CFAM 
+types don't report the max port number, in which case this would not 
+probe up any ports. So we probably need a fallback to dts if the max 
+ports is 0.
+
+
+Thanks,
+
+Eddie
+
 
 > +
-> +	/*
-> +	 * Register the mux device, we use PLATFORM_DEVID_NONE here
-> +	 * because since we are referring to the GPIO chip by name we are
-> +	 * anyways in deep trouble if there is more than one of these
-> +	 * devices, and there should likely only be one platform controller
-> +	 * hub.
-> +	 */
->  	priv->mux_pdev = platform_device_register_data(dev, "i2c-mux-gpio",
-> -				PLATFORM_DEVID_AUTO, &gpio_data,
-> +				PLATFORM_DEVID_NONE, &gpio_data,
->  				sizeof(struct i2c_mux_gpio_platform_data));
->  	if (IS_ERR(priv->mux_pdev)) {
->  		err = PTR_ERR(priv->mux_pdev);
+> +	for (port_no = 0; port_no < ports; port_no++) {
+> +		np = fsi_i2c_find_port_of_node(dev.of_node, port_no);
+> +		if (np && !of_device_is_available(np))
+>   			continue;
+>
+>   		port = kzalloc(sizeof(*port), GFP_KERNEL);
