@@ -2,35 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0297133982
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2019 22:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBD13398F
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2019 22:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbfFCUIE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Jun 2019 16:08:04 -0400
-Received: from sauhun.de ([88.99.104.3]:40288 "EHLO pokefinder.org"
+        id S1726241AbfFCUN2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Jun 2019 16:13:28 -0400
+Received: from sauhun.de ([88.99.104.3]:40334 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbfFCUIE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 3 Jun 2019 16:08:04 -0400
+        id S1726173AbfFCUN2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 3 Jun 2019 16:13:28 -0400
 Received: from localhost (p5486CC42.dip0.t-ipconnect.de [84.134.204.66])
-        by pokefinder.org (Postfix) with ESMTPSA id 983CA2CF690;
-        Mon,  3 Jun 2019 22:08:02 +0200 (CEST)
-Date:   Mon, 3 Jun 2019 22:08:02 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 5FA242CF690;
+        Mon,  3 Jun 2019 22:13:26 +0200 (CEST)
+Date:   Mon, 3 Jun 2019 22:13:26 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Stefan Roese <sr@denx.de>
-Cc:     linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Steven Liu <steven_liu@mediatek.com>,
-        Jan Breuer <jan.breuer@jaybee.cz>,
-        John Crispin <john@phrozen.org>
-Subject: Re: [PATCH v2] i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C driver
-Message-ID: <20190603200802.GB2383@kunai>
-References: <20190506105746.16397-1-sr@denx.de>
- <c43fac92-aa5e-b2db-6667-08c12cdced67@denx.de>
+To:     Asmaa Mnebhi <Asmaa@mellanox.com>
+Cc:     "minyard@acm.org" <minyard@acm.org>,
+        Vadim Pasternak <vadimp@mellanox.com>,
+        Michael Shych <michaelsh@mellanox.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH v9 1/1] Add support for IPMB driver
+Message-ID: <20190603201325.GC2383@kunai>
+References: <cover.1557322882.git.Asmaa@mellanox.com>
+ <a4d9fe418013b604e7224bf3038c294da42d5534.1557322882.git.Asmaa@mellanox.com>
+ <20190519140231.GA7291@kunai>
+ <VI1PR05MB623971FF6F956A091840716DDA060@VI1PR05MB6239.eurprd05.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lEGEL1/lMxI0MVQ2"
+        protocol="application/pgp-signature"; boundary="9Ek0hoCL9XbhcSqy"
 Content-Disposition: inline
-In-Reply-To: <c43fac92-aa5e-b2db-6667-08c12cdced67@denx.de>
+In-Reply-To: <VI1PR05MB623971FF6F956A091840716DDA060@VI1PR05MB6239.eurprd05.prod.outlook.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -38,43 +41,108 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---lEGEL1/lMxI0MVQ2
+--9Ek0hoCL9XbhcSqy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 28, 2019 at 07:12:25AM +0200, Stefan Roese wrote:
-> Hi Wolfram,
+Hi Asmaa,
+
+sorry for the long wait. I missed this mail was still sitting in my
+Drafts folder :(
+
+> >> Am I overlooking something? Why are you protecting an atomic_read with=
+ a spinlock?
 >=20
-> Any updates on this?
+> A thread would lock the ipmb_dev->lock spinlock (above) for all the code =
+below ONLY IF the atomic_read for the request_queue_len reports a value dif=
+ferent from 0:
 
-Please don't ping me personally. Reviewing is a community effort,
-especially for I2C drivers.
+Well, not really. The spinlock is taken _before_ the atomic read. But
+the read is atomic, so there should be no need. I am asking if the code
+could look like this?
 
-Also, in the (sadly long) meantime you or interested people could have
-taken the review of recent new drivers as an example to improve this
-one. The stuff I found in this driver was to some extent "the usual
-stuff". This likely would have reduced the reviewing time, too.
++	while (!atomic_read(&ipmb_dev->request_queue_len)) {
++		if (non_blocking)
++			return -EAGAIN;
++
++		res =3D wait_event_interruptible(ipmb_dev->wait_queue,
++				atomic_read(&ipmb_dev->request_queue_len));
++		if (res)
++			return res;
++	}
++
++	spin_lock_irqsave(&ipmb_dev->lock, flags);
++	if (list_empty(&ipmb_dev->request_queue)) {
 
+> if (list_empty(&ipmb_dev->request_queue)) {
+> 260 +               dev_err(&ipmb_dev->client->dev, "request_queue is emp=
+ty\n");
+> 261 +               spin_unlock_irqrestore(&ipmb_dev->lock, flags);
 
---lEGEL1/lMxI0MVQ2
+The unlock operation could come before the dev_err. We don't need to
+protect the printout and save time with the spinlock held.
+
+> > +	rq_sa =3D msg[RQ_SA_8BIT_IDX] >> 1;
+> > +	netf_rq_lun =3D msg[NETFN_LUN_IDX];
+> > +	/*
+> > +	 * subtract rq_sa and netf_rq_lun from the length of the msg passed to
+> > +	 * i2c_smbus_write_block_data_local
+> > +	 */
+> > +	msg_len =3D msg[IPMB_MSG_LEN_IDX] - SMBUS_MSG_HEADER_LENGTH;
+> > +
+> > +	strcpy(rq_client.name, "ipmb_requester");
+> > +	rq_client.adapter =3D ipmb_dev->client->adapter;
+> > +	rq_client.flags =3D ipmb_dev->client->flags;
+> > +	rq_client.addr =3D rq_sa;
+>=20
+> >> Is it possible to determine in a race-free way if rq_sa (which came
+> >> from userspace AFAIU) is really the address from which the request
+> >> came in (again if I understood all this correctly)?
+> Yes there is. I see 2 options:
+>=20
+> 1) This is less explicit than option 2 but uses existing code and is
+> simpler. we can use the ipmb_verify_checksum1 function since the IPMB
+> response format is as follows:
+> Byte 1: rq_sa
+> Byte 2: netfunction/rqLUN
+> Byte 3: checksum1
+
+Hmmm, does that really prove that rq_sa is the same address the request
+came from? Or does it only prove that the response packet is not
+mangled?
+
+> So if checksum1 is verified, it means rq_sa is correct.
+>=20
+> 2) I am not sure we want this but have a global variable which stores
+> the address of the requester once the first request is received. We
+> would compare that address with the one received from userspace in the
+> code above.
+
+Can there be only one requester in the system?
+
+Thanks,
+
+   Wolfram
+
+--9Ek0hoCL9XbhcSqy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz1fiIACgkQFA3kzBSg
-KbYt2w/9H7deNpJU+p9s8Ox8Dd2+4+f7GqNPX6jPYcHSSPQHJ8csNIKVXojl9DIJ
-BcNd8QDnVpvAp1NUk462DmbFkGJHXoduF2NiUujmpppEYJ83g/AoWH8vvCI4+QAS
-onYn0HLha5b9tcj5/OS9vVhQSr9q598b6qwFqnKSXEQ6Y/X4qGUTnZkMhmKbooxy
-RSaCc1yNifRyBEXC27tuq4YVZhuW56cj5TVj8qfxteFk2aIZSn/EvtTH6efBDgky
-1katjJLjpx17vzYYQknH6og9N+Z2ndLkuDyBecJprND0Yqpf9QglDuQseIQu+JQK
-mDnmKH+bV14jOGB1q/O+1KMsVUUh7atkpAo5vFL+r+8j7N8Vh7tC8nzOHkFT8JUr
-XUuBQTIEQ82L7jFXuLjLrARqL+bpkZ2cKPxsyuY4mMywewAKYCA2AMyO1gHdfAs/
-V6TgKf/cewn4gNpWevwJOsC78wYuWM8S5aH/O4jzDWGzEjN8SfZihpTUcP8wcFJq
-9103ZsNpIzuiE0o+ihA1aiL7qQx17Zty98yml4FdlZXLjw85hNHKSejS5bMiBXg6
-eaCltbtNDWlhqdJBUT8McHtakYEmg5UBRMDX6yODIPOo5xoW1VGyDZT8w4De9YiZ
-9JhYGgX52O51jEJmdbDfWtjzK0u1ryPcmlTqbjq/SBIfadxETOs=
-=xd+w
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz1f2UACgkQFA3kzBSg
+KbZe1A//dZCx+YmQNFnYXW6fwX4hm2JFolCqtolCDfbAEKvqcqgEf7VwQ0Qoy4wm
+P+RbEvYTBlnvPfk01PM8Kbe3D79xGgjGLAzfaLyVN5khGiQguK1nWND76tSxAkws
+otCtiiNEcVv0z2uRGheJZWZvmANEt9nzbwqcyJzqaCDZKATQNstu1ClkWrIZLxJ4
+rqXP2mPGJHAv7KzquR5dlpAmAz8yxA0uqoUzQoKbWuchg6fSKbIp7JzVePJvGI7o
+7U/pNuhQ7hJ/tAPrj5fWELHjazDsDUkgu/vsQObvps1ixUuCFymFk+7l2tmPCAnX
+OzFNk79jBbh3YgpSAqMLqPi9ftMrn6so7c3JzchzXzrmAvRmLvf/ChBwTIB8fGZi
+f7958PVOdDr5c386w9EOLB0q9MLc5ONLDlKO96SVnvC8kLrq1iylbpRm17xmJywb
+29Aao9YdsjIoijXsuskYV02XxMGh4JxgrewBOq0IcAuit/YWKsJldp1RyMuWESjM
+gdptkXyp69N1Y6wVL72zkDNB2Cd6NWpoCu4mJDgb6XfX/zv2hadXIgL4yq4cZncx
+61wRgMM0F0MZEiXGsC85qlryaZuBUFdlZnKj1sBbkaRdvDbSpykE1NcGvOti1fIM
+UIYYy9E2Vo/VzPxXR4Gx5JO+6UTjvX2onpJgPAbGOTAiC8Yn53s=
+=REap
 -----END PGP SIGNATURE-----
 
---lEGEL1/lMxI0MVQ2--
+--9Ek0hoCL9XbhcSqy--
