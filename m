@@ -2,140 +2,162 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E1B32C67
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2019 11:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6D532EF3
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2019 13:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728520AbfFCJLw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Jun 2019 05:11:52 -0400
-Received: from mail-eopbgr30085.outbound.protection.outlook.com ([40.107.3.85]:2958
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728019AbfFCJLw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 3 Jun 2019 05:11:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7lUbE3IAV64cGmmc8MyXZz9pcD5QSTTIX77gmmsICro=;
- b=soB5yRM0dt4OYQ+wfoGMBBDH7kZFDyoWrYeNPVcJFCQzPHi+3y/0SZw0UbuVa3mQJ4sVV6k1O7kyBgrgWCB/ENXxIMlMcDzV+nOXKX8VOi8M+8S5j5ByVXwXxvZCB70SYti64QTQWOLVi0NOzz57sYXd8cwik/Kwrmpp5bda5Dc=
-Received: from AM0PR05MB5217.eurprd05.prod.outlook.com (20.178.19.32) by
- AM0PR05MB4289.eurprd05.prod.outlook.com (52.134.126.15) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.21; Mon, 3 Jun 2019 09:11:48 +0000
-Received: from AM0PR05MB5217.eurprd05.prod.outlook.com
- ([fe80::c91c:a669:49d1:600]) by AM0PR05MB5217.eurprd05.prod.outlook.com
- ([fe80::c91c:a669:49d1:600%7]) with mapi id 15.20.1878.024; Mon, 3 Jun 2019
- 09:11:48 +0000
-From:   Vadim Pasternak <vadimp@mellanox.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Michael Shych <michaelsh@mellanox.com>
-Subject: RE: [PATCH v1 i2c-next] i2c: mlxcpld: prevent devices from being
- unbounded from driver via sysfs
-Thread-Topic: [PATCH v1 i2c-next] i2c: mlxcpld: prevent devices from being
- unbounded from driver via sysfs
-Thread-Index: AQHVFikvHsnod3P+HECicoXis2Atu6aGwxKAgALk3fA=
-Date:   Mon, 3 Jun 2019 09:11:48 +0000
-Message-ID: <AM0PR05MB521704ECCCB55AEA7C1DA072A2140@AM0PR05MB5217.eurprd05.prod.outlook.com>
-References: <20190529141636.6043-1-vadimp@mellanox.com>
- <20190601124404.GA11008@kunai>
-In-Reply-To: <20190601124404.GA11008@kunai>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=vadimp@mellanox.com; 
-x-originating-ip: [193.47.165.251]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b3027040-77df-4100-17ce-08d6e80381f3
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:AM0PR05MB4289;
-x-ms-traffictypediagnostic: AM0PR05MB4289:
-x-microsoft-antispam-prvs: <AM0PR05MB42895B59492D9321DCC86D3FA2140@AM0PR05MB4289.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0057EE387C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(396003)(376002)(39860400002)(136003)(346002)(189003)(199004)(13464003)(478600001)(256004)(6916009)(74316002)(4326008)(68736007)(2906002)(7736002)(71190400001)(53936002)(8676002)(52536014)(316002)(5660300002)(71200400001)(81166006)(81156014)(9686003)(54906003)(14454004)(6116002)(305945005)(8936002)(3846002)(73956011)(33656002)(99286004)(6246003)(26005)(186003)(229853002)(107886003)(86362001)(53546011)(55016002)(7696005)(6506007)(76176011)(6436002)(102836004)(446003)(11346002)(66946007)(66446008)(64756008)(66556008)(66476007)(66066001)(486006)(76116006)(476003)(25786009)(133343001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR05MB4289;H:AM0PR05MB5217.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 8WSdeAL9KK3XRr32OhEsBoiVE9wrnUQ8NkZ+QDZpqwMF0dhIUcBaFprsHL3Zr9HUzzKAvSJy8cId01k6qf41ykLX+4FZvmjcEeE5U2tdxH17hNygeQEiaOLvIu6WQspYoCQSBnYuWZZ2mQpV9ERf3GO0jR4TApUgvighUm5iVaicqpXUiB3gcBwCaMh8EgsydRUp6u7XgHQdIRMLvcmbgP0RA86OAIHXCTo63W2m0JvKl3JjfsYe2igiJAe81cBi6TPiacTO2ylxnS8NUai73xK1ixw+xm2OTytP4UTP+LBVzupHCv13LoZ9ReiX52QXvnFMTSQ8sBMHxeB57VSuybJBjivG1auYMPc39Fc0vzuLApw+cZylycJjGb/T4Jj6GVf9RN8lD9rMmH5o3V4m6E7Ufk/3Yqt8Cu4ZQ6XI5KM=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726270AbfFCLvI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Jun 2019 07:51:08 -0400
+Received: from mga12.intel.com ([192.55.52.136]:23333 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726269AbfFCLvI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 3 Jun 2019 07:51:08 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Jun 2019 04:51:08 -0700
+X-ExtLoop1: 1
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 03 Jun 2019 04:51:05 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 03 Jun 2019 14:51:04 +0300
+Date:   Mon, 3 Jun 2019 14:51:04 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v2] i2c: mux/i801: Switch to use descriptor passing
+Message-ID: <20190603115104.GD2781@lahna.fi.intel.com>
+References: <20190530210604.25559-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3027040-77df-4100-17ce-08d6e80381f3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2019 09:11:48.1202
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR05MB4289
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190530210604.25559-1-linus.walleij@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, May 30, 2019 at 11:06:04PM +0200, Linus Walleij wrote:
+> This switches the i801 GPIO mux to use GPIO descriptors for
+> handling the GPIO lines. The previous hack which was reaching
+> inside the GPIO chips etc cannot live on. We pass descriptors
+> along with the GPIO mux device at creation instead.
+> 
+> The GPIO mux was only used by way of platform data with a
+> platform device from one place in the kernel: the i801 i2c bus
+> driver. Let's just associate the GPIO descriptor table with
+> the actual device like everyone else and dynamically create
+> a descriptor table passed along with the GPIO i2c mux.
+> 
+> This enables simplification of the GPIO i2c mux driver to
+> use only the descriptor API and the OF probe path gets
+> simplified in the process.
+> 
+> The i801 driver was registering the GPIO i2c mux with
+> PLATFORM_DEVID_AUTO which would make it hard to predict the
+> device name and assign the descriptor table properly, but
+> this seems to be a mistake to begin with: all of the
+> GPIO mux devices are hardcoded to look up GPIO lines from
+> the "gpio_ich" GPIO chip. If there are more than one mux,
+> there is certainly more than one gpio chip as well, and
+> then we have more serious problems. Switch to
+> PLATFORM_DEVID_NONE instead. There can be only one.
+> 
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Peter Rosin <peda@axentia.se>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ChangeLog v1->v2:
+> - Found some unused vars when compiling for DT, mea culpa.
+> 
+> Folks, you surely see what I am trying to do. Would
+> appreciate help fixing any bugs (it compiles).
 
+Heh, I think this looks good in general. I have a couple of minor
+comments, though.
 
-> -----Original Message-----
-> From: Wolfram Sang <wsa@the-dreams.de>
-> Sent: Saturday, June 01, 2019 3:44 PM
-> To: Vadim Pasternak <vadimp@mellanox.com>
-> Cc: linux-i2c@vger.kernel.org; Michael Shych <michaelsh@mellanox.com>
-> Subject: Re: [PATCH v1 i2c-next] i2c: mlxcpld: prevent devices from being
-> unbounded from driver via sysfs
->=20
->=20
-> > 'i2c_mlxcpld' is a platform drivers and it registered via
-> > platform_driver_probe() and can be bound to devices only once, upon
-> > registration.
->=20
-> ?? No, it isn't. If it was, the driver core would have prevented these at=
-tributes
-> (post 2009 kernels at least).
+Also I have never used the mux part of this driver so probably can't
+test this without help from someone who knows how it is supposed to
+work.
 
-Hi Wolfram,
+> ---
+>  drivers/i2c/busses/i2c-i801.c              |  31 ++++--
+>  drivers/i2c/muxes/i2c-mux-gpio.c           | 113 +++++----------------
+>  include/linux/platform_data/i2c-mux-gpio.h |   7 --
+>  3 files changed, 53 insertions(+), 98 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index 679c6c41f64b..5bf5e16df888 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -107,7 +107,7 @@
+>  #include <linux/pm_runtime.h>
+>  
+>  #if IS_ENABLED(CONFIG_I2C_MUX_GPIO) && defined CONFIG_DMI
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/machine.h>
+>  #include <linux/platform_data/i2c-mux-gpio.h>
+>  #endif
+>  
+> @@ -1259,6 +1259,8 @@ static int i801_add_mux(struct i801_priv *priv)
+>  	const struct i801_mux_config *mux_config;
+>  	struct i2c_mux_gpio_platform_data gpio_data;
+>  	int err;
+> +	struct gpiod_lookup_table *lookup;
+> +	int i;
 
-Thank you very much for your input.
-Yes, I see my statement was wrong.
+It looks better if you arrange these like:
 
-I performed more debug with option CONFIG_DEBUG_TEST_DRIVER_REMOVE.
-And I think I found the issue.
+  	struct i2c_mux_gpio_platform_data gpio_data;
+	struct gpiod_lookup_table *lookup;
+ 	int err, i;
 
-In code from 'mlx-platform' driver, I pointed out in commit text,
-'mlx-platform' registers 'i2c_mlxcpld' device and then registers few
-underlying 'i2c-mux-reg' devices:
-	priv->pdev_i2c =3D platform_device_register_simple("i2c_mlxcpld", nr,
-							 NULL, 0);
-	...
-	for (i =3D 0; i < ARRAY_SIZE(mlxplat_mux_data); i++) {
-		priv->pdev_mux[i] =3D platform_device_register_resndata(
-						&mlxplat_dev->dev,
-						"i2c-mux-reg", i, NULL,
-						0, &mlxplat_mux_data[i],
-						sizeof(mlxplat_mux_data[i]));
-					=09
-But it seems for priv->pdev_mux[i] entries,
-platform_device_register_resndata() should be called with parent device
-priv->pdev_i2c->dev instead of mlxplat_dev->dev, since "i2c-mux-reg
-parent is device, created by "i2c_mlxcpld".
+>  
+>  	if (!priv->mux_drvdata)
+>  		return 0;
+> @@ -1270,14 +1272,31 @@ static int i801_add_mux(struct i801_priv *priv)
+>  	gpio_data.values = mux_config->values;
+>  	gpio_data.n_values = mux_config->n_values;
+>  	gpio_data.classes = mux_config->classes;
+> -	gpio_data.gpio_chip = mux_config->gpio_chip;
+> -	gpio_data.gpios = mux_config->gpios;
+> -	gpio_data.n_gpios = mux_config->n_gpios;
+>  	gpio_data.idle = I2C_MUX_GPIO_NO_IDLE;
+>  
+> -	/* Register the mux device */
+> +	/* Register GPIO descriptor lookup table */
+> +	lookup = devm_kzalloc(dev,
+> +			      struct_size(lookup, table, mux_config->n_gpios),
+> +			      GFP_KERNEL);
+> +	if (!lookup)
+> +		return -ENOMEM;
+> +	lookup->dev_id = "i2c-mux-gpio";
+> +	for (i = 0; i < mux_config->n_gpios; i++) {
+> +		lookup->table[i].chip_label = mux_config->gpio_chip;
+> +		lookup->table[i].chip_hwnum = mux_config->gpios[i];
+> +		lookup->table[i].con_id = NULL;
+> +	}
+> +	gpiod_add_lookup_table(lookup);
 
-This change solves the issue I found with DEBUG_TEST_DRIVER_REMOVE.
-And it also seems to be a possible source for some other issues.
-I am going to send a path with this fix to platform.
+I wonder if we need to call gpiod_remove_lookup_table() in
+i801_del_mux()? Also it seems to leak if the below function fails.
 
---- a/drivers/platform/x86/mlx-platform.c
-+++ b/drivers/platform/x86/mlx-platform.c
-@@ -2032,7 +2032,7 @@ static int __init mlxplat_init(void)
-=20
-        for (i =3D 0; i < ARRAY_SIZE(mlxplat_mux_data); i++) {
-                priv->pdev_mux[i] =3D platform_device_register_resndata(
--                                               &mlxplat_dev->dev,
-+                                               &priv->pdev_i2c->dev,
-                                                "i2c-mux-reg", i, NULL,
-                                                0, &mlxplat_mux_data[i],
-                                                sizeof(mlxplat_mux_data[i])=
-);
-
-Thank you,
-Vadim.
+> +
+> +	/*
+> +	 * Register the mux device, we use PLATFORM_DEVID_NONE here
+> +	 * because since we are referring to the GPIO chip by name we are
+> +	 * anyways in deep trouble if there is more than one of these
+> +	 * devices, and there should likely only be one platform controller
+> +	 * hub.
+> +	 */
+>  	priv->mux_pdev = platform_device_register_data(dev, "i2c-mux-gpio",
+> -				PLATFORM_DEVID_AUTO, &gpio_data,
+> +				PLATFORM_DEVID_NONE, &gpio_data,
+>  				sizeof(struct i2c_mux_gpio_platform_data));
+>  	if (IS_ERR(priv->mux_pdev)) {
+>  		err = PTR_ERR(priv->mux_pdev);
