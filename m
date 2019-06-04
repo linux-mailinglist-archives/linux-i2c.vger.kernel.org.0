@@ -2,94 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0585C34EF0
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 19:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCE73503C
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 21:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726286AbfFDRdl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Jun 2019 13:33:41 -0400
-Received: from mga11.intel.com ([192.55.52.93]:25657 "EHLO mga11.intel.com"
+        id S1726179AbfFDT0t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Jun 2019 15:26:49 -0400
+Received: from anholt.net ([50.246.234.109]:48998 "EHLO anholt.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726092AbfFDRdk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 4 Jun 2019 13:33:40 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jun 2019 10:33:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,550,1549958400"; 
-   d="scan'208";a="181632572"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga002.fm.intel.com with ESMTP; 04 Jun 2019 10:33:38 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hYDJZ-0001RA-SF; Tue, 04 Jun 2019 20:33:37 +0300
-Date:   Tue, 4 Jun 2019 20:33:37 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v3] i2c: mux/i801: Switch to use descriptor passing
-Message-ID: <20190604173337.GT9224@smile.fi.intel.com>
-References: <20190603220819.31701-1-linus.walleij@linaro.org>
+        id S1725933AbfFDT0t (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 4 Jun 2019 15:26:49 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by anholt.net (Postfix) with ESMTP id 816BD10A288F;
+        Tue,  4 Jun 2019 12:26:48 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at anholt.net
+Received: from anholt.net ([127.0.0.1])
+        by localhost (kingsolver.anholt.net [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id JbnoffimuG9y; Tue,  4 Jun 2019 12:26:46 -0700 (PDT)
+Received: from eliezer.anholt.net (localhost [127.0.0.1])
+        by anholt.net (Postfix) with ESMTP id C88F310A1128;
+        Tue,  4 Jun 2019 12:26:46 -0700 (PDT)
+Received: by eliezer.anholt.net (Postfix, from userid 1000)
+        id 45BC92FE3AAE; Tue,  4 Jun 2019 12:26:46 -0700 (PDT)
+From:   Eric Anholt <eric@anholt.net>
+To:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Annaliese McDermond <nh6z@nh6z.net>, f.fainelli@gmail.com,
+        wsa@the-dreams.de, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     team@nwdigitalradio.com
+Subject: Re: [PATCH v3] i2c: bcm2835: Model Divider in CCF
+In-Reply-To: <31580e1f-60d2-f13b-dcfe-6bc6e75e9285@i2se.com>
+References: <20190529042912.12956-1-nh6z@nh6z.net> <31580e1f-60d2-f13b-dcfe-6bc6e75e9285@i2se.com>
+User-Agent: Notmuch/0.22.2+1~gb0bcfaa (http://notmuchmail.org) Emacs/26.1 (x86_64-pc-linux-gnu)
+Date:   Tue, 04 Jun 2019 12:26:44 -0700
+Message-ID: <87pnnt6tjf.fsf@anholt.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190603220819.31701-1-linus.walleij@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 04, 2019 at 12:08:19AM +0200, Linus Walleij wrote:
-> This switches the i801 GPIO mux to use GPIO descriptors for
-> handling the GPIO lines. The previous hack which was reaching
-> inside the GPIO chips etc cannot live on. We pass descriptors
-> along with the GPIO mux device at creation instead.
-> 
-> The GPIO mux was only used by way of platform data with a
-> platform device from one place in the kernel: the i801 i2c bus
-> driver. Let's just associate the GPIO descriptor table with
-> the actual device like everyone else and dynamically create
-> a descriptor table passed along with the GPIO i2c mux.
-> 
-> This enables simplification of the GPIO i2c mux driver to
-> use only the descriptor API and the OF probe path gets
-> simplified in the process.
-> 
-> The i801 driver was registering the GPIO i2c mux with
-> PLATFORM_DEVID_AUTO which would make it hard to predict the
-> device name and assign the descriptor table properly, but
-> this seems to be a mistake to begin with: all of the
-> GPIO mux devices are hardcoded to look up GPIO lines from
-> the "gpio_ich" GPIO chip. If there are more than one mux,
-> there is certainly more than one gpio chip as well, and
-> then we have more serious problems. Switch to
-> PLATFORM_DEVID_NONE instead. There can be only one.
+--=-=-=
+Content-Type: text/plain
 
-> +/* FIXME: stop poking around inside gpiolib */
->  #include "../../gpio/gpiolib.h"
+Stefan Wahren <stefan.wahren@i2se.com> writes:
 
-> +		/* FIXME: find a proper way to access the GPIO device */
-> +		gpio_dev = &gpiod->gdev->dev;
+> Am 29.05.19 um 06:29 schrieb Annaliese McDermond:
+>> Model the I2C bus clock divider as a part of the Core Clock Framework.
+>> Primarily this removes the clk_get_rate() call from each transfer.
+>> This call causes problems for slave drivers that themselves have
+>> internal clock components that are controlled by an I2C interface.
+>> When the slave's internal clock component is prepared, the prepare
+>> lock is obtained, and it makes calls to the I2C subsystem to
+>> command the hardware to activate the clock.  In order to perform
+>> the I2C transfer, this driver sets the divider, which requires
+>> it to get the parent clock rate, which it does with clk_get_rate().
+>> Unfortunately, this function will try to take the clock prepare
+>> lock, which is already held by the slave's internal clock calls
+>> creating a deadlock.
+>>
+>> Modeling the divider in the CCF natively removes this dependency
+>> and the divider value is only set upon changing the bus clock
+>> frequency or changes in the parent clock that cascade down to this
+>> divisor.  This obviates the need to set the divider with every
+>> transfer and avoids the deadlock described above.  It also should
+>> provide better clock debugging and save a few cycles on each
+>> transfer due to not having to recalcuate the divider value.
+>>
+>> Signed-off-by: Annaliese McDermond <nh6z@nh6z.net>
+>
+> Acked-by: Stefan Wahren <stefan.wahren@i2se.com>
 
+FWIW, also:
 
-#include <linux/gpio/driver.h>
+Reviewed-by: Eric Anholt <eric@anholt.net>
 
-	gpio_dev = &gpiod_to_chip()->...->dev;
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-?
+-----BEGIN PGP SIGNATURE-----
 
-Yes, I noticed "driver" word... :-(
-But seems cleaner to me, than gpiolib.h inclusion.
-
-(Perhaps deserves a separate, preparatory?, patch)
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+iQIzBAEBCgAdFiEE/JuuFDWp9/ZkuCBXtdYpNtH8nugFAlz2xfQACgkQtdYpNtH8
+nugysA//bZbeBZr4HJvvzsJhUkxzSPImOH4/xN2nzZVCVPXWro2fQXPC/WRTdl5K
+/WA44cuxN/zAfFwzOQgPs3LRRQiddJZsiKMhSiZeu4+Wu9vQP4vCoFU6lZHoZzGq
+XL3N29LzHldvQ4OY7wOsYDgPZrR1EKoP0nqeH8K/ayJ1m1bGVv0SypbdyAGRDPH3
+t39/xMXBDhgLjFd8u5rSDObqVLDo3W6yJDyb4n7Jd61qomrIqCzwPWT6/P2cxr7o
+70p85EcGXejuwPEez5SCbMY452e5LmHFyTa99aRf69KYEfXm9Ut6/uGjohlINIzk
+isMZFI2wIKt7BKpjDep3LaQAlO+B5S7m21rqcHB0BT/yarY4tPdA1M65L+eSMN00
+MVoCwpI4Xy9dN0R2YuXiwBFtGChXEcqwbct9TkBd49nbjQIslBQQUOgCWKWyfXwX
+Qa/pxuXl8vVVI2F+ACFBPaM4EVt6mYS7Uc12PokM8XU2tiIWklzaPIjEQlI4LSVr
+uj1cxcAc5aSbSfioenbPeNCYFO8AxlwtRdAIk4CQz2yD7PNmkzUnkqnKGyjOngCt
+S026/jbBITOpIvGVEdeXzAfKTwkNsNqj2R2Bul5SSIr3u3pUxcUoTUhpFXnzf39H
+CXJZTCowSW8/5Fk6UxQ4RFSfuVUXF8cQmjgkvL+8VLKITVTMBS0=
+=djj2
+-----END PGP SIGNATURE-----
+--=-=-=--
