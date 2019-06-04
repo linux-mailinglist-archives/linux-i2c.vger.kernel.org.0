@@ -2,67 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D643634698
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 14:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7AC3476D
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 15:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727668AbfFDMZn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 4 Jun 2019 08:25:43 -0400
-Received: from mail02.inet.sy ([212.11.196.40]:40746 "HELO mail02.inet.sy"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with SMTP
-        id S1727642AbfFDMZn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 4 Jun 2019 08:25:43 -0400
-X-Greylist: delayed 339 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jun 2019 08:25:43 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail02.inet.sy (Postfix) with ESMTP id ABAFE16326A;
-        Tue,  4 Jun 2019 15:19:58 +0300 (EEST)
-X-Virus-Scanned: Debian amavisd-new at mail03.inet.sy
-X-Spam-Flag: NO
-X-Spam-Score: 6.357
-X-Spam-Level: ******
-X-Spam-Status: No, score=6.357 tagged_above=-999 required=7
-        tests=[BAYES_50=0.8, FREEMAIL_FROM=0.001, FREEMAIL_REPLYTO=1,
-        LOTS_OF_MONEY=0.001, SPF_FAIL=0.001, SPF_HELO_NONE=0.001,
-        SPOOFED_FREEM_REPTO=2.499, TO_EQ_FM_DOM_SPF_FAIL=0.053,
-        TO_EQ_FM_SPF_FAIL=0.001, US_DOLLARS_3=2] autolearn=unavailable
-Received: from mail02.inet.sy ([127.0.0.1])
-        by localhost (mail02.inet.sy [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id E8y4CfnaMmRZ; Tue,  4 Jun 2019 15:19:58 +0300 (EEST)
-Received: from mail01.inet.sy (mail.inet.sy [212.11.196.115])
-        by mail02.inet.sy (Postfix) with ESMTP id 91FF6163269;
-        Tue,  4 Jun 2019 15:19:58 +0300 (EEST)
-Received: from Mail-Exchange.firefite.local (unknown [212.11.218.206])
-        by mail01.inet.sy (Postfix) with ESMTP id 18CC18EC025;
-        Tue,  4 Jun 2019 15:21:06 +0300 (EEST)
-Received: from Mail-Exchange.firefite.local (192.168.0.19) by
- Mail-Exchange.firefite.local (192.168.0.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.1466.3; Tue, 4 Jun 2019 15:20:03 +0300
-Received: from Admin.localhost (105.186.0.15) by Mail-Exchange.firefite.local
- (192.168.0.19) with Microsoft SMTP Server (version=TLS1_0,
- cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.1.1466.3 via Frontend Transport;
- Tue, 4 Jun 2019 15:19:56 +0300
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1727067AbfFDNAq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Jun 2019 09:00:46 -0400
+Received: from mxs2.seznam.cz ([77.75.76.125]:12773 "EHLO mxs2.seznam.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727033AbfFDNAp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 4 Jun 2019 09:00:45 -0400
+Received: from email.seznam.cz
+        by email-smtpc8a.ng.seznam.cz (email-smtpc8a.ng.seznam.cz [10.23.10.225])
+        id 2feada5f1be42f6c2dedeac6;
+        Tue, 04 Jun 2019 15:00:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=emailprofi.seznam.cz; s=beta; t=1559653240;
+        bh=UlDA7z971vAl4+SbfYen/ut8yWZSLZyfk9hZq1g72Do=;
+        h=Received:Received:X-Gm-Message-State:X-Google-Smtp-Source:
+         X-Received:MIME-Version:References:In-Reply-To:From:Date:
+         X-Gmail-Original-Message-ID:Message-ID:Subject:To:Cc:Content-Type;
+        b=tWqnP6O+CaeACg+E8CBDGE4b4yFE37U+jGhQr7zJHEpEUjWyQIrIS/y5NI4d51NrM
+         0RQ9XJJDdx7XPuSKG7f9YY+z25MevQMm8COVlquCHWPocn2+aYTdCi2lij/QPgauDJ
+         ZkRRqQjho9qlmDf+oajM3Pq/FUwNpt31F48G3qbc=
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+        by email-relay24.ng.seznam.cz (Seznam SMTPD 1.3.104) with ESMTP;
+        Tue, 04 Jun 2019 15:00:38 +0200 (CEST)  
+Received: by mail-lj1-f175.google.com with SMTP id a10so16347533ljf.6;
+        Tue, 04 Jun 2019 06:00:38 -0700 (PDT)
+X-Gm-Message-State: APjAAAUmo/9OqNF1bb7oxnT7lqplPB4NuMI5NQBGDaYWuB0S8x2JUHgr
+        0j6yjDhw6FkPFAglabnTblAZSKdSCEBXnvgHmI0=
+X-Google-Smtp-Source: APXvYqx80dQ2dqy238/eYpAmtM1RTiUz9MvM39Alq6Xb2Ct3dz6p9fG3rXZq2x4wGZee4KcNOz1s7JBLMGZTl9ygIQI=
+X-Received: by 2002:a2e:124b:: with SMTP id t72mr7360878lje.143.1559653236886;
+ Tue, 04 Jun 2019 06:00:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Award Notice
-To:     Recipients <hnkglobalpromo@brew-meister.com>
-From:   "Mrs. Vera Donald" <hnkglobalpromo@brew-meister.com>
-Date:   Tue, 4 Jun 2019 20:19:49 +0800
-Reply-To: <hp-fudiciaryagent@brew-meister.com>
-X-Antivirus: Avast (VPS 190604-1, 06/03/2019), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <b4eb94b4-2003-45b5-ae9b-b7eb00873798@Mail-Exchange.firefite.local>
+References: <20190604113407.8948-1-sr@denx.de> <20190604113407.8948-2-sr@denx.de>
+In-Reply-To: <20190604113407.8948-2-sr@denx.de>
+From:   Jan Breuer <jan.breuer@jaybee.cz>
+Date:   Tue, 4 Jun 2019 15:00:25 +0200
+X-Gmail-Original-Message-ID: <CAEEQaa9D0cWFNa_MtiGQ5hD4Z+0vG5ftV6etEr-dRMAW2AA1yQ@mail.gmail.com>
+Message-ID: <CAEEQaa9D0cWFNa_MtiGQ5hD4Z+0vG5ftV6etEr-dRMAW2AA1yQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2 v3] i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C driver
+To:     Stefan Roese <sr@denx.de>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Jan Breuer <jan.breuer@jaybee.cz>,
+        John Crispin <john@phrozen.org>,
+        =?UTF-8?Q?Ren=C3=A9_van_Dorst?= <opensource@vdorst.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-We are gleeful to inform you that your e-mail address eventually entered our 2019 online promotion that won you C$3,780,000.00 Canadian Dollars. Kindly respond for claim processing.
+Hi Stefan,
 
-Mrs. Vera Donald
+> +#define MT76XX_I2C_INPUT_CLOCK 40000000
 
----
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+This is peripheral clock and should be reachable by devm_clk_get() and
+later clk_get_rate() should give value similar to
+MT76XX_I2C_INPUT_CLOCK.
+I don't have currently recent enough kernel to test it or prove it,
+but I see this in openwrt I2C driver for this platform
+https://github.com/openwrt/openwrt/blob/master/target/linux/ramips/patches-4.14/0045-i2c-add-mt7621-driver.patch
 
+Kind regards,
+Jan
