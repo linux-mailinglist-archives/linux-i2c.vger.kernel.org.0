@@ -2,80 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E6A349B3
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 16:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0E1349B8
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 16:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727182AbfFDOCV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 4 Jun 2019 10:02:21 -0400
-Received: from mail02.inet.sy ([212.11.196.40]:40460 "HELO mail02.inet.sy"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with SMTP
-        id S1727137AbfFDOCV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 4 Jun 2019 10:02:21 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail02.inet.sy (Postfix) with ESMTP id 469E2164B0B;
-        Tue,  4 Jun 2019 17:02:14 +0300 (EEST)
-X-Virus-Scanned: Debian amavisd-new at mail03.inet.sy
-X-Spam-Flag: NO
-X-Spam-Score: 6.358
-X-Spam-Level: ******
-X-Spam-Status: No, score=6.358 tagged_above=-999 required=7
-        tests=[BAYES_50=0.8, FREEMAIL_FROM=0.001, FREEMAIL_REPLYTO=1,
-        LOTS_OF_MONEY=0.001, MONEY_FRAUD_5=0.001, SPF_FAIL=0.001,
-        SPF_HELO_NONE=0.001, SPOOFED_FREEM_REPTO=2.499,
-        TO_EQ_FM_DOM_SPF_FAIL=0.053, TO_EQ_FM_SPF_FAIL=0.001, US_DOLLARS_3=2]
-        autolearn=unavailable
-Received: from mail02.inet.sy ([127.0.0.1])
-        by localhost (mail02.inet.sy [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EBGxFnxPDw88; Tue,  4 Jun 2019 17:02:14 +0300 (EEST)
-Received: from mail01.inet.sy (mail.inet.sy [212.11.196.115])
-        by mail02.inet.sy (Postfix) with ESMTP id 2EF5D164B0A;
-        Tue,  4 Jun 2019 17:02:14 +0300 (EEST)
-Received: from Mail-Exchange.firefite.local (unknown [212.11.218.206])
-        by mail01.inet.sy (Postfix) with ESMTP id D8ACE8EC025;
-        Tue,  4 Jun 2019 17:03:21 +0300 (EEST)
-Received: from Mail-Exchange.firefite.local (192.168.0.19) by
- Mail-Exchange.firefite.local (192.168.0.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.1466.3; Tue, 4 Jun 2019 17:02:18 +0300
-Received: from Admin.localhost (105.186.0.15) by Mail-Exchange.firefite.local
- (192.168.0.19) with Microsoft SMTP Server (version=TLS1_0,
- cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.1.1466.3 via Frontend Transport;
- Tue, 4 Jun 2019 17:02:11 +0300
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1727340AbfFDODV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Jun 2019 10:03:21 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:36496 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727041AbfFDODU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 4 Jun 2019 10:03:20 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 5DB8AA01A8;
+        Tue,  4 Jun 2019 16:03:18 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
+        with ESMTP id Hn2ZZs0CSD_D; Tue,  4 Jun 2019 16:03:12 +0200 (CEST)
+Subject: Re: [PATCH 2/2 v3] i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C
+ driver
+To:     Jan Breuer <jan.breuer@jaybee.cz>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+References: <20190604113407.8948-1-sr@denx.de>
+ <20190604113407.8948-2-sr@denx.de>
+ <CAEEQaa9D0cWFNa_MtiGQ5hD4Z+0vG5ftV6etEr-dRMAW2AA1yQ@mail.gmail.com>
+From:   Stefan Roese <sr@denx.de>
+Message-ID: <0b60c94f-4a06-90f8-cdb7-1cbef090bd3a@denx.de>
+Date:   Tue, 4 Jun 2019 16:03:11 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Award Notice
-To:     Recipients <hnkglobalpromo@brew-meister.com>
-From:   "Mrs. Vera Donald" <hnkglobalpromo@brew-meister.com>
-Date:   Tue, 4 Jun 2019 22:02:03 +0800
-Reply-To: <hp-fudiciaryagent@brew-meister.com>
-X-Antivirus: Avast (VPS 190604-1, 06/03/2019), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <6093605d-16f1-4934-ba62-ee829645579f@Mail-Exchange.firefite.local>
+In-Reply-To: <CAEEQaa9D0cWFNa_MtiGQ5hD4Z+0vG5ftV6etEr-dRMAW2AA1yQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-We are gleeful to inform you that your e-mail address eventually entered our 2019 online promotion that won you C$3,780,000.00 Canadian Dollars. Claim No:HGP/748/89-3PL. Keep your claim number confidential until claim.
+Hi Jan,
 
-Contact our office immediately with details below to commence release of your winning prize by providing your winning details above.
+On 04.06.19 15:00, Jan Breuer wrote:
+> Hi Stefan,
+> 
+>> +#define MT76XX_I2C_INPUT_CLOCK 40000000
+> 
+> This is peripheral clock and should be reachable by devm_clk_get() and
+> later clk_get_rate() should give value similar to
+> MT76XX_I2C_INPUT_CLOCK.
 
-Mr. Vorst Paxton
-Email: hp-fudiciaryagent@brew-meister.com
-Alternative e-Mail: heinekenglobalpromo@gmail.com
-Office: +1-438-700-9141
+Unfortunately not (yet) in mainline Linux.
 
-Congratulations!!!
+> I don't have currently recent enough kernel to test it or prove it,
+> but I see this in openwrt I2C driver for this platform
+> https://github.com/openwrt/openwrt/blob/master/target/linux/ramips/patches-4.14/0045-i2c-add-mt7621-driver.patch
 
-Yours Sincerely,
+Yes, its available in the OpenWRT v4.14 tree, but not in mainline
+Linux (AFAICT).
 
-Mrs. Vera Donald
-Head of Award Department
-Heineken Global Promotion
+I might try to make some time to add this clock driver for these
+SoC's. But I would prefer to use the hardcoded define in this
+driver for now, to not block its usage in mainline any longer.
 
----
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
-
+Thanks,
+Stefan
