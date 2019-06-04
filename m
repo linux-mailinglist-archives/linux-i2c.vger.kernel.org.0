@@ -2,93 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C7234490
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 12:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70769344C0
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 12:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727483AbfFDKpM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Jun 2019 06:45:12 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:38720 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727476AbfFDKpJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Jun 2019 06:45:09 -0400
-Received: by mail-wr1-f65.google.com with SMTP id d18so15275277wrs.5
-        for <linux-i2c@vger.kernel.org>; Tue, 04 Jun 2019 03:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MkGVFZY1XhtlH3EXbDSeWCPiZrbaYk4zwPdOeyiIsNc=;
-        b=hljw8RsTFEcbuplHCj6D4tq/5nIpPFTXoAK24WDaO16R2lM4A4tkIl52AnrPf6JXw1
-         gT3EjpICXK9lQrDnqMtsHhdKD3i45MO0tlSwTZkOGsLnygeqnS1GEq42hVT5+HlqpNGw
-         T+gYf8t0vIU7HSEAEdNBmet5opXalvHQjYcEdfz/km30EDtQQfXPpL8nTAL5/46rMhak
-         gMuexpRELw1yz4AqSHcBpII97mOzlQXjdBv9q9uxJg0vY4L2Wkz4mWfTGT41kUyPjWyf
-         oCCUVzTVMMLzv8BuVscDTyHO0HMHqetsCPsptCOLxfHbS+xv6PqNZFqqiN1cTF5Ezas/
-         RETA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=MkGVFZY1XhtlH3EXbDSeWCPiZrbaYk4zwPdOeyiIsNc=;
-        b=l8YR4Yzxs/JzpSBOfbFx7A7ffoxGq7t8cdtHP83RtuA6teZQae3npavkhukqlzOYeT
-         MVrbgX4+TkkL1a002qtTWMBUIVXCd16C+AG/H9NpfZZHNju02HJgKxzCxanm14Ku9D1g
-         YJMGX31l8UUhf8tbNp2iDQMNNzEr2cEiOZUV2Rbei5kV4TRPXMNc/n2FaIw+yrCgM8GG
-         p8B7ivggAS4Pz/lnhUIwdpAroYs0y19UATXd2dqwutrMbBuIIshET3/3i90au0Tq/Q/a
-         4xLns+Zmxpm8uQa4AsSMoIIUPArzEGgXwaX0G5NRk7CVQa3ntbOb17+imnF7nurTBHIv
-         fGXg==
-X-Gm-Message-State: APjAAAWb6+Eb9dvZrlbQi06/V0SoFW7Y+5mYtr90BsOpxojNy16D7GB/
-        kreWlmh/yMXE49+jEHrrSYkrksp1UUw=
-X-Google-Smtp-Source: APXvYqyK+bgytdW+OPwhr0ZBevMVV7NDVd58ezc6owb6wL4UOd2DK/LWci6dPsr3n48XMl5sTrJS0w==
-X-Received: by 2002:adf:a38d:: with SMTP id l13mr13613323wrb.187.1559645107190;
-        Tue, 04 Jun 2019 03:45:07 -0700 (PDT)
-Received: from localhost.localdomain ([2.27.167.43])
-        by smtp.gmail.com with ESMTPSA id t140sm2718623wmt.0.2019.06.04.03.45.06
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Jun 2019 03:45:06 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     alokc@codeaurora.org, kramasub@codeaurora.org,
-        andy.gross@linaro.org, david.brown@linaro.org,
-        wsa+renesas@sang-engineering.com, bjorn.andersson@linaro.org,
-        linus.walleij@linaro.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 8/8] usb: dwc3: qcom: Improve error handling
-Date:   Tue,  4 Jun 2019 11:44:55 +0100
-Message-Id: <20190604104455.8877-8-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190604104455.8877-1-lee.jones@linaro.org>
-References: <20190604104455.8877-1-lee.jones@linaro.org>
+        id S1727266AbfFDKvH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Jun 2019 06:51:07 -0400
+Received: from sauhun.de ([88.99.104.3]:45604 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727242AbfFDKvH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 4 Jun 2019 06:51:07 -0400
+Received: from localhost (p5486CF7A.dip0.t-ipconnect.de [84.134.207.122])
+        by pokefinder.org (Postfix) with ESMTPSA id 6F6053E43B3;
+        Tue,  4 Jun 2019 12:51:03 +0200 (CEST)
+Date:   Tue, 4 Jun 2019 12:51:03 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Stefan Roese <sr@denx.de>
+Cc:     linux-i2c@vger.kernel.org, Jan Breuer <jan.breuer@jaybee.cz>,
+        John Crispin <john@phrozen.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v2] i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C driver
+Message-ID: <20190604105103.GA3598@kunai>
+References: <20190506105746.16397-1-sr@denx.de>
+ <20190603200139.GA2383@kunai>
+ <702927e9-6821-8241-6839-3ea248d2a9ab@denx.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="C7zPtVaVf+AK4Oqc"
+Content-Disposition: inline
+In-Reply-To: <702927e9-6821-8241-6839-3ea248d2a9ab@denx.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-dwc3_qcom_clk_init() is called with of_count_phandle_with_args() as an
-argument.  If of_count_phandle_with_args() returns an error, the number
-of clocks will be a negative value and will lead to undefined behaviour.
 
-Ensure we check for an error before attempting to blindly use the value.
+--C7zPtVaVf+AK4Oqc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 3 +++
- 1 file changed, 3 insertions(+)
+Hi Stefan,
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index f21fdd6cdd1a..633482926497 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -419,6 +419,9 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
- 	if (!count || ACPI_HANDLE(dev))
- 		return 0;
- 
-+	if (count < 0)
-+		return count;
-+
- 	qcom->clks = devm_kcalloc(dev, qcom->num_clocks,
- 				  sizeof(struct clk *), GFP_KERNEL);
- 	if (!qcom->clks)
--- 
-2.17.1
+> > ... and this into the for-loop? I'd think it is a tad more readable, but
+> > it is a minor nit.
+>=20
+> Do you mean this way:
+>=20
+> 		for (len =3D pmsg->len; len > 0; len -=3D 8, j +=3D 8) {
+>=20
+> ?
 
+with 'j =3D 0' added, yes.
+
+> > > +
+> > > +static const struct i2c_algorithm mtk_i2c_algo =3D {
+> > > +	.master_xfer	=3D mtk_i2c_master_xfer,
+> > > +	.functionality	=3D mtk_i2c_func,
+> > > +};
+> > > +
+> > > +static const struct of_device_id i2c_mtk_dt_ids[] =3D {
+> > > +	{ .compatible =3D "mediatek,mt7621-i2c" },
+> > > +	{ /* sentinel */ }
+> > > +};
+> > > +
+> > > +MODULE_DEVICE_TABLE(of, i2c_mtk_dt_ids);
+> > > +
+> > > +static void mtk_i2c_init(struct mtk_i2c *i2c)
+> > > +{
+> > > +	i2c->clk_div =3D 40000000 / i2c->cur_clk - 1;
+> >=20
+> > What is 40000000? Maybe a define for this magic value?
+>=20
+> Seems to be the clock input frequency. I'll add a define.
+
+Ah, I got confused because I thought cur_clk was the input clock and did
+not double check. Renaming 'cur_clk' to 'bus_clk' or better
+'bus_freq' seems like a good idea?
+
+> > And no protection if cur_clk is 1 and thus the divider is 0!
+>=20
+> The divisor is "cur_clk" and not "(cur_clk - 1)".
+
+Uhm, yes :)
+
+> > > +	adap->class =3D I2C_CLASS_HWMON | I2C_CLASS_SPD;
+> >=20
+> > Why do you want the classes?
+>=20
+> No idea, sorry. I have no clue what the intention of the original
+> authors might have been. Perhaps just some copy-and-paste? SPD is
+> very unlikely as there surely are no DIMM's installed on any
+> MT76xx platforms.
+
+Then remove it. This is to *limit* potential clients and I don't see a
+reason why to limit here. I guess you want to allow all.
+
+> Many thanks for the review. Very much appreciated.
+
+You are welcome. Thanks for keeping at it.
+
+Kind regards,
+
+   Wolfram
+
+
+--C7zPtVaVf+AK4Oqc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz2TRMACgkQFA3kzBSg
+KbYBvQ//emDViqXqerBhOrkFCEBkqCUA8ycaFZKthVMKQrchzRdAnBHInMOvr8Zn
+ac8P/vZ0WPJoC+eglsuhPBFOWo6Vg5Vui3DYI1UUPoPzw960LmURDWxw32y+wSmT
+LDjQrBVUoN9SzSzzLhyD5CqdTXnAUkouChIhLkK+hvaRTS7nhfzFwS3ZHnIUy0VV
+hRQ3ZIW9ponLRaRA/7o/s2oZtNnf/jkX9Pp8hSbcOdh0ITkeGGMw/dOXg+q+KRGO
+AjryOqk7a9VEeloVk48prCMbCX91ca2zjh2WihUPcu8w3i86f+cdCz3gfYEqrWiD
+uOEV5KrTp8VHmFQam1mxNphUqOrGQnZdZiEswoN6pXZo+1qSM6gGItiItwHm9bU9
+14dmPcRk0VGpYRgRvAuiFFawWPTTEqy1Efr9p95Ufq7SrJE+aJjYAtdvcNXZS9y8
+I6WyH/LTDc90O5IdAynbmP0yRiGNpQbgNw/tuJ1MUfiG9VjRufYfnV+MnftT4dkE
+csYvDmsW/timg2K72yuAoBG7KiN0OVvWDvo0eBo5qDX85nC2lSZAt15BbFSsGobJ
+xg6uDx3vjI3J8vNRbGHiRAkxyf43kUuHBy/jrQS83P2GSBKB4MN/eKizvfKkwDAw
+NA4Yxy6jSxz2F0S4DOEN+q9aIDNnwZ91bjzyX9c+obi8FWz3h2I=
+=BbXt
+-----END PGP SIGNATURE-----
+
+--C7zPtVaVf+AK4Oqc--
