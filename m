@@ -2,162 +2,138 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2172833EDB
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 08:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F6F33EF1
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 08:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726645AbfFDGO0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Jun 2019 02:14:26 -0400
-Received: from mail-it1-f195.google.com ([209.85.166.195]:53607 "EHLO
-        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726488AbfFDGO0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Jun 2019 02:14:26 -0400
-Received: by mail-it1-f195.google.com with SMTP id m187so5831325ite.3
-        for <linux-i2c@vger.kernel.org>; Mon, 03 Jun 2019 23:14:25 -0700 (PDT)
+        id S1726683AbfFDGWz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Jun 2019 02:22:55 -0400
+Received: from mail-eopbgr680085.outbound.protection.outlook.com ([40.107.68.85]:29313
+        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726595AbfFDGWz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 4 Jun 2019 02:22:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mpV+ZLe1Y/pV6FsmPy/Hsmr8nazSfBYPF/FYxcvhXhw=;
-        b=O/DwmIQPBDIPzjwyL9JSCCCs2p/EtplyKCC20zuHO0dm833GLj8N3ewOJQclezpH0R
-         ZoN1urGpPwl9NEpwrhFMWXUOfVpemmbQiTLulxzL2A2RhGkzlRY5VJAvjSBpE86o1gkC
-         L3LiCOrHQfo1vO4jscFmXGHETwE3WANMjo6J2iAPwi8ggiNCkhLhf6pkkfT47UfP6oy6
-         f2R0fBD4IdkEA2sKsrxi1M7czswxyvVYzbAboyWLlQueRdKYxMPlST+/2ERCkEZTDZg6
-         VejOlNuPrCZB4c78Nnd5PRao7CP2r6T/KLO1Z81YCoZgogDu1F6ckgfOVMXOYl7yj5PS
-         nLaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mpV+ZLe1Y/pV6FsmPy/Hsmr8nazSfBYPF/FYxcvhXhw=;
-        b=a9lsePhxlTxV1ADK3l9Wa1n47BZ4uIxZev/umjB6YgV8LqQasnLqjIR8dU1EyA4SyP
-         /rAnSM5is9pgZy7jp/D6OzgckkHQAgA8c/7P+Vokw4WxDg+zMiNj+lLCmFycUvxzzJpK
-         lj3UoSdpn4BDrRHs074CErVNxQxkg+ZB9s8RnenjyonyOOeG9nAOO19ug+C0MXzVS1QP
-         k8OxuAMSv6bvMr1ZnREodTC9UbhPLy7dK0huTUAvbB8UpLVMmHnXmcY8rlmnSQLAbDoD
-         7JDeKxl45lKu2lUX43/fICe9fktuq9c+WdQ2Y0ninswzZCEriyrKjMdIXotj6i/1SauB
-         jwgQ==
-X-Gm-Message-State: APjAAAUf/0TzRGGKOJl6xDQLp5ILG8hsQxt+JrUf2qCnAfVy1oHEb3/W
-        8Q9YGwPykDTQRFpLUd6MQmdbjHVed9OtFfvt4EXhi+M4
-X-Google-Smtp-Source: APXvYqzS3jwKCwk/umYAxKFFeDfgAPzZpyp0FAipe2DJGulCx+yBszMTdcmCUYb6hHU0qq+n6pwLJkhfLztu8Czenpk=
-X-Received: by 2002:a24:2855:: with SMTP id h82mr13134280ith.15.1559628865436;
- Mon, 03 Jun 2019 23:14:25 -0700 (PDT)
+ d=xilinx.onmicrosoft.com; s=selector1-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tmQE9gjXsfgo54l5y1C7O063/zDxInvt8HEJ3Wa7qMs=;
+ b=ISW8pfQYNkxwqW+s6dI91Rpjn1JHwVTJNBKpkRHtgTCAMimuXZbDcwqjd/tJt0VI0jgBfwtZ3HQ3uVtvLxEkkgqMrHy1u7lpBNMxlPAV52187Yubo5hFlcRK1nQrOTTzvcPsS8cxGZvspvtBdZwCsWkGug5f3MLAzTv7lsC1bJE=
+Received: from SN4PR0201CA0003.namprd02.prod.outlook.com
+ (2603:10b6:803:2b::13) by DM6PR02MB4937.namprd02.prod.outlook.com
+ (2603:10b6:5:11::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1943.22; Tue, 4 Jun
+ 2019 06:22:52 +0000
+Received: from CY1NAM02FT014.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::207) by SN4PR0201CA0003.outlook.office365.com
+ (2603:10b6:803:2b::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1943.16 via Frontend
+ Transport; Tue, 4 Jun 2019 06:22:51 +0000
+Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ CY1NAM02FT014.mail.protection.outlook.com (10.152.75.142) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1943.19
+ via Frontend Transport; Tue, 4 Jun 2019 06:22:51 +0000
+Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1hY2qR-0000AC-0b; Mon, 03 Jun 2019 23:22:51 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1hY2qL-0001Mq-TW; Mon, 03 Jun 2019 23:22:45 -0700
+Received: from [172.30.17.116]
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <michals@xilinx.com>)
+        id 1hY2qG-0001JD-5e; Mon, 03 Jun 2019 23:22:40 -0700
+Subject: Re: [PATCH] i2c: xiic: Add max_read_len quirk
+To:     Robert Hancock <hancock@sedsystems.ca>, linux-i2c@vger.kernel.org
+Cc:     michal.simek@xilinx.com, Shubhrajyoti Datta <shubhraj@xilinx.com>
+References: <1559604825-23517-1-git-send-email-hancock@sedsystems.ca>
+From:   Michal Simek <michal.simek@xilinx.com>
+Message-ID: <abfb762f-115a-7607-f228-923db07f551e@xilinx.com>
+Date:   Tue, 4 Jun 2019 08:22:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20190603055714.7203-1-oohall@gmail.com> <e546c15f-07a9-656a-ce11-4f9a24795d9a@linux.ibm.com>
-In-Reply-To: <e546c15f-07a9-656a-ce11-4f9a24795d9a@linux.ibm.com>
-From:   Oliver <oohall@gmail.com>
-Date:   Tue, 4 Jun 2019 16:14:13 +1000
-Message-ID: <CAOSf1CE5J93rai-VcZJJWkU=N=1=STtV2XqKQh_yLvQpXBKkHw@mail.gmail.com>
-Subject: Re: [PATCH] i2c: fsi: Create busses for all ports
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-i2c@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Eddie James <eajames@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1559604825-23517-1-git-send-email-hancock@sedsystems.ca>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(396003)(346002)(376002)(39860400002)(136003)(2980300002)(199004)(189003)(356004)(81166006)(81156014)(8676002)(305945005)(107886003)(4326008)(36756003)(230700001)(106002)(47776003)(76176011)(2486003)(52146003)(23676004)(36386004)(316002)(65956001)(9786002)(44832011)(65806001)(58126008)(6246003)(486006)(64126003)(2616005)(336012)(446003)(186003)(8936002)(77096007)(478600001)(2906002)(26005)(229853002)(126002)(63266004)(5660300002)(476003)(426003)(31696002)(31686004)(65826007)(11346002)(70586007)(70206006)(50466002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR02MB4937;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;A:1;MX:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bdea28d0-f5e4-42bb-5c53-08d6e8b51279
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(4709080)(1401327)(2017052603328);SRVR:DM6PR02MB4937;
+X-MS-TrafficTypeDiagnostic: DM6PR02MB4937:
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-Microsoft-Antispam-PRVS: <DM6PR02MB49379744CDA8838748AD929EC6150@DM6PR02MB4937.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2150;
+X-Forefront-PRVS: 0058ABBBC7
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Message-Info: o59pmgJLC5Md2C8PA3eUGIEG8rdWL8W6bqr2jG3ldT7EHkm7eSB2kOQG08UCG5SyR8Lc3BGq8gW2inOONgGFGpemFLE6mlMRGHa/OuOePDrWT6gI6PjDPFQ0LwP1LUrtErtIQQ5NVR7sB73R52DIfHj+mgiigv7mDLlA3EvGIYB1vP7ayy/hCxH6eLwCw3U4MyagR0IrBmBJNipsrbTXu+Je+gzs7uXGwws28pCP8VN5yOTtja1EhRpMWw+doACXJpaB6mPDlyeHLIKtxM4/9p7IsLSev10txQWYH0gvowsgYVbkBTRZeTqUgngFzjljgweVN3hRidlOEp2rTwzfxnH5ihKwaFtAg+YwUYpLwfpz1cPJjISqJ2wqcxTA1ewGTqcVNP+eBdy/D3i8AbzZDBQivpPM6VOjxIMdnrdmkTo=
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2019 06:22:51.4498
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bdea28d0-f5e4-42bb-5c53-08d6e8b51279
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4937
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 4, 2019 at 12:15 AM Eddie James <eajames@linux.ibm.com> wrote:
->
->
-> On 6/3/19 12:57 AM, Oliver O'Halloran wrote:
-> > Currently we only create an I2C bus for the ports listed in the
-> > device-tree for that master. There's no real reason for this since
-> > we can discover the number of ports the master supports by looking
-> > at the port_max field of the status register.
-> >
-> > This patch re-works the bus add logic so that we always create buses
-> > for each port, unless the bus is marked as unavailable in the DT. This
-> > is useful since it ensures that all the buses provided by the CFAM I2C
-> > master are accessible to debug tools.
-> >
-> > Cc: Eddie James <eajames@linux.vnet.ibm.com>
-> > Signed-off-by: Oliver O'Halloran <oohall@gmail.com>
-> > ---
-> >   drivers/i2c/busses/i2c-fsi.c | 30 +++++++++++++++++++++++++-----
-> >   1 file changed, 25 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-fsi.c b/drivers/i2c/busses/i2c-fsi.c
-> > index 1e2be2219a60..59a76c6e31ad 100644
-> > --- a/drivers/i2c/busses/i2c-fsi.c
-> > +++ b/drivers/i2c/busses/i2c-fsi.c
-> > @@ -658,13 +658,27 @@ static const struct i2c_algorithm fsi_i2c_algorithm = {
-> >       .functionality = fsi_i2c_functionality,
-> >   };
-> >
++Shubhrajyoti,
 
-> > +static device_node *fsi_i2c_find_port_of_node(struct device_node *master,
-> > +                                           int port)
+On 04. 06. 19 1:33, Robert Hancock wrote:
+> This driver does not support reading more than 255 bytes at once because
+> the register for storing the number of bytes to read is only 8 bits. Add
+> a max_read_len quirk to enforce this.
 
-Turns out I had a pile of compile fixes staged but not committed so
-this patch is totally broken. Oops.
+How did you find it out?
+Any particular issue you have had that you were looking for a solution?
 
-> > +{
-> > +     struct device_node *np;
-> > +
-> > +     for_each_child_of_node(fsi, np) {
-> > +             rc = of_property_read_u32(np, "reg", &port_no);
-> > +             if (!rc && port_no == port)
-> > +                     return np;
-> > +     }
-> > +
-> > +     return NULL;
-> > +}
-> > +
-> >   static int fsi_i2c_probe(struct device *dev)
-> >   {
-> >       struct fsi_i2c_master *i2c;
-> >       struct fsi_i2c_port *port;
-> >       struct device_node *np;
-> > +     u32 port_no, ports, stat;
-> >       int rc;
-> > -     u32 port_no;
-> >
-> >       i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
-> >       if (!i2c)
-> > @@ -678,10 +692,16 @@ static int fsi_i2c_probe(struct device *dev)
-> >       if (rc)
-> >               return rc;
-> >
-> > -     /* Add adapter for each i2c port of the master. */
-> > -     for_each_available_child_of_node(dev->of_node, np) {
-> > -             rc = of_property_read_u32(np, "reg", &port_no);
-> > -             if (rc || port_no > USHRT_MAX)
-> > +     rc = fsi_i2c_read_reg(i2c->fsi, I2C_FSI_STAT, &state);
-> > +     if (rc)
-> > +             return rc;
-> > +
-> > +     ports = FIELD_GET(I2C_STAT_MAX_PORT, stat);
-> > +     dev_dbg(dev, "I2C master has %d ports\n", ports);
->
->
-> Thanks for the patch Oliver. This looks great except some older CFAM
-> types don't report the max port number, in which case this would not
-> probe up any ports. So we probably need a fallback to dts if the max
-> ports is 0.
+I think there is more things behind which should be described in commit
+message.
 
-Hmm, The oldest CFAM spec I could find was v1.2 which is from the p6
-era and it includes the MAX_PORT field. When I was checking the spec I
-noticed that I mis-interpreted the meaning of MAX_PORT. It's actually
-the largest value you can write into the port field of the mode
-register rather than the number of ports the master supports. So zero
-is a valid value for MAX_PORT that you would see if the master only
-has one port.
+Thanks,
+Michal
 
-Do you know if the old masters only had one port? If not, do you know
-what version (from the ext status reg) of the master doesn't support
-the max_port field?
+> 
+> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+> ---
+>  drivers/i2c/busses/i2c-xiic.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+> index 0fea7c5..37b3b93 100644
+> --- a/drivers/i2c/busses/i2c-xiic.c
+> +++ b/drivers/i2c/busses/i2c-xiic.c
+> @@ -709,11 +709,16 @@ static u32 xiic_func(struct i2c_adapter *adap)
+>  	.functionality = xiic_func,
+>  };
+>  
+> +static const struct i2c_adapter_quirks xiic_quirks = {
+> +	.max_read_len = 255,
+> +};
+> +
+>  static const struct i2c_adapter xiic_adapter = {
+>  	.owner = THIS_MODULE,
+>  	.name = DRIVER_NAME,
+>  	.class = I2C_CLASS_DEPRECATED,
+>  	.algo = &xiic_algorithm,
+> +	.quirks = &xiic_quirks,
+>  };
+>  
+>  
+> 
 
-
-> Thanks,
->
-> Eddie
->
->
-> > +
-> > +     for (port_no = 0; port_no < ports; port_no++) {
-> > +             np = fsi_i2c_find_port_of_node(dev.of_node, port_no);
-> > +             if (np && !of_device_is_available(np))
-> >                       continue;
-> >
-> >               port = kzalloc(sizeof(*port), GFP_KERNEL);
