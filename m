@@ -2,41 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0392234E47
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 19:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14AB34E88
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2019 19:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727716AbfFDREI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Jun 2019 13:04:08 -0400
-Received: from mga09.intel.com ([134.134.136.24]:27906 "EHLO mga09.intel.com"
+        id S1725929AbfFDRQS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Jun 2019 13:16:18 -0400
+Received: from mga17.intel.com ([192.55.52.151]:2047 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726532AbfFDREH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 4 Jun 2019 13:04:07 -0400
-X-Amp-Result: UNSCANNABLE
+        id S1725267AbfFDRQS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 4 Jun 2019 13:16:18 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jun 2019 10:04:07 -0700
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jun 2019 10:16:17 -0700
 X-ExtLoop1: 1
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by orsmga002.jf.intel.com with ESMTP; 04 Jun 2019 10:04:04 -0700
+  by orsmga006.jf.intel.com with ESMTP; 04 Jun 2019 10:16:11 -0700
 Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hYCqy-0001Dt-19; Tue, 04 Jun 2019 20:04:04 +0300
-Date:   Tue, 4 Jun 2019 20:04:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     wsa@the-dreams.de, mika.westerberg@linux.intel.com,
-        jarkko.nikula@linux.intel.com, linux-i2c@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benjamin.tissoires@redhat.com, jbroadus@gmail.com,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH v3 4/6] i2c: core: Move ACPI IRQ handling to probe time
-Message-ID: <20190604170404.GR9224@smile.fi.intel.com>
-References: <20190528142900.24147-1-ckeepax@opensource.cirrus.com>
- <20190528142900.24147-4-ckeepax@opensource.cirrus.com>
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1hYD2h-0001Jc-6c; Tue, 04 Jun 2019 20:16:11 +0300
+Date:   Tue, 4 Jun 2019 20:16:11 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Eduardo Valentin <eduval@amazon.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Haiyue Wang <haiyue.wang@linux.intel.com>,
+        jarkko.nikula@linux.intel.com, brendanhiggins@google.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] i2c: slave-mqueue: add a slave backend to receive
+ and queue messages
+Message-ID: <20190604171611.GS9224@smile.fi.intel.com>
+References: <20190531043347.4196-1-eduval@amazon.com>
+ <20190531043347.4196-3-eduval@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190528142900.24147-4-ckeepax@opensource.cirrus.com>
+In-Reply-To: <20190531043347.4196-3-eduval@amazon.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
@@ -44,109 +47,90 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, May 28, 2019 at 03:28:58PM +0100, Charles Keepax wrote:
-> Bring the ACPI path in sync with the device tree path and handle all the
-> IRQ fetching at probe time. This leaves the only IRQ handling at device
-> registration time being that which is passed directly through the board
-> info as either a resource or an actual IRQ number.
+On Thu, May 30, 2019 at 09:33:46PM -0700, Eduardo Valentin wrote:
+> From: Haiyue Wang <haiyue.wang@linux.intel.com>
 > 
+> Some protocols over I2C are designed for bi-directional transferring
+> messages by using I2C Master Write protocol. Like the MCTP (Management
+> Component Transport Protocol) and IPMB (Intelligent Platform Management
+> Bus), they both require that the userspace can receive messages from
+> I2C dirvers under slave mode.
+> 
+> This new slave mqueue backend is used to receive and queue messages, it
+> will exposes these messages to userspace by sysfs bin file.
+> 
+> Note: DT interface and a couple of minor fixes here and there
+> by Eduardo, so I kept the original authorship here.
 
-It seems my comments weren't addressed by one or another reason.
-This one I would rather to split with exporting function as a separate patch.
+> +#define MQ_MSGBUF_SIZE		CONFIG_I2C_SLAVE_MQUEUE_MESSAGE_SIZE
+> +#define MQ_QUEUE_SIZE		CONFIG_I2C_SLAVE_MQUEUE_QUEUE_SIZE
 
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> ---
-> 
-> Changes since v2:
->  - Add kernel doc for i2c_acpi_get_irq
-> 
-> Thanks,
-> Charles
-> 
->  drivers/i2c/i2c-core-acpi.c | 16 ++++++++++------
->  drivers/i2c/i2c-core-base.c |  5 ++++-
->  drivers/i2c/i2c-core.h      |  7 +++++++
->  3 files changed, 21 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> index c107f260e252f..62a938c17cbd2 100644
-> --- a/drivers/i2c/i2c-core-acpi.c
-> +++ b/drivers/i2c/i2c-core-acpi.c
-> @@ -148,8 +148,17 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
->  	return 1; /* No need to add resource to the list */
->  }
->  
-> -static int i2c_acpi_get_irq(struct acpi_device *adev)
-> +/**
-> + * i2c_acpi_get_irq - get device IRQ number from ACPI
-> + * @client: Pointer to the I2C client device
-> + *
-> + * Find the IRQ number used by a specific client device.
-> + *
-> + * Return: The IRQ number or an error code.
-> + */
-> +int i2c_acpi_get_irq(struct i2c_client *client)
->  {
-> +	struct acpi_device *adev = ACPI_COMPANION(&client->adapter->dev);
->  	struct list_head resource_list;
->  	int irq = -ENOENT;
->  	int ret;
-> @@ -201,11 +210,6 @@ static int i2c_acpi_get_info(struct acpi_device *adev,
->  	if (adapter_handle)
->  		*adapter_handle = lookup.adapter_handle;
->  
-> -	/* Then fill IRQ number if any */
-> -	ret = i2c_acpi_get_irq(adev);
-> -	if (ret > 0)
-> -		info->irq = ret;
-> -
->  	acpi_set_modalias(adev, dev_name(&adev->dev), info->type,
->  			  sizeof(info->type));
->  
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 84bf11b25a120..b6b009bfe842b 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -335,7 +335,10 @@ static int i2c_device_probe(struct device *dev)
->  			if (irq == -EINVAL || irq == -ENODATA)
->  				irq = of_irq_get(dev->of_node, 0);
->  		} else if (ACPI_COMPANION(dev)) {
-> -			irq = acpi_dev_gpio_irq_get(ACPI_COMPANION(dev), 0);
-> +			irq = i2c_acpi_get_irq(client);
-> +
-> +			if (irq == -ENOENT)
-> +				irq = acpi_dev_gpio_irq_get(ACPI_COMPANION(dev), 0);
->  		}
->  		if (irq == -EPROBE_DEFER)
->  			return irq;
-> diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
-> index 8f3a08dc73a25..15c1411f35f07 100644
-> --- a/drivers/i2c/i2c-core.h
-> +++ b/drivers/i2c/i2c-core.h
-> @@ -72,6 +72,8 @@ const struct acpi_device_id *
->  i2c_acpi_match_device(const struct acpi_device_id *matches,
->  		      struct i2c_client *client);
->  void i2c_acpi_register_devices(struct i2c_adapter *adap);
-> +
-> +int i2c_acpi_get_irq(struct i2c_client *client);
->  #else /* CONFIG_ACPI */
->  static inline void i2c_acpi_register_devices(struct i2c_adapter *adap) { }
->  static inline const struct acpi_device_id *
-> @@ -80,6 +82,11 @@ i2c_acpi_match_device(const struct acpi_device_id *matches,
->  {
->  	return NULL;
->  }
-> +
-> +static inline int i2c_acpi_get_irq(struct i2c_client *client)
+> +#define MQ_QUEUE_NEXT(x)	(((x) + 1) & (MQ_QUEUE_SIZE - 1))
+
+Also possible ((x + 1) % ..._SIZE)
+
+> +	mq = dev_get_drvdata(container_of(kobj, struct device, kobj));
+
+kobj_to_dev()
+
+> +static int i2c_slave_mqueue_probe(struct i2c_client *client,
+> +				  const struct i2c_device_id *id)
 > +{
+> +	struct device *dev = &client->dev;
+> +	struct mq_queue *mq;
+> +	int ret, i;
+> +	void *buf;
+> +
+> +	mq = devm_kzalloc(dev, sizeof(*mq), GFP_KERNEL);
+> +	if (!mq)
+> +		return -ENOMEM;
+> +
+
+> +	BUILD_BUG_ON(!is_power_of_2(MQ_QUEUE_SIZE));
+
+Perhaps start function with this kind of assertions?
+
+> +
+> +	buf = devm_kmalloc_array(dev, MQ_QUEUE_SIZE, MQ_MSGBUF_SIZE,
+> +				 GFP_KERNEL);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < MQ_QUEUE_SIZE; i++)
+> +		mq->queue[i].buf = buf + i * MQ_MSGBUF_SIZE;
+
+
+Just wondering if kfifo API can bring an advantage here?
+
 > +	return 0;
 > +}
->  #endif /* CONFIG_ACPI */
->  extern struct notifier_block i2c_acpi_notifier;
->  
-> -- 
-> 2.11.0
-> 
+
+> +static const struct of_device_id i2c_slave_mqueue_of_match[] = {
+> +	{
+> +		.compatible = "i2c-slave-mqueue",
+> +	},
+
+> +	{ },
+
+No need for comma here.
+
+> +};
+
+> +
+> +static struct i2c_driver i2c_slave_mqueue_driver = {
+> +	.driver = {
+> +		.name	= "i2c-slave-mqueue",
+
+> +		.of_match_table = of_match_ptr(i2c_slave_mqueue_of_match),
+
+Wouldn't compiler warn you due to unused data?
+Perhaps drop of_match_ptr() for good...
+
+> +	},
+> +	.probe		= i2c_slave_mqueue_probe,
+> +	.remove		= i2c_slave_mqueue_remove,
+> +	.id_table	= i2c_slave_mqueue_id,
+> +};
 
 -- 
 With Best Regards,
