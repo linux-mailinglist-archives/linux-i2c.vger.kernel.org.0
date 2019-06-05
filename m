@@ -2,69 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF58935F07
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 16:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8472535F16
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 16:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728007AbfFEOUE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jun 2019 10:20:04 -0400
-Received: from sauhun.de ([88.99.104.3]:54932 "EHLO pokefinder.org"
+        id S1728254AbfFEOVw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jun 2019 10:21:52 -0400
+Received: from sauhun.de ([88.99.104.3]:54978 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727893AbfFEOUE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 5 Jun 2019 10:20:04 -0400
+        id S1728211AbfFEOVv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 5 Jun 2019 10:21:51 -0400
 Received: from localhost (p5486CB35.dip0.t-ipconnect.de [84.134.203.53])
-        by pokefinder.org (Postfix) with ESMTPSA id 291123E43B4;
-        Wed,  5 Jun 2019 16:20:01 +0200 (CEST)
-Date:   Wed, 5 Jun 2019 16:20:00 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 25C0F3E43B4;
+        Wed,  5 Jun 2019 16:21:50 +0200 (CEST)
+Date:   Wed, 5 Jun 2019 16:21:49 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>, kernel@collabora.com,
-        dtor@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        alsa-devel@alsa-project.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-iio@vger.kernel.org,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        linux-input@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        linux-pm@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Evan Green <evgreen@chromium.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Cheng-Yi Chiang <cychiang@chromium.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jiri Kosina <jikos@kernel.org>
-Subject: Re: [PATCH 06/10] mfd / platform: cros_ec: Reorganize platform and
- mfd includes
-Message-ID: <20190605142000.GC962@kunai>
-References: <20190604152019.16100-1-enric.balletbo@collabora.com>
- <20190604152019.16100-7-enric.balletbo@collabora.com>
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     Robert Hancock <hancock@sedsystems.ca>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: xiic: Add max_read_len quirk
+Message-ID: <20190605142149.GD962@kunai>
+References: <1559685351-25249-1-git-send-email-hancock@sedsystems.ca>
+ <f1a679b1-71e7-c260-0f38-c617d906b7a2@xilinx.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Clx92ZfkiYIKRjnr"
+        protocol="application/pgp-signature"; boundary="BI5RvnYi6R4T2M87"
 Content-Disposition: inline
-In-Reply-To: <20190604152019.16100-7-enric.balletbo@collabora.com>
+In-Reply-To: <f1a679b1-71e7-c260-0f38-c617d906b7a2@xilinx.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -72,63 +34,86 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Clx92ZfkiYIKRjnr
+--BI5RvnYi6R4T2M87
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 04, 2019 at 05:20:15PM +0200, Enric Balletbo i Serra wrote:
-> There is a bit of mess between cros-ec mfd includes and platform
-> includes. For example, we have a linux/mfd/cros_ec.h include that
-> exports the interface implemented in platform/chrome/cros_ec_proto.c. Or
-> we have a linux/mfd/cros_ec_commands.h file that is non related to the
-> multifunction device (in the sense that is not exporting any function of
-> the mfd device). This causes crossed includes between mfd and
-> platform/chrome subsystems and makes the code difficult to read, apart
-> from creating 'curious' situations where a platform/chrome driver includes
-> a linux/mfd/cros_ec.h file just to get the exported functions that are
-> implemented in another platform/chrome driver.
->=20
-> In order to have a better separation on what the cros-ec multifunction
-> driver does and what the cros-ec core provides move and rework the
-> affected includes doing:
->=20
->  - Move cros_ec_commands.h to include/linux/platform_data/cros_ec_command=
-s.h
->  - Get rid of the parts that are implemented in the platform/chrome/cros_=
-ec_proto.c
->    driver from include/linux/mfd/cros_ec.h to a new file
->    include/linux/platform_data/cros_ec_proto.h
->  - Update all the drivers with the new includes, so
->    - Drivers that only need to know about the protocol include
->      - linux/platform_data/cros_ec_proto.h
->      - linux/platform_data/cros_ec_commands.h
->    - Drivers that need to know about the cros-ec mfd device also include
->      - linux/mfd/cros_ec.h
->=20
-> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+On Wed, Jun 05, 2019 at 04:18:49PM +0200, Michal Simek wrote:
+> On 04. 06. 19 23:55, Robert Hancock wrote:
+> > This driver does not support reading more than 255 bytes at once because
+> > the register for storing the number of bytes to read is only 8 bits. Add
+> > a max_read_len quirk to enforce this.
+> >=20
+> > This was found when using this driver with the SFP driver, which was
+> > previously reading all 256 bytes in the SFP EEPROM in one transaction.
+> > This caused a bunch of hard-to-debug errors in the xiic driver since the
+> > driver/logic was treating the number of bytes to read as zero.
+> > Rejecting transactions that aren't supported at least allows the problem
+> > to be diagnosed more easily.
+> >=20
+> > Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
 
-Acked-by: Wolfram Sang <wsa@the-dreams.de> (for the I2C part)
+Thanks for the patch!
+
+> > ---
+> >=20
+> > Changes since v1: Added more rationale in description.
+> >=20
+> >  drivers/i2c/busses/i2c-xiic.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >=20
+> > diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xii=
+c.c
+> > index 0fea7c5..37b3b93 100644
+> > --- a/drivers/i2c/busses/i2c-xiic.c
+> > +++ b/drivers/i2c/busses/i2c-xiic.c
+> > @@ -709,11 +709,16 @@ static u32 xiic_func(struct i2c_adapter *adap)
+> >  	.functionality =3D xiic_func,
+> >  };
+> > =20
+> > +static const struct i2c_adapter_quirks xiic_quirks =3D {
+> > +	.max_read_len =3D 255,
+> > +};
+> > +
+> >  static const struct i2c_adapter xiic_adapter =3D {
+> >  	.owner =3D THIS_MODULE,
+> >  	.name =3D DRIVER_NAME,
+> >  	.class =3D I2C_CLASS_DEPRECATED,
+> >  	.algo =3D &xiic_algorithm,
+> > +	.quirks =3D &xiic_quirks,
+> >  };
+> > =20
+>=20
+> Reviewed-by: Michal Simek <michal.simek@xilinx.com>
+>=20
+> Nit: The same limitation is there for write. Maybe worth to also set it
+> up. Anyway this can be done separately.
+
+I consider this stable material, so I'd prefer to have both fixed in one
+patch, if possible.
+
+Robert, are you willing to add this?
 
 
---Clx92ZfkiYIKRjnr
+--BI5RvnYi6R4T2M87
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz3z5AACgkQFA3kzBSg
-KbYuGA/9GcL4++C/ViixlrJ+2KnwVIZhutol9fcA8YKEeEpGQq42AkU9zJV8pX3y
-U6sLvo3bHeDjA98mwO+aWKCaZIp1W5vZrKdQNqUZ35xvEaIgjhZ2dATu2+ontUAI
-Yv9koHktSt4oTbZlAPmcIwV/vLrhmJgr0FA1B6pS4qFbccYh+ePsTKvYpsjaguox
-vwDsmzJkZJ6AjW51Nx0dvMGJuUX6RLnv14etbz6P1I47cPKG9lYyVOsDiUIHsOPG
-JmhUiCaertI9rrsjaYNQIGrzGbkAozoO0c5klJC5BlnfBvqEfwjgBh5+ccqH1HXL
-WuegitNsfkAX3Y5nSZUsGoC1wtg+pqmLWsNs2eTc1uQAxYOwlleFOiMKXuhUIG2U
-0BMFoJ6/AYCuMkvIPyDdl8UWMjXW8Odreu2Y0h1rF6SuJ+mmI8TfhgfbTG/s1uX7
-qs9bPWwmi1EOJ1AoNv3ouLrC2PT6ES7Kt5mnvi4byXFcwkdq8EKcTfLVpy0xz6l/
-tDTHCxNLCrku2WX32buEW+mHZfCpbNRfcU7/VlTNU8o9i4QYy4WeL/SgaGLDVZvM
-zDFRRhXw2U+mtxRI6yAI/bl0Tl8VJG7cqCHeGuKGeA30siz75gSi6b2n+rCTnkba
-dfCggQuvByFYBOqqO4mnuvTflAYInnad7IyBnbGhS7p7NEkPbgE=
-=Nrms
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz3z/0ACgkQFA3kzBSg
+Kbbkog/7BFvavz5t1VuEYMuzQI4v5+GDIRrWznv6S62Wjx9iTO1ubEyyRu33A+CC
+VIOpYUIjMkYSEKEwljYklRH9F9uvVvWsDYwXm3zxwrM8wR0dwu1xxMyj08w86Smo
+FpBAqn6kqXg4yHm2lr66m5NBAmtUnZmq67VcxhEAwGCXXwDYuMCok3hoQxEaWC53
+JrZc6KIOZ9jiCtinQgleXUiKGfEyPvaO7VwG2MjWOWpiP2qhvugjZu7aJ3jGD2d8
+rtIKu6bx/Acm3TpVsliZxsAJtsK1o5wt1jfGs+fCNSVJfFnpWKkeMr2V+1ofBg88
+adIsKEDGHbQ+k3FdusCzdLviT7m71E0e9iYKtOw8k1Or1uuSkF3q8msIQbnIgOy7
+BOliUphtOrhORSYgukArVS5IJAk13jR8OyGwTbct6DtvxmLOcXtk3G6615pIIr+k
+uLYFOu9jsR4eJ5xDcOv7o/zh5m/Melb7xsL7g27hgu30LFgyzHbCXoOORujRCK3k
+FLMiiwF0+cZuNg+U3qNCU4JT+FTa+0x+bJa+HK+ynj0ChzuazGDUErxBKHo2yDze
+eRtPeBPwtiR/Qh9sYsjU8nr+L0uOAtwMbbDO1Su/WFaqa87cMIVCB/pS5jRMLggh
+8vX9O12DfcLAqx0yIS1+Dq996ErXovAaWPw2DOre3XlN/Al6DN0=
+=IqM3
 -----END PGP SIGNATURE-----
 
---Clx92ZfkiYIKRjnr--
+--BI5RvnYi6R4T2M87--
