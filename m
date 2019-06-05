@@ -2,145 +2,133 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E468D35F05
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 16:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF58935F07
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 16:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728181AbfFEOTF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jun 2019 10:19:05 -0400
-Received: from mail-eopbgr770077.outbound.protection.outlook.com ([40.107.77.77]:52450
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728127AbfFEOTF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 5 Jun 2019 10:19:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector1-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PfJQTLP8DF/gl6bBIV0D9ozEbkU4mvSVbKau+uAereQ=;
- b=KKKTiDMO33eaKPHC47PMrYoYuyNJSJRgN0k/M9KsaQqAYzyBiNGvclHdLWXXkpSKFljB6yZyzDlDoHHnGNzJJq1iI8PwUxy9yA4uLLQ/dNggDJwREePbG7V9IPclfkDoYnpmI9Pd5OzB7FRD47IfFKx0HNCBh8LUbjjAsZCxk7Q=
-Received: from BN6PR02CA0044.namprd02.prod.outlook.com (2603:10b6:404:5f::30)
- by CY4PR02MB2677.namprd02.prod.outlook.com (2603:10b6:903:11a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1943.22; Wed, 5 Jun
- 2019 14:19:02 +0000
-Received: from BL2NAM02FT034.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e46::201) by BN6PR02CA0044.outlook.office365.com
- (2603:10b6:404:5f::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1965.14 via Frontend
- Transport; Wed, 5 Jun 2019 14:19:02 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; sedsystems.ca; dkim=none (message not signed)
- header.d=none;sedsystems.ca; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- BL2NAM02FT034.mail.protection.outlook.com (10.152.77.161) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1965.12
- via Frontend Transport; Wed, 5 Jun 2019 14:19:01 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1hYWkm-0001lD-TH; Wed, 05 Jun 2019 07:19:00 -0700
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1hYWkh-00073h-Px; Wed, 05 Jun 2019 07:18:55 -0700
-Received: from xsj-pvapsmtp01 (smtp2.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id x55EIpek027850;
-        Wed, 5 Jun 2019 07:18:51 -0700
-Received: from [172.30.17.116]
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <michals@xilinx.com>)
-        id 1hYWkd-000735-Af; Wed, 05 Jun 2019 07:18:51 -0700
-Subject: Re: [PATCH v2] i2c: xiic: Add max_read_len quirk
-To:     Robert Hancock <hancock@sedsystems.ca>, linux-i2c@vger.kernel.org
-Cc:     michal.simek@xilinx.com
-References: <1559685351-25249-1-git-send-email-hancock@sedsystems.ca>
-From:   Michal Simek <michal.simek@xilinx.com>
-Message-ID: <f1a679b1-71e7-c260-0f38-c617d906b7a2@xilinx.com>
-Date:   Wed, 5 Jun 2019 16:18:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1728007AbfFEOUE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jun 2019 10:20:04 -0400
+Received: from sauhun.de ([88.99.104.3]:54932 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727893AbfFEOUE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 5 Jun 2019 10:20:04 -0400
+Received: from localhost (p5486CB35.dip0.t-ipconnect.de [84.134.203.53])
+        by pokefinder.org (Postfix) with ESMTPSA id 291123E43B4;
+        Wed,  5 Jun 2019 16:20:01 +0200 (CEST)
+Date:   Wed, 5 Jun 2019 16:20:00 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>, kernel@collabora.com,
+        dtor@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        alsa-devel@alsa-project.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-iio@vger.kernel.org,
+        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        linux-input@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        linux-pm@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Evan Green <evgreen@chromium.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Mark Brown <broonie@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jiri Kosina <jikos@kernel.org>
+Subject: Re: [PATCH 06/10] mfd / platform: cros_ec: Reorganize platform and
+ mfd includes
+Message-ID: <20190605142000.GC962@kunai>
+References: <20190604152019.16100-1-enric.balletbo@collabora.com>
+ <20190604152019.16100-7-enric.balletbo@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <1559685351-25249-1-git-send-email-hancock@sedsystems.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(346002)(39860400002)(136003)(376002)(396003)(2980300002)(189003)(199004)(229853002)(64126003)(31686004)(356004)(50466002)(107886003)(2906002)(65826007)(63266004)(6246003)(230700001)(4326008)(47776003)(76176011)(65806001)(336012)(126002)(486006)(65956001)(58126008)(9786002)(52146003)(44832011)(316002)(23676004)(36756003)(476003)(5660300002)(31696002)(2486003)(106002)(186003)(8676002)(70206006)(11346002)(446003)(26005)(81156014)(81166006)(426003)(70586007)(478600001)(8936002)(2616005)(77096007)(305945005)(36386004);DIR:OUT;SFP:1101;SCL:1;SRVR:CY4PR02MB2677;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1cd7453b-235b-4225-faa2-08d6e9c0c1ef
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(4709080)(1401327)(2017052603328);SRVR:CY4PR02MB2677;
-X-MS-TrafficTypeDiagnostic: CY4PR02MB2677:
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-Microsoft-Antispam-PRVS: <CY4PR02MB2677D7CF002570EEFC86672FC6160@CY4PR02MB2677.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-Forefront-PRVS: 00594E8DBA
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: zwAE7rH/f18kpn/nPWNsq8DdereNqvB1n7CBiNJeg4S3wYjLkJnR9jV3fS+2syFaIsfJjbtEwPe9J9GpIcdZTU9r238t0H0EeIZLLSpFN1kt3SJEGUnGCnXV8yO5ZfLxk02ZK0VR4w7/6aio02WBZfskEBzfuUBdvjcGxMGkRbWWuw7kt4u/B0msfMCp1045P4pTxpyGZfs3EPufLCzhVJ5vXwzvMHbCnX+UHVCRxcu+c7UmO8Vz1LPi6iEPpfE190HGacwWVBeaarIqbizOBi9idM3rKhgV6qFHS6AeLODWQTc9FRoKv87GrHtp+d4Rm9T+yJk+qiZB57ZMeFx9Ws3UVtYcrt2yGv+IdmN/K5KWA8JXELMlAbl9l65DrniNchohWn/GnNm9zl1xSq+fico41LXIeZ4a+/1s+S4OR8Y=
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2019 14:19:01.4515
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cd7453b-235b-4225-faa2-08d6e9c0c1ef
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2677
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Clx92ZfkiYIKRjnr"
+Content-Disposition: inline
+In-Reply-To: <20190604152019.16100-7-enric.balletbo@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 04. 06. 19 23:55, Robert Hancock wrote:
-> This driver does not support reading more than 255 bytes at once because
-> the register for storing the number of bytes to read is only 8 bits. Add
-> a max_read_len quirk to enforce this.
-> 
-> This was found when using this driver with the SFP driver, which was
-> previously reading all 256 bytes in the SFP EEPROM in one transaction.
-> This caused a bunch of hard-to-debug errors in the xiic driver since the
-> driver/logic was treating the number of bytes to read as zero.
-> Rejecting transactions that aren't supported at least allows the problem
-> to be diagnosed more easily.
-> 
-> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
-> ---
-> 
-> Changes since v1: Added more rationale in description.
-> 
->  drivers/i2c/busses/i2c-xiic.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-> index 0fea7c5..37b3b93 100644
-> --- a/drivers/i2c/busses/i2c-xiic.c
-> +++ b/drivers/i2c/busses/i2c-xiic.c
-> @@ -709,11 +709,16 @@ static u32 xiic_func(struct i2c_adapter *adap)
->  	.functionality = xiic_func,
->  };
->  
-> +static const struct i2c_adapter_quirks xiic_quirks = {
-> +	.max_read_len = 255,
-> +};
-> +
->  static const struct i2c_adapter xiic_adapter = {
->  	.owner = THIS_MODULE,
->  	.name = DRIVER_NAME,
->  	.class = I2C_CLASS_DEPRECATED,
->  	.algo = &xiic_algorithm,
-> +	.quirks = &xiic_quirks,
->  };
->  
 
-Reviewed-by: Michal Simek <michal.simek@xilinx.com>
+--Clx92ZfkiYIKRjnr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Nit: The same limitation is there for write. Maybe worth to also set it
-up. Anyway this can be done separately.
+On Tue, Jun 04, 2019 at 05:20:15PM +0200, Enric Balletbo i Serra wrote:
+> There is a bit of mess between cros-ec mfd includes and platform
+> includes. For example, we have a linux/mfd/cros_ec.h include that
+> exports the interface implemented in platform/chrome/cros_ec_proto.c. Or
+> we have a linux/mfd/cros_ec_commands.h file that is non related to the
+> multifunction device (in the sense that is not exporting any function of
+> the mfd device). This causes crossed includes between mfd and
+> platform/chrome subsystems and makes the code difficult to read, apart
+> from creating 'curious' situations where a platform/chrome driver includes
+> a linux/mfd/cros_ec.h file just to get the exported functions that are
+> implemented in another platform/chrome driver.
+>=20
+> In order to have a better separation on what the cros-ec multifunction
+> driver does and what the cros-ec core provides move and rework the
+> affected includes doing:
+>=20
+>  - Move cros_ec_commands.h to include/linux/platform_data/cros_ec_command=
+s.h
+>  - Get rid of the parts that are implemented in the platform/chrome/cros_=
+ec_proto.c
+>    driver from include/linux/mfd/cros_ec.h to a new file
+>    include/linux/platform_data/cros_ec_proto.h
+>  - Update all the drivers with the new includes, so
+>    - Drivers that only need to know about the protocol include
+>      - linux/platform_data/cros_ec_proto.h
+>      - linux/platform_data/cros_ec_commands.h
+>    - Drivers that need to know about the cros-ec mfd device also include
+>      - linux/mfd/cros_ec.h
+>=20
+> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 
-Thanks,
-Michal
+Acked-by: Wolfram Sang <wsa@the-dreams.de> (for the I2C part)
+
+
+--Clx92ZfkiYIKRjnr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz3z5AACgkQFA3kzBSg
+KbYuGA/9GcL4++C/ViixlrJ+2KnwVIZhutol9fcA8YKEeEpGQq42AkU9zJV8pX3y
+U6sLvo3bHeDjA98mwO+aWKCaZIp1W5vZrKdQNqUZ35xvEaIgjhZ2dATu2+ontUAI
+Yv9koHktSt4oTbZlAPmcIwV/vLrhmJgr0FA1B6pS4qFbccYh+ePsTKvYpsjaguox
+vwDsmzJkZJ6AjW51Nx0dvMGJuUX6RLnv14etbz6P1I47cPKG9lYyVOsDiUIHsOPG
+JmhUiCaertI9rrsjaYNQIGrzGbkAozoO0c5klJC5BlnfBvqEfwjgBh5+ccqH1HXL
+WuegitNsfkAX3Y5nSZUsGoC1wtg+pqmLWsNs2eTc1uQAxYOwlleFOiMKXuhUIG2U
+0BMFoJ6/AYCuMkvIPyDdl8UWMjXW8Odreu2Y0h1rF6SuJ+mmI8TfhgfbTG/s1uX7
+qs9bPWwmi1EOJ1AoNv3ouLrC2PT6ES7Kt5mnvi4byXFcwkdq8EKcTfLVpy0xz6l/
+tDTHCxNLCrku2WX32buEW+mHZfCpbNRfcU7/VlTNU8o9i4QYy4WeL/SgaGLDVZvM
+zDFRRhXw2U+mtxRI6yAI/bl0Tl8VJG7cqCHeGuKGeA30siz75gSi6b2n+rCTnkba
+dfCggQuvByFYBOqqO4mnuvTflAYInnad7IyBnbGhS7p7NEkPbgE=
+=Nrms
+-----END PGP SIGNATURE-----
+
+--Clx92ZfkiYIKRjnr--
