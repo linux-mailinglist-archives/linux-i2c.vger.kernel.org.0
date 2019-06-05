@@ -2,168 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B893589F
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 10:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A2F358DC
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 10:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726667AbfFEIfD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jun 2019 04:35:03 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:39082 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726537AbfFEIe6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jun 2019 04:34:58 -0400
-Received: by mail-wr1-f67.google.com with SMTP id x4so18534842wrt.6
-        for <linux-i2c@vger.kernel.org>; Wed, 05 Jun 2019 01:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=8g/yZPWG+i1WVLfgMfiKNG8jFuss04L+NM2N8hvdwuU=;
-        b=duvNpDjeQMy8g7ArkYr8qMf4P0vqAOFHxA5m7OA3dSPpU8Whx3HYz22J+tcP5H7fOz
-         1ZznSkXdDIq1nnKilrD3TGhV6t0zrEzaOq/RDvyjaAgxf+XUcwJDO2lqoZatoK/3+uEv
-         E1ftDeSUC01zpeAkA7vyZLU2On3x8YyfiVJahVLLzeMbOahAR0cqVBbKFDa/Ugz1wHB3
-         UMHBitPjZbAQiG/2VorRB9SUdv0NGaqay8xKb1H1u2QaGjKA/kIoGylOE3Bfimw5OUx+
-         2Ymtzqpo1AFcxBExsqvimaZHp7e8G0QiKtMS1YsnBb+6XhWmqv39jUJRcnuuHgtAq/Ek
-         56Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=8g/yZPWG+i1WVLfgMfiKNG8jFuss04L+NM2N8hvdwuU=;
-        b=uNFgeadontEItrXQB8QuJmg6mbcDlZSoNHryYkTLBVMW4r14sx1x3Nfr9NEeK/fnJS
-         QlOswwWK1+iuZvQCY8yQMveDIpnowJAUoKNS0DpT8yuvJW5odVTMOiCeEInEg1Zg6Rp8
-         aiS1OxUVe4+hwL0vjLvFzjIw8khLLG5r/7h+/lRL6+ICrDwgSwrQrdmkFao6O7v4ieVI
-         qeh2J7wn+18Us1m50NjbxEzxTS+vMm/wAnLOTZ0hiKkIgiRB1NFI/l8pclNSi4r7h/de
-         N1yPg/LDlCcgtB4S34xKJJalEAhdm25aFSCj2U5m4My63vTfCNffe5Noc8A7cp2oDeo8
-         zwEg==
-X-Gm-Message-State: APjAAAWh/YaIXBnqLmn8G+37irHJn+JM9wYQ/lPEQvpKHwbncSx+N9NP
-        tXhMdrkGOwJUYW4eNxMMBqRD6w==
-X-Google-Smtp-Source: APXvYqzBuf1OKbs5PAYFvIiTv6Ji1rE3PaXYvKbhChwv5f9DahKjEOxWETTF4saSPngpiLUNQ3p1Qw==
-X-Received: by 2002:a5d:4e46:: with SMTP id r6mr8473126wrt.290.1559723696792;
-        Wed, 05 Jun 2019 01:34:56 -0700 (PDT)
-Received: from dell ([2.27.167.43])
-        by smtp.gmail.com with ESMTPSA id 128sm2231857wme.12.2019.06.05.01.34.55
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 05 Jun 2019 01:34:56 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 09:34:54 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
-        andy.gross@linaro.org, david.brown@linaro.org,
-        wsa+renesas@sang-engineering.com, linus.walleij@linaro.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 7/8] usb: dwc3: qcom: Start USB in 'host mode' on the
- SDM845
-Message-ID: <20190605083454.GO4797@dell>
-References: <20190604104455.8877-1-lee.jones@linaro.org>
- <20190604104455.8877-7-lee.jones@linaro.org>
- <20190605070029.GN22737@tuxbook-pro>
+        id S1726849AbfFEIoo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jun 2019 04:44:44 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:59046 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726785AbfFEIoo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jun 2019 04:44:44 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x558iaLL013111;
+        Wed, 5 Jun 2019 03:44:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1559724276;
+        bh=QKydF6Lu876iSU7k9u/2w0MqEwWA6SgTM0O/bbSGalU=;
+        h=From:To:CC:Subject:Date;
+        b=moaSXXmEcs6rH/hQuc+U3NW2TtyVq4IHbf3dhyRj/fxxMMa/787KHDwX7uhsgP4Us
+         IJnzDW2EjeZGY9z6iqmhEDFYeCr81LHJ7UwTGIk1YdY3XCbzTy0eOWT8/Mb2fLrZsX
+         1AEHxxlnoVxQ9pJsYuxMqDKfPrPFbnposzWZ8jdM=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x558iaQn101311
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 5 Jun 2019 03:44:36 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 5 Jun
+ 2019 03:44:36 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 5 Jun 2019 03:44:35 -0500
+Received: from a0132425.india.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x558iWYF019139;
+        Wed, 5 Jun 2019 03:44:33 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Vignesh R <vigneshr@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>
+CC:     <linux-omap@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH] dt-bindings: i2c: omap: Add new compatible for J721E SoCs
+Date:   Wed, 5 Jun 2019 14:15:04 +0530
+Message-ID: <20190605084504.2777-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190605070029.GN22737@tuxbook-pro>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 05 Jun 2019, Bjorn Andersson wrote:
+From: Peter Ujfalusi <peter.ujfalusi@ti.com>
 
-> On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
-> 
-> > When booting with Device Tree, the current default boot configuration
-> > table option, the request to boot via 'host mode' comes from the
-> > "dr_mode" property.
-> 
-> This has been the default on the MTP, but this is changing as this is
-> causing issues when connected downstream from a hub (the typical
-> development case for the primary USB port of a phone like device) and
-> more importantly we don't have support for the PMIC blocks that control
-> VBUS.
+J721E SoCs have same I2C IP as OMAP SoCs. Add new compatible to
+handle J721E SoCs.
 
-My point is not about which mode is currently chosen.  It's more about
-the capability of choosing which mode is appropriate for a given
-system via DT.
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+---
 
-> Once these issues are resolved the dr_mode would be "otg".
+Initial support for J721E Platform is proposed here:
+https://lore.kernel.org/patchwork/cover/1077382/
 
-OTG doesn't work on this H/W, so we need to specify "host" mode.
+ Documentation/devicetree/bindings/i2c/i2c-omap.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > A property of the same name can be used inside
-> > ACPI tables too.  However it is missing from the SDM845's ACPI tables
-> > so we have to supply this information using Platform Device Properites
-> > instead.
-> > 
-> 
-> Afaict this would install a fall-back property, so in the case that we
-> have specified dr_mode in DT (or ACPI) that would take precedence. So
-
-That's correct.
-
-> the commit message should reflect that this redefines the default choice
-> to be "host", rather than "otg".
-
-No problem.
-
-> Which is in conflict with what's described for dr_mode in
-> Documentation/devicetree/bindings/usb/generic.txt
-
-This implementation only affects ACPI based platforms.  When booting
-with DT, the description in that DT related document is still
-accurate.
-
-> And this driver is used on a range of different Qualcomm platforms, so I
-> don't think this is SDM845 specific.
-
-ACPI based platforms?
-
-All the ones I've seen use the XHCI USB driver directly ("PNP0D10").
- 
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >  drivers/usb/dwc3/dwc3-qcom.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> > 
-> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > index 349bf549ee44..f21fdd6cdd1a 100644
-> > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > @@ -468,6 +468,11 @@ static const struct acpi_device_id dwc3_qcom_acpi_match[] = {
-> >  };
-> >  MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
-> >  
-> > +static const struct property_entry dwc3_qcom_acpi_properties[] = {
-> > +	PROPERTY_ENTRY_STRING("dr_mode", "host"),
-> > +	{}
-> > +};
-> > +
-> >  static int dwc3_qcom_probe(struct platform_device *pdev)
-> >  {
-> >  	struct device_node	*np = pdev->dev.of_node, *dwc3_np;
-> > @@ -603,6 +608,13 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
-> >  			goto platform_unalloc;
-> >  		}
-> >  
-> > +		ret = platform_device_add_properties(qcom->dwc3,
-> > +						     dwc3_qcom_acpi_properties);
-> > +		if (ret < 0) {
-> > +			dev_err(&pdev->dev, "failed to add properties\n");
-> > +			goto platform_unalloc;
-> > +		}
-> > +
-> >  		ret = platform_device_add(qcom->dwc3);
-> >  		if (ret) {
-> >  			dev_err(&pdev->dev, "failed to add device\n");
-
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-omap.txt b/Documentation/devicetree/bindings/i2c/i2c-omap.txt
+index 4b90ba9f31b7..a44573d7c118 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-omap.txt
++++ b/Documentation/devicetree/bindings/i2c/i2c-omap.txt
+@@ -7,6 +7,7 @@ Required properties :
+ 	"ti,omap3-i2c" for OMAP3 SoCs
+ 	"ti,omap4-i2c" for OMAP4+ SoCs
+ 	"ti,am654-i2c", "ti,omap4-i2c" for AM654 SoCs
++	"ti,j721e-i2c", "ti,omap4-i2c" for J721E SoCs
+ - ti,hwmods : Must be "i2c<n>", n being the instance number (1-based)
+ - #address-cells = <1>;
+ - #size-cells = <0>;
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.21.0
+
