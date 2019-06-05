@@ -2,49 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB9635708
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 08:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C133535747
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 08:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726653AbfFEGeY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jun 2019 02:34:24 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:37820 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbfFEGeX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jun 2019 02:34:23 -0400
-Received: by mail-pg1-f194.google.com with SMTP id 20so11838667pgr.4
-        for <linux-i2c@vger.kernel.org>; Tue, 04 Jun 2019 23:34:23 -0700 (PDT)
+        id S1726477AbfFEG7r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jun 2019 02:59:47 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:36617 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726528AbfFEG7q (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jun 2019 02:59:46 -0400
+Received: by mail-pg1-f196.google.com with SMTP id a3so4469215pgb.3
+        for <linux-i2c@vger.kernel.org>; Tue, 04 Jun 2019 23:59:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=MDnhT69i4+3igVNMGRO0Olac0iYlmd7+e9rYlDGKlMQ=;
-        b=b0zeeCKtZnHGuRksL/MviXPn9ETjzaS+XVRjInqPSn3MmRYG1h2xHNGblAhI+hwSgW
-         27ZfCX1Gruevo4QQpULxZqIYe5C+Zgz/G1c55aHrsLCR1l4SuO6Zl2rqHMz/HhFh9Z9Q
-         QxMw+vu3nl1p1nftk6+cafNIaL0Qc2EIwNB2KxZMrgxWW1jAV1G6l5NzkuLcxcGZCAGE
-         4WVEq1fL81w0hRjY+jxAYMV+Z8z5ugYVoDpGILoXwPvhIzQqgv5xTEOy7KxvxfLB+J1S
-         ODzal5jdUT/lQkiRAr2R384iYKbide9/PJ3H67SHJn10yNgF/PbuaKGoJUtwsqQIGR2B
-         g+0Q==
+        bh=kyvvb8Dpo+7r/hNh0Hasg4c/obIxKq733Zz2TyhyGfk=;
+        b=hnjKuAO+7okYKXT89T/HbjNHxzesqyxbmXGKeWw/M0zwLzOfJJzpKp+dzmqoVSGqOt
+         iDtduWPOOhMqRZ6X5vd3CEdo10NfJCUvGI9JQm/MdY9gjmE2kuH4LRETYHUrglfYxm8J
+         VCjECmRAgTUl366uCinwIDOF69n2S5FaY6OJFhB2njA68JADokDFOWPoi928hFXfMxfB
+         VH3bfVZX1XT/JVjKlUVWZJi68djN/YvQ0aFGC14/GD6WwBmQAobvm00Mwv4a1zw8aV6G
+         TWWSXbzVPVAtUSPJfPtY03wapzuBJphxNZZ/50HL2mG/P3OXVXN4cflOO4fT/wy4Hbek
+         8vTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=MDnhT69i4+3igVNMGRO0Olac0iYlmd7+e9rYlDGKlMQ=;
-        b=FH2VMxaMBhaaBHnQ9vQLVhBEfaGthQolRJkOGIwh/vG6AMoUD9q77iiZC82y2XI91D
-         YfqjPKtKIDstSXvvjhc3OYr36qXF0VW2pad32UWh39LHZITn3s6Dl/Zz5l1xLNvud88N
-         ZZtUcxbyH/GPnoaJcBoq+2wQjy0LmJGzQ8Kxa7oPgV2/ymvIbkSbGTnULNdZAH040WUA
-         /21saPUUewmUNVbbY5NpMW8uWbdeYfyaf81Z2O2BeKrlfpmghKkOmIj/A2XUyCUnv2yl
-         ogoesf7/vIfOgHwXmyozw4H9RiTBUgvrW3N3X+Dfvxacett00XcB63Vr+113pqtD1vyN
-         Co3Q==
-X-Gm-Message-State: APjAAAVbJUqo8XwKP0k3c3EDoMJ920qFVohow0I6xvggrMHPcJpM+hOG
-        rvEQZCP6ib5AF5PHTDaZVy1iOAWvV2g=
-X-Google-Smtp-Source: APXvYqy3bNsHWjS/PwRCl4JZk2sWXQhzg3FwJWCnisZBOEnbpp0qgkByrv0MfZW4pI4x2RdDmUP25g==
-X-Received: by 2002:a63:f146:: with SMTP id o6mr2228929pgk.179.1559716463205;
-        Tue, 04 Jun 2019 23:34:23 -0700 (PDT)
+        bh=kyvvb8Dpo+7r/hNh0Hasg4c/obIxKq733Zz2TyhyGfk=;
+        b=aYOG6SHhPFijbuBGinD234XgE6w4O1Mz6PQQgxRUvPAt5sKfaQkIDD2+mlLZ9zWa0h
+         7X2B5LtPhZqZcG3HnWLgQRDfi8q+YGJpIcFGMhzshF1NQV5Opy+4O8RU1l7cf0gMYoF2
+         3wIYdyyHyfhpxCyeYkbA1kzJXLkj9NnGXPoCPM2FaCLEATU1Z5hTTlLkeytIIVghSGeq
+         hYNA2zNZdh1Mihg8iBS+mWSPNWGr//NZ2gzTfhnNaFU0aUw9LqIXU90QChvB5C4rVts1
+         raBU313ABYKwdr/CC0fE4zjL90/nZd2fWXNqUfmnJZy2stV1UlQS81rmD89EZ0JWeGuC
+         K5Uw==
+X-Gm-Message-State: APjAAAU6pt2MpMben2G0IEgp+4H5aGl/eMIZ6rwYEszQbL+D5DY3jZJN
+        ZKPSodyQl3VMrBwNqpZnzptGnQ==
+X-Google-Smtp-Source: APXvYqxpBjz9vh9WdULbhd//bFEmA+VYRSMMw3Z/uoePAdJidj7tnNGvl62YsQy5ZWMZmZn6F/RnRw==
+X-Received: by 2002:a62:648d:: with SMTP id y135mr35422233pfb.98.1559717985295;
+        Tue, 04 Jun 2019 23:59:45 -0700 (PDT)
 Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id k8sm8144854pfk.177.2019.06.04.23.34.21
+        by smtp.gmail.com with ESMTPSA id e184sm28589093pfa.169.2019.06.04.23.59.43
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 04 Jun 2019 23:34:22 -0700 (PDT)
-Date:   Tue, 4 Jun 2019 23:35:07 -0700
+        Tue, 04 Jun 2019 23:59:44 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 00:00:29 -0700
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Lee Jones <lee.jones@linaro.org>
 Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
@@ -55,14 +55,15 @@ Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
         jlhugo@gmail.com, linux-i2c@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH 6/8] usb: dwc3: qcom: Add support for booting with ACPI
-Message-ID: <20190605063507.GM22737@tuxbook-pro>
+Subject: Re: [PATCH 7/8] usb: dwc3: qcom: Start USB in 'host mode' on the
+ SDM845
+Message-ID: <20190605070029.GN22737@tuxbook-pro>
 References: <20190604104455.8877-1-lee.jones@linaro.org>
- <20190604104455.8877-6-lee.jones@linaro.org>
+ <20190604104455.8877-7-lee.jones@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190604104455.8877-6-lee.jones@linaro.org>
+In-Reply-To: <20190604104455.8877-7-lee.jones@linaro.org>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -70,51 +71,75 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-[..]
-> @@ -373,7 +416,7 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
->  
->  	qcom->num_clocks = count;
->  
-> -	if (!count)
-> +	if (!count || ACPI_HANDLE(dev))
->  		return 0;
 
-Afaict you call this with count = of_count_phandle_with_args(), which
-should be 0. But why not skip calling this at all?
+> When booting with Device Tree, the current default boot configuration
+> table option, the request to boot via 'host mode' comes from the
+> "dr_mode" property.
 
->  
->  	qcom->clks = devm_kcalloc(dev, qcom->num_clocks,
-> @@ -409,12 +452,28 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
->  	return 0;
->  }
->  
-> +static const struct dwc3_acpi_pdata sdm845_acpi_pdata = {
-> +	.qscratch_base_offset = SDM845_QSCRATCH_BASE_OFFSET,
-> +	.qscratch_base_size = SDM845_QSCRATCH_SIZE,
-> +	.dwc3_core_base_size = SDM845_DWC3_CORE_SIZE,
-> +	.hs_phy_irq_index = 1,
-> +	.dp_hs_phy_irq_index = 4,
-> +	.dm_hs_phy_irq_index = 3,
-> +	.ss_phy_irq_index = 2
-> +};
-> +
-> +static const struct acpi_device_id dwc3_qcom_acpi_match[] = {
-> +	{ "QCOM2430", (unsigned long)&sdm845_acpi_pdata },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
+This has been the default on the MTP, but this is changing as this is
+causing issues when connected downstream from a hub (the typical
+development case for the primary USB port of a phone like device) and
+more importantly we don't have support for the PMIC blocks that control
+VBUS.
 
-Analog to of_device_get_match_data() there seems to be a
-acpi_device_get_match_data(), if you use this you should be able to
-have you acpi_device_id array next to the of_device_id.
+Once these issues are resolved the dr_mode would be "otg".
 
-> +
->  static int dwc3_qcom_probe(struct platform_device *pdev)
+> A property of the same name can be used inside
+> ACPI tables too.  However it is missing from the SDM845's ACPI tables
+> so we have to supply this information using Platform Device Properites
+> instead.
+> 
 
-It seems that all that's left unconditional on ACPI_HANDLE() in this
-function are the optional pieces and the tail. Wouldn't it be cleaner to
-split it out in different functions?
+Afaict this would install a fall-back property, so in the case that we
+have specified dr_mode in DT (or ACPI) that would take precedence. So
+the commit message should reflect that this redefines the default choice
+to be "host", rather than "otg".
+
+Which is in conflict with what's described for dr_mode in
+Documentation/devicetree/bindings/usb/generic.txt
+
+
+And this driver is used on a range of different Qualcomm platforms, so I
+don't think this is SDM845 specific.
 
 Regards,
 Bjorn
+
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 349bf549ee44..f21fdd6cdd1a 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -468,6 +468,11 @@ static const struct acpi_device_id dwc3_qcom_acpi_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
+>  
+> +static const struct property_entry dwc3_qcom_acpi_properties[] = {
+> +	PROPERTY_ENTRY_STRING("dr_mode", "host"),
+> +	{}
+> +};
+> +
+>  static int dwc3_qcom_probe(struct platform_device *pdev)
+>  {
+>  	struct device_node	*np = pdev->dev.of_node, *dwc3_np;
+> @@ -603,6 +608,13 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  			goto platform_unalloc;
+>  		}
+>  
+> +		ret = platform_device_add_properties(qcom->dwc3,
+> +						     dwc3_qcom_acpi_properties);
+> +		if (ret < 0) {
+> +			dev_err(&pdev->dev, "failed to add properties\n");
+> +			goto platform_unalloc;
+> +		}
+> +
+>  		ret = platform_device_add(qcom->dwc3);
+>  		if (ret) {
+>  			dev_err(&pdev->dev, "failed to add device\n");
+> -- 
+> 2.17.1
+> 
