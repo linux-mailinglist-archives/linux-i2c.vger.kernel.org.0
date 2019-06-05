@@ -2,192 +2,189 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1942735599
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 05:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981D5355A2
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 05:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbfFEDRb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Jun 2019 23:17:31 -0400
-Received: from mail-it1-f195.google.com ([209.85.166.195]:37545 "EHLO
-        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726354AbfFEDRb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Jun 2019 23:17:31 -0400
-Received: by mail-it1-f195.google.com with SMTP id s16so1421334ita.2
-        for <linux-i2c@vger.kernel.org>; Tue, 04 Jun 2019 20:17:30 -0700 (PDT)
+        id S1726488AbfFED1P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Jun 2019 23:27:15 -0400
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:35598 "EHLO
+        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726354AbfFED1O (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Jun 2019 23:27:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nR+fw+sm8IO1kJHf+eZ+FfOpYY+0Uj1n8xQS2155FaY=;
-        b=O80GZT44V5PHZ2H7WNemGa0JyrlFf+swZ9K+OFhDphLc4Vv1CIzO+etNqF2zZgPr/E
-         llNMUuND/SFEZ3emXR3rPeag4piQ2uI8hjCsJb84mr5IprJlagwZVNcYLE3rnUoOuQf/
-         aZHi1XsB6+BH7eHGaUfKyAz5oMkmo4e4nTwixdgS82mP5UvPMt4xRpEIISLhF/0F6ekm
-         5wLsZqs5f1EmASxf3tRT3aA1Sk7PR9sFNR+zxJWm56kNVaNzqLmaHI9krFjYh8VHUVXg
-         fN3GuBNP3p5DR1ykqgnyXPeEUidCutuiCrDbntNRP7bpqvD5Nu+YX2ClG+HB+gKf7m7L
-         ABbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nR+fw+sm8IO1kJHf+eZ+FfOpYY+0Uj1n8xQS2155FaY=;
-        b=re5FcdSTLmrnUyg38oeN7nYtouBLv0ubhTMs3jmxrQ5TBhJDtKmNtNsoBy7QYIrTke
-         EOCS4lmuy7DzXf0yZU2vDMMskeXYcr3wKH0qV5nITOnD0S58kodOZadCLA9M6Pu9BIng
-         CUPv+u9iVGVbeqHgpZnCA/Qo/cfvjEPKLWBhVFutpBuzehF64p0vg4FtW0kR+tzvzXh1
-         0lXEVAInGsv74jteUqbSG4Xqn7+vVeC8Ex80550wJL0RRbHMFqxala8vtl9vby06cqij
-         GWWqYLMFtySMb9oQydiGkabiEADal8DgaduSdo2BeVYQhdZ19cfnsxL241hcUHPeysqL
-         eCdA==
-X-Gm-Message-State: APjAAAWh8DcFVvs5y5Cnf8bE1u+p4eWTjfm2Ab/hJpac3frQrvWS9poy
-        BWRNQlrq9r+KmGEJ019wEzh7gktKBesVJM3mb/gJV8q9
-X-Google-Smtp-Source: APXvYqyLbE2qjepqrPZIIMK74pFLv6SAD9LCvqXxdYToJrgls5v6ziGhlx2TviwR6aRkp/n8WNYemZXD58Y7hfWgixs=
-X-Received: by 2002:a02:5a02:: with SMTP id v2mr21790706jaa.124.1559704650317;
- Tue, 04 Jun 2019 20:17:30 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1559705233; x=1591241233;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VXjX19MVgR+03nnn2b8Q+rJ+rQtez95FczrcM8VTBYg=;
+  b=FU5fDu6MCrgqbu/UZlG6Gpkg+MC8M6QEzGOA3TXG7CV0h9Apk6CDx35o
+   CSuTcM3v2vSo62WvH6/tVFIA+/RJ5wlwBlgnNf3pwbB4hvnLqwaoNmJH1
+   0w/V8rvxXGlVpoV96NzlMFfQkTchaJMUPvrlfTtwYcBcat9dL6mvxbZkR
+   c=;
+X-IronPort-AV: E=Sophos;i="5.60,550,1549929600"; 
+   d="scan'208";a="769017448"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-4e24fd92.us-west-2.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 05 Jun 2019 03:27:11 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-2b-4e24fd92.us-west-2.amazon.com (Postfix) with ESMTPS id 96D3CA230D;
+        Wed,  5 Jun 2019 03:27:10 +0000 (UTC)
+Received: from EX13D05UWB003.ant.amazon.com (10.43.161.26) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Wed, 5 Jun 2019 03:27:10 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13D05UWB003.ant.amazon.com (10.43.161.26) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Wed, 5 Jun 2019 03:27:09 +0000
+Received: from localhost (10.85.18.74) by mail-relay.amazon.com
+ (10.43.161.249) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Wed, 5 Jun 2019 03:27:09 +0000
+Date:   Tue, 4 Jun 2019 20:27:09 -0700
+From:   Eduardo Valentin <eduval@amazon.com>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+CC:     Eduardo Valentin <eduval@amazon.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Haiyue Wang <haiyue.wang@linux.intel.com>,
+        <jarkko.nikula@linux.intel.com>, <brendanhiggins@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/3] i2c: slave-mqueue: add a slave backend to receive
+ and queue messages
+Message-ID: <20190605032709.GA1534@u40b0340c692b58f6553c.ant.amazon.com>
+References: <20190531043347.4196-1-eduval@amazon.com>
+ <20190531043347.4196-3-eduval@amazon.com>
+ <20190604171611.GS9224@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20190603055714.7203-1-oohall@gmail.com> <e546c15f-07a9-656a-ce11-4f9a24795d9a@linux.ibm.com>
- <CAOSf1CE5J93rai-VcZJJWkU=N=1=STtV2XqKQh_yLvQpXBKkHw@mail.gmail.com> <e578ae92-baf0-f55a-1cb4-82c992851483@linux.ibm.com>
-In-Reply-To: <e578ae92-baf0-f55a-1cb4-82c992851483@linux.ibm.com>
-From:   Oliver <oohall@gmail.com>
-Date:   Wed, 5 Jun 2019 13:17:18 +1000
-Message-ID: <CAOSf1CEA-S8ond9Bwk+CGQ9=OGwV9EevJRn7LB075615rbz65A@mail.gmail.com>
-Subject: Re: [PATCH] i2c: fsi: Create busses for all ports
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-i2c@vger.kernel.org, Eddie James <eajames@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20190604171611.GS9224@smile.fi.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jun 5, 2019 at 8:57 AM Eddie James <eajames@linux.ibm.com> wrote:
->
->
-> On 6/4/19 1:14 AM, Oliver wrote:
-> > On Tue, Jun 4, 2019 at 12:15 AM Eddie James <eajames@linux.ibm.com> wro=
-te:
-> >>
-> >> On 6/3/19 12:57 AM, Oliver O'Halloran wrote:
-> >>> Currently we only create an I2C bus for the ports listed in the
-> >>> device-tree for that master. There's no real reason for this since
-> >>> we can discover the number of ports the master supports by looking
-> >>> at the port_max field of the status register.
-> >>>
-> >>> This patch re-works the bus add logic so that we always create buses
-> >>> for each port, unless the bus is marked as unavailable in the DT. Thi=
-s
-> >>> is useful since it ensures that all the buses provided by the CFAM I2=
-C
-> >>> master are accessible to debug tools.
-> >>>
-> >>> Cc: Eddie James <eajames@linux.vnet.ibm.com>
-> >>> Signed-off-by: Oliver O'Halloran <oohall@gmail.com>
-> >>> ---
-> >>>    drivers/i2c/busses/i2c-fsi.c | 30 +++++++++++++++++++++++++-----
-> >>>    1 file changed, 25 insertions(+), 5 deletions(-)
-> >>>
-> >>> diff --git a/drivers/i2c/busses/i2c-fsi.c b/drivers/i2c/busses/i2c-fs=
-i.c
-> >>> index 1e2be2219a60..59a76c6e31ad 100644
-> >>> --- a/drivers/i2c/busses/i2c-fsi.c
-> >>> +++ b/drivers/i2c/busses/i2c-fsi.c
-> >>> @@ -658,13 +658,27 @@ static const struct i2c_algorithm fsi_i2c_algor=
-ithm =3D {
-> >>>        .functionality =3D fsi_i2c_functionality,
-> >>>    };
-> >>>
-> >>> +static device_node *fsi_i2c_find_port_of_node(struct device_node *ma=
-ster,
-> >>> +                                           int port)
-> > Turns out I had a pile of compile fixes staged but not committed so
-> > this patch is totally broken. Oops.
-> >
-> >>> +{
-> >>> +     struct device_node *np;
-> >>> +
-> >>> +     for_each_child_of_node(fsi, np) {
-> >>> +             rc =3D of_property_read_u32(np, "reg", &port_no);
-> >>> +             if (!rc && port_no =3D=3D port)
-> >>> +                     return np;
-> >>> +     }
-> >>> +
-> >>> +     return NULL;
-> >>> +}
-> >>> +
-> >>>    static int fsi_i2c_probe(struct device *dev)
-> >>>    {
-> >>>        struct fsi_i2c_master *i2c;
-> >>>        struct fsi_i2c_port *port;
-> >>>        struct device_node *np;
-> >>> +     u32 port_no, ports, stat;
-> >>>        int rc;
-> >>> -     u32 port_no;
-> >>>
-> >>>        i2c =3D devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
-> >>>        if (!i2c)
-> >>> @@ -678,10 +692,16 @@ static int fsi_i2c_probe(struct device *dev)
-> >>>        if (rc)
-> >>>                return rc;
-> >>>
-> >>> -     /* Add adapter for each i2c port of the master. */
-> >>> -     for_each_available_child_of_node(dev->of_node, np) {
-> >>> -             rc =3D of_property_read_u32(np, "reg", &port_no);
-> >>> -             if (rc || port_no > USHRT_MAX)
-> >>> +     rc =3D fsi_i2c_read_reg(i2c->fsi, I2C_FSI_STAT, &state);
-> >>> +     if (rc)
-> >>> +             return rc;
-> >>> +
-> >>> +     ports =3D FIELD_GET(I2C_STAT_MAX_PORT, stat);
-> >>> +     dev_dbg(dev, "I2C master has %d ports\n", ports);
-> >>
-> >> Thanks for the patch Oliver. This looks great except some older CFAM
-> >> types don't report the max port number, in which case this would not
-> >> probe up any ports. So we probably need a fallback to dts if the max
-> >> ports is 0.
-> > Hmm, The oldest CFAM spec I could find was v1.2 which is from the p6
-> > era and it includes the MAX_PORT field. When I was checking the spec I
-> > noticed that I mis-interpreted the meaning of MAX_PORT. It's actually
-> > the largest value you can write into the port field of the mode
-> > register rather than the number of ports the master supports. So zero
-> > is a valid value for MAX_PORT that you would see if the master only
-> > has one port.
->
->
-> Yep, now that I look at the specs too, that is correct.
->
->
-> >
-> > Do you know if the old masters only had one port? If not, do you know
-> > what version (from the ext status reg) of the master doesn't support
-> > the max_port field?
->
->
-> I used to have some more up-to-date specs but I can't seem to find
-> them... I think I see what's going on. Some versions of the CFAM have
-> the max port, or "upper threshold for ports" at bits 16-19, while others
-> have that information at 9-15 or 12-15... I'm not sure we can reliably
-> determine where/what that number will be. I'm open to suggestions!
+Hey Andry,
 
-I had a look at the various docs I've got and they say:
+Long time no seeing :-)
 
-CFAM 1.2:      9 - 11 b =E2=80=98000=E2=80=99
-              12 - 15 Upper threshold for I2C ports (Port number - 1)
-p7 pervasive:  9 - 11 b =E2=80=98000=E2=80=99
-              12 - 15 Upper threshold for I2C ports (Port number - 1)
-p8 pervasive:  9 - 15 Upper threshold for I2C ports (Port number - 1)
-p9 pervasive:  9 - 15 Upper threshold for I2C ports (Port number - 1)
+On Tue, Jun 04, 2019 at 08:16:11PM +0300, Andy Shevchenko wrote:
+> On Thu, May 30, 2019 at 09:33:46PM -0700, Eduardo Valentin wrote:
+> > From: Haiyue Wang <haiyue.wang@linux.intel.com>
+> > 
+> > Some protocols over I2C are designed for bi-directional transferring
+> > messages by using I2C Master Write protocol. Like the MCTP (Management
+> > Component Transport Protocol) and IPMB (Intelligent Platform Management
+> > Bus), they both require that the userspace can receive messages from
+> > I2C dirvers under slave mode.
+> > 
+> > This new slave mqueue backend is used to receive and queue messages, it
+> > will exposes these messages to userspace by sysfs bin file.
+> > 
+> > Note: DT interface and a couple of minor fixes here and there
+> > by Eduardo, so I kept the original authorship here.
+> 
+> > +#define MQ_MSGBUF_SIZE		CONFIG_I2C_SLAVE_MQUEUE_MESSAGE_SIZE
+> > +#define MQ_QUEUE_SIZE		CONFIG_I2C_SLAVE_MQUEUE_QUEUE_SIZE
+> 
+> > +#define MQ_QUEUE_NEXT(x)	(((x) + 1) & (MQ_QUEUE_SIZE - 1))
+> 
+> Also possible ((x + 1) % ..._SIZE)
 
-Keep in mind these docs use IBM bit numbering. Translating to normal bits:
+Right.. but I suppose the original idea is to avoid divisions on the hotpath.
 
-  binary: 01111111 00000000 00000000
-bits set: 22, 21, 20, 19, 18, 17, 16 (7)
- IBM 32b:  9, 10, 11, 12, 13, 14, 15
+So, I am actually fine with the limitation of only using power of 2.
 
-And dropping the upper 3 bits gives you 16 - 19. Are you sure it's
-actually different or is this IBM bit ordering just screwing us again?
+> 
+> > +	mq = dev_get_drvdata(container_of(kobj, struct device, kobj));
+> 
+> kobj_to_dev()
 
-Anyway, while I was looking I noticed that between p7 and p8 they did
-change the layout of the mode register. The baud rate divider was
-extended from 8 to 16 bits and the port select field was moved from
-IBM(8,15) to IBM(16,21) to make room. If we need to support the older
-masters we'll need to fix that too.
+Well, yeah, I guess this is a nit, but I can add that in case of a real need for a v7.
 
-Oliver
+> 
+> > +static int i2c_slave_mqueue_probe(struct i2c_client *client,
+> > +				  const struct i2c_device_id *id)
+> > +{
+> > +	struct device *dev = &client->dev;
+> > +	struct mq_queue *mq;
+> > +	int ret, i;
+> > +	void *buf;
+> > +
+> > +	mq = devm_kzalloc(dev, sizeof(*mq), GFP_KERNEL);
+> > +	if (!mq)
+> > +		return -ENOMEM;
+> > +
+> 
+> > +	BUILD_BUG_ON(!is_power_of_2(MQ_QUEUE_SIZE));
+> 
+> Perhaps start function with this kind of assertions?
+> 
+
+
+same here, in case I see a huge ask for a v7, I can move this up.
+
+> > +
+> > +	buf = devm_kmalloc_array(dev, MQ_QUEUE_SIZE, MQ_MSGBUF_SIZE,
+> > +				 GFP_KERNEL);
+> > +	if (!buf)
+> > +		return -ENOMEM;
+> > +
+> > +	for (i = 0; i < MQ_QUEUE_SIZE; i++)
+> > +		mq->queue[i].buf = buf + i * MQ_MSGBUF_SIZE;
+> 
+> 
+> Just wondering if kfifo API can bring an advantage here?
+> 
+
+Well, then again, I suppose the idea is simplify here, not if we need to go
+kfifo as the Protocol on top of this is perfectly fine with the current
+discipline of just having a simple drop of older messages.
+
+
+> > +	return 0;
+> > +}
+> 
+> > +static const struct of_device_id i2c_slave_mqueue_of_match[] = {
+> > +	{
+> > +		.compatible = "i2c-slave-mqueue",
+> > +	},
+> 
+> > +	{ },
+> 
+> No need for comma here.
+
+It does not hurt to have it either :-)
+
+> 
+> > +};
+> 
+> > +
+> > +static struct i2c_driver i2c_slave_mqueue_driver = {
+> > +	.driver = {
+> > +		.name	= "i2c-slave-mqueue",
+> 
+> > +		.of_match_table = of_match_ptr(i2c_slave_mqueue_of_match),
+> 
+> Wouldn't compiler warn you due to unused data?
+> Perhaps drop of_match_ptr() for good...
+
+
+Not sure what you meant here. I dont see any compiler warning.
+Also, of_match_ptr seams to be well spread in the kernel.
+> 
+> > +	},
+> > +	.probe		= i2c_slave_mqueue_probe,
+> > +	.remove		= i2c_slave_mqueue_remove,
+> > +	.id_table	= i2c_slave_mqueue_id,
+> > +};
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
+
+-- 
+All the best,
+Eduardo Valentin
