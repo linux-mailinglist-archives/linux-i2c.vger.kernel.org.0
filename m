@@ -2,189 +2,194 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 981D5355A2
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 05:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFBE356BA
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 08:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbfFED1P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Jun 2019 23:27:15 -0400
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:35598 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726354AbfFED1O (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Jun 2019 23:27:14 -0400
+        id S1726050AbfFEGQi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jun 2019 02:16:38 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:39593 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726572AbfFEGQh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jun 2019 02:16:37 -0400
+Received: by mail-pg1-f193.google.com with SMTP id 196so11815001pgc.6
+        for <linux-i2c@vger.kernel.org>; Tue, 04 Jun 2019 23:16:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1559705233; x=1591241233;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VXjX19MVgR+03nnn2b8Q+rJ+rQtez95FczrcM8VTBYg=;
-  b=FU5fDu6MCrgqbu/UZlG6Gpkg+MC8M6QEzGOA3TXG7CV0h9Apk6CDx35o
-   CSuTcM3v2vSo62WvH6/tVFIA+/RJ5wlwBlgnNf3pwbB4hvnLqwaoNmJH1
-   0w/V8rvxXGlVpoV96NzlMFfQkTchaJMUPvrlfTtwYcBcat9dL6mvxbZkR
-   c=;
-X-IronPort-AV: E=Sophos;i="5.60,550,1549929600"; 
-   d="scan'208";a="769017448"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-4e24fd92.us-west-2.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 05 Jun 2019 03:27:11 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2b-4e24fd92.us-west-2.amazon.com (Postfix) with ESMTPS id 96D3CA230D;
-        Wed,  5 Jun 2019 03:27:10 +0000 (UTC)
-Received: from EX13D05UWB003.ant.amazon.com (10.43.161.26) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 5 Jun 2019 03:27:10 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX13D05UWB003.ant.amazon.com (10.43.161.26) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 5 Jun 2019 03:27:09 +0000
-Received: from localhost (10.85.18.74) by mail-relay.amazon.com
- (10.43.161.249) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Wed, 5 Jun 2019 03:27:09 +0000
-Date:   Tue, 4 Jun 2019 20:27:09 -0700
-From:   Eduardo Valentin <eduval@amazon.com>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-CC:     Eduardo Valentin <eduval@amazon.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Haiyue Wang <haiyue.wang@linux.intel.com>,
-        <jarkko.nikula@linux.intel.com>, <brendanhiggins@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] i2c: slave-mqueue: add a slave backend to receive
- and queue messages
-Message-ID: <20190605032709.GA1534@u40b0340c692b58f6553c.ant.amazon.com>
-References: <20190531043347.4196-1-eduval@amazon.com>
- <20190531043347.4196-3-eduval@amazon.com>
- <20190604171611.GS9224@smile.fi.intel.com>
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=yPLGcJboWqTS41OXT0YPS9mFDLi+KIswrNZ4xj5RMzE=;
+        b=a2p19VFRYfiN+slwv4mz43rBb2yISQyrLkTJcMwSA/WWx9l79OZvNlzb0McxQjlz1q
+         V0H85qKfEr5ZtprV5QK9qBTKSV8I1gF9ndrBiqTp2IS+Bz1UAF4xjzJ5ovK8Dbv9obd/
+         E4MAUdbc473B8+RS4fi0cnV5jtQ/pttN9wdLEjbGLZPKISnutmqS1RoLvLUmatV7Sxj4
+         1YpTj26Z25oIhkuyqe73xgLobBxUTtBRWPzTU80HA6shTFVU+iFMdg7A/LeV1fBVQ54j
+         iipbbvvwaXrxFxqY26USW52xFqh7PwiURi/plOK8dz92vePi2swKlawieFKqGfDli8E8
+         zFfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=yPLGcJboWqTS41OXT0YPS9mFDLi+KIswrNZ4xj5RMzE=;
+        b=QR5lfUoNu5xoaihPeAb9cZT/b+RCOtTQblnIGx8k44X6h1WzZWE/jD9wXELUNcWauH
+         ifgNo0li3cTln7QR7K8cyN7721qAZwVaDqfdZb22ELtj/VTkzBVi9zyLB+MRTN2Ai5+c
+         /ejRNnKem+dv23CqWqE98u3NBGhSrTtf1iF672vfAuk6mBx6B+HzlJHJbr90mK3w+xDt
+         eFLCd4k8Um5cmV3pg7Y+AM7k1RjuUnTT/iE6OR3iKmilIrIDaeAf0Fbf9BxCCXGKTb1B
+         tOuyJykvy/pO9NAF1TtRbF14IR1GhFWR64+hRhQUoJP4ClMjgvrjNbPiiKlD32bv4XTG
+         fIpA==
+X-Gm-Message-State: APjAAAXAmdTmGZKcMmh1iJP943qpifn0FzPNOqKRHIbBpNYFftShEbZ5
+        ayPL2D2DVUx5fnJVWTIzpKWnTg==
+X-Google-Smtp-Source: APXvYqwEJhIs8QubYN0avnbvfixWjIzhGaRnp7YPaFTgZ2Z2O0BG2WDaO37plKfU2MMrMOlw9tyzHw==
+X-Received: by 2002:a62:ea0a:: with SMTP id t10mr43421341pfh.236.1559715396814;
+        Tue, 04 Jun 2019 23:16:36 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id z18sm8987858pgh.88.2019.06.04.23.16.35
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 04 Jun 2019 23:16:36 -0700 (PDT)
+Date:   Tue, 4 Jun 2019 23:17:21 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
+        andy.gross@linaro.org, david.brown@linaro.org,
+        wsa+renesas@sang-engineering.com, linus.walleij@linaro.org,
+        balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 4/8] pinctrl: qcom: sdm845: Provide ACPI support
+Message-ID: <20190605061721.GK22737@tuxbook-pro>
+References: <20190604104455.8877-1-lee.jones@linaro.org>
+ <20190604104455.8877-4-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190604171611.GS9224@smile.fi.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190604104455.8877-4-lee.jones@linaro.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hey Andry,
+On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
 
-Long time no seeing :-)
+> This patch provides basic support for booting with ACPI instead
+> of the currently supported Device Tree.  When doing so there are a
+> couple of differences which we need to taken into consideration.
+> 
+> Firstly, the SDM850 ACPI tables omit information pertaining to the
+> 4 reserved GPIOs on the platform.  If Linux attempts to touch/
+> initialise any of these lines, the firmware will restart the
+> platform.
+> 
+> Secondly, when booting with ACPI, it is expected that the firmware
+> will set-up things like; Regulators, Clocks, Pin Functions, etc in
+> their ideal configuration.  Thus, the possible Pin Functions
+> available to this platform are not advertised when providing the
+> higher GPIOD/Pinctrl APIs with pin information.
+> 
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  drivers/pinctrl/qcom/Kconfig          |  2 +-
+>  drivers/pinctrl/qcom/pinctrl-sdm845.c | 35 ++++++++++++++++++++++++++-
+>  2 files changed, 35 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
+> index 2e66ab72c10b..aafbe932424f 100644
+> --- a/drivers/pinctrl/qcom/Kconfig
+> +++ b/drivers/pinctrl/qcom/Kconfig
+> @@ -168,7 +168,7 @@ config PINCTRL_SDM660
+>  
+>  config PINCTRL_SDM845
+>         tristate "Qualcomm Technologies Inc SDM845 pin controller driver"
+> -       depends on GPIOLIB && OF
+> +       depends on GPIOLIB && (OF || ACPI)
+>         select PINCTRL_MSM
+>         help
+>           This is the pinctrl, pinmux, pinconf and gpiolib driver for the
+> diff --git a/drivers/pinctrl/qcom/pinctrl-sdm845.c b/drivers/pinctrl/qcom/pinctrl-sdm845.c
+> index c97f20fca5fd..7188bee3cf3e 100644
+> --- a/drivers/pinctrl/qcom/pinctrl-sdm845.c
+> +++ b/drivers/pinctrl/qcom/pinctrl-sdm845.c
+> @@ -3,6 +3,7 @@
+>   * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
+>   */
+>  
+> +#include <linux/acpi.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> @@ -1277,6 +1278,10 @@ static const struct msm_pingroup sdm845_groups[] = {
+>  	UFS_RESET(ufs_reset, 0x99f000),
+>  };
+>  
+> +static const int sdm845_acpi_reserved_gpios[] = {
+> +	0, 1, 2, 3, 81, 82, 83, 84, -1
+> +};
+> +
+>  static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
+>  	.pins = sdm845_pins,
+>  	.npins = ARRAY_SIZE(sdm845_pins),
+> @@ -1284,14 +1289,41 @@ static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
+>  	.nfunctions = ARRAY_SIZE(sdm845_functions),
+>  	.groups = sdm845_groups,
+>  	.ngroups = ARRAY_SIZE(sdm845_groups),
+> +	.reserved_gpios = sdm845_acpi_reserved_gpios,
 
-On Tue, Jun 04, 2019 at 08:16:11PM +0300, Andy Shevchenko wrote:
-> On Thu, May 30, 2019 at 09:33:46PM -0700, Eduardo Valentin wrote:
-> > From: Haiyue Wang <haiyue.wang@linux.intel.com>
-> > 
-> > Some protocols over I2C are designed for bi-directional transferring
-> > messages by using I2C Master Write protocol. Like the MCTP (Management
-> > Component Transport Protocol) and IPMB (Intelligent Platform Management
-> > Bus), they both require that the userspace can receive messages from
-> > I2C dirvers under slave mode.
-> > 
-> > This new slave mqueue backend is used to receive and queue messages, it
-> > will exposes these messages to userspace by sysfs bin file.
-> > 
-> > Note: DT interface and a couple of minor fixes here and there
-> > by Eduardo, so I kept the original authorship here.
-> 
-> > +#define MQ_MSGBUF_SIZE		CONFIG_I2C_SLAVE_MQUEUE_MESSAGE_SIZE
-> > +#define MQ_QUEUE_SIZE		CONFIG_I2C_SLAVE_MQUEUE_QUEUE_SIZE
-> 
-> > +#define MQ_QUEUE_NEXT(x)	(((x) + 1) & (MQ_QUEUE_SIZE - 1))
-> 
-> Also possible ((x + 1) % ..._SIZE)
+The reason why put these in DT is because the list is board/firmware
+dependent. E.g. the firmware on db845c does not support the peripherals
+that sits on these 8 pins and as such these are not reserved.
 
-Right.. but I suppose the original idea is to avoid divisions on the hotpath.
+But given that the two structs looks identical now, did you perhaps not
+intend to add.reserved_gpios for the non-ACPI case?
 
-So, I am actually fine with the limitation of only using power of 2.
+Regards,
+Bjorn
 
-> 
-> > +	mq = dev_get_drvdata(container_of(kobj, struct device, kobj));
-> 
-> kobj_to_dev()
-
-Well, yeah, I guess this is a nit, but I can add that in case of a real need for a v7.
-
-> 
-> > +static int i2c_slave_mqueue_probe(struct i2c_client *client,
-> > +				  const struct i2c_device_id *id)
-> > +{
-> > +	struct device *dev = &client->dev;
-> > +	struct mq_queue *mq;
-> > +	int ret, i;
-> > +	void *buf;
-> > +
-> > +	mq = devm_kzalloc(dev, sizeof(*mq), GFP_KERNEL);
-> > +	if (!mq)
-> > +		return -ENOMEM;
-> > +
-> 
-> > +	BUILD_BUG_ON(!is_power_of_2(MQ_QUEUE_SIZE));
-> 
-> Perhaps start function with this kind of assertions?
-> 
-
-
-same here, in case I see a huge ask for a v7, I can move this up.
-
-> > +
-> > +	buf = devm_kmalloc_array(dev, MQ_QUEUE_SIZE, MQ_MSGBUF_SIZE,
-> > +				 GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > +	for (i = 0; i < MQ_QUEUE_SIZE; i++)
-> > +		mq->queue[i].buf = buf + i * MQ_MSGBUF_SIZE;
-> 
-> 
-> Just wondering if kfifo API can bring an advantage here?
-> 
-
-Well, then again, I suppose the idea is simplify here, not if we need to go
-kfifo as the Protocol on top of this is perfectly fine with the current
-discipline of just having a simple drop of older messages.
-
-
-> > +	return 0;
-> > +}
-> 
-> > +static const struct of_device_id i2c_slave_mqueue_of_match[] = {
-> > +	{
-> > +		.compatible = "i2c-slave-mqueue",
-> > +	},
-> 
-> > +	{ },
-> 
-> No need for comma here.
-
-It does not hurt to have it either :-)
-
-> 
-> > +};
-> 
-> > +
-> > +static struct i2c_driver i2c_slave_mqueue_driver = {
-> > +	.driver = {
-> > +		.name	= "i2c-slave-mqueue",
-> 
-> > +		.of_match_table = of_match_ptr(i2c_slave_mqueue_of_match),
-> 
-> Wouldn't compiler warn you due to unused data?
-> Perhaps drop of_match_ptr() for good...
-
-
-Not sure what you meant here. I dont see any compiler warning.
-Also, of_match_ptr seams to be well spread in the kernel.
-> 
-> > +	},
-> > +	.probe		= i2c_slave_mqueue_probe,
-> > +	.remove		= i2c_slave_mqueue_remove,
-> > +	.id_table	= i2c_slave_mqueue_id,
-> > +};
-> 
+> +	.ngpios = 150,
+> +};
+> +
+> +static const struct msm_pinctrl_soc_data sdm845_acpi_pinctrl = {
+> +	.pins = sdm845_pins,
+> +	.npins = ARRAY_SIZE(sdm845_pins),
+> +	.groups = sdm845_groups,
+> +	.ngroups = ARRAY_SIZE(sdm845_groups),
+> +	.reserved_gpios = sdm845_acpi_reserved_gpios,
+>  	.ngpios = 150,
+>  };
+>  
+>  static int sdm845_pinctrl_probe(struct platform_device *pdev)
+>  {
+> -	return msm_pinctrl_probe(pdev, &sdm845_pinctrl);
+> +	int ret;
+> +
+> +	if (pdev->dev.of_node) {
+> +		ret = msm_pinctrl_probe(pdev, &sdm845_pinctrl);
+> +	} else if (ACPI_HANDLE(&pdev->dev)) {
+> +		ret = msm_pinctrl_probe(pdev, &sdm845_acpi_pinctrl);
+> +	} else {
+> +		dev_err(&pdev->dev, "DT and ACPI disabled\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+>  }
+>  
+> +static const struct acpi_device_id sdm845_pinctrl_acpi_match[] = {
+> +	{ "QCOM0217"},
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(acpi, sdm845_pinctrl_acpi_match);
+> +
+>  static const struct of_device_id sdm845_pinctrl_of_match[] = {
+>  	{ .compatible = "qcom,sdm845-pinctrl", },
+>  	{ },
+> @@ -1302,6 +1334,7 @@ static struct platform_driver sdm845_pinctrl_driver = {
+>  		.name = "sdm845-pinctrl",
+>  		.pm = &msm_pinctrl_dev_pm_ops,
+>  		.of_match_table = sdm845_pinctrl_of_match,
+> +		.acpi_match_table = ACPI_PTR(sdm845_pinctrl_acpi_match),
+>  	},
+>  	.probe = sdm845_pinctrl_probe,
+>  	.remove = msm_pinctrl_remove,
 > -- 
-> With Best Regards,
-> Andy Shevchenko
+> 2.17.1
 > 
-> 
-
--- 
-All the best,
-Eduardo Valentin
