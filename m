@@ -2,163 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD050357C0
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 09:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97ECC35823
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 09:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726341AbfFEHbj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jun 2019 03:31:39 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:35393 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726467AbfFEHbj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jun 2019 03:31:39 -0400
-Received: by mail-wm1-f67.google.com with SMTP id c6so1151628wml.0
-        for <linux-i2c@vger.kernel.org>; Wed, 05 Jun 2019 00:31:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=IWnG5mk+FSYYj2lHa0zQw85I3E1T6olPRsvdmWWZtDA=;
-        b=LnC7DlOAeqIU6jCar36+vJfnaBNJe7XDi+C9PTCBaCI6KbsqmLbikd0R4ff2IsEJrd
-         KXDU+/9i/2/3H1156mWXbRspGIKTixZGHqqBSfwvQSbknV1dXCvlxMJcXa0bwG95q18r
-         Dvn1fLNcMEz8cnM83vCka5cC2NsTRflgoRIxCS58wYgGh6EIKIFolkHw6lC0zeqHhwoZ
-         C5WhuwIxioR/vJCvvBa8ptAsN2IQYEGK+45vS1tGxq2gI3LCo/PkEGHyPvTx+LBX3umY
-         i8BcoGDi3C3mbCMjmj75qj+L1JYcTf2IkZtDp57NqjuyLaG2qdUm2YtKhyXE/eHv5cxy
-         4zeA==
+        id S1726671AbfFEH5F (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jun 2019 03:57:05 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:35317 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726467AbfFEH5C (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jun 2019 03:57:02 -0400
+Received: by mail-lf1-f65.google.com with SMTP id a25so18391858lfg.2;
+        Wed, 05 Jun 2019 00:57:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=IWnG5mk+FSYYj2lHa0zQw85I3E1T6olPRsvdmWWZtDA=;
-        b=QgtsaaDXK4+OlM4sT7Q8GUzeX1ECCDs7V17J3PRildNF/VFwc+BoF9Flx0El953RUx
-         tpqP2aOgNE0WyTDY+gilGkgpwdGWbdyr2+9s0+pOc27B2NFjYmlDvj2Eex2llzaxElM7
-         APkB4sRJ08i0vtzxaoiTKL/SfDYUP8R02fDbpRsz9XisJaXh6gqSpGPokwnLhe542/DI
-         Pe5P3n7bhZqWjTRi36QogeGgGgFVfhsKr0nGLJbMFrgfVelvVQPXD2KgBc+ZB48ZYcad
-         8Li984ez/uhUIzEcbEIHF0JUyhVXmQOPsZjO6h4f5nL6pqUuHbcIhgJ+7Gm5mU0YtRJR
-         F4zg==
-X-Gm-Message-State: APjAAAWlpB+HyUsQiEf//a2wD8IUd+wB/Zb+KIQSBqR4I0wfJX2EHR/4
-        A95hgqLvOF3uBM/BUEfu4YNwxg==
-X-Google-Smtp-Source: APXvYqyCnKW0jfvwBVA6aJcAK6VfcLrnJuvLPQVDIWk0oxlDsnBP0uEq+gISa827spE4AsPpgFfkTQ==
-X-Received: by 2002:a1c:6c08:: with SMTP id h8mr14401084wmc.62.1559719896073;
-        Wed, 05 Jun 2019 00:31:36 -0700 (PDT)
-Received: from dell ([2.27.167.43])
-        by smtp.gmail.com with ESMTPSA id u11sm13722491wrn.1.2019.06.05.00.31.34
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 05 Jun 2019 00:31:35 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 08:31:33 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     alokc@codeaurora.org, kramasub@codeaurora.org,
-        andy.gross@linaro.org, david.brown@linaro.org,
-        wsa+renesas@sang-engineering.com, linus.walleij@linaro.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jlhugo@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 4/8] pinctrl: qcom: sdm845: Provide ACPI support
-Message-ID: <20190605073133.GL4797@dell>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=BIGkKcYfLrKZMcNofxFte/MwlnM+iUUU8rGg0Es0KCI=;
+        b=jRpSbB4kywIBITbYWEf6/kRotgyPwypZ2xiTiMXOl0E1rybviEi2ONR4DIJ00lXGXR
+         vVEMTcbSgDoasqjGTmiV+73RyS5JhIw9ARxsVeFOV5gxOTGpzSCvaFC9llO0HrbV2G85
+         xeEVV0vodGNT1ter+ADBS8kqHyHPHJzh1tdGU1OsSUvngS/3vNlHNFdAlmivn4cDzRAO
+         JhGlzf6bvGgm02RPkVP7GcaXSQ3PRqocVtumxDV/6arnynLI7jXjoxrtJewwW5IjbNo5
+         gumC2sFZ7TpXE5xr6u5astLFgKblMLTLBRAixPPthRfP35JYDUz3qjFYVdLp+obMcfCb
+         xvMg==
+X-Gm-Message-State: APjAAAUm9WVT9+7h4UsT9IecKmTSFSbtIuxArhNiu2foPLMIAubZ/r2S
+        0vwQekxBQJhpVLhGInycVgk=
+X-Google-Smtp-Source: APXvYqyJTHFtU2ZPnYiQSPpENJAgbw8I3+7lh4a0s29uA2IVhDFXd/5pYXop0LCfMkGc18+7XLWDyw==
+X-Received: by 2002:a19:6a01:: with SMTP id u1mr17636778lfu.141.1559721419930;
+        Wed, 05 Jun 2019 00:56:59 -0700 (PDT)
+Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
+        by smtp.gmail.com with ESMTPSA id t22sm4189527lje.58.2019.06.05.00.56.59
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 00:56:59 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.91)
+        (envelope-from <johan@kernel.org>)
+        id 1hYQn2-00063e-Gt; Wed, 05 Jun 2019 09:56:57 +0200
+Date:   Wed, 5 Jun 2019 09:56:56 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, balbi@kernel.org,
+        wsa+renesas@sang-engineering.com, gregkh@linuxfoundation.org,
+        linus.walleij@linaro.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, david.brown@linaro.org,
+        alokc@codeaurora.org, kramasub@codeaurora.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, andy.gross@linaro.org,
+        jlhugo@gmail.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/8] i2c: i2c-qcom-geni: Signify successful driver probe
+Message-ID: <20190605075656.GC29637@localhost>
 References: <20190604104455.8877-1-lee.jones@linaro.org>
- <20190604104455.8877-4-lee.jones@linaro.org>
- <20190605061721.GK22737@tuxbook-pro>
+ <20190604104455.8877-2-lee.jones@linaro.org>
+ <20190605062020.GL22737@tuxbook-pro>
+ <20190605071625.GK4797@dell>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190605061721.GK22737@tuxbook-pro>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20190605071625.GK4797@dell>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 04 Jun 2019, Bjorn Andersson wrote:
-
-> On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
+On Wed, Jun 05, 2019 at 08:16:25AM +0100, Lee Jones wrote:
+> On Tue, 04 Jun 2019, Bjorn Andersson wrote:
 > 
-> > This patch provides basic support for booting with ACPI instead
-> > of the currently supported Device Tree.  When doing so there are a
-> > couple of differences which we need to taken into consideration.
+> > On Tue 04 Jun 03:44 PDT 2019, Lee Jones wrote:
 > > 
-> > Firstly, the SDM850 ACPI tables omit information pertaining to the
-> > 4 reserved GPIOs on the platform.  If Linux attempts to touch/
-> > initialise any of these lines, the firmware will restart the
-> > platform.
+> > > The Qualcomm Geni I2C driver currently probes silently which can be
+> > > confusing when debugging potential issues.  Add a low level (INFO)
+> > > print when each I2C controller is successfully initially set-up.
+> > > 
+> > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > ---
+> > >  drivers/i2c/busses/i2c-qcom-geni.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> > > index 0fa93b448e8d..e27466d77767 100644
+> > > --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> > > +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> > > @@ -598,6 +598,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > +	dev_info(&pdev->dev, "Geni-I2C adaptor successfully added\n");
+> > > +
 > > 
-> > Secondly, when booting with ACPI, it is expected that the firmware
-> > will set-up things like; Regulators, Clocks, Pin Functions, etc in
-> > their ideal configuration.  Thus, the possible Pin Functions
-> > available to this platform are not advertised when providing the
-> > higher GPIOD/Pinctrl APIs with pin information.
-> > 
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >  drivers/pinctrl/qcom/Kconfig          |  2 +-
-> >  drivers/pinctrl/qcom/pinctrl-sdm845.c | 35 ++++++++++++++++++++++++++-
-> >  2 files changed, 35 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
-> > index 2e66ab72c10b..aafbe932424f 100644
-> > --- a/drivers/pinctrl/qcom/Kconfig
-> > +++ b/drivers/pinctrl/qcom/Kconfig
-> > @@ -168,7 +168,7 @@ config PINCTRL_SDM660
-> >  
-> >  config PINCTRL_SDM845
-> >         tristate "Qualcomm Technologies Inc SDM845 pin controller driver"
-> > -       depends on GPIOLIB && OF
-> > +       depends on GPIOLIB && (OF || ACPI)
-> >         select PINCTRL_MSM
-> >         help
-> >           This is the pinctrl, pinmux, pinconf and gpiolib driver for the
-> > diff --git a/drivers/pinctrl/qcom/pinctrl-sdm845.c b/drivers/pinctrl/qcom/pinctrl-sdm845.c
-> > index c97f20fca5fd..7188bee3cf3e 100644
-> > --- a/drivers/pinctrl/qcom/pinctrl-sdm845.c
-> > +++ b/drivers/pinctrl/qcom/pinctrl-sdm845.c
-> > @@ -3,6 +3,7 @@
-> >   * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
-> >   */
-> >  
-> > +#include <linux/acpi.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> >  #include <linux/platform_device.h>
-> > @@ -1277,6 +1278,10 @@ static const struct msm_pingroup sdm845_groups[] = {
-> >  	UFS_RESET(ufs_reset, 0x99f000),
-> >  };
-> >  
-> > +static const int sdm845_acpi_reserved_gpios[] = {
-> > +	0, 1, 2, 3, 81, 82, 83, 84, -1
-> > +};
-> > +
-> >  static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
-> >  	.pins = sdm845_pins,
-> >  	.npins = ARRAY_SIZE(sdm845_pins),
-> > @@ -1284,14 +1289,41 @@ static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
-> >  	.nfunctions = ARRAY_SIZE(sdm845_functions),
-> >  	.groups = sdm845_groups,
-> >  	.ngroups = ARRAY_SIZE(sdm845_groups),
-> > +	.reserved_gpios = sdm845_acpi_reserved_gpios,
+> > I would prefer that we do not add such prints, as it would be to accept
+> > the downstream behaviour of spamming the log to the point where no one
+> > will ever look through it.
 > 
-> The reason why put these in DT is because the list is board/firmware
-> dependent. E.g. the firmware on db845c does not support the peripherals
-> that sits on these 8 pins and as such these are not reserved.
+> We should be able to find a middle ground.  Spamming the log with all
+> sorts of device specific information/debug is obviously not
+> constructive, but a single liner to advertise that an important
+> device/controller has been successfully initialised is more helpful
+> than it is hinderous.
+> 
+> This print was added due to the silent initialisation costing me
+> several hours of debugging ACPI device/driver code (albeit learning a
+> lot about ACPI as I go) just to find out that it was already doing the
+> right thing - just very quietly.
 
-If we need to be more particular about which platform(s) this affects,
-we could add matching based on their differences (some ACPI HID or F/W
-version/descriptor, etc) as and when we enable them for booting with
-ACPI.
+No, we don't add noise like this to the logs just because it may be
+useful while debugging. Even one-liners add up.
 
-> But given that the two structs looks identical now, did you perhaps not
-> intend to add.reserved_gpios for the non-ACPI case?
+There are plenty of options for debugging already ranging from adding a
+temporary dev_info() to the probe function in question to using dynamic
+debugging to have driver core log every successful probe.
 
-Given your example above, I think it's best that we let the
-configuration tables advertise these in the first instance.  I only
-add them here because it is not possible to obtain them from
-elsewhere.
+And in this case you say the driver was in fact already bound; that can
+easily be verified through sysfs too in case things aren't behaving the
+way you expect.
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Johan
