@@ -2,150 +2,130 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E256B35F49
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 16:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96FBF36003
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 17:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727864AbfFEOcR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jun 2019 10:32:17 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:58587 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbfFEOcR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jun 2019 10:32:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1559745136; x=1591281136;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XNFcFvZp+FLfITJoF+AIM8yN6QrQMB3mYowCFh64VQc=;
-  b=QLL5tU8DfhW/SxBUsohJj/kG/MAf69SZduyCsCMTFtVLlua15gUBkmVG
-   NcdzDbeqVlZqOmlPqpW8V4ssEJZ8+sJCrP+Qs+auPj0boRa5xGZxfR21h
-   LdUPcgiVu6xJpuV61Ev7PO+1pmeUHYNHWj6a6Ghts7GvR+yfvmt/QR5Ws
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.60,550,1549929600"; 
-   d="scan'208";a="678308820"
-Received: from sea3-co-svc-lb6-vlan3.sea.amazon.com (HELO email-inbound-relay-2b-3714e498.us-west-2.amazon.com) ([10.47.22.38])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 05 Jun 2019 14:32:02 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2b-3714e498.us-west-2.amazon.com (Postfix) with ESMTPS id 3B1C8A2753;
-        Wed,  5 Jun 2019 14:32:01 +0000 (UTC)
-Received: from EX13D05UWB004.ant.amazon.com (10.43.161.208) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 5 Jun 2019 14:32:00 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D05UWB004.ant.amazon.com (10.43.161.208) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 5 Jun 2019 14:32:00 +0000
-Received: from localhost (10.85.18.74) by mail-relay.amazon.com (10.43.61.243)
- with Microsoft SMTP Server id 15.0.1367.3 via Frontend Transport; Wed, 5 Jun
- 2019 14:31:58 +0000
-Date:   Wed, 5 Jun 2019 07:31:58 -0700
-From:   Eduardo Valentin <eduval@amazon.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Eduardo Valentin <eduval@amazon.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Haiyue Wang <haiyue.wang@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
+        id S1728463AbfFEPOf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jun 2019 11:14:35 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:33392 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728458AbfFEPOe (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 5 Jun 2019 11:14:34 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5092115BF;
+        Wed,  5 Jun 2019 08:14:34 -0700 (PDT)
+Received: from en101.cambridge.arm.com (en101.cambridge.arm.com [10.1.196.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0B1963F246;
+        Wed,  5 Jun 2019 08:14:28 -0700 (PDT)
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        suzuki.poulose@arm.com, Alan Tull <atull@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Moritz Fischer <mdf@kernel.org>, Peter Rosin <peda@axentia.se>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] i2c: slave-mqueue: add a slave backend to receive
- and queue messages
-Message-ID: <20190605143158.GB1534@u40b0340c692b58f6553c.ant.amazon.com>
-References: <20190531043347.4196-1-eduval@amazon.com>
- <20190531043347.4196-3-eduval@amazon.com>
- <20190604171611.GS9224@smile.fi.intel.com>
- <20190605032709.GA1534@u40b0340c692b58f6553c.ant.amazon.com>
- <CAHp75Vdaeprj0hFXukMqDi_dnK9-vA-O-OTRiGY6y3aGrNHUjQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vdaeprj0hFXukMqDi_dnK9-vA-O-OTRiGY6y3aGrNHUjQ@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Joe Perches <joe@perches.com>
+Subject: [PATCH 04/13] drivers: Add generic helper to match by of_node
+Date:   Wed,  5 Jun 2019 16:13:41 +0100
+Message-Id: <1559747630-28065-5-git-send-email-suzuki.poulose@arm.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1559747630-28065-1-git-send-email-suzuki.poulose@arm.com>
+References: <1559747630-28065-1-git-send-email-suzuki.poulose@arm.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 11:25:39AM +0300, Andy Shevchenko wrote:
-> On Wed, Jun 5, 2019 at 6:30 AM Eduardo Valentin <eduval@amazon.com> wrote:
-> >
-> > Hey Andry,
-> >
-> > Long time no seeing :-)
-> 
-> True!
-> 
-> 
-> > > > +#define MQ_MSGBUF_SIZE             CONFIG_I2C_SLAVE_MQUEUE_MESSAGE_SIZE
-> > > > +#define MQ_QUEUE_SIZE              CONFIG_I2C_SLAVE_MQUEUE_QUEUE_SIZE
-> > >
-> > > > +#define MQ_QUEUE_NEXT(x)   (((x) + 1) & (MQ_QUEUE_SIZE - 1))
-> > >
-> > > Also possible ((x + 1) % ..._SIZE)
-> >
-> > Right.. but I suppose the original idea is to avoid divisions on the hotpath.
-> >
-> > So, I am actually fine with the limitation of only using power of 2.
-> 
-> The original code implies that anyway, so, my proposal doesn't
-> restrict it any farther.
+Add a helper to match device by the of_node. This will be later used
+to provide generic lookup functions by of_node.
 
-Well, yes, but the point is you would be switching from a simple AND (&) operation
-to a division...
+Cc: Alan Tull <atull@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: David Airlie <airlied@linux.ie>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: devicetree@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Jiri Slaby <jslaby@suse.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: linux-fpga@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-spi@vger.kernel.org
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+Cc: Moritz Fischer <mdf@kernel.org>
+Cc: Peter Rosin <peda@axentia.se>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Thor Thayer <thor.thayer@linux.intel.com>
+Cc: Wolfram Sang <wsa@the-dreams.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Joe Perches <joe@perches.com>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+---
+ drivers/base/core.c    | 6 ++++++
+ include/linux/device.h | 2 ++
+ 2 files changed, 8 insertions(+)
 
-I am keeping the power of 2 dep so that we can keep this with a simple &.
-
-> > > > +   {
-> > > > +           .compatible = "i2c-slave-mqueue",
-> > > > +   },
-> > >
-> > > > +   { },
-> > >
-> > > No need for comma here.
-> >
-> > It does not hurt to have it either :-)
-> 
-> It's just a protection against some weird cases of adding entries
-> behind the terminator.
-
-Fair..
-
-> 
-> > > > +           .of_match_table = of_match_ptr(i2c_slave_mqueue_of_match),
-> > >
-> > > Wouldn't compiler warn you due to unused data?
-> > > Perhaps drop of_match_ptr() for good...
-> >
-> >
-> > Not sure what you meant here. I dont see any compiler warning.
-> > Also, of_match_ptr seams to be well spread in the kernel.
-> 
-> If this will be compiled with CONFIG_OF=n...
-
-I see.. I obviously did not test with that config..
-
-> Though I didn't check all dependencies to see if it even possible. In
-> any case of_match_ptr() is redundant in both cases here.
-> Either you need to protect i2c_slave_mqueue_of_match with #ifdef
-> CONFIG_OF, or drop the macro use.
-
-I will wrap it into CONFIG_OF..
-
-> 
-> P.S. Taking into account the last part, I would wait for v7 with that
-> fixed followed by fixing other nits.
-
-I agree, the warn on CONFIG_OF=n is enough to spin out an extra version.
-I will include the other nits too.
-
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index fd7511e..9211908 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3328,3 +3328,9 @@ void device_set_of_node_from_dev(struct device *dev, const struct device *dev2)
+ 	dev->of_node_reused = true;
+ }
+ EXPORT_SYMBOL_GPL(device_set_of_node_from_dev);
++
++int device_match_of_node(struct device *dev, const void *np)
++{
++	return dev->of_node == np;
++}
++EXPORT_SYMBOL_GPL(device_match_of_node);
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 4d7c881..7093085 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -163,6 +163,8 @@ void subsys_dev_iter_init(struct subsys_dev_iter *iter,
+ struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter);
+ void subsys_dev_iter_exit(struct subsys_dev_iter *iter);
+ 
++int device_match_of_node(struct device *dev, const void *np);
++
+ int bus_for_each_dev(struct bus_type *bus, struct device *start, void *data,
+ 		     int (*fn)(struct device *dev, void *data));
+ struct device *bus_find_device(struct bus_type *bus, struct device *start,
 -- 
-All the best,
-Eduardo Valentin
+2.7.4
+
