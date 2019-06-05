@@ -2,47 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED8035BDC
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 13:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED8C35B6E
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 13:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727696AbfFELqO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jun 2019 07:46:14 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:41593 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727488AbfFELnN (ORCPT
+        id S1727565AbfFELnO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jun 2019 07:43:14 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:50239 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727511AbfFELnN (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jun 2019 07:43:13 -0400
-Received: by mail-wr1-f68.google.com with SMTP id c2so19130312wrm.8
-        for <linux-i2c@vger.kernel.org>; Wed, 05 Jun 2019 04:43:11 -0700 (PDT)
+Received: by mail-wm1-f65.google.com with SMTP id f204so1941732wme.0
+        for <linux-i2c@vger.kernel.org>; Wed, 05 Jun 2019 04:43:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=nmWKh7PwMWUSmXx8hL09I0aV6DcSJSwvr9bLIGJ3tMI=;
-        b=SgtCbgZWn+iyD+TREQ41swHeI1GDlVUfH980YLfnSjYgcyagCPeaJWpcd2Jv8qZS6E
-         A852cUGqauHT/kNRq3k2YvtwgJJ/+3BX0NswYhwvizWDIirfnmC9wVs+93wOOLztsJr9
-         qnTLQ0zw6htFYjGQbrdOu48/hO3kfXrALbf8DLL/r5qxUoSIjfNn225cWEvOmLd1b1I5
-         6wISaGry68nhRWJ/eTmSICdaDW2BR3uwbHUJjH0I/MLwNU0Nx6Tf93ihLjZN21zKwBfn
-         NejYAOAY8pW5bKYMdxXwrcHlTTpzNAYcxmyAOtzTjoFK2ylDvzYHFK35UTTbsdXFsAp2
-         7BSw==
+        bh=Ixa6PZM7Qd3yNTQ1/2lb9UJukHzNBYD4+3OM8ec4OSs=;
+        b=Jp/JdV2yn/wqzzWfOfRwb4FDVYCujOYkpzb+HCTUS8NJcsoL4RrGPGuKPM8+By8ldP
+         jPZZn5cDvQZM4hPjpBYEHrh/IeOX0Z7r4dvWciU3vsimgp8YD0BNAI+Gw25gu1z4Gz8Y
+         D3ui/SE5BXLU3wep3K6tbv585rzPvuk4KGIyNY5pTZ73EYHFKqL0ETq7VHveP0ik1XbP
+         vRjdeVso0R3Qf3fg30cUV1JGbZ9rPnx5URfNBjQnyBqMB1vL7SrpnuPWfhxvEodve6a9
+         nxKo++m195buCgkzC5hyYHqa6Y2fqKDvoQRgatziZq1/c9ycvazbtDPQschW4lFDaiTC
+         3eXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=nmWKh7PwMWUSmXx8hL09I0aV6DcSJSwvr9bLIGJ3tMI=;
-        b=ZQftpPg0b1GkcjPnSVgh9GRtNeKyFLq6U+jANisxbx0gcTHEnz3HTCvyN/L/my9/kh
-         T11tcVptDQccW6dBzv6NqOufE+Wa2+27sn5BrWTGfCPK63xL5tbCRSUDmYDPY5iHaMnn
-         yeWZf46PZcjEMLzVuz0txDQeSXsP8SI7vBFma+srajDyoNsoy4qOzbJfr9J0/f22gV78
-         zvb2Wzn5oTb7IEDuT05uT/l0QeRj9o21OLCOknz6DK3S53lnxagbhVBhL4874LdeKNRN
-         9xBk0XyO8VLec8GhqzoBUczOkuWFfPkU3j0fFgbu1Tg+NNpNfUHskWhpJKI4bh98I64e
-         ADrQ==
-X-Gm-Message-State: APjAAAXQ3zM8oBsRnMaIYT+aogAKKZKrzxW5A99QEBtQujqD++xVlLy3
-        Zdn0dZUjmjID7wnz27EMgggrog==
-X-Google-Smtp-Source: APXvYqyPMmLvKJCSCbvOHxYOc49TsFqScPeN8qfrlKdaILVUtgPT5NujbI2M6w+g8sdOD6nidZ4ILw==
-X-Received: by 2002:a5d:5552:: with SMTP id g18mr7592538wrw.254.1559734990576;
-        Wed, 05 Jun 2019 04:43:10 -0700 (PDT)
+        bh=Ixa6PZM7Qd3yNTQ1/2lb9UJukHzNBYD4+3OM8ec4OSs=;
+        b=A7WGz4EnqBIzEX0zbmEDcnye1mwiP2HVaAnBqT8qd9TyMiTHgOojHP8NUr4ih5+wVN
+         3g80ugX915u+u+loCKmfFPHhTi9fUQsSDHjMnfmi+6FM8dTTYdPX/IPPJi3GapsVD3rf
+         FMGPpZBLIQNEeZ1iVtIPcez9Wx8q0RIiDQy1+Fv06nSvo4EWEHmax8DaPrnj6GjEVxlu
+         u3ZlF18AFdjRD9yn5WzbyvX+QfTOL4ZmR31rdxTQsSM4MaHPg4eMlfC2VYL6Nmtn8lI0
+         9dFFGXUCMnOYEisbf6Cl0pXbGJqTkkLwj7zUq313fg+1A6mSxvTCuVkynxyCci9sheyv
+         fApg==
+X-Gm-Message-State: APjAAAX8iSJW7ZSQ0JL8J10/BGX+SNfrpBUZW14GkFTK1m2aSr3upwwy
+        wfQDaGUAkCjo+HibnT+5mBSLcg==
+X-Google-Smtp-Source: APXvYqyl2gwOWbUGVEnYEh9X8OzB/jrJfkYNgjV/h4onDE5kOB10EdAyUcgxHPRB9QKTfy4UfkQugg==
+X-Received: by 2002:a1c:e3c1:: with SMTP id a184mr1175742wmh.24.1559734991651;
+        Wed, 05 Jun 2019 04:43:11 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.167.43])
-        by smtp.gmail.com with ESMTPSA id 34sm27718740wre.32.2019.06.05.04.43.09
+        by smtp.gmail.com with ESMTPSA id 34sm27718740wre.32.2019.06.05.04.43.10
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 04:43:10 -0700 (PDT)
+        Wed, 05 Jun 2019 04:43:11 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     alokc@codeaurora.org, andy.gross@linaro.org,
         david.brown@linaro.org, wsa+renesas@sang-engineering.com,
@@ -52,9 +52,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         jlhugo@gmail.com, linux-i2c@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 4/8] pinctrl: qcom: sdm845: Provide ACPI support
-Date:   Wed,  5 Jun 2019 12:42:58 +0100
-Message-Id: <20190605114302.22509-4-lee.jones@linaro.org>
+Subject: [PATCH 5/8] soc: qcom: geni: Add support for ACPI
+Date:   Wed,  5 Jun 2019 12:42:59 +0100
+Message-Id: <20190605114302.22509-5-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190605114302.22509-1-lee.jones@linaro.org>
 References: <20190605114302.22509-1-lee.jones@linaro.org>
@@ -63,114 +63,70 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This patch provides basic support for booting with ACPI instead
-of the currently supported Device Tree.  When doing so there are a
-couple of differences which we need to taken into consideration.
-
-Firstly, the SDM850 ACPI tables omit information pertaining to the
-4 reserved GPIOs on the platform.  If Linux attempts to touch/
-initialise any of these lines, the firmware will restart the
-platform.
-
-Secondly, when booting with ACPI, it is expected that the firmware
-will set-up things like; Regulators, Clocks, Pin Functions, etc in
-their ideal configuration.  Thus, the possible Pin Functions
-available to this platform are not advertised when providing the
-higher GPIOD/Pinctrl APIs with pin information.
+When booting with ACPI as the active set of configuration tables,
+all; clocks, regulators, pin functions ect are expected to be at
+their ideal values/levels/rates, thus the associated frameworks
+are unavailable.  Ensure calls to these APIs are shielded when
+ACPI is enabled.
 
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/pinctrl/qcom/Kconfig          |  2 +-
- drivers/pinctrl/qcom/pinctrl-sdm845.c | 35 ++++++++++++++++++++++++++-
- 2 files changed, 35 insertions(+), 2 deletions(-)
+ drivers/soc/qcom/qcom-geni-se.c | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
-index 2e66ab72c10b..aafbe932424f 100644
---- a/drivers/pinctrl/qcom/Kconfig
-+++ b/drivers/pinctrl/qcom/Kconfig
-@@ -168,7 +168,7 @@ config PINCTRL_SDM660
- 
- config PINCTRL_SDM845
-        tristate "Qualcomm Technologies Inc SDM845 pin controller driver"
--       depends on GPIOLIB && OF
-+       depends on GPIOLIB && (OF || ACPI)
-        select PINCTRL_MSM
-        help
-          This is the pinctrl, pinmux, pinconf and gpiolib driver for the
-diff --git a/drivers/pinctrl/qcom/pinctrl-sdm845.c b/drivers/pinctrl/qcom/pinctrl-sdm845.c
-index c97f20fca5fd..7188bee3cf3e 100644
---- a/drivers/pinctrl/qcom/pinctrl-sdm845.c
-+++ b/drivers/pinctrl/qcom/pinctrl-sdm845.c
-@@ -3,6 +3,7 @@
-  * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
-  */
+diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+index 6b8ef01472e9..cff0a413e59a 100644
+--- a/drivers/soc/qcom/qcom-geni-se.c
++++ b/drivers/soc/qcom/qcom-geni-se.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
  
 +#include <linux/acpi.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-@@ -1277,6 +1278,10 @@ static const struct msm_pingroup sdm845_groups[] = {
- 	UFS_RESET(ufs_reset, 0x99f000),
- };
- 
-+static const int sdm845_acpi_reserved_gpios[] = {
-+	0, 1, 2, 3, 81, 82, 83, 84, -1
-+};
-+
- static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
- 	.pins = sdm845_pins,
- 	.npins = ARRAY_SIZE(sdm845_pins),
-@@ -1284,14 +1289,41 @@ static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
- 	.nfunctions = ARRAY_SIZE(sdm845_functions),
- 	.groups = sdm845_groups,
- 	.ngroups = ARRAY_SIZE(sdm845_groups),
-+	.reserved_gpios = sdm845_acpi_reserved_gpios,
-+	.ngpios = 150,
-+};
-+
-+static const struct msm_pinctrl_soc_data sdm845_acpi_pinctrl = {
-+	.pins = sdm845_pins,
-+	.npins = ARRAY_SIZE(sdm845_pins),
-+	.groups = sdm845_groups,
-+	.ngroups = ARRAY_SIZE(sdm845_groups),
-+	.reserved_gpios = sdm845_acpi_reserved_gpios,
- 	.ngpios = 150,
- };
- 
- static int sdm845_pinctrl_probe(struct platform_device *pdev)
+ #include <linux/clk.h>
+ #include <linux/slab.h>
+ #include <linux/dma-mapping.h>
+@@ -450,6 +451,9 @@ int geni_se_resources_off(struct geni_se *se)
  {
--	return msm_pinctrl_probe(pdev, &sdm845_pinctrl);
-+	int ret;
-+
-+	if (pdev->dev.of_node) {
-+		ret = msm_pinctrl_probe(pdev, &sdm845_pinctrl);
-+	} else if (ACPI_HANDLE(&pdev->dev)) {
-+		ret = msm_pinctrl_probe(pdev, &sdm845_acpi_pinctrl);
-+	} else {
-+		dev_err(&pdev->dev, "DT and ACPI disabled\n");
-+		return -EINVAL;
-+	}
-+
-+	return ret;
- }
+ 	int ret;
  
-+static const struct acpi_device_id sdm845_pinctrl_acpi_match[] = {
-+	{ "QCOM0217"},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(acpi, sdm845_pinctrl_acpi_match);
++	if (ACPI_HANDLE(se->dev))
++		return 0;
 +
- static const struct of_device_id sdm845_pinctrl_of_match[] = {
- 	{ .compatible = "qcom,sdm845-pinctrl", },
- 	{ },
-@@ -1302,6 +1334,7 @@ static struct platform_driver sdm845_pinctrl_driver = {
- 		.name = "sdm845-pinctrl",
- 		.pm = &msm_pinctrl_dev_pm_ops,
- 		.of_match_table = sdm845_pinctrl_of_match,
-+		.acpi_match_table = ACPI_PTR(sdm845_pinctrl_acpi_match),
- 	},
- 	.probe = sdm845_pinctrl_probe,
- 	.remove = msm_pinctrl_remove,
+ 	ret = pinctrl_pm_select_sleep_state(se->dev);
+ 	if (ret)
+ 		return ret;
+@@ -487,6 +491,9 @@ int geni_se_resources_on(struct geni_se *se)
+ {
+ 	int ret;
+ 
++	if (ACPI_HANDLE(se->dev))
++		return 0;
++
+ 	ret = geni_se_clks_on(se);
+ 	if (ret)
+ 		return ret;
+@@ -724,12 +731,14 @@ static int geni_se_probe(struct platform_device *pdev)
+ 	if (IS_ERR(wrapper->base))
+ 		return PTR_ERR(wrapper->base);
+ 
+-	wrapper->ahb_clks[0].id = "m-ahb";
+-	wrapper->ahb_clks[1].id = "s-ahb";
+-	ret = devm_clk_bulk_get(dev, NUM_AHB_CLKS, wrapper->ahb_clks);
+-	if (ret) {
+-		dev_err(dev, "Err getting AHB clks %d\n", ret);
+-		return ret;
++	if (!ACPI_HANDLE(&pdev->dev)) {
++		wrapper->ahb_clks[0].id = "m-ahb";
++		wrapper->ahb_clks[1].id = "s-ahb";
++		ret = devm_clk_bulk_get(dev, NUM_AHB_CLKS, wrapper->ahb_clks);
++		if (ret) {
++			dev_err(dev, "Err getting AHB clks %d\n", ret);
++			return ret;
++		}
+ 	}
+ 
+ 	dev_set_drvdata(dev, wrapper);
 -- 
 2.17.1
 
