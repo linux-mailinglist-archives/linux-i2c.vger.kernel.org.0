@@ -2,599 +2,220 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DB73640E
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 21:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A03BF36454
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2019 21:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbfFETJ6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jun 2019 15:09:58 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:59042 "EHLO
-        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727049AbfFETJs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jun 2019 15:09:48 -0400
-Received: from Internal Mail-Server by MTLPINE2 (envelope-from asmaa@mellanox.com)
-        with ESMTPS (AES256-SHA encrypted); 5 Jun 2019 22:09:45 +0300
-Received: from farm-1.mtbu.labs.mlnx (farm-1.mtbu.labs.mlnx [10.15.2.31])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id x55J9iXW004275;
-        Wed, 5 Jun 2019 15:09:44 -0400
-Received: (from asmaa@localhost)
-        by farm-1.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id x55J9iKC014245;
-        Wed, 5 Jun 2019 15:09:44 -0400
-From:   Asmaa Mnebhi <Asmaa@mellanox.com>
-To:     minyard@acm.org, wsa@the-dreams.de, vadimp@mellanox.com,
-        michaelsh@mellanox.com, rdunlap@infradead.org
-Cc:     Asmaa Mnebhi <Asmaa@mellanox.com>, linux-kernel@vger.kernel.org,
+        id S1726477AbfFETOg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jun 2019 15:14:36 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52338 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726280AbfFETOf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jun 2019 15:14:35 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x55J6scn136456
+        for <linux-i2c@vger.kernel.org>; Wed, 5 Jun 2019 15:14:34 -0400
+Received: from e32.co.us.ibm.com (e32.co.us.ibm.com [32.97.110.150])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2sxh2mexnw-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-i2c@vger.kernel.org>; Wed, 05 Jun 2019 15:14:34 -0400
+Received: from localhost
+        by e32.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-i2c@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
+        Wed, 5 Jun 2019 20:14:33 +0100
+Received: from b03cxnp07028.gho.boulder.ibm.com (9.17.130.15)
+        by e32.co.us.ibm.com (192.168.1.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 5 Jun 2019 20:14:31 +0100
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x55JEUUd19595770
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Jun 2019 19:14:30 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B9AA3C63D4;
+        Wed,  5 Jun 2019 19:14:30 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6D604C63CE;
+        Wed,  5 Jun 2019 19:14:30 +0000 (GMT)
+Received: from [9.41.179.222] (unknown [9.41.179.222])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Jun 2019 19:14:30 +0000 (GMT)
+Subject: Re: [PATCH] i2c: fsi: Create busses for all ports
+To:     Oliver <oohall@gmail.com>, Eddie James <eajames@linux.ibm.com>
+Cc:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
         linux-i2c@vger.kernel.org
-Subject: [PATCH v10 1/1] Add support for IPMB driver
-Date:   Wed,  5 Jun 2019 15:09:30 -0400
-Message-Id: <db9dfb91e9d28b07944a8ce7c92ced3c3c65dea4.1559761562.git.Asmaa@mellanox.com>
-X-Mailer: git-send-email 2.1.2
-In-Reply-To: <cover.1559761562.git.Asmaa@mellanox.com>
-References: <cover.1559761562.git.Asmaa@mellanox.com>
-In-Reply-To: <cover.1559761562.git.Asmaa@mellanox.com>
-References: <cover.1559761562.git.Asmaa@mellanox.com>
+References: <20190603055714.7203-1-oohall@gmail.com>
+ <e546c15f-07a9-656a-ce11-4f9a24795d9a@linux.ibm.com>
+ <CAOSf1CE5J93rai-VcZJJWkU=N=1=STtV2XqKQh_yLvQpXBKkHw@mail.gmail.com>
+ <e578ae92-baf0-f55a-1cb4-82c992851483@linux.ibm.com>
+ <CAOSf1CEA-S8ond9Bwk+CGQ9=OGwV9EevJRn7LB075615rbz65A@mail.gmail.com>
+From:   Eddie James <eajames@linux.vnet.ibm.com>
+Date:   Wed, 5 Jun 2019 14:14:29 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <CAOSf1CEA-S8ond9Bwk+CGQ9=OGwV9EevJRn7LB075615rbz65A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+x-cbid: 19060519-0004-0000-0000-00001518AA29
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011220; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01213711; UDB=6.00637935; IPR=6.00994785;
+ MB=3.00027198; MTD=3.00000008; XFM=3.00000015; UTC=2019-06-05 19:14:32
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19060519-0005-0000-0000-00008BF3FBF8
+Message-Id: <73d9cbde-3aa6-5e32-e7ab-5d7650aed5dd@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-05_11:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906050119
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Support receiving IPMB requests on a Satellite MC from the BMC.
-Once a response is ready, this driver will send back a response
-to the BMC via the IPMB channel.
 
-Signed-off-by: Asmaa Mnebhi <Asmaa@mellanox.com>
-Acked-by: vadimp@mellanox.com
----
- Documentation/IPMB.txt           | 103 ++++++++++
- drivers/char/ipmi/Kconfig        |   8 +
- drivers/char/ipmi/Makefile       |   1 +
- drivers/char/ipmi/ipmb_dev_int.c | 400 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 512 insertions(+)
- create mode 100644 Documentation/IPMB.txt
- create mode 100644 drivers/char/ipmi/ipmb_dev_int.c
+On 6/4/19 10:17 PM, Oliver wrote:
+> On Wed, Jun 5, 2019 at 8:57 AM Eddie James <eajames@linux.ibm.com> wrote:
+>>
+>> On 6/4/19 1:14 AM, Oliver wrote:
+>>> On Tue, Jun 4, 2019 at 12:15 AM Eddie James <eajames@linux.ibm.com> wrote:
+>>>> On 6/3/19 12:57 AM, Oliver O'Halloran wrote:
+>>>>> Currently we only create an I2C bus for the ports listed in the
+>>>>> device-tree for that master. There's no real reason for this since
+>>>>> we can discover the number of ports the master supports by looking
+>>>>> at the port_max field of the status register.
+>>>>>
+>>>>> This patch re-works the bus add logic so that we always create buses
+>>>>> for each port, unless the bus is marked as unavailable in the DT. This
+>>>>> is useful since it ensures that all the buses provided by the CFAM I2C
+>>>>> master are accessible to debug tools.
+>>>>>
+>>>>> Cc: Eddie James <eajames@linux.vnet.ibm.com>
+>>>>> Signed-off-by: Oliver O'Halloran <oohall@gmail.com>
+>>>>> ---
+>>>>>     drivers/i2c/busses/i2c-fsi.c | 30 +++++++++++++++++++++++++-----
+>>>>>     1 file changed, 25 insertions(+), 5 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/i2c/busses/i2c-fsi.c b/drivers/i2c/busses/i2c-fsi.c
+>>>>> index 1e2be2219a60..59a76c6e31ad 100644
+>>>>> --- a/drivers/i2c/busses/i2c-fsi.c
+>>>>> +++ b/drivers/i2c/busses/i2c-fsi.c
+>>>>> @@ -658,13 +658,27 @@ static const struct i2c_algorithm fsi_i2c_algorithm = {
+>>>>>         .functionality = fsi_i2c_functionality,
+>>>>>     };
+>>>>>
+>>>>> +static device_node *fsi_i2c_find_port_of_node(struct device_node *master,
+>>>>> +                                           int port)
+>>> Turns out I had a pile of compile fixes staged but not committed so
+>>> this patch is totally broken. Oops.
+>>>
+>>>>> +{
+>>>>> +     struct device_node *np;
+>>>>> +
+>>>>> +     for_each_child_of_node(fsi, np) {
+>>>>> +             rc = of_property_read_u32(np, "reg", &port_no);
+>>>>> +             if (!rc && port_no == port)
+>>>>> +                     return np;
+>>>>> +     }
+>>>>> +
+>>>>> +     return NULL;
+>>>>> +}
+>>>>> +
+>>>>>     static int fsi_i2c_probe(struct device *dev)
+>>>>>     {
+>>>>>         struct fsi_i2c_master *i2c;
+>>>>>         struct fsi_i2c_port *port;
+>>>>>         struct device_node *np;
+>>>>> +     u32 port_no, ports, stat;
+>>>>>         int rc;
+>>>>> -     u32 port_no;
+>>>>>
+>>>>>         i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
+>>>>>         if (!i2c)
+>>>>> @@ -678,10 +692,16 @@ static int fsi_i2c_probe(struct device *dev)
+>>>>>         if (rc)
+>>>>>                 return rc;
+>>>>>
+>>>>> -     /* Add adapter for each i2c port of the master. */
+>>>>> -     for_each_available_child_of_node(dev->of_node, np) {
+>>>>> -             rc = of_property_read_u32(np, "reg", &port_no);
+>>>>> -             if (rc || port_no > USHRT_MAX)
+>>>>> +     rc = fsi_i2c_read_reg(i2c->fsi, I2C_FSI_STAT, &state);
+>>>>> +     if (rc)
+>>>>> +             return rc;
+>>>>> +
+>>>>> +     ports = FIELD_GET(I2C_STAT_MAX_PORT, stat);
+>>>>> +     dev_dbg(dev, "I2C master has %d ports\n", ports);
+>>>> Thanks for the patch Oliver. This looks great except some older CFAM
+>>>> types don't report the max port number, in which case this would not
+>>>> probe up any ports. So we probably need a fallback to dts if the max
+>>>> ports is 0.
+>>> Hmm, The oldest CFAM spec I could find was v1.2 which is from the p6
+>>> era and it includes the MAX_PORT field. When I was checking the spec I
+>>> noticed that I mis-interpreted the meaning of MAX_PORT. It's actually
+>>> the largest value you can write into the port field of the mode
+>>> register rather than the number of ports the master supports. So zero
+>>> is a valid value for MAX_PORT that you would see if the master only
+>>> has one port.
+>>
+>> Yep, now that I look at the specs too, that is correct.
+>>
+>>
+>>> Do you know if the old masters only had one port? If not, do you know
+>>> what version (from the ext status reg) of the master doesn't support
+>>> the max_port field?
+>>
+>> I used to have some more up-to-date specs but I can't seem to find
+>> them... I think I see what's going on. Some versions of the CFAM have
+>> the max port, or "upper threshold for ports" at bits 16-19, while others
+>> have that information at 9-15 or 12-15... I'm not sure we can reliably
+>> determine where/what that number will be. I'm open to suggestions!
+> I had a look at the various docs I've got and they say:
+>
+> CFAM 1.2:      9 - 11 b ‘000’
+>                12 - 15 Upper threshold for I2C ports (Port number - 1)
+> p7 pervasive:  9 - 11 b ‘000’
+>                12 - 15 Upper threshold for I2C ports (Port number - 1)
+> p8 pervasive:  9 - 15 Upper threshold for I2C ports (Port number - 1)
+> p9 pervasive:  9 - 15 Upper threshold for I2C ports (Port number - 1)
+>
+> Keep in mind these docs use IBM bit numbering. Translating to normal bits:
+>
+>    binary: 01111111 00000000 00000000
+> bits set: 22, 21, 20, 19, 18, 17, 16 (7)
+>   IBM 32b:  9, 10, 11, 12, 13, 14, 15
+>
+> And dropping the upper 3 bits gives you 16 - 19. Are you sure it's
+> actually different or is this IBM bit ordering just screwing us again?
 
-diff --git a/Documentation/IPMB.txt b/Documentation/IPMB.txt
-new file mode 100644
-index 0000000..7160d53
---- /dev/null
-+++ b/Documentation/IPMB.txt
-@@ -0,0 +1,103 @@
-+==============================
-+IPMB Driver for a Satellite MC
-+==============================
-+
-+The Intelligent Platform Management Bus or IPMB, is an
-+I2C bus that provides a standardized interconnection between
-+different boards within a chassis. This interconnection is
-+between the baseboard management (BMC) and chassis electronics.
-+IPMB is also associated with the messaging protocol through the
-+IPMB bus.
-+
-+The devices using the IPMB are usually management
-+controllers that perform management functions such as servicing
-+the front panel interface, monitoring the baseboard,
-+hot-swapping disk drivers in the system chassis, etc...
-+
-+When an IPMB is implemented in the system, the BMC serves as
-+a controller to give system software access to the IPMB. The BMC
-+sends IPMI requests to a device (usually a Satellite Management
-+Controller or Satellite MC) via IPMB and the device
-+sends a response back to the BMC.
-+
-+For more information on IPMB and the format of an IPMB message,
-+refer to the IPMB and IPMI specifications.
-+
-+IPMB driver for Satellite MC
-+----------------------------
-+
-+ipmb-dev-int - This is the driver needed on a Satellite MC to
-+receive IPMB messages from a BMC and send a response back.
-+This driver works with the I2C driver and a userspace
-+program such as OpenIPMI:
-+
-+1) It is an I2C slave backend driver. So, it defines a callback
-+function to set the Satellite MC as an I2C slave.
-+This callback function handles the received IPMI requests.
-+
-+2) It defines the read and write functions to enable a user
-+space program (such as OpenIPMI) to communicate with the kernel.
-+
-+
-+Load the IPMB driver
-+--------------------
-+
-+The driver needs to be loaded at boot time or manually first.
-+First, make sure you have the following in your config file:
-+CONFIG_IPMB_DEVICE_INTERFACE=y
-+
-+1) If you want the driver to be loaded at boot time:
-+
-+a) Add this entry to your ACPI table, under the appropriate SMBus:
-+
-+Device (SMB0) // Example SMBus host controller
-+{
-+  Name (_HID, "<Vendor-Specific HID>") // Vendor-Specific HID
-+  Name (_UID, 0) // Unique ID of particular host controller
-+  :
-+  :
-+    Device (IPMB)
-+    {
-+      Name (_HID, "IPMB0001") // IPMB device interface
-+      Name (_UID, 0) // Unique device identifier
-+    }
-+}
-+
-+b) Example for device tree:
-+
-+&i2c2 {
-+         status = "okay";
-+ 
-+         ipmb@10 {
-+                 compatible = "ipmb-dev";
-+                 reg = <0x10>;
-+         };
-+};
-+
-+2) Manually from Linux:
-+modprobe ipmb-dev-int
-+
-+
-+Instantiate the device
-+----------------------
-+
-+After loading the driver, you can instantiate the device as
-+described in 'Documentation/i2c/instantiating-devices'.
-+If you have multiple BMCs, each connected to your Satellite MC via
-+a different I2C bus, you can instantiate a device for each of
-+those BMCs.
-+The name of the instantiated device contains the I2C bus number
-+associated with it as follows:
-+
-+BMC1 ------ IPMB/I2C bus 1 ---------|   /dev/ipmb-1
-+				Satellite MC
-+BMC1 ------ IPMB/I2C bus 2 ---------|   /dev/ipmb-2
-+
-+For instance, you can instantiate the ipmb-dev-int device from
-+user space at the 7 bit address 0x10 on bus 2:
-+
-+  # echo ipmb-dev 0x1010 > /sys/bus/i2c/devices/i2c-2/new_device
-+
-+This will create the device file /dev/ipmb-2, which can be accessed
-+by the user space program. The device needs to be instantiated
-+before running the user space program.
-diff --git a/drivers/char/ipmi/Kconfig b/drivers/char/ipmi/Kconfig
-index caac5d2..811fccb 100644
---- a/drivers/char/ipmi/Kconfig
-+++ b/drivers/char/ipmi/Kconfig
-@@ -75,6 +75,14 @@ config IPMI_SSIF
- 	 have a driver that must be accessed over an I2C bus instead of a
- 	 standard interface.  This module requires I2C support.
- 
-+config IPMB_DEVICE_INTERFACE
-+       tristate 'IPMB Interface handler'
-+       depends on I2C_SLAVE
-+       help
-+         Provides a driver for a device (Satellite MC) to
-+         receive requests and send responses back to the BMC via
-+         the IPMB interface. This module requires I2C support.
-+
- config IPMI_POWERNV
-        depends on PPC_POWERNV
-        tristate 'POWERNV (OPAL firmware) IPMI interface'
-diff --git a/drivers/char/ipmi/Makefile b/drivers/char/ipmi/Makefile
-index 3f06b20..0822adc 100644
---- a/drivers/char/ipmi/Makefile
-+++ b/drivers/char/ipmi/Makefile
-@@ -26,3 +26,4 @@ obj-$(CONFIG_IPMI_KCS_BMC) += kcs_bmc.o
- obj-$(CONFIG_ASPEED_BT_IPMI_BMC) += bt-bmc.o
- obj-$(CONFIG_ASPEED_KCS_IPMI_BMC) += kcs_bmc_aspeed.o
- obj-$(CONFIG_NPCM7XX_KCS_IPMI_BMC) += kcs_bmc_npcm7xx.o
-+obj-$(CONFIG_IPMB_DEVICE_INTERFACE) += ipmb_dev_int.o
-diff --git a/drivers/char/ipmi/ipmb_dev_int.c b/drivers/char/ipmi/ipmb_dev_int.c
-new file mode 100644
-index 0000000..6dd1866
---- /dev/null
-+++ b/drivers/char/ipmi/ipmb_dev_int.c
-@@ -0,0 +1,400 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * IPMB driver to receive a request and send a response
-+ *
-+ * Copyright (C) 2018 Mellanox Techologies, Ltd.
-+ *
-+ * This was inspired by Brendan Higgins' ipmi-bmc-bt-i2c driver.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/errno.h>
-+#include <linux/i2c.h>
-+#include <linux/miscdevice.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/poll.h>
-+#include <linux/slab.h>
-+#include <linux/spinlock.h>
-+#include <linux/wait.h>
-+
-+#define MAX_MSG_LEN		128
-+#define IPMB_REQUEST_LEN_MIN	7
-+#define NETFN_RSP_BIT_MASK	0x4
-+#define REQUEST_QUEUE_MAX_LEN	256
-+
-+#define IPMB_MSG_LEN_IDX	0
-+#define RQ_SA_8BIT_IDX		1
-+#define NETFN_LUN_IDX		2
-+
-+/* get 7-bit address from 8-bit address */
-+#define GET_7BIT_ADDR(addr)	(addr >> 1)
-+
-+#define IPMB_MSG_PAYLOAD_LEN_MAX (MAX_MSG_LEN - IPMB_REQUEST_LEN_MIN - 1)
-+
-+#define SMBUS_MSG_HEADER_LENGTH	2
-+#define SMBUS_MSG_IDX_OFFSET	(SMBUS_MSG_HEADER_LENGTH + 1)
-+
-+#define GET_8BIT_ADDR(addr_7bit) ((addr_7bit << 1) & 0xff)
-+
-+#define UNPOPULATED_RQ_SA	0xff
-+
-+/* Reference 7-bit rq_sa */
-+static u8 reference_rq_sa[128];
-+
-+struct ipmb_msg {
-+	u8 len;
-+	u8 rs_sa;
-+	u8 netfn_rs_lun;
-+	u8 checksum1;
-+	u8 rq_sa;
-+	u8 rq_seq_rq_lun;
-+	u8 cmd;
-+	u8 payload[IPMB_MSG_PAYLOAD_LEN_MAX];
-+	/* checksum2 is included in payload */
-+} __packed;
-+
-+struct ipmb_request_elem {
-+	struct list_head list;
-+	struct ipmb_msg request;
-+};
-+
-+struct ipmb_dev {
-+	struct i2c_client *client;
-+	struct miscdevice miscdev;
-+	struct ipmb_msg request;
-+	struct list_head request_queue;
-+	atomic_t request_queue_len;
-+	size_t msg_idx;
-+	spinlock_t lock;
-+	wait_queue_head_t wait_queue;
-+	struct mutex file_mutex;
-+};
-+
-+static int receive_ipmb_request(struct ipmb_dev *ipmb_dev,
-+				bool non_blocking,
-+				struct ipmb_msg *ipmb_request)
-+{
-+	struct ipmb_request_elem *queue_elem;
-+	unsigned long flags;
-+	int res;
-+
-+	while (!atomic_read(&ipmb_dev->request_queue_len)) {
-+		if (non_blocking)
-+			return -EAGAIN;
-+
-+		res = wait_event_interruptible(ipmb_dev->wait_queue,
-+				atomic_read(&ipmb_dev->request_queue_len));
-+		if (res)
-+			return res;
-+
-+	}
-+
-+	spin_lock_irqsave(&ipmb_dev->lock, flags);
-+
-+	if (list_empty(&ipmb_dev->request_queue)) {
-+		spin_unlock_irqrestore(&ipmb_dev->lock, flags);
-+		dev_err(&ipmb_dev->client->dev, "request_queue is empty\n");
-+		return -EIO;
-+	}
-+
-+	queue_elem = list_first_entry(&ipmb_dev->request_queue,
-+					struct ipmb_request_elem, list);
-+	memcpy(ipmb_request, &queue_elem->request, sizeof(*ipmb_request));
-+	list_del(&queue_elem->list);
-+	kfree(queue_elem);
-+	atomic_dec(&ipmb_dev->request_queue_len);
-+
-+	spin_unlock_irqrestore(&ipmb_dev->lock, flags);
-+
-+	return 0;
-+}
-+
-+static inline struct ipmb_dev *to_ipmb_dev(struct file *file)
-+{
-+	return container_of(file->private_data, struct ipmb_dev, miscdev);
-+}
-+
-+static ssize_t ipmb_read(struct file *file, char __user *buf, size_t count,
-+			loff_t *ppos)
-+{
-+	struct ipmb_dev *ipmb_dev = to_ipmb_dev(file);
-+	struct ipmb_msg msg;
-+	ssize_t ret;
-+	int bus;
-+
-+	memset(&msg, 0, sizeof(msg));
-+
-+	mutex_lock(&ipmb_dev->file_mutex);
-+	ret = receive_ipmb_request(ipmb_dev, file->f_flags & O_NONBLOCK,
-+				&msg);
-+	if (ret < 0)
-+		goto out;
-+
-+	bus = ipmb_dev->client->adapter->nr;
-+	if (reference_rq_sa[bus] == UNPOPULATED_RQ_SA)
-+		reference_rq_sa[bus] = GET_7BIT_ADDR(msg.rq_sa);
-+
-+	count = min_t(size_t, count, msg.len + 1);
-+	if (copy_to_user(buf, &msg, count)) {
-+		ret = -EFAULT;
-+		goto out;
-+	}
-+
-+out:
-+	mutex_unlock(&ipmb_dev->file_mutex);
-+	return ret < 0 ? ret : count;
-+}
-+
-+static ssize_t ipmb_write(struct file *file, const char __user *buf,
-+			size_t count, loff_t *ppos)
-+{
-+	struct ipmb_dev *ipmb_dev = to_ipmb_dev(file);
-+	u8 rq_sa, netf_rq_lun, msg_len;
-+	struct i2c_client rq_client;
-+	u8 msg[MAX_MSG_LEN];
-+	ssize_t ret;
-+	int bus;
-+
-+	if (count > sizeof(msg))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&msg, buf, count) || count < msg[0])
-+		return -EFAULT;
-+
-+	bus = ipmb_dev->client->adapter->nr;
-+	rq_sa = GET_7BIT_ADDR(msg[RQ_SA_8BIT_IDX]);
-+	if (rq_sa != reference_rq_sa[bus])
-+		return -EINVAL;
-+
-+	netf_rq_lun = msg[NETFN_LUN_IDX];
-+	/*
-+	 * subtract rq_sa and netf_rq_lun from the length of the msg passed to
-+	 * i2c_smbus_write_block_data_local
-+	 */
-+	msg_len = msg[IPMB_MSG_LEN_IDX] - SMBUS_MSG_HEADER_LENGTH;
-+
-+	strcpy(rq_client.name, "ipmb_requester");
-+	rq_client.adapter = ipmb_dev->client->adapter;
-+	rq_client.flags = ipmb_dev->client->flags;
-+	rq_client.addr = rq_sa;
-+
-+	mutex_lock(&ipmb_dev->file_mutex);
-+	ret = i2c_smbus_write_block_data(&rq_client, netf_rq_lun, msg_len,
-+					msg + SMBUS_MSG_IDX_OFFSET);
-+	mutex_unlock(&ipmb_dev->file_mutex);
-+
-+	return ret ? : count;
-+}
-+
-+static unsigned int ipmb_poll(struct file *file, poll_table *wait)
-+{
-+	struct ipmb_dev *ipmb_dev = to_ipmb_dev(file);
-+	unsigned int mask = POLLOUT;
-+
-+	mutex_lock(&ipmb_dev->file_mutex);
-+	poll_wait(file, &ipmb_dev->wait_queue, wait);
-+
-+	if (atomic_read(&ipmb_dev->request_queue_len))
-+		mask |= POLLIN;
-+	mutex_unlock(&ipmb_dev->file_mutex);
-+
-+	return mask;
-+}
-+
-+static const struct file_operations ipmb_fops = {
-+	.owner	= THIS_MODULE,
-+	.read	= ipmb_read,
-+	.write	= ipmb_write,
-+	.poll	= ipmb_poll,
-+};
-+
-+/* Called with ipmb_dev->lock held. */
-+static void ipmb_handle_request(struct ipmb_dev *ipmb_dev)
-+{
-+	struct ipmb_request_elem *queue_elem;
-+
-+	if (atomic_read(&ipmb_dev->request_queue_len) >=
-+			REQUEST_QUEUE_MAX_LEN)
-+		return;
-+
-+	queue_elem = kmalloc(sizeof(*queue_elem), GFP_KERNEL);
-+	if (!queue_elem)
-+		return;
-+
-+	memcpy(&queue_elem->request, &ipmb_dev->request,
-+		sizeof(struct ipmb_msg));
-+	list_add(&queue_elem->list, &ipmb_dev->request_queue);
-+	atomic_inc(&ipmb_dev->request_queue_len);
-+	wake_up_all(&ipmb_dev->wait_queue);
-+}
-+
-+static u8 ipmb_verify_checksum1(struct ipmb_dev *ipmb_dev, u8 rs_sa)
-+{
-+	/* The 8 lsb of the sum is 0 when the checksum is valid */
-+	return (rs_sa + ipmb_dev->request.netfn_rs_lun +
-+		ipmb_dev->request.checksum1);
-+}
-+
-+static bool is_ipmb_request(struct ipmb_dev *ipmb_dev, u8 rs_sa)
-+{
-+	if (ipmb_dev->msg_idx >= IPMB_REQUEST_LEN_MIN) {
-+		if (ipmb_verify_checksum1(ipmb_dev, rs_sa))
-+			return false;
-+
-+		/*
-+		 * Check whether this is an IPMB request or
-+		 * response.
-+		 * The 6 MSB of netfn_rs_lun are dedicated to the netfn
-+		 * while the remaining bits are dedicated to the lun.
-+		 * If the LSB of the netfn is cleared, it is associated
-+		 * with an IPMB request.
-+		 * If the LSB of the netfn is set, it is associated with
-+		 * an IPMB response.
-+		 */
-+		if (!(ipmb_dev->request.netfn_rs_lun & NETFN_RSP_BIT_MASK))
-+			return true;
-+	}
-+	return false;
-+}
-+
-+/*
-+ * The IPMB protocol only supports I2C Writes so there is no need
-+ * to support I2C_SLAVE_READ* events.
-+ * This i2c callback function only monitors IPMB request messages
-+ * and adds them in a queue, so that they can be handled by
-+ * receive_ipmb_request.
-+ */
-+static int ipmb_slave_cb(struct i2c_client *client,
-+			enum i2c_slave_event event, u8 *val)
-+{
-+	struct ipmb_dev *ipmb_dev = i2c_get_clientdata(client);
-+	u8 *buf = (u8 *)&ipmb_dev->request;
-+
-+	spin_lock(&ipmb_dev->lock);
-+	switch (event) {
-+	case I2C_SLAVE_WRITE_REQUESTED:
-+		memset(&ipmb_dev->request, 0, sizeof(ipmb_dev->request));
-+		ipmb_dev->msg_idx = 0;
-+
-+		/*
-+		 * At index 0, ipmb_msg stores the length of msg,
-+		 * skip it for now.
-+		 * The len will be populated once the whole
-+		 * buf is populated.
-+		 *
-+		 * The I2C bus driver's responsibility is to pass the
-+		 * data bytes to the backend driver; it does not
-+		 * forward the i2c slave address.
-+		 * Since the first byte in the IPMB message is the
-+		 * address of the responder, it is the responsibility
-+		 * of the IPMB driver to format the message properly.
-+		 * So this driver prepends the address of the responder
-+		 * to the received i2c data before the request message
-+		 * is handled in userland.
-+		 */
-+		buf[++ipmb_dev->msg_idx] = GET_8BIT_ADDR(client->addr);
-+		break;
-+
-+	case I2C_SLAVE_WRITE_RECEIVED:
-+		if (ipmb_dev->msg_idx >= sizeof(struct ipmb_msg))
-+			break;
-+
-+		buf[++ipmb_dev->msg_idx] = *val;
-+		break;
-+
-+	case I2C_SLAVE_STOP:
-+		ipmb_dev->request.len = ipmb_dev->msg_idx;
-+
-+		if (is_ipmb_request(ipmb_dev, GET_8BIT_ADDR(client->addr)))
-+			ipmb_handle_request(ipmb_dev);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+	spin_unlock(&ipmb_dev->lock);
-+
-+	return 0;
-+}
-+
-+static int ipmb_probe(struct i2c_client *client,
-+			const struct i2c_device_id *id)
-+{
-+	struct ipmb_dev *ipmb_dev;
-+	int ret;
-+
-+	ipmb_dev = devm_kzalloc(&client->dev, sizeof(*ipmb_dev),
-+					GFP_KERNEL);
-+	if (!ipmb_dev)
-+		return -ENOMEM;
-+
-+	spin_lock_init(&ipmb_dev->lock);
-+	init_waitqueue_head(&ipmb_dev->wait_queue);
-+	atomic_set(&ipmb_dev->request_queue_len, 0);
-+	INIT_LIST_HEAD(&ipmb_dev->request_queue);
-+
-+	mutex_init(&ipmb_dev->file_mutex);
-+
-+	ipmb_dev->miscdev.minor = MISC_DYNAMIC_MINOR;
-+
-+	ipmb_dev->miscdev.name = devm_kasprintf(&client->dev, GFP_KERNEL,
-+						"%s%d", "ipmb-",
-+						client->adapter->nr);
-+	ipmb_dev->miscdev.fops = &ipmb_fops;
-+	ipmb_dev->miscdev.parent = &client->dev;
-+	ret = misc_register(&ipmb_dev->miscdev);
-+	if (ret)
-+		return ret;
-+
-+	ipmb_dev->client = client;
-+	i2c_set_clientdata(client, ipmb_dev);
-+	ret = i2c_slave_register(client, ipmb_slave_cb);
-+	if (ret) {
-+		misc_deregister(&ipmb_dev->miscdev);
-+		return ret;
-+	}
-+
-+	reference_rq_sa[client->adapter->nr] = UNPOPULATED_RQ_SA;
-+
-+	return 0;
-+}
-+
-+static int ipmb_remove(struct i2c_client *client)
-+{
-+	struct ipmb_dev *ipmb_dev = i2c_get_clientdata(client);
-+
-+	i2c_slave_unregister(client);
-+	misc_deregister(&ipmb_dev->miscdev);
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id ipmb_id[] = {
-+	{ "ipmb-dev", 0 },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(i2c, ipmb_id);
-+
-+static const struct acpi_device_id acpi_ipmb_id[] = {
-+	{ "IPMB0001", 0 },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(acpi, acpi_ipmb_id);
-+
-+static struct i2c_driver ipmb_driver = {
-+	.driver = {
-+		.owner = THIS_MODULE,
-+		.name = "ipmb-dev",
-+		.acpi_match_table = ACPI_PTR(acpi_ipmb_id),
-+	},
-+	.probe = ipmb_probe,
-+	.remove = ipmb_remove,
-+	.id_table = ipmb_id,
-+};
-+module_i2c_driver(ipmb_driver);
-+
-+MODULE_AUTHOR("Mellanox Technologies");
-+MODULE_DESCRIPTION("IPMB driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.1.2
+
+Ah, good point, I forgot it was backwards, I was puzzling over where I 
+had originally gotten the 16-19. So it should be good to check 9-15 
+(real 16-22) as the upper bits will be 0 in the older case.
+
+
+>
+> Anyway, while I was looking I noticed that between p7 and p8 they did
+> change the layout of the mode register. The baud rate divider was
+> extended from 8 to 16 bits and the port select field was moved from
+> IBM(8,15) to IBM(16,21) to make room. If we need to support the older
+> masters we'll need to fix that too.
+
+
+Probably not worth it, I don't think anyone will try older processors 
+with this driver now.
+
+Thanks,
+
+Eddie
+
+
+>
+> Oliver
+>
 
