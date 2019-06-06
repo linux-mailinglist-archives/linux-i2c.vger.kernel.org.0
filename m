@@ -2,50 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C542037812
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2019 17:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3148537816
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2019 17:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729145AbfFFPe3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jun 2019 11:34:29 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:43826 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728916AbfFFPe3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jun 2019 11:34:29 -0400
-Received: by mail-lf1-f67.google.com with SMTP id j29so463770lfk.10;
-        Thu, 06 Jun 2019 08:34:26 -0700 (PDT)
+        id S1729191AbfFFPe7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jun 2019 11:34:59 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37097 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729185AbfFFPe7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jun 2019 11:34:59 -0400
+Received: by mail-lj1-f195.google.com with SMTP id 131so2485052ljf.4;
+        Thu, 06 Jun 2019 08:34:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=SzDhvhshjsFSSHSi+Eod6Z0jHeQx4OkmeJrier2GblM=;
-        b=UQcJLrJneu34YJjKqmC79bH5LQi6mMN6cqPC2WPG+Gu+bVu+mqbAo2J3y8wuXAJAcH
-         ona4ZtLabPkhCfxJUF19PQo+CPfgNFpxaJXCa/D4rlFDGwP7277FiD8wFnLxy0qXCEZI
-         QX9HevHapm4k500UCrO5ToCN6tywvoRmgEy1aDGLofl9MLTdH/6425gUtpfEPEH2o49K
-         C45NCe9k75gbOT1EjmemxtRsu2b7LvlBZw2ZwbZdvzXPS9hWMdoI299+TGCA7RfbPBUU
-         AMswfF592SN1fNfW+/LUW88haA7wfDg+cnCrOsrcHHKccA3v1wXKAteYZXQ+o60fo498
-         qsyw==
+        bh=CNzuT4B+gj0fca3L+CBElR5BCGQz7D37R5CsfOS0R5U=;
+        b=VWscwD+f7KttjezbVWzpZtP1ZvHaxYlbphCgYRA7iz58igJeZyW24ly4jyIogAH0Uw
+         SHrCD9VcA1bnc0g4lDBUhiArGjnOKqINogD2cGRbqydhHmnbOt/9FOVwptsK9Ts/EDtM
+         vDeCBMXacEKgoIZrgg06bMgL6XwQiMlNa6OYNbARX2UOEv9qlrzo91Z0ocO6b9jNToYz
+         bk9kivBv6638oKvzKIlHqdQFNM0fpg9+4i4hwoRfSp3YM5699DWdG248k1ySlPOe+zy8
+         uVede+6ARmkEQwT4pDGyhUevnkhKW36zKI80lgtHM1ZzG3Repouf0aKJO1Ff4gS7RXBF
+         mv6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=SzDhvhshjsFSSHSi+Eod6Z0jHeQx4OkmeJrier2GblM=;
-        b=hnSN4JpghVOVbZfleCYVe3wo6Y68sLn4So83YlFAfB27MMVx7CUI/+huHUFe7pbVld
-         YjAw1zDPyJcMfMjprBJKG6/stGEDV3bLN4J9gQlRnnLCSVG9+9ZyDtApsUr1zhjlo1Vo
-         0eIFDdfKansd9UtLaXFb7yTLjkNwE0APuHhuw2qqMp8bdboSRjdpGZ0/tU25sUx7HtKx
-         PMLbvwyjr6OZH8gJlNWFbueqdpUPiu9hoWEz9ZIhWpRttMEdKTB0Gw+jeve7XhwCiGck
-         5zdNude5py4HU/RY6HIzWCUo/Qb4jwSRS100ErkmWkMzNkZmDQsrfmMBdwzTy6pJxUfp
-         /66Q==
-X-Gm-Message-State: APjAAAVXn7OUDbtD8hsFjLQULURwcbGRoEaMN81xfiNu2bs4S3QIKahz
-        G/X9BqOiACrJrVIQLiC4Hww=
-X-Google-Smtp-Source: APXvYqzPbG22Fe+Mqvj1W8fD3FRpLt79MCku8i2OvdwsFB8vU/pcIU/ymrSdykUw1AgxXKGxNY95tA==
-X-Received: by 2002:a19:750b:: with SMTP id y11mr11104398lfe.16.1559835265610;
-        Thu, 06 Jun 2019 08:34:25 -0700 (PDT)
+        bh=CNzuT4B+gj0fca3L+CBElR5BCGQz7D37R5CsfOS0R5U=;
+        b=Gh74JyOWZ7yCfR8bCvvK+yG8e4qIhyBMqG2WYcE0NascSTzLcWy5BpPO0K/jROuPVH
+         GEOfWVbU17mVAiDCKQs/4sVNDkCczWAGIyuBjfrTDuJ1ngGELMBmd7w7xG+3cjKIGbgT
+         lnE7pJN24qH0wssvvCqun93wPmlF4yjWeg6Id/kVJmdiPcHB+l3dazF/stuXWzEDtxx8
+         241Hwid/grhqPPrUeSgTWXQgsMNvrwA0sVN5R1cFvOaJgNKqD0c9cGnvIMiUTpNwM0Ru
+         jL98ob5bW70YgT8jHtlwiilss+TWQaFp1GQ3M7XLxE6WEe2zEeuvHYQ3DFWuEB/LdVyD
+         6/Aw==
+X-Gm-Message-State: APjAAAXikuLb3n0lOH5R9D2Ap9GCWNGP1H6gER4K3cPSfroFivw3P0DH
+        2za24uaqeQUKhcr9CwAbS0s=
+X-Google-Smtp-Source: APXvYqycnx3S37BNA7DJjEmd/qBgfJr+RwE4m5dx1DAhWLvIzmnhmE5vqjakjfMRNCOKq5AfjVegUw==
+X-Received: by 2002:a2e:988b:: with SMTP id b11mr10513015ljj.85.1559835296660;
+        Thu, 06 Jun 2019 08:34:56 -0700 (PDT)
 Received: from [192.168.2.145] ([94.29.35.141])
-        by smtp.googlemail.com with ESMTPSA id e14sm342122lfd.84.2019.06.06.08.34.24
+        by smtp.googlemail.com with ESMTPSA id z12sm343409lfe.2.2019.06.06.08.34.55
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Jun 2019 08:34:24 -0700 (PDT)
-Subject: Re: [PATCH V4] drivers: i2c: tegra: fix checkpatch defects
+        Thu, 06 Jun 2019 08:34:55 -0700 (PDT)
+Subject: Re: [PATCH V2] i2c: busses: tegra: Add suspend-resume support
 To:     Bitan Biswas <bbiswas@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         Thierry Reding <treding@nvidia.com>,
@@ -55,16 +55,16 @@ To:     Bitan Biswas <bbiswas@nvidia.com>,
 Cc:     Shardar Mohammed <smohammed@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Mantravadi Karthik <mkarthik@nvidia.com>
-References: <1559806523-1352-1-git-send-email-bbiswas@nvidia.com>
- <bbe8ef0e-fdef-613c-9758-6525b60e5992@gmail.com>
- <e8c2f722-eeaa-7449-d4fb-6caf0466bcc8@nvidia.com>
+References: <1559800475-5446-1-git-send-email-bbiswas@nvidia.com>
+ <bf93e88f-cbed-3bb0-223a-74ad0b08aa9e@gmail.com>
+ <5871f51b-11d4-8bc9-6f40-4a91f2aab8f8@nvidia.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <eafab1bf-82bb-ecbb-e3b3-332c3db620c2@gmail.com>
-Date:   Thu, 6 Jun 2019 18:34:24 +0300
+Message-ID: <3d4ea007-e289-6b52-5321-68a7399e62d7@gmail.com>
+Date:   Thu, 6 Jun 2019 18:34:55 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <e8c2f722-eeaa-7449-d4fb-6caf0466bcc8@nvidia.com>
+In-Reply-To: <5871f51b-11d4-8bc9-6f40-4a91f2aab8f8@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -73,205 +73,96 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-06.06.2019 17:02, Bitan Biswas пишет:
+06.06.2019 16:58, Bitan Biswas пишет:
 > 
 > 
-> On 6/6/19 4:39 AM, Dmitry Osipenko wrote:
->> 06.06.2019 10:35, Bitan Biswas пишет:
->>> Fix checkpatch.pl warning(s)/error(s)/check(s) in i2c-tegra.c
+> On 6/6/19 5:06 AM, Dmitry Osipenko wrote:
+>> 06.06.2019 8:54, Bitan Biswas пишет:
+>>> Post suspend I2C registers have power on reset values. Before any
+>>> transfer initialize I2C registers to prevent I2C transfer timeout
+>>> and implement suspend and resume callbacks needed. Fix below errors
+>>> post suspend:
 >>>
->>> Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
->>> as needed. Replace BUG() with error handling code.
->>> Define I2C_ERR_UNEXPECTED_STATUS for error handling.
+>>> 1) Tegra I2C transfer timeout during jetson tx2 resume:
+>>>
+>>> [   27.520613] pca953x 1-0074: calling pca953x_resume+0x0/0x1b0 @
+>>> 2939, parent: i2c-1
+>>> [   27.633623] tegra-i2c 3160000.i2c: i2c transfer timed out
+>>> [   27.639162] pca953x 1-0074: Unable to sync registers 0x3-0x5. -110
+>>> [   27.645336] pca953x 1-0074: Failed to sync GPIO dir registers: -110
+>>> [   27.651596] PM: dpm_run_callback(): pca953x_resume+0x0/0x1b0
+>>> returns -110
+>>> [   27.658375] pca953x 1-0074: pca953x_resume+0x0/0x1b0 returned -110
+>>> after 127152 usecs
+>>> [   27.666194] PM: Device 1-0074 failed to resume: error -110
+>>>
+>>> 2) Tegra I2C transfer timeout error on jetson Xavier post resume.
+>>>
+>>> Remove i2c bus lock-unlock calls in resume callback as
+>>> i2c_mark_adapter_*
+>>> (suspended-resumed) help ensure i2c core calls from client are not
+>>> executed before i2c-tegra resume.
 >>>
 >>> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
 >>> ---
->>>   drivers/i2c/busses/i2c-tegra.c | 67
->>> +++++++++++++++++++++++-------------------
->>>   1 file changed, 37 insertions(+), 30 deletions(-)
+>>>   drivers/i2c/busses/i2c-tegra.c | 23 +++++++++++++++++++++++
+>>>   1 file changed, 23 insertions(+)
 >>>
 >>> diff --git a/drivers/i2c/busses/i2c-tegra.c
 >>> b/drivers/i2c/busses/i2c-tegra.c
->>> index 76b7926..55a5d87 100644
+>>> index ebaa78d..76b7926 100644
 >>> --- a/drivers/i2c/busses/i2c-tegra.c
 >>> +++ b/drivers/i2c/busses/i2c-tegra.c
->>> @@ -78,6 +78,7 @@
->>>   #define I2C_ERR_NO_ACK                0x01
->>>   #define I2C_ERR_ARBITRATION_LOST        0x02
->>>   #define I2C_ERR_UNKNOWN_INTERRUPT        0x04
->>> +#define I2C_ERR_UNEXPECTED_STATUS               0x08
->>>     #define PACKET_HEADER0_HEADER_SIZE_SHIFT    28
->>>   #define PACKET_HEADER0_PACKET_ID_SHIFT        16
->>> @@ -112,7 +113,7 @@
->>>   #define I2C_CLKEN_OVERRIDE            0x090
->>>   #define I2C_MST_CORE_CLKEN_OVR            BIT(0)
->>>   -#define I2C_CONFIG_LOAD_TIMEOUT            1000000
->>> +#define I2C_CONFIG_LOAD_TMOUT            1000000
->>>     #define I2C_MST_FIFO_CONTROL            0x0b4
->>>   #define I2C_MST_FIFO_CONTROL_RX_FLUSH        BIT(0)
->>> @@ -280,6 +281,7 @@ struct tegra_i2c_dev {
->>>       u32 bus_clk_rate;
->>>       u16 clk_divisor_non_hs_mode;
->>>       bool is_multimaster_mode;
->>> +    /* xfer_lock: lock to serialize transfer submission and
->>> processing */
->>>       spinlock_t xfer_lock;
->>>       struct dma_chan *tx_dma_chan;
->>>       struct dma_chan *rx_dma_chan;
->>> @@ -306,7 +308,7 @@ static u32 dvc_readl(struct tegra_i2c_dev
->>> *i2c_dev, unsigned long reg)
->>>    * to the I2C block inside the DVC block
->>>    */
->>>   static unsigned long tegra_i2c_reg_addr(struct tegra_i2c_dev *i2c_dev,
->>> -    unsigned long reg)
->>> +                    unsigned long reg)
->>>   {
->>>       if (i2c_dev->is_dvc)
->>>           reg += (reg >= I2C_TX_FIFO) ? 0x10 : 0x40;
->>> @@ -314,7 +316,7 @@ static unsigned long tegra_i2c_reg_addr(struct
->>> tegra_i2c_dev *i2c_dev,
+>>> @@ -1687,7 +1687,30 @@ static int tegra_i2c_remove(struct
+>>> platform_device *pdev)
 >>>   }
->>>     static void i2c_writel(struct tegra_i2c_dev *i2c_dev, u32 val,
->>> -    unsigned long reg)
->>> +               unsigned long reg)
->>>   {
->>>       writel(val, i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
->>>   @@ -329,13 +331,13 @@ static u32 i2c_readl(struct tegra_i2c_dev
->>> *i2c_dev, unsigned long reg)
->>>   }
->>>     static void i2c_writesl(struct tegra_i2c_dev *i2c_dev, void *data,
->>> -    unsigned long reg, int len)
->>> +            unsigned long reg, int len)
->>>   {
->>>       writesl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg), data,
->>> len);
->>>   }
->>>     static void i2c_readsl(struct tegra_i2c_dev *i2c_dev, void *data,
->>> -    unsigned long reg, int len)
->>> +               unsigned long reg, int len)
->>>   {
->>>       readsl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg), data,
->>> len);
->>>   }
->>> @@ -486,7 +488,7 @@ static int tegra_i2c_flush_fifos(struct
->>> tegra_i2c_dev *i2c_dev)
->>>               dev_warn(i2c_dev->dev, "timeout waiting for fifo
->>> flush\n");
->>>               return -ETIMEDOUT;
->>>           }
->>> -        msleep(1);
->>> +        usleep_range(1000, 2000);
->>>       }
->>>       return 0;
->>>   }
->>> @@ -525,7 +527,6 @@ static int tegra_i2c_empty_rx_fifo(struct
->>> tegra_i2c_dev *i2c_dev)
->>>        * prevent overwriting past the end of buf
->>>        */
->>>       if (rx_fifo_avail > 0 && buf_remaining > 0) {
->>> -        BUG_ON(buf_remaining > 3);
->>>           val = i2c_readl(i2c_dev, I2C_RX_FIFO);
->>>           val = cpu_to_le32(val);
->>>           memcpy(buf, &val, buf_remaining);
->>> @@ -533,7 +534,6 @@ static int tegra_i2c_empty_rx_fifo(struct
->>> tegra_i2c_dev *i2c_dev)
->>>           rx_fifo_avail--;
->>>       }
->>>   -    BUG_ON(rx_fifo_avail > 0 && buf_remaining > 0);
->>>       i2c_dev->msg_buf_remaining = buf_remaining;
->>>       i2c_dev->msg_buf = buf;
->>>   @@ -591,7 +591,6 @@ static int tegra_i2c_fill_tx_fifo(struct
->>> tegra_i2c_dev *i2c_dev)
->>>        * boundary and fault.
->>>        */
->>>       if (tx_fifo_avail > 0 && buf_remaining > 0) {
->>> -        BUG_ON(buf_remaining > 3);
->>>           memcpy(&val, buf, buf_remaining);
->>>           val = le32_to_cpu(val);
->>>   @@ -680,10 +679,11 @@ static int
->>> tegra_i2c_wait_for_config_load(struct tegra_i2c_dev *i2c_dev)
->>>           i2c_writel(i2c_dev, I2C_MSTR_CONFIG_LOAD, I2C_CONFIG_LOAD);
->>>           if (in_interrupt())
->>>               err = readl_poll_timeout_atomic(addr, val, val == 0,
->>> -                    1000, I2C_CONFIG_LOAD_TIMEOUT);
->>> +                            1000,
->>> +                            I2C_CONFIG_LOAD_TMOUT);
->>>           else
->>> -            err = readl_poll_timeout(addr, val, val == 0,
->>> -                    1000, I2C_CONFIG_LOAD_TIMEOUT);
->>> +            err = readl_poll_timeout(addr, val, val == 0, 1000,
->>> +                         I2C_CONFIG_LOAD_TMOUT);
->>>             if (err) {
->>>               dev_warn(i2c_dev->dev,
->>> @@ -858,16 +858,21 @@ static irqreturn_t tegra_i2c_isr(int irq, void
->>> *dev_id)
->>>           if (i2c_dev->msg_read && (status &
->>> I2C_INT_RX_FIFO_DATA_REQ)) {
->>>               if (i2c_dev->msg_buf_remaining)
->>>                   tegra_i2c_empty_rx_fifo(i2c_dev);
->>> -            else
->>> -                BUG();
->>> +            else {
->>> +                dev_err(i2c_dev->dev, "unexpected rx data request\n");
->>> +                i2c_dev->msg_err |= I2C_ERR_UNEXPECTED_STATUS;
->>> +                goto err;
->>> +            }
->>>           }
->>>             if (!i2c_dev->msg_read && (status &
->>> I2C_INT_TX_FIFO_DATA_REQ)) {
->>> -            if (i2c_dev->msg_buf_remaining)
->>> -                tegra_i2c_fill_tx_fifo(i2c_dev);
->>> -            else
->>> +            if (i2c_dev->msg_buf_remaining) {
->>> +                if (tegra_i2c_fill_tx_fifo(i2c_dev))
->>> +                    goto err;
->>> +            } else {
->>>                   tegra_i2c_mask_irq(i2c_dev,
->>>                              I2C_INT_TX_FIFO_DATA_REQ);
->>> +            }
->>>           }
->>>       }
->>>   @@ -885,7 +890,7 @@ static irqreturn_t tegra_i2c_isr(int irq, void
->>> *dev_id)
->>>       if (status & I2C_INT_PACKET_XFER_COMPLETE) {
->>>           if (i2c_dev->is_curr_dma_xfer)
->>>               i2c_dev->msg_buf_remaining = 0;
->>> -        BUG_ON(i2c_dev->msg_buf_remaining);
->>> +        WARN_ON_ONCE(i2c_dev->msg_buf_remaining);
->>>           complete(&i2c_dev->msg_complete);
->>>       }
->>>       goto done;
->>> @@ -1024,7 +1029,7 @@ static int tegra_i2c_issue_bus_clear(struct
->>> i2c_adapter *adap)
->>>   }
->>>     static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
->>> -    struct i2c_msg *msg, enum msg_end_type end_state)
->>> +                  struct i2c_msg *msg, enum msg_end_type end_state)
->>>   {
->>>       u32 packet_header;
->>>       u32 int_mask;
->>> @@ -1034,7 +1039,7 @@ static int tegra_i2c_xfer_msg(struct
->>> tegra_i2c_dev *i2c_dev,
->>>       u32 *buffer = NULL;
->>>       int err = 0;
->>>       bool dma;
->>> -    u16 xfer_time = 100;
->>> +    u16 xfer_tm = 100;
+>>>     #ifdef CONFIG_PM_SLEEP
+>>> +static int tegra_i2c_suspend(struct device *dev)
+>>> +{
+>>> +    struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+>>> +
+>>> +    i2c_mark_adapter_suspended(&i2c_dev->adapter);
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static int tegra_i2c_resume(struct device *dev)
+>>> +{
+>>> +    struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+>>> +    int ret;
+>>> +
+>>> +    ret = tegra_i2c_init(i2c_dev, false);
+>>> +    if (ret)
+>>> +        return ret;
 >>
->> Why xfer_time is renamed? It is much more important to keep code
->> readable rather than to satisfy checkpatch. You should *not* follow
->> checkpatch recommendations where they do not make much sense. The
->> xfer_tm is a less intuitive naming and hence it harms readability of the
->> code. Hence it is better to have "lines over 80 chars" in this
->> particular case.
-> Agreed. I shall share updated patch.
+>> We're expecting that tegra_i2c_init returns a error code on a failure
+>> and nothing else, hence it will be a bit more expressive to name the
+>> returned variable as "err". There is nothing wrong with yours variant,
+>> this is just a very minor recommendation from me. Please note that a bit
+>> more wise choice of the names makes easier to follow the code for other
+>> people and hence results in a cleaner code.
+> Agreed.
+> 
+>>
+>>> +
+>>> +    i2c_mark_adapter_resumed(&i2c_dev->adapter);
+>>
+>> Please add a blank line here for a better readability and to make the
+>> patch consistent. You added the blank line in a similar case of
+>> tegra_i2c_suspend() and this makes it inconsistent.
+>>
+> OK.
+> 
+>>> +    return 0;
+>>> +}
+>>> +
+>>>   static const struct dev_pm_ops tegra_i2c_pm = {
+>>> +    SET_SYSTEM_SLEEP_PM_OPS(tegra_i2c_suspend, tegra_i2c_resume)
+>>>       SET_RUNTIME_PM_OPS(tegra_i2c_runtime_suspend,
+>>> tegra_i2c_runtime_resume,
+>>>                  NULL)
+>>>   };
+>>>
+> I shall send updated patch with suggested changes.
 
 Yes, please.
-
->>
->> Also, please don't skip review comments. I already pointed out the above
->> in the answer to previous version of the patch.
->>
-> I apologize for the oversight. I shall be more careful in future.
-
-No problems ;)
