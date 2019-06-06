@@ -2,82 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BFC3739E
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2019 13:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC19373C8
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2019 14:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727955AbfFFL5I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jun 2019 07:57:08 -0400
-Received: from sauhun.de ([88.99.104.3]:33984 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727290AbfFFL5I (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 6 Jun 2019 07:57:08 -0400
-Received: from localhost (p5486CDEB.dip0.t-ipconnect.de [84.134.205.235])
-        by pokefinder.org (Postfix) with ESMTPSA id 4EE662C35BF;
-        Thu,  6 Jun 2019 13:57:06 +0200 (CEST)
-Date:   Thu, 6 Jun 2019 13:57:06 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Bitan Biswas <bbiswas@nvidia.com>
-Cc:     Laxman Dewangan <ldewangan@nvidia.com>,
+        id S1727153AbfFFMGx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jun 2019 08:06:53 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:36439 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726922AbfFFMGx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jun 2019 08:06:53 -0400
+Received: by mail-lf1-f65.google.com with SMTP id q26so1355174lfc.3;
+        Thu, 06 Jun 2019 05:06:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=R7ZNJlaqp8GSpG9iatV9CsosxNubuXEWB8hYZg3ZABo=;
+        b=KSyEVJWQEAGeNjkM0M25ea194Kr78Z0HoM1QpSkVGhD2e7pB9J2vbVJ/G4sCHXMCFn
+         DDmW8pFDKIQugaRdyOHf3C+AvfcyKJyHELE4j/JzZUxBBidg1v5uB6kYRRzO88wHQbrK
+         oa6eUu57sSpximL+edAi8vlcsrWLz/728il0PtWj1d+HOUf31d81lt0VSIwQKK+yzEOk
+         dPefFCB+ZTLKVs73eGPukGyf6l0nCxpDp0rsDY28b+7aDcuFWi/GUsgLzCSh7hEwzjfi
+         sbXOMaGbm6pviz3ab4z34mJmcvZhzu6fsMOCsEns9VmA3u6oHQCO3rf5YvSqN80zELZ8
+         PoDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=R7ZNJlaqp8GSpG9iatV9CsosxNubuXEWB8hYZg3ZABo=;
+        b=e5EA9v6fkEaTqYFIjYyqByCquWiYwXiCKYh4jL0LcdHmrKjof8iL8i4ePjY9WUbQPU
+         jTEiNvEHc3XOafVBmVWHkYJXhNKLwv3gYl50uv4P1SG5xTUwPNzgXk0Sv0V6215TR2iL
+         2HI9L0Y2CzSvOKT9o//sdkxpeZVAd/3dQJ3XH0kNXuVJ1ZWZAEGquRzg5+UZ5I56gJbY
+         VzQf7Wem9A4npHpdGkLJi6ktBi3lXMkFjLy/KqMsp2/oj+ab4LRwJCTt60VDnZjNL77z
+         4lTcmWIS6JNuWM3IGDGqPftDK2kzj4LbhCcVp6YpGF3DBXYoo/RRGrSsZissMrTdl2Ma
+         uZ/g==
+X-Gm-Message-State: APjAAAVG2zUCZkg1kEKbawZFdulmP0lLUw0ArRMJ/osuWkhTbjBhkd0/
+        VciDAFcPlrPsVS8+c5rM075u7HAr
+X-Google-Smtp-Source: APXvYqxO+aCdvSb2nD0dOik+RwlSYkhPGiPvJpNMWZMh2EeMXfs6t6PoEUMrsGEKeXF5z7iiVWJ13A==
+X-Received: by 2002:ac2:5446:: with SMTP id d6mr23084965lfn.138.1559822810432;
+        Thu, 06 Jun 2019 05:06:50 -0700 (PDT)
+Received: from [192.168.2.145] ([94.29.35.141])
+        by smtp.googlemail.com with ESMTPSA id 1sm304424ljt.78.2019.06.06.05.06.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 06 Jun 2019 05:06:49 -0700 (PDT)
+Subject: Re: [PATCH V2] i2c: busses: tegra: Add suspend-resume support
+To:     Bitan Biswas <bbiswas@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
         Thierry Reding <treding@nvidia.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shardar Mohammed <smohammed@nvidia.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Shardar Mohammed <smohammed@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Mantravadi Karthik <mkarthik@nvidia.com>
-Subject: Re: [PATCH V4] drivers: i2c: tegra: fix checkpatch defects
-Message-ID: <20190606115705.6j2oigsm2imvvqh7@ninjato>
-References: <1559806523-1352-1-git-send-email-bbiswas@nvidia.com>
+References: <1559800475-5446-1-git-send-email-bbiswas@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <bf93e88f-cbed-3bb0-223a-74ad0b08aa9e@gmail.com>
+Date:   Thu, 6 Jun 2019 15:06:48 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="elce2mn4beyzveti"
-Content-Disposition: inline
-In-Reply-To: <1559806523-1352-1-git-send-email-bbiswas@nvidia.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <1559800475-5446-1-git-send-email-bbiswas@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---elce2mn4beyzveti
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jun 06, 2019 at 12:35:23AM -0700, Bitan Biswas wrote:
-> Fix checkpatch.pl warning(s)/error(s)/check(s) in i2c-tegra.c
->=20
-> Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
-> as needed. Replace BUG() with error handling code.
-> Define I2C_ERR_UNEXPECTED_STATUS for error handling.
->=20
+06.06.2019 8:54, Bitan Biswas пишет:
+> Post suspend I2C registers have power on reset values. Before any
+> transfer initialize I2C registers to prevent I2C transfer timeout
+> and implement suspend and resume callbacks needed. Fix below errors
+> post suspend:
+> 
+> 1) Tegra I2C transfer timeout during jetson tx2 resume:
+> 
+> [   27.520613] pca953x 1-0074: calling pca953x_resume+0x0/0x1b0 @ 2939, parent: i2c-1
+> [   27.633623] tegra-i2c 3160000.i2c: i2c transfer timed out
+> [   27.639162] pca953x 1-0074: Unable to sync registers 0x3-0x5. -110
+> [   27.645336] pca953x 1-0074: Failed to sync GPIO dir registers: -110
+> [   27.651596] PM: dpm_run_callback(): pca953x_resume+0x0/0x1b0 returns -110
+> [   27.658375] pca953x 1-0074: pca953x_resume+0x0/0x1b0 returned -110 after 127152 usecs
+> [   27.666194] PM: Device 1-0074 failed to resume: error -110
+> 
+> 2) Tegra I2C transfer timeout error on jetson Xavier post resume.
+> 
+> Remove i2c bus lock-unlock calls in resume callback as i2c_mark_adapter_*
+> (suspended-resumed) help ensure i2c core calls from client are not
+> executed before i2c-tegra resume.
+> 
 > Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+> ---
+>  drivers/i2c/busses/i2c-tegra.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index ebaa78d..76b7926 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -1687,7 +1687,30 @@ static int tegra_i2c_remove(struct platform_device *pdev)
+>  }
+>  
+>  #ifdef CONFIG_PM_SLEEP
+> +static int tegra_i2c_suspend(struct device *dev)
+> +{
+> +	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+> +
+> +	i2c_mark_adapter_suspended(&i2c_dev->adapter);
+> +
+> +	return 0;
+> +}
+> +
+> +static int tegra_i2c_resume(struct device *dev)
+> +{
+> +	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = tegra_i2c_init(i2c_dev, false);
+> +	if (ret)
+> +		return ret;
 
-I wonder why you didn't fix this checkpatch defect?
+We're expecting that tegra_i2c_init returns a error code on a failure
+and nothing else, hence it will be a bit more expressive to name the
+returned variable as "err". There is nothing wrong with yours variant,
+this is just a very minor recommendation from me. Please note that a bit
+more wise choice of the names makes easier to follow the code for other
+people and hence results in a cleaner code.
 
-WARNING: A patch subject line should describe the change not the tool that =
-found it
+> +
+> +	i2c_mark_adapter_resumed(&i2c_dev->adapter);
 
+Please add a blank line here for a better readability and to make the
+patch consistent. You added the blank line in a similar case of
+tegra_i2c_suspend() and this makes it inconsistent.
 
---elce2mn4beyzveti
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz4/40ACgkQFA3kzBSg
-KbapPQ//Wqml+UIJlWSm5inlWvFznTdF9x+06WbPj4JYk7x7ab4nHQYEdX+qLC2I
-d5QejH2ouSSJ60gTNMbRu6QhwtULhhUnrtBf07qdq4o/TfVqvQsQ+HcjvQnn905w
-03gYunTuwaLjup5CZYNAGRR1lWTnWlC8hJlG2NXXiYYkuW4luGYH0jdp+yQom4ip
-4rZ85sOtRA/1IZWw+MKLQwyHQRy8rVMdGoAZ2/3+qsnfLmylsVdGfVvesXQvLsj3
-vd4f9G5+GfgHbJPJ6XMfyGwho8sxr8XUz7Oxy59DSfSvcQsO8LvgxsDD3Byex7DC
-dsH+PopNEgmDhbuh/oWkfHpChPPxsSDoI4zm6TVKNGwOEC/0fj1Dqs9QI9TL0Soy
-GMVy03XNKE8Q3vc1+kZV3wNAwJSPvVde6pT+AB+GfsxOcmxZj9Wpoo7lgfxsnx+G
-N5vWRkidksphWMOPcUHxcBYqm1VgcqBY0U+z4yxkbMV9PWBG4glE0usq7aSub44z
-qOB8TsUc3b/CV1asWz6M3QBGZk8GnS2KVfN8nK+MlzL6kXG/KpEkNF4qs2diY8Ca
-o1UA2Q0NWNSP15S/UFCkqzP5+CtsVel5Kw6O3LJ9jXvhDuTwOWrxn11BdbvAdDvC
-UJMBbSwCF4Deo/O/kiG9Kcqj188lZKhoze4zv7e+Oxv2niPmgmE=
-=8tXa
------END PGP SIGNATURE-----
-
---elce2mn4beyzveti--
+> +	return 0;
+> +}
+> +
+>  static const struct dev_pm_ops tegra_i2c_pm = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(tegra_i2c_suspend, tegra_i2c_resume)
+>  	SET_RUNTIME_PM_OPS(tegra_i2c_runtime_suspend, tegra_i2c_runtime_resume,
+>  			   NULL)
+>  };
+> 
