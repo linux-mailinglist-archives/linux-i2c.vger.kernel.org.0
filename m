@@ -2,138 +2,155 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCE537372
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2019 13:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF7137371
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2019 13:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727571AbfFFLwj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jun 2019 07:52:39 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:45889 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727531AbfFFLwj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jun 2019 07:52:39 -0400
-Received: by mail-pl1-f196.google.com with SMTP id x7so820013plr.12
-        for <linux-i2c@vger.kernel.org>; Thu, 06 Jun 2019 04:52:39 -0700 (PDT)
+        id S1727325AbfFFLw3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jun 2019 07:52:29 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:36881 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727110AbfFFLw3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jun 2019 07:52:29 -0400
+Received: by mail-lf1-f68.google.com with SMTP id m15so1325055lfh.4;
+        Thu, 06 Jun 2019 04:52:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=blH/ADtjzK9YsJSTsS01CxxSyUBPkBx6oUfeUl/QPQc=;
-        b=jfHAGPy/xgbVnb2fL5ba+FB6dY6KjRLp5L69Ylblsc8MtRtd0GXcVGm3oOqPN2vZJT
-         uUdugxOa0MSi/rBAQAaXbIkntRdj0ZoR9e3dyGZxfnnKh3JDaDtgDQGMwZslHX2sYkoD
-         wiBEx0b316YXKK6gXHwk5YD/jCH4MtVmx4G2WeMcdk3zyOLCzkCirpzQz5KpuKwd/zeC
-         Og7V/fc9hY73h7EQ22rYvn01hEOFSLD4HjbORQrUK9W6XsfP1WxWkOSieKE4Id6v0z7R
-         xPm1sIimTiHGqfc1agRU+2cHa4rvm0zI5qO5fqHdhdO30eLZtJ/OZMP86AtR2XhskfOl
-         uQdQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zPLkA/L+MT2tb0YKXYeABZbn8ju7XPPpKF8Cm5YcWwY=;
+        b=SMis4RP11BWLAtEAe/AcVwMHUFdHYhwm4lgqJj0zCFzDFTUR7sVzRouZ3qKXRmUYja
+         paWnrgCl3cj4x8z7kACumI+8hKt8DF/heg1hG78OwcUf+kh8PwF8tq1byYJX08dsJv3X
+         QntZqBkewrE/dYemVY1O7w4uzEcagcyrOvUwZXu8mO0PiIYvDkXzxMFXvQ9M8M/3+tTL
+         YtLrwo1tl9cfMvGORPD/ehP2dTXD5hz5SwwV4dFwNsGbK1ebEq4nRpeMhGzp3OVR7sLU
+         GRlSDfhjgCV53vo1/T5fuYezWkQAgNFknivUQoNm9rzG0kQ/jRPvIPnz6jvjNW+XGsgI
+         ukeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=blH/ADtjzK9YsJSTsS01CxxSyUBPkBx6oUfeUl/QPQc=;
-        b=ry9h01zikZPh6VMY2/vgM2/3jF9rsee294o4Ztv4yjbg4+AhWpbuUans1xNOFu/9mz
-         IkUudRGo5NOeXMaZo9Uv6jOAaK/Vk1GFsD/zke1lIy68IrzF8oMsFCoIry6KtHlVoMm7
-         LR5ALG1EqQPwWva1zP9wRUYHxVHAYlENs7We1pYSdChtztjQLz/c/yo/l2sdU9csqRzJ
-         QV5uK3cphuEBNFq9jWJkOVZ0P3N9TZd4JzQM/iycga2badz7T7mil//dHgI2/sfoU+m6
-         8JBFTbn5FNjSd3E4tsmxibq4zDpMzak6j8tg/yVx6XCE0QfBHtyPOVgMy42b2p8hPR+t
-         ZSoQ==
-X-Gm-Message-State: APjAAAX0I4yTEiDM/GOXIFqlkkBsRnJuk/IKIKPOqc6p9vf/J2f681In
-        bxa9W0PUZ63PWamfkclNpXBPpsKU
-X-Google-Smtp-Source: APXvYqykYMhmOhk7r5PxJ427J0KH7jiTrLQ0MHpt52OthS8P+XWhVXxwCzGgKFZHWcfW74eUUAmOAw==
-X-Received: by 2002:a17:902:2aa8:: with SMTP id j37mr9979051plb.316.1559821958629;
-        Thu, 06 Jun 2019 04:52:38 -0700 (PDT)
-Received: from 192-168-1-2.tpgi.com.au (14-200-200-125.tpgi.com.au. [14.200.200.125])
-        by smtp.gmail.com with ESMTPSA id c142sm3878241pfb.171.2019.06.06.04.52.35
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 06 Jun 2019 04:52:37 -0700 (PDT)
-From:   Oliver O'Halloran <oohall@gmail.com>
-To:     openbmc@lists.ozlabs.org
-Cc:     linux-i2c@vger.kernel.org, Oliver O'Halloran <oohall@gmail.com>,
-        Eddie James <eajames@linux.vnet.ibm.com>
-Subject: [PATCH v2] i2c: fsi: Create busses for all ports
-Date:   Thu,  6 Jun 2019 21:52:20 +1000
-Message-Id: <20190606115220.9888-1-oohall@gmail.com>
-X-Mailer: git-send-email 2.21.0
+        bh=zPLkA/L+MT2tb0YKXYeABZbn8ju7XPPpKF8Cm5YcWwY=;
+        b=pK9tNXdSLK1mQf0p5OHLhoRf1SCRbl/UaVjeXkZ58rLV+HYrBuxjmlpBJ/KVw1esFp
+         VwSkIZgvzUOTeaBGb5D+p9751jxiqPx/iaT908yi/oqXGHMxV7Ne+ULCI/dS0auRoxHc
+         lQd6zEcyyGxAXIbB0AGwks4ObxhmELFu2JTfRjscYa00V7a0hTtzivzkclCKILCwOJcq
+         Fw9cjzzn/495eS42EbzNcAUSR7cVdHUERuVXz60g6g7JOlU2RBO9rU6uLmi6JKVJ5yx3
+         cdcDBT6dVSiDOuYnBBn5CKV4MW60wWJgi68lOrCzMDjp8TblMHBvryln9x+mreglvj+n
+         6CNQ==
+X-Gm-Message-State: APjAAAWPRLCM8iXqQeOVw4HLaXIhZFcY3XI5SNoEK/t+/Qea9UYy7RGQ
+        2cW4F41RKVyUHxb2OxfEOuQ=
+X-Google-Smtp-Source: APXvYqzmyOkZXWN5lfsLPAhrNTYEgiBO+5rUSrFZxFIShj+qXgIAvp9nzbLNM129xeNZKqbYHpi8hw==
+X-Received: by 2002:ac2:5922:: with SMTP id v2mr23366649lfi.180.1559821946588;
+        Thu, 06 Jun 2019 04:52:26 -0700 (PDT)
+Received: from [192.168.2.145] ([94.29.35.141])
+        by smtp.googlemail.com with ESMTPSA id e19sm309810ljj.62.2019.06.06.04.52.25
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 06 Jun 2019 04:52:25 -0700 (PDT)
+Subject: Re: [PATCH V1] i2c: busses: tegra: Add suspend-resume support
+To:     Bitan Biswas <bbiswas@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1559195718-6693-1-git-send-email-bbiswas@nvidia.com>
+ <c8bad04b-67ef-bcdf-04df-4aa61271e81c@gmail.com>
+ <9142282b-ab76-53a0-13ce-c43b8adc575f@nvidia.com>
+ <4f14a218-332c-0263-c6c5-73a13b2446f0@gmail.com>
+ <caa17a53-6f29-411b-9a84-58ff019752ff@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <d5803f1d-0895-08b8-4851-cd8afad830c6@gmail.com>
+Date:   Thu, 6 Jun 2019 14:52:24 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <caa17a53-6f29-411b-9a84-58ff019752ff@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Currently we only create an I2C bus for the ports listed in the
-device-tree for that master. There's no real reason for this since
-we can discover the number of ports the master supports by looking
-at the port_max field of the status register.
+06.06.2019 8:43, Bitan Biswas пишет:
+> 
+> 
+> On 5/31/19 5:43 AM, Dmitry Osipenko wrote:
+>> 31.05.2019 11:50, Bitan Biswas пишет:
+>>>
+>>>
+>>> On 5/30/19 4:27 AM, Dmitry Osipenko wrote:
+>>>> 30.05.2019 8:55, Bitan Biswas пишет:
+>>>>> Post suspend I2C registers have power on reset values. Before any
+>>>>> transfer initialize I2C registers to prevent I2C transfer timeout
+>>>>> and implement suspend and resume callbacks needed. Fix below errors
+>>>>> post suspend:
+>>>>>
+>>>>> 1) Tegra I2C transfer timeout during jetson tx2 resume:
+>>>>>
+>>>>> [   27.520613] pca953x 1-0074: calling pca953x_resume+0x0/0x1b0 @
+>>>>> 2939, parent: i2c-1
+>>>>> [   27.633623] tegra-i2c 3160000.i2c: i2c transfer timed out
+>>>>> [   27.639162] pca953x 1-0074: Unable to sync registers 0x3-0x5. -110
+>>>>> [   27.645336] pca953x 1-0074: Failed to sync GPIO dir registers: -110
+>>>>> [   27.651596] PM: dpm_run_callback(): pca953x_resume+0x0/0x1b0
+>>>>> returns -110
+>>>>> [   27.658375] pca953x 1-0074: pca953x_resume+0x0/0x1b0 returned -110
+>>>>> after 127152 usecs
+>>>>> [   27.666194] PM: Device 1-0074 failed to resume: error -110
+>>>>>
+>>>>> 2) Tegra I2C transfer timeout error on jetson Xavier post resume.
+>>>>>
+>>>>> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+>>>>> ---
+>>>>>    drivers/i2c/busses/i2c-tegra.c | 24 ++++++++++++++++++++++++
+>>>>>    1 file changed, 24 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/i2c/busses/i2c-tegra.c
+>>>>> b/drivers/i2c/busses/i2c-tegra.c
+>>>>> index ebaa78d..f6a377f 100644
+>>>>> --- a/drivers/i2c/busses/i2c-tegra.c
+>>>>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>>>>> @@ -1687,9 +1687,33 @@ static int tegra_i2c_remove(struct
+>>>>> platform_device *pdev)
+>>>>>    }
+>>>>>      #ifdef CONFIG_PM_SLEEP
+>>>>> +static int tegra_i2c_suspend(struct device *dev)
+>>>>> +{
+>>>>> +    struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+>>>>> +
+>>>>> +    i2c_mark_adapter_suspended(&i2c_dev->adapter);
+>>>>> +
+>>>>> +    return 0;
+>>>>> +}
+>>>>> +
+>>>>> +static int tegra_i2c_resume(struct device *dev)
+>>>>> +{
+>>>>> +    struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+>>>>> +    int ret;
+>>>>> +
+>>>>> +    i2c_lock_bus(&i2c_dev->adapter, I2C_LOCK_ROOT_ADAPTER);
+>>>>> +    ret = tegra_i2c_init(i2c_dev, false);
+>>>>> +    i2c_unlock_bus(&i2c_dev->adapter, I2C_LOCK_ROOT_ADAPTER);
+>>>>
+>>>> Why the locking is needed here?
+>>>
+>>> async resume could result in stress test issues if some client accesses
+>>> the i2c instance. This ensures the i2c instance is locked till the
+>>> initialization is complete.
+>>
+>> 1) This doesn't make much sense.. if client could access I2C during of
+>> tegra_i2c_init execution, then what stops it to perform the access
+>> before the lock is taken?
+> Client resumes will start after I2C instance resume because of driver
+> dependency. Since lock is the first call in i2c-tegra I believe I2C
+> calls of client will not start.
 
-This patch re-works the bus add logic so that we always create buses
-for each port, unless the bus is marked as unavailable in the DT. This
-is useful since it ensures that all the buses provided by the CFAM I2C
-master are accessible to debug tools.
-
-Cc: Eddie James <eajames@linux.vnet.ibm.com>
-Signed-off-by: Oliver O'Halloran <oohall@gmail.com>
----
-v2: Fixed off-by-one when calulating the number of ports.
-    Compile fixes.
----
- drivers/i2c/busses/i2c-fsi.c | 32 +++++++++++++++++++++++++++-----
- 1 file changed, 27 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-fsi.c b/drivers/i2c/busses/i2c-fsi.c
-index 1e2be2219a60..da5eb3960def 100644
---- a/drivers/i2c/busses/i2c-fsi.c
-+++ b/drivers/i2c/busses/i2c-fsi.c
-@@ -658,13 +658,29 @@ static const struct i2c_algorithm fsi_i2c_algorithm = {
- 	.functionality = fsi_i2c_functionality,
- };
- 
-+static struct device_node *fsi_i2c_find_port_of_node(struct device_node *fsi,
-+						     int port)
-+{
-+	struct device_node *np;
-+	u32 port_no;
-+	int rc;
-+
-+	for_each_child_of_node(fsi, np) {
-+		rc = of_property_read_u32(np, "reg", &port_no);
-+		if (!rc && port_no == port)
-+			return np;
-+	}
-+
-+	return NULL;
-+}
-+
- static int fsi_i2c_probe(struct device *dev)
- {
- 	struct fsi_i2c_master *i2c;
- 	struct fsi_i2c_port *port;
- 	struct device_node *np;
-+	u32 port_no, ports, stat;
- 	int rc;
--	u32 port_no;
- 
- 	i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
- 	if (!i2c)
-@@ -678,10 +694,16 @@ static int fsi_i2c_probe(struct device *dev)
- 	if (rc)
- 		return rc;
- 
--	/* Add adapter for each i2c port of the master. */
--	for_each_available_child_of_node(dev->of_node, np) {
--		rc = of_property_read_u32(np, "reg", &port_no);
--		if (rc || port_no > USHRT_MAX)
-+	rc = fsi_i2c_read_reg(i2c->fsi, I2C_FSI_STAT, &stat);
-+	if (rc)
-+		return rc;
-+
-+	ports = FIELD_GET(I2C_STAT_MAX_PORT, stat) + 1;
-+	dev_dbg(dev, "I2C master has %d ports\n", ports);
-+
-+	for (port_no = 0; port_no < ports; port_no++) {
-+		np = fsi_i2c_find_port_of_node(dev->of_node, port_no);
-+		if (np && !of_device_is_available(np))
- 			continue;
- 
- 		port = kzalloc(sizeof(*port), GFP_KERNEL);
--- 
-2.21.0
-
+You're incorrectly assuming that client can start resuming in the middle
+of the controller's resume process. I2C client's resume won't start
+until tegra_i2c_resume() is finished completely. That is because child
+drivers are resumed only after theirs parent is ready and this is
+guaranteed by the drivers core.
