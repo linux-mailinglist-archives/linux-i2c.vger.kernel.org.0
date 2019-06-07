@@ -2,30 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6A039896
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 00:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B79398C6
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 00:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730849AbfFGWY7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Jun 2019 18:24:59 -0400
-Received: from sauhun.de ([88.99.104.3]:46538 "EHLO pokefinder.org"
+        id S1729996AbfFGWcU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Jun 2019 18:32:20 -0400
+Received: from sauhun.de ([88.99.104.3]:46592 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730799AbfFGWY7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 7 Jun 2019 18:24:59 -0400
+        id S1728749AbfFGWcU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 7 Jun 2019 18:32:20 -0400
 Received: from localhost (p5486CE26.dip0.t-ipconnect.de [84.134.206.38])
-        by pokefinder.org (Postfix) with ESMTPSA id C34363E474D;
-        Sat,  8 Jun 2019 00:24:57 +0200 (CEST)
-Date:   Sat, 8 Jun 2019 00:24:57 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 65C593E43BA;
+        Sat,  8 Jun 2019 00:32:18 +0200 (CEST)
+Date:   Sat, 8 Jun 2019 00:32:18 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Robert Hancock <hancock@sedsystems.ca>
-Cc:     linux-i2c@vger.kernel.org, michal.simek@xilinx.com
-Subject: Re: [PATCH v2] i2c: xiic: Add max_read_len quirk
-Message-ID: <20190607222457.GD869@kunai>
-References: <1559685351-25249-1-git-send-email-hancock@sedsystems.ca>
+To:     "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
+        <krzysztof.adamski@nokia.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] hwmon: pmbus: protect read-modify-write with lock
+Message-ID: <20190607223217.GE869@kunai>
+References: <20190528090746.GA31184@localhost.localdomain>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ycz6tD7Th1CMF4v7"
+        protocol="application/pgp-signature"; boundary="HnQK338I3UIa/qiP"
 Content-Disposition: inline
-In-Reply-To: <1559685351-25249-1-git-send-email-hancock@sedsystems.ca>
+In-Reply-To: <20190528090746.GA31184@localhost.localdomain>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -33,46 +35,48 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Ycz6tD7Th1CMF4v7
+--HnQK338I3UIa/qiP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 04, 2019 at 03:55:51PM -0600, Robert Hancock wrote:
-> This driver does not support reading more than 255 bytes at once because
-> the register for storing the number of bytes to read is only 8 bits. Add
-> a max_read_len quirk to enforce this.
+On Tue, May 28, 2019 at 09:08:21AM +0000, Adamski, Krzysztof (Nokia - PL/Wr=
+oclaw) wrote:
+> The operation done in the pmbus_update_fan() function is a
+> read-modify-write operation but it lacks any kind of lock protection
+> which may cause problems if run more than once simultaneously. This
+> patch uses an existing update_lock mutex to fix this problem.
 >=20
-> This was found when using this driver with the SFP driver, which was
-> previously reading all 256 bytes in the SFP EEPROM in one transaction.
-> This caused a bunch of hard-to-debug errors in the xiic driver since the
-> driver/logic was treating the number of bytes to read as zero.
-> Rejecting transactions that aren't supported at least allows the problem
-> to be diagnosed more easily.
->=20
-> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
 
-Applied to for-current and added a stable-tag, thanks!
+Please use get_maintainer to find the people responsible for this file.
+It is not my realm.
+
+> +out:
+> +	mutex_lock(&data->update_lock);
+
+Despite the above, have you tested the code? This likely should be
+mutex_unlock?
 
 
---Ycz6tD7Th1CMF4v7
+--HnQK338I3UIa/qiP
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz65DkACgkQFA3kzBSg
-KbYcpRAAoNXlZu2POC9Y7fR+gwcbYTt2Fz8XYefnr4ehwLLi77V9YCQ6QgB3Mq4D
-8W0O/jzHRnRSVnfjAzoVdfeQdQcHOdxgaPnzOBNRgeVff9KB0ZrLrx8L8zRXhrHO
-IVET8TSoK9y6iCGOLs/e6BCA+oHNRAnRKrYWhYk3TwXGtjt/F4f5Utjaa/i/Oak1
-0j9NSKTZPImCLymEsa6GuUk0vYfuf+hREUbG4fkPQl3bDFjkauXakehSRx1/rijd
-TIFGrwMNWoLWOVcHzA05w1qMwopbJGRn0gcLOc7ZfLHtUJzLLYVsUBrib9Dj9wI6
-7wJrb/eeU+mSsJFnLiF1j7EAypiQxhd/UAjNnHhdaowzuDl2jwrXB2lkUmQW4Vcr
-MyVE6znjWiyUlDEIiauzrE5LrTNc3cEVbt2sgVO8Un3EOmHJ1+JlvkWcFIjNKKzl
-EZFNUxWmmADKnJSD+Jn7DsFKTjowa8nqSd/UKB/+4j7YjncVGH7hNgeGsWm3Dr55
-xdE4o6PkzcDApkWKemPrXlpolv1ZN85FDVafWX/BPPr9W+vkB/gKe5pSNEuSEpVE
-aB1TNMguaMrUAgFSy86uSpE+9avlarXKTZeI8BG7/rp932X6PGy3FefMGywiLkBF
-c6OXINK9O2uuOiBxnZ98O49xcTrAc8vLUnvzZiLdhzEKNhSFWvY=
-=GCEI
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz65fEACgkQFA3kzBSg
+KbYJ0w//UZ891A5ERJxc0KfiTONdubv82Tq6XlgvMzF6NBLXovXj4QGY/Cai1j+u
+d4yIv6YReQoS4Zsd5hNKoQk2vTtI7TF2yCTWjffQWRvXyOppQ8vmoAOlxUsCV4lU
+UJAotgCnlwo4KZKjKEAYMv0X5cbwByWcswyz8W3ZAKEVfVePw3EiAj37EO2bfRXw
+QG66Y8jBPzphQU0BzxZxq5xlv+tYJnE804uXnOrqqxDaKA2jo8lyEO7iRPrTSOP0
+UvA19GIA5Tgw5wLLfHxRR+Ewday9+hcAr1pWhpqYKrZvJadXJgZ4wVVOql9RNkMe
+PEJe5aGxPCvgvc1nRe3lN49iGE/lKAOA6zA5RJPfmXf46S4lQGi+tDX46hWzxNh7
+SKM5Fkc+ieWs1Z1BidMlDmYvXwdeCALFcbMo6/HBdeXkOob4Y1j4PrOysCd936u3
+Kv8zSvw2z0qbd/2mdqjanFzIGABXPZAuS65cs8yci9P6pLdyu2siBIEDIKUf2HDm
+OI8TBwu6y1DwER2EW8l07njzo5CzvTWanYwBi2sh7pJsCxGKGaszFni82C+pNPOh
+pvdmoKp9RI+nWZ5fLDIiq7TQk5mPmVspw4zKlqB48MgVAUrH163NPWyoJSeGyBd5
+om4tv4lmJTWx5no5UPg1oj7U6hJojFoFpyg0tE48bfIFCUE+uLM=
+=6s6f
 -----END PGP SIGNATURE-----
 
---Ycz6tD7Th1CMF4v7--
+--HnQK338I3UIa/qiP--
