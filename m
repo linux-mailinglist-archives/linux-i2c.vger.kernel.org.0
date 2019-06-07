@@ -2,58 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C47C38FE7
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2019 17:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD877390BF
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2019 17:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731455AbfFGPqm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Jun 2019 11:46:42 -0400
-Received: from nat-hk.nvidia.com ([203.18.50.4]:21919 "EHLO nat-hk.nvidia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731431AbfFGPqi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 7 Jun 2019 11:46:38 -0400
-Received: from hkpgpgate101.nvidia.com (Not Verified[10.18.92.100]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cfa86da0000>; Fri, 07 Jun 2019 23:46:34 +0800
-Received: from HKMAIL102.nvidia.com ([10.18.16.11])
-  by hkpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 07 Jun 2019 08:46:34 -0700
+        id S1731972AbfFGPyM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Jun 2019 11:54:12 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:8145 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731515AbfFGPrG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Jun 2019 11:47:06 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cfa86f80000>; Fri, 07 Jun 2019 08:47:04 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 07 Jun 2019 08:47:04 -0700
 X-PGP-Universal: processed;
-        by hkpgpgate101.nvidia.com on Fri, 07 Jun 2019 08:46:34 -0700
-Received: from HKMAIL103.nvidia.com (10.18.16.12) by HKMAIL102.nvidia.com
- (10.18.16.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 7 Jun
- 2019 15:46:34 +0000
-Received: from NAM03-BY2-obe.outbound.protection.outlook.com (104.47.42.52) by
- HKMAIL103.nvidia.com (10.18.16.12) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Fri, 7 Jun 2019 15:46:33 +0000
+        by hqpgpgate101.nvidia.com on Fri, 07 Jun 2019 08:47:04 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 7 Jun
+ 2019 15:47:04 +0000
+Received: from NAM04-SN1-obe.outbound.protection.outlook.com (104.47.44.59) by
+ HQMAIL109.nvidia.com (172.20.187.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Fri, 7 Jun 2019 15:47:03 +0000
 Received: from BYAPR12MB2727.namprd12.prod.outlook.com (20.177.125.216) by
- BYAPR12MB3079.namprd12.prod.outlook.com (20.178.54.76) with Microsoft SMTP
+ BYAPR12MB2806.namprd12.prod.outlook.com (20.177.126.83) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1965.14; Fri, 7 Jun 2019 15:46:31 +0000
+ 15.20.1965.12; Fri, 7 Jun 2019 15:47:02 +0000
 Received: from BYAPR12MB2727.namprd12.prod.outlook.com
  ([fe80::54a2:b360:f53:6aa]) by BYAPR12MB2727.namprd12.prod.outlook.com
  ([fe80::54a2:b360:f53:6aa%6]) with mapi id 15.20.1965.011; Fri, 7 Jun 2019
- 15:46:31 +0000
+ 15:47:01 +0000
 From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Ajay Gupta <ajaykuee@gmail.com>,
+To:     Wolfram Sang <wsa@the-dreams.de>, Ajay Gupta <ajaykuee@gmail.com>
+CC:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: RE: [PATCH v4 3/5] usb: typec: ucsi: ccg: enable runtime pm support
-Thread-Topic: [PATCH v4 3/5] usb: typec: ucsi: ccg: enable runtime pm support
-Thread-Index: AQHVGi8HqgGN4jlQBUW8sHZpNgcaFaaP4KwAgAAAiACAAHoyMA==
-Date:   Fri, 7 Jun 2019 15:46:31 +0000
-Message-ID: <BYAPR12MB2727152C62A13508E5B4092FDC100@BYAPR12MB2727.namprd12.prod.outlook.com>
+Subject: RE: [PATCH v4 2/5] i2c: nvidia-gpu: add runtime pm support
+Thread-Topic: [PATCH v4 2/5] i2c: nvidia-gpu: add runtime pm support
+Thread-Index: AQHVGi8CIE5ghl70p02XBMfZY6QCgKaP4u8AgAB5EUA=
+Date:   Fri, 7 Jun 2019 15:47:01 +0000
+Message-ID: <BYAPR12MB27270536D34E3ACFB55AB252DC100@BYAPR12MB2727.namprd12.prod.outlook.com>
 References: <20190603170545.24004-1-ajayg@nvidia.com>
- <20190603170545.24004-4-ajayg@nvidia.com>
- <20190607082510.GB10298@kuha.fi.intel.com> <20190607082704.GA3360@kunai>
-In-Reply-To: <20190607082704.GA3360@kunai>
+ <20190603170545.24004-3-ajayg@nvidia.com> <20190607083316.GB3360@kunai>
+In-Reply-To: <20190607083316.GB3360@kunai>
 Accept-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
  MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
  MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-06-07T15:46:29.6001855Z;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-06-07T15:46:59.8120883Z;
  MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
  MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
  Information Protection;
@@ -63,32 +61,32 @@ authentication-results: spf=none (sender IP is )
  smtp.mailfrom=ajayg@nvidia.com; 
 x-originating-ip: [216.228.112.22]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 17c1cb2b-885c-4b4e-f7b0-08d6eb5f4fdf
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR12MB3079;
-x-ms-traffictypediagnostic: BYAPR12MB3079:
-x-microsoft-antispam-prvs: <BYAPR12MB307935541869CCFBE3A82FF2DC100@BYAPR12MB3079.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3383;
+x-ms-office365-filtering-correlation-id: b7352579-0a3f-4f7e-587e-08d6eb5f6201
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR12MB2806;
+x-ms-traffictypediagnostic: BYAPR12MB2806:
+x-microsoft-antispam-prvs: <BYAPR12MB28062CB1DDF96B5CBCEA3EDBDC100@BYAPR12MB2806.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
 x-forefront-prvs: 0061C35778
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(979002)(136003)(346002)(396003)(39860400002)(366004)(376002)(13464003)(199004)(189003)(5660300002)(26005)(99286004)(53936002)(9686003)(81156014)(8676002)(54906003)(186003)(66946007)(6116002)(3846002)(305945005)(8936002)(68736007)(6246003)(14454004)(229853002)(476003)(102836004)(6506007)(7696005)(53546011)(110136005)(33656002)(55016002)(14444005)(478600001)(6436002)(76176011)(7736002)(256004)(486006)(2906002)(25786009)(76116006)(81166006)(66066001)(71190400001)(52536014)(11346002)(66476007)(66556008)(446003)(73956011)(71200400001)(66446008)(4326008)(316002)(74316002)(86362001)(64756008)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB3079;H:BYAPR12MB2727.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(979002)(136003)(346002)(396003)(39850400004)(376002)(366004)(13464003)(189003)(199004)(55016002)(6116002)(316002)(6246003)(4326008)(53936002)(54906003)(110136005)(3846002)(25786009)(9686003)(256004)(14444005)(7736002)(7696005)(33656002)(74316002)(76116006)(73956011)(102836004)(53546011)(76176011)(66446008)(64756008)(66556008)(66476007)(66946007)(71200400001)(305945005)(6506007)(6436002)(99286004)(81166006)(81156014)(8936002)(66066001)(229853002)(8676002)(52536014)(26005)(186003)(486006)(446003)(11346002)(476003)(4744005)(5660300002)(14454004)(68736007)(2906002)(71190400001)(478600001)(86362001)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB2806;H:BYAPR12MB2727.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: nvidia.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: rBHduFAsM1+bM8nZCOJvQvD07BB9tCHlDwDAgJeD43AIyDs2SWqtbwbg3OO8YEb3LBYVfNj712d6DRCmCMSR6DPP75c+fVCcZXFH06D72gLkSX4ktXl8SjMeiupBiweNfpRLxIdijon4jpVKN+oqJIJ81K4jcCX02Vj0YVhupyBE6KR3BZlWpVBx24/GWjSzQr/fUQ+4F2sGySHrBMsf26JkyFihY8zmdCAxdXtnM+SDl/KJceoiytmW0yBNJEZ1x0s3XdI+5TO9ebgcj0LHXoWTw0MxD5VwcpXkLdVCKJHCgCKsfmmnpsosfRFSNoLjlQ1F0hWTQg5oYKh83SFNFjNEUtxzplZLipRCyAM9wA9B0Y/G7YyJ/gC/Mu0z+4GqumHF9JL+uqAuVh4FJPIJeG0NH9qV9Pv2RDj+m2rhTck=
+x-microsoft-antispam-message-info: cqWI5SpIneslcAbCxBMlYL+nP0ZHVectAHV+azJ2Urb5ublvtDpcjaTtEcC97TAqizE4ohNZ7/cE5tPqhU0G8xoXne7ywqeVGtPQuQ90XQ1kBj+r2XYHpajR5rrinc5qfmaf8pAQlP8Gb5GErDX+sYNAORTsI7S1hOx7QlI2fSr5CN3EFDEf8mlTmA9Mn+ty8DQgDHXrFjOpkTh1i2IXUzFOn/SDf4mlfNCrTClr0RLYxA4/NF+gmxavdf3wkl0RQcH5PyOzehs9hD9JIsmXwOint+M2v0Jgb+Qwj8oqRaxiozCX7kbJZPWjTc9Wki/qpdFgw8ohg3xkvn7G/J+eS7PFg66B+0ekEAFCafqxlFG890QOWbfQPanGR7+Md+t3OSG57OFL5c4Sz5ysMVmRas8SJ00zNbBGNi9/n+QMvlQ=
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 17c1cb2b-885c-4b4e-f7b0-08d6eb5f4fdf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2019 15:46:31.2103
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7352579-0a3f-4f7e-587e-08d6eb5f6201
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2019 15:47:01.6300
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: ajayg@nvidia.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3079
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2806
 X-OriginatorOrg: Nvidia.com
 Content-Language: en-US
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1559922394; bh=jUc8sNxBozVThXT153aMBu0ikOj7z9Qsr5cTRjBTEIY=;
+        t=1559922424; bh=Spd5zf7HiDCTWOrFh4waSST6JRcnTcJ+N+HlTxs2kZc=;
         h=X-PGP-Universal:From:To:CC:Subject:Thread-Topic:Thread-Index:Date:
          Message-ID:References:In-Reply-To:Accept-Language:X-MS-Has-Attach:
          X-MS-TNEF-Correlator:msip_labels:authentication-results:
@@ -105,49 +103,48 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
          X-MS-Exchange-CrossTenant-userprincipalname:
          X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
          Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=pWJ7Z3PtHsR7YejW7G4tBVZpmv/jrLX1KyNce8NWMeTXt409euqcsh3pzLvnzqRj5
-         LAF6cRjo9pf0wMWF9EXNLljmiWSzhp4egqQYAUWhq4+HnVl2jiBGrz1s8Y1PVOUesW
-         0R+SYR4XziTOCdnf9oJkzgyGrbNrbvRCfLIgyXn2ZNsvvRjbSl+WuoqYOJGMKQ0h56
-         Zejt+q03YBvasB5LW8ryhMLBLPEjx/MZ8bVnxtmDGIFYZVL7qLHIsOkJtgfFpeqxOZ
-         pyGpB+qWY4bJ5oN5gmUHSABCsJqnlmpG3pmQUgqbJb/W+BYyzlGOWFXsWwwPuDtf0L
-         5qJSKq7NZlg0Q==
+        b=LrPwtFHAj8FXAsX3XliFVblHyf+z8sIuPglerpY5j3tbOmq/EcM2/TErD5PBR+MCJ
+         fLk8zSKDmQQMxh9SLItxFvjVyQ+Uycx9THmfFPrHXoLEJ/D1676+NuegrNweIgB/pL
+         HlPh7Uui3EgKtVBVsMqjt1fiRqHcQky2SVK4U3IdBRSnMVXHFP1oSoLVBxg9Mh2xSU
+         rnOKsfGdxxG03XYWP6YR8Lzvx2pFMLvQnyrjEir34hSL/r06PmWaNmXdtb7pJpMkA/
+         Jkpin73mAbjqsTGa5eFVpWASrRa5MkYlojyZmTJJBRXBd0MyPymrG/w6Jk/+ggNQ0U
+         dFb5nVBKyCE6A==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Heikki and Wolfram,
+Hi Wolfram,
 
 > -----Original Message-----
 > From: linux-i2c-owner@vger.kernel.org <linux-i2c-owner@vger.kernel.org>
 > On Behalf Of Wolfram Sang
-> Sent: Friday, June 7, 2019 1:27 AM
-> To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Ajay Gupta <ajaykuee@gmail.com>; linux-usb@vger.kernel.org; linux-
+> Sent: Friday, June 7, 2019 1:33 AM
+> To: Ajay Gupta <ajaykuee@gmail.com>
+> Cc: heikki.krogerus@linux.intel.com; linux-usb@vger.kernel.org; linux-
 > i2c@vger.kernel.org; Ajay Gupta <ajayg@nvidia.com>
-> Subject: Re: [PATCH v4 3/5] usb: typec: ucsi: ccg: enable runtime pm supp=
-ort
+> Subject: Re: [PATCH v4 2/5] i2c: nvidia-gpu: add runtime pm support
 >=20
-> On Fri, Jun 07, 2019 at 11:25:10AM +0300, Heikki Krogerus wrote:
-> > On Mon, Jun 03, 2019 at 10:05:43AM -0700, Ajay Gupta wrote:
-> > > From: Ajay Gupta <ajayg@nvidia.com>
-> > >
-> > > The change enables runtime pm support to UCSI CCG driver.
-> > > Added ucsi_resume() function to enable notification after system
-> > > reusme. Exported both ucsi_resume() and ucsi_send_command()
-> symbols
-> > > in ucsi.c for modular build.
-> > >
-> > > Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
-> >
-> > Was the idea that Wolfram picks these? In that case:
 >=20
-> Cover letter says your tree, will check the i2c patches now.
-Either tree is fine with me. There are 3 (out of 5)  I2C related patches in=
- the set so better
-they go through I2C tree.
+> > +	pm_runtime_mark_last_busy(i2cd->dev);
+> > +	pm_runtime_put_autosuspend(i2cd->dev);
+>=20
+> Much better to have this only once!
+>=20
+> > +/*
+> > + * We need gpu_i2c_suspend() even if it is stub, for runtime pm to
+> > +work
+> > + * correctly. Without it, lspci shows runtime pm status as "D0" for th=
+e
+> card.
+> > + * Documentation/power/pci.txt also insists for driver to provide this=
+:
+>=20
+> I'd think the comment up to here is enough and the rest can go. However, =
+I
+> leave this decision to you.
+Sure, will fix it.
 
 Thanks
-Ajay
 > nvpublic
 
