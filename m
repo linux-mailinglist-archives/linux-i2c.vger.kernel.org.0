@@ -2,70 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC93398FB
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 00:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 616853992B
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 00:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731768AbfFGWi2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Jun 2019 18:38:28 -0400
-Received: from sauhun.de ([88.99.104.3]:46660 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731806AbfFGWiZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 7 Jun 2019 18:38:25 -0400
-Received: from localhost (p5486CE26.dip0.t-ipconnect.de [84.134.206.38])
-        by pokefinder.org (Postfix) with ESMTPSA id 73AC13E43BA;
-        Sat,  8 Jun 2019 00:38:23 +0200 (CEST)
-Date:   Sat, 8 Jun 2019 00:38:23 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Annaliese McDermond <nh6z@nh6z.net>
-Cc:     eric@anholt.net, stefan.wahren@i2se.com, f.fainelli@gmail.com,
-        swarren@wwwdotorg.org, linux-i2c@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, team@nwdigitalradio.com
-Subject: Re: [PATCH v3] i2c: bcm2835: Model Divider in CCF
-Message-ID: <20190607223822.GG869@kunai>
-References: <20190529042912.12956-1-nh6z@nh6z.net>
+        id S1730299AbfFGWzh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Jun 2019 18:55:37 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:32842 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729919AbfFGWzh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Jun 2019 18:55:37 -0400
+Received: by mail-lf1-f66.google.com with SMTP id y17so2774663lfe.0
+        for <linux-i2c@vger.kernel.org>; Fri, 07 Jun 2019 15:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c/T6VjH20uvUa3yYetZY3PpFJLLU5h9EmF7PJycL8Sc=;
+        b=kaBIkmemiQ2zpGmxzKK56rGmiZpJQmZWqz3oaLXQCPvA1bhpU26lX4c3AyAE1lFDs7
+         x6Gdkxj3ZTOo4korQnFOjeM9rmS1lrAoEwVdxAOqP7XInaIup5UGAcZCBt++Tdab+JIB
+         4G9IVix8retd3KUkVCUH7V0iMUsrBcYIYHBboktFECemb4S5gV4HXMdMwqx8VD7OAZwp
+         sExLuVNXBYkVuUMeSZkPz5fGWaTmjjF7F13P6LQTcyqi4zflwM2Kg0cWVyaJ70ITtz50
+         8+mToRpQMQ9svSPLX6qzz9ah39Cc+MjeE2oMDjH039zZ4wnz4gK10qWAytxI2YQnwjCE
+         h7xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c/T6VjH20uvUa3yYetZY3PpFJLLU5h9EmF7PJycL8Sc=;
+        b=HE+1D1EgnYVejOoEQApdU1r3lGKQjk+O+IX114IcOk772B6YRmCXTeR5BWdV94nGTk
+         +vi76mngNv+ryXZwB/I/dNh01gKm+WSB2Uh2OZFNTI4/MvgAj4zoFa0WtU1e0fDwqodx
+         divXZoeuHETreMpMGA6g9Ia46d0JkONG1vcSgCBT5hTwpNwuYdMVelFFpAWhC5fJcnrL
+         fkRN0p0+qXb7+otxY+fltEpomXaokp9E40ydaXrYCt4rLQ3h5bGLnvMYdaJZZOh7FJFX
+         xWu2xx3JqeWXLETK4dYvZ+e5GjnZMsBy2reS73qKx/qG8nY3kUMFKqx/sXwQJ872wGUt
+         Zd/Q==
+X-Gm-Message-State: APjAAAXASjeSocMDO25vKJ/dTLNqdS3NFX+GQ3e1Exp8+nBAlI8AVoqv
+        f7pcYvAPIkyJ5GTeta3M+3f6on6pKIJ0K8KJGUuUNQ==
+X-Google-Smtp-Source: APXvYqxRYmUz1dC+xScN//G5lQMyOJKTxG+WVBJjntXZbf34gRGK7ry2Mx77evZPOXtw6qlEVO15Jo2i5c8aG+LnICs=
+X-Received: by 2002:ac2:4891:: with SMTP id x17mr16099210lfc.60.1559948135564;
+ Fri, 07 Jun 2019 15:55:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KIzF6Cje4W/osXrF"
-Content-Disposition: inline
-In-Reply-To: <20190529042912.12956-1-nh6z@nh6z.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190603220819.31701-1-linus.walleij@linaro.org>
+ <e992bb50-cedc-74c0-cecd-8cac37ecaf69@axentia.se> <20190604224316.slrrlinhzngdan5o@mobilestation>
+ <ee06c942-ad3d-b45b-f067-bbc988595733@axentia.se>
+In-Reply-To: <ee06c942-ad3d-b45b-f067-bbc988595733@axentia.se>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 8 Jun 2019 00:55:27 +0200
+Message-ID: <CACRpkdYybLgfnFRra6MmY0ckk+3nZcW-3dJtA=Ay8fPd0fcTAA@mail.gmail.com>
+Subject: Re: [PATCH v3] i2c: mux/i801: Switch to use descriptor passing
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, Jun 5, 2019 at 10:15 AM Peter Rosin <peda@axentia.se> wrote:
+> On 2019-06-05 00:43, Serge Semin wrote:
 
---KIzF6Cje4W/osXrF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+>  I
+> now have two "competing" pieces of work for the 5.3 merge window.
 
+I had no idea about Serge's patch set, sorry for my ignorance and
+overload etc.
 
-> +	devm_clk_unregister(i2c_dev->dev, bus_clk);
+Serge, if I just rebase & fix this as soon as your stuff is upstream, can
+you test my patches?
 
-Is there a reason you call this and not rely on devm to unregister?
+> Which
+> of these works was sent first has little bearing on my ordering issues.
+> I you guys don't sort this out, I will go whichever way I find more
+> pleasing.
 
-Other than that, looks good from what I can tell.
+I'm fine if you apply Serge's patch set first, I can just look over the
+result afterwards and see what remains to fix. My only goal is
+really to get rid of all <linux/gpio.h> from the kernel in favor of
+using the consumer and machine APIs.
 
-
---KIzF6Cje4W/osXrF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz6514ACgkQFA3kzBSg
-KbaMExAApAMFnRZJvXuFOCFels8tmkIPUkpkZ69YwmOIYzCf8kK1VDSpQ3jzmrVN
-gWajpxvY8z9Vn3x95HPtzpuoo8qkhnydRE+mS98Yto2qek3Z6gMCjwY5V9X7go0P
-y5goRoVDz7yLMvWtJMH+gc4fPrDoFXz17+vpkX1+fHz94Em/Q801nZTUsqe8S2K1
-sCQrL37uijXaXlihwCWbRfn+XC26Ci4oyJ733rVUoc0LqSUH1uk19OwN1ASZ3M1l
-yLDEnCh7FsEmi7n30F0bvF6EU718HrOb9assrqIvu6mzh+t1Pdmo/2Cw48ZQai4Q
-Dp50Tzt5Ky7J0ufI1koR9h4xkQIRsy4lVNNzohkzOutgHNOPh3qmfjH/K4DAi0Hx
-FIhl+mKU7QFlcFHTHfEUC+SZpC9Cu4mCnWdpvzoZvgOOm6BpH5vUg7NCcFhBY7wn
-AoVojYqtZIjDuQmSHDLeQXbz7Tz0TeP7FF7ZUYEyOKnnSASMlWKf/XN3Rs0u9KaZ
-GeBTT5aEXyIgUuVfXo+rJrW0/9KPbZ5aJpIa6c9eiDYHjbrNFIBl4PEpF+UmovPX
-N+r8tXKI/UOqRzvqBFiIweFMl0kIPi9h/sZFERTLuYshmkN6bmLb/CR7rqvSfeQz
-6jaeK7xsRVupOhNrNyAC5Blh6OX+uyzOjGDMhFPOyNVdW9EskGA=
-=R1IH
------END PGP SIGNATURE-----
-
---KIzF6Cje4W/osXrF--
+Yours,
+Linus Walleij
