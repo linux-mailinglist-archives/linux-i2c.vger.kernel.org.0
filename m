@@ -2,143 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6D53844B
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2019 08:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2172638504
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2019 09:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726292AbfFGG1t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Jun 2019 02:27:49 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:42374 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbfFGG1t (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Jun 2019 02:27:49 -0400
-Received: by mail-lf1-f66.google.com with SMTP id y13so698394lfh.9;
-        Thu, 06 Jun 2019 23:27:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rQ9b6+/u+diNabiHcRE//MFPJUhb+OGFksp8HDzi/hU=;
-        b=fBgZarhjfXorlEMGFSQnX2nUvbQdTLuG9hbfjj00rUQdWHreO7GeDMonHkak3356zy
-         r11ZrF2piYb/v3hUy7iiv/Wh8V7YlJFFJUDpv8hzwrJv/ptm0rKFAtnc4mrEMVdytLuJ
-         LgoD+hd7n7gpiWO7fp5Yej+S9s14nKj2Y+pvAhE3m/7QFftSoKlR/M1wX8n/ARkGinBK
-         zAF1+UeD0w4/Xg2ItOhwIdMTyLN97TS6Qly6rfggDx01T4dZvkOFp1HchvJBVtL425Fh
-         cYovjG/p8pjJGzJitCWdXShIj7C+HYJt0HZY9J0dciRM0SYxuc7SSEdZlemRXF/a6LXd
-         nKbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rQ9b6+/u+diNabiHcRE//MFPJUhb+OGFksp8HDzi/hU=;
-        b=oBtTO6hmOnfJcA+u2jdhRtXYo1GzhNuDajRDw3effiP8Xs4CtS4OmPdQmWu7k7utuZ
-         pMN3qCYy/AEK/9y2ro8tDMP2tdXGRs3xSW6AdaBm3mj8qie+teD5gaxIfr6RdBtAj8ub
-         OvC7OPYZ0XEIvQkq9v0y7CdyBxsUmrkMO5zxfh3NScZagudzcw+kB+oXsBoIITCZ2nw+
-         GMT4YLd5jZApJTiYn7hou6R5J8bRXeiiaBKiZdY/rgXckONbedZ+UQhI1FZpEqbUwQ2Q
-         uqxKN/IMQtb+nXuoKIIrLR0h5+syqJHUUnvW15ewAzHDJ2PUFIR0APlT+qCBaMUrh+eF
-         ND8Q==
-X-Gm-Message-State: APjAAAXN78kCMZWAzx65fm/kibM8DDdPHxm7WkebVpqkaaPBn/L40MGk
-        yYiCPD43RuuC34bXN/yjSKqDnxvR
-X-Google-Smtp-Source: APXvYqxgAO53ZX14VWcFn/HznS/BNE1wjsgjAQRx60U637GDtOlOSMD0nwqNg6QtiaOekwCEfkjKLA==
-X-Received: by 2002:a19:c14f:: with SMTP id r76mr15665324lff.70.1559888867472;
-        Thu, 06 Jun 2019 23:27:47 -0700 (PDT)
-Received: from [192.168.2.145] ([94.29.35.141])
-        by smtp.googlemail.com with ESMTPSA id k82sm212388ljb.84.2019.06.06.23.27.46
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Jun 2019 23:27:46 -0700 (PDT)
-Subject: Re: [PATCH V3] i2c: busses: tegra: Add suspend-resume support
-To:     Bitan Biswas <bbiswas@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Shardar Mohammed <smohammed@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>
-References: <1559885867-10190-1-git-send-email-bbiswas@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <21a2b722-cd1d-284f-2a4d-99bb12c98afd@gmail.com>
-Date:   Fri, 7 Jun 2019 09:27:45 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727406AbfFGH25 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Jun 2019 03:28:57 -0400
+Received: from smtp1.iitb.ac.in ([103.21.127.13]:60536 "EHLO smtp1.iitb.ac.in"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726956AbfFGH25 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 7 Jun 2019 03:28:57 -0400
+Received: from ldns2.iitb.ac.in (ldns2.iitb.ac.in [10.200.12.2])
+        by smtp1.iitb.ac.in (Postfix) with SMTP id 18843105C476
+        for <linux-i2c@vger.kernel.org>; Fri,  7 Jun 2019 12:01:54 +0530 (IST)
+Received: (qmail 29995 invoked by uid 510); 7 Jun 2019 12:01:34 +0530
+X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns2 (envelope-from <rws@aero.iitb.ac.in>, uid 501) with qmail-scanner-2.11
+ spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.100.0/25472} 
+ Clear:RC:1(10.200.1.25):SA:0(1.5/7.0):. Processed in 3.224183 secs; 07 Jun 2019 12:01:34 +0530
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on ldns2.iitb.ac.in
+X-Spam-Level: *
+X-Spam-Status: No, score=1.5 required=7.0 tests=BAYES_50,IITB_ORIG,
+        MISSING_HEADERS,PROPER_IITB_MSGID autolearn=disabled version=3.4.1
+X-Spam-Pyzor: Reported 1 times.
+X-Envelope-From: rws@aero.iitb.ac.in
+X-Qmail-Scanner-Mime-Attachments: |
+X-Qmail-Scanner-Zip-Files: |
+Received: from unknown (HELO ldns2.iitb.ac.in) (10.200.1.25)
+  by ldns2.iitb.ac.in with SMTP; 7 Jun 2019 12:01:31 +0530
+Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
+        by ldns2.iitb.ac.in (Postfix) with ESMTP id CB958341965;
+        Fri,  7 Jun 2019 12:01:17 +0530 (IST)
+Received: from localhost (localhost [127.0.0.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 9509A8902E52F;
+        Fri,  7 Jun 2019 12:01:17 +0530 (IST)
+Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
+        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 3VnK-_U7b-vs; Fri,  7 Jun 2019 12:01:17 +0530 (IST)
+Received: from localhost (localhost [127.0.0.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 5DAB88902E54D;
+        Fri,  7 Jun 2019 12:01:14 +0530 (IST)
+X-Virus-Scanned: amavisd-new at aero.iitb.ac.in
+Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
+        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id TgJiwoMo_EHZ; Fri,  7 Jun 2019 12:01:14 +0530 (IST)
+Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 0EEE684310111;
+        Fri,  7 Jun 2019 12:01:10 +0530 (IST)
+Date:   Fri, 7 Jun 2019 12:01:09 +0530 (IST)
+From:   Martins Henry <rws@aero.iitb.ac.in>
+Message-ID: <412557711.60336.1559889069980.JavaMail.zimbra@aero.iitb.ac.in>
+Subject: Thanks and I wait for your answer
 MIME-Version: 1.0
-In-Reply-To: <1559885867-10190-1-git-send-email-bbiswas@nvidia.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.101.1.5]
+X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF11 (Win)/8.8.12_GA_3794)
+Thread-Index: SsslhYkcLNFU69da/wYft5cO9/ZYnA==
+Thread-Topic: Thanks and I wait for your answer
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-07.06.2019 8:37, Bitan Biswas пишет:
-> Post suspend I2C registers have power on reset values. Before any
-> transfer initialize I2C registers to prevent I2C transfer timeout
-> and implement suspend and resume callbacks needed. Fix below errors
-> post suspend:
-> 
-> 1) Tegra I2C transfer timeout during jetson tx2 resume:
-> 
-> [   27.520613] pca953x 1-0074: calling pca953x_resume+0x0/0x1b0 @ 2939, parent: i2c-1
-> [   27.633623] tegra-i2c 3160000.i2c: i2c transfer timed out
-> [   27.639162] pca953x 1-0074: Unable to sync registers 0x3-0x5. -110
-> [   27.645336] pca953x 1-0074: Failed to sync GPIO dir registers: -110
-> [   27.651596] PM: dpm_run_callback(): pca953x_resume+0x0/0x1b0 returns -110
-> [   27.658375] pca953x 1-0074: pca953x_resume+0x0/0x1b0 returned -110 after 127152 usecs
-> [   27.666194] PM: Device 1-0074 failed to resume: error -110
-> 
-> 2) Tegra I2C transfer timeout error on jetson Xavier post resume.
-> 
-> Remove i2c bus lock-unlock calls in resume callback as i2c_mark_adapter_*
-> (suspended-resumed) help ensure i2c core calls from client are not
-> executed before i2c-tegra resume.
-> 
-> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
-> ---
->  drivers/i2c/busses/i2c-tegra.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-> index ebaa78d..1dbba39 100644
-> --- a/drivers/i2c/busses/i2c-tegra.c
-> +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -1687,7 +1687,31 @@ static int tegra_i2c_remove(struct platform_device *pdev)
->  }
->  
->  #ifdef CONFIG_PM_SLEEP
-> +static int tegra_i2c_suspend(struct device *dev)
-> +{
-> +	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
-> +
-> +	i2c_mark_adapter_suspended(&i2c_dev->adapter);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tegra_i2c_resume(struct device *dev)
-> +{
-> +	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
-> +	int err;
-> +
-> +	err = tegra_i2c_init(i2c_dev, false);
-> +	if (err)
-> +		return err;
-> +
-> +	i2c_mark_adapter_resumed(&i2c_dev->adapter);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct dev_pm_ops tegra_i2c_pm = {
-> +	SET_SYSTEM_SLEEP_PM_OPS(tegra_i2c_suspend, tegra_i2c_resume)
->  	SET_RUNTIME_PM_OPS(tegra_i2c_runtime_suspend, tegra_i2c_runtime_resume,
->  			   NULL)
->  };
-> 
+Hello,
 
-Thanks!
+I am Martin Henry, An American Citizen; I am the personal secretary to
+Mr. Donald Railton, the controller of a Lottery Company. Please I am
+having big problem now, I have a 6yrs old daughter who has leukemia, a
+disease of the blood, and she needs a bone marrow transplant or she
+will die.
 
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Please I am only asking for your help and you will benefit from it
+also. As an insider with Lottery Firm, working as the personal
+secretary to the controller, I want you to send me your name to play,
+I have some numbers that are going to win, stored in his secret data
+system in the office. The Lottery is an online entry with credit card
+anywhere with a name and address. All I want you to do is to send your
+name to play it and I will send confirmation to you.
 
--- 
-Dmitry
+I will play with my card on your name and the Prize will be shared
+equally between us. Immediately the results are released they will
+contact you for payment as the oversea winner. The lotto can be played
+with 9.00 dollars, or 50 dollars but the prize will be Millions.
+Remember that I am playing on your name with my card; I just want to
+front you for this, because I need this money to save the life of my
+little daughter.
+
+Thanks and I wait for your answer
+Martin Henry.
