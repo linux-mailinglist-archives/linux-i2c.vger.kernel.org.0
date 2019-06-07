@@ -2,40 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5BA39862
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 00:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC8A39873
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 00:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730177AbfFGWQA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Jun 2019 18:16:00 -0400
-Received: from sauhun.de ([88.99.104.3]:46426 "EHLO pokefinder.org"
+        id S1730955AbfFGWT0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Jun 2019 18:19:26 -0400
+Received: from sauhun.de ([88.99.104.3]:46478 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729127AbfFGWQA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 7 Jun 2019 18:16:00 -0400
+        id S1729014AbfFGWT0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 7 Jun 2019 18:19:26 -0400
 Received: from localhost (p5486CE26.dip0.t-ipconnect.de [84.134.206.38])
-        by pokefinder.org (Postfix) with ESMTPSA id 95E123E43BA;
-        Sat,  8 Jun 2019 00:15:58 +0200 (CEST)
-Date:   Sat, 8 Jun 2019 00:15:58 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 684603E43BA;
+        Sat,  8 Jun 2019 00:19:24 +0200 (CEST)
+Date:   Sat, 8 Jun 2019 00:19:24 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        =?utf-8?B?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>,
-        Steven Honeyman <stevenhoneyman@gmail.com>,
-        Valdis.Kletnieks@vt.edu,
-        Jochen Eisinger <jochen@penguin-breeder.org>,
-        Gabriele Mazzotta <gabriele.mzt@gmail.com>,
-        Andy Lutomirski <luto@kernel.org>, Mario_Limonciello@dell.com,
-        Alex Hung <alex.hung@canonical.com>,
-        Takashi Iwai <tiwai@suse.de>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v5] i2c: i801: Register optional lis3lv02d I2C device on
- Dell machines
-Message-ID: <20190607221558.GB869@kunai>
-References: <20190606181845.14091-1-pali.rohar@gmail.com>
+To:     Oliver O'Halloran <oohall@gmail.com>
+Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        Eddie James <eajames@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2] i2c: fsi: Create busses for all ports
+Message-ID: <20190607221924.GC869@kunai>
+References: <20190606115220.9888-1-oohall@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="A6N2fC+uXW/VQSAv"
+        protocol="application/pgp-signature"; boundary="4ZLFUWh1odzi/v6L"
 Content-Disposition: inline
-In-Reply-To: <20190606181845.14091-1-pali.rohar@gmail.com>
+In-Reply-To: <20190606115220.9888-1-oohall@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -43,54 +34,46 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---A6N2fC+uXW/VQSAv
-Content-Type: text/plain; charset=utf-8
+--4ZLFUWh1odzi/v6L
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 06, 2019 at 08:18:45PM +0200, Pali Roh=C3=A1r wrote:
-> Dell platform team told us that some (DMI whitelisted) Dell Latitude
-> machines have ST microelectronics accelerometer at I2C address 0x29.
+On Thu, Jun 06, 2019 at 09:52:20PM +1000, Oliver O'Halloran wrote:
+> Currently we only create an I2C bus for the ports listed in the
+> device-tree for that master. There's no real reason for this since
+> we can discover the number of ports the master supports by looking
+> at the port_max field of the status register.
 >=20
-> Presence of that ST microelectronics accelerometer is verified by existen=
-ce
-> of SMO88xx ACPI device which represent that accelerometer. Unfortunately
-> ACPI device does not specify I2C address.
+> This patch re-works the bus add logic so that we always create buses
+> for each port, unless the bus is marked as unavailable in the DT. This
+> is useful since it ensures that all the buses provided by the CFAM I2C
+> master are accessible to debug tools.
 >=20
-> This patch registers lis3lv02d device for selected Dell Latitude machines
-> at I2C address 0x29 after detection. And for Dell Vostro V131 machine at
-> I2C address 0x1d which was manually detected.
->=20
-> Finally commit a7ae81952cda ("i2c: i801: Allow ACPI SystemIO OpRegion to
-> conflict with PCI BAR") allowed to use i2c-i801 driver on Dell machines so
-> lis3lv02d correctly initialize accelerometer.
->=20
-> Tested on Dell Latitude E6440.
->=20
-> Signed-off-by: Pali Roh=C3=A1r <pali.rohar@gmail.com>
->=20
+> Cc: Eddie James <eajames@linux.vnet.ibm.com>
+> Signed-off-by: Oliver O'Halloran <oohall@gmail.com>
 
-Applied to for-next, thanks for keeping at it!
+Applied to for-next, thanks!
 
 
---A6N2fC+uXW/VQSAv
+--4ZLFUWh1odzi/v6L
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz64h4ACgkQFA3kzBSg
-KbYD+g//aii1FojuiA4U0z0/JO99KdQT+W2HhcekFjKUQnnnsgLBw18QuP9AuaMC
-NG9HPCOP5o+7Q4kp85NEEKtbtLjNavO7vnfKydPbijv/ekNapQ+ZghA85ZEKmdX2
-b+D1vTQuHCcIueVJhJEnMCfWUo+MOKTyeXQL01piA8r8JvcQcbp3I9JWs4ul/ihN
-ggNnS3uJreXwMyM/Aulbhj3Ql9CVYZuhOswSI1BnMEtPdN9j/Y27yceWUF6lB7jw
-5QgBBmmFTvNTgQ2Rv7gZt+gr7jO+kYSkfMSXf0gMOzSFhjXsbHmSks7hNUuWVmkL
-L6VB9Lg1Iyl0Km1atYD2q7nA/8WCQuE/8AyidUQV+HxvEebypCdlj3y+baT33nbr
-VD16iosdzxGqNZpTalSzG/+QHvfrMQiem1tovZjhj/icW/o5khK53AGiLN1TFZVh
-S/o9R1SqiV5eLrShMZJp9RJSsVvoFOw3HG8mWjTZltYLwwfefmmITGJ8TDsjH3oV
-nyIQv2Ypo/6HCZGQ63x3TbK+OaQpdZJ1z3Rmbts6yKwJpE+nLPu6pZ0afFIYh39k
-ur0RZbSnvjAtHLNgQ1nU/84T+O+Fxn7K1qw/KpLZJaQkQM/qpxTsYPJNwk1F718/
-D30urkkl+PFQq68JZ3MU7wx3UxP+7V6wAd1B48Nvj9vFnPfif8E=
-=Ntf9
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz64usACgkQFA3kzBSg
+KbbYthAArVDgB7Kw8dfQVNVvY21iHqMnEE+6VseRR2PzZyWqGLJPTTAnqJm8L6sL
+rhR+fZXxa8nFvU1rKnybYcp58OxxhJT1RO/UQDs4Qv6+9JMHmteb2Ll3ETno+FMu
+2I8Y5xFNeGqf3X2wn+yFm36IcXIn2l2P7BaQ8cN82AW7Etq+fTAmDH5v46ydngqQ
+OeXgSIR9bP1T6qEzcdf9sDENC3Dkw7S6YbPKA3UzOFypsXOo2f9xPC6Esmr0sZkb
+apquwU4lUCkQj//neBtI0mZqSQCv0k1F3k8BFmtFqLKw+KkaHQP3HxDWlOchv9Ow
+A14dNahgdm5D2IVcpM3MjrGS04U9Puu4dpYZ6X3adXwg25qLp6nS7XRVykV0OUcy
+2Va7Kot+e1u2n9S5Io4owfCdjszVW0ANkiyrQ8wp0o8A1dgSeAHfAH99I8wfBfxS
+yaKz+QCoMH3UQ/VDnMdS4EBLNFRuEdjmszAbrDIhoP9oul7nxar1ZTiAL/w/8w5I
+yA5Wmlf3oTXHRbOPc7qy7TT6zI4ZxjoNKRJpzYnrXeZYo6hbpK+vwK6DZlUy3R2k
+ohkg1s952Poq0nvrruBlCvz214nDonJmXDHxuzrmqCl57uV5VHh9g1WiHkRFrIWB
++RThkQpHnTmXTLc8ax2D6b1VzYHiVoS39mZFtMyulniv5/42DKw=
+=tZYM
 -----END PGP SIGNATURE-----
 
---A6N2fC+uXW/VQSAv--
+--4ZLFUWh1odzi/v6L--
