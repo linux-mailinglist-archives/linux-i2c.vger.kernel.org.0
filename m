@@ -2,159 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E5337FB5
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2019 23:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD043832F
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2019 05:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727089AbfFFVig (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jun 2019 17:38:36 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46108 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726157AbfFFVig (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jun 2019 17:38:36 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x56LVxUe075085
-        for <linux-i2c@vger.kernel.org>; Thu, 6 Jun 2019 17:38:34 -0400
-Received: from e11.ny.us.ibm.com (e11.ny.us.ibm.com [129.33.205.201])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2sy9y2ag71-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-i2c@vger.kernel.org>; Thu, 06 Jun 2019 17:38:34 -0400
-Received: from localhost
-        by e11.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-i2c@vger.kernel.org> from <eajames@linux.ibm.com>;
-        Thu, 6 Jun 2019 22:38:34 +0100
-Received: from b01cxnp22033.gho.pok.ibm.com (9.57.198.23)
-        by e11.ny.us.ibm.com (146.89.104.198) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 6 Jun 2019 22:38:31 +0100
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x56LcUEJ30015918
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Jun 2019 21:38:30 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 827D0124052;
-        Thu,  6 Jun 2019 21:38:30 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32BD3124055;
-        Thu,  6 Jun 2019 21:38:30 +0000 (GMT)
-Received: from [9.85.223.174] (unknown [9.85.223.174])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu,  6 Jun 2019 21:38:30 +0000 (GMT)
-Subject: Re: [PATCH v2] i2c: fsi: Create busses for all ports
-To:     "Oliver O'Halloran" <oohall@gmail.com>, openbmc@lists.ozlabs.org
-Cc:     Eddie James <eajames@linux.vnet.ibm.com>, linux-i2c@vger.kernel.org
-References: <20190606115220.9888-1-oohall@gmail.com>
-From:   Eddie James <eajames@linux.ibm.com>
-Date:   Thu, 6 Jun 2019 16:38:29 -0500
+        id S1726589AbfFGDkS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jun 2019 23:40:18 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:15308 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726331AbfFGDkS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jun 2019 23:40:18 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cf9dc920000>; Thu, 06 Jun 2019 20:40:02 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 06 Jun 2019 20:40:17 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 06 Jun 2019 20:40:17 -0700
+Received: from [10.19.65.14] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 7 Jun
+ 2019 03:40:14 +0000
+Subject: Re: [PATCH V4] drivers: i2c: tegra: fix checkpatch defects
+To:     Peter Rosin <peda@axentia.se>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1559806523-1352-1-git-send-email-bbiswas@nvidia.com>
+ <8df7648d-c5bd-7179-6368-66dab9b7fa39@axentia.se>
+From:   Bitan Biswas <bbiswas@nvidia.com>
+Message-ID: <7f24640f-5031-1413-e96d-6a28e6a50869@nvidia.com>
+Date:   Thu, 6 Jun 2019 20:40:11 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20190606115220.9888-1-oohall@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <8df7648d-c5bd-7179-6368-66dab9b7fa39@axentia.se>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-X-TM-AS-GCONF: 00
-x-cbid: 19060621-2213-0000-0000-0000039B2FDC
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011225; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01214230; UDB=6.00638252; IPR=6.00995310;
- MB=3.00027212; MTD=3.00000008; XFM=3.00000015; UTC=2019-06-06 21:38:32
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19060621-2214-0000-0000-00005EBF5E11
-Message-Id: <5eca0a3d-f2e9-16a9-a9ed-edf795c529a8@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-06_14:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906060145
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1559878802; bh=nfSUhBUF0xlX62infTIeqrfDT/WeXXcT5pJ8IWqzS7E=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=eIZjWpfvKzFCwQBJeizXnXqq20T+jo+8OdUlQ/U8pnV5ormVQsb0am3YqW0y7wIwc
+         kxWPHMyJvk1z/h3Men8AqQ0X9V0BeJgeV1XqYg93Ud2y/AfbJqi43yhQh8Cf0b7XMh
+         1CZDD6wfk/8I5EctFaDLnz2c1qUmBPN38GcjR84OLNbz/xmGuzdTMkltoKHaP4PXI8
+         5OSw19q4NXiPZ3zqQqg3u9WZ464Y2Im3mAUFKqGgXVtPmHu+RFYps6sw8yIR2A1y05
+         dU7CfPAMO7aOCUpHWvi1sjAV4VaoECe3k+vr7FcCkkiznBpnFSejJ0TtFZCpEvuZVA
+         KhmWBvf1ETI0w==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-On 6/6/19 6:52 AM, Oliver O'Halloran wrote:
-> Currently we only create an I2C bus for the ports listed in the
-> device-tree for that master. There's no real reason for this since
-> we can discover the number of ports the master supports by looking
-> at the port_max field of the status register.
->
-> This patch re-works the bus add logic so that we always create buses
-> for each port, unless the bus is marked as unavailable in the DT. This
-> is useful since it ensures that all the buses provided by the CFAM I2C
-> master are accessible to debug tools.
 
+On 6/6/19 1:45 PM, Peter Rosin wrote:
+> On 2019-06-06 09:35, Bitan Biswas wrote:
+>> Fix checkpatch.pl warning(s)/error(s)/check(s) in i2c-tegra.c
+>>
+>> Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
+>> as needed. Replace BUG() with error handling code.
+>> Define I2C_ERR_UNEXPECTED_STATUS for error handling.
+>>
+>> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+>> ---
+>>   drivers/i2c/busses/i2c-tegra.c | 67 +++++++++++++++++++++++-------------------
+>>   1 file changed, 37 insertions(+), 30 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+>> index 76b7926..55a5d87 100644
+>> --- a/drivers/i2c/busses/i2c-tegra.c
+>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>> @@ -78,6 +78,7 @@
+>>   #define I2C_ERR_NO_ACK				0x01
+>>   #define I2C_ERR_ARBITRATION_LOST		0x02
+>>   #define I2C_ERR_UNKNOWN_INTERRUPT		0x04
+>> +#define I2C_ERR_UNEXPECTED_STATUS               0x08
+> 
+> Use tabs like the the surrounding code. And perhaps convert all
+> these flags to use the BIT() macro?
+I shall correct the line and use tabs. I shall convert macros to BIT() 
+if possible.
 
-Thanks Oliver.
+> 
+>>   
+>>   #define PACKET_HEADER0_HEADER_SIZE_SHIFT	28
+>>   #define PACKET_HEADER0_PACKET_ID_SHIFT		16
+>> @@ -112,7 +113,7 @@
+>>   #define I2C_CLKEN_OVERRIDE			0x090
+>>   #define I2C_MST_CORE_CLKEN_OVR			BIT(0)
+>>   
+>> -#define I2C_CONFIG_LOAD_TIMEOUT			1000000
+>> +#define I2C_CONFIG_LOAD_TMOUT			1000000
+> 
+> Similar to xfer_tm already mentioned by Dmitry; just keep it as
+> ..._TIMEOUT and ignore checkpatch on this issue. Or juggle the
+> code in some other way to pacify checkpatch. E.g. abbreviate
+> CONFIG instead? Or something. CONF is way easier to read than
+> TMOUT IMHO...
+OK. Just for consistency planning to ignore checkpatch warning and shall 
+keep current macro I2C_CONFIG_LOAD_TIMEOUT.
 
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
-
-
->
-> Cc: Eddie James <eajames@linux.vnet.ibm.com>
-> Signed-off-by: Oliver O'Halloran <oohall@gmail.com>
-> ---
-> v2: Fixed off-by-one when calulating the number of ports.
->      Compile fixes.
-> ---
->   drivers/i2c/busses/i2c-fsi.c | 32 +++++++++++++++++++++++++++-----
->   1 file changed, 27 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-fsi.c b/drivers/i2c/busses/i2c-fsi.c
-> index 1e2be2219a60..da5eb3960def 100644
-> --- a/drivers/i2c/busses/i2c-fsi.c
-> +++ b/drivers/i2c/busses/i2c-fsi.c
-> @@ -658,13 +658,29 @@ static const struct i2c_algorithm fsi_i2c_algorithm = {
->   	.functionality = fsi_i2c_functionality,
->   };
->   
-> +static struct device_node *fsi_i2c_find_port_of_node(struct device_node *fsi,
-> +						     int port)
-> +{
-> +	struct device_node *np;
-> +	u32 port_no;
-> +	int rc;
-> +
-> +	for_each_child_of_node(fsi, np) {
-> +		rc = of_property_read_u32(np, "reg", &port_no);
-> +		if (!rc && port_no == port)
-> +			return np;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
->   static int fsi_i2c_probe(struct device *dev)
->   {
->   	struct fsi_i2c_master *i2c;
->   	struct fsi_i2c_port *port;
->   	struct device_node *np;
-> +	u32 port_no, ports, stat;
->   	int rc;
-> -	u32 port_no;
->   
->   	i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
->   	if (!i2c)
-> @@ -678,10 +694,16 @@ static int fsi_i2c_probe(struct device *dev)
->   	if (rc)
->   		return rc;
->   
-> -	/* Add adapter for each i2c port of the master. */
-> -	for_each_available_child_of_node(dev->of_node, np) {
-> -		rc = of_property_read_u32(np, "reg", &port_no);
-> -		if (rc || port_no > USHRT_MAX)
-> +	rc = fsi_i2c_read_reg(i2c->fsi, I2C_FSI_STAT, &stat);
-> +	if (rc)
-> +		return rc;
-> +
-> +	ports = FIELD_GET(I2C_STAT_MAX_PORT, stat) + 1;
-> +	dev_dbg(dev, "I2C master has %d ports\n", ports);
-> +
-> +	for (port_no = 0; port_no < ports; port_no++) {
-> +		np = fsi_i2c_find_port_of_node(dev->of_node, port_no);
-> +		if (np && !of_device_is_available(np))
->   			continue;
->   
->   		port = kzalloc(sizeof(*port), GFP_KERNEL);
-
+-Thanks,
+  Bitan
