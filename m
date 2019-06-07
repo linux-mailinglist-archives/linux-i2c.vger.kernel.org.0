@@ -2,52 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C27C38893
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2019 13:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB3B388AC
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2019 13:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728347AbfFGLKQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Jun 2019 07:10:16 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:42972 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727754AbfFGLKQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Jun 2019 07:10:16 -0400
-Received: by mail-io1-f66.google.com with SMTP id u19so1074481ior.9
-        for <linux-i2c@vger.kernel.org>; Fri, 07 Jun 2019 04:10:15 -0700 (PDT)
+        id S1728116AbfFGLMs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Jun 2019 07:12:48 -0400
+Received: from mail-it1-f196.google.com ([209.85.166.196]:34349 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728008AbfFGLMs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Jun 2019 07:12:48 -0400
+Received: by mail-it1-f196.google.com with SMTP id c3so1131182itc.1
+        for <linux-i2c@vger.kernel.org>; Fri, 07 Jun 2019 04:12:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qtT3xvK7Vazpl4o9exivAkvcEkMHtpOwXvVAPT2SJ40=;
-        b=jDo5BRjlVR3AVWDSSfo+gKcryeGPi/AmUttwaIMq0VxqJ+qVI2178K607NkM3CeySN
-         bBJCIl7N6/so3FXSZPrNsg3COjHe1B1atLZy+JgJHiMd9jSc8S4CwxPUM6KpZZWut1Ki
-         xcHnXQyeNRyWHaRgAcrIbDX07S1YcY1LGHUjDdLkg/rEBtcOlHPuiUzuOvE284Cn3XuW
-         cuJfglGXmCS+YULoWL89XM76DEtg5rZupYaC6jM/6ElBUMEg2tOGlKPglN2UFzQeSrkg
-         DGDDIKwDF2JCsDEdafcgCsWVVNTP3zHe6AU0YMfye1c3ZW0cWJg/BGgUKlW7y9Tbthif
-         UZQg==
+        bh=hTNKtOKHHHI8OrPCvhB9+wouB0nXF3Kl/Zi686sIrd0=;
+        b=AwvVeXoMNi9tcUu/RnJEFnfeCf8doml7Cz80CvalFhZ2CGqbDab90V+bAWAM76d1+D
+         o/aI2xzU5pJuRcN3Z3N9cnb/lExQLzuwWPFVOP8kkQLw19gyr842NmpAjnudOKSd3fFy
+         rU8Ma9yUNSAbZzVG4lNGgMD3fmo3zk+VGy6U5JcF+42R5pCVcjG+EVr23yg0GzkBLAQR
+         wu2HuCasU4NM77D9uAiXzO6jk3+vQPr0Sl8WA6YXAB7KAnvClicH+c8YC0KptAGfbLA7
+         NgPslUvVlM1htXbOdJd5JCTBSfUCsOmmngfLHz4wFTxWixqXUpCLRZfbPWwkyQvbjsh1
+         TwRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qtT3xvK7Vazpl4o9exivAkvcEkMHtpOwXvVAPT2SJ40=;
-        b=HgEE9nez0KlmbQ+m9VkTxfBo6SmTwQ2yN1q1wIEAp65l2gt212v3LuKZxFHh3D+EHe
-         jqBX7NtiWdyBRXFPHITIjl6c8EJxRzMkg5T8JmvZdQd6Rsy8E8LGb81PwaOrMon063co
-         hnRmFhW7S6ikI+Rd12pjA964DAfr1wa2h67dFCCQ+HllSUW36lcLCp2H1BF/IE/ml1wz
-         AKt77iMompZqrSQI4oka6Xc+fFkFy6pThqCx4HoMAITryxdhO0gVpClV5JJK/T+JdjMI
-         l0km3SkKOmkb1xtnpe5AchngooM5GdwUtrAK5RlSgc/qSGvcjQaJdmzh4VXHrMbNWIty
-         M16Q==
-X-Gm-Message-State: APjAAAU6W9tUjzL4RSaUmw6fYxh3PA4kUiGDv9p4v2mJx8IGdOO2to6q
-        lzd+4ZHsTU/M7T9YDDnUK7BdHuVD8Bqj+2vrVDhwfQ==
-X-Google-Smtp-Source: APXvYqwrUGnknS/zJMuvQI2wfL8thoDfsVGFqzJXzvtaPiQuD0VcSmpnabR9lJl/h/nYmF51UIoE2867Nj/5gi+piZI=
-X-Received: by 2002:a05:6602:98:: with SMTP id h24mr304941iob.49.1559905815366;
- Fri, 07 Jun 2019 04:10:15 -0700 (PDT)
+        bh=hTNKtOKHHHI8OrPCvhB9+wouB0nXF3Kl/Zi686sIrd0=;
+        b=DbjM/syOut6TT5EI+Vbd1SEhChLuc/afKpjs7kyhqnimerfDeMcTmerQ6m0KHgFZhT
+         UCVUzXNRPc/m6UTwLGC6srZqC2/kJXNXZTgPNh9tadJFeM8Df4zuFHe3Eeh0YO9+2sD1
+         mFhpJhjHTGf2ENbq8sHKKoe3MQMlZdX8k9zIVAKKGKxgtYCXsUPV64l6jeB0a9hlNAGu
+         s7hH5A3pKPlipHivjn5Mt1ibJadcZf3L3JHRY07udQMl4fuI1ALu3Yu3IJbecwdRF4VR
+         hG9Nsp6xYL552mvwjw0NA39jReLjFTAl0MnxILYlYJeZ6YQ93fA5J6B4+WgAVEpz/iRE
+         3+Lg==
+X-Gm-Message-State: APjAAAW0L62uLGD8AuuP0jw2wnLlCljrLnO0VovDBjRxW4PzfcRVtk3K
+        lslrtd1u0NATMRu+9fFtJw4KK98/ohhEJKwxWeCGZA==
+X-Google-Smtp-Source: APXvYqz5tOF3jV0oTY2mNwby2o78QXw0yLqWstPYftPQcuGoW05rYxmIZKkVHV4wRYupNqEQb4ZMrG/bJP79pbwo0oE=
+X-Received: by 2002:a24:4f88:: with SMTP id c130mr3477700itb.104.1559905967402;
+ Fri, 07 Jun 2019 04:12:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190607082901.6491-1-lee.jones@linaro.org> <20190607082901.6491-3-lee.jones@linaro.org>
-In-Reply-To: <20190607082901.6491-3-lee.jones@linaro.org>
+References: <20190607082901.6491-1-lee.jones@linaro.org> <20190607082901.6491-4-lee.jones@linaro.org>
+In-Reply-To: <20190607082901.6491-4-lee.jones@linaro.org>
 From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Date:   Fri, 7 Jun 2019 13:10:04 +0200
-Message-ID: <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/8] pinctrl: msm: Add ability for drivers to supply a
- reserved GPIO list
+Date:   Fri, 7 Jun 2019 13:12:36 +0200
+Message-ID: <CAKv+Gu85kHUDYPDkYVLmZ2pq22wtKP-+8vPUX7qsV_2TixWcFA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/8] pinctrl: qcom: sdm845: Provide ACPI support
 To:     Lee Jones <lee.jones@linaro.org>
 Cc:     alokc@codeaurora.org, Andy Gross <andy.gross@linaro.org>,
         David Brown <david.brown@linaro.org>,
@@ -68,81 +67,122 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 7 Jun 2019 at 10:29, Lee Jones <lee.jones@linaro.org> wrote:
+On Fri, 7 Jun 2019 at 10:30, Lee Jones <lee.jones@linaro.org> wrote:
 >
-> When booting MSM based platforms with Device Tree or some ACPI
-> implementations, it is possible to provide a list of reserved pins
-> via the 'gpio-reserved-ranges' and 'gpios' properties respectively.
-> However some ACPI tables are not populated with this information,
-> thus it has to come from a knowledgable device driver instead.
+> This patch provides basic support for booting with ACPI instead
+> of the currently supported Device Tree.  When doing so there are a
+> couple of differences which we need to taken into consideration.
 >
-> Here we provide the MSM common driver with additional support to
-> parse this informtion and correctly populate the widely used
-> 'valid_mask'.
+> Firstly, the SDM850 ACPI tables omit information pertaining to the
+> 4 reserved GPIOs on the platform.  If Linux attempts to touch/
+> initialise any of these lines, the firmware will restart the
+> platform.
+>
+> Secondly, when booting with ACPI, it is expected that the firmware
+> will set-up things like; Regulators, Clocks, Pin Functions, etc in
+> their ideal configuration.  Thus, the possible Pin Functions
+> available to this platform are not advertised when providing the
+> higher GPIOD/Pinctrl APIs with pin information.
 >
 > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-
-I'm not sure if this is the correct approach. Presumably, on ACPI
-systems, all the pinctl stuff is already set up by the firmware, and
-so we shouldn't touch *any* pins unless they have been requested
-explicitly. Is there any way we can support this in the current
-framework?
-
 > ---
->  drivers/pinctrl/qcom/pinctrl-msm.c | 18 ++++++++++++++++++
->  drivers/pinctrl/qcom/pinctrl-msm.h |  1 +
->  2 files changed, 19 insertions(+)
+>  drivers/pinctrl/qcom/Kconfig          |  2 +-
+>  drivers/pinctrl/qcom/pinctrl-sdm845.c | 35 ++++++++++++++++++++++++++-
+>  2 files changed, 35 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
-> index ee8119879c4c..3ac740b36508 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-msm.c
-> +++ b/drivers/pinctrl/qcom/pinctrl-msm.c
-> @@ -607,8 +607,23 @@ static int msm_gpio_init_valid_mask(struct gpio_chip *chip)
->         int ret;
->         unsigned int len, i;
->         unsigned int max_gpios = pctrl->soc->ngpios;
-> +       const int *reserved = pctrl->soc->reserved_gpios;
->         u16 *tmp;
+> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
+> index 2e66ab72c10b..aafbe932424f 100644
+> --- a/drivers/pinctrl/qcom/Kconfig
+> +++ b/drivers/pinctrl/qcom/Kconfig
+> @@ -168,7 +168,7 @@ config PINCTRL_SDM660
 >
-> +       /* Driver provided reserved list overrides DT and ACPI */
-> +       if (reserved) {
-> +               bitmap_fill(chip->valid_mask, max_gpios);
-> +               for (i = 0; reserved[i] >= 0; i++) {
-> +                       if (i >= max_gpios || reserved[i] >= max_gpios) {
-> +                               dev_err(pctrl->dev, "invalid list of reserved GPIOs\n");
-> +                               return -EINVAL;
-> +                       }
-> +                       clear_bit(reserved[i], chip->valid_mask);
-> +               }
-> +
-> +               return 0;
-> +       }
-> +
->         /* The number of GPIOs in the ACPI tables */
->         len = ret = device_property_read_u16_array(pctrl->dev, "gpios", NULL,
->                                                    0);
-> @@ -964,6 +979,9 @@ static void msm_gpio_irq_handler(struct irq_desc *desc)
+>  config PINCTRL_SDM845
+>         tristate "Qualcomm Technologies Inc SDM845 pin controller driver"
+> -       depends on GPIOLIB && OF
+> +       depends on GPIOLIB && (OF || ACPI)
+>         select PINCTRL_MSM
+>         help
+>           This is the pinctrl, pinmux, pinconf and gpiolib driver for the
+> diff --git a/drivers/pinctrl/qcom/pinctrl-sdm845.c b/drivers/pinctrl/qcom/pinctrl-sdm845.c
+> index c97f20fca5fd..7188bee3cf3e 100644
+> --- a/drivers/pinctrl/qcom/pinctrl-sdm845.c
+> +++ b/drivers/pinctrl/qcom/pinctrl-sdm845.c
+> @@ -3,6 +3,7 @@
+>   * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
+>   */
 >
->  static bool msm_gpio_needs_valid_mask(struct msm_pinctrl *pctrl)
->  {
-> +       if (pctrl->soc->reserved_gpios)
-> +               return true;
-> +
->         return device_property_read_u16_array(pctrl->dev, "gpios", NULL, 0) > 0;
->  }
->
-> diff --git a/drivers/pinctrl/qcom/pinctrl-msm.h b/drivers/pinctrl/qcom/pinctrl-msm.h
-> index c12048e54a6f..23b93ae92269 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-msm.h
-> +++ b/drivers/pinctrl/qcom/pinctrl-msm.h
-> @@ -121,6 +121,7 @@ struct msm_pinctrl_soc_data {
->         bool pull_no_keeper;
->         const char *const *tiles;
->         unsigned int ntiles;
-> +       const int *reserved_gpios;
+> +#include <linux/acpi.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> @@ -1277,6 +1278,10 @@ static const struct msm_pingroup sdm845_groups[] = {
+>         UFS_RESET(ufs_reset, 0x99f000),
 >  };
 >
->  extern const struct dev_pm_ops msm_pinctrl_dev_pm_ops;
+> +static const int sdm845_acpi_reserved_gpios[] = {
+> +       0, 1, 2, 3, 81, 82, 83, 84, -1
+> +};
+> +
+>  static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
+>         .pins = sdm845_pins,
+>         .npins = ARRAY_SIZE(sdm845_pins),
+> @@ -1284,14 +1289,41 @@ static const struct msm_pinctrl_soc_data sdm845_pinctrl = {
+>         .nfunctions = ARRAY_SIZE(sdm845_functions),
+>         .groups = sdm845_groups,
+>         .ngroups = ARRAY_SIZE(sdm845_groups),
+> +       .reserved_gpios = sdm845_acpi_reserved_gpios,
+> +       .ngpios = 150,
+> +};
+> +
+> +static const struct msm_pinctrl_soc_data sdm845_acpi_pinctrl = {
+> +       .pins = sdm845_pins,
+> +       .npins = ARRAY_SIZE(sdm845_pins),
+> +       .groups = sdm845_groups,
+> +       .ngroups = ARRAY_SIZE(sdm845_groups),
+> +       .reserved_gpios = sdm845_acpi_reserved_gpios,
+>         .ngpios = 150,
+>  };
+>
+>  static int sdm845_pinctrl_probe(struct platform_device *pdev)
+>  {
+> -       return msm_pinctrl_probe(pdev, &sdm845_pinctrl);
+> +       int ret;
+> +
+> +       if (pdev->dev.of_node) {
+> +               ret = msm_pinctrl_probe(pdev, &sdm845_pinctrl);
+> +       } else if (ACPI_HANDLE(&pdev->dev)) {
+
+Please use has_acpi_companion() here
+
+> +               ret = msm_pinctrl_probe(pdev, &sdm845_acpi_pinctrl);
+> +       } else {
+> +               dev_err(&pdev->dev, "DT and ACPI disabled\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       return ret;
+>  }
+>
+> +static const struct acpi_device_id sdm845_pinctrl_acpi_match[] = {
+> +       { "QCOM0217"},
+> +       { },
+> +};
+> +MODULE_DEVICE_TABLE(acpi, sdm845_pinctrl_acpi_match);
+> +
+
+Put this in a #ifdef CONFIG_ACPI please
+
+>  static const struct of_device_id sdm845_pinctrl_of_match[] = {
+>         { .compatible = "qcom,sdm845-pinctrl", },
+>         { },
+> @@ -1302,6 +1334,7 @@ static struct platform_driver sdm845_pinctrl_driver = {
+>                 .name = "sdm845-pinctrl",
+>                 .pm = &msm_pinctrl_dev_pm_ops,
+>                 .of_match_table = sdm845_pinctrl_of_match,
+> +               .acpi_match_table = ACPI_PTR(sdm845_pinctrl_acpi_match),
+>         },
+>         .probe = sdm845_pinctrl_probe,
+>         .remove = msm_pinctrl_remove,
 > --
 > 2.17.1
 >
