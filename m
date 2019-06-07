@@ -2,196 +2,179 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56161393FB
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2019 20:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E3F394EC
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2019 20:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730422AbfFGSJr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Jun 2019 14:09:47 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38234 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729815AbfFGSJr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Jun 2019 14:09:47 -0400
-Received: by mail-pg1-f196.google.com with SMTP id v11so1557915pgl.5
-        for <linux-i2c@vger.kernel.org>; Fri, 07 Jun 2019 11:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/3m639ul9fLGHczHyKn0H1zZg+5SVSXXo1Nl+CYKby4=;
-        b=PzFmnwe5R9+tXehwIXZM6y8FoShB+B2G5A0MZe7+0cyb/EOpN+t4FPLENdAFQiY4vp
-         snMFvVlNDWgHWDB2eUSQIPp1jPpux+sTG071CiSoW9pKxLK4lCyinxlVC7k40V6c7NyM
-         z5pTl9+LJCEFZIC3Qz7jsfCfXo3GXCw4hr6fH/Of0zai00v9lD1BaHATpmLQ9qqU0zRI
-         HEJWGafkIT/mIu9OHFbD7peMSgFffJJnzRTXUZh94uyM4rRLf4WGCbHpAYNJSgv6Pp+D
-         fd+lIHwpViriTTXjPu1DqDEtndYAxhmI9tO3EsjbdeUbHvIlHX+VrJDGetgrOd1J7w40
-         Dz0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/3m639ul9fLGHczHyKn0H1zZg+5SVSXXo1Nl+CYKby4=;
-        b=HuwOoCAjV3xxtaxJyESdjLrY4v5gD/7Z1+t+r3cA+rxRu3KrCdC1ZXkzjzLXcHJ2Fk
-         EaOqVIxsHGv/LP7Ff3SYLiplk3fkLAUV6GA1VfhWC+8LD+y6TK2ZY34PI3wCU4P8kVCI
-         j/OAJ9fdS1GtNItBHDoIPFtpVYg4L7dtNsGitag9gJLxYTZ0R1idLWmDCXeXYckVOhdL
-         qmV7XExwcC0zM8EN+eysJBdAnHZD0Kpu9ZeRN+ZNh5JwX/1U0g7v4hF661zJHbeKQLWq
-         IdOq7rc01YzDYY9bMS61LsJBUpslHPQYgpsnEfRfNm44TDJE3Gd6d+LgLDt2LuXKgai4
-         Kqig==
-X-Gm-Message-State: APjAAAXao9tYclGALMmG3VunbdvakXZn8h5ioN+CSLzW0WzM3sRcWLdr
-        EPTn70EFapzoYzG/VYo0w0NUrw==
-X-Google-Smtp-Source: APXvYqzt5gwdXKwtn7ZORpYSN5ZFetcAiXsBwVaXb6cj35kEgitwNjg1kWrl11fOzV9tGYSsCfKnXw==
-X-Received: by 2002:a62:3287:: with SMTP id y129mr4134583pfy.251.1559930986308;
-        Fri, 07 Jun 2019 11:09:46 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id l44sm6897224pje.29.2019.06.07.11.09.43
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 07 Jun 2019 11:09:45 -0700 (PDT)
-Date:   Fri, 7 Jun 2019 11:10:30 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, alokc@codeaurora.org,
-        Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>,
-        wsa+renesas@sang-engineering.com,
-        Linus Walleij <linus.walleij@linaro.org>, balbi@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Jeffrey Hugo <jlhugo@gmail.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 3/8] pinctrl: msm: Add ability for drivers to supply a
- reserved GPIO list
-Message-ID: <20190607181030.GX22737@tuxbook-pro>
-References: <20190607082901.6491-1-lee.jones@linaro.org>
- <20190607082901.6491-3-lee.jones@linaro.org>
- <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
+        id S1732319AbfFGS4C (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Jun 2019 14:56:02 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:15695 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732313AbfFGS4B (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Jun 2019 14:56:01 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cfab33e0000>; Fri, 07 Jun 2019 11:55:58 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 07 Jun 2019 11:56:00 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 07 Jun 2019 11:56:00 -0700
+Received: from [10.19.65.14] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 7 Jun
+ 2019 18:55:57 +0000
+Subject: Re: [PATCH V1 6/6] i2c: tegra: remove BUG, BUG_ON
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
+        Wolfram Sang <wsa@the-dreams.de>
+CC:     Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1559908507-31192-1-git-send-email-bbiswas@nvidia.com>
+ <1559908507-31192-6-git-send-email-bbiswas@nvidia.com>
+ <4aec6d7a-0dea-18c9-efde-96cc1a54b945@gmail.com>
+ <2281ef29-6e69-78e7-4d07-77f33c2f2d5a@gmail.com>
+ <9adcde41-2450-27dc-36a0-b3b99022b43d@gmail.com>
+From:   Bitan Biswas <bbiswas@nvidia.com>
+Message-ID: <75a7f16f-5d54-797d-fb72-445411f20424@nvidia.com>
+Date:   Fri, 7 Jun 2019 11:55:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <9adcde41-2450-27dc-36a0-b3b99022b43d@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL108.nvidia.com (172.18.146.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1559933758; bh=uCIuy8rH6YJsc+yfcuZuDGYINzs4oKq/K+wz218dMQY=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=M4arfBVACmw1/pC2JeZFWgiz8tnHqrKaAdWNoIHxOKemsUv+YfBPsmCrmeFLH5MLA
+         cfg83/NLK5j8NvXYO5rA2zArplHXysMUKSxB+Nw0Ru7MUbswLOCvyCtVLYfCftQdHw
+         3mnodvVhLEGbw4cK9g0QSg1F5GhtM5sKqM7jJZAZpmW0Jl+a3tqm+cbtVHnK788k7P
+         O5HvvpUcdLGguNTjB88UJr5FcNIF5ZrAfmpzkSb9/XyUNI/5q8rIgDAn78qvVFxoUh
+         lLITiVRD0Za1AbRyGSV2+e3WAjd9masCdBhM1ultRq20Ir9jjK0OL10CCzmLS9APS5
+         XfZtRe420ANbg==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri 07 Jun 04:10 PDT 2019, Ard Biesheuvel wrote:
-
-> On Fri, 7 Jun 2019 at 10:29, Lee Jones <lee.jones@linaro.org> wrote:
-> >
-> > When booting MSM based platforms with Device Tree or some ACPI
-> > implementations, it is possible to provide a list of reserved pins
-> > via the 'gpio-reserved-ranges' and 'gpios' properties respectively.
-> > However some ACPI tables are not populated with this information,
-> > thus it has to come from a knowledgable device driver instead.
-> >
-> > Here we provide the MSM common driver with additional support to
-> > parse this informtion and correctly populate the widely used
-> > 'valid_mask'.
-> >
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> 
-> I'm not sure if this is the correct approach. Presumably, on ACPI
-> systems, all the pinctl stuff is already set up by the firmware, and
-> so we shouldn't touch *any* pins unless they have been requested
-> explicitly. Is there any way we can support this in the current
-> framework?
-> 
-
-The only reason why we do this (at least the initial reason) is because
-gpiolib will read the current state of all GPIOs during initialization.
-
-But due to the sensitive nature of the application using these pins
-Linux is prohibited from touching the associated GPIO/pinmux/pinconf
-registers - resulting in a security violation if we allow gpiolib to
-touch them.
 
 
-When it comes to pinmux/pinconf those are only poked explicitly and
-those seems to be described in PEP nodes, such as:
+On 6/7/19 5:18 AM, Dmitry Osipenko wrote:
+> 07.06.2019 15:12, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>> 07.06.2019 15:08, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>> 07.06.2019 14:55, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>>> Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
+>>>> as needed. Replace BUG() with error handling code.
+>>>> Define I2C_ERR_UNEXPECTED_STATUS for error handling.
+>>>>
+>>>> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+>>>> ---
+>>>>   drivers/i2c/busses/i2c-tegra.c | 15 ++++++++-------
+>>>>   1 file changed, 8 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-t=
+egra.c
+>>>> index 4dfb4c1..c407bd7 100644
+>>>> --- a/drivers/i2c/busses/i2c-tegra.c
+>>>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>>>> @@ -73,6 +73,7 @@
+>>>>   #define I2C_ERR_NO_ACK				BIT(0)
+>>>>   #define I2C_ERR_ARBITRATION_LOST		BIT(1)
+>>>>   #define I2C_ERR_UNKNOWN_INTERRUPT		BIT(2)
+>>>> +#define I2C_ERR_UNEXPECTED_STATUS		BIT(3)
+>>>>  =20
+>>>>   #define PACKET_HEADER0_HEADER_SIZE_SHIFT	28
+>>>>   #define PACKET_HEADER0_PACKET_ID_SHIFT		16
+>>>> @@ -515,7 +516,6 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2=
+c_dev *i2c_dev)
+>>>>   	 * prevent overwriting past the end of buf
+>>>>   	 */
+>>>>   	if (rx_fifo_avail > 0 && buf_remaining > 0) {
+>>>> -		BUG_ON(buf_remaining > 3);
+>>>>   		val =3D i2c_readl(i2c_dev, I2C_RX_FIFO);
+>>>>   		val =3D cpu_to_le32(val);
+>>>>   		memcpy(buf, &val, buf_remaining);
+>>>> @@ -523,7 +523,6 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2=
+c_dev *i2c_dev)
+>>>>   		rx_fifo_avail--;
+>>>>   	}
+>>>>  =20
+>>>> -	BUG_ON(rx_fifo_avail > 0 && buf_remaining > 0);
+>>>>   	i2c_dev->msg_buf_remaining =3D buf_remaining;
+>>>>   	i2c_dev->msg_buf =3D buf;
+>>>>  =20
+>>>> @@ -581,7 +580,6 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c=
+_dev *i2c_dev)
+>>>>   	 * boundary and fault.
+>>>>   	 */
+>>>>   	if (tx_fifo_avail > 0 && buf_remaining > 0) {
+>>>> -		BUG_ON(buf_remaining > 3);
+>>>>   		memcpy(&val, buf, buf_remaining);
+>>>>   		val =3D le32_to_cpu(val);
+>>>>  =20
+>>>> @@ -847,10 +845,13 @@ static irqreturn_t tegra_i2c_isr(int irq, void *=
+dev_id)
+>>>>  =20
+>>>>   	if (!i2c_dev->is_curr_dma_xfer) {
+>>>>   		if (i2c_dev->msg_read && (status & I2C_INT_RX_FIFO_DATA_REQ)) {
+>>>> -			if (i2c_dev->msg_buf_remaining)
+>>>> +			if (i2c_dev->msg_buf_remaining) {
+>>>>   				tegra_i2c_empty_rx_fifo(i2c_dev);
+>>>> -			else
+>>>> -				BUG();
+>>>> +			} else {
+>>>> +				dev_err(i2c_dev->dev, "unexpected rx data request\n");
+>>>> +				i2c_dev->msg_err |=3D I2C_ERR_UNEXPECTED_STATUS;
+>>>> +				goto err;
+>>>> +			}
+>>>>   		}
+>>>>  =20
+>>>>   		if (!i2c_dev->msg_read && (status & I2C_INT_TX_FIFO_DATA_REQ)) {
+>>>> @@ -876,7 +877,7 @@ static irqreturn_t tegra_i2c_isr(int irq, void *de=
+v_id)
+>>>>   	if (status & I2C_INT_PACKET_XFER_COMPLETE) {
+>>>>   		if (i2c_dev->is_curr_dma_xfer)
+>>>>   			i2c_dev->msg_buf_remaining =3D 0;
+>>>> -		BUG_ON(i2c_dev->msg_buf_remaining);
+>>>> +		WARN_ON_ONCE(i2c_dev->msg_buf_remaining);
+>>>>   		complete(&i2c_dev->msg_complete);
+>>>>   	}
+>>>>   	goto done;
+>>>>
+>>>
+>>> Very nice, thank you very much! BTW, I think it may worth to add anothe=
+r
+>>> patch that will reset hardware state in a case of the warning since we
+>>> know that something gone wrong.
+>>>
+>>> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+>>>
+>>
+>> Something like that:
+>>
+>>   	complete(&i2c_dev->msg_complete);
+>>
+>> 	if (WARN_ON_ONCE(i2c_dev->msg_buf_remaining))
+>> 		goto err;
+>>
+>=20
+> Ah, that's inside the ISR, so maybe will make sense to just not complete
+> the transfer and let it timeout:
+>=20
+> 	if (!WARN_ON_ONCE(i2c_dev->msg_buf_remaining))
+> 		complete(&i2c_dev->msg_complete);
+OK. I shall send the updated patch.
 
-	Package (0x02)
-	{
-	    "TLMMGPIO",
-	    Package (0x06)
-	    {
-		0x2C,
-		One,
-		Zero,
-		One,
-		Zero,
-		Zero
-	    }
-	},
+-Thanks,
+  Bitan
 
-So the pinctrl-sdm845/msm drivers gives us GPIOs, but for pinconf and
-pinmux there's a need for something very different from what we're used
-to.
-
-Regards,
-Bjorn
-
-> > ---
-> >  drivers/pinctrl/qcom/pinctrl-msm.c | 18 ++++++++++++++++++
-> >  drivers/pinctrl/qcom/pinctrl-msm.h |  1 +
-> >  2 files changed, 19 insertions(+)
-> >
-> > diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
-> > index ee8119879c4c..3ac740b36508 100644
-> > --- a/drivers/pinctrl/qcom/pinctrl-msm.c
-> > +++ b/drivers/pinctrl/qcom/pinctrl-msm.c
-> > @@ -607,8 +607,23 @@ static int msm_gpio_init_valid_mask(struct gpio_chip *chip)
-> >         int ret;
-> >         unsigned int len, i;
-> >         unsigned int max_gpios = pctrl->soc->ngpios;
-> > +       const int *reserved = pctrl->soc->reserved_gpios;
-> >         u16 *tmp;
-> >
-> > +       /* Driver provided reserved list overrides DT and ACPI */
-> > +       if (reserved) {
-> > +               bitmap_fill(chip->valid_mask, max_gpios);
-> > +               for (i = 0; reserved[i] >= 0; i++) {
-> > +                       if (i >= max_gpios || reserved[i] >= max_gpios) {
-> > +                               dev_err(pctrl->dev, "invalid list of reserved GPIOs\n");
-> > +                               return -EINVAL;
-> > +                       }
-> > +                       clear_bit(reserved[i], chip->valid_mask);
-> > +               }
-> > +
-> > +               return 0;
-> > +       }
-> > +
-> >         /* The number of GPIOs in the ACPI tables */
-> >         len = ret = device_property_read_u16_array(pctrl->dev, "gpios", NULL,
-> >                                                    0);
-> > @@ -964,6 +979,9 @@ static void msm_gpio_irq_handler(struct irq_desc *desc)
-> >
-> >  static bool msm_gpio_needs_valid_mask(struct msm_pinctrl *pctrl)
-> >  {
-> > +       if (pctrl->soc->reserved_gpios)
-> > +               return true;
-> > +
-> >         return device_property_read_u16_array(pctrl->dev, "gpios", NULL, 0) > 0;
-> >  }
-> >
-> > diff --git a/drivers/pinctrl/qcom/pinctrl-msm.h b/drivers/pinctrl/qcom/pinctrl-msm.h
-> > index c12048e54a6f..23b93ae92269 100644
-> > --- a/drivers/pinctrl/qcom/pinctrl-msm.h
-> > +++ b/drivers/pinctrl/qcom/pinctrl-msm.h
-> > @@ -121,6 +121,7 @@ struct msm_pinctrl_soc_data {
-> >         bool pull_no_keeper;
-> >         const char *const *tiles;
-> >         unsigned int ntiles;
-> > +       const int *reserved_gpios;
-> >  };
-> >
-> >  extern const struct dev_pm_ops msm_pinctrl_dev_pm_ops;
-> > --
-> > 2.17.1
-> >
-> >
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
