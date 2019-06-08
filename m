@@ -2,87 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D80C139EF7
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 13:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65D539F4C
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 13:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727943AbfFHLxF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jun 2019 07:53:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58220 "EHLO mail.kernel.org"
+        id S1726967AbfFHLju (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Jun 2019 07:39:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56784 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727949AbfFHLky (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 8 Jun 2019 07:40:54 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726935AbfFHLju (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 8 Jun 2019 07:39:50 -0400
+Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 388FF214C6;
-        Sat,  8 Jun 2019 11:40:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 338E9208C0;
+        Sat,  8 Jun 2019 11:39:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559994054;
-        bh=TSRcLFrlpO2JyXfmGJburXdZEkncU+WobgydvtGgduo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a2BI3QjeBS3u+iyXQKXw4MqkCz/dvVz6cD417TNoEs2T7bjX7XHOO/dn7LrqAp2Ow
-         0MWDRpS222Q65doKKa18j17DLJmYc/PoPzWFeAOr03D07Gb6n1dRRjUX2XOeCIohM8
-         97rTb503GAlgBXfHWM7zMuibTzxJA91aTOaEI2y4=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vadim Pasternak <vadimp@mellanox.com>,
-        Wolfram Sang <wsa@the-dreams.de>, stable@kernel.org,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 40/70] i2c: mlxcpld: Fix wrong initialization order in probe
-Date:   Sat,  8 Jun 2019 07:39:19 -0400
-Message-Id: <20190608113950.8033-40-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190608113950.8033-1-sashal@kernel.org>
-References: <20190608113950.8033-1-sashal@kernel.org>
+        s=default; t=1559993989;
+        bh=xfk2wRGEM4iv26ktKy2rXmXoYgltCUoUo9eEQWOVnKk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pQTRSkU4qclN1APUcAgyy15vvD+kWn8KddareEMCj0Tz3uURVBr/E1blj8GecqzcF
+         ytzNymxwMaQLjhnd2RWVB+RUQ5m3j8yLq1P8etg6TPFubbflq8erKCTA+7ywJTH9QU
+         rbo9ZcrQGZ5w6fQpqlMpk6s2aasGxd4ejYauI+qE=
+Date:   Sat, 8 Jun 2019 12:39:45 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/34] iio: light: bh1780: simplify getting the adapter
+ of a client
+Message-ID: <20190608123945.4bef51e0@archlinux>
+In-Reply-To: <20190608105619.593-4-wsa+renesas@sang-engineering.com>
+References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
+        <20190608105619.593-4-wsa+renesas@sang-engineering.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Vadim Pasternak <vadimp@mellanox.com>
+On Sat,  8 Jun 2019 12:55:42 +0200
+Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
 
-[ Upstream commit 13067ef73f337336e3149f5bb9f3fd05fe7f87a0 ]
+> We have a dedicated pointer for that, so use it. Much easier to read and
+> less computation involved.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Applied to the togreg branch of iio.git and pushed out as testing for
+the autobuilders to play with it.
 
-Fix wrong order in probing routine initialization - field `base_addr'
-is used before it's initialized. Move assignment of 'priv->base_addr`
-to the beginning, prior the call to mlxcpld_i2c_read_comm().
-Wrong order caused the first read of capability register to be executed
-at wrong offset 0x0 instead of 0x2000. By chance it was a "good
-garbage" at 0x0 offset.
+Thanks,
 
-Fixes: 313ce648b5a4 ("i2c: mlxcpld: Add support for extended transaction length for i2c-mlxcpld")
-Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Cc: stable@kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-mlxcpld.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Jonathan
 
-diff --git a/drivers/i2c/busses/i2c-mlxcpld.c b/drivers/i2c/busses/i2c-mlxcpld.c
-index 745ed43a22d6..2fd717d8dd30 100644
---- a/drivers/i2c/busses/i2c-mlxcpld.c
-+++ b/drivers/i2c/busses/i2c-mlxcpld.c
-@@ -503,6 +503,7 @@ static int mlxcpld_i2c_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, priv);
- 
- 	priv->dev = &pdev->dev;
-+	priv->base_addr = MLXPLAT_CPLD_LPC_I2C_BASE_ADDR;
- 
- 	/* Register with i2c layer */
- 	mlxcpld_i2c_adapter.timeout = usecs_to_jiffies(MLXCPLD_I2C_XFER_TO);
-@@ -518,7 +519,6 @@ static int mlxcpld_i2c_probe(struct platform_device *pdev)
- 		mlxcpld_i2c_adapter.nr = pdev->id;
- 	priv->adap = mlxcpld_i2c_adapter;
- 	priv->adap.dev.parent = &pdev->dev;
--	priv->base_addr = MLXPLAT_CPLD_LPC_I2C_BASE_ADDR;
- 	i2c_set_adapdata(&priv->adap, priv);
- 
- 	err = i2c_add_numbered_adapter(&priv->adap);
--- 
-2.20.1
+> ---
+> 
+> Please apply to your subsystem tree.
+> 
+>  drivers/iio/light/bh1780.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/light/bh1780.c b/drivers/iio/light/bh1780.c
+> index 340d64d0ac59..a8361006dcd9 100644
+> --- a/drivers/iio/light/bh1780.c
+> +++ b/drivers/iio/light/bh1780.c
+> @@ -146,7 +146,7 @@ static int bh1780_probe(struct i2c_client *client,
+>  {
+>  	int ret;
+>  	struct bh1780_data *bh1780;
+> -	struct i2c_adapter *adapter = to_i2c_adapter(client->dev.parent);
+> +	struct i2c_adapter *adapter = client->adapter;
+>  	struct iio_dev *indio_dev;
+>  
+>  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE))
 
