@@ -2,82 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B764E39E03
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 13:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358A139E38
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 13:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728673AbfFHLnQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jun 2019 07:43:16 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:37848 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728670AbfFHLnP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jun 2019 07:43:15 -0400
-Received: from pendragon.ideasonboard.com (unknown [IPv6:2a02:a03f:44f0:8500:ca05:8177:199c:fed4])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BA9335D;
-        Sat,  8 Jun 2019 13:43:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1559994193;
-        bh=fx0n19qeDMTimK0VJDa0BLED3Bsk5ypjzYYcWtyI8qM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZDPaD+uGBOpeDGvPUnyFI/5vah3s3AzGNxyTy1RxJCRRphTDxgBJJM1VZqVDcP1cl
-         EZGYUzEMYUy/3PWydkLoruilef7KKBLifnP6pwg364yGk+Z7xxJJYiwa4KTR+KEyLn
-         4r+q6zI8+SEipYfGasvIMBKiQ3P4khCzwqZaDIDA=
-Date:   Sat, 8 Jun 2019 14:42:59 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/34] media: i2c: mt9p031: simplify getting the adapter
- of a client
-Message-ID: <20190608114259.GB4786@pendragon.ideasonboard.com>
-References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
- <20190608105619.593-10-wsa+renesas@sang-engineering.com>
+        id S1728090AbfFHLr3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Jun 2019 07:47:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36188 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729248AbfFHLr3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 8 Jun 2019 07:47:29 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DEDF0214AF;
+        Sat,  8 Jun 2019 11:47:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559994448;
+        bh=d+YqoHbqw30cU7RL+Ka8NpXNIPY8m8LzQcwZPp9UdTY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OhxBEIzyuMfOqZScA0Ph94PfkQhy9eJ5weG223GRmR+PmcgypDRJESYwro4Tr+OIY
+         R3/Ry7+aAOnSnOEJz+8Mxh3yXDFQ7RofUvq6KJtrFvmLNeRvu1bj9C0EiR1vLUZRV3
+         N6Kk6fZtqZn/A9v10OXg4Ex5BjT6G9HOELSuPf98=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 17/31] i2c: dev: fix potential memory leak in i2cdev_ioctl_rdwr
+Date:   Sat,  8 Jun 2019 07:46:28 -0400
+Message-Id: <20190608114646.9415-17-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190608114646.9415-1-sashal@kernel.org>
+References: <20190608114646.9415-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190608105619.593-10-wsa+renesas@sang-engineering.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+From: Yingjoe Chen <yingjoe.chen@mediatek.com>
 
-Thank you for the patch.
+[ Upstream commit a0692f0eef91354b62c2b4c94954536536be5425 ]
 
-On Sat, Jun 08, 2019 at 12:55:48PM +0200, Wolfram Sang wrote:
-> We have a dedicated pointer for that, so use it. Much easier to read and
-> less computation involved.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+If I2C_M_RECV_LEN check failed, msgs[i].buf allocated by memdup_user
+will not be freed. Pump index up so it will be freed.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Fixes: 838bfa6049fb ("i2c-dev: Add support for I2C_M_RECV_LEN")
+Signed-off-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
+Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/i2c/i2c-dev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-and taken in my tree.
-
-> ---
-> 
-> Please apply to your subsystem tree.
-> 
->  drivers/media/i2c/mt9p031.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
-> index 715be3632b01..5d824dd33edd 100644
-> --- a/drivers/media/i2c/mt9p031.c
-> +++ b/drivers/media/i2c/mt9p031.c
-> @@ -1034,7 +1034,7 @@ static int mt9p031_probe(struct i2c_client *client,
->  			 const struct i2c_device_id *did)
->  {
->  	struct mt9p031_platform_data *pdata = mt9p031_get_pdata(client);
-> -	struct i2c_adapter *adapter = to_i2c_adapter(client->dev.parent);
-> +	struct i2c_adapter *adapter = client->adapter;
->  	struct mt9p031 *mt9p031;
->  	unsigned int i;
->  	int ret;
-
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index 00e8e675cbeb..eaa312bc3a3c 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -297,6 +297,7 @@ static noinline int i2cdev_ioctl_rdwr(struct i2c_client *client,
+ 			    rdwr_pa[i].buf[0] < 1 ||
+ 			    rdwr_pa[i].len < rdwr_pa[i].buf[0] +
+ 					     I2C_SMBUS_BLOCK_MAX) {
++				i++;
+ 				res = -EINVAL;
+ 				break;
+ 			}
 -- 
-Regards,
+2.20.1
 
-Laurent Pinchart
