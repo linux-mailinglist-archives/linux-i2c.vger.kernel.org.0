@@ -2,26 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 283D639CBE
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 12:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E33739CB0
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 12:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726789AbfFHK60 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jun 2019 06:58:26 -0400
-Received: from sauhun.de ([88.99.104.3]:51874 "EHLO pokefinder.org"
+        id S1727165AbfFHK44 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Jun 2019 06:56:56 -0400
+Received: from sauhun.de ([88.99.104.3]:51934 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727130AbfFHK4z (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 8 Jun 2019 06:56:55 -0400
+        id S1727134AbfFHK44 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 8 Jun 2019 06:56:56 -0400
 Received: from localhost (p5486CBCC.dip0.t-ipconnect.de [84.134.203.204])
-        by pokefinder.org (Postfix) with ESMTPSA id 2BA6E3E4786;
+        by pokefinder.org (Postfix) with ESMTPSA id AD80A3E4788;
         Sat,  8 Jun 2019 12:56:54 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 25/34] regulator: max8952: simplify getting the adapter of a client
-Date:   Sat,  8 Jun 2019 12:56:04 +0200
-Message-Id: <20190608105619.593-26-wsa+renesas@sang-engineering.com>
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 26/34] rtc: fm3130: simplify getting the adapter of a client
+Date:   Sat,  8 Jun 2019 12:56:05 +0200
+Message-Id: <20190608105619.593-27-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
 References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
@@ -40,22 +41,42 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Please apply to your subsystem tree.
 
- drivers/regulator/max8952.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-fm3130.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/regulator/max8952.c b/drivers/regulator/max8952.c
-index 2a123b87d9f2..5d3096e20f47 100644
---- a/drivers/regulator/max8952.c
-+++ b/drivers/regulator/max8952.c
-@@ -179,7 +179,7 @@ static struct max8952_platform_data *max8952_parse_dt(struct device *dev)
- static int max8952_pmic_probe(struct i2c_client *client,
- 		const struct i2c_device_id *i2c_id)
- {
--	struct i2c_adapter *adapter = to_i2c_adapter(client->dev.parent);
-+	struct i2c_adapter *adapter = client->adapter;
- 	struct max8952_platform_data *pdata = dev_get_platdata(&client->dev);
- 	struct regulator_config config = { };
- 	struct max8952_data *max8952;
+diff --git a/drivers/rtc/rtc-fm3130.c b/drivers/rtc/rtc-fm3130.c
+index e1137670d4d2..015cf639166e 100644
+--- a/drivers/rtc/rtc-fm3130.c
++++ b/drivers/rtc/rtc-fm3130.c
+@@ -107,8 +107,7 @@ static int fm3130_get_time(struct device *dev, struct rtc_time *t)
+ 	fm3130_rtc_mode(dev, FM3130_MODE_READ);
+ 
+ 	/* read the RTC date and time registers all at once */
+-	tmp = i2c_transfer(to_i2c_adapter(fm3130->client->dev.parent),
+-			fm3130->msg, 2);
++	tmp = i2c_transfer(fm3130->client->adapter, fm3130->msg, 2);
+ 	if (tmp != 2) {
+ 		dev_err(dev, "%s error %d\n", "read", tmp);
+ 		return -EIO;
+@@ -200,8 +199,7 @@ static int fm3130_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 	}
+ 
+ 	/* read the RTC alarm registers all at once */
+-	tmp = i2c_transfer(to_i2c_adapter(fm3130->client->dev.parent),
+-			&fm3130->msg[2], 2);
++	tmp = i2c_transfer(fm3130->client->adapter, &fm3130->msg[2], 2);
+ 	if (tmp != 2) {
+ 		dev_err(dev, "%s error %d\n", "read", tmp);
+ 		return -EIO;
+@@ -351,7 +349,7 @@ static int fm3130_probe(struct i2c_client *client,
+ 	struct fm3130		*fm3130;
+ 	int			err = -ENODEV;
+ 	int			tmp;
+-	struct i2c_adapter	*adapter = to_i2c_adapter(client->dev.parent);
++	struct i2c_adapter	*adapter = client->adapter;
+ 
+ 	if (!i2c_check_functionality(adapter,
+ 			I2C_FUNC_I2C | I2C_FUNC_SMBUS_WRITE_BYTE_DATA))
 -- 
 2.19.1
 
