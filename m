@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 821E039CA4
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 12:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2C139C98
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 12:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727281AbfFHK5S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jun 2019 06:57:18 -0400
-Received: from sauhun.de ([88.99.104.3]:51862 "EHLO pokefinder.org"
+        id S1727161AbfFHK5K (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Jun 2019 06:57:10 -0400
+Received: from sauhun.de ([88.99.104.3]:51874 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727194AbfFHK47 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 8 Jun 2019 06:56:59 -0400
+        id S1727197AbfFHK5A (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 8 Jun 2019 06:57:00 -0400
 Received: from localhost (p5486CBCC.dip0.t-ipconnect.de [84.134.203.204])
-        by pokefinder.org (Postfix) with ESMTPSA id 6A1E43E476F;
+        by pokefinder.org (Postfix) with ESMTPSA id EE3A03E47A1;
         Sat,  8 Jun 2019 12:56:58 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 33/34] staging: media: soc_camera: soc_mt9v022: simplify getting the adapter of a client
-Date:   Sat,  8 Jun 2019 12:56:12 +0200
-Message-Id: <20190608105619.593-34-wsa+renesas@sang-engineering.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 34/34] usb: typec: tcpm: fusb302: simplify getting the adapter of a client
+Date:   Sat,  8 Jun 2019 12:56:13 +0200
+Message-Id: <20190608105619.593-35-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
 References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
@@ -42,22 +42,28 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Please apply to your subsystem tree.
 
- drivers/staging/media/soc_camera/soc_mt9v022.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/typec/tcpm/fusb302.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/soc_camera/soc_mt9v022.c b/drivers/staging/media/soc_camera/soc_mt9v022.c
-index e7e0d3d29499..1739a618846d 100644
---- a/drivers/staging/media/soc_camera/soc_mt9v022.c
-+++ b/drivers/staging/media/soc_camera/soc_mt9v022.c
-@@ -883,7 +883,7 @@ static int mt9v022_probe(struct i2c_client *client,
+diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+index 7302f7501ec9..c524088246ee 100644
+--- a/drivers/usb/typec/tcpm/fusb302.c
++++ b/drivers/usb/typec/tcpm/fusb302.c
+@@ -1697,13 +1697,12 @@ static int fusb302_probe(struct i2c_client *client,
+ 			 const struct i2c_device_id *id)
  {
- 	struct mt9v022 *mt9v022;
- 	struct soc_camera_subdev_desc *ssdd = soc_camera_i2c_to_desc(client);
--	struct i2c_adapter *adapter = to_i2c_adapter(client->dev.parent);
+ 	struct fusb302_chip *chip;
+-	struct i2c_adapter *adapter;
 +	struct i2c_adapter *adapter = client->adapter;
- 	struct mt9v022_platform_data *pdata;
- 	int ret;
+ 	struct device *dev = &client->dev;
+ 	const char *name;
+ 	int ret = 0;
+ 	u32 v;
  
+-	adapter = to_i2c_adapter(client->dev.parent);
+ 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_I2C_BLOCK)) {
+ 		dev_err(&client->dev,
+ 			"I2C/SMBus block functionality not supported!\n");
 -- 
 2.19.1
 
