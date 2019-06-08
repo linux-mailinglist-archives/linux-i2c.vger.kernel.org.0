@@ -2,106 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7F339FC1
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 14:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA8A3A042
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 16:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727137AbfFHM7V (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jun 2019 08:59:21 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:44190 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726976AbfFHM7V (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jun 2019 08:59:21 -0400
-Received: by mail-pf1-f195.google.com with SMTP id t16so2692869pfe.11;
-        Sat, 08 Jun 2019 05:59:20 -0700 (PDT)
+        id S1727009AbfFHOWP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Jun 2019 10:22:15 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:37815 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727035AbfFHOWN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jun 2019 10:22:13 -0400
+Received: by mail-lf1-f68.google.com with SMTP id m15so3685105lfh.4
+        for <linux-i2c@vger.kernel.org>; Sat, 08 Jun 2019 07:22:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=U6kNzw9jg6wjnbbAdjWukgPoHdW/wsFLgOtzXedRmQY=;
-        b=GpSA+M/dnDLmUIfKHKILYGlW+ssHIXlWIknKgB3dionkiIycmDI90wnlNQo6gTe54f
-         B5aM/REyPQ05QVbvR8PSpEMOa85NIwd7h5t//8DwC7BhDNpspLJBSk0DNGMsGEdc+vnn
-         cLXSdSQFliisilIf3KMKKo4VmlFeyt9JO18JmVAMY0hzOO0g28gCqLvMHGohRMJtK8yd
-         CP1GlR3zSZ0+85KfzNSe+8ur9RuP//cMEiU3vm7ZyuzOfAGL7QVq+f7tHrsq85uh7Psh
-         HmQVOqpjDINB4RhIkCE21li55iVE4TDiaXGk/CTEitIWxcr+CO4w9AH9Kz6g2VBT0eY1
-         7VMg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aIUAKPG6L/Uk7RNnahoThkSWUC4nrgmZui5o+1IQtNk=;
+        b=a8zCjMPgP8flEe8AX4DYltakrbTeXlf4HJdUBQFer/b0IPJPCfVav33LROaOIvkRBh
+         d/ezKZe+qMrAcg+2zaULmB+dIX8setyM8Dw/amQKtBtuGvpqfUZdtCABo4QaT5ZFUGGd
+         fksqElAG9w2gwbE6Q6S46627rrHHqLiRDCA8eScKkVkurpN9O6Dge+avOCJxW9CwIBjE
+         vWmpOGwdimteMBWpy3R6+1wtE1HyS9jIIsl6y+9pjv6itruHNG55mTSg6Qzlisw2u1sl
+         d/rKG06wFYR5828vG892iuyGTPq8CV75uQK3Cx8ndRZlvQhTZTCv/wvDzZyIGlw+oOwZ
+         bmxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=U6kNzw9jg6wjnbbAdjWukgPoHdW/wsFLgOtzXedRmQY=;
-        b=Pn3Hbaqz36Su0Qr8bBx60NwZPZbCvu6+2RYbI6f+Jma+1AZ7hZ2FQ1Rm4mfJMSOZop
-         uJFs/kVdjNWVBZuLeuTa+1uK8gCmdQBObSCV8tOPcxKgsIx5S7etDAUqvek0aZpch61k
-         LJuOVNBQJvTP4nOSUZkWTFIXeFoDcdjG9CdeBmmW1NsY3/QVqMwKKRY3iLHYvUGwwK3V
-         66VGDYvy78acjkr24K6LDa+tdpyR96u5bZFdXNfvpr2dUIw1XghgJPPNHgR5T5mVHT/c
-         qUi+1NyOe0Yshnuqr1Ol8VG1MQsdsaIPuzL57ZxOMsMQrZf0WzsFVNkjBE/lP+pguOeZ
-         YxVQ==
-X-Gm-Message-State: APjAAAW/zWadXfx27o4Mlbl33b4KESf1qyQepuFsYZXXbbg6o7NQX5TI
-        MZckO6ATt5tlYUHoYFiBm0a20iHr
-X-Google-Smtp-Source: APXvYqxr/wei3HEkeiEAaJNqCFNiiLSJWQcad/VgHMXw/qaK0q94sYMsz8v0iNdbfA4n0SYluSTAAA==
-X-Received: by 2002:a65:4907:: with SMTP id p7mr7301950pgs.288.1559998760078;
-        Sat, 08 Jun 2019 05:59:20 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v23sm5099951pff.185.2019.06.08.05.59.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 08 Jun 2019 05:59:19 -0700 (PDT)
-Subject: Re: [PATCH 34/34] usb: typec: tcpm: fusb302: simplify getting the
- adapter of a client
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
- <20190608105619.593-35-wsa+renesas@sang-engineering.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <bb8439e5-f56a-c848-180f-1feddbb198fe@roeck-us.net>
-Date:   Sat, 8 Jun 2019 05:59:17 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aIUAKPG6L/Uk7RNnahoThkSWUC4nrgmZui5o+1IQtNk=;
+        b=pVfgkb2dZjwfEp0+lVOusG/MTNOuTn535ImfJ8l9ueIhrBQtnffgRzWHjZttJkP2YZ
+         AF3rEBqrtIMxWXSdaYzWjJhJT0vVYFnBpUpVr+qOytCFNswDXx9yE5Itnh65sZ54Ytmw
+         mv9VnP9ckSVLH3QxMVuOXjVsLUPkrcHlw14zvWHzX1RsCYLAh8kTkGM1WZI2YBHUd0s2
+         La9xhp6aY+NPkToLpi9ktr7G1tXRpMBE9CqGEB0P4RgsFuTNnNxrFqtlWTikQ4vU38uM
+         BSKtOFXIuGKJTjxYZGP5aHuKNJHiSQ/U3gcdg4+gTffFcY/ZN3b5nqix1OjejX+t1WRk
+         60yA==
+X-Gm-Message-State: APjAAAWpzkFu9kIkInCqESKUlgpyr1/zec2z+d/LbHvvXqNio5wN6lx8
+        8K6ZdNDhTtemRUFhGC74TPqhCyEWBJbjNepFLmq1Dg==
+X-Google-Smtp-Source: APXvYqx2MoGtkoQjUm5Wa5IOCM/k/orM6EKwAwZG7AXIo8rcqREn8WTPkR2Fc2Pbt++tRSEdz7xZS6GOynFOOaZSLRQ=
+X-Received: by 2002:ac2:598d:: with SMTP id w13mr28511822lfn.165.1560003730786;
+ Sat, 08 Jun 2019 07:22:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190608105619.593-35-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190607082901.6491-1-lee.jones@linaro.org> <20190607082901.6491-3-lee.jones@linaro.org>
+ <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
+In-Reply-To: <CAKv+Gu-1QhX-9aNhFJauc9NVe6ceQQueE8Kd14031XJ-2yaupA@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 8 Jun 2019 16:22:03 +0200
+Message-ID: <CACRpkdZmBe6ucmekLUNkypDKx=eAXqtwdYNpZzwByzuWb-sjDA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/8] pinctrl: msm: Add ability for drivers to supply a
+ reserved GPIO list
+To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, alokc@codeaurora.org,
+        Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jeffrey Hugo <jlhugo@gmail.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 6/8/19 3:56 AM, Wolfram Sang wrote:
-> We have a dedicated pointer for that, so use it. Much easier to read and
-> less computation involved.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Fri, Jun 7, 2019 at 1:10 PM Ard Biesheuvel <ard.biesheuvel@linaro.org> wrote:
+> On Fri, 7 Jun 2019 at 10:29, Lee Jones <lee.jones@linaro.org> wrote:
+> >
+> > When booting MSM based platforms with Device Tree or some ACPI
+> > implementations, it is possible to provide a list of reserved pins
+> > via the 'gpio-reserved-ranges' and 'gpios' properties respectively.
+> > However some ACPI tables are not populated with this information,
+> > thus it has to come from a knowledgable device driver instead.
+> >
+> > Here we provide the MSM common driver with additional support to
+> > parse this informtion and correctly populate the widely used
+> > 'valid_mask'.
+> >
+> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+>
+> I'm not sure if this is the correct approach. Presumably, on ACPI
+> systems, all the pinctl stuff is already set up by the firmware, and
+> so we shouldn't touch *any* pins unless they have been requested
+> explicitly. Is there any way we can support this in the current
+> framework?
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I don't suppose anything but the GPIO portions of the pinctrl
+driver is ever used under ACPI. I guess in an ideal ACPI world
+noone (like userspace) would ever use a GPIO because ACPI
+would have all GPIOs assigned a particular purpose, so accessing
+any of them would lead to a crash.
 
-> ---
-> 
-> Please apply to your subsystem tree.
-> 
->   drivers/usb/typec/tcpm/fusb302.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> index 7302f7501ec9..c524088246ee 100644
-> --- a/drivers/usb/typec/tcpm/fusb302.c
-> +++ b/drivers/usb/typec/tcpm/fusb302.c
-> @@ -1697,13 +1697,12 @@ static int fusb302_probe(struct i2c_client *client,
->   			 const struct i2c_device_id *id)
->   {
->   	struct fusb302_chip *chip;
-> -	struct i2c_adapter *adapter;
-> +	struct i2c_adapter *adapter = client->adapter;
->   	struct device *dev = &client->dev;
->   	const char *name;
->   	int ret = 0;
->   	u32 v;
->   
-> -	adapter = to_i2c_adapter(client->dev.parent);
->   	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_I2C_BLOCK)) {
->   		dev_err(&client->dev,
->   			"I2C/SMBus block functionality not supported!\n");
-> 
+But in practice it seems a lot of GPIOs are available and used
+for example by userspace hacks, so just blacklisting the ones
+that cannot be accessed by the GPIO subsystem seems like
+a viable compromise.
 
+Then we have the ACPI paradigm of pin control being controlled
+by ACPI: this is also great in theory, but it seems like the ACPI
+firmware has in cases forgot or omitted to implement some of
+it and people need to access it anyways. The people writing the
+default firmware cannot think out or test all usecases, so some
+will be left open-ended to non-firmware authoring users. This is why
+drivers/pinctrl/intel/* exists despite being for exclusively
+ACPI platforms. Being able to control pins also from the kernel
+has become a viable compromise.
+
+Yours,
+Linus Walleij
