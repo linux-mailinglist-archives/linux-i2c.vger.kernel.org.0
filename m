@@ -2,68 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2C139C98
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 12:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE7E39D6F
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 13:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727161AbfFHK5K (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jun 2019 06:57:10 -0400
-Received: from sauhun.de ([88.99.104.3]:51874 "EHLO pokefinder.org"
+        id S1727943AbfFHLkx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Jun 2019 07:40:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58194 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727197AbfFHK5A (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 8 Jun 2019 06:57:00 -0400
-Received: from localhost (p5486CBCC.dip0.t-ipconnect.de [84.134.203.204])
-        by pokefinder.org (Postfix) with ESMTPSA id EE3A03E47A1;
-        Sat,  8 Jun 2019 12:56:58 +0200 (CEST)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 34/34] usb: typec: tcpm: fusb302: simplify getting the adapter of a client
-Date:   Sat,  8 Jun 2019 12:56:13 +0200
-Message-Id: <20190608105619.593-35-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
-References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
+        id S1727934AbfFHLkx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 8 Jun 2019 07:40:53 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2CF74208C0;
+        Sat,  8 Jun 2019 11:40:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559994052;
+        bh=oRTnIMPHnocH1F7D3G7EC322cznTmIvB1n24vfGQ1UY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tLzwIcBYSM+KUEcaybZstUJBGZFgoMYyNhXeyf5AvEdJ7gAiu81Ga6d6kviOp3ShQ
+         016eNQpLpNO26IbRuGmQZk3wBPDHQvlbmaMlRwIY5OTgH9VGtUlL50/WcJxCi7aAB6
+         et7YEIqXTeJuPO0zdLSw4uQYAm6ySO6YCBLN36/Q=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 39/70] i2c: dev: fix potential memory leak in i2cdev_ioctl_rdwr
+Date:   Sat,  8 Jun 2019 07:39:18 -0400
+Message-Id: <20190608113950.8033-39-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190608113950.8033-1-sashal@kernel.org>
+References: <20190608113950.8033-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-We have a dedicated pointer for that, so use it. Much easier to read and
-less computation involved.
+From: Yingjoe Chen <yingjoe.chen@mediatek.com>
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+[ Upstream commit a0692f0eef91354b62c2b4c94954536536be5425 ]
+
+If I2C_M_RECV_LEN check failed, msgs[i].buf allocated by memdup_user
+will not be freed. Pump index up so it will be freed.
+
+Fixes: 838bfa6049fb ("i2c-dev: Add support for I2C_M_RECV_LEN")
+Signed-off-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
+Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
+ drivers/i2c/i2c-dev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Please apply to your subsystem tree.
-
- drivers/usb/typec/tcpm/fusb302.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index 7302f7501ec9..c524088246ee 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -1697,13 +1697,12 @@ static int fusb302_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
- 	struct fusb302_chip *chip;
--	struct i2c_adapter *adapter;
-+	struct i2c_adapter *adapter = client->adapter;
- 	struct device *dev = &client->dev;
- 	const char *name;
- 	int ret = 0;
- 	u32 v;
- 
--	adapter = to_i2c_adapter(client->dev.parent);
- 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_I2C_BLOCK)) {
- 		dev_err(&client->dev,
- 			"I2C/SMBus block functionality not supported!\n");
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index 3f7b9af11137..776f36690448 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -283,6 +283,7 @@ static noinline int i2cdev_ioctl_rdwr(struct i2c_client *client,
+ 			    msgs[i].len < 1 || msgs[i].buf[0] < 1 ||
+ 			    msgs[i].len < msgs[i].buf[0] +
+ 					     I2C_SMBUS_BLOCK_MAX) {
++				i++;
+ 				res = -EINVAL;
+ 				break;
+ 			}
 -- 
-2.19.1
+2.20.1
 
