@@ -2,99 +2,149 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05AB739BEE
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 10:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADA139CEA
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2019 13:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbfFHIyO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jun 2019 04:54:14 -0400
-Received: from sauhun.de ([88.99.104.3]:50966 "EHLO pokefinder.org"
+        id S1726935AbfFHK4p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Jun 2019 06:56:45 -0400
+Received: from sauhun.de ([88.99.104.3]:51774 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726448AbfFHIyN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 8 Jun 2019 04:54:13 -0400
+        id S1726692AbfFHK4p (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 8 Jun 2019 06:56:45 -0400
 Received: from localhost (p5486CBCC.dip0.t-ipconnect.de [84.134.203.204])
-        by pokefinder.org (Postfix) with ESMTPSA id 31C082C3637;
-        Sat,  8 Jun 2019 10:54:11 +0200 (CEST)
-Date:   Sat, 8 Jun 2019 10:54:10 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for 5.2
-Message-ID: <20190608085406.GA1746@kunai>
+        by pokefinder.org (Postfix) with ESMTPSA id D0A142C3637;
+        Sat,  8 Jun 2019 12:56:40 +0200 (CEST)
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org, devel@driverdev.osuosl.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH 00/34] treewide: simplify getting the adapter of an I2C client
+Date:   Sat,  8 Jun 2019 12:55:39 +0200
+Message-Id: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ibTvN161/egqYuK8"
-Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+While preparing a refactoring series, I noticed that some drivers use a
+complicated way of determining the adapter of a client. The easy way is
+to use the intended pointer: client->adapter
 
---ibTvN161/egqYuK8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+These drivers do:
+	to_i2c_adapter(client->dev.parent);
 
-Linus,
+The I2C core populates the parent pointer as:
+	client->dev.parent = &client->adapter->dev;
 
-I2C has a driver bugfix and a MAINTAINERS fix.
+Now take into consideration that
+	to_i2c_adapter(&adapter->dev);
 
-Please pull.
+is a complicated way of saying 'adapter', then we can even formally
+prove that the complicated expression can be simplified by using
+client->adapter.
 
-Thanks,
+The conversion was done using a coccinelle script with some manual
+indentation fixes applied on top.
+
+To avoid a brown paper bag mistake, I double checked this on a Renesas
+Salvator-XS board (R-Car M3N) and verified both expression result in the
+same pointer. Other than that, the series is only build tested.
+
+A branch can be found here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/no_to_adapter
+
+Please apply the patches to the individual subsystem trees. There are no
+dependencies.
+
+Thanks and kind regards,
 
    Wolfram
 
 
-The following changes since commit f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a:
+Wolfram Sang (34):
+  clk: clk-cdce706: simplify getting the adapter of a client
+  gpu: drm: bridge: sii9234: simplify getting the adapter of a client
+  iio: light: bh1780: simplify getting the adapter of a client
+  leds: leds-pca955x: simplify getting the adapter of a client
+  leds: leds-tca6507: simplify getting the adapter of a client
+  media: i2c: ak881x: simplify getting the adapter of a client
+  media: i2c: mt9m001: simplify getting the adapter of a client
+  media: i2c: mt9m111: simplify getting the adapter of a client
+  media: i2c: mt9p031: simplify getting the adapter of a client
+  media: i2c: ov2640: simplify getting the adapter of a client
+  media: i2c: tw9910: simplify getting the adapter of a client
+  misc: fsa9480: simplify getting the adapter of a client
+  misc: isl29003: simplify getting the adapter of a client
+  misc: tsl2550: simplify getting the adapter of a client
+  mtd: maps: pismo: simplify getting the adapter of a client
+  power: supply: bq24190_charger: simplify getting the adapter of a client
+  power: supply: bq24257_charger: simplify getting the adapter of a client
+  power: supply: bq25890_charger: simplify getting the adapter of a client
+  power: supply: max14656_charger_detector: simplify getting the adapter
+    of a client
+  power: supply: max17040_battery: simplify getting the adapter of a client
+  power: supply: max17042_battery: simplify getting the adapter of a client
+  power: supply: rt5033_battery: simplify getting the adapter of a client
+  power: supply: rt9455_charger: simplify getting the adapter of a client
+  power: supply: sbs-manager: simplify getting the adapter of a client
+  regulator: max8952: simplify getting the adapter of a client
+  rtc: fm3130: simplify getting the adapter of a client
+  rtc: m41t80: simplify getting the adapter of a client
+  rtc: rv8803: simplify getting the adapter of a client
+  rtc: rx8010: simplify getting the adapter of a client
+  rtc: rx8025: simplify getting the adapter of a client
+  staging: media: soc_camera: imx074: simplify getting the adapter of a client
+  staging: media: soc_camera: mt9t031: simplify getting the adapter of a client
+  staging: media: soc_camera: soc_mt9v022: simplify getting the adapter
+    of a client
+  usb: typec: tcpm: fusb302: simplify getting the adapter of a client
 
-  Linux 5.2-rc3 (2019-06-02 13:55:33 -0700)
+ drivers/clk/clk-cdce706.c                        | 2 +-
+ drivers/gpu/drm/bridge/sii9234.c                 | 4 ++--
+ drivers/iio/light/bh1780.c                       | 2 +-
+ drivers/leds/leds-pca955x.c                      | 2 +-
+ drivers/leds/leds-tca6507.c                      | 2 +-
+ drivers/media/i2c/ak881x.c                       | 2 +-
+ drivers/media/i2c/mt9m001.c                      | 2 +-
+ drivers/media/i2c/mt9m111.c                      | 2 +-
+ drivers/media/i2c/mt9p031.c                      | 2 +-
+ drivers/media/i2c/ov2640.c                       | 2 +-
+ drivers/media/i2c/tw9910.c                       | 3 +--
+ drivers/misc/fsa9480.c                           | 2 +-
+ drivers/misc/isl29003.c                          | 2 +-
+ drivers/misc/tsl2550.c                           | 2 +-
+ drivers/mtd/maps/pismo.c                         | 2 +-
+ drivers/power/supply/bq24190_charger.c           | 2 +-
+ drivers/power/supply/bq24257_charger.c           | 2 +-
+ drivers/power/supply/bq25890_charger.c           | 2 +-
+ drivers/power/supply/max14656_charger_detector.c | 2 +-
+ drivers/power/supply/max17040_battery.c          | 2 +-
+ drivers/power/supply/max17042_battery.c          | 2 +-
+ drivers/power/supply/rt5033_battery.c            | 2 +-
+ drivers/power/supply/rt9455_charger.c            | 2 +-
+ drivers/power/supply/sbs-manager.c               | 2 +-
+ drivers/regulator/max8952.c                      | 2 +-
+ drivers/rtc/rtc-fm3130.c                         | 8 +++-----
+ drivers/rtc/rtc-m41t80.c                         | 2 +-
+ drivers/rtc/rtc-rv8803.c                         | 2 +-
+ drivers/rtc/rtc-rx8010.c                         | 2 +-
+ drivers/rtc/rtc-rx8025.c                         | 2 +-
+ drivers/staging/media/soc_camera/imx074.c        | 2 +-
+ drivers/staging/media/soc_camera/mt9t031.c       | 2 +-
+ drivers/staging/media/soc_camera/soc_mt9v022.c   | 2 +-
+ drivers/usb/typec/tcpm/fusb302.c                 | 3 +--
+ 34 files changed, 37 insertions(+), 41 deletions(-)
 
-are available in the Git repository at:
+-- 
+2.19.1
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-
-for you to fetch changes up to 8f77293cca1f5116edc98d7a0e36c6da3917fc08:
-
-  MAINTAINERS: Karthikeyan Ramasubramanian is MIA (2019-06-08 00:32:50 +0200)
-
-----------------------------------------------------------------
-Robert Hancock (1):
-      i2c: xiic: Add max_read_len quirk
-
-Wolfram Sang (1):
-      MAINTAINERS: Karthikeyan Ramasubramanian is MIA
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Michal Simek (1):
-      (Rev.) i2c: xiic: Add max_read_len quirk
-
- MAINTAINERS                   | 1 -
- drivers/i2c/busses/i2c-xiic.c | 5 +++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
---ibTvN161/egqYuK8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz7d6kACgkQFA3kzBSg
-KbbNzBAAkTwbbglUamLuV1jUGB9KzuTIyXY7XkQpYo02ksw8X2b66Ipdfc59KVfW
-LJxm8efPLOVx+rlvZ/eB4J1vu7OQqHHvihV8G6GTM/9GAmSusnkITNLpGJ645Gc4
-s9hy0Wbq2rrLMVNCJnxsr3njediP/y766RfzHQhxS7b9UtwQu05mr9cyrE+XQCs2
-MdJNDEZeN+J6lbhjj3ErSBKiKenlrz6FAggKazP3fhD/5Yhv1Uh6InigL/b6XuEc
-MbAbiNuwy7OPeMLZPi7AzP67yTRAd6NR7wI9Twx1llyqfcYakm+dFER4HHNEqdi3
-j/SSPIfZeNJakz/CYr0xoKBPUwsHmdAe/vNmCDgsF6n5K3v9CXmPv52ycjmby1zy
-Qq0WQWq12ELCoUZozxJPqjNDaAuXvyII57hJu6UciIE0shWqHUsClPvveZCR88kX
-r+XHNiE+xSab1OfIIHNAqxKq4jvBcPyo40jQK1oWVrJWoJM4KUdspNWnAKnPHLoI
-YgbbeOx+w8OlT2WNw8rywOvMmpqSSQS/qiIjdXe7PuKw9zBa42KQRwwxPKgNjccZ
-ubI/nVv0Y+aSd+HOnoypkHCO8ZTdGEkt/MQ2leF02DWMfcNX/AUYJyMmd87lv7aA
-jH06Eg/6+x9vAV87zPgrOqJOfkTO9Ygqa6Z+I0K9LNIBdVsTk4E=
-=8khH
------END PGP SIGNATURE-----
-
---ibTvN161/egqYuK8--
