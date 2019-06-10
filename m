@@ -2,168 +2,144 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF1F3ADC4
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2019 05:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537EA3AE78
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2019 07:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387504AbfFJDwq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 9 Jun 2019 23:52:46 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:12303 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387475AbfFJDwq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 9 Jun 2019 23:52:46 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cfdd40c0000>; Sun, 09 Jun 2019 20:52:44 -0700
+        id S1728451AbfFJFI6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Jun 2019 01:08:58 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:16340 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728478AbfFJFI6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jun 2019 01:08:58 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cfde5ea0001>; Sun, 09 Jun 2019 22:08:59 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate102.nvidia.com (PGP Universal service);
-  Sun, 09 Jun 2019 20:52:44 -0700
+  Sun, 09 Jun 2019 22:08:57 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Sun, 09 Jun 2019 20:52:44 -0700
-Received: from [10.19.65.14] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 10 Jun
- 2019 03:52:40 +0000
-Subject: Re: [PATCH V2 6/6] i2c: tegra: remove BUG, BUG_ON
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
+        by hqpgpgate102.nvidia.com on Sun, 09 Jun 2019 22:08:57 -0700
+Received: from HQMAIL103.nvidia.com (172.20.187.11) by HQMAIL106.nvidia.com
+ (172.18.146.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 10 Jun
+ 2019 05:08:57 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL103.nvidia.com
+ (172.20.187.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 10 Jun 2019 05:08:57 +0000
+Received: from dhcp-10-19-65-14.client.nvidia.com (Not Verified[10.19.65.14]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5cfde5e60003>; Sun, 09 Jun 2019 22:08:56 -0700
+From:   Bitan Biswas <bbiswas@nvidia.com>
+To:     Laxman Dewangan <ldewangan@nvidia.com>,
         Thierry Reding <treding@nvidia.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
-        Wolfram Sang <wsa@the-dreams.de>
+        Wolfram Sang <wsa@the-dreams.de>,
+        Dmitry Osipenko <digetx@gmail.com>
 CC:     Shardar Mohammed <smohammed@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>
-References: <1559935826-25812-1-git-send-email-bbiswas@nvidia.com>
- <1559935826-25812-6-git-send-email-bbiswas@nvidia.com>
- <dfe5e3a7-a761-0633-8da6-32f94aae171f@gmail.com>
-From:   Bitan Biswas <bbiswas@nvidia.com>
-Message-ID: <8daef4be-f841-bb9a-3865-9cc6bf9c51c5@nvidia.com>
-Date:   Sun, 9 Jun 2019 20:52:38 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mantravadi Karthik <mkarthik@nvidia.com>,
+        Bitan Biswas <bbiswas@nvidia.com>
+Subject: [PATCH V3 1/6] i2c: tegra: clean up macros
+Date:   Sun, 9 Jun 2019 22:08:39 -0700
+Message-ID: <1560143324-21754-1-git-send-email-bbiswas@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <dfe5e3a7-a761-0633-8da6-32f94aae171f@gmail.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL106.nvidia.com (172.18.146.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1560138764; bh=yXIQhZiuDrR39F7erbT77tNotRwn9PKTJ9/szEqbqKs=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=Wz15GGOzLuwvcRXS8qIzANRXAHRvn9QmSRcaQB3/ObxKnP/UhQauKR27H6rvDPdM+
-         JLNtZRghnwL/UVUUWEzp6I8P3kZ9Z2ETCZPdSB+pZuO8NX4/yz29q97qbdzUGeF9Kq
-         M1XHXfNL/TrnduU9Jx6NPZ1ag+YcBtuxn5s3tRwi/xUmlD0tpq8rLg85lOUdEvS2qF
-         1T05m9aDA1dD0yXR4pZg9ZYLDfIq1XoXWDVxB06/sc4iQj0K1PxEOORejokKJvURMT
-         5xM1m4wWkQV8JuPDJwAkrfV2CcmvCbUS84ZJBBeum3rkLcB8Pfxh6zOAv0kzfivefE
-         A4hO/x8nFZoHg==
+        t=1560143339; bh=ottEE2XiiiPbfH/Skr0UtzLGEI1kOObrtR9qGE7imE4=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=p3yn7hVOex6fyPWPZK2uYun5FzuL9+yd6kIiAlGWBTAkv7gsk3HY9UFtBnwy0MBbm
+         0lyZ6s5ivXImfmbX0hMoaf4+homG83BnHoIQpI3DPld6MnGQcksgqhYLe8RGeSezHx
+         foRB5RApfcjekXjGvAfibrf/hFKxK7WWchIRbMSmuiqYcJP16/F1lkEqGrMEH6J5Vj
+         bQaFutdgWo+RT0N8DyDcm1zmqHXaoNpCdDgQcw+4aszm9kMimqd33P5AwdxEqAXp5D
+         Aq5s/34AxrJbyKIVOV0cBFdsmXrH3zYGZkz3geZHTZP6FnQ9mbCwcNdy2fkCItBgUJ
+         OVLCAL+KmTrMg==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Clean up macros by:
+1) removing unused macros
+2) replace constants by macro BIT()
 
+Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 17 +++--------------
+ 1 file changed, 3 insertions(+), 14 deletions(-)
 
-On 6/7/19 12:47 PM, Dmitry Osipenko wrote:
-> 07.06.2019 22:30, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->> Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
->> as needed. Replace BUG() with error handling code.
->> Define I2C_ERR_UNEXPECTED_STATUS for error handling.
->>
->> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
->> ---
->>   drivers/i2c/busses/i2c-tegra.c | 16 +++++++++-------
->>   1 file changed, 9 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-teg=
-ra.c
->> index 4dfb4c1..c89d0ee 100644
->> --- a/drivers/i2c/busses/i2c-tegra.c
->> +++ b/drivers/i2c/busses/i2c-tegra.c
->> @@ -73,6 +73,7 @@
->>   #define I2C_ERR_NO_ACK				BIT(0)
->>   #define I2C_ERR_ARBITRATION_LOST		BIT(1)
->>   #define I2C_ERR_UNKNOWN_INTERRUPT		BIT(2)
->> +#define I2C_ERR_UNEXPECTED_STATUS		BIT(3)
->>  =20
->>   #define PACKET_HEADER0_HEADER_SIZE_SHIFT	28
->>   #define PACKET_HEADER0_PACKET_ID_SHIFT		16
->> @@ -515,7 +516,6 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_=
-dev *i2c_dev)
->>   	 * prevent overwriting past the end of buf
->>   	 */
->>   	if (rx_fifo_avail > 0 && buf_remaining > 0) {
->> -		BUG_ON(buf_remaining > 3);
->>   		val =3D i2c_readl(i2c_dev, I2C_RX_FIFO);
->>   		val =3D cpu_to_le32(val);
->>   		memcpy(buf, &val, buf_remaining);
->> @@ -523,7 +523,6 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_=
-dev *i2c_dev)
->>   		rx_fifo_avail--;
->>   	}
->>  =20
->> -	BUG_ON(rx_fifo_avail > 0 && buf_remaining > 0);
->>   	i2c_dev->msg_buf_remaining =3D buf_remaining;
->>   	i2c_dev->msg_buf =3D buf;
->>  =20
->> @@ -581,7 +580,6 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_d=
-ev *i2c_dev)
->>   	 * boundary and fault.
->>   	 */
->>   	if (tx_fifo_avail > 0 && buf_remaining > 0) {
->> -		BUG_ON(buf_remaining > 3);
->>   		memcpy(&val, buf, buf_remaining);
->>   		val =3D le32_to_cpu(val);
->>  =20
->> @@ -847,10 +845,13 @@ static irqreturn_t tegra_i2c_isr(int irq, void *de=
-v_id)
->>  =20
->>   	if (!i2c_dev->is_curr_dma_xfer) {
->>   		if (i2c_dev->msg_read && (status & I2C_INT_RX_FIFO_DATA_REQ)) {
->> -			if (i2c_dev->msg_buf_remaining)
->> +			if (i2c_dev->msg_buf_remaining) {
->>   				tegra_i2c_empty_rx_fifo(i2c_dev);
->> -			else
->> -				BUG();
->> +			} else {
->> +				dev_err(i2c_dev->dev, "unexpected rx data request\n");
->> +				i2c_dev->msg_err |=3D I2C_ERR_UNEXPECTED_STATUS;
->> +				goto err;
->> +			}
->>   		}
->>  =20
->>   		if (!i2c_dev->msg_read && (status & I2C_INT_TX_FIFO_DATA_REQ)) {
->> @@ -876,7 +877,8 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_=
-id)
->>   	if (status & I2C_INT_PACKET_XFER_COMPLETE) {
->>   		if (i2c_dev->is_curr_dma_xfer)
->>   			i2c_dev->msg_buf_remaining =3D 0;
->> -		BUG_ON(i2c_dev->msg_buf_remaining);
->> +		if (WARN_ON_ONCE(i2c_dev->msg_buf_remaining))
->> +			goto err;
->>   		complete(&i2c_dev->msg_complete);
->>   	}
->>   	goto done;
->>
->=20
-> Unfortunately that's not enough because the indicator of the error is
-> the i2c_dev->msg_err and no error is set in yours case, hence no
-> hardware reset will be performed. It should be at least somewhat like thi=
-s:
->=20
-> 	if (WARN_ON_ONCE(i2c_dev->msg_buf_remaining)) {
-> 		i2c_dev->msg_err |=3D I2C_ERR_UNKNOWN_INTERRUPT;
-> 		goto err;
-> 	}
->=20
-Fine. I shall set msg_err as I2C_ERR_UNKNOWN_INTERRUPT instead of=20
-I2C_ERR_UNEXPECTED_STATUS for condition of non-zero msg_bug_remaining in=20
-PIO mode with transfer complete interrupt.
-
-
--Thanks,
-  Bitan
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 1dbba39..00692d8 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -54,20 +54,15 @@
+ #define I2C_INT_STATUS				0x068
+ #define I2C_INT_BUS_CLR_DONE			BIT(11)
+ #define I2C_INT_PACKET_XFER_COMPLETE		BIT(7)
+-#define I2C_INT_ALL_PACKETS_XFER_COMPLETE	BIT(6)
+-#define I2C_INT_TX_FIFO_OVERFLOW		BIT(5)
+-#define I2C_INT_RX_FIFO_UNDERFLOW		BIT(4)
+ #define I2C_INT_NO_ACK				BIT(3)
+ #define I2C_INT_ARBITRATION_LOST		BIT(2)
+ #define I2C_INT_TX_FIFO_DATA_REQ		BIT(1)
+ #define I2C_INT_RX_FIFO_DATA_REQ		BIT(0)
+ #define I2C_CLK_DIVISOR				0x06c
+ #define I2C_CLK_DIVISOR_STD_FAST_MODE_SHIFT	16
+-#define I2C_CLK_MULTIPLIER_STD_FAST_MODE	8
+ 
+ #define DVC_CTRL_REG1				0x000
+ #define DVC_CTRL_REG1_INTR_EN			BIT(10)
+-#define DVC_CTRL_REG2				0x004
+ #define DVC_CTRL_REG3				0x008
+ #define DVC_CTRL_REG3_SW_PROG			BIT(26)
+ #define DVC_CTRL_REG3_I2C_DONE_INTR_EN		BIT(30)
+@@ -75,24 +70,21 @@
+ #define DVC_STATUS_I2C_DONE_INTR		BIT(30)
+ 
+ #define I2C_ERR_NONE				0x00
+-#define I2C_ERR_NO_ACK				0x01
+-#define I2C_ERR_ARBITRATION_LOST		0x02
+-#define I2C_ERR_UNKNOWN_INTERRUPT		0x04
++#define I2C_ERR_NO_ACK				BIT(0)
++#define I2C_ERR_ARBITRATION_LOST		BIT(1)
++#define I2C_ERR_UNKNOWN_INTERRUPT		BIT(2)
+ 
+ #define PACKET_HEADER0_HEADER_SIZE_SHIFT	28
+ #define PACKET_HEADER0_PACKET_ID_SHIFT		16
+ #define PACKET_HEADER0_CONT_ID_SHIFT		12
+ #define PACKET_HEADER0_PROTOCOL_I2C		BIT(4)
+ 
+-#define I2C_HEADER_HIGHSPEED_MODE		BIT(22)
+ #define I2C_HEADER_CONT_ON_NAK			BIT(21)
+-#define I2C_HEADER_SEND_START_BYTE		BIT(20)
+ #define I2C_HEADER_READ				BIT(19)
+ #define I2C_HEADER_10BIT_ADDR			BIT(18)
+ #define I2C_HEADER_IE_ENABLE			BIT(17)
+ #define I2C_HEADER_REPEAT_START			BIT(16)
+ #define I2C_HEADER_CONTINUE_XFER		BIT(15)
+-#define I2C_HEADER_MASTER_ADDR_SHIFT		12
+ #define I2C_HEADER_SLAVE_ADDR_SHIFT		1
+ 
+ #define I2C_BUS_CLEAR_CNFG			0x084
+@@ -106,8 +98,6 @@
+ 
+ #define I2C_CONFIG_LOAD				0x08C
+ #define I2C_MSTR_CONFIG_LOAD			BIT(0)
+-#define I2C_SLV_CONFIG_LOAD			BIT(1)
+-#define I2C_TIMEOUT_CONFIG_LOAD			BIT(2)
+ 
+ #define I2C_CLKEN_OVERRIDE			0x090
+ #define I2C_MST_CORE_CLKEN_OVR			BIT(0)
+@@ -133,7 +123,6 @@
+ #define I2C_STANDARD_MODE			100000
+ #define I2C_FAST_MODE				400000
+ #define I2C_FAST_PLUS_MODE			1000000
+-#define I2C_HS_MODE				3500000
+ 
+ /* Packet header size in bytes */
+ #define I2C_PACKET_HEADER_SIZE			12
+-- 
+2.7.4
 
