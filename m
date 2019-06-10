@@ -2,106 +2,178 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA523AF07
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2019 08:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B613AF16
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2019 08:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387581AbfFJGgu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Jun 2019 02:36:50 -0400
-Received: from mail-eopbgr50128.outbound.protection.outlook.com ([40.107.5.128]:51546
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387464AbfFJGgu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 10 Jun 2019 02:36:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l8BQdb3SRazE1QSjIFxhl2w5hJ6E6pSiALoKrKWE4qQ=;
- b=EzDNFDJOR5e/cywrrvOFyEuMyS9aR8UJfANp9J0CzfcH604rv5g9ngC/2Ud6NrXKN2fpm79sUbKE219kH45cbT0oc99xqNUGR7gkiX80rwGcXWK1jwK3ar0PCuoWGQGOgfAWiYRIANi40L6ogJxTQBAuHW4iMKFfLGtZDDhRI/8=
-Received: from VI1PR0701MB2752.eurprd07.prod.outlook.com (10.173.81.136) by
- VI1PR0701MB2351.eurprd07.prod.outlook.com (10.168.137.146) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.8; Mon, 10 Jun 2019 06:36:46 +0000
-Received: from VI1PR0701MB2752.eurprd07.prod.outlook.com
- ([fe80::f477:e7f8:c964:4d06]) by VI1PR0701MB2752.eurprd07.prod.outlook.com
- ([fe80::f477:e7f8:c964:4d06%7]) with mapi id 15.20.1987.008; Mon, 10 Jun 2019
- 06:36:46 +0000
-From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: pmbus: protect read-modify-write with lock
-Thread-Topic: [PATCH] hwmon: pmbus: protect read-modify-write with lock
-Thread-Index: AQHVFTTnFHDIhjzuaE2NtFtr8sxEU6aQ11AAgAOr/YA=
-Date:   Mon, 10 Jun 2019 06:36:46 +0000
-Message-ID: <20190610063639.GA18981@localhost.localdomain>
-References: <20190528090746.GA31184@localhost.localdomain>
- <20190607223217.GE869@kunai>
-In-Reply-To: <20190607223217.GE869@kunai>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR05CA0238.eurprd05.prod.outlook.com
- (2603:10a6:3:fb::14) To VI1PR0701MB2752.eurprd07.prod.outlook.com
- (2603:10a6:801:a::8)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=krzysztof.adamski@nokia.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [131.228.2.15]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8a592131-282a-454e-21eb-08d6ed6e028a
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR0701MB2351;
-x-ms-traffictypediagnostic: VI1PR0701MB2351:
-x-microsoft-antispam-prvs: <VI1PR0701MB2351F57A1A7EF3D5ED00BE4AEF130@VI1PR0701MB2351.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 0064B3273C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(376002)(396003)(346002)(366004)(39860400002)(189003)(199004)(478600001)(66446008)(53936002)(73956011)(54906003)(66556008)(64756008)(66476007)(66946007)(386003)(6916009)(76176011)(6506007)(68736007)(33656002)(99286004)(102836004)(52116002)(316002)(14454004)(305945005)(7736002)(14444005)(3846002)(6116002)(4744005)(8676002)(81156014)(81166006)(1076003)(2906002)(6436002)(6486002)(229853002)(86362001)(9686003)(66066001)(6512007)(256004)(11346002)(25786009)(476003)(71190400001)(71200400001)(4326008)(186003)(26005)(5660300002)(446003)(61506002)(8936002)(6246003)(486006);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR0701MB2351;H:VI1PR0701MB2752.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nokia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: MgFrVsws+qjhTmuwmiZzhGT79MnqJBxQK8qu1v4xQGEiBHbfVk3LJnDrhqqlgUHwxxqTvl2ZgQLkCARSuCJDmNsjZGg24HMdd5KaqCKJv6W+p0kAT7ifS17spYvk2VqzvRKD7NvwrKTwan+3rjZYOJq9Aum3WV78bBdR/I9yFpZc2fSDWAVaJ+5YH4GPdIAcF+FQh4AdArMKJCcImVKpOtSuZ9YSXqvYBseXw9alA/2VEpQiMg+gb7t4RqoiWwOo52diPvX/IMK6piRqXfa6OrU/EP1UCgjAuAZUhMYB6ZQLQO3CdcQ1uGpPDf62ZLgm5nho24u4iR9WhczlVaC67MprDJLvTRsk87MhAHmzdHTrCkflTkKDvmkygB/eDBg+JInkeyljKKL5P5B23o5r48dwbZJ0tOu6SwQqEAto7Bc=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <405DED71A7499E42BD0DDDC2705F4D70@eurprd07.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S2387830AbfFJGod (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Jun 2019 02:44:33 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:42818 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387655AbfFJGod (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jun 2019 02:44:33 -0400
+Received: by mail-wr1-f65.google.com with SMTP id x17so7885888wrl.9
+        for <linux-i2c@vger.kernel.org>; Sun, 09 Jun 2019 23:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=6v285XyrONVGX85JZPN2vEBoOamuC/TCwUgIuT1MYVI=;
+        b=JUO0jDnbhpEfAJfOIn/mmbA+BYvZwYR3dpEtmWpv9PZIPu+703QoKa9lYvNN7XE01N
+         AVuskQ8lgqYi+ReRHmxOrXd+3ZIitSv/af+yb//VqjPkALpRfqUZdL/uGfKplsJoFcGw
+         dz7tWj7T0RpYSYQNTTZ1dnCBTeRYE4/Ss6EQ2RS+ITbVhrViYs2H0KPJims9t1QepBn6
+         fae6961ZZ0d1mcM/cSiHvZVl4tLZgujzYzWG9ouCPAuwDM1CzhtchbqGQkSuZ7/q8F20
+         tbp9aLC0U4YJItjQdYRh9Y8lOaSRcOuO4hKmsKR1J6jdVcvCG0XFPTTX4C383DwnePsf
+         sP/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=6v285XyrONVGX85JZPN2vEBoOamuC/TCwUgIuT1MYVI=;
+        b=U3WIsnpFadlyPWaFeTQohr8wc/llHvThaWDHvO6Lw5ImR3UajmYRLNCuBpd7KhItQz
+         y3gmHmyicasziT6wTW8NVQrQVsscHCy+4017tE4GJNxgfUoXGwKm9x+5ON4/VWHdoa/F
+         RijzNa035NUd4l8CHUARJbEZmnj0KwKxV5kvfgwCGgwlRxwtrkJmRRmnP8187/m4mxIA
+         wvi3kD6O8fzHHx32u4jm1bkRIz9ecKuBi1Y7vHzefTaNdZMHEe/+znhwExfrBKeQoTRd
+         wVh1UvTcGPmB/RrmQhBbWOhSD3usFmqBIFHjsBS/c9gXxWenCPI3O9AwBEkh/u79RGkk
+         wv5Q==
+X-Gm-Message-State: APjAAAWR3Y63KaG9nE/BNHEK8aajcmI6iDxQGTbI4vA6Awy4OL1RYi+E
+        3xN2SUuF1m83IIIJoOJcwQR0rA==
+X-Google-Smtp-Source: APXvYqy45tNcTtpg/c94lrABKtUPI2IloeMt1vo9EvaBBcW/D4raRflIRHWeOa3AYFf8Fefw5c/jrg==
+X-Received: by 2002:adf:a11d:: with SMTP id o29mr14522807wro.262.1560149071686;
+        Sun, 09 Jun 2019 23:44:31 -0700 (PDT)
+Received: from dell ([2.31.167.229])
+        by smtp.gmail.com with ESMTPSA id a2sm5038333wmj.9.2019.06.09.23.44.29
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 09 Jun 2019 23:44:30 -0700 (PDT)
+Date:   Mon, 10 Jun 2019 07:44:28 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc:     alokc@codeaurora.org, Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        wsa+renesas@sang-engineering.com,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>, balbi@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Jeffrey Hugo <jlhugo@gmail.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 1/8] i2c: i2c-qcom-geni: Provide support for ACPI
+Message-ID: <20190610064428.GF4797@dell>
+References: <20190607082901.6491-1-lee.jones@linaro.org>
+ <CAKv+Gu_SP7qBggCrVkF41BimV3PnCQXb5OUKyCsE0bBxa68RZA@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a592131-282a-454e-21eb-08d6ed6e028a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2019 06:36:46.7198
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: krzysztof.adamski@nokia.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0701MB2351
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKv+Gu_SP7qBggCrVkF41BimV3PnCQXb5OUKyCsE0bBxa68RZA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Jun 08, 2019 at 12:32:18AM +0200, Wolfram Sang wrote:
->On Tue, May 28, 2019 at 09:08:21AM +0000, Adamski, Krzysztof (Nokia - PL/W=
-roclaw) wrote:
->> The operation done in the pmbus_update_fan() function is a
->> read-modify-write operation but it lacks any kind of lock protection
->> which may cause problems if run more than once simultaneously. This
->> patch uses an existing update_lock mutex to fix this problem.
->>
->> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
->
->Please use get_maintainer to find the people responsible for this file.
->It is not my realm.
->
->> +out:
->> +	mutex_lock(&data->update_lock);
->
->Despite the above, have you tested the code? This likely should be
->mutex_unlock?
->
+On Fri, 07 Jun 2019, Ard Biesheuvel wrote:
 
-Sorry for that, I made a mistake and used wrong command to generate the
-patch and send it to the wrong list of people. You can ignore this
-patchset, it was resent to the proper mailing list instead.
+> On Fri, 7 Jun 2019 at 10:29, Lee Jones <lee.jones@linaro.org> wrote:
+> >
+> > Add a match table to allow automatic probing of ACPI device
+> > QCOM0220.  Ignore clock attainment errors.  Set default clock
+> > frequency value.
+> >
+> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > ---
+> >  drivers/i2c/busses/i2c-qcom-geni.c | 19 +++++++++++++++++--
+> >  1 file changed, 17 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> > index db075bc0d952..0fa93b448e8d 100644
+> > --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> > +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> > @@ -1,6 +1,7 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> >  // Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
+> >
+> > +#include <linux/acpi.h>
+> >  #include <linux/clk.h>
+> >  #include <linux/dma-mapping.h>
+> >  #include <linux/err.h>
+> > @@ -483,6 +484,12 @@ static const struct i2c_algorithm geni_i2c_algo = {
+> >         .functionality  = geni_i2c_func,
+> >  };
+> >
+> > +static const struct acpi_device_id geni_i2c_acpi_match[] = {
+> > +       { "QCOM0220"},
+> > +       { },
+> > +};
+> > +MODULE_DEVICE_TABLE(acpi, geni_i2c_acpi_match);
+> > +
+> 
+> We usually put #ifdef CONFIG_ACPI/#endif around these, otherwise you
+> end up with acpi:XXXX modaliases even though ACPI is not compiled in.
 
-Krzysztof
+No problem.
+
+> >  static int geni_i2c_probe(struct platform_device *pdev)
+> >  {
+> >         struct geni_i2c_dev *gi2c;
+> > @@ -502,7 +509,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
+> >                 return PTR_ERR(gi2c->se.base);
+> >
+> >         gi2c->se.clk = devm_clk_get(&pdev->dev, "se");
+> 
+> Can we avoid this call altogether in ACPI mode? Also, please use
+
+I'm trying not to place all non-ACPI specific callers into if ()
+statements.  The tabbing becomes ridiculous in some places.  A great
+deal of these calls are requesting optional resources too, so it's
+better to simply ignore the returning error in the cases where
+non-optional resources (such as this one) are requested, since it has
+the least impact on the existing code.
+
+> 'has_acpi_companion()' to test whether we are probing via ACPI.
+
+Sure.
+
+> > -       if (IS_ERR(gi2c->se.clk)) {
+> > +       if (IS_ERR(gi2c->se.clk) && !ACPI_HANDLE(&pdev->dev)) {
+> 
+> 
+> >                 ret = PTR_ERR(gi2c->se.clk);
+> >                 dev_err(&pdev->dev, "Err getting SE Core clk %d\n", ret);
+> >                 return ret;
+> > @@ -510,12 +517,19 @@ static int geni_i2c_probe(struct platform_device *pdev)
+> >
+> >         ret = device_property_read_u32(&pdev->dev, "clock-frequency",
+> >                                                         &gi2c->clk_freq_out);
+> > -       if (ret) {
+> > +       if (ret && !ACPI_HANDLE(&pdev->dev)) {
+> >                 dev_info(&pdev->dev,
+> >                         "Bus frequency not specified, default to 100kHz.\n");
+> >                 gi2c->clk_freq_out = KHZ(100);
+> >         }
+> >
+> > +       if (ACPI_HANDLE(&pdev->dev)) {
+> > +               ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(&pdev->dev));
+> > +
+> > +               /* Using default, same as the !ACPI case above */
+> > +               gi2c->clk_freq_out = KHZ(100);
+> > +       }
+> > +
+> 
+> You are overriding the speed to 100 kHz even if the ACPI device has a
+> "clock-frequency" property.
+
+Will look at this.
+
+Thanks Ard.
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
