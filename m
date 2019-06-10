@@ -2,126 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF483BA6B
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2019 19:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80ABC3BB09
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2019 19:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728278AbfFJRJD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Jun 2019 13:09:03 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:16633 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727679AbfFJRJC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jun 2019 13:09:02 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cfe8eae0000>; Mon, 10 Jun 2019 10:09:02 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 10 Jun 2019 10:09:01 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 10 Jun 2019 10:09:01 -0700
-Received: from HQMAIL104.nvidia.com (172.18.146.11) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 10 Jun
- 2019 17:09:01 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 10 Jun 2019 17:09:01 +0000
-Received: from dhcp-10-19-65-14.client.nvidia.com (Not Verified[10.19.65.14]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5cfe8ea90008>; Mon, 10 Jun 2019 10:09:00 -0700
-From:   Bitan Biswas <bbiswas@nvidia.com>
-To:     Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Dmitry Osipenko <digetx@gmail.com>
-CC:     Shardar Mohammed <smohammed@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>,
-        Bitan Biswas <bbiswas@nvidia.com>
-Subject: [PATCH V4 6/6] i2c: tegra: remove BUG, BUG_ON
-Date:   Mon, 10 Jun 2019 10:08:35 -0700
-Message-ID: <1560186515-30797-6-git-send-email-bbiswas@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1560186515-30797-1-git-send-email-bbiswas@nvidia.com>
-References: <1560186515-30797-1-git-send-email-bbiswas@nvidia.com>
-X-NVConfidentiality: public
-MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1560186542; bh=Gfzngx0clR6d9UOZuOxpnc3aAu0Ti7qqGyhmjCpt1n4=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=CnZ9KZRSzFQr/Nh/EZ7I2TECnVjGCnyvPuX3xtQ5DQ/hp4HafifFDPi3l/NMdcFtq
-         n/K0+d2icjKpWl0UyD3G/jVymPoF6Dfb79eUZ+ET1ZYvGIM2rBML9y3jqV6ugFkYgs
-         nDtWPxrciogvVLsDXQn9kCesh12z036RkYhUvHk1WYrPOWmMvBivA3bQ8iiqituen9
-         3XBjTtBtotpS/cBfwVOMP//rBkO5XuHjQac6jw0SEGTTDBB5Fd6FU8YELpdr4cK9SP
-         SVuUtrxQg7EqnSVbDKL1Wq3EYN6rpvyoxSBMiKoW2ElS35I5QgawBE1eEOo9WmEkzy
-         xC87pccMwpl8w==
+        id S2387750AbfFJRev (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Jun 2019 13:34:51 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52992 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387492AbfFJRev (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jun 2019 13:34:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=WmWx1d5ZiY2U4Nqy7aAua5rzNc7jtyqb64fzhepsCbs=; b=ejX2a8rT1GNj
+        L6p7eJrhEy61yaaxVHEJDbji7wV5Atg4xjp49wZfJA3VaSfcAfuWKI83Wc/J8MtPutJutQKGRcGGR
+        W+3X3vvV97fVaQD93g+BmOSKPuCJdv569Eg+hg3WHkcPvWgVSzotuT3HwOfme6/hkAlNm6hTRcCuN
+        8iQ0E=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1haOBz-0006G3-4e; Mon, 10 Jun 2019 17:34:47 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id B100A440046; Mon, 10 Jun 2019 18:34:46 +0100 (BST)
+From:   Mark Brown <broonie@kernel.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Applied "regulator: max8952: simplify getting the adapter of a client" to the regulator tree
+In-Reply-To: <20190608105619.593-26-wsa+renesas@sang-engineering.com>
+X-Patchwork-Hint: ignore
+Message-Id: <20190610173446.B100A440046@finisterre.sirena.org.uk>
+Date:   Mon, 10 Jun 2019 18:34:46 +0100 (BST)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
-as needed. Remove BUG() and make Rx and Tx case handling
-similar.
+The patch
 
-Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+   regulator: max8952: simplify getting the adapter of a client
+
+has been applied to the regulator tree at
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-5.3
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 6b96092a6bfa65566dda2f5a68a559a743b8d132 Mon Sep 17 00:00:00 2001
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Date: Sat, 8 Jun 2019 12:56:04 +0200
+Subject: [PATCH] regulator: max8952: simplify getting the adapter of a client
+
+We have a dedicated pointer for that, so use it. Much easier to read and
+less computation involved.
+
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/i2c/busses/i2c-tegra.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/regulator/max8952.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 4dfb4c1..30619d6 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -515,7 +515,6 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
- 	 * prevent overwriting past the end of buf
- 	 */
- 	if (rx_fifo_avail > 0 && buf_remaining > 0) {
--		BUG_ON(buf_remaining > 3);
- 		val = i2c_readl(i2c_dev, I2C_RX_FIFO);
- 		val = cpu_to_le32(val);
- 		memcpy(buf, &val, buf_remaining);
-@@ -523,7 +522,6 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
- 		rx_fifo_avail--;
- 	}
- 
--	BUG_ON(rx_fifo_avail > 0 && buf_remaining > 0);
- 	i2c_dev->msg_buf_remaining = buf_remaining;
- 	i2c_dev->msg_buf = buf;
- 
-@@ -581,7 +579,6 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
- 	 * boundary and fault.
- 	 */
- 	if (tx_fifo_avail > 0 && buf_remaining > 0) {
--		BUG_ON(buf_remaining > 3);
- 		memcpy(&val, buf, buf_remaining);
- 		val = le32_to_cpu(val);
- 
-@@ -850,7 +847,8 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
- 			if (i2c_dev->msg_buf_remaining)
- 				tegra_i2c_empty_rx_fifo(i2c_dev);
- 			else
--				BUG();
-+				tegra_i2c_mask_irq(i2c_dev,
-+						   I2C_INT_RX_FIFO_DATA_REQ);
- 		}
- 
- 		if (!i2c_dev->msg_read && (status & I2C_INT_TX_FIFO_DATA_REQ)) {
-@@ -876,7 +874,10 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
- 	if (status & I2C_INT_PACKET_XFER_COMPLETE) {
- 		if (i2c_dev->is_curr_dma_xfer)
- 			i2c_dev->msg_buf_remaining = 0;
--		BUG_ON(i2c_dev->msg_buf_remaining);
-+		if (WARN_ON_ONCE(i2c_dev->msg_buf_remaining)) {
-+			i2c_dev->msg_err |= I2C_ERR_UNKNOWN_INTERRUPT;
-+			goto err;
-+		}
- 		complete(&i2c_dev->msg_complete);
- 	}
- 	goto done;
+diff --git a/drivers/regulator/max8952.c b/drivers/regulator/max8952.c
+index cf2a2912cb1b..451237efb359 100644
+--- a/drivers/regulator/max8952.c
++++ b/drivers/regulator/max8952.c
+@@ -192,7 +192,7 @@ static struct max8952_platform_data *max8952_parse_dt(struct device *dev)
+ static int max8952_pmic_probe(struct i2c_client *client,
+ 		const struct i2c_device_id *i2c_id)
+ {
+-	struct i2c_adapter *adapter = to_i2c_adapter(client->dev.parent);
++	struct i2c_adapter *adapter = client->adapter;
+ 	struct max8952_platform_data *pdata = dev_get_platdata(&client->dev);
+ 	struct regulator_config config = { };
+ 	struct max8952_data *max8952;
 -- 
-2.7.4
+2.20.1
 
