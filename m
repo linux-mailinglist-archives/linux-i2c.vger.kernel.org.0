@@ -2,216 +2,168 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 281433AC0C
-	for <lists+linux-i2c@lfdr.de>; Sun,  9 Jun 2019 23:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF1F3ADC4
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2019 05:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728635AbfFIVfD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 9 Jun 2019 17:35:03 -0400
-Received: from mail-eopbgr80134.outbound.protection.outlook.com ([40.107.8.134]:59380
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726583AbfFIVfC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 9 Jun 2019 17:35:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mndvfMpi24ZKRYTMRzHmQyXhzatwsbI1HQRe6YKrCI0=;
- b=p1Ynb0oR/CdTvIMTCrPRD53nr8wqkToFOs6hQwrJbNcNPEQkOeXN/zxZwoW6cistw6mrffU6j0i3HVBX2fYhTKLb+T12WvpNuW3BhM6566YIhYOx2uXxk49srBUamUbkxpZMLFjfy/8Z+1SPlJCPxfptQYA3r5gX6p8YWnDcPGc=
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com (52.134.66.158) by
- DB3PR0202MB3515.eurprd02.prod.outlook.com (52.134.72.148) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1965.14; Sun, 9 Jun 2019 21:34:54 +0000
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::49ac:3a71:a3ec:d6bf]) by DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::49ac:3a71:a3ec:d6bf%5]) with mapi id 15.20.1965.017; Sun, 9 Jun 2019
- 21:34:54 +0000
-From:   Peter Rosin <peda@axentia.se>
-To:     Serge Semin <fancer.lancer@gmail.com>,
-        Peter Korsgaard <peter.korsgaard@barco.com>
-CC:     Serge Semin <Sergey.Semin@t-platforms.ru>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2 2/3] i2c-mux-gpio: Unpin the platform-specific GPIOs
- request code
-Thread-Topic: [PATCH v2 2/3] i2c-mux-gpio: Unpin the platform-specific GPIOs
- request code
-Thread-Index: AQHU+72dy7EDmo3k6EmkNrf+93yZ3aaUHtoA
-Date:   Sun, 9 Jun 2019 21:34:54 +0000
-Message-ID: <783250dd-87c0-b3cc-0e90-7978605a9b07@axentia.se>
-References: <20190425232028.9333-1-fancer.lancer@gmail.com>
- <20190425232028.9333-3-fancer.lancer@gmail.com>
-In-Reply-To: <20190425232028.9333-3-fancer.lancer@gmail.com>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+        id S2387504AbfFJDwq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 9 Jun 2019 23:52:46 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:12303 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387475AbfFJDwq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 9 Jun 2019 23:52:46 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cfdd40c0000>; Sun, 09 Jun 2019 20:52:44 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Sun, 09 Jun 2019 20:52:44 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Sun, 09 Jun 2019 20:52:44 -0700
+Received: from [10.19.65.14] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 10 Jun
+ 2019 03:52:40 +0000
+Subject: Re: [PATCH V2 6/6] i2c: tegra: remove BUG, BUG_ON
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
+        Wolfram Sang <wsa@the-dreams.de>
+CC:     Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1559935826-25812-1-git-send-email-bbiswas@nvidia.com>
+ <1559935826-25812-6-git-send-email-bbiswas@nvidia.com>
+ <dfe5e3a7-a761-0633-8da6-32f94aae171f@gmail.com>
+From:   Bitan Biswas <bbiswas@nvidia.com>
+Message-ID: <8daef4be-f841-bb9a-3865-9cc6bf9c51c5@nvidia.com>
+Date:   Sun, 9 Jun 2019 20:52:38 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
-x-originating-ip: [213.112.138.100]
-x-clientproxiedby: HE1PR0102CA0023.eurprd01.prod.exchangelabs.com
- (2603:10a6:7:14::36) To DB3PR0202MB3434.eurprd02.prod.outlook.com
- (2603:10a6:8:5::30)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peda@axentia.se; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 152c472e-42ab-42df-9c92-08d6ed224f7e
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:DB3PR0202MB3515;
-x-ms-traffictypediagnostic: DB3PR0202MB3515:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <DB3PR0202MB35151C6E9B03C606A603AC26BC120@DB3PR0202MB3515.eurprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 006339698F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(366004)(346002)(376002)(39830400003)(396003)(199004)(189003)(54534003)(6436002)(229853002)(3846002)(186003)(6306002)(6512007)(64126003)(6486002)(14454004)(6506007)(53546011)(386003)(36756003)(31686004)(316002)(305945005)(5660300002)(508600001)(2616005)(65826007)(966005)(486006)(476003)(26005)(68736007)(8676002)(8936002)(7736002)(446003)(81166006)(11346002)(81156014)(4326008)(256004)(25786009)(14444005)(6116002)(31696002)(53936002)(86362001)(71200400001)(2906002)(71190400001)(102836004)(6246003)(99286004)(52116002)(76176011)(74482002)(54906003)(66556008)(58126008)(66446008)(73956011)(64756008)(66476007)(66946007)(110136005)(66066001)(65956001)(65806001);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3515;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: axentia.se does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: DP5A12DwZeHIsja+VWwN8OGBZvwhncJfej0+9bR41JIIXHaoxjqKsUBPOLNUjGJwleZRcb+5Ulfm1eGkDSXiOel+M8of4g7uzE7eoBLHAnQyxLTawfMs2WVsQxkrZ1MepsntG/3UGC6LJjgCfC+wrXsHJ43UaT4G1WQAhNt9qxyVutLf1S/AYaGA12VtkrT40Tukpk8C2kguqnLK3agy7yMqVbIxY2/P5FAbVFXT7jnGH4FjxN4buhAL5iUWtZ0Xzl5GceakMgkN8eh+EU0LJXWDNMoqZmC+a6nwG57eQ2Okznlqt+lL+jnZFa5iUwJZqEk4o/FdHfjqF6u7bkVBiRG1xNM2Alo0eJ/2qusw93yqTPRCjEVDB+BTHIf0oEXRgKUjmPD0L6LJDDxvzmSSSjmijI2ToQKq0HjbDuBeVJI=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9F847E48D62AF34EA4FB49694F649380@eurprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 152c472e-42ab-42df-9c92-08d6ed224f7e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jun 2019 21:34:54.0411
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: peda@axentia.se
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3515
+In-Reply-To: <dfe5e3a7-a761-0633-8da6-32f94aae171f@gmail.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL106.nvidia.com (172.18.146.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1560138764; bh=yXIQhZiuDrR39F7erbT77tNotRwn9PKTJ9/szEqbqKs=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=Wz15GGOzLuwvcRXS8qIzANRXAHRvn9QmSRcaQB3/ObxKnP/UhQauKR27H6rvDPdM+
+         JLNtZRghnwL/UVUUWEzp6I8P3kZ9Z2ETCZPdSB+pZuO8NX4/yz29q97qbdzUGeF9Kq
+         M1XHXfNL/TrnduU9Jx6NPZ1ag+YcBtuxn5s3tRwi/xUmlD0tpq8rLg85lOUdEvS2qF
+         1T05m9aDA1dD0yXR4pZg9ZYLDfIq1XoXWDVxB06/sc4iQj0K1PxEOORejokKJvURMT
+         5xM1m4wWkQV8JuPDJwAkrfV2CcmvCbUS84ZJBBeum3rkLcB8Pfxh6zOAv0kzfivefE
+         A4hO/x8nFZoHg==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gMjAxOS0wNC0yNiAwMToyMCwgU2VyZ2UgU2VtaW4gd3JvdGU6DQo+IFRoZSBHUElPcyByZXF1
-ZXN0IGxvb3AgY2FuIGJlIHNhZmVseSBtb3ZlZCB0byBhIHNlcGFyYXRlIGZ1bmN0aW9uLg0KPiBG
-aXJzdCBvZiBhbGwgaXQgc2hhbGwgaW1wcm92ZSB0aGUgY29kZSByZWFkYWJpbGl0eS4gU2Vjb25k
-bHkgdGhlDQo+IGluaXRpYWxpemF0aW9uIGxvb3AgYXQgdGhpcyBwb2ludCBpcyB1c2VkIGZvciBi
-b3RoIG9mLSBhbmQNCj4gcGxhdGZvcm1fZGF0YS1iYXNlZCBpbml0aWFsaXphdGlvbiBwYXRocywg
-YnV0IGl0IHdpbGwgYmUgY2hhbmdlZCBpbg0KPiB0aGUgbmV4dCBwYXRjaCwgc28gYnkgaXNvbGF0
-aW5nIHRoZSBjb2RlIHdlJ2xsIHNpbXBsaWZ5IHRoZSBmdXR1cmUNCj4gd29yay4NCg0KVGhpcyBw
-YXRjaCBpcyBqdXN0IHByZXBhcmF0b3J5IGZvciBwYXRjaCAzLzMsIGFzIEkgc2VlIGl0LiBBbmQg
-c2luY2UNCkknbSBub3QgcmVhbGx5IGZvbmQgb2YgdGhlIGVuZCByZXN1bHQgYWZ0ZXIgcGF0Y2gg
-My8zLCBJJ20gZ29pbmcgdG8NCnN1bSB1cCBteSBpc3N1ZXMgaGVyZSwgaW5zdGVhZCBvZiB0cnlp
-bmcgZG8gaXQgcGllY2VtZWFsIGluIHRoZSB0d28NCnBhdGNoZXMuDQoNCkxpbnVzIGFuZCBKZWFu
-LCBmb3IgeW91ciBjb252ZW5pZW5jZSwgbGluayB0byB0aGlzIHBhdGNoIHNlcmllcyBbMV0uDQoN
-CldoaWxlIEkgYWdyZWUgd2l0aCB0aGUgZ29hbCAodG8gdXNlIHRoZSBtb3JlIGZsZXhpYmxlIGdw
-aW9kIGZ1bmN0aW9ucw0KdG8gZ2V0IGF0IHRoZSBncGlvIGRlc2NyaXB0b3JzKSwgdGhlIGNvc3Qg
-aXMgdG9vIGhpZ2ggd2hlbiB0aGUgaW5pdA0KY29kZSBmb3IgcGxhdGZvcm0gYW5kIE9GIGlzIGJh
-c2ljYWxseSBjb21wbGV0ZWx5IHNlcGFyYXRlZC4gSSBtdWNoDQpwcmVmZXIgdGhlIGFwcHJvYWNo
-IHRha2VuIGJ5IExpbnVzIFsyXSwgd2hpY2ggaW5zdGVhZCBjb252ZXJ0cyB0aGUNCnBsYXRmb3Jt
-IGludGVyZmFjZSBhbmQgaXRzIHNpbmdsZSB1c2VyIHRvIHVzZSBncGlvIGRlc2NyaXB0b3JzIGlu
-c3RlYWQNCm9mIHRoZSBsZWdhY3kgZ3BpbyBpbnRlcmZhY2UuIFRoZSBpMmMtbXV4LWdwaW8gY29k
-ZSB0aGVuIGhhcyB0aGUNCnBvdGVudGlhbCB0byB0YWtlIGEgdW5pZmllZCBhcHByb2FjaCB0byB0
-aGUgZ2l2ZW4gZ3BpbyBkZXNjcmlwdG9ycywNCndoZXJldmVyIHRoZXkgYXJlIG9yaWdpbmF0aW5n
-IGZyb20sIHdoaWNoIGlzIG11Y2ggbmljZXIgdGhhbiB0aGUNCmNvZGUtZm9yayBpbiB0aGlzIHNl
-cmllcy4NCg0KSSBhbHNvIHRoaW5rIGl0IGlzIHByZXR0eSBwb2ludGxlc3MgdG8gZmlyc3Qgc3Bs
-aXQgdGhlIGNvZGUgaW50bw0KcGxhdGZvcm0gYW5kIE9GIHBhdGhzLCBqdXN0IHNvIHRoYXQgdGhl
-IG5leHQgcGF0Y2ggKGZyb20gTGludXMpIGNhbg0KdW5pZnkgdGhlIHR3byBwYXRocyBhZ2Fpbi4g
-SSdkIGxpa2UgdG8gc2tpcCB0aGUgaW50ZXJtZWRpYXRlIHN0ZXAuDQoNClNvLCBJJ20gaG9waW5n
-IGZvciB0aGUgZm9sbG93aW5nIHRvIGhhcHBlbi4NCjEuIFNlcmdleSBzZW5kcyBhIHJldmlzZWQg
-cGF0Y2ggZm9yIHBhdGNoIDEvMy4NCjIuIEkgcHV0IHRoZSBwYXRjaCBvbiB0aGUgZm9yLW5leHQg
-YnJhbmNoLg0KMy4gTGludXMgcmViYXNlcyBoaXMgcGF0Y2ggb24gdG9wIG9mIHRoYXQgKHdoaWxl
-IHRoaW5raW5nIGFib3V0DQogICB0aGUgcXVlc3Rpb25zIHJhaXNlZCBieSBTZXJnZXkpLg0KNC4g
-U2VyZ2V5IHRlc3RzIHRoZSByZXN1bHQsIEkgYW5kIEplYW4gcmV2aWV3IGl0LCB0aGVuIHBvc3Np
-Ymx5DQogICBnbyBiYWNrIHRvIDMuDQo1LiBJIHB1dCB0aGUgcGF0Y2ggb24gdGhlIGZvci1uZXh0
-IGJyYW5jaC4NCg0KSXMgdGhhdCBvaz8gT3IgaXMgc29tZW9uZSBpbnNpc3RpbmcgdGhhdCB3ZSB0
-YWtlIGEgZGV0b3VyPw0KDQpDaGVlcnMsDQpQZXRlcg0KDQpbMV0gaHR0cHM6Ly9wYXRjaHdvcmsu
-b3psYWJzLm9yZy9jb3Zlci8xMDkxMTE5LyAoYW5kIHNob3cgcmVsYXRlZCkNClsyXSBodHRwczov
-L3BhdGNod29yay5vemxhYnMub3JnL3BhdGNoLzExMDk1MjEvDQoNCj4gU2lnbmVkLW9mZi1ieTog
-U2VyZ2UgU2VtaW4gPGZhbmNlci5sYW5jZXJAZ21haWwuY29tPg0KPiANCj4gLS0tDQo+IENoYW5n
-ZWxvZyB2Mg0KPiAtIENyZWF0ZSBhIGRlZGljYXRlZCBpbml0aWFsX3N0YXRlIGZpZWxkIGluIHRo
-ZSAiZ3Bpb211eCIgc3RydWN0dXJlIHRvDQo+ICAga2VlcCBhbiBpbml0aWFsIGNoYW5uZWwgc2Vs
-ZWN0b3Igc3RhdGUuDQo+IC0tLQ0KPiAgZHJpdmVycy9pMmMvbXV4ZXMvaTJjLW11eC1ncGlvLmMg
-fCAxMTMgKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQs
-IDY4IGluc2VydGlvbnMoKyksIDQ1IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvaTJjL211eGVzL2kyYy1tdXgtZ3Bpby5jIGIvZHJpdmVycy9pMmMvbXV4ZXMvaTJjLW11
-eC1ncGlvLmMNCj4gaW5kZXggNTQxNThiODI1YWNkLi5lMTBmNzI3MDZiOTkgMTAwNjQ0DQo+IC0t
-LSBhL2RyaXZlcnMvaTJjL211eGVzL2kyYy1tdXgtZ3Bpby5jDQo+ICsrKyBiL2RyaXZlcnMvaTJj
-L211eGVzL2kyYy1tdXgtZ3Bpby5jDQo+IEBAIC0yMCw3ICsyMCw4IEBADQo+ICANCj4gIHN0cnVj
-dCBncGlvbXV4IHsNCj4gIAlzdHJ1Y3QgaTJjX211eF9ncGlvX3BsYXRmb3JtX2RhdGEgZGF0YTsN
-Cj4gLQl1bnNpZ25lZCBncGlvX2Jhc2U7DQo+ICsJdW5zaWduZWQgaW50IGdwaW9fYmFzZTsNCj4g
-Kwl1bnNpZ25lZCBpbnQgaW5pdGlhbF9zdGF0ZTsNCj4gIAlzdHJ1Y3QgZ3Bpb19kZXNjICoqZ3Bp
-b3M7DQo+ICB9Ow0KPiAgDQo+IEBAIC0xNjIsMTMgKzE2Myw2OCBAQCBzdGF0aWMgaW50IGkyY19t
-dXhfZ3Bpb19wcm9iZV9wbGF0KHN0cnVjdCBncGlvbXV4ICptdXgsDQo+ICAJcmV0dXJuIDA7DQo+
-ICB9DQo+ICANCj4gK3N0YXRpYyBpbnQgaTJjX211eF9ncGlvX3JlcXVlc3RfcGxhdChzdHJ1Y3Qg
-Z3Bpb211eCAqbXV4LA0KPiArCQkJCQlzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAr
-ew0KPiArCXN0cnVjdCBpMmNfbXV4X2NvcmUgKm11eGMgPSBwbGF0Zm9ybV9nZXRfZHJ2ZGF0YShw
-ZGV2KTsNCj4gKwlzdHJ1Y3QgZ3Bpb19kZXNjICpncGlvX2Rlc2M7DQo+ICsJc3RydWN0IGkyY19h
-ZGFwdGVyICpyb290Ow0KPiArCXN0cnVjdCBkZXZpY2UgKmdwaW9fZGV2Ow0KPiArCWludCBpLCBy
-ZXQ7DQo+ICsNCj4gKwlyb290ID0gaTJjX3Jvb3RfYWRhcHRlcigmbXV4Yy0+cGFyZW50LT5kZXYp
-Ow0KPiArDQo+ICsJZm9yIChpID0gMDsgaSA8IG11eC0+ZGF0YS5uX2dwaW9zOyBpKyspIHsNCj4g
-KwkJcmV0ID0gZ3Bpb19yZXF1ZXN0KG11eC0+Z3Bpb19iYXNlICsgbXV4LT5kYXRhLmdwaW9zW2ld
-LA0KPiArCQkJCSAgICJpMmMtbXV4LWdwaW8iKTsNCj4gKwkJaWYgKHJldCkgew0KPiArCQkJZGV2
-X2VycigmcGRldi0+ZGV2LCAiRmFpbGVkIHRvIHJlcXVlc3QgR1BJTyAlZFxuIiwNCj4gKwkJCQlt
-dXgtPmRhdGEuZ3Bpb3NbaV0pOw0KPiArCQkJZ290byBlcnJfcmVxdWVzdF9ncGlvOw0KPiArCQl9
-DQo+ICsNCj4gKwkJcmV0ID0gZ3Bpb19kaXJlY3Rpb25fb3V0cHV0KG11eC0+Z3Bpb19iYXNlICsg
-bXV4LT5kYXRhLmdwaW9zW2ldLA0KPiArCQkJCQkgICAgbXV4LT5pbml0aWFsX3N0YXRlICYgKDEg
-PDwgaSkpOw0KPiArCQlpZiAocmV0KSB7DQo+ICsJCQlkZXZfZXJyKCZwZGV2LT5kZXYsDQo+ICsJ
-CQkJIkZhaWxlZCB0byBzZXQgZGlyZWN0aW9uIG9mIEdQSU8gJWQgdG8gb3V0cHV0XG4iLA0KPiAr
-CQkJCW11eC0+ZGF0YS5ncGlvc1tpXSk7DQo+ICsJCQlpKys7CS8qIGdwaW9fcmVxdWVzdCBhYm92
-ZSBzdWNjZWVkZWQsIHNvIG11c3QgZnJlZSAqLw0KPiArCQkJZ290byBlcnJfcmVxdWVzdF9ncGlv
-Ow0KPiArCQl9DQo+ICsNCj4gKwkJZ3Bpb19kZXNjID0gZ3Bpb190b19kZXNjKG11eC0+Z3Bpb19i
-YXNlICsgbXV4LT5kYXRhLmdwaW9zW2ldKTsNCj4gKwkJbXV4LT5ncGlvc1tpXSA9IGdwaW9fZGVz
-YzsNCj4gKw0KPiArCQlpZiAoIW11eGMtPm11eF9sb2NrZWQpDQo+ICsJCQljb250aW51ZTsNCj4g
-Kw0KPiArCQlncGlvX2RldiA9ICZncGlvX2Rlc2MtPmdkZXYtPmRldjsNCj4gKwkJbXV4Yy0+bXV4
-X2xvY2tlZCA9IGkyY19yb290X2FkYXB0ZXIoZ3Bpb19kZXYpID09IHJvb3Q7DQo+ICsJfQ0KPiAr
-DQo+ICsJcmV0dXJuIDA7DQo+ICsNCj4gK2Vycl9yZXF1ZXN0X2dwaW86DQo+ICsJZm9yICg7IGkg
-PiAwOyBpLS0pDQo+ICsJCWdwaW9fZnJlZShtdXgtPmdwaW9fYmFzZSArIG11eC0+ZGF0YS5ncGlv
-c1tpIC0gMV0pOw0KPiArDQo+ICsJcmV0dXJuIHJldDsNCj4gK30NCj4gKw0KPiArc3RhdGljIHZv
-aWQgaTJjX211eF9ncGlvX2ZyZWUoc3RydWN0IGdwaW9tdXggKm11eCkNCj4gK3sNCj4gKwlpbnQg
-aTsNCj4gKw0KPiArCWZvciAoaSA9IDA7IGkgPCBtdXgtPmRhdGEubl9ncGlvczsgaSsrKQ0KPiAr
-CQlncGlvZF9mcmVlKG11eC0+Z3Bpb3NbaV0pOw0KPiArfQ0KPiArDQo+ICBzdGF0aWMgaW50IGky
-Y19tdXhfZ3Bpb19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgew0KPiAg
-CXN0cnVjdCBpMmNfbXV4X2NvcmUgKm11eGM7DQo+ICAJc3RydWN0IGdwaW9tdXggKm11eDsNCj4g
-IAlzdHJ1Y3QgaTJjX2FkYXB0ZXIgKnBhcmVudDsNCj4gLQlzdHJ1Y3QgaTJjX2FkYXB0ZXIgKnJv
-b3Q7DQo+IC0JdW5zaWduZWQgaW5pdGlhbF9zdGF0ZTsNCj4gIAlpbnQgaSwgcmV0Ow0KPiAgDQo+
-ICAJbXV4ID0gZGV2bV9remFsbG9jKCZwZGV2LT5kZXYsIHNpemVvZigqbXV4KSwgR0ZQX0tFUk5F
-TCk7DQo+IEBAIC0xOTgsNDggKzI1NCwxOCBAQCBzdGF0aWMgaW50IGkyY19tdXhfZ3Bpb19wcm9i
-ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgDQo+ICAJcGxhdGZvcm1fc2V0X2Ry
-dmRhdGEocGRldiwgbXV4Yyk7DQo+ICANCj4gLQlyb290ID0gaTJjX3Jvb3RfYWRhcHRlcigmcGFy
-ZW50LT5kZXYpOw0KPiAtDQo+ICAJbXV4Yy0+bXV4X2xvY2tlZCA9IHRydWU7DQo+ICANCj4gIAlp
-ZiAobXV4LT5kYXRhLmlkbGUgIT0gSTJDX01VWF9HUElPX05PX0lETEUpIHsNCj4gLQkJaW5pdGlh
-bF9zdGF0ZSA9IG11eC0+ZGF0YS5pZGxlOw0KPiArCQltdXgtPmluaXRpYWxfc3RhdGUgPSBtdXgt
-PmRhdGEuaWRsZTsNCj4gIAkJbXV4Yy0+ZGVzZWxlY3QgPSBpMmNfbXV4X2dwaW9fZGVzZWxlY3Q7
-DQo+ICAJfSBlbHNlIHsNCj4gLQkJaW5pdGlhbF9zdGF0ZSA9IG11eC0+ZGF0YS52YWx1ZXNbMF07
-DQo+ICsJCW11eC0+aW5pdGlhbF9zdGF0ZSA9IG11eC0+ZGF0YS52YWx1ZXNbMF07DQo+ICAJfQ0K
-PiAgDQo+IC0JZm9yIChpID0gMDsgaSA8IG11eC0+ZGF0YS5uX2dwaW9zOyBpKyspIHsNCj4gLQkJ
-c3RydWN0IGRldmljZSAqZ3Bpb19kZXY7DQo+IC0JCXN0cnVjdCBncGlvX2Rlc2MgKmdwaW9fZGVz
-YzsNCj4gLQ0KPiAtCQlyZXQgPSBncGlvX3JlcXVlc3QobXV4LT5ncGlvX2Jhc2UgKyBtdXgtPmRh
-dGEuZ3Bpb3NbaV0sDQo+IC0JCQkJICAgImkyYy1tdXgtZ3BpbyIpOw0KPiAtCQlpZiAocmV0KSB7
-DQo+IC0JCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJGYWlsZWQgdG8gcmVxdWVzdCBHUElPICVkXG4i
-LA0KPiAtCQkJCW11eC0+ZGF0YS5ncGlvc1tpXSk7DQo+IC0JCQlnb3RvIGVycl9yZXF1ZXN0X2dw
-aW87DQo+IC0JCX0NCj4gLQ0KPiAtCQlyZXQgPSBncGlvX2RpcmVjdGlvbl9vdXRwdXQobXV4LT5n
-cGlvX2Jhc2UgKyBtdXgtPmRhdGEuZ3Bpb3NbaV0sDQo+IC0JCQkJCSAgICBpbml0aWFsX3N0YXRl
-ICYgKDEgPDwgaSkpOw0KPiAtCQlpZiAocmV0KSB7DQo+IC0JCQlkZXZfZXJyKCZwZGV2LT5kZXYs
-DQo+IC0JCQkJIkZhaWxlZCB0byBzZXQgZGlyZWN0aW9uIG9mIEdQSU8gJWQgdG8gb3V0cHV0XG4i
-LA0KPiAtCQkJCW11eC0+ZGF0YS5ncGlvc1tpXSk7DQo+IC0JCQlpKys7CS8qIGdwaW9fcmVxdWVz
-dCBhYm92ZSBzdWNjZWVkZWQsIHNvIG11c3QgZnJlZSAqLw0KPiAtCQkJZ290byBlcnJfcmVxdWVz
-dF9ncGlvOw0KPiAtCQl9DQo+IC0NCj4gLQkJZ3Bpb19kZXNjID0gZ3Bpb190b19kZXNjKG11eC0+
-Z3Bpb19iYXNlICsgbXV4LT5kYXRhLmdwaW9zW2ldKTsNCj4gLQkJbXV4LT5ncGlvc1tpXSA9IGdw
-aW9fZGVzYzsNCj4gLQ0KPiAtCQlpZiAoIW11eGMtPm11eF9sb2NrZWQpDQo+IC0JCQljb250aW51
-ZTsNCj4gLQ0KPiAtCQlncGlvX2RldiA9ICZncGlvX2Rlc2MtPmdkZXYtPmRldjsNCj4gLQkJbXV4
-Yy0+bXV4X2xvY2tlZCA9IGkyY19yb290X2FkYXB0ZXIoZ3Bpb19kZXYpID09IHJvb3Q7DQo+IC0J
-fQ0KPiArCXJldCA9IGkyY19tdXhfZ3Bpb19yZXF1ZXN0X3BsYXQobXV4LCBwZGV2KTsNCj4gKwlp
-ZiAocmV0KQ0KPiArCQlnb3RvIGFsbG9jX2ZhaWxlZDsNCj4gIA0KPiAgCWlmIChtdXhjLT5tdXhf
-bG9ja2VkKQ0KPiAgCQlkZXZfaW5mbygmcGRldi0+ZGV2LCAibXV4LWxvY2tlZCBpMmMgbXV4XG4i
-KTsNCj4gQEAgLTI2MCwxMCArMjg2LDkgQEAgc3RhdGljIGludCBpMmNfbXV4X2dwaW9fcHJvYmUo
-c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4gIA0KPiAgYWRkX2FkYXB0ZXJfZmFpbGVk
-Og0KPiAgCWkyY19tdXhfZGVsX2FkYXB0ZXJzKG11eGMpOw0KPiAtCWkgPSBtdXgtPmRhdGEubl9n
-cGlvczsNCj4gLWVycl9yZXF1ZXN0X2dwaW86DQo+IC0JZm9yICg7IGkgPiAwOyBpLS0pDQo+IC0J
-CWdwaW9fZnJlZShtdXgtPmdwaW9fYmFzZSArIG11eC0+ZGF0YS5ncGlvc1tpIC0gMV0pOw0KPiAr
-DQo+ICsJaTJjX211eF9ncGlvX2ZyZWUobXV4KTsNCj4gKw0KPiAgYWxsb2NfZmFpbGVkOg0KPiAg
-CWkyY19wdXRfYWRhcHRlcihwYXJlbnQpOw0KPiAgDQo+IEBAIC0yNzQsMTIgKzI5OSwxMCBAQCBz
-dGF0aWMgaW50IGkyY19tdXhfZ3Bpb19yZW1vdmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRl
-dikNCj4gIHsNCj4gIAlzdHJ1Y3QgaTJjX211eF9jb3JlICptdXhjID0gcGxhdGZvcm1fZ2V0X2Ry
-dmRhdGEocGRldik7DQo+ICAJc3RydWN0IGdwaW9tdXggKm11eCA9IGkyY19tdXhfcHJpdihtdXhj
-KTsNCj4gLQlpbnQgaTsNCj4gIA0KPiAgCWkyY19tdXhfZGVsX2FkYXB0ZXJzKG11eGMpOw0KPiAg
-DQo+IC0JZm9yIChpID0gMDsgaSA8IG11eC0+ZGF0YS5uX2dwaW9zOyBpKyspDQo+IC0JCWdwaW9f
-ZnJlZShtdXgtPmdwaW9fYmFzZSArIG11eC0+ZGF0YS5ncGlvc1tpXSk7DQo+ICsJaTJjX211eF9n
-cGlvX2ZyZWUobXV4KTsNCj4gIA0KPiAgCWkyY19wdXRfYWRhcHRlcihtdXhjLT5wYXJlbnQpOw0K
-PiAgDQo+IA0KDQo=
+
+
+On 6/7/19 12:47 PM, Dmitry Osipenko wrote:
+> 07.06.2019 22:30, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>> Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
+>> as needed. Replace BUG() with error handling code.
+>> Define I2C_ERR_UNEXPECTED_STATUS for error handling.
+>>
+>> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+>> ---
+>>   drivers/i2c/busses/i2c-tegra.c | 16 +++++++++-------
+>>   1 file changed, 9 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-teg=
+ra.c
+>> index 4dfb4c1..c89d0ee 100644
+>> --- a/drivers/i2c/busses/i2c-tegra.c
+>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>> @@ -73,6 +73,7 @@
+>>   #define I2C_ERR_NO_ACK				BIT(0)
+>>   #define I2C_ERR_ARBITRATION_LOST		BIT(1)
+>>   #define I2C_ERR_UNKNOWN_INTERRUPT		BIT(2)
+>> +#define I2C_ERR_UNEXPECTED_STATUS		BIT(3)
+>>  =20
+>>   #define PACKET_HEADER0_HEADER_SIZE_SHIFT	28
+>>   #define PACKET_HEADER0_PACKET_ID_SHIFT		16
+>> @@ -515,7 +516,6 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_=
+dev *i2c_dev)
+>>   	 * prevent overwriting past the end of buf
+>>   	 */
+>>   	if (rx_fifo_avail > 0 && buf_remaining > 0) {
+>> -		BUG_ON(buf_remaining > 3);
+>>   		val =3D i2c_readl(i2c_dev, I2C_RX_FIFO);
+>>   		val =3D cpu_to_le32(val);
+>>   		memcpy(buf, &val, buf_remaining);
+>> @@ -523,7 +523,6 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_=
+dev *i2c_dev)
+>>   		rx_fifo_avail--;
+>>   	}
+>>  =20
+>> -	BUG_ON(rx_fifo_avail > 0 && buf_remaining > 0);
+>>   	i2c_dev->msg_buf_remaining =3D buf_remaining;
+>>   	i2c_dev->msg_buf =3D buf;
+>>  =20
+>> @@ -581,7 +580,6 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_d=
+ev *i2c_dev)
+>>   	 * boundary and fault.
+>>   	 */
+>>   	if (tx_fifo_avail > 0 && buf_remaining > 0) {
+>> -		BUG_ON(buf_remaining > 3);
+>>   		memcpy(&val, buf, buf_remaining);
+>>   		val =3D le32_to_cpu(val);
+>>  =20
+>> @@ -847,10 +845,13 @@ static irqreturn_t tegra_i2c_isr(int irq, void *de=
+v_id)
+>>  =20
+>>   	if (!i2c_dev->is_curr_dma_xfer) {
+>>   		if (i2c_dev->msg_read && (status & I2C_INT_RX_FIFO_DATA_REQ)) {
+>> -			if (i2c_dev->msg_buf_remaining)
+>> +			if (i2c_dev->msg_buf_remaining) {
+>>   				tegra_i2c_empty_rx_fifo(i2c_dev);
+>> -			else
+>> -				BUG();
+>> +			} else {
+>> +				dev_err(i2c_dev->dev, "unexpected rx data request\n");
+>> +				i2c_dev->msg_err |=3D I2C_ERR_UNEXPECTED_STATUS;
+>> +				goto err;
+>> +			}
+>>   		}
+>>  =20
+>>   		if (!i2c_dev->msg_read && (status & I2C_INT_TX_FIFO_DATA_REQ)) {
+>> @@ -876,7 +877,8 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_=
+id)
+>>   	if (status & I2C_INT_PACKET_XFER_COMPLETE) {
+>>   		if (i2c_dev->is_curr_dma_xfer)
+>>   			i2c_dev->msg_buf_remaining =3D 0;
+>> -		BUG_ON(i2c_dev->msg_buf_remaining);
+>> +		if (WARN_ON_ONCE(i2c_dev->msg_buf_remaining))
+>> +			goto err;
+>>   		complete(&i2c_dev->msg_complete);
+>>   	}
+>>   	goto done;
+>>
+>=20
+> Unfortunately that's not enough because the indicator of the error is
+> the i2c_dev->msg_err and no error is set in yours case, hence no
+> hardware reset will be performed. It should be at least somewhat like thi=
+s:
+>=20
+> 	if (WARN_ON_ONCE(i2c_dev->msg_buf_remaining)) {
+> 		i2c_dev->msg_err |=3D I2C_ERR_UNKNOWN_INTERRUPT;
+> 		goto err;
+> 	}
+>=20
+Fine. I shall set msg_err as I2C_ERR_UNKNOWN_INTERRUPT instead of=20
+I2C_ERR_UNEXPECTED_STATUS for condition of non-zero msg_bug_remaining in=20
+PIO mode with transfer complete interrupt.
+
+
+-Thanks,
+  Bitan
+
