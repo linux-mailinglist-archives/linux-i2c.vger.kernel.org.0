@@ -2,563 +2,183 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA4B3BC43
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2019 20:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FA43BD06
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2019 21:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388812AbfFJS5O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Jun 2019 14:57:14 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:49767 "EHLO
-        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2387805AbfFJS5N (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jun 2019 14:57:13 -0400
-Received: from Internal Mail-Server by MTLPINE2 (envelope-from asmaa@mellanox.com)
-        with ESMTPS (AES256-SHA encrypted); 10 Jun 2019 21:57:09 +0300
-Received: from farm-1.mtbu.labs.mlnx (farm-1.mtbu.labs.mlnx [10.15.2.31])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id x5AIv860003177;
-        Mon, 10 Jun 2019 14:57:08 -0400
-Received: (from asmaa@localhost)
-        by farm-1.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id x5AIv8gQ023420;
-        Mon, 10 Jun 2019 14:57:08 -0400
-From:   Asmaa Mnebhi <Asmaa@mellanox.com>
-To:     minyard@acm.org, wsa@the-dreams.de, vadimp@mellanox.com,
-        michaelsh@mellanox.com, rdunlap@infradead.org
-Cc:     Asmaa Mnebhi <Asmaa@mellanox.com>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH v12 1/1] Add support for IPMB driver
-Date:   Mon, 10 Jun 2019 14:57:02 -0400
-Message-Id: <319690553a0da2a1e80b400941341081b383e5f1.1560192707.git.Asmaa@mellanox.com>
-X-Mailer: git-send-email 2.1.2
-In-Reply-To: <cover.1560192707.git.Asmaa@mellanox.com>
-References: <cover.1560192707.git.Asmaa@mellanox.com>
-In-Reply-To: <cover.1560192707.git.Asmaa@mellanox.com>
-References: <cover.1560192707.git.Asmaa@mellanox.com>
+        id S2389099AbfFJTlM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Jun 2019 15:41:12 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:4037 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388843AbfFJTlM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jun 2019 15:41:12 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cfeb2560000>; Mon, 10 Jun 2019 12:41:10 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 10 Jun 2019 12:41:10 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 10 Jun 2019 12:41:10 -0700
+Received: from [10.19.65.14] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 10 Jun
+ 2019 19:41:07 +0000
+Subject: Re: [PATCH V4 6/6] i2c: tegra: remove BUG, BUG_ON
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
+        Wolfram Sang <wsa@the-dreams.de>
+CC:     Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1560186515-30797-1-git-send-email-bbiswas@nvidia.com>
+ <1560186515-30797-6-git-send-email-bbiswas@nvidia.com>
+ <06ab30b6-bf79-c628-0a04-d0307511a06f@gmail.com>
+From:   Bitan Biswas <bbiswas@nvidia.com>
+Message-ID: <851d7837-5b98-228e-d8c9-3c41be1fb2e0@nvidia.com>
+Date:   Mon, 10 Jun 2019 12:41:03 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <06ab30b6-bf79-c628-0a04-d0307511a06f@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1560195670; bh=JyK/p2hqLXboqisgBAqPIy3Mdy8LlNVYdBjpebqVJIY=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=O2WBtoUyUH1swTwYr1h7CefLuJAxiWBgyeBLPVsr3jTC2AcNMgxWB3gMesP7s+f0N
+         fCpjGh1kuoth4PjvQ0BvOh4w2Et3IkhRMkzNrVIXHkQfF120onInDHXmPNGDBWBZIX
+         wdQsI40WJmpHjq8YAzZzOAra0CMDrYQ9IapOPm3uvFTVJewdGhc6Vn+CeSdnPKKYII
+         fAI9anU2BtlxsRJMXovQrh4On76+0ifQNTCg8BCEKPFsKNAteZsGrCesZEpQBEHbJc
+         aIeY6ky7RiJ6jBJjzDZ/8ALC2ImfCKqP61Z4IJ8Sj9atviSvOtYENquZ89n3YuuJ6U
+         F41YtYrSVkw5A==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Support receiving IPMB requests on a Satellite MC from the BMC.
-Once a response is ready, this driver will send back a response
-to the BMC via the IPMB channel.
 
-Signed-off-by: Asmaa Mnebhi <Asmaa@mellanox.com>
-Acked-by: vadimp@mellanox.com
----
- Documentation/IPMB.txt           | 103 +++++++++++
- drivers/char/ipmi/Kconfig        |   8 +
- drivers/char/ipmi/Makefile       |   1 +
- drivers/char/ipmi/ipmb_dev_int.c | 364 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 476 insertions(+)
- create mode 100644 Documentation/IPMB.txt
- create mode 100644 drivers/char/ipmi/ipmb_dev_int.c
 
-diff --git a/Documentation/IPMB.txt b/Documentation/IPMB.txt
-new file mode 100644
-index 0000000..7160d53
---- /dev/null
-+++ b/Documentation/IPMB.txt
-@@ -0,0 +1,103 @@
-+==============================
-+IPMB Driver for a Satellite MC
-+==============================
-+
-+The Intelligent Platform Management Bus or IPMB, is an
-+I2C bus that provides a standardized interconnection between
-+different boards within a chassis. This interconnection is
-+between the baseboard management (BMC) and chassis electronics.
-+IPMB is also associated with the messaging protocol through the
-+IPMB bus.
-+
-+The devices using the IPMB are usually management
-+controllers that perform management functions such as servicing
-+the front panel interface, monitoring the baseboard,
-+hot-swapping disk drivers in the system chassis, etc...
-+
-+When an IPMB is implemented in the system, the BMC serves as
-+a controller to give system software access to the IPMB. The BMC
-+sends IPMI requests to a device (usually a Satellite Management
-+Controller or Satellite MC) via IPMB and the device
-+sends a response back to the BMC.
-+
-+For more information on IPMB and the format of an IPMB message,
-+refer to the IPMB and IPMI specifications.
-+
-+IPMB driver for Satellite MC
-+----------------------------
-+
-+ipmb-dev-int - This is the driver needed on a Satellite MC to
-+receive IPMB messages from a BMC and send a response back.
-+This driver works with the I2C driver and a userspace
-+program such as OpenIPMI:
-+
-+1) It is an I2C slave backend driver. So, it defines a callback
-+function to set the Satellite MC as an I2C slave.
-+This callback function handles the received IPMI requests.
-+
-+2) It defines the read and write functions to enable a user
-+space program (such as OpenIPMI) to communicate with the kernel.
-+
-+
-+Load the IPMB driver
-+--------------------
-+
-+The driver needs to be loaded at boot time or manually first.
-+First, make sure you have the following in your config file:
-+CONFIG_IPMB_DEVICE_INTERFACE=y
-+
-+1) If you want the driver to be loaded at boot time:
-+
-+a) Add this entry to your ACPI table, under the appropriate SMBus:
-+
-+Device (SMB0) // Example SMBus host controller
-+{
-+  Name (_HID, "<Vendor-Specific HID>") // Vendor-Specific HID
-+  Name (_UID, 0) // Unique ID of particular host controller
-+  :
-+  :
-+    Device (IPMB)
-+    {
-+      Name (_HID, "IPMB0001") // IPMB device interface
-+      Name (_UID, 0) // Unique device identifier
-+    }
-+}
-+
-+b) Example for device tree:
-+
-+&i2c2 {
-+         status = "okay";
-+ 
-+         ipmb@10 {
-+                 compatible = "ipmb-dev";
-+                 reg = <0x10>;
-+         };
-+};
-+
-+2) Manually from Linux:
-+modprobe ipmb-dev-int
-+
-+
-+Instantiate the device
-+----------------------
-+
-+After loading the driver, you can instantiate the device as
-+described in 'Documentation/i2c/instantiating-devices'.
-+If you have multiple BMCs, each connected to your Satellite MC via
-+a different I2C bus, you can instantiate a device for each of
-+those BMCs.
-+The name of the instantiated device contains the I2C bus number
-+associated with it as follows:
-+
-+BMC1 ------ IPMB/I2C bus 1 ---------|   /dev/ipmb-1
-+				Satellite MC
-+BMC1 ------ IPMB/I2C bus 2 ---------|   /dev/ipmb-2
-+
-+For instance, you can instantiate the ipmb-dev-int device from
-+user space at the 7 bit address 0x10 on bus 2:
-+
-+  # echo ipmb-dev 0x1010 > /sys/bus/i2c/devices/i2c-2/new_device
-+
-+This will create the device file /dev/ipmb-2, which can be accessed
-+by the user space program. The device needs to be instantiated
-+before running the user space program.
-diff --git a/drivers/char/ipmi/Kconfig b/drivers/char/ipmi/Kconfig
-index caac5d2..811fccb 100644
---- a/drivers/char/ipmi/Kconfig
-+++ b/drivers/char/ipmi/Kconfig
-@@ -75,6 +75,14 @@ config IPMI_SSIF
- 	 have a driver that must be accessed over an I2C bus instead of a
- 	 standard interface.  This module requires I2C support.
- 
-+config IPMB_DEVICE_INTERFACE
-+       tristate 'IPMB Interface handler'
-+       depends on I2C_SLAVE
-+       help
-+         Provides a driver for a device (Satellite MC) to
-+         receive requests and send responses back to the BMC via
-+         the IPMB interface. This module requires I2C support.
-+
- config IPMI_POWERNV
-        depends on PPC_POWERNV
-        tristate 'POWERNV (OPAL firmware) IPMI interface'
-diff --git a/drivers/char/ipmi/Makefile b/drivers/char/ipmi/Makefile
-index 3f06b20..0822adc 100644
---- a/drivers/char/ipmi/Makefile
-+++ b/drivers/char/ipmi/Makefile
-@@ -26,3 +26,4 @@ obj-$(CONFIG_IPMI_KCS_BMC) += kcs_bmc.o
- obj-$(CONFIG_ASPEED_BT_IPMI_BMC) += bt-bmc.o
- obj-$(CONFIG_ASPEED_KCS_IPMI_BMC) += kcs_bmc_aspeed.o
- obj-$(CONFIG_NPCM7XX_KCS_IPMI_BMC) += kcs_bmc_npcm7xx.o
-+obj-$(CONFIG_IPMB_DEVICE_INTERFACE) += ipmb_dev_int.o
-diff --git a/drivers/char/ipmi/ipmb_dev_int.c b/drivers/char/ipmi/ipmb_dev_int.c
-new file mode 100644
-index 0000000..2895abf
---- /dev/null
-+++ b/drivers/char/ipmi/ipmb_dev_int.c
-@@ -0,0 +1,364 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * IPMB driver to receive a request and send a response
-+ *
-+ * Copyright (C) 2019 Mellanox Techologies, Ltd.
-+ *
-+ * This was inspired by Brendan Higgins' ipmi-bmc-bt-i2c driver.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/errno.h>
-+#include <linux/i2c.h>
-+#include <linux/miscdevice.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/poll.h>
-+#include <linux/slab.h>
-+#include <linux/spinlock.h>
-+#include <linux/wait.h>
-+
-+#define MAX_MSG_LEN		128
-+#define IPMB_REQUEST_LEN_MIN	7
-+#define NETFN_RSP_BIT_MASK	0x4
-+#define REQUEST_QUEUE_MAX_LEN	256
-+
-+#define IPMB_MSG_LEN_IDX	0
-+#define RQ_SA_8BIT_IDX		1
-+#define NETFN_LUN_IDX		2
-+
-+#define GET_7BIT_ADDR(addr_8bit)	(addr_8bit >> 1)
-+#define GET_8BIT_ADDR(addr_7bit)	((addr_7bit << 1) & 0xff)
-+
-+#define IPMB_MSG_PAYLOAD_LEN_MAX (MAX_MSG_LEN - IPMB_REQUEST_LEN_MIN - 1)
-+
-+#define SMBUS_MSG_HEADER_LENGTH	2
-+#define SMBUS_MSG_IDX_OFFSET	(SMBUS_MSG_HEADER_LENGTH + 1)
-+
-+struct ipmb_msg {
-+	u8 len;
-+	u8 rs_sa;
-+	u8 netfn_rs_lun;
-+	u8 checksum1;
-+	u8 rq_sa;
-+	u8 rq_seq_rq_lun;
-+	u8 cmd;
-+	u8 payload[IPMB_MSG_PAYLOAD_LEN_MAX];
-+	/* checksum2 is included in payload */
-+} __packed;
-+
-+struct ipmb_request_elem {
-+	struct list_head list;
-+	struct ipmb_msg request;
-+};
-+
-+struct ipmb_dev {
-+	struct i2c_client *client;
-+	struct miscdevice miscdev;
-+	struct ipmb_msg request;
-+	struct list_head request_queue;
-+	atomic_t request_queue_len;
-+	size_t msg_idx;
-+	spinlock_t lock;
-+	wait_queue_head_t wait_queue;
-+	struct mutex file_mutex;
-+};
-+
-+static inline struct ipmb_dev *to_ipmb_dev(struct file *file)
-+{
-+	return container_of(file->private_data, struct ipmb_dev, miscdev);
-+}
-+
-+static ssize_t ipmb_read(struct file *file, char __user *buf, size_t count,
-+			loff_t *ppos)
-+{
-+	struct ipmb_dev *ipmb_dev = to_ipmb_dev(file);
-+	struct ipmb_request_elem *queue_elem;
-+	struct ipmb_msg msg;
-+	ssize_t ret;
-+
-+	memset(&msg, 0, sizeof(msg));
-+
-+	spin_lock_irq(&ipmb_dev->lock);
-+
-+	while (list_empty(&ipmb_dev->request_queue)) {
-+		spin_unlock_irq(&ipmb_dev->lock);
-+
-+		if (file->f_flags & O_NONBLOCK)
-+			return -EAGAIN;
-+
-+		ret = wait_event_interruptible(ipmb_dev->wait_queue,
-+				!list_empty(&ipmb_dev->request_queue));
-+		if (ret)
-+			return ret;
-+
-+		spin_lock_irq(&ipmb_dev->lock);
-+	}
-+
-+	queue_elem = list_first_entry(&ipmb_dev->request_queue,
-+					struct ipmb_request_elem, list);
-+	memcpy(&msg, &queue_elem->request, sizeof(msg));
-+	list_del(&queue_elem->list);
-+	kfree(queue_elem);
-+	atomic_dec(&ipmb_dev->request_queue_len);
-+
-+	spin_unlock_irq(&ipmb_dev->lock);
-+
-+	count = min_t(size_t, count, msg.len + 1);
-+	if (copy_to_user(buf, &msg, count))
-+		ret = -EFAULT;
-+
-+	return ret < 0 ? ret : count;
-+}
-+
-+static ssize_t ipmb_write(struct file *file, const char __user *buf,
-+			size_t count, loff_t *ppos)
-+{
-+	struct ipmb_dev *ipmb_dev = to_ipmb_dev(file);
-+	u8 rq_sa, netf_rq_lun, msg_len;
-+	struct i2c_client rq_client;
-+	u8 msg[MAX_MSG_LEN];
-+	ssize_t ret;
-+
-+	if (count > sizeof(msg))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&msg, buf, count))
-+		return -EFAULT;
-+
-+	if (count < msg[0])
-+		return -EINVAL;
-+
-+	rq_sa = GET_7BIT_ADDR(msg[RQ_SA_8BIT_IDX]);
-+	netf_rq_lun = msg[NETFN_LUN_IDX];
-+
-+	if (!(netf_rq_lun & NETFN_RSP_BIT_MASK))
-+		return -EINVAL;
-+
-+	/*
-+	 * subtract rq_sa and netf_rq_lun from the length of the msg passed to
-+	 * i2c_smbus_write_block_data_local
-+	 */
-+	msg_len = msg[IPMB_MSG_LEN_IDX] - SMBUS_MSG_HEADER_LENGTH;
-+
-+	strcpy(rq_client.name, "ipmb_requester");
-+	rq_client.adapter = ipmb_dev->client->adapter;
-+	rq_client.flags = ipmb_dev->client->flags;
-+	rq_client.addr = rq_sa;
-+
-+	ret = i2c_smbus_write_block_data(&rq_client, netf_rq_lun, msg_len,
-+					msg + SMBUS_MSG_IDX_OFFSET);
-+
-+	return ret ? : count;
-+}
-+
-+static unsigned int ipmb_poll(struct file *file, poll_table *wait)
-+{
-+	struct ipmb_dev *ipmb_dev = to_ipmb_dev(file);
-+	unsigned int mask = POLLOUT;
-+
-+	mutex_lock(&ipmb_dev->file_mutex);
-+	poll_wait(file, &ipmb_dev->wait_queue, wait);
-+
-+	if (atomic_read(&ipmb_dev->request_queue_len))
-+		mask |= POLLIN;
-+	mutex_unlock(&ipmb_dev->file_mutex);
-+
-+	return mask;
-+}
-+
-+static const struct file_operations ipmb_fops = {
-+	.owner	= THIS_MODULE,
-+	.read	= ipmb_read,
-+	.write	= ipmb_write,
-+	.poll	= ipmb_poll,
-+};
-+
-+/* Called with ipmb_dev->lock held. */
-+static void ipmb_handle_request(struct ipmb_dev *ipmb_dev)
-+{
-+	struct ipmb_request_elem *queue_elem;
-+
-+	if (atomic_read(&ipmb_dev->request_queue_len) >=
-+			REQUEST_QUEUE_MAX_LEN)
-+		return;
-+
-+	queue_elem = kmalloc(sizeof(*queue_elem), GFP_ATOMIC);
-+	if (!queue_elem)
-+		return;
-+
-+	memcpy(&queue_elem->request, &ipmb_dev->request,
-+		sizeof(struct ipmb_msg));
-+	list_add(&queue_elem->list, &ipmb_dev->request_queue);
-+	atomic_inc(&ipmb_dev->request_queue_len);
-+	wake_up_all(&ipmb_dev->wait_queue);
-+}
-+
-+static u8 ipmb_verify_checksum1(struct ipmb_dev *ipmb_dev, u8 rs_sa)
-+{
-+	/* The 8 lsb of the sum is 0 when the checksum is valid */
-+	return (rs_sa + ipmb_dev->request.netfn_rs_lun +
-+		ipmb_dev->request.checksum1);
-+}
-+
-+static bool is_ipmb_request(struct ipmb_dev *ipmb_dev, u8 rs_sa)
-+{
-+	if (ipmb_dev->msg_idx >= IPMB_REQUEST_LEN_MIN) {
-+		if (ipmb_verify_checksum1(ipmb_dev, rs_sa))
-+			return false;
-+
-+		/*
-+		 * Check whether this is an IPMB request or
-+		 * response.
-+		 * The 6 MSB of netfn_rs_lun are dedicated to the netfn
-+		 * while the remaining bits are dedicated to the lun.
-+		 * If the LSB of the netfn is cleared, it is associated
-+		 * with an IPMB request.
-+		 * If the LSB of the netfn is set, it is associated with
-+		 * an IPMB response.
-+		 */
-+		if (!(ipmb_dev->request.netfn_rs_lun & NETFN_RSP_BIT_MASK))
-+			return true;
-+	}
-+	return false;
-+}
-+
-+/*
-+ * The IPMB protocol only supports I2C Writes so there is no need
-+ * to support I2C_SLAVE_READ* events.
-+ * This i2c callback function only monitors IPMB request messages
-+ * and adds them in a queue, so that they can be handled by
-+ * receive_ipmb_request.
-+ */
-+static int ipmb_slave_cb(struct i2c_client *client,
-+			enum i2c_slave_event event, u8 *val)
-+{
-+	struct ipmb_dev *ipmb_dev = i2c_get_clientdata(client);
-+	u8 *buf = (u8 *)&ipmb_dev->request;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&ipmb_dev->lock, flags);
-+	switch (event) {
-+	case I2C_SLAVE_WRITE_REQUESTED:
-+		memset(&ipmb_dev->request, 0, sizeof(ipmb_dev->request));
-+		ipmb_dev->msg_idx = 0;
-+
-+		/*
-+		 * At index 0, ipmb_msg stores the length of msg,
-+		 * skip it for now.
-+		 * The len will be populated once the whole
-+		 * buf is populated.
-+		 *
-+		 * The I2C bus driver's responsibility is to pass the
-+		 * data bytes to the backend driver; it does not
-+		 * forward the i2c slave address.
-+		 * Since the first byte in the IPMB message is the
-+		 * address of the responder, it is the responsibility
-+		 * of the IPMB driver to format the message properly.
-+		 * So this driver prepends the address of the responder
-+		 * to the received i2c data before the request message
-+		 * is handled in userland.
-+		 */
-+		buf[++ipmb_dev->msg_idx] = GET_8BIT_ADDR(client->addr);
-+		break;
-+
-+	case I2C_SLAVE_WRITE_RECEIVED:
-+		if (ipmb_dev->msg_idx >= sizeof(struct ipmb_msg))
-+			break;
-+
-+		buf[++ipmb_dev->msg_idx] = *val;
-+		break;
-+
-+	case I2C_SLAVE_STOP:
-+		ipmb_dev->request.len = ipmb_dev->msg_idx;
-+
-+		if (is_ipmb_request(ipmb_dev, GET_8BIT_ADDR(client->addr)))
-+			ipmb_handle_request(ipmb_dev);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+	spin_unlock_irqrestore(&ipmb_dev->lock, flags);
-+
-+	return 0;
-+}
-+
-+static int ipmb_probe(struct i2c_client *client,
-+			const struct i2c_device_id *id)
-+{
-+	struct ipmb_dev *ipmb_dev;
-+	int ret;
-+
-+	ipmb_dev = devm_kzalloc(&client->dev, sizeof(*ipmb_dev),
-+					GFP_KERNEL);
-+	if (!ipmb_dev)
-+		return -ENOMEM;
-+
-+	spin_lock_init(&ipmb_dev->lock);
-+	init_waitqueue_head(&ipmb_dev->wait_queue);
-+	atomic_set(&ipmb_dev->request_queue_len, 0);
-+	INIT_LIST_HEAD(&ipmb_dev->request_queue);
-+
-+	mutex_init(&ipmb_dev->file_mutex);
-+
-+	ipmb_dev->miscdev.minor = MISC_DYNAMIC_MINOR;
-+
-+	ipmb_dev->miscdev.name = devm_kasprintf(&client->dev, GFP_KERNEL,
-+						"%s%d", "ipmb-",
-+						client->adapter->nr);
-+	ipmb_dev->miscdev.fops = &ipmb_fops;
-+	ipmb_dev->miscdev.parent = &client->dev;
-+	ret = misc_register(&ipmb_dev->miscdev);
-+	if (ret)
-+		return ret;
-+
-+	ipmb_dev->client = client;
-+	i2c_set_clientdata(client, ipmb_dev);
-+	ret = i2c_slave_register(client, ipmb_slave_cb);
-+	if (ret) {
-+		misc_deregister(&ipmb_dev->miscdev);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ipmb_remove(struct i2c_client *client)
-+{
-+	struct ipmb_dev *ipmb_dev = i2c_get_clientdata(client);
-+
-+	i2c_slave_unregister(client);
-+	misc_deregister(&ipmb_dev->miscdev);
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id ipmb_id[] = {
-+	{ "ipmb-dev", 0 },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(i2c, ipmb_id);
-+
-+static const struct acpi_device_id acpi_ipmb_id[] = {
-+	{ "IPMB0001", 0 },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(acpi, acpi_ipmb_id);
-+
-+static struct i2c_driver ipmb_driver = {
-+	.driver = {
-+		.owner = THIS_MODULE,
-+		.name = "ipmb-dev",
-+		.acpi_match_table = ACPI_PTR(acpi_ipmb_id),
-+	},
-+	.probe = ipmb_probe,
-+	.remove = ipmb_remove,
-+	.id_table = ipmb_id,
-+};
-+module_i2c_driver(ipmb_driver);
-+
-+MODULE_AUTHOR("Mellanox Technologies");
-+MODULE_DESCRIPTION("IPMB driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.1.2
+On 6/10/19 11:12 AM, Dmitry Osipenko wrote:
+> 10.06.2019 20:08, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>> Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
+>> as needed. Remove BUG() and make Rx and Tx case handling
+>> similar.
+>>
+>> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+>> ---
+>>   drivers/i2c/busses/i2c-tegra.c | 11 ++++++-----
+>>   1 file changed, 6 insertions(+), 5 deletions(-)
+>=20
+> Looks that this is still not correct. What if it transfer-complete flag
+> is set and buffer is full on RX? In this case the transfer will succeed
+> while it was a failure.
+>=20
+>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-teg=
+ra.c
+>> index 4dfb4c1..30619d6 100644
+>> --- a/drivers/i2c/busses/i2c-tegra.c
+>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>> @@ -515,7 +515,6 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_=
+dev *i2c_dev)
+>>   	 * prevent overwriting past the end of buf
+>>   	 */
+>>   	if (rx_fifo_avail > 0 && buf_remaining > 0) {
+>> -		BUG_ON(buf_remaining > 3);
+>=20
+> Actually error should be returned here since out-of-bounds memory
+> accesses must be avoided, hence:
+>=20
+> 	if (WARN_ON_ONCE(buf_remaining > 3))
+> 		return -EINVAL;
+buf_remaining will be less than equal to 3 because of the expression=20
+earlier
+https://elixir.bootlin.com/linux/v5.2-rc4/source/drivers/i2c/busses/i2c-teg=
+ra.c#L520
+
+>=20
+>>   		val =3D i2c_readl(i2c_dev, I2C_RX_FIFO);
+>>   		val =3D cpu_to_le32(val);
+>>   		memcpy(buf, &val, buf_remaining);
+>> @@ -523,7 +522,6 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_=
+dev *i2c_dev)
+>>   		rx_fifo_avail--;
+>>   	}
+>>  =20
+>> -	BUG_ON(rx_fifo_avail > 0 && buf_remaining > 0);
+>=20
+> Better not to ignore this as well:
+>=20
+> 	if (WARN_ON_ONCE(rx_fifo_avail > 0 &&
+> 			 buf_remaining > 0))
+> 		return -EINVAL;
+>=20
+Please check below line.
+https://elixir.bootlin.com/linux/v5.2-rc4/source/drivers/i2c/busses/i2c-teg=
+ra.c#L532=20
+
+
+It ensures that buf_remaining will be 0 and we never hit the BUG_ON as=20
+follows:
+
+ >> -	BUG_ON(rx_fifo_avail > 0 && buf_remaining > 0);
+
+>>   	i2c_dev->msg_buf_remaining =3D buf_remaining;
+>>   	i2c_dev->msg_buf =3D buf;
+>>  =20
+>> @@ -581,7 +579,6 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_d=
+ev *i2c_dev)
+>>   	 * boundary and fault.
+>>   	 */
+>>   	if (tx_fifo_avail > 0 && buf_remaining > 0) {
+>> -		BUG_ON(buf_remaining > 3);
+>=20
+> And here, cause this will corrupt stack:
+>=20
+> 		if (WARN_ON_ONCE(buf_remaining > 3))
+> 			return -EINVAL;
+>=20
+Please check the line
+https://elixir.bootlin.com/linux/v5.2-rc4/source/drivers/i2c/busses/i2c-teg=
+ra.c#L576
+
+It ensures buf_remaining will be less or equal to 3.
+
+>>   		memcpy(&val, buf, buf_remaining);
+>>   		val =3D le32_to_cpu(val);
+>>  =20
+>> @@ -850,7 +847,8 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_=
+id)
+>>   			if (i2c_dev->msg_buf_remaining)
+>>   				tegra_i2c_empty_rx_fifo(i2c_dev);
+>>   			else
+>> -				BUG();
+>> +				tegra_i2c_mask_irq(i2c_dev,
+>> +						   I2C_INT_RX_FIFO_DATA_REQ);
+>=20
+> Then here:
+>=20
+> 	if (WARN_ON_ONCE(!i2c_dev->msg_buf_remaining) ||
+> 	    tegra_i2c_empty_rx_fifo(i2c_dev)) {
+> 		i2c_dev->msg_err |=3D I2C_ERR_UNKNOWN_INTERRUPT;
+> 		goto err;
+> 	}
+>=20
+Can you please elaborate why the condition needs to be as follows=20
+instead of " if (WARN_ON_ONCE(i2c_dev->msg_buf_remaining)) " ?
+
+ > 	if (WARN_ON_ONCE(!i2c_dev->msg_buf_remaining) ||
+ > 	    tegra_i2c_empty_rx_fifo(i2c_dev)) {
+
+
+-regards,
+  Bitan
 
