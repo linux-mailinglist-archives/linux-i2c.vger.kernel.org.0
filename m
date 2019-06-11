@@ -2,108 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0F43D08F
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2019 17:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338FD3D0C6
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2019 17:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbfFKPRL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Jun 2019 11:17:11 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:47063 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727748AbfFKPRL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jun 2019 11:17:11 -0400
-Received: by mail-qt1-f195.google.com with SMTP id h21so14934103qtn.13
-        for <linux-i2c@vger.kernel.org>; Tue, 11 Jun 2019 08:17:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P8EQNdlfEKMSd2en3pkgledmujjaJiojIo3h1kmvnOQ=;
-        b=f9/1EaKVoy3hOiqinWESsBpB40GD7+aj8CSCy70NeXATwnkYSYp3v1SitYHzcQFOCN
-         XHizrzXE6y0iZvFxqr+190Oo6Oh5gq+yNpjZeewsUbpwH5OIDScV5UoVAXkgf8lMtLNT
-         684sNruyqlziUd8dGtyhc5yM1DaVnRQ8gDqiipXccD4pxxNS4LY00TQWK8SHvdeSostP
-         +Q2I1Qysj/U6EiDPr1gWoNdkjTvK8Po4Gx5lAnrWOJ/4zE9aCylD5fQsiUwPP3tyYAsr
-         M+itsIhIA7kCkodzvx84U7kQ68RVhUBzXpyZC91a/b9qNfK/nlSIxu1I6jvOFI7GfZR4
-         aEwA==
-X-Gm-Message-State: APjAAAXyrvW3X+qxpzg04yPJg7VBhhHR1tzX66cHyAkbyw2kf/r4QhXG
-        Tlw74CtevfkvwVbv2blVwYAkAeYe1KPwMnv2QPxnCkGNJcIvNQ==
-X-Google-Smtp-Source: APXvYqxTwhCXjUiYOLjzsXDsnhv8C1o60LWTFhRLJ28dtwbw6MnKs2gpVUwymuiiAZ8b1O+X+RMvu9It7qiwHlxTQk8=
-X-Received: by 2002:ac8:2998:: with SMTP id 24mr62676416qts.31.1560266230100;
- Tue, 11 Jun 2019 08:17:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190611123101.25264-1-ckeepax@opensource.cirrus.com>
-In-Reply-To: <20190611123101.25264-1-ckeepax@opensource.cirrus.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 11 Jun 2019 17:16:58 +0200
-Message-ID: <CAO-hwJ+qSXwZ-5sAiZ55-r_PXp9pvnE1XEaE_v3SBnxzQQNH4g@mail.gmail.com>
-Subject: Re: [PATCH v4 0/7] I2C IRQ Probe Improvements
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, mika.westerberg@linux.intel.com,
+        id S2404414AbfFKP3E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Jun 2019 11:29:04 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:36414 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2387864AbfFKP3E (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jun 2019 11:29:04 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5BFNeLu029871;
+        Tue, 11 Jun 2019 10:28:34 -0500
+Authentication-Results: ppops.net;
+        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from mail4.cirrus.com ([87.246.98.35])
+        by mx0a-001ae601.pphosted.com with ESMTP id 2t0ae2vet2-1;
+        Tue, 11 Jun 2019 10:28:34 -0500
+Received: from EDIEX02.ad.cirrus.com (ediex02.ad.cirrus.com [198.61.84.81])
+        by mail4.cirrus.com (Postfix) with ESMTP id 2AABD611C8A7;
+        Tue, 11 Jun 2019 10:28:51 -0500 (CDT)
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Tue, 11 Jun
+ 2019 16:28:33 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Tue, 11 Jun 2019 16:28:33 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2704B44;
+        Tue, 11 Jun 2019 16:28:33 +0100 (BST)
+Date:   Tue, 11 Jun 2019 16:28:33 +0100
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+CC:     Wolfram Sang <wsa@the-dreams.de>,
+        <mika.westerberg@linux.intel.com>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-acpi@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Jim Broadus <jbroadus@gmail.com>, patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
+        <linux-acpi@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Jim Broadus <jbroadus@gmail.com>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH v4 0/7] I2C IRQ Probe Improvements
+Message-ID: <20190611152833.GR28362@ediswmail.ad.cirrus.com>
+References: <20190611123101.25264-1-ckeepax@opensource.cirrus.com>
+ <CAO-hwJ+qSXwZ-5sAiZ55-r_PXp9pvnE1XEaE_v3SBnxzQQNH4g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAO-hwJ+qSXwZ-5sAiZ55-r_PXp9pvnE1XEaE_v3SBnxzQQNH4g@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906110101
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 2:31 PM Charles Keepax
-<ckeepax@opensource.cirrus.com> wrote:
->
-> This series attempts to align as much IRQ handling into the
-> probe path as possible. Note that I don't have a great setup
-> for testing these patches so they are mostly just build tested
-> and need careful review and testing before any of them are
-> merged.
->
-> The series brings the ACPI path inline with the way the device
-> tree path handles the IRQ entirely at probe time. However,
-> it still leaves any IRQ specified through the board_info as
-> being handled at device time. In that case we need to cache
-> something from the board_info until probe time, which leaves
-> any alternative solution with something basically the same as
-> the current handling although perhaps caching more stuff.
+On Tue, Jun 11, 2019 at 05:16:58PM +0200, Benjamin Tissoires wrote:
+> On Tue, Jun 11, 2019 at 2:31 PM Charles Keepax
+> <ckeepax@opensource.cirrus.com> wrote:
+> >
+> > This series attempts to align as much IRQ handling into the
+> > probe path as possible. Note that I don't have a great setup
+> > for testing these patches so they are mostly just build tested
+> > and need careful review and testing before any of them are
+> > merged.
+> >
+> > The series brings the ACPI path inline with the way the device
+> > tree path handles the IRQ entirely at probe time. However,
+> > it still leaves any IRQ specified through the board_info as
+> > being handled at device time. In that case we need to cache
+> > something from the board_info until probe time, which leaves
+> > any alternative solution with something basically the same as
+> > the current handling although perhaps caching more stuff.
+> 
+> Hmm, I still haven't pinpointed the issue, but I wanted to give a test
+> of the series and I have:
+> [    5.511806] i2c_hid i2c-DLL075B:01: HID over i2c has not been
+> provided an Int IRQ
+> [    5.511825] i2c_hid: probe of i2c-DLL075B:01 failed with error -22
+> 
+> So it seems that there is something wrong happening when fetching the
+> IRQ and providing it to i2c-hid.
+> 
+> That was on a Dell XPS 9360.
+> 
+> Bisecting is starting.
+> 
 
-Hmm, I still haven't pinpointed the issue, but I wanted to give a test
-of the series and I have:
-[    5.511806] i2c_hid i2c-DLL075B:01: HID over i2c has not been
-provided an Int IRQ
-[    5.511825] i2c_hid: probe of i2c-DLL075B:01 failed with error -22
+I have a sneaking suspision, does this diff fix it:
 
-So it seems that there is something wrong happening when fetching the
-IRQ and providing it to i2c-hid.
+diff --git a/drivers/i2c/i2c-core-acpi.c
+b/drivers/i2c/i2c-core-acpi.c
+index 57be6342ba508..a90b05a269c36 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -169,7 +169,7 @@ int i2c_acpi_get_irq(struct i2c_client *client)
+        acpi_dev_free_resource_list(&resource_list);
 
-That was on a Dell XPS 9360.
+        if (irq == -ENOENT)
+-           irq = acpi_dev_gpio_irq_get(adev, 0);
++         irq = acpi_dev_gpio_irq_get(ACPI_COMPANION(&client->dev), 0);
 
-Bisecting is starting.
+        return irq;
+ }
 
-Cheers,
-Benjamin
+There was some earlier discussion about which device was suitable
+for this call.
 
->
-> Thanks,
-> Charles
->
-> See previous discussions:
->  - https://lkml.org/lkml/2019/2/15/989
->  - https://www.spinics.net/lists/linux-i2c/msg39541.html
->
-> Charles Keepax (7):
->   i2c: core: Allow whole core to use i2c_dev_irq_from_resources
->   i2c: acpi: Use available IRQ helper functions
->   i2c: acpi: Factor out getting the IRQ from ACPI
->   i2c: core: Make i2c_acpi_get_irq available to the rest of the I2C core
->   i2c: core: Move ACPI IRQ handling to probe time
->   i2c: core: Move ACPI gpio IRQ handling into i2c_acpi_get_irq
->   i2c: core: Tidy up handling of init_irq
->
->  drivers/i2c/i2c-core-acpi.c | 58 ++++++++++++++++++++++++++++++++-------------
->  drivers/i2c/i2c-core-base.c | 11 +++++----
->  drivers/i2c/i2c-core.h      |  9 +++++++
->  3 files changed, 56 insertions(+), 22 deletions(-)
->
-> --
-> 2.11.0
->
+Thanks,
+Charles
