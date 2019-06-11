@@ -2,136 +2,239 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E213D3A1
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2019 19:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9011A3D567
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2019 20:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405455AbfFKRKf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Jun 2019 13:10:35 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44591 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389356AbfFKRKe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jun 2019 13:10:34 -0400
-Received: by mail-pf1-f193.google.com with SMTP id t16so7808092pfe.11;
-        Tue, 11 Jun 2019 10:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=QfcRtoONgWVTwtnQoP4rlwBElT3so0FbJIuhPmULhig=;
-        b=m6uDPrf0xbKxHOBxlYlJgBJluDseTqpUrZe+FhasYzB64ReBzKMIdV5XGEhIGV9N+T
-         GciSYgvch7xUNYa81gxMPnMByXHKgU/Oyv2MWE9wocowq9z8bHYJcScjGr0PcGcTVy4I
-         lGX1/Dn9Pq/uG79uFh2Z+2aImHK6qBLTTR6lwi3S0LODaisIL34fRlEQ9XyAQWRucmCq
-         gxSvkYh0kzEMswZuMDBdN9iubeyxHBLfT0gAiB/xF3+YWiYhw8eQQakd8aQ1mSs0vc7O
-         SCjhUKvcmVw0/pQC222MOMCTzDBLJNwhJoJ9HST5soGEe0+2ih1NjRliyjzmVz3qsaNq
-         dc2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=QfcRtoONgWVTwtnQoP4rlwBElT3so0FbJIuhPmULhig=;
-        b=oFvjPrHxfAuJsU6BvBEklWdbMtcEUe+Zv+JGE4+CO5RhAqBAA6npe3KRMwBv+q+Naa
-         Aq24fmJHpcfw0+nxE3VOPdTv/JFvkL/QQiUwmEPI/224lsVercjHWrIhnOZS71KGTl9y
-         m3sUWujZn3c01XPr/1B6pgLf/1s85DG3poEYdhgHdNLm/Q/bJEn7DGNG7eCqT9/4yqLj
-         ZguVZBl68BXFvHtERW3F+XS0OBFEtY6G6/CnTOmC2tPNptBowpZ0ltOHLsbbAP+FJuPq
-         wUdHb1E74Vz0RNRsCfkO6pJUQc9dh5D7rxUIdYvnHQHgNxXwTtzIMZdcXd7eMpNgXxY5
-         eTSw==
-X-Gm-Message-State: APjAAAXojb2UGebfQEybAbsrgmnACc5UQWOIF6KdjMhto9mmM9lP3U+s
-        f0cGRF2lzoNyf4noVY3CCh0=
-X-Google-Smtp-Source: APXvYqwMksWM0B/q19Q0jWzNmvs/opGNhXpundemVkKe3ekBw/AhIEcAanhmfVC6alp8iLNfynW0+g==
-X-Received: by 2002:a63:eb0a:: with SMTP id t10mr19060142pgh.99.1560273033558;
-        Tue, 11 Jun 2019 10:10:33 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id p15sm16391934pgj.61.2019.06.11.10.10.31
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 11 Jun 2019 10:10:32 -0700 (PDT)
-Date:   Tue, 11 Jun 2019 10:10:30 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>, kernel@collabora.com,
-        dtor@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        alsa-devel@alsa-project.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-iio@vger.kernel.org,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        linux-input@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        linux-pm@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Evan Green <evgreen@chromium.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Cheng-Yi Chiang <cychiang@chromium.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jiri Kosina <jikos@kernel.org>
-Subject: Re: [PATCH 06/10] mfd / platform: cros_ec: Reorganize platform and
- mfd includes
-Message-ID: <20190611171030.GC143729@dtor-ws>
-References: <20190604152019.16100-1-enric.balletbo@collabora.com>
- <20190604152019.16100-7-enric.balletbo@collabora.com>
+        id S2406747AbfFKSW6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Jun 2019 14:22:58 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:10936 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405802AbfFKSW6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jun 2019 14:22:58 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cfff1800000>; Tue, 11 Jun 2019 11:22:56 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Tue, 11 Jun 2019 11:22:55 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Tue, 11 Jun 2019 11:22:55 -0700
+Received: from [10.19.65.14] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 11 Jun
+ 2019 18:22:52 +0000
+Subject: Re: [PATCH V4 6/6] i2c: tegra: remove BUG, BUG_ON
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
+        Wolfram Sang <wsa@the-dreams.de>
+CC:     Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1560186515-30797-1-git-send-email-bbiswas@nvidia.com>
+ <1560186515-30797-6-git-send-email-bbiswas@nvidia.com>
+ <06ab30b6-bf79-c628-0a04-d0307511a06f@gmail.com>
+ <851d7837-5b98-228e-d8c9-3c41be1fb2e0@nvidia.com>
+ <e733bcb0-ea8c-61d1-e6b5-cee8b7696c70@gmail.com>
+ <fe0a0cb2-73e3-8f5c-8115-f99c150bd5df@nvidia.com>
+ <d29804b9-d3be-9eb2-ba06-f4de2aad3764@gmail.com>
+From:   Bitan Biswas <bbiswas@nvidia.com>
+Message-ID: <acb7970e-b1b2-ce14-d822-fc74ca7751fb@nvidia.com>
+Date:   Tue, 11 Jun 2019 11:22:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190604152019.16100-7-enric.balletbo@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <d29804b9-d3be-9eb2-ba06-f4de2aad3764@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1560277377; bh=Siey2IXCghQc1b+HjTOt8qDeeFID6nmkd3olmUxb5OY=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=CFAPmI/LgnAHMDhGQvW+GWcfzeKIqHr0L1N4KWE3LW3eDvTvuPSsYe/P3n6Ab6Bi6
+         HP7+K+pq7ve+uhbweTMadJIobofaeVy7C0qhihGdqfNWF5Uo+9vn/hCMKyf7UibQHp
+         ryJo7D8GqWOUuYKoJGYyeQfGGErtWgtIiY41Q6/jEp9bjCWR0wvU47BHkxpVIZIU3n
+         FN5e/xEeBY7sFM9JQPXABUbCv46fcHbPb+LokUQ1SAau0yMyhJMkCgypkg3ykHpN+7
+         CTfBK3A6DucXwvU8N2ByYGBfW1N+TI3jhFg48fn+gRZi9FBA81U8ZyaFAP/LbgcEMh
+         DDRbDHtVpyraA==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 04, 2019 at 05:20:15PM +0200, Enric Balletbo i Serra wrote:
-> There is a bit of mess between cros-ec mfd includes and platform
-> includes. For example, we have a linux/mfd/cros_ec.h include that
-> exports the interface implemented in platform/chrome/cros_ec_proto.c. Or
-> we have a linux/mfd/cros_ec_commands.h file that is non related to the
-> multifunction device (in the sense that is not exporting any function of
-> the mfd device). This causes crossed includes between mfd and
-> platform/chrome subsystems and makes the code difficult to read, apart
-> from creating 'curious' situations where a platform/chrome driver includes
-> a linux/mfd/cros_ec.h file just to get the exported functions that are
-> implemented in another platform/chrome driver.
-> 
-> In order to have a better separation on what the cros-ec multifunction
-> driver does and what the cros-ec core provides move and rework the
-> affected includes doing:
-> 
->  - Move cros_ec_commands.h to include/linux/platform_data/cros_ec_commands.h
->  - Get rid of the parts that are implemented in the platform/chrome/cros_ec_proto.c
->    driver from include/linux/mfd/cros_ec.h to a new file
->    include/linux/platform_data/cros_ec_proto.h
->  - Update all the drivers with the new includes, so
->    - Drivers that only need to know about the protocol include
->      - linux/platform_data/cros_ec_proto.h
->      - linux/platform_data/cros_ec_commands.h
->    - Drivers that need to know about the cros-ec mfd device also include
->      - linux/mfd/cros_ec.h
-> 
-> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> # for input
 
-Thanks.
+On 6/11/19 4:34 AM, Dmitry Osipenko wrote:
+> 11.06.2019 10:38, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>
+>>
+>> On 6/10/19 2:00 PM, Dmitry Osipenko wrote:
+>>> 10.06.2019 22:41, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>>>
+>>>>
+>>>> On 6/10/19 11:12 AM, Dmitry Osipenko wrote:
+>>>>> 10.06.2019 20:08, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>>>>> Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
+>>>>>> as needed. Remove BUG() and make Rx and Tx case handling
+>>>>>> similar.
+>>>>>>
+>>>>>> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+>>>>>> ---
+>>>>>>  =C2=A0=C2=A0 drivers/i2c/busses/i2c-tegra.c | 11 ++++++-----
+>>>>>>  =C2=A0=C2=A0 1 file changed, 6 insertions(+), 5 deletions(-)
+>>>>>
+>>>>> Looks that this is still not correct. What if it transfer-complete fl=
+ag
+>>>>> is set and buffer is full on RX? In this case the transfer will succe=
+ed
+>>>>> while it was a failure.
+>>>>>
+>>>>>> diff --git a/drivers/i2c/busses/i2c-tegra.c
+>>>>>> b/drivers/i2c/busses/i2c-tegra.c
+>>>>>> index 4dfb4c1..30619d6 100644
+>>>>>> --- a/drivers/i2c/busses/i2c-tegra.c
+>>>>>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>>>>>> @@ -515,7 +515,6 @@ static int tegra_i2c_empty_rx_fifo(struct
+>>>>>> tegra_i2c_dev *i2c_dev)
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * prevent overwriting pa=
+st the end of buf
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (rx_fifo_avail > 0 && buf_r=
+emaining > 0) {
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BUG_ON(buf_remaining > 3=
+);
+>>>>>
+>>>>> Actually error should be returned here since out-of-bounds memory
+>>>>> accesses must be avoided, hence:
+>>>>>
+>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (WARN_ON_ONCE(buf_remaining > 3))
+>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
+>>>> buf_remaining will be less than equal to 3 because of the expression
+>>>> earlier
+>>>> https://elixir.bootlin.com/linux/v5.2-rc4/source/drivers/i2c/busses/i2=
+c-tegra.c#L520
+>>>>
+>>>>
+>>>
+>>> Ah yes, indeed!
+>>>
+>> I see that I am wrong and buf_remaining > 3 needs to be prevented at
+>>
+>> https://elixir.bootlin.com/linux/v5.2-rc4/source/drivers/i2c/busses/i2c-=
+tegra.c#L528
+>>
+>>
+>> because of word_to_transfer is limited to rx_fifo_avail:
+>>
+>> https://elixir.bootlin.com/linux/v5.2-rc4/source/drivers/i2c/busses/i2c-=
+tegra.c#L515
+>>
+>>
+>> I shall add the check for less than 3 in both RX and TX cases in a
+>> separate patch in this series.
+>=20
+> When word_to_transfer is more than rx_fifo_avail, then the rx_fifo_avail
+> becomes zero and hence the nibbles won't be copied. Please take a closer
+> look, the current code is correct, but the buf_remaining > 3 is unneeded
+> because it can't ever happen.
+>=20
+> The code is structured the way that it's difficult to follow, apparently
+> the person who added the BUG_ON check in the first place couldn't follow
+> it either. Maybe it's worth to invest some more effort into refactoring
+> at least that part of the code. At minimum a clarifying comments would
+> be helpful.
+>=20
+I shall try to add some comments near the BUG_ON check.
 
--- 
-Dmitry
+> [snip]
+>=20
+>>>>> Then here:
+>>>>>
+>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (WARN_ON_ONCE(!i2c_dev->msg_buf_rem=
+aining) ||
+>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tegra_i2c_empty_rx_=
+fifo(i2c_dev)) {
+>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 i2c_dev->msg_err |=
+=3D I2C_ERR_UNKNOWN_INTERRUPT;
+>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto err;
+>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+>>>>>
+>>>> Can you please elaborate why the condition needs to be as follows
+>>>> instead of " if (WARN_ON_ONCE(i2c_dev->msg_buf_remaining)) " ?
+>>>>
+>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (WARN_ON_ONCE(!i2c_dev->msg_buf_re=
+maining) ||
+>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tegra_i2c_emp=
+ty_rx_fifo(i2c_dev)) {
+>>>
+>>> Because this is a "receive" transfer and hence it is a error condition
+>>> if the data-message was already fully received and then there is anothe=
+r
+>>> request from hardware to receive more data. So
+>>> "!i2c_dev->msg_buf_remaining" is the error condition here because there
+>>> is no more space in the buffer.
+>>>
+>>> Looking at this again, seems checking for "if
+>>> (WARN_ON_ONCE(rx_fifo_avail))" in the above hunk [1] will be already
+>>> enough since a not fully drained RX FIFO means that there is no enough
+>>> space in the buffer. Then it could be:
+>>>
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (tegra_i2c_empty_r=
+x_fifo(i2c_dev)) {
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 i2c_dev->msg_err |=3D I2C_ERR_UNKNOWN_INTERRUPT=
+;
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto err;
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0}
+>>>
+>> In the case "if (status & I2C_INT_PACKET_XFER_COMPLETE) {" , we do not
+>> have any tegra_i2c_empty_rx_fifo call today. In this current driver I do
+>> not see any code that checks for the buffer space and prevents RX FIFO
+>> from being drained. The transfer complete when seen must have already
+>> consumed all bytes of msg_buf_remaining in the call at the line
+>>
+>> https://elixir.bootlin.com/linux/v5.2-rc4/source/drivers/i2c/busses/i2c-=
+tegra.c#L860
+>>
+>>
+>> So we can put the "WARN_ON_ONCE(i2c_dev->msg_buf_remaining) with msg_err
+>> assignment and goto err" to confirm if some corner case is not handled.
+>>
+>> Planning to share updated patch.
+>=20
+> There are two possible error conditions:
+>=20
+> 1) Underflow: the XFER_COMPLETE happens before message is fully sent.
+>=20
+> 2) Overflow: message is fully sent, but there is no XFER_COMPLETE and
+> then hardware asks to transfer more.
+>=20
+> We are addressing the second case here, while you seems are confusing it
+> with the first case.
+>=20
+Is the Overflow case pointed above corresponding to when=20
+msg_buf_remaining is zero? If no, what indicates that message is fully=20
+sent? I see that if msg_buf_remaining is already zero, the call=20
+tegra_i2c_empty_rx_fifo will not do any copy of the bytes from FIFO to buf.
+
+One more point that is not clear to me is are the above suggestions you=20
+made is corresponding to replacing below line in linux-next ?
+
+https://elixir.bootlin.com/linux/v5.2-rc4/source/drivers/i2c/busses/i2c-teg=
+ra.c#L888
+
+Can you please also review the newly added patch "V5 6/7 "that was newly=20
+posted? I think it is needed.
+
+
+-regards,
+  Bitan
+
