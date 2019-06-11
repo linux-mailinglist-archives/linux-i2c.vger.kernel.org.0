@@ -2,101 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C871E3CF67
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2019 16:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0F43D08F
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2019 17:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389733AbfFKOuu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Jun 2019 10:50:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47350 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388362AbfFKOuu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 11 Jun 2019 10:50:50 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BA6BD2089E;
-        Tue, 11 Jun 2019 14:50:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560264649;
-        bh=MpYPAaIV13S2Yylnp2EyZ431PTaW/WjP6IAwHXeD6IY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ReLwKN5pZRc7uGT6tVskU8kc0sdNJCY1Vees7AqtPNFwL1R7wczuGjJknKJazUkuf
-         Q+ovaZh+VQPHMBeChWR8c2NtMA4B3UKDWZh7FptmE3s7uAtmdq5INuouQ8bIoKctoc
-         pzqV5z9FKyvOPMVFc9Kam+7v1hTM3NHsgDELh6aQ=
-Received: by mail-qt1-f172.google.com with SMTP id h21so14812926qtn.13;
-        Tue, 11 Jun 2019 07:50:49 -0700 (PDT)
-X-Gm-Message-State: APjAAAVNFlviLNzyv6R71A+wGff0vTa3ImlHHLDdQ2H/8evP/jKkwH4Q
-        T21/JX3Yo/Sw4yWXYAs12bRhAL83bD8ceFG4aw==
-X-Google-Smtp-Source: APXvYqyJUBDtqhRg65MZJLGpagrESYWGxQEF/Opjh/WxDQ0lr19H2G/og3yzhLmg7b7P0Cv1k8sNGFJrHhVtjcNM90U=
-X-Received: by 2002:ac8:2ec3:: with SMTP id i3mr19914156qta.110.1560264648991;
- Tue, 11 Jun 2019 07:50:48 -0700 (PDT)
+        id S1727867AbfFKPRL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Jun 2019 11:17:11 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:47063 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727748AbfFKPRL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jun 2019 11:17:11 -0400
+Received: by mail-qt1-f195.google.com with SMTP id h21so14934103qtn.13
+        for <linux-i2c@vger.kernel.org>; Tue, 11 Jun 2019 08:17:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P8EQNdlfEKMSd2en3pkgledmujjaJiojIo3h1kmvnOQ=;
+        b=f9/1EaKVoy3hOiqinWESsBpB40GD7+aj8CSCy70NeXATwnkYSYp3v1SitYHzcQFOCN
+         XHizrzXE6y0iZvFxqr+190Oo6Oh5gq+yNpjZeewsUbpwH5OIDScV5UoVAXkgf8lMtLNT
+         684sNruyqlziUd8dGtyhc5yM1DaVnRQ8gDqiipXccD4pxxNS4LY00TQWK8SHvdeSostP
+         +Q2I1Qysj/U6EiDPr1gWoNdkjTvK8Po4Gx5lAnrWOJ/4zE9aCylD5fQsiUwPP3tyYAsr
+         M+itsIhIA7kCkodzvx84U7kQ68RVhUBzXpyZC91a/b9qNfK/nlSIxu1I6jvOFI7GfZR4
+         aEwA==
+X-Gm-Message-State: APjAAAXyrvW3X+qxpzg04yPJg7VBhhHR1tzX66cHyAkbyw2kf/r4QhXG
+        Tlw74CtevfkvwVbv2blVwYAkAeYe1KPwMnv2QPxnCkGNJcIvNQ==
+X-Google-Smtp-Source: APXvYqxTwhCXjUiYOLjzsXDsnhv8C1o60LWTFhRLJ28dtwbw6MnKs2gpVUwymuiiAZ8b1O+X+RMvu9It7qiwHlxTQk8=
+X-Received: by 2002:ac8:2998:: with SMTP id 24mr62676416qts.31.1560266230100;
+ Tue, 11 Jun 2019 08:17:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190605122936.11972-1-maxime.ripard@bootlin.com>
- <CAL_JsqKC7uP0J14A8_CvPhbZkoSRNWSpS1ee+Q4sG013jY=JeQ@mail.gmail.com> <20190611090641.byr6mpywkfmbhrbk@flea>
-In-Reply-To: <20190611090641.byr6mpywkfmbhrbk@flea>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 11 Jun 2019 08:50:37 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL3cua3u2gNTzHEdgFU0On5J9ziPZeFNiTpu5HS=SJoDA@mail.gmail.com>
-Message-ID: <CAL_JsqL3cua3u2gNTzHEdgFU0On5J9ziPZeFNiTpu5HS=SJoDA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: sun6i-p2wi: Add YAML schemas
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
+References: <20190611123101.25264-1-ckeepax@opensource.cirrus.com>
+In-Reply-To: <20190611123101.25264-1-ckeepax@opensource.cirrus.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 11 Jun 2019 17:16:58 +0200
+Message-ID: <CAO-hwJ+qSXwZ-5sAiZ55-r_PXp9pvnE1XEaE_v3SBnxzQQNH4g@mail.gmail.com>
+Subject: Re: [PATCH v4 0/7] I2C IRQ Probe Improvements
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, mika.westerberg@linux.intel.com,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linux I2C <linux-i2c@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>, devicetree@vger.kernel.org
+        linux-acpi@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Jim Broadus <jbroadus@gmail.com>, patches@opensource.cirrus.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 3:06 AM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
+On Tue, Jun 11, 2019 at 2:31 PM Charles Keepax
+<ckeepax@opensource.cirrus.com> wrote:
 >
-> Hi Rob,
+> This series attempts to align as much IRQ handling into the
+> probe path as possible. Note that I don't have a great setup
+> for testing these patches so they are mostly just build tested
+> and need careful review and testing before any of them are
+> merged.
 >
-> On Mon, Jun 10, 2019 at 03:34:18PM -0600, Rob Herring wrote:
-> > On Wed, Jun 5, 2019 at 6:29 AM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
-> > > +properties:
-> > > +  "#address-cells":
-> > > +    const: 1
-> > > +
-> > > +  "#size-cells":
-> > > +    const: 0
-> >
-> > These 2 are covered by i2c-controller.yaml, right?
+> The series brings the ACPI path inline with the way the device
+> tree path handles the IRQ entirely at probe time. However,
+> it still leaves any IRQ specified through the board_info as
+> being handled at device time. In that case we need to cache
+> something from the board_info until probe time, which leaves
+> any alternative solution with something basically the same as
+> the current handling although perhaps caching more stuff.
+
+Hmm, I still haven't pinpointed the issue, but I wanted to give a test
+of the series and I have:
+[    5.511806] i2c_hid i2c-DLL075B:01: HID over i2c has not been
+provided an Int IRQ
+[    5.511825] i2c_hid: probe of i2c-DLL075B:01 failed with error -22
+
+So it seems that there is something wrong happening when fetching the
+IRQ and providing it to i2c-hid.
+
+That was on a Dell XPS 9360.
+
+Bisecting is starting.
+
+Cheers,
+Benjamin
+
 >
-> Indeed, I've removed them.
+> Thanks,
+> Charles
 >
-> > > +examples:
-> > > +  - |
-> > > +    p2wi@1f03400 {
-> >
-> > i2c@...
-> >
-> > That should fail on the schema (I need to get the schema checking of
-> > examples finished.)
+> See previous discussions:
+>  - https://lkml.org/lkml/2019/2/15/989
+>  - https://www.spinics.net/lists/linux-i2c/msg39541.html
 >
-> That would be great :) The compilation of the examples alone already
-> caught a good number of examples that weren't even compiling.
-
-I'm primarily waiting on a dtc change to be accepted[1]. Feel free to
-review/ack.
-
-> Speaking of examples, one thing that would be great too would be to
-> allow the usage of our C headers. It's not supported at the moment,
-> and this often ends up with an example that is less readable than the
-> actual DT.
-
-It should be. You just have to add them. See
-Documentation/devicetree/bindings/timer/intel,ixp4xx-timer.yaml for
-example.
-
-Maybe the common interrupt and gpio ones should be added by default.
-
-Rob
-
-[1] https://www.spinics.net/lists/devicetree-compiler/msg02709.html
+> Charles Keepax (7):
+>   i2c: core: Allow whole core to use i2c_dev_irq_from_resources
+>   i2c: acpi: Use available IRQ helper functions
+>   i2c: acpi: Factor out getting the IRQ from ACPI
+>   i2c: core: Make i2c_acpi_get_irq available to the rest of the I2C core
+>   i2c: core: Move ACPI IRQ handling to probe time
+>   i2c: core: Move ACPI gpio IRQ handling into i2c_acpi_get_irq
+>   i2c: core: Tidy up handling of init_irq
+>
+>  drivers/i2c/i2c-core-acpi.c | 58 ++++++++++++++++++++++++++++++++-------------
+>  drivers/i2c/i2c-core-base.c | 11 +++++----
+>  drivers/i2c/i2c-core.h      |  9 +++++++
+>  3 files changed, 56 insertions(+), 22 deletions(-)
+>
+> --
+> 2.11.0
+>
