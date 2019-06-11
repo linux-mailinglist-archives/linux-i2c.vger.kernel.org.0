@@ -2,86 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4150F3CA25
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2019 13:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AFC3CB91
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2019 14:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389710AbfFKLia (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Jun 2019 07:38:30 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55262 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389649AbfFKLia (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jun 2019 07:38:30 -0400
-Received: by mail-wm1-f65.google.com with SMTP id g135so2565690wme.4;
-        Tue, 11 Jun 2019 04:38:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dFhw9Yzk7crkLa1zIM8G/hSEMNLmlVpm6QeraFAZi18=;
-        b=ThV4dkzZewzQjl2cU8wXTNnMo3cTTjOTeI94/XWcPyOWOSesuRadJpZbgCWNl6T25e
-         Oaiog6lCtikg6EoxZAYRCl1lhUrTj8Jsn3onA5NnWHmL2n22z5VPi+jk8KxmubukTc/F
-         5cnGa1TLdy4HkJ0cl2ch4YhC3KnwpEE/sWPw/Ee97YRp3Y74sPcgJBPPbR4cme34Pf1n
-         XVGz8sYh/s5jEBee/6njtaGY93bYcZcp5tdXaLTN+jJ/1+hqcjrRvSOiB7F2upt6yWMA
-         Vv8h8ejNzj3dlFbDaCwyHB98upmLkAYUDpcSfS9IdLExeuAHGhbMqJxUZjJmMpHLZ2UG
-         CCgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dFhw9Yzk7crkLa1zIM8G/hSEMNLmlVpm6QeraFAZi18=;
-        b=k8NiYVsDQDSryPtMLow9K6RQKjOtV4rZGr6cCOLReq/RTw/1fMyUTPKEDe1ZJVZlqz
-         GXsSHc8Cki8xRpGcU39LyGJCneEr/3dVHBVuUf44rtec89fPpKJh5XEyxu/PtcvoPOU9
-         55CpV44m6QdIsOn1JRfItiwYYN5Q8eQnLcwk0ofOkkiNREiLc2M11J+x9hG6+o36g+Mx
-         WT8MnLWSwWwKaUBvpgwFxZzciZTm37JOGfNQGjLw9EvYUl5DtoL1l9Dzw8UAx1lAI3J8
-         nESUT8MHKBQ7p8qfCGDPcQ8xCz2/yTNPUSnl3kAWv1ZSTIlfEnUkciRBLUGRmYoVf2DT
-         nvhA==
-X-Gm-Message-State: APjAAAXBSP5+0ekQWXUj4bZO4Upwa9yc8vkKRac4bXb/DOt28GU1mSq6
-        TFHd2+AcjF4z0vbRTA9yrhQXuOs+
-X-Google-Smtp-Source: APXvYqxrkozBv92s4+oeR1xFC9mhkvcY3me5bcK1gJVfy3VuWjnE+NcpPCCdXB/ihNBs0jPynsr+iA==
-X-Received: by 2002:a1c:7e08:: with SMTP id z8mr16475328wmc.36.1560253108218;
-        Tue, 11 Jun 2019 04:38:28 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.googlemail.com with ESMTPSA id z14sm23916198wre.96.2019.06.11.04.38.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Jun 2019 04:38:27 -0700 (PDT)
-Subject: Re: [PATCH V5 7/7] i2c: tegra: remove BUG, BUG_ON
-To:     Bitan Biswas <bbiswas@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     Shardar Mohammed <smohammed@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>
-References: <1560250274-18499-1-git-send-email-bbiswas@nvidia.com>
- <1560250274-18499-7-git-send-email-bbiswas@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <745086cc-9470-a1af-7339-fbca35525479@gmail.com>
-Date:   Tue, 11 Jun 2019 14:38:25 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S2387444AbfFKMba (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Jun 2019 08:31:30 -0400
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:32826 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729436AbfFKMba (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jun 2019 08:31:30 -0400
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5BCTCDA027111;
+        Tue, 11 Jun 2019 07:31:03 -0500
+Authentication-Results: ppops.net;
+        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from mail3.cirrus.com ([87.246.76.56])
+        by mx0b-001ae601.pphosted.com with ESMTP id 2t09ep3xqf-1;
+        Tue, 11 Jun 2019 07:31:02 -0500
+Received: from EDIEX01.ad.cirrus.com (ediex01.ad.cirrus.com [198.61.84.80])
+        by mail3.cirrus.com (Postfix) with ESMTP id DB74461408FC;
+        Tue, 11 Jun 2019 07:31:46 -0500 (CDT)
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Tue, 11 Jun
+ 2019 13:31:01 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Tue, 11 Jun 2019 13:31:01 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8968A45;
+        Tue, 11 Jun 2019 13:31:01 +0100 (BST)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <wsa@the-dreams.de>, <mika.westerberg@linux.intel.com>
+CC:     <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>, <linux-i2c@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <benjamin.tissoires@redhat.com>, <jbroadus@gmail.com>,
+        <patches@opensource.cirrus.com>
+Subject: [PATCH v4 0/7] I2C IRQ Probe Improvements
+Date:   Tue, 11 Jun 2019 13:30:54 +0100
+Message-ID: <20190611123101.25264-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-In-Reply-To: <1560250274-18499-7-git-send-email-bbiswas@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=927 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906110085
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-11.06.2019 13:51, Bitan Biswas пишет:
-> Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
-> as needed. Remove BUG() and make Rx and Tx case handling
-> similar. Add WARN_ON_ONCE check for non-zero rx_fifo_avail
-> in tegra_i2c_empty_rx_fifo() and return new error
-> I2C_ERR_UNEXPECTED_STATUS.
-> 
-> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
-> ---
+This series attempts to align as much IRQ handling into the
+probe path as possible. Note that I don't have a great setup
+for testing these patches so they are mostly just build tested
+and need careful review and testing before any of them are
+merged.
 
-Please see my answer to v4.
+The series brings the ACPI path inline with the way the device
+tree path handles the IRQ entirely at probe time. However,
+it still leaves any IRQ specified through the board_info as
+being handled at device time. In that case we need to cache
+something from the board_info until probe time, which leaves
+any alternative solution with something basically the same as
+the current handling although perhaps caching more stuff.
+
+Thanks,
+Charles
+
+See previous discussions:
+ - https://lkml.org/lkml/2019/2/15/989
+ - https://www.spinics.net/lists/linux-i2c/msg39541.html
+
+Charles Keepax (7):
+  i2c: core: Allow whole core to use i2c_dev_irq_from_resources
+  i2c: acpi: Use available IRQ helper functions
+  i2c: acpi: Factor out getting the IRQ from ACPI
+  i2c: core: Make i2c_acpi_get_irq available to the rest of the I2C core
+  i2c: core: Move ACPI IRQ handling to probe time
+  i2c: core: Move ACPI gpio IRQ handling into i2c_acpi_get_irq
+  i2c: core: Tidy up handling of init_irq
+
+ drivers/i2c/i2c-core-acpi.c | 58 ++++++++++++++++++++++++++++++++-------------
+ drivers/i2c/i2c-core-base.c | 11 +++++----
+ drivers/i2c/i2c-core.h      |  9 +++++++
+ 3 files changed, 56 insertions(+), 22 deletions(-)
+
+-- 
+2.11.0
 
