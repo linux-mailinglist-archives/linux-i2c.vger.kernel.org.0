@@ -2,71 +2,136 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4373D2F3
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2019 18:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E213D3A1
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2019 19:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390339AbfFKQsW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Jun 2019 12:48:22 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:44422 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387814AbfFKQsW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jun 2019 12:48:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-        Content-Transfer-Encoding:MIME-Version:Subject:To:From:Reply-To:Cc:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=IdZ8MhLjTQ3+GmMDTWNfRq37QvDLfsqCS7lnrzKdDxw=; b=rOHlwKZfvwMPWkj197Y71Ok63g
-        enp+nSpl5Ht+HL5Trdje8qlYfKzR0HOrDg6Q7jBKhPYnmd892qyAX9HovGQiFUqk6Y43mboza36/9
-        mj+cZNruqD/H120hC7J2Fj12iO7KzI1kGzglFfpKZrTYFyY36IzaCbU/ruTlXgcWfgT9+vU6etpTk
-        bfmZgNN6oT/nTZI+RTvGO0ziXeXlAichK0cDhywNj9X3EppzIhSR21G6Y5ocXVf28GCvlQLkgVbXp
-        wT/YbCQ7LMpl6odexl2KnznYavNUcnL8CKWFXBrdbjSxafleJj0Ms/qCESuCwpd+0kHeHjmAYJp7c
-        zEVYtvgg==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:55468 helo=rmk-PC.armlinux.org.uk)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1hajwZ-0006sl-9Q; Tue, 11 Jun 2019 17:48:19 +0100
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.82_1-5b7a7c0-XX)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1hajwY-0003Aj-OD; Tue, 11 Jun 2019 17:48:18 +0100
-From:   Russell King <rmk+kernel@armlinux.org.uk>
-To:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] i2c: acorn: fix i2c warning
+        id S2405455AbfFKRKf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Jun 2019 13:10:35 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:44591 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389356AbfFKRKe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jun 2019 13:10:34 -0400
+Received: by mail-pf1-f193.google.com with SMTP id t16so7808092pfe.11;
+        Tue, 11 Jun 2019 10:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=QfcRtoONgWVTwtnQoP4rlwBElT3so0FbJIuhPmULhig=;
+        b=m6uDPrf0xbKxHOBxlYlJgBJluDseTqpUrZe+FhasYzB64ReBzKMIdV5XGEhIGV9N+T
+         GciSYgvch7xUNYa81gxMPnMByXHKgU/Oyv2MWE9wocowq9z8bHYJcScjGr0PcGcTVy4I
+         lGX1/Dn9Pq/uG79uFh2Z+2aImHK6qBLTTR6lwi3S0LODaisIL34fRlEQ9XyAQWRucmCq
+         gxSvkYh0kzEMswZuMDBdN9iubeyxHBLfT0gAiB/xF3+YWiYhw8eQQakd8aQ1mSs0vc7O
+         SCjhUKvcmVw0/pQC222MOMCTzDBLJNwhJoJ9HST5soGEe0+2ih1NjRliyjzmVz3qsaNq
+         dc2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QfcRtoONgWVTwtnQoP4rlwBElT3so0FbJIuhPmULhig=;
+        b=oFvjPrHxfAuJsU6BvBEklWdbMtcEUe+Zv+JGE4+CO5RhAqBAA6npe3KRMwBv+q+Naa
+         Aq24fmJHpcfw0+nxE3VOPdTv/JFvkL/QQiUwmEPI/224lsVercjHWrIhnOZS71KGTl9y
+         m3sUWujZn3c01XPr/1B6pgLf/1s85DG3poEYdhgHdNLm/Q/bJEn7DGNG7eCqT9/4yqLj
+         ZguVZBl68BXFvHtERW3F+XS0OBFEtY6G6/CnTOmC2tPNptBowpZ0ltOHLsbbAP+FJuPq
+         wUdHb1E74Vz0RNRsCfkO6pJUQc9dh5D7rxUIdYvnHQHgNxXwTtzIMZdcXd7eMpNgXxY5
+         eTSw==
+X-Gm-Message-State: APjAAAXojb2UGebfQEybAbsrgmnACc5UQWOIF6KdjMhto9mmM9lP3U+s
+        f0cGRF2lzoNyf4noVY3CCh0=
+X-Google-Smtp-Source: APXvYqwMksWM0B/q19Q0jWzNmvs/opGNhXpundemVkKe3ekBw/AhIEcAanhmfVC6alp8iLNfynW0+g==
+X-Received: by 2002:a63:eb0a:: with SMTP id t10mr19060142pgh.99.1560273033558;
+        Tue, 11 Jun 2019 10:10:33 -0700 (PDT)
+Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
+        by smtp.gmail.com with ESMTPSA id p15sm16391934pgj.61.2019.06.11.10.10.31
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 11 Jun 2019 10:10:32 -0700 (PDT)
+Date:   Tue, 11 Jun 2019 10:10:30 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>, kernel@collabora.com,
+        dtor@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        alsa-devel@alsa-project.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-iio@vger.kernel.org,
+        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        linux-input@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        linux-pm@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Evan Green <evgreen@chromium.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Mark Brown <broonie@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jiri Kosina <jikos@kernel.org>
+Subject: Re: [PATCH 06/10] mfd / platform: cros_ec: Reorganize platform and
+ mfd includes
+Message-ID: <20190611171030.GC143729@dtor-ws>
+References: <20190604152019.16100-1-enric.balletbo@collabora.com>
+ <20190604152019.16100-7-enric.balletbo@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1hajwY-0003Aj-OD@rmk-PC.armlinux.org.uk>
-Date:   Tue, 11 Jun 2019 17:48:18 +0100
+In-Reply-To: <20190604152019.16100-7-enric.balletbo@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The Acorn i2c driver (for RiscPC) triggers the "i2c adapter has no name"
-warning in the I2C core driver, resulting in the RTC being inaccessible.
-Fix this.
+On Tue, Jun 04, 2019 at 05:20:15PM +0200, Enric Balletbo i Serra wrote:
+> There is a bit of mess between cros-ec mfd includes and platform
+> includes. For example, we have a linux/mfd/cros_ec.h include that
+> exports the interface implemented in platform/chrome/cros_ec_proto.c. Or
+> we have a linux/mfd/cros_ec_commands.h file that is non related to the
+> multifunction device (in the sense that is not exporting any function of
+> the mfd device). This causes crossed includes between mfd and
+> platform/chrome subsystems and makes the code difficult to read, apart
+> from creating 'curious' situations where a platform/chrome driver includes
+> a linux/mfd/cros_ec.h file just to get the exported functions that are
+> implemented in another platform/chrome driver.
+> 
+> In order to have a better separation on what the cros-ec multifunction
+> driver does and what the cros-ec core provides move and rework the
+> affected includes doing:
+> 
+>  - Move cros_ec_commands.h to include/linux/platform_data/cros_ec_commands.h
+>  - Get rid of the parts that are implemented in the platform/chrome/cros_ec_proto.c
+>    driver from include/linux/mfd/cros_ec.h to a new file
+>    include/linux/platform_data/cros_ec_proto.h
+>  - Update all the drivers with the new includes, so
+>    - Drivers that only need to know about the protocol include
+>      - linux/platform_data/cros_ec_proto.h
+>      - linux/platform_data/cros_ec_commands.h
+>    - Drivers that need to know about the cros-ec mfd device also include
+>      - linux/mfd/cros_ec.h
+> 
+> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 
-Fixes: 2236baa75f70 ("i2c: Sanity checks on adapter registration")
-Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
----
- drivers/i2c/busses/i2c-acorn.c | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> # for input
 
-diff --git a/drivers/i2c/busses/i2c-acorn.c b/drivers/i2c/busses/i2c-acorn.c
-index f4a5ae69bf6a..fa3763e4b3ee 100644
---- a/drivers/i2c/busses/i2c-acorn.c
-+++ b/drivers/i2c/busses/i2c-acorn.c
-@@ -81,6 +81,7 @@ static struct i2c_algo_bit_data ioc_data = {
- 
- static struct i2c_adapter ioc_ops = {
- 	.nr			= 0,
-+	.name			= "ioc",
- 	.algo_data		= &ioc_data,
- };
- 
+Thanks.
+
 -- 
-2.7.4
-
+Dmitry
