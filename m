@@ -2,32 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D978B4232D
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2019 13:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8290C42369
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2019 13:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728179AbfFLK7o (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 12 Jun 2019 06:59:44 -0400
-Received: from sauhun.de ([88.99.104.3]:58568 "EHLO pokefinder.org"
+        id S2406048AbfFLLEz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 Jun 2019 07:04:55 -0400
+Received: from sauhun.de ([88.99.104.3]:58624 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727993AbfFLK7o (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 12 Jun 2019 06:59:44 -0400
+        id S2404880AbfFLLEz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 12 Jun 2019 07:04:55 -0400
 Received: from localhost (p5486CACA.dip0.t-ipconnect.de [84.134.202.202])
-        by pokefinder.org (Postfix) with ESMTPSA id 7391D2C54BC;
-        Wed, 12 Jun 2019 12:59:42 +0200 (CEST)
-Date:   Wed, 12 Jun 2019 12:59:42 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id B5E6B2C54BC;
+        Wed, 12 Jun 2019 13:04:53 +0200 (CEST)
+Date:   Wed, 12 Jun 2019 13:04:53 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-i2c@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH] i2c: s3c2410: Convert to use GPIO descriptors
-Message-ID: <20190612105942.umcio34me542zthm@ninjato>
-References: <20190530215013.17806-1-linus.walleij@linaro.org>
+Cc:     linux-i2c@vger.kernel.org, arm@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH] i2c: iop: Use GPIO descriptors
+Message-ID: <20190612110453.hzjgxeuw4amyb52c@ninjato>
+References: <20190531223756.1861-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ulrngfbntawifyiz"
+        protocol="application/pgp-signature"; boundary="kktnzml73vbhwpli"
 Content-Disposition: inline
-In-Reply-To: <20190530215013.17806-1-linus.walleij@linaro.org>
+In-Reply-To: <20190531223756.1861-1-linus.walleij@linaro.org>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -35,49 +34,35 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---ulrngfbntawifyiz
+--kktnzml73vbhwpli
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, May 30, 2019 at 11:50:13PM +0200, Linus Walleij wrote:
-> The S3C2410 does some funny dance around its pins:
-> - First try to call back to the platform to get and control
->   some GPIO pins
-> - If this doesn't work, it tries to get a pin control handle
-> - If this doesn't work, it retrieves two GPIOs from the device
->   tree node and does nothing with them
->=20
-> If we're gonna retrieve two GPIOs and do nothing with them, we
-> might as well do it using the GPIO descriptor API. When we use
-> the resource management API, the code gets smaller.
->=20
-> Cc: Kukjin Kim <kgene@kernel.org>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: linux-samsung-soc@vger.kernel.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-
-Applied to for-next, thanks!
 
 
---ulrngfbntawifyiz
+> ARM SoC mainatiners: looking for a handshake ACK on this
+> so Wolfram can merge it into the I2C subsystem.
+
+Yes, I can pick it up, but an ARM SoC ack would be really good for that.
+
+
+--kktnzml73vbhwpli
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0A2x0ACgkQFA3kzBSg
-KbY1dg/+OxG/iLbfwcBQiE8qa5VqheJYG2OnenUXHpctl08bDL0lCuK5/ihdu3sf
-erdq7Uvn+yU41f+D3wYaXKhbp2v53rOm39CEQeNjmKJ2+zVHUAXgrHRY0onAspnN
-qTZBZnU7Xc+np9Gm2Dt6OzpdlUzh53vrcPMgfZcr/Z36jTxKtYkal1WI4rY+dQxI
-nhmLotE6Myq5yFWdl78uddcGAeFdJqdkzC+d6cSRYYzYzSaSmxt4n4Yn4PAxJzkG
-LKLTiCEkFkz50pv6IB9qYmGdr2NPfRJkVGMaLL7tWZEd8bGk7PeoXBeTPtMKSrYR
-jBt6k6R36gMVhnHwMJqrSnscTpG1bgT1LWqGOmjeC33kxrUab5Jzh+fVt7UtdPCz
-ssEEvS7cZQZKXfNAF/06SAOL/iF8G41IOVSnX83xgGC1qyqSD2KwHqOWXtWLTSIC
-Y7c3yj+XNF61sKzMnwvuoptSHjWpi844Vi52JX/2m+Uk4ReDfQziEVOrVcehYayq
-/soDbeJ5NqzWm6KQv1SV0WNwk2oeCKbj0QL5CITxXWkIAHx7nhaIjogKAroApIA4
-Y3LoRS/g2KdR6aRlXQQazEMoRNSQ4FCUvW9+5HahtLdtvbWcL9AtV+GSZoTXxU3a
-xTd9ilC4JZ2MuRL7G70t6r/gVfaFU+sC45Z8RJdAYssAAqNnTiQ=
-=CxsI
+iQIzBAABCAAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0A3FUACgkQFA3kzBSg
+Kbak4w//R2MY179YNMdcMZMhODkdOXY+jNQzQiRdM9EJcaZOQk6waCZ/F3PvDzXz
+NOxGqFvmIDmEudft/XrBgFW2kO0qtDYVKOJp/nIqYnHxhTT0OIWayRzCJjueHUCB
+5pwDHsabcZVMU7MQnHpk3qXoyttT+660EYxZsaJEhX3P6uZFHWVlhd9+SMBxB2TZ
+jc7B1g9vlgMSJFacU1pDna4burf4nLLx3so0b4wjlVi/j/rlJieF64B8E2VFLIOf
+rUvXpA/FD5cPFdFJCnMNUMq6oFlleqY28Z6Cshn3MCesnYj1dZDZ9jfkxlwD5m+h
+Fwu4jHmU0HRIK6JjlrkZMrJtxljIPOykLuyhvAPEif9HP9xPBZZURzRgY6N/uy/T
+LNNArWKbe0J+NqyvnA6JI1NaqsgUl47KdEhOMBENgQyQu8UB4l06SlnFu29AAnE4
+VlVKwugRLfQYH3gWTwwBiMRlEKIMKxgIJKYafPIirfnNghuvvD2puJ9NmiG/x/pP
+3E75nnWZRo/i3OThyzSw3LfDa6VHCGoR0ynCgrr4Ly3QHmxK93Z4KuYz9ptqT8np
+SCBXrKRnaSy1DsbYDiY3DBPxl/qta65vUAyNuhD/ly09TeWPtPxvkw9bIYrYGgwH
+EXqfQOYEm4OW6vXjAHvvCdyurV8fQRbb3MVCIiwfE4aiJRVtjg8=
+=mGBK
 -----END PGP SIGNATURE-----
 
---ulrngfbntawifyiz--
+--kktnzml73vbhwpli--
