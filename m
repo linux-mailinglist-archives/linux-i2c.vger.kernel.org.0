@@ -2,90 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5542C423E9
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2019 13:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A97AE425CD
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2019 14:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726026AbfFLLWM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 12 Jun 2019 07:22:12 -0400
-Received: from sauhun.de ([88.99.104.3]:58826 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725771AbfFLLWM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 12 Jun 2019 07:22:12 -0400
-Received: from localhost (p5486CACA.dip0.t-ipconnect.de [84.134.202.202])
-        by pokefinder.org (Postfix) with ESMTPSA id A273E2C54BC;
-        Wed, 12 Jun 2019 13:22:10 +0200 (CEST)
-Date:   Wed, 12 Jun 2019 13:22:10 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-i2c@vger.kernel.org, arm@kernel.org,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH] i2c: iop: Use GPIO descriptors
-Message-ID: <20190612112210.7m4ljuehdr5g5bwq@ninjato>
-References: <20190531223756.1861-1-linus.walleij@linaro.org>
+        id S1727823AbfFLMaM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 Jun 2019 08:30:12 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:36281 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2407613AbfFLMaL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Jun 2019 08:30:11 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5CCLeHk031270;
+        Wed, 12 Jun 2019 14:30:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : from : to : cc
+ : references : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=uzCtDAjBrL+1vZ61l6aZvXQ4DLiHhDO5NcE7f5ZHrV4=;
+ b=mjxkucljzxAUHj2FgtiNV1hqjOQZJlu5AT7lQvpD9DL415dfBHy3T26A9vzP7rPEFQwp
+ i85TbeaRuAW4ihjecSNylDmocBdjY5MbLdAX3D0q2roChQg63/iwRIA0i1Q0BQvCsub8
+ j0dlY3HyL9IEmVAA46N8aLAQUFhmNerrtp4ME5wXtBUmsPn1NNUFWX1uEqxhhULJUXp5
+ DJo2ThnnvzFzyPRPTdu0wTLyujCU/juTlitsLqr0fDJP4mNenKVwmnaeI3vzsi06xl2V
+ zjfRDFE4ZckshHoHz0uar2gVlgnVhnihDpEQSBS2bWM79PtchXVjkCcf8HrnKKU1479q rg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2t2k3c41wm-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Wed, 12 Jun 2019 14:30:00 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 67EF538;
+        Wed, 12 Jun 2019 12:29:59 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 494E82963;
+        Wed, 12 Jun 2019 12:29:59 +0000 (GMT)
+Received: from [10.48.0.167] (10.75.127.49) by SFHDAG5NODE3.st.com
+ (10.75.127.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 12 Jun
+ 2019 14:29:58 +0200
+Subject: Re: [PATCH v2] i2c: i2c-stm32f7: fix the get_irq error cases
+From:   Fabrice Gasnier <fabrice.gasnier@st.com>
+To:     <wsa@the-dreams.de>, <pierre-yves.mordret@st.com>
+CC:     <alexandre.torgue@st.com>, <marc.w.gonzalez@free.fr>,
+        <linux-kernel@vger.kernel.org>, <fabien.dessenne@st.com>,
+        <linux-i2c@vger.kernel.org>, <mcoquelin.stm32@gmail.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <1558020594-1498-1-git-send-email-fabrice.gasnier@st.com>
+Message-ID: <6fe9c4cc-d7ed-aad8-b8f8-240a4888aaa8@st.com>
+Date:   Wed, 12 Jun 2019 14:29:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wyx2eqaxasf6eonl"
-Content-Disposition: inline
-In-Reply-To: <20190531223756.1861-1-linus.walleij@linaro.org>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <1558020594-1498-1-git-send-email-fabrice.gasnier@st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG5NODE2.st.com (10.75.127.14) To SFHDAG5NODE3.st.com
+ (10.75.127.15)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-12_07:,,
+ signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 5/16/19 5:29 PM, Fabrice Gasnier wrote:
+> During probe, return the "get_irq" error value instead of -EINVAL which
+> allows the driver to be deferred probed if needed.
+> Fix also the case where of_irq_get() returns a negative value.
+> Note :
+> On failure of_irq_get() returns 0 or a negative value while
+> platform_get_irq() returns a negative value.
+> 
+> Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
+> 
+> Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
+> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+> ---
+> Changes in v2:
+> - Also check for irq == 0 that means "does not exist" as pointed out by
+>   Marc
 
---wyx2eqaxasf6eonl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Wolfram, all,
 
-On Sat, Jun 01, 2019 at 12:37:56AM +0200, Linus Walleij wrote:
-> The IOP3xx has some elaborate code to directly slam the
-> GPIO lines multiplexed with I2C down low before enablement,
-> apparently a workaround for a hardware bug found in the
-> early chips.
->=20
-> After consulting the developer documentation for IOP80321
-> and IOP80331 I can clearly see that this may be useful for
-> IOP80321 family (mach-iop32x) but it is highly dubious for
-> any 80331 series or later chip: in these chips the lines
-> are not multiplexed for UARTs.
->=20
-> We convert the code to pass optional GPIO descriptors
-> and register these only on the 80321-based boards where
-> it makes sense, optionally obtain them in the driver and
-> use the gpiod_set_raw_value() to ascertain the line gets
-> driven low when needed.
->=20
-> The GPIO driver does not give the GPIO chip a reasonable
-> label so the patch also adds that so that these machine
-> descriptor tables can be used.
->=20
-> Cc: arm@kernel.org
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Gentle ping on this patch
 
-Added Dan's ack, too, and applied to for-next, thanks!
+Best Regards,
+Fabrice
 
-
---wyx2eqaxasf6eonl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0A4GIACgkQFA3kzBSg
-KbY8rA//ZOZSv5AxhjolcHVNroyPWDjFceO3QiH7pVgYP9/d8bn8gIu5LtKfpShZ
-akWBEvz6BAthsBNd4468c0OL/7N26P6jV7DUYSv6++K/loteDywdqeCLSl62GaJS
-OThBERqvOdkMIJoBcugYMVlxiikwLX5n3G6bwg1j6NuvfOowiXk8D0vnc/MCUNyp
-lnlVu0Rjw/J5SA7M/1Ls+bC1IJGmR0LRQaZxLkhhxHjhBbcLQ9Ho+Ck9EN4/MjF8
-Gd623vNgvbQFjXt1IDtB5xnJj7G1EIcLEcRAQfscGRfqcF2zrHz2OlbbECcNCj1/
-edgfNmjWXRw9QN2bDANRdNxrG+AW7GSmqoG+0OjCHsDKgXmdsCCXN+FzEyKfxvfu
-y+s75uFD+iRbenutDj+jIkNZNYNnQpRcwWZX3GrDyXskYvCulxwCDY2Rc/QwMzJm
-C8rmMMBgo5TxbXQ6et0UlU4/FKwMm3yEngR3xsiuEc2sQLC5xM106bxOvYRO/m0z
-PCYkco8ASSllsMd/xuRcREGMvYwvyzta02zYD7JRmkAiWc0gMPT0veofdIV0Q3+Q
-d9G0RLZkUoaOeULZqIASJ3DsTrPEj+WvCXJdzaL5pAnXEcFDOLehSDS2QBmEVUCZ
-DoEwXFjbr9+GvhKfGDA2a+60knA4Th/FDl2oa8UjSp85TingInI=
-=MI1D
------END PGP SIGNATURE-----
-
---wyx2eqaxasf6eonl--
+> ---
+>  drivers/i2c/busses/i2c-stm32f7.c | 26 ++++++++++++++------------
+>  1 file changed, 14 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+> index 4284fc9..d7d7dd7 100644
+> --- a/drivers/i2c/busses/i2c-stm32f7.c
+> +++ b/drivers/i2c/busses/i2c-stm32f7.c
+> @@ -25,7 +25,6 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_address.h>
+> -#include <linux/of_irq.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pinctrl/consumer.h>
+> @@ -1812,15 +1811,14 @@ static struct i2c_algorithm stm32f7_i2c_algo = {
+>  
+>  static int stm32f7_i2c_probe(struct platform_device *pdev)
+>  {
+> -	struct device_node *np = pdev->dev.of_node;
+>  	struct stm32f7_i2c_dev *i2c_dev;
+>  	const struct stm32f7_i2c_setup *setup;
+>  	struct resource *res;
+> -	u32 irq_error, irq_event, clk_rate, rise_time, fall_time;
+> +	u32 clk_rate, rise_time, fall_time;
+>  	struct i2c_adapter *adap;
+>  	struct reset_control *rst;
+>  	dma_addr_t phy_addr;
+> -	int ret;
+> +	int irq_error, irq_event, ret;
+>  
+>  	i2c_dev = devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
+>  	if (!i2c_dev)
+> @@ -1832,16 +1830,20 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
+>  		return PTR_ERR(i2c_dev->base);
+>  	phy_addr = (dma_addr_t)res->start;
+>  
+> -	irq_event = irq_of_parse_and_map(np, 0);
+> -	if (!irq_event) {
+> -		dev_err(&pdev->dev, "IRQ event missing or invalid\n");
+> -		return -EINVAL;
+> +	irq_event = platform_get_irq(pdev, 0);
+> +	if (irq_event <= 0) {
+> +		if (irq_event != -EPROBE_DEFER)
+> +			dev_err(&pdev->dev, "Failed to get IRQ event: %d\n",
+> +				irq_event);
+> +		return irq_event ? irq_event : -ENODEV;
+>  	}
+>  
+> -	irq_error = irq_of_parse_and_map(np, 1);
+> -	if (!irq_error) {
+> -		dev_err(&pdev->dev, "IRQ error missing or invalid\n");
+> -		return -EINVAL;
+> +	irq_error = platform_get_irq(pdev, 1);
+> +	if (irq_error <= 0) {
+> +		if (irq_error != -EPROBE_DEFER)
+> +			dev_err(&pdev->dev, "Failed to get IRQ error: %d\n",
+> +				irq_error);
+> +		return irq_error ? irq_error : -ENODEV;
+>  	}
+>  
+>  	i2c_dev->clk = devm_clk_get(&pdev->dev, NULL);
+> 
