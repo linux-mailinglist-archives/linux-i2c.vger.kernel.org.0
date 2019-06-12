@@ -2,108 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7347422BD
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2019 12:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E568422CB
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2019 12:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438034AbfFLKkQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 12 Jun 2019 06:40:16 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:53758 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438033AbfFLKkQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Jun 2019 06:40:16 -0400
-Received: by mail-wm1-f65.google.com with SMTP id x15so6027881wmj.3
-        for <linux-i2c@vger.kernel.org>; Wed, 12 Jun 2019 03:40:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=QOUu665VzbrQkdt6yuFrpjcTfZcOezuzhB04ruczt2c=;
-        b=cigPc5yqKtc5ty1KWdwigqWdNQXSGwDhC0Fr7SXbLKN7MEyfVKpajuulmqbSG9T7QR
-         IcPH51LzN028aYASAjgoEvs/yg4Pg8H7A3SohtTv9x6uhcRAyl9DQBsIVFyyILSkyj9d
-         xvuJKhveB91CQX7REZo886hk+/xTsR01v7H+aDTJMS5cjqVGwEnDcLhDG102dooNRbGC
-         ULMdawJIHoCs7ZGUg8ib5cVyPBzduAUauJ3SwSKqDPWx3zfLegCI5ahAM1K/OWF9mcoY
-         FCwJE2bPnH9bZekPqQ4TYGMFqT1RcIFXKug7miIo23wz9IegSMwwKsCcB+tH6ImR17w9
-         eVNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=QOUu665VzbrQkdt6yuFrpjcTfZcOezuzhB04ruczt2c=;
-        b=c1AoEtRvqxTd+JVxUDCbAO4qTycUVb4R9vwmxzoENhLL8E1wM8bBDgGIn80WLaDTJw
-         ocjvjVkx5StHVz4kjriyc0cNFWI3lexY3PSGCjaY77z46R1W6nUS3HsQr5siKypJg6Gz
-         8C5kBriEI4htX2GfjQBqKz80M1dqAySVp3Fd/iFbt7oh+4vqGSeNXJAG0VuLEHFjTEWE
-         ynuO7XeW+hhN8l1fFnArFtvUHKLPwnF6en5JBS3ruRazwfIENZV7vbE62O+T83nHlz+5
-         hbJQkgDRRxcrcLX5YI2BBhATgYDigIPa0VBq5C0qv9QoIJvTHjx64SsBeRv930c4U4nj
-         ByTQ==
-X-Gm-Message-State: APjAAAXMpTXW8szlvKX0JQ0jLikibr+u3R0fNR/4ZuIHzkPZiOUMJLL4
-        1/j2a+8LCYJQqSnhssXjrg98iQ==
-X-Google-Smtp-Source: APXvYqy1InhFscPbjy00LsR+VSBPtrs/pTzNt7sH1NgkU981TFf39ZicVqy8q3leI91RcX0sQgcUIA==
-X-Received: by 2002:a1c:a7ca:: with SMTP id q193mr23272055wme.150.1560336014376;
-        Wed, 12 Jun 2019 03:40:14 -0700 (PDT)
-Received: from dell ([185.80.132.160])
-        by smtp.gmail.com with ESMTPSA id g5sm20846547wrp.29.2019.06.12.03.40.13
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 12 Jun 2019 03:40:13 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 11:40:11 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     alokc@codeaurora.org, andy.gross@linaro.org,
-        david.brown@linaro.org, wsa+renesas@sang-engineering.com,
-        bjorn.andersson@linaro.org, linus.walleij@linaro.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org,
-        ard.biesheuvel@linaro.org, jlhugo@gmail.com,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/8] i2c: i2c-qcom-geni: Provide support for ACPI
-Message-ID: <20190612104011.GA4660@dell>
-References: <20190610084213.1052-1-lee.jones@linaro.org>
- <20190612103453.ccet2pneairnlpcc@ninjato>
+        id S2405151AbfFLKlJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 Jun 2019 06:41:09 -0400
+Received: from sauhun.de ([88.99.104.3]:58374 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2403978AbfFLKlJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 12 Jun 2019 06:41:09 -0400
+Received: from localhost (p5486CACA.dip0.t-ipconnect.de [84.134.202.202])
+        by pokefinder.org (Postfix) with ESMTPSA id A55412C54BC;
+        Wed, 12 Jun 2019 12:41:07 +0200 (CEST)
+Date:   Wed, 12 Jun 2019 12:41:07 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Annaliese McDermond <nh6z@nh6z.net>
+Cc:     eric@anholt.net, stefan.wahren@i2se.com, f.fainelli@gmail.com,
+        swarren@wwwdotorg.org, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, team@nwdigitalradio.com
+Subject: Re: [PATCH v4] i2c: bcm2835: Model Divider in CCF
+Message-ID: <20190612104107.ndbo55ii2w3ahtzr@ninjato>
+References: <20190529042912.12956-1-nh6z@nh6z.net>
+ <20190608171443.14484-1-nh6z@nh6z.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="c6c35ryx46u6myid"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190612103453.ccet2pneairnlpcc@ninjato>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20190608171443.14484-1-nh6z@nh6z.net>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 12 Jun 2019, Wolfram Sang wrote:
 
-> On Mon, Jun 10, 2019 at 09:42:06AM +0100, Lee Jones wrote:
-> > Add a match table to allow automatic probing of ACPI device
-> > QCOM0220.  Ignore clock attainment errors.  Set default clock
-> > frequency value.
-> > 
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> 
-> Sadly, there is no cover-letter describing if there is a dependency or
-> not. I assume there is, otherwise I would get the I2C patches only? But
-> what is the suggested way upstream then?
+--c6c35ryx46u6myid
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There are no cross-subsystem build dependencies on any of these
-patches.  The only reason they are bundled together in the same
-patch-set is for cross-subsystem visibility and understanding.
+On Sat, Jun 08, 2019 at 10:14:43AM -0700, Annaliese McDermond wrote:
+> Model the I2C bus clock divider as a part of the Core Clock Framework.
+> Primarily this removes the clk_get_rate() call from each transfer.
+> This call causes problems for slave drivers that themselves have
+> internal clock components that are controlled by an I2C interface.
+> When the slave's internal clock component is prepared, the prepare
+> lock is obtained, and it makes calls to the I2C subsystem to
+> command the hardware to activate the clock.  In order to perform
+> the I2C transfer, this driver sets the divider, which requires
+> it to get the parent clock rate, which it does with clk_get_rate().
+> Unfortunately, this function will try to take the clock prepare
+> lock, which is already held by the slave's internal clock calls
+> creating a deadlock.
+>=20
+> Modeling the divider in the CCF natively removes this dependency
+> and the divider value is only set upon changing the bus clock
+> frequency or changes in the parent clock that cascade down to this
+> divisor.  This obviates the need to set the divider with every
+> transfer and avoids the deadlock described above.  It also should
+> provide better clock debugging and save a few cycles on each
+> transfer due to not having to recalcuate the divider value.
+>=20
+> Signed-off-by: Annaliese McDermond <nh6z@nh6z.net>
+> Acked-by: Stefan Wahren <stefan.wahren@i2se.com>
+> Reviewed-by: Eric Anholt <eric@anholt.net>
 
-There is wide interest in these devices.
+Applied to for-next, thanks for keeping at this! And thanks to all
+reviewers, too.
 
-> Also, the current maintainer entry for this driver looks like:
-> 
-> drivers/i2c/busses/i2c-qcom-geni.c:
->         Andy Gross <agross@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT)
->         David Brown <david.brown@linaro.org> (maintainer:ARM/QUALCOMM SUPPORT)
->         Alok Chauhan <alokc@codeaurora.org> (supporter:QUALCOMM GENERIC INTERFACE I2C DRIVER)
-> 
-> I didn't hear from those people yet, would be great to have their acks.
+(One minor thing: next time, please start a new thread when sending a
+new patch. This makes applying patches easier.)
 
-I will see if I can rouse them from their slumber.
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+--c6c35ryx46u6myid
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0A1sMACgkQFA3kzBSg
+KbasXBAAses+qCt/n9a2IXid6+QUuQ1nhIn/M5YcKTklfilWQ8izcToLQQeSAhDf
+9k7JxvejL6Soq9oj3aR+RTvcH3G2l7yaYHZzUIkq76ux4LN0ZdFymlkhAPQoN6Ar
+bBSiP4EH03os2jiUBSxSqnHlJE5y0WVSZdvLin2sOj8Y7FC6AztHkFWaYkcm0gBc
+kbHZdFu+FDmO51hv+jv0RQYefigjJfCNsh5dMZbCPxVvTt2EPn5vks+49dsXlqWE
+YaZCH0qKMB0KqIzpg7AXlH2htqNORVcJ3wYrdrKC30rvexgyp9h/CNwnxZEYAtUR
+C/Sft+FJWzVagqC5K/rZcwB10FNj4yItJZ1+JOg9AkxHo7CTlo51zwSBAajblaLi
+VQnf1PlZHkSy3CGGJZOFyOOHLmEX/Mzs/Nq+lhSEM2sQoYBxd8XZYHtITMumodoy
+38fSFJlon7aDl28zM3t72h7MTUsQvsujaqMpQa67vn3FjySqXDk7qS71Als9RPxS
+RcXwm097rMS+OQRjOPH0dOur5dm14iOLtChA3OrZpBe9zEjjIWa8Q565BurTsqW7
++uQ/MqzYVfkkW4EHSt308mALe5yYJBdS4Nb8Ws2ua8qp8pUrCjWewxDZg0yMff+p
+zGFHmwOm+Jl9vu2SCpTVBtBLtU4+b6sN/AyZCVnh/tTKd90AwWQ=
+=UHqb
+-----END PGP SIGNATURE-----
+
+--c6c35ryx46u6myid--
