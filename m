@@ -2,155 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D98B43B0D
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2019 17:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9940D43AC5
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2019 17:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbfFMPZc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Jun 2019 11:25:32 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:10738 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731542AbfFMMAu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Jun 2019 08:00:50 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d023af20000>; Thu, 13 Jun 2019 05:00:50 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 13 Jun 2019 05:00:49 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 13 Jun 2019 05:00:49 -0700
-Received: from [10.19.65.14] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 13 Jun
- 2019 12:00:46 +0000
-Subject: Re: [PATCH V3] i2c: busses: tegra: Add suspend-resume support
-To:     Dmitry Osipenko <digetx@gmail.com>,
+        id S1732032AbfFMPXd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Jun 2019 11:23:33 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:46339 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726954AbfFMM2K (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Jun 2019 08:28:10 -0400
+Received: by mail-lj1-f193.google.com with SMTP id v24so13991808ljg.13;
+        Thu, 13 Jun 2019 05:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=UQ+Qox4hW8dsJtCk2ZCLCPvmN8eEmr4G4NBOJT4SbN0=;
+        b=jdu1IhW6u+Yr+r8gEQ5i6y5O88urrnghhhxsYuGEcoakzlD/OdRaE1vy4Ih0NPkxQU
+         eGpsnC07oZhKXnOYTgiIwfDNPmg1yRYqDJLtul0y5X99w5ZS5m2R8Fx4jPVcfYu2nCt3
+         S3auR4bitV8Nnb4BCPBZdep56F6lMmPxUmd3RY3R63AlxTar71BFFo7PHqF+0i70f33h
+         9BCPuFQtF/9P/6llw0OF0Z3PlvSICD3822L8yfbL7Uzy4CHgZlOMgiiwc1JOqAHNdzFB
+         V5F3K5vPnJK9g2fgs+E0D3/xyZGZRVy+hSSbUBtN+sBeJXDRPmksYdStewc889WMHxas
+         dTmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UQ+Qox4hW8dsJtCk2ZCLCPvmN8eEmr4G4NBOJT4SbN0=;
+        b=Hsk21cwaTvvUpH6yfIC8gdJj8/nMiFTy4s+3us5lmL9BaoG6EHGqWa4zGQcKJyH3SL
+         zRg0rx3aqzNALhqCteRzoNiaJU93hv8yc8Tk5RdU94c9c7GzhYy/goG3N1Gd8Hn36pN5
+         o/njGTiUfk2Q4/vPZ5caW37gy+vSaU0pxGwsv5SbxzK8Y6MRY/IvYXUUH6E1jjWUcLt2
+         pAGspdgiX8tPMNcppejA4NN61FCONbLLmlIx2pec1myQBUiFM/hhZyr4vh+OD20oGG90
+         T0jseLixUXMNBPOaHyYVfQNrV/4nG9XB+7A8GbWQFvQglgE7KqDmMGaW2bONmuPRLe0Z
+         9Ipg==
+X-Gm-Message-State: APjAAAX5nisU/b14EHG8apYHvBHNl8Zfc7NInUj6uRocfBDnws9DGuun
+        0DjOI8adI8WNIlEKOj4F3Lk=
+X-Google-Smtp-Source: APXvYqyBEzjakBkImaSdIOPRPwatSvpPTzKVKlduXaaNW1IJw4poVz29AEsii6/hb7BLvbc0JYlkNA==
+X-Received: by 2002:a2e:98d7:: with SMTP id s23mr13507586ljj.179.1560428888349;
+        Thu, 13 Jun 2019 05:28:08 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
+        by smtp.googlemail.com with ESMTPSA id a7sm571018lfo.22.2019.06.13.05.28.06
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 13 Jun 2019 05:28:07 -0700 (PDT)
+Subject: Re: [PATCH V5 6/7] i2c: tegra: fix PIO rx/tx residual transfer check
+To:     Bitan Biswas <bbiswas@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         Thierry Reding <treding@nvidia.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Shardar Mohammed <smohammed@nvidia.com>,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     Shardar Mohammed <smohammed@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>,
-        "Wolfram Sang" <wsa@the-dreams.de>
-References: <1559885867-10190-1-git-send-email-bbiswas@nvidia.com>
- <21a2b722-cd1d-284f-2a4d-99bb12c98afd@gmail.com>
-From:   Bitan Biswas <bbiswas@nvidia.com>
-Message-ID: <508037a2-52cb-43e8-24a9-1c064972d2d8@nvidia.com>
-Date:   Thu, 13 Jun 2019 05:00:43 -0700
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1560250274-18499-1-git-send-email-bbiswas@nvidia.com>
+ <1560250274-18499-6-git-send-email-bbiswas@nvidia.com>
+ <42ce2523-dab9-0cdf-e8ff-42631dd161b7@gmail.com>
+ <78140337-dca0-e340-a501-9e37eca6cc87@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <9cb7123a-1ebd-3a93-60dc-c8f57f60270b@gmail.com>
+Date:   Thu, 13 Jun 2019 15:28:02 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <21a2b722-cd1d-284f-2a4d-99bb12c98afd@gmail.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <78140337-dca0-e340-a501-9e37eca6cc87@nvidia.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1560427250; bh=23RUxXLABPsWTgbFYKYPOjxplDTXER3cpUykkuAC2Lo=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=lN3dzddRBdZg/kW2vQGRewhaFK9/Kw+nulX4aX3AE9/bHLpGfokl5HzngCRzF+SaA
-         //HKb+YLKQniCeKNMc6c6wcAqz5ITtZhfgVukW2JLEuYnJks256zFr1UzVE2k5E1W8
-         Du8FnPs8qIoPVq6bJ120BOJQ+bjqa6FbD5+Lvq8ll4NhKC3WxAbVKLbJ+FVfeuqFXG
-         9s6wQVQwJkEDbQCS1xhnzZ9E/gh2hcig42ulgvGgprkErNJ0Hub6GKFqkveoIFsxLe
-         Fl+9dUUeUrSenbEfK/2Ud6iXI885rW6CXgFtljN+EsShFVqf/mUzJEG1SkGuyesJ7H
-         g8+4JGZnDHWQw==
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-
-On 6/6/19 11:27 PM, Dmitry Osipenko wrote:
-> 07.06.2019 8:37, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->> Post suspend I2C registers have power on reset values. Before any
->> transfer initialize I2C registers to prevent I2C transfer timeout
->> and implement suspend and resume callbacks needed. Fix below errors
->> post suspend:
+13.06.2019 14:30, Bitan Biswas пишет:
+> 
+> 
+> On 6/12/19 7:30 AM, Dmitry Osipenko wrote:
+>> 11.06.2019 13:51, Bitan Biswas пишет:
+>>> Fix expression for residual bytes(less than word) transfer
+>>> in I2C PIO mode RX/TX.
+>>>
+>>> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+>>> ---
 >>
->> 1) Tegra I2C transfer timeout during jetson tx2 resume:
+>> [snip]
 >>
->> [   27.520613] pca953x 1-0074: calling pca953x_resume+0x0/0x1b0 @ 2939, =
-parent: i2c-1
->> [   27.633623] tegra-i2c 3160000.i2c: i2c transfer timed out
->> [   27.639162] pca953x 1-0074: Unable to sync registers 0x3-0x5. -110
->> [   27.645336] pca953x 1-0074: Failed to sync GPIO dir registers: -110
->> [   27.651596] PM: dpm_run_callback(): pca953x_resume+0x0/0x1b0 returns =
--110
->> [   27.658375] pca953x 1-0074: pca953x_resume+0x0/0x1b0 returned -110 af=
-ter 127152 usecs
->> [   27.666194] PM: Device 1-0074 failed to resume: error -110
+>>>           /*
+>>> -         * Update state before writing to FIFO.  If this casues us
+>>> +         * Update state before writing to FIFO.  If this causes us
+>>>            * to finish writing all bytes (AKA buf_remaining goes to
+>>> 0) we
+>>>            * have a potential for an interrupt (PACKET_XFER_COMPLETE is
+>>> -         * not maskable).  We need to make sure that the isr sees
+>>> -         * buf_remaining as 0 and doesn't call us back re-entrantly.
+>>> +         * not maskable).
+>>>            */
+>>>           buf_remaining -= words_to_transfer * BYTES_PER_FIFO_WORD;
 >>
->> 2) Tegra I2C transfer timeout error on jetson Xavier post resume.
+>> Looks like the comment could be removed altogether because it doesn't
+>> make sense since interrupt handler is under xfer_lock which is kept
+>> locked during of tegra_i2c_xfer_msg().
+> I would push a separate patch to remove this comment because of
+> xfer_lock in ISR now.
+> 
 >>
->> Remove i2c bus lock-unlock calls in resume callback as i2c_mark_adapter_=
-*
->> (suspended-resumed) help ensure i2c core calls from client are not
->> executed before i2c-tegra resume.
+>> Moreover the comment says that "PACKET_XFER_COMPLETE is not maskable",
+>> but then what I2C_INT_PACKET_XFER_COMPLETE masking does?
 >>
->> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
->> ---
->>   drivers/i2c/busses/i2c-tegra.c | 24 ++++++++++++++++++++++++
->>   1 file changed, 24 insertions(+)
->>
->> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-teg=
-ra.c
->> index ebaa78d..1dbba39 100644
->> --- a/drivers/i2c/busses/i2c-tegra.c
->> +++ b/drivers/i2c/busses/i2c-tegra.c
->> @@ -1687,7 +1687,31 @@ static int tegra_i2c_remove(struct platform_devic=
-e *pdev)
->>   }
->>  =20
->>   #ifdef CONFIG_PM_SLEEP
->> +static int tegra_i2c_suspend(struct device *dev)
->> +{
->> +	struct tegra_i2c_dev *i2c_dev =3D dev_get_drvdata(dev);
->> +
->> +	i2c_mark_adapter_suspended(&i2c_dev->adapter);
->> +
->> +	return 0;
->> +}
->> +
->> +static int tegra_i2c_resume(struct device *dev)
->> +{
->> +	struct tegra_i2c_dev *i2c_dev =3D dev_get_drvdata(dev);
->> +	int err;
->> +
->> +	err =3D tegra_i2c_init(i2c_dev, false);
->> +	if (err)
->> +		return err;
->> +
->> +	i2c_mark_adapter_resumed(&i2c_dev->adapter);
->> +
->> +	return 0;
->> +}
->> +
->>   static const struct dev_pm_ops tegra_i2c_pm =3D {
->> +	SET_SYSTEM_SLEEP_PM_OPS(tegra_i2c_suspend, tegra_i2c_resume)
->>   	SET_RUNTIME_PM_OPS(tegra_i2c_runtime_suspend, tegra_i2c_runtime_resum=
-e,
->>   			   NULL)
->>   };
->>
->=20
-> Thanks!
->=20
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
->=20
+> I2C_INT_PACKET_XFER_COMPLETE masking support available in Tegra chips
+> newer than Tegra30 allows one to not see interrupt after Packet transfer
+> complete. With the xfer_lock in ISR the scenario discussed in comment
+> can be ignored.
 
-Please get back if there is/are any further review comment(s) for below=20
-patch.
+Also note that xfer_lock could be removed and replaced with a just
+irq_enable/disable() calls in tegra_i2c_xfer_msg() because we only care
+about IRQ not firing during of the preparation process.
 
-
-http://patchwork.ozlabs.org/patch/1111570/
-
--Thanks,
-  Bitan
-
-
+It also looks like tegra_i2c_[un]nmask_irq isn't really needed and all
+IRQ's could be simply unmasked during the driver's probe, in that case
+it may worth to add a kind of "in-progress" flag to catch erroneous
+interrupts.
