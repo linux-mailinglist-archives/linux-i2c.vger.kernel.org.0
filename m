@@ -2,123 +2,130 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F6F43F27
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2019 17:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D51043EFE
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2019 17:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731708AbfFMPzR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Jun 2019 11:55:17 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:37377 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731557AbfFMIw6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Jun 2019 04:52:58 -0400
-Received: by mail-wm1-f66.google.com with SMTP id 22so9210092wmg.2
-        for <linux-i2c@vger.kernel.org>; Thu, 13 Jun 2019 01:52:57 -0700 (PDT)
+        id S2390048AbfFMPyT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Jun 2019 11:54:19 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:34005 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731566AbfFMIxZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Jun 2019 04:53:25 -0400
+Received: by mail-wm1-f68.google.com with SMTP id w9so6099715wmd.1;
+        Thu, 13 Jun 2019 01:53:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=Lcs2ag+JWd9LLpjNoidl6yxCYy5aNsRikxLQuGKzVzU=;
-        b=aThNGW7+I2PxRdhTNPV1LIhF0/5UJHVr6LSBQpWYfs9mymFpbdG0+eLwcuD+s8sSB5
-         CHOJAEAIZTXTkJqs/TqV6VH1/6I6+rikSUTduZJCk79S8Hk9UfkJ1XfHzjMkHtKZs0tK
-         ZlBBsvvs+mVji5Lwc21wIDSZNvTHmP3HB49j6W+heCALno3MD9xs+WEpPpN3zFjxXiOW
-         O7iuKmnGS4AljVYDGrYPvT2Yi9OBB+FCXpttSSbyOBt8OTsYQ0IUGeJVZnFrz6QJFn6Q
-         s8LeaL9BzwtyyXFLkJGfTsRJTTnS+kmZHtYyXuE97oWxfqxjy0Dx5PgKSMOvcQF8yleU
-         B1qQ==
+         :content-disposition:in-reply-to:user-agent;
+        bh=/OgU2TpfXEeSpwkFFZhBsXGi+MN32/lqmv7BcTIi3FI=;
+        b=USazJQPkklCfeKwWu7WagGrFt+KbbFSw6ITSivwBX+ZIniGirMHPtvBHKpQuPaDyz4
+         W6WOkQQy3IHIUidyTh0Adu0sut3YnkEisBWWo8Bx3iwMVCa80WBbCnsNaOdwfAIpUmNG
+         CAzg0G+xNBVYUco2YhRYW3ypuetByRwosrXKXr6ITlzZbOMp6uat5vyCTSFv2CrEGs9F
+         AxA57V0WogIf0XqvoDHu7TfFo1WzSv5C2La7ISkkohtW7d/+4258YH7C4OztDDsIXBFf
+         x1dezGbIu1xzKokNJgkvdb7RSTx8zJwvXdHe9fbLUr/tNhZwtAGw0NyM3YUKLvio7mPb
+         H/UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=Lcs2ag+JWd9LLpjNoidl6yxCYy5aNsRikxLQuGKzVzU=;
-        b=M0PyTFQJpVHgnB28TaY1eBWBtcGoVTvHm+SEqgRhvLsNXsXTDaigYwNOpgR81Z6hW0
-         tRXZFdItEWrf+6DJz3kov0slff+1561th4UcSY9TLNx4z4R/C+AFuMR+m9mdnphsKlgK
-         uH3zS9L7qYIhe2wKBAc/VhRyt3nQNv7DuQF/HDSRhQWp/LSJTOIvTDRCLL1zFeKcXpP3
-         72sQJGEU2bLTJSChFYDCPvCw0Y1JPkLgMGeJVYJ6v9b7W7Tl2aeucIihtNj/sBLCMok6
-         lCe2NkxV67zWA+6PcHgMDuCyPU4gHhUIKrMRsDiA7oF80d09TxcBjM5cu7gf0TmTm0F7
-         NV2A==
-X-Gm-Message-State: APjAAAVsqyFnTFMLSeRQq1F7g0qMt6Tkoght3N/qANW5TXMaUXnj4ljK
-        66e2mBWqzsX2+UpJEHYNmRL1V5gZqnY=
-X-Google-Smtp-Source: APXvYqybK0Nj/fHviz/pGDZHrRpbNts9oH2DSs1lQLgmXDT7aDSFDqouW7z3b4vqEk65dYuSlWyFoA==
-X-Received: by 2002:a7b:c776:: with SMTP id x22mr2668542wmk.55.1560415976540;
-        Thu, 13 Jun 2019 01:52:56 -0700 (PDT)
-Received: from dell ([2.27.35.243])
-        by smtp.gmail.com with ESMTPSA id c5sm1837184wma.19.2019.06.13.01.52.55
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 13 Jun 2019 01:52:56 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 09:52:54 +0100
-From:   Lee Jones <lee.jones@linaro.org>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/OgU2TpfXEeSpwkFFZhBsXGi+MN32/lqmv7BcTIi3FI=;
+        b=rI9m6sVu2JPgA5ZAKjkd/i3WPg5Qx9nD9GOM4KnbLggy7hyaPz2xAfqgwiH9mvs5M1
+         tLQsnj3E4JRfqpKzXsoaFHBQsH6F4yGJvUcjY6XkyTNnvemMl3v6ZlC4fbmb3oHQxDr/
+         a+n6eDVgtiA8/D4XAUsAW1KDCm1lY9EdgaN4ICzrMAYc+BgQXMmfXx1NO8Ejnwnxt0R4
+         UefmqKMu9mt+aV/0gW3AvyF8gA5nt7Upajr3H2RdEJU16b0wYvF2ykgXHAb0FQ1RMsLC
+         gXBt/qcUwE43KT8+4XDHnmJv8GavWXgdMx3XOnLiKuQz3svJjWm/tlrDM4H5uKhFAjZ4
+         zoHA==
+X-Gm-Message-State: APjAAAX0vYJ2KtqHDGy4EGzya1ESbE2qA+JSMbcr0cwzOx+DiEKX6e6X
+        ad0yiqZF9Qv1hBPrdKBu1ho=
+X-Google-Smtp-Source: APXvYqw6Kjh0hiMNmclneqev/DiCYw6yuOi8A+C+DQ65yxl2fqr1dNeigLLp6R43aVGCaFl3a6dpTA==
+X-Received: by 2002:a1c:9d86:: with SMTP id g128mr2936562wme.51.1560416002865;
+        Thu, 13 Jun 2019 01:53:22 -0700 (PDT)
+Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
+        by smtp.gmail.com with ESMTPSA id h90sm5178879wrh.15.2019.06.13.01.53.21
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 13 Jun 2019 01:53:21 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 10:53:20 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     alokc@codeaurora.org, andy.gross@linaro.org,
-        david.brown@linaro.org, wsa+renesas@sang-engineering.com,
-        bjorn.andersson@linaro.org, linus.walleij@linaro.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org,
-        ard.biesheuvel@linaro.org, jlhugo@gmail.com,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/8] i2c: i2c-qcom-geni: Provide support for ACPI
-Message-ID: <20190613085254.GA16364@dell>
-References: <20190610084213.1052-1-lee.jones@linaro.org>
- <20190612103453.ccet2pneairnlpcc@ninjato>
- <20190612104011.GA4660@dell>
- <20190612104459.gvji3qxym5s4odfq@ninjato>
- <20190613085204.GF4660@dell>
+Cc:     Jon Hunter <jonathanh@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] i2c: tegra: Avoid error message on deferred probe
+Message-ID: <20190613085320.GB30664@ulmo>
+References: <20190527102939.7616-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="IrhDeMKUP4DT/M7F"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190613085204.GF4660@dell>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20190527102939.7616-1-thierry.reding@gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 13 Jun 2019, Lee Jones wrote:
 
-> On Wed, 12 Jun 2019, Wolfram Sang wrote:
-> 
-> > 
-> > > There are no cross-subsystem build dependencies on any of these
-> > > patches.  The only reason they are bundled together in the same
-> > > patch-set is for cross-subsystem visibility and understanding.
-> > > 
-> > > There is wide interest in these devices.
-> > 
-> > I see. That would have been a great cover-letter, Lee ;) Thanks for the
-> > heads up!
-> 
-> :)
-> 
-> > > > Also, the current maintainer entry for this driver looks like:
-> > > > 
-> > > > drivers/i2c/busses/i2c-qcom-geni.c:
-> > > >         Andy Gross <agross@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT)
-> > > >         David Brown <david.brown@linaro.org> (maintainer:ARM/QUALCOMM SUPPORT)
-> > > >         Alok Chauhan <alokc@codeaurora.org> (supporter:QUALCOMM GENERIC INTERFACE I2C DRIVER)
-> > > > 
-> > > > I didn't hear from those people yet, would be great to have their acks.
-> > > 
-> > > I will see if I can rouse them from their slumber.
-> > 
-> > Please do. If they are not to reach, we probably need to update the
-> > entry...
-> 
-> I contacted both of them.
-> 
->  Andy doesn't touch anything that isn't QUP based (8994 and older).
-> 
->  David doesn't deal with MSM platforms if Andy is available. 
-> 
-> So I guess the decision is yours.  Seeing at this patch is pretty
-> trivial and has our ACPI expert's Ack, the decision shouldn't be a
-> difficult one.
+--IrhDeMKUP4DT/M7F
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-BTW, v4 has collected Acks and a cover-letter. :)
+On Mon, May 27, 2019 at 12:29:39PM +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+>=20
+> If the driver defers probe because of a missing clock, avoid outputting
+> an error message. The clock will show up eventually.
+>=20
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  drivers/i2c/busses/i2c-tegra.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Hi Wolfram,
+
+any comments on this patch or is it good to go?
+
+Thanks,
+Thierry
+
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegr=
+a.c
+> index ebaa78d17d6e..6bfd5297f425 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -1517,7 +1517,9 @@ static int tegra_i2c_probe(struct platform_device *=
+pdev)
+> =20
+>  	div_clk =3D devm_clk_get(&pdev->dev, "div-clk");
+>  	if (IS_ERR(div_clk)) {
+> -		dev_err(&pdev->dev, "missing controller clock\n");
+> +		if (PTR_ERR(div_clk) !=3D -EPROBE_DEFER)
+> +			dev_err(&pdev->dev, "missing controller clock\n");
+> +
+>  		return PTR_ERR(div_clk);
+>  	}
+> =20
+> --=20
+> 2.21.0
+>=20
+
+--IrhDeMKUP4DT/M7F
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl0CDwAACgkQ3SOs138+
+s6Huaw/8DLbY+/OI6PwN9jtoWHGbyhVXpxvkBSLVhozT9JgwZd55mRFCWTUWo/5X
+NvzLpFarCawjpz2qIb+lGKX2GA7oIFIAVwmJ5XBrS7lB8LEHbx0z5Sz2Vfi8pmQ3
+OgdNBVw1JMuR8N6NxvBRdN0oUQ2WLRn/4iDuaKWA2/DsoyDvA7WTdUJUsXrqK+iR
+gPjWbcow+fxanOVZQdgrv6zeooxWF42wkeo+dbrOegPZnwuX6DYoQtGENynAg0jL
+feeX5hfXJNHKdFVrY4Q+njUHF9Sb0ZeoJOOtIuviQTAZ6+MhVX0ipXlD24vXyYkH
+CGJWIrvWcRoNeVQ08gWrNSjn1QsGErprzhJTq9VfeAgYtdkEaK/Jp7xcIhyiu00Y
+BWU4N48ee6GwuAArDmmgKjKNYSsn1MLq5GNk60+39aH7IxkajmW0JRwjQ7aIwgPN
+OLr3DXIG96Ych7TxKjpvYINIRKXmNrB7qnbUM4sCZuVkPbExujkzWXymG/Nu+ogZ
+9geaL6nYwuIcc+xvUnJ4hVBKv1iT9aVSv9aKClLr+FJ8DHokbjCeWk7Wt4o6DTeP
+oRH8g3DKqxbE/NBBsL/jLFJJ6kAPzgB9TZi1HJ5UuEvNLMUjIQJ7Hg2qZ92Bax8h
+ZtvTrzwJBpp93VjlidVhoXClxJT7VLC3MHdFTZ7RZctAv3KzTXk=
+=DTRB
+-----END PGP SIGNATURE-----
+
+--IrhDeMKUP4DT/M7F--
