@@ -2,113 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3C843FC7
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2019 18:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B212D43F32
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2019 17:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731476AbfFMQAA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Jun 2019 12:00:00 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:34226 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731469AbfFMItW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Jun 2019 04:49:22 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5D8hupF013156;
-        Thu, 13 Jun 2019 03:49:00 -0500
-Authentication-Results: ppops.net;
-        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
-Received: from mail3.cirrus.com ([87.246.76.56])
-        by mx0a-001ae601.pphosted.com with ESMTP id 2t0ae2yd16-1;
-        Thu, 13 Jun 2019 03:49:00 -0500
-Received: from EDIEX02.ad.cirrus.com (ediex02.ad.cirrus.com [198.61.84.81])
-        by mail3.cirrus.com (Postfix) with ESMTP id 91AE2613139C;
-        Thu, 13 Jun 2019 03:49:44 -0500 (CDT)
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 13 Jun
- 2019 09:48:58 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
- Transport; Thu, 13 Jun 2019 09:48:58 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C31072A1;
-        Thu, 13 Jun 2019 09:48:58 +0100 (BST)
-Date:   Thu, 13 Jun 2019 09:48:58 +0100
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     <wsa@the-dreams.de>, <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>, <linux-i2c@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <benjamin.tissoires@redhat.com>, <jbroadus@gmail.com>,
-        <patches@opensource.cirrus.com>
-Subject: Re: [PATCH v4 4/7] i2c: core: Make i2c_acpi_get_irq available to the
- rest of the I2C core
-Message-ID: <20190613084858.GU28362@ediswmail.ad.cirrus.com>
-References: <20190611123101.25264-1-ckeepax@opensource.cirrus.com>
- <20190611123101.25264-5-ckeepax@opensource.cirrus.com>
- <20190612152718.GC2640@lahna.fi.intel.com>
+        id S1732043AbfFMPzb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Jun 2019 11:55:31 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:33910 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731546AbfFMIwJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Jun 2019 04:52:09 -0400
+Received: by mail-wm1-f65.google.com with SMTP id w9so6097348wmd.1
+        for <linux-i2c@vger.kernel.org>; Thu, 13 Jun 2019 01:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=WVZ+rcl5b/TJbfPdwJog0AuENCxf5fDzdWtd1QjNORs=;
+        b=KhRHPOT+eeCOo3Rd17kUr4gESsUUD6oB/H9FuZEkVh5X07Q3459tvOQUJY/t2LgvNt
+         Y6UyMSWniCeuvWdTLwzXcrwj8Ag2k85/UAKnJIhY5spD8wVOGOY6Y8zvi4mW2VfDWbXe
+         vd8pGQ9f8dOsk6c2/n+PJ2/q8VFeGZ26/hoUpLv4E1XmnO0ExHLiiDk+i00pEEkL7uic
+         pxH9oKrv2e5eXF7YXI8BST1o0KYCgCjFx7reqdsSEcPxLCBbJ8GkRCoqCc4CNS9k83Gf
+         TBo2kDnqQIhU+z+sB42tEAztWO1cS9IGrfz6leTNKEN3uIj4+cngS7qju+ylhNPkEs5g
+         md5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=WVZ+rcl5b/TJbfPdwJog0AuENCxf5fDzdWtd1QjNORs=;
+        b=W3z4bNp9UtkJiel/eq3FTJ/uGMzDVBsD1GTQ0RiLKicL6RFTYX9phSfxnsQOLYA50Q
+         becaOZbSfIgczuR8f6RRbhwmp4Xm6bAco1etrJprlM5BpCZIjzTQfltLOeCcKnnilmsE
+         qHj3mwAg9p8R8BZ68MruWzYS1NHDgQY+YPze+XoV39ZtaFSNvU/ZJdyZsMepU33HUgDR
+         1ED4FeYmOQbZpjAHZHr1lW7eBPuiEjEKGB0kCd9tcm37FZNdu61f++9zf7pWY4pksTc7
+         xltLzRNix0USuCNKO3VMm24w6udpi0Ox4ieq6su2E584uc5VCMVDkUoW/fWlxmwtQw1s
+         We9w==
+X-Gm-Message-State: APjAAAWmANfDW3HVG/uylvP8ZMjGelVhdT0JmcDp7+FunTnDUGUe7pKX
+        oAmyZqu+8IopwemK1LgLDjX2DA==
+X-Google-Smtp-Source: APXvYqwMM9q5lwGeSSVSnEBxvQ/pJDmMKfQGsGMfurbu78aCJ/K2e5YVPjas2AvJJWv2rHYYLvuXTw==
+X-Received: by 2002:a1c:9d86:: with SMTP id g128mr2931036wme.51.1560415927490;
+        Thu, 13 Jun 2019 01:52:07 -0700 (PDT)
+Received: from dell ([2.27.35.243])
+        by smtp.gmail.com with ESMTPSA id s7sm4929762wmc.2.2019.06.13.01.52.06
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 13 Jun 2019 01:52:06 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 09:52:04 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     alokc@codeaurora.org, andy.gross@linaro.org,
+        david.brown@linaro.org, wsa+renesas@sang-engineering.com,
+        bjorn.andersson@linaro.org, linus.walleij@linaro.org,
+        balbi@kernel.org, gregkh@linuxfoundation.org,
+        ard.biesheuvel@linaro.org, jlhugo@gmail.com,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/8] i2c: i2c-qcom-geni: Provide support for ACPI
+Message-ID: <20190613085204.GF4660@dell>
+References: <20190610084213.1052-1-lee.jones@linaro.org>
+ <20190612103453.ccet2pneairnlpcc@ninjato>
+ <20190612104011.GA4660@dell>
+ <20190612104459.gvji3qxym5s4odfq@ninjato>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190612152718.GC2640@lahna.fi.intel.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906130070
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190612104459.gvji3qxym5s4odfq@ninjato>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jun 12, 2019 at 06:27:18PM +0300, Mika Westerberg wrote:
-> On Tue, Jun 11, 2019 at 01:30:58PM +0100, Charles Keepax wrote:
-> > In preparation for more refactoring make i2c_acpi_get_irq available
-> > outside i2c-core-acpi.c.
-> > 
-> > Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> > ---
-> > 
-> > Changes since v3:
-> >  - Move the change to use the helper function from i2c-core-base into its own patch.
-> > 
-> > Thanks,
-> > Charles
-> > 
-> >  drivers/i2c/i2c-core-acpi.c | 15 +++++++++++++--
-> >  drivers/i2c/i2c-core.h      |  7 +++++++
-> >  2 files changed, 20 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> > index 7d4d66ba752d4..35966cc337dde 100644
-> > --- a/drivers/i2c/i2c-core-acpi.c
-> > +++ b/drivers/i2c/i2c-core-acpi.c
-> > @@ -144,8 +144,17 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
-> >  	return 1; /* No need to add resource to the list */
-> >  }
-> >  
-> > -static int i2c_acpi_get_irq(struct acpi_device *adev)
-> > +/**
-> > + * i2c_acpi_get_irq - get device IRQ number from ACPI
-> > + * @client: Pointer to the I2C client device
-> > + *
-> > + * Find the IRQ number used by a specific client device.
-> > + *
-> > + * Return: The IRQ number or an error code.
-> > + */
-> > +int i2c_acpi_get_irq(struct i2c_client *client)
-> >  {
-> > +	struct acpi_device *adev = ACPI_COMPANION(&client->adapter->dev);
-> 
-> Is this adev checked for being NULL somewhere below before it is being
-> dereferenced?
-> 
-> It could explain the issue Benjamin is seeing.
-> 
+On Wed, 12 Jun 2019, Wolfram Sang wrote:
 
-Yeah could be that or just for some reason this isn't returning
-the same adev as we previously had. I will do some digging see if
-I can find any likely culprits.
+> 
+> > There are no cross-subsystem build dependencies on any of these
+> > patches.  The only reason they are bundled together in the same
+> > patch-set is for cross-subsystem visibility and understanding.
+> > 
+> > There is wide interest in these devices.
+> 
+> I see. That would have been a great cover-letter, Lee ;) Thanks for the
+> heads up!
 
-Thanks,
-Charles
+:)
+
+> > > Also, the current maintainer entry for this driver looks like:
+> > > 
+> > > drivers/i2c/busses/i2c-qcom-geni.c:
+> > >         Andy Gross <agross@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT)
+> > >         David Brown <david.brown@linaro.org> (maintainer:ARM/QUALCOMM SUPPORT)
+> > >         Alok Chauhan <alokc@codeaurora.org> (supporter:QUALCOMM GENERIC INTERFACE I2C DRIVER)
+> > > 
+> > > I didn't hear from those people yet, would be great to have their acks.
+> > 
+> > I will see if I can rouse them from their slumber.
+> 
+> Please do. If they are not to reach, we probably need to update the
+> entry...
+
+I contacted both of them.
+
+ Andy doesn't touch anything that isn't QUP based (8994 and older).
+
+ David doesn't deal with MSM platforms if Andy is available. 
+
+So I guess the decision is yours.  Seeing at this patch is pretty
+trivial and has our ACPI expert's Ack, the decision shouldn't be a
+difficult one.
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
