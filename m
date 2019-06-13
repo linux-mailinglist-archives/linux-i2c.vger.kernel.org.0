@@ -2,120 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEED439A4
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2019 17:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C267445D3
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2019 18:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732693AbfFMPPI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Jun 2019 11:15:08 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:41001 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732231AbfFMN0G (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Jun 2019 09:26:06 -0400
-Received: from localhost (aaubervilliers-681-1-40-246.w90-88.abo.wanadoo.fr [90.88.159.246])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id F29BB20000D;
-        Thu, 13 Jun 2019 13:26:01 +0000 (UTC)
-Date:   Wed, 12 Jun 2019 17:38:18 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: sun6i-p2wi: Add YAML schemas
-Message-ID: <20190612153818.q5xj5su33krlignu@flea>
-References: <20190605122936.11972-1-maxime.ripard@bootlin.com>
- <CAL_JsqKC7uP0J14A8_CvPhbZkoSRNWSpS1ee+Q4sG013jY=JeQ@mail.gmail.com>
- <20190611090641.byr6mpywkfmbhrbk@flea>
- <CAL_JsqL3cua3u2gNTzHEdgFU0On5J9ziPZeFNiTpu5HS=SJoDA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jqnskoivfbu5krfp"
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqL3cua3u2gNTzHEdgFU0On5J9ziPZeFNiTpu5HS=SJoDA@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+        id S1730304AbfFMQq7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Jun 2019 12:46:59 -0400
+Received: from smtp111.iad3a.emailsrvr.com ([173.203.187.111]:38808 "EHLO
+        smtp111.iad3a.emailsrvr.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730280AbfFMFJZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Jun 2019 01:09:25 -0400
+Received: from smtp38.relay.iad3a.emailsrvr.com (localhost [127.0.0.1])
+        by smtp38.relay.iad3a.emailsrvr.com (SMTP Server) with ESMTP id 302C31855;
+        Thu, 13 Jun 2019 01:09:24 -0400 (EDT)
+X-SMTPDoctor-Processed: csmtpprox beta
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=g001.emailsrvr.com;
+        s=20190322-9u7zjiwi; t=1560402564;
+        bh=YphfuBxons+OWOZNJBAlemTbwJdLog12Pz9975FV9lE=;
+        h=Subject:From:Date:To:From;
+        b=TcnXbiR3mVBC7+Vi+KfgW8p+wSwKO0l7u8OvL72AXx/4HHzTnVJo/6ptDUYm8BaqU
+         CgGAn3DnI0OtguY6c3serWW4+cOuHk3BfAwYRVr1vJf9hCm0TCDmIagPrIxt12p5yN
+         JYx3XPruhINe/T2oZ3rOyEOO8JiwMpMwgBd3fsO0=
+X-Auth-ID: mcdermj@xenotropic.com
+Received: by smtp38.relay.iad3a.emailsrvr.com (Authenticated sender: mcdermj-AT-xenotropic.com) with ESMTPSA id 0E2CD2CA6;
+        Thu, 13 Jun 2019 01:09:22 -0400 (EDT)
+X-Sender-Id: mcdermj@xenotropic.com
+Received: from [10.0.3.33] (c-73-96-52-102.hsd1.or.comcast.net [73.96.52.102])
+        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
+        by 0.0.0.0:465 (trex/5.7.12);
+        Thu, 13 Jun 2019 01:09:24 -0400
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH v4] i2c: bcm2835: Model Divider in CCF
+From:   Annaliese McDermond <nh6z@nh6z.net>
+In-Reply-To: <20190612104107.ndbo55ii2w3ahtzr@ninjato>
+Date:   Wed, 12 Jun 2019 22:09:21 -0700
+Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, swarren@wwwdotorg.org,
+        NWDR Team <team@nwdigitalradio.com>,
+        Eric Anholt <eric@anholt.net>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <2E838B63-DD8D-40AC-AA31-7C0FEF8B4424@nh6z.net>
+References: <20190529042912.12956-1-nh6z@nh6z.net>
+ <20190608171443.14484-1-nh6z@nh6z.net>
+ <20190612104107.ndbo55ii2w3ahtzr@ninjato>
+To:     Wolfram Sang <wsa@the-dreams.de>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---jqnskoivfbu5krfp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-Hi,
+> On Jun 12, 2019, at 3:41 AM, Wolfram Sang <wsa@the-dreams.de> wrote:
+>=20
+> On Sat, Jun 08, 2019 at 10:14:43AM -0700, Annaliese McDermond wrote:
+>> Model the I2C bus clock divider as a part of the Core Clock =
+Framework.
+>> Primarily this removes the clk_get_rate() call from each transfer.
+>> This call causes problems for slave drivers that themselves have
+>> internal clock components that are controlled by an I2C interface.
+>> When the slave's internal clock component is prepared, the prepare
+>> lock is obtained, and it makes calls to the I2C subsystem to
+>> command the hardware to activate the clock.  In order to perform
+>> the I2C transfer, this driver sets the divider, which requires
+>> it to get the parent clock rate, which it does with clk_get_rate().
+>> Unfortunately, this function will try to take the clock prepare
+>> lock, which is already held by the slave's internal clock calls
+>> creating a deadlock.
+>>=20
+>> Modeling the divider in the CCF natively removes this dependency
+>> and the divider value is only set upon changing the bus clock
+>> frequency or changes in the parent clock that cascade down to this
+>> divisor.  This obviates the need to set the divider with every
+>> transfer and avoids the deadlock described above.  It also should
+>> provide better clock debugging and save a few cycles on each
+>> transfer due to not having to recalcuate the divider value.
+>>=20
+>> Signed-off-by: Annaliese McDermond <nh6z@nh6z.net>
+>> Acked-by: Stefan Wahren <stefan.wahren@i2se.com>
+>> Reviewed-by: Eric Anholt <eric@anholt.net>
+>=20
+> Applied to for-next, thanks for keeping at this!
 
-On Tue, Jun 11, 2019 at 08:50:37AM -0600, Rob Herring wrote:
-> On Tue, Jun 11, 2019 at 3:06 AM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
-> >
-> > Hi Rob,
-> >
-> > On Mon, Jun 10, 2019 at 03:34:18PM -0600, Rob Herring wrote:
-> > > On Wed, Jun 5, 2019 at 6:29 AM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
-> > > > +properties:
-> > > > +  "#address-cells":
-> > > > +    const: 1
-> > > > +
-> > > > +  "#size-cells":
-> > > > +    const: 0
-> > >
-> > > These 2 are covered by i2c-controller.yaml, right?
-> >
-> > Indeed, I've removed them.
-> >
-> > > > +examples:
-> > > > +  - |
-> > > > +    p2wi@1f03400 {
-> > >
-> > > i2c@...
-> > >
-> > > That should fail on the schema (I need to get the schema checking of
-> > > examples finished.)
-> >
-> > That would be great :) The compilation of the examples alone already
-> > caught a good number of examples that weren't even compiling.
->
-> I'm primarily waiting on a dtc change to be accepted[1]. Feel free to
-> review/ack.
+Thanks for your patience with this.  I know it=E2=80=99s hard to deal =
+with
+newer folks sometimes, but I really appreciate your forbearance.
 
-I guess it's too late now :)
+> And thanks to all
+> reviewers, too.
 
-> > Speaking of examples, one thing that would be great too would be to
-> > allow the usage of our C headers. It's not supported at the moment,
-> > and this often ends up with an example that is less readable than the
-> > actual DT.
->
-> It should be. You just have to add them. See
-> Documentation/devicetree/bindings/timer/intel,ixp4xx-timer.yaml for
-> example.
+Thanks too to Eric and Stefan.  If you=E2=80=99re ever in the Eugene, OR =
+area
+look me up for a free beverage of your choice. :)
 
-Hmmm, I'm pretty sure I tried this before. I'll try again.
+> (One minor thing: next time, please start a new thread when sending a
+> new patch. This makes applying patches easier.)
 
-> Maybe the common interrupt and gpio ones should be added by default.
-
-I guess so, yeah. The GIC too is pretty common
-
-Maxime
+I=E2=80=99ll definitely do so next time.  Thank you.
 
 --
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
---jqnskoivfbu5krfp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXQEcaQAKCRDj7w1vZxhR
-xWTgAP9WB+1aXtMSPMtLHzMJKOV6r1RNowdkygnwiE+cBDkvOAD7BDqmviqSzzZt
-6saIUD3M+DBgvkUTsko4s0nJ4Wp+1AQ=
-=GewT
------END PGP SIGNATURE-----
-
---jqnskoivfbu5krfp--
+Annaliese McDermond
+nh6z@nh6z.net=
