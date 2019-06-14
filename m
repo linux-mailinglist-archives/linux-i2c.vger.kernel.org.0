@@ -2,140 +2,135 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3707F46BFF
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jun 2019 23:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E1B46C1E
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jun 2019 23:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726297AbfFNVkK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 14 Jun 2019 17:40:10 -0400
-Received: from sauhun.de ([88.99.104.3]:57478 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725809AbfFNVkJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 14 Jun 2019 17:40:09 -0400
-Received: from localhost (p5486CF81.dip0.t-ipconnect.de [84.134.207.129])
-        by pokefinder.org (Postfix) with ESMTPSA id AA8282CF690;
-        Fri, 14 Jun 2019 23:40:06 +0200 (CEST)
-Date:   Fri, 14 Jun 2019 23:40:05 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Stefan Roese <sr@denx.de>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        Jan Breuer <jan.breuer@jaybee.cz>,
-        John Crispin <john@phrozen.org>,
-        =?utf-8?B?UmVuw6k=?= van Dorst <opensource@vdorst.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH 2/2 v3] i2c: mt7621: Add MediaTek MT7621/7628/7688 I2C
- driver
-Message-ID: <20190614214005.GK17899@ninjato>
-References: <20190604113407.8948-1-sr@denx.de>
- <20190604113407.8948-2-sr@denx.de>
+        id S1726126AbfFNVtb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 14 Jun 2019 17:49:31 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:43397 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725837AbfFNVta (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Jun 2019 17:49:30 -0400
+Received: by mail-lj1-f193.google.com with SMTP id 16so3776690ljv.10;
+        Fri, 14 Jun 2019 14:49:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qrq7bOdVmDw17MlBZJ7Vd00iMTb4xybgawnbUy2H72A=;
+        b=bn1uTT9Nevw3W6y+y5HuXvq9Fu6GMV1xnAOr6mKOB25yeYREKMNqap4B0rLpIk6Lcq
+         z7Dr4bNQSAcYLq2nQN0GMR2Bp6XZ2D2FCsTTq+sf5JdXS+Ykf0UMaElROiDh3nebxfAh
+         ZBEKVMVExT1chp3GI7QisjbxWHS+9HQqaiiLpsNQDDbzDBN3sIPtJU30ry2aTEPf1pUy
+         cWYLPq2CQPPkzsmj7qkbRhMqnCjyYSXZxthZn9XxRK3RvyG+UctZ8HYFKXglp77AS8ZK
+         WXB/xfCT/JB9Rky0AqZVKc1Bn7gLf4b2bdWGe3pl7Nw+gHMpkFVhjC6l39B+T7QKBk3J
+         6dhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qrq7bOdVmDw17MlBZJ7Vd00iMTb4xybgawnbUy2H72A=;
+        b=c0iGombDgYfcxVu0qnFz1Tesx6J4mkxZr/mM/nWAa8EeO1iJBx2rd9tsdroJr6w+Oe
+         fbr3aFRPEeb27okXZB116itw4Lg3mLuI0o2TUFRkjPFVzibMDJFpK9tqLLf+E0xwFbFd
+         j0tT5Posfu//35bVSiCrQEEq70LtJhPdfGXNiojPVwgG1eLRIKh3s1ogauxxAeDQAjmR
+         EsPA+JErccN8+rJxnJsGLJxt5WJ59zsdNQqj2eoASIgkLYMjEnV6B1gSfyD0U0ZXwwIA
+         hd6r+B1ZC3kUA/BtybfOYBY/5ulHIuqNKIM4mrYjDJMb/hRmZXjs5UWx37Vj3kV3AXqq
+         UhHA==
+X-Gm-Message-State: APjAAAVbQPmI7HbTabEjVnXlPnFDMRVnDIqQ2BLKUeeB/VhqrxmPB+Qp
+        ll8YnS5SXsLJN68WkLk/YKE=
+X-Google-Smtp-Source: APXvYqxTw2K6vRdQwnrF8czdgDPe7mREpeNG2XKDI7lOMIKgocUvEqKbem/tnEylfJxhg7VPpKmiDg==
+X-Received: by 2002:a2e:5d92:: with SMTP id v18mr44428002lje.9.1560548968827;
+        Fri, 14 Jun 2019 14:49:28 -0700 (PDT)
+Received: from localhost.localdomain ([5.164.217.122])
+        by smtp.gmail.com with ESMTPSA id 137sm783792ljj.46.2019.06.14.14.49.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 14 Jun 2019 14:49:27 -0700 (PDT)
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        Peter Rosin <peda@axentia.se>
+Cc:     Serge Semin <Sergey.Semin@t-platforms.ru>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: mux-gpio: Use "mux" con_id to find channel GPIOs
+Date:   Sat, 15 Jun 2019 00:47:49 +0300
+Message-Id: <20190614214748.2389-1-fancer.lancer@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZG5hGh9V5E9QzVHS"
-Content-Disposition: inline
-In-Reply-To: <20190604113407.8948-2-sr@denx.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Recent patch - ("i2c: mux/i801: Switch to use descriptor passing")
+altered the i2c-mux-gpio driver to use the GPIO-descriptor
+based interface to find and request the GPIOs then being utilized
+to select and deselect the channels of GPIO-driven i2c-muxes. Even
+though the proposed modification was correct for the platform_data-based
+systems, it was invalid for the OF-based ones and caused the kernel
+to crash at the driver probe procedure. There were two problems with
+that modification. First of all the gpiod_count() and gpiod_get_index()
+were called with NULL con_id. Due to this the methods couldn't find
+the "mux-gpios" OF-properties and returned the -ENOENT error. Secondly
+the return value of gpiod_count() wasn't checked for being negative,
+which in case of an error caused the driver to crash. This patch
+is intended to fix the described problems.
 
---ZG5hGh9V5E9QzVHS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: - ("i2c: mux/i801: Switch to use descriptor passing")
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Peter Rosin <peda@axentia.se>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+---
+ drivers/i2c/busses/i2c-i801.c    |  2 +-
+ drivers/i2c/muxes/i2c-mux-gpio.c | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Hi Stefan,
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index a377d94968af..ec54b5b4f1a1 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1276,7 +1276,7 @@ static int i801_add_mux(struct i801_priv *priv)
+ 	for (i = 0; i < mux_config->n_gpios; i++) {
+ 		lookup->table[i].chip_label = mux_config->gpio_chip;
+ 		lookup->table[i].chip_hwnum = mux_config->gpios[i];
+-		lookup->table[i].con_id = NULL;
++		lookup->table[i].con_id = "mux";
+ 	}
+ 	gpiod_add_lookup_table(lookup);
+ 	priv->lookup = lookup;
+diff --git a/drivers/i2c/muxes/i2c-mux-gpio.c b/drivers/i2c/muxes/i2c-mux-gpio.c
+index b9578f668fb2..1ea097dc8d5d 100644
+--- a/drivers/i2c/muxes/i2c-mux-gpio.c
++++ b/drivers/i2c/muxes/i2c-mux-gpio.c
+@@ -130,10 +130,10 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
+ 			sizeof(mux->data));
+ 	}
+ 
+-	ngpios = gpiod_count(&pdev->dev, NULL);
+-	if (!ngpios) {
+-		dev_err(&pdev->dev, "no gpios provided\n");
+-		return -EINVAL;
++	ngpios = gpiod_count(&pdev->dev, "mux");
++	if (ngpios <= 0) {
++		dev_err(&pdev->dev, "no valid gpios provided\n");
++		return ngpios ?: -EINVAL;
+ 	}
+ 	mux->ngpios = ngpios;
+ 
+@@ -173,7 +173,7 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
+ 			flag = GPIOD_OUT_HIGH;
+ 		else
+ 			flag = GPIOD_OUT_LOW;
+-		gpiod = devm_gpiod_get_index(&pdev->dev, NULL, i, flag);
++		gpiod = devm_gpiod_get_index(&pdev->dev, "mux", i, flag);
+ 		if (IS_ERR(gpiod)) {
+ 			ret = PTR_ERR(gpiod);
+ 			goto alloc_failed;
+-- 
+2.21.0
 
-On Tue, Jun 04, 2019 at 01:34:07PM +0200, Stefan Roese wrote:
-> This patch adds a driver for the I2C controller found on the MediaTek
-> MT7621/7628/7688 SoC's. The base version of this driver was done by
-> Steven Liu (according to the copyright and MODULE_AUTHOR lines). It
-> can be found in the OpenWRT repositories (v4.14 at the time I looked).
->=20
-> The base driver had many issues, which are disccussed here:
->=20
-> https://en.forum.labs.mediatek.com/t/openwrt-15-05-loads-non-working-i2c-=
-kernel-module-for-mt7688/1286/3
->=20
-> From this link an enhanced driver version (complete rewrite, mayor
-> changes: support clock stretching, repeated start, ACK handling and
-> unlimited message length) from Jan Breuer can be found here:
->=20
-> https://gist.github.com/j123b567/9b555b635c2b4069d716b24198546954
->=20
-> This patch now adds this enhanced I2C driver to mainline.
->=20
-> Changes by Stefan Roese for upstreaming:
-> - Add devicetree bindings
-> - checkpatch clean
-> - Use module_platform_driver()
-> - Minor cosmetic enhancements
-> - Removed IO warpped functions
-> - Use readl_relaxed_poll_timeout() and drop poll_down_timeout()
-> - Removed superfluous barrier() in mtk_i2c_reset()
-> - Use i2c_8bit_addr_from_msg()
-> - Added I2C_FUNC_PROTOCOL_MANGLING
-> - Removed adap->class =3D I2C_CLASS_HWMON | I2C_CLASS_SPD;
->=20
-> Signed-off-by: Stefan Roese <sr@denx.de>
-
-Mostly good, really minor nits left.
-
-> +config I2C_MT7621
-> +	tristate "MT7621/MT7628 I2C Controller"
-> +	depends on (RALINK && (SOC_MT7620 || SOC_MT7621)) || COMPILE_TEST
-> +	select OF_I2C
-
-OF_I2C is gone since 2013. Didn't Kconfig complain?
-
-> +
-> +#define MT76XX_I2C_INPUT_CLOCK	40000000
-
-Add a comment here explaining that this is a temporary solution until
-proper clock support is added?
-
-> +	ret =3D readl_relaxed_poll_timeout(i2c->base + REG_SM0CTL1_REG,
-> +					 val, !(val & SM0CTL1_TRI),
-> +					 10, TIMEOUT_MS * 1000);
-
-Yay, much better.
-
-> +	if (i2c->bus_freq =3D=3D 0) {
-> +		dev_warn(i2c->dev,
-> +			 "clock-frequency 0 not supported, using 1\n");
-> +		i2c->bus_freq =3D 1;
-> +	}
-
-A bus frequency of 1 Hz does neither make much sense. -EINVAL because
-there is surely something broken then?
-
-> +MODULE_AUTHOR("Steven Liu <steven_liu@mediatek.com>");
-
-His address is known to be broken!
-
-Regards,
-
-   Wolfram
-
-
---ZG5hGh9V5E9QzVHS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0EFDUACgkQFA3kzBSg
-KbaYmA/+Pk6EKiOklBWcrEM5rmp8OdZhk8Ay7VVs38Pb1pA/qvkrfmDt8EIFdFoB
-ysgnrGUCARrMMYfU1xxOay5C2ZedQq0hT8y+aB5YVYRE+cOL54Y76YmzvH4+0/Qf
-16za7WVLKalegbM216SHbh+uitHY8JMB/Lwl1AwCyK75ZTZRwLfsmqFSPXqkwaG/
-q3hSVWSRAx7z4dELYAbKfgwPwhJ7G9uFq7bn3mNFXWZ0tMv/MN3FZFmNEvhGWwry
-ZQC9zCUstll30i/BaELNqlFTlGKN2JWPLlS+DQSbcFd2CwzS/x/m5ddS2C35KU5X
-vWrOJCPmAnxrioR45zYfEtqaKJTuXY+tf52BPolrIRpYef8Boa0T+uEhKe+yYNRW
-ohc6AOxW8ocRiS/+ZyWldY6QPUnEAj1mjd0D92QoiR4nF9xjYJxnfkNVZ6OvWkn/
-9Atr1jSExJpnxqXDKAQHmMBjwK2WVPkSwIz4wHDi/yBi2xYQzQZxZqHRRwO5cHA5
-t5463LR4f1wDFzl3N3V7cxH+aapBUueRLlpeRmzal6RwNfwPNExPklwZS0iiz/32
-VbocpSRk6SV7iOIQW/NhJZpWOV6GrpTBwZ2PLM/Ff8oQ7mb+YzaSb82zzTVMgS8S
-MJ/7b8ZxR4gEtSM/7q4/i+ttK4BFGqn7jCtIm6Cd8eZ2WOCo1T8=
-=uD5t
------END PGP SIGNATURE-----
-
---ZG5hGh9V5E9QzVHS--
