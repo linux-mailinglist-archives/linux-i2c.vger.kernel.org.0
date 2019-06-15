@@ -2,90 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D263F46FD2
-	for <lists+linux-i2c@lfdr.de>; Sat, 15 Jun 2019 13:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C17470B5
+	for <lists+linux-i2c@lfdr.de>; Sat, 15 Jun 2019 17:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726675AbfFOLnV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 15 Jun 2019 07:43:21 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:46761 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726366AbfFOLnV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 15 Jun 2019 07:43:21 -0400
-Received: by mail-pg1-f195.google.com with SMTP id v9so3040057pgr.13;
-        Sat, 15 Jun 2019 04:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NUjJvuIJuf9kpTL8AqJ3ET3rgB/iUv5XqduCHnxMBK4=;
-        b=TJBil7g3Cq/qP5HRTHRnzke6fpX21SdYGBIjvW3jZt7N9OeRYSKOD9aQiSIW0z0V6L
-         5i+aaA/70RCOv39Tkn7HrOsAHPjJtmgBVW8+PTOwnnK4M6EIl3CqADMNauX09DYiLqI7
-         eNgLvXrvPGV1qBuIMNjokfdB3FhULQXMpp7Y4lVlJyoAo7kJQOackT8ExNPVAeMzHFHr
-         C/nMD57SIsdguhp0E3xrcUxElknWGRZXK9ENMIPIY7iitiQFtFKIkx2DO7kSj7vO9HSj
-         1bWGn6ngkUhPFo8KRL0B2EFMwnK1wviqBOM2kYKnDNh9ikQPfmniXvGAxMw0JvY7j710
-         dQ4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NUjJvuIJuf9kpTL8AqJ3ET3rgB/iUv5XqduCHnxMBK4=;
-        b=jVzO03Kdhl+ynJZ1V1dRJC18eNXeQa+HX7Ekr8w9xGOINr6Y9ZsJNoFMVR/Bu+JSbZ
-         kGC3SjKd/6+5YcBXMQGd6nvsh4PNeflSXxTAXGHOHioBAuPHZjZoxLJjoEeKvA+hUP7B
-         KzvAOSNHgx1RFpZhtYVxwQZbK4FA5uhXAq/BLDDZ/MpoZigjrukQPZJfvO9Z5Fip33zu
-         9+v74K7BZMT1w4b+3Lbj9Yz80jFPWZZDVOZn1UEhDEXCo3uDUZLUwp/iVkGipQap6nc7
-         IBAqkQ/cIK6LvoNg4bk/RrMzH21ULH0rEJh5+lLt5Q0FrFiNYKR9GkqD8vMhpf6KmucP
-         DgvQ==
-X-Gm-Message-State: APjAAAUtcqE+ULMpkV8n/e6ucYMpHpL5BI4uxkwffHiA5aZoNkJGqf0Q
-        mrEQcUQgfCSKyzTPsWL8vGh+3+xxdBfpoy7frSc=
-X-Google-Smtp-Source: APXvYqyXkeF8EVnt1DSjQYip4cIMAGErcJmolHnwxkL61NvM8AynVb+7NbOm8IeF8DX+FTpt+y9W2fzp7y2hXHw3M4A=
-X-Received: by 2002:a62:14c4:: with SMTP id 187mr30101202pfu.241.1560599000827;
- Sat, 15 Jun 2019 04:43:20 -0700 (PDT)
+        id S1726614AbfFOPL1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 15 Jun 2019 11:11:27 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33628 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725944AbfFOPL1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 15 Jun 2019 11:11:27 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 6B2A5ADE0;
+        Sat, 15 Jun 2019 15:11:26 +0000 (UTC)
+Date:   Sat, 15 Jun 2019 17:11:24 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Pali =?UTF-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>,
+        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH v1 3/3] i2c: i801: Remove linux/init.h and sort headers
+Message-ID: <20190615171124.6992ffd4@endymion>
+In-Reply-To: <20190614144743.GP9224@smile.fi.intel.com>
+References: <20190613164529.63482-1-andriy.shevchenko@linux.intel.com>
+        <20190613164529.63482-3-andriy.shevchenko@linux.intel.com>
+        <20190614163041.13d5ee68@endymion>
+        <20190614144743.GP9224@smile.fi.intel.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20190614214748.2389-1-fancer.lancer@gmail.com>
-In-Reply-To: <20190614214748.2389-1-fancer.lancer@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 15 Jun 2019 14:43:09 +0300
-Message-ID: <CAHp75VcwP8DzhqfOn=cbcRQtd8WrnuoFPT6GCU754drTZePheg@mail.gmail.com>
-Subject: Re: [PATCH] i2c: mux-gpio: Use "mux" con_id to find channel GPIOs
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        Peter Rosin <peda@axentia.se>,
-        Serge Semin <Sergey.Semin@t-platforms.ru>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Jun 15, 2019 at 12:51 AM Serge Semin <fancer.lancer@gmail.com> wrote:
->
-> Recent patch - ("i2c: mux/i801: Switch to use descriptor passing")
-> altered the i2c-mux-gpio driver to use the GPIO-descriptor
-> based interface to find and request the GPIOs then being utilized
-> to select and deselect the channels of GPIO-driven i2c-muxes. Even
-> though the proposed modification was correct for the platform_data-based
-> systems, it was invalid for the OF-based ones and caused the kernel
-> to crash at the driver probe procedure. There were two problems with
-> that modification. First of all the gpiod_count() and gpiod_get_index()
-> were called with NULL con_id.
+On Fri, 14 Jun 2019 17:47:43 +0300, Andy Shevchenko wrote:
+> On Fri, Jun 14, 2019 at 04:30:41PM +0200, Jean Delvare wrote:
+> > In my books, you should never rely on a header including for you
+> > another header you need. Is there a reason for not following that
+> > principle here?  
+> 
+> init.h vs. module.h is a special case. Otherwise I agree with you.
 
-I always thought that this means "count me all GPIO's for this device
-despite their names" and "get me GPIO by index despite it's name".
-What's went wrong?
-
-
-> Due to this the methods couldn't find
-> the "mux-gpios" OF-properties and returned the -ENOENT error. Secondly
-> the return value of gpiod_count() wasn't checked for being negative,
-> which in case of an error caused the driver to crash. This patch
-> is intended to fix the described problems.
+Why? Where is this documented?
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Jean Delvare
+SUSE L3 Support
