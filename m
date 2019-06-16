@@ -2,74 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FD047454
-	for <lists+linux-i2c@lfdr.de>; Sun, 16 Jun 2019 13:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8EA474DE
+	for <lists+linux-i2c@lfdr.de>; Sun, 16 Jun 2019 15:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726069AbfFPLPf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 16 Jun 2019 07:15:35 -0400
-Received: from sauhun.de ([88.99.104.3]:45562 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725947AbfFPLPf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 16 Jun 2019 07:15:35 -0400
-Received: from localhost (p5486CA8A.dip0.t-ipconnect.de [84.134.202.138])
-        by pokefinder.org (Postfix) with ESMTPSA id D57D72C3112;
-        Sun, 16 Jun 2019 13:15:32 +0200 (CEST)
-Date:   Sun, 16 Jun 2019 13:15:31 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] i2c: i801: Fix kernel crash in
- is_dell_system_with_lis3lv02d()
-Message-ID: <20190616111531.GA3258@kunai>
-References: <20190613164529.63482-1-andriy.shevchenko@linux.intel.com>
- <20190616115957.661f1a7c@endymion>
+        id S1726698AbfFPN4U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 16 Jun 2019 09:56:20 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:43608 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725874AbfFPN4U (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 16 Jun 2019 09:56:20 -0400
+Received: by mail-lf1-f68.google.com with SMTP id j29so4643047lfk.10;
+        Sun, 16 Jun 2019 06:56:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=vUj7/cmqz5EsJjON5muTu2B1PksKipHdgkZedARaWAY=;
+        b=EArIxiUtzwv4fAo+tQXYXVYXrYx2cB+95rmkMP1Sbun8BYAnoXJvcPNJ/+VqPFG7NV
+         RPrMmnQO0vhs5xa32MLsOiZv0l8PCJ8cpaPqhI2flQWvJqgbAcTNjvAxCzSwYJ7Wnbqx
+         8ME4LPcwqiU1sF5dW5bKJa8CbpWGd10FcE1NdAk1Pm89ovais6IaK27HFTgvojNoa2EO
+         QqjQFZTrx+kRH6ptv+PeApRs4rUu/bYTsNRNgQyTuy/XQQ9r8N2WGQ10Vc93gmIwNN6j
+         9+ef2fyP0GA5kaZ3bDgK4ygInimJmZAndBQWqnx2UA1K8ICDQQeW8AjiynhslUrERBml
+         hJqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vUj7/cmqz5EsJjON5muTu2B1PksKipHdgkZedARaWAY=;
+        b=iMZ9D5coofBoyYdS1DlOfqWCsVtFs/pYbq7lUYLmQKO/dY3QuwzTkJrn6rXBKesw2b
+         NofVkrvy5XxrFjWG5OmwtsAYQnsAPUIiE29tIxc/F5znb5D6ctgXLn3/1ns3ne5x86mc
+         0oaIifEgbpJcY2X0LG2r8v7jLaeal1Rmt1lvHTMu7g0wQs5JmlEBUD0mftpCqRd1xfNQ
+         rFRuzKSxcu1zdi/vsmT/XaduAmIZkDwZpIlz5QUkN3fCyRisABTybhZTUnzJwPiMIAOb
+         Mf+FmYedxBxH7U+l1hv8oaUcSFw2F+Zbm44cR6m5ud2Xc+u1uUt7mip4qFsacrxKJzK4
+         swaQ==
+X-Gm-Message-State: APjAAAVxtX86D5HtiPl7YMQRnzeCY/DyyiFis/hvaX5BsPU4YtAVsaSf
+        7utSn2xAiblI7FNDRCzYeoQ=
+X-Google-Smtp-Source: APXvYqziCr78Zs5kDjI/NHZgifF4wyDPKUb+UgfVgT5G+4vXttuXr/e5KKMq7FdThf8SUrN9mEM1kg==
+X-Received: by 2002:a19:6e41:: with SMTP id q1mr45228904lfk.20.1560693377880;
+        Sun, 16 Jun 2019 06:56:17 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
+        by smtp.googlemail.com with ESMTPSA id z12sm1297835lfg.67.2019.06.16.06.56.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 16 Jun 2019 06:56:17 -0700 (PDT)
+Subject: Re: [PATCH V3] i2c: busses: tegra: Add suspend-resume support
+To:     Wolfram Sang <wsa@the-dreams.de>, Bitan Biswas <bbiswas@nvidia.com>
+Cc:     Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1559885867-10190-1-git-send-email-bbiswas@nvidia.com>
+ <20190614211129.GG17899@ninjato>
+ <758d6dc2-f044-6be3-6896-196ef477d393@nvidia.com>
+ <20190615045405.GA1023@kunai>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <69a9a7e3-f885-b6ab-60bb-a1165ce2db23@gmail.com>
+Date:   Sun, 16 Jun 2019 16:56:06 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tKW2IUtsqtDRztdT"
-Content-Disposition: inline
-In-Reply-To: <20190616115957.661f1a7c@endymion>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190615045405.GA1023@kunai>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+15.06.2019 7:54, Wolfram Sang пишет:
+> 
+>>> Without a maintainer ack, this is an exception this time. Should we add
+>>> Dmitry as another maintainer or reviewer at least?
+>>>
+>> I shall followup with Maintainer for ACK in future I2C tegra patches.
+> 
+> This comment was not directed at you, sorry if that was not clear. It
+> was more for Laxman, Thierry, Jonathan, and Dmitry (if he is
+> interested).
+> 
 
---tKW2IUtsqtDRztdT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-
-> > Fixes: 19b07cb4a187 ("i2c: i801: Register optional lis3lv02d I2C device=
- on Dell machines")
->=20
-> Are we certain it will be the same commit ID in the upstream kernel
-> tree?
-
-Yes, because I don't rebase my tree and Linus pulls as-is.
-
-
---tKW2IUtsqtDRztdT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0GJM8ACgkQFA3kzBSg
-KbYp0g//Vtg/CkIOZqciLntyUyV32jk590cQyYr5eSud7lNeakgHqFmz7sTZHbQl
-JwH0FeeMrIkVlqYcG9p2CpfWNPNooxl0jM/amQpORrIJ52l38O7EVked5oAA7OAh
-OyEsorsZbZXwqGmyqykdZ3pyx7+2JJrLqe1df0+saiVlU7K6UMBgW2lrVi2HXKux
-TU7Dm8pnyVCG6Xnet3EMI885m2Kh0f/8/66Vuk5eOmCXBs2gXFFuPL61s1ZvjBIZ
-N0bhKWkNoXUHub4jRR71Ui/JXUzSx9Igy+pEOgooGzkMz3bQKN6J9a5ykTnmJgo4
-yAklqP8kBP6SQjXdP22EP7T4f7+c10Bsp89MCURK2Yc8XcmhJ4JtPjbITcjqRcbm
-+nLS0WKII+ViOstlYtkD9Ts05dLyZxEfruoBZoFoVfDluhjVv1jWEqXNPMPVyu4r
-NVxErcIHAtKlSHmpkL5Ir/dvSIT9tG4rijuYb0hNJfMXuC6QMy+aUvPQzXtaFAhv
-F+g1yRDnTSSa6CsYN5e2hDp8bu/hQKwJbkKEyAz1FIRheJtm654lsgqiUhSbcQi6
-GacPKFfs8lmtbDm1ZC4TGaS8UgSVuWc6nU1tx1hC2W8jdWDIjOH9kI2t8oJl5Prf
-q0n5bBoCEKpWn0qWZ/P+LqDqa/z1BLIG565ZV3FYj5uXJkKhpw8=
-=VXQK
------END PGP SIGNATURE-----
-
---tKW2IUtsqtDRztdT--
+I don't mind at all to review and test patches for the driver and can propose myself
+as a reviewer if that helps and if there are no objections from the Tegra maintainers.
+My primary interest is to have my devices working after next kernel update, but I also
+like to review patches in general if they are touching area that I'm familiar with.
