@@ -2,125 +2,145 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E52947A70
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2019 09:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1223447BAC
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2019 09:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725837AbfFQHJk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Jun 2019 03:09:40 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:46084 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725826AbfFQHJj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jun 2019 03:09:39 -0400
-Received: by mail-wr1-f67.google.com with SMTP id n4so8610766wrw.13;
-        Mon, 17 Jun 2019 00:09:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zc43v5OXvBodortEpoBgk30Fo78ZOXUbz9MiDIgCHI8=;
-        b=jCFUn1F97HkQbPngeYTE4/eBBPutGYfsqLOd78UIxq9RouKOzpgRpqERNS7Xlxqish
-         BM61imiY2+admADx7Sehze8C0yBf9yUt1/vGJ5GZu1v+JaKSqdB+9scJRsOL565VOFEL
-         ktNQRBkbwT21Xnd5AUezDBBtavsCV3pCg3ize8/aaT2xy63z20cpWQS6nrrL6uXD+sU1
-         BsuXmYCaEsRsEgzmoF1M4mrA7aCLnBH99lcLfKItKSV72GdEyOOrDY1KTe+nVtAZo9m6
-         OgotGOmOJJu8LKAsHzrUXoj26SVVjJwL08ZwgWPy8rYNserhJI1eO7O1Egk6MduFTYar
-         FwIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zc43v5OXvBodortEpoBgk30Fo78ZOXUbz9MiDIgCHI8=;
-        b=s+qdUuvI5pD86UUWgpmiSS3pso/yojMljd5q7/hpoSHt3xwoWluueO6fUbw8rIGHUS
-         BdLHg8W366rGaLXGnjUVpNO8Aj9W473oUl2iFL9VbBaywZUrBDnn35kRAiYiGvakAsO0
-         j+cPTrq4kqVn2rSFZBglkWS6NPYyqh/4RKFEIcQE8sgAu5q3o5bKWOSKQRpL7KKacj4a
-         r+LTE/8qgM2Lvvs4nZaCfDWt0zUA+m/PNq1JVMMUSKm1uDW5wZiKSn6+6vlDs4RDCKCw
-         Fg7NIrwuh6a6Z2HvTqJVkVrDRkoPXcD8HKbY2BaIE0p05LdEQY3AgVbH3ttrgZBeEugH
-         S+BQ==
-X-Gm-Message-State: APjAAAXm47koNgmYLUsF6Q+3SDjjBU0nmHsc+GeLTO73jyccgzuxNgqv
-        aGcB9Kl6YC7A84cEe0JCM9s=
-X-Google-Smtp-Source: APXvYqwY3noebc3h+fhryUhAYjxed8EgOCK3RkQT+brQik4yFxPPgD14tIOlpFTkXC4QUAlFlfRFKA==
-X-Received: by 2002:adf:ef8d:: with SMTP id d13mr58425865wro.60.1560755377638;
-        Mon, 17 Jun 2019 00:09:37 -0700 (PDT)
-Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
-        by smtp.gmail.com with ESMTPSA id x3sm12563246wrp.78.2019.06.17.00.09.36
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 17 Jun 2019 00:09:36 -0700 (PDT)
-Date:   Mon, 17 Jun 2019 09:09:35 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Wolfram Sang <wsa@the-dreams.de>, Bitan Biswas <bbiswas@nvidia.com>
-Cc:     Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shardar Mohammed <smohammed@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>
-Subject: Re: [PATCH V3] i2c: busses: tegra: Add suspend-resume support
-Message-ID: <20190617070935.GB30126@ulmo>
-References: <1559885867-10190-1-git-send-email-bbiswas@nvidia.com>
- <20190614211129.GG17899@ninjato>
- <758d6dc2-f044-6be3-6896-196ef477d393@nvidia.com>
- <20190615045405.GA1023@kunai>
+        id S1725826AbfFQHxT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Jun 2019 03:53:19 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:46963 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725837AbfFQHxS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jun 2019 03:53:18 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5H7qB6H012707;
+        Mon, 17 Jun 2019 09:53:07 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=CTrvQhARsK2rq2uBwxe43MaGoFurKJQoc0Xtvz7t0+w=;
+ b=F+3o3nWzlV27xMfCYtyHi/OANHrg1Tk3r9hUGfm+ebNmuIr21dxUkuVttOzWP3Yn+mJB
+ vm7doDEu6zsFP6Hjg+wCgJEwDg+vtwJl2z3eLSJBydDrhp2uuM5UYQ/hW+hfv68CV9AI
+ dtWb1qSj4cmDL6f1tdzjC7h47jHnWDpn3MEcvdWiJAUk/zcMw8SnvNrKb5WR9QL7YuGV
+ iKVI3txkM9N91g3WlV3MqgjmETqFXpjwLgzugPbcQY+OSQa8DQHfunbW1ySrSkZ66Fd6
+ 92GntuY5SJX9Dtr8WubS7jpZGazAE2qp5Ksyn/CHvrNVKoF6d9smR3KFY0UAvuJNPXjl qQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2t4peu1399-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Mon, 17 Jun 2019 09:53:07 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B712234;
+        Mon, 17 Jun 2019 07:53:06 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 959181651;
+        Mon, 17 Jun 2019 07:53:06 +0000 (GMT)
+Received: from localhost (10.75.127.49) by SFHDAG5NODE3.st.com (10.75.127.15)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 17 Jun 2019 09:53:06
+ +0200
+From:   Fabrice Gasnier <fabrice.gasnier@st.com>
+To:     <wsa@the-dreams.de>, <pierre-yves.mordret@st.com>
+CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <marc.w.gonzalez@free.fr>,
+        <fabien.dessenne@st.com>, <fabrice.gasnier@st.com>
+Subject: [PATCH v3] i2c: i2c-stm32f7: fix the get_irq error cases
+Date:   Mon, 17 Jun 2019 09:53:01 +0200
+Message-ID: <1560757981-10532-1-git-send-email-fabrice.gasnier@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="cmJC7u66zC7hs+87"
-Content-Disposition: inline
-In-Reply-To: <20190615045405.GA1023@kunai>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG5NODE3.st.com
+ (10.75.127.15)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-17_05:,,
+ signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+During probe, return the "get_irq" error value instead of -EINVAL which
+allows the driver to be deferred probed if needed.
+Fix also the case where of_irq_get() returns a negative value.
+Note :
+On failure of_irq_get() returns 0 or a negative value while
+platform_get_irq() returns a negative value.
 
---cmJC7u66zC7hs+87
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
 
-On Sat, Jun 15, 2019 at 06:54:05AM +0200, Wolfram Sang wrote:
->=20
-> > > Without a maintainer ack, this is an exception this time. Should we a=
-dd
-> > > Dmitry as another maintainer or reviewer at least?
-> > >=20
-> > I shall followup with Maintainer for ACK in future I2C tegra patches.
->=20
-> This comment was not directed at you, sorry if that was not clear. It
-> was more for Laxman, Thierry, Jonathan, and Dmitry (if he is
-> interested).
+Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
+Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+---
+Changes in v3:
+- return -ENOENT instead of -ENODEV and shorten the ternary operator as
+  suggested by Wolfram.
+Changes in v2:
+- Also check for irq == 0 that means "does not exist" as pointed out by
+  Marc
+---
+ drivers/i2c/busses/i2c-stm32f7.c | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
-I thought I had already acked this. I've certainly been testing this
-since I carry it in a local tree. So for what it's worth:
+diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+index 4284fc9..432b701 100644
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -25,7 +25,6 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+-#include <linux/of_irq.h>
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/pinctrl/consumer.h>
+@@ -1812,15 +1811,14 @@ static struct i2c_algorithm stm32f7_i2c_algo = {
+ 
+ static int stm32f7_i2c_probe(struct platform_device *pdev)
+ {
+-	struct device_node *np = pdev->dev.of_node;
+ 	struct stm32f7_i2c_dev *i2c_dev;
+ 	const struct stm32f7_i2c_setup *setup;
+ 	struct resource *res;
+-	u32 irq_error, irq_event, clk_rate, rise_time, fall_time;
++	u32 clk_rate, rise_time, fall_time;
+ 	struct i2c_adapter *adap;
+ 	struct reset_control *rst;
+ 	dma_addr_t phy_addr;
+-	int ret;
++	int irq_error, irq_event, ret;
+ 
+ 	i2c_dev = devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
+ 	if (!i2c_dev)
+@@ -1832,16 +1830,20 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
+ 		return PTR_ERR(i2c_dev->base);
+ 	phy_addr = (dma_addr_t)res->start;
+ 
+-	irq_event = irq_of_parse_and_map(np, 0);
+-	if (!irq_event) {
+-		dev_err(&pdev->dev, "IRQ event missing or invalid\n");
+-		return -EINVAL;
++	irq_event = platform_get_irq(pdev, 0);
++	if (irq_event <= 0) {
++		if (irq_event != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "Failed to get IRQ event: %d\n",
++				irq_event);
++		return irq_event ? : -ENOENT;
+ 	}
+ 
+-	irq_error = irq_of_parse_and_map(np, 1);
+-	if (!irq_error) {
+-		dev_err(&pdev->dev, "IRQ error missing or invalid\n");
+-		return -EINVAL;
++	irq_error = platform_get_irq(pdev, 1);
++	if (irq_error <= 0) {
++		if (irq_error != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "Failed to get IRQ error: %d\n",
++				irq_error);
++		return irq_error ? : -ENOENT;
+ 	}
+ 
+ 	i2c_dev->clk = devm_clk_get(&pdev->dev, NULL);
+-- 
+2.7.4
 
-Tested-by: Thierry Reding <treding@nvidia.com>
-Acked-by: Thierry Reding <treding@nvidia.com>
-
-Bitan, I don't mind getting the patches to the corporate email address,
-but please make sure to also always include the gmail address when
-sending patches to the public mailing lists. My workflow is somewhat
-quirky that way because I work remotely and for historical reasons.
-
-Thierry
-
---cmJC7u66zC7hs+87
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl0HPK8ACgkQ3SOs138+
-s6FohhAAueqXXOLMZn3+hgH+DaEpPrk9LFMEZiSlIPZ7H/nQ7UBUFlw5RL+eMCi8
-VdtLa4T3PVlHCWkQB525d+e2Zz59rpsAiLaFpbjnH6rg/1USybHGmXiZonu1q65N
-mfia5/uyCp/zOjFI59IUSCWUtDNukWa4Ypy1OIjt/l+kBmPjFALVRNzfdTBDoxli
-45IaxfFz0zV/F+1kGSHlcrgPFU14KsFYOdiXsKe2+LS4+dKPmhXf4MALat2f9RRM
-QyoniVVfd3a8wMAPuQ7K0KAU4KtnjHglpgxd0WlJ0TN95aTjqi+9cCxIEsshw3T7
-FYKWyQqHcZ7j5GPk8UBt9jKHnmsg4z8r2ZMO2+F2+xmMnUvW67vZzFsSNti0KJc7
-8IeyHVbhTOQya2fR5pj6pyPDfW7k+kKQ9iQYl98XvaCDrND7k0SdtkB+ctbi/qva
-ZqFErPJFPWZggjz2CICICaH98ueKpvKODf/wCDM57ManU7iXO6zx34f4eR758O54
-SPvblD8XW6L0RPMq9hnlTmn7mJKw4XhVvGXkABxvwErfKeew+GIcCyJsgz/BsIAZ
-SRwKl7WC1FECPHtWQfwN1oWuu33T2eg5Z/nKsJcFQ/mcyk6Kq41Bi0A3NohkJvsp
-AkLVEx8ivhD68wLQ/RZQyFcVbiPiUBmxT9OM1BKzZ5utoIsldts=
-=e940
------END PGP SIGNATURE-----
-
---cmJC7u66zC7hs+87--
