@@ -2,87 +2,181 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4139C48C36
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2019 20:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C9248C48
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2019 20:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728280AbfFQSjn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Jun 2019 14:39:43 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:49895 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725839AbfFQSjn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jun 2019 14:39:43 -0400
-Received: from orion.localdomain ([77.2.173.233]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M9nAB-1hfwoi06b7-005qYN; Mon, 17 Jun 2019 20:39:41 +0200
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        wsa@the-dreams.de, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH 3/3] drivers: gpio: pcf857x: use subsys_i2c_driver()
-Date:   Mon, 17 Jun 2019 20:39:39 +0200
-Message-Id: <1560796779-17117-3-git-send-email-info@metux.net>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1560796779-17117-1-git-send-email-info@metux.net>
-References: <1560796779-17117-1-git-send-email-info@metux.net>
-X-Provags-ID: V03:K1:llSAjebDYGluuZiize11hDPpsvBQMhYG4De6irWqXpmrHFW04Ly
- 16HNNFKFZTlcAGOEjM3VXOjZFxqfKNcvtKacdROJ+cGjp+KyQoKZp6RRM1f992D8AajRfTH
- ubwHArQwNvStp54tgaocGmyvbXapqAM7qNDKhz2QRgL5qwPbQisxsuiE/XJdECl2+ebOz6T
- ITlmQqYFAR6uLzV5MrTEg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/EmVtBUJHQk=:0Lk+obK6sn9wuxf6NJ5WYU
- 2N3vh3G4xIS8Xv+4baEazkT2iJ/MRCrxQ7OZmSxMHMAWO6QteAWJKgC3RxmmisIcTTZpIOVN2
- nh6dkNWRBqEeWmeDfROuDTAKmaONjVk6C9Er9AwQ8i/+N0bEYuPYll6uJ+fXsWjs0KoYgg3cP
- 5O/Dpjr1Dwy454jQMZbzsyOE6TzVk1a5SRtVzwfjQnCs9QAnA+IpCTY0db46924mrs3RkpsOQ
- D9X9q9Iirffy+tKcFKSQVtmW7Sv1eZJhWgWUWfLjw3Z1FXf73SUTQbbWJ4tZTTRbe2pQ35XVU
- Svx0UoMsSyyRcDDK6YQ6VUlhynhaLPTO75ZEoggsV35m7DGyvwFHkR+jP5gu6Yo1A7cJ8M8bv
- AJaGBg8sfpC6vwk41zOP43SMEP57MOxWPrMGeB+GMCkdyU/NuPH2q28lVzpUu8SWuK/QOjYgr
- bisZIoETFYa7JDOxGz0zN3FIORGMaAzZHdjiyNCgb9Jrmc/HFLBmYjaIE3/PTnLnvj77CrdYT
- SqLs15lZq95H8vwmn4tH7JU/k1lr0/x4ilJjmxfHJvn41s47IbiChy0N+d/S7ztgez1Q2HxGL
- 0eg/2N9r8ImIMJmq2FGw+q0INVhrRKchX7VCA0HM7Nv5jclWscVg/qPOR5i1jKLbQgxAUmLlt
- oTDMOSo/yj6OT1bEEJmrAHtIpA9MXn4ygPpBQc3hHYGKRWywNvbpNTbPqC7gZnX7iH3pC3rB4
- A91VyeQi0T8SRG+3uSxJa6mekFpQWtCobrD+CA==
+        id S1727529AbfFQSlI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Jun 2019 14:41:08 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:15176 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725764AbfFQSlI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jun 2019 14:41:08 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d07dec20001>; Mon, 17 Jun 2019 11:41:06 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 17 Jun 2019 11:41:06 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 17 Jun 2019 11:41:06 -0700
+Received: from [10.19.65.14] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 17 Jun
+ 2019 18:41:03 +0000
+Subject: Re: [PATCH V7] i2c: tegra: remove BUG, BUG_ON
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
+        Wolfram Sang <wsa@the-dreams.de>
+CC:     Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1560748152-6575-1-git-send-email-bbiswas@nvidia.com>
+ <5a8ad23f-33c8-5140-cef8-f9cef70764b1@gmail.com>
+From:   Bitan Biswas <bbiswas@nvidia.com>
+Message-ID: <43a3fae8-dd3e-c7d3-42a7-493210e601e2@nvidia.com>
+Date:   Mon, 17 Jun 2019 11:41:00 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <5a8ad23f-33c8-5140-cef8-f9cef70764b1@gmail.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1560796866; bh=NS+EykB/fDCq1eHfod8gUDIK5K1DLkej1/yjn/VU47w=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=FpO1R5vfGDr+ZFPUGeb0zS2Z7NcDA878Teg+7Lzrn22iDNVT4ByzNPr5aeI63c+21
+         Ux7FGyaIzS6TdpU0mFUBdcrxNb9fxaSjcMA1c++dBk6tNbL3b57mqsedHvP+/BNeM/
+         WGpUA3zwLsWpyQGBN+omZACjz5xKH43yjILRnVTlqxHXcaWx7o9qgfAJi7ZdkFJKiR
+         n40FwztUE/plMJ0/4JsbRlAvYlYOFjuBx1GhNjN+zOwb9TaFwbnktxVgOxVYQ0C0w+
+         oU90KpqrS9xSh17CyJ0CPq6b/y1ESZLYLlDg6PTcJlFBB33FaI/ERNk/xATaFe5Gei
+         WzcO0HiHDIqag==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Enrico Weigelt <info@metux.net>
 
-Reduce driver init boilerplate by using the new
-subsys_i2c_driver() macro.
 
-Signed-off-by: Enrico Weigelt <info@metux.net>
----
- drivers/gpio/gpio-pcf857x.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+On 6/17/19 5:13 AM, Dmitry Osipenko wrote:
+> 17.06.2019 8:09, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>> Remove BUG, BUG_ON as it makes system usable:
+>>   - Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
+>>     as needed.
+>>   - Remove BUG() and mask Rx interrupt similar as Tx
+>>     for message fully sent case.
+>>   - Add caller error handling and WARN_ON_ONCE check for non-zero
+>>     rx_fifo_avail in tegra_i2c_empty_rx_fifo() after all processing.
+>=20
+> The commit message should describe motivation of the change and not the c=
+hange itself,
+> unless it's some additional information which is required for better unde=
+rstanding of
+> the code.
+>=20
+> In yours case it could be something like that:
+>=20
+>      The usage of BUG() macro is generally discouraged in kernel, unless
+>      it's a problem that results in a physical damage or loss of data.
+>      This patch removes unnecessary BUG() macros and replaces the rest
+>      with a warnings.
+I shall update as per above comments.
 
-diff --git a/drivers/gpio/gpio-pcf857x.c b/drivers/gpio/gpio-pcf857x.c
-index 14fb8f6..554663e 100644
---- a/drivers/gpio/gpio-pcf857x.c
-+++ b/drivers/gpio/gpio-pcf857x.c
-@@ -430,20 +430,10 @@ static void pcf857x_shutdown(struct i2c_client *client)
- 	.id_table = pcf857x_id,
- };
- 
--static int __init pcf857x_init(void)
--{
--	return i2c_add_driver(&pcf857x_driver);
--}
- /* register after i2c postcore initcall and before
-  * subsys initcalls that may rely on these GPIOs
-  */
--subsys_initcall(pcf857x_init);
--
--static void __exit pcf857x_exit(void)
--{
--	i2c_del_driver(&pcf857x_driver);
--}
--module_exit(pcf857x_exit);
-+subsys_i2c_driver(pcf857x_driver);
- 
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("David Brownell");
--- 
-1.9.1
+>=20
+>> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+>> ---
+>>   drivers/i2c/busses/i2c-tegra.c | 45 ++++++++++++++++++++++++++++++++++=
+--------
+>>   1 file changed, 37 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-teg=
+ra.c
+>> index 4dfb4c1..b155b61 100644
+>> --- a/drivers/i2c/busses/i2c-tegra.c
+>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>> @@ -73,6 +73,7 @@
+>>   #define I2C_ERR_NO_ACK				BIT(0)
+>>   #define I2C_ERR_ARBITRATION_LOST		BIT(1)
+>>   #define I2C_ERR_UNKNOWN_INTERRUPT		BIT(2)
+>> +#define I2C_ERR_RX_BUFFER_OVERFLOW		BIT(3)
+>>  =20
+>>   #define PACKET_HEADER0_HEADER_SIZE_SHIFT	28
+>>   #define PACKET_HEADER0_PACKET_ID_SHIFT		16
+>> @@ -515,7 +516,11 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c=
+_dev *i2c_dev)
+>>   	 * prevent overwriting past the end of buf
+>>   	 */
+>>   	if (rx_fifo_avail > 0 && buf_remaining > 0) {
+>> -		BUG_ON(buf_remaining > 3);
+>> +		/*
+>> +		 * buf_remaining > 3 check not needed as rx_fifo_avail =3D=3D 0
+>> +		 * when (words_to_transfer was > rx_fifo_avail) earlier
+>> +		 * in this function.
+>> +		 */
+>>   		val =3D i2c_readl(i2c_dev, I2C_RX_FIFO);
+>>   		val =3D cpu_to_le32(val);
+>>   		memcpy(buf, &val, buf_remaining);
+>> @@ -523,7 +528,15 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c=
+_dev *i2c_dev)
+>>   		rx_fifo_avail--;
+>>   	}
+>>  =20
+>> -	BUG_ON(rx_fifo_avail > 0 && buf_remaining > 0);
+>> +	if ((!(i2c_dev->msg_buf_remaining)) &&
+>=20
+> The RX FIFO shall be drained completely no matter what.
+>=20
+> Hence why the "i2c_dev->msg_buf_remaining" checking is needed here?
+I moved the part of below condition in Patch V6 to function=20
+tegra_i2c_empty_rx_fifo:
 
+ >> +			err_val =3D tegra_i2c_empty_rx_fifo(i2c_dev);
+ >> +			if ((!(i2c_dev->msg_buf_remaining)) &&
+
+ > Let's move this check into tegra_i2c_empty_rx_fifo() and return=20
+-EINVAL for that case.
+ > This will make code to look cleaner.
+
+Is above condition not needed?
+
+
+>=20
+> Secondly, in the future please don't add parens where they are not needed=
+. In this
+> case parens around !i2c_dev->msg_buf_remaining are not needed at all.
+>=20
+I shall look out for similar unnecessary parentheses and update the patch.
+
+>> +	    WARN_ON_ONCE(rx_fifo_avail))
+>> +		return -EINVAL;
+>> +
+>> +	/*
+>> +	 * buf_remaining > 0 at this point can only have rx_fifo_avail =3D=3D =
+0
+>=20
+> The rx_fifo_avail is always 0 at this point, including the case of buf_re=
+maining =3D=3D 0.
+> It will be better if you'll add a comment for the WARN_ON_ONCE(rx_fifo_av=
+ail) above,
+> saying that RX FIFO must be fully drained, and then just drop this commen=
+t.
+>=20
+
+OK.
+
+>> +	 * as this corresponds to (words_to_transfer was > rx_fifo_avail)
+>> +	 * case earlier in this function.
+>> +	 */
+>>   	i2c_dev->msg_buf_remaining =3D buf_remaining;
+>>   	i2c_dev->msg_buf =3D buf;
+>=20
+> [snip]
+>=20
