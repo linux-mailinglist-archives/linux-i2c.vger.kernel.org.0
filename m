@@ -2,61 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A734885A
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2019 18:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD12348AEF
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2019 19:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726047AbfFQQIN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Jun 2019 12:08:13 -0400
-Received: from mga09.intel.com ([134.134.136.24]:39197 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726028AbfFQQIN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 17 Jun 2019 12:08:13 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jun 2019 09:08:12 -0700
-X-ExtLoop1: 1
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Jun 2019 09:08:11 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hcuB0-0007W1-Jn; Mon, 17 Jun 2019 19:08:10 +0300
-Date:   Mon, 17 Jun 2019 19:08:10 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali.rohar@gmail.com>,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [PATCH v1 2/3] i2c: i801: Use match_string() helper to simplify
- the code
-Message-ID: <20190617160810.GG9224@smile.fi.intel.com>
-References: <20190613164529.63482-1-andriy.shevchenko@linux.intel.com>
- <20190613164529.63482-2-andriy.shevchenko@linux.intel.com>
- <20190617161644.781a1940@endymion>
+        id S1728575AbfFQR6T (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Jun 2019 13:58:19 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:11787 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbfFQR6T (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jun 2019 13:58:19 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d07d4ba0000>; Mon, 17 Jun 2019 10:58:18 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 17 Jun 2019 10:58:18 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 17 Jun 2019 10:58:18 -0700
+Received: from [10.19.65.14] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 17 Jun
+ 2019 17:58:15 +0000
+Subject: Re: [PATCH V3] i2c: busses: tegra: Add suspend-resume support
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+CC:     Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1559885867-10190-1-git-send-email-bbiswas@nvidia.com>
+ <20190614211129.GG17899@ninjato>
+ <758d6dc2-f044-6be3-6896-196ef477d393@nvidia.com>
+ <20190615045405.GA1023@kunai> <20190617070935.GB30126@ulmo>
+From:   Bitan Biswas <bbiswas@nvidia.com>
+Message-ID: <4abda3d1-b70b-672d-0fe0-6e0ef748f9aa@nvidia.com>
+Date:   Mon, 17 Jun 2019 10:58:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190617161644.781a1940@endymion>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190617070935.GB30126@ulmo>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL106.nvidia.com (172.18.146.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1560794298; bh=0ueJBY+Lv6odOXcv++qxQRsJjIhWcKA5wndZDLgnKGQ=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=DKuno/6ydOH7Oel00ywdck6oDWWbiMppgU5mfbnBCi2UpQgMyp0sEkZJRXo9G4tya
+         p2qppgQL8nRHOjFGHKaT+rHIhZb6d94OUqE2S/lRmZ0VHz50HJqyHKcSOAsgmKhkz9
+         +tEA1iDctCwUDteJS7Odxcxw4Fd+3ubJVqyK/jhKhmzGsxIPhph+oIYoWYyyguC4Iv
+         0mI2BJBKIZI4FGBzbKaJVCfv43IMmA/stOwV9ZitcBDOcKRy0FLEAoHvw6DEKcu0o7
+         9elO43NwIuepL23nFFExsPyjajML5/S5fAic3KWqJNjrHteAgjgHMz5cs6KyXyTVV6
+         AmY/+giItMaqg==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 04:16:44PM +0200, Jean Delvare wrote:
-> On Thu, 13 Jun 2019 19:45:28 +0300, Andy Shevchenko wrote:
-> > match_string() returns the array index of a matching string.
-> > Use it instead of the open-coded implementation.
+
+
+On 6/17/19 12:09 AM, Thierry Reding wrote:
+> On Sat, Jun 15, 2019 at 06:54:05AM +0200, Wolfram Sang wrote:
+>>
+>>>> Without a maintainer ack, this is an exception this time. Should we add
+>>>> Dmitry as another maintainer or reviewer at least?
+>>>>
+>>> I shall followup with Maintainer for ACK in future I2C tegra patches.
+>>
+>> This comment was not directed at you, sorry if that was not clear. It
+>> was more for Laxman, Thierry, Jonathan, and Dmitry (if he is
+>> interested).
 > 
-> Nice, I didn't know about this utility function.
+> I thought I had already acked this. I've certainly been testing this
+> since I carry it in a local tree. So for what it's worth:
 > 
-> Don't we need to include <linux/string.h> though? Or is it another
-> undocumented exception?
+> Tested-by: Thierry Reding <treding@nvidia.com>
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> 
+> Bitan, I don't mind getting the patches to the corporate email address,
+> but please make sure to also always include the gmail address when
+> sending patches to the public mailing lists. My workflow is somewhat
+> quirky that way because I work remotely and for historical reasons.
+I shall put both email addresses going forward.
 
-Here it is a nice catch! I will update.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+-regards,
+  Bitan
