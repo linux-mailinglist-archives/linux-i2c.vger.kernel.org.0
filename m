@@ -2,102 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22285481A5
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2019 14:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6A848279
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2019 14:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726121AbfFQMQR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Jun 2019 08:16:17 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:32930 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbfFQMQR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jun 2019 08:16:17 -0400
-Received: by mail-lf1-f67.google.com with SMTP id y17so6356087lfe.0;
-        Mon, 17 Jun 2019 05:16:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=udosfGcsxFjuEN1zHDqJn+M1NCMIGyoOGu6CEwS0pac=;
-        b=jT6Q8qRlLptMoZIpkA1ya0gK8Hw5DW2D9Hc/oZSFod6/4ON8smZ2C7pacHVBKJtwif
-         M+xf14CBbD/qagu98vIVvN7eUlakgVL6aPxSZYBEugSmRZnoCp0Eew+WqZufuoPMUzTv
-         9PpvWRw8UiFn9Ge4YwGlGP1kyvOhW34lP9M3ZdXvxWhMHUa9k4uCr/Xfz4dpv+Eehvzn
-         UTvd6YRbzndJvOK79fD9uLdXHE7VJ/WhdmlBLoVQBbzlkg3ocRIB6IAxJNYllvdAiw3H
-         5Qo9n8tqkBDMSJgvjKMS5O6eWZtW5svcIMoXivzy2xeNcbNmX8/E3FiRCv9Tcuwj6D1P
-         Jnsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=udosfGcsxFjuEN1zHDqJn+M1NCMIGyoOGu6CEwS0pac=;
-        b=FOjOFKtECsYnTp6z6bUcsh7OPKhQbhdxFN9E6qTeaWE36MXwjA3s7GJdkkfL5qel7S
-         nP8ZavD/IjYvcUr+txuxwpWiNPPXCK766PVbiAok2Tv1enkRzwgtxkTFYVjtEH+TFReJ
-         4DlXsdeph8sJt2iL35Lcwd0WZPMuy/O8SjG8g0PzrijCNMd1T4VXRSJoR/HTxP8A+25C
-         iJ/ZNBE0bpwTbNhCYQOa9P8uSIJ0a2UyDFTQvaC2MoXPU2l0yEkPu7LSAmjqzOE0PbLM
-         ckLfcyO4nfczG7vz6DCC1oM/tBi1amW2cehsD19E8OcL6KKhsjp7qbQNLvXbfIdvcPBw
-         g0MQ==
-X-Gm-Message-State: APjAAAXbseUN1XADJymcRlFytk06JvQoUxAA2TtmjEr6g1d6Z8HS5fWn
-        l03zxGselx5oqHPe43+9SGI=
-X-Google-Smtp-Source: APXvYqwKB+ebv49DdCC7IQFSoLc/U1801tvGqjIasHp0bM9bHN0LQJ7nTRElnvd5f7F/YByM2GjGqA==
-X-Received: by 2002:ac2:48a5:: with SMTP id u5mr49615261lfg.62.1560773774658;
-        Mon, 17 Jun 2019 05:16:14 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.googlemail.com with ESMTPSA id k12sm1940837lfm.90.2019.06.17.05.16.13
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 17 Jun 2019 05:16:14 -0700 (PDT)
-Subject: Re: [PATCH V3] i2c: busses: tegra: Add suspend-resume support
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Bitan Biswas <bbiswas@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shardar Mohammed <smohammed@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>
-References: <1559885867-10190-1-git-send-email-bbiswas@nvidia.com>
- <20190614211129.GG17899@ninjato>
- <758d6dc2-f044-6be3-6896-196ef477d393@nvidia.com>
- <20190615045405.GA1023@kunai>
- <69a9a7e3-f885-b6ab-60bb-a1165ce2db23@gmail.com>
- <20190617070259.GA30126@ulmo>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <3f5adcda-49e3-46b3-9881-bc33532db4df@gmail.com>
-Date:   Mon, 17 Jun 2019 15:16:13 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        id S1726065AbfFQMcS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Jun 2019 08:32:18 -0400
+Received: from mga12.intel.com ([192.55.52.136]:57562 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726005AbfFQMcS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 17 Jun 2019 08:32:18 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jun 2019 05:32:17 -0700
+X-ExtLoop1: 1
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by orsmga005.jf.intel.com with ESMTP; 17 Jun 2019 05:32:13 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>, alokc@codeaurora.org,
+        agross@kernel.org, david.brown@linaro.org,
+        wsa+renesas@sang-engineering.com, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, ard.biesheuvel@linaro.org,
+        jlhugo@gmail.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 4/6] usb: dwc3: qcom: Add support for booting with ACPI
+In-Reply-To: <20190617102146.GG16364@dell>
+References: <20190612142654.9639-1-lee.jones@linaro.org> <20190612142654.9639-5-lee.jones@linaro.org> <20190617102146.GG16364@dell>
+Date:   Mon, 17 Jun 2019 15:32:07 +0300
+Message-ID: <87y320gzp4.fsf@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20190617070259.GA30126@ulmo>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-17.06.2019 10:02, Thierry Reding пишет:
-> On Sun, Jun 16, 2019 at 04:56:06PM +0300, Dmitry Osipenko wrote:
->> 15.06.2019 7:54, Wolfram Sang пишет:
->>>
->>>>> Without a maintainer ack, this is an exception this time. Should we add
->>>>> Dmitry as another maintainer or reviewer at least?
->>>>>
->>>> I shall followup with Maintainer for ACK in future I2C tegra patches.
->>>
->>> This comment was not directed at you, sorry if that was not clear. It
->>> was more for Laxman, Thierry, Jonathan, and Dmitry (if he is
->>> interested).
->>>
->>
->> I don't mind at all to review and test patches for the driver and can propose myself
->> as a reviewer if that helps and if there are no objections from the Tegra maintainers.
->> My primary interest is to have my devices working after next kernel update, but I also
->> like to review patches in general if they are touching area that I'm familiar with.
-> 
-> No objection from me.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Thanks! I guess the same from Laxman and Jon?
+Hi,
 
-I'll prepare the patch to add myself as a reviewer.
+Lee Jones <lee.jones@linaro.org> writes:
+>> In Linux, the DWC3 core exists as its own independent platform device.
+>> Thus when describing relationships in Device Tree, the current default
+>> boot configuration table option, the DWC3 core often resides as a child
+>> of the platform specific node.  Both of which are given their own
+>> address space descriptions and the drivers can be mostly agnostic to
+>> each other.
+>>=20
+>> However, other Operating Systems have taken a more monolithic approach,
+>> which is evident in the configuration ACPI tables for the Qualcomm
+>> Snapdragon SDM850, where all DWC3 (core and platform) components are
+>> described under a single IO memory region.
+>>=20
+>> To ensure successful booting using the supplied ACPI tables, we need to
+>> devise a way to chop up the address regions provided and subsequently
+>> register the DWC3 core with the resultant information, which is
+>> precisely what this patch aims to achieve.
+>>=20
+>> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> ---
+>>  drivers/usb/dwc3/Kconfig     |   2 +-
+>>  drivers/usb/dwc3/dwc3-qcom.c | 206 ++++++++++++++++++++++++++++++-----
+>>  2 files changed, 179 insertions(+), 29 deletions(-)
+>
+> I'm starting to get a little twitchy about these patches now.  Due to
+> the release cadence of the larger Linux distros, it's pretty important
+> that these changes land in v5.3.  Without them, it is impossible to
+> install Linux on some pretty high profile emerging platforms.
+>
+> It's already -rc5 and I'm concerned that we're going to miss the
+> merge-window.  Would you be kind enough to review these patches
+> please?  The Pinctrl and I2C parts of the set have already been
+> merged.
+
+I don't seem to have this series in my inbox. This is the only email I
+have in this series.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl0HiEkACgkQzL64meEa
+mQZgTg/+MvWLo+0fVFNR04KSqTX6nZcqLk/4KwBc7uy1RsD4WMFa3zcKE/jB8scd
+KN48Szwr6TxXj6/nboP7PeKF+u2ftbYw8L1Ggtd1Okq/Fn8mUcM+vY1xGotjgrao
+ZXbOLcI393gCADUuEgHbOZDXPeLtgF2K/RQ06CPJ+wPunpx3pDwJVaMumW5Inocu
+Yz/eMkd5XP2QXDfL8F+27ZfnZQ6oNbEa+RV0cakbyvjHWDbkeiCW2DN5YFM3gJpC
+T9RXeqzKIUkfWd3mLcBq54Z3wCh51nw2UfThE1bQK2XlPKPXnU9P/Oi7ZIJYn5X4
+hF9PoBRoYWoaS5v9TJxL+78F+salna/FVsr6jKtbmVQjr4t3H+2i3SKXUmcMtaP9
+/jXg8jRCni44640ri7F4xN52TdkE/K7eAShOTp2izyRydKkZRxCOgW0xPh1Yi6Yx
+DGFxy4TQPUc6uAchzWfB/DIQywLYMDChFGMc525vTiw3ATnWf5dK7c/G0FufNs+g
+YcXsD9HyhYs9puAp4DBUZmXZGiuPHT8Se78aTfYqAvY7oFH5puh2Mg8UDLeeiatr
+A67I1jpWh9RvTGFPpBABobbaItB4lMcitFy2MqxByxNmJt9l5bbExTRmdXLFzbZK
+db8+BiVaO0xw70s0j9BuGwO/YolXOiX2i4lP4Qzhc7WjniL3FPw=
+=l8qE
+-----END PGP SIGNATURE-----
+--=-=-=--
