@@ -2,95 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD12348AEF
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2019 19:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D82DD48C34
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2019 20:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728575AbfFQR6T (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Jun 2019 13:58:19 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:11787 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726091AbfFQR6T (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jun 2019 13:58:19 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d07d4ba0000>; Mon, 17 Jun 2019 10:58:18 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 17 Jun 2019 10:58:18 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 17 Jun 2019 10:58:18 -0700
-Received: from [10.19.65.14] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 17 Jun
- 2019 17:58:15 +0000
-Subject: Re: [PATCH V3] i2c: busses: tegra: Add suspend-resume support
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-CC:     Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Shardar Mohammed <smohammed@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>
-References: <1559885867-10190-1-git-send-email-bbiswas@nvidia.com>
- <20190614211129.GG17899@ninjato>
- <758d6dc2-f044-6be3-6896-196ef477d393@nvidia.com>
- <20190615045405.GA1023@kunai> <20190617070935.GB30126@ulmo>
-From:   Bitan Biswas <bbiswas@nvidia.com>
-Message-ID: <4abda3d1-b70b-672d-0fe0-6e0ef748f9aa@nvidia.com>
-Date:   Mon, 17 Jun 2019 10:58:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20190617070935.GB30126@ulmo>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL106.nvidia.com (172.18.146.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1560794298; bh=0ueJBY+Lv6odOXcv++qxQRsJjIhWcKA5wndZDLgnKGQ=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=DKuno/6ydOH7Oel00ywdck6oDWWbiMppgU5mfbnBCi2UpQgMyp0sEkZJRXo9G4tya
-         p2qppgQL8nRHOjFGHKaT+rHIhZb6d94OUqE2S/lRmZ0VHz50HJqyHKcSOAsgmKhkz9
-         +tEA1iDctCwUDteJS7Odxcxw4Fd+3ubJVqyK/jhKhmzGsxIPhph+oIYoWYyyguC4Iv
-         0mI2BJBKIZI4FGBzbKaJVCfv43IMmA/stOwV9ZitcBDOcKRy0FLEAoHvw6DEKcu0o7
-         9elO43NwIuepL23nFFExsPyjajML5/S5fAic3KWqJNjrHteAgjgHMz5cs6KyXyTVV6
-         AmY/+giItMaqg==
+        id S1726091AbfFQSjm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Jun 2019 14:39:42 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:35755 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725844AbfFQSjm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jun 2019 14:39:42 -0400
+Received: from orion.localdomain ([77.2.173.233]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MKc0o-1hvYmm1ROO-00KvUQ; Mon, 17 Jun 2019 20:39:40 +0200
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        wsa@the-dreams.de, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH 1/3] include: linux: i2c: more helpers for declaring i2c drivers
+Date:   Mon, 17 Jun 2019 20:39:37 +0200
+Message-Id: <1560796779-17117-1-git-send-email-info@metux.net>
+X-Mailer: git-send-email 1.9.1
+X-Provags-ID: V03:K1:LNAGFFDSSGhrBJAVfAfdpZS3/d/gWgechh97rUsMMlo81oJiI31
+ H8SwkPnBK7lasHLpmX5/y50mEYh2o3n88GGUs0p+KHb3FmzIIeh3nSQZR7oqXRR6fFo2D80
+ mpyqat861/1S8USST1EKfXo0dsawOE0tgNb50Hlwy8Cw2r7b7XobktyLtfALDv4INcg1A/2
+ /PITBQ5p9pCcIC/tJ/vXA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xFB658LfSTA=:PoXhzmZr4oPSj16nxtRPl5
+ mUycdTT0pK945VaN81pKG6dLJu7IRYlgAkG5rMk4hkAXp/RVPXpS38JUztiE2OFzMRGYJhx0G
+ FdYP3NgSBfxCxM9CH2mYR7EoUqNyGeLNWCGcs9FmYh3IWzNBTQ3cj/3SwO79NOdoqJp3e9ir2
+ hIf8quAyjb6YHzCtVq5fhaQ2XA9nI6hVQOiVtp67geW/UMfBm1urLCiqLZXwHFuc5HqvjuADB
+ iQUqGl9lSXyRQ/N/sFJGPitT9vXekGa7zCrGmiB8bXPhtFQqBZKe1v+LxNANTPccTsL/IzuqT
+ 1WjxiOpN1yge1GACfsBm6dIL3euNqNYroF6+wmweRmZ1w8w5Au0BhVN0VYOWRMc4Yz/L4ERnI
+ jczN6rjB+WQWa0EdAefmxmkSULkCDKvIFXfbRIMi5E8u/r28i0gSlI+B6qhnHi8OCQ5JbHacm
+ l1qh8LWCNa4iu54sVARCmJbBCUVcOZU1KVN3JTSvcoGiWRibPC6/chr6m6WEuhn8N8bkBVwz7
+ YXcGJCdFG/cM6kzU063GILKduwgX6WuYC0U10+cJVGVYWo+8NQfxXkGNf266OWPrm6eteowyC
+ 32El8moHv+gHxzE8Ou4707JfCoW/YyHzn1JDekB8HKqmV7+6ya2WYpp8lGnPQN2rFxm6bVxc6
+ WF/KeCkUp5iLk13rEXfnZv0F3X67+3LTc+nf4NtYuNG41JXWZVlrhFMtcGZB4ByiPJNDEQKOr
+ lp1v2PQqHum5Ll80u+DZVx7WlQtxwVM8HQLkdA==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Enrico Weigelt <info@metux.net>
 
+Add more helper macros for trivial driver init cases, similar to the
+already existing module_i2c_driver()+friends - now for those which
+are initialized at other stages (eg. by subsys_initcall()).
 
-On 6/17/19 12:09 AM, Thierry Reding wrote:
-> On Sat, Jun 15, 2019 at 06:54:05AM +0200, Wolfram Sang wrote:
->>
->>>> Without a maintainer ack, this is an exception this time. Should we add
->>>> Dmitry as another maintainer or reviewer at least?
->>>>
->>> I shall followup with Maintainer for ACK in future I2C tegra patches.
->>
->> This comment was not directed at you, sorry if that was not clear. It
->> was more for Laxman, Thierry, Jonathan, and Dmitry (if he is
->> interested).
-> 
-> I thought I had already acked this. I've certainly been testing this
-> since I carry it in a local tree. So for what it's worth:
-> 
-> Tested-by: Thierry Reding <treding@nvidia.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
-> 
-> Bitan, I don't mind getting the patches to the corporate email address,
-> but please make sure to also always include the gmail address when
-> sending patches to the public mailing lists. My workflow is somewhat
-> quirky that way because I work remotely and for historical reasons.
-I shall put both email addresses going forward.
+This helps to further reduce driver init boilerplate.
 
--regards,
-  Bitan
+Signed-off-by: Enrico Weigelt <info@metux.net>
+---
+ include/linux/i2c.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 1308126..fee59bd 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -920,6 +920,23 @@ static inline u8 i2c_8bit_addr_from_msg(const struct i2c_msg *msg)
+ #define builtin_i2c_driver(__i2c_driver) \
+ 	builtin_driver(__i2c_driver, i2c_add_driver)
+ 
++/* subsys_i2c_driver() - Helper macro for drivers that don't do
++ * anything special in module init/exit.  This eliminates a lot of
++ * boilerplate.  Each module may only use this macro once, and
++ * calling it replaces subsys_initcall() and module_exit()
++ */
++#define subsys_i2c_driver(__i2c_driver) \
++static int __init __i2c_driver##_init(void) \
++{ \
++       return i2c_add_driver(&(__i2c_driver)); \
++} \
++subsys_initcall(__i2c_driver##_init); \
++static void __exit __i2c_driver##_exit(void) \
++{ \
++       i2c_del_driver(&(__i2c_driver)); \
++} \
++module_exit(__i2c_driver##_exit);
++
+ #endif /* I2C */
+ 
+ #if IS_ENABLED(CONFIG_OF)
+-- 
+1.9.1
+
