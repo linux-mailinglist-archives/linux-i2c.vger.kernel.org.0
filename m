@@ -2,91 +2,171 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8EA474DE
-	for <lists+linux-i2c@lfdr.de>; Sun, 16 Jun 2019 15:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C03479A1
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2019 07:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbfFPN4U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 16 Jun 2019 09:56:20 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:43608 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725874AbfFPN4U (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 16 Jun 2019 09:56:20 -0400
-Received: by mail-lf1-f68.google.com with SMTP id j29so4643047lfk.10;
-        Sun, 16 Jun 2019 06:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vUj7/cmqz5EsJjON5muTu2B1PksKipHdgkZedARaWAY=;
-        b=EArIxiUtzwv4fAo+tQXYXVYXrYx2cB+95rmkMP1Sbun8BYAnoXJvcPNJ/+VqPFG7NV
-         RPrMmnQO0vhs5xa32MLsOiZv0l8PCJ8cpaPqhI2flQWvJqgbAcTNjvAxCzSwYJ7Wnbqx
-         8ME4LPcwqiU1sF5dW5bKJa8CbpWGd10FcE1NdAk1Pm89ovais6IaK27HFTgvojNoa2EO
-         QqjQFZTrx+kRH6ptv+PeApRs4rUu/bYTsNRNgQyTuy/XQQ9r8N2WGQ10Vc93gmIwNN6j
-         9+ef2fyP0GA5kaZ3bDgK4ygInimJmZAndBQWqnx2UA1K8ICDQQeW8AjiynhslUrERBml
-         hJqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vUj7/cmqz5EsJjON5muTu2B1PksKipHdgkZedARaWAY=;
-        b=iMZ9D5coofBoyYdS1DlOfqWCsVtFs/pYbq7lUYLmQKO/dY3QuwzTkJrn6rXBKesw2b
-         NofVkrvy5XxrFjWG5OmwtsAYQnsAPUIiE29tIxc/F5znb5D6ctgXLn3/1ns3ne5x86mc
-         0oaIifEgbpJcY2X0LG2r8v7jLaeal1Rmt1lvHTMu7g0wQs5JmlEBUD0mftpCqRd1xfNQ
-         rFRuzKSxcu1zdi/vsmT/XaduAmIZkDwZpIlz5QUkN3fCyRisABTybhZTUnzJwPiMIAOb
-         Mf+FmYedxBxH7U+l1hv8oaUcSFw2F+Zbm44cR6m5ud2Xc+u1uUt7mip4qFsacrxKJzK4
-         swaQ==
-X-Gm-Message-State: APjAAAVxtX86D5HtiPl7YMQRnzeCY/DyyiFis/hvaX5BsPU4YtAVsaSf
-        7utSn2xAiblI7FNDRCzYeoQ=
-X-Google-Smtp-Source: APXvYqziCr78Zs5kDjI/NHZgifF4wyDPKUb+UgfVgT5G+4vXttuXr/e5KKMq7FdThf8SUrN9mEM1kg==
-X-Received: by 2002:a19:6e41:: with SMTP id q1mr45228904lfk.20.1560693377880;
-        Sun, 16 Jun 2019 06:56:17 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.googlemail.com with ESMTPSA id z12sm1297835lfg.67.2019.06.16.06.56.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 16 Jun 2019 06:56:17 -0700 (PDT)
-Subject: Re: [PATCH V3] i2c: busses: tegra: Add suspend-resume support
-To:     Wolfram Sang <wsa@the-dreams.de>, Bitan Biswas <bbiswas@nvidia.com>
-Cc:     Laxman Dewangan <ldewangan@nvidia.com>,
+        id S1725971AbfFQFJV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Jun 2019 01:09:21 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:19745 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725372AbfFQFJV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jun 2019 01:09:21 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d07207f0000>; Sun, 16 Jun 2019 22:09:19 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Sun, 16 Jun 2019 22:09:19 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Sun, 16 Jun 2019 22:09:19 -0700
+Received: from HQMAIL112.nvidia.com (172.18.146.18) by HQMAIL108.nvidia.com
+ (172.18.146.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 17 Jun
+ 2019 05:09:18 +0000
+Received: from HQMAIL106.nvidia.com (172.18.146.12) by HQMAIL112.nvidia.com
+ (172.18.146.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 17 Jun
+ 2019 05:09:18 +0000
+Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL106.nvidia.com
+ (172.18.146.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 17 Jun 2019 05:09:18 +0000
+Received: from dhcp-10-19-65-14.client.nvidia.com (Not Verified[10.19.65.14]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d07207b0003>; Sun, 16 Jun 2019 22:09:18 -0700
+From:   Bitan Biswas <bbiswas@nvidia.com>
+To:     Laxman Dewangan <ldewangan@nvidia.com>,
         Thierry Reding <treding@nvidia.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shardar Mohammed <smohammed@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Dmitry Osipenko <digetx@gmail.com>
+CC:     Shardar Mohammed <smohammed@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>
-References: <1559885867-10190-1-git-send-email-bbiswas@nvidia.com>
- <20190614211129.GG17899@ninjato>
- <758d6dc2-f044-6be3-6896-196ef477d393@nvidia.com>
- <20190615045405.GA1023@kunai>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <69a9a7e3-f885-b6ab-60bb-a1165ce2db23@gmail.com>
-Date:   Sun, 16 Jun 2019 16:56:06 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        Mantravadi Karthik <mkarthik@nvidia.com>,
+        "Bitan Biswas" <bbiswas@nvidia.com>
+Subject: [PATCH V7] i2c: tegra: remove BUG, BUG_ON
+Date:   Sun, 16 Jun 2019 22:09:12 -0700
+Message-ID: <1560748152-6575-1-git-send-email-bbiswas@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <20190615045405.GA1023@kunai>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1560748159; bh=DQLNyMrp9rcChhHIh+I9Q65+uLm1TeHggUBsEyzdr4E=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=Ttmtf/07nDENtuBEHC65pKmMf8sCU8u0SsSSJZuKzDkxfbQ/w04gCXiTFFBiJi4hK
+         GEdfjSZUoRE8LvL8ZjNSmdQLEVho8bNO6Ny7jeHvJHOxXQTC2igh0PZQgjEvwjHl9+
+         MralymHECDuFz22olbSPRnrEyVeiBFZ8NnL7GU0Kou3B/C6oeFE3UKy6CRPZt3M4Jd
+         strLWa3fwnjI2aw33iztj1AmepoJJboWwIxaEU3KPt1j846PZ+Zj40j9/nCSqf8WL9
+         itPGP30tWeV/IIxR+oUE2h+ozQgyZhHSHjjcgMHoN5+ddZrl0TDkzGY3G/9JyCXrm3
+         5UTJxpGFYGXZA==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-15.06.2019 7:54, Wolfram Sang пишет:
-> 
->>> Without a maintainer ack, this is an exception this time. Should we add
->>> Dmitry as another maintainer or reviewer at least?
->>>
->> I shall followup with Maintainer for ACK in future I2C tegra patches.
-> 
-> This comment was not directed at you, sorry if that was not clear. It
-> was more for Laxman, Thierry, Jonathan, and Dmitry (if he is
-> interested).
-> 
+Remove BUG, BUG_ON as it makes system usable:
+ - Remove redundant BUG_ON calls or replace with WARN_ON_ONCE
+   as needed.
+ - Remove BUG() and mask Rx interrupt similar as Tx
+   for message fully sent case.
+ - Add caller error handling and WARN_ON_ONCE check for non-zero
+   rx_fifo_avail in tegra_i2c_empty_rx_fifo() after all processing.
 
-I don't mind at all to review and test patches for the driver and can propose myself
-as a reviewer if that helps and if there are no objections from the Tegra maintainers.
-My primary interest is to have my devices working after next kernel update, but I also
-like to review patches in general if they are touching area that I'm familiar with.
+Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 45 ++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 37 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 4dfb4c1..b155b61 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -73,6 +73,7 @@
+ #define I2C_ERR_NO_ACK				BIT(0)
+ #define I2C_ERR_ARBITRATION_LOST		BIT(1)
+ #define I2C_ERR_UNKNOWN_INTERRUPT		BIT(2)
++#define I2C_ERR_RX_BUFFER_OVERFLOW		BIT(3)
+ 
+ #define PACKET_HEADER0_HEADER_SIZE_SHIFT	28
+ #define PACKET_HEADER0_PACKET_ID_SHIFT		16
+@@ -515,7 +516,11 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
+ 	 * prevent overwriting past the end of buf
+ 	 */
+ 	if (rx_fifo_avail > 0 && buf_remaining > 0) {
+-		BUG_ON(buf_remaining > 3);
++		/*
++		 * buf_remaining > 3 check not needed as rx_fifo_avail == 0
++		 * when (words_to_transfer was > rx_fifo_avail) earlier
++		 * in this function.
++		 */
+ 		val = i2c_readl(i2c_dev, I2C_RX_FIFO);
+ 		val = cpu_to_le32(val);
+ 		memcpy(buf, &val, buf_remaining);
+@@ -523,7 +528,15 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
+ 		rx_fifo_avail--;
+ 	}
+ 
+-	BUG_ON(rx_fifo_avail > 0 && buf_remaining > 0);
++	if ((!(i2c_dev->msg_buf_remaining)) &&
++	    WARN_ON_ONCE(rx_fifo_avail))
++		return -EINVAL;
++
++	/*
++	 * buf_remaining > 0 at this point can only have rx_fifo_avail == 0
++	 * as this corresponds to (words_to_transfer was > rx_fifo_avail)
++	 * case earlier in this function.
++	 */
+ 	i2c_dev->msg_buf_remaining = buf_remaining;
+ 	i2c_dev->msg_buf = buf;
+ 
+@@ -581,7 +594,11 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
+ 	 * boundary and fault.
+ 	 */
+ 	if (tx_fifo_avail > 0 && buf_remaining > 0) {
+-		BUG_ON(buf_remaining > 3);
++		/*
++		 * buf_remaining > 3 check not needed as tx_fifo_avail == 0
++		 * when (words_to_transfer was > tx_fifo_avail) earlier
++		 * in this function for non-zero words_to_transfer.
++		 */
+ 		memcpy(&val, buf, buf_remaining);
+ 		val = le32_to_cpu(val);
+ 
+@@ -847,10 +864,15 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+ 
+ 	if (!i2c_dev->is_curr_dma_xfer) {
+ 		if (i2c_dev->msg_read && (status & I2C_INT_RX_FIFO_DATA_REQ)) {
+-			if (i2c_dev->msg_buf_remaining)
+-				tegra_i2c_empty_rx_fifo(i2c_dev);
+-			else
+-				BUG();
++			if (tegra_i2c_empty_rx_fifo(i2c_dev)) {
++				/*
++				 * Overflow error condition: message fully sent,
++				 * with no XFER_COMPLETE interrupt but hardware
++				 * asks to transfer more.
++				 */
++				i2c_dev->msg_err |= I2C_ERR_RX_BUFFER_OVERFLOW;
++				goto err;
++			}
+ 		}
+ 
+ 		if (!i2c_dev->msg_read && (status & I2C_INT_TX_FIFO_DATA_REQ)) {
+@@ -876,7 +898,14 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+ 	if (status & I2C_INT_PACKET_XFER_COMPLETE) {
+ 		if (i2c_dev->is_curr_dma_xfer)
+ 			i2c_dev->msg_buf_remaining = 0;
+-		BUG_ON(i2c_dev->msg_buf_remaining);
++		/*
++		 * Underflow error condition: XFER_COMPLETE before message
++		 * fully sent.
++		 */
++		if (WARN_ON_ONCE(i2c_dev->msg_buf_remaining)) {
++			i2c_dev->msg_err |= I2C_ERR_UNKNOWN_INTERRUPT;
++			goto err;
++		}
+ 		complete(&i2c_dev->msg_complete);
+ 	}
+ 	goto done;
+-- 
+2.7.4
+
