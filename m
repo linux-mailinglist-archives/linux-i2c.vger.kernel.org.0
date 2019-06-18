@@ -2,179 +2,162 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F754985A
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2019 06:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E42498FE
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2019 08:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726376AbfFRE3y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jun 2019 00:29:54 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:19557 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbfFRE3y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jun 2019 00:29:54 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d0868c00001>; Mon, 17 Jun 2019 21:29:52 -0700
+        id S1726885AbfFRGm2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jun 2019 02:42:28 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:16185 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726640AbfFRGm0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jun 2019 02:42:26 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d0874fc0000>; Mon, 17 Jun 2019 22:22:04 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Mon, 17 Jun 2019 21:29:53 -0700
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 17 Jun 2019 22:22:03 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Mon, 17 Jun 2019 21:29:53 -0700
-Received: from HQMAIL102.nvidia.com (172.18.146.10) by HQMAIL108.nvidia.com
- (172.18.146.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 18 Jun
- 2019 04:29:52 +0000
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL102.nvidia.com
- (172.18.146.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 18 Jun
- 2019 04:29:52 +0000
-Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 18 Jun 2019 04:29:52 +0000
-Received: from dhcp-10-19-65-14.client.nvidia.com (Not Verified[10.19.65.14]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d0868bd0002>; Mon, 17 Jun 2019 21:29:52 -0700
-From:   Bitan Biswas <bbiswas@nvidia.com>
-To:     Laxman Dewangan <ldewangan@nvidia.com>,
+        by hqpgpgate101.nvidia.com on Mon, 17 Jun 2019 22:22:03 -0700
+Received: from [10.19.65.14] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 18 Jun
+ 2019 05:22:00 +0000
+Subject: Re: [PATCH V5 6/7] i2c: tegra: fix PIO rx/tx residual transfer check
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
         Thierry Reding <treding@nvidia.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Dmitry Osipenko <digetx@gmail.com>
+        Wolfram Sang <wsa@the-dreams.de>
 CC:     Shardar Mohammed <smohammed@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>,
-        "Bitan Biswas" <bbiswas@nvidia.com>
-Subject: [PATCH V8] i2c: tegra: remove BUG() macro
-Date:   Mon, 17 Jun 2019 21:29:45 -0700
-Message-ID: <1560832186-17001-1-git-send-email-bbiswas@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1560250274-18499-1-git-send-email-bbiswas@nvidia.com>
+ <1560250274-18499-6-git-send-email-bbiswas@nvidia.com>
+ <42ce2523-dab9-0cdf-e8ff-42631dd161b7@gmail.com>
+ <78140337-dca0-e340-a501-9e37eca6cc87@nvidia.com>
+ <9cb7123a-1ebd-3a93-60dc-c8f57f60270b@gmail.com>
+ <e795ddcf-dd11-4e39-2a94-b663e5ecb35b@nvidia.com>
+ <d2c97291-6392-d614-5cd9-1490a816548c@gmail.com>
+From:   Bitan Biswas <bbiswas@nvidia.com>
+Message-ID: <87b38915-3b2d-9484-e33e-eeacb3746c75@nvidia.com>
+Date:   Mon, 17 Jun 2019 22:21:57 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <d2c97291-6392-d614-5cd9-1490a816548c@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1560832193; bh=LNX4mUvxRDqPABzr8Kuwd0X8X0sezQ+Py3Qmzev6Wh8=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         X-NVConfidentiality:MIME-Version:Content-Type;
-        b=hlj4MWPUK9U5cPzh4dO2OnqEgfa2VabZhQLlIO0HX7koXzBnUI5LIP5fUNcGN8c6r
-         9nlWCAByn9F+5lyeealO6pvsyUxh0KPOZ8cax/yeE1GrZhmMZqfgXut63maMLRoRDn
-         ZDWfIunjifPMOLHxTSqPi7Zz57v+XOlWkohxn/Ay3rUNFGK+9BW3nVesvA2LyYPxui
-         Spzb/3Rtm7yEo5VxNpmcUL50c5STMgewVJbP1sq15zKIDIPobqCegRqiAGZTuykVDU
-         qbalHzlFn18kaGkswFVYe52KUVne6LfE8vvWMBvvPR7CBTkKzg0DPBOjvxUx/zRcUg
-         C7Ec6mQOy4sRg==
+        t=1560835324; bh=woogEWFYrC0moysa3wzNl7oK1UHsHbN3eH7N+d7q6yc=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=k96W7kFdznyim8y9BZ+rdxtP39YESejnbdafkvCuu7Ay90MxdbkGEvR77jTmwo9R1
+         cojCXySqv0/fTYfaX/pZ9lApqe2EUdz0Gun1VTlDbZCmXo0mlJFv9niAbLGXBCyn6y
+         qiW9EKcJS+nTZsrrCseaikMYwiTIvdsg2eWgqCbnA5S8uA9uV5oY98BC/j0GgkYt9b
+         9s/T0CITT9laDnS5DiDWr4SjA2xgVAY0Yg9z6BMgdqMTLuKcJsVxmg6rJdhX1M5nfc
+         GGt1DfGSt2gFXaotO+9jk8ynXz6/EkV5ghftpc4wE3rHwVT1gs1/I3uvuWe1/yMd91
+         qrCzfuM485vzA==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The usage of BUG() macro is generally discouraged in kernel, unless
-it's a problem that results in a physical damage or loss of data.
-This patch removes unnecessary BUG() macros and replaces the rest
-with warning.
 
-Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
----
- drivers/i2c/busses/i2c-tegra.c | 49 +++++++++++++++++++++++++++++++++++-------
- 1 file changed, 41 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 4dfb4c1..6fb545e 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -73,6 +73,7 @@
- #define I2C_ERR_NO_ACK				BIT(0)
- #define I2C_ERR_ARBITRATION_LOST		BIT(1)
- #define I2C_ERR_UNKNOWN_INTERRUPT		BIT(2)
-+#define I2C_ERR_RX_BUFFER_OVERFLOW		BIT(3)
- 
- #define PACKET_HEADER0_HEADER_SIZE_SHIFT	28
- #define PACKET_HEADER0_PACKET_ID_SHIFT		16
-@@ -489,6 +490,13 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
- 	size_t buf_remaining = i2c_dev->msg_buf_remaining;
- 	int words_to_transfer;
- 
-+	/*
-+	 * Catch overflow due to message fully sent before
-+	 * check for RX FIFO availability.
-+	 */
-+	if (WARN_ON_ONCE(!(i2c_dev->msg_buf_remaining)))
-+		return -EINVAL;
-+
- 	if (i2c_dev->hw->has_mst_fifo) {
- 		val = i2c_readl(i2c_dev, I2C_MST_FIFO_STATUS);
- 		rx_fifo_avail = (val & I2C_MST_FIFO_STATUS_RX_MASK) >>
-@@ -515,7 +523,11 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
- 	 * prevent overwriting past the end of buf
- 	 */
- 	if (rx_fifo_avail > 0 && buf_remaining > 0) {
--		BUG_ON(buf_remaining > 3);
-+		/*
-+		 * buf_remaining > 3 check not needed as rx_fifo_avail == 0
-+		 * when (words_to_transfer was > rx_fifo_avail) earlier
-+		 * in this function.
-+		 */
- 		val = i2c_readl(i2c_dev, I2C_RX_FIFO);
- 		val = cpu_to_le32(val);
- 		memcpy(buf, &val, buf_remaining);
-@@ -523,7 +535,12 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
- 		rx_fifo_avail--;
- 	}
- 
--	BUG_ON(rx_fifo_avail > 0 && buf_remaining > 0);
-+	/*
-+	 * RX FIFO must be drained in Overflow case.
-+	 */
-+	if (WARN_ON_ONCE(rx_fifo_avail))
-+		return -EINVAL;
-+
- 	i2c_dev->msg_buf_remaining = buf_remaining;
- 	i2c_dev->msg_buf = buf;
- 
-@@ -581,7 +598,11 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
- 	 * boundary and fault.
- 	 */
- 	if (tx_fifo_avail > 0 && buf_remaining > 0) {
--		BUG_ON(buf_remaining > 3);
-+		/*
-+		 * buf_remaining > 3 check not needed as tx_fifo_avail == 0
-+		 * when (words_to_transfer was > tx_fifo_avail) earlier
-+		 * in this function for non-zero words_to_transfer.
-+		 */
- 		memcpy(&val, buf, buf_remaining);
- 		val = le32_to_cpu(val);
- 
-@@ -847,10 +868,15 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
- 
- 	if (!i2c_dev->is_curr_dma_xfer) {
- 		if (i2c_dev->msg_read && (status & I2C_INT_RX_FIFO_DATA_REQ)) {
--			if (i2c_dev->msg_buf_remaining)
--				tegra_i2c_empty_rx_fifo(i2c_dev);
--			else
--				BUG();
-+			if (tegra_i2c_empty_rx_fifo(i2c_dev)) {
-+				/*
-+				 * Overflow error condition: message fully sent,
-+				 * with no XFER_COMPLETE interrupt but hardware
-+				 * asks to transfer more.
-+				 */
-+				i2c_dev->msg_err |= I2C_ERR_RX_BUFFER_OVERFLOW;
-+				goto err;
-+			}
- 		}
- 
- 		if (!i2c_dev->msg_read && (status & I2C_INT_TX_FIFO_DATA_REQ)) {
-@@ -876,7 +902,14 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
- 	if (status & I2C_INT_PACKET_XFER_COMPLETE) {
- 		if (i2c_dev->is_curr_dma_xfer)
- 			i2c_dev->msg_buf_remaining = 0;
--		BUG_ON(i2c_dev->msg_buf_remaining);
-+		/*
-+		 * Underflow error condition: XFER_COMPLETE before message
-+		 * fully sent.
-+		 */
-+		if (WARN_ON_ONCE(i2c_dev->msg_buf_remaining)) {
-+			i2c_dev->msg_err |= I2C_ERR_UNKNOWN_INTERRUPT;
-+			goto err;
-+		}
- 		complete(&i2c_dev->msg_complete);
- 	}
- 	goto done;
--- 
-2.7.4
+On 6/14/19 6:02 AM, Dmitry Osipenko wrote:
+> 14.06.2019 12:50, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>
+>>
+>> On 6/13/19 5:28 AM, Dmitry Osipenko wrote:
+>>> 13.06.2019 14:30, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>>>
+>>>>
+>>>> On 6/12/19 7:30 AM, Dmitry Osipenko wrote:
+>>>>> 11.06.2019 13:51, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>>>>> Fix expression for residual bytes(less than word) transfer
+>>>>>> in I2C PIO mode RX/TX.
+>>>>>>
+>>>>>> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+>>>>>> ---
+>>>>>
+>>>>> [snip]
+>>>>>
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Update state bef=
+ore writing to FIFO.=C2=A0 If this casues us
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Update state bef=
+ore writing to FIFO.=C2=A0 If this causes us
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+* to finish writing all bytes (AKA buf_remaining goes to
+>>>>>> 0) we
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+* have a potential for an interrupt (PACKET_XFER_COMPLETE is
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * not maskable).=
+=C2=A0 We need to make sure that the isr sees
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * buf_remaining as=
+ 0 and doesn't call us back re-entrantly.
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * not maskable).
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+*/
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf_re=
+maining -=3D words_to_transfer * BYTES_PER_FIFO_WORD;
+>>>>>
+>>>>> Looks like the comment could be removed altogether because it doesn't
+>>>>> make sense since interrupt handler is under xfer_lock which is kept
+>>>>> locked during of tegra_i2c_xfer_msg().
+>>>> I would push a separate patch to remove this comment because of
+>>>> xfer_lock in ISR now.
+>>>>
+>>>>>
+>>>>> Moreover the comment says that "PACKET_XFER_COMPLETE is not maskable"=
+,
+>>>>> but then what I2C_INT_PACKET_XFER_COMPLETE masking does?
+>>>>>
+>>>> I2C_INT_PACKET_XFER_COMPLETE masking support available in Tegra chips
+>>>> newer than Tegra30 allows one to not see interrupt after Packet transf=
+er
+>>>> complete. With the xfer_lock in ISR the scenario discussed in comment
+>>>> can be ignored.
+>>>
+>>> Also note that xfer_lock could be removed and replaced with a just
+>>> irq_enable/disable() calls in tegra_i2c_xfer_msg() because we only care
+>>> about IRQ not firing during of the preparation process.
+>> This should need sufficient testing hence let us do it in a different se=
+ries.
+>=20
+> I don't think that there is much to test here since obviously it should w=
+ork.
+>=20
+I shall push a patch for this as basic i2c read write test passed.
+
+>>>
+>>> It also looks like tegra_i2c_[un]nmask_irq isn't really needed and all
+>>> IRQ's could be simply unmasked during the driver's probe, in that case
+>>> it may worth to add a kind of "in-progress" flag to catch erroneous
+>>> interrupts.
+>>>
+>> TX interrupt needs special handling if this change is done. Hence I thin=
+k it should be
+>> taken up after sufficient testing in a separate patch.
+>=20
+> This one is indeed a bit more trickier. Probably another alternative coul=
+d be to keep GIC
+> interrupt disabled while no transfer is performed, then you'll have to re=
+quest interrupt
+> in a disabled state using IRQ_NOAUTOEN flag.
+>=20
+> And yes, that all should be a separate changes if you're going to impleme=
+nt them.
+>=20
+OK
+
+-Thanks,
+  Bitan
 
