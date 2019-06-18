@@ -2,158 +2,172 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 819D84A2F4
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2019 15:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD8C4A7DB
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2019 19:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728982AbfFRN6K (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jun 2019 09:58:10 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:36228 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728575AbfFRN6K (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jun 2019 09:58:10 -0400
-Received: by mail-ed1-f66.google.com with SMTP id k21so21895318edq.3
-        for <linux-i2c@vger.kernel.org>; Tue, 18 Jun 2019 06:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5R+NHLt8PsIXt8anR6pHPXfCo/6c3mgcVEHW0Oc9gbQ=;
-        b=IomabLXyUSPmgwDNcXRKvVrUMuM5eZ/qFxhM5kHvyjpENaInZNJNgpWS2VXKwHAf8l
-         NEYfD3/Cknpfi5MEzA9EZaX9F2yCLM3CKUM7IF4wGm/S5BpJNzl8Jsl5PsP0DTT3/X1D
-         dmpJqayomyio9iJpF1/FYtElgLw9pM2lZeCXI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=5R+NHLt8PsIXt8anR6pHPXfCo/6c3mgcVEHW0Oc9gbQ=;
-        b=SCDbRrQi3l6Uz5GM0DrypSv/VtlgVx6bgs8h6fdlW+Emp5Y2Qpt4cLBTmrC3TrQrWs
-         MH6BahfHOnIkhNWFqAuLzoKKJqU4Y2pDiJTzv+bYUhr30G29J7UkwWxw0wiluGHFdoHA
-         UfrI8jSClbD3lq4+AQYj6GkVDFwaRbv0Y7fcqaDu3/vBrbE7LmEkpCRFHJ14IJufw31P
-         2sL1rG6TzTeNFezEg+g2PKRXb0Ud/q29U9nqeb7U9VGTU+r+Fqw3SfWOB7crLsMLfiaH
-         VvfjAi6qXUD0Fys+XjRJaGpkABKzGU82rj+Z641ClLNzd713eKSsDxVWDv+Xwf6pMxa4
-         Rmjw==
-X-Gm-Message-State: APjAAAUSmfj2aSyS/EFSTTI2iHWr7VNqZoqWOAMgAr04X5wPk8aHZn7E
-        uc2eulKPYmytxd80w6SaJ5Z4QwLWepY=
-X-Google-Smtp-Source: APXvYqyBb0v30F83VtHb2y9yPf5YE3kiCupaF4YgpnDXka6VJj+7GT+WSSudOjww3CuybbgcAiEZ8g==
-X-Received: by 2002:a17:906:2415:: with SMTP id z21mr82019805eja.211.1560866288249;
-        Tue, 18 Jun 2019 06:58:08 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:569e:0:3106:d637:d723:e855])
-        by smtp.gmail.com with ESMTPSA id o22sm4776392edc.37.2019.06.18.06.58.06
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 18 Jun 2019 06:58:07 -0700 (PDT)
-Date:   Tue, 18 Jun 2019 15:58:05 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Otto Sabart <ottosabart@seberm.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Will Deacon <will.deacon@arm.com>, devicetree@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] docs: fix some broken references due to txt->rst renames
-Message-ID: <20190618135804.GZ12905@phenom.ffwll.local>
-Mail-Followup-To: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>, Ajay Gupta <ajayg@nvidia.com>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Otto Sabart <ottosabart@seberm.com>, Li Yang <leoyang.li@nxp.com>,
-        Will Deacon <will.deacon@arm.com>, devicetree@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-i2c@vger.kernel.org
-References: <6f09587b7678f2fb378d736f45a02ffa9412cc99.1560864716.git.mchehab+samsung@kernel.org>
+        id S1729738AbfFRRG7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jun 2019 13:06:59 -0400
+Received: from mail-eopbgr60131.outbound.protection.outlook.com ([40.107.6.131]:64000
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729541AbfFRRG6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 18 Jun 2019 13:06:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pJLjbFSBGNl2T8yonpvT1fE2FmJNFnf2WfGzTrgYRHc=;
+ b=ASRmZazyD2IcKC5tfUNomUI+l+vNL03qVpAi4pPzcJPjJCicEQccqZTtVDp0UQm5WNUEfacR3BOyeKhtrZnq6A1uHPcMMqD9xFkA/4dY/Ezg/J8tdNdPO5V7/GKl2Q8ac+GF/mcOF0tmO4OSuodiqhnhxiuBFZfTmh7MN2kVOU8=
+Received: from VI1PR07MB5744.eurprd07.prod.outlook.com (20.177.202.24) by
+ VI1PR07MB4384.eurprd07.prod.outlook.com (20.176.7.29) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.7; Tue, 18 Jun 2019 17:06:51 +0000
+Received: from VI1PR07MB5744.eurprd07.prod.outlook.com
+ ([fe80::fcde:79c2:8330:b9db]) by VI1PR07MB5744.eurprd07.prod.outlook.com
+ ([fe80::fcde:79c2:8330:b9db%6]) with mapi id 15.20.2008.007; Tue, 18 Jun 2019
+ 17:06:51 +0000
+From:   "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
+To:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+CC:     "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Subject: [PATCH v2] i2c: i801: Add Block Write-Block Read Process Call support
+Thread-Topic: [PATCH v2] i2c: i801: Add Block Write-Block Read Process Call
+ support
+Thread-Index: AQHVJfg4WNYMyeJaVkqh1/eOuQEyTw==
+Date:   Tue, 18 Jun 2019 17:06:50 +0000
+Message-ID: <20190618170633.14774-1-alexander.sverdlin@nokia.com>
+In-Reply-To: <20190617161951.56510723@endymion>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [131.228.32.181]
+x-mailer: git-send-email 2.21.0
+x-clientproxiedby: HE1PR0202CA0002.eurprd02.prod.outlook.com
+ (2603:10a6:3:8c::12) To VI1PR07MB5744.eurprd07.prod.outlook.com
+ (2603:10a6:803:98::24)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=alexander.sverdlin@nokia.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 875218f1-1be0-43df-2d2f-08d6f40f5af7
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR07MB4384;
+x-ms-traffictypediagnostic: VI1PR07MB4384:
+x-microsoft-antispam-prvs: <VI1PR07MB43844DC0C7D91E796F96856388EA0@VI1PR07MB4384.eurprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:466;
+x-forefront-prvs: 007271867D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(396003)(346002)(366004)(376002)(136003)(54534003)(189003)(199004)(86362001)(81166006)(8676002)(81156014)(1076003)(54906003)(2351001)(6916009)(5660300002)(2906002)(6512007)(53936002)(99286004)(50226002)(256004)(6486002)(486006)(5640700003)(6506007)(14444005)(6436002)(386003)(52116002)(305945005)(26005)(102836004)(2501003)(25786009)(186003)(8936002)(478600001)(14454004)(71190400001)(66446008)(2616005)(7736002)(66066001)(316002)(64756008)(6116002)(3846002)(476003)(66476007)(66556008)(11346002)(71200400001)(4326008)(66946007)(36756003)(73956011)(68736007);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR07MB4384;H:VI1PR07MB5744.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nokia.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: NwwPVh3q84khzp4kgMxwpHqB6q9t7Vz9Qnk/uSLxlGLKxSJbK+4mRvlFuYSdx28OaCYPWcgeCY982P67+70tTlxRxvFOC0Bcfi1M4BISyL5p5c1kMoip50pbj6e6qDSc5NcWfWFe1AceDFy5fJaFWEA0MjJbK3LO/nCLOmF94NjdPR7GlN+L12HpF4XjgmUxYHq0RCJJ2AAcLNGI+SgZZDC52u+z+JBr0mrapzw1BczUm0xKwJ8sm/l7vBkBMCm638NuFaFzZ2cQbzv1+xOweWEaCMLQwWmZaXTTmpTOIWm9Y65vg5/7zQMEHbCfQpR6fTaHEbKzmoJkgjqMy8RNfsJ1U1g/dbwfnaP2GMhLSQeCouu33mJdTPsRPDB6tgyrsiV0l11oNaUP82jDglvQA0rlbTcPO9clmncTB6SRt0A=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f09587b7678f2fb378d736f45a02ffa9412cc99.1560864716.git.mchehab+samsung@kernel.org>
-X-Operating-System: Linux phenom 4.19.0-5-amd64 
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 875218f1-1be0-43df-2d2f-08d6f40f5af7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2019 17:06:50.9427
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: alexander.sverdlin@nokia.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR07MB4384
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 10:33:58AM -0300, Mauro Carvalho Chehab wrote:
-> There are three left-overs from the recent file renames,
-> probably due to some other conflicting patch.
-> 
-> Fix them.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> ---
-> 
-> This patch is against today's next-20190617 branch. Not sure if it
-> will apply cleanly at -docs tree. If not,  Please let me know for me to
-> split.
-
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> 
->  Documentation/devicetree/bindings/arm/idle-states.txt | 2 +-
->  drivers/gpu/drm/i915/intel_runtime_pm.h               | 2 +-
->  drivers/i2c/busses/i2c-nvidia-gpu.c                   | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/idle-states.txt b/Documentation/devicetree/bindings/arm/idle-states.txt
-> index 3bdbe675b9e6..d8d9aa7167e8 100644
-> --- a/Documentation/devicetree/bindings/arm/idle-states.txt
-> +++ b/Documentation/devicetree/bindings/arm/idle-states.txt
-> @@ -703,4 +703,4 @@ cpus {
->      https://www.devicetree.org/specifications/
->  
->  [6] ARM Linux Kernel documentation - Booting AArch64 Linux
-> -    Documentation/arm64/booting.txt
-> +    Documentation/arm64/booting.rst
-> diff --git a/drivers/gpu/drm/i915/intel_runtime_pm.h b/drivers/gpu/drm/i915/intel_runtime_pm.h
-> index f2d6299a8161..3cb391cd81c1 100644
-> --- a/drivers/gpu/drm/i915/intel_runtime_pm.h
-> +++ b/drivers/gpu/drm/i915/intel_runtime_pm.h
-> @@ -44,7 +44,7 @@ enum i915_drm_suspend_mode {
->   * to be disabled. This shouldn't happen and we'll print some error messages in
->   * case it happens.
->   *
-> - * For more, read the Documentation/power/runtime_pm.txt.
-> + * For more, read the Documentation/power/runtime_pm.rst.
->   */
->  struct intel_runtime_pm {
->  	atomic_t wakeref_count;
-> diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> index cfc76b5de726..5a1235fd86bb 100644
-> --- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-> +++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> @@ -364,7 +364,7 @@ static void gpu_i2c_remove(struct pci_dev *pdev)
->  /*
->   * We need gpu_i2c_suspend() even if it is stub, for runtime pm to work
->   * correctly. Without it, lspci shows runtime pm status as "D0" for the card.
-> - * Documentation/power/pci.txt also insists for driver to provide this.
-> + * Documentation/power/pci.rst also insists for driver to provide this.
->   */
->  static __maybe_unused int gpu_i2c_suspend(struct device *dev)
->  {
-> -- 
-> 2.21.0
-> 
-> 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+RnJvbTogQWxleGFuZGVyIFN2ZXJkbGluIDxhbGV4YW5kZXIuc3ZlcmRsaW5Abm9raWEuY29tPg0K
+DQpBZGQgU01CVVMgMi4wIEJsb2NrIFdyaXRlLUJsb2NrIFJlYWQgUHJvY2VzcyBDYWxsIGNvbW1h
+bmQgc3VwcG9ydC4NCg0KU2lnbmVkLW9mZi1ieTogQWxleGFuZGVyIFN2ZXJkbGluIDxhbGV4YW5k
+ZXIuc3ZlcmRsaW5Abm9raWEuY29tPg0KLS0tDQpDaGFuZ2Vsb2c6DQp2MjogVXBkYXRlZCBEb2N1
+bWVudGF0aW9uDQoNCiBEb2N1bWVudGF0aW9uL2kyYy9idXNzZXMvaTJjLWk4MDEgfCAgMiArLQ0K
+IGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtaTgwMS5jICAgICB8IDQzICsrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKy0tLS0tLQ0KIDIgZmlsZXMgY2hhbmdlZCwgMzggaW5zZXJ0aW9ucygr
+KSwgNyBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vaTJjL2J1c3Nl
+cy9pMmMtaTgwMSBiL0RvY3VtZW50YXRpb24vaTJjL2J1c3Nlcy9pMmMtaTgwMQ0KaW5kZXggZWU5
+OTg0Zi4uY2FmYjdlMDUgMTAwNjQ0DQotLS0gYS9Eb2N1bWVudGF0aW9uL2kyYy9idXNzZXMvaTJj
+LWk4MDENCisrKyBiL0RvY3VtZW50YXRpb24vaTJjL2J1c3Nlcy9pMmMtaTgwMQ0KQEAgLTg4LDcg
+Kzg4LDcgQEAgU01CdXMgY29udHJvbGxlci4NCiBQcm9jZXNzIENhbGwgU3VwcG9ydA0KIC0tLS0t
+LS0tLS0tLS0tLS0tLS0tDQogDQotTm90IHN1cHBvcnRlZC4NCitCbG9jayBwcm9jZXNzIGNhbGwg
+aXMgc3VwcG9ydGVkIG9uIHRoZSA4MjgwMUVCIChJQ0g1KSBhbmQgbGF0ZXIgY2hpcHMuDQogDQog
+DQogSTJDIEJsb2NrIFJlYWQgU3VwcG9ydA0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvaTJjL2J1c3Nl
+cy9pMmMtaTgwMS5jIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1pODAxLmMNCmluZGV4IGFjN2Y3
+ODEuLjNiMjM0ODEgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWk4MDEuYw0K
+KysrIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1pODAxLmMNCkBAIC02OSw3ICs2OSw3IEBADQog
+ICogU29mdHdhcmUgUEVDCQkJCW5vDQogICogSGFyZHdhcmUgUEVDCQkJCXllcw0KICAqIEJsb2Nr
+IGJ1ZmZlcgkJCQl5ZXMNCi0gKiBCbG9jayBwcm9jZXNzIGNhbGwgdHJhbnNhY3Rpb24Jbm8NCisg
+KiBCbG9jayBwcm9jZXNzIGNhbGwgdHJhbnNhY3Rpb24JeWVzDQogICogSTJDIGJsb2NrIHJlYWQg
+dHJhbnNhY3Rpb24JCXllcyAoZG9lc24ndCB1c2UgdGhlIGJsb2NrIGJ1ZmZlcikNCiAgKiBTbGF2
+ZSBtb2RlCQkJCW5vDQogICogU01CdXMgSG9zdCBOb3RpZnkJCQl5ZXMNCkBAIC0xNjksNiArMTY5
+LDcgQEANCiAjZGVmaW5lIEk4MDFfUFJPQ19DQUxMCQkweDEwCS8qIHVuaW1wbGVtZW50ZWQgKi8N
+CiAjZGVmaW5lIEk4MDFfQkxPQ0tfREFUQQkJMHgxNA0KICNkZWZpbmUgSTgwMV9JMkNfQkxPQ0tf
+REFUQQkweDE4CS8qIElDSDUgYW5kIGxhdGVyICovDQorI2RlZmluZSBJODAxX0JMT0NLX1BST0Nf
+Q0FMTAkweDFDDQogDQogLyogSTgwMSBIb3N0IENvbnRyb2wgcmVnaXN0ZXIgYml0cyAqLw0KICNk
+ZWZpbmUgU01CSFNUQ05UX0lOVFJFTglCSVQoMCkNCkBAIC01MDksMTAgKzUxMCwyMyBAQCBzdGF0
+aWMgaW50IGk4MDFfdHJhbnNhY3Rpb24oc3RydWN0IGk4MDFfcHJpdiAqcHJpdiwgaW50IHhhY3Qp
+DQogDQogc3RhdGljIGludCBpODAxX2Jsb2NrX3RyYW5zYWN0aW9uX2J5X2Jsb2NrKHN0cnVjdCBp
+ODAxX3ByaXYgKnByaXYsDQogCQkJCQkgICB1bmlvbiBpMmNfc21idXNfZGF0YSAqZGF0YSwNCi0J
+CQkJCSAgIGNoYXIgcmVhZF93cml0ZSwgaW50IGh3cGVjKQ0KKwkJCQkJICAgY2hhciByZWFkX3dy
+aXRlLCBpbnQgY29tbWFuZCwNCisJCQkJCSAgIGludCBod3BlYykNCiB7DQogCWludCBpLCBsZW47
+DQogCWludCBzdGF0dXM7DQorCWludCB4YWN0ID0gaHdwZWMgPyBTTUJIU1RDTlRfUEVDX0VOIDog
+MDsNCisNCisJc3dpdGNoIChjb21tYW5kKSB7DQorCWNhc2UgSTJDX1NNQlVTX0JMT0NLX1BST0Nf
+Q0FMTDoNCisJCXhhY3QgfD0gSTgwMV9CTE9DS19QUk9DX0NBTEw7DQorCQlicmVhazsNCisJY2Fz
+ZSBJMkNfU01CVVNfQkxPQ0tfREFUQToNCisJCXhhY3QgfD0gSTgwMV9CTE9DS19EQVRBOw0KKwkJ
+YnJlYWs7DQorCWRlZmF1bHQ6DQorCQlyZXR1cm4gLUVPUE5PVFNVUFA7DQorCX0NCiANCiAJaW5i
+X3AoU01CSFNUQ05UKHByaXYpKTsgLyogcmVzZXQgdGhlIGRhdGEgYnVmZmVyIGluZGV4ICovDQog
+DQpAQCAtNTI0LDEyICs1MzgsMTIgQEAgc3RhdGljIGludCBpODAxX2Jsb2NrX3RyYW5zYWN0aW9u
+X2J5X2Jsb2NrKHN0cnVjdCBpODAxX3ByaXYgKnByaXYsDQogCQkJb3V0Yl9wKGRhdGEtPmJsb2Nr
+W2krMV0sIFNNQkJMS0RBVChwcml2KSk7DQogCX0NCiANCi0Jc3RhdHVzID0gaTgwMV90cmFuc2Fj
+dGlvbihwcml2LCBJODAxX0JMT0NLX0RBVEEgfA0KLQkJCQkgIChod3BlYyA/IFNNQkhTVENOVF9Q
+RUNfRU4gOiAwKSk7DQorCXN0YXR1cyA9IGk4MDFfdHJhbnNhY3Rpb24ocHJpdiwgeGFjdCk7DQog
+CWlmIChzdGF0dXMpDQogCQlyZXR1cm4gc3RhdHVzOw0KIA0KLQlpZiAocmVhZF93cml0ZSA9PSBJ
+MkNfU01CVVNfUkVBRCkgew0KKwlpZiAocmVhZF93cml0ZSA9PSBJMkNfU01CVVNfUkVBRCB8fA0K
+KwkgICAgY29tbWFuZCA9PSBJMkNfU01CVVNfQkxPQ0tfUFJPQ19DQUxMKSB7DQogCQlsZW4gPSBp
+bmJfcChTTUJIU1REQVQwKHByaXYpKTsNCiAJCWlmIChsZW4gPCAxIHx8IGxlbiA+IEkyQ19TTUJV
+U19CTE9DS19NQVgpDQogCQkJcmV0dXJuIC1FUFJPVE87DQpAQCAtNjY3LDYgKzY4MSw5IEBAIHN0
+YXRpYyBpbnQgaTgwMV9ibG9ja190cmFuc2FjdGlvbl9ieXRlX2J5X2J5dGUoc3RydWN0IGk4MDFf
+cHJpdiAqcHJpdiwNCiAJaW50IHJlc3VsdDsNCiAJY29uc3Qgc3RydWN0IGkyY19hZGFwdGVyICph
+ZGFwID0gJnByaXYtPmFkYXB0ZXI7DQogDQorCWlmIChjb21tYW5kID09IEkyQ19TTUJVU19CTE9D
+S19QUk9DX0NBTEwpDQorCQlyZXR1cm4gLUVPUE5PVFNVUFA7DQorDQogCXJlc3VsdCA9IGk4MDFf
+Y2hlY2tfcHJlKHByaXYpOw0KIAlpZiAocmVzdWx0IDwgMCkNCiAJCXJldHVybiByZXN1bHQ7DQpA
+QCAtNzk4LDcgKzgxNSw4IEBAIHN0YXRpYyBpbnQgaTgwMV9ibG9ja190cmFuc2FjdGlvbihzdHJ1
+Y3QgaTgwMV9wcml2ICpwcml2LA0KIAkgJiYgY29tbWFuZCAhPSBJMkNfU01CVVNfSTJDX0JMT0NL
+X0RBVEENCiAJICYmIGk4MDFfc2V0X2Jsb2NrX2J1ZmZlcl9tb2RlKHByaXYpID09IDApDQogCQly
+ZXN1bHQgPSBpODAxX2Jsb2NrX3RyYW5zYWN0aW9uX2J5X2Jsb2NrKHByaXYsIGRhdGEsDQotCQkJ
+CQkJCSByZWFkX3dyaXRlLCBod3BlYyk7DQorCQkJCQkJCSByZWFkX3dyaXRlLA0KKwkJCQkJCQkg
+Y29tbWFuZCwgaHdwZWMpOw0KIAllbHNlDQogCQlyZXN1bHQgPSBpODAxX2Jsb2NrX3RyYW5zYWN0
+aW9uX2J5dGVfYnlfYnl0ZShwcml2LCBkYXRhLA0KIAkJCQkJCQkgICAgIHJlYWRfd3JpdGUsDQpA
+QCAtODkwLDYgKzkwOCwxNSBAQCBzdGF0aWMgczMyIGk4MDFfYWNjZXNzKHN0cnVjdCBpMmNfYWRh
+cHRlciAqYWRhcCwgdTE2IGFkZHIsDQogCQkJb3V0Yl9wKGNvbW1hbmQsIFNNQkhTVENNRChwcml2
+KSk7DQogCQlibG9jayA9IDE7DQogCQlicmVhazsNCisJY2FzZSBJMkNfU01CVVNfQkxPQ0tfUFJP
+Q19DQUxMOg0KKwkJLyoNCisJCSAqIEJpdCAwIG9mIHRoZSBzbGF2ZSBhZGRyZXNzIHJlZ2lzdGVy
+IGFsd2F5cyBpbmRpY2F0ZSBhIHdyaXRlDQorCQkgKiBjb21tYW5kLg0KKwkJICovDQorCQlvdXRi
+X3AoKGFkZHIgJiAweDdmKSA8PCAxLCBTTUJIU1RBREQocHJpdikpOw0KKwkJb3V0Yl9wKGNvbW1h
+bmQsIFNNQkhTVENNRChwcml2KSk7DQorCQlibG9jayA9IDE7DQorCQlicmVhazsNCiAJZGVmYXVs
+dDoNCiAJCWRldl9lcnIoJnByaXYtPnBjaV9kZXYtPmRldiwgIlVuc3VwcG9ydGVkIHRyYW5zYWN0
+aW9uICVkXG4iLA0KIAkJCXNpemUpOw0KQEAgLTk1MCw2ICs5NzcsOCBAQCBzdGF0aWMgdTMyIGk4
+MDFfZnVuYyhzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXB0ZXIpDQogCSAgICAgICBJMkNfRlVOQ19T
+TUJVU19CWVRFX0RBVEEgfCBJMkNfRlVOQ19TTUJVU19XT1JEX0RBVEEgfA0KIAkgICAgICAgSTJD
+X0ZVTkNfU01CVVNfQkxPQ0tfREFUQSB8IEkyQ19GVU5DX1NNQlVTX1dSSVRFX0kyQ19CTE9DSyB8
+DQogCSAgICAgICAoKHByaXYtPmZlYXR1cmVzICYgRkVBVFVSRV9TTUJVU19QRUMpID8gSTJDX0ZV
+TkNfU01CVVNfUEVDIDogMCkgfA0KKwkgICAgICAgKChwcml2LT5mZWF0dXJlcyAmIEZFQVRVUkVf
+QkxPQ0tfUFJPQykgPw0KKwkJSTJDX0ZVTkNfU01CVVNfQkxPQ0tfUFJPQ19DQUxMIDogMCkgfA0K
+IAkgICAgICAgKChwcml2LT5mZWF0dXJlcyAmIEZFQVRVUkVfSTJDX0JMT0NLX1JFQUQpID8NCiAJ
+CUkyQ19GVU5DX1NNQlVTX1JFQURfSTJDX0JMT0NLIDogMCkgfA0KIAkgICAgICAgKChwcml2LT5m
+ZWF0dXJlcyAmIEZFQVRVUkVfSE9TVF9OT1RJRlkpID8NCkBAIC0xNTMwLDYgKzE1NTksNyBAQCBz
+dGF0aWMgaW50IGk4MDFfcHJvYmUoc3RydWN0IHBjaV9kZXYgKmRldiwgY29uc3Qgc3RydWN0IHBj
+aV9kZXZpY2VfaWQgKmlkKQ0KIAljYXNlIFBDSV9ERVZJQ0VfSURfSU5URUxfS0FCWUxBS0VfUENI
+X0hfU01CVVM6DQogCWNhc2UgUENJX0RFVklDRV9JRF9JTlRFTF9JQ0VMQUtFX0xQX1NNQlVTOg0K
+IAljYXNlIFBDSV9ERVZJQ0VfSURfSU5URUxfQ09NRVRMQUtFX1NNQlVTOg0KKwkJcHJpdi0+ZmVh
+dHVyZXMgfD0gRkVBVFVSRV9CTE9DS19QUk9DOw0KIAkJcHJpdi0+ZmVhdHVyZXMgfD0gRkVBVFVS
+RV9JMkNfQkxPQ0tfUkVBRDsNCiAJCXByaXYtPmZlYXR1cmVzIHw9IEZFQVRVUkVfSVJROw0KIAkJ
+cHJpdi0+ZmVhdHVyZXMgfD0gRkVBVFVSRV9TTUJVU19QRUM7DQpAQCAtMTU0OSw2ICsxNTc5LDcg
+QEAgc3RhdGljIGludCBpODAxX3Byb2JlKHN0cnVjdCBwY2lfZGV2ICpkZXYsIGNvbnN0IHN0cnVj
+dCBwY2lfZGV2aWNlX2lkICppZCkNCiAJCXByaXYtPmZlYXR1cmVzIHw9IEZFQVRVUkVfSURGOw0K
+IAkJLyogZmFsbCB0aHJvdWdoICovDQogCWRlZmF1bHQ6DQorCQlwcml2LT5mZWF0dXJlcyB8PSBG
+RUFUVVJFX0JMT0NLX1BST0M7DQogCQlwcml2LT5mZWF0dXJlcyB8PSBGRUFUVVJFX0kyQ19CTE9D
+S19SRUFEOw0KIAkJcHJpdi0+ZmVhdHVyZXMgfD0gRkVBVFVSRV9JUlE7DQogCQkvKiBmYWxsIHRo
+cm91Z2ggKi8NCi0tIA0KMi40LjYNCg0K
