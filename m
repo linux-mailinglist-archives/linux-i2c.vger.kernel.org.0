@@ -2,78 +2,162 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 893C049902
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2019 08:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E3649C39
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2019 10:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727750AbfFRGmg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jun 2019 02:42:36 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:16189 "EHLO
+        id S1729148AbfFRIm4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jun 2019 04:42:56 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:3615 "EHLO
         hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726446AbfFRGm0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jun 2019 02:42:26 -0400
+        with ESMTP id S1728818AbfFRIm4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jun 2019 04:42:56 -0400
 Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d08858e0000>; Mon, 17 Jun 2019 23:32:46 -0700
+        id <B5d08a40f0001>; Tue, 18 Jun 2019 01:42:55 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 17 Jun 2019 23:32:45 -0700
+  Tue, 18 Jun 2019 01:42:54 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 17 Jun 2019 23:32:45 -0700
-Received: from [10.26.11.141] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 18 Jun
- 2019 06:32:42 +0000
-Subject: Re: [PATCH V1] i2c: tegra: disable irq in tegra_i2c_xfer_msg
-To:     Bitan Biswas <bbiswas@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
+        by hqpgpgate101.nvidia.com on Tue, 18 Jun 2019 01:42:54 -0700
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 18 Jun
+ 2019 08:42:54 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 18 Jun 2019 08:42:54 +0000
+Received: from dhcp-10-19-65-14.client.nvidia.com (Not Verified[10.19.65.14]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d08a40b0006>; Tue, 18 Jun 2019 01:42:54 -0700
+From:   Bitan Biswas <bbiswas@nvidia.com>
+To:     Laxman Dewangan <ldewangan@nvidia.com>,
         Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
         Wolfram Sang <wsa@the-dreams.de>,
         Dmitry Osipenko <digetx@gmail.com>
 CC:     Shardar Mohammed <smohammed@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>
-References: <1560835386-2865-1-git-send-email-bbiswas@nvidia.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <30d1d048-f474-f1fb-6415-ee6389900032@nvidia.com>
-Date:   Tue, 18 Jun 2019 07:32:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mantravadi Karthik <mkarthik@nvidia.com>,
+        Bitan Biswas <bbiswas@nvidia.com>
+Subject: [PATCH V2] i2c: tegra: disable irq in tegra_i2c_xfer_msg
+Date:   Tue, 18 Jun 2019 01:42:48 -0700
+Message-ID: <1560847368-16069-1-git-send-email-bbiswas@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <1560835386-2865-1-git-send-email-bbiswas@nvidia.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1560839566; bh=36AfYXlVRsIoRYgUu6dWpzivHUbZQ39MsVKao4WnHfE=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=kY0hE6X5Z5s5Kt/F5TcMUn842rvnQIIrOM8tb1SCa2FxEQYtNnoJBGWfFzCSSJvzH
-         EubDQzNfMSuSGsgWi/37RYYEw/cUNWGCLIyaVFd7IYd3Kd/U9JG4vwGxV9rvMzP+f2
-         KhVt/Dkph9ZaaL3xEVZrPuEpEiQBw687VetjNgzIrwKp89qIRBWSbh9st2o/4ixpsJ
-         VW8gNsiOX8aSQal9sL69b7+kw1BpXiSb3fsXbokFtwEozpMK049eo1z6trKatajUtl
-         +detDi5RcfTMtBYxEXi08tlEZ2kXNeGRlDugGL7sp9GR7yEpAO9BthfyHfaZ9e17nk
-         3pW2Im5oNYYpQ==
+        t=1560847375; bh=HqDxJokKgFe1kNELmIXIfg1rSInkOt34jaRIIaxFV6c=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=o4hxEGOBt4jHW3AFM4uPmORRpOmNjwGP8oUU8ZQbkzc5+fZLQ8K0vW2m4yxcTdL2o
+         NMVJuIi4dwqn84EqY1B+FcKwYnHX1V19S4s2qwYN6O1zBEISZgxmwXO02OulJZOo2T
+         wrsGLliKsvC0jfdv7DIRAAWKVrL77VAXbFEnEhtPjePR0e0jdXNM3RWuY/Cv3KWH+8
+         C4V4AHpBboog2tr0U3IlQfkMLpnFwWINn/eVbKCAjiYgusTdShVgpBcZzH1UGESC5d
+         40RCE7Me3Y1grrVGY/BuslqMIDDf3oqjg60CW18AlFR3s8GaUyfc/lrW+z5YmeqrGk
+         /booCGUDRst8w==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+tegra_i2c_xfer_msg initiates the I2C transfer in DMA
+or PIO mode. It involves steps that need FIFO register
+access, DMA API calls like dma_sync_single_for_device, etc.
+Tegra I2C ISR has calls to tegra_i2c_empty_rx_fifo in PIO mode
+and in DMA/PIO mode writes different I2C registers including
+I2C interrupt status. ISR cannot start processing
+before the preparation step at tegra_i2c_xfer_msg is complete.
+Hence, a synchronization between ISR and tegra_i2c_xfer_msg
+is in place today using spinlock.
 
-On 18/06/2019 06:23, Bitan Biswas wrote:
-> Synchronize ISR and tegra_i2c_xfer_msg execution
-> by disabling interrupt. This avoids spinlock usage
-> for same purpose.
+Spinlock busy waits and can add avoidable delays.
 
-I think that you need to explain the motivation/benefit of this. It is
-not immediately clear to me. Sorry if I have missed some previous
-discussion.
+In this patch needed synchronization is achieved by disabling
+I2C interrupt during preparation step and enabling interrupt
+once preparation is over and spinlock is no longer needed.
 
-Jon
+Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 6fb545e..ccc7fae 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -240,7 +240,6 @@ struct tegra_i2c_hw_feature {
+  * @bus_clk_rate: current I2C bus clock rate
+  * @clk_divisor_non_hs_mode: clock divider for non-high-speed modes
+  * @is_multimaster_mode: track if I2C controller is in multi-master mode
+- * @xfer_lock: lock to serialize transfer submission and processing
+  * @tx_dma_chan: DMA transmit channel
+  * @rx_dma_chan: DMA receive channel
+  * @dma_phys: handle to DMA resources
+@@ -270,8 +269,6 @@ struct tegra_i2c_dev {
+ 	u32 bus_clk_rate;
+ 	u16 clk_divisor_non_hs_mode;
+ 	bool is_multimaster_mode;
+-	/* xfer_lock: lock to serialize transfer submission and processing */
+-	spinlock_t xfer_lock;
+ 	struct dma_chan *tx_dma_chan;
+ 	struct dma_chan *rx_dma_chan;
+ 	dma_addr_t dma_phys;
+@@ -835,7 +832,6 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+ 
+ 	status = i2c_readl(i2c_dev, I2C_INT_STATUS);
+ 
+-	spin_lock(&i2c_dev->xfer_lock);
+ 	if (status == 0) {
+ 		dev_warn(i2c_dev->dev, "irq status 0 %08x %08x %08x\n",
+ 			 i2c_readl(i2c_dev, I2C_PACKET_TRANSFER_STATUS),
+@@ -935,7 +931,6 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+ 
+ 	complete(&i2c_dev->msg_complete);
+ done:
+-	spin_unlock(&i2c_dev->xfer_lock);
+ 	return IRQ_HANDLED;
+ }
+ 
+@@ -1054,7 +1049,6 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 	u32 packet_header;
+ 	u32 int_mask;
+ 	unsigned long time_left;
+-	unsigned long flags;
+ 	size_t xfer_size;
+ 	u32 *buffer = NULL;
+ 	int err = 0;
+@@ -1085,7 +1079,10 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 	 */
+ 	xfer_time += DIV_ROUND_CLOSEST(((xfer_size * 9) + 2) * MSEC_PER_SEC,
+ 					i2c_dev->bus_clk_rate);
+-	spin_lock_irqsave(&i2c_dev->xfer_lock, flags);
++	if (!i2c_dev->irq_disabled) {
++		disable_irq_nosync(i2c_dev->irq);
++		i2c_dev->irq_disabled = true;
++	}
+ 
+ 	int_mask = I2C_INT_NO_ACK | I2C_INT_ARBITRATION_LOST;
+ 	tegra_i2c_unmask_irq(i2c_dev, int_mask);
+@@ -1180,7 +1177,10 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 		i2c_readl(i2c_dev, I2C_INT_MASK));
+ 
+ unlock:
+-	spin_unlock_irqrestore(&i2c_dev->xfer_lock, flags);
++	if (i2c_dev->irq_disabled) {
++		i2c_dev->irq_disabled = false;
++		enable_irq(i2c_dev->irq);
++	}
+ 
+ 	if (dma) {
+ 		if (err)
+@@ -1576,7 +1576,6 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 				I2C_PACKET_HEADER_SIZE;
+ 	init_completion(&i2c_dev->msg_complete);
+ 	init_completion(&i2c_dev->dma_complete);
+-	spin_lock_init(&i2c_dev->xfer_lock);
+ 
+ 	if (!i2c_dev->hw->has_single_clk_source) {
+ 		fast_clk = devm_clk_get(&pdev->dev, "fast-clk");
 -- 
-nvpublic
+2.7.4
+
