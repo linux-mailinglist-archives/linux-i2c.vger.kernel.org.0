@@ -2,74 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD2E4A0C9
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2019 14:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF784A24A
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2019 15:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725934AbfFRM3J (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jun 2019 08:29:09 -0400
-Received: from mga04.intel.com ([192.55.52.120]:2410 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725913AbfFRM3J (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 18 Jun 2019 08:29:09 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 05:29:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,389,1557212400"; 
-   d="scan'208";a="181384458"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 18 Jun 2019 05:29:05 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 18 Jun 2019 15:29:05 +0300
-Date:   Tue, 18 Jun 2019 15:29:05 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Serge Semin <fancer.lancer@gmail.com>
-Subject: Re: [PATCH v4] i2c: mux/i801: Switch to use descriptor passing
-Message-ID: <20190618122905.GK2640@lahna.fi.intel.com>
-References: <20190618105833.31933-1-linus.walleij@linaro.org>
+        id S1729295AbfFRNeH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jun 2019 09:34:07 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:42476 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728699AbfFRNeG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jun 2019 09:34:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=3pt+lvuNJTl0R7q+cDc7mElDC2SrbdpyQw7HovUZcjM=; b=B6VLnbVASmJOveAXuJlXWMBGF
+        cSjBXTuJTPybZr5q2iqqH16k8QN3sWX1eMGy5BwQ4lCWRMhZsV13dyWkcfxYVKKtF3G9QcWYi0lVg
+        tDoc3QPZ9bMIixzCfhriR7kObOttuGy6QFB1/BYdyYLTEkzGBS1ht7Npm/+6HGwWMl3VsTczEHrPt
+        3O4zLgvWja0VUNS6T2Vmovv1T0tbVpA6/cnI7iWw+gqpuBiLe50Xq39mlVx3HauhSewrto+ThH0C6
+        V2NLcWvLD6tw7b2Vaoy71tmCLHR00npK04ddP9L2StMkyKDlfYIczIU7Wz2iat3RYJgfttxfBsWVj
+        rFRhknlAg==;
+Received: from 179.186.105.91.dynamic.adsl.gvt.net.br ([179.186.105.91] helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hdEFP-0007CG-72; Tue, 18 Jun 2019 13:34:03 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hdEFM-00008f-4G; Tue, 18 Jun 2019 10:34:00 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Otto Sabart <ottosabart@seberm.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Will Deacon <will.deacon@arm.com>, devicetree@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH] docs: fix some broken references due to txt->rst renames
+Date:   Tue, 18 Jun 2019 10:33:58 -0300
+Message-Id: <6f09587b7678f2fb378d736f45a02ffa9412cc99.1560864716.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190618105833.31933-1-linus.walleij@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 12:58:33PM +0200, Linus Walleij wrote:
-> This switches the i801 GPIO mux to use GPIO descriptors for
-> handling the GPIO lines. The previous hack which was reaching
-> inside the GPIO chips etc cannot live on. We pass descriptors
-> along with the GPIO mux device at creation instead.
-> 
-> The GPIO mux was only used by way of platform data with a
-> platform device from one place in the kernel: the i801 i2c bus
-> driver. Let's just associate the GPIO descriptor table with
-> the actual device like everyone else and dynamically create
-> a descriptor table passed along with the GPIO i2c mux.
-> 
-> This enables simplification of the GPIO i2c mux driver to
-> use only the descriptor API and the OF probe path gets
-> simplified in the process.
-> 
-> The i801 driver was registering the GPIO i2c mux with
-> PLATFORM_DEVID_AUTO which would make it hard to predict the
-> device name and assign the descriptor table properly, but
-> this seems to be a mistake to begin with: all of the
-> GPIO mux devices are hardcoded to look up GPIO lines from
-> the "gpio_ich" GPIO chip. If there are more than one mux,
-> there is certainly more than one gpio chip as well, and
-> then we have more serious problems. Switch to
-> PLATFORM_DEVID_NONE instead. There can be only one.
-> 
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+There are three left-overs from the recent file renames,
+probably due to some other conflicting patch.
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Fix them.
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+
+This patch is against today's next-20190617 branch. Not sure if it
+will apply cleanly at -docs tree. If not,  Please let me know for me to
+split.
+
+ Documentation/devicetree/bindings/arm/idle-states.txt | 2 +-
+ drivers/gpu/drm/i915/intel_runtime_pm.h               | 2 +-
+ drivers/i2c/busses/i2c-nvidia-gpu.c                   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/arm/idle-states.txt b/Documentation/devicetree/bindings/arm/idle-states.txt
+index 3bdbe675b9e6..d8d9aa7167e8 100644
+--- a/Documentation/devicetree/bindings/arm/idle-states.txt
++++ b/Documentation/devicetree/bindings/arm/idle-states.txt
+@@ -703,4 +703,4 @@ cpus {
+     https://www.devicetree.org/specifications/
+ 
+ [6] ARM Linux Kernel documentation - Booting AArch64 Linux
+-    Documentation/arm64/booting.txt
++    Documentation/arm64/booting.rst
+diff --git a/drivers/gpu/drm/i915/intel_runtime_pm.h b/drivers/gpu/drm/i915/intel_runtime_pm.h
+index f2d6299a8161..3cb391cd81c1 100644
+--- a/drivers/gpu/drm/i915/intel_runtime_pm.h
++++ b/drivers/gpu/drm/i915/intel_runtime_pm.h
+@@ -44,7 +44,7 @@ enum i915_drm_suspend_mode {
+  * to be disabled. This shouldn't happen and we'll print some error messages in
+  * case it happens.
+  *
+- * For more, read the Documentation/power/runtime_pm.txt.
++ * For more, read the Documentation/power/runtime_pm.rst.
+  */
+ struct intel_runtime_pm {
+ 	atomic_t wakeref_count;
+diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
+index cfc76b5de726..5a1235fd86bb 100644
+--- a/drivers/i2c/busses/i2c-nvidia-gpu.c
++++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
+@@ -364,7 +364,7 @@ static void gpu_i2c_remove(struct pci_dev *pdev)
+ /*
+  * We need gpu_i2c_suspend() even if it is stub, for runtime pm to work
+  * correctly. Without it, lspci shows runtime pm status as "D0" for the card.
+- * Documentation/power/pci.txt also insists for driver to provide this.
++ * Documentation/power/pci.rst also insists for driver to provide this.
+  */
+ static __maybe_unused int gpu_i2c_suspend(struct device *dev)
+ {
+-- 
+2.21.0
+
+
