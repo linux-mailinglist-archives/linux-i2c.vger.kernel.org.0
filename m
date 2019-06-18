@@ -2,172 +2,184 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD8C4A7DB
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2019 19:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245A44A9CC
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2019 20:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729738AbfFRRG7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jun 2019 13:06:59 -0400
-Received: from mail-eopbgr60131.outbound.protection.outlook.com ([40.107.6.131]:64000
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729541AbfFRRG6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 18 Jun 2019 13:06:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pJLjbFSBGNl2T8yonpvT1fE2FmJNFnf2WfGzTrgYRHc=;
- b=ASRmZazyD2IcKC5tfUNomUI+l+vNL03qVpAi4pPzcJPjJCicEQccqZTtVDp0UQm5WNUEfacR3BOyeKhtrZnq6A1uHPcMMqD9xFkA/4dY/Ezg/J8tdNdPO5V7/GKl2Q8ac+GF/mcOF0tmO4OSuodiqhnhxiuBFZfTmh7MN2kVOU8=
-Received: from VI1PR07MB5744.eurprd07.prod.outlook.com (20.177.202.24) by
- VI1PR07MB4384.eurprd07.prod.outlook.com (20.176.7.29) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.7; Tue, 18 Jun 2019 17:06:51 +0000
-Received: from VI1PR07MB5744.eurprd07.prod.outlook.com
- ([fe80::fcde:79c2:8330:b9db]) by VI1PR07MB5744.eurprd07.prod.outlook.com
- ([fe80::fcde:79c2:8330:b9db%6]) with mapi id 15.20.2008.007; Tue, 18 Jun 2019
- 17:06:51 +0000
-From:   "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-To:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-CC:     "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        id S1730060AbfFRS04 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jun 2019 14:26:56 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:40945 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727616AbfFRS04 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jun 2019 14:26:56 -0400
+Received: by mail-lf1-f66.google.com with SMTP id a9so10058686lff.7;
+        Tue, 18 Jun 2019 11:26:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yidQ/JoteqePmrNToanD1FIIm5PIfhjC5P+85GqoSXo=;
+        b=AcEFUp2/gfNe+FIlVyznfRqaCq766VcPH3by9YSNylW2HcG1LpRed+HCwDsWB+3kqn
+         9FnX02StNBCRlsSBY+zdKDEsE3VcjpwViCngstHzMkR7Ymt9jpoZ2hhremG9JVsgFMga
+         q6t8Zke/wB0JavdQQM5M4lxwFA/8r9ruamAz95yb5LMSpWpRD1M9+UIGLM8t39d644QV
+         CngnyI+nmLDVq729klEzV5NskyK//cbwVnzRWk7njV91fMPQGm7+CeP11BC9WZQ9JjXz
+         xttnVJm/ivBJaNbhzGmcpH4++agS9zkHWT5iaOC6cwWYo/G/wTTgPqK2J5H69U2GSyD/
+         6kAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yidQ/JoteqePmrNToanD1FIIm5PIfhjC5P+85GqoSXo=;
+        b=blM91wgxiab/NIKNoRfcbIYq4+chWLx0VvMMuyqHSLC33k9iGQxhvyX4LrRIQi00vk
+         BtWZUdyR5ZA3k5/cN3bgqv5d4jBoEn7SKQATfNrHz8WYFWyZgbrLayrYgQf25/0VCMj9
+         80pC/VR+VNhAEo4K92q+WcmMwkl0uh3MELxLapQhhu2tOa+o3P1tmuNmFRvlqX/OoR5e
+         lprNOqJiT/7PlDLi/L50G2aWzNDi0MABlF+9Vg/gFp0aVcom11H057RFEpcnp6LJleSQ
+         xelVmIHtAdpsj6seKr0B4xtpp5pZXfrwr1fecvsd4ANEEg4JzIL2m8bhuichCM2aUEUC
+         b7+g==
+X-Gm-Message-State: APjAAAVAFf+IJAkxSghAtNtEBtq6rNi0Hq0zjvEG20DgP+iRezJq0Qwz
+        Wngruc9W+BApfarM5Egc7/w=
+X-Google-Smtp-Source: APXvYqwMuI2ursOsy+CrF8ir3Ch7WCOQc4IyMeY71CthSm6OZIy5lGwis8NRfH05k7PyHsO2DIFckA==
+X-Received: by 2002:a19:6e41:: with SMTP id q1mr52075192lfk.20.1560882412849;
+        Tue, 18 Jun 2019 11:26:52 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
+        by smtp.googlemail.com with ESMTPSA id b6sm2580242lfa.54.2019.06.18.11.26.51
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 18 Jun 2019 11:26:52 -0700 (PDT)
+Subject: Re: [PATCH V2] i2c: tegra: disable irq in tegra_i2c_xfer_msg
+To:     Bitan Biswas <bbiswas@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>,
         Wolfram Sang <wsa@the-dreams.de>
-Subject: [PATCH v2] i2c: i801: Add Block Write-Block Read Process Call support
-Thread-Topic: [PATCH v2] i2c: i801: Add Block Write-Block Read Process Call
- support
-Thread-Index: AQHVJfg4WNYMyeJaVkqh1/eOuQEyTw==
-Date:   Tue, 18 Jun 2019 17:06:50 +0000
-Message-ID: <20190618170633.14774-1-alexander.sverdlin@nokia.com>
-In-Reply-To: <20190617161951.56510723@endymion>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [131.228.32.181]
-x-mailer: git-send-email 2.21.0
-x-clientproxiedby: HE1PR0202CA0002.eurprd02.prod.outlook.com
- (2603:10a6:3:8c::12) To VI1PR07MB5744.eurprd07.prod.outlook.com
- (2603:10a6:803:98::24)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=alexander.sverdlin@nokia.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 875218f1-1be0-43df-2d2f-08d6f40f5af7
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR07MB4384;
-x-ms-traffictypediagnostic: VI1PR07MB4384:
-x-microsoft-antispam-prvs: <VI1PR07MB43844DC0C7D91E796F96856388EA0@VI1PR07MB4384.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:466;
-x-forefront-prvs: 007271867D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(396003)(346002)(366004)(376002)(136003)(54534003)(189003)(199004)(86362001)(81166006)(8676002)(81156014)(1076003)(54906003)(2351001)(6916009)(5660300002)(2906002)(6512007)(53936002)(99286004)(50226002)(256004)(6486002)(486006)(5640700003)(6506007)(14444005)(6436002)(386003)(52116002)(305945005)(26005)(102836004)(2501003)(25786009)(186003)(8936002)(478600001)(14454004)(71190400001)(66446008)(2616005)(7736002)(66066001)(316002)(64756008)(6116002)(3846002)(476003)(66476007)(66556008)(11346002)(71200400001)(4326008)(66946007)(36756003)(73956011)(68736007);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR07MB4384;H:VI1PR07MB5744.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nokia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: NwwPVh3q84khzp4kgMxwpHqB6q9t7Vz9Qnk/uSLxlGLKxSJbK+4mRvlFuYSdx28OaCYPWcgeCY982P67+70tTlxRxvFOC0Bcfi1M4BISyL5p5c1kMoip50pbj6e6qDSc5NcWfWFe1AceDFy5fJaFWEA0MjJbK3LO/nCLOmF94NjdPR7GlN+L12HpF4XjgmUxYHq0RCJJ2AAcLNGI+SgZZDC52u+z+JBr0mrapzw1BczUm0xKwJ8sm/l7vBkBMCm638NuFaFzZ2cQbzv1+xOweWEaCMLQwWmZaXTTmpTOIWm9Y65vg5/7zQMEHbCfQpR6fTaHEbKzmoJkgjqMy8RNfsJ1U1g/dbwfnaP2GMhLSQeCouu33mJdTPsRPDB6tgyrsiV0l11oNaUP82jDglvQA0rlbTcPO9clmncTB6SRt0A=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc:     Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+References: <1560847368-16069-1-git-send-email-bbiswas@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <cda89c10-c597-ce90-98dd-5cc13ee9b83d@gmail.com>
+Date:   Tue, 18 Jun 2019 21:26:51 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 875218f1-1be0-43df-2d2f-08d6f40f5af7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2019 17:06:50.9427
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: alexander.sverdlin@nokia.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR07MB4384
+In-Reply-To: <1560847368-16069-1-git-send-email-bbiswas@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-RnJvbTogQWxleGFuZGVyIFN2ZXJkbGluIDxhbGV4YW5kZXIuc3ZlcmRsaW5Abm9raWEuY29tPg0K
-DQpBZGQgU01CVVMgMi4wIEJsb2NrIFdyaXRlLUJsb2NrIFJlYWQgUHJvY2VzcyBDYWxsIGNvbW1h
-bmQgc3VwcG9ydC4NCg0KU2lnbmVkLW9mZi1ieTogQWxleGFuZGVyIFN2ZXJkbGluIDxhbGV4YW5k
-ZXIuc3ZlcmRsaW5Abm9raWEuY29tPg0KLS0tDQpDaGFuZ2Vsb2c6DQp2MjogVXBkYXRlZCBEb2N1
-bWVudGF0aW9uDQoNCiBEb2N1bWVudGF0aW9uL2kyYy9idXNzZXMvaTJjLWk4MDEgfCAgMiArLQ0K
-IGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtaTgwMS5jICAgICB8IDQzICsrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKy0tLS0tLQ0KIDIgZmlsZXMgY2hhbmdlZCwgMzggaW5zZXJ0aW9ucygr
-KSwgNyBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vaTJjL2J1c3Nl
-cy9pMmMtaTgwMSBiL0RvY3VtZW50YXRpb24vaTJjL2J1c3Nlcy9pMmMtaTgwMQ0KaW5kZXggZWU5
-OTg0Zi4uY2FmYjdlMDUgMTAwNjQ0DQotLS0gYS9Eb2N1bWVudGF0aW9uL2kyYy9idXNzZXMvaTJj
-LWk4MDENCisrKyBiL0RvY3VtZW50YXRpb24vaTJjL2J1c3Nlcy9pMmMtaTgwMQ0KQEAgLTg4LDcg
-Kzg4LDcgQEAgU01CdXMgY29udHJvbGxlci4NCiBQcm9jZXNzIENhbGwgU3VwcG9ydA0KIC0tLS0t
-LS0tLS0tLS0tLS0tLS0tDQogDQotTm90IHN1cHBvcnRlZC4NCitCbG9jayBwcm9jZXNzIGNhbGwg
-aXMgc3VwcG9ydGVkIG9uIHRoZSA4MjgwMUVCIChJQ0g1KSBhbmQgbGF0ZXIgY2hpcHMuDQogDQog
-DQogSTJDIEJsb2NrIFJlYWQgU3VwcG9ydA0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvaTJjL2J1c3Nl
-cy9pMmMtaTgwMS5jIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1pODAxLmMNCmluZGV4IGFjN2Y3
-ODEuLjNiMjM0ODEgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWk4MDEuYw0K
-KysrIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1pODAxLmMNCkBAIC02OSw3ICs2OSw3IEBADQog
-ICogU29mdHdhcmUgUEVDCQkJCW5vDQogICogSGFyZHdhcmUgUEVDCQkJCXllcw0KICAqIEJsb2Nr
-IGJ1ZmZlcgkJCQl5ZXMNCi0gKiBCbG9jayBwcm9jZXNzIGNhbGwgdHJhbnNhY3Rpb24Jbm8NCisg
-KiBCbG9jayBwcm9jZXNzIGNhbGwgdHJhbnNhY3Rpb24JeWVzDQogICogSTJDIGJsb2NrIHJlYWQg
-dHJhbnNhY3Rpb24JCXllcyAoZG9lc24ndCB1c2UgdGhlIGJsb2NrIGJ1ZmZlcikNCiAgKiBTbGF2
-ZSBtb2RlCQkJCW5vDQogICogU01CdXMgSG9zdCBOb3RpZnkJCQl5ZXMNCkBAIC0xNjksNiArMTY5
-LDcgQEANCiAjZGVmaW5lIEk4MDFfUFJPQ19DQUxMCQkweDEwCS8qIHVuaW1wbGVtZW50ZWQgKi8N
-CiAjZGVmaW5lIEk4MDFfQkxPQ0tfREFUQQkJMHgxNA0KICNkZWZpbmUgSTgwMV9JMkNfQkxPQ0tf
-REFUQQkweDE4CS8qIElDSDUgYW5kIGxhdGVyICovDQorI2RlZmluZSBJODAxX0JMT0NLX1BST0Nf
-Q0FMTAkweDFDDQogDQogLyogSTgwMSBIb3N0IENvbnRyb2wgcmVnaXN0ZXIgYml0cyAqLw0KICNk
-ZWZpbmUgU01CSFNUQ05UX0lOVFJFTglCSVQoMCkNCkBAIC01MDksMTAgKzUxMCwyMyBAQCBzdGF0
-aWMgaW50IGk4MDFfdHJhbnNhY3Rpb24oc3RydWN0IGk4MDFfcHJpdiAqcHJpdiwgaW50IHhhY3Qp
-DQogDQogc3RhdGljIGludCBpODAxX2Jsb2NrX3RyYW5zYWN0aW9uX2J5X2Jsb2NrKHN0cnVjdCBp
-ODAxX3ByaXYgKnByaXYsDQogCQkJCQkgICB1bmlvbiBpMmNfc21idXNfZGF0YSAqZGF0YSwNCi0J
-CQkJCSAgIGNoYXIgcmVhZF93cml0ZSwgaW50IGh3cGVjKQ0KKwkJCQkJICAgY2hhciByZWFkX3dy
-aXRlLCBpbnQgY29tbWFuZCwNCisJCQkJCSAgIGludCBod3BlYykNCiB7DQogCWludCBpLCBsZW47
-DQogCWludCBzdGF0dXM7DQorCWludCB4YWN0ID0gaHdwZWMgPyBTTUJIU1RDTlRfUEVDX0VOIDog
-MDsNCisNCisJc3dpdGNoIChjb21tYW5kKSB7DQorCWNhc2UgSTJDX1NNQlVTX0JMT0NLX1BST0Nf
-Q0FMTDoNCisJCXhhY3QgfD0gSTgwMV9CTE9DS19QUk9DX0NBTEw7DQorCQlicmVhazsNCisJY2Fz
-ZSBJMkNfU01CVVNfQkxPQ0tfREFUQToNCisJCXhhY3QgfD0gSTgwMV9CTE9DS19EQVRBOw0KKwkJ
-YnJlYWs7DQorCWRlZmF1bHQ6DQorCQlyZXR1cm4gLUVPUE5PVFNVUFA7DQorCX0NCiANCiAJaW5i
-X3AoU01CSFNUQ05UKHByaXYpKTsgLyogcmVzZXQgdGhlIGRhdGEgYnVmZmVyIGluZGV4ICovDQog
-DQpAQCAtNTI0LDEyICs1MzgsMTIgQEAgc3RhdGljIGludCBpODAxX2Jsb2NrX3RyYW5zYWN0aW9u
-X2J5X2Jsb2NrKHN0cnVjdCBpODAxX3ByaXYgKnByaXYsDQogCQkJb3V0Yl9wKGRhdGEtPmJsb2Nr
-W2krMV0sIFNNQkJMS0RBVChwcml2KSk7DQogCX0NCiANCi0Jc3RhdHVzID0gaTgwMV90cmFuc2Fj
-dGlvbihwcml2LCBJODAxX0JMT0NLX0RBVEEgfA0KLQkJCQkgIChod3BlYyA/IFNNQkhTVENOVF9Q
-RUNfRU4gOiAwKSk7DQorCXN0YXR1cyA9IGk4MDFfdHJhbnNhY3Rpb24ocHJpdiwgeGFjdCk7DQog
-CWlmIChzdGF0dXMpDQogCQlyZXR1cm4gc3RhdHVzOw0KIA0KLQlpZiAocmVhZF93cml0ZSA9PSBJ
-MkNfU01CVVNfUkVBRCkgew0KKwlpZiAocmVhZF93cml0ZSA9PSBJMkNfU01CVVNfUkVBRCB8fA0K
-KwkgICAgY29tbWFuZCA9PSBJMkNfU01CVVNfQkxPQ0tfUFJPQ19DQUxMKSB7DQogCQlsZW4gPSBp
-bmJfcChTTUJIU1REQVQwKHByaXYpKTsNCiAJCWlmIChsZW4gPCAxIHx8IGxlbiA+IEkyQ19TTUJV
-U19CTE9DS19NQVgpDQogCQkJcmV0dXJuIC1FUFJPVE87DQpAQCAtNjY3LDYgKzY4MSw5IEBAIHN0
-YXRpYyBpbnQgaTgwMV9ibG9ja190cmFuc2FjdGlvbl9ieXRlX2J5X2J5dGUoc3RydWN0IGk4MDFf
-cHJpdiAqcHJpdiwNCiAJaW50IHJlc3VsdDsNCiAJY29uc3Qgc3RydWN0IGkyY19hZGFwdGVyICph
-ZGFwID0gJnByaXYtPmFkYXB0ZXI7DQogDQorCWlmIChjb21tYW5kID09IEkyQ19TTUJVU19CTE9D
-S19QUk9DX0NBTEwpDQorCQlyZXR1cm4gLUVPUE5PVFNVUFA7DQorDQogCXJlc3VsdCA9IGk4MDFf
-Y2hlY2tfcHJlKHByaXYpOw0KIAlpZiAocmVzdWx0IDwgMCkNCiAJCXJldHVybiByZXN1bHQ7DQpA
-QCAtNzk4LDcgKzgxNSw4IEBAIHN0YXRpYyBpbnQgaTgwMV9ibG9ja190cmFuc2FjdGlvbihzdHJ1
-Y3QgaTgwMV9wcml2ICpwcml2LA0KIAkgJiYgY29tbWFuZCAhPSBJMkNfU01CVVNfSTJDX0JMT0NL
-X0RBVEENCiAJICYmIGk4MDFfc2V0X2Jsb2NrX2J1ZmZlcl9tb2RlKHByaXYpID09IDApDQogCQly
-ZXN1bHQgPSBpODAxX2Jsb2NrX3RyYW5zYWN0aW9uX2J5X2Jsb2NrKHByaXYsIGRhdGEsDQotCQkJ
-CQkJCSByZWFkX3dyaXRlLCBod3BlYyk7DQorCQkJCQkJCSByZWFkX3dyaXRlLA0KKwkJCQkJCQkg
-Y29tbWFuZCwgaHdwZWMpOw0KIAllbHNlDQogCQlyZXN1bHQgPSBpODAxX2Jsb2NrX3RyYW5zYWN0
-aW9uX2J5dGVfYnlfYnl0ZShwcml2LCBkYXRhLA0KIAkJCQkJCQkgICAgIHJlYWRfd3JpdGUsDQpA
-QCAtODkwLDYgKzkwOCwxNSBAQCBzdGF0aWMgczMyIGk4MDFfYWNjZXNzKHN0cnVjdCBpMmNfYWRh
-cHRlciAqYWRhcCwgdTE2IGFkZHIsDQogCQkJb3V0Yl9wKGNvbW1hbmQsIFNNQkhTVENNRChwcml2
-KSk7DQogCQlibG9jayA9IDE7DQogCQlicmVhazsNCisJY2FzZSBJMkNfU01CVVNfQkxPQ0tfUFJP
-Q19DQUxMOg0KKwkJLyoNCisJCSAqIEJpdCAwIG9mIHRoZSBzbGF2ZSBhZGRyZXNzIHJlZ2lzdGVy
-IGFsd2F5cyBpbmRpY2F0ZSBhIHdyaXRlDQorCQkgKiBjb21tYW5kLg0KKwkJICovDQorCQlvdXRi
-X3AoKGFkZHIgJiAweDdmKSA8PCAxLCBTTUJIU1RBREQocHJpdikpOw0KKwkJb3V0Yl9wKGNvbW1h
-bmQsIFNNQkhTVENNRChwcml2KSk7DQorCQlibG9jayA9IDE7DQorCQlicmVhazsNCiAJZGVmYXVs
-dDoNCiAJCWRldl9lcnIoJnByaXYtPnBjaV9kZXYtPmRldiwgIlVuc3VwcG9ydGVkIHRyYW5zYWN0
-aW9uICVkXG4iLA0KIAkJCXNpemUpOw0KQEAgLTk1MCw2ICs5NzcsOCBAQCBzdGF0aWMgdTMyIGk4
-MDFfZnVuYyhzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXB0ZXIpDQogCSAgICAgICBJMkNfRlVOQ19T
-TUJVU19CWVRFX0RBVEEgfCBJMkNfRlVOQ19TTUJVU19XT1JEX0RBVEEgfA0KIAkgICAgICAgSTJD
-X0ZVTkNfU01CVVNfQkxPQ0tfREFUQSB8IEkyQ19GVU5DX1NNQlVTX1dSSVRFX0kyQ19CTE9DSyB8
-DQogCSAgICAgICAoKHByaXYtPmZlYXR1cmVzICYgRkVBVFVSRV9TTUJVU19QRUMpID8gSTJDX0ZV
-TkNfU01CVVNfUEVDIDogMCkgfA0KKwkgICAgICAgKChwcml2LT5mZWF0dXJlcyAmIEZFQVRVUkVf
-QkxPQ0tfUFJPQykgPw0KKwkJSTJDX0ZVTkNfU01CVVNfQkxPQ0tfUFJPQ19DQUxMIDogMCkgfA0K
-IAkgICAgICAgKChwcml2LT5mZWF0dXJlcyAmIEZFQVRVUkVfSTJDX0JMT0NLX1JFQUQpID8NCiAJ
-CUkyQ19GVU5DX1NNQlVTX1JFQURfSTJDX0JMT0NLIDogMCkgfA0KIAkgICAgICAgKChwcml2LT5m
-ZWF0dXJlcyAmIEZFQVRVUkVfSE9TVF9OT1RJRlkpID8NCkBAIC0xNTMwLDYgKzE1NTksNyBAQCBz
-dGF0aWMgaW50IGk4MDFfcHJvYmUoc3RydWN0IHBjaV9kZXYgKmRldiwgY29uc3Qgc3RydWN0IHBj
-aV9kZXZpY2VfaWQgKmlkKQ0KIAljYXNlIFBDSV9ERVZJQ0VfSURfSU5URUxfS0FCWUxBS0VfUENI
-X0hfU01CVVM6DQogCWNhc2UgUENJX0RFVklDRV9JRF9JTlRFTF9JQ0VMQUtFX0xQX1NNQlVTOg0K
-IAljYXNlIFBDSV9ERVZJQ0VfSURfSU5URUxfQ09NRVRMQUtFX1NNQlVTOg0KKwkJcHJpdi0+ZmVh
-dHVyZXMgfD0gRkVBVFVSRV9CTE9DS19QUk9DOw0KIAkJcHJpdi0+ZmVhdHVyZXMgfD0gRkVBVFVS
-RV9JMkNfQkxPQ0tfUkVBRDsNCiAJCXByaXYtPmZlYXR1cmVzIHw9IEZFQVRVUkVfSVJROw0KIAkJ
-cHJpdi0+ZmVhdHVyZXMgfD0gRkVBVFVSRV9TTUJVU19QRUM7DQpAQCAtMTU0OSw2ICsxNTc5LDcg
-QEAgc3RhdGljIGludCBpODAxX3Byb2JlKHN0cnVjdCBwY2lfZGV2ICpkZXYsIGNvbnN0IHN0cnVj
-dCBwY2lfZGV2aWNlX2lkICppZCkNCiAJCXByaXYtPmZlYXR1cmVzIHw9IEZFQVRVUkVfSURGOw0K
-IAkJLyogZmFsbCB0aHJvdWdoICovDQogCWRlZmF1bHQ6DQorCQlwcml2LT5mZWF0dXJlcyB8PSBG
-RUFUVVJFX0JMT0NLX1BST0M7DQogCQlwcml2LT5mZWF0dXJlcyB8PSBGRUFUVVJFX0kyQ19CTE9D
-S19SRUFEOw0KIAkJcHJpdi0+ZmVhdHVyZXMgfD0gRkVBVFVSRV9JUlE7DQogCQkvKiBmYWxsIHRo
-cm91Z2ggKi8NCi0tIA0KMi40LjYNCg0K
+18.06.2019 11:42, Bitan Biswas пишет:
+> tegra_i2c_xfer_msg initiates the I2C transfer in DMA
+> or PIO mode. It involves steps that need FIFO register
+> access, DMA API calls like dma_sync_single_for_device, etc.
+> Tegra I2C ISR has calls to tegra_i2c_empty_rx_fifo in PIO mode
+> and in DMA/PIO mode writes different I2C registers including
+> I2C interrupt status. ISR cannot start processing
+> before the preparation step at tegra_i2c_xfer_msg is complete.
+> Hence, a synchronization between ISR and tegra_i2c_xfer_msg
+> is in place today using spinlock.
+
+Please use full 75 chars per-line, this should make commit message to look better.
+
+> Spinlock busy waits and can add avoidable delays.
+> 
+> In this patch needed synchronization is achieved by disabling
+> I2C interrupt during preparation step and enabling interrupt
+> once preparation is over and spinlock is no longer needed.
+> 
+> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+> ---
+>  drivers/i2c/busses/i2c-tegra.c | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index 6fb545e..ccc7fae 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -240,7 +240,6 @@ struct tegra_i2c_hw_feature {
+>   * @bus_clk_rate: current I2C bus clock rate
+>   * @clk_divisor_non_hs_mode: clock divider for non-high-speed modes
+>   * @is_multimaster_mode: track if I2C controller is in multi-master mode
+> - * @xfer_lock: lock to serialize transfer submission and processing
+>   * @tx_dma_chan: DMA transmit channel
+>   * @rx_dma_chan: DMA receive channel
+>   * @dma_phys: handle to DMA resources
+> @@ -270,8 +269,6 @@ struct tegra_i2c_dev {
+>  	u32 bus_clk_rate;
+>  	u16 clk_divisor_non_hs_mode;
+>  	bool is_multimaster_mode;
+> -	/* xfer_lock: lock to serialize transfer submission and processing */
+> -	spinlock_t xfer_lock;
+>  	struct dma_chan *tx_dma_chan;
+>  	struct dma_chan *rx_dma_chan;
+>  	dma_addr_t dma_phys;
+> @@ -835,7 +832,6 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+>  
+>  	status = i2c_readl(i2c_dev, I2C_INT_STATUS);
+>  
+> -	spin_lock(&i2c_dev->xfer_lock);
+>  	if (status == 0) {
+>  		dev_warn(i2c_dev->dev, "irq status 0 %08x %08x %08x\n",
+>  			 i2c_readl(i2c_dev, I2C_PACKET_TRANSFER_STATUS),
+> @@ -935,7 +931,6 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+>  
+>  	complete(&i2c_dev->msg_complete);
+>  done:
+> -	spin_unlock(&i2c_dev->xfer_lock);
+>  	return IRQ_HANDLED;
+>  }
+>  
+> @@ -1054,7 +1049,6 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+>  	u32 packet_header;
+>  	u32 int_mask;
+>  	unsigned long time_left;
+> -	unsigned long flags;
+>  	size_t xfer_size;
+>  	u32 *buffer = NULL;
+>  	int err = 0;
+> @@ -1085,7 +1079,10 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+>  	 */
+>  	xfer_time += DIV_ROUND_CLOSEST(((xfer_size * 9) + 2) * MSEC_PER_SEC,
+>  					i2c_dev->bus_clk_rate);
+> -	spin_lock_irqsave(&i2c_dev->xfer_lock, flags);
+> +	if (!i2c_dev->irq_disabled) {
+> +		disable_irq_nosync(i2c_dev->irq);
+> +		i2c_dev->irq_disabled = true;
+> +	}
+
+1) Peter correctly pointed out in the other email that the disabling should be synced.
+But see more below in 3.
+
+2) i2c_dev->irq_disabled == true can't ever be the case here because tegra_i2c_init()
+re-enables interrupt in a case of error condition. Hence interrupt always enabled at
+the beginning of the transfer.
+
+3) In my previous answer I was suggesting to request IRQ in a disabled state, this
+will allow to remove i2c_dev->irq_disabled completely.
+
+Then the tegra_i2c_xfer_msg() will have to enable IRQ after completion of the
+transfer-preparation process and disable IRQ once transfer is done (both success and
+failure cases). This is actually not a bad additional motivation for this patch, to
+keep CPU's interrupt disabled while idling and not to only rely on interrupt masking
+of the I2C hardware.
+
+4) ISR should simply return IRQ_NONE when interrupt status is 0 and allow kernel core
+to disable the faulty interrupt itself. There will be "unhandled interrupt" error
+message in KMSG log, following the disabling.
+
+5) In order to request IRQ in a disabled state, the IRQ_NOAUTOEN flag need to be set
+before the requesting, like this:
+
+    irq_set_status_flags(irq, IRQ_NOAUTOEN);
+
+    devm_request_irq(&pdev->dev, irq...);
+
+In a result of combining 3-5, both i2c_dev->irq_disabled and i2c_dev->irq variables
+become obsolete and could be removed in addition to xfer_lock. That all is a good
+cleanup in my opinion.
+
+[snip]
