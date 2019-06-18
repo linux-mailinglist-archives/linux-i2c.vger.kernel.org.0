@@ -2,162 +2,150 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E42498FE
+	by mail.lfdr.de (Postfix) with ESMTP id B619F498FF
 	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2019 08:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbfFRGm2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jun 2019 02:42:28 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:16185 "EHLO
+        id S1726589AbfFRGm0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Jun 2019 02:42:26 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:16186 "EHLO
         hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726640AbfFRGm0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jun 2019 02:42:26 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d0874fc0000>; Mon, 17 Jun 2019 22:22:04 -0700
+        with ESMTP id S1726579AbfFRGmZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jun 2019 02:42:25 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d0875460003>; Mon, 17 Jun 2019 22:23:18 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 17 Jun 2019 22:22:03 -0700
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Mon, 17 Jun 2019 22:23:17 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 17 Jun 2019 22:22:03 -0700
-Received: from [10.19.65.14] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 18 Jun
- 2019 05:22:00 +0000
-Subject: Re: [PATCH V5 6/7] i2c: tegra: fix PIO rx/tx residual transfer check
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
+        by hqpgpgate102.nvidia.com on Mon, 17 Jun 2019 22:23:17 -0700
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL108.nvidia.com
+ (172.18.146.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 18 Jun
+ 2019 05:23:17 +0000
+Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 18 Jun 2019 05:23:17 +0000
+Received: from dhcp-10-19-65-14.client.nvidia.com (Not Verified[10.19.65.14]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d0875420002>; Mon, 17 Jun 2019 22:23:17 -0700
+From:   Bitan Biswas <bbiswas@nvidia.com>
+To:     Laxman Dewangan <ldewangan@nvidia.com>,
         Thierry Reding <treding@nvidia.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
-        Wolfram Sang <wsa@the-dreams.de>
+        Wolfram Sang <wsa@the-dreams.de>,
+        Dmitry Osipenko <digetx@gmail.com>
 CC:     Shardar Mohammed <smohammed@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mantravadi Karthik <mkarthik@nvidia.com>
-References: <1560250274-18499-1-git-send-email-bbiswas@nvidia.com>
- <1560250274-18499-6-git-send-email-bbiswas@nvidia.com>
- <42ce2523-dab9-0cdf-e8ff-42631dd161b7@gmail.com>
- <78140337-dca0-e340-a501-9e37eca6cc87@nvidia.com>
- <9cb7123a-1ebd-3a93-60dc-c8f57f60270b@gmail.com>
- <e795ddcf-dd11-4e39-2a94-b663e5ecb35b@nvidia.com>
- <d2c97291-6392-d614-5cd9-1490a816548c@gmail.com>
-From:   Bitan Biswas <bbiswas@nvidia.com>
-Message-ID: <87b38915-3b2d-9484-e33e-eeacb3746c75@nvidia.com>
-Date:   Mon, 17 Jun 2019 22:21:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mantravadi Karthik <mkarthik@nvidia.com>,
+        Bitan Biswas <bbiswas@nvidia.com>
+Subject: [PATCH V1] i2c: tegra: disable irq in tegra_i2c_xfer_msg
+Date:   Mon, 17 Jun 2019 22:23:06 -0700
+Message-ID: <1560835386-2865-1-git-send-email-bbiswas@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <d2c97291-6392-d614-5cd9-1490a816548c@gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1560835324; bh=woogEWFYrC0moysa3wzNl7oK1UHsHbN3eH7N+d7q6yc=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=k96W7kFdznyim8y9BZ+rdxtP39YESejnbdafkvCuu7Ay90MxdbkGEvR77jTmwo9R1
-         cojCXySqv0/fTYfaX/pZ9lApqe2EUdz0Gun1VTlDbZCmXo0mlJFv9niAbLGXBCyn6y
-         qiW9EKcJS+nTZsrrCseaikMYwiTIvdsg2eWgqCbnA5S8uA9uV5oY98BC/j0GgkYt9b
-         9s/T0CITT9laDnS5DiDWr4SjA2xgVAY0Yg9z6BMgdqMTLuKcJsVxmg6rJdhX1M5nfc
-         GGt1DfGSt2gFXaotO+9jk8ynXz6/EkV5ghftpc4wE3rHwVT1gs1/I3uvuWe1/yMd91
-         qrCzfuM485vzA==
+        t=1560835398; bh=ek2QlnEku1LWWQhyrwcm5zlLW9WTvoLiW1Kx+VIPSbY=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=aCpVsXO9iy+/3KuNJWWG+V22pb6KND0WVsZwZ80F1nWG6DezlK7WQhmFhKt1oeFv0
+         z4KG6Fztx+ImjL7euCdm7+CUv/WkPg0vh7YdF9fMs2gUo7bWL0+OdFuvjLiNEWsbCg
+         o80gX0rUynmhUuzOFpLwO71zVQaZI22QL7UaVMV7qtqE7ddKcRONK3vK8VrpNBlynq
+         qJZOoFeZVQ4CrluNxQbZkgJCR1kD0jFVGhRcN3uy5YC3s18MuFFo7niaroGAytGz/J
+         coYYIlk3BpKPZltBKVOjCPZ3E8qG0F2qnxuG8cI6/mGa/kPPnwWKWfqCImsBgl2U0B
+         +cLLtk1lT61Ug==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Synchronize ISR and tegra_i2c_xfer_msg execution
+by disabling interrupt. This avoids spinlock usage
+for same purpose.
 
+Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-On 6/14/19 6:02 AM, Dmitry Osipenko wrote:
-> 14.06.2019 12:50, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>
->>
->> On 6/13/19 5:28 AM, Dmitry Osipenko wrote:
->>> 13.06.2019 14:30, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>>>
->>>>
->>>> On 6/12/19 7:30 AM, Dmitry Osipenko wrote:
->>>>> 11.06.2019 13:51, Bitan Biswas =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>>>>> Fix expression for residual bytes(less than word) transfer
->>>>>> in I2C PIO mode RX/TX.
->>>>>>
->>>>>> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
->>>>>> ---
->>>>>
->>>>> [snip]
->>>>>
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Update state bef=
-ore writing to FIFO.=C2=A0 If this casues us
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Update state bef=
-ore writing to FIFO.=C2=A0 If this causes us
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-* to finish writing all bytes (AKA buf_remaining goes to
->>>>>> 0) we
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-* have a potential for an interrupt (PACKET_XFER_COMPLETE is
->>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * not maskable).=
-=C2=A0 We need to make sure that the isr sees
->>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * buf_remaining as=
- 0 and doesn't call us back re-entrantly.
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * not maskable).
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-*/
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf_re=
-maining -=3D words_to_transfer * BYTES_PER_FIFO_WORD;
->>>>>
->>>>> Looks like the comment could be removed altogether because it doesn't
->>>>> make sense since interrupt handler is under xfer_lock which is kept
->>>>> locked during of tegra_i2c_xfer_msg().
->>>> I would push a separate patch to remove this comment because of
->>>> xfer_lock in ISR now.
->>>>
->>>>>
->>>>> Moreover the comment says that "PACKET_XFER_COMPLETE is not maskable"=
-,
->>>>> but then what I2C_INT_PACKET_XFER_COMPLETE masking does?
->>>>>
->>>> I2C_INT_PACKET_XFER_COMPLETE masking support available in Tegra chips
->>>> newer than Tegra30 allows one to not see interrupt after Packet transf=
-er
->>>> complete. With the xfer_lock in ISR the scenario discussed in comment
->>>> can be ignored.
->>>
->>> Also note that xfer_lock could be removed and replaced with a just
->>> irq_enable/disable() calls in tegra_i2c_xfer_msg() because we only care
->>> about IRQ not firing during of the preparation process.
->> This should need sufficient testing hence let us do it in a different se=
-ries.
->=20
-> I don't think that there is much to test here since obviously it should w=
-ork.
->=20
-I shall push a patch for this as basic i2c read write test passed.
-
->>>
->>> It also looks like tegra_i2c_[un]nmask_irq isn't really needed and all
->>> IRQ's could be simply unmasked during the driver's probe, in that case
->>> it may worth to add a kind of "in-progress" flag to catch erroneous
->>> interrupts.
->>>
->> TX interrupt needs special handling if this change is done. Hence I thin=
-k it should be
->> taken up after sufficient testing in a separate patch.
->=20
-> This one is indeed a bit more trickier. Probably another alternative coul=
-d be to keep GIC
-> interrupt disabled while no transfer is performed, then you'll have to re=
-quest interrupt
-> in a disabled state using IRQ_NOAUTOEN flag.
->=20
-> And yes, that all should be a separate changes if you're going to impleme=
-nt them.
->=20
-OK
-
--Thanks,
-  Bitan
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 6fb545e..ccc7fae 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -240,7 +240,6 @@ struct tegra_i2c_hw_feature {
+  * @bus_clk_rate: current I2C bus clock rate
+  * @clk_divisor_non_hs_mode: clock divider for non-high-speed modes
+  * @is_multimaster_mode: track if I2C controller is in multi-master mode
+- * @xfer_lock: lock to serialize transfer submission and processing
+  * @tx_dma_chan: DMA transmit channel
+  * @rx_dma_chan: DMA receive channel
+  * @dma_phys: handle to DMA resources
+@@ -270,8 +269,6 @@ struct tegra_i2c_dev {
+ 	u32 bus_clk_rate;
+ 	u16 clk_divisor_non_hs_mode;
+ 	bool is_multimaster_mode;
+-	/* xfer_lock: lock to serialize transfer submission and processing */
+-	spinlock_t xfer_lock;
+ 	struct dma_chan *tx_dma_chan;
+ 	struct dma_chan *rx_dma_chan;
+ 	dma_addr_t dma_phys;
+@@ -835,7 +832,6 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+ 
+ 	status = i2c_readl(i2c_dev, I2C_INT_STATUS);
+ 
+-	spin_lock(&i2c_dev->xfer_lock);
+ 	if (status == 0) {
+ 		dev_warn(i2c_dev->dev, "irq status 0 %08x %08x %08x\n",
+ 			 i2c_readl(i2c_dev, I2C_PACKET_TRANSFER_STATUS),
+@@ -935,7 +931,6 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+ 
+ 	complete(&i2c_dev->msg_complete);
+ done:
+-	spin_unlock(&i2c_dev->xfer_lock);
+ 	return IRQ_HANDLED;
+ }
+ 
+@@ -1054,7 +1049,6 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 	u32 packet_header;
+ 	u32 int_mask;
+ 	unsigned long time_left;
+-	unsigned long flags;
+ 	size_t xfer_size;
+ 	u32 *buffer = NULL;
+ 	int err = 0;
+@@ -1085,7 +1079,10 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 	 */
+ 	xfer_time += DIV_ROUND_CLOSEST(((xfer_size * 9) + 2) * MSEC_PER_SEC,
+ 					i2c_dev->bus_clk_rate);
+-	spin_lock_irqsave(&i2c_dev->xfer_lock, flags);
++	if (!i2c_dev->irq_disabled) {
++		disable_irq_nosync(i2c_dev->irq);
++		i2c_dev->irq_disabled = true;
++	}
+ 
+ 	int_mask = I2C_INT_NO_ACK | I2C_INT_ARBITRATION_LOST;
+ 	tegra_i2c_unmask_irq(i2c_dev, int_mask);
+@@ -1180,7 +1177,10 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 		i2c_readl(i2c_dev, I2C_INT_MASK));
+ 
+ unlock:
+-	spin_unlock_irqrestore(&i2c_dev->xfer_lock, flags);
++	if (i2c_dev->irq_disabled) {
++		i2c_dev->irq_disabled = false;
++		enable_irq(i2c_dev->irq);
++	}
+ 
+ 	if (dma) {
+ 		if (err)
+@@ -1576,7 +1576,6 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 				I2C_PACKET_HEADER_SIZE;
+ 	init_completion(&i2c_dev->msg_complete);
+ 	init_completion(&i2c_dev->dma_complete);
+-	spin_lock_init(&i2c_dev->xfer_lock);
+ 
+ 	if (!i2c_dev->hw->has_single_clk_source) {
+ 		fast_clk = devm_clk_get(&pdev->dev, "fast-clk");
+-- 
+2.7.4
 
