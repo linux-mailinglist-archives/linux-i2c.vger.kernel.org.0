@@ -2,58 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4864BC21
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jun 2019 16:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 768404BC99
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jun 2019 17:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726332AbfFSO50 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jun 2019 10:57:26 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55708 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725899AbfFSO50 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 19 Jun 2019 10:57:26 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 90079AF47;
-        Wed, 19 Jun 2019 14:57:25 +0000 (UTC)
-Date:   Wed, 19 Jun 2019 16:57:24 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [PATCH v2] i2c: i801: Add Block Write-Block Read Process Call
- support
-Message-ID: <20190619165724.2eece890@endymion>
-In-Reply-To: <20190618170633.14774-1-alexander.sverdlin@nokia.com>
-References: <20190617161951.56510723@endymion>
-        <20190618170633.14774-1-alexander.sverdlin@nokia.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
+        id S1727002AbfFSPM5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jun 2019 11:12:57 -0400
+Received: from mga14.intel.com ([192.55.52.115]:16538 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726009AbfFSPM5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 19 Jun 2019 11:12:57 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Jun 2019 08:12:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,392,1557212400"; 
+   d="scan'208";a="358641562"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Jun 2019 08:12:55 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 9065314B; Wed, 19 Jun 2019 18:12:54 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>,
+        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/2] i2c: i801: Use match_string() helper to simplify the code
+Date:   Wed, 19 Jun 2019 18:12:47 +0300
+Message-Id: <20190619151248.75618-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 18 Jun 2019 17:06:50 +0000, Sverdlin, Alexander (Nokia - DE/Ulm) wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-> 
-> Add SMBUS 2.0 Block Write-Block Read Process Call command support.
-> 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-> ---
-> Changelog:
-> v2: Updated Documentation
-> 
->  Documentation/i2c/busses/i2c-i801 |  2 +-
->  drivers/i2c/busses/i2c-i801.c     | 43 +++++++++++++++++++++++++++++++++------
->  2 files changed, 38 insertions(+), 7 deletions(-)
-> (...)
+match_string() returns the array index of a matching string.
+Use it instead of the open-coded implementation.
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Pali Rohár <pali.rohar@gmail.com>
+---
+ drivers/i2c/busses/i2c-i801.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-Thanks for your contribution!
-
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 694eb636b40b..b9c5d7933d12 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -92,6 +92,7 @@
+ #include <linux/io.h>
+ #include <linux/dmi.h>
+ #include <linux/slab.h>
++#include <linux/string.h>
+ #include <linux/wait.h>
+ #include <linux/err.h>
+ #include <linux/platform_device.h>
+@@ -1164,14 +1165,12 @@ static acpi_status check_acpi_smo88xx_device(acpi_handle obj_handle,
+ 	if (!hid)
+ 		return AE_OK;
+ 
+-	for (i = 0; i < ARRAY_SIZE(acpi_smo8800_ids); ++i) {
+-		if (strcmp(hid, acpi_smo8800_ids[i]) == 0) {
+-			*((bool *)return_value) = true;
+-			return AE_CTRL_TERMINATE;
+-		}
+-	}
++	i = match_string(acpi_smo8800_ids, ARRAY_SIZE(acpi_smo8800_ids), hid);
++	if (i < 0)
++		return AE_OK;
+ 
+-	return AE_OK;
++	*((bool *)return_value) = true;
++	return AE_CTRL_TERMINATE;
+ }
+ 
+ static bool is_dell_system_with_lis3lv02d(void)
 -- 
-Jean Delvare
-SUSE L3 Support
+2.20.1
+
