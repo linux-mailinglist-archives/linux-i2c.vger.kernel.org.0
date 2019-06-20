@@ -2,168 +2,185 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2241F4C56E
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 04:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087BF4C665
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 07:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726480AbfFTC2v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Jun 2019 22:28:51 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:10038 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726370AbfFTC2v (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jun 2019 22:28:51 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5K2DA1I000522;
-        Wed, 19 Jun 2019 19:28:20 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=U7QIe/oedTOCkkD3V2c/L4NT3fkYvZQFGhmGvyB0oy0=;
- b=rOX/9m6lwdo5sFF6ntlgJbg9pK7xDD5NCuAepllr1oQBIs2eRKhrxGIZm1dUs4xgi/qj
- hJwbI7G7Fx3kuM29/u618PVd63pwBINvtFLgZJM4hjt41qJD1Eycvm4xKgc2aZa91Bmd
- Ml3AZ2KMH+HkOqEyWu8flPSmQQ4R0aEwRFg= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2t7wwcgn09-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jun 2019 19:28:08 -0700
-Received: from prn-mbx03.TheFacebook.com (2620:10d:c081:6::17) by
- prn-hub03.TheFacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Wed, 19 Jun 2019 19:28:07 -0700
-Received: from prn-hub01.TheFacebook.com (2620:10d:c081:35::125) by
- prn-mbx03.TheFacebook.com (2620:10d:c081:6::17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Wed, 19 Jun 2019 19:28:07 -0700
-Received: from NAM05-CO1-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Wed, 19 Jun 2019 19:28:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U7QIe/oedTOCkkD3V2c/L4NT3fkYvZQFGhmGvyB0oy0=;
- b=Zg+9Wvx2ZDh8OFUmlhf1eHKzgZdRdbYF5hp4X9BvW6q7Qb8OGjaBOc6YXdFBb30URImUL1ZbsXnRvhb/NrEnIvu+v8ElYkA0P+OO67O0LGpMITTzd4xTmx5ORfP9c3R4e/WI68cXpxqN4qjPAEJGTMUggCOdcte0NrnYSdGJssI=
-Received: from MWHPR15MB1216.namprd15.prod.outlook.com (10.175.2.17) by
- MWHPR15MB1342.namprd15.prod.outlook.com (10.175.2.18) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.13; Thu, 20 Jun 2019 02:28:06 +0000
-Received: from MWHPR15MB1216.namprd15.prod.outlook.com
- ([fe80::d51f:8f19:e2b5:3ae8]) by MWHPR15MB1216.namprd15.prod.outlook.com
- ([fe80::d51f:8f19:e2b5:3ae8%6]) with mapi id 15.20.1987.014; Thu, 20 Jun 2019
- 02:28:06 +0000
-From:   Tao Ren <taoren@fb.com>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "OpenBMC Maillist" <openbmc@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Joel Stanley" <joel@jms.id.au>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "ryan_chen@aspeedtech.com" <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH 1/2] i2c: aspeed: allow to customize base clock divisor
-Thread-Topic: [PATCH 1/2] i2c: aspeed: allow to customize base clock divisor
-Thread-Index: AQHVJuIcteG+E70PmUey9PLXreYJ5KajfUSAgAASwwCAAAhQgIAAOXUA
-Date:   Thu, 20 Jun 2019 02:28:06 +0000
-Message-ID: <aefd4de2-31b4-1332-7cc0-92cc04fea045@fb.com>
-References: <20190619205009.4176588-1-taoren@fb.com>
- <CAFd5g45TMtXcuqONdkpN_K+c0O+wUw8wkGzcQfV+sO8p5Krc9w@mail.gmail.com>
- <18565fcf-3dc1-b671-f826-e4417e4ad284@fb.com>
- <4c8b9ca5e84db7db67ad552d8fdbaa17d11b6432.camel@kernel.crashing.org>
-In-Reply-To: <4c8b9ca5e84db7db67ad552d8fdbaa17d11b6432.camel@kernel.crashing.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: CO2PR05CA0002.namprd05.prod.outlook.com
- (2603:10b6:102:2::12) To MWHPR15MB1216.namprd15.prod.outlook.com
- (2603:10b6:320:22::17)
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        id S1725937AbfFTFBB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Jun 2019 01:01:01 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:1709 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725872AbfFTFBB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jun 2019 01:01:01 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d0b130a0000>; Wed, 19 Jun 2019 22:00:58 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 19 Jun 2019 22:00:58 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 19 Jun 2019 22:00:58 -0700
+Received: from [10.19.65.14] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 20 Jun
+ 2019 05:00:54 +0000
+Subject: Re: [PATCH V9] i2c: tegra: remove BUG() macro
+To:     Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Dmitry Osipenko <digetx@gmail.com>
+CC:     Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>,
+        "Thierry Reding" <thierry.reding@gmail.com>
+References: <1560856182-26072-1-git-send-email-bbiswas@nvidia.com>
+From:   Bitan Biswas <bbiswas@nvidia.com>
+Message-ID: <a2a94eb5-c3c3-24bb-e7a6-0d02f2546f94@nvidia.com>
+Date:   Wed, 19 Jun 2019 22:00:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::3:2141]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5e7b35a4-cbae-4293-2c53-08d6f526ed1b
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR15MB1342;
-x-ms-traffictypediagnostic: MWHPR15MB1342:
-x-microsoft-antispam-prvs: <MWHPR15MB134285666109EE5373AC1952B2E40@MWHPR15MB1342.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 0074BBE012
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(396003)(346002)(39860400002)(376002)(366004)(189003)(199004)(256004)(52116002)(8676002)(99286004)(64756008)(36756003)(68736007)(66476007)(66446008)(11346002)(478600001)(6512007)(66556008)(65826007)(25786009)(46003)(53936002)(305945005)(6246003)(53546011)(31686004)(7416002)(4326008)(476003)(14454004)(71190400001)(7736002)(71200400001)(6116002)(2616005)(486006)(14444005)(31696002)(446003)(65956001)(316002)(64126003)(81166006)(66946007)(2906002)(73956011)(102836004)(86362001)(76176011)(6436002)(229853002)(386003)(6506007)(54906003)(8936002)(58126008)(65806001)(110136005)(81156014)(5660300002)(6486002)(186003);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1342;H:MWHPR15MB1216.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: teF2a2zJwfvQAcieCDNmss28ILqu6fJHTLbuBkH+MpEjpkCsKdQ9gO/FkKNzhmad92HmbuH3Am9WbWrnfa8ouL3J78anFTkAogAytEpzX7wkvfC7tkXKnEbZiPCmxT9h56zAExqJU417oZ6hfwiHdsZv9O5NdMPCW9hDBrhrP3CDfTxkjaelZIxXqIoXlsD0d8SikONN7Vk25Fam5mW7mdbS0La8G2oTLNTgDBI/oEx1yRAp20LpAz3oByQnMSzYmkMf3fDeC/TDhZCYMCkDS2rzJyTp7E1TzJVSA7mzWeGjcg6j4JTB51QluvGr7U05fa+zHvN4kE93uPXjI1gJmyB9/O6qYBUpqzwoWwm9mZKcTGAm6rTULUj64ZIPaobLyCl8ipJjtrYOHVnB7gumN6Ly8qJNox+Kov8rW5Y4fTY=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8840564E23F9E849A053530EEF97466C@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e7b35a4-cbae-4293-2c53-08d6f526ed1b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2019 02:28:06.1252
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: taoren@fb.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1342
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-20_01:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906200016
-X-FB-Internal: deliver
+In-Reply-To: <1560856182-26072-1-git-send-email-bbiswas@nvidia.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1561006858; bh=fYK1YbOLXLOtJfuwb+ssRvSQx1QHtpEJNfYKlLvob5Y=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=k/I4WdmDTLwcuyLc2eosg3rscAeySxlTqFn8VH3dri5WOfRnKe7DoPeh9vKvVkD0Q
+         XWeUcSdPPSJ9hUk0xC6+y9qGpWqJaomL5IcQ7Se8qao/+W1mnrHZ9ouS1WaraMABda
+         NElV4FpAB7faFin8e1HqoP7S0/ZpX6gEB4hJUwcZBZq9o7bFyWnU6jNE+bLOc4CgST
+         cCMj4s5OFbwogdZkAhhwPRlin9FxiIzIFm4MeXD3uIKZ1Bh4P+8uqHtNzjo/jeeUjL
+         ik/7t60MhV2YFAl+txpRbgpfANDlzwc5hazdpWK9X6Cz/7FIlUVYBLwAYOon4SsXrI
+         tULrs5g0TZyLw==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gNi8xOS8xOSA0OjAyIFBNLCBCZW5qYW1pbiBIZXJyZW5zY2htaWR0IHdyb3RlOg0KPiBPbiBX
-ZWQsIDIwMTktMDYtMTkgYXQgMjI6MzIgKzAwMDAsIFRhbyBSZW4gd3JvdGU6DQo+PiBUaGFuayB5
-b3UgZm9yIHRoZSBxdWljayByZXNwb25zZSwgQnJlbmRhbi4NCj4+DQo+PiBBc3BlZWQgSTJDIGJ1
-cyBmcmVxdWVuY3kgaXMgZGVmaW5lZCBieSAzIHBhcmFtZXRlcnMNCj4+IChiYXNlX2Nsa19kaXZp
-c29yLCBjbGtfaGlnaF93aWR0aCwgY2xrX2xvd193aWR0aCksIGFuZCBJIGNob29zZQ0KPj4gYmFz
-ZV9jbGtfZGl2aXNvciBiZWNhdXNlIGl0IGNvbnRyb2xzIGFsbCB0aGUgQXNwZWVkIEkyQyB0aW1p
-bmdzIChzdWNoDQo+PiBhcyBzZXR1cCB0aW1lIGFuZCBob2xkIHRpbWUpLiBPbmNlIGJhc2VfY2xr
-X2Rpdmlzb3IgaXMgZGVjaWRlZA0KPj4gKGVpdGhlciBieSB0aGUgY3VycmVudCBsb2dpYyBpbiBp
-MmMtYXNwZWVkIGRyaXZlciBvciBtYW51YWxseSBzZXQgaW4NCj4+IGRldmljZSB0cmVlKSwgY2xr
-X2hpZ2hfd2lkdGggYW5kIGNsa19sb3dfd2lkdGggd2lsbCBiZSBjYWxjdWxhdGVkIGJ5DQo+PiBp
-MmMtYXNwZWVkIGRyaXZlciB0byBtZWV0IHRoZSBzcGVjaWZpZWQgSTJDIGJ1cyBzcGVlZC4NCj4+
-DQo+PiBGb3IgZXhhbXBsZSwgYnkgc2V0dGluZyBJMkMgYnVzIGZyZXF1ZW5jeSB0byAxMDBLSHog
-b24gQVNUMjUwMA0KPj4gcGxhdGZvcm0sIChiYXNlX2Nsb2NrX2Rpdmlzb3IsIGNsa19oaWdoX3dp
-ZHRoLCBjbGtfbG93X3dpZHRoKSBpcyBzZXQNCj4+IHRvICgzLCAxNSwgMTQpIGJ5IG91ciBkcml2
-ZXIuIEJ1dCBzb21lIHNsYXZlIGRldmljZXMgKG9uIENNTSBpMmMtOA0KPj4gYW5kIE1pbmlwYWNr
-IGkyYy0wKSBOQUNLIGJ5dGUgdHJhbnNhY3Rpb25zIHdpdGggdGhlIGRlZmF1bHQgdGltaW5nDQo+
-PiBzZXR0aW5nOiB0aGUgaXNzdWUgY2FuIGJlIHJlc29sdmVkIGJ5IHNldHRpbmcgYmFzZV9jbGtf
-ZGl2aXNvciB0byA0LA0KPj4gYW5kIChjbGtfaGlnaF93aWR0aCwgY2xrX2xvd193aWR0aCkgd2ls
-bCBiZSBzZXQgdG8gKDcsIDcpIGJ5IG91ciBpMmMtDQo+PiBhc3BlZWQgZHJpdmVyIHRvIGFjaGll
-dmUgc2ltaWxhciBJMkMgYnVzIHNwZWVkLg0KPj4NCj4+IE5vdCBzdXJlIGlmIG15IGFuc3dlciBo
-ZWxwcyB0byBhZGRyZXNzIHlvdXIgY29uY2VybnMsIGJ1dCBraW5kbHkgbGV0DQo+PiBtZSBrbm93
-IGlmIHlvdSBoYXZlIGZ1cnRoZXIgcXVlc3Rpb25zL3N1Z2dlc3Rpb25zLg0KPiANCj4gRGlkIHlv
-dSBsb29rIGF0IHRoZSByZXN1bHRpbmcgb3V0cHV0IG9uIGEgc2NvcGUgPyBJJ20gY3VyaW91cyB3
-aGF0DQo+IG1pZ2h0IGJlIHdyb25nLi4uLiANCj4gDQo+IENDaW5nIFJ5YW4gZnJvbSBBc3BlZWQs
-IGhlIG1pZ2h0IGhhdmUgc29tZSBpZGVhLg0KPiANCj4gQ291bGQgaXQgYmUgdGhhdCB3aXRoIHNv
-bWUgc3BlY2lmaWMgZGl2aWRlcnMgeW91IGhhdmUgbW9yZSBqaXR0ZXIgPw0KPiBTdGlsbCwgaTJj
-IGRldmljZXMgdGVuZCB0byBiZSByYXRoZXIgcm9idXN0IHZzIGNyYXBweSBjbG9ja3MgdW5sZXNz
-IHlvdQ0KPiBhcmUgbWFzc2l2ZWx5IG91dCBvZiBib3VuZHMsIHdoaWNoIG1ha2VzIG1lIHdvbmRl
-ciB3aGV0aGVyIHNvbWV0aGluZw0KPiBlbHNlIG1pZ2h0IGJlIHdyb25nIGluIHlvdXIgc2V0dXAu
-DQo+IA0KPiBDaGVlcnMsDQo+IEJlbi4NCg0KSSd2ZSByZWFjaGVkIG91dCB0byBoYXJkd2FyZSB0
-ZWFtIHRvIHNlZSBpZiB0aGV5IGNhbiBwcm92aWRlIG1vcmUgaW5wdXRzIChzdWNoIGFzIHByb3Rv
-Y29sIGRlY29kZXIgb3V0cHV0KSBidXQgc28gZmFyIEkgZG9uJ3QgaGF2ZSBzdWNoIGRhdGEuIEkn
-bSBzdXNwZWN0aW5nIGl0J3MgY2F1c2VkIGJ5IEkyQyB0aW1pbmcgbWFpbmx5IGJlY2F1c2U6DQoN
-CjEpIHRoZSBpbnRlcm1pdHRlbnQgaTJjIHRyYW5zYWN0aW9uIGZhaWx1cmVzIGFsd2F5cyBoYXBw
-ZW4gdG8gc2xhdmUgZGV2aWNlcyB3aGljaCBhcmUgZnVydGhlc3QgYXdheSBmcm9tIEFTUEVFRCBj
-aGlwLg0KDQoyKSBBcyB0aGUgaTJjLWFzcGVlZCBkcml2ZXIgaW4gbXkga2VybmVsIDQuMSB0cmVl
-IChkZXJpdmVkIGZyb20gQVNQRUVEIFNESykgd29ya3MgcHJvcGVybHksIGFuZCBJIGNvcGllZCBJ
-MkNEMDQgKENsb2NrIGFuZCBBQyBUaW1pbmcgQ29udHJvbCkgcmVnaXN0ZXIgdmFsdWUgZnJvbSBr
-ZXJuZWwgNC4xIGFuZCBhcHBsaWVkIHRvIHRoZSBsYXRlc3QgdXBzdHJlYW0gZHJpdmVyOiB0aGUg
-dHJhbnNhY3Rpb24gZmFpbHVyZSBpcyBmaXhlZCA6KQ0KDQpUaGFuayB5b3UgQmVuIGZvciBsb29r
-aW5nIGludG8gdGhlIGlzc3VlIGFuZCBpbnZvbHZpbmcgbW9yZSBleHBlcnRzIChSeWFuKSBmb3Ig
-ZGlzY3Vzc2lvbi4gSSBoYXZlIGJlZW4gc3VmZmVyaW5nIGZyb20gdGhlIHByb2JsZW0gZm9yIHNl
-dmVyYWwgbW9udGhzIGFuZCBJJ20gbG9va2luZyBmb3J3YXJkIGZvciBwcm9wZXIvcmlnaHQgc29s
-dXRpb25zLg0KDQoNCkNoZWVycywNCg0KVGFvDQoNCg0K
+
+
+On 6/18/19 4:09 AM, Bitan Biswas wrote:
+> The usage of BUG() macro is generally discouraged in kernel, unless
+> it's a problem that results in a physical damage or loss of data.
+> This patch removes unnecessary BUG() macros and replaces the rest
+> with warning.
+> 
+> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+> ---
+>   drivers/i2c/busses/i2c-tegra.c | 47 +++++++++++++++++++++++++++++++++++-------
+>   1 file changed, 39 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index 4dfb4c1..e9ff96d 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -73,6 +73,7 @@
+>   #define I2C_ERR_NO_ACK				BIT(0)
+>   #define I2C_ERR_ARBITRATION_LOST		BIT(1)
+>   #define I2C_ERR_UNKNOWN_INTERRUPT		BIT(2)
+> +#define I2C_ERR_RX_BUFFER_OVERFLOW		BIT(3)
+>   
+>   #define PACKET_HEADER0_HEADER_SIZE_SHIFT	28
+>   #define PACKET_HEADER0_PACKET_ID_SHIFT		16
+> @@ -489,6 +490,13 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
+>   	size_t buf_remaining = i2c_dev->msg_buf_remaining;
+>   	int words_to_transfer;
+>   
+> +	/*
+> +	 * Catch overflow due to message fully sent
+> +	 * before the check for RX FIFO availability.
+> +	 */
+> +	if (WARN_ON_ONCE(!(i2c_dev->msg_buf_remaining)))
+> +		return -EINVAL;
+> +
+>   	if (i2c_dev->hw->has_mst_fifo) {
+>   		val = i2c_readl(i2c_dev, I2C_MST_FIFO_STATUS);
+>   		rx_fifo_avail = (val & I2C_MST_FIFO_STATUS_RX_MASK) >>
+> @@ -515,7 +523,11 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
+>   	 * prevent overwriting past the end of buf
+>   	 */
+>   	if (rx_fifo_avail > 0 && buf_remaining > 0) {
+> -		BUG_ON(buf_remaining > 3);
+> +		/*
+> +		 * buf_remaining > 3 check not needed as rx_fifo_avail == 0
+> +		 * when (words_to_transfer was > rx_fifo_avail) earlier
+> +		 * in this function.
+> +		 */
+>   		val = i2c_readl(i2c_dev, I2C_RX_FIFO);
+>   		val = cpu_to_le32(val);
+>   		memcpy(buf, &val, buf_remaining);
+> @@ -523,7 +535,10 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
+>   		rx_fifo_avail--;
+>   	}
+>   
+> -	BUG_ON(rx_fifo_avail > 0 && buf_remaining > 0);
+> +	/* RX FIFO must be drained, otherwise it's an Overflow case. */
+> +	if (WARN_ON_ONCE(rx_fifo_avail))
+> +		return -EINVAL;
+> +
+>   	i2c_dev->msg_buf_remaining = buf_remaining;
+>   	i2c_dev->msg_buf = buf;
+>   
+> @@ -581,7 +596,11 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
+>   	 * boundary and fault.
+>   	 */
+>   	if (tx_fifo_avail > 0 && buf_remaining > 0) {
+> -		BUG_ON(buf_remaining > 3);
+> +		/*
+> +		 * buf_remaining > 3 check not needed as tx_fifo_avail == 0
+> +		 * when (words_to_transfer was > tx_fifo_avail) earlier
+> +		 * in this function for non-zero words_to_transfer.
+> +		 */
+>   		memcpy(&val, buf, buf_remaining);
+>   		val = le32_to_cpu(val);
+>   
+> @@ -847,10 +866,15 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+>   
+>   	if (!i2c_dev->is_curr_dma_xfer) {
+>   		if (i2c_dev->msg_read && (status & I2C_INT_RX_FIFO_DATA_REQ)) {
+> -			if (i2c_dev->msg_buf_remaining)
+> -				tegra_i2c_empty_rx_fifo(i2c_dev);
+> -			else
+> -				BUG();
+> +			if (tegra_i2c_empty_rx_fifo(i2c_dev)) {
+> +				/*
+> +				 * Overflow error condition: message fully sent,
+> +				 * with no XFER_COMPLETE interrupt but hardware
+> +				 * asks to transfer more.
+> +				 */
+> +				i2c_dev->msg_err |= I2C_ERR_RX_BUFFER_OVERFLOW;
+> +				goto err;
+> +			}
+>   		}
+>   
+>   		if (!i2c_dev->msg_read && (status & I2C_INT_TX_FIFO_DATA_REQ)) {
+> @@ -876,7 +900,14 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+>   	if (status & I2C_INT_PACKET_XFER_COMPLETE) {
+>   		if (i2c_dev->is_curr_dma_xfer)
+>   			i2c_dev->msg_buf_remaining = 0;
+> -		BUG_ON(i2c_dev->msg_buf_remaining);
+> +		/*
+> +		 * Underflow error condition: XFER_COMPLETE before message
+> +		 * fully sent.
+> +		 */
+> +		if (WARN_ON_ONCE(i2c_dev->msg_buf_remaining)) {
+> +			i2c_dev->msg_err |= I2C_ERR_UNKNOWN_INTERRUPT;
+> +			goto err;
+> +		}
+>   		complete(&i2c_dev->msg_complete);
+>   	}
+>   	goto done;
+> 
+
+Please get back if there are any further comments regarding this patch.
+
+-regards,
+  Bitan
+
