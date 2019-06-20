@@ -2,161 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE9D4C973
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 10:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473BA4CAB5
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 11:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725937AbfFTI1l (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Jun 2019 04:27:41 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:52209 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725875AbfFTI1k (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jun 2019 04:27:40 -0400
-Received: from localhost (alyon-656-1-672-152.w92-137.abo.wanadoo.fr [92.137.69.152])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 226F420000F;
-        Thu, 20 Jun 2019 08:27:36 +0000 (UTC)
-Date:   Thu, 20 Jun 2019 10:27:36 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Eugen.Hristev@microchip.com
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
-        Nicolas.Ferre@microchip.com, Ludovic.Desroches@microchip.com,
-        wsa@the-dreams.de, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] i2c: at91: add support for digital filtering
-Message-ID: <20190620082736.GS23549@piout.net>
-References: <1561014676-22446-1-git-send-email-eugen.hristev@microchip.com>
- <1561014676-22446-3-git-send-email-eugen.hristev@microchip.com>
+        id S1725889AbfFTJYG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Jun 2019 05:24:06 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:15092 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725875AbfFTJYF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jun 2019 05:24:05 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d0b50b30001>; Thu, 20 Jun 2019 02:24:03 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 20 Jun 2019 02:24:04 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 20 Jun 2019 02:24:04 -0700
+Received: from [10.19.64.157] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 20 Jun
+ 2019 09:24:00 +0000
+Subject: Re: [PATCH V9] i2c: tegra: remove BUG() macro
+To:     Bitan Biswas <bbiswas@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Dmitry Osipenko <digetx@gmail.com>
+References: <1560856182-26072-1-git-send-email-bbiswas@nvidia.com>
+CC:     Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+From:   Laxman Dewangan <ldewangan@nvidia.com>
+Message-ID: <bac4fc16-858f-0ede-0c36-7c60e215ea77@nvidia.com>
+Date:   Thu, 20 Jun 2019 14:53:56 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101
+ Thunderbird/45.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1561014676-22446-3-git-send-email-eugen.hristev@microchip.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <1560856182-26072-1-git-send-email-bbiswas@nvidia.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL106.nvidia.com (172.18.146.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1561022644; bh=rlztNEug3hk4IBq5DjW1s4T+e1rUkPC3E75CrKzHJRY=;
+        h=X-PGP-Universal:Subject:To:References:CC:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding;
+        b=aFykmx6XFhAy9pbHntU+O7i8L7t2m79gU0JV5gtCDxcImL/RinX1L0IjiqtCmdiiO
+         1e+5WzFUMlDlA+2lu0y4gBLm8KHQMBUXZRfXYbCjTTTGDSo2mFYBkJ3aNZUlw6uSmv
+         w5YvVpMNG2BqBznTBlil29B7EiuCgNjeW9YBmc0dW494BCP0Ma3xZ4BRfm9Sk/NRod
+         aET96y5A888cPGwqbiKZAHacRntZ8Cy4Oc+KS8ORPT7sLDffGZrx9RIGoH7gOz5TAU
+         g4f2nX2u6e0BukYgz/LHB8M4GnApanOS7op3xnsZtZ1i9a83tH18ORCXCImbrvRwGA
+         3Y60TqFR+Ujcw==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 20/06/2019 07:16:13+0000, Eugen.Hristev@microchip.com wrote:
-> From: Eugen Hristev <eugen.hristev@microchip.com>
-> 
-> Add new platform data support for digital filtering for i2c.
-> The sama5d4, sama5d2 and sam9x60 support this feature.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
->  drivers/i2c/busses/i2c-at91-core.c   | 9 +++++++++
->  drivers/i2c/busses/i2c-at91-master.c | 6 ++++++
->  drivers/i2c/busses/i2c-at91.h        | 4 ++++
->  3 files changed, 19 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-at91-core.c b/drivers/i2c/busses/i2c-at91-core.c
-> index a663a7a..62610af 100644
-> --- a/drivers/i2c/busses/i2c-at91-core.c
-> +++ b/drivers/i2c/busses/i2c-at91-core.c
-> @@ -68,6 +68,7 @@ static struct at91_twi_pdata at91rm9200_config = {
->  	.has_unre_flag = true,
->  	.has_alt_cmd = false,
->  	.has_hold_field = false,
-> +	.has_dig_filtr = false,
-
-As false is the default value, may we should avoid setting it
-explicitly to keep the file size manageable.
-
->  };
->  
->  static struct at91_twi_pdata at91sam9261_config = {
-> @@ -76,6 +77,7 @@ static struct at91_twi_pdata at91sam9261_config = {
->  	.has_unre_flag = false,
->  	.has_alt_cmd = false,
->  	.has_hold_field = false,
-> +	.has_dig_filtr = false,
->  };
->  
->  static struct at91_twi_pdata at91sam9260_config = {
-> @@ -84,6 +86,7 @@ static struct at91_twi_pdata at91sam9260_config = {
->  	.has_unre_flag = false,
->  	.has_alt_cmd = false,
->  	.has_hold_field = false,
-> +	.has_dig_filtr = false,
->  };
->  
->  static struct at91_twi_pdata at91sam9g20_config = {
-> @@ -92,6 +95,7 @@ static struct at91_twi_pdata at91sam9g20_config = {
->  	.has_unre_flag = false,
->  	.has_alt_cmd = false,
->  	.has_hold_field = false,
-> +	.has_dig_filtr = false,
->  };
->  
->  static struct at91_twi_pdata at91sam9g10_config = {
-> @@ -100,6 +104,7 @@ static struct at91_twi_pdata at91sam9g10_config = {
->  	.has_unre_flag = false,
->  	.has_alt_cmd = false,
->  	.has_hold_field = false,
-> +	.has_dig_filtr = false,
->  };
->  
->  static const struct platform_device_id at91_twi_devtypes[] = {
-> @@ -130,6 +135,7 @@ static struct at91_twi_pdata at91sam9x5_config = {
->  	.has_unre_flag = false,
->  	.has_alt_cmd = false,
->  	.has_hold_field = false,
-> +	.has_dig_filtr = false,
->  };
->  
->  static struct at91_twi_pdata sama5d4_config = {
-> @@ -138,6 +144,7 @@ static struct at91_twi_pdata sama5d4_config = {
->  	.has_unre_flag = false,
->  	.has_alt_cmd = false,
->  	.has_hold_field = true,
-> +	.has_dig_filtr = true,
->  };
->  
->  static struct at91_twi_pdata sama5d2_config = {
-> @@ -146,6 +153,7 @@ static struct at91_twi_pdata sama5d2_config = {
->  	.has_unre_flag = true,
->  	.has_alt_cmd = true,
->  	.has_hold_field = true,
-> +	.has_dig_filtr = true,
->  };
->  
->  static struct at91_twi_pdata sam9x60_config = {
-> @@ -154,6 +162,7 @@ static struct at91_twi_pdata sam9x60_config = {
->  	.has_unre_flag = true,
->  	.has_alt_cmd = true,
->  	.has_hold_field = true,
-> +	.has_dig_filtr = true,
->  };
->  
->  static const struct of_device_id atmel_twi_dt_ids[] = {
-> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-> index e87232f..366e90f 100644
-> --- a/drivers/i2c/busses/i2c-at91-master.c
-> +++ b/drivers/i2c/busses/i2c-at91-master.c
-> @@ -31,12 +31,18 @@
->  
->  void at91_init_twi_bus_master(struct at91_twi_dev *dev)
->  {
-> +	struct at91_twi_pdata *pdata = dev->pdata;
-> +
->  	/* FIFO should be enabled immediately after the software reset */
->  	if (dev->fifo_size)
->  		at91_twi_write(dev, AT91_TWI_CR, AT91_TWI_FIFOEN);
->  	at91_twi_write(dev, AT91_TWI_CR, AT91_TWI_MSEN);
->  	at91_twi_write(dev, AT91_TWI_CR, AT91_TWI_SVDIS);
->  	at91_twi_write(dev, AT91_TWI_CWGR, dev->twi_cwgr_reg);
-> +
-> +	/* enable digital filter */
-> +	if (pdata->has_dig_filtr)
-> +		at91_twi_write(dev, AT91_TWI_FILTR, AT91_TWI_FILTR_FILT);
-
-You are enabling all those filtering features by default which mean that
-if we ever need to handle them using DT, the property will be a
-disabling one instead of a more logical enabling one.
 
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On Tuesday 18 June 2019 04:39 PM, Bitan Biswas wrote:
+> The usage of BUG() macro is generally discouraged in kernel, unless
+> it's a problem that results in a physical damage or loss of data.
+> This patch removes unnecessary BUG() macros and replaces the rest
+> with warning.
+>
+> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
+>
+Acked By: Laxman Dewangan <ldewangan@nvidia.com>
+
+Thanks,
+Laxman
