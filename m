@@ -2,96 +2,127 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 572004D128
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 17:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980804D1C1
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 17:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732165AbfFTPAq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Jun 2019 11:00:46 -0400
-Received: from mga03.intel.com ([134.134.136.65]:2903 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732148AbfFTPAo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 20 Jun 2019 11:00:44 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jun 2019 08:00:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,397,1557212400"; 
-   d="scan'208";a="162387155"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Jun 2019 08:00:40 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hdyYJ-0001PS-8N; Thu, 20 Jun 2019 18:00:39 +0300
-Date:   Thu, 20 Jun 2019 18:00:39 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     wsa@the-dreams.de, mika.westerberg@linux.intel.com,
-        jarkko.nikula@linux.intel.com, linux-i2c@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benjamin.tissoires@redhat.com, jbroadus@gmail.com,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH v5 0/7] I2C IRQ Probe Improvements
-Message-ID: <20190620150039.GF9224@smile.fi.intel.com>
+        id S1726530AbfFTPLz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Jun 2019 11:11:55 -0400
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:4574 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726512AbfFTPLz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jun 2019 11:11:55 -0400
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5KFAHuE008756;
+        Thu, 20 Jun 2019 10:11:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=ln7dkvArTMvPCZI/teQNxY7fYIBJQ2+O3y36iVfwwhU=;
+ b=VDxqVuUIdo+iIzaT7zCSpDT1zuA5PDq2PIx/jYFvgU19t+niTOfjmfGHzGUwW1eriSQ2
+ 6zPpE9ckHy7HugMHyoKWUU2QrIPjly1amfQDc6uKeMQSz4UMcYJ1RjPhWl6hKtuMzozF
+ QfHGQp9ac8zUrzpRnM5Ymer+SlWEwXdFDH0wENa4pfW22BEoxqo+r/qNZbzvEXvJ6itt
+ e7OBgTUp4nkjqtdnslbL1hN61LlfBzfA7ySEjOf4OZlZ0LKFCdydh4PZPZD9wC5tZX0z
+ DUcjgSyVeAnDxJeGXazZc+Bl0B9MGkytFrrdapOY1ytMj40U0TEKyN5EcI8LULkyLlGo 3A== 
+Authentication-Results: ppops.net;
+        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from mail3.cirrus.com ([87.246.76.56])
+        by mx0b-001ae601.pphosted.com with ESMTP id 2t780ctnwk-1;
+        Thu, 20 Jun 2019 10:11:17 -0500
+Received: from EDIEX01.ad.cirrus.com (ediex01.ad.cirrus.com [198.61.84.80])
+        by mail3.cirrus.com (Postfix) with ESMTP id 4773E615D9D0;
+        Thu, 20 Jun 2019 10:12:03 -0500 (CDT)
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 20 Jun
+ 2019 16:11:15 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Thu, 20 Jun 2019 16:11:15 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D9A9944;
+        Thu, 20 Jun 2019 16:11:15 +0100 (BST)
+Date:   Thu, 20 Jun 2019 16:11:15 +0100
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     <wsa@the-dreams.de>, <mika.westerberg@linux.intel.com>,
+        <jarkko.nikula@linux.intel.com>, <linux-i2c@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <benjamin.tissoires@redhat.com>, <jbroadus@gmail.com>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH v5 2/7] i2c: acpi: Use available IRQ helper functions
+Message-ID: <20190620151115.GA54126@ediswmail.ad.cirrus.com>
 References: <20190620133420.4632-1-ckeepax@opensource.cirrus.com>
+ <20190620133420.4632-3-ckeepax@opensource.cirrus.com>
+ <20190620145221.GC9224@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20190620133420.4632-1-ckeepax@opensource.cirrus.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190620145221.GC9224@smile.fi.intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906200111
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jun 20, 2019 at 02:34:13PM +0100, Charles Keepax wrote:
-> This series attempts to align as much IRQ handling into the
-> probe path as possible. Note that I don't have a great setup
-> for testing these patches so they are mostly just build tested
-> and need careful review and testing before any of them are
-> merged.
+On Thu, Jun 20, 2019 at 05:52:21PM +0300, Andy Shevchenko wrote:
+> On Thu, Jun 20, 2019 at 02:34:15PM +0100, Charles Keepax wrote:
+> > Use the available IRQ helper functions, most of the functions have
+> > additional helpful side affects like configuring the trigger type of the
+> > IRQ.
+> > 
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 > 
-> The series brings the ACPI path inline with the way the device
-> tree path handles the IRQ entirely at probe time. However,
-> it still leaves any IRQ specified through the board_info as
-> being handled at device time. In that case we need to cache
-> something from the board_info until probe time, which leaves
-> any alternative solution with something basically the same as
-> the current handling although perhaps caching more stuff.
-
-Thank you for an update.
-I asked few last minute questions on per patch basis.
-
+> Some last minute observations / questions.
 > 
-> Thanks,
-> Charles
+> > +	struct resource r;
+> > +
+> > +	if (*irq <= 0 && acpi_dev_resource_interrupt(ares, 0, &r))
+> > +		*irq = i2c_dev_irq_from_resources(&r, 1);
+> > +
+> > +	return 1; /* No need to add resource to the list */
 > 
-> See previous discussions:
->  - https://lkml.org/lkml/2019/2/15/989
->  - https://www.spinics.net/lists/linux-i2c/msg39541.html
-> 
-> Charles Keepax (7):
->   i2c: core: Allow whole core to use i2c_dev_irq_from_resources
->   i2c: acpi: Use available IRQ helper functions
->   i2c: acpi: Factor out getting the IRQ from ACPI
->   i2c: core: Make i2c_acpi_get_irq available to the rest of the I2C core
->   i2c: core: Move ACPI IRQ handling to probe time
->   i2c: core: Move ACPI gpio IRQ handling into i2c_acpi_get_irq
->   i2c: core: Tidy up handling of init_irq
-> 
->  drivers/i2c/i2c-core-acpi.c | 57 +++++++++++++++++++++++++++++++--------------
->  drivers/i2c/i2c-core-base.c | 11 +++++----
->  drivers/i2c/i2c-core.h      | 11 +++++++++
->  3 files changed, 57 insertions(+), 22 deletions(-)
-> 
-> -- 
-> 2.11.0
+> If we don't add it to the list, do we still need to manage the empty
+> resource_list below?
 > 
 
--- 
-With Best Regards,
-Andy Shevchenko
+I think you are right looking closely I think we can skip this. I
+might update the comment here to make it clear the list needs
+freed if this is changed though.
 
+> >  	/* Then fill IRQ number if any */
+> >  	INIT_LIST_HEAD(&resource_list);
+> > -	ret = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
+> > +	ret = acpi_dev_get_resources(adev, &resource_list,
+> > +				     i2c_acpi_add_resource, &irq);
+> >  	if (ret < 0)
+> >  		return -EINVAL;
+> >  
+> > -	resource_list_for_each_entry(entry, &resource_list) {
+> > -		if (resource_type(entry->res) == IORESOURCE_IRQ) {
+> > -			info->irq = entry->res->start;
+> > -			break;
+> > -		}
+> > -	}
+> 
+> > +	if (irq > 0)
+> > +		info->irq = irq;
+> 
+> Hmm... can't we just assign it directly inside the _add_resource() call back as
+> original code did?
+> 
 
+Again I think you are correct here, my thinking had been to
+preserve the original functionality of only overwriting the value
+in info->irq if we found one. But it looks like all callers don't
+pass anything meaningful in this field so changing that behaviour
+shouldn't matter.
+
+Thanks,
+Charles
