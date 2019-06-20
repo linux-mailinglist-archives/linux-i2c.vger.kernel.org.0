@@ -2,67 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B154DADA
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 22:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E524DB01
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 22:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbfFTUCB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Jun 2019 16:02:01 -0400
-Received: from sauhun.de ([88.99.104.3]:45074 "EHLO pokefinder.org"
+        id S1726687AbfFTUOn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Jun 2019 16:14:43 -0400
+Received: from ms.lwn.net ([45.79.88.28]:47642 "EHLO ms.lwn.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725914AbfFTUCB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 20 Jun 2019 16:02:01 -0400
-Received: from localhost (p5486CFDE.dip0.t-ipconnect.de [84.134.207.222])
-        by pokefinder.org (Postfix) with ESMTPSA id 66C972C376D;
-        Thu, 20 Jun 2019 22:01:58 +0200 (CEST)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH] i2c: mux: demux-pinctrl: use proper email address for ABI requests
-Date:   Thu, 20 Jun 2019 22:01:47 +0200
-Message-Id: <20190620200147.1268-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
+        id S1725907AbfFTUOm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 20 Jun 2019 16:14:42 -0400
+Received: from lwn.net (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 514252BA;
+        Thu, 20 Jun 2019 20:14:41 +0000 (UTC)
+Date:   Thu, 20 Jun 2019 14:14:40 -0600
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Otto Sabart <ottosabart@seberm.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Will Deacon <will.deacon@arm.com>, devicetree@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] docs: fix some broken references due to txt->rst
+ renames
+Message-ID: <20190620141440.5e352241@lwn.net>
+In-Reply-To: <6f09587b7678f2fb378d736f45a02ffa9412cc99.1560864716.git.mchehab+samsung@kernel.org>
+References: <6f09587b7678f2fb378d736f45a02ffa9412cc99.1560864716.git.mchehab+samsung@kernel.org>
+Organization: LWN.net
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Use my commercial address, not my community one.
+On Tue, 18 Jun 2019 10:33:58 -0300
+Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+> here are three left-overs from the recent file renames,
+> probably due to some other conflicting patch.
+> 
+> Fix them.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> ---
+> 
+> This patch is against today's next-20190617 branch. Not sure if it
+> will apply cleanly at -docs tree. If not,  Please let me know for me to
+> split.
 
-Peter, I'd assume this goes via your tree unless you let me know
-otherwise. Thanks!
+Indeed it does not; one of the files being patched doesn't even exist in
+my world...
 
- Documentation/ABI/testing/sysfs-platform-i2c-demux-pinctrl | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-platform-i2c-demux-pinctrl b/Documentation/ABI/testing/sysfs-platform-i2c-demux-pinctrl
-index 3c3514815cd5..d6e0c3bb6bbf 100644
---- a/Documentation/ABI/testing/sysfs-platform-i2c-demux-pinctrl
-+++ b/Documentation/ABI/testing/sysfs-platform-i2c-demux-pinctrl
-@@ -1,7 +1,8 @@
- What:		/sys/devices/platform/<i2c-demux-name>/available_masters
- Date:		January 2016
- KernelVersion:	4.6
--Contact:	Wolfram Sang <wsa@the-dreams.de>
-+Contact:	Wolfram Sang <wsa+renesas@sang-engineering.com>
-+
- Description:
- 		Reading the file will give you a list of masters which can be
- 		selected for a demultiplexed bus. The format is
-@@ -12,7 +13,7 @@ Description:
- What:		/sys/devices/platform/<i2c-demux-name>/current_master
- Date:		January 2016
- KernelVersion:	4.6
--Contact:	Wolfram Sang <wsa@the-dreams.de>
-+Contact:	Wolfram Sang <wsa+renesas@sang-engineering.com>
- Description:
- 		This file selects/shows the active I2C master for a demultiplexed
- 		bus. It uses the <index> value from the file 'available_masters'.
--- 
-2.20.1
-
+jon
