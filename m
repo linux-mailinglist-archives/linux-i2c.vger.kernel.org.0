@@ -2,117 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C2F4CEE5
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 15:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49F24D048
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 16:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732013AbfFTNfC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Jun 2019 09:35:02 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:47966 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726562AbfFTNfC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jun 2019 09:35:02 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5KDY3cl021995;
-        Thu, 20 Jun 2019 08:34:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=PODMain02222019;
- bh=Rr86wGImsB3xWrMXYeZ57gFYRLJG9GZEXPTJxPnw7X4=;
- b=XbJ4HxxwDL4z9nq1nGSsPKh6vQvVLFqCosIVLWEPb2Cg/DxwttUw2SHUDVUBD8dHXgxB
- vXI/nvKd1D9jd4lHOHmXBZkX5hY7mCxYlUyhBKL30fBK91VfMiZYNIKQZqWofs981Tqs
- cc27HVReK8uuObrXorgVl4CO+Gf6BCM0yFzneZO+5H3GTj84oQn8fLFbVXTlnWfDrULg
- Teo0VJdY823boiZNWqL5+ii7ZFbMqyBnqOvsjgKbQPvn4wRLAyAOqjVPWlS3T0RxbJH3
- II8Ught6B8om+ZQQsxzfLuF5ecpUoEpXzZ6AMMEldr6dFwaOz8J5Llwf8UweThoR0gQe KA== 
-Authentication-Results: ppops.net;
-        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
-Received: from mail1.cirrus.com (mail1.cirrus.com [141.131.3.20])
-        by mx0a-001ae601.pphosted.com with ESMTP id 2t780gjqhv-2;
-        Thu, 20 Jun 2019 08:34:22 -0500
-Received: from EDIEX01.ad.cirrus.com (unknown [198.61.84.80])
-        by mail1.cirrus.com (Postfix) with ESMTP id 69114611C8C8;
-        Thu, 20 Jun 2019 08:34:22 -0500 (CDT)
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 20 Jun
- 2019 14:34:20 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
- Transport; Thu, 20 Jun 2019 14:34:20 +0100
-Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A9B36446;
-        Thu, 20 Jun 2019 14:34:20 +0100 (BST)
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <wsa@the-dreams.de>, <mika.westerberg@linux.intel.com>
-CC:     <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>, <linux-i2c@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <benjamin.tissoires@redhat.com>, <jbroadus@gmail.com>,
-        <patches@opensource.cirrus.com>
-Subject: [PATCH v5 7/7] i2c: core: Tidy up handling of init_irq
-Date:   Thu, 20 Jun 2019 14:34:20 +0100
-Message-ID: <20190620133420.4632-8-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190620133420.4632-1-ckeepax@opensource.cirrus.com>
-References: <20190620133420.4632-1-ckeepax@opensource.cirrus.com>
+        id S1726750AbfFTOYB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Jun 2019 10:24:01 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54446 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726391AbfFTOYB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 20 Jun 2019 10:24:01 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 95EE6AD9C;
+        Thu, 20 Jun 2019 14:24:00 +0000 (UTC)
+Date:   Thu, 20 Jun 2019 16:23:59 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH] i2c: i801: Add support for Intel Elkhart Lake
+Message-ID: <20190620162359.435c0637@endymion>
+In-Reply-To: <20190620105126.11547-1-jarkko.nikula@linux.intel.com>
+References: <20190620105126.11547-1-jarkko.nikula@linux.intel.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906200102
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Only set init_irq during i2c_device_new and only handle client->irq on
-the probe/remove paths.
+On Thu, 20 Jun 2019 13:51:26 +0300, Jarkko Nikula wrote:
+> Add PCI ID for Intel Elkhart Lake PCH.
+> 
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> ---
+>  Documentation/i2c/busses/i2c-i801 | 1 +
+>  drivers/i2c/busses/Kconfig        | 1 +
+>  drivers/i2c/busses/i2c-i801.c     | 4 ++++
+>  3 files changed, 6 insertions(+)
+> (...)
 
-Suggested-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
+Looks good to me.
 
-No changes since v4.
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-Thanks,
-Charles
+Wolfram, you'll have to solve a merge conflict with "i2c: i801: Add
+Block Write-Block Read Process Call support", but it's a trivial one.
 
- drivers/i2c/i2c-core-base.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 95a0380286c1c..a3dbaefe4ca66 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -314,6 +314,8 @@ static int i2c_device_probe(struct device *dev)
- 
- 	driver = to_i2c_driver(dev->driver);
- 
-+	client->irq = client->init_irq;
-+
- 	if (!client->irq && !driver->disable_i2c_core_irq_mapping) {
- 		int irq = -ENOENT;
- 
-@@ -424,7 +426,7 @@ static int i2c_device_remove(struct device *dev)
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
- 
--	client->irq = client->init_irq;
-+	client->irq = 0;
- 	if (client->flags & I2C_CLIENT_HOST_NOTIFY)
- 		pm_runtime_put(&client->adapter->dev);
- 
-@@ -741,7 +743,6 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
- 	if (!client->init_irq)
- 		client->init_irq = i2c_dev_irq_from_resources(info->resources,
- 							 info->num_resources);
--	client->irq = client->init_irq;
- 
- 	strlcpy(client->name, info->type, sizeof(client->name));
- 
 -- 
-2.11.0
-
+Jean Delvare
+SUSE L3 Support
