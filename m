@@ -2,95 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EA94CE93
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 15:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028444CEDD
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2019 15:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbfFTNYM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 20 Jun 2019 09:24:12 -0400
-Received: from mx2.suse.de ([195.135.220.15]:41858 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726404AbfFTNYM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 20 Jun 2019 09:24:12 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A4A71AE04;
-        Thu, 20 Jun 2019 13:24:11 +0000 (UTC)
-Date:   Thu, 20 Jun 2019 15:24:10 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Pali =?UTF-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>
-Subject: Re: [PATCH v2 2/2] i2c: i801: Remove linux/init.h and sort headers
-Message-ID: <20190620152410.627ec14b@endymion>
-In-Reply-To: <20190619151248.75618-2-andriy.shevchenko@linux.intel.com>
-References: <20190619151248.75618-1-andriy.shevchenko@linux.intel.com>
-        <20190619151248.75618-2-andriy.shevchenko@linux.intel.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
+        id S1726777AbfFTNe7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Jun 2019 09:34:59 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:5868 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726562AbfFTNe7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 Jun 2019 09:34:59 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5KDYLFw022021;
+        Thu, 20 Jun 2019 08:34:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type;
+ s=PODMain02222019; bh=lTma+isYmZ86XvEFPQ4p1OK4O8R26zPHPYXD3Zj9zxQ=;
+ b=hva258S0GWbBOIZp5KNgwXIUvCQWFxWrPf+Vp2RCEpVFmizBreL8hIsZh3XjUJjRUs1y
+ nyxEWGs9HSST7neF2/+udscaLpVBDidL+Hw700ron4Efr0wA7YQXb7SXHxeOWwfbcKdE
+ o3kvT4223uBtlTplkji5GWSCz+m1jhajsivI+W0upLZojFSU5j8coXh+9wXG3p0wzEOH
+ 7pHnVXMy4uB81NTMQOWX5K5LVSpY3VYL/x8GWQWaV/Z+MFI4Dv3nvmSLbEub+ghHRBGU
+ ySZl35fIfWDTLs3kPok1UhACuX6ARTl6ZOUVJuVNx3dxsG9FBOe1I07Pk6bQuJ4co0rD qQ== 
+Authentication-Results: ppops.net;
+        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from mail1.cirrus.com (mail1.cirrus.com [141.131.3.20])
+        by mx0a-001ae601.pphosted.com with ESMTP id 2t780gjqht-1;
+        Thu, 20 Jun 2019 08:34:21 -0500
+Received: from EDIEX01.ad.cirrus.com (unknown [198.61.84.80])
+        by mail1.cirrus.com (Postfix) with ESMTP id F2BB3611C8C7;
+        Thu, 20 Jun 2019 08:34:20 -0500 (CDT)
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 20 Jun
+ 2019 14:34:20 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Thu, 20 Jun 2019 14:34:20 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 51E7445;
+        Thu, 20 Jun 2019 14:34:20 +0100 (BST)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <wsa@the-dreams.de>, <mika.westerberg@linux.intel.com>
+CC:     <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>, <linux-i2c@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <benjamin.tissoires@redhat.com>, <jbroadus@gmail.com>,
+        <patches@opensource.cirrus.com>
+Subject: [PATCH v5 0/7] I2C IRQ Probe Improvements
+Date:   Thu, 20 Jun 2019 14:34:13 +0100
+Message-ID: <20190620133420.4632-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=936 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906200102
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy,
+This series attempts to align as much IRQ handling into the
+probe path as possible. Note that I don't have a great setup
+for testing these patches so they are mostly just build tested
+and need careful review and testing before any of them are
+merged.
 
-On Wed, 19 Jun 2019 18:12:48 +0300, Andy Shevchenko wrote:
-> There is no need to include linux/init.h when at the same time
-> we include linux/module.h.
-> 
-> Remove redundant inclusion.
-> 
-> For more details, refer to the commit
->   0fd972a7d91d ("module: relocate module_init from init.h to module.h")
-> where the split had been introduced.
+The series brings the ACPI path inline with the way the device
+tree path handles the IRQ entirely at probe time. However,
+it still leaves any IRQ specified through the board_info as
+being handled at device time. In that case we need to cache
+something from the board_info until probe time, which leaves
+any alternative solution with something basically the same as
+the current handling although perhaps caching more stuff.
 
-I've read it. It's not a split, it's a move. A move which makes sense
-because, as explained in the commit message, module_init() is only
-needed by modular code, so including it in init.h was slowing down the
-pre-processing of non-modular code.
+Thanks,
+Charles
 
-That being said, this alone does not imply that explicit inclusion of
-both linux/init.h and linux/module.h in the same file is wrong. The
-only case where this commit would directly lead to the removal of
-#include <linux/init.h> from i2c-i801.c is if module_init() was the
-only thing from linux/init.h that this driver was using. Which is not
-the case, as I see various occurrences of __init and __exit left, and
-these are declared in linux/init.h.
+See previous discussions:
+ - https://lkml.org/lkml/2019/2/15/989
+ - https://www.spinics.net/lists/linux-i2c/msg39541.html
 
-As a matter of fact I still count 3921 driver files which include both
-linux/init.h and linux/module.h. And I see no comment in either header
-file that including one exempts you from including the other.
+Charles Keepax (7):
+  i2c: core: Allow whole core to use i2c_dev_irq_from_resources
+  i2c: acpi: Use available IRQ helper functions
+  i2c: acpi: Factor out getting the IRQ from ACPI
+  i2c: core: Make i2c_acpi_get_irq available to the rest of the I2C core
+  i2c: core: Move ACPI IRQ handling to probe time
+  i2c: core: Move ACPI gpio IRQ handling into i2c_acpi_get_irq
+  i2c: core: Tidy up handling of init_irq
 
-So I'm not taking this change, sorry. If this is really the direction
-you want us to take (and I'm not convinced, but my opinion does not
-necessarily matter), then it must be documented first, and I believe it
-should then be addressed tree-wide. 3921 individual commits do not seem
-to be the most efficient to get it done.
-
-> Cc: Paul Gortmaker <paul.gortmaker@windriver.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Pali Rohár <pali.rohar@gmail.com>
-> ---
->  drivers/i2c/busses/i2c-i801.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index b9c5d7933d12..69c3ccb69669 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -85,7 +85,6 @@
->  #include <linux/stddef.h>
->  #include <linux/delay.h>
->  #include <linux/ioport.h>
-> -#include <linux/init.h>
->  #include <linux/i2c.h>
->  #include <linux/i2c-smbus.h>
->  #include <linux/acpi.h>
+ drivers/i2c/i2c-core-acpi.c | 57 +++++++++++++++++++++++++++++++--------------
+ drivers/i2c/i2c-core-base.c | 11 +++++----
+ drivers/i2c/i2c-core.h      | 11 +++++++++
+ 3 files changed, 57 insertions(+), 22 deletions(-)
 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.11.0
+
