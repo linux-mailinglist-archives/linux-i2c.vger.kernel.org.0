@@ -2,119 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C744E679
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2019 12:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3384E731
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2019 13:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726250AbfFUKxT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Jun 2019 06:53:19 -0400
-Received: from smtp127.iad3b.emailsrvr.com ([146.20.161.127]:47598 "EHLO
-        smtp127.iad3b.emailsrvr.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726218AbfFUKxT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Jun 2019 06:53:19 -0400
-Received: from smtp24.relay.iad3b.emailsrvr.com (localhost [127.0.0.1])
-        by smtp24.relay.iad3b.emailsrvr.com (SMTP Server) with ESMTP id 6605C4014B;
-        Fri, 21 Jun 2019 06:53:18 -0400 (EDT)
-X-SMTPDoctor-Processed: csmtpprox beta
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=g001.emailsrvr.com;
-        s=20190322-9u7zjiwi; t=1561114398;
-        bh=drA647kOQx3Qy/hXufrYD6fGVPB9NJiYqLYUgqB2t/Q=;
-        h=From:To:Subject:Date:From;
-        b=IkmriXzHvteJZa2JQprZRtdaMBggXmTpoZyWcy4vxRT67cduTKkVSnzGx6usJbSBb
-         nZFi9gUyTDOe5dy8944y60lJi5xYqFmnV//qoYjCuBphkYPJUiJasi05lyxQ5WDbuY
-         H4656XNlxqIGflPxJDmkehUWEs9FW6RWQoqqABB4=
-X-Auth-ID: mcdermj@xenotropic.com
-Received: by smtp24.relay.iad3b.emailsrvr.com (Authenticated sender: mcdermj-AT-xenotropic.com) with ESMTPSA id 1E59440127;
-        Fri, 21 Jun 2019 06:53:17 -0400 (EDT)
-X-Sender-Id: mcdermj@xenotropic.com
-Received: from commune.xenotropic.com (c-73-96-52-102.hsd1.or.comcast.net [73.96.52.102])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-GCM-SHA256)
-        by 0.0.0.0:25 (trex/5.7.12);
-        Fri, 21 Jun 2019 06:53:18 -0400
-From:   Annaliese McDermond <nh6z@nh6z.net>
-To:     eric@anholt.net, wahrenst@gmx.net, f.fainelli@gmail.com,
-        wsa@the-dreams.de, swarren@wwwdotorg.org,
-        linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Annaliese McDermond <nh6z@nh6z.net>, team@nwdigitalradio.com
-Subject: [PATCH v2 2/2] i2c: bcm2835: Ensure clock exists when probing
-Date:   Fri, 21 Jun 2019 03:52:50 -0700
-Message-Id: <20190621105250.19858-3-nh6z@nh6z.net>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190621105250.19858-1-nh6z@nh6z.net>
-References: <20190621105250.19858-1-nh6z@nh6z.net>
+        id S1726299AbfFULen (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Jun 2019 07:34:43 -0400
+Received: from mga02.intel.com ([134.134.136.20]:24788 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726285AbfFULen (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 21 Jun 2019 07:34:43 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Jun 2019 04:34:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,400,1557212400"; 
+   d="scan'208";a="151232195"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by orsmga007.jf.intel.com with ESMTP; 21 Jun 2019 04:34:41 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1heHoW-00041A-Gc; Fri, 21 Jun 2019 14:34:40 +0300
+Date:   Fri, 21 Jun 2019 14:34:40 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Paul Gortmaker <paul.gortmaker@windriver.com>
+Cc:     Jean Delvare <jdelvare@suse.de>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali.rohar@gmail.com>,
+        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH v2 2/2] i2c: i801: Remove linux/init.h and sort headers
+Message-ID: <20190621113440.GK9224@smile.fi.intel.com>
+References: <20190619151248.75618-1-andriy.shevchenko@linux.intel.com>
+ <20190619151248.75618-2-andriy.shevchenko@linux.intel.com>
+ <20190620152410.627ec14b@endymion>
+ <20190620173256.GS26627@windriver.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190620173256.GS26627@windriver.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Probe function fails to recognize that upstream clock actually
-doesn't yet exist because clock driver has not been initialized.
-Actually try to go get the clock and test for its existence
-before trying to set up a downstream clock based upon it.
+On Thu, Jun 20, 2019 at 01:32:56PM -0400, Paul Gortmaker wrote:
+> [Re: [PATCH v2 2/2] i2c: i801: Remove linux/init.h and sort headers] On 20/06/2019 (Thu 15:24) Jean Delvare wrote:
+> 
+> > Hi Andy,
+> > 
+> > On Wed, 19 Jun 2019 18:12:48 +0300, Andy Shevchenko wrote:
+> > > There is no need to include linux/init.h when at the same time
+> > > we include linux/module.h.
+> > > 
+> > > Remove redundant inclusion.
+> > > 
+> > > For more details, refer to the commit
+> > >   0fd972a7d91d ("module: relocate module_init from init.h to module.h")
+> > > where the split had been introduced.
+> > 
+> > I've read it. It's not a split, it's a move. A move which makes sense
+> > because, as explained in the commit message, module_init() is only
+> > needed by modular code, so including it in init.h was slowing down the
+> > pre-processing of non-modular code.
+> > 
+> > That being said, this alone does not imply that explicit inclusion of
+> > both linux/init.h and linux/module.h in the same file is wrong. The
+> 
+> Agreed.  If one looks at all the many follow-on changes that relocation
+> enabled, they will see that related changes are a "downgrade" of
+> module.h to init.h inclusion - to reduce CPP overhead as stated above.
+> 
+> To be clear, that kind of change does NOT introduce any implicit header
+> use, but the reverse:  init.h ---> module.h DOES introduce implicit use.
+> 
+> I've never intentionally removed init.h from a file just because
+> module.h was already present.
+> 
+> I don't think implicit header inclusion is a good thing.  It leads to
+> random compile failures that pop up depending on what is in your .config
+> file and/or what architecture you are building for, etc etc.
+> 
+> Those issues wont happen from the patch proposed here, since module.h
+> does explictly draw in init.h -- but that still doesn't make it right.
+> 
+> Note that solving all cases of implicit use of init.h is a totally
+> different problem space than what I set out to tackle, as it doesn't
+> impact CPP loading, and as Jean implies, it might not be worth tackling
+> that problem - definitely not with 4000 individual commits!
 
-This fixes a bug that causes the i2c driver not to work with
-monolithic kernels.
+Thank you for explanation.
 
-Fixes: bebff81fb8b9 ("i2c: bcm2835: Model Divider in CCF")
-
-Signed-off-by: Annaliese McDermond <nh6z@nh6z.net>
----
- drivers/i2c/busses/i2c-bcm2835.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-index 27b2f204c693..79d06286b926 100644
---- a/drivers/i2c/busses/i2c-bcm2835.c
-+++ b/drivers/i2c/busses/i2c-bcm2835.c
-@@ -244,15 +244,18 @@ static const struct clk_ops clk_bcm2835_i2c_ops = {
- };
- 
- static struct clk *bcm2835_i2c_register_div(struct device *dev,
--					const char *mclk_name,
-+					struct clk *mclk,
- 					struct bcm2835_i2c_dev *i2c_dev)
- {
- 	struct clk_init_data init;
- 	struct clk_bcm2835_i2c *priv;
- 	char name[32];
-+	const char *mclk_name;
- 
- 	snprintf(name, sizeof(name), "%s_div", dev_name(dev));
- 
-+	mclk_name = __clk_get_name(mclk);
-+
- 	init.ops = &clk_bcm2835_i2c_ops;
- 	init.name = name;
- 	init.parent_names = (const char* []) { mclk_name };
-@@ -505,8 +508,8 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
- 	struct resource *mem, *irq;
- 	int ret;
- 	struct i2c_adapter *adap;
--	const char *mclk_name;
- 	struct clk *bus_clk;
-+	struct clk *mclk;
- 	u32 bus_clk_rate;
- 
- 	i2c_dev = devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
-@@ -521,9 +524,14 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
- 	if (IS_ERR(i2c_dev->regs))
- 		return PTR_ERR(i2c_dev->regs);
- 
--	mclk_name = of_clk_get_parent_name(pdev->dev.of_node, 0);
-+	mclk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(mclk)) {
-+		if (PTR_ERR(mclk) != -EPROBE_DEFER)
-+			dev_err(&pdev->dev, "Could not get clock\n");
-+		return PTR_ERR(mclk);
-+	}
- 
--	bus_clk = bcm2835_i2c_register_div(&pdev->dev, mclk_name, i2c_dev);
-+	bus_clk = bcm2835_i2c_register_div(&pdev->dev, mclk, i2c_dev);
- 
- 	if (IS_ERR(bus_clk)) {
- 		dev_err(&pdev->dev, "Could not register clock\n");
 -- 
-2.19.1
+With Best Regards,
+Andy Shevchenko
+
 
