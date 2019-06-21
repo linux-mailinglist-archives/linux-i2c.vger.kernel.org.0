@@ -2,44 +2,46 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C314E677
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2019 12:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A1E4E678
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2019 12:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726229AbfFUKxQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Jun 2019 06:53:16 -0400
-Received: from smtp127.iad3b.emailsrvr.com ([146.20.161.127]:58666 "EHLO
+        id S1726232AbfFUKxS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Jun 2019 06:53:18 -0400
+Received: from smtp127.iad3b.emailsrvr.com ([146.20.161.127]:47750 "EHLO
         smtp127.iad3b.emailsrvr.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726218AbfFUKxQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Jun 2019 06:53:16 -0400
+        by vger.kernel.org with ESMTP id S1726218AbfFUKxS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Jun 2019 06:53:18 -0400
 Received: from smtp24.relay.iad3b.emailsrvr.com (localhost [127.0.0.1])
-        by smtp24.relay.iad3b.emailsrvr.com (SMTP Server) with ESMTP id 6C74C40101;
-        Fri, 21 Jun 2019 06:53:15 -0400 (EDT)
+        by smtp24.relay.iad3b.emailsrvr.com (SMTP Server) with ESMTP id E12D44009E;
+        Fri, 21 Jun 2019 06:53:16 -0400 (EDT)
 X-SMTPDoctor-Processed: csmtpprox beta
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=g001.emailsrvr.com;
-        s=20190322-9u7zjiwi; t=1561114395;
-        bh=sq67qECzciHcysXU6QW4+AWhIlJ5q5EgWY3WTdVjfdo=;
+        s=20190322-9u7zjiwi; t=1561114396;
+        bh=lV2bfiKsrsCHwVyTTU5OqwVm0y5wd6eyI9O1PfwzpQA=;
         h=From:To:Subject:Date:From;
-        b=PCGhT/8YcmoSxQHcv8TDBQPom2zk1MjPN4ntOyz6oAddHcFpEKPrlqWrCmYMxUf4h
-         Ygtd8yJYQOLTswQM+XCri4NPVYX+3BvkJdV5Z+xkFr1F7OiljV6UE+Ssvh5LyTB8Fh
-         elVX1O6NSl8g8OSqFiFsJASRpPHdJilaOZaniyUw=
+        b=u6vzPBTngG+KiVZ/YIymkvv49EWY1A7zcjitAMkROEQnPul9o6NX6OJpiSWdfbXpK
+         nm0enxQJIhwSCAMmuG3jYBz7P6Z2Xj8qy7A4bz/21zoJgPKlrZox6QneigzGBG3Dpk
+         CDgxdwFEiIHmUcdQjVFE5NIcRKtmOp4S33R1nKi4=
 X-Auth-ID: mcdermj@xenotropic.com
-Received: by smtp24.relay.iad3b.emailsrvr.com (Authenticated sender: mcdermj-AT-xenotropic.com) with ESMTPSA id 2414540127;
-        Fri, 21 Jun 2019 06:53:14 -0400 (EDT)
+Received: by smtp24.relay.iad3b.emailsrvr.com (Authenticated sender: mcdermj-AT-xenotropic.com) with ESMTPSA id 9C1D440127;
+        Fri, 21 Jun 2019 06:53:15 -0400 (EDT)
 X-Sender-Id: mcdermj@xenotropic.com
 Received: from commune.xenotropic.com (c-73-96-52-102.hsd1.or.comcast.net [73.96.52.102])
         (using TLSv1.2 with cipher DHE-RSA-AES128-GCM-SHA256)
         by 0.0.0.0:25 (trex/5.7.12);
-        Fri, 21 Jun 2019 06:53:15 -0400
+        Fri, 21 Jun 2019 06:53:16 -0400
 From:   Annaliese McDermond <nh6z@nh6z.net>
 To:     eric@anholt.net, wahrenst@gmx.net, f.fainelli@gmail.com,
         wsa@the-dreams.de, swarren@wwwdotorg.org,
         linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Annaliese McDermond <nh6z@nh6z.net>, team@nwdigitalradio.com
-Subject: [PATCH v2 0/2] i2c: bcm2835: Fixes for clock changes in probe function
-Date:   Fri, 21 Jun 2019 03:52:48 -0700
-Message-Id: <20190621105250.19858-1-nh6z@nh6z.net>
+Subject: [PATCH v2 1/2] i2c: bcm2835: Move IRQ request after clock code in probe
+Date:   Fri, 21 Jun 2019 03:52:49 -0700
+Message-Id: <20190621105250.19858-2-nh6z@nh6z.net>
 X-Mailer: git-send-email 2.19.1
+In-Reply-To: <20190621105250.19858-1-nh6z@nh6z.net>
+References: <20190621105250.19858-1-nh6z@nh6z.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
@@ -47,30 +49,65 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-An issue was reported in [1] and [2] that the latest version of the i2c
-driver was not properly loading.  After analysis it was determined that
-the new clock code was failiing because the i2c driver was trying to
-load before the bcm2835-clk driver when not loaded as a module. This is
-fixed by actually attempting to grab a reference to the clock and failing
-out with a EPROBE_DEFER if it's not there.  This gives the other drivers
-an opportunity to load.
+If any of the clock code in the probe fails and returns, the IRQ
+will not be freed.  Moving the IRQ request to last allows it to
+be freed on any errors further up in the probe function.  devm_
+calls can apparently not be used because there are some potential
+race conditions that will arise.
 
-This series also fixes a related bug where the clock setup code in the
-probe function could cause an issue where the IRQ would be requested
-by the driver and never freed in case of some clock setup failure.  The
-patch moves this IRQ code to the end of the probe function where it will
-not cause this issue.
+Fixes: bebff81fb8b9 ("i2c: bcm2835: Model Divider in CCF")
 
-[1] - https://www.raspberrypi.org/forums/viewtopic.php?f=44&t=242856
-[2] - https://archlinuxarm.org/forum/viewtopic.php?f=23&t=13719
+Signed-off-by: Annaliese McDermond <nh6z@nh6z.net>
+---
+ drivers/i2c/busses/i2c-bcm2835.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-Annaliese McDermond (2):
-  i2c: bcm2835: Move IRQ request after clock code in probe
-  i2c: bcm2835: Ensure clock exists when probing
-
- drivers/i2c/busses/i2c-bcm2835.c | 42 +++++++++++++++++++-------------
- 1 file changed, 25 insertions(+), 17 deletions(-)
-
+diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
+index 108d2ae4632c..27b2f204c693 100644
+--- a/drivers/i2c/busses/i2c-bcm2835.c
++++ b/drivers/i2c/busses/i2c-bcm2835.c
+@@ -521,20 +521,6 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
+ 	if (IS_ERR(i2c_dev->regs))
+ 		return PTR_ERR(i2c_dev->regs);
+ 
+-	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!irq) {
+-		dev_err(&pdev->dev, "No IRQ resource\n");
+-		return -ENODEV;
+-	}
+-	i2c_dev->irq = irq->start;
+-
+-	ret = request_irq(i2c_dev->irq, bcm2835_i2c_isr, IRQF_SHARED,
+-			  dev_name(&pdev->dev), i2c_dev);
+-	if (ret) {
+-		dev_err(&pdev->dev, "Could not request IRQ\n");
+-		return -ENODEV;
+-	}
+-
+ 	mclk_name = of_clk_get_parent_name(pdev->dev.of_node, 0);
+ 
+ 	bus_clk = bcm2835_i2c_register_div(&pdev->dev, mclk_name, i2c_dev);
+@@ -564,6 +550,20 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
++	if (!irq) {
++		dev_err(&pdev->dev, "No IRQ resource\n");
++		return -ENODEV;
++	}
++	i2c_dev->irq = irq->start;
++
++	ret = request_irq(i2c_dev->irq, bcm2835_i2c_isr, IRQF_SHARED,
++			  dev_name(&pdev->dev), i2c_dev);
++	if (ret) {
++		dev_err(&pdev->dev, "Could not request IRQ\n");
++		return -ENODEV;
++	}
++
+ 	adap = &i2c_dev->adapter;
+ 	i2c_set_adapdata(adap, i2c_dev);
+ 	adap->owner = THIS_MODULE;
 -- 
 2.19.1
 
