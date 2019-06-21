@@ -2,88 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05AA94ED95
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2019 19:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031344F048
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2019 23:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726032AbfFURME (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Jun 2019 13:12:04 -0400
-Received: from mout.gmx.net ([212.227.15.19]:35235 "EHLO mout.gmx.net"
+        id S1726017AbfFUVKS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Jun 2019 17:10:18 -0400
+Received: from sauhun.de ([88.99.104.3]:56038 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726031AbfFURME (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 21 Jun 2019 13:12:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561137110;
-        bh=pikR5/KXF+9GO3cS9XFX/uRd/MsXY9NL3Y1lHICzUUk=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=FJXxyzw+/1XB/g0RUfao91CSG+l1ICS3cdsJHBdgdb6Trm0BllQJ2xom71hIsqmRP
-         FkcVpO0dRFtQo6qCOvvk8tgezQ+yxVYVl4mg9eYJaKjLjt2GZTLOpYAZLYKGY5bSyh
-         hJnmnxp1pWXb4wj1ZL2q25nqT+LGTNiTy2TerMxU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.1.162] ([37.4.249.111]) by mail.gmx.com (mrgmx002
- [212.227.17.190]) with ESMTPSA (Nemesis) id 0LaXEN-1iJUzq3X9L-00mIa6; Fri, 21
- Jun 2019 19:11:49 +0200
-Subject: Re: [PATCH v2 0/2] i2c: bcm2835: Fixes for clock changes in probe
- function
-To:     Annaliese McDermond <nh6z@nh6z.net>, eric@anholt.net,
-        f.fainelli@gmail.com, wsa@the-dreams.de, swarren@wwwdotorg.org,
-        linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     team@nwdigitalradio.com
-References: <20190621105250.19858-1-nh6z@nh6z.net>
-From:   Stefan Wahren <wahrenst@gmx.net>
-Message-ID: <7d23a83f-4e3a-5186-78b2-2183e636b0af@gmx.net>
-Date:   Fri, 21 Jun 2019 19:11:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        id S1725985AbfFUVKS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 21 Jun 2019 17:10:18 -0400
+Received: from localhost (p5486CF54.dip0.t-ipconnect.de [84.134.207.84])
+        by pokefinder.org (Postfix) with ESMTPSA id 38C412C077A;
+        Fri, 21 Jun 2019 23:10:16 +0200 (CEST)
+Date:   Fri, 21 Jun 2019 23:10:15 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>,
+        linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.de>
+Subject: Re: [PATCH v3] i2c: i801: Use match_string() helper to simplify the
+ code
+Message-ID: <20190621211015.GA950@kunai>
+References: <20190621113624.47877-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20190621105250.19858-1-nh6z@nh6z.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:taiXKuJGyrqz/BHoKI9wPQvzZ/He7P42vNLrqNR/za/dm564A3Y
- mRGIFBrcnHMAo0vByONnKinbDRLSetzaePSTdZjCHPtexJGtB47g5JshdyVuA87vW1xzYqO
- 49HOPhzRHZWKYw6TW8Wk7JciWSBiPl6s9swQ+7w9QwnXMITgbdma50acDpD+jGm0+CzRzzd
- dlBU5Qj4MW3XflcwOe65w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XqbpE/Gjd04=:hg1BHGqyph7ozZl2spYdEE
- kVBMb1xhXyEzsgRZruYhs78JOZ4PUIkhbxWTPE5ITXagKTKQh46ZN3mXLPLd07klwifBxm2rY
- YtEPEnan3/+2y0Uw1/n374bFeG8UdgJy+uSg8IUI6gso6NSBk0L5HZ4vo/3tk5GkHJUnvFlzT
- je+2f0CFw11oYwoX8Jji1xuU1QZaD/inaW4SUoCupr1yDrBJSd+Tz1AfMRPEqNmP8Y5FkOgV8
- kPZNOrvo8ZOWaCrStWiSIgVHWPssAsDE1twdAOY7F/o5GkiQ+enFlKDa1qrGp158SoBuPXKcr
- IInDTOFNCHPwmu6zKV8njVek9q5G2xNdMZ+rA56H3xyrTyWdnXlKkZd51HMSEzabBd37Wgmqy
- EpAF197obWmWSqJQyDM2vFElITyKbCXEyufncZ8cZV+1/eABkopZDx/RWT8YeVK2BEXgDGOZh
- aLFMz4gpybewx+7CucVU94Q5dcPI2qT6cOGG4GfbjQA6YXOuIK4mJ9knRkpFUw+J+Jb3tB0p+
- 1wjdWrkGSEleqknh+JY3tFuGsAPHMpVfp99j5OHrMaQw8AQuXyn81Rwrv7icIpzvaDtqJ+1X1
- ZQTUimozgGsts5FipE0ycPnOyi01jZP/tntZVgWqlrOeh9IETRKvRNDhBGMQBYevQWFSMpgBV
- QXoRzWz6wUWryC7PrJdRIO5swRb7c7UxPjG9kSU/luoDTRowwcWZQDY9MUuOWjnyL6Pu344GK
- hPHnM8fFI0VSu6l1DZUknKQkWTABcTX2zStr2RfJ2VPzeY6NbNMAweyJEe/oQkQLfI2oTWnXU
- Xd8Mn/tAFXwGcFIzYdgpAci3iItkAW6SwlJk89bTz00Wg5bQC8QtwBf5esTnxVATZ39W3tKKD
- FrOQx/OUA8hWcja12eJi5t3M3UBUA85FYQAIaNcLC5m4jSKlY/4w+oX/QFKSiAHubvbAJ0s6w
- lgbp4TLe4Q8RfrfYHglCnGDFCb82kLUIQ6bgDcV1+CqisunHQLAVq
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Q68bSM7Ycu6FN28Q"
+Content-Disposition: inline
+In-Reply-To: <20190621113624.47877-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Am 21.06.19 um 12:52 schrieb Annaliese McDermond:
-> An issue was reported in [1] and [2] that the latest version of the i2c
-> driver was not properly loading.  After analysis it was determined that
-> the new clock code was failiing because the i2c driver was trying to
-> load before the bcm2835-clk driver when not loaded as a module. This is
-> fixed by actually attempting to grab a reference to the clock and failing
-> out with a EPROBE_DEFER if it's not there.  This gives the other drivers
-> an opportunity to load.
->
-> This series also fixes a related bug where the clock setup code in the
-> probe function could cause an issue where the IRQ would be requested
-> by the driver and never freed in case of some clock setup failure.  The
-> patch moves this IRQ code to the end of the probe function where it will
-> not cause this issue.
->
-> [1] - https://www.raspberrypi.org/forums/viewtopic.php?f=44&t=242856
-> [2] - https://archlinuxarm.org/forum/viewtopic.php?f=23&t=13719
 
-This whole series is:
+--Q68bSM7Ycu6FN28Q
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Stefan Wahren <wahrenst@gmx.net>
+On Fri, Jun 21, 2019 at 02:36:24PM +0300, Andy Shevchenko wrote:
+> match_string() returns the array index of a matching string.
+> Use it instead of the open-coded implementation.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Pali Roh=C3=A1r <pali.rohar@gmail.com>
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
+Applied to for-next, thanks!
+
+
+--Q68bSM7Ycu6FN28Q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0NR7MACgkQFA3kzBSg
+KbZdLQ/+PJiD70H+122Q78OUK7tfNMHhHJUbwmgXV9Jc5OpaKJXa0wbSOTZ94QZJ
+NlANmbgr2Pb7Ejs0cnhxCczAMCpl2ZM8KS/xhX6otcS12EI0CfKCyCfUqm/7Dpk9
+dAbc9A71M42udAy6BR0XACkBRVFpIRo3hnpBQNa3f1QpT4lFLBmwGMcMUe638Q18
+AS/96FF93uoxC2szNwxhxaz4w+xRjFFlxtctO1ss1JuyfudMrgmAA6h7boEIDLe5
+Cpiok+6XqnZxfymvBuY7Svt81qK6grpDXJLA9z2te4vIyLaczSZLKlaJ1us1kyWW
+zByQitAPNCXK8b0xbGqwwioPsp1AsN5YIg2DPiEoRcd+xWXzD4yDmQY0c6YiVhve
+6H1xgLfMKIQNksAewdCLGgYvYngLd/X/YIy+bbHD1IO6un/0lK27672OBcD4zbzT
+p4crbSM/Cl8NswJ7/Y+hU/oz8qRacIulk2zOVwixU2jPnpUk1JhohWLABNoAOndB
+bd47Vgk36tLF4+vc5Iq3MVNErDcqU60xj961IlJnfhK/Ccg+gaFhTvdZl7A+djwb
+DuIxmSJT+9YPT3nMtGZRUO9OFNV8IOqYMROwE/1HB6EYTRPKfh1bOKz4pVhFwAdG
+Gci7EHn1fKN+ha67mnKNLnK8dyfFzWi9Juaz95HWIIJVCvBK5Iw=
+=Apij
+-----END PGP SIGNATURE-----
+
+--Q68bSM7Ycu6FN28Q--
