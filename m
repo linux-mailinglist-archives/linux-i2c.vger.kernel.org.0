@@ -2,34 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E619F4F053
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2019 23:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE744F067
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2019 23:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725985AbfFUVOG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Jun 2019 17:14:06 -0400
-Received: from sauhun.de ([88.99.104.3]:56086 "EHLO pokefinder.org"
+        id S1726043AbfFUVRr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Jun 2019 17:17:47 -0400
+Received: from sauhun.de ([88.99.104.3]:56154 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726237AbfFUVOF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 21 Jun 2019 17:14:05 -0400
+        id S1726017AbfFUVRr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 21 Jun 2019 17:17:47 -0400
 Received: from localhost (p5486CF54.dip0.t-ipconnect.de [84.134.207.84])
-        by pokefinder.org (Postfix) with ESMTPSA id 583FB2C077A;
-        Fri, 21 Jun 2019 23:14:03 +0200 (CEST)
-Date:   Fri, 21 Jun 2019 23:14:02 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 21D772C077A;
+        Fri, 21 Jun 2019 23:17:45 +0200 (CEST)
+Date:   Fri, 21 Jun 2019 23:17:44 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Fabrice Gasnier <fabrice.gasnier@st.com>
-Cc:     pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        marc.w.gonzalez@free.fr, fabien.dessenne@st.com
-Subject: Re: [PATCH v3] i2c: i2c-stm32f7: fix the get_irq error cases
-Message-ID: <20190621211402.GB950@kunai>
-References: <1560757981-10532-1-git-send-email-fabrice.gasnier@st.com>
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 1/3] include: linux: i2c: more helpers for declaring i2c
+ drivers
+Message-ID: <20190621211744.GC950@kunai>
+References: <1560796779-17117-1-git-send-email-info@metux.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l76fUT7nc3MelDdI"
+        protocol="application/pgp-signature"; boundary="da4uJneut+ArUgXk"
 Content-Disposition: inline
-In-Reply-To: <1560757981-10532-1-git-send-email-fabrice.gasnier@st.com>
+In-Reply-To: <1560796779-17117-1-git-send-email-info@metux.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -37,46 +36,45 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---l76fUT7nc3MelDdI
+--da4uJneut+ArUgXk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 17, 2019 at 09:53:01AM +0200, Fabrice Gasnier wrote:
-> During probe, return the "get_irq" error value instead of -EINVAL which
-> allows the driver to be deferred probed if needed.
-> Fix also the case where of_irq_get() returns a negative value.
-> Note :
-> On failure of_irq_get() returns 0 or a negative value while
-> platform_get_irq() returns a negative value.
+On Mon, Jun 17, 2019 at 08:39:37PM +0200, Enrico Weigelt, metux IT consult =
+wrote:
+> From: Enrico Weigelt <info@metux.net>
 >=20
-> Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
+> Add more helper macros for trivial driver init cases, similar to the
+> already existing module_i2c_driver()+friends - now for those which
+> are initialized at other stages (eg. by subsys_initcall()).
 >=20
-> Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
-> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+> This helps to further reduce driver init boilerplate.
 
-Applied to for-next, thanks!
+Uh, no! Using subsys_initcall is an old fashioned hack to work around
+boot time dependencies. Unless there are very strong arguments, I
+usually do not accept them anymore. So, any simplification of that sends
+out the wrong message.
 
 
---l76fUT7nc3MelDdI
+--da4uJneut+ArUgXk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0NSJoACgkQFA3kzBSg
-KbaKLg/+IDVBZI+FWBpYna0/CpvmO5Uyzx0xj2RFArNr4l7IySOTfA79vSKuZ+cx
-VB+ap4ihOQ5gta95Jt7ZFgHj1h81yy/5ER2C8yCbn9NNkv5NjF3HvVSNaolQuU4q
-LIDq5JjlKMOExTBuRFfDvDC4jnTAPZcIv9KfxsC98tK4u47jzh2GIAnrX/BjIydl
-khpnpg1KwbS52qFfm6OxxKtZBZrIJg42kEt7IH7AYG3IqpE52zO0Xg92e5HVdRJV
-KP/E13T5YZXONCzT8ZB4vYiPC0lpl3QFCEO1VpwVCTM/AqxTA573L9GOmoFurPra
-6vkNeUgZdfBXvTvIQo1Qteuuim8NfpZMy/Q44WZUDNVG5VEGzlDFli3j3z5GON9r
-c0N1SbA9ev+U+4Lrw+6N+RLG3VKNiEAKLILKWzP3Kc4KOlRZDa6mxgTdHL3E9i86
-stVEayxqkOZPiTtmb8AaJz513cWFMIlnqolWZqgl5hXL80JHE7lmebA7xC0GzN6z
-o8V33npjYNMPH8vaS4Fm+2Huo3q95A1DccuN3xqhx6WClG3vrpkImyBOKEla15NT
-Ox70qsmBi2q+rXdqcM/g5gaedc/568Le2FT/whNDxr3mJ8o6lGfwRDupZFKGN8Vm
-8LJRUVAA5fokwSR9C1IJfHHJgGi47RA8dBJy3pLJWV4BbjrbGtg=
-=etZv
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0NSXgACgkQFA3kzBSg
+KbZjXw/7BDQPWzOvqZPNd97wNb483GXB/NYxRB2BDp1AfM5gWiuL/Bboumrl55JP
+p4olpY5+yuKMld0e4kFyNHAwtLYwrYtSxu/BORhV4Cw4J0JdgaCuw6fcOEgQ2nze
+vE4rBvCZ5iQHWCG077uhNkH1SdO9yiIadcycWst7DhFCCIPj5o5SNNXM6xdnLUO1
+DVcZkiO8yqQGemySpJXRGlQH6qQ3JEVTOaliWB8A49JFioI9zNkMEUyLxzw2vNvL
+PCfcDjTIDa0nwgFxoty5FNK/UJRBMwO9GOGqUfSemS/INjYp4OQ8e6q+IGYWVSUE
+0uwkg/aYvvKLCEPtBOspdRO+larQQIlkykicBDRRzzbbjG4CNgc0pyZCK1u15yQb
+Ag1T55ThdT4DS9dgWnPjHnTh6Zb3Ge3KuJu2WuwGitlA+XPKCWMIESUwZ4gyTJd/
+joshHaK0TvtqtRVxvtcEqo8JCXHd1IH0OWx/pacGPW9NkmBpjTRHIo1xGPwzFnkj
+PyC8qyh/rSDZyfVvGXDcdYOqCzj6Rznqh9rcSgGqxKWKDNaCjwk8xa3p5weahKIc
+gPJF8Z/VflyKGhpTBzFRGMpigvqfwINbWvVOi8T9FLlEkAFGNa4Ty/hI3d+xY6dj
+pNu2XykPMevZrYs2y2JDiQ1Zb+66MBl6ES5FLspJ6NV52t58wZ0=
+=5ptx
 -----END PGP SIGNATURE-----
 
---l76fUT7nc3MelDdI--
+--da4uJneut+ArUgXk--
