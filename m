@@ -2,33 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B1E4F078
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2019 23:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C644F07A
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2019 23:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbfFUVY3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Jun 2019 17:24:29 -0400
-Received: from sauhun.de ([88.99.104.3]:56232 "EHLO pokefinder.org"
+        id S1726066AbfFUV0m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Jun 2019 17:26:42 -0400
+Received: from sauhun.de ([88.99.104.3]:56260 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725985AbfFUVY3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 21 Jun 2019 17:24:29 -0400
+        id S1725985AbfFUV0m (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 21 Jun 2019 17:26:42 -0400
 Received: from localhost (p5486CF54.dip0.t-ipconnect.de [84.134.207.84])
-        by pokefinder.org (Postfix) with ESMTPSA id 89CAB2C077A;
-        Fri, 21 Jun 2019 23:24:27 +0200 (CEST)
-Date:   Fri, 21 Jun 2019 23:24:27 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id A7B3E2C077A;
+        Fri, 21 Jun 2019 23:26:40 +0200 (CEST)
+Date:   Fri, 21 Jun 2019 23:26:40 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v2] i2c: i801: Add Block Write-Block Read Process Call
- support
-Message-ID: <20190621212427.GE950@kunai>
-References: <20190617161951.56510723@endymion>
- <20190618170633.14774-1-alexander.sverdlin@nokia.com>
+To:     Bitan Biswas <bbiswas@nvidia.com>
+Cc:     Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Shardar Mohammed <smohammed@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mantravadi Karthik <mkarthik@nvidia.com>
+Subject: Re: [PATCH V9] i2c: tegra: remove BUG() macro
+Message-ID: <20190621212640.GF950@kunai>
+References: <1560856182-26072-1-git-send-email-bbiswas@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="so9zsI5B81VjUb/o"
+        protocol="application/pgp-signature"; boundary="vA66WO2vHvL/CRSR"
 Content-Disposition: inline
-In-Reply-To: <20190618170633.14774-1-alexander.sverdlin@nokia.com>
+In-Reply-To: <1560856182-26072-1-git-send-email-bbiswas@nvidia.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -36,42 +41,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---so9zsI5B81VjUb/o
+--vA66WO2vHvL/CRSR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 18, 2019 at 05:06:50PM +0000, Sverdlin, Alexander (Nokia - DE/U=
-lm) wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+On Tue, Jun 18, 2019 at 04:09:42AM -0700, Bitan Biswas wrote:
+> The usage of BUG() macro is generally discouraged in kernel, unless
+> it's a problem that results in a physical damage or loss of data.
+> This patch removes unnecessary BUG() macros and replaces the rest
+> with warning.
 >=20
-> Add SMBUS 2.0 Block Write-Block Read Process Call command support.
->=20
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+> Signed-off-by: Bitan Biswas <bbiswas@nvidia.com>
 
 Applied to for-next, thanks!
 
-Please send new patches as new threads. It makes adding them easier.
 
-
---so9zsI5B81VjUb/o
+--vA66WO2vHvL/CRSR
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0NSwsACgkQFA3kzBSg
-KbZrFA//X94QwLt3H7g+z44AglDBQrgRqRjttwJLFT6suajwpqHehvVEaLxnP1Ph
-DR5lCduyA9P2oXhfT3a5VtBwhBAW30qDPrwoc5ymFrYGGL9tVG5AptPCq1u6uHi4
-j389J1eX52DWscw/BdDjnCeDxlQ9dpLI8gM25dIEhQic8TiJkUfQZ1flEe7bTe73
-WUCglbAfZgrcxCl03lXq99IVWK6q3F5pBzYsl+o6hW5WIpLf5dNXJx47OehU73ky
-/23XSQF0Dr1eNcun/RzzD0HCOzZM0mFTNWhC08sdJNLSNNuYJAZTu/bY4el/ckgM
-7jkukXzX+A+kT9oilRKYmqUso24YiOKkH4XSrLns2lPFCB/6IPqLyyQzXPf+Go7/
-sUn+51Z9Y/JO+ynNszFeQwTS7XVwBusn+aJsFrd0ND6bOOHRrkdTHmuMaCRLYzYC
-CmG70piiG4rppKLYeT6wo8f/MPP+c8w9xsiQsb0ljzFGlp0t4oapPAIMGkleMtwy
-ZSNAlx9kBnOL9Hx798L00GxEpWBSdRFsn5SK6DOl9MImn6TW8pQz/GrlF0/EEpCy
-PuH2Dfd/6jht41tJgJvUXiRvyuTIhNmAORSLe5ydaTiMl2yx56QpD0XIL0mRxrBS
-ZrJQ6+1VHJiQ3MV3hkLm1A5sY97pmL2Ki5lpETFcd2r8DimimB0=
-=O8A2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0NS5AACgkQFA3kzBSg
+KbZGAQ/+POOwqL1aPhZCqfwAJ5oAN9IH0Mf/A2wreDZee1OnVZFXd51w3hlSweSD
+NlqQuCl42kk06T1F1epfCCh7n1jsLliF9WbvVfY8eXsjXQ4BR0HELwMF8ZAJ321S
+0qQhVG36klBTu2uj/4iR5J2i+4k0xQA/REMG8gyeY6yfaOucfx+9Mlk6oMyk82c8
+QUNhuHjWEyabSmTMnMXN2UYGi38OzjydkolrDu3rFc0AtyiqF8h7bAa9Yz7p4SZi
+hP+/JpZUpzoldhiCLnfPautGYB3r8lrPV9qBMDiKgsEg64RQHzRGdCMZkIT66fwa
+c2fJcuMdV3JPEO1COYCOKhi8VLt3t51+U3lqZiik+OyEyTBcLQzdLdzzp87Z9nE+
+M/J2QFqBeI5CpcghbluwJinfbGOG/7jc5hDnJ250G8J43HE2AKJre2cGIbNaOsNi
++UHZvP3B12nrhIwAeLCyvdwLKczHO9ZIT9GaQBPox8siWiXWVYqLa+ZD10Z8G1qx
+7sIEvgYykkX2oy82LbwByA7OGivv8atiN/ReB3SHMGGeY3nWcKneDdk3zkW8KYX7
+4YAI7HPFqqbcFTODJiDi3pnmJo16/a1FBKnjCM6FShMjGTObe45ysMzhBAT+aRrU
+Z2/a823reAyjrSU/k3NELeyqcCbdCxMQbiLbiWFXCHmTg1Jrupo=
+=abNm
 -----END PGP SIGNATURE-----
 
---so9zsI5B81VjUb/o--
+--vA66WO2vHvL/CRSR--
