@@ -2,83 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EBA4F3F1
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jun 2019 07:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE27E4F6D5
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jun 2019 18:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726033AbfFVFvH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Jun 2019 01:51:07 -0400
-Received: from mail-eopbgr80101.outbound.protection.outlook.com ([40.107.8.101]:11424
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725932AbfFVFvH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 22 Jun 2019 01:51:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+srSdDK0IXBTRSFEiJmKNXnPenhj+4/1kHxKePjBTts=;
- b=Auvs1SXkzj6OVno7MHZN2RcCCX9Rhh1R5++kIV5AqY1aZaCylS2mZBiNQz8hJBeEq7NxjIwrpO4x6vuSkxHciOt1uciUfQ/bRSbIsEuIUI6JmwQ0Ccmg3+jfRSkrSV0fOUPF8VoMNhNgbJ0xQChIObjk2rcSPA12dNKywGAy5GE=
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com (52.134.66.158) by
- DB3PR0202MB3468.eurprd02.prod.outlook.com (52.134.66.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.13; Sat, 22 Jun 2019 05:51:00 +0000
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::49ac:3a71:a3ec:d6bf]) by DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::49ac:3a71:a3ec:d6bf%5]) with mapi id 15.20.1987.014; Sat, 22 Jun 2019
- 05:51:00 +0000
-From:   Peter Rosin <peda@axentia.se>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i2c: mux: add sysfs header
-Thread-Topic: [PATCH] i2c: mux: add sysfs header
-Thread-Index: AQHVJsDjZ5djla0nnEmUwhwNxXFTaKanL2qA
-Date:   Sat, 22 Jun 2019 05:51:00 +0000
-Message-ID: <a18d24a1-b36f-5a4c-e116-abfb8ecec17d@axentia.se>
-References: <20190619170306.28432-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20190619170306.28432-1-wsa+renesas@sang-engineering.com>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
-x-originating-ip: [213.112.138.100]
-x-clientproxiedby: HE1P195CA0014.EURP195.PROD.OUTLOOK.COM (2603:10a6:3:fd::24)
- To DB3PR0202MB3434.eurprd02.prod.outlook.com (2603:10a6:8:5::30)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peda@axentia.se; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3f559f7c-e157-4d87-6027-08d6f6d59ab0
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:DB3PR0202MB3468;
-x-ms-traffictypediagnostic: DB3PR0202MB3468:
-x-microsoft-antispam-prvs: <DB3PR0202MB3468619EA298952EFAB542E6BCE60@DB3PR0202MB3468.eurprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-forefront-prvs: 0076F48C8A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(366004)(346002)(376002)(136003)(39830400003)(189003)(199004)(76176011)(446003)(74482002)(52116002)(476003)(2616005)(110136005)(11346002)(66446008)(66556008)(64756008)(6246003)(66476007)(66946007)(6436002)(73956011)(58126008)(86362001)(6486002)(26005)(64126003)(386003)(6512007)(6506007)(31686004)(53546011)(25786009)(14454004)(65956001)(2906002)(102836004)(186003)(508600001)(66066001)(65806001)(8676002)(558084003)(486006)(53936002)(229853002)(36756003)(65826007)(305945005)(316002)(31696002)(8936002)(68736007)(71190400001)(81166006)(81156014)(99286004)(256004)(7736002)(2501003)(5660300002)(71200400001)(3846002)(6116002);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3468;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: axentia.se does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: tF0R26QG0pi/jq/qTZEbqjrfyqp66SQPoeUPALLc6p/wWp67ZAxUA46UTd6Y/ULcZw7m1QmDSQkWQOiLVRq6p4MpmuJiTnS/WyZBUAHORv27eUINSwJG9tCSOMkF5wPUTqxn6+KNATgFRT7ZPnAzRcZc2oimZutr9wyTqizsNcIpM3gvLTMHarlDEeim9NRN8xVG4AIvzS+R/hk+QY3ikNjsaINtulnLdeK1eJRfHqKJ+JoXdSYGxegqX9J2I9EfQjruGihTxgu4TxQPmOxslp91WAdVWqBwQqs51fdWGdd3Wfm/PDTWCmKmFlWutx1OWerl6V8GHzdZAOGpu/IqgnuIneSfnGwrNVUfEqnqjr1W5a8k7REByLzKbW1QTR2+SQCKUUGmuOk57l9NRlIA1aQYkxQm7ZR6b1OSvlDYskw=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8D0120ACDC779647B70A6B45A454F016@eurprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726351AbfFVQ2u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 22 Jun 2019 12:28:50 -0400
+Received: from sonic301-3.consmr.mail.bf2.yahoo.com ([74.6.129.42]:43726 "EHLO
+        sonic301-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726409AbfFVQ2u (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jun 2019 12:28:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220929; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=FwrBLUl7u665XwQeVPTq5hUQ4Ptv5qPcwgE0MfCyAxPjQW66W+sBKlTITy95Xiak8M/9mL3k87XvuhuNYmdzjOXFqAsXXJ7ZeR0tr0xQhaR4qpp9+I79zHB4JVXDeOtUnrv/ni1DEn3m49tSMIml9+1SbDvUcui/xLYzcB7mOtvlwJJC6bBkcbOwJW8drH7WnSKYQVlUvO9PRg8+IWYABo4m/HoTrmg3JSd7+tfq1bmdsTjreC9G6uwJClVG1p8XyGEOijmNqXv9Ivunj8UzUvxVldTIg/taTAKdSlSG3i+xbnz28LKLpxSK2+M63p52Vf+hNJ0OycyVj1TkO+H8OQ==
+X-YMail-OSG: BClZlNgVM1mJa1pSUAMlnjmDwJQUKDn0osVKNVIeZ6AC0JZQ8NzrV_.P2vPToBw
+ lk4l1yMYy0P1wu9iKWHPF1vwWtED.NCcY6jE.jXdELnZdUngnDzcX.f1Ik7TcPjN._6dUftCNvSG
+ 0ilPDIIh6JKut3rld3EDzfXqVTEprJFL10dLfXEmdNXy8_9HzWnLN9Uxxh6FWr8nj4DbExyF48M8
+ b8CzHn8AtWzh0fDjJqMRXb5UR1L1fHF.mq4wk_41bl8VHLLREhO8D9AiMB_Iou.TvP.xektI4Uzf
+ lBotEg54S8nbe5a5a2eamKaLSiD6XaCIzSQkrGwkgk9qzk7J4361PG1C2lAWhSULJjGYH.uKi9SH
+ 8omXh8MvwuZmVU7umqXbA4eIFWV8ruRR3qRFWtA.2B0Eer.D49EbNovsAu.wRPm8yYyL6YMdaoys
+ 3vYAkjype1yPgR0gHAH3zObnNPMrtMzQfsTzcaha59dNYsVWPRo5EvcFgAIKXVIUqnKnooWuODru
+ O4SgrdrM8PGEZGs5dJS.h.dJB3gwQ.0I1wf1Q_CLgJhbPMrumaMiWl3ifhN9G_CCxrGhRPRltqdB
+ RyAvAXGENXKEJswzM.sYWHkLQyblOWaGX5TLKzeDGaJCZVu7CtZvQ0aNcyWtqrf4SAtE7MK9SqUH
+ 7phABBxeBrGdyDkvdUQOX_EPh25.Hb3SncDKllMEIHjvEdwbQcMGmqMEDVCI8Jh0nfgpjh259ODl
+ q.bGW_sz63_QvjPWXygjUQ4RzfXiei1bHIkvbkPAHc04dS.Qr8LP1Jyxp2QD0wtNtJgo5RScK99X
+ P5NPqcNAR8eez8YgXpk3cKLQCR9JSylhL6QyUVACODhQSLMO_l73eEDpWzNQUeEQLrEwA53TFUO9
+ BXx4lR26gADp4OeWMANR3pTNDn8J7Oc5G1l.tF8AqVFtdsoB5vgCdw0tzoX9_22cJzNNteihaN9H
+ ktOSXaCeUY26x9DWNkYi7HTOCc9F4vHnioRwelB9Lv.KGDeGPUJBBPmfcn0xXC8MB2YTlUFeVHzN
+ FJsHhvFz9eJx.VwEAdhJs3DHW6xmbj9a_RSOf.BoLPiAvMAdoBe_1sVY8nFOqhuBwpkbj17TOzIW
+ ts0JEWafkyantIFw8kEnIr0AHDEAK4aB1fgOVS8TQpbEaj2tB4pKHPa4OOjXszQAPBozr7PYVj2f
+ 6AcwHFYhcmsrFfliX20p43dgFMRY8GMXgvUWeegBAeAuOTxCoUC9WvAdL
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:28:49 +0000
+Date:   Sat, 22 Jun 2019 16:28:46 +0000 (UTC)
+From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
+Reply-To: miss.fmayusuf11@gmail.com
+Message-ID: <270302503.296556.1561220926635@mail.yahoo.com>
+Subject: From:Miss: Fatima Yusuf.
 MIME-Version: 1.0
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f559f7c-e157-4d87-6027-08d6f6d59ab0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2019 05:51:00.5239
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: peda@axentia.se
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3468
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gMjAxOS0wNi0xOSAxOTowMywgV29sZnJhbSBTYW5nIHdyb3RlOg0KPiBXZSBhcmUgdXNpbmcg
-c3lzZnMgZnVuY3Rpb25zIGRpcmVjdGx5LCBzbyB3ZSBzaG91bGQgaW5jbHVkZSB0aGUgaGVhZGVy
-Lg0KPiANCj4gU2lnbmVkLW9mZi1ieTogV29sZnJhbSBTYW5nIDx3c2ErcmVuZXNhc0BzYW5nLWVu
-Z2luZWVyaW5nLmNvbT4NCg0KUGF0Y2ggYXBwbGllcyB0byBpMmMtbXV4L2Zvci1uZXh0LiBUaGFu
-a3MhDQoNCkNoZWVycywNClBldGVyDQo=
+
+
+From:Miss: Fatima Yusuf.
+
+For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
+
+I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
+
+Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
+
+I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
+
+I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
+
+My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
+
+I am waiting to hear from you.
+Yours Sincerely,
+Miss.Fatima Yusuf.
