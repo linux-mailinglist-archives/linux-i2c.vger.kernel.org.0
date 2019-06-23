@@ -2,64 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE27E4F6D5
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jun 2019 18:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2094FD63
+	for <lists+linux-i2c@lfdr.de>; Sun, 23 Jun 2019 19:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726351AbfFVQ2u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Jun 2019 12:28:50 -0400
-Received: from sonic301-3.consmr.mail.bf2.yahoo.com ([74.6.129.42]:43726 "EHLO
-        sonic301-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726409AbfFVQ2u (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jun 2019 12:28:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220929; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=FwrBLUl7u665XwQeVPTq5hUQ4Ptv5qPcwgE0MfCyAxPjQW66W+sBKlTITy95Xiak8M/9mL3k87XvuhuNYmdzjOXFqAsXXJ7ZeR0tr0xQhaR4qpp9+I79zHB4JVXDeOtUnrv/ni1DEn3m49tSMIml9+1SbDvUcui/xLYzcB7mOtvlwJJC6bBkcbOwJW8drH7WnSKYQVlUvO9PRg8+IWYABo4m/HoTrmg3JSd7+tfq1bmdsTjreC9G6uwJClVG1p8XyGEOijmNqXv9Ivunj8UzUvxVldTIg/taTAKdSlSG3i+xbnz28LKLpxSK2+M63p52Vf+hNJ0OycyVj1TkO+H8OQ==
-X-YMail-OSG: BClZlNgVM1mJa1pSUAMlnjmDwJQUKDn0osVKNVIeZ6AC0JZQ8NzrV_.P2vPToBw
- lk4l1yMYy0P1wu9iKWHPF1vwWtED.NCcY6jE.jXdELnZdUngnDzcX.f1Ik7TcPjN._6dUftCNvSG
- 0ilPDIIh6JKut3rld3EDzfXqVTEprJFL10dLfXEmdNXy8_9HzWnLN9Uxxh6FWr8nj4DbExyF48M8
- b8CzHn8AtWzh0fDjJqMRXb5UR1L1fHF.mq4wk_41bl8VHLLREhO8D9AiMB_Iou.TvP.xektI4Uzf
- lBotEg54S8nbe5a5a2eamKaLSiD6XaCIzSQkrGwkgk9qzk7J4361PG1C2lAWhSULJjGYH.uKi9SH
- 8omXh8MvwuZmVU7umqXbA4eIFWV8ruRR3qRFWtA.2B0Eer.D49EbNovsAu.wRPm8yYyL6YMdaoys
- 3vYAkjype1yPgR0gHAH3zObnNPMrtMzQfsTzcaha59dNYsVWPRo5EvcFgAIKXVIUqnKnooWuODru
- O4SgrdrM8PGEZGs5dJS.h.dJB3gwQ.0I1wf1Q_CLgJhbPMrumaMiWl3ifhN9G_CCxrGhRPRltqdB
- RyAvAXGENXKEJswzM.sYWHkLQyblOWaGX5TLKzeDGaJCZVu7CtZvQ0aNcyWtqrf4SAtE7MK9SqUH
- 7phABBxeBrGdyDkvdUQOX_EPh25.Hb3SncDKllMEIHjvEdwbQcMGmqMEDVCI8Jh0nfgpjh259ODl
- q.bGW_sz63_QvjPWXygjUQ4RzfXiei1bHIkvbkPAHc04dS.Qr8LP1Jyxp2QD0wtNtJgo5RScK99X
- P5NPqcNAR8eez8YgXpk3cKLQCR9JSylhL6QyUVACODhQSLMO_l73eEDpWzNQUeEQLrEwA53TFUO9
- BXx4lR26gADp4OeWMANR3pTNDn8J7Oc5G1l.tF8AqVFtdsoB5vgCdw0tzoX9_22cJzNNteihaN9H
- ktOSXaCeUY26x9DWNkYi7HTOCc9F4vHnioRwelB9Lv.KGDeGPUJBBPmfcn0xXC8MB2YTlUFeVHzN
- FJsHhvFz9eJx.VwEAdhJs3DHW6xmbj9a_RSOf.BoLPiAvMAdoBe_1sVY8nFOqhuBwpkbj17TOzIW
- ts0JEWafkyantIFw8kEnIr0AHDEAK4aB1fgOVS8TQpbEaj2tB4pKHPa4OOjXszQAPBozr7PYVj2f
- 6AcwHFYhcmsrFfliX20p43dgFMRY8GMXgvUWeegBAeAuOTxCoUC9WvAdL
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:28:49 +0000
-Date:   Sat, 22 Jun 2019 16:28:46 +0000 (UTC)
-From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
-Reply-To: miss.fmayusuf11@gmail.com
-Message-ID: <270302503.296556.1561220926635@mail.yahoo.com>
-Subject: From:Miss: Fatima Yusuf.
+        id S1726603AbfFWRro (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 23 Jun 2019 13:47:44 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:43168 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726399AbfFWRro (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 23 Jun 2019 13:47:44 -0400
+Received: by mail-lf1-f68.google.com with SMTP id j29so8331598lfk.10;
+        Sun, 23 Jun 2019 10:47:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cDhw7qv5Q+/BXJJ0stCvtC79undlN+qMj6BtzDp7pak=;
+        b=P//5KQJDw9St6fTDS5RMDunpsFHQpHwqe+/LBTeLnJ2LMwOkdQH566CJCtT4VU/ZMK
+         1V3lb6Z/cpkUyDzfVd7giE0YSGTNVabSjFsMQMhmyDltIVu7B5jCA6vHdLQbLbgZeh/x
+         k0MvfeUlXMkbmuqwMGZindQSv7lSyCtn0jsl9tnMMjDoXlm/xzAwexoBdejeAoq1OabG
+         Ma55ikpUno/i2KGL8P3sxgxExq6zEBsMShKxfeap7vtM1fSzayYAS5b+xctfiIgdHiUg
+         Yg1achdvSqxf4CjUxNvSF5GS7mxFany4ykf7GS9e6Onq2YLTQdU9JZjx0payhWy6NSdV
+         3oyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cDhw7qv5Q+/BXJJ0stCvtC79undlN+qMj6BtzDp7pak=;
+        b=pMv0JXYIV/+iaCqUfes5T3LwKwFBhtcoW8ckOvKx5z1EWXGT2zPIzEUe8ylyscgw0C
+         Iju50SEKKbs40wpbjUJ+SazGJnBpwwwz5m2eI690RJMR17unfw40LYDXmRKNur3HnH6Q
+         yE4djIAixdbTH1jxmnYofEL5g6pHLMOsqUWAsovbS23CeL6gbQvAnaF2EFUJJZa0UhWV
+         uCoaN5BiGnN4gtm7uuiQv4j0hDUbuyGvxsxrUcAl5VXfFqBueGB2jyvb56i9CaYHZuUu
+         6QlRtdTeAQaByrK6XOAzG0qbrrE3CyO+FTsWFekbqFta8Moi/UUTiCHDYHKKMOtM0gsV
+         XV2w==
+X-Gm-Message-State: APjAAAWNIGaV/103rZILInutVJSCzWgG8dPN+klFqw4uXhuoBlc1jooz
+        qx03EqqZWr3kAA+aBqsmenw=
+X-Google-Smtp-Source: APXvYqy6AkdQgXyPOrROxiYPXlbLohhB4gLkxwcBUAJhRhJz3pAReBRehbd/h/LdKfjfzFKWxzOSKw==
+X-Received: by 2002:a19:4c05:: with SMTP id z5mr64264185lfa.5.1561312061983;
+        Sun, 23 Jun 2019 10:47:41 -0700 (PDT)
+Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
+        by smtp.gmail.com with ESMTPSA id m24sm1219553lfl.41.2019.06.23.10.47.41
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 23 Jun 2019 10:47:41 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: tegra: Add Dmitry as a reviewer
+Date:   Sun, 23 Jun 2019 20:46:55 +0300
+Message-Id: <20190623174655.25445-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+I'm contributing to Tegra's upstream development in general and happened
+to review the Tegra's I2C patches for awhile because I'm actively using
+upstream kernel on all of my Tegra-powered devices and initially some of
+the submitted patches were getting my attention since they were causing
+problems. Recently Wolfram Sang asked whether I'm interested in becoming
+a reviewer for the driver and I don't mind at all.
 
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-From:Miss: Fatima Yusuf.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ac347278f1fc..402c6ee32db6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15588,6 +15588,7 @@ F:	drivers/dma/tegra*
+ 
+ TEGRA I2C DRIVER
+ M:	Laxman Dewangan <ldewangan@nvidia.com>
++R:	Dmitry Osipenko <digetx@gmail.com>
+ S:	Supported
+ F:	drivers/i2c/busses/i2c-tegra.c
+ 
+-- 
+2.22.0
 
-For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
-
-I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
-
-Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
-
-I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
-
-I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
-
-My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
-
-I am waiting to hear from you.
-Yours Sincerely,
-Miss.Fatima Yusuf.
