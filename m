@@ -2,83 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF6F4FE26
-	for <lists+linux-i2c@lfdr.de>; Sun, 23 Jun 2019 23:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C6E50136
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2019 07:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726311AbfFWVOK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 23 Jun 2019 17:14:10 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:37725 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726299AbfFWVOJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 23 Jun 2019 17:14:09 -0400
-Received: by mail-lf1-f65.google.com with SMTP id d11so8535030lfb.4;
-        Sun, 23 Jun 2019 14:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=Yq63nB88Kgkj8Q6RKzRC9VHnoDiMRzczFesixFyv9aw=;
-        b=s4TzRs1nTzkzrMcWtFZ3xWAgpRp8NZlYmTogZDQch1tH4ZZYGHZ3xznV4Um52YoULL
-         q12TeJGt+aWvmGRarMDv34znE4V3Of5l/vqRHmKe6dxgdSM2gDKVwjBF/rVh82alyRYN
-         ZO0iwCyrQ9U8OKzbwPQiK8zNvSThjIm8Xu9SS3VCt0UX7w4wEAYVzx+0I57VLFwQUjDC
-         lMOMlc0QgdTrd4t0N6gG3w4RtoqUPgXUdwBSXl6ZYFqYch8kW5+/9TVSt6/zZm1Yn6YL
-         tLmTrui9lFL3PxOP5+2/QtXFUjQciuEkaFSrnRBkIMxNcvcFfuMSg6s7I5Z+YTaB+unt
-         dy5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Yq63nB88Kgkj8Q6RKzRC9VHnoDiMRzczFesixFyv9aw=;
-        b=qLSwKTO34bVDPh+pN7+CABEOSsYDWDzJuN0MmDpj9PB/TJSRrPCXxPchWbUhGnwerg
-         Vmaogt9mGjfpQvDxXaQMWC8UWdb8+F52Hrm8YthY4MHDKa0CaLTk83M3CYoIPFodGS3z
-         NY6IGpzT+G3h2aWQvotdmj/hWhTZuCTCHW1zHV54Bye9M/ZQ7JPwPZsNZTaYve8yT2T3
-         InFgCCtnP5ekqTZdIAt/GBbc3cfTrlhPrSp4jInuNAlg5PXiUD7rMOBnvfGy3q6r/JgN
-         1jtBMo1BVZqka/EUSZ0OgFDeemHhNNdJzDO0PHlCTgBO+QLPT2bTgUyDATz2hHeRxXYb
-         evkA==
-X-Gm-Message-State: APjAAAX3b/yxxVLT+P3dnQFDoO/yViAsLQ7Zp9U6LqaCvYIxN+GoIm7a
-        s5qQcTuZduKv2rCXtlVDvV4GGqZP8QsiN92R
-X-Google-Smtp-Source: APXvYqxTyY8feaWKXEXubyTRNHBlk2m80ddPTTgl23MptTY8kpsBcpN2d+qgHwqYDNFZVG5fho65dQ==
-X-Received: by 2002:ac2:5225:: with SMTP id i5mr19068045lfl.157.1561324447751;
-        Sun, 23 Jun 2019 14:14:07 -0700 (PDT)
-Received: from localhost.localdomain ([91.90.160.140])
-        by smtp.gmail.com with ESMTPSA id y10sm1274970lfb.28.2019.06.23.14.14.06
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Jun 2019 14:14:06 -0700 (PDT)
-From:   Vasyl Gomonovych <gomonovych@gmail.com>
-To:     jochen@scram.de, linuxppc-dev@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Vasyl <gomonovych@gmail.com>
-Subject: [PATCH] i2c: remove casting dma_alloc
-Date:   Sun, 23 Jun 2019 23:13:53 +0200
-Message-Id: <20190623211354.24181-1-gomonovych@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727530AbfFXFoH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Jun 2019 01:44:07 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:45721 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727528AbfFXFoG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Jun 2019 01:44:06 -0400
+Received: from [192.168.1.110] ([77.4.138.202]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1Mirb8-1iBLL42bbQ-00ernJ; Mon, 24 Jun 2019 07:44:02 +0200
+Subject: Re: [PATCH 1/3] include: linux: i2c: more helpers for declaring i2c
+ drivers
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <1560796779-17117-1-git-send-email-info@metux.net>
+ <20190621211744.GC950@kunai>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Organization: metux IT consult
+Message-ID: <c669a041-f025-693a-492a-80ce888db737@metux.net>
+Date:   Mon, 24 Jun 2019 07:44:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
+MIME-Version: 1.0
+In-Reply-To: <20190621211744.GC950@kunai>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:FvDrHSFA8yM3VTo9ZSCraAJ6BwDwCFk9ahYKWgsP4DDZkk6r8ky
+ YFwhJqRRev+bQQvSYnqRJ90sIt6HfVrJ4Bb47ltZXGJ88avFYlgHZ+qCH1NjHAf9+tQC6Vm
+ W11tVZdPEFw5OhhXUqDmP9fBpb9UiaBpeM6oRcWZBL71fQfYGypQ0n49np14OS1JRe37L8A
+ EaU5Wc/r33jgiYVpdodpQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:q6wwMcoSqTc=:htisqL60GOqxnfeGPCSIZn
+ UJmJhGBi0BgHHnYj8q1iSAR/lqlgPRdCgELgPdPoh3MUsaQB22sU4hAPzHRcU5bJuinye4Piv
+ DfHiq4aIzeI0TBOGqvMxxvEc6FAOypHr89MZDA3MbMr8lkvjGGProSXW3t21CNxDHceO8vbog
+ AtSbo35dKdRc/QRVXsMY4L0OwM7Zn4zOlbRWDHVFebmfe8xNhG+mE1gX1L3rbOgrhIdH0UrVS
+ iGxLLsRWC4W/sHQ1auGy9qMFzwR0hNSN06UUJVLh34vgP1Q0MAyeS+Eb7nX9YjB5tZyYOQNkT
+ yztCYLQXsYJ4+i3saQaCmv+KGHemO6hQiDqz746Ip2Dq1TkhsgCxJCkWAQE+AyW/igwJZdxtX
+ kvwmljNdd/ybBtg3eC8u4wrLKrHPFS2C33VGPFxf8PyMnKZWvGxQWgtKljWnkVNcZaj7Moml8
+ gH2m5bW6b6ERSN33wc1A2YaVIAKMXDCCWxrq2sAokOHkV7ibq8BnVBgj9HjrhHuj3uEZ66IO7
+ yzTPAV4pxY7pRyO2uXuuVHYsvzGAH/NKUKjFuwD6wCcKfddVAUCkV598vU7AV8BONsbO6l+hm
+ r6/8vQV4eciWiOHbmuhiW0ZstbU/9/D7DIoryOtuQKOmtT8Ve3jgv9ozaKUXupEWD5+TeT4NJ
+ gSUPdHrl6kpMvbtxaLlKYagL3XuJjWK5ZHGIKnO5mxdQT8w/0zDCx3gOdtPLu2vWHxBKo5A6z
+ OTaLIuuvpDca82Nfxbq5IrwleGpB9tTjBcZNhkpjt5yXA9R/Qngu8dnh9kA=
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Vasyl <gomonovych@gmail.com>
+On 21.06.19 23:17, Wolfram Sang wrote:
+> On Mon, Jun 17, 2019 at 08:39:37PM +0200, Enrico Weigelt, metux IT consult wrote:
+>> From: Enrico Weigelt <info@metux.net>
+>>
+>> Add more helper macros for trivial driver init cases, similar to the
+>> already existing module_i2c_driver()+friends - now for those which
+>> are initialized at other stages (eg. by subsys_initcall()).
+>>
+>> This helps to further reduce driver init boilerplate.
+> 
+> Uh, no! Using subsys_initcall is an old fashioned hack to work around
+> boot time dependencies. Unless there are very strong arguments, I
+> usually do not accept them anymore. So, any simplification of that sends
+> out the wrong message.
 
-Generated by:  alloc_cast.cocci
+Okay, what's the correct initialization method then ?
+Just convert it to already existing module_i2c_driver() ?
 
-Signed-off-by: Vasyl <gomonovych@gmail.com>
----
- drivers/i2c/busses/i2c-cpm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-cpm.c b/drivers/i2c/busses/i2c-cpm.c
-index 187900594e3d..1213e1932ccb 100644
---- a/drivers/i2c/busses/i2c-cpm.c
-+++ b/drivers/i2c/busses/i2c-cpm.c
-@@ -531,7 +531,9 @@ static int cpm_i2c_setup(struct cpm_i2c *cpm)
- 		}
- 		out_be32(&rbdf[i].cbd_bufaddr, ((cpm->rxdma[i] + 1) & ~1));
- 
--		cpm->txbuf[i] = (unsigned char *)dma_alloc_coherent(&cpm->ofdev->dev, CPM_MAX_READ + 1, &cpm->txdma[i], GFP_KERNEL);
-+		cpm->txbuf[i] = dma_alloc_coherent(&cpm->ofdev->dev,
-+						   CPM_MAX_READ + 1,
-+						   &cpm->txdma[i], GFP_KERNEL);
- 		if (!cpm->txbuf[i]) {
- 			ret = -ENOMEM;
- 			goto out_muram;
+--mtx
+
 -- 
-2.17.1
-
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
