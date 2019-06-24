@@ -2,85 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F9D504FF
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2019 10:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E8C51936
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2019 19:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725916AbfFXI7U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Jun 2019 04:59:20 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:55623 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726557AbfFXI7U (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Jun 2019 04:59:20 -0400
-Received: from [192.168.1.110] ([77.4.138.202]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MJVY8-1hzD7W12sq-00JruV; Mon, 24 Jun 2019 10:59:18 +0200
-Subject: Re: [PATCH 1/3] include: linux: i2c: more helpers for declaring i2c
- drivers
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, linux-gpio@vger.kernel.org,
+        id S1726881AbfFXRCb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Jun 2019 13:02:31 -0400
+Received: from sauhun.de ([88.99.104.3]:35436 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727839AbfFXRCb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 24 Jun 2019 13:02:31 -0400
+Received: from localhost (p54B33083.dip0.t-ipconnect.de [84.179.48.131])
+        by pokefinder.org (Postfix) with ESMTPSA id EFD452C0398;
+        Mon, 24 Jun 2019 19:02:28 +0200 (CEST)
+Date:   Mon, 24 Jun 2019 19:02:28 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     "Jonas Mark (BT-FIR/ENG1)" <Mark.Jonas@de.bosch.com>
+Cc:     "kjetilaamodt@gmail.com" <kjetilaamodt@gmail.com>,
+        "WANG Xin (BT-FIR/ENG1-Zhu)" <Xin.Wang7@cn.bosch.com>,
         linux-i2c@vger.kernel.org
-References: <1560796779-17117-1-git-send-email-info@metux.net>
- <20190621211744.GC950@kunai> <c669a041-f025-693a-492a-80ce888db737@metux.net>
- <20190624084427.GA1014@kunai>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <205d0ef7-d487-006b-d104-88958f40e197@metux.net>
-Date:   Mon, 24 Jun 2019 10:59:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+Subject: Re: Bug present in at24.c in 4.14 kernel
+Message-ID: <20190624170228.GB6164@kunai>
+References: <12a06d759e3d44a89ae41f65631c16c5@de.bosch.com>
 MIME-Version: 1.0
-In-Reply-To: <20190624084427.GA1014@kunai>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:kVx291ZekfkMnc6WJzsoAVGadykZkXcOImRJ4KvFPHdNlmO8X/w
- wDVWLmsrflIK8awd/K9cSRQ18j/vONP/bvXB6ZqUdqjmZFLoJdqpR8zsfGxyUYPo7aw5OTq
- JTWaPVTxkWAt9RDtJ8x+xcczZqZUYacyI6ljlgrQfbl6e+VfRyuU605WdSdh2P1L53dnNHb
- oBmbyA1UGpa/KoX9vsv5w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:swNYtjFfWCA=:Jx2Lqwjcro1pBpKYHO0/pU
- +A1W/g1q42uZpjEit3HRp0zwiLLJHbmGa6ZR56uXgJ90ynEVvLvx0SFGfGQEIfpt7msP05TRu
- hR/qwuHAVkYCmAL3G+ZOc1DK5zK88e2bUgZRsLDIQgk1Lxj+RYm73fx5BRtTE/zl+IkIDYPdx
- taT4jr067Tw76Ht39NXb1Are5dq69lwUM79TqytyRbBY/2SBjQM172VjXJ28UG2AezM/qmVGY
- 1okO761KsA9gewuK58pamhxz3zfrTGC1CUc6dPCKt7i49JXHWSBi5D0qI9fpgjlOYcl4xvOc1
- /c/MwWmVgGuTUjQM5z7r+QIGbmoN2Kuwv4jobmMwyWlcL/NtyGfSErZ51YluK8tF5fyoxw7uq
- creyd+1iDAJYEGPk6gANoiqV8iubpjtbkG6WD/kF55tZxIXeN5G7Zl9RXCNZQYUvctTce9jVp
- PYQLXfeGasLg39y/FEj5oIS+OTZn4zgFqvYxrRQw5P4bngTRYqdRVCbleM7BN7WTJrwBCNCb3
- 6hs/p34Ores8bYLoboOzauGD/XktVcuNQJ1ZuOQSjbkTq5bD1DZ02+VNCM0HePYvOwDeJmLWu
- 29Z7fd77nF8MOzTFPxKbfSg8L6suqRslFE0Z5cOLoZT7TG3nb3h0C+znK0yylVkiucSH/aJ++
- v+pIMbLe6iIhaIp2osaPIs1HzpTFQN/CSMCLYEQ7AgHtXG3WmtIDGYhqxC3PoEff2yehi8/Lx
- YBmCLnZ0D49Mk6dGlEqOt7iBMaY9KvJwvD6X36Q7qIw9xLjD0cKiSfEP16g=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="i0/AhcQY5QxfSsSZ"
+Content-Disposition: inline
+In-Reply-To: <12a06d759e3d44a89ae41f65631c16c5@de.bosch.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 24.06.19 10:44, Wolfram Sang wrote:
 
-> The correct solution is to fix the boot dependency in the affected I2C
-> client drivers. That definately needs HW and thorough testing.
-> 
-> It may also need something better than the current deferred probe. Big
-> topic.
+--i0/AhcQY5QxfSsSZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So, then the current approach of using subsys_initcall() can't be
-changed easily, right now. But planned for the future (or at least
-not introducing new caes).
+On Mon, Jun 24, 2019 at 04:48:17PM +0000, Jonas Mark (BT-FIR/ENG1) wrote:
+> Hi Kjetil,
+>=20
+> > I have been investigating an issue with eeprom that turned out to be an
+> > error present in 4.14, but fixed in master.
+> >=20
+> > The fix is
+> > commit 9a9e295e7c5c0409c020088b0ae017e6c2b7df6e
+> > Author: Wang Xin <xin.wang7@cn.bosch.com>
+> > Date:   Thu Aug 16 19:45:34 2018 +0200
+> >=20
+> >     eeprom: at24: fix unexpected timeout under high load
+> >=20
+> > A lot of stuff has changed in at24.c so a simple cherry-pick is not pos=
+sible
+> > to do. I am not fully sure how to fix this in the actual version of at2=
+4.c, or
+> > if some other patches should be reverted instead, hence I have not
+> > written any patch myself usable for upstreaming.
+> >=20
+> > I am writing this to let you know that the 4.14 has an error, and maybe
+> > other branches as well, I have not checked. I am not sure what is the
+> > best way of handling it.
+>=20
+> Thank you for bringing this to our attention. We are actually using
+> Linux 4.14 and the original patch was developed on 4.14. So we are
+> covered.
+>=20
+> For getting the patch on mainline we ported it to 4.19 and sent it to
+> linux-i2c.
+>=20
+> I do not know what is the right way to get the patch into the 4.14 LTS
+> maintenance branch. I propose you ask that question on the linux-i2c
 
-But: how does that conflict w/ just moving the existing redundant
-pieces into a helper macro ? The logic stays the same - just using
-a shorter notation. (assuming my patch isn't buggy ;-)).
+You (or Kjetil) could send the v4.14-patch to the stable@vger.kernel.org
+with a line added to the commit message:
 
-I can add a remark in the function documentation that this shall
-only by used in rare cases, and maybe something like "that's just
-legacy  - introducing  new caller is most certainly wrong" ;-)
+=3D=3D=3D
+commit <sha1_id of the v4.19 patch> upstream.
+=3D=3D=3D
 
+Would be great if the i2c list would be added when this gets submitted,
+too.
 
---mtx
+I added the i2c list now, because there is much value in this
+conversation.
 
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+> mailing list. If needed I can then supply a patch which applies to 4.14.
+> Please keep mark.jonas@de.bosch.com and xin.wang7@cn.bosch.com in CC so
+> Xin and I will notice your post.
+>=20
+> Greetings,
+> Mark
+
+--i0/AhcQY5QxfSsSZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0RAiAACgkQFA3kzBSg
+KbY/vQ//TIrKwqDPrMCr0xcxBpkHH7v5+YEwWWcoIoiJ6dOjHWsBuXOHQXEQ7yrF
+PXdmZ1nc8nE3CksXCoZzUnfOopCerbpCE57ynpf+/Gl8T/lKQ18/BPOtqfc1Va+O
+owXFWPWQViB71fhNmyoa92Sac1PxA5FQ64QdluHO0FLuGnsZuqYVXJTpD44W/2G9
+YItxNkbbd4B0jW5o52Zlabx3D8JzeAM0VXoPp3grp97nJFtQms/v6yBSbcA7MXzn
+Ok+XCKEHsJdR25YMsH14P/aefgns1bR9Y+UYgBiOL1mLqEKE0OloqqO2H7wLA7sD
+8OtmScynqlL0Xp+lOV1hp5Rkqv0hDn3tBVVKPLA2CnjXKVc0zthuWPrvbeQP9+xQ
+yqx7qptqcEWhefdSjA6/y+uja2f+5H23pMo9E4uYBIcBo3qLGMY0KyJw3IIs9EET
+UUEH9dloKVRwVBjEDwOenHPG7R1fuIp+7Gfym5JJbeCR/7sJxE1RN7q50FkdIck4
+/5GPyH/L2a2b/PTYZXlUFu/85HYu67cWJAIgFF0a3MFeMeqcgnY8PFoAAMp8/a7l
+t8XkySObhp/Cfk3SG2379x/7POXos9qWbo9VIOaxbt/Z2Lm6GoP5kKpezYwn8QOb
+nWss6gmO+c1dedF81z7vzj9cxoNlIwE244OcdgoYcPbrm9XVnhs=
+=BaV9
+-----END PGP SIGNATURE-----
+
+--i0/AhcQY5QxfSsSZ--
