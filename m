@@ -2,112 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB1255080
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2019 15:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5481955A73
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2019 23:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729985AbfFYNip (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Jun 2019 09:38:45 -0400
-Received: from mga18.intel.com ([134.134.136.126]:9648 "EHLO mga18.intel.com"
+        id S1726341AbfFYV6v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Jun 2019 17:58:51 -0400
+Received: from sauhun.de ([88.99.104.3]:49142 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729365AbfFYNio (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 Jun 2019 09:38:44 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Jun 2019 06:38:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,416,1557212400"; 
-   d="scan'208";a="182887735"
-Received: from mylly.fi.intel.com (HELO [10.237.72.194]) ([10.237.72.194])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Jun 2019 06:38:37 -0700
-Subject: Re: [PATCH] i2c: designware: Add disable runtime pm quirk
-To:     AceLan Kao <acelan.kao@canonical.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190625083051.30332-1-acelan.kao@canonical.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <a3469010-829c-16dc-be83-6fe9b3021530@linux.intel.com>
-Date:   Tue, 25 Jun 2019 16:38:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        id S1726339AbfFYV6v (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 Jun 2019 17:58:51 -0400
+Received: from localhost (p54B333A7.dip0.t-ipconnect.de [84.179.51.167])
+        by pokefinder.org (Postfix) with ESMTPSA id 299292C376D;
+        Tue, 25 Jun 2019 23:58:49 +0200 (CEST)
+Date:   Tue, 25 Jun 2019 23:58:48 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Kjetil Aamodt <kjetilaamodt@gmail.com>
+Cc:     "Jonas Mark (BT-FIR/ENG1)" <Mark.Jonas@de.bosch.com>,
+        "WANG Xin (BT-FIR/ENG1-Zhu)" <Xin.Wang7@cn.bosch.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: Bug present in at24.c in 4.14 kernel
+Message-ID: <20190625215848.GA2987@kunai>
+References: <12a06d759e3d44a89ae41f65631c16c5@de.bosch.com>
+ <20190624170228.GB6164@kunai>
+ <CAKAz2q0x8Qi8+RT2dFNv74X1Cm_SyTUvzBmnZ-YN_x6d3bQS4Q@mail.gmail.com>
+ <20190624184330.GA8035@kunai>
+ <CAKAz2q3_jCRB0=tOF4BWMc8Bof0GGw_G_rQaeFM+ZPjxfD7WLg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190625083051.30332-1-acelan.kao@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
+Content-Disposition: inline
+In-Reply-To: <CAKAz2q3_jCRB0=tOF4BWMc8Bof0GGw_G_rQaeFM+ZPjxfD7WLg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 6/25/19 11:30 AM, AceLan Kao wrote:
-> Dell machines come with goodix touchpad IC suffer from the double click
-> issue if the Designware I2C adapter enters runtime suspend.
-> 
-> It's because the goodix re-assert the interrupt if host doesn't read the
-> data within 100ms and designware takes a longer time to wake up from
-> runtime suspend. In the case, it got a second interrupt during
-> resuming, so it thinks it's a double click.
-> 
-> There is no simple way to fix this, it's a firmware issue and goodix
-> agrees to fix this in their firmware on next release, but this issue
-> still affects the machines that don't come with an updated firmware. So,
-> add a quirk to mark those machines and avoid the designware from
-> entering runtime suspend.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=202683
-> 
-> Signed-off-by: AceLan Kao <acelan.kao@canonical.com>
-> ---
->   drivers/i2c/busses/i2c-designware-master.c | 30 ++++++++++++++++++++--
->   1 file changed, 28 insertions(+), 2 deletions(-)
-> 
-I think better place to have this fixed is in 
-drivers/hid/i2c-hid/i2c-hid-core.c by forcing the adapter device active 
-when communicating with such touchpad.
 
-In that way only bus where touchpad is connected stays active, not all 
-and makes sure issue is handled also if that touchpad is ever connected 
-to any other I2C adapter than Designware.
+--EVF5PPMfhYS0aIcm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I did something similar in the commit 72bfcee11cf8 ("i2c: Prevent 
-runtime suspend of adapter when Host Notify is required"). Not exactly 
-same issue but similar idea.
 
-By looking at i2c-hid-core.c I saw a few i2c-hid devices have 
-I2C_HID_QUIRK_NO_RUNTIME_PM. Could you test how does this Goodix behave 
-if only i2c-hid device runtime PM is prevented not I2C adapter?
+> > That makes sense. Porting to 4.19 means, using 4.19 as the base for this
+> > patch and then send out. So, the patch will appear in the next release
+> > after 4.19 earliest.
+>=20
+> My understanding of this is that
+> the 9a9e295e7c5c0409c020088b0ae017e6c2b7df6e patch
+> was written for 4.19 and sent for inclusion in mainline, but not added
+> before v4.20-rc1.
 
-A very quick test would be to comment out those lines below:
+Not quite, please read again: v4.19 was the *base*. The patch was put
+*on top* of it. It can't be *for* v4.19 because v4.19 was already
+released.
 
-diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c 
-b/drivers/hid/i2c-hid/i2c-hid-core.c
-index 90164fed08d3..bd3e6570c45e 100644
---- a/drivers/hid/i2c-hid/i2c-hid-core.c
-+++ b/drivers/hid/i2c-hid/i2c-hid-core.c
-@@ -1156,8 +1156,8 @@ static int i2c_hid_probe(struct i2c_client *client,
-  		goto err_mem_free;
-  	}
+> If you can send your 4.14 patch for inclusion in 4.14, and ask for
+> 9a9e295e7c5c0409c020088b0ae017e6c2b7df6e to be merged to 4.19 I think we
+> are all good here.
 
--	if (!(ihid->quirks & I2C_HID_QUIRK_NO_RUNTIME_PM))
--		pm_runtime_put(&client->dev);
-+//	if (!(ihid->quirks & I2C_HID_QUIRK_NO_RUNTIME_PM))
-+//		pm_runtime_put(&client->dev);
+This goes to Jonas, I had nothing to do with this patch other than
+applying the version which was sent to me.
 
-  	return 0;
+I agree though, that it would be nice if Jonas could send this patch for
+4.14, so it could be send further to stable kernels.
 
-@@ -1183,8 +1183,8 @@ static int i2c_hid_remove(struct i2c_client *client)
-  	struct i2c_hid *ihid = i2c_get_clientdata(client);
-  	struct hid_device *hid;
+Regards,
 
--	if (!(ihid->quirks & I2C_HID_QUIRK_NO_RUNTIME_PM))
--		pm_runtime_get_sync(&client->dev);
-+//	if (!(ihid->quirks & I2C_HID_QUIRK_NO_RUNTIME_PM))
-+//		pm_runtime_get_sync(&client->dev);
-  	pm_runtime_disable(&client->dev);
-  	pm_runtime_set_suspended(&client->dev);
-  	pm_runtime_put_noidle(&client->dev);
+   Wolfram
 
--- 
-Jarkko
+
+--EVF5PPMfhYS0aIcm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0SmRQACgkQFA3kzBSg
+Kba5Vg/9EA7GwgNFCpa3TcioAjf64ZbvxJJVJJQlrNp+nLZnBLTWCqIZJtEozA1E
+6aQlnYoSomm1vfTQkQfS2kwCLWKZqX61m3xz5qlSGhnPT5Td+MsSuS/AUIFUw3NL
+Ig3HgJrYmX8I1edbbnbc3ji1uMPk5vLZMMEBdg//kX96ohOMaQg1n3RYRyrTz/l5
+VoJ44TX6EM76MTnwbjCGk5ozCEzHke611GpEQ3x5u7wBeA20tPEKA4yWVDyOVtkA
+qDkzrT5CDicAqim/tuy+EAC30uLWNe0IY4QWRm5C5gHPzYRmT2QfuI4dAFXx8f4x
+VSGbXzewBg+9UzklwA1QdQmn6cxYhrS2Ts8AHP7cGdwkoNh7elzaITUo60fB4ILs
+aqm1GZz6AfmdDmBg89vJf8xim4lTb8BaosVF4EoG/LrM4qn2bxUNFvQ58kpI+mrh
+QizpSy78+3OB1BsRnE+1u04SAUH8mJSxkUCsDETs7mR/Ix5Y2uqiS89fmlq3Hled
+kTKmIVlo5rgkuoc+/q1ffy3CwYMhwQBPYEnu1pbfHRC0Yq/nR9+4hVZsaeQPzU9u
+cBA7HX8SYD87egiitpU203SfIEsesIhrUQmjjJEyXbqXLuxk7rgcEyvpUpLxEWak
+TFeP5vwEa6byl+v0YYzEtRSTAU5aLnGgzDRHSLkzAEi9J4oHPPw=
+=1IF5
+-----END PGP SIGNATURE-----
+
+--EVF5PPMfhYS0aIcm--
