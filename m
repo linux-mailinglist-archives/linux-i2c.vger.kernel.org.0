@@ -2,98 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FF756BAD
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2019 16:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B1456D0E
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2019 17:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726131AbfFZORD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Jun 2019 10:17:03 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:52017 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726157AbfFZORC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Jun 2019 10:17:02 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5QE8mJY025877;
-        Wed, 26 Jun 2019 16:16:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=CgrU7g19mUGlFYARexQUWZHRH8Nsuuv1t4En5Zbf7qQ=;
- b=L5CU7dOZ6hbCmFZhYGPI6n517KjA58N6aoG7+PWaZLNRmykqAzw3TdVmzqj43FCDmNEs
- ezcv7Lmt+CuwqD1WH+BipfNJmOITnw9vT+TFRFWfFOPr5stVc//LJfAGXOOmgyywp8gY
- uKMYn4NWKs64OOm8DQNxdvJ228n53cHoEeR5/qzY3tsu10bw1FQAYKg17kgndCPSa0a7
- JBL+jB9zIwzGQrqq99Vb7xluhHuDmmfxcQKT8qPEJbsojgUCIv9psqsBi5e3gGrKUdqq
- qToCXAWINbt2budmHjsoUgE8PhAJvvx02krgnr0gWPAC+DjtBTh6uJMNGZaei97fyAuv fQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2tb1f3vsyr-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Wed, 26 Jun 2019 16:16:51 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D42F634;
-        Wed, 26 Jun 2019 14:16:50 +0000 (GMT)
-Received: from Webmail-eu.st.com (sfhdag5node2.st.com [10.75.127.14])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 759F22A72;
-        Wed, 26 Jun 2019 14:16:50 +0000 (GMT)
-Received: from [10.48.1.93] (10.75.127.50) by SFHDAG5NODE2.st.com
- (10.75.127.14) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 26 Jun
- 2019 16:16:49 +0200
-Subject: Re: [PATCH] dt-bindings: i2c-stm32: document optional dmas
-To:     Fabrice Gasnier <fabrice.gasnier@st.com>, <wsa@the-dreams.de>,
-        <robh+dt@kernel.org>
-CC:     <mark.rutland@arm.com>, <mcoquelin.stm32@gmail.com>,
-        <alexandre.torgue@st.com>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1559655253-27008-1-git-send-email-fabrice.gasnier@st.com>
-From:   Pierre Yves MORDRET <pierre-yves.mordret@st.com>
-Message-ID: <7d521d13-de38-1d6b-83c1-927e6cad38e1@st.com>
-Date:   Wed, 26 Jun 2019 16:16:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        id S1728041AbfFZPDb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Jun 2019 11:03:31 -0400
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:12054 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726157AbfFZPDb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Jun 2019 11:03:31 -0400
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5QEx8JR031474;
+        Wed, 26 Jun 2019 10:03:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type;
+ s=PODMain02222019; bh=t95MC3q32p9rAPkXg0ISKU0GoUuWK1qfv3qhH/m8tXU=;
+ b=m6V0jnW2XbCeWbBkiaAFgfMtZhaJcoLVFqVqfbyFLEeiy/pf23SwVNz8jmyVJst9vH1M
+ J9GAwoXulCJTV3m1e4lxe2LleSWEpRFxjsnI4rWukBfI9n8TtXLaXJs7PabXP4Io+kPW
+ 98B/+twHRZC2mG1XJQZle9RpZJjGz1oiKBJyVWiGFSwQqgkIR1k+fNO9H/78ZdmBmQlF
+ +CqK1eYIU/R7ofyW4DvE1Bqo1xFWy1l0VHUagOdMJp5tQTjwMJWf/dCld11J8USJVDkG
+ mJojEGhpW/SNJOmo0/vYniJph1hJanFO65g4DohWTxPwYhQrz/SvcVuS4WKmcbjNUYCr eQ== 
+Authentication-Results: ppops.net;
+        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from mail3.cirrus.com ([87.246.76.56])
+        by mx0b-001ae601.pphosted.com with ESMTP id 2tc7gt8b77-1;
+        Wed, 26 Jun 2019 10:03:03 -0500
+Received: from EDIEX02.ad.cirrus.com (ediex02.ad.cirrus.com [198.61.84.81])
+        by mail3.cirrus.com (Postfix) with ESMTP id D51676159F99;
+        Wed, 26 Jun 2019 10:03:50 -0500 (CDT)
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Wed, 26 Jun
+ 2019 16:03:02 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Wed, 26 Jun 2019 16:03:02 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 112CA44;
+        Wed, 26 Jun 2019 16:03:02 +0100 (BST)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <wsa@the-dreams.de>, <mika.westerberg@linux.intel.com>
+CC:     <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>, <linux-i2c@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <benjamin.tissoires@redhat.com>, <jbroadus@gmail.com>,
+        <patches@opensource.cirrus.com>
+Subject: [PATCH v7 0/6] I2C IRQ Probe Improvements
+Date:   Wed, 26 Jun 2019 16:02:56 +0100
+Message-ID: <20190626150302.22703-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-In-Reply-To: <1559655253-27008-1-git-send-email-fabrice.gasnier@st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG7NODE2.st.com (10.75.127.20) To SFHDAG5NODE2.st.com
- (10.75.127.14)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-26_07:,,
- signatures=0
+Content-Type: text/plain
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=950 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906260177
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi
+This series attempts to align as much IRQ handling into the
+probe path as possible. Note that I don't have a great setup
+for testing these patches so they are mostly just build tested
+and need careful review and testing before any of them are
+merged.
 
-It looks good to me
+The series brings the ACPI path inline with the way the device
+tree path handles the IRQ entirely at probe time. However,
+it still leaves any IRQ specified through the board_info as
+being handled at device time. In that case we need to cache
+something from the board_info until probe time, which leaves
+any alternative solution with something basically the same as
+the current handling although perhaps caching more stuff.
 
-Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
+Thanks,
+Charles
 
-Thx
+See previous discussions:
+ - https://lkml.org/lkml/2019/2/15/989
+ - https://www.spinics.net/lists/linux-i2c/msg39541.html
 
-On 6/4/19 3:34 PM, Fabrice Gasnier wrote:
-> Add missing documentation for "dmas" and "dma-names" properties that can be
-> used on i2c-stm32.
-> 
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-stm32.txt | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-stm32.txt b/Documentation/devicetree/bindings/i2c/i2c-stm32.txt
-> index f334738..ce3df2ff 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-stm32.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-stm32.txt
-> @@ -21,6 +21,8 @@ Optional properties:
->    100000 and 400000.
->    For STM32F7, STM32H7 and STM32MP1 SoCs, Standard-mode, Fast-mode and Fast-mode
->    Plus are supported, possible values are 100000, 400000 and 1000000.
-> +- dmas: List of phandles to rx and tx DMA channels. Refer to stm32-dma.txt.
-> +- dma-names: List of dma names. Valid names are: "rx" and "tx".
->  - i2c-scl-rising-time-ns: I2C SCL Rising time for the board (default: 25)
->    For STM32F7, STM32H7 and STM32MP1 only.
->  - i2c-scl-falling-time-ns: I2C SCL Falling time for the board (default: 10)
-> 
+Charles Keepax (6):
+  i2c: core: Allow whole core to use i2c_dev_irq_from_resources
+  i2c: acpi: Use available IRQ helper functions
+  i2c: acpi: Factor out getting the IRQ from ACPI
+  i2c: core: Move ACPI IRQ handling to probe time
+  i2c: core: Move ACPI gpio IRQ handling into i2c_acpi_get_irq
+  i2c: core: Tidy up handling of init_irq
+
+ drivers/i2c/i2c-core-acpi.c | 59 ++++++++++++++++++++++++++++++++-------------
+ drivers/i2c/i2c-core-base.c | 11 +++++----
+ drivers/i2c/i2c-core.h      |  9 +++++++
+ 3 files changed, 57 insertions(+), 22 deletions(-)
+
+-- 
+2.11.0
+
