@@ -2,130 +2,201 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B94956D7E
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2019 17:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C9456E95
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2019 18:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727139AbfFZPUR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Jun 2019 11:20:17 -0400
-Received: from de-out1.bosch-org.com ([139.15.230.186]:46316 "EHLO
-        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725958AbfFZPUQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Jun 2019 11:20:16 -0400
-X-Greylist: delayed 28995 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Jun 2019 11:20:15 EDT
-Received: from si0vm1947.rbesz01.com (unknown [139.15.230.188])
-        by si0vms0216.rbdmz01.com (Postfix) with ESMTPS id 45YmtQ37lwz1XLG7J;
-        Wed, 26 Jun 2019 17:20:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=de.bosch.com;
-        s=key1-intmail; t=1561562414;
-        bh=brOTsNdTPJ5plf10dFzc0FfJiVLR3ifComvWPdhZwFI=; l=10;
-        h=From:Subject:From:Reply-To:Sender;
-        b=1hnGT1sc8Xql7FC3XYEeyjcufXNrBPygoPXkfUHI7ZuRu2Iye94XvNg3l0ka/9lkt
-         Dq2aEC3ExG9WHSEXLXHY6plbsuMJlkkP4hVQzf+DhIyvLKgM5HTN2kLqyqNgm0evk+
-         tTd3TDQUCfy9jDphYGKVhfsPNrSAizh+RNb2/HU0=
-Received: from fe0vm7918.rbesz01.com (unknown [10.58.172.176])
-        by si0vm1947.rbesz01.com (Postfix) with ESMTPS id 45YmtP6qW7z6CjQSN;
-        Wed, 26 Jun 2019 17:20:13 +0200 (CEST)
-X-AuditID: 0a3aad10-03fff70000007f88-a4-5d138d2daba4
-Received: from fe0vm1651.rbesz01.com ( [10.58.173.29])
-        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by fe0vm7918.rbesz01.com (SMG Outbound) with SMTP id A9.9F.32648.D2D831D5; Wed, 26 Jun 2019 17:20:13 +0200 (CEST)
-Received: from FE-MBX2050.de.bosch.com (fe-mbx2050.de.bosch.com [10.3.231.60])
-        by fe0vm1651.rbesz01.com (Postfix) with ESMTPS id 45YmtP4MRpznqj;
-        Wed, 26 Jun 2019 17:20:13 +0200 (CEST)
-Received: from FE-MBX2051.de.bosch.com (10.3.231.61) by
- FE-MBX2050.de.bosch.com (10.3.231.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.1713.5; Wed, 26 Jun 2019 17:20:13 +0200
-Received: from FE-MBX2051.de.bosch.com ([fe80::d5b5:44fa:ef15:153e]) by
- FE-MBX2051.de.bosch.com ([fe80::d5b5:44fa:ef15:153e%6]) with mapi id
- 15.01.1713.007; Wed, 26 Jun 2019 17:20:13 +0200
-From:   "Jonas Mark (BT-FIR/ENG1)" <Mark.Jonas@de.bosch.com>
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Kjetil Aamodt <kjetilaamodt@gmail.com>
-CC:     "WANG Xin (BT-FIR/ENG1-Zhu)" <Xin.Wang7@cn.bosch.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "Jonas Mark (BT-FIR/ENG1)" <Mark.Jonas@de.bosch.com>
-Subject: AW: Bug present in at24.c in 4.14 kernel
-Thread-Topic: Bug present in at24.c in 4.14 kernel
-Thread-Index: AdUqqsR+9F+soRsLRNOF7W0j3oP9G///5iQAgAAVCACAAAczAIAA338AgADpZgD//0OMYP/+AGdg
-Date:   Wed, 26 Jun 2019 15:20:13 +0000
-Message-ID: <c3336be1ef4e479cba09d3469dfea187@de.bosch.com>
-References: <12a06d759e3d44a89ae41f65631c16c5@de.bosch.com>
- <20190624170228.GB6164@kunai>
- <CAKAz2q0x8Qi8+RT2dFNv74X1Cm_SyTUvzBmnZ-YN_x6d3bQS4Q@mail.gmail.com>
- <20190624184330.GA8035@kunai>
- <CAKAz2q3_jCRB0=tOF4BWMc8Bof0GGw_G_rQaeFM+ZPjxfD7WLg@mail.gmail.com>
- <20190625215848.GA2987@kunai> <8d3189f60c5a47598c2dc62757558dc7@de.bosch.com>
-In-Reply-To: <8d3189f60c5a47598c2dc62757558dc7@de.bosch.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.19.142.147]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1726271AbfFZQUq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Jun 2019 12:20:46 -0400
+Received: from ns.iliad.fr ([212.27.33.1]:47826 "EHLO ns.iliad.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726227AbfFZQUq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 26 Jun 2019 12:20:46 -0400
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id 193562097A;
+        Wed, 26 Jun 2019 18:20:44 +0200 (CEST)
+Received: from [192.168.108.49] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id B77C220307;
+        Wed, 26 Jun 2019 18:20:43 +0200 (CEST)
+Subject: Re: [PATCH v1] arm64: dts: qcom: msm8998: Add i2c5 pins
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        gpio <linux-gpio@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        I2C <linux-i2c@vger.kernel.org>
+References: <ed5b1b55-285a-1c6d-c562-a965119000a5@free.fr>
+ <20190427045151.GE3137@builder>
+ <fcc97e67-3b8e-5b31-866e-6bee62a88fd9@free.fr>
+ <20190502151244.GM2938@tuxbook-pro>
+From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
+Message-ID: <db923066-2684-b768-c750-92b82c1bb656@free.fr>
+Date:   Wed, 26 Jun 2019 18:20:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA21TfUwbdRjmx13LUTk4ruv6roDEDqeiZRRmZGOSKZthRgbqTBSHcsBBO2lL
-        egUBjaIL++gCYpGNFVY+9gXTjaUS3IcbUDBbcWQqca4ZEBLYInOoge7LCHi3g7V/+M/l+T3P
-        +zzv+3vvjsBoJ6Ei9EYLazYyRWqpDJetOxGl0VTLs+OtvZqks+Pd0qRjdRdQ0u45L0rquGTH
-        NuBph65el6SdsY8GpbkHJ/G0WefjmXiWbH0+W6QvZc2rU3JkOtuhZ4r/Di5bmOyWVKLpICsK
-        JoBaA1/PzCAB01RDINzredeKZDw+h6Cz7jgSD9MIHlzcjYuHXgQ7KicwwSKl1sGuoz8+jFpG
-        vQb7WpqlAsaoIQTtVlLAckoLN5u+lIo1CTCxv4YPInicBW2eTwQap56ElqoxiYBJKhnqfzkp
-        EXt5AqGu2YMLQjC1HvZfHX6Yg6goOHXqCib2UoLz5j2JeB0KDn8v8kApYGpiXiL0AuoJaGp4
-        WSyPg2v1Xy2O+Swcbf0DE/uGg/vAJF6LlHa/VLufxe5nsftZWhB+HCkK2PhSwwtrtUlx5lyW
-        q4jXxuWZDE4kvj7qNDozWOBCFIHUIeRCiTybljClXLnBhZ4nAtUKkv2WzqZDc0355TqG071v
-        LiliObWKjPzp1W20/BHNleQa9BynNxldCAhMvYw8wlDZNJnPlFewZpNoc6EIAlcryUIiYxtN
-        FTIW9gOWLWbNS2oyQaiBbLbyM4Sb2UK2rEBfZFmS1VEkCggIoJf7K/5tA4lgF0okQvjew0IE
-        yRUzBk5fuGhfIdrpJdZnHUSbidqpg20Y0feDow2jcaPJyKqUZOZePoUS6nUlxkdzqCLJlem8
-        oPATfFm3kAfxm5STEYI5hP9XfBMAGSEsLXyR9JkSjvAeqkkKPZ5h/uOen8bgvncPf2y0hcI/
-        B+rDwN3VHwb3v2mn4VrNX0pw2GcAGn7tjwLnLP/4zHUjGmaPda+Es9dvPA0PdozEwr+tnRrw
-        3rmoge6mqTj47fbP8eAY6E8Ax92+F2H+7mgKDHSOboThSccmODfu2QSHqz9/BXrcTZvh5E5n
-        Opze15cOewZaM6C+o/FN8Fbbtt7i1xvIrzenihbWa2Es/7PeRdZ3O1Ul+tj1p+Ry1eXERPrS
-        eUXM6rk13Nancr74HcZTP+ySc49tqXydSnib3R60du/tO7GJc9GpO0cyRrI0ee0L0502bGj5
-        Be+QVJU31lth2r7ljcZ3vouJVEWXJdu66lMO1mht+HPsextXZYaF7vrIoOy7smFsxUurOnBn
-        TMyn50+kuiPeiqlV45yO0cZiZo75D+O0V+jFBAAA
+In-Reply-To: <20190502151244.GM2938@tuxbook-pro>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Wed Jun 26 18:20:44 2019 +0200 (CEST)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+On 02/05/2019 17:12, Bjorn Andersson wrote:
 
-> > > If you can send your 4.14 patch for inclusion in 4.14, and ask for
-> > > 9a9e295e7c5c0409c020088b0ae017e6c2b7df6e to be merged to 4.19 I
-> > think
-> > > we are all good here.
-> >
-> > This goes to Jonas, I had nothing to do with this patch other than
-> > applying the version which was sent to me.
-> >
-> > I agree though, that it would be nice if Jonas could send this patch
-> > for 4.14, so it could be send further to stable kernels.
->=20
-> I already started working on preparing patches for the stable mailing lis=
-t.
-> My time budget is just very tight. Please bear with me.
->=20
-> I will put you, Kjetil and linux-i2c on CC.
+> On Mon 29 Apr 01:38 PDT 2019, Marc Gonzalez wrote:
+> 
+>> On 27/04/2019 06:51, Bjorn Andersson wrote:
+>>
+>>> On Thu 25 Apr 09:06 PDT 2019, Marc Gonzalez wrote:
+>>>
+>>>> Downstream source:
+>>>> https://source.codeaurora.org/quic/la/kernel/msm-4.4/tree/arch/arm/boot/dts/qcom/msm8998-pinctrl.dtsi?h=LE.UM.1.3.r3.25#n165
+>>>>
+>>>> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
+>>>> ---
+>>>>  arch/arm64/boot/dts/qcom/msm8998-pins.dtsi | 7 +++++++
+>>>>  1 file changed, 7 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/msm8998-pins.dtsi b/arch/arm64/boot/dts/qcom/msm8998-pins.dtsi
+>>>> index 6db70acd38ee..d0a95c70d1e7 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/msm8998-pins.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/msm8998-pins.dtsi
+>>>> @@ -2,6 +2,13 @@
+>>>>  /* Copyright (c) 2018, The Linux Foundation. All rights reserved. */
+>>>>  
+>>>>  &tlmm {
+>>>> +	i2c5_default: i2c5_default {
+>>>> +		pins = "gpio87", "gpio88";
+>>>> +		function = "blsp_i2c5";
+>>>> +		drive-strength = <2>;
+>>>> +		bias-disable;
+>>>> +	};
+>>>
+>>> You need to reference this node for it to make a difference.
+>>
+>> Right. I do have a local board file referencing i2c5_default, which I plan
+>> to submit at some point. It contains:
+>>
+>> &blsp1_i2c5 {
+>> 	status = "ok";
+>> 	clock-frequency = <100000>;
+>> 	pinctrl-names = "default";
+>> 	pinctrl-0 = <&i2c5_default>;
+>> };
+>>
+>>> Also the drive-strength and bias are board specific, so please move this
+>>> to your board dts (and reference the node).
+>>
+>> Wait... Are you saying there should be no drive-strength nor bias definitions
+>> inside msm8998-pins.dtsi?
+>>
+>> $ grep -c 'strength\|bias' arch/arm64/boot/dts/qcom/msm8998-pins.dtsi
+>> 18
+>>
+>> Why are the SDHC pins different than the I2C pins?
+>>
+>> i2c5 is "tied" to gpio87 and gpio88. Could my board designer "reassign"
+>> these pins to a different HW block? Or is that immutable?
+>>
+> 
+> Right, so it makes a lot of sense to have a node in msm8998.dtsi that
+> says that if i2c5 is probed then the associated pinmux should be set up.
+> 
+> But the pinconf (drive-strenght, internal vs external bias) are board
+> specific, so this part better go in the board.dts.
+> 
+> 
+> On sdm845 we put a node with pinmux in the platform.dtsi and then in the
+> board we extend this node with the electrical properties of the board.
+> This works out pretty well, but we haven't gone back and updated the
+> older platforms/boards yet.
 
-I sent the patches to stable@vger.kernel.org. I hope I got the format right=
-.
+Wow, I had completely lost track of this thread...
 
-I forgot to put linux-i2c on CC but added Bartosz Golaszewski who accepted =
-the original patch.
+OK, I think what you had in mind is the following:
+(Please confirm before I spin a v2)
 
-Greetings,
-Mark
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi b/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
+index f09f3e03f708..9cd1f96dc3c8 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
+@@ -27,6 +27,18 @@
+ 	status = "okay";
+ };
+ 
++&blsp1_i2c5 {
++	status = "ok";
++	clock-frequency = <100000>; /*** NOT SURE... This depends on which devices are on the I2C bus? ***/
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c5_default>;
++};
++
++&i2c5_default {
++	drive-strength = <2>;
++	bias-disable;
++};
++
+ &qusb2phy {
+ 	status = "okay";
+ 
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-pins.dtsi b/arch/arm64/boot/dts/qcom/msm8998-pins.dtsi
+index 6db70acd38ee..dad175a52d03 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-pins.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998-pins.dtsi
+@@ -2,6 +2,11 @@
+ /* Copyright (c) 2018, The Linux Foundation. All rights reserved. */
+ 
+ &tlmm {
++	i2c5_default: i2c5-default {
++		pins = "gpio87", "gpio88";
++		function = "blsp_i2c5";
++	};
++
+ 	sdc2_clk_on: sdc2_clk_on {
+ 		config {
+ 			pins = "sdc2_clk";
 
-Mark Jonas
 
-Building Technologies, Panel Software Fire (BT-FIR/ENG1)=20
-Bosch Sicherheitssysteme GmbH | Postfach 11 11 | 85626 Grasbrunn | GERMANY =
-| www.boschsecurity.com
 
-Sitz: Stuttgart, Registergericht: Amtsgericht Stuttgart HRB 23118=20
-Aufsichtsratsvorsitzender: Christian Fischer; Gesch=E4ftsf=FChrung: Tanja R=
-=FCckert, Andreas Bartz, Thomas Quante, Bernhard Schuster=20
 
+Well, except that there don't seem to be any devices on the i2c5 bus
+on the mediabox...
+
+# i2cdetect -r 0
+i2cdetect: WARNING! This program can confuse your I2C bus
+Continue? [y/N] y
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+
+But there are on several on my batfish board:
+
+# i2cdetect -r 0
+i2cdetect: WARNING! This program can confuse your I2C bus
+Continue? [y/N] y
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- 44 -- -- 47 -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- 68 -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+
+
+Can I submit the arch/arm64/boot/dts/qcom/msm8998-pins.dtsi alone?
+
+Regards.
