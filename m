@@ -2,39 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0B7560A2
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2019 05:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1FE560C5
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2019 05:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727290AbfFZDnU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Jun 2019 23:43:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54508 "EHLO mail.kernel.org"
+        id S1727193AbfFZDos (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Jun 2019 23:44:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56152 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727289AbfFZDnS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 Jun 2019 23:43:18 -0400
-Received: from sasha-vm.mshome.net (mobile-107-77-172-74.mobile.att.net [107.77.172.74])
+        id S1727651AbfFZDor (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 Jun 2019 23:44:47 -0400
+Received: from sasha-vm.mshome.net (mobile-107-77-172-98.mobile.att.net [107.77.172.98])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C988F20659;
-        Wed, 26 Jun 2019 03:43:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9D428205ED;
+        Wed, 26 Jun 2019 03:44:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561520598;
+        s=default; t=1561520686;
         bh=nmVqm5LCFkN57JcvZZ3jWRa4TbV2CnF7sjsDTG8/21g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Oj3KhlkTDOL0SVQQZacBz9WkB7BPKTbaqBnuvXFQ7uAJLPHgG/PlrUnUowFxeXCAP
-         d9Sk0HUBa0nlUWJjt+DTkxorCPO5mRTe2M8LE4E2CGp/A57H8OfJ6kVNijYqd7+Szj
-         T0ihNz78K1g3kdPBR7qH3RbEPFSEcQUwK268yK8k=
+        b=h+d9muqx5owDHTqM/1JOEvPotDZ3iXA8KlXFXDgzC0vEzSxjLTBc3bNyvwNP6EMCu
+         AHaU2SWdxE6BHXzo1u2cerRx8ddd95dqd09hhCjcYwGLhZTb3Xeux+GuBABc7IyqlI
+         vw3YJoy22nkQ/0f8oq4KukHesgeM9lzC+90XfUMk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Chris Packham <chris.packham@alliedtelesis.co.nz>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 44/51] i2c: pca-platform: Fix GPIO lookup code
-Date:   Tue, 25 Jun 2019 23:41:00 -0400
-Message-Id: <20190626034117.23247-44-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 28/34] i2c: pca-platform: Fix GPIO lookup code
+Date:   Tue, 25 Jun 2019 23:43:29 -0400
+Message-Id: <20190626034335.23767-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190626034117.23247-1-sashal@kernel.org>
-References: <20190626034117.23247-1-sashal@kernel.org>
+In-Reply-To: <20190626034335.23767-1-sashal@kernel.org>
+References: <20190626034335.23767-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
