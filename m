@@ -2,92 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1FE560C5
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2019 05:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCD456252
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2019 08:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727193AbfFZDos (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Jun 2019 23:44:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56152 "EHLO mail.kernel.org"
+        id S1726042AbfFZG1a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Jun 2019 02:27:30 -0400
+Received: from mga05.intel.com ([192.55.52.43]:53074 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727651AbfFZDor (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 Jun 2019 23:44:47 -0400
-Received: from sasha-vm.mshome.net (mobile-107-77-172-98.mobile.att.net [107.77.172.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9D428205ED;
-        Wed, 26 Jun 2019 03:44:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561520686;
-        bh=nmVqm5LCFkN57JcvZZ3jWRa4TbV2CnF7sjsDTG8/21g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h+d9muqx5owDHTqM/1JOEvPotDZ3iXA8KlXFXDgzC0vEzSxjLTBc3bNyvwNP6EMCu
-         AHaU2SWdxE6BHXzo1u2cerRx8ddd95dqd09hhCjcYwGLhZTb3Xeux+GuBABc7IyqlI
-         vw3YJoy22nkQ/0f8oq4KukHesgeM9lzC+90XfUMk=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 28/34] i2c: pca-platform: Fix GPIO lookup code
-Date:   Tue, 25 Jun 2019 23:43:29 -0400
-Message-Id: <20190626034335.23767-28-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190626034335.23767-1-sashal@kernel.org>
-References: <20190626034335.23767-1-sashal@kernel.org>
+        id S1725954AbfFZG13 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 26 Jun 2019 02:27:29 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Jun 2019 23:27:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,418,1557212400"; 
+   d="scan'208";a="166931790"
+Received: from mylly.fi.intel.com (HELO [10.237.72.158]) ([10.237.72.158])
+  by orsmga006.jf.intel.com with ESMTP; 25 Jun 2019 23:27:27 -0700
+Subject: Re: [PATCH] i2c: designware: Add disable runtime pm quirk
+To:     AceLan Kao <acelan.kao@canonical.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+References: <20190625083051.30332-1-acelan.kao@canonical.com>
+ <a3469010-829c-16dc-be83-6fe9b3021530@linux.intel.com>
+ <CAFv23QnaKMs9bjS9ry_L4K7wskUqNR2AsgDG-v+fah2XO7EpKw@mail.gmail.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <5c14537d-b6aa-b478-fdd8-29f690b15e07@linux.intel.com>
+Date:   Wed, 26 Jun 2019 09:27:27 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFv23QnaKMs9bjS9ry_L4K7wskUqNR2AsgDG-v+fah2XO7EpKw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Linus Walleij <linus.walleij@linaro.org>
+On 6/26/19 5:32 AM, AceLan Kao wrote:
+> Adding I2C_HID_QUIRK_NO_RUNTIME_PM quirk doesn't help on this issue.
+> Actually, Goodix touchpad already has that PM quirk in the list for other issue.
+>          { I2C_VENDOR_ID_GOODIX, I2C_DEVICE_ID_GOODIX_01F0,
+>                 I2C_HID_QUIRK_NO_RUNTIME_PM },
+> I also modify the code as you suggested, but no luck.
+> 
+Yeah, I realized it won't help as the i2c-hid device is anyway powered 
+on constantly when the device is open by the pm_runtime_get_sync() call 
+in i2c_hid_open().
 
-[ Upstream commit a0cac264a86fbf4d6cb201fbbb73c1d335e3248a ]
+> It's not Goodix takes time to wakeup, it's designware I2C controller.
+> Designware doesn't do anything wrong here, it's Goodix set the interrupt timeout
+> that leads to the issue, so we have to prevent designware from runtime
+> suspended.
+> But only on that bus where Goodix is connected and open by user space. 
+What I mean something like below:
 
-The devm_gpiod_request_gpiod() call will add "-gpios" to
-any passed connection ID before looking it up.
+diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c 
+b/drivers/hid/i2c-hid/i2c-hid-core.c
+index 90164fed08d3..bbeaa39ddc23 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-core.c
++++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+@@ -795,6 +795,9 @@ static int i2c_hid_open(struct hid_device *hid)
+  	struct i2c_hid *ihid = i2c_get_clientdata(client);
+  	int ret = 0;
 
-I do not think the reset GPIO on this platform is named
-"reset-gpios-gpios" but rather "reset-gpios" in the device
-tree, so fix this up so that we get a proper reset GPIO
-handle.
++	/* some quirk test here */
++	pm_runtime_get_sync(&client->adapter->dev);
++
+  	ret = pm_runtime_get_sync(&client->dev);
+  	if (ret < 0)
+  		return ret;
+@@ -812,6 +815,9 @@ static void i2c_hid_close(struct hid_device *hid)
 
-Also drop the inclusion of the legacy GPIO header.
+  	/* Save some power */
+  	pm_runtime_put(&client->dev);
++
++	/* some quirk test here */
++	pm_runtime_put(&client->adapter->dev);
+  }
 
-Fixes: 0e8ce93bdceb ("i2c: pca-platform: add devicetree awareness")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-pca-platform.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+  static int i2c_hid_power(struct hid_device *hid, int lvl)
 
-diff --git a/drivers/i2c/busses/i2c-pca-platform.c b/drivers/i2c/busses/i2c-pca-platform.c
-index de3fe6e828cb..f50afa8e3cba 100644
---- a/drivers/i2c/busses/i2c-pca-platform.c
-+++ b/drivers/i2c/busses/i2c-pca-platform.c
-@@ -21,7 +21,6 @@
- #include <linux/platform_device.h>
- #include <linux/i2c-algo-pca.h>
- #include <linux/platform_data/i2c-pca-platform.h>
--#include <linux/gpio.h>
- #include <linux/gpio/consumer.h>
- #include <linux/io.h>
- #include <linux/of.h>
-@@ -173,7 +172,7 @@ static int i2c_pca_pf_probe(struct platform_device *pdev)
- 	i2c->adap.dev.parent = &pdev->dev;
- 	i2c->adap.dev.of_node = np;
- 
--	i2c->gpio = devm_gpiod_get_optional(&pdev->dev, "reset-gpios", GPIOD_OUT_LOW);
-+	i2c->gpio = devm_gpiod_get_optional(&pdev->dev, "reset", GPIOD_OUT_LOW);
- 	if (IS_ERR(i2c->gpio))
- 		return PTR_ERR(i2c->gpio);
- 
 -- 
-2.20.1
-
+Jarkko
