@@ -2,71 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BD5583B6
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jun 2019 15:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65AE5843D
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jun 2019 16:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726431AbfF0Njm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 Jun 2019 09:39:42 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:56719 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbfF0Njm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jun 2019 09:39:42 -0400
-X-Originating-IP: 92.137.69.152
-Received: from localhost (alyon-656-1-672-152.w92-137.abo.wanadoo.fr [92.137.69.152])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id AAFAF60018;
-        Thu, 27 Jun 2019 13:39:33 +0000 (UTC)
-Date:   Thu, 27 Jun 2019 15:39:32 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Eugen.Hristev@microchip.com, peda@axentia.se, robh+dt@kernel.org,
-        mark.rutland@arm.com, Nicolas.Ferre@microchip.com,
-        Ludovic.Desroches@microchip.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        pierre-yves.mordret@st.com
-Subject: Re: I2C filtering (was Re: [PATCH v2 6/9] dt-bindings: i2c: at91:
- add binding for enable-ana-filt)
-Message-ID: <20190627133932.GL3692@piout.net>
-References: <1561449642-26956-1-git-send-email-eugen.hristev@microchip.com>
- <1561449642-26956-7-git-send-email-eugen.hristev@microchip.com>
- <4e81d3c9-25f3-ca6e-f2d5-17fad5905bb8@axentia.se>
- <84628b5e-bea7-7d91-f790-f3a2650040fa@microchip.com>
- <20190625093156.GF5690@piout.net>
- <20190625095533.GC1688@kunai>
- <20190627132200.GK3692@piout.net>
- <eb2d87b7-437c-53ee-a1ca-37c4d3fadea6@microchip.com>
- <20190627133440.GA7158@ninjato>
+        id S1726979AbfF0OIw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 Jun 2019 10:08:52 -0400
+Received: from mx2.suse.de ([195.135.220.15]:56438 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726829AbfF0OIw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 27 Jun 2019 10:08:52 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 77B52ABD4
+        for <linux-i2c@vger.kernel.org>; Thu, 27 Jun 2019 14:08:51 +0000 (UTC)
+Date:   Thu, 27 Jun 2019 16:08:50 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Linux I2C <linux-i2c@vger.kernel.org>
+Subject: Re: Can't rmmod i2c-i801
+Message-ID: <20190627160850.768c3128@endymion>
+In-Reply-To: <20190627134123.41c10609@endymion>
+References: <20190627134123.41c10609@endymion>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190627133440.GA7158@ninjato>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 27/06/2019 15:34:40+0200, Wolfram Sang wrote:
+On Thu, 27 Jun 2019 13:41:23 +0200, Jean Delvare wrote:
+> On my system, i2c-i801 gets loaded automatically. I am working on this
+> driver today so I'd like to be able to rmmod and modprobe it again.
+> However rmmod doesn't work because someone is holding a reference to
+> the module:
 > 
-> > > Apart from enabling the filter there is indeed one configuration
-> > > setting, the maximum pulse width of spikes to be suppressed by the input
-> > > filter.
+> > /sbin/lsmod | grep ^i2c_i801  
+> i2c_i801               36864  1
 > 
-> Yup, this is what I anticipated.
-> 
-> > This is a number 0 to 7 (3 bits) that represents the width of the spike 
-> > in periph clock cycles.
-> 
-> For a generic binding, we would need some time-value as a parameter and
-> convert it to clock cycles in the driver then, I'd think.
-> 
+> How do I figure out who is holding that reference and how do I get rid
+> of it?
 
-Yes, that is what I was going to suggest.
-
+Bah, ignore me. My own code is doing it. Apparently the kernel doesn't
+like infinite loops during module initialization.
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Jean Delvare
+SUSE L3 Support
