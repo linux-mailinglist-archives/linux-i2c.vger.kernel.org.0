@@ -2,34 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 290275AA66
-	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2019 13:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515565AA6C
+	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2019 13:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbfF2L3Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 29 Jun 2019 07:29:25 -0400
-Received: from sauhun.de ([88.99.104.3]:32778 "EHLO pokefinder.org"
+        id S1726892AbfF2Lcc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 29 Jun 2019 07:32:32 -0400
+Received: from sauhun.de ([88.99.104.3]:32810 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726874AbfF2L3Z (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 29 Jun 2019 07:29:25 -0400
+        id S1726874AbfF2Lcc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 29 Jun 2019 07:32:32 -0400
 Received: from localhost (p5486CA23.dip0.t-ipconnect.de [84.134.202.35])
-        by pokefinder.org (Postfix) with ESMTPSA id 531C32C047A;
-        Sat, 29 Jun 2019 13:29:22 +0200 (CEST)
-Date:   Sat, 29 Jun 2019 13:29:22 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 0A6B92C047A;
+        Sat, 29 Jun 2019 13:32:30 +0200 (CEST)
+Date:   Sat, 29 Jun 2019 13:32:29 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     mika.westerberg@linux.intel.com, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benjamin.tissoires@redhat.com, jbroadus@gmail.com,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH v7 0/6] I2C IRQ Probe Improvements
-Message-ID: <20190629112921.GE1685@kunai>
-References: <20190626150302.22703-1-ckeepax@opensource.cirrus.com>
+To:     Fabrice Gasnier <fabrice.gasnier@st.com>
+Cc:     pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: i2c-stm32f7: Add I2C_SMBUS_I2C_BLOCK_DATA support
+Message-ID: <20190629113229.GF1685@kunai>
+References: <1559654451-26612-1-git-send-email-fabrice.gasnier@st.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="M/SuVGWktc5uNpra"
+        protocol="application/pgp-signature"; boundary="w3uUfsyyY1Pqa/ej"
 Content-Disposition: inline
-In-Reply-To: <20190626150302.22703-1-ckeepax@opensource.cirrus.com>
+In-Reply-To: <1559654451-26612-1-git-send-email-fabrice.gasnier@st.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -37,53 +36,45 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---M/SuVGWktc5uNpra
+--w3uUfsyyY1Pqa/ej
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 26, 2019 at 04:02:56PM +0100, Charles Keepax wrote:
-> This series attempts to align as much IRQ handling into the
-> probe path as possible. Note that I don't have a great setup
-> for testing these patches so they are mostly just build tested
-> and need careful review and testing before any of them are
-> merged.
+On Tue, Jun 04, 2019 at 03:20:51PM +0200, Fabrice Gasnier wrote:
+> This patch adds the support of I2C_SMBUS_I2C_BLOCK_DATA transaction type
+> for the stm32f7 SMBUS Controller.
+> Use emulated I2C_SMBUS_I2C_BLOCK_DATA transactions as there is no specific
+> hardware in STM32 I2C to manage this (e.g. like no need for PEC here).
+> Emulated transfer will fall back calling i2c transfer method where there's
+> already support for DMAs for example.
+> So, use the I2C_FUNC_SMBUS_I2C_BLOCK in stm32f7_i2c_func(), and rely on
+> emulated transfer by returning -EOPNOTSUPP in the smbus_xfer() routine
+> for such a case.
 >=20
-> The series brings the ACPI path inline with the way the device
-> tree path handles the IRQ entirely at probe time. However,
-> it still leaves any IRQ specified through the board_info as
-> being handled at device time. In that case we need to cache
-> something from the board_info until probe time, which leaves
-> any alternative solution with something basically the same as
-> the current handling although perhaps caching more stuff.
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
 
-Ehrm, I somehow lost the cover-letter from v8, so I am replying here.
-Sorry for the noise.
-
-So, since all patches have the review from Mika and Andy (thanks!), I
-applied v8 now to for-next. I had a glimpse, too, and thought it was
-ready to go. But I didn't really review myself, I trust you guys. Thank
-you, Charles, for your efforts working on this one!
+Applied to for-next, thanks!
 
 
---M/SuVGWktc5uNpra
+--w3uUfsyyY1Pqa/ej
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0XS40ACgkQFA3kzBSg
-KbaMYA/+PjsJLq8bemY+KXXj66YNG2qLcNss3uXlAq0Czj2/IE1VSN0S/N86Zccn
-+QtDfmfIdpCqqAzs0N0D6N7pr4olIcrUlbz/FFLg4v0Dtn8ybYTT9QPDK6zAOrSq
-cTUBJjNVcMhENVby9rXISu/uwr09Cq1C7chdZlYeq/etaDFgJEclr/U4aZrnjTJ1
-JMzD6/CWn0d2OkUKCjdFvGtDDbrxRNnCOXMuEM3fkqyR3Usg28kMqr9NhMxJe3jg
-0CO5DgpeVTwAaGeyrKsGhNxcbpgw0u4Dr4i9tkV6F3hea/1fKshy/DuMZ5o46q19
-Qn1F4L7XlsE5ATLHpw6QXgZ/ZY8CRW3XJ3r5p0E5M9PVlb2hyKb8qygK8/yaOuMt
-g2c96OSh2fQpz7X4FdLTjRfwX9Qz4q2uAOUIckq1TzyTkqqs83MliX6r5P6l6WfT
-+rAqqJcBaIgZE9K91EFyhq0wTasyfSH0Cl11gMOE0DFUG8Wxp0o8uTpUwA1HIAT6
-W9T24bkyyqcK4fPclCwT0NhTAqaHOStu3Zi5F7M4htiXvjQwE+qEW5WZ5MW09PPf
-dfPvqm9g6xfyPkdQcaZEL7KMaBvGHjlDbt5+5wcqerdKqJsOELkD/Huq4R09ym7w
-0qZxWB2aLRaDn1M88KJ5komdYV6NC13QPTh1t8OonctwizFOAuY=
-=dIfh
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0XTE0ACgkQFA3kzBSg
+KbYQPBAAnI6LSZiadL1Afn6Q3hTlf1gK/ZLwpBe9FuKUWv6nQzI/qdghchXuaaWl
+Q2LMTuSWroSxSXQ/1vNwAJ8HcOx5vYsP+spOHkSuftyUJLqukklSbfRLtgeo+3kL
+fXfTbNIYsVkIEmR5rg9VmLUS80c4eBq7owL9bfUVsD960Qr+tCbnfqHVJPN33TiE
+7qW+mI/wvm8R7ToZU5W1J/bvKl0bN53g0qQi4Eu7XGFM3zRvtGS+0jyZ7EhDCQ00
+xjnF4tjLCpL6gV5rPMoHW42qqnlc+sAKGwfD6GBAJXJO9Om3FQ2QC6CHmUmg1w0Z
+nnSlLXVmTn7rutt7C/5j3cJPMoPhGKNOA7BIPM8S48fvlBBIlkvbC0n9EbzOT2Ww
+L4AK0akwhzXa/zbbf8F44+PfYSoMpLz9uRnfzmBax5w2RfwypdKx+y75At5HM6Wl
+elqhbmi7DPP20aTpwytaV9BdLW6En5MbHOAkxOJYWszAAXtqQdckQjZtfCZ9Gwzp
+14k4Ll6MybldqBi0+efaAsm6ezESOSby98hPDqqqhLEydKCxfMaZ4/2YunF63UTt
+EHhyI3pWjSwALJwO6e5Z9PH5mT0c6K/gXLJAlpNA2ap/6ThrUE+/HWL0EK4m6MPB
+4ma+27a/n5zV94RlQFgxKbG9m72aKOmFOGOHQRuUs6yLfymGpow=
+=grZh
 -----END PGP SIGNATURE-----
 
---M/SuVGWktc5uNpra--
+--w3uUfsyyY1Pqa/ej--
