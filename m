@@ -2,31 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B056F5AA52
-	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2019 13:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082AD5AA54
+	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2019 13:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726895AbfF2LEa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 29 Jun 2019 07:04:30 -0400
-Received: from sauhun.de ([88.99.104.3]:60766 "EHLO pokefinder.org"
+        id S1726906AbfF2LGw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 29 Jun 2019 07:06:52 -0400
+Received: from sauhun.de ([88.99.104.3]:60796 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726874AbfF2LEa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 29 Jun 2019 07:04:30 -0400
+        id S1726874AbfF2LGw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 29 Jun 2019 07:06:52 -0400
 Received: from localhost (p5486CA23.dip0.t-ipconnect.de [84.134.202.35])
-        by pokefinder.org (Postfix) with ESMTPSA id C2EB63E43C6;
-        Sat, 29 Jun 2019 13:04:28 +0200 (CEST)
-Date:   Sat, 29 Jun 2019 13:04:28 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 179423E43C6;
+        Sat, 29 Jun 2019 13:06:50 +0200 (CEST)
+Date:   Sat, 29 Jun 2019 13:06:49 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linux-i2c@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [GIT PULL] at24: updates for v5.3
-Message-ID: <20190629110428.GB1685@kunai>
-References: <20190627143708.10135-1-brgl@bgdev.pl>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PULL REQUEST] i2c-mux for 5.3-rc1
+Message-ID: <20190629110649.GC1685@kunai>
+References: <c1769ae2-8e44-c54e-e8cb-dcca5d3b0a2a@axentia.se>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mxv5cy4qt+RJ9ypb"
+        protocol="application/pgp-signature"; boundary="+xNpyl7Qekk2NvDX"
 Content-Disposition: inline
-In-Reply-To: <20190627143708.10135-1-brgl@bgdev.pl>
+In-Reply-To: <c1769ae2-8e44-c54e-e8cb-dcca5d3b0a2a@axentia.se>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -34,59 +33,42 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---mxv5cy4qt+RJ9ypb
+--+xNpyl7Qekk2NvDX
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 27, 2019 at 04:37:08PM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
->=20
-> Hi Wolfram,
->=20
-> please pull the following set of updates for at24 for the v5.3 merge wind=
-ow.
->=20
-> Best regards,
-> Bartosz Golaszewski
->=20
-> The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0eb=
-d9:
->=20
->   Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/at24-=
-v5.3-updates-for-wolfram
->=20
-> for you to fetch changes up to dce91ba39c765b2b90d07c717683abcdd9891592:
->=20
->   eeprom: at24: modify a comment referring to platform data (2019-06-27 1=
-5:55:08 +0200)
->=20
+
+> I realize that there are changes in drivers/i2c/busses/i2c-i801.c that strictly
+> speaking don't belong here, but I hope you don't mind. These changes are all
+> about the interaction with the i2c-mux-gpio code, and I did a test-merge a few
+> days ago w/o conflicts.
+
+All fine.
+
+> Anyway, the GPIO-work from Linus Walleij (with help from Serge Semin) in the
+> i2c-mux-gpio and i2c-arb-gpio-challenge drivers is the main feature.
 
 Applied to for-next, thanks!
 
 
---mxv5cy4qt+RJ9ypb
+--+xNpyl7Qekk2NvDX
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0XRbwACgkQFA3kzBSg
-KbbcGRAAlZxwYQ4zscmv/tExQkF4D4RXmSHcwFHDB6VQFbW7v8Hilk5vIHBjGlH8
-GkfadMKHiFdTfiTgOs/xdr0e7QfZd9EZPHb2Lpg5q/CwF/tZmTbqiSaVw/toy42K
-eDS0wAW0uZ4Z3PsnaAzJJMdqoV1SoVBxuVD9283drzyx1bvgvs6K3/sfK0TWfaNM
-BbrAMjiaamDc9q+g2o3pJyr9ew3hTqngsOL/uXpY6l0Xn6TGU9+Hn7yGXxG12E8r
-fidkGCg2ar0nTNMdR8vY7DoBn8bue1an/2BqzsvACwTih3s79ieaHAyZnQz81b6k
-67rQCgQLtgtgUo60Om/k+uh28XRc+0VmEWq9ITPmcndFNE/hPTBQIf5ahgE+rLWQ
-Z3CBSzQzNLzj1anMGIIAf3beM9vfpRGlmheU7vc5nFk82Szhq9wVjkfuagOGyk2H
-Akt7xl/Wesc/xzownE3Endr3R7XRyBuZm4p1eCeh0gqLOH1UENL8ZsDDdpbuDXjL
-EMNI6Bs6FAlcqyAGfM4Ib7G9dqqtRyYzWesLKhbf9qfpY7r6TxrOMFHAU1C8AGwq
-XPiF39PjcI6/52xDVD/rRunm/OTtBKji3tTYGxhjj3jtNQGnnhZIWpZyG5kMTGL9
-iT7EysJUQOIjd4+B2KDhOmospHhaPjYCy2WJ0pb3atKm153zFZ8=
-=wxXS
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0XRkkACgkQFA3kzBSg
+KbZx5g/8CGOGtRt4YTUtLzjxXcmN4Us0S21MoncppAOLwlaMU8+SNtQXihuxH/4A
+dAnqZKUl5GP+GJW2ymCPIrTEdWm7E+poJg+QChEJTzBZvguIIxT8NdTwfyvVHchF
+gOL7U93YOi1/VTtfYwW3gj+zJtQiPdhFNHDlKkD5zkVrKApTqoXs3Fb5tkoUOwZv
+3QBBauJYXlT19KHLrR93Zi00pRecfJj7ZsWf3O2BtkWPg7RSXSr77LnsohlF9hsS
+FsH/j2PcLtlZwhG5cF3DIY346WzvanQIwHGFo7W9OVvkPFw+/JsG7J4v5KP0/8Es
+VR9qd88xtnOWtxAvvWCsWIN37xOEn4IiFLAocgQUSK88dZfHlUSbZaXLOBqUUOwF
+V4xfFJtQufn6Z24H5puOqEGcZCWeW7l6apJz1EJqPLO9Y4zy1WsNk3K9vHzbBTYg
+j1aCQwuDV9jVSb4V5RXYScizr2Eux6cKkvO4SiDSqE9tMK7OQ7UxlGE3LpXOdsdR
+U3jpnOd+/M/DosteyLXulE0Ff2UwpBcoLfKldYZ2rfaWvtFNfio8M0Bt0cslV194
+rrcJ56pVgmGx8g651yRRnorHhKxyr0uL/TJfozMtj4G7DjnSC6O3Of/ObEJIiVLT
+jACpwbyGUytgGJtq0rFiFUwRWZmUvEVVvB3IlWGCaWQ2xMYDLi4=
+=GcxW
 -----END PGP SIGNATURE-----
 
---mxv5cy4qt+RJ9ypb--
+--+xNpyl7Qekk2NvDX--
