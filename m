@@ -2,90 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D1E60BC0
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2019 21:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A8C60D50
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2019 23:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725884AbfGETVb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 5 Jul 2019 15:21:31 -0400
-Received: from sauhun.de ([88.99.104.3]:53992 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725778AbfGETVb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 5 Jul 2019 15:21:31 -0400
-Received: from localhost (p54B334DF.dip0.t-ipconnect.de [84.179.52.223])
-        by pokefinder.org (Postfix) with ESMTPSA id 2C5D62C0398;
-        Fri,  5 Jul 2019 21:21:30 +0200 (CEST)
-Date:   Fri, 5 Jul 2019 21:21:29 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for 5.2
-Message-ID: <20190705192126.GA13751@kunai>
+        id S1728101AbfGEVtj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 5 Jul 2019 17:49:39 -0400
+Received: from out12.masterobox.work ([178.156.202.12]:42704 "EHLO
+        slot0.mathewsons.ga" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1725882AbfGEVtj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 5 Jul 2019 17:49:39 -0400
+X-Greylist: delayed 623 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Jul 2019 17:49:37 EDT
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=mathewsons.ga;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=purchase@mathewsons.ga;
+ bh=onxYcir3NvpNjk2I/gjm/O+ljxo=;
+ b=AE9arMlCzZJNmc4rIX9JPlqg5GudcOZhxGFP96qBi7OYarw/TTUR+yJq079qN0oQXxCBORSHH6At
+   n4rNCNMiqAFyJKK0fw6sBXLWjI8EUGh+jXonu9kd5g5Mb+z1BzzGJv9V29ggTRrCxw7VSaYSkZjf
+   aNt6/08CyMofxzeEperuUPSAxbUPNdqXhj/75KO/nuanhazYK+zyG3qr3giEtj+y54fZknUdY7Fj
+   aMZ9+Nl8/+UhNiIvhWRBYt4Y+soWI38qNuw9mBfnECet0XhVHIcckZqdDf9fXcfE85pI+CtgUj42
+   hJIziUW7xG19s4zVom31dG+QTxUvNwQQHJuOjA==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=mathewsons.ga;
+ b=JvwqzllsHLr3+H6pNhKA4BSRjiRzvEUI6RayMAzsrRFE6158+WyKZL851Z7knPtVfFgq+eF4tKJh
+   Mwr1z8xEB3Re60o6LyUc4pxegZwPknW2EDMirRgA2NREH0SNWhW4/pmjxMbYtsSQ35UunEd1qY8i
+   YadwMr2q/xi2KUZsWAamTM2S5gwY8wvRXYQomuuTc5Lc0KfSgS3x78GW0l2IV+rLzkQAsIDKs7Ch
+   NN9C018sREfICb6xsxRIJzidTg7jF1P3qcvYY69JDQiS6QbH9koNP5uDeJOiPDzXkEB+w0Nz0dqm
+   FI1g9u7qDbya8AzaXZEu74zXTyu8SYsoN2257w==;
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="envbJBWh7q8WU6mo"
-Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Quotes needed For July Shipments
+To:     Recipients <purchase@mathewsons.ga>
+From:   "Sales -Jpexcc." <purchase@mathewsons.ga>
+Date:   Sat, 06 Jul 2019 00:39:05 +0300
+Reply-To: jpexcc@aol.com
+Message-ID: <0.0.4D.12D.1D53379E0115B52.0@slot0.mathewsons.ga>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hello dear,
+ =
 
---envbJBWh7q8WU6mo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+We are in the market for your products after meeting at your stand during l=
+ast expo.
+ =
 
-Linus,
+Please kindly send us your latest catalog and price list so as to start a n=
+ew project/order as promised during the exhibition. =
 
-I2C has a MAINTAINERS update which will be benfitial for developers, so
-let's add it right away.
+ =
 
-Please pull.
+I would appreciate your response about the above details required so we can=
+ revert back to you asap.
+ =
 
-Thanks,
+Kind regards
+ =
 
-   Wolfram
-
-
-The following changes since commit 6fbc7275c7a9ba97877050335f290341a1fd8dbf:
-
-  Linux 5.2-rc7 (2019-06-30 11:25:36 +0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-
-for you to fetch changes up to f3a3ea28edd9a17588fede4ff53bc02d986cf4d1:
-
-  i2c: tegra: Add Dmitry as a reviewer (2019-07-05 20:46:56 +0200)
-
-----------------------------------------------------------------
-Dmitry Osipenko (1):
-      i2c: tegra: Add Dmitry as a reviewer
-
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
---envbJBWh7q8WU6mo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0fozEACgkQFA3kzBSg
-KbbvtxAAtDtIFBQq4LzR8NsNxLg1RYtW/63y/WUMrikqCqG2DoUApdTy1IrOPrXJ
-jSCeJOHNh2KVDLYRbIu6Ry2MdJNsvQvgez1QBgDPgkPV3byLQoYSLbGzwMQ8dBsX
-QbmAEF+8jzuxF2jq4fjF1tHZUfZJssuBaeQ3Uj1ayDW/M8VuM3jGsdSISB16KVWN
-KpotLElxS17Ddubo+qb1zyED7qxqZPTGhQsyaNKw8it/5Vl7jvUBCgvfQyZSvjaC
-osMkgLYbSMsJvSUV/eWHbs6q8NDK9XD1dwSIwg+tkOIz7ZKxtTHecHJz7ilhgJWW
-mzhYMyp7mMPeD9dTQOntGR83qfj7hJjLibcA0ybMMAPAlOrTuOvj6YHmP/tkIJBj
-4nwhaMmPQKKL1BhNd430tFMMWLOIUIEMtwshkpqSJ+KthrU0vSyGmdSB1h6TKWsk
-Tf0r8uwaQHuSTjSYBtMkB8aa+Mrw6swsArfazCr+E6/pO497hF0TsyoXKvacNX/Q
-Th+xwO5MdaWekOyTfufNGdhJXMmfTWj6LBH4c0l2ZCoapm3RO7Wx4maFPTXmKSC5
-+DGIUi0BJ2tIClcura0zLLYql5NphILON7rfCy09AhAOOajo3fPre36qLNvudy1D
-GWsBkCQVfP2Gyekbfa3bBeqWKc5aRL62uSlebIZcORWi2Px7p6E=
-=dvvr
------END PGP SIGNATURE-----
-
---envbJBWh7q8WU6mo--
+Rhema Zoeh
