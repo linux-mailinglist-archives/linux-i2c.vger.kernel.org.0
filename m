@@ -2,103 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEDC60B19
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2019 19:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7C360B64
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2019 20:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727879AbfGERb7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 5 Jul 2019 13:31:59 -0400
-Received: from mail1.bemta26.messagelabs.com ([85.158.142.117]:52234 "EHLO
-        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727055AbfGERb7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 5 Jul 2019 13:31:59 -0400
-Received: from [85.158.142.193] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-6.bemta.az-b.eu-central-1.aws.symcld.net id C0/A7-10235-B898F1D5; Fri, 05 Jul 2019 17:31:55 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGIsWRWlGSWpSXmKPExsUyo1hfQre7Uz7
-  W4MpjKYu/k46xW3yZe4rFonnxejaLjr9fGB1YPH7/msTo8f5GK7vH/rlr2D0+b5ILYIlizcxL
-  yq9IYM24O2E+c8EDroqJm96xNDBO5uxi5OIQEljDKHFlwUamLkYODjYBXYmuO6ZdjJwcIgLyE
-  hMWtbKB1DALbACqubyCHSQhLOAlsfLIDHaQehYBFYkj04NAwrwCDhL7Pn5jBbElBOQkbp7rZI
-  aIC0qcnPmEBcRmFpCQOPjiBTNIq5CArMTRS7EQ5QoSZ7dMZJzAyDMLSccsJB0LGJlWMVokFWW
-  mZ5TkJmbm6BoaGOgaGhrrmumaGOklVukm6aWW6ian5pUUJQIl9RLLi/WKK3OTc1L08lJLNjEC
-  gy+lkE1rB+PCWW/0DjFKcjApifKGpMrHCvEl5adUZiQWZ8QXleakFh9ilOHgUJLgfdsOlBMsS
-  k1PrUjLzAFGAkxagoNHSYRXqgMozVtckJhbnJkOkTrFqCglznsQpE8AJJFRmgfXBou+S4yyUs
-  K8jAwMDEI8BalFuZklqPKvGMU5GJWEeUtApvBk5pXATX8FtJgJaPHMFDmQxSWJCCmpBqa4hiT
-  P6ULsC4PCNYv5zMSfPHD9cmD2jO4lIcst79xyqz9mt4XLTG2JwJJvwWuuu3PtyVjuLi2r1rvR
-  KHir8udGpfsRPYqRL9U/67MJe9a+n7tJKvTwkoCJnx/zr+yQ6jZnfit8dzn3LWU9eaGdzKaik
-  q6OnQKiG4tu8ydqKV+TeiJw/UxpUNKJmDy1218Xtvc+vnpH99fG3Ursj34LKFTx3Ztw976W0P
-  Rv9QIsa4p9751lSY0NXCK36OLzpqVqvtOn3rllYn7kLs+7XUfkjSdnmXxSf/TMa5v5++dRkkv
-  ecNaulfNnSd8+sf/qVIWDn9ZIW702KlS5lHKBK1Z1r1Ok/eQ33hU+Wx2XKoY/eq3EUpyRaKjF
-  XFScCADueWXwOQMAAA==
-X-Env-Sender: cst@phaseone.com
-X-Msg-Ref: server-28.tower-238.messagelabs.com!1562347915!582328!1
-X-Originating-IP: [152.115.47.24]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.43.9; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 13423 invoked from network); 5 Jul 2019 17:31:55 -0000
-Received: from unknown (HELO Exchange3.phaseone.com) (152.115.47.24)
-  by server-28.tower-238.messagelabs.com with ECDHE-RSA-AES256-SHA384 encrypted SMTP; 5 Jul 2019 17:31:55 -0000
-Received: from cstu16.phaseone.com (172.16.2.207) by Exchange3.phaseone.com
- (172.16.1.184) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 5 Jul
- 2019 19:31:53 +0200
-From:   "Claus H. Stovgaard" <cst@phaseone.com>
-To:     <linux-i2c@vger.kernel.org>
-CC:     "Claus H. Stovgaard" <cst@phaseone.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Subject: [PATCH] eeprom: at24: Limit gpio calls to when wp_gpio is defined
-Date:   Fri, 5 Jul 2019 19:24:19 +0200
-Message-ID: <1562347885-58349-1-git-send-email-cst@phaseone.com>
-X-Mailer: git-send-email 2.7.4
+        id S1727090AbfGES2a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 5 Jul 2019 14:28:30 -0400
+Received: from sauhun.de ([88.99.104.3]:53352 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726005AbfGES2a (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 5 Jul 2019 14:28:30 -0400
+Received: from localhost (p54B334DF.dip0.t-ipconnect.de [84.179.52.223])
+        by pokefinder.org (Postfix) with ESMTPSA id 7B41A2C0398;
+        Fri,  5 Jul 2019 20:28:27 +0200 (CEST)
+Date:   Fri, 5 Jul 2019 20:28:27 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     Stefan Roese <sr@denx.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH -next] i2c: mt7621: Fix platform_no_drv_owner.cocci
+ warnings
+Message-ID: <20190705182826.GA4717@kunai>
+References: <20190629024421.177153-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.2.207]
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0OAP2g/MAC+5xKAE"
+Content-Disposition: inline
+In-Reply-To: <20190629024421.177153-1-yuehaibing@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Calling gpiod_set_value_cansleep with no GPIO driver associated result in
-the WARN_ON error from consumer.h. So change to only call
-gpiod_set_value_cansleep when wp_gpio is defined.
 
-Signed-off-by: Claus H. Stovgaard <cst@phaseone.com>
----
- drivers/misc/eeprom/at24.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+--0OAP2g/MAC+5xKAE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 35bf247..d17e982 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -458,12 +458,14 @@ static int at24_write(void *priv, unsigned int off, void *val, size_t count)
- 	 * from this host, but not from other I2C masters.
- 	 */
- 	mutex_lock(&at24->lock);
--	gpiod_set_value_cansleep(at24->wp_gpio, 0);
-+	if (at24->wp_gpio)
-+		gpiod_set_value_cansleep(at24->wp_gpio, 0);
- 
- 	while (count) {
- 		ret = at24_regmap_write(at24, buf, off, count);
- 		if (ret < 0) {
--			gpiod_set_value_cansleep(at24->wp_gpio, 1);
-+			if (at24->wp_gpio)
-+				gpiod_set_value_cansleep(at24->wp_gpio, 1);
- 			mutex_unlock(&at24->lock);
- 			pm_runtime_put(dev);
- 			return ret;
-@@ -473,7 +475,8 @@ static int at24_write(void *priv, unsigned int off, void *val, size_t count)
- 		count -= ret;
- 	}
- 
--	gpiod_set_value_cansleep(at24->wp_gpio, 1);
-+	if (at24->wp_gpio)
-+		gpiod_set_value_cansleep(at24->wp_gpio, 1);
- 	mutex_unlock(&at24->lock);
- 
- 	pm_runtime_put(dev);
--- 
-2.7.4
+On Sat, Jun 29, 2019 at 02:44:21AM +0000, YueHaibing wrote:
+> Remove .owner field if calls are used which set it automatically
+> Generated by: scripts/coccinelle/api/platform_no_drv_owner.cocci
+>=20
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
+Stefan?
+
+
+--0OAP2g/MAC+5xKAE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0flr8ACgkQFA3kzBSg
+KbbmGQ/8DtsJ1Pi75zlktzq6cz/ZsmCZgkI5B/ChnJzExHCwj+tVQfFwd3j1euEa
+vlzXpx26dy5Cxf4Mxa2gq90aA0I+ZDPAKG+RdxX83EycyzLBakuapYZVisSCMEYr
+RgB+Fe/TKnhKIeRNz5sFjk99CcLjC0cFXDdjed+v5CdY+ieUuJgEbR1g+o+umwA3
+zbq5i2u4qKv0Ih7HCzF8Pq5//7JOdQkq0KFkUbjweGR0Xu/ChzvmCWg87ksdLHwe
+sff8QM48E1e5NhFPPKk/T6WTu13Td4nxsaYorxtc5HHrjf5DoWv9VxS4MiMWuElh
+tjF/1D7ZHP+dKtKM15jq6pJWLNLyvgrFoMg+BCmfxTiv+wIJSmOQe0fd5jHGfwxj
+0askgPzwL4ouq33pRiEUHmp0GzBpwr8b9EwO/5Rha5WaO22fil9RL+UhoSHJpC7P
+58DWeus73nA9UULf9ONo/V/qaVeDWeQ3iF9S0oJaBzNv4UUuEW37yui7xjH5Haaa
+01izcn5sZyZRzhVzW9FQ4HexpqM8njSBIe5EI5g76LdUH/bBvYvHsS4o4v8N88bj
+SCalJMhr5+1FahooeCvhCjlu7mK+KPFl3w0xbyYifIk5UxRUhh+cvyshpsHF0yT7
+jPr++EfMGPF2hV6XrSbtrbrb1V4meWPe9UQmoi3r2zb/5kJYJz4=
+=rson
+-----END PGP SIGNATURE-----
+
+--0OAP2g/MAC+5xKAE--
