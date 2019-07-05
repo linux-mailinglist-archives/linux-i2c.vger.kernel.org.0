@@ -2,88 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 267FD5FC0A
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2019 18:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CDF604F3
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2019 13:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbfGDQno (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 4 Jul 2019 12:43:44 -0400
-Received: from ns.iliad.fr ([212.27.33.1]:40418 "EHLO ns.iliad.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725887AbfGDQno (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 4 Jul 2019 12:43:44 -0400
-Received: from ns.iliad.fr (localhost [127.0.0.1])
-        by ns.iliad.fr (Postfix) with ESMTP id 1CA612077F;
-        Thu,  4 Jul 2019 18:43:42 +0200 (CEST)
-Received: from [192.168.108.49] (freebox.vlq16.iliad.fr [213.36.7.13])
-        by ns.iliad.fr (Postfix) with ESMTP id A205820701;
-        Thu,  4 Jul 2019 18:43:39 +0200 (CEST)
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Simon Horman <horms+renesas@verge.net.au>,
-        Peter Korsgaard <peter.korsgaard@barco.com>
-Cc:     I2C <linux-i2c@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
-Subject: Generic get_something from an i2c_client
-Message-ID: <07aa1229-2b67-e191-5740-70e6ed2a8ce3@free.fr>
-Date:   Thu, 4 Jul 2019 18:43:39 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727158AbfGELBM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 5 Jul 2019 07:01:12 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:51568 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726921AbfGELBL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 5 Jul 2019 07:01:11 -0400
+Received: from relay12.mail.gandi.net (unknown [217.70.178.232])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id BFF673A7062;
+        Fri,  5 Jul 2019 10:34:21 +0000 (UTC)
+Received: from localhost (alyon-656-1-672-152.w92-137.abo.wanadoo.fr [92.137.69.152])
+        (Authenticated sender: gregory.clement@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 35AFF20000C;
+        Fri,  5 Jul 2019 10:34:13 +0000 (UTC)
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Maxime Ripard <maxime.ripard@bootlin.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Subject: Re: [PATCH 1/2] dt-bindings: i2c: mv64xxx: Fix the example compatible
+In-Reply-To: <20190703095338.11266-1-maxime.ripard@bootlin.com>
+References: <20190703095338.11266-1-maxime.ripard@bootlin.com>
+Date:   Fri, 05 Jul 2019 12:34:12 +0200
+Message-ID: <87k1cwg47v.fsf@FE-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Thu Jul  4 18:43:42 2019 +0200 (CEST)
+Content-Type: text/plain
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello,
+Maxime Ripard <maxime.ripard@bootlin.com> writes:
 
-In media drivers, TS drivers typically hard-code their front-end (demod and tuner)
-init by loading the modules themselves.
+> One example has a compatible that isn't a valid combination according to
+> the binding, and now that the examples are validated as well, this
+> generates a warning.
+>
+> Let's fix this.
+>
+> Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
 
-I feel this is not a good solution for SoCs, where the TS HW might be on the SoC,
-and the front-end be on the board. So we may have different front-ends for
-different boards, and the driver would have to hard-code all of them.
 
-Am I making sense?
+Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-Here's an example of what I mean:
-https://elixir.bootlin.com/linux/latest/source/drivers/media/usb/dvb-usb-v2/dvbsky.c#L466
+Thanks,
 
-I've been working on defining the demod in DT, and having a phandle
-to the demod in the TSIF node.
+Gregory
 
-I've got everything working like I had hoped, but I have many ugly hacks.
+> ---
+>  Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+> index 9a5654ef5670..001f2b7abad0 100644
+> --- a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+> @@ -105,7 +105,7 @@ examples:
+>  
+>    - |
+>      i2c@11000 {
+> -        compatible = "marvell,mv78230-i2c", "marvell,mv64xxx-i2c";
+> +        compatible = "marvell,mv78230-i2c";
+>          reg = <0x11000 0x100>;
+>          interrupts = <29>;
+>          clock-frequency = <100000>;
+> -- 
+> 2.21.0
+>
 
-The TSIF driver needs to register the frontend, which is created in
-the demod driver.
-
-So I have:
-
-	struct device_node *toto = of_parse_phandle(np, "demod", 0);
-	if (!toto) panic("of_parse_phandle");
-	struct i2c_client *demod = of_find_i2c_device_by_node(toto);
-	if (!demod) panic("of_find_i2c_device_by_node");
-	printk("\tdemod=%px\n", demod);
-	struct dvb_frontend *get_fe(struct i2c_client *client);
-	my_dvb_frontend = get_fe(demod);
-
-The problem is get_fe(). It needs to be a call-back, so that every
-demod can implement his own version. But only a few i2c_client's
-have a dvb_frontend to return.
-
-Could we have a generic void *get_something() callback in struct i2c_client?
-(Seems like the wrong place)
-
-How can I solve this conundrum?
-
-Maybe look above i2c, in struct device?
-
-Regards.
-
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
