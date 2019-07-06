@@ -2,73 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31924611C8
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2019 17:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D20661262
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2019 19:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726672AbfGFPE5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 6 Jul 2019 11:04:57 -0400
-Received: from sauhun.de ([88.99.104.3]:44276 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726526AbfGFPE5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 6 Jul 2019 11:04:57 -0400
-Received: from localhost (p5486CF0A.dip0.t-ipconnect.de [84.134.207.10])
-        by pokefinder.org (Postfix) with ESMTPSA id ADFC22C376D;
-        Sat,  6 Jul 2019 17:04:55 +0200 (CEST)
-Date:   Sat, 6 Jul 2019 17:04:55 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     Stefan Roese <sr@denx.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH -next] i2c: mt7621: Fix platform_no_drv_owner.cocci
- warnings
-Message-ID: <20190706150455.GB7429@kunai>
-References: <20190629024421.177153-1-yuehaibing@huawei.com>
+        id S1727050AbfGFReH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 6 Jul 2019 13:34:07 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38699 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727020AbfGFReH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 6 Jul 2019 13:34:07 -0400
+Received: by mail-ot1-f67.google.com with SMTP id d17so12053591oth.5
+        for <linux-i2c@vger.kernel.org>; Sat, 06 Jul 2019 10:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=6rSokrjV72EOKICMeiM4aeHXTuigt5/+m6ro2k3F+44=;
+        b=JTIoTq3DRAAWkLD35oXvk1/GTKYI/b/+Qo3TR1z1vzGMfWzv9aCQPw1xpInrZonynQ
+         YWZkTPZ/o4lH0zx0sjEYuHB6rrKqrlZ+XmXg69bqlCY7vPMsikQmtkojnEiS7SaZtYUh
+         XrUgQjpK5wKowIjs4aNczeJnC+N1mSVO+uZo3ExsLwsxEPkB8LWm9eJu3S1OQrAuqm2p
+         jnWPtmfT26c3P/F5UF7UFbRaiTw5HiI+JAkqUiX4hcXVM11FD7AYXmAHxrflDtC1nN8h
+         2nAwt7Eg4GZs7Vg+HGn9bThPl+42CQQHE3vilO6p0mAmkUioIV8sGqrkFn8UG3CW23ed
+         mqyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6rSokrjV72EOKICMeiM4aeHXTuigt5/+m6ro2k3F+44=;
+        b=m59elNos0gbPdCecorvXbCm6pkFlLLQjhlFwosrDG2o40vqGZcI68ZXYhsjCxgQa4s
+         Z3Jh+O0Xt9Gd2hZ/bFMtFsxr99cBwjSyM87IoyLl9JVfDw6ccSZ3mcpTRkPHsN2qhdyZ
+         fBhTBn0bUz6ckNzga1LxZvGwxOMseJx4ELSliAT10OLfLU5AKZzM1xgnPesW4ofiDoNO
+         yy4cyjl0r5qO9Z6pLAR4wpIukbbuF5J1iibdBh5onIAF30ApbRgitlajngQFb5qZP0B4
+         TdORG4HdwPMwdlNOufBb6qI/9ZhyRqka6b/4dLkVZ7piS6pge5xgKMaA5XTVtW/BTVzx
+         Orcg==
+X-Gm-Message-State: APjAAAXztDPUAz/jAFHLRnhtJK0kM5kckZJ0o6XeViWoZgtPKFaHa52L
+        MnDuZKc6BQccQ+PMxp2ffM2n1O46afuCW3Sa4sqxB1U5PPo=
+X-Google-Smtp-Source: APXvYqxRSfsrnoYmJkITtMpnb36V/sa7V5iARcGpdgnivBqIomF5WicbrRlh0B319QyJPiuCGwR1tL8/q3qUv2ZOlQ8=
+X-Received: by 2002:a9d:7352:: with SMTP id l18mr7776517otk.292.1562434446220;
+ Sat, 06 Jul 2019 10:34:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QKdGvSO+nmPlgiQ/"
-Content-Disposition: inline
-In-Reply-To: <20190629024421.177153-1-yuehaibing@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1562347885-58349-1-git-send-email-cst@phaseone.com>
+In-Reply-To: <1562347885-58349-1-git-send-email-cst@phaseone.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Sat, 6 Jul 2019 19:33:55 +0200
+Message-ID: <CAMpxmJX3x5kOi63+cs5JFHp2Eu5W+0=zKBURcde7pZ5K_2=3nA@mail.gmail.com>
+Subject: Re: [PATCH] eeprom: at24: Limit gpio calls to when wp_gpio is defined
+To:     "Claus H. Stovgaard" <cst@phaseone.com>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+pt., 5 lip 2019 o 19:31 Claus H. Stovgaard <cst@phaseone.com> napisa=C5=82(=
+a):
+>
+> Calling gpiod_set_value_cansleep with no GPIO driver associated result in
+> the WARN_ON error from consumer.h. So change to only call
+> gpiod_set_value_cansleep when wp_gpio is defined.
+>
+> Signed-off-by: Claus H. Stovgaard <cst@phaseone.com>
+> ---
+>  drivers/misc/eeprom/at24.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index 35bf247..d17e982 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -458,12 +458,14 @@ static int at24_write(void *priv, unsigned int off,=
+ void *val, size_t count)
+>          * from this host, but not from other I2C masters.
+>          */
+>         mutex_lock(&at24->lock);
+> -       gpiod_set_value_cansleep(at24->wp_gpio, 0);
+> +       if (at24->wp_gpio)
+> +               gpiod_set_value_cansleep(at24->wp_gpio, 0);
+>
+>         while (count) {
+>                 ret =3D at24_regmap_write(at24, buf, off, count);
+>                 if (ret < 0) {
+> -                       gpiod_set_value_cansleep(at24->wp_gpio, 1);
+> +                       if (at24->wp_gpio)
+> +                               gpiod_set_value_cansleep(at24->wp_gpio, 1=
+);
+>                         mutex_unlock(&at24->lock);
+>                         pm_runtime_put(dev);
+>                         return ret;
+> @@ -473,7 +475,8 @@ static int at24_write(void *priv, unsigned int off, v=
+oid *val, size_t count)
+>                 count -=3D ret;
+>         }
+>
+> -       gpiod_set_value_cansleep(at24->wp_gpio, 1);
+> +       if (at24->wp_gpio)
+> +               gpiod_set_value_cansleep(at24->wp_gpio, 1);
+>         mutex_unlock(&at24->lock);
+>
+>         pm_runtime_put(dev);
+> --
+> 2.7.4
+>
 
---QKdGvSO+nmPlgiQ/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Claus,
 
-On Sat, Jun 29, 2019 at 02:44:21AM +0000, YueHaibing wrote:
-> Remove .owner field if calls are used which set it automatically
-> Generated by: scripts/coccinelle/api/platform_no_drv_owner.cocci
->=20
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+gpiod_set_value_cansleep() doesn't complain if the passed descriptor
+is NULL - it just quietly returns. Could you give me some more info on
+how you trigger this warning?
 
-Applied to for-next, thanks!
-
-
---QKdGvSO+nmPlgiQ/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0guJcACgkQFA3kzBSg
-KbZvhRAAo4+3YhI39rG4rBWsbdNyRoz5yDVMxqJcCWGiGnwMuR6RATNCRLJGpdP6
-MJUjKMsYiRGVgFM/DeUxxM0/EwxYu5bYVdcD8pVz/rb5Cz89bjlGQgKeQ1qE/f1x
-p8tneSHQmebUv9RVyC3ip+/cyI2JdmRdZF/q2BhRTgXJKgKbzUcBgO5o8j+fdGIz
-GTG9t6WNui6q4cYgnhkD5C9Rsp+e13I1EP14h5AhPVMlvM06xy5fjyzw2OMd+khR
-bK8mOlMqXc391eD7Sslakz4w3mu8zjLT9jedSWyp/621EV5RSyrstFZZaG9StWxD
-mNY0amrWqg3jZxZElj8+CqkQnJt+n8P9jbtI8tKe2m5AmwoKjRB/QUrj8QDK2DsW
-QmGcHumPvGJVBFSP03MB4M9VJ9pp3rwuf5Mm7pQdK4jgdLgNs71G1FYlBzoW7JAP
-Qptvwkt9A4BE2gpWokgtu7O3nb12LfZbe3ot86yRmKQlWlxZGoG/BVuyMUyD/HsE
-42KxXykKAokiovUt049RIQyMLB4IZBLGBuuuwEcaTiUfkDVb1/h8fCiVQX+S6C5v
-BnePbGuf9M0zNPGeBS1NYn0+CkOO4mkR0aiS+2q0KQjuypmdeHbnWXrjl4MfVk7k
-WpMHEHUFGvHQ2LNQsqxUAq4VUtGapi0d0RsNPX4cL+4HhWDqyAo=
-=5oAP
------END PGP SIGNATURE-----
-
---QKdGvSO+nmPlgiQ/--
+Bart
