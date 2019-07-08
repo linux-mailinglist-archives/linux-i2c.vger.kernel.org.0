@@ -2,137 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9BB61BAE
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2019 10:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAAF961BF6
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2019 10:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728883AbfGHI0o (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Jul 2019 04:26:44 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:46372 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725807AbfGHI0o (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Jul 2019 04:26:44 -0400
-Received: by mail-ot1-f67.google.com with SMTP id z23so15302313ote.13
-        for <linux-i2c@vger.kernel.org>; Mon, 08 Jul 2019 01:26:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uoItMK1A2qDechzKVKSEqDhxI2F4iG1fp09oUvQ+1pE=;
-        b=cKorSYt48ybN37VDp8EzCbQuYGVXMwY01AGY95OC5E2pgRipUW0Nai/KQnfl+NH90s
-         C6MA5awv0QdWxClglYGEJ3/6UvtZS39A8aSESzAfJdtaOfGHZxGNCeiPb/gkhaHYKtxc
-         CWbNW+r0G0Lq1K8zc9I88r81xKbPg7K+D5X9I616pGqmQ0BL1fI8XK7zPeALOnEjTQTE
-         a0tV5r+T2HaaMENkEAOH5T594NV6SoIpyX4nrxT7OpahHwe76wd8SMS2q2RBang9xjs7
-         TwCmMJ10ODKKe/BXmtXC0FInOuWTRK7uDrcmRHFfxyDMizwqqTi/G9NNabvrLD9iuo/A
-         9VbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uoItMK1A2qDechzKVKSEqDhxI2F4iG1fp09oUvQ+1pE=;
-        b=GCmVhndl2a/wq2ZWq3JqgrXOi3RVNZE4NT2bVIPtWDUsUW52ezA/nD3ZnG3lmyI8TA
-         ird+9mzThSnSVs6ll6qBMcKugMdJA81hHE2HnR4oWJbN05qL5cSv+74jlt/chf1tgQqC
-         pZboWifhv2skRRfPUNp89CHeM6eiB5+P8FQObTEHrZQMmhDamGjSKLvuXwVewjbfEY39
-         WpoECKpCPi3L+jt8QfGlEideNriOMkSaojiXHUQDiQGldAaq/eyruUFOnXKR+xfZOdX0
-         7RH6FZbVghaNit+cto7lsI2BrLR5rksQJ+Xj1/sSNhk/khi21YPEnCOTqC4be44LPakp
-         WUwA==
-X-Gm-Message-State: APjAAAVgiKuzGID2QPCVEZF8Mx91UvT1j7kk9qJvNxdw+o0L5AepDFwr
-        mOPK8XyVn0Pnv151Z/YLZiCVKeZ72OOoi0tvGAWGbg9F
-X-Google-Smtp-Source: APXvYqx2NcHNdDVQv1rKawvPTCZEf6PnV+duEYljtrmwmQQ49v5mwLZo9amCQSbmx5vuwDWObDiqZ/xiCa8oIDDKcew=
-X-Received: by 2002:a9d:7352:: with SMTP id l18mr13860683otk.292.1562574403803;
- Mon, 08 Jul 2019 01:26:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <1562347885-58349-1-git-send-email-cst@phaseone.com>
- <CAMpxmJX3x5kOi63+cs5JFHp2Eu5W+0=zKBURcde7pZ5K_2=3nA@mail.gmail.com> <4359efb29daa2a6922e651bba90908794190de07.camel@phaseone.com>
-In-Reply-To: <4359efb29daa2a6922e651bba90908794190de07.camel@phaseone.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Mon, 8 Jul 2019 10:26:31 +0200
-Message-ID: <CAMpxmJVX=x5ed9yTyczEqiaEp8nfS1VWZkMaBwToqMX9nMu80g@mail.gmail.com>
-Subject: Re: [PATCH] eeprom: at24: Limit gpio calls to when wp_gpio is defined
-To:     "Claus H. Stovgaard" <cst@phaseone.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        id S1727914AbfGHIxy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Jul 2019 04:53:54 -0400
+Received: from mail1.bemta26.messagelabs.com ([85.158.142.1]:62516 "EHLO
+        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727636AbfGHIxx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Jul 2019 04:53:53 -0400
+Received: from [85.158.142.103] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-1.bemta.az-a.eu-central-1.aws.symcld.net id 6E/A7-10067-E94032D5; Mon, 08 Jul 2019 08:53:50 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLIsWRWlGSWpSXmKPExsUyo1hfUncei3K
+  swZfPHBZ/Jx1jt/gy9xSLRfPi9WwWU/4sZ7Lo+PuF0YHV4/evSYwe72+0snvcubaHzWP/3DXs
+  Hp83yQWwRrFm5iXlVySwZhz8FFZwir1i38m/zA2M31m7GLk4hATWMEp8eruHpYuRk4NXwFhi5
+  rNPTCC2sIC/xK/+b8xdjBwcbAK6El13TEHCIkAlTXvbGEF6mQWWMkpMmjgdrJdFQEXi5romRp
+  B6ToFAib1tWRDz+5gkjh+aBDaTWUBTonX7b3YQW0JAQ2LDzWNMEHsFJU7OfMICUSMv0bx1Nth
+  eIQFZiaOXYiHKFSTObpnICGEnSZzru8I2gVFgFpKps5BMmoVk0gJG5lWMlklFmekZJbmJmTm6
+  hgYGuoaGxrpgUi+xSjdRL7VUNzk1r6QoESirl1herFdcmZuck6KXl1qyiREYCymFDIU7GD/Me
+  qN3iFGSg0lJlDckVT5WiC8pP6UyI7E4I76oNCe1+BCjDAeHkgRvHjC6hASLUtNTK9Iyc4BxCZ
+  OW4OBREuGtZAZK8xYXJOYWZ6ZDpE4xKkqJ8+qCJARAEhmleXBtsFRwiVFWSpiXkYGBQYinILU
+  oN7MEVf4VozgHo5Iw7yuQKTyZeSVw018BLWYCWlwXqQSyuCQRISXVwBR0KcKzwVVn2Yu803tV
+  hAwVDK68tDj4cvo9pv5jh416bm7cG7/QKWlNwzHJuqm1zTbNXz1/zin2bnjw8YjqvYmtmjzLM
+  hRve2/9ubdxd6mP93/pCI3ZX/17uo9uZZeJN7VZ7sUm3Rf/6/ekKVPW168Oz360IWz39n/LJn
+  TcqT8WMi3eR5I/qnbhHIOK+ozOPo9Yu46AY7fiZs3rlLBezFZ659LKxzvKtvA8dai3vB96bem
+  9zEPVT3S/zGEp0Qp751WmYZH599eNossZOpVHy1b/Pf7rwLqeD1vjPv7wvZPXnKR+bu6bsw7z
+  VGe947nvKskmqH/qYMOc7z86HxvEsuZKJbvr5HerJjJdS6vy/6/EUpyRaKjFXFScCAAH0QhOg
+  AMAAA==
+X-Env-Sender: cst@phaseone.com
+X-Msg-Ref: server-8.tower-228.messagelabs.com!1562576029!154416!1
+X-Originating-IP: [152.115.47.25]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.43.9; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 26456 invoked from network); 8 Jul 2019 08:53:50 -0000
+Received: from unknown (HELO Exchange2.phaseone.com) (152.115.47.25)
+  by server-8.tower-228.messagelabs.com with ECDHE-RSA-AES256-SHA384 encrypted SMTP; 8 Jul 2019 08:53:50 -0000
+Received: from cstu16.phaseone.com (172.16.2.207) by Exchange2.phaseone.com
+ (172.16.1.180) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 8 Jul
+ 2019 10:53:49 +0200
+Message-ID: <1562576029.10420.2.camel@phaseone.com>
+Subject: Re: [PATCH] eeprom: at24: Limit gpio calls to when wp_gpio is
+ defined
+From:   "Claus H. Stovgaard" <cst@phaseone.com>
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+CC:     linux-i2c <linux-i2c@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 8 Jul 2019 10:53:49 +0200
+In-Reply-To: <CAMpxmJVX=x5ed9yTyczEqiaEp8nfS1VWZkMaBwToqMX9nMu80g@mail.gmail.com>
+References: <1562347885-58349-1-git-send-email-cst@phaseone.com>
+         <CAMpxmJX3x5kOi63+cs5JFHp2Eu5W+0=zKBURcde7pZ5K_2=3nA@mail.gmail.com>
+         <4359efb29daa2a6922e651bba90908794190de07.camel@phaseone.com>
+         <CAMpxmJVX=x5ed9yTyczEqiaEp8nfS1VWZkMaBwToqMX9nMu80g@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.2.207]
+X-ClientProxiedBy: Exchange3.phaseone.com (172.16.1.184) To
+ Exchange2.phaseone.com (172.16.1.180)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-sob., 6 lip 2019 o 19:57 Claus H. Stovgaard <cst@phaseone.com> napisa=C5=82=
-(a):
->
-> On l=C3=B8r, 2019-07-06 at 19:33 +0200, Bartosz Golaszewski wrote:
-> > Hi Claus,
-> >
-> > gpiod_set_value_cansleep() doesn't complain if the passed descriptor
-> > is NULL - it just quietly returns. Could you give me some more info
-> > on
-> > how you trigger this warning?
-> >
-> > Bart
->
-> Hi Bart
->
-> If you don't have enabled gpiolib, (E.g. CONFIG_GPIOLIB is not set)
-> gpiod_set_value_cansleep ends in /include/linux/gpio/consumer.h with
-> the following code
->
-> ---
-> static inline void gpiod_set_value_cansleep(struct gpio_desc *desc, int
-> value)
-> {
->         /* GPIO can never have been requested */
->         WARN_ON(1);
-> }
-> ---
->
-> So we get warnings like this in the log
->
-> [  148.508317] WARNING: CPU: 0 PID: 1903 at
-> include/linux/gpio/consumer.h:396 at24_write+0x150/0x260
-> [  148.517187] Modules linked in:
-> [  148.520236] CPU: 0 PID: 1903 Comm: DataObjects Tainted:
-> G        W         4.19.0-p1-iq4-05669-g6fe8008-dirty #2
-> [  148.530394] Hardware name: P1 IQ4 (DT)
-> [  148.534129] pstate: 60000005 (nZCv daif -PAN -UAO)
-> [  148.538914] pc : at24_write+0x150/0x260
-> [  148.542741] lr : at24_write+0x11c/0x260
-> [  148.546565] sp : ffffff800d5f3c40
-> [  148.549864] x29: ffffff800d5f3c40 x28: 0000000000000000
-> [  148.555167] x27: 0000000000000001 x26: ffffffc975096304
-> [  148.560470] x25: ffffff8008d46980 x24: ffffffc975293020
-> [  148.565774] x23: 00000000ffff6c15 x22: ffffffc977484498
-> [  148.571077] x21: 00000000000006e2 x20: 0000000000000000
-> [  148.576381] x19: 00000000000006e1 x18: 0000000000000400
-> [  148.581684] x17: 0000000000000000 x16: ffffffc977008300
-> [  148.586988] x15: 0000000000000400 x14: 0000000000000088
-> [  148.592291] x13: 0000000000000000 x12: 0000000000000001
-> [  148.597595] x11: 0000000000000001 x10: 00000000000007f0
-> [  148.602898] x9 : ffffff800d5f37e0 x8 : ffffffc977008b50
-> [  148.608202] x7 : ffffffc97ff76800 x6 : 000000001fbe647a
-> [  148.613505] x5 : 00000000ffff6c0f x4 : ffffffbf211a0d8f
-> [  148.618809] x3 : ffffffbf211a0d90 x2 : ffffff80084e55c4
-> [  148.624113] x1 : 00000000000005dc x0 : 0000000000000001
-> [  148.629417] Call trace:
-> [  148.631852]  at24_write+0x150/0x260
-> [  148.635335]  bin_attr_nvmem_write+0x6c/0xa0
-> [  148.639510]  sysfs_kf_bin_write+0x64/0x80
-> [  148.643510]  kernfs_fop_write+0xcc/0x1e0
-> [  148.647425]  __vfs_write+0x30/0x158
-> [  148.650905]  vfs_write+0xa4/0x1a8
-> [  148.654211]  ksys_write+0x5c/0xc0
-> [  148.657519]  __arm64_sys_write+0x18/0x20
-> [  148.661436]  el0_svc_common+0x84/0xd8
-> [  148.665087]  el0_svc_handler+0x68/0x80
-> [  148.668828]  el0_svc+0x8/0xc
-> [  148.671699] ---[ end trace f3f414c3b5f66f98 ]---
->
+On Mon, 2019-07-08 at 10:26 +0200, Bartosz Golaszewski wrote:
+> sob., 6 lip 2019 o 19:57 Claus H. Stovgaard <cst@phaseone.com>
+> napisał(a):
+> > 
+> > 
+> > On lør, 2019-07-06 at 19:33 +0200, Bartosz Golaszewski wrote:
+> > > 
+> > > Hi Claus,
+> > > 
+> > > gpiod_set_value_cansleep() doesn't complain if the passed
+> > > descriptor
+> > > is NULL - it just quietly returns. Could you give me some more
+> > > info
+> > > on
+> > > how you trigger this warning?
+> > > 
+> > > Bart
+> > Hi Bart
+> > 
+> > If you don't have enabled gpiolib, (E.g. CONFIG_GPIOLIB is not set)
+> > gpiod_set_value_cansleep ends in /include/linux/gpio/consumer.h 
+> > 
+> Cc Linus Walleij
+> 
+> I see. This isn't a problem with at24 but with the GPIO API. I Cc'ed
+> you on a patch I've just sent. Please take a look a possibly test.
+> 
+> Bart
 
-Cc Linus Walleij
+Hi Bart
 
-I see. This isn't a problem with at24 but with the GPIO API. I Cc'ed
-you on a patch I've just sent. Please take a look a possibly test.
+Have just looked at the patch and it look good to me.
+Will test it, and answer on the separate patch mail, but think it will
+work great for me.
 
-Bart
+Claus
