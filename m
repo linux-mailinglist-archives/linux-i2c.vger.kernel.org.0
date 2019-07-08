@@ -2,133 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E57961A8E
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2019 08:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9BB61BAE
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2019 10:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729048AbfGHGSX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 8 Jul 2019 02:18:23 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:60213 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729045AbfGHGSX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Jul 2019 02:18:23 -0400
-Received: from mail-wm1-f70.google.com ([209.85.128.70])
-        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <chia-lin.kao@canonical.com>)
-        id 1hkMyj-0007Kf-Df
-        for linux-i2c@vger.kernel.org; Mon, 08 Jul 2019 06:18:21 +0000
-Received: by mail-wm1-f70.google.com with SMTP id b67so5258897wmd.0
-        for <linux-i2c@vger.kernel.org>; Sun, 07 Jul 2019 23:18:21 -0700 (PDT)
+        id S1728883AbfGHI0o (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Jul 2019 04:26:44 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:46372 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725807AbfGHI0o (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Jul 2019 04:26:44 -0400
+Received: by mail-ot1-f67.google.com with SMTP id z23so15302313ote.13
+        for <linux-i2c@vger.kernel.org>; Mon, 08 Jul 2019 01:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=uoItMK1A2qDechzKVKSEqDhxI2F4iG1fp09oUvQ+1pE=;
+        b=cKorSYt48ybN37VDp8EzCbQuYGVXMwY01AGY95OC5E2pgRipUW0Nai/KQnfl+NH90s
+         C6MA5awv0QdWxClglYGEJ3/6UvtZS39A8aSESzAfJdtaOfGHZxGNCeiPb/gkhaHYKtxc
+         CWbNW+r0G0Lq1K8zc9I88r81xKbPg7K+D5X9I616pGqmQ0BL1fI8XK7zPeALOnEjTQTE
+         a0tV5r+T2HaaMENkEAOH5T594NV6SoIpyX4nrxT7OpahHwe76wd8SMS2q2RBang9xjs7
+         TwCmMJ10ODKKe/BXmtXC0FInOuWTRK7uDrcmRHFfxyDMizwqqTi/G9NNabvrLD9iuo/A
+         9VbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ni/ZsRUHJQeGte3cJaCva9RYqIeypB1jmcG6EYYS4M0=;
-        b=f8rBCEbcjMKMv1fouwRoIQpYGu3pBKMgtsDtf+PClI+fr/Ae30QvEHfveJjuo1xK8+
-         Y45iG941OlDUhkMkr7WumIMQBiINceKjqklDL1qv4x1CrQQFubtceY2yvaVtzJlsikeL
-         g4dCn6566MJ+ZxBuYHD3IowUyIcUl0buEXKo37l2Eb/hrzkfNC9w59Bg+PM7VlSeq3DR
-         lQodAfIaV2ShfAVXZE6ehnv+T+/Vmg2LMk+erYM8IIC0KQFMlvOlQgenlwKHBvuhTaQV
-         7OzlZXjJ8QxGz4/lGXP4vKt/96t6q08B9yqotZr1N5/LT7a8gFtCQ3NucatFP3ngVgX0
-         Kuxg==
-X-Gm-Message-State: APjAAAUz+bWOGPAX5IM6Ko6y2cgD9FiTwyEKEw7ek+qDjWiShkJrxyTA
-        btoH59jwYwAj8rvz2tUNmsiK8w6A/2vojAqf8Nwz3Jebz19XI49+QZDuhlxJXLl1IMTH+CqOhME
-        dE6chdEjF8RIffN/fHb3KnMK7qWsVklD9ESftcqpVSgnB8KmCd5/HJg==
-X-Received: by 2002:adf:ec0f:: with SMTP id x15mr16856898wrn.165.1562566700887;
-        Sun, 07 Jul 2019 23:18:20 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwig7hgNaptLx4qBqsvR/0MyqEqHKYxSDJDbwqswzvIlF/Euk+VlLhQjiYtbYlLVahTH/1T47u6IHnv1+zpsmk=
-X-Received: by 2002:adf:ec0f:: with SMTP id x15mr16856867wrn.165.1562566700631;
- Sun, 07 Jul 2019 23:18:20 -0700 (PDT)
+        bh=uoItMK1A2qDechzKVKSEqDhxI2F4iG1fp09oUvQ+1pE=;
+        b=GCmVhndl2a/wq2ZWq3JqgrXOi3RVNZE4NT2bVIPtWDUsUW52ezA/nD3ZnG3lmyI8TA
+         ird+9mzThSnSVs6ll6qBMcKugMdJA81hHE2HnR4oWJbN05qL5cSv+74jlt/chf1tgQqC
+         pZboWifhv2skRRfPUNp89CHeM6eiB5+P8FQObTEHrZQMmhDamGjSKLvuXwVewjbfEY39
+         WpoECKpCPi3L+jt8QfGlEideNriOMkSaojiXHUQDiQGldAaq/eyruUFOnXKR+xfZOdX0
+         7RH6FZbVghaNit+cto7lsI2BrLR5rksQJ+Xj1/sSNhk/khi21YPEnCOTqC4be44LPakp
+         WUwA==
+X-Gm-Message-State: APjAAAVgiKuzGID2QPCVEZF8Mx91UvT1j7kk9qJvNxdw+o0L5AepDFwr
+        mOPK8XyVn0Pnv151Z/YLZiCVKeZ72OOoi0tvGAWGbg9F
+X-Google-Smtp-Source: APXvYqx2NcHNdDVQv1rKawvPTCZEf6PnV+duEYljtrmwmQQ49v5mwLZo9amCQSbmx5vuwDWObDiqZ/xiCa8oIDDKcew=
+X-Received: by 2002:a9d:7352:: with SMTP id l18mr13860683otk.292.1562574403803;
+ Mon, 08 Jul 2019 01:26:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190625083051.30332-1-acelan.kao@canonical.com>
- <a3469010-829c-16dc-be83-6fe9b3021530@linux.intel.com> <CAFv23QnaKMs9bjS9ry_L4K7wskUqNR2AsgDG-v+fah2XO7EpKw@mail.gmail.com>
- <5c14537d-b6aa-b478-fdd8-29f690b15e07@linux.intel.com>
-In-Reply-To: <5c14537d-b6aa-b478-fdd8-29f690b15e07@linux.intel.com>
-From:   AceLan Kao <acelan.kao@canonical.com>
-Date:   Mon, 8 Jul 2019 14:18:09 +0800
-Message-ID: <CAFv23Qmo_f=FEVM2ZOfL-8SvP624doY-OxU_T091uweKwJJ7QA@mail.gmail.com>
-Subject: Re: [PATCH] i2c: designware: Add disable runtime pm quirk
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Kai Heng Feng <kai.heng.feng@canonical.com>,
-        Lee Jones <lee.jones@linaro.org>
+References: <1562347885-58349-1-git-send-email-cst@phaseone.com>
+ <CAMpxmJX3x5kOi63+cs5JFHp2Eu5W+0=zKBURcde7pZ5K_2=3nA@mail.gmail.com> <4359efb29daa2a6922e651bba90908794190de07.camel@phaseone.com>
+In-Reply-To: <4359efb29daa2a6922e651bba90908794190de07.camel@phaseone.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Mon, 8 Jul 2019 10:26:31 +0200
+Message-ID: <CAMpxmJVX=x5ed9yTyczEqiaEp8nfS1VWZkMaBwToqMX9nMu80g@mail.gmail.com>
+Subject: Re: [PATCH] eeprom: at24: Limit gpio calls to when wp_gpio is defined
+To:     "Claus H. Stovgaard" <cst@phaseone.com>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Jarkko,
-
-Sorry, I lost track of this thread and didn't understand what you want
-me to try.
-I'm willing to try it if you can explain it more.
-
-My colleague comes out another solution for this issue
-   https://lkml.org/lkml/2019/7/5/17
-and it explains why it takes up to 100ms to wake up.
-This solution is more aggressive to zero the d3cold_delay and it looks
-like the delay is not necessary.
-
-Anyway, we have two different proposed solutions now, my proposed
-solution is specific to the listed platforms, but we may have to
-extent the list(platforms which uses the old firmware),
-the other proposed solution from my colleague is generic and apply to
-all platforms which loads intel-lpss-pci driver, it may lead to
-unexpected regressions which we don't see now.
-Please give some suggestions, thanks.
-
-Best regards,
-AceLan Kao.
-
-Jarkko Nikula <jarkko.nikula@linux.intel.com> 於 2019年6月26日 週三 下午2:27寫道：
+sob., 6 lip 2019 o 19:57 Claus H. Stovgaard <cst@phaseone.com> napisa=C5=82=
+(a):
 >
-> On 6/26/19 5:32 AM, AceLan Kao wrote:
-> > Adding I2C_HID_QUIRK_NO_RUNTIME_PM quirk doesn't help on this issue.
-> > Actually, Goodix touchpad already has that PM quirk in the list for other issue.
-> >          { I2C_VENDOR_ID_GOODIX, I2C_DEVICE_ID_GOODIX_01F0,
-> >                 I2C_HID_QUIRK_NO_RUNTIME_PM },
-> > I also modify the code as you suggested, but no luck.
+> On l=C3=B8r, 2019-07-06 at 19:33 +0200, Bartosz Golaszewski wrote:
+> > Hi Claus,
 > >
-> Yeah, I realized it won't help as the i2c-hid device is anyway powered
-> on constantly when the device is open by the pm_runtime_get_sync() call
-> in i2c_hid_open().
+> > gpiod_set_value_cansleep() doesn't complain if the passed descriptor
+> > is NULL - it just quietly returns. Could you give me some more info
+> > on
+> > how you trigger this warning?
+> >
+> > Bart
 >
-> > It's not Goodix takes time to wakeup, it's designware I2C controller.
-> > Designware doesn't do anything wrong here, it's Goodix set the interrupt timeout
-> > that leads to the issue, so we have to prevent designware from runtime
-> > suspended.
-> > But only on that bus where Goodix is connected and open by user space.
-> What I mean something like below:
+> Hi Bart
 >
-> diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c
-> b/drivers/hid/i2c-hid/i2c-hid-core.c
-> index 90164fed08d3..bbeaa39ddc23 100644
-> --- a/drivers/hid/i2c-hid/i2c-hid-core.c
-> +++ b/drivers/hid/i2c-hid/i2c-hid-core.c
-> @@ -795,6 +795,9 @@ static int i2c_hid_open(struct hid_device *hid)
->         struct i2c_hid *ihid = i2c_get_clientdata(client);
->         int ret = 0;
+> If you don't have enabled gpiolib, (E.g. CONFIG_GPIOLIB is not set)
+> gpiod_set_value_cansleep ends in /include/linux/gpio/consumer.h with
+> the following code
 >
-> +       /* some quirk test here */
-> +       pm_runtime_get_sync(&client->adapter->dev);
-> +
->         ret = pm_runtime_get_sync(&client->dev);
->         if (ret < 0)
->                 return ret;
-> @@ -812,6 +815,9 @@ static void i2c_hid_close(struct hid_device *hid)
+> ---
+> static inline void gpiod_set_value_cansleep(struct gpio_desc *desc, int
+> value)
+> {
+>         /* GPIO can never have been requested */
+>         WARN_ON(1);
+> }
+> ---
 >
->         /* Save some power */
->         pm_runtime_put(&client->dev);
-> +
-> +       /* some quirk test here */
-> +       pm_runtime_put(&client->adapter->dev);
->   }
+> So we get warnings like this in the log
 >
->   static int i2c_hid_power(struct hid_device *hid, int lvl)
+> [  148.508317] WARNING: CPU: 0 PID: 1903 at
+> include/linux/gpio/consumer.h:396 at24_write+0x150/0x260
+> [  148.517187] Modules linked in:
+> [  148.520236] CPU: 0 PID: 1903 Comm: DataObjects Tainted:
+> G        W         4.19.0-p1-iq4-05669-g6fe8008-dirty #2
+> [  148.530394] Hardware name: P1 IQ4 (DT)
+> [  148.534129] pstate: 60000005 (nZCv daif -PAN -UAO)
+> [  148.538914] pc : at24_write+0x150/0x260
+> [  148.542741] lr : at24_write+0x11c/0x260
+> [  148.546565] sp : ffffff800d5f3c40
+> [  148.549864] x29: ffffff800d5f3c40 x28: 0000000000000000
+> [  148.555167] x27: 0000000000000001 x26: ffffffc975096304
+> [  148.560470] x25: ffffff8008d46980 x24: ffffffc975293020
+> [  148.565774] x23: 00000000ffff6c15 x22: ffffffc977484498
+> [  148.571077] x21: 00000000000006e2 x20: 0000000000000000
+> [  148.576381] x19: 00000000000006e1 x18: 0000000000000400
+> [  148.581684] x17: 0000000000000000 x16: ffffffc977008300
+> [  148.586988] x15: 0000000000000400 x14: 0000000000000088
+> [  148.592291] x13: 0000000000000000 x12: 0000000000000001
+> [  148.597595] x11: 0000000000000001 x10: 00000000000007f0
+> [  148.602898] x9 : ffffff800d5f37e0 x8 : ffffffc977008b50
+> [  148.608202] x7 : ffffffc97ff76800 x6 : 000000001fbe647a
+> [  148.613505] x5 : 00000000ffff6c0f x4 : ffffffbf211a0d8f
+> [  148.618809] x3 : ffffffbf211a0d90 x2 : ffffff80084e55c4
+> [  148.624113] x1 : 00000000000005dc x0 : 0000000000000001
+> [  148.629417] Call trace:
+> [  148.631852]  at24_write+0x150/0x260
+> [  148.635335]  bin_attr_nvmem_write+0x6c/0xa0
+> [  148.639510]  sysfs_kf_bin_write+0x64/0x80
+> [  148.643510]  kernfs_fop_write+0xcc/0x1e0
+> [  148.647425]  __vfs_write+0x30/0x158
+> [  148.650905]  vfs_write+0xa4/0x1a8
+> [  148.654211]  ksys_write+0x5c/0xc0
+> [  148.657519]  __arm64_sys_write+0x18/0x20
+> [  148.661436]  el0_svc_common+0x84/0xd8
+> [  148.665087]  el0_svc_handler+0x68/0x80
+> [  148.668828]  el0_svc+0x8/0xc
+> [  148.671699] ---[ end trace f3f414c3b5f66f98 ]---
 >
-> --
-> Jarkko
+
+Cc Linus Walleij
+
+I see. This isn't a problem with at24 but with the GPIO API. I Cc'ed
+you on a patch I've just sent. Please take a look a possibly test.
+
+Bart
