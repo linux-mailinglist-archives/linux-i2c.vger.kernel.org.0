@@ -2,106 +2,157 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDCE6392F
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2019 18:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A8C63D09
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2019 23:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725816AbfGIQTZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Jul 2019 12:19:25 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:40023 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726060AbfGIQTY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Jul 2019 12:19:24 -0400
-Received: by mail-io1-f66.google.com with SMTP id h6so36179877iom.7;
-        Tue, 09 Jul 2019 09:19:24 -0700 (PDT)
+        id S1729594AbfGIVED (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Jul 2019 17:04:03 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:44084 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726318AbfGIVED (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Jul 2019 17:04:03 -0400
+Received: by mail-qk1-f195.google.com with SMTP id d79so204825qke.11;
+        Tue, 09 Jul 2019 14:04:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wpghyK4dozu5v3hFpJGTeVXF3O891a2KOUKLtA2/s7Q=;
+        b=uU4kwx9NLOtv/WY27Kbwrzjh9vMwckOyHx4U3LkvO6nmgZKidA4HhHZ0u02NycVP6t
+         gOSQotf8KmSCZPn1P74YEu7INxpJdl9mG8IOde4TeVPFdwAK4PB7JZcHTzTBvulnBqV2
+         WCy4TsXx0t4SLmbNwxGsmVqfm9JWWvLtB99DekUCJDnAUyU1+9K/cjQTW9eOWhMl4xnZ
+         wL6so19l9AeL0jEbz8FjY7VWNdJy8kI8VkwbQvr77gGZE0O6a/v+riUouBRwx3T1Neiy
+         NezwhCqVU7VFqfFbyhbkvNqrEgFtSJCnRlUMmXLvA/FjpsN92IOT6dSjBxyJzvSGkfih
+         T6VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7tAfXbTGjm8fRgQr1s7o3SHyobzROVcWesepsvUVeJ0=;
-        b=ruanipF8ui2ugcexuiwtCQgXb2kw9c0aikK7uxCD126M1XxoKqOOi4Rwul1BaQqawZ
-         bfKWEIpOnDryBjbcQkA7epjzHmhZuatuWjdEuIA/Eb4qGZipcfk92OD1kUOO0H+z4Txm
-         bbwdw6Zhj/GnbIzZD6Bf8MSb/YZCu7lIvBI7BH4TYTWBxoNhK4ucwZSpvzjvbyJF2wFt
-         6mKz/9SCZ88DfGi5+VtdUZNZC47WZjzPnoMYf4XqKU+9mhXjc2bVTP1aDNVLWuvFeDWP
-         jtsSSu4tWhIoSY4g9y4URrPCV8Lfryyf9aPl/4YbRlvIcBYh+a8TpZYgLBmhjm5UesQJ
-         PI1w==
-X-Gm-Message-State: APjAAAU3y1fTxN5rKRmpF+hiDLdWeZj15P5GBYUxeSjzdGcZqQhoXD+Y
-        kRDoXVp2WWBmAb82vOvOdw==
-X-Google-Smtp-Source: APXvYqytUb4e1tTFkilBAmDnbfpUegwR/3+McS2ESVbZuIF2pcM4ypCPA270vJObgxVGw3SsHisGJg==
-X-Received: by 2002:a05:6638:191:: with SMTP id a17mr24115446jaq.101.1562689163723;
-        Tue, 09 Jul 2019 09:19:23 -0700 (PDT)
-Received: from localhost ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id r5sm18036660iom.42.2019.07.09.09.19.22
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 09 Jul 2019 09:19:22 -0700 (PDT)
-Date:   Tue, 9 Jul 2019 10:19:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, suzuki.poulose@arm.com,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>, Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [PATCH v2 17/28] drivers: Introduce bus_find_device_by_of_node()
- helper
-Message-ID: <20190709161922.GA1609@bogus>
-References: <1560534863-15115-1-git-send-email-suzuki.poulose@arm.com>
- <1560534863-15115-18-git-send-email-suzuki.poulose@arm.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wpghyK4dozu5v3hFpJGTeVXF3O891a2KOUKLtA2/s7Q=;
+        b=hViwRyH3T2rrSLWUT8lQjtDMywWKNA/grizUpUzI4nN91woGf0olmzTeIrWIZprgND
+         rxPnKw37FKe/AHduktyt2q69oMLCv9mkN3W/1Fq9q8YqSPw4ohfb6L6oju49H3P94dNj
+         ePxHm0Ud0GrLFqJfThzWAlhcusygK0gir0z4JL3UGpG43tYLEUY9ecQPIgnspV6ru58k
+         +KEhpH0TZkBdufsxxGyt8CVWyIrQ6wsE7CF+kcR2AobEJjUX+HMvaHfUoIHcz9Lpe1MN
+         hs8wNLBoqY+Mz3QZztrW6Y+Z912ud4EfxYMDbY6PY4CKNW2ol3xT9AJlZvRrbG1FNp8F
+         8D8w==
+X-Gm-Message-State: APjAAAVD1YaAgpSBerzTow49IBzBaczEpv4Gl55mcP9x52uOBCbNpA+K
+        f2jzjFJyXKC10bGPANZ0aXRUq36v
+X-Google-Smtp-Source: APXvYqzxdl4qVrv5T+Ey4gJlsXUVNtPWb624rW6L1vHtsdIqxE7NJhGlM7MoMCQoEGqcRCA5vSGZsA==
+X-Received: by 2002:a37:9c0c:: with SMTP id f12mr19391827qke.442.1562706241767;
+        Tue, 09 Jul 2019 14:04:01 -0700 (PDT)
+Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
+        by smtp.googlemail.com with ESMTPSA id z50sm10999043qtz.36.2019.07.09.14.03.59
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Jul 2019 14:04:01 -0700 (PDT)
+Subject: Re: [PATCH v1] i2c: tegra: Compile PM functions unconditionally
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190707231234.11679-1-digetx@gmail.com>
+ <13be0f2e-2131-2e0d-d39f-9f1c964b8698@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <44febd8d-6b1a-a948-4102-b1809e906f44@gmail.com>
+Date:   Wed, 10 Jul 2019 00:03:58 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1560534863-15115-18-git-send-email-suzuki.poulose@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <13be0f2e-2131-2e0d-d39f-9f1c964b8698@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 14 Jun 2019 18:54:12 +0100, Suzuki K Poulose wrote:
-> Add a wrapper to bus_find_device() to search for a device
-> by the of_node pointer, reusing the generic match function.
-> Also convert the existing users to make use of the new helper.
+09.07.2019 13:12, Jon Hunter пишет:
 > 
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: Maxime Ripard <maxime.ripard@bootlin.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: devicetree@vger.kernel.org
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Heiko Stuebner <heiko@sntech.de>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-rockchip@lists.infradead.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: Takashi Iwai <tiwai@suse.com>
-> Cc: Wolfram Sang <wsa@the-dreams.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> ---
->  drivers/gpu/drm/drm_mipi_dsi.c             |  7 +------
->  drivers/hwtracing/coresight/of_coresight.c | 11 ++---------
->  drivers/i2c/i2c-core-of.c                  |  7 +------
->  drivers/nvmem/core.c                       |  7 +------
->  drivers/of/of_mdio.c                       |  8 +-------
->  drivers/of/platform.c                      |  7 +------
->  drivers/spi/spi.c                          |  9 ++-------
->  include/linux/device.h                     | 12 ++++++++++++
->  sound/soc/rockchip/rk3399_gru_sound.c      |  9 ++-------
->  9 files changed, 23 insertions(+), 54 deletions(-)
+> On 08/07/2019 00:12, Dmitry Osipenko wrote:
+>> The I2C driver fails to probe if CONFIG_PM_SLEEP=n because runtime PM
+>> doesn't depend on the PM sleep and in this case the runtime PM ops are
+>> not included in the driver, resulting in I2C clock not being enabled.
+>> It's much cleaner to simply allow compiler to remove the dead code
+>> instead of messing with the #ifdefs.
+>>
+>> This patch fixes such errors when CONFIG_PM_SLEEP=n:
+>>
+>>   tegra-i2c 7000c400.i2c: timeout waiting for fifo flush
+>>   tegra-i2c 7000c400.i2c: Failed to initialize i2c controller
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  drivers/i2c/busses/i2c-tegra.c | 16 +++++-----------
+>>  1 file changed, 5 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+>> index 9fcb13beeb8f..18f0ceed9f1b 100644
+>> --- a/drivers/i2c/busses/i2c-tegra.c
+>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>> @@ -636,7 +636,7 @@ static void tegra_dvc_init(struct tegra_i2c_dev *i2c_dev)
+>>  	dvc_writel(i2c_dev, val, DVC_CTRL_REG1);
+>>  }
+>>  
+>> -static int tegra_i2c_runtime_resume(struct device *dev)
+>> +static int __maybe_unused tegra_i2c_runtime_resume(struct device *dev)
+>>  {
+>>  	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+>>  	int ret;
+>> @@ -665,7 +665,7 @@ static int tegra_i2c_runtime_resume(struct device *dev)
+>>  	return 0;
+>>  }
+>>  
+>> -static int tegra_i2c_runtime_suspend(struct device *dev)
+>> +static int __maybe_unused tegra_i2c_runtime_suspend(struct device *dev)
+>>  {
+>>  	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+>>  
+>> @@ -1711,8 +1711,7 @@ static int tegra_i2c_remove(struct platform_device *pdev)
+>>  	return 0;
+>>  }
+>>  
+>> -#ifdef CONFIG_PM_SLEEP
+>> -static int tegra_i2c_suspend(struct device *dev)
+>> +static int __maybe_unused tegra_i2c_suspend(struct device *dev)
+>>  {
+>>  	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+>>  
+>> @@ -1721,7 +1720,7 @@ static int tegra_i2c_suspend(struct device *dev)
+>>  	return 0;
+>>  }
+>>  
+>> -static int tegra_i2c_resume(struct device *dev)
+>> +static int __maybe_unused tegra_i2c_resume(struct device *dev)
+>>  {
+>>  	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+>>  	int err;
+>> @@ -1741,18 +1740,13 @@ static const struct dev_pm_ops tegra_i2c_pm = {
+>>  			   NULL)
+>>  };
+>>  
+>> -#define TEGRA_I2C_PM	(&tegra_i2c_pm)
+>> -#else
+>> -#define TEGRA_I2C_PM	NULL
+>> -#endif
+>> -
+>>  static struct platform_driver tegra_i2c_driver = {
+>>  	.probe   = tegra_i2c_probe,
+>>  	.remove  = tegra_i2c_remove,
+>>  	.driver  = {
+>>  		.name  = "tegra-i2c",
+>>  		.of_match_table = tegra_i2c_of_match,
+>> -		.pm    = TEGRA_I2C_PM,
+>> +		.pm    = &tegra_i2c_pm,
+>>  	},
+>>  };
+>>  
 > 
+> Looks good to me.
+> 
+> Acked-by: Jon Hunter <jonathanh@nvidia.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks!
+
