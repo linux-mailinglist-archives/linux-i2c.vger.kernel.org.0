@@ -2,160 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 666546690D
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jul 2019 10:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5494266ADC
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jul 2019 12:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726224AbfGLIVg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 12 Jul 2019 04:21:36 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:31655 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726057AbfGLIVf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Jul 2019 04:21:35 -0400
-Received-SPF: Pass (esa3.microchip.iphmx.com: domain of
-  Ludovic.Desroches@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Ludovic.Desroches@microchip.com";
-  x-sender="Ludovic.Desroches@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa3.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Ludovic.Desroches@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa3.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Ludovic.Desroches@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: 0nKJFzhFvuZ347cB/1iiOa0gusRvfdBglhNi2o0z9N/fIyHAPcTdgecYmTmIkYUI0QIejHKQnG
- +f+1HheYLXKArKACJuXk7O2Uhe86jslFjq2mI57IY0bNjUxlg1tw2eCrM5ZmUUcF5ccyiU5giF
- gmrGI4Ne4wsOcSl9iMxQ9cRI+UaJ7jEMD+4oxeIVy+JBNiGrVxRQSwpBrRpKH6To1dDo9+3TFP
- ehkXFDSs9lCGlYq9Tf260yBnuier1zs8uLlkU4Z/LtPRITUYb3LuxVU0QLiupiyuj27Vkfr6wz
- tf8=
-X-IronPort-AV: E=Sophos;i="5.63,481,1557212400"; 
-   d="scan'208";a="41053477"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2019 01:21:34 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
- chn-vm-ex04.mchp-main.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 12 Jul 2019 01:21:33 -0700
-Received: from localhost (10.10.85.251) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
- Transport; Fri, 12 Jul 2019 01:21:31 -0700
-Date:   Fri, 12 Jul 2019 10:20:44 +0200
-From:   Ludovic Desroches <ludovic.desroches@microchip.com>
-To:     Eugen Hristev - M18282 <Eugen.Hristev@microchip.com>
-CC:     "wsa@the-dreams.de" <wsa@the-dreams.de>,
-        "peda@axentia.se" <peda@axentia.se>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "pierre-yves.mordret@st.com" <pierre-yves.mordret@st.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>
-Subject: Re: [PATCH v3 0/9] i2c: add support for filters
-Message-ID: <20190712082044.6eteunzehyptsibk@M43218.corp.atmel.com>
-Mail-Followup-To: Eugen Hristev - M18282 <Eugen.Hristev@microchip.com>,
-        "wsa@the-dreams.de" <wsa@the-dreams.de>,
-        "peda@axentia.se" <peda@axentia.se>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "pierre-yves.mordret@st.com" <pierre-yves.mordret@st.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>
-References: <1562678049-17581-1-git-send-email-eugen.hristev@microchip.com>
+        id S1726140AbfGLK1v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 12 Jul 2019 06:27:51 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:51423 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbfGLK1u (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Jul 2019 06:27:50 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190712102748euoutp02a282faef929eb94c42307d7082f12db5~wohHnKneh1156011560euoutp02H
+        for <linux-i2c@vger.kernel.org>; Fri, 12 Jul 2019 10:27:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190712102748euoutp02a282faef929eb94c42307d7082f12db5~wohHnKneh1156011560euoutp02H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1562927268;
+        bh=lakT5IvZPewFHKpfWnaitlRRseevezRjb/QpbnwhAUc=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=dvbQz8jWPKxRtA4MXKNK1AzzAoj8AkcYyDLBXaYSbDWLsqKedshMx8YKLOz1Wws9R
+         p37XuvUIolIKVV9QAW86F3blj+TipgaN4VkHOFkfUhQlyqfxljvUvyYYAoV8EDW33J
+         YVI0YzEqgXfRuNmAcNkvJJMJs2QINFC42IzaH+sQ=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190712102748eucas1p2bdeba0118252ef40fcce73154d5f9b57~wohHRqixq2376623766eucas1p2v;
+        Fri, 12 Jul 2019 10:27:48 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id B1.95.04298.3A0682D5; Fri, 12
+        Jul 2019 11:27:47 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190712102747eucas1p25e29b56e7b4fd11b403a3bb8fc9a0263~wohGmNJUK1562615626eucas1p2i;
+        Fri, 12 Jul 2019 10:27:47 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190712102747eusmtrp1431636753e0ec0443454243e7aa5b0bc~wohGYIv5-1664416644eusmtrp1-;
+        Fri, 12 Jul 2019 10:27:47 +0000 (GMT)
+X-AuditID: cbfec7f2-f2dff700000010ca-d2-5d2860a37247
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id B1.AB.04146.2A0682D5; Fri, 12
+        Jul 2019 11:27:47 +0100 (BST)
+Received: from [106.120.51.74] (unknown [106.120.51.74]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190712102746eusmtip2dedd242a5f8feec072425ccd54395f32~wohF7uOuv0703007030eusmtip27;
+        Fri, 12 Jul 2019 10:27:46 +0000 (GMT)
+Subject: Re: [PATCH 4/6] media: i2c: s5c73m3: Convert to new i2c device
+ probe()
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+From:   Andrzej Hajda <a.hajda@samsung.com>
+Message-ID: <4c343c7b-5c43-7234-fae4-4f384c6d09ed@samsung.com>
+Date:   Fri, 12 Jul 2019 12:27:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+        Thunderbird/68.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1562678049-17581-1-git-send-email-eugen.hristev@microchip.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190710215149.9208-5-kieran.bingham+renesas@ideasonboard.com>
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPKsWRmVeSWpSXmKPExsWy7djPc7qLEzRiDeY9Mrb4dK2b0eJs0xt2
+        i46/XxgtLu+aw2bRs2Erq8XWl++YLJZt+sNksfLELGYHDo/ZHTNZPTat6mTz6NuyitHj5Kkn
+        LB6fN8kFsEZx2aSk5mSWpRbp2yVwZXx5to+14C9zxc1HX1gaGBcxdzFyckgImEicfTaVrYuR
+        i0NIYAWjxP75c1khnC+MEjNv9rOBVAkJfGaUWPcqFKbj2OoZTBBFyxklLjZfZYEoessosWau
+        NogtLBAo8WLxG0aQIhGB2YwScw9PBtvBLLCSUeLtkmtMIFVsApoSfzffBEpwcPAK2Ek8PWAL
+        EmYRUJXourkArERUIEzi54JOsCt4BQQlTs58AraMU8BHYu+uHrA4s4C8RPPW2cwQtrjErSfz
+        wa6TENjFLtHx8j87xNkuEktWP2GEsIUlXh3fAhWXkTg9uYcFwq6XuL+ihRmiuYNRYuuGndBQ
+        spY4fPwiK8ihzEBHr9+lDxF2lOhbvIARJCwhwCdx460gxA18EpO2TWeGCPNKdLQJQVQrStw/
+        uxVqoLjE0gtf2SYwKs1C8tksJN/MQvLNLIS9CxhZVjGKp5YW56anFhvmpZbrFSfmFpfmpesl
+        5+duYgQmo9P/jn/awfj1UtIhRgEORiUe3huW6rFCrIllxZW5hxglOJiVRHhX/QcK8aYkVlal
+        FuXHF5XmpBYfYpTmYFES561meBAtJJCeWJKanZpakFoEk2Xi4JRqYNTStgkLubftsfCnvBRn
+        cSu1ubrnmZr0PI57GUca/qk8sPGxj37emW1sb+bPTuad9HCtpRmL1JmNtozbrR8urajxPbrQ
+        yPOxr7hH01Vfq8835T5wztSeJ1GX6fErIHjNZyF7RxP9LYq/zgm2edlP3iU5K3UDb/Wq+M6v
+        f1Z3numewFa48tgTbyWW4oxEQy3mouJEAKf9MIhCAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIIsWRmVeSWpSXmKPExsVy+t/xe7qLEzRiDZasYrL4dK2b0eJs0xt2
+        i46/XxgtLu+aw2bRs2Erq8XWl++YLJZt+sNksfLELGYHDo/ZHTNZPTat6mTz6NuyitHj5Kkn
+        LB6fN8kFsEbp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp
+        2yXoZXx5to+14C9zxc1HX1gaGBcxdzFyckgImEgcWz2DqYuRi0NIYCmjxMP9P6AS4hK757+F
+        soUl/lzrYgOxhQReM0rMWZQKYgsLBEq8WPyGEaRZRGA2o8TOU6vAipgFVjNKHDoSADH1IaPE
+        0X37WEASbAKaEn833wQq4uDgFbCTeHrAFiTMIqAq0XVzARNIWFQgTOLoiTyQMK+AoMTJmU/A
+        OjkFfCT27uqBGq8u8WfeJWYIW16ieetsKFtc4taT+UwTGIVmIWmfhaRlFpKWWUhaFjCyrGIU
+        SS0tzk3PLTbUK07MLS7NS9dLzs/dxAiMvm3Hfm7ewXhpY/AhRgEORiUe3huW6rFCrIllxZW5
+        hxglOJiVRHhX/QcK8aYkVlalFuXHF5XmpBYfYjQF+m0is5Rocj4wMeSVxBuaGppbWBqaG5sb
+        m1koifN2CByMERJITyxJzU5NLUgtgulj4uCUamDsMp1W8lzr/SqLC7xBN0Ue7fv9P89qw4Jl
+        EhyzGLevNF1kuD27W4TLfdK6+exr9tqe/pCvP/Ebw/fLa/R6nrsGlJ2L4zz6x3z3v4wdnVFi
+        s9oLL8/oWy1/MU6P/ciL7MsdP1u+NHkKRX03/cRXEZp6NWJGbW675k7fi0cuisy+rm3Qfub8
+        7EOcSizFGYmGWsxFxYkAEE9P49QCAAA=
+X-CMS-MailID: 20190712102747eucas1p25e29b56e7b4fd11b403a3bb8fc9a0263
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190710215208epcas2p4a00565b70691c0afb0c3a04f9c43f6cd
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190710215208epcas2p4a00565b70691c0afb0c3a04f9c43f6cd
+References: <20190710215149.9208-1-kieran.bingham+renesas@ideasonboard.com>
+        <CGME20190710215208epcas2p4a00565b70691c0afb0c3a04f9c43f6cd@epcas2p4.samsung.com>
+        <20190710215149.9208-5-kieran.bingham+renesas@ideasonboard.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jul 09, 2019 at 03:19:26PM +0200, Eugen Hristev - M18282 wrote:
-> From: Eugen Hristev <eugen.hristev@microchip.com>
-> 
-> Hello,
-> 
-> This series adds support for analog and digital filters for i2c controllers
-> 
-> This series is based on the series:
-> [PATCH v2 0/9] i2c: at91: filters support for at91 SoCs
-> and enhanced to add the bindings for all controllers plus an extra binding
-> for the width of the spikes in nanoseconds.
-> 
-> First, bindings are created for
-> 'i2c-ana-filter'
-> 'i2c-dig-filter'
-> 'i2c-filter-width-ns'
-> 
-> The support is added in the i2c core to retrieve filter width and add it
-> to the timings structure.
-> Next, the at91 driver is enhanced for supporting digital filter, advanced
-> digital filter (with selectable spike width) and the analog filter.
-> 
-> Finally the device tree for two boards are modified to make use of the
-> new properties.
-> 
-> This series is the result of the comments on the ML in the direction
-> requested: to make the bindings globally available for i2c drivers.
-> 
-> Changes in v3:
-> - made bindings global for i2c controllers and modified accordingly
-> - gave up PADFCDF bit because it's a lack in datasheet
-> - the computation on the width of the spike is based on periph clock as it
-> is done for hold time.
-> 
-> Changes in v2:
-> - added device tree bindings and support for enable-ana-filt and
-> enable-dig-filt
-> - added the new properties to the DT for sama5d4_xplained/sama5d2_xplained
-> 
-> Eugen Hristev (9):
->   dt-bindings: i2c: at91: add new compatible
->   dt-bindings: i2c: add bindings for i2c analog and digital filter
->   i2c: add support for filter-width-ns optional property
->   i2c: at91: add new platform support for sam9x60
->   i2c: at91: add support for digital filtering
->   i2c: at91: add support for advanced digital filtering
->   i2c: at91: add support for analog filtering
->   ARM: dts: at91: sama5d2_xplained: add analog and digital filter for
->     i2c
->   ARM: dts: at91: sama5d4_xplained: add analog filter for i2c
-> 
->  Documentation/devicetree/bindings/i2c/i2c-at91.txt |  3 +-
->  Documentation/devicetree/bindings/i2c/i2c.txt      | 11 +++++
->  arch/arm/boot/dts/at91-sama5d2_xplained.dts        |  6 +++
->  arch/arm/boot/dts/at91-sama5d4_xplained.dts        |  1 +
->  drivers/i2c/busses/i2c-at91-core.c                 | 38 +++++++++++++++++
->  drivers/i2c/busses/i2c-at91-master.c               | 49 ++++++++++++++++++++--
->  drivers/i2c/busses/i2c-at91.h                      | 13 ++++++
->  drivers/i2c/i2c-core-base.c                        |  2 +
->  include/linux/i2c.h                                |  2 +
->  9 files changed, 121 insertions(+), 4 deletions(-)
+On 10.07.2019 23:51, Kieran Bingham wrote:
+> The I2C core framework provides a simplified probe framework from commit
+> b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back type").
+>
+> This driver does not utilise the i2c_device_id table in the probe, so we can
+> easily convert it to utilise the simplfied i2c driver registration.
+>
+> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-Hi,
 
-I don't know if it will fit other vendors need concerning the binding
-but for Microchip it sounds good.
+Acked-by: Andrzej Hajda <a.hajda@samsung.com>
 
-Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com>
-for the whole serie.
 
+ --
 Regards
+Andrzej
 
-Ludovic
+
