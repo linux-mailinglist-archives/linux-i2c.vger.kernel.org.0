@@ -2,40 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB076DEC1
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jul 2019 06:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A166E017
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jul 2019 06:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728206AbfGSEEv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 Jul 2019 00:04:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37092 "EHLO mail.kernel.org"
+        id S1725616AbfGSEjx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Jul 2019 00:39:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57780 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731289AbfGSEEv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 19 Jul 2019 00:04:51 -0400
+        id S1727891AbfGSD61 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 18 Jul 2019 23:58:27 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E6B1218BB;
-        Fri, 19 Jul 2019 04:04:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 84429218A0;
+        Fri, 19 Jul 2019 03:58:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563509090;
-        bh=v9Pn+9R6HHtr8XQS+dNaYVDFM0/s9GUOjJuGW05vXGk=;
+        s=default; t=1563508706;
+        bh=wUJWAjQzObn3pLeVm9IKlEipJO5fexx9Y4fykdY7Iew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MeUGzUB1vq87aiNiTCO5g+hc/m5YlWxr93KtvD+V1ErxtFmDveYyS9IG5YHcqvYDa
-         f9kzpAKFAj+78fP+KB0Yzmnfu8D+FqW2+J901/xvARBBm668ZwiFxu7shduaMwP7jT
-         W84BHP1Ijq3HIbt8DMiPF2XvSkUD5kfVqsZijuSg=
+        b=Qhdd1+1dwIZ4cDXAfO9D/OppNTW216J2Si1Em5I5QgOQT1nXEMyu891nFhFlz70s3
+         EZxEJJlsuwlxsRB14IXyGYgcCvNb4XJtYrikQHv/o3WUPpzwSvIjI722eQ+vDpQeiP
+         sMrNetdlsVXLtDEdyLiX5Xrh0cjMwlbwqMBVEus8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Fabien Dessenne <fabien.dessenne@st.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
+Cc:     Ajay Gupta <ajayg@nvidia.com>, Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 063/141] i2c: stm32f7: fix the get_irq error cases
-Date:   Fri, 19 Jul 2019 00:01:28 -0400
-Message-Id: <20190719040246.15945-63-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 044/171] i2c: nvidia-gpu: resume ccgx i2c client
+Date:   Thu, 18 Jul 2019 23:54:35 -0400
+Message-Id: <20190719035643.14300-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190719040246.15945-1-sashal@kernel.org>
-References: <20190719040246.15945-1-sashal@kernel.org>
+In-Reply-To: <20190719035643.14300-1-sashal@kernel.org>
+References: <20190719035643.14300-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,86 +42,76 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Fabrice Gasnier <fabrice.gasnier@st.com>
+From: Ajay Gupta <ajayg@nvidia.com>
 
-[ Upstream commit 79b4499524ed659fb76323efc30f3dc03967c88f ]
+[ Upstream commit 9f2e244d0a39eb437f98324ac315e605e48636db ]
 
-During probe, return the "get_irq" error value instead of -EINVAL which
-allows the driver to be deferred probed if needed.
-Fix also the case where of_irq_get() returns a negative value.
-Note :
-On failure of_irq_get() returns 0 or a negative value while
-platform_get_irq() returns a negative value.
+Cypress USB Type-C CCGx controller firmware version 3.1.10
+(which is being used in many NVIDIA GPU cards) has known issue of
+not triggering interrupt when a USB device is hot plugged to runtime
+resume the controller. If any GPU card gets latest kernel with runtime
+pm support but does not get latest fixed firmware then also it should
+continue to work and therefore a workaround is required to check for
+any connector change event
 
-Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
-Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
-Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+The workaround is to request runtime resume of i2c client
+which is UCSI Cypress CCGx driver. CCG driver will call the ISR
+for any connector change event only if NVIDIA GPU has old
+CCG firmware with the known issue.
+
+Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
 Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-stm32f7.c | 26 ++++++++++++++------------
- 1 file changed, 14 insertions(+), 12 deletions(-)
+ drivers/i2c/busses/i2c-nvidia-gpu.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 4284fc991cfd..432b701ccf38 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -25,7 +25,6 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
--#include <linux/of_irq.h>
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/pinctrl/consumer.h>
-@@ -1812,15 +1811,14 @@ static struct i2c_algorithm stm32f7_i2c_algo = {
+diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
+index 1c8f708f212b..ee2412b7459c 100644
+--- a/drivers/i2c/busses/i2c-nvidia-gpu.c
++++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
+@@ -51,6 +51,7 @@ struct gpu_i2c_dev {
+ 	void __iomem *regs;
+ 	struct i2c_adapter adapter;
+ 	struct i2c_board_info *gpu_ccgx_ucsi;
++	struct i2c_client *ccgx_client;
+ };
  
- static int stm32f7_i2c_probe(struct platform_device *pdev)
+ static void gpu_enable_i2c_bus(struct gpu_i2c_dev *i2cd)
+@@ -261,8 +262,6 @@ static const struct property_entry ccgx_props[] = {
+ 
+ static int gpu_populate_client(struct gpu_i2c_dev *i2cd, int irq)
  {
--	struct device_node *np = pdev->dev.of_node;
- 	struct stm32f7_i2c_dev *i2c_dev;
- 	const struct stm32f7_i2c_setup *setup;
- 	struct resource *res;
--	u32 irq_error, irq_event, clk_rate, rise_time, fall_time;
-+	u32 clk_rate, rise_time, fall_time;
- 	struct i2c_adapter *adap;
- 	struct reset_control *rst;
- 	dma_addr_t phy_addr;
--	int ret;
-+	int irq_error, irq_event, ret;
+-	struct i2c_client *ccgx_client;
+-
+ 	i2cd->gpu_ccgx_ucsi = devm_kzalloc(i2cd->dev,
+ 					   sizeof(*i2cd->gpu_ccgx_ucsi),
+ 					   GFP_KERNEL);
+@@ -274,8 +273,8 @@ static int gpu_populate_client(struct gpu_i2c_dev *i2cd, int irq)
+ 	i2cd->gpu_ccgx_ucsi->addr = 0x8;
+ 	i2cd->gpu_ccgx_ucsi->irq = irq;
+ 	i2cd->gpu_ccgx_ucsi->properties = ccgx_props;
+-	ccgx_client = i2c_new_device(&i2cd->adapter, i2cd->gpu_ccgx_ucsi);
+-	if (!ccgx_client)
++	i2cd->ccgx_client = i2c_new_device(&i2cd->adapter, i2cd->gpu_ccgx_ucsi);
++	if (!i2cd->ccgx_client)
+ 		return -ENODEV;
  
- 	i2c_dev = devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
- 	if (!i2c_dev)
-@@ -1832,16 +1830,20 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
- 		return PTR_ERR(i2c_dev->base);
- 	phy_addr = (dma_addr_t)res->start;
+ 	return 0;
+@@ -354,6 +353,13 @@ static __maybe_unused int gpu_i2c_resume(struct device *dev)
+ 	struct gpu_i2c_dev *i2cd = dev_get_drvdata(dev);
  
--	irq_event = irq_of_parse_and_map(np, 0);
--	if (!irq_event) {
--		dev_err(&pdev->dev, "IRQ event missing or invalid\n");
--		return -EINVAL;
-+	irq_event = platform_get_irq(pdev, 0);
-+	if (irq_event <= 0) {
-+		if (irq_event != -EPROBE_DEFER)
-+			dev_err(&pdev->dev, "Failed to get IRQ event: %d\n",
-+				irq_event);
-+		return irq_event ? : -ENOENT;
- 	}
+ 	gpu_enable_i2c_bus(i2cd);
++	/*
++	 * Runtime resume ccgx client so that it can see for any
++	 * connector change event. Old ccg firmware has known
++	 * issue of not triggering interrupt when a device is
++	 * connected to runtime resume the controller.
++	 */
++	pm_request_resume(&i2cd->ccgx_client->dev);
+ 	return 0;
+ }
  
--	irq_error = irq_of_parse_and_map(np, 1);
--	if (!irq_error) {
--		dev_err(&pdev->dev, "IRQ error missing or invalid\n");
--		return -EINVAL;
-+	irq_error = platform_get_irq(pdev, 1);
-+	if (irq_error <= 0) {
-+		if (irq_error != -EPROBE_DEFER)
-+			dev_err(&pdev->dev, "Failed to get IRQ error: %d\n",
-+				irq_error);
-+		return irq_error ? : -ENOENT;
- 	}
- 
- 	i2c_dev->clk = devm_clk_get(&pdev->dev, NULL);
 -- 
 2.20.1
 
