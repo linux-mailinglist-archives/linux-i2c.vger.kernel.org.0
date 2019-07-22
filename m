@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4317073C
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 19:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12BD7073E
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 19:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731324AbfGVR0I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Jul 2019 13:26:08 -0400
-Received: from sauhun.de ([88.99.104.3]:42116 "EHLO pokefinder.org"
+        id S1726635AbfGVR3d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Jul 2019 13:29:33 -0400
+Received: from sauhun.de ([88.99.104.3]:42124 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731307AbfGVR0I (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S1731310AbfGVR0I (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
         Mon, 22 Jul 2019 13:26:08 -0400
 Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
-        by pokefinder.org (Postfix) with ESMTPSA id 983614A1493;
-        Mon, 22 Jul 2019 19:26:06 +0200 (CEST)
+        by pokefinder.org (Postfix) with ESMTPSA id 2948B4A1494;
+        Mon, 22 Jul 2019 19:26:07 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Antti Palosaari <crope@iki.fi>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/8] media: dvb-frontends: mn88473: convert to i2c_new_dummy_device
-Date:   Mon, 22 Jul 2019 19:25:58 +0200
-Message-Id: <20190722172604.3572-5-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 5/8] media: i2c: ad9389b: convert to i2c_new_dummy_device
+Date:   Mon, 22 Jul 2019 19:25:59 +0200
+Message-Id: <20190722172604.3572-6-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190722172604.3572-1-wsa+renesas@sang-engineering.com>
 References: <20190722172604.3572-1-wsa+renesas@sang-engineering.com>
@@ -41,39 +41,27 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
 
- drivers/media/dvb-frontends/mn88473.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ad9389b.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/mn88473.c b/drivers/media/dvb-frontends/mn88473.c
-index 08118b38533b..71cedce6c7d0 100644
---- a/drivers/media/dvb-frontends/mn88473.c
-+++ b/drivers/media/dvb-frontends/mn88473.c
-@@ -657,9 +657,9 @@ static int mn88473_probe(struct i2c_client *client,
- 	 * Also, register bank 2 do not support sequential I/O. Only single
- 	 * register write or read is allowed to that bank.
- 	 */
--	dev->client[1] = i2c_new_dummy(client->adapter, 0x1a);
--	if (dev->client[1] == NULL) {
--		ret = -ENODEV;
-+	dev->client[1] = i2c_new_dummy_device(client->adapter, 0x1a);
-+	if (IS_ERR(dev->client[1])) {
-+		ret = PTR_ERR(dev->client[1]);
- 		dev_err(&client->dev, "I2C registration failed\n");
- 		if (ret)
- 			goto err_regmap_0_regmap_exit;
-@@ -671,9 +671,9 @@ static int mn88473_probe(struct i2c_client *client,
- 	}
- 	i2c_set_clientdata(dev->client[1], dev);
+diff --git a/drivers/media/i2c/ad9389b.c b/drivers/media/i2c/ad9389b.c
+index aa8b04cfed0f..1b92048a4a67 100644
+--- a/drivers/media/i2c/ad9389b.c
++++ b/drivers/media/i2c/ad9389b.c
+@@ -1148,10 +1148,10 @@ static int ad9389b_probe(struct i2c_client *client, const struct i2c_device_id *
+ 	v4l2_dbg(1, debug, sd, "reg 0x41 0x%x, chip version (reg 0x00) 0x%x\n",
+ 		 ad9389b_rd(sd, 0x41), state->chip_revision);
  
--	dev->client[2] = i2c_new_dummy(client->adapter, 0x1c);
--	if (dev->client[2] == NULL) {
--		ret = -ENODEV;
-+	dev->client[2] = i2c_new_dummy_device(client->adapter, 0x1c);
-+	if (IS_ERR(dev->client[2])) {
-+		ret = PTR_ERR(dev->client[2]);
- 		dev_err(&client->dev, "2nd I2C registration failed\n");
- 		if (ret)
- 			goto err_regmap_1_regmap_exit;
+-	state->edid_i2c_client = i2c_new_dummy(client->adapter, (0x7e>>1));
+-	if (state->edid_i2c_client == NULL) {
++	state->edid_i2c_client = i2c_new_dummy_device(client->adapter, (0x7e >> 1));
++	if (IS_ERR(state->edid_i2c_client)) {
+ 		v4l2_err(sd, "failed to register edid i2c client\n");
+-		err = -ENOMEM;
++		err = PTR_ERR(state->edid_i2c_client);
+ 		goto err_entity;
+ 	}
+ 
 -- 
 2.20.1
 
