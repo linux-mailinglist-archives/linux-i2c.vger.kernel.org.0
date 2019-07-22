@@ -2,27 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BC870834
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 20:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61DD7083B
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 20:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729023AbfGVSOs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Jul 2019 14:14:48 -0400
-Received: from sauhun.de ([88.99.104.3]:42782 "EHLO pokefinder.org"
+        id S1729637AbfGVSP5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Jul 2019 14:15:57 -0400
+Received: from sauhun.de ([88.99.104.3]:42816 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728594AbfGVSOs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 22 Jul 2019 14:14:48 -0400
+        id S1726070AbfGVSP5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 22 Jul 2019 14:15:57 -0400
 Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
-        by pokefinder.org (Postfix) with ESMTPSA id 3F0F54A148F;
-        Mon, 22 Jul 2019 20:14:46 +0200 (CEST)
+        by pokefinder.org (Postfix) with ESMTPSA id 593654A148F;
+        Mon, 22 Jul 2019 20:15:55 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] leds: is31fl319x: simplify getting the adapter of a client
-Date:   Mon, 22 Jul 2019 20:14:16 +0200
-Message-Id: <20190722181416.6743-1-wsa+renesas@sang-engineering.com>
+        David Woodhouse <dwmw2@infradead.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] mtd: maps: pismo: simplify getting the adapter of a client
+Date:   Mon, 22 Jul 2019 20:15:49 +0200
+Message-Id: <20190722181549.6798-1-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -36,27 +40,33 @@ less computation involved.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/leds/leds-is31fl319x.c | 3 +--
+
+Change since V1:
+
+* remove 'adapter' variable entirely
+
+ drivers/mtd/maps/pismo.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
-index 2d077b8edd0e..ca6634b8683c 100644
---- a/drivers/leds/leds-is31fl319x.c
-+++ b/drivers/leds/leds-is31fl319x.c
-@@ -333,12 +333,11 @@ static int is31fl319x_probe(struct i2c_client *client,
+diff --git a/drivers/mtd/maps/pismo.c b/drivers/mtd/maps/pismo.c
+index 788d4996e2c1..946ba80f9758 100644
+--- a/drivers/mtd/maps/pismo.c
++++ b/drivers/mtd/maps/pismo.c
+@@ -211,13 +211,12 @@ static int pismo_remove(struct i2c_client *client)
+ static int pismo_probe(struct i2c_client *client,
+ 		       const struct i2c_device_id *id)
  {
- 	struct is31fl319x_chip *is31;
- 	struct device *dev = &client->dev;
--	struct i2c_adapter *adapter = to_i2c_adapter(dev->parent);
- 	int err;
- 	int i = 0;
- 	u32 aggregated_led_microamp = IS31FL319X_CURRENT_MAX;
+-	struct i2c_adapter *adapter = to_i2c_adapter(client->dev.parent);
+ 	struct pismo_pdata *pdata = client->dev.platform_data;
+ 	struct pismo_eeprom eeprom;
+ 	struct pismo_data *pismo;
+ 	int ret, i;
  
--	if (!i2c_check_functionality(adapter, I2C_FUNC_I2C))
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+-	if (!i2c_check_functionality(adapter, I2C_FUNC_I2C)) {
++	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
+ 		dev_err(&client->dev, "functionality mismatch\n");
  		return -EIO;
- 
- 	is31 = devm_kzalloc(&client->dev, sizeof(*is31), GFP_KERNEL);
+ 	}
 -- 
 2.20.1
 
