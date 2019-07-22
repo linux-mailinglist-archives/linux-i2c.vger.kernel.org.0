@@ -2,30 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B88470722
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 19:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2063E70714
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 19:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726312AbfGVR25 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Jul 2019 13:28:57 -0400
+        id S1731729AbfGVR2h (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Jul 2019 13:28:37 -0400
 Received: from sauhun.de ([88.99.104.3]:42116 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731382AbfGVR0T (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 22 Jul 2019 13:26:19 -0400
+        id S1731401AbfGVR0V (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 22 Jul 2019 13:26:21 -0400
 Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
-        by pokefinder.org (Postfix) with ESMTPSA id C1DBA4A1499;
-        Mon, 22 Jul 2019 19:26:17 +0200 (CEST)
+        by pokefinder.org (Postfix) with ESMTPSA id 27C744A1494;
+        Mon, 22 Jul 2019 19:26:20 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] misc: eeprom: max6875: convert to i2c_new_dummy_device
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH 2/4] rtc: max77686: convert to i2c_new_dummy_device
 Date:   Mon, 22 Jul 2019 19:26:16 +0200
-Message-Id: <20190722172616.3982-3-wsa+renesas@sang-engineering.com>
+Message-Id: <20190722172618.4061-3-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190722172616.3982-1-wsa+renesas@sang-engineering.com>
-References: <20190722172616.3982-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20190722172618.4061-1-wsa+renesas@sang-engineering.com>
+References: <20190722172618.4061-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
@@ -41,26 +44,28 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
 
- drivers/misc/eeprom/max6875.c | 6 +++---
+ drivers/rtc/rtc-max77686.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/misc/eeprom/max6875.c b/drivers/misc/eeprom/max6875.c
-index 4d0cb90f4aeb..9da81f6d4a1c 100644
---- a/drivers/misc/eeprom/max6875.c
-+++ b/drivers/misc/eeprom/max6875.c
-@@ -150,9 +150,9 @@ static int max6875_probe(struct i2c_client *client,
- 		return -ENOMEM;
- 
- 	/* A fake client is created on the odd address */
--	data->fake_client = i2c_new_dummy(client->adapter, client->addr + 1);
--	if (!data->fake_client) {
--		err = -ENOMEM;
-+	data->fake_client = i2c_new_dummy_device(client->adapter, client->addr + 1);
-+	if (IS_ERR(data->fake_client)) {
-+		err = PTR_ERR(data->fake_client);
- 		goto exit_kfree;
+diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
+index 4aff349ae301..d04fd1024697 100644
+--- a/drivers/rtc/rtc-max77686.c
++++ b/drivers/rtc/rtc-max77686.c
+@@ -693,11 +693,11 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
+ 		goto add_rtc_irq;
  	}
  
+-	info->rtc = i2c_new_dummy(parent_i2c->adapter,
++	info->rtc = i2c_new_dummy_device(parent_i2c->adapter,
+ 				  info->drv_data->rtc_i2c_addr);
+-	if (!info->rtc) {
++	if (IS_ERR(info->rtc)) {
+ 		dev_err(info->dev, "Failed to allocate I2C device for RTC\n");
+-		return -ENODEV;
++		return PTR_ERR(info->rtc);
+ 	}
+ 
+ 	info->rtc_regmap = devm_regmap_init_i2c(info->rtc,
 -- 
 2.20.1
 
