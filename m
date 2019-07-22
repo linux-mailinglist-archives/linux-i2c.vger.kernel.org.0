@@ -2,28 +2,26 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B6C7070B
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 19:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2F0706C6
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 19:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731438AbfGVR2U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Jul 2019 13:28:20 -0400
-Received: from sauhun.de ([88.99.104.3]:42320 "EHLO pokefinder.org"
+        id S1731371AbfGVR0Q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Jul 2019 13:26:16 -0400
+Received: from sauhun.de ([88.99.104.3]:42188 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731327AbfGVR00 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 22 Jul 2019 13:26:26 -0400
+        id S1731360AbfGVR0P (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 22 Jul 2019 13:26:15 -0400
 Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
-        by pokefinder.org (Postfix) with ESMTPSA id 3EA064A149C;
-        Mon, 22 Jul 2019 19:26:25 +0200 (CEST)
+        by pokefinder.org (Postfix) with ESMTPSA id 0FB394A1494;
+        Mon, 22 Jul 2019 19:26:14 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 02/14] mfd: 88pm860x-core: convert to i2c_new_dummy_device
-Date:   Mon, 22 Jul 2019 19:26:09 +0200
-Message-Id: <20190722172623.4166-3-wsa+renesas@sang-engineering.com>
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] iio: convert subsystem to i2c_new_dummy_device()
+Date:   Mon, 22 Jul 2019 19:26:10 +0200
+Message-Id: <20190722172613.3890-1-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190722172623.4166-1-wsa+renesas@sang-engineering.com>
-References: <20190722172623.4166-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
@@ -31,37 +29,32 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Move from i2c_new_dummy() to i2c_new_dummy_device(), so we now get an
-ERRPTR which we use in error handling.
+This series is part of a tree-wide movement to replace the I2C API call
+'i2c_new_dummy' which returns NULL with its new counterpart returning an
+ERRPTR.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+The series was generated with coccinelle (audited afterwards, of course) and
+build tested by me and by buildbot. No tests on HW have been performed.
 
-Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
+The branch is based on v5.3-rc1. A branch (with some more stuff included) can
+be found here:
 
- drivers/mfd/88pm860x-core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/i2c/new_dummy
 
-diff --git a/drivers/mfd/88pm860x-core.c b/drivers/mfd/88pm860x-core.c
-index 9e0bd135730f..c9bae71f643a 100644
---- a/drivers/mfd/88pm860x-core.c
-+++ b/drivers/mfd/88pm860x-core.c
-@@ -1178,12 +1178,12 @@ static int pm860x_probe(struct i2c_client *client)
- 	 */
- 	if (pdata->companion_addr && (pdata->companion_addr != client->addr)) {
- 		chip->companion_addr = pdata->companion_addr;
--		chip->companion = i2c_new_dummy(chip->client->adapter,
-+		chip->companion = i2c_new_dummy_device(chip->client->adapter,
- 						chip->companion_addr);
--		if (!chip->companion) {
-+		if (IS_ERR(chip->companion)) {
- 			dev_err(&client->dev,
- 				"Failed to allocate I2C companion device\n");
--			return -ENODEV;
-+			return PTR_ERR(chip->companion);
- 		}
- 		chip->regmap_companion = regmap_init_i2c(chip->companion,
- 							&pm860x_regmap_config);
+Some drivers still need to be manually converted. Patches for those will be
+sent out individually.
+
+
+Wolfram Sang (3):
+  iio: light: cm36651: convert to i2c_new_dummy_device
+  iio: light: veml6070: convert to i2c_new_dummy_device
+  iio: pressure: hp03: convert to i2c_new_dummy_device
+
+ drivers/iio/light/cm36651.c  | 12 ++++++------
+ drivers/iio/light/veml6070.c |  6 +++---
+ drivers/iio/pressure/hp03.c  |  6 +++---
+ 3 files changed, 12 insertions(+), 12 deletions(-)
+
 -- 
 2.20.1
 
