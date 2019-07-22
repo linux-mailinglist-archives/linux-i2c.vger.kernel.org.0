@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E12BD7073E
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 19:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE0170744
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 19:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726635AbfGVR3d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S1726736AbfGVR3d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Mon, 22 Jul 2019 13:29:33 -0400
-Received: from sauhun.de ([88.99.104.3]:42124 "EHLO pokefinder.org"
+Received: from sauhun.de ([88.99.104.3]:42128 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731310AbfGVR0I (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S1731317AbfGVR0I (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
         Mon, 22 Jul 2019 13:26:08 -0400
 Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
-        by pokefinder.org (Postfix) with ESMTPSA id 2948B4A1494;
+        by pokefinder.org (Postfix) with ESMTPSA id B2BAD4A148F;
         Mon, 22 Jul 2019 19:26:07 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Lars-Peter Clausen <lars@metafoo.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/8] media: i2c: ad9389b: convert to i2c_new_dummy_device
-Date:   Mon, 22 Jul 2019 19:25:59 +0200
-Message-Id: <20190722172604.3572-6-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 6/8] media: i2c: adv7180: convert to i2c_new_dummy_device
+Date:   Mon, 22 Jul 2019 19:26:00 +0200
+Message-Id: <20190722172604.3572-7-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190722172604.3572-1-wsa+renesas@sang-engineering.com>
 References: <20190722172604.3572-1-wsa+renesas@sang-engineering.com>
@@ -41,27 +41,37 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
 
- drivers/media/i2c/ad9389b.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/i2c/adv7180.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/i2c/ad9389b.c b/drivers/media/i2c/ad9389b.c
-index aa8b04cfed0f..1b92048a4a67 100644
---- a/drivers/media/i2c/ad9389b.c
-+++ b/drivers/media/i2c/ad9389b.c
-@@ -1148,10 +1148,10 @@ static int ad9389b_probe(struct i2c_client *client, const struct i2c_device_id *
- 	v4l2_dbg(1, debug, sd, "reg 0x41 0x%x, chip version (reg 0x00) 0x%x\n",
- 		 ad9389b_rd(sd, 0x41), state->chip_revision);
- 
--	state->edid_i2c_client = i2c_new_dummy(client->adapter, (0x7e>>1));
--	if (state->edid_i2c_client == NULL) {
-+	state->edid_i2c_client = i2c_new_dummy_device(client->adapter, (0x7e >> 1));
-+	if (IS_ERR(state->edid_i2c_client)) {
- 		v4l2_err(sd, "failed to register edid i2c client\n");
--		err = -ENOMEM;
-+		err = PTR_ERR(state->edid_i2c_client);
- 		goto err_entity;
+diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
+index 6f3dc8862622..e780969cc2f2 100644
+--- a/drivers/media/i2c/adv7180.c
++++ b/drivers/media/i2c/adv7180.c
+@@ -1329,17 +1329,17 @@ static int adv7180_probe(struct i2c_client *client,
  	}
  
+ 	if (state->chip_info->flags & ADV7180_FLAG_MIPI_CSI2) {
+-		state->csi_client = i2c_new_dummy(client->adapter,
++		state->csi_client = i2c_new_dummy_device(client->adapter,
+ 				ADV7180_DEFAULT_CSI_I2C_ADDR);
+-		if (!state->csi_client)
+-			return -ENOMEM;
++		if (IS_ERR(state->csi_client))
++			return PTR_ERR(state->csi_client);
+ 	}
+ 
+ 	if (state->chip_info->flags & ADV7180_FLAG_I2P) {
+-		state->vpp_client = i2c_new_dummy(client->adapter,
++		state->vpp_client = i2c_new_dummy_device(client->adapter,
+ 				ADV7180_DEFAULT_VPP_I2C_ADDR);
+-		if (!state->vpp_client) {
+-			ret = -ENOMEM;
++		if (IS_ERR(state->vpp_client)) {
++			ret = PTR_ERR(state->vpp_client);
+ 			goto err_unregister_csi_client;
+ 		}
+ 	}
 -- 
 2.20.1
 
