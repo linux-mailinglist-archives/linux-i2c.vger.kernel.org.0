@@ -2,102 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F8A7089E
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 20:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EC2708F4
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 20:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726291AbfGVSaI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Jul 2019 14:30:08 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:41533 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728934AbfGVSaI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Jul 2019 14:30:08 -0400
-Received: by mail-pl1-f194.google.com with SMTP id m9so19452772pls.8;
-        Mon, 22 Jul 2019 11:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6Fzk71LNruyVJOHAIeh7BkqFWyiYQ59QlSCVLT+fsNA=;
-        b=MKgJOdusXQP0ZsRCepxrRGOtPW2Ge6aebl80NhRU/jNCDPjD+u2cVvYTSbCbuikg2J
-         pXtJBkW3JAtvNk9CeY/g8ZeaEtmJ4WNtPawH1WWMTTtNH6eJrx1jIYluNc2vaT0tvec+
-         ddXMkfpS10h0GRWeL94/KMI3DZRDqVcYGBabU/zWg/W6JMlZYsxQ64V3LFPsbSrV8grY
-         vTJd0EnP0lhgWgGW3Z6lbi2x/AYNJZbpHLlHcGJl8/T1uEAZ6jJ7VLN+gLYPxK7t+axR
-         W0MCNkOlsnWOuXOHuYZKpP3LKf5kMEhfBAfHYEW1XunYulNuuFdTcNPOR4iMPayMxtfx
-         imuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6Fzk71LNruyVJOHAIeh7BkqFWyiYQ59QlSCVLT+fsNA=;
-        b=rz82m+hYsK5VU+1+gxfULBcRy6ZUB8qxbPImXUbRaOcR54sOjUTZFMl7QTwrjDHPa2
-         5Br979KlXGr59dl5Y6MswbufxJUOFvpNbDDjwt6uQkMMT8yEALqOejeODRtDW3SQLdrD
-         4/oEYgjENEoc5MMbHldfX3YR2TMbyc1hfvOEQE+TUSxSVsDWlZ0pn3URLjIWHQkyBmIy
-         ghuVfRra00z6+ECQ9XolDVikX8VCUwvNkxiu9sOJoK9rHNyYXi5+j8l/3nO6gQ2K97uu
-         Q2e0wKtNjYtVIyFTcx9loBpPW1+mMcv1PXKUIgdM7xQGzUwRaMLBMKUaKuppBWxULZdX
-         XrNw==
-X-Gm-Message-State: APjAAAWl+DGs3ngkzBqvCmVyP1MEyCWtkW0nEG9YFB2MmDVYmeK1YtAP
-        0B8rP9qwMNoMfnYyXrW0bLrkxtHW
-X-Google-Smtp-Source: APXvYqyNEhkXXMSvHBEXK2arEDckcIF9ItV+P+YSbNUz1DptSnfT9hQa1buRMMKMUJjbEGyGzXonaA==
-X-Received: by 2002:a17:902:2de4:: with SMTP id p91mr45716027plb.28.1563820207777;
-        Mon, 22 Jul 2019 11:30:07 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p15sm38150807pjf.27.2019.07.22.11.30.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 Jul 2019 11:30:07 -0700 (PDT)
-Date:   Mon, 22 Jul 2019 11:30:06 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: w83781d: convert to i2c_new_dummy_device
-Message-ID: <20190722183006.GA16898@roeck-us.net>
-References: <20190722172611.3797-1-wsa+renesas@sang-engineering.com>
- <20190722172611.3797-4-wsa+renesas@sang-engineering.com>
+        id S1726312AbfGVSza (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Jul 2019 14:55:30 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:57653 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726253AbfGVSza (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 22 Jul 2019 14:55:30 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 45srPD71TmzB2;
+        Mon, 22 Jul 2019 20:54:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1563821649; bh=bE0dGjjaQbgRByh9iGi+rEP/3lt1aLZBFV2P9c6N2Ts=;
+        h=Date:From:Subject:To:Cc:From;
+        b=BXy4QEJVLaikHX+RNr5A4A4LXU6tRqxeihcJdBKf+gCIL5ETxjHwqSmDnTBuKiSRr
+         8fl4ykxTVlXMGqn+dDEHmprEcT28UHT4sBE2uAka5Y2VvpslDXMUe95K8/HNJD4E3T
+         WI22brJNzRhjB5/mdDK9orERCtgfA+559dRJqVbAb9g0OhELP5KwmijrKwtI9Sc1/m
+         wUhU5Q/JSK+nZDLVtJa1LdNEnRRbtg+7zlQxlqZ6saPicgsHouLIyPupUrEgGK/Rgd
+         6rJ/97WfPogYa7FE00f1aJT66nhAZFJtf9GWTVcL7GiNeWxKhwTzto8QqJ7IiX7HaX
+         qz7rctNgabfJA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.100.3 at mail
+Date:   Mon, 22 Jul 2019 20:55:27 +0200
+Message-Id: <cbd93920a225e2e32c7f43ff417f301af57c4e6c.1563820695.git.mirq-linux@rere.qmqm.pl>
+From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Subject: [PATCH] i2c: at91: disable TXRDY interrupt after sending data
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190722172611.3797-4-wsa+renesas@sang-engineering.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     linux-i2c@vger.kernel.org
+Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jul 22, 2019 at 07:26:10PM +0200, Wolfram Sang wrote:
-> Move from i2c_new_dummy() to i2c_new_dummy_device(), so we now get an
-> ERRPTR which we use in error handling.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Driver was not disabling TXRDY interrupt after last TX byte.
+This caused interrupt storm until transfer timeouts for slow
+or broken device on the bus. The patch fixes the interrupt storm
+on my SAMA5D2-based board.
 
-Applied to hwmon-next.
+Cc: stable@vger.kernel.org # 5.2.x
+[v5.2 introduced file split; the patch should apply to i2c-at91.c before the split]
+Fixes: fac368a0404 ("i2c: at91: add new driver")
+Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 
-Thanks,
-Guenter
+---
+ drivers/i2c/busses/i2c-at91-master.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-> ---
-> 
-> Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
-> 
->  drivers/hwmon/w83781d.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/w83781d.c b/drivers/hwmon/w83781d.c
-> index d2c04b6a3f2b..015f1ea31966 100644
-> --- a/drivers/hwmon/w83781d.c
-> +++ b/drivers/hwmon/w83781d.c
-> @@ -894,12 +894,12 @@ w83781d_detect_subclients(struct i2c_client *new_client)
->  	}
->  
->  	for (i = 0; i < num_sc; i++) {
-> -		data->lm75[i] = i2c_new_dummy(adapter, sc_addr[i]);
-> -		if (!data->lm75[i]) {
-> +		data->lm75[i] = i2c_new_dummy_device(adapter, sc_addr[i]);
-> +		if (IS_ERR(data->lm75[i])) {
->  			dev_err(&new_client->dev,
->  				"Subclient %d registration at address 0x%x failed.\n",
->  				i, sc_addr[i]);
-> -			err = -ENOMEM;
-> +			err = PTR_ERR(data->lm75[i]);
->  			if (i == 1)
->  				goto ERROR_SC_3;
->  			goto ERROR_SC_2;
+diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+index e87232f2e708..a3fcc35ffd3b 100644
+--- a/drivers/i2c/busses/i2c-at91-master.c
++++ b/drivers/i2c/busses/i2c-at91-master.c
+@@ -122,9 +122,11 @@ static void at91_twi_write_next_byte(struct at91_twi_dev *dev)
+ 	writeb_relaxed(*dev->buf, dev->base + AT91_TWI_THR);
+ 
+ 	/* send stop when last byte has been written */
+-	if (--dev->buf_len == 0)
++	if (--dev->buf_len == 0) {
+ 		if (!dev->use_alt_cmd)
+ 			at91_twi_write(dev, AT91_TWI_CR, AT91_TWI_STOP);
++		at91_twi_write(dev, AT91_TWI_IDR, AT91_TWI_TXRDY);
++	}
+ 
+ 	dev_dbg(dev->dev, "wrote 0x%x, to go %zu\n", *dev->buf, dev->buf_len);
+ 
+@@ -542,9 +544,8 @@ static int at91_do_twi_transfer(struct at91_twi_dev *dev)
+ 		} else {
+ 			at91_twi_write_next_byte(dev);
+ 			at91_twi_write(dev, AT91_TWI_IER,
+-				       AT91_TWI_TXCOMP |
+-				       AT91_TWI_NACK |
+-				       AT91_TWI_TXRDY);
++				       AT91_TWI_TXCOMP | AT91_TWI_NACK |
++				       (dev->buf_len ? AT91_TWI_TXRDY : 0));
+ 		}
+ 	}
+ 
+-- 
+2.20.1
+
