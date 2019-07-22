@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F9B7072F
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 19:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4491570709
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2019 19:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731366AbfGVR0P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Jul 2019 13:26:15 -0400
-Received: from sauhun.de ([88.99.104.3]:42206 "EHLO pokefinder.org"
+        id S1726186AbfGVR2P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Jul 2019 13:28:15 -0400
+Received: from sauhun.de ([88.99.104.3]:42304 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731354AbfGVR0O (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 22 Jul 2019 13:26:14 -0400
+        id S1731438AbfGVR01 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 22 Jul 2019 13:26:27 -0400
 Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
-        by pokefinder.org (Postfix) with ESMTPSA id E7C254A1493;
-        Mon, 22 Jul 2019 19:26:12 +0200 (CEST)
+        by pokefinder.org (Postfix) with ESMTPSA id C43EE4A149D;
+        Mon, 22 Jul 2019 19:26:25 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] hwmon: w83781d: convert to i2c_new_dummy_device
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 03/14] mfd: ab3100-core: convert to i2c_new_dummy_device
 Date:   Mon, 22 Jul 2019 19:26:10 +0200
-Message-Id: <20190722172611.3797-4-wsa+renesas@sang-engineering.com>
+Message-Id: <20190722172623.4166-4-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190722172611.3797-1-wsa+renesas@sang-engineering.com>
-References: <20190722172611.3797-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20190722172623.4166-1-wsa+renesas@sang-engineering.com>
+References: <20190722172623.4166-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
@@ -41,29 +41,27 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
 
- drivers/hwmon/w83781d.c | 6 +++---
+ drivers/mfd/ab3100-core.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/w83781d.c b/drivers/hwmon/w83781d.c
-index d2c04b6a3f2b..015f1ea31966 100644
---- a/drivers/hwmon/w83781d.c
-+++ b/drivers/hwmon/w83781d.c
-@@ -894,12 +894,12 @@ w83781d_detect_subclients(struct i2c_client *new_client)
+diff --git a/drivers/mfd/ab3100-core.c b/drivers/mfd/ab3100-core.c
+index e350ab64238e..7e007df857b8 100644
+--- a/drivers/mfd/ab3100-core.c
++++ b/drivers/mfd/ab3100-core.c
+@@ -896,10 +896,10 @@ static int ab3100_probe(struct i2c_client *client,
+ 		 &ab3100->chip_name[0]);
+ 
+ 	/* Attach a second dummy i2c_client to the test register address */
+-	ab3100->testreg_client = i2c_new_dummy(client->adapter,
++	ab3100->testreg_client = i2c_new_dummy_device(client->adapter,
+ 					       client->addr + 1);
+-	if (!ab3100->testreg_client) {
+-		err = -ENOMEM;
++	if (IS_ERR(ab3100->testreg_client)) {
++		err = PTR_ERR(ab3100->testreg_client);
+ 		goto exit_no_testreg_client;
  	}
  
- 	for (i = 0; i < num_sc; i++) {
--		data->lm75[i] = i2c_new_dummy(adapter, sc_addr[i]);
--		if (!data->lm75[i]) {
-+		data->lm75[i] = i2c_new_dummy_device(adapter, sc_addr[i]);
-+		if (IS_ERR(data->lm75[i])) {
- 			dev_err(&new_client->dev,
- 				"Subclient %d registration at address 0x%x failed.\n",
- 				i, sc_addr[i]);
--			err = -ENOMEM;
-+			err = PTR_ERR(data->lm75[i]);
- 			if (i == 1)
- 				goto ERROR_SC_3;
- 			goto ERROR_SC_2;
 -- 
 2.20.1
 
