@@ -2,111 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34193716C0
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jul 2019 13:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F35716E5
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jul 2019 13:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726950AbfGWLLQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Jul 2019 07:11:16 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:38752 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726709AbfGWLLQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Jul 2019 07:11:16 -0400
-Received: by mail-pf1-f193.google.com with SMTP id y15so18981808pfn.5;
-        Tue, 23 Jul 2019 04:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hLE+uvTLBw9PwWML02QRkRdkEaxbje4YIX9zUI0ZUnc=;
-        b=s2yL5v4pdf2a5iHalxCn1uyDwXhBF7kNoqnlkEsHZJZWLe65EAkNcNsjCtLoQKjh9F
-         /ng32Olv7Qsj6XMr5mjWZBDjR1rKaLweZe5zbNN5CAujGDw9ZcXdYyJNgA0OiQCqqX1c
-         MwEQHzkpK3LT28WNE/BxUA1vPo4KiFz+XWZM2tVnabsC1BQCWWvbpN8eKR+ctaUUcZkV
-         h+2ckclyhLDyHPijSs+T1gHpKURtzgpZGmkxebScKhGZiUejNxmRhhZ6J48ZwoN8MPC0
-         RrONS2zUVy+lns5i7RighM+ng4LRD6jYuzGVXsAm0jbTUPYMNpWb14XjzqfsUNl4pWkm
-         VkoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hLE+uvTLBw9PwWML02QRkRdkEaxbje4YIX9zUI0ZUnc=;
-        b=R3wkUUuqIlDAHjzJEdUH3aQmJahV6Ev0el5/vw8P6EV0MZJ4OQlryxm9Itpu7VFLHj
-         GSF1aUZNR6ejPJ93IDJXlN8Rd+eT8sAFOLCMDfP7vLyOoADl/+kLR7f16kXLEeB5PXlS
-         LzD++MnS691MyYXfQvNUGQFoH2At9XiQRLJCXQZ61a94IsojVZ653/Lc7YjZ5744g/zo
-         nxJ4YqXtmPA2Vmlj/ZbluuvyuZA3EbOL1oo/XSPFeV4pFUT6AkOBocjduNrOuCtKtGIV
-         zgbJy2xxGkZ7/BNTU/otecJGwNl/oOOul2RYazqWgzgu4Wkz7LYGO91PRJG9Zq3qxdLO
-         hRkg==
-X-Gm-Message-State: APjAAAXNc6749sWS8AFCZJv5iu0Cd+Lccl6412JQxGUt2jhMDc9TmJxh
-        dPjucoLDZHjh3MHjzVaQQLkTRovH61A=
-X-Google-Smtp-Source: APXvYqynnH31LPno6ltEcHkrqbGBKnOd2p39f1ApYnrfRJpCTGj65ZrPPHx+h/IJvOdLzJu1SuNV3g==
-X-Received: by 2002:a65:640d:: with SMTP id a13mr75434935pgv.256.1563880275480;
-        Tue, 23 Jul 2019 04:11:15 -0700 (PDT)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([89.31.126.54])
-        by smtp.gmail.com with ESMTPSA id l25sm52282284pff.143.2019.07.23.04.11.13
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 23 Jul 2019 04:11:14 -0700 (PDT)
-From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] i2c: busses: Use dev_get_drvdata where possible
-Date:   Tue, 23 Jul 2019 19:11:10 +0800
-Message-Id: <20190723111110.11121-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        id S1730624AbfGWLXg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Jul 2019 07:23:36 -0400
+Received: from valentin-vidic.from.hr ([94.229.67.141]:58775 "EHLO
+        valentin-vidic.from.hr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728103AbfGWLXg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Jul 2019 07:23:36 -0400
+X-Virus-Scanned: Debian amavisd-new at valentin-vidic.from.hr
+Received: by valentin-vidic.from.hr (Postfix, from userid 1000)
+        id B39973A33C; Tue, 23 Jul 2019 13:23:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=valentin-vidic.from.hr; s=2017; t=1563881007;
+        bh=2Mgnwoj5xR3QUy8vNL71/ooriKoYwrWLw0Pu7Exed/Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YLv7LE+HDwA3PMd9cHtSpvNVWFMG8qsio8Axfcmobkvv54R4V/KNHXGN7u5lIQevo
+         pu4J36s/5Y8HZ3QdcyzJy4RNnm+y4wNN6yIKZnRPs9yzHl6b4lRJEGhphIAYnUvxu3
+         I+qmd7Ae+BBv2iMJjhJ4J0Mgpo9xSdyVS8tLOCCUvdB87ug7YEVxa/G3JvjUMLmh58
+         76mKhQD4h+eM2cVK1Z97jTWF/y2GjZZ2ccVNRY44r5pTZEsB5AxuRGWdfQcYhDlG8J
+         ga8otXLtOZj0COfbxGGBFqBsI5qOj+azZdVurRffCtuzN8LWlTPgl/hAhBSg167jEs
+         t59qAH2vKJijA==
+Date:   Tue, 23 Jul 2019 13:23:27 +0200
+From:   Valentin =?utf-8?B?VmlkacSH?= <vvidic@valentin-vidic.from.hr>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: iTCO_wdt on Intel NUC
+Message-ID: <20190723112327.dvvnjwpxqx5mlc6f@valentin-vidic.from.hr>
+References: <20190722174504.qwp52opvy6ptyxn6@valentin-vidic.from.hr>
+ <20190723100256.3895bd3b@endymion>
+ <20190723085546.n4c33twqrtul6fae@valentin-vidic.from.hr>
+ <20190723120936.176290d2@endymion>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190723120936.176290d2@endymion>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Instead of using to_pci_dev + pci_get_drvdata,
-use dev_get_drvdata to make code simpler.
+On Tue, Jul 23, 2019 at 12:09:36PM +0200, Jean Delvare wrote:
+> As a conclusion, your problem is that your watchdog device was not
+> properly configured by the BIOS. The device needs to be assigned an I/O
+> memory range within a Reserved area, NOT System RAM. A range that's
+> also not used by any other device. The BIOS author is supposed to make
+> the decision.
+> 
+> So... I think you're up for a visit to your BIOS options in case
+> anything related to the watchdog can be configured. If that doesn't
+> help, look for BIOS updates for your system. And if that still doesn't
+> help, you'll have to complain to your system vendor.
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
----
- drivers/i2c/busses/i2c-designware-pcidrv.c | 6 ++----
- drivers/i2c/busses/i2c-i801.c              | 3 +--
- 2 files changed, 3 insertions(+), 6 deletions(-)
+Thank you for the detailed explanation. I suspected it could be
+something to do with this platform as I don't get errors loading
+iTCO_wdt on other Intel based systems. I already checked BIOS menus
+and did not find anything mentioning watchdog but I will try once
+more. Also maybe it has to do with UEFI so Legacy boot might help?
 
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 76810deb2de6..7d2e6959679c 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -173,8 +173,7 @@ static struct dw_pci_controller dw_pci_controllers[] = {
- #ifdef CONFIG_PM
- static int i2c_dw_pci_suspend(struct device *dev)
- {
--	struct pci_dev *pdev = to_pci_dev(dev);
--	struct dw_i2c_dev *i_dev = pci_get_drvdata(pdev);
-+	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
- 
- 	i_dev->suspended = true;
- 	i_dev->disable(i_dev);
-@@ -184,8 +183,7 @@ static int i2c_dw_pci_suspend(struct device *dev)
- 
- static int i2c_dw_pci_resume(struct device *dev)
- {
--	struct pci_dev *pdev = to_pci_dev(dev);
--	struct dw_i2c_dev *i_dev = pci_get_drvdata(pdev);
-+	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
- 	int ret;
- 
- 	ret = i_dev->init(i_dev);
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index f2956936c3f2..a6469978e735 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1912,8 +1912,7 @@ static int i801_suspend(struct device *dev)
- 
- static int i801_resume(struct device *dev)
- {
--	struct pci_dev *pci_dev = to_pci_dev(dev);
--	struct i801_priv *priv = pci_get_drvdata(pci_dev);
-+	struct i801_priv *priv = dev_get_drvdata(dev);
- 
- 	i801_enable_host_notify(&priv->adapter);
- 
+In case that does not work out maybe Felipe could help?  Or there
+is someone else at Intel I could contact as this seems to be a
+more general problem (I found complaints of watchdog not working
+on older NUC generations too)?
+
 -- 
-2.20.1
-
+Valentin
