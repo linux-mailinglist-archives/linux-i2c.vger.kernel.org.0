@@ -2,90 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A9B71473
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jul 2019 10:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD23715B5
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jul 2019 12:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728804AbfGWIz4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Jul 2019 04:55:56 -0400
-Received: from valentin-vidic.from.hr ([94.229.67.141]:56035 "EHLO
-        valentin-vidic.from.hr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727748AbfGWIzz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Jul 2019 04:55:55 -0400
-X-Virus-Scanned: Debian amavisd-new at valentin-vidic.from.hr
-Received: by valentin-vidic.from.hr (Postfix, from userid 1000)
-        id 001AE3A33C; Tue, 23 Jul 2019 10:55:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=valentin-vidic.from.hr; s=2017; t=1563872147;
-        bh=ZbfDjg9s3v25K12wKhMz5cNll4Hjy/oSaV1YnINzL6E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PxBLA5R7R56jPcw9CVA4e9FnZZg0tUhP4f2E6xTez8x2l5hDA9pd5EXjxxw0FNmZx
-         kZuwNP4qn7RALgrPGeqGKtDs0ZhAP+go1AWja2RuyB7GvVXK0vZzsUQ9mm6mNE0gIq
-         VbHCOzSgPffZuFI1vzHeBGP1wh5LqsiRgCkgRJesKQeNBWDfHkmRICQWCulLxHfqqf
-         dZPhrzSO+ldCN4KK0D9/t5bCtN7n7hqLJrDkCZG2R6N1WMmJNBDv9BnYktPtBIHZOo
-         B5Zl49E2680txJV8aBJVaXbOt3AtyUTF+2QjQD/798Ycc4ZyVLHaXL1X7mvk/qUjk5
-         Ea2QiWhWRCBkQ==
-Date:   Tue, 23 Jul 2019 10:55:46 +0200
-From:   Valentin =?utf-8?B?VmlkacSH?= <vvidic@valentin-vidic.from.hr>
-To:     Jean Delvare <jdelvare@suse.de>
+        id S1728268AbfGWKKA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 23 Jul 2019 06:10:00 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60120 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726710AbfGWKKA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 23 Jul 2019 06:10:00 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 54BAAB119;
+        Tue, 23 Jul 2019 10:09:58 +0000 (UTC)
+Date:   Tue, 23 Jul 2019 12:09:36 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Valentin =?UTF-8?B?VmlkacSH?= <vvidic@valentin-vidic.from.hr>
 Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
         linux-i2c@vger.kernel.org
 Subject: Re: iTCO_wdt on Intel NUC
-Message-ID: <20190723085546.n4c33twqrtul6fae@valentin-vidic.from.hr>
+Message-ID: <20190723120936.176290d2@endymion>
+In-Reply-To: <20190723085546.n4c33twqrtul6fae@valentin-vidic.from.hr>
 References: <20190722174504.qwp52opvy6ptyxn6@valentin-vidic.from.hr>
- <20190723100256.3895bd3b@endymion>
+        <20190723100256.3895bd3b@endymion>
+        <20190723085546.n4c33twqrtul6fae@valentin-vidic.from.hr>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190723100256.3895bd3b@endymion>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 10:02:56AM +0200, Jean Delvare wrote:
-> I think you are contacting the wrong people and list. The iTCO_wdt
-> driver is a watchdog driver and as such it is handled by the watchdog
-> subsystem maintainers (Wim Van Sebroeck and Guenter Roeck). You better
-> write to them and their list (linux-watchdog@vger).
+On Tue, 23 Jul 2019 10:55:46 +0200, Valentin Vidić wrote:
+> So the main question at the moment is why loading just i2c-i801 produces
+> an iTCO_wdt entry in /proc/iomem? Could it be that both i2c-i801 and
+> iTCO_wdt are trying to register the same region?
 
-Hello and yes, I just came from there as we could not work it out :)
+This is expected, due to how resources are handled by the kernel. In
+fact there are 2 types of resources: free resources, which are merely
+information about known devices, and busy resources, which correspond
+to resources actually reserved by running drivers. If you look
+at /proc/iomem (or /proc/ioport for that matter), you'll find a lot of
+similar examples. For example i2c-i801 on my machine:
 
-https://www.spinics.net/lists/linux-watchdog/msg16232.html
+0d00-ffff : PCI Bus 0000:00
+  (...)
+  f000-f01f : 0000:00:1f.3
+    f000-f01f : i801_smbus
 
-> The fact that iTCO_wdt loads when you load i2c-i801 is just a side
-> effect of an implementation detail (i2c-i801 instantiates the watchdog
-> device in certain cases, then module alias magic gets the needed driver
-> loaded automatically). If you only care about SMBus and not watchdog,
-> you can ignore the error message completely.
-> 
-> If you care about the watchdog feature, you should check what is
-> conflicting with iTCO_wdt. Error -16 is -EBUSY which suggests that
-> another driver has already grabbed the memory range. This should be
-> visible in /proc/iomem.
-> 
-> If it was grabbed by ACPI, you may need an ACPI driver for your
-> watchdog (if anything like that exists). If it was grabbed by another
-> non-ACPI driver, both drivers may have to be modified to synchronize
-> their access to the hardware.
+First one is the port pool allocated to the whole PCI bus. Second one
+is the resource declared as used by the SMBUs controller device at the
+PCI level, and the last one is the busy resource created by the
+i2c-i801 driver to claim that I/O port range. In general the busy range
+matches the device range, but it can also be a subset.
 
-The only conflict we could find is that loading i2c-i801 creates this
-entry in /proc/iomem:
+Back to iTCO_wdt... This is not a standalone PCI device, instead it is
+a feature of another device. If I recall right, depending on the
+chipset, it is part of the SMBus controller device (which is why
+i2c-i801 is in charge of instantiating the device), or part of the LPC
+device (then lpc_ich is in charge of instantiating the device). In your
+case, the i2c-i801 driver instantiates the iTCO_wdt device. Nothing
+wrong with that.
 
+My own resources for the iTCO_wdt device look like:
+
+fed1c000-fed1ffff : Reserved
+  fed1c000-fed1ffff : pnp 00:09
+    fed1f410-fed1f414 : iTCO_wdt.0.auto
+      fed1f410-fed1f414 : iTCO_wdt.0.auto
+
+That's with the iTCO_wdt driver loaded (last line is the busy
+resource). Last line goes away when iTCO_wdt driver is not loaded.
+
+Now if I look at your resource tree, we have:
+
+00100000-6f8d8017 : System RAM
   00c5fffc-00c5ffff : iTCO_wdt
 
-and loading iTCO_wdt after that produces the -16 error.
+The key difference between yours and mine is that mine is in a RESERVED
+memory range, while yours is in SYSTEM RAM. Which is a totally
+incorrect place to map device I/O memory. And that's the reason why it
+fails.
 
-Loading iTCO_wdt before i2c-i801 does not produce an error but also
-does not create /dev/watchdog. If i2c-i801 is loaded after that the
-same -16 error appears.
+Down to the technical details... The kernel will always let you create
+a free resource in the tree as long as it doesn't break a boundary of
+an existing resource (region). However you can only create a BUSY
+resource if ALL wrapping resources down the tree are themselves FREE
+(that's the whole point of having busy resources in the first place).
+In order to protect the system, the System RAM regions are always
+created busy by the kernel, so no driver can accidentally use system
+RAM as device mapped memory (the consequences would be terribly unsafe
+and insecure).
 
-I don't think any other watchdog module is running because /dev/watchdog
-does not exist, but I can send a lsmod output.
+As a conclusion, your problem is that your watchdog device was not
+properly configured by the BIOS. The device needs to be assigned an I/O
+memory range within a Reserved area, NOT System RAM. A range that's
+also not used by any other device. The BIOS author is supposed to make
+the decision.
 
-So the main question at the moment is why loading just i2c-i801 produces
-an iTCO_wdt entry in /proc/iomem? Could it be that both i2c-i801 and
-iTCO_wdt are trying to register the same region?
+So... I think you're up for a visit to your BIOS options in case
+anything related to the watchdog can be configured. If that doesn't
+help, look for BIOS updates for your system. And if that still doesn't
+help, you'll have to complain to your system vendor.
 
 -- 
-Valentin
+Jean Delvare
+SUSE L3 Support
