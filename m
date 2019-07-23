@@ -2,75 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A0971389
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jul 2019 10:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D26A471401
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jul 2019 10:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbfGWIDB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Jul 2019 04:03:01 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46602 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727352AbfGWIDB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 23 Jul 2019 04:03:01 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 07A5EB0BE;
-        Tue, 23 Jul 2019 08:03:00 +0000 (UTC)
-Date:   Tue, 23 Jul 2019 10:02:56 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Valentin Vidic <vvidic@valentin-vidic.from.hr>
-Cc:     "Felipe Balbi" <felipe.balbi@linux.intel.com>,
-        <linux-i2c@vger.kernel.org>
-Subject: Re: iTCO_wdt on Intel NUC
-Message-ID: <20190723100256.3895bd3b@endymion>
-In-Reply-To: <20190722174504.qwp52opvy6ptyxn6@valentin-vidic.from.hr>
-References: <20190722174504.qwp52opvy6ptyxn6@valentin-vidic.from.hr>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1730820AbfGWIaP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Jul 2019 04:30:15 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:44837 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730598AbfGWIaP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Jul 2019 04:30:15 -0400
+Received: by mail-lf1-f65.google.com with SMTP id r15so11723515lfm.11
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Jul 2019 01:30:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=syBlnIr3lotOltOc/vZkYQKICHGTlfmAJxr6rc/TPFI=;
+        b=IDHd3BlllDzmuMywX3W/Mwaxf9SUAC1ITQAYxVe3EdpVLn9P7ox/KvicZW0H2rn0VZ
+         XYMuUIDtUmUgSakwnZqRD1wQNi33jFkVfQ++7gqN+S1bYzcoiZEpYsIYDg+s8PtPW9+K
+         MSur3qtEyMptDyPfThqGYsTkPwZI82uma6RJmI3Z3uNyWTSnvQnDub5P482J9AI4exHZ
+         MibyDiZFASkBdczzlG82BC7XX9iF5uOdeBkbJ8eNZKBp1/DlcJfWf8owTiKuBkS9Gdhk
+         9wVcvG5Pfqbu1AVShyl1gXG5TMkTM9JLUFH0Wfp9eDgJ8oepkWepG/LEbP9vk/XxLltc
+         Gs+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=syBlnIr3lotOltOc/vZkYQKICHGTlfmAJxr6rc/TPFI=;
+        b=oIKoIo2of5j5X3DZmojOTQ3RrFEh9TM+TCNltHcFBdWfl559H0deLA/YH2cpKTX+uY
+         Nqf5kD0PqcoZiQ6i2qbB1OVlimcIXR6L3rSJsGyiDuzjhZYRWmxeZ8+/taTaQVdcU0Gh
+         OZv4Ae4sc+wQsfdkqeDWhjbzBdANvi+uaWQiys+eSWcarc156gYrvlWjLEiLo66UPjgB
+         3Pep0Bo0VIGaOSV5MxwGT1ujoENMe5x8l7JwnQRz0SaVSLpJq6Sgxe0CBbL3/U38oO9R
+         5drA7Z7F2fXW4MTUTVSWsdOKCe9eecoWdGhR3daF4iskiHzz7IGxYsHNndHw3RNVyIM5
+         MQQQ==
+X-Gm-Message-State: APjAAAXa9Bce4G/SJOhHQRvexPaunSILOaN8pI9tczBXDwlpoyBe6xaW
+        TD3euxCgNburkwV+NF2EdB9f9Iud6FL4C+IMWhcOHA==
+X-Google-Smtp-Source: APXvYqwWGxao/28Kz2zbNijiOv5Hz8uDmZYEJmaa8ZR+sLnSu5xitdAQqA8b5w1+jLpRJZce7gmX18s/KwwTbJI3EQI=
+X-Received: by 2002:ac2:4891:: with SMTP id x17mr35514625lfc.60.1563870614049;
+ Tue, 23 Jul 2019 01:30:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20190722172623.4166-1-wsa+renesas@sang-engineering.com> <20190722172623.4166-4-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20190722172623.4166-4-wsa+renesas@sang-engineering.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 23 Jul 2019 10:30:02 +0200
+Message-ID: <CACRpkdb4CtiiYbSwHEcC4godbRBA3DmABCHpx5_OKUCfxgcUSg@mail.gmail.com>
+Subject: Re: [PATCH 03/14] mfd: ab3100-core: convert to i2c_new_dummy_device
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Valentin,
+On Mon, Jul 22, 2019 at 7:26 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
 
-On Mon, 22 Jul 2019 19:45:04 +0200, Valentin Vidic wrote:
-> I'm having trouble getting iTCO_wdt to work on NUC8i5BEH with kernel 4.19.37-5+deb10u1:
-> 
-> # modprobe i2c_i801
-> [40450.070587] i801_smbus 0000:00:1f.4: SPD Write Disable is set
-> [40450.070652] i801_smbus 0000:00:1f.4: SMBus using PCI interrupt
-> [40450.072919] iTCO_vendor_support: vendor-support=0
-> [40450.073485] iTCO_wdt: Intel TCO WatchDog Timer Driver v1.11
-> [40450.073546] iTCO_wdt iTCO_wdt: can't request region for resource [mem 0x00c5fffc-0x00c5ffff]
-> [40450.073578] iTCO_wdt: probe of iTCO_wdt failed with error -16
-> 
-> Is there a way to check if the TCO hardware is missing in this machine
-> or something else needs to be updated to get it working?
+> Move from i2c_new_dummy() to i2c_new_dummy_device(), so we now get an
+> ERRPTR which we use in error handling.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-I think you are contacting the wrong people and list. The iTCO_wdt
-driver is a watchdog driver and as such it is handled by the watchdog
-subsystem maintainers (Wim Van Sebroeck and Guenter Roeck). You better
-write to them and their list (linux-watchdog@vger).
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-The fact that iTCO_wdt loads when you load i2c-i801 is just a side
-effect of an implementation detail (i2c-i801 instantiates the watchdog
-device in certain cases, then module alias magic gets the needed driver
-loaded automatically). If you only care about SMBus and not watchdog,
-you can ignore the error message completely.
-
-If you care about the watchdog feature, you should check what is
-conflicting with iTCO_wdt. Error -16 is -EBUSY which suggests that
-another driver has already grabbed the memory range. This should be
-visible in /proc/iomem.
-
-If it was grabbed by ACPI, you may need an ACPI driver for your
-watchdog (if anything like that exists). If it was grabbed by another
-non-ACPI driver, both drivers may have to be modified to synchronize
-their access to the hardware.
-
--- 
-Jean Delvare
-SUSE L3 Support
+Yours,
+Linus Walleij
