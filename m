@@ -2,464 +2,566 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A007215A
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jul 2019 23:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DD972237
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Jul 2019 00:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389078AbfGWVMN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Jul 2019 17:12:13 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58726 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728921AbfGWVMN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Jul 2019 17:12:13 -0400
-Received: from [88.149.224.16] (port=34022 helo=melee.fritz.box)
-        by hostingweb31.netsons.net with esmtpa (Exim 4.92)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1hq1Xp-007idA-IN; Tue, 23 Jul 2019 22:37:57 +0200
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        id S2392413AbfGWWTQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Jul 2019 18:19:16 -0400
+Received: from foss.arm.com ([217.140.110.172]:60674 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387599AbfGWWTP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 23 Jul 2019 18:19:15 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 41BB515A1;
+        Tue, 23 Jul 2019 15:19:14 -0700 (PDT)
+Received: from dawn-kernel.cambridge.arm.com (unknown [10.1.197.116])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3D88B3F694;
+        Tue, 23 Jul 2019 15:19:10 -0700 (PDT)
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Peter Rosin <peda@axentia.se>
-Subject: [RFC,v2 6/6] media: ds90ub953: new driver for TI DS90UB953-Q1 video serializer
-Date:   Tue, 23 Jul 2019 22:37:23 +0200
-Message-Id: <20190723203723.11730-7-luca@lucaceresoli.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190723203723.11730-1-luca@lucaceresoli.net>
-References: <20190723203723.11730-1-luca@lucaceresoli.net>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Wolfram Sang <wsa@the-dreams.de>, Alan Tull <atull@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Mark Brown <broonie@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, Lee Jones <lee.jones@linaro.org>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        Jiri Slaby <jslaby@suse.com>
+Subject: [PATCH v3 2/7] drivers: Introduce device lookup variants by of_node
+Date:   Tue, 23 Jul 2019 23:18:33 +0100
+Message-Id: <20190723221838.12024-3-suzuki.poulose@arm.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190723221838.12024-1-suzuki.poulose@arm.com>
+References: <20190723221838.12024-1-suzuki.poulose@arm.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add a driver for the TI DS90UB953-Q1, a MIPI CSI-2 video serializer that
-forwards a MIPI CSI-2 input video stream over an FPD Link 3 connection to a
-remote deserializer. It also allows access to I2C and GPIO from the
-deserializer.
+Introduce wrappers for {bus/driver/class}_find_device() to
+locate devices by its of_node.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+Cc: dri-devel@lists.freedesktop.org
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: devicetree@vger.kernel.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-rockchip@lists.infradead.org
+Cc: linux-spi@vger.kernel.org
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: Wolfram Sang <wsa@the-dreams.de>
+Cc: Alan Tull <atull@kernel.org>
+Cc: Moritz Fischer <mdf@kernel.org>
+Cc: linux-fpga@vger.kernel.org
+Cc: Peter Rosin <peda@axentia.se>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Thor Thayer <thor.thayer@linux.intel.com>
+Cc: Jiri Slaby <jslaby@suse.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Peter Rosin <peda@axentia.se>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 ---
-
-Changes RFCv1 -> RFCv2: none, this patch is new in RFCv2
+ - Dropped the reviewed-by tags from Thor, Mark, Andrew and Peter as the
+   patches are mereged, though there are no functional changes.
 ---
- drivers/media/i2c/Kconfig     |  10 +
- drivers/media/i2c/Makefile    |   1 +
- drivers/media/i2c/ds90ub953.c | 354 ++++++++++++++++++++++++++++++++++
- 3 files changed, 365 insertions(+)
- create mode 100644 drivers/media/i2c/ds90ub953.c
+ drivers/amba/tegra-ahb.c              | 11 +-------
+ drivers/fpga/fpga-bridge.c            |  8 +-----
+ drivers/fpga/fpga-mgr.c               |  8 +-----
+ drivers/gpu/drm/drm_mipi_dsi.c        |  7 +----
+ drivers/i2c/i2c-core-of.c             |  7 +----
+ drivers/mfd/altera-sysmgr.c           | 14 ++--------
+ drivers/mux/core.c                    |  7 +----
+ drivers/net/phy/mdio_bus.c            |  9 +------
+ drivers/nvmem/core.c                  |  7 +----
+ drivers/of/of_mdio.c                  |  8 +-----
+ drivers/of/platform.c                 |  7 +----
+ drivers/regulator/of_regulator.c      |  7 +----
+ drivers/spi/spi.c                     | 20 +++------------
+ include/linux/device.h                | 37 +++++++++++++++++++++++++++
+ sound/soc/rockchip/rk3399_gru_sound.c |  9 ++-----
+ 15 files changed, 56 insertions(+), 110 deletions(-)
 
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index e7088ccfd280..9db84ebdc060 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -569,6 +569,16 @@ config VIDEO_DS90UB954
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called ds90ub954.
+diff --git a/drivers/amba/tegra-ahb.c b/drivers/amba/tegra-ahb.c
+index aa64eece77a6..57d3b2e2d007 100644
+--- a/drivers/amba/tegra-ahb.c
++++ b/drivers/amba/tegra-ahb.c
+@@ -134,22 +134,13 @@ static inline void gizmo_writel(struct tegra_ahb *ahb, u32 value, u32 offset)
+ }
  
-+config VIDEO_DS90UB953
-+	tristate "TI DS90UB953-Q1 serializer"
-+	help
-+	  Device driver for the Texas Instruments "DS90UB953-Q1
-+	  FPD-Link III 4.16-Gbps Serializer With CSI-2 Interface for
-+	  2.3MP/60fps Cameras, RADAR, and Other Sensors".
+ #ifdef CONFIG_TEGRA_IOMMU_SMMU
+-static int tegra_ahb_match_by_smmu(struct device *dev, const void *data)
+-{
+-	struct tegra_ahb *ahb = dev_get_drvdata(dev);
+-	const struct device_node *dn = data;
+-
+-	return (ahb->dev->of_node == dn) ? 1 : 0;
+-}
+-
+ int tegra_ahb_enable_smmu(struct device_node *dn)
+ {
+ 	struct device *dev;
+ 	u32 val;
+ 	struct tegra_ahb *ahb;
+ 
+-	dev = driver_find_device(&tegra_ahb_driver.driver, NULL, dn,
+-				 tegra_ahb_match_by_smmu);
++	dev = driver_find_device_by_of_node(&tegra_ahb_driver.driver, dn);
+ 	if (!dev)
+ 		return -EPROBE_DEFER;
+ 	ahb = dev_get_drvdata(dev);
+diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+index 80bd8f1b2aa6..4bab9028940a 100644
+--- a/drivers/fpga/fpga-bridge.c
++++ b/drivers/fpga/fpga-bridge.c
+@@ -19,11 +19,6 @@ static struct class *fpga_bridge_class;
+ /* Lock for adding/removing bridges to linked lists*/
+ static spinlock_t bridge_list_lock;
+ 
+-static int fpga_bridge_of_node_match(struct device *dev, const void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ /**
+  * fpga_bridge_enable - Enable transactions on the bridge
+  *
+@@ -104,8 +99,7 @@ struct fpga_bridge *of_fpga_bridge_get(struct device_node *np,
+ {
+ 	struct device *dev;
+ 
+-	dev = class_find_device(fpga_bridge_class, NULL, np,
+-				fpga_bridge_of_node_match);
++	dev = class_find_device_by_of_node(fpga_bridge_class, np);
+ 	if (!dev)
+ 		return ERR_PTR(-ENODEV);
+ 
+diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+index c3866816456a..e05104f5e40c 100644
+--- a/drivers/fpga/fpga-mgr.c
++++ b/drivers/fpga/fpga-mgr.c
+@@ -482,11 +482,6 @@ struct fpga_manager *fpga_mgr_get(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(fpga_mgr_get);
+ 
+-static int fpga_mgr_of_node_match(struct device *dev, const void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ /**
+  * of_fpga_mgr_get - Given a device node, get a reference to a fpga mgr.
+  *
+@@ -498,8 +493,7 @@ struct fpga_manager *of_fpga_mgr_get(struct device_node *node)
+ {
+ 	struct device *dev;
+ 
+-	dev = class_find_device(fpga_mgr_class, NULL, node,
+-				fpga_mgr_of_node_match);
++	dev = class_find_device_by_of_node(fpga_mgr_class, node);
+ 	if (!dev)
+ 		return ERR_PTR(-ENODEV);
+ 
+diff --git a/drivers/gpu/drm/drm_mipi_dsi.c b/drivers/gpu/drm/drm_mipi_dsi.c
+index ad19df0686c9..bd2498bbd74a 100644
+--- a/drivers/gpu/drm/drm_mipi_dsi.c
++++ b/drivers/gpu/drm/drm_mipi_dsi.c
+@@ -93,11 +93,6 @@ static struct bus_type mipi_dsi_bus_type = {
+ 	.pm = &mipi_dsi_device_pm_ops,
+ };
+ 
+-static int of_device_match(struct device *dev, const void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ /**
+  * of_find_mipi_dsi_device_by_node() - find the MIPI DSI device matching a
+  *    device tree node
+@@ -110,7 +105,7 @@ struct mipi_dsi_device *of_find_mipi_dsi_device_by_node(struct device_node *np)
+ {
+ 	struct device *dev;
+ 
+-	dev = bus_find_device(&mipi_dsi_bus_type, NULL, np, of_device_match);
++	dev = bus_find_device_by_of_node(&mipi_dsi_bus_type, np);
+ 
+ 	return dev ? to_mipi_dsi_device(dev) : NULL;
+ }
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index d1c48dec7118..6f632d543fcc 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -113,11 +113,6 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
+ 	of_node_put(bus);
+ }
+ 
+-static int of_dev_node_match(struct device *dev, const void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ static int of_dev_or_parent_node_match(struct device *dev, const void *data)
+ {
+ 	if (dev->of_node == data)
+@@ -135,7 +130,7 @@ struct i2c_client *of_find_i2c_device_by_node(struct device_node *node)
+ 	struct device *dev;
+ 	struct i2c_client *client;
+ 
+-	dev = bus_find_device(&i2c_bus_type, NULL, node, of_dev_node_match);
++	dev = bus_find_device_by_of_node(&i2c_bus_type, node);
+ 	if (!dev)
+ 		return NULL;
+ 
+diff --git a/drivers/mfd/altera-sysmgr.c b/drivers/mfd/altera-sysmgr.c
+index 2ee14d8a6d31..d2a13a547a3c 100644
+--- a/drivers/mfd/altera-sysmgr.c
++++ b/drivers/mfd/altera-sysmgr.c
+@@ -87,16 +87,6 @@ static struct regmap_config altr_sysmgr_regmap_cfg = {
+ 	.use_single_write = true,
+ };
+ 
+-/**
+- * sysmgr_match_phandle
+- * Matching function used by driver_find_device().
+- * Return: True if match is found, otherwise false.
+- */
+-static int sysmgr_match_phandle(struct device *dev, const void *data)
+-{
+-	return dev->of_node == (const struct device_node *)data;
+-}
+-
+ /**
+  * altr_sysmgr_regmap_lookup_by_phandle
+  * Find the sysmgr previous configured in probe() and return regmap property.
+@@ -117,8 +107,8 @@ struct regmap *altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
+ 	if (!sysmgr_np)
+ 		return ERR_PTR(-ENODEV);
+ 
+-	dev = driver_find_device(&altr_sysmgr_driver.driver, NULL,
+-				 (void *)sysmgr_np, sysmgr_match_phandle);
++	dev = driver_find_device_by_of_node(&altr_sysmgr_driver.driver,
++					    (void *)sysmgr_np);
+ 	of_node_put(sysmgr_np);
+ 	if (!dev)
+ 		return ERR_PTR(-EPROBE_DEFER);
+diff --git a/drivers/mux/core.c b/drivers/mux/core.c
+index d1271c1ee23c..1fb22388e7e0 100644
+--- a/drivers/mux/core.c
++++ b/drivers/mux/core.c
+@@ -405,17 +405,12 @@ int mux_control_deselect(struct mux_control *mux)
+ }
+ EXPORT_SYMBOL_GPL(mux_control_deselect);
+ 
+-static int of_dev_node_match(struct device *dev, const void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ /* Note this function returns a reference to the mux_chip dev. */
+ static struct mux_chip *of_find_mux_chip_by_node(struct device_node *np)
+ {
+ 	struct device *dev;
+ 
+-	dev = class_find_device(&mux_class, NULL, np, of_dev_node_match);
++	dev = class_find_device_by_of_node(&mux_class, np);
+ 
+ 	return dev ? to_mux_chip(dev) : NULL;
+ }
+diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
+index bd04fe762056..ce940871331e 100644
+--- a/drivers/net/phy/mdio_bus.c
++++ b/drivers/net/phy/mdio_bus.c
+@@ -262,11 +262,6 @@ static struct class mdio_bus_class = {
+ };
+ 
+ #if IS_ENABLED(CONFIG_OF_MDIO)
+-/* Helper function for of_mdio_find_bus */
+-static int of_mdio_bus_match(struct device *dev, const void *mdio_bus_np)
+-{
+-	return dev->of_node == mdio_bus_np;
+-}
+ /**
+  * of_mdio_find_bus - Given an mii_bus node, find the mii_bus.
+  * @mdio_bus_np: Pointer to the mii_bus.
+@@ -287,9 +282,7 @@ struct mii_bus *of_mdio_find_bus(struct device_node *mdio_bus_np)
+ 	if (!mdio_bus_np)
+ 		return NULL;
+ 
+-	d = class_find_device(&mdio_bus_class, NULL,  mdio_bus_np,
+-			      of_mdio_bus_match);
+-
++	d = class_find_device_by_of_node(&mdio_bus_class, mdio_bus_np);
+ 	return d ? to_mii_bus(d) : NULL;
+ }
+ EXPORT_SYMBOL(of_mdio_find_bus);
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index ac5d945be88a..057d1ff87d5d 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -76,11 +76,6 @@ static struct bus_type nvmem_bus_type = {
+ 	.name		= "nvmem",
+ };
+ 
+-static int of_nvmem_match(struct device *dev, const void *nvmem_np)
+-{
+-	return dev->of_node == nvmem_np;
+-}
+-
+ static struct nvmem_device *of_nvmem_find(struct device_node *nvmem_np)
+ {
+ 	struct device *d;
+@@ -88,7 +83,7 @@ static struct nvmem_device *of_nvmem_find(struct device_node *nvmem_np)
+ 	if (!nvmem_np)
+ 		return NULL;
+ 
+-	d = bus_find_device(&nvmem_bus_type, NULL, nvmem_np, of_nvmem_match);
++	d = bus_find_device_by_of_node(&nvmem_bus_type, nvmem_np);
+ 
+ 	if (!d)
+ 		return NULL;
+diff --git a/drivers/of/of_mdio.c b/drivers/of/of_mdio.c
+index 44f53496cab1..000b95787df1 100644
+--- a/drivers/of/of_mdio.c
++++ b/drivers/of/of_mdio.c
+@@ -280,12 +280,6 @@ int of_mdiobus_register(struct mii_bus *mdio, struct device_node *np)
+ }
+ EXPORT_SYMBOL(of_mdiobus_register);
+ 
+-/* Helper function for of_phy_find_device */
+-static int of_phy_match(struct device *dev, const void *phy_np)
+-{
+-	return dev->of_node == phy_np;
+-}
+-
+ /**
+  * of_phy_find_device - Give a PHY node, find the phy_device
+  * @phy_np: Pointer to the phy's device tree node
+@@ -301,7 +295,7 @@ struct phy_device *of_phy_find_device(struct device_node *phy_np)
+ 	if (!phy_np)
+ 		return NULL;
+ 
+-	d = bus_find_device(&mdio_bus_type, NULL, phy_np, of_phy_match);
++	d = bus_find_device_by_of_node(&mdio_bus_type, phy_np);
+ 	if (d) {
+ 		mdiodev = to_mdio_device(d);
+ 		if (mdiodev->flags & MDIO_DEVICE_FLAG_PHY)
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index 7801e25e6895..b47a2292fe8e 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -37,11 +37,6 @@ static const struct of_device_id of_skipped_node_table[] = {
+ 	{} /* Empty terminated list */
+ };
+ 
+-static int of_dev_node_match(struct device *dev, const void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ /**
+  * of_find_device_by_node - Find the platform_device associated with a node
+  * @np: Pointer to device tree node
+@@ -55,7 +50,7 @@ struct platform_device *of_find_device_by_node(struct device_node *np)
+ {
+ 	struct device *dev;
+ 
+-	dev = bus_find_device(&platform_bus_type, NULL, np, of_dev_node_match);
++	dev = bus_find_device_by_of_node(&platform_bus_type, np);
+ 	return dev ? to_platform_device(dev) : NULL;
+ }
+ EXPORT_SYMBOL(of_find_device_by_node);
+diff --git a/drivers/regulator/of_regulator.c b/drivers/regulator/of_regulator.c
+index 397918ebba55..20dcc9c03adc 100644
+--- a/drivers/regulator/of_regulator.c
++++ b/drivers/regulator/of_regulator.c
+@@ -460,16 +460,11 @@ struct regulator_init_data *regulator_of_get_init_data(struct device *dev,
+ 	return NULL;
+ }
+ 
+-static int of_node_match(struct device *dev, const void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ struct regulator_dev *of_find_regulator_by_node(struct device_node *np)
+ {
+ 	struct device *dev;
+ 
+-	dev = class_find_device(&regulator_class, NULL, np, of_node_match);
++	dev = class_find_device_by_of_node(&regulator_class, np);
+ 
+ 	return dev ? dev_to_rdev(dev) : NULL;
+ }
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 75ac046cae52..a591da87981a 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -3652,37 +3652,25 @@ EXPORT_SYMBOL_GPL(spi_write_then_read);
+ /*-------------------------------------------------------------------------*/
+ 
+ #if IS_ENABLED(CONFIG_OF)
+-static int __spi_of_device_match(struct device *dev, const void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ /* must call put_device() when done with returned spi_device device */
+ struct spi_device *of_find_spi_device_by_node(struct device_node *node)
+ {
+-	struct device *dev = bus_find_device(&spi_bus_type, NULL, node,
+-						__spi_of_device_match);
++	struct device *dev = bus_find_device_by_of_node(&spi_bus_type, node);
 +
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called ds90ub953.
-+
- comment "Camera sensor devices"
+ 	return dev ? to_spi_device(dev) : NULL;
+ }
+ EXPORT_SYMBOL_GPL(of_find_spi_device_by_node);
+ #endif /* IS_ENABLED(CONFIG_OF) */
  
- config VIDEO_APTINA_PLL
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index 66e52ededa4e..98c124c47be2 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -116,5 +116,6 @@ obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
- obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
+ #if IS_ENABLED(CONFIG_OF_DYNAMIC)
+-static int __spi_of_controller_match(struct device *dev, const void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ /* the spi controllers are not using spi_bus, so we find it with another way */
+ static struct spi_controller *of_find_spi_controller_by_node(struct device_node *node)
+ {
+ 	struct device *dev;
  
- obj-$(CONFIG_VIDEO_DS90UB954)	+= ds90ub954.o
-+obj-$(CONFIG_VIDEO_DS90UB953)	+= ds90ub953.o
+-	dev = class_find_device(&spi_master_class, NULL, node,
+-				__spi_of_controller_match);
++	dev = class_find_device_by_of_node(&spi_master_class, node);
+ 	if (!dev && IS_ENABLED(CONFIG_SPI_SLAVE))
+-		dev = class_find_device(&spi_slave_class, NULL, node,
+-					__spi_of_controller_match);
++		dev = class_find_device_by_of_node(&spi_slave_class, node);
+ 	if (!dev)
+ 		return NULL;
  
- obj-$(CONFIG_SDR_MAX2175) += max2175.o
-diff --git a/drivers/media/i2c/ds90ub953.c b/drivers/media/i2c/ds90ub953.c
-new file mode 100644
-index 000000000000..d88366f81a8d
---- /dev/null
-+++ b/drivers/media/i2c/ds90ub953.c
-@@ -0,0 +1,354 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 3ba376b8b456..29d8d7ad41e6 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -186,6 +186,18 @@ static inline struct device *bus_find_device_by_name(struct bus_type *bus,
+ 	return bus_find_device(bus, start, name, device_match_name);
+ }
+ 
 +/**
-+ * Driver for the Texas Instruments DS90UB953-Q1 video serializer
-+ *
-+ * Copyright (c) 2019 Luca Ceresoli <luca@lucaceresoli.net>
++ * bus_find_device_by_of_node : device iterator for locating a particular device
++ * matching the of_node.
++ * @bus: bus type
++ * @np: of_node of the device to match.
 + */
++static inline struct device *
++bus_find_device_by_of_node(struct bus_type *bus, const struct device_node *np)
++{
++	return bus_find_device(bus, NULL, np, device_match_of_node);
++}
 +
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/delay.h>
-+#include <dt-bindings/media/ds90ub953.h>
-+
-+#define DS90_NUM_GPIOS			4  /* Physical GPIO pins */
-+
-+
-+#define DS90_REG_DEVICE_ID		0x00
-+
-+#define DS90_REG_RESET_CTL		0x01
-+#define DS90_REG_RESET_CTL_RESTART_AUTOLOAD	BIT(2)
-+#define DS90_REG_RESET_CTL_DIGITAL_RESET_1	BIT(1)
-+#define DS90_REG_RESET_CTL_DIGITAL_RESET_0	BIT(0)
-+
-+#define DS90_REG_GENERAL_CFG		0x02
-+#define DS90_REG_MODE_SEL		0x03
-+#define DS90_REG_BC_MODE_SELECT		0x04
-+#define DS90_REG_PLLCLK_CTRL		0x05
-+#define DS90_REG_CLKOUT_CTRL0		0x06
-+#define DS90_REG_CLKOUT_CTRL1		0x07
-+#define DS90_REG_BCC_WATCHDOG		0x08
-+#define DS90_REG_I2C_CONTROL1		0x09
-+#define DS90_REG_I2C_CONTROL2		0x0A
-+#define DS90_REG_SCL_HIGH_TIME		0x0B
-+#define DS90_REG_SCL_LOW_TIME		0x0C
-+
-+#define DS90_REG_LOCAL_GPIO_DATA	0x0D
-+#define DS90_REG_LOCAL_GPIO_DATA_RMTEN(n)	BIT((n) + 4)
-+#define DS90_REG_LOCAL_GPIO_DATA_OUT_SRC(n)	BIT((n) + 4)
-+
-+#define DS90_REG_GPIO_INPUT_CTRL	0x0E
-+#define DS90_REG_GPIO_INPUT_CTRL_INPUT_EN(n)	BIT((n))
-+#define DS90_REG_GPIO_INPUT_CTRL_OUT_EN(n)	BIT((n) + 4)
-+
-+#define DS90_REG_DVP_CFG		0x10
-+#define DS90_REG_DVP_DT			0x11
-+#define DS90_REG_FORCE_BIST_ERR		0x13
-+#define DS90_REG_REMOTE_BIST_CTRL	0x14
-+#define DS90_REG_SENSOR_VGAIN		0x15
-+#define DS90_REG_SENSOR_CTRL0		0x17
-+#define DS90_REG_SENSOR_CTRL1		0x18
-+#define DS90_REG_SENSOR_V0_THRESH	0x19
-+#define DS90_REG_SENSOR_V1_THRESH	0x1A
-+#define DS90_REG_SENSOR_T_THRESH	0x1B
-+#define DS90_REG_SENSOR_T_THRESH	0x1B
-+#define DS90_REG_ALARM_CSI_EN		0x1C
-+#define DS90_REG_ALARM_SENSE_EN		0x1D
-+#define DS90_REG_ALARM_BC_EN		0x1E
-+
-+#define DS90_REG_CSI_POL_SEL		0x20
-+#define DS90_REG_CSI_POL_SEL_POLARITY_CLK0	BIT(4)
-+
-+#define DS90_REG_CSI_LP_POLARITY	0x21
-+#define DS90_REG_CSI_LP_POLARITY_POL_LP_CLK0	BIT(4)
-+
-+#define DS90_REG_CSI_EN_HSRX		0x22
-+#define DS90_REG_CSI_EN_LPRX		0x23
-+#define DS90_REG_CSI_EN_RXTERM		0x24
-+#define DS90_REG_CSI_PKT_HDR_TINIT_CTRL 0x31
-+#define DS90_REG_BCC_CONFIG		0x32
-+#define DS90_REG_DATAPATH_CTL1		0x33
-+#define DS90_REG_REMOTE_PAR_CAP1	0x35
-+#define DS90_REG_DES_ID			0x37
-+#define DS90_REG_SLAVE_ID_0		0x39
-+#define DS90_REG_SLAVE_ID_1		0x3A
-+#define DS90_REG_SLAVE_ID_2		0x3B
-+#define DS90_REG_SLAVE_ID_3		0x3C
-+#define DS90_REG_SLAVE_ID_4		0x3D
-+#define DS90_REG_SLAVE_ID_5		0x3E
-+#define DS90_REG_SLAVE_ID_6		0x3F
-+#define DS90_REG_SLAVE_ID_7		0x40
-+#define DS90_REG_SLAVE_ID_ALIAS_0	0x41
-+#define DS90_REG_SLAVE_ID_ALIAS_0	0x41
-+#define DS90_REG_SLAVE_ID_ALIAS_1	0x42
-+#define DS90_REG_SLAVE_ID_ALIAS_2	0x43
-+#define DS90_REG_SLAVE_ID_ALIAS_3	0x44
-+#define DS90_REG_SLAVE_ID_ALIAS_4	0x45
-+#define DS90_REG_SLAVE_ID_ALIAS_5	0x46
-+#define DS90_REG_SLAVE_ID_ALIAS_6	0x47
-+#define DS90_REG_SLAVE_ID_ALIAS_7	0x48
-+#define DS90_REG_BC_CTRL		0x49
-+#define DS90_REG_REV_MASK_ID		0x50
-+
-+#define DS90_REG_DEVICE_STS		0x51
-+#define DS90_REG_DEVICE_STS_CFG_INIT_DONE	BIT(6)
-+
-+#define DS90_REG_GENERAL_STATUS		0x52
-+#define DS90_REG_GPIO_PIN_STS		0x53
-+#define DS90_REG_BIST_ERR_CNT		0x54
-+#define DS90_REG_CRC_ERR_CNT1		0x55
-+#define DS90_REG_CRC_ERR_CNT2		0x56
-+#define DS90_REG_SENSOR_STATUS		0x57
-+#define DS90_REG_SENSOR_V0		0x58
-+#define DS90_REG_SENSOR_V1		0x59
-+#define DS90_REG_SENSOR_T		0x5A
-+#define DS90_REG_SENSOR_T		0x5A
-+#define DS90_REG_CSI_ERR_CNT		0x5C
-+#define DS90_REG_CSI_ERR_STATUS		0x5D
-+#define DS90_REG_CSI_ERR_DLANE01	0x5E
-+#define DS90_REG_CSI_ERR_DLANE23	0x5F
-+#define DS90_REG_CSI_ERR_CLK_LANE	0x60
-+#define DS90_REG_CSI_PKT_HDR_VC_ID	0x61
-+#define DS90_REG_PKT_HDR_WC_LSB		0x62
-+#define DS90_REG_PKT_HDR_WC_MSB		0x63
-+#define DS90_REG_CSI_ECC		0x64
-+#define DS90_REG_IND_ACC_CTL		0xB0
-+#define DS90_REG_IND_ACC_ADDR		0xB1
-+#define DS90_REG_IND_ACC_DATA		0xB2
-+#define DS90_REG_FPD3_RX_ID0		0xF0
-+#define DS90_REG_FPD3_RX_ID1		0xF1
-+#define DS90_REG_FPD3_RX_ID2		0xF2
-+#define DS90_REG_FPD3_RX_ID3		0xF3
-+#define DS90_REG_FPD3_RX_ID4		0xF4
-+#define DS90_REG_FPD3_RX_ID5		0xF5
-+
-+struct ds90_data {
-+	struct i2c_client      *client;
-+
-+	u32 gpio_func[DS90_NUM_GPIOS];
-+};
-+
-+/* -----------------------------------------------------------------------------
-+ * Basic device access
+ struct device *subsys_find_device_by_id(struct bus_type *bus, unsigned int id,
+ 					struct device *hint);
+ int bus_for_each_drv(struct bus_type *bus, struct device_driver *start,
+@@ -366,6 +378,19 @@ static inline struct device *driver_find_device_by_name(struct device_driver *dr
+ 	return driver_find_device(drv, NULL, name, device_match_name);
+ }
+ 
++/**
++ * driver_find_device_by_of_node- device iterator for locating a particular device
++ * by of_node pointer.
++ * @driver: the driver we're iterating
++ * @np: of_node pointer to match.
 + */
-+static s32 ds90_read(const struct ds90_data *ds90, u8 reg)
++static inline struct device *
++driver_find_device_by_of_node(struct device_driver *drv,
++			      const struct device_node *np)
 +{
-+	s32 ret;
-+
-+	ret = i2c_smbus_read_byte_data(ds90->client, reg);
-+	if (ret < 0)
-+		dev_err(&ds90->client->dev, "Cannot read register 0x%02x!\n",
-+			reg);
-+
-+	return ret;
++	return driver_find_device(drv, NULL, np, device_match_of_node);
 +}
 +
-+static s32 ds90_write(const struct ds90_data *ds90, u8 reg, u8 val)
-+{
-+	s32 ret;
-+
-+	ret = i2c_smbus_write_byte_data(ds90->client, reg, val);
-+	if (ret < 0)
-+		dev_err(&ds90->client->dev, "Cannot write register 0x%02x!\n",
-+			reg);
-+
-+	return ret;
-+}
-+
-+/* -----------------------------------------------------------------------------
-+ * GPIOs
+ void driver_deferred_probe_add(struct device *dev);
+ int driver_deferred_probe_check_state(struct device *dev);
+ int driver_deferred_probe_check_state_continue(struct device *dev);
+@@ -507,6 +532,18 @@ static inline struct device *class_find_device_by_name(struct class *class,
+ 	return class_find_device(class, NULL, name, device_match_name);
+ }
+ 
++/**
++ * class_find_device_by_of_node : device iterator for locating a particular device
++ * matching the of_node.
++ * @class: class type
++ * @np: of_node of the device to match.
 + */
-+
-+static int ds90_configure_gpios(struct ds90_data *ds90)
++static inline struct device *
++class_find_device_by_of_node(struct class *class, const struct device_node *np)
 +{
-+	struct device *dev = &ds90->client->dev;
-+	u8 gpio_input_ctrl = 0;
-+	u8 local_gpio_data = 0;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(ds90->gpio_func); i++) {
-+
-+		if (ds90->gpio_func[i] >= DS90_GPIO_N_FUNCS) {
-+			dev_err(dev,
-+				"Unknown gpio-functions value %u, GPIO%d will be unused",
-+				ds90->gpio_func[i], i);
-+			continue;
-+		}
-+
-+		switch (ds90->gpio_func[i]) {
-+		case DS90_GPIO_FUNC_INPUT:
-+			gpio_input_ctrl |= DS90_REG_GPIO_INPUT_CTRL_INPUT_EN(i);
-+			break;
-+		case DS90_GPIO_FUNC_OUTPUT_REMOTE:
-+			gpio_input_ctrl |= DS90_REG_GPIO_INPUT_CTRL_OUT_EN(i);
-+			local_gpio_data |= DS90_REG_LOCAL_GPIO_DATA_RMTEN(i);
-+			break;
-+		}
-+	}
-+
-+	ds90_write(ds90, DS90_REG_LOCAL_GPIO_DATA, local_gpio_data);
-+	ds90_write(ds90, DS90_REG_GPIO_INPUT_CTRL, gpio_input_ctrl);
-+	/* TODO setting DATAPATH_CTL1 is needed for inputs? */
-+
-+	return 0;
++	return class_find_device(class, NULL, np, device_match_of_node);
 +}
 +
-+/* -----------------------------------------------------------------------------
-+ * Core
-+ */
-+
-+/*
-+ * Reset via registers (useful from remote).
-+ * Note: the procedure is undocumented, but this one seems to work.
-+ */
-+static void ds90_soft_reset(struct ds90_data *ds90)
-+{
-+	int retries = 10;
-+	s32 ret;
-+
-+	while (retries-- > 0) {
-+		ret = ds90_write(ds90, DS90_REG_RESET_CTL,
-+				 DS90_REG_RESET_CTL_DIGITAL_RESET_1);
-+		if (ret >= 0)
-+			break;
-+		usleep_range(1000, 3000);
-+	}
-+
-+	retries = 10;
-+	while (retries-- > 0) {
-+		ret = ds90_read(ds90, DS90_REG_DEVICE_STS);
-+		if (ret >= 0 && (ret & DS90_REG_DEVICE_STS_CFG_INIT_DONE))
-+			break;
-+		usleep_range(1000, 3000);
-+	}
-+}
-+
-+static int ds90_parse_dt(struct ds90_data *ds90)
-+{
-+	struct device_node *np = ds90->client->dev.of_node;
-+	struct device *dev = &ds90->client->dev;
-+	int err;
-+
-+	if (!np) {
-+		dev_err(dev, "OF: no device tree node!\n");
-+		return -ENOENT;
-+	}
-+
-+	/* optional, if absent all GPIO pins are unused */
-+	err = of_property_read_u32_array(np, "gpio-functions", ds90->gpio_func,
-+					ARRAY_SIZE(ds90->gpio_func));
-+	if (err && err != -EINVAL)
-+		dev_err(dev, "DT: invalid gpio-functions property (%d)", err);
-+
-+	if (of_property_read_bool(np, "ti,ds90ub953-q1-clk-inv-pol-quirk")) {
-+		ds90_write(ds90,
-+			   DS90_REG_CSI_POL_SEL,
-+			   DS90_REG_CSI_POL_SEL_POLARITY_CLK0);
-+		ds90_write(ds90,
-+			   DS90_REG_CSI_LP_POLARITY,
-+			   DS90_REG_CSI_LP_POLARITY_POL_LP_CLK0);
-+	}
-+
-+	return 0;
-+}
-+
-+static int ds90_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct ds90_data *ds90;
-+	s32 rev_mask;
-+	int err;
-+
-+	dev_dbg(dev, "probing, addr 0x%02x\n", client->addr);
-+
-+	ds90 = devm_kzalloc(dev, sizeof(*ds90), GFP_KERNEL);
-+	if (!ds90)
-+		return -ENOMEM;
-+
-+	ds90->client = client;
-+	i2c_set_clientdata(client, ds90);
-+
-+	ds90_soft_reset(ds90);
-+
-+	rev_mask = ds90_read(ds90, DS90_REG_REV_MASK_ID);
-+	if (rev_mask < 0) {
-+		err = rev_mask;
-+		dev_err(dev,
-+			"Cannot read first register (%d), abort\n", err);
-+		goto err_reg_read;
-+	}
-+
-+	err = ds90_parse_dt(ds90);
-+	if (err)
-+		goto err_parse_dt;
-+
-+	/* I2C fast mode 400 kHz */
-+	/* TODO compute values from REFCLK */
-+	ds90_write(ds90, DS90_REG_SCL_HIGH_TIME, 0x13);
-+	ds90_write(ds90, DS90_REG_SCL_LOW_TIME,  0x26);
-+
-+	/*
-+	 * TODO compute these hard-coded values
-+	 *
-+	 * SET CLK_OUT:
-+	 * MODE    = 0 = CSI-2 sync (strap, reg 0x03) -> refclk from deser
-+	 * REFCLK  = 23..26 MHz (REFCLK pin @ remote deserializer)
-+	 * FC      = fwd channel data rate = 160 x REFCLK
-+	 * CLK_OUT = FC * M / (HS_CLK_DIV * N)
-+	 *         = FC * 1 / (4 * 20) = 2 * REFCLK
-+	 */
-+	ds90_write(ds90, DS90_REG_CLKOUT_CTRL0, 0x41); /* div by 4, M=1 */
-+	ds90_write(ds90, DS90_REG_CLKOUT_CTRL1,   20); /* N=20 */
-+
-+	err = ds90_configure_gpios(ds90);
-+	if (err)
-+		goto err_configure_gpios;
-+
-+	dev_info(dev, "Successfully probed (rev/mask %02x)\n", rev_mask);
-+
-+	return 0;
-+
-+err_configure_gpios:
-+err_parse_dt:
-+err_reg_read:
-+	return err;
-+}
-+
-+static int ds90_remove(struct i2c_client *client)
-+{
-+	dev_info(&client->dev, "Removing\n");
-+	return 0;
-+}
-+
-+static const struct i2c_device_id ds90_id[] = {
-+	{ "ds90ub953-q1", 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, ds90_id);
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id ds90_dt_ids[] = {
-+	{ .compatible = "ti,ds90ub953-q1", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ds90_dt_ids);
-+#endif
-+
-+static struct i2c_driver ds90ub953_driver = {
-+	.probe_new	= ds90_probe,
-+	.remove		= ds90_remove,
-+	.id_table	= ds90_id,
-+	.driver = {
-+		.name	= "ds90ub953",
-+		.owner = THIS_MODULE,
-+		.of_match_table = of_match_ptr(ds90_dt_ids),
-+	},
-+};
-+
-+module_i2c_driver(ds90ub953_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Texas Instruments DS90UB953-Q1 CSI-2 serializer driver");
-+MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
+ struct class_attribute {
+ 	struct attribute attr;
+ 	ssize_t (*show)(struct class *class, struct class_attribute *attr,
+diff --git a/sound/soc/rockchip/rk3399_gru_sound.c b/sound/soc/rockchip/rk3399_gru_sound.c
+index c16b0ffe8cfc..d951100bf770 100644
+--- a/sound/soc/rockchip/rk3399_gru_sound.c
++++ b/sound/soc/rockchip/rk3399_gru_sound.c
+@@ -422,11 +422,6 @@ static const struct dailink_match_data dailink_match[] = {
+ 	},
+ };
+ 
+-static int of_dev_node_match(struct device *dev, const void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ static int rockchip_sound_codec_node_match(struct device_node *np_codec)
+ {
+ 	struct device *dev;
+@@ -438,8 +433,8 @@ static int rockchip_sound_codec_node_match(struct device_node *np_codec)
+ 			continue;
+ 
+ 		if (dailink_match[i].bus_type) {
+-			dev = bus_find_device(dailink_match[i].bus_type, NULL,
+-					      np_codec, of_dev_node_match);
++			dev = bus_find_device_by_of_node(dailink_match[i].bus_type,
++							 np_codec);
+ 			if (!dev)
+ 				continue;
+ 			put_device(dev);
 -- 
-2.17.1
+2.21.0
 
