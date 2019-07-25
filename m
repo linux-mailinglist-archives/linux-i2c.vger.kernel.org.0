@@ -2,85 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A34757D5
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Jul 2019 21:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D83758DA
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Jul 2019 22:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726715AbfGYT1H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Jul 2019 15:27:07 -0400
-Received: from sauhun.de ([88.99.104.3]:55094 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726597AbfGYT1H (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 25 Jul 2019 15:27:07 -0400
-Received: from localhost (p5486CDF3.dip0.t-ipconnect.de [84.134.205.243])
-        by pokefinder.org (Postfix) with ESMTPSA id 0AFF54A1209;
-        Thu, 25 Jul 2019 21:27:04 +0200 (CEST)
-Date:   Thu, 25 Jul 2019 21:27:04 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Edward Cree <ecree@solarflare.com>
-Cc:     David Miller <davem@davemloft.net>,
-        wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org,
-        linux-net-drivers@solarflare.com, mhabets@solarflare.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: sfc: falcon: convert to i2c_new_dummy_device
-Message-ID: <20190725192704.GB1440@kunai>
-References: <20190722172635.4535-1-wsa+renesas@sang-engineering.com>
- <20190724.154739.72147269285837223.davem@davemloft.net>
- <72968faa-e260-3640-99be-9c63bc79ad5e@solarflare.com>
+        id S1726516AbfGYUal (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Jul 2019 16:30:41 -0400
+Received: from antares.kleine-koenig.org ([94.130.110.236]:50290 "EHLO
+        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726593AbfGYUak (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Jul 2019 16:30:40 -0400
+X-Greylist: delayed 535 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Jul 2019 16:30:40 EDT
+Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
+        id A8BE073ADEE; Thu, 25 Jul 2019 22:21:44 +0200 (CEST)
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH] i2c: designware: make use of devm_gpiod_get_optional
+Date:   Thu, 25 Jul 2019 22:21:36 +0200
+Message-Id: <20190725202136.19423-1-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p4qYPpj5QlsIQJ0K"
-Content-Disposition: inline
-In-Reply-To: <72968faa-e260-3640-99be-9c63bc79ad5e@solarflare.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+There is a semantical change: if devm_gpiod_get_optional returns -ENOSYS
+this is passed as error to the caller. This effectively reverts commit
+d1fa74520dcd ("i2c: designware: Consider SCL GPIO optional") which
+shouldn't be necessary any more since gpiod_get_optional doesn't return
+-ENOSYS any more with GPIOLIB=n.
 
---p4qYPpj5QlsIQJ0K
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
+---
+ drivers/i2c/busses/i2c-designware-master.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index d464799e40a3..867787dade43 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -657,13 +657,10 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+ 	struct gpio_desc *gpio;
+ 	int r;
+ 
+-	gpio = devm_gpiod_get(dev->dev, "scl", GPIOD_OUT_HIGH);
+-	if (IS_ERR(gpio)) {
+-		r = PTR_ERR(gpio);
+-		if (r == -ENOENT || r == -ENOSYS)
+-			return 0;
+-		return r;
+-	}
++	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
++	if (IS_ERR_OR_NULL(gpio))
++		return PTR_ERR_OR_ZERO(gpio);
++
+ 	rinfo->scl_gpiod = gpio;
+ 
+ 	gpio = devm_gpiod_get_optional(dev->dev, "sda", GPIOD_IN);
+-- 
+2.20.1
 
-> >> Move from i2c_new_dummy() to i2c_new_dummy_device(). So, we now get an
-> >> ERRPTR which we use in error handling.
-> >>
-> >> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->=20
-> Subject & description are incomplete, you're also changing i2c_new_device=
-()
->  to i2c_new_client_device().
-
-Right, this was an anomaly with this patch to have both code paths
-returning an ERRPTR. The big conversion for i2c_new_device will come
-later in a seperate series.
-
-> Other than that,
-> Acked-by: Edward Cree <ecree@solarflare.com>
-
-Thanks!
-
-
---p4qYPpj5QlsIQJ0K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl06AogACgkQFA3kzBSg
-KbbqPw/+I8J47byhVJzk1I9WnVJH6a4uo6kzDKO3hB3ESzbKzRKhyP4Xfb9KNV/Z
-e2tkr2/0GRgJRiPEVmnHmeFf365heKGNovJ2uDqC/kXJzzg3o3Nr1Xv01x36s2uD
-zkuna+fb03fD9UaIrrDhnmwCNJfPM4wy/0EF43nbeknyIOpmJhnPysE4vlVpUZcR
-VANt4BYUTxcdf96/AWlCgdSJ/blDAeDQ7vMxRGEXEq6OaHS/uKSb3GuOMeb4dCZR
-dqMcyosih7qcaqyZCRR4ChIvAXxUzxP1AqxaVyBtMsJ0ruqJ+S+vMZ3k9qbLS750
-47kSU2sq2ttR4BhgQczpcq+aft2FTcreXbk3U+zQjMGnPZEnSnWC3Usyr5TU3kLv
-DLK5+HvGYe222qmnoTWJrdBIBNqIy0989PbHSwzKDo8wsMpzOW5MGQUVISc1OVhr
-qiOaQ9sfxsw++veEuwgjbx63Gto7RLYoCleJy8bdj/4sVPsuStEr+7jtuSFsDmuM
-WFulVRG4TCVYDf+Lp6mWvil3nX7lfsA7BCXeDgTZes4Ro5AJcMQ8s8dtW3Vjgcb6
-D81f76OaRrJ2l6691GNoa92L95V3H8RoWbJZuVTRhnzDHFtmZ2kRtoDkCRrzq0Oe
-K2jAhc4XUA6gDswN5Mi7F785gXnO5626gYnvxt3twlYuHyVEpOs=
-=/BXX
------END PGP SIGNATURE-----
-
---p4qYPpj5QlsIQJ0K--
