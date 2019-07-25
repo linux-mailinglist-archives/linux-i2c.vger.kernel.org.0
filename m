@@ -2,103 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A95174885
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Jul 2019 09:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466827488A
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Jul 2019 09:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388578AbfGYHzl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Jul 2019 03:55:41 -0400
-Received: from sauhun.de ([88.99.104.3]:47736 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388335AbfGYHzl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 25 Jul 2019 03:55:41 -0400
-Received: from localhost (p5486CDF3.dip0.t-ipconnect.de [84.134.205.243])
-        by pokefinder.org (Postfix) with ESMTPSA id 3A54C2C282F;
-        Thu, 25 Jul 2019 09:55:39 +0200 (CEST)
-Date:   Thu, 25 Jul 2019 09:55:38 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Sean Young <sean@mess.org>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] media: ir-kbd-i2c: prevent potential NULL pointer
- access
-Message-ID: <20190725075538.GB1323@kunai>
-References: <20190722172632.4402-1-wsa+renesas@sang-engineering.com>
- <20190722172632.4402-2-wsa+renesas@sang-engineering.com>
- <20190725051202.o47mz4unbn63z6uk@gofer.mess.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="neYutvxvOLaeuPCA"
-Content-Disposition: inline
-In-Reply-To: <20190725051202.o47mz4unbn63z6uk@gofer.mess.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S2388670AbfGYH4g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Jul 2019 03:56:36 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:42997 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388667AbfGYH4g (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Jul 2019 03:56:36 -0400
+Received: by mail-pg1-f194.google.com with SMTP id t132so22598256pgb.9
+        for <linux-i2c@vger.kernel.org>; Thu, 25 Jul 2019 00:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=oPhMC5eLv3LSVkBhX5uqN94UAFd9buQ6xbizcntcIj4=;
+        b=gU9RlzjKhjVYpSzfgbQtfgo4FUEPEtq8PTlxfAMmALiP6j7lO9a1JjhQ2/waNbbRh3
+         q1cqem1MSNir9sfiSTZdURrn+1MBTgX6N4mdEU735+P37HKkR8LNRkiZJwGBuWz5FRKZ
+         B5s70u0vk96SBR0+TgZteULP5GWzfT2/PH+NWm6TtTo3TnQ/gkOCPKbAJ3ColBXyB9BU
+         vMxReKCWpwvNFYUeXmW497IB11fJ9hMBG6xvQtlFqFpQM5K6IQ8dPQuYSMEQsu15qQkZ
+         r6HatIt/DN5NQcHMp1ItDn0gArYHDJ3e17HrL6b+3ta7UqGm9RXU01l81wiUHMDV1jNJ
+         24Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=oPhMC5eLv3LSVkBhX5uqN94UAFd9buQ6xbizcntcIj4=;
+        b=KHv6EpFX7gKFzA938G4Zs2qLySZmIwXFC6ljOHy1RUesZgIJwbgZ9MlrbF65SzD/P0
+         8IDHVizvMdswrkGgZfAL50zg0xtFCoH9CBNqqYEwba/24LUH5IMbjQCyu78DnPpISo6P
+         5MUKyFBhF7pcaPXZWSLFFlLMFqZPr5w2fUtFApHGKalfWdhxc30ga7kiaL2UyD4Q0GT3
+         hOaPq6aiXVvG1TjQMcXsUrpBeqln8l6AZvNpJqqzVQURXWNjphcTpAEeV0C6t4xCp1Ui
+         KnojVrYL108fgbGDwa6YvCZ+w844lf+Yk90ZFBaPUskA08GOOEO74akJKmBm5ydFJsdN
+         /cew==
+X-Gm-Message-State: APjAAAVS24rLzkV0qNppCSfHsinwTmYHtfcgNFuOtJELcOgJWAC80VNk
+        6dkrmui2KkiIJ6iddFP6/BeAqw==
+X-Google-Smtp-Source: APXvYqy+e+5oK4u7Xqc2D6N3+nHwMsCbW0trRnX/rMhmvbjT0I6R9vvI2j6wgbVVk2Bzh/re5uUU2A==
+X-Received: by 2002:aa7:9407:: with SMTP id x7mr15929124pfo.163.1564041395498;
+        Thu, 25 Jul 2019 00:56:35 -0700 (PDT)
+Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id m9sm89021419pgr.24.2019.07.25.00.56.32
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 25 Jul 2019 00:56:35 -0700 (PDT)
+From:   Baolin Wang <baolin.wang@linaro.org>
+To:     wsa+renesas@sang-engineering.com, orsonzhai@gmail.com,
+        zhang.lyra@gmail.com
+Cc:     baolin.wang@linaro.org, vincent.guittot@linaro.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] i2c: sprd: Make I2C driver can be built as a module
+Date:   Thu, 25 Jul 2019 15:56:16 +0800
+Message-Id: <c9e2c50b54577e4b5cb7cc424f4c6de5f116cf60.1564041157.git.baolin.wang@linaro.org>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Now there is no need to keep our I2C driver to be initialized so early,
+thus changing to module level and let it can be built as a module,
+meanwhile adding some module information.
 
---neYutvxvOLaeuPCA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
+---
+ drivers/i2c/busses/Kconfig    |    2 +-
+ drivers/i2c/busses/i2c-sprd.c |   10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Hi Sean,
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 09367fc..69f1931 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -977,7 +977,7 @@ config I2C_SIRF
+ 	  will be called i2c-sirf.
+ 
+ config I2C_SPRD
+-	bool "Spreadtrum I2C interface"
++	tristate "Spreadtrum I2C interface"
+ 	depends on I2C=y && ARCH_SPRD
+ 	help
+ 	  If you say yes to this option, support will be included for the
+diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.c
+index 9611235..8002835 100644
+--- a/drivers/i2c/busses/i2c-sprd.c
++++ b/drivers/i2c/busses/i2c-sprd.c
+@@ -12,6 +12,7 @@
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
++#include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+@@ -644,8 +645,7 @@ static int __maybe_unused sprd_i2c_runtime_resume(struct device *dev)
+ 	},
+ };
+ 
+-static int sprd_i2c_init(void)
+-{
+-	return platform_driver_register(&sprd_i2c_driver);
+-}
+-arch_initcall_sync(sprd_i2c_init);
++module_platform_driver(sprd_i2c_driver);
++
++MODULE_DESCRIPTION("Spreadtrum I2C master controller driver");
++MODULE_LICENSE("GPL v2");
+-- 
+1.7.9.5
 
-thanks for the review!
-
-On Thu, Jul 25, 2019 at 06:12:02AM +0100, Sean Young wrote:
-> On Mon, Jul 22, 2019 at 07:26:31PM +0200, Wolfram Sang wrote:
-> > i2c_new_dummy() can fail returning a NULL pointer. The code does not
-> > bail out in this case and the returned pointer is blindly used.
->=20
-> I don't see how. The existing code tries to set up the tx part; if
-> i2c_new_dummy() return NULL then the rcdev is registered without tx,
-> and tx_c is never used.
-
-Yes, you are totally right. I missed that the send_block function is
-also only called iff zilog_init succeeded. Thanks for the heads up and
-sorry for the noise.
-
->=20
-> > Convert
-> > to devm_i2c_new_dummy_device() which returns an ERR_PTR and also bail
-> > out when failing the validity check.
->=20
-> Possibly I was being overly cautious with not bailing out if tx can't
-> be registered; moving to devm is probably a good idea. However the
-> commit message is misleading, because the existing code has no
-> NULL pointer access.
-
-Yep, I will resend with a proper commit message. Technically, there is
-no need to bail out anymore because there is no NULL pointer access. My
-tendency is now to not bail out and keep the old behaviour (registering
-without tx). What do you think?
-
-Regards,
-
-   Wolfram
-
-
---neYutvxvOLaeuPCA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl05YHoACgkQFA3kzBSg
-Kbb0Fg//T+O24dPRZUIRCXb4QStDI05XO3V3ecMujrNrRI3ZVB/TX3AQFQ14WKAu
-W3p7vv/8BxSRDhrLvEFzEOuSSxTzp4HjU7//jo8OkbccUrK2Sd9OAC/IXstHGcR6
-BVO49QDcRF7BGVfQOoxwo4pjNxg9EMRPlmcaOzvZ6FhHC/jbRn9DmkRgDaWbDPba
-dpjCiqlbihvCkcDkIPEfCuOTmEOZaceBKWKgawJ2eoN+0MivCPbRkoT0fdSa00H4
-qiAbSrWvH+hg96+fkp8AJeDx3wkRC/YQQA4HL9ibJLiPv8qkImqu0oOhZ2y6VwYt
-ek9LSUO/eAgRu+KYPbjoS2oAml/oqZFB9XSFg4NCNDAGU0qLznCpe3TJ6WqAsrwI
-hA69F9vECYLx22YH/Zg6mRaf0Zyb49yoFIRKj3ZqtEwVys6a4170c6C3iR8qEycK
-i4qHJzWn37P7lblZvc4Do5uo5yx6qNZKSFWSzH5qNGMhMl1qMErMQ7aASGH0/dD9
-RguCYcVMwPpsaItrUDE2P78DPSPdXRpCOoY8iwYjHhyaZ5BFQKUVz0l7L/gqAOyy
-O3YKbBoQrzCLC/Iu8iRsleqiL+s8+KUfz5jyeoPncRMoygtv8lgB+NUPZY7VAgL8
-1FGG4/REIoTIUVn7Wen8lVvuQiLGj2XjcJ78m1dosv2JeIi2Gz4=
-=XMJb
------END PGP SIGNATURE-----
-
---neYutvxvOLaeuPCA--
