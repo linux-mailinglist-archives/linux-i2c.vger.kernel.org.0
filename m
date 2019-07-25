@@ -2,82 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE61B74C08
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Jul 2019 12:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE82174E3F
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Jul 2019 14:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727379AbfGYKo4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Jul 2019 06:44:56 -0400
-Received: from gofer.mess.org ([88.97.38.141]:41021 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726513AbfGYKoz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 25 Jul 2019 06:44:55 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id EA01460474; Thu, 25 Jul 2019 11:44:53 +0100 (BST)
-Date:   Thu, 25 Jul 2019 11:44:53 +0100
-From:   Sean Young <sean@mess.org>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] media: ir-kbd-i2c: prevent potential NULL pointer
- access
-Message-ID: <20190725104453.5kqusisyg44zbbcy@gofer.mess.org>
-References: <20190722172632.4402-1-wsa+renesas@sang-engineering.com>
- <20190722172632.4402-2-wsa+renesas@sang-engineering.com>
- <20190725051202.o47mz4unbn63z6uk@gofer.mess.org>
- <20190725075538.GB1323@kunai>
+        id S2388166AbfGYMiF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Jul 2019 08:38:05 -0400
+Received: from dispatch1-us1.ppe-hosted.com ([148.163.129.52]:60826 "EHLO
+        dispatch1-us1.ppe-hosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387879AbfGYMiF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Jul 2019 08:38:05 -0400
+X-Virus-Scanned: Proofpoint Essentials engine
+Received: from webmail.solarflare.com (webmail.solarflare.com [12.187.104.26])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 2BFF0A80079;
+        Thu, 25 Jul 2019 12:38:03 +0000 (UTC)
+Received: from [10.17.20.203] (10.17.20.203) by ocex03.SolarFlarecom.com
+ (10.20.40.36) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 25 Jul
+ 2019 05:37:59 -0700
+Subject: Re: [PATCH] net: sfc: falcon: convert to i2c_new_dummy_device
+To:     David Miller <davem@davemloft.net>,
+        <wsa+renesas@sang-engineering.com>
+CC:     <linux-i2c@vger.kernel.org>, <linux-net-drivers@solarflare.com>,
+        <mhabets@solarflare.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20190722172635.4535-1-wsa+renesas@sang-engineering.com>
+ <20190724.154739.72147269285837223.davem@davemloft.net>
+From:   Edward Cree <ecree@solarflare.com>
+Message-ID: <72968faa-e260-3640-99be-9c63bc79ad5e@solarflare.com>
+Date:   Thu, 25 Jul 2019 13:37:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190725075538.GB1323@kunai>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190724.154739.72147269285837223.davem@davemloft.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
+X-Originating-IP: [10.17.20.203]
+X-TM-AS-Product-Ver: SMEX-12.5.0.1300-8.5.1010-24796.003
+X-TM-AS-Result: No-7.381600-4.000000-10
+X-TMASE-MatchedRID: oTBA/+sdKabmLzc6AOD8DfHkpkyUphL9fEdXo4+42aEkt9BigJAcVgjx
+        o7OW856yTtDq+0o8imgSs4PEHE58E9fQ7AU9Ytd4lVHM/F6YkvRDyJQKgOPwxIj5cMaEv6IyTpS
+        1paZtgYF1nt+700MBrsT6tzHD1wk5+5Y5nT90ICBky+3bD6o2HKa83Mq89i9dGUs9b7xvtJrFhC
+        wp4b+TJfj1IL4P7eCO7phItSi3Xzl9G+Xm35+1yP3HILfxLV/9fS0Ip2eEHnw7lDGytTXSz/oLR
+        4+zsDTtjoczmuoPCq32UcM14UFnrdM9fJjZ1or/+LMMQwpJHXjyb2MvkMmHkaPRoAinAl+w
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--7.381600-4.000000
+X-TMASE-Version: SMEX-12.5.0.1300-8.5.1010-24796.003
+X-MDID: 1564058284-ivdeBhWiSCVo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+On 24/07/2019 23:47, David Miller wrote:
+> From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Date: Mon, 22 Jul 2019 19:26:35 +0200
+>
+>> Move from i2c_new_dummy() to i2c_new_dummy_device(). So, we now get an
+>> ERRPTR which we use in error handling.
+>>
+>> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-On Thu, Jul 25, 2019 at 09:55:38AM +0200, Wolfram Sang wrote:
-> Hi Sean,
-> 
-> thanks for the review!
-> 
-> On Thu, Jul 25, 2019 at 06:12:02AM +0100, Sean Young wrote:
-> > On Mon, Jul 22, 2019 at 07:26:31PM +0200, Wolfram Sang wrote:
-> > > i2c_new_dummy() can fail returning a NULL pointer. The code does not
-> > > bail out in this case and the returned pointer is blindly used.
-> > 
-> > I don't see how. The existing code tries to set up the tx part; if
-> > i2c_new_dummy() return NULL then the rcdev is registered without tx,
-> > and tx_c is never used.
-> 
-> Yes, you are totally right. I missed that the send_block function is
-> also only called iff zilog_init succeeded. Thanks for the heads up and
-> sorry for the noise.
+Subject & description are incomplete, you're also changing i2c_new_device()
+ to i2c_new_client_device().
+Other than that,
+Acked-by: Edward Cree <ecree@solarflare.com>
 
-Not at all, thank you for the patch.
-
-> > > Convert
-> > > to devm_i2c_new_dummy_device() which returns an ERR_PTR and also bail
-> > > out when failing the validity check.
-> > 
-> > Possibly I was being overly cautious with not bailing out if tx can't
-> > be registered; moving to devm is probably a good idea. However the
-> > commit message is misleading, because the existing code has no
-> > NULL pointer access.
-> 
-> Yep, I will resend with a proper commit message. Technically, there is
-> no need to bail out anymore because there is no NULL pointer access. My
-> tendency is now to not bail out and keep the old behaviour (registering
-> without tx). What do you think?
-
-Since I write this code I've got pretty much every model with this zilog
-transmitter/receiver, and they all work fine, including different firmware
-versions. If there is a problem it would be nice to hear about it, and
-not silently swallow the error. I think.
-
-Thanks,
-
-Sean
+> Solarflare folks, please review/test.
+>
+> Thank you.
+Falcon isn't likely to get tested by us, I think we only have about three
+ of them left in the building, two of which are in display cabinets ;-)
+We end-of-lifed this hardware a couple of years ago, maybe it should be
+ downgraded from 'supported' to 'odd fixes'.  Or even moved to staging,
+ like that qlogic driver recently was.
