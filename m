@@ -2,157 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B27F076157
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jul 2019 10:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B911D76168
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jul 2019 10:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725878AbfGZIx6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 26 Jul 2019 04:53:58 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36405 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725842AbfGZIx6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 Jul 2019 04:53:58 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l21so24449750pgm.3
-        for <linux-i2c@vger.kernel.org>; Fri, 26 Jul 2019 01:53:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Kn51c4iVY6vEKLBAUEgNeUWaRLfBi8NFzSwtDO3qJPo=;
-        b=ZrwXgOysV4Nm38G/Jd5hjo4ESfSee36UHEVzuju2NmMPD0fUC94XqOIjPS/vdAra91
-         GePNmRjhbOHDSzgaRjaMUMHG2ycRlVIjQlvGTHCJ6xkeIKiWZn0uDU1XyD51GtXPWUIZ
-         1aTRStwb5PMDv7h+ojMqDKzg/9hv/j4m2tbSs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Kn51c4iVY6vEKLBAUEgNeUWaRLfBi8NFzSwtDO3qJPo=;
-        b=XDgCBxu9Ofh406GvXnWvwJrFDnA9RjK1scJZHDYrFRpX8Hl8qHFoPJjUf3wJEROmHd
-         E2oYE/KbZoL+M4dSGliqca9noMeMYu/hbfJ5HNo244OtutZgs69F8o/1NzyL53Fk2AH2
-         vrKBsGuXZfriiOr4hzExAVvaXepFNfBrewrcnAhYGQU4ltcKv///pfvyjL5f6hvVqGit
-         bCoXFhwKhz3/hp7o5FaIcI5hqc4pTN4fQXI5+Sbdrmki598U9XFMetgjvztL9oMXnH38
-         qmptjWZo+JdhV+UywIGfqJyDsr8A/EtP5HGyThMd3k56dWS0W7wBRCYT5IYWolkiNQSR
-         Dp8g==
-X-Gm-Message-State: APjAAAXf3XPFA6J0R+vElKkCc0NhyVVwHOsblLzkto0wyfVnd8R8fvWO
-        OdMQIveDDu7Ty9OC+ZIkhHKKHQ==
-X-Google-Smtp-Source: APXvYqwEl1k8U3GLoPPwct03h2YHbh18gkXJVzJDcKZV2mmsK3QGn7e5o8uX6/Q7RDC9oULrHaYOvA==
-X-Received: by 2002:a63:c03:: with SMTP id b3mr26309020pgl.23.1564131237150;
-        Fri, 26 Jul 2019 01:53:57 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:b852:bd51:9305:4261])
-        by smtp.gmail.com with ESMTPSA id p15sm49438737pjf.27.2019.07.26.01.53.54
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 26 Jul 2019 01:53:56 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jun Gao <jun.gao@mediatek.com>,
-        Alexandru M Stan <amstan@chromium.org>,
-        linux-i2c@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: mediatek: disable zero-length transfers for mt8183
-Date:   Fri, 26 Jul 2019 16:53:06 +0800
-Message-Id: <20190726085305.163306-1-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.20.1
+        id S1725878AbfGZI70 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 Jul 2019 04:59:26 -0400
+Received: from mx2.suse.de ([195.135.220.15]:48688 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725842AbfGZI70 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 26 Jul 2019 04:59:26 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id ACA13AF21
+        for <linux-i2c@vger.kernel.org>; Fri, 26 Jul 2019 08:59:25 +0000 (UTC)
+Date:   Fri, 26 Jul 2019 10:59:24 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Linux I2C <linux-i2c@vger.kernel.org>
+Subject: [PATCH] decode-dimms: Round DDR4 speed properly
+Message-ID: <20190726105924.0ce38de7@endymion>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When doing i2cdetect quick write mode, we would get transfer
-error ENOMEM, and i2cdetect shows there's no device at the address.
-Quoting from mt8183 datasheet, the number of transfers to be
-transferred in one transaction should be set to bigger than 1,
-so we should forbid zero-length transfer and update functionality.
+The cycle time of high-speed memory modules is stored rounded. We
+already have a heuristic to un-round it and display the expected
+speed for DDR3 modules. Use the same heuristic for DDR4.
 
-Incorrect return:
-localhost ~ # i2cdetect -q -y 0
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:          -- -- -- -- -- -- -- -- -- -- -- -- --
-10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-70: -- -- -- -- -- -- -- --
+For example this will make PC4-17000 memory properly displayed as
+operating at 2133 MHz instead of 2132 MHz. As a side effect, this
+fixes a bug where the maximum speed wouldn't be listed in section
+"Timings at Standard Speeds" if it had been computed incorrectly
+due to the rounded cycle time.
 
-After this patch:
-localhost ~ #  i2cdetect -q -y 0
-Error: Can't use SMBus Quick Write command on this bus
-
-localhost ~ #  i2cdetect -y 0
-Warning: Can't use SMBus Quick Write command, will skip some addresses
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:
-10:
-20:
-30: -- -- -- -- -- -- -- --
-40:
-50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-60:
-70:
-
-Reported-by: Alexandru M Stan <amstan@chromium.org>
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
 ---
-Previous patch and discussion:
-http://patchwork.ozlabs.org/patch/1042684/
----
- drivers/i2c/busses/i2c-mt65xx.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ eeprom/decode-dimms |   30 +++++++++++++++++++++---------
+ 1 file changed, 21 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index 252edb433fdf..2842ca4b8c3b 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -234,6 +234,10 @@ static const struct i2c_adapter_quirks mt7622_i2c_quirks = {
- 	.max_num_msgs = 255,
- };
+--- i2c-tools.orig/eeprom/decode-dimms	2019-07-26 10:48:21.964141808 +0200
++++ i2c-tools/eeprom/decode-dimms	2019-07-26 10:49:04.064695751 +0200
+@@ -1554,6 +1554,24 @@ use constant DDR3_REGISTERED	=> 2;
+ use constant DDR3_CLOCKED	=> 3;
+ use constant DDR3_LOAD_REDUCED	=> 4;
  
-+static const struct i2c_adapter_quirks mt8183_i2c_quirks = {
-+	.flags = I2C_AQ_NO_ZERO_LEN,
-+};
++sub ddr3_adjust_ctime($$)
++{
++	my ($ctime, $ftb) = @_;
++	my $ii;
 +
- static const struct mtk_i2c_compatible mt2712_compat = {
- 	.regs = mt_i2c_regs_v1,
- 	.pmic_i2c = 0,
-@@ -298,6 +302,7 @@ static const struct mtk_i2c_compatible mt8173_compat = {
- };
- 
- static const struct mtk_i2c_compatible mt8183_compat = {
-+	.quirks = &mt8183_i2c_quirks,
- 	.regs = mt_i2c_regs_v2,
- 	.pmic_i2c = 0,
- 	.dcm = 0,
-@@ -870,7 +875,11 @@ static irqreturn_t mtk_i2c_irq(int irqno, void *dev_id)
- 
- static u32 mtk_i2c_functionality(struct i2c_adapter *adap)
++	# Starting with DDR3-1866, vendors may start approximating the
++	# minimum cycle time. Try to guess what they really meant so
++	# that the reported speed matches the standard.
++	for ($ii = 7; $ii < 15; $ii++) {
++		if ($ctime > 7.5/$ii - $ftb/1000 && $ctime < 7.5/$ii + $ftb/1000) {
++			$ctime = 7.5/$ii;
++			last;
++		}
++	}
++
++	return $ctime;
++}
++
+ # Parameter: EEPROM bytes 0-127 (using 1-68)
+ sub decode_ddr3_sdram($)
  {
--	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-+	if (adap->quirks->flags & I2C_AQ_NO_ZERO_LEN)
-+		return I2C_FUNC_I2C |
-+			(I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
-+	else
-+		return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
- }
+@@ -1600,15 +1618,7 @@ sub decode_ddr3_sdram($)
+ 	prints("Memory Characteristics");
  
- static const struct i2c_algorithm mtk_i2c_algorithm = {
-@@ -933,8 +942,8 @@ static int mtk_i2c_probe(struct platform_device *pdev)
- 	i2c->dev = &pdev->dev;
- 	i2c->adap.dev.parent = &pdev->dev;
- 	i2c->adap.owner = THIS_MODULE;
--	i2c->adap.algo = &mtk_i2c_algorithm;
- 	i2c->adap.quirks = i2c->dev_comp->quirks;
-+	i2c->adap.algo = &mtk_i2c_algorithm;
- 	i2c->adap.timeout = 2 * HZ;
- 	i2c->adap.retries = 1;
+ 	$ctime = ddr3_mtb_ftb($bytes->[12], $bytes->[34], $mtb, $ftb);
+-	# Starting with DDR3-1866, vendors may start approximating the
+-	# minimum cycle time. Try to guess what they really meant so
+-	# that the reported speed matches the standard.
+-	for ($ii = 7; $ii < 15; $ii++) {
+-		if ($ctime > 7.5/$ii - $ftb/1000 && $ctime < 7.5/$ii + $ftb/1000) {
+-			$ctime = 7.5/$ii;
+-			last;
+-		}
+-	}
++	$ctime = ddr3_adjust_ctime($ctime, $ftb);
  
--- 
-2.20.1
+ 	my $ddrclk = 2 * (1000 / $ctime);
+ 	my $tbits = 1 << (($bytes->[8] & 7) + 3);
+@@ -1874,7 +1884,9 @@ sub decode_ddr4_sdram($)
+ 	prints("Memory Characteristics");
+ 
+ 	$ctime = ddr4_mtb_ftb($bytes->[18], $bytes->[125], $mtb, $ftb);
++	$ctime = ddr3_adjust_ctime($ctime, $ftb);
+ 	$ctime_max = ddr4_mtb_ftb($bytes->[19], $bytes->[124], $mtb, $ftb);
++	$ctime_max = ddr3_adjust_ctime($ctime_max, $ftb);
+ 
+ 	my $ddrclk = 2 * (1000 / $ctime);
+ 	my $tbits = 8 << ($bytes->[13] & 7);
 
+-- 
+Jean Delvare
+SUSE L3 Support
