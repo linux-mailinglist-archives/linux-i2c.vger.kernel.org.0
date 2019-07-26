@@ -2,91 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C2076726
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jul 2019 15:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADB976A26
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jul 2019 15:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbfGZNST (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 26 Jul 2019 09:18:19 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47740 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726001AbfGZNST (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 26 Jul 2019 09:18:19 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 7950AAC8C;
-        Fri, 26 Jul 2019 13:18:18 +0000 (UTC)
-Date:   Fri, 26 Jul 2019 15:18:16 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Linux I2C <linux-i2c@vger.kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] eeprom: at24: make spd world-readable again
-Message-ID: <20190726151816.66f2ff2f@endymion>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1726681AbfGZN4a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 Jul 2019 09:56:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48914 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387777AbfGZNlu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 26 Jul 2019 09:41:50 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2672A22CF5;
+        Fri, 26 Jul 2019 13:41:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564148509;
+        bh=zX30Y7I8lGQSE39mcBLgCQnD1zhzLqgkvgnTgW8bI/U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=k7/MYg0MGLbki0g3EqS6d5XoAuDjmxLmZ5gir1IHBeua4yDd4S/goV17so5PiFt8n
+         +FJh7ZVsJa/LcxUvub/nflNlyhoyELQboQqE6meOYLtPh7zlfMdNwoyEKTbOxO4dvN
+         n1+yN7Rq6NuEbvgyeiChNQerVHe6alV6d3tfnU8g=
+Received: by mail-qk1-f172.google.com with SMTP id v22so39029500qkj.8;
+        Fri, 26 Jul 2019 06:41:49 -0700 (PDT)
+X-Gm-Message-State: APjAAAW6M4OTnD6ssHM6XypNkKeXuIX16MHEhAhKgQNS9mb8d+YFTD4h
+        wk3szdOcuFgO0FJ3KMpWPvDVUqaPGOoQOF9q9Q==
+X-Google-Smtp-Source: APXvYqxjuwBX7ksE7JbZB0mI6ceV0xcxiT8SPZ6Gi56d7P4U1vzH0bY2zZ15ZhXiikKw8Sd4XxO8RlHxVifobutyBU8=
+X-Received: by 2002:a37:a010:: with SMTP id j16mr64220208qke.152.1564148507205;
+ Fri, 26 Jul 2019 06:41:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <cover.1564140865.git.mchehab+samsung@kernel.org> <430ed96cb234805d1deb216e8c8559da22cc6bac.1564140865.git.mchehab+samsung@kernel.org>
+In-Reply-To: <430ed96cb234805d1deb216e8c8559da22cc6bac.1564140865.git.mchehab+samsung@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 26 Jul 2019 07:41:35 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqK_rfHehrKW_NS89BOV0=dYoao0H=zOzG=D-724vKduKw@mail.gmail.com>
+Message-ID: <CAL_JsqK_rfHehrKW_NS89BOV0=dYoao0H=zOzG=D-724vKduKw@mail.gmail.com>
+Subject: Re: [PATCH 1/7] docs: fix broken doc references due to renames
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
+        Don Brace <don.brace@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        rcu@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        esc.storagedev@microsemi.com, SCSI <linux-scsi@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The integration of the at24 driver into the nvmem framework broke the
-world-readability of spd EEPROMs. Fix it.
+On Fri, Jul 26, 2019 at 5:47 AM Mauro Carvalho Chehab
+<mchehab+samsung@kernel.org> wrote:
+>
+> Some files got renamed but probably due to some merge conflicts,
+> a few references still point to the old locations.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> Acked-by: Wolfram Sang <wsa@the-dreams.de> # I2C part
+> Reviewed-by: Jerry Hoemann <jerry.hoemann@hpe.com> # hpwdt.rst
+> ---
+>  Documentation/RCU/rculist_nulls.txt                   |  2 +-
+>  Documentation/devicetree/bindings/arm/idle-states.txt |  2 +-
+>  Documentation/locking/spinlocks.rst                   |  4 ++--
+>  Documentation/memory-barriers.txt                     |  2 +-
+>  Documentation/translations/ko_KR/memory-barriers.txt  |  2 +-
+>  Documentation/watchdog/hpwdt.rst                      |  2 +-
+>  MAINTAINERS                                           | 10 +++++-----
+>  drivers/gpu/drm/drm_modes.c                           |  2 +-
+>  drivers/i2c/busses/i2c-nvidia-gpu.c                   |  2 +-
+>  drivers/scsi/hpsa.c                                   |  4 ++--
+>  10 files changed, 16 insertions(+), 16 deletions(-)
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Fixes: 57d155506dd5 ("eeprom: at24: extend driver to plug into the NVMEM framework")
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Arnd Bergmann <arnd@arndb.de>
----
- drivers/misc/eeprom/at24.c |    2 +-
- drivers/nvmem/core.c       |   15 +++++++++++----
- 2 files changed, 12 insertions(+), 5 deletions(-)
-
---- linux-5.1.orig/drivers/misc/eeprom/at24.c	2019-05-06 02:42:58.000000000 +0200
-+++ linux-5.1/drivers/misc/eeprom/at24.c	2019-07-26 13:56:37.612197390 +0200
-@@ -719,7 +719,7 @@ static int at24_probe(struct i2c_client
- 	nvmem_config.name = dev_name(dev);
- 	nvmem_config.dev = dev;
- 	nvmem_config.read_only = !writable;
--	nvmem_config.root_only = true;
-+	nvmem_config.root_only = !(flags & AT24_FLAG_IRUGO);
- 	nvmem_config.owner = THIS_MODULE;
- 	nvmem_config.compat = true;
- 	nvmem_config.base_dev = dev;
---- linux-5.1.orig/drivers/nvmem/core.c	2019-07-23 19:30:27.630099103 +0200
-+++ linux-5.1/drivers/nvmem/core.c	2019-07-26 14:21:31.002908472 +0200
-@@ -435,10 +435,17 @@ static int nvmem_setup_compat(struct nvm
- 	if (!config->base_dev)
- 		return -EINVAL;
- 
--	if (nvmem->read_only)
--		nvmem->eeprom = bin_attr_ro_root_nvmem;
--	else
--		nvmem->eeprom = bin_attr_rw_root_nvmem;
-+	if (nvmem->read_only) {
-+		if (config->root_only)
-+			nvmem->eeprom = bin_attr_ro_root_nvmem;
-+		else
-+			nvmem->eeprom = bin_attr_ro_nvmem;
-+	} else {
-+		if (config->root_only)
-+			nvmem->eeprom = bin_attr_rw_root_nvmem;
-+		else
-+			nvmem->eeprom = bin_attr_rw_nvmem;
-+	}
- 	nvmem->eeprom.attr.name = "eeprom";
- 	nvmem->eeprom.size = nvmem->size;
- #ifdef CONFIG_DEBUG_LOCK_ALLOC
-
-
--- 
-Jean Delvare
-SUSE L3 Support
+Acked-by: Rob Herring <robh@kernel.org>
