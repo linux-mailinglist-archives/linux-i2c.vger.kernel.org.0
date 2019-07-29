@@ -2,41 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EBC78AB4
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jul 2019 13:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4673978ABD
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jul 2019 13:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387778AbfG2Lj7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Jul 2019 07:39:59 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:34413 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387467AbfG2Lj6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Jul 2019 07:39:58 -0400
-Received: by mail-wr1-f67.google.com with SMTP id 31so61512700wrm.1;
-        Mon, 29 Jul 2019 04:39:56 -0700 (PDT)
+        id S2387664AbfG2LnL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Jul 2019 07:43:11 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:56210 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387483AbfG2LnL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Jul 2019 07:43:11 -0400
+Received: by mail-wm1-f66.google.com with SMTP id a15so53537246wmj.5;
+        Mon, 29 Jul 2019 04:43:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mtJdzbW3OOpjsEtmQxM3ki8nrSOXvXY0ubiY8BKmPl0=;
-        b=bDM6wAzqzUPDQPK1u8I5YAC+Elo8N8L8XcItoO58fuMCSb66b37k/KAqrQGoEDjtXD
-         M1B6lCHfiyTT3iNK7UAEav7yERU3tYcvKTeEIXuD+BmzqlfEg9Wxf7roe23J8bwgeEEF
-         k6/0OPubnZGt/WvGBxbOqF9GsN9b5UPdJ9kCPH0eqljdDM3wyyTGRFuPEYnI6EAUa/f6
-         1Q250Pdotgq5GLq3ToUqTGJy9GOx6yKosWeRag/PnTQYtPYByK/V1H5pZ/g5/9N/P3xk
-         lmCKkcp4m9Xq30YJLB8n15MMmH2y5QldUEjl8V6sHlNPa2ugycRflbzhYZcrAPw7PIIi
-         jQ+Q==
-X-Gm-Message-State: APjAAAUm5mrrUffKUY9Bfo1JXqXFqLJs9oaGMUn7ZaWAIRsLfRXKExcG
-        LTYF59O6XOvlsknxbx/AiMeO4ry1u8z7TTzWelA=
-X-Google-Smtp-Source: APXvYqwsv0EP2D3Ic1LzSkwSX02GY0PnXhgzpnFiIdu6QLxaYoTsm4jdSzeorUlunM5h+Z3JxZLDkICDq21xY7TBAak=
-X-Received: by 2002:a5d:4b91:: with SMTP id b17mr346128wrt.57.1564400396173;
- Mon, 29 Jul 2019 04:39:56 -0700 (PDT)
+        bh=jigptzo01XZyGgLtipuPU950QxuAZ3ye0iGsK04xVZM=;
+        b=EK5T+3fskevPl/P3wy0lUyvPgc0TCuPGcEx/WdUGethfFz91VIQY2caXQ6CDB2ejF9
+         IoSiyiPXRhs/RWr23UeacbYpy4eAxajM83/kAqUfYYZQt9Sy5vLvkCzJ5tYyCGbMsdbj
+         HB+zFj+mPuLIDwyXYSjdueP53uijOmMekzHWX4Xk8HxGEljlRLae963eTGwx5RQpXtEg
+         gU0aAkQMHQPjlqX+Fs39N9x4TZHt8J9sXln4PaQ4+WC98llVIfRgdR+Su4gNO/nopTRG
+         QxXU0B5XQre3yfmD76tJOs52wIB04bmPT96U7qAnMv8uC1KwzGeQsfznoUkPJv9++3gb
+         +7NA==
+X-Gm-Message-State: APjAAAU/ZLiFYGMUHhAB1czjBw/iTaY0sgFJjLeQKraNmdSCRoVpdaaB
+        7+4fYSkIBAtzTCuDayJfdH/D+4Hrqr3Ozo4rROB8h2Wi
+X-Google-Smtp-Source: APXvYqyw7637f2weqxwSRxchSzxJmWFT4ZjeK6nN9vKoOEBYdf4ygLTz4RmaK4c3sZ1BE94k33re74QzD+ovObKPg0A=
+X-Received: by 2002:a05:600c:254b:: with SMTP id e11mr92695832wma.171.1564400589337;
+ Mon, 29 Jul 2019 04:43:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190724121559.19079-1-horms+renesas@verge.net.au> <20190724121559.19079-2-horms+renesas@verge.net.au>
-In-Reply-To: <20190724121559.19079-2-horms+renesas@verge.net.au>
+References: <20190724121559.19079-1-horms+renesas@verge.net.au> <20190724121559.19079-3-horms+renesas@verge.net.au>
+In-Reply-To: <20190724121559.19079-3-horms+renesas@verge.net.au>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 29 Jul 2019 13:39:44 +0200
-Message-ID: <CAMuHMdVmTSinvJ9RbG0MdFd9LoxtFHRPqZV31dju2n=PLbYG6w@mail.gmail.com>
-Subject: Re: [PATCH 1/4] dt-bindings: i2c: sh_mobile: Rename bindings
- documentation file
+Date:   Mon, 29 Jul 2019 13:42:57 +0200
+Message-ID: <CAMuHMdUYTo1_zz4sCv5=PRL90EyFSU_b5WgUJoc4Oii08F_tww@mail.gmail.com>
+Subject: Re: [PATCH 2/4] dt-bindings: i2c: rcar: Rename bindings documentation file
 To:     Simon Horman <horms+renesas@verge.net.au>
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Chris Brandt <chris.brandt@renesas.com>,
@@ -54,22 +53,25 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Wed, Jul 24, 2019 at 3:25 PM Simon Horman <horms+renesas@verge.net.au> wrote:
-> Rename the bindings documentation file for sh_mobile I2C controller
-> from i2c-sh_mobile.txt to renesas,iic.txt.
->
+> Rename the bindings documentation file for R-Car I2C controller
+> from i2c-rcar.txt to renesas,rcar.txt.
+
+renesas,i2c.txt
+
 > This is part of an ongoing effort to name bindings documentation files for
 > Renesas IP blocks consistently, in line with the compat strings they
 > document.
 >
 > Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
 
+With the above fixed:
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 
                         Geert
 
--- 
+--
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
 In personal conversations with technical people, I call myself a hacker. But
