@@ -2,118 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 990E478084
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jul 2019 18:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9461F7829D
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jul 2019 02:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726251AbfG1QvK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 28 Jul 2019 12:51:10 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:41575 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726248AbfG1QvJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Jul 2019 12:51:09 -0400
-Received: by mail-io1-f68.google.com with SMTP id j5so110855880ioj.8
-        for <linux-i2c@vger.kernel.org>; Sun, 28 Jul 2019 09:51:09 -0700 (PDT)
+        id S1726440AbfG2AIQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 28 Jul 2019 20:08:16 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:35930 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726384AbfG2AIQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Jul 2019 20:08:16 -0400
+Received: by mail-vs1-f66.google.com with SMTP id y16so39599761vsc.3
+        for <linux-i2c@vger.kernel.org>; Sun, 28 Jul 2019 17:08:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=iPSTb/ugUHYwVlT9/uQIlUkREIRlUpHM1TgwBqyHsyk=;
-        b=miIE5U6vo4jaVkuTEOM7/ypLJ3V+22yx72Dn1jCqSFjPIFe/SSAYUvZWJK0GgkpuRo
-         wIRC24qiddywrZDvNEz0d/bk94SqU34ES/OlW4GFVnyqq2h21yTR1op1wXW//lgFuMCe
-         fdCSvcoWcI/rmok2/AAa4R8VXAXeAQskSKRZgxPq5Kyta0Oku/W/Ap9H1FGphG4P5tLH
-         /1+JA3oTL7dCU4DQzfFLv70PsddVUxu/tG8yrd+qBRonh8UVXriUqWaY6IGo+hxrU6q/
-         NXl+Nw32bDVGiEfx5A2/sypKeRrnQvXp4LtvtkVI//pL6arOEMpKPv3zCq1BW1My/1BW
-         5qcQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=BrTkYGT/CoRQ7U7g4N9efxmX5N2ln4oVBYUSCIHtobA=;
+        b=Hrbix6Ncwndj0/ZhLdg0qekQEb+2Kgjc0SeRBr4FoeMFiX6XHGMMMukOQcIKSRIyn6
+         1FLJR6mLR/vulQ1VtBLTJl0Lda2nbHDXGla8f4MZapoFNxChdOqG0oC2RV/IR5Di4VyD
+         grjfPw7UAkWugiyvS9Gl1hDt40Nvloz7Q8hFS7wLEsjTOSX4W7lFPW9PhND4JzOEZ+VX
+         SBGYCM0giRSd8L6L/uLWJrYqn2I37qhpbbuqonQi3s5AF+bCkD88dzpmwDbsGmVCx0VK
+         YxQyZe0oSBHMaPJJxMQFY+Lj0j7LLb7a1Ztlp5dpJ58wOiotopzo5wS6I3+UonrsS7ek
+         PqTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=iPSTb/ugUHYwVlT9/uQIlUkREIRlUpHM1TgwBqyHsyk=;
-        b=jPl25N1+DQodwMIn8iN+/fh24bSf6SRCJOWO7A902RLq44p8JRlLRZ2MNx3nwu6Iyc
-         syOa+S9NFypidBXPzAbSYv5BkRvW6Xz5XJK/1zh5XQZcIsQEBeHz7iydXgX0VuLYRExw
-         3SE0X5/1xM614rBQddcypBK1tpmX3o+sQaaI+zYXVCk0Nawoii01/90unpvF3bQav4Yq
-         30SalALpixjjiLya2sFKS/Q38Pw+rGIUeZ2Yk5xPAMhcsjze8uI9K8s+jJ8s9ypg7yAB
-         nSSE1J/0fBTIt+i7EuEKE0AFy81h5QGkSeH/mMYz8QcriHgXRQcXkQfuHwuJQ+ggN9QS
-         5Ucw==
-X-Gm-Message-State: APjAAAWRYcBjCzM6MBsgz3wWUJ/rdlxIBtw8QtlakZ6jhxYsbzCCx1YY
-        X/3YFgJgHX683n9xMhSIgHx8qcSpG/of+KHW1SgDVw==
-X-Google-Smtp-Source: APXvYqxDP/Xc4YvFTazXuFe3kUOMZmk9NmWfWq1JFLzpBh0f15mNtNVuIvC7ICSDFCC05pVsc3xEtlgwjKAkHlHwaiQ=
-X-Received: by 2002:a02:c492:: with SMTP id t18mr108750115jam.67.1564332668827;
- Sun, 28 Jul 2019 09:51:08 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=BrTkYGT/CoRQ7U7g4N9efxmX5N2ln4oVBYUSCIHtobA=;
+        b=fwsvMsnqfIuwwr25bJgYSe06CSwAyUq4Afmq9sb7HgwTkR8RmT4sH5Ieeh0IgFXlUN
+         vQG1XQAdq0bSlIYWDpGd32Sa/YMBFEyHvHF1ykOMnVxJpd1ToJp1tpFoRogbOCazjtO5
+         DHEm1SlvzI9UFCm0ngA/FoCQo+X66nY4sYkH4sF5YE1ITflD3eGQxAtgUPdS+VNdRMiX
+         LJG29G5pvgR3392njYkRfTsxcgDu+Nt0cRAC9xvEqo14m3+JA7dyTe3SWWUVU2WOQKNa
+         qiscbNEB8wFFtFY/brhJBwByw4a1dRsrHOgKafEOZzmimRVFO3T9gbpvT3LwZcLb0Qrp
+         jtrA==
+X-Gm-Message-State: APjAAAVDmsNNEW+rb2D0frupwCyLOKjDjOZ6D1vDI9WkSI/YEhhwDa5f
+        JNu+XYntw+DcjzniMvU3TF1vPVb81J68y3Uab2I=
+X-Google-Smtp-Source: APXvYqz5Tv/G3ojzOIebxdxZc+D3VZ7ztK4AVBhaXkUwSAzoovp0N7wtTAf+Vftj4yT+nLwP2EIhs0O9djQd9MpIws8=
+X-Received: by 2002:a67:eb19:: with SMTP id a25mr65238884vso.109.1564358894898;
+ Sun, 28 Jul 2019 17:08:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190728184138.78afc30f@endymion> <20190728184255.563332e6@endymion>
-In-Reply-To: <20190728184255.563332e6@endymion>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Sun, 28 Jul 2019 18:50:58 +0200
-Message-ID: <CAMRc=Mc6mB56zkhOzvBsJtyePx3H6DvVLLSYwPChBNoyD_zR2w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] nvmem: Use the same permissions for eeprom as for nvmem
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>
+Received: by 2002:a67:80c8:0:0:0:0:0 with HTTP; Sun, 28 Jul 2019 17:08:14
+ -0700 (PDT)
+Reply-To: williamrobert416@gmail.com
+From:   "Mr. Robert William" <officialuse87@gmail.com>
+Date:   Mon, 29 Jul 2019 01:08:14 +0100
+Message-ID: <CAD00q0_sEF2SnzFkOGUBd7uFGZugFRAOygkgQE-c=-i01FWC-w@mail.gmail.com>
+Subject: Please listen
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-niedz., 28 lip 2019 o 18:43 Jean Delvare <jdelvare@suse.de> napisa=C5=82(a)=
-:
->
-> The compatibility "eeprom" attribute is currently root-only no
-> matter what the configuration says. The "nvmem" attribute does
-> respect the setting of the root_only configuration bit, so do the
-> same for "eeprom".
->
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> Fixes: b6c217ab9be6 ("nvmem: Add backwards compatibility support for olde=
-r EEPROM drivers.")
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> ---
-> Changes since V1:
->  * Split into 2 patches, one to the at24 driver and one to the nvmem
->    core. drivers/nvmem/nvmem-sysfs.c |   15 +++++++++++----
->
->  1 file changed, 11 insertions(+), 4 deletions(-)
->
-> --- linux-5.2.orig/drivers/nvmem/nvmem-sysfs.c  2019-07-08 00:41:56.00000=
-0000 +0200
-> +++ linux-5.2/drivers/nvmem/nvmem-sysfs.c       2019-07-28 18:06:53.10514=
-0893 +0200
-> @@ -224,10 +224,17 @@ int nvmem_sysfs_setup_compat(struct nvme
->         if (!config->base_dev)
->                 return -EINVAL;
->
-> -       if (nvmem->read_only)
-> -               nvmem->eeprom =3D bin_attr_ro_root_nvmem;
-> -       else
-> -               nvmem->eeprom =3D bin_attr_rw_root_nvmem;
-> +       if (nvmem->read_only) {
-> +               if (config->root_only)
-> +                       nvmem->eeprom =3D bin_attr_ro_root_nvmem;
-> +               else
-> +                       nvmem->eeprom =3D bin_attr_ro_nvmem;
-> +       } else {
-> +               if (config->root_only)
-> +                       nvmem->eeprom =3D bin_attr_rw_root_nvmem;
-> +               else
-> +                       nvmem->eeprom =3D bin_attr_rw_nvmem;
-> +       }
->         nvmem->eeprom.attr.name =3D "eeprom";
->         nvmem->eeprom.size =3D nvmem->size;
->  #ifdef CONFIG_DEBUG_LOCK_ALLOC
->
->
-> --
-> Jean Delvare
-> SUSE L3 Support
+-- 
+Hello,
 
-Reviewed-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+I am Eng. Robert William, a retired Marine Engineer residing in
+Trinidad & Tobago.
+Unfortunately i am admitted to the hospital for a cancer (Sickness)
+over a year now,my doctor reported that i have only few months to pass
+away. Please i need your consent to invest my money (USD$1.8 Million)
+in any business of your
+
+choice in your country before i die, i have no other relatives not
+even children because i lost my family in a fire disaster in 2005.
+Please i need your urgent and
+
+kind response to enable me send you more information on how to contact
+my bank as my next of kin to process the fund into your bank account.
+
+Mr Robert William
