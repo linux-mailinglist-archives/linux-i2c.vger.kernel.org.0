@@ -2,81 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9A778AD3
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jul 2019 13:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F3878CB2
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jul 2019 15:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387810AbfG2Lqf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Jul 2019 07:46:35 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34292 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387638AbfG2Lqe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Jul 2019 07:46:34 -0400
-Received: by mail-wr1-f66.google.com with SMTP id 31so61534814wrm.1;
-        Mon, 29 Jul 2019 04:46:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vOK6hAPIyKIN5T25qCKZRpxZVqNpHvJX+jJCmKFHS6c=;
-        b=bAYwW1kC/6XYCm6elvtD+sWeTVSw8JFBJRHe9fD3nun3J1BQSOjPZ3lmR8Y60Q5+7m
-         sRCPUi8aHkFP4lC8d+A6s/A+LfF3T1iEgcVdnmTaB3eVAb5hHf+NL7EWrDgQ9m2NvbIH
-         qouhwNPiw5rzmUJmkYPfnQnbYJWNGFKhPUw/+/bDmb1CyHrX6yUfHPtWVRC1+8UNqfFu
-         seJdxGR1p8l0iZ/aGBcq8fLGsT/QFH6wgwaKIQfLVY/uG9XGQA5FzPLsEKiAe+U2b14f
-         3Ezqi/5tAG/qK4194enBDSbGMkMu71Ev08MDTUG6QpFGWsMEcAv6lFOIYVMY8qdC+Qm5
-         FGoA==
-X-Gm-Message-State: APjAAAVeyF/8uPgcK4mxd1tL53gADPsqhc88zhQrDZf/MW13kW5LddZ2
-        b99NPQS5KCLkFPZduIUUXzeYPIwUu6+/swtCpqvF6add
-X-Google-Smtp-Source: APXvYqysJniGorIJj1c+0IqS832w1usN1p5zURvg9QGJ0cqow67I5PdsrZn6SaxSvxGiJOFk+K+LujNwcHJfcBAKE+k=
-X-Received: by 2002:a5d:630c:: with SMTP id i12mr32357257wru.312.1564400792794;
- Mon, 29 Jul 2019 04:46:32 -0700 (PDT)
+        id S2387420AbfG2NXl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Jul 2019 09:23:41 -0400
+Received: from mga11.intel.com ([192.55.52.93]:11886 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387413AbfG2NXl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 29 Jul 2019 09:23:41 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Jul 2019 06:23:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,322,1559545200"; 
+   d="scan'208";a="182744433"
+Received: from mylly.fi.intel.com (HELO [10.237.72.159]) ([10.237.72.159])
+  by orsmga002.jf.intel.com with ESMTP; 29 Jul 2019 06:23:39 -0700
+Subject: Re: [PATCH] i2c: busses: Use dev_get_drvdata where possible
+To:     Jean Delvare <jdelvare@suse.de>,
+        Chuhong Yuan <hslester96@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190723111110.11121-1-hslester96@gmail.com>
+ <20190723203452.5714f142@endymion>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <c58ef749-fae3-8df5-2d20-59d766256409@linux.intel.com>
+Date:   Mon, 29 Jul 2019 16:23:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20190724121559.19079-1-horms+renesas@verge.net.au> <20190724121559.19079-5-horms+renesas@verge.net.au>
-In-Reply-To: <20190724121559.19079-5-horms+renesas@verge.net.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 29 Jul 2019 13:46:21 +0200
-Message-ID: <CAMuHMdV1kzOajwZXCkU-=bX1PW4=OUq3wZwbFRAUZuOWWwo=_w@mail.gmail.com>
-Subject: Re: [PATCH 4/4] dt-bindings: i2c: riic: Rename bindings documentation file
-To:     Simon Horman <horms+renesas@verge.net.au>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190723203452.5714f142@endymion>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Simon,
+On 7/23/19 9:34 PM, Jean Delvare wrote:
+> On Tue, 23 Jul 2019 19:11:10 +0800, Chuhong Yuan wrote:
+>> Instead of using to_pci_dev + pci_get_drvdata,
+>> use dev_get_drvdata to make code simpler.
+>>
+>> Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+>> ---
+>>   drivers/i2c/busses/i2c-designware-pcidrv.c | 6 ++----
+>>   drivers/i2c/busses/i2c-i801.c              | 3 +--
+>>   2 files changed, 3 insertions(+), 6 deletions(-)
+>> (...)
+> 
+> Looks good to me, thanks.
+> 
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> 
+For the i2c-designware-pcidrv.c
 
-The subject line is identical to the one for PATCH 3/4.
-Probably you intended s/riic/iic-emev2/?
-
-On Wed, Jul 24, 2019 at 3:25 PM Simon Horman <horms+renesas@verge.net.au> wrote:
->
-> Rename the bindings documentation file for Renesas EMEV2 IIC controller
-> from i2c-emev2.txt to renesas,iic-emev2.txt.
->
-> This is part of an ongoing effort to name bindings documentation files for
-> Renesas IP blocks consistently, in line with the compat strings they
-> document.
->
-> Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
