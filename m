@@ -2,89 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A21E7A3E8
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Jul 2019 11:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B7E7A66B
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Jul 2019 13:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728192AbfG3JWr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Jul 2019 05:22:47 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:43726 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725934AbfG3JWr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Jul 2019 05:22:47 -0400
-Received: by mail-wr1-f65.google.com with SMTP id p13so64910184wru.10
-        for <linux-i2c@vger.kernel.org>; Tue, 30 Jul 2019 02:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZB30ikpmvUH342s0WczV3x/mE9MH1qk5ePvWq53/sUg=;
-        b=XoShbxn0Jo2Gxgx50uyDZmiLwRI9kwXAktKZbO9V6BuzbEV9JqXxJa0EaX5KqNltVT
-         6HK/h2Ok/Dh6JbD3mFaK6tIXqmFgSVvGSdBG/Q5FD9Q5fwp8Xk5USnd3OaMYaQrxLI5X
-         QzLWRbK6VIRwd6xBMJ5M7bOSYkQNyOdWVECkZm/6YXvIdMvYold/covEUrvRdT6jgAyY
-         tiBSgehZb514qht0142tjVDbRYMKpHPk5N7a9Mp2t5OnIILk8ldHdMwwrRJ9al2J8wqo
-         /+J+F9TH8eFVK6nQA85nq9Z9rb+SthvQR4g2hau+aUAY/5HOrxiJcuDrh8HF75F3/Q3J
-         paNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZB30ikpmvUH342s0WczV3x/mE9MH1qk5ePvWq53/sUg=;
-        b=YFIDl0kDqCJ5MQKHbXCVlElJHrNGK4Gh/rXRzNOFTynMQlBEc0QEqoYWWMfISkqSSC
-         5pbvlAAZjQJJvp6anDTiOnXOvJzP80K/FlzKdYyk1FwSGdIHrbQ0GdgvM1K42lKZFwSZ
-         aCJK+4mbq5Asdft5yjFrdt9tKjeo4gsp0KdVYgRvpWA+9JlBMiGkjctefbp+SnWBGjd3
-         orr4d0Nk2eHwzZGBfEvn6zrib0SY7xs84/Vad0R6DXAuG2XyDnhRKndlOvrCqwwmSnYB
-         fQuHklbh1XA6FaPlYBZI5Ojuur/Rgq1J0MTcM34SCtxgRErKQHAYAoHqwBbUlACfteKu
-         g6gQ==
-X-Gm-Message-State: APjAAAX5d6kFUbCeuHbYmqCEFhqu6kTGupYcgE4ZWC/DVYQJQXhFRC4r
-        G9ipcSeopDG55Yv3/tKJ6Mk=
-X-Google-Smtp-Source: APXvYqwSbhAblUn0yS0plIpEq3kwlU1mnkUOfiCodhNjvfxBiH1kBDBzL68JtO1ZfkDTulECSfSKAg==
-X-Received: by 2002:adf:a299:: with SMTP id s25mr118979691wra.74.1564478565212;
-        Tue, 30 Jul 2019 02:22:45 -0700 (PDT)
-Received: from debian-brgl.home ([2a01:cb1d:af:5b00:6d6c:8493:1ab5:dad7])
-        by smtp.gmail.com with ESMTPSA id k124sm105870811wmk.47.2019.07.30.02.22.44
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 30 Jul 2019 02:22:44 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [GIT PULL] at24: fixes for v5.3-rc3
-Date:   Tue, 30 Jul 2019 11:22:41 +0200
-Message-Id: <20190730092241.30185-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.21.0
+        id S1729966AbfG3LDu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Jul 2019 07:03:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46556 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725974AbfG3LDu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 30 Jul 2019 07:03:50 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0C5A4206E0;
+        Tue, 30 Jul 2019 11:03:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564484629;
+        bh=m7dX//3pP3+FR/k30u2LZ08eMNQLWPNMDC/X3b/BoIk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KMur5BSVhiHRRxRO7wuNTmwbmOspluKLLcMqQiSBI6R7I/hFrZiXflMDNkswhbTtv
+         EtfxkIXJJq6sth6CVf9ItRiCuP0D4xoZNWRDgBMa+C9ci6Q/RzCOpg0pkrmiDgRQ+R
+         3Gg+K/+v70+FPzWyiJ5B9GhEpGfyM7rsXoIoSgX0=
+Date:   Tue, 30 Jul 2019 13:03:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Wolfram Sang <wsa@the-dreams.de>, Alan Tull <atull@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Mark Brown <broonie@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        Jiri Slaby <jslaby@suse.com>
+Subject: Re: [PATCH v3 2/7] drivers: Introduce device lookup variants by
+ of_node
+Message-ID: <20190730110315.GA31631@kroah.com>
+References: <20190723221838.12024-1-suzuki.poulose@arm.com>
+ <20190723221838.12024-3-suzuki.poulose@arm.com>
+ <20190725135402.GL23883@dell>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190725135402.GL23883@dell>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+On Thu, Jul 25, 2019 at 02:54:02PM +0100, Lee Jones wrote:
+> On Tue, 23 Jul 2019, Suzuki K Poulose wrote:
+> 
+> > Introduce wrappers for {bus/driver/class}_find_device() to
+> > locate devices by its of_node.
+> > 
+> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> > Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+> > Cc: dri-devel@lists.freedesktop.org
+> > Cc: David Airlie <airlied@linux.ie>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: devicetree@vger.kernel.org
+> > Cc: Florian Fainelli <f.fainelli@gmail.com>
+> > Cc: Frank Rowand <frowand.list@gmail.com>
+> > Cc: Heiko Stuebner <heiko@sntech.de>
+> > Cc: Liam Girdwood <lgirdwood@gmail.com>
+> > Cc: linux-i2c@vger.kernel.org
+> > Cc: linux-rockchip@lists.infradead.org
+> > Cc: linux-spi@vger.kernel.org
+> > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> > Cc: Takashi Iwai <tiwai@suse.com>
+> > Cc: Wolfram Sang <wsa@the-dreams.de>
+> > Cc: Alan Tull <atull@kernel.org>
+> > Cc: Moritz Fischer <mdf@kernel.org>
+> > Cc: linux-fpga@vger.kernel.org
+> > Cc: Peter Rosin <peda@axentia.se>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Florian Fainelli <f.fainelli@gmail.com>
+> > Cc: Heiner Kallweit <hkallweit1@gmail.com>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Andrew Lunn <andrew@lunn.ch>
+> > Cc: Liam Girdwood <lgirdwood@gmail.com>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: Lee Jones <lee.jones@linaro.org>
+> > Cc: Thor Thayer <thor.thayer@linux.intel.com>
+> > Cc: Jiri Slaby <jslaby@suse.com>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Andrew Lunn <andrew@lunn.ch>
+> > Cc: Peter Rosin <peda@axentia.se>
+> > Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> > ---
+> >  - Dropped the reviewed-by tags from Thor, Mark, Andrew and Peter as the
+> >    patches are mereged, though there are no functional changes.
+> > ---
+> >  drivers/amba/tegra-ahb.c              | 11 +-------
+> >  drivers/fpga/fpga-bridge.c            |  8 +-----
+> >  drivers/fpga/fpga-mgr.c               |  8 +-----
+> >  drivers/gpu/drm/drm_mipi_dsi.c        |  7 +----
+> >  drivers/i2c/i2c-core-of.c             |  7 +----
+> >  drivers/mfd/altera-sysmgr.c           | 14 ++--------
+> 
+> For my own reference:
+>   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> 
+> What's the merge plan for this patch?
+> 
+> Is anyone prepared to create an immutable branch for us to pull from?
+> I'm happy to do it if no one else steps up.
 
-Hi Wolfram,
+I'll take it, and create a branch for everyone to pull from.
 
-please pull the following fix for at24.
+thanks,
 
-The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca4b:
-
-  Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git at24-v5.3-rc3-fixes-for-wolfram
-
-for you to fetch changes up to 25e5ef302c24a6fead369c0cfe88c073d7b97ca8:
-
-  eeprom: at24: make spd world-readable again (2019-07-28 18:49:20 +0200)
-
-----------------------------------------------------------------
-at24 fixes for v5.3-rc3
-
-- make spd eeproms world-readable again
-
-----------------------------------------------------------------
-Jean Delvare (1):
-      eeprom: at24: make spd world-readable again
-
- drivers/misc/eeprom/at24.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+greg k-h
