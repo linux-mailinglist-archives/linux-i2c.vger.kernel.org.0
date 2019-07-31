@@ -2,115 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A78747B490
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Jul 2019 22:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72EF87BEB8
+	for <lists+linux-i2c@lfdr.de>; Wed, 31 Jul 2019 12:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728519AbfG3Uxa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Jul 2019 16:53:30 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:46452 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726641AbfG3Ux2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Jul 2019 16:53:28 -0400
-Received: by mail-pf1-f193.google.com with SMTP id c3so7318003pfa.13
-        for <linux-i2c@vger.kernel.org>; Tue, 30 Jul 2019 13:53:28 -0700 (PDT)
+        id S1728425AbfGaK4w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 31 Jul 2019 06:56:52 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36109 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726073AbfGaK4w (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 Jul 2019 06:56:52 -0400
+Received: by mail-lj1-f195.google.com with SMTP id i21so65155323ljj.3
+        for <linux-i2c@vger.kernel.org>; Wed, 31 Jul 2019 03:56:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RGi8YSyqfGHFxZ4qxqzTrqnfCbtBm7VBWTegRdqBqJA=;
-        b=M54UzvXvvuwPcYffLeUbPfMGWrV7EgGeFXXZay6Jp7eWsxe24wEwnNq3h0IqfHEPtt
-         j97FjJBplbL+HW2M+qoa/c/X8iqJ15uDqlq7DKkAkn23eP257BlqCsKNGjDp2oFfYRYG
-         FeERJlxkUNpwBIJarL248E21HoCUXOTs58nds=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lWUtb7zcpjriA4PXCl0a7ByZXS09QukiEbZhHIw2Fjk=;
+        b=jH3yCYNA8+Yew2LxOI67IHkIjKIsIvFHYzr03cz0THjJFGu0OSsiDwfWUan3chbQpm
+         mZEmEi3yMQkW1v4HReuKE3j4j9p/8Wx1FKkBKXDmoKkeeNOzFy1e48b9yGjieDjSvsLl
+         q6eJ0Q3q7/4RU5n4aXwx1Il4o8xewvLD3mclXDsKyWQwmw6bds/boYFyVWwpAL1NV7N6
+         P3d9H0F6jh2iWh6vDuzyv9gWB6jawLP/p5I8bS9gfxJ4IGJzLQUx1/wwy2IxRGylUo9x
+         Mqx/a4sZNY16xHx/NQ2Se9O54+kiXJrC7MQtmbgVdCRhev9A/ltJvrS1pJnXqlQhKfwl
+         xyXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=RGi8YSyqfGHFxZ4qxqzTrqnfCbtBm7VBWTegRdqBqJA=;
-        b=WsM0yvFEAmA/cm20zvCOfmk0ai45AYQLqJR5xwpuXiD+V7KNTGi1SY/u7IYfK28SJa
-         kzPje2HTIJDC9n0wsLaWrEaxuniCeTVRwWrpNTwptCP0GAgAho9g50qSknMC7dvuBbhp
-         pZBiO6Cx2f4djxdUi/p3vDBSLa1m1uVizbwNXqRsChYDLXwTvA4kArS5g0qh2h7B988k
-         MaYal+qamtxvbMEDgNRMYMceD3zqdODclX3usr1aB0iqUpuk6mKBZo2UMtiqnWE9yzM4
-         nOfkrj8CWBUq7nAvQcMwLBUInE3DnGdSYprV9nrjC8YzDmyuWuLu9nuyiXCcDQha0ZAY
-         abbQ==
-X-Gm-Message-State: APjAAAWrkUf8vXL9AkdSmqiC3kSkFpJrx5/HAPnVB8aayOVsD/ih49/u
-        cm+4gTKweoVm/DZ8aMiTpB+kkw==
-X-Google-Smtp-Source: APXvYqzh+qauyPlzUnXvJLah95lGU4CLhUnpH5T201YFRASrlH3tCF34TwBU9lCOYSYPr9aw5WG+fg==
-X-Received: by 2002:a17:90a:d998:: with SMTP id d24mr91210113pjv.89.1564520007294;
-        Tue, 30 Jul 2019 13:53:27 -0700 (PDT)
-Received: from [10.136.8.239] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id z4sm55247034pgp.80.2019.07.30.13.53.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Jul 2019 13:53:26 -0700 (PDT)
-Subject: Re: [PATCH v1 1/1] i2c: iproc: Fix i2c master read more than 63 bytes
-To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>
-References: <1563956907-21255-1-git-send-email-rayagonda.kokatanur@broadcom.com>
-From:   Ray Jui <ray.jui@broadcom.com>
-Message-ID: <8b8d83ce-70ba-eacd-7ea3-6f8425f1e0fc@broadcom.com>
-Date:   Tue, 30 Jul 2019 13:53:24 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        bh=lWUtb7zcpjriA4PXCl0a7ByZXS09QukiEbZhHIw2Fjk=;
+        b=cplEyHD6m8aW55hx3jr+dWbyeZwMkSO6+yQWma/kTGmck+sb+FFUiIItcLUlPDGHLP
+         a5ldpxTT/qsbKS3ycwDbktvtW/DiuBBjGBM7kk4endhkZm8AV6SD9qMWvJ6yirpZc5I2
+         5caHQ/DVmqQHHzwZQ+3vknzrxTguN+gQVTZIx2185YaFIajm0RfIvCqy/NOgwJGtsLQI
+         HFXyuk5+dQ8qFHGfUe48HisEFSj8w8wocJfHTSL/aSnq5J03ypWH6gCYJYLpGkiLwzV4
+         k2QFJRBrJntszR9vPfMUjR0tD1XNo9UBOnaFUyCALcwv9sfBO10lLuAtUtmHNs8uuY21
+         gaVw==
+X-Gm-Message-State: APjAAAUn6MjikVF7ePcA+TMWidvZLqYYwjlktFGnygeOeP6aSRBR8Fg7
+        G1bJAqOh4lJMUhFDjBKpmLuPCw==
+X-Google-Smtp-Source: APXvYqxyeEQO8uE5Fdhzw9ds+s0/2GTAh6VgDFeXsuRN/l7VM3timHKnAv7SQw94o9XSRrHPLEphKA==
+X-Received: by 2002:a2e:b0e6:: with SMTP id h6mr12041708ljl.18.1564570610667;
+        Wed, 31 Jul 2019 03:56:50 -0700 (PDT)
+Received: from localhost (c-243c70d5.07-21-73746f28.bbcust.telenor.se. [213.112.60.36])
+        by smtp.gmail.com with ESMTPSA id l11sm13191843lfc.18.2019.07.31.03.56.49
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 31 Jul 2019 03:56:50 -0700 (PDT)
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     mika.westerberg@linux.intel.com, wsa@the-dreams.de
+Cc:     linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH] i2c: core: remove unused function
+Date:   Wed, 31 Jul 2019 12:56:42 +0200
+Message-Id: <20190731105642.29664-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <1563956907-21255-1-git-send-email-rayagonda.kokatanur@broadcom.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Rayagonda,
+GCC warns taht function 'i2c_acpi_find_match_adapter()' is not used.
 
-On 7/24/2019 1:28 AM, Rayagonda Kokatanur wrote:
-> Use SMBUS_MASTER_DATA_READ.MASTER_RD_STATUS bit to check for RX
-> FIFO empty condition because SMBUS_MASTER_FIFO_CONTROL.MASTER_RX_PKT_COUNT
-> is not updated for read >= 64 bytes. This fixes the issue when trying to
-> read from the I2C slave more than 63 bytes.
-> 
-> Fixes: c24b8d574b7c ("i2c: iproc: Extend I2C read up to 255 bytes")
-> 
-> Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-> ---
->  drivers/i2c/busses/i2c-bcm-iproc.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-> index 2c7f145..d7fd76b 100644
-> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
-> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-> @@ -392,16 +392,18 @@ static bool bcm_iproc_i2c_slave_isr(struct bcm_iproc_i2c_dev *iproc_i2c,
->  static void bcm_iproc_i2c_read_valid_bytes(struct bcm_iproc_i2c_dev *iproc_i2c)
->  {
->  	struct i2c_msg *msg = iproc_i2c->msg;
-> +	uint32_t val;
->  
->  	/* Read valid data from RX FIFO */
->  	while (iproc_i2c->rx_bytes < msg->len) {
-> -		if (!((iproc_i2c_rd_reg(iproc_i2c, M_FIFO_CTRL_OFFSET) >> M_FIFO_RX_CNT_SHIFT)
-> -		      & M_FIFO_RX_CNT_MASK))
-> +		val = iproc_i2c_rd_reg(iproc_i2c, M_RX_OFFSET);
-> +
-> +		/* rx fifo empty */
-> +		if (!((val >> M_RX_STATUS_SHIFT) & M_RX_STATUS_MASK))
->  			break;
->  
->  		msg->buf[iproc_i2c->rx_bytes] =
-> -			(iproc_i2c_rd_reg(iproc_i2c, M_RX_OFFSET) >>
-> -			M_RX_DATA_SHIFT) & M_RX_DATA_MASK;
-> +			(val >> M_RX_DATA_SHIFT) & M_RX_DATA_MASK;
->  		iproc_i2c->rx_bytes++;
->  	}
->  }
-> 
+../drivers/i2c/i2c-core-acpi.c:347:12: warning:
+  ‘i2c_acpi_find_match_adapter’ defined but not used [-Wunused-function]
+ static int i2c_acpi_find_match_adapter(struct device *dev, const void *data)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Thanks for the fix. This fix looks good to me!
+Rework to remove the function 'i2c_acpi_find_match_adapter()'.
 
-Reviewed-by: Ray Jui <ray.jui@broadcom.com>
+Fixes: 00500147cbd3 ("drivers: Introduce device lookup variants by ACPI_COMPANION device")
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ drivers/i2c/i2c-core-acpi.c | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index bc80aafb521f..bb6b39fe343a 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -344,17 +344,6 @@ u32 i2c_acpi_find_bus_speed(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(i2c_acpi_find_bus_speed);
+ 
+-static int i2c_acpi_find_match_adapter(struct device *dev, const void *data)
+-{
+-	struct i2c_adapter *adapter = i2c_verify_adapter(dev);
+-
+-	if (!adapter)
+-		return 0;
+-
+-	return ACPI_HANDLE(dev) == (acpi_handle)data;
+-}
+-
+-
+ struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle)
+ {
+ 	struct device *dev = bus_find_device_by_acpi_dev(&i2c_bus_type, handle);
+-- 
+2.20.1
+
