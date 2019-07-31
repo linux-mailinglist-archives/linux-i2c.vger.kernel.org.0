@@ -2,102 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72EF87BEB8
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 Jul 2019 12:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFDB7C0FE
+	for <lists+linux-i2c@lfdr.de>; Wed, 31 Jul 2019 14:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728425AbfGaK4w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 31 Jul 2019 06:56:52 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:36109 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbfGaK4w (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 Jul 2019 06:56:52 -0400
-Received: by mail-lj1-f195.google.com with SMTP id i21so65155323ljj.3
-        for <linux-i2c@vger.kernel.org>; Wed, 31 Jul 2019 03:56:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lWUtb7zcpjriA4PXCl0a7ByZXS09QukiEbZhHIw2Fjk=;
-        b=jH3yCYNA8+Yew2LxOI67IHkIjKIsIvFHYzr03cz0THjJFGu0OSsiDwfWUan3chbQpm
-         mZEmEi3yMQkW1v4HReuKE3j4j9p/8Wx1FKkBKXDmoKkeeNOzFy1e48b9yGjieDjSvsLl
-         q6eJ0Q3q7/4RU5n4aXwx1Il4o8xewvLD3mclXDsKyWQwmw6bds/boYFyVWwpAL1NV7N6
-         P3d9H0F6jh2iWh6vDuzyv9gWB6jawLP/p5I8bS9gfxJ4IGJzLQUx1/wwy2IxRGylUo9x
-         Mqx/a4sZNY16xHx/NQ2Se9O54+kiXJrC7MQtmbgVdCRhev9A/ltJvrS1pJnXqlQhKfwl
-         xyXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lWUtb7zcpjriA4PXCl0a7ByZXS09QukiEbZhHIw2Fjk=;
-        b=cplEyHD6m8aW55hx3jr+dWbyeZwMkSO6+yQWma/kTGmck+sb+FFUiIItcLUlPDGHLP
-         a5ldpxTT/qsbKS3ycwDbktvtW/DiuBBjGBM7kk4endhkZm8AV6SD9qMWvJ6yirpZc5I2
-         5caHQ/DVmqQHHzwZQ+3vknzrxTguN+gQVTZIx2185YaFIajm0RfIvCqy/NOgwJGtsLQI
-         HFXyuk5+dQ8qFHGfUe48HisEFSj8w8wocJfHTSL/aSnq5J03ypWH6gCYJYLpGkiLwzV4
-         k2QFJRBrJntszR9vPfMUjR0tD1XNo9UBOnaFUyCALcwv9sfBO10lLuAtUtmHNs8uuY21
-         gaVw==
-X-Gm-Message-State: APjAAAUn6MjikVF7ePcA+TMWidvZLqYYwjlktFGnygeOeP6aSRBR8Fg7
-        G1bJAqOh4lJMUhFDjBKpmLuPCw==
-X-Google-Smtp-Source: APXvYqxyeEQO8uE5Fdhzw9ds+s0/2GTAh6VgDFeXsuRN/l7VM3timHKnAv7SQw94o9XSRrHPLEphKA==
-X-Received: by 2002:a2e:b0e6:: with SMTP id h6mr12041708ljl.18.1564570610667;
-        Wed, 31 Jul 2019 03:56:50 -0700 (PDT)
-Received: from localhost (c-243c70d5.07-21-73746f28.bbcust.telenor.se. [213.112.60.36])
-        by smtp.gmail.com with ESMTPSA id l11sm13191843lfc.18.2019.07.31.03.56.49
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 31 Jul 2019 03:56:50 -0700 (PDT)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     mika.westerberg@linux.intel.com, wsa@the-dreams.de
-Cc:     linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH] i2c: core: remove unused function
-Date:   Wed, 31 Jul 2019 12:56:42 +0200
-Message-Id: <20190731105642.29664-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.20.1
+        id S1726417AbfGaMRZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 31 Jul 2019 08:17:25 -0400
+Received: from esa2.microchip.iphmx.com ([68.232.149.84]:55467 "EHLO
+        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726274AbfGaMRY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 Jul 2019 08:17:24 -0400
+Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
+  Ludovic.Desroches@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Ludovic.Desroches@microchip.com";
+  x-sender="Ludovic.Desroches@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa2.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Ludovic.Desroches@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa2.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Ludovic.Desroches@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: DquYbKvmvh5apYp69bl9l1YXFhiNDPyjEMrbgKUyGQYHRL1dIzx35Fq/3r+9i8Oq4ZKzAcsa4q
+ g81Dwvbc/7X+jpoWK/ALRU829soj0xhj/nOxzzGskgzbMAFHbLIM+9q6GUerJMxKOZ4tx4hS8Y
+ lptDYboQoTErjHE8uWbIzHCVBkfSTPxI6yRdE4NS0NL23sz518MJKtu7Kw8xJH0Z/TUCCDa/FS
+ PqYLpEuG8AKexUY6CndXmx0acXgY/o43o8bfCVxHDvQ4xDdN3Y2yrkyAcq/tYSEjaSgOVC9/kb
+ dr8=
+X-IronPort-AV: E=Sophos;i="5.64,330,1559545200"; 
+   d="scan'208";a="43406548"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Jul 2019 05:17:23 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 31 Jul 2019 05:17:17 -0700
+Received: from localhost (10.10.85.251) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
+ Transport; Wed, 31 Jul 2019 05:17:17 -0700
+Date:   Wed, 31 Jul 2019 14:16:22 +0200
+From:   Ludovic Desroches <ludovic.desroches@microchip.com>
+To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+CC:     <linux-i2c@vger.kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Cyrille Pitchen <cyrille.pitchen@atmel.com>
+Subject: Re: [PATCH] i2c: at91: fix clk_offset for sama5d2
+Message-ID: <20190731121622.khjhl4usnsvweci3@M43218.corp.atmel.com>
+Mail-Followup-To: =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        linux-i2c@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Cyrille Pitchen <cyrille.pitchen@atmel.com>
+References: <90b284b92b1ce27a682526db8a8c5e6dc5eeb5f6.1563822220.git.mirq-linux@rere.qmqm.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <90b284b92b1ce27a682526db8a8c5e6dc5eeb5f6.1563822220.git.mirq-linux@rere.qmqm.pl>
+User-Agent: NeoMutt/20180716
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-GCC warns taht function 'i2c_acpi_find_match_adapter()' is not used.
+On Mon, Jul 22, 2019 at 09:05:56PM +0200, Michał Mirosław wrote:
+> 
+> In SAMA5D2 datasheet, TWIHS_CWGR register rescription mentions clock
+> offset of 3 cycles (compared to 4 in eg. SAMA5D3).
+> 
+> Cc: stable@vger.kernel.org # 5.2.x
+> [needs applying to i2c-at91.c instead for earlier kernels]
+> Fixes: 0ef6f3213dac ("i2c: at91: add support for new alternative command mode")
+> Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com>
 
-../drivers/i2c/i2c-core-acpi.c:347:12: warning:
-  ‘i2c_acpi_find_match_adapter’ defined but not used [-Wunused-function]
- static int i2c_acpi_find_match_adapter(struct device *dev, const void *data)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+Thanks
 
-Rework to remove the function 'i2c_acpi_find_match_adapter()'.
-
-Fixes: 00500147cbd3 ("drivers: Introduce device lookup variants by ACPI_COMPANION device")
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- drivers/i2c/i2c-core-acpi.c | 11 -----------
- 1 file changed, 11 deletions(-)
-
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index bc80aafb521f..bb6b39fe343a 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -344,17 +344,6 @@ u32 i2c_acpi_find_bus_speed(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(i2c_acpi_find_bus_speed);
- 
--static int i2c_acpi_find_match_adapter(struct device *dev, const void *data)
--{
--	struct i2c_adapter *adapter = i2c_verify_adapter(dev);
--
--	if (!adapter)
--		return 0;
--
--	return ACPI_HANDLE(dev) == (acpi_handle)data;
--}
--
--
- struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle)
- {
- 	struct device *dev = bus_find_device_by_acpi_dev(&i2c_bus_type, handle);
--- 
-2.20.1
-
+> ---
+>  drivers/i2c/busses/i2c-at91-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-at91-core.c b/drivers/i2c/busses/i2c-at91-core.c
+> index 8d55cdd69ff4..435c7d7377a3 100644
+> --- a/drivers/i2c/busses/i2c-at91-core.c
+> +++ b/drivers/i2c/busses/i2c-at91-core.c
+> @@ -142,7 +142,7 @@ static struct at91_twi_pdata sama5d4_config = {
+>  
+>  static struct at91_twi_pdata sama5d2_config = {
+>  	.clk_max_div = 7,
+> -	.clk_offset = 4,
+> +	.clk_offset = 3,
+>  	.has_unre_flag = true,
+>  	.has_alt_cmd = true,
+>  	.has_hold_field = true,
+> -- 
+> 2.20.1
+> 
