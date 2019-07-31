@@ -2,134 +2,123 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6977C199
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 Jul 2019 14:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DDF7C21C
+	for <lists+linux-i2c@lfdr.de>; Wed, 31 Jul 2019 14:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387780AbfGaMic (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 31 Jul 2019 08:38:32 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:3120 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728100AbfGaMic (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 Jul 2019 08:38:32 -0400
-Received-SPF: Pass (esa3.microchip.iphmx.com: domain of
-  Ludovic.Desroches@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Ludovic.Desroches@microchip.com";
-  x-sender="Ludovic.Desroches@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa3.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Ludovic.Desroches@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa3.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Ludovic.Desroches@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: QtWDPdtYaxhPlK+Opso5NZdaxPCloJ5bhv4/nRfD59BzHpBI/L8U3pizQYqjByBR+cCEBWWUMJ
- Dyz8WFitZ+yqS+NMXwp2o6jHNPVgssTtdPsSQ+5HpiRcxJNzbCFQaKz1C5R4tG32qXb4Goe9NJ
- 5cTNqpTRxqJoBnvRYC13UJULdIgjZpPm+MFjMIfGqIA+IE3jLzeILhLyUq1IkiyeF1FdcHDYTD
- 9YnsWkU/Leaht9KruUJqNc+tvzy1FLnuJjYBKftybeHth1F4AIdh/Es8a43f6DniWZq4Kp9pxg
- O0k=
-X-IronPort-AV: E=Sophos;i="5.64,330,1559545200"; 
-   d="scan'208";a="43450858"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Jul 2019 05:38:31 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 31 Jul 2019 05:38:29 -0700
-Received: from localhost (10.10.85.251) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
- Transport; Wed, 31 Jul 2019 05:38:29 -0700
-Date:   Wed, 31 Jul 2019 14:37:35 +0200
-From:   Ludovic Desroches <ludovic.desroches@microchip.com>
-To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-CC:     <linux-i2c@vger.kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        <raagjadav@gmail.com>
-Subject: Re: [PATCH] i2c: at91: disable TXRDY interrupt after sending data
-Message-ID: <20190731123734.4ixxlurouni6nopp@M43218.corp.atmel.com>
-Mail-Followup-To: =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        linux-i2c@vger.kernel.org,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        raagjadav@gmail.com
-References: <cbd93920a225e2e32c7f43ff417f301af57c4e6c.1563820695.git.mirq-linux@rere.qmqm.pl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cbd93920a225e2e32c7f43ff417f301af57c4e6c.1563820695.git.mirq-linux@rere.qmqm.pl>
-User-Agent: NeoMutt/20180716
+        id S1726559AbfGaMsd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 31 Jul 2019 08:48:33 -0400
+Received: from andre.telenet-ops.be ([195.130.132.53]:56042 "EHLO
+        andre.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726307AbfGaMsd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 Jul 2019 08:48:33 -0400
+Received: from ramsan ([84.194.98.4])
+        by andre.telenet-ops.be with bizsmtp
+        id jQoX2000p05gfCL01QoXNu; Wed, 31 Jul 2019 14:48:31 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hso1v-0000WE-JM; Wed, 31 Jul 2019 14:48:31 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hso1v-0003oQ-H8; Wed, 31 Jul 2019 14:48:31 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] i2c: core: Use DEVICE_ATTR_RW() helper macros
+Date:   Wed, 31 Jul 2019 14:48:30 +0200
+Message-Id: <20190731124830.14613-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Convert the i2c core sysfs attributes from DEVICE_ATTR() to
+DEVICE_ATTR_RW(), to reduce boilerplate.
+This requires renaming some functions.
 
-On Mon, Jul 22, 2019 at 08:55:27PM +0200, Michał Mirosław wrote:
-> 
-> Driver was not disabling TXRDY interrupt after last TX byte.
-> This caused interrupt storm until transfer timeouts for slow
-> or broken device on the bus. The patch fixes the interrupt storm
-> on my SAMA5D2-based board.
-> 
-> Cc: stable@vger.kernel.org # 5.2.x
-> [v5.2 introduced file split; the patch should apply to i2c-at91.c before the split]
-> Fixes: fac368a0404 ("i2c: at91: add new driver")
-> Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com> 
+Although no suitable macro exists for the delete_device attribute,
+rename i2c_sysfs_delete_device() to delete_device_store() for
+consistency.
 
-Sounds good to me as AT91_TWI_TXRDY is only used to send the next byte.
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/i2c/i2c-core-base.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-Raag, you added you in the copy list as it seems close to your issue. I am
-really sorry, I didn't have time to go further with your issue. Is this
-patch solves your issue?
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index f26ed495d38420b3..f66cfdf4d0e6b1d6 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -451,15 +451,15 @@ static void i2c_client_dev_release(struct device *dev)
+ }
+ 
+ static ssize_t
+-show_name(struct device *dev, struct device_attribute *attr, char *buf)
++name_show(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+ 	return sprintf(buf, "%s\n", dev->type == &i2c_client_type ?
+ 		       to_i2c_client(dev)->name : to_i2c_adapter(dev)->name);
+ }
+-static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
++static DEVICE_ATTR_RO(name);
+ 
+ static ssize_t
+-show_modalias(struct device *dev, struct device_attribute *attr, char *buf)
++modalias_show(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	int len;
+@@ -474,7 +474,7 @@ show_modalias(struct device *dev, struct device_attribute *attr, char *buf)
+ 
+ 	return sprintf(buf, "%s%s\n", I2C_MODULE_PREFIX, client->name);
+ }
+-static DEVICE_ATTR(modalias, S_IRUGO, show_modalias, NULL);
++static DEVICE_ATTR_RO(modalias);
+ 
+ static struct attribute *i2c_dev_attrs[] = {
+ 	&dev_attr_name.attr,
+@@ -1041,8 +1041,8 @@ EXPORT_SYMBOL_GPL(i2c_adapter_depth);
+  * the user to provide incorrect parameters.
+  */
+ static ssize_t
+-i2c_sysfs_new_device(struct device *dev, struct device_attribute *attr,
+-		     const char *buf, size_t count)
++new_device_store(struct device *dev, struct device_attribute *attr,
++		 const char *buf, size_t count)
+ {
+ 	struct i2c_adapter *adap = to_i2c_adapter(dev);
+ 	struct i2c_board_info info;
+@@ -1097,7 +1097,7 @@ i2c_sysfs_new_device(struct device *dev, struct device_attribute *attr,
+ 
+ 	return count;
+ }
+-static DEVICE_ATTR(new_device, S_IWUSR, NULL, i2c_sysfs_new_device);
++static DEVICE_ATTR_WO(new_device);
+ 
+ /*
+  * And of course let the users delete the devices they instantiated, if
+@@ -1109,8 +1109,8 @@ static DEVICE_ATTR(new_device, S_IWUSR, NULL, i2c_sysfs_new_device);
+  * the user to delete the wrong device.
+  */
+ static ssize_t
+-i2c_sysfs_delete_device(struct device *dev, struct device_attribute *attr,
+-			const char *buf, size_t count)
++delete_device_store(struct device *dev, struct device_attribute *attr,
++		    const char *buf, size_t count)
+ {
+ 	struct i2c_adapter *adap = to_i2c_adapter(dev);
+ 	struct i2c_client *client, *next;
+@@ -1153,7 +1153,7 @@ i2c_sysfs_delete_device(struct device *dev, struct device_attribute *attr,
+ 	return res;
+ }
+ static DEVICE_ATTR_IGNORE_LOCKDEP(delete_device, S_IWUSR, NULL,
+-				   i2c_sysfs_delete_device);
++				  delete_device_store);
+ 
+ static struct attribute *i2c_adapter_attrs[] = {
+ 	&dev_attr_name.attr,
+-- 
+2.17.1
 
-Thanks for this patch.
-
-Ludovic
-
-> ---
->  drivers/i2c/busses/i2c-at91-master.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-> index e87232f2e708..a3fcc35ffd3b 100644
-> --- a/drivers/i2c/busses/i2c-at91-master.c
-> +++ b/drivers/i2c/busses/i2c-at91-master.c
-> @@ -122,9 +122,11 @@ static void at91_twi_write_next_byte(struct at91_twi_dev *dev)
->  	writeb_relaxed(*dev->buf, dev->base + AT91_TWI_THR);
->  
->  	/* send stop when last byte has been written */
-> -	if (--dev->buf_len == 0)
-> +	if (--dev->buf_len == 0) {
->  		if (!dev->use_alt_cmd)
->  			at91_twi_write(dev, AT91_TWI_CR, AT91_TWI_STOP);
-> +		at91_twi_write(dev, AT91_TWI_IDR, AT91_TWI_TXRDY);
-> +	}
->  
->  	dev_dbg(dev->dev, "wrote 0x%x, to go %zu\n", *dev->buf, dev->buf_len);
->  
-> @@ -542,9 +544,8 @@ static int at91_do_twi_transfer(struct at91_twi_dev *dev)
->  		} else {
->  			at91_twi_write_next_byte(dev);
->  			at91_twi_write(dev, AT91_TWI_IER,
-> -				       AT91_TWI_TXCOMP |
-> -				       AT91_TWI_NACK |
-> -				       AT91_TWI_TXRDY);
-> +				       AT91_TWI_TXCOMP | AT91_TWI_NACK |
-> +				       (dev->buf_len ? AT91_TWI_TXRDY : 0));
->  		}
->  	}
->  
-> -- 
-> 2.20.1
-> 
