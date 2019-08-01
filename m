@@ -2,19 +2,19 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B47207DBED
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2019 14:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496177DBF0
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2019 14:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731511AbfHAMu0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Aug 2019 08:50:26 -0400
-Received: from sauhun.de ([88.99.104.3]:52594 "EHLO pokefinder.org"
+        id S1731386AbfHAMua (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Aug 2019 08:50:30 -0400
+Received: from sauhun.de ([88.99.104.3]:52616 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731335AbfHAMu0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 1 Aug 2019 08:50:26 -0400
+        id S1731335AbfHAMua (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 1 Aug 2019 08:50:30 -0400
 Received: from localhost (p54B333D2.dip0.t-ipconnect.de [84.179.51.210])
-        by pokefinder.org (Postfix) with ESMTPSA id 62C102C2817;
-        Thu,  1 Aug 2019 14:50:24 +0200 (CEST)
-Date:   Thu, 1 Aug 2019 14:50:24 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 5A5F52C2817;
+        Thu,  1 Aug 2019 14:50:29 +0200 (CEST)
+Date:   Thu, 1 Aug 2019 14:50:29 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Anson.Huang@nxp.com
 Cc:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
@@ -22,15 +22,16 @@ Cc:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
         wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Linux-imx@nxp.com
-Subject: Re: [PATCH 1/2] i2c: mxs: use devm_platform_ioremap_resource() to
- simplify code
-Message-ID: <20190801125023.GH1659@ninjato>
+Subject: Re: [PATCH 2/2] i2c: imx-lpi2c: use devm_platform_ioremap_resource()
+ to simplify code
+Message-ID: <20190801125028.GI1659@ninjato>
 References: <20190717084017.30987-1-Anson.Huang@nxp.com>
+ <20190717084017.30987-2-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cfJ13FhsvNR/yOpm"
+        protocol="application/pgp-signature"; boundary="mXDO3udm/xYWQeMQ"
 Content-Disposition: inline
-In-Reply-To: <20190717084017.30987-1-Anson.Huang@nxp.com>
+In-Reply-To: <20190717084017.30987-2-Anson.Huang@nxp.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -38,12 +39,12 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---cfJ13FhsvNR/yOpm
+--mXDO3udm/xYWQeMQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 17, 2019 at 04:40:16PM +0800, Anson.Huang@nxp.com wrote:
+On Wed, Jul 17, 2019 at 04:40:17PM +0800, Anson.Huang@nxp.com wrote:
 > From: Anson Huang <Anson.Huang@nxp.com>
 >=20
 > Use the new helper devm_platform_ioremap_resource() which wraps the
@@ -55,24 +56,24 @@ On Wed, Jul 17, 2019 at 04:40:16PM +0800, Anson.Huang@nxp.com wrote:
 Applied to for-next, thanks!
 
 
---cfJ13FhsvNR/yOpm
+--mXDO3udm/xYWQeMQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1C4A8ACgkQFA3kzBSg
-KbbuCQ/+Jh3jQy7mSWoI1drhM0j9+MC/Kq5i599BC0Fr4mV3KNiHW9aKVRPpNKnm
-PPe6xTh0GiT8TetvzKh0k8snQi0xhZOB4NagfqVK3sZ1zKgQFLX2420Gf1V6rF9+
-e7OqfHEkIbJDfn4649lJCjpjfkDFBrOgItFISc7in0APZjhlFVFeNyErUe4xIaqu
-XdBZ3s5hJNdvF8l759DZEf8Ue77+RkjOFjjM5elGRz3qCEjCsSXVgs2x0toozBd4
-mAxgRx3r7eBWSeuhyWqJSNEVo24rwS7Aw1UUR5vPWLWfVkJLqdxPEdirywXtIW3d
-3GPu/D6W8YK63Mg7ncs+ryD3giFfNz5IFhGFKm7kFPvwju7IR2kzIjZTrMo92vTO
-O780yEYiDnnqLTJrVBBYEXMu7xJB6U+IbiCC+2r1eJg4mgJo1eHYxIK7PxBSCZs4
-pdwFNeSzJJRXJgM4+bMb253AJVtVmkkxFbsv+UXc//8hFqvIWnqg2Jn7NKncFkjh
-wZK1gRASN1uEE79J1Z3P7RdMElW2a6LRSqErfOduznRQUlo5bdSX/u4bxJdv3qLY
-Y37hMgqJnrP5Nf4yktdfTXJIa76Z+eNkfhRihK23Nr4mXxYey06lRvRsqjsO8Fam
-kP9TB/6L5ENQ4zn9MASaLP9MhA6dekax5msNYj97Ww0oXG8Fy0U=
-=niRb
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1C4BQACgkQFA3kzBSg
+Kbar1hAAquWHe0O3sEuqpFSEu1yKoyDSLzPeFYmaYzdz+Snz7NxsssYKw9wudKh4
+9+j0FsIKOQFzlDfXviOwYBsl94ixNziBtVPPFoWEtCSXKlAMCRfIVXT8SsIrY3SE
+/lIZY7jBKi9oRvBxWMImxP0iLS2HC6uIg/3fs5sAy4Hy1VKcn2mvMy7WZES8gFTR
+/Bc2v4Y2Y4cdTjzjy8MpRUthrYbYU06XHXp5RF3/UkEg2I7NU6bYDt+5OUTpv36c
+B/9vR/zk2kg9lhzrWRZqu3n91VY9KJB5ykfGBRHez+qJ3uFqnMGJn1zW9C73S6q/
+KKpkXcSJ14otSb3iq7KGlCjuQ7l18mEjFlYmemRtUTivOSmVIuCg57aGvhgduNfu
+kENj8whpMZo7M01121HGCtjo8r8aFKEQBoQ2mRqnakxyvzjmTu4Ljr0E4yZab52p
+RNOHUjbtZL/R0Dp/aWugfsiwqZiD0c4/rsubRSnJN5gHlk9ze1vD+zauF+DeIFqb
+oMRGa8mFtmPdaeNb9nSmbEBNzngBbiatr+DCMYogeRM6+AOjycAn86TOdxOvEPiB
+Xy7XllFoUuQvTXXeI79M7fZE2zH/NCcvqAtPYu2/Adt0bz+AW5InsRhG7pgdusAN
+u6rb/QzX13xSs5s/NsYDDGUll1KGrOoIcTDpmSghgsTpIwLzW7I=
+=S2Wq
 -----END PGP SIGNATURE-----
 
---cfJ13FhsvNR/yOpm--
+--mXDO3udm/xYWQeMQ--
