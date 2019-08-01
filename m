@@ -2,41 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 969547DAF1
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2019 14:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C237DAFA
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2019 14:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728705AbfHAMIm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Aug 2019 08:08:42 -0400
-Received: from sauhun.de ([88.99.104.3]:52170 "EHLO pokefinder.org"
+        id S1726756AbfHAMJ5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Aug 2019 08:09:57 -0400
+Received: from sauhun.de ([88.99.104.3]:52204 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728129AbfHAMIm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 1 Aug 2019 08:08:42 -0400
+        id S1729071AbfHAMJ5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 1 Aug 2019 08:09:57 -0400
 Received: from localhost (p54B333D2.dip0.t-ipconnect.de [84.179.51.210])
-        by pokefinder.org (Postfix) with ESMTPSA id B05342C2817;
-        Thu,  1 Aug 2019 14:08:39 +0200 (CEST)
-Date:   Thu, 1 Aug 2019 14:08:30 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 2CB262C2817;
+        Thu,  1 Aug 2019 14:09:56 +0200 (CEST)
+Date:   Thu, 1 Aug 2019 14:09:55 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 5/7] drivers: Introduce device lookup variants by
- ACPI_COMPANION device
-Message-ID: <20190801120830.GA1659@ninjato>
-References: <20190723221838.12024-1-suzuki.poulose@arm.com>
- <20190723221838.12024-6-suzuki.poulose@arm.com>
- <20190726202353.GA963@kunai>
- <20190801115856.GS23480@smile.fi.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-i2c@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: [GIT PULL] at24: fixes for v5.3-rc3
+Message-ID: <20190801120955.GB1659@ninjato>
+References: <20190730092241.30185-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="azLHFNyN32YCQGCU"
+        protocol="application/pgp-signature"; boundary="QTprm0S8XgL7H0Dt"
 Content-Disposition: inline
-In-Reply-To: <20190801115856.GS23480@smile.fi.intel.com>
+In-Reply-To: <20190730092241.30185-1-brgl@bgdev.pl>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -44,64 +34,53 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---azLHFNyN32YCQGCU
+--QTprm0S8XgL7H0Dt
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 01, 2019 at 02:58:56PM +0300, Andy Shevchenko wrote:
-> On Fri, Jul 26, 2019 at 10:23:54PM +0200, Wolfram Sang wrote:
-> > On Tue, Jul 23, 2019 at 11:18:36PM +0100, Suzuki K Poulose wrote:
-> > > Add a generic helper to match a device by the ACPI_COMPANION device
-> > > and provide wrappers for the device lookup APIs.
-> > >=20
-> > > Cc: Len Brown <lenb@kernel.org>
-> > > Cc: linux-acpi@vger.kernel.org
-> > > Cc: linux-spi@vger.kernel.org
-> > > Cc: Mark Brown <broonie@kernel.org>
-> > > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > Cc: Wolfram Sang <wsa@the-dreams.de>
-> > > Cc: linux-i2c@vger.kernel.org
-> > > Cc: Mark Brown <broonie@kernel.org>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > > Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> >=20
-> > From my side, OK:
-> >=20
-> > Acked-by: Wolfram Sang <wsa@the-dreams.de> # I2C parts
-> >=20
-> > yet you missed to cc the I2C ACPI maintainers. Done so now.
+On Tue, Jul 30, 2019 at 11:22:41AM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 >=20
-> Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Hi Wolfram,
 >=20
-> Thanks, Wolfram, for notifying.
+> please pull the following fix for at24.
+>=20
+> The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca=
+4b:
+>=20
+>   Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git at24-v5.3-=
+rc3-fixes-for-wolfram
+>=20
+> for you to fetch changes up to 25e5ef302c24a6fead369c0cfe88c073d7b97ca8:
+>=20
+>   eeprom: at24: make spd world-readable again (2019-07-28 18:49:20 +0200)
 
-Sure. There seems to be a problem, though? Please check:
-
-[PATCH 1/3] i2c: Revert incorrect conversion to use generic helper
-
-which came in today.
+Thanks, pulled!
 
 
---azLHFNyN32YCQGCU
+--QTprm0S8XgL7H0Dt
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1C1joACgkQFA3kzBSg
-KbbX9w//ahSM//xepZXO66KqHlHww6eDykCIoj3oQpGcr21WoXQ5yAdv72yYXQtq
-rl7XeSaJ8Iv2ssC0wmeBfJeChcltWVeiQ3pMr9j6iKLEAcqkjzEBqS3V1jbs4mkE
-ozU97VeC3SqzksBRLDE3Ff4tRm4I5hH5JomEjPFX5Vbilf4XrD2BFFCT8Mq1C068
-lxX4PtvnkYkmjY3OC0brXw//i5IIo5ht66ilLow4Lto63tGqyAzxvrgEQeG5HT9D
-zzel4ygQxoTJLefLD9Vm1NdjIfcDSA0BUEe6zyaKfUS/P1E+tQS3oqgLuInor5zf
-jXmcw6LwlYDn7S4A+8vkGrn6fhgY4zBBN5qOZz9yNOb3d83ifyiPZ1TiGnXuE5U4
-ROK5OCrgCrIUB3QuDUQGNFet3j3WpUh4HObje5YOyh2Rb3snk8cx+uCMwWjg2v+d
-hMgoaegs+wjORIZ5p+db7XbdIiWwpxG86N80mKvoxzQHik9wkDDBfczv2BGK2hsA
-Zw8PJalgcGhHfaSZuuADyrOvr6Gg6s7pEi9BlpF7/6JrAZ+a7zTIE4+IShwsG8vu
-UaDL7UBoY5JVzvgbAt98C1DKaaQolC2ccLv6HOKgeNoXuA0RLOQj7A47tkHEHuEq
-O8vqYaYJOZPGdN2Kx94xvpmwsAR2hFLvGuuHqW6V9LqCBP18meY=
-=wX+k
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1C1pMACgkQFA3kzBSg
+KbaLJw/+MCbYtArxKSrEt5gX6SzhUuLOromV7yCcnD9e70nqsMNmPY2QosVrfE30
+j8uMSGDdSbcbdxIf2ftjvbOnlYGoFzQLAvv/xUXuYJWmW0ywxD/lZCUSDcrMzsN4
+9QEpYfr7ZOvqdzcRttRqNlVHUne/7hu7pNs039mW1bEuPeMFcZo62V/8VCqipC8o
+CP2xuO1sUYarwCc6z9+G5MwIfoEGuO6tcLDVM8hL8qa10l1LZAZ9WMdwtcjXj6gk
++HoH0ij/HC68/YSRqbE3m1BWtr895TpUA7/uTL0kA30jFVxAcil0Vbm6PqCwGr37
+qj+eYVs5aYgw+880wgYFE3oIK97ax1HhUsJLzVwctAjCxqW+A5SrHMxCrfS05/mw
+zelsrkmzKM54bfo+lJAS//RcGrhGenJC739fziGhTqVUt32g8fsyvqonoEOH+WiN
+yQd+l/Ss/SZl3/ieIFFCdl39681CTTQScNO/CxnE7Nk76kba2jv0/mst9zNiDwpW
+7RUW4TQvuIyYxIbIZcS+U5rVB9HQNyRk3fw3CNp5aQK2C3iEBHZzN1LIhLywSJDz
+UjuH0OdqygqZdhRgAIXle2fJGBQTumHHp64ZZ1ItWThD9JMGSo6cn+A+Ppp+JVsl
+VnFhHUJqpXCRy5K1qcEIjnmUDACFJu62TvNzt+H2XXuMpJL3y0U=
+=ru06
 -----END PGP SIGNATURE-----
 
---azLHFNyN32YCQGCU--
+--QTprm0S8XgL7H0Dt--
