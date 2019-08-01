@@ -2,131 +2,269 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9C97CD3A
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 Jul 2019 21:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9D17DAC4
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2019 13:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729236AbfGaTxt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 31 Jul 2019 15:53:49 -0400
-Received: from sauhun.de ([88.99.104.3]:44750 "EHLO pokefinder.org"
+        id S1730968AbfHAL7D (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Aug 2019 07:59:03 -0400
+Received: from mga03.intel.com ([134.134.136.65]:51753 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726175AbfGaTxt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 31 Jul 2019 15:53:49 -0400
-Received: from localhost (p54B33080.dip0.t-ipconnect.de [84.179.48.128])
-        by pokefinder.org (Postfix) with ESMTPSA id 6C4152C270A;
-        Wed, 31 Jul 2019 21:53:46 +0200 (CEST)
-Date:   Wed, 31 Jul 2019 21:53:46 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Leon Luo <leonl@leopardimaging.com>,
-        Ramesh Shanmugasundaram <ramesh.shanmugasundaram@bp.renesas.com>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Luis Oliveira <lolivei@synopsys.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Mats Randgaard <matrandg@cisco.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Enrico Scholz <enrico.scholz@sigma-chemnitz.de>,
-        Simon Horman <horms+renesas@verge.net.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        Richard Fontana <rfontana@redhat.com>,
-        Todor Tomov <todor.tomov@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Julia Lawall <Julia.Lawall@lip6.fr>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/6] media: i2c: Convert to new i2c device probe()
-Message-ID: <20190731195346.GH4084@kunai>
-References: <20190710215149.9208-1-kieran.bingham+renesas@ideasonboard.com>
- <20190710215149.9208-7-kieran.bingham+renesas@ideasonboard.com>
+        id S1730710AbfHAL7D (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 1 Aug 2019 07:59:03 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Aug 2019 04:59:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,334,1559545200"; 
+   d="scan'208";a="372000008"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Aug 2019 04:58:57 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ht9jU-000306-0h; Thu, 01 Aug 2019 14:58:56 +0300
+Date:   Thu, 1 Aug 2019 14:58:56 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v3 5/7] drivers: Introduce device lookup variants by
+ ACPI_COMPANION device
+Message-ID: <20190801115856.GS23480@smile.fi.intel.com>
+References: <20190723221838.12024-1-suzuki.poulose@arm.com>
+ <20190723221838.12024-6-suzuki.poulose@arm.com>
+ <20190726202353.GA963@kunai>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pfTAc8Cvt8L6I27a"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190710215149.9208-7-kieran.bingham+renesas@ideasonboard.com>
+In-Reply-To: <20190726202353.GA963@kunai>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, Jul 26, 2019 at 10:23:54PM +0200, Wolfram Sang wrote:
+> On Tue, Jul 23, 2019 at 11:18:36PM +0100, Suzuki K Poulose wrote:
+> > Add a generic helper to match a device by the ACPI_COMPANION device
+> > and provide wrappers for the device lookup APIs.
+> > 
+> > Cc: Len Brown <lenb@kernel.org>
+> > Cc: linux-acpi@vger.kernel.org
+> > Cc: linux-spi@vger.kernel.org
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Cc: Wolfram Sang <wsa@the-dreams.de>
+> > Cc: linux-i2c@vger.kernel.org
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> 
+> From my side, OK:
+> 
+> Acked-by: Wolfram Sang <wsa@the-dreams.de> # I2C parts
+> 
+> yet you missed to cc the I2C ACPI maintainers. Done so now.
 
---pfTAc8Cvt8L6I27a
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-On Wed, Jul 10, 2019 at 10:51:49PM +0100, Kieran Bingham wrote:
-> The I2C core framework provides a simplified probe framework from commit
-> b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back type").
->=20
-> These drivers do not utilise the i2c_device_id table in the probe, so we
-> can easily convert them to utilise the simplfied i2c driver
-> registration.
->=20
-> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> ---
->  drivers/media/i2c/adv7343.c  | 5 ++---
->  drivers/media/i2c/imx274.c   | 5 ++---
->  drivers/media/i2c/max2175.c  | 5 ++---
->  drivers/media/i2c/mt9m001.c  | 5 ++---
->  drivers/media/i2c/mt9m111.c  | 5 ++---
->  drivers/media/i2c/ov2640.c   | 5 ++---
->  drivers/media/i2c/ov2659.c   | 5 ++---
->  drivers/media/i2c/ov5640.c   | 5 ++---
->  drivers/media/i2c/ov5645.c   | 5 ++---
->  drivers/media/i2c/ov5647.c   | 5 ++---
->  drivers/media/i2c/ov772x.c   | 5 ++---
->  drivers/media/i2c/ov7740.c   | 5 ++---
->  drivers/media/i2c/ov9650.c   | 5 ++---
->  drivers/media/i2c/s5k5baf.c  | 5 ++---
->  drivers/media/i2c/s5k6a3.c   | 5 ++---
->  drivers/media/i2c/tc358743.c | 5 ++---
->  drivers/media/i2c/ths8200.c  | 5 ++---
->  drivers/media/i2c/tvp5150.c  | 5 ++---
->  drivers/media/i2c/tvp7002.c  | 4 ++--
+Thanks, Wolfram, for notifying.
 
-These drivers, I did not review visually but build tested them and
-verified they didn't show any build warnings or failures. Glimpsed
-through the conversion pattern. Looks all good.
+> 
+> > ---
+> >  drivers/base/core.c         |  6 ++++
+> >  drivers/i2c/i2c-core-acpi.c | 11 ++-----
+> >  drivers/spi/spi.c           |  8 +----
+> >  include/linux/device.h      | 65 +++++++++++++++++++++++++++++++++++++
+> >  4 files changed, 74 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/drivers/base/core.c b/drivers/base/core.c
+> > index 3abc32b60c0a..57d71bc2c559 100644
+> > --- a/drivers/base/core.c
+> > +++ b/drivers/base/core.c
+> > @@ -3373,3 +3373,9 @@ int device_match_devt(struct device *dev, const void *pdevt)
+> >  	return dev->devt == *(dev_t *)pdevt;
+> >  }
+> >  EXPORT_SYMBOL_GPL(device_match_devt);
+> > +
+> > +int device_match_acpi_dev(struct device *dev, const void *adev)
+> > +{
+> > +	return ACPI_COMPANION(dev) == adev;
+> > +}
+> > +EXPORT_SYMBOL(device_match_acpi_dev);
+> > diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> > index 4dbbc9a35f65..bc80aafb521f 100644
+> > --- a/drivers/i2c/i2c-core-acpi.c
+> > +++ b/drivers/i2c/i2c-core-acpi.c
+> > @@ -354,17 +354,11 @@ static int i2c_acpi_find_match_adapter(struct device *dev, const void *data)
+> >  	return ACPI_HANDLE(dev) == (acpi_handle)data;
+> >  }
+> >  
+> > -static int i2c_acpi_find_match_device(struct device *dev, const void *data)
+> > -{
+> > -	return ACPI_COMPANION(dev) == data;
+> > -}
+> >  
+> >  struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle)
+> >  {
+> > -	struct device *dev;
+> > +	struct device *dev = bus_find_device_by_acpi_dev(&i2c_bus_type, handle);
+> >  
+> > -	dev = bus_find_device(&i2c_bus_type, NULL, handle,
+> > -			      i2c_acpi_find_match_adapter);
+> >  	return dev ? i2c_verify_adapter(dev) : NULL;
+> >  }
+> >  EXPORT_SYMBOL_GPL(i2c_acpi_find_adapter_by_handle);
+> > @@ -373,8 +367,7 @@ static struct i2c_client *i2c_acpi_find_client_by_adev(struct acpi_device *adev)
+> >  {
+> >  	struct device *dev;
+> >  
+> > -	dev = bus_find_device(&i2c_bus_type, NULL, adev,
+> > -			      i2c_acpi_find_match_device);
+> > +	dev = bus_find_device_by_acpi_dev(&i2c_bus_type, adev);
+> >  	return dev ? i2c_verify_client(dev) : NULL;
+> >  }
+> >  
+> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> > index a591da87981a..c486a6f84c2c 100644
+> > --- a/drivers/spi/spi.c
+> > +++ b/drivers/spi/spi.c
+> > @@ -3741,11 +3741,6 @@ static int spi_acpi_controller_match(struct device *dev, const void *data)
+> >  	return ACPI_COMPANION(dev->parent) == data;
+> >  }
+> >  
+> > -static int spi_acpi_device_match(struct device *dev, const void *data)
+> > -{
+> > -	return ACPI_COMPANION(dev) == data;
+> > -}
+> > -
+> >  static struct spi_controller *acpi_spi_find_controller_by_adev(struct acpi_device *adev)
+> >  {
+> >  	struct device *dev;
+> > @@ -3765,8 +3760,7 @@ static struct spi_device *acpi_spi_find_device_by_adev(struct acpi_device *adev)
+> >  {
+> >  	struct device *dev;
+> >  
+> > -	dev = bus_find_device(&spi_bus_type, NULL, adev, spi_acpi_device_match);
+> > -
+> > +	dev = bus_find_device_by_acpi_dev(&spi_bus_type, adev);
+> >  	return dev ? to_spi_device(dev) : NULL;
+> >  }
+> >  
+> > diff --git a/include/linux/device.h b/include/linux/device.h
+> > index 93b2f55ef44e..7514ef3d3f1a 100644
+> > --- a/include/linux/device.h
+> > +++ b/include/linux/device.h
+> > @@ -168,6 +168,7 @@ int device_match_name(struct device *dev, const void *name);
+> >  int device_match_of_node(struct device *dev, const void *np);
+> >  int device_match_fwnode(struct device *dev, const void *fwnode);
+> >  int device_match_devt(struct device *dev, const void *pdevt);
+> > +int device_match_acpi_dev(struct device *dev, const void *adev);
+> >  
+> >  int bus_for_each_dev(struct bus_type *bus, struct device *start, void *data,
+> >  		     int (*fn)(struct device *dev, void *data));
+> > @@ -224,6 +225,28 @@ static inline struct device *bus_find_device_by_devt(struct bus_type *bus,
+> >  	return bus_find_device(bus, NULL, &devt, device_match_devt);
+> >  }
+> >  
+> > +#ifdef CONFIG_ACPI
+> > +struct acpi_device;
+> > +
+> > +/**
+> > + * bus_find_device_by_acpi_dev : device iterator for locating a particular device
+> > + * matching the ACPI COMPANION device.
+> > + * @bus: bus type
+> > + * @adev: ACPI COMPANION device to match.
+> > + */
+> > +static inline struct device *
+> > +bus_find_device_by_acpi_dev(struct bus_type *bus, const struct acpi_device *adev)
+> > +{
+> > +	return bus_find_device(bus, NULL, adev, device_match_acpi_dev);
+> > +}
+> > +#else
+> > +static inline struct device *
+> > +bus_find_device_by_acpi_dev(struct bus_type *bus, const void *adev)
+> > +{
+> > +	return NULL;
+> > +}
+> > +#endif
+> > +
+> >  struct device *subsys_find_device_by_id(struct bus_type *bus, unsigned int id,
+> >  					struct device *hint);
+> >  int bus_for_each_drv(struct bus_type *bus, struct device_driver *start,
+> > @@ -442,6 +465,27 @@ static inline struct device *driver_find_device_by_devt(struct device_driver *dr
+> >  	return driver_find_device(drv, NULL, &devt, device_match_devt);
+> >  }
+> >  
+> > +#ifdef CONFIG_ACPI
+> > +/**
+> > + * driver_find_device_by_acpi_dev : device iterator for locating a particular
+> > + * device matching the ACPI_COMPANION device.
+> > + * @driver: the driver we're iterating
+> > + * @adev: ACPI_COMPANION device to match.
+> > + */
+> > +static inline struct device *
+> > +driver_find_device_by_acpi_dev(struct device_driver *drv,
+> > +			       const struct acpi_device *adev)
+> > +{
+> > +	return driver_find_device(drv, NULL, adev, device_match_acpi_dev);
+> > +}
+> > +#else
+> > +static inline struct device *
+> > +driver_find_device_by_acpi_dev(struct device_driver *drv, const void *adev)
+> > +{
+> > +	return NULL;
+> > +}
+> > +#endif
+> > +
+> >  void driver_deferred_probe_add(struct device *dev);
+> >  int driver_deferred_probe_check_state(struct device *dev);
+> >  int driver_deferred_probe_check_state_continue(struct device *dev);
+> > @@ -620,6 +664,27 @@ static inline struct device *class_find_device_by_devt(struct class *class,
+> >  	return class_find_device(class, NULL, &devt, device_match_devt);
+> >  }
+> >  
+> > +#ifdef CONFIG_ACPI
+> > +struct acpi_device;
+> > +/**
+> > + * class_find_device_by_acpi_dev : device iterator for locating a particular
+> > + * device matching the ACPI_COMPANION device.
+> > + * @class: class type
+> > + * @adev: ACPI_COMPANION device to match.
+> > + */
+> > +static inline struct device *
+> > +class_find_device_by_acpi_dev(struct class *class, const struct acpi_device *adev)
+> > +{
+> > +	return class_find_device(class, NULL, adev, device_match_acpi_dev);
+> > +}
+> > +#else
+> > +static inline struct device *
+> > +class_find_device_by_acpi_dev(struct class *class, const void *adev)
+> > +{
+> > +	return NULL;
+> > +}
+> > +#endif
+> > +
+> >  struct class_attribute {
+> >  	struct attribute attr;
+> >  	ssize_t (*show)(struct class *class, struct class_attribute *attr,
+> > -- 
+> > 2.21.0
+> > 
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---pfTAc8Cvt8L6I27a
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+With Best Regards,
+Andy Shevchenko
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1B8ckACgkQFA3kzBSg
-KbYEMRAAhmwhczAhbJim7z/RwnJLFoLsdVmxLuFphdE5tArR1CVlmSnLmePsb+SV
-oUHKtP20MJqd0JG5BQPthFD14pLhhgPSqEfx5wuEZ8D6JVHIVnj1Xghr+eg7B3/2
-+3o9zhbn57geSAmR56Mqm23SR9Je9WeggL8jtQll/JScKzyMo672s8U6sX5fJhy6
-tQ87t59yQ6QhMX1uu4yCPLwlbryhoFYwB8zeYtDsMJdgyg9AbMCLT7XePRmZdR6B
-BDmzajGEOrRYtW48Nl0xI7lyO79iLuD8JvqiqMPmM5sbz0GntdItUMgwbLFHgaAN
-tWLRMJlg/WffwWP7HEzPctBR1EMgfoCBDbPTdbckYuzhbtXnUn2bZe4yJalo73U2
-aoAnO4/LUqPkheQSrZklOhc6IdAuYCVvRs5DfryTubv7UcHpFVwTAZpVqWvU4mN+
-O351GpW8QdkBqCwu7M2J/dbCF2Xbz9kRuDdD1v+gS4eaMoVy68CB2IcYUgh52EnW
-aWqLKnIn1Vkz02N9sM35OvIYZKBaX5/EXjJSGkjltV65bSC20CqFBMFwRfuE+4vB
-SfkxTnwTI5beAn2ouZope7AanpO08QHCSb46JC86fMTt+3M9lzw0ehBw8cPv1A1j
-VPldElHq9IVpVRUyy4gZMJmvDzWtR8LCXFG3lsQ6rYTLa8dlI54=
-=FykV
------END PGP SIGNATURE-----
-
---pfTAc8Cvt8L6I27a--
