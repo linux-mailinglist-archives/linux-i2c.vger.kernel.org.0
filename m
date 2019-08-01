@@ -2,85 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C237DAFA
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2019 14:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7017DB40
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2019 14:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726756AbfHAMJ5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Aug 2019 08:09:57 -0400
-Received: from sauhun.de ([88.99.104.3]:52204 "EHLO pokefinder.org"
+        id S1728916AbfHAMVM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Aug 2019 08:21:12 -0400
+Received: from mga09.intel.com ([134.134.136.24]:30848 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729071AbfHAMJ5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 1 Aug 2019 08:09:57 -0400
-Received: from localhost (p54B333D2.dip0.t-ipconnect.de [84.179.51.210])
-        by pokefinder.org (Postfix) with ESMTPSA id 2CB262C2817;
-        Thu,  1 Aug 2019 14:09:56 +0200 (CEST)
-Date:   Thu, 1 Aug 2019 14:09:55 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linux-i2c@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [GIT PULL] at24: fixes for v5.3-rc3
-Message-ID: <20190801120955.GB1659@ninjato>
-References: <20190730092241.30185-1-brgl@bgdev.pl>
+        id S1728791AbfHAMVM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 1 Aug 2019 08:21:12 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Aug 2019 05:21:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,334,1559545200"; 
+   d="scan'208";a="172896234"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Aug 2019 05:21:08 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1htA4w-0003Cp-F3; Thu, 01 Aug 2019 15:21:06 +0300
+Date:   Thu, 1 Aug 2019 15:21:06 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v3 5/7] drivers: Introduce device lookup variants by
+ ACPI_COMPANION device
+Message-ID: <20190801122106.GU23480@smile.fi.intel.com>
+References: <20190723221838.12024-1-suzuki.poulose@arm.com>
+ <20190723221838.12024-6-suzuki.poulose@arm.com>
+ <20190726202353.GA963@kunai>
+ <20190801115856.GS23480@smile.fi.intel.com>
+ <20190801120830.GA1659@ninjato>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QTprm0S8XgL7H0Dt"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190730092241.30185-1-brgl@bgdev.pl>
+In-Reply-To: <20190801120830.GA1659@ninjato>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, Aug 01, 2019 at 02:08:30PM +0200, Wolfram Sang wrote:
+> On Thu, Aug 01, 2019 at 02:58:56PM +0300, Andy Shevchenko wrote:
+> > On Fri, Jul 26, 2019 at 10:23:54PM +0200, Wolfram Sang wrote:
+> > > On Tue, Jul 23, 2019 at 11:18:36PM +0100, Suzuki K Poulose wrote:
+> > > > Add a generic helper to match a device by the ACPI_COMPANION device
+> > > > and provide wrappers for the device lookup APIs.
+> > > > 
+> > > > Cc: Len Brown <lenb@kernel.org>
+> > > > Cc: linux-acpi@vger.kernel.org
+> > > > Cc: linux-spi@vger.kernel.org
+> > > > Cc: Mark Brown <broonie@kernel.org>
+> > > > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > > Cc: Wolfram Sang <wsa@the-dreams.de>
+> > > > Cc: linux-i2c@vger.kernel.org
+> > > > Cc: Mark Brown <broonie@kernel.org>
+> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > > Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> > > 
+> > > From my side, OK:
+> > > 
+> > > Acked-by: Wolfram Sang <wsa@the-dreams.de> # I2C parts
+> > > 
+> > > yet you missed to cc the I2C ACPI maintainers. Done so now.
+> > 
+> > Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > 
+> > Thanks, Wolfram, for notifying.
+> 
+> Sure. There seems to be a problem, though? Please check:
+> 
+> [PATCH 1/3] i2c: Revert incorrect conversion to use generic helper
+> 
+> which came in today.
 
---QTprm0S8XgL7H0Dt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's again not Cc'ed to all parties.
+But OK, looks good to me.
+Tough may be Jarkko can test all this.
 
-On Tue, Jul 30, 2019 at 11:22:41AM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
->=20
-> Hi Wolfram,
->=20
-> please pull the following fix for at24.
->=20
-> The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca=
-4b:
->=20
->   Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git at24-v5.3-=
-rc3-fixes-for-wolfram
->=20
-> for you to fetch changes up to 25e5ef302c24a6fead369c0cfe88c073d7b97ca8:
->=20
->   eeprom: at24: make spd world-readable again (2019-07-28 18:49:20 +0200)
-
-Thanks, pulled!
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---QTprm0S8XgL7H0Dt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1C1pMACgkQFA3kzBSg
-KbaLJw/+MCbYtArxKSrEt5gX6SzhUuLOromV7yCcnD9e70nqsMNmPY2QosVrfE30
-j8uMSGDdSbcbdxIf2ftjvbOnlYGoFzQLAvv/xUXuYJWmW0ywxD/lZCUSDcrMzsN4
-9QEpYfr7ZOvqdzcRttRqNlVHUne/7hu7pNs039mW1bEuPeMFcZo62V/8VCqipC8o
-CP2xuO1sUYarwCc6z9+G5MwIfoEGuO6tcLDVM8hL8qa10l1LZAZ9WMdwtcjXj6gk
-+HoH0ij/HC68/YSRqbE3m1BWtr895TpUA7/uTL0kA30jFVxAcil0Vbm6PqCwGr37
-qj+eYVs5aYgw+880wgYFE3oIK97ax1HhUsJLzVwctAjCxqW+A5SrHMxCrfS05/mw
-zelsrkmzKM54bfo+lJAS//RcGrhGenJC739fziGhTqVUt32g8fsyvqonoEOH+WiN
-yQd+l/Ss/SZl3/ieIFFCdl39681CTTQScNO/CxnE7Nk76kba2jv0/mst9zNiDwpW
-7RUW4TQvuIyYxIbIZcS+U5rVB9HQNyRk3fw3CNp5aQK2C3iEBHZzN1LIhLywSJDz
-UjuH0OdqygqZdhRgAIXle2fJGBQTumHHp64ZZ1ItWThD9JMGSo6cn+A+Ppp+JVsl
-VnFhHUJqpXCRy5K1qcEIjnmUDACFJu62TvNzt+H2XXuMpJL3y0U=
-=ru06
------END PGP SIGNATURE-----
-
---QTprm0S8XgL7H0Dt--
