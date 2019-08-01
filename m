@@ -2,36 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 356F57DB88
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2019 14:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3A97DBBD
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2019 14:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730344AbfHAMbd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Aug 2019 08:31:33 -0400
-Received: from sauhun.de ([88.99.104.3]:52418 "EHLO pokefinder.org"
+        id S1731360AbfHAMpy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Aug 2019 08:45:54 -0400
+Received: from sauhun.de ([88.99.104.3]:52522 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728800AbfHAMbd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 1 Aug 2019 08:31:33 -0400
+        id S1730458AbfHAMpy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 1 Aug 2019 08:45:54 -0400
 Received: from localhost (p54B333D2.dip0.t-ipconnect.de [84.179.51.210])
-        by pokefinder.org (Postfix) with ESMTPSA id 029702C2817;
-        Thu,  1 Aug 2019 14:31:30 +0200 (CEST)
-Date:   Thu, 1 Aug 2019 14:31:30 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id A00772C2817;
+        Thu,  1 Aug 2019 14:45:52 +0200 (CEST)
+Date:   Thu, 1 Aug 2019 14:45:52 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Ray Jui <ray.jui@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH v1 1/1] i2c: iproc: Fix i2c master read more than 63 bytes
-Message-ID: <20190801123130.GE1659@ninjato>
-References: <1563956907-21255-1-git-send-email-rayagonda.kokatanur@broadcom.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] i2c: tegra: Compile PM functions unconditionally
+Message-ID: <20190801124552.GF1659@ninjato>
+References: <20190707231234.11679-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2hMgfIw2X+zgXrFs"
+        protocol="application/pgp-signature"; boundary="aZoGpuMECXJckB41"
 Content-Disposition: inline
-In-Reply-To: <1563956907-21255-1-git-send-email-rayagonda.kokatanur@broadcom.com>
+In-Reply-To: <20190707231234.11679-1-digetx@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -39,42 +37,46 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---2hMgfIw2X+zgXrFs
+--aZoGpuMECXJckB41
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 24, 2019 at 01:58:27PM +0530, Rayagonda Kokatanur wrote:
-> Use SMBUS_MASTER_DATA_READ.MASTER_RD_STATUS bit to check for RX
-> FIFO empty condition because SMBUS_MASTER_FIFO_CONTROL.MASTER_RX_PKT_COUNT
-> is not updated for read >=3D 64 bytes. This fixes the issue when trying to
-> read from the I2C slave more than 63 bytes.
+On Mon, Jul 08, 2019 at 02:12:34AM +0300, Dmitry Osipenko wrote:
+> The I2C driver fails to probe if CONFIG_PM_SLEEP=3Dn because runtime PM
+> doesn't depend on the PM sleep and in this case the runtime PM ops are
+> not included in the driver, resulting in I2C clock not being enabled.
+> It's much cleaner to simply allow compiler to remove the dead code
+> instead of messing with the #ifdefs.
 >=20
-> Fixes: c24b8d574b7c ("i2c: iproc: Extend I2C read up to 255 bytes")
+> This patch fixes such errors when CONFIG_PM_SLEEP=3Dn:
 >=20
-> Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+>   tegra-i2c 7000c400.i2c: timeout waiting for fifo flush
+>   tegra-i2c 7000c400.i2c: Failed to initialize i2c controller
+>=20
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
-Applied to for-current, thanks!
+Applied to for-next, thanks!
 
 
---2hMgfIw2X+zgXrFs
+--aZoGpuMECXJckB41
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1C26IACgkQFA3kzBSg
-Kba85w//WB/fT1rfNyJzzedg2jVwLmdiaCcBYk4Y+Sz9sKRE3/SAdPulfp/wRUcb
-Q0YUiC2cRjunfZK0voZ5EUSFU+pBvM8dIRuTIWon/qdi1+6tDDAFIuXcswulFf1d
-09hBq1/aSOad318mNt2k4qJmUNyLvDaeYFHDCLwic1K48FWFqTWzgLpFn0idKxYq
-wIqINQz9dl6Qg0t81emc4xX0MB202LoaDriix4ERwHFjLsQuseqr4IeDrbXtGvLN
-7msFGGu7cgru2AUNXKPYWpZP3NItfZexR7AVhYKvuvDECy/jk/f+3DSyxj7qvrnS
-1Am4aRNQI6BQRzpfVCZwOEdOTpsx9SCQTEKpWkj6P5sde01ghq/oQzp8ENb9qoj7
-cuqGUJ3jf02dSLLFXusgfqywUEmLktGX+1gUvicURBykEYEecUV2xgCjnB3e7cTf
-v3/IJxTqDRpeCIbMkD0W4MN3WVoFISnn/Vl50oH7GiwoxVJ4TnFdNOZ8TmWfV1TG
-EoQf9yQR3vcmz13HUwyF8W27wJwWJ8u0iWLyqxeCgDaKtHRrL5HG8bEPu3rdLafE
-6n5ksnQpABRPshtd18hRQyGVqWaqNDUjKLJgGJVhqK3kbnvgGg0Z8qrcQHOA7tl+
-HMquJaDbDdS3AMUD3N0JHWqTr236PF05THzOH1X4hXIfsRtnPF0=
-=L7tj
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1C3vsACgkQFA3kzBSg
+KbYELg//d7ixrsPiRwLtaLHuba30xC1YeUezmk5+ixVYw/7+c14MZLNZga8JxydY
+AOkuAOmM9FifwuQpYFO6dHilZuF0zPngcwPKTUusPoFZacSJVfU4qfPjRNtpqPrJ
+aEy7kgRYpvAgtXhX/Yl/7l/19Gq8Jw3nzJ8XMG6QWVhAsE5c8FJr2fSUGJmVRE7I
+Aof/qD1QStABjSa42ClCvBn5DRnJRYYH/aAz4RlKI5N+Tqm6Jkh8MQOn6slg415K
+9vtZDG9OY9lO6fkSRhrDkNwIR/K7acJV9mjjCJ6xiOA0sFhyuB1xw5Z1uJSCzHlj
+3Oh7aiVYAxK23Z8XugdCheppSvauuNqV14x8i/wmLImjBoK+KFfJSq6m5uMgtjHz
+0qW4YQH69OPA83L2Ko1g63UKqL2wYMChGAGcLu/qZECP4Y2RYIAE/eL0Zx1h3ezv
+bR1pg7DGVxs6DPm7bcM69i8pinqrBnKtq8eRmVGsLrwjCgWXMyJT8rjUqzJOA4GC
+8+2Urg9mjGRFhUwFaawvffzqUzfLMIiOSTbZLw+C0FWjarFlc7bv5lY/ODefhQl2
+uy9oqBNlXHVcsm8O7FTa4t8qyL/zm1/92OREQiHE3fRogrhmJsOXNcN+TwgkBkaB
+3lZFAFQA3eqAK8W6bW/250JMsuAlac2LB/4dQm3vDLrLf9XMVWU=
+=1CO3
 -----END PGP SIGNATURE-----
 
---2hMgfIw2X+zgXrFs--
+--aZoGpuMECXJckB41--
