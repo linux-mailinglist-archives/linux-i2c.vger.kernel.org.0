@@ -2,90 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8477FB1B
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Aug 2019 15:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B1180691
+	for <lists+linux-i2c@lfdr.de>; Sat,  3 Aug 2019 16:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391684AbfHBNhH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 2 Aug 2019 09:37:07 -0400
-Received: from sauhun.de ([88.99.104.3]:37712 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405101AbfHBNg7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 2 Aug 2019 09:36:59 -0400
-Received: from localhost (p54B3308A.dip0.t-ipconnect.de [84.179.48.138])
-        by pokefinder.org (Postfix) with ESMTPSA id 9D4F92C08C3;
-        Fri,  2 Aug 2019 15:36:56 +0200 (CEST)
-Date:   Fri, 2 Aug 2019 15:36:56 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Simon Horman <horms+renesas@verge.net.au>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH 2/4] dt-bindings: i2c: rcar: Rename bindings
- documentation file
-Message-ID: <20190802133656.GA23542@kunai>
-References: <20190724121559.19079-1-horms+renesas@verge.net.au>
- <20190724121559.19079-3-horms+renesas@verge.net.au>
- <CAMuHMdUYTo1_zz4sCv5=PRL90EyFSU_b5WgUJoc4Oii08F_tww@mail.gmail.com>
+        id S1727592AbfHCONn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 3 Aug 2019 10:13:43 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46279 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725954AbfHCONn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 3 Aug 2019 10:13:43 -0400
+Received: by mail-pg1-f196.google.com with SMTP id w3so275232pgt.13;
+        Sat, 03 Aug 2019 07:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=2nW1qdYT+ls+yP7SZf0Ct0WsFONxeOJJreCKu5Wq5r0=;
+        b=vXpncURIJuxiU45nZgakz+fsbMIciPseDLVeOBtMQSwBKOUqkNji0zExHlbGcox+7h
+         A859cGbT9tgfN5TITg97JCDm/WkhwbPqNYG8W+NPEnyo/wjmUZuXfWtw24misjeNEMCx
+         OgRHGXee0G00IV3e+5zsE5aWdsq4/aPF6T138e0RccQnvNSrGib0gZ8PGPER20BwqlRr
+         V4jrBzx6G4P53o4AYpS3zSSROdjtgY4z+IuprdhBPVooHkZTR1+6zLnnvPaZ192JWVjA
+         nk24/4i2yFXERL0+k6GwMn8JJAnwjLV3Jp/DX2zzzWZoqLYaupjolTKbhcvaImgEuGRJ
+         PG6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=2nW1qdYT+ls+yP7SZf0Ct0WsFONxeOJJreCKu5Wq5r0=;
+        b=c2GTDSNvPhoOiRJrI8Ek243pDmM0wChY0JVIA25BtwFEdK4S3OchBltUCiovS41fSe
+         FHZ69rXScBT6MTHZAmlwAjrBQCtnEM0ALNFcqf8lFGe08UPoYqkHJBf0wMT8r13gF51H
+         vqYCHoQDU0uQn6C/tfNVxTag7l4VrzrY+9QepJ1nSTVnS6kV/KgQbmSIcYlGx++ndg9c
+         U1niAv/s2t4oY/KHaVVXuG3+0pnYnrmVLpWdiLkzSlFUNOeY5Gz7Y7jKpHb2rAG4VHX8
+         FkfrDwQsgifRHB3QXOR/sOCZ9OlCNZ/91N3z5R9WZ9uFbjDscsSgCXUwijuGO6hIJVUX
+         uPCQ==
+X-Gm-Message-State: APjAAAUMOPurWvuJuaP6HSrQgrpxAiPRgwSdDGSRYq1CRINydVlcEJDH
+        DSTpPgBQJyR3AniPmYWPSb4=
+X-Google-Smtp-Source: APXvYqyPilma59RFUQoDatZkRE5fdaK3QZsnXT7UVrQoypYHakMO16WqAbGIumdAE1KTzZGTg+UHxw==
+X-Received: by 2002:a63:61cd:: with SMTP id v196mr2130652pgb.263.1564841622833;
+        Sat, 03 Aug 2019 07:13:42 -0700 (PDT)
+Received: from nishad (p3261240-ipngn21201hodogaya.kanagawa.ocn.ne.jp. [153.202.122.240])
+        by smtp.gmail.com with ESMTPSA id a12sm12704967pje.3.2019.08.03.07.13.39
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 03 Aug 2019 07:13:42 -0700 (PDT)
+Date:   Sat, 3 Aug 2019 19:43:35 +0530
+From:   Nishad Kamdar <nishadkamdar@gmail.com>
+To:     Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joe Perches <joe@perches.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: stm32: Use the correct style for SPDX License Identifier
+Message-ID: <20190803141331.GA3588@nishad>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pWyiEgJYm5f9v55/"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdUYTo1_zz4sCv5=PRL90EyFSU_b5WgUJoc4Oii08F_tww@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+This patch corrects the SPDX License Identifier style
+in header file related to STM32 Driver for I2C hardware
+bus support.
+For C header files Documentation/process/license-rules.rst
+mandates C-like comments (opposed to C source files where
+C++ style should be used)
 
---pWyiEgJYm5f9v55/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Changes made by using a script provided by Joe Perches here:
+https://lkml.org/lkml/2019/2/7/46
 
-Hi Geert,
+Suggested-by: Joe Perches <joe@perches.com>
+Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
+---
+ drivers/i2c/busses/i2c-stm32.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> With the above fixed:
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+diff --git a/drivers/i2c/busses/i2c-stm32.h b/drivers/i2c/busses/i2c-stm32.h
+index 868755f82f88..2c21893905a3 100644
+--- a/drivers/i2c/busses/i2c-stm32.h
++++ b/drivers/i2c/busses/i2c-stm32.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * i2c-stm32.h
+  *
+-- 
+2.17.1
 
-Now I understand why I applied this patch despite your request for a
-change. Patchwork picked up the tag, and so I it looked to me in the
-patchwork summary that this patch series was completely reviewed.
-
-Would it be OK for you to not give the formal tag in advance but rather
-describe it like "you may add my rev-by tag like in patch 1"? Or just
-wait for v2 and tag?
-
-Workflows aside, thanks for your continued reviews of patches!
-
-Best regards,
-
-   Wolfram
-
---pWyiEgJYm5f9v55/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1EPHMACgkQFA3kzBSg
-KbZ7RhAAlCroZhSd5jTgDALjGRyID5fY13IsztvuZnprWKyFazvBExSaXA1UCyPX
-VKMrdS0wStW2XkD1ub1vSt9AwEiIoOi/xjNj2/KplcZlNybArQxvl0KlcYQSt/lT
-49zfXC+Mq3JtHQ620a2gkydYhdtW3V3kVf+jrmDN6E40/5GmQ8mXww172IbzR8xz
-m6V3JKn/LUX3RYceLNJOU92SIiO9zi+xWrGDZ+py/7GR0S7r2Vay8CZ6ODyaPU8v
-n9JdZDWqUCeFwsaiv5rAjTAVVaon5kCkowxYihzbq1CiWYVKVsWEZejX03XjuDiu
-vwiNyQou86Wrn4hWAZKdWvGBf2TcKmK4DoE2XVGLlOJw7U7s0D9xepzZYDFQn7kM
-GVkQDZl7WU2IXaah4NfsXljMMaTXU00+eH+A2kfjz0vXHv7JIy285jR0VH6aZxzB
-UPl8hJCOxVYi1TuuwRXl5zd3KIwoWJDOmGUYKBFVUSuvxIoRE8ERK7DdC2aeOAK7
-9Lc7ggneN4RynDfU1vo8JQk/gF2zBuCOQtlZ98Vh+sQXbhjlLp5SRVvcSW8YCgjZ
-/LHn8/8fDFaVzZ2Kx4dMvpoTb2kHI+cVCu9INgBmRd+7M2/D4nD5p76NWGsiG5vb
-7Xyc1/zgsg3iXjFNuFNr4moVyv77I51WWvdHCHX/muYLUMl/vqc=
-=bVeD
------END PGP SIGNATURE-----
-
---pWyiEgJYm5f9v55/--
