@@ -2,96 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B1180691
-	for <lists+linux-i2c@lfdr.de>; Sat,  3 Aug 2019 16:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5301180732
+	for <lists+linux-i2c@lfdr.de>; Sat,  3 Aug 2019 18:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727592AbfHCONn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 3 Aug 2019 10:13:43 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46279 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725954AbfHCONn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 3 Aug 2019 10:13:43 -0400
-Received: by mail-pg1-f196.google.com with SMTP id w3so275232pgt.13;
-        Sat, 03 Aug 2019 07:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=2nW1qdYT+ls+yP7SZf0Ct0WsFONxeOJJreCKu5Wq5r0=;
-        b=vXpncURIJuxiU45nZgakz+fsbMIciPseDLVeOBtMQSwBKOUqkNji0zExHlbGcox+7h
-         A859cGbT9tgfN5TITg97JCDm/WkhwbPqNYG8W+NPEnyo/wjmUZuXfWtw24misjeNEMCx
-         OgRHGXee0G00IV3e+5zsE5aWdsq4/aPF6T138e0RccQnvNSrGib0gZ8PGPER20BwqlRr
-         V4jrBzx6G4P53o4AYpS3zSSROdjtgY4z+IuprdhBPVooHkZTR1+6zLnnvPaZ192JWVjA
-         nk24/4i2yFXERL0+k6GwMn8JJAnwjLV3Jp/DX2zzzWZoqLYaupjolTKbhcvaImgEuGRJ
-         PG6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=2nW1qdYT+ls+yP7SZf0Ct0WsFONxeOJJreCKu5Wq5r0=;
-        b=c2GTDSNvPhoOiRJrI8Ek243pDmM0wChY0JVIA25BtwFEdK4S3OchBltUCiovS41fSe
-         FHZ69rXScBT6MTHZAmlwAjrBQCtnEM0ALNFcqf8lFGe08UPoYqkHJBf0wMT8r13gF51H
-         vqYCHoQDU0uQn6C/tfNVxTag7l4VrzrY+9QepJ1nSTVnS6kV/KgQbmSIcYlGx++ndg9c
-         U1niAv/s2t4oY/KHaVVXuG3+0pnYnrmVLpWdiLkzSlFUNOeY5Gz7Y7jKpHb2rAG4VHX8
-         FkfrDwQsgifRHB3QXOR/sOCZ9OlCNZ/91N3z5R9WZ9uFbjDscsSgCXUwijuGO6hIJVUX
-         uPCQ==
-X-Gm-Message-State: APjAAAUMOPurWvuJuaP6HSrQgrpxAiPRgwSdDGSRYq1CRINydVlcEJDH
-        DSTpPgBQJyR3AniPmYWPSb4=
-X-Google-Smtp-Source: APXvYqyPilma59RFUQoDatZkRE5fdaK3QZsnXT7UVrQoypYHakMO16WqAbGIumdAE1KTzZGTg+UHxw==
-X-Received: by 2002:a63:61cd:: with SMTP id v196mr2130652pgb.263.1564841622833;
-        Sat, 03 Aug 2019 07:13:42 -0700 (PDT)
-Received: from nishad (p3261240-ipngn21201hodogaya.kanagawa.ocn.ne.jp. [153.202.122.240])
-        by smtp.gmail.com with ESMTPSA id a12sm12704967pje.3.2019.08.03.07.13.39
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 03 Aug 2019 07:13:42 -0700 (PDT)
-Date:   Sat, 3 Aug 2019 19:43:35 +0530
-From:   Nishad Kamdar <nishadkamdar@gmail.com>
-To:     Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: stm32: Use the correct style for SPDX License Identifier
-Message-ID: <20190803141331.GA3588@nishad>
+        id S2388076AbfHCQR4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 3 Aug 2019 12:17:56 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:33660 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387958AbfHCQRz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 3 Aug 2019 12:17:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Gu8G8y6Ne0ryjTmF9kVNzse2VVG5LtflJsXjD47kfSE=; b=jXX1dtoyVtUHxbYohmvnyEjxf
+        M5gRSf7KQbRDdCt1G2xrGgvnfzeGaUODS73jlHhuEQ+xeIu8nGV7fxTj1zAvjWc2/saKM+EV/msqc
+        5ME2bZ5WJnFe4pPUZZyNyDBiP+IPqwVCzKSYPP+swO6xyt5g5FeinAejTBl32oLx1JiCHxNExUHfh
+        0Piel9GlHhmG0h2esCM7M25c6G1dThsWOeXoFwEbWCfyiRJ8chZuKcHuDGJKWlp/iS4iTmnUzsi1Z
+        8HSDL0HfhUewmzZkdy7O+9OOghZDpuzoDN95i2wZYCgGDMLk8NYLlZvwEfK8VriDMWMgm25VIqXfk
+        Y7vqHlUjw==;
+Received: from [191.33.150.100] (helo=coco.lan)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1htwjB-0007VE-PE; Sat, 03 Aug 2019 16:17:54 +0000
+Date:   Sat, 3 Aug 2019 13:17:49 -0300
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, Sean Young <sean@mess.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] media: ir-kbd-i2c: convert to
+ i2c_new_dummy_device()
+Message-ID: <20190803131749.4d6517ab@coco.lan>
+In-Reply-To: <20190730175555.14098-2-wsa+renesas@sang-engineering.com>
+References: <20190730175555.14098-1-wsa+renesas@sang-engineering.com>
+        <20190730175555.14098-2-wsa+renesas@sang-engineering.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This patch corrects the SPDX License Identifier style
-in header file related to STM32 Driver for I2C hardware
-bus support.
-For C header files Documentation/process/license-rules.rst
-mandates C-like comments (opposed to C source files where
-C++ style should be used)
+Em Tue, 30 Jul 2019 19:55:54 +0200
+Wolfram Sang <wsa+renesas@sang-engineering.com> escreveu:
 
-Changes made by using a script provided by Joe Perches here:
-https://lkml.org/lkml/2019/2/7/46
+> Convert this driver to use the new i2c_new_dummy_device() call and bail
+> out if the dummy device cannot be registered to make failure more
+> visible to the user.
+> 
 
-Suggested-by: Joe Perches <joe@perches.com>
-Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
----
- drivers/i2c/busses/i2c-stm32.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please don't do that.
 
-diff --git a/drivers/i2c/busses/i2c-stm32.h b/drivers/i2c/busses/i2c-stm32.h
-index 868755f82f88..2c21893905a3 100644
---- a/drivers/i2c/busses/i2c-stm32.h
-+++ b/drivers/i2c/busses/i2c-stm32.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * i2c-stm32.h
-  *
--- 
-2.17.1
+At first glance, devm_* sounds a good idea, but we had enough issues
+using it on media system.
 
+I don't mind mind much if some SoC specific would use it, but doing
+it on generic drivers is a very bad idea. We have removed almost all
+devm_* calls from the media system.
+
+The problem with devm is that it the de-allocation routines aren't
+called during device unbind. They happen a way later, only when the
+device itself is physically removed, or the driver is removed.
+
+That caused lots of headaches to debug memory lifetime issues on
+media.
+
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> Change since v1:
+> 
+> * reworded commit message because there was no NULL ptr access
+> 
+>  drivers/media/i2c/ir-kbd-i2c.c | 13 +++++--------
+>  1 file changed, 5 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ir-kbd-i2c.c b/drivers/media/i2c/ir-kbd-i2c.c
+> index 876d7587a1da..f46717052efc 100644
+> --- a/drivers/media/i2c/ir-kbd-i2c.c
+> +++ b/drivers/media/i2c/ir-kbd-i2c.c
+> @@ -885,9 +885,12 @@ static int ir_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  	INIT_DELAYED_WORK(&ir->work, ir_work);
+>  
+>  	if (probe_tx) {
+> -		ir->tx_c = i2c_new_dummy(client->adapter, 0x70);
+> -		if (!ir->tx_c) {
+> +		ir->tx_c = devm_i2c_new_dummy_device(&client->dev,
+> +						     client->adapter, 0x70);
+> +		if (IS_ERR(ir->tx_c)) {
+>  			dev_err(&client->dev, "failed to setup tx i2c address");
+> +			err = PTR_ERR(ir->tx_c);
+> +			goto err_out_free;
+>  		} else if (!zilog_init(ir)) {
+>  			ir->carrier = 38000;
+>  			ir->duty_cycle = 40;
+> @@ -904,9 +907,6 @@ static int ir_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  	return 0;
+>  
+>   err_out_free:
+> -	if (ir->tx_c)
+> -		i2c_unregister_device(ir->tx_c);
+> -
+>  	/* Only frees rc if it were allocated internally */
+>  	rc_free_device(rc);
+>  	return err;
+> @@ -919,9 +919,6 @@ static int ir_remove(struct i2c_client *client)
+>  	/* kill outstanding polls */
+>  	cancel_delayed_work_sync(&ir->work);
+>  
+> -	if (ir->tx_c)
+> -		i2c_unregister_device(ir->tx_c);
+> -
+>  	/* unregister device */
+>  	rc_unregister_device(ir->rc);
+>  
+
+
+
+Thanks,
+Mauro
