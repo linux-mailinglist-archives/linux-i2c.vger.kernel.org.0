@@ -2,125 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5301180732
-	for <lists+linux-i2c@lfdr.de>; Sat,  3 Aug 2019 18:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA89807F4
+	for <lists+linux-i2c@lfdr.de>; Sat,  3 Aug 2019 21:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388076AbfHCQR4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 3 Aug 2019 12:17:56 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:33660 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387958AbfHCQRz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 3 Aug 2019 12:17:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Gu8G8y6Ne0ryjTmF9kVNzse2VVG5LtflJsXjD47kfSE=; b=jXX1dtoyVtUHxbYohmvnyEjxf
-        M5gRSf7KQbRDdCt1G2xrGgvnfzeGaUODS73jlHhuEQ+xeIu8nGV7fxTj1zAvjWc2/saKM+EV/msqc
-        5ME2bZ5WJnFe4pPUZZyNyDBiP+IPqwVCzKSYPP+swO6xyt5g5FeinAejTBl32oLx1JiCHxNExUHfh
-        0Piel9GlHhmG0h2esCM7M25c6G1dThsWOeXoFwEbWCfyiRJ8chZuKcHuDGJKWlp/iS4iTmnUzsi1Z
-        8HSDL0HfhUewmzZkdy7O+9OOghZDpuzoDN95i2wZYCgGDMLk8NYLlZvwEfK8VriDMWMgm25VIqXfk
-        Y7vqHlUjw==;
-Received: from [191.33.150.100] (helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1htwjB-0007VE-PE; Sat, 03 Aug 2019 16:17:54 +0000
-Date:   Sat, 3 Aug 2019 13:17:49 -0300
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, Sean Young <sean@mess.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] media: ir-kbd-i2c: convert to
- i2c_new_dummy_device()
-Message-ID: <20190803131749.4d6517ab@coco.lan>
-In-Reply-To: <20190730175555.14098-2-wsa+renesas@sang-engineering.com>
-References: <20190730175555.14098-1-wsa+renesas@sang-engineering.com>
-        <20190730175555.14098-2-wsa+renesas@sang-engineering.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1728815AbfHCTCM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 3 Aug 2019 15:02:12 -0400
+Received: from sauhun.de ([88.99.104.3]:52058 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728759AbfHCTCM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 3 Aug 2019 15:02:12 -0400
+Received: from localhost (p54B338D8.dip0.t-ipconnect.de [84.179.56.216])
+        by pokefinder.org (Postfix) with ESMTPSA id C3E952C311C;
+        Sat,  3 Aug 2019 21:02:09 +0200 (CEST)
+Date:   Sat, 3 Aug 2019 21:02:06 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for 5.3
+Message-ID: <20190803190200.GA1126@ninjato>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
+Content-Disposition: inline
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Em Tue, 30 Jul 2019 19:55:54 +0200
-Wolfram Sang <wsa+renesas@sang-engineering.com> escreveu:
 
-> Convert this driver to use the new i2c_new_dummy_device() call and bail
-> out if the dummy device cannot be registered to make failure more
-> visible to the user.
-> 
+--EVF5PPMfhYS0aIcm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Please don't do that.
+Linus,
 
-At first glance, devm_* sounds a good idea, but we had enough issues
-using it on media system.
+here is a set of drivers fixes for the I2C subsystem.
 
-I don't mind mind much if some SoC specific would use it, but doing
-it on generic drivers is a very bad idea. We have removed almost all
-devm_* calls from the media system.
-
-The problem with devm is that it the de-allocation routines aren't
-called during device unbind. They happen a way later, only when the
-device itself is physically removed, or the driver is removed.
-
-That caused lots of headaches to debug memory lifetime issues on
-media.
-
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> 
-> Change since v1:
-> 
-> * reworded commit message because there was no NULL ptr access
-> 
->  drivers/media/i2c/ir-kbd-i2c.c | 13 +++++--------
->  1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/ir-kbd-i2c.c b/drivers/media/i2c/ir-kbd-i2c.c
-> index 876d7587a1da..f46717052efc 100644
-> --- a/drivers/media/i2c/ir-kbd-i2c.c
-> +++ b/drivers/media/i2c/ir-kbd-i2c.c
-> @@ -885,9 +885,12 @@ static int ir_probe(struct i2c_client *client, const struct i2c_device_id *id)
->  	INIT_DELAYED_WORK(&ir->work, ir_work);
->  
->  	if (probe_tx) {
-> -		ir->tx_c = i2c_new_dummy(client->adapter, 0x70);
-> -		if (!ir->tx_c) {
-> +		ir->tx_c = devm_i2c_new_dummy_device(&client->dev,
-> +						     client->adapter, 0x70);
-> +		if (IS_ERR(ir->tx_c)) {
->  			dev_err(&client->dev, "failed to setup tx i2c address");
-> +			err = PTR_ERR(ir->tx_c);
-> +			goto err_out_free;
->  		} else if (!zilog_init(ir)) {
->  			ir->carrier = 38000;
->  			ir->duty_cycle = 40;
-> @@ -904,9 +907,6 @@ static int ir_probe(struct i2c_client *client, const struct i2c_device_id *id)
->  	return 0;
->  
->   err_out_free:
-> -	if (ir->tx_c)
-> -		i2c_unregister_device(ir->tx_c);
-> -
->  	/* Only frees rc if it were allocated internally */
->  	rc_free_device(rc);
->  	return err;
-> @@ -919,9 +919,6 @@ static int ir_remove(struct i2c_client *client)
->  	/* kill outstanding polls */
->  	cancel_delayed_work_sync(&ir->work);
->  
-> -	if (ir->tx_c)
-> -		i2c_unregister_device(ir->tx_c);
-> -
->  	/* unregister device */
->  	rc_unregister_device(ir->rc);
->  
-
-
+Please pull.
 
 Thanks,
-Mauro
+
+   Wolfram
+
+
+The following changes since commit 609488bc979f99f805f34e9a32c1e3b71179d10b:
+
+  Linux 5.3-rc2 (2019-07-28 12:47:02 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current-fixed
+
+for you to fetch changes up to 8eb9a2dff019055e4ff307bb7f8c64a7a20e79c8:
+
+  i2c: s3c2410: Mark expected switch fall-through (2019-08-01 22:24:16 +0200)
+
+----------------------------------------------------------------
+Gustavo A. R. Silva (1):
+      i2c: s3c2410: Mark expected switch fall-through
+
+Jean Delvare (1):
+      eeprom: at24: make spd world-readable again
+
+Micha?? Miros??aw (2):
+      i2c: at91: disable TXRDY interrupt after sending data
+      i2c: at91: fix clk_offset for sama5d2
+
+Rayagonda Kokatanur (1):
+      i2c: iproc: Fix i2c master read more than 63 bytes
+
+Wolfram Sang (1):
+      Merge tag 'at24-v5.3-rc3-fixes-for-wolfram' of git://git.kernel.org/.../brgl/linux into i2c/for-current
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Kees Cook (1):
+      (Rev.) i2c: s3c2410: Mark expected switch fall-through
+
+Raag Jadav (1):
+      (Test) i2c: at91: disable TXRDY interrupt after sending data
+
+Ray Jui (1):
+      (Rev.) i2c: iproc: Fix i2c master read more than 63 bytes
+
+ drivers/i2c/busses/i2c-at91-core.c   |  2 +-
+ drivers/i2c/busses/i2c-at91-master.c |  9 +++++----
+ drivers/i2c/busses/i2c-bcm-iproc.c   | 10 ++++++----
+ drivers/i2c/busses/i2c-s3c2410.c     |  1 +
+ drivers/misc/eeprom/at24.c           |  2 +-
+ 5 files changed, 14 insertions(+), 10 deletions(-)
+
+--EVF5PPMfhYS0aIcm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1F2iQACgkQFA3kzBSg
+Kbb1Kg//RcE4r4w2O9BSIjkUP9yUu4bTRVynvypME3yhxVYzT79kZ/EnmNFrwuoD
+YmoQgGFBt4EhGaxC9RoBMqa9SHoz8F0+HyiOJdQlm6i4Ump5fowpu5yKy8jk6SK5
+7QQWgKTZGYedL0rUa16rroekZq5qO5di5Dn6Ye1Tj5xtbpM8//zm01eK971u64sP
+kbU3wYn7N4q5rXYslSRWbkwFA+pRx9PNBiNd6rbf02QJoe1ckKV9KeSw7SKlRH0F
+d5NJYLWSBPKM8xut2AuQG/eVjfBCg4EYJVScc+ijq6Lxoi0F1+wb5alJnVFmuFRZ
+vvPOFve8N4TBCIDP47IiLZX+u7nfqa8mDilVoGvYObh1vca71Six2Map/aZAk9jd
+MmDPMo0csLBcNiS0xeH8+c2Oe65dI+/0ympEq4RzpNrlHzhnxDGmbRMPPCA9OI4J
+VjNysy3SX/28jxREzy+ALm9udjunvNiw+LVjD1sBdETtzZalWhBR66zcmzIaI1hb
+eVarj0E1haOaPxltCnZekmrxQvZknnfkqiW4rXjVrBQoJ4iLdrL6ltqwUEEBh5rg
+1O+g1Ubd3umIydVEgk4FAgY0equUzik/dJBO07Nbu5Fsy+tVvekmZ2YtjxJV9ko2
+Wo07gefspUBlFnhWFH2E9NkSZech2sywlKIQWSd/2+qW8M9n2bA=
+=S8jj
+-----END PGP SIGNATURE-----
+
+--EVF5PPMfhYS0aIcm--
