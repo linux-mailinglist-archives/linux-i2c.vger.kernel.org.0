@@ -2,68 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE52808EC
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2019 04:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56B4813CC
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2019 10:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbfHDC5b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 3 Aug 2019 22:57:31 -0400
-Received: from gofer.mess.org ([88.97.38.141]:49813 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726268AbfHDC5b (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 3 Aug 2019 22:57:31 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 2D44F604C0; Sun,  4 Aug 2019 03:57:29 +0100 (BST)
-Date:   Sun, 4 Aug 2019 03:57:29 +0100
-From:   Sean Young <sean@mess.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] media: ir-kbd-i2c: convert to
- i2c_new_dummy_device()
-Message-ID: <20190804025728.5v5r42zmjn5onxl7@gofer.mess.org>
-References: <20190730175555.14098-1-wsa+renesas@sang-engineering.com>
- <20190730175555.14098-2-wsa+renesas@sang-engineering.com>
- <20190803131749.4d6517ab@coco.lan>
+        id S1726829AbfHEIBk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Aug 2019 04:01:40 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:51307 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726423AbfHEIBk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Aug 2019 04:01:40 -0400
+Received: by mail-wm1-f66.google.com with SMTP id 207so73772337wma.1
+        for <linux-i2c@vger.kernel.org>; Mon, 05 Aug 2019 01:01:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tLTq55G+8HM5id3F6PTEq7vm1jOe6eDLF+mAtsGbVn8=;
+        b=jUah69i7szH9MKt+wlpPATO2iSXZ8TY9Lni/PdErU9oRBj16CWbb2Hcc8dFA+lsVnm
+         0vPAzyA+Be5IGDrm4OpHBclDlR63C7kCBHTbJKTRIyczD/fCy6dFghz0Mpy+AWtyqCea
+         NuC2WPuSpWdKr5kBVrhMjaiC2GdIquMK80fTt9RsyFClJKRnMVlW5Ip5u2v6ja+Zr8QA
+         RO1yt4R83HSadVKjgugvYk2ekup3v4AQE8zhYrwZKtLIlFsopzm1BSUXhSek/Njz2Q25
+         9JkydhRqiXn1bMRwtjwvDZF/f4dBRq7PkzstRsmDoQs9hxENbdJl8sfTq9tNs6kGF3JH
+         AbrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tLTq55G+8HM5id3F6PTEq7vm1jOe6eDLF+mAtsGbVn8=;
+        b=IAtlUQxN3WGQulRBN7nTdZmMww7zKYhQkAMRkbNKiOTmro2olrakKd6rYoINbeYTzK
+         YHDAF7eU8w3qxykPaAfj0dnLzzRiBb+FHY1npU9y9xlvajXobkPYy9UBUqfYFZGERE5M
+         V8zQ+B7IHMPLPlW2A8QTEhCmdcIxxFs6XOyecFWd50KDk3tyG1o2jW6I5jIFwOxHRjPM
+         j2E0WKPg+CuCS5UXEPzIKDEPF2+mPOHGhTEvDa0HUNGXPIIY1S1dNYBwm6rmuCjwE4TF
+         5HznArU7FYdtNu81YG3OLpFhAe6fIwk3IzzMOz4ivMCpL4+fgjW0EqWTEWDdrOIKfygy
+         7wFA==
+X-Gm-Message-State: APjAAAU5dwJamM9s9forAPYsAHPHF745UuUAq5tfKvi2HMcNKdOI8Gi6
+        1EVMpWGwjeMsSVgpCTcLXN8Hxw==
+X-Google-Smtp-Source: APXvYqw4mn9gu4bHlXL9JlRLmR/VRheqqFndxlo7p//U5SPq5PS12svDIp3Sp3aF3WqL0pRMF7kSaQ==
+X-Received: by 2002:a1c:acc8:: with SMTP id v191mr17726531wme.177.1564992098303;
+        Mon, 05 Aug 2019 01:01:38 -0700 (PDT)
+Received: from localhost.localdomain (amontpellier-652-1-281-69.w109-210.abo.wanadoo.fr. [109.210.96.69])
+        by smtp.gmail.com with ESMTPSA id o26sm177570979wro.53.2019.08.05.01.01.37
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 05 Aug 2019 01:01:37 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.de>, Andrew Lunn <andrew@lunn.ch>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH][v4.9.y, v4.14.y] eeprom: at24: make spd world-readable again
+Date:   Mon,  5 Aug 2019 10:01:25 +0200
+Message-Id: <20190805080125.20943-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190803131749.4d6517ab@coco.lan>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Aug 03, 2019 at 01:17:49PM -0300, Mauro Carvalho Chehab wrote:
-> Em Tue, 30 Jul 2019 19:55:54 +0200
-> Wolfram Sang <wsa+renesas@sang-engineering.com> escreveu:
-> 
-> > Convert this driver to use the new i2c_new_dummy_device() call and bail
-> > out if the dummy device cannot be registered to make failure more
-> > visible to the user.
-> > 
-> 
-> Please don't do that.
-> 
-> At first glance, devm_* sounds a good idea, but we had enough issues
-> using it on media system.
-> 
-> I don't mind mind much if some SoC specific would use it, but doing
-> it on generic drivers is a very bad idea. We have removed almost all
-> devm_* calls from the media system.
-> 
-> The problem with devm is that it the de-allocation routines aren't
-> called during device unbind. They happen a way later, only when the
-> device itself is physically removed, or the driver is removed.
+From: Jean Delvare <jdelvare@suse.de>
 
-Yes, good point.
+The integration of the at24 driver into the nvmem framework broke the
+world-readability of spd EEPROMs. Fix it.
 
-> That caused lots of headaches to debug memory lifetime issues on
-> media.
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: stable@vger.kernel.org
+Fixes: 57d155506dd5 ("eeprom: at24: extend driver to plug into the NVMEM framework")
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Arnd Bergmann <arnd@arndb.de>
+[Bartosz: backported the patch to older branches]
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ drivers/misc/eeprom/at24.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Indeed this becomes much more complex. Explicit freeing is much better.
+diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+index a37b9b6a315a..2eef811764ad 100644
+--- a/drivers/misc/eeprom/at24.c
++++ b/drivers/misc/eeprom/at24.c
+@@ -777,7 +777,7 @@ static int at24_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	at24->nvmem_config.name = dev_name(&client->dev);
+ 	at24->nvmem_config.dev = &client->dev;
+ 	at24->nvmem_config.read_only = !writable;
+-	at24->nvmem_config.root_only = true;
++	at24->nvmem_config.root_only = !(chip.flags & AT24_FLAG_IRUGO);
+ 	at24->nvmem_config.owner = THIS_MODULE;
+ 	at24->nvmem_config.compat = true;
+ 	at24->nvmem_config.base_dev = &client->dev;
+-- 
+2.21.0
 
-
-Thanks,
-Sean
