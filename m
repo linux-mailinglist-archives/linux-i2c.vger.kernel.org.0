@@ -2,87 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CD4816E5
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2019 12:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D3781958
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2019 14:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728113AbfHEKVY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Aug 2019 06:21:24 -0400
-Received: from mga18.intel.com ([134.134.136.126]:18915 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727158AbfHEKVY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 5 Aug 2019 06:21:24 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Aug 2019 03:20:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,349,1559545200"; 
-   d="scan'208";a="202410739"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Aug 2019 03:20:49 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hua6h-0005fH-Le; Mon, 05 Aug 2019 13:20:47 +0300
-Date:   Mon, 5 Aug 2019 13:20:47 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Shaokun Zhang <zhangshaokun@hisilicon.com>
-Cc:     linux-i2c@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Subject: Re: [PATCH -next] i2c: designware: Fix unused variable warning
-Message-ID: <20190805102047.GH23480@smile.fi.intel.com>
-References: <1564997468-48538-1-git-send-email-zhangshaokun@hisilicon.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1564997468-48538-1-git-send-email-zhangshaokun@hisilicon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1728681AbfHEMbw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Aug 2019 08:31:52 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:45801 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728144AbfHEMbw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Aug 2019 08:31:52 -0400
+Received: by mail-pl1-f194.google.com with SMTP id y8so36439474plr.12;
+        Mon, 05 Aug 2019 05:31:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=sqV3s1K4ns9GNRz+g3OmEaOqbEW74Ump8unGoU9qEjg=;
+        b=f6z1Pblsnub+mS8CYJfFLKu4rUlG4HLRKLG+TwMtUylc6+JoSJuziEDRFVwjAwiQh4
+         2ZAvhgAmyYdrkzKEOSyG+aT/rl3meCnWQztBVsX9b8kwrdutRO/d/qqQFoI2oSra2JW/
+         04hfJ9nF12lsZ0MqFLh6AWLHYNnN/Sf8A/sg+JOjhkg7Gdhc4veFr7txdwB2ztjdbSQZ
+         /rM4Ely7QK6C6a2d4h1rPmtpj1cax3Ql+7nVt1fZfmUNmoUiW/0F5uYO7Xd7RAks+Ni1
+         RKMHxYjbja0tMgbSwsD4dQ5lCJyKwet0F4aS2XKORfa+JerJo506DQhe2aIizLGs9BTu
+         +XKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=sqV3s1K4ns9GNRz+g3OmEaOqbEW74Ump8unGoU9qEjg=;
+        b=S0cNFVgr+Z8uWKQ/ldAJe3iaGibrGu8TPwYwGaHzPgCi9bDhi0hvIzdNF63IkQsXTG
+         0nHz70mr8hXf0tQAErfROrEnMGv8fW8UfXn9LE2Ekzon+KkUxoetcP9FdjJ/L01HyQ+P
+         r1L8e5ndO9Db5A+AfDh22lou8BsvS3E1vXDJV3HopVMvN3Z1h016kMQxxxuAT45V22MU
+         sPGZg9sA9W85eOWyQXz1S8ked64r3afCkCwzi5QSIknlLC595WFLnrq1b5/QTfCTIjjj
+         Jg9naTP6DwFgbl+zvTQTNvG0lecKuyF5Id6+ibMpN+PSx+wGTWpePJfqRYrhH1VP3ELF
+         fMjw==
+X-Gm-Message-State: APjAAAWbBOcW/jyTxsv9NsP4n7CiwjFunWjrZkWMmH+XMIudj8iHTnWg
+        vFM8tUS8eMIWgXy8FlzTA992S2FJNtM=
+X-Google-Smtp-Source: APXvYqwUXaGe1XPCUVLysfhJwuZu+MPxpvv5ljQ0VMfEZzHTo9f81Bll8bj+CXZ+ds+14JP2az45Cg==
+X-Received: by 2002:a17:902:8a94:: with SMTP id p20mr143610300plo.312.1565008311500;
+        Mon, 05 Aug 2019 05:31:51 -0700 (PDT)
+Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.googlemail.com with ESMTPSA id u3sm18958550pjn.5.2019.08.05.05.31.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Aug 2019 05:31:50 -0700 (PDT)
+From:   Fuqian Huang <huangfq.daxian@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fuqian Huang <huangfq.daxian@gmail.com>
+Subject: [PATCH] i2c: avoid sleep in IRQ context
+Date:   Mon,  5 Aug 2019 20:31:34 +0800
+Message-Id: <20190805123134.23199-1-huangfq.daxian@gmail.com>
+X-Mailer: git-send-email 2.11.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Aug 05, 2019 at 05:31:08PM +0800, Shaokun Zhang wrote:
-> drivers/i2c/busses/i2c-designware-master.c: In function ‘i2c_dw_init_recovery_info’:
-> drivers/i2c/busses/i2c-designware-master.c:658:6: warning: unused variable ‘r’ [-Wunused-variable]
->   int r;
->       ^
+i2c_pxa_handler -> i2c_pxa_irq_txempty ->
+i2c_pxa_reset -> i2c_pxa_set_slave -> i2c_pxa_wait_slave
 
-Thanks,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+As i2c_pxa_handler is an interrupt handler, it will finally
+calls i2c_pxa_wait_slave which calls msleep.
 
-> Fixes: 33eb09a02e8d ("i2c: designware: make use of devm_gpiod_get_optional")
-> Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com> 
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com> 
-> Cc: Uwe Kleine-König <uwe@kleine-koenig.org>
-> Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
-> ---
->  drivers/i2c/busses/i2c-designware-master.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-> index 867787dade43..e8b328242256 100644
-> --- a/drivers/i2c/busses/i2c-designware-master.c
-> +++ b/drivers/i2c/busses/i2c-designware-master.c
-> @@ -655,7 +655,6 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
->  	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
->  	struct i2c_adapter *adap = &dev->adapter;
->  	struct gpio_desc *gpio;
-> -	int r;
->  
->  	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
->  	if (IS_ERR_OR_NULL(gpio))
-> -- 
-> 2.7.4
-> 
+Add in_interrupt check before msleep to avoid sleep
+in IRQ context.
 
+Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
+---
+ drivers/i2c/busses/i2c-pxa.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-pxa.c b/drivers/i2c/busses/i2c-pxa.c
+index 2c3c3d6935c0..b35a0e8efcb2 100644
+--- a/drivers/i2c/busses/i2c-pxa.c
++++ b/drivers/i2c/busses/i2c-pxa.c
+@@ -443,6 +443,8 @@ static int i2c_pxa_wait_slave(struct pxa_i2c *i2c)
+ 
+ 	show_state(i2c);
+ 
++	if (in_interrupt())
++		return 0;
+ 	while (time_before(jiffies, timeout)) {
+ 		if (i2c_debug > 1)
+ 			dev_dbg(&i2c->adap.dev, "%s: %ld: ISR=%08x, ICR=%08x, IBMR=%02x\n",
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.11.0
 
