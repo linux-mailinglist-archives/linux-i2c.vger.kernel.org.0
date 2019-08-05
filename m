@@ -2,99 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F170813F4
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2019 10:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6841281587
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2019 11:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727450AbfHEIIh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Aug 2019 04:08:37 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:46544 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727225AbfHEIIh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Aug 2019 04:08:37 -0400
-Received: by mail-wr1-f65.google.com with SMTP id z1so83390622wru.13
-        for <linux-i2c@vger.kernel.org>; Mon, 05 Aug 2019 01:08:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vgLjv1nCww8791VcRdUZize4N+pz9H+H0mFxYoQg1Bs=;
-        b=fCibp5QhZzCJUJb6fpPrgbUGadeUS7m+LHz63o1X7WuWDv3vjictaNE+XNX8PGuzm3
-         jM7kbRtvbyk0uLiS+AFw5GvV6FLuU0gP+KpEvBowcXqPZH4zZU6oZrIqL9CHNeYAAH/7
-         jU8F2kGEeAGMbGkif9Bk5FZ94gG1j0XzSSdE2T7/Tdoa+xpJkRxTEYWVF02eqfgxGgbO
-         htWbVKZumSlZKVO93aQAlvnRCETMORxtzirbDK6KdyLLtOfnoRqS3ZMf2KDVzeaw16CN
-         2dI7DhR5r0ZaZOOHQHah4g2r8GpEyvVqC6i9FzYSBFhK2B1KJv2XkJPAUYE4DvcsunTP
-         afAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vgLjv1nCww8791VcRdUZize4N+pz9H+H0mFxYoQg1Bs=;
-        b=ODWf9P2QdblADPUdERS6hBbMMcoY44i5KajZ84JJAjJE6JSTFfKM1dzkokvbNFQCmO
-         LOPARMNjbKEmBd8cvjT/1gJ8PTj8kJL73GLadUgh6SZ85HUeQl0dvFLsFdPgWpdw38LM
-         5t6X3xa0PRMFQDqXqzotLErKZaSh60VF3mtChwTCMO6kO1fkIgTATU3xecWEd5Qca549
-         8VGimAAufnJGIus3cvMtTD6oHijja1SEcyLkqVCsI2sJKQ3SXj7xWndPOkb0t2mm+0PE
-         mI4IzQ9UHXlSsC/ldGCo+y+HN7KLW67u+ks/pmFQqNUTtuHbHr+Pi4i+XgqpGoZCV7qo
-         3ePQ==
-X-Gm-Message-State: APjAAAVzEXygoNlQVHNbkchNawjag8zYLkj/aPLE7BBMJE3dhkNIX6Ut
-        jysVq59hqoU/BcZWSXiuG7Y=
-X-Google-Smtp-Source: APXvYqxUQs2hbc6aZY7Cb1LTbwB3p6UHrIH5yJbtzj7wJhAIEjGCLhjS5+skKnteeEnuArgN5ppDgw==
-X-Received: by 2002:adf:df8b:: with SMTP id z11mr103437181wrl.62.1564992515157;
-        Mon, 05 Aug 2019 01:08:35 -0700 (PDT)
-Received: from localhost.localdomain (amontpellier-652-1-281-69.w109-210.abo.wanadoo.fr. [109.210.96.69])
-        by smtp.gmail.com with ESMTPSA id y12sm57598408wru.30.2019.08.05.01.08.33
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 05 Aug 2019 01:08:34 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.de>, Andrew Lunn <andrew@lunn.ch>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH][v4.19.y] eeprom: at24: make spd world-readable again
-Date:   Mon,  5 Aug 2019 10:08:31 +0200
-Message-Id: <20190805080831.23092-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.21.0
+        id S1727259AbfHEJdr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Aug 2019 05:33:47 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:3757 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727230AbfHEJdq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 5 Aug 2019 05:33:46 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 75BE36944B7A9850719A;
+        Mon,  5 Aug 2019 17:33:42 +0800 (CST)
+Received: from localhost.localdomain (10.67.212.132) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.439.0; Mon, 5 Aug 2019 17:33:31 +0800
+From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
+To:     <linux-i2c@vger.kernel.org>
+CC:     Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Subject: [PATCH -next] i2c: designware: Fix unused variable warning
+Date:   Mon, 5 Aug 2019 17:31:08 +0800
+Message-ID: <1564997468-48538-1-git-send-email-zhangshaokun@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.212.132]
+X-CFilter-Loop: Reflected
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Jean Delvare <jdelvare@suse.de>
-
-The integration of the at24 driver into the nvmem framework broke the
-world-readability of spd EEPROMs. Fix it.
-
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: stable@vger.kernel.org
-Fixes: 57d155506dd5 ("eeprom: at24: extend driver to plug into the NVMEM framework")
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Arnd Bergmann <arnd@arndb.de>
-[Bartosz: backported to v4.19.y]
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+drivers/i2c/busses/i2c-designware-master.c: In function ‘i2c_dw_init_recovery_info’:
+drivers/i2c/busses/i2c-designware-master.c:658:6: warning: unused variable ‘r’ [-Wunused-variable]
+  int r;
+      ^
+Fixes: 33eb09a02e8d ("i2c: designware: make use of devm_gpiod_get_optional")
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com> 
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com> 
+Cc: Uwe Kleine-König <uwe@kleine-koenig.org>
+Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
 ---
- drivers/misc/eeprom/at24.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-designware-master.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index ddfcf4ade7bf..dc3537651b80 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -724,7 +724,7 @@ static int at24_probe(struct i2c_client *client)
- 	nvmem_config.name = dev_name(dev);
- 	nvmem_config.dev = dev;
- 	nvmem_config.read_only = !writable;
--	nvmem_config.root_only = true;
-+	nvmem_config.root_only = !(pdata.flags & AT24_FLAG_IRUGO);
- 	nvmem_config.owner = THIS_MODULE;
- 	nvmem_config.compat = true;
- 	nvmem_config.base_dev = dev;
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index 867787dade43..e8b328242256 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -655,7 +655,6 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+ 	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+ 	struct i2c_adapter *adap = &dev->adapter;
+ 	struct gpio_desc *gpio;
+-	int r;
+ 
+ 	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
+ 	if (IS_ERR_OR_NULL(gpio))
 -- 
-2.21.0
+2.7.4
 
