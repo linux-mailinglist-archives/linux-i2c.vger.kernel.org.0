@@ -2,34 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C0A83A3C
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2019 22:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EB583A4E
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2019 22:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726301AbfHFU1M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Aug 2019 16:27:12 -0400
-Received: from sauhun.de ([88.99.104.3]:36476 "EHLO pokefinder.org"
+        id S1726055AbfHFUdR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Aug 2019 16:33:17 -0400
+Received: from sauhun.de ([88.99.104.3]:36534 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725948AbfHFU1M (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 6 Aug 2019 16:27:12 -0400
+        id S1726009AbfHFUdR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 6 Aug 2019 16:33:17 -0400
 Received: from localhost (p54B3324E.dip0.t-ipconnect.de [84.179.50.78])
-        by pokefinder.org (Postfix) with ESMTPSA id 9D8162C290E;
-        Tue,  6 Aug 2019 22:27:09 +0200 (CEST)
-Date:   Tue, 6 Aug 2019 22:27:06 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 0B67E2C290E;
+        Tue,  6 Aug 2019 22:33:15 +0200 (CEST)
+Date:   Tue, 6 Aug 2019 22:33:14 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Shaokun Zhang <zhangshaokun@hisilicon.com>
-Cc:     linux-i2c@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Subject: Re: [PATCH -next] i2c: designware: Fix unused variable warning
-Message-ID: <20190806202705.GA911@ninjato>
-References: <1564997468-48538-1-git-send-email-zhangshaokun@hisilicon.com>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     mika.westerberg@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: core: remove unused function
+Message-ID: <20190806203314.GB911@ninjato>
+References: <20190731105642.29664-1-anders.roxell@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gKMricLos+KVdGMg"
+        protocol="application/pgp-signature"; boundary="1LKvkjL3sHcu1TtY"
 Content-Disposition: inline
-In-Reply-To: <1564997468-48538-1-git-send-email-zhangshaokun@hisilicon.com>
+In-Reply-To: <20190731105642.29664-1-anders.roxell@linaro.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -37,50 +34,87 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---gKMricLos+KVdGMg
+--1LKvkjL3sHcu1TtY
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 05, 2019 at 05:31:08PM +0800, Shaokun Zhang wrote:
-> drivers/i2c/busses/i2c-designware-master.c: In function =E2=80=98i2c_dw_i=
-nit_recovery_info=E2=80=99:
-> drivers/i2c/busses/i2c-designware-master.c:658:6: warning: unused variabl=
-e =E2=80=98r=E2=80=99 [-Wunused-variable]
->   int r;
->       ^
-> Fixes: 33eb09a02e8d ("i2c: designware: make use of devm_gpiod_get_optiona=
-l")
-> Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>=20
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>=20
-> Cc: Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.org>
-> Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+Hi Anders,
 
-Applied to for-next, thanks!
+On Wed, Jul 31, 2019 at 12:56:42PM +0200, Anders Roxell wrote:
+> GCC warns taht function 'i2c_acpi_find_match_adapter()' is not used.
+>=20
+> ../drivers/i2c/i2c-core-acpi.c:347:12: warning:
+>   =E2=80=98i2c_acpi_find_match_adapter=E2=80=99 defined but not used [-Wu=
+nused-function]
+>  static int i2c_acpi_find_match_adapter(struct device *dev, const void *d=
+ata)
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>=20
+> Rework to remove the function 'i2c_acpi_find_match_adapter()'.
+>=20
+> Fixes: 00500147cbd3 ("drivers: Introduce device lookup variants by ACPI_C=
+OMPANION device")
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
-And let's all (me included) try harder to pay attention to build issues
-when reviewing.
+Can you resend with gkh and "Suzuki K Poulose <suzuki.poulose@arm.com>"
+added to CC? Greg maintains a branch with device_lookup changes and
+Suzuki is the author of it.
 
+Kind regards,
 
---gKMricLos+KVdGMg
+   Wolfram
+
+> ---
+>  drivers/i2c/i2c-core-acpi.c | 11 -----------
+>  1 file changed, 11 deletions(-)
+>=20
+> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> index bc80aafb521f..bb6b39fe343a 100644
+> --- a/drivers/i2c/i2c-core-acpi.c
+> +++ b/drivers/i2c/i2c-core-acpi.c
+> @@ -344,17 +344,6 @@ u32 i2c_acpi_find_bus_speed(struct device *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(i2c_acpi_find_bus_speed);
+> =20
+> -static int i2c_acpi_find_match_adapter(struct device *dev, const void *d=
+ata)
+> -{
+> -	struct i2c_adapter *adapter =3D i2c_verify_adapter(dev);
+> -
+> -	if (!adapter)
+> -		return 0;
+> -
+> -	return ACPI_HANDLE(dev) =3D=3D (acpi_handle)data;
+> -}
+> -
+> -
+>  struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle)
+>  {
+>  	struct device *dev =3D bus_find_device_by_acpi_dev(&i2c_bus_type, handl=
+e);
+> --=20
+> 2.20.1
+>=20
+
+--1LKvkjL3sHcu1TtY
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1J4pUACgkQFA3kzBSg
-KbZkLQ//YTJBbEbuAoeXVwFcXYKoF5V2ufZYQGHqyBlEybNkDzTI/KzsWifWtyTx
-xQXos1A6+Myb6qbvfMOKGtg1cuVmIaliPZyKhVuXO4TW1VH4RWadP7IbOT2MGOMN
-pXzhkKw8RyqBXUY6eqWcwter86BAdM5kLpC8vkah2r+BObzVQ/xPgls6UIlPdP9Y
-1JWXLnoljS08liB0RXWK3jCDBc2JAJnP9LpFwxwzaJ0c+vrXvesLM0Eq/1gO+mO7
-1NzwezYtFhiS4ByGfQhNiTnfaYyIR9Ei3ra1K4/l2DMI2ELrDDUSrWTvwliIY5hm
-yxolLItMBTbnC/IKbMZP9PtBhRG3U/9vMi8CfRQ2wQVOixGXwXj8qcmSKnCjkjll
-7y0P2cL0DBiUbi52YhXBjGNdMIZ615znfziYcXCn7XJW3OnaqypmflBz9OqmCgZg
-+PifeWBLpXcMdG+Z0kgLnC+WfLYQsWcjUi9nQPbmv24Y2wY3bh7ky0cQzkZzmN6Q
-/qQrw9CjQLVv1Px1YGi6VKDVvLEbTqnxBEPtI49Uku7jGS/cPBGeazthAVA3zWWI
-AJ6pnvL5UUFeb4G8C0qLhz9H3bZeQtEmHFtpLdgrQRhUz2UWaiGro+nDPPK9qY5G
-dXPgDCbw9eMDxOXogdKr/RU19TY11dflj0Gf4eVlKcTbhLIGHJg=
-=R/RX
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1J5AoACgkQFA3kzBSg
+KbZDTQ/6AmedFvfIwu9NlIhayf2vJHURysQINDdu+Qak547nivAllwlq4TQwhgW9
+yjifC0GCgdJZeSxkipNDgwQK+l0EgR4NuMypA1lqcH/r/0RoemNZRzM5kaR1leYl
++jx2AJdLsH8Jg4TJtxL5xnpNQmowDs6z2CtlkO7k6APCw8PE9ki2xhPVaR9VcSVk
+SZJhlnUQlVJUN7i/Y6ittUAMDxS/XM/+CmO74e+aFZa2snpQyoEJ2WhPzHUnbfHv
+gJjuZz6TyBSWCfNjDPcwUQkT0nTbq4XiGp5c3murLXkvFXPBI43MwNZRkyNyqyZy
+E0gk18rL5242nprX4ffsvfz5biO+Ab+WgZk1r670XlETLs25S1x/374fSSDRYHXk
+P1bKROABD829y5o0MlCt4T3vB7P/HFdmsaqJGePH0RUh0DL+yPHF3MXdGTxzwaC0
+ADtGRJ1jXfEeq+vGtDkCExfUJOM6xVIFW6g9zwvHN9gHsoTM2gbnmfxHDNqfNBEN
+foMxnzIZymeDgk0ZcYT0HNpD2OIBvfrtsQG1x9mbxew4CQU/6GgyVaFE4gHPzK9y
+5vLZw31J0fOfWhLgAr9upR1qWQ9zDZQytQ4AFGTRv64EJoAGTMPzlFBGDzszV5L6
+44Wn+sQjErHw2eIpaaeqJiRtv3f2NUxmwWzQDzxUIM/+7W8kgBM=
+=I0Kb
 -----END PGP SIGNATURE-----
 
---gKMricLos+KVdGMg--
+--1LKvkjL3sHcu1TtY--
