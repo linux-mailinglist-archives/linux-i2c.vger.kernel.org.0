@@ -2,86 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D3781958
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2019 14:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C2482D94
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2019 10:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728681AbfHEMbw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Aug 2019 08:31:52 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:45801 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728144AbfHEMbw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Aug 2019 08:31:52 -0400
-Received: by mail-pl1-f194.google.com with SMTP id y8so36439474plr.12;
-        Mon, 05 Aug 2019 05:31:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=sqV3s1K4ns9GNRz+g3OmEaOqbEW74Ump8unGoU9qEjg=;
-        b=f6z1Pblsnub+mS8CYJfFLKu4rUlG4HLRKLG+TwMtUylc6+JoSJuziEDRFVwjAwiQh4
-         2ZAvhgAmyYdrkzKEOSyG+aT/rl3meCnWQztBVsX9b8kwrdutRO/d/qqQFoI2oSra2JW/
-         04hfJ9nF12lsZ0MqFLh6AWLHYNnN/Sf8A/sg+JOjhkg7Gdhc4veFr7txdwB2ztjdbSQZ
-         /rM4Ely7QK6C6a2d4h1rPmtpj1cax3Ql+7nVt1fZfmUNmoUiW/0F5uYO7Xd7RAks+Ni1
-         RKMHxYjbja0tMgbSwsD4dQ5lCJyKwet0F4aS2XKORfa+JerJo506DQhe2aIizLGs9BTu
-         +XKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=sqV3s1K4ns9GNRz+g3OmEaOqbEW74Ump8unGoU9qEjg=;
-        b=S0cNFVgr+Z8uWKQ/ldAJe3iaGibrGu8TPwYwGaHzPgCi9bDhi0hvIzdNF63IkQsXTG
-         0nHz70mr8hXf0tQAErfROrEnMGv8fW8UfXn9LE2Ekzon+KkUxoetcP9FdjJ/L01HyQ+P
-         r1L8e5ndO9Db5A+AfDh22lou8BsvS3E1vXDJV3HopVMvN3Z1h016kMQxxxuAT45V22MU
-         sPGZg9sA9W85eOWyQXz1S8ked64r3afCkCwzi5QSIknlLC595WFLnrq1b5/QTfCTIjjj
-         Jg9naTP6DwFgbl+zvTQTNvG0lecKuyF5Id6+ibMpN+PSx+wGTWpePJfqRYrhH1VP3ELF
-         fMjw==
-X-Gm-Message-State: APjAAAWbBOcW/jyTxsv9NsP4n7CiwjFunWjrZkWMmH+XMIudj8iHTnWg
-        vFM8tUS8eMIWgXy8FlzTA992S2FJNtM=
-X-Google-Smtp-Source: APXvYqwUXaGe1XPCUVLysfhJwuZu+MPxpvv5ljQ0VMfEZzHTo9f81Bll8bj+CXZ+ds+14JP2az45Cg==
-X-Received: by 2002:a17:902:8a94:: with SMTP id p20mr143610300plo.312.1565008311500;
-        Mon, 05 Aug 2019 05:31:51 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id u3sm18958550pjn.5.2019.08.05.05.31.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Aug 2019 05:31:50 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
+        id S1728056AbfHFIPp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Aug 2019 04:15:45 -0400
+Received: from gateway24.websitewelcome.com ([192.185.51.31]:47980 "EHLO
+        gateway24.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727259AbfHFIPp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Aug 2019 04:15:45 -0400
+X-Greylist: delayed 1488 seconds by postgrey-1.27 at vger.kernel.org; Tue, 06 Aug 2019 04:15:44 EDT
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id 2D97B3D2CC
+        for <linux-i2c@vger.kernel.org>; Tue,  6 Aug 2019 02:50:56 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id uuFEhIeCidnCeuuFEhkZ02; Tue, 06 Aug 2019 02:50:56 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=BLQJA0ZrIGSjNwAj/WHSkr6DM6khrjzA0+pF5VmmsmM=; b=DWdHrQLk2XlqdgAc9eA42TO10d
+        TxRxW4ldd8yVBZOzcglkunMfnY3Dc/NCGpSRGLtGsY15dF0mMnGjEEZpXHMYHOxOVmUjS6Uf+VTt2
+        qe5b7EFfDKEUQZ9ffTMSjRK/uF79FRbVp8XNQqzlGSHoJ6OUIVF3gbDH8wEe5VsXDwBYK/o2jNLfX
+        HVDqMXqnppkEt/pl7BKCl9Fi+zRXxnStJ3Zf4Hhfjrfxl/0I4K2FxsU+set7Zt26ZxX0xF2VDxaMJ
+        fy6tdsN2qSDg3n/1JGTTxly3sge5LJhuFSGOmbDMFMDOOM7T2UDehOLFZWsNvCOF5t9Rr4/Oih8KW
+        MBuYnMPQ==;
+Received: from [187.192.11.120] (port=43460 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1huuFC-000YPs-U1; Tue, 06 Aug 2019 02:50:55 -0500
+Date:   Tue, 6 Aug 2019 02:50:54 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fuqian Huang <huangfq.daxian@gmail.com>
-Subject: [PATCH] i2c: avoid sleep in IRQ context
-Date:   Mon,  5 Aug 2019 20:31:34 +0800
-Message-Id: <20190805123134.23199-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] i2c: designware: Fix unused variable warning in
+ i2c_dw_init_recovery_info
+Message-ID: <20190806075054.GA15418@embeddedor>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.192.11.120
+X-Source-L: No
+X-Exim-ID: 1huuFC-000YPs-U1
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [187.192.11.120]:43460
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 11
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-i2c_pxa_handler -> i2c_pxa_irq_txempty ->
-i2c_pxa_reset -> i2c_pxa_set_slave -> i2c_pxa_wait_slave
+Fix the following warning:
 
-As i2c_pxa_handler is an interrupt handler, it will finally
-calls i2c_pxa_wait_slave which calls msleep.
+drivers/i2c/busses/i2c-designware-master.c: In function ‘i2c_dw_init_recovery_info’:
+drivers/i2c/busses/i2c-designware-master.c:658:6: warning: unused variable ‘r’ [-Wunused-variable]
+  int r;
+      ^
 
-Add in_interrupt check before msleep to avoid sleep
-in IRQ context.
-
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
+Fixes: 33eb09a02e8d ("i2c: designware: make use of devm_gpiod_get_optional")
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 ---
- drivers/i2c/busses/i2c-pxa.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/i2c/busses/i2c-designware-master.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-pxa.c b/drivers/i2c/busses/i2c-pxa.c
-index 2c3c3d6935c0..b35a0e8efcb2 100644
---- a/drivers/i2c/busses/i2c-pxa.c
-+++ b/drivers/i2c/busses/i2c-pxa.c
-@@ -443,6 +443,8 @@ static int i2c_pxa_wait_slave(struct pxa_i2c *i2c)
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index 867787dade43..e8b328242256 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -655,7 +655,6 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+ 	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+ 	struct i2c_adapter *adap = &dev->adapter;
+ 	struct gpio_desc *gpio;
+-	int r;
  
- 	show_state(i2c);
- 
-+	if (in_interrupt())
-+		return 0;
- 	while (time_before(jiffies, timeout)) {
- 		if (i2c_debug > 1)
- 			dev_dbg(&i2c->adap.dev, "%s: %ld: ISR=%08x, ICR=%08x, IBMR=%02x\n",
+ 	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
+ 	if (IS_ERR_OR_NULL(gpio))
 -- 
-2.11.0
+2.22.0
 
