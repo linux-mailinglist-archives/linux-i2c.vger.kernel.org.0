@@ -2,126 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE6A84554
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2019 09:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9901E84582
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2019 09:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727179AbfHGHJh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Aug 2019 03:09:37 -0400
-Received: from mail-eopbgr80125.outbound.protection.outlook.com ([40.107.8.125]:27625
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727114AbfHGHJh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 7 Aug 2019 03:09:37 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LiTm4nXPqdzUYLJO5XwTKH+23aWbgIdHns9wtv1cuNQuPe8Uhk3vGapH1d8HJEn1PjyAt1ncnmuGVyuj0/uPjISVhotBOOf91Py3bwMrnhfvtXOHVwgEtFK7yz8VSAMdLodMwdlOduvHhWGutXZrSFJq8ja0xJNY8JJHf6G4lNnqnTs+JFJ8URiKsh1+duPWxrtxuAiZU4HGRYv50vtZxEhMNAAl51zIcMXZMsWhOdRZrPjlWnfZ7T6aCRrcQL8Ly5eiAr4wVnPdr94GVeDc/WSgY2mgf9TAeadOSuTCoJbJCt7FUwX8b2kPjW/n9y70/FmcCE/2trCQfD3CVUZL/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YGWh70SunHa3t8rc3Pu4GCQHmUdB648PUMurdKxlOtE=;
- b=DMKR2ft9OpE2j8zjvACaXb/PxJjueA+qm05HWk6x2PmyEO6tOnOYJw0ZO2jRX6Tve0qmJAc36t/XrlHi/H/S7ct5+K8qYLPJ5ygxq2r82KhJVvdth3ELXiVllw7uBxP7BMJXZEdugRv1kh63sBfRODg7VEyerbeu3fYJKtDKnlRjWlMY4u2vFiMJYh7ib4rB2rpLzYuur1ESspYWumIcPi9RREVmPuAmVAIyXxX3FU4xAEja4wwNXCToEfdn9ubM8K6z53tpgsdL3WX/FwwpyH3q2bOnnJqHskp0RhsTAOaD90+57H7dN7HF4bKDzI81zrukKNU8btattk6ct680kw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YGWh70SunHa3t8rc3Pu4GCQHmUdB648PUMurdKxlOtE=;
- b=cmjzkf6a/nfW9Bxsl6mZAQFRkXKZ02YQY8UZo0uFblXUSnOAi70M8Qkmy7TXJ7JrQgf70q52tB40irmFnx+nFn8qk/OGxr2jPrir5IZHNN5zH0q3JYNph65geySrR8qxpM7eEbX5grgZwoT6b8PpI4IqSwvokryMZwKz0HCboFs=
-Received: from DB7PR07MB6042.eurprd07.prod.outlook.com (20.178.107.151) by
- DB7PR07MB6043.eurprd07.prod.outlook.com (20.178.107.152) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.9; Wed, 7 Aug 2019 07:09:33 +0000
-Received: from DB7PR07MB6042.eurprd07.prod.outlook.com
- ([fe80::7983:ce79:7be8:bc02]) by DB7PR07MB6042.eurprd07.prod.outlook.com
- ([fe80::7983:ce79:7be8:bc02%6]) with mapi id 15.20.2157.011; Wed, 7 Aug 2019
- 07:09:33 +0000
-From:   "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Subject: Re: [PATCH] i2c-axxia: support slave mode
-Thread-Topic: [PATCH] i2c-axxia: support slave mode
-Thread-Index: AQHVSGwOk+MxAclOz0u7iP5t8pKxw6buoJIAgACsrQA=
-Date:   Wed, 7 Aug 2019 07:09:32 +0000
-Message-ID: <20190807070926.GB17104@localhost.localdomain>
-References: <20190801132129.GA5550@localhost.localdomain>
- <20190806205124.GG911@ninjato>
-In-Reply-To: <20190806205124.GG911@ninjato>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1P18901CA0016.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:3:8b::26) To DB7PR07MB6042.eurprd07.prod.outlook.com
- (2603:10a6:10:8e::23)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=krzysztof.adamski@nokia.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [131.228.32.167]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f5fd92c5-f316-44cd-893e-08d71b06328e
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR07MB6043;
-x-ms-traffictypediagnostic: DB7PR07MB6043:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR07MB604391F0B4032A1C0EEFE7EAEFD40@DB7PR07MB6043.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 01221E3973
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(39860400002)(396003)(346002)(136003)(366004)(189003)(199004)(61506002)(71200400001)(4326008)(1076003)(25786009)(107886003)(66066001)(5660300002)(71190400001)(478600001)(14444005)(256004)(6246003)(66946007)(53936002)(14454004)(66446008)(9686003)(66556008)(64756008)(6512007)(6436002)(66476007)(6916009)(33656002)(86362001)(76176011)(99286004)(6486002)(81166006)(81156014)(8936002)(8676002)(386003)(316002)(305945005)(186003)(52116002)(6506007)(2906002)(6116002)(446003)(3846002)(26005)(102836004)(68736007)(486006)(229853002)(7736002)(11346002)(54906003)(476003);DIR:OUT;SFP:1102;SCL:1;SRVR:DB7PR07MB6043;H:DB7PR07MB6042.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nokia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: gVQRo1ZpHExQx/AGMbG4QnNkiMGlYTGqctCOtwGR5l514hvVSiJWEFAllWZ4+lIOM1xgVI1WEmLAuiEhhl833cbRz2ylIdSjvUNM0nogDv787iwNuKX3ABfa2QtAlRaamiDc38Ul2K9cIWFedI9iu0xBrDDgeM4daUG9o0aWO5owf3BR9hysZZjgZ+Y8KhI1f8XlPNs6nFVzxfAz0zPQrltRHmmghxsOXNKNeFjXktSrQI5uhMxCLAHyDwFm6gIjeZAXIIiz6/MzQEd0zwsKSEUKI+TTD7UBrhqTSStmw9X7dmabcNupKUC6CsRutJW8gQHNo2l4xeFMqjGbgt2IB8q7pVEFbHeWNLq+sh3Ji4zpxXuPlp0WUP/zaLk+PcxL/OVYB8nbzLGLBCjdx1Cn/bZS4N5HR+H4hzis/pKc7L0=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <88B4540EB1019A4C9C932965A65343C6@eurprd07.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5fd92c5-f316-44cd-893e-08d71b06328e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Aug 2019 07:09:32.9199
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lxxM5YN4ZUN370NwvRJ/h02xF6SSU9gYBvFBORFWerjWu37xf5zND7xNBuFsTD+MNhHqapRO9lbwIRgQk1Cwdfz/EMWTjAswzpSANz1PK50=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR07MB6043
+        id S1727511AbfHGHST (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Aug 2019 03:18:19 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:40106 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727436AbfHGHSS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Aug 2019 03:18:18 -0400
+Received: by mail-pl1-f195.google.com with SMTP id a93so39304008pla.7;
+        Wed, 07 Aug 2019 00:18:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=lStqXB1CE+Wazs+U2rxsTV3wYflhaLXJIkT4Eebm9Ds=;
+        b=GkhaTE0UE4nePuRPazYfHVmLl6UFjBwfbR+C7iplIolBn3RNuWmgNzI5I+eVahe+xe
+         Z43Ykl28TtMMC3LHyqfeOlHRS2OAr9n+GrSpcd9ldBUs0yKv1ECHGpiVeYIF4rLATZE4
+         FUdFochaJMaCsk00J0T+sUD60TXWdH3PfHsf4C3YJBh+z4Jk31SiocHLSNhkrP3s+S2g
+         UPBx5S44gcygQJX/CZVv2nzw1YlDFBbGYooMVxb+n/uAU52tGGaJJxvzf5uKgHDuRo4R
+         fTfqCUOey/c94OTSearRQTi1pYfvL8ou/ryK/TVvyHihQrVdVTuwXHqgvwYJHCl82TGp
+         omSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=lStqXB1CE+Wazs+U2rxsTV3wYflhaLXJIkT4Eebm9Ds=;
+        b=Gx1JvqOi2S5f/S6wNT4Hx4/g689lj4XcEleFdYbqwdSj5gJTyV+msDB48yoWC/uBLT
+         mmZe7FoOysj8ffE5lx15CjLZtJkTaVRMt1RTqiSCnNPPFPNfBNfpNDZxdAViuUBcAX3w
+         8Ad2co8dmnw3m4vN5CfO32bjTRbLa2Ar67ydKRCLC3lTY9Q6DbSbyGk8PCFxzR/oMkQQ
+         3WRA4L9XRA5i7oqHau544TC6KGfDsZvvYZoTVSTMdIj8yIf/zb/FhylDyo2LGNsVh9sa
+         g0vmprnJypLhNOZibcFb4xL8M+B6N61tSyeTctKFPid/xYpcdgw/2xDDWPvBi3KwvChE
+         BFKw==
+X-Gm-Message-State: APjAAAVOXq6liDhb2LrXw+9QgY4gSfmaRoumWwGrUdg4mvqGSCVMl46G
+        pGvOZ1TdtbbVhXLwgpwu3QREidzKDSE=
+X-Google-Smtp-Source: APXvYqyVBs5fnbKDSnwvjleSvufFtN8/d/YvIkLh89tOTYbCjM/8+P1+YlW+dqGIDupRvcRSJdcPaw==
+X-Received: by 2002:a17:902:9004:: with SMTP id a4mr6927957plp.109.1565162298236;
+        Wed, 07 Aug 2019 00:18:18 -0700 (PDT)
+Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.googlemail.com with ESMTPSA id q22sm83570089pgh.49.2019.08.07.00.18.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 07 Aug 2019 00:18:17 -0700 (PDT)
+From:   Fuqian Huang <huangfq.daxian@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fuqian Huang <huangfq.daxian@gmail.com>
+Subject: [PATCH v2] i2c: avoid sleep in IRQ context
+Date:   Wed,  7 Aug 2019 15:18:07 +0800
+Message-Id: <20190807071807.17488-1-huangfq.daxian@gmail.com>
+X-Mailer: git-send-email 2.11.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+i2c_pxa_handler -> i2c_pxa_irq_txempty ->
+i2c_pxa_reset -> i2c_pxa_set_slave -> i2c_pxa_wait_slave
 
->Hi Krzysztof,
->
->> +	if (fifo_status & SLV_FIFO_DV1) {
->> +		if (fifo_status & SLV_FIFO_STRC) {
->> +			dev_dbg(dev, "First data byte sent\n");
->
->I think, however, these debug messages could go. They were surely
->helpful during development but assuming things work now, they will not
->help backend authors. Can you agree?
+As i2c_pxa_handler is an interrupt handler, it will finally
+calls i2c_pxa_wait_slave which calls msleep.
 
-Good point. I'll remove those verbose messages and maybe leave one or
-two debug messages with just a summary of the status which will
-hopefully be a good compromise. Will that be ok?
+Add in_interrupt check before msleep to avoid sleep
+in IRQ context.
+When in interrupt context, use mdelay instead of msleep.
 
->
->Rest looks good from what I can tell without knowing the hardware.
+Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
+---
+ drivers/i2c/busses/i2c-pxa.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-It also seems to work correctly and I tried to do everything in a way
-that nothing is changed if slave mode is not used to eliminate the risk
-of regressions.
+diff --git a/drivers/i2c/busses/i2c-pxa.c b/drivers/i2c/busses/i2c-pxa.c
+index 2c3c3d6935c0..876e693bafd9 100644
+--- a/drivers/i2c/busses/i2c-pxa.c
++++ b/drivers/i2c/busses/i2c-pxa.c
+@@ -456,7 +456,10 @@ static int i2c_pxa_wait_slave(struct pxa_i2c *i2c)
+ 			return 1;
+ 		}
+ 
+-		msleep(1);
++		if (in_interrupt())
++			mdelay(1);
++		else
++			msleep(1);
+ 	}
+ 
+ 	if (i2c_debug > 0)
+-- 
+2.11.0
 
-BTW, I have added this synchronize_irq() in unreg_slave callback just to
-make sure it is save to set idev->slave to NULL already. Most of the
-controllers do not have such a guard and I'm wondering why that wouldn't
-be a problem for them. Like the i2c-rcar.c - isn't there a small race
-condition if some slave interrupt triggers just before ICSIER is cleared
-and somehow does not finish before priv->slave is set to NULL? This is
-the situation I was afraid of and tried to solve by using this
-synchronize_irq().
-
-Krzysztof
