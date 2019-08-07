@@ -2,50 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A80A084B3B
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2019 14:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE5084CE1
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2019 15:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727213AbfHGMJt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Aug 2019 08:09:49 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:16894 "EHLO mx2.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726773AbfHGMJt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 7 Aug 2019 08:09:49 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        id S2387982AbfHGNZu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Aug 2019 09:25:50 -0400
+Received: from skedge04.snt-world.com ([91.208.41.69]:56622 "EHLO
+        skedge04.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387981AbfHGNZu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Aug 2019 09:25:50 -0400
+Received: from sntmail11s.snt-is.com (unknown [10.203.32.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id 4B090A10DC;
-        Wed,  7 Aug 2019 14:09:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mailbox.org; h=
-        content-type:content-type:content-transfer-encoding:mime-version
-        :references:in-reply-to:message-id:date:date:subject:subject
-        :from:from:received; s=mail20150812; t=1565179767; bh=rHCAZ074Uy
-        ZIuo+YOhlm7YH0Of6VHZ3w7JPuviszgG8=; b=msNk2qv0fNTuD4PX61ubg1jISG
-        qPJuJnrAKNt1IE/LEXBHmFsZHl9nSzfecmvWL692Td9+Ym9o4nclypzUpNDlSJJx
-        9pk+b6X+fvMYdr8bBDy4/rmb2BCIctwTxg6XR5rU4dJz4sZJ5efpuMSWkLCarzwf
-        WfYJKufSjPk8tc5W1NUboQaH1zchV8qws7kVQJBXkOUYqtHBe/IxFvnoIyXoeS6t
-        XBDp5Ih5DlSFpy5jcrYaI9CQCAIakf5v3ePIsdx2AEwx25GRCsLy9WlxBpF0qXqH
-        sGofhS16+sRtEcENUfy+U5YLKyubWwTi7rbo2bDDwlrLcPCB/TWYHwqT8o3Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1565179786; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nIi2+dVFgNEqDAbNVFX5OQFfz6csuB3+TfgG3t4PX58=;
-        b=psdQRXuMdCNnuvjhag32JrP02RtOG2WT11a9nkp7lvgI3sQWpETzWnmuUSD/GD5wiL2fx1
-        5C/4IA3gMLqfG9i99VUFTqmb6IW7MvfmC1mftvJOAVBvjHVkHBejPAFNfhWshXYqA522xc
-        h2zoq+fpJRtpOS5YT8uBXMYyAxxlMzi3zIuPrXwdctiLkORXTqPSYpwR/j39Y6c98/Soj0
-        f1wE6LqI0/GPwyPh78LeQvv9GrixT5R8Q2yXz9FlEo/IxRkk/m72kAPVYxd3/6O7xALBO0
-        UUu5/+s+qPty7x8eizF+40ZarDlU7VeQnBjl/rT2Hs+J5SFA3QH/Fjiiwm3fmA==
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
-        with ESMTP id PIIso7cOiSde; Wed,  7 Aug 2019 14:09:27 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@mailbox.org>
-To:     Schrempf Frieder <frieder.schrempf@kontron.de>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        by skedge04.snt-world.com (Postfix) with ESMTPS id 85EE367F489;
+        Wed,  7 Aug 2019 15:25:46 +0200 (CEST)
+Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail11s.snt-is.com
+ (10.203.32.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Wed, 7 Aug 2019
+ 15:25:46 +0200
+Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
+ sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
+ 15.01.1713.004; Wed, 7 Aug 2019 15:25:46 +0200
+From:   Schrempf Frieder <frieder.schrempf@kontron.de>
+To:     Alexander Stein <alexander.stein@mailbox.org>
+CC:     Wolfram Sang <wsa@the-dreams.de>, Jean Delvare <jdelvare@suse.de>,
+        "Jarkko Nikula" <jarkko.nikula@linux.intel.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Juergen Fitschen <jfi@ssv-embedded.de>,
         Ajay Gupta <ajayg@nvidia.com>,
@@ -56,49 +37,67 @@ Cc:     Wolfram Sang <wsa@the-dreams.de>, Jean Delvare <jdelvare@suse.de>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: imx: Allow the driver to be built for ARM64 SoCs such as i.MX8M
-Date:   Wed, 07 Aug 2019 14:09:24 +0200
-Message-ID: <2445092.UF1PKDTzN1@ws-140106>
-In-Reply-To: <20190807114332.13312-1-frieder.schrempf@kontron.de>
+Subject: Re: [PATCH] i2c: imx: Allow the driver to be built for ARM64 SoCs
+ such as i.MX8M
+Thread-Topic: [PATCH] i2c: imx: Allow the driver to be built for ARM64 SoCs
+ such as i.MX8M
+Thread-Index: AQHVTRVrY8XY4w2l80SM63DeuQxTsKbvdjUAgAAVVYA=
+Date:   Wed, 7 Aug 2019 13:25:45 +0000
+Message-ID: <552fae9f-a28d-3dd4-c169-ab860180e794@kontron.de>
 References: <20190807114332.13312-1-frieder.schrempf@kontron.de>
+ <2445092.UF1PKDTzN1@ws-140106>
+In-Reply-To: <2445092.UF1PKDTzN1@ws-140106>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.25.9.193]
+x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F7B35F894732B74CB18AF4C07EB70188@snt-world.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+X-SnT-MailScanner-Information: Please contact the ISP for more information
+X-SnT-MailScanner-ID: 85EE367F489.AFBBA
+X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+X-SnT-MailScanner-SpamCheck: 
+X-SnT-MailScanner-From: frieder.schrempf@kontron.de
+X-SnT-MailScanner-To: ajayg@nvidia.com, alexander.stein@mailbox.org,
+        f.fainelli@gmail.com, jarkko.nikula@linux.intel.com,
+        jdelvare@suse.de, jfi@ssv-embedded.de, kdasu.kdev@gmail.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        paul@crapouillou.net, shreesha.rajashekar@broadcom.com, sr@denx.de,
+        syniurge@gmail.com, vigneshr@ti.com, wsa@the-dreams.de
+X-Spam-Status: No
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wednesday, August 7, 2019, 1:44:06 PM CEST Schrempf Frieder wrote:
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
-> 
-> The imx I2C controller is used in some ARM64 SoCs such as i.MX8M.
-> To make use of it, append ARM64 to the list of dependencies.
-> 
-> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> ---
->  drivers/i2c/busses/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> index 09367fc014c3..46b653621513 100644
-> --- a/drivers/i2c/busses/Kconfig
-> +++ b/drivers/i2c/busses/Kconfig
-> @@ -664,7 +664,7 @@ config I2C_IMG
->  
->  config I2C_IMX
->  	tristate "IMX I2C interface"
-> -	depends on ARCH_MXC || ARCH_LAYERSCAPE || COLDFIRE
-> +	depends on ARCH_MXC || ARCH_LAYERSCAPE || COLDFIRE || ARM64
-
-I don't think this should be necessary at all as ARCH_MXC is also available for arm64, see https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/Kconfig.platforms#n167
-I rather wonder why ARCH_MXC is not set. Same for fec.
-
->  	help
->  	  Say Y here if you want to use the IIC bus controller on
->  	  the Freescale i.MX/MXC, Layerscape or ColdFire processors.
-> 
-
-
-
-
+T24gMDcuMDguMTkgMTQ6MDksIEFsZXhhbmRlciBTdGVpbiB3cm90ZToNCj4gT24gV2VkbmVzZGF5
+LCBBdWd1c3QgNywgMjAxOSwgMTo0NDowNiBQTSBDRVNUIFNjaHJlbXBmIEZyaWVkZXIgd3JvdGU6
+DQo+PiBGcm9tOiBGcmllZGVyIFNjaHJlbXBmIDxmcmllZGVyLnNjaHJlbXBmQGtvbnRyb24uZGU+
+DQo+Pg0KPj4gVGhlIGlteCBJMkMgY29udHJvbGxlciBpcyB1c2VkIGluIHNvbWUgQVJNNjQgU29D
+cyBzdWNoIGFzIGkuTVg4TS4NCj4+IFRvIG1ha2UgdXNlIG9mIGl0LCBhcHBlbmQgQVJNNjQgdG8g
+dGhlIGxpc3Qgb2YgZGVwZW5kZW5jaWVzLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEZyaWVkZXIg
+U2NocmVtcGYgPGZyaWVkZXIuc2NocmVtcGZAa29udHJvbi5kZT4NCj4+IC0tLQ0KPj4gICBkcml2
+ZXJzL2kyYy9idXNzZXMvS2NvbmZpZyB8IDIgKy0NCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5z
+ZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaTJj
+L2J1c3Nlcy9LY29uZmlnIGIvZHJpdmVycy9pMmMvYnVzc2VzL0tjb25maWcNCj4+IGluZGV4IDA5
+MzY3ZmMwMTRjMy4uNDZiNjUzNjIxNTEzIDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9pMmMvYnVz
+c2VzL0tjb25maWcNCj4+ICsrKyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9LY29uZmlnDQo+PiBAQCAt
+NjY0LDcgKzY2NCw3IEBAIGNvbmZpZyBJMkNfSU1HDQo+PiAgIA0KPj4gICBjb25maWcgSTJDX0lN
+WA0KPj4gICAJdHJpc3RhdGUgIklNWCBJMkMgaW50ZXJmYWNlIg0KPj4gLQlkZXBlbmRzIG9uIEFS
+Q0hfTVhDIHx8IEFSQ0hfTEFZRVJTQ0FQRSB8fCBDT0xERklSRQ0KPj4gKwlkZXBlbmRzIG9uIEFS
+Q0hfTVhDIHx8IEFSQ0hfTEFZRVJTQ0FQRSB8fCBDT0xERklSRSB8fCBBUk02NA0KPiANCj4gSSBk
+b24ndCB0aGluayB0aGlzIHNob3VsZCBiZSBuZWNlc3NhcnkgYXQgYWxsIGFzIEFSQ0hfTVhDIGlz
+IGFsc28gYXZhaWxhYmxlIGZvciBhcm02NCwgc2VlIGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHVi
+L3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC90cmVlL2FyY2gvYXJtNjQv
+S2NvbmZpZy5wbGF0Zm9ybXMjbjE2Nw0KPiBJIHJhdGhlciB3b25kZXIgd2h5IEFSQ0hfTVhDIGlz
+IG5vdCBzZXQuIFNhbWUgZm9yIGZlYy4NCg0KWW91J3JlIHJpZ2h0IG9mIGNvdXJzZS4gSSBzb21l
+aG93IG1hbmFnZWQgdG8gbWVzcyB1cCBteSBkZWZjb25maWcuIEkgDQpzdGFydGVkIG92ZXIgd2l0
+aCBhIGNsZWFuIGNvbmZpZyBmcm9tIGFyY2gvYXJtNjQvY29uZmlncy9kZWZjb25maWcgYW5kIA0K
+ZXZlcnl0aGluZyBzZWVtcyBmaW5lIG5vdy4gU29ycnkgZm9yIHRoZSBub2lzZS4NCg0KPiANCj4+
+ICAgCWhlbHANCj4+ICAgCSAgU2F5IFkgaGVyZSBpZiB5b3Ugd2FudCB0byB1c2UgdGhlIElJQyBi
+dXMgY29udHJvbGxlciBvbg0KPj4gICAJICB0aGUgRnJlZXNjYWxlIGkuTVgvTVhDLCBMYXllcnNj
+YXBlIG9yIENvbGRGaXJlIHByb2Nlc3NvcnMuDQo+Pg0KPiANCj4gDQo+IA0KPiA=
