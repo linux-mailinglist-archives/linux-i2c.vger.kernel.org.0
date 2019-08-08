@@ -2,104 +2,279 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBE3858A2
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2019 05:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0E4858D3
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2019 06:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730747AbfHHDmP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Aug 2019 23:42:15 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44202 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730742AbfHHDmP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Aug 2019 23:42:15 -0400
-Received: by mail-pf1-f196.google.com with SMTP id t16so43245457pfe.11
-        for <linux-i2c@vger.kernel.org>; Wed, 07 Aug 2019 20:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=sYG6cpuEWkiuiZSTjJ/tkE2X/s2syaTjG0yfloKLSE0=;
-        b=Zqb+cgi2hDsfXgHlecgHReUK5105u+oAXv7BB+DCZY/hMGx1sxb1+EqfxhA1eSd4nU
-         T8ave2YfqpukyF0QuRTjjIMXAFtg8LiYpJFs4gEXLcC3R7aRfBBZ9lVDN5XTHA7eWeAS
-         SRt87N9Rucv13ptk0JnoNbOxRZx/Oixb5iacg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=sYG6cpuEWkiuiZSTjJ/tkE2X/s2syaTjG0yfloKLSE0=;
-        b=hi+XQZDsHrOeUmn5GEpQfs8pAFo9Y5ZDcqG8ktC4fo3+90MCbsULXi8ABD0SDV3mMN
-         1ADkFcdajTCcF4ei+Wq8zWifL9PT6vsAXJ/ZEXcfFmoUa/chFLjXSkxLm27PBZmEJFRA
-         XhFO1mGq/JM0XoHpZ4Kzhv2ud2TMWfnyjAvyTDLDWi5x3FT3W4pLwr71PKCxb0cr7pLk
-         sVnr/tZTIKOZaRwSt2vDHXN4OeJyoMqDStCTQs7FMxWU0WZ1QH7P94w1adqZBqROeXNn
-         RSBqOJRJZGXHAf/ETLAsjd4/qGpbttGk+MLX4XFkh8hLugezMXYRsKSGWx+o4N4RGipP
-         vdgA==
-X-Gm-Message-State: APjAAAUZLekZ69IKjKpHYjhe0Ls/p9ToZL2xDfmMkOctY2Ie82mxGNAd
-        lizWrPjiB8XOrrT1VFXUxVyoNg==
-X-Google-Smtp-Source: APXvYqw0VyrLw6SijXdgxWzGrWGwlkTeqgHtcpsU3gz31hb34TRSE0lX0YnaKNOSEsTbHd6OT+XIfw==
-X-Received: by 2002:a63:2b0c:: with SMTP id r12mr10684315pgr.206.1565235734462;
-        Wed, 07 Aug 2019 20:42:14 -0700 (PDT)
-Received: from rayagonda.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id y14sm46425482pge.7.2019.08.07.20.42.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 07 Aug 2019 20:42:13 -0700 (PDT)
-From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-To:     Wolfram Sang <wsa@the-dreams.de>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Ray Jui <ray.jui@broadcom.com>,
-        Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lori Hikichi <lori.hikichi@broadcom.com>
-Subject: [PATCH v1 2/2] i2c: iproc: Add full name of devicetree node to adapter name
-Date:   Thu,  8 Aug 2019 09:07:53 +0530
-Message-Id: <1565235473-28461-3-git-send-email-rayagonda.kokatanur@broadcom.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1565235473-28461-1-git-send-email-rayagonda.kokatanur@broadcom.com>
-References: <1565235473-28461-1-git-send-email-rayagonda.kokatanur@broadcom.com>
+        id S1725806AbfHHEDa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Aug 2019 00:03:30 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:43922 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725805AbfHHED3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 8 Aug 2019 00:03:29 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C3860200103;
+        Thu,  8 Aug 2019 06:03:26 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7F2E320009E;
+        Thu,  8 Aug 2019 06:03:21 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 012B5402F6;
+        Thu,  8 Aug 2019 12:03:14 +0800 (SGT)
+From:   Biwen Li <biwen.li@nxp.com>
+To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, wsa@the-dreams.de
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, laurentiu.tudor@nxp.com,
+        Biwen Li <biwen.li@nxp.com>
+Subject: i2c: imx: support slave mode for imx I2C driver
+Date:   Thu,  8 Aug 2019 11:53:43 +0800
+Message-Id: <20190808035343.34120-1-biwen.li@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Lori Hikichi <lori.hikichi@broadcom.com>
+The patch supports slave mode for imx I2C driver
 
-Add the full name of the devicetree node to the adapter name.
-Without this change, all adapters have the same name making it difficult
-to distinguish between multiple instances.
-The most obvious way to see this is to use the utility i2c_detect.
-e.g. "i2c-detect -l"
-
-Before
-i2c-1 i2c Broadcom iProc I2C adapter I2C adapter
-i2c-0 i2c Broadcom iProc I2C adapter I2C adapter
-
-After
-i2c-1 i2c Broadcom iProc (i2c@e0000) I2C adapter
-i2c-0 i2c Broadcom iProc (i2c@b0000) I2C adapter
-
-Now it is easy to figure out which adapter maps to a which DT node.
-
-Signed-off-by: Lori Hikichi <lori.hikichi@broadcom.com>
-Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Signed-off-by: Biwen Li <biwen.li@nxp.com>
 ---
- drivers/i2c/busses/i2c-bcm-iproc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-imx.c | 199 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 185 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-index 19ef2b0..183b220 100644
---- a/drivers/i2c/busses/i2c-bcm-iproc.c
-+++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-@@ -922,7 +922,9 @@ static int bcm_iproc_i2c_probe(struct platform_device *pdev)
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index b1b8b938d7f4..f7583a9fa56f 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -202,6 +202,9 @@ struct imx_i2c_struct {
+ 	struct pinctrl_state *pinctrl_pins_gpio;
  
- 	adap = &iproc_i2c->adapter;
- 	i2c_set_adapdata(adap, iproc_i2c);
--	strlcpy(adap->name, "Broadcom iProc I2C adapter", sizeof(adap->name));
-+	snprintf(adap->name, sizeof(adap->name),
-+		"Broadcom iProc (%s)",
-+		of_node_full_name(iproc_i2c->device->of_node));
- 	adap->algo = &bcm_iproc_algo;
- 	adap->quirks = &bcm_iproc_i2c_quirks;
- 	adap->dev.parent = &pdev->dev;
+ 	struct imx_i2c_dma	*dma;
++#if IS_ENABLED(CONFIG_I2C_SLAVE)
++	struct i2c_client		*slave;
++#endif /* CONFIG_I2C_SLAVE */
+ };
+ 
+ static const struct imx_i2c_hwdata imx1_i2c_hwdata = {
+@@ -583,23 +586,40 @@ static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx)
+ 	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+ }
+ 
+-static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
++/* Clear interrupt flag bit */
++static void i2c_imx_clr_if_bit(struct imx_i2c_struct *i2c_imx)
+ {
+-	struct imx_i2c_struct *i2c_imx = dev_id;
+-	unsigned int temp;
++	unsigned int status;
+ 
+-	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+-	if (temp & I2SR_IIF) {
+-		/* save status register */
+-		i2c_imx->i2csr = temp;
+-		temp &= ~I2SR_IIF;
+-		temp |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
+-		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
+-		wake_up(&i2c_imx->queue);
+-		return IRQ_HANDLED;
+-	}
++	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
++	status &= ~I2SR_IIF;
++	status |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
++	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR);
++}
++
++/* Clear arbitration lost bit */
++static void i2c_imx_clr_al_bit(struct imx_i2c_struct *i2c_imx)
++{
++	unsigned int status;
++
++	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
++	status &= ~I2SR_IAL;
++	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR);
++}
+ 
+-	return IRQ_NONE;
++static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx)
++{
++	unsigned int status;
++
++	dev_dbg(&i2c_imx->adapter.dev, "<%s>: master interrupt\n", __func__);
++
++	/* Save status register */
++	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
++	i2c_imx->i2csr = status | I2SR_IIF;
++
++	wake_up(&i2c_imx->queue);
++
++	return IRQ_HANDLED;
+ }
+ 
+ static int i2c_imx_dma_write(struct imx_i2c_struct *i2c_imx,
+@@ -1043,11 +1063,162 @@ static u32 i2c_imx_func(struct i2c_adapter *adapter)
+ 		| I2C_FUNC_SMBUS_READ_BLOCK_DATA;
+ }
+ 
++#if IS_ENABLED(CONFIG_I2C_SLAVE)
++static void i2c_imx_slave_init(struct imx_i2c_struct *i2c_imx)
++{
++	unsigned int temp;
++
++	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
++
++	/* Set slave addr. */
++	imx_i2c_write_reg((i2c_imx->slave->addr << 1), i2c_imx, IMX_I2C_IADR);
++
++	/* Disable i2c module */
++	temp = i2c_imx->hwdata->i2cr_ien_opcode
++			^ I2CR_IEN;
++	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
++
++	/* Reset status register */
++	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx,
++			  IMX_I2C_I2SR);
++
++	/* Enable module and enable interrupt from i2c module */
++	temp = i2c_imx->hwdata->i2cr_ien_opcode
++			| I2CR_IIEN;
++	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
++
++	/* Wait controller to be stable */
++	usleep_range(50, 150);
++}
++
++static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx)
++{
++	unsigned int status, ctl;
++	u8 value;
++
++	if (!i2c_imx->slave) {
++		dev_err(&i2c_imx->adapter.dev, "cannot deal with slave irq,i2c_imx->slave is null");
++		return IRQ_NONE;
++	}
++
++	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
++	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
++	if (status & I2SR_IAL) { /* Arbitration lost */
++		i2c_imx_clr_al_bit(i2c_imx);
++	} else if (status & I2SR_IAAS) { /* Addressed as a slave */
++		if (status & I2SR_SRW) { /* Master wants to read from us*/
++			dev_dbg(&i2c_imx->adapter.dev, "read requested");
++			i2c_slave_event(i2c_imx->slave, I2C_SLAVE_READ_REQUESTED, &value);
++
++			/* Slave transimt */
++			ctl |= I2CR_MTX;
++			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
++
++			/* Send data */
++			imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
++		} else { /* Master wants to write to us */
++			dev_dbg(&i2c_imx->adapter.dev, "write requested");
++			i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_WRITE_REQUESTED, &value);
++
++			/* Slave receive */
++			ctl &= ~I2CR_MTX;
++			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
++			/* Dummy read */
++			value = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
++		}
++	} else {
++		if (!(ctl & I2CR_MTX)) { /* Receive mode */
++			if (status & I2SR_IBB) { /* No STOP signal detected */
++				ctl &= ~I2CR_MTX;
++				imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
++
++				value = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
++				i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_WRITE_RECEIVED, &value);
++			} else { /* STOP signal is detected */
++				dev_dbg(&i2c_imx->adapter.dev,
++					"STOP signal detected");
++				i2c_slave_event(i2c_imx->slave, I2C_SLAVE_STOP, &value);
++			}
++		} else { /* Transmit mode */
++			if (!(status & I2SR_RXAK)) {	/* Received ACK */
++				ctl |= I2CR_MTX;
++				imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
++
++				i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_READ_PROCESSED, &value);
++
++				imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
++			} else { /* Received NAK */
++				ctl &= ~I2CR_MTX;
++				imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
++				value = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
++			}
++		}
++	}
++	return IRQ_HANDLED;
++}
++
++static int i2c_imx_reg_slave(struct i2c_client *client)
++{
++	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(client->adapter);
++
++	if (i2c_imx->slave)
++		return -EINVAL;
++
++	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
++	i2c_imx->slave = client;
++
++	i2c_imx_slave_init(i2c_imx);
++
++	return 0;
++}
++
++static int i2c_imx_unreg_slave(struct i2c_client *client)
++{
++	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(client->adapter);
++
++	if (!i2c_imx->slave)
++		return -EINVAL;
++
++	i2c_imx->slave = NULL;
++
++	return 0;
++}
++#endif /* CONFIG_I2C_SLAVE */
++
+ static const struct i2c_algorithm i2c_imx_algo = {
+ 	.master_xfer	= i2c_imx_xfer,
+ 	.functionality	= i2c_imx_func,
++#if IS_ENABLED(CONFIG_I2C_SLAVE)
++	.reg_slave	= i2c_imx_reg_slave,
++	.unreg_slave	= i2c_imx_unreg_slave,
++#endif /* CONFIG_I2C_SLAVE */
+ };
+ 
++static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
++{
++	struct imx_i2c_struct *i2c_imx = dev_id;
++	unsigned int status, ctl;
++	irqreturn_t irq_status = IRQ_NONE;
++
++	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
++	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
++
++	if (status & I2SR_IIF) {
++		i2c_imx_clr_if_bit(i2c_imx);
++#if IS_ENABLED(CONFIG_I2C_SLAVE)
++		if (ctl & I2CR_MSTA)
++			irq_status = i2c_imx_master_isr(i2c_imx);
++		else
++			irq_status = i2c_imx_slave_isr(i2c_imx);
++#else
++		irq_status = i2c_imx_master_isr(i2c_imx);
++
++#endif /* CONFIG_I2C_SLAVE */
++	}
++
++	return irq_status;
++}
++
+ static int i2c_imx_probe(struct platform_device *pdev)
+ {
+ 	const struct of_device_id *of_id = of_match_device(i2c_imx_dt_ids,
 -- 
-1.9.1
+2.17.1
 
