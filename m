@@ -2,279 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0E4858D3
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2019 06:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B33585E0B
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2019 11:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725806AbfHHEDa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Aug 2019 00:03:30 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:43922 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725805AbfHHED3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 8 Aug 2019 00:03:29 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C3860200103;
-        Thu,  8 Aug 2019 06:03:26 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7F2E320009E;
-        Thu,  8 Aug 2019 06:03:21 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 012B5402F6;
-        Thu,  8 Aug 2019 12:03:14 +0800 (SGT)
-From:   Biwen Li <biwen.li@nxp.com>
-To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, wsa@the-dreams.de
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, laurentiu.tudor@nxp.com,
-        Biwen Li <biwen.li@nxp.com>
-Subject: i2c: imx: support slave mode for imx I2C driver
-Date:   Thu,  8 Aug 2019 11:53:43 +0800
-Message-Id: <20190808035343.34120-1-biwen.li@nxp.com>
-X-Mailer: git-send-email 2.9.5
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1731755AbfHHJSa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Aug 2019 05:18:30 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:47895 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731038AbfHHJSa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Aug 2019 05:18:30 -0400
+Received: from [192.168.1.110] ([77.4.95.67]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MNtny-1hgC4p2pVQ-00ODOZ; Thu, 08 Aug 2019 11:17:55 +0200
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Subject: Re: [PATCH v5 0/3] Enable ACPI-defined peripherals on i2c-piix4 SMBus
+To:     Jean Delvare <jdelvare@suse.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org,
+        Andrew Cooks <acooks@rationali.st>, linux-acpi@vger.kernel.org,
+        platypus-sw@opengear.com, "Tobin C . Harding" <me@tobin.cc>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Will Wagner <willw@carallon.com>
+References: <20190802145109.38dd4045@endymion>
+Organization: metux IT consult
+Message-ID: <b013c33b-da11-ce5e-08d4-0b24a8575109@metux.net>
+Date:   Thu, 8 Aug 2019 11:17:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <20190802145109.38dd4045@endymion>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:fDJyaJZtVxYv99ekvBH+6b0TBe7TOwbHfnLSolHa2Jg3X6OYlah
+ Us+9njVqv4Npt6CbAvSUMzJKv6321IqRYHUJ0p6VKGQ7omN23XDrkZF9fIv2VQE1Fr4qVcb
+ Hcl2XMTfAdOD8VjItWugPh3tMpNy14L1M3AjJCFHmJU0GEMAtjpoM0XZ5idlNtiYhnbLYKD
+ IvBjYYirMJ6V3ABaSkipw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rzdJUnUhmGE=:dR0Vz8X/m0DWewyWZSxygA
+ +oDC7DzsJ2NdrDS+ChQ8U5ZZFiVbCVaHqe7aWYqqG8rZr/0tUgbv/QwBQXxvjHzjqW8g5bvdQ
+ +N/7phO9Yus8GCdN+5pNPU0IhNyew2uqR2LkKG1Tuby6n/2Ixj6j4kVkjWsw8ecy1aCcAc5/S
+ eSqD9TyLcUk4M+GLnVfJxNBvhX/gLIUu4lRICqgDA1bXxs+IQzl97LUwJKhs3r0vqhoOPNEtl
+ sD4zQnxjw5kQRtd32ivoS7A0OdpWzw85Cv8n3ipV/3OIYiJVz/PoTmDFDEzcEMHbOereHbm46
+ LnUfYMAYAl+Ahi5q76r2kuy+67goi0kncXnOlrxIgkjwaGMbdISx/5lZbb7fM7UKFMWBmsPmO
+ g3DYc7Etev5D4Ix+HE/gI69ZqWXMObqYrS6zCEbgVEIZScUAJsfOnEolX2F+JyB9CcF1o4hbN
+ HdRY6sPJyrbz2FHUiPs9ohArmEkW+g1TW5qCx7TowTuwQQsGo0eUEWyYEzYjs5/QqDVDQcv2r
+ bPtZDHHJI0NAzzlNVTOmLlulZdFZnrF1pu7OT6vhYMOoddUc6Hdfxob59Lraoa4Jo9glmqPxT
+ qXl65kwtlR0gI8E6F3cSWVnoU1QSUVpPhW/sJIvK0d51EFlw/v5bMzDCkSKV5ys5mHyFrzAoY
+ h4o967Ty/ipFP/MM6Hwy49J41CFqJAyOWy3Op5VZQmnEwFQZAgJmtEz8SRxgmDmFpoNoDS4Qp
+ LuvL03KLpDOA5u/zl+F1wUud9vj9WLGGeqxlU1q9ft4CRkGnF1Fw2zK69uM=
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The patch supports slave mode for imx I2C driver
+On 02.08.19 14:51, Jean Delvare wrote:
 
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
----
- drivers/i2c/busses/i2c-imx.c | 199 ++++++++++++++++++++++++++++++++---
- 1 file changed, 185 insertions(+), 14 deletions(-)
+Hi,
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index b1b8b938d7f4..f7583a9fa56f 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -202,6 +202,9 @@ struct imx_i2c_struct {
- 	struct pinctrl_state *pinctrl_pins_gpio;
- 
- 	struct imx_i2c_dma	*dma;
-+#if IS_ENABLED(CONFIG_I2C_SLAVE)
-+	struct i2c_client		*slave;
-+#endif /* CONFIG_I2C_SLAVE */
- };
- 
- static const struct imx_i2c_hwdata imx1_i2c_hwdata = {
-@@ -583,23 +586,40 @@ static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx)
- 	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
- }
- 
--static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
-+/* Clear interrupt flag bit */
-+static void i2c_imx_clr_if_bit(struct imx_i2c_struct *i2c_imx)
- {
--	struct imx_i2c_struct *i2c_imx = dev_id;
--	unsigned int temp;
-+	unsigned int status;
- 
--	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
--	if (temp & I2SR_IIF) {
--		/* save status register */
--		i2c_imx->i2csr = temp;
--		temp &= ~I2SR_IIF;
--		temp |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
--		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
--		wake_up(&i2c_imx->queue);
--		return IRQ_HANDLED;
--	}
-+	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
-+	status &= ~I2SR_IIF;
-+	status |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
-+	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR);
-+}
-+
-+/* Clear arbitration lost bit */
-+static void i2c_imx_clr_al_bit(struct imx_i2c_struct *i2c_imx)
-+{
-+	unsigned int status;
-+
-+	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
-+	status &= ~I2SR_IAL;
-+	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR);
-+}
- 
--	return IRQ_NONE;
-+static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx)
-+{
-+	unsigned int status;
-+
-+	dev_dbg(&i2c_imx->adapter.dev, "<%s>: master interrupt\n", __func__);
-+
-+	/* Save status register */
-+	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
-+	i2c_imx->i2csr = status | I2SR_IIF;
-+
-+	wake_up(&i2c_imx->queue);
-+
-+	return IRQ_HANDLED;
- }
- 
- static int i2c_imx_dma_write(struct imx_i2c_struct *i2c_imx,
-@@ -1043,11 +1063,162 @@ static u32 i2c_imx_func(struct i2c_adapter *adapter)
- 		| I2C_FUNC_SMBUS_READ_BLOCK_DATA;
- }
- 
-+#if IS_ENABLED(CONFIG_I2C_SLAVE)
-+static void i2c_imx_slave_init(struct imx_i2c_struct *i2c_imx)
-+{
-+	unsigned int temp;
-+
-+	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
-+
-+	/* Set slave addr. */
-+	imx_i2c_write_reg((i2c_imx->slave->addr << 1), i2c_imx, IMX_I2C_IADR);
-+
-+	/* Disable i2c module */
-+	temp = i2c_imx->hwdata->i2cr_ien_opcode
-+			^ I2CR_IEN;
-+	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-+
-+	/* Reset status register */
-+	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx,
-+			  IMX_I2C_I2SR);
-+
-+	/* Enable module and enable interrupt from i2c module */
-+	temp = i2c_imx->hwdata->i2cr_ien_opcode
-+			| I2CR_IIEN;
-+	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-+
-+	/* Wait controller to be stable */
-+	usleep_range(50, 150);
-+}
-+
-+static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx)
-+{
-+	unsigned int status, ctl;
-+	u8 value;
-+
-+	if (!i2c_imx->slave) {
-+		dev_err(&i2c_imx->adapter.dev, "cannot deal with slave irq,i2c_imx->slave is null");
-+		return IRQ_NONE;
-+	}
-+
-+	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
-+	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
-+	if (status & I2SR_IAL) { /* Arbitration lost */
-+		i2c_imx_clr_al_bit(i2c_imx);
-+	} else if (status & I2SR_IAAS) { /* Addressed as a slave */
-+		if (status & I2SR_SRW) { /* Master wants to read from us*/
-+			dev_dbg(&i2c_imx->adapter.dev, "read requested");
-+			i2c_slave_event(i2c_imx->slave, I2C_SLAVE_READ_REQUESTED, &value);
-+
-+			/* Slave transimt */
-+			ctl |= I2CR_MTX;
-+			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
-+
-+			/* Send data */
-+			imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
-+		} else { /* Master wants to write to us */
-+			dev_dbg(&i2c_imx->adapter.dev, "write requested");
-+			i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_WRITE_REQUESTED, &value);
-+
-+			/* Slave receive */
-+			ctl &= ~I2CR_MTX;
-+			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
-+			/* Dummy read */
-+			value = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
-+		}
-+	} else {
-+		if (!(ctl & I2CR_MTX)) { /* Receive mode */
-+			if (status & I2SR_IBB) { /* No STOP signal detected */
-+				ctl &= ~I2CR_MTX;
-+				imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
-+
-+				value = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
-+				i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_WRITE_RECEIVED, &value);
-+			} else { /* STOP signal is detected */
-+				dev_dbg(&i2c_imx->adapter.dev,
-+					"STOP signal detected");
-+				i2c_slave_event(i2c_imx->slave, I2C_SLAVE_STOP, &value);
-+			}
-+		} else { /* Transmit mode */
-+			if (!(status & I2SR_RXAK)) {	/* Received ACK */
-+				ctl |= I2CR_MTX;
-+				imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
-+
-+				i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_READ_PROCESSED, &value);
-+
-+				imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
-+			} else { /* Received NAK */
-+				ctl &= ~I2CR_MTX;
-+				imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
-+				value = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
-+			}
-+		}
-+	}
-+	return IRQ_HANDLED;
-+}
-+
-+static int i2c_imx_reg_slave(struct i2c_client *client)
-+{
-+	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(client->adapter);
-+
-+	if (i2c_imx->slave)
-+		return -EINVAL;
-+
-+	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
-+	i2c_imx->slave = client;
-+
-+	i2c_imx_slave_init(i2c_imx);
-+
-+	return 0;
-+}
-+
-+static int i2c_imx_unreg_slave(struct i2c_client *client)
-+{
-+	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(client->adapter);
-+
-+	if (!i2c_imx->slave)
-+		return -EINVAL;
-+
-+	i2c_imx->slave = NULL;
-+
-+	return 0;
-+}
-+#endif /* CONFIG_I2C_SLAVE */
-+
- static const struct i2c_algorithm i2c_imx_algo = {
- 	.master_xfer	= i2c_imx_xfer,
- 	.functionality	= i2c_imx_func,
-+#if IS_ENABLED(CONFIG_I2C_SLAVE)
-+	.reg_slave	= i2c_imx_reg_slave,
-+	.unreg_slave	= i2c_imx_unreg_slave,
-+#endif /* CONFIG_I2C_SLAVE */
- };
- 
-+static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
-+{
-+	struct imx_i2c_struct *i2c_imx = dev_id;
-+	unsigned int status, ctl;
-+	irqreturn_t irq_status = IRQ_NONE;
-+
-+	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
-+	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
-+
-+	if (status & I2SR_IIF) {
-+		i2c_imx_clr_if_bit(i2c_imx);
-+#if IS_ENABLED(CONFIG_I2C_SLAVE)
-+		if (ctl & I2CR_MSTA)
-+			irq_status = i2c_imx_master_isr(i2c_imx);
-+		else
-+			irq_status = i2c_imx_slave_isr(i2c_imx);
-+#else
-+		irq_status = i2c_imx_master_isr(i2c_imx);
-+
-+#endif /* CONFIG_I2C_SLAVE */
-+	}
-+
-+	return irq_status;
-+}
-+
- static int i2c_imx_probe(struct platform_device *pdev)
- {
- 	const struct of_device_id *of_id = of_match_device(i2c_imx_dt_ids,
+> These patches fix a couple of issues with the i2c-piix4 driver on
+> AMD Family 16h Model 30h SoCs and add ACPI-based enumeration to the
+> i2c-piix4 driver.
+
+Can you tell a little bit more about what devices are behind the smbus ?
+I recall the G-412 SoCs (such as on apu2+ boards) have an Hudson inside
+and fall into this category. (I'll have to check when back in office),
+so (as the apu2 platform driver maintainer) I'm very interested in this.
+
+Does the probing need some special BIOS support (or do the necessary
+table entries already come from aegesa) ?
+
+I have to admit, I'm still confused by the AMD documentation - haven't
+found a clear documentation on what peripherals exactly are in the
+G-412 SoC, just puzzled together that the FCH seems to be an Hudson,
+probably v2. There also seems to be some relation between smbus and
+gpio, but the gpio's are directly memory-mapped - no idea whether they
+just share the same base address register or the gpios are really behind
+smbus and some hw logic directy maps them into mmio space ...
+Do you happen to have some more information on that ?
+
+By the way: I'm considering collecting some hw documentation in the
+kernel tree (maybe Documentation/hardware/...) - do you folks think
+that's a good idea ?
+
+--mtx
+
 -- 
-2.17.1
-
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
