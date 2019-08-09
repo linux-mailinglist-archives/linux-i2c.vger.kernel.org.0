@@ -2,104 +2,144 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF898836D
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2019 21:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8664588442
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2019 22:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726053AbfHIToJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Aug 2019 15:44:09 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:38830 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726428AbfHIToI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Aug 2019 15:44:08 -0400
-Received: by mail-ot1-f68.google.com with SMTP id d17so137106586oth.5
-        for <linux-i2c@vger.kernel.org>; Fri, 09 Aug 2019 12:44:08 -0700 (PDT)
+        id S1726137AbfHIUty (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Aug 2019 16:49:54 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33711 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725985AbfHIUty (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Aug 2019 16:49:54 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n190so5598683pgn.0;
+        Fri, 09 Aug 2019 13:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AwTeQv0nkF8ZzkbuQwNoI5oM1jAqjP+SUKLHmshqgU4=;
-        b=rVihWVM562FWHeevrHmURj44PEleWt0ASN0AHKY6Hov5uYsCDz6oAGJ08b5H+EjqCD
-         hrjmBpOMNbBTXqmeCjkz46TBjIJrLkXjEjT+pVCiYGb3t70pJZ2s6SOhfMQAgipiQcfh
-         voXpiKFXiOl4fpATrz2qU7P+Vg3vo2ah//XnRDQOufMi7c8/E93rAoGgLk+1pT8eIesw
-         585O3KBYW/5zl+F/ep6RKtKY1WSoGGTwUAiTU/eKHm+FE0rZel3W99kgCKtIDv2+gsT6
-         wOOIjgW/HCzR2ZqBx4Wu4gcauVBAzX3ll5QJUQsdIRWzbWiBDlsl1aGpBEBpZSKJ+Urg
-         5L/w==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=hJJT1ymL0J7mCHWyypa9/1ViXebR8DKZp56qRVfUD3k=;
+        b=W9IiWK5mNRb5v0Z60Udl2qWtr5McC19LDDU9Uh35V7PWknGHcqYx6jtXzkm4p3E8Hu
+         S2zpCu/5tMEQWyutxqMXPhl6ixOTzXkAZjKbSMzQazwzdf2/TsdjgkcATtYFcwmxcErS
+         ASZQC6/IP4F9Zkjaa9fSXW7OD7wA48FMOi73QtOgjkK/eZiZSHFa4r2BNdVflogPGR1S
+         eSHBH5CQyhyJF/5uXaG+ychE9dX4Rl9Yyj6l2GpH83joyOTbT+xzxvc4E93p1pyj+G8K
+         YIGOTsDwCPYnXGxwHVZ179Dst5lnYS7xVmHZUb00GBWPN3OMoCwFYiSr0WDNsMgfPYbN
+         JpWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AwTeQv0nkF8ZzkbuQwNoI5oM1jAqjP+SUKLHmshqgU4=;
-        b=Ax+VC3JCzbEHrzg5u5jdxLoJD2NSo2eHTakx6QNSUtCZ60c62AOGn9b+XEOdPLWzc2
-         qTbIryh7rPEaZZT0UAxkHLaj/CEFb8pqbBcjEeIUBIUg98cV+K+oDUt8or4bEifPGct4
-         vDQody2jnCKKZ3hoxEzv7IOk4/FxGAAs0DaVi1HKJt7HtCcjxPI1HjrWENk8qf3aFIXq
-         OwqU73K2rZ8CshDusxIJIAbZZUOZsNWiNYf3lic4uevQIraXNCLsgHw8UUOI7DF4gNsz
-         Kra+Qy+NQdvNJZIwwomsUlP+yRhnDpyvRyUb34IQJSM+7sshN5XLiEcZU5SdtYfr3NdT
-         njeA==
-X-Gm-Message-State: APjAAAVClbBZel7jZ6sR9IQZKAX09tzUQX6AWPz89H+NHw2ShRXFtHKc
-        xG4W02OAFACfZVDQgOmPG9sEbzON0OU5Pc+OAd91bw==
-X-Google-Smtp-Source: APXvYqwmGWxKnhH0pu0CdmdtkY9MWiQA2sqa6Y0AXYzLsTz11/rPRS6N91uTv6hH5s8O/RR8/YTXeJBAlToJ8WjZMUg=
-X-Received: by 2002:aca:d80a:: with SMTP id p10mr7522848oig.105.1565379847824;
- Fri, 09 Aug 2019 12:44:07 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=hJJT1ymL0J7mCHWyypa9/1ViXebR8DKZp56qRVfUD3k=;
+        b=fI41rt8VJnUg4uWN+R5zqL+5fftxQXDd2gZmFejWMNNuGbbXtRhYe3xiM8VVv5Lrvg
+         H7ZCZhxlMThV//zGH8CJcKA3DSPvDcaEBQyZlKJnMo5D8yQWT/ndnzurnnlD9zCdJd+k
+         /JaY41B7B/9ziZzAvWOab0IPoIkCX3oYGzWNsWZvVT+PTcVMhXxcvCChfjPpMp0w1Pv4
+         0Kf5JMxW4mywMATVs8AIEb35JY2I5aiwIFDQ8oDe356tvIR2hy/VHl/v3rF1itr0fkIJ
+         0nSZzO4l4PMsRzr3ETZtR016Z9lARS6ZKU8rQ5AZtBrt43Oh0XfwP9qV+XDajLeyabud
+         F4IA==
+X-Gm-Message-State: APjAAAWTrlpwMZwfNdE8UBSHPrBndIIlgEP6kzs5VvunNyisY0YAuLRL
+        /Kd8uBxJP06nnyZsQzzu/H0sU0KC
+X-Google-Smtp-Source: APXvYqxAs/H11obqnFZLlgOJG5x8xfRmZPLWgxaCmjFUne1g/M6zrWS2VkEkebAR2v8CWZOZCV3nGw==
+X-Received: by 2002:a62:2c93:: with SMTP id s141mr6233405pfs.114.1565383793588;
+        Fri, 09 Aug 2019 13:49:53 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 131sm28299090pge.37.2019.08.09.13.49.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 09 Aug 2019 13:49:53 -0700 (PDT)
+Date:   Fri, 9 Aug 2019 13:49:52 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@the-dreams.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 1/2] watchdog: iTCO: Add support for Cannon Lake PCH iTCO
+Message-ID: <20190809204952.GA21059@roeck-us.net>
+References: <20190809124553.67012-1-mika.westerberg@linux.intel.com>
+ <20190809124553.67012-2-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
-References: <20190809162956.488941-1-arnd@arndb.de> <20190809163334.489360-1-arnd@arndb.de>
- <CAA9_cmdDbBm0ookyqGJMcyLVFHkYHuR3mEeawQKS2UqYJoWWaQ@mail.gmail.com> <20190809183658.GA13294@shell.armlinux.org.uk>
-In-Reply-To: <20190809183658.GA13294@shell.armlinux.org.uk>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 9 Aug 2019 12:43:56 -0700
-Message-ID: <CAPcyv4juKU5TLU+3=xAw0Hq=6EeLSxKA4C9kR1YqEV8XuH7e2Q@mail.gmail.com>
-Subject: Re: [PATCH 1/7] [RFC] ARM: remove Intel iop33x and iop13xx support
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dmaengine@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Martin Michlmayr <tbm@cyrius.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190809124553.67012-2-mika.westerberg@linux.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Aug 9, 2019 at 11:37 AM Russell King - ARM Linux admin
-<linux@armlinux.org.uk> wrote:
->
-> On Fri, Aug 09, 2019 at 11:34:12AM -0700, Dan Williams wrote:
-> > [ add Martin (if cyrius.com address is still valid) ]
-> >
-> > On Fri, Aug 9, 2019 at 9:35 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > There are three families of IOP machines we support in Linux: iop32x
-> > > (which includes EP80219), iop33x and iop13xx (aka IOP34x aka WP8134x).
-> > >
-> > > All products we support in the kernel are based on the first of these,
-> > > iop32x, the other families only ever supported the Intel reference
-> > > boards but no actual machine anyone could ever buy.
-> > >
-> > > While one could clearly make them all three work in a single kernel
-> > > with some work, this takes the easy way out, removing the later two
-> > > platforms entirely, under the assumption that there are no remaining
-> > > users.
-> > >
-> > > Earlier versions of OpenWRT and Debian both had support for iop32x
-> > > but not the others, and they both dropped iop32x as well in their 2015
-> > > releases.
-> > >
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > > ---
-> > > I'm just guessing that iop32x is still needed, and the other two are
-> > > not. If anyone disagrees with that assessment, let me know so we
-> > > can come up with an alternative approach.
-> >
-> > I'm not sure who would scream if iop32x support went away as well, but
-> > I have not followed this space in years hence copying Martin.
-> >
-> > In any event:
-> >
-> > Acked-by: Dan Williams <dan.j.williams@intel.com>
->
-> Those of us who have and still run Thecus N2100's, for example?
+On Fri, Aug 09, 2019 at 03:45:52PM +0300, Mika Westerberg wrote:
+> In Intel Cannon Lake PCH the NO_REBOOT bit was moved from the private
+> register space to be part of the TCO1_CNT register. For this reason
+> introduce another version (6) that uses this register to set and clear
+> NO_REBOOT bit.
+> 
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Nice! Good to hear.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+I assume this will be applied through i2c together with the other patch
+of the series.
+
+Guenter
+
+> ---
+>  drivers/watchdog/iTCO_wdt.c | 25 +++++++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+> index c559f706ae7e..505f2c837347 100644
+> --- a/drivers/watchdog/iTCO_wdt.c
+> +++ b/drivers/watchdog/iTCO_wdt.c
+> @@ -215,6 +215,23 @@ static int update_no_reboot_bit_mem(void *priv, bool set)
+>  	return 0;
+>  }
+>  
+> +static int update_no_reboot_bit_cnt(void *priv, bool set)
+> +{
+> +	struct iTCO_wdt_private *p = priv;
+> +	u16 val, newval;
+> +
+> +	val = inw(TCO1_CNT(p));
+> +	if (set)
+> +		val |= BIT(0);
+> +	else
+> +		val &= ~BIT(0);
+> +	outw(val, TCO1_CNT(p));
+> +	newval = inw(TCO1_CNT(p));
+> +
+> +	/* make sure the update is successful */
+> +	return val != newval ? -EIO : 0;
+> +}
+> +
+>  static void iTCO_wdt_no_reboot_bit_setup(struct iTCO_wdt_private *p,
+>  		struct itco_wdt_platform_data *pdata)
+>  {
+> @@ -224,7 +241,9 @@ static void iTCO_wdt_no_reboot_bit_setup(struct iTCO_wdt_private *p,
+>  		return;
+>  	}
+>  
+> -	if (p->iTCO_version >= 2)
+> +	if (p->iTCO_version >= 6)
+> +		p->update_no_reboot_bit = update_no_reboot_bit_cnt;
+> +	else if (p->iTCO_version >= 2)
+>  		p->update_no_reboot_bit = update_no_reboot_bit_mem;
+>  	else if (p->iTCO_version == 1)
+>  		p->update_no_reboot_bit = update_no_reboot_bit_pci;
+> @@ -452,7 +471,8 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  	 * Get the Memory-Mapped GCS or PMC register, we need it for the
+>  	 * NO_REBOOT flag (TCO v2 and v3).
+>  	 */
+> -	if (p->iTCO_version >= 2 && !pdata->update_no_reboot_bit) {
+> +	if (p->iTCO_version >= 2 && p->iTCO_version < 6 &&
+> +	    !pdata->update_no_reboot_bit) {
+>  		p->gcs_pmc_res = platform_get_resource(pdev,
+>  						       IORESOURCE_MEM,
+>  						       ICH_RES_MEM_GCS_PMC);
+> @@ -502,6 +522,7 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  
+>  	/* Clear out the (probably old) status */
+>  	switch (p->iTCO_version) {
+> +	case 6:
+>  	case 5:
+>  	case 4:
+>  		outw(0x0008, TCO1_STS(p)); /* Clear the Time Out Status bit */
+> -- 
+> 2.20.1
+> 
