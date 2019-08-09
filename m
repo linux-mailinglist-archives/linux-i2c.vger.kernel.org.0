@@ -2,95 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC78A8742B
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2019 10:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA58C8745E
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2019 10:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726059AbfHIIdn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Aug 2019 04:33:43 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37894 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726054AbfHIIdn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 9 Aug 2019 04:33:43 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id CF469AFBB;
-        Fri,  9 Aug 2019 08:33:41 +0000 (UTC)
-Date:   Fri, 9 Aug 2019 10:33:40 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org,
-        Andrew Cooks <acooks@rationali.st>, linux-acpi@vger.kernel.org,
-        platypus-sw@opengear.com, "Tobin C . Harding" <me@tobin.cc>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Will Wagner <willw@carallon.com>
-Subject: Re: [PATCH v5 0/3] Enable ACPI-defined peripherals on i2c-piix4
- SMBus
-Message-ID: <20190809103340.2ef24523@endymion>
-In-Reply-To: <b013c33b-da11-ce5e-08d4-0b24a8575109@metux.net>
-References: <20190802145109.38dd4045@endymion>
-        <b013c33b-da11-ce5e-08d4-0b24a8575109@metux.net>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1726233AbfHIIjN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Aug 2019 04:39:13 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47593 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726178AbfHIIjM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Aug 2019 04:39:12 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1hw0QY-00066k-Mu; Fri, 09 Aug 2019 10:39:10 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1hw0QX-0004KR-Ao; Fri, 09 Aug 2019 10:39:09 +0200
+Date:   Fri, 9 Aug 2019 10:39:09 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Chris Healy <cphealy@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH] i2c: imx: Fix endlessly clk warnings
+Message-ID: <20190809083909.s7i6fvkxky5mv5cz@pengutronix.de>
+References: <20190807203153.11778-1-festevam@gmail.com>
+ <CAOMZO5B_3d2DYMzpchJmM9CnRL0gN6-8zGeB_zorN-0cL8rbKA@mail.gmail.com>
+ <20190807211317.GA5193@shell.armlinux.org.uk>
+ <AM0PR04MB421142CCB25E76ED53148E7480D70@AM0PR04MB4211.eurprd04.prod.outlook.com>
+ <20190808111054.GE5193@shell.armlinux.org.uk>
+ <20190808200728.GB6609@ninjato>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190808200728.GB6609@ninjato>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 10:38:33 up 83 days, 14:56, 57 users,  load average: 0.10, 0.06,
+ 0.03
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Enrico,
-
-On Thu, 8 Aug 2019 11:17:53 +0200, Enrico Weigelt, metux IT consult wrote:
-> On 02.08.19 14:51, Jean Delvare wrote:
-> > These patches fix a couple of issues with the i2c-piix4 driver on
-> > AMD Family 16h Model 30h SoCs and add ACPI-based enumeration to the
-> > i2c-piix4 driver.  
+On Thu, Aug 08, 2019 at 10:07:28PM +0200, Wolfram Sang wrote:
 > 
-> Can you tell a little bit more about what devices are behind the smbus ?
-> I recall the G-412 SoCs (such as on apu2+ boards) have an Hudson inside
-> and fall into this category. (I'll have to check when back in office),
-> so (as the apu2 platform driver maintainer) I'm very interested in this.
+> > This sounds like a more in-depth fix than what we should be doing for
+> > stable trees.  Can we revert the original patch and restore the old
+> > behaviour, then propose a proper feature enhancement that doesn't
+> > regress existing setups?
+> 
+> Yes, that.
+> 
+> And since some interested parties have gathered now, I start yet another
+> call for a maintainer for this driver. It is really needed, I'd say.
+> 
 
-Unfortunately not. I only picked up from where Andrew Cooks left, due
-to me being way too slow to review his patches. I did not want his work
-to be lost. I was able to test the first 2 patches which fix bugs, but
-not the 3rd one which deals with ACPI devices. There does not seem to
-be any such device on the 2 test machines I have remotely access to.
-
-> Does the probing need some special BIOS support (or do the necessary
-> table entries already come from aegesa) ?
-
-I assume that ACPI devices are declared in one of the ACPI tables, so
-it comes from the "BIOS", yes, whatever form it takes these days.
-
-> I have to admit, I'm still confused by the AMD documentation - haven't
-> found a clear documentation on what peripherals exactly are in the
-> G-412 SoC, just puzzled together that the FCH seems to be an Hudson,
-> probably v2. There also seems to be some relation between smbus and
-> gpio, but the gpio's are directly memory-mapped - no idea whether they
-> just share the same base address register or the gpios are really behind
-> smbus and some hw logic directy maps them into mmio space ...
-> Do you happen to have some more information on that ?
-
-I remember noticing long ago that SMBus ports were using GPIO pins, so
-these pins could be used for SMBus or for any other purpose. I could
-not find any way to figure out from the registers if a given pin pair
-was used for SMBus or not, which is pretty bad because it means we are
-blindly instantiating ALL possible SMBus ports even if some of the pins
-are used for a completely different purpose. It was over 1 year ago
-though, so I don't remember the details, and my findings then may not
-apply to the most recent hardware.
-
-> By the way: I'm considering collecting some hw documentation in the
-> kernel tree (maybe Documentation/hardware/...) - do you folks think
-> that's a good idea ?
-
-No. Only documentation specifically related to the Linux kernel should
-live in the kernel tree. OS-neutral documentation must go somewhere
-else.
+If no one against it, I will take this task.
 
 -- 
-Jean Delvare
-SUSE L3 Support
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
