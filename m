@@ -2,84 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F9D87840
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2019 13:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEEFC87A64
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2019 14:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbfHILLZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Aug 2019 07:11:25 -0400
-Received: from sauhun.de ([88.99.104.3]:36486 "EHLO pokefinder.org"
+        id S2406454AbfHIMp5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Aug 2019 08:45:57 -0400
+Received: from mga12.intel.com ([192.55.52.136]:64792 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726037AbfHILLZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 9 Aug 2019 07:11:25 -0400
-Received: from localhost (p54B333D4.dip0.t-ipconnect.de [84.179.51.212])
-        by pokefinder.org (Postfix) with ESMTPSA id DE8E32C3014;
-        Fri,  9 Aug 2019 13:11:23 +0200 (CEST)
-Date:   Fri, 9 Aug 2019 13:11:23 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-Subject: Re: [PATCH RFT] i2c: emev2: avoid race when unregistering slave
- client
-Message-ID: <20190809111123.GB1143@ninjato>
-References: <20190808195417.13482-1-wsa+renesas@sang-engineering.com>
- <20190809104016.GC25406@localhost.localdomain>
+        id S2405948AbfHIMp5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 9 Aug 2019 08:45:57 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Aug 2019 05:45:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,364,1559545200"; 
+   d="scan'208";a="350482342"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 09 Aug 2019 05:45:54 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id D01359E0; Fri,  9 Aug 2019 15:45:53 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@the-dreams.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH 0/2] watchdog: Correct iTCO for Cannon Lake and beyond
+Date:   Fri,  9 Aug 2019 15:45:51 +0300
+Message-Id: <20190809124553.67012-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0ntfKIWw70PvrIHh"
-Content-Disposition: inline
-In-Reply-To: <20190809104016.GC25406@localhost.localdomain>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi,
 
---0ntfKIWw70PvrIHh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Starting from Intel Cannon Lake PCH the NO_REBOOT bit which is required by
+the iTCO driver was moved from private register space to be part of the
+TCO1_CNT register. This series introduces a new iTCO version (6) that gets
+set for Cannon Lake, Cedar Fork, Comet Lake, Elkhart Lake and Ice Lake
+which are affected by this move.
 
+Mika Westerberg (2):
+  watchdog: iTCO: Add support for Cannon Lake PCH iTCO
+  i2c: i801: Use iTCO version 6 in Cannon Lake PCH and beyond
 
-> I don't see how this could influence the standard I2C communication at
-> all. If change in em_i2c_unreg_slave() is excluded, all that was changed
-> is moving irq number from local variable to the em_i2c_device struct
-> which is also not used outside of the em_i2c_unreg_slave() appart from
-> logging :)
+ drivers/i2c/busses/i2c-i801.c | 138 +++++++++++++++++++++-------------
+ drivers/watchdog/iTCO_wdt.c   |  25 +++++-
+ 2 files changed, 109 insertions(+), 54 deletions(-)
 
-I agree. Still, I do have brown-paper-bag experiences caused by wrong
-assumptions like "this cannot fail". And we are changing the way
-interrupts are acquired. So, if it is not too hard, I'd prefer to have
-patches tested, too. I'd still apply the patch if it turns out to be too
-complicated to test (given the reviews raise the trust). Yet, also on
-the pro-side, it doesn't hurt to test a newer kernel on a packed-away
-system once in a while.
+-- 
+2.20.1
 
-Thanks for the reviews!
-
-
---0ntfKIWw70PvrIHh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1NVNsACgkQFA3kzBSg
-KbabTw/+KkLIW/BoUGVlyJ9CgURdm4aUF1NtSctEVLgA42YRYR4xWjbmmuKxqx4S
-oWRZOQk2+R4h8vZxSmLfRv4OoGEcRUtlCNsmWMXWZJCvY0I2yqmMu1y1OAFKpVSY
-9wZ0nvE4MOds/13DrTtCC3Wpzc4gtB1UcWk+GBw/b+vB2qKUkdO9X0AB54TWBcnj
-Fzeg6adkazIuHKrG11bCnSvdisdmzoBYC9EVMpzsUPmlkR5bWHGerPsIYbJZhPHj
-TO8w8lPrF1PAVeeFIFO2WleMKraG5KjsLQ2oUKhslJHZKZgQK01Ao81m8J3fIGxA
-4EvuZeJ1P6nVwkPiRCNsJdUP852LPWVr4L89/qR5Q4Q+IRmPkvWKOU1iT5FzByLZ
-yOSOq5BM2sMkabVB6EMpb6SmkzLsLlxypHuY0KGlwoWjK7kRwnDgRka2xfYMTANj
-ou4BsNFiLohVJWTidUNEhIKscZCZLXwwSRx6vMfAjc90j7aN3lMBQG+4uot3a2Co
-sD52Rpn6CPlq5vCTc//mwps/NuHM1I2Gj3SjUsQxCYhs6cJW5btRxil7UnCfpT2M
-/DpJYkvi0lHMu/mGiTRkpHx5SsWzgJXD9uf6GJrvBmU0sJIMKzOsoDIsABs3xcwg
-6IofvPKGt6KK6O5z0MNea+fPgT02J/TnQ8RPKmKDAnFgXKzst58=
-=+VyL
------END PGP SIGNATURE-----
-
---0ntfKIWw70PvrIHh--
