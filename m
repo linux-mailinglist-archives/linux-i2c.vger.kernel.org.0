@@ -2,151 +2,5952 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5282A87EAC
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2019 17:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEA388029
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2019 18:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436862AbfHIPxm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Aug 2019 11:53:42 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:58587 "EHLO
+        id S2437246AbfHIQeZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Aug 2019 12:34:25 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:55805 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436833AbfHIPxl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Aug 2019 11:53:41 -0400
-Received: from [192.168.1.110] ([77.4.36.189]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M4aEC-1hvYhd08OM-001iYZ; Fri, 09 Aug 2019 17:53:11 +0200
-Subject: Re: [PATCH v5 0/3] Enable ACPI-defined peripherals on i2c-piix4 SMBus
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org,
-        Andrew Cooks <acooks@rationali.st>, linux-acpi@vger.kernel.org,
-        platypus-sw@opengear.com, "Tobin C . Harding" <me@tobin.cc>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Will Wagner <willw@carallon.com>
-References: <20190802145109.38dd4045@endymion>
- <b013c33b-da11-ce5e-08d4-0b24a8575109@metux.net>
- <20190809103340.2ef24523@endymion>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <01de7b0c-7579-048b-312c-122dddc23c64@metux.net>
-Date:   Fri, 9 Aug 2019 17:53:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        with ESMTP id S2437081AbfHIQeY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Aug 2019 12:34:24 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1MlNcr-1iaOGC1uzF-00lmHo; Fri, 09 Aug 2019 18:33:37 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     soc@kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH 1/7] [RFC] ARM: remove Intel iop33x and iop13xx support
+Date:   Fri,  9 Aug 2019 18:33:15 +0200
+Message-Id: <20190809163334.489360-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20190809162956.488941-1-arnd@arndb.de>
+References: <20190809162956.488941-1-arnd@arndb.de>
 MIME-Version: 1.0
-In-Reply-To: <20190809103340.2ef24523@endymion>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:Ol+j9g3GSr/B3uX/7Axtmz0D6ZvfPeyZ7Cu9g9P+ouAEulPh0il
- aWfCstzGyGaVzurKRFqBsD6VR7QYbpPCDX7giqDfc3ce8u4RwMOdEa7z4lg3K5NnUGNdMBB
- Ev1syf68tYfOvie5+OYX4wp7rTxIrhJmIOp2aU6FQleS2yZE4Gwoc3aoBQjVYNSiQi7txvJ
- H62TORHN8AIZn8tABGurg==
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:BJnBOtklwZ0wnaaaetZ9vyL0DMxSiKu9XdnLI6qnVtKqN2pNPW0
+ K2moJ+b/1gY92kCmrR/r0DFNyi8T4BS/Dmsiq7EB/OvO+J4T4SxsO8P6zAWmK0z20/MG/Js
+ K+3Zk/2BoXmdIjHecX7kOnokp39gun0EzlSqbROOsh3ynGDiHp4NqY6zxZzjPO/5Da3MQF0
+ 7/0RMNyh41X5VXPeIo+eA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rHCh1NfESDU=:JQ30SsuGrRDQ2yRw2GquHl
- raiNV7eHfwnzLzvmtvOnJiICHqN6W3/rHzGp5Qws7RclCKYmYNxxf+Y5mDqrTenBaven3dtWe
- jeJ3lRrRJJiZum48FfSdazYZaJqfl2NTL4TQ1igGeG5X6x2hJbJZ+Do05xCwroLTIOBQLadaq
- q8mrvhk1rYfwrUTthE4Qigw1EGbpfiI5sQQvoGu9BuORKsK5YWGea27fueP/GhROfzT8Y3WJA
- va8nwYKIyAmxAni0a+Q7BFn8IWob5BN8fVOCX/Gc0OiHZDmJFLwMzt2/5N92Wa16x5oDOQ6vx
- 7MCo6zTI/8ufy+sW+g0/JJUzoduty41PL5UkCkvkgGaZmzGceQLBPvjikjYRbU/NRqtQ8Zmx5
- 0NErt14OJJYaSKWoRrPKHBHQnaWsmw9arNR6OiMonu5gO+/Sy05IKC2+oqFEh6X34851RD3yA
- ayXSqh8PGwuFIRfp3uCANr6PyvJfnVEs0ztJOS1UPXuc1A3xmjU1xQh1W4H3+e8I3zIWFBwQZ
- zUE5fzGYrQ4aZKnMUu7s2YQcRlDN3rnvTNCeylaYo6fLtHDg2i9vkBRfHcIjYQM29NzrDcMgv
- wcO68qxVhnS3DEzq1eEX1TBQLNAGgnEgHoemikHuTZlaua+lyrsXLxUBb5R/MXOWLkgr/38m+
- m9xyk7ARDb0EpQcJLV/AKug80GV03Y5iUQyi3LBdR4/fb6YrqEZzRP6e/BnitZym43s2D+30+
- mwWkIYY0/JVQw5qkS/wQ8/nR3cC0btYvPZ/5qvdJRW7KgCwHMAX9jo70WqM=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MhM364lYhOc=:Z+KVAsQUSNuXnesJXNVjVg
+ TIPdU5XzrWk59APd/sHLA+cZuXdLmc12Uox3naEwYQZcb1ApHHaJLrmi+nW+Gbf/BoKtHRI5y
+ HMtvEqX7Tvj8pbVM6FziB8SIjVqfjsKJP0SZsrBK43phip0TyK17OsI3uokNU1uCDe5Ftf2Ne
+ 0ayTCYAIhglXlZ/h/3l826s1rMqMwcxEvI0cVJh28L0mYJVfoFioWX0TawAelrgItU7eehmTZ
+ /tWH0hfP3kQJrdVh4zPw4t/54+Cxfv7Yf59NEFjCjYSazFNQR0OI5hAZYdBGM6lkdfbx3Y8rl
+ CJxIMav+9QWlqf95CHQQm6QKNpAPId3FjsNlcOLLdPT4yEe8YXXweGLrpgieyBTonGG4PMhBu
+ 9cePTSXYhFRmZPMzrKtJa6mOuKtYP9Y1mI/qJWp05ZDbL+cjwAyej5JQaXZAVpAUsVyjBXtiO
+ 4oHoFFPcV7ipMVieEBNmFOvkPoN35AdK08+ByjYEF5iRZo0BPxtgpGV5M4ucf2x4ReAbfuPim
+ CDqYmTCDpORKjvRGuYNKf2fpnlldVLYjnjn7TRg6QH5tbpT3PeRU2Gyzy6SLuGAt+EgVTtTCY
+ vlBDeLB00Ic3/zhDSmDmKuSZOIOMDTYP9Ww02ank33K1f0lH/tFzRSBoaOZOhhGydwCGMT86P
+ XhaosG8X5Dz5IC3JflUwstkzX2QqIsLaJecjCweHmz0bO8icQQ5A7HcKd/RZ1fPiorXGqwcw8
+ Tr799SKQ25PjvWDe
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 09.08.19 10:33, Jean Delvare wrote:
+There are three families of IOP machines we support in Linux: iop32x
+(which includes EP80219), iop33x and iop13xx (aka IOP34x aka WP8134x).
 
-Hi,
+All products we support in the kernel are based on the first of these,
+iop32x, the other families only ever supported the Intel reference
+boards but no actual machine anyone could ever buy.
 
-> Unfortunately not. I only picked up from where Andrew Cooks left, due
-> to me being way too slow to review his patches. 
+While one could clearly make them all three work in a single kernel
+with some work, this takes the easy way out, removing the later two
+platforms entirely, under the assumption that there are no remaining
+users.
 
-@Andrew: can you tell us more about this ?
+Earlier versions of OpenWRT and Debian both had support for iop32x
+but not the others, and they both dropped iop32x as well in their 2015
+releases.
 
-> I was able to test the first 2 patches which fix bugs, but
-> not the 3rd one which deals with ACPI devices. There does not seem to
-> be any such device on the 2 test machines I have remotely access to.
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+I'm just guessing that iop32x is still needed, and the other two are
+not. If anyone disagrees with that assessment, let me know so we
+can come up with an alternative approach.
+---
+ arch/arm/Kconfig                              |   30 -
+ arch/arm/Kconfig.debug                        |    8 +-
+ arch/arm/Makefile                             |    2 -
+ arch/arm/configs/iop13xx_defconfig            |  118 --
+ arch/arm/configs/iop33x_defconfig             |   85 --
+ arch/arm/mach-iop13xx/Kconfig                 |   21 -
+ arch/arm/mach-iop13xx/Makefile                |    9 -
+ arch/arm/mach-iop13xx/Makefile.boot           |    4 -
+ arch/arm/mach-iop13xx/include/mach/adma.h     |  608 ---------
+ .../mach-iop13xx/include/mach/entry-macro.S   |   29 -
+ arch/arm/mach-iop13xx/include/mach/hardware.h |   22 -
+ arch/arm/mach-iop13xx/include/mach/iop13xx.h  |  508 --------
+ arch/arm/mach-iop13xx/include/mach/iq81340.h  |   29 -
+ arch/arm/mach-iop13xx/include/mach/irqs.h     |  195 ---
+ arch/arm/mach-iop13xx/include/mach/time.h     |  127 --
+ .../mach-iop13xx/include/mach/uncompress.h    |   23 -
+ arch/arm/mach-iop13xx/io.c                    |   77 --
+ arch/arm/mach-iop13xx/iq81340mc.c             |   84 --
+ arch/arm/mach-iop13xx/iq81340sc.c             |   86 --
+ arch/arm/mach-iop13xx/irq.c                   |  227 ----
+ arch/arm/mach-iop13xx/msi.c                   |  152 ---
+ arch/arm/mach-iop13xx/msi.h                   |   12 -
+ arch/arm/mach-iop13xx/pci.c                   | 1115 -----------------
+ arch/arm/mach-iop13xx/pci.h                   |   66 -
+ arch/arm/mach-iop13xx/setup.c                 |  595 ---------
+ arch/arm/mach-iop13xx/tpmi.c                  |  244 ----
+ arch/arm/mach-iop33x/Kconfig                  |   22 -
+ arch/arm/mach-iop33x/Makefile                 |    9 -
+ arch/arm/mach-iop33x/Makefile.boot            |    4 -
+ arch/arm/mach-iop33x/include/mach/adma.h      |    6 -
+ .../mach-iop33x/include/mach/entry-macro.S    |   34 -
+ arch/arm/mach-iop33x/include/mach/hardware.h  |   44 -
+ arch/arm/mach-iop33x/include/mach/iop33x.h    |   37 -
+ arch/arm/mach-iop33x/include/mach/iq80331.h   |   17 -
+ arch/arm/mach-iop33x/include/mach/iq80332.h   |   17 -
+ arch/arm/mach-iop33x/include/mach/irqs.h      |   57 -
+ arch/arm/mach-iop33x/include/mach/time.h      |    5 -
+ .../arm/mach-iop33x/include/mach/uncompress.h |   37 -
+ arch/arm/mach-iop33x/iq80331.c                |  148 ---
+ arch/arm/mach-iop33x/iq80332.c                |  148 ---
+ arch/arm/mach-iop33x/irq.c                    |  115 --
+ arch/arm/mach-iop33x/uart.c                   |  100 --
+ arch/arm/plat-iop/Makefile                    |   14 -
+ arch/arm/plat-iop/adma.c                      |   32 +-
+ arch/arm/plat-iop/i2c.c                       |   17 +-
+ arch/arm/plat-iop/pmu.c                       |    6 -
+ drivers/dma/Kconfig                           |    2 +-
+ drivers/gpio/Kconfig                          |    2 +-
+ drivers/i2c/busses/Kconfig                    |    2 +-
+ 49 files changed, 9 insertions(+), 5342 deletions(-)
+ delete mode 100644 arch/arm/configs/iop13xx_defconfig
+ delete mode 100644 arch/arm/configs/iop33x_defconfig
+ delete mode 100644 arch/arm/mach-iop13xx/Kconfig
+ delete mode 100644 arch/arm/mach-iop13xx/Makefile
+ delete mode 100644 arch/arm/mach-iop13xx/Makefile.boot
+ delete mode 100644 arch/arm/mach-iop13xx/include/mach/adma.h
+ delete mode 100644 arch/arm/mach-iop13xx/include/mach/entry-macro.S
+ delete mode 100644 arch/arm/mach-iop13xx/include/mach/hardware.h
+ delete mode 100644 arch/arm/mach-iop13xx/include/mach/iop13xx.h
+ delete mode 100644 arch/arm/mach-iop13xx/include/mach/iq81340.h
+ delete mode 100644 arch/arm/mach-iop13xx/include/mach/irqs.h
+ delete mode 100644 arch/arm/mach-iop13xx/include/mach/time.h
+ delete mode 100644 arch/arm/mach-iop13xx/include/mach/uncompress.h
+ delete mode 100644 arch/arm/mach-iop13xx/io.c
+ delete mode 100644 arch/arm/mach-iop13xx/iq81340mc.c
+ delete mode 100644 arch/arm/mach-iop13xx/iq81340sc.c
+ delete mode 100644 arch/arm/mach-iop13xx/irq.c
+ delete mode 100644 arch/arm/mach-iop13xx/msi.c
+ delete mode 100644 arch/arm/mach-iop13xx/msi.h
+ delete mode 100644 arch/arm/mach-iop13xx/pci.c
+ delete mode 100644 arch/arm/mach-iop13xx/pci.h
+ delete mode 100644 arch/arm/mach-iop13xx/setup.c
+ delete mode 100644 arch/arm/mach-iop13xx/tpmi.c
+ delete mode 100644 arch/arm/mach-iop33x/Kconfig
+ delete mode 100644 arch/arm/mach-iop33x/Makefile
+ delete mode 100644 arch/arm/mach-iop33x/Makefile.boot
+ delete mode 100644 arch/arm/mach-iop33x/include/mach/adma.h
+ delete mode 100644 arch/arm/mach-iop33x/include/mach/entry-macro.S
+ delete mode 100644 arch/arm/mach-iop33x/include/mach/hardware.h
+ delete mode 100644 arch/arm/mach-iop33x/include/mach/iop33x.h
+ delete mode 100644 arch/arm/mach-iop33x/include/mach/iq80331.h
+ delete mode 100644 arch/arm/mach-iop33x/include/mach/iq80332.h
+ delete mode 100644 arch/arm/mach-iop33x/include/mach/irqs.h
+ delete mode 100644 arch/arm/mach-iop33x/include/mach/time.h
+ delete mode 100644 arch/arm/mach-iop33x/include/mach/uncompress.h
+ delete mode 100644 arch/arm/mach-iop33x/iq80331.c
+ delete mode 100644 arch/arm/mach-iop33x/iq80332.c
+ delete mode 100644 arch/arm/mach-iop33x/irq.c
+ delete mode 100644 arch/arm/mach-iop33x/uart.c
 
-Did you already test on apu2/apu3 ?
-If not, maybe you could prepare a queue that I could test.
-
->> Does the probing need some special BIOS support (or do the necessary
->> table entries already come from aegesa) ?
-> 
-> I assume that ACPI devices are declared in one of the ACPI tables, so
-> it comes from the "BIOS", yes, whatever form it takes these days.
-
-hmm, so we'll yet have to find out whether these entries are actually
-present on actual machines in the field and potentially stick w/
-board specific platform drivers.
-
-I had hoped I could do all the probing of things like gpio, etc, from
-firmware (grmpf, w/ oftree all of that would be pretty trivial :o),
-but I doubt that it will work. Even w/ fairly recent gpio support in
-ACPI (IIRC my apu's dont have this yet), we're still lacking the
-actual assignment of the gpios (LEDs, Keys, ...).
-
-> I remember noticing long ago that SMBus ports were using GPIO pins, so
-> these pins could be used for SMBus or for any other purpose. 
-
-You mean via bit banging ? Or smbus and gpio shared behind a pinmux ?
-
-That might explain the strange holes in the register set (actually,
-never tried using anything undocumented as gpio).
-
-Did you find some documents you could send over ?
-
-> I could
-> not find any way to figure out from the registers if a given pin pair
-> was used for SMBus or not, which is pretty bad because it means we are
-> blindly instantiating ALL possible SMBus ports even if some of the pins
-> are used for a completely different purpose. 
-
-Do you know the addresses of the smbus port registers ?
-
-These are the gpio registers I've found out - relative to fch base
-(0xFED80000) plus gpio offset (0x1500):
-
-/*
-  * gpio register index definitions
-  */
-#define AMD_FCH_GPIO_REG_GPIO49         0x40
-#define AMD_FCH_GPIO_REG_GPIO50         0x41
-#define AMD_FCH_GPIO_REG_GPIO51         0x42
-#define AMD_FCH_GPIO_REG_GPIO59_DEVSLP0 0x43
-#define AMD_FCH_GPIO_REG_GPIO57         0x44
-#define AMD_FCH_GPIO_REG_GPIO58         0x45
-#define AMD_FCH_GPIO_REG_GPIO59_DEVSLP1 0x46
-#define AMD_FCH_GPIO_REG_GPIO64         0x47
-#define AMD_FCH_GPIO_REG_GPIO68         0x48
-#define AMD_FCH_GPIO_REG_GPIO66_SPKR    0x5B
-#define AMD_FCH_GPIO_REG_GPIO71         0x4D
-#define AMD_FCH_GPIO_REG_GPIO32_GE1     0x59
-#define AMD_FCH_GPIO_REG_GPIO33_GE2     0x5A
-#define AMT_FCH_GPIO_REG_GEVT22         0x09
-
-(see: include/linux/platform_data/gpio/gpio-amd-fch.h)
-
->> By the way: I'm considering collecting some hw documentation in the
->> kernel tree (maybe Documentation/hardware/...) - do you folks think
->> that's a good idea ?
-> 
-> No. Only documentation specifically related to the Linux kernel should
-> live in the kernel tree. OS-neutral documentation must go somewhere
-> else.
-
-hmm, but dts is also kinda documentation, isn't it ? ;-)
-
-Well, I'll probably start a separate project for that.
-
-
---mtx
-
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 33b00579beff..0009f6b109fd 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -263,7 +263,6 @@ config PHYS_OFFSET
+ 	default 0x00000000 if ARCH_EBSA110 || \
+ 			ARCH_FOOTBRIDGE || \
+ 			ARCH_INTEGRATOR || \
+-			ARCH_IOP13XX || \
+ 			ARCH_KS8695 || \
+ 			ARCH_REALVIEW
+ 	default 0x10000000 if ARCH_OMAP1 || ARCH_RPC
+@@ -377,19 +376,6 @@ config ARCH_FOOTBRIDGE
+ 	  Support for systems based on the DC21285 companion chip
+ 	  ("FootBridge"), such as the Simtec CATS and the Rebel NetWinder.
+ 
+-config ARCH_IOP13XX
+-	bool "IOP13xx-based"
+-	depends on MMU
+-	select CPU_XSC3
+-	select NEED_MACH_MEMORY_H
+-	select NEED_RET_TO_USER
+-	select FORCE_PCI
+-	select PLAT_IOP
+-	select VMSPLIT_1G
+-	select SPARSE_IRQ
+-	help
+-	  Support for Intel's IOP13XX (XScale) family of processors.
+-
+ config ARCH_IOP32X
+ 	bool "IOP32x-based"
+ 	depends on MMU
+@@ -403,18 +389,6 @@ config ARCH_IOP32X
+ 	  Support for Intel's 80219 and IOP32X (XScale) family of
+ 	  processors.
+ 
+-config ARCH_IOP33X
+-	bool "IOP33x-based"
+-	depends on MMU
+-	select CPU_XSCALE
+-	select GPIO_IOP
+-	select GPIOLIB
+-	select NEED_RET_TO_USER
+-	select FORCE_PCI
+-	select PLAT_IOP
+-	help
+-	  Support for Intel's IOP33X (XScale) family of processors.
+-
+ config ARCH_IXP4XX
+ 	bool "IXP4xx-based"
+ 	depends on MMU
+@@ -734,12 +708,8 @@ source "arch/arm/mach-imx/Kconfig"
+ 
+ source "arch/arm/mach-integrator/Kconfig"
+ 
+-source "arch/arm/mach-iop13xx/Kconfig"
+-
+ source "arch/arm/mach-iop32x/Kconfig"
+ 
+-source "arch/arm/mach-iop33x/Kconfig"
+-
+ source "arch/arm/mach-ixp4xx/Kconfig"
+ 
+ source "arch/arm/mach-keystone/Kconfig"
+diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+index 85710e078afb..0e2bb9ee404b 100644
+--- a/arch/arm/Kconfig.debug
++++ b/arch/arm/Kconfig.debug
+@@ -1568,9 +1568,7 @@ config DEBUG_UART_PL01X
+ 
+ # Compatibility options for 8250
+ config DEBUG_UART_8250
+-	def_bool ARCH_EBSA110 || \
+-		ARCH_IOP13XX || ARCH_IOP32X || ARCH_IOP33X || ARCH_IXP4XX || \
+-		ARCH_RPC
++	def_bool ARCH_EBSA110 || ARCH_IOP32X || ARCH_IXP4XX || ARCH_RPC
+ 
+ config DEBUG_UART_PHYS
+ 	hex "Physical base address of debug UART"
+@@ -1683,7 +1681,6 @@ config DEBUG_UART_PHYS
+ 	default 0xffc02000 if DEBUG_SOCFPGA_UART0
+ 	default 0xffc02100 if DEBUG_SOCFPGA_ARRIA10_UART1
+ 	default 0xffc03000 if DEBUG_SOCFPGA_CYCLONE5_UART1
+-	default 0xffd82340 if ARCH_IOP13XX
+ 	default 0xffe40000 if DEBUG_RCAR_GEN1_SCIF0
+ 	default 0xffe42000 if DEBUG_RCAR_GEN1_SCIF2
+ 	default 0xfff36000 if DEBUG_HIGHBANK_UART
+@@ -1693,7 +1690,6 @@ config DEBUG_UART_PHYS
+ 	default 0xfffe8600 if DEBUG_BCM63XX_UART
+ 	default 0xffffee00 if DEBUG_AT91_SAM9263_DBGU
+ 	default 0xfffff200 if DEBUG_AT91_RM9200_DBGU
+-	default 0xfffff700 if ARCH_IOP33X
+ 	depends on ARCH_EP93XX || \
+ 	        DEBUG_LL_UART_8250 || DEBUG_LL_UART_PL01X || \
+ 		DEBUG_LL_UART_EFM32 || \
+@@ -1805,14 +1801,12 @@ config DEBUG_UART_VIRT
+ 	default 0xfedc0000 if DEBUG_EP93XX
+ 	default 0xfee003f8 if DEBUG_FOOTBRIDGE_COM1
+ 	default 0xfee20000 if DEBUG_NSPIRE_CLASSIC_UART || DEBUG_NSPIRE_CX_UART
+-	default 0xfee82340 if ARCH_IOP13XX
+ 	default 0xfef00000 if ARCH_IXP4XX && !CPU_BIG_ENDIAN
+ 	default 0xfef00003 if ARCH_IXP4XX && CPU_BIG_ENDIAN
+ 	default 0xfef36000 if DEBUG_HIGHBANK_UART
+ 	default 0xfefb0000 if DEBUG_OMAP1UART1 || DEBUG_OMAP7XXUART1
+ 	default 0xfefb0800 if DEBUG_OMAP1UART2 || DEBUG_OMAP7XXUART2
+ 	default 0xfefb9800 if DEBUG_OMAP1UART3 || DEBUG_OMAP7XXUART3
+-	default 0xfefff700 if ARCH_IOP33X
+ 	default 0xff003000 if DEBUG_U300_UART
+ 	default 0xffd01000 if DEBUG_HIP01_UART
+ 	default DEBUG_UART_PHYS if !MMU
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index c3624ca6c0bc..d92bc5328df7 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -173,9 +173,7 @@ machine-$(CONFIG_ARCH_GEMINI)		+= gemini
+ machine-$(CONFIG_ARCH_HIGHBANK)		+= highbank
+ machine-$(CONFIG_ARCH_HISI)		+= hisi
+ machine-$(CONFIG_ARCH_INTEGRATOR)	+= integrator
+-machine-$(CONFIG_ARCH_IOP13XX)		+= iop13xx
+ machine-$(CONFIG_ARCH_IOP32X)		+= iop32x
+-machine-$(CONFIG_ARCH_IOP33X)		+= iop33x
+ machine-$(CONFIG_ARCH_IXP4XX)		+= ixp4xx
+ machine-$(CONFIG_ARCH_KEYSTONE)		+= keystone
+ machine-$(CONFIG_ARCH_KS8695)		+= ks8695
+diff --git a/arch/arm/configs/iop13xx_defconfig b/arch/arm/configs/iop13xx_defconfig
+deleted file mode 100644
+index 30cdb287e1b4..000000000000
+--- a/arch/arm/configs/iop13xx_defconfig
++++ /dev/null
+@@ -1,118 +0,0 @@
+-# CONFIG_LOCALVERSION_AUTO is not set
+-CONFIG_SYSVIPC=y
+-CONFIG_POSIX_MQUEUE=y
+-CONFIG_BSD_PROCESS_ACCT=y
+-CONFIG_IKCONFIG=y
+-CONFIG_IKCONFIG_PROC=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_BLK_DEV_INITRD=y
+-# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
+-CONFIG_SLAB=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_MODVERSIONS=y
+-# CONFIG_BLK_DEV_BSG is not set
+-# CONFIG_IOSCHED_CFQ is not set
+-CONFIG_ARCH_IOP13XX=y
+-CONFIG_MACH_IQ81340SC=y
+-CONFIG_MACH_IQ81340MC=y
+-CONFIG_ZBOOT_ROM_TEXT=0x0
+-CONFIG_ZBOOT_ROM_BSS=0x0
+-CONFIG_CMDLINE="ip=bootp root=nfs console=ttyS0,115200 nfsroot=,tcp,v3,wsize=8192,rsize=8192"
+-CONFIG_FPE_NWFPE=y
+-CONFIG_BINFMT_AOUT=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_NET_KEY=y
+-CONFIG_INET=y
+-CONFIG_IP_MULTICAST=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_BOOTP=y
+-CONFIG_IPV6=y
+-# CONFIG_INET6_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET6_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET6_XFRM_MODE_BEET is not set
+-# CONFIG_IPV6_SIT is not set
+-CONFIG_MTD=y
+-CONFIG_MTD_REDBOOT_PARTS=y
+-CONFIG_MTD_REDBOOT_PARTS_UNALLOCATED=y
+-CONFIG_MTD_REDBOOT_PARTS_READONLY=y
+-CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_CFI=y
+-CONFIG_MTD_CFI_ADV_OPTIONS=y
+-CONFIG_MTD_CFI_INTELEXT=y
+-CONFIG_MTD_PHYSMAP=y
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_RAM_COUNT=2
+-CONFIG_BLK_DEV_RAM_SIZE=8192
+-CONFIG_SCSI=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_CHR_DEV_SG=y
+-CONFIG_SCSI_CONSTANTS=y
+-CONFIG_SCSI_ISCSI_ATTRS=y
+-CONFIG_MD=y
+-CONFIG_BLK_DEV_MD=y
+-CONFIG_MD_RAID0=y
+-CONFIG_MD_RAID1=y
+-CONFIG_MD_RAID10=y
+-CONFIG_MD_RAID456=y
+-CONFIG_BLK_DEV_DM=y
+-CONFIG_NETDEVICES=y
+-CONFIG_E1000=y
+-# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
+-# CONFIG_INPUT_KEYBOARD is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_SERIO is not set
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-CONFIG_SERIAL_8250_NR_UARTS=2
+-CONFIG_HW_RANDOM=y
+-CONFIG_I2C=y
+-CONFIG_I2C_IOP3XX=y
+-# CONFIG_VGA_CONSOLE is not set
+-CONFIG_DMADEVICES=y
+-CONFIG_INTEL_IOP_ADMA=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT3_FS=y
+-CONFIG_TMPFS=y
+-CONFIG_ECRYPT_FS=y
+-CONFIG_JFFS2_FS=y
+-CONFIG_CRAMFS=y
+-CONFIG_NFS_FS=y
+-CONFIG_NFS_V3=y
+-CONFIG_ROOT_NFS=y
+-CONFIG_NFSD=y
+-CONFIG_NFSD_V3=y
+-CONFIG_SMB_FS=m
+-CONFIG_CIFS=m
+-CONFIG_PARTITION_ADVANCED=y
+-CONFIG_NLS=y
+-CONFIG_DEBUG_USER=y
+-CONFIG_KEYS=y
+-CONFIG_CRYPTO_NULL=y
+-CONFIG_CRYPTO_LRW=y
+-CONFIG_CRYPTO_PCBC=m
+-CONFIG_CRYPTO_HMAC=y
+-CONFIG_CRYPTO_XCBC=y
+-CONFIG_CRYPTO_MD4=y
+-CONFIG_CRYPTO_MICHAEL_MIC=y
+-CONFIG_CRYPTO_SHA1=y
+-CONFIG_CRYPTO_SHA256=y
+-CONFIG_CRYPTO_SHA512=y
+-CONFIG_CRYPTO_TGR192=y
+-CONFIG_CRYPTO_WP512=y
+-CONFIG_CRYPTO_AES=y
+-CONFIG_CRYPTO_ANUBIS=y
+-CONFIG_CRYPTO_ARC4=y
+-CONFIG_CRYPTO_BLOWFISH=y
+-CONFIG_CRYPTO_CAST5=y
+-CONFIG_CRYPTO_CAST6=y
+-CONFIG_CRYPTO_DES=y
+-CONFIG_CRYPTO_KHAZAD=y
+-CONFIG_CRYPTO_SERPENT=y
+-CONFIG_CRYPTO_TEA=y
+-CONFIG_CRYPTO_TWOFISH=y
+-CONFIG_CRYPTO_DEFLATE=y
+-CONFIG_CRC_CCITT=y
+-CONFIG_LIBCRC32C=y
+diff --git a/arch/arm/configs/iop33x_defconfig b/arch/arm/configs/iop33x_defconfig
+deleted file mode 100644
+index 089eca43214a..000000000000
+--- a/arch/arm/configs/iop33x_defconfig
++++ /dev/null
+@@ -1,85 +0,0 @@
+-CONFIG_SYSVIPC=y
+-CONFIG_BSD_PROCESS_ACCT=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_KALLSYMS_ALL=y
+-CONFIG_SLAB=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_BLK_DEV_BSG is not set
+-CONFIG_ARCH_IOP33X=y
+-CONFIG_ARCH_IQ80331=y
+-CONFIG_MACH_IQ80332=y
+-# CONFIG_ARM_THUMB is not set
+-CONFIG_ZBOOT_ROM_TEXT=0x0
+-CONFIG_ZBOOT_ROM_BSS=0x0
+-CONFIG_CMDLINE="console=ttyS0,115200 root=/dev/nfs ip=bootp cachepolicy=writealloc iop3xx_init_atu=y"
+-CONFIG_FPE_NWFPE=y
+-CONFIG_BINFMT_AOUT=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_MULTICAST=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_BOOTP=y
+-CONFIG_IPV6=y
+-# CONFIG_INET6_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET6_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET6_XFRM_MODE_BEET is not set
+-# CONFIG_IPV6_SIT is not set
+-CONFIG_MTD=y
+-CONFIG_MTD_REDBOOT_PARTS=y
+-CONFIG_MTD_REDBOOT_PARTS_UNALLOCATED=y
+-CONFIG_MTD_REDBOOT_PARTS_READONLY=y
+-CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_CFI=y
+-CONFIG_MTD_CFI_ADV_OPTIONS=y
+-CONFIG_MTD_CFI_INTELEXT=y
+-CONFIG_MTD_PHYSMAP=y
+-CONFIG_BLK_DEV_NBD=y
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_RAM_SIZE=8192
+-CONFIG_SCSI=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_CHR_DEV_SG=y
+-CONFIG_MD=y
+-CONFIG_BLK_DEV_MD=y
+-CONFIG_MD_LINEAR=y
+-CONFIG_MD_RAID0=y
+-CONFIG_MD_RAID1=y
+-CONFIG_MD_RAID456=y
+-CONFIG_BLK_DEV_DM=y
+-CONFIG_NETDEVICES=y
+-CONFIG_E1000=y
+-# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
+-# CONFIG_INPUT_KEYBOARD is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_SERIO is not set
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-CONFIG_HW_RANDOM=y
+-CONFIG_I2C=y
+-CONFIG_I2C_CHARDEV=y
+-CONFIG_I2C_IOP3XX=y
+-# CONFIG_VGA_CONSOLE is not set
+-CONFIG_DMADEVICES=y
+-CONFIG_INTEL_IOP_ADMA=y
+-CONFIG_NET_DMA=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT3_FS=y
+-CONFIG_TMPFS=y
+-CONFIG_CRAMFS=y
+-CONFIG_NFS_FS=y
+-CONFIG_NFS_V3=y
+-CONFIG_ROOT_NFS=y
+-CONFIG_NFSD=y
+-CONFIG_NFSD_V3=y
+-CONFIG_PARTITION_ADVANCED=y
+-CONFIG_MAGIC_SYSRQ=y
+-CONFIG_DEBUG_KERNEL=y
+-CONFIG_DEBUG_USER=y
+-CONFIG_DEBUG_LL=y
+-CONFIG_DEBUG_LL_UART_8250=y
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+-# CONFIG_CRC32 is not set
+diff --git a/arch/arm/mach-iop13xx/Kconfig b/arch/arm/mach-iop13xx/Kconfig
+deleted file mode 100644
+index c4f04070b4c1..000000000000
+--- a/arch/arm/mach-iop13xx/Kconfig
++++ /dev/null
+@@ -1,21 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-if ARCH_IOP13XX
+-
+-menu "IOP13XX Implementation Options"
+-
+-comment "IOP13XX Platform Support"
+-
+-config MACH_IQ81340SC
+-	bool "Enable IQ81340SC Hardware Support"
+-	help
+-	  Say Y here if you want to support running on the Intel IQ81340SC
+-	  evaluation kit.
+-
+-config MACH_IQ81340MC
+-	bool "Enable IQ81340MC Hardware Support"
+-	help
+-	  Say Y here if you want to support running on the Intel IQ81340MC
+-	  evaluation kit.
+-
+-endmenu
+-endif
+diff --git a/arch/arm/mach-iop13xx/Makefile b/arch/arm/mach-iop13xx/Makefile
+deleted file mode 100644
+index 5757c8f6e371..000000000000
+--- a/arch/arm/mach-iop13xx/Makefile
++++ /dev/null
+@@ -1,9 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-obj-$(CONFIG_ARCH_IOP13XX) += setup.o
+-obj-$(CONFIG_ARCH_IOP13XX) += irq.o
+-obj-$(CONFIG_ARCH_IOP13XX) += pci.o
+-obj-$(CONFIG_ARCH_IOP13XX) += io.o
+-obj-$(CONFIG_ARCH_IOP13XX) += tpmi.o
+-obj-$(CONFIG_MACH_IQ81340SC) += iq81340sc.o
+-obj-$(CONFIG_MACH_IQ81340MC) += iq81340mc.o
+-obj-$(CONFIG_PCI_MSI) += msi.o
+diff --git a/arch/arm/mach-iop13xx/Makefile.boot b/arch/arm/mach-iop13xx/Makefile.boot
+deleted file mode 100644
+index 4f29554c8401..000000000000
+--- a/arch/arm/mach-iop13xx/Makefile.boot
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-   zreladdr-y   += 0x00008000
+-params_phys-y	:= 0x00000100
+-initrd_phys-y 	:= 0x00800000
+diff --git a/arch/arm/mach-iop13xx/include/mach/adma.h b/arch/arm/mach-iop13xx/include/mach/adma.h
+deleted file mode 100644
+index 51d206f5b093..000000000000
+--- a/arch/arm/mach-iop13xx/include/mach/adma.h
++++ /dev/null
+@@ -1,608 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright(c) 2006, Intel Corporation.
+- */
+-#ifndef _ADMA_H
+-#define _ADMA_H
+-#include <linux/types.h>
+-#include <linux/io.h>
+-#include <mach/hardware.h>
+-#include <asm/hardware/iop_adma.h>
+-
+-#define ADMA_ACCR(chan)	(chan->mmr_base + 0x0)
+-#define ADMA_ACSR(chan)	(chan->mmr_base + 0x4)
+-#define ADMA_ADAR(chan)	(chan->mmr_base + 0x8)
+-#define ADMA_IIPCR(chan)	(chan->mmr_base + 0x18)
+-#define ADMA_IIPAR(chan)	(chan->mmr_base + 0x1c)
+-#define ADMA_IIPUAR(chan)	(chan->mmr_base + 0x20)
+-#define ADMA_ANDAR(chan)	(chan->mmr_base + 0x24)
+-#define ADMA_ADCR(chan)	(chan->mmr_base + 0x28)
+-#define ADMA_CARMD(chan)	(chan->mmr_base + 0x2c)
+-#define ADMA_ABCR(chan)	(chan->mmr_base + 0x30)
+-#define ADMA_DLADR(chan)	(chan->mmr_base + 0x34)
+-#define ADMA_DUADR(chan)	(chan->mmr_base + 0x38)
+-#define ADMA_SLAR(src, chan)	(chan->mmr_base + (0x3c + (src << 3)))
+-#define ADMA_SUAR(src, chan)	(chan->mmr_base + (0x40 + (src << 3)))
+-
+-struct iop13xx_adma_src {
+-	u32 src_addr;
+-	union {
+-		u32 upper_src_addr;
+-		struct {
+-			unsigned int pq_upper_src_addr:24;
+-			unsigned int pq_dmlt:8;
+-		};
+-	};
+-};
+-
+-struct iop13xx_adma_desc_ctrl {
+-	unsigned int int_en:1;
+-	unsigned int xfer_dir:2;
+-	unsigned int src_select:4;
+-	unsigned int zero_result:1;
+-	unsigned int block_fill_en:1;
+-	unsigned int crc_gen_en:1;
+-	unsigned int crc_xfer_dis:1;
+-	unsigned int crc_seed_fetch_dis:1;
+-	unsigned int status_write_back_en:1;
+-	unsigned int endian_swap_en:1;
+-	unsigned int reserved0:2;
+-	unsigned int pq_update_xfer_en:1;
+-	unsigned int dual_xor_en:1;
+-	unsigned int pq_xfer_en:1;
+-	unsigned int p_xfer_dis:1;
+-	unsigned int reserved1:10;
+-	unsigned int relax_order_en:1;
+-	unsigned int no_snoop_en:1;
+-};
+-
+-struct iop13xx_adma_byte_count {
+-	unsigned int byte_count:24;
+-	unsigned int host_if:3;
+-	unsigned int reserved:2;
+-	unsigned int zero_result_err_q:1;
+-	unsigned int zero_result_err:1;
+-	unsigned int tx_complete:1;
+-};
+-
+-struct iop13xx_adma_desc_hw {
+-	u32 next_desc;
+-	union {
+-		u32 desc_ctrl;
+-		struct iop13xx_adma_desc_ctrl desc_ctrl_field;
+-	};
+-	union {
+-		u32 crc_addr;
+-		u32 block_fill_data;
+-		u32 q_dest_addr;
+-	};
+-	union {
+-		u32 byte_count;
+-		struct iop13xx_adma_byte_count byte_count_field;
+-	};
+-	union {
+-		u32 dest_addr;
+-		u32 p_dest_addr;
+-	};
+-	union {
+-		u32 upper_dest_addr;
+-		u32 pq_upper_dest_addr;
+-	};
+-	struct iop13xx_adma_src src[1];
+-};
+-
+-struct iop13xx_adma_desc_dual_xor {
+-	u32 next_desc;
+-	u32 desc_ctrl;
+-	u32 reserved;
+-	u32 byte_count;
+-	u32 h_dest_addr;
+-	u32 h_upper_dest_addr;
+-	u32 src0_addr;
+-	u32 upper_src0_addr;
+-	u32 src1_addr;
+-	u32 upper_src1_addr;
+-	u32 h_src_addr;
+-	u32 h_upper_src_addr;
+-	u32 d_src_addr;
+-	u32 d_upper_src_addr;
+-	u32 d_dest_addr;
+-	u32 d_upper_dest_addr;
+-};
+-
+-struct iop13xx_adma_desc_pq_update {
+-	u32 next_desc;
+-	u32 desc_ctrl;
+-	u32 reserved;
+-	u32 byte_count;
+-	u32 p_dest_addr;
+-	u32 p_upper_dest_addr;
+-	u32 src0_addr;
+-	u32 upper_src0_addr;
+-	u32 src1_addr;
+-	u32 upper_src1_addr;
+-	u32 p_src_addr;
+-	u32 p_upper_src_addr;
+-	u32 q_src_addr;
+-	struct {
+-		unsigned int q_upper_src_addr:24;
+-		unsigned int q_dmlt:8;
+-	};
+-	u32 q_dest_addr;
+-	u32 q_upper_dest_addr;
+-};
+-
+-static inline int iop_adma_get_max_xor(void)
+-{
+-	return 16;
+-}
+-
+-#define iop_adma_get_max_pq iop_adma_get_max_xor
+-
+-static inline u32 iop_chan_get_current_descriptor(struct iop_adma_chan *chan)
+-{
+-	return __raw_readl(ADMA_ADAR(chan));
+-}
+-
+-static inline void iop_chan_set_next_descriptor(struct iop_adma_chan *chan,
+-						u32 next_desc_addr)
+-{
+-	__raw_writel(next_desc_addr, ADMA_ANDAR(chan));
+-}
+-
+-#define ADMA_STATUS_BUSY (1 << 13)
+-
+-static inline char iop_chan_is_busy(struct iop_adma_chan *chan)
+-{
+-	if (__raw_readl(ADMA_ACSR(chan)) &
+-		ADMA_STATUS_BUSY)
+-		return 1;
+-	else
+-		return 0;
+-}
+-
+-static inline int
+-iop_chan_get_desc_align(struct iop_adma_chan *chan, int num_slots)
+-{
+-	return 1;
+-}
+-#define iop_desc_is_aligned(x, y) 1
+-
+-static inline int
+-iop_chan_memcpy_slot_count(size_t len, int *slots_per_op)
+-{
+-	*slots_per_op = 1;
+-	return 1;
+-}
+-
+-#define iop_chan_interrupt_slot_count(s, c) iop_chan_memcpy_slot_count(0, s)
+-
+-static inline int
+-iop_chan_memset_slot_count(size_t len, int *slots_per_op)
+-{
+-	*slots_per_op = 1;
+-	return 1;
+-}
+-
+-static inline int
+-iop_chan_xor_slot_count(size_t len, int src_cnt, int *slots_per_op)
+-{
+-	static const char slot_count_table[] = { 1, 2, 2, 2,
+-						 2, 3, 3, 3,
+-						 3, 4, 4, 4,
+-						 4, 5, 5, 5,
+-						};
+-	*slots_per_op = slot_count_table[src_cnt - 1];
+-	return *slots_per_op;
+-}
+-
+-#define ADMA_MAX_BYTE_COUNT	(16 * 1024 * 1024)
+-#define IOP_ADMA_MAX_BYTE_COUNT ADMA_MAX_BYTE_COUNT
+-#define IOP_ADMA_ZERO_SUM_MAX_BYTE_COUNT ADMA_MAX_BYTE_COUNT
+-#define IOP_ADMA_XOR_MAX_BYTE_COUNT ADMA_MAX_BYTE_COUNT
+-#define IOP_ADMA_PQ_MAX_BYTE_COUNT ADMA_MAX_BYTE_COUNT
+-#define iop_chan_zero_sum_slot_count(l, s, o) iop_chan_xor_slot_count(l, s, o)
+-#define iop_chan_pq_slot_count iop_chan_xor_slot_count
+-#define iop_chan_pq_zero_sum_slot_count iop_chan_xor_slot_count
+-
+-static inline u32 iop_desc_get_byte_count(struct iop_adma_desc_slot *desc,
+-					struct iop_adma_chan *chan)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	return hw_desc->byte_count_field.byte_count;
+-}
+-
+-static inline u32 iop_desc_get_src_addr(struct iop_adma_desc_slot *desc,
+-					struct iop_adma_chan *chan,
+-					int src_idx)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	return hw_desc->src[src_idx].src_addr;
+-}
+-
+-static inline u32 iop_desc_get_src_count(struct iop_adma_desc_slot *desc,
+-					struct iop_adma_chan *chan)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	return hw_desc->desc_ctrl_field.src_select + 1;
+-}
+-
+-static inline void
+-iop_desc_init_memcpy(struct iop_adma_desc_slot *desc, unsigned long flags)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	union {
+-		u32 value;
+-		struct iop13xx_adma_desc_ctrl field;
+-	} u_desc_ctrl;
+-
+-	u_desc_ctrl.value = 0;
+-	u_desc_ctrl.field.xfer_dir = 3; /* local to internal bus */
+-	u_desc_ctrl.field.int_en = flags & DMA_PREP_INTERRUPT;
+-	hw_desc->desc_ctrl = u_desc_ctrl.value;
+-	hw_desc->crc_addr = 0;
+-}
+-
+-static inline void
+-iop_desc_init_memset(struct iop_adma_desc_slot *desc, unsigned long flags)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	union {
+-		u32 value;
+-		struct iop13xx_adma_desc_ctrl field;
+-	} u_desc_ctrl;
+-
+-	u_desc_ctrl.value = 0;
+-	u_desc_ctrl.field.xfer_dir = 3; /* local to internal bus */
+-	u_desc_ctrl.field.block_fill_en = 1;
+-	u_desc_ctrl.field.int_en = flags & DMA_PREP_INTERRUPT;
+-	hw_desc->desc_ctrl = u_desc_ctrl.value;
+-	hw_desc->crc_addr = 0;
+-}
+-
+-/* to do: support buffers larger than ADMA_MAX_BYTE_COUNT */
+-static inline void
+-iop_desc_init_xor(struct iop_adma_desc_slot *desc, int src_cnt,
+-		  unsigned long flags)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	union {
+-		u32 value;
+-		struct iop13xx_adma_desc_ctrl field;
+-	} u_desc_ctrl;
+-
+-	u_desc_ctrl.value = 0;
+-	u_desc_ctrl.field.src_select = src_cnt - 1;
+-	u_desc_ctrl.field.xfer_dir = 3; /* local to internal bus */
+-	u_desc_ctrl.field.int_en = flags & DMA_PREP_INTERRUPT;
+-	hw_desc->desc_ctrl = u_desc_ctrl.value;
+-	hw_desc->crc_addr = 0;
+-
+-}
+-#define iop_desc_init_null_xor(d, s, i) iop_desc_init_xor(d, s, i)
+-
+-/* to do: support buffers larger than ADMA_MAX_BYTE_COUNT */
+-static inline int
+-iop_desc_init_zero_sum(struct iop_adma_desc_slot *desc, int src_cnt,
+-		       unsigned long flags)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	union {
+-		u32 value;
+-		struct iop13xx_adma_desc_ctrl field;
+-	} u_desc_ctrl;
+-
+-	u_desc_ctrl.value = 0;
+-	u_desc_ctrl.field.src_select = src_cnt - 1;
+-	u_desc_ctrl.field.xfer_dir = 3; /* local to internal bus */
+-	u_desc_ctrl.field.zero_result = 1;
+-	u_desc_ctrl.field.status_write_back_en = 1;
+-	u_desc_ctrl.field.int_en = flags & DMA_PREP_INTERRUPT;
+-	hw_desc->desc_ctrl = u_desc_ctrl.value;
+-	hw_desc->crc_addr = 0;
+-
+-	return 1;
+-}
+-
+-static inline void
+-iop_desc_init_pq(struct iop_adma_desc_slot *desc, int src_cnt,
+-		  unsigned long flags)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	union {
+-		u32 value;
+-		struct iop13xx_adma_desc_ctrl field;
+-	} u_desc_ctrl;
+-
+-	u_desc_ctrl.value = 0;
+-	u_desc_ctrl.field.src_select = src_cnt - 1;
+-	u_desc_ctrl.field.xfer_dir = 3; /* local to internal bus */
+-	u_desc_ctrl.field.pq_xfer_en = 1;
+-	u_desc_ctrl.field.p_xfer_dis = !!(flags & DMA_PREP_PQ_DISABLE_P);
+-	u_desc_ctrl.field.int_en = flags & DMA_PREP_INTERRUPT;
+-	hw_desc->desc_ctrl = u_desc_ctrl.value;
+-}
+-
+-static inline void
+-iop_desc_init_pq_zero_sum(struct iop_adma_desc_slot *desc, int src_cnt,
+-			  unsigned long flags)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	union {
+-		u32 value;
+-		struct iop13xx_adma_desc_ctrl field;
+-	} u_desc_ctrl;
+-
+-	u_desc_ctrl.value = 0;
+-	u_desc_ctrl.field.src_select = src_cnt - 1;
+-	u_desc_ctrl.field.xfer_dir = 3; /* local to internal bus */
+-	u_desc_ctrl.field.zero_result = 1;
+-	u_desc_ctrl.field.status_write_back_en = 1;
+-	u_desc_ctrl.field.pq_xfer_en = 1;
+-	u_desc_ctrl.field.p_xfer_dis = !!(flags & DMA_PREP_PQ_DISABLE_P);
+-	u_desc_ctrl.field.int_en = flags & DMA_PREP_INTERRUPT;
+-	hw_desc->desc_ctrl = u_desc_ctrl.value;
+-}
+-
+-static inline void iop_desc_set_byte_count(struct iop_adma_desc_slot *desc,
+-					struct iop_adma_chan *chan,
+-					u32 byte_count)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	hw_desc->byte_count = byte_count;
+-}
+-
+-static inline void
+-iop_desc_set_zero_sum_byte_count(struct iop_adma_desc_slot *desc, u32 len)
+-{
+-	int slots_per_op = desc->slots_per_op;
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc, *iter;
+-	int i = 0;
+-
+-	if (len <= IOP_ADMA_ZERO_SUM_MAX_BYTE_COUNT) {
+-		hw_desc->byte_count = len;
+-	} else {
+-		do {
+-			iter = iop_hw_desc_slot_idx(hw_desc, i);
+-			iter->byte_count = IOP_ADMA_ZERO_SUM_MAX_BYTE_COUNT;
+-			len -= IOP_ADMA_ZERO_SUM_MAX_BYTE_COUNT;
+-			i += slots_per_op;
+-		} while (len > IOP_ADMA_ZERO_SUM_MAX_BYTE_COUNT);
+-
+-		if (len) {
+-			iter = iop_hw_desc_slot_idx(hw_desc, i);
+-			iter->byte_count = len;
+-		}
+-	}
+-}
+-
+-#define iop_desc_set_pq_zero_sum_byte_count iop_desc_set_zero_sum_byte_count
+-
+-static inline void iop_desc_set_dest_addr(struct iop_adma_desc_slot *desc,
+-					struct iop_adma_chan *chan,
+-					dma_addr_t addr)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	hw_desc->dest_addr = addr;
+-	hw_desc->upper_dest_addr = 0;
+-}
+-
+-static inline void
+-iop_desc_set_pq_addr(struct iop_adma_desc_slot *desc, dma_addr_t *addr)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-
+-	hw_desc->dest_addr = addr[0];
+-	hw_desc->q_dest_addr = addr[1];
+-	hw_desc->upper_dest_addr = 0;
+-}
+-
+-static inline void iop_desc_set_memcpy_src_addr(struct iop_adma_desc_slot *desc,
+-					dma_addr_t addr)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	hw_desc->src[0].src_addr = addr;
+-	hw_desc->src[0].upper_src_addr = 0;
+-}
+-
+-static inline void iop_desc_set_xor_src_addr(struct iop_adma_desc_slot *desc,
+-					int src_idx, dma_addr_t addr)
+-{
+-	int slot_cnt = desc->slot_cnt, slots_per_op = desc->slots_per_op;
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc, *iter;
+-	int i = 0;
+-
+-	do {
+-		iter = iop_hw_desc_slot_idx(hw_desc, i);
+-		iter->src[src_idx].src_addr = addr;
+-		iter->src[src_idx].upper_src_addr = 0;
+-		slot_cnt -= slots_per_op;
+-		if (slot_cnt) {
+-			i += slots_per_op;
+-			addr += IOP_ADMA_XOR_MAX_BYTE_COUNT;
+-		}
+-	} while (slot_cnt);
+-}
+-
+-static inline void
+-iop_desc_set_pq_src_addr(struct iop_adma_desc_slot *desc, int src_idx,
+-			 dma_addr_t addr, unsigned char coef)
+-{
+-	int slot_cnt = desc->slot_cnt, slots_per_op = desc->slots_per_op;
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc, *iter;
+-	struct iop13xx_adma_src *src;
+-	int i = 0;
+-
+-	do {
+-		iter = iop_hw_desc_slot_idx(hw_desc, i);
+-		src = &iter->src[src_idx];
+-		src->src_addr = addr;
+-		src->pq_upper_src_addr = 0;
+-		src->pq_dmlt = coef;
+-		slot_cnt -= slots_per_op;
+-		if (slot_cnt) {
+-			i += slots_per_op;
+-			addr += IOP_ADMA_PQ_MAX_BYTE_COUNT;
+-		}
+-	} while (slot_cnt);
+-}
+-
+-static inline void
+-iop_desc_init_interrupt(struct iop_adma_desc_slot *desc,
+-	struct iop_adma_chan *chan)
+-{
+-	iop_desc_init_memcpy(desc, 1);
+-	iop_desc_set_byte_count(desc, chan, 0);
+-	iop_desc_set_dest_addr(desc, chan, 0);
+-	iop_desc_set_memcpy_src_addr(desc, 0);
+-}
+-
+-#define iop_desc_set_zero_sum_src_addr iop_desc_set_xor_src_addr
+-#define iop_desc_set_pq_zero_sum_src_addr iop_desc_set_pq_src_addr
+-
+-static inline void
+-iop_desc_set_pq_zero_sum_addr(struct iop_adma_desc_slot *desc, int pq_idx,
+-			      dma_addr_t *src)
+-{
+-	iop_desc_set_xor_src_addr(desc, pq_idx, src[pq_idx]);
+-	iop_desc_set_xor_src_addr(desc, pq_idx+1, src[pq_idx+1]);
+-}
+-
+-static inline void iop_desc_set_next_desc(struct iop_adma_desc_slot *desc,
+-					u32 next_desc_addr)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-
+-	iop_paranoia(hw_desc->next_desc);
+-	hw_desc->next_desc = next_desc_addr;
+-}
+-
+-static inline u32 iop_desc_get_next_desc(struct iop_adma_desc_slot *desc)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	return hw_desc->next_desc;
+-}
+-
+-static inline void iop_desc_clear_next_desc(struct iop_adma_desc_slot *desc)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	hw_desc->next_desc = 0;
+-}
+-
+-static inline void iop_desc_set_block_fill_val(struct iop_adma_desc_slot *desc,
+-						u32 val)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	hw_desc->block_fill_data = val;
+-}
+-
+-static inline enum sum_check_flags
+-iop_desc_get_zero_result(struct iop_adma_desc_slot *desc)
+-{
+-	struct iop13xx_adma_desc_hw *hw_desc = desc->hw_desc;
+-	struct iop13xx_adma_desc_ctrl desc_ctrl = hw_desc->desc_ctrl_field;
+-	struct iop13xx_adma_byte_count byte_count = hw_desc->byte_count_field;
+-	enum sum_check_flags flags;
+-
+-	BUG_ON(!(byte_count.tx_complete && desc_ctrl.zero_result));
+-
+-	flags = byte_count.zero_result_err_q << SUM_CHECK_Q;
+-	flags |= byte_count.zero_result_err << SUM_CHECK_P;
+-
+-	return flags;
+-}
+-
+-static inline void iop_chan_append(struct iop_adma_chan *chan)
+-{
+-	u32 adma_accr;
+-
+-	adma_accr = __raw_readl(ADMA_ACCR(chan));
+-	adma_accr |= 0x2;
+-	__raw_writel(adma_accr, ADMA_ACCR(chan));
+-}
+-
+-static inline u32 iop_chan_get_status(struct iop_adma_chan *chan)
+-{
+-	return __raw_readl(ADMA_ACSR(chan));
+-}
+-
+-static inline void iop_chan_disable(struct iop_adma_chan *chan)
+-{
+-	u32 adma_chan_ctrl = __raw_readl(ADMA_ACCR(chan));
+-	adma_chan_ctrl &= ~0x1;
+-	__raw_writel(adma_chan_ctrl, ADMA_ACCR(chan));
+-}
+-
+-static inline void iop_chan_enable(struct iop_adma_chan *chan)
+-{
+-	u32 adma_chan_ctrl;
+-
+-	adma_chan_ctrl = __raw_readl(ADMA_ACCR(chan));
+-	adma_chan_ctrl |= 0x1;
+-	__raw_writel(adma_chan_ctrl, ADMA_ACCR(chan));
+-}
+-
+-static inline void iop_adma_device_clear_eot_status(struct iop_adma_chan *chan)
+-{
+-	u32 status = __raw_readl(ADMA_ACSR(chan));
+-	status &= (1 << 12);
+-	__raw_writel(status, ADMA_ACSR(chan));
+-}
+-
+-static inline void iop_adma_device_clear_eoc_status(struct iop_adma_chan *chan)
+-{
+-	u32 status = __raw_readl(ADMA_ACSR(chan));
+-	status &= (1 << 11);
+-	__raw_writel(status, ADMA_ACSR(chan));
+-}
+-
+-static inline void iop_adma_device_clear_err_status(struct iop_adma_chan *chan)
+-{
+-	u32 status = __raw_readl(ADMA_ACSR(chan));
+-	status &= (1 << 9) | (1 << 5) | (1 << 4) | (1 << 3);
+-	__raw_writel(status, ADMA_ACSR(chan));
+-}
+-
+-static inline int
+-iop_is_err_int_parity(unsigned long status, struct iop_adma_chan *chan)
+-{
+-	return test_bit(9, &status);
+-}
+-
+-static inline int
+-iop_is_err_mcu_abort(unsigned long status, struct iop_adma_chan *chan)
+-{
+-	return test_bit(5, &status);
+-}
+-
+-static inline int
+-iop_is_err_int_tabort(unsigned long status, struct iop_adma_chan *chan)
+-{
+-	return test_bit(4, &status);
+-}
+-
+-static inline int
+-iop_is_err_int_mabort(unsigned long status, struct iop_adma_chan *chan)
+-{
+-	return test_bit(3, &status);
+-}
+-
+-static inline int
+-iop_is_err_pci_tabort(unsigned long status, struct iop_adma_chan *chan)
+-{
+-	return 0;
+-}
+-
+-static inline int
+-iop_is_err_pci_mabort(unsigned long status, struct iop_adma_chan *chan)
+-{
+-	return 0;
+-}
+-
+-static inline int
+-iop_is_err_split_tx(unsigned long status, struct iop_adma_chan *chan)
+-{
+-	return 0;
+-}
+-
+-#endif /* _ADMA_H */
+diff --git a/arch/arm/mach-iop13xx/include/mach/entry-macro.S b/arch/arm/mach-iop13xx/include/mach/entry-macro.S
+deleted file mode 100644
+index 9f4ecb8861bd..000000000000
+--- a/arch/arm/mach-iop13xx/include/mach/entry-macro.S
++++ /dev/null
+@@ -1,29 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * iop13xx low level irq macros
+- * Copyright (c) 2005-2006, Intel Corporation.
+- */
+-	.macro get_irqnr_preamble, base, tmp
+-	mrc	p15, 0, \tmp, c15, c1, 0
+-	orr	\tmp, \tmp, #(1 << 6)
+-	mcr	p15, 0, \tmp, c15, c1, 0	@ Enable cp6 access
+-	.endm
+-
+-	/*
+-	 * Note: a 1-cycle window exists where iintvec will return the value
+-	 * of iintbase, so we explicitly check for "bad zeros"
+-	 */
+-	.macro  get_irqnr_and_base, irqnr, irqstat, base, tmp
+-	mrc	p6, 0, \irqnr, c3, c2, 0  	@ Read IINTVEC
+-	cmp	\irqnr, #0
+-	mrceq	p6, 0, \irqnr, c3, c2, 0  	@ Re-read on potentially bad zero
+-	adds	\irqstat, \irqnr, #1	  	@ Check for 0xffffffff
+-	movne	\irqnr, \irqnr, lsr #2	  	@ Convert to irqnr
+-	.endm
+-
+-	.macro arch_ret_to_user, tmp1, tmp2
+-	mrc	p15, 0, \tmp1, c15, c1, 0
+-	ands	\tmp2, \tmp1, #(1 << 6)
+-	bicne	\tmp1, \tmp1, #(1 << 6)
+-	mcrne	p15, 0, \tmp1, c15, c1, 0	@ Disable cp6 access
+-	.endm
+diff --git a/arch/arm/mach-iop13xx/include/mach/hardware.h b/arch/arm/mach-iop13xx/include/mach/hardware.h
+deleted file mode 100644
+index 8c943fa6bbd7..000000000000
+--- a/arch/arm/mach-iop13xx/include/mach/hardware.h
++++ /dev/null
+@@ -1,22 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __ASM_ARCH_HARDWARE_H
+-#define __ASM_ARCH_HARDWARE_H
+-#include <asm/types.h>
+-
+-#ifndef __ASSEMBLY__
+-extern u16 iop13xx_dev_id(void);
+-extern void iop13xx_set_atu_mmr_bases(void);
+-#endif
+-
+-/*
+- * Generic chipset bits
+- *
+- */
+-#include "iop13xx.h"
+-
+-/*
+- * Board specific bits
+- */
+-#include "iq81340.h"
+-
+-#endif  /* _ASM_ARCH_HARDWARE_H */
+diff --git a/arch/arm/mach-iop13xx/include/mach/iop13xx.h b/arch/arm/mach-iop13xx/include/mach/iop13xx.h
+deleted file mode 100644
+index 04bb6aca12c5..000000000000
+--- a/arch/arm/mach-iop13xx/include/mach/iop13xx.h
++++ /dev/null
+@@ -1,508 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _IOP13XX_HW_H_
+-#define _IOP13XX_HW_H_
+-
+-#ifndef __ASSEMBLY__
+-
+-enum reboot_mode;
+-
+-/* The ATU offsets can change based on the strapping */
+-extern u32 iop13xx_atux_pmmr_offset;
+-extern u32 iop13xx_atue_pmmr_offset;
+-void iop13xx_init_early(void);
+-void iop13xx_init_irq(void);
+-void iop13xx_map_io(void);
+-void iop13xx_platform_init(void);
+-void iop13xx_add_tpmi_devices(void);
+-void iop13xx_init_irq(void);
+-void iop13xx_restart(enum reboot_mode, const char *);
+-
+-/* CPUID CP6 R0 Page 0 */
+-static inline int iop13xx_cpu_id(void)
+-{
+-	int id;
+-	asm volatile("mrc p6, 0, %0, c0, c0, 0":"=r" (id));
+-	return id;
+-}
+-
+-/* WDTCR CP6 R7 Page 9 */
+-static inline u32 read_wdtcr(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c7, c9, 0":"=r" (val));
+-	return val;
+-}
+-static inline void write_wdtcr(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c7, c9, 0"::"r" (val));
+-}
+-
+-/* WDTSR CP6 R8 Page 9 */
+-static inline u32 read_wdtsr(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c8, c9, 0":"=r" (val));
+-	return val;
+-}
+-static inline void write_wdtsr(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c8, c9, 0"::"r" (val));
+-}
+-
+-/* RCSR - Reset Cause Status Register  */
+-static inline u32 read_rcsr(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c0, c1, 0":"=r" (val));
+-	return val;
+-}
+-
+-extern unsigned long get_iop_tick_rate(void);
+-#endif
+-
+-/*
+- * IOP13XX I/O and Mem space regions for PCI autoconfiguration
+- */
+-#define IOP13XX_MAX_RAM_SIZE    0x80000000UL  /* 2GB */
+-#define IOP13XX_PCI_OFFSET	 IOP13XX_MAX_RAM_SIZE
+-
+-/* PCI MAP
+- * bus range		cpu phys	cpu virt	note
+- * 0x0000.0000 + 2GB	(n/a)		(n/a)		inbound, 1:1 mapping with Physical RAM
+- * 0x8000.0000 + 928M	0x1.8000.0000   (ioremap)	PCIX outbound memory window
+- * 0x8000.0000 + 928M	0x2.8000.0000   (ioremap)	PCIE outbound memory window
+- *
+- * IO MAP
+- * 0x00000 + 64K	0x0.fffb.0000	0xfee0.0000	PCIX outbound i/o window
+- * 0x10000 + 64K	0x0.fffd.0000	0xfee1.0000	PCIE outbound i/o window
+- */
+-#define IOP13XX_PCIX_LOWER_IO_PA      0xfffb0000UL
+-#define IOP13XX_PCIX_LOWER_IO_BA      0x0UL /* OIOTVR */
+-
+-#define IOP13XX_PCIX_MEM_PHYS_OFFSET  0x100000000ULL
+-#define IOP13XX_PCIX_MEM_WINDOW_SIZE  0x3a000000UL
+-#define IOP13XX_PCIX_LOWER_MEM_BA     (PHYS_OFFSET + IOP13XX_PCI_OFFSET)
+-#define IOP13XX_PCIX_LOWER_MEM_PA     (IOP13XX_PCIX_MEM_PHYS_OFFSET +\
+-				       IOP13XX_PCIX_LOWER_MEM_BA)
+-#define IOP13XX_PCIX_UPPER_MEM_PA     (IOP13XX_PCIX_LOWER_MEM_PA +\
+-				       IOP13XX_PCIX_MEM_WINDOW_SIZE - 1)
+-#define IOP13XX_PCIX_UPPER_MEM_BA     (IOP13XX_PCIX_LOWER_MEM_BA +\
+-				       IOP13XX_PCIX_MEM_WINDOW_SIZE - 1)
+-
+-#define IOP13XX_PCIX_MEM_COOKIE        0x80000000UL
+-#define IOP13XX_PCIX_LOWER_MEM_RA      IOP13XX_PCIX_MEM_COOKIE
+-#define IOP13XX_PCIX_UPPER_MEM_RA      (IOP13XX_PCIX_LOWER_MEM_RA +\
+-					IOP13XX_PCIX_MEM_WINDOW_SIZE - 1)
+-#define IOP13XX_PCIX_MEM_OFFSET        (IOP13XX_PCIX_MEM_COOKIE -\
+-					IOP13XX_PCIX_LOWER_MEM_BA)
+-
+-/* PCI-E ranges */
+-#define IOP13XX_PCIE_LOWER_IO_PA      	 0xfffd0000UL
+-#define IOP13XX_PCIE_LOWER_IO_BA	 0x10000UL  /* OIOTVR */
+-
+-#define IOP13XX_PCIE_MEM_PHYS_OFFSET  	 0x200000000ULL
+-#define IOP13XX_PCIE_MEM_WINDOW_SIZE  	 0x3a000000UL
+-#define IOP13XX_PCIE_LOWER_MEM_BA     	 (PHYS_OFFSET + IOP13XX_PCI_OFFSET)
+-#define IOP13XX_PCIE_LOWER_MEM_PA     	 (IOP13XX_PCIE_MEM_PHYS_OFFSET +\
+-					 IOP13XX_PCIE_LOWER_MEM_BA)
+-#define IOP13XX_PCIE_UPPER_MEM_PA     	 (IOP13XX_PCIE_LOWER_MEM_PA +\
+-					 IOP13XX_PCIE_MEM_WINDOW_SIZE - 1)
+-#define IOP13XX_PCIE_UPPER_MEM_BA     	 (IOP13XX_PCIE_LOWER_MEM_BA +\
+-					 IOP13XX_PCIE_MEM_WINDOW_SIZE - 1)
+-
+-/* All 0xc000.0000 - 0xfdff.ffff addresses belong to PCIe */
+-#define IOP13XX_PCIE_MEM_COOKIE       	 0xc0000000UL
+-#define IOP13XX_PCIE_LOWER_MEM_RA     	 IOP13XX_PCIE_MEM_COOKIE
+-#define IOP13XX_PCIE_UPPER_MEM_RA     	 (IOP13XX_PCIE_LOWER_MEM_RA +\
+-					 IOP13XX_PCIE_MEM_WINDOW_SIZE - 1)
+-#define IOP13XX_PCIE_MEM_OFFSET       	 (IOP13XX_PCIE_MEM_COOKIE -\
+-					 IOP13XX_PCIE_LOWER_MEM_BA)
+-
+-/* PBI Ranges */
+-#define IOP13XX_PBI_LOWER_MEM_PA	  0xf0000000UL
+-#define IOP13XX_PBI_MEM_WINDOW_SIZE	  0x04000000UL
+-#define IOP13XX_PBI_MEM_COOKIE		  0xfa000000UL
+-#define IOP13XX_PBI_LOWER_MEM_RA	  IOP13XX_PBI_MEM_COOKIE
+-#define IOP13XX_PBI_UPPER_MEM_RA	  (IOP13XX_PBI_LOWER_MEM_RA +\
+-					  IOP13XX_PBI_MEM_WINDOW_SIZE - 1)
+-
+-/*
+- * IOP13XX chipset registers
+- */
+-#define IOP13XX_PMMR_PHYS_MEM_BASE	   0xffd80000UL  /* PMMR phys. address */
+-#define IOP13XX_PMMR_VIRT_MEM_BASE	   (void __iomem *)(0xfee80000UL)  /* PMMR phys. address */
+-#define IOP13XX_PMMR_MEM_WINDOW_SIZE	   0x80000
+-#define IOP13XX_PMMR_UPPER_MEM_VA	   (IOP13XX_PMMR_VIRT_MEM_BASE +\
+-					   IOP13XX_PMMR_MEM_WINDOW_SIZE - 1)
+-#define IOP13XX_PMMR_UPPER_MEM_PA	   (IOP13XX_PMMR_PHYS_MEM_BASE +\
+-					   IOP13XX_PMMR_MEM_WINDOW_SIZE - 1)
+-#define IOP13XX_PMMR_VIRT_TO_PHYS(addr)   (((addr) - IOP13XX_PMMR_VIRT_MEM_BASE)\
+-					   + IOP13XX_PMMR_PHYS_MEM_BASE)
+-#define IOP13XX_PMMR_PHYS_TO_VIRT(addr)   (((addr) - IOP13XX_PMMR_PHYS_MEM_BASE)\
+-					   + IOP13XX_PMMR_VIRT_MEM_BASE)
+-#define IOP13XX_REG_ADDR32(reg)     	   (IOP13XX_PMMR_VIRT_MEM_BASE + (reg))
+-#define IOP13XX_REG_ADDR16(reg)     	   (IOP13XX_PMMR_VIRT_MEM_BASE + (reg))
+-#define IOP13XX_REG_ADDR8(reg)      	   (IOP13XX_PMMR_VIRT_MEM_BASE + (reg))
+-#define IOP13XX_REG_ADDR32_PHYS(reg)      (IOP13XX_PMMR_PHYS_MEM_BASE + (reg))
+-#define IOP13XX_REG_ADDR16_PHYS(reg)      (IOP13XX_PMMR_PHYS_MEM_BASE + (reg))
+-#define IOP13XX_REG_ADDR8_PHYS(reg)       (IOP13XX_PMMR_PHYS_MEM_BASE + (reg))
+-#define IOP13XX_PMMR_SIZE		   0x00080000
+-
+-/*=================== Defines for Platform Devices =====================*/
+-#define IOP13XX_UART0_PHYS  (IOP13XX_PMMR_PHYS_MEM_BASE + 0x00002300)
+-#define IOP13XX_UART1_PHYS  (IOP13XX_PMMR_PHYS_MEM_BASE + 0x00002340)
+-#define IOP13XX_UART0_VIRT  (IOP13XX_PMMR_VIRT_MEM_BASE + 0x00002300)
+-#define IOP13XX_UART1_VIRT  (IOP13XX_PMMR_VIRT_MEM_BASE + 0x00002340)
+-
+-#define IOP13XX_I2C0_PHYS   (IOP13XX_PMMR_PHYS_MEM_BASE | 0x00002500)
+-#define IOP13XX_I2C1_PHYS   (IOP13XX_PMMR_PHYS_MEM_BASE | 0x00002520)
+-#define IOP13XX_I2C2_PHYS   (IOP13XX_PMMR_PHYS_MEM_BASE | 0x00002540)
+-#define IOP13XX_I2C0_VIRT   (IOP13XX_PMMR_VIRT_MEM_BASE | 0x00002500)
+-#define IOP13XX_I2C1_VIRT   (IOP13XX_PMMR_VIRT_MEM_BASE | 0x00002520)
+-#define IOP13XX_I2C2_VIRT   (IOP13XX_PMMR_VIRT_MEM_BASE | 0x00002540)
+-
+-/* ATU selection flags */
+-/* IOP13XX_INIT_ATU_DEFAULT = Rely on CONFIG_IOP13XX_ATU* */
+-#define IOP13XX_INIT_ATU_DEFAULT     (0)
+-#define IOP13XX_INIT_ATU_ATUX	      (1 << 0)
+-#define IOP13XX_INIT_ATU_ATUE	      (1 << 1)
+-#define IOP13XX_INIT_ATU_NONE	      (1 << 2)
+-
+-/* UART selection flags */
+-/* IOP13XX_INIT_UART_DEFAULT = Rely on CONFIG_IOP13XX_UART* */
+-#define IOP13XX_INIT_UART_DEFAULT    (0)
+-#define IOP13XX_INIT_UART_0	      (1 << 0)
+-#define IOP13XX_INIT_UART_1	      (1 << 1)
+-
+-/* I2C selection flags */
+-/* IOP13XX_INIT_I2C_DEFAULT = Rely on CONFIG_IOP13XX_I2C* */
+-#define IOP13XX_INIT_I2C_DEFAULT     (0)
+-#define IOP13XX_INIT_I2C_0	      (1 << 0)
+-#define IOP13XX_INIT_I2C_1	      (1 << 1)
+-#define IOP13XX_INIT_I2C_2	      (1 << 2)
+-
+-/* ADMA selection flags */
+-/* INIT_ADMA_DEFAULT = Rely on CONFIG_IOP13XX_ADMA* */
+-#define IOP13XX_INIT_ADMA_DEFAULT     (0)
+-#define IOP13XX_INIT_ADMA_0           (1 << 0)
+-#define IOP13XX_INIT_ADMA_1           (1 << 1)
+-#define IOP13XX_INIT_ADMA_2           (1 << 2)
+-
+-/* Platform devices */
+-#define IQ81340_NUM_UART     		2
+-#define IQ81340_NUM_I2C      		3
+-#define IQ81340_NUM_PHYS_MAP_FLASH	1
+-#define IQ81340_NUM_ADMA     		3
+-#define IQ81340_MAX_PLAT_DEVICES (IQ81340_NUM_UART + \
+-				IQ81340_NUM_I2C + \
+-				IQ81340_NUM_PHYS_MAP_FLASH + \
+-				IQ81340_NUM_ADMA)
+-
+-/*========================== PMMR offsets for key registers ============*/
+-#define IOP13XX_ATU0_PMMR_OFFSET   	0x00048000
+-#define IOP13XX_ATU1_PMMR_OFFSET   	0x0004c000
+-#define IOP13XX_ATU2_PMMR_OFFSET   	0x0004d000
+-#define IOP13XX_ADMA0_PMMR_OFFSET  	0x00000000
+-#define IOP13XX_ADMA1_PMMR_OFFSET  	0x00000200
+-#define IOP13XX_ADMA2_PMMR_OFFSET  	0x00000400
+-#define IOP13XX_PBI_PMMR_OFFSET    	0x00001580
+-#define IOP13XX_MU_PMMR_OFFSET		0x00004000
+-#define IOP13XX_ESSR0_PMMR_OFFSET  	0x00002188
+-#define IOP13XX_ESSR0			IOP13XX_REG_ADDR32(0x00002188)
+-
+-#define IOP13XX_ESSR0_IFACE_MASK   	0x00004000  /* Interface PCI-X / PCI-E */
+-#define IOP13XX_CONTROLLER_ONLY    	(1 << 14)
+-#define IOP13XX_INTERFACE_SEL_PCIX 	(1 << 15)
+-
+-#define IOP13XX_PMON_PMMR_OFFSET	0x0001A000
+-#define IOP13XX_PMON_BASE		(IOP13XX_PMMR_VIRT_MEM_BASE +\
+-					IOP13XX_PMON_PMMR_OFFSET)
+-#define IOP13XX_PMON_PHYSBASE		(IOP13XX_PMMR_PHYS_MEM_BASE +\
+-					IOP13XX_PMON_PMMR_OFFSET)
+-
+-#define IOP13XX_PMON_CMD0		(IOP13XX_PMON_BASE + 0x0)
+-#define IOP13XX_PMON_EVR0		(IOP13XX_PMON_BASE + 0x4)
+-#define IOP13XX_PMON_STS0		(IOP13XX_PMON_BASE + 0x8)
+-#define IOP13XX_PMON_DATA0		(IOP13XX_PMON_BASE + 0xC)
+-
+-#define IOP13XX_PMON_CMD3		(IOP13XX_PMON_BASE + 0x30)
+-#define IOP13XX_PMON_EVR3		(IOP13XX_PMON_BASE + 0x34)
+-#define IOP13XX_PMON_STS3		(IOP13XX_PMON_BASE + 0x38)
+-#define IOP13XX_PMON_DATA3		(IOP13XX_PMON_BASE + 0x3C)
+-
+-#define IOP13XX_PMON_CMD7		(IOP13XX_PMON_BASE + 0x70)
+-#define IOP13XX_PMON_EVR7		(IOP13XX_PMON_BASE + 0x74)
+-#define IOP13XX_PMON_STS7		(IOP13XX_PMON_BASE + 0x78)
+-#define IOP13XX_PMON_DATA7		(IOP13XX_PMON_BASE + 0x7C)
+-
+-#define IOP13XX_PMONEN			(IOP13XX_PMMR_VIRT_MEM_BASE + 0x4E040)
+-#define IOP13XX_PMONSTAT		(IOP13XX_PMMR_VIRT_MEM_BASE + 0x4E044)
+-
+-/*================================ATU===================================*/
+-#define IOP13XX_ATUX_OFFSET(ofs)	IOP13XX_REG_ADDR32(\
+-					iop13xx_atux_pmmr_offset + (ofs))
+-
+-#define IOP13XX_ATUX_DID		IOP13XX_REG_ADDR16(\
+-					iop13xx_atux_pmmr_offset + 0x2)
+-
+-#define IOP13XX_ATUX_ATUCMD		IOP13XX_REG_ADDR16(\
+-					iop13xx_atux_pmmr_offset + 0x4)
+-#define IOP13XX_ATUX_ATUSR		IOP13XX_REG_ADDR16(\
+-					iop13xx_atux_pmmr_offset + 0x6)
+-
+-#define IOP13XX_ATUX_IABAR0   		IOP13XX_ATUX_OFFSET(0x10)
+-#define IOP13XX_ATUX_IAUBAR0  		IOP13XX_ATUX_OFFSET(0x14)
+-#define IOP13XX_ATUX_IABAR1   		IOP13XX_ATUX_OFFSET(0x18)
+-#define IOP13XX_ATUX_IAUBAR1  		IOP13XX_ATUX_OFFSET(0x1c)
+-#define IOP13XX_ATUX_IABAR2   		IOP13XX_ATUX_OFFSET(0x20)
+-#define IOP13XX_ATUX_IAUBAR2  		IOP13XX_ATUX_OFFSET(0x24)
+-#define IOP13XX_ATUX_IALR0    		IOP13XX_ATUX_OFFSET(0x40)
+-#define IOP13XX_ATUX_IATVR0   		IOP13XX_ATUX_OFFSET(0x44)
+-#define IOP13XX_ATUX_IAUTVR0  		IOP13XX_ATUX_OFFSET(0x48)
+-#define IOP13XX_ATUX_IALR1    		IOP13XX_ATUX_OFFSET(0x4c)
+-#define IOP13XX_ATUX_IATVR1   		IOP13XX_ATUX_OFFSET(0x50)
+-#define IOP13XX_ATUX_IAUTVR1  		IOP13XX_ATUX_OFFSET(0x54)
+-#define IOP13XX_ATUX_IALR2    		IOP13XX_ATUX_OFFSET(0x58)
+-#define IOP13XX_ATUX_IATVR2   		IOP13XX_ATUX_OFFSET(0x5c)
+-#define IOP13XX_ATUX_IAUTVR2  		IOP13XX_ATUX_OFFSET(0x60)
+-#define IOP13XX_ATUX_ATUCR    		IOP13XX_ATUX_OFFSET(0x70)
+-#define IOP13XX_ATUX_PCSR     		IOP13XX_ATUX_OFFSET(0x74)
+-#define IOP13XX_ATUX_ATUISR   		IOP13XX_ATUX_OFFSET(0x78)
+-#define IOP13XX_ATUX_PCIXSR   		IOP13XX_ATUX_OFFSET(0xD4)
+-#define IOP13XX_ATUX_IABAR3   		IOP13XX_ATUX_OFFSET(0x200)
+-#define IOP13XX_ATUX_IAUBAR3  		IOP13XX_ATUX_OFFSET(0x204)
+-#define IOP13XX_ATUX_IALR3    		IOP13XX_ATUX_OFFSET(0x208)
+-#define IOP13XX_ATUX_IATVR3   		IOP13XX_ATUX_OFFSET(0x20c)
+-#define IOP13XX_ATUX_IAUTVR3  		IOP13XX_ATUX_OFFSET(0x210)
+-
+-#define IOP13XX_ATUX_OIOBAR   		IOP13XX_ATUX_OFFSET(0x300)
+-#define IOP13XX_ATUX_OIOWTVR  		IOP13XX_ATUX_OFFSET(0x304)
+-#define IOP13XX_ATUX_OUMBAR0  		IOP13XX_ATUX_OFFSET(0x308)
+-#define IOP13XX_ATUX_OUMWTVR0 		IOP13XX_ATUX_OFFSET(0x30c)
+-#define IOP13XX_ATUX_OUMBAR1  		IOP13XX_ATUX_OFFSET(0x310)
+-#define IOP13XX_ATUX_OUMWTVR1 		IOP13XX_ATUX_OFFSET(0x314)
+-#define IOP13XX_ATUX_OUMBAR2  		IOP13XX_ATUX_OFFSET(0x318)
+-#define IOP13XX_ATUX_OUMWTVR2 		IOP13XX_ATUX_OFFSET(0x31c)
+-#define IOP13XX_ATUX_OUMBAR3  		IOP13XX_ATUX_OFFSET(0x320)
+-#define IOP13XX_ATUX_OUMWTVR3 		IOP13XX_ATUX_OFFSET(0x324)
+-#define IOP13XX_ATUX_OUDMABAR 		IOP13XX_ATUX_OFFSET(0x328)
+-#define IOP13XX_ATUX_OUMSIBAR 		IOP13XX_ATUX_OFFSET(0x32c)
+-#define IOP13XX_ATUX_OCCAR    		IOP13XX_ATUX_OFFSET(0x330)
+-#define IOP13XX_ATUX_OCCDR    		IOP13XX_ATUX_OFFSET(0x334)
+-
+-#define IOP13XX_ATUX_ATUCR_OUT_EN		(1 << 1)
+-#define IOP13XX_ATUX_PCSR_CENTRAL_RES		(1 << 25)
+-#define IOP13XX_ATUX_PCSR_P_RSTOUT		(1 << 21)
+-#define IOP13XX_ATUX_PCSR_OUT_Q_BUSY		(1 << 15)
+-#define IOP13XX_ATUX_PCSR_IN_Q_BUSY		(1 << 14)
+-#define IOP13XX_ATUX_PCSR_FREQ_OFFSET		(16)
+-
+-#define IOP13XX_ATUX_STAT_PCI_IFACE_ERR	(1 << 18)
+-#define IOP13XX_ATUX_STAT_VPD_ADDR		(1 << 17)
+-#define IOP13XX_ATUX_STAT_INT_PAR_ERR		(1 << 16)
+-#define IOP13XX_ATUX_STAT_CFG_WRITE		(1 << 15)
+-#define IOP13XX_ATUX_STAT_ERR_COR		(1 << 14)
+-#define IOP13XX_ATUX_STAT_TX_SCEM		(1 << 13)
+-#define IOP13XX_ATUX_STAT_REC_SCEM		(1 << 12)
+-#define IOP13XX_ATUX_STAT_POWER_TRAN	 	(1 << 11)
+-#define IOP13XX_ATUX_STAT_TX_SERR		(1 << 10)
+-#define IOP13XX_ATUX_STAT_DET_PAR_ERR	 	(1 << 9	)
+-#define IOP13XX_ATUX_STAT_BIST			(1 << 8	)
+-#define IOP13XX_ATUX_STAT_INT_REC_MABORT 	(1 << 7	)
+-#define IOP13XX_ATUX_STAT_REC_SERR		(1 << 4	)
+-#define IOP13XX_ATUX_STAT_EXT_REC_MABORT 	(1 << 3	)
+-#define IOP13XX_ATUX_STAT_EXT_REC_TABORT 	(1 << 2	)
+-#define IOP13XX_ATUX_STAT_EXT_SIG_TABORT 	(1 << 1	)
+-#define IOP13XX_ATUX_STAT_MASTER_DATA_PAR	(1 << 0	)
+-
+-#define IOP13XX_ATUX_PCIXSR_BUS_NUM	(8)
+-#define IOP13XX_ATUX_PCIXSR_DEV_NUM	(3)
+-#define IOP13XX_ATUX_PCIXSR_FUNC_NUM	(0)
+-
+-#define IOP13XX_ATUX_IALR_DISABLE  	0x00000001
+-#define IOP13XX_ATUX_OUMBAR_ENABLE 	0x80000000
+-
+-#define IOP13XX_ATUE_OFFSET(ofs)	IOP13XX_REG_ADDR32(\
+-					iop13xx_atue_pmmr_offset + (ofs))
+-
+-#define IOP13XX_ATUE_DID		IOP13XX_REG_ADDR16(\
+-					iop13xx_atue_pmmr_offset + 0x2)
+-#define IOP13XX_ATUE_ATUCMD		IOP13XX_REG_ADDR16(\
+-					iop13xx_atue_pmmr_offset + 0x4)
+-#define IOP13XX_ATUE_ATUSR		IOP13XX_REG_ADDR16(\
+-					iop13xx_atue_pmmr_offset + 0x6)
+-
+-#define IOP13XX_ATUE_IABAR0		IOP13XX_ATUE_OFFSET(0x10)
+-#define IOP13XX_ATUE_IAUBAR0		IOP13XX_ATUE_OFFSET(0x14)
+-#define IOP13XX_ATUE_IABAR1		IOP13XX_ATUE_OFFSET(0x18)
+-#define IOP13XX_ATUE_IAUBAR1		IOP13XX_ATUE_OFFSET(0x1c)
+-#define IOP13XX_ATUE_IABAR2		IOP13XX_ATUE_OFFSET(0x20)
+-#define IOP13XX_ATUE_IAUBAR2		IOP13XX_ATUE_OFFSET(0x24)
+-#define IOP13XX_ATUE_IALR0		IOP13XX_ATUE_OFFSET(0x40)
+-#define IOP13XX_ATUE_IATVR0		IOP13XX_ATUE_OFFSET(0x44)
+-#define IOP13XX_ATUE_IAUTVR0		IOP13XX_ATUE_OFFSET(0x48)
+-#define IOP13XX_ATUE_IALR1		IOP13XX_ATUE_OFFSET(0x4c)
+-#define IOP13XX_ATUE_IATVR1		IOP13XX_ATUE_OFFSET(0x50)
+-#define IOP13XX_ATUE_IAUTVR1		IOP13XX_ATUE_OFFSET(0x54)
+-#define IOP13XX_ATUE_IALR2		IOP13XX_ATUE_OFFSET(0x58)
+-#define IOP13XX_ATUE_IATVR2		IOP13XX_ATUE_OFFSET(0x5c)
+-#define IOP13XX_ATUE_IAUTVR2		IOP13XX_ATUE_OFFSET(0x60)
+-#define IOP13XX_ATUE_PE_LSTS		IOP13XX_REG_ADDR16(\
+-					iop13xx_atue_pmmr_offset + 0xe2)
+-#define IOP13XX_ATUE_OIOWTVR		IOP13XX_ATUE_OFFSET(0x304)
+-#define IOP13XX_ATUE_OUMBAR0		IOP13XX_ATUE_OFFSET(0x308)
+-#define IOP13XX_ATUE_OUMWTVR0		IOP13XX_ATUE_OFFSET(0x30c)
+-#define IOP13XX_ATUE_OUMBAR1		IOP13XX_ATUE_OFFSET(0x310)
+-#define IOP13XX_ATUE_OUMWTVR1		IOP13XX_ATUE_OFFSET(0x314)
+-#define IOP13XX_ATUE_OUMBAR2		IOP13XX_ATUE_OFFSET(0x318)
+-#define IOP13XX_ATUE_OUMWTVR2		IOP13XX_ATUE_OFFSET(0x31c)
+-#define IOP13XX_ATUE_OUMBAR3		IOP13XX_ATUE_OFFSET(0x320)
+-#define IOP13XX_ATUE_OUMWTVR3		IOP13XX_ATUE_OFFSET(0x324)
+-
+-#define IOP13XX_ATUE_ATUCR		IOP13XX_ATUE_OFFSET(0x70)
+-#define IOP13XX_ATUE_PCSR		IOP13XX_ATUE_OFFSET(0x74)
+-#define IOP13XX_ATUE_ATUISR		IOP13XX_ATUE_OFFSET(0x78)
+-#define IOP13XX_ATUE_OIOBAR		IOP13XX_ATUE_OFFSET(0x300)
+-#define IOP13XX_ATUE_OCCAR		IOP13XX_ATUE_OFFSET(0x32c)
+-#define IOP13XX_ATUE_OCCDR		IOP13XX_ATUE_OFFSET(0x330)
+-
+-#define IOP13XX_ATUE_PIE_STS		IOP13XX_ATUE_OFFSET(0x384)
+-#define IOP13XX_ATUE_PIE_MSK		IOP13XX_ATUE_OFFSET(0x388)
+-
+-#define IOP13XX_ATUE_ATUCR_IVM		(1 << 6)
+-#define IOP13XX_ATUE_ATUCR_OUT_EN	(1 << 1)
+-#define IOP13XX_ATUE_OCCAR_BUS_NUM	(24)
+-#define IOP13XX_ATUE_OCCAR_DEV_NUM	(19)
+-#define IOP13XX_ATUE_OCCAR_FUNC_NUM	(16)
+-#define IOP13XX_ATUE_OCCAR_EXT_REG	(8)
+-#define IOP13XX_ATUE_OCCAR_REG		(2)
+-
+-#define IOP13XX_ATUE_PCSR_BUS_NUM	(24)
+-#define IOP13XX_ATUE_PCSR_DEV_NUM	(19)
+-#define IOP13XX_ATUE_PCSR_FUNC_NUM	(16)
+-#define IOP13XX_ATUE_PCSR_OUT_Q_BUSY	(1 << 15)
+-#define IOP13XX_ATUE_PCSR_IN_Q_BUSY	(1 << 14)
+-#define IOP13XX_ATUE_PCSR_END_POINT	(1 << 13)
+-#define IOP13XX_ATUE_PCSR_LLRB_BUSY	(1 << 12)
+-
+-#define IOP13XX_ATUE_PCSR_BUS_NUM_MASK		(0xff)
+-#define IOP13XX_ATUE_PCSR_DEV_NUM_MASK		(0x1f)
+-#define IOP13XX_ATUE_PCSR_FUNC_NUM_MASK	(0x7)
+-
+-#define IOP13XX_ATUE_PCSR_CORE_RESET		(8)
+-#define IOP13XX_ATUE_PCSR_FUNC_NUM		(16)
+-
+-#define IOP13XX_ATUE_LSTS_TRAINING		(1 << 11)
+-#define IOP13XX_ATUE_STAT_SLOT_PWR_MSG		(1 << 28)
+-#define IOP13XX_ATUE_STAT_PME			(1 << 27)
+-#define IOP13XX_ATUE_STAT_HOT_PLUG_MSG		(1 << 26)
+-#define IOP13XX_ATUE_STAT_IVM			(1 << 25)
+-#define IOP13XX_ATUE_STAT_BIST			(1 << 24)
+-#define IOP13XX_ATUE_STAT_CFG_WRITE		(1 << 18)
+-#define IOP13XX_ATUE_STAT_VPD_ADDR		(1 << 17)
+-#define IOP13XX_ATUE_STAT_POWER_TRAN		(1 << 16)
+-#define IOP13XX_ATUE_STAT_HALT_ON_ERROR	(1 << 13)
+-#define IOP13XX_ATUE_STAT_ROOT_SYS_ERR		(1 << 12)
+-#define IOP13XX_ATUE_STAT_ROOT_ERR_MSG		(1 << 11)
+-#define IOP13XX_ATUE_STAT_PCI_IFACE_ERR	(1 << 10)
+-#define IOP13XX_ATUE_STAT_ERR_COR		(1 << 9	)
+-#define IOP13XX_ATUE_STAT_ERR_UNCOR		(1 << 8	)
+-#define IOP13XX_ATUE_STAT_CRS			(1 << 7	)
+-#define IOP13XX_ATUE_STAT_LNK_DWN		(1 << 6	)
+-#define IOP13XX_ATUE_STAT_INT_REC_MABORT	(1 << 5	)
+-#define IOP13XX_ATUE_STAT_DET_PAR_ERR		(1 << 4	)
+-#define IOP13XX_ATUE_STAT_EXT_REC_MABORT	(1 << 3	)
+-#define IOP13XX_ATUE_STAT_SIG_TABORT		(1 << 2	)
+-#define IOP13XX_ATUE_STAT_EXT_REC_TABORT	(1 << 1	)
+-#define IOP13XX_ATUE_STAT_MASTER_DATA_PAR	(1 << 0	)
+-
+-#define IOP13XX_ATUE_ESTAT_REC_UNSUPPORTED_COMP_REQ	(1 << 31)
+-#define IOP13XX_ATUE_ESTAT_REC_COMPLETER_ABORT		(1 << 30)
+-#define IOP13XX_ATUE_ESTAT_TX_POISONED_TLP		(1 << 29)
+-#define IOP13XX_ATUE_ESTAT_TX_PAR_ERR			(1 << 28)
+-#define IOP13XX_ATUE_ESTAT_REC_UNSUPPORTED_REQ		(1 << 20)
+-#define IOP13XX_ATUE_ESTAT_REC_ECRC_ERR		(1 << 19)
+-#define IOP13XX_ATUE_ESTAT_REC_MALFORMED_TLP		(1 << 18)
+-#define IOP13XX_ATUE_ESTAT_TX_RECEIVER_OVERFLOW	(1 << 17)
+-#define IOP13XX_ATUE_ESTAT_REC_UNEXPECTED_COMP		(1 << 16)
+-#define IOP13XX_ATUE_ESTAT_INT_COMP_ABORT		(1 << 15)
+-#define IOP13XX_ATUE_ESTAT_COMP_TIMEOUT		(1 << 14)
+-#define IOP13XX_ATUE_ESTAT_FLOW_CONTROL_ERR		(1 << 13)
+-#define IOP13XX_ATUE_ESTAT_REC_POISONED_TLP		(1 << 12)
+-#define IOP13XX_ATUE_ESTAT_DATA_LNK_ERR		(1 << 4	)
+-#define IOP13XX_ATUE_ESTAT_TRAINING_ERR		(1 << 0	)
+-
+-#define IOP13XX_ATUE_IALR_DISABLE   		(0x00000001)
+-#define IOP13XX_ATUE_OUMBAR_ENABLE  		(0x80000000)
+-#define IOP13XX_ATU_OUMBAR_FUNC_NUM  		(28)
+-#define IOP13XX_ATU_OUMBAR_FUNC_NUM_MASK  	(0x7)
+-/*=======================================================================*/
+-
+-/*============================MESSAGING UNIT=============================*/
+-#define IOP13XX_MU_OFFSET(ofs)	IOP13XX_REG_ADDR32(IOP13XX_MU_PMMR_OFFSET +\
+-							(ofs))
+-
+-#define IOP13XX_MU_IMR0	IOP13XX_MU_OFFSET(0x10)
+-#define IOP13XX_MU_IMR1	IOP13XX_MU_OFFSET(0x14)
+-#define IOP13XX_MU_OMR0	IOP13XX_MU_OFFSET(0x18)
+-#define IOP13XX_MU_OMR1	IOP13XX_MU_OFFSET(0x1C)
+-#define IOP13XX_MU_IDR	       	IOP13XX_MU_OFFSET(0x20)
+-#define IOP13XX_MU_IISR	IOP13XX_MU_OFFSET(0x24)
+-#define IOP13XX_MU_IIMR	IOP13XX_MU_OFFSET(0x28)
+-#define IOP13XX_MU_ODR	       	IOP13XX_MU_OFFSET(0x2C)
+-#define IOP13XX_MU_OISR	IOP13XX_MU_OFFSET(0x30)
+-#define IOP13XX_MU_OIMR	IOP13XX_MU_OFFSET(0x34)
+-#define IOP13XX_MU_IRCSR      	IOP13XX_MU_OFFSET(0x38)
+-#define IOP13XX_MU_ORCSR      	IOP13XX_MU_OFFSET(0x3C)
+-#define IOP13XX_MU_MIMR	IOP13XX_MU_OFFSET(0x48)
+-#define IOP13XX_MU_MUCR	IOP13XX_MU_OFFSET(0x50)
+-#define IOP13XX_MU_QBAR	IOP13XX_MU_OFFSET(0x54)
+-#define IOP13XX_MU_MUBAR      	IOP13XX_MU_OFFSET(0x84)
+-
+-#define IOP13XX_MU_WINDOW_SIZE	(8 * 1024)
+-#define IOP13XX_MU_BASE_PHYS	(0xff000000)
+-#define IOP13XX_MU_BASE_PCI	(0xff000000)
+-#define IOP13XX_MU_MIMR_PCI	(IOP13XX_MU_BASE_PCI + 0x48)
+-#define IOP13XX_MU_MIMR_CORE_SELECT (15)
+-/*=======================================================================*/
+-
+-/*==============================ADMA UNITS===============================*/
+-#define IOP13XX_ADMA_PHYS_BASE(chan)	IOP13XX_REG_ADDR32_PHYS((chan << 9))
+-#define IOP13XX_ADMA_UPPER_PA(chan)	(IOP13XX_ADMA_PHYS_BASE(chan) + 0xc0)
+-
+-/*==============================XSI BRIDGE===============================*/
+-#define IOP13XX_XBG_BECSR		IOP13XX_REG_ADDR32(0x178c)
+-#define IOP13XX_XBG_BERAR		IOP13XX_REG_ADDR32(0x1790)
+-#define IOP13XX_XBG_BERUAR		IOP13XX_REG_ADDR32(0x1794)
+-#define is_atue_occdr_error(x) 	((__raw_readl(IOP13XX_XBG_BERAR) == \
+-					IOP13XX_PMMR_VIRT_TO_PHYS(\
+-					IOP13XX_ATUE_OCCDR))\
+-					&& (__raw_readl(IOP13XX_XBG_BECSR) & 1))
+-#define is_atux_occdr_error(x) 	((__raw_readl(IOP13XX_XBG_BERAR) == \
+-					IOP13XX_PMMR_VIRT_TO_PHYS(\
+-					IOP13XX_ATUX_OCCDR))\
+-					&& (__raw_readl(IOP13XX_XBG_BECSR) & 1))
+-/*=======================================================================*/
+-
+-#define IOP13XX_PBI_OFFSET(ofs) IOP13XX_REG_ADDR32(IOP13XX_PBI_PMMR_OFFSET +\
+-							(ofs))
+-
+-#define IOP13XX_PBI_CR	       		IOP13XX_PBI_OFFSET(0x0)
+-#define IOP13XX_PBI_SR	       		IOP13XX_PBI_OFFSET(0x4)
+-#define IOP13XX_PBI_BAR0      		IOP13XX_PBI_OFFSET(0x8)
+-#define IOP13XX_PBI_LR0       		IOP13XX_PBI_OFFSET(0xc)
+-#define IOP13XX_PBI_BAR1      		IOP13XX_PBI_OFFSET(0x10)
+-#define IOP13XX_PBI_LR1       		IOP13XX_PBI_OFFSET(0x14)
+-
+-#define IOP13XX_PROCESSOR_FREQ		IOP13XX_REG_ADDR32(0x2180)
+-
+-/* Watchdog timer definitions */
+-#define IOP_WDTCR_EN_ARM  	0x1e1e1e1e
+-#define IOP_WDTCR_EN      	0xe1e1e1e1
+-#define IOP_WDTCR_DIS_ARM 	0x1f1f1f1f
+-#define IOP_WDTCR_DIS     	0xf1f1f1f1
+-#define IOP_RCSR_WDT		(1 << 5) /* reset caused by watchdog timer */
+-#define IOP13XX_WDTSR_WRITE_EN	(1 << 31) /* used to speed up reset requests */
+-#define IOP13XX_WDTCR_IB_RESET	(1 << 0)
+-
+-#endif /* _IOP13XX_HW_H_ */
+diff --git a/arch/arm/mach-iop13xx/include/mach/iq81340.h b/arch/arm/mach-iop13xx/include/mach/iq81340.h
+deleted file mode 100644
+index d7ad27a95558..000000000000
+--- a/arch/arm/mach-iop13xx/include/mach/iq81340.h
++++ /dev/null
+@@ -1,29 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _IQ81340_H_
+-#define _IQ81340_H_
+-
+-#define IQ81340_PCE_BAR0    IOP13XX_PBI_LOWER_MEM_RA
+-#define IQ81340_PCE_BAR1    (IQ81340_PCE_BAR0 + 0x02000000)
+-
+-#define IQ81340_FLASHBASE   IQ81340_PCE_BAR0	/* Flash */
+-
+-#define IQ81340_PCE_BAR1_OFFSET(a) (IQ81340_PCE_BAR1 + (a))
+-
+-#define IQ81340_PRD_CODE    IQ81340_PCE_BAR1_OFFSET(0)
+-#define IQ81340_BRD_STEP    IQ81340_PCE_BAR1_OFFSET(0x10000)
+-#define IQ81340_CPLD_REV    IQ81340_PCE_BAR1_OFFSET(0x20000)
+-#define IQ81340_LED	     IQ81340_PCE_BAR1_OFFSET(0x30000)
+-#define IQ81340_LHEX	     IQ81340_PCE_BAR1_OFFSET(0x40000)
+-#define IQ81340_RHEX	     IQ81340_PCE_BAR1_OFFSET(0x50000)
+-#define IQ81340_BUZZER	     IQ81340_PCE_BAR1_OFFSET(0x60000)
+-#define IQ81340_32K_NVRAM   IQ81340_PCE_BAR1_OFFSET(0x70000)
+-#define IQ81340_256K_NVRAM  IQ81340_PCE_BAR1_OFFSET(0x80000)
+-#define IQ81340_ROTARY_SW   IQ81340_PCE_BAR1_OFFSET(0xd0000)
+-#define IQ81340_BATT_STAT   IQ81340_PCE_BAR1_OFFSET(0xf0000)
+-#define IQ81340_CMP_FLSH    IQ81340_PCE_BAR1_OFFSET(0x1000000) /* 16MB */
+-
+-#define PBI_CF_IDE_BASE     (IQ81340_CMP_FLSH)
+-#define PBI_CF_BAR_ADDR     (IOP13XX_PBI_BAR1)
+-
+-
+-#endif	/* _IQ81340_H_ */
+diff --git a/arch/arm/mach-iop13xx/include/mach/irqs.h b/arch/arm/mach-iop13xx/include/mach/irqs.h
+deleted file mode 100644
+index cd6b6375c050..000000000000
+--- a/arch/arm/mach-iop13xx/include/mach/irqs.h
++++ /dev/null
+@@ -1,195 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _IOP13XX_IRQS_H_
+-#define _IOP13XX_IRQS_H_
+-
+-#ifndef __ASSEMBLER__
+-#include <linux/types.h>
+-
+-/* INTPND0 CP6 R0 Page 3
+- */
+-static inline u32 read_intpnd_0(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c0, c3, 0":"=r" (val));
+-	return val;
+-}
+-
+-/* INTPND1 CP6 R1 Page 3
+- */
+-static inline u32 read_intpnd_1(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c1, c3, 0":"=r" (val));
+-	return val;
+-}
+-
+-/* INTPND2 CP6 R2 Page 3
+- */
+-static inline u32 read_intpnd_2(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c2, c3, 0":"=r" (val));
+-	return val;
+-}
+-
+-/* INTPND3 CP6 R3 Page 3
+- */
+-static inline u32 read_intpnd_3(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c3, c3, 0":"=r" (val));
+-	return val;
+-}
+-#endif
+-
+-#define INTBASE 0
+-#define INTSIZE_4 1
+-
+-/*
+- * iop34x chipset interrupts
+- */
+-#define IOP13XX_IRQ(x)		(IOP13XX_IRQ_OFS + (x))
+-
+-/*
+- * On IRQ or FIQ register
+- */
+-#define IRQ_IOP13XX_ADMA0_EOT	(0)
+-#define IRQ_IOP13XX_ADMA0_EOC	(1)
+-#define IRQ_IOP13XX_ADMA1_EOT	(2)
+-#define IRQ_IOP13XX_ADMA1_EOC	(3)
+-#define IRQ_IOP13XX_ADMA2_EOT	(4)
+-#define IRQ_IOP13XX_ADMA2_EOC	(5)
+-#define IRQ_IOP134_WATCHDOG	(6)
+-#define IRQ_IOP13XX_RSVD_7	(7)
+-#define IRQ_IOP13XX_TIMER0	(8)
+-#define IRQ_IOP13XX_TIMER1	(9)
+-#define IRQ_IOP13XX_I2C_0	(10)
+-#define IRQ_IOP13XX_I2C_1	(11)
+-#define IRQ_IOP13XX_MSG	(12)
+-#define IRQ_IOP13XX_MSGIBQ	(13)
+-#define IRQ_IOP13XX_ATU_IM	(14)
+-#define IRQ_IOP13XX_ATU_BIST	(15)
+-#define IRQ_IOP13XX_PPMU	(16)
+-#define IRQ_IOP13XX_COREPMU	(17)
+-#define IRQ_IOP13XX_CORECACHE	(18)
+-#define IRQ_IOP13XX_RSVD_19	(19)
+-#define IRQ_IOP13XX_RSVD_20	(20)
+-#define IRQ_IOP13XX_RSVD_21	(21)
+-#define IRQ_IOP13XX_RSVD_22	(22)
+-#define IRQ_IOP13XX_RSVD_23	(23)
+-#define IRQ_IOP13XX_XINT0	(24)
+-#define IRQ_IOP13XX_XINT1	(25)
+-#define IRQ_IOP13XX_XINT2	(26)
+-#define IRQ_IOP13XX_XINT3	(27)
+-#define IRQ_IOP13XX_XINT4	(28)
+-#define IRQ_IOP13XX_XINT5	(29)
+-#define IRQ_IOP13XX_XINT6	(30)
+-#define IRQ_IOP13XX_XINT7	(31)
+-				      /* IINTSRC1 bit */
+-#define IRQ_IOP13XX_XINT8	(32)  /* 0  */
+-#define IRQ_IOP13XX_XINT9	(33)  /* 1  */
+-#define IRQ_IOP13XX_XINT10	(34)  /* 2  */
+-#define IRQ_IOP13XX_XINT11	(35)  /* 3  */
+-#define IRQ_IOP13XX_XINT12	(36)  /* 4  */
+-#define IRQ_IOP13XX_XINT13	(37)  /* 5  */
+-#define IRQ_IOP13XX_XINT14	(38)  /* 6  */
+-#define IRQ_IOP13XX_XINT15	(39)  /* 7  */
+-#define IRQ_IOP13XX_RSVD_40	(40)  /* 8  */
+-#define IRQ_IOP13XX_RSVD_41	(41)  /* 9  */
+-#define IRQ_IOP13XX_RSVD_42	(42)  /* 10 */
+-#define IRQ_IOP13XX_RSVD_43	(43)  /* 11 */
+-#define IRQ_IOP13XX_RSVD_44	(44)  /* 12 */
+-#define IRQ_IOP13XX_RSVD_45	(45)  /* 13 */
+-#define IRQ_IOP13XX_RSVD_46	(46)  /* 14 */
+-#define IRQ_IOP13XX_RSVD_47	(47)  /* 15 */
+-#define IRQ_IOP13XX_RSVD_48	(48)  /* 16 */
+-#define IRQ_IOP13XX_RSVD_49	(49)  /* 17 */
+-#define IRQ_IOP13XX_RSVD_50	(50)  /* 18 */
+-#define IRQ_IOP13XX_UART0	(51)  /* 19 */
+-#define IRQ_IOP13XX_UART1	(52)  /* 20 */
+-#define IRQ_IOP13XX_PBIE	(53)  /* 21 */
+-#define IRQ_IOP13XX_ATU_CRW	(54)  /* 22 */
+-#define IRQ_IOP13XX_ATU_ERR	(55)  /* 23 */
+-#define IRQ_IOP13XX_MCU_ERR	(56)  /* 24 */
+-#define IRQ_IOP13XX_ADMA0_ERR	(57)  /* 25 */
+-#define IRQ_IOP13XX_ADMA1_ERR	(58)  /* 26 */
+-#define IRQ_IOP13XX_ADMA2_ERR	(59)  /* 27 */
+-#define IRQ_IOP13XX_RSVD_60	(60)  /* 28 */
+-#define IRQ_IOP13XX_RSVD_61	(61)  /* 29 */
+-#define IRQ_IOP13XX_MSG_ERR	(62)  /* 30 */
+-#define IRQ_IOP13XX_RSVD_63	(63)  /* 31 */
+-				      /* IINTSRC2 bit */
+-#define IRQ_IOP13XX_INTERPROC	(64)  /* 0  */
+-#define IRQ_IOP13XX_RSVD_65	(65)  /* 1  */
+-#define IRQ_IOP13XX_RSVD_66	(66)  /* 2  */
+-#define IRQ_IOP13XX_RSVD_67	(67)  /* 3  */
+-#define IRQ_IOP13XX_RSVD_68	(68)  /* 4  */
+-#define IRQ_IOP13XX_RSVD_69	(69)  /* 5  */
+-#define IRQ_IOP13XX_RSVD_70	(70)  /* 6  */
+-#define IRQ_IOP13XX_RSVD_71	(71)  /* 7  */
+-#define IRQ_IOP13XX_RSVD_72	(72)  /* 8  */
+-#define IRQ_IOP13XX_RSVD_73	(73)  /* 9  */
+-#define IRQ_IOP13XX_RSVD_74	(74)  /* 10 */
+-#define IRQ_IOP13XX_RSVD_75	(75)  /* 11 */
+-#define IRQ_IOP13XX_RSVD_76	(76)  /* 12 */
+-#define IRQ_IOP13XX_RSVD_77	(77)  /* 13 */
+-#define IRQ_IOP13XX_RSVD_78	(78)  /* 14 */
+-#define IRQ_IOP13XX_RSVD_79	(79)  /* 15 */
+-#define IRQ_IOP13XX_RSVD_80	(80)  /* 16 */
+-#define IRQ_IOP13XX_RSVD_81	(81)  /* 17 */
+-#define IRQ_IOP13XX_RSVD_82	(82)  /* 18 */
+-#define IRQ_IOP13XX_RSVD_83	(83)  /* 19 */
+-#define IRQ_IOP13XX_RSVD_84	(84)  /* 20 */
+-#define IRQ_IOP13XX_RSVD_85	(85)  /* 21 */
+-#define IRQ_IOP13XX_RSVD_86	(86)  /* 22 */
+-#define IRQ_IOP13XX_RSVD_87	(87)  /* 23 */
+-#define IRQ_IOP13XX_RSVD_88	(88)  /* 24 */
+-#define IRQ_IOP13XX_RSVD_89	(89)  /* 25 */
+-#define IRQ_IOP13XX_RSVD_90	(90)  /* 26 */
+-#define IRQ_IOP13XX_RSVD_91	(91)  /* 27 */
+-#define IRQ_IOP13XX_RSVD_92	(92)  /* 28 */
+-#define IRQ_IOP13XX_RSVD_93	(93)  /* 29 */
+-#define IRQ_IOP13XX_SIB_ERR	(94)  /* 30 */
+-#define IRQ_IOP13XX_SRAM_ERR	(95)  /* 31 */
+-				      /* IINTSRC3 bit */
+-#define IRQ_IOP13XX_I2C_2	(96)  /* 0  */
+-#define IRQ_IOP13XX_ATUE_BIST	(97)  /* 1  */
+-#define IRQ_IOP13XX_ATUE_CRW	(98)  /* 2  */
+-#define IRQ_IOP13XX_ATUE_ERR	(99)  /* 3  */
+-#define IRQ_IOP13XX_IMU	(100) /* 4  */
+-#define IRQ_IOP13XX_RSVD_101	(101) /* 5  */
+-#define IRQ_IOP13XX_RSVD_102	(102) /* 6  */
+-#define IRQ_IOP13XX_TPMI0_OUT	(103) /* 7  */
+-#define IRQ_IOP13XX_TPMI1_OUT	(104) /* 8  */
+-#define IRQ_IOP13XX_TPMI2_OUT	(105) /* 9  */
+-#define IRQ_IOP13XX_TPMI3_OUT	(106) /* 10 */
+-#define IRQ_IOP13XX_ATUE_IMA	(107) /* 11 */
+-#define IRQ_IOP13XX_ATUE_IMB	(108) /* 12 */
+-#define IRQ_IOP13XX_ATUE_IMC	(109) /* 13 */
+-#define IRQ_IOP13XX_ATUE_IMD	(110) /* 14 */
+-#define IRQ_IOP13XX_MU_MSI_TB	(111) /* 15 */
+-#define IRQ_IOP13XX_RSVD_112	(112) /* 16 */
+-#define IRQ_IOP13XX_INBD_MSI	(113) /* 17 */
+-#define IRQ_IOP13XX_RSVD_114	(114) /* 18 */
+-#define IRQ_IOP13XX_RSVD_115	(115) /* 19 */
+-#define IRQ_IOP13XX_RSVD_116	(116) /* 20 */
+-#define IRQ_IOP13XX_RSVD_117	(117) /* 21 */
+-#define IRQ_IOP13XX_RSVD_118	(118) /* 22 */
+-#define IRQ_IOP13XX_RSVD_119	(119) /* 23 */
+-#define IRQ_IOP13XX_RSVD_120	(120) /* 24 */
+-#define IRQ_IOP13XX_RSVD_121	(121) /* 25 */
+-#define IRQ_IOP13XX_RSVD_122	(122) /* 26 */
+-#define IRQ_IOP13XX_RSVD_123	(123) /* 27 */
+-#define IRQ_IOP13XX_RSVD_124	(124) /* 28 */
+-#define IRQ_IOP13XX_RSVD_125	(125) /* 29 */
+-#define IRQ_IOP13XX_RSVD_126	(126) /* 30 */
+-#define IRQ_IOP13XX_HPI	(127) /* 31 */
+-
+-#ifdef CONFIG_PCI_MSI
+-#define IRQ_IOP13XX_MSI_0	(IRQ_IOP13XX_HPI + 1)
+-#define NR_IOP13XX_IRQS 	(IRQ_IOP13XX_MSI_0 + 128)
+-#else
+-#define NR_IOP13XX_IRQS	(IRQ_IOP13XX_HPI + 1)
+-#endif
+-
+-#endif /* _IOP13XX_IRQ_H_ */
+diff --git a/arch/arm/mach-iop13xx/include/mach/time.h b/arch/arm/mach-iop13xx/include/mach/time.h
+deleted file mode 100644
+index 2c2d7532d5c3..000000000000
+--- a/arch/arm/mach-iop13xx/include/mach/time.h
++++ /dev/null
+@@ -1,127 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _IOP13XX_TIME_H_
+-#define _IOP13XX_TIME_H_
+-
+-#include <mach/irqs.h>
+-
+-#define IRQ_IOP_TIMER0 IRQ_IOP13XX_TIMER0
+-
+-#define IOP_TMR_EN	    0x02
+-#define IOP_TMR_RELOAD	    0x04
+-#define IOP_TMR_PRIVILEGED 0x08
+-#define IOP_TMR_RATIO_1_1  0x00
+-
+-#define IOP13XX_XSI_FREQ_RATIO_MASK	(3 << 19)
+-#define IOP13XX_XSI_FREQ_RATIO_2   	(0 << 19)
+-#define IOP13XX_XSI_FREQ_RATIO_3	(1 << 19)
+-#define IOP13XX_XSI_FREQ_RATIO_4	(2 << 19)
+-#define IOP13XX_CORE_FREQ_MASK		(7 << 16)
+-#define IOP13XX_CORE_FREQ_600		(0 << 16)
+-#define IOP13XX_CORE_FREQ_667		(1 << 16)
+-#define IOP13XX_CORE_FREQ_800		(2 << 16)
+-#define IOP13XX_CORE_FREQ_933		(3 << 16)
+-#define IOP13XX_CORE_FREQ_1000		(4 << 16)
+-#define IOP13XX_CORE_FREQ_1200		(5 << 16)
+-
+-void iop_init_time(unsigned long tickrate);
+-
+-static inline unsigned long iop13xx_core_freq(void)
+-{
+-	unsigned long freq = __raw_readl(IOP13XX_PROCESSOR_FREQ);
+-	freq &= IOP13XX_CORE_FREQ_MASK;
+-	switch (freq) {
+-	case IOP13XX_CORE_FREQ_600:
+-		return 600000000;
+-	case IOP13XX_CORE_FREQ_667:
+-		return 667000000;
+-	case IOP13XX_CORE_FREQ_800:
+-		return 800000000;
+-	case IOP13XX_CORE_FREQ_933:
+-		return 933000000;
+-	case IOP13XX_CORE_FREQ_1000:
+-		return 1000000000;
+-	case IOP13XX_CORE_FREQ_1200:
+-		return 1200000000;
+-	default:
+-		printk("%s: warning unknown frequency, defaulting to 800MHz\n",
+-			__func__);
+-	}
+-
+-	return 800000000;
+-}
+-
+-static inline unsigned long iop13xx_xsi_bus_ratio(void)
+-{
+-	unsigned long  ratio = __raw_readl(IOP13XX_PROCESSOR_FREQ);
+-	ratio &= IOP13XX_XSI_FREQ_RATIO_MASK;
+-	switch (ratio) {
+-	case IOP13XX_XSI_FREQ_RATIO_2:
+-		return 2;
+-	case IOP13XX_XSI_FREQ_RATIO_3:
+-		return 3;
+-	case IOP13XX_XSI_FREQ_RATIO_4:
+-		return 4;
+-	default:
+-		printk("%s: warning unknown ratio, defaulting to 2\n",
+-			__func__);
+-	}
+-
+-	return 2;
+-}
+-
+-static inline u32 read_tmr0(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c0, c9, 0" : "=r" (val));
+-	return val;
+-}
+-
+-static inline void write_tmr0(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c0, c9, 0" : : "r" (val));
+-}
+-
+-static inline void write_tmr1(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c1, c9, 0" : : "r" (val));
+-}
+-
+-static inline u32 read_tcr0(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c2, c9, 0" : "=r" (val));
+-	return val;
+-}
+-
+-static inline void write_tcr0(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c2, c9, 0" : : "r" (val));
+-}
+-
+-static inline u32 read_tcr1(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c3, c9, 0" : "=r" (val));
+-	return val;
+-}
+-
+-static inline void write_tcr1(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c3, c9, 0" : : "r" (val));
+-}
+-
+-static inline void write_trr0(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c4, c9, 0" : : "r" (val));
+-}
+-
+-static inline void write_trr1(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c5, c9, 0" : : "r" (val));
+-}
+-
+-static inline void write_tisr(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c6, c9, 0" : : "r" (val));
+-}
+-#endif
+diff --git a/arch/arm/mach-iop13xx/include/mach/uncompress.h b/arch/arm/mach-iop13xx/include/mach/uncompress.h
+deleted file mode 100644
+index c62903041d11..000000000000
+--- a/arch/arm/mach-iop13xx/include/mach/uncompress.h
++++ /dev/null
+@@ -1,23 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#include <asm/types.h>
+-#include <linux/serial_reg.h>
+-#include <mach/hardware.h>
+-
+-#define UART_BASE ((volatile u32 *)IOP13XX_UART1_PHYS)
+-#define TX_DONE (UART_LSR_TEMT | UART_LSR_THRE)
+-
+-static inline void putc(char c)
+-{
+-	while ((UART_BASE[UART_LSR] & TX_DONE) != TX_DONE)
+-		barrier();
+-	UART_BASE[UART_TX] = c;
+-}
+-
+-static inline void flush(void)
+-{
+-}
+-
+-/*
+- * nothing to do
+- */
+-#define arch_decomp_setup()
+diff --git a/arch/arm/mach-iop13xx/io.c b/arch/arm/mach-iop13xx/io.c
+deleted file mode 100644
+index 253d446b1f3f..000000000000
+--- a/arch/arm/mach-iop13xx/io.c
++++ /dev/null
+@@ -1,77 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * iop13xx custom ioremap implementation
+- * Copyright (c) 2005-2006, Intel Corporation.
+- */
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/io.h>
+-#include <mach/hardware.h>
+-
+-#include "pci.h"
+-
+-static void __iomem *__iop13xx_ioremap_caller(phys_addr_t cookie,
+-	size_t size, unsigned int mtype, void *caller)
+-{
+-	void __iomem * retval;
+-
+-	switch (cookie) {
+-	case IOP13XX_PCIX_LOWER_MEM_RA ... IOP13XX_PCIX_UPPER_MEM_RA:
+-		if (unlikely(!iop13xx_atux_mem_base))
+-			retval = NULL;
+-		else
+-			retval = (iop13xx_atux_mem_base +
+-			         (cookie - IOP13XX_PCIX_LOWER_MEM_RA));
+-		break;
+-	case IOP13XX_PCIE_LOWER_MEM_RA ... IOP13XX_PCIE_UPPER_MEM_RA:
+-		if (unlikely(!iop13xx_atue_mem_base))
+-			retval = NULL;
+-		else
+-			retval = (iop13xx_atue_mem_base +
+-			         (cookie - IOP13XX_PCIE_LOWER_MEM_RA));
+-		break;
+-	case IOP13XX_PBI_LOWER_MEM_RA ... IOP13XX_PBI_UPPER_MEM_RA:
+-		retval = __arm_ioremap_caller(IOP13XX_PBI_LOWER_MEM_PA +
+-				       (cookie - IOP13XX_PBI_LOWER_MEM_RA),
+-				       size, mtype, __builtin_return_address(0));
+-		break;
+-	case IOP13XX_PMMR_PHYS_MEM_BASE ... IOP13XX_PMMR_UPPER_MEM_PA:
+-		retval = IOP13XX_PMMR_PHYS_TO_VIRT(cookie);
+-		break;
+-	default:
+-		retval = __arm_ioremap_caller(cookie, size, mtype,
+-				caller);
+-	}
+-
+-	return retval;
+-}
+-
+-static void __iop13xx_iounmap(volatile void __iomem *addr)
+-{
+-	if (iop13xx_atue_mem_base)
+-		if (addr >= (void __iomem *) iop13xx_atue_mem_base &&
+-	 	    addr < (void __iomem *) (iop13xx_atue_mem_base +
+-	 	    			     iop13xx_atue_mem_size))
+-		    goto skip;
+-
+-	if (iop13xx_atux_mem_base)
+-		if (addr >= (void __iomem *) iop13xx_atux_mem_base &&
+-	 	    addr < (void __iomem *) (iop13xx_atux_mem_base +
+-	 	    			     iop13xx_atux_mem_size))
+-		    goto skip;
+-
+-	switch ((u32) addr) {
+-	case (u32)IOP13XX_PMMR_VIRT_MEM_BASE ... (u32)IOP13XX_PMMR_UPPER_MEM_VA:
+-		goto skip;
+-	}
+-	__iounmap(addr);
+-
+-skip:
+-	return;
+-}
+-
+-void __init iop13xx_init_early(void)
+-{
+-	arch_ioremap_caller = __iop13xx_ioremap_caller;
+-	arch_iounmap = __iop13xx_iounmap;
+-}
+diff --git a/arch/arm/mach-iop13xx/iq81340mc.c b/arch/arm/mach-iop13xx/iq81340mc.c
+deleted file mode 100644
+index b3ce5cb228cc..000000000000
+--- a/arch/arm/mach-iop13xx/iq81340mc.c
++++ /dev/null
+@@ -1,84 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * iq81340mc board support
+- * Copyright (c) 2005-2006, Intel Corporation.
+- */
+-#include <linux/pci.h>
+-
+-#include <mach/hardware.h>
+-#include <asm/irq.h>
+-#include <asm/mach/pci.h>
+-#include <asm/mach-types.h>
+-#include <asm/mach/arch.h>
+-#include "pci.h"
+-#include <asm/mach/time.h>
+-#include <mach/time.h>
+-
+-extern int init_atu; /* Flag to select which ATU(s) to initialize / disable */
+-
+-static int __init
+-iq81340mc_pcix_map_irq(const struct pci_dev *dev, u8 idsel, u8 pin)
+-{
+-	switch (idsel) {
+-	case 1:
+-		switch (pin) {
+-		case 1: return ATUX_INTB;
+-		case 2: return ATUX_INTC;
+-		case 3: return ATUX_INTD;
+-		case 4: return ATUX_INTA;
+-		default: return -1;
+-		}
+-	case 2:
+-		switch (pin) {
+-		case 1: return ATUX_INTC;
+-		case 2: return ATUX_INTD;
+-		case 3: return ATUX_INTC;
+-		case 4: return ATUX_INTD;
+-		default: return -1;
+-		}
+-	default: return -1;
+-	}
+-}
+-
+-static struct hw_pci iq81340mc_pci __initdata = {
+-	.nr_controllers = 0,
+-	.setup		= iop13xx_pci_setup,
+-	.map_irq	= iq81340mc_pcix_map_irq,
+-	.scan		= iop13xx_scan_bus,
+-	.preinit	= iop13xx_pci_init,
+-};
+-
+-static int __init iq81340mc_pci_init(void)
+-{
+-	iop13xx_atu_select(&iq81340mc_pci);
+-	pci_common_init(&iq81340mc_pci);
+-	iop13xx_map_pci_memory();
+-
+-	return 0;
+-}
+-
+-static void __init iq81340mc_init(void)
+-{
+-	iop13xx_platform_init();
+-	iq81340mc_pci_init();
+-	iop13xx_add_tpmi_devices();
+-}
+-
+-static void __init iq81340mc_timer_init(void)
+-{
+-	unsigned long bus_freq = iop13xx_core_freq() / iop13xx_xsi_bus_ratio();
+-	printk(KERN_DEBUG "%s: bus frequency: %lu\n", __func__, bus_freq);
+-	iop_init_time(bus_freq);
+-}
+-
+-MACHINE_START(IQ81340MC, "Intel IQ81340MC")
+-	/* Maintainer: Dan Williams <dan.j.williams@intel.com> */
+-	.atag_offset    = 0x100,
+-	.init_early     = iop13xx_init_early,
+-	.map_io         = iop13xx_map_io,
+-	.init_irq       = iop13xx_init_irq,
+-	.init_time	= iq81340mc_timer_init,
+-	.init_machine   = iq81340mc_init,
+-	.restart	= iop13xx_restart,
+-	.nr_irqs	= NR_IOP13XX_IRQS,
+-MACHINE_END
+diff --git a/arch/arm/mach-iop13xx/iq81340sc.c b/arch/arm/mach-iop13xx/iq81340sc.c
+deleted file mode 100644
+index 123845dcf2d3..000000000000
+--- a/arch/arm/mach-iop13xx/iq81340sc.c
++++ /dev/null
+@@ -1,86 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * iq81340sc board support
+- * Copyright (c) 2005-2006, Intel Corporation.
+- */
+-#include <linux/pci.h>
+-
+-#include <mach/hardware.h>
+-#include <asm/irq.h>
+-#include <asm/mach/pci.h>
+-#include <asm/mach-types.h>
+-#include <asm/mach/arch.h>
+-#include "pci.h"
+-#include <asm/mach/time.h>
+-#include <mach/time.h>
+-
+-extern int init_atu;
+-
+-static int __init
+-iq81340sc_atux_map_irq(const struct pci_dev *dev, u8 idsel, u8 pin)
+-{
+-	WARN_ON(idsel < 1 || idsel > 2);
+-
+-	switch (idsel) {
+-	case 1:
+-		switch (pin) {
+-		case 1: return ATUX_INTB;
+-		case 2: return ATUX_INTC;
+-		case 3: return ATUX_INTD;
+-		case 4: return ATUX_INTA;
+-		default: return -1;
+-		}
+-	case 2:
+-		switch (pin) {
+-		case 1: return ATUX_INTC;
+-		case 2: return ATUX_INTC;
+-		case 3: return ATUX_INTC;
+-		case 4: return ATUX_INTC;
+-		default: return -1;
+-		}
+-	default: return -1;
+-	}
+-}
+-
+-static struct hw_pci iq81340sc_pci __initdata = {
+-	.nr_controllers = 0,
+-	.setup		= iop13xx_pci_setup,
+-	.scan		= iop13xx_scan_bus,
+-	.map_irq	= iq81340sc_atux_map_irq,
+-	.preinit	= iop13xx_pci_init
+-};
+-
+-static int __init iq81340sc_pci_init(void)
+-{
+-	iop13xx_atu_select(&iq81340sc_pci);
+-	pci_common_init(&iq81340sc_pci);
+-	iop13xx_map_pci_memory();
+-
+-	return 0;
+-}
+-
+-static void __init iq81340sc_init(void)
+-{
+-	iop13xx_platform_init();
+-	iq81340sc_pci_init();
+-	iop13xx_add_tpmi_devices();
+-}
+-
+-static void __init iq81340sc_timer_init(void)
+-{
+-	unsigned long bus_freq = iop13xx_core_freq() / iop13xx_xsi_bus_ratio();
+-	printk(KERN_DEBUG "%s: bus frequency: %lu\n", __func__, bus_freq);
+-	iop_init_time(bus_freq);
+-}
+-
+-MACHINE_START(IQ81340SC, "Intel IQ81340SC")
+-	/* Maintainer: Dan Williams <dan.j.williams@intel.com> */
+-	.atag_offset    = 0x100,
+-	.init_early     = iop13xx_init_early,
+-	.map_io         = iop13xx_map_io,
+-	.init_irq       = iop13xx_init_irq,
+-	.init_time	= iq81340sc_timer_init,
+-	.init_machine   = iq81340sc_init,
+-	.restart	= iop13xx_restart,
+-	.nr_irqs	= NR_IOP13XX_IRQS,
+-MACHINE_END
+diff --git a/arch/arm/mach-iop13xx/irq.c b/arch/arm/mach-iop13xx/irq.c
+deleted file mode 100644
+index 0e24ba7a1309..000000000000
+--- a/arch/arm/mach-iop13xx/irq.c
++++ /dev/null
+@@ -1,227 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * iop13xx IRQ handling / support functions
+- * Copyright (c) 2005-2006, Intel Corporation.
+- */
+-#include <linux/init.h>
+-#include <linux/interrupt.h>
+-#include <linux/list.h>
+-#include <linux/sysctl.h>
+-#include <linux/uaccess.h>
+-#include <asm/mach/irq.h>
+-#include <asm/irq.h>
+-#include <mach/hardware.h>
+-#include <mach/irqs.h>
+-#include "msi.h"
+-
+-/* INTCTL0 CP6 R0 Page 4
+- */
+-static u32 read_intctl_0(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c0, c4, 0":"=r" (val));
+-	return val;
+-}
+-static void write_intctl_0(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c0, c4, 0"::"r" (val));
+-}
+-
+-/* INTCTL1 CP6 R1 Page 4
+- */
+-static u32 read_intctl_1(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c1, c4, 0":"=r" (val));
+-	return val;
+-}
+-static void write_intctl_1(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c1, c4, 0"::"r" (val));
+-}
+-
+-/* INTCTL2 CP6 R2 Page 4
+- */
+-static u32 read_intctl_2(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c2, c4, 0":"=r" (val));
+-	return val;
+-}
+-static void write_intctl_2(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c2, c4, 0"::"r" (val));
+-}
+-
+-/* INTCTL3 CP6 R3 Page 4
+- */
+-static u32 read_intctl_3(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c3, c4, 0":"=r" (val));
+-	return val;
+-}
+-static void write_intctl_3(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c3, c4, 0"::"r" (val));
+-}
+-
+-/* INTSTR0 CP6 R0 Page 5
+- */
+-static void write_intstr_0(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c0, c5, 0"::"r" (val));
+-}
+-
+-/* INTSTR1 CP6 R1 Page 5
+- */
+-static void write_intstr_1(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c1, c5, 0"::"r" (val));
+-}
+-
+-/* INTSTR2 CP6 R2 Page 5
+- */
+-static void write_intstr_2(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c2, c5, 0"::"r" (val));
+-}
+-
+-/* INTSTR3 CP6 R3 Page 5
+- */
+-static void write_intstr_3(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c3, c5, 0"::"r" (val));
+-}
+-
+-/* INTBASE CP6 R0 Page 2
+- */
+-static void write_intbase(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c0, c2, 0"::"r" (val));
+-}
+-
+-/* INTSIZE CP6 R2 Page 2
+- */
+-static void write_intsize(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c2, c2, 0"::"r" (val));
+-}
+-
+-/* 0 = Interrupt Masked and 1 = Interrupt not masked */
+-static void
+-iop13xx_irq_mask0 (struct irq_data *d)
+-{
+-	write_intctl_0(read_intctl_0() & ~(1 << (d->irq - 0)));
+-}
+-
+-static void
+-iop13xx_irq_mask1 (struct irq_data *d)
+-{
+-	write_intctl_1(read_intctl_1() & ~(1 << (d->irq - 32)));
+-}
+-
+-static void
+-iop13xx_irq_mask2 (struct irq_data *d)
+-{
+-	write_intctl_2(read_intctl_2() & ~(1 << (d->irq - 64)));
+-}
+-
+-static void
+-iop13xx_irq_mask3 (struct irq_data *d)
+-{
+-	write_intctl_3(read_intctl_3() & ~(1 << (d->irq - 96)));
+-}
+-
+-static void
+-iop13xx_irq_unmask0(struct irq_data *d)
+-{
+-	write_intctl_0(read_intctl_0() | (1 << (d->irq - 0)));
+-}
+-
+-static void
+-iop13xx_irq_unmask1(struct irq_data *d)
+-{
+-	write_intctl_1(read_intctl_1() | (1 << (d->irq - 32)));
+-}
+-
+-static void
+-iop13xx_irq_unmask2(struct irq_data *d)
+-{
+-	write_intctl_2(read_intctl_2() | (1 << (d->irq - 64)));
+-}
+-
+-static void
+-iop13xx_irq_unmask3(struct irq_data *d)
+-{
+-	write_intctl_3(read_intctl_3() | (1 << (d->irq - 96)));
+-}
+-
+-static struct irq_chip iop13xx_irqchip1 = {
+-	.name       = "IOP13xx-1",
+-	.irq_ack    = iop13xx_irq_mask0,
+-	.irq_mask   = iop13xx_irq_mask0,
+-	.irq_unmask = iop13xx_irq_unmask0,
+-};
+-
+-static struct irq_chip iop13xx_irqchip2 = {
+-	.name       = "IOP13xx-2",
+-	.irq_ack    = iop13xx_irq_mask1,
+-	.irq_mask   = iop13xx_irq_mask1,
+-	.irq_unmask = iop13xx_irq_unmask1,
+-};
+-
+-static struct irq_chip iop13xx_irqchip3 = {
+-	.name       = "IOP13xx-3",
+-	.irq_ack    = iop13xx_irq_mask2,
+-	.irq_mask   = iop13xx_irq_mask2,
+-	.irq_unmask = iop13xx_irq_unmask2,
+-};
+-
+-static struct irq_chip iop13xx_irqchip4 = {
+-	.name       = "IOP13xx-4",
+-	.irq_ack    = iop13xx_irq_mask3,
+-	.irq_mask   = iop13xx_irq_mask3,
+-	.irq_unmask = iop13xx_irq_unmask3,
+-};
+-
+-extern void iop_init_cp6_handler(void);
+-
+-void __init iop13xx_init_irq(void)
+-{
+-	unsigned int i;
+-
+-	iop_init_cp6_handler();
+-
+-	/* disable all interrupts */
+-	write_intctl_0(0);
+-	write_intctl_1(0);
+-	write_intctl_2(0);
+-	write_intctl_3(0);
+-
+-	/* treat all as IRQ */
+-	write_intstr_0(0);
+-	write_intstr_1(0);
+-	write_intstr_2(0);
+-	write_intstr_3(0);
+-
+-	/* initialize the interrupt vector generator */
+-	write_intbase(INTBASE);
+-	write_intsize(INTSIZE_4);
+-
+-	for(i = 0; i <= IRQ_IOP13XX_HPI; i++) {
+-		if (i < 32)
+-			irq_set_chip(i, &iop13xx_irqchip1);
+-		else if (i < 64)
+-			irq_set_chip(i, &iop13xx_irqchip2);
+-		else if (i < 96)
+-			irq_set_chip(i, &iop13xx_irqchip3);
+-		else
+-			irq_set_chip(i, &iop13xx_irqchip4);
+-
+-		irq_set_handler(i, handle_level_irq);
+-		irq_clear_status_flags(i, IRQ_NOREQUEST | IRQ_NOPROBE);
+-	}
+-
+-	iop13xx_msi_init();
+-}
+diff --git a/arch/arm/mach-iop13xx/msi.c b/arch/arm/mach-iop13xx/msi.c
+deleted file mode 100644
+index f4d70cba1dd1..000000000000
+--- a/arch/arm/mach-iop13xx/msi.c
++++ /dev/null
+@@ -1,152 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * arch/arm/mach-iop13xx/msi.c
+- *
+- * PCI MSI support for the iop13xx processor
+- *
+- * Copyright (c) 2006, Intel Corporation.
+- */
+-#include <linux/pci.h>
+-#include <linux/msi.h>
+-#include <asm/mach/irq.h>
+-#include <asm/irq.h>
+-#include <mach/irqs.h>
+-
+-/* IMIPR0 CP6 R8 Page 1
+- */
+-static u32 read_imipr_0(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c8, c1, 0":"=r" (val));
+-	return val;
+-}
+-static void write_imipr_0(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c8, c1, 0"::"r" (val));
+-}
+-
+-/* IMIPR1 CP6 R9 Page 1
+- */
+-static u32 read_imipr_1(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c9, c1, 0":"=r" (val));
+-	return val;
+-}
+-static void write_imipr_1(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c9, c1, 0"::"r" (val));
+-}
+-
+-/* IMIPR2 CP6 R10 Page 1
+- */
+-static u32 read_imipr_2(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c10, c1, 0":"=r" (val));
+-	return val;
+-}
+-static void write_imipr_2(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c10, c1, 0"::"r" (val));
+-}
+-
+-/* IMIPR3 CP6 R11 Page 1
+- */
+-static u32 read_imipr_3(void)
+-{
+-	u32 val;
+-	asm volatile("mrc p6, 0, %0, c11, c1, 0":"=r" (val));
+-	return val;
+-}
+-static void write_imipr_3(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c11, c1, 0"::"r" (val));
+-}
+-
+-static u32 (*read_imipr[])(void) = {
+-	read_imipr_0,
+-	read_imipr_1,
+-	read_imipr_2,
+-	read_imipr_3,
+-};
+-
+-static void (*write_imipr[])(u32) = {
+-	write_imipr_0,
+-	write_imipr_1,
+-	write_imipr_2,
+-	write_imipr_3,
+-};
+-
+-static void iop13xx_msi_handler(struct irq_desc *desc)
+-{
+-	int i, j;
+-	unsigned long status;
+-
+-	/* read IMIPR registers and find any active interrupts,
+-	 * then call ISR for each active interrupt
+-	 */
+-	for (i = 0; i < ARRAY_SIZE(read_imipr); i++) {
+-		status = (read_imipr[i])();
+-		if (!status)
+-			continue;
+-
+-		do {
+-			j = find_first_bit(&status, 32);
+-			(write_imipr[i])(1 << j); /* write back to clear bit */
+-			generic_handle_irq(IRQ_IOP13XX_MSI_0 + j + (32*i));
+-			status = (read_imipr[i])();
+-		} while (status);
+-	}
+-}
+-
+-void __init iop13xx_msi_init(void)
+-{
+-	irq_set_chained_handler(IRQ_IOP13XX_INBD_MSI, iop13xx_msi_handler);
+-}
+-
+-static void iop13xx_msi_nop(struct irq_data *d)
+-{
+-	return;
+-}
+-
+-static struct irq_chip iop13xx_msi_chip = {
+-	.name = "PCI-MSI",
+-	.irq_ack = iop13xx_msi_nop,
+-	.irq_enable = pci_msi_unmask_irq,
+-	.irq_disable = pci_msi_mask_irq,
+-	.irq_mask = pci_msi_mask_irq,
+-	.irq_unmask = pci_msi_unmask_irq,
+-};
+-
+-int arch_setup_msi_irq(struct pci_dev *pdev, struct msi_desc *desc)
+-{
+-	int id, irq = irq_alloc_desc_from(IRQ_IOP13XX_MSI_0, -1);
+-	struct msi_msg msg;
+-
+-	if (irq < 0)
+-		return irq;
+-
+-	if (irq >= NR_IOP13XX_IRQS) {
+-		irq_free_desc(irq);
+-		return -ENOSPC;
+-	}
+-
+-	irq_set_msi_desc(irq, desc);
+-
+-	msg.address_hi = 0x0;
+-	msg.address_lo = IOP13XX_MU_MIMR_PCI;
+-
+-	id = iop13xx_cpu_id();
+-	msg.data = (id << IOP13XX_MU_MIMR_CORE_SELECT) | (irq & 0x7f);
+-
+-	pci_write_msi_msg(irq, &msg);
+-	irq_set_chip_and_handler(irq, &iop13xx_msi_chip, handle_simple_irq);
+-
+-	return 0;
+-}
+-
+-void arch_teardown_msi_irq(unsigned int irq)
+-{
+-	irq_free_desc(irq);
+-}
+diff --git a/arch/arm/mach-iop13xx/msi.h b/arch/arm/mach-iop13xx/msi.h
+deleted file mode 100644
+index 766dcfaaa353..000000000000
+--- a/arch/arm/mach-iop13xx/msi.h
++++ /dev/null
+@@ -1,12 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _IOP13XX_MSI_H_
+-#define _IOP13XX_MSI_H_
+-#ifdef CONFIG_PCI_MSI
+-void iop13xx_msi_init(void);
+-#else
+-static inline void iop13xx_msi_init(void)
+-{
+-	return;
+-}
+-#endif
+-#endif
+diff --git a/arch/arm/mach-iop13xx/pci.c b/arch/arm/mach-iop13xx/pci.c
+deleted file mode 100644
+index 46ea06e906cc..000000000000
+--- a/arch/arm/mach-iop13xx/pci.c
++++ /dev/null
+@@ -1,1115 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * iop13xx PCI support
+- * Copyright (c) 2005-2006, Intel Corporation.
+- */
+-
+-#include <linux/pci.h>
+-#include <linux/slab.h>
+-#include <linux/delay.h>
+-#include <linux/jiffies.h>
+-#include <linux/export.h>
+-#include <asm/irq.h>
+-#include <mach/hardware.h>
+-#include <linux/sizes.h>
+-#include <asm/signal.h>
+-#include <asm/mach/pci.h>
+-#include "pci.h"
+-
+-#define IOP13XX_PCI_DEBUG 0
+-#define PRINTK(x...) ((void)(IOP13XX_PCI_DEBUG && printk(x)))
+-
+-u32 iop13xx_atux_pmmr_offset; /* This offset can change based on strapping */
+-u32 iop13xx_atue_pmmr_offset; /* This offset can change based on strapping */
+-static struct pci_bus *pci_bus_atux = 0;
+-static struct pci_bus *pci_bus_atue = 0;
+-void __iomem *iop13xx_atue_mem_base;
+-void __iomem *iop13xx_atux_mem_base;
+-size_t iop13xx_atue_mem_size;
+-size_t iop13xx_atux_mem_size;
+-
+-EXPORT_SYMBOL(iop13xx_atue_mem_base);
+-EXPORT_SYMBOL(iop13xx_atux_mem_base);
+-EXPORT_SYMBOL(iop13xx_atue_mem_size);
+-EXPORT_SYMBOL(iop13xx_atux_mem_size);
+-
+-int init_atu = 0; /* Flag to select which ATU(s) to initialize / disable */
+-static unsigned long atux_trhfa_timeout = 0; /* Trhfa = RST# high to first
+-						 access */
+-
+-/* Scan the initialized busses and ioremap the requested memory range
+- */
+-void iop13xx_map_pci_memory(void)
+-{
+-	int atu;
+-	struct pci_bus *bus;
+-	struct pci_dev *dev;
+-	resource_size_t end = 0;
+-
+-	for (atu = 0; atu < 2; atu++) {
+-		bus = atu ? pci_bus_atue : pci_bus_atux;
+-		if (bus) {
+-			list_for_each_entry(dev, &bus->devices, bus_list) {
+-				int i;
+-				int max = 7;
+-
+-				if (dev->subordinate)
+-					max = DEVICE_COUNT_RESOURCE;
+-
+-				for (i = 0; i < max; i++) {
+-					struct resource *res = &dev->resource[i];
+-					if (res->flags & IORESOURCE_MEM)
+-						end = max(res->end, end);
+-				}
+-			}
+-
+-			switch(atu) {
+-			case 0:
+-				iop13xx_atux_mem_size =
+-					(end - IOP13XX_PCIX_LOWER_MEM_RA) + 1;
+-
+-				/* 16MB align the request */
+-				if (iop13xx_atux_mem_size & (SZ_16M - 1)) {
+-					iop13xx_atux_mem_size &= ~(SZ_16M - 1);
+-					iop13xx_atux_mem_size += SZ_16M;
+-				}
+-
+-				if (end) {
+-					iop13xx_atux_mem_base = __arm_ioremap_pfn(
+-					__phys_to_pfn(IOP13XX_PCIX_LOWER_MEM_PA)
+-					, 0, iop13xx_atux_mem_size, MT_DEVICE);
+-					if (!iop13xx_atux_mem_base) {
+-						printk("%s: atux allocation "
+-						       "failed\n", __func__);
+-						BUG();
+-					}
+-				} else
+-					iop13xx_atux_mem_size = 0;
+-				PRINTK("%s: atu: %d bus_size: %d mem_base: %p\n",
+-				__func__, atu, iop13xx_atux_mem_size,
+-				iop13xx_atux_mem_base);
+-				break;
+-			case 1:
+-				iop13xx_atue_mem_size =
+-					(end - IOP13XX_PCIE_LOWER_MEM_RA) + 1;
+-
+-				/* 16MB align the request */
+-				if (iop13xx_atue_mem_size & (SZ_16M - 1)) {
+-					iop13xx_atue_mem_size &= ~(SZ_16M - 1);
+-					iop13xx_atue_mem_size += SZ_16M;
+-				}
+-
+-				if (end) {
+-					iop13xx_atue_mem_base = __arm_ioremap_pfn(
+-					__phys_to_pfn(IOP13XX_PCIE_LOWER_MEM_PA)
+-					, 0, iop13xx_atue_mem_size, MT_DEVICE);
+-					if (!iop13xx_atue_mem_base) {
+-						printk("%s: atue allocation "
+-						       "failed\n", __func__);
+-						BUG();
+-					}
+-				} else
+-					iop13xx_atue_mem_size = 0;
+-				PRINTK("%s: atu: %d bus_size: %d mem_base: %p\n",
+-				__func__, atu, iop13xx_atue_mem_size,
+-				iop13xx_atue_mem_base);
+-				break;
+-			}
+-
+-			printk("%s: Initialized (%uM @ resource/virtual: %08lx/%p)\n",
+-			atu ? "ATUE" : "ATUX",
+-			(atu ? iop13xx_atue_mem_size : iop13xx_atux_mem_size) /
+-			SZ_1M,
+-			atu ? IOP13XX_PCIE_LOWER_MEM_RA :
+-			IOP13XX_PCIX_LOWER_MEM_RA,
+-			atu ? iop13xx_atue_mem_base :
+-			iop13xx_atux_mem_base);
+-			end = 0;
+-		}
+-
+-	}
+-}
+-
+-static int iop13xx_atu_function(int atu)
+-{
+-	int func = 0;
+-	/* the function number depends on the value of the
+-	 * IOP13XX_INTERFACE_SEL_PCIX reset strap
+-	 * see C-Spec section 3.17
+-	 */
+-	switch(atu) {
+-	case IOP13XX_INIT_ATU_ATUX:
+-		if (__raw_readl(IOP13XX_ESSR0) & IOP13XX_INTERFACE_SEL_PCIX)
+-			func = 5;
+-		else
+-			func = 0;
+-		break;
+-	case IOP13XX_INIT_ATU_ATUE:
+-		if (__raw_readl(IOP13XX_ESSR0) & IOP13XX_INTERFACE_SEL_PCIX)
+-			func = 0;
+-		else
+-			func = 5;
+-		break;
+-	default:
+-		BUG();
+-	}
+-
+-	return func;
+-}
+-
+-/* iop13xx_atux_cfg_address - format a configuration address for atux
+- * @bus: Target bus to access
+- * @devfn: Combined device number and function number
+- * @where: Desired register's address offset
+- *
+- * Convert the parameters to a configuration address formatted
+- * according the PCI-X 2.0 specification
+- */
+-static u32 iop13xx_atux_cfg_address(struct pci_bus *bus, int devfn, int where)
+-{
+-	struct pci_sys_data *sys = bus->sysdata;
+-	u32 addr;
+-
+-	if (sys->busnr == bus->number)
+-		addr = 1 << (PCI_SLOT(devfn) + 16) | (PCI_SLOT(devfn) << 11);
+-	else
+-		addr = bus->number << 16 | PCI_SLOT(devfn) << 11 | 1;
+-
+-	addr |=	PCI_FUNC(devfn) << 8 | ((where & 0xff) & ~3);
+-	addr |= ((where & 0xf00) >> 8) << 24; /* upper register number */
+-
+-	return addr;
+-}
+-
+-/* iop13xx_atue_cfg_address - format a configuration address for atue
+- * @bus: Target bus to access
+- * @devfn: Combined device number and function number
+- * @where: Desired register's address offset
+- *
+- * Convert the parameters to an address usable by the ATUE_OCCAR
+- */
+-static u32 iop13xx_atue_cfg_address(struct pci_bus *bus, int devfn, int where)
+-{
+-	struct pci_sys_data *sys = bus->sysdata;
+-	u32 addr;
+-
+-	PRINTK("iop13xx_atue_cfg_address: bus: %d dev: %d func: %d",
+-		bus->number, PCI_SLOT(devfn), PCI_FUNC(devfn));
+-	addr = ((u32) bus->number)     << IOP13XX_ATUE_OCCAR_BUS_NUM |
+-		   ((u32) PCI_SLOT(devfn)) << IOP13XX_ATUE_OCCAR_DEV_NUM |
+-		   ((u32) PCI_FUNC(devfn)) << IOP13XX_ATUE_OCCAR_FUNC_NUM |
+-		   (where & ~0x3);
+-
+-	if (sys->busnr != bus->number)
+-		addr |= 1; /* type 1 access */
+-
+-	return addr;
+-}
+-
+-/* This routine checks the status of the last configuration cycle.  If an error
+- * was detected it returns >0, else it returns a 0.  The errors being checked
+- * are parity, master abort, target abort (master and target).  These types of
+- * errors occur during a config cycle where there is no device, like during
+- * the discovery stage.
+- */
+-static int iop13xx_atux_pci_status(int clear)
+-{
+-	unsigned int status;
+-	int err = 0;
+-
+-	/*
+-	 * Check the status registers.
+-	 */
+-	status = __raw_readw(IOP13XX_ATUX_ATUSR);
+-	if (status & IOP_PCI_STATUS_ERROR)
+-	{
+-		PRINTK("\t\t\tPCI error: ATUSR %#08x", status);
+-		if(clear)
+-			__raw_writew(status & IOP_PCI_STATUS_ERROR,
+-				IOP13XX_ATUX_ATUSR);
+-		err = 1;
+-	}
+-	status = __raw_readl(IOP13XX_ATUX_ATUISR);
+-	if (status & IOP13XX_ATUX_ATUISR_ERROR)
+-	{
+-		PRINTK("\t\t\tPCI error interrupt:  ATUISR %#08x", status);
+-		if(clear)
+-			__raw_writel(status & IOP13XX_ATUX_ATUISR_ERROR,
+-				IOP13XX_ATUX_ATUISR);
+-		err = 1;
+-	}
+-	return err;
+-}
+-
+-/* Simply write the address register and read the configuration
+- * data.  Note that the data dependency on %0 encourages an abort
+- * to be detected before we return.
+- */
+-static u32 iop13xx_atux_read(unsigned long addr)
+-{
+-	u32 val;
+-
+-	__asm__ __volatile__(
+-		"str	%1, [%2]\n\t"
+-		"ldr	%0, [%3]\n\t"
+-		"mov	%0, %0\n\t"
+-		: "=r" (val)
+-		: "r" (addr), "r" (IOP13XX_ATUX_OCCAR), "r" (IOP13XX_ATUX_OCCDR));
+-
+-	return val;
+-}
+-
+-/* The read routines must check the error status of the last configuration
+- * cycle.  If there was an error, the routine returns all hex f's.
+- */
+-static int
+-iop13xx_atux_read_config(struct pci_bus *bus, unsigned int devfn, int where,
+-		int size, u32 *value)
+-{
+-	unsigned long addr = iop13xx_atux_cfg_address(bus, devfn, where);
+-	u32 val = iop13xx_atux_read(addr) >> ((where & 3) * 8);
+-
+-	if (iop13xx_atux_pci_status(1) || is_atux_occdr_error()) {
+-		__raw_writel(__raw_readl(IOP13XX_XBG_BECSR) & 3,
+-			IOP13XX_XBG_BECSR);
+-		val = 0xffffffff;
+-	}
+-
+-	*value = val;
+-
+-	return PCIBIOS_SUCCESSFUL;
+-}
+-
+-static int
+-iop13xx_atux_write_config(struct pci_bus *bus, unsigned int devfn, int where,
+-		int size, u32 value)
+-{
+-	unsigned long addr = iop13xx_atux_cfg_address(bus, devfn, where);
+-	u32 val;
+-
+-	if (size != 4) {
+-		val = iop13xx_atux_read(addr);
+-		if (!iop13xx_atux_pci_status(1) == 0)
+-			return PCIBIOS_SUCCESSFUL;
+-
+-		where = (where & 3) * 8;
+-
+-		if (size == 1)
+-			val &= ~(0xff << where);
+-		else
+-			val &= ~(0xffff << where);
+-
+-		__raw_writel(val | value << where, IOP13XX_ATUX_OCCDR);
+-	} else {
+-		__raw_writel(addr, IOP13XX_ATUX_OCCAR);
+-		__raw_writel(value, IOP13XX_ATUX_OCCDR);
+-	}
+-
+-	return PCIBIOS_SUCCESSFUL;
+-}
+-
+-static struct pci_ops iop13xx_atux_ops = {
+-	.read	= iop13xx_atux_read_config,
+-	.write	= iop13xx_atux_write_config,
+-};
+-
+-/* This routine checks the status of the last configuration cycle.  If an error
+- * was detected it returns >0, else it returns a 0.  The errors being checked
+- * are parity, master abort, target abort (master and target).  These types of
+- * errors occur during a config cycle where there is no device, like during
+- * the discovery stage.
+- */
+-static int iop13xx_atue_pci_status(int clear)
+-{
+-	unsigned int status;
+-	int err = 0;
+-
+-	/*
+-	 * Check the status registers.
+-	 */
+-
+-	/* standard pci status register */
+-	status = __raw_readw(IOP13XX_ATUE_ATUSR);
+-	if (status & IOP_PCI_STATUS_ERROR) {
+-		PRINTK("\t\t\tPCI error: ATUSR %#08x", status);
+-		if(clear)
+-			__raw_writew(status & IOP_PCI_STATUS_ERROR,
+-				IOP13XX_ATUE_ATUSR);
+-		err++;
+-	}
+-
+-	/* check the normal status bits in the ATUISR */
+-	status = __raw_readl(IOP13XX_ATUE_ATUISR);
+-	if (status & IOP13XX_ATUE_ATUISR_ERROR)	{
+-		PRINTK("\t\t\tPCI error: ATUISR %#08x", status);
+-		if (clear)
+-			__raw_writew(status & IOP13XX_ATUE_ATUISR_ERROR,
+-				IOP13XX_ATUE_ATUISR);
+-		err++;
+-
+-		/* check the PCI-E status if the ATUISR reports an interface error */
+-		if (status & IOP13XX_ATUE_STAT_PCI_IFACE_ERR) {
+-			/* get the unmasked errors */
+-			status = __raw_readl(IOP13XX_ATUE_PIE_STS) &
+-					~(__raw_readl(IOP13XX_ATUE_PIE_MSK));
+-
+-			if (status) {
+-				PRINTK("\t\t\tPCI-E error: ATUE_PIE_STS %#08x",
+-					__raw_readl(IOP13XX_ATUE_PIE_STS));
+-				err++;
+-			} else {
+-				PRINTK("\t\t\tPCI-E error: ATUE_PIE_STS %#08x",
+-					__raw_readl(IOP13XX_ATUE_PIE_STS));
+-				PRINTK("\t\t\tPCI-E error: ATUE_PIE_MSK %#08x",
+-					__raw_readl(IOP13XX_ATUE_PIE_MSK));
+-				BUG();
+-			}
+-
+-			if(clear)
+-				__raw_writel(status, IOP13XX_ATUE_PIE_STS);
+-		}
+-	}
+-
+-	return err;
+-}
+-
+-static int
+-iop13xx_pcie_map_irq(const struct pci_dev *dev, u8 idsel, u8 pin)
+-{
+-	WARN_ON(idsel != 0);
+-
+-	switch (pin) {
+-	case 1: return ATUE_INTA;
+-	case 2: return ATUE_INTB;
+-	case 3: return ATUE_INTC;
+-	case 4: return ATUE_INTD;
+-	default: return -1;
+-	}
+-}
+-
+-static u32 iop13xx_atue_read(unsigned long addr)
+-{
+-	u32 val;
+-
+-	__raw_writel(addr, IOP13XX_ATUE_OCCAR);
+-	val = __raw_readl(IOP13XX_ATUE_OCCDR);
+-
+-	rmb();
+-
+-	return val;
+-}
+-
+-/* The read routines must check the error status of the last configuration
+- * cycle.  If there was an error, the routine returns all hex f's.
+- */
+-static int
+-iop13xx_atue_read_config(struct pci_bus *bus, unsigned int devfn, int where,
+-		int size, u32 *value)
+-{
+-	u32 val;
+-	unsigned long addr = iop13xx_atue_cfg_address(bus, devfn, where);
+-
+-	/* Hide device numbers > 0 on the local PCI-E bus (Type 0 access) */
+-	if (!PCI_SLOT(devfn) || (addr & 1)) {
+-		val = iop13xx_atue_read(addr) >> ((where & 3) * 8);
+-		if( iop13xx_atue_pci_status(1) || is_atue_occdr_error() ) {
+-			__raw_writel(__raw_readl(IOP13XX_XBG_BECSR) & 3,
+-				IOP13XX_XBG_BECSR);
+-			val = 0xffffffff;
+-		}
+-
+-		PRINTK("addr=%#0lx, val=%#010x", addr, val);
+-	} else
+-		val = 0xffffffff;
+-
+-	*value = val;
+-
+-	return PCIBIOS_SUCCESSFUL;
+-}
+-
+-static int
+-iop13xx_atue_write_config(struct pci_bus *bus, unsigned int devfn, int where,
+-		int size, u32 value)
+-{
+-	unsigned long addr = iop13xx_atue_cfg_address(bus, devfn, where);
+-	u32 val;
+-
+-	if (size != 4) {
+-		val = iop13xx_atue_read(addr);
+-		if (!iop13xx_atue_pci_status(1) == 0)
+-			return PCIBIOS_SUCCESSFUL;
+-
+-		where = (where & 3) * 8;
+-
+-		if (size == 1)
+-			val &= ~(0xff << where);
+-		else
+-			val &= ~(0xffff << where);
+-
+-		__raw_writel(val | value << where, IOP13XX_ATUE_OCCDR);
+-	} else {
+-		__raw_writel(addr, IOP13XX_ATUE_OCCAR);
+-		__raw_writel(value, IOP13XX_ATUE_OCCDR);
+-	}
+-
+-	return PCIBIOS_SUCCESSFUL;
+-}
+-
+-static struct pci_ops iop13xx_atue_ops = {
+-	.read	= iop13xx_atue_read_config,
+-	.write	= iop13xx_atue_write_config,
+-};
+-
+-/* When a PCI device does not exist during config cycles, the XScale gets a
+- * bus error instead of returning 0xffffffff.  We can't rely on the ATU status
+- * bits to tell us that it was indeed a configuration cycle that caused this
+- * error especially in the case when the ATUE link is down.  Instead we rely
+- * on data from the south XSI bridge to validate the abort
+- */
+-int
+-iop13xx_pci_abort(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
+-{
+-	PRINTK("Data abort: address = 0x%08lx "
+-		    "fsr = 0x%03x PC = 0x%08lx LR = 0x%08lx",
+-		addr, fsr, regs->ARM_pc, regs->ARM_lr);
+-
+-	PRINTK("IOP13XX_XBG_BECSR: %#10x", __raw_readl(IOP13XX_XBG_BECSR));
+-	PRINTK("IOP13XX_XBG_BERAR: %#10x", __raw_readl(IOP13XX_XBG_BERAR));
+-	PRINTK("IOP13XX_XBG_BERUAR: %#10x", __raw_readl(IOP13XX_XBG_BERUAR));
+-
+-	/*  If it was an imprecise abort, then we need to correct the
+-	 *  return address to be _after_ the instruction.
+-	 */
+-	if (fsr & (1 << 10))
+-		regs->ARM_pc += 4;
+-
+-	if (is_atue_occdr_error() || is_atux_occdr_error())
+-		return 0;
+-	else
+-		return 1;
+-}
+-
+-/* Scan an IOP13XX PCI bus.  nr selects which ATU we use.
+- */
+-int iop13xx_scan_bus(int nr, struct pci_host_bridge *bridge)
+-{
+-	int which_atu, ret;
+-	struct pci_sys_data *sys = pci_host_bridge_priv(bridge);
+-
+-	switch (init_atu) {
+-	case IOP13XX_INIT_ATU_ATUX:
+-		which_atu = nr ? 0 : IOP13XX_INIT_ATU_ATUX;
+-		break;
+-	case IOP13XX_INIT_ATU_ATUE:
+-		which_atu = nr ? 0 : IOP13XX_INIT_ATU_ATUE;
+-		break;
+-	case (IOP13XX_INIT_ATU_ATUX | IOP13XX_INIT_ATU_ATUE):
+-		which_atu = nr ? IOP13XX_INIT_ATU_ATUE : IOP13XX_INIT_ATU_ATUX;
+-		break;
+-	default:
+-		which_atu = 0;
+-	}
+-
+-	if (!which_atu) {
+-		BUG();
+-		return -ENODEV;
+-	}
+-
+-	list_splice_init(&sys->resources, &bridge->windows);
+-	bridge->dev.parent = NULL;
+-	bridge->sysdata = sys;
+-	bridge->busnr = sys->busnr;
+-
+-	switch (which_atu) {
+-	case IOP13XX_INIT_ATU_ATUX:
+-		if (time_after_eq(jiffies + msecs_to_jiffies(1000),
+-				  atux_trhfa_timeout))  /* ensure not wrap */
+-			while(time_before(jiffies, atux_trhfa_timeout))
+-				udelay(100);
+-
+-		bridge->ops = &iop13xx_atux_ops;
+-		ret = pci_scan_root_bus_bridge(bridge);
+-		if (!ret)
+-			pci_bus_atux = bridge->bus;
+-		break;
+-	case IOP13XX_INIT_ATU_ATUE:
+-		bridge->ops = &iop13xx_atue_ops;
+-		ret = pci_scan_root_bus_bridge(bridge);
+-		if (!ret)
+-			pci_bus_atue = bridge->bus;
+-		break;
+-	default:
+-		ret = -EINVAL;
+-	}
+-
+-	return ret;
+-}
+-
+-/* This function is called from iop13xx_pci_init() after assigning valid
+- * values to iop13xx_atue_pmmr_offset.  This is the location for common
+- * setup of ATUE for all IOP13XX implementations.
+- */
+-void __init iop13xx_atue_setup(void)
+-{
+-	int func = iop13xx_atu_function(IOP13XX_INIT_ATU_ATUE);
+-	u32 reg_val;
+-
+-#ifdef CONFIG_PCI_MSI
+-	/* BAR 0 (inbound msi window) */
+-	__raw_writel(IOP13XX_MU_BASE_PHYS, IOP13XX_MU_MUBAR);
+-	__raw_writel(~(IOP13XX_MU_WINDOW_SIZE - 1), IOP13XX_ATUE_IALR0);
+-	__raw_writel(IOP13XX_MU_BASE_PHYS, IOP13XX_ATUE_IATVR0);
+-	__raw_writel(IOP13XX_MU_BASE_PCI, IOP13XX_ATUE_IABAR0);
+-#endif
+-
+-	/* BAR 1 (1:1 mapping with Physical RAM) */
+-	/* Set limit and enable */
+-	__raw_writel(~(IOP13XX_MAX_RAM_SIZE - PHYS_OFFSET - 1) & ~0x1,
+-			IOP13XX_ATUE_IALR1);
+-	__raw_writel(0x0, IOP13XX_ATUE_IAUBAR1);
+-
+-	/* Set base at the top of the reserved address space */
+-	__raw_writel(PHYS_OFFSET | PCI_BASE_ADDRESS_MEM_TYPE_64 |
+-			PCI_BASE_ADDRESS_MEM_PREFETCH, IOP13XX_ATUE_IABAR1);
+-
+-	/* 1:1 mapping with physical ram
+-	 * (leave big endian byte swap disabled)
+-	 */
+-	 __raw_writel(0x0, IOP13XX_ATUE_IAUTVR1);
+-	 __raw_writel(PHYS_OFFSET, IOP13XX_ATUE_IATVR1);
+-
+-	/* Outbound window 1 (PCIX/PCIE memory window) */
+-	/* 32 bit Address Space */
+-	__raw_writel(0x0, IOP13XX_ATUE_OUMWTVR1);
+-	/* PA[35:32] */
+-	__raw_writel(IOP13XX_ATUE_OUMBAR_ENABLE |
+-			(IOP13XX_PCIE_MEM_PHYS_OFFSET >> 32),
+-			IOP13XX_ATUE_OUMBAR1);
+-
+-	/* Setup the I/O Bar
+-	 * A[35-16] in 31-12
+-	 */
+-	__raw_writel(((IOP13XX_PCIE_LOWER_IO_PA >> 0x4) & 0xfffff000),
+-		IOP13XX_ATUE_OIOBAR);
+-	__raw_writel(IOP13XX_PCIE_LOWER_IO_BA, IOP13XX_ATUE_OIOWTVR);
+-
+-	/* clear startup errors */
+-	iop13xx_atue_pci_status(1);
+-
+-	/* OIOBAR function number
+-	 */
+-	reg_val = __raw_readl(IOP13XX_ATUE_OIOBAR);
+-	reg_val &= ~0x7;
+-	reg_val |= func;
+-	__raw_writel(reg_val, IOP13XX_ATUE_OIOBAR);
+-
+-	/* OUMBAR function numbers
+-	 */
+-	reg_val = __raw_readl(IOP13XX_ATUE_OUMBAR0);
+-	reg_val &= ~(IOP13XX_ATU_OUMBAR_FUNC_NUM_MASK <<
+-			IOP13XX_ATU_OUMBAR_FUNC_NUM);
+-	reg_val |= func << IOP13XX_ATU_OUMBAR_FUNC_NUM;
+-	__raw_writel(reg_val, IOP13XX_ATUE_OUMBAR0);
+-
+-	reg_val = __raw_readl(IOP13XX_ATUE_OUMBAR1);
+-	reg_val &= ~(IOP13XX_ATU_OUMBAR_FUNC_NUM_MASK <<
+-			IOP13XX_ATU_OUMBAR_FUNC_NUM);
+-	reg_val |= func << IOP13XX_ATU_OUMBAR_FUNC_NUM;
+-	__raw_writel(reg_val, IOP13XX_ATUE_OUMBAR1);
+-
+-	reg_val = __raw_readl(IOP13XX_ATUE_OUMBAR2);
+-	reg_val &= ~(IOP13XX_ATU_OUMBAR_FUNC_NUM_MASK <<
+-			IOP13XX_ATU_OUMBAR_FUNC_NUM);
+-	reg_val |= func << IOP13XX_ATU_OUMBAR_FUNC_NUM;
+-	__raw_writel(reg_val, IOP13XX_ATUE_OUMBAR2);
+-
+-	reg_val = __raw_readl(IOP13XX_ATUE_OUMBAR3);
+-	reg_val &= ~(IOP13XX_ATU_OUMBAR_FUNC_NUM_MASK <<
+-			IOP13XX_ATU_OUMBAR_FUNC_NUM);
+-	reg_val |= func << IOP13XX_ATU_OUMBAR_FUNC_NUM;
+-	__raw_writel(reg_val, IOP13XX_ATUE_OUMBAR3);
+-
+-	/* Enable inbound and outbound cycles
+-	 */
+-	reg_val = __raw_readw(IOP13XX_ATUE_ATUCMD);
+-	reg_val |= PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER |
+-			PCI_COMMAND_PARITY | PCI_COMMAND_SERR;
+-	__raw_writew(reg_val, IOP13XX_ATUE_ATUCMD);
+-
+-	reg_val = __raw_readl(IOP13XX_ATUE_ATUCR);
+-	reg_val |= IOP13XX_ATUE_ATUCR_OUT_EN |
+-			IOP13XX_ATUE_ATUCR_IVM;
+-	__raw_writel(reg_val, IOP13XX_ATUE_ATUCR);
+-}
+-
+-void __init iop13xx_atue_disable(void)
+-{
+-	u32 reg_val;
+-
+-	__raw_writew(0x0, IOP13XX_ATUE_ATUCMD);
+-	__raw_writel(IOP13XX_ATUE_ATUCR_IVM, IOP13XX_ATUE_ATUCR);
+-
+-	/* wait for cycles to quiesce */
+-	while (__raw_readl(IOP13XX_ATUE_PCSR) & (IOP13XX_ATUE_PCSR_OUT_Q_BUSY |
+-					     IOP13XX_ATUE_PCSR_IN_Q_BUSY |
+-					     IOP13XX_ATUE_PCSR_LLRB_BUSY))
+-		cpu_relax();
+-
+-	/* BAR 0 ( Disabled ) */
+-	__raw_writel(0x0, IOP13XX_ATUE_IAUBAR0);
+-	__raw_writel(0x0, IOP13XX_ATUE_IABAR0);
+-	__raw_writel(0x0, IOP13XX_ATUE_IAUTVR0);
+-	__raw_writel(0x0, IOP13XX_ATUE_IATVR0);
+-	__raw_writel(0x0, IOP13XX_ATUE_IALR0);
+-	reg_val = __raw_readl(IOP13XX_ATUE_OUMBAR0);
+-	reg_val &= ~IOP13XX_ATUE_OUMBAR_ENABLE;
+-	__raw_writel(reg_val, IOP13XX_ATUE_OUMBAR0);
+-
+-	/* BAR 1 ( Disabled ) */
+-	__raw_writel(0x0, IOP13XX_ATUE_IAUBAR1);
+-	__raw_writel(0x0, IOP13XX_ATUE_IABAR1);
+-	__raw_writel(0x0, IOP13XX_ATUE_IAUTVR1);
+-	__raw_writel(0x0, IOP13XX_ATUE_IATVR1);
+-	__raw_writel(0x0, IOP13XX_ATUE_IALR1);
+-	reg_val = __raw_readl(IOP13XX_ATUE_OUMBAR1);
+-	reg_val &= ~IOP13XX_ATUE_OUMBAR_ENABLE;
+-	__raw_writel(reg_val, IOP13XX_ATUE_OUMBAR1);
+-
+-	/* BAR 2 ( Disabled ) */
+-	__raw_writel(0x0, IOP13XX_ATUE_IAUBAR2);
+-	__raw_writel(0x0, IOP13XX_ATUE_IABAR2);
+-	__raw_writel(0x0, IOP13XX_ATUE_IAUTVR2);
+-	__raw_writel(0x0, IOP13XX_ATUE_IATVR2);
+-	__raw_writel(0x0, IOP13XX_ATUE_IALR2);
+-	reg_val = __raw_readl(IOP13XX_ATUE_OUMBAR2);
+-	reg_val &= ~IOP13XX_ATUE_OUMBAR_ENABLE;
+-	__raw_writel(reg_val, IOP13XX_ATUE_OUMBAR2);
+-
+-	/* BAR 3 ( Disabled ) */
+-	reg_val = __raw_readl(IOP13XX_ATUE_OUMBAR3);
+-	reg_val &= ~IOP13XX_ATUE_OUMBAR_ENABLE;
+-	__raw_writel(reg_val, IOP13XX_ATUE_OUMBAR3);
+-
+-	/* Setup the I/O Bar
+-	 * A[35-16] in 31-12
+-	 */
+-	__raw_writel((IOP13XX_PCIE_LOWER_IO_PA >> 0x4) & 0xfffff000,
+-			IOP13XX_ATUE_OIOBAR);
+-	__raw_writel(IOP13XX_PCIE_LOWER_IO_BA, IOP13XX_ATUE_OIOWTVR);
+-}
+-
+-/* This function is called from iop13xx_pci_init() after assigning valid
+- * values to iop13xx_atux_pmmr_offset.  This is the location for common
+- * setup of ATUX for all IOP13XX implementations.
+- */
+-void __init iop13xx_atux_setup(void)
+-{
+-	u32 reg_val;
+-	int func = iop13xx_atu_function(IOP13XX_INIT_ATU_ATUX);
+-
+-	/* Take PCI-X bus out of reset if bootloader hasn't already.
+-	 * According to spec, we should wait for 2^25 PCI clocks to meet
+-	 * the PCI timing parameter Trhfa (RST# high to first access).
+-	 * This is rarely necessary and often ignored.
+-	 */
+-	reg_val = __raw_readl(IOP13XX_ATUX_PCSR);
+-	if (reg_val & IOP13XX_ATUX_PCSR_P_RSTOUT) {
+-		int msec = (reg_val >> IOP13XX_ATUX_PCSR_FREQ_OFFSET) & 0x7;
+-		msec = 1000 / (8-msec); /* bits 100=133MHz, 111=>33MHz */
+-		__raw_writel(reg_val & ~IOP13XX_ATUX_PCSR_P_RSTOUT,
+-				IOP13XX_ATUX_PCSR);
+-		atux_trhfa_timeout = jiffies + msecs_to_jiffies(msec);
+-	}
+-	else
+-		atux_trhfa_timeout = jiffies;
+-
+-#ifdef CONFIG_PCI_MSI
+-	/* BAR 0 (inbound msi window) */
+-	__raw_writel(IOP13XX_MU_BASE_PHYS, IOP13XX_MU_MUBAR);
+-	__raw_writel(~(IOP13XX_MU_WINDOW_SIZE - 1), IOP13XX_ATUX_IALR0);
+-	__raw_writel(IOP13XX_MU_BASE_PHYS, IOP13XX_ATUX_IATVR0);
+-	__raw_writel(IOP13XX_MU_BASE_PCI, IOP13XX_ATUX_IABAR0);
+-#endif
+-
+-	/* BAR 1 (1:1 mapping with Physical RAM) */
+-	/* Set limit and enable */
+-	__raw_writel(~(IOP13XX_MAX_RAM_SIZE - PHYS_OFFSET - 1) & ~0x1,
+-			IOP13XX_ATUX_IALR1);
+-	__raw_writel(0x0, IOP13XX_ATUX_IAUBAR1);
+-
+-	/* Set base at the top of the reserved address space */
+-	__raw_writel(PHYS_OFFSET | PCI_BASE_ADDRESS_MEM_TYPE_64 |
+-			PCI_BASE_ADDRESS_MEM_PREFETCH, IOP13XX_ATUX_IABAR1);
+-
+-	/* 1:1 mapping with physical ram
+-	 * (leave big endian byte swap disabled)
+-	 */
+-	__raw_writel(0x0, IOP13XX_ATUX_IAUTVR1);
+-	__raw_writel(PHYS_OFFSET, IOP13XX_ATUX_IATVR1);
+-
+-	/* Outbound window 1 (PCIX/PCIE memory window) */
+-	/* 32 bit Address Space */
+-	__raw_writel(0x0, IOP13XX_ATUX_OUMWTVR1);
+-	/* PA[35:32] */
+-	__raw_writel(IOP13XX_ATUX_OUMBAR_ENABLE |
+-			IOP13XX_PCIX_MEM_PHYS_OFFSET >> 32,
+-			IOP13XX_ATUX_OUMBAR1);
+-
+-	/* Setup the I/O Bar
+-	 * A[35-16] in 31-12
+-	 */
+-	__raw_writel((IOP13XX_PCIX_LOWER_IO_PA >> 0x4) & 0xfffff000,
+-		IOP13XX_ATUX_OIOBAR);
+-	__raw_writel(IOP13XX_PCIX_LOWER_IO_BA, IOP13XX_ATUX_OIOWTVR);
+-
+-	/* clear startup errors */
+-	iop13xx_atux_pci_status(1);
+-
+-	/* OIOBAR function number
+-	 */
+-	reg_val = __raw_readl(IOP13XX_ATUX_OIOBAR);
+-	reg_val &= ~0x7;
+-	reg_val |= func;
+-	__raw_writel(reg_val, IOP13XX_ATUX_OIOBAR);
+-
+-	/* OUMBAR function numbers
+-	 */
+-	reg_val = __raw_readl(IOP13XX_ATUX_OUMBAR0);
+-	reg_val &= ~(IOP13XX_ATU_OUMBAR_FUNC_NUM_MASK <<
+-			IOP13XX_ATU_OUMBAR_FUNC_NUM);
+-	reg_val |= func << IOP13XX_ATU_OUMBAR_FUNC_NUM;
+-	__raw_writel(reg_val, IOP13XX_ATUX_OUMBAR0);
+-
+-	reg_val = __raw_readl(IOP13XX_ATUX_OUMBAR1);
+-	reg_val &= ~(IOP13XX_ATU_OUMBAR_FUNC_NUM_MASK <<
+-			IOP13XX_ATU_OUMBAR_FUNC_NUM);
+-	reg_val |= func << IOP13XX_ATU_OUMBAR_FUNC_NUM;
+-	__raw_writel(reg_val, IOP13XX_ATUX_OUMBAR1);
+-
+-	reg_val = __raw_readl(IOP13XX_ATUX_OUMBAR2);
+-	reg_val &= ~(IOP13XX_ATU_OUMBAR_FUNC_NUM_MASK <<
+-			IOP13XX_ATU_OUMBAR_FUNC_NUM);
+-	reg_val |= func << IOP13XX_ATU_OUMBAR_FUNC_NUM;
+-	__raw_writel(reg_val, IOP13XX_ATUX_OUMBAR2);
+-
+-	reg_val = __raw_readl(IOP13XX_ATUX_OUMBAR3);
+-	reg_val &= ~(IOP13XX_ATU_OUMBAR_FUNC_NUM_MASK <<
+-			IOP13XX_ATU_OUMBAR_FUNC_NUM);
+-	reg_val |= func << IOP13XX_ATU_OUMBAR_FUNC_NUM;
+-	__raw_writel(reg_val, IOP13XX_ATUX_OUMBAR3);
+-
+-	/* Enable inbound and outbound cycles
+-	 */
+-	reg_val = __raw_readw(IOP13XX_ATUX_ATUCMD);
+-	reg_val |= PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER |
+-		        PCI_COMMAND_PARITY | PCI_COMMAND_SERR;
+-	__raw_writew(reg_val, IOP13XX_ATUX_ATUCMD);
+-
+-	reg_val = __raw_readl(IOP13XX_ATUX_ATUCR);
+-	reg_val |= IOP13XX_ATUX_ATUCR_OUT_EN;
+-	__raw_writel(reg_val, IOP13XX_ATUX_ATUCR);
+-}
+-
+-void __init iop13xx_atux_disable(void)
+-{
+-	u32 reg_val;
+-
+-	__raw_writew(0x0, IOP13XX_ATUX_ATUCMD);
+-	__raw_writel(0x0, IOP13XX_ATUX_ATUCR);
+-
+-	/* wait for cycles to quiesce */
+-	while (__raw_readl(IOP13XX_ATUX_PCSR) & (IOP13XX_ATUX_PCSR_OUT_Q_BUSY |
+-				     IOP13XX_ATUX_PCSR_IN_Q_BUSY))
+-		cpu_relax();
+-
+-	/* BAR 0 ( Disabled ) */
+-	__raw_writel(0x0, IOP13XX_ATUX_IAUBAR0);
+-	__raw_writel(0x0, IOP13XX_ATUX_IABAR0);
+-	__raw_writel(0x0, IOP13XX_ATUX_IAUTVR0);
+-	__raw_writel(0x0, IOP13XX_ATUX_IATVR0);
+-	__raw_writel(0x0, IOP13XX_ATUX_IALR0);
+-	reg_val = __raw_readl(IOP13XX_ATUX_OUMBAR0);
+-	reg_val &= ~IOP13XX_ATUX_OUMBAR_ENABLE;
+-	__raw_writel(reg_val, IOP13XX_ATUX_OUMBAR0);
+-
+-	/* BAR 1 ( Disabled ) */
+-	__raw_writel(0x0, IOP13XX_ATUX_IAUBAR1);
+-	__raw_writel(0x0, IOP13XX_ATUX_IABAR1);
+-	__raw_writel(0x0, IOP13XX_ATUX_IAUTVR1);
+-	__raw_writel(0x0, IOP13XX_ATUX_IATVR1);
+-	__raw_writel(0x0, IOP13XX_ATUX_IALR1);
+-	reg_val = __raw_readl(IOP13XX_ATUX_OUMBAR1);
+-	reg_val &= ~IOP13XX_ATUX_OUMBAR_ENABLE;
+-	__raw_writel(reg_val, IOP13XX_ATUX_OUMBAR1);
+-
+-	/* BAR 2 ( Disabled ) */
+-	__raw_writel(0x0, IOP13XX_ATUX_IAUBAR2);
+-	__raw_writel(0x0, IOP13XX_ATUX_IABAR2);
+-	__raw_writel(0x0, IOP13XX_ATUX_IAUTVR2);
+-	__raw_writel(0x0, IOP13XX_ATUX_IATVR2);
+-	__raw_writel(0x0, IOP13XX_ATUX_IALR2);
+-	reg_val = __raw_readl(IOP13XX_ATUX_OUMBAR2);
+-	reg_val &= ~IOP13XX_ATUX_OUMBAR_ENABLE;
+-	__raw_writel(reg_val, IOP13XX_ATUX_OUMBAR2);
+-
+-	/* BAR 3 ( Disabled ) */
+-	__raw_writel(0x0, IOP13XX_ATUX_IAUBAR3);
+-	__raw_writel(0x0, IOP13XX_ATUX_IABAR3);
+-	__raw_writel(0x0, IOP13XX_ATUX_IAUTVR3);
+-	__raw_writel(0x0, IOP13XX_ATUX_IATVR3);
+-	__raw_writel(0x0, IOP13XX_ATUX_IALR3);
+-	reg_val = __raw_readl(IOP13XX_ATUX_OUMBAR3);
+-	reg_val &= ~IOP13XX_ATUX_OUMBAR_ENABLE;
+-	__raw_writel(reg_val, IOP13XX_ATUX_OUMBAR3);
+-
+-	/* Setup the I/O Bar
+-	* A[35-16] in 31-12
+-	*/
+-	__raw_writel((IOP13XX_PCIX_LOWER_IO_PA >> 0x4) & 0xfffff000,
+-			IOP13XX_ATUX_OIOBAR);
+-	__raw_writel(IOP13XX_PCIX_LOWER_IO_BA, IOP13XX_ATUX_OIOWTVR);
+-}
+-
+-void __init iop13xx_set_atu_mmr_bases(void)
+-{
+-	/* Based on ESSR0, determine the ATU X/E offsets */
+-	switch(__raw_readl(IOP13XX_ESSR0) &
+-		(IOP13XX_CONTROLLER_ONLY | IOP13XX_INTERFACE_SEL_PCIX)) {
+-	/* both asserted */
+-	case 0:
+-		iop13xx_atux_pmmr_offset = IOP13XX_ATU1_PMMR_OFFSET;
+-		iop13xx_atue_pmmr_offset = IOP13XX_ATU2_PMMR_OFFSET;
+-		break;
+-	/* IOP13XX_CONTROLLER_ONLY = deasserted
+-	 * IOP13XX_INTERFACE_SEL_PCIX = asserted
+-	 */
+-	case IOP13XX_CONTROLLER_ONLY:
+-		iop13xx_atux_pmmr_offset = IOP13XX_ATU0_PMMR_OFFSET;
+-		iop13xx_atue_pmmr_offset = IOP13XX_ATU2_PMMR_OFFSET;
+-		break;
+-	/* IOP13XX_CONTROLLER_ONLY = asserted
+-	 * IOP13XX_INTERFACE_SEL_PCIX = deasserted
+-	 */
+-	case IOP13XX_INTERFACE_SEL_PCIX:
+-		iop13xx_atux_pmmr_offset = IOP13XX_ATU1_PMMR_OFFSET;
+-		iop13xx_atue_pmmr_offset = IOP13XX_ATU2_PMMR_OFFSET;
+-		break;
+-	/* both deasserted */
+-	case IOP13XX_CONTROLLER_ONLY | IOP13XX_INTERFACE_SEL_PCIX:
+-		iop13xx_atux_pmmr_offset = IOP13XX_ATU2_PMMR_OFFSET;
+-		iop13xx_atue_pmmr_offset = IOP13XX_ATU0_PMMR_OFFSET;
+-		break;
+-	default:
+-		BUG();
+-	}
+-}
+-
+-void __init iop13xx_atu_select(struct hw_pci *plat_pci)
+-{
+-	int i;
+-
+-	/* set system defaults
+-	 * note: if "iop13xx_init_atu=" is specified this autodetect
+-	 * sequence will be bypassed
+-	 */
+-	if (init_atu == IOP13XX_INIT_ATU_DEFAULT) {
+-		/* check for single/dual interface */
+-		if (__raw_readl(IOP13XX_ESSR0) & IOP13XX_INTERFACE_SEL_PCIX) {
+-			/* ATUE must be present check the device id
+-			 * to see if ATUX is present.
+-			 */
+-			init_atu |= IOP13XX_INIT_ATU_ATUE;
+-			switch (__raw_readw(IOP13XX_ATUE_DID) & 0xf0) {
+-			case 0x70:
+-			case 0x80:
+-			case 0xc0:
+-				init_atu |= IOP13XX_INIT_ATU_ATUX;
+-				break;
+-			}
+-		} else {
+-			/* ATUX must be present check the device id
+-			 * to see if ATUE is present.
+-			 */
+-			init_atu |= IOP13XX_INIT_ATU_ATUX;
+-			switch (__raw_readw(IOP13XX_ATUX_DID) & 0xf0) {
+-			case 0x70:
+-			case 0x80:
+-			case 0xc0:
+-				init_atu |= IOP13XX_INIT_ATU_ATUE;
+-				break;
+-			}
+-		}
+-
+-		/* check central resource and root complex capability */
+-		if (init_atu & IOP13XX_INIT_ATU_ATUX)
+-			if (!(__raw_readl(IOP13XX_ATUX_PCSR) &
+-				IOP13XX_ATUX_PCSR_CENTRAL_RES))
+-				init_atu &= ~IOP13XX_INIT_ATU_ATUX;
+-
+-		if (init_atu & IOP13XX_INIT_ATU_ATUE)
+-			if (__raw_readl(IOP13XX_ATUE_PCSR) &
+-				IOP13XX_ATUE_PCSR_END_POINT)
+-				init_atu &= ~IOP13XX_INIT_ATU_ATUE;
+-	}
+-
+-	for (i = 0; i < 2; i++) {
+-		if((init_atu & (1 << i)) == (1 << i))
+-			plat_pci->nr_controllers++;
+-	}
+-}
+-
+-void __init iop13xx_pci_init(void)
+-{
+-	/* clear pre-existing south bridge errors */
+-	__raw_writel(__raw_readl(IOP13XX_XBG_BECSR) & 3, IOP13XX_XBG_BECSR);
+-
+-	/* Setup the Min Address for PCI memory... */
+-	pcibios_min_mem = IOP13XX_PCIX_LOWER_MEM_BA;
+-
+-	/* if Linux is given control of an ATU
+-	 * clear out its prior configuration,
+-	 * otherwise do not touch the registers
+-	 */
+-	if (init_atu & IOP13XX_INIT_ATU_ATUE) {
+-		iop13xx_atue_disable();
+-		iop13xx_atue_setup();
+-	}
+-
+-	if (init_atu & IOP13XX_INIT_ATU_ATUX) {
+-		iop13xx_atux_disable();
+-		iop13xx_atux_setup();
+-	}
+-
+-	hook_fault_code(16+6, iop13xx_pci_abort, SIGBUS, 0,
+-			"imprecise external abort");
+-}
+-
+-/* initialize the pci memory space.  handle any combination of
+- * atue and atux enabled/disabled
+- */
+-int iop13xx_pci_setup(int nr, struct pci_sys_data *sys)
+-{
+-	struct resource *res;
+-	int which_atu;
+-	u32 pcixsr, pcsr;
+-
+-	if (nr > 1)
+-		return 0;
+-
+-	res = kzalloc(sizeof(struct resource), GFP_KERNEL);
+-	if (!res)
+-		panic("PCI: unable to alloc resources");
+-
+-
+-	/* 'nr' assumptions:
+-	 * ATUX is always 0
+-	 * ATUE is 1 when ATUX is also enabled
+-	 * ATUE is 0 when ATUX is disabled
+-	 */
+-	switch(init_atu) {
+-	case IOP13XX_INIT_ATU_ATUX:
+-		which_atu = nr ? 0 : IOP13XX_INIT_ATU_ATUX;
+-		break;
+-	case IOP13XX_INIT_ATU_ATUE:
+-		which_atu = nr ? 0 : IOP13XX_INIT_ATU_ATUE;
+-		break;
+-	case (IOP13XX_INIT_ATU_ATUX | IOP13XX_INIT_ATU_ATUE):
+-		which_atu = nr ? IOP13XX_INIT_ATU_ATUE : IOP13XX_INIT_ATU_ATUX;
+-		break;
+-	default:
+-		which_atu = 0;
+-	}
+-
+-	if (!which_atu) {
+-		kfree(res);
+-		return 0;
+-	}
+-
+-	switch(which_atu) {
+-	case IOP13XX_INIT_ATU_ATUX:
+-		pcixsr = __raw_readl(IOP13XX_ATUX_PCIXSR);
+-		pcixsr &= ~0xffff;
+-		pcixsr |= sys->busnr << IOP13XX_ATUX_PCIXSR_BUS_NUM |
+-			  0 << IOP13XX_ATUX_PCIXSR_DEV_NUM |
+-			  iop13xx_atu_function(IOP13XX_INIT_ATU_ATUX)
+-				  << IOP13XX_ATUX_PCIXSR_FUNC_NUM;
+-		__raw_writel(pcixsr, IOP13XX_ATUX_PCIXSR);
+-
+-		pci_ioremap_io(0, IOP13XX_PCIX_LOWER_IO_PA);
+-
+-		res->start = IOP13XX_PCIX_LOWER_MEM_RA;
+-		res->end   = IOP13XX_PCIX_UPPER_MEM_RA;
+-		res->name  = "IQ81340 ATUX PCI Memory Space";
+-		res->flags = IORESOURCE_MEM;
+-		sys->mem_offset = IOP13XX_PCIX_MEM_OFFSET;
+-		break;
+-	case IOP13XX_INIT_ATU_ATUE:
+-		/* Note: the function number field in the PCSR is ro */
+-		pcsr = __raw_readl(IOP13XX_ATUE_PCSR);
+-		pcsr &= ~(0xfff8 << 16);
+-		pcsr |= sys->busnr << IOP13XX_ATUE_PCSR_BUS_NUM |
+-				0 << IOP13XX_ATUE_PCSR_DEV_NUM;
+-
+-		__raw_writel(pcsr, IOP13XX_ATUE_PCSR);
+-
+-		pci_ioremap_io(SZ_64K, IOP13XX_PCIE_LOWER_IO_PA);
+-
+-		res->start = IOP13XX_PCIE_LOWER_MEM_RA;
+-		res->end   = IOP13XX_PCIE_UPPER_MEM_RA;
+-		res->name  = "IQ81340 ATUE PCI Memory Space";
+-		res->flags = IORESOURCE_MEM;
+-		sys->mem_offset = IOP13XX_PCIE_MEM_OFFSET;
+-		sys->map_irq = iop13xx_pcie_map_irq;
+-		break;
+-	default:
+-		kfree(res);
+-		return 0;
+-	}
+-
+-	request_resource(&iomem_resource, res);
+-
+-	pci_add_resource_offset(&sys->resources, res, sys->mem_offset);
+-
+-	return 1;
+-}
+-
+-u16 iop13xx_dev_id(void)
+-{
+-	if (__raw_readl(IOP13XX_ESSR0) & IOP13XX_INTERFACE_SEL_PCIX)
+-		return __raw_readw(IOP13XX_ATUE_DID);
+-	else
+-		return __raw_readw(IOP13XX_ATUX_DID);
+-}
+-
+-static int __init iop13xx_init_atu_setup(char *str)
+-{
+-        init_atu = IOP13XX_INIT_ATU_NONE;
+-        if (str) {
+-                while (*str != '\0') {
+-                        switch (*str) {
+-                        case 'x':
+-                        case 'X':
+-                                init_atu |= IOP13XX_INIT_ATU_ATUX;
+-                                init_atu &= ~IOP13XX_INIT_ATU_NONE;
+-                                break;
+-                        case 'e':
+-                        case 'E':
+-                                init_atu |= IOP13XX_INIT_ATU_ATUE;
+-                                init_atu &= ~IOP13XX_INIT_ATU_NONE;
+-                                break;
+-                        case ',':
+-                        case '=':
+-                                break;
+-                        default:
+-                                PRINTK("\"iop13xx_init_atu\" malformed at "
+-                                            "character: \'%c\'", *str);
+-                                *(str + 1) = '\0';
+-                                init_atu = IOP13XX_INIT_ATU_DEFAULT;
+-                        }
+-                        str++;
+-                }
+-        }
+-        return 1;
+-}
+-
+-__setup("iop13xx_init_atu", iop13xx_init_atu_setup);
+diff --git a/arch/arm/mach-iop13xx/pci.h b/arch/arm/mach-iop13xx/pci.h
+deleted file mode 100644
+index 736168d8c7ac..000000000000
+--- a/arch/arm/mach-iop13xx/pci.h
++++ /dev/null
+@@ -1,66 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _IOP13XX_PCI_H_
+-#define _IOP13XX_PCI_H_
+-#include <linux/io.h>
+-#include <mach/irqs.h>
+-
+-#include <linux/types.h>
+-
+-extern void __iomem *iop13xx_atue_mem_base;
+-extern void __iomem *iop13xx_atux_mem_base;
+-extern size_t iop13xx_atue_mem_size;
+-extern size_t iop13xx_atux_mem_size;
+-
+-struct pci_sys_data;
+-struct pci_host_bridge;
+-struct hw_pci;
+-int iop13xx_pci_setup(int nr, struct pci_sys_data *sys);
+-int iop13xx_scan_bus(int nr, struct pci_host_bridge *bridge);
+-void iop13xx_atu_select(struct hw_pci *plat_pci);
+-void iop13xx_pci_init(void);
+-void iop13xx_map_pci_memory(void);
+-
+-#define IOP_PCI_STATUS_ERROR (PCI_STATUS_PARITY |	     \
+-			       PCI_STATUS_SIG_TARGET_ABORT | \
+-			       PCI_STATUS_REC_TARGET_ABORT | \
+-			       PCI_STATUS_REC_TARGET_ABORT | \
+-			       PCI_STATUS_REC_MASTER_ABORT | \
+-			       PCI_STATUS_SIG_SYSTEM_ERROR | \
+-	 		       PCI_STATUS_DETECTED_PARITY)
+-
+-#define IOP13XX_ATUE_ATUISR_ERROR (IOP13XX_ATUE_STAT_HALT_ON_ERROR |  \
+-				    IOP13XX_ATUE_STAT_ROOT_SYS_ERR |   \
+-				    IOP13XX_ATUE_STAT_PCI_IFACE_ERR |  \
+-				    IOP13XX_ATUE_STAT_ERR_COR |	       \
+-				    IOP13XX_ATUE_STAT_ERR_UNCOR |      \
+-				    IOP13XX_ATUE_STAT_CRS |	       \
+-				    IOP13XX_ATUE_STAT_DET_PAR_ERR |    \
+-				    IOP13XX_ATUE_STAT_EXT_REC_MABORT | \
+-				    IOP13XX_ATUE_STAT_SIG_TABORT |     \
+-				    IOP13XX_ATUE_STAT_EXT_REC_TABORT | \
+-				    IOP13XX_ATUE_STAT_MASTER_DATA_PAR)
+-
+-#define IOP13XX_ATUX_ATUISR_ERROR (IOP13XX_ATUX_STAT_TX_SCEM |        \
+-				    IOP13XX_ATUX_STAT_REC_SCEM |       \
+-				    IOP13XX_ATUX_STAT_TX_SERR |	       \
+-				    IOP13XX_ATUX_STAT_DET_PAR_ERR |    \
+-				    IOP13XX_ATUX_STAT_INT_REC_MABORT | \
+-				    IOP13XX_ATUX_STAT_REC_SERR |       \
+-				    IOP13XX_ATUX_STAT_EXT_REC_MABORT | \
+-				    IOP13XX_ATUX_STAT_EXT_REC_TABORT | \
+-				    IOP13XX_ATUX_STAT_EXT_SIG_TABORT | \
+-				    IOP13XX_ATUX_STAT_MASTER_DATA_PAR)
+-
+-/* PCI interrupts
+- */
+-#define ATUX_INTA IRQ_IOP13XX_XINT0
+-#define ATUX_INTB IRQ_IOP13XX_XINT1
+-#define ATUX_INTC IRQ_IOP13XX_XINT2
+-#define ATUX_INTD IRQ_IOP13XX_XINT3
+-
+-#define ATUE_INTA IRQ_IOP13XX_ATUE_IMA
+-#define ATUE_INTB IRQ_IOP13XX_ATUE_IMB
+-#define ATUE_INTC IRQ_IOP13XX_ATUE_IMC
+-#define ATUE_INTD IRQ_IOP13XX_ATUE_IMD
+-
+-#endif /* _IOP13XX_PCI_H_ */
+diff --git a/arch/arm/mach-iop13xx/setup.c b/arch/arm/mach-iop13xx/setup.c
+deleted file mode 100644
+index c5c84c9ec9ee..000000000000
+--- a/arch/arm/mach-iop13xx/setup.c
++++ /dev/null
+@@ -1,595 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * iop13xx platform Initialization
+- * Copyright (c) 2005-2006, Intel Corporation.
+- */
+-
+-#include <linux/dma-mapping.h>
+-#include <linux/serial_8250.h>
+-#include <linux/io.h>
+-#include <linux/reboot.h>
+-#ifdef CONFIG_MTD_PHYSMAP
+-#include <linux/mtd/physmap.h>
+-#endif
+-#include <asm/mach/map.h>
+-#include <mach/hardware.h>
+-#include <asm/irq.h>
+-#include <asm/hardware/iop_adma.h>
+-#include <mach/irqs.h>
+-
+-#define IOP13XX_UART_XTAL 33334000
+-#define IOP13XX_SETUP_DEBUG 0
+-#define PRINTK(x...) ((void)(IOP13XX_SETUP_DEBUG && printk(x)))
+-
+-/* Standard IO mapping for all IOP13XX based systems
+- */
+-static struct map_desc iop13xx_std_desc[] __initdata = {
+-	{    /* mem mapped registers */
+-		.virtual = (unsigned long)IOP13XX_PMMR_VIRT_MEM_BASE,
+-		.pfn 	 = __phys_to_pfn(IOP13XX_PMMR_PHYS_MEM_BASE),
+-		.length  = IOP13XX_PMMR_SIZE,
+-		.type	 = MT_DEVICE,
+-	},
+-};
+-
+-static struct resource iop13xx_uart0_resources[] = {
+-	[0] = {
+-		.start = IOP13XX_UART0_PHYS,
+-		.end = IOP13XX_UART0_PHYS + 0x3f,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start = IRQ_IOP13XX_UART0,
+-		.end = IRQ_IOP13XX_UART0,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-static struct resource iop13xx_uart1_resources[] = {
+-	[0] = {
+-		.start = IOP13XX_UART1_PHYS,
+-		.end = IOP13XX_UART1_PHYS + 0x3f,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start = IRQ_IOP13XX_UART1,
+-		.end = IRQ_IOP13XX_UART1,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-static struct plat_serial8250_port iop13xx_uart0_data[] = {
+-	{
+-       .membase     = IOP13XX_UART0_VIRT,
+-       .mapbase     = IOP13XX_UART0_PHYS,
+-       .irq         = IRQ_IOP13XX_UART0,
+-       .uartclk     = IOP13XX_UART_XTAL,
+-       .regshift    = 2,
+-       .iotype      = UPIO_MEM,
+-       .flags       = UPF_SKIP_TEST,
+-	},
+-	{  },
+-};
+-
+-static struct plat_serial8250_port iop13xx_uart1_data[] = {
+-	{
+-       .membase     = IOP13XX_UART1_VIRT,
+-       .mapbase     = IOP13XX_UART1_PHYS,
+-       .irq         = IRQ_IOP13XX_UART1,
+-       .uartclk     = IOP13XX_UART_XTAL,
+-       .regshift    = 2,
+-       .iotype      = UPIO_MEM,
+-       .flags       = UPF_SKIP_TEST,
+-	},
+-	{  },
+-};
+-
+-/* The ids are fixed up later in iop13xx_platform_init */
+-static struct platform_device iop13xx_uart0 = {
+-       .name = "serial8250",
+-       .id = 0,
+-       .dev.platform_data = iop13xx_uart0_data,
+-       .num_resources = 2,
+-       .resource = iop13xx_uart0_resources,
+-};
+-
+-static struct platform_device iop13xx_uart1 = {
+-       .name = "serial8250",
+-       .id = 0,
+-       .dev.platform_data = iop13xx_uart1_data,
+-       .num_resources = 2,
+-       .resource = iop13xx_uart1_resources
+-};
+-
+-static struct resource iop13xx_i2c_0_resources[] = {
+-	[0] = {
+-		.start = IOP13XX_I2C0_PHYS,
+-		.end = IOP13XX_I2C0_PHYS + 0x18,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start = IRQ_IOP13XX_I2C_0,
+-		.end = IRQ_IOP13XX_I2C_0,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-static struct resource iop13xx_i2c_1_resources[] = {
+-	[0] = {
+-		.start = IOP13XX_I2C1_PHYS,
+-		.end = IOP13XX_I2C1_PHYS + 0x18,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start = IRQ_IOP13XX_I2C_1,
+-		.end = IRQ_IOP13XX_I2C_1,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-static struct resource iop13xx_i2c_2_resources[] = {
+-	[0] = {
+-		.start = IOP13XX_I2C2_PHYS,
+-		.end = IOP13XX_I2C2_PHYS + 0x18,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start = IRQ_IOP13XX_I2C_2,
+-		.end = IRQ_IOP13XX_I2C_2,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-/* I2C controllers. The IOP13XX uses the same block as the IOP3xx, so
+- * we just use the same device name.
+- */
+-
+-/* The ids are fixed up later in iop13xx_platform_init */
+-static struct platform_device iop13xx_i2c_0_controller = {
+-	.name = "IOP3xx-I2C",
+-	.id = 0,
+-	.num_resources = 2,
+-	.resource = iop13xx_i2c_0_resources
+-};
+-
+-static struct platform_device iop13xx_i2c_1_controller = {
+-	.name = "IOP3xx-I2C",
+-	.id = 0,
+-	.num_resources = 2,
+-	.resource = iop13xx_i2c_1_resources
+-};
+-
+-static struct platform_device iop13xx_i2c_2_controller = {
+-	.name = "IOP3xx-I2C",
+-	.id = 0,
+-	.num_resources = 2,
+-	.resource = iop13xx_i2c_2_resources
+-};
+-
+-#ifdef CONFIG_MTD_PHYSMAP
+-/* PBI Flash Device
+- */
+-static struct physmap_flash_data iq8134x_flash_data = {
+-	.width = 2,
+-};
+-
+-static struct resource iq8134x_flash_resource = {
+-	.start = IQ81340_FLASHBASE,
+-	.end   = 0,
+-	.flags = IORESOURCE_MEM,
+-};
+-
+-static struct platform_device iq8134x_flash = {
+-	.name           = "physmap-flash",
+-	.id             = 0,
+-	.dev            = { .platform_data  = &iq8134x_flash_data, },
+-	.num_resources  = 1,
+-	.resource       = &iq8134x_flash_resource,
+-};
+-
+-static unsigned long iq8134x_probe_flash_size(void)
+-{
+-	uint8_t __iomem *flash_addr = ioremap(IQ81340_FLASHBASE, PAGE_SIZE);
+-	int i;
+-	char query[3];
+-	unsigned long size = 0;
+-	int width = iq8134x_flash_data.width;
+-
+-	if (flash_addr) {
+-		/* send CFI 'query' command */
+-		writew(0x98, flash_addr);
+-
+-		/* check for CFI compliance */
+-		for (i = 0; i < 3 * width; i += width)
+-			query[i / width] = readb(flash_addr + (0x10 * width) + i);
+-
+-		/* read the size */
+-		if (memcmp(query, "QRY", 3) == 0)
+-			size = 1 << readb(flash_addr + (0x27 * width));
+-
+-		/* send CFI 'read array' command */
+-		writew(0xff, flash_addr);
+-
+-		iounmap(flash_addr);
+-	}
+-
+-	return size;
+-}
+-#endif
+-
+-/* ADMA Channels */
+-static struct resource iop13xx_adma_0_resources[] = {
+-	[0] = {
+-		.start = IOP13XX_ADMA_PHYS_BASE(0),
+-		.end = IOP13XX_ADMA_UPPER_PA(0),
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start = IRQ_IOP13XX_ADMA0_EOT,
+-		.end = IRQ_IOP13XX_ADMA0_EOT,
+-		.flags = IORESOURCE_IRQ
+-	},
+-	[2] = {
+-		.start = IRQ_IOP13XX_ADMA0_EOC,
+-		.end = IRQ_IOP13XX_ADMA0_EOC,
+-		.flags = IORESOURCE_IRQ
+-	},
+-	[3] = {
+-		.start = IRQ_IOP13XX_ADMA0_ERR,
+-		.end = IRQ_IOP13XX_ADMA0_ERR,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-static struct resource iop13xx_adma_1_resources[] = {
+-	[0] = {
+-		.start = IOP13XX_ADMA_PHYS_BASE(1),
+-		.end = IOP13XX_ADMA_UPPER_PA(1),
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start = IRQ_IOP13XX_ADMA1_EOT,
+-		.end = IRQ_IOP13XX_ADMA1_EOT,
+-		.flags = IORESOURCE_IRQ
+-	},
+-	[2] = {
+-		.start = IRQ_IOP13XX_ADMA1_EOC,
+-		.end = IRQ_IOP13XX_ADMA1_EOC,
+-		.flags = IORESOURCE_IRQ
+-	},
+-	[3] = {
+-		.start = IRQ_IOP13XX_ADMA1_ERR,
+-		.end = IRQ_IOP13XX_ADMA1_ERR,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-static struct resource iop13xx_adma_2_resources[] = {
+-	[0] = {
+-		.start = IOP13XX_ADMA_PHYS_BASE(2),
+-		.end = IOP13XX_ADMA_UPPER_PA(2),
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start = IRQ_IOP13XX_ADMA2_EOT,
+-		.end = IRQ_IOP13XX_ADMA2_EOT,
+-		.flags = IORESOURCE_IRQ
+-	},
+-	[2] = {
+-		.start = IRQ_IOP13XX_ADMA2_EOC,
+-		.end = IRQ_IOP13XX_ADMA2_EOC,
+-		.flags = IORESOURCE_IRQ
+-	},
+-	[3] = {
+-		.start = IRQ_IOP13XX_ADMA2_ERR,
+-		.end = IRQ_IOP13XX_ADMA2_ERR,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-static u64 iop13xx_adma_dmamask = DMA_BIT_MASK(32);
+-static struct iop_adma_platform_data iop13xx_adma_0_data = {
+-	.hw_id = 0,
+-	.pool_size = PAGE_SIZE,
+-};
+-
+-static struct iop_adma_platform_data iop13xx_adma_1_data = {
+-	.hw_id = 1,
+-	.pool_size = PAGE_SIZE,
+-};
+-
+-static struct iop_adma_platform_data iop13xx_adma_2_data = {
+-	.hw_id = 2,
+-	.pool_size = PAGE_SIZE,
+-};
+-
+-/* The ids are fixed up later in iop13xx_platform_init */
+-static struct platform_device iop13xx_adma_0_channel = {
+-	.name = "iop-adma",
+-	.id = 0,
+-	.num_resources = 4,
+-	.resource = iop13xx_adma_0_resources,
+-	.dev = {
+-		.dma_mask = &iop13xx_adma_dmamask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-		.platform_data = (void *) &iop13xx_adma_0_data,
+-	},
+-};
+-
+-static struct platform_device iop13xx_adma_1_channel = {
+-	.name = "iop-adma",
+-	.id = 0,
+-	.num_resources = 4,
+-	.resource = iop13xx_adma_1_resources,
+-	.dev = {
+-		.dma_mask = &iop13xx_adma_dmamask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-		.platform_data = (void *) &iop13xx_adma_1_data,
+-	},
+-};
+-
+-static struct platform_device iop13xx_adma_2_channel = {
+-	.name = "iop-adma",
+-	.id = 0,
+-	.num_resources = 4,
+-	.resource = iop13xx_adma_2_resources,
+-	.dev = {
+-		.dma_mask = &iop13xx_adma_dmamask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-		.platform_data = (void *) &iop13xx_adma_2_data,
+-	},
+-};
+-
+-void __init iop13xx_map_io(void)
+-{
+-	/* Initialize the Static Page Table maps */
+-	iotable_init(iop13xx_std_desc, ARRAY_SIZE(iop13xx_std_desc));
+-}
+-
+-static int init_uart;
+-static int init_i2c;
+-static int init_adma;
+-
+-void __init iop13xx_platform_init(void)
+-{
+-	int i;
+-	u32 uart_idx, i2c_idx, adma_idx, plat_idx;
+-	struct platform_device *iop13xx_devices[IQ81340_MAX_PLAT_DEVICES];
+-
+-	/* set the bases so we can read the device id */
+-	iop13xx_set_atu_mmr_bases();
+-
+-	memset(iop13xx_devices, 0, sizeof(iop13xx_devices));
+-
+-	if (init_uart == IOP13XX_INIT_UART_DEFAULT) {
+-		switch (iop13xx_dev_id()) {
+-		/* enable both uarts on iop341 */
+-		case 0x3380:
+-		case 0x3384:
+-		case 0x3388:
+-		case 0x338c:
+-			init_uart |= IOP13XX_INIT_UART_0;
+-			init_uart |= IOP13XX_INIT_UART_1;
+-			break;
+-		/* only enable uart 1 */
+-		default:
+-			init_uart |= IOP13XX_INIT_UART_1;
+-		}
+-	}
+-
+-	if (init_i2c == IOP13XX_INIT_I2C_DEFAULT) {
+-		switch (iop13xx_dev_id()) {
+-		/* enable all i2c units on iop341 and iop342 */
+-		case 0x3380:
+-		case 0x3384:
+-		case 0x3388:
+-		case 0x338c:
+-		case 0x3382:
+-		case 0x3386:
+-		case 0x338a:
+-		case 0x338e:
+-			init_i2c |= IOP13XX_INIT_I2C_0;
+-			init_i2c |= IOP13XX_INIT_I2C_1;
+-			init_i2c |= IOP13XX_INIT_I2C_2;
+-			break;
+-		/* only enable i2c 1 and 2 */
+-		default:
+-			init_i2c |= IOP13XX_INIT_I2C_1;
+-			init_i2c |= IOP13XX_INIT_I2C_2;
+-		}
+-	}
+-
+-	if (init_adma == IOP13XX_INIT_ADMA_DEFAULT) {
+-		init_adma |= IOP13XX_INIT_ADMA_0;
+-		init_adma |= IOP13XX_INIT_ADMA_1;
+-		init_adma |= IOP13XX_INIT_ADMA_2;
+-	}
+-
+-	plat_idx = 0;
+-	uart_idx = 0;
+-	i2c_idx = 0;
+-
+-	/* uart 1 (if enabled) is ttyS0 */
+-	if (init_uart & IOP13XX_INIT_UART_1) {
+-		PRINTK("Adding uart1 to platform device list\n");
+-		iop13xx_uart1.id = uart_idx++;
+-		iop13xx_devices[plat_idx++] = &iop13xx_uart1;
+-	}
+-	if (init_uart & IOP13XX_INIT_UART_0) {
+-		PRINTK("Adding uart0 to platform device list\n");
+-		iop13xx_uart0.id = uart_idx++;
+-		iop13xx_devices[plat_idx++] = &iop13xx_uart0;
+-	}
+-
+-	for(i = 0; i < IQ81340_NUM_I2C; i++) {
+-		if ((init_i2c & (1 << i)) && IOP13XX_SETUP_DEBUG)
+-			printk("Adding i2c%d to platform device list\n", i);
+-		switch(init_i2c & (1 << i)) {
+-		case IOP13XX_INIT_I2C_0:
+-			iop13xx_i2c_0_controller.id = i2c_idx++;
+-			iop13xx_devices[plat_idx++] =
+-				&iop13xx_i2c_0_controller;
+-			break;
+-		case IOP13XX_INIT_I2C_1:
+-			iop13xx_i2c_1_controller.id = i2c_idx++;
+-			iop13xx_devices[plat_idx++] =
+-				&iop13xx_i2c_1_controller;
+-			break;
+-		case IOP13XX_INIT_I2C_2:
+-			iop13xx_i2c_2_controller.id = i2c_idx++;
+-			iop13xx_devices[plat_idx++] =
+-				&iop13xx_i2c_2_controller;
+-			break;
+-		}
+-	}
+-
+-	/* initialize adma channel ids and capabilities */
+-	adma_idx = 0;
+-	for (i = 0; i < IQ81340_NUM_ADMA; i++) {
+-		struct iop_adma_platform_data *plat_data;
+-		if ((init_adma & (1 << i)) && IOP13XX_SETUP_DEBUG)
+-			printk(KERN_INFO
+-				"Adding adma%d to platform device list\n", i);
+-		switch (init_adma & (1 << i)) {
+-		case IOP13XX_INIT_ADMA_0:
+-			iop13xx_adma_0_channel.id = adma_idx++;
+-			iop13xx_devices[plat_idx++] = &iop13xx_adma_0_channel;
+-			plat_data = &iop13xx_adma_0_data;
+-			dma_cap_set(DMA_MEMCPY, plat_data->cap_mask);
+-			dma_cap_set(DMA_XOR, plat_data->cap_mask);
+-			dma_cap_set(DMA_XOR_VAL, plat_data->cap_mask);
+-			dma_cap_set(DMA_INTERRUPT, plat_data->cap_mask);
+-			break;
+-		case IOP13XX_INIT_ADMA_1:
+-			iop13xx_adma_1_channel.id = adma_idx++;
+-			iop13xx_devices[plat_idx++] = &iop13xx_adma_1_channel;
+-			plat_data = &iop13xx_adma_1_data;
+-			dma_cap_set(DMA_MEMCPY, plat_data->cap_mask);
+-			dma_cap_set(DMA_XOR, plat_data->cap_mask);
+-			dma_cap_set(DMA_XOR_VAL, plat_data->cap_mask);
+-			dma_cap_set(DMA_INTERRUPT, plat_data->cap_mask);
+-			break;
+-		case IOP13XX_INIT_ADMA_2:
+-			iop13xx_adma_2_channel.id = adma_idx++;
+-			iop13xx_devices[plat_idx++] = &iop13xx_adma_2_channel;
+-			plat_data = &iop13xx_adma_2_data;
+-			dma_cap_set(DMA_MEMCPY, plat_data->cap_mask);
+-			dma_cap_set(DMA_XOR, plat_data->cap_mask);
+-			dma_cap_set(DMA_XOR_VAL, plat_data->cap_mask);
+-			dma_cap_set(DMA_INTERRUPT, plat_data->cap_mask);
+-			dma_cap_set(DMA_PQ, plat_data->cap_mask);
+-			dma_cap_set(DMA_PQ_VAL, plat_data->cap_mask);
+-			break;
+-		}
+-	}
+-
+-#ifdef CONFIG_MTD_PHYSMAP
+-	iq8134x_flash_resource.end = iq8134x_flash_resource.start +
+-				iq8134x_probe_flash_size() - 1;
+-	if (iq8134x_flash_resource.end > iq8134x_flash_resource.start)
+-		iop13xx_devices[plat_idx++] = &iq8134x_flash;
+-	else
+-		printk(KERN_ERR "%s: Failed to probe flash size\n", __func__);
+-#endif
+-
+-	platform_add_devices(iop13xx_devices, plat_idx);
+-}
+-
+-static int __init iop13xx_init_uart_setup(char *str)
+-{
+-	if (str) {
+-		while (*str != '\0') {
+-			switch(*str) {
+-			case '0':
+-				init_uart |= IOP13XX_INIT_UART_0;
+-				break;
+-			case '1':
+-				init_uart |= IOP13XX_INIT_UART_1;
+-				break;
+-			case ',':
+-			case '=':
+-				break;
+-			default:
+-				PRINTK("\"iop13xx_init_uart\" malformed"
+-					    " at character: \'%c\'", *str);
+-				*(str + 1) = '\0';
+-				init_uart = IOP13XX_INIT_UART_DEFAULT;
+-			}
+-			str++;
+-		}
+-	}
+-	return 1;
+-}
+-
+-static int __init iop13xx_init_i2c_setup(char *str)
+-{
+-	if (str) {
+-		while (*str != '\0') {
+-			switch(*str) {
+-			case '0':
+-				init_i2c |= IOP13XX_INIT_I2C_0;
+-				break;
+-			case '1':
+-				init_i2c |= IOP13XX_INIT_I2C_1;
+-				break;
+-			case '2':
+-				init_i2c |= IOP13XX_INIT_I2C_2;
+-				break;
+-			case ',':
+-			case '=':
+-				break;
+-			default:
+-				PRINTK("\"iop13xx_init_i2c\" malformed"
+-					    " at character: \'%c\'", *str);
+-				*(str + 1) = '\0';
+-				init_i2c = IOP13XX_INIT_I2C_DEFAULT;
+-			}
+-			str++;
+-		}
+-	}
+-	return 1;
+-}
+-
+-static int __init iop13xx_init_adma_setup(char *str)
+-{
+-	if (str)	{
+-		while (*str != '\0') {
+-			switch (*str) {
+-			case '0':
+-				init_adma |= IOP13XX_INIT_ADMA_0;
+-				break;
+-			case '1':
+-				init_adma |= IOP13XX_INIT_ADMA_1;
+-				break;
+-			case '2':
+-				init_adma |= IOP13XX_INIT_ADMA_2;
+-				break;
+-			case ',':
+-			case '=':
+-				break;
+-			default:
+-				PRINTK("\"iop13xx_init_adma\" malformed"
+-					    " at character: \'%c\'", *str);
+-				*(str + 1) = '\0';
+-				init_adma = IOP13XX_INIT_ADMA_DEFAULT;
+-			}
+-			str++;
+-		}
+-	}
+-	return 1;
+-}
+-
+-__setup("iop13xx_init_adma", iop13xx_init_adma_setup);
+-__setup("iop13xx_init_uart", iop13xx_init_uart_setup);
+-__setup("iop13xx_init_i2c", iop13xx_init_i2c_setup);
+-
+-void iop13xx_restart(enum reboot_mode mode, const char *cmd)
+-{
+-	/*
+-	 * Reset the internal bus (warning both cores are reset)
+-	 */
+-	write_wdtcr(IOP_WDTCR_EN_ARM);
+-	write_wdtcr(IOP_WDTCR_EN);
+-	write_wdtsr(IOP13XX_WDTSR_WRITE_EN | IOP13XX_WDTCR_IB_RESET);
+-	write_wdtcr(0x1000);
+-}
+diff --git a/arch/arm/mach-iop13xx/tpmi.c b/arch/arm/mach-iop13xx/tpmi.c
+deleted file mode 100644
+index 4f916549e381..000000000000
+--- a/arch/arm/mach-iop13xx/tpmi.c
++++ /dev/null
+@@ -1,244 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * iop13xx tpmi device resources
+- * Copyright (c) 2005-2006, Intel Corporation.
+- */
+-
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/platform_device.h>
+-#include <linux/dma-mapping.h>
+-#include <linux/io.h>
+-#include <asm/irq.h>
+-#include <linux/sizes.h>
+-#include <mach/irqs.h>
+-
+-/* assumes CONTROLLER_ONLY# is never asserted in the ESSR register */
+-#define IOP13XX_TPMI_MMR(dev) 	IOP13XX_REG_ADDR32_PHYS(0x48000 + (dev << 12))
+-#define IOP13XX_TPMI_MEM(dev) 	IOP13XX_REG_ADDR32_PHYS(0x60000 + (dev << 13))
+-#define IOP13XX_TPMI_CTRL(dev)	IOP13XX_REG_ADDR32_PHYS(0x50000 + (dev << 10))
+-#define IOP13XX_TPMI_IOP_CTRL(dev) (IOP13XX_TPMI_CTRL(dev) + 0x2000)
+-#define IOP13XX_TPMI_MMR_SIZE	    (SZ_4K - 1)
+-#define IOP13XX_TPMI_MEM_SIZE	    (255)
+-#define IOP13XX_TPMI_MEM_CTRL	    (SZ_1K - 1)
+-#define IOP13XX_TPMI_RESOURCE_MMR  0
+-#define IOP13XX_TPMI_RESOURCE_MEM  1
+-#define IOP13XX_TPMI_RESOURCE_CTRL 2
+-#define IOP13XX_TPMI_RESOURCE_IOP_CTRL 3
+-#define IOP13XX_TPMI_RESOURCE_IRQ  4
+-
+-static struct resource iop13xx_tpmi_0_resources[] = {
+-	[IOP13XX_TPMI_RESOURCE_MMR] = {
+-		.start = IOP13XX_TPMI_MMR(4), /* tpmi0 starts at dev == 4 */
+-		.end = IOP13XX_TPMI_MMR(4) + IOP13XX_TPMI_MMR_SIZE,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_MEM] = {
+-		.start = IOP13XX_TPMI_MEM(0),
+-		.end = IOP13XX_TPMI_MEM(0) + IOP13XX_TPMI_MEM_SIZE,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_CTRL] = {
+-		.start = IOP13XX_TPMI_CTRL(0),
+-		.end = IOP13XX_TPMI_CTRL(0) + IOP13XX_TPMI_MEM_CTRL,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_IOP_CTRL] = {
+-		.start = IOP13XX_TPMI_IOP_CTRL(0),
+-		.end = IOP13XX_TPMI_IOP_CTRL(0) + IOP13XX_TPMI_MEM_CTRL,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_IRQ] = {
+-		.start = IRQ_IOP13XX_TPMI0_OUT,
+-		.end = IRQ_IOP13XX_TPMI0_OUT,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-static struct resource iop13xx_tpmi_1_resources[] = {
+-	[IOP13XX_TPMI_RESOURCE_MMR] = {
+-		.start = IOP13XX_TPMI_MMR(1),
+-		.end = IOP13XX_TPMI_MMR(1) + IOP13XX_TPMI_MMR_SIZE,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_MEM] = {
+-		.start = IOP13XX_TPMI_MEM(1),
+-		.end = IOP13XX_TPMI_MEM(1) + IOP13XX_TPMI_MEM_SIZE,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_CTRL] = {
+-		.start = IOP13XX_TPMI_CTRL(1),
+-		.end = IOP13XX_TPMI_CTRL(1) + IOP13XX_TPMI_MEM_CTRL,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_IOP_CTRL] = {
+-		.start = IOP13XX_TPMI_IOP_CTRL(1),
+-		.end = IOP13XX_TPMI_IOP_CTRL(1) + IOP13XX_TPMI_MEM_CTRL,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_IRQ] = {
+-		.start = IRQ_IOP13XX_TPMI1_OUT,
+-		.end = IRQ_IOP13XX_TPMI1_OUT,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-static struct resource iop13xx_tpmi_2_resources[] = {
+-	[IOP13XX_TPMI_RESOURCE_MMR] = {
+-		.start = IOP13XX_TPMI_MMR(2),
+-		.end = IOP13XX_TPMI_MMR(2) + IOP13XX_TPMI_MMR_SIZE,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_MEM] = {
+-		.start = IOP13XX_TPMI_MEM(2),
+-		.end = IOP13XX_TPMI_MEM(2) + IOP13XX_TPMI_MEM_SIZE,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_CTRL] = {
+-		.start = IOP13XX_TPMI_CTRL(2),
+-		.end = IOP13XX_TPMI_CTRL(2) + IOP13XX_TPMI_MEM_CTRL,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_IOP_CTRL] = {
+-		.start = IOP13XX_TPMI_IOP_CTRL(2),
+-		.end = IOP13XX_TPMI_IOP_CTRL(2) + IOP13XX_TPMI_MEM_CTRL,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_IRQ] = {
+-		.start = IRQ_IOP13XX_TPMI2_OUT,
+-		.end = IRQ_IOP13XX_TPMI2_OUT,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-static struct resource iop13xx_tpmi_3_resources[] = {
+-	[IOP13XX_TPMI_RESOURCE_MMR] = {
+-		.start = IOP13XX_TPMI_MMR(3),
+-		.end = IOP13XX_TPMI_MMR(3) + IOP13XX_TPMI_MMR_SIZE,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_MEM] = {
+-		.start = IOP13XX_TPMI_MEM(3),
+-		.end = IOP13XX_TPMI_MEM(3) + IOP13XX_TPMI_MEM_SIZE,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_CTRL] = {
+-		.start = IOP13XX_TPMI_CTRL(3),
+-		.end = IOP13XX_TPMI_CTRL(3) + IOP13XX_TPMI_MEM_CTRL,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_IOP_CTRL] = {
+-		.start = IOP13XX_TPMI_IOP_CTRL(3),
+-		.end = IOP13XX_TPMI_IOP_CTRL(3) + IOP13XX_TPMI_MEM_CTRL,
+-		.flags = IORESOURCE_MEM,
+-	},
+-	[IOP13XX_TPMI_RESOURCE_IRQ] = {
+-		.start = IRQ_IOP13XX_TPMI3_OUT,
+-		.end = IRQ_IOP13XX_TPMI3_OUT,
+-		.flags = IORESOURCE_IRQ
+-	}
+-};
+-
+-u64 iop13xx_tpmi_mask = DMA_BIT_MASK(32);
+-static struct platform_device iop13xx_tpmi_0_device = {
+-	.name = "iop-tpmi",
+-	.id = 0,
+-	.num_resources = ARRAY_SIZE(iop13xx_tpmi_0_resources),
+-	.resource = iop13xx_tpmi_0_resources,
+-	.dev = {
+-		.dma_mask          = &iop13xx_tpmi_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-	},
+-};
+-
+-static struct platform_device iop13xx_tpmi_1_device = {
+-	.name = "iop-tpmi",
+-	.id = 1,
+-	.num_resources = ARRAY_SIZE(iop13xx_tpmi_1_resources),
+-	.resource = iop13xx_tpmi_1_resources,
+-	.dev = {
+-		.dma_mask          = &iop13xx_tpmi_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-	},
+-};
+-
+-static struct platform_device iop13xx_tpmi_2_device = {
+-	.name = "iop-tpmi",
+-	.id = 2,
+-	.num_resources = ARRAY_SIZE(iop13xx_tpmi_2_resources),
+-	.resource = iop13xx_tpmi_2_resources,
+-	.dev = {
+-		.dma_mask          = &iop13xx_tpmi_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-	},
+-};
+-
+-static struct platform_device iop13xx_tpmi_3_device = {
+-	.name = "iop-tpmi",
+-	.id = 3,
+-	.num_resources = ARRAY_SIZE(iop13xx_tpmi_3_resources),
+-	.resource = iop13xx_tpmi_3_resources,
+-	.dev = {
+-		.dma_mask          = &iop13xx_tpmi_mask,
+-		.coherent_dma_mask = DMA_BIT_MASK(32),
+-	},
+-};
+-
+-__init void iop13xx_add_tpmi_devices(void)
+-{
+-	unsigned short device_id;
+-
+-	/* tpmi's not present on iop341 or iop342 */
+-	if (__raw_readl(IOP13XX_ESSR0) & IOP13XX_INTERFACE_SEL_PCIX)
+-		/* ATUE must be present */
+-		device_id = __raw_readw(IOP13XX_ATUE_DID);
+-	else
+-		/* ATUX must be present */
+-		device_id = __raw_readw(IOP13XX_ATUX_DID);
+-
+-	switch (device_id) {
+-	/* iop34[1|2] 0-tpmi */
+-	case 0x3380:
+-	case 0x3384:
+-	case 0x3388:
+-	case 0x338c:
+-	case 0x3382:
+-	case 0x3386:
+-	case 0x338a:
+-	case 0x338e:
+-		return;
+-	/* iop348 1-tpmi */
+-	case 0x3310:
+-	case 0x3312:
+-	case 0x3314:
+-	case 0x3318:
+-	case 0x331a:
+-	case 0x331c:
+-	case 0x33c0:
+-	case 0x33c2:
+-	case 0x33c4:
+-	case 0x33c8:
+-	case 0x33ca:
+-	case 0x33cc:
+-	case 0x33b0:
+-	case 0x33b2:
+-	case 0x33b4:
+-	case 0x33b8:
+-	case 0x33ba:
+-	case 0x33bc:
+-	case 0x3320:
+-	case 0x3322:
+-	case 0x3324:
+-	case 0x3328:
+-	case 0x332a:
+-	case 0x332c:
+-		platform_device_register(&iop13xx_tpmi_0_device);
+-		return;
+-	default:
+-		platform_device_register(&iop13xx_tpmi_0_device);
+-		platform_device_register(&iop13xx_tpmi_1_device);
+-		platform_device_register(&iop13xx_tpmi_2_device);
+-		platform_device_register(&iop13xx_tpmi_3_device);
+-		return;
+-	}
+-}
+diff --git a/arch/arm/mach-iop33x/Kconfig b/arch/arm/mach-iop33x/Kconfig
+deleted file mode 100644
+index cd6069c7c568..000000000000
+--- a/arch/arm/mach-iop33x/Kconfig
++++ /dev/null
+@@ -1,22 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-if ARCH_IOP33X
+-
+-menu "IOP33x Implementation Options"
+-
+-comment "IOP33x Platform Types"
+-
+-config ARCH_IQ80331
+-	bool "Enable support for IQ80331"
+-	help
+-	  Say Y here if you want to run your kernel on the Intel IQ80331
+-	  evaluation kit for the IOP331 chipset.
+-
+-config MACH_IQ80332
+-	bool "Enable support for IQ80332"
+-	help
+-	  Say Y here if you want to run your kernel on the Intel IQ80332
+-	  evaluation kit for the IOP332 chipset.
+-
+-endmenu
+-
+-endif
+diff --git a/arch/arm/mach-iop33x/Makefile b/arch/arm/mach-iop33x/Makefile
+deleted file mode 100644
+index 320ecde1f907..000000000000
+--- a/arch/arm/mach-iop33x/Makefile
++++ /dev/null
+@@ -1,9 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-#
+-# Makefile for the linux kernel.
+-#
+-
+-obj-y			:= irq.o uart.o
+-
+-obj-$(CONFIG_ARCH_IQ80331) += iq80331.o
+-obj-$(CONFIG_MACH_IQ80332) += iq80332.o
+diff --git a/arch/arm/mach-iop33x/Makefile.boot b/arch/arm/mach-iop33x/Makefile.boot
+deleted file mode 100644
+index e4dd1d26038f..000000000000
+--- a/arch/arm/mach-iop33x/Makefile.boot
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-   zreladdr-y	+= 0x00008000
+-params_phys-y	:= 0x00000100
+-initrd_phys-y	:= 0x00800000
+diff --git a/arch/arm/mach-iop33x/include/mach/adma.h b/arch/arm/mach-iop33x/include/mach/adma.h
+deleted file mode 100644
+index 8aa7159ab6d8..000000000000
+--- a/arch/arm/mach-iop33x/include/mach/adma.h
++++ /dev/null
+@@ -1,6 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef IOP33X_ADMA_H
+-#define IOP33X_ADMA_H
+-#include <asm/hardware/iop3xx-adma.h>
+-#endif
+-
+diff --git a/arch/arm/mach-iop33x/include/mach/entry-macro.S b/arch/arm/mach-iop33x/include/mach/entry-macro.S
+deleted file mode 100644
+index 0a398fe1fba4..000000000000
+--- a/arch/arm/mach-iop33x/include/mach/entry-macro.S
++++ /dev/null
+@@ -1,34 +0,0 @@
+-/*
+- * arch/arm/mach-iop33x/include/mach/entry-macro.S
+- *
+- * Low-level IRQ helper macros for IOP33x-based platforms
+- *
+- * This file is licensed under the terms of the GNU General Public
+- * License version 2. This program is licensed "as is" without any
+- * warranty of any kind, whether express or implied.
+- */
+-#include <mach/iop33x.h>
+-
+-	.macro get_irqnr_preamble, base, tmp
+-	mrc	p15, 0, \tmp, c15, c1, 0
+-	orr	\tmp, \tmp, #(1 << 6)
+-	mcr	p15, 0, \tmp, c15, c1, 0	@ Enable cp6 access
+-	mrc	p15, 0, \tmp, c15, c1, 0
+-	mov	\tmp, \tmp
+-	sub	pc, pc, #4			@ cp_wait
+-	.endm
+-
+-	.macro  get_irqnr_and_base, irqnr, irqstat, base, tmp
+-	mrc     p6, 0, \irqstat, c14, c0, 0     @ Read IINTVEC
+-	cmp     \irqstat, #0
+-	mrceq   p6, 0, \irqstat, c14, c0, 0     @ erratum 63 workaround
+-	adds    \irqnr, \irqstat, #1
+-	movne   \irqnr, \irqstat, lsr #2
+-	.endm
+-
+-	.macro arch_ret_to_user, tmp1, tmp2
+-	mrc	p15, 0, \tmp1, c15, c1, 0
+-	ands	\tmp2, \tmp1, #(1 << 6)
+-	bicne	\tmp1, \tmp1, #(1 << 6)
+-	mcrne	p15, 0, \tmp1, c15, c1, 0	@ Disable cp6 access
+-	.endm
+diff --git a/arch/arm/mach-iop33x/include/mach/hardware.h b/arch/arm/mach-iop33x/include/mach/hardware.h
+deleted file mode 100644
+index 020bafbc36a5..000000000000
+--- a/arch/arm/mach-iop33x/include/mach/hardware.h
++++ /dev/null
+@@ -1,44 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * arch/arm/mach-iop33x/include/mach/hardware.h
+- */
+-
+-#ifndef __HARDWARE_H
+-#define __HARDWARE_H
+-
+-#include <asm/types.h>
+-
+-/*
+- * Note about PCI IO space mappings
+- *
+- * To make IO space accesses efficient, we store virtual addresses in
+- * the IO resources.
+- *
+- * The PCI IO space is located at virtual 0xfe000000 from physical
+- * 0x90000000.  The PCI BARs must be programmed with physical addresses,
+- * but when we read them, we convert them to virtual addresses.  See
+- * arch/arm/mach-iop3xx/iop3xx-pci.c
+- */
+-
+-#ifndef __ASSEMBLY__
+-void iop33x_init_irq(void);
+-
+-extern struct platform_device iop33x_uart0_device;
+-extern struct platform_device iop33x_uart1_device;
+-#endif
+-
+-
+-/*
+- * Generic chipset bits
+- *
+- */
+-#include "iop33x.h"
+-
+-/*
+- * Board specific bits
+- */
+-#include "iq80331.h"
+-#include "iq80332.h"
+-
+-
+-#endif
+diff --git a/arch/arm/mach-iop33x/include/mach/iop33x.h b/arch/arm/mach-iop33x/include/mach/iop33x.h
+deleted file mode 100644
+index 0c7041ed7a60..000000000000
+--- a/arch/arm/mach-iop33x/include/mach/iop33x.h
++++ /dev/null
+@@ -1,37 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * arch/arm/mach-iop33x/include/mach/iop33x.h
+- *
+- * Intel IOP33X Chip definitions
+- *
+- * Author: Dave Jiang (dave.jiang@intel.com)
+- * Copyright (C) 2003, 2004 Intel Corp.
+- */
+-
+-#ifndef __IOP33X_H
+-#define __IOP33X_H
+-
+-/*
+- * Peripherals that are shared between the iop32x and iop33x but
+- * located at different addresses.
+- */
+-#define IOP3XX_TIMER_REG(reg)	(IOP3XX_PERIPHERAL_VIRT_BASE + 0x07d0 + (reg))
+-
+-#include <asm/hardware/iop3xx.h>
+-
+-/* UARTs  */
+-#define IOP33X_UART0_PHYS	(IOP3XX_PERIPHERAL_PHYS_BASE + 0x1700)
+-#define IOP33X_UART0_VIRT	(IOP3XX_PERIPHERAL_VIRT_BASE + 0x1700)
+-#define IOP33X_UART1_PHYS	(IOP3XX_PERIPHERAL_PHYS_BASE + 0x1740)
+-#define IOP33X_UART1_VIRT	(IOP3XX_PERIPHERAL_VIRT_BASE + 0x1740)
+-
+-/* ATU Parameters
+- * set up a 1:1 bus to physical ram relationship
+- * w/ pci on top of physical ram in memory map
+- */
+-#define IOP33X_MAX_RAM_SIZE		0x80000000UL
+-#define IOP3XX_MAX_RAM_SIZE		IOP33X_MAX_RAM_SIZE
+-#define IOP3XX_PCI_LOWER_MEM_BA	(PHYS_OFFSET + IOP33X_MAX_RAM_SIZE)
+-
+-
+-#endif
+diff --git a/arch/arm/mach-iop33x/include/mach/iq80331.h b/arch/arm/mach-iop33x/include/mach/iq80331.h
+deleted file mode 100644
+index c7e68d863e44..000000000000
+--- a/arch/arm/mach-iop33x/include/mach/iq80331.h
++++ /dev/null
+@@ -1,17 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * arch/arm/mach-iop33x/include/mach/iq80331.h
+- *
+- * Intel IQ80331 evaluation board registers
+- */
+-
+-#ifndef __IQ80331_H
+-#define __IQ80331_H
+-
+-#define IQ80331_7SEG_1		0xce840000	/* 7-Segment MSB */
+-#define IQ80331_7SEG_0		0xce850000	/* 7-Segment LSB (WO) */
+-#define IQ80331_ROTARY_SW	0xce8d0000	/* Rotary Switch */
+-#define IQ80331_BATT_STAT	0xce8f0000	/* Battery Status */
+-
+-
+-#endif
+diff --git a/arch/arm/mach-iop33x/include/mach/iq80332.h b/arch/arm/mach-iop33x/include/mach/iq80332.h
+deleted file mode 100644
+index 749b44bf7f62..000000000000
+--- a/arch/arm/mach-iop33x/include/mach/iq80332.h
++++ /dev/null
+@@ -1,17 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * arch/arm/mach-iop33x/include/mach/iq80332.h
+- *
+- * Intel IQ80332 evaluation board registers
+- */
+-
+-#ifndef __IQ80332_H
+-#define __IQ80332_H
+-
+-#define IQ80332_7SEG_1		0xce840000	/* 7-Segment MSB */
+-#define IQ80332_7SEG_0		0xce850000	/* 7-Segment LSB (WO) */
+-#define IQ80332_ROTARY_SW	0xce8d0000	/* Rotary Switch */
+-#define IQ80332_BATT_STAT	0xce8f0000	/* Battery Status */
+-
+-
+-#endif
+diff --git a/arch/arm/mach-iop33x/include/mach/irqs.h b/arch/arm/mach-iop33x/include/mach/irqs.h
+deleted file mode 100644
+index cc3dce0ad4a1..000000000000
+--- a/arch/arm/mach-iop33x/include/mach/irqs.h
++++ /dev/null
+@@ -1,57 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * arch/arm/mach-iop33x/include/mach/irqs.h
+- *
+- * Author:	Dave Jiang (dave.jiang@intel.com)
+- * Copyright:	(C) 2003 Intel Corp.
+- */
+-
+-#ifndef __IRQS_H
+-#define __IRQS_H
+-
+-/*
+- * IOP80331 chipset interrupts
+- */
+-#define IRQ_IOP33X_DMA0_EOT	0
+-#define IRQ_IOP33X_DMA0_EOC	1
+-#define IRQ_IOP33X_DMA1_EOT	2
+-#define IRQ_IOP33X_DMA1_EOC	3
+-#define IRQ_IOP33X_AA_EOT	6
+-#define IRQ_IOP33X_AA_EOC	7
+-#define IRQ_IOP33X_TIMER0	8
+-#define IRQ_IOP33X_TIMER1	9
+-#define IRQ_IOP33X_I2C_0	10
+-#define IRQ_IOP33X_I2C_1	11
+-#define IRQ_IOP33X_MSG		12
+-#define IRQ_IOP33X_MSGIBQ	13
+-#define IRQ_IOP33X_ATU_BIST	14
+-#define IRQ_IOP33X_PERFMON	15
+-#define IRQ_IOP33X_CORE_PMU	16
+-#define IRQ_IOP33X_XINT0	24
+-#define IRQ_IOP33X_XINT1	25
+-#define IRQ_IOP33X_XINT2	26
+-#define IRQ_IOP33X_XINT3	27
+-#define IRQ_IOP33X_XINT8	32
+-#define IRQ_IOP33X_XINT9	33
+-#define IRQ_IOP33X_XINT10	34
+-#define IRQ_IOP33X_XINT11	35
+-#define IRQ_IOP33X_XINT12	36
+-#define IRQ_IOP33X_XINT13	37
+-#define IRQ_IOP33X_XINT14	38
+-#define IRQ_IOP33X_XINT15	39
+-#define IRQ_IOP33X_UART0	51
+-#define IRQ_IOP33X_UART1	52
+-#define IRQ_IOP33X_PBIE		53
+-#define IRQ_IOP33X_ATU_CRW	54
+-#define IRQ_IOP33X_ATU_ERR	55
+-#define IRQ_IOP33X_MCU_ERR	56
+-#define IRQ_IOP33X_DMA0_ERR	57
+-#define IRQ_IOP33X_DMA1_ERR	58
+-#define IRQ_IOP33X_AA_ERR	60
+-#define IRQ_IOP33X_MSG_ERR	62
+-#define IRQ_IOP33X_HPI		63
+-
+-#define NR_IRQS			64
+-
+-
+-#endif
+diff --git a/arch/arm/mach-iop33x/include/mach/time.h b/arch/arm/mach-iop33x/include/mach/time.h
+deleted file mode 100644
+index 801f8fd644ad..000000000000
+--- a/arch/arm/mach-iop33x/include/mach/time.h
++++ /dev/null
+@@ -1,5 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _IOP33X_TIME_H_
+-#define _IOP33X_TIME_H_
+-#define IRQ_IOP_TIMER0 IRQ_IOP33X_TIMER0
+-#endif
+diff --git a/arch/arm/mach-iop33x/include/mach/uncompress.h b/arch/arm/mach-iop33x/include/mach/uncompress.h
+deleted file mode 100644
+index 62b71cde1f79..000000000000
+--- a/arch/arm/mach-iop33x/include/mach/uncompress.h
++++ /dev/null
+@@ -1,37 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * arch/arm/mach-iop33x/include/mach/uncompress.h
+- */
+-
+-#include <asm/types.h>
+-#include <asm/mach-types.h>
+-#include <linux/serial_reg.h>
+-#include <mach/hardware.h>
+-
+-volatile u32 *uart_base;
+-
+-#define TX_DONE		(UART_LSR_TEMT | UART_LSR_THRE)
+-
+-static inline void putc(char c)
+-{
+-	while ((uart_base[UART_LSR] & TX_DONE) != TX_DONE)
+-		barrier();
+-	uart_base[UART_TX] = c;
+-}
+-
+-static inline void flush(void)
+-{
+-}
+-
+-static __inline__ void __arch_decomp_setup(unsigned long arch_id)
+-{
+-	if (machine_is_iq80331() || machine_is_iq80332())
+-		uart_base = (volatile u32 *)IOP33X_UART0_PHYS;
+-	else
+-		uart_base = (volatile u32 *)0xfe800000;
+-}
+-
+-/*
+- * nothing to do
+- */
+-#define arch_decomp_setup()	__arch_decomp_setup(arch_id)
+diff --git a/arch/arm/mach-iop33x/iq80331.c b/arch/arm/mach-iop33x/iq80331.c
+deleted file mode 100644
+index ab74fbabc749..000000000000
+--- a/arch/arm/mach-iop33x/iq80331.c
++++ /dev/null
+@@ -1,148 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * arch/arm/mach-iop33x/iq80331.c
+- *
+- * Board support code for the Intel IQ80331 platform.
+- *
+- * Author: Dave Jiang <dave.jiang@intel.com>
+- * Copyright (C) 2003 Intel Corp.
+- */
+-
+-#include <linux/mm.h>
+-#include <linux/init.h>
+-#include <linux/kernel.h>
+-#include <linux/pci.h>
+-#include <linux/string.h>
+-#include <linux/serial_core.h>
+-#include <linux/serial_8250.h>
+-#include <linux/mtd/physmap.h>
+-#include <linux/platform_device.h>
+-#include <linux/io.h>
+-#include <mach/hardware.h>
+-#include <asm/irq.h>
+-#include <asm/mach/arch.h>
+-#include <asm/mach/map.h>
+-#include <asm/mach/pci.h>
+-#include <asm/mach/time.h>
+-#include <asm/mach-types.h>
+-#include <asm/page.h>
+-#include <asm/pgtable.h>
+-#include <mach/time.h>
+-
+-/*
+- * IQ80331 timer tick configuration.
+- */
+-static void __init iq80331_timer_init(void)
+-{
+-	/* D-Step parts run at a higher internal bus frequency */
+-	if (*IOP3XX_ATURID >= 0xa)
+-		iop_init_time(333000000);
+-	else
+-		iop_init_time(266000000);
+-}
+-
+-
+-/*
+- * IQ80331 PCI.
+- */
+-static int __init
+-iq80331_pci_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+-{
+-	int irq;
+-
+-	if (slot == 1 && pin == 1) {
+-		/* PCI-X Slot INTA */
+-		irq = IRQ_IOP33X_XINT1;
+-	} else if (slot == 1 && pin == 2) {
+-		/* PCI-X Slot INTB */
+-		irq = IRQ_IOP33X_XINT2;
+-	} else if (slot == 1 && pin == 3) {
+-		/* PCI-X Slot INTC */
+-		irq = IRQ_IOP33X_XINT3;
+-	} else if (slot == 1 && pin == 4) {
+-		/* PCI-X Slot INTD */
+-		irq = IRQ_IOP33X_XINT0;
+-	} else if (slot == 2) {
+-		/* GigE */
+-		irq = IRQ_IOP33X_XINT2;
+-	} else {
+-		printk(KERN_ERR "iq80331_pci_map_irq() called for unknown "
+-			"device PCI:%d:%d:%d\n", dev->bus->number,
+-			PCI_SLOT(dev->devfn), PCI_FUNC(dev->devfn));
+-		irq = -1;
+-	}
+-
+-	return irq;
+-}
+-
+-static struct hw_pci iq80331_pci __initdata = {
+-	.nr_controllers = 1,
+-	.ops		= &iop3xx_ops,
+-	.setup		= iop3xx_pci_setup,
+-	.preinit	= iop3xx_pci_preinit_cond,
+-	.map_irq	= iq80331_pci_map_irq,
+-};
+-
+-static int __init iq80331_pci_init(void)
+-{
+-	if ((iop3xx_get_init_atu() == IOP3XX_INIT_ATU_ENABLE) &&
+-		machine_is_iq80331())
+-		pci_common_init(&iq80331_pci);
+-
+-	return 0;
+-}
+-
+-subsys_initcall(iq80331_pci_init);
+-
+-
+-/*
+- * IQ80331 machine initialisation.
+- */
+-static struct physmap_flash_data iq80331_flash_data = {
+-	.width		= 1,
+-};
+-
+-static struct resource iq80331_flash_resource = {
+-	.start		= 0xc0000000,
+-	.end		= 0xc07fffff,
+-	.flags		= IORESOURCE_MEM,
+-};
+-
+-static struct platform_device iq80331_flash_device = {
+-	.name		= "physmap-flash",
+-	.id		= 0,
+-	.dev		= {
+-		.platform_data	= &iq80331_flash_data,
+-	},
+-	.num_resources	= 1,
+-	.resource	= &iq80331_flash_resource,
+-};
+-
+-static struct resource iq80331_gpio_res[] = {
+-	DEFINE_RES_MEM((IOP3XX_PERIPHERAL_PHYS_BASE + 0x1780), 0x10),
+-};
+-
+-static void __init iq80331_init_machine(void)
+-{
+-	platform_device_register_simple("gpio-iop", 0,
+-					iq80331_gpio_res,
+-					ARRAY_SIZE(iq80331_gpio_res));
+-	platform_device_register(&iop3xx_i2c0_device);
+-	platform_device_register(&iop3xx_i2c1_device);
+-	platform_device_register(&iop33x_uart0_device);
+-	platform_device_register(&iop33x_uart1_device);
+-	platform_device_register(&iq80331_flash_device);
+-	platform_device_register(&iop3xx_dma_0_channel);
+-	platform_device_register(&iop3xx_dma_1_channel);
+-	platform_device_register(&iop3xx_aau_channel);
+-}
+-
+-MACHINE_START(IQ80331, "Intel IQ80331")
+-	/* Maintainer: Intel Corp. */
+-	.atag_offset	= 0x100,
+-	.map_io		= iop3xx_map_io,
+-	.init_irq	= iop33x_init_irq,
+-	.init_time	= iq80331_timer_init,
+-	.init_machine	= iq80331_init_machine,
+-	.restart	= iop3xx_restart,
+-MACHINE_END
+diff --git a/arch/arm/mach-iop33x/iq80332.c b/arch/arm/mach-iop33x/iq80332.c
+deleted file mode 100644
+index 2e309b197aa4..000000000000
+--- a/arch/arm/mach-iop33x/iq80332.c
++++ /dev/null
+@@ -1,148 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * arch/arm/mach-iop33x/iq80332.c
+- *
+- * Board support code for the Intel IQ80332 platform.
+- *
+- * Author: Dave Jiang <dave.jiang@intel.com>
+- * Copyright (C) 2004 Intel Corp.
+- */
+-
+-#include <linux/mm.h>
+-#include <linux/init.h>
+-#include <linux/kernel.h>
+-#include <linux/pci.h>
+-#include <linux/string.h>
+-#include <linux/serial_core.h>
+-#include <linux/serial_8250.h>
+-#include <linux/mtd/physmap.h>
+-#include <linux/platform_device.h>
+-#include <linux/io.h>
+-#include <mach/hardware.h>
+-#include <asm/irq.h>
+-#include <asm/mach/arch.h>
+-#include <asm/mach/map.h>
+-#include <asm/mach/pci.h>
+-#include <asm/mach/time.h>
+-#include <asm/mach-types.h>
+-#include <asm/page.h>
+-#include <asm/pgtable.h>
+-#include <mach/time.h>
+-
+-/*
+- * IQ80332 timer tick configuration.
+- */
+-static void __init iq80332_timer_init(void)
+-{
+-	/* D-Step parts and the iop333 run at a higher internal bus frequency */
+-	if (*IOP3XX_ATURID >= 0xa || *IOP3XX_ATUDID == 0x374)
+-		iop_init_time(333000000);
+-	else
+-		iop_init_time(266000000);
+-}
+-
+-
+-/*
+- * IQ80332 PCI.
+- */
+-static int __init
+-iq80332_pci_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+-{
+-	int irq;
+-
+-	if (slot == 4 && pin == 1) {
+-		/* PCI-X Slot INTA */
+-		irq = IRQ_IOP33X_XINT0;
+-	} else if (slot == 4 && pin == 2) {
+-		/* PCI-X Slot INTB */
+-		irq = IRQ_IOP33X_XINT1;
+-	} else if (slot == 4 && pin == 3) {
+-		/* PCI-X Slot INTC */
+-		irq = IRQ_IOP33X_XINT2;
+-	} else if (slot == 4 && pin == 4) {
+-		/* PCI-X Slot INTD */
+-		irq = IRQ_IOP33X_XINT3;
+-	} else if (slot == 6) {
+-		/* GigE */
+-		irq = IRQ_IOP33X_XINT2;
+-	} else {
+-		printk(KERN_ERR "iq80332_pci_map_irq() called for unknown "
+-			"device PCI:%d:%d:%d\n", dev->bus->number,
+-			PCI_SLOT(dev->devfn), PCI_FUNC(dev->devfn));
+-		irq = -1;
+-	}
+-
+-	return irq;
+-}
+-
+-static struct hw_pci iq80332_pci __initdata = {
+-	.nr_controllers = 1,
+-	.ops		= &iop3xx_ops,
+-	.setup		= iop3xx_pci_setup,
+-	.preinit	= iop3xx_pci_preinit_cond,
+-	.map_irq	= iq80332_pci_map_irq,
+-};
+-
+-static int __init iq80332_pci_init(void)
+-{
+-	if ((iop3xx_get_init_atu() == IOP3XX_INIT_ATU_ENABLE) &&
+-		machine_is_iq80332())
+-		pci_common_init(&iq80332_pci);
+-
+-	return 0;
+-}
+-
+-subsys_initcall(iq80332_pci_init);
+-
+-
+-/*
+- * IQ80332 machine initialisation.
+- */
+-static struct physmap_flash_data iq80332_flash_data = {
+-	.width		= 1,
+-};
+-
+-static struct resource iq80332_flash_resource = {
+-	.start		= 0xc0000000,
+-	.end		= 0xc07fffff,
+-	.flags		= IORESOURCE_MEM,
+-};
+-
+-static struct platform_device iq80332_flash_device = {
+-	.name		= "physmap-flash",
+-	.id		= 0,
+-	.dev		= {
+-		.platform_data	= &iq80332_flash_data,
+-	},
+-	.num_resources	= 1,
+-	.resource	= &iq80332_flash_resource,
+-};
+-
+-static struct resource iq80332_gpio_res[] = {
+-	DEFINE_RES_MEM((IOP3XX_PERIPHERAL_PHYS_BASE + 0x1780), 0x10),
+-};
+-
+-static void __init iq80332_init_machine(void)
+-{
+-	platform_device_register_simple("gpio-iop", 0,
+-					iq80332_gpio_res,
+-					ARRAY_SIZE(iq80332_gpio_res));
+-	platform_device_register(&iop3xx_i2c0_device);
+-	platform_device_register(&iop3xx_i2c1_device);
+-	platform_device_register(&iop33x_uart0_device);
+-	platform_device_register(&iop33x_uart1_device);
+-	platform_device_register(&iq80332_flash_device);
+-	platform_device_register(&iop3xx_dma_0_channel);
+-	platform_device_register(&iop3xx_dma_1_channel);
+-	platform_device_register(&iop3xx_aau_channel);
+-}
+-
+-MACHINE_START(IQ80332, "Intel IQ80332")
+-	/* Maintainer: Intel Corp. */
+-	.atag_offset	= 0x100,
+-	.map_io		= iop3xx_map_io,
+-	.init_irq	= iop33x_init_irq,
+-	.init_time	= iq80332_timer_init,
+-	.init_machine	= iq80332_init_machine,
+-	.restart	= iop3xx_restart,
+-MACHINE_END
+diff --git a/arch/arm/mach-iop33x/irq.c b/arch/arm/mach-iop33x/irq.c
+deleted file mode 100644
+index 03ad7d3a8f49..000000000000
+--- a/arch/arm/mach-iop33x/irq.c
++++ /dev/null
+@@ -1,115 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * arch/arm/mach-iop33x/irq.c
+- *
+- * Generic IOP331 IRQ handling functionality
+- *
+- * Author: Dave Jiang <dave.jiang@intel.com>
+- * Copyright (C) 2003 Intel Corp.
+- */
+-
+-#include <linux/init.h>
+-#include <linux/interrupt.h>
+-#include <linux/list.h>
+-#include <asm/mach/irq.h>
+-#include <asm/irq.h>
+-#include <mach/hardware.h>
+-#include <asm/mach-types.h>
+-
+-static u32 iop33x_mask0;
+-static u32 iop33x_mask1;
+-
+-static void intctl0_write(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c0, c0, 0" : : "r" (val));
+-}
+-
+-static void intctl1_write(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c1, c0, 0" : : "r" (val));
+-}
+-
+-static void intstr0_write(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c2, c0, 0" : : "r" (val));
+-}
+-
+-static void intstr1_write(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c3, c0, 0" : : "r" (val));
+-}
+-
+-static void intbase_write(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c12, c0, 0" : : "r" (val));
+-}
+-
+-static void intsize_write(u32 val)
+-{
+-	asm volatile("mcr p6, 0, %0, c13, c0, 0" : : "r" (val));
+-}
+-
+-static void
+-iop33x_irq_mask1 (struct irq_data *d)
+-{
+-	iop33x_mask0 &= ~(1 << d->irq);
+-	intctl0_write(iop33x_mask0);
+-}
+-
+-static void
+-iop33x_irq_mask2 (struct irq_data *d)
+-{
+-	iop33x_mask1 &= ~(1 << (d->irq - 32));
+-	intctl1_write(iop33x_mask1);
+-}
+-
+-static void
+-iop33x_irq_unmask1(struct irq_data *d)
+-{
+-	iop33x_mask0 |= 1 << d->irq;
+-	intctl0_write(iop33x_mask0);
+-}
+-
+-static void
+-iop33x_irq_unmask2(struct irq_data *d)
+-{
+-	iop33x_mask1 |= (1 << (d->irq - 32));
+-	intctl1_write(iop33x_mask1);
+-}
+-
+-struct irq_chip iop33x_irqchip1 = {
+-	.name		= "IOP33x-1",
+-	.irq_ack	= iop33x_irq_mask1,
+-	.irq_mask	= iop33x_irq_mask1,
+-	.irq_unmask	= iop33x_irq_unmask1,
+-};
+-
+-struct irq_chip iop33x_irqchip2 = {
+-	.name		= "IOP33x-2",
+-	.irq_ack	= iop33x_irq_mask2,
+-	.irq_mask	= iop33x_irq_mask2,
+-	.irq_unmask	= iop33x_irq_unmask2,
+-};
+-
+-void __init iop33x_init_irq(void)
+-{
+-	int i;
+-
+-	iop_init_cp6_handler();
+-
+-	intctl0_write(0);
+-	intctl1_write(0);
+-	intstr0_write(0);
+-	intstr1_write(0);
+-	intbase_write(0);
+-	intsize_write(1);
+-	if (machine_is_iq80331())
+-		*IOP3XX_PCIIRSR = 0x0f;
+-
+-	for (i = 0; i < NR_IRQS; i++) {
+-		irq_set_chip_and_handler(i,
+-					 (i < 32) ? &iop33x_irqchip1 : &iop33x_irqchip2,
+-					 handle_level_irq);
+-		irq_clear_status_flags(i, IRQ_NOREQUEST | IRQ_NOPROBE);
+-	}
+-}
+diff --git a/arch/arm/mach-iop33x/uart.c b/arch/arm/mach-iop33x/uart.c
+deleted file mode 100644
+index 8fa079d2e3c3..000000000000
+--- a/arch/arm/mach-iop33x/uart.c
++++ /dev/null
+@@ -1,100 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * arch/arm/mach-iop33x/uart.c
+- *
+- * Author: Dave Jiang (dave.jiang@intel.com)
+- * Copyright (C) 2004 Intel Corporation.
+- */
+-
+-#include <linux/mm.h>
+-#include <linux/init.h>
+-#include <linux/major.h>
+-#include <linux/fs.h>
+-#include <linux/platform_device.h>
+-#include <linux/serial.h>
+-#include <linux/tty.h>
+-#include <linux/serial_8250.h>
+-#include <linux/io.h>
+-#include <asm/pgtable.h>
+-#include <asm/page.h>
+-#include <asm/mach/map.h>
+-#include <asm/setup.h>
+-#include <asm/memory.h>
+-#include <mach/hardware.h>
+-#include <asm/hardware/iop3xx.h>
+-#include <asm/mach/arch.h>
+-
+-#define IOP33X_UART_XTAL 33334000
+-
+-static struct plat_serial8250_port iop33x_uart0_data[] = {
+-	{
+-		.membase	= (char *)IOP33X_UART0_VIRT,
+-		.mapbase	= IOP33X_UART0_PHYS,
+-		.irq		= IRQ_IOP33X_UART0,
+-		.uartclk	= IOP33X_UART_XTAL,
+-		.regshift	= 2,
+-		.iotype		= UPIO_MEM,
+-		.flags		= UPF_SKIP_TEST,
+-	},
+-	{ },
+-};
+-
+-static struct resource iop33x_uart0_resources[] = {
+-	[0] = {
+-		.start	= IOP33X_UART0_PHYS,
+-		.end	= IOP33X_UART0_PHYS + 0x3f,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start	= IRQ_IOP33X_UART0,
+-		.end	= IRQ_IOP33X_UART0,
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-struct platform_device iop33x_uart0_device = {
+-	.name		= "serial8250",
+-	.id		= PLAT8250_DEV_PLATFORM,
+-	.dev		= {
+-		.platform_data		= iop33x_uart0_data,
+-	},
+-	.num_resources	= 2,
+-	.resource	= iop33x_uart0_resources,
+-};
+-
+-
+-static struct resource iop33x_uart1_resources[] = {
+-	[0] = {
+-		.start	= IOP33X_UART1_PHYS,
+-		.end	= IOP33X_UART1_PHYS + 0x3f,
+-		.flags	= IORESOURCE_MEM,
+-	},
+-	[1] = {
+-		.start	= IRQ_IOP33X_UART1,
+-		.end	= IRQ_IOP33X_UART1,
+-		.flags	= IORESOURCE_IRQ,
+-	},
+-};
+-
+-static struct plat_serial8250_port iop33x_uart1_data[] = {
+-	{
+-		.membase	= (char *)IOP33X_UART1_VIRT,
+-		.mapbase	= IOP33X_UART1_PHYS,
+-		.irq		= IRQ_IOP33X_UART1,
+-		.uartclk	= IOP33X_UART_XTAL,
+-		.regshift	= 2,
+-		.iotype		= UPIO_MEM,
+-		.flags		= UPF_SKIP_TEST,
+-	},
+-	{ },
+-};
+-
+-struct platform_device iop33x_uart1_device = {
+-	.name		= "serial8250",
+-	.id		= PLAT8250_DEV_PLATFORM1,
+-	.dev		= {
+-		.platform_data		= iop33x_uart1_data,
+-	},
+-	.num_resources	= 2,
+-	.resource	= iop33x_uart1_resources,
+-};
+diff --git a/arch/arm/plat-iop/Makefile b/arch/arm/plat-iop/Makefile
+index 4d839a3cf284..86e354b9065d 100644
+--- a/arch/arm/plat-iop/Makefile
++++ b/arch/arm/plat-iop/Makefile
+@@ -12,17 +12,3 @@ obj-$(CONFIG_ARCH_IOP32X) += cp6.o
+ obj-$(CONFIG_ARCH_IOP32X) += adma.o
+ obj-$(CONFIG_ARCH_IOP32X) += pmu.o
+ obj-$(CONFIG_ARCH_IOP32X) += restart.o
+-
+-# IOP33X
+-obj-$(CONFIG_ARCH_IOP33X) += i2c.o
+-obj-$(CONFIG_ARCH_IOP33X) += pci.o
+-obj-$(CONFIG_ARCH_IOP33X) += setup.o
+-obj-$(CONFIG_ARCH_IOP33X) += time.o
+-obj-$(CONFIG_ARCH_IOP33X) += cp6.o
+-obj-$(CONFIG_ARCH_IOP33X) += adma.o
+-obj-$(CONFIG_ARCH_IOP33X) += pmu.o
+-obj-$(CONFIG_ARCH_IOP33X) += restart.o
+-
+-# IOP13XX
+-obj-$(CONFIG_ARCH_IOP13XX) += cp6.o
+-obj-$(CONFIG_ARCH_IOP13XX) += time.o
+diff --git a/arch/arm/plat-iop/adma.c b/arch/arm/plat-iop/adma.c
+index b8e360299293..368496471e60 100644
+--- a/arch/arm/plat-iop/adma.c
++++ b/arch/arm/plat-iop/adma.c
+@@ -9,7 +9,6 @@
+ #include <mach/adma.h>
+ #include <asm/hardware/iop_adma.h>
+ 
+-#ifdef CONFIG_ARCH_IOP32X
+ #define IRQ_DMA0_EOT IRQ_IOP32X_DMA0_EOT
+ #define IRQ_DMA0_EOC IRQ_IOP32X_DMA0_EOC
+ #define IRQ_DMA0_ERR IRQ_IOP32X_DMA0_ERR
+@@ -21,20 +20,7 @@
+ #define IRQ_AA_EOT IRQ_IOP32X_AA_EOT
+ #define IRQ_AA_EOC IRQ_IOP32X_AA_EOC
+ #define IRQ_AA_ERR IRQ_IOP32X_AA_ERR
+-#endif
+-#ifdef CONFIG_ARCH_IOP33X
+-#define IRQ_DMA0_EOT IRQ_IOP33X_DMA0_EOT
+-#define IRQ_DMA0_EOC IRQ_IOP33X_DMA0_EOC
+-#define IRQ_DMA0_ERR IRQ_IOP33X_DMA0_ERR
+-
+-#define IRQ_DMA1_EOT IRQ_IOP33X_DMA1_EOT
+-#define IRQ_DMA1_EOC IRQ_IOP33X_DMA1_EOC
+-#define IRQ_DMA1_ERR IRQ_IOP33X_DMA1_ERR
+-
+-#define IRQ_AA_EOT IRQ_IOP33X_AA_EOT
+-#define IRQ_AA_EOC IRQ_IOP33X_AA_EOC
+-#define IRQ_AA_ERR IRQ_IOP33X_AA_ERR
+-#endif
++
+ /* AAU and DMA Channels */
+ static struct resource iop3xx_dma_0_resources[] = {
+ 	[0] = {
+@@ -161,30 +147,14 @@ struct platform_device iop3xx_aau_channel = {
+ 
+ static int __init iop3xx_adma_cap_init(void)
+ {
+-	#ifdef CONFIG_ARCH_IOP32X /* the 32x DMA does not perform CRC32C */
+-	dma_cap_set(DMA_MEMCPY, iop3xx_dma_0_data.cap_mask);
+-	dma_cap_set(DMA_INTERRUPT, iop3xx_dma_0_data.cap_mask);
+-	#else
+ 	dma_cap_set(DMA_MEMCPY, iop3xx_dma_0_data.cap_mask);
+ 	dma_cap_set(DMA_INTERRUPT, iop3xx_dma_0_data.cap_mask);
+-	#endif
+ 
+-	#ifdef CONFIG_ARCH_IOP32X /* the 32x DMA does not perform CRC32C */
+ 	dma_cap_set(DMA_MEMCPY, iop3xx_dma_1_data.cap_mask);
+ 	dma_cap_set(DMA_INTERRUPT, iop3xx_dma_1_data.cap_mask);
+-	#else
+-	dma_cap_set(DMA_MEMCPY, iop3xx_dma_1_data.cap_mask);
+-	dma_cap_set(DMA_INTERRUPT, iop3xx_dma_1_data.cap_mask);
+-	#endif
+ 
+-	#ifdef CONFIG_ARCH_IOP32X /* the 32x AAU does not perform zero sum */
+-	dma_cap_set(DMA_XOR, iop3xx_aau_data.cap_mask);
+-	dma_cap_set(DMA_INTERRUPT, iop3xx_aau_data.cap_mask);
+-	#else
+ 	dma_cap_set(DMA_XOR, iop3xx_aau_data.cap_mask);
+-	dma_cap_set(DMA_XOR_VAL, iop3xx_aau_data.cap_mask);
+ 	dma_cap_set(DMA_INTERRUPT, iop3xx_aau_data.cap_mask);
+-	#endif
+ 
+ 	return 0;
+ }
+diff --git a/arch/arm/plat-iop/i2c.c b/arch/arm/plat-iop/i2c.c
+index dfbd7c332866..8d5fe349c7cd 100644
+--- a/arch/arm/plat-iop/i2c.c
++++ b/arch/arm/plat-iop/i2c.c
+@@ -26,15 +26,6 @@
+ #include <asm/hardware/iop3xx.h>
+ #include <asm/mach/arch.h>
+ 
+-#ifdef CONFIG_ARCH_IOP32X
+-#define IRQ_IOP3XX_I2C_0	IRQ_IOP32X_I2C_0
+-#define IRQ_IOP3XX_I2C_1	IRQ_IOP32X_I2C_1
+-#endif
+-#ifdef CONFIG_ARCH_IOP33X
+-#define IRQ_IOP3XX_I2C_0	IRQ_IOP33X_I2C_0
+-#define IRQ_IOP3XX_I2C_1	IRQ_IOP33X_I2C_1
+-#endif
+-
+ /*
+  * Each of the I2C busses have corresponding GPIO lines, and the driver
+  * need to access these directly to drive the bus low at times.
+@@ -65,8 +56,8 @@ static struct resource iop3xx_i2c0_resources[] = {
+ 		.flags	= IORESOURCE_MEM,
+ 	},
+ 	[1] = {
+-		.start	= IRQ_IOP3XX_I2C_0,
+-		.end	= IRQ_IOP3XX_I2C_0,
++		.start	= IRQ_IOP32X_I2C_0,
++		.end	= IRQ_IOP32X_I2C_0,
+ 		.flags	= IORESOURCE_IRQ,
+ 	},
+ };
+@@ -86,8 +77,8 @@ static struct resource iop3xx_i2c1_resources[] = {
+ 		.flags	= IORESOURCE_MEM,
+ 	},
+ 	[1] = {
+-		.start	= IRQ_IOP3XX_I2C_1,
+-		.end	= IRQ_IOP3XX_I2C_1,
++		.start	= IRQ_IOP32X_I2C_1,
++		.end	= IRQ_IOP32X_I2C_1,
+ 		.flags	= IORESOURCE_IRQ,
+ 	}
+ };
+diff --git a/arch/arm/plat-iop/pmu.c b/arch/arm/plat-iop/pmu.c
+index 04c44a809b32..3834142c17f4 100644
+--- a/arch/arm/plat-iop/pmu.c
++++ b/arch/arm/plat-iop/pmu.c
+@@ -8,14 +8,8 @@
+ #include <mach/irqs.h>
+ 
+ static struct resource pmu_resource = {
+-#ifdef CONFIG_ARCH_IOP32X
+ 	.start	= IRQ_IOP32X_CORE_PMU,
+ 	.end	= IRQ_IOP32X_CORE_PMU,
+-#endif
+-#ifdef CONFIG_ARCH_IOP33X
+-	.start	= IRQ_IOP33X_CORE_PMU,
+-	.end	= IRQ_IOP33X_CORE_PMU,
+-#endif
+ 	.flags	= IORESOURCE_IRQ,
+ };
+ 
+diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
+index 03fa0c58cef3..cc84863bc52b 100644
+--- a/drivers/dma/Kconfig
++++ b/drivers/dma/Kconfig
+@@ -295,7 +295,7 @@ config INTEL_IOATDMA
+ 
+ config INTEL_IOP_ADMA
+ 	tristate "Intel IOP ADMA support"
+-	depends on ARCH_IOP32X || ARCH_IOP33X || ARCH_IOP13XX
++	depends on ARCH_IOP32X
+ 	select DMA_ENGINE
+ 	select ASYNC_TX_ENABLE_CHANNEL_SWITCH
+ 	help
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index bb13c266c329..6d4bc584efc4 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -275,7 +275,7 @@ config GPIO_ICH
+ 
+ config GPIO_IOP
+ 	tristate "Intel IOP GPIO"
+-	depends on ARCH_IOP32X || ARCH_IOP33X || COMPILE_TEST
++	depends on ARCH_IOP32X || COMPILE_TEST
+ 	select GPIO_GENERIC
+ 	help
+ 	  Say yes here to support the GPIO functionality of a number of Intel
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 09367fc014c3..f8c77edf70d0 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -684,7 +684,7 @@ config I2C_IMX_LPI2C
+ 
+ config I2C_IOP3XX
+ 	tristate "Intel IOPx3xx and IXP4xx on-chip I2C interface"
+-	depends on ARCH_IOP32X || ARCH_IOP33X || ARCH_IXP4XX || ARCH_IOP13XX
++	depends on ARCH_IOP32X || ARCH_IXP4XX
+ 	help
+ 	  Say Y here if you want to use the IIC bus controller on
+ 	  the Intel IOPx3xx I/O Processors or IXP4xx Network Processors.
 -- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+2.20.0
+
