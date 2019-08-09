@@ -2,80 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FE08808A
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2019 18:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C14B880A4
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2019 18:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406607AbfHIQwZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Aug 2019 12:52:25 -0400
-Received: from sauhun.de ([88.99.104.3]:39654 "EHLO pokefinder.org"
+        id S2407503AbfHIQ5e (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Aug 2019 12:57:34 -0400
+Received: from sauhun.de ([88.99.104.3]:39732 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726157AbfHIQwY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 9 Aug 2019 12:52:24 -0400
+        id S2407453AbfHIQ5e (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 9 Aug 2019 12:57:34 -0400
 Received: from localhost (p54B333D4.dip0.t-ipconnect.de [84.179.51.212])
-        by pokefinder.org (Postfix) with ESMTPSA id 0E79C2C3014;
-        Fri,  9 Aug 2019 18:52:23 +0200 (CEST)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: i2c: tda1997x: prevent potential NULL pointer access
-Date:   Fri,  9 Aug 2019 18:52:15 +0200
-Message-Id: <20190809165215.10605-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
+        by pokefinder.org (Postfix) with ESMTPSA id CE01D2C3014;
+        Fri,  9 Aug 2019 18:57:31 +0200 (CEST)
+Date:   Fri, 9 Aug 2019 18:57:31 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     soc@kernel.org, Russell King <linux@armlinux.org.uk>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 1/7] [RFC] ARM: remove Intel iop33x and iop13xx support
+Message-ID: <20190809165731.GD5099@ninjato>
+References: <20190809162956.488941-1-arnd@arndb.de>
+ <20190809163334.489360-1-arnd@arndb.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ycz6tD7Th1CMF4v7"
+Content-Disposition: inline
+In-Reply-To: <20190809163334.489360-1-arnd@arndb.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-i2c_new_dummy() can fail returning a NULL pointer. This is not checked
-and the returned pointer is blindly used. Convert to
-devm_i2c_new_dummy_client() which returns an ERR_PTR and also add a
-validity check. Using devm_* here also fixes a leak because the dummy
-client was not released in the probe error path.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+--Ycz6tD7Th1CMF4v7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I didn't add a stable tag becase devm_i2c_new_dummy_device() is new in
-the kernel. So, a backport would need to add a check for the old API.
+On Fri, Aug 09, 2019 at 06:33:15PM +0200, Arnd Bergmann wrote:
+> There are three families of IOP machines we support in Linux: iop32x
+> (which includes EP80219), iop33x and iop13xx (aka IOP34x aka WP8134x).
+>=20
+> All products we support in the kernel are based on the first of these,
+> iop32x, the other families only ever supported the Intel reference
+> boards but no actual machine anyone could ever buy.
+>=20
+> While one could clearly make them all three work in a single kernel
+> with some work, this takes the easy way out, removing the later two
+> platforms entirely, under the assumption that there are no remaining
+> users.
+>=20
+> Earlier versions of OpenWRT and Debian both had support for iop32x
+> but not the others, and they both dropped iop32x as well in their 2015
+> releases.
+>=20
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-I used devm_ here because the driver uses it already in other places,
-too (despite media not favoring devm?).
+Acked-by: Wolfram Sang <wsa@the-dreams.de> # for I2C parts
 
- drivers/media/i2c/tda1997x.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/tda1997x.c b/drivers/media/i2c/tda1997x.c
-index a62ede096636..5e68182001ec 100644
---- a/drivers/media/i2c/tda1997x.c
-+++ b/drivers/media/i2c/tda1997x.c
-@@ -2691,7 +2691,13 @@ static int tda1997x_probe(struct i2c_client *client,
- 	}
- 
- 	ret = 0x34 + ((io_read(sd, REG_SLAVE_ADDR)>>4) & 0x03);
--	state->client_cec = i2c_new_dummy(client->adapter, ret);
-+	state->client_cec = devm_i2c_new_dummy_device(&client->dev,
-+						      client->adapter, ret);
-+	if (IS_ERR(state->client_cec)) {
-+		ret = PTR_ERR(state->client_cec);
-+		goto err_free_mutex;
-+	}
-+
- 	v4l_info(client, "CEC slave address 0x%02x\n", ret);
- 
- 	ret = tda1997x_core_init(sd);
-@@ -2798,7 +2804,6 @@ static int tda1997x_remove(struct i2c_client *client)
- 	media_entity_cleanup(&sd->entity);
- 	v4l2_ctrl_handler_free(&state->hdl);
- 	regulator_bulk_disable(TDA1997X_NUM_SUPPLIES, state->supplies);
--	i2c_unregister_device(state->client_cec);
- 	cancel_delayed_work(&state->delayed_work_enable_hpd);
- 	mutex_destroy(&state->page_lock);
- 	mutex_destroy(&state->lock);
--- 
-2.20.1
+--Ycz6tD7Th1CMF4v7
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1NpfcACgkQFA3kzBSg
+KbYo3xAAoUFahZppsWnQT+posnK7OdanH8eP9bFsX9jA3vLm1Z8xByrQrxVnTPYp
+97VYfI7Czhue+5wf/ceACt4Q3XkAwKIQXkcqJgdBFfErPboWdL6yvrvIHhLbnfRr
+HBw+/UiJSf7MisT3PutST0VFWRgJ0sv4LphNT+qbRDnX+3olTmhLax9NeETmzvBz
+2MNNUTTerfJGsuORhlubz0TKccORwFqKERhq/NS48U4qdJnHcROBaMd/xyX37YEx
+qBTS7eC5XWD4QiXyG6386DXhoLJi47uBdVuOTde1QF9Vuif/454Gg7uyenHpHndF
+7hGT/5wSCKLFaFJJi1GABp2addD3DYdibkM2rueAbjCjb8d9g6YNFhuDOnSR2L+n
+aV/QXEyTUe6j8JaX50cEeAPLAJ5MjqGRU9csYB16zfTpsty9aPkaEr75eiK+XTjt
+wo6glb84+WYdsX7PZKbzYXmLpoFZAx1zkycp3Cf4DA0fxaDmYVDts0plkwQ7AR5D
+jPG1Q8qxby/Y4yPceGfKHzV0MkMkrPSEDZEeg2NpnQiVRpvRR33okKu6xftMGxc1
+4Z6ovgHtXBP9PUGOcdn0AmGHDNsHDYBEfCQDESQlwWaDEC9Q6IhGD9UTjsnUjLSj
+AwXK137vfKLiWohLLeZbrWquBKJoV6vBJ9ByYrMtgRadv9qA5/Y=
+=zEyv
+-----END PGP SIGNATURE-----
+
+--Ycz6tD7Th1CMF4v7--
