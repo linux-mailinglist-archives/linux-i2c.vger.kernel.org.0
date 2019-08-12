@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 887898A44E
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Aug 2019 19:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488498A454
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Aug 2019 19:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726982AbfHLR3V (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Aug 2019 13:29:21 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:40450 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726681AbfHLR3U (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Aug 2019 13:29:20 -0400
-Received: by mail-wr1-f67.google.com with SMTP id r1so6193934wrl.7
-        for <linux-i2c@vger.kernel.org>; Mon, 12 Aug 2019 10:29:19 -0700 (PDT)
+        id S1726479AbfHLR34 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Aug 2019 13:29:56 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:52412 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726995AbfHLR3w (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Aug 2019 13:29:52 -0400
+Received: by mail-wm1-f67.google.com with SMTP id s3so305653wms.2
+        for <linux-i2c@vger.kernel.org>; Mon, 12 Aug 2019 10:29:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gLmU/oA3BCk2uiOw0NCotyQaVZi//v3NX7oeTBpbzPI=;
-        b=HRqI7gpgVlreUi1D++HQHECQSCm+7bHRVkxlJA31xjKyAOIIwHmSF0LjBvN65ZEOzo
-         xj0MNruGBDagLsis6PIDdhDXNL56WaiUmZalJAk7WI+Eu4argckKozpmRBWBGvGat+Ps
-         jB1DJLIHnq73jpePKgYdnjSfprtsMhRY1uvCY=
+        bh=ByFUgdhbenoqEac047fOWBGeHpky4WQIPNsQ5F/8hHw=;
+        b=OMiVvuQ6ojoYr2YaifiVWycNEMTTYrBGavkydOe6vRXCe5m9lxrGeQZD/i2qxrv3S6
+         +dxN1eFQvkk00T5cXg2ceO/GOTDj+MNPm959qjfJFzbl4DrPw6VLexlrq9ZhmPKLSf79
+         YyXON1FHSIP9zt2EHjOA+Ii8cCDWH1NA25tDA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=gLmU/oA3BCk2uiOw0NCotyQaVZi//v3NX7oeTBpbzPI=;
-        b=koyuiL8/imb3564671Kh3dnUdfQBT6sB+sjoS1uoZKCPq5S2KYk3a0ro3DofReJjUg
-         Ubi6BDfW9fbYcUgmJ2xhJO+Z0TlREa7oC5MYS5uQSFaqkD9CVjcK+ZeI5up74Qqr2F1j
-         9d4WeJDGMwzrSupf6NJW8/I1wqMEYaFA7BMO4CQv5bc2I9YwfEM7RRBVghioSGqmMg3r
-         qPostnR/W15oGEIDSQvL7dxOymbaR07EIl42JTASUcy01fdIA8r4OHhwj51Oxlk2CVRV
-         DUPobzi6JXJ9zoSarQ3jFwWFmR7wU/PVIYbqxJMTw9tpwckhb10Y0v8rUffWbbGaFEV8
-         5njA==
-X-Gm-Message-State: APjAAAV72dyrxhGzEmvBin9MaOO5O+hHlm+FkjlzXtZ92WcghnMnJND+
-        7MIqGvVbHikbPv+8G+ZhcmZPbA==
-X-Google-Smtp-Source: APXvYqxHJNwUpwVM9tbfVDO/o2ELdYI+GRRNwxKxz0h2W8TZ4S/n1eM8b2GMn7in/kY22iY0PrtG+w==
-X-Received: by 2002:a5d:4f8e:: with SMTP id d14mr10405833wru.207.1565630958564;
-        Mon, 12 Aug 2019 10:29:18 -0700 (PDT)
+        bh=ByFUgdhbenoqEac047fOWBGeHpky4WQIPNsQ5F/8hHw=;
+        b=HNxXvHUDvAW09CvxApdRXSlsiFjHTOeP3CItY+WB8+AKYxPSoZQAlaHuXkcMnnprmp
+         JCMzGAPNByR9ayDoBcEk+UHwVTzOiwQngomqM9QGOpAgBaoHrzrVuF9Eyi8sboHx6EpA
+         Mp21piy5OtP+Anq1ntTHD7fDr+KjDK0I1gEkQXdVROQf971+wjUQb03miPJkQTw1dxrP
+         Jtg8QyOExDShf2GOCNShjvZXxx4mNDRvDIT60vuQ43ni5fFkS2sJISWYeRgsKNsqfMQF
+         1YotecaLaw2wGliFhegKp1GQ7X6dBBQwVW2jVZBY9hOVHLdfImujfPURKJQldwMQTAEv
+         v/YQ==
+X-Gm-Message-State: APjAAAXMuMZuaSdA4PwgC0HrytJJ8TOKml7fzznhn/Neow9HymKdgfx9
+        niyL5zBxTH4MNwvC94g1i+14lQ==
+X-Google-Smtp-Source: APXvYqwffxgDJUFgKjRnlRgtgc57iuw+e8GldResFtDU49A9XNzUc1EaUB1YKilvT4b09fNs8Ut0Fw==
+X-Received: by 2002:a05:600c:24a:: with SMTP id 10mr422398wmj.7.1565630990279;
+        Mon, 12 Aug 2019 10:29:50 -0700 (PDT)
 Received: from rj-aorus.ric.broadcom.com ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id a64sm606796wmf.1.2019.08.12.10.29.14
+        by smtp.gmail.com with ESMTPSA id t14sm12277331wrv.12.2019.08.12.10.29.47
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Aug 2019 10:29:18 -0700 (PDT)
-Subject: Re: [PATCH v1 1/2] i2c: iproc: Stop advertising support of SMBUS
- quick cmd
+        Mon, 12 Aug 2019 10:29:49 -0700 (PDT)
+Subject: Re: [PATCH v1 2/2] i2c: iproc: Add full name of devicetree node to
+ adapter name
 To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
         Wolfram Sang <wsa@the-dreams.de>,
         Rob Herring <robh+dt@kernel.org>,
@@ -54,14 +54,14 @@ Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
         Lori Hikichi <lori.hikichi@broadcom.com>
 References: <1565235473-28461-1-git-send-email-rayagonda.kokatanur@broadcom.com>
- <1565235473-28461-2-git-send-email-rayagonda.kokatanur@broadcom.com>
+ <1565235473-28461-3-git-send-email-rayagonda.kokatanur@broadcom.com>
 From:   Ray Jui <ray.jui@broadcom.com>
-Message-ID: <201903a5-c517-f436-0337-4110165d18a0@broadcom.com>
-Date:   Mon, 12 Aug 2019 10:29:12 -0700
+Message-ID: <76f6d006-a0af-85ba-f893-f60e60bfc20d@broadcom.com>
+Date:   Mon, 12 Aug 2019 10:29:45 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <1565235473-28461-2-git-send-email-rayagonda.kokatanur@broadcom.com>
+In-Reply-To: <1565235473-28461-3-git-send-email-rayagonda.kokatanur@broadcom.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -75,40 +75,45 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 On 8/7/19 8:37 PM, Rayagonda Kokatanur wrote:
 > From: Lori Hikichi <lori.hikichi@broadcom.com>
 > 
-> The driver does not support the SMBUS Quick command so remove the
-> flag that indicates that level of support.
-> By default the i2c_detect tool uses the quick command to try and
-> detect devices at some bus addresses.  If the quick command is used
-> then we will not detect the device, even though it is present.
+> Add the full name of the devicetree node to the adapter name.
+> Without this change, all adapters have the same name making it difficult
+> to distinguish between multiple instances.
+> The most obvious way to see this is to use the utility i2c_detect.
+> e.g. "i2c-detect -l"
 > 
-> Fixes: e6e5dd3566e0 (i2c: iproc: Add Broadcom iProc I2C Driver)
+> Before
+> i2c-1 i2c Broadcom iProc I2C adapter I2C adapter
+> i2c-0 i2c Broadcom iProc I2C adapter I2C adapter
+> 
+> After
+> i2c-1 i2c Broadcom iProc (i2c@e0000) I2C adapter
+> i2c-0 i2c Broadcom iProc (i2c@b0000) I2C adapter
+> 
+> Now it is easy to figure out which adapter maps to a which DT node.
 > 
 > Signed-off-by: Lori Hikichi <lori.hikichi@broadcom.com>
 > Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 > ---
->   drivers/i2c/busses/i2c-bcm-iproc.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
+>   drivers/i2c/busses/i2c-bcm-iproc.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-> index d7fd76b..19ef2b0 100644
+> index 19ef2b0..183b220 100644
 > --- a/drivers/i2c/busses/i2c-bcm-iproc.c
 > +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-> @@ -790,7 +790,10 @@ static int bcm_iproc_i2c_xfer(struct i2c_adapter *adapter,
+> @@ -922,7 +922,9 @@ static int bcm_iproc_i2c_probe(struct platform_device *pdev)
 >   
->   static uint32_t bcm_iproc_i2c_functionality(struct i2c_adapter *adap)
->   {
-> -	u32 val = I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-> +	u32 val;
-> +
-> +	/* We do not support the SMBUS Quick command */
-> +	val = I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
->   
->   	if (adap->algo->reg_slave)
->   		val |= I2C_FUNC_SLAVE;
+>   	adap = &iproc_i2c->adapter;
+>   	i2c_set_adapdata(adap, iproc_i2c);
+> -	strlcpy(adap->name, "Broadcom iProc I2C adapter", sizeof(adap->name));
+> +	snprintf(adap->name, sizeof(adap->name),
+> +		"Broadcom iProc (%s)",
+> +		of_node_full_name(iproc_i2c->device->of_node));
+>   	adap->algo = &bcm_iproc_algo;
+>   	adap->quirks = &bcm_iproc_i2c_quirks;
+>   	adap->dev.parent = &pdev->dev;
 > 
 
-Change looks good to me. Thanks.
+Looks good, thanks!
 
 Reviewed-by: Ray Jui <ray.jui@broadcom.com>
-
-
