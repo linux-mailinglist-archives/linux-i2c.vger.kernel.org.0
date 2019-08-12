@@ -2,67 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8348A4AB
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Aug 2019 19:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E458AA56
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 00:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbfHLRdu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Aug 2019 13:33:50 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:56162 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726681AbfHLRdu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Aug 2019 13:33:50 -0400
-Received: by mail-wm1-f67.google.com with SMTP id f72so298490wmf.5
-        for <linux-i2c@vger.kernel.org>; Mon, 12 Aug 2019 10:33:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cAgtYZHgV6xUR+yC/VEEeHLdtqd6juyZ2ABBZdUumQE=;
-        b=FkOMMl3g4RPI0502AjI9JhmjFGhx8iEHR6MXlhd7QQb38nkD5pmT0wlZ6B3cwjdfkR
-         a4w1WS5ORSm542pGKgVcQXmLXR4jP/kFGbW6sQYIOny5xVRPsj5D3HEidrrZ5iJVn8JP
-         u+CpTzQoxr5Pe+QSU9KvI1UUpxSr9VhDPwGOA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cAgtYZHgV6xUR+yC/VEEeHLdtqd6juyZ2ABBZdUumQE=;
-        b=Aueuo87qF1FvbctEXSNU8yEpr5cwLdlcSguS1MQEu8E15b9jRXv4/xKjQq/B2wIc49
-         aEf2frfyXybBopjWYm13+eFtlAI5NUzyDz24XsSqPIr0aN0kZ4VeoPjvIMjbMFYe8aaV
-         iGHKiCFCqLZoVZdfLYOpr/+WzusQTOu72YX2XA+YBSt9Io6dsM151QOWE4+z2CKoN16o
-         dfF3HKtr1WPGKtajkaUgyIbHQk0fFTHPTOti7d5OQneush3Q6M3bGKta9SaIOTVKsW1P
-         u5Mb2ZVNH8UkXTHMdshiFspzLLRL//rBXm5kRS6JhCS0vLtrHo05FT3RJAOJk+z0dI+i
-         lb+g==
-X-Gm-Message-State: APjAAAUxQSQTHwYwJajmKpCVBoGZ2LW85ZoYyO4M2JLlXTXU29rWMTLN
-        ZC5ASFTlqoCW3vWoZyhySFauAw==
-X-Google-Smtp-Source: APXvYqzl9ysVhJW+R47AyXAx8TEcPlPa5dLrHEwezvxULcJifU7LOO2WC9NW3PQshBaROW+6GP8lMw==
-X-Received: by 2002:a7b:c95a:: with SMTP id i26mr402521wml.175.1565631227782;
-        Mon, 12 Aug 2019 10:33:47 -0700 (PDT)
-Received: from rj-aorus.ric.broadcom.com ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id j10sm183930432wrd.26.2019.08.12.10.33.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Aug 2019 10:33:47 -0700 (PDT)
-Subject: Re: [PATCH v1 1/1] i2c: iproc: Add i2c repeated start capability
-To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lori Hikichi <lori.hikichi@broadcom.com>,
-        Icarus Chau <icarus.chau@broadcom.com>,
-        Shivaraj Shetty <sshetty1@broadcom.com>
-References: <1565150941-27297-1-git-send-email-rayagonda.kokatanur@broadcom.com>
-From:   Ray Jui <ray.jui@broadcom.com>
-Message-ID: <a2b0ccc1-63d5-177d-2b54-d79c65057907@broadcom.com>
-Date:   Mon, 12 Aug 2019 10:33:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726730AbfHLWVG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Aug 2019 18:21:06 -0400
+Received: from enpas.org ([46.38.239.100]:55668 "EHLO mail.enpas.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726488AbfHLWVG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 12 Aug 2019 18:21:06 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id 5F953100078;
+        Mon, 12 Aug 2019 22:21:04 +0000 (UTC)
+Subject: Re: [PATCH] i2c/busses: Add i2c-icy for I2C on m68k/Amiga
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+References: <20190811043253.24938-1-max@enpas.org>
+ <CAMuHMdVJJxjH-gPraW==smrkOOMcGYPKB8BPzrYPU4bstASX3A@mail.gmail.com>
+From:   Max Staudt <max@enpas.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
+ 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
+ urZIw0nz8zec+73Bv/qF4GHHftLYfA==
+Message-ID: <0d61e12f-5fc5-7cb6-755f-298ebf4c935f@enpas.org>
+Date:   Tue, 13 Aug 2019 00:21:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <1565150941-27297-1-git-send-email-rayagonda.kokatanur@broadcom.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <CAMuHMdVJJxjH-gPraW==smrkOOMcGYPKB8BPzrYPU4bstASX3A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
@@ -70,186 +110,16 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
-
-On 8/6/19 9:09 PM, Rayagonda Kokatanur wrote:
-> From: Lori Hikichi <lori.hikichi@broadcom.com>
+On 08/12/2019 11:37 AM, Geert Uytterhoeven wrote:
+>> +       iowrite8(val, address);
 > 
-> Enable handling of i2c repeated start. The current code
-> handles a multi msg i2c transfer as separate i2c bus
-> transactions. This change will now handle this case
-> using the i2c repeated start protocol. The number of msgs
-> in a transfer is limited to two, and must be a write
-> followed by a read.
-> 
-> Signed-off-by: Lori Hikichi <lori.hikichi@broadcom.com>
-> Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-> Signed-off-by: Icarus Chau <icarus.chau@broadcom.com>
-> Signed-off-by: Ray Jui <ray.jui@broadcom.com>
-> Signed-off-by: Shivaraj Shetty <sshetty1@broadcom.com>
-> ---
+> As this is on a Zorro bus, z_writeb()?
 
-Note this patch has gone through internal review and testing on various 
-I2C slave devices. It is introduced to work around limitation of our I2C 
-controller and allows it to work on certain I2C slave devices that are 
-sensitive and requires repeated start between transactions instead of a 
-stop.
+I forgot to ask about this.
 
-Given that my name is also on the Signed-off-by since I helped to 
-rewrite part of the patch, I'm not going to add my Reviewed-by tag here.
+What is the reasoning behind having a separate z_writeb() for Zorro?
+As far as I can see in arch/m68k/include/asm this maps 1:1 to a direct memory access, and it prohibits cross-arch code as in i2c-elektor.
 
-Please help to review.
 
 Thanks,
-
-Ray
-
->   drivers/i2c/busses/i2c-bcm-iproc.c | 70 +++++++++++++++++++++++++++++++-------
->   1 file changed, 57 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-> index d7fd76b..15fedcf 100644
-> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
-> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-> @@ -81,6 +81,7 @@
->   #define M_CMD_PROTOCOL_MASK          0xf
->   #define M_CMD_PROTOCOL_BLK_WR        0x7
->   #define M_CMD_PROTOCOL_BLK_RD        0x8
-> +#define M_CMD_PROTOCOL_PROCESS       0xa
->   #define M_CMD_PEC_SHIFT              8
->   #define M_CMD_RD_CNT_SHIFT           0
->   #define M_CMD_RD_CNT_MASK            0xff
-> @@ -675,13 +676,20 @@ static int bcm_iproc_i2c_xfer_wait(struct bcm_iproc_i2c_dev *iproc_i2c,
->   	return 0;
->   }
->   
-> -static int bcm_iproc_i2c_xfer_single_msg(struct bcm_iproc_i2c_dev *iproc_i2c,
-> -					 struct i2c_msg *msg)
-> +/*
-> + * If 'process_call' is true, then this is a multi-msg transfer that requires
-> + * a repeated start between the messages.
-> + * More specifically, it must be a write (reg) followed by a read (data).
-> + * The i2c quirks are set to enforce this rule.
-> + */
-> +static int bcm_iproc_i2c_xfer_internal(struct bcm_iproc_i2c_dev *iproc_i2c,
-> +					struct i2c_msg *msgs, bool process_call)
->   {
->   	int i;
->   	u8 addr;
->   	u32 val, tmp, val_intr_en;
->   	unsigned int tx_bytes;
-> +	struct i2c_msg *msg = &msgs[0];
->   
->   	/* check if bus is busy */
->   	if (!!(iproc_i2c_rd_reg(iproc_i2c,
-> @@ -707,14 +715,29 @@ static int bcm_iproc_i2c_xfer_single_msg(struct bcm_iproc_i2c_dev *iproc_i2c,
->   			val = msg->buf[i];
->   
->   			/* mark the last byte */
-> -			if (i == msg->len - 1)
-> -				val |= BIT(M_TX_WR_STATUS_SHIFT);
-> +			if (!process_call && (i == msg->len - 1))
-> +				val |= 1 << M_TX_WR_STATUS_SHIFT;
->   
->   			iproc_i2c_wr_reg(iproc_i2c, M_TX_OFFSET, val);
->   		}
->   		iproc_i2c->tx_bytes = tx_bytes;
->   	}
->   
-> +	/* Process the read message if this is process call */
-> +	if (process_call) {
-> +		msg++;
-> +		iproc_i2c->msg = msg;  /* point to second msg */
-> +
-> +		/*
-> +		 * The last byte to be sent out should be a slave
-> +		 * address with read operation
-> +		 */
-> +		addr = msg->addr << 1 | 1;
-> +		/* mark it the last byte out */
-> +		val = addr | (1 << M_TX_WR_STATUS_SHIFT);
-> +		iproc_i2c_wr_reg(iproc_i2c, M_TX_OFFSET, val);
-> +	}
-> +
->   	/* mark as incomplete before starting the transaction */
->   	if (iproc_i2c->irq)
->   		reinit_completion(&iproc_i2c->done);
-> @@ -733,7 +756,7 @@ static int bcm_iproc_i2c_xfer_single_msg(struct bcm_iproc_i2c_dev *iproc_i2c,
->   	 * underrun interrupt, which will be triggerred when the TX FIFO is
->   	 * empty. When that happens we can then pump more data into the FIFO
->   	 */
-> -	if (!(msg->flags & I2C_M_RD) &&
-> +	if (!process_call && !(msg->flags & I2C_M_RD) &&
->   	    msg->len > iproc_i2c->tx_bytes)
->   		val_intr_en |= BIT(IE_M_TX_UNDERRUN_SHIFT);
->   
-> @@ -743,6 +766,8 @@ static int bcm_iproc_i2c_xfer_single_msg(struct bcm_iproc_i2c_dev *iproc_i2c,
->   	 */
->   	val = BIT(M_CMD_START_BUSY_SHIFT);
->   	if (msg->flags & I2C_M_RD) {
-> +		u32 protocol;
-> +
->   		iproc_i2c->rx_bytes = 0;
->   		if (msg->len > M_RX_FIFO_MAX_THLD_VALUE)
->   			iproc_i2c->thld_bytes = M_RX_FIFO_THLD_VALUE;
-> @@ -758,7 +783,10 @@ static int bcm_iproc_i2c_xfer_single_msg(struct bcm_iproc_i2c_dev *iproc_i2c,
->   		/* enable the RX threshold interrupt */
->   		val_intr_en |= BIT(IE_M_RX_THLD_SHIFT);
->   
-> -		val |= (M_CMD_PROTOCOL_BLK_RD << M_CMD_PROTOCOL_SHIFT) |
-> +		protocol = process_call ?
-> +				M_CMD_PROTOCOL_PROCESS : M_CMD_PROTOCOL_BLK_RD;
-> +
-> +		val |= (protocol << M_CMD_PROTOCOL_SHIFT) |
->   		       (msg->len << M_CMD_RD_CNT_SHIFT);
->   	} else {
->   		val |= (M_CMD_PROTOCOL_BLK_WR << M_CMD_PROTOCOL_SHIFT);
-> @@ -774,17 +802,31 @@ static int bcm_iproc_i2c_xfer(struct i2c_adapter *adapter,
->   			      struct i2c_msg msgs[], int num)
->   {
->   	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(adapter);
-> -	int ret, i;
-> +	bool process_call = false;
-> +	int ret;
->   
-> -	/* go through all messages */
-> -	for (i = 0; i < num; i++) {
-> -		ret = bcm_iproc_i2c_xfer_single_msg(iproc_i2c, &msgs[i]);
-> -		if (ret) {
-> -			dev_dbg(iproc_i2c->device, "xfer failed\n");
-> -			return ret;
-> +	if (num > 2) {
-> +		dev_err(iproc_i2c->device,
-> +			"Only support up to 2 messages. Current msg count %d\n",
-> +			num);
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	if (num == 2) {
-> +		/* Repeated start, use process call */
-> +		process_call = true;
-> +		if (msgs[1].flags & I2C_M_NOSTART) {
-> +			dev_err(iproc_i2c->device, "Invalid repeated start\n");
-> +			return -EOPNOTSUPP;
->   		}
->   	}
->   
-> +	ret = bcm_iproc_i2c_xfer_internal(iproc_i2c, msgs, process_call);
-> +	if (ret) {
-> +		dev_dbg(iproc_i2c->device, "xfer failed\n");
-> +		return ret;
-> +	}
-> +
->   	return num;
->   }
->   
-> @@ -806,6 +848,8 @@ static uint32_t bcm_iproc_i2c_functionality(struct i2c_adapter *adap)
->   };
->   
->   static struct i2c_adapter_quirks bcm_iproc_i2c_quirks = {
-> +	.flags = I2C_AQ_COMB_WRITE_THEN_READ,
-> +	.max_comb_1st_msg_len = M_TX_RX_FIFO_SIZE,
->   	.max_read_len = M_RX_MAX_READ_LEN,
->   };
->   
-> 
+Max
