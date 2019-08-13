@@ -2,104 +2,136 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B828BE3E
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 18:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A43B48BF8D
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 19:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728489AbfHMQVX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Aug 2019 12:21:23 -0400
-Received: from mout.gmx.net ([212.227.15.19]:58787 "EHLO mout.gmx.net"
+        id S1726942AbfHMRXK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Aug 2019 13:23:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44454 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728267AbfHMQVT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 13 Aug 2019 12:21:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1565713263;
-        bh=mk1t8axBSu7Iis10B+6pFBh8hZLr+xH3FZwDc1byKUc=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=DlHq/dgfHdubCcFkek5nvmD+0IXDcWxMBesB/Jm8s/xZyl771PE757O/MWlJ6IuFZ
-         ZIdL3Vgxm4ME4Kr7+hCLDFs5C4/ISLxawzLRKn3ck3qjI/ZwOPHO+7C1cshCiwo+FA
-         ie1dCFmx9v+2gEHAof2Mk40hEX23TaqzHGFZsCko=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([37.4.249.106]) by mail.gmx.com
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Mr9Bk-1ibZFo47eA-00oGiA; Tue, 13 Aug 2019 18:21:03 +0200
-From:   Stefan Wahren <wahrenst@gmx.net>
-To:     Eric Anholt <eric@anholt.net>,
+        id S1726094AbfHMRXK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Aug 2019 13:23:10 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 970252085A;
+        Tue, 13 Aug 2019 17:23:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565716989;
+        bh=oEIyygQpeyc5lZgtguO481uQtwKNligWTCld8t/UPMM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pMsDao8Lhb4JfOY1tLFQq5Ki+A5JURQhuKVcQ63i/PvYhoxIo18eDqbP5YKmZLM9J
+         1878SYWfxEDBVeouUdV2EjM3gBEHanSuEO3CJqzrDA0fDqloDKxr0EJEpxZlJA/K1R
+         COr8q9noK7pTdlLQRxqEnBeFF+PzwdKaesbCuGWw=
+Received: by mail-qt1-f179.google.com with SMTP id b11so7342585qtp.10;
+        Tue, 13 Aug 2019 10:23:09 -0700 (PDT)
+X-Gm-Message-State: APjAAAVZoCMa6hwDadyvSfrmdFY9ZvuAIRP8ALP5cYySUP4Lu/QsGa/t
+        U+vFunGAr/ok+b0fwPBqjMQZCNyAmS5VHrPXLA==
+X-Google-Smtp-Source: APXvYqy2+6R8b2VmAb1mm1zXL0U2rDdmV0wVqEBWCEyUZTZp0W4z8AS8GmE6aw8CLPCiSVKucGkFVT4q+0lMBjKid1Y=
+X-Received: by 2002:ac8:44c4:: with SMTP id b4mr23403904qto.224.1565716988767;
+ Tue, 13 Aug 2019 10:23:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <1565713248-4906-1-git-send-email-wahrenst@gmx.net> <1565713248-4906-10-git-send-email-wahrenst@gmx.net>
+In-Reply-To: <1565713248-4906-10-git-send-email-wahrenst@gmx.net>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 13 Aug 2019 11:22:56 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+01vXQpf_ZuAvetWvcGLhK4EiiB1qFqhRkM3PQWAzdsA@mail.gmail.com>
+Message-ID: <CAL_Jsq+01vXQpf_ZuAvetWvcGLhK4EiiB1qFqhRkM3PQWAzdsA@mail.gmail.com>
+Subject: Re: [PATCH V2 09/13] dt-bindings: arm: Convert BCM2835 board/soc
+ bindings to json-schema
+To:     Stefan Wahren <wahrenst@gmx.net>
+Cc:     Eric Anholt <eric@anholt.net>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         Wolfram Sang <wsa@the-dreams.de>,
-        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 13/13] MAINTAINERS: Add BCM2711 to BCM2835 ARCH
-Date:   Tue, 13 Aug 2019 18:20:48 +0200
-Message-Id: <1565713248-4906-14-git-send-email-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1565713248-4906-1-git-send-email-wahrenst@gmx.net>
-References: <1565713248-4906-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:cayvR/uheIWNxYHm5e3pr7PKq9+WmnbRouCP3lNLUJCKQ3k6XG0
- /WefPCwMSh9iL5GYsHo5zipRtHFrg/Y1etR0jeGC/jLrdXLKxpA3DomoG19bFJBzokBa8Eu
- pPTQdhQgLzzfaqmgAvjAhNxQxV3WaFRz5jwCJkvhn1VvTtjkoOFsTKrrcY3ZWvNfRwb6Rbx
- zB84wH6ALdi8C+jjW9K9A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:L0YbU3sLpSo=:OeI70LLcBh0CDJzTaHVBO1
- tjhK+J5B193bRTAVTtYaooTH1xXMikebb4tDhlJrME1FusXgayqOVnST3vq1FNTVtBFaV02J6
- pTJTCs8xKYjDdXoII0dBs0FpdQs/aI2zIRU5bdjLA422CV7+KMbeBBGzvkB5BkuoHxUZC/HSV
- Zd6fhYRY3lcItpE0dHAuoOWwnn+c9Faa4Xldm+9jGheU5/rwA8shxgiu6oCI/N7lBSUqmnYoG
- +n/YoGFfRCYc1MnQtQo4QWhoornVujNjol7Kn07h/iVzyEq2f1uUqdcFNw7JTirlBLwuXC0ON
- M++U0fiBdeEGzSK7Z5jDyeSBg8D+gMMYO+QT7RtuIHH0rGCiHfwzlOnnhxVIpZP+XbMfvYJq8
- MDtePnsKPXXgaaWzi3jnMobp0WM8vKA63XHkBmRxpnQE7htAXnu7qsTjYYidSjdyiQP7FThxe
- m3sKVd9OAO+s1fflgK9xpZRUOl7f3lENJplPHe43fdcJ1Ob7+FswR3vhlR1sdSUwwcz3f4Jsx
- J0K3/3Ib3ztoxYAeu3XmZjhfpv7OAN9KzR3D4KILqSuYB1enhW1yBH+h5/p/7SEyzRLqEhuYm
- tvjmjkNjsiQC/jOQAJPDeNJF8DcP18FAcy8BT+DPXXyqHPaeMBpPVk/h1pd0+EWjpRrgbgtIA
- l2SwlqcL9gj/4TeNKRz1zYxLcudkBiyQB3yWfm3d0TSley+fhQNoHCHv4ew4UKHbwEh/FM1zw
- qoP+Or3ug6JpHNWGQ9jsWwTAgZd/e+cezTM4DoKBwzu2NyDG5JAO99FM0uS5wGmzdZ9vUkc65
- inutHqbA5Pwk6/KT2ZAMoxEaW07bUPACc9DfUGhU+q2QL7mQECWdkKYPws8GILzoXuLQy0WnV
- NAawSGyo90BjtPlBgn0S8QUudCXqlu4KOKlUm2MKJUJYOjuH88jYCXMuz4j8o3+9YxZtFfuCD
- cIRjHxaE0LZIK7HANFmP5bBAMdP/fcZwiI07ph0oGLm1jsHLYH5i6b3IddruDg7VnkeH9eBGt
- 3NjDGEO0X86iBbZ/z6PgrH5M/fELSvUDZBb0UTjZ6pW7cFmV1od3lpIE5TRdBEe6h939+K4+s
- cDDLK9b4mLpFGGWF5pBrfK4GHevfUT4buYSv9Qhu2234td7+O8Wc1GOCw==
-Content-Transfer-Encoding: quoted-printable
+        Stephen Boyd <sboyd@kernel.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Clarify that BCM2711 belongs to the BCM2835 ARCH.
+On Tue, Aug 13, 2019 at 10:21 AM Stefan Wahren <wahrenst@gmx.net> wrote:
+>
+> Convert the BCM2835/6/7 SoC bindings to DT schema format using json-schema.
+> All the other Broadcom boards are maintained by Florian Fainelli.
+>
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> Acked-by: Eric Anholt <eric@anholt.net>
+> ---
+>  .../devicetree/bindings/arm/bcm/bcm2835.yaml       | 46 +++++++++++++++
+>  .../devicetree/bindings/arm/bcm/brcm,bcm2835.txt   | 67 ----------------------
+>  2 files changed, 46 insertions(+), 67 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/arm/bcm/brcm,bcm2835.txt
+>
+> diff --git a/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml b/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml
+> new file mode 100644
+> index 0000000..1a4be26
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/bcm/bcm2835.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom BCM2711/BCM2835 Platforms Device Tree Bindings
+> +
+> +maintainers:
+> +  - Eric Anholt <eric@anholt.net>
+> +  - Stefan Wahren <wahrenst@gmx.net>
+> +
+> +properties:
+> +  $nodename:
+> +    const: '/'
+> +  compatible:
+> +    oneOf:
+> +      - description: BCM2835 based Boards
+> +        items:
+> +          - enum:
+> +              - raspberrypi,model-a
+> +              - raspberrypi,model-a-plus
+> +              - raspberrypi,model-b
+> +              - raspberrypi,model-b-i2c0  # Raspberry Pi Model B (no P5)
+> +              - raspberrypi,model-b-rev2
+> +              - raspberrypi,model-b-plus
+> +              - raspberrypi,compute-module
+> +              - raspberrypi,model-zero
+> +              - raspberrypi,model-zero-w
+> +          - const: brcm,bcm2835
+> +
+> +      - description: BCM2836 based Boards
+> +        items:
+> +          - enum:
+> +              - raspberrypi,2-model-b
 
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-Acked-by: Eric Anholt <eric@anholt.net>
-=2D--
- MAINTAINERS | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Don't you need brcm,bcm2836 here?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6426db5..13c7c64 100644
-=2D-- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3168,7 +3168,7 @@ N:	bcm216*
- N:	kona
- F:	arch/arm/mach-bcm/
+> +
+> +      - description: BCM2837 based Boards
+> +        items:
+> +          - enum:
+> +              - raspberrypi,3-model-a-plus
+> +              - raspberrypi,3-model-b
+> +              - raspberrypi,3-model-b-plus
+> +              - raspberrypi,3-compute-module
+> +              - raspberrypi,3-compute-module-lite
 
--BROADCOM BCM2835 ARM ARCHITECTURE
-+BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE
- M:	Eric Anholt <eric@anholt.net>
- M:	Stefan Wahren <wahrenst@gmx.net>
- L:	bcm-kernel-feedback-list@broadcom.com
-@@ -3176,6 +3176,7 @@ L:	linux-rpi-kernel@lists.infradead.org (moderated f=
-or non-subscribers)
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- T:	git git://github.com/anholt/linux
- S:	Maintained
-+N:	bcm2711
- N:	bcm2835
- F:	drivers/staging/vc04_services
+Don't you need brcm,bcm2837 here?
 
-=2D-
-2.7.4
+Please run 'dtbs_check' and make sure there aren't warnings (in the root node).
 
+Rob
