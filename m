@@ -2,44 +2,45 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5FB8B02A
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 08:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A036E8B061
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 09:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726282AbfHMGx1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Aug 2019 02:53:27 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:45593 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725820AbfHMGx1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Aug 2019 02:53:27 -0400
-Received: by mail-ot1-f66.google.com with SMTP id m24so15626751otp.12;
-        Mon, 12 Aug 2019 23:53:26 -0700 (PDT)
+        id S1726282AbfHMHAL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Aug 2019 03:00:11 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:37820 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725842AbfHMHAK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Aug 2019 03:00:10 -0400
+Received: by mail-ot1-f65.google.com with SMTP id f17so33290942otq.4;
+        Tue, 13 Aug 2019 00:00:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vz3G11PqHYeCzc37P34uoD1vhwXZtRmIg5ogdMOlp8Y=;
-        b=kXY0qAyCMENcVwrKoVuaKTUJKKY8OtPQHZVn9R6067vh4M/lpSfXMAwt3PNmAmHFb4
-         Mb3BgEs+z254KdpqPaGjPPrNVpb+B+pkc8trU4pERCDoEg2clZR8N7iMDO+YXOhkfnpS
-         ShWWmkH3382PzTBcpWPXFCK8PUxLQxsMd6u5T2h7bvzpHnEXHCemiqQ5xASKkJV+wIPw
-         Harkj4FagGLS4Y8jZCQQCxi2K7HJpIQweOUKs2KzUL+lxC87GkxUwnfyPmNj4khkW3QA
-         vSu2PoyxVlCmIfnKkqjVvt9691OHC+1QVhl3koYoFJgnf527dm8PL9pBojxW+fvStgOA
-         3hng==
-X-Gm-Message-State: APjAAAXqgCZc+4SsWlwX/sQhelU2JmRs7Y+Pz+pl824omAWsUNQCU0jA
-        2ZQvzgn//40v5p3Z99T/8fkeYsnBzcaZPIBkipKUQg==
-X-Google-Smtp-Source: APXvYqxMLv1ABsas1WFYO66GujeO/vB0usB7gDbIYXEPS6g7MCLQzXHL1a7g5P39z2LryIdQg8rzU18p4abRSAQJzrQ=
-X-Received: by 2002:a9d:5c11:: with SMTP id o17mr30441928otk.107.1565679206247;
- Mon, 12 Aug 2019 23:53:26 -0700 (PDT)
+        bh=77nlFndun7+dGLHYK0mymCeb7GTkfwqNOTyP8GLXKB4=;
+        b=qboxgeRTLWXXqOowRm05AOos5Q3CNX5A3U2ihlmVjIro9my5thrpFK1uDpMEy6otGp
+         mbdKyNx7rMgdztfK9jDjwWwVwfsL0mYBwan/lbwwp+fN1WSMquinV5Dwahaz/kV3XYNv
+         WBu+gU0RDGNKY50ZO8rrf7X1OlcjntmM0kGYjx5TTzwLZS+zR74ZXzD+P9Hou6N6Q8HA
+         n+SF/72cRlpOyEouDtYFN+BwP7J4w90EaNMEDMSwJclqAVRZ9RBTnzNfIkydwrzGiJaB
+         FieBGESCtDraaRvGapP87ppnfhL+pHopDeZcpR0vdGKKl4uDN4Sx3ozHooV9g7l9skk8
+         Bt9Q==
+X-Gm-Message-State: APjAAAXXZur4E8GQE/Pb+kIOe4FDh0Rm3Eps/m/KDRpk//Zj9u8+hSHs
+        NmUKwx2gx7LOHH+kTh/lNtP3FiA9L6QvdNvxdmY=
+X-Google-Smtp-Source: APXvYqx3kK+CuMloi9M4R9/cF/K1zMbeUQFdDRf0G+wFjMbtmanXoDtwPVr9jCd4x3uBDF/WRwC/cZ09bLBJJswO7sY=
+X-Received: by 2002:a9d:7a90:: with SMTP id l16mr34349798otn.297.1565679609997;
+ Tue, 13 Aug 2019 00:00:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190811043253.24938-1-max@enpas.org> <CAMuHMdVJJxjH-gPraW==smrkOOMcGYPKB8BPzrYPU4bstASX3A@mail.gmail.com>
- <0d61e12f-5fc5-7cb6-755f-298ebf4c935f@enpas.org>
-In-Reply-To: <0d61e12f-5fc5-7cb6-755f-298ebf4c935f@enpas.org>
+References: <20190812235237.21797-1-max@enpas.org> <20190812235237.21797-3-max@enpas.org>
+In-Reply-To: <20190812235237.21797-3-max@enpas.org>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 13 Aug 2019 08:53:14 +0200
-Message-ID: <CAMuHMdWr8VNBBVjgcu9wtdby-0pznEtg=GeVmAcrk78Of7gwNA@mail.gmail.com>
-Subject: Re: [PATCH] i2c/busses: Add i2c-icy for I2C on m68k/Amiga
+Date:   Tue, 13 Aug 2019 08:59:59 +0200
+Message-ID: <CAMuHMdX8VAA+P_JYi=Xs1Q1SX3aLJuedGRNPPg0tPZ5vvfqY1w@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] hwmon/ltc2990: Add platform_data support
 To:     Max Staudt <max@enpas.org>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>, linux-hwmon@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         "Linux/m68k" <linux-m68k@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
@@ -49,25 +50,12 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Max,
-
-On Tue, Aug 13, 2019 at 12:21 AM Max Staudt <max@enpas.org> wrote:
-> On 08/12/2019 11:37 AM, Geert Uytterhoeven wrote:
-> >> +       iowrite8(val, address);
-> >
-> > As this is on a Zorro bus, z_writeb()?
+On Tue, Aug 13, 2019 at 1:53 AM Max Staudt <max@enpas.org> wrote:
+> This allows code using i2c_new_device() to specify a measurement mode.
 >
-> I forgot to ask about this.
->
-> What is the reasoning behind having a separate z_writeb() for Zorro?
-> As far as I can see in arch/m68k/include/asm this maps 1:1 to a direct memory access, and it prohibits cross-arch code as in i2c-elektor.
+> Signed-off-by: Max Staudt <max@enpas.org>
 
-write*() and friends are intended for PCI, and thus little endian, while
-the Zorro bus is big endian. For byte accesses this doesn't matter,
-obviously.
-
-Note that this predates iowrite*(), which does have *be variants.
-If you want to add compile-testing to your driver, using iowrite*() is fine.
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
 Gr{oetje,eeting}s,
 
