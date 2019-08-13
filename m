@@ -2,214 +2,161 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DC28B4E6
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 12:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98ECD8B516
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 12:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728722AbfHMKDF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Aug 2019 06:03:05 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:48330 "EHLO mx1.redhat.com"
+        id S1728838AbfHMKKg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Aug 2019 06:10:36 -0400
+Received: from enpas.org ([46.38.239.100]:56410 "EHLO mail.enpas.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728713AbfHMKDF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 13 Aug 2019 06:03:05 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id EB80FC015C30;
-        Tue, 13 Aug 2019 10:03:03 +0000 (UTC)
-Received: from shalem.localdomain.com (ovpn-116-178.ams2.redhat.com [10.36.116.178])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CCADF7EED1;
-        Tue, 13 Aug 2019 10:03:02 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Wolfram Sang <wsa@the-dreams.de>, Peter Rosin <peda@axentia.se>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-i2c@vger.kernel.org
-Subject: [PATCH] i2c-cht-wc: Fix lockdep warning
-Date:   Tue, 13 Aug 2019 12:03:01 +0200
-Message-Id: <20190813100301.79915-1-hdegoede@redhat.com>
+        id S1728736AbfHMKKf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Aug 2019 06:10:35 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id 13A3510016D;
+        Tue, 13 Aug 2019 10:10:31 +0000 (UTC)
+Subject: Re: [PATCH v2 3/4] hwmon/ltc2990: Add platform_data support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-m68k@vger.kernel.org,
+        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
+References: <20190812235237.21797-1-max@enpas.org>
+ <20190812235237.21797-3-max@enpas.org> <20190813080237.GA29986@roeck-us.net>
+From:   Max Staudt <max@enpas.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
+ 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
+ urZIw0nz8zec+73Bv/qF4GHHftLYfA==
+Message-ID: <6912362a-1f58-a9d6-f86b-d16930aa359c@enpas.org>
+Date:   Tue, 13 Aug 2019 12:10:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Tue, 13 Aug 2019 10:03:04 +0000 (UTC)
+In-Reply-To: <20190813080237.GA29986@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When the kernel is build with lockdep support and the i2c-cht-wc driver is
-used, the following warning is shown:
+On 08/13/2019 10:02 AM, Guenter Roeck wrote:
+> On Tue, Aug 13, 2019 at 01:52:36AM +0200, Max Staudt wrote:
+>> This allows code using i2c_new_device() to specify a measurement mode.
+>>
+>> Signed-off-by: Max Staudt <max@enpas.org>
+>> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>> ---
+>>  drivers/hwmon/ltc2990.c               |  9 +++++++++
+>>  include/linux/platform_data/ltc2990.h | 11 +++++++++++
+>>  2 files changed, 20 insertions(+)
+>>  create mode 100644 include/linux/platform_data/ltc2990.h
+>>
+>> diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
+>> index f9431ad43..f19b9c50c 100644
+>> --- a/drivers/hwmon/ltc2990.c
+>> +++ b/drivers/hwmon/ltc2990.c
+>> @@ -14,6 +14,7 @@
+>>  #include <linux/kernel.h>
+>>  #include <linux/module.h>
+>>  #include <linux/of.h>
+>> +#include <linux/platform_data/ltc2990.h>
+>>  
+>>  #define LTC2990_STATUS	0x00
+>>  #define LTC2990_CONTROL	0x01
+>> @@ -206,6 +207,7 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
+>>  	int ret;
+>>  	struct device *hwmon_dev;
+>>  	struct ltc2990_data *data;
+>> +	struct ltc2990_platform_data *pdata = dev_get_platdata(&i2c->dev);
+>>  	struct device_node *of_node = i2c->dev.of_node;
+>>  
+>>  	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_SMBUS_BYTE_DATA |
+>> @@ -227,6 +229,13 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
+>>  		if (data->mode[0] & ~LTC2990_MODE0_MASK ||
+>>  		    data->mode[1] & ~LTC2990_MODE1_MASK)
+>>  			return -EINVAL;
+>> +	} else if (pdata) {
+>> +		data->mode[0] = pdata->meas_mode[0];
+>> +		data->mode[1] = pdata->meas_mode[1];
+>> +
+>> +		if (data->mode[0] & ~LTC2990_MODE0_MASK ||
+>> +		    data->mode[1] & ~LTC2990_MODE1_MASK)
+>> +			return -EINVAL;
+> 
+> I would prefer if the driver was modified to accept device
+> properties, and if those were set using the appropriate
+> fwnode function. Any reason for not doing that ?
 
-[   66.674334] ======================================================
-[   66.674337] WARNING: possible circular locking dependency detected
-[   66.674340] 5.3.0-rc4+ #83 Not tainted
-[   66.674342] ------------------------------------------------------
-[   66.674345] systemd-udevd/1232 is trying to acquire lock:
-[   66.674349] 00000000a74dab07 (intel_soc_pmic_chtwc:167:(&cht_wc_regmap_cfg)->lock){+.+.}, at: regmap_write+0x31/0x70
-[   66.674360]
-               but task is already holding lock:
-[   66.674362] 00000000d44a85b7 (i2c_register_adapter){+.+.}, at: i2c_smbus_xfer+0x49/0xf0
-[   66.674370]
-               which lock already depends on the new lock.
+The driver does have DT support implemented right above my new platform_data code, and DT takes precedence. However, I can't set DT data programatically when instantiating the client using i2c_new_device() - hence the platform_data support.
 
-[   66.674371]
-               the existing dependency chain (in reverse order) is:
-[   66.674374]
-               -> #1 (i2c_register_adapter){+.+.}:
-[   66.674381]        rt_mutex_lock_nested+0x46/0x60
-[   66.674384]        i2c_smbus_xfer+0x49/0xf0
-[   66.674387]        i2c_smbus_read_byte_data+0x45/0x70
-[   66.674391]        cht_wc_byte_reg_read+0x35/0x50
-[   66.674394]        _regmap_read+0x63/0x1a0
-[   66.674396]        _regmap_update_bits+0xa8/0xe0
-[   66.674399]        regmap_update_bits_base+0x63/0xa0
-[   66.674403]        regmap_irq_update_bits.isra.0+0x3b/0x50
-[   66.674406]        regmap_add_irq_chip+0x592/0x7a0
-[   66.674409]        devm_regmap_add_irq_chip+0x89/0xed
-[   66.674412]        cht_wc_probe+0x102/0x158
-[   66.674415]        i2c_device_probe+0x95/0x250
-[   66.674419]        really_probe+0xf3/0x380
-[   66.674422]        driver_probe_device+0x59/0xd0
-[   66.674425]        device_driver_attach+0x53/0x60
-[   66.674428]        __driver_attach+0x92/0x150
-[   66.674431]        bus_for_each_dev+0x7d/0xc0
-[   66.674434]        bus_add_driver+0x14d/0x1f0
-[   66.674437]        driver_register+0x6d/0xb0
-[   66.674440]        i2c_register_driver+0x45/0x80
-[   66.674445]        do_one_initcall+0x60/0x2f4
-[   66.674450]        kernel_init_freeable+0x20d/0x2b4
-[   66.674453]        kernel_init+0xa/0x10c
-[   66.674457]        ret_from_fork+0x3a/0x50
-[   66.674459]
-               -> #0 (intel_soc_pmic_chtwc:167:(&cht_wc_regmap_cfg)->lock){+.+.}:
-[   66.674465]        __lock_acquire+0xe07/0x1930
-[   66.674468]        lock_acquire+0x9d/0x1a0
-[   66.674472]        __mutex_lock+0xa8/0x9a0
-[   66.674474]        regmap_write+0x31/0x70
-[   66.674480]        cht_wc_i2c_adap_smbus_xfer+0x72/0x240 [i2c_cht_wc]
-[   66.674483]        __i2c_smbus_xfer+0x1a3/0x640
-[   66.674486]        i2c_smbus_xfer+0x67/0xf0
-[   66.674489]        i2c_smbus_read_byte_data+0x45/0x70
-[   66.674494]        bq24190_probe+0x26b/0x410 [bq24190_charger]
-[   66.674497]        i2c_device_probe+0x189/0x250
-[   66.674500]        really_probe+0xf3/0x380
-[   66.674503]        driver_probe_device+0x59/0xd0
-[   66.674506]        device_driver_attach+0x53/0x60
-[   66.674509]        __driver_attach+0x92/0x150
-[   66.674512]        bus_for_each_dev+0x7d/0xc0
-[   66.674515]        bus_add_driver+0x14d/0x1f0
-[   66.674518]        driver_register+0x6d/0xb0
-[   66.674521]        i2c_register_driver+0x45/0x80
-[   66.674524]        do_one_initcall+0x60/0x2f4
-[   66.674528]        do_init_module+0x5c/0x230
-[   66.674531]        load_module+0x2707/0x2a20
-[   66.674534]        __do_sys_init_module+0x188/0x1b0
-[   66.674537]        do_syscall_64+0x5c/0xb0
-[   66.674541]        entry_SYSCALL_64_after_hwframe+0x49/0xbe
-[   66.674543]
-               other info that might help us debug this:
-
-[   66.674545]  Possible unsafe locking scenario:
-
-[   66.674547]        CPU0                    CPU1
-[   66.674548]        ----                    ----
-[   66.674550]   lock(i2c_register_adapter);
-[   66.674553]                                lock(intel_soc_pmic_chtwc:167:(&cht_wc_regmap_cfg)->lock);
-[   66.674556]                                lock(i2c_register_adapter);
-[   66.674559]   lock(intel_soc_pmic_chtwc:167:(&cht_wc_regmap_cfg)->lock);
-[   66.674561]
-                *** DEADLOCK ***
-
-The problem is that the CHT Whiskey Cove PMIC's builtin i2c-adapter is
-itself a part of an i2c-client (the PMIC). This means that transfers done
-through it take adapter->bus_lock twice, once for the parent i2c-adapter
-and once for its own bus_lock. Lockdep does not like this nested locking.
-
-To make lockdep happy in the case of busses with muxes, the i2c-core's
-i2c_adapter_lock_bus function calls:
-
- rt_mutex_lock_nested(&adapter->bus_lock, i2c_adapter_depth(adapter));
-
-But i2c_adapter_depth only works when the direct parent of the adapter is
-another adapter, as it is only meant for muxes. In this case there is an
-i2c-client and MFD instantiated platform_device in the parent->child chain
-between the 2 devices.
-
-This commit overrides the default i2c_lock_operations, passing a hardcoded
-depth of 1 to rt_mutex_lock_nested, making lockdep happy.
-
-Note that if there were to be a mux attached to the i2c-wc-cht adapter,
-this would break things again since the i2c-mux code expects the
-root-adapter to have a locking depth of 0. But the i2c-wc-cht adapter
-always has only 1 client directly attached in the form of the charger IC
-paired with the CHT Whiskey Cove PMIC.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/i2c/busses/i2c-cht-wc.c | 46 +++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
-
-diff --git a/drivers/i2c/busses/i2c-cht-wc.c b/drivers/i2c/busses/i2c-cht-wc.c
-index 66af44bfa67d..f6546de66fbc 100644
---- a/drivers/i2c/busses/i2c-cht-wc.c
-+++ b/drivers/i2c/busses/i2c-cht-wc.c
-@@ -178,6 +178,51 @@ static const struct i2c_algorithm cht_wc_i2c_adap_algo = {
- 	.smbus_xfer = cht_wc_i2c_adap_smbus_xfer,
- };
- 
-+/*
-+ * We are an i2c-adapter which itself is part of an i2c-client. This means that
-+ * transfers done through us take adapter->bus_lock twice, once for our parent
-+ * i2c-adapter and once to take our own bus_lock. Lockdep does not like this
-+ * nested locking, to make lockdep happy in the case of busses with muxes, the
-+ * i2c-core's i2c_adapter_lock_bus function calls:
-+ * rt_mutex_lock_nested(&adapter->bus_lock, i2c_adapter_depth(adapter));
-+ *
-+ * But i2c_adapter_depth only works when the direct parent of the adapter is
-+ * another adapter, as it is only meant for muxes. In our case there is an
-+ * i2c-client and MFD instantiated platform_device in the parent->child chain
-+ * between the 2 devices.
-+ *
-+ * So we override the default i2c_lock_operations and pass a hardcoded
-+ * depth of 1 to rt_mutex_lock_nested, to make lockdep happy.
-+ *
-+ * Note that if there were to be a mux attached to our adapter, this would
-+ * break things again since the i2c-mux code expects the root-adapter to have
-+ * a locking depth of 0. But we always have only 1 client directly attached
-+ * in the form of the Charger IC paired with the CHT Whiskey Cove PMIC.
-+ */
-+static void cht_wc_i2c_adap_lock_bus(struct i2c_adapter *adapter,
-+				 unsigned int flags)
-+{
-+	rt_mutex_lock_nested(&adapter->bus_lock, 1);
-+}
-+
-+static int cht_wc_i2c_adap_trylock_bus(struct i2c_adapter *adapter,
-+				   unsigned int flags)
-+{
-+	return rt_mutex_trylock(&adapter->bus_lock);
-+}
-+
-+static void cht_wc_i2c_adap_unlock_bus(struct i2c_adapter *adapter,
-+				   unsigned int flags)
-+{
-+	rt_mutex_unlock(&adapter->bus_lock);
-+}
-+
-+static const struct i2c_lock_operations cht_wc_i2c_adap_lock_ops = {
-+	.lock_bus =    cht_wc_i2c_adap_lock_bus,
-+	.trylock_bus = cht_wc_i2c_adap_trylock_bus,
-+	.unlock_bus =  cht_wc_i2c_adap_unlock_bus,
-+};
-+
- /**** irqchip for the client connected to the extchgr i2c adapter ****/
- static void cht_wc_i2c_irq_lock(struct irq_data *data)
- {
-@@ -286,6 +331,7 @@ static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
- 	adap->adapter.owner = THIS_MODULE;
- 	adap->adapter.class = I2C_CLASS_HWMON;
- 	adap->adapter.algo = &cht_wc_i2c_adap_algo;
-+	adap->adapter.lock_ops = &cht_wc_i2c_adap_lock_ops;
- 	strlcpy(adap->adapter.name, "PMIC I2C Adapter",
- 		sizeof(adap->adapter.name));
- 	adap->adapter.dev.parent = &pdev->dev;
--- 
-2.23.0.rc1
-
+Max
