@@ -2,18 +2,19 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC748B48F
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 11:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAE88B493
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 11:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728410AbfHMJtL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Aug 2019 05:49:11 -0400
-Received: from enpas.org ([46.38.239.100]:56334 "EHLO mail.enpas.org"
+        id S1726890AbfHMJuG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Aug 2019 05:50:06 -0400
+Received: from enpas.org ([46.38.239.100]:56356 "EHLO mail.enpas.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726685AbfHMJtL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 13 Aug 2019 05:49:11 -0400
+        id S1726685AbfHMJuG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Aug 2019 05:50:06 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 7A75410016D;
-        Tue, 13 Aug 2019 09:49:07 +0000 (UTC)
+        by mail.enpas.org (Postfix) with ESMTPSA id DE79110016D;
+        Tue, 13 Aug 2019 09:50:02 +0000 (UTC)
+Subject: Re: [PATCH v2 1/4] i2c/busses: Add i2c-icy for I2C on m68k/Amiga
 To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Linux I2C <linux-i2c@vger.kernel.org>, linux-hwmon@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -23,8 +24,7 @@ Cc:     Linux I2C <linux-i2c@vger.kernel.org>, linux-hwmon@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 References: <20190812235237.21797-1-max@enpas.org>
- <20190812235237.21797-2-max@enpas.org>
- <CAMuHMdX3NtKwxb6BJzJR1qLs5vC9zhU3d+cdrrHx4B9r1opkvQ@mail.gmail.com>
+ <CAMuHMdWCm9peP9P5_6KBC63cMHXiC3p1oycb0DvKqEd8G4Nx6g@mail.gmail.com>
 From:   Max Staudt <max@enpas.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
@@ -98,60 +98,30 @@ Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
  qowubYXvP+RW4E9h6/NwGzS3Sbw7dRC6HK7xeSjmnzgrbbdF3TbHa5WHGZ3MLFQqbMuSn1Gn
  a0dBnIpkQG5yGknQjCL7SGEun1siNzluV19nLu66YRJsZ1HE9RgbMhTe2Ca8bWH1985ra4GV
  urZIw0nz8zec+73Bv/qF4GHHftLYfA==
-Subject: Re: [PATCH v2 2/4] i2c/busses/i2c-icy: Add LTC2990 present on 2019
- board revision
-Message-ID: <fa145f84-4249-44da-57dc-10cfe25dbde3@enpas.org>
-Date:   Tue, 13 Aug 2019 11:49:05 +0200
+Message-ID: <09642ea4-03b0-36be-1d52-6ef5e09f20d0@enpas.org>
+Date:   Tue, 13 Aug 2019 11:50:02 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdX3NtKwxb6BJzJR1qLs5vC9zhU3d+cdrrHx4B9r1opkvQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdWCm9peP9P5_6KBC63cMHXiC3p1oycb0DvKqEd8G4Nx6g@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 08/13/2019 09:03 AM, Geert Uytterhoeven wrote:
-> Hi Max,
+On 08/13/2019 09:08 AM, Geert Uytterhoeven wrote:
+>> +       dev_info(&z->dev, "ICY I2C controller at %#x, IRQ not implemented\n",
+>> +                z->resource.start);
 > 
-> On Tue, Aug 13, 2019 at 1:53 AM Max Staudt <max@enpas.org> wrote:
->> Since the 2019 a1k.org community re-print of these PCBs sports an
->> LTC2990 hwmon chip as an example use case, let this driver autoprobe
->> for that as well. If it is present, modprobing ltc2990 is sufficient.
->>
->> Signed-off-by: Max Staudt <max@enpas.org>
-> 
-> Thanks for your patch!
-> 
->> --- a/drivers/i2c/busses/i2c-icy.c
->> +++ b/drivers/i2c/busses/i2c-icy.c
->> @@ -160,6 +180,8 @@ static void icy_remove(struct zorro_dev *z)
->>  {
->>         struct icy_i2c *i2c = dev_get_drvdata(&z->dev);
->>
->> +       i2c_unregister_device(i2c->client_ltc2990);
-> 
-> Is this needed?
-> In my understanding, i2c_del_adapter() below takes care of that.
-It seems to do that in i2c_del_adapter():
+> z->resource.start has type phys_addr_t, so you should pas a reference, and
+> use %pa to print it.
+> Alternatively, you can print the full resource using %pR.
+> See Documentation/core-api/printk-formats.rst
 
-  device_for_each_child(&adap->dev, NULL, __unregister_dummy);
+Ack, this snuck in from the early days. Thanks for pointing this out!
 
-
-However, I'm not sure I'm supposed to do that. I went by Documentation/i2c/instantiating-devices, which in "Method 2" says:
-
-  The driver which instantiated the I2C device is responsible for destroying
-  it on cleanup. This is done by calling i2c_unregister_device() on the
-  pointer that was earlier returned by i2c_new_device() or
-  i2c_new_probed_device().
-
-
-So, what is preferred and why?
-
-
-Thanks!
 
 Max
