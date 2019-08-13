@@ -2,310 +2,190 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBCEC8BD78
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 17:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7C18BE33
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 18:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727377AbfHMPom (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Aug 2019 11:44:42 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:33873 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727491AbfHMPom (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Aug 2019 11:44:42 -0400
-Received: by mail-ot1-f68.google.com with SMTP id c7so1641533otp.1;
-        Tue, 13 Aug 2019 08:44:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SFxfynLI/PayVK9T09mSvJ64s8uI65LTsxBTjCv6WcM=;
-        b=hY3ddn4ZK5tGvPTBiLkxH+x7mamRXpGMTAuWyeXYo6VDrj+ZtRMFD2c0UQX9U2cIry
-         109T5HwR+t7wdJNtzQQ9YpCl572oey0n/mrzro9JRIqwhgDxS8X1E6Qhlqkh3d+QdlEY
-         bsCv/kUOnq+kAt4H5oVeUTZBku75zyBbwx3rDmUZXoy06+oUsisC2x1KWAljb3mUL066
-         n4VZ34/7WIL+u66s0SWglCfDB0tuFVdrtqMSoG5uSJD7gEUhsxJYFizETvprxIbdP8nU
-         Kshnh/HmGpqqJ/FiKtyzbWC/Fu3jWW2vmc8smx/A/v5Vhc4+3DW6Hl0m/WJq1mjMtodN
-         Jcaw==
-X-Gm-Message-State: APjAAAVeXeooLwFojWgE29zxAT9e+YlWqSM0I2y96V5sTakXQpKE9T4F
-        kPyh0J3TqlisAwmGt6iC4Q==
-X-Google-Smtp-Source: APXvYqwiOI2LwlaSaAXpu7WaNtoQaiiVUisNbPaGgLe845gRk8bidZjBEntLcLXJBp0UuKTM2tqjvA==
-X-Received: by 2002:a05:6638:52:: with SMTP id a18mr44508592jap.75.1565711080806;
-        Tue, 13 Aug 2019 08:44:40 -0700 (PDT)
-Received: from localhost ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id f9sm16190844ioc.47.2019.08.13.08.44.40
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 13 Aug 2019 08:44:40 -0700 (PDT)
-Date:   Tue, 13 Aug 2019 09:44:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1728424AbfHMQVU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Aug 2019 12:21:20 -0400
+Received: from mout.gmx.net ([212.227.15.18]:55761 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728019AbfHMQVT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Aug 2019 12:21:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1565713256;
+        bh=dUBlT9Xxrn/3cLif2R6aatleNAWiZ7l31/AxHu5ssns=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=MztWCiiBtmdH4Sb0M3d5URvOceAhk5qSPqzBKjKjgQkYRkShQJ8BlvBfZE1UCO1yJ
+         ibQy0NYozhSm+yVsGLbR76/l0OOLttQ/KLQokUqKSRjMcp40D09NwjYbuJ+19ecpA8
+         cmXO0fQ1dxQBXIAYYOmnh4PdTQKh1VFnkEP0ewp0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([37.4.249.106]) by mail.gmx.com
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MSt8W-1hrQiE1GHO-00UGxW; Tue, 13 Aug 2019 18:20:56 +0200
+From:   Stefan Wahren <wahrenst@gmx.net>
+To:     Eric Anholt <eric@anholt.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
         Wolfram Sang <wsa@the-dreams.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Peter Rosin <peda@axentia.se>
-Subject: Re: [RFC,v2 3/6] media: dt-bindings: add DS90UB954-Q1 video
- deserializer
-Message-ID: <20190813154439.GA29515@bogus>
-References: <20190723203723.11730-1-luca@lucaceresoli.net>
- <20190723203723.11730-4-luca@lucaceresoli.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190723203723.11730-4-luca@lucaceresoli.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH V2 00/13] ARM: Add minimal Raspberry Pi 4 support
+Date:   Tue, 13 Aug 2019 18:20:35 +0200
+Message-Id: <1565713248-4906-1-git-send-email-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.7.4
+X-Provags-ID: V03:K1:omgWgWBXYFvuPOX6q9fI7KNy5K8f42ZRB+xeRxWYdkKzXFVCQ1l
+ MqXRbXyZh0HlU14WNpWih9FJIyCoqS89MysLx6bguRh5tkxToeMCOtc8cPokyn1q/T9lFug
+ AUTGI5tp2nmtUNhujij/sI89MaOSREKci6JFVdkwSoeyNCkXqZTyjqmES4VDNnGIznakzSc
+ BkYiYhHSgXf0i+c6wgFCw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Sx08nM0KaTc=:/5FhSM3w71RuIBd5P052cY
+ I2adqVoXok+QKFpL76+25Cv4drVurWMR0MhQm3v2sqGKMbY5FEVaE/V5LNaFsT7Bi/Okuu8dk
+ 3wHKlXF140nlPUeuNwd3pYnFaC2BheayNkd/xiqE0hQEYSd2baMi8ycW8MfKuFQmiZI77zP7g
+ pMScfRjs4p3Nh40CMjrFCOut0NmLOQtI7bROUfzEVw5r3A51Mrp1/iys447a46TiFnPdRiDSQ
+ BkjASIFHMTuxSkO7ahuFs/+3QGZfhtlu+TuwwvTzPLN0iQkNqM/Cd9V2sVpSu6rV7kADb7V4/
+ R+xTxVPWuo45byw/g0AKJFX4yLDdwnNH7Ii/Tp1ByqsL8Rdic5lZW69KmUpeV704VxPWyUHpI
+ 1mdLo5QhQ0HwI1OGiaNoESLvwDeegn/Kx1RyskKTxK6vuDcjx8txVRpBNcUoi3h0DiAV9aycA
+ JR2tM/nUowQEUHG+3CYRIufU1XDLf+ZPgLwkrDLL6YKENvgGGPPypbuc4RSNIZrBHaOwE4oHW
+ 9YL+aaGWPTZUn7EuEYD1WxJcnSB4+LkKzsj/Sunp0NoiQBa08kR1Hj268TLmdI1JAWDkw8vOz
+ NLX8V6K3vBQfj14bRf/BeoRtsTDlLPe1hmlG5bFgxowYv9GGmRwagA6aigx6XmR4PxsHIzxF8
+ eVn4NM+7lCUs2MDq4bqn3I+yua7DDQ8itpbVAoveQ1mj5ANFhpUVY9c7YH1xw0MiD0iBjCsG4
+ Kv+OZyKqeB91VhKVCtNC+lNb/J1VrT4WpAAgHpghdLHW5t5eb54ECWlERJQVQqU6wSkq6XTwr
+ eFbMz4iBMIADTI+S3M44wWesDQWJ1tMD12r/NdAn+/VaxncIdNPccDh1uV1lRO3HMmvdwiDAz
+ cEWsuMCDXpLNNRkjEZDvi9GAYNpx/hZ6zSuXa6jhTQQCo332S+FSay2fv5SAISzAVGEGsyfIA
+ dByFeJr1T89V+nvMhp94TVyGQohzNuKt9TCugVAHtFpy++ad52mm9BEf1XLYF62//IQ03DB1D
+ JdmRgAedBUFqlJ/1f4t07AGL0mPXZGtg+rkKdNnRKBm8LLJjpZ187LlxQAWlMPvdWoWPo7JH1
+ 2ekdj8HwzycljYzcd6fJrP5WXazZVfyDh34hghS/4o3zELCRi2KxZE/1hzVIpMW27txwERHji
+ QJAFzjdQhAZFg4fPzdNoTafC5hEbqzdiSxNvJTx3qx2NsJtw==
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 10:37:20PM +0200, Luca Ceresoli wrote:
-> Describe the Texas Instruments DS90UB954-Q1, a 2-input video deserializer
-> with I2C Address Translator and remote GPIOs.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> 
-> ---
-> 
-> Changes RFCv1 -> RFCv2:
-> 
->  - add explicit aliases for the FPD-link RX ports (optional)
->  - add proper remote GPIO description
-> ---
->  .../bindings/media/i2c/ti,ds90ub954-q1.txt    | 194 ++++++++++++++++++
->  1 file changed, 194 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.txt b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.txt
-> new file mode 100644
-> index 000000000000..73ce21ecc3b6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.txt
-> @@ -0,0 +1,194 @@
-> +Texas Instruments DS90UB954-Q1 dual video deserializer
-> +======================================================
-> +
-> +The TI DS90UB954-Q1 is a MIPI CSI-2 video deserializer that forwards video
-> +streams from up to two FPD-Link 3 connections to a MIPI CSI-2 output. It
-> +also allows access to remote I2C and GPIO.
-> +
-> +Required properties:
-> +
-> + - compatible: must be "ti,ds90ub954-q1"
-> +
-> + - reg: main I2C slave address; optionally aliases for RX port registers
-> +   and remote serializers. The main address is mandatory and must be the
-> +   first, others are optional and fall back to defaults if not
-> +   specified. See "reg-names".
-> +
-> + - reset-gpios: chip reset GPIO, active low (connected to PDB pin of the chip)
-> + - i2c-alias-pool: list of I2C addresses that are known to be available on the
-> +                   "local" (SoC-to-deser) I2C bus; they will be picked at
-> +		   runtime and used as aliases to reach remove I2C chips
+This series adds minimal support for the new Raspberry Pi 4, so we are abl=
+e
+to login via debug UART.
 
-s/remove/remote/
+Patch 1-2:   Prepare platform and DTS for the new SoC BMC2711
+Patch 3-6:   Enable clock support for BCM2711
+Patch 7-8:   Add I2C support for BCM2711
+Patch 9-12:  Add Raspberry Pi 4 DTS support
+Patch 13:    Update MAINTAINERS
 
-Needs a vendor prefix.
+Unfortunately the Raspberry Pi Foundation didn't released a
+peripheral documentation for the new SoC yet. So we only have a preliminar=
+y
+datasheet [1] and reduced schematics [2].
 
-> + - gpio-controller
-> + - #gpio-cells: must be 3: FPD-Link 3 RX port number, remote gpio number, flags
+Known issues:
+Since Linux 5.3-rc1 DMA doesn't work properly on that platform.
+Nicolas Saenz Julienne investigates on that issue. As a temporary workarou=
+nd
+i reverted the following patch to test this series:
 
-We're pretty standardized on 2 cells for GPIO. Perhaps combine the port 
-and gpio number to 1 cell.
+79a98672 "dma-mapping: remove dma_max_pfn"
+7559d612 "mmc: core: let the dma map ops handle bouncing"
 
-> +
-> +Optional properties:
-> +
-> + - reg-names: names of I2C address used to communicate with the chip, must
-> +              match the "reg" values; mandatory if there are 2 or more
-> +              addresses
-> +    - "main": the main I2C address, used to access shared registers
-> +    - "rxport0", "rxport1": I2C alias to access FPD-link RX port specific
-> +      registers; must not be used by other slaves on the same bus
-> +    - "ser0", "ser1": I2C alias to access the remote serializer connected
-> +      on each FPD-link RX port; must not be used by other slaves on the
-> +      same bus
-> + - interrupts: interrupt pin from the chip
-> +
-> +Required subnodes:
-> +
-> + - ports: A ports node with one port child node per device input and output
-> +          port, in accordance with the video interface bindings defined in
-> +          Documentation/devicetree/bindings/media/video-interfaces.txt. The
-> +          port nodes are numbered as follows:
-> +
-> +          Port Description
-> +          ------------------------------------
-> +          0    Input from FPD-Link 3 RX port 0
-> +          1    Input from FPD-Link 3 RX port 1
-> +          2    CSI-2 output
-> +
-> +          Each port must have a "remote-chip" subnode that defines the remote
-> +	  chip (serializer) with at least a "compatible" property
+Changes in V2:
+- use separate board file for BCM2711
+- enable ARM_GIC for ARCH_BCM2835
+- add Acked-by and Reviewed-by
+- fix arm-pmu and timer nodes for BCM2711 reported by Marc Zyngier
+- enable HDMI at board level
+- move HDMI and pixelvalve into bcm2835-common.dtsi as suggested by Eric A=
+nholt
+- fix DWC2 probing warning by setting USB role to peripheral
+- fix order of node references in bcm2711.dtsi
+- disable I2C clock stretching quirk for BCM2711
+- mark PLLD_PER as critical clock
+- make PLLH clock unavailable on BCM2711
+- fix compile warning in clk-bcm2835 for arm64
 
-We don't allow other nodes within graph nodes. I'm not really clear what 
-you are trying to do here.
+Changes since RFC:
+- change BCM2838 -> BCM2711 as discussed in RFC
+- update MAINTAINERS accordingly
+- drop "spi: bcm2835: enable shared interrupt support" from series
+- squash all pinctrl-bcm2835 changes into one patch
+- introduce SoC specific clock registration as suggested by Florian
+- fix watchdog probing for Raspberry Pi 4
+- convert brcm,bcm2835.txt to json-schema
+- move VC4 node to bcm2835-common.dtsi
+- fallback to legacy pull config for Raspberry Pi 4
+- revert unintended change of mailbox in bcm283x.dtsi
+- add reference for arm64
 
-> +
-> + - i2c-atr: contains one child per RX port, each describes the I2C bus on
-> +            the remote side
-> +
-> +	    Required properties:
-> +	    - #address-cells = <1>;
-> +	    - #size-cells = <0>;
-> +
-> +	    Subnodes: one per each FPD-link RX port, each having:
-> +
-> +	    Required properties for "i2c-atr" child bus nodes:
-> +	    - reg: The number of the port where the remove chip is connected
+[1] - https://www.raspberrypi.org/documentation/hardware/raspberrypi/bcm27=
+11/rpi_DATA_2711_1p0_preliminary.pdf
+[2] - https://www.raspberrypi.org/documentation/hardware/raspberrypi/schem=
+atics/rpi_SCH_4b_4p0_reduced.pdf
 
-s/remove/remote/
+Stefan Wahren (13):
+  ARM: dts: bcm283x: Enable HDMI at board level
+  ARM: dts: bcm283x: Move BCM2835/6/7 specific to bcm2835-common.dtsi
+  dt-bindings: bcm2835-cprman: Add bcm2711 support
+  clk: bcm2835: Introduce SoC specific clock registration
+  clk: bcm2835: Add BCM2711_CLOCK_EMMC2 support
+  clk: bcm2835: Mark PLLD_PER as CRITICAL
+  dt-bindings: i2c: bcm2835: Add brcm,bcm2711 compatible
+  i2c: bcm2835: Avoid clk stretch quirk for BCM2711
+  dt-bindings: arm: Convert BCM2835 board/soc bindings to json-schema
+  dt-bindings: arm: bcm2835: Add Raspberry Pi 4 to DT schema
+  ARM: bcm: Add support for BCM2711 SoC
+  ARM: dts: Add minimal Raspberry Pi 4 support
+  MAINTAINERS: Add BCM2711 to BCM2835 ARCH
 
-> +	    - #address-cells = <1>;
-> +	    - #size-cells = <0>;
-> +
-> +	    Optional properties for "i2c-atr" child bus nodes:
-> +	    - Other properties specific to the remote hardware
+ .../devicetree/bindings/arm/bcm/bcm2835.yaml       |  51 ++
+ .../devicetree/bindings/arm/bcm/brcm,bcm2835.txt   |  67 ---
+ .../bindings/clock/brcm,bcm2835-cprman.txt         |   4 +-
+ .../devicetree/bindings/i2c/brcm,bcm2835-i2c.txt   |   4 +-
+ MAINTAINERS                                        |   3 +-
+ arch/arm/boot/dts/Makefile                         |   1 +
+ arch/arm/boot/dts/bcm2711-rpi-4-b.dts              | 121 ++++
+ arch/arm/boot/dts/bcm2711.dtsi                     | 662 ++++++++++++++++=
++++++
+ arch/arm/boot/dts/bcm2835-common.dtsi              | 183 ++++++
+ arch/arm/boot/dts/bcm2835-rpi-a-plus.dts           |   2 +
+ arch/arm/boot/dts/bcm2835-rpi-a.dts                |   2 +
+ arch/arm/boot/dts/bcm2835-rpi-b-plus.dts           |   2 +
+ arch/arm/boot/dts/bcm2835-rpi-b-rev2.dts           |   2 +
+ arch/arm/boot/dts/bcm2835-rpi-b.dts                |   2 +
+ arch/arm/boot/dts/bcm2835-rpi-cm1-io1.dts          |   2 +
+ arch/arm/boot/dts/bcm2835-rpi-zero-w.dts           |   2 +
+ arch/arm/boot/dts/bcm2835-rpi-zero.dts             |   2 +
+ arch/arm/boot/dts/bcm2835-rpi.dtsi                 |   5 -
+ arch/arm/boot/dts/bcm2835.dtsi                     |   1 +
+ arch/arm/boot/dts/bcm2836-rpi-2-b.dts              |   2 +
+ arch/arm/boot/dts/bcm2836.dtsi                     |   1 +
+ arch/arm/boot/dts/bcm2837-rpi-3-a-plus.dts         |   2 +
+ arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts         |   2 +
+ arch/arm/boot/dts/bcm2837-rpi-3-b.dts              |   2 +
+ arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts          |   2 +
+ arch/arm/boot/dts/bcm2837.dtsi                     |   1 +
+ arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi  |   7 +
+ arch/arm/boot/dts/bcm283x.dtsi                     | 168 +-----
+ arch/arm/mach-bcm/Kconfig                          |   3 +-
+ arch/arm/mach-bcm/Makefile                         |   3 +-
+ arch/arm/mach-bcm/bcm2711.c                        |  22 +
+ drivers/clk/bcm/clk-bcm2835.c                      | 133 ++++-
+ drivers/i2c/busses/i2c-bcm2835.c                   |  16 +-
+ include/dt-bindings/clock/bcm2835.h                |   2 +
+ 34 files changed, 1221 insertions(+), 263 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml
+ delete mode 100644 Documentation/devicetree/bindings/arm/bcm/brcm,bcm2835=
+.txt
+ create mode 100644 arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+ create mode 100644 arch/arm/boot/dts/bcm2711.dtsi
+ create mode 100644 arch/arm/boot/dts/bcm2835-common.dtsi
+ create mode 100644 arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
+ create mode 100644 arch/arm/mach-bcm/bcm2711.c
 
-Such as?
+=2D-
+2.7.4
 
-> +	    - Child nodes conforming to i2c bus binding
-> +
-> +
-> +Device node example
-> +-------------------
-> +
-> +&i2c0 {
-> +	deser: deser@3d {
-> +		compatible = "ti,ds90ub954-q1";
-> +		reg-names = "main", "rxport0", "rxport1", "ser0", "ser1";
-> +		reg       = <0x3d>,  <0x40>,    <0x41>,   <0x44>, <0x45>;
-> +		clocks = <&clk_25M>;
-> +		interrupt-parent = <&gic>;
-> +		interrupts = <3 1 IRQ_TYPE_LEVEL_HIGH>;
-> +		reset-gpios = <&gpio_ctl 4 GPIO_ACTIVE_LOW>;
-> +
-> +		i2c-alias-pool = /bits/ 16 <0x4a 0x4b 0x4c 0x4d 0x4e 0x4f>;
-> +
-> +		gpio-controller;
-> +		#gpio-cells = <3>; /* rxport, remote gpio num, flags */
-> +
-> +		ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			port@0 {
-> +				reg = <0>;
-> +				ds90ub954_fpd3_in0: endpoint {
-> +					remote-endpoint = <&sensor_0_out>;
-> +				};
-> +			};
-> +
-> +			port@1 {
-> +				reg = <1>;
-> +				ds90ub954_fpd3_in1: endpoint {
-> +					remote-endpoint = <&sensor_1_out>;
-> +				};
-> +			};
-> +
-> +			port@2 {
-> +				reg = <2>;
-> +				ds90ub954_mipi_out0: endpoint {
-> +					data-lanes = <1 2 3 4>;
-> +					/* Actually a REFCLK multiplier */
-> +					data-rate = <1600000000>;
-> +					remote-endpoint = <&csirx_0_in>;
-> +				};
-> +			};
-> +		};
-> +
-> +		i2c-atr {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			remote_i2c0: i2c@0 {
-> +				reg = <0>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-
-Presumably, there are child I2C devices here. Please show that in the 
-example.
-
-> +			};
-> +
-> +			remote_i2c1: i2c@1 {
-> +				reg = <1>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&ds90ub954_fpd3_in0 {
-> +	remote-chip {
-> +		compatible = "ti,ds90ub953-q1";
-> +		gpio-functions = <DS90_GPIO_FUNC_OUTPUT_REMOTE
-
-Not documented.
-
-> +				  DS90_GPIO_FUNC_UNUSED
-> +				  DS90_GPIO_FUNC_UNUSED
-> +				  DS90_GPIO_FUNC_UNUSED>;
-> +	};
-> +};
-> +
-> +&ds90ub954_fpd3_in1 {
-> +	remote-chip {
-> +		compatible = "ti,ds90ub953-q1";
-> +		gpio-functions = <DS90_GPIO_FUNC_OUTPUT_REMOTE
-> +				  DS90_GPIO_FUNC_UNUSED
-> +				  DS90_GPIO_FUNC_UNUSED
-> +				  DS90_GPIO_FUNC_UNUSED>;
-> +	};
-> +};
-> +
-> +&remote_i2c0 {
-> +	sensor_0@3c {
-> +		compatible = "sony,imx274";
-> +		reg = <0x3c>;
-> +
-> +		reset-gpios = <&deser 0 0 GPIO_ACTIVE_LOW>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		port@0 {
-> +			reg = <0>;
-> +			sensor_0_out: endpoint {
-> +				remote-endpoint = <&ds90ub954_fpd3_in0>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&remote_i2c1 {
-> +	sensor_0@3c {
-> +		compatible = "sony,imx274";
-> +		reg = <0x3c>;
-> +
-> +		reset-gpios = <&deser 1 0 GPIO_ACTIVE_LOW>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		port@0 {
-> +			reg = <0>;
-> +			sensor_1_out: endpoint {
-> +				remote-endpoint = <&ds90ub954_fpd3_in1>;
-> +			};
-> +		};
-> +	};
-> +};
-> -- 
-> 2.17.1
-> 
