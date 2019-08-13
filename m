@@ -2,26 +2,26 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D84478BE21
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 18:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAAC08BE29
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 18:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727683AbfHMQVP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Aug 2019 12:21:15 -0400
-Received: from mout.gmx.net ([212.227.15.15]:59773 "EHLO mout.gmx.net"
+        id S1727211AbfHMQVS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Aug 2019 12:21:18 -0400
+Received: from mout.gmx.net ([212.227.15.18]:45875 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728019AbfHMQVP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 13 Aug 2019 12:21:15 -0400
+        id S1728019AbfHMQVR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Aug 2019 12:21:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1565713259;
-        bh=dcbp9wyo3uwTgq6UFIx/2q7he00MX7X5KQnY77LIfhw=;
+        s=badeba3b8450; t=1565713260;
+        bh=uRHDvL3TndR8wGBn8RWaBtvuYQCKr4j/BBz8Ga9FesQ=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=VhqxHnO/VCxDXppsYNbwakKFGN/6gX3zR0T0aL5FXCg1MRU6CjP8pQBsJSP6kqQVJ
-         lfGehUcXza5qQAWQszx4JZ7fijQ3vEjE3pWpQzhMN5LWNVedCVuSbLZc2cSd9fow/v
-         pswoGLzMKer8FCm2EHf6rwGKMkLZru4xhZ6dJzBM=
+        b=FD4Yg2lq/EwvFJdKqcle/04/mM9YxkFkhJBujTJPAx7L4Tg7folHXQuavb+A0FUeL
+         1p4LTYdw5W9/Wngcwog1CjPRTZ375rJdL75CG6B03kqa5CgihYalh1HP/seJi2P6M2
+         AGbtQTjjKOCXRjNB2LSOc9yv+fV1dMpESbOfKFWw=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.106]) by mail.gmx.com
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Mr9Bk-1ibZFt1nWw-00oGiA; Tue, 13 Aug 2019 18:20:59 +0200
+ 1MUGi9-1hoOJE43pT-00RFcV; Tue, 13 Aug 2019 18:21:00 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -36,63 +36,64 @@ Cc:     bcm-kernel-feedback-list@broadcom.com,
         linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 06/13] clk: bcm2835: Mark PLLD_PER as CRITICAL
-Date:   Tue, 13 Aug 2019 18:20:41 +0200
-Message-Id: <1565713248-4906-7-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH V2 07/13] dt-bindings: i2c: bcm2835: Add brcm,bcm2711 compatible
+Date:   Tue, 13 Aug 2019 18:20:42 +0200
+Message-Id: <1565713248-4906-8-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1565713248-4906-1-git-send-email-wahrenst@gmx.net>
 References: <1565713248-4906-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:IHISipDPkgSEtuerZ9YeqAdbuOcqfx1WWZSpdue+ABrqodCLh8L
- WOgb+7OoOmRjx9vcoUBPxzV8jzAd+hz60S8LROQ66M2sU9RBMNpc+ez02VAYhQHxZuXHmoT
- 0HIHHaQRnOFGKbENNspO17RhUFzXPwf6UUTeQxcNlK+KBSsg2ga2GI+B1xzV6XC2VAsDivu
- cq1pL8PogxkL5fO98sLQA==
+X-Provags-ID: V03:K1:0cRHZfQHKeaAt4ouWJuDoL7IzMS/0ykCsxm1ArsSFkmJwmbdWdv
+ SoPXQAAsZXksgG77tAe3/UJGlqPk1jl0LKXDwsgQQoY0xvsHgzUlNWnErDNfwZtWG5n3Q6a
+ NFZzMIZctTNntz7XfsE22RrJYddL45W6QLlFIeMeGJOlmNDx1WOCRPmvk0on4sPrtGDhybQ
+ IaYaLlCG6JWIw83K6kEvA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:S/vGA3BKd6Q=:DdZMNsh5Yyf+gZY+8I2lMf
- eBujfU4NY6iid0Wp4iR3MQ4Q0WhuA2To6M2STPNgodnv3HPT0FVKDezOVz/hN4cbfAFOlMMhu
- eOQ1NHAMFV10tTFUKjqsojKhaA3WajBp/XU5BrCscsMztiDNtCwlq/D+Tv4R98gKC5F+cxoeX
- rkjepfac6Ykz5t/k58g/AMJy4UQkzbsnp253g9pnZWjNqOeJT0JsGRdZAcf9HzoUuHFy8bCP3
- tT628OxdViueKVf154hRfbfBBIT4PL4IGOs4wmKsKOPIPY6HpWJHZpXzn89CdluBBFlKReU95
- oiVcqhap50qWJn3aKeL//4BXCoKF43eI8+luLXsR8HzNsuikTSk1/wrDGFPDKDng3mLlq+6/x
- 5sLngt+Js7MnXZKZUOAr0yxCXt5kCbA9KE0B973FXIenJosQ+7uYAk0kJPkA6PwagqG9E9tOx
- NzLIx1ZAlBDp5UI5uJrPeKMnpLcMyk65pItZOcHuVy/Dw1eJDA2XXHRplLgjO4GtDGhcw6gOZ
- O0qLEkOIqBeGmXRBHpwX9HDI0xZ758+qGXurphN5oqOC0tixgxxaD27VRvK/dq1K3HGb2g1da
- cX1p12pOy2Cp/NOWWrcnTUsd121smpkbD794yaWYvlt8hmGnfhrQLy7Uc8HiZtF8+7ZvOhRsm
- uCaUdLvnRjakTk27cH/YxwjfvSCcYlNDYaMzkeQ7aUI8xYsnzQkOZR5ZWVC9wHgHjhTLnIh8l
- A46MLFhD4u7R3ndrZyqnP3qoXLDGh72xnf+H1RBxkRVtO7Yh3lLevSUqFOnEUjfb5NkrLTL5j
- Jck0zb0Azl6YurGfPlIjcYwi3hFWTwrLMKWKYvQbPgsG7/YYbpD8lUdD4aE1N9hzXCtb4/+fD
- i2WBW5uOVrt0zxlp5q5BI60hCQe0u9SfNU+mFxzXfqBs1MdiTCzqKxvJGZf3mlod0b472HjvQ
- wtesTYl+JEdrRpBDnVUc3v/RPiFctz4RbX8YpCl/SXzU7WayFAGcNeO1i5LrIB/gIzu++7BnH
- 2jI/IcFgiqt6JED9mP/5tYKxPtdKo6ewZLvFrg/rN4xRfy3pQWLi8QJe9A0dmwuHibZ0hOSra
- bXRiZ5UV1KSqx3Rn/BwVliK1GnDOsny/ZIKvYAfnp5jpLOrdkhC8L6RHA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/rvAzAeYiA0=:FN5M4wjfBAy5hu8tlP0v3T
+ FDXwcxrxr5zUVQI1XKkrTKoFJDyzFHJE2XLGPoynZYwgpmok/hiG9urc2+ZmfO8oPUmqF9t3R
+ jhfJqvhL1oXDDMeJHraVwQ4IP0YvBNIgluqw1j9Orb9gG1vHYFySZFu/y2DhDw54sVO101twT
+ 7k5XaACYS2Rmkfp7kdV+at/RaA4pMiYuuDm6Z5tRaYlzlCnNoP4XtIYatwsBSedjl1YVfIs6M
+ PnCjrSVG1U4aP3BAfHEhVWkeQS6z/ElBY96JSOtMFRqWdanSnKZWTZWEZw0LnR4mm4GPWfQsJ
+ ZRfbCAmJFpVZiii8BNl8Vt3fPhd7q68knKrzKeeEb3UVYZvqjkG1KIODDW0ijaJjhu1VuLW57
+ CmC7tEA7tEyOI6Tc1NOb/5KoltbZBh0lyaM8kjdssXev+bF/ydu9qiEjQCQExQtMwBfe5IfbD
+ ryZVglojt6AFGhzEajt2v2FdNg/OJt9+h1SOHhpg4Qt6Q2O19yKfgQ8ywfq061c27nSaPxxDx
+ Mu9pjb5/n8Qhsg+ngZPkKX583i3z56fDyjgN+DyKAU/SECDEzxYsLZJzYRzZPdLSMuN9Nubhx
+ UP6tN2J5RMCsQf6B/QtXNJoU41dDF35RJ8Nt0pAGKYqME13v2gKttZeKfmQ2SEoOvd2HHkjSZ
+ WqFl8OIpdlmr6sPb8KTTjUZ2RfCQUa6RmOkrImsDWwwznSUxxkTf4TnfsRz2Ytc4ww+TE97L7
+ 5MP045jdalgfg383oDhnpX2NrDr3/BSoGqnksQR9SwsmvN+4xCraLL9BDJiD3p8/ystQvZzlP
+ sU0zsVvkyzp3ouKy3cpuW8bfOKd0Mk3qT+5Iz585hXEUJ/yD07jbpAwnRA8eNcPC68Gd5FP78
+ tBABbJcRmIvZb6Uj3GyRh6RWzlxgorRUFPfqpLm0S72X8nLVCC68mnoKu3v39MNlSqR4ZgtCM
+ BGEWqEAtFCD/5zJnFYng56lRFT6ogZ9yLw3qagJ744nTNiPATpbRKzGIoVcS2bfFKa9gU+2qx
+ Vn89/SYLzVRbrNQotYZ001sXafDKZKJOI7/BMnH+JD6cv3gz4bM0XdJ9j8yia4w0FdOxNSz8t
+ 24s1j29sZd81dTWe/fR9Ih4qMQHNr5xM6StHJcMG7qfkoROPEFMaz2oIqN/FqBcyZva9Gtu48
+ SZSYvQV6mKYjiLq0IaTDwvIKJ7bfuOsSl297QSEoTUe+9WTA==
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The VPU firmware assume that the PLLD_PER isn't modified by the ARM core.
-Otherwise this could cause firmware lookups. So mark the clock as critical
-to avoid this.
+Add a new compatible for the BCM2711, which hasn't the clock stretch bug.
 
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 =2D--
- drivers/clk/bcm/clk-bcm2835.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
-index fdf672a..b62052e 100644
-=2D-- a/drivers/clk/bcm/clk-bcm2835.c
-+++ b/drivers/clk/bcm/clk-bcm2835.c
-@@ -1785,7 +1785,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.load_mask =3D CM_PLLD_LOADPER,
- 		.hold_mask =3D CM_PLLD_HOLDPER,
- 		.fixed_divider =3D 1,
--		.flags =3D CLK_SET_RATE_PARENT),
-+		.flags =3D CLK_IS_CRITICAL | CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLD_DSI0]	=3D REGISTER_PLL_DIV(
- 		SOC_ALL,
- 		.name =3D "plld_dsi0",
+diff --git a/Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.txt b/=
+Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.txt
+index e9de375..c9a6587 100644
+=2D-- a/Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.txt
++++ b/Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.txt
+@@ -1,7 +1,9 @@
+ Broadcom BCM2835 I2C controller
+
+ Required properties:
+=2D- compatible : Should be "brcm,bcm2835-i2c".
++- compatible : Should be one of:
++	"brcm,bcm2711-i2c"
++	"brcm,bcm2835-i2c"
+ - reg: Should contain register location and length.
+ - interrupts: Should contain interrupt.
+ - clocks : The clock feeding the I2C controller.
 =2D-
 2.7.4
 
