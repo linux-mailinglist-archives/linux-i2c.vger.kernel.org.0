@@ -2,92 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5D88AB79
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 01:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E1D8ADC5
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 06:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726992AbfHLXxJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Aug 2019 19:53:09 -0400
-Received: from enpas.org ([46.38.239.100]:55746 "EHLO mail.enpas.org"
+        id S1725836AbfHMEeh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Aug 2019 00:34:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57400 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726659AbfHLXxJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 12 Aug 2019 19:53:09 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id B7B7D100704;
-        Mon, 12 Aug 2019 23:53:06 +0000 (UTC)
-From:   Max Staudt <max@enpas.org>
-To:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org,
-        glaubitz@physik.fu-berlin.de, Max Staudt <max@enpas.org>
-Subject: [PATCH v2 4/4] i2c/busses/i2c-icy: Add platform_data for LTC2990
-Date:   Tue, 13 Aug 2019 01:52:37 +0200
-Message-Id: <20190812235237.21797-4-max@enpas.org>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190812235237.21797-1-max@enpas.org>
-References: <20190812235237.21797-1-max@enpas.org>
+        id S1725298AbfHMEeh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Aug 2019 00:34:37 -0400
+Received: from localhost (unknown [106.201.103.22])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D145A20644;
+        Tue, 13 Aug 2019 04:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565670876;
+        bh=LeDopwTuWI+vg3sAxESkUP1Ad5woiNmLizqxL2IUUjM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2m6MPJ5tm+CEzskDxqHh9F5ecwuPmPFOBWaBViK3MhhhWAkFnTetCXd5ZZllNn9EW
+         EvujBk4rI/uez+gJqjt7AKpovUYUPsV8xcNohYbUEs89CXz7wyihUSeXqeEWSDZQ6a
+         gd+NmLgXwRhYiYmrZZWdTko2muDs9IZgs4W+WBH0=
+Date:   Tue, 13 Aug 2019 10:03:24 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     soc@kernel.org, Russell King <linux@armlinux.org.uk>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, kbuild test robot <lkp@intel.com>
+Subject: Re: [PATCH 2/7] dma: iop-adma: include prefetch.h
+Message-ID: <20190813043324.GN12733@vkoul-mobl.Dlink>
+References: <20190809162956.488941-1-arnd@arndb.de>
+ <20190809163334.489360-1-arnd@arndb.de>
+ <20190809163334.489360-2-arnd@arndb.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190809163334.489360-2-arnd@arndb.de>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This enables the three additional inputs available on the 2019 a1k.org
-reprint of the ICY board:
+On 09-08-19, 18:33, Arnd Bergmann wrote:
+> Compile-testing this driver fails on m68k without the
+> extra header inclusion.
 
-  in1 will be the voltage of the 5V rail, divided by 2.
-  in2 will be the voltage of the 12V rail, divided by 4.
-  temp3 will be measured using a PCB loop next the chip.
+Please change title to "dmaengine: iop-adma: include prefetch.h"
 
-Signed-off-by: Max Staudt <max@enpas.org>
----
- drivers/i2c/busses/i2c-icy.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+After that:
 
-diff --git a/drivers/i2c/busses/i2c-icy.c b/drivers/i2c/busses/i2c-icy.c
-index 8125683c5..6ad9910a0 100644
---- a/drivers/i2c/busses/i2c-icy.c
-+++ b/drivers/i2c/busses/i2c-icy.c
-@@ -42,6 +42,7 @@
- 
- #include <linux/i2c.h>
- #include <linux/i2c-algo-pcf.h>
-+#include <linux/platform_data/ltc2990.h>
- 
- #include <asm/amigaints.h>
- #include <linux/zorro.h>
-@@ -106,8 +107,21 @@ static void icy_pcf_waitforpin(void *data)
- /*
-  * Main i2c-icy part
-  */
-+static struct ltc2990_platform_data icy_ltc2990_platform_data = {
-+	/*
-+	 * Additional sensors exposed by this platform data:
-+	 *
-+	 * in1 will be the voltage of the 5V rail, divided by 2.
-+	 * in2 will be the voltage of the 12V rail, divided by 4.
-+	 * temp3 will be measured using a PCB loop next the chip.
-+	 */
-+	.meas_mode = {0, 3},
-+};
-+
- static struct i2c_board_info icy_ltc2990_info = {
--	I2C_BOARD_INFO("ltc2990", 0x4c),
-+	.type		= "ltc2990",
-+	.addr		= 0x4c,
-+	.platform_data	= &icy_ltc2990_platform_data,
- };
- 
- static unsigned short const icy_ltc2990_addresses[] = {0x4c, I2C_CLIENT_END};
-@@ -167,6 +181,8 @@ static int icy_probe(struct zorro_dev *z,
- 	 *
- 	 * in0 is the voltage of the internal 5V power supply.
- 	 * temp1 is the temperature inside the chip.
-+	 *
-+	 * See platform data above for in1, in2, temp3.
- 	 */
- 	i2c->client_ltc2990 = i2c_new_probed_device(&i2c->adapter,
- 						    &icy_ltc2990_info,
+Acked-by: Vinod Koul <vkoul@kernel.org>
+
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/dma/iop-adma.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/dma/iop-adma.c b/drivers/dma/iop-adma.c
+> index c6c0143670d9..7857b54770d1 100644
+> --- a/drivers/dma/iop-adma.c
+> +++ b/drivers/dma/iop-adma.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/spinlock.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/prefetch.h>
+>  #include <linux/memory.h>
+>  #include <linux/ioport.h>
+>  #include <linux/raid/pq.h>
+> -- 
+> 2.20.0
+
 -- 
-2.11.0
-
+~Vinod
