@@ -2,26 +2,26 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAC08BE29
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 18:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 797A08BE3C
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2019 18:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727211AbfHMQVS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Aug 2019 12:21:18 -0400
-Received: from mout.gmx.net ([212.227.15.18]:45875 "EHLO mout.gmx.net"
+        id S1728399AbfHMQVT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Aug 2019 12:21:19 -0400
+Received: from mout.gmx.net ([212.227.15.18]:35873 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728019AbfHMQVR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 13 Aug 2019 12:21:17 -0400
+        id S1728237AbfHMQVS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Aug 2019 12:21:18 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
         s=badeba3b8450; t=1565713260;
-        bh=uRHDvL3TndR8wGBn8RWaBtvuYQCKr4j/BBz8Ga9FesQ=;
+        bh=Y5aGEI9G/hsaduQVg6mAPiwmIIHBg3hjSpNANdv++sg=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=FD4Yg2lq/EwvFJdKqcle/04/mM9YxkFkhJBujTJPAx7L4Tg7folHXQuavb+A0FUeL
-         1p4LTYdw5W9/Wngcwog1CjPRTZ375rJdL75CG6B03kqa5CgihYalh1HP/seJi2P6M2
-         AGbtQTjjKOCXRjNB2LSOc9yv+fV1dMpESbOfKFWw=
+        b=AEEPLeS20UcPjgOac3mgYrID9haAhFjV3cGIkOXHOX4NxWyTb9VWiNzHLU3/i7I5e
+         G/RLON8Yi2iZ0x+jyWryAWYYWdOahJ0ryvlypMiySkmYaPSbQazF6Q2FarCZgI9Kgq
+         ckXIrfsGQw+lILB247R7iUqI0RQVSgVKt/e65VIo=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.106]) by mail.gmx.com
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MUGi9-1hoOJE43pT-00RFcV; Tue, 13 Aug 2019 18:21:00 +0200
+ 1N3bWr-1iNS51247n-010aN5; Tue, 13 Aug 2019 18:21:00 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -36,64 +36,117 @@ Cc:     bcm-kernel-feedback-list@broadcom.com,
         linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 07/13] dt-bindings: i2c: bcm2835: Add brcm,bcm2711 compatible
-Date:   Tue, 13 Aug 2019 18:20:42 +0200
-Message-Id: <1565713248-4906-8-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH V2 08/13] i2c: bcm2835: Avoid clk stretch quirk for BCM2711
+Date:   Tue, 13 Aug 2019 18:20:43 +0200
+Message-Id: <1565713248-4906-9-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1565713248-4906-1-git-send-email-wahrenst@gmx.net>
 References: <1565713248-4906-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:0cRHZfQHKeaAt4ouWJuDoL7IzMS/0ykCsxm1ArsSFkmJwmbdWdv
- SoPXQAAsZXksgG77tAe3/UJGlqPk1jl0LKXDwsgQQoY0xvsHgzUlNWnErDNfwZtWG5n3Q6a
- NFZzMIZctTNntz7XfsE22RrJYddL45W6QLlFIeMeGJOlmNDx1WOCRPmvk0on4sPrtGDhybQ
- IaYaLlCG6JWIw83K6kEvA==
+X-Provags-ID: V03:K1:Pnlk69KrwCk9LvgrYJTYiJBIKI8o4JVBFM4dQ0wgTfUJNXIHwvE
+ sNswh1Zm0es1wlgCP4X/1hGtxTHDFRiyNKKKsNzjCe79bHc1596yEHIsObjFFgI63RWhgMi
+ Ob+Xn89m0mUMcFifQTaP+brmvGmYUeHcThDn0CHmuJ7Tu+er+BM+WFDBMcNcGuggrkTPKa4
+ jDtfu+lyZqFfNAfJcCI4A==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/rvAzAeYiA0=:FN5M4wjfBAy5hu8tlP0v3T
- FDXwcxrxr5zUVQI1XKkrTKoFJDyzFHJE2XLGPoynZYwgpmok/hiG9urc2+ZmfO8oPUmqF9t3R
- jhfJqvhL1oXDDMeJHraVwQ4IP0YvBNIgluqw1j9Orb9gG1vHYFySZFu/y2DhDw54sVO101twT
- 7k5XaACYS2Rmkfp7kdV+at/RaA4pMiYuuDm6Z5tRaYlzlCnNoP4XtIYatwsBSedjl1YVfIs6M
- PnCjrSVG1U4aP3BAfHEhVWkeQS6z/ElBY96JSOtMFRqWdanSnKZWTZWEZw0LnR4mm4GPWfQsJ
- ZRfbCAmJFpVZiii8BNl8Vt3fPhd7q68knKrzKeeEb3UVYZvqjkG1KIODDW0ijaJjhu1VuLW57
- CmC7tEA7tEyOI6Tc1NOb/5KoltbZBh0lyaM8kjdssXev+bF/ydu9qiEjQCQExQtMwBfe5IfbD
- ryZVglojt6AFGhzEajt2v2FdNg/OJt9+h1SOHhpg4Qt6Q2O19yKfgQ8ywfq061c27nSaPxxDx
- Mu9pjb5/n8Qhsg+ngZPkKX583i3z56fDyjgN+DyKAU/SECDEzxYsLZJzYRzZPdLSMuN9Nubhx
- UP6tN2J5RMCsQf6B/QtXNJoU41dDF35RJ8Nt0pAGKYqME13v2gKttZeKfmQ2SEoOvd2HHkjSZ
- WqFl8OIpdlmr6sPb8KTTjUZ2RfCQUa6RmOkrImsDWwwznSUxxkTf4TnfsRz2Ytc4ww+TE97L7
- 5MP045jdalgfg383oDhnpX2NrDr3/BSoGqnksQR9SwsmvN+4xCraLL9BDJiD3p8/ystQvZzlP
- sU0zsVvkyzp3ouKy3cpuW8bfOKd0Mk3qT+5Iz585hXEUJ/yD07jbpAwnRA8eNcPC68Gd5FP78
- tBABbJcRmIvZb6Uj3GyRh6RWzlxgorRUFPfqpLm0S72X8nLVCC68mnoKu3v39MNlSqR4ZgtCM
- BGEWqEAtFCD/5zJnFYng56lRFT6ogZ9yLw3qagJ744nTNiPATpbRKzGIoVcS2bfFKa9gU+2qx
- Vn89/SYLzVRbrNQotYZ001sXafDKZKJOI7/BMnH+JD6cv3gz4bM0XdJ9j8yia4w0FdOxNSz8t
- 24s1j29sZd81dTWe/fR9Ih4qMQHNr5xM6StHJcMG7qfkoROPEFMaz2oIqN/FqBcyZva9Gtu48
- SZSYvQV6mKYjiLq0IaTDwvIKJ7bfuOsSl297QSEoTUe+9WTA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MElBaoq2NOo=:NgQcO7MtpiaVPB+cYEBP4v
+ +zQaSwTPLexJsZbZCFqVKXX4MFzR4yg1nqveO7UEo59M7zRIY4/Qn2Y4IEDrmNPRY9eTV5scB
+ HtOvTa7bOkwai9Mt8g103rGzoRPv2GE1ZdDLSY9Q6ba7qRWFVHt2R5EzMlG+Q47YHCq0HN81Z
+ oWL/VOgvAlM9Yqww4eT1TUxduRt8IKhJLc7uqxA3m7MMm6HqTKePBOHM6NoOnnXYLSqZi45Jd
+ MyNTnH0NiIEf+LrOUK91Ec2Pqt7KzR534tbIXYOhZ84TTrruRNJuNDVDKp61JkCf1MH4Bi/tD
+ 8iqMyPVByOns1KBOauE5gKD8z/qSb/Y99+7JGcoFT2DiPks7vnE5ZofPyoPUUudLmL5kpYncj
+ ghdwWZmPZuNk1eQ+wmTEULXvTj0T4pMXqxaEeCx/OCPq1n/1e75oirptZuChAXfqm7woIYD4+
+ O200/efAFL79CtszzYo/pmVHrhCJQW41Ag9ukNXNb6soyQNCbzEWun9VnnJFWW8bj1MeD7MIt
+ wilIC8R3ZjM6Vu/kVdhAYCaHszNAMhNTJnxvd7alY3llHvQ5mJtAyRuj78M/1SmMNB3VElFer
+ oUamxL+vLUUswFtVT3fkpoOpTnzXfc8yVmnKPqgQTe8AMRYiw7tUJhZEImCj7NHrRmoL14NC1
+ s6/58jPmjkMisoZ55C/yS5/SOrMTB8bIruWSpgGDYlfqseu+L//sy1PjdbdW/iO+HYj0QP/0x
+ JMMr7SbbI+5nNP94Oq8P+k3DICT/h+ZhmYeH3ddmOZCdkLZvUJxE5GOLThg/Uc9edffEhRzqX
+ ZfsmyeXZE4e1Ks/kMGqu0RVgcvt8k0C9JA4EJYnl+MufrnU28rRRaSuDyyeuGxZH+O5lX4uRN
+ 2HMhJv39uu00i3lY4R2EsdUXppMzvnH8fMjl9hbWJW/+p7F/Y7H1H0xMUQtbvznJ1oic98Mq0
+ UiuigsDCL4fpgj6i3hpBgzKYS5Q0QRpPLp230mEujkscBoOLGuMR/F/Y5F51MI050KmHyyPbI
+ YsAcLKB/WcRHq3t+Zrsaqd5Q7PIEg6yxC2xB7S/b2RlKpRdWE4MZMVc2YPIEAvVjZT27aIFwo
+ jmZIAKyArntL7YVJUGy6prK24LZ14pW09xCvTVfTRWhDBidvCszKsCgTHXoJXoueb5wQyvjZy
+ NXXyBl7CZL1tP/yDKz5xEu3T3EvlLmX0VqD3aUoldKdp3z6w==
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add a new compatible for the BCM2711, which hasn't the clock stretch bug.
+The I2C block on the BCM2711 isn't affected by the clock stretching bug.
+So there is no need to apply the corresponding quirk.
 
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 =2D--
- Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.txt | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-bcm2835.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.txt b/=
-Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.txt
-index e9de375..c9a6587 100644
-=2D-- a/Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.txt
-+++ b/Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.txt
-@@ -1,7 +1,9 @@
- Broadcom BCM2835 I2C controller
+diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm=
+2835.c
+index 67752f7..340da70 100644
+=2D-- a/drivers/i2c/busses/i2c-bcm2835.c
++++ b/drivers/i2c/busses/i2c-bcm2835.c
+@@ -12,6 +12,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
++#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
 
- Required properties:
-=2D- compatible : Should be "brcm,bcm2835-i2c".
-+- compatible : Should be one of:
-+	"brcm,bcm2711-i2c"
-+	"brcm,bcm2835-i2c"
- - reg: Should contain register location and length.
- - interrupts: Should contain interrupt.
- - clocks : The clock feeding the I2C controller.
+@@ -50,6 +51,9 @@
+ #define BCM2835_I2C_CDIV_MIN	0x0002
+ #define BCM2835_I2C_CDIV_MAX	0xFFFE
+
++#define NO_STRETCH_BUG	false
++#define STRETCH_BUG	true
++
+ struct bcm2835_i2c_dev {
+ 	struct device *dev;
+ 	void __iomem *regs;
+@@ -389,7 +393,7 @@ static const struct i2c_algorithm bcm2835_i2c_algo =3D=
+ {
+ };
+
+ /*
+- * This HW was reported to have problems with clock stretching:
++ * The BCM2835 was reported to have problems with clock stretching:
+  * http://www.advamation.com/knowhow/raspberrypi/rpi-i2c-bug.html
+  * https://www.raspberrypi.org/forums/viewtopic.php?p=3D146272
+  */
+@@ -406,6 +410,9 @@ static int bcm2835_i2c_probe(struct platform_device *p=
+dev)
+ 	struct clk *bus_clk;
+ 	struct clk *mclk;
+ 	u32 bus_clk_rate;
++	bool clk_stretch_bug;
++
++	clk_stretch_bug =3D (bool)of_device_get_match_data(&pdev->dev);
+
+ 	i2c_dev =3D devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
+ 	if (!i2c_dev)
+@@ -475,7 +482,9 @@ static int bcm2835_i2c_probe(struct platform_device *p=
+dev)
+ 	adap->algo =3D &bcm2835_i2c_algo;
+ 	adap->dev.parent =3D &pdev->dev;
+ 	adap->dev.of_node =3D pdev->dev.of_node;
+-	adap->quirks =3D &bcm2835_i2c_quirks;
++
++	if (clk_stretch_bug)
++		adap->quirks =3D &bcm2835_i2c_quirks;
+
+ 	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_C, 0);
+
+@@ -501,7 +510,8 @@ static int bcm2835_i2c_remove(struct platform_device *=
+pdev)
+ }
+
+ static const struct of_device_id bcm2835_i2c_of_match[] =3D {
+-	{ .compatible =3D "brcm,bcm2835-i2c" },
++	{ .compatible =3D "brcm,bcm2711-i2c", .data =3D (void *)NO_STRETCH_BUG }=
+,
++	{ .compatible =3D "brcm,bcm2835-i2c", .data =3D (void *)STRETCH_BUG },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, bcm2835_i2c_of_match);
 =2D-
 2.7.4
 
