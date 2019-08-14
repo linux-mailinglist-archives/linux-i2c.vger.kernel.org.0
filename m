@@ -2,97 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 249F88D219
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 13:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676788D23B
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 13:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727039AbfHNL01 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Aug 2019 07:26:27 -0400
-Received: from sauhun.de ([88.99.104.3]:47714 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725800AbfHNL01 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 14 Aug 2019 07:26:27 -0400
-Received: from localhost (p54B33326.dip0.t-ipconnect.de [84.179.51.38])
-        by pokefinder.org (Postfix) with ESMTPSA id 4E02E2C311C;
-        Wed, 14 Aug 2019 13:26:25 +0200 (CEST)
-Date:   Wed, 14 Aug 2019 13:26:24 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Ray Jui <ray.jui@broadcom.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-Subject: Re: Please check your unreg_slave() callbacks!
-Message-ID: <20190814112624.GA9343@ninjato>
-References: <20190809110305.GA1143@ninjato>
- <20190812110301.GD30120@smile.fi.intel.com>
- <20190812143842.GA5804@kunai>
- <20190812154949.GO30120@smile.fi.intel.com>
+        id S1727111AbfHNLdr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Aug 2019 07:33:47 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:35169 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726619AbfHNLdr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Aug 2019 07:33:47 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hxrXF-00013H-3s; Wed, 14 Aug 2019 13:33:45 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hxrXE-0001HE-D6; Wed, 14 Aug 2019 13:33:44 +0200
+Date:   Wed, 14 Aug 2019 13:33:44 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Aisheng Dong <aisheng.dong@nxp.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        linux-i2c@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Chris Healy <cphealy@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1] MAINTAINERS: i2c-imx: take over maintainership
+Message-ID: <20190814113344.5j7zh37nm36rlagr@pengutronix.de>
+References: <20190812050817.23279-1-o.rempel@pengutronix.de>
+ <20190812064811.427cy7ahim54odkk@pengutronix.de>
+ <20190814100224.GE1511@ninjato>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="T4sUOijqQbZv57TR"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20190812154949.GO30120@smile.fi.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190814100224.GE1511@ninjato>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, Aug 14, 2019 at 12:02:25PM +0200, Wolfram Sang wrote:
+> 
+> > Even without this patch the generic "ARM/FREESCALE IMX / MXC ARM
+> > ARCHITECTURE" entry matches the i2c-imx driver.
+> 
+> It matches, but it didn't work well, I am afraid.
 
---T4sUOijqQbZv57TR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I didn't intend to imply it worked well. Just thought it was sensible to
+point out that even with the newly added entry in MAINTAINERS the old
+entry still matches.
 
-Hi Andy,
+Best regards
+Uwe
 
-> > > I'm wondering if synchronize_irq() is enough. The free_irq() theoreti=
-cally is
-> > > the best option, though I dunno which one suits in which cases better.
-> >=20
-> > In which scenario do you think synchronize_irq() is not enough?
->=20
-> I think if the driver is using tasklets this is not enough. However, I mi=
-ght
-> miss the context in i2c case.
-
-Do you mean 'threaded irqs' here? If so, synchronize_irq() should be
-safe because synchronize_hardirq() is the function for not waiting for
-threaded handlers.
-
-If you mean something else, currently no I2C bus master driver is using
-a separate tasklet, so I'd think synchronize_irq() is a sufficient
-choice?
-
-But still open for criticism. I want the best solution!
-
-Kind regards,
-
-   Wolfram
-
-
---T4sUOijqQbZv57TR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1T79wACgkQFA3kzBSg
-Kba6jg//f2Ikqjw5P82bJWUQXcFNJmPT1jRKQGNwh1OgIG2V409JLG0Q1+p4aaTH
-SoOpZU9Zbc15Axn9y7knuCOLvFpJ6LNszOpqM7orS2uRkM/B5L2/Za29W8LKzi31
-cs+qNlQTjrjBCm7axvcDImhp8Je8HIIrNCrjAlX161vRGdkZHcVVFnmHLVEocVBe
-2cR7AM8RmB0ARMcTfwwKZHll+xUDA9OH8NlcVWh2EDSiNTRD7qOTqI6ONX3FnVgk
-eyTMuTEmnmX5dmters1tU/mxrnzC8Is4l6lJI/G8xBQkjfCPNkcw7wG0WwN2iaRM
-ErCpnGhQmnROXqapTTaqbAQ0QqwIDvHu+pGK0QI+1RSqDSS57AwXE4Aulq4Iq7V/
-opKuGmBLJU152v82LzfIfIsg5DS+pdTEY6BdS5YGXXuJUjAkkJ0lJRqmoEAoNrd+
-Cs39Bd2MtH1zJq1/GYrppT2AX38bkjH7TvVxw3NI/j+NGZBinzeYEio15dXhlPQR
-rd5aP7ysPTxQDOV0pwzFWyFVjhLD/lHWv7OWB9nqVNulrK6NkCgOc8zShloQEtFi
-V3vznq+3sC0T5MT+PKcVO2C7NWqxKOL0MN9YJGR+2DZUzNobhXHTyMneN5RpVCyZ
-umgc5GI5M4xcU35JxmP635xLZZIhSiXbvSt95NKFL0wIV6GjwtQ=
-=tUhP
------END PGP SIGNATURE-----
-
---T4sUOijqQbZv57TR--
+-- 
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
