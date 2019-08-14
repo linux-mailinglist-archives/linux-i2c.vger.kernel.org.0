@@ -2,73 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 676788D23B
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 13:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81EC8D36F
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 14:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727111AbfHNLdr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Aug 2019 07:33:47 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:35169 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726619AbfHNLdr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Aug 2019 07:33:47 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hxrXF-00013H-3s; Wed, 14 Aug 2019 13:33:45 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hxrXE-0001HE-D6; Wed, 14 Aug 2019 13:33:44 +0200
-Date:   Wed, 14 Aug 2019 13:33:44 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Aisheng Dong <aisheng.dong@nxp.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        linux-i2c@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Chris Healy <cphealy@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1] MAINTAINERS: i2c-imx: take over maintainership
-Message-ID: <20190814113344.5j7zh37nm36rlagr@pengutronix.de>
-References: <20190812050817.23279-1-o.rempel@pengutronix.de>
- <20190812064811.427cy7ahim54odkk@pengutronix.de>
- <20190814100224.GE1511@ninjato>
+        id S1726721AbfHNMsS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Aug 2019 08:48:18 -0400
+Received: from sauhun.de ([88.99.104.3]:48520 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726522AbfHNMsS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 14 Aug 2019 08:48:18 -0400
+Received: from localhost (p54B33326.dip0.t-ipconnect.de [84.179.51.38])
+        by pokefinder.org (Postfix) with ESMTPSA id ABA482C311C;
+        Wed, 14 Aug 2019 14:48:16 +0200 (CEST)
+Date:   Wed, 14 Aug 2019 14:48:16 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Krzysztof Adamski <krzysztof.adamski@nokia.com>
+Subject: Re: [PATCH] i2c: rcar: avoid race when unregistering slave client
+Message-ID: <20190814124816.GA9716@ninjato>
+References: <20190808193910.12365-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lrZ03NoBR/3+SXJZ"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190814100224.GE1511@ninjato>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20190808193910.12365-1-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 12:02:25PM +0200, Wolfram Sang wrote:
-> 
-> > Even without this patch the generic "ARM/FREESCALE IMX / MXC ARM
-> > ARCHITECTURE" entry matches the i2c-imx driver.
-> 
-> It matches, but it didn't work well, I am afraid.
 
-I didn't intend to imply it worked well. Just thought it was sensible to
-point out that even with the newly added entry in MAINTAINERS the old
-entry still matches.
+--lrZ03NoBR/3+SXJZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards
-Uwe
+On Thu, Aug 08, 2019 at 09:39:10PM +0200, Wolfram Sang wrote:
+> After we disabled interrupts, there might still be an active one
+> running. Sync before clearing the pointer to the slave device.
+>=20
+> Reported-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Applied to for-current, thanks!
+
+
+--lrZ03NoBR/3+SXJZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1UAxAACgkQFA3kzBSg
+KbZ2KxAAtCgIpAKBP1G0zxZhRU2dC5/8co9r8PyjzkpoI9pNXa6L4C37ANcmGjXJ
+GsjAOCg5Y7MOJ6TByIQBJ3+aUyRpSs6ukCSohqKdRK95d3QkBrl3Ls2xaArG7Hpj
+/DFdet0uwjCMrH98t90QodWj7zMh7DN56EErb/fQUlwwJTtG+Rt97nSTdmzIsaFG
+g+wuUHZOz6g+aDGS5nfR2wZ/P85cfihJqoG3hqcEkdzZGr8b9YYDiE2wvTjUezzL
+4UuEw4XO6gP6jdMGBKyeZwEWNJ/kbpFTUAp2ybbXeqFWg90Q2a6yHfy3LelSQOF5
+GwX3QEqShTpk7i27OQZEbcAeKqspWa6LU0WgskwQoHQw2V4RwME2CX+TPVXVCSl+
+jqB4ow6S6K8lrIAzZ7UGUXK7jPm8sgWMiKoMverqDObzDyz23h6LUru437OCkHGG
+45An+e8AsDvsSD54iZLtcuIiMSIo82ilO6UjOVQ8KB2/VtTcTo9XlVVbBa3hFXAi
+ygge0trjQbrCe86c57++Z4sp8eALzhK/XW1ddZZ8PBYAnSEjxvLSC4hmGUNsNLCU
+zcDs+WZ0YGErjKqVW+JDnR9BSgiGhvdB72ukuIcK/uJG7+lc+N5ZyYyNNDIuH3u7
+LJFpOK3KHSep8ctFGzOSFEegqTggTiSySFij40iXB3yfU3T2/n8=
+=Gx2b
+-----END PGP SIGNATURE-----
+
+--lrZ03NoBR/3+SXJZ--
