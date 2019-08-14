@@ -2,33 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 982A28D44D
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 15:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7018D482
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 15:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727849AbfHNNNi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Aug 2019 09:13:38 -0400
-Received: from sauhun.de ([88.99.104.3]:48888 "EHLO pokefinder.org"
+        id S1726575AbfHNNUl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Aug 2019 09:20:41 -0400
+Received: from sauhun.de ([88.99.104.3]:48958 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727819AbfHNNNh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 14 Aug 2019 09:13:37 -0400
+        id S1726263AbfHNNUl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 14 Aug 2019 09:20:41 -0400
 Received: from localhost (p54B33326.dip0.t-ipconnect.de [84.179.51.38])
-        by pokefinder.org (Postfix) with ESMTPSA id 3D5452C311C;
-        Wed, 14 Aug 2019 15:13:36 +0200 (CEST)
-Date:   Wed, 14 Aug 2019 15:13:35 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 2B4A32C311C;
+        Wed, 14 Aug 2019 15:20:40 +0200 (CEST)
+Date:   Wed, 14 Aug 2019 15:20:39 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Subject: Re: [PATCH v2] i2c: axxia: support slave mode
-Message-ID: <20190814131335.GF9716@ninjato>
-References: <20190809091709.GA24838@localhost.localdomain>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c-cht-wc: Fix lockdep warning
+Message-ID: <20190814132039.GG9716@ninjato>
+References: <20190813100301.79915-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ExXT7PjY8AI4Hyfa"
+        protocol="application/pgp-signature"; boundary="E69HUUNAyIJqGpVn"
 Content-Disposition: inline
-In-Reply-To: <20190809091709.GA24838@localhost.localdomain>
+In-Reply-To: <20190813100301.79915-1-hdegoede@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -36,58 +33,42 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---ExXT7PjY8AI4Hyfa
+--E69HUUNAyIJqGpVn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi Krzysztof,
+On Tue, Aug 13, 2019 at 12:03:01PM +0200, Hans de Goede wrote:
+> When the kernel is build with lockdep support and the i2c-cht-wc driver is
+> used, the following warning is shown:
+>=20
+> [   66.674334] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [   66.674337] WARNING: possible circular locking dependency detected
+> [   66.674340] 5.3.0-rc4+ #83 Not tainted
 
-> - Reduced the number of dev_dbg messages.
-
-Yes, that looks good. Just some curly braces left over...
-
-> +		if (fifo_status & SLV_FIFO_STRC) {
-> +			i2c_slave_event(idev->slave,
-> +					I2C_SLAVE_WRITE_REQUESTED, &val);
-> +		}
-
-...
-
-> +	if (fifo_status & SLV_FIFO_RSC) {
-> +		readl(idev->base + SLV_DATA); /* dummy read */
-> +	}
-
-..
-
-> +	if (status & SLV_STATUS_SRC1) {
-> +		i2c_slave_event(idev->slave, I2C_SLAVE_STOP, &val);
-> +	}
-
-If you add '--strict' to checkpatch, it warns about two of them.
-
-Kind regards,
-
-   Wolfram
+Applied to for-next, thanks!
 
 
---ExXT7PjY8AI4Hyfa
+--E69HUUNAyIJqGpVn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1UCPwACgkQFA3kzBSg
-KbaoMA//dE7z+rJCoGb69AGRmxmByWbLQyAaC2V5mZOKoXyQHZSQQYqMrhlTX1IN
-k5j2vXU4VQaAGVeSCRynDEdGzJgj9U8BsIF8pKJW5YdkAv/7rHmud03UaUGMM8bj
-zP5CzOksv9i/jY1pSBgbT8t23G/nCZkBsK5MyxSnWNQMqYlaO0N77esrqncOyrHM
-qOwv4pa1PjvHuCuh3CMfUie5ylPzMo5BMw0og7S0WIBnmgcIa2GVVDOtmg2yMnBF
-hFUgdZ2LzgGhJNBOxUeM6J7nYkxCVhsdiPZpDxo8oU8iinTyoyZT7fsBfHdkfeWz
-LvjUciYGnmeiuPTrVSC3My0no7humDW7LwECBzUXKxLE7geY/9yv/bX1LApa9nR9
-I8xIIThMVVGwhqNqN391HCJ96MAIb1VkgAQzoxRfshkd/z5hD4DwN+7hhUFLn0Fu
-go8NP1kPwf7kMKfvSDR3yuXKI11z+sybpzLcluJ6gCZBJ7YDMgCIjdOuxA+naH4a
-SFCXBoKcFQV7jlOU3EqKP9f5LBVO+dkGJ5365uxVEucjQ/H4maraizBB47C3G8us
-tn2SDULqPH82OQbrrcJnudFaaCItRJkJwbYGOze3jAVJnowB6VK/fgwsiMf803tq
-I/HZVAjMPIt/fAt1M/rgulL9JH2xJLeWVMAURF49B6olopxM3SY=
-=S//p
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1UCqcACgkQFA3kzBSg
+Kbb9yA//UpGMfphnXfvwjW85zY532mpPl4nUvOSx2i2VpR+lXLl0pQVkeUbasjkm
+ycUK1B1oVZ+5SbrV7uPnnF86SBMFxoWRVZj7IP7u1WoGoPFRPHByoKdIbl2symyT
+By2ATVIct7H6zMIVpAas6Ow40GwdTPw+4XD/gcD5o3qLdxS0OWvI5TM4TUeTkk3S
+QCLICIxgMvd35tn6trggvjpEBdou0/BQpDPBylYYNj9O5SHMatRa+Q7ISylkPnhM
+HLAiBS2Iy3qgV9VvOq1l0Xpv9frMMNYOKpdoa1MHuzigNp/4aTjtq8pvMVBKNYer
+HBzcch/Zcg0gLhvF1jvt3QPp42BozqZ3rxq50j14xPdPbcBCS2pU4ReOfZnsSveA
+CjQZnIYpgtOYGVAPKlTc3ETZF6PCnZGwj/8I3t8M1/vdgoZBXf1vCppv1rYmxfNu
+N1LNbr3E4UNlIEAx5DJWPuo3KLT0ZeHNsdEqJd5XcxohSkDdVjrZ7P9+1jB41J6k
+yu0/IZSKWHVke3gJ7+3txCv4MMGee7oVVcWXNVoj6KQ1W1vTZj8prNVqamhepSx7
+KGDQZN6XddnmQeeCV2Fv64UjTv9DP/6yVxKVmfWA0l3A9m8B4djIRtsdi6Lcao41
+/j0bTMDoa3QIYKsQyP5fA1lJ/yE7TwEkkHDYKkggHfY9IQzKRt8=
+=hnAw
 -----END PGP SIGNATURE-----
 
---ExXT7PjY8AI4Hyfa--
+--E69HUUNAyIJqGpVn--
