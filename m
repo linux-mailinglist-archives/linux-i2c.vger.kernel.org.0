@@ -2,73 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7018D482
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 15:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193598D72E
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 17:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726575AbfHNNUl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Aug 2019 09:20:41 -0400
-Received: from sauhun.de ([88.99.104.3]:48958 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726263AbfHNNUl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 14 Aug 2019 09:20:41 -0400
-Received: from localhost (p54B33326.dip0.t-ipconnect.de [84.179.51.38])
-        by pokefinder.org (Postfix) with ESMTPSA id 2B4A32C311C;
-        Wed, 14 Aug 2019 15:20:40 +0200 (CEST)
-Date:   Wed, 14 Aug 2019 15:20:39 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c-cht-wc: Fix lockdep warning
-Message-ID: <20190814132039.GG9716@ninjato>
-References: <20190813100301.79915-1-hdegoede@redhat.com>
+        id S1726525AbfHNP3U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Aug 2019 11:29:20 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:36858 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726047AbfHNP3U (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Aug 2019 11:29:20 -0400
+Received: by mail-qt1-f196.google.com with SMTP id z4so110608145qtc.3;
+        Wed, 14 Aug 2019 08:29:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hkxXFxsppAjXcN3Fnw0Ysp3XgDoee+JKNoPUXSqHEM4=;
+        b=SipexNLQTdiqQNlEHJbGyAE3AnuyNLioPesL8ndijjGQV39XVg6qP7TDc8bmQVmGNC
+         VsTuWgPlGcQvGZon+ZRlM91lhj4JyGHOEKt1GN7/7pKuEqS2cbSRKQ0gCC4tYhe5uChJ
+         oOFQT2s7bRGdJbHlSi2lgucUQdCSMJMQze4uvWWTsqdlhoZzu1fWrLUNDLiFN790dWue
+         ywfmCBLNs6drSKoMHyZzjmbAtWXZjcHOsaucD7U8TP+MfgxqFwqYHTC5XVLA9X9AvzYX
+         FzHER/W5TthAQ6g9dFcxZsEgLlR5KnbnpKktl3S2lfEdbjbb9QvZN6QepG3IMh7m8jst
+         7Hsw==
+X-Gm-Message-State: APjAAAVSTknwJ6wDNixg65MosHJEpn0AFb3PjWANwPmW46a+qGY0+mRB
+        FqZvJssExL6JWuSGHHkpcoZJqy5s/bIYQ6Hfyhc=
+X-Google-Smtp-Source: APXvYqwLKjmuLo6RfGCS8yr97bmaozdgfj78fh2TDXsp3KO1WrajwArEwxXrcfFgURj+QRlR1VEJ90KRLcwY3cq6bcA=
+X-Received: by 2002:ac8:f99:: with SMTP id b25mr38079380qtk.142.1565796559558;
+ Wed, 14 Aug 2019 08:29:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="E69HUUNAyIJqGpVn"
-Content-Disposition: inline
-In-Reply-To: <20190813100301.79915-1-hdegoede@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190809162956.488941-1-arnd@arndb.de> <20190809163334.489360-1-arnd@arndb.de>
+ <20190809163334.489360-2-arnd@arndb.de> <20190813043324.GN12733@vkoul-mobl.Dlink>
+In-Reply-To: <20190813043324.GN12733@vkoul-mobl.Dlink>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 14 Aug 2019 17:29:03 +0200
+Message-ID: <CAK8P3a0jWunQFvt4bVn0GtqN5xwcnO2a1jO0EaqxWqw4VMGL5Q@mail.gmail.com>
+Subject: Re: [PATCH 2/7] dma: iop-adma: include prefetch.h
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     soc@kernel.org, Russell King <linux@armlinux.org.uk>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dmaengine@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        kbuild test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Aug 13, 2019 at 6:34 AM Vinod Koul <vkoul@kernel.org> wrote:
+>
+> On 09-08-19, 18:33, Arnd Bergmann wrote:
+> > Compile-testing this driver fails on m68k without the
+> > extra header inclusion.
+>
+> Please change title to "dmaengine: iop-adma: include prefetch.h"
+>
+> After that:
+>
+> Acked-by: Vinod Koul <vkoul@kernel.org>
 
---E69HUUNAyIJqGpVn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ok, thanks!
 
-On Tue, Aug 13, 2019 at 12:03:01PM +0200, Hans de Goede wrote:
-> When the kernel is build with lockdep support and the i2c-cht-wc driver is
-> used, the following warning is shown:
->=20
-> [   66.674334] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> [   66.674337] WARNING: possible circular locking dependency detected
-> [   66.674340] 5.3.0-rc4+ #83 Not tainted
+One day I will remember all the subsystem prefixes. ;-)
 
-Applied to for-next, thanks!
-
-
---E69HUUNAyIJqGpVn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1UCqcACgkQFA3kzBSg
-Kbb9yA//UpGMfphnXfvwjW85zY532mpPl4nUvOSx2i2VpR+lXLl0pQVkeUbasjkm
-ycUK1B1oVZ+5SbrV7uPnnF86SBMFxoWRVZj7IP7u1WoGoPFRPHByoKdIbl2symyT
-By2ATVIct7H6zMIVpAas6Ow40GwdTPw+4XD/gcD5o3qLdxS0OWvI5TM4TUeTkk3S
-QCLICIxgMvd35tn6trggvjpEBdou0/BQpDPBylYYNj9O5SHMatRa+Q7ISylkPnhM
-HLAiBS2Iy3qgV9VvOq1l0Xpv9frMMNYOKpdoa1MHuzigNp/4aTjtq8pvMVBKNYer
-HBzcch/Zcg0gLhvF1jvt3QPp42BozqZ3rxq50j14xPdPbcBCS2pU4ReOfZnsSveA
-CjQZnIYpgtOYGVAPKlTc3ETZF6PCnZGwj/8I3t8M1/vdgoZBXf1vCppv1rYmxfNu
-N1LNbr3E4UNlIEAx5DJWPuo3KLT0ZeHNsdEqJd5XcxohSkDdVjrZ7P9+1jB41J6k
-yu0/IZSKWHVke3gJ7+3txCv4MMGee7oVVcWXNVoj6KQ1W1vTZj8prNVqamhepSx7
-KGDQZN6XddnmQeeCV2Fv64UjTv9DP/6yVxKVmfWA0l3A9m8B4djIRtsdi6Lcao41
-/j0bTMDoa3QIYKsQyP5fA1lJ/yE7TwEkkHDYKkggHfY9IQzKRt8=
-=hnAw
------END PGP SIGNATURE-----
-
---E69HUUNAyIJqGpVn--
+       Arnd
