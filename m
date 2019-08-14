@@ -2,133 +2,259 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AB78DCC7
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 20:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30628DDD5
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 21:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728395AbfHNSL2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Aug 2019 14:11:28 -0400
-Received: from enpas.org ([46.38.239.100]:58846 "EHLO mail.enpas.org"
+        id S1728283AbfHNTVb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Aug 2019 15:21:31 -0400
+Received: from mout.gmx.net ([212.227.17.21]:60081 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727975AbfHNSL2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 14 Aug 2019 14:11:28 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 6F2A1100073;
-        Wed, 14 Aug 2019 18:11:23 +0000 (UTC)
-Subject: Re: [PATCH v2 3/4] hwmon/ltc2990: Add platform_data support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-m68k@vger.kernel.org,
-        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
-References: <20190812235237.21797-1-max@enpas.org>
- <20190812235237.21797-3-max@enpas.org> <20190813080237.GA29986@roeck-us.net>
- <6912362a-1f58-a9d6-f86b-d16930aa359c@enpas.org>
- <275c42b3-9a91-a73a-0696-3c5a0a344509@roeck-us.net>
-From:   Max Staudt <max@enpas.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
- xsNNBFWfXgEBIADcbJMG2xuJBIVNlhj5AFBwKLZ6GPo3tGxHye+Bk3R3W5uIws3Sxbuj++7R
- PoWqUkvrdsxJAmnkFgMKx4euW/MCzXXgEQOM2nE0CWR7xmutpoXYc9BLZ2HHE2mSkpXVa1Ea
- UTm00jR+BUXgG/ZzCRkkLvN1W9Hkdb75qE/HIpkkVyDiSteJTIjGnpTnJrwiHbZVvXoR/Bx3
- IWFNpuG80xnsGv3X9ierbalXaI3ZrmFiezbPuGzG1kqV1q0gdV4DNuFVi1NjpQU1aTmBV8bv
- gDi2Wygs1pOSj+dlLPwUJ+9jGVzFXiM3xUkNaJc4UPRKxAGskh1nWDdg0odbs0OarQ0o+E+v
- d7WbKK7TR1jfYNcQ+Trr0ca0m72XNFk0hUxNyaEv3kkZEpAv0IDKqXFQD700kr3ftZ8ZKOxd
- CP4UqVYI+1d0nR9LnJYVjRpKI9QqIx492As6Vl1YPjUbmuKi4OT2JdvaT4czGq9EJkbhjC8E
- KQqc2mWeLnnwiMJwp8fMGTq+1TuBgNIbVSdTeyMnNr5w0UmJ4Y/TNFnTsOR0yytpJlHU4YiW
- HDQKaw6wzvdxql2DCjRvn+Hgm9ifMmtPn5RO3PGvq7XQJ0bNzJ/lXl9ts9QbeR62vQUuv63S
- P6WIU+uEUZVtaNJIjmsoEkziMX01Agi+5gCgKkY8mLakdXOAGX9CaUrVAH/ssM0SIwgxbmeH
- F0mwfbd7OuPYCKpmIiX1wqNfiLhcTgV3lJ12Gz7XeeIH3JW5gw6tFGN3pQQNsy6SqtThyFQN
- RlLNZWEHBh2RdE1Bh3HFFCgdbQ2CISV+nEGdTpP+wjlP17FaBUEREM/j4FT5Dn1y/XICJog/
- dymN4Srn8BZ0q1HQBVIJszdfpBa37Fj3gHQbUPinoDsNCCjNibOD06Xk4hvex307pcsXe/Gi
- qON0vCtTfbF9jUmao84LpOMjfnqMXQDl3bIi0GwvdXWTvTNM3gCllj1sygWYvPn405BHysbk
- xbuGCP1qwRRYxrkBpCOUxBz48fT+90CewfwvhuYjBc1dPu0x2io+TRex2rfpMLbjUhYWYeun
- Oo/w+7Ea8UoxqLkvQjNY7IDBtvtPQdW5NxPh1kYOOMCMTGPR7wKMo7O0clMQ3Gviu12nvt2X
- 2rKtI56oU9pEFpIY/moDM+nDNR3fIi1BjdBfhGhSi6uRWy1vgBHYdW0rItPqYtQ9R/AxMbFN
- Kv4axzus1+yAfqSAWyp1DCC8+PX+x4gYEh0rbh2Ii91jdhzONzoEjMy8VCfu9hgeE4XazsFD
- 234zaonkEh8Mpo/SyYH4x0iMO0UyKn1RbyC9zTmAtlIvYUsQdF8exWwF07vvqbzKWkHv8a+y
- RFT9nuZZtVN3ABEBAAHNGk1heCBTdGF1ZHQgPG1heEBlbnBhcy5vcmc+wsN9BBMBCgAnAhsD
- CAsJCAcNDAsKBRUKCQgLAh4BAheAAhkBBQJc3wOtBQkJkOisAAoJEGVYAQQ5PhMuk4AgAKdf
- EzQcishDKhBOBSlRzU1/G07DRT2izrYH4skCXNBXsfiIbp+5BKkAAyxPsa+pCFrJsHC5ZV8J
- UDmnQyocp0pTSSH2eZqGGf+XqLBXuhJTvBLPWaqjkez5LHQs0LFZtPR6DkVhxwLlwvyApkpe
- 2jatxkADZGhoAqxJjScGsiDuSvChqaMfuEEaEzwve+u7SeY59UvF6iLWZ9EpWoZg8EczuJ+h
- 0FftsRE+PprQXWu7lpFcL4eo540IkOzrAschIsNMPax5rPCUglCrdMiNEka43/yIksTuVM/x
- 8hOSXfaaE434R4w5+Kd5phL3fo35RM0p+AXd87UARDiSB4xtyfXZpYPKnJtL2r1KFQeEnMUV
- UCEbgI/B9+po4iJ1ToN30X2pJxnnTM30WiNC9o2rfG4C09+3hU+Hh3Wh6cvGaQ1qBrwsKtpb
- EXSM86f5gfqEoJeUQb6lrFqlIlfSBF2ZWl4w7evyCvYbJlnQWhF+8bnYn3Hm2Lydq9TSRrt5
- 7mlDjuJrmNnbld4Ur7N7cpZ/oM8Ms2hMjbECMkXsMuQ6mY9yHwacnmhhR4Q0ukTTKArenF3W
- 2zsoQJ+nI1JNEcJudX27lnEPWZdEckXiGQECTjiTzZ7eBtYSccP8lrIRkuMP1VlUJTOVlOI6
- GPmhxhbeyYG63dYq3zNFCLSJxynC1Eqmjm70zOYqZ7Rl2cRslycoEQe4YEa1K+mk3Kz+lq4P
- wE9SvAcfhG30peoPxRFBXVXkO8w6g2fSirdBggydB5zQJFkgVM6aG1dgtbFlwERh6ps3Spj6
- eCuqcFRFrDSQDcOj1lIwjwGzJnD4Wli1afG8swqjlm99oq2xteXyWXjXa3bmlGzCvrJLZtHd
- y3qlCgyGtZ2s0WMWo3wasUXJUrAR190ZHcYVAyAU3a3iNVxd+lRUemTMyn86aPmxC79T71Ne
- oZTXxP4srTaX3+qnasViNLntxKCWR/LbLOVWfVBTl+ikXgyn4lXj0qh/7g4dKuP2ZabrOV6V
- s3YUyIwbxlHzYGqDGW7/ae+DCI/mSNuNpN9XfDrERPW7wskucYY44kFFyLN5DQABDr6fHG0w
- zuT6hlxC58X5gW7igCaQCBE3FRY1yTENVMsyRJyfRnOGLwhAHQt2GBsBffPICYiZZuhEZtAk
- C3uOT5xNnYfT/pxEdYeYX+w/MHa0VfY8nYgMd83s0psqqQiA8vBw2xlJoGpnhEkb6sjfxYay
- OViHy2Z3Bi6TAjnNFmveg3Qs2lkTzUCvYonIDPIWBMT11QPcx8hwWjdylJHbEt6zWbH+0ScA
- /iDn5aQ16Zox3JNnQcH0AoDvozyiRihO0yTEd4tS+zCwucfqxL78yy0IgbGRUAFzZvbOwU0E
- VZ96mAEQAMPq/us9ZHl8E8+V6PdoOGvwNh0DwxjVF7kT/LEIwLu94jofUSwz8sgiQqz/AEJg
- HFysMbTxpUnq9sqVMr46kOMVavkRhwZWtjLGhr9iiIRJDnCSkjYuzEmLOfAgkKo+moxz4PZk
- DL0sluOCJeWWm3fFMs4y3YcMXC0DMNGOtK+l1Xno4ZZ2euAy2+XlOgBQQH3cOyPdMeJvpu7m
- nY8CXejH/aS40H4b/yaDu1RUa1+NajnmX+EwRoHsnJcXm62Qu8zjyhYdQjV8B2raMk5HcIzl
- jeVRpEQDlQMUGXESGF4CjYlMGlTidRy6d5GydhRLZXHOLdqG2HZKz1/cot7x5Qle2+P50I32
- iB0u4aPCyeKYJV6m/evBGWwYWYvCUJWnghbP5F2ouC/ytfyzXVNAJKJDkz//wqU27K26vWjy
- Bh0Jdg+G8HivgZLmyZP229sYH0ohrJBoc68ndh9ukw53jASNGkzQ6pONue8+NKF9NUNONkw4
- jjm7lqD/VWFe5duMgSoizu/DkoN+QJwOu/z10y3oN9X7EMImppCdEVS01hdJSyEcyUq90v/O
- kt8tWo906trE65NkIj+ZSaONYAhTK+Yp/jrG88W2WAZU54CwHtoMxhbMH9xRM0hB97rBvaLO
- JwGBAU0+HrxOp1Sqy2M1v91XBt4HeW8YxzNEexq1ZtNnABEBAAHCw2UEGAEKAA8CGwwFAlzf
- A9kFCQmQzEEACgkQZVgBBDk+Ey79byAAhnvJdqOqZ3PFJgb5vODVOL0KbJJ2A1zWYX69YGw2
- rjWDf+/VvXkppswMRUCttswiNbGq8GmvAuTjOk2nnDKatZrsVTDxN8erAzafMX77XdV0+j+h
- 0epk7vAsOCxvKX3fLyyeJccbbzA6RaMlg6ACtXYZbRjjYGLWPCUEF5XN8bsSjN7fIaIYUFJO
- +5DIr3CyyRAVpgR6Hu/n0MbRTzucMDvqp9J+JDh1GNbJstIz0r8L02I/ZZS1P9FFjXlQXyE/
- WEoU0U+GJA6z3e2fcCkhhj1cVgH0KpxssKSAvcakv3nJGgE33c5CzxcGw2pJOSETDOeR8F3d
- tqjUPR+AZ2V963cCbfh0o/klaorJq54k/tlSHpWC55oXj1A1Q1wHLtl8CYYYju8MinS1dJG/
- I/gE2rQeXmwAzc3MF8jmEzZfpwR1uzwT4vG7NKcoo0UGsSSuMzj1VJUd2QSqfy3BTtpRH4Ts
- znQevaqUzuxcpFlBYj4Y2aqpw2ErWCE1/2gEWiDKmfLZNsnvFbj54RF+e6ajv0EHmgDOOU6H
- ZPQe8U6qFRMfhgCA0v8HIxIn8HCpei9XiAZoILD9w0/Pp1SqMqtEYifImGPdGIFPhiccpA/g
- Wxncxb7TvCzyTieRLCnzn2sWzHeLLtsbnxmq0gXedWAwpIV8sMpKauvc/z0gkNkbySPPLzof
- /gBw5zuaaTU8nzXWoPbDl6EuWtyVrwo1S6sSoeEb+7KHJYig8mPeyJvA+1tSTzOjPZLlA56j
- L7B2x7Mf+vohJx6qS93MVqOLPZo3lvi3QH+ScUNmQNBcLe+sGd8EIJCIMJa9ab8Esx1I8AVr
- ZVP2hV0XjPJCw/bGp66yYq7dYvvT2wOMk9FUOKCTTBxHEgz5H4LjrA0gJONNrqjI9Hjo8IJU
- IHKdyyMuKDhs8FkGpx9UTEBMXYasF2J1V9wMJp+JWYEDKQ/ienhXzMpTKeTntPaF3EPcwdmo
- n6Ro70RlUvNcCNXlosS6KWgXLVZx0xy3cFsF6m4HL3GEXarDm2ub3EatN4nGbknQqzh+1gUG
- fN1OsIbabwgqrLEUO4tTTE5BKcccjti20S8+3Xn4LCyowrqMREfXDHDT2tStJmi4i8l1NDsf
- 0deMB5e+8oupffJn64n0qod8e535MEZ8UM244dTv1bR3w9GLWr1eLIF1hOeN6YkRgks7zD1O
- qowubYXvP+RW4E9h6/NwGzS3Sbw7dRC6HK7xeSjmnzgrbbdF3TbHa5WHGZ3MLFQqbMuSn1Gn
- a0dBnIpkQG5yGknQjCL7SGEun1siNzluV19nLu66YRJsZ1HE9RgbMhTe2Ca8bWH1985ra4GV
- urZIw0nz8zec+73Bv/qF4GHHftLYfA==
-Message-ID: <a35b87c2-6bcd-fc27-ceb5-6a18c06f5cc2@enpas.org>
-Date:   Wed, 14 Aug 2019 20:11:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1728128AbfHNTVb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 14 Aug 2019 15:21:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1565810462;
+        bh=d++ldL5SUC49z8++j07OgZlhrKCwugADIKUc2KAPYKQ=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=YIYzHdQ9HOuEI2ceKDjtlQRa1UDtDc5tcUqULOz+souydaPKIqWUyAyhv/G2PuQm4
+         mQziR78L30hz4qHh3OEEsUJYSKSmPcSBNIq02+pAp/+Ir55o+BHCme7iNx6Eo4HvIU
+         7ogKNTFyxae1UfNAjZEnk9VYWGeL8gMAsk5MNaNA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.1.162] ([37.4.249.106]) by mail.gmx.com (mrgmx103
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 0LZzY9-1ihVj92KA1-00lkpt; Wed, 14
+ Aug 2019 21:21:02 +0200
+Subject: Re: [PATCH V2 09/13] dt-bindings: arm: Convert BCM2835 board/soc
+ bindings to json-schema
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Stephen Boyd <sboyd@kernel.org>, Ray Jui <rjui@broadcom.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Eric Anholt <eric@anholt.net>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>
+References: <1565713248-4906-1-git-send-email-wahrenst@gmx.net>
+ <1565713248-4906-10-git-send-email-wahrenst@gmx.net>
+ <CAL_Jsq+01vXQpf_ZuAvetWvcGLhK4EiiB1qFqhRkM3PQWAzdsA@mail.gmail.com>
+From:   Stefan Wahren <wahrenst@gmx.net>
+Message-ID: <f9acf678-854d-720d-3c84-d9a05766c02e@gmx.net>
+Date:   Wed, 14 Aug 2019 21:21:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <275c42b3-9a91-a73a-0696-3c5a0a344509@roeck-us.net>
+In-Reply-To: <CAL_Jsq+01vXQpf_ZuAvetWvcGLhK4EiiB1qFqhRkM3PQWAzdsA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:/I3kDilaSmvTywo6Y0PtWIRiL9BDzfqMeNJs/p2nee9NhkwKYgv
+ QZsM5sLRt9l1mpgZGVxcxqx3LWRTzaDl3VEuf6QV6JpXliVZ4f/KjDf9P619DiStmVrcRr3
+ TfIfSyj8u3kfEHbGF208jVV1t6lCDlhaK1SRbysS0X3ehzZ3oqcAZ0tNQnjc0oaypnziYd+
+ XQCvmJ97G25h65hMxPRgg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fs0wjMQYF5o=:r85/xzGI12wsXXkjV16o5A
+ pYzfFmyt3dmifUkAu1ewZ7TN+rmaL/oyaj7gHS/n+sjs2dFbG2uMmYWQUUZT3CvbhDPk5BKqT
+ /sQV4Ykf52+APUfU1QfX0kOSA4taJwzfZUpG6XZMaaFJW5nFb7BppDQVaBUmSdY4MLodCQAgk
+ jKemp1YPE/xfzC1fpPiGuBCSkJUfXPT5GXPdh2rSNzWl2i4IuLUe3bef8h0x+Z7/+89S04kq/
+ m90BDkUu1cS7DO34RzaaKUGXLQkX3u99ERj1fO4FOYTl6ghKNFPJBiSjFOKJuCPJEs+2qJwJo
+ VCJ0jndWjlcQDPJyEOAHNnv6HWRJLYJQKyTvkGATzfsrYjCtVllAZzjTNwDTizJObEyKSty75
+ yhLK5udhv7Jhbk6aLn8QJzXa3I5omF5sZUjGVS9Je+Bxrza+j1IMeKZwssWgWznyCF+/JdAmd
+ dLdrT3Ub4BtbAN19lKF82OcF75IGgRxHv61mch3R0NQyPakYyKHsIN3eUtrAsS4S28sFBD9Fh
+ 6PmzVpvJSrVA5B79ar5phl6igfrhReuoDysmxCpOpvkpctn7KFP3TlhH0cfeigoYzMqDuaNOV
+ nmTyS3D3L1Xsi5BSyAClZv1M9l+KUx4J39Mn4dnVJlSChnIFzvG31UA6E8Xok8sbKtim9L53Z
+ w+WR+NJkECeoKfoFGvkpTkbIwl4vBpHk8YU5+t/1bSezI8E4TmgxglmTajLDCf5CSscaG+HG8
+ hqFDPGbGZYwo6IWxSrh8m2AdXOjWDo+SNg5LoeUjHPZ+mbO5Ev0SpsBd4kMf/C5P8zls2vIt2
+ tDox7zWANFY8YOeSptyVAqJa+8QDO3upTFYOxzHbiyLAPlMYlIv9oxgVTYRG3b+AytV7ovGTT
+ DIseyEBuL6DStPa9UGuzBE+ka7HfZdk0aYr1+bU39ZYixyYAoO5VQwfp0NZt+5tcJn1FZNHNE
+ Ryma0tRnQ1wesqvB6qLxAdTRye6S1hs9kPPRxc5vpXfffSHr1m0foafLqduzCrvnw5D8GeRDm
+ KoswhjH1uo87fvYBnAgZ1siqkwOLlOpUaXUXoFybkiScEWZk6/Xv2I7HAmLSV/HfFYPj4Z08h
+ GkzzhxfdKLvFy8dQMq2gD9dsu4UzYpmKgmonKAOzsOb5VZs2Wfqo9aSAY3SlawAt9YsUUg+O+
+ WPOt6mGLZ2iknTTT8BYbXGRKD3a0wvZNHRZqe71rg2Zk9cIUuIxe1TY/MuRyI9L+Xa5uYSbC2
+ k2KcbTYrvdHjVMUlLIKGAWPk0KDNbExVJUTjDDaX0I+gnEWbapkiRzaMnkOM=
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Guenter,
+Hi Rob,
 
-Thanks for your feedback!
-Reply below.
+Am 13.08.19 um 19:22 schrieb Rob Herring:
+> On Tue, Aug 13, 2019 at 10:21 AM Stefan Wahren <wahrenst@gmx.net> wrote:
+>> Convert the BCM2835/6/7 SoC bindings to DT schema format using json-sch=
+ema.
+>> All the other Broadcom boards are maintained by Florian Fainelli.
+>>
+>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+>> Acked-by: Eric Anholt <eric@anholt.net>
+>> ---
+>>  .../devicetree/bindings/arm/bcm/bcm2835.yaml       | 46 ++++++++++++++=
++
+>>  .../devicetree/bindings/arm/bcm/brcm,bcm2835.txt   | 67 --------------=
+--------
+>>  2 files changed, 46 insertions(+), 67 deletions(-)
+>>  create mode 100644 Documentation/devicetree/bindings/arm/bcm/bcm2835.y=
+aml
+>>  delete mode 100644 Documentation/devicetree/bindings/arm/bcm/brcm,bcm2=
+835.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml b/D=
+ocumentation/devicetree/bindings/arm/bcm/bcm2835.yaml
+>> new file mode 100644
+>> index 0000000..1a4be26
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml
+>> @@ -0,0 +1,46 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/arm/bcm/bcm2835.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Broadcom BCM2711/BCM2835 Platforms Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - Eric Anholt <eric@anholt.net>
+>> +  - Stefan Wahren <wahrenst@gmx.net>
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    const: '/'
+>> +  compatible:
+>> +    oneOf:
+>> +      - description: BCM2835 based Boards
+>> +        items:
+>> +          - enum:
+>> +              - raspberrypi,model-a
+>> +              - raspberrypi,model-a-plus
+>> +              - raspberrypi,model-b
+>> +              - raspberrypi,model-b-i2c0  # Raspberry Pi Model B (no P=
+5)
+>> +              - raspberrypi,model-b-rev2
+>> +              - raspberrypi,model-b-plus
+>> +              - raspberrypi,compute-module
+>> +              - raspberrypi,model-zero
+>> +              - raspberrypi,model-zero-w
+>> +          - const: brcm,bcm2835
+>> +
+>> +      - description: BCM2836 based Boards
+>> +        items:
+>> +          - enum:
+>> +              - raspberrypi,2-model-b
+> Don't you need brcm,bcm2836 here?
+>
+>> +
+>> +      - description: BCM2837 based Boards
+>> +        items:
+>> +          - enum:
+>> +              - raspberrypi,3-model-a-plus
+>> +              - raspberrypi,3-model-b
+>> +              - raspberrypi,3-model-b-plus
+>> +              - raspberrypi,3-compute-module
+>> +              - raspberrypi,3-compute-module-lite
+> Don't you need brcm,bcm2837 here?
+>
+> Please run 'dtbs_check' and make sure there aren't warnings (in the root=
+ node).
 
+thanks, after addressing your comments the root node doesn't have
+warnings anymore.
 
-On 08/13/2019 03:24 PM, Guenter Roeck wrote:
-> Sorry, I don't understand. Why exactly can't you replace of_property_read_u32_array()
-> with device_property_read_u32_array() and use fwnode_create_software_node()
-> in the calling code to set the properties ?
+Beside that there a lot of other warnings:
 
-Thanks for this hint.
+=C2=A0 DTC=C2=A0=C2=A0=C2=A0=C2=A0 arch/arm/boot/dts/bcm2711-rpi-4-b.dt.ya=
+ml
+=C2=A0 CHECK=C2=A0=C2=A0 arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+arm-pmu: compatible: ['arm,cortex-a72-pmu', 'arm,armv8-pmuv3'] is too long
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+arm-pmu: compatible: Additional items are not allowed ('arm,armv8-pmuv3'
+was unexpected)
 
-Turns out wcove is the only user of fwnode_create_software_node(), and intel_cht_int33fe is the only other driver to contain the string "software_node". Please bear with us if we didn't know about this handy trick yet. And handy it is!
+I think the schema is a little bit too strict by prohibit a fallback
+compatible.
 
-device_property_read_*() is also really helpful to know about, as it covers both the DT case, as well as other firmware interfaces - thanks for the hint. Is there any reason to ever use of_property_read_*() anymore?
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+serial@7e201800: Additional properties are not allowed
+('arm,primecell-periphid' was unexpected)
 
-I've applied your suggested changes, and will send another patch round soon (I want to try one last thing). Please let me/us know what you think once it's on the list.
+In the old txt version this was an allowed property.
 
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+firmware: $nodename:0: 'firmware' does not match
+'^(bus|soc|axi|ahb|apb)(@[0-9a-f]+)?$'
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+firmware: '#address-cells' is a required property
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+firmware: '#size-cells' is a required property
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+firmware: 'ranges' is a required property
 
-Max
+I suggest to fix this by removing the "simple-bus".
+
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+serial@7e201a00: Additional properties are not allowed
+('arm,primecell-periphid' was unexpected)
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+gpio@7e200000: 'pinctrl-0' is a dependency of 'pinctrl-names'
+
+This could be fixed by removing pinctrl-names.
+
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+serial@7e201600: Additional properties are not allowed
+('arm,primecell-periphid' was unexpected)
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+gic400@40041000: $nodename:0: 'gic400@40041000' does not match
+'^interrupt-controller(@[0-9a-f,]+)*$'
+
+I will rename gic400 to interrupt-controller.
+
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+serial@7e201400: Additional properties are not allowed
+('arm,primecell-periphid' was unexpected)
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+serial@7e201000: compatible: ['brcm,bcm2835-pl011', 'arm,pl011',
+'arm,primecell'] is not valid under any of the given schemas
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+serial@7e201000: Additional properties are not allowed ('bluetooth',
+'arm,primecell-periphid' were unexpected)
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+sd_io_1v8_reg: states:0: [1800000, 1, 3300000, 0] is too long
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+sd_io_1v8_reg: states:0: Additional items are not allowed (3300000, 0
+were unexpected)
+
+No idea what is wrong here
+
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml: clocks:
+#size-cells:0:0: 0 is not one of [1, 2]
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml: clocks:
+$nodename:0: 'clocks' does not match '^(bus|soc|axi|ahb|apb)(@[0-9a-f]+)?$=
+'
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml: clocks:
+clock@3:reg:0: [3] is too short
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml: clocks:
+clock@4:reg:0: [4] is too short
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml: clocks:
+'ranges' is a required property
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+clock@3: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
+/home/stefan/torvalds/arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml:
+clock@4: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
+
+This could be fixed by avoiding a simple-bus for the fixed clocks.
+
+Stefan
+
+>
+> Rob
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
