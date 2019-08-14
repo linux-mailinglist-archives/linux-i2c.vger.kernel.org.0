@@ -2,83 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C3B8D14B
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 12:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249F88D219
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2019 13:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726931AbfHNKso (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Aug 2019 06:48:44 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:44110 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726126AbfHNKso (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Aug 2019 06:48:44 -0400
-Received: by mail-qk1-f194.google.com with SMTP id d79so82010405qke.11;
-        Wed, 14 Aug 2019 03:48:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6Pd2kynJ3XCWkX4RKcVEYfgPLi/9H/DDd0NVl7yQPeo=;
-        b=b3WfU4JrlERMYKiLFbBextRd7Yf69VVTW6nuiE21/6RvqXYKge8poIU+J8JMwdJiZH
-         pzUPX8ALt7pm0DOucJNDLl4QMghRb0/j4O8FtrWS3vNMctxx9I3OZCkpQNEohrg1WS1h
-         5TdReU4oZMhBV92RSRM7DwElUHfP/dQPL/ajWUMIogpyCMeyIJNrII8cLsiX1j9gdbsS
-         4VVkGJfwKfCCm1Ggi1kI7IlP4Kkldzk+U/h+Gfh7Jm8galthdPkquR1oLPw9QjOZ2BqT
-         Ryrw6u3uIbgPhV+CElyw08M/Isw7bGI8rznYdLlN1j4GVsWmQe3F+8qcUlc7PQzC418l
-         3WMA==
-X-Gm-Message-State: APjAAAWq0ebSqKDmFCdj0GJN40JJAkqmONMUNQzD76dwn0L5TEHp5zU8
-        5sGJLDfPaXhRDLe6ZF6tKMKV6zwixU7SEbSfFDs=
-X-Google-Smtp-Source: APXvYqzJchKTdX84186eS/GRemJU2ycIuCn2KmHcwgWMevAGnRcm51YC1Y0PGo9zYEARmcpYhVr0785iqWnXPMYbu7s=
-X-Received: by 2002:a37:4ac3:: with SMTP id x186mr36177300qka.138.1565779720761;
- Wed, 14 Aug 2019 03:48:40 -0700 (PDT)
+        id S1727039AbfHNL01 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Aug 2019 07:26:27 -0400
+Received: from sauhun.de ([88.99.104.3]:47714 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725800AbfHNL01 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 14 Aug 2019 07:26:27 -0400
+Received: from localhost (p54B33326.dip0.t-ipconnect.de [84.179.51.38])
+        by pokefinder.org (Postfix) with ESMTPSA id 4E02E2C311C;
+        Wed, 14 Aug 2019 13:26:25 +0200 (CEST)
+Date:   Wed, 14 Aug 2019 13:26:24 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Ray Jui <ray.jui@broadcom.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+        "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
+        <krzysztof.adamski@nokia.com>
+Subject: Re: Please check your unreg_slave() callbacks!
+Message-ID: <20190814112624.GA9343@ninjato>
+References: <20190809110305.GA1143@ninjato>
+ <20190812110301.GD30120@smile.fi.intel.com>
+ <20190812143842.GA5804@kunai>
+ <20190812154949.GO30120@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20190809162956.488941-1-arnd@arndb.de> <20190809163334.489360-1-arnd@arndb.de>
- <CAA9_cmdDbBm0ookyqGJMcyLVFHkYHuR3mEeawQKS2UqYJoWWaQ@mail.gmail.com>
- <20190812094456.GI10598@jirafa.cyrius.com> <CACRpkdao8LF8g5qi_h+9BT9cHwmB4OadabkdGfP0sEFeLbmiLw@mail.gmail.com>
-In-Reply-To: <CACRpkdao8LF8g5qi_h+9BT9cHwmB4OadabkdGfP0sEFeLbmiLw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 14 Aug 2019 12:48:23 +0200
-Message-ID: <CAK8P3a3Jtc-hgP+st=oDUF2hWkLK7CCM461YSA2ks3dqcv-W7g@mail.gmail.com>
-Subject: Re: [PATCH 1/7] [RFC] ARM: remove Intel iop33x and iop13xx support
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Martin Michlmayr <tbm@cyrius.com>,
-        Dan Williams <dan.j.williams@intel.com>, soc@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dmaengine@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Peter Teichmann <lists@peter-teichmann.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="T4sUOijqQbZv57TR"
+Content-Disposition: inline
+In-Reply-To: <20190812154949.GO30120@smile.fi.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 10:36 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Mon, Aug 12, 2019 at 11:45 AM Martin Michlmayr <tbm@cyrius.com> wrote:
->
-> > As Arnd points out, Debian used to have support for various iop32x
-> > devices.  While Debian hasn't supported iop32x in a number of years,
-> > these devices are still usable and in use (RMK being a prime example).
->
-> I suppose it could be a good idea to add support for iop32x to
-> OpenWrt and/or OpenEmbedded, both of which support some
-> pretty constrained systems. I am personally using these
-> distributions to support elder ARM hardware these days.
 
-OpenWRT also had support in the past and dropped it around the
-same time as Debian. The way I understand it, a couple of platforms
-including iop32x were moved out of the main openwrt source tree
-into https://github.com/openwrt/targets/ because there was little
-interest in keeping them running.
+--T4sUOijqQbZv57TR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The idea was that any remaining users could add that feed to get
-minimal support, but I'm not sure if would still work. In particular,
-iop33x appears to be based on linux-3.3 plus three patches that
-are no longer needed in mainline. Building a mainline kernel without
-those patches may or may not work.
+Hi Andy,
 
-        Arnd
+> > > I'm wondering if synchronize_irq() is enough. The free_irq() theoreti=
+cally is
+> > > the best option, though I dunno which one suits in which cases better.
+> >=20
+> > In which scenario do you think synchronize_irq() is not enough?
+>=20
+> I think if the driver is using tasklets this is not enough. However, I mi=
+ght
+> miss the context in i2c case.
+
+Do you mean 'threaded irqs' here? If so, synchronize_irq() should be
+safe because synchronize_hardirq() is the function for not waiting for
+threaded handlers.
+
+If you mean something else, currently no I2C bus master driver is using
+a separate tasklet, so I'd think synchronize_irq() is a sufficient
+choice?
+
+But still open for criticism. I want the best solution!
+
+Kind regards,
+
+   Wolfram
+
+
+--T4sUOijqQbZv57TR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1T79wACgkQFA3kzBSg
+Kba6jg//f2Ikqjw5P82bJWUQXcFNJmPT1jRKQGNwh1OgIG2V409JLG0Q1+p4aaTH
+SoOpZU9Zbc15Axn9y7knuCOLvFpJ6LNszOpqM7orS2uRkM/B5L2/Za29W8LKzi31
+cs+qNlQTjrjBCm7axvcDImhp8Je8HIIrNCrjAlX161vRGdkZHcVVFnmHLVEocVBe
+2cR7AM8RmB0ARMcTfwwKZHll+xUDA9OH8NlcVWh2EDSiNTRD7qOTqI6ONX3FnVgk
+eyTMuTEmnmX5dmters1tU/mxrnzC8Is4l6lJI/G8xBQkjfCPNkcw7wG0WwN2iaRM
+ErCpnGhQmnROXqapTTaqbAQ0QqwIDvHu+pGK0QI+1RSqDSS57AwXE4Aulq4Iq7V/
+opKuGmBLJU152v82LzfIfIsg5DS+pdTEY6BdS5YGXXuJUjAkkJ0lJRqmoEAoNrd+
+Cs39Bd2MtH1zJq1/GYrppT2AX38bkjH7TvVxw3NI/j+NGZBinzeYEio15dXhlPQR
+rd5aP7ysPTxQDOV0pwzFWyFVjhLD/lHWv7OWB9nqVNulrK6NkCgOc8zShloQEtFi
+V3vznq+3sC0T5MT+PKcVO2C7NWqxKOL0MN9YJGR+2DZUzNobhXHTyMneN5RpVCyZ
+umgc5GI5M4xcU35JxmP635xLZZIhSiXbvSt95NKFL0wIV6GjwtQ=
+=tUhP
+-----END PGP SIGNATURE-----
+
+--T4sUOijqQbZv57TR--
