@@ -2,18 +2,18 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C518EC1D
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2019 14:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF9A8EC22
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2019 14:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731194AbfHOM6K (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Aug 2019 08:58:10 -0400
-Received: from enpas.org ([46.38.239.100]:60066 "EHLO mail.enpas.org"
+        id S1731989AbfHOM6M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Aug 2019 08:58:12 -0400
+Received: from enpas.org ([46.38.239.100]:60076 "EHLO mail.enpas.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730124AbfHOM6K (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 15 Aug 2019 08:58:10 -0400
+        id S1730981AbfHOM6L (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 15 Aug 2019 08:58:11 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id B3B0F100172;
-        Thu, 15 Aug 2019 12:58:07 +0000 (UTC)
+        by mail.enpas.org (Postfix) with ESMTPSA id 16FC71006F0;
+        Thu, 15 Aug 2019 12:58:08 +0000 (UTC)
 From:   Max Staudt <max@enpas.org>
 To:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -21,9 +21,9 @@ To:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org,
         glaubitz@physik.fu-berlin.de, Max Staudt <max@enpas.org>
-Subject: [PATCH v3 2/3] hwmon/ltc2990: Generalise DT to fwnode support
-Date:   Thu, 15 Aug 2019 14:58:01 +0200
-Message-Id: <20190815125802.16500-2-max@enpas.org>
+Subject: [PATCH v3 3/3] i2c/busses/i2c-icy: Add LTC2990 present on 2019 board revision
+Date:   Thu, 15 Aug 2019 14:58:02 +0200
+Message-Id: <20190815125802.16500-3-max@enpas.org>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20190815125802.16500-1-max@enpas.org>
 References: <20190815125802.16500-1-max@enpas.org>
@@ -32,43 +32,133 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-ltc2990 will now use device_property_read_u32_array() instead of
-of_property_read_u32_array() - allowing the use of software nodes
-via fwnode_create_software_node().
+Since the 2019 a1k.org community re-print of these PCBs sports an
+LTC2990 hwmon chip as an example use case, let this driver autoprobe
+for that as well. If it is present, modprobing ltc2990 is sufficient.
 
-This allows code using i2c_new_device() to specify a default
-measurement mode for the LTC2990.
+The property_entry enables the three additional inputs available on
+this particular board:
+
+  in1 will be the voltage of the 5V rail, divided by 2.
+  in2 will be the voltage of the 12V rail, divided by 4.
+  temp3 will be measured using a PCB loop next the chip.
+
+v3: Merged with initial LTC2990 support on ICY.
+    Moved defaults from platform_data to swnode.
+    Added note to Kconfig.
 
 Signed-off-by: Max Staudt <max@enpas.org>
 ---
- drivers/hwmon/ltc2990.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/Kconfig   |  3 +++
+ drivers/i2c/busses/i2c-icy.c | 56 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 59 insertions(+)
 
-diff --git a/drivers/hwmon/ltc2990.c b/drivers/hwmon/ltc2990.c
-index f9431ad43..e06619ac9 100644
---- a/drivers/hwmon/ltc2990.c
-+++ b/drivers/hwmon/ltc2990.c
-@@ -206,7 +206,6 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
- 	int ret;
- 	struct device *hwmon_dev;
- 	struct ltc2990_data *data;
--	struct device_node *of_node = i2c->dev.of_node;
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 9e57e1101..a311d07f3 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -1311,6 +1311,9 @@ config I2C_ICY
+ 	  This support is also available as a module.  If so, the module
+ 	  will be called i2c-icy.
  
- 	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_SMBUS_BYTE_DATA |
- 				     I2C_FUNC_SMBUS_WORD_DATA))
-@@ -218,9 +217,10 @@ static int ltc2990_i2c_probe(struct i2c_client *i2c,
++	  If you have a 2019 edition board with an LTC2990 sensor at address
++	  0x4c, loading the module 'ltc2990' is sufficient to enable it.
++
+ config I2C_MLXCPLD
+ 	tristate "Mellanox I2C driver"
+ 	depends on X86_64
+diff --git a/drivers/i2c/busses/i2c-icy.c b/drivers/i2c/busses/i2c-icy.c
+index edac515da..c43cd170f 100644
+--- a/drivers/i2c/busses/i2c-icy.c
++++ b/drivers/i2c/busses/i2c-icy.c
+@@ -54,6 +54,8 @@ struct icy_i2c {
  
- 	data->i2c = i2c;
+ 	void __iomem *reg_s0;
+ 	void __iomem *reg_s1;
++	struct fwnode_handle *ltc2990_fwnode;
++	struct i2c_client *ltc2990_client;
+ };
  
--	if (of_node) {
--		ret = of_property_read_u32_array(of_node, "lltc,meas-mode",
--						 data->mode, 2);
-+	if (i2c->dev.of_node || i2c->dev.fwnode) {
-+		ret = device_property_read_u32_array(&i2c->dev,
-+						     "lltc,meas-mode",
-+						     data->mode, 2);
- 		if (ret < 0)
- 			return ret;
+ 
+@@ -100,11 +102,33 @@ static void icy_pcf_waitforpin(void *data)
+ /*
+  * Main i2c-icy part
+  */
++static unsigned short const icy_ltc2990_addresses[] = {0x4c, I2C_CLIENT_END};
++
++/*
++ * Additional sensors exposed once this property is applied:
++ *
++ * in1 will be the voltage of the 5V rail, divided by 2.
++ * in2 will be the voltage of the 12V rail, divided by 4.
++ * temp3 will be measured using a PCB loop next the chip.
++ */
++static const u32 icy_ltc2990_meas_mode[] = {0, 3};
++
++static const struct property_entry icy_ltc2990_props[] = {
++	PROPERTY_ENTRY_U32_ARRAY("lltc,meas-mode", icy_ltc2990_meas_mode),
++	{ }
++};
++
++
+ static int icy_probe(struct zorro_dev *z,
+ 			 const struct zorro_device_id *ent)
+ {
+ 	struct icy_i2c *i2c;
+ 	struct i2c_algo_pcf_data *algo_data;
++	struct fwnode_handle *new_fwnode;
++	struct i2c_board_info ltc2990_info = {
++		.type		= "ltc2990",
++		.addr		= 0x4c,
++	};
+ 
+ 
+ 	i2c = devm_kzalloc(&z->dev, sizeof(*i2c), GFP_KERNEL);
+@@ -147,6 +171,35 @@ static int icy_probe(struct zorro_dev *z,
+ 	dev_info(&z->dev, "ICY I2C controller at %pa, IRQ not implemented\n",
+ 		 &z->resource.start);
+ 
++	/*
++	 * The 2019 a1k.org PCBs have an LTC2990 at 0x4c, so start
++	 * it automatically once ltc2990 is modprobed.
++	 *
++	 * in0 is the voltage of the internal 5V power supply.
++	 * temp1 is the temperature inside the chip.
++	 *
++	 * See property_entry above for in1, in2, temp3.
++	 */
++	new_fwnode = fwnode_create_software_node(icy_ltc2990_props, NULL);
++	if (IS_ERR(new_fwnode))
++		dev_info(&z->dev, "Failed to create fwnode for LTC2990, error: %ld\n",
++			 PTR_ERR(new_fwnode));
++	else {
++		/*
++		 * Store the fwnode so we can destroy it on .remove().
++		 * Only store it on success, as fwnode_remove_software_node()
++		 * is NULL safe, but not PTR_ERR safe.
++		 */
++		i2c->ltc2990_fwnode = new_fwnode;
++		ltc2990_info.fwnode = new_fwnode;
++
++		i2c->ltc2990_client =
++			i2c_new_probed_device(&i2c->adapter,
++					      &ltc2990_info,
++					      icy_ltc2990_addresses,
++					      NULL);
++	}
++
+ 	return 0;
+ }
+ 
+@@ -154,6 +207,9 @@ static void icy_remove(struct zorro_dev *z)
+ {
+ 	struct icy_i2c *i2c = dev_get_drvdata(&z->dev);
+ 
++	i2c_unregister_device(i2c->ltc2990_client);
++	fwnode_remove_software_node(i2c->ltc2990_fwnode);
++
+ 	i2c_del_adapter(&i2c->adapter);
+ }
  
 -- 
 2.11.0
