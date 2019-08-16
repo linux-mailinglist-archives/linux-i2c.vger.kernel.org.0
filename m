@@ -2,95 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 184BD8F726
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2019 00:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB138FB87
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2019 08:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731946AbfHOWnp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Aug 2019 18:43:45 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44430 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731244AbfHOWno (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Aug 2019 18:43:44 -0400
-Received: by mail-pf1-f193.google.com with SMTP id c81so2037457pfc.11;
-        Thu, 15 Aug 2019 15:43:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jS6ShQKayPnRfpjr7j4ASXzzmaziPz8YNcXH2Dd4cGI=;
-        b=qCJImpwQOUspMCTLKbwvXVRgGObb7V6OYqGLS8BjgWthmzLXv8hotcavowknGzXCsU
-         Q8skwEIjCthehtVk/rrbB8uvTRNBz9JUxcdnkDVdVZ0M36fO2wT7xX6/Xbx4opoTXA1s
-         1rq8b6rSC8MaKo/AC4WBP2sNJLP/3NHdi09MbtoVVCFZo6CvEq8DaKWs1wTJD3W2bsP1
-         /jxVMaot27wvz+Hv2FTmH2z3QhLuRqqOH1/LpcqVTWuKsnIQV6yY52EY6dli+6xL9HV3
-         oAYfeFgy8vXMr5FMuIilsg+TfMDP7J7qr8ca8uRAYkGXbwcTmGqNa13K4vK2JLWNZ8Bt
-         fcTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jS6ShQKayPnRfpjr7j4ASXzzmaziPz8YNcXH2Dd4cGI=;
-        b=Rr5iOmAgsGEY1wwgaV0zxSzVg+dRhlkvzeIu6LPalg5joIhS00eDzm441MLC/twKy5
-         1f6kqWJmtq0O44WLykvH86oUF3jFbm0wdnMGuPEkG21BzuHPEZ2saeNA+WDIp0lrjCOJ
-         dZv8uwSPFU+uflDZbSSQVrB2n7EiO05siBM6nFS/4xM3GQu/YDbCEt1hSGCBIFsMi0o/
-         h2WmFAFMqmW9KAbsQVZDqVJLFxKlYnbu5wBhUEWH0vo+h7MpZ7M+auhGfV24LrrzlliR
-         JOpMyutyLRkjIh+frA+rjkdHsf0lRYw679XRYPtRscggaWaJuB8n3+XAQpVbDJ9dWkS3
-         nwSA==
-X-Gm-Message-State: APjAAAWtosj8nWt36hFxXNUAf0+nGewwDI1OtgejGpA0TK734FEgX6xl
-        8/37Ed4XjwnRa0RmFA6AwTXcGavd
-X-Google-Smtp-Source: APXvYqy9PwdVKsaODSdLLrFGTDC0/CiqF1mCACd5317pAaqx6ZPgD8PIEXqW90ku1YNHlCgfqc4bZQ==
-X-Received: by 2002:aa7:9e9a:: with SMTP id p26mr7875391pfq.25.1565909023971;
-        Thu, 15 Aug 2019 15:43:43 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 16sm6203783pfc.66.2019.08.15.15.43.42
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Aug 2019 15:43:42 -0700 (PDT)
-Date:   Thu, 15 Aug 2019 15:43:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Max Staudt <max@enpas.org>
-Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-m68k@vger.kernel.org,
-        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
-Subject: Re: [PATCH v3 2/3] hwmon/ltc2990: Generalise DT to fwnode support
-Message-ID: <20190815224341.GA12420@roeck-us.net>
-References: <20190815125802.16500-1-max@enpas.org>
- <20190815125802.16500-2-max@enpas.org>
- <6920f2da-3139-6fc8-b02c-3678cc17912e@enpas.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6920f2da-3139-6fc8-b02c-3678cc17912e@enpas.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        id S1727085AbfHPGz2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Aug 2019 02:55:28 -0400
+Received: from letterbox.kde.org ([46.43.1.242]:53684 "EHLO letterbox.kde.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726976AbfHPGz1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 16 Aug 2019 02:55:27 -0400
+Received: from archbox.localdomain (unknown [123.201.155.129])
+        (Authenticated sender: bshah)
+        by letterbox.kde.org (Postfix) with ESMTPSA id 27E8328ACED;
+        Fri, 16 Aug 2019 07:47:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kde.org; s=users;
+        t=1565938058; bh=WFc0UZ1hs7LdUGdmu8qpw3+FtS1REZ6c7sIEozRjejM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=m4NnzmEd45cZgPnuyqw+E6Xm8fBtuceixldmLQ160P9XhQ1dRsm+MeH3SNozLdrfQ
+         7A5skpytPKRusQXFBhklSnwEI9cGrGbfnmRdKDU32i8PE9JgCuCx27DTqxtNowsrGi
+         wjjVcvLkWG1bGlwO6X8d8so3dwld4unxrHv1sbxjFLw7IppuxLvE7yyRLgnhw3QKMq
+         fJYdX3qv0ewyF3VDfQPIiH8Qf/8cbteZJUN953yNvPARjkKXuUGVRrI+u80WwwL7rX
+         Y9FBHxMYFuH9wa3cjwGf6C5hfNLZq5tMGNRnIzwKqDnJyYmqwnUnyeqt4nFAZeY+5B
+         Q+f3uE7CWblpw==
+From:   Bhushan Shah <bshah@kde.org>
+To:     Icenowy Zheng <icenowy@aosc.io>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>, Wolfram Sang <wsa@the-dreams.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Bhushan Shah <bshah@kde.org>
+Subject: [PATCH v2 0/3] Enable the I2C nodes for Allwinner H6 CPU
+Date:   Fri, 16 Aug 2019 12:17:07 +0530
+Message-Id: <20190816064710.18280-1-bshah@kde.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190811090503.32396-1-bshah@kde.org>
+References: <20190811090503.32396-1-bshah@kde.org>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Aug 16, 2019 at 12:19:42AM +0200, Max Staudt wrote:
-> On 08/15/2019 02:58 PM, Max Staudt wrote:
-> > -	if (of_node) {
-> > -		ret = of_property_read_u32_array(of_node, "lltc,meas-mode",
-> > -						 data->mode, 2);
-> > +	if (i2c->dev.of_node || i2c->dev.fwnode) {
-> 
-> One more idea, would it be better here to do the following?
-> 
-> 	if (device_property_present(i2c->dev, "lltc,meas-mode")) {
-> 		ret = of_property_read_u32_array(of_node, "lltc,meas-mode",
-> 						 data->mode, 2);
-> 	}
-> 
-> I'm happy to prepare a patch if you wish to have this in - just let me know whether it should be on top of the last one, or instead of it.
+This patch series adds device-tree nodes for i2c nodes in the H6 dtsi,
+and enables it for the Pine H64.
 
-That would be semantically different. The property is currently mandatory.
-The above code would make it optional. This might work:
+Changes in v2:
+  - Add the SoC specific compatible string instead of re-using a31 one.
+  - Don't enable the i2c0 node in PineH64 by default
 
-	if (dev_fwnode(&i2c->dev)) {
-		ret = device_property_read_u32_array(...);
-		...
-	}
+Bhushan Shah (3):
+  dt-bindings: i2c: mv64xxx: Add compatible for the H6 i2c node.
+  arm64: allwinner: h6: add I2C nodes
+  arm64: allwinner: h6: add i2c0 node in PineH64
 
-Feel free to send another version of your patch.
+ .../bindings/i2c/marvell,mv64xxx-i2c.yaml     |  3 +
+ .../boot/dts/allwinner/sun50i-h6-pine-h64.dts |  9 +++
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  | 56 ++++++++++++++++++-
+ 3 files changed, 67 insertions(+), 1 deletion(-)
 
-Thanks,
-Guenter
+-- 
+2.17.1
+
