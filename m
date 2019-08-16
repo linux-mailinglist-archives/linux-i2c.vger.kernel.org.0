@@ -2,99 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 185EF90517
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2019 17:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E47790577
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2019 18:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727381AbfHPP6z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Aug 2019 11:58:55 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:59568 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727347AbfHPP6y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Aug 2019 11:58:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=elvBvWVjA5zEKSsmKbJEnexDrHQ4zbh3H23MLrNFngo=; b=tvPwPtQ4nFDYaEWEEzQfKWjwT
-        qpues7whqp46I5Vlpf5mw8wLLXsjKZKhYL3qENDObHr6e/tfvEqxnobSqk7I+o8v6P6iqggBm6bK8
-        +y3guiVg8OfWpHZ8bh58NmAeKwmeX0HupBG5xVopY34VS5LqkUavmbNU6noiQQopZ1a4mq9fGdq6p
-        c5KbXcAx4K1KtIkxoRHLI/wqpZf4RM43n0pGEclxKe0aaadyBCwVAPigha/G0PUIBxsj4OfqNCkkw
-        FxLd0qpy6KdFuAW2HwhGMe+61mqPkgsxj3ISsxS3g1BEReMjus1jWj7xe4EIHYxHqFNmDHQ2jXorL
-        8vxupwB3g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57356)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1hyecj-00034q-B3; Fri, 16 Aug 2019 16:58:41 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1hyecb-00023W-PW; Fri, 16 Aug 2019 16:58:33 +0100
-Date:   Fri, 16 Aug 2019 16:58:33 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Aaro Koskinen <aaro.koskinen@iki.fi>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Martin Michlmayr <tbm@cyrius.com>,
-        Peter Teichmann <lists@peter-teichmann.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        soc@kernel.org, Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>, dmaengine@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 1/7] [RFC] ARM: remove Intel iop33x and iop13xx support
-Message-ID: <20190816155833.GL13294@shell.armlinux.org.uk>
-References: <20190809162956.488941-1-arnd@arndb.de>
- <20190809163334.489360-1-arnd@arndb.de>
- <CAA9_cmdDbBm0ookyqGJMcyLVFHkYHuR3mEeawQKS2UqYJoWWaQ@mail.gmail.com>
- <20190812094456.GI10598@jirafa.cyrius.com>
- <CACRpkdao8LF8g5qi_h+9BT9cHwmB4OadabkdGfP0sEFeLbmiLw@mail.gmail.com>
- <20190816154249.GA30291@darkstar.musicnaut.iki.fi>
+        id S1727357AbfHPQJU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Aug 2019 12:09:20 -0400
+Received: from sauhun.de ([88.99.104.3]:46520 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727448AbfHPQJU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 16 Aug 2019 12:09:20 -0400
+Received: from localhost (p54B33308.dip0.t-ipconnect.de [84.179.51.8])
+        by pokefinder.org (Postfix) with ESMTPSA id 4781D4A14FE;
+        Fri, 16 Aug 2019 18:09:17 +0200 (CEST)
+Date:   Fri, 16 Aug 2019 18:09:16 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-m68k@vger.kernel.org,
+        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
+Subject: Re: [PATCH v3 3/3] i2c/busses/i2c-icy: Add LTC2990 present on 2019
+ board revision
+Message-ID: <20190816160916.GA5858@kunai>
+References: <20190815125802.16500-1-max@enpas.org>
+ <20190815125802.16500-3-max@enpas.org>
+ <20190816115112.GA3507@kunai>
+ <513d49dd-70fc-a226-fdfd-598aadcfec05@enpas.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AhhlLboLdkugWU4S"
 Content-Disposition: inline
-In-Reply-To: <20190816154249.GA30291@darkstar.musicnaut.iki.fi>
+In-Reply-To: <513d49dd-70fc-a226-fdfd-598aadcfec05@enpas.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Aug 16, 2019 at 06:42:49PM +0300, Aaro Koskinen wrote:
-> Hi,
-> 
-> On Wed, Aug 14, 2019 at 10:36:01AM +0200, Linus Walleij wrote:
-> > On Mon, Aug 12, 2019 at 11:45 AM Martin Michlmayr <tbm@cyrius.com> wrote:
-> > > As Arnd points out, Debian used to have support for various iop32x
-> > > devices.  While Debian hasn't supported iop32x in a number of years,
-> > > these devices are still usable and in use (RMK being a prime example).
-> > 
-> > I suppose it could be a good idea to add support for iop32x to
-> > OpenWrt and/or OpenEmbedded, both of which support some
-> > pretty constrained systems.
-> 
-> This platform is not really too constrained... E.g. on N2100 you have
-> 512 MB RAM, SATA disks and gigabit ethernet. Not that different from
-> mvebu that Debian currently (?) supports. Maybe with multiplatform they
-> could support iop32x again.
 
-Probably not.  The kernel has a dividing line between ARMv5 and ARMv6
-where it's not possible to multiplatform across that boundary, so
-you're already needing separate kernel images there.
+--AhhlLboLdkugWU4S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Secondly, armhf distros won't be compatible with ARMv5, and to make
-them compatible will make performance on armhf suffer - you have to
-stop using barriers, exclusive load/store and a few other things.
-You have to rely on the kuser page exported by the kernel (which is
-now optional as it's deemed to be a security issue for ROP attacks)
-for some things that such a userspace requires - such as NPTL support.
 
-Effectively, ARMv5 is an entirely separate userspace distro from armhf.
+> > Braces for both blocks. Did you run checkpatch?
+>=20
+> I did, and it didn't say anything.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+Hmm, strange, does is complain when you use '--strict'?
+
+> Turns out I misremembered the CodingStyle as having a corner case
+> where it doesn't. I'll fix the style - I dislike the above, too ;)
+
+Thanks!
+
+> Yes and no. Now that you mention it - the LTC2990 can be at four
+> addresses (0x4c - 0x4f), and there are jumpers (solder pads) on the
+> PCB to select its address. Shall I add all 4 addresses to the array?
+
+Yes, please.
+
+> It's also possible that there is no LTC2990 at all (because it's hard
+> to solder at home), and that's why we need to probe for it first. I
+> believe i2c_new[_client]_device doesn't do probing, but rather assumes
+> the device to be there. Correct?
+
+Correct. I assumed the sensor is always there. But it is not and can be
+at multiple addresses, so updating the array of addresses is the right
+thing to do(tm).
+
+
+--AhhlLboLdkugWU4S
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1W1SQACgkQFA3kzBSg
+Kbb15Q/9Fxje8eCVKx3e/loxQhqvd9xaHapbEZXDrB6fF77czkPwsNASNvz/Coyl
+Ru5qKJn3AErr8VyUSOXUDDnHDGqqdYzZwQY3uoaV6aN4xza0u29e7PokP7XeA/I6
+zYMK5mIcC7D0Sk+0/biF/Xi3mjpy7pVMeYgOa/xo7Pv8QW0zEITd4u/if2EBzw6n
+q8MCJDwZnqKQicmjdUMaYMl9yDDkEPrCI6HEYGkB0hgffYSwoxpxbeBbT3yhDqZO
+bruA80sIcu3vOa6+kN7jmogcAq8Kg5CUTNWUbINsXMyxqUfJxxKrH4IhrgjjvarY
+1FvmQOihKmkfE2Lp4NMR7tSciWQdRDlgW5gHrQqurr6msCRZ10E9Ylx/ABJ/hOvI
+dJontetvx06hz6JV8nVDLpk7Im6EtT4wU5kzirdpY4un9lgVe4/fm++hwFgHADbO
+ReUC6TBaqe38eVHJh2j1bYCgkMy42iNdwfRv4iDHsxk87diGRiJLIV69qlhxIWeD
+ynGdwgxnBlF110mwyyHwzXwQ8Gi+tW5NVWWOTL4ibfjCUH4KYUU/iT0N4UkgNDfm
+Yy+2u16Fe3GOLc6t15AuWmFFtP/lju6SaY+ngE6rArla1G4Iy/8jMdPEQn1ntTNr
+vtoE4oH4ckD1aEbF39uTzGz6jTUvJPnl5vmgT+fmf1R/trrR/zQ=
+=QAlX
+-----END PGP SIGNATURE-----
+
+--AhhlLboLdkugWU4S--
