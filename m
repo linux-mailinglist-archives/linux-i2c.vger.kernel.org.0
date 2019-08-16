@@ -2,91 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7789A8FC56
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2019 09:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBCE8FCBC
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2019 09:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726649AbfHPHc6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Aug 2019 03:32:58 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:39258 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725945AbfHPHc6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Aug 2019 03:32:58 -0400
-Received: by mail-oi1-f193.google.com with SMTP id 16so4173748oiq.6;
-        Fri, 16 Aug 2019 00:32:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YMjNDFoTyC/WmTTL8SMem1efnk9isGv2HzTBMC3OaDU=;
-        b=VgEFn3Lf4+tJ5bbPjjrpw6dqL3yTQrl85bHpDr4BnfJFmvPHH1/8A40b66xGJkxPDE
-         S1Uhp83gbPsmFtCt9JCb0z3XUKClE8AvH+1Yg3p9VyyG/4xHB/mGdEh17Iewtv0Ewrg3
-         T36SG3Gxn+A1TfIN7kCx8NdLvPueu5UYcVZoa/2ljMrzuUhpx/icpHN45XudXIYfdpuV
-         QHak7GLdjfxcxKE/NlUtOJogTdme57rU3z6JNPArk1LZLUykp91qZUqtpcnjVMTEroN3
-         MPikaGlWY0RAnOnO/Y57QWz5YDVsLoLL1i9KTW7S2IgN9VJCnXikaBWO8bHmxyyWpg2B
-         j2xA==
-X-Gm-Message-State: APjAAAU3pwF3FcHv9yHjBBjVK1SiCiKxN07L1dno2Z9t7rUqb+Duonvn
-        fEwtC7ezYXXYpJacnottsDtT44kuUGoaEo7nx3a63m9N
-X-Google-Smtp-Source: APXvYqzWNfvTWG9fpc413R/pCWadsylPqkNbdupcwfsE0h3lCFrO/2jZVW5KOMPqSw0qJrHen5M2M68ksj0bajITnUg=
-X-Received: by 2002:aca:3bc6:: with SMTP id i189mr3877069oia.153.1565940777213;
- Fri, 16 Aug 2019 00:32:57 -0700 (PDT)
+        id S1726575AbfHPHug (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Aug 2019 03:50:36 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:53013 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725945AbfHPHug (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Aug 2019 03:50:36 -0400
+X-Originating-IP: 86.250.200.211
+Received: from localhost (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 560C0FF803;
+        Fri, 16 Aug 2019 07:50:32 +0000 (UTC)
+Date:   Fri, 16 Aug 2019 09:50:31 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Bhushan Shah <bshah@kde.org>
+Cc:     Icenowy Zheng <icenowy@aosc.io>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>, Wolfram Sang <wsa@the-dreams.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] arm64: allwinner: h6: add I2C nodes
+Message-ID: <20190816075031.zw4bjunn4hfoaq3e@flea>
+References: <20190811090503.32396-1-bshah@kde.org>
+ <20190816064710.18280-1-bshah@kde.org>
+ <20190816064710.18280-3-bshah@kde.org>
 MIME-Version: 1.0
-References: <20190815125802.16500-1-max@enpas.org> <20190815125802.16500-2-max@enpas.org>
- <6920f2da-3139-6fc8-b02c-3678cc17912e@enpas.org> <20190815224341.GA12420@roeck-us.net>
-In-Reply-To: <20190815224341.GA12420@roeck-us.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 16 Aug 2019 09:32:46 +0200
-Message-ID: <CAMuHMdUYpkkmhxwTu7MGm6NiMfYs9SqjLKRPazuSEjRgpRavyg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] hwmon/ltc2990: Generalise DT to fwnode support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Max Staudt <max@enpas.org>, Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ibqavahcu4hffii3"
+Content-Disposition: inline
+In-Reply-To: <20190816064710.18280-3-bshah@kde.org>
+User-Agent: NeoMutt/20180716
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Aug 16, 2019 at 1:50 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> On Fri, Aug 16, 2019 at 12:19:42AM +0200, Max Staudt wrote:
-> > On 08/15/2019 02:58 PM, Max Staudt wrote:
-> > > -   if (of_node) {
-> > > -           ret = of_property_read_u32_array(of_node, "lltc,meas-mode",
-> > > -                                            data->mode, 2);
-> > > +   if (i2c->dev.of_node || i2c->dev.fwnode) {
 
-I was just going to comment on this check...
+--ibqavahcu4hffii3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > One more idea, would it be better here to do the following?
-> >
-> >       if (device_property_present(i2c->dev, "lltc,meas-mode")) {
-> >               ret = of_property_read_u32_array(of_node, "lltc,meas-mode",
-> >                                                data->mode, 2);
-> >       }
-> >
-> > I'm happy to prepare a patch if you wish to have this in - just let me know whether it should be on top of the last one, or instead of it.
+On Fri, Aug 16, 2019 at 12:17:09PM +0530, Bhushan Shah wrote:
+> Add device-tree nodes for i2c0 to i2c2, and also add relevant pinctrl
+> nodes.
 >
-> That would be semantically different. The property is currently mandatory.
-> The above code would make it optional. This might work:
+> Suggested-by: Icenowy Zheng <icenowy@aosc.io>
+> Signed-off-by: Bhushan Shah <bshah@kde.org>
+> ---
+> Changes in v2:
+>   - Add the SoC specific compatible string instead of re-using a31 one.
 >
->         if (dev_fwnode(&i2c->dev)) {
->                 ret = device_property_read_u32_array(...);
->                 ...
->         }
+>  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 56 +++++++++++++++++++-
+>  1 file changed, 55 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+> index bcecca17d61d..a1a329926540 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+> @@ -329,6 +329,21 @@
+>  				function = "hdmi";
+>  			};
+>
+> +			i2c0_pins: i2c0-pins {
+> +				pins = "PD25", "PD26";
+> +				function = "i2c0";
+> +			};
+> +
+> +			i2c1_pins: i2c1-pins {
+> +				pins = "PH5", "PH6";
+> +				function = "i2c1";
+> +			};
+> +
+> +			i2c2_pins: i2c2-pins {
+> +				pins = "PD23", "PD24";
+> +				function = "i2c2";
+> +			};
+> +
+>  			mmc0_pins: mmc0-pins {
+>  				pins = "PF0", "PF1", "PF2", "PF3",
+>  				       "PF4", "PF5";
+> @@ -464,6 +479,45 @@
+>  			status = "disabled";
+>  		};
+>
+> +		i2c0: i2c@5002000 {
+> +			compatible = "allwinner,sun50i-h6-i2c";
 
-Much better, thanks!
+This isn't going to work if you don't patch the driver to add the
+compatible. And this isn't what you described in the binding patch.
 
-Gr{oetje,eeting}s,
+Maxime
 
-                        Geert
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+--ibqavahcu4hffii3
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXVZgRwAKCRDj7w1vZxhR
+xS+HAQCepqHx2ZpfYXULQei3MlCiSsZt/LK4vD5T0th5iQi3YgD/Yh5TJDYYPBYh
+bHb7icMbNnDQjvYijyzCk3IJQmfegAU=
+=b9Qc
+-----END PGP SIGNATURE-----
+
+--ibqavahcu4hffii3--
