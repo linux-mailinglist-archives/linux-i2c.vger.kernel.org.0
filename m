@@ -2,85 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 822C49090B
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2019 21:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F50C90DBA
+	for <lists+linux-i2c@lfdr.de>; Sat, 17 Aug 2019 09:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727656AbfHPT4m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Aug 2019 15:56:42 -0400
-Received: from sauhun.de ([88.99.104.3]:48456 "EHLO pokefinder.org"
+        id S1725965AbfHQHc3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 17 Aug 2019 03:32:29 -0400
+Received: from mout.gmx.net ([212.227.17.22]:46163 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727542AbfHPT4m (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 16 Aug 2019 15:56:42 -0400
-Received: from localhost (p54B33308.dip0.t-ipconnect.de [84.179.51.8])
-        by pokefinder.org (Postfix) with ESMTPSA id 8437D4A14FE;
-        Fri, 16 Aug 2019 21:56:40 +0200 (CEST)
-Date:   Fri, 16 Aug 2019 21:56:40 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 1/3] include: linux: i2c: more helpers for declaring i2c
- drivers
-Message-ID: <20190816195640.GD6886@kunai>
-References: <1560796779-17117-1-git-send-email-info@metux.net>
- <20190621211744.GC950@kunai>
- <c669a041-f025-693a-492a-80ce888db737@metux.net>
- <20190624084427.GA1014@kunai>
- <205d0ef7-d487-006b-d104-88958f40e197@metux.net>
+        id S1725911AbfHQHc3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 17 Aug 2019 03:32:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1566027124;
+        bh=79c1Qiwd78Z6gHB2H4pQRBwu61ap1LwxLc8fK5Abisk=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=NZl8Tmdp/ezt6FiEYl2PBlTbYdZKwj9RcFtZjGSJn/7uw667z71uHz7QcequF4+fg
+         WGhcZm7hUboTt642tQXdfefE+FcBrxopY0c1NE2qS72VQmFbrZVfwpeRTsV9rUpjGD
+         s7/Vb+TAsR2zn9POmYQAJM76E9Fx1u3pRbncRuI8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.1.162] ([37.4.249.106]) by mail.gmx.com (mrgmx102
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 0LjdS8-1ia8p221u4-00baXc; Sat, 17
+ Aug 2019 09:32:04 +0200
+Subject: Re: [PATCH V2 08/13] i2c: bcm2835: Avoid clk stretch quirk for
+ BCM2711
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Eric Anholt <eric@anholt.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+References: <1565713248-4906-1-git-send-email-wahrenst@gmx.net>
+ <1565713248-4906-9-git-send-email-wahrenst@gmx.net>
+ <20190814193628.GA9756@kunai>
+From:   Stefan Wahren <wahrenst@gmx.net>
+Message-ID: <bb924d04-b4a9-56c7-c7d5-31f3cc8c1da3@gmx.net>
+Date:   Sat, 17 Aug 2019 09:32:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eheScQNz3K90DVRs"
-Content-Disposition: inline
-In-Reply-To: <205d0ef7-d487-006b-d104-88958f40e197@metux.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190814193628.GA9756@kunai>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:MYYp/EY0zAmFLDdjas94knWfcnTU3EQgK4637yghfQalxZkOem6
+ iQS5oBLTT6i9RCppasf/mYECnDySmMTKWswDhTOYC1fmOtzWdfYinEPNmiJAWbRfbvb6GwH
+ 8A2Go6sXdtfVoU2Lmva1IJUonQEbpvHKigI31xDLH8u8VlkBf2EuBJ0lLJEWNeFGr49a7fl
+ 8WVeJB6VIy6hDuz2Dg/qA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:tcerPsRZ5/o=:H7AqX+83ICOeyvNpx0DDvO
+ gIXuDAsdC+0xkeAV4O5gU8BPMijJ9NHYuy6AYNKT5R+LPSpLkxV82miwOU2+CCLImFrtkx6I+
+ 4VagaT3zGtzPb75vik0DbP+bnqFfdmLYa4gj/c4btgF1+KpC5L+7kAGo2t/HBd+zT8G8CjrcQ
+ 2rQ447Kgyzb4GdIy8ydKK+5sDZTMyXkOBvsFhAoNLY1FIbsD8QS+uU/f+YG3iZf6wqQZlUL+F
+ Adi84cufhubHDGv4CW8IaWO7DaVd29C5mtgOc9y3dJpYhY+CWI0kBn7R10B/04ZIQ7D6iS9z6
+ RiVYbeJ1WzkGSpqimOuFTlrbKg+QngBNn4qy55N6iN4HC3F+WEEHetuiAP7aKegIvmQL15Ium
+ GIR0ynngQXtME5aph1DYH6Lu2kD0IGeWuwp7f/qGWWWqxaQyfnvf1ieDdteaZzYpYjVtx/fYW
+ mcZJebB4kSRCrWA5OPWjC5FxVInPN6EOghHEnkQguB14oSwfXZJ/oyIZH8uN4a71hXFW01t53
+ 41plg9YxbtmdXhboo0Jy64RTH3e/Dy9EOv34vhN0WYQwxnXiTk4h7XScz3ylsD59NO3FLsweM
+ D8Rpg4sBGlC4yUsMtCrOWO+g+rsg1xfSZKXw0Q/ARowig6WAFVNrM6das//t3BmnKynshtsqs
+ tUrO3kFGIsQxjP5BxjS//1z8uYmmNw21yp4PDRftWULjaMjKDLGYaus5QtORmCoy8krsS9ifS
+ nl06pyAEP1t2bn4P1CIuq7OSuFchGVnM9eK7PvcgGJUfmPmrKRmKiQZDFv4qrbmNC2ctti0wP
+ Cwiq/APoZ2wKeZZv/lwcISEjeygwzGByPv0d5hdPO9QFpE7FerpI+vtjMc7ADyLq3YX3VZRyn
+ PHWYu6ieY7ujJ67EZfLhoqR6wQemZTz2FMJnhpBQzMVw+MKP4FFGf+WsSpfxpkCRRIBVNE0Wf
+ zZQK0D2sPYxHIq534H+O1n8uv/RUQwqWmWK5wmgispD1iOs5p66Gy5reaJm0y0eCP0x69YiwQ
+ prfA1tVHDXLYQYSbrW63NTc9fB0x92Jes5AsBVGuWjsQVxDk8dUKMf2kZYdfQAHLaKO4O0Bcf
+ XrhxJsL4ZWA/L352tM0hjQ26Ojp4wCVA8tMfC0FKjeEfpO8snfYTl5QL6okoZgjiJpvBOrZbo
+ a0Yao=
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram,
 
---eheScQNz3K90DVRs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Am 14.08.19 um 21:36 schrieb Wolfram Sang:
+>>  static const struct of_device_id bcm2835_i2c_of_match[] = {
+>> -	{ .compatible = "brcm,bcm2835-i2c" },
+>> +	{ .compatible = "brcm,bcm2711-i2c", .data = (void *)NO_STRETCH_BUG },
+>> +	{ .compatible = "brcm,bcm2835-i2c", .data = (void *)STRETCH_BUG },
+> What about simply putting a pointer to the quirks data (or NULL) as
+> match_data? Then the code should be:
+>
+> adap->quirks = (cast)of_device_get_match_data(&pdev->dev);
 
+quirks = (const struct i2c_adapter_quirks *)of_device_get_match_data(dev);
 
-(Found this mail in the offline draft folder of another laptop)
+would hit the line limit. Do you insists on the cast, because it's
+actually not required?
 
-> So, then the current approach of using subsys_initcall() can't be
-> changed easily, right now. But planned for the future (or at least
-> not introducing new caes).
-
-Yes.
-
-> But: how does that conflict w/ just moving the existing redundant
-> pieces into a helper macro ? The logic stays the same - just using
-> a shorter notation. (assuming my patch isn't buggy ;-)).
-
-It is not conflicting. My thinking is that such helpers, in general,
-scale better and are less error prone. But there is nothing to scale
-here.
-
-
---eheScQNz3K90DVRs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1XCngACgkQFA3kzBSg
-KbYWTRAAjHFuFmxp6ayjp/MNRyXYjcRadDc3TrI200+v/8QzljjpaQ4oBTmXoKPU
-2nqyXXulIQZU9Bfy4IxgNHkbv9X3Au5mC3rJP+Mp/77JfFyk5EDFl2sPWlg2gt2g
-kvgjFTv70bOso6Md3V88f0XppSFDj0rXJ33dMwTaDIEVVGBCE22o6ei0AQZfs5qb
-PS4UtuLBxD3nahjziH6GIbY69CxCOPgXcLY/WVT7FjhyQu+RmZzRVJ9MCJRyE7Nb
-2at41jzk1fMpsAligpgkVGRDLE2yvGgoDwiCWO96SqUsM/8ARmXk8PmHCUsn123G
-MJbtl9D96AkGSKTe3JRXuPkcztAzENWF8en+AT3OfMwuB5aXSv41UTCTEy61SWWV
-eQlCtX5h89NIreEmwU+n0tVpQG5Q0C3ds5toCHyuaXvSHWfucmMVbY/pDyezBuV+
-ON8qCGii7VJpsafs1ggn59bxKJJRRkztN5SVahqUAafIGNGNLZEQAl1S+fmVuEZn
-iadGjmQFnv89hDpniObnVvfV4hPYEaNOfrIDwydGpL4mB/wKLp/xLE+Oz3Qd0Okg
-d4JHRahfTM7Dq2YkWkd25jTkTe4UugGM1kxxOWIwjyYEM7mULa87npP2ZRCboIiv
-CEc8dk3c3Qke9oEtYsQ7SoXuLjtURRSsGgSr+rgQrk0AaMsXNVk=
-=QklQ
------END PGP SIGNATURE-----
-
---eheScQNz3K90DVRs--
