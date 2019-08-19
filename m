@@ -2,128 +2,297 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD74C9222B
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2019 13:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741099233F
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2019 14:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727586AbfHSLW7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Aug 2019 07:22:59 -0400
-Received: from enpas.org ([46.38.239.100]:37704 "EHLO mail.enpas.org"
+        id S1727525AbfHSMQd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Aug 2019 08:16:33 -0400
+Received: from enpas.org ([46.38.239.100]:37780 "EHLO mail.enpas.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727498AbfHSLW6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 19 Aug 2019 07:22:58 -0400
+        id S1726477AbfHSMQc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 19 Aug 2019 08:16:32 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 16C68100078;
-        Mon, 19 Aug 2019 11:22:55 +0000 (UTC)
-Subject: Re: [PATCH v3 3/3] i2c/busses/i2c-icy: Add LTC2990 present on 2019
- board revision
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        by mail.enpas.org (Postfix) with ESMTPSA id 08748100080;
+        Mon, 19 Aug 2019 12:16:27 +0000 (UTC)
+From:   Max Staudt <max@enpas.org>
+To:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-m68k@vger.kernel.org,
-        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
-References: <20190815125802.16500-1-max@enpas.org>
- <20190815125802.16500-3-max@enpas.org> <20190816115112.GA3507@kunai>
- <513d49dd-70fc-a226-fdfd-598aadcfec05@enpas.org>
- <20190816160916.GA5858@kunai>
-From:   Max Staudt <max@enpas.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
- 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
- urZIw0nz8zec+73Bv/qF4GHHftLYfA==
-Message-ID: <c7997f14-dd3e-11c6-4ab8-8e7fbf4e926a@enpas.org>
-Date:   Mon, 19 Aug 2019 13:22:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <20190816160916.GA5858@kunai>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org,
+        glaubitz@physik.fu-berlin.de, Max Staudt <max@enpas.org>
+Subject: [PATCH v5 1/3] i2c/busses: Add i2c-icy for I2C on m68k/Amiga
+Date:   Mon, 19 Aug 2019 14:16:16 +0200
+Message-Id: <20190819121618.16557-1-max@enpas.org>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 08/16/2019 06:09 PM, Wolfram Sang wrote:
-> 
->>> Braces for both blocks. Did you run checkpatch?
->>
->> I did, and it didn't say anything.
-> 
-> Hmm, strange, does is complain when you use '--strict'?
+This is the i2c-icy driver for the ICY board for Amiga computers.
+It connects a PCF8584 I2C controller to the Zorro bus, providing I2C
+connectivity. The original documentation can be found on Aminet:
 
-Yes, --strict catches it. Thanks, I didn't know about that parameter.
+https://aminet.net/package/docs/hard/icy
 
-I'll send a v5 with all requested fixes.
+IRQ support is currently not implemented, as i2c-algo-pcf is built for
+the ISA bus and a straight implementation of the same stack locks up a
+Zorro machine.
 
+v5: usleep_range() instead of udelay()
+    Style
 
-Max
+v3: Fixed %pa format string
+    Dropped adapter class.
+    Clarified licence.
+    Removed clock parameter.
+
+v2: Matched function names to callbacks from i2c-algo-pcf
+    Used z_readb()/z_writeb()
+    Removed BROKEN_ON_SMP in Kconfig
+    Moved LTC2990 to a separate commit
+
+Signed-off-by: Max Staudt <max@enpas.org>
+---
+ MAINTAINERS                  |   6 ++
+ drivers/i2c/busses/Kconfig   |  11 +++
+ drivers/i2c/busses/Makefile  |   1 +
+ drivers/i2c/busses/i2c-icy.c | 174 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 192 insertions(+)
+ create mode 100644 drivers/i2c/busses/i2c-icy.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1be025959..70336c083 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7705,6 +7705,12 @@ S:	Maintained
+ F:	drivers/mfd/lpc_ich.c
+ F:	drivers/gpio/gpio-ich.c
+ 
++ICY I2C DRIVER
++M:	Max Staudt <max@enpas.org>
++L:	linux-i2c@vger.kernel.org
++S:	Maintained
++F:	drivers/i2c/busses/i2c-icy.c
++
+ IDE SUBSYSTEM
+ M:	"David S. Miller" <davem@davemloft.net>
+ L:	linux-ide@vger.kernel.org
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index ee5dfb5ae..9e57e1101 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -1300,6 +1300,17 @@ config I2C_ELEKTOR
+ 	  This support is also available as a module.  If so, the module
+ 	  will be called i2c-elektor.
+ 
++config I2C_ICY
++	tristate "ICY Zorro card"
++	depends on ZORRO
++	select I2C_ALGOPCF
++	help
++	  This supports the PCF8584 Zorro bus I2C adapter, known as ICY.
++	  Say Y if you own such an adapter.
++
++	  This support is also available as a module.  If so, the module
++	  will be called i2c-icy.
++
+ config I2C_MLXCPLD
+ 	tristate "Mellanox I2C driver"
+ 	depends on X86_64
+diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+index a3245231b..d0e1c3d4e 100644
+--- a/drivers/i2c/busses/Makefile
++++ b/drivers/i2c/busses/Makefile
+@@ -139,6 +139,7 @@ obj-$(CONFIG_I2C_BCM_KONA)	+= i2c-bcm-kona.o
+ obj-$(CONFIG_I2C_BRCMSTB)	+= i2c-brcmstb.o
+ obj-$(CONFIG_I2C_CROS_EC_TUNNEL)	+= i2c-cros-ec-tunnel.o
+ obj-$(CONFIG_I2C_ELEKTOR)	+= i2c-elektor.o
++obj-$(CONFIG_I2C_ICY)		+= i2c-icy.o
+ obj-$(CONFIG_I2C_MLXCPLD)	+= i2c-mlxcpld.o
+ obj-$(CONFIG_I2C_OPAL)		+= i2c-opal.o
+ obj-$(CONFIG_I2C_PCA_ISA)	+= i2c-pca-isa.o
+diff --git a/drivers/i2c/busses/i2c-icy.c b/drivers/i2c/busses/i2c-icy.c
+new file mode 100644
+index 000000000..20c0fbacf
+--- /dev/null
++++ b/drivers/i2c/busses/i2c-icy.c
+@@ -0,0 +1,174 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * I2C driver for stand-alone PCF8584 style adapters on Zorro cards
++ *
++ * Original ICY documentation can be found on Aminet:
++ * https://aminet.net/package/docs/hard/icy
++ *
++ * There has been a modern community re-print of this design in 2019:
++ * https://www.a1k.org/forum/index.php?threads/70106/
++ *
++ * The card is basically a Philips PCF8584 connected straight to the
++ * beginning of the AutoConfig'd address space (register S1 on base+2),
++ * with /INT on /INT2 on the Zorro bus.
++ *
++ * Copyright (c) 2019 Max Staudt <max@enpas.org>
++ *
++ * This started as a fork of i2c-elektor.c and has evolved since.
++ * Thanks go to its authors for providing a base to grow on.
++ *
++ *
++ * IRQ support is currently not implemented.
++ *
++ * As it turns out, i2c-algo-pcf is really written with i2c-elektor's
++ * edge-triggered ISA interrupts in mind, while the Amiga's Zorro bus has
++ * level-triggered interrupts. This means that once an interrupt occurs, we
++ * have to tell the PCF8584 to shut up immediately, or it will keep the
++ * interrupt line busy and cause an IRQ storm.
++
++ * However, because of the PCF8584's host-side protocol, there is no good
++ * way to just quieten it without side effects. Rather, we have to perform
++ * the next read/write operation straight away, which will reset the /INT
++ * pin. This entails re-designing the core of i2c-algo-pcf in the future.
++ * For now, we never request an IRQ from the PCF8584, and poll it instead.
++ */
++
++#include <linux/delay.h>
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/ioport.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++
++#include <linux/i2c.h>
++#include <linux/i2c-algo-pcf.h>
++
++#include <asm/amigaints.h>
++#include <linux/zorro.h>
++
++#include "../algos/i2c-algo-pcf.h"
++
++struct icy_i2c {
++	struct i2c_adapter adapter;
++
++	void __iomem *reg_s0;
++	void __iomem *reg_s1;
++};
++
++/*
++ * Functions called by i2c-algo-pcf
++ */
++static void icy_pcf_setpcf(void *data, int ctl, int val)
++{
++	struct icy_i2c *i2c = (struct icy_i2c *)data;
++
++	u8 __iomem *address = ctl ? i2c->reg_s1 : i2c->reg_s0;
++
++	z_writeb(val, address);
++}
++
++static int icy_pcf_getpcf(void *data, int ctl)
++{
++	struct icy_i2c *i2c = (struct icy_i2c *)data;
++
++	u8 __iomem *address = ctl ? i2c->reg_s1 : i2c->reg_s0;
++	int val = z_readb(address);
++
++	return val;
++}
++
++static int icy_pcf_getown(void *data)
++{
++	return 0x55;
++}
++
++static int icy_pcf_getclock(void *data)
++{
++	return 0x1c;
++}
++
++static void icy_pcf_waitforpin(void *data)
++{
++	usleep_range(50, 150);
++}
++
++/*
++ * Main i2c-icy part
++ */
++static int icy_probe(struct zorro_dev *z,
++		     const struct zorro_device_id *ent)
++{
++	struct icy_i2c *i2c;
++	struct i2c_algo_pcf_data *algo_data;
++
++	i2c = devm_kzalloc(&z->dev, sizeof(*i2c), GFP_KERNEL);
++	if (!i2c)
++		return -ENOMEM;
++
++	algo_data = devm_kzalloc(&z->dev, sizeof(*algo_data), GFP_KERNEL);
++	if (!algo_data)
++		return -ENOMEM;
++
++	dev_set_drvdata(&z->dev, i2c);
++	i2c->adapter.dev.parent = &z->dev;
++	i2c->adapter.owner = THIS_MODULE;
++	/* i2c->adapter.algo assigned by i2c_pcf_add_bus() */
++	i2c->adapter.algo_data = algo_data;
++	strlcpy(i2c->adapter.name, "ICY I2C Zorro adapter",
++		sizeof(i2c->adapter.name));
++
++	if (!devm_request_mem_region(&z->dev,
++				     z->resource.start,
++				     4, i2c->adapter.name))
++		return -ENXIO;
++
++	/* Driver private data */
++	i2c->reg_s0 = ZTWO_VADDR(z->resource.start);
++	i2c->reg_s1 = ZTWO_VADDR(z->resource.start + 2);
++
++	algo_data->data = i2c;
++	algo_data->setpcf     = icy_pcf_setpcf;
++	algo_data->getpcf     = icy_pcf_getpcf;
++	algo_data->getown     = icy_pcf_getown;
++	algo_data->getclock   = icy_pcf_getclock;
++	algo_data->waitforpin = icy_pcf_waitforpin;
++
++	if (i2c_pcf_add_bus(&i2c->adapter)) {
++		dev_err(&z->dev, "i2c_pcf_add_bus() failed\n");
++		return -ENXIO;
++	}
++
++	dev_info(&z->dev, "ICY I2C controller at %pa, IRQ not implemented\n",
++		 &z->resource.start);
++
++	return 0;
++}
++
++static void icy_remove(struct zorro_dev *z)
++{
++	struct icy_i2c *i2c = dev_get_drvdata(&z->dev);
++
++	i2c_del_adapter(&i2c->adapter);
++}
++
++static const struct zorro_device_id icy_zorro_tbl[] = {
++	{ ZORRO_ID(VMC, 15, 0), },
++	{ 0 }
++};
++
++MODULE_DEVICE_TABLE(zorro, icy_zorro_tbl);
++
++static struct zorro_driver icy_driver = {
++	.name           = "i2c-icy",
++	.id_table       = icy_zorro_tbl,
++	.probe          = icy_probe,
++	.remove         = icy_remove,
++};
++
++module_driver(icy_driver,
++	      zorro_register_driver,
++	      zorro_unregister_driver);
++
++MODULE_AUTHOR("Max Staudt <max@enpas.org>");
++MODULE_DESCRIPTION("I2C bus via PCF8584 on ICY Zorro card");
++MODULE_LICENSE("GPL v2");
+-- 
+2.11.0
+
