@@ -2,63 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1927923E1
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2019 14:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CDD9259E
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2019 15:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727563AbfHSMyE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 19 Aug 2019 08:54:04 -0400
-Received: from ns1.univ-skikda.dz ([193.194.68.2]:41922 "HELO
-        ms1.univ-skikda.dz" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with SMTP id S1727548AbfHSMyE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Aug 2019 08:54:04 -0400
-X-Greylist: delayed 501 seconds by postgrey-1.27 at vger.kernel.org; Mon, 19 Aug 2019 08:53:53 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by ms1.univ-skikda.dz (Postfix) with ESMTP id CFA687E8503;
-        Mon, 19 Aug 2019 13:39:32 +0100 (CET)
-Received: from ms1.univ-skikda.dz ([127.0.0.1])
-        by localhost (ms1.univ-skikda.dz [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id kxVdpguuBErN; Mon, 19 Aug 2019 13:39:22 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by ms1.univ-skikda.dz (Postfix) with ESMTP id 2CE587E84FB;
-        Mon, 19 Aug 2019 13:39:22 +0100 (CET)
-X-Virus-Scanned: amavisd-new at univ-skikda.dz
-Received: from ms1.univ-skikda.dz ([127.0.0.1])
-        by localhost (ms1.univ-skikda.dz [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 8EhfeutTc77a; Mon, 19 Aug 2019 13:39:21 +0100 (CET)
-Received: from ms1.univ-skikda.dz (ms1.univ-skikda.dz [172.16.20.30])
-        by ms1.univ-skikda.dz (Postfix) with ESMTP id C995A7E84E8;
-        Mon, 19 Aug 2019 13:39:20 +0100 (CET)
-Date:   Mon, 19 Aug 2019 13:39:20 +0100 (CET)
-From:   Emile SALAKO <a.addala@univ-skikda.dz>
-Reply-To: Emile SALAKO <ge.salako@yahoo.com>
-To:     emile.salako121@gmail.com
-Message-ID: <1400492801.334354.1566218360800.JavaMail.zimbra@univ-skikda.dz>
-Subject: Demande de partenariat
+        id S1727525AbfHSN55 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Aug 2019 09:57:57 -0400
+Received: from mga02.intel.com ([134.134.136.20]:60030 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726987AbfHSN55 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 19 Aug 2019 09:57:57 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Aug 2019 06:56:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,405,1559545200"; 
+   d="scan'208";a="207012387"
+Received: from mylly.fi.intel.com (HELO [10.237.72.162]) ([10.237.72.162])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Aug 2019 06:56:49 -0700
+Subject: Re: [PATCH v1] i2c: designware: assert reset when error happen at
+ ->probe()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Phil Edworthy <phil.edworthy@renesas.com>
+References: <20190819102423.73683-1-andriy.shevchenko@linux.intel.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <eb14fc95-c613-6303-8869-b3e849179122@linux.intel.com>
+Date:   Mon, 19 Aug 2019 16:56:48 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [197.234.219.54]
-X-Mailer: Zimbra 8.0.5_GA_5839 (zclient/8.0.5_GA_5839)
-Thread-Topic: Demande de partenariat
-Thread-Index: FTsV/vDefPAYUva2IDVwC3TezVueHg==
+In-Reply-To: <20190819102423.73683-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-Bonjour
-
-Nous sommes à la tête d'une société qui vend de l'or métal, diamant et cuivre cathode. Nous cherchons des collaborateurs capables de nous fournir des acheteurs sérieux pour un contrat de vente à long terme. Vous bénéficierez en retour d'une commission considérable à chaque vente si vous nous trouviez des acheteurs potentiels et capable de se déplacer. Pour plus de précision, veuillez me contacter.
-
-Mr. SALAKO Émile
-Email: emile.salako121@gmail.com
-
-=================================================================================================================================================================
-
-Hello
-
-We are the head of a company that sells gold metal, Diamond and copper cathode. We are looking for employees who can provide us with serious buyers for a long-term sales contract. In return, you will receive a substantial commission on each sale if you find us potential buyers who are able to move around. For more information, please contact me.
-
-Mr. SALAKO Émile
-Email: emile.salako121@gmail.com
+On 8/19/19 1:24 PM, Andy Shevchenko wrote:
+> The commit c62ebb3d5f0d ("i2c: designware: Add support for an interface clock")
+> introduced an optional clock while missed correct error handling.
+> assert reset line back if error happen at ->probe().
+> 
+> Fixes: c62ebb3d5f0d ("i2c: designware: Add support for an interface clock")
+> Cc: Phil Edworthy <phil.edworthy@renesas.com>
+> Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>   drivers/i2c/busses/i2c-designware-platdrv.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> index ddfb81872906..4624ef8fbae8 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -346,8 +346,10 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+>   
+>   	/* Optional interface clock */
+>   	dev->pclk = devm_clk_get_optional(&pdev->dev, "pclk");
+> -	if (IS_ERR(dev->pclk))
+> -		return PTR_ERR(dev->pclk);
+> +	if (IS_ERR(dev->pclk)) {
+> +		ret = PTR_ERR(dev->pclk);
+> +		goto exit_reset;
+> +	}
+>   
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
