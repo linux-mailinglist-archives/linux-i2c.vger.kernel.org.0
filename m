@@ -2,57 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28719914EA
-	for <lists+linux-i2c@lfdr.de>; Sun, 18 Aug 2019 07:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C6791E43
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2019 09:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725290AbfHRFaQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 18 Aug 2019 01:30:16 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:44236 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725209AbfHRFaQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 18 Aug 2019 01:30:16 -0400
-Received: by mail-lf1-f65.google.com with SMTP id v16so3631820lfg.11
-        for <linux-i2c@vger.kernel.org>; Sat, 17 Aug 2019 22:30:15 -0700 (PDT)
+        id S1726261AbfHSHq0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Aug 2019 03:46:26 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:41900 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725846AbfHSHqZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Aug 2019 03:46:25 -0400
+Received: by mail-pl1-f194.google.com with SMTP id m9so566397pls.8
+        for <linux-i2c@vger.kernel.org>; Mon, 19 Aug 2019 00:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=i9DQjwrqEBGmY1sBaaiFVr90c4g3ISA84DXAzg4zYYQ=;
-        b=XGknlK+rXRdba9nf+m4dMwhg4NqOKwUU7+SQALgKXNssWSQh/Ps3C7RnmC+NUBWBvh
-         UUFiZrplZQ64nz25631Ib1CSjAHl/FoR5BWwIK0/E6eW5oQ4/CtTjXeqz1PVg+nm6YOT
-         axBXGp5rBNSH0hQEFX4ZDL2rcjBVTIl4FP+kvGT/rwW7BluSWUDgJLeSkRgwmcnTrwdJ
-         +sH3S5qy9aMfbW9PKEe2FfjiqfIE6j3nSgdNoDzUjnxAl+KCqZhotOOsnXrNgXBvccCB
-         3oZRPVAcXlIjqAqr+pzK5PJC495170QDVx2YLhyiAlMaSi/t9OAejuF1J3pRXTWCeQbW
-         GWpw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SVBiffuNEOiaua/CTjF2RYo1EoJ7NdsrEe4WYMvF/Tc=;
+        b=Wa6u3zS7y1oEchy5YNujHU8A1c02KBma8nykY/FXeYNwJNqbcVh4TnMluf3DFGkfxx
+         hrPARGB/wdyKnuKTHIyfGlrjXcyysOD7upO+jtnMWpu3WrV8PGgCGKhWf551VknPXGkp
+         MBm6KiIAb7ELFdDq2qZ5Gsu9gfP4E3rMPBRquKDY5gDhCLaxa0dim3PsyjsZctD+5sTx
+         jSm7P4HzBD4LZWwjBL//ov58cpibFEzAvmmgT+Aszoe8sZYFGsdwEcwQv9G8ZYBmVbae
+         vHjmdxIWwOht9yhCIOCYSJHvjQNOrvKCMqiEWM0w+fw6rfQnT9HOufFpsd/NXR8rYGjk
+         s5kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=i9DQjwrqEBGmY1sBaaiFVr90c4g3ISA84DXAzg4zYYQ=;
-        b=R7lM815AwsD8tdXq5U527fZ8MqPOYTCUCkJyIdow/iCKB71FazwpFV283QiJ/S8M9h
-         C+JBtGYUt6DhaPjVNLvtg4Uh4x+6LIV61EGgHZxYq2+fyWKM5RI0140YFGU3pfxrKoXw
-         gjmtV5Jy3Sbj0HKIFipVDwdr7CkPWLcPITemB50hQf/xJL2FXri0WorTtHBl+DmpDYAt
-         T5/Ans7yb8Ecwn5ghIB/4M/lfLtytNxkJ1xR7OiLxlUEnn+32IfTU6Tey8EGVh3VqCln
-         1ovY5dp6SaCEIfyCvuEfFsicsCkpaYJEfQYpIXJqx8TiHAfpYntmb+U2wKq5KV0RvLyU
-         LPxA==
-X-Gm-Message-State: APjAAAXhiA6sSbW8py7HAjDu2xiDoRfgK9mPXGCLlHdMNIw1hcnfp4zH
-        PSbwRNMcYU1K5t8xR17lH7MDCs0Y2R+ji0W1La4=
-X-Google-Smtp-Source: APXvYqy62M34XVCpj8n7Y0We7clF7YNv8d2l7H7dxfhVrYDTFtnwyNjyj0nMtQPaSNnO9HIO/6hCoZLpNYnW3F1Rpr0=
-X-Received: by 2002:a05:6512:484:: with SMTP id v4mr9576959lfq.66.1566106214234;
- Sat, 17 Aug 2019 22:30:14 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SVBiffuNEOiaua/CTjF2RYo1EoJ7NdsrEe4WYMvF/Tc=;
+        b=bwtx4NxBwU/OaIy4gyk0MMCOneI7R5JD9wFvuKDZ13fJLm/nKARghWZVrG6rUcQ9oE
+         e395DhUuONlHAiyRwnPe8sCKQhzsPx44s4H2wApYxAMNh1MT8qtXzsPtwBDIu7lJZhbV
+         hWZi/+NPjARRyFvJpkZaT3HRyZ6Yg3RZ6mA3VSgZ/jg3jBBQRd6C2T9EVsg/3ursBa2g
+         ZaoPWCfp2xTAPDyANnx+yzVmncFGy+zDXK6BtdtWQ7na4w3Vp1e4dTvcKKqtjQ2V9jF6
+         Gsyd2QaAq3CMryun2XFDqa3jSdqTTB2g7F7dt675zg+cG3HHA5CsVsdI+9tdXxgbAY19
+         btCg==
+X-Gm-Message-State: APjAAAXZ1QoQ4y1MqocTvIn1FGNU93635eBLF6iV8ZimkzYvK8wiYSF9
+        yDSu7KDsA1o+nh8N3VAwxTI=
+X-Google-Smtp-Source: APXvYqysffUYqwO4sp7IX78TDZL7FE1+sxGph+w+B6yhxnnOHDWNEGE51hUtdmWF2esWInQJHpLz0Q==
+X-Received: by 2002:a17:902:7781:: with SMTP id o1mr21032877pll.205.1566200785353;
+        Mon, 19 Aug 2019 00:46:25 -0700 (PDT)
+Received: from localhost.localdomain ([110.225.16.165])
+        by smtp.gmail.com with ESMTPSA id q69sm15500435pjb.0.2019.08.19.00.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Aug 2019 00:46:24 -0700 (PDT)
+From:   Nishka Dasgupta <nishkadg.linux@gmail.com>
+To:     jdelvare@suse.com, linux-i2c@vger.kernel.org
+Cc:     Nishka Dasgupta <nishkadg.linux@gmail.com>
+Subject: [PATCH] i2c: taos-evm: Make structure tsl2550_info constant
+Date:   Mon, 19 Aug 2019 13:16:01 +0530
+Message-Id: <20190819074601.326-1-nishkadg.linux@gmail.com>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
-Received: by 2002:a19:7f17:0:0:0:0:0 with HTTP; Sat, 17 Aug 2019 22:30:13
- -0700 (PDT)
-From:   Kristen griest <capt.kristengiest1@gmail.com>
-Date:   Sun, 18 Aug 2019 05:30:13 +0000
-X-Google-Sender-Auth: gIEDGWvfxY5dBG2NUx3cwq7S9Tc
-Message-ID: <CADLH5k31fscLXCv4FP7q+0jmNeu405MR+m=Uq-aPd2c5kwrP2Q@mail.gmail.com>
-Subject: hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-How are you today
-I'm Capt Kristen from github, please get back to me for more about me
+Static structure tsl2550_info, of type i2c_board_info, is referenced
+only twice: the first time in arguments to dev_info() (which does not
+modify it) and the second time as the last argument to function
+i2c_new_device() (where the corresponding parameter is declared as
+const). As tsl2550_info is therefore never modified, make it const to
+protect it from unintended modifications.
+Issue found with Coccinelle.
+
+Signed-off-by: Nishka Dasgupta <nishkadg.linux@gmail.com>
+---
+ drivers/i2c/busses/i2c-taos-evm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-taos-evm.c b/drivers/i2c/busses/i2c-taos-evm.c
+index c82e78f57386..056df6b2538a 100644
+--- a/drivers/i2c/busses/i2c-taos-evm.c
++++ b/drivers/i2c/busses/i2c-taos-evm.c
+@@ -39,7 +39,7 @@ struct taos_data {
+ };
+ 
+ /* TAOS TSL2550 EVM */
+-static struct i2c_board_info tsl2550_info = {
++static const struct i2c_board_info tsl2550_info = {
+ 	I2C_BOARD_INFO("tsl2550", 0x39),
+ };
+ 
+-- 
+2.19.1
+
