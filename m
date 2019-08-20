@@ -2,93 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8526A95CA7
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2019 12:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A469796021
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2019 15:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729383AbfHTKxb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 20 Aug 2019 06:53:31 -0400
-Received: from sauhun.de ([88.99.104.3]:35204 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729194AbfHTKxb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 20 Aug 2019 06:53:31 -0400
-Received: from localhost (p54B333DC.dip0.t-ipconnect.de [84.179.51.220])
-        by pokefinder.org (Postfix) with ESMTPSA id 474EB2C3014;
-        Tue, 20 Aug 2019 12:53:29 +0200 (CEST)
-Date:   Tue, 20 Aug 2019 12:53:28 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Cc:     acooks@rationali.st, Jean Delvare <jdelvare@suse.de>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        platypus-sw@opengear.com, "Tobin C . Harding" <me@tobin.cc>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Will Wagner <willw@carallon.com>
-Subject: Re: [PATCH v5 0/3] Enable ACPI-defined peripherals on i2c-piix4 SMBus
-Message-ID: <20190820105328.GD1007@ninjato>
-References: <20190802145109.38dd4045@endymion>
- <b013c33b-da11-ce5e-08d4-0b24a8575109@metux.net>
- <db725a3b-7b6e-ac79-ef1c-e601ff45c0f2@rationali.st>
- <9019cce9-837f-97fc-0f3b-7503b8fc3717@metux.net>
- <20190819185334.GA9762@kunai>
- <82cd0682-91db-6afd-855c-2c2f4b329eda@metux.net>
+        id S1729927AbfHTNdV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 20 Aug 2019 09:33:21 -0400
+Received: from mx-rz-2.rrze.uni-erlangen.de ([131.188.11.21]:60007 "EHLO
+        mx-rz-2.rrze.uni-erlangen.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728682AbfHTNdV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 20 Aug 2019 09:33:21 -0400
+X-Greylist: delayed 590 seconds by postgrey-1.27 at vger.kernel.org; Tue, 20 Aug 2019 09:33:20 EDT
+Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 46CWhK379PzPk9r;
+        Tue, 20 Aug 2019 15:23:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2013;
+        t=1566307409; bh=BxZImDV6BlbvPHA92gmLrkRnXj5dPxu62gW8SlF7G7o=;
+        h=From:Subject:To:Cc:Date:From:To:CC:Subject;
+        b=fAvpwIv/WZl+hu8gSJaP+zYQCU1KnTq8XWEnlWsEkloQ1mgSEUbBivjIbJYkRKkRu
+         M4GFPD+PfGoF4O0zagcLg0v7ffqP+4MWkrKFW1RlKO/Lja3V5pGhv4w6h2t+QiZk9N
+         3dZvZuBEpZJIgZzxSusj1m/rQ3gJ7jNKXWpde+AmKVwt9Qc+zXCb/VWvnlFmCMustY
+         RwcCDg9hlzRLR7KA4CMuqYy4N+A9CcPXDQKWaYFEfK6w6eKdMEURwx4cskBANlu4IJ
+         zUHfu+rU0qsJosfFOnO5X6XH1oMvLfj03ZdbL0uhsDHhE3pZE/OtAIq7/TymgnRe+B
+         I057B2n63Rk/Q==
+X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Flag: Not-Spam
+X-RRZE-Submit-IP: 109.41.192.99
+Received: from [192.168.43.238] (ip-109-41-192-99.web.vodafone.de [109.41.192.99])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: U2FsdGVkX198FXRVDZeSOd/yGZlSwh2MSmzQV7o2K6g=)
+        by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 46CWhG6N19zPjvd;
+        Tue, 20 Aug 2019 15:23:26 +0200 (CEST)
+From:   Sebastian Duda <sebastian.duda@fau.de>
+Subject: Status of Subsystems - I2C/SMBUS ISMT DRIVER
+To:     Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukas.bulwahn@gmail.com
+Message-ID: <97bcaca4-22f8-e17e-55b0-a19443c27bef@fau.de>
+Date:   Tue, 20 Aug 2019 15:23:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UoPmpPX/dBe4BELn"
-Content-Disposition: inline
-In-Reply-To: <82cd0682-91db-6afd-855c-2c2f4b329eda@metux.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hello Seth,
+hello Neil,
 
---UoPmpPX/dBe4BELn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+in my master thesis, I'm using the association of subsystems to 
+maintainers/reviewers and its status given in the MAINTAINERS file.
+During the research I noticed that there are several subsystems without 
+a status in the maintainers file. One of them is the subsystem 
+`I2C/SMBUS ISMT DRIVER` where you're mentioned as reviewers.
 
+Is it intended not to mention a status for your subsystems?
+What is the current status of your subsystem?
 
-> Yes, I'm struggling to find out which devices are connected to the
-> smbus, in case there're some already inside the SoC (instead of just
-> entirely board specific).
-
-I see.
-
->=20
-> > but you are okay with Jean's patches? Or is this
-> > discussion affecting patch 3? (/me knows not much about ACPI'n'stuff)
->=20
-> I'm fine with them, just wondered whether BIOS needs to add some extra
-> support for the probing, that is not already somehow coming w/ aegesa.
-
-Ok, thanks for the heads up.
-
-> Unfortunately, we cannot rely on board vendors to do that right and
-> cope w/ old and incomplete firmware. (that's also the reason why I'm
-> *not* using acpi gpio entries for the apu2+ board family).
-
-Guess we all have been there :/ Good luck!
-
-
---UoPmpPX/dBe4BELn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1b0SgACgkQFA3kzBSg
-KbYnNg//TrGo0SAPX4AcR+zMkPXjXWcOskXX4skdPLgQb8ZujAxnlicBnD4szHRq
-J6tfWgGZ3izUbPXfgpK33UgwO7y9Ml6SCz81XVkuanOklUw6rFtPmS9TRwlnmUSD
-B9ih1Q/grImlCzv5P12NxYpUJvHVfEQubwDM+qguXgNJPwmI4fwWKI/lGUvfKEVm
-jOVivjA7xjKf9KdjwzD3m6zYLTQ6kQss4y4CL0X+mWX+5FztMOeqeXl1Q0Bbb8OA
-1CYonNRV5l2QwFTsIPNkjL0wGhjnA22GzHGq3D1GhJKlhN5X1TCQMlpjd1Nr0qtw
-5LoOma/JXhunXcsDbBe9RpZUklQl2s7JVFUa57eaA5PKCr6098k1anlRAwXoS51S
-BceA+e2okENXJfHjFLU/+lTGrYJhDW7vsCD2XweT3m6WzYAFT4jcuDyBcTkupipE
-SnNLp4+lgk91T/t2C3+ctdfWYVPF0ofjKxeE6tpqFzlGICgmJGsyg0kl3+DTFWzo
-rLSH21MgRx6ie7MWxMsuSKLfzoArTkYSoE+ZU/j/AX0zouy3/EtaunVZShNxeOBv
-q2H5BmYbBt1Xd+f4mARI9Mvlbz3hYsi5Nz7vOi4P8uN80jU/QjCCCvETk6KMBQvJ
-WyXzzAEjIODUhpaq1o6wqRjuKdWUv1K3DtEVLdLdIg7UqbhZMAY=
-=xMp7
------END PGP SIGNATURE-----
-
---UoPmpPX/dBe4BELn--
+Kind regards
+Sebastian Duda
