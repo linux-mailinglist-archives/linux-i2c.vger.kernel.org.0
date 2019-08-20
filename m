@@ -2,39 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 186F296106
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2019 15:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C09960ED
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2019 15:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730925AbfHTNoe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 20 Aug 2019 09:44:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38732 "EHLO mail.kernel.org"
+        id S1730519AbfHTNoA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 20 Aug 2019 09:44:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39120 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730778AbfHTNnF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 20 Aug 2019 09:43:05 -0400
+        id S1730846AbfHTNnV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 20 Aug 2019 09:43:21 -0400
 Received: from sasha-vm.mshome.net (unknown [12.236.144.82])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B576F2332A;
-        Tue, 20 Aug 2019 13:43:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7C6C022DBF;
+        Tue, 20 Aug 2019 13:43:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566308585;
-        bh=Q5HI2uqSsn9Q2lche9iF1O586AHO9f04gzNyzOLNNd0=;
+        s=default; t=1566308601;
+        bh=kKQb/INrTFnCBj1QOGr23fLCsE8NmwgEu+JBC7HBdlA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P7GxV7/T8lVEihgT+Kcsa7SyNj/kntj5AiQbcd0OXom2eaOVs4A7F4q3FFNpwxm5p
-         58gCDutZO13Dz0szYUYojmrpOu3KCGKlPkfJPyV5WF1x7rhqNc6hReQpBh6HNjFGvC
-         VjQmNU6dOGEw4pp8/v3Q8vU+vor/JKtvQ676QDbs=
+        b=oM5YZZpciKc1PyHwfMEgv223gMEHNB4YUaNahfv2SWb+pvbPGS5ZFRW+cXvfj4qYL
+         13ZQAoCRp1ygigDI7nEMVFcVg8f1yMcIkvv1Duk8qLuJzSmanVfYrMar/GexflV6yF
+         Lu5D+ggwsECDr3A4HF6VwVA5giOL1joJ57u+Y03o=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Krzysztof Adamski <krzysztof.adamski@nokia.com>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 09/12] i2c: emev2: avoid race when unregistering slave client
-Date:   Tue, 20 Aug 2019 09:42:50 -0400
-Message-Id: <20190820134253.11562-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 5/7] i2c: emev2: avoid race when unregistering slave client
+Date:   Tue, 20 Aug 2019 09:43:13 -0400
+Message-Id: <20190820134315.11720-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190820134253.11562-1-sashal@kernel.org>
-References: <20190820134253.11562-1-sashal@kernel.org>
+In-Reply-To: <20190820134315.11720-1-sashal@kernel.org>
+References: <20190820134315.11720-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,7 +62,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-emev2.c b/drivers/i2c/busses/i2c-emev2.c
-index d2e84480fbe96..dd97e5d9f49a2 100644
+index 96bb4e7490128..0218ba6eb26ab 100644
 --- a/drivers/i2c/busses/i2c-emev2.c
 +++ b/drivers/i2c/busses/i2c-emev2.c
 @@ -72,6 +72,7 @@ struct em_i2c_device {
@@ -95,7 +95,7 @@ index d2e84480fbe96..dd97e5d9f49a2 100644
  
  	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
  	if (!priv)
-@@ -393,8 +400,8 @@ static int em_i2c_probe(struct platform_device *pdev)
+@@ -391,8 +398,8 @@ static int em_i2c_probe(struct platform_device *pdev)
  
  	em_i2c_reset(&priv->adap);
  
@@ -106,7 +106,7 @@ index d2e84480fbe96..dd97e5d9f49a2 100644
  				"em_i2c", priv);
  	if (ret)
  		goto err_clk;
-@@ -404,7 +411,8 @@ static int em_i2c_probe(struct platform_device *pdev)
+@@ -402,7 +409,8 @@ static int em_i2c_probe(struct platform_device *pdev)
  	if (ret)
  		goto err_clk;
  
