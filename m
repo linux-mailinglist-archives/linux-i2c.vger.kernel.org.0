@@ -2,146 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFFD98FEC
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2019 11:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2B4993D6
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2019 14:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729276AbfHVJpj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 22 Aug 2019 05:45:39 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36236 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726050AbfHVJpj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Aug 2019 05:45:39 -0400
-Received: by mail-pg1-f194.google.com with SMTP id l21so3299687pgm.3
-        for <linux-i2c@vger.kernel.org>; Thu, 22 Aug 2019 02:45:39 -0700 (PDT)
+        id S2388441AbfHVMeN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 22 Aug 2019 08:34:13 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:33596 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388490AbfHVMeN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Aug 2019 08:34:13 -0400
+Received: by mail-lf1-f68.google.com with SMTP id x3so4436149lfc.0
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Aug 2019 05:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=sgHEzZrPt9EteY2/QiFiyeYlRXQlrmCLZpXRsbYVLMM=;
-        b=a9yy/07U4q9DkIrWE+1S1A5qGfmGOHr2Iah/Cwu7XTniDeBQidLmwEdnkTDXQM31RX
-         HhXAwzTUtfbL7o0VP7LGkI+cz+lIG1ARIpBt7uaEM+lvwDLuY2LuYf4zfjpbXOzaKx1h
-         ZskFoEcfaOXTiPrX0jOZiLZ1+rX1vte6oawec=
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=qQwouDogyXJvS+YAsG7u3jI4chdOO2iCwbnUv4qV7/t3H0mpAnkar5BQ6W4yzvm3w4
+         MFy7lbM3I35ux+N13OWQLqMSp+JYBfamJOBS4Rv9YtwGFbdx/1nZ3P/IH2tA3AOy5PjU
+         kwMZko6qlgHP0UHJGHFvzgceOWtw4tjNefrQZ96MP6AChhfKt94B36gjTZhv6W5d2u3q
+         XLX/JEQ53zQai3qewoG2X6xDeNJ4HOzQU6TV4Cb4zGt4uQQf5AD05mnaufLgjsYbqLh0
+         X5GVMmJW05ufNL+28p6nLz0lCjVsZITmyIS1mIvW9/VAX3eTcLMat0TkK0bawj8l1wal
+         unaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sgHEzZrPt9EteY2/QiFiyeYlRXQlrmCLZpXRsbYVLMM=;
-        b=aQsu0DHDEfTtitFPXJHwb1AYeDp9c3Ar9Ns79GFnYFBHMvX8eMTBqvKu6AG1NBB02r
-         g+e0Bj4TA6bDioioJhcNEjhA61kKV27xTaW/b9T/gfAS9wSh+T7Q7PjPmxbhOysPGUlX
-         7bVzQrcBlEI+HjN3efL9nPwycm6D36Tr+eZNbrtCWaphaBTT+/iah6iQKWW3Ilqq8yYc
-         9rgngIaYfTuCWQVBFnChzT3VIUGjg4QM01ePkhspvy5bBmwezXo8T5GuhDuUF+HKkJwJ
-         tjuboW+WHC42EGb0+S5i9RKRxcWYXKUV0/+XTLNy41X41s3xPfGSwrc3xVp4CTjA8ZPs
-         6bhQ==
-X-Gm-Message-State: APjAAAUuUEe0RUvv/XGsOpSQsBbu7bwaB5UqKgbyHIc6TlwxKc6Z0VV5
-        LU3ifQzlcJCASKXwgdI2CVjNwA==
-X-Google-Smtp-Source: APXvYqwkD6Agsn8K0zNRrV8QL+ZYvIkEdfXfGFsEU0viYlCos3ngXCAmY0WDc8ulQwd3AcyBj/e79Q==
-X-Received: by 2002:a65:6281:: with SMTP id f1mr31045994pgv.400.1566467138859;
-        Thu, 22 Aug 2019 02:45:38 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:b852:bd51:9305:4261])
-        by smtp.gmail.com with ESMTPSA id 4sm26154645pfn.118.2019.08.22.02.45.35
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 22 Aug 2019 02:45:37 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Jun Gao <jun.gao@mediatek.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandru M Stan <amstan@chromium.org>
-Subject: [PATCH v2] i2c: mediatek: disable zero-length transfers for mt8183
-Date:   Thu, 22 Aug 2019 17:45:17 +0800
-Message-Id: <20190822094516.55130-1-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=joFko/rrRU32fh6Vv0hCCEbFJDg0zIwAud/5Xlz02exY87UMU8VRceW2QbMZ3aNFyi
+         BwiWM3ItgKkNywf+GOyDzj06R1GsL/yJMUz61BJybgCZp20kY9/0GGgFltISe8faTqEy
+         xL1Gyb0H4psRo/FO9wHfa9Ch1MBuA95XL1GFBRgftaesK6s9VrKK/qV4AZhPqANcLx99
+         4LFdt1XZJ/wD9vt/4IvIebf7qRbBZcxFPw0XtfvxhKhzbgRYQNSDQm4WnkIQuOdWwxBn
+         OUNSTlVoWJVeGNCWfYAMnlXh+Fe6AJWqNOgEQ3mRCnfibkueok9JyroWSAQawKWx5GBl
+         pZrA==
+X-Gm-Message-State: APjAAAXDQi6RY9mEqv7Pmb+t83ZxJSi0NzJU3VO+ENvBOmwO4K9mDBiO
+        9WOu4pyBvRXQPn5iYQUr+K4tdDXhj5uNO/m3ptY=
+X-Google-Smtp-Source: APXvYqyvt2RXzV9cZsTsiBwjcFFEoyd1HLlAwIQQPxXOemblWJ85A0QXgz94gt7tcllsT417ikCMvXpOU1ZxhrqMZqI=
+X-Received: by 2002:ac2:42c3:: with SMTP id n3mr13722899lfl.117.1566477250738;
+ Thu, 22 Aug 2019 05:34:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:34:10
+ -0700 (PDT)
+Reply-To: eku.lawfirm@gmail.com
+From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
+Date:   Thu, 22 Aug 2019 12:34:10 +0000
+Message-ID: <CAN-_bTZ04fanuBw0m=mWQFHTKscwdYgns3LR19ZdaFDanOVNGQ@mail.gmail.com>
+Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When doing i2cdetect quick write mode, we would get transfer
-error ENOMEM, and i2cdetect shows there's no device at the address.
-Quoting from mt8183 datasheet, the number of transfers to be
-transferred in one transaction should be set to bigger than 1,
-so we should forbid zero-length transfer and update functionality.
+--=20
+Dear,
+With due respect this is not spam or Scam mail, because I have
+contacted you before and there was no response from you,I apologise if
+the contents of this mail are contrary to your moral ethics, which I
+feel may be of great disturbance to your person, but please treat this
+with absolute confidentiality, believing that this email reaches you
+in good faith. My contacting you is not a mistake or a coincidence
+because God can use any person known or unknown to accomplish great
+things.
+I am a lawyer and I have an investment business proposal to offer you.
+It is not official but should be considered as legal and confidential
+business. I have a customer's deposit of $US25 million dollars ready
+to be moved for investment if you can partner with us. We are ready to
+offer you 10% of this total amount as your compensation for supporting
+the transaction to completion. If you are interested to help me please
+reply me with your full details as stated below:
+(1) Your full names:
+(2) Your address:
+(3) Your occupation:
+(4) Your mobile telephone number:
+(5) Your nationality:
+(6) Your present location:
+(7) Your age:
+So that I will provide you more details on what to do and what is
+required for successful completion.
+Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
+MENTIONED DETAILS
 
-Incorrect return:
-localhost ~ # i2cdetect -q -y 0
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:          -- -- -- -- -- -- -- -- -- -- -- -- --
-10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-70: -- -- -- -- -- -- -- --
-
-After this patch:
-localhost ~ #  i2cdetect -q -y 0
-Error: Can't use SMBus Quick Write command on this bus
-
-localhost ~ #  i2cdetect -y 0
-Warning: Can't use SMBus Quick Write command, will skip some addresses
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:
-10:
-20:
-30: -- -- -- -- -- -- -- --
-40:
-50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-60:
-70:
-
-Reported-by: Alexandru M Stan <amstan@chromium.org>
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
----
-Change from v1:
-* restore the order of algo and quirks
----
- drivers/i2c/busses/i2c-mt65xx.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index 252edb433fdf..29eae1bf4f86 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -234,6 +234,10 @@ static const struct i2c_adapter_quirks mt7622_i2c_quirks = {
- 	.max_num_msgs = 255,
- };
- 
-+static const struct i2c_adapter_quirks mt8183_i2c_quirks = {
-+	.flags = I2C_AQ_NO_ZERO_LEN,
-+};
-+
- static const struct mtk_i2c_compatible mt2712_compat = {
- 	.regs = mt_i2c_regs_v1,
- 	.pmic_i2c = 0,
-@@ -298,6 +302,7 @@ static const struct mtk_i2c_compatible mt8173_compat = {
- };
- 
- static const struct mtk_i2c_compatible mt8183_compat = {
-+	.quirks = &mt8183_i2c_quirks,
- 	.regs = mt_i2c_regs_v2,
- 	.pmic_i2c = 0,
- 	.dcm = 0,
-@@ -870,7 +875,11 @@ static irqreturn_t mtk_i2c_irq(int irqno, void *dev_id)
- 
- static u32 mtk_i2c_functionality(struct i2c_adapter *adap)
- {
--	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-+	if (adap->quirks->flags & I2C_AQ_NO_ZERO_LEN)
-+		return I2C_FUNC_I2C |
-+			(I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
-+	else
-+		return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
- }
- 
- static const struct i2c_algorithm mtk_i2c_algorithm = {
--- 
-2.20.1
-
+Sinc=C3=A8rement v=C3=B4tre,
+Avocat Etienne Eku Esq.(Lawfirm)
+Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
+=E2=80=99ouest.
+Skype:westafricalawfirm
