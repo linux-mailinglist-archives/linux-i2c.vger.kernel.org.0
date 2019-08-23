@@ -2,93 +2,138 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD84E9A913
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2019 09:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7DF9A9B8
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2019 10:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390835AbfHWHoe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Aug 2019 03:44:34 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:42732 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388557AbfHWHod (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Aug 2019 03:44:33 -0400
-Received: by mail-lf1-f68.google.com with SMTP id s19so6445062lfb.9
-        for <linux-i2c@vger.kernel.org>; Fri, 23 Aug 2019 00:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8VhnyQ/lvnPjeI+ZEe4VcwGbfHZbPpwY+AwHcnvR+oE=;
-        b=I7Wm2w112kZVo5kWC7G4B9lxgpkpfdDFoX4S5HugYjmAlJg9Z0erMI9NUjIR6JI91X
-         Ksvwc+eyUbldOgsBbz65LlhuXXdpscFzJc1vJ07sq2yZe6jlm9x/fvoK0tql9th3ci1/
-         CS+DHzG+MT0BgLZQuteblBYRpuXfutqgO3hdFI44CeD329VZcVFLu1vQ44gVVuzeSVII
-         9p9q/El026NdnM9A+3b7963AZEg2TEzK3EH31+tAvlgORlD7In2/scnhEcL1feu4ST/1
-         DZzgp81ZoP5eiSFgyUIMgsd2vNRj0qHbQfnJPxqefeos6vZgInxz5UN2yqRGIAW1wRLF
-         a/Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8VhnyQ/lvnPjeI+ZEe4VcwGbfHZbPpwY+AwHcnvR+oE=;
-        b=Wh9ZA25bblGT6lbh+5ePJl1sZ6vgnwweLDq4687BJoWZifrBjwayW90Z5OA6oqVOgR
-         qeqfLiMOGtaPKlPA8Ha0dYHrkJej6ZPCeDnvzdGPBbmKjyuh3Ff0gNgv1s0ZGY4HjPPJ
-         anPCMB2RIBPNiUuhXl63GyLhSg43qu9vi15kR4b2JlfJCoW5r8ZWnRXpNdsqaJaQbY/7
-         zvFeJB6yFfeGkxWIXqaL9I6SGkeT6cEwNU/PNNXK4JQWjj7JCtHonbn3ASHVwhIaNE/H
-         fmLIIz769OvTasaMZBSXjXkvWl5wXS3Hv6QETIRkpfGl6evNumFNf+FPm05XbCR5PBZX
-         owbw==
-X-Gm-Message-State: APjAAAVtmOar7QyS8DYfMgfXrnkRianbo53ZVFvEGnkK9KfP9gZ5hj+o
-        EyUTjfwd1H8EJihJksqkoR9v//N5t6AWt/9l9FD6Ww==
-X-Google-Smtp-Source: APXvYqyNoQgfYc8y4pHvuwV6KbLFLXwLC/iwoPTjq9ZJq+M/tH/JxhgIoE9IKKUF7jG7d7iHWjhzOuKCY0Oof3gDTrw=
-X-Received: by 2002:a19:e006:: with SMTP id x6mr1828413lfg.165.1566546271241;
- Fri, 23 Aug 2019 00:44:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190809162956.488941-1-arnd@arndb.de> <20190809163334.489360-1-arnd@arndb.de>
- <20190809163334.489360-5-arnd@arndb.de>
-In-Reply-To: <20190809163334.489360-5-arnd@arndb.de>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 23 Aug 2019 09:44:19 +0200
-Message-ID: <CACRpkdajapOw+fsEx1fqG3FL-n-WYmOUoGw_HGRHd730h+uv-w@mail.gmail.com>
-Subject: Re: [PATCH 5/7] ARM: xscale: fix multi-cpu compilation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     soc@kernel.org, Russell King <linux@armlinux.org.uk>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dmaengine@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>
+        id S2387782AbfHWIJp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Aug 2019 04:09:45 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:25296 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1733287AbfHWIJp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Aug 2019 04:09:45 -0400
+X-UUID: ea16a705c0fa430b86e661066209a169-20190823
+X-UUID: ea16a705c0fa430b86e661066209a169-20190823
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
+        with ESMTP id 232667969; Fri, 23 Aug 2019 16:09:39 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs01n1.mediatek.inc
+ (172.21.101.68) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 23 Aug
+ 2019 16:09:30 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 23 Aug 2019 16:09:27 +0800
+Message-ID: <1566547772.19935.2.camel@mhfsdcap03>
+Subject: Re: [PATCH v2] i2c: mediatek: disable zero-length transfers for
+ mt8183
+From:   Qii Wang <qii.wang@mediatek.com>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+CC:     Wolfram Sang <wsa@the-dreams.de>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Jun Gao <jun.gao@mediatek.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexandru M Stan <amstan@chromium.org>
+Date:   Fri, 23 Aug 2019 16:09:32 +0800
+In-Reply-To: <20190822094516.55130-1-hsinyi@chromium.org>
+References: <20190822094516.55130-1-hsinyi@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Aug 9, 2019 at 6:33 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Thu, 2019-08-22 at 17:45 +0800, Hsin-Yi Wang wrote:
+> When doing i2cdetect quick write mode, we would get transfer
+> error ENOMEM, and i2cdetect shows there's no device at the address.
+> Quoting from mt8183 datasheet, the number of transfers to be
+> transferred in one transaction should be set to bigger than 1,
+> so we should forbid zero-length transfer and update functionality.
+> 
+> Incorrect return:
+> localhost ~ # i2cdetect -q -y 0
+>      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+> 00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 70: -- -- -- -- -- -- -- --
+> 
+> After this patch:
+> localhost ~ #  i2cdetect -q -y 0
+> Error: Can't use SMBus Quick Write command on this bus
+> 
+> localhost ~ #  i2cdetect -y 0
+> Warning: Can't use SMBus Quick Write command, will skip some addresses
+>      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+> 00:
+> 10:
+> 20:
+> 30: -- -- -- -- -- -- -- --
+> 40:
+> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 60:
+> 70:
+> 
+> Reported-by: Alexandru M Stan <amstan@chromium.org>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
+> Change from v1:
+> * restore the order of algo and quirks
+> ---
+>  drivers/i2c/busses/i2c-mt65xx.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+> index 252edb433fdf..29eae1bf4f86 100644
+> --- a/drivers/i2c/busses/i2c-mt65xx.c
+> +++ b/drivers/i2c/busses/i2c-mt65xx.c
+> @@ -234,6 +234,10 @@ static const struct i2c_adapter_quirks mt7622_i2c_quirks = {
+>  	.max_num_msgs = 255,
+>  };
+>  
+> +static const struct i2c_adapter_quirks mt8183_i2c_quirks = {
+> +	.flags = I2C_AQ_NO_ZERO_LEN,
+> +};
+> +
+>  static const struct mtk_i2c_compatible mt2712_compat = {
+>  	.regs = mt_i2c_regs_v1,
+>  	.pmic_i2c = 0,
+> @@ -298,6 +302,7 @@ static const struct mtk_i2c_compatible mt8173_compat = {
+>  };
+>  
+>  static const struct mtk_i2c_compatible mt8183_compat = {
+> +	.quirks = &mt8183_i2c_quirks,
+>  	.regs = mt_i2c_regs_v2,
+>  	.pmic_i2c = 0,
+>  	.dcm = 0,
+> @@ -870,7 +875,11 @@ static irqreturn_t mtk_i2c_irq(int irqno, void *dev_id)
+>  
+>  static u32 mtk_i2c_functionality(struct i2c_adapter *adap)
+>  {
+> -	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+> +	if (adap->quirks->flags & I2C_AQ_NO_ZERO_LEN)
+> +		return I2C_FUNC_I2C |
+> +			(I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
+> +	else
+> +		return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
 
-> Building a combined ARMv4+XScale kernel produces these
-> and other build failures:
->
-> /tmp/copypage-xscale-3aa821.s: Assembler messages:
-> /tmp/copypage-xscale-3aa821.s:167: Error: selected processor does not support `pld [r7,#0]' in ARM mode
-> /tmp/copypage-xscale-3aa821.s:168: Error: selected processor does not support `pld [r7,#32]' in ARM mode
-> /tmp/copypage-xscale-3aa821.s:169: Error: selected processor does not support `pld [r1,#0]' in ARM mode
-> /tmp/copypage-xscale-3aa821.s:170: Error: selected processor does not support `pld [r1,#32]' in ARM mode
-> /tmp/copypage-xscale-3aa821.s:171: Error: selected processor does not support `pld [r7,#64]' in ARM mode
-> /tmp/copypage-xscale-3aa821.s:176: Error: selected processor does not support `ldrd r4,r5,[r7],#8' in ARM mode
-> /tmp/copypage-xscale-3aa821.s:180: Error: selected processor does not support `strd r4,r5,[r1],#8' in ARM mode
+It can be removed?
 
-OK we certainly need this.
+>  }
+>  
+>  static const struct i2c_algorithm mtk_i2c_algorithm = {
 
-> Add an explict .arch armv5 in the inline assembly to allow the ARMv5
-> specific instructions regardless of the compiler -march= target.
 
-You probably mean...
-
-> +.arch xscale                                   \n\
->         pld     [%0, #0]                        \n\
-
-Explicit .arch xscale rather than .arch armv5.
-
-Yours,
-Linus Walleij
