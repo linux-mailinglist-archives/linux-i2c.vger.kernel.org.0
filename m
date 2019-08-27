@@ -2,177 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F599DAFC
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2019 03:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC179EF8C
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2019 18:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727435AbfH0BUZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Aug 2019 21:20:25 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:55159 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726487AbfH0BUZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Aug 2019 21:20:25 -0400
-X-UUID: 6a31ab75335c4ba68e077d084a2e6387-20190827
-X-UUID: 6a31ab75335c4ba68e077d084a2e6387-20190827
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <bibby.hsieh@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
-        with ESMTP id 1222410388; Tue, 27 Aug 2019 09:20:17 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 27 Aug 2019 09:20:24 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 27 Aug 2019 09:20:24 +0800
-From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        <linux-i2c@vger.kernel.org>
-CC:     <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>
-Subject: [PATCH v0 1/1] WIP: misc: eeprom: at24: support pm_runtime control
-Date:   Tue, 27 Aug 2019 09:20:15 +0800
-Message-ID: <20190827012015.10440-1-bibby.hsieh@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S1727064AbfH0QA2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 27 Aug 2019 12:00:28 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:37002 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726257AbfH0QA1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Aug 2019 12:00:27 -0400
+Received: by mail-ot1-f68.google.com with SMTP id f17so19193532otq.4;
+        Tue, 27 Aug 2019 09:00:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=CwAy1Ps+MjuuEKpxDHokPNhG1OQvVQq/qbn73rtHDl4=;
+        b=srB8FMJForIHlEw03N6VrBJNgdesxEm6cCAKjtT3gWg8TmdCIPY7ZHdQNaBnqOAATm
+         EDXXVZFZjfmHMvMzfe4/tU02MjNoIWZc9B49f1jcNOSLe4c0LtZwWpSXkw56w2ccUEsM
+         Wq1kTw4sCv6b7bil6x+brotrP+UyYBulmDQX4Hmi94N5XQhmqtesdBWoUBrju0yOd57r
+         SReuAZd7+Rej96zvQwtHenqonGojMHWN91g1n0HMmJB0r5FdTZnVXkHPLO5LyYCnA2sf
+         cmYuTIj6uBZJ+3dON5v0FGVjtM8DJ+zspbrvOBBmV3VDrXQ7iE9fH8yEcNOcGxjxIex0
+         Py7A==
+X-Gm-Message-State: APjAAAXESdDOR8ubQNEkmc8WCKoZhTMAFc46iPe76TywdvEvAoxS7nEK
+        dOVGqmO369zl4gYz/SAfQiPBBGM=
+X-Google-Smtp-Source: APXvYqwSKzfBpjOCtUh3Bg/GdA55c3XRKq0U7eMrWbyBtx4KABdnq/2qKlzSzSMzYXuXK2SHHvO5FA==
+X-Received: by 2002:a9d:170b:: with SMTP id i11mr19812279ota.60.1566921626608;
+        Tue, 27 Aug 2019 09:00:26 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id h197sm4768104oib.14.2019.08.27.09.00.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2019 09:00:26 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 11:00:25 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Stefan Wahren <wahrenst@gmx.net>
+Cc:     Eric Anholt <eric@anholt.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
+Subject: Re: [PATCH V2 03/13] dt-bindings: bcm2835-cprman: Add bcm2711 support
+Message-ID: <20190827160025.GA13142@bogus>
+References: <1565713248-4906-1-git-send-email-wahrenst@gmx.net>
+ <1565713248-4906-4-git-send-email-wahrenst@gmx.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1565713248-4906-4-git-send-email-wahrenst@gmx.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Although in the most platforms, the power of eeprom and i2c
-are alway on, some platforms disable the eeprom and i2c power
-in order to meet low power request.
-This patch add the pm_runtime ops to control power to support
-all platforms.
+On Tue, 13 Aug 2019 18:20:38 +0200, Stefan Wahren wrote:
+> The new BCM2711 supports an additional clock for the emmc2 block.
+> So we need an additional compatible.
+> 
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> Acked-by: Eric Anholt <eric@anholt.net>
+> ---
+>  Documentation/devicetree/bindings/clock/brcm,bcm2835-cprman.txt | 4 +++-
+>  include/dt-bindings/clock/bcm2835.h                             | 2 ++
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+> 
 
-Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
----
- drivers/misc/eeprom/at24.c | 61 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 60 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 35bf2477693d..2843e4b4aacd 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -23,6 +23,7 @@
- #include <linux/nvmem-provider.h>
- #include <linux/regmap.h>
- #include <linux/pm_runtime.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/gpio/consumer.h>
- 
- /* Address pointer is 16 bit. */
-@@ -68,6 +69,12 @@
-  * which won't work on pure SMBus systems.
-  */
- 
-+static const char * const at24_supply_names[] = {
-+	"power", "i2c",
-+};
-+
-+#define AT24_NUM_SUPPLIES ARRAY_SIZE(at24_supply_names)
-+
- struct at24_client {
- 	struct i2c_client *client;
- 	struct regmap *regmap;
-@@ -92,6 +99,8 @@ struct at24_data {
- 
- 	struct gpio_desc *wp_gpio;
- 
-+	bool has_supplies;
-+	struct regulator_bulk_data supplies[AT24_NUM_SUPPLIES];
- 	/*
- 	 * Some chips tie up multiple I2C addresses; dummy devices reserve
- 	 * them for us, and we'll use them with SMBus calls.
-@@ -663,6 +672,17 @@ static int at24_probe(struct i2c_client *client)
- 	at24->client[0].client = client;
- 	at24->client[0].regmap = regmap;
- 
-+	for (i = 0; i < AT24_NUM_SUPPLIES; i++)
-+		at24->supplies[i].supply = at24_supply_names[i];
-+	err =  devm_regulator_bulk_get(&at24->client[0].client->dev,
-+				       AT24_NUM_SUPPLIES,
-+				       at24->supplies);
-+	if (err == -EPROBE_DEFER) {
-+		dev_err(dev, "Failed to get power regulators\n");
-+		return err;
-+	}
-+	at24->has_supplies = !err ? true : false;
-+
- 	at24->wp_gpio = devm_gpiod_get_optional(dev, "wp", GPIOD_OUT_HIGH);
- 	if (IS_ERR(at24->wp_gpio))
- 		return PTR_ERR(at24->wp_gpio);
-@@ -705,13 +725,21 @@ static int at24_probe(struct i2c_client *client)
- 	/* enable runtime pm */
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
-+	pm_runtime_get_sync(dev);
-+	if (at24->has_supplies) {
-+		err = regulator_bulk_enable(AT24_NUM_SUPPLIES, at24->supplies);
-+		if (err) {
-+			dev_err(dev, "Failed to enable power regulators\n");
-+			return err;
-+		}
-+	}
- 
- 	/*
- 	 * Perform a one-byte test read to verify that the
- 	 * chip is functional.
- 	 */
- 	err = at24_read(at24, 0, &test_byte, 1);
--	pm_runtime_idle(dev);
-+	pm_runtime_put(dev);
- 	if (err) {
- 		pm_runtime_disable(dev);
- 		return -ENODEV;
-@@ -726,15 +754,46 @@ static int at24_probe(struct i2c_client *client)
- 
- static int at24_remove(struct i2c_client *client)
- {
-+	struct at24_data *at24 = i2c_get_clientdata(client);
-+
- 	pm_runtime_disable(&client->dev);
- 	pm_runtime_set_suspended(&client->dev);
-+	if (at24->has_supplies)
-+		regulator_bulk_disable(AT24_NUM_SUPPLIES, at24->supplies);
- 
- 	return 0;
- }
- 
-+static int __maybe_unused at24_suspend(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct at24_data *at24 = i2c_get_clientdata(client);
-+
-+	if (at24->has_supplies)
-+		return regulator_bulk_disable(AT24_NUM_SUPPLIES,
-+					      at24->supplies);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused at24_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct at24_data *at24 = i2c_get_clientdata(client);
-+
-+	if (at24->has_supplies)
-+		return regulator_bulk_enable(AT24_NUM_SUPPLIES,
-+					     at24->supplies);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(at24_pm_ops, at24_suspend, at24_resume);
-+
- static struct i2c_driver at24_driver = {
- 	.driver = {
- 		.name = "at24",
-+		.pm = &at24_pm_ops,
- 		.of_match_table = at24_of_match,
- 		.acpi_match_table = ACPI_PTR(at24_acpi_ids),
- 	},
--- 
-2.18.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>
