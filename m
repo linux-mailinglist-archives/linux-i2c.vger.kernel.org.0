@@ -2,66 +2,177 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9261E9CFCF
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Aug 2019 14:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F599DAFC
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2019 03:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbfHZMsj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Aug 2019 08:48:39 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:43637 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726593AbfHZMsj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Aug 2019 08:48:39 -0400
-Received: by mail-oi1-f196.google.com with SMTP id y8so11959831oih.10
-        for <linux-i2c@vger.kernel.org>; Mon, 26 Aug 2019 05:48:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zXK8wSxYeU6mTfAA+o9q9brcj/U7vzDk9wL4rKw+72U=;
-        b=PuhDj3GbY8X0hQfJMrNkB11xzS4dm9MBThrZ9VCjvyMvmq5rqiFlIPsjTzgmVur/Sw
-         3D4Afun9NUoXtABLplN7zdXHMxzbFTiCN9G439a8PBQdBduboKyz+17bJrhc1AhDK2JR
-         rwFLmAqq1XuyG/TJg05wYajQRVT0H1GuAKiw76b13Z9rmpspnzX6DNBjBW6bRXA0vRsZ
-         XjdO2FcqbzGJROPLMWLkJTc89/AN2iU/lmQoVu0xTQ1+gUc/hSHkOJrfyWA8mk+4Lixp
-         qVBCY9bf9Kd6QeIdr3EJFGD40DFN5UNczTntCkU8/GGtMeWQhTayAEmdzn3GQcm8ecMJ
-         K7uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=zXK8wSxYeU6mTfAA+o9q9brcj/U7vzDk9wL4rKw+72U=;
-        b=Erz+12kCEPQer1DdhBRTqGwofo1KhnYz+wer5Pw6ahimoYiiTS6sxUGcVsXzsIz+GR
-         d3+7fUd3oCmjBMUtfK9tQT2/NzFBOKcKf6hD/2CULgd1rrA8QX/40BuV91BG/M2nhY98
-         WXnxi86GoDiUfD40XDrLJph5VlpAH7lK0Zf1L99sGQQOlBXeW3g2RgG9jxMSzik1MtSy
-         LeqOR2uZkvuKuo0u6nz/QPMDMzsA0a9zeMX1pJjQGY3kagZfIGVq0NSas6n9MIc5X4P8
-         1pYCbKTK4A7RznElELyKDIB0hkUe4A6OvwV6PQ/xq0A5gNUrDvRlj89IUrwkTW7M60y9
-         8Gjg==
-X-Gm-Message-State: APjAAAWssDiueBYbA2gquOqWNF6hvj4F+NliZzzipEEwv2Oc8M9SpsXX
-        NE4MjovqYrQXdjdpdBlcZ8cMUSFVBME2JfsMK+s=
-X-Google-Smtp-Source: APXvYqx3GyoSiwyllCUpm5UA6G3Cn/tQVqKjktvBxyfRpE2WCmimWZ7Pr4gjQ7sPMKwA0ui6Ran3NhE/XSYWrz4lyYk=
-X-Received: by 2002:aca:3382:: with SMTP id z124mr12479175oiz.102.1566823718672;
- Mon, 26 Aug 2019 05:48:38 -0700 (PDT)
+        id S1727435AbfH0BUZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Aug 2019 21:20:25 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:55159 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726487AbfH0BUZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Aug 2019 21:20:25 -0400
+X-UUID: 6a31ab75335c4ba68e077d084a2e6387-20190827
+X-UUID: 6a31ab75335c4ba68e077d084a2e6387-20190827
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <bibby.hsieh@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
+        with ESMTP id 1222410388; Tue, 27 Aug 2019 09:20:17 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 27 Aug 2019 09:20:24 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 27 Aug 2019 09:20:24 +0800
+From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        <linux-i2c@vger.kernel.org>
+CC:     <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>
+Subject: [PATCH v0 1/1] WIP: misc: eeprom: at24: support pm_runtime control
+Date:   Tue, 27 Aug 2019 09:20:15 +0800
+Message-ID: <20190827012015.10440-1-bibby.hsieh@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Received: by 2002:a8a:13c6:0:0:0:0:0 with HTTP; Mon, 26 Aug 2019 05:48:37
- -0700 (PDT)
-Reply-To: linelink008@gmail.com
-From:   AZIM HASHIM PREMJI <linelink003@gmail.com>
-Date:   Mon, 26 Aug 2019 05:48:37 -0700
-Message-ID: <CAGLKtBVBpArtuF06UPUh_5-rhvFBfoQ8skR+dHLY3fVx+8BVQw@mail.gmail.com>
-Subject: =?UTF-8?Q?HERZLICHEN_GL=C3=9CCKWUNSCH_=E2=82=AC_1=2C000=2E000=2C00_wurde_an_Si?=
-        =?UTF-8?Q?e_gespendet?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Ich bin der Vorsitzende von Wipro Limited. Ich habe 25 Prozent meines
-pers=C3=B6nlichen Verm=C3=B6gens verschenkt
-f=C3=BCr die Wohlfahrt. Und ich habe zugesagt, den Rest von 25% dieses Jahr
-2019 an zu vergeben
-Privatpersonen .. Ich habe mich entschieden, Ihnen =E2=82=AC1.000.000,00 zu
-spenden. Wenn du bist
-Interesse an meiner Spende, kontaktieren Sie mich f=C3=BCr weitere Informat=
-ionen.
+Although in the most platforms, the power of eeprom and i2c
+are alway on, some platforms disable the eeprom and i2c power
+in order to meet low power request.
+This patch add the pm_runtime ops to control power to support
+all platforms.
+
+Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+---
+ drivers/misc/eeprom/at24.c | 61 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 60 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+index 35bf2477693d..2843e4b4aacd 100644
+--- a/drivers/misc/eeprom/at24.c
++++ b/drivers/misc/eeprom/at24.c
+@@ -23,6 +23,7 @@
+ #include <linux/nvmem-provider.h>
+ #include <linux/regmap.h>
+ #include <linux/pm_runtime.h>
++#include <linux/regulator/consumer.h>
+ #include <linux/gpio/consumer.h>
+ 
+ /* Address pointer is 16 bit. */
+@@ -68,6 +69,12 @@
+  * which won't work on pure SMBus systems.
+  */
+ 
++static const char * const at24_supply_names[] = {
++	"power", "i2c",
++};
++
++#define AT24_NUM_SUPPLIES ARRAY_SIZE(at24_supply_names)
++
+ struct at24_client {
+ 	struct i2c_client *client;
+ 	struct regmap *regmap;
+@@ -92,6 +99,8 @@ struct at24_data {
+ 
+ 	struct gpio_desc *wp_gpio;
+ 
++	bool has_supplies;
++	struct regulator_bulk_data supplies[AT24_NUM_SUPPLIES];
+ 	/*
+ 	 * Some chips tie up multiple I2C addresses; dummy devices reserve
+ 	 * them for us, and we'll use them with SMBus calls.
+@@ -663,6 +672,17 @@ static int at24_probe(struct i2c_client *client)
+ 	at24->client[0].client = client;
+ 	at24->client[0].regmap = regmap;
+ 
++	for (i = 0; i < AT24_NUM_SUPPLIES; i++)
++		at24->supplies[i].supply = at24_supply_names[i];
++	err =  devm_regulator_bulk_get(&at24->client[0].client->dev,
++				       AT24_NUM_SUPPLIES,
++				       at24->supplies);
++	if (err == -EPROBE_DEFER) {
++		dev_err(dev, "Failed to get power regulators\n");
++		return err;
++	}
++	at24->has_supplies = !err ? true : false;
++
+ 	at24->wp_gpio = devm_gpiod_get_optional(dev, "wp", GPIOD_OUT_HIGH);
+ 	if (IS_ERR(at24->wp_gpio))
+ 		return PTR_ERR(at24->wp_gpio);
+@@ -705,13 +725,21 @@ static int at24_probe(struct i2c_client *client)
+ 	/* enable runtime pm */
+ 	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
++	pm_runtime_get_sync(dev);
++	if (at24->has_supplies) {
++		err = regulator_bulk_enable(AT24_NUM_SUPPLIES, at24->supplies);
++		if (err) {
++			dev_err(dev, "Failed to enable power regulators\n");
++			return err;
++		}
++	}
+ 
+ 	/*
+ 	 * Perform a one-byte test read to verify that the
+ 	 * chip is functional.
+ 	 */
+ 	err = at24_read(at24, 0, &test_byte, 1);
+-	pm_runtime_idle(dev);
++	pm_runtime_put(dev);
+ 	if (err) {
+ 		pm_runtime_disable(dev);
+ 		return -ENODEV;
+@@ -726,15 +754,46 @@ static int at24_probe(struct i2c_client *client)
+ 
+ static int at24_remove(struct i2c_client *client)
+ {
++	struct at24_data *at24 = i2c_get_clientdata(client);
++
+ 	pm_runtime_disable(&client->dev);
+ 	pm_runtime_set_suspended(&client->dev);
++	if (at24->has_supplies)
++		regulator_bulk_disable(AT24_NUM_SUPPLIES, at24->supplies);
+ 
+ 	return 0;
+ }
+ 
++static int __maybe_unused at24_suspend(struct device *dev)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	struct at24_data *at24 = i2c_get_clientdata(client);
++
++	if (at24->has_supplies)
++		return regulator_bulk_disable(AT24_NUM_SUPPLIES,
++					      at24->supplies);
++
++	return 0;
++}
++
++static int __maybe_unused at24_resume(struct device *dev)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	struct at24_data *at24 = i2c_get_clientdata(client);
++
++	if (at24->has_supplies)
++		return regulator_bulk_enable(AT24_NUM_SUPPLIES,
++					     at24->supplies);
++
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(at24_pm_ops, at24_suspend, at24_resume);
++
+ static struct i2c_driver at24_driver = {
+ 	.driver = {
+ 		.name = "at24",
++		.pm = &at24_pm_ops,
+ 		.of_match_table = at24_of_match,
+ 		.acpi_match_table = ACPI_PTR(at24_acpi_ids),
+ 	},
+-- 
+2.18.0
+
