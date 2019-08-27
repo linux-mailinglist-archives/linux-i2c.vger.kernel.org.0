@@ -2,92 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A9C9F119
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2019 19:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A829F4C4
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2019 23:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727807AbfH0RFG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 27 Aug 2019 13:05:06 -0400
-Received: from mout.gmx.net ([212.227.15.19]:39457 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727064AbfH0RFG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 27 Aug 2019 13:05:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1566925496;
-        bh=iHML+3J8Gz/ZoXa55rWlvuO5gxBAoQS0ShcVMHMoF+8=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=QIRU5LXEtpLxXDh5f4Tu8sKtaz3KCIFtqmFhU+C3bPOjwrcWwow6Wc6s5ei1cnDtZ
-         kUQkf4QjjnqV9oVJec58sB0ERMGW9/V7NKmaW+OwfKU/y5Kw+zLqiOpcHtLnFh9xVq
-         jT0owZ1x7wI289IWT+BlBVbjqyT7Sr7HinEjsLiQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([37.4.249.106]) by mail.gmx.com
- (mrgmx003 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 0MIuSH-1i4aq91kQD-002VXu; Tue, 27 Aug 2019 19:04:56 +0200
-From:   Stefan Wahren <wahrenst@gmx.net>
-To:     Wolfram Sang <wsa@the-dreams.de>, Eric Anholt <eric@anholt.net>,
+        id S1728233AbfH0VKu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 27 Aug 2019 17:10:50 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43368 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727064AbfH0VKu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Aug 2019 17:10:50 -0400
+Received: by mail-pg1-f195.google.com with SMTP id k3so137554pgb.10
+        for <linux-i2c@vger.kernel.org>; Tue, 27 Aug 2019 14:10:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=jpomdVGA5p42umi8ubetJR56dC18fC/oAubbOu5Ilsk=;
+        b=HJgdekOb2c8f3gRbcDRpDs+Zps9PfGWBN0q5BSa5IWsYs7UZzQmy/1kzHlZGnLWypG
+         hWL8mwrqa+wNOxLTGPakFK7jHz9TkN/ioDOg3TA0Iec6/138y09IySwjKSnRIQGqHyaU
+         drM/0Bfphi2hYMWGltcph1ovE1eVAutqoWQHE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=jpomdVGA5p42umi8ubetJR56dC18fC/oAubbOu5Ilsk=;
+        b=auk8K6Lagyyh9UqOxdFT6vAPfFL4utdpld8ILJT0r8wM5y5D/rJyA1KPdzXA0fthOZ
+         T8t2ktUCiZSFNTWEcOoqv9B/lIypfzTheRv2KN5e3Q/4Sg+juiRaSRHKql6mT4ePqoOr
+         AmcDUMy+V7zqLZZewsHBLEoTtO9iaeDJAXmNr1t8AYAUF/+b/ClYwATFAU7jWCU8un4Y
+         VFelw0i8KxHiuhuKlIlJktQZdJFQCZ0TFkDShqB418ktvAyXKhNeb5gxbHpEZ1UPWHfV
+         N3xWh4u12QSEk/aHiITy/hsNwlabiqvISyLJV9nvRbp5KHMD85zhrHnqJtKKAgajrwct
+         HBRQ==
+X-Gm-Message-State: APjAAAU49idqJpgskGS9Gy4iLHagUbtxGVC5YxymrKxF7EL7W5MHW7eR
+        +NqzoR5SiQP2RmWd9gqI69fyAA==
+X-Google-Smtp-Source: APXvYqzT2kvVrSL+W5x9nHvalWE8UntFAd6GPW9EiqI9/PPoYTtDOeGyI7rRTJ1KlgCTVSH3vfWTZQ==
+X-Received: by 2002:a65:6547:: with SMTP id a7mr385824pgw.65.1566940249162;
+        Tue, 27 Aug 2019 14:10:49 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id a128sm223417pfb.185.2019.08.27.14.10.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 27 Aug 2019 14:10:48 -0700 (PDT)
+Subject: Re: [PATCH 3/3] i2c: bcm2835: Add full name of devicetree node to
+ adapter name
+To:     Stefan Wahren <wahrenst@gmx.net>, Wolfram Sang <wsa@the-dreams.de>,
+        Eric Anholt <eric@anholt.net>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH 3/3] i2c: bcm2835: Add full name of devicetree node to adapter name
-Date:   Tue, 27 Aug 2019 19:04:16 +0200
-Message-Id: <1566925456-5928-4-git-send-email-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1566925456-5928-1-git-send-email-wahrenst@gmx.net>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <1566925456-5928-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:aZYCnrYSUMa259o8XUY7VioHSFgAqtazTRKuK29qv+dxx4hlcWX
- y3W507fuap5c14ulqH8+mdcazpaWUShLGhu5I+k3ayg7Kwoh7HYWFfozjn8mihWipo166EI
- sUBCS75QNwWoMNgYORuMcxPV+Dn5tm0Y7xWcykJe1Zi1SuSiU7hpl+zB5HuF4UkmsxJqziI
- PbIK5Dh6YDWo5TU9CDaTg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:te8ExPthDRw=:+1A4+agapq1RX9Pb4knZFi
- qgN1IUfIiJsvYeSE8DMBA8l0KJSLd+o1+EEXGa+8GzeEIt2RfBv5v3wOCa3XP8ZXmkpfkYU8+
- lgLZYAwxhMW0DhiksWtRhvlrl75myih6YgU3aUlPG3S4Fm6P9mfTKztTnQBI/6ntTIRcPJZ+5
- 0yScBSID09fHIZfAyRNCnC/SUyaOiLMzPHz2cFD7ueXU2341JDvwTl8y6ugw2L0SBLw4SSgoP
- beOMXtp264Ki9CDjCLSHImUUR+yluM5uXZiwZXbZCpnmG1BgUM4/uSSVhjN3tJVlla9bC6M7m
- 1h+dNnTojqAncg9Pn6ErKpPW1G8KLUb3pjoFNT8o0KbDtCuj98TUS5DkPzT9fjvFxdhpdtxzc
- Jrl6dwMDHbDhlWpxmoyRNBXSIbRE3STl6aOeNwFQJboWckHQ3parW1ZHQrz2o5Tf9KuN8aQqm
- BT+0EQsfLrNPdneD0LUug90psobgLYLzm4GTbkizSHT4GqIJ+0slyN+mVBxKeGIlHC6Mjss8X
- Tk65u4vHp49mjI3afTl6+bViCiAlncVm/obV0GY0bP6/UJnrbm7yNPUduKSjx0laU4FW7OD/W
- Mgo/C0eSZ5K4yC+CHYZLI/HvXSTzJP07dzTgDqiQHRI5NzE9fDe4olBbw/Erdcw+K/TyUomyJ
- gpEfJrpDMm1t2hgvGHUCBTYTo6OmpJ3tjqOn81f1dvrdVdFYAjaARoAGSTTdrhlj0FFT9U3Er
- CckhZybyO5x+OdAuCO/pJjPFAMdMvo84sHWX3IjNus9Lu+zO/SvdjbHeTZ98GexWDGsCZNcjw
- eIjhq0KGqruQn9K7eEfyt5cU5wwoO+TgFaNRoaCZZ41tGdBoIGzEFHozh1fxFr+hyhBrlq7MB
- JzG24VMXCf0DturZZ8AmIjQWwvBV8w9kSONe294TQAMzlqKpWastQOoIKJXDJpyLbskl+UM/Y
- KX8U0bAyWP7fanIERSmYAUU+EajnbUNjzX0ir8pvUsfosPiVLDJAUFMTRRzton2ZuTcnKEjOI
- Oec9ixThaaW0jTF9cTgsYBz4MZe1ksw3o71tU3jc4+J6rqKjNYMSvjU0TLY3AfK3HI7BHhhx1
- jYrnYKcGffNkLfoig7Tt+ScnyD33xir8nxt4aF2ZKDHie4XMnhAw1hjig==
-Content-Transfer-Encoding: quoted-printable
+ <1566925456-5928-4-git-send-email-wahrenst@gmx.net>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <1c42daa2-f7f7-baac-2d44-f9d86848d331@broadcom.com>
+Date:   Tue, 27 Aug 2019 14:10:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <1566925456-5928-4-git-send-email-wahrenst@gmx.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Inspired by Lori Hikichi's patch for iproc, this adds the full name of
-the devicetree node to the adapter name. With the introduction of
-BCM2711 it's very difficult to distinguish between the multiple instances.
 
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-=2D--
- drivers/i2c/busses/i2c-bcm2835.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm=
-2835.c
-index ab5502f..e01b2b5 100644
-=2D-- a/drivers/i2c/busses/i2c-bcm2835.c
-+++ b/drivers/i2c/busses/i2c-bcm2835.c
-@@ -472,7 +472,8 @@ static int bcm2835_i2c_probe(struct platform_device *p=
-dev)
- 	i2c_set_adapdata(adap, i2c_dev);
- 	adap->owner =3D THIS_MODULE;
- 	adap->class =3D I2C_CLASS_DEPRECATED;
--	strlcpy(adap->name, "bcm2835 I2C adapter", sizeof(adap->name));
-+	snprintf(adap->name, sizeof(adap->name), "bcm2835 (%s)",
-+		 of_node_full_name(pdev->dev.of_node));
- 	adap->algo =3D &bcm2835_i2c_algo;
- 	adap->dev.parent =3D &pdev->dev;
- 	adap->dev.of_node =3D pdev->dev.of_node;
-=2D-
-2.7.4
+On 2019-08-27 10:04 a.m., Stefan Wahren wrote:
+> Inspired by Lori Hikichi's patch for iproc, this adds the full name of
+> the devicetree node to the adapter name. With the introduction of
+> BCM2711 it's very difficult to distinguish between the multiple instances.
+>
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+Acked-by: Scott Branden <scott.branden@broadcom.com>
+> =2D--
+>   drivers/i2c/busses/i2c-bcm2835.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm=
+> 2835.c
+> index ab5502f..e01b2b5 100644
+> =2D-- a/drivers/i2c/busses/i2c-bcm2835.c
+> +++ b/drivers/i2c/busses/i2c-bcm2835.c
+> @@ -472,7 +472,8 @@ static int bcm2835_i2c_probe(struct platform_device *p=
+> dev)
+>   	i2c_set_adapdata(adap, i2c_dev);
+>   	adap->owner =3D THIS_MODULE;
+>   	adap->class =3D I2C_CLASS_DEPRECATED;
+> -	strlcpy(adap->name, "bcm2835 I2C adapter", sizeof(adap->name));
+> +	snprintf(adap->name, sizeof(adap->name), "bcm2835 (%s)",
+> +		 of_node_full_name(pdev->dev.of_node));
+>   	adap->algo =3D &bcm2835_i2c_algo;
+>   	adap->dev.parent =3D &pdev->dev;
+>   	adap->dev.of_node =3D pdev->dev.of_node;
+> =2D-
+> 2.7.4
+>
 
