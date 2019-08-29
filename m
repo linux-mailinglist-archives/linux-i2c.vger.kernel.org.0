@@ -2,36 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99325A2681
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2019 20:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB4BA2694
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2019 21:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728541AbfH2SxB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 29 Aug 2019 14:53:01 -0400
-Received: from sauhun.de ([88.99.104.3]:42172 "EHLO pokefinder.org"
+        id S1728124AbfH2TAR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 29 Aug 2019 15:00:17 -0400
+Received: from sauhun.de ([88.99.104.3]:42290 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727798AbfH2SxB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 29 Aug 2019 14:53:01 -0400
+        id S1727798AbfH2TAR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 29 Aug 2019 15:00:17 -0400
 Received: from localhost (p54B33070.dip0.t-ipconnect.de [84.179.48.112])
-        by pokefinder.org (Postfix) with ESMTPSA id 764D32C001C;
-        Thu, 29 Aug 2019 20:52:59 +0200 (CEST)
-Date:   Thu, 29 Aug 2019 20:52:59 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 37F742C001C;
+        Thu, 29 Aug 2019 21:00:15 +0200 (CEST)
+Date:   Thu, 29 Aug 2019 21:00:14 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Stefan Wahren <wahrenst@gmx.net>
-Cc:     Eric Anholt <eric@anholt.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/3] i2c: bcm2835: Add full name of devicetree node to
- adapter name
-Message-ID: <20190829185258.GF3740@ninjato>
-References: <1566925456-5928-1-git-send-email-wahrenst@gmx.net>
- <1566925456-5928-4-git-send-email-wahrenst@gmx.net>
+To:     Max Staudt <max@enpas.org>
+Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-m68k@vger.kernel.org,
+        linux-kernel@vger.kernel.org, glaubitz@physik.fu-berlin.de
+Subject: Re: [PATCH] i2c/busses: Add i2c-icy for I2C on m68k/Amiga
+Message-ID: <20190829190014.GG3740@ninjato>
+References: <3F017C0B-44D6-4E63-A908-DDAA5586D67C@enpas.org>
+ <20190820092739.7213-1-max@enpas.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iBwuxWUsK/REspAd"
+        protocol="application/pgp-signature"; boundary="Cp3Cp8fzgozWLBWL"
 Content-Disposition: inline
-In-Reply-To: <1566925456-5928-4-git-send-email-wahrenst@gmx.net>
+In-Reply-To: <20190820092739.7213-1-max@enpas.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -39,39 +38,63 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---iBwuxWUsK/REspAd
+--Cp3Cp8fzgozWLBWL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 27, 2019 at 07:04:16PM +0200, Stefan Wahren wrote:
-> Inspired by Lori Hikichi's patch for iproc, this adds the full name of
-> the devicetree node to the adapter name. With the introduction of
-> BCM2711 it's very difficult to distinguish between the multiple instances.
+On Tue, Aug 20, 2019 at 11:27:39AM +0200, Max Staudt wrote:
+> This is the i2c-icy driver for the ICY board for Amiga computers.
+> It connects a PCF8584 I2C controller to the Zorro bus, providing I2C
+> connectivity. The original documentation can be found on Aminet:
 >=20
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> https://aminet.net/package/docs/hard/icy
+>=20
+> IRQ support is currently not implemented, as i2c-algo-pcf is built for
+> the ISA bus and a straight implementation of the same stack locks up a
+> Zorro machine.
+>=20
+> v5: usleep_range() instead of udelay()
+>     Style
+>=20
+> v3: Fixed %pa format string
+>     Dropped adapter class.
+>     Clarified licence.
+>     Removed clock parameter.
+>=20
+> v2: Matched function names to callbacks from i2c-algo-pcf
+>     Used z_readb()/z_writeb()
+>     Removed BROKEN_ON_SMP in Kconfig
+>     Moved LTC2990 to a separate commit
 
-Applied to for-next, thanks!
+Thanks for the changelog; it should go below the '---' line, however.
+
+>=20
+> Signed-off-by: Max Staudt <max@enpas.org>
+
+Fixed a freshly introduced checkpatch warning for you.
+
+But most importantly, applied to for-next, thanks!
 
 
---iBwuxWUsK/REspAd
+--Cp3Cp8fzgozWLBWL
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1oHwoACgkQFA3kzBSg
-KbaAlhAAn9G0ZUGQTYXFyYIW4w3nIISRT1DCe/hw6DNo3JK7fLdbwHiecrA29Vnx
-mgsA5gp2kSreMJlkM6TZRt90QdhCbpswa7MS7r2VH7p+WWtRyBsSD3Uerrkw1vSs
-dZJcB/8r/RN9XIo1h3sOChGcS4EoEc9U3aPls3XpUloPhY5lF+XPB/suZnp47tGI
-OHCPESXRhFzabYbhr0O16X794BSrLFSe4YIYG7zzuc1hErW5qNTWYGSyOl5t6bar
-2vYjvZSf1yyBhsXNDKV+/hwy88Gc0K/VHPU8qcfbIPlnpxYV0l6jYev6ArFEkKN7
-st1+LZ7+RPyloqf7ZMkEngYf30cmrLG2AbpRViNjKT5ja+augDMs6vPMh5Uac0Ci
-mkc3Xt/YIiVEvE6msBplWGQ7FLIhxAWMmUlZxUVzRg9lSJ35ew3j5UH3pcP1gOcI
-XpIFMK73nAx3H83CjFvufIxo4XUkcpJIwaJIsqBC1WN9ygEOp+gJMWNnjYzu8f47
-ctklX2fcOSkP1Dy1rTY9qrfsHJeDakD1uYA+eQvYZzLN0wS98kpe2fxEgPYL6+Qj
-B4kx98BFaadQIXG3Ae1L8ziOGEWQlSZS/3Rbv1Q3m72Fz9VRNKXmCbJOUdUsfAZi
-XFD0Ulkuy16WZYA8gCMe7SU4Ntzm/fGERw+4717jqBRVSxv7utg=
-=b2WE
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1oIL4ACgkQFA3kzBSg
+KbaIlQ/+KKet9VcY+M8pjIHgWGbP2wcEex6N0ARbClkez48OAeie4CbCpz0PGQHj
+0GaJZXsnat80+rQzajZqGCue5iktKEJL6YuN9j7PdSfGZk2zgIGLm742yMDzBWXT
+iKgggKkn+jh1QZoHbXZzBY8gs0EEphunYPsFjDgxXn9Oj5rkt8lAy7U26pwOiCCW
+9RQ3byci5bFpp0dE45BgsDAvH74lDzztYJ1c/xjL48M/cdGCUASFlDDxoT+8A9/R
+YtzRaYl1+LtsKK7APGXigvAnUNXR3iMZeHHhcecBzraWyU9ZLHIMLqEOlOGXcqG0
+SNzB+DQVsS6bqtgf2rbaVDU+N1sT+xADNsyyrr1AzmYHFy4YjLQJTkfw6yqMKa1y
+vyvZBAG7DpmyZYn5Guug068u+7VkX3Vdq7wZ5W5IlbML7mQNqN/cTg9UrFuTH2gj
+Up5tagvkjn01tSUidd1+EAkmQzJRTzT3hUabe7d5kG0fbJrws0BRcK6K3d/nIyJs
+kUAx+Pq5SKCGaCCP4XGVeJddMmFoqrfZbN/5vgab+225yNq832vpGu+RanGn5L6h
+d+l778bj57TO4DvAQ3XgfVnPbaYtlO0B6XPLlh0bR6AK+TLGlvNpLFZPDjGmWBSB
+796nA/Wy5PwTWkTxSmLZ8u5H+WT3OuFQG4yM4Na7Trpv8iiU2lM=
+=WJlR
 -----END PGP SIGNATURE-----
 
---iBwuxWUsK/REspAd--
+--Cp3Cp8fzgozWLBWL--
