@@ -2,144 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8CAA1074
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2019 06:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5CB0A1430
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2019 10:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725810AbfH2E3p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 29 Aug 2019 00:29:45 -0400
-Received: from antares.kleine-koenig.org ([94.130.110.236]:54664 "EHLO
-        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725776AbfH2E3p (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Aug 2019 00:29:45 -0400
-Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
-        id C8D38789194; Thu, 29 Aug 2019 06:29:41 +0200 (CEST)
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Oleksij Rempel <linux@rempel-privat.de>
-Cc:     kernel@pengutronix.de, Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Enrico Weigelt <lkml@metux.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] [RFC] i2c: imx: make use of format specifier %dE
-Date:   Thu, 29 Aug 2019 06:29:05 +0200
-Message-Id: <20190829042905.4850-1-uwe@kleine-koenig.org>
-X-Mailer: git-send-email 2.23.0
+        id S1727123AbfH2IxI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 29 Aug 2019 04:53:08 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38965 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727124AbfH2IxI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Aug 2019 04:53:08 -0400
+Received: by mail-ot1-f67.google.com with SMTP id b1so2649368otp.6;
+        Thu, 29 Aug 2019 01:53:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EIJAhw2urkR5VtvRodOO+ASHpiwIZz6qqEqE7Oa24LU=;
+        b=cK35fNUUR5PX36UcmIbskW4jEFbit7GuxV1/iPbgO03d1vad2fS8rhtBIaMFF6ZlmL
+         JMIwfxYs0eura+EgTQrCz4D6GDLf95ac7dBJn3ICLqRiFgJc9LFJVT1NQVQkFyJuzqf4
+         +WczoyBsLydE4HYSyenLzP7GgeSS1stQoEq0wzNrKpOvahF21Z61u35te9ukd8EO51GD
+         gBOssDPlqe/6+nnlxed8gejeV7fzTL2+mP+7blMvqiCnBZcMCtX2R/3c29IJpr/v0Wa6
+         FAXQTVuho+WqomWJHgLst9fOO5ZfdHhdUVUvxG/gn+FcJNmUtONE7r6DGDWuXxsg7NdX
+         ALhQ==
+X-Gm-Message-State: APjAAAW20BgYleNUmf24DALs9ClXiNfDsquM1+SkF1C1REvJ38Ma40dH
+        EB+LPQqMsbQLPg6yqa1q23z7YaL1nLhBs8JvtiDhMQ==
+X-Google-Smtp-Source: APXvYqzKrWEUmujCP99cM9ckSxbmOwT2FI15sD68kl0juR/qG5KPwUfpLut7eiRgBPU7JipcYuDhHSTK+45aVFrnW/I=
+X-Received: by 2002:a9d:3e50:: with SMTP id h16mr6446572otg.107.1567068787660;
+ Thu, 29 Aug 2019 01:53:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190819204825.2937-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20190819204825.2937-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 29 Aug 2019 10:52:56 +0200
+Message-ID: <CAMuHMdUvbjosOUeSNyga07=2tnrGsnxE-C=NhoJ8qooTxMWxUA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: make i2c_unregister_device() ERR_PTR safe
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I created a patch that teaches printk et al to emit a symbolic error
-name for an error valued integer[1]. With that applied
+On Mon, Aug 19, 2019 at 10:49 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> We are moving towards returning ERR_PTRs when i2c_new_*_device() calls
+> fail. Make sure its counterpart for unregistering handles ERR_PTRs as
+> well.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-	dev_err(&pdev->dev, "can't enable I2C clock, ret=%dE\n", ret);
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-emits
+Gr{oetje,eeting}s,
 
-	... can't enable I2C clock, ret=EIO
+                        Geert
 
-if ret is -EIO. Petr Mladek (i.e. one of the printk maintainers) had
-concerns if this would be well received and worth the effort. He asked
-to present it to a few subsystems. So for now, this patch converting the
-i2c-imx driver shouldn't be applied yet but it would be great to get
-some feedback about if you think that being able to easily printk (for
-example) "EIO" instead of "-5" is a good idea. Would it help you? Do you
-think it helps your users?
-
-Thanks
-Uwe
-
-[1] https://lkml.org/lkml/2019/8/27/1456
----
- drivers/i2c/busses/i2c-imx.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index 15f6cde6452f..359e911cb891 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -289,7 +289,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
- 	if (IS_ERR(dma->chan_tx)) {
- 		ret = PTR_ERR(dma->chan_tx);
- 		if (ret != -ENODEV && ret != -EPROBE_DEFER)
--			dev_err(dev, "can't request DMA tx channel (%d)\n", ret);
-+			dev_err(dev, "can't request DMA tx channel (%dE)\n", ret);
- 		goto fail_al;
- 	}
- 
-@@ -300,7 +300,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
- 	dma_sconfig.direction = DMA_MEM_TO_DEV;
- 	ret = dmaengine_slave_config(dma->chan_tx, &dma_sconfig);
- 	if (ret < 0) {
--		dev_err(dev, "can't configure tx channel (%d)\n", ret);
-+		dev_err(dev, "can't configure tx channel (%dE)\n", ret);
- 		goto fail_tx;
- 	}
- 
-@@ -308,7 +308,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
- 	if (IS_ERR(dma->chan_rx)) {
- 		ret = PTR_ERR(dma->chan_rx);
- 		if (ret != -ENODEV && ret != -EPROBE_DEFER)
--			dev_err(dev, "can't request DMA rx channel (%d)\n", ret);
-+			dev_err(dev, "can't request DMA rx channel (%dE)\n", ret);
- 		goto fail_tx;
- 	}
- 
-@@ -319,7 +319,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
- 	dma_sconfig.direction = DMA_DEV_TO_MEM;
- 	ret = dmaengine_slave_config(dma->chan_rx, &dma_sconfig);
- 	if (ret < 0) {
--		dev_err(dev, "can't configure rx channel (%d)\n", ret);
-+		dev_err(dev, "can't configure rx channel (%dE)\n", ret);
- 		goto fail_rx;
- 	}
- 
-@@ -964,7 +964,7 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
- 	pm_runtime_put_autosuspend(i2c_imx->adapter.dev.parent);
- 
- out:
--	dev_dbg(&i2c_imx->adapter.dev, "<%s> exit with: %s: %d\n", __func__,
-+	dev_dbg(&i2c_imx->adapter.dev, "<%s> exit with: %s: %dE\n", __func__,
- 		(result < 0) ? "error" : "success msg",
- 			(result < 0) ? result : num);
- 	return (result < 0) ? result : num;
-@@ -1100,7 +1100,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 
- 	ret = clk_prepare_enable(i2c_imx->clk);
- 	if (ret) {
--		dev_err(&pdev->dev, "can't enable I2C clock, ret=%d\n", ret);
-+		dev_err(&pdev->dev, "can't enable I2C clock, ret=%dE\n", ret);
- 		return ret;
- 	}
- 
-@@ -1108,7 +1108,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 	ret = devm_request_irq(&pdev->dev, irq, i2c_imx_isr, IRQF_SHARED,
- 				pdev->name, i2c_imx);
- 	if (ret) {
--		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
-+		dev_err(&pdev->dev, "can't claim irq %dE\n", irq);
- 		goto clk_disable;
- 	}
- 
-@@ -1230,7 +1230,7 @@ static int __maybe_unused i2c_imx_runtime_resume(struct device *dev)
- 
- 	ret = clk_enable(i2c_imx->clk);
- 	if (ret)
--		dev_err(dev, "can't enable I2C clock, ret=%d\n", ret);
-+		dev_err(dev, "can't enable I2C clock, ret=%dE\n", ret);
- 
- 	return ret;
- }
 -- 
-2.23.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
