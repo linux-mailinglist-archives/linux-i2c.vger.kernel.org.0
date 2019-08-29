@@ -2,19 +2,19 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49193A2680
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2019 20:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99325A2681
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2019 20:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728493AbfH2Sw5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 29 Aug 2019 14:52:57 -0400
-Received: from sauhun.de ([88.99.104.3]:42166 "EHLO pokefinder.org"
+        id S1728541AbfH2SxB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 29 Aug 2019 14:53:01 -0400
+Received: from sauhun.de ([88.99.104.3]:42172 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727798AbfH2Sw5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 29 Aug 2019 14:52:57 -0400
+        id S1727798AbfH2SxB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 29 Aug 2019 14:53:01 -0400
 Received: from localhost (p54B33070.dip0.t-ipconnect.de [84.179.48.112])
-        by pokefinder.org (Postfix) with ESMTPSA id 362DD2C0021;
-        Thu, 29 Aug 2019 20:52:56 +0200 (CEST)
-Date:   Thu, 29 Aug 2019 20:52:55 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 764D32C001C;
+        Thu, 29 Aug 2019 20:52:59 +0200 (CEST)
+Date:   Thu, 29 Aug 2019 20:52:59 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Stefan Wahren <wahrenst@gmx.net>
 Cc:     Eric Anholt <eric@anholt.net>,
@@ -22,15 +22,16 @@ Cc:     Eric Anholt <eric@anholt.net>,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/3] i2c: bcm2835: Avoid clk stretch quirk for BCM2711
-Message-ID: <20190829185255.GE3740@ninjato>
+Subject: Re: [PATCH 3/3] i2c: bcm2835: Add full name of devicetree node to
+ adapter name
+Message-ID: <20190829185258.GF3740@ninjato>
 References: <1566925456-5928-1-git-send-email-wahrenst@gmx.net>
- <1566925456-5928-3-git-send-email-wahrenst@gmx.net>
+ <1566925456-5928-4-git-send-email-wahrenst@gmx.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+JUInw4efm7IfTNU"
+        protocol="application/pgp-signature"; boundary="iBwuxWUsK/REspAd"
 Content-Disposition: inline
-In-Reply-To: <1566925456-5928-3-git-send-email-wahrenst@gmx.net>
+In-Reply-To: <1566925456-5928-4-git-send-email-wahrenst@gmx.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -38,39 +39,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---+JUInw4efm7IfTNU
+--iBwuxWUsK/REspAd
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 27, 2019 at 07:04:15PM +0200, Stefan Wahren wrote:
-> The I2C block on the BCM2711 isn't affected by the clk stretching bug.
-> So there is no need to apply the corresponding quirk.
+On Tue, Aug 27, 2019 at 07:04:16PM +0200, Stefan Wahren wrote:
+> Inspired by Lori Hikichi's patch for iproc, this adds the full name of
+> the devicetree node to the adapter name. With the introduction of
+> BCM2711 it's very difficult to distinguish between the multiple instances.
 >=20
 > Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> Reviewed-by: Eric Anholt <eric@anholt.net>
 
 Applied to for-next, thanks!
 
 
---+JUInw4efm7IfTNU
+--iBwuxWUsK/REspAd
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1oHwcACgkQFA3kzBSg
-KbakKRAAsAY5xsvAvpGx6PZp0uRhtLlAPh4nNZEdWvXB1S/Sjc/S9+d1O7S3KgX3
-vNHGjpeRfvFZmkzr7SU8z9CHlAyu+hf0shAeuZGsXM9yrnkpVJHpCMm48DzMAVr2
-ud1G/bj6RvxzjyAuxtn3SL8GGsBaoDeIoz0a5GIkdDWMB2v8hBQgIWP3Ym8BRtE2
-5Pq9h445Ol2jtSlxiVKbxLTicqccywapHyfIX4k3k6x7F80Savl8AuaBKCU5bznC
-j/USjoIqbtf8nEN6OzZj8ig6M320aggv2PW3UbLAEsZ2M9uUtyIuwWcmGFiOucOP
-0c3Hb6/mD2o+Shn/iS3Qp6+LIRVFOM0o/+aJawq2Aw8eAV6X5tzVE2RqvSff+X/p
-MHwq5ikdcj+4/XKgg8Ab/d4DZ2tK8I8I0am3FcU4MeU0jjbFyut0+AdlND8Zw3oE
-8p5ATq0GtMxWZ7YkbCvPG6uLmDdBQG/5uO/33TmkV+W6JuWaXk8jrf8/yChD2XY2
-EajubuqcvJNzXemPOTBkk0cr26debd2eFa0V094fEZU05yn3CvonNA8bQOECS5ob
-ZqG19+uOx8bP9DayagPKSxY7MPpuu/3xaofW+OgJD6LqhgoSGCOGsI9LJcx9K8RU
-pxcJ0yEQPN/0H/ZfWOe3wZh9sBxH5UhcAVmkeAo1Jb9lr7F4RvE=
-=MKy2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1oHwoACgkQFA3kzBSg
+KbaAlhAAn9G0ZUGQTYXFyYIW4w3nIISRT1DCe/hw6DNo3JK7fLdbwHiecrA29Vnx
+mgsA5gp2kSreMJlkM6TZRt90QdhCbpswa7MS7r2VH7p+WWtRyBsSD3Uerrkw1vSs
+dZJcB/8r/RN9XIo1h3sOChGcS4EoEc9U3aPls3XpUloPhY5lF+XPB/suZnp47tGI
+OHCPESXRhFzabYbhr0O16X794BSrLFSe4YIYG7zzuc1hErW5qNTWYGSyOl5t6bar
+2vYjvZSf1yyBhsXNDKV+/hwy88Gc0K/VHPU8qcfbIPlnpxYV0l6jYev6ArFEkKN7
+st1+LZ7+RPyloqf7ZMkEngYf30cmrLG2AbpRViNjKT5ja+augDMs6vPMh5Uac0Ci
+mkc3Xt/YIiVEvE6msBplWGQ7FLIhxAWMmUlZxUVzRg9lSJ35ew3j5UH3pcP1gOcI
+XpIFMK73nAx3H83CjFvufIxo4XUkcpJIwaJIsqBC1WN9ygEOp+gJMWNnjYzu8f47
+ctklX2fcOSkP1Dy1rTY9qrfsHJeDakD1uYA+eQvYZzLN0wS98kpe2fxEgPYL6+Qj
+B4kx98BFaadQIXG3Ae1L8ziOGEWQlSZS/3Rbv1Q3m72Fz9VRNKXmCbJOUdUsfAZi
+XFD0Ulkuy16WZYA8gCMe7SU4Ntzm/fGERw+4717jqBRVSxv7utg=
+=b2WE
 -----END PGP SIGNATURE-----
 
---+JUInw4efm7IfTNU--
+--iBwuxWUsK/REspAd--
