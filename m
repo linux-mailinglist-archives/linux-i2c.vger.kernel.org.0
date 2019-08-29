@@ -2,178 +2,144 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D05D9A0F5E
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2019 04:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8CAA1074
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2019 06:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726330AbfH2CE4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 28 Aug 2019 22:04:56 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:28575 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726384AbfH2CEz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Aug 2019 22:04:55 -0400
-X-UUID: ac46628743ee478f872d918a93a30ef0-20190829
-X-UUID: ac46628743ee478f872d918a93a30ef0-20190829
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <bibby.hsieh@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 511660189; Thu, 29 Aug 2019 10:04:49 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 29 Aug 2019 10:04:54 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 29 Aug 2019 10:04:54 +0800
-From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        <linux-i2c@vger.kernel.org>
-CC:     <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <srv_heupstream@mediatek.com>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>
-Subject: [PATCH] misc: eeprom: at24: support pm_runtime control
-Date:   Thu, 29 Aug 2019 10:04:46 +0800
-Message-ID: <20190829020446.27176-1-bibby.hsieh@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S1725810AbfH2E3p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 29 Aug 2019 00:29:45 -0400
+Received: from antares.kleine-koenig.org ([94.130.110.236]:54664 "EHLO
+        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbfH2E3p (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Aug 2019 00:29:45 -0400
+Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
+        id C8D38789194; Thu, 29 Aug 2019 06:29:41 +0200 (CEST)
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Oleksij Rempel <linux@rempel-privat.de>
+Cc:     kernel@pengutronix.de, Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Enrico Weigelt <lkml@metux.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] [RFC] i2c: imx: make use of format specifier %dE
+Date:   Thu, 29 Aug 2019 06:29:05 +0200
+Message-Id: <20190829042905.4850-1-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Although in the most platforms, the power of eeprom and i2c
-are alway on, some platforms disable the eeprom and i2c power
-in order to meet low power request.
-This patch add the pm_runtime ops to control power to support
-all platforms.
+I created a patch that teaches printk et al to emit a symbolic error
+name for an error valued integer[1]. With that applied
 
-Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+	dev_err(&pdev->dev, "can't enable I2C clock, ret=%dE\n", ret);
+
+emits
+
+	... can't enable I2C clock, ret=EIO
+
+if ret is -EIO. Petr Mladek (i.e. one of the printk maintainers) had
+concerns if this would be well received and worth the effort. He asked
+to present it to a few subsystems. So for now, this patch converting the
+i2c-imx driver shouldn't be applied yet but it would be great to get
+some feedback about if you think that being able to easily printk (for
+example) "EIO" instead of "-5" is a good idea. Would it help you? Do you
+think it helps your users?
+
+Thanks
+Uwe
+
+[1] https://lkml.org/lkml/2019/8/27/1456
 ---
- drivers/misc/eeprom/at24.c | 61 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 60 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-imx.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 35bf2477693d..2843e4b4aacd 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -23,6 +23,7 @@
- #include <linux/nvmem-provider.h>
- #include <linux/regmap.h>
- #include <linux/pm_runtime.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/gpio/consumer.h>
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index 15f6cde6452f..359e911cb891 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -289,7 +289,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
+ 	if (IS_ERR(dma->chan_tx)) {
+ 		ret = PTR_ERR(dma->chan_tx);
+ 		if (ret != -ENODEV && ret != -EPROBE_DEFER)
+-			dev_err(dev, "can't request DMA tx channel (%d)\n", ret);
++			dev_err(dev, "can't request DMA tx channel (%dE)\n", ret);
+ 		goto fail_al;
+ 	}
  
- /* Address pointer is 16 bit. */
-@@ -68,6 +69,12 @@
-  * which won't work on pure SMBus systems.
-  */
+@@ -300,7 +300,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
+ 	dma_sconfig.direction = DMA_MEM_TO_DEV;
+ 	ret = dmaengine_slave_config(dma->chan_tx, &dma_sconfig);
+ 	if (ret < 0) {
+-		dev_err(dev, "can't configure tx channel (%d)\n", ret);
++		dev_err(dev, "can't configure tx channel (%dE)\n", ret);
+ 		goto fail_tx;
+ 	}
  
-+static const char * const at24_supply_names[] = {
-+	"power", "i2c",
-+};
-+
-+#define AT24_NUM_SUPPLIES ARRAY_SIZE(at24_supply_names)
-+
- struct at24_client {
- 	struct i2c_client *client;
- 	struct regmap *regmap;
-@@ -92,6 +99,8 @@ struct at24_data {
+@@ -308,7 +308,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
+ 	if (IS_ERR(dma->chan_rx)) {
+ 		ret = PTR_ERR(dma->chan_rx);
+ 		if (ret != -ENODEV && ret != -EPROBE_DEFER)
+-			dev_err(dev, "can't request DMA rx channel (%d)\n", ret);
++			dev_err(dev, "can't request DMA rx channel (%dE)\n", ret);
+ 		goto fail_tx;
+ 	}
  
- 	struct gpio_desc *wp_gpio;
+@@ -319,7 +319,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
+ 	dma_sconfig.direction = DMA_DEV_TO_MEM;
+ 	ret = dmaengine_slave_config(dma->chan_rx, &dma_sconfig);
+ 	if (ret < 0) {
+-		dev_err(dev, "can't configure rx channel (%d)\n", ret);
++		dev_err(dev, "can't configure rx channel (%dE)\n", ret);
+ 		goto fail_rx;
+ 	}
  
-+	bool has_supplies;
-+	struct regulator_bulk_data supplies[AT24_NUM_SUPPLIES];
- 	/*
- 	 * Some chips tie up multiple I2C addresses; dummy devices reserve
- 	 * them for us, and we'll use them with SMBus calls.
-@@ -663,6 +672,17 @@ static int at24_probe(struct i2c_client *client)
- 	at24->client[0].client = client;
- 	at24->client[0].regmap = regmap;
+@@ -964,7 +964,7 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
+ 	pm_runtime_put_autosuspend(i2c_imx->adapter.dev.parent);
  
-+	for (i = 0; i < AT24_NUM_SUPPLIES; i++)
-+		at24->supplies[i].supply = at24_supply_names[i];
-+	err =  devm_regulator_bulk_get(&at24->client[0].client->dev,
-+				       AT24_NUM_SUPPLIES,
-+				       at24->supplies);
-+	if (err == -EPROBE_DEFER) {
-+		dev_err(dev, "Failed to get power regulators\n");
-+		return err;
-+	}
-+	at24->has_supplies = !err ? true : false;
-+
- 	at24->wp_gpio = devm_gpiod_get_optional(dev, "wp", GPIOD_OUT_HIGH);
- 	if (IS_ERR(at24->wp_gpio))
- 		return PTR_ERR(at24->wp_gpio);
-@@ -705,13 +725,21 @@ static int at24_probe(struct i2c_client *client)
- 	/* enable runtime pm */
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
-+	pm_runtime_get_sync(dev);
-+	if (at24->has_supplies) {
-+		err = regulator_bulk_enable(AT24_NUM_SUPPLIES, at24->supplies);
-+		if (err) {
-+			dev_err(dev, "Failed to enable power regulators\n");
-+			return err;
-+		}
-+	}
+ out:
+-	dev_dbg(&i2c_imx->adapter.dev, "<%s> exit with: %s: %d\n", __func__,
++	dev_dbg(&i2c_imx->adapter.dev, "<%s> exit with: %s: %dE\n", __func__,
+ 		(result < 0) ? "error" : "success msg",
+ 			(result < 0) ? result : num);
+ 	return (result < 0) ? result : num;
+@@ -1100,7 +1100,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
  
- 	/*
- 	 * Perform a one-byte test read to verify that the
- 	 * chip is functional.
- 	 */
- 	err = at24_read(at24, 0, &test_byte, 1);
--	pm_runtime_idle(dev);
-+	pm_runtime_put(dev);
- 	if (err) {
- 		pm_runtime_disable(dev);
- 		return -ENODEV;
-@@ -726,15 +754,46 @@ static int at24_probe(struct i2c_client *client)
+ 	ret = clk_prepare_enable(i2c_imx->clk);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "can't enable I2C clock, ret=%d\n", ret);
++		dev_err(&pdev->dev, "can't enable I2C clock, ret=%dE\n", ret);
+ 		return ret;
+ 	}
  
- static int at24_remove(struct i2c_client *client)
- {
-+	struct at24_data *at24 = i2c_get_clientdata(client);
-+
- 	pm_runtime_disable(&client->dev);
- 	pm_runtime_set_suspended(&client->dev);
-+	if (at24->has_supplies)
-+		regulator_bulk_disable(AT24_NUM_SUPPLIES, at24->supplies);
+@@ -1108,7 +1108,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	ret = devm_request_irq(&pdev->dev, irq, i2c_imx_isr, IRQF_SHARED,
+ 				pdev->name, i2c_imx);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
++		dev_err(&pdev->dev, "can't claim irq %dE\n", irq);
+ 		goto clk_disable;
+ 	}
  
- 	return 0;
+@@ -1230,7 +1230,7 @@ static int __maybe_unused i2c_imx_runtime_resume(struct device *dev)
+ 
+ 	ret = clk_enable(i2c_imx->clk);
+ 	if (ret)
+-		dev_err(dev, "can't enable I2C clock, ret=%d\n", ret);
++		dev_err(dev, "can't enable I2C clock, ret=%dE\n", ret);
+ 
+ 	return ret;
  }
- 
-+static int __maybe_unused at24_suspend(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct at24_data *at24 = i2c_get_clientdata(client);
-+
-+	if (at24->has_supplies)
-+		return regulator_bulk_disable(AT24_NUM_SUPPLIES,
-+					      at24->supplies);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused at24_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct at24_data *at24 = i2c_get_clientdata(client);
-+
-+	if (at24->has_supplies)
-+		return regulator_bulk_enable(AT24_NUM_SUPPLIES,
-+					     at24->supplies);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(at24_pm_ops, at24_suspend, at24_resume);
-+
- static struct i2c_driver at24_driver = {
- 	.driver = {
- 		.name = "at24",
-+		.pm = &at24_pm_ops,
- 		.of_match_table = at24_of_match,
- 		.acpi_match_table = ACPI_PTR(at24_acpi_ids),
- 	},
 -- 
-2.18.0
+2.23.0
 
