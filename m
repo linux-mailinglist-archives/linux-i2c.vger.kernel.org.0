@@ -2,19 +2,19 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9197EA3764
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2019 14:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF05CA3769
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2019 14:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727924AbfH3M6r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Aug 2019 08:58:47 -0400
-Received: from sauhun.de ([88.99.104.3]:53666 "EHLO pokefinder.org"
+        id S1727883AbfH3M7u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Aug 2019 08:59:50 -0400
+Received: from sauhun.de ([88.99.104.3]:53684 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727522AbfH3M6r (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 30 Aug 2019 08:58:47 -0400
+        id S1727522AbfH3M7u (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 30 Aug 2019 08:59:50 -0400
 Received: from localhost (p54B335BE.dip0.t-ipconnect.de [84.179.53.190])
-        by pokefinder.org (Postfix) with ESMTPSA id 5A9932C0095;
-        Fri, 30 Aug 2019 14:58:45 +0200 (CEST)
-Date:   Fri, 30 Aug 2019 14:58:45 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 9444D2C0095;
+        Fri, 30 Aug 2019 14:59:48 +0200 (CEST)
+Date:   Fri, 30 Aug 2019 14:59:48 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -25,16 +25,16 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Ray Jui <ray.jui@broadcom.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Lori Hikichi <lori.hikichi@broadcom.com>
-Subject: Re: [PATCH v1 1/2] i2c: iproc: Stop advertising support of SMBUS
- quick cmd
-Message-ID: <20190830125844.GD2870@ninjato>
+Subject: Re: [PATCH v1 2/2] i2c: iproc: Add full name of devicetree node to
+ adapter name
+Message-ID: <20190830125948.GE2870@ninjato>
 References: <1565235473-28461-1-git-send-email-rayagonda.kokatanur@broadcom.com>
- <1565235473-28461-2-git-send-email-rayagonda.kokatanur@broadcom.com>
+ <1565235473-28461-3-git-send-email-rayagonda.kokatanur@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Km1U/tdNT/EmXiR1"
+        protocol="application/pgp-signature"; boundary="5xSkJheCpeK0RUEJ"
 Content-Disposition: inline
-In-Reply-To: <1565235473-28461-2-git-send-email-rayagonda.kokatanur@broadcom.com>
+In-Reply-To: <1565235473-28461-3-git-send-email-rayagonda.kokatanur@broadcom.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -42,46 +42,54 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Km1U/tdNT/EmXiR1
+--5xSkJheCpeK0RUEJ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 08, 2019 at 09:07:52AM +0530, Rayagonda Kokatanur wrote:
+On Thu, Aug 08, 2019 at 09:07:53AM +0530, Rayagonda Kokatanur wrote:
 > From: Lori Hikichi <lori.hikichi@broadcom.com>
 >=20
-> The driver does not support the SMBUS Quick command so remove the
-> flag that indicates that level of support.
-> By default the i2c_detect tool uses the quick command to try and
-> detect devices at some bus addresses.  If the quick command is used
-> then we will not detect the device, even though it is present.
+> Add the full name of the devicetree node to the adapter name.
+> Without this change, all adapters have the same name making it difficult
+> to distinguish between multiple instances.
+> The most obvious way to see this is to use the utility i2c_detect.
+> e.g. "i2c-detect -l"
 >=20
-> Fixes: e6e5dd3566e0 (i2c: iproc: Add Broadcom iProc I2C Driver)
+> Before
+> i2c-1 i2c Broadcom iProc I2C adapter I2C adapter
+> i2c-0 i2c Broadcom iProc I2C adapter I2C adapter
+>=20
+> After
+> i2c-1 i2c Broadcom iProc (i2c@e0000) I2C adapter
+> i2c-0 i2c Broadcom iProc (i2c@b0000) I2C adapter
+>=20
+> Now it is easy to figure out which adapter maps to a which DT node.
 >=20
 > Signed-off-by: Lori Hikichi <lori.hikichi@broadcom.com>
 > Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 
-Applied to for-current, thanks!
+Applied to for-next, thanks!
 
 
---Km1U/tdNT/EmXiR1
+--5xSkJheCpeK0RUEJ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1pHYQACgkQFA3kzBSg
-KbYqPw/+L16sbeg6ZouyXIds6l9vBvd5ZpyTng7F7EMmGA5qkOQ7Dxk5gtWfW7xL
-edvDOfUZOeQRw8IAJBTxUDl8Brg3UBnD16skm0aiOlwCFoyrDmCBQ3/BX6q1mFOF
-nbhX0YZRzK+h45anQVsOJ7td7A1F+29EwBu39CZDCbcHzbLmYbOi6/jem4eXZK5I
-r3Mk+DhvQtGeDEQEHE92b3WlUGNTVZswssk/OhF/r0Wzc890BYO6/aK2Ux8oFTnw
-0mf02w49uhjub9+qeX5yq8vKFD1UyYC5wI6QOWJtuJyj9pXcigzA29T628PjShjI
-wlHpGxoVEvzvdi6Ho6wlXwwiz3yNLRT/Hn4fsVDd3os3oHJ8NmFCJqMZMWZv5tyv
-d9CLV9FCW9aCMiEyTcHNhwNVSrig++NVYcZcwpAYZyVqIC8s9QWelBMk2veog66K
-wjreG6p9d5EZXV2y1Uowff31ZUMWColTayrYXMY4u+Gk2y3MuCunH85oFfH2MLEQ
-w6+FS6VVysmJ0YkugyodtVyKIsyYGRcatEYPF1U7MrP67lJLHYw2dnP1JhgrHkx6
-wqmMths0bmxu1xu234RD+IeGfZyM7/EqpKH2mSmGXy1Nu6hdBMZm4XNMEFXDlqO7
-ruZiI7elM4XeMAZppEoW84Ja9HQrvqM2a2KmVXBpORQP2JBghqY=
-=rbvx
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1pHcQACgkQFA3kzBSg
+KbabhRAAqkAUPTyDcgsxg6iBp9wHBqOf4Tvov5KX9lLAKKkdBJPIHlplIbc932uT
+UFFRU/aU4B/IezQYOlq6e3vLCH0gqjXb3lTqUJNEQYxZAFKHZIHjawk8aFeFsRXo
+xaMNNLBzOggSzZSSIRetueIlvz5VK3UiTBR5jNLJ8RKAjEWeP7xSBLn2SJOCgfY5
+U+XLVMWw7MC+URR+0f/JICFexPkf4guujDe40MjLHLziEWUauGpDpAGKyx6n5KYG
+GjSM88vlK8TYmACciAa5avC3HUC2wrzvjoXoSkF57wupss35t3gi5KHaAbOZL4kc
+LocZMGDmEdTxM9aEEqWkeX/z3zH89TNuRIHv49V94OkoWzOpwl2Vxv5iJiapSW8W
+BNxGoI6ELmHx+dOEP3rDwq588XL0i5MlLE+sPHabWZvbUwSdibiUZ6UyuELRv/iV
+ynZLprkU2jQaMnmSflUbPKlfe4g4ugrA7ABySopWjcAZYkOjHmJKYQArmTipH9Zo
+ju7cNo6jhQPxpypMCLWkfrm+fmPQsUWDBtqcIRqyQBFcrtpcdZkww0gHLmo4BQ8L
+7HEgIIameZ2NfJ3S047grLxUz0gwYhYj69v5KwOm+q5sqfaJgGWMs75EsfQ/Gs3Y
+E5sMlpq7v32WuhRu9fRTHCo747TVWh7tYWlihBI+zsUr7Xi8q5A=
+=KZnX
 -----END PGP SIGNATURE-----
 
---Km1U/tdNT/EmXiR1--
+--5xSkJheCpeK0RUEJ--
