@@ -2,162 +2,122 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D23A37CA
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2019 15:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D82AA3DBC
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2019 20:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727812AbfH3Nb3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Aug 2019 09:31:29 -0400
-Received: from sauhun.de ([88.99.104.3]:54438 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727756AbfH3Nb2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 30 Aug 2019 09:31:28 -0400
-Received: from localhost (p54B335BE.dip0.t-ipconnect.de [84.179.53.190])
-        by pokefinder.org (Postfix) with ESMTPSA id 6AE062C00AB;
-        Fri, 30 Aug 2019 15:31:27 +0200 (CEST)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-rtc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] rtc: s35390a: convert to devm_i2c_new_dummy_device()
-Date:   Fri, 30 Aug 2019 15:31:24 +0200
-Message-Id: <20190830133124.21633-3-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190830133124.21633-1-wsa+renesas@sang-engineering.com>
-References: <20190830133124.21633-1-wsa+renesas@sang-engineering.com>
+        id S1727959AbfH3SfP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Aug 2019 14:35:15 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36166 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727888AbfH3SfP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Aug 2019 14:35:15 -0400
+Received: by mail-pf1-f196.google.com with SMTP id w2so5155384pfi.3
+        for <linux-i2c@vger.kernel.org>; Fri, 30 Aug 2019 11:35:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=bIeN59zLlf9hPECJ+a5c6Glfl7dAXXKY36z7SizN9gM=;
+        b=IQGa3Mt4+au2PyMQHW+PvrAcz/AETV0wFmHOYGLymVh/gc+dTht/JO4nBjR1m4Z8Qx
+         B7KxIkemrczvh45Jb/1x2k0NFOVuub+ATOjZSexJsTNLChgVm8aVno/qRULf4iIGKJ07
+         z71IX/iXX3oF2ff6SAr+g37jeArEF4jRYP+lc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bIeN59zLlf9hPECJ+a5c6Glfl7dAXXKY36z7SizN9gM=;
+        b=FLIKxIYInpwuK5pPnu1TklkrAgWm1k64jaoPysKpCc5TrpV+esfUdtOW+c/jiPYAUK
+         kJbeg8gCIm8xeMdNtZjUOwNeq30x97hRuDrfaSTfafS0/SUDYX7USjmkCNV2157B29r9
+         vGPEsbIcieB2F0/FIwvI00L1K2QqlGW6LiQ+FHu4im6GghTOEk6ZXZTcJKRBN2lsWlPT
+         RkmEVaarJpPRMttmaNyxOeHLCJbJhOZwJyuNCbaUpNJN02H3fWKefZtE/gOpQnhX/jcL
+         egaisF2OaBlpG77xYZm6TUXPYF9zabTtRwfVp+wvI6dkcEA7LCR3UyefbJXp9X54QRbZ
+         flhw==
+X-Gm-Message-State: APjAAAW52TPIKbkRI3uPr6AcYz2S8fVOUTaEW8M3o4km8hse5zHR0UUZ
+        /M2LWERxLcAdXdJS1eMVPjsQgA==
+X-Google-Smtp-Source: APXvYqygSJnu7L2JedNmYX5ICyfUrGX+E4J3wKc8DRjWeJwkgnQsT/NWZZ9V0F2txVYvAu85h9YZmw==
+X-Received: by 2002:a17:90a:8081:: with SMTP id c1mr17371952pjn.62.1567190113962;
+        Fri, 30 Aug 2019 11:35:13 -0700 (PDT)
+Received: from rj-aorus.ric.broadcom.com ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id x16sm7420135pff.99.2019.08.30.11.35.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 30 Aug 2019 11:35:12 -0700 (PDT)
+Subject: Re: [PATCH v1 1/1] i2c: iproc: Add i2c repeated start capability
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lori Hikichi <lori.hikichi@broadcom.com>,
+        Icarus Chau <icarus.chau@broadcom.com>,
+        Shivaraj Shetty <sshetty1@broadcom.com>
+References: <1565150941-27297-1-git-send-email-rayagonda.kokatanur@broadcom.com>
+ <20190830125626.GC2870@ninjato>
+From:   Ray Jui <ray.jui@broadcom.com>
+Message-ID: <3e70fa7e-de13-4edd-2e17-b7c56e91d220@broadcom.com>
+Date:   Fri, 30 Aug 2019 11:35:08 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190830125626.GC2870@ninjato>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I was about to simplify the call to i2c_unregister_device() when I
-realized that converting to devm_i2c_new_dummy_device() will simplify
-the driver a lot. So I took this approach.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/rtc/rtc-s35390a.c | 54 ++++++++++-----------------------------
- 1 file changed, 13 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
-index d773fd597bd5..da34cfd70f95 100644
---- a/drivers/rtc/rtc-s35390a.c
-+++ b/drivers/rtc/rtc-s35390a.c
-@@ -434,37 +434,32 @@ static int s35390a_probe(struct i2c_client *client,
- 	char buf, status1;
- 	struct device *dev = &client->dev;
- 
--	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
--		err = -ENODEV;
--		goto exit;
--	}
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-+		return -ENODEV;
- 
- 	s35390a = devm_kzalloc(dev, sizeof(struct s35390a), GFP_KERNEL);
--	if (!s35390a) {
--		err = -ENOMEM;
--		goto exit;
--	}
-+	if (!s35390a)
-+		return -ENOMEM;
- 
- 	s35390a->client[0] = client;
- 	i2c_set_clientdata(client, s35390a);
- 
- 	/* This chip uses multiple addresses, use dummy devices for them */
- 	for (i = 1; i < 8; ++i) {
--		s35390a->client[i] = i2c_new_dummy_device(client->adapter,
--							  client->addr + i);
-+		s35390a->client[i] = devm_i2c_new_dummy_device(dev,
-+							       client->adapter,
-+							       client->addr + i);
- 		if (IS_ERR(s35390a->client[i])) {
- 			dev_err(dev, "Address %02x unavailable\n",
- 				client->addr + i);
--			err = PTR_ERR(s35390a->client[i]);
--			goto exit_dummy;
-+			return PTR_ERR(s35390a->client[i]);
- 		}
- 	}
- 
- 	err_read = s35390a_read_status(s35390a, &status1);
- 	if (err_read < 0) {
--		err = err_read;
- 		dev_err(dev, "error resetting chip\n");
--		goto exit_dummy;
-+		return err_read;
- 	}
- 
- 	if (status1 & S35390A_FLAG_24H)
-@@ -478,13 +473,13 @@ static int s35390a_probe(struct i2c_client *client,
- 		err = s35390a_set_reg(s35390a, S35390A_CMD_STATUS2, &buf, 1);
- 		if (err < 0) {
- 			dev_err(dev, "error disabling alarm");
--			goto exit_dummy;
-+			return err;
- 		}
- 	} else {
- 		err = s35390a_disable_test_mode(s35390a);
- 		if (err < 0) {
- 			dev_err(dev, "error disabling test mode\n");
--			goto exit_dummy;
-+			return err;
- 		}
- 	}
- 
-@@ -493,10 +488,8 @@ static int s35390a_probe(struct i2c_client *client,
- 	s35390a->rtc = devm_rtc_device_register(dev, s35390a_driver.driver.name,
- 						&s35390a_rtc_ops, THIS_MODULE);
- 
--	if (IS_ERR(s35390a->rtc)) {
--		err = PTR_ERR(s35390a->rtc);
--		goto exit_dummy;
--	}
-+	if (IS_ERR(s35390a->rtc))
-+		return PTR_ERR(s35390a->rtc);
- 
- 	/* supports per-minute alarms only, therefore set uie_unsupported */
- 	s35390a->rtc->uie_unsupported = 1;
-@@ -505,26 +498,6 @@ static int s35390a_probe(struct i2c_client *client,
- 		rtc_update_irq(s35390a->rtc, 1, RTC_AF);
- 
- 	return 0;
--
--exit_dummy:
--	for (i = 1; i < 8; ++i)
--		if (s35390a->client[i])
--			i2c_unregister_device(s35390a->client[i]);
--
--exit:
--	return err;
--}
--
--static int s35390a_remove(struct i2c_client *client)
--{
--	unsigned int i;
--	struct s35390a *s35390a = i2c_get_clientdata(client);
--
--	for (i = 1; i < 8; ++i)
--		if (s35390a->client[i])
--			i2c_unregister_device(s35390a->client[i]);
--
--	return 0;
- }
- 
- static struct i2c_driver s35390a_driver = {
-@@ -533,7 +506,6 @@ static struct i2c_driver s35390a_driver = {
- 		.of_match_table = of_match_ptr(s35390a_of_match),
- 	},
- 	.probe		= s35390a_probe,
--	.remove		= s35390a_remove,
- 	.id_table	= s35390a_id,
- };
- 
--- 
-2.20.1
+On 8/30/19 5:56 AM, Wolfram Sang wrote:
+> Hi everyone,
+> 
+>> +/*
+>> + * If 'process_call' is true, then this is a multi-msg transfer that requires
+>> + * a repeated start between the messages.
+>> + * More specifically, it must be a write (reg) followed by a read (data).
+>> + * The i2c quirks are set to enforce this rule.
+>> + */
+> 
+> With all the limitations in place, I wonder if it might be easier to
+> implement an smbus_xfer callback instead? What is left that makes this
+> controller more than SMBus and real I2C?
+> 
 
+Right. But what is the implication of using smbus_xfer instead of 
+master_xfer in our driver?
+
+Does it mean it will break existing functions of the i2c app that our 
+customers developed based on i2cdev (e.g., I2C_RDWR)?
+
+1) Does
+>> +	/* Process the read message if this is process call */
+> 
+> Also, the term "process call" here seriously sounds like SMBus.
+> 
+>> +		addr = msg->addr << 1 | 1;
+> 
+> addr = i2c_8bit_addr_from_msg(msg);
+> 
+>> +		u32 protocol;
+> 
+> Hmm, another SMBus terminology.
+> 
+> 
+>> +	if (num > 2) {
+>> +		dev_err(iproc_i2c->device,
+>> +			"Only support up to 2 messages. Current msg count %d\n",
+>> +			num);
+>> +		return -EOPNOTSUPP;
+>> +	}
+> 
+> With your quirks flags set, the core checks it for you.
+> 
+> Kind regards,
+> 
+>     Wolfram
+> 
