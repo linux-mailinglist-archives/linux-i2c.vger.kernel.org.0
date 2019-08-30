@@ -2,79 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 982DCA3732
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2019 14:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F51A3745
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2019 14:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727455AbfH3Mxt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Aug 2019 08:53:49 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:39195 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727170AbfH3Mxt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Aug 2019 08:53:49 -0400
-Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id B4278200005;
-        Fri, 30 Aug 2019 12:53:45 +0000 (UTC)
-Date:   Fri, 30 Aug 2019 14:53:38 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 1/2] rtc: max77686: convert to devm_i2c_new_dummy_device()
-Message-ID: <20190830125338.GP21922@piout.net>
-References: <20190820154239.8230-1-wsa+renesas@sang-engineering.com>
- <20190820154239.8230-2-wsa+renesas@sang-engineering.com>
- <20190829205752.GL21922@piout.net>
- <20190830124554.GB2870@ninjato>
+        id S1727135AbfH3M42 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Aug 2019 08:56:28 -0400
+Received: from sauhun.de ([88.99.104.3]:53618 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727718AbfH3M42 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 30 Aug 2019 08:56:28 -0400
+Received: from localhost (p54B335BE.dip0.t-ipconnect.de [84.179.53.190])
+        by pokefinder.org (Postfix) with ESMTPSA id 922732C0095;
+        Fri, 30 Aug 2019 14:56:26 +0200 (CEST)
+Date:   Fri, 30 Aug 2019 14:56:26 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Ray Jui <ray.jui@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lori Hikichi <lori.hikichi@broadcom.com>,
+        Icarus Chau <icarus.chau@broadcom.com>,
+        Shivaraj Shetty <sshetty1@broadcom.com>
+Subject: Re: [PATCH v1 1/1] i2c: iproc: Add i2c repeated start capability
+Message-ID: <20190830125626.GC2870@ninjato>
+References: <1565150941-27297-1-git-send-email-rayagonda.kokatanur@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qjNfmADvan18RZcF"
 Content-Disposition: inline
-In-Reply-To: <20190830124554.GB2870@ninjato>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <1565150941-27297-1-git-send-email-rayagonda.kokatanur@broadcom.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 30/08/2019 14:45:54+0200, Wolfram Sang wrote:
-> On Thu, Aug 29, 2019 at 10:57:52PM +0200, Alexandre Belloni wrote:
-> > On 20/08/2019 17:42:37+0200, Wolfram Sang wrote:
-> > > I was about to simplify the call to i2c_unregister_device() when I
-> > > realized that converting to devm_i2c_new_dummy_device() will simplify
-> > > the driver a lot. So I took this approach.
-> > > 
-> > > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> > > ---
-> > > Build tested only, buildbot is happy, too.
-> > > 
-> > > Please apply to your tree.
-> > > 
-> > 
-> > I'm confused because I already applied:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git/commit/?h=rtc-next&id=7150710f3084de8d35ce3221eeae2caee8813f92
-> 
-> The above was a mass conversion to i2c_new_dummy_device() to make sure
-> all in-kernel users use the API returning an ERRPTR. Mass conversion to
-> the devm_ variant of the same function was too troublesome.
-> 
-> With another series, I wanted to remove superfluous error checking of
-> i2c_unregister_device() because it is NULL-ptr safe, like here:
-> 
-> > > -	if (info->rtc)
-> > > -		i2c_unregister_device(info->rtc);
-> 
-> But for these two RTC drivers, I figured moving to devm_* is way easier
-> than fixing up the mass conversion result from coccinelle.
-> 
 
-Ok so should I drop the previous patches and apply those instead?
+--qjNfmADvan18RZcF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi everyone,
+
+> +/*
+> + * If 'process_call' is true, then this is a multi-msg transfer that requires
+> + * a repeated start between the messages.
+> + * More specifically, it must be a write (reg) followed by a read (data).
+> + * The i2c quirks are set to enforce this rule.
+> + */
+
+With all the limitations in place, I wonder if it might be easier to
+implement an smbus_xfer callback instead? What is left that makes this
+controller more than SMBus and real I2C?
+
+> +	/* Process the read message if this is process call */
+
+Also, the term "process call" here seriously sounds like SMBus.
+
+> +		addr = msg->addr << 1 | 1;
+
+addr = i2c_8bit_addr_from_msg(msg);
+
+> +		u32 protocol;
+
+Hmm, another SMBus terminology.
 
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> +	if (num > 2) {
+> +		dev_err(iproc_i2c->device,
+> +			"Only support up to 2 messages. Current msg count %d\n",
+> +			num);
+> +		return -EOPNOTSUPP;
+> +	}
+
+With your quirks flags set, the core checks it for you.
+
+Kind regards,
+
+   Wolfram
+
+
+--qjNfmADvan18RZcF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1pHPkACgkQFA3kzBSg
+Kba6Ww/+MiQX21OGgbWmV1RzOJTJcm22OqliAmcBgIMJnQ3TB9Uoo0xpA4XkwD1z
+tHnXk1VKf4NsN7NLnoGRG8hYHwZLIElSTQz89eP/PMCmNnj5pu0ebgfP9X+NvC84
+vbFUN3fhmdhMlzvWlS/ixiEbvFud28JxJE9YAOpSDv+3sTMDM/EB2rTLk+tF1Hrn
++L3B0D2C99gN/fm9kakCYow3FBCXEIwv2CSok5YQ2OXPdteG/rSNnm+3q6gSnleg
+xEgzP6MNSkCJXUaGVt4VSNZ8uek8GQSwy+ZnPr8M07bpmhEfYARJYirQCMatbBoj
+0Ga9/TZn/tFfArKiJMbVMVMJNzo479UQR+NXLpdcTSTScTckAyeNiFECAHXLAw76
+ZMx8q2SAiO2GR9u8xJl7OQoPZoyc+4nHoLxtQVLW1xf+Kfl0irzNBZGQ41dk1gVL
+veiFQy3+By3BqwzA4BaOIU2gsXMYORQ1yIczK4vQOTzq6tShAzj3gjVbrl0ijfc/
+2EtqHB2b8b9X44xd1FppKiHfzcVc8RpNLUziBdJxlWKfC0SAVqM47IcSe/2beynS
+4BUh9UbHhuIjJ+cS0fLUuaCHukk5p22G+g/DqmbctT7kP5GaZ0vQ07dWFyxzNb9/
+4e04NH5ZecIvlp2xlAuJBOn1DFIIBCHbDCPNhj59U5YhY6Mj6NQ=
+=1TD/
+-----END PGP SIGNATURE-----
+
+--qjNfmADvan18RZcF--
