@@ -2,110 +2,225 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B93A35D1
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2019 13:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F1DA3622
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2019 13:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727887AbfH3Lft (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Aug 2019 07:35:49 -0400
-Received: from mail-eopbgr60122.outbound.protection.outlook.com ([40.107.6.122]:11803
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727417AbfH3Lfs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 30 Aug 2019 07:35:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hf6zgdGu9WLxUt/iJCn5cTTjzaFHwMQiXcjz9tKO2IZxs5xsCDLIP2HnwLxjPz2Oc6ZU5s46b0OD44+aIpQoZRV7euVf0dNzOmjoz8uqBtVc6UAmEqxsNJ/dEDaihm0U/ntUGWyn0Ei/rTCEjVZm/pFNFN8kvht338GrG/Bga1N6a8x+4f+8iFdTAVH9mB3l2LCzAXYTjig/L9GSr6+J2a4D1cW/J7Cddg4RjMI+APuDfYkW1QdSvjGi32fRY/rqkNk/XCakCRZYTFyd7dca5o5uOJbSNh81pLHyW5Nc5pzqQKxA7a0fR7H90/yzQPUMhm3he5rWjlq3FFtF+1zwPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aMwTPHB++wv1AtRxw0e+3J8s5vM9Bjw2Fvps5l3ZBa4=;
- b=ZOe7dqUN9q6iigisQ1Uxy0UZ1Z0BTqEBNF7d5j6Fb2odk1rMDb7DPhOh/+gzMxYv9iLOwrkvWINbyuyVV3lS20XSX5iU1CaX3hny5kwSnpUJfNHj5xsaUQWpu0gb+oL2QT30q273Uu5xqwo+G2fqzx/HxNT9d+lDnI8CH/J30DTlKABk/QAdEs17I0Ho+DzQ0QMGz9sz2Zz7duNO5fQBtgKt/xLv9r0WUtMzI1mtuFuhyKHJQeqSZOnSMrx8btkszgUW3284MkiHW8OiNq2NsNba0l8GrsmONw9I2IRgDMaqLknv+2Ri8LWS1gGgsV7n7TWnaxnb6QbbPzOjEYMpZw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aMwTPHB++wv1AtRxw0e+3J8s5vM9Bjw2Fvps5l3ZBa4=;
- b=Um46H50EW+5GCy56D3gwXq2rc2iN55spSyT7blnfMR/u8VeIbBKgkRZTmVBlwoMe+R+4oLIDbre8UEcV5y4nWzCCnfVH2DwohGq1JultA9FXPsQPO4D5vYVnOX+JL5VTIntNKO08dqkD9bQ4w99qRtAwBXT7V5yoYm3/rEUulYw=
-Received: from AM6PR0702MB3527.eurprd07.prod.outlook.com (52.133.24.149) by
- AM6PR0702MB3734.eurprd07.prod.outlook.com (52.133.17.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.14; Fri, 30 Aug 2019 11:35:46 +0000
-Received: from AM6PR0702MB3527.eurprd07.prod.outlook.com
- ([fe80::900d:d8bf:ee4:3fbb]) by AM6PR0702MB3527.eurprd07.prod.outlook.com
- ([fe80::900d:d8bf:ee4:3fbb%3]) with mapi id 15.20.2220.013; Fri, 30 Aug 2019
- 11:35:46 +0000
-From:   "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-To:     Jean Delvare <jdelvare@suse.de>,
-        "Xu, Lingyan (NSB - CN/Hangzhou)" <lingyan.xu@nokia-sbell.com>
-CC:     "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>,
-        "Wiebe, Wladislav (Nokia - DE/Ulm)" <wladislav.wiebe@nokia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i801_smbus: clear SMBALERT status bit and disable
- SMBALERT interrupt
-Thread-Topic: [PATCH] i801_smbus: clear SMBALERT status bit and disable
- SMBALERT interrupt
-Thread-Index: AQHVXycNtQ6bNeFFV0qdOS3acGbEtQ==
-Date:   Fri, 30 Aug 2019 11:35:46 +0000
-Message-ID: <2cd456ae-7e90-6c8d-32f4-5efa03823b84@nokia.com>
-References: <1565577634-18264-1-git-send-email-lingyan.xu@nokia-sbell.com>
- <20190828155822.7cb13a7b@endymion>
-In-Reply-To: <20190828155822.7cb13a7b@endymion>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [131.228.32.166]
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
-x-clientproxiedby: HE1PR0102CA0027.eurprd01.prod.exchangelabs.com
- (2603:10a6:7:14::40) To AM6PR0702MB3527.eurprd07.prod.outlook.com
- (2603:10a6:209:11::21)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=alexander.sverdlin@nokia.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 80e09812-8ea1-4139-e596-08d72d3e32ec
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM6PR0702MB3734;
-x-ms-traffictypediagnostic: AM6PR0702MB3734:
-x-ld-processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR0702MB373499D77A1BFF5FA536E27788BD0@AM6PR0702MB3734.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0145758B1D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(136003)(376002)(396003)(39860400002)(366004)(199004)(189003)(6246003)(110136005)(3846002)(6116002)(4744005)(71190400001)(305945005)(71200400001)(81166006)(66066001)(8936002)(65806001)(446003)(2616005)(11346002)(478600001)(8676002)(65956001)(7736002)(5660300002)(2906002)(81156014)(86362001)(14454004)(31696002)(6506007)(36756003)(54906003)(102836004)(58126008)(53936002)(6436002)(99286004)(316002)(6486002)(53546011)(26005)(6512007)(14444005)(256004)(229853002)(186003)(486006)(476003)(25786009)(66556008)(386003)(76176011)(64756008)(66446008)(66476007)(52116002)(66946007)(31686004)(4326008)(79990200002);DIR:OUT;SFP:1102;SCL:1;SRVR:AM6PR0702MB3734;H:AM6PR0702MB3527.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nokia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 0XaOZ7Zijy9vASYC151CcHJMlDBvxL4PBPXi3feraIAQwpnUiE03CdMo6pzDyNpFnyFO2q3idQgE4i/w4LvBgJrFU9e39FY211WjStv/PcP+WrbQiIsntJHDLPSjHCQMAOw6lKCOh7Xiumq2M0wbOHCqqWwfFmKjTlleNwsmE5RKpYGQ/9Q9nDK9tusaqShi/qZlV7uDkWRPoDKDDGlt0ls2xeTcvFK8gtRiOhMYNvNiWwMwWEDCxLkhNHP3BoZZSB5DR94LaJcOWobHrvyLULY+0eb5vCwNwia4K7YA92HZOVom+jyIz4P8xesZv+5s2gsp7ZKgOTu0A+zTgDRsO+/N5sI0UEucjrAiN3FzpaGBWAwJwiTyorW5L9b0cLtBQAP0zB509jxUjaJIcsSbXy6qdYZYtj1A1vc2ek0lIyhGU17WkVHywUzIZx0intGDp5nCOifOURvnt9Z0nNXR3A==
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D25B2473E899D54A90547C1A7DF6ED6E@eurprd07.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727434AbfH3L6a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Aug 2019 07:58:30 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:38385 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727417AbfH3L6a (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Aug 2019 07:58:30 -0400
+Received: by mail-oi1-f195.google.com with SMTP id q8so5127763oij.5
+        for <linux-i2c@vger.kernel.org>; Fri, 30 Aug 2019 04:58:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=2GgEZLzospHW6voyfcLjBAZhEwnM+1xe/mwLZoPtRCU=;
+        b=2GoDUPgGMrJopQJev+GwJ2zb478KObnSGEcEL8ddOVbTGOsy5gOlGDnemCnMr28ooK
+         P9rmMivJITEcQMha3lYq0O8Lw0j/W9JCj41LAlo6XwGOfmii/XwTL2KVqJH7861KU0pD
+         T0i4nKOzh4JIM7ZK9hGbQoLx2CT3fK1MwHkdhL+fVj4vM2jnp+2NFT1YottBrq+F/xkF
+         hPbf7CUJwgQq9gaYG/hcJXFBB/zHLZAGNNGEh0Jt91ZpYJaMxKfdHi+1X319QmcYchXu
+         s3A0pld4vGA3aVtPyUd5CfFkIMWs2JXB47NG4zhSpSBiB3IIDmBgDnBSeZh9cin0KpEB
+         YK8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=2GgEZLzospHW6voyfcLjBAZhEwnM+1xe/mwLZoPtRCU=;
+        b=fNTbNvQmT0TeSGO4Sg4/SHVa4Li/9ooHGraulZYErIK/GtpbFt18HTnsN48ZQC0+uF
+         k3y5qMqUaj/6lIe5NMjPlOwcbobgMnwZM4uZ06aJwT31qX4YXfQKq1RjAxwq4u+ESmC7
+         WjigsBP8sNYCRUSM56IsJZe58kliet/s8yTLFJuOLhqlSzQb9rsHfb3UiJDlRRWRGgnb
+         DAIMjeWoAr25WPzkkYHYU/fqWg8RLV9ONZ4Lh/LC19C4w9izjSJ8YCiR7W3sW28dHoeD
+         EC5QXMDSH9PdBEZxB4p7vK9YOAoU15Bnwj5qJxxjkmsktyz35yzBWLcKLQrcuh27j0Ns
+         Q41A==
+X-Gm-Message-State: APjAAAU7y2YxH/QPzkyJMkdKqn1IMKwt7VV6TyD2TdvuxtGKddyaFlLx
+        1rmayYkb4ZMiXooxGm+MCMCfW7SWbcrPAmtVbrpwPQ==
+X-Google-Smtp-Source: APXvYqyNfJ7JtaCY73Mx/sUTSkmPDz4m+/DcOFUxZpisEaStc0/2SGQXmRcLJ49fxdQyFZ0qp/c4IMKD3BqCFA2Qseg=
+X-Received: by 2002:aca:f54d:: with SMTP id t74mr1361086oih.170.1567166308953;
+ Fri, 30 Aug 2019 04:58:28 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 80e09812-8ea1-4139-e596-08d72d3e32ec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Aug 2019 11:35:46.3481
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dQ+Yxaj/3e0ZVA9MasAm3FsTI+20OC/Qfhv23dkUTb5hGAARUkfmZ2MeHrpu8s42q5Z5gpzu9e+XOZ24RAgvyYEe+np3H8idVDwsolFrJ/w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0702MB3734
+References: <20190829020446.27176-1-bibby.hsieh@mediatek.com>
+In-Reply-To: <20190829020446.27176-1-bibby.hsieh@mediatek.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Fri, 30 Aug 2019 13:58:17 +0200
+Message-ID: <CAMpxmJW7bb9i9tffgwSOm5rUejo0LutmS+bsEFcA0Rv1MHrAgw@mail.gmail.com>
+Subject: Re: [PATCH] misc: eeprom: at24: support pm_runtime control
+To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        srv_heupstream@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGVsbG8gSmVhbiwNCg0KT24gMjgvMDgvMjAxOSAxNTo1OCwgSmVhbiBEZWx2YXJlIHdyb3RlOg0K
-PiBBbHNvIGl0IGlzIG1hbmRhdG9yeSB0byByZXN0b3JlIHRoZSB2YWx1ZSBvZiBTTUJTTFZDTUQg
-YmVmb3JlIHJldHVybmluZw0KPiB0aGUgY29udHJvbCBiYWNrIHRvIHRoZSBCSU9TLiBDdXJyZW50
-bHkgdGhpcyBpcyBvbmx5IGJlaW5nIGRvbmUgd2hlbg0KPiB0aGUgRkVBVFVSRV9IT1NUX05PVElG
-WSBiaXQgaXMgc2V0IGJlY2F1c2UgdGhhdCdzIHRoZSBvbmx5IGNhc2Ugd2hlcmUNCj4gd2UgY2hh
-bmdlIHRoZSB2YWx1ZSBvZiB0aGF0IHJlZ2lzdGVyLCBidXQgaWYgd2UgY2hhbmdlIGl0DQo+IHVu
-Y29uZGl0aW9uYWxseSB0aGVuIGl0IG11c3QgYmUgc2F2ZWQgYW5kIHJlc3RvcmVkIHVuY29uZGl0
-aW9uYWxseSB0b28uDQoNCmNvdWxkIHlvdSBwbGVhc2UgdGVsbCBhIGJpdCBtb3JlIGFib3V0IHRo
-ZSB1c2UgY2FzZSwgd2hlcmUvaG93IGV4YWN0bHkgb25lDQpjYW4gInJldHVybiBjb250cm9sIGJh
-Y2sgdG8gdGhlIEJJT1MiPyBNYXliZSByZWZlcmVuY2luZyB0aGUgZnVuY3Rpb25zIGluDQp0aGUg
-ZHJpdmVyLi4uDQoNCi0tIA0KQmVzdCByZWdhcmRzLA0KQWxleGFuZGVyIFN2ZXJkbGluLg0K
+czw., 29 sie 2019 o 04:04 Bibby Hsieh <bibby.hsieh@mediatek.com> napisa=C5=
+=82(a):
+>
+> Although in the most platforms, the power of eeprom and i2c
+> are alway on, some platforms disable the eeprom and i2c power
+> in order to meet low power request.
+> This patch add the pm_runtime ops to control power to support
+> all platforms.
+>
+> Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+> ---
+>  drivers/misc/eeprom/at24.c | 61 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 60 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index 35bf2477693d..2843e4b4aacd 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/nvmem-provider.h>
+>  #include <linux/regmap.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/gpio/consumer.h>
+>
+>  /* Address pointer is 16 bit. */
+> @@ -68,6 +69,12 @@
+>   * which won't work on pure SMBus systems.
+>   */
+>
+> +static const char * const at24_supply_names[] =3D {
+> +       "power", "i2c",
+> +};
+> +
+> +#define AT24_NUM_SUPPLIES ARRAY_SIZE(at24_supply_names)
+> +
+>  struct at24_client {
+>         struct i2c_client *client;
+>         struct regmap *regmap;
+> @@ -92,6 +99,8 @@ struct at24_data {
+>
+>         struct gpio_desc *wp_gpio;
+>
+> +       bool has_supplies;
+> +       struct regulator_bulk_data supplies[AT24_NUM_SUPPLIES];
+>         /*
+>          * Some chips tie up multiple I2C addresses; dummy devices reserv=
+e
+>          * them for us, and we'll use them with SMBus calls.
+> @@ -663,6 +672,17 @@ static int at24_probe(struct i2c_client *client)
+>         at24->client[0].client =3D client;
+>         at24->client[0].regmap =3D regmap;
+>
+> +       for (i =3D 0; i < AT24_NUM_SUPPLIES; i++)
+> +               at24->supplies[i].supply =3D at24_supply_names[i];
+
+Please, add a newline here.
+
+> +       err =3D  devm_regulator_bulk_get(&at24->client[0].client->dev,
+> +                                      AT24_NUM_SUPPLIES,
+> +                                      at24->supplies);
+
+This fits nicely in 80 chars - no need to break the line here again.
+
+> +       if (err =3D=3D -EPROBE_DEFER) {
+> +               dev_err(dev, "Failed to get power regulators\n");
+
+I assume you want to make the supplies optional by only returning on
+EPROBE_DEFER, but why the error log then?
+
+> +               return err;
+> +       }
+> +       at24->has_supplies =3D !err ? true : false;
+
+Just a simple at24->has_supplies =3D !err is enough.
+
+> +
+>         at24->wp_gpio =3D devm_gpiod_get_optional(dev, "wp", GPIOD_OUT_HI=
+GH);
+>         if (IS_ERR(at24->wp_gpio))
+>                 return PTR_ERR(at24->wp_gpio);
+> @@ -705,13 +725,21 @@ static int at24_probe(struct i2c_client *client)
+>         /* enable runtime pm */
+>         pm_runtime_set_active(dev);
+>         pm_runtime_enable(dev);
+> +       pm_runtime_get_sync(dev);
+> +       if (at24->has_supplies) {
+> +               err =3D regulator_bulk_enable(AT24_NUM_SUPPLIES, at24->su=
+pplies);
+
+Unrelated to this patch, but I'm surprised we don't have optional
+variants for bulk regulator operations.
+
+> +               if (err) {
+> +                       dev_err(dev, "Failed to enable power regulators\n=
+");
+> +                       return err;
+> +               }
+> +       }
+>
+>         /*
+>          * Perform a one-byte test read to verify that the
+>          * chip is functional.
+>          */
+>         err =3D at24_read(at24, 0, &test_byte, 1);
+> -       pm_runtime_idle(dev);
+> +       pm_runtime_put(dev);
+>         if (err) {
+>                 pm_runtime_disable(dev);
+>                 return -ENODEV;
+> @@ -726,15 +754,46 @@ static int at24_probe(struct i2c_client *client)
+>
+>  static int at24_remove(struct i2c_client *client)
+>  {
+> +       struct at24_data *at24 =3D i2c_get_clientdata(client);
+> +
+>         pm_runtime_disable(&client->dev);
+>         pm_runtime_set_suspended(&client->dev);
+> +       if (at24->has_supplies)
+> +               regulator_bulk_disable(AT24_NUM_SUPPLIES, at24->supplies)=
+;
+>
+>         return 0;
+>  }
+>
+> +static int __maybe_unused at24_suspend(struct device *dev)
+> +{
+> +       struct i2c_client *client =3D to_i2c_client(dev);
+> +       struct at24_data *at24 =3D i2c_get_clientdata(client);
+> +
+> +       if (at24->has_supplies)
+> +               return regulator_bulk_disable(AT24_NUM_SUPPLIES,
+> +                                             at24->supplies);
+> +
+> +       return 0;
+> +}
+> +
+> +static int __maybe_unused at24_resume(struct device *dev)
+> +{
+> +       struct i2c_client *client =3D to_i2c_client(dev);
+> +       struct at24_data *at24 =3D i2c_get_clientdata(client);
+> +
+> +       if (at24->has_supplies)
+> +               return regulator_bulk_enable(AT24_NUM_SUPPLIES,
+> +                                            at24->supplies);
+> +
+> +       return 0;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(at24_pm_ops, at24_suspend, at24_resume);
+> +
+>  static struct i2c_driver at24_driver =3D {
+>         .driver =3D {
+>                 .name =3D "at24",
+> +               .pm =3D &at24_pm_ops,
+>                 .of_match_table =3D at24_of_match,
+>                 .acpi_match_table =3D ACPI_PTR(at24_acpi_ids),
+>         },
+> --
+> 2.18.0
+>
+
+The rest looks good.
+
+Bart
