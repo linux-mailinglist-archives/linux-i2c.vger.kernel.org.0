@@ -2,63 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4205A36AF
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2019 14:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47152A36E4
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2019 14:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbfH3MVS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Aug 2019 08:21:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34370 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727788AbfH3MVS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 30 Aug 2019 08:21:18 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 8A3B3B621;
-        Fri, 30 Aug 2019 12:21:17 +0000 (UTC)
-Date:   Fri, 30 Aug 2019 14:21:24 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-Cc:     "Xu, Lingyan (NSB - CN/Hangzhou)" <lingyan.xu@nokia-sbell.com>,
-        "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>,
-        "Wiebe, Wladislav (Nokia - DE/Ulm)" <wladislav.wiebe@nokia.com>,
+        id S1727812AbfH3Mi0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Aug 2019 08:38:26 -0400
+Received: from sauhun.de ([88.99.104.3]:53442 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727603AbfH3Mi0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 30 Aug 2019 08:38:26 -0400
+Received: from localhost (p54B335BE.dip0.t-ipconnect.de [84.179.53.190])
+        by pokefinder.org (Postfix) with ESMTPSA id 951B72C0095;
+        Fri, 30 Aug 2019 14:38:24 +0200 (CEST)
+Date:   Fri, 30 Aug 2019 14:38:24 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Denis Efremov <efremov@linux.com>
+Cc:     linux-kernel@vger.kernel.org, joe@perches.com,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
         linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i801_smbus: clear SMBALERT status bit and disable
- SMBALERT interrupt
-Message-ID: <20190830142124.1efbab68@endymion>
-In-Reply-To: <2cd456ae-7e90-6c8d-32f4-5efa03823b84@nokia.com>
-References: <1565577634-18264-1-git-send-email-lingyan.xu@nokia-sbell.com>
-        <20190828155822.7cb13a7b@endymion>
-        <2cd456ae-7e90-6c8d-32f4-5efa03823b84@nokia.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+Subject: Re: [PATCH] MAINTAINERS: i2c mv64xxx: Update documentation path
+Message-ID: <20190830123824.GA2870@ninjato>
+References: <7cd8d12f59bcacd18a78f599b46dac555f7f16c0.camel@perches.com>
+ <20190813060913.14722-1-efremov@linux.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dDRMvlgZJXvWKvBx"
+Content-Disposition: inline
+In-Reply-To: <20190813060913.14722-1-efremov@linux.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 30 Aug 2019 11:35:46 +0000, Sverdlin, Alexander (Nokia - DE/Ulm) wrote:
-> Hello Jean,
-> 
-> On 28/08/2019 15:58, Jean Delvare wrote:
-> > Also it is mandatory to restore the value of SMBSLVCMD before returning
-> > the control back to the BIOS. Currently this is only being done when
-> > the FEATURE_HOST_NOTIFY bit is set because that's the only case where
-> > we change the value of that register, but if we change it
-> > unconditionally then it must be saved and restored unconditionally too.  
-> 
-> could you please tell a bit more about the use case, where/how exactly one
-> can "return control back to the BIOS"? Maybe referencing the functions in
-> the driver...
 
-i801_remove() and i801_shutdown(). Basically when you reboot the
-system. Possibly also on suspend-to-disk in certain cases, I'm not
-sure. In general shutdown + cold boot is OK either way because on cold
-boot the chipsets gets hard-reset anyway.
+--dDRMvlgZJXvWKvBx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Jean Delvare
-SUSE L3 Support
+On Tue, Aug 13, 2019 at 09:09:13AM +0300, Denis Efremov wrote:
+> Update MAINTAINERS record to reflect the file move
+> from i2c-mv64xxx.txt to marvell,mv64xxx-i2c.yaml.
+>=20
+> Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+> Cc: Gregory CLEMENT <gregory.clement@bootlin.com>
+> Cc: linux-i2c@vger.kernel.org
+> Fixes: f8bbde72ef44 ("dt-bindings: i2c: mv64xxx: Add YAML schemas")
+> Signed-off-by: Denis Efremov <efremov@linux.com>
+
+Applied to for-current, thanks!
+
+
+--dDRMvlgZJXvWKvBx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1pGLwACgkQFA3kzBSg
+KbbpVQ/+IH7kcAXue6rPOWOPJdmutU+Eg1LqiWGcV0Fp0IKxRdK3uEVk9rZriZT8
+QgkS+eBpPAF+R4YEmPaUtiCeQIZM32yefBaPxY4PxNb8m02ZNKmMXekaP0cu2Ng5
+XC24aUH73PJfZ/iK0v4BLUA8CwrUi3wWnrLs6cvBEqKpiIDvs1K43WDlaeM5nJIF
+pYRlM3W8GE9Qjh4eIPye9raAqEbEzNyHkyeeeNRSOZlDnoni21hyRBTpr6O6XjSa
+pUzjMQRUSTpA97fmpqQ4s+Hp6DDZ2CLrzFNT+c+9OJX6YzHYkKk7SN0OVEu/Wf36
+fmWySelznaNUtARrvhQLfkIBpjr3QRleNoz9A8YKHClgrFuyCtZc4foPymU0pzhq
+h8na8FuE3g9OAVyyL7BzI8Y9954OKvFjFYlbA62zZjlFuhcZnqeEKpL1US5FRUDX
+SsiZjuhJzF2RbS3HxjUIT7IH+XmLhZgH0YZ4yKCV326BCHUCD0IeZS8ty6JKEUGL
+GBlDcSeWt8LX4DTUv5v6/sbxdDlRIU8jnSP+vN2/CicfIGnVGvHCXC91wQsT+Zzq
+vBio/Mk4H5AaaAKsQcAGRWO/Y1EVplLLHkflsKcGelnIYZflvxi9BRC0DjCHzWcU
+80e0Wi67lOn5det6t2sKDoFtuClMfyL51UU5GPtOU1Gyj/ZCNLg=
+=E8jy
+-----END PGP SIGNATURE-----
+
+--dDRMvlgZJXvWKvBx--
