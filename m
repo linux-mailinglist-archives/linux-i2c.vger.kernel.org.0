@@ -2,37 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9629AA4461
-	for <lists+linux-i2c@lfdr.de>; Sat, 31 Aug 2019 14:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C76A4467
+	for <lists+linux-i2c@lfdr.de>; Sat, 31 Aug 2019 14:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726685AbfHaMRy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 31 Aug 2019 08:17:54 -0400
-Received: from sauhun.de ([88.99.104.3]:37824 "EHLO pokefinder.org"
+        id S1726251AbfHaMTi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 31 Aug 2019 08:19:38 -0400
+Received: from sauhun.de ([88.99.104.3]:37884 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726195AbfHaMRy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 31 Aug 2019 08:17:54 -0400
+        id S1726195AbfHaMTi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 31 Aug 2019 08:19:38 -0400
 Received: from localhost (p5486C98B.dip0.t-ipconnect.de [84.134.201.139])
-        by pokefinder.org (Postfix) with ESMTPSA id 137752C0093;
-        Sat, 31 Aug 2019 14:17:52 +0200 (CEST)
-Date:   Sat, 31 Aug 2019 14:17:51 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id CF5272C0093;
+        Sat, 31 Aug 2019 14:19:36 +0200 (CEST)
+Date:   Sat, 31 Aug 2019 14:19:36 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Eugen.Hristev@microchip.com
-Cc:     peda@axentia.se, mark.rutland@arm.com,
-        Ludovic.Desroches@microchip.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, pierre-yves.mordret@st.com,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        pierre-yves.mordret@st.com, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, peda@axentia.se, mark.rutland@arm.com,
         Nicolas.Ferre@microchip.com
-Subject: Re: [PATCH v3 5/9] i2c: at91: add support for digital filtering
-Message-ID: <20190831121751.GC1032@ninjato>
+Subject: Re: [PATCH v3 0/9] i2c: add support for filters
+Message-ID: <20190831121936.GD1032@ninjato>
 References: <1562678049-17581-1-git-send-email-eugen.hristev@microchip.com>
- <1562678049-17581-6-git-send-email-eugen.hristev@microchip.com>
- <20190831121308.GB1032@ninjato>
+ <20190712082044.6eteunzehyptsibk@M43218.corp.atmel.com>
+ <867070c3-02c8-da1b-04d9-0a1b628577de@microchip.com>
+ <20190829202817.GT3740@ninjato>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t0UkRYy7tHLRMCai"
+        protocol="application/pgp-signature"; boundary="sXc4Kmr5FA7axrvy"
 Content-Disposition: inline
-In-Reply-To: <20190831121308.GB1032@ninjato>
+In-Reply-To: <20190829202817.GT3740@ninjato>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -40,45 +40,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---t0UkRYy7tHLRMCai
+--sXc4Kmr5FA7axrvy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 
-> > +	dev->enable_dig_filt =3D of_property_read_bool(pdev->dev.of_node,
-> > +						     "i2c-dig-filter");
-> > +
+> > What is the plan for this patch series?
 >=20
-> What do you think of the idea to introduce 'flags' to struct i2c_timings
-> and parse the bindings in the core, too? Then you'd have sth like:
->=20
-> 	if (t->flags & I2C_TIMINGS_ANALOG_FILTER)
->=20
-> Would that be useful for you?
+> I hope to review it this weekend and my hope it is good to go for 5.4.
 
-Forgot to say, we can also implement this incrementally to make sure
-your patches land in 5.4 in case you are currently busy with sth else.
+Series looks good basically. Just a few comments for some patches. See
+there.
+
+Thanks!
 
 
---t0UkRYy7tHLRMCai
+--sXc4Kmr5FA7axrvy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1qZW8ACgkQFA3kzBSg
-KbbcoQ//ZMuUi7Vd6Xj/Gh9IgbGuTbXxjGeoSW+Kts2TbqLIcJHl9A8F8BLOe3OH
-QJRwEMB/NVIpI6XTuQKadhBkKHoI/1n+5jhOJX4P239Lar26V3kXG97WLSNH3kJP
-RJ4q5ZfPRLKzpxlebefRUWntFCadSWmQvztiji0VyQR5wSY3+eJkVhU7ftIKFEpW
-LFMoCI0Gr1eClZM47oZERx9hsilWnacd+y8eLTDoiUmd0yVGx0QO26JNju6zIkuU
-zMAfj51/y0aNN63LIHAp3M4uOxVvLxAWZrhg4nGrbfrEwUIFjWMajM27mnuF8C6R
-jFaK/CUOBUHO1dRRDvPHmFEJThJo7iQ4gR++2r4+ADeoWDP7geMn6uttEs3xRZEU
-HkOvWUDUzxgR0ylv768MU4lUV8eYt5d0kzYEQqcOiBO4eAS7zQ0SaeSLdbrQuIhR
-Vx6Msz70pCaBSQqEckJPlKcmN4fm4vp67wVZdy8jEjNuJIY7j7jVsFEQZkJXfdBq
-tV8yfRFm0C5HZbq5DR0QSF6xqREW/k40aHsPC/7bmyvyzCuA9GiGe3bZCzxoOeuR
-TAmzevIjsE4UfmCrNdqQP/V4E0tZMAbllPgxUlgZYO84EiLn76pKxxlvyt5hp++t
-NlMl1rO/Ne51jtwCVcmGgpkoLtlop2ChAKzhPSGZDMn7aAHdJVU=
-=YVhT
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1qZdgACgkQFA3kzBSg
+KbZsZA//f78QF1bYvAot77Sdun9f88jzno8Z7dYA6QF/uU2GL7npsGzJilGHp0bX
+18ft7DNi86YVPNglhutCWhlLDicMZOTe2fZkqrSX/w574Kq9TKadW4aCaVBkIyhj
+lvFP5lDSVQo9lHaXv+ocopAcFkKLlZ7KivZAXbOCAW9AwYF0l2bSC7FqVyJVYQOY
+8LEfUB0T4ZANnMuN2xn4S3OyTlidykhOy5rF+oppjpesIJ21zjSKwKLKKqz0eD2p
+vP4RcoEYvP+UvswkfMFeQ/nW8sSOOVi0lIpWPkRUwog9rHtZfVov8qd63r4/ftQK
+IEkQDXCmB+0oK5Dgz+FeIS7Hty6oJluLSpxLG1TTZ3W/716j2BrcrcTX7V0EoHGv
+YutKi0SD855I2bSWrk/O+P5Vor13a0oBVsu4WjRFbhO/Fzd3bIcZghILe3ty7um/
+US6WEMXpn0HRFPA2wdeBHfYWwGheN67Eovuxu24aPLF3G9GkTsaN38q4HCLfEZaf
+ofK5L+b2Tmb9O40aaXWIIZ5BwsI8STpT0LA0HS5zUh/j6y+3WRmKAaGA8tjDQUNz
+5GlQwcdvyBe8bsXSAqdFwR3r1mX3G9bC30hm2PX8DyCxQfgV7FJQjns44p3NKfHn
+5wPMNxUVEU2VsilefWifVBUwpdq8UxmPPJamPdY4sygrxOq+GK4=
+=4j4B
 -----END PGP SIGNATURE-----
 
---t0UkRYy7tHLRMCai--
+--sXc4Kmr5FA7axrvy--
