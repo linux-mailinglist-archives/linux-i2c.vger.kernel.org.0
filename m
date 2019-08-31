@@ -2,50 +2,23 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D82AA3DBC
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2019 20:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A77BA43C4
+	for <lists+linux-i2c@lfdr.de>; Sat, 31 Aug 2019 11:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727959AbfH3SfP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Aug 2019 14:35:15 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36166 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727888AbfH3SfP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Aug 2019 14:35:15 -0400
-Received: by mail-pf1-f196.google.com with SMTP id w2so5155384pfi.3
-        for <linux-i2c@vger.kernel.org>; Fri, 30 Aug 2019 11:35:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bIeN59zLlf9hPECJ+a5c6Glfl7dAXXKY36z7SizN9gM=;
-        b=IQGa3Mt4+au2PyMQHW+PvrAcz/AETV0wFmHOYGLymVh/gc+dTht/JO4nBjR1m4Z8Qx
-         B7KxIkemrczvh45Jb/1x2k0NFOVuub+ATOjZSexJsTNLChgVm8aVno/qRULf4iIGKJ07
-         z71IX/iXX3oF2ff6SAr+g37jeArEF4jRYP+lc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bIeN59zLlf9hPECJ+a5c6Glfl7dAXXKY36z7SizN9gM=;
-        b=FLIKxIYInpwuK5pPnu1TklkrAgWm1k64jaoPysKpCc5TrpV+esfUdtOW+c/jiPYAUK
-         kJbeg8gCIm8xeMdNtZjUOwNeq30x97hRuDrfaSTfafS0/SUDYX7USjmkCNV2157B29r9
-         vGPEsbIcieB2F0/FIwvI00L1K2QqlGW6LiQ+FHu4im6GghTOEk6ZXZTcJKRBN2lsWlPT
-         RkmEVaarJpPRMttmaNyxOeHLCJbJhOZwJyuNCbaUpNJN02H3fWKefZtE/gOpQnhX/jcL
-         egaisF2OaBlpG77xYZm6TUXPYF9zabTtRwfVp+wvI6dkcEA7LCR3UyefbJXp9X54QRbZ
-         flhw==
-X-Gm-Message-State: APjAAAW52TPIKbkRI3uPr6AcYz2S8fVOUTaEW8M3o4km8hse5zHR0UUZ
-        /M2LWERxLcAdXdJS1eMVPjsQgA==
-X-Google-Smtp-Source: APXvYqygSJnu7L2JedNmYX5ICyfUrGX+E4J3wKc8DRjWeJwkgnQsT/NWZZ9V0F2txVYvAu85h9YZmw==
-X-Received: by 2002:a17:90a:8081:: with SMTP id c1mr17371952pjn.62.1567190113962;
-        Fri, 30 Aug 2019 11:35:13 -0700 (PDT)
-Received: from rj-aorus.ric.broadcom.com ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id x16sm7420135pff.99.2019.08.30.11.35.11
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 30 Aug 2019 11:35:12 -0700 (PDT)
-Subject: Re: [PATCH v1 1/1] i2c: iproc: Add i2c repeated start capability
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        id S1726890AbfHaJto (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 31 Aug 2019 05:49:44 -0400
+Received: from sauhun.de ([88.99.104.3]:36442 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726402AbfHaJto (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 31 Aug 2019 05:49:44 -0400
+Received: from localhost (p5486C98B.dip0.t-ipconnect.de [84.134.201.139])
+        by pokefinder.org (Postfix) with ESMTPSA id 649852C0093;
+        Sat, 31 Aug 2019 11:49:41 +0200 (CEST)
+Date:   Sat, 31 Aug 2019 11:49:41 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Ray Jui <ray.jui@broadcom.com>
+Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org,
@@ -54,70 +27,73 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Lori Hikichi <lori.hikichi@broadcom.com>,
         Icarus Chau <icarus.chau@broadcom.com>,
         Shivaraj Shetty <sshetty1@broadcom.com>
+Subject: Re: [PATCH v1 1/1] i2c: iproc: Add i2c repeated start capability
+Message-ID: <20190831094940.GA1138@kunai>
 References: <1565150941-27297-1-git-send-email-rayagonda.kokatanur@broadcom.com>
  <20190830125626.GC2870@ninjato>
-From:   Ray Jui <ray.jui@broadcom.com>
-Message-ID: <3e70fa7e-de13-4edd-2e17-b7c56e91d220@broadcom.com>
-Date:   Fri, 30 Aug 2019 11:35:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ <3e70fa7e-de13-4edd-2e17-b7c56e91d220@broadcom.com>
 MIME-Version: 1.0
-In-Reply-To: <20190830125626.GC2870@ninjato>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AhhlLboLdkugWU4S"
+Content-Disposition: inline
+In-Reply-To: <3e70fa7e-de13-4edd-2e17-b7c56e91d220@broadcom.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
+--AhhlLboLdkugWU4S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 8/30/19 5:56 AM, Wolfram Sang wrote:
-> Hi everyone,
-> 
->> +/*
->> + * If 'process_call' is true, then this is a multi-msg transfer that requires
->> + * a repeated start between the messages.
->> + * More specifically, it must be a write (reg) followed by a read (data).
->> + * The i2c quirks are set to enforce this rule.
->> + */
-> 
-> With all the limitations in place, I wonder if it might be easier to
-> implement an smbus_xfer callback instead? What is left that makes this
-> controller more than SMBus and real I2C?
-> 
+Hi Ray,
 
-Right. But what is the implication of using smbus_xfer instead of 
-master_xfer in our driver?
+> > With all the limitations in place, I wonder if it might be easier to
+> > implement an smbus_xfer callback instead? What is left that makes this
+> > controller more than SMBus and real I2C?
+> >=20
+>=20
+> Right. But what is the implication of using smbus_xfer instead of
+> master_xfer in our driver?
+>=20
+> Does it mean it will break existing functions of the i2c app that our
+> customers developed based on i2cdev (e.g., I2C_RDWR)?
 
-Does it mean it will break existing functions of the i2c app that our 
-customers developed based on i2cdev (e.g., I2C_RDWR)?
+If the customers uses I2C_RDWR (and it cannot be mapped to i2c_smbus_*
+calls) then this is an indication that there is some I2C functionality
+left which the HW can provide. I'd be interested which one, though.
 
-1) Does
->> +	/* Process the read message if this is process call */
-> 
-> Also, the term "process call" here seriously sounds like SMBus.
-> 
->> +		addr = msg->addr << 1 | 1;
-> 
-> addr = i2c_8bit_addr_from_msg(msg);
-> 
->> +		u32 protocol;
-> 
-> Hmm, another SMBus terminology.
-> 
-> 
->> +	if (num > 2) {
->> +		dev_err(iproc_i2c->device,
->> +			"Only support up to 2 messages. Current msg count %d\n",
->> +			num);
->> +		return -EOPNOTSUPP;
->> +	}
-> 
-> With your quirks flags set, the core checks it for you.
-> 
-> Kind regards,
-> 
->     Wolfram
-> 
+>=20
+> 1) Does
+
+Maybe you wanted to describe it here and it got accidently cut off?
+
+Regards,
+
+   Wolfram
+
+
+--AhhlLboLdkugWU4S
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1qQrAACgkQFA3kzBSg
+KbbmbQ/9E9Ts1/5jZMraYl7CNxsXtWMbdSUWQFyuZDJGvO7UvZz9v7O0Aq9ct/MB
+mMb4lMVP4lLM/y1DMpVmoYoqVXyKPXzvMzGzsB0CMCs5e+XCbWKr1yCaDCLv0/Js
+HNbEe7PC1fuNz/YklNtYvHEe1LjSxf81lFWoLDFGPZ4FkSDcbUAZQkUfe/VpcKbc
+VVhYAQucc6GrBoJ12UMRSWSf3diIkR0CBqKhALZXCnrSLx9cXtTuqA0k7UnN9Piv
+qPZs/I20tTu52RCHXTpjnwFpWMLNuswRIoCWcMR6Vl1Ix6v0TB4NiUpMStk4Pw45
+KD6hdZSPBtFM4uQ04M7wbVFR634PF4mQx7wts+VjFXBe6rxEASwpIq3dMtxVFWgs
+GwZ2tyZDQBT/jqdJi2QyUsKw4UW2R7su3D3+/idNTtoT1JkqwAfsFix283Bcbees
+Kmx1W32dzB7p2G0k2vCWmNWx1CI+Mf/K16H0n2ffyD/5t4vCME7kLeIVcqkYNF7l
+i98hRkYVJm3iecvg2iVr5/y6a7T/V248YJl59WTs7ycb3wqZJib5hQDOmMKeZbmS
+DrKSbdHwlistLsHnatTQxOz8vlHG6ufoAXBy+x3PXs1b+HD21Zh94ugVqgoOHoSm
+xqIQaulWFBYVg6xi2y9ZyEPyKo4KEwBBmNFs4eTCPmSgTvKT3lg=
+=mcNR
+-----END PGP SIGNATURE-----
+
+--AhhlLboLdkugWU4S--
