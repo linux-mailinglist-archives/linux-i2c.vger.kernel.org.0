@@ -2,180 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B3CA4DC6
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Sep 2019 05:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30BEA4F05
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Sep 2019 07:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729294AbfIBDcV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 1 Sep 2019 23:32:21 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:45001 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729333AbfIBDcV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 1 Sep 2019 23:32:21 -0400
-X-UUID: 1315deb52f844755ba11aabf65006759-20190902
-X-UUID: 1315deb52f844755ba11aabf65006759-20190902
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
-        (envelope-from <bibby.hsieh@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1199839143; Mon, 02 Sep 2019 11:32:16 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 2 Sep 2019 11:32:08 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 2 Sep 2019 11:32:08 +0800
-From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        <linux-i2c@vger.kernel.org>
-CC:     <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <srv_heupstream@mediatek.com>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>
-Subject: [PATCH v1] misc: eeprom: at24: support pm_runtime control
-Date:   Mon, 2 Sep 2019 11:32:05 +0800
-Message-ID: <20190902033205.30276-1-bibby.hsieh@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S1726008AbfIBF7B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 2 Sep 2019 01:59:01 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:58913 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726001AbfIBF7B (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Sep 2019 01:59:01 -0400
+Received: from soja.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:13da])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <o.rempel@pengutronix.de>)
+        id 1i4fMO-0007zm-FU; Mon, 02 Sep 2019 07:58:40 +0200
+Subject: Re: [PATCH] [RFC] i2c: imx: make use of format specifier %dE
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Enrico Weigelt <lkml@metux.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190829042905.4850-1-uwe@kleine-koenig.org>
+ <20190829203912.GU3740@ninjato>
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+Message-ID: <aefbf1c5-d0b7-bb6e-0f97-d65575d549ff@pengutronix.de>
+Date:   Mon, 2 Sep 2019 07:58:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <20190829203912.GU3740@ninjato>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:13da
+X-SA-Exim-Mail-From: o.rempel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Although in the most platforms, the power of eeprom and i2c
-are alway on, some platforms disable the eeprom and i2c power
-in order to meet low power request.
-This patch add the pm_runtime ops to control power to support
-all platforms.
 
-Changes since v1:
- - remove redundant code
- - fixup coding style
 
-Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
----
- drivers/misc/eeprom/at24.c | 59 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 58 insertions(+), 1 deletion(-)
+On 29.08.19 22:39, Wolfram Sang wrote:
+> On Thu, Aug 29, 2019 at 06:29:05AM +0200, Uwe Kleine-König wrote:
+>> I created a patch that teaches printk et al to emit a symbolic error
+>> name for an error valued integer[1]. With that applied
+>>
+>> 	dev_err(&pdev->dev, "can't enable I2C clock, ret=%dE\n", ret);
+>>
+>> emits
+>>
+>> 	... can't enable I2C clock, ret=EIO
+>>
+>> if ret is -EIO. Petr Mladek (i.e. one of the printk maintainers) had
+>> concerns if this would be well received and worth the effort. He asked
+>> to present it to a few subsystems. So for now, this patch converting the
+>> i2c-imx driver shouldn't be applied yet but it would be great to get
+>> some feedback about if you think that being able to easily printk (for
+>> example) "EIO" instead of "-5" is a good idea. Would it help you? Do you
+>> think it helps your users?
+> 
+> Yes, it would help me. And users, too, I am quite sure. For me, if I mix
+> up two numbers while debugging, I am hunting ghosts for a while until I
+> realize my mistake. So:
+> 
+> Acked-by: Wolfram Sang <wsa@the-dreams.de>
+> 
+> I think the main drawback is that ERRORCODES in vsprintf.c now need
+> maintenance, but I think it is worth the effort. I'd be interested in
+> the overhead in size this causes, but I also think it is worth the
+> effort. (It could even be compiled out if we have some generic Kconfig
+> symbol for smaller kernels).
 
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 35bf2477693d..ce17e82eedca 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -23,6 +23,7 @@
- #include <linux/nvmem-provider.h>
- #include <linux/regmap.h>
- #include <linux/pm_runtime.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/gpio/consumer.h>
- 
- /* Address pointer is 16 bit. */
-@@ -68,6 +69,12 @@
-  * which won't work on pure SMBus systems.
-  */
- 
-+static const char * const at24_supply_names[] = {
-+	"power", "i2c",
-+};
-+
-+#define AT24_NUM_SUPPLIES ARRAY_SIZE(at24_supply_names)
-+
- struct at24_client {
- 	struct i2c_client *client;
- 	struct regmap *regmap;
-@@ -92,6 +99,8 @@ struct at24_data {
- 
- 	struct gpio_desc *wp_gpio;
- 
-+	bool has_supplies;
-+	struct regulator_bulk_data supplies[AT24_NUM_SUPPLIES];
- 	/*
- 	 * Some chips tie up multiple I2C addresses; dummy devices reserve
- 	 * them for us, and we'll use them with SMBus calls.
-@@ -663,6 +672,15 @@ static int at24_probe(struct i2c_client *client)
- 	at24->client[0].client = client;
- 	at24->client[0].regmap = regmap;
- 
-+	for (i = 0; i < AT24_NUM_SUPPLIES; i++)
-+		at24->supplies[i].supply = at24_supply_names[i];
-+
-+	err =  devm_regulator_bulk_get(&at24->client[0].client->dev,
-+				       AT24_NUM_SUPPLIES, at24->supplies);
-+	if (err == -EPROBE_DEFER)
-+		return err;
-+	at24->has_supplies = !err;
-+
- 	at24->wp_gpio = devm_gpiod_get_optional(dev, "wp", GPIOD_OUT_HIGH);
- 	if (IS_ERR(at24->wp_gpio))
- 		return PTR_ERR(at24->wp_gpio);
-@@ -705,13 +723,21 @@ static int at24_probe(struct i2c_client *client)
- 	/* enable runtime pm */
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
-+	pm_runtime_get_sync(dev);
-+	if (at24->has_supplies) {
-+		err = regulator_bulk_enable(AT24_NUM_SUPPLIES, at24->supplies);
-+		if (err) {
-+			dev_err(dev, "Failed to enable power regulators\n");
-+			return err;
-+		}
-+	}
- 
- 	/*
- 	 * Perform a one-byte test read to verify that the
- 	 * chip is functional.
- 	 */
- 	err = at24_read(at24, 0, &test_byte, 1);
--	pm_runtime_idle(dev);
-+	pm_runtime_put(dev);
- 	if (err) {
- 		pm_runtime_disable(dev);
- 		return -ENODEV;
-@@ -726,15 +752,46 @@ static int at24_probe(struct i2c_client *client)
- 
- static int at24_remove(struct i2c_client *client)
- {
-+	struct at24_data *at24 = i2c_get_clientdata(client);
-+
- 	pm_runtime_disable(&client->dev);
- 	pm_runtime_set_suspended(&client->dev);
-+	if (at24->has_supplies)
-+		regulator_bulk_disable(AT24_NUM_SUPPLIES, at24->supplies);
- 
- 	return 0;
- }
- 
-+static int __maybe_unused at24_suspend(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct at24_data *at24 = i2c_get_clientdata(client);
-+
-+	if (at24->has_supplies)
-+		return regulator_bulk_disable(AT24_NUM_SUPPLIES,
-+					      at24->supplies);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused at24_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct at24_data *at24 = i2c_get_clientdata(client);
-+
-+	if (at24->has_supplies)
-+		return regulator_bulk_enable(AT24_NUM_SUPPLIES,
-+					     at24->supplies);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(at24_pm_ops, at24_suspend, at24_resume);
-+
- static struct i2c_driver at24_driver = {
- 	.driver = {
- 		.name = "at24",
-+		.pm = &at24_pm_ops,
- 		.of_match_table = at24_of_match,
- 		.acpi_match_table = ACPI_PTR(at24_acpi_ids),
- 	},
+
+I like it, at least it will safe me some time.
+I tested this patch together with the vprintf patch, so result looks like:
+[    0.281843] imx-i2c 21a0000.i2c: can't enable I2C clock, ret=EIO
+[    0.281891] imx-i2c: probe of 21a0000.i2c failed with error -5
+
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+
+Kind regards,
+Oleksij Rempel
+
 -- 
-2.18.0
-
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
