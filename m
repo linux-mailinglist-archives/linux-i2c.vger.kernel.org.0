@@ -2,122 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1658A5D64
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Sep 2019 23:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB01A5D91
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Sep 2019 23:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727318AbfIBVQ0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 Sep 2019 17:16:26 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34216 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726979AbfIBVQZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Sep 2019 17:16:25 -0400
-Received: by mail-pf1-f194.google.com with SMTP id b24so9537181pfp.1;
-        Mon, 02 Sep 2019 14:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UzPPEolNh35wWErUe2k2fZkCpaurwJuZg/+ELGsiOFk=;
-        b=Yw0hv6WPGdzg89CqQgm2pjeaLxqK1SCjR9n0FGD5Y3r2LiFeW+G9UtCLiznr5RxuhI
-         7tE3P5Li0aUEBa2fZHPoHoot/SSNCoFmsbvAnqNg9aZX2mbt5QhkqpDML4MSTi/QpcpM
-         lxoK1qzZaPS5EA4osYjqQ2CDcDD+DBrRlxvXe3RImogXOtyntEvvi2ecDgvwyaHy84XK
-         RitqIfgPXhoh1+oroTx4tktLbK5Kqc/1Le9S3MJUcn/vj85LdAkINB8xrvuPRrvcF1wt
-         XG1FcNeH0sAxpcl72s4C6ov/yEFMMPgQchAya1U+z4GvOBJqX/jHRkG2XgpuDvMlv4Jh
-         ZY6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UzPPEolNh35wWErUe2k2fZkCpaurwJuZg/+ELGsiOFk=;
-        b=ARQ3o811yRXmggLTx8OkI3mbSVpG6KMzb1MGHaWrZAin8K/IqLuEP+5qGwCiuzjIqb
-         y/jnvglpTn2SDYI7QXVQBX787+BExjxoa3nYf4/0vFGkgJaiUax0WLu0iDm/Ue6Ynkco
-         sej8Y+FNVMAuIcPfT1mNtoI99Djpc11iLnJs25W8YkB7rmbqkJcpwETVAYHzrKrsmV+6
-         pS5IyNtuSpkoiPFmFO9tzXiltihAdtXVreYrZIj/gAI6OaDrkQWlaEgrxVJZrc0zK0x0
-         U37tMxh7e9msNjuHqRvBqFnV3U8BS8KaSTSQVvmFDMLiSyduCqIQIj1jf74ODbiBoFb9
-         idhg==
-X-Gm-Message-State: APjAAAXLlRdE0X02u4waistTfWei/DwEUpv5/ng/4mimR9VfveE9aywx
-        wmlSp1F5CIeIU9aYD0G8NbYlY5dJfLVVSEPwcf8=
-X-Google-Smtp-Source: APXvYqyg9Tkgzp+liZd++CYTKTIbIPE7/kBlL+HXD5OkDBg82HGev2/K71w5cyXBHT4FgJomex2UHjw/TsfC1ly8MEY=
-X-Received: by 2002:a63:6eca:: with SMTP id j193mr26308059pgc.74.1567458984928;
- Mon, 02 Sep 2019 14:16:24 -0700 (PDT)
+        id S1727706AbfIBVcR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 2 Sep 2019 17:32:17 -0400
+Received: from sauhun.de ([88.99.104.3]:44486 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726964AbfIBVcR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 2 Sep 2019 17:32:17 -0400
+Received: from localhost (p54B337C1.dip0.t-ipconnect.de [84.179.55.193])
+        by pokefinder.org (Postfix) with ESMTPSA id BDB4F2C0165;
+        Mon,  2 Sep 2019 23:32:15 +0200 (CEST)
+Date:   Mon, 2 Sep 2019 23:32:15 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-media@vger.kernel.org
+Subject: BoF at LPC "New hardware with modern I2C address conflicts"
+Message-ID: <20190902213215.GD7253@kunai>
 MIME-Version: 1.0
-References: <20190711102601.20582-1-chuanhua.han@nxp.com> <CAJZ5v0hY2sL+XfN_4v07_hjvoxgCAt+Q89+wNg5Pky6XKP-mqA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hY2sL+XfN_4v07_hjvoxgCAt+Q89+wNg5Pky6XKP-mqA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 3 Sep 2019 00:16:12 +0300
-Message-ID: <CAHp75VfFtMMQhetRFHrx=Ft7OWwyMqLrwP3sPjT6YVtr8xCHoQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: support for NXP i2c controller
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Chuanhua Han <chuanhua.han@nxp.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Leo Li <leoyang.li@nxp.com>,
-        Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>,
-        Udit Kumar <udit.kumar@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/3yNEOqWowh/8j+e"
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Sep 2, 2019 at 11:58 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Jul 11, 2019 at 12:35 PM Chuanhua Han <chuanhua.han@nxp.com> wrote:
-> >
-> > Enable NXP i2c controller to boot with ACPI
-> >
-> > Signed-off-by: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
-> > Signed-off-by: Udit Kumar <udit.kumar@nxp.com>
-> > Signed-off-by: Chuanhua Han <chuanhua.han@nxp.com>
->
-> Wolfram, any objections to this from the i2c side?
 
-May I propose amendment(s)?
+--/3yNEOqWowh/8j+e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > @@ -44,6 +44,7 @@
-> >  #include <linux/pm_runtime.h>
-> >  #include <linux/sched.h>
-> >  #include <linux/slab.h>
+Hey everyone,
 
-> > +#include <linux/acpi.h>
+at LPC next week in Lisboa, there will be a BoF run by me which I want
+to point out. Quoting the official description[1]:
 
-If it's kept in order, better to go with it. (Yes, it is as I have checked)
-However, property.h should be included instead, see below.
+===
 
-> >         const struct of_device_id *of_id = of_match_device(i2c_imx_dt_ids,
-> >                                                            &pdev->dev);
-> > +       const struct acpi_device_id *acpi_id =
-> > +                       acpi_match_device(i2c_imx_acpi_ids,
-> > +                                         &pdev->dev);
+"New hardware with modern I2C address conflicts"
+
+For some time now, special camera setups exist having features which are
+challenging for I2C address layouts as we know them in Linux: a) a
+high-speed serial link which can embed I2C communication (e.g. GMSL or
+FPD-Link III) and b) the ability to reprogram the client addresses of
+the I2C devices on the camera.
+
+The use case for these cameras is to run multiple of them in parallel,
+and not just a single one. To be easily pluggable, they don't have a way
+to configure the I2C addresses they need. They use initially all the
+same I2C addresses and rely on software to reprogram them and sort out
+that problem.
+
+The really tricky thing is now that they are connected to the same
+serial high speed link. As a result, all the clients with initially
+equal addresses sit (more or less, depending on the link) on the same
+I2C bus as well and need to be carefully reprogrammed one-by-one to a
+unique address.
+
+The camera setup above is the primary example we are facing right now.
+Some early implementations for GMSL and FPD-Link exist with different
+approaches to map the I2C topology. However, there might be other
+hardware facing very similar problems. We definitely want to have you in
+the room.
+
+An introductory talk gives a few more details of current
+implementations, and explains the current problems in abstracting all
+this. From there on, we hope to have gathered enough highly interested
+people for discussion, opinions, and brainstorming. The goal is, of
+course, to enhance the I2C core to provide reasonable support for such
+scenarios which will be beneficial for all users like these high speed
+links.
+
+====
+
+The BoF takes place 11 Sep 2019, 10:45 in the Ametista-room-I.
+
+If you face similar problems, know other HW behaving like this, or are
+simply interested, you are very welcome to join the BoF. Or contact me
+beforehand at the conference.
+
+Hope to see you there!
+
+Happy hacking,
+
+   Wolfram
+
+[1] https://linuxplumbersconf.org/event/4/contributions/542/
 
 
-> >         if (of_id)
-> >                 i2c_imx->hwdata = of_id->data;
-> > +       else if (acpi_id)
-> > +               i2c_imx->hwdata = (struct imx_i2c_hwdata *)
-> > +                               acpi_id->driver_data;
+--/3yNEOqWowh/8j+e
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-The above altogher may be replaced with
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1tilsACgkQFA3kzBSg
+KbZYkA//dVIarSguujsqS8z9aAMXc+bxSGjUXfDHKTqOl4iNvncXrMGGKtpB16Kh
+oBd/YPDgzcjPjUcVGSoauR6Xyy29DgHD+8JgRh5cvAPO2HDH+Nesi1KFNOk3yLKd
+NZuYD+5YWwxYMePXgwjnMImPRkxuSzZtuzpuTCrKP02z/Kv0eeAQZoFAp2+JXWeR
+YkXqQsP7JNJlzATT8T6nSmq2CuYTL1UUvISd+0DK//7qZXtC1SR+Cgtl0WwmcfHi
+LlEQy03+Q+oS3SWvksObwxN4gF+KhwU1wyWyzAJ5G0nXk4RyfWarCneGLx5Vpeaq
+VJBf3RwbK3TL4LUlS2RzR1KTc2OMdu7L2aCHzx1Zq2HWlPvaZolxjly8hqCs249v
+6m79KS5lFDbV6ZEqi+ic/bmwh9YvmEtBPMispHVnbezv+t3pKe9pNfLvSHHKCF6o
+r6qpHujt3EhhNX3/wxFwWjHFz5b/TR7txvqgHCMPoon04o9GoMuL9F8JL7XkBx6C
+/FrOcpAQUGT8aKBNGY3XPMHeBa75UMPHFo6nAsdlLyWbdtcRSjEOua8N1jY5uPip
+7n7rKNnwVXThXLD6101ab+Z8U3ZFgW2Uu2xT/uyKZ4RJwr9k0tRc1oES9FVYWBtX
+iCaams5HSoNeSo70i4pSQ0Y2wphxfJCfWGfJFQex2EpeRdfhfGM=
+=fCdU
+-----END PGP SIGNATURE-----
 
-const struct imx_i2c_hwdata *match;
-...
-match = device_get_match_data(&pdev->dev);
-if (match)
- i2c_imx->hwdata = match;
-else
-...
-
-> > +               .acpi_match_table = ACPI_PTR(i2c_imx_acpi_ids),
-
-Since there is no #ifdef guard no need to use ACPI_PTR().
-
--- 
-With Best Regards,
-Andy Shevchenko
+--/3yNEOqWowh/8j+e--
