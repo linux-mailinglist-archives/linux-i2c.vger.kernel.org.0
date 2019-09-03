@@ -2,80 +2,169 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 390A7A62A6
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2019 09:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6520A6317
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2019 09:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727958AbfICHhX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 Sep 2019 03:37:23 -0400
-Received: from sauhun.de ([88.99.104.3]:49762 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725895AbfICHhW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 3 Sep 2019 03:37:22 -0400
-Received: from localhost (p54B3348D.dip0.t-ipconnect.de [84.179.52.141])
-        by pokefinder.org (Postfix) with ESMTPSA id 7167C2C4F2F;
-        Tue,  3 Sep 2019 09:37:20 +0200 (CEST)
-Date:   Tue, 3 Sep 2019 09:37:20 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     jacopo mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Peter Rosin <peda@axentia.se>
-Subject: Re: [RFC,v2 2/6] i2c: add I2C Address Translator (ATR) support
-Message-ID: <20190903073719.GA1020@kunai>
-References: <20190723203723.11730-1-luca@lucaceresoli.net>
- <20190723203723.11730-3-luca@lucaceresoli.net>
- <20190901143101.humomdehy5ee73sk@vino>
- <20bac324-c4d3-270c-5175-0a7f261fd760@lucaceresoli.net>
+        id S1725888AbfICHvo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 Sep 2019 03:51:44 -0400
+Received: from bastet.se.axis.com ([195.60.68.11]:52234 "EHLO
+        bastet.se.axis.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725878AbfICHvo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 Sep 2019 03:51:44 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bastet.se.axis.com (Postfix) with ESMTP id 5F35E1813A;
+        Tue,  3 Sep 2019 09:51:40 +0200 (CEST)
+X-Axis-User: NO
+X-Axis-NonUser: YES
+X-Virus-Scanned: Debian amavisd-new at bastet.se.axis.com
+Received: from bastet.se.axis.com ([IPv6:::ffff:127.0.0.1])
+        by localhost (bastet.se.axis.com [::ffff:127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id gbLLRfZe3_pg; Tue,  3 Sep 2019 09:51:39 +0200 (CEST)
+Received: from boulder02.se.axis.com (boulder02.se.axis.com [10.0.8.16])
+        by bastet.se.axis.com (Postfix) with ESMTPS id 6CBD018324;
+        Tue,  3 Sep 2019 09:51:39 +0200 (CEST)
+Received: from boulder02.se.axis.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B6161A062;
+        Tue,  3 Sep 2019 09:51:39 +0200 (CEST)
+Received: from boulder02.se.axis.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4FC221A05F;
+        Tue,  3 Sep 2019 09:51:39 +0200 (CEST)
+Received: from thoth.se.axis.com (unknown [10.0.2.173])
+        by boulder02.se.axis.com (Postfix) with ESMTP;
+        Tue,  3 Sep 2019 09:51:39 +0200 (CEST)
+Received: from lnxbjornar3.se.axis.com (lnxbjornar3.se.axis.com [10.88.24.4])
+        by thoth.se.axis.com (Postfix) with ESMTP id 43BC628E5;
+        Tue,  3 Sep 2019 09:51:39 +0200 (CEST)
+Received: by lnxbjornar3.se.axis.com (Postfix, from userid 9651)
+        id 3D68EC4749; Tue,  3 Sep 2019 09:51:39 +0200 (CEST)
+From:   =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>
+To:     wsa@the-dreams.de
+Cc:     linux-i2c@vger.kernel.org,
+        =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjornar@axis.com>
+Subject: [PATCH] i2c-eeprom_slave: Add support for more eeprom models
+Date:   Tue,  3 Sep 2019 09:51:31 +0200
+Message-Id: <1567497091-18270-1-git-send-email-bjorn.ardo@axis.com>
+X-Mailer: git-send-email 2.1.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a8Wt8u1KmwUX3Y2C"
-Content-Disposition: inline
-In-Reply-To: <20bac324-c4d3-270c-5175-0a7f261fd760@lucaceresoli.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Add a 32 and a 64 kbit memory. These needs 16 bit address
+so added support for that as well.
 
---a8Wt8u1KmwUX3Y2C
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Björn Ardö <bjorn.ardo@axis.com>
+---
+ drivers/i2c/i2c-slave-eeprom.c | 37 ++++++++++++++++++++++++++-----------
+ 1 file changed, 26 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
+index be65d38..73325e2 100644
+--- a/drivers/i2c/i2c-slave-eeprom.c
++++ b/drivers/i2c/i2c-slave-eeprom.c
+@@ -11,6 +11,7 @@
+  * pointer, yet implementation is deferred until the need actually arises.
+  */
+ 
++#include <linux/bitfield.h>
+ #include <linux/i2c.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
+@@ -19,14 +20,21 @@
+ #include <linux/spinlock.h>
+ #include <linux/sysfs.h>
+ 
++
+ struct eeprom_data {
+ 	struct bin_attribute bin;
+-	bool first_write;
+ 	spinlock_t buffer_lock;
+-	u8 buffer_idx;
++	u16 buffer_idx;
++	u16 address_mask;
++	u8 num_address_bytes;
++	u8 idx_write_cnt;
+ 	u8 buffer[];
+ };
+ 
++#define I2C_SLAVE_BYTELEN GENMASK(15, 0)
++#define I2C_SLAVE_FLAG_ADDR16 BIT(16)
++#define I2C_SLAVE_DEVICE_MAGIC(_len, _flags) ((_flags) | (_len))
++
+ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
+ 				     enum i2c_slave_event event, u8 *val)
+ {
+@@ -34,12 +42,14 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
+ 
+ 	switch (event) {
+ 	case I2C_SLAVE_WRITE_RECEIVED:
+-		if (eeprom->first_write) {
+-			eeprom->buffer_idx = *val;
+-			eeprom->first_write = false;
++		if (eeprom->idx_write_cnt < eeprom->num_address_bytes) {
++			if (eeprom->idx_write_cnt == 0)
++				eeprom->buffer_idx = 0;
++			eeprom->buffer_idx = *val | (eeprom->buffer_idx << 8);
++			eeprom->idx_write_cnt++;
+ 		} else {
+ 			spin_lock(&eeprom->buffer_lock);
+-			eeprom->buffer[eeprom->buffer_idx++] = *val;
++			eeprom->buffer[eeprom->buffer_idx++ & eeprom->address_mask] = *val;
+ 			spin_unlock(&eeprom->buffer_lock);
+ 		}
+ 		break;
+@@ -50,7 +60,7 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
+ 		/* fallthrough */
+ 	case I2C_SLAVE_READ_REQUESTED:
+ 		spin_lock(&eeprom->buffer_lock);
+-		*val = eeprom->buffer[eeprom->buffer_idx];
++		*val = eeprom->buffer[eeprom->buffer_idx & eeprom->address_mask];
+ 		spin_unlock(&eeprom->buffer_lock);
+ 		/*
+ 		 * Do not increment buffer_idx here, because we don't know if
+@@ -61,7 +71,7 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
+ 
+ 	case I2C_SLAVE_STOP:
+ 	case I2C_SLAVE_WRITE_REQUESTED:
+-		eeprom->first_write = true;
++		eeprom->idx_write_cnt = 0;
+ 		break;
+ 
+ 	default:
+@@ -105,13 +115,16 @@ static int i2c_slave_eeprom_probe(struct i2c_client *client, const struct i2c_de
+ {
+ 	struct eeprom_data *eeprom;
+ 	int ret;
+-	unsigned size = id->driver_data;
++	unsigned int size = FIELD_GET(I2C_SLAVE_BYTELEN, id->driver_data);
++	unsigned int flag_addr16 = FIELD_GET(I2C_SLAVE_FLAG_ADDR16, id->driver_data);
+ 
+ 	eeprom = devm_kzalloc(&client->dev, sizeof(struct eeprom_data) + size, GFP_KERNEL);
+ 	if (!eeprom)
+ 		return -ENOMEM;
+ 
+-	eeprom->first_write = true;
++	eeprom->idx_write_cnt = 0;
++	eeprom->num_address_bytes = flag_addr16 ? 2 : 1;
++	eeprom->address_mask = size - 1;
+ 	spin_lock_init(&eeprom->buffer_lock);
+ 	i2c_set_clientdata(client, eeprom);
+ 
+@@ -146,7 +159,9 @@ static int i2c_slave_eeprom_remove(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id i2c_slave_eeprom_id[] = {
+-	{ "slave-24c02", 2048 / 8 },
++	{ "slave-24c02", I2C_SLAVE_DEVICE_MAGIC(2048 / 8,  0) },
++	{ "slave-24c32", I2C_SLAVE_DEVICE_MAGIC(32768 / 8, I2C_SLAVE_FLAG_ADDR16) },
++	{ "slave-24c64", I2C_SLAVE_DEVICE_MAGIC(65536 / 8, I2C_SLAVE_FLAG_ADDR16) },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, i2c_slave_eeprom_id);
+-- 
+2.1.4
 
-> Adding the ATR features to i2c-mux.c was very tricky and error-prone due
-> to all of this code, that's why I have moved ATR to its own file in RFCv2.
-
-I forgot to say that I like this.
-
-
---a8Wt8u1KmwUX3Y2C
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1uGCoACgkQFA3kzBSg
-KbZidw/9EM+Hx6X3hquMtRxGgJV6HJWi8UYyPYgFrwAIYCAt7gtjHWnk1cNizf98
-4DSVtoi6zpMeLx4zM76DZ3P2nnDSDNQ+QwJRYRIoWLs3yWkZ56EPQvCxcc4lhNRW
-+XDgzFLnoVnkn4PJlAjztG7xcVm0u9XfM+8Ion0U9A9E7wIR1ml3XwctccOL0Zd7
-VW2zR+nzhEEH9iV/bCKeKTQXg75YgHyIIUlJm48FuP1mA5uWMqtX9hf5h6ctRZK4
-AYcxw1uLOICIBmbW5WaTOHq0xd3TaE4R0+lI9fcODckq7CVFijl1/odDsmgy/ISU
-24A0v/ulqd6b8XMXq3DyU3hyFmbwbJjWitI0nYQKdpCvF9hNFJ5KR++ko/P2I4s8
-inR7erFYYab2RSo0VKsZLgB4t45jmbQmCQtwKjla9uDcz2lHgG5/JzumGaPYdDEa
-DdQZOM8vz1GxM/3Yf2sCNkE2WJ5S0dT8PvrtsIhkn4Sqd9WiGPDiyjpK9mhdU1ap
-H9aXNKDRl+t4/x0zRe1K1gCydQzRsmLByXzAbs/sq+aKtUHl/obBKt9j6XFHMStG
-hOdIT2mQCys07yZpSK/LApFds0PbYBIB8XQjEsXIzGbSwau0BUJl3Ezwn7seZeer
-1SKdzmZlqUCJTeGdvjz6ef8RWeFRKrtl4srdu6ApbgvYAxGvcVk=
-=RqGE
------END PGP SIGNATURE-----
-
---a8Wt8u1KmwUX3Y2C--
