@@ -2,27 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2FAA7251
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2019 20:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C30EFA7254
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2019 20:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730009AbfICSND (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 Sep 2019 14:13:03 -0400
-Received: from sauhun.de ([88.99.104.3]:56848 "EHLO pokefinder.org"
+        id S1730115AbfICSNH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 Sep 2019 14:13:07 -0400
+Received: from sauhun.de ([88.99.104.3]:56856 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729499AbfICSND (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S1728065AbfICSND (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
         Tue, 3 Sep 2019 14:13:03 -0400
 Received: from localhost (p54B3348D.dip0.t-ipconnect.de [84.179.52.141])
-        by pokefinder.org (Postfix) with ESMTPSA id 393842C4F3A;
+        by pokefinder.org (Postfix) with ESMTPSA id D077B2C4F3E;
         Tue,  3 Sep 2019 20:13:01 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rudolf Marek <r.marek@assembler.cz>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND 2/3] hwmon: w83792d: convert to use devm_i2c_new_dummy_device
-Date:   Tue,  3 Sep 2019 20:12:55 +0200
-Message-Id: <20190903181256.13450-3-wsa+renesas@sang-engineering.com>
+Subject: [PATCH RESEND 3/3] hwmon: w83793d: convert to use devm_i2c_new_dummy_device
+Date:   Tue,  3 Sep 2019 20:12:56 +0200
+Message-Id: <20190903181256.13450-4-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190903181256.13450-1-wsa+renesas@sang-engineering.com>
 References: <20190903181256.13450-1-wsa+renesas@sang-engineering.com>
@@ -37,59 +38,69 @@ And simplify the error handling.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/hwmon/w83792d.c | 32 +++++++++-----------------------
- 1 file changed, 9 insertions(+), 23 deletions(-)
+ drivers/hwmon/w83793.c | 30 ++++++++----------------------
+ 1 file changed, 8 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/hwmon/w83792d.c b/drivers/hwmon/w83792d.c
-index da8a6d62aa23..7fc8a1160c8f 100644
---- a/drivers/hwmon/w83792d.c
-+++ b/drivers/hwmon/w83792d.c
-@@ -924,7 +924,7 @@ store_sf2_level(struct device *dev, struct device_attribute *attr,
+diff --git a/drivers/hwmon/w83793.c b/drivers/hwmon/w83793.c
+index 46f5dfec8d0a..9df48b70c70c 100644
+--- a/drivers/hwmon/w83793.c
++++ b/drivers/hwmon/w83793.c
+@@ -1551,9 +1551,6 @@ static int w83793_remove(struct i2c_client *client)
+ 	for (i = 0; i < ARRAY_SIZE(w83793_temp); i++)
+ 		device_remove_file(dev, &w83793_temp[i].dev_attr);
+ 
+-	i2c_unregister_device(data->lm75[0]);
+-	i2c_unregister_device(data->lm75[1]);
+-
+ 	/* Decrease data reference counter */
+ 	mutex_lock(&watchdog_data_mutex);
+ 	kref_put(&data->kref, w83793_release_resources);
+@@ -1565,7 +1562,7 @@ static int w83793_remove(struct i2c_client *client)
  static int
- w83792d_detect_subclients(struct i2c_client *new_client)
+ w83793_detect_subclients(struct i2c_client *client)
  {
 -	int i, id, err;
 +	int i, id;
- 	int address = new_client->addr;
- 	u8 val;
- 	struct i2c_adapter *adapter = new_client->adapter;
-@@ -938,8 +938,7 @@ w83792d_detect_subclients(struct i2c_client *new_client)
- 				dev_err(&new_client->dev,
- 					"invalid subclient address %d; must be 0x48-0x4f\n",
+ 	int address = client->addr;
+ 	u8 tmp;
+ 	struct i2c_adapter *adapter = client->adapter;
+@@ -1580,8 +1577,7 @@ w83793_detect_subclients(struct i2c_client *client)
+ 					"invalid subclient "
+ 					"address %d; must be 0x48-0x4f\n",
  					force_subclients[i]);
--				err = -ENODEV;
+-				err = -EINVAL;
 -				goto ERROR_SC_0;
-+				return -ENODEV;
++				return -EINVAL;
  			}
  		}
- 		w83792d_write_value(new_client, W83792D_REG_I2C_SUBADDR,
-@@ -949,28 +948,21 @@ w83792d_detect_subclients(struct i2c_client *new_client)
+ 		w83793_write_value(client, W83793_REG_I2C_SUBADDR,
+@@ -1591,28 +1587,21 @@ w83793_detect_subclients(struct i2c_client *client)
  
- 	val = w83792d_read_value(new_client, W83792D_REG_I2C_SUBADDR);
- 	if (!(val & 0x08))
--		data->lm75[0] = i2c_new_dummy(adapter, 0x48 + (val & 0x7));
-+		data->lm75[0] = devm_i2c_new_dummy_device(&new_client->dev, adapter,
-+							  0x48 + (val & 0x7));
- 	if (!(val & 0x80)) {
--		if ((data->lm75[0] != NULL) &&
-+		if (!IS_ERR(data->lm75[0]) &&
- 			((val & 0x7) == ((val >> 4) & 0x7))) {
- 			dev_err(&new_client->dev,
- 				"duplicate addresses 0x%x, use force_subclient\n",
- 				data->lm75[0]->addr);
+ 	tmp = w83793_read_value(client, W83793_REG_I2C_SUBADDR);
+ 	if (!(tmp & 0x08))
+-		data->lm75[0] = i2c_new_dummy(adapter, 0x48 + (tmp & 0x7));
++		data->lm75[0] = devm_i2c_new_dummy_device(&client->dev, adapter,
++							  0x48 + (tmp & 0x7));
+ 	if (!(tmp & 0x80)) {
+-		if ((data->lm75[0] != NULL)
++		if (!IS_ERR(data->lm75[0])
+ 		    && ((tmp & 0x7) == ((tmp >> 4) & 0x7))) {
+ 			dev_err(&client->dev,
+ 				"duplicate addresses 0x%x, "
+ 				"use force_subclients\n", data->lm75[0]->addr);
 -			err = -ENODEV;
 -			goto ERROR_SC_1;
 +			return -ENODEV;
  		}
 -		data->lm75[1] = i2c_new_dummy(adapter,
--					      0x48 + ((val >> 4) & 0x7));
-+		data->lm75[1] = devm_i2c_new_dummy_device(&new_client->dev, adapter,
-+							  0x48 + ((val >> 4) & 0x7));
+-					      0x48 + ((tmp >> 4) & 0x7));
++		data->lm75[1] = devm_i2c_new_dummy_device(&client->dev, adapter,
++							  0x48 + ((tmp >> 4) & 0x7));
  	}
  
  	return 0;
 -
--/* Undo inits in case of errors */
+-	/* Undo inits in case of errors */
 -
 -ERROR_SC_1:
 -	i2c_unregister_device(data->lm75[0]);
@@ -97,36 +108,17 @@ index da8a6d62aa23..7fc8a1160c8f 100644
 -	return err;
  }
  
- static SENSOR_DEVICE_ATTR(in0_input, S_IRUGO, show_in, NULL, 0);
-@@ -1396,7 +1388,7 @@ w83792d_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	/* Register sysfs hooks */
- 	err = sysfs_create_group(&dev->kobj, &w83792d_group);
- 	if (err)
--		goto exit_i2c_unregister;
-+		return err;
+ /* Return 0 if detection is successful, -ENODEV otherwise */
+@@ -1945,9 +1934,6 @@ static int w83793_probe(struct i2c_client *client,
  
- 	/*
- 	 * Read GPIO enable register to check if pins for fan 4,5 are used as
-@@ -1441,9 +1433,6 @@ w83792d_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	sysfs_remove_group(&dev->kobj, &w83792d_group);
- 	for (i = 0; i < ARRAY_SIZE(w83792d_group_fan); i++)
- 		sysfs_remove_group(&dev->kobj, &w83792d_group_fan[i]);
--exit_i2c_unregister:
--	i2c_unregister_device(data->lm75[0]);
--	i2c_unregister_device(data->lm75[1]);
- 	return err;
- }
- 
-@@ -1459,9 +1448,6 @@ w83792d_remove(struct i2c_client *client)
- 		sysfs_remove_group(&client->dev.kobj,
- 				   &w83792d_group_fan[i]);
- 
--	i2c_unregister_device(data->lm75[0]);
--	i2c_unregister_device(data->lm75[1]);
+ 	for (i = 0; i < ARRAY_SIZE(w83793_temp); i++)
+ 		device_remove_file(dev, &w83793_temp[i].dev_attr);
 -
- 	return 0;
- }
- 
+-	i2c_unregister_device(data->lm75[0]);
+-	i2c_unregister_device(data->lm75[1]);
+ free_mem:
+ 	kfree(data);
+ exit:
 -- 
 2.20.1
 
