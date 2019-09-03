@@ -2,24 +2,24 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1E1A650F
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2019 11:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221E2A6512
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2019 11:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727078AbfICJXR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 Sep 2019 05:23:17 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53126 "EHLO mx1.suse.de"
+        id S1727077AbfICJYI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 Sep 2019 05:24:08 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53576 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727077AbfICJXR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 3 Sep 2019 05:23:17 -0400
+        id S1727005AbfICJYI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 3 Sep 2019 05:24:08 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 89559AC10
-        for <linux-i2c@vger.kernel.org>; Tue,  3 Sep 2019 09:23:16 +0000 (UTC)
-Date:   Tue, 3 Sep 2019 11:23:24 +0200
+        by mx1.suse.de (Postfix) with ESMTP id 4FAE2AC64
+        for <linux-i2c@vger.kernel.org>; Tue,  3 Sep 2019 09:24:07 +0000 (UTC)
+Date:   Tue, 3 Sep 2019 11:24:15 +0200
 From:   Jean Delvare <jdelvare@suse.de>
 To:     Linux I2C <linux-i2c@vger.kernel.org>
-Subject: [PATCH 5/7] decode-dimms: Decode manufacturing data for LPDDR3
-Message-ID: <20190903112324.7466e21b@endymion>
+Subject: [PATCH 6/7] decode-dimms: Fix the version string
+Message-ID: <20190903112415.315c4097@endymion>
 In-Reply-To: <20190903111706.43f9bc2b@endymion>
 References: <20190903111706.43f9bc2b@endymion>
 Organization: SUSE Linux
@@ -32,26 +32,42 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I assume the manufacturing data format for LPDDR3 is the same as
-regular DDR3.
+We moved away from Subversion long ago, so $Revision$ and $Date$ are
+no longer being resolved. Just use the version of i2c-tools itself.
 
 Signed-off-by: Jean Delvare <jdelvare@suse.de>
 ---
- eeprom/decode-dimms |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ eeprom/decode-dimms |    9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
---- i2c-tools.orig/eeprom/decode-dimms	2019-09-03 10:29:53.609710368 +0200
-+++ i2c-tools/eeprom/decode-dimms	2019-09-03 10:33:56.479794382 +0200
-@@ -2719,7 +2719,8 @@ for $current (0 .. $#dimm) {
- 	$decode_callback{$type}->(\@bytes)
- 		if exists $decode_callback{$type};
+--- i2c-tools.orig/eeprom/decode-dimms	2019-09-03 10:38:26.287220460 +0200
++++ i2c-tools/eeprom/decode-dimms	2019-09-03 10:41:14.805360317 +0200
+@@ -43,14 +43,11 @@ use Fcntl qw(:DEFAULT :seek);
+ use File::Basename;
+ use vars qw($opt_html $opt_bodyonly $opt_side_by_side $opt_merge
+ 	    $opt_igncheck $use_sysfs $use_hexdump $sbs_col_width
+-	    @vendors %decode_callback $revision @dimm $current %hexdump_cache);
++	    @vendors %decode_callback @dimm $current %hexdump_cache);
  
--	if ($type eq "DDR3 SDRAM") {
-+	if ($type eq "DDR3 SDRAM" ||
-+	    $type eq "LPDDR3 SDRAM") {
- 		# Decode DDR3-specific manufacturing data in bytes
- 		# 117-149
- 		if (@bytes >= 150) {
+ use constant LITTLEENDIAN	=> "little-endian";
+ use constant BIGENDIAN		=> "big-endian";
+-
+-$revision = '$Revision$ ($Date$)';
+-$revision =~ s/\$\w+: (.*?) \$/$1/g;
+-$revision =~ s/ \([^()]*\)//;
++use constant I2C_TOOLS_VER	=> "4.1";
+ 
+ @vendors = (
+ ["AMD", "AMI", "Fairchild", "Fujitsu",
+@@ -2637,7 +2634,7 @@ if ($opt_html && !$opt_bodyonly) {
+ 	      "<body>\n";
+ }
+ 
+-printc("decode-dimms version $revision");
++printc("decode-dimms version ".I2C_TOOLS_VER);
+ printh('Memory Serial Presence Detect Decoder',
+ 'By Philip Edelbrock, Christian Zuckschwerdt, Burkart Lingner,
+ Jean Delvare, Trent Piepho and others');
 
 -- 
 Jean Delvare
