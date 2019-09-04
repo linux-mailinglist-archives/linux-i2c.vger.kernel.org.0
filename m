@@ -2,90 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CC9A89AF
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2019 21:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DD6A8A7D
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2019 21:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731424AbfIDPsR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 4 Sep 2019 11:48:17 -0400
-Received: from sauhun.de ([88.99.104.3]:42926 "EHLO pokefinder.org"
+        id S1732427AbfIDP7f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 4 Sep 2019 11:59:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34166 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729993AbfIDPsR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 4 Sep 2019 11:48:17 -0400
-Received: from localhost (p54B337F1.dip0.t-ipconnect.de [84.179.55.241])
-        by pokefinder.org (Postfix) with ESMTPSA id 08E342C08C3;
-        Wed,  4 Sep 2019 17:48:15 +0200 (CEST)
-Date:   Wed, 4 Sep 2019 17:48:14 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Bjorn Ardo <bjorn.ardo@axis.com>
-Cc:     =?utf-8?B?QmrDtnJuIEFyZMO2?= <bjornar@axis.com>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c-eeprom_slave: Add support for more eeprom models
-Message-ID: <20190904154814.GC1157@kunai>
-References: <1567497091-18270-1-git-send-email-bjorn.ardo@axis.com>
- <20190903174359.GB2171@ninjato>
- <ea04722c-81e5-1fb3-d5fc-0ee24e073025@axis.com>
+        id S1732419AbfIDP7f (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 4 Sep 2019 11:59:35 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8524E2087E;
+        Wed,  4 Sep 2019 15:59:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567612774;
+        bh=YTk7WT15d0Y8PLniGSxM2yMCqXNLzL1Es1fkvcZq1Wk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rL+1U5A0B6g3r9PJAJE390q6/eNJgyQxiUyjrnWIaeFgh9h3TISDrqo2eBtPqO/hj
+         wom/To5mCEwCuphBpivq01K7+EfquYvNrzT/5Lv6BJ1DQD5ET0adNb0GzTOYcc/Qmd
+         zTESTadBSfgj57JsCQaykMLubEiphTtkBgc7JOY8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Lori Hikichi <lori.hikichi@broadcom.com>,
+        Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
+        Ray Jui <ray.jui@broadcom.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 73/94] i2c: iproc: Stop advertising support of SMBUS quick cmd
+Date:   Wed,  4 Sep 2019 11:57:18 -0400
+Message-Id: <20190904155739.2816-73-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190904155739.2816-1-sashal@kernel.org>
+References: <20190904155739.2816-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RIYY1s2vRbPFwWeW"
-Content-Disposition: inline
-In-Reply-To: <ea04722c-81e5-1fb3-d5fc-0ee24e073025@axis.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Lori Hikichi <lori.hikichi@broadcom.com>
 
---RIYY1s2vRbPFwWeW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[ Upstream commit b3d604d405166edfd4e1e6053409b85008f4f56d ]
 
+The driver does not support the SMBUS Quick command so remove the
+flag that indicates that level of support.
+By default the i2c_detect tool uses the quick command to try and
+detect devices at some bus addresses.  If the quick command is used
+then we will not detect the device, even though it is present.
 
-> Yes, now I have made that measurement.
+Fixes: e6e5dd3566e0 (i2c: iproc: Add Broadcom iProc I2C Driver)
+Signed-off-by: Lori Hikichi <lori.hikichi@broadcom.com>
+Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Reviewed-by: Ray Jui <ray.jui@broadcom.com>
+Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/i2c/busses/i2c-bcm-iproc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Cool!
+diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
+index ad1681872e39d..b99322d83f483 100644
+--- a/drivers/i2c/busses/i2c-bcm-iproc.c
++++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+@@ -801,7 +801,10 @@ static int bcm_iproc_i2c_xfer(struct i2c_adapter *adapter,
+ 
+ static uint32_t bcm_iproc_i2c_functionality(struct i2c_adapter *adap)
+ {
+-	u32 val = I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
++	u32 val;
++
++	/* We do not support the SMBUS Quick command */
++	val = I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
+ 
+ 	if (adap->algo->reg_slave)
+ 		val |= I2C_FUNC_SLAVE;
+-- 
+2.20.1
 
-> So it happily accepts just one byte as an address (that is no NACK), but =
-all
-> bytes read afterward will be 0xff (but the device will ACK all of them). I
-> have tried to fill up the eeprom with non-0xff data, so it does not appear
-> to be reading from any other address.
-
-Interesting.
-
->=20
-> I am not sure if this is a behavior that is worth trying to mimic?
-
-Not yet. We can add this incrementally once we know most EERPOMs behave
-like this. It could be worth adding a comment, though, like:
-
-/*
- * FIXME: What to do if only 8 bits of a 16 bit address are sent?
- * The <your vendor & eeprom type> sends only 0xff then. Needs verification
- * with other EEPROMs, though. We currently use the 8 bit as a valid
- * address.
- */
-
-
---RIYY1s2vRbPFwWeW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1v3L4ACgkQFA3kzBSg
-KbZwoA/+ITW8HBXKkfH89DY+0RikUy33Ck08ZDw4PY3WjiriXcZ2WPvte41OvBmn
-hkIHeqgCc/pZeUCVsn3vt7zoVorSocND90rWZRBDCIlXpoOD0DzcpOfteYaYh0Ni
-HkBMljnEQQSTs+JLVQspt3gn5i6wAupT1eDzxwSUH/e89ImudAX/54oz1GP92Gsz
-Iiu6XPVfTs1qLVQ8ad1+oUHi5IO7sjQYpi93MDUbXsgSMzcAKfnBLOgra6zjVgzC
-MYoe9YCvzo/0D/UwkzrxL/KYAPDXHGP5UTsJeMJfTNvYNnKy+Dj9nT1VnA36+Ntk
-bt6vNCZwbN3cjnDlW/hFtZ9m9Urx596oP1fkVVEGB9rx1f9q67ZPcblepEhD/xQr
-yyT8Pz8JR3VTb5KW/0l80CNKtUxxU2VzSVD9dOO4hPNzCwAPMTGGjNxFdIAPUS2D
-+gwLiqraZ7R1p6PztZFQJ5druFvCmy3kbeZQjaM4hfakCbtKdGKpnaJ+K5vmTZkn
-Y6Vje6pW97vugdG9IXrt51dUeF+lu291Qkk+6OMghPtbUn79r1Cv0Ha1TodxAnOi
-Nz/N+Q5Wrin4qG3TLO+HtnO/vswsyPHpzyW6a/PJVBAtC6kasNGC1eQFeD3vh7Lq
-ofv8tYEk7CpwJOUqsgoLug81uYyuAa1Lwosu2wNsVrIJ2woUQTI=
-=foGj
------END PGP SIGNATURE-----
-
---RIYY1s2vRbPFwWeW--
