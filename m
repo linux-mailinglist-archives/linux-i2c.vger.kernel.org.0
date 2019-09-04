@@ -2,170 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0593EA7F65
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2019 11:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E258A8123
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2019 13:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725840AbfIDJaH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 4 Sep 2019 05:30:07 -0400
-Received: from bastet.se.axis.com ([195.60.68.11]:34152 "EHLO
-        bastet.se.axis.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729093AbfIDJaG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 Sep 2019 05:30:06 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bastet.se.axis.com (Postfix) with ESMTP id 4EB9B183EF;
-        Wed,  4 Sep 2019 11:30:04 +0200 (CEST)
-X-Axis-User: NO
-X-Axis-NonUser: YES
-X-Virus-Scanned: Debian amavisd-new at bastet.se.axis.com
-Received: from bastet.se.axis.com ([IPv6:::ffff:127.0.0.1])
-        by localhost (bastet.se.axis.com [::ffff:127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id 4An1dBi-dRBw; Wed,  4 Sep 2019 11:29:55 +0200 (CEST)
-Received: from boulder03.se.axis.com (boulder03.se.axis.com [10.0.8.17])
-        by bastet.se.axis.com (Postfix) with ESMTPS id E4C2A183FC;
-        Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
-Received: from boulder03.se.axis.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A834D1E07E;
-        Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
-Received: from boulder03.se.axis.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CB8D1E079;
-        Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
-Received: from thoth.se.axis.com (unknown [10.0.2.173])
-        by boulder03.se.axis.com (Postfix) with ESMTP;
-        Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
-Received: from lnxbjornar3.se.axis.com (lnxbjornar3.se.axis.com [10.88.24.4])
-        by thoth.se.axis.com (Postfix) with ESMTP id 9089E2899;
-        Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
-Received: by lnxbjornar3.se.axis.com (Postfix, from userid 9651)
-        id 8EC15C44DB; Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
-From:   =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>
-To:     wsa@the-dreams.de
-Cc:     linux-i2c@vger.kernel.org,
-        =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjornar@axis.com>
-Subject: [PATCH v2] i2c-eeprom_slave: Add support for more eeprom models
-Date:   Wed,  4 Sep 2019 11:29:53 +0200
-Message-Id: <1567589393-19752-1-git-send-email-bjorn.ardo@axis.com>
-X-Mailer: git-send-email 2.1.4
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
+        id S1725911AbfIDLgT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 4 Sep 2019 07:36:19 -0400
+Received: from mail-wm1-f54.google.com ([209.85.128.54]:38053 "EHLO
+        mail-wm1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725840AbfIDLgT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 Sep 2019 07:36:19 -0400
+Received: by mail-wm1-f54.google.com with SMTP id o184so3282999wme.3
+        for <linux-i2c@vger.kernel.org>; Wed, 04 Sep 2019 04:36:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=6n1x8bAGsyaVUn7RCRrZd6pcUeSbUTUlFO1sD7W+jdE=;
+        b=h6B+fLtpSONhSBxg/IJPOu8ZrT+zjGIRlQ9PafT3Q+SZuugLTW6Ms+HeiIs199by73
+         /y+NK2ynYGk5Q1wiraznmv2S5N8Lz0qJIog53PZqHuAG5OFvBaAac4XnhbVk0k+0NGWi
+         IUHCcEYDqbyRKZZp2QJ8hxBdm7rxewdpV32Cn9jFMFQB3McBI0q5ZjtIQTG3kzNunl+J
+         wd5cfQNbtsC+bA9G4OAwDPM+UzwfqTBSFiXdOXS2MFlj5hQCg4AYNsTJ3GCer+YjaTp7
+         TYsyWv5RGnBfWrv689OK75VW6sakK4tDIkVN+13SPqxEk7zGNRbD7F3Sp3yWfKoTo0bU
+         rcdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=6n1x8bAGsyaVUn7RCRrZd6pcUeSbUTUlFO1sD7W+jdE=;
+        b=MFen+MiUb6Z6+7tk1RW9gFGHYF6rR82mN/4lFyBCOAWvesTJldMmhAVsxtb1cKr8wk
+         p5xDOgoGVzHa8sHWIk7utpEk6BnvdZW7YYqlbcSwHU0EODmaoL7pBp0I13gJALQl7LMo
+         GPr3q1n6KZ+RpUlNO/+g0rSvGsXkednfPPrY7T1tGWTyyV6rebP6RiIB74lYrI9FW5iP
+         PUJHH6l1Q60jXI+uJCztkrmwOY2dxd2iidV5ZxlPtO8roDaxBKVCPySkz7MXttbIvqCW
+         GtxpTzWlPelVKwYv/m+4Sbybu26cV64AtmQcM/iYCc9hOT/YUu2N7UTh4XRtrlLkJ2Ds
+         8Lmw==
+X-Gm-Message-State: APjAAAXNaQJMvUKWmLMQsz96Mo779Dhwv9es7Jslwj3GInvNE6naVWxw
+        WMpRfkShRPawPDmY6MTlIdxO5Q==
+X-Google-Smtp-Source: APXvYqzrtOfOuNj6frgLWfYGsNvZUObicbYASkZ26jqaCnscUAcwcq1/Gwrc40q+OpB0xe98gVVB7A==
+X-Received: by 2002:a1c:20cf:: with SMTP id g198mr4199256wmg.66.1567596977066;
+        Wed, 04 Sep 2019 04:36:17 -0700 (PDT)
+Received: from localhost.localdomain ([95.147.198.36])
+        by smtp.gmail.com with ESMTPSA id d9sm10823933wrc.39.2019.09.04.04.36.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Sep 2019 04:36:16 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     alokc@codeaurora.org, agross@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, bjorn.andersson@linaro.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 1/2] i2c: qcom-geni: Provide an option to select FIFO processing
+Date:   Wed,  4 Sep 2019 12:36:12 +0100
+Message-Id: <20190904113613.14997-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add a 32 and a 64 kbit memory. These needs 16 bit address
-so added support for that as well.
-
-Changelog v2:
-* Updated variable names
-* Changed idx_write_cnt to u8
-
-Signed-off-by: Björn Ardö <bjorn.ardo@axis.com>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/i2c/i2c-slave-eeprom.c | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+ drivers/i2c/busses/i2c-qcom-geni.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
-index be65d38..773afaa 100644
---- a/drivers/i2c/i2c-slave-eeprom.c
-+++ b/drivers/i2c/i2c-slave-eeprom.c
-@@ -11,6 +11,7 @@
-  * pointer, yet implementation is deferred until the need actually arises.
-  */
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index a89bfce5388e..dfdbce067827 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -353,13 +353,16 @@ static void geni_i2c_tx_fsm_rst(struct geni_i2c_dev *gi2c)
+ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 				u32 m_param)
+ {
++	struct device_node *np = gi2c->se.dev->of_node;
+ 	dma_addr_t rx_dma;
+ 	unsigned long time_left;
+-	void *dma_buf;
++	void *dma_buf = NULL;
+ 	struct geni_se *se = &gi2c->se;
+ 	size_t len = msg->len;
  
-+#include <linux/bitfield.h>
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/module.h>
-@@ -21,12 +22,18 @@
- 
- struct eeprom_data {
- 	struct bin_attribute bin;
--	bool first_write;
- 	spinlock_t buffer_lock;
--	u8 buffer_idx;
-+	u16 buffer_idx;
-+	u16 address_mask;
-+	u8 num_address_bytes;
-+	u8 idx_write_cnt;
- 	u8 buffer[];
- };
- 
-+#define I2C_SLAVE_BYTELEN GENMASK(15, 0)
-+#define I2C_SLAVE_FLAG_ADDR16 BIT(16)
-+#define I2C_SLAVE_DEVICE_MAGIC(_len, _flags) ((_flags) | (_len))
+-	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
++	if (!of_property_read_bool(np, "qcom,geni-se-fifo"))
++		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
 +
- static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
- 				     enum i2c_slave_event event, u8 *val)
+ 	if (dma_buf)
+ 		geni_se_select_mode(se, GENI_SE_DMA);
+ 	else
+@@ -392,13 +395,16 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 				u32 m_param)
  {
-@@ -34,12 +41,14 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
++	struct device_node *np = gi2c->se.dev->of_node;
+ 	dma_addr_t tx_dma;
+ 	unsigned long time_left;
+-	void *dma_buf;
++	void *dma_buf = NULL;
+ 	struct geni_se *se = &gi2c->se;
+ 	size_t len = msg->len;
  
- 	switch (event) {
- 	case I2C_SLAVE_WRITE_RECEIVED:
--		if (eeprom->first_write) {
--			eeprom->buffer_idx = *val;
--			eeprom->first_write = false;
-+		if (eeprom->idx_write_cnt < eeprom->num_address_bytes) {
-+			if (eeprom->idx_write_cnt == 0)
-+				eeprom->buffer_idx = 0;
-+			eeprom->buffer_idx = *val | (eeprom->buffer_idx << 8);
-+			eeprom->idx_write_cnt++;
- 		} else {
- 			spin_lock(&eeprom->buffer_lock);
--			eeprom->buffer[eeprom->buffer_idx++] = *val;
-+			eeprom->buffer[eeprom->buffer_idx++ & eeprom->address_mask] = *val;
- 			spin_unlock(&eeprom->buffer_lock);
- 		}
- 		break;
-@@ -50,7 +59,7 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
- 		/* fallthrough */
- 	case I2C_SLAVE_READ_REQUESTED:
- 		spin_lock(&eeprom->buffer_lock);
--		*val = eeprom->buffer[eeprom->buffer_idx];
-+		*val = eeprom->buffer[eeprom->buffer_idx & eeprom->address_mask];
- 		spin_unlock(&eeprom->buffer_lock);
- 		/*
- 		 * Do not increment buffer_idx here, because we don't know if
-@@ -61,7 +70,7 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
- 
- 	case I2C_SLAVE_STOP:
- 	case I2C_SLAVE_WRITE_REQUESTED:
--		eeprom->first_write = true;
-+		eeprom->idx_write_cnt = 0;
- 		break;
- 
- 	default:
-@@ -105,13 +114,16 @@ static int i2c_slave_eeprom_probe(struct i2c_client *client, const struct i2c_de
- {
- 	struct eeprom_data *eeprom;
- 	int ret;
--	unsigned size = id->driver_data;
-+	unsigned int size = FIELD_GET(I2C_SLAVE_BYTELEN, id->driver_data);
-+	unsigned int flag_addr16 = FIELD_GET(I2C_SLAVE_FLAG_ADDR16, id->driver_data);
- 
- 	eeprom = devm_kzalloc(&client->dev, sizeof(struct eeprom_data) + size, GFP_KERNEL);
- 	if (!eeprom)
- 		return -ENOMEM;
- 
--	eeprom->first_write = true;
-+	eeprom->idx_write_cnt = 0;
-+	eeprom->num_address_bytes = flag_addr16 ? 2 : 1;
-+	eeprom->address_mask = size - 1;
- 	spin_lock_init(&eeprom->buffer_lock);
- 	i2c_set_clientdata(client, eeprom);
- 
-@@ -146,7 +158,9 @@ static int i2c_slave_eeprom_remove(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id i2c_slave_eeprom_id[] = {
--	{ "slave-24c02", 2048 / 8 },
-+	{ "slave-24c02", I2C_SLAVE_DEVICE_MAGIC(2048 / 8,  0) },
-+	{ "slave-24c32", I2C_SLAVE_DEVICE_MAGIC(32768 / 8, I2C_SLAVE_FLAG_ADDR16) },
-+	{ "slave-24c64", I2C_SLAVE_DEVICE_MAGIC(65536 / 8, I2C_SLAVE_FLAG_ADDR16) },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, i2c_slave_eeprom_id);
+-	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
++	if (!of_property_read_bool(np, "qcom,geni-se-fifo"))
++		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
++
+ 	if (dma_buf)
+ 		geni_se_select_mode(se, GENI_SE_DMA);
+ 	else
 -- 
-2.1.4
+2.17.1
 
