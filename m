@@ -2,111 +2,170 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB93A7DD4
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2019 10:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0593EA7F65
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2019 11:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726358AbfIDI0d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 4 Sep 2019 04:26:33 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:39160 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725267AbfIDI0d (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 4 Sep 2019 04:26:33 -0400
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 7A4B483F3B
-        for <linux-i2c@vger.kernel.org>; Wed,  4 Sep 2019 08:26:33 +0000 (UTC)
-Received: by mail-ed1-f71.google.com with SMTP id f9so5284808edv.1
-        for <linux-i2c@vger.kernel.org>; Wed, 04 Sep 2019 01:26:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Mdq+QracXr/iUxjMIxa/s/5noOnKKkBNDchKNpboJh8=;
-        b=Jslw2nKnPx5SZX684vWgDj8DeM5JyX4+BjpUlqTfAIV/8oI+EqRQfT1qNkRivPDrZ1
-         00Apzr+d2xXOlnIgkRaSmFkRolZ15VIjwAyEX359EALVUsuTZ1glUrJlq1pNywHKzMPo
-         Pj6+O4AFLCWTRVfOqqeFPArYbGwpaJRGJqC2WGzECNlucXht7R9Zley+0DMoKesIgnze
-         nCJU5HJJO/Z6sVuOQ6/IJAuUjvI3+YJHv29fV5ds+fe7kth0FDrGjNELUoBci3gdI+qH
-         mp1jZzoVhIBKhBMYnnK7Mpe6MorTcPuyC8i5Q3f+TQzU1odou1/eBJXr7GopxngbzDJx
-         ewwA==
-X-Gm-Message-State: APjAAAVSANp3jch9w0KM9EleNofmlRhS0ZNE6jR3jccRCWDaUKtAtNV1
-        4ne0kPMcRQTduWqvdek5S4TEFJnt5yluomaebSWTgJ3ISzQUFAluknWY04wojy/Z932ICyh0dnO
-        uC7gNmBlz3XAyv/wa6ZfY
-X-Received: by 2002:a50:935d:: with SMTP id n29mr17641210eda.294.1567585592283;
-        Wed, 04 Sep 2019 01:26:32 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyrZIi/f7VkraEJ2lB8pAtxxch5NNjc6CDt2RyPZ8JPCmVki5CWKUep7EVPz+F/rfwvljQ3FQ==
-X-Received: by 2002:a50:935d:: with SMTP id n29mr17641199eda.294.1567585592109;
-        Wed, 04 Sep 2019 01:26:32 -0700 (PDT)
-Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
-        by smtp.gmail.com with ESMTPSA id d10sm2621252ejd.86.2019.09.04.01.26.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2019 01:26:31 -0700 (PDT)
-Subject: Re: [PATCH] i2c: cht-wc: drop check because i2c_unregister_device()
- is NULL safe
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190820153441.7693-1-wsa+renesas@sang-engineering.com>
- <20190903175218.GE2171@ninjato>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <2e55f3cb-ba88-5404-3b38-585710976ed0@redhat.com>
-Date:   Wed, 4 Sep 2019 10:26:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1725840AbfIDJaH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 4 Sep 2019 05:30:07 -0400
+Received: from bastet.se.axis.com ([195.60.68.11]:34152 "EHLO
+        bastet.se.axis.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729093AbfIDJaG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 Sep 2019 05:30:06 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bastet.se.axis.com (Postfix) with ESMTP id 4EB9B183EF;
+        Wed,  4 Sep 2019 11:30:04 +0200 (CEST)
+X-Axis-User: NO
+X-Axis-NonUser: YES
+X-Virus-Scanned: Debian amavisd-new at bastet.se.axis.com
+Received: from bastet.se.axis.com ([IPv6:::ffff:127.0.0.1])
+        by localhost (bastet.se.axis.com [::ffff:127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id 4An1dBi-dRBw; Wed,  4 Sep 2019 11:29:55 +0200 (CEST)
+Received: from boulder03.se.axis.com (boulder03.se.axis.com [10.0.8.17])
+        by bastet.se.axis.com (Postfix) with ESMTPS id E4C2A183FC;
+        Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
+Received: from boulder03.se.axis.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A834D1E07E;
+        Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
+Received: from boulder03.se.axis.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9CB8D1E079;
+        Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
+Received: from thoth.se.axis.com (unknown [10.0.2.173])
+        by boulder03.se.axis.com (Postfix) with ESMTP;
+        Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
+Received: from lnxbjornar3.se.axis.com (lnxbjornar3.se.axis.com [10.88.24.4])
+        by thoth.se.axis.com (Postfix) with ESMTP id 9089E2899;
+        Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
+Received: by lnxbjornar3.se.axis.com (Postfix, from userid 9651)
+        id 8EC15C44DB; Wed,  4 Sep 2019 11:29:54 +0200 (CEST)
+From:   =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>
+To:     wsa@the-dreams.de
+Cc:     linux-i2c@vger.kernel.org,
+        =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjornar@axis.com>
+Subject: [PATCH v2] i2c-eeprom_slave: Add support for more eeprom models
+Date:   Wed,  4 Sep 2019 11:29:53 +0200
+Message-Id: <1567589393-19752-1-git-send-email-bjorn.ardo@axis.com>
+X-Mailer: git-send-email 2.1.4
 MIME-Version: 1.0
-In-Reply-To: <20190903175218.GE2171@ninjato>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Add a 32 and a 64 kbit memory. These needs 16 bit address
+so added support for that as well.
 
-On 03-09-19 19:52, Wolfram Sang wrote:
-> On Tue, Aug 20, 2019 at 05:34:40PM +0200, Wolfram Sang wrote:
->> No need to check the argument of i2c_unregister_device() because the
->> function itself does it.
->>
->> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->> ---
-> 
-> Hans, are you OK with this change?
+Changelog v2:
+* Updated variable names
+* Changed idx_write_cnt to u8
 
-Yes this is fine by me:
+Signed-off-by: Björn Ardö <bjorn.ardo@axis.com>
+---
+ drivers/i2c/i2c-slave-eeprom.c | 36 +++++++++++++++++++++++++-----------
+ 1 file changed, 25 insertions(+), 11 deletions(-)
 
-Acked-by: Hans de Goede <hdegoede@redhat.com>
+diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
+index be65d38..773afaa 100644
+--- a/drivers/i2c/i2c-slave-eeprom.c
++++ b/drivers/i2c/i2c-slave-eeprom.c
+@@ -11,6 +11,7 @@
+  * pointer, yet implementation is deferred until the need actually arises.
+  */
+ 
++#include <linux/bitfield.h>
+ #include <linux/i2c.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
+@@ -21,12 +22,18 @@
+ 
+ struct eeprom_data {
+ 	struct bin_attribute bin;
+-	bool first_write;
+ 	spinlock_t buffer_lock;
+-	u8 buffer_idx;
++	u16 buffer_idx;
++	u16 address_mask;
++	u8 num_address_bytes;
++	u8 idx_write_cnt;
+ 	u8 buffer[];
+ };
+ 
++#define I2C_SLAVE_BYTELEN GENMASK(15, 0)
++#define I2C_SLAVE_FLAG_ADDR16 BIT(16)
++#define I2C_SLAVE_DEVICE_MAGIC(_len, _flags) ((_flags) | (_len))
++
+ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
+ 				     enum i2c_slave_event event, u8 *val)
+ {
+@@ -34,12 +41,14 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
+ 
+ 	switch (event) {
+ 	case I2C_SLAVE_WRITE_RECEIVED:
+-		if (eeprom->first_write) {
+-			eeprom->buffer_idx = *val;
+-			eeprom->first_write = false;
++		if (eeprom->idx_write_cnt < eeprom->num_address_bytes) {
++			if (eeprom->idx_write_cnt == 0)
++				eeprom->buffer_idx = 0;
++			eeprom->buffer_idx = *val | (eeprom->buffer_idx << 8);
++			eeprom->idx_write_cnt++;
+ 		} else {
+ 			spin_lock(&eeprom->buffer_lock);
+-			eeprom->buffer[eeprom->buffer_idx++] = *val;
++			eeprom->buffer[eeprom->buffer_idx++ & eeprom->address_mask] = *val;
+ 			spin_unlock(&eeprom->buffer_lock);
+ 		}
+ 		break;
+@@ -50,7 +59,7 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
+ 		/* fallthrough */
+ 	case I2C_SLAVE_READ_REQUESTED:
+ 		spin_lock(&eeprom->buffer_lock);
+-		*val = eeprom->buffer[eeprom->buffer_idx];
++		*val = eeprom->buffer[eeprom->buffer_idx & eeprom->address_mask];
+ 		spin_unlock(&eeprom->buffer_lock);
+ 		/*
+ 		 * Do not increment buffer_idx here, because we don't know if
+@@ -61,7 +70,7 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
+ 
+ 	case I2C_SLAVE_STOP:
+ 	case I2C_SLAVE_WRITE_REQUESTED:
+-		eeprom->first_write = true;
++		eeprom->idx_write_cnt = 0;
+ 		break;
+ 
+ 	default:
+@@ -105,13 +114,16 @@ static int i2c_slave_eeprom_probe(struct i2c_client *client, const struct i2c_de
+ {
+ 	struct eeprom_data *eeprom;
+ 	int ret;
+-	unsigned size = id->driver_data;
++	unsigned int size = FIELD_GET(I2C_SLAVE_BYTELEN, id->driver_data);
++	unsigned int flag_addr16 = FIELD_GET(I2C_SLAVE_FLAG_ADDR16, id->driver_data);
+ 
+ 	eeprom = devm_kzalloc(&client->dev, sizeof(struct eeprom_data) + size, GFP_KERNEL);
+ 	if (!eeprom)
+ 		return -ENOMEM;
+ 
+-	eeprom->first_write = true;
++	eeprom->idx_write_cnt = 0;
++	eeprom->num_address_bytes = flag_addr16 ? 2 : 1;
++	eeprom->address_mask = size - 1;
+ 	spin_lock_init(&eeprom->buffer_lock);
+ 	i2c_set_clientdata(client, eeprom);
+ 
+@@ -146,7 +158,9 @@ static int i2c_slave_eeprom_remove(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id i2c_slave_eeprom_id[] = {
+-	{ "slave-24c02", 2048 / 8 },
++	{ "slave-24c02", I2C_SLAVE_DEVICE_MAGIC(2048 / 8,  0) },
++	{ "slave-24c32", I2C_SLAVE_DEVICE_MAGIC(32768 / 8, I2C_SLAVE_FLAG_ADDR16) },
++	{ "slave-24c64", I2C_SLAVE_DEVICE_MAGIC(65536 / 8, I2C_SLAVE_FLAG_ADDR16) },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, i2c_slave_eeprom_id);
+-- 
+2.1.4
 
-Regards,
-
-Hans
-
-
-> 
->> Build tested only, buildbot is happy, too.
->>
->> Please apply to your tree.
->>
->>   drivers/i2c/busses/i2c-cht-wc.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-cht-wc.c b/drivers/i2c/busses/i2c-cht-wc.c
->> index 66af44bfa67d..3e2608a65c06 100644
->> --- a/drivers/i2c/busses/i2c-cht-wc.c
->> +++ b/drivers/i2c/busses/i2c-cht-wc.c
->> @@ -363,8 +363,7 @@ static int cht_wc_i2c_adap_i2c_remove(struct platform_device *pdev)
->>   {
->>   	struct cht_wc_i2c_adap *adap = platform_get_drvdata(pdev);
->>   
->> -	if (adap->client)
->> -		i2c_unregister_device(adap->client);
->> +	i2c_unregister_device(adap->client);
->>   	i2c_del_adapter(&adap->adapter);
->>   	irq_domain_remove(adap->irq_domain);
->>   
->> -- 
->> 2.20.1
->>
