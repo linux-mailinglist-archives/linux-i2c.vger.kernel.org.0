@@ -2,85 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF7CA7C67
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2019 09:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCB8A7CFF
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2019 09:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbfIDHOl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 4 Sep 2019 03:14:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33826 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728870AbfIDHOl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 4 Sep 2019 03:14:41 -0400
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0DF082339D;
-        Wed,  4 Sep 2019 07:14:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567581280;
-        bh=UhKM6/sWm4oQ05BpJZZNfaTF3lBq/9uJJ37RvJbgKNA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=wNEFVb2c/g+ykWCBmkZamGkOWzaUvbGvyPmgOPxGMePQEBhaOFq9fY8f+If5gshQE
-         9NAGOzlQZWgBKTE2frob0xLpTaSpl7esKEt+oD95+yXa1paVzuvnmJy8uI5zquUWjP
-         AIgAOpwJkEX9ZjTrB0Dn2buHg1y0NQTDqnAEG8C0=
-Received: by mail-lj1-f179.google.com with SMTP id e17so7549751ljf.13;
-        Wed, 04 Sep 2019 00:14:39 -0700 (PDT)
-X-Gm-Message-State: APjAAAUqhRmD97+b1I9w0Wj5oOZXWj3OKK+Q9u9ZkyQr09cCtwO4i6f7
-        8K+IfPIxXn4W0EmTEyG7GpGpm4X64HfEuwtdemQ=
-X-Google-Smtp-Source: APXvYqwxEBbZCCVd3db7t9OIjWZpPH3cyrgsdKPFj5Qw8NbbsvAzzdtj4ChTa6fbl5DfphaeeFB0p+kMXhysueftJZo=
-X-Received: by 2002:a2e:8091:: with SMTP id i17mr15253351ljg.13.1567581278186;
- Wed, 04 Sep 2019 00:14:38 -0700 (PDT)
+        id S1727787AbfIDHr2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 4 Sep 2019 03:47:28 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:26660 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727144AbfIDHr1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 Sep 2019 03:47:27 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x847bAmM000836;
+        Wed, 4 Sep 2019 09:47:17 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=4UyuBYEhSmaJWCoduBpGAY7jENPHNN3jaF8lnYU4bFY=;
+ b=avLB/K+6dY1CH0Jiwo9EBM5miectu4+Tap6y9Zoritd2dLPoZcLD1Dwpl8D9oCB3J2Db
+ ULwNIdfpicC7HVHo8X7839kHq/yt7EGMps7uItCDQFhABO5T6SM0VM/HE5tEvjtjdO9p
+ /3BU6I0Qkgfc/iYkWYvRFBsws+mOklltKTUGZzlqmiXGGtJUdUrx3RJdOjsFqrfh60Ur
+ SDLYlCTnRnBPUaVfoL81ZPNOg83zjEzLqE+B+iUi+5m/csvhwPx/ECXDhLx2k/TxaihG
+ uLnV0r/Ixi7nnpAKDgedAU6gZyF0pwLsBMmD914k4waeTETbLoP5koubBxysrtTNg/z4 jQ== 
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2uqe19r07v-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Wed, 04 Sep 2019 09:47:17 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 7F74E54;
+        Wed,  4 Sep 2019 07:47:09 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag5node2.st.com [10.75.127.14])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 35A4A2BA693;
+        Wed,  4 Sep 2019 09:47:09 +0200 (CEST)
+Received: from [10.48.1.93] (10.75.127.45) by SFHDAG5NODE2.st.com
+ (10.75.127.14) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 4 Sep
+ 2019 09:47:08 +0200
+Subject: Re: [PATCH] i2c: stm32f7: Make structure stm32f7_i2c_algo constant
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Nishka Dasgupta <nishkadg.linux@gmail.com>
+CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20190815055857.1944-1-nishkadg.linux@gmail.com>
+ <20190903180552.GI2171@ninjato>
+From:   Pierre Yves MORDRET <pierre-yves.mordret@st.com>
+Message-ID: <662b171f-37e2-f58e-3e05-41a52737b1f3@st.com>
+Date:   Wed, 4 Sep 2019 09:47:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20190813115555.10542-1-bigeasy@linutronix.de> <20190813115555.10542-2-bigeasy@linutronix.de>
- <20190903175449.GF2171@ninjato>
-In-Reply-To: <20190903175449.GF2171@ninjato>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 4 Sep 2019 09:14:26 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPfnu2aJHWkxSecH6YZZ7t5-8528LsCaQtk5sSH0L+ayYA@mail.gmail.com>
-Message-ID: <CAJKOXPfnu2aJHWkxSecH6YZZ7t5-8528LsCaQtk5sSH0L+ayYA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] i2c: exynos5: Remove IRQF_ONESHOT
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-i2c@vger.kernel.org, tglx@linutronix.de,
-        Benjamin Rouxel <benjamin.rouxel@uva.nl>,
-        Kukjin Kim <kgene@kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190903180552.GI2171@ninjato>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG7NODE1.st.com (10.75.127.19) To SFHDAG5NODE2.st.com
+ (10.75.127.14)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
+ definitions=2019-09-04_01:2019-09-03,2019-09-04 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 3 Sep 2019 at 19:54, Wolfram Sang <wsa@the-dreams.de> wrote:
->
-> On Tue, Aug 13, 2019 at 01:55:54PM +0200, Sebastian Andrzej Siewior wrote:
-> > The drivers sets IRQF_ONESHOT and passes only a primary handler. The IRQ
-> > is masked while the primary is handler is invoked independently of
-> > IRQF_ONESHOT.
-> > With IRQF_ONESHOT the core code will not force-thread the interrupt and
-> > this is probably not intended. I *assume* that the original author copied
-> > the IRQ registration from another driver which passed a primary and
-> > secondary handler and removed the secondary handler but keeping the
-> > ONESHOT flag.
-> >
-> > Remove IRQF_ONESHOT.
-> >
-> > Reported-by: Benjamin Rouxel <benjamin.rouxel@uva.nl>
-> > Tested-by: Benjamin Rouxel <benjamin.rouxel@uva.nl>
-> > Cc: Kukjin Kim <kgene@kernel.org>
-> > Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> > Cc: linux-samsung-soc@vger.kernel.org
-> > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
->
-> Krzysztof, are you okay with this change?
+Hi Wolfram
 
-I do not have a clue what the original author back in 2013 had in
-mind, but change itself looks reasonable. I also gave it a try and it
-seems it works fine:
+Sorry for the delay.
 
-Tested-by: Krzysztof Kozlowski <krzk@kernel.org>
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+Acked-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
 
-Best regards,
-Krzysztof
+BR
+
+On 9/3/19 8:05 PM, Wolfram Sang wrote:
+> On Thu, Aug 15, 2019 at 11:28:57AM +0530, Nishka Dasgupta wrote:
+>> Static structure stm32f7_i2c_algo, of type i2c_algorithm, is used only
+>> when it is assigned to constant field algo of a variable having type
+>> i2c_adapter. As stm32f7_i2c_algo is therefore never modified, make it
+>> const as well to protect it from unintended modification.
+>> Issue found with Coccinelle.
+>>
+>> Signed-off-by: Nishka Dasgupta <nishkadg.linux@gmail.com>
+>> ---
+> 
+> Are you guys okay with this patch?
+> 
+>>  drivers/i2c/busses/i2c-stm32f7.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+>> index 266d1c269b83..d36cf08461f7 100644
+>> --- a/drivers/i2c/busses/i2c-stm32f7.c
+>> +++ b/drivers/i2c/busses/i2c-stm32f7.c
+>> @@ -1809,7 +1809,7 @@ static u32 stm32f7_i2c_func(struct i2c_adapter *adap)
+>>  		I2C_FUNC_SMBUS_I2C_BLOCK;
+>>  }
+>>  
+>> -static struct i2c_algorithm stm32f7_i2c_algo = {
+>> +static const struct i2c_algorithm stm32f7_i2c_algo = {
+>>  	.master_xfer = stm32f7_i2c_xfer,
+>>  	.smbus_xfer = stm32f7_i2c_smbus_xfer,
+>>  	.functionality = stm32f7_i2c_func,
+>> -- 
+>> 2.19.1
+>>
