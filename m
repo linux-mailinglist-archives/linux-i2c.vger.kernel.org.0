@@ -2,56 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08690AA88E
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 18:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC963AA889
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 18:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388097AbfIEQTb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Sep 2019 12:19:31 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:38101 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388086AbfIEQSL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 12:18:11 -0400
-Received: by mail-pf1-f194.google.com with SMTP id h195so2075809pfe.5
-        for <linux-i2c@vger.kernel.org>; Thu, 05 Sep 2019 09:18:11 -0700 (PDT)
+        id S2388219AbfIEQTW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Sep 2019 12:19:22 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:32879 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388158AbfIEQSN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 12:18:13 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q10so2090855pfl.0
+        for <linux-i2c@vger.kernel.org>; Thu, 05 Sep 2019 09:18:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=NoTtLr1lztWfrS92BUWnGWn3zk0jvQAYseg1lZWuSGs=;
-        b=GFbERyZ9NRV2dkkLT4vQsg2O43TovjaGYNn6dZQb4zlipk1hrBEI93ONy4uCdy17BN
-         qs6turZaX0cjL2hsvD0XQcPWWyT5eGXz7QIlN5q8rtchZ5viCWRBDwkHQ7obcrcC3Uar
-         1ortXnAwgQMvUwFZEFdfF67Zd3yS6nt3iV9SSsbRUiIhAZwUvGND/emO1CKYf2KWOr28
-         VxlM82pRtImf20eiipHbpwiiWXaq0nZI2+bBsKhiaerAHkOFKlpVyiIpgMWISCo/STX0
-         lWqLo+YlveCj4WJwPQ/Qdyw/LyipxCRHxudVAm/baaKD40BYKWBjg0PjlTT0keABvYme
-         Sx5g==
+        bh=zGhRU3CF0nckn4q3RpFyAUKnMAipsfpJ2Ggo67IAKJc=;
+        b=Esj7f4QN25ld+Ovd4UPXhi2gSS9+Lzc1VVLMSaLedss00TUu/574n7510/KARXCZI3
+         7W6vE5cd7uARf9ipf0Ags1oPwG3CFAYVMe29Tybo5a64c/5svbgUNtDOdTUTjtzJgzsk
+         BBVG0AUZqbY2eMEesm9XN02filAWjn0hrxTZtIA6mzGsPfn9CVvXwJMErc9ztNrFDZlQ
+         hSJdg6l4K5XNAYyr1Od0KnturBe85nLy/GTao8rjSvtfT1nPC/0vFWd+7bbID+jHlLNF
+         uVWRzrdTujIrO+oTLdms5SAw0eB7uKDL1CNjQPdxf+8SUROE+hX1TvIpDFBHgWNZSiuB
+         ++TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=NoTtLr1lztWfrS92BUWnGWn3zk0jvQAYseg1lZWuSGs=;
-        b=oNfTLC4m6CZAfQ82GMVPAuO173UQgWBTmWvBO5qlv1mCoynI371vF41Nbr1q1ZW7P5
-         mNqiBujspCVuV1fMaYdScwjtir1dHRHR88qsvc+aY8qJKj+9dQwp2aqtFmXKJtBzyCpO
-         8yABdKcb6G58gr3jGIRpzYAVvb5nJp/ryfUX1KlDn7crooZU7sAWiceaInM1hhV0sOPe
-         xEtynRJF5LaO2XlZhn5CtskzfQ4/sKyKSinyYbXbPBnNJoK1mB2iyIKm6JqrcqnMZwCL
-         8sS5LCVErfP6L6JrGzauUTtwmkPugUaxGpJORiqx4aZ57QY/W99POKnGapggk3+GJfry
-         xyTA==
-X-Gm-Message-State: APjAAAUcs003uWGYZzP3QRimUX2SOBjSP8Q3zhBc4JFXYU81JGs/kJNo
-        RQQBAO21+/qHJHaZT1jFY7jYTQ==
-X-Google-Smtp-Source: APXvYqxTYivq/efmoU5WtwxZv5cSxczPS7YC9boEJTkxinNAbnn0GjS2kdu7p4Li6YOQRyRvVr3Cpw==
-X-Received: by 2002:a63:60a:: with SMTP id 10mr3873993pgg.381.1567700290813;
-        Thu, 05 Sep 2019 09:18:10 -0700 (PDT)
+        bh=zGhRU3CF0nckn4q3RpFyAUKnMAipsfpJ2Ggo67IAKJc=;
+        b=LZ/U201+hj8bt+fE3xb/19PTWWe85iZuQRCAX85kuMv6+EwUdLTPTHYPJptw2naYHO
+         XLdiIZcTDdUdAeLyq6uAaNyLrnACMqwWUrOahGIfhiSJXByGREl9pi5KxSLADI52dIG9
+         HAMLFz3XFHmE0m0ZRgqgPzNvf87r4rLuCQd1YyeIKtIn5Y0n1VpYwPSsCVLnz7M27qHF
+         dLw8eM+YaBr8PdvqUx8coM9KuyleYXmeasbOSc6RqgAkgT4xfsJgNvG2xp2QaEmm0G50
+         ezzsTQfrxVDmuhHf2Hh9XNWFTEg+C8Lc9CspOTYpTT1/6re/4GWOClECDmVhWBpZdKVC
+         iMyg==
+X-Gm-Message-State: APjAAAVTNP24UMN9jtS/yGN5G7Inl5kwxEv6zD510utFbf9zRfliGhVb
+        2WbCMbPMr0a4Fufeawo+pL3t9r+MybE=
+X-Google-Smtp-Source: APXvYqxNw7e1zU8HXSUIIVJJi/ZzjnAKR5k1wwrrYFe2F5hAHe78MAzfLAz3iUKxFfZDzG3VAqGKEA==
+X-Received: by 2002:a63:5f01:: with SMTP id t1mr3605020pgb.200.1567700292199;
+        Thu, 05 Sep 2019 09:18:12 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id m129sm6324005pga.39.2019.09.05.09.18.09
+        by smtp.gmail.com with ESMTPSA id m129sm6324005pga.39.2019.09.05.09.18.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2019 09:18:10 -0700 (PDT)
+        Thu, 05 Sep 2019 09:18:11 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     stable@vger.kernel.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: [BACKPORT 4.14.y 08/18] mtd: spi-nor: cadence-quadspi: add a delay in write sequence
-Date:   Thu,  5 Sep 2019 10:17:49 -0600
-Message-Id: <20190905161759.28036-9-mathieu.poirier@linaro.org>
+Subject: [BACKPORT 4.14.y 09/18] misc: pci_endpoint_test: Prevent some integer overflows
+Date:   Thu,  5 Sep 2019 10:17:50 -0600
+Message-Id: <20190905161759.28036-10-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190905161759.28036-1-mathieu.poirier@linaro.org>
 References: <20190905161759.28036-1-mathieu.poirier@linaro.org>
@@ -60,99 +60,58 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Vignesh R <vigneshr@ti.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 61dc8493bae9ba82a1c72edbc6c6065f6a94456a upstream
+commit 378f79cab12b669928f3a4037f023837ead2ce0c upstream
 
-As per 66AK2G02 TRM[1] SPRUHY8F section 11.15.5.3 Indirect Access
-Controller programming sequence, a delay equal to couple of QSPI master
-clock(~5ns) is required after setting CQSPI_REG_INDIRECTWR_START bit and
-writing data to the flash. Introduce a quirk flag CQSPI_NEEDS_WR_DELAY
-to handle this and set this flag for TI 66AK2G SoC.
+"size + max" can have an arithmetic overflow when we're allocating:
 
-[1]http://www.ti.com/lit/ug/spruhy8f/spruhy8f.pdf
+	orig_src_addr = dma_alloc_coherent(dev, size + alignment, ...
 
-Signed-off-by: Vignesh R <vigneshr@ti.com>
-Acked-by: Marek Vasut <marek.vasut@gmail.com>
-Signed-off-by: Cyrille Pitchen <cyrille.pitchen@wedev4u.fr>
+I've added a few checks to prevent that.
+
+Fixes: 13107c60681f ("misc: pci_endpoint_test: Add support to provide aligned buffer addresses")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 ---
- drivers/mtd/spi-nor/cadence-quadspi.c | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+ drivers/misc/pci_endpoint_test.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/mtd/spi-nor/cadence-quadspi.c b/drivers/mtd/spi-nor/cadence-quadspi.c
-index f22dd34f4f83..ff4edf4bb23c 100644
---- a/drivers/mtd/spi-nor/cadence-quadspi.c
-+++ b/drivers/mtd/spi-nor/cadence-quadspi.c
-@@ -38,6 +38,9 @@
- #define CQSPI_NAME			"cadence-qspi"
- #define CQSPI_MAX_CHIPSELECT		16
+diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+index 9849bf183299..504fa680825d 100644
+--- a/drivers/misc/pci_endpoint_test.c
++++ b/drivers/misc/pci_endpoint_test.c
+@@ -226,6 +226,9 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test, size_t size)
+ 	u32 src_crc32;
+ 	u32 dst_crc32;
  
-+/* Quirks */
-+#define CQSPI_NEEDS_WR_DELAY		BIT(0)
++	if (size > SIZE_MAX - alignment)
++		goto err;
 +
- struct cqspi_st;
+ 	orig_src_addr = dma_alloc_coherent(dev, size + alignment,
+ 					   &orig_src_phys_addr, GFP_KERNEL);
+ 	if (!orig_src_addr) {
+@@ -311,6 +314,9 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test, size_t size)
+ 	size_t alignment = test->alignment;
+ 	u32 crc32;
  
- struct cqspi_flash_pdata {
-@@ -76,6 +79,7 @@ struct cqspi_st {
- 	u32			fifo_depth;
- 	u32			fifo_width;
- 	u32			trigger_address;
-+	u32			wr_delay;
- 	struct cqspi_flash_pdata f_pdata[CQSPI_MAX_CHIPSELECT];
- };
++	if (size > SIZE_MAX - alignment)
++		goto err;
++
+ 	orig_addr = dma_alloc_coherent(dev, size + alignment, &orig_phys_addr,
+ 				       GFP_KERNEL);
+ 	if (!orig_addr) {
+@@ -369,6 +375,9 @@ static bool pci_endpoint_test_read(struct pci_endpoint_test *test, size_t size)
+ 	size_t alignment = test->alignment;
+ 	u32 crc32;
  
-@@ -623,6 +627,15 @@ static int cqspi_indirect_write_execute(struct spi_nor *nor,
- 	reinit_completion(&cqspi->transfer_complete);
- 	writel(CQSPI_REG_INDIRECTWR_START_MASK,
- 	       reg_base + CQSPI_REG_INDIRECTWR);
-+	/*
-+	 * As per 66AK2G02 TRM SPRUHY8F section 11.15.5.3 Indirect Access
-+	 * Controller programming sequence, couple of cycles of
-+	 * QSPI_REF_CLK delay is required for the above bit to
-+	 * be internally synchronized by the QSPI module. Provide 5
-+	 * cycles of delay.
-+	 */
-+	if (cqspi->wr_delay)
-+		ndelay(cqspi->wr_delay);
- 
- 	while (remaining > 0) {
- 		size_t write_words, mod_bytes;
-@@ -1184,6 +1197,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	struct cqspi_st *cqspi;
- 	struct resource *res;
- 	struct resource *res_ahb;
-+	unsigned long data;
- 	int ret;
- 	int irq;
- 
-@@ -1241,6 +1255,10 @@ static int cqspi_probe(struct platform_device *pdev)
- 	}
- 
- 	cqspi->master_ref_clk_hz = clk_get_rate(cqspi->clk);
-+	data  = (unsigned long)of_device_get_match_data(dev);
-+	if (data & CQSPI_NEEDS_WR_DELAY)
-+		cqspi->wr_delay = 5 * DIV_ROUND_UP(NSEC_PER_SEC,
-+						   cqspi->master_ref_clk_hz);
- 
- 	ret = devm_request_irq(dev, irq, cqspi_irq_handler, 0,
- 			       pdev->name, cqspi);
-@@ -1312,7 +1330,14 @@ static const struct dev_pm_ops cqspi__dev_pm_ops = {
- #endif
- 
- static const struct of_device_id cqspi_dt_ids[] = {
--	{.compatible = "cdns,qspi-nor",},
-+	{
-+		.compatible = "cdns,qspi-nor",
-+		.data = (void *)0,
-+	},
-+	{
-+		.compatible = "ti,k2g-qspi",
-+		.data = (void *)CQSPI_NEEDS_WR_DELAY,
-+	},
- 	{ /* end of table */ }
- };
- 
++	if (size > SIZE_MAX - alignment)
++		goto err;
++
+ 	orig_addr = dma_alloc_coherent(dev, size + alignment, &orig_phys_addr,
+ 				       GFP_KERNEL);
+ 	if (!orig_addr) {
 -- 
 2.17.1
 
