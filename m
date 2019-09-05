@@ -2,144 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDBEAA8BD
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 18:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34866AA8BE
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 18:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729790AbfIEQSC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Sep 2019 12:18:02 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:42862 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731992AbfIEQSB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 12:18:01 -0400
-Received: by mail-pl1-f193.google.com with SMTP id y1so1508042plp.9
-        for <linux-i2c@vger.kernel.org>; Thu, 05 Sep 2019 09:18:01 -0700 (PDT)
+        id S1730768AbfIEQUN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Sep 2019 12:20:13 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:40718 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733184AbfIEQSE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 12:18:04 -0400
+Received: by mail-pg1-f194.google.com with SMTP id w10so1680291pgj.7
+        for <linux-i2c@vger.kernel.org>; Thu, 05 Sep 2019 09:18:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=mukYH+OPB5B2Q8cIXti1kEopT3yxftlik4aW1yItWl0=;
-        b=Kl4bnPESFCY769er88olLvIMydPIt7MSvRLFnbrMUBFJe2XGXC8oNJ+eB44CxUq8Z8
-         icVfI4Z7Zv2fzyYYpmgSfOeLpo80hrioId35SGiSFn9P8y2EAYTnu2zhJFWW2+ZCCuVB
-         Acsg/wxujlaWpromsOPO/XEkL8skQ8K6nxVzl/UgdDGnWguc6yvHxK/Wv797MeTMZZKg
-         uTS6IS/ihZs3WKvkhpct4BSG3iQljiRqCPgkcGGvlkMO9io8/jgOGOyYiaq1v5JzqePy
-         StJEuicwLxbARj/KoZGqt30jsFFl3ji38xfmmhdmOvICWnSF2ih5SFi0lKIRKtupViAc
-         aAVw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=MSiwBcSQD+D+YdS5Q0qHybng0VxB5Rm8vXeXQFjLMZc=;
+        b=O3tNCt/W9wLVtkbdnd5ZHoteegcojqCr7hKVqHkZxaUlxVn/YzfA6HZZ40nBdnkoAO
+         ZhrB0iw1Uc7D91gKUNEFUts4aaIwRfLc9HFFMibqH7dcc8fRUXz52KMfGwZDlccDJJiE
+         RKX9AyFqS2JsIHjGGXMBX/BZ1YMB9oSdcvYb1l/YwNtkOv1/bY7a0taZGatIUTZLB8B5
+         qoHjnHc9HvsJyTbTAEzBV36syWkgm7Xqp77PJV2mZ8WayBu5mJr3U5qaAjISS8G7GYPD
+         EdmiI92amAdqbvyv4IrbpfYnerC9XFLioXTmFRbJMwAJ7YCYhVi9YGHLHFzUt0cn8dd8
+         c2lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=mukYH+OPB5B2Q8cIXti1kEopT3yxftlik4aW1yItWl0=;
-        b=OGNvftVDMqPrQvgT2v28jBAA6CBawvO3AQye9Yw1KDkZm4nZpkYRpXrx6i0F58KNtK
-         kxtK/Lqiw+8dTpbHuZEawJ+LhkmP8IeVGWgxhEVp59w6F0KMA/syFBO9ItAGdu+3+auj
-         UYfE1SmUS4RHuki2qaNrScrf7PhHjqfFhLDgqFEY0qyLiJ6A+F90X9u5RukfC5KYBWjL
-         6YAieTBbua73+F9njKbkaePfgIDOjqIIYSwyUto6A/qGCIbMfSZ/ymgntIJbvadvQg8S
-         BVh1XVBn0Lm8TBut4xgN0RWVxtwDHX1xO/mng2A0J+yedzIfCYniwT8wi1/mhLANo3rB
-         xrTg==
-X-Gm-Message-State: APjAAAVc9Zn4vvDZNzpMxo5uNCyo4Z++In/HShsKxsozLq88Echi7m5e
-        QbQG3VRQaYibFxqaC9vHH0e1zQ==
-X-Google-Smtp-Source: APXvYqzStzXxTWL+1VFEsqINN1zYVOMyUuv7eD3n8K9EXYt6eOChXB640bT4MB9P7QjeXftsWyVKSw==
-X-Received: by 2002:a17:902:b583:: with SMTP id a3mr4258322pls.52.1567700281066;
-        Thu, 05 Sep 2019 09:18:01 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=MSiwBcSQD+D+YdS5Q0qHybng0VxB5Rm8vXeXQFjLMZc=;
+        b=Gfkx5CrjLTLmK7AAQcv2Abxm+MnMw8VrgwwfcBo1jHkYnVcSTbA/Se3KvVXHdZY/+X
+         TTQoqGjivAKEpwfLbs6T4VJ3Atrnvzgm3T5Z7jGWrIVKswYDZOrpMIKOt2NLVAv3Vwxc
+         bVYyPXu01lYbLpXJxjyRRI5cAvkNLZ32Vfc9U23JeaXaMRjSzRnvsdINEuStQfKpT61W
+         KLvUwLxQ6GGxiyLkocFCUgYaQHW0xosDz7uR0bXJtNXlWIXDmkosrh/nIgbrmGD3L5G4
+         xhwpPyNa4NsTUBtOw2x7+QGEygPyr3/hUWEQw5PkH8Elfd047EIeoH0B8VKtHxRUpQpt
+         JHqg==
+X-Gm-Message-State: APjAAAWY6lHnoDC3KyAZXsme7LxGw9F0ZLW8dwDPCTkIoGeaU6b86wkE
+        UC+DT1nb+gpnzsgQEhpDMmuwSQ==
+X-Google-Smtp-Source: APXvYqwx6+407C9x94FJoPzSVHCP0t2Zdj+mPwGij0zS69UFxmlYHwYXWRRcMX8TRc0mw6jEYgImGw==
+X-Received: by 2002:a65:684c:: with SMTP id q12mr3654124pgt.405.1567700283561;
+        Thu, 05 Sep 2019 09:18:03 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id m129sm6324005pga.39.2019.09.05.09.17.59
+        by smtp.gmail.com with ESMTPSA id m129sm6324005pga.39.2019.09.05.09.18.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2019 09:18:00 -0700 (PDT)
+        Thu, 05 Sep 2019 09:18:03 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     stable@vger.kernel.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: [BACKPORT 4.14.y 00/18] Backport candidate from TI 4.14 product kernel 
-Date:   Thu,  5 Sep 2019 10:17:41 -0600
-Message-Id: <20190905161759.28036-1-mathieu.poirier@linaro.org>
+Subject: [BACKPORT 4.14.y 02/18] PCI: dra7xx: Fix legacy INTD IRQ handling
+Date:   Thu,  5 Sep 2019 10:17:43 -0600
+Message-Id: <20190905161759.28036-3-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190905161759.28036-1-mathieu.poirier@linaro.org>
+References: <20190905161759.28036-1-mathieu.poirier@linaro.org>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-These patches are backport candidates picked out of TI's 4.14.y tree [1],
-with most of them already found in the 4.19.y stable tree.
+From: Vignesh R <vigneshr@ti.com>
 
-The set apply and compiles cleanly on 4.14.141.
+commit 524d59f6e30aab5b618da55e604c802ccd83e708 upstream
 
-Thanks,
-Mathieu
+Legacy INTD IRQ handling is broken on dra7xx due to fact that driver
+uses hwirq in range of 1-4 for INTA, INTD whereas IRQ domain is of size
+4 which is numbered 0-3. Therefore when INTD IRQ line is used with
+pci-dra7xx driver following warning is seen:
 
+       WARNING: CPU: 0 PID: 1 at kernel/irq/irqdomain.c:342 irq_domain_associate+0x12c/0x1c4
+       error: hwirq 0x4 is too large for dummy
 
-[1]. http://git.ti.com/gitweb/?p=ti-linux-kernel/ti-linux-kernel.git;a=shortlog;h=refs/heads/ti-linux-4.14.y
+Fix this by using pci_irqd_intx_xlate() helper to translate the INTx 1-4
+range into the 0-3 as done in other PCIe drivers.
 
-Andrew F. Davis (1):
-  ASoC: tlv320aic31xx: Handle inverted BCLK in non-DSP modes
+Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
+Reported-by: Chris Welch <Chris.Welch@viavisolutions.com>
+Signed-off-by: Vignesh R <vigneshr@ti.com>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Acked-by: Kishon Vijay Abraham I <kishon@ti.com>
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+---
+ drivers/pci/dwc/pci-dra7xx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Arvind Yadav (1):
-  ASoC: davinci-mcasp: Handle return value of devm_kasprintf
-
-Christophe Jaillet (1):
-  ASoC: davinci-mcasp: Fix an error handling path in
-    'davinci_mcasp_probe()'
-
-Claudio Foellmi (1):
-  i2c: omap: Trigger bus recovery in lockup case
-
-Dan Carpenter (1):
-  misc: pci_endpoint_test: Prevent some integer overflows
-
-Gustavo A. R. Silva (1):
-  ASoC: tlv320dac31xx: mark expected switch fall-through
-
-Keerthy (2):
-  mfd: palmas: Assign the right powerhold mask for tps65917
-  PCI: dra7xx: Add shutdown handler to cleanly turn off clocks
-
-Kishon Vijay Abraham I (1):
-  misc: pci_endpoint_test: Fix BUG_ON error during pci_disable_msi()
-
-Niklas Cassel (1):
-  PCI: designware-ep: Fix find_first_zero_bit() usage
-
-Roger Quadros (1):
-  usb: dwc3: Allow disabling of metastability workaround
-
-Roman Yeryomin (1):
-  mtd: spi-nor: enable 4B opcodes for mx66l51235l
-
-Sudeep Holla (1):
-  mailbox: reset txdone_method TXDONE_BY_POLL if client knows_txdone
-
-Takashi Iwai (1):
-  ASoC: davinci: Kill BUG_ON() usage
-
-Tony Lindgren (1):
-  drm/omap: panel-dsi-cm: fix driver
-
-Vignesh R (2):
-  PCI: dra7xx: Fix legacy INTD IRQ handling
-  mtd: spi-nor: cadence-quadspi: add a delay in write sequence
-
-Zumeng Chen (1):
-  cpufreq: ti-cpufreq: add missing of_node_put()
-
- .../devicetree/bindings/usb/dwc3.txt          |  2 +
- drivers/cpufreq/ti-cpufreq.c                  |  1 +
- .../gpu/drm/omapdrm/displays/panel-dsi-cm.c   | 56 +++++++++++++++++--
- drivers/i2c/busses/i2c-omap.c                 | 25 ++++++++-
- drivers/mailbox/mailbox.c                     |  4 +-
- drivers/mailbox/pcc.c                         |  4 +-
- drivers/mfd/palmas.c                          | 10 +++-
- drivers/misc/pci_endpoint_test.c              | 17 ++++++
- drivers/mtd/spi-nor/cadence-quadspi.c         | 27 ++++++++-
- drivers/mtd/spi-nor/spi-nor.c                 |  2 +-
- drivers/pci/dwc/pci-dra7xx.c                  | 20 ++++++-
- drivers/pci/dwc/pcie-designware-ep.c          | 34 ++++++++---
- drivers/pci/dwc/pcie-designware.h             |  8 ++-
- drivers/usb/dwc3/core.c                       |  3 +
- drivers/usb/dwc3/core.h                       |  3 +
- drivers/usb/dwc3/gadget.c                     |  6 +-
- include/linux/mfd/palmas.h                    |  3 +
- sound/soc/codecs/tlv320aic31xx.c              | 30 ++++++----
- sound/soc/davinci/davinci-mcasp.c             | 21 ++++++-
- 19 files changed, 235 insertions(+), 41 deletions(-)
-
+diff --git a/drivers/pci/dwc/pci-dra7xx.c b/drivers/pci/dwc/pci-dra7xx.c
+index 63052c5e5f82..7f5dfa169d0f 100644
+--- a/drivers/pci/dwc/pci-dra7xx.c
++++ b/drivers/pci/dwc/pci-dra7xx.c
+@@ -227,6 +227,7 @@ static int dra7xx_pcie_intx_map(struct irq_domain *domain, unsigned int irq,
+ 
+ static const struct irq_domain_ops intx_domain_ops = {
+ 	.map = dra7xx_pcie_intx_map,
++	.xlate = pci_irqd_intx_xlate,
+ };
+ 
+ static int dra7xx_pcie_init_irq_domain(struct pcie_port *pp)
+@@ -270,7 +271,7 @@ static irqreturn_t dra7xx_pcie_msi_irq_handler(int irq, void *arg)
+ 	case INTC:
+ 	case INTD:
+ 		generic_handle_irq(irq_find_mapping(dra7xx->irq_domain,
+-						    ffs(reg)));
++						    ffs(reg) - 1));
+ 		break;
+ 	}
+ 
 -- 
 2.17.1
 
