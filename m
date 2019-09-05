@@ -2,107 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD447AA527
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 15:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788DDAA51C
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 15:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730909AbfIEN5g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Sep 2019 09:57:36 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:54976 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730739AbfIEN5g (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 09:57:36 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x85DsiJZ006461;
-        Thu, 5 Sep 2019 13:57:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=LgsLEuYSSuSxdyB1142Y9m/yvZ92hSXbjFvXb1lpSpg=;
- b=sIzrX7fgd+ZF3vbce1v1COWb+vs33vP0XRYr/dGsRRCqV0/8UedCgjS0u+VKM+qjzG9g
- Frd0nmwg7r/aIbjdN42agTUhgdRxJDPhgGuLHUp0xNJNPurYjElPyb2JoKH34lfYZ1bS
- ebtGK1RkXk0u4x9bDpo7V3EWUxxr30H/jrvKCwbr45fttKYG+8jFXe3RvPeIJ6u1Wsc9
- MXgqyym3svgEiOh2y6OH0FljRjFZicXu7EiEzmnVbLWggufOuqz/UQ55cSlm/Ne73mZY
- 9ekBF+p3q5/SbpVmezJWE/vdyaBjgPQnXujGLLljmMLovczoP1e5CjHooPrsHfuRETwr aQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2uu3ks02am-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 05 Sep 2019 13:57:29 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x85DbeTl025204;
-        Thu, 5 Sep 2019 13:52:27 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 2utpmb8crd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 05 Sep 2019 13:52:27 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x85DqQTc029430;
-        Thu, 5 Sep 2019 13:52:26 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 05 Sep 2019 06:52:26 -0700
-Date:   Thu, 5 Sep 2019 16:52:19 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Elie Morisse <syniurge@gmail.com>
-Cc:     Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Oleh Kravchenko <oleg@kaa.org.ua>
-Subject: [PATCH] i2c: i2c-amd-mp2-pci: Fix Oops in amd_mp2_pci_init() error
- handling
-Message-ID: <20190905135219.GA29629@mwanda>
+        id S1731717AbfIENxk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Sep 2019 09:53:40 -0400
+Received: from sauhun.de ([88.99.104.3]:57438 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731109AbfIENxk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 5 Sep 2019 09:53:40 -0400
+Received: from localhost (p54B335F6.dip0.t-ipconnect.de [84.179.53.246])
+        by pokefinder.org (Postfix) with ESMTPSA id 9B2412C00C0;
+        Thu,  5 Sep 2019 15:53:38 +0200 (CEST)
+Date:   Thu, 5 Sep 2019 15:53:38 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Bjorn Ardo <bjorn.ardo@axis.com>
+Cc:     Bjorn Ardo <bjornar@axis.com>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c-eeprom_slave: Add support for more eeprom models
+Message-ID: <20190905135338.GH1157@kunai>
+References: <1567497091-18270-1-git-send-email-bjorn.ardo@axis.com>
+ <20190903174359.GB2171@ninjato>
+ <ea04722c-81e5-1fb3-d5fc-0ee24e073025@axis.com>
+ <20190904154814.GC1157@kunai>
+ <f8629df5-c1b7-aa72-c403-9de393e87a93@axis.com>
+ <20190905083851.GA1157@kunai>
+ <20fc32eb-e2ff-84d1-da3d-3ba6484653dc@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lrvsYIebpInmECXG"
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+In-Reply-To: <20fc32eb-e2ff-84d1-da3d-3ba6484653dc@axis.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9370 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1909050134
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9370 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1909050135
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The problem is that we dereference "privdata->pci_dev" when we print
-the error messages in amd_mp2_pci_init():
 
-	dev_err(ndev_dev(privdata), "Failed to enable MP2 PCI device\n");
-                ^^^^^^^^^^^^^^^^^
+--lrvsYIebpInmECXG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 529766e0a011 ("i2c: Add drivers for the AMD PCIe MP2 I2C controller")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/i2c/busses/i2c-amd-mp2-pci.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2c-amd-mp2-pci.c
-index 5e4800d72e00..6bbc89d0bb27 100644
---- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
-+++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
-@@ -349,13 +349,13 @@ static int amd_mp2_pci_probe(struct pci_dev *pci_dev,
- 	if (!privdata)
- 		return -ENOMEM;
- 
-+	mutex_init(&privdata->c2p_lock);
-+	privdata->pci_dev = pci_dev;
-+
- 	rc = amd_mp2_pci_init(privdata, pci_dev);
- 	if (rc)
- 		return rc;
- 
--	mutex_init(&privdata->c2p_lock);
--	privdata->pci_dev = pci_dev;
--
- 	pm_runtime_set_autosuspend_delay(&pci_dev->dev, 1000);
- 	pm_runtime_use_autosuspend(&pci_dev->dev);
- 	pm_runtime_put_autosuspend(&pci_dev->dev);
--- 
-2.20.1
+> > > The eeprom tested is from ST, model M24C64. Should this be added in t=
+he code
+> > > or in some doc folder?
+> > I think FIXMEs should be in the source itself.
+>=20
+> Do you want this as a patch of its own, or as an update of the old patch?
 
+Incremental please. Your other patch is already applied in my for-next
+branch :)
+
+>=20
+> Well, the "24c02ro" version will solve our use-case and is by far the
+> simplest to implement. But as you say it does not scale well with more
+> features. I can however not see any practical use-cases where we would ne=
+ed
+> anything else (like "write-only" for instance). I can make an implementat=
+ion
+> of that so you can see how it looks. And most likely, this could be combi=
+ned
+> with a DT/sysfs version to do the same without breaking anything in the
+> future if that is required.
+
+Yes, go ahead and let's have a look. I am quite positive I will like it.
+
+> One more question, I'm thinking about trying to use the "request_firmware=
+()"
+> in the kernel in some way to be able to automatically populate the eeprom
+> with content from some file (the equivalent of a "pre-flashed eeprom"). Do
+> you have any thoughts about adding a feature like that?
+
+I see. Sounds reasonable, yet I need to think about it more.
+
+
+--lrvsYIebpInmECXG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1xE2IACgkQFA3kzBSg
+KbZCxRAAnzGnAqYX9gc+bfaOQ0GIXnnRpO8sMtI2sRjj0LjbRMVSc517idjDi46V
+fOREMpEWbdxVlYegYUN671YupTAwvJvOWtv1U+7c20QuM9fTWidM4tMQdKvWSLgC
+ljiVb+z2nL1kJf/lEfI/6Z3MAPwjoK0is6mHukFpY1CioArWiS5zF1GDia7oNO6y
+MYv6RrSlOvUMi96IY7ohJ8En2LU1J5sG28VmD/XJ8DePsLic7GER2NrgvdOAssLO
+JMxxpftGFP9pCbEPchTBoU+b++KTa/JCApgykYqgYMvLp0Bp1IdSgtVYX2/EK7qH
+8+UYBBPaPjtqqHq39ucJ+XXr9HY/ijsszU+ruQUP9QSSHA0jJqMsKBY2rKvY+aoh
+A88Yw8UPcs++dOPbt63x2zOmX+gqbMXH33K/cvRM98Sv00OkJDb3omC+V4HTG3rW
+ZbyK6KsWn3ZZsAk5pTsA1f85OLIxhvPlgW2RGcpBnbr5rbUSlo6bqQB6fRby5yIV
+akWUOGDjuF8pe/s4iC1ObZUgNQVaZe/envDg956YkHQ2nraprIf3lYKEOy5UBX/E
+YC5RSKyOKGwuQ9SyWRnUgsAtu8YBMsd0wrl2ltp7BFoaz4jKTcUXk7PnI2h81tzd
+0mRTi3Q7HYeXs7sAaRo4N7Nl5KZ7z52Uw498gD2syOmYiVBo9MU=
+=owjw
+-----END PGP SIGNATURE-----
+
+--lrvsYIebpInmECXG--
