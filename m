@@ -2,89 +2,182 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46807A9AC7
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 08:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A81A9B4A
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 09:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726162AbfIEGma (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Sep 2019 02:42:30 -0400
-Received: from bastet.se.axis.com ([195.60.68.11]:59570 "EHLO
-        bastet.se.axis.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725921AbfIEGma (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 02:42:30 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bastet.se.axis.com (Postfix) with ESMTP id 89105182C7;
-        Thu,  5 Sep 2019 08:42:27 +0200 (CEST)
-X-Axis-User: NO
-X-Axis-NonUser: YES
-X-Virus-Scanned: Debian amavisd-new at bastet.se.axis.com
-Received: from bastet.se.axis.com ([IPv6:::ffff:127.0.0.1])
-        by localhost (bastet.se.axis.com [::ffff:127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id g8dJ4AEJqw_k; Thu,  5 Sep 2019 08:42:26 +0200 (CEST)
-Received: from boulder02.se.axis.com (boulder02.se.axis.com [10.0.8.16])
-        by bastet.se.axis.com (Postfix) with ESMTPS id DCFE918488;
-        Thu,  5 Sep 2019 08:42:26 +0200 (CEST)
-Received: from boulder02.se.axis.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BC81A1A066;
-        Thu,  5 Sep 2019 08:42:26 +0200 (CEST)
-Received: from boulder02.se.axis.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B01F41A064;
-        Thu,  5 Sep 2019 08:42:26 +0200 (CEST)
-Received: from thoth.se.axis.com (unknown [10.0.2.173])
-        by boulder02.se.axis.com (Postfix) with ESMTP;
-        Thu,  5 Sep 2019 08:42:26 +0200 (CEST)
-Received: from XBOX02.axis.com (xbox02.axis.com [10.0.5.16])
-        by thoth.se.axis.com (Postfix) with ESMTP id A3ADE421;
-        Thu,  5 Sep 2019 08:42:26 +0200 (CEST)
-Received: from [10.88.24.4] (10.0.5.60) by XBOX02.axis.com (10.0.5.16) with
- Microsoft SMTP Server (TLS) id 15.0.1365.1; Thu, 5 Sep 2019 08:42:26 +0200
-Subject: Re: [PATCH] i2c-eeprom_slave: Add support for more eeprom models
-To:     Wolfram Sang <wsa@the-dreams.de>, Bjorn Ardo <bjornar@axis.com>
-CC:     <linux-i2c@vger.kernel.org>
-References: <1567497091-18270-1-git-send-email-bjorn.ardo@axis.com>
- <20190903174359.GB2171@ninjato>
- <ea04722c-81e5-1fb3-d5fc-0ee24e073025@axis.com> <20190904154814.GC1157@kunai>
-From:   Bjorn Ardo <bjorn.ardo@axis.com>
-Message-ID: <f8629df5-c1b7-aa72-c403-9de393e87a93@axis.com>
-Date:   Thu, 5 Sep 2019 08:42:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1731732AbfIEHLJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Sep 2019 03:11:09 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:46889 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731501AbfIEHLJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 03:11:09 -0400
+Received: by mail-wr1-f68.google.com with SMTP id h7so1306272wrt.13
+        for <linux-i2c@vger.kernel.org>; Thu, 05 Sep 2019 00:11:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=DFvvnaHLzFEzaTnNYzUt4Q2hQTFq/NK+O6UpsbmEMb0=;
+        b=By8LGyThV3tQ7KpjUQafQj2mWoVF3UaQyPDD/AsSXb+5tk4zZFZVekW3CeEG2npb2B
+         Jmy5Qb0Gklgk/axCGfbNZJSWL5JklgbojPM3DCPn25IMckFHtdSMHFMkMKwn7/d9ZmWv
+         NLlXUPiedZKGcQzpUT6V3EIMJJci8gkcWnpcauUrUpDTBdDfs6O8etqFgheEto1vISaT
+         rTOEicKYLY89K5mHry30Y6vbjFHGz2jb/uZ/4t9ZzErtlzLlh8SbtbMZiSpSdYxh5rsz
+         Kv529cVvW8zneJb4OdeHcTYd38NSZx322XL6q16Xz2Oj3s9WMBkYdcj0JhBNbdVGNIE9
+         JkqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=DFvvnaHLzFEzaTnNYzUt4Q2hQTFq/NK+O6UpsbmEMb0=;
+        b=KP3YqHOF7jaujhKCPzGmEtzwBhIsneV3AgtcRKTrvMkftlHOSdgMX/2KaWsC4NFmTn
+         MH/9n0OwZVyFk0DwsgXQJ4EF/pU3P+TzTD5iTaO+IIAFarxC56WlHAXduY2i7IaetHU4
+         nWpzCutaA6AYEAffDd54ngjGwrOahBbkxD88juD6mL1jj656bsK9MhCQ0bgC78WSNudU
+         1hkX+ztUxbroY6SZnduCaAl5oNNxanh29E0UfNbUsNQE8KoqSE0Xh3oIMdglXazmLU4X
+         yKy6N6XeGA2EZl51MA4avn900rec3Qa4VVl7n9QSdOFnPXild8y1OVGw6R+OghDo7STh
+         8t/Q==
+X-Gm-Message-State: APjAAAVmLPBSpAfpujZjzP5uPEKgx1Ja+Dhn1G4YXEY0eLxDH0cOQLx0
+        93CIL/SzBZ7VL6qJ/GTfVsjGRg==
+X-Google-Smtp-Source: APXvYqwmUfGIDO2UDqtQ8Ewygc0VpleSUBO6Yhj2gmAs7eRwG0RusGrqdiNi/OFtceHOm46lPN3l5g==
+X-Received: by 2002:a5d:528a:: with SMTP id c10mr1153426wrv.111.1567667466248;
+        Thu, 05 Sep 2019 00:11:06 -0700 (PDT)
+Received: from dell ([95.147.198.36])
+        by smtp.gmail.com with ESMTPSA id m18sm1455462wrg.97.2019.09.05.00.11.05
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 05 Sep 2019 00:11:05 -0700 (PDT)
+Date:   Thu, 5 Sep 2019 08:11:03 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, alokc@codeaurora.org,
+        agross@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: qcom-geni: Provide an option to select FIFO
+ processing
+Message-ID: <20190905071103.GX26880@dell>
+References: <20190904113613.14997-1-lee.jones@linaro.org>
+ <20190904203548.GC580@tuxbook-pro>
+ <20190904212337.GF23608@ninjato>
 MIME-Version: 1.0
-In-Reply-To: <20190904154814.GC1157@kunai>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: XBOX04.axis.com (10.0.5.18) To XBOX02.axis.com (10.0.5.16)
-X-TM-AS-GCONF: 00
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190904212337.GF23608@ninjato>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, 04 Sep 2019, Wolfram Sang wrote:
 
-On 9/4/19 5:48 PM, Wolfram Sang wrote:
->
-> I am not sure if this is a behavior that is worth trying to mimic?
-> Not yet. We can add this incrementally once we know most EERPOMs behave
-> like this. It could be worth adding a comment, though, like:
->
-> /*
->   * FIXME: What to do if only 8 bits of a 16 bit address are sent?
->   * The <your vendor & eeprom type> sends only 0xff then. Needs verification
->   * with other EEPROMs, though. We currently use the 8 bit as a valid
->   * address.
->   */
->
+> On Wed, Sep 04, 2019 at 01:35:48PM -0700, Bjorn Andersson wrote:
+> > On Wed 04 Sep 04:36 PDT 2019, Lee Jones wrote:
+> > 
+> > The subject implies that we select FIFO mode instead of DMA, but that's
+> > not really true, because with DMA enabled we still fall back to FIFO for
+> > messages below 32 bytes. 
 
-The eeprom tested is from ST, model M24C64. Should this be added in the 
-code or in some doc folder?
+Do you mean, we fall back to DMA?
+
+> > So what this does it to disable DMA, which neither the subject or the DT
+> > property describes.
+> > 
+> > Also missing is a description of why this is needed.
+> 
+> Yes.
+> 
+> I am willing to help to get this resolved soonish. However, I have
+> issues with the approach.
+> 
+> It looks like a workaround to me. It would be interesting to hear which
+> I2C client breaks with DMA and if it's driver can't be fixed somehow
+> instead. But even if we agree on a workaround short term, adding a
+> binding for this workaround seems like a no-go to me. We have to live
+> with this binding forever. Sidenote: I could think of a generic
+> 'disable-dma' which could be reused everywhere but we probably won't get
+> that upstream that late in the cycle.
+> 
+> Is there no other way to disable DMA which is local to this driver so we
+> can easily revert the workaround later?
+
+This is the most local low-impact solution (nomenclature aside).
+
+The beautiful thing about this approach is that, *if* the Geni SE DMA
+ever starts working, we can remove the C code and any old properties
+left in older DTs just become NOOP.  Older kernels with newer DTs
+(less of a priority) *still* won't work, but they don't work now
+anyway.
+
+NB: QCom have also made it pretty clear that DTBs *must* match their
+kernel version.  I know this is controversial amongst DT purists, but
+it's still how QCom operate.
+
+The offending line can be found at [0].  There is no obvious bug to
+fix and this code obviously works well on some of the hardware
+platforms using it.  But on our platform (Lenovo Yoga C630 - QCom
+SMD850) that final command, which initiates the DMA transaction, ends
+up rebooting the machine.
+
+With regards to the nomenclature, my original suggestion was
+'qcom,geni-se-no-dma'.  Would that better suit your request?
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/soc/qcom/qcom-geni-se.c#n644
+
+> > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > ---
+> > >  drivers/i2c/busses/i2c-qcom-geni.c | 14 ++++++++++----
+> > >  1 file changed, 10 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> > > index a89bfce5388e..dfdbce067827 100644
+> > > --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> > > +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> > > @@ -353,13 +353,16 @@ static void geni_i2c_tx_fsm_rst(struct geni_i2c_dev *gi2c)
+> > >  static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+> > >  				u32 m_param)
+> > >  {
+> > > +	struct device_node *np = gi2c->se.dev->of_node;
+> > >  	dma_addr_t rx_dma;
+> > >  	unsigned long time_left;
+> > > -	void *dma_buf;
+> > > +	void *dma_buf = NULL;
+> > >  	struct geni_se *se = &gi2c->se;
+> > >  	size_t len = msg->len;
+> > >  
+> > > -	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+> > > +	if (!of_property_read_bool(np, "qcom,geni-se-fifo"))
+> > > +		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+> > > +
+> > >  	if (dma_buf)
+> > >  		geni_se_select_mode(se, GENI_SE_DMA);
+> > >  	else
+> > > @@ -392,13 +395,16 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+> > >  static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+> > >  				u32 m_param)
+> > >  {
+> > > +	struct device_node *np = gi2c->se.dev->of_node;
+> > >  	dma_addr_t tx_dma;
+> > >  	unsigned long time_left;
+> > > -	void *dma_buf;
+> > > +	void *dma_buf = NULL;
+> > >  	struct geni_se *se = &gi2c->se;
+> > >  	size_t len = msg->len;
+> > >  
+> > > -	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+> > > +	if (!of_property_read_bool(np, "qcom,geni-se-fifo"))
+> > > +		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+> > > +
+> > >  	if (dma_buf)
+> > >  		geni_se_select_mode(se, GENI_SE_DMA);
+> > >  	else
 
 
-I have another question. I'm considering adding a flag to set the 
-virtual eeprom in read-only mode on the i2c side (but writable from the 
-sysfs side). Should this be implemented as a separate i2c_device_id, or 
-by trying to read som configuration flag from devicetree?
 
-
-/BA
-
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
