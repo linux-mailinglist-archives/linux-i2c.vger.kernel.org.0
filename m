@@ -2,171 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC84FA9DF6
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 11:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB00A9E03
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 11:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733064AbfIEJPJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Sep 2019 05:15:09 -0400
-Received: from cnshjsmin05.nokia-sbell.com ([116.246.26.45]:9396 "EHLO
-        cnshjsmin05.nokia-sbell.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732968AbfIEJPJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 05:15:09 -0400
-X-AuditID: ac18929d-d43ff7000000dbec-74-5d70d217f412
-Received: from CNSHPPEXCH1608.nsn-intra.net (Unknown_Domain [135.251.51.108])
-        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by cnshjsmin05.nokia-sbell.com (Symantec Messaging Gateway) with SMTP id EB.C0.56300.712D07D5; Thu,  5 Sep 2019 17:15:03 +0800 (HKT)
-Received: from CNSHPPEXCH1601.nsn-intra.net (135.251.51.101) by
- CNSHPPEXCH1608.nsn-intra.net (135.251.51.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 5 Sep 2019 17:15:03 +0800
-Received: from CNSHPPEXCH1601.nsn-intra.net ([135.251.51.101]) by
- CNSHPPEXCH1601.nsn-intra.net ([135.251.51.101]) with mapi id 15.01.1713.007;
- Thu, 5 Sep 2019 17:15:03 +0800
-From:   "Xu, Lingyan (NSB - CN/Hangzhou)" <lingyan.xu@nokia-sbell.com>
-To:     Jean Delvare <jdelvare@suse.de>
-CC:     "Adamski, Krzysztof (Nokia - PL/Wroclaw)" 
-        <krzysztof.adamski@nokia.com>,
-        "Wiebe, Wladislav (Nokia - DE/Ulm)" <wladislav.wiebe@nokia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] i801_smbus: clear SMBALERT status bit and disable
- SMBALERT interrupt
-Thread-Topic: [PATCH] i801_smbus: clear SMBALERT status bit and disable
- SMBALERT interrupt
-Thread-Index: AQHVULdbLY35dV27K065atkwcJuHaqcQKcMAgAkqZLCAA5540A==
-Date:   Thu, 5 Sep 2019 09:15:03 +0000
-Message-ID: <75809576d53146f29500fdf5fdbc1940@nokia-sbell.com>
-References: <1565577634-18264-1-git-send-email-lingyan.xu@nokia-sbell.com>
- <20190828155822.7cb13a7b@endymion>
- <a6cd1872effd46c7ba088f28402b32b8@nokia-sbell.com>
-In-Reply-To: <a6cd1872effd46c7ba088f28402b32b8@nokia-sbell.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [135.251.51.115]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        id S1732073AbfIEJQU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Sep 2019 05:16:20 -0400
+Received: from sauhun.de ([88.99.104.3]:54110 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730518AbfIEJQU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 5 Sep 2019 05:16:20 -0400
+Received: from localhost (p54B335F6.dip0.t-ipconnect.de [84.179.53.246])
+        by pokefinder.org (Postfix) with ESMTPSA id 9698D2C0509;
+        Thu,  5 Sep 2019 11:16:17 +0200 (CEST)
+Date:   Thu, 5 Sep 2019 11:16:17 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, alokc@codeaurora.org,
+        agross@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: qcom-geni: Provide an option to select FIFO
+ processing
+Message-ID: <20190905091617.GC1157@kunai>
+References: <20190904113613.14997-1-lee.jones@linaro.org>
+ <20190904203548.GC580@tuxbook-pro>
+ <20190904212337.GF23608@ninjato>
+ <20190905071103.GX26880@dell>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIIsWRmVeSWpSXmKPExsXS/ts4R1f8UkGswc+FNhZL735is+j4+4XR
-        4vKuOWwOzB6bT1d7fN4kF8AUxWWTkpqTWZZapG+XwJVxcbJ6wRu7ijNTVzI2MM6x7WLk5JAQ
-        MJG4MWsecxcjF4eQwCEmiT/vVjNCOH8YJZ48m8gE4WxklNjybzVQGQcHm4CLxMtZgiDdIgLK
-        Es//H2MFqWEW6GKSWNvZxAKSEBaIlli/fCErRFGMxIlr16BsJ4mGa8+ZQGwWARWJzdP2s4LM
-        5BWwk1i5rRZi1xJGiU3H9jGD1HAK2EucbFrGBmIzCohJfD+1BqyXWUBc4taT+UwQLwhILNlz
-        nhnCFpV4+fgf2EwJASWJvg1Q5VoS8xp+Q9mKElO6H7KD2LwCghInZz5hmcAoNgvJ1FlIWmYh
-        aZmFpGUBI8sqRunkvOKMrOLczDwDU728/OzMRN3ipNScHL3k/NxNjMCIWiMxae4Oxs7O+EOM
-        AhyMSjy8D+bmxwqxJpYVV+YeYpTgYFYS4V2/sSBWiDclsbIqtSg/vqg0J7X4EKM0B4uSOO/v
-        VqdYIYH0xJLU7NTUgtQimCwTB6dUA6PiwyN3b7e3/YmZbd06bf7uZ0bOU7f6/eybWxG8+6Hi
-        IQ2ztcnXTmpH7JZfPiczxLXpjSJDLMvsyuwlpz0S9RT2GW1NnfBAW8V00hbz44XTdm1j5hSr
-        ql91/fqu5fIfn3wX+VzDpL98n5nNyZUlc6yP3OiY/G3X+iNilkVMy+7tnn3WZlLW3tzVSizF
-        GYmGWsxFxYkApWbsrKQCAAA=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="R+My9LyyhiUvIEro"
+Content-Disposition: inline
+In-Reply-To: <20190905071103.GX26880@dell>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGkgSmVhbiwNCkFmdGVyIG91ciBsb2NhbCB0ZXN0LCB0aGUgYWN0aW9uIGNsZWFyIFNNQkFMRVJU
-IHN0YXR1cyBiaXQgaXMgbmVlZGVkIG9ubHkgaGVyZSBmb3IgdGhlIEhXIGludGVycnVwdCB3aWxs
-IGJlIGNsZWFyZWQgYnkgc2xhdmUgY2hpcC4NClNvIEkgY2hhbmdlIHRoZSBwYXRjaCBhcyBmb2xs
-b3cuDQoNCkZyb206IExpbmd5YW4gWHUgPGxpbmd5YW4ueHVAbm9raWEtc2JlbGwuY29tPg0KDQpJ
-biBjdXJyZW50IGk4MDEgZHJpdmVyLCBTTUJBTEVSVCBpbnRlcnJ1cHQgaXMgYWxsb3dlZCAoU2xh
-dmUgQ29tbWFuZCBSZWdpc3RlciBiaXQyIGlzIDApLg0KQnV0IHRoZXNlIGlzIG5vIGhhbmRsZXIg
-Zm9yIFNNQkFMRVJUIGludGVycnVwdCBpbiBpODAxX2lzciwgaWYgdGhlcmUgaXMgU01CQUxFUlQg
-aW50ZXJydXB0IGFzc2VydGVkIGFuZCBkZWFzc2VydGVkLA0KaTgwMSB3aWxsIGhhdmUgYW4gaXJx
-IGZsb29kIGZvciB0aGUgcmVsYXRlZCBzdGF0dXMgYml0IGlzIHNldHRlZC4NCg0KU28gU01CQUxF
-UlQgc3RhdHVzIGNsZWFyIGlzIG5lZWRlZC4NCg0KQWJvdXQgdGhlIHNvbHV0aW9uLA0KcGxlYXNl
-IHNlZSBodHRwOi8vd3d3LmZhcm5lbGwuY29tL2RhdGFzaGVldHMvMTU4MTk2Ny5wZGYNClBhZ2U2
-MzIgUDY0MCBmb3IgbW9yZS4NCg0KU2lnbmVkLW9mZi1ieTogTGluZ3lhbiBYdSA8bGluZ3lhbi54
-dUBub2tpYS1zYmVsbC5jb20+DQotLS0NCiBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLWk4MDEuYyB8
-IDUgKysrKysNCiAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspDQoNCmRpZmYgLS1naXQg
-YS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWk4MDEuYyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMt
-aTgwMS5jIGluZGV4IGYyOTU2OTMuLjI5YzkwZjAgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL2kyYy9i
-dXNzZXMvaTJjLWk4MDEuYw0KKysrIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1pODAxLmMNCkBA
-IC02NjEsNiArNjYxLDExIEBAIHN0YXRpYyBpcnFyZXR1cm5fdCBpODAxX2lzcihpbnQgaXJxLCB2
-b2lkICpkZXZfaWQpDQogCSAqIENsZWFyIGlycSBzb3VyY2VzIGFuZCByZXBvcnQgdHJhbnNhY3Rp
-b24gcmVzdWx0Lg0KIAkgKiAtPnN0YXR1cyBtdXN0IGJlIGNsZWFyZWQgYmVmb3JlIHRoZSBuZXh0
-IHRyYW5zYWN0aW9uIGlzIHN0YXJ0ZWQuDQogCSAqLw0KKwkNCisJaWYgKHN0YXR1cyAmIFNNQkhT
-VFNUU19TTUJBTEVSVF9TVFMpIHsNCisJCW91dGJfcChzdGF0dXMgJiBTTUJIU1RTVFNfU01CQUxF
-UlRfU1RTLCBTTUJIU1RTVFMocHJpdikpOw0KKwl9DQorDQogCXN0YXR1cyAmPSBTTUJIU1RTVFNf
-SU5UUiB8IFNUQVRVU19FUlJPUl9GTEFHUzsNCiAJaWYgKHN0YXR1cykgew0KIAkJb3V0Yl9wKHN0
-YXR1cywgU01CSFNUU1RTKHByaXYpKTsNCi0tDQoyLjYuMg0KDQpCZXN0IFJlZ2FyZHMhDQpMaW5n
-eWFuIHh1DQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBYdSwgTGluZ3lhbiAo
-TlNCIC0gQ04vSGFuZ3pob3UpIA0KU2VudDogMjAxOcTqOdTCM8jVIDEwOjE2DQpUbzogJ0plYW4g
-RGVsdmFyZScgPGpkZWx2YXJlQHN1c2UuZGU+DQpDYzogQWRhbXNraSwgS3J6eXN6dG9mIChOb2tp
-YSAtIFBML1dyb2NsYXcpIDxrcnp5c3p0b2YuYWRhbXNraUBub2tpYS5jb20+OyBXaWViZSwgV2xh
-ZGlzbGF2IChOb2tpYSAtIERFL1VsbSkgPHdsYWRpc2xhdi53aWViZUBub2tpYS5jb20+OyBsaW51
-eC1pMmNAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQpTdWJq
-ZWN0OiBSRTogW1BBVENIXSBpODAxX3NtYnVzOiBjbGVhciBTTUJBTEVSVCBzdGF0dXMgYml0IGFu
-ZCBkaXNhYmxlIFNNQkFMRVJUIGludGVycnVwdA0KDQpIaSBKZWFuLA0KVGhhbmtzIGEgbG90IGZv
-ciB5b3VyIGNvbW1lbnRzLiBBbmQsIHllcywgaXQgaXMgZGFuZ2Vyb3VzIHRoYXQgY2xlYXIgYWxs
-IGludGVycnVwdCBiaXQgaGVyZSBiYXNlZCBteSBsb2NhbCB0ZXN0LiBBbmQgYWJvdXQgdGhlIGlu
-dGVycnVwdCBmbG9vZCwgSSB3aWxsIHNob3cgeW91IGluIGF0dGFjaGVkIGZpbGUuIEFuZCBJIGFn
-cmVlIHdpdGggeW91IHRoYXQgYWRkIFNNQkFMRVJUIGludGVycnVwdCBoYW5kbGVyIGlmIHBvc3Np
-YmxlLCBidXQgSSBoYXZlIG5vIGlkZWEgYWJvdXQgd2hhdCBhY3Rpb24gaXMgbmVlZCBpbiB0aGlz
-IGhhbmRsZXIgYmVjYXVzZSB0aGF0IGl0IHNlYW1zIHRoYXQgaTgwMSBjYW4gbm90IGNsZWFyIHNh
-bHZlIGNoaXAncyBzdGF0dXMgYml0IGRpcmVjdGx5Lg0KDQoNCkJlc3QgUmVnYXJkcyENCkxpbmd5
-YW4geHUNCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEplYW4gRGVsdmFyZSA8
-amRlbHZhcmVAc3VzZS5kZT4NClNlbnQ6IDIwMTnE6jjUwjI4yNUgMjE6NTgNClRvOiBYdSwgTGlu
-Z3lhbiAoTlNCIC0gQ04vSGFuZ3pob3UpIDxsaW5neWFuLnh1QG5va2lhLXNiZWxsLmNvbT4NCkNj
-OiBBZGFtc2tpLCBLcnp5c3p0b2YgKE5va2lhIC0gUEwvV3JvY2xhdykgPGtyenlzenRvZi5hZGFt
-c2tpQG5va2lhLmNvbT47IFdpZWJlLCBXbGFkaXNsYXYgKE5va2lhIC0gREUvVWxtKSA8d2xhZGlz
-bGF2LndpZWJlQG5va2lhLmNvbT47IGxpbnV4LWkyY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtl
-cm5lbEB2Z2VyLmtlcm5lbC5vcmcNClN1YmplY3Q6IFJlOiBbUEFUQ0hdIGk4MDFfc21idXM6IGNs
-ZWFyIFNNQkFMRVJUIHN0YXR1cyBiaXQgYW5kIGRpc2FibGUgU01CQUxFUlQgaW50ZXJydXB0DQoN
-CkhpIExpbmd5YW4sDQoNCk9uIE1vbiwgMTIgQXVnIDIwMTkgMTA6NDA6MzQgKzA4MDAsIGxpbmd5
-eHUgd3JvdGU6DQo+IEZyb206IExpbmd5YW4gWHUgPGxpbmd5YW4ueHVAbm9raWEtc2JlbGwuY29t
-Pg0KPiANCj4gSW4gY3VycmVudCBpODAxIGRyaXZlciwgU01CQUxFUlQgaW50ZXJydXB0IGlzIGFs
-bG93ZWQgKFNsYXZlIENvbW1hbmQgDQo+IFJlZ2lzdGVyIGJpdDIgaXMgMCkuDQo+IEJ1dCB0aGVz
-ZSBpcyBubyBoYW5kbGVyIGZvciBTTUJBTEVSVCBpbnRlcnJ1cHQgaW4gaTgwMV9pc3IsIGlmIHRo
-ZXJlIA0KPiBpcyBTTUJBTEVSVCBpbnRlcnJ1cHQgYXNzZXJ0ZWQgYW5kIGRlYXNzZXJ0ZWQsDQo+
-IGk4MDEgd2lsbCBoYXZlIGFuIGlycSBmbG9vZCBmb3IgdGhlIHJlbGF0ZWQgc3RhdHVzIGJpdCBp
-cyBzZXR0ZWQuDQo+IA0KPiBTbyBTTUJBTEVSVCBpbnRlcnJ1cHQgaGFuZGxlciBpcyBuZWVkZWQs
-IGFuZCBhbHNvLCBTTUJBTEVSVCBpbnRlcnJ1cHQgDQo+IHdpbGwgYmUgZ2VuZXJhdGVkIGZyb20g
-dGltZSB0byB0aW1lIGlmIHNsYXZlIGNoaXAgaGF2ZSBzb21lIGZhdWx0Lg0KPiBTbyBkaXNhYmxl
-IFNNQkFMRVJUIGludGVycnVwdCBpcyBhbHNvIG5lZWRlZC4NCj4gDQo+IEFib3V0IHRoZSBzb2x1
-dGlvbiwNCj4gcGxlYXNlIHNlZSBodHRwOi8vd3d3LmZhcm5lbGwuY29tL2RhdGFzaGVldHMvMTU4
-MTk2Ny5wZGYNCj4gUGFnZTYzMiBQNjQwIGZvciBtb3JlLg0KPiANCj4gU2lnbmVkLW9mZi1ieTog
-TGluZ3lhbiBYdSA8bGluZ3lhbi54dUBub2tpYS1zYmVsbC5jb20+DQo+IC0tLQ0KPiAgZHJpdmVy
-cy9pMmMvYnVzc2VzL2kyYy1pODAxLmMgfCAgICA3ICsrKysrKy0NCj4gIDEgZmlsZXMgY2hhbmdl
-ZCwgNiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvaTJjL2J1c3Nlcy9pMmMtaTgwMS5jIA0KPiBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMt
-aTgwMS5jIGluZGV4IGYyOTU2OTMuLjAzM2JhZmUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvaTJj
-L2J1c3Nlcy9pMmMtaTgwMS5jDQo+ICsrKyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtaTgwMS5j
-DQo+IEBAIC02NjEsOSArNjYxLDExIEBAIHN0YXRpYyBpcnFyZXR1cm5fdCBpODAxX2lzcihpbnQg
-aXJxLCB2b2lkICpkZXZfaWQpDQo+ICAJICogQ2xlYXIgaXJxIHNvdXJjZXMgYW5kIHJlcG9ydCB0
-cmFuc2FjdGlvbiByZXN1bHQuDQo+ICAJICogLT5zdGF0dXMgbXVzdCBiZSBjbGVhcmVkIGJlZm9y
-ZSB0aGUgbmV4dCB0cmFuc2FjdGlvbiBpcyBzdGFydGVkLg0KPiAgCSAqLw0KPiArDQo+ICsJb3V0
-Yl9wKHN0YXR1cywgU01CSFNUU1RTKHByaXYpKTsNCj4gKw0KPiAgCXN0YXR1cyAmPSBTTUJIU1RT
-VFNfSU5UUiB8IFNUQVRVU19FUlJPUl9GTEFHUzsNCj4gIAlpZiAoc3RhdHVzKSB7DQo+IC0JCW91
-dGJfcChzdGF0dXMsIFNNQkhTVFNUUyhwcml2KSk7DQo+ICAJCXByaXYtPnN0YXR1cyA9IHN0YXR1
-czsNCj4gIAkJd2FrZV91cCgmcHJpdi0+d2FpdHEpOw0KPiAgCX0NCg0KTG9va3Mgc2NhcnkuIFdy
-aXRpbmcgdGhlIHdob2xlIHZhbHVlIG9mIFNNQkhTVFNUUyBiYWNrIHRvIGl0c2VsZiB3aXRob3V0
-IHNlbGVjdGluZyB3aGljaCBiaXRzIHlvdSB3cml0ZSBpcyBkYW5nZXJvdXMuIFNwZWNpZmljYWxs
-eSwgd3JpdGluZyBiYWNrIFNNQkhTVFNUU19CWVRFX0RPTkUsIFNNQkhTVFNUU19JTlVTRV9TVFMg
-YW5kIFNNQkhTVFNUU19IT1NUX0JVU1kgY291bGQgaGF2ZSB1bmV4cGVjdGVkIGNvbnNlcXVlbmNl
-cy4gSSB3b3VsZCBmZWVsIG11Y2ggYmV0dGVyIGlmIHlvdSB3b3VsZCBqdXN0IGV4cGxpY2l0bHkg
-YWRkIFNNQkhTVFNUU19TTUJBTEVSVF9TVFMgdG8gdGhlIGxpc3QuDQoNCj4gQEAgLTE4MTAsNiAr
-MTgxMiw5IEBAIHN0YXRpYyBpbnQgaTgwMV9wcm9iZShzdHJ1Y3QgcGNpX2RldiAqZGV2LCBjb25z
-dCBzdHJ1Y3QgcGNpX2RldmljZV9pZCAqaWQpDQo+ICAJLyogRGVmYXVsdCB0aW1lb3V0IGluIGlu
-dGVycnVwdCBtb2RlOiAyMDAgbXMgKi8NCj4gIAlwcml2LT5hZGFwdGVyLnRpbWVvdXQgPSBIWiAv
-IDU7DQo+ICANCj4gKwkvKiBEaXNhYmxlIFNNQkFMRVJUIGludGVycnVwdCAqLw0KPiArCW91dGJf
-cChpbmJfcChTTUJTTFZDTUQocHJpdikpIHwgQklUKDIpLCBTTUJTTFZDTUQocHJpdikpOw0KDQpQ
-bGVhc2UgZ2l2ZSBTTUJTTFZDTUQncyBCSVQoMikgYSBuYW1lIGFuZCBkZWZpbmUgaXQgYWZ0ZXIg
-U01CU0xWQ01EX0hTVF9OVEZZX0lOVFJFTi4NCg0KQWxzbyBpdCBpcyBtYW5kYXRvcnkgdG8gcmVz
-dG9yZSB0aGUgdmFsdWUgb2YgU01CU0xWQ01EIGJlZm9yZSByZXR1cm5pbmcgdGhlIGNvbnRyb2wg
-YmFjayB0byB0aGUgQklPUy4gQ3VycmVudGx5IHRoaXMgaXMgb25seSBiZWluZyBkb25lIHdoZW4g
-dGhlIEZFQVRVUkVfSE9TVF9OT1RJRlkgYml0IGlzIHNldCBiZWNhdXNlIHRoYXQncyB0aGUgb25s
-eSBjYXNlIHdoZXJlIHdlIGNoYW5nZSB0aGUgdmFsdWUgb2YgdGhhdCByZWdpc3RlciwgYnV0IGlm
-IHdlIGNoYW5nZSBpdCB1bmNvbmRpdGlvbmFsbHkgdGhlbiBpdCBtdXN0IGJlIHNhdmVkIGFuZCBy
-ZXN0b3JlZCB1bmNvbmRpdGlvbmFsbHkgdG9vLg0KDQo+ICsNCj4gIAlpZiAoZGV2LT5pcnEgPT0g
-SVJRX05PVENPTk5FQ1RFRCkNCj4gIAkJcHJpdi0+ZmVhdHVyZXMgJj0gfkZFQVRVUkVfSVJROw0K
-PiAgDQoNClRoYXQgYmVpbmcgc2FpZCwgaWYgeW91IHNlZSB0aGlzIGludGVycnVwdCBmbG9vZCwg
-aXQgbWVhbnMgdGhhdCBhdCBsZWFzdCBvbmUgZGV2aWNlIG9uIHlvdXIgU01CdXMgd291bGQgYmVu
-ZWZpdCBmcm9tIFNNQnVzIEFsZXJ0IGJlaW5nIHN1cHBvcnRlZC4gVGhlIGluZnJhc3RydWN0dXJl
-IGlzIGFscmVhZHkgdGhlcmUgYXMgd2UgYWRkZWQgc3VwcG9ydCBpbiBhIGZldyBJMkMgYnVzIGRy
-aXZlcnMgYWxyZWFkeS4gU28gbWF5YmUgaW5zdGVhZCBvZiBzaWxlbmNpbmcgdGhlIGludGVycnVw
-dHMsIHdlIGNvdWxkIGFkZCBwcm9wZXIgU01CdXMgQWxlcnQgc3VwcG9ydCB0byB0aGUgaTJjLWk4
-MDEgZHJpdmVyPw0KDQpEaWQgeW91IGZpZ3VyZSBvdXQgd2hpY2ggZGV2aWNlIGlzIHJhaXNpbmcg
-dGhlIFNNQnVzIEFsZXJ0IGFuZCB3aHk/DQoNCi0tDQpKZWFuIERlbHZhcmUNClNVU0UgTDMgU3Vw
-cG9ydA0K
+
+--R+My9LyyhiUvIEro
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Lee,
+
+> > It looks like a workaround to me. It would be interesting to hear which
+> > I2C client breaks with DMA and if it's driver can't be fixed somehow
+> > instead. But even if we agree on a workaround short term, adding a
+
+So, are there investigations running why this reboot happens?
+
+> > Is there no other way to disable DMA which is local to this driver so we
+> > can easily revert the workaround later?
+>=20
+> This is the most local low-impact solution (nomenclature aside).
+
+I disagree. You could use of_machine_is_compatible() and disable DMA for
+that machine. Less impact because we save the workaround binding.
+
+> The beautiful thing about this approach is that, *if* the Geni SE DMA
+
+I'd say 'advantage' instead of 'beautiful' ;)
+
+> ever starts working, we can remove the C code and any old properties
+> left in older DTs just become NOOP.  Older kernels with newer DTs
+> (less of a priority) *still* won't work, but they don't work now
+> anyway.
+
+Which is a clear disadvantage of that solution. It won't fix older
+kernels. My suggestion above should fix them, too.
+
+> The offending line can be found at [0].  There is no obvious bug to
+> fix and this code obviously works well on some of the hardware
+> platforms using it.  But on our platform (Lenovo Yoga C630 - QCom
+> SMD850) that final command, which initiates the DMA transaction, ends
+> up rebooting the machine.
+
+Unless we know why the reboot happens on your platform, I'd be careful
+with saying "work obviously well" on other platforms.
+
+> With regards to the nomenclature, my original suggestion was
+> 'qcom,geni-se-no-dma'.  Would that better suit your request?
+
+My suggestion:
+
+For 5.3, use of_machine_is_compatible() and we backport that. For later,
+try to find out the root cause and fix it. If that can't be done, try to
+set up a generic "disable-dma" property and use it.
+
+What do you think about that?
+
+Kind regards,
+
+   Wolfram
+
+
+--R+My9LyyhiUvIEro
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1w0l0ACgkQFA3kzBSg
+KbZwIw//V6IiIveJDn0aD/OW1kfJryDVHjJc9G0mc7e95Zv5IY4F77vlM/3CreL9
+Af8mavqJNEfLlkVymEEVTAt5PqfsdhPd1Ttd54GEByAk7gFtXtbHt8LpkY2Sqn6p
+gFdduWs32IP/JG6iQpi0Ee9CeLKhU4me95zYWcky93b2tdBA7+G7nZjD/+WL4OyB
+32xbzQgElDmo0WiphV6jwpYpISbIcmpaeTTmFYSAs0UMXBbGV2aIN+Ji/mIko/Lv
+BtZtPegtsBK+8DyuxqsRYwI6vpyoMf6RTBe0GnkpRVYeMJpuaGxEsNAkc8YpdiF3
+f7rdd/EMf0mrONo37R6ZpYmxMAP/IJ7pBUYnpDffPRNDiXEhXfBD+DruIc//UcDi
+GAtZXEOgpBAu9ajY0EUUqXkqgKYx6KeTdAWklCYBNt4/E9IaIvp9A+o4K0O19PI0
+ArjbIhqNKKV70VytmD9DyGhzC248OYpkyY9A9emMSgeU8JoL2UsgbMzvAnykz3gc
+d0xVBP9b37pTrpkvaQHY6kH7Jkso/5HgSFzS81OiAqmmBt1TrazTT+1FN02brO2G
+KvnIbw0p1nwwbH3s4L0G6ejee2wf0Jjjki0rJi8Sy4WMN5K5pcVIHo3eTTtlhIr/
+BI5zFeZg6eu8RkalM5glGaFpO1KWV27kaRx+INA1LdndZ+3RZmA=
+=UyFF
+-----END PGP SIGNATURE-----
+
+--R+My9LyyhiUvIEro--
