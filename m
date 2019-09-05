@@ -2,71 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E059A9C8D
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 10:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8F4A9CCA
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 10:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732247AbfIEIEs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Sep 2019 04:04:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59246 "EHLO mail.kernel.org"
+        id S1730778AbfIEISy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Sep 2019 04:18:54 -0400
+Received: from ns.iliad.fr ([212.27.33.1]:46870 "EHLO ns.iliad.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730991AbfIEIEs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 5 Sep 2019 04:04:48 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 530EC21883;
-        Thu,  5 Sep 2019 08:04:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567670687;
-        bh=UUzJc/ue/a93m0taKXh9s1z/mAnBDooHV9BAX4YRpa0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=xdyxIzcFkmCittJxVLCAnOnnNhEdIUpg/9yWl0O8cay9hW9RCuNO+ISs7scEl9jVk
-         ru+HwIovSaqbuZk3eEXbNoszctpB8zApTb0PQjkd2C96SHmLTTekEzAXWVju7W+1ce
-         NjGmlHRyndymkkjkSrGLKn1qNFr0yjql+TV/MZOY=
-Received: by mail-qt1-f173.google.com with SMTP id b2so1746723qtq.5;
-        Thu, 05 Sep 2019 01:04:47 -0700 (PDT)
-X-Gm-Message-State: APjAAAVrex28OBhtUOoDe8akGnLPkVKoRf4diZ0PX3zvSlg/GuLF9tNA
-        fxUX1OVGPF9TaYkSekdA6eGakfkpzUkRKBEUng==
-X-Google-Smtp-Source: APXvYqwRGN/t8Ztwm+Pr581GXO5zsaWfW8VanIvwMI00vkFHJS2e6Kk1OJsW7UmmPizjTTPidsBQ1AWG7fsG3JHH9Ls=
-X-Received: by 2002:ac8:31b3:: with SMTP id h48mr2280163qte.300.1567670686489;
- Thu, 05 Sep 2019 01:04:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190905075213.13260-1-lee.jones@linaro.org>
-In-Reply-To: <20190905075213.13260-1-lee.jones@linaro.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 5 Sep 2019 09:04:34 +0100
-X-Gmail-Original-Message-ID: <CAL_JsqKB1hyJKM6S9cbNptq9kysa4_mgxaby7WmQHMW6d8KX3w@mail.gmail.com>
-Message-ID: <CAL_JsqKB1hyJKM6S9cbNptq9kysa4_mgxaby7WmQHMW6d8KX3w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: soc: qcom: Provide option to disable DMA
+        id S1726175AbfIEISy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 5 Sep 2019 04:18:54 -0400
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id B035F20FE8;
+        Thu,  5 Sep 2019 10:18:52 +0200 (CEST)
+Received: from [192.168.108.37] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id 9EEC520E0C;
+        Thu,  5 Sep 2019 10:18:52 +0200 (CEST)
+Subject: Re: [PATCH 2/2] i2c: qcom-geni: Provide an option to disable DMA
+ processing
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Alok Chauhan <alokc@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+References: <20190905075213.13260-1-lee.jones@linaro.org>
+ <20190905075213.13260-2-lee.jones@linaro.org>
+Cc:     I2C <linux-i2c@vger.kernel.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        devicetree@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
-        Vinod <vkoul@kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Vinod Koul <vkoul@kernel.org>
+From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
+Message-ID: <e2c46fef-332f-ef91-2121-bff33f6f7646@free.fr>
+Date:   Thu, 5 Sep 2019 10:18:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190905075213.13260-2-lee.jones@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Thu Sep  5 10:18:52 2019 +0200 (CEST)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Sep 5, 2019 at 8:52 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> Used when DMA is not available or the best option.
->
+[ Trimming recipients list for idle chat ]
+
+On 05/09/2019 09:52, Lee Jones wrote:
+
+> We have a production-level laptop (Lenovo Yoga C630) which is exhibiting
+> a rather horrific bug.  When I2C HID devices are being scanned for at
+> boot-time the QCom Geni based I2C (Serial Engine) attempts to use DMA.
+> When it does, the laptop reboots and the user never sees the OS.
+> 
+> The beautiful thing about this approach is that, *if* the Geni SE DMA
+> ever starts working, we can remove the C code and any old properties
+> left in older DTs just become NOOP.  Older kernels with newer DTs (less
+> of a priority) *still* will not work - but they do not work now anyway.
+> 
+> Fixes: 8bc529b25354 ("soc: qcom: geni: Add support for ACPI")
 > Signed-off-by: Lee Jones <lee.jones@linaro.org>
 > Reviewed-by: Vinod Koul <vkoul@kernel.org>
 > ---
->  Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.txt | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/i2c/busses/i2c-qcom-geni.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index a89bfce5388e..8822dea82980 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -353,13 +353,16 @@ static void geni_i2c_tx_fsm_rst(struct geni_i2c_dev *gi2c)
+>  static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>  				u32 m_param)
+>  {
+> +	struct device_node *np = gi2c->se.dev->of_node;
+>  	dma_addr_t rx_dma;
+>  	unsigned long time_left;
+> -	void *dma_buf;
+> +	void *dma_buf = NULL;
+>  	struct geni_se *se = &gi2c->se;
+>  	size_t len = msg->len;
+>  
+> -	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+> +	if (!of_property_read_bool(np, "qcom,geni-se-no-dma"))
+> +		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+> +
+>  	if (dma_buf)
+>  		geni_se_select_mode(se, GENI_SE_DMA);
+>  	else
+> @@ -392,13 +395,16 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>  static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>  				u32 m_param)
+>  {
+> +	struct device_node *np = gi2c->se.dev->of_node;
+>  	dma_addr_t tx_dma;
+>  	unsigned long time_left;
+> -	void *dma_buf;
+> +	void *dma_buf = NULL;
+>  	struct geni_se *se = &gi2c->se;
+>  	size_t len = msg->len;
+>  
+> -	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+> +	if (!of_property_read_bool(np, "qcom,geni-se-no-dma"))
+> +		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+> +
+>  	if (dma_buf)
+>  		geni_se_select_mode(se, GENI_SE_DMA);
+>  	else
+> 
 
-If it was me, I'd just turn off DMA. DMA for typical I2C usage seems
-kind of pointless. However:
+Would it make sense to factorize the DT lookup within a helper?
+(For example; not compile-tested; not sure it's worth it)
 
-Acked-by: Rob Herring <robh@kernel.org>
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index a89bfce5388e..1489181f60fe 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -350,6 +350,14 @@ static void geni_i2c_tx_fsm_rst(struct geni_i2c_dev *gi2c)
+ 		dev_err(gi2c->se.dev, "Timeout resetting TX_FSM\n");
+ }
+ 
++static void *get_dma_buf(struct geni_se *se, struct i2c_msg *msg)
++{
++	if (of_property_read_bool(se->dev->of_node, "qcom,geni-se-no-dma"))
++		return NULL;
++
++	return i2c_get_dma_safe_msg_buf(msg, 32);
++}
++
+ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 				u32 m_param)
+ {
+@@ -359,7 +367,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 	struct geni_se *se = &gi2c->se;
+ 	size_t len = msg->len;
+ 
+-	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
++	dma_buf = get_dma_buf(se, msg);
+ 	if (dma_buf)
+ 		geni_se_select_mode(se, GENI_SE_DMA);
+ 	else
+@@ -398,7 +406,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 	struct geni_se *se = &gi2c->se;
+ 	size_t len = msg->len;
+ 
+-	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
++	dma_buf = get_dma_buf(se, msg);
+ 	if (dma_buf)
+ 		geni_se_select_mode(se, GENI_SE_DMA);
+ 	else
