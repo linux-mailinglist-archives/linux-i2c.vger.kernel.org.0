@@ -2,83 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B2FAA962
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 18:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7603AAA970
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 18:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390183AbfIEQxj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Sep 2019 12:53:39 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:37699 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728254AbfIEQxi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 12:53:38 -0400
-Received: by mail-pf1-f194.google.com with SMTP id y9so2139002pfl.4;
-        Thu, 05 Sep 2019 09:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=RWnMjjgITJJqdE2woZBvos5GFZ5W8pugG64G2X+tFzM=;
-        b=lbxwZdSkgDsz8thBfK05SolVFonN7ns0WmIQsha4NqlZij7+w9cC8i3INFtRYbZRhj
-         EZVmNIrGWtUqZAZYANLqTiVo+9NkqO74p/Yivm87vBHoTA4jjeUtfZAKOlhV2eqP2gfT
-         0EK+OKsuGeXkWrIc37ztsq2d+ZH86hMUatvBzyyA6VAWfZ4R6/Om+LRll2wS7rvx+Wsr
-         s37QR+aMWh9piE6l+t/qFRTNFU4jtzBGmKAibaA1GpomsO3mdfEf+euc7ZISjzN1RTtz
-         VPUNDeWyYxal1zJvbmNq99KqDPDj9TkES+HCLFsjHKTdaHFlpBBlfGN6m3HzhetJq0Sq
-         Rccg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=RWnMjjgITJJqdE2woZBvos5GFZ5W8pugG64G2X+tFzM=;
-        b=BDm0vWGTwooWaRYwcrfoWSFqr4YVhJkjLFgEXhxwiWJC5VtautzBl1BubplV5jP7TH
-         csA6B4ztdw8b7kOVvpDJ0x92zXD5KNvIPJm+jF+fC8+RjslNqxVDyW78+xaXNs/YjKsJ
-         b85f0Yt1b1RXlWjZB2SlmjxtURk5HEMf5lAbPB6Dn9MCsTxiEiYXhPBvMY3e8LZDGVRB
-         IReOP8B+U4RKCCKVn62H56FRmcBrGP/2IARZsKzN5frUGjeZYicQlnzFO+CsGe1IZnOz
-         VaLI5PSz/8GjFbFBR4MrBUSmouYyCTr+s6YE8oAwlocHr83vSKWqgE/5O5rqqeuW468x
-         II7Q==
-X-Gm-Message-State: APjAAAXO8ZcMf/aBMZcBCAvkqFVTeyJGwQyCIVWx1IN4L+AxbRYdoEeg
-        WqmimoTXKOBZ6KZZKTA+ncjjPE7U
-X-Google-Smtp-Source: APXvYqxuur0SmCF/3LNMIqDzfUVkMPZT/G5qyihsk72t9YIOjXosGzQm/HCfA8STogqJAbz+dfBRAw==
-X-Received: by 2002:a17:90a:a611:: with SMTP id c17mr5090767pjq.17.1567702418117;
-        Thu, 05 Sep 2019 09:53:38 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s73sm2684946pjb.15.2019.09.05.09.53.36
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 05 Sep 2019 09:53:36 -0700 (PDT)
-Date:   Thu, 5 Sep 2019 09:53:35 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Saiyam Doshi <saiyamdoshi.in@gmail.com>
-Cc:     peda@axentia.se, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: muxes: pca9541: use BIT() macro
-Message-ID: <20190905165335.GA23158@roeck-us.net>
-References: <20190905131318.GA21280@SD.eic.com>
- <1d248333-abe9-cff8-ad29-d3b618643dc6@roeck-us.net>
- <20190905154448.GA3378@SD>
+        id S1731492AbfIEQzr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Sep 2019 12:55:47 -0400
+Received: from bastet.se.axis.com ([195.60.68.11]:39883 "EHLO
+        bastet.se.axis.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728254AbfIEQzq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 12:55:46 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bastet.se.axis.com (Postfix) with ESMTP id 6B17B184DD;
+        Thu,  5 Sep 2019 18:55:44 +0200 (CEST)
+X-Axis-User: NO
+X-Axis-NonUser: YES
+X-Virus-Scanned: Debian amavisd-new at bastet.se.axis.com
+Received: from bastet.se.axis.com ([IPv6:::ffff:127.0.0.1])
+        by localhost (bastet.se.axis.com [::ffff:127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id UShOhYtQohO6; Thu,  5 Sep 2019 18:55:43 +0200 (CEST)
+Received: from boulder02.se.axis.com (boulder02.se.axis.com [10.0.8.16])
+        by bastet.se.axis.com (Postfix) with ESMTPS id 8B500184C5;
+        Thu,  5 Sep 2019 18:55:43 +0200 (CEST)
+Received: from boulder02.se.axis.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 768D81A066;
+        Thu,  5 Sep 2019 18:55:43 +0200 (CEST)
+Received: from boulder02.se.axis.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6AB251A064;
+        Thu,  5 Sep 2019 18:55:43 +0200 (CEST)
+Received: from seth.se.axis.com (unknown [10.0.2.172])
+        by boulder02.se.axis.com (Postfix) with ESMTP;
+        Thu,  5 Sep 2019 18:55:43 +0200 (CEST)
+Received: from XBOX08.axis.com (xbox08.axis.com [10.0.15.178])
+        by seth.se.axis.com (Postfix) with ESMTP id 5E54D25CC;
+        Thu,  5 Sep 2019 18:55:43 +0200 (CEST)
+Received: from XBOX02.axis.com (10.0.5.16) by XBOX08.axis.com (10.0.15.178)
+ with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 5 Sep 2019 18:55:43
+ +0200
+Received: from XBOX02.axis.com ([fe80::d00f:cb52:1b56:20d]) by XBOX02.axis.com
+ ([fe80::d00f:cb52:1b56:20d%21]) with mapi id 15.00.1365.000; Thu, 5 Sep 2019
+ 18:55:43 +0200
+From:   =?utf-8?B?QmrDtnJuIEFyZMO2?= <bjorn.ardo@axis.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c-eeprom_slave: Add read only mode
+Thread-Topic: [PATCH] i2c-eeprom_slave: Add read only mode
+Thread-Index: AQHVY/mVwIUeYgIvn0Kx5XZGOQIDP6cdIMCAgAAsz68=
+Date:   Thu, 5 Sep 2019 16:55:43 +0000
+Message-ID: <1D4EAF68-973E-4E25-AFD8-48815E0BFBC6@axis.com>
+References: <1567695164-20464-1-git-send-email-bjorn.ardo@axis.com>,<20190905161521.GA3695@kunai>
+In-Reply-To: <20190905161521.GA3695@kunai>
+Accept-Language: sv-SE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190905154448.GA3378@SD>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-TM-AS-GCONF: 00
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Sep 05, 2019 at 09:15:36PM +0530, Saiyam Doshi wrote:
-> On Thu, Sep 05, 2019 at 06:21:06AM -0700, Guenter Roeck wrote:
-> > linux/bitops.h should be included when using BIT().
-> 
-> It's included from linux/i2c-mux.h and it compiled successfully.
-> But if it's needed I'll update the patch and resend.
-> 
-> Just a question - What is the best practice in such case? Should the 
-> header included explicitly?
-> 
-
-process/submit-checklist.rst says, as very first point:
-
-1) If you use a facility then #include the file that defines/declares
-   that facility.  Don't depend on other header files pulling in ones
-   that you use.
-
-Guenter
+DQo+IE9uIDUgU2VwIDIwMTksIGF0IDE4OjE1LCBXb2xmcmFtIFNhbmcgPHdzYUB0aGUtZHJlYW1z
+LmRlPiB3cm90ZToNCj4gDQo+IA0KPj4gKyAgICAgICAgICAgIGlmIChlZXByb20tPnJlYWRfb25s
+eSkNCj4+ICsgICAgICAgICAgICAgICAgcmV0dXJuIDA7DQo+IA0KPiBXaGF0IGFib3V0Og0KPiAN
+Cj4gICAgaWYgKCFlZXByb20tPnJlYWRfb25seSkgew0KPiAgICAgICAgc3Bpbl9sb2NrKCZlZXBy
+b20tPmJ1ZmZlcl9sb2NrKTsNCj4gICAgICAgIGVlcHJvbS0+YnVmZmVyW2VlcHJvbS0+YnVmZmVy
+X2lkeCsrICYgZWVwcm9tLT5hZGRyZXNzX21hc2tdID0gKnZhbDsNCj4gICAgICAgIHNwaW5fdW5s
+b2NrKCZlZXByb20tPmJ1ZmZlcl9sb2NrKTsNCj4gICAgfQ0KPiANCj4gV2UgY2FuIHN0aWxsIGtl
+ZXAgb25seSBvbmUgZXhpdCBwb2ludCBmcm9tIHRoZSBmdW5jdGlvbiB0aGlzIHdheS4NCg0KDQpZ
+ZXMsIHRoYXQgaXMgYmV0dGVyLCBJIHdpbGwgZml4IHRvbW9ycm93Lg0KDQo+IA0KPj4gICAgeyAi
+c2xhdmUtMjRjMDIiLCBJMkNfU0xBVkVfREVWSUNFX01BR0lDKDIwNDggLyA4LCAgMCkgfSwNCj4+
+ICsgICAgeyAic2xhdmUtMjRjMDIiLCBJMkNfU0xBVkVfREVWSUNFX01BR0lDKDIwNDggLyA4LCAg
+STJDX1NMQVZFX0ZMQUdfUk8pIH0sDQo+IA0KPiAicm8iIG1pc3NpbmcuIFlvdSBoYXZlbid0IHRl
+c3RlZCB0aGlzIGVudHJ5IDspDQo+IA0KDQpHdWlsdHkhIEkgZGlzY292ZXJlZCB3aGVuIEkgd2Fz
+IGFib3V0IHRvIHNlbmQgdGhlIHBhdGNoIHRoYXQgSeKAmXZlIG1pc3NlZCB0aGF0IGVlcHJvbSwg
+c28gSSBhZGRlZCBpdCB0aGVyZS4gQnV0IEkgZGlzY292ZXJlZCBteSBlcnJvciB3aGVuIEkgYmFj
+a3BvcnRlZCBpdCB0byBvdXIgc3lzdGVtOi0pDQoNCkJhIA==
