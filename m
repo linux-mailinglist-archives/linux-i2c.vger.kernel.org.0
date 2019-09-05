@@ -2,56 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF689AA89F
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 18:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8729EAA898
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 18:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728948AbfIEQTt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Sep 2019 12:19:49 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:35595 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387631AbfIEQSI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 12:18:08 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 205so2082097pfw.2
-        for <linux-i2c@vger.kernel.org>; Thu, 05 Sep 2019 09:18:07 -0700 (PDT)
+        id S1732042AbfIEQTj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Sep 2019 12:19:39 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40248 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387939AbfIEQSJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 12:18:09 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x127so2068044pfb.7
+        for <linux-i2c@vger.kernel.org>; Thu, 05 Sep 2019 09:18:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=3Bt6nNLlt+xUVNaG8TogY6q5T68efSQtUAFTBH8Xlsg=;
-        b=HI5tWkpkgDB2JApLY2ATp8wEzTgsgI7cUXG07/am8F65CP7VSB3lI0NXxyns+DWiX2
-         gaWTANI3zq2OwmaBZXn99DM6sZThpLtoRKLYi5a2I85zG/SH7P8SCjVgftKwhY5ktFuA
-         vJO992gbVyS1qZ7VJYG2btuxuSIAhhpNXMIqEzmVfiiabSsH0Mel1mVFYnYEbX7WVla8
-         tN7UFY3JcIVURcYH4ZeeV0a1XoRM7rgtLWf0/zDA5+VHxMm9oxNpGTujIBcQCjB7dge2
-         mpkITrf0/86JuXKn9lS53c6lBD7zg0AWMotgCzvCXmzDoFROpRfyCy8gCpdWJAq9a8Hw
-         RNtw==
+        bh=rjuaqfgsXjJPwAACoDEoQUxKOEl2ZmoHXoDNdOHfK/8=;
+        b=DhtZCS6pEqVXAANTeuPn229D+BZX3X67QaHqNgnEKoio/f3XFGIKudVgM5FDU+7o8L
+         nQ6C8zCJpGUG562Tdrhhk+jzdjUxPEUMlyMrosXluqm8s7BPYWWQ2Sfl8GPdcyN3+vz3
+         WgC0nx5vQPM/ac0gkVSlnhW9uet9jY41HdO0XoqnQ4dQQgwZRDvRXdAX5pdKiXWoz78p
+         gJ/gB20nx7nFBvvCBuWrSZgl46CenVN2LnP6ZluOUqhvk/2lQx7TA+V1EqPfUJ0tOjn4
+         d9umZlIflwKbjOrolidHP4+2mwXkt5JzsO/HIsQg2gt2s/+L0G/cpcGqNlGMyilyzdUy
+         uaqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=3Bt6nNLlt+xUVNaG8TogY6q5T68efSQtUAFTBH8Xlsg=;
-        b=S8Dz5fU/SUOAaKYl6ozC/kMrIDFAyBvw18L7FWRw3VUio7FpQIAnvljk/fTsnIhaVQ
-         4tqsMEZUXoI7ZaB0ZR3ziuyOIxER2pGg5T0nO/PAHqr6M1Lf/UO2KenNi4Fd84ZROaBW
-         ZEm5qaZyHq1uPQ3SZuFCbKfVOFJOttJT4rlryy/gyfEv+zZ2AV0A8ALiFZd+luWdrZj0
-         iq9B80V3PFfCa5OdR+DdenGKxIa8V3Ea4QNGhDDGh1UAFJ+oJBy8eB7Jnp+Sbg+6+ndY
-         qQ1owaxJqK2n8wegwHBJmiLWmJxvcNs/mZvaDilVMsHsQntCPZmz6Ef4397agBqz599X
-         AEVw==
-X-Gm-Message-State: APjAAAU1ivEsk1Z/ZjMgfwxE19p2dlkm/9tj0frrtvQApe+yybvkybar
-        zMAPJ9QQoEbX87c9rsnrRWsZ4g==
-X-Google-Smtp-Source: APXvYqyeuaXfpPcMY8LL3N9SzaC/DWAxU9D1agyzvWDKKPe/Or/72DzL6TV62pYkRSpSy8AT7z2T/g==
-X-Received: by 2002:a63:6686:: with SMTP id a128mr3841760pgc.361.1567700287353;
-        Thu, 05 Sep 2019 09:18:07 -0700 (PDT)
+        bh=rjuaqfgsXjJPwAACoDEoQUxKOEl2ZmoHXoDNdOHfK/8=;
+        b=VhjPVDqZ1XTVpX5sW2QELqqk1XqW1J66kDQNGHLRE+HUw+3Zl1N8kannLJnLQ64VET
+         0OWt3T7i3Lm5fwhobgQsKsnJc2C4Us7whOqXTCCUnd4IErkscv1RsuxMadH/p2G3g+1T
+         jghe7ubYLQ8TMUlrQWgIuymsBRBXQIUEDsYXo6dhthIRcscFals5JM/+GW8P52b91DzU
+         pdfVQXBnFn5OnSZCJfhhUxgt0Bg7Mhex3QG9dACZtk2GSMdd9V/bK+nl0dDxYc9Y7FGQ
+         4Oh90Yx7/cfuj0jxeqp/DKM4kG6EZ04GnSSULcCGOx1+NHqMwGWckzKGorzI3vd5DV+1
+         bJ9g==
+X-Gm-Message-State: APjAAAWJs6Rx1tOpRe2wk84r8h3em9Me/0oNdkNH++zJIMxMP3P3dLXM
+        0JcYDonKe8JFQG5zGazRHUVnmA==
+X-Google-Smtp-Source: APXvYqwjC/u78z/zaGM+j2+m/kS1EooYMEgWtfeDDH4gvURdMNHJyy5MyPkUpGOGmsnrWffGg8MToQ==
+X-Received: by 2002:a63:394:: with SMTP id 142mr3929328pgd.43.1567700288547;
+        Thu, 05 Sep 2019 09:18:08 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id m129sm6324005pga.39.2019.09.05.09.18.05
+        by smtp.gmail.com with ESMTPSA id m129sm6324005pga.39.2019.09.05.09.18.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2019 09:18:06 -0700 (PDT)
+        Thu, 05 Sep 2019 09:18:08 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     stable@vger.kernel.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: [BACKPORT 4.14.y 05/18] mfd: palmas: Assign the right powerhold mask for tps65917
-Date:   Thu,  5 Sep 2019 10:17:46 -0600
-Message-Id: <20190905161759.28036-6-mathieu.poirier@linaro.org>
+Subject: [BACKPORT 4.14.y 06/18] ASoC: tlv320aic31xx: Handle inverted BCLK in non-DSP modes
+Date:   Thu,  5 Sep 2019 10:17:47 -0600
+Message-Id: <20190905161759.28036-7-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190905161759.28036-1-mathieu.poirier@linaro.org>
 References: <20190905161759.28036-1-mathieu.poirier@linaro.org>
@@ -60,65 +60,68 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Keerthy <j-keerthy@ti.com>
+From: "Andrew F. Davis" <afd@ti.com>
 
-commit 572ff4d560be3784205b224cd67d6715620092d7 upstream
+commit dcb407b257af06fa58b0544ec01ec9e0d3927e02 upstream
 
-The powerhold mask for TPS65917 is different when comapred to
-the other palmas versions. Hence assign the right mask that enables
-power off of tps65917 pmic correctly.
+Currently BCLK inverting is only handled when the DAI format is
+DSP, but the BCLK may be inverted in any supported mode. Without
+this using this CODEC in any other mode than DSP with the BCLK
+inverted leads to bad sampling timing and very poor audio quality.
 
-Signed-off-by: Keerthy <j-keerthy@ti.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Andrew F. Davis <afd@ti.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 ---
- drivers/mfd/palmas.c       | 10 +++++++++-
- include/linux/mfd/palmas.h |  3 +++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ sound/soc/codecs/tlv320aic31xx.c | 28 ++++++++++++++++++----------
+ 1 file changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/mfd/palmas.c b/drivers/mfd/palmas.c
-index 3922a93f9f92..663a2398b6b1 100644
---- a/drivers/mfd/palmas.c
-+++ b/drivers/mfd/palmas.c
-@@ -430,6 +430,7 @@ static void palmas_power_off(void)
- {
- 	unsigned int addr;
- 	int ret, slave;
-+	u8 powerhold_mask;
- 	struct device_node *np = palmas_dev->dev->of_node;
+diff --git a/sound/soc/codecs/tlv320aic31xx.c b/sound/soc/codecs/tlv320aic31xx.c
+index 54a87a905eb6..d3bd0bf15ddb 100644
+--- a/sound/soc/codecs/tlv320aic31xx.c
++++ b/sound/soc/codecs/tlv320aic31xx.c
+@@ -924,6 +924,18 @@ static int aic31xx_set_dai_fmt(struct snd_soc_dai *codec_dai,
+ 		return -EINVAL;
+ 	}
  
- 	if (of_property_read_bool(np, "ti,palmas-override-powerhold")) {
-@@ -437,8 +438,15 @@ static void palmas_power_off(void)
- 					  PALMAS_PRIMARY_SECONDARY_PAD2);
- 		slave = PALMAS_BASE_TO_SLAVE(PALMAS_PU_PD_OD_BASE);
- 
-+		if (of_device_is_compatible(np, "ti,tps65917"))
-+			powerhold_mask =
-+				TPS65917_PRIMARY_SECONDARY_PAD2_GPIO_5_MASK;
-+		else
-+			powerhold_mask =
-+				PALMAS_PRIMARY_SECONDARY_PAD2_GPIO_7_MASK;
++	/* signal polarity */
++	switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
++	case SND_SOC_DAIFMT_NB_NF:
++		break;
++	case SND_SOC_DAIFMT_IB_NF:
++		iface_reg2 |= AIC31XX_BCLKINV_MASK;
++		break;
++	default:
++		dev_err(codec->dev, "Invalid DAI clock signal polarity\n");
++		return -EINVAL;
++	}
 +
- 		ret = regmap_update_bits(palmas_dev->regmap[slave], addr,
--				PALMAS_PRIMARY_SECONDARY_PAD2_GPIO_7_MASK, 0);
-+					 powerhold_mask, 0);
- 		if (ret)
- 			dev_err(palmas_dev->dev,
- 				"Unable to write PRIMARY_SECONDARY_PAD2 %d\n",
-diff --git a/include/linux/mfd/palmas.h b/include/linux/mfd/palmas.h
-index 6dec43826303..cffb23b8bd70 100644
---- a/include/linux/mfd/palmas.h
-+++ b/include/linux/mfd/palmas.h
-@@ -3733,6 +3733,9 @@ enum usb_irq_events {
- #define TPS65917_REGEN3_CTRL_MODE_ACTIVE			0x01
- #define TPS65917_REGEN3_CTRL_MODE_ACTIVE_SHIFT			0x00
- 
-+/* POWERHOLD Mask field for PRIMARY_SECONDARY_PAD2 register */
-+#define TPS65917_PRIMARY_SECONDARY_PAD2_GPIO_5_MASK		0xC
-+
- /* Registers for function RESOURCE */
- #define TPS65917_REGEN1_CTRL					0x2
- #define TPS65917_PLLEN_CTRL					0x3
+ 	/* interface format */
+ 	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
+ 	case SND_SOC_DAIFMT_I2S:
+@@ -931,16 +943,12 @@ static int aic31xx_set_dai_fmt(struct snd_soc_dai *codec_dai,
+ 	case SND_SOC_DAIFMT_DSP_A:
+ 		dsp_a_val = 0x1;
+ 	case SND_SOC_DAIFMT_DSP_B:
+-		/* NOTE: BCLKINV bit value 1 equas NB and 0 equals IB */
+-		switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
+-		case SND_SOC_DAIFMT_NB_NF:
+-			iface_reg2 |= AIC31XX_BCLKINV_MASK;
+-			break;
+-		case SND_SOC_DAIFMT_IB_NF:
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
++		/*
++		 * NOTE: This CODEC samples on the falling edge of BCLK in
++		 * DSP mode, this is inverted compared to what most DAIs
++		 * expect, so we invert for this mode
++		 */
++		iface_reg2 ^= AIC31XX_BCLKINV_MASK;
+ 		iface_reg1 |= (AIC31XX_DSP_MODE <<
+ 			       AIC31XX_IFACE1_DATATYPE_SHIFT);
+ 		break;
 -- 
 2.17.1
 
