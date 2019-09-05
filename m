@@ -2,102 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 479CEAA4FB
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 15:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD447AA527
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 15:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731653AbfIENto (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Sep 2019 09:49:44 -0400
-Received: from sauhun.de ([88.99.104.3]:57390 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731008AbfIENto (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 5 Sep 2019 09:49:44 -0400
-Received: from localhost (p54B335F6.dip0.t-ipconnect.de [84.179.53.246])
-        by pokefinder.org (Postfix) with ESMTPSA id AC7102C00C0;
-        Thu,  5 Sep 2019 15:49:41 +0200 (CEST)
-Date:   Thu, 5 Sep 2019 15:49:41 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     alokc@codeaurora.org, agross@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, bjorn.andersson@linaro.org, vkoul@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] i2c: qcom-geni: Provide an option to disable DMA
- processing
-Message-ID: <20190905134941.GG1157@kunai>
-References: <20190905102247.27583-1-lee.jones@linaro.org>
+        id S1730909AbfIEN5g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Sep 2019 09:57:36 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:54976 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730739AbfIEN5g (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 09:57:36 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x85DsiJZ006461;
+        Thu, 5 Sep 2019 13:57:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=LgsLEuYSSuSxdyB1142Y9m/yvZ92hSXbjFvXb1lpSpg=;
+ b=sIzrX7fgd+ZF3vbce1v1COWb+vs33vP0XRYr/dGsRRCqV0/8UedCgjS0u+VKM+qjzG9g
+ Frd0nmwg7r/aIbjdN42agTUhgdRxJDPhgGuLHUp0xNJNPurYjElPyb2JoKH34lfYZ1bS
+ ebtGK1RkXk0u4x9bDpo7V3EWUxxr30H/jrvKCwbr45fttKYG+8jFXe3RvPeIJ6u1Wsc9
+ MXgqyym3svgEiOh2y6OH0FljRjFZicXu7EiEzmnVbLWggufOuqz/UQ55cSlm/Ne73mZY
+ 9ekBF+p3q5/SbpVmezJWE/vdyaBjgPQnXujGLLljmMLovczoP1e5CjHooPrsHfuRETwr aQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2uu3ks02am-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 05 Sep 2019 13:57:29 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x85DbeTl025204;
+        Thu, 5 Sep 2019 13:52:27 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 2utpmb8crd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 05 Sep 2019 13:52:27 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x85DqQTc029430;
+        Thu, 5 Sep 2019 13:52:26 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 05 Sep 2019 06:52:26 -0700
+Date:   Thu, 5 Sep 2019 16:52:19 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Elie Morisse <syniurge@gmail.com>
+Cc:     Nehal Shah <nehal-bakulchandra.shah@amd.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Oleh Kravchenko <oleg@kaa.org.ua>
+Subject: [PATCH] i2c: i2c-amd-mp2-pci: Fix Oops in amd_mp2_pci_init() error
+ handling
+Message-ID: <20190905135219.GA29629@mwanda>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jt0yj30bxbg11sci"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190905102247.27583-1-lee.jones@linaro.org>
+X-Mailer: git-send-email haha only kidding
 User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9370 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1909050134
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9370 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1909050135
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The problem is that we dereference "privdata->pci_dev" when we print
+the error messages in amd_mp2_pci_init():
 
---jt0yj30bxbg11sci
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+	dev_err(ndev_dev(privdata), "Failed to enable MP2 PCI device\n");
+                ^^^^^^^^^^^^^^^^^
 
-Hi Lee,
+Fixes: 529766e0a011 ("i2c: Add drivers for the AMD PCIe MP2 I2C controller")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/i2c/busses/i2c-amd-mp2-pci.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I understand you are in a hurry, but please double check before
-sending...
+diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+index 5e4800d72e00..6bbc89d0bb27 100644
+--- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
++++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+@@ -349,13 +349,13 @@ static int amd_mp2_pci_probe(struct pci_dev *pci_dev,
+ 	if (!privdata)
+ 		return -ENOMEM;
+ 
++	mutex_init(&privdata->c2p_lock);
++	privdata->pci_dev = pci_dev;
++
+ 	rc = amd_mp2_pci_init(privdata, pci_dev);
+ 	if (rc)
+ 		return rc;
+ 
+-	mutex_init(&privdata->c2p_lock);
+-	privdata->pci_dev = pci_dev;
+-
+ 	pm_runtime_set_autosuspend_delay(&pci_dev->dev, 1000);
+ 	pm_runtime_use_autosuspend(&pci_dev->dev);
+ 	pm_runtime_put_autosuspend(&pci_dev->dev);
+-- 
+2.20.1
 
-On Thu, Sep 05, 2019 at 11:22:47AM +0100, Lee Jones wrote:
-> We have a production-level laptop (Lenovo Yoga C630) which is exhibiting
-> a rather horrific bug.  When I2C HID devices are being scanned for at
-> boot-time the QCom Geni based I2C (Serial Engine) attempts to use DMA.
-> When it does, the laptop reboots and the user never sees the OS.
->=20
-> The beautiful thing about this approach is that, *if* the Geni SE DMA
-> ever starts working, we can remove the C code and any old properties
-> left in older DTs just become NOOP.  Older kernels with newer DTs (less
-> of a priority) *still* will not work - but they do not work now anyway.
-
-=2E.. becasue this paragraph doesn't fit anymore. Needs to be reworded.
-
->=20
-> Fixes: 8bc529b25354 ("soc: qcom: geni: Add support for ACPI")
-
-As said in the other thread, I don't get it, but this is not a show
-stopper for me.
-
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> Reviewed-by: Vinod Koul <vkoul@kernel.org>
-
-I'd like Vinod to resend his review. Because IMO the change since v2 was
-not trivial, so the old rev-by has to be dropped.
-
-Other than that, the code looks good to me!
-
-Regards,
-
-   Wolfram
-
-
---jt0yj30bxbg11sci
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1xEnUACgkQFA3kzBSg
-KbZADQ//bVc8JLCde99ZKqUN8Y09DkUCfN9nWo2ec5DwxFmDGC8HdJ6mtz50/MLV
-jBJDWvml349aU4YwpmGf5ON51GWxey0iWmJ0Fo/km09XZp3JVHObxS+66M1y7p34
-T60tKi6kct3QpVwT+jaqMimTvGDGY6W78cG/GCVErlFbthDEEeDfPzy1iuU0D/OW
-j/rdRGz6Q8VlN2CvN6EPPn9njVwBQBIgsSAGeUULgGxb6dUs9oVp6CbRvPQMzwPV
-7sPJzdV5bZ5YPWRaExFUiR6AfCkeDtJwK26jWKVVVLh2Xfc+FMSJ/pOQrQfzoGDA
-Dv50xlVGa3oQV3zeyHzOIFhUZpjsTChbfzVNSt0GGzgYlc09U3ltyWZBR6iEyPfm
-00x/oA1oyMjLpsaOq3xf5+AP7+PScfvB0910iujc+nPd2agCZRRDtl8hCmCiisBK
-W2RB7RnLd3ZKf09bqU0xwkMNUXHSllk0bZK27lxdGFXIK8XCRjf9SJ6bQe1jvXWO
-P5FG1/PuaQIjh8l7u2t15uFpzISvYvKAhypuSpV1Sbgc9fOfZSlbo20SrVkYAmd1
-Y2JcfmTJBjlmRfpyXoVEzOGJclp1AlyrFQd955dzl/LAVBUdvDlHLaFkZ1molQF4
-Ou0LwmX7yn69/N//1QKohUFuLjAkW+tJHd17zYtqMF/HAPcmZl0=
-=pZZv
------END PGP SIGNATURE-----
-
---jt0yj30bxbg11sci--
