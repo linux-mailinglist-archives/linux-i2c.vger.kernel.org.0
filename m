@@ -2,113 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA57AA6B6
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 17:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC690AA798
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 17:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732303AbfIEPFJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Sep 2019 11:05:09 -0400
-Received: from bastet.se.axis.com ([195.60.68.11]:52311 "EHLO
-        bastet.se.axis.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387675AbfIEPFI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 11:05:08 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bastet.se.axis.com (Postfix) with ESMTP id 5E1691848E;
-        Thu,  5 Sep 2019 17:05:06 +0200 (CEST)
-X-Axis-User: NO
-X-Axis-NonUser: YES
-X-Virus-Scanned: Debian amavisd-new at bastet.se.axis.com
-Received: from bastet.se.axis.com ([IPv6:::ffff:127.0.0.1])
-        by localhost (bastet.se.axis.com [::ffff:127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id ZSgk1NBGKqrm; Thu,  5 Sep 2019 17:05:05 +0200 (CEST)
-Received: from boulder03.se.axis.com (boulder03.se.axis.com [10.0.8.17])
-        by bastet.se.axis.com (Postfix) with ESMTPS id 5DADF184B1;
-        Thu,  5 Sep 2019 17:05:05 +0200 (CEST)
-Received: from boulder03.se.axis.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A6C11E076;
-        Thu,  5 Sep 2019 17:05:05 +0200 (CEST)
-Received: from boulder03.se.axis.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3E6141E068;
-        Thu,  5 Sep 2019 17:05:05 +0200 (CEST)
-Received: from thoth.se.axis.com (unknown [10.0.2.173])
-        by boulder03.se.axis.com (Postfix) with ESMTP;
-        Thu,  5 Sep 2019 17:05:05 +0200 (CEST)
-Received: from lnxbjornar3.se.axis.com (lnxbjornar3.se.axis.com [10.88.24.4])
-        by thoth.se.axis.com (Postfix) with ESMTP id 31CA82441;
-        Thu,  5 Sep 2019 17:05:05 +0200 (CEST)
-Received: by lnxbjornar3.se.axis.com (Postfix, from userid 9651)
-        id 2AEF6C4713; Thu,  5 Sep 2019 17:05:05 +0200 (CEST)
-From:   =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>
-To:     wsa@the-dreams.de
-Cc:     linux-i2c@vger.kernel.org,
-        =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjornar@axis.com>
-Subject: [PATCH v2] i2c-eeprom_slave: Add read only mode
-Date:   Thu,  5 Sep 2019 17:04:59 +0200
-Message-Id: <1567695899-23385-1-git-send-email-bjorn.ardo@axis.com>
-X-Mailer: git-send-email 2.1.4
+        id S1732428AbfIEPps (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Sep 2019 11:45:48 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:33989 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732169AbfIEPps (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 11:45:48 -0400
+Received: by mail-pl1-f194.google.com with SMTP id d3so1513786plr.1;
+        Thu, 05 Sep 2019 08:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xq7PaIvlw1cq6VwhN/gvh/Nn++emmClwqvlixNp8Y2o=;
+        b=hzUPwQmN7EORi+VGDVDqL+5++GqrSKsuzNCFA7v95mNrCz/fUvKiXTkwKPOkCSiEKK
+         d5pQZE/2Hk6lcvVpOtmniPr/+FDVtd1HxBpwXYuFCZdKUdfipEP2TsEso0DBkA743Cuf
+         Gxv8CUiyexyy1nRkQ1Crad6mNaZ0iDIdKhnto86P8AIL+6m+OBDyyUf7LeVhugKNreii
+         Y5DrLGfNHw5QYQq3GoJ0CER6Bb46C7xnnd+yzDksE4oCTwNua0cqPThzE6dAv9JHSm5j
+         3D6jo+QrI0ExZ1mXMuNVNwwcrK1J4t+77FHmgU3tjiVUCiq/XKGvBVrKKD746fiFvwIk
+         FDHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xq7PaIvlw1cq6VwhN/gvh/Nn++emmClwqvlixNp8Y2o=;
+        b=XirGndUlQ/bww5mBvCqG/DtojCPN4OEAx6Zg3D/gpX/4a0cXs5VTGb0hnAW2nLfX5u
+         aHafjsF0TD0AOF9yd54jw1trbW+r0WOpxxN+xYz41iSuKdOcqOiJqYLMqP8KwOJgomUg
+         fpQ6D0//etLL81W8fTVlUNIkiXJJ22gK54pXVPTpnLMtCu6cFdbMQF5IZdx0+tmpa58N
+         pTyyu2Sf0ImJkCJzoyZAORBIPtGC6rdwHa2UHj+3lorlrJ/8ZrFiJfu1HL0gQsO3Z3EU
+         Mybmisgoj7ancEXaxM1zbDkewhns0npHrULnDk1HYJyNrv80HpQOaodO+pkVAVBNZae6
+         FVeg==
+X-Gm-Message-State: APjAAAUTajdlGc7UzM9BgX38sYTVYk7aNDgFyZDActE9DsF2C8NBO01j
+        8hmVEg0HxV1C2gkpEOhywVY=
+X-Google-Smtp-Source: APXvYqzTpFQc65RCjYdk+Yw52dpVNUXIwNxnnk+gHNOU9tJx5Ze32YdHV5zp4mVb9hPbFYEh9A4cAg==
+X-Received: by 2002:a17:902:9889:: with SMTP id s9mr4261599plp.100.1567698347210;
+        Thu, 05 Sep 2019 08:45:47 -0700 (PDT)
+Received: from SD ([106.222.7.143])
+        by smtp.gmail.com with ESMTPSA id f27sm2357999pgm.60.2019.09.05.08.45.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2019 08:45:46 -0700 (PDT)
+Date:   Thu, 5 Sep 2019 21:15:36 +0530
+From:   Saiyam Doshi <saiyamdoshi.in@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     peda@axentia.se, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: muxes: pca9541: use BIT() macro
+Message-ID: <20190905154448.GA3378@SD>
+References: <20190905131318.GA21280@SD.eic.com>
+ <1d248333-abe9-cff8-ad29-d3b618643dc6@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d248333-abe9-cff8-ad29-d3b618643dc6@roeck-us.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add read-only versions of all EEPROMs. These versions are read-only
-on the i2c side, but can be written from the sysfs side.
+On Thu, Sep 05, 2019 at 06:21:06AM -0700, Guenter Roeck wrote:
+> linux/bitops.h should be included when using BIT().
 
-Signed-off-by: Björn Ardö <bjorn.ardo@axis.com>
----
- drivers/i2c/i2c-slave-eeprom.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+It's included from linux/i2c-mux.h and it compiled successfully.
+But if it's needed I'll update the patch and resend.
 
-diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
-index 92ff999..b3d271b 100644
---- a/drivers/i2c/i2c-slave-eeprom.c
-+++ b/drivers/i2c/i2c-slave-eeprom.c
-@@ -33,11 +33,13 @@ struct eeprom_data {
- 	u16 address_mask;
- 	u8 num_address_bytes;
- 	u8 idx_write_cnt;
-+	bool read_only;
- 	u8 buffer[];
- };
- 
- #define I2C_SLAVE_BYTELEN GENMASK(15, 0)
- #define I2C_SLAVE_FLAG_ADDR16 BIT(16)
-+#define I2C_SLAVE_FLAG_RO BIT(17)
- #define I2C_SLAVE_DEVICE_MAGIC(_len, _flags) ((_flags) | (_len))
- 
- static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
-@@ -53,6 +55,8 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
- 			eeprom->buffer_idx = *val | (eeprom->buffer_idx << 8);
- 			eeprom->idx_write_cnt++;
- 		} else {
-+			if (eeprom->read_only)
-+				return 0;
- 			spin_lock(&eeprom->buffer_lock);
- 			eeprom->buffer[eeprom->buffer_idx++ & eeprom->address_mask] = *val;
- 			spin_unlock(&eeprom->buffer_lock);
-@@ -130,6 +134,7 @@ static int i2c_slave_eeprom_probe(struct i2c_client *client, const struct i2c_de
- 	eeprom->idx_write_cnt = 0;
- 	eeprom->num_address_bytes = flag_addr16 ? 2 : 1;
- 	eeprom->address_mask = size - 1;
-+	eeprom->read_only = FIELD_GET(I2C_SLAVE_FLAG_RO, id->driver_data);
- 	spin_lock_init(&eeprom->buffer_lock);
- 	i2c_set_clientdata(client, eeprom);
- 
-@@ -165,8 +170,11 @@ static int i2c_slave_eeprom_remove(struct i2c_client *client)
- 
- static const struct i2c_device_id i2c_slave_eeprom_id[] = {
- 	{ "slave-24c02", I2C_SLAVE_DEVICE_MAGIC(2048 / 8,  0) },
-+	{ "slave-24c02ro", I2C_SLAVE_DEVICE_MAGIC(2048 / 8,  I2C_SLAVE_FLAG_RO) },
- 	{ "slave-24c32", I2C_SLAVE_DEVICE_MAGIC(32768 / 8, I2C_SLAVE_FLAG_ADDR16) },
-+	{ "slave-24c32ro", I2C_SLAVE_DEVICE_MAGIC(32768 / 8, I2C_SLAVE_FLAG_ADDR16 | I2C_SLAVE_FLAG_RO) },
- 	{ "slave-24c64", I2C_SLAVE_DEVICE_MAGIC(65536 / 8, I2C_SLAVE_FLAG_ADDR16) },
-+	{ "slave-24c64ro", I2C_SLAVE_DEVICE_MAGIC(65536 / 8, I2C_SLAVE_FLAG_ADDR16 | I2C_SLAVE_FLAG_RO) },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, i2c_slave_eeprom_id);
--- 
-2.1.4
+Just a question - What is the best practice in such case? Should the 
+header included explicitly?
 
+-Saiyam
