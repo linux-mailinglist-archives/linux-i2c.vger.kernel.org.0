@@ -2,99 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3FFA9546
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2019 23:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0500A9926
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2019 06:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729640AbfIDVhs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 4 Sep 2019 17:37:48 -0400
-Received: from sauhun.de ([88.99.104.3]:46500 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727125AbfIDVhs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 4 Sep 2019 17:37:48 -0400
-Received: from localhost (p54B337F1.dip0.t-ipconnect.de [84.179.55.241])
-        by pokefinder.org (Postfix) with ESMTPSA id E8DCE2C08C3;
-        Wed,  4 Sep 2019 23:37:45 +0200 (CEST)
-Date:   Wed, 4 Sep 2019 23:37:45 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Ray Jui <ray.jui@broadcom.com>
-Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lori Hikichi <lori.hikichi@broadcom.com>,
-        Icarus Chau <icarus.chau@broadcom.com>,
-        Shivaraj Shetty <sshetty1@broadcom.com>
-Subject: Re: [PATCH v1 1/1] i2c: iproc: Add i2c repeated start capability
-Message-ID: <20190904213745.GG23608@ninjato>
-References: <1565150941-27297-1-git-send-email-rayagonda.kokatanur@broadcom.com>
- <20190830125626.GC2870@ninjato>
- <3e70fa7e-de13-4edd-2e17-b7c56e91d220@broadcom.com>
- <20190831094940.GA1138@kunai>
- <540c4e2d-0dd5-5260-30b2-e1589b279d71@broadcom.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EDJsL2R9iCFAt7IV"
-Content-Disposition: inline
-In-Reply-To: <540c4e2d-0dd5-5260-30b2-e1589b279d71@broadcom.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726032AbfIEEAq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Sep 2019 00:00:46 -0400
+Received: from condef-10.nifty.com ([202.248.20.75]:29013 "EHLO
+        condef-10.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725935AbfIEEAp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Sep 2019 00:00:45 -0400
+X-Greylist: delayed 681 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Sep 2019 00:00:44 EDT
+Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-10.nifty.com with ESMTP id x853kHxM009530
+        for <linux-i2c@vger.kernel.org>; Thu, 5 Sep 2019 12:46:17 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id x853jcTH003166;
+        Thu, 5 Sep 2019 12:45:39 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com x853jcTH003166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1567655140;
+        bh=7gaxoylNrSTAPifaXUMFJFcVml5WuDbSfw0bNdNYgYM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=H2oqbZYUpS6xDMhaK5PhpPyCGgywVffCJmhNpiMupiVr7p6Xmid33GiuiI3bVqEHz
+         QlUAC6hZHOSnIoOY9NFTEUP4r5IqpM7bwuCFB4DcfY4fumrIUAZXg+9t6hfu209rqe
+         hNUp76bDcw31kvFpjY7Zc+mFrIoIW5rOniPZ4AZdLDGmB8kZurgrhtQS6LX+DRLdv6
+         /BrKTX/5mc1KUp832Cx2zheldE8ijvghFp5i/bwNjDlIai/8c9/1/RuQQH058Y6v7f
+         far3P6PeQsx3xlNLIY4ZlulKjoDVYE+6LxU2d6w+gGntBWRP5xxqsUY6Nygd8MH+gl
+         jTdm/yKKxuCgg==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] i2c: uniphier(-f): use devm_platform_ioremap_resource()
+Date:   Thu,  5 Sep 2019 12:45:32 +0900
+Message-Id: <20190905034533.9842-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Replace the chain of platform_get_resource() and devm_ioremap_resource()
+with devm_platform_ioremap_resource().
 
---EDJsL2R9iCFAt7IV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This allows to remove the local variable for (struct resource *), and
+have one function call less.
 
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
 
-> I think you are right that the controller does not seem to support
-> additional I2C features in addition to SMBUS.
->=20
-> However, my concern of switching to the smbus_xfer API is:
->=20
-> 1) Some customers might have used I2C_RDWR based API from i2cdev. Changing
-> from master_xfer to smbus_xfer may break the existing applications that a=
-re
-> already developed.
+ drivers/i2c/busses/i2c-uniphier-f.c | 4 +---
+ drivers/i2c/busses/i2c-uniphier.c   | 4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-Well, given that you add new quirks in the original patch here, you are
-kind of breaking it already. Most transfers which are not SMBus-alike
-transfers would now be rejected. For SMBus-alike transfers which are
-sent via I2C_RDWR (which is ugly), I have to think about it.
+diff --git a/drivers/i2c/busses/i2c-uniphier-f.c b/drivers/i2c/busses/i2c-uniphier-f.c
+index 7acca2599f04..fc5354845ffa 100644
+--- a/drivers/i2c/busses/i2c-uniphier-f.c
++++ b/drivers/i2c/busses/i2c-uniphier-f.c
+@@ -538,7 +538,6 @@ static int uniphier_fi2c_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct uniphier_fi2c_priv *priv;
+-	struct resource *regs;
+ 	u32 bus_speed;
+ 	unsigned long clk_rate;
+ 	int irq, ret;
+@@ -547,8 +546,7 @@ static int uniphier_fi2c_probe(struct platform_device *pdev)
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
+-	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	priv->membase = devm_ioremap_resource(dev, regs);
++	priv->membase = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(priv->membase))
+ 		return PTR_ERR(priv->membase);
+ 
+diff --git a/drivers/i2c/busses/i2c-uniphier.c b/drivers/i2c/busses/i2c-uniphier.c
+index 0173840c32af..a6d7a3709051 100644
+--- a/drivers/i2c/busses/i2c-uniphier.c
++++ b/drivers/i2c/busses/i2c-uniphier.c
+@@ -326,7 +326,6 @@ static int uniphier_i2c_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct uniphier_i2c_priv *priv;
+-	struct resource *regs;
+ 	u32 bus_speed;
+ 	unsigned long clk_rate;
+ 	int irq, ret;
+@@ -335,8 +334,7 @@ static int uniphier_i2c_probe(struct platform_device *pdev)
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
+-	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	priv->membase = devm_ioremap_resource(dev, regs);
++	priv->membase = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(priv->membase))
+ 		return PTR_ERR(priv->membase);
+ 
+-- 
+2.17.1
 
-> 2) The sound subsystem I2C regmap based implementation seems to be using
-> i2c_ based API instead of smbus_ based API. Does this mean this will also
-> break most of the audio codec drivers with I2C regmap API based usage?
-
-I don't think so. If you check regmap_get_i2c_bus() then it checks the
-adapter functionality and chooses the best transfer option then. I may
-be missing something but I would wonder if the sound system does
-something special and different.
-
-
---EDJsL2R9iCFAt7IV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1wLqkACgkQFA3kzBSg
-KbbdPBAAsHYbJFSjXbArIzGj/6rYqzbUnvYeKqVHK/C1E7C1/89RAeVkba81NFsu
-PjHeTsrPaMQ6lK5Df79WK8I0EDf++K1Imv1edG64CamFTHqc60rVShO3ifPnQf8P
-XrOEAUxLEsoXjAqsUy9Nl2xU9roZxcglRdSSg+rlDsN6WRJ8bq0xg7I/7pPs0t/m
-DU+77rOjrqcj3mKJsMvcH/ay4tAYQGwXKalqLwkRuy6u5bQ98G/z9mPdGRwBXxx7
-2lg61m1t05rmuU8PQZnnD1xB8syyt3/ivq4VWVs/9ghtAoTirMGtkhWu0SIQ17M5
-KePWtCxia4A4rHQeEF6vdrbuZAcPqFy8ttnoccsUBBXLy4KYs2zguxiss0EXq95t
-QHW83RzcyxpPqqbVPAgtoQONVcFBLvJ3p5LDIHi/kgosLcTyyjTfre1vzRcG8j9S
-j/q++XaORKmfJ4evfK5AdbexTLnXGlUyXcRj0vQElOHxVOwk2PbjYAAq58XKsY9W
-95LmlBMR2kDB/GCdZWGdTt29hyyhLgde4temx2eBCAqafAhAsPdFp8sFA2mEkaC4
-h5rby01u7yD66c8hpI/4q5psgoj1j7fRctKsdtxb/S8P2sHcKZ6HygntSmmEb+WG
-BGd+gabtDbQBSHrOxqYrYBZVQFNf3YABNMFvC5LuvgMs3Ek59iM=
-=s2Lx
------END PGP SIGNATURE-----
-
---EDJsL2R9iCFAt7IV--
