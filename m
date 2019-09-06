@@ -2,79 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19345AB8D5
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2019 15:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E316AB8FB
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2019 15:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390346AbfIFNEy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Sep 2019 09:04:54 -0400
-Received: from mga04.intel.com ([192.55.52.120]:7641 "EHLO mga04.intel.com"
+        id S2392950AbfIFNNI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Sep 2019 09:13:08 -0400
+Received: from mga06.intel.com ([134.134.136.31]:52549 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730147AbfIFNEy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 6 Sep 2019 09:04:54 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1727914AbfIFNNI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 6 Sep 2019 09:13:08 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Sep 2019 06:04:54 -0700
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Sep 2019 06:13:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,473,1559545200"; 
-   d="asc'?scan'208";a="383246558"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Sep 2019 06:04:50 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: Re: [PATCH] i2c: designware-pci: Remove needless pci_set_master() call
-In-Reply-To: <20190906124029.25406-1-jarkko.nikula@linux.intel.com>
+   d="scan'208";a="267358344"
+Received: from mylly.fi.intel.com (HELO [10.237.72.68]) ([10.237.72.68])
+  by orsmga001.jf.intel.com with ESMTP; 06 Sep 2019 06:13:05 -0700
+Subject: Re: [PATCH] i2c: designware-pci: Remove needless pci_set_master()
+ call
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 References: <20190906124029.25406-1-jarkko.nikula@linux.intel.com>
-Date:   Fri, 06 Sep 2019 16:04:48 +0300
-Message-ID: <87o8zx379r.fsf@gmail.com>
+ <20190906124358.GL18521@lahna.fi.intel.com>
+ <9e1c4015-f99e-ac3c-3dad-0cf10522dee6@linux.intel.com>
+ <87r24t37b7.fsf@gmail.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <fc5ebf99-ede5-ed5b-7549-332029f7880e@linux.intel.com>
+Date:   Fri, 6 Sep 2019 16:13:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <87r24t37b7.fsf@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On 9/6/19 4:03 PM, Felipe Balbi wrote:
+> Jarkko Nikula <jarkko.nikula@linux.intel.com> writes:
+> 
+>> On 9/6/19 3:43 PM, Mika Westerberg wrote:
+>>> On Fri, Sep 06, 2019 at 03:40:29PM +0300, Jarkko Nikula wrote:
+>>>> I failed to notice the pci_set_master() call is needless in the
+>>>> commit 21aa3983d619 ("i2c: designware-pci: Switch over to MSI interrupts")
+>>>> due the fact driver don't support DMA.
+>>>
+>>> Hmm, MSI still needs bus mastering to be enabled, no?
+>>>
+>> At least Documentation/PCI/msi-howto.rst doesn't mention it and I think
+>> I saw some commit adding MSI support without pci_set_master() but I'll
+>> dig more.
+> 
+> Read PCI documentation (see attached)
+> 
+Thanks, that explains it. So please drop this patch.
 
-Jarkko Nikula <jarkko.nikula@linux.intel.com> writes:
-
-> I failed to notice the pci_set_master() call is needless in the
-> commit 21aa3983d619 ("i2c: designware-pci: Switch over to MSI interrupts")
-> due the fact driver don't support DMA.
->
-> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-
-NAK (see reply on sub-thread)
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl1yWXAACgkQzL64meEa
-mQZRhg/9En8X55TEgOpco2g6YJEJjEBNmekUWzwsnXENq9zdcBnTPrqry3PgPNtF
-qKliNpOidKKvM+JOU+x0QWcJxuYv8+g/0OOqu1MoGN3c4oUoVwwqInfwv0TrC954
-IqcN5sKvpwL2JobbCljA9gxdRednREn6tk1bpnU82VdMK4lG+RsNsxZyaBKOlNHB
-+P8DMnVrx+o4zPIFEn/jFdrMUAapRUcN0WRQNyPeo0tVdHf5xb11CvUiY5K8p/Z4
-TZ0lSB8YCYTQKGXqnviAB6raLSQfRiHITxDDnu+74NqRxPqqbp2bpz2L2fjJZDCY
-52N84uIKvAzRs6V/2Sn5NxEE8mGoy8eR5c7aPzI63I+a9k9DwF0xFn7ws3ZtjNUm
-k7GEudzBH5KWc/Zlgasn6lgIBHEZlTmLjY4JKXmlCFIIONNOTYlLQrqNtwwvHpNI
-8ddJfxcNT4Yw3Xf4q9WJtm+3e0KbEI2iBfeEvGHAhhVXG2mNaAloEM+uBI7SZ5qR
-LpAkmOq9Ng2j6lm7Dqn4yRqkbFK+78+VCCYmGBSfJNUGcboI6UWrxfT4f9Lv2QGU
-eySaj6WcN/Jz2LRZmUPyXnr7o6N2DCHc6qW5fczeLUsxbrBxCdw2retCjdMeYSbQ
-IZPdrF0krwMaD6X8citwQEiB+nI1XrZ1XcEKQ4vCpVtPders12U=
-=qPmM
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+Jarkko
