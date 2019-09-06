@@ -2,119 +2,187 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE14ABA44
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2019 16:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98898ABB23
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2019 16:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729932AbfIFOGR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Sep 2019 10:06:17 -0400
-Received: from bastet.se.axis.com ([195.60.68.11]:58297 "EHLO
-        bastet.se.axis.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730753AbfIFOGQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Sep 2019 10:06:16 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bastet.se.axis.com (Postfix) with ESMTP id 018C718136;
-        Fri,  6 Sep 2019 16:06:14 +0200 (CEST)
-X-Axis-User: NO
-X-Axis-NonUser: YES
-X-Virus-Scanned: Debian amavisd-new at bastet.se.axis.com
-Received: from bastet.se.axis.com ([IPv6:::ffff:127.0.0.1])
-        by localhost (bastet.se.axis.com [::ffff:127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id DTb89vPd-mku; Fri,  6 Sep 2019 16:06:10 +0200 (CEST)
-Received: from boulder02.se.axis.com (boulder02.se.axis.com [10.0.8.16])
-        by bastet.se.axis.com (Postfix) with ESMTPS id DEDCC18523;
-        Fri,  6 Sep 2019 16:06:10 +0200 (CEST)
-Received: from boulder02.se.axis.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C4B361A062;
-        Fri,  6 Sep 2019 16:06:10 +0200 (CEST)
-Received: from boulder02.se.axis.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B8AD51A060;
-        Fri,  6 Sep 2019 16:06:10 +0200 (CEST)
-Received: from seth.se.axis.com (unknown [10.0.2.172])
-        by boulder02.se.axis.com (Postfix) with ESMTP;
-        Fri,  6 Sep 2019 16:06:10 +0200 (CEST)
-Received: from lnxbjornar3.se.axis.com (lnxbjornar3.se.axis.com [10.88.24.4])
-        by seth.se.axis.com (Postfix) with ESMTP id ABFBC2A1D;
-        Fri,  6 Sep 2019 16:06:10 +0200 (CEST)
-Received: by lnxbjornar3.se.axis.com (Postfix, from userid 9651)
-        id AA3BDC433C; Fri,  6 Sep 2019 16:06:10 +0200 (CEST)
-From:   =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>
-To:     wsa@the-dreams.de
-Cc:     linux-i2c@vger.kernel.org,
-        =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjornar@axis.com>
-Subject: [PATCH v3] i2c: slave-eeprom: Add read only mode
-Date:   Fri,  6 Sep 2019 16:06:09 +0200
-Message-Id: <1567778769-25485-1-git-send-email-bjorn.ardo@axis.com>
-X-Mailer: git-send-email 2.1.4
+        id S2394531AbfIFOju (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Sep 2019 10:39:50 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:42509 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394504AbfIFOju (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Sep 2019 10:39:50 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1i6FOm-0005ih-UF; Fri, 06 Sep 2019 16:39:40 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1i6FOk-0008Ns-3e; Fri, 06 Sep 2019 16:39:38 +0200
+Date:   Fri, 6 Sep 2019 16:39:38 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Biwen Li <biwen.li@nxp.com>
+Cc:     andy.shevchenko@gmail.com, rafael@kernel.org, leoyang.li@nxp.com,
+        meenakshi.aggarwal@nxp.com, udit.kumar@nxp.com, wsa@the-dreams.de,
+        rjw@rjwysocki.net, chuanhua.han@nxp.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [v2] ACPI: support for NXP i2c controller
+Message-ID: <20190906143938.weqs6rvdvlnrzpau@pengutronix.de>
+References: <20190906075319.21244-1-biwen.li@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190906075319.21244-1-biwen.li@nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 16:09:03 up 111 days, 20:27, 66 users,  load average: 0.07, 0.06,
+ 0.01
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add read-only versions of all EEPROMs. These versions are read-only
-on the i2c side, but can be written from the sysfs side.
+On Fri, Sep 06, 2019 at 03:53:19PM +0800, Biwen Li wrote:
+> From: Chuanhua Han <chuanhua.han@nxp.com>
+> 
+> Enable NXP i2c controller to boot with ACPI
+> 
+> Signed-off-by: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
+> Signed-off-by: Udit Kumar <udit.kumar@nxp.com>
+> Signed-off-by: Chuanhua Han <chuanhua.han@nxp.com>
+> Signed-off-by: Biwen Li <biwen.li@nxp.com>
 
-Signed-off-by: Björn Ardö <bjorn.ardo@axis.com>
----
- drivers/i2c/i2c-slave-eeprom.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+for i2c-imx.c:
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Tested on iMX6Q SabreSD
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
-index 92ff999..db9763c 100644
---- a/drivers/i2c/i2c-slave-eeprom.c
-+++ b/drivers/i2c/i2c-slave-eeprom.c
-@@ -33,11 +33,13 @@ struct eeprom_data {
- 	u16 address_mask;
- 	u8 num_address_bytes;
- 	u8 idx_write_cnt;
-+	bool read_only;
- 	u8 buffer[];
- };
- 
- #define I2C_SLAVE_BYTELEN GENMASK(15, 0)
- #define I2C_SLAVE_FLAG_ADDR16 BIT(16)
-+#define I2C_SLAVE_FLAG_RO BIT(17)
- #define I2C_SLAVE_DEVICE_MAGIC(_len, _flags) ((_flags) | (_len))
- 
- static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
-@@ -53,9 +55,11 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
- 			eeprom->buffer_idx = *val | (eeprom->buffer_idx << 8);
- 			eeprom->idx_write_cnt++;
- 		} else {
--			spin_lock(&eeprom->buffer_lock);
--			eeprom->buffer[eeprom->buffer_idx++ & eeprom->address_mask] = *val;
--			spin_unlock(&eeprom->buffer_lock);
-+			if (!eeprom->read_only) {
-+				spin_lock(&eeprom->buffer_lock);
-+				eeprom->buffer[eeprom->buffer_idx++ & eeprom->address_mask] = *val;
-+				spin_unlock(&eeprom->buffer_lock);
-+			}
- 		}
- 		break;
- 
-@@ -130,6 +134,7 @@ static int i2c_slave_eeprom_probe(struct i2c_client *client, const struct i2c_de
- 	eeprom->idx_write_cnt = 0;
- 	eeprom->num_address_bytes = flag_addr16 ? 2 : 1;
- 	eeprom->address_mask = size - 1;
-+	eeprom->read_only = FIELD_GET(I2C_SLAVE_FLAG_RO, id->driver_data);
- 	spin_lock_init(&eeprom->buffer_lock);
- 	i2c_set_clientdata(client, eeprom);
- 
-@@ -165,8 +170,11 @@ static int i2c_slave_eeprom_remove(struct i2c_client *client)
- 
- static const struct i2c_device_id i2c_slave_eeprom_id[] = {
- 	{ "slave-24c02", I2C_SLAVE_DEVICE_MAGIC(2048 / 8,  0) },
-+	{ "slave-24c02ro", I2C_SLAVE_DEVICE_MAGIC(2048 / 8,  I2C_SLAVE_FLAG_RO) },
- 	{ "slave-24c32", I2C_SLAVE_DEVICE_MAGIC(32768 / 8, I2C_SLAVE_FLAG_ADDR16) },
-+	{ "slave-24c32ro", I2C_SLAVE_DEVICE_MAGIC(32768 / 8, I2C_SLAVE_FLAG_ADDR16 | I2C_SLAVE_FLAG_RO) },
- 	{ "slave-24c64", I2C_SLAVE_DEVICE_MAGIC(65536 / 8, I2C_SLAVE_FLAG_ADDR16) },
-+	{ "slave-24c64ro", I2C_SLAVE_DEVICE_MAGIC(65536 / 8, I2C_SLAVE_FLAG_ADDR16 | I2C_SLAVE_FLAG_RO) },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, i2c_slave_eeprom_id);
+> ---
+> Change in v2:
+> 	- Simplify code
+> 	- Adjust header file order
+> 	- Not use ACPI_PTR()
+> 
+>  drivers/acpi/acpi_apd.c      |  7 +++++++
+>  drivers/i2c/busses/i2c-imx.c | 17 +++++++++++++----
+>  2 files changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
+> index 7cd0c9ac71ea..71511ae2dfcd 100644
+> --- a/drivers/acpi/acpi_apd.c
+> +++ b/drivers/acpi/acpi_apd.c
+> @@ -160,11 +160,17 @@ static const struct apd_device_desc hip08_i2c_desc = {
+>  	.setup = acpi_apd_setup,
+>  	.fixed_clk_rate = 250000000,
+>  };
+> +
+>  static const struct apd_device_desc thunderx2_i2c_desc = {
+>  	.setup = acpi_apd_setup,
+>  	.fixed_clk_rate = 125000000,
+>  };
+>  
+> +static const struct apd_device_desc nxp_i2c_desc = {
+> +	.setup = acpi_apd_setup,
+> +	.fixed_clk_rate = 350000000,
+> +};
+> +
+>  static const struct apd_device_desc hip08_spi_desc = {
+>  	.setup = acpi_apd_setup,
+>  	.fixed_clk_rate = 250000000,
+> @@ -238,6 +244,7 @@ static const struct acpi_device_id acpi_apd_device_ids[] = {
+>  	{ "HISI02A1", APD_ADDR(hip07_i2c_desc) },
+>  	{ "HISI02A2", APD_ADDR(hip08_i2c_desc) },
+>  	{ "HISI0173", APD_ADDR(hip08_spi_desc) },
+> +	{ "NXP0001", APD_ADDR(nxp_i2c_desc) },
+>  #endif
+>  	{ }
+>  };
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 15f6cde6452f..a3b61336fe55 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -20,6 +20,7 @@
+>   *
+>   */
+>  
+> +#include <linux/acpi.h>
+>  #include <linux/clk.h>
+>  #include <linux/completion.h>
+>  #include <linux/delay.h>
+> @@ -255,6 +256,12 @@ static const struct of_device_id i2c_imx_dt_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, i2c_imx_dt_ids);
+>  
+> +static const struct acpi_device_id i2c_imx_acpi_ids[] = {
+> +	{"NXP0001", .driver_data = (kernel_ulong_t)&vf610_i2c_hwdata},
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(acpi, i2c_imx_acpi_ids);
+> +
+>  static inline int is_imx1_i2c(struct imx_i2c_struct *i2c_imx)
+>  {
+>  	return i2c_imx->hwdata->devtype == IMX1_I2C;
+> @@ -1048,14 +1055,13 @@ static const struct i2c_algorithm i2c_imx_algo = {
+>  
+>  static int i2c_imx_probe(struct platform_device *pdev)
+>  {
+> -	const struct of_device_id *of_id = of_match_device(i2c_imx_dt_ids,
+> -							   &pdev->dev);
+>  	struct imx_i2c_struct *i2c_imx;
+>  	struct resource *res;
+>  	struct imxi2c_platform_data *pdata = dev_get_platdata(&pdev->dev);
+>  	void __iomem *base;
+>  	int irq, ret;
+>  	dma_addr_t phy_addr;
+> +	const struct imx_i2c_hwdata *match;
+>  
+>  	dev_dbg(&pdev->dev, "<%s>\n", __func__);
+>  
+> @@ -1075,8 +1081,9 @@ static int i2c_imx_probe(struct platform_device *pdev)
+>  	if (!i2c_imx)
+>  		return -ENOMEM;
+>  
+> -	if (of_id)
+> -		i2c_imx->hwdata = of_id->data;
+> +	match = device_get_match_data(&pdev->dev);
+> +	if (match)
+> +		i2c_imx->hwdata = match;
+>  	else
+>  		i2c_imx->hwdata = (struct imx_i2c_hwdata *)
+>  				platform_get_device_id(pdev)->driver_data;
+> @@ -1089,6 +1096,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
+>  	i2c_imx->adapter.nr		= pdev->id;
+>  	i2c_imx->adapter.dev.of_node	= pdev->dev.of_node;
+>  	i2c_imx->base			= base;
+> +	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
+>  
+>  	/* Get I2C clock */
+>  	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
+> @@ -1247,6 +1255,7 @@ static struct platform_driver i2c_imx_driver = {
+>  		.name = DRIVER_NAME,
+>  		.pm = &i2c_imx_pm_ops,
+>  		.of_match_table = i2c_imx_dt_ids,
+> +		.acpi_match_table = i2c_imx_acpi_ids,
+>  	},
+>  	.id_table = imx_i2c_devtype,
+>  };
+> -- 
+> 2.17.1
+> 
+> 
+
 -- 
-2.1.4
-
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
