@@ -2,105 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 166F0AB66C
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2019 12:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A332CAB84B
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2019 14:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391398AbfIFKyt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Sep 2019 06:54:49 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:34582 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbfIFKyt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Sep 2019 06:54:49 -0400
-Received: by mail-wr1-f65.google.com with SMTP id s18so6098530wrn.1
-        for <linux-i2c@vger.kernel.org>; Fri, 06 Sep 2019 03:54:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=rET0iaiiuCDKjoQBx43XIsBD5MxIh4jXYYHw1kxz16U=;
-        b=uCExWhLWEQIF1yDJTjsDcdxJkJrKiEzQCAHSpMf564Io00a2Ec8+QhrJDXyjvuq2W6
-         01cYYGmMt8kn9mRNcXKddYJiqaT/BJi7ZKiWGGVHageWf3L5V1By5PTgfdOj/ZKbPR80
-         FIMIrXYM4HApJW8EoBRw8KxJobOHN4rieikuP5j2ZJIHSuYCkgdZo8GBPhiqfcjfwVnW
-         mnZSbaPpA4wRPvU3orZXbiapeTkLrTWVXN48ESa4MuKtlg6DqWGcCieIDha/jR0bmCcr
-         ZzaimmShZJr01SOe/ScuiGfxsfnoUzUqMfZYXZ7mBZrD/DOsBgAgy0n3Ds6BWecXjxg7
-         FHLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=rET0iaiiuCDKjoQBx43XIsBD5MxIh4jXYYHw1kxz16U=;
-        b=N0BR07/uDsoNMbhW9BNP9ykusne/+ynNSL76eAwANYUmVRC47qRxgPVRy+pMo8H6dW
-         N1Td3cOVfrog3nrr56UwcLLxFBoPa/GmenS4pvK2h2yXRPpdMvb6pdaCUY8r+4ZrJNIN
-         YRGdPO1ICH5mcD3ph6jHZjGVJMyPHv2E9L3vs+nKLXgiYoOSjU9J8DvH2bkn4dPkm5OG
-         eh+ARqQz7fdrpySdqkigQDI3fUidkDnvv8d4AtA8oBStmSigigtXtMsVqSx3m8OdlHyJ
-         vALQBr1zNhPvXT1HavvxgWCcpcxSvzq1Xu2uOGLdUXbDouAaG00FsQ2rrHMnWFp5RIVd
-         gYTQ==
-X-Gm-Message-State: APjAAAUZcHognxRWVIMhvK+2j1T9+lKvL/0Lm3+Yd6LJsINfnLpmQwwe
-        Md61BN3Dx19A0xiljt5d/5mxSg==
-X-Google-Smtp-Source: APXvYqyLPZ5O/UcCSTZ62ObBfvcGeMFb1YL7I6ZwwZnW/Zxpf5t0wWMYBFO8ZZVeNF60uHezHfoBQA==
-X-Received: by 2002:a05:6000:2:: with SMTP id h2mr5865424wrx.309.1567767287888;
-        Fri, 06 Sep 2019 03:54:47 -0700 (PDT)
-Received: from dell ([95.147.198.36])
-        by smtp.gmail.com with ESMTPSA id s26sm9141058wrs.63.2019.09.06.03.54.47
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 06 Sep 2019 03:54:47 -0700 (PDT)
-Date:   Fri, 6 Sep 2019 11:54:45 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
-        alokc@codeaurora.org, bjorn.andersson@linaro.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, vkoul@kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [RESEND v3 1/1] i2c: qcom-geni: Disable DMA processing on the
- Lenovo Yoga C630
-Message-ID: <20190906105445.GO26880@dell>
-References: <20190905192412.23116-1-lee.jones@linaro.org>
- <5d71ef95.1c69fb81.6d090.085d@mx.google.com>
- <20190906061448.GJ26880@dell>
- <20190906065018.GA1019@kunai>
- <20190906075600.GL26880@dell>
- <20190906102355.GA3146@kunai>
+        id S1732456AbfIFMke (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Sep 2019 08:40:34 -0400
+Received: from mga09.intel.com ([134.134.136.24]:12899 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728507AbfIFMke (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 6 Sep 2019 08:40:34 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Sep 2019 05:40:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,473,1559545200"; 
+   d="scan'208";a="177624565"
+Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.68])
+  by orsmga008.jf.intel.com with ESMTP; 06 Sep 2019 05:40:32 -0700
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH] i2c: designware-pci: Remove needless pci_set_master() call
+Date:   Fri,  6 Sep 2019 15:40:29 +0300
+Message-Id: <20190906124029.25406-1-jarkko.nikula@linux.intel.com>
+X-Mailer: git-send-email 2.23.0.rc1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190906102355.GA3146@kunai>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 06 Sep 2019, Wolfram Sang wrote:
+I failed to notice the pci_set_master() call is needless in the
+commit 21aa3983d619 ("i2c: designware-pci: Switch over to MSI interrupts")
+due the fact driver don't support DMA.
 
-> On Fri, Sep 06, 2019 at 08:56:00AM +0100, Lee Jones wrote:
-> > On Fri, 06 Sep 2019, Wolfram Sang wrote:
-> > > > > This compatible isn't in the 5.3 rc series nor is it in linux-next yet.
-> > > > > Is this "hot-fix" for the next merge window? Or is this compatible
-> > > > > string being generated by firmware somewhere and thus isn't part of the
-> > > > > kernel?
-> > > > 
-> > > > It's on the list and will be in all of the distro v5.3 release kernels.
-> > > > 
-> > > > https://lkml.org/lkml/2019/9/5/695
-> > > 
-> > > And why don't the distro kernels simply pick up this patch, too?
-> > 
-> > I could send it to them and find out.  They are on kernel-freeze now,
-> > on the lead-up to the release date (next month), but I think they're
-> > still taking bug fixes.
-> 
-> Please do.
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-designware-pcidrv.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Submitted.
-
-Does this mean you plan to have this merged for v5.4?
-
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index 050adda7c1bd..1fa6171e253b 100644
+--- a/drivers/i2c/busses/i2c-designware-pcidrv.c
++++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+@@ -234,8 +234,6 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 		return r;
+ 	}
+ 
+-	pci_set_master(pdev);
+-
+ 	r = pcim_iomap_regions(pdev, 1 << 0, pci_name(pdev));
+ 	if (r) {
+ 		dev_err(&pdev->dev, "I/O memory remapping failed\n");
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.23.0.rc1
+
