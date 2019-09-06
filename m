@@ -2,94 +2,159 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A926CAB38B
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2019 09:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B623AB3A6
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2019 10:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388300AbfIFH4E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Sep 2019 03:56:04 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:39563 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388258AbfIFH4E (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Sep 2019 03:56:04 -0400
-Received: by mail-wm1-f65.google.com with SMTP id q12so5911132wmj.4
-        for <linux-i2c@vger.kernel.org>; Fri, 06 Sep 2019 00:56:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=GBSrVEv3FkA0u4Qz9b1PZ+GS0dImegg5i95tX5f08MA=;
-        b=oKBgcUVIqRGIe6MsD6iEyRnhdfCSvJ62wOyc+MP5ddCrBgohfCdwPFagkkWDicHj4i
-         Ud1G+VeKhR8y6Wq/5LRbbg2/UUznVsmWshevk1+H7eoRnHHXfcqpNuqJ9NlDsZLjTdRb
-         gdn8P5OBAq8oQST2/ZymJi+xyaaL26S2nJKPkP8GiJyCPY7eiKoFDj+HR9913Zpb42wx
-         iS2b0BXmSL6HfdHw09F9bft8QpipihTBWssdptwgy170jL/kdJgNHtOVlYROX1cesSEm
-         SJBMrHrloiEBix4LSie54M48PIolVSvt0gbRSlXfc/iB91xpJsq9ucBwlg5oNZNOYNfm
-         N2gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=GBSrVEv3FkA0u4Qz9b1PZ+GS0dImegg5i95tX5f08MA=;
-        b=XDuXtOCtljKlG/FTcnhriJEeozSVhMfYnydPW0a1q/5WZ0dq3U5RPcvr9cOz4n2zO7
-         SXJdcstkoe9VT0CFE0i8v88PCyKH/uJkKZR47Twur1sTyHkWPFhxmDGEndYAfS5jneBI
-         gCfMKc9vmQGqHBaXAYrRsB2MIPSIGO+HAhtaEQIJkSVfhpvb/67eHYHrO4eWydhHQbgv
-         O9CfW5b0lLpbkH6YSbM/HehCe4+KK9/0AOg8/vnq8qk2MwvY3ttvPZPZ3Lyl/rfvxaUX
-         v3TTFSqJ9Q6j5XBZ+U7a8lIOGItrCsZhizQ4haqNJ+WkaSEK2Gk1DZ5dj0FD5Wtui6+C
-         fvGA==
-X-Gm-Message-State: APjAAAVg6tw1IhWod6Jl/n2IKwL/TCul3mDbGIEECjo7FXINzTZbmiJm
-        9RuxCvmv0WylyCB4BVyCpKCFxA==
-X-Google-Smtp-Source: APXvYqzOqdeiqIcPjAkHBg783CUd8gkiIobQAXdzTjznanYqW8tv8J/XJ85sWC0yGMWk8V6mwHuXRg==
-X-Received: by 2002:a7b:cd05:: with SMTP id f5mr5949466wmj.12.1567756562847;
-        Fri, 06 Sep 2019 00:56:02 -0700 (PDT)
-Received: from dell ([95.147.198.36])
-        by smtp.gmail.com with ESMTPSA id y186sm6636374wmd.26.2019.09.06.00.56.01
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 06 Sep 2019 00:56:01 -0700 (PDT)
-Date:   Fri, 6 Sep 2019 08:56:00 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
-        alokc@codeaurora.org, bjorn.andersson@linaro.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, vkoul@kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [RESEND v3 1/1] i2c: qcom-geni: Disable DMA processing on the
- Lenovo Yoga C630
-Message-ID: <20190906075600.GL26880@dell>
-References: <20190905192412.23116-1-lee.jones@linaro.org>
- <5d71ef95.1c69fb81.6d090.085d@mx.google.com>
- <20190906061448.GJ26880@dell>
- <20190906065018.GA1019@kunai>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190906065018.GA1019@kunai>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1729217AbfIFIEC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Sep 2019 04:04:02 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:55324 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728742AbfIFIEC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 6 Sep 2019 04:04:02 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 042B8200589;
+        Fri,  6 Sep 2019 10:03:59 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 321242000EC;
+        Fri,  6 Sep 2019 10:03:52 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id E4747402A5;
+        Fri,  6 Sep 2019 16:03:43 +0800 (SGT)
+From:   Biwen Li <biwen.li@nxp.com>
+To:     andy.shevchenko@gmail.com, rafael@kernel.org, leoyang.li@nxp.com,
+        meenakshi.aggarwal@nxp.com, udit.kumar@nxp.com, wsa@the-dreams.de,
+        rjw@rjwysocki.net
+Cc:     chuanhua.han@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Biwen Li <biwen.li@nxp.com>
+Subject: [v2] ACPI: support for NXP i2c controller
+Date:   Fri,  6 Sep 2019 15:53:19 +0800
+Message-Id: <20190906075319.21244-1-biwen.li@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 06 Sep 2019, Wolfram Sang wrote:
-> > > This compatible isn't in the 5.3 rc series nor is it in linux-next yet.
-> > > Is this "hot-fix" for the next merge window? Or is this compatible
-> > > string being generated by firmware somewhere and thus isn't part of the
-> > > kernel?
-> > 
-> > It's on the list and will be in all of the distro v5.3 release kernels.
-> > 
-> > https://lkml.org/lkml/2019/9/5/695
-> 
-> And why don't the distro kernels simply pick up this patch, too?
+From: Chuanhua Han <chuanhua.han@nxp.com>
 
-I could send it to them and find out.  They are on kernel-freeze now,
-on the lead-up to the release date (next month), but I think they're
-still taking bug fixes.
+Enable NXP i2c controller to boot with ACPI
 
+Signed-off-by: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
+Signed-off-by: Udit Kumar <udit.kumar@nxp.com>
+Signed-off-by: Chuanhua Han <chuanhua.han@nxp.com>
+Signed-off-by: Biwen Li <biwen.li@nxp.com>
+---
+Change in v2:
+	- Simplify code
+	- Adjust header file order
+	- Not use ACPI_PTR()
+
+ drivers/acpi/acpi_apd.c      |  7 +++++++
+ drivers/i2c/busses/i2c-imx.c | 17 +++++++++++++----
+ 2 files changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
+index 7cd0c9ac71ea..71511ae2dfcd 100644
+--- a/drivers/acpi/acpi_apd.c
++++ b/drivers/acpi/acpi_apd.c
+@@ -160,11 +160,17 @@ static const struct apd_device_desc hip08_i2c_desc = {
+ 	.setup = acpi_apd_setup,
+ 	.fixed_clk_rate = 250000000,
+ };
++
+ static const struct apd_device_desc thunderx2_i2c_desc = {
+ 	.setup = acpi_apd_setup,
+ 	.fixed_clk_rate = 125000000,
+ };
+ 
++static const struct apd_device_desc nxp_i2c_desc = {
++	.setup = acpi_apd_setup,
++	.fixed_clk_rate = 350000000,
++};
++
+ static const struct apd_device_desc hip08_spi_desc = {
+ 	.setup = acpi_apd_setup,
+ 	.fixed_clk_rate = 250000000,
+@@ -238,6 +244,7 @@ static const struct acpi_device_id acpi_apd_device_ids[] = {
+ 	{ "HISI02A1", APD_ADDR(hip07_i2c_desc) },
+ 	{ "HISI02A2", APD_ADDR(hip08_i2c_desc) },
+ 	{ "HISI0173", APD_ADDR(hip08_spi_desc) },
++	{ "NXP0001", APD_ADDR(nxp_i2c_desc) },
+ #endif
+ 	{ }
+ };
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index 15f6cde6452f..a3b61336fe55 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -20,6 +20,7 @@
+  *
+  */
+ 
++#include <linux/acpi.h>
+ #include <linux/clk.h>
+ #include <linux/completion.h>
+ #include <linux/delay.h>
+@@ -255,6 +256,12 @@ static const struct of_device_id i2c_imx_dt_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(of, i2c_imx_dt_ids);
+ 
++static const struct acpi_device_id i2c_imx_acpi_ids[] = {
++	{"NXP0001", .driver_data = (kernel_ulong_t)&vf610_i2c_hwdata},
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, i2c_imx_acpi_ids);
++
+ static inline int is_imx1_i2c(struct imx_i2c_struct *i2c_imx)
+ {
+ 	return i2c_imx->hwdata->devtype == IMX1_I2C;
+@@ -1048,14 +1055,13 @@ static const struct i2c_algorithm i2c_imx_algo = {
+ 
+ static int i2c_imx_probe(struct platform_device *pdev)
+ {
+-	const struct of_device_id *of_id = of_match_device(i2c_imx_dt_ids,
+-							   &pdev->dev);
+ 	struct imx_i2c_struct *i2c_imx;
+ 	struct resource *res;
+ 	struct imxi2c_platform_data *pdata = dev_get_platdata(&pdev->dev);
+ 	void __iomem *base;
+ 	int irq, ret;
+ 	dma_addr_t phy_addr;
++	const struct imx_i2c_hwdata *match;
+ 
+ 	dev_dbg(&pdev->dev, "<%s>\n", __func__);
+ 
+@@ -1075,8 +1081,9 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	if (!i2c_imx)
+ 		return -ENOMEM;
+ 
+-	if (of_id)
+-		i2c_imx->hwdata = of_id->data;
++	match = device_get_match_data(&pdev->dev);
++	if (match)
++		i2c_imx->hwdata = match;
+ 	else
+ 		i2c_imx->hwdata = (struct imx_i2c_hwdata *)
+ 				platform_get_device_id(pdev)->driver_data;
+@@ -1089,6 +1096,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	i2c_imx->adapter.nr		= pdev->id;
+ 	i2c_imx->adapter.dev.of_node	= pdev->dev.of_node;
+ 	i2c_imx->base			= base;
++	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
+ 
+ 	/* Get I2C clock */
+ 	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
+@@ -1247,6 +1255,7 @@ static struct platform_driver i2c_imx_driver = {
+ 		.name = DRIVER_NAME,
+ 		.pm = &i2c_imx_pm_ops,
+ 		.of_match_table = i2c_imx_dt_ids,
++		.acpi_match_table = i2c_imx_acpi_ids,
+ 	},
+ 	.id_table = imx_i2c_devtype,
+ };
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.17.1
+
