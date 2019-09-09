@@ -2,25 +2,26 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 253FAAD2C1
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2019 06:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F263AD3A4
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2019 09:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726759AbfIIE41 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 9 Sep 2019 00:56:27 -0400
-Received: from mleia.com ([178.79.152.223]:40066 "EHLO mail.mleia.com"
+        id S1731292AbfIIHWh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 9 Sep 2019 03:22:37 -0400
+Received: from sauhun.de ([88.99.104.3]:55138 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725926AbfIIE40 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 9 Sep 2019 00:56:26 -0400
-Received: from mail.mleia.com (localhost [127.0.0.1])
-        by mail.mleia.com (Postfix) with ESMTP id CBC1639C7AA;
-        Mon,  9 Sep 2019 04:56:23 +0000 (UTC)
-Subject: Re: [RFC,v2 2/6] i2c: add I2C Address Translator (ATR) support
-From:   Vladimir Zapolskiy <vz@mleia.com>
-To:     jacopo mondi <jacopo@jmondi.org>,
+        id S1727546AbfIIHWg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 9 Sep 2019 03:22:36 -0400
+Received: from localhost (234.77.63.94.rev.vodafone.pt [94.63.77.234])
+        by pokefinder.org (Postfix) with ESMTPSA id 84C1E2C3112;
+        Mon,  9 Sep 2019 09:22:33 +0200 (CEST)
+Date:   Mon, 9 Sep 2019 08:22:32 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Vladimir Zapolskiy <vz@mleia.com>
+Cc:     jacopo mondi <jacopo@jmondi.org>,
         Luca Ceresoli <luca@lucaceresoli.net>,
-        Wolfram Sang <wsa@the-dreams.de>, Peter Rosin <peda@axentia.se>
-Cc:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, linux-media@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -28,85 +29,79 @@ Cc:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: Re: [RFC,v2 2/6] i2c: add I2C Address Translator (ATR) support
+Message-ID: <20190909072232.GA990@kunai>
 References: <20190723203723.11730-1-luca@lucaceresoli.net>
  <20190723203723.11730-3-luca@lucaceresoli.net>
  <20190901143101.humomdehy5ee73sk@vino>
  <aedad45b-16d6-d189-b045-329727440ca5@mleia.com>
-Message-ID: <1fb71437-eaa2-99a7-885f-63ee769969aa@mleia.com>
-Date:   Mon, 9 Sep 2019 07:56:22 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.6.0
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="opJtzjQTFsWo+cga"
+Content-Disposition: inline
 In-Reply-To: <aedad45b-16d6-d189-b045-329727440ca5@mleia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20190909_045623_861624_81A29212 
-X-CRM114-Status: GOOD (  22.75  )
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Luca, Jacopo, Wolfram, Peter,
 
-On 09/08/2019 11:45 PM, Vladimir Zapolskiy wrote:
-> Hi Luca, Jacopo, Wolfram, Peter,
-> 
-> On 09/01/2019 05:31 PM, jacopo mondi wrote:
->> Hi Luca,
->>    thanks for keep pushing this series! I hope we can use part of this
->> for the (long time) on-going GMSL work...
->>
->> I hope you will be patient enough to provide (another :) overview
->> of this work during the BoF Wolfram has organized at LPC for the next
->> week.
->>
->> In the meantime I would have some comments after having a read at the
->> series and trying to apply its concept to GMSL
->>
-> 
+--opJtzjQTFsWo+cga
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Vladimir,
+
 > I won't attend the LPC, however I would appreciate if you book some
+
+A pity. I would have liked to have you in the room. Let's see if we can
+get enough input from you via mail here.
+
 > time to review my original / alternative implementation of the TI
 > DS90Ux9xx I2C bridge device driver.
-> 
-> For your convenience the links to the driver are given below:
-> * dt bindings: https://lore.kernel.org/lkml/20181012060314.GU4939@dell/T/#mead5ea226550b
-> * driver code: https://lore.kernel.org/lkml/20181012060314.GU4939@dell/T/#m2fe3664c5f884
-> * usage example: https://lore.kernel.org/lkml/20181012060314.GU4939@dell/T/#m56c146f5decdc
-> 
+
+We have only 45 minutes, this will not allow to review specific
+implementations. I want to give an overview of existing implementations
+with pros/cons...
+
 > The reasons why my driver is better/more flexible/more functional are
 > discussed earlier, please let me know, if you expect anything else
 > from me to add, also I would be happy to get a summary of your offline
 > discussion.
 
-I forgot to repeat my main objection against Luca's approach, the TI
-DS90Ux9xx I2C bridge driver does not require to call i2c_add_adapter()
-or register a new mux/bus and then do run select/deselect in runtime to
-overcome the created handicap.
+... and I'd appreciate support here from you, like your summary of the
+back then discussion (from where I can dive deeper if needed).
 
-> The undeniable fact is that the device tree bindings in my I2C bridge
-> implementation can be improved further, thanks to Luca for the comments.
-> 
->> On Tue, Jul 23, 2019 at 10:37:19PM +0200, Luca Ceresoli wrote:
->>> An ATR is a device that looks similar to an i2c-mux: it has an I2C
->>> slave "upstream" port and N master "downstream" ports, and forwards
->>> transactions from upstream to the appropriate downstream port. But is
->>> is different in that the forwarded transaction has a different slave
->>> address. The address used on the upstream bus is called the "alias"
->>> and is (potentially) different from the physical slave address of the
->>> downstream chip.
->>>
->>> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
->>> implementing ATR features in a device driver. The helper takes care or
->>> adapter creation/destruction and translates addresses at each transaction.
->>>
->>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->>>
-> 
+Also, with Luca's new series we discussed some scenarios which can
+happen WRT to I2C address conflicts. Maybe you could comment on them,
+too? As I read the old thread, you have a hardcoded aliases using
+"ti,i2c-bridge-maps". This means you can't have own DTSI files for e.g.
+add-on modules, do I get this correctly?
 
---
-Best wishes,
-Vladimir
+Regards,
 
+   Wolfram
+
+
+--opJtzjQTFsWo+cga
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl11/bQACgkQFA3kzBSg
+Kba0gw//SqXQP85w5Al3h5SpknTTtA58vH9+t7A1sh/8dQECAQiHyupLtYyIbo49
+fkEgUsofN7z1QbGLjiz7YHw6HaIOya6wzAlEA6Usnk8fApS5vAnHiZU3DFnHlsW+
+FOqvn2pwjyA3USz0+67ZSb1ioivrztQcNpd8lTVdTYLprIMNcAaiuMKRVEBX0xgW
+Sx7l4Gy7gzxKxFdNCERshQsge3qcKGTc90oXYriTY/uPEyuL8TbP5wy2l95njk/L
+CDxbIR+G+rrS4iCN+wK9bmmRog5tiP4T9voS1AgX0J2hW5GIfgLayR7cxCP9WRxR
+0UgaQfVPHruESXcd5fcwkLiW97VHgIfV3eSlBeDtx1Xl8h+s9AxxDeCNGF+XJNrJ
+2hmvGmv25qqcG5ZPb+Qj5iEDm8JIHtACnJEYb7GUyL8vwTFinLI9zpHhsXp2wIzc
+2mBGaiY4mw83eomSOy1untwqFdVkLq4sm98oFEZQFwrNCi0uO+F7Azl8lUMQDWcM
+GGsdtYxiQIhg5CvKCPDfJbJjF7mMTVrsIzHgfvD/oraN+52kDv6CFpkT0qDqBy+l
+AZ1l2/zR2K2nPnUxXcyU9CSLwboBNxcuQ0CNiq2G0F7WC646MiALQXLkLpu4FdGb
+4MaEUK7LHp9OPDhbjT3fGfbNw45zR1m3BSQgwL7unDYMhLZEUI4=
+=33hh
+-----END PGP SIGNATURE-----
+
+--opJtzjQTFsWo+cga--
