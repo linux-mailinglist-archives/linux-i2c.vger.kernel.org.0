@@ -2,59 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBFFB1365
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2019 19:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E967B136D
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2019 19:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730337AbfILRVH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Sep 2019 13:21:07 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:46886 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730023AbfILRVH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Sep 2019 13:21:07 -0400
-Received: by mail-ed1-f65.google.com with SMTP id i8so24597296edn.13
-        for <linux-i2c@vger.kernel.org>; Thu, 12 Sep 2019 10:21:05 -0700 (PDT)
+        id S2387435AbfILRYh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Sep 2019 13:24:37 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:46369 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387434AbfILRYh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Sep 2019 13:24:37 -0400
+Received: by mail-ed1-f67.google.com with SMTP id i8so24606726edn.13;
+        Thu, 12 Sep 2019 10:24:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=dq+ZhK4d7lL2s5x8xlpABC534HfysjVeU6PZopQ0WxE=;
-        b=W36nctF3MLHjsgnPbSFhGfq04rcioeMl+9pvIJcfkqNziqUgWrdsAB5pccfN+CyjfW
-         aNpboaAg9SU2SmqvbRlm6wTVIu3Drc268Kco1BwL0XCORR0BLQaK8de4QpaKsfp2lMUp
-         F/Ui+IZvdlcP/yaFA3/MseXbKLXCRvYhy4MIw9Wzvh8Ra5CfmpSjiEFUv+GTWfVuTA8e
-         RdKF8UxcSPd3rRc0Uo+EcreGQDs5ZE2caTknSZZ2AMgj1PyaOD3wfVsrkckJLXdsRoNQ
-         DYf/JazCq8ekJLAxabaINuyQiZrz179Avcr0iqsExsltka105PijoFa83vn1snllOE54
-         uHMA==
+        bh=47/wXc9rf9Ux1m99kbSa/jErJayFEv/4bL6ywJuiERY=;
+        b=hY06RrEQDjqQ3vYk5aZ3GUE/XCPrEQ6W6Ob5lsfnTh6Ual6vz++XLlycp8lAL1zueO
+         2dR4p2fkLeghasBt8VtYzENaGLdjdCuPg8qCwBPqN/4CBfUJIZA54X/uFjetkCb6+RJI
+         Zoh80K9KwO7GE+FnTT2ToQRzleyfA6UP2dR5zU9auh2GB1Z1odfiB2xAr+ny8aGQ67wF
+         SfI3gy5OPRUOEKtCfteG2q4sC4BsSNMlPQOkO2gCS7KsBv4Wd5zrWFtnqpwp0A7P8Di6
+         /tPR8D0TSVXIstJQTFLgHOVVSKoPR4sYQtvC7VVYWHS6BkgSnWrSkbLde2wHE8Q7LM2v
+         50ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=dq+ZhK4d7lL2s5x8xlpABC534HfysjVeU6PZopQ0WxE=;
-        b=q8pWc2zdbn2BJnCTRgvlv4eEFBmcijAnaTIVinsX4o8SpkBao5J5cU65fHyb0i14I6
-         9IbZ4FMwuRy4tspr9fdwB6XOWsWNFRqc1TWabMI5wQRZhrfk8nJZg43Wgn6ka96FMYqt
-         hgKqFWp763RCVC8kOOiyq+9uFOCgNrbH5qPDvvDIuFOrWRcMGZRkKetmmmVBIJxI3HJX
-         LlYTlSHjXB4H+y3cLDINd7Ox9TQeIah4L8cav1yQRzrw3DHSoA1y971Uc9k1Vk85FU7X
-         v6qoPmNxRvpqgkX3YLF5ZGlTAAkwUoswf0hjq3dmX5xeIzkm2iSzdRNWteYq2CnxbGPk
-         YWBQ==
-X-Gm-Message-State: APjAAAWWXU8aEKDBxnGiV6v8+ZBH4JbzHXWpoXZEs5NlXGY31yvVFGxL
-        ivBAn0t3C0sEnu6EZ3PNef8=
-X-Google-Smtp-Source: APXvYqyarEFr6LuNaOuDoS4XN6Ijd+CrVmNqfr4rGePH6uKeHeNVGQ0wSLf5uGbctMr0JXBipiBD2w==
-X-Received: by 2002:a17:906:bb14:: with SMTP id jz20mr6291438ejb.218.1568308864312;
-        Thu, 12 Sep 2019 10:21:04 -0700 (PDT)
+        bh=47/wXc9rf9Ux1m99kbSa/jErJayFEv/4bL6ywJuiERY=;
+        b=Y3CrWwzzna1JqBvzcp5KXNYlYARHPue7rnvbTxRAddjwg8h8ywSdYgxR+2vfsf7RNa
+         JGwTIoW5ToxPcLjaVC9xrlEiplR8Ff8fm+ec5LFWM0C59rBb0xNbUawo0VHEXqjMtZh/
+         wFUqnObyss4rLHJakp+rPUVdosfKO1vvSxqz2iOKaNAYfaAgaI1d92M40xUpReIYHqRg
+         j+GSRb6ZyQUMheVdSGWmr9mRhicA+3eub7TDu79IYEyF+AbsyNq6MD8+V7Kf2b4SruO5
+         o6SpuUVqrgymHeuTXqbR8pqL0JwFhnSAdPJh4cER+uYezxTVbgmBucZFVfkQmMUZJoq6
+         wcZQ==
+X-Gm-Message-State: APjAAAVm+i5YqfQ/qAkW9ICBGS4lIZmWrTO6VKDUH5I/eNACho87CSWB
+        eRxprVKsdo8wrQ9BwWxJK2awNmiJEtY=
+X-Google-Smtp-Source: APXvYqzHDoMuvbT8k2H7huqsrr2E7bVBJ8Ve+fNHuHKlkzUwAtIkQJAnrQJ82vbd7IIT/yQSr/wvUA==
+X-Received: by 2002:a17:906:7c4e:: with SMTP id g14mr36067987ejp.103.1568309074890;
+        Thu, 12 Sep 2019 10:24:34 -0700 (PDT)
 Received: from ziggy.stardust ([37.223.145.235])
-        by smtp.gmail.com with ESMTPSA id la18sm2903485ejb.14.2019.09.12.10.21.03
+        by smtp.gmail.com with ESMTPSA id m13sm4829069edr.15.2019.09.12.10.24.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Sep 2019 10:21:03 -0700 (PDT)
-Subject: Re: [PATCH 2/3] i2c: bcm2835: Avoid clk stretch quirk for BCM2711
-To:     Stefan Wahren <wahrenst@gmx.net>, Wolfram Sang <wsa@the-dreams.de>,
-        Eric Anholt <eric@anholt.net>,
+        Thu, 12 Sep 2019 10:24:34 -0700 (PDT)
+Subject: Re: [PATCH V2 05/13] clk: bcm2835: Add BCM2711_CLOCK_EMMC2 support
+To:     Stefan Wahren <wahrenst@gmx.net>, Eric Anholt <eric@anholt.net>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <1566925456-5928-1-git-send-email-wahrenst@gmx.net>
- <1566925456-5928-3-git-send-email-wahrenst@gmx.net>
+        Scott Branden <sbranden@broadcom.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+References: <1565713248-4906-1-git-send-email-wahrenst@gmx.net>
+ <1565713248-4906-6-git-send-email-wahrenst@gmx.net>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
@@ -150,12 +156,12 @@ Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
  pac005PuhxCWkKTJz3gCmznnoat4GCnL5gy/m0Qk45l4PFqwWXVLo9AQg2Kp3mlIFZ6fsEKI
  AN5hxlbNvNb9V2Zo5bFZjPWPFTxOteM0omUAS+QopwU0yPLLGJVf2iCmItHcUXI+r2JwH1CJ
  jrHWeQEI2ucSKsNa8FllDmG/fQ==
-Message-ID: <c43878d8-e7d0-bc13-107b-2b6045692504@gmail.com>
-Date:   Thu, 12 Sep 2019 19:21:02 +0200
+Message-ID: <d89bbc4b-b6bc-0d4e-86d1-6be11876ce00@gmail.com>
+Date:   Thu, 12 Sep 2019 19:24:32 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <1566925456-5928-3-git-send-email-wahrenst@gmx.net>
+In-Reply-To: <1565713248-4906-6-git-send-email-wahrenst@gmx.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -166,64 +172,78 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 
 
-On 27/08/2019 19:04, Stefan Wahren wrote:
-> The I2C block on the BCM2711 isn't affected by the clk stretching bug.
-> So there is no need to apply the corresponding quirk.
+On 13/08/2019 18:20, Stefan Wahren wrote:
+> The new BCM2711 supports an additional clock for the emmc2 block.
+> So add a new compatible and register this clock only for BCM2711.
 > 
 > Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> Reviewed-by: Eric Anholt <eric@anholt.net>
+> Reviewed-by: Matthias Brugger <mbrugger@suse.com>
+> Acked-by: Eric Anholt <eric@anholt.net>
 > ---
->  drivers/i2c/busses/i2c-bcm2835.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+>  drivers/clk/bcm/clk-bcm2835.c | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-> index 67752f7..ab5502f 100644
-> --- a/drivers/i2c/busses/i2c-bcm2835.c
-> +++ b/drivers/i2c/busses/i2c-bcm2835.c
-> @@ -12,6 +12,7 @@
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
-> +#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
+> diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
+> index 21cd952..fdf672a 100644
+> --- a/drivers/clk/bcm/clk-bcm2835.c
+> +++ b/drivers/clk/bcm/clk-bcm2835.c
+> @@ -114,6 +114,8 @@
+>  #define CM_AVEODIV		0x1bc
+>  #define CM_EMMCCTL		0x1c0
+>  #define CM_EMMCDIV		0x1c4
+> +#define CM_EMMC2CTL		0x1d0
+> +#define CM_EMMC2DIV		0x1d4
 > 
-> @@ -389,7 +390,7 @@ static const struct i2c_algorithm bcm2835_i2c_algo = {
->  };
+>  /* General bits for the CM_*CTL regs */
+>  # define CM_ENABLE			BIT(4)
+> @@ -290,7 +292,8 @@
+>  #define BCM2835_MAX_FB_RATE	1750000000u
+> 
+>  #define SOC_BCM2835		BIT(0)
+> -#define SOC_ALL			(SOC_BCM2835)
+> +#define SOC_BCM2711		BIT(1)
+> +#define SOC_ALL			(SOC_BCM2835 | SOC_BCM2711)
 > 
 >  /*
-> - * This HW was reported to have problems with clock stretching:
-> + * The BCM2835 was reported to have problems with clock stretching:
->   * http://www.advamation.com/knowhow/raspberrypi/rpi-i2c-bug.html
->   * https://www.raspberrypi.org/forums/viewtopic.php?p=146272
->   */
-> @@ -475,7 +476,7 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
->  	adap->algo = &bcm2835_i2c_algo;
->  	adap->dev.parent = &pdev->dev;
->  	adap->dev.of_node = pdev->dev.of_node;
-> -	adap->quirks = &bcm2835_i2c_quirks;
-> +	adap->quirks = of_device_get_match_data(&pdev->dev);
+>   * Names of clocks used within the driver that need to be replaced
+> @@ -2003,6 +2006,16 @@ static const struct bcm2835_clk_desc clk_desc_array[] = {
+>  		.frac_bits = 8,
+>  		.tcnt_mux = 39),
 > 
->  	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_C, 0);
+> +	/* EMMC2 clock (only available for BCM2711) */
+> +	[BCM2711_CLOCK_EMMC2]	= REGISTER_PER_CLK(
+> +		SOC_BCM2711,
+> +		.name = "emmc2",
+> +		.ctl_reg = CM_EMMC2CTL,
+> +		.div_reg = CM_EMMC2DIV,
+> +		.int_bits = 4,
+> +		.frac_bits = 8,
+> +		.tcnt_mux = 42),
+> +
+>  	/* General purpose (GPIO) clocks */
+>  	[BCM2835_CLOCK_GP0]	= REGISTER_PER_CLK(
+>  		SOC_ALL,
+> @@ -2238,8 +2251,13 @@ static const struct cprman_plat_data cprman_bcm2835_plat_data = {
+>  	.soc = SOC_BCM2835,
+>  };
 > 
-> @@ -501,7 +502,8 @@ static int bcm2835_i2c_remove(struct platform_device *pdev)
->  }
-> 
->  static const struct of_device_id bcm2835_i2c_of_match[] = {
-> -	{ .compatible = "brcm,bcm2835-i2c" },
-> +	{ .compatible = "brcm,bcm2711-i2c" },
-> +	{ .compatible = "brcm,bcm2835-i2c", .data = &bcm2835_i2c_quirks },
+> +static const struct cprman_plat_data cprman_bcm2711_plat_data = {
+> +	.soc = SOC_BCM2711,
+> +};
+> +
+>  static const struct of_device_id bcm2835_clk_of_match[] = {
+>  	{ .compatible = "brcm,bcm2835-cprman", .data = &cprman_bcm2835_plat_data },
+> +	{ .compatible = "brcm,bcm2711-cprman", .data = &cprman_bcm2711_plat_data },
 
-RPi4 FW seems to still use bcm2835-i2c as compatible in it's DTB blob. Does this
-break the driver or is this something we can improve by changing the FW blob in
-the future without breaking the driver now?
+Because the RPi4 FW uses bcm2838-cprman as compatible, we will need to add this
+here as well.
 
 Regards,
 Matthias
 
->  	{},
+>  	{}
 >  };
->  MODULE_DEVICE_TABLE(of, bcm2835_i2c_of_match);
+>  MODULE_DEVICE_TABLE(of, bcm2835_clk_of_match);
 > --
 > 2.7.4
 > 
