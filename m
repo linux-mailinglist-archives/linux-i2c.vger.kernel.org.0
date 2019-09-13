@@ -2,96 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB49B23F5
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2019 18:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44ACFB242C
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2019 18:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387594AbfIMQRv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 Sep 2019 12:17:51 -0400
-Received: from sauhun.de ([88.99.104.3]:37026 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730605AbfIMQRv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 13 Sep 2019 12:17:51 -0400
-Received: from localhost (234.77.63.94.rev.vodafone.pt [94.63.77.234])
-        by pokefinder.org (Postfix) with ESMTPSA id 110E32C3115;
-        Fri, 13 Sep 2019 18:17:49 +0200 (CEST)
-Date:   Fri, 13 Sep 2019 17:17:48 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Rob Clark <robdclark@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>, alokc@codeaurora.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, vkoul@kernel.org,
-        linux-i2c@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [RESEND v3 1/1] i2c: qcom-geni: Disable DMA processing on the
- Lenovo Yoga C630
-Message-ID: <20190913161748.GF1022@kunai>
-References: <5d71ef95.1c69fb81.6d090.085d@mx.google.com>
- <20190906061448.GJ26880@dell>
- <20190906065018.GA1019@kunai>
- <20190906075600.GL26880@dell>
- <20190906102355.GA3146@kunai>
- <20190906105445.GO26880@dell>
- <20190906183139.GB19123@kunai>
- <CAF6AEGsHOaR1dRf8xGH5sRa38=S+Y3NvNiAJ9DpMkddWoLBw8g@mail.gmail.com>
- <20190913142821.GD1022@kunai>
- <20190913161345.GB8466@tuxbook-pro>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sDKAb4OeUBrWWL6P"
-Content-Disposition: inline
-In-Reply-To: <20190913161345.GB8466@tuxbook-pro>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S2390216AbfIMQfd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 Sep 2019 12:35:33 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41708 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2387822AbfIMQfd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Sep 2019 12:35:33 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8DGWSXg095030;
+        Fri, 13 Sep 2019 12:35:19 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2v0cjewbn8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Sep 2019 12:35:19 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x8DGX7x9096532;
+        Fri, 13 Sep 2019 12:35:18 -0400
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2v0cjewbmu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Sep 2019 12:35:18 -0400
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x8DGYrLC005706;
+        Fri, 13 Sep 2019 16:35:17 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma04dal.us.ibm.com with ESMTP id 2uytdx2em9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Sep 2019 16:35:17 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8DGZHUm24445206
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 Sep 2019 16:35:17 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2357FAE063;
+        Fri, 13 Sep 2019 16:35:17 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5AD84AE05F;
+        Fri, 13 Sep 2019 16:35:16 +0000 (GMT)
+Received: from talon7.ibm.com (unknown [9.41.179.222])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 13 Sep 2019 16:35:16 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-aspeed@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, brendanhiggins@google.com,
+        joel@jms.id.au, andrew@aj.id.au, robh+dt@kernel.org,
+        mark.rutland@arm.com, benh@kernel.crashing.org,
+        Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH 0/2] i2c: Aspeed: Add AST2600 compatible string
+Date:   Fri, 13 Sep 2019 11:35:08 -0500
+Message-Id: <1568392510-866-1-git-send-email-eajames@linux.ibm.com>
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-13_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=575 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1909130167
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Update the Aspeed I2C driver with the AST2600 compatible string. The default
+driver behavior works fine with the AST2600. A new compatible string is needed
+to avoid the AST2400 and AST2500 behavior.
 
---sDKAb4OeUBrWWL6P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Eddie James (2):
+  i2c: Aspeed: Add AST2600 compatible
+  dt-bindings: i2c: Aspeed: Add AST2600 compatible
 
+ Documentation/devicetree/bindings/i2c/i2c-aspeed.txt | 3 ++-
+ drivers/i2c/busses/i2c-aspeed.c                      | 4 ++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-> It seems linux-next is now pulling from the soc.git, rather than
-> arm-soc.git, but Arnd is still pushing patches to arm-soc.git.
+-- 
+1.8.3.1
 
-Can you ask them to fix this?
-
-> Arnd says that the patch will be in v5.4 and I merged Arnd's tree and
-> gave it a spin here and this patch makes it boot. So please merge this
-> patch for v5.4 as well.
-
-No worries, this is clearly a bugfix. So it will easily go in with the
-same release as the DTS file.
-
-> Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Thanks!
-
-
---sDKAb4OeUBrWWL6P
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl17wSwACgkQFA3kzBSg
-Kbal/w//aXNof3lkVpfTmIhhGgkjv8YayEMRqV7utAriywrHmijJe0W6x14U0Cnu
-qVa787uJ9IWZIXiw/oEAWJCZ35wJsmieSsFbjLSv1X879bUck4Ns+A2WPQuelpXe
-pc5NbHkB2wrN+oVWcTaNWozRp+RbNBjoMDX4rzE9p6crx3kIQ4notA5DyDICfzih
-jG7zhNRXln3Y7RShZm4zzQk1fN3L9v/2B028aS/97EdjZspCSdWdirzGOCfSSGLx
-bnYou6JkrIYW0+77NnjXo/NFvo2nG2m4X88AlzA2443YKm/qYbfyviMluTnSq/de
-Mqj+G4aOC3sT7Go0wpX3EumT4NXmYKXPl2UsHKwqFZ2Bp1MQUE8RIh8KffRMXhUd
-mpYn/naRlU1DdiBj0VnRPPjSeW3NPp18TqQ8Q5taM+AvCX1X0/HBzWH8Kl22kkye
-ZlNq1ypePu5l9dr0SS9cBfVCYYZc6EpFeWNHvcfIY7v3F/L6ce8EOAXSaiwE5bnP
-FMQPyr8hrLrAnAiVP2h9QYN61n01LwRWQOWywyo1pHd6Z56ogae7bkgT4xBi+HI2
-nxP8d4OKPoHhXeHoiqA/86+j1BY8Yriqsg/lFlH3UteEFxj+8VHNi0JyzqW34EBE
-6MUipiry/etmVPg0T1dACsYYNYYTLx56HcQ0rX4cPDp+c+pvMtE=
-=jq+N
------END PGP SIGNATURE-----
-
---sDKAb4OeUBrWWL6P--
