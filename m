@@ -2,156 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE6EB2C9E
-	for <lists+linux-i2c@lfdr.de>; Sat, 14 Sep 2019 21:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB443B2CA2
+	for <lists+linux-i2c@lfdr.de>; Sat, 14 Sep 2019 21:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726646AbfINTFk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 14 Sep 2019 15:05:40 -0400
-Received: from esa1.microchip.iphmx.com ([68.232.147.91]:15024 "EHLO
-        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726426AbfINTFk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 Sep 2019 15:05:40 -0400
-Received-SPF: Pass (esa1.microchip.iphmx.com: domain of
-  Ludovic.Desroches@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
-  envelope-from="Ludovic.Desroches@microchip.com";
-  x-sender="Ludovic.Desroches@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa1.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
-  envelope-from="Ludovic.Desroches@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa1.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Ludovic.Desroches@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: NamCnpYy7SPDNIB3inySM76wPEFDkbfm16Jv9c2QJO7rqBr18skMfsFHvgdYGBvU/O7zLERuLf
- sMp/3dM2X6MFofMZCc49ldEjcBZKAJ9XLk5J1vftjusHp+vZcM+Wt5GWC+evLq6iyou2dyYAIP
- 2s+WfJvk6zxP6JLtyJSVfFCgvCIJgAfewFMp9x38PFg6qFOGq/e6rF7zUYWOnIcav5mAwHUb8m
- aW6QlCXClqr2pWjIzPSr5wrO10iAJts19F7p1YFXyIA9nU5nZGwZgTKtu/11LDhp78n1k4UNFh
- tgk=
-X-IronPort-AV: E=Sophos;i="5.64,505,1559545200"; 
-   d="scan'208";a="50488026"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Sep 2019 12:05:38 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sat, 14 Sep 2019 12:05:29 -0700
-Received: from localhost (10.10.85.251) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
- Transport; Sat, 14 Sep 2019 12:05:29 -0700
-Date:   Sat, 14 Sep 2019 21:05:28 +0200
-From:   Ludovic Desroches <ludovic.desroches@microchip.com>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-CC:     <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <wsa@the-dreams.de>
-Subject: Re: [PATCH] i2c: at91: Send bus clear command if SCL or SDA is down
-Message-ID: <20190914190528.wnxhcjo5s66qive6@sekiro>
-Mail-Followup-To: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, wsa@the-dreams.de
-References: <20190911095854.5141-1-codrin.ciubotariu@microchip.com>
+        id S1728260AbfINTNp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 14 Sep 2019 15:13:45 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:34129 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726426AbfINTNp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 Sep 2019 15:13:45 -0400
+Received: by mail-qt1-f196.google.com with SMTP id j1so25408500qth.1;
+        Sat, 14 Sep 2019 12:13:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IAgjPYgxJuywqHP8wcgTqQvaYuKAXpQd8Aaaa0T5GSM=;
+        b=FTociWALlazvY5q8JzHdwBEFo2ntDifG4bQVaLT5d23ziz7zTa0TAs8VDt4b73jl7J
+         3Cmyp50CfNSM+QbiqhQebH4tEnBo2zHSVHiwdtZ+6xPzBbbwpZ23uHi9Czat/j33KZLc
+         FGFsWdnpRZ0+4TrBz9oDiYH9gVOIktUo171lsF9Z8oMgIZgN4Dpmyz7LY3c92d6QRyXE
+         /Er6iXO/kB84lPCJok3sicDcfe2nthKGnJvJN9u5tdgvYB8q+E9KVTCbdWxUIlTlV2HR
+         5L665OPIJsyzODWGZkD6Z3HefFw4rdJidxo450oUcpaaa1u9DqaXEN1SPH5kX6eZGmqh
+         eA+g==
+X-Gm-Message-State: APjAAAUYdfsX8WffbxlRrai7H3bis3U4SapEnniNG25rd6qUtQFGdcN6
+        wQ6eV4vLjalqdwcODfs6vGbUcbjkjOJPN1DtymM=
+X-Google-Smtp-Source: APXvYqw7nKOIle6xbMusZICSNTO1mMvxG94oyioy5LP+FZetL8wQseG51/MDb9ooROfqPa+L+ao5QFEYMvit9qVM8rM=
+X-Received: by 2002:a0c:e74b:: with SMTP id g11mr30779948qvn.62.1568488424396;
+ Sat, 14 Sep 2019 12:13:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20190911095854.5141-1-codrin.ciubotariu@microchip.com>
-User-Agent: NeoMutt/20180716
+References: <20190905192412.23116-1-lee.jones@linaro.org> <5d71ef95.1c69fb81.6d090.085d@mx.google.com>
+ <20190906061448.GJ26880@dell> <20190906065018.GA1019@kunai>
+ <20190906075600.GL26880@dell> <20190906102355.GA3146@kunai>
+ <20190906105445.GO26880@dell> <20190906183139.GB19123@kunai>
+ <CAF6AEGsHOaR1dRf8xGH5sRa38=S+Y3NvNiAJ9DpMkddWoLBw8g@mail.gmail.com>
+ <20190913142821.GD1022@kunai> <20190913161345.GB8466@tuxbook-pro>
+In-Reply-To: <20190913161345.GB8466@tuxbook-pro>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 14 Sep 2019 21:13:28 +0200
+Message-ID: <CAK8P3a2+Foj4gxxetFQ5y1jUjc+HZDT1B3Utj9y2fJQMq83NrQ@mail.gmail.com>
+Subject: Re: [RESEND v3 1/1] i2c: qcom-geni: Disable DMA processing on the
+ Lenovo Yoga C630
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, Rob Clark <robdclark@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>, alokc@codeaurora.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 12:58:54PM +0300, Codrin Ciubotariu wrote:
-> After a transfer timeout, some faulty I2C slave devices might hold down
-> the SCL or the SDA pins. We can generate a bus clear command, hoping that
-> the slave might release the pins.
-> 
-> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+On Fri, Sep 13, 2019 at 6:13 PM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Fri 13 Sep 07:28 PDT 2019, Wolfram Sang wrote:
+>
+> > On Sat, Sep 07, 2019 at 10:56:34AM -0700, Rob Clark wrote:
+> > > On Sat, Sep 7, 2019 at 9:17 AM Wolfram Sang <wsa@the-dreams.de> wrote:
+> > > >
+> > > >
+> > > > > Does this mean you plan to have this merged for v5.4?
+> > > >
+> > > > Only if the machine DTS is expected to land in 5.4. But Stephen said it
+> > > > is not in liunx-next yet?
+> > > >
+> > >
+> > > It appears to be in arm-soc for-next:
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/arm/arm-soc.git/log/?h=for-next
+> >
+> > Still not in linux-next. Please ping me or resend this patch once it
+> > hits linux-next.
+> >
+>
+> It seems linux-next is now pulling from the soc.git, rather than
+> arm-soc.git, but Arnd is still pushing patches to arm-soc.git.
 
-I'll be off for three weeks so if there are minor changes, you can keep my
-ack.
+I'm still pushing identical contents to both, but plan to remove the old
+tree after the merge window.
 
-Thanks
-
-Ludovic
-
-> ---
->  drivers/i2c/busses/i2c-at91-master.c | 20 ++++++++++++++++++++
->  drivers/i2c/busses/i2c-at91.h        |  6 +++++-
->  2 files changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-> index a3fcc35ffd3b..5f544a16db96 100644
-> --- a/drivers/i2c/busses/i2c-at91-master.c
-> +++ b/drivers/i2c/busses/i2c-at91-master.c
-> @@ -599,6 +599,26 @@ static int at91_do_twi_transfer(struct at91_twi_dev *dev)
->  		at91_twi_write(dev, AT91_TWI_CR,
->  			       AT91_TWI_THRCLR | AT91_TWI_LOCKCLR);
->  	}
-> +
-> +	/*
-> +	 * After timeout, some faulty I2C slave devices might hold SCL/SDA down;
-> +	 * we can send a bus clear command, hoping that the pins will be
-> +	 * released
-> +	 */
-> +	if (!(dev->transfer_status & AT91_TWI_SDA) ||
-> +	    !(dev->transfer_status & AT91_TWI_SCL)) {
-> +		dev_dbg(dev->dev,
-> +			"SDA/SCL are down; sending bus clear command\n");
-> +		if (dev->use_alt_cmd) {
-> +			unsigned int acr;
-> +
-> +			acr = at91_twi_read(dev, AT91_TWI_ACR);
-> +			acr &= ~AT91_TWI_ACR_DATAL_MASK;
-> +			at91_twi_write(dev, AT91_TWI_ACR, acr);
-> +		}
-> +		at91_twi_write(dev, AT91_TWI_CR, AT91_TWI_CLEAR);
-> +	}
-> +
->  	return ret;
->  }
->  
-> diff --git a/drivers/i2c/busses/i2c-at91.h b/drivers/i2c/busses/i2c-at91.h
-> index 499b506f6128..ffb870f3ffc6 100644
-> --- a/drivers/i2c/busses/i2c-at91.h
-> +++ b/drivers/i2c/busses/i2c-at91.h
-> @@ -36,6 +36,7 @@
->  #define	AT91_TWI_SVDIS		BIT(5)	/* Slave Transfer Disable */
->  #define	AT91_TWI_QUICK		BIT(6)	/* SMBus quick command */
->  #define	AT91_TWI_SWRST		BIT(7)	/* Software Reset */
-> +#define	AT91_TWI_CLEAR		BIT(15) /* Bus clear command */
->  #define	AT91_TWI_ACMEN		BIT(16) /* Alternative Command Mode Enable */
->  #define	AT91_TWI_ACMDIS		BIT(17) /* Alternative Command Mode Disable */
->  #define	AT91_TWI_THRCLR		BIT(24) /* Transmit Holding Register Clear */
-> @@ -69,6 +70,8 @@
->  #define	AT91_TWI_NACK		BIT(8)	/* Not Acknowledged */
->  #define	AT91_TWI_EOSACC		BIT(11)	/* End Of Slave Access */
->  #define	AT91_TWI_LOCK		BIT(23) /* TWI Lock due to Frame Errors */
-> +#define	AT91_TWI_SCL		BIT(24) /* TWI SCL status */
-> +#define	AT91_TWI_SDA		BIT(25) /* TWI SDA status */
->  
->  #define	AT91_TWI_INT_MASK \
->  	(AT91_TWI_TXCOMP | AT91_TWI_RXRDY | AT91_TWI_TXRDY | AT91_TWI_NACK \
-> @@ -81,7 +84,8 @@
->  #define	AT91_TWI_THR		0x0034	/* Transmit Holding Register */
->  
->  #define	AT91_TWI_ACR		0x0040	/* Alternative Command Register */
-> -#define	AT91_TWI_ACR_DATAL(len)	((len) & 0xff)
-> +#define	AT91_TWI_ACR_DATAL_MASK	GENMASK(15, 0)
-> +#define	AT91_TWI_ACR_DATAL(len)	((len) & AT91_TWI_ACR_DATAL_MASK)
->  #define	AT91_TWI_ACR_DIR	BIT(8)
->  
->  #define	AT91_TWI_FMR		0x0050	/* FIFO Mode Register */
-> -- 
-> 2.20.1
-> 
+      Arnd
