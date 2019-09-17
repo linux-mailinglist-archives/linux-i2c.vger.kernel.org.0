@@ -2,55 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1955BB53C6
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2019 19:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A94AFB53FE
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2019 19:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727326AbfIQRPQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Sep 2019 13:15:16 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:41676 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725881AbfIQRPP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Sep 2019 13:15:15 -0400
-Received: by mail-pg1-f193.google.com with SMTP id x15so2350708pgg.8;
-        Tue, 17 Sep 2019 10:15:13 -0700 (PDT)
+        id S1730903AbfIQRVd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Sep 2019 13:21:33 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:42800 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727112AbfIQRVd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Sep 2019 13:21:33 -0400
+Received: by mail-pg1-f196.google.com with SMTP id z12so2357099pgp.9;
+        Tue, 17 Sep 2019 10:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=Tj2R7ApU+R18kZtfMMHwpOo/TfY0rKl5+SwEZrS2MK8=;
-        b=nL0fqthR3Yr0B1JZ28qUvy2WywfFQqdrbRxcoSiHsAsSUP59yEtv2B+06hnL6BY3jb
-         G51vqCLP7S25TQZqdVVxkDNIpbVKiTpaHDIx6JUIwcs47xQDaNi4t6Q/KSCLYppKM5fP
-         a5SGR1/GgIBno222ddzpdq8uuEdAOoVa0iRgemkV0saQG98r5yRk5SCTaVBMZkjqjAOB
-         +F34KioPgwvnLkk+WSvtBaeEKb5PdeQ+LODzyZwMbOW0iXDttfXb1aUigPNi4UHaeskm
-         9r37p++wEYENAuNGgfAXZ5z8kgPoNRxF0+7ntUIQZ/XzbiA8TsDGhtlM2HCSo7wn9ePp
-         0dpw==
+        bh=XP3nl6czy0Go84+GXhP6xekWe3lUeVW+0ACtxPkNsuU=;
+        b=ra2F+YVLYvZr1nAkWH0/Wv1eCDF8R5O0xDtT3wLIHtB0NEovuDhYBLvmw5yKAr9dFc
+         H5aPYrv2116jWoh7+mTpiVamxPdlD11YiaW1LQwPuMtNRAnt23CKa0S5ZyEoRY05Ul3L
+         TZRWwjueLtoPq4vykQs18KjMAt8WeKE/9eJbguHdHJ8ORG1E7YVcPNEqjoqYJrsotMdp
+         onjHvr14tX/TQQ2MRQ6U/YmynXB9Grm8p2cOec86NFrnwEdi4vQ7l5gHoZBhuuB/ssHE
+         zJPYHx8/CRc7vLYaA++VFnSxbiCOJ2DEjjrJ/lL8WJK3ESj3vl2NYBXrO6fu9lFY0O+i
+         HVGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=Tj2R7ApU+R18kZtfMMHwpOo/TfY0rKl5+SwEZrS2MK8=;
-        b=GJGCKWnBACFDGg0+NEdQ+WV02VKbkO5seF5E6YJLXiFYsJw7HLFAItSZKpvLXqKpay
-         Z6CdKTiviSwNHwdvCkh6oAQXTkzkwZ9hLb/93VJR25mamwfswwJJXC02I1FRU8ds5uKP
-         Z7asz77xFly2dTCY1D7BfKBrDyCMImGzZEw2+0LPU2P1hGqODc5dHv4ROr4EUHge8a5S
-         6h9WSJflHWg+LTVshwhDV97Nu2hwWxLOAPfU1Jfev9iAk8OyGKChJAF2+prOvQk3W7J1
-         RCdo1UM7bMJJLpoGNagYXuFwp4I0XX1xdIZ9LpAVpfasPJUPOM8a8tTMnGmtBZrkETVi
-         m/fQ==
-X-Gm-Message-State: APjAAAXhqpxUJ99BppEWeOd3Iiqh9VKBBVI1fgrWjBqlFLI8fp7nmCsi
-        rQMQoWIUD2GznPo9HKN8zgs=
-X-Google-Smtp-Source: APXvYqy8fG0q6iCMJJos1z/WHR4mu7VgHhmjsqcNKJNwGISeMBnPFajiPIVWixEmUHT6SsN22jN88g==
-X-Received: by 2002:a17:90a:e017:: with SMTP id u23mr5731639pjy.55.1568740513471;
-        Tue, 17 Sep 2019 10:15:13 -0700 (PDT)
+        bh=XP3nl6czy0Go84+GXhP6xekWe3lUeVW+0ACtxPkNsuU=;
+        b=qXfLsX4142OhASzxaor7Z+dURuHKsHgwkkKvqQkQwHaKAh3N3jI+AufAs2xOgfAo2x
+         tgVrDv9Mzif5dxOyxvdIelGyuSkJy5ihtwN7699Sus76q/fxxAznHh2IB9l4kWJ8Vv3E
+         BTlxA8F5wMAIFf2AUNuU+nmFcvmy8OA4eIClUM2b1SCBsdLEZiNgYF/4fwxt/yVGLaTW
+         Xakb/rk2lFoZBbjcMQmKBjxN8GoHrJB73JN8dacU8tX3EO0oxjadHZngUKmc9W172p4P
+         GwkMdwmY64fDuQRfe2e17uvHbEVH1boV3ERLuv1fK21dAtXZYwskDSQn28mRsR62hCob
+         kTPQ==
+X-Gm-Message-State: APjAAAVL21qIe9dMrf7viGnrpyFqBZNIyMBRmwq54Z6zGbOzLY+h14LQ
+        ZphiB8y4xiiv2JotE0xX4UI=
+X-Google-Smtp-Source: APXvYqy9+ZSC73Ve3Dqf5eomIyJYUjt2b9pP6rdhOaaLMMGlu5/7bJTtbLOpJVlM1c73KZW6WZxyJg==
+X-Received: by 2002:a62:7d8c:: with SMTP id y134mr5459148pfc.257.1568740892878;
+        Tue, 17 Sep 2019 10:21:32 -0700 (PDT)
 Received: from SD ([106.222.12.103])
-        by smtp.gmail.com with ESMTPSA id a11sm3315255pfg.94.2019.09.17.10.15.10
+        by smtp.gmail.com with ESMTPSA id g1sm2714459pgg.27.2019.09.17.10.21.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Sep 2019 10:15:12 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 22:44:55 +0530
+        Tue, 17 Sep 2019 10:21:31 -0700 (PDT)
+Date:   Tue, 17 Sep 2019 22:51:20 +0530
 From:   Saiyam Doshi <saiyamdoshi.in@gmail.com>
 To:     agross@kernel.org
 Cc:     linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org, markus.elfring@web.de
-Subject: [PATCH v2 1/3] i2c: qup: remove explicit conversion to boolean
-Message-ID: <20190917171455.GA7922@SD>
+Subject: [PATCH v2 2/3] i2c: qup: Remove dev_err() log after
+ platform_get_irq*() failure
+Message-ID: <20190917172120.GA11581@SD>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -60,51 +61,35 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Relational and logical operators evaluate to bool,
-explicit conversion is overly verbose and unneeded.
+The debug message after platform_get_irq() failure is redundant
+because platform_get_irq() already prints an error. Thus remove it.
 
-Generated by: scripts/coccinelle/misc/boolconv.cocci
+Generated by: scripts/coccinelle/api/platform_get_irq.cocci
 
 Signed-off-by: Saiyam Doshi <saiyamdoshi.in@gmail.com>
 ---
 Changes in v2:
-* Updated changelog
+Updated changelog and removed unnecessary braces after if condition.
 
- drivers/i2c/busses/i2c-qup.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/i2c/busses/i2c-qup.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
-index e09cd0775ae9..5519c19bfd9c 100644
+index 5519c19bfd9c..ed09a59066b2 100644
 --- a/drivers/i2c/busses/i2c-qup.c
 +++ b/drivers/i2c/busses/i2c-qup.c
-@@ -961,10 +961,8 @@ static void qup_i2c_conf_v1(struct qup_i2c_dev *qup)
- 	u32 qup_config = I2C_MINI_CORE | I2C_N_VAL;
- 	u32 io_mode = QUP_REPACK_EN;
+@@ -1766,10 +1766,8 @@ static int qup_i2c_probe(struct platform_device *pdev)
+ 		return PTR_ERR(qup->base);
 
--	blk->is_tx_blk_mode =
--		blk->total_tx_len > qup->out_fifo_sz ? true : false;
--	blk->is_rx_blk_mode =
--		blk->total_rx_len > qup->in_fifo_sz ? true : false;
-+	blk->is_tx_blk_mode = blk->total_tx_len > qup->out_fifo_sz;
-+	blk->is_rx_blk_mode = blk->total_rx_len > qup->in_fifo_sz;
+ 	qup->irq = platform_get_irq(pdev, 0);
+-	if (qup->irq < 0) {
+-		dev_err(qup->dev, "No IRQ defined\n");
++	if (qup->irq < 0)
+ 		return qup->irq;
+-	}
 
- 	if (blk->is_tx_blk_mode) {
- 		io_mode |= QUP_OUTPUT_BLK_MODE;
-@@ -1532,10 +1530,10 @@ qup_i2c_determine_mode_v2(struct qup_i2c_dev *qup,
- 	    (total_len > qup->out_fifo_sz || total_len > qup->in_fifo_sz)) {
- 		qup->use_dma = true;
- 	} else {
--		qup->blk.is_tx_blk_mode = max_tx_len > qup->out_fifo_sz -
--			QUP_MAX_TAGS_LEN ? true : false;
--		qup->blk.is_rx_blk_mode = max_rx_len > qup->in_fifo_sz -
--			READ_RX_TAGS_LEN ? true : false;
-+		qup->blk.is_tx_blk_mode =
-+			max_tx_len > qup->out_fifo_sz - QUP_MAX_TAGS_LEN;
-+		qup->blk.is_rx_blk_mode =
-+			max_rx_len > qup->in_fifo_sz - READ_RX_TAGS_LEN;
- 	}
-
- 	return 0;
+ 	if (has_acpi_companion(qup->dev)) {
+ 		ret = device_property_read_u32(qup->dev,
 --
 2.20.1
 
