@@ -2,77 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BC6B52D5
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2019 18:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E071DB52E8
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2019 18:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbfIQQVI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Sep 2019 12:21:08 -0400
-Received: from mail-pg1-f172.google.com ([209.85.215.172]:41097 "EHLO
-        mail-pg1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726059AbfIQQVH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Sep 2019 12:21:07 -0400
-Received: by mail-pg1-f172.google.com with SMTP id x15so2278132pgg.8;
-        Tue, 17 Sep 2019 09:21:07 -0700 (PDT)
+        id S1726865AbfIQQZP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Sep 2019 12:25:15 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:45055 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725825AbfIQQZP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Sep 2019 12:25:15 -0400
+Received: by mail-pl1-f196.google.com with SMTP id k24so917026pll.11;
+        Tue, 17 Sep 2019 09:25:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=NCOl4aNg2JXCgak1io+lJcKczvWl3tjttSd25dm7D0A=;
-        b=oOlgfWqQ4IYViSiWiefP0ouH7rCalamb6bQFiuOqq2EoB//enTmMmqKRxDSExIiHBX
-         hcn1YAyBATeZwp9lphdEHPV8i7V4vaIUrpELr123xp/X+WH69MLb5e33mJ2vopa7RudS
-         6uaxotpV9J3nBtUouEt3thGlsIQVburEk8avlTJGq7vKgl21+TJbf0IkAVOsjh2nucWQ
-         zO7IHsTnSRzBIHwv/ab48p24oeeM6KFjfTxtwpJQ8AzkfcugeSOhOUkXTGfwXzhxbrd2
-         TJec+DwJFAHhRcgakT+kX+BgdBjH+5m/9Kt4opLdRJQEzJtjl7cS8FKJ6D6QvgYQS979
-         IjVw==
+        bh=bgljOZg/sNzlCH3RJEuTYnEE1iTvY4pjYoRACNtJrFc=;
+        b=oJ5h3OBhaOR+w9LTwoV08mAgk9zZk060nVry0Q2M30E8rm+D3r/y4zRaUnzE4GPyMj
+         IvYP93wpuqDU5sCtqII+asMTopmOK5l/LcabbWLFZBeWi998ucf4S57rCRR8R+upxGs6
+         SgmlbXLZmR38Vs8sf1sv3pE9xj8m+FTROUEWhHF41hwMVwcYvgkgbmj0kb5dZn+2DUEK
+         LWwecHOKgMrglfEcYTLqF4KrchJoZ0jIVviM+8nLub5ej0RKNOWErmmgrjTjG5D3w4qM
+         hmnGNdp5chA3uOTDdir+9EuP425fanZ7nhdWBkqy5MS3j0bWQsKv2wOgP0aoy1r3OPKM
+         hx/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=NCOl4aNg2JXCgak1io+lJcKczvWl3tjttSd25dm7D0A=;
-        b=uWD2+7Ui5EEiVaX5cWjqKdxS64GJwQkXVbkTuie5BKcrmN1kn0QSe3jdA2yPSv1pl3
-         DQtz3V+pH/z5IEGhYVvT1Q7I7NseMLuoNd3Aw2hwjItmK9nnepx4zKLvKfXxON+Bk4xH
-         RbeIZ/2rU7ZAdLvzz7E5VbtuMP1VOpIUBPwFs4zMI96YyQS6ZF8I/8iL7vjFth6zmbao
-         xnkTD3Ms9AUpeLYWwXZn13uxP4G/7+28bVFRUaHzw4J1tId3yc23VMGdML/OrY5LjBXv
-         X4KXA2VNfkVlmieOQgRcYcd2pSyEFGQ1UEg70I6Fd5v0nCCiy4f1cumkdVpFDpBlS7KZ
-         HV0g==
-X-Gm-Message-State: APjAAAWt6GrkfQZGn9MoQntDF9hun2CQthO3QGhenPvGC56/WN+hxVnC
-        1xTES5/ioVJtNH0esTKwPVc=
-X-Google-Smtp-Source: APXvYqz+Yigq2Mnhew0hEmbFGlslf4RIt+lyh8bqnqLC6d8CpbsVFRHiPV3am+SGiWapkUTwxKHLhg==
-X-Received: by 2002:a17:90a:7782:: with SMTP id v2mr5582891pjk.3.1568737266388;
-        Tue, 17 Sep 2019 09:21:06 -0700 (PDT)
+        bh=bgljOZg/sNzlCH3RJEuTYnEE1iTvY4pjYoRACNtJrFc=;
+        b=U4786Z4SsdDfqPBT+HNbrghLeKFEwvvUnp9085GbzEI/TbeBnQFtV44KQYbxru0+Nz
+         LecpjB9hcwltQF6AgI214gAQLATQVEyryTWrrZlzsgLAIdULjggRDf911ObrN7FE4ZxF
+         GlEO9Jxc3NPWnp5iCkC57/hKHBb83ig0ik6EULVX7uPKq8bLbePjTzfHX2FZCpF90ZFW
+         5yRVnlmBqoXvdH69RxFyLFraQVU3H6ojgzudlwZaM3c6c6dJKWLkFO1BBVipbX9aZTLx
+         mJVoAZtB4sGs7c9JnHrTzUJ6ZqSiidYRB6+72IEvwrBfDwyxzz7aZJGNNo/ZZ2C/j3ui
+         mqAQ==
+X-Gm-Message-State: APjAAAUQWWVawqlZuTrLFip2uFXXb0s+5JKcNKwRczicqVnIJdv2mafu
+        jjLyvCwa0yvUZtyd/EheJjOk/jvYgbU=
+X-Google-Smtp-Source: APXvYqz8jakHTBRwb+1gp8rUMsqSo/5z7PiJPXJLaQyV38Bzag7BMrZO2lSw4oq/sN/MupqStLivrQ==
+X-Received: by 2002:a17:902:8c92:: with SMTP id t18mr4726014plo.147.1568737514466;
+        Tue, 17 Sep 2019 09:25:14 -0700 (PDT)
 Received: from SD ([106.222.12.103])
-        by smtp.gmail.com with ESMTPSA id l7sm7975529pga.92.2019.09.17.09.21.02
+        by smtp.gmail.com with ESMTPSA id r186sm4411622pfr.40.2019.09.17.09.25.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Sep 2019 09:21:05 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 21:50:46 +0530
+        Tue, 17 Sep 2019 09:25:13 -0700 (PDT)
+Date:   Tue, 17 Sep 2019 21:55:08 +0530
 From:   Saiyam Doshi <saiyamdoshi.in@gmail.com>
 To:     Markus Elfring <Markus.Elfring@web.de>
 Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel-janitors@vger.kernel.org
-Subject: Re: [1/3] i2c: qup: remove explicit conversion to boolean
-Message-ID: <20190917162046.GA5388@SD>
-References: <20190916185738.GA14035@SD>
- <b5f63a71-6f6f-eea5-2283-6b5df22b267a@web.de>
+Subject: Re: [PATCH 2/3] i2c: qup: Remove dev_err() log after
+ platform_get_irq*() failure
+Message-ID: <20190917162508.GB5388@SD>
+References: <20190916185857.GA14093@SD>
+ <f25a406d-9032-5db9-7136-6ff99c02f888@web.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b5f63a71-6f6f-eea5-2283-6b5df22b267a@web.de>
+In-Reply-To: <f25a406d-9032-5db9-7136-6ff99c02f888@web.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 05:07:29PM +0200, Markus Elfring wrote:
-> > Found using - Coccinelle (http://coccinelle.lip6.fr)
+On Tue, Sep 17, 2019 at 05:28:47PM +0200, Markus Elfring wrote:
+> > The semantic patch that makes this report is available
+> > in scripts/coccinelle/api/platform_get_irq.cocci.
+> >
+> > Found using - http://coccinelle.lip6.fr/
 > 
-> Can a tag like “Generated by: scripts/coccinelle/misc/boolconv.cocci”
-> be more helpful for this change description?
+> Can a tag like “Generated by: scripts/coccinelle/api/platform_get_irq.cocci”
+> be more helpful than the other description variant?
+Okay, will update the changelog.
 
-Yes, will do.
+> >  	if (qup->irq < 0) {
+> > -		dev_err(qup->dev, "No IRQ defined\n");
+> >  		return qup->irq;
+> >  	}
+> How do you think about to omit the curly brackets here after only a single
+> statement would be used in the if branch?
+Completely missed that! I will update and resend.
 
 -Saiyam
