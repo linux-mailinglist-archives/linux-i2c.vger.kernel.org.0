@@ -2,88 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E071DB52E8
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2019 18:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D2DB5331
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2019 18:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbfIQQZP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Sep 2019 12:25:15 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:45055 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725825AbfIQQZP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Sep 2019 12:25:15 -0400
-Received: by mail-pl1-f196.google.com with SMTP id k24so917026pll.11;
-        Tue, 17 Sep 2019 09:25:14 -0700 (PDT)
+        id S1728697AbfIQQiL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Sep 2019 12:38:11 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:45196 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727632AbfIQQiL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Sep 2019 12:38:11 -0400
+Received: by mail-pf1-f194.google.com with SMTP id y72so2464728pfb.12;
+        Tue, 17 Sep 2019 09:38:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=bgljOZg/sNzlCH3RJEuTYnEE1iTvY4pjYoRACNtJrFc=;
-        b=oJ5h3OBhaOR+w9LTwoV08mAgk9zZk060nVry0Q2M30E8rm+D3r/y4zRaUnzE4GPyMj
-         IvYP93wpuqDU5sCtqII+asMTopmOK5l/LcabbWLFZBeWi998ucf4S57rCRR8R+upxGs6
-         SgmlbXLZmR38Vs8sf1sv3pE9xj8m+FTROUEWhHF41hwMVwcYvgkgbmj0kb5dZn+2DUEK
-         LWwecHOKgMrglfEcYTLqF4KrchJoZ0jIVviM+8nLub5ej0RKNOWErmmgrjTjG5D3w4qM
-         hmnGNdp5chA3uOTDdir+9EuP425fanZ7nhdWBkqy5MS3j0bWQsKv2wOgP0aoy1r3OPKM
-         hx/w==
+        bh=M+C/fxYyUGZMHeSdVODDGx5ShuHSCst9DvpbxsNqER0=;
+        b=jXjlzNBOcQH8Eu+3Z2zTQJsUcxnZg6x90wnFCjdL7W7Rjb12GkKu5rBwajTF9Haf1P
+         KF2ABsE/9p0C0oK/C291voDVlfVEDYM8NnEikE+U/haxu2GLJ3CG7vzCfo6LCZK3ZyJg
+         8nbLfGl1dMNkfxpfd7IqOmqt37/M5B0PF78dtFJHHnfsqR7pfyJhQry1XXVmFYtenQmK
+         qaoi+1GJwQzEo5PlPr7Bmfv8XFJsyZs1E1+NjNG8STvp9knD2gHihgAl8LpdOajLFz9B
+         upMuz+PKjwQPnWBAEIDI2WbkFFBrfLemMj+POdfyc9VKZn/lZrDlAxKR5N4hDTjujMJt
+         UJ1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=bgljOZg/sNzlCH3RJEuTYnEE1iTvY4pjYoRACNtJrFc=;
-        b=U4786Z4SsdDfqPBT+HNbrghLeKFEwvvUnp9085GbzEI/TbeBnQFtV44KQYbxru0+Nz
-         LecpjB9hcwltQF6AgI214gAQLATQVEyryTWrrZlzsgLAIdULjggRDf911ObrN7FE4ZxF
-         GlEO9Jxc3NPWnp5iCkC57/hKHBb83ig0ik6EULVX7uPKq8bLbePjTzfHX2FZCpF90ZFW
-         5yRVnlmBqoXvdH69RxFyLFraQVU3H6ojgzudlwZaM3c6c6dJKWLkFO1BBVipbX9aZTLx
-         mJVoAZtB4sGs7c9JnHrTzUJ6ZqSiidYRB6+72IEvwrBfDwyxzz7aZJGNNo/ZZ2C/j3ui
-         mqAQ==
-X-Gm-Message-State: APjAAAUQWWVawqlZuTrLFip2uFXXb0s+5JKcNKwRczicqVnIJdv2mafu
-        jjLyvCwa0yvUZtyd/EheJjOk/jvYgbU=
-X-Google-Smtp-Source: APXvYqz8jakHTBRwb+1gp8rUMsqSo/5z7PiJPXJLaQyV38Bzag7BMrZO2lSw4oq/sN/MupqStLivrQ==
-X-Received: by 2002:a17:902:8c92:: with SMTP id t18mr4726014plo.147.1568737514466;
-        Tue, 17 Sep 2019 09:25:14 -0700 (PDT)
+        bh=M+C/fxYyUGZMHeSdVODDGx5ShuHSCst9DvpbxsNqER0=;
+        b=WYqIh+iC3aZPH/GX3LmChPQhbBanU1aRdPDAUi9M5nBGRioUsD4H3cacayHR1Qbhvr
+         qaP8h/iA/50ZXlKxcqTy5vqUDY6oxjPWUqDpPxm7ph4M7y1hAl+J+N+Gbnn4aWfEr3a8
+         o7XAXkJqGMQCRib1nmbYoXF0ZupnR6qhsJt6FFrPJxIsFmdEPvdo4cUPiu4Vf+RYnRYQ
+         ob0uY352fJJpBD6VPgDjQYWhjFug1d2tg47CVEGLHef8ByHThe3GaohMseCVc0h6jM/2
+         6XtJ7/GxCd0rbUMbMlJtgUoq8YkkSJY7WQVkHMPTBQdWVAxU0mb8NL51ksB6nXOripbQ
+         wZUQ==
+X-Gm-Message-State: APjAAAWAZeXXrL/2/Tx8lUYe9aCLjhhEDrquzDBdGs6IvVfyZq4Ghxz2
+        DgXUz8uOjWWOEID+MoVQtKk=
+X-Google-Smtp-Source: APXvYqyAU13q2kH5ppA37f+1DD2gPRmjj9r+uktMGJ6vw5VwzCfvD7TyOhfijEit3/VQ/g8RoE7r6g==
+X-Received: by 2002:a17:90a:8e84:: with SMTP id f4mr5950212pjo.122.1568738290209;
+        Tue, 17 Sep 2019 09:38:10 -0700 (PDT)
 Received: from SD ([106.222.12.103])
-        by smtp.gmail.com with ESMTPSA id r186sm4411622pfr.40.2019.09.17.09.25.11
+        by smtp.gmail.com with ESMTPSA id w7sm2906714pjn.1.2019.09.17.09.38.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Sep 2019 09:25:13 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 21:55:08 +0530
+        Tue, 17 Sep 2019 09:38:09 -0700 (PDT)
+Date:   Tue, 17 Sep 2019 22:08:03 +0530
 From:   Saiyam Doshi <saiyamdoshi.in@gmail.com>
 To:     Markus Elfring <Markus.Elfring@web.de>
 Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 2/3] i2c: qup: Remove dev_err() log after
- platform_get_irq*() failure
-Message-ID: <20190917162508.GB5388@SD>
-References: <20190916185857.GA14093@SD>
- <f25a406d-9032-5db9-7136-6ff99c02f888@web.de>
+Subject: Re: [3/3] i2c: qup: Use devm_platform_ioremap_resource helper
+Message-ID: <20190917163803.GC5388@SD>
+References: <20190916190254.GA14207@SD>
+ <c24065f1-2692-9529-d505-ae639ce5d271@web.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f25a406d-9032-5db9-7136-6ff99c02f888@web.de>
+In-Reply-To: <c24065f1-2692-9529-d505-ae639ce5d271@web.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 05:28:47PM +0200, Markus Elfring wrote:
+On Tue, Sep 17, 2019 at 05:40:14PM +0200, Markus Elfring wrote:
+> > Use devm_platform_ioremap_resource helper which wraps
+> > platform_get_resource() and devm_ioremap_resource() together.
+> 
+> Can a wording like “Simplify this function implementation by using
+> a known wrapper function.” be nicer for this change description?
+Okay. I will change as actual change and changelog is almost similar :)
+
 > > The semantic patch that makes this report is available
-> > in scripts/coccinelle/api/platform_get_irq.cocci.
+> > in scripts/coccinelle/api/devm_platform_ioremap_resource.cocci.
 > >
 > > Found using - http://coccinelle.lip6.fr/
 > 
-> Can a tag like “Generated by: scripts/coccinelle/api/platform_get_irq.cocci”
+> Can a tag like “Generated by: scripts/coccinelle/api/devm_platform_ioremap_resource.cocci”
 > be more helpful than the other description variant?
-Okay, will update the changelog.
-
-> >  	if (qup->irq < 0) {
-> > -		dev_err(qup->dev, "No IRQ defined\n");
-> >  		return qup->irq;
-> >  	}
-> How do you think about to omit the curly brackets here after only a single
-> statement would be used in the if branch?
-Completely missed that! I will update and resend.
+will update this in changelog and resend this series.
 
 -Saiyam
