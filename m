@@ -2,30 +2,29 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C72B4B517D
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2019 17:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A87CB51B0
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2019 17:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729562AbfIQP2x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Sep 2019 11:28:53 -0400
-Received: from mout.web.de ([212.227.15.4]:42221 "EHLO mout.web.de"
+        id S1727923AbfIQPkV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Sep 2019 11:40:21 -0400
+Received: from mout.web.de ([212.227.15.4]:34575 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726305AbfIQP2x (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 17 Sep 2019 11:28:53 -0400
+        id S1726038AbfIQPkV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 17 Sep 2019 11:40:21 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1568734128;
-        bh=G9TZSNUKLdrLpEHYKM5LRzFW5y+Z1TzgCmUc7szZ38s=;
+        s=dbaedf251592; t=1568734815;
+        bh=Z9bctWDpIcLF5jbzZ5SjGhI21IDVR1k5oXtZh1NOdNs=;
         h=X-UI-Sender-Class:Cc:References:Subject:To:From:Date:In-Reply-To;
-        b=nVsqzSWvDmJklYkevMU/FNdNsT031pWNpy8/nQ9q+c3062199qCN9kYlg6fjg6zEv
-         2zyUwf3MkvwjRkeG3WyadP9KWYZlnxGubWlepJSGu3EKZdvYWskMokxWIs58MXiixl
-         4ENPmefOSq9SL1Mj56+JIGbFADn+bdJIsCGxmyJY=
+        b=k65KTPRRxthTWsoZUn3AK5ISS4SCl7IKnsMHrXYn/046Wj3HL/cPAa1LVKjukwEza
+         /LnGjrFbNcYPoP4ZKHHs8x3T/xWsVHnZ2saXjeXpaV39+MW/oig+nsHJlRehWN3fo1
+         Z5fQ5VdXh8YbtA0Dyu8OLoPiDNlfCunNZie9RukU=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.244.93.51]) by smtp.web.de (mrweb002
- [213.165.67.108]) with ESMTPSA (Nemesis) id 0LoYJu-1hi28D3orK-00gVB5; Tue, 17
- Sep 2019 17:28:48 +0200
+Received: from [192.168.1.2] ([2.244.93.51]) by smtp.web.de (mrweb004
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 0LhhVB-1hoL6c36mH-00mtmE; Tue, 17
+ Sep 2019 17:40:15 +0200
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <20190916185857.GA14093@SD>
-Subject: Re: [PATCH 2/3] i2c: qup: Remove dev_err() log after
- platform_get_irq*() failure
+References: <20190916190254.GA14207@SD>
+Subject: Re: [3/3] i2c: qup: Use devm_platform_ioremap_resource helper
 To:     Saiyam Doshi <saiyamdoshi.in@gmail.com>,
         Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-i2c@vger.kernel.org
@@ -73,69 +72,59 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <f25a406d-9032-5db9-7136-6ff99c02f888@web.de>
-Date:   Tue, 17 Sep 2019 17:28:47 +0200
+Message-ID: <c24065f1-2692-9529-d505-ae639ce5d271@web.de>
+Date:   Tue, 17 Sep 2019 17:40:14 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.0
 MIME-Version: 1.0
-In-Reply-To: <20190916185857.GA14093@SD>
+In-Reply-To: <20190916190254.GA14207@SD>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:FEiVmc3Rc3Ggh7bg9KUwsXvV9ejxmkgrXq0nDh3yCmsEv8RQ8Fj
- GRd8fNlRCT60C1RWhXN4/pFdccCpDMXxsqV4F8iJTP2VsXiYREzZTNIKvCcJI1g2ykdp3m4
- Vkt+Rona2elFWTY5lgOOri4hmeYkti4qPSWJfdsAlLEGPXQs8M4YL8mTLQjbzHN9bfTVCuq
- KG5w9cbud37cT3wz1w+2w==
+X-Provags-ID: V03:K1:Gn6QLV8IyYo5OKOfLJia/XY5aC5iB9OCV413m5JqvDAIrTOfPC6
+ Icn1nI7tVhw4A/mYqFZTO4BslXNuK6/M4H56/Jouc+r9ej51e+8gnDFrzPIuHcx2+PXspxk
+ olfWARZBVZ1adnEDfDLhcykLriZ91uc/EujaFdQR6QTmAjESmaH5XqJ2HQhABrrV9z9Lodf
+ JTb32xVqz602I1LCryqmA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PIAgitQJ8YM=:cq2AElC0onpwHQ9SOTFp5L
- YhGNrGLNsm5nSRi8ypVTXXqO6XV8BniDX9TZLTvdbZCQQlcoaSIe3kT4rBqKw7PPMRygKlWm1
- jzaDU4eGJfNkulo2HmgtxWNOxegffTdqNxOQT7PQPcJouN28voOrTC7D9kY7NV9kkwpJVFoW+
- Dwd/kbYTY1ZYMcaZmb+lGCnfQ6x7K2t4Xf9NDlDgcABvGg8XPusV6SyB2xuSQuWEo8BOT6nL6
- 1JhwHS/XNianbOzTpVzID3JJfo3DZTwwKi0CNFk/VPCV5zvGQmTrP4F7KCX4vVBfdb0UU3GeX
- XtMCoGkVtvnB+gmmcwCjrEuHXeRJLJY7m9yxC97vGCEd93V7OUT+ZxcynkiRDxgBKl0/gu+Re
- cV6c7rSivZLnYg5kQvQ7LSMQZzRCiDwLUvIEA2lR6VYtE6KijO1Nw8x+Q72lP7DkqRVVEkHNK
- wRjHsfI4cycPJ5pHuReNICAwOWi9Y8rgJhlD55hVuBmM73dh2/Wr2Vzzyo2WJayZQDs3eCQBT
- PQZyZeENjKMsG1U3jbGiKHRB+2TS+uNWBBdDEFc0jqLdczsoZo1pm+sHkNZGkxvJZ+87ZHkr3
- bu7LuTnKrEPj81Br6hJ1vuz2cLsXJ8iaOBaWPCg091Xf/F5tip5EsqHuNOWjrj2XiTJcdo+af
- /xua2xh1yC2nTC6nN4Xz/eSlDSL+bMVYyVydD98q0kEWaDM/g8oRD6kw9mNOBA1t0Hrh+pttj
- PLvy3jB3Jf2XgRXphMeUOnqO43e0YkF4QfQMHTczKcOV7L4WSIhxJMsKKJmxE//rxyWMonMeh
- pV5DU8MhGW3CC6ajB914n7jr419sH54YLZOWEvBU4IWAcRWPTQUwEJAbP6z2SZm1t9+qNuKI+
- CPGTLPW4/OSGtcWj6tEHEWI7OXOm0pI7q5qH7l26dDCws6MscJpnK+a8R0Hc6urr7xy3jSA8W
- iwTulTO0lYrj3rUsbaW/3L+Bo1UxIkrUgUOUDGTyQGXGwr1r1ELhXc4GLUys5qXmtHhrp+Wsg
- FAUi7c9amaaDT/+TKVWEqyU4fUTSVQz8ILsNFwWRuri7mnEOr9c3GWCR1W/XO8C6C58m/eWwh
- n68ke7zKr/0GQ/IofdkKmuUKdx+Wx3v+Ym65p82vK5ZRpa27lSTJj09UZbHYlAQFN3gofVnXS
- E6HbYKViRJqOj6OtmxMngmSfQ/paz6kwD1M5H5YyUBWnZjwnIuIXEqlBHVA3mt37Jlfi65rlQ
- Q6q+VArUEFDDwZ0enZYTW/p+b6LABv6PJ9LNhV7xEJRicmz3K8uZ277kGyuk=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1RPp9Hf0kBI=:wXZjz1fekG/GT9XA0UTJme
+ LWrQvDUBVNQ1XYyAolOTBh61Y0shZjn+69NGjFm3fuKSXHVjKiABl+t8/J6Wg0pAI8V1SUMf4
+ WtpU/86Q3tA0YUIQqdgznTPa/Hkfb1Quy/5PeMLtX25AUlNieHSHOg/ylDm5mzmLKTqRZjDh1
+ lX2mHe78w2vTuaXLiElvfGz8yxQhWItg0V81Wb1AMYC/FN9nNkRJhQFEiEcQgZ3xtFKd5XK1N
+ fryujCzDyYQ9MgFEq7DDhu91qCkrMmXgwhrsWbv+9zAS39MKVu2zd6+nLpjn8xXFPjozxB26J
+ sR/PT8PpugHUS5/gBBuVtwb8nmyJV48TRdK7DlFjiazTIFyfJrlPryDGLozkoaRHDzuPN7Ht3
+ 1/13V/qgamAitST9ADjeCSjek5p4Cu94040gcb1JYDmDBh+aY4rNCZ3tXAjKIdIvNS9tmy5K8
+ XEr/QddckpuLqaEsE3PoIqZYzAJ+hnOdu71wvW47D/KuCv2t0Z5I6452AzPqv0JHwDfswqXzC
+ sAwQMc38SgX2AgpCOdT/ajIfOU/wA4lqxDIs7ii9QhYwfnTpS1vkS/e9glk/CgaF7K6STMupT
+ h/oR8XZkhd9eeVcy7xQhnAiYFgJYEm/Z3KQetPnefvRH6QIQvO1BrscWjSXZzAZTw4c4MIFxA
+ tiSiNeooMpDi4NarG091RWQBe4GA1NvcPVNrLTBBRcSE9iL/wnzFwOnwXA8hykxeGoZ6LMou8
+ +lBYw9SUjtOQy08OEwsIxdHDVN3gCezqzxiq7Dqjeay+gieSFcf6OYLgIhDszS1Rwfs1cnIew
+ DoYd+bRQ7htUTiZU0Lg8FA6PrJWte46cpuGeFZtenPVPgHKzp1h5pW/EyVu3zDT2wwOl705rd
+ yspkt78zIlZ6d/qf470O50frESlyFnAm26R100gFZy0XIBBcvpP7VtFlBZTF7I25l7NBoHiPr
+ I+hHcPVVKI70TXM8vXI4X3CD3bNbkDmJ9Pwz4k5KigSqrsEUnfl68zhNkATSYr+A6fDtNiOzw
+ r+YqUWEEGZVYtEiYqWjxJXnPVb+FHTr2h944mxUfxku1EWKVR8jAB2yJ5Ww7I3VVrN7usnVQh
+ i+Ebic7P8wtnCHSSgyGjrBqpzTmRBJx0dDupyQP6qMRJE8Fp0qi35SHOJya9XNeqpS601G6Fm
+ D+qViRccuNptE5f+gRkWvulqoM8zGRo+I5SBP9M4GXyi/70FB2SdHT/ZRQsdSGoknxnC4DKoK
+ nZz8YcRbs1J1fb+pQy3t9oTv82DgzgmRSpUwlITEdkMyBhaY6Sg4UDaGSGYQ=
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+> Use devm_platform_ioremap_resource helper which wraps
+> platform_get_resource() and devm_ioremap_resource() together.
+
+Can a wording like =E2=80=9CSimplify this function implementation by using
+a known wrapper function.=E2=80=9D be nicer for this change description?
+
+
 > The semantic patch that makes this report is available
-> in scripts/coccinelle/api/platform_get_irq.cocci.
+> in scripts/coccinelle/api/devm_platform_ioremap_resource.cocci.
 >
 > Found using - http://coccinelle.lip6.fr/
 
-Can a tag like =E2=80=9CGenerated by: scripts/coccinelle/api/platform_get_=
-irq.cocci=E2=80=9D
+Can a tag like =E2=80=9CGenerated by: scripts/coccinelle/api/devm_platform=
+_ioremap_resource.cocci=E2=80=9D
 be more helpful than the other description variant?
-
-
-> +++ b/drivers/i2c/busses/i2c-qup.c
-> @@ -1767,7 +1767,6 @@ static int qup_i2c_probe(struct platform_device *p=
-dev)
->
->  	qup->irq =3D platform_get_irq(pdev, 0);
->  	if (qup->irq < 0) {
-> -		dev_err(qup->dev, "No IRQ defined\n");
->  		return qup->irq;
->  	}
-
-How do you think about to omit the curly brackets here after only a single
-statement would be used in the if branch?
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/coding-style.rst?id=3Dad062195731bea1624ce7160e79e0fcd=
-aa25c1b5#n175
 
 Regards,
 Markus
