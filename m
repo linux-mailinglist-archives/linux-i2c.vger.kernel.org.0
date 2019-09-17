@@ -2,56 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A94AFB53FE
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2019 19:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B7BB5403
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2019 19:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730903AbfIQRVd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Sep 2019 13:21:33 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:42800 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727112AbfIQRVd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Sep 2019 13:21:33 -0400
-Received: by mail-pg1-f196.google.com with SMTP id z12so2357099pgp.9;
-        Tue, 17 Sep 2019 10:21:33 -0700 (PDT)
+        id S1730934AbfIQRWb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Sep 2019 13:22:31 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:34778 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727112AbfIQRWb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Sep 2019 13:22:31 -0400
+Received: by mail-pl1-f193.google.com with SMTP id d3so1826642plr.1;
+        Tue, 17 Sep 2019 10:22:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=XP3nl6czy0Go84+GXhP6xekWe3lUeVW+0ACtxPkNsuU=;
-        b=ra2F+YVLYvZr1nAkWH0/Wv1eCDF8R5O0xDtT3wLIHtB0NEovuDhYBLvmw5yKAr9dFc
-         H5aPYrv2116jWoh7+mTpiVamxPdlD11YiaW1LQwPuMtNRAnt23CKa0S5ZyEoRY05Ul3L
-         TZRWwjueLtoPq4vykQs18KjMAt8WeKE/9eJbguHdHJ8ORG1E7YVcPNEqjoqYJrsotMdp
-         onjHvr14tX/TQQ2MRQ6U/YmynXB9Grm8p2cOec86NFrnwEdi4vQ7l5gHoZBhuuB/ssHE
-         zJPYHx8/CRc7vLYaA++VFnSxbiCOJ2DEjjrJ/lL8WJK3ESj3vl2NYBXrO6fu9lFY0O+i
-         HVGQ==
+        bh=o0LaOrUJw9U8Z2eNdeJ3da2UYwU8tP+swoc6QJzczfc=;
+        b=GO9b8s86YzMd9CJsXnsM5NBWpStpUduvNa5Jkw+9IKCPh6K2l/rYIih02wD5ysEg+D
+         sM0W4GM5rc3fOHFD3IOnJIUBMlV/lREMK5gYImV8HpWNML0SMhGBGYYH3yEAA+P2hqAc
+         UrJMYPsByTMcNw2ff7lcYqbldpm4crvOZtGof4rydstvxkNNnP/1uq4SRAQMY2+3U0yJ
+         BkNMjE0GR8FJpVShIGJiKJzCrnif8YfkCpjxLURISOJB1n16CdgSNfZsah/xQ+jyXA4c
+         U6QeNsts0jUiyS5c1EDqbnlxwjJFXSvXp2q2pcIAvh6iZ6fvhN8Wdkd+YJq52IHEDs+m
+         r4xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=XP3nl6czy0Go84+GXhP6xekWe3lUeVW+0ACtxPkNsuU=;
-        b=qXfLsX4142OhASzxaor7Z+dURuHKsHgwkkKvqQkQwHaKAh3N3jI+AufAs2xOgfAo2x
-         tgVrDv9Mzif5dxOyxvdIelGyuSkJy5ihtwN7699Sus76q/fxxAznHh2IB9l4kWJ8Vv3E
-         BTlxA8F5wMAIFf2AUNuU+nmFcvmy8OA4eIClUM2b1SCBsdLEZiNgYF/4fwxt/yVGLaTW
-         Xakb/rk2lFoZBbjcMQmKBjxN8GoHrJB73JN8dacU8tX3EO0oxjadHZngUKmc9W172p4P
-         GwkMdwmY64fDuQRfe2e17uvHbEVH1boV3ERLuv1fK21dAtXZYwskDSQn28mRsR62hCob
-         kTPQ==
-X-Gm-Message-State: APjAAAVL21qIe9dMrf7viGnrpyFqBZNIyMBRmwq54Z6zGbOzLY+h14LQ
-        ZphiB8y4xiiv2JotE0xX4UI=
-X-Google-Smtp-Source: APXvYqy9+ZSC73Ve3Dqf5eomIyJYUjt2b9pP6rdhOaaLMMGlu5/7bJTtbLOpJVlM1c73KZW6WZxyJg==
-X-Received: by 2002:a62:7d8c:: with SMTP id y134mr5459148pfc.257.1568740892878;
-        Tue, 17 Sep 2019 10:21:32 -0700 (PDT)
+        bh=o0LaOrUJw9U8Z2eNdeJ3da2UYwU8tP+swoc6QJzczfc=;
+        b=j3nUPbSrQZwugAR931pm4hJN4VSK/QbuNeJyMFkal451U2RAMi7323DiXFDbczyOKb
+         AkmuQw6qdg0t5lSAgKojz6mmqaLyW7ewq68k9ijF5gaNQ+6f8ubhKjFDq69Q6fozohYJ
+         uulTe4GA8QarSapHQTU5HFJVwZMOppFgw7QTfIzxosdrQ2JB6lMMDhsThK5T5cfi5Ngf
+         pMJCHIABRJl6mXFiRotR8E1CHrzqEjPY0llihbnwKmtiNVwkTP0jR6MvK4mQ3AUKkHPa
+         rq9PvW6yhUREn9jKua6wqx7k+w6DoqbnMFkks0tERSZcl+AAjaQL1wICiaGU860FwW7v
+         BSLg==
+X-Gm-Message-State: APjAAAU3C5G9RFyR2LNPvDWpXd7qPu9Jlk4I8WWchMfvcwCJrcIFLghC
+        /kH1rlES97spL6BbQLFjIFU=
+X-Google-Smtp-Source: APXvYqy7rQNQ3sCyATlwlX5P/VxuAokpQVQqUiyz2cStrilET3RW6Cd9BZ/rNFoPIzqVvUBlah+zhA==
+X-Received: by 2002:a17:902:ba89:: with SMTP id k9mr5013459pls.44.1568740950436;
+        Tue, 17 Sep 2019 10:22:30 -0700 (PDT)
 Received: from SD ([106.222.12.103])
-        by smtp.gmail.com with ESMTPSA id g1sm2714459pgg.27.2019.09.17.10.21.29
+        by smtp.gmail.com with ESMTPSA id d76sm3488179pfd.185.2019.09.17.10.22.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Sep 2019 10:21:31 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 22:51:20 +0530
+        Tue, 17 Sep 2019 10:22:30 -0700 (PDT)
+Date:   Tue, 17 Sep 2019 22:52:20 +0530
 From:   Saiyam Doshi <saiyamdoshi.in@gmail.com>
 To:     agross@kernel.org
 Cc:     linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org, markus.elfring@web.de
-Subject: [PATCH v2 2/3] i2c: qup: Remove dev_err() log after
- platform_get_irq*() failure
-Message-ID: <20190917172120.GA11581@SD>
+Subject: [PATCH v2 3/3] i2c: qup: Use devm_platform_ioremap_resource helper
+Message-ID: <20190917172220.GA11681@SD>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -61,35 +60,40 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The debug message after platform_get_irq() failure is redundant
-because platform_get_irq() already prints an error. Thus remove it.
+Simplify the implementation by using a known wrapper function.
 
-Generated by: scripts/coccinelle/api/platform_get_irq.cocci
+Generated by: scripts/coccinelle/api/devm_platform_ioremap_resource.cocci
 
 Signed-off-by: Saiyam Doshi <saiyamdoshi.in@gmail.com>
 ---
 Changes in v2:
-Updated changelog and removed unnecessary braces after if condition.
+* Updated changelog.
 
  drivers/i2c/busses/i2c-qup.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
-index 5519c19bfd9c..ed09a59066b2 100644
+index ed09a59066b2..2c43ae22162c 100644
 --- a/drivers/i2c/busses/i2c-qup.c
 +++ b/drivers/i2c/busses/i2c-qup.c
-@@ -1766,10 +1766,8 @@ static int qup_i2c_probe(struct platform_device *pdev)
+@@ -1663,7 +1663,6 @@ static int qup_i2c_probe(struct platform_device *pdev)
+ 	static const int blk_sizes[] = {4, 16, 32};
+ 	struct qup_i2c_dev *qup;
+ 	unsigned long one_bit_t;
+-	struct resource *res;
+ 	u32 io_mode, hw_ver, size;
+ 	int ret, fs_div, hs_div;
+ 	u32 src_clk_freq = DEFAULT_SRC_CLK;
+@@ -1760,8 +1759,7 @@ static int qup_i2c_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	qup->base = devm_ioremap_resource(qup->dev, res);
++	qup->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(qup->base))
  		return PTR_ERR(qup->base);
 
- 	qup->irq = platform_get_irq(pdev, 0);
--	if (qup->irq < 0) {
--		dev_err(qup->dev, "No IRQ defined\n");
-+	if (qup->irq < 0)
- 		return qup->irq;
--	}
-
- 	if (has_acpi_companion(qup->dev)) {
- 		ret = device_property_read_u32(qup->dev,
 --
 2.20.1
 
