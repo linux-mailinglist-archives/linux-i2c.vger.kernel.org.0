@@ -2,99 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EE0B40C2
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2019 21:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DD8B472E
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2019 08:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727959AbfIPTDK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 Sep 2019 15:03:10 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36400 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbfIPTDK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Sep 2019 15:03:10 -0400
-Received: by mail-pl1-f195.google.com with SMTP id f19so318409plr.3;
-        Mon, 16 Sep 2019 12:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=O593HMHr1X+t/3lCKgBpvy9WSO86CaTojEYHPvt/fEk=;
-        b=usgnhg07TRgsfaVdzt3E55MQ+J8ZG8EqLxQ4kckSs3uxRwVIVE0MRZ533n0fklbPf4
-         pckxTev4WnlQh+hY4cmeCUHKr7qz80TmkeQj56c4uHzcw+K7/PvOLSd0fpsO1P2quZZ7
-         OmbXUaaFu2SgIUmRpbVqHa5mNQsesQ8/0mL7yJ1MQItSEBUdtjzyUp0XNxtp5Bz2h77Q
-         tNisNAoSaCBIofjqKWWBTbvJcb2nIGW949Xz+ucy3So40fB7+XBC807UIY+SH87oXgMl
-         s/0ACbxVSc+LdAmFLaZxEij9evKOYVEeoukeCev3fjnh5ZrYnnacuiZ1C8qkck1ZhTuY
-         7eKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=O593HMHr1X+t/3lCKgBpvy9WSO86CaTojEYHPvt/fEk=;
-        b=eWwXvMHDEs1CaGKegezZiSG1c2H5BroiHiICUmCzojtCOt6r3JEnQS8EUh/KQC1B2p
-         LUgQz3hGTGTdGOD+vnbCxdAKPKgdSXkVNn2BtJZuGSVIMiyI6jrE5cAfJC+RMKj/7oOd
-         FoZhGlhwqRp1T58JMPM7Zmkn56jS3PAmvi2zsNx7MtMPI8P//NbGAP//t/Ug+wfkwXvS
-         ylFLMpq1E2WVbzQvCCk4ysxP9p0WQ5oYJzyANVg4syV75P16e59B1JnET1EeohZ2WSwQ
-         nY+0Y1A4r8NGzBfFy9JZ50SpFoBDJOICL3dE/LGMmzRxZXUViz814U9OYrkwiB9+gTji
-         t3bw==
-X-Gm-Message-State: APjAAAXoV6mwd8MkpU522p/pivO49HlmnkwgznNoBuIhIaWDnPw63tiw
-        Vq9jJQKMFY9mfQiwYYyzgHxvEnD7
-X-Google-Smtp-Source: APXvYqxuxI6u8zDVKZJbWfmjYLJJp9vLcVvaYS8HA2y5ASTUm3CVUjEZTsJMbtW3HHZqto0l/lLIAA==
-X-Received: by 2002:a17:902:9001:: with SMTP id a1mr1400116plp.148.1568660588129;
-        Mon, 16 Sep 2019 12:03:08 -0700 (PDT)
-Received: from SD ([2405:204:828a:aaec:8514:49dd:92d4:793d])
-        by smtp.gmail.com with ESMTPSA id i6sm67954035pfq.20.2019.09.16.12.03.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Sep 2019 12:03:07 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 00:32:54 +0530
-From:   Saiyam Doshi <saiyamdoshi.in@gmail.com>
-To:     agross@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] i2c: qup: Use devm_platform_ioremap_resource helper
-Message-ID: <20190916190254.GA14207@SD>
+        id S2391281AbfIQGIL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 17 Sep 2019 02:08:11 -0400
+Received: from mail.11d03.mspz7.gob.ec ([190.214.23.250]:51584 "EHLO
+        mail.11d03.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390980AbfIQGIL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Sep 2019 02:08:11 -0400
+X-Greylist: delayed 5993 seconds by postgrey-1.27 at vger.kernel.org; Tue, 17 Sep 2019 02:08:11 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTP id 51B584052A370;
+        Mon, 16 Sep 2019 23:12:31 -0500 (-05)
+Received: from mail.11d03.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d03.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 4DVZM-PqmNY4; Mon, 16 Sep 2019 23:12:31 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTP id D04B34052A377;
+        Mon, 16 Sep 2019 23:12:30 -0500 (-05)
+X-Virus-Scanned: amavisd-new at 11d03.mspz7.gob.ec
+Received: from mail.11d03.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d03.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 0WT2yjf8ddfw; Mon, 16 Sep 2019 23:12:30 -0500 (-05)
+Received: from [10.33.79.142] (unknown [105.4.0.133])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTPSA id D072A40529EAF;
+        Mon, 16 Sep 2019 23:12:21 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
+To:     Recipients <vicenta.sinche@11d03.mspz7.gob.ec>
+From:   ''Tayeb souami'' <vicenta.sinche@11d03.mspz7.gob.ec>
+Date:   Tue, 17 Sep 2019 06:12:10 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20190917041221.D072A40529EAF@mail.11d03.mspz7.gob.ec>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Use devm_platform_ioremap_resource helper which wraps
-platform_get_resource() and devm_ioremap_resource() together.
+Lieber Freund,
 
-The semantic patch that makes this report is available
-in scripts/coccinelle/api/devm_platform_ioremap_resource.cocci.
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
 
-Found using - http://coccinelle.lip6.fr/
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
-Signed-off-by: Saiyam Doshi <saiyamdoshi.in@gmail.com>
----
- drivers/i2c/busses/i2c-qup.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Das ist dein Spendencode: [TS530342018]
 
-diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
-index 23c4893512b2..2d21168f81a0 100644
---- a/drivers/i2c/busses/i2c-qup.c
-+++ b/drivers/i2c/busses/i2c-qup.c
-@@ -1663,7 +1663,6 @@ static int qup_i2c_probe(struct platform_device *pdev)
- 	static const int blk_sizes[] = {4, 16, 32};
- 	struct qup_i2c_dev *qup;
- 	unsigned long one_bit_t;
--	struct resource *res;
- 	u32 io_mode, hw_ver, size;
- 	int ret, fs_div, hs_div;
- 	u32 src_clk_freq = DEFAULT_SRC_CLK;
-@@ -1760,8 +1759,7 @@ static int qup_i2c_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
+Antworten Sie mit dem SPENDE-CODE an diese 
 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	qup->base = devm_ioremap_resource(qup->dev, res);
-+	qup->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(qup->base))
- 		return PTR_ERR(qup->base);
+E-Mail:Tayebsouam.spende@gmail.com
 
---
-2.20.1
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
 
+Grüße
+Herr Tayeb Souami
