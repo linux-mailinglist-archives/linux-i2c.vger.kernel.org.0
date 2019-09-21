@@ -2,102 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B913B8D08
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2019 10:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE68B9DED
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 Sep 2019 14:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437539AbfITIj7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 20 Sep 2019 04:39:59 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:46229 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405234AbfITIj7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Sep 2019 04:39:59 -0400
-Received: by mail-ed1-f66.google.com with SMTP id t3so5558121edw.13;
-        Fri, 20 Sep 2019 01:39:56 -0700 (PDT)
+        id S2407619AbfIUM6M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 Sep 2019 08:58:12 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:40627 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407616AbfIUM6M (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 Sep 2019 08:58:12 -0400
+Received: by mail-pg1-f193.google.com with SMTP id w10so5381746pgj.7
+        for <linux-i2c@vger.kernel.org>; Sat, 21 Sep 2019 05:58:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=Mu+zBpq9b/jWdQOUN8vxIvFaJLLO4vVxC25/55CrgIk=;
+        b=FuXKtizcxT2hsPdUFIOC51abOVFlTo2gSGMtkvcYlozFzhfG9+h0qlMGDIvmnY8yPM
+         Lmu+fOCm6KbOIjAqfSMi3d5ENNTrFlCVDM5Ww2DwOWVT/Nn0AdAsNONznEmiIzzpa+yk
+         6whMFKP2paZ+EvgwRoWO+JXIcgZKJnQghV3NB36yQ2eSPSndv2imDh85fPGcQ4Mo6rGA
+         Bh5gE2b9tQ2zVGpT09rHtvdDkMCJXYZxJY1Tg6S/ixmModyIjFguZSDuC2uFq7sjAtZk
+         fTw+jYCPObuFnqmux/xwpLq6n0/N9kX4jLarfgpc1QY8kM7ys/3K0cFwN+ANAppFaj18
+         dfDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WCr8CPJIbQdsDFVeXzCBJIO+AejaAKprgzLbff1WJj4=;
-        b=QFI7VBX6R3I/OMMPkbocBqhrTtmVDaUtE53gV0kBuMQat9djL0d2B/+ZwrrFD6tAAF
-         Bb1JT4yeWewvEjT5w8Cza61Y2NgUuvrKOOCONnoeGphNuZAJljHTkFdLDaRvKbHwXc88
-         IH+r/GrrduNfOCzChaKgdOKdDMmA6Tz+ugpfWGP0DR6Vc+QfwyWjBiOlunCnNvU0EKTF
-         CKdQdAefh6Yl+CirKqUZiD70l6tEj+7hN397468ftn5trHy0bHhPYpuNTS0SjGfiMDh2
-         9Gr+D1SqNeI40z68iHD44jTzDUJ8Wtb7UQhaRCqTjRt8J/8RyRTLSOJS13hcLarq7NE7
-         i+Iw==
-X-Gm-Message-State: APjAAAVCq79yYjaqe1clYBRwVbW+1gaddDoybbYxk3ODz2G0nEHUS3uj
-        ySyToD3ATVPSImtBfD6PrYsQJI4OOEM=
-X-Google-Smtp-Source: APXvYqxHOg7mYNanK1Q6V1OXObSCNpb5/HzFmFTJe9VuHAM1pOUWJWMEA2IhZksqCkHF5yKPycwbBw==
-X-Received: by 2002:a17:906:2ec8:: with SMTP id s8mr18694368eji.275.1568968794627;
-        Fri, 20 Sep 2019 01:39:54 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id q9sm154609eja.31.2019.09.20.01.39.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Sep 2019 01:39:53 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id h7so5832593wrw.8;
-        Fri, 20 Sep 2019 01:39:53 -0700 (PDT)
-X-Received: by 2002:a5d:668d:: with SMTP id l13mr11159369wru.279.1568968793107;
- Fri, 20 Sep 2019 01:39:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=Mu+zBpq9b/jWdQOUN8vxIvFaJLLO4vVxC25/55CrgIk=;
+        b=XfI/MtN6grd9trj+jqEbNMfolZ04vdsnQMPw+C/abatH2aEjloe8rZrlOQFfPJpq2d
+         /bD3lWREAsRLthkAlg76/yoVmXnFCSIfZvnNwW/FC1qoHXak/O2gqA+qd6xyK/Pirn7Z
+         IaU26YwCvyjNp3XIm0/RkEyrUj1StQpGoHEFtm+xltrnqCpDj6uOE6fb2msCoFSScvOl
+         6h5Xsa3Kv7fVeCMl+ZTjYhVknno8O3nVK+RRz/+v+lPtkJoWVO3o/8bTg8xjj+4hB+Hg
+         6cEirB2gUXrya06/bSjA5DMZJOFkl2XU3PTJN8AE6YUGfs63OjI1cBt6A7KKYjH87V4w
+         Wa6g==
+X-Gm-Message-State: APjAAAW9Tzay8B6NnqQ/U2SmS6B3KB9xHfx7BsH3LA1kkVPmqysalW4g
+        q55ZK2TVwugnlzY4sz7EB5Q=
+X-Google-Smtp-Source: APXvYqx95bK+2jBI1/IX4H1wFwrDl79u9mJvUOi6D2J5FHFTaieAk5HD5XxADe1OzhmLAfZd6aIkiQ==
+X-Received: by 2002:a63:e853:: with SMTP id a19mr19525741pgk.296.1569070691300;
+        Sat, 21 Sep 2019 05:58:11 -0700 (PDT)
+Received: from gmail.com (ip-103-85-37-119.syd.xi.com.au. [103.85.37.119])
+        by smtp.gmail.com with ESMTPSA id q88sm5950883pjq.9.2019.09.21.05.58.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Sep 2019 05:58:10 -0700 (PDT)
+Date:   Sat, 21 Sep 2019 22:58:04 +1000
+From:   Adam Zerella <adam.zerella@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-i2c@vger.kernel.org, Adam Zerella <adam.zerella@gmail.com>
+Subject: [PATCH] i2c: busses: Convert parameter to __le32
+Message-ID: <20190921125804.GA10910@gmail.com>
 MIME-Version: 1.0
-References: <20190920083237.GA11657@plaes.org>
-In-Reply-To: <20190920083237.GA11657@plaes.org>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Fri, 20 Sep 2019 16:39:41 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65JrZXV9vb6pbCHfJvE3AawBxcWEpQH7C3woxnXpbN7vw@mail.gmail.com>
-Message-ID: <CAGb2v65JrZXV9vb6pbCHfJvE3AawBxcWEpQH7C3woxnXpbN7vw@mail.gmail.com>
-Subject: Re: [BUG] sun4i: axp209: no atomic i2c transfer handler
-To:     Priit Laes <plaes@plaes.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-sunxi <linux-sunxi@googlegroups.com>, priit.laes@paf.com,
-        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Sep 20, 2019 at 4:32 PM Priit Laes <plaes@plaes.org> wrote:
->
-> Heya!
->
-> I have seen following warning message for few times when shutting down the
-> machine (Olinuxino Lime2-emmc) running the mainline kernel.
->
-> [snip]
-> WARNING: CPU: 0 PID: 1 at drivers/i2c/i2c-core.h:41 i2c_transfer+0xe8/0xf4
-> No atomic I2C transfer handler for 'i2c-1'
-> Modules linked in: enc28j60
-> CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted 5.3.0-rc8-paf+ #28
-> Hardware name: Allwinner sun7i (A20) Family
-> [<c010ee08>] (unwind_backtrace) from [<c010b5b8>] (show_stack+0x10/0x14)
-> [<c010b5b8>] (show_stack) from [<c06bf2b4>] (dump_stack+0x88/0x9c)
-> [<c06bf2b4>] (dump_stack) from [<c011e044>] (__warn+0xd4/0xf0)
-> [<c011e044>] (__warn) from [<c011dbe4>] (warn_slowpath_fmt+0x48/0x6c)
-> [<c011dbe4>] (warn_slowpath_fmt) from [<c051ce20>] (i2c_transfer+0xe8/0xf4)
-> [<c051ce20>] (i2c_transfer) from [<c051ce78>] (i2c_transfer_buffer_flags+0x4c/0x70)
-> [<c051ce78>] (i2c_transfer_buffer_flags) from [<c046c2a4>] (regmap_i2c_write+0x14/0x30)
-> [<c046c2a4>] (regmap_i2c_write) from [<c0468180>] (_regmap_raw_write_impl+0x588/0x63c)
-> [<c0468180>] (_regmap_raw_write_impl) from [<c0468b50>] (regmap_write+0x3c/0x5c)
-> [<c0468b50>] (regmap_write) from [<c046f554>] (axp20x_power_off+0x2c/0x38)
-> [<c046f554>] (axp20x_power_off) from [<c013e8a4>] (sys_reboot+0x14c/0x1e0)
-> [<c013e8a4>] (sys_reboot) from [<c0101000>] (ret_fast_syscall+0x0/0x54)
-> Exception stack(0xef04ffa8 to 0xef04fff0)
-> ffa0:                   00427954 00000000 fee1dead 28121969 4321fedc 16814300
-> ffc0: 00427954 00000000 00000000 00000058 bec15c78 00000000 bec15c10 004266f8
-> ffe0: 00000058 bec15b6c b6f69d45 b6eeb746
-> [/snip]
->
-> The enc28j60 module is SPI, so it has nothing to do with the message.
->
-> Any ideas where to look?
+The assignment of `serial` is using le32_to_cpu() without
+first converting the parameter `dev->ibuffer` to __le32.
 
-This looks like it's complaining that i2c-1 (i2c-mv64xxx) does not have
-.master_xfer_atomic , which should be used in atomic contexts.
+This produces a Sparse warning of:
 
-include/linux/i2c.h says:
+`warning: cast to restricted __le32`
 
-   @master_xfer_atomic: same as @master_xfer. Yet, only using atomic context
-     so e.g. PMICs can be accessed very late before shutdown. Optional.
+Signed-off-by: Adam Zerella <adam.zerella@gmail.com>
+---
+ drivers/i2c/busses/i2c-diolan-u2c.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-ChenYu
+diff --git a/drivers/i2c/busses/i2c-diolan-u2c.c b/drivers/i2c/busses/i2c-diolan-u2c.c
+index 382f105e0fe3..32de47eda950 100644
+--- a/drivers/i2c/busses/i2c-diolan-u2c.c
++++ b/drivers/i2c/busses/i2c-diolan-u2c.c
+@@ -289,7 +289,7 @@ static void diolan_get_serial(struct i2c_diolan_u2c *dev)
+ 
+ 	ret = diolan_usb_cmd(dev, CMD_GET_SERIAL, true);
+ 	if (ret >= 4) {
+-		serial = le32_to_cpu(*(u32 *)dev->ibuffer);
++		serial = le32_to_cpu(cpu_to_le32(*(u32 *)dev->ibuffer));
+ 		dev_info(&dev->interface->dev,
+ 			 "Diolan U2C serial number %u\n", serial);
+ 	}
+-- 
+2.21.0
+
