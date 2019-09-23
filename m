@@ -2,250 +2,351 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 012A5BBB97
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2019 20:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8338BBBA7
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2019 20:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbfIWSas (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 23 Sep 2019 14:30:48 -0400
-Received: from mail-eopbgr00126.outbound.protection.outlook.com ([40.107.0.126]:13893
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725864AbfIWSar (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 23 Sep 2019 14:30:47 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R5dRWE/a9j5YJUqnToLs2Lyi1WBSSRs0ag/aYZQH8l7I0gDieyt5qOmEuI7cdua7B5g9h146frrNJ6vRZHnw0iQvSHFp5DaWO4nh4E6UcHucXZXqCTi09GfrmMRm8Cnqr3YkYSopBK2VCWnomev8NmRz5ZqWrFNQnoKPepZoUGAw2qRXGFhOUnI/UZxBMPwJ/KfK5fCE3FdXEX9JMBczej1gsTonVltynLzJi1LUXzuMjsPuEyI70jrmxdCVhL4F0eTpJ2sPd7UUjQIARRfoOkV61/onbNvOkNWf7dNUO1j2B43Amsc0sDU+WoyhxHw0eWEHU7IWqtmAckfI+Mg5jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A1RF4glcUjKOakDz/3N2EQ0X4QbXkLguzDWRgPorQAI=;
- b=n5+y5XykSdVXBIucKbnIHgffZ1PgFTUReg/54XjlA8bj756jSabKzYU4eFceHzAiOvtJAvr+fPEPJtMcDLLHqtstqgwfYwAx5J9l9GHuQ193B1iW+tVqbzmzfpUBqZBz7k+sYR9+TwNreXEth6pDp6fjj+EJb60oBRnQn2UdabQXYXadMYjSG4aeOxxfR5mtY8jAZorKPpMTWd9mj9Lnt0m0sRy+cfwFNGjwxRcmTqE0XwqyHSuQUqUBgUhVDUJ00v0YqzeGzd+1glVA7snKg7jkOGqC4kpyq6o+fanHH+kEtG19hQufYRM6nydVExIdsmzUWIMOEyRHCa/KPJU5Fw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A1RF4glcUjKOakDz/3N2EQ0X4QbXkLguzDWRgPorQAI=;
- b=ac0xl00LDsMsyL39z+FsEcbvAP8ZTfaNApGZs4gsndb10zXs8F4wWkFnzeXSAJ7Q/yDDR4kHU8262MVwLKQgknKJ19+VNe0Kwr7IsO+yDc+Peh0KFQmByO6dYudz4COhhk0V1Ky8iTZJmBChsiV8xgkLt7yzrBfZevSm5SjV2C0=
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com (52.134.66.158) by
- DB3PR0202MB3561.eurprd02.prod.outlook.com (52.134.68.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2284.20; Mon, 23 Sep 2019 18:30:35 +0000
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::c5b8:6014:87a4:1afe]) by DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::c5b8:6014:87a4:1afe%7]) with mapi id 15.20.2284.023; Mon, 23 Sep 2019
- 18:30:35 +0000
-From:   Peter Rosin <peda@axentia.se>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        id S1727491AbfIWSe7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 23 Sep 2019 14:34:59 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:44634 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726655AbfIWSe6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 Sep 2019 14:34:58 -0400
+Received: by mail-io1-f66.google.com with SMTP id j4so35872161iog.11
+        for <linux-i2c@vger.kernel.org>; Mon, 23 Sep 2019 11:34:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/YECtlhpDnaFwK1IOiuPd/4Cs+yhfo5ueLmz6MhEiP8=;
+        b=BY+CMg4oVDaXNAMUSWzMcaGynNeN31Gs6a57yyNwe0PJrByQcTRe0E8D/uJW8/dSuB
+         8/YH2PkCTeSsjwQCShqktLImC/+KFWypNLlfi48tpQrzXCqVW6W04lBfijfJEB92VN0v
+         zx3A8SmO4Bsk/ahMz5kA4xL9aNgfmiTsdPGK5Ht6bibBm8AA436dzA6LnCRzzWs4aNHM
+         HmmrL0tDf6m6UaVN28WXo13jJqSEBBVNNsuycoeGLPNUz/q84qE7RNqbkIHzlqlT+QIz
+         pRHwQM6JjzqNIi541hvo0EXa4OUv8T2+VdkhBUw7MWKVN7Hbkjdt0v+BmV9TiF/07knq
+         uhmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/YECtlhpDnaFwK1IOiuPd/4Cs+yhfo5ueLmz6MhEiP8=;
+        b=auq8+AcTbUwOnQFy8sRWc0G1cMznUN8cmILAx9qVbRoVXRQPPM6cThbSzp5f9hpGfp
+         KOuXYn9OZiH58gT0kULRgBd4ODswJXCqyo1HJljsXTpOLpfnO8Bd11T4UaxJRdHhebxr
+         OeK+yrr6i5scacOEeJ6nBsT2EiUWezyc4UmsAdzdiCmwExz27/F8vySRInc/+y3KQO2c
+         TQSBG+73E3gwp9LnpnpyyTXauGlNjA0lQmGhj06/atTijXlaFCB5mp2MikvdxNXPqZwl
+         361CD32KI9x4LPynZIa2TD2vPp6BxKPo6ilR3NruPWpjnhA7waYHHgVWeBbfuTAlBxXd
+         V3GQ==
+X-Gm-Message-State: APjAAAUl+meEFYI9ZPOtNRussDg9v8y9N86HHU48tIaRBYhXE4Y9mVRA
+        QPAc6FnqMi3wgKcu49CLFZDCjQdK44h/xmtR+syYOg==
+X-Google-Smtp-Source: APXvYqzFmByrgwsxRHl2fyT5JN2VDyxbZKmFDEXQJsEg5w4zcFYsd2QNtvlLiCYLZRmHt2QDWJqiQGPF9D1S2pBjROw=
+X-Received: by 2002:a05:6638:1f2:: with SMTP id t18mr895443jaq.67.1569263697796;
+ Mon, 23 Sep 2019 11:34:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190923175211.2060-1-brgl@bgdev.pl> <b3a3ca68-45ab-c60a-7f48-636b102b32c1@axentia.se>
+In-Reply-To: <b3a3ca68-45ab-c60a-7f48-636b102b32c1@axentia.se>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 23 Sep 2019 20:34:46 +0200
+Message-ID: <CAMRc=MfEtSg9eABT5Zb=KQWqXn4BiWxC9eTibSSMAOnHMw8DGQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: at24: convert the binding document to yaml
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH] dt-bindings: at24: convert the binding document to yaml
-Thread-Topic: [PATCH] dt-bindings: at24: convert the binding document to yaml
-Thread-Index: AQHVcjeocf98ho4EUE6as/1S5tdIl6c5lYUA
-Date:   Mon, 23 Sep 2019 18:30:35 +0000
-Message-ID: <b3a3ca68-45ab-c60a-7f48-636b102b32c1@axentia.se>
-References: <20190923175211.2060-1-brgl@bgdev.pl>
-In-Reply-To: <20190923175211.2060-1-brgl@bgdev.pl>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-x-originating-ip: [213.112.138.100]
-x-clientproxiedby: HE1PR07CA0009.eurprd07.prod.outlook.com
- (2603:10a6:7:67::19) To DB3PR0202MB3434.eurprd02.prod.outlook.com
- (2603:10a6:8:5::30)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peda@axentia.se; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 07009d02-154c-411e-d473-08d740541fd6
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600167)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:DB3PR0202MB3561;
-x-ms-traffictypediagnostic: DB3PR0202MB3561:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <DB3PR0202MB35615EEE1D859B83A6E82F40BC850@DB3PR0202MB3561.eurprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0169092318
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(136003)(366004)(376002)(396003)(42606007)(39830400003)(189003)(199004)(6246003)(305945005)(5660300002)(316002)(7736002)(186003)(26005)(6512007)(508600001)(11346002)(81156014)(2616005)(6306002)(81166006)(8676002)(486006)(6486002)(31696002)(8936002)(6116002)(229853002)(25786009)(58126008)(446003)(110136005)(6436002)(476003)(3846002)(386003)(6506007)(14454004)(54906003)(99286004)(52116002)(86362001)(66476007)(53546011)(66946007)(256004)(66446008)(64756008)(71190400001)(66556008)(36756003)(66066001)(76176011)(71200400001)(65956001)(102836004)(4326008)(2906002)(65806001)(31686004);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3561;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: axentia.se does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: kPYP1ROlx8B8gnkFLtNL8Mk01U08JbB4kcxIzoZfA5mNp9mX6M0tFNzTYv6Y4YtMu/m0CyFy5/ymKkOeTy0WK+bRcmwhJd9b4cfKe3hzjuedJ6K7q2v0Qk/ApK7gG0PtXaJ/guUnGyWG0JqLZWAggv9gdNhT3fb7qQKYLndOdwky/r5KcftY91MA29378KkJcb63voXn8vTL5GRUUkZRFLRuBivFgu7+seFwxmJDDGoi/+g3qC6hXh+CDtpRQwplAHDTY+nPOXNcnc6YVwo3//A6BV/GKR9rVVnkFlpn8WevgD9pcgR+3zaJ81oH3J/taV0ORv30jLW2H8MACwcoeHQHpHfwchxU6siISuTD71lc6YxUrVYCZlXELLwVBKHUYZ0CxKufPrxnSfe9R0zNjByjt6WltoOOhkGHjhHtbdE=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E00E7793A9A2EA438A195A08BFF17C56@eurprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07009d02-154c-411e-d473-08d740541fd6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2019 18:30:35.4446
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: M2Lcj5sgxwbpWmV3JK9j3h0X3N2lL4TNPNl6rkMm7MiSXm6taHc3Cj2eNMLJEQUR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3561
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gMjAxOS0wOS0yMyAxOTo1MiwgQmFydG9zeiBHb2xhc3pld3NraSB3cm90ZToNCj4gRnJvbTog
-QmFydG9zeiBHb2xhc3pld3NraSA8YmdvbGFzemV3c2tpQGJheWxpYnJlLmNvbT4NCj4gDQo+IENv
-bnZlcnQgdGhlIGJpbmRpbmcgZG9jdW1lbnQgZm9yIGF0MjQgRUVQUk9NcyBmcm9tIHR4dCB0byB5
-YW1sLiBUaGUNCj4gY29tcGF0aWJsZSBwcm9wZXJ0eSB1c2VzIGEgcmVnZXggcGF0dGVybiB0byBh
-ZGRyZXNzIGFsbCB0aGUgcG9zc2libGUNCj4gY29tYmluYXRpb25zIG9mICJ2ZW5kb3IsbW9kZWwi
-IHN0cmluZ3MuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBCYXJ0b3N6IEdvbGFzemV3c2tpIDxiZ29s
-YXN6ZXdza2lAYmF5bGlicmUuY29tPg0KPiAtLS0NCj4gIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L2VlcHJvbS9hdDI0LnR4dCAgICAgICB8ICA5MCArLS0tLS0tLS0tLS0tLS0NCj4gIC4uLi9kZXZp
-Y2V0cmVlL2JpbmRpbmdzL2VlcHJvbS9hdDI0LnlhbWwgICAgICB8IDEwNyArKysrKysrKysrKysr
-KysrKysNCj4gIE1BSU5UQUlORVJTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8
-ICAgMiArLQ0KPiAgMyBmaWxlcyBjaGFuZ2VkLCAxMDkgaW5zZXJ0aW9ucygrKSwgOTAgZGVsZXRp
-b25zKC0pDQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL2VlcHJvbS9hdDI0LnlhbWwNCj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9u
-L2RldmljZXRyZWUvYmluZGluZ3MvZWVwcm9tL2F0MjQudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZp
-Y2V0cmVlL2JpbmRpbmdzL2VlcHJvbS9hdDI0LnR4dA0KPiBpbmRleCAyMmFlYWQ4NDRkMGYuLmM5
-NGFjYmI4Y2IwYyAxMDA2NDQNCj4gLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
-bmdzL2VlcHJvbS9hdDI0LnR4dA0KPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3MvZWVwcm9tL2F0MjQudHh0DQo+IEBAIC0xLDg5ICsxIEBADQo+IC1FRVBST01zIChJMkMp
-DQo+IC0NCj4gLVJlcXVpcmVkIHByb3BlcnRpZXM6DQo+IC0NCj4gLSAgLSBjb21wYXRpYmxlOiBN
-dXN0IGJlIGEgIjxtYW51ZmFjdHVyZXI+LDxtb2RlbD4iIHBhaXIuIFRoZSBmb2xsb3dpbmcgPG1v
-ZGVsPg0KPiAtICAgICAgICAgICAgICAgIHZhbHVlcyBhcmUgc3VwcG9ydGVkIChhc3N1bWluZyAi
-YXRtZWwiIGFzIG1hbnVmYWN0dXJlcik6DQo+IC0NCj4gLSAgICAgICAgICAgICAgICAiYXRtZWws
-MjRjMDAiLA0KPiAtICAgICAgICAgICAgICAgICJhdG1lbCwyNGMwMSIsDQo+IC0gICAgICAgICAg
-ICAgICAgImF0bWVsLDI0Y3MwMSIsDQo+IC0gICAgICAgICAgICAgICAgImF0bWVsLDI0YzAyIiwN
-Cj4gLSAgICAgICAgICAgICAgICAiYXRtZWwsMjRjczAyIiwNCj4gLSAgICAgICAgICAgICAgICAi
-YXRtZWwsMjRtYWM0MDIiLA0KPiAtICAgICAgICAgICAgICAgICJhdG1lbCwyNG1hYzYwMiIsDQo+
-IC0gICAgICAgICAgICAgICAgImF0bWVsLHNwZCIsDQo+IC0gICAgICAgICAgICAgICAgImF0bWVs
-LDI0YzA0IiwNCj4gLSAgICAgICAgICAgICAgICAiYXRtZWwsMjRjczA0IiwNCj4gLSAgICAgICAg
-ICAgICAgICAiYXRtZWwsMjRjMDgiLA0KPiAtICAgICAgICAgICAgICAgICJhdG1lbCwyNGNzMDgi
-LA0KPiAtICAgICAgICAgICAgICAgICJhdG1lbCwyNGMxNiIsDQo+IC0gICAgICAgICAgICAgICAg
-ImF0bWVsLDI0Y3MxNiIsDQo+IC0gICAgICAgICAgICAgICAgImF0bWVsLDI0YzMyIiwNCj4gLSAg
-ICAgICAgICAgICAgICAiYXRtZWwsMjRjczMyIiwNCj4gLSAgICAgICAgICAgICAgICAiYXRtZWws
-MjRjNjQiLA0KPiAtICAgICAgICAgICAgICAgICJhdG1lbCwyNGNzNjQiLA0KPiAtICAgICAgICAg
-ICAgICAgICJhdG1lbCwyNGMxMjgiLA0KPiAtICAgICAgICAgICAgICAgICJhdG1lbCwyNGMyNTYi
-LA0KPiAtICAgICAgICAgICAgICAgICJhdG1lbCwyNGM1MTIiLA0KPiAtICAgICAgICAgICAgICAg
-ICJhdG1lbCwyNGMxMDI0IiwNCj4gLSAgICAgICAgICAgICAgICAiYXRtZWwsMjRjMjA0OCIsDQo+
-IC0NCj4gLSAgICAgICAgICAgICAgICBJZiA8bWFudWZhY3R1cmVyPiBpcyBub3QgImF0bWVsIiwg
-dGhlbiBhIGZhbGxiYWNrIG11c3QgYmUgdXNlZA0KPiAtICAgICAgICAgICAgICAgIHdpdGggdGhl
-IHNhbWUgPG1vZGVsPiBhbmQgImF0bWVsIiBhcyBtYW51ZmFjdHVyZXIuDQo+IC0NCj4gLSAgICAg
-ICAgICAgICAgICBFeGFtcGxlOg0KPiAtICAgICAgICAgICAgICAgICAgICAgICAgY29tcGF0aWJs
-ZSA9ICJtaWNyb2NoaXAsMjRjMTI4IiwgImF0bWVsLDI0YzEyOCI7DQo+IC0NCj4gLSAgICAgICAg
-ICAgICAgICBTdXBwb3J0ZWQgbWFudWZhY3R1cmVycyBhcmU6DQo+IC0NCj4gLSAgICAgICAgICAg
-ICAgICAiY2F0YWx5c3QiLA0KPiAtICAgICAgICAgICAgICAgICJtaWNyb2NoaXAiLA0KPiAtICAg
-ICAgICAgICAgICAgICJueHAiLA0KPiAtICAgICAgICAgICAgICAgICJyYW10cm9uIiwNCj4gLSAg
-ICAgICAgICAgICAgICAicmVuZXNhcyIsDQo+IC0gICAgICAgICAgICAgICAgInJvaG0iLA0KPiAt
-ICAgICAgICAgICAgICAgICJzdCIsDQo+IC0NCj4gLSAgICAgICAgICAgICAgICBTb21lIHZlbmRv
-cnMgdXNlIGRpZmZlcmVudCBtb2RlbCBuYW1lcyBmb3IgY2hpcHMgd2hpY2ggYXJlIGp1c3QNCj4g
-LSAgICAgICAgICAgICAgICB2YXJpYW50cyBvZiB0aGUgYWJvdmUuIEtub3duIHN1Y2ggZXhjZXB0
-aW9ucyBhcmUgbGlzdGVkIGJlbG93Og0KPiAtDQo+IC0gICAgICAgICAgICAgICAgIm54cCxzZTk3
-YiIgLSB0aGUgZmFsbGJhY2sgaXMgImF0bWVsLDI0YzAyIiwNCj4gLSAgICAgICAgICAgICAgICAi
-cmVuZXNhcyxyMWV4MjQwMDIiIC0gdGhlIGZhbGxiYWNrIGlzICJhdG1lbCwyNGMwMiINCj4gLSAg
-ICAgICAgICAgICAgICAicmVuZXNhcyxyMWV4MjQwMTYiIC0gdGhlIGZhbGxiYWNrIGlzICJhdG1l
-bCwyNGMxNiINCj4gLSAgICAgICAgICAgICAgICAicmVuZXNhcyxyMWV4MjQxMjgiIC0gdGhlIGZh
-bGxiYWNrIGlzICJhdG1lbCwyNGMxMjgiDQo+IC0gICAgICAgICAgICAgICAgInJvaG0sYnIyNHQw
-MSIgLSB0aGUgZmFsbGJhY2sgaXMgImF0bWVsLDI0YzAxIg0KPiAtDQo+IC0gIC0gcmVnOiBUaGUg
-STJDIGFkZHJlc3Mgb2YgdGhlIEVFUFJPTS4NCj4gLQ0KPiAtT3B0aW9uYWwgcHJvcGVydGllczoN
-Cj4gLQ0KPiAtICAtIHBhZ2VzaXplOiBUaGUgbGVuZ3RoIG9mIHRoZSBwYWdlc2l6ZSBmb3Igd3Jp
-dGluZy4gUGxlYXNlIGNvbnN1bHQgdGhlDQo+IC0gICAgICAgICAgICAgIG1hbnVhbCBvZiB5b3Vy
-IGRldmljZSwgdGhhdCB2YWx1ZSB2YXJpZXMgYSBsb3QuIEEgd3JvbmcgdmFsdWUNCj4gLSAgICAg
-ICAgICAgICAgbWF5IHJlc3VsdCBpbiBkYXRhIGxvc3MhIElmIG5vdCBzcGVjaWZpZWQsIGEgc2Fm
-ZXR5IHZhbHVlIG9mDQo+IC0gICAgICAgICAgICAgICcxJyBpcyB1c2VkIHdoaWNoIHdpbGwgYmUg
-dmVyeSBzbG93Lg0KPiAtDQo+IC0gIC0gcmVhZC1vbmx5OiBUaGlzIHBhcmFtZXRlcmxlc3MgcHJv
-cGVydHkgZGlzYWJsZXMgd3JpdGVzIHRvIHRoZSBlZXByb20uDQo+IC0NCj4gLSAgLSBzaXplOiBU
-b3RhbCBlZXByb20gc2l6ZSBpbiBieXRlcy4NCj4gLQ0KPiAtICAtIG5vLXJlYWQtcm9sbG92ZXI6
-IFRoaXMgcGFyYW1ldGVybGVzcyBwcm9wZXJ0eSBpbmRpY2F0ZXMgdGhhdCB0aGUNCj4gLSAgICAg
-ICAgICAgICAgICAgICAgICBtdWx0aS1hZGRyZXNzIGVlcHJvbSBkb2VzIG5vdCBhdXRvbWF0aWNh
-bGx5IHJvbGwgb3Zlcg0KPiAtICAgICAgICAgICAgICAgICAgICAgIHJlYWRzIHRvIHRoZSBuZXh0
-IHNsYXZlIGFkZHJlc3MuIFBsZWFzZSBjb25zdWx0IHRoZQ0KPiAtICAgICAgICAgICAgICAgICAg
-ICAgIG1hbnVhbCBvZiB5b3VyIGRldmljZS4NCj4gLQ0KPiAtICAtIHdwLWdwaW9zOiBHUElPIHRv
-IHdoaWNoIHRoZSB3cml0ZS1wcm90ZWN0IHBpbiBvZiB0aGUgY2hpcCBpcyBjb25uZWN0ZWQuDQo+
-IC0NCj4gLSAgLSBhZGRyZXNzLXdpZHRoOiBudW1iZXIgb2YgYWRkcmVzcyBiaXRzIChvbmUgb2Yg
-OCwgMTYpLg0KPiAtDQo+IC0gIC0gbnVtLWFkZHJlc3NlczogdG90YWwgbnVtYmVyIG9mIGkyYyBz
-bGF2ZSBhZGRyZXNzZXMgdGhpcyBkZXZpY2UgdGFrZXMNCj4gLQ0KPiAtRXhhbXBsZToNCj4gLQ0K
-PiAtZWVwcm9tQDUyIHsNCj4gLQljb21wYXRpYmxlID0gImF0bWVsLDI0YzMyIjsNCj4gLQlyZWcg
-PSA8MHg1Mj47DQo+IC0JcGFnZXNpemUgPSA8MzI+Ow0KPiAtCXdwLWdwaW9zID0gPCZncGlvMSAz
-IDA+Ow0KPiAtCW51bS1hZGRyZXNzZXMgPSA8OD47DQo+IC19Ow0KPiArVGhpcyBmaWxlIGhhcyBi
-ZWVuIG1vdmVkIHRvIGF0MjQueWFtbC4NCj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2
-aWNldHJlZS9iaW5kaW5ncy9lZXByb20vYXQyNC55YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0
-cmVlL2JpbmRpbmdzL2VlcHJvbS9hdDI0LnlhbWwNCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4g
-aW5kZXggMDAwMDAwMDAwMDAwLi4yOGM4YjA2OGM4YTENCj4gLS0tIC9kZXYvbnVsbA0KPiArKysg
-Yi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZWVwcm9tL2F0MjQueWFtbA0KPiBA
-QCAtMCwwICsxLDEwNyBAQA0KPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0K
-PiArIyBDb3B5cmlnaHQgMjAxOSBCYXlMaWJyZSBTQVMNCj4gKyVZQU1MIDEuMg0KPiArLS0tDQo+
-ICskaWQ6ICJodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9lZXByb20vYXQyNC55YW1sIyIN
-Cj4gKyRzY2hlbWE6ICJodHRwOi8vZGV2aWNldHJlZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFt
-bCMiDQo+ICsNCj4gK3RpdGxlOiBJMkMgRUVQUk9NcyBjb21wYXRpYmxlIHdpdGggQXRtZWwncyBB
-VDI0DQo+ICsNCj4gK21haW50YWluZXJzOg0KPiArICAtIEJhcnRvc3ogR29sYXN6ZXdza2kgPGJn
-b2xhc3pld3NraUBiYXlsaWJyZS5jb20+DQo+ICsNCj4gK3Byb3BlcnRpZXM6DQo+ICsgIGNvbXBh
-dGlibGU6DQo+ICsgICAgYWRkaXRpb25hbEl0ZW1zOiB0cnVlDQo+ICsgICAgbWF4SXRlbXM6IDIN
-Cj4gKyAgICBwYXR0ZXJuOiAiXihhdG1lbHxjYXRhbHlzdHxtaWNyb2NoaXB8bnhwfHJhbXRyb258
-cmVuZXNhc3xyb2htfHN0KSwyNChjfGNzfG1hYylbMC05XSskIg0KPiArICAgIG9uZU9mOg0KPiAr
-ICAgICAgLSBjb25zdDogbnhwLHNlOTdiDQo+ICsgICAgICAtIGNvbnN0OiByZW5lc2FzLHIxZXgy
-NDAwMg0KPiArICAgICAgLSBjb25zdDogcmVuZXNhcyxyMWV4MjQwMTYNCj4gKyAgICAgIC0gY29u
-c3Q6IHJlbmVzYXMscjFleDI0MTI4DQo+ICsgICAgICAtIGNvbnN0OiByb2htLGJyMjR0MDENCj4g
-KyAgICBjb250YWluczoNCj4gKyAgICAgIGVudW06DQo+ICsgICAgICAgIC0gYXRtZWwsMjRjMDAN
-Cj4gKyAgICAgICAgLSBhdG1lbCwyNGMwMQ0KPiArICAgICAgICAtIGF0bWVsLDI0Y3MwMQ0KPiAr
-ICAgICAgICAtIGF0bWVsLDI0YzAyDQo+ICsgICAgICAgIC0gYXRtZWwsMjRjczAyDQo+ICsgICAg
-ICAgIC0gYXRtZWwsMjRtYWM0MDINCj4gKyAgICAgICAgLSBhdG1lbCwyNG1hYzYwMg0KPiArICAg
-ICAgICAtIGF0bWVsLHNwZA0KPiArICAgICAgICAtIGF0bWVsLDI0YzA0DQo+ICsgICAgICAgIC0g
-YXRtZWwsMjRjczA0DQo+ICsgICAgICAgIC0gYXRtZWwsMjRjMDgNCj4gKyAgICAgICAgLSBhdG1l
-bCwyNGNzMDgNCj4gKyAgICAgICAgLSBhdG1lbCwyNGMxNg0KPiArICAgICAgICAtIGF0bWVsLDI0
-Y3MxNg0KPiArICAgICAgICAtIGF0bWVsLDI0YzMyDQo+ICsgICAgICAgIC0gYXRtZWwsMjRjczMy
-DQo+ICsgICAgICAgIC0gYXRtZWwsMjRjNjQNCj4gKyAgICAgICAgLSBhdG1lbCwyNGNzNjQNCj4g
-KyAgICAgICAgLSBhdG1lbCwyNGMxMjgNCj4gKyAgICAgICAgLSBhdG1lbCwyNGMyNTYNCj4gKyAg
-ICAgICAgLSBhdG1lbCwyNGM1MTINCj4gKyAgICAgICAgLSBhdG1lbCwyNGMxMDI0DQo+ICsgICAg
-ICAgIC0gYXRtZWwsMjRjMjA0OA0KDQpUaGUgcHJldmlvdXMgYmluZGluZyBhbGxvd3MgbW9yZSBl
-LmcuDQoNCgljb21wYXRpYmxlID0gIm54cCxzcGQiLCAiYXRtZWwsc3BkIjsNCg0Kd2hpY2ggaXMg
-bm8gbG9uZ2VyIGFsbG93ZWQuIFRoYXQgbWlnaHQgYmUgYSBwcm9ibGVtPyBUaGUgcHJldmlvdXMg
-YmluZGluZw0KYWxzbyBhbGxvd3MgbGVzcyBlLmcuDQoNCgljb21wYXRpYmxlID0gImF0bWVsLDI0
-YzAwIiwgInJlbmVzYXMsMjRtYWM0MDIiOw0KDQp3aGljaCBvZiBjb3Vyc2UgaXMgbm9uc2Vuc2Ug
-YnV0IEFGQUlVIG5vdyBhbGxvd2VkLg0KDQpUaGUgbmV3IGZvcm1hbCBydWxlcyBhcmUgdGhlcmVm
-b3JlIG5vdCAicmlnaHQiLCBhbmQgaXQgbWlnaHQgYmUgaW1wb3NzaWJsZQ0KdG8gZXhwcmVzcyB0
-aGUgc3VidGxldGllcyBvZiB0aGlzIHdlaXJkIGJpbmRpbmcgd2l0aCB0aGUgY3VycmVudCBzcGVj
-IHNvDQp0aGVyZSBtaWdodCBiZSBsaXR0bGUgdG8gZG8gYWJvdXQgaXQ/IEJ1dCBlaXRoZXIgd2F5
-LCB0aGVzZSBpc3N1ZXMgYXJlIG5vdA0KbWVudGlvbmVkIG5laXRoZXIgaW4gdGhlIGJpbmRpbmcg
-bm9yIHRoZSBjb21taXQgbWVzc2FnZS4gU2hvdWxkIHRoZXkgYmUNCm1lbnRpb25lZD8NCg0KQ2hl
-ZXJzLA0KUGV0ZXINCg0KPiArDQo+ICsgIHJlZzoNCj4gKyAgICBkZXNjcmlwdGlvbjoNCj4gKyAg
-ICAgIFRoZSBJMkMgc2xhdmUgYWRkcmVzcyBvZiB0aGUgRUVQUk9NLg0KPiArICAgIG1heEl0ZW1z
-OiAxDQo+ICsNCj4gKyAgcGFnZXNpemU6DQo+ICsgICAgZGVzY3JpcHRpb246DQo+ICsgICAgICBU
-aGUgbGVuZ3RoIG9mIHRoZSBwYWdlc2l6ZSBmb3Igd3JpdGluZy4gUGxlYXNlIGNvbnN1bHQgdGhl
-DQo+ICsgICAgICBtYW51YWwgb2YgeW91ciBkZXZpY2UsIHRoYXQgdmFsdWUgdmFyaWVzIGEgbG90
-LiBBIHdyb25nIHZhbHVlDQo+ICsgICAgICBtYXkgcmVzdWx0IGluIGRhdGEgbG9zcyEgSWYgbm90
-IHNwZWNpZmllZCwgYSBzYWZldHkgdmFsdWUgb2YNCj4gKyAgICAgICcxJyBpcyB1c2VkIHdoaWNo
-IHdpbGwgYmUgdmVyeSBzbG93Lg0KPiArICAgIHR5cGU6IGludGVnZXINCj4gKw0KPiArICByZWFk
-LW9ubHk6DQo+ICsgICAgZGVzY3JpcHRpb246DQo+ICsgICAgICBUaGlzIHBhcmFtZXRlcmxlc3Mg
-cHJvcGVydHkgZGlzYWJsZXMgd3JpdGVzIHRvIHRoZSBlZXByb20uDQo+ICsgICAgdHlwZTogYm9v
-bGVhbg0KPiArDQo+ICsgIHNpemU6DQo+ICsgICAgZGVzY3JpcHRpb246DQo+ICsgICAgICBUb3Rh
-bCBlZXByb20gc2l6ZSBpbiBieXRlcy4NCj4gKyAgICB0eXBlOiBpbnRlZ2VyDQo+ICsNCj4gKyAg
-bm8tcmVhZC1yb2xsb3ZlcjoNCj4gKyAgICBkZXNjcmlwdGlvbjoNCj4gKyAgICAgIFRoaXMgcGFy
-YW1ldGVybGVzcyBwcm9wZXJ0eSBpbmRpY2F0ZXMgdGhhdCB0aGUgbXVsdGktYWRkcmVzcw0KPiAr
-ICAgICAgZWVwcm9tIGRvZXMgbm90IGF1dG9tYXRpY2FsbHkgcm9sbCBvdmVyIHJlYWRzIHRvIHRo
-ZSBuZXh0IHNsYXZlDQo+ICsgICAgICBhZGRyZXNzLiBQbGVhc2UgY29uc3VsdCB0aGUgbWFudWFs
-IG9mIHlvdXIgZGV2aWNlLg0KPiArICAgIHR5cGU6IGJvb2xlYW4NCj4gKw0KPiArICB3cC1ncGlv
-czoNCj4gKyAgICBkZXNjcmlwdGlvbjoNCj4gKyAgICAgIEdQSU8gdG8gd2hpY2ggdGhlIHdyaXRl
-LXByb3RlY3QgcGluIG9mIHRoZSBjaGlwIGlzIGNvbm5lY3RlZC4NCj4gKyAgICBtYXhJdGVtczog
-MQ0KPiArDQo+ICsgIGFkZHJlc3Mtd2lkdGg6DQo+ICsgICAgZGVzY3JpcHRpb246DQo+ICsgICAg
-ICBOdW1iZXIgb2YgYWRkcmVzcyBiaXRzIChvbmUgb2YgOCwgMTYpLg0KPiArICAgIHR5cGU6IGlu
-dGVnZXINCj4gKw0KPiArICBudW0tYWRkcmVzc2VzOg0KPiArICAgIGRlc2NyaXB0aW9uOg0KPiAr
-ICAgICAgVG90YWwgbnVtYmVyIG9mIGkyYyBzbGF2ZSBhZGRyZXNzZXMgdGhpcyBkZXZpY2UgdGFr
-ZXMuDQo+ICsgICAgdHlwZTogaW50ZWdlcg0KPiArDQo+ICtyZXF1aXJlZDoNCj4gKyAgLSBjb21w
-YXRpYmxlDQo+ICsgIC0gcmVnDQo+ICsNCj4gK2V4YW1wbGVzOg0KPiArICAtIHwNCj4gKyAgICBl
-ZXByb21ANTIgew0KPiArICAgICAgICBjb21wYXRpYmxlID0gIm1pY3JvY2hpcCwyNGMzMiIsICJh
-dG1lbCwyNGMzMiI7DQo+ICsgICAgICAgIHJlZyA9IDwweDUyPjsNCj4gKyAgICAgICAgcGFnZXNp
-emUgPSA8MzI+Ow0KPiArICAgICAgICB3cC1ncGlvcyA9IDwmZ3BpbzEgMyAwPjsNCj4gKyAgICAg
-ICAgbnVtLWFkZHJlc3NlcyA9IDw4PjsNCj4gKyAgICB9Ow0KPiBkaWZmIC0tZ2l0IGEvTUFJTlRB
-SU5FUlMgYi9NQUlOVEFJTkVSUw0KPiBpbmRleCBhNDAwYWYwNTAxYzkuLjNjN2NlZDY4Njk2NiAx
-MDA2NDQNCj4gLS0tIGEvTUFJTlRBSU5FUlMNCj4gKysrIGIvTUFJTlRBSU5FUlMNCj4gQEAgLTI2
-OTgsNyArMjY5OCw3IEBAIE06CUJhcnRvc3ogR29sYXN6ZXdza2kgPGJnb2xhc3pld3NraUBiYXls
-aWJyZS5jb20+DQo+ICBMOglsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnDQo+ICBUOglnaXQgZ2l0
-Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2JyZ2wvbGludXguZ2l0
-DQo+ICBTOglNYWludGFpbmVkDQo+IC1GOglEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
-Z3MvZWVwcm9tL2F0MjQudHh0DQo+ICtGOglEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
-Z3MvZWVwcm9tL2F0MjQueWFtbA0KPiAgRjoJZHJpdmVycy9taXNjL2VlcHJvbS9hdDI0LmMNCj4g
-IA0KPiAgQVRBIE9WRVIgRVRIRVJORVQgKEFPRSkgRFJJVkVSDQo+IA0KDQo=
+pon., 23 wrz 2019 o 20:30 Peter Rosin <peda@axentia.se> napisa=C5=82(a):
+>
+> On 2019-09-23 19:52, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> >
+> > Convert the binding document for at24 EEPROMs from txt to yaml. The
+> > compatible property uses a regex pattern to address all the possible
+> > combinations of "vendor,model" strings.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > ---
+> >  .../devicetree/bindings/eeprom/at24.txt       |  90 +--------------
+> >  .../devicetree/bindings/eeprom/at24.yaml      | 107 ++++++++++++++++++
+> >  MAINTAINERS                                   |   2 +-
+> >  3 files changed, 109 insertions(+), 90 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/eeprom/at24.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/eeprom/at24.txt b/Docume=
+ntation/devicetree/bindings/eeprom/at24.txt
+> > index 22aead844d0f..c94acbb8cb0c 100644
+> > --- a/Documentation/devicetree/bindings/eeprom/at24.txt
+> > +++ b/Documentation/devicetree/bindings/eeprom/at24.txt
+> > @@ -1,89 +1 @@
+> > -EEPROMs (I2C)
+> > -
+> > -Required properties:
+> > -
+> > -  - compatible: Must be a "<manufacturer>,<model>" pair. The following=
+ <model>
+> > -                values are supported (assuming "atmel" as manufacturer=
+):
+> > -
+> > -                "atmel,24c00",
+> > -                "atmel,24c01",
+> > -                "atmel,24cs01",
+> > -                "atmel,24c02",
+> > -                "atmel,24cs02",
+> > -                "atmel,24mac402",
+> > -                "atmel,24mac602",
+> > -                "atmel,spd",
+> > -                "atmel,24c04",
+> > -                "atmel,24cs04",
+> > -                "atmel,24c08",
+> > -                "atmel,24cs08",
+> > -                "atmel,24c16",
+> > -                "atmel,24cs16",
+> > -                "atmel,24c32",
+> > -                "atmel,24cs32",
+> > -                "atmel,24c64",
+> > -                "atmel,24cs64",
+> > -                "atmel,24c128",
+> > -                "atmel,24c256",
+> > -                "atmel,24c512",
+> > -                "atmel,24c1024",
+> > -                "atmel,24c2048",
+> > -
+> > -                If <manufacturer> is not "atmel", then a fallback must=
+ be used
+> > -                with the same <model> and "atmel" as manufacturer.
+> > -
+> > -                Example:
+> > -                        compatible =3D "microchip,24c128", "atmel,24c1=
+28";
+> > -
+> > -                Supported manufacturers are:
+> > -
+> > -                "catalyst",
+> > -                "microchip",
+> > -                "nxp",
+> > -                "ramtron",
+> > -                "renesas",
+> > -                "rohm",
+> > -                "st",
+> > -
+> > -                Some vendors use different model names for chips which=
+ are just
+> > -                variants of the above. Known such exceptions are liste=
+d below:
+> > -
+> > -                "nxp,se97b" - the fallback is "atmel,24c02",
+> > -                "renesas,r1ex24002" - the fallback is "atmel,24c02"
+> > -                "renesas,r1ex24016" - the fallback is "atmel,24c16"
+> > -                "renesas,r1ex24128" - the fallback is "atmel,24c128"
+> > -                "rohm,br24t01" - the fallback is "atmel,24c01"
+> > -
+> > -  - reg: The I2C address of the EEPROM.
+> > -
+> > -Optional properties:
+> > -
+> > -  - pagesize: The length of the pagesize for writing. Please consult t=
+he
+> > -              manual of your device, that value varies a lot. A wrong =
+value
+> > -              may result in data loss! If not specified, a safety valu=
+e of
+> > -              '1' is used which will be very slow.
+> > -
+> > -  - read-only: This parameterless property disables writes to the eepr=
+om.
+> > -
+> > -  - size: Total eeprom size in bytes.
+> > -
+> > -  - no-read-rollover: This parameterless property indicates that the
+> > -                      multi-address eeprom does not automatically roll=
+ over
+> > -                      reads to the next slave address. Please consult =
+the
+> > -                      manual of your device.
+> > -
+> > -  - wp-gpios: GPIO to which the write-protect pin of the chip is conne=
+cted.
+> > -
+> > -  - address-width: number of address bits (one of 8, 16).
+> > -
+> > -  - num-addresses: total number of i2c slave addresses this device tak=
+es
+> > -
+> > -Example:
+> > -
+> > -eeprom@52 {
+> > -     compatible =3D "atmel,24c32";
+> > -     reg =3D <0x52>;
+> > -     pagesize =3D <32>;
+> > -     wp-gpios =3D <&gpio1 3 0>;
+> > -     num-addresses =3D <8>;
+> > -};
+> > +This file has been moved to at24.yaml.
+> > diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Docum=
+entation/devicetree/bindings/eeprom/at24.yaml
+> > new file mode 100644
+> > index 000000000000..28c8b068c8a1
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+> > @@ -0,0 +1,107 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +# Copyright 2019 BayLibre SAS
+> > +%YAML 1.2
+> > +---
+> > +$id: "http://devicetree.org/schemas/eeprom/at24.yaml#"
+> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > +
+> > +title: I2C EEPROMs compatible with Atmel's AT24
+> > +
+> > +maintainers:
+> > +  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    additionalItems: true
+> > +    maxItems: 2
+> > +    pattern: "^(atmel|catalyst|microchip|nxp|ramtron|renesas|rohm|st),=
+24(c|cs|mac)[0-9]+$"
+> > +    oneOf:
+> > +      - const: nxp,se97b
+> > +      - const: renesas,r1ex24002
+> > +      - const: renesas,r1ex24016
+> > +      - const: renesas,r1ex24128
+> > +      - const: rohm,br24t01
+> > +    contains:
+> > +      enum:
+> > +        - atmel,24c00
+> > +        - atmel,24c01
+> > +        - atmel,24cs01
+> > +        - atmel,24c02
+> > +        - atmel,24cs02
+> > +        - atmel,24mac402
+> > +        - atmel,24mac602
+> > +        - atmel,spd
+> > +        - atmel,24c04
+> > +        - atmel,24cs04
+> > +        - atmel,24c08
+> > +        - atmel,24cs08
+> > +        - atmel,24c16
+> > +        - atmel,24cs16
+> > +        - atmel,24c32
+> > +        - atmel,24cs32
+> > +        - atmel,24c64
+> > +        - atmel,24cs64
+> > +        - atmel,24c128
+> > +        - atmel,24c256
+> > +        - atmel,24c512
+> > +        - atmel,24c1024
+> > +        - atmel,24c2048
+>
+> The previous binding allows more e.g.
+>
+>         compatible =3D "nxp,spd", "atmel,spd";
+>
+
+Ugh, I was thinking about spd and then forgot it anyway. :(
+
+> which is no longer allowed. That might be a problem? The previous binding
+> also allows less e.g.
+>
+>         compatible =3D "atmel,24c00", "renesas,24mac402";
+>
+
+Right, but I'm not really sure how to express fallbacks in yaml. Any hint?
+
+Bart
+
+> which of course is nonsense but AFAIU now allowed.
+>
+> The new formal rules are therefore not "right", and it might be impossibl=
+e
+> to express the subtleties of this weird binding with the current spec so
+> there might be little to do about it? But either way, these issues are no=
+t
+> mentioned neither in the binding nor the commit message. Should they be
+> mentioned?
+>
+> Cheers,
+> Peter
+>
+> > +
+> > +  reg:
+> > +    description:
+> > +      The I2C slave address of the EEPROM.
+> > +    maxItems: 1
+> > +
+> > +  pagesize:
+> > +    description:
+> > +      The length of the pagesize for writing. Please consult the
+> > +      manual of your device, that value varies a lot. A wrong value
+> > +      may result in data loss! If not specified, a safety value of
+> > +      '1' is used which will be very slow.
+> > +    type: integer
+> > +
+> > +  read-only:
+> > +    description:
+> > +      This parameterless property disables writes to the eeprom.
+> > +    type: boolean
+> > +
+> > +  size:
+> > +    description:
+> > +      Total eeprom size in bytes.
+> > +    type: integer
+> > +
+> > +  no-read-rollover:
+> > +    description:
+> > +      This parameterless property indicates that the multi-address
+> > +      eeprom does not automatically roll over reads to the next slave
+> > +      address. Please consult the manual of your device.
+> > +    type: boolean
+> > +
+> > +  wp-gpios:
+> > +    description:
+> > +      GPIO to which the write-protect pin of the chip is connected.
+> > +    maxItems: 1
+> > +
+> > +  address-width:
+> > +    description:
+> > +      Number of address bits (one of 8, 16).
+> > +    type: integer
+> > +
+> > +  num-addresses:
+> > +    description:
+> > +      Total number of i2c slave addresses this device takes.
+> > +    type: integer
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +examples:
+> > +  - |
+> > +    eeprom@52 {
+> > +        compatible =3D "microchip,24c32", "atmel,24c32";
+> > +        reg =3D <0x52>;
+> > +        pagesize =3D <32>;
+> > +        wp-gpios =3D <&gpio1 3 0>;
+> > +        num-addresses =3D <8>;
+> > +    };
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index a400af0501c9..3c7ced686966 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -2698,7 +2698,7 @@ M:      Bartosz Golaszewski <bgolaszewski@baylibr=
+e.com>
+> >  L:   linux-i2c@vger.kernel.org
+> >  T:   git git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+> >  S:   Maintained
+> > -F:   Documentation/devicetree/bindings/eeprom/at24.txt
+> > +F:   Documentation/devicetree/bindings/eeprom/at24.yaml
+> >  F:   drivers/misc/eeprom/at24.c
+> >
+> >  ATA OVER ETHERNET (AOE) DRIVER
+> >
+>
