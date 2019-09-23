@@ -2,105 +2,261 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 747E2BBBB5
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2019 20:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54085BBD30
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2019 22:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728067AbfIWSj3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 23 Sep 2019 14:39:29 -0400
-Received: from mail-eopbgr10109.outbound.protection.outlook.com ([40.107.1.109]:49926
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727376AbfIWSj3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 23 Sep 2019 14:39:29 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gEm5irB5vlvofzcq8/Yvey+/LtB4ZOu3l+o694mt1M1FWcTmSisKW+QY0ptt31vMCAo9kIajWTPPozoDMOGwqSKNPLy3BwqsejjleUkAeS45ThbobAF85J0eokMgYgRzGk+N7TQ3SZ3WswIw33rtSUn0loBDJYa9Gc960Q+Z04/71mSQs1sIFW1vdbvsvK2351+HgZxfI1LdJ4RwjgU2RwpQlLE5x5mDct7lKHDXt5m5un40owiKWfdURgT8ga/kYIlVx2pmhTRJ/7yeF/8mhlXyqo1rP1LuKNQced0V3N2GWzm98xU7chBYmz9jij43L/ZAZC6A4gH9BiWlSXlkgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mF9rslXDRsdDPOrMQ48XVv7NCJ60qaDlzeL8GACi3uc=;
- b=neS5bUDs6fexnu62K6ljjAwMJr03YhX8Y56q7s5ckJWw/WX6+hQUp0F7KsbnbPAMZccZABSuJGJI3YAN92JFnnuYx3VcnbaezKV8wkYY2Beqspk03ldKF/ZT1iNb2zHk6f0ZobA1FYSpx5ttiBT+K2UIJPPx5CYuTWRzVdxrfB7vVs5DaOnpq/49MK0PNEvYGERfisegyZqR3eW21hlB76NPTJXLt+7fIJzA7wBqq/Nxb7CirxdygQLO3/aVvU3QxT306QCpKIbW3UlLjQOFTQ170H+3x97MTfz0HVMrfGVzektJHg4OPPcIL+BBfwFtTWsRwT7z59SBBgZoDV9JXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mF9rslXDRsdDPOrMQ48XVv7NCJ60qaDlzeL8GACi3uc=;
- b=YwHzAfPpwmgwl460HeEb7wIiNbfukzNlaQPuav9gN9mpbku8FGKNQf6xFb14EIIvu9KXNfnPA5atpbAx/3To5adzhIHxRZ123iJeXK8XtwSv7TaiGEPKcrMarjTrXWfIFRL2WIqJpqfRV8ci4Gxs6YXlQQorXLmFf5L7bfrjAGs=
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com (52.134.66.158) by
- DB3PR0202MB3420.eurprd02.prod.outlook.com (52.134.67.140) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2284.25; Mon, 23 Sep 2019 18:39:24 +0000
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::c5b8:6014:87a4:1afe]) by DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::c5b8:6014:87a4:1afe%7]) with mapi id 15.20.2284.023; Mon, 23 Sep 2019
- 18:39:24 +0000
-From:   Peter Rosin <peda@axentia.se>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH] dt-bindings: at24: convert the binding document to yaml
-Thread-Topic: [PATCH] dt-bindings: at24: convert the binding document to yaml
-Thread-Index: AQHVcjeocf98ho4EUE6as/1S5tdIl6c5lYUAgAABMQCAAAFEAA==
-Date:   Mon, 23 Sep 2019 18:39:24 +0000
-Message-ID: <bf499787-acd1-1919-a4b4-c0278a50e282@axentia.se>
-References: <20190923175211.2060-1-brgl@bgdev.pl>
- <b3a3ca68-45ab-c60a-7f48-636b102b32c1@axentia.se>
- <CAMRc=MfEtSg9eABT5Zb=KQWqXn4BiWxC9eTibSSMAOnHMw8DGQ@mail.gmail.com>
-In-Reply-To: <CAMRc=MfEtSg9eABT5Zb=KQWqXn4BiWxC9eTibSSMAOnHMw8DGQ@mail.gmail.com>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-x-originating-ip: [213.112.138.100]
-x-clientproxiedby: HE1PR0102CA0012.eurprd01.prod.exchangelabs.com
- (2603:10a6:7:14::25) To DB3PR0202MB3434.eurprd02.prod.outlook.com
- (2603:10a6:8:5::30)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peda@axentia.se; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1c0d51dd-b858-4f4e-1115-08d740555b1c
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600167)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:DB3PR0202MB3420;
-x-ms-traffictypediagnostic: DB3PR0202MB3420:
-x-microsoft-antispam-prvs: <DB3PR0202MB3420EB69906E2331423C865FBC850@DB3PR0202MB3420.eurprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5516;
-x-forefront-prvs: 0169092318
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(39830400003)(136003)(396003)(346002)(42606007)(366004)(189003)(199004)(7736002)(6436002)(305945005)(256004)(4326008)(4744005)(71190400001)(102836004)(316002)(6916009)(11346002)(8936002)(446003)(66946007)(6506007)(186003)(6246003)(54906003)(6512007)(58126008)(26005)(53546011)(386003)(66446008)(64756008)(66556008)(66476007)(5660300002)(8676002)(65806001)(65956001)(66066001)(99286004)(31696002)(14454004)(76176011)(71200400001)(3846002)(6116002)(36756003)(486006)(81156014)(81166006)(86362001)(476003)(2616005)(52116002)(6486002)(2906002)(25786009)(229853002)(508600001)(31686004);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3420;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: axentia.se does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: q1FqMqtXmkE628q17FqI5G1d6GMp+ELN30I9cVuxO3gfxapGqvLL/WxaN54A7rt6P6sXD1h5DUE0EtsTw8hT8Lk8PjlwLVBpo5FzCE1IRQzqW5ljTVxDYP8kMBrfJNIK7TJmW83kOaxKKteU9+2Lc+jqtA31bZkHm4jIaO0PZteUFJYuysHfSa9GN1IdSxjf8E1aa9DcOLJslG+pIg0ZJ5OZzprE732VA7e6QoMe0xaRTgiGcKCsjxsvX4CfdXYIP1Kar0/4MRnw8jP76kGYa0ipX+VHtgh5IiRX5HsqHmsz71CoDGIOG1mPgTEpwjkIkpavHQ8DzCqX6fRt8690uDuYKcJCWoZ9otuZ7rXVWmsZaCi+FObIE3YiokCutBWq/TSHJL+NKfoaX0Mdv8ugGFajUL/efLntOeGTY8BQIn8=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4839E545D3A3E2409D208AED16C25AB7@eurprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S2388405AbfIWUis (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 23 Sep 2019 16:38:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33822 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387586AbfIWUis (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 23 Sep 2019 16:38:48 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3500020B7C;
+        Mon, 23 Sep 2019 20:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569271127;
+        bh=gNrXvUAU8wOQh+iz7AfVncMXjSwAzg06fGaV6JWq7VM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Zhmep+7Yb+218KwH3rXqqFXlWqTUT+B+anFjP7DzudTHptIUjrsAhFxa2zsVTSJ1p
+         7FSXtVzzeonhZORvXyVB/BQzuNpVpvxJpvRb40C4i3gDsU5sg8IMC6ELwXmaUIXQ/T
+         A6DX/9i1XQuCcydOn+6Ax6wgn94ATIiAwIPhT3Ic=
+Received: by mail-qk1-f169.google.com with SMTP id y189so16935585qkc.3;
+        Mon, 23 Sep 2019 13:38:47 -0700 (PDT)
+X-Gm-Message-State: APjAAAXmTOnrvgXG3anSag8jToy+W93QqGMEDDzZ2FzR03yt9Z7gB8VD
+        whbrHBqogkKd4e1qGm4F9GU6m0C6+XFtPjSdQw==
+X-Google-Smtp-Source: APXvYqz4x174VUoDQ+sHaLwwQwYrYkn6emdZqVdsDwxBV8jupD/JDZttNZMfO0zz0c9aUqqQPkIDUNmyo/zXIew/gks=
+X-Received: by 2002:a37:682:: with SMTP id 124mr1915258qkg.393.1569271126374;
+ Mon, 23 Sep 2019 13:38:46 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c0d51dd-b858-4f4e-1115-08d740555b1c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2019 18:39:24.3047
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HXcEmtEXoW9yHezzhYBGkYUmR5mypcSNGcG5LuU3gr4aSZXU40J+PzWhv6jW6Wyn
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3420
+References: <20190923175211.2060-1-brgl@bgdev.pl>
+In-Reply-To: <20190923175211.2060-1-brgl@bgdev.pl>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 23 Sep 2019 15:38:35 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJ7w0rvzMLePgz-g+HERhuEJ3F9uDpKcwE241FpumZxfA@mail.gmail.com>
+Message-ID: <CAL_JsqJ7w0rvzMLePgz-g+HERhuEJ3F9uDpKcwE241FpumZxfA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: at24: convert the binding document to yaml
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gMjAxOS0wOS0yMyAyMDozNCwgQmFydG9zeiBHb2xhc3pld3NraSB3cm90ZToNCj4gcG9uLiwg
-MjMgd3J6IDIwMTkgbyAyMDozMCBQZXRlciBSb3NpbiA8cGVkYUBheGVudGlhLnNlPiBuYXBpc2HF
-gihhKToNCj4+DQo+PiB3aGljaCBpcyBubyBsb25nZXIgYWxsb3dlZC4gVGhhdCBtaWdodCBiZSBh
-IHByb2JsZW0/IFRoZSBwcmV2aW91cyBiaW5kaW5nDQo+PiBhbHNvIGFsbG93cyBsZXNzIGUuZy4N
-Cj4+DQo+PiAgICAgICAgIGNvbXBhdGlibGUgPSAiYXRtZWwsMjRjMDAiLCAicmVuZXNhcywyNG1h
-YzQwMiI7DQo+Pg0KPiANCj4gUmlnaHQsIGJ1dCBJJ20gbm90IHJlYWxseSBzdXJlIGhvdyB0byBl
-eHByZXNzIGZhbGxiYWNrcyBpbiB5YW1sLiBBbnkgaGludD8NCg0KQWJzb2x1dGVseSBubyBpZGVh
-IHdoYXQtc28tZXZlci4gU29ycnkuLi4NCg0KQ2hlZXJzLA0KUGV0ZXINCg==
+On Mon, Sep 23, 2019 at 12:52 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+>
+> Convert the binding document for at24 EEPROMs from txt to yaml. The
+> compatible property uses a regex pattern to address all the possible
+> combinations of "vendor,model" strings.
+>
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> ---
+>  .../devicetree/bindings/eeprom/at24.txt       |  90 +--------------
+>  .../devicetree/bindings/eeprom/at24.yaml      | 107 ++++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 109 insertions(+), 90 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/eeprom/at24.yaml
+
+[...]
+
+> diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
+> new file mode 100644
+> index 000000000000..28c8b068c8a1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+> @@ -0,0 +1,107 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright 2019 BayLibre SAS
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/eeprom/at24.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: I2C EEPROMs compatible with Atmel's AT24
+> +
+> +maintainers:
+> +  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> +
+> +properties:
+> +  compatible:
+
+Did you run this thru 'make dt_bindings_check' and is dt-schema up to
+date? I don't think it will pass and if it does I want to fix that.
+
+> +    additionalItems: true
+
+We pretty much never allow this.
+
+> +    maxItems: 2
+
+This applies to arrays...
+
+> +    pattern: "^(atmel|catalyst|microchip|nxp|ramtron|renesas|rohm|st),24(c|cs|mac)[0-9]+$"
+
+And this to strings which is non-sense. What you want is something like this:
+
+minItems: 1
+maxItems: 2
+items:
+  - pattern: "^(atmel|catalyst|microchip|nxp|ramtron|renesas|rohm|st),24(c|cs|mac)[0-9]+$"
+  - pattern: "^atmel,24(c|cs|mac)[0-9]+$"
+
+This would allow 'atmel' twice, but entries have to be unique already.
+It doesn't enforce the part numbers matching though. For that, you'd
+need either a bunch of these under a oneOf instead:
+
+items:
+  - pattern: "^(atmel|catalyst|microchip|nxp|ramtron|renesas|rohm|st),24c00$"
+  - const: atmel,24c00
+
+Or just add this to the above with an 'allOf':
+
+items:
+  pattern: "(c00|c01|mac402|...)$"
+
+Note the lack of '-' under items. That means the schema applies to all entries.
+
+> +    oneOf:
+> +      - const: nxp,se97b
+> +      - const: renesas,r1ex24002
+> +      - const: renesas,r1ex24016
+> +      - const: renesas,r1ex24128
+> +      - const: rohm,br24t01
+
+For this part, you probably want:
+
+oneOf:
+  - items:
+      - const: nxp,se97b
+      - const: atmel,24c02
+  - items:
+      ...
+
+And for the spd cases...
+
+> +    contains:
+> +      enum:
+
+allOf:
+  - oneOf:
+      # all the above stuff
+  - contains:
+      enum:
+
+> +        - atmel,24c00
+> +        - atmel,24c01
+> +        - atmel,24cs01
+> +        - atmel,24c02
+> +        - atmel,24cs02
+> +        - atmel,24mac402
+> +        - atmel,24mac602
+> +        - atmel,spd
+> +        - atmel,24c04
+> +        - atmel,24cs04
+> +        - atmel,24c08
+> +        - atmel,24cs08
+> +        - atmel,24c16
+> +        - atmel,24cs16
+> +        - atmel,24c32
+> +        - atmel,24cs32
+> +        - atmel,24c64
+> +        - atmel,24cs64
+> +        - atmel,24c128
+> +        - atmel,24c256
+> +        - atmel,24c512
+> +        - atmel,24c1024
+> +        - atmel,24c2048
+> +
+> +  reg:
+> +    description:
+> +      The I2C slave address of the EEPROM.
+> +    maxItems: 1
+> +
+> +  pagesize:
+> +    description:
+> +      The length of the pagesize for writing. Please consult the
+> +      manual of your device, that value varies a lot. A wrong value
+> +      may result in data loss! If not specified, a safety value of
+> +      '1' is used which will be very slow.
+> +    type: integer
+
+Other than boolean, you need to reference a type in types.yaml.
+
+Does it really vary too much to list out possible values?
+
+> +
+> +  read-only:
+> +    description:
+> +      This parameterless property disables writes to the eeprom.
+> +    type: boolean
+> +
+> +  size:
+> +    description:
+> +      Total eeprom size in bytes.
+> +    type: integer
+> +
+> +  no-read-rollover:
+> +    description:
+> +      This parameterless property indicates that the multi-address
+> +      eeprom does not automatically roll over reads to the next slave
+> +      address. Please consult the manual of your device.
+> +    type: boolean
+> +
+> +  wp-gpios:
+> +    description:
+> +      GPIO to which the write-protect pin of the chip is connected.
+> +    maxItems: 1
+> +
+> +  address-width:
+> +    description:
+> +      Number of address bits (one of 8, 16).
+
+Sounds like a constraint...
+
+> +    type: integer
+> +
+> +  num-addresses:
+> +    description:
+> +      Total number of i2c slave addresses this device takes.
+
+2^32 addresses okay?
+
+> +    type: integer
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    eeprom@52 {
+> +        compatible = "microchip,24c32", "atmel,24c32";
+> +        reg = <0x52>;
+> +        pagesize = <32>;
+> +        wp-gpios = <&gpio1 3 0>;
+> +        num-addresses = <8>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a400af0501c9..3c7ced686966 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2698,7 +2698,7 @@ M:        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+>  L:     linux-i2c@vger.kernel.org
+>  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+>  S:     Maintained
+> -F:     Documentation/devicetree/bindings/eeprom/at24.txt
+> +F:     Documentation/devicetree/bindings/eeprom/at24.yaml
+>  F:     drivers/misc/eeprom/at24.c
+>
+>  ATA OVER ETHERNET (AOE) DRIVER
+> --
+> 2.23.0
+>
