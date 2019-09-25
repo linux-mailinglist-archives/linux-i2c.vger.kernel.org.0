@@ -2,81 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 858B2BE619
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2019 22:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 567CABE66C
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2019 22:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390169AbfIYUHG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Sep 2019 16:07:06 -0400
-Received: from pbmsgap02.intersil.com ([192.157.179.202]:52140 "EHLO
-        pbmsgap02.intersil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727743AbfIYUHG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Sep 2019 16:07:06 -0400
-X-Greylist: delayed 1144 seconds by postgrey-1.27 at vger.kernel.org; Wed, 25 Sep 2019 16:07:04 EDT
-Received: from pps.filterd (pbmsgap02.intersil.com [127.0.0.1])
-        by pbmsgap02.intersil.com (8.16.0.27/8.16.0.27) with SMTP id x8PJXPCI005373;
-        Wed, 25 Sep 2019 15:43:54 -0400
-Received: from pbmxdp03.intersil.corp (pbmxdp03.pb.intersil.com [132.158.200.224])
-        by pbmsgap02.intersil.com with ESMTP id 2v60v8ae1j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 25 Sep 2019 15:43:54 -0400
-Received: from pbmxdp02.intersil.corp (132.158.200.223) by
- pbmxdp03.intersil.corp (132.158.200.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.1531.3; Wed, 25 Sep 2019 15:43:52 -0400
-Received: from localhost.localdomain (132.158.202.109) by
- pbmxdp02.intersil.corp (132.158.200.223) with Microsoft SMTP Server id
- 15.1.1531.3 via Frontend Transport; Wed, 25 Sep 2019 15:43:52 -0400
-From:   Chris Brandt <chris.brandt@renesas.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-CC:     <stable@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Chien Nguyen <chien.nguyen.eb@rvc.renesas.com>
-Subject: [PATCH] i2c: riic: Clear NACK in tend isr
-Date:   Wed, 25 Sep 2019 14:43:27 -0500
-Message-ID: <20190925194327.28109-1-chris.brandt@renesas.com>
+        id S2387768AbfIYUbU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Sep 2019 16:31:20 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:44838 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393128AbfIYUbU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Sep 2019 16:31:20 -0400
+Received: by mail-wr1-f66.google.com with SMTP id i18so8385799wru.11
+        for <linux-i2c@vger.kernel.org>; Wed, 25 Sep 2019 13:31:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AcBsCzwhp5Ecgxfu1Yf/yNSTuRVO8fFdckSjieoTLBs=;
+        b=dOzuI9mJG7MNkBkGgMGYhShhE5duhtiVQDyWLneLxX5wD/HCWf9T/PGCnLnPzC7wtc
+         ysS3Th4+kQaByGMbqsOJTgU9iown1CZdT89pHVI0AwdYL8iFDKcrSGBjpJLG5UVdC/Z5
+         eFEL4LYNjIxiH8xHZSo6ggGvIjxXX0eE8hVW8ghYYZYge090LkWEtqou4uIwMC+Q6C7K
+         BmI6qzs0PsJPxUaEiJH3kQJ+Rut1XEYojN4XokuuEIzUqBoZdypscGa3T0t7AJulGOCi
+         pQeAI/Uc1o44hsSpr1OWt2THVPdcK3Q0ilf9Qd1CykPt2J7mq2nyU7AkflhRneuODZeh
+         d2HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AcBsCzwhp5Ecgxfu1Yf/yNSTuRVO8fFdckSjieoTLBs=;
+        b=R1YbL8A0LgPy3mM/KlFlygOg9VcBg5F+P4c5R+R5fWamjau+VkiDnMjsrUur+eK6Os
+         xmGdeFuP2FvZZJRcjw0y0AqAb+guT8sVfk5KU/6OezjTr+kZmKn8dkEebY3nfj9vq7ag
+         T9XP+wytlnA2R7vPWdv3y5LuVHyAyET45LhMSLpYoQYJSmVp2fkU3aAkht/vcjvU/USf
+         dH7EGZWm/F1qd+dKmNWimb6vT9lDJtbsNpMKpwaXhR9hBJSwtBVHwKG8rO/RlPYiS768
+         5ohbMcQbmATTQE/WH84vjFiHlfQVmDM6bGGBhWgNx4rWlX1lEa5GE5W5H2qwiD903hhN
+         Pv9w==
+X-Gm-Message-State: APjAAAX4ksStejjr4z6iDu1WGJP8bJqW7FPJNbeuTs+3poRCPziQ2P0O
+        lTm2Bk9VqjCJz9sShQJ89CKuqftfG/o=
+X-Google-Smtp-Source: APXvYqwzQxZ9IYuGZE7fRHX9HR9jZ3vCuFGihvzGzRLMzKQ9kPDNMFvtmH/a4e7Uuo1sLkQjk6Emtw==
+X-Received: by 2002:adf:cc87:: with SMTP id p7mr142508wrj.43.1569443477086;
+        Wed, 25 Sep 2019 13:31:17 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e34:ecba:5540:2c05:40e4:899d:aef0])
+        by smtp.gmail.com with ESMTPSA id j1sm301348wrg.24.2019.09.25.13.31.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Sep 2019 13:31:16 -0700 (PDT)
+From:   Fabien Parent <fparent@baylibre.com>
+To:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     matthias.bgg@gmail.com, wsa@the-dreams.de, qii.wang@mediatek.com,
+        drinkcat@chromium.org, hsinyi@chromium.org, tglx@linutronix.de,
+        Fabien Parent <fparent@baylibre.com>
+Subject: [PATCH] i2c: i2c-mt65xx: fix NULL ptr dereference
+Date:   Wed, 25 Sep 2019 22:31:13 +0200
+Message-Id: <20190925203113.6972-1-fparent@baylibre.com>
 X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-25_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=junk_notspam policy=junk score=0 suspectscore=2 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=589
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1909250161
-X-Proofpoint-Spam-Reason: mlx
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The NACKF flag should be cleared in INTRIICNAKI interrupt processing as
-description in HW manual.
+Since commit abf4923e97c3 ("i2c: mediatek: disable zero-length transfers
+for mt8183"), there is a NULL pointer dereference for all the SoCs
+that don't have any quirk. mtk_i2c_functionality is not checking that
+the quirks pointer is not NULL before starting to use it.
 
-This issue shows up quickly when PREEMPT_RT is applied and a device is
-probed that is not plugged in (like a touchscreen controller). The result
-is endless interrupts that halt system boot.
+This commit add a check on the quirk pointer before dereferencing it.
 
-Fixes: 310c18a41450 ("i2c: riic: add driver")
-Reported-by: Chien Nguyen <chien.nguyen.eb@rvc.renesas.com>
-Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
+Fixes: abf4923e97c3 ("i2c: mediatek: disable zero-length transfers for mt8183")
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
 ---
- drivers/i2c/busses/i2c-riic.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/i2c/busses/i2c-mt65xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index f31413fd9521..800414886f6b 100644
---- a/drivers/i2c/busses/i2c-riic.c
-+++ b/drivers/i2c/busses/i2c-riic.c
-@@ -202,6 +202,7 @@ static irqreturn_t riic_tend_isr(int irq, void *data)
- 	if (readb(riic->base + RIIC_ICSR2) & ICSR2_NACKF) {
- 		/* We got a NACKIE */
- 		readb(riic->base + RIIC_ICDRR);	/* dummy read */
-+		riic_clear_set_bit(riic, ICSR2_NACKF, 0, RIIC_ICSR2);
- 		riic->err = -ENXIO;
- 	} else if (riic->bytes_left) {
- 		return IRQ_NONE;
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index 29eae1bf4f86..ec00fc6af9ae 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -875,7 +875,7 @@ static irqreturn_t mtk_i2c_irq(int irqno, void *dev_id)
+ 
+ static u32 mtk_i2c_functionality(struct i2c_adapter *adap)
+ {
+-	if (adap->quirks->flags & I2C_AQ_NO_ZERO_LEN)
++	if (adap->quirks && adap->quirks->flags & I2C_AQ_NO_ZERO_LEN)
+ 		return I2C_FUNC_I2C |
+ 			(I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
+ 	else
 -- 
 2.23.0
 
