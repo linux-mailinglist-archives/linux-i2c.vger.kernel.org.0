@@ -2,91 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EEABED95
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2019 10:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8B2BF32E
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2019 14:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729299AbfIZIlf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Sep 2019 04:41:35 -0400
-Received: from sauhun.de ([88.99.104.3]:37168 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726925AbfIZIlf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 26 Sep 2019 04:41:35 -0400
-Received: from localhost (unknown [65.39.69.237])
-        by pokefinder.org (Postfix) with ESMTPSA id 5B2052C01EC;
-        Thu, 26 Sep 2019 10:41:30 +0200 (CEST)
-Date:   Thu, 26 Sep 2019 10:41:27 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PULL REQUEST] i2c for 5.4
-Message-ID: <20190926084127.GA1862@kunai>
-References: <20190924193054.GA2215@kunai>
- <CAHk-=wi1WroG_uZ44au_KdEcujkCvcwz+d05EDR_=6vHb8xQaw@mail.gmail.com>
+        id S1726668AbfIZMmO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Sep 2019 08:42:14 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:41558 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726666AbfIZMmO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Sep 2019 08:42:14 -0400
+Received: by mail-oi1-f196.google.com with SMTP id w17so1917165oiw.8;
+        Thu, 26 Sep 2019 05:42:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AL8G4GaFXXe+EdF1qCUjEYm77B3nhKXRxYcSGeOKIsg=;
+        b=al57q/gly2kYnNT680p3iThuFzqbD3gePoCJdvg8sDA0w9fNZ+ssT3/bTeiUEkMJFd
+         R0GzCfGiis9IYYkU3ri9Osa3LnqjUGVilFnnmZ3u0R8u+6xS9QbcNER8W1YAm+TIBs7R
+         EomsuPuV05vs9O4bZp5KK+nG2opjjWAE8TXoj5mdBpdxU/ED5ezQ3+gRSV6KTIK87/Zz
+         eJ31PhwYFM6niYonsgukJdPk4Pwsza5E5whv3O07rqa+5hi1waGM6ogI03nmKQrIucMK
+         Eg+C5OXB92ooE/ZvYtASq3Aq9KJPzcOinZK31MzEmPdZjwTCW3UtqVjgcjhiDwaaD5vW
+         oWNA==
+X-Gm-Message-State: APjAAAVFH898cFE5pCOziUC15S2SiqLdfpBq4eCMG2Qq6NyDA5SKJHa/
+        GtFWWlDmzLPGpCxKG07iBfD73oeiK9vjbc2/9Rs=
+X-Google-Smtp-Source: APXvYqzsM86yclJ1iukNRZU2cRT0LTl7JSApiE3Oce2aFIWS1x893458nDWFV/G/pbY1c95M28hW2993LfF1WXJrExE=
+X-Received: by 2002:aca:b654:: with SMTP id g81mr2318394oif.153.1569501733175;
+ Thu, 26 Sep 2019 05:42:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EeQfGwPcQSOJBaQU"
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi1WroG_uZ44au_KdEcujkCvcwz+d05EDR_=6vHb8xQaw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1569310377-24976-1-git-send-email-biju.das@bp.renesas.com>
+In-Reply-To: <1569310377-24976-1-git-send-email-biju.das@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 26 Sep 2019 14:42:02 +0200
+Message-ID: <CAMuHMdXp_u-w9DMbmBZn3G99LexLuQyBR2hRA_0T8Wn130SsZg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: i2c: rcar: Add r8a774b1 support
+To:     Biju Das <biju.das@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Simon Horman <horms@verge.net.au>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Sep 24, 2019 at 9:33 AM Biju Das <biju.das@bp.renesas.com> wrote:
+> Document RZ/G2N (R8A774B1) I2C compatibility with the relevant driver
+> dt-bindings.
+>
+> Signed-off-by: Biju Das <biju.das@bp.renesas.com>
 
---EeQfGwPcQSOJBaQU
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Hi Linus,
+>  Documentation/devicetree/bindings/i2c/i2c-rcar.txt | 1 +
 
-> > - new driver for ICY, an Amiga Zorro card :)
->=20
-> Christ. Will that thing _never_ die?
+BTW, this file has been renamed to
+Documentation/devicetree/bindings/i2c/renesas,i2c.txt
 
-Well, a couple of happy users there...
+Gr{oetje,eeting}s,
 
-> I don't know what the proper mutt incantation is to make it join the
-> modern world, but I'm sure one exists, and then your emails would get
-> names right too. Even if they are some funky Swedish ones with =C3=A5=C3=
-=A4=C3=B6.
+                        Geert
 
-Sorry, my template for pull-requests had bogus header overriding the
-default utf-8 of my config. I fixed it now. Thanks for pointing it out.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> (And no, don't use Latin1 - it may cover Swedish and German etc, but
-> you really want to go with proper utf-8 and be able to handle true
-> complex character sets, not just the Western European ones).
-
-Heh, no need to convince me, I am all for utf-8!
-
-Regards,
-
-   Wolfram
-
-
---EeQfGwPcQSOJBaQU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl2MebcACgkQFA3kzBSg
-KbbPew/8C5Cg7gXflRpP7sT2XwDafwFNolQzyA1KoTi1TGR6+5p8iQvo8fGy76dr
-/iXIa97HPKpr/QQvdp6hYAG6/DNgByOf5FrbYv+5IQ3zOwOhdAEi6Jz0hZ/SCKTI
-V26eryi6oiDX1SpSY0pFo6mODxP9wAb3vC/omiPEFhNHz4bA+6ljdehWb31c9J/r
-wk+CbKlXoEdB1BhgSfuLpu/wemCBDu1cW3hFoBXRnIlKipHyDIpQukop9jwH+zxg
-lCN32U+LRm+h+6GuMzQ88RjaD7BTIHINijTsgZywrsZlC5sERjCgU9nNVSEhMqfU
-QqY57I3Y+nPC6gh0jt5mE5a8QvOcbTLJ+ClvGiDLq0A0a2x2SWrpkPN1B0HCWxfB
-8W0517CtbH6NgG1o54fbqOtSWhWmiDOu4/4uWM9qwEBvvPwJFROVCIproO4rKde8
-dude8sgYNIK9nuh+u+H/irYcTk9t4xPsiRt2YhC/iWJ/0I8XUQeBN18wC1fk+lP2
-HixvCV42/Y8OwdlWqDHo5WWlnYRKo4xqKSZLzz5BtUri/U84LnDcQNoT/XKtytzM
-33qbZaMm6QMbHBpkz3+kx6NUTXHgzgqSkLP7bmXkGOktErCni7fVKMXMXOwWy9JO
-U0jZoBogEVXTEIZpVLVAYPIPsYLytT3GDFoVr/hhQJ14kSeZtg0=
-=V5uj
------END PGP SIGNATURE-----
-
---EeQfGwPcQSOJBaQU--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
