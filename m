@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8B2BF32E
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2019 14:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FFFBF337
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2019 14:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbfIZMmO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Sep 2019 08:42:14 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:41558 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726666AbfIZMmO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Sep 2019 08:42:14 -0400
-Received: by mail-oi1-f196.google.com with SMTP id w17so1917165oiw.8;
-        Thu, 26 Sep 2019 05:42:13 -0700 (PDT)
+        id S1726677AbfIZMnf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Sep 2019 08:43:35 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38751 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726354AbfIZMnf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Sep 2019 08:43:35 -0400
+Received: by mail-ot1-f67.google.com with SMTP id e11so1853756otl.5;
+        Thu, 26 Sep 2019 05:43:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AL8G4GaFXXe+EdF1qCUjEYm77B3nhKXRxYcSGeOKIsg=;
-        b=al57q/gly2kYnNT680p3iThuFzqbD3gePoCJdvg8sDA0w9fNZ+ssT3/bTeiUEkMJFd
-         R0GzCfGiis9IYYkU3ri9Osa3LnqjUGVilFnnmZ3u0R8u+6xS9QbcNER8W1YAm+TIBs7R
-         EomsuPuV05vs9O4bZp5KK+nG2opjjWAE8TXoj5mdBpdxU/ED5ezQ3+gRSV6KTIK87/Zz
-         eJ31PhwYFM6niYonsgukJdPk4Pwsza5E5whv3O07rqa+5hi1waGM6ogI03nmKQrIucMK
-         Eg+C5OXB92ooE/ZvYtASq3Aq9KJPzcOinZK31MzEmPdZjwTCW3UtqVjgcjhiDwaaD5vW
-         oWNA==
-X-Gm-Message-State: APjAAAVFH898cFE5pCOziUC15S2SiqLdfpBq4eCMG2Qq6NyDA5SKJHa/
-        GtFWWlDmzLPGpCxKG07iBfD73oeiK9vjbc2/9Rs=
-X-Google-Smtp-Source: APXvYqzsM86yclJ1iukNRZU2cRT0LTl7JSApiE3Oce2aFIWS1x893458nDWFV/G/pbY1c95M28hW2993LfF1WXJrExE=
-X-Received: by 2002:aca:b654:: with SMTP id g81mr2318394oif.153.1569501733175;
- Thu, 26 Sep 2019 05:42:13 -0700 (PDT)
+        bh=xaZjgarK9CYThctBUtjyEbiHILC+LTcDWErdkYY4QV8=;
+        b=anobDpR82GA6s+NwqOMr5LjMZUNtcE/Ud4QrrQBmOY7JCF5/DPMzm4rQDGgpWRkkZK
+         LzYWjaIlQszo75yeblsykR6y4XWnMljwXKXHLveY/frydhL8u2QYO0ZTYt3mJW4e+q00
+         +c6p+JvZQ4Ad273LZDVv3crywiVfvr96JtbmkJ4iP0NDbvQngXRcGbu1r1Kq9Qve6nFg
+         XHn1taKF5KxFse72qA5Fx1oCkCo+S6PMHbmGXDyLqVHRO1VBUKFqp9YLbc0Am4PpVNmq
+         tB3R0RFZhYG0JvvA+jOJVyZ8K5PB7uub7noJrfrhHNpwZmjMZPSLY7SuvKHmE/hxPkA7
+         d4IQ==
+X-Gm-Message-State: APjAAAXbRKuhi8qS9Y8oyW0FYZpOO3bsQ8F4at2Wukz2fi+eBah+qcis
+        PKGvF89Zp65v05pI+J5muiEtXl4RKrk4v8RK1XQ=
+X-Google-Smtp-Source: APXvYqyA82AX+5py+5vYcZhKasjc7tRy7AskMCtbibVccfaptnBC9UXxhDazhb2BZGqRkDWUdjaxvZK3E4kQVlrYZqw=
+X-Received: by 2002:a9d:17e6:: with SMTP id j93mr2503102otj.297.1569501813872;
+ Thu, 26 Sep 2019 05:43:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <1569310377-24976-1-git-send-email-biju.das@bp.renesas.com>
-In-Reply-To: <1569310377-24976-1-git-send-email-biju.das@bp.renesas.com>
+References: <1569310619-31071-1-git-send-email-biju.das@bp.renesas.com>
+In-Reply-To: <1569310619-31071-1-git-send-email-biju.das@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 26 Sep 2019 14:42:02 +0200
-Message-ID: <CAMuHMdXp_u-w9DMbmBZn3G99LexLuQyBR2hRA_0T8Wn130SsZg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: i2c: rcar: Add r8a774b1 support
+Date:   Thu, 26 Sep 2019 14:43:22 +0200
+Message-ID: <CAMuHMdXwpSeQPUtKT4g6Oa14w71WM9dw5xXj3DUZ8Qj6=9OM0g@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: i2c: sh_mobile: Add r8a774b1 support
 To:     Biju Das <biju.das@bp.renesas.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -54,18 +54,16 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Sep 24, 2019 at 9:33 AM Biju Das <biju.das@bp.renesas.com> wrote:
-> Document RZ/G2N (R8A774B1) I2C compatibility with the relevant driver
-> dt-bindings.
+On Tue, Sep 24, 2019 at 9:37 AM Biju Das <biju.das@bp.renesas.com> wrote:
+> Document RZ/G2N (R8A774B1) SoC bindings.
 >
 > Signed-off-by: Biju Das <biju.das@bp.renesas.com>
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
->  Documentation/devicetree/bindings/i2c/i2c-rcar.txt | 1 +
+>  Documentation/devicetree/bindings/i2c/i2c-sh_mobile.txt | 1 +
 
-BTW, this file has been renamed to
-Documentation/devicetree/bindings/i2c/renesas,i2c.txt
+Documentation/devicetree/bindings/i2c/renesas,iic.txt
 
 Gr{oetje,eeting}s,
 
