@@ -2,121 +2,364 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8233C03E5
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2019 13:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB9BC068E
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2019 15:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727033AbfI0LPu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Sep 2019 07:15:50 -0400
-Received: from mail-eopbgr40109.outbound.protection.outlook.com ([40.107.4.109]:45795
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726179AbfI0LPu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 27 Sep 2019 07:15:50 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M0In+tg+StK9BIy4t+RxRXyr0SXflCkvTv1GWAhC2UvsW8YsbmjEvkvJ8nRjySWfKDiNFX0AQN1ljHI48opQZbAhQIDx5ubYLrR4kJc74ze3gVUkEED2QsX00PJiMi+yLyVK2EB7xdnhEozqmsGUCYh69MJivSl/URUP3AnsGO3BVFunBS7vdVkNtSFuw9XRJozikJzKQK4W8IjHEOT1zEwkVDY9BKcnx4lY1tsw+Hmj9yLjuo4Nde3ux+HeR5PfxHr36Niy+wU3t/njzSwVOBNwxSyel3E+Cg8/QZkxUt8GObgee4vhK6SsVnAG67xzCvYsoW4YzRBP/pDBhm6LQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oZHO4QN2Yon058Mn/K0er+xQATf46gdGIdVimILnO/8=;
- b=lgRznJQceIOQw4m+WeW8jU5BWGT+4dG4FP3e5CegQXo5mCJoHUWGwucXO71ChPyRbAlU1/FaC9ZAaHRJSaTgjjtWvRDBalOPGC1tlGv2DuSMgx1kXs6vx4qO551IGpcWZ1RMkc1DGuQOcz7X5MLcWEHYUqJ+hnu7EpYyrmJuwHWunGTj2Gias4xbHuOu8TiQ/1xlTMfGXLBO6S3/lkAaCRs4VKGUBmvsWWLJsExjjQmtOZ78z0Bc3auGD5OJsBqXuHerhUMC8Cu6FKRGnMLYsQINkF9JKd/4J4TVQm7kuPfIWwjUec15eyUv0N4sMk2bM6SViXNMFfWm+R1rLze/PQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oZHO4QN2Yon058Mn/K0er+xQATf46gdGIdVimILnO/8=;
- b=GRomStr8DRyqbiZv8g5lKoze5V2oRIwHEBc1Kukj2XmFeStfuOTxzexY3hIuS49fUGZ6x9i8q5iRrzzeUEBpZakX97+Z0PHP72hMWp5lqC/wBtOYEHpu0LhWLvuXpzXZOyIWRMv7XgRXXMehL6e6ZgkDUzyNIL/rmNPU9zlU4jo=
-Received: from AM6PR0702MB3527.eurprd07.prod.outlook.com (52.133.24.149) by
- AM6PR0702MB3575.eurprd07.prod.outlook.com (52.133.17.12) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.15; Fri, 27 Sep 2019 11:15:46 +0000
-Received: from AM6PR0702MB3527.eurprd07.prod.outlook.com
- ([fe80::7497:742a:1167:30dc]) by AM6PR0702MB3527.eurprd07.prod.outlook.com
- ([fe80::7497:742a:1167:30dc%6]) with mapi id 15.20.2305.013; Fri, 27 Sep 2019
- 11:15:46 +0000
-From:   "Sverdlin, Alexander (Nokia - DE/Ulm)" <alexander.sverdlin@nokia.com>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-CC:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] i2c: i801: Bring back Block Process Call support for
- certain platforms
-Thread-Topic: [PATCH] i2c: i801: Bring back Block Process Call support for
- certain platforms
-Thread-Index: AQHVdSQCyfoRzmtNCUS/Z+b9Fx2Hj6c/X4OA
-Date:   Fri, 27 Sep 2019 11:15:46 +0000
-Message-ID: <1ab328d1-a75d-e8b6-5652-4e4cfbcf320a@nokia.com>
-References: <20190927110911.23045-1-jarkko.nikula@linux.intel.com>
-In-Reply-To: <20190927110911.23045-1-jarkko.nikula@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [131.228.32.167]
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
-x-clientproxiedby: HE1PR0402CA0053.eurprd04.prod.outlook.com
- (2603:10a6:7:7c::42) To AM6PR0702MB3527.eurprd07.prod.outlook.com
- (2603:10a6:209:11::21)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=alexander.sverdlin@nokia.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fc11eda1-6fb2-42be-e665-08d7433c0b12
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: AM6PR0702MB3575:
-x-microsoft-antispam-prvs: <AM6PR0702MB3575B5F1842812F78D154A1188810@AM6PR0702MB3575.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:541;
-x-forefront-prvs: 0173C6D4D5
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(39860400002)(396003)(366004)(136003)(376002)(199004)(189003)(71190400001)(58126008)(486006)(31696002)(71200400001)(2616005)(476003)(3846002)(256004)(14454004)(446003)(11346002)(478600001)(99286004)(6246003)(4326008)(76176011)(86362001)(52116002)(186003)(31686004)(6512007)(7736002)(2501003)(305945005)(36756003)(6436002)(6486002)(81166006)(64756008)(66476007)(66556008)(81156014)(5660300002)(66946007)(66446008)(8676002)(8936002)(229853002)(25786009)(102836004)(53546011)(6506007)(6116002)(2906002)(386003)(316002)(26005)(110136005)(54906003)(66066001)(65956001)(65806001);DIR:OUT;SFP:1102;SCL:1;SRVR:AM6PR0702MB3575;H:AM6PR0702MB3527.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nokia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: a+RDapjfb3GzPQJH70HkO/id9dCvIkBkazr86VyX3iq2uOd0mBT0eVpJwcpo53oYntBNuetsRUkIIFFahEs/opbyYcW+d8vo9xB1/JuD4T1etEw6HvYZgpnJ9SXNg/mG8LDlaX2Bk7Wf2s/gxgcS2NpUo+LXxo9zVBxNJpqg2eIMq93LyFBDCuIcCxd0TSFLWHmY3Qj1TwaE8QgMBIGFyVGfsReA13yGIP6wNC5Vfc6iEVD0m0GCzQoYXUL0UsLqSMghf7HSnAgqYG90xD5K3lW42AuCfwCRiV89pcpS0+m6gFyoDrYR2hTn78OeAQkbSKJkTn4KBoyYaRmO0mBeRIJJYlqgLXpqz26CaqgHpEzPv790NCgGL7S1VUmQWWjjUD88uydGWJhDuwCvnkc5kQ/UmypIhcAxaG70LAdLvKQ=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CACDBA10EACC1E4197F3819917B19CCC@eurprd07.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727266AbfI0NmX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Sep 2019 09:42:23 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:37931 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725992AbfI0NmX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Sep 2019 09:42:23 -0400
+Received: by mail-oi1-f193.google.com with SMTP id m16so5232263oic.5;
+        Fri, 27 Sep 2019 06:42:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6A8+XK4hH5QQ+56YfWFGj8rbwtwJGUbVuhTbqELL8Ac=;
+        b=mDErom3TzVVFHGHjHsbVJYbYPffVXUHK+e63H5SsWqYeMv/Szo+725EyiP8rJD3A2m
+         Hx5S77vMsuUut02z1GObiOQA6fXrVnn4/C5fzg8tLt11UE2WHXxT03s+G5dBMC0zeZyW
+         2nSU+Dy+yRVGk9etOAjOgIcQPDuwzb0bfjTKTLEbXw8GNKBIFCnL+ir7otM5wAakbqZc
+         RlA13qTZVVb0Ti+9yU9HN1EacMCnnz+LdmrufvCugeyF7xmJqoLmUVfjUUMS5fPhup76
+         RRge/vF49Up2P576ecMGifqZf7Pv3IDyPvu2obatHvvoRW+kSpbs075COmkXfFfbjtA8
+         I03A==
+X-Gm-Message-State: APjAAAWSDMB4ROgNiqC10VIf7eSXtfldLuuKdVTRzOeGCM+k8+RWKXWV
+        RXOTvSls96heFezqcrguHOr0YAw=
+X-Google-Smtp-Source: APXvYqy/DmKJirBgPut/1N5QoQ0+HlN+0IYb/OAJrg6t1IOktijl5IneIPBHcaF+u2k6jCtYAEAEUA==
+X-Received: by 2002:a05:6808:7cd:: with SMTP id f13mr7224509oij.6.1569591741778;
+        Fri, 27 Sep 2019 06:42:21 -0700 (PDT)
+Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.googlemail.com with ESMTPSA id 38sm970941otw.28.2019.09.27.06.42.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Sep 2019 06:42:21 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Peter Rosin <peda@axentia.se>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH v4] dt-bindings: at24: convert the binding document to yaml
+Date:   Fri, 27 Sep 2019 08:42:20 -0500
+Message-Id: <20190927134220.8734-1-robh@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc11eda1-6fb2-42be-e665-08d7433c0b12
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2019 11:15:46.0760
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0Gz6NIGkhbMmVGAFXjJJ7vVFfTvQtKeHnCfsl2M+tP6MH7giAxDlMK9y04UD30wgZq2VgijUxE9QlUHPzOhWgjeRS3UVHxrjwcfgAAWIyCY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0702MB3575
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-VGhhbmtzLCBKYXJra28hDQoNCk9uIDI3LzA5LzIwMTkgMTM6MDksIEphcmtrbyBOaWt1bGEgd3Jv
-dGU6DQo+IENvbW1pdCBiODQzOThkNmQ3ZjkgKCJpMmM6IGk4MDE6IFVzZSBpVENPIHZlcnNpb24g
-NiBpbiBDYW5ub24gTGFrZSBQQ0gNCj4gYW5kIGJleW9uZCIpIGxvb2tzIGxpa2UgdG8gZHJvcCBi
-eSBhY2NpZGVudCBCbG9jayBXcml0ZS1CbG9jayBSZWFkIFByb2Nlc3MNCj4gQ2FsbCBzdXBwb3J0
-IGZvciBJbnRlbCBTdW5yaXNlcG9pbnQsIExld2lzYnVyZywgRGVudmVydG9uIGFuZCBLYWJ5IExh
-a2UuDQo+IA0KPiBUaGF0IHN1cHBvcnQgd2FzIGFkZGVkIGZvciBhYm92ZSBhbmQgbmV3ZXIgcGxh
-dGZvcm1zIGJ5IHRoZSBjb21taXQNCj4gMzE1Y2Q2N2M5NDUzICgiaTJjOiBpODAxOiBBZGQgQmxv
-Y2sgV3JpdGUtQmxvY2sgUmVhZCBQcm9jZXNzIENhbGwNCj4gc3VwcG9ydCIpIHNvIGJyaW5nIGl0
-IGJhY2sgZm9yIGFib3ZlIHBsYXRmb3Jtcy4NCj4gDQo+IEZpeGVzOiBiODQzOThkNmQ3ZjkgKCJp
-MmM6IGk4MDE6IFVzZSBpVENPIHZlcnNpb24gNiBpbiBDYW5ub24gTGFrZSBQQ0ggYW5kIGJleW9u
-ZCIpDQoNClJldmlld2VkLWJ5OiBBbGV4YW5kZXIgU3ZlcmRsaW4gPGFsZXhhbmRlci5zdmVyZGxp
-bkBub2tpYS5jb20+DQoNCj4gU2lnbmVkLW9mZi1ieTogSmFya2tvIE5pa3VsYSA8amFya2tvLm5p
-a3VsYUBsaW51eC5pbnRlbC5jb20+DQo+IC0tLQ0KPiAgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1p
-ODAxLmMgfCAxICsNCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0KPiANCj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtaTgwMS5jIGIvZHJpdmVycy9pMmMvYnVz
-c2VzL2kyYy1pODAxLmMNCj4gaW5kZXggYTQ2MDhhMDQ3NDY4Li4xZmVkN2JmMDBhNmQgMTAwNjQ0
-DQo+IC0tLSBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtaTgwMS5jDQo+ICsrKyBiL2RyaXZlcnMv
-aTJjL2J1c3Nlcy9pMmMtaTgwMS5jDQo+IEBAIC0xNzM2LDYgKzE3MzYsNyBAQCBzdGF0aWMgaW50
-IGk4MDFfcHJvYmUoc3RydWN0IHBjaV9kZXYgKmRldiwgY29uc3Qgc3RydWN0IHBjaV9kZXZpY2Vf
-aWQgKmlkKQ0KPiAgCWNhc2UgUENJX0RFVklDRV9JRF9JTlRFTF9MRVdJU0JVUkdfU1NLVV9TTUJV
-UzoNCj4gIAljYXNlIFBDSV9ERVZJQ0VfSURfSU5URUxfRE5WX1NNQlVTOg0KPiAgCWNhc2UgUENJ
-X0RFVklDRV9JRF9JTlRFTF9LQUJZTEFLRV9QQ0hfSF9TTUJVUzoNCj4gKwkJcHJpdi0+ZmVhdHVy
-ZXMgfD0gRkVBVFVSRV9CTE9DS19QUk9DOw0KPiAgCQlwcml2LT5mZWF0dXJlcyB8PSBGRUFUVVJF
-X0kyQ19CTE9DS19SRUFEOw0KPiAgCQlwcml2LT5mZWF0dXJlcyB8PSBGRUFUVVJFX0lSUTsNCj4g
-IAkJcHJpdi0+ZmVhdHVyZXMgfD0gRkVBVFVSRV9TTUJVU19QRUM7DQoNCi0tIA0KQmVzdCByZWdh
-cmRzLA0KQWxleGFuZGVyIFN2ZXJkbGluLg0K
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+
+Convert the binding document for at24 EEPROMs from txt to yaml. The
+compatible property uses a regex pattern to address all the possible
+combinations of "vendor,model" strings.
+
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+[robh: rework compatible schema, fix missing allOf for $ref, fix errors in example]
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v4:
+- Add a $nodename definition
+
+- Turns out the compatible schema is too complex for generating a 'select'
+schema and only a small subset where getting validated. So we need a
+custom 'select' schema. This in turn fixes the issue with the nxp,se97b
+binding.
+
+Now we get a different set of errors checking Arm dts files (omitting
+a bunch of node name ones):
+
+arch/arm/boot/dts/at91-dvk_som60.dt.yaml: eeprom@57: compatible: ['giantec,gt24c32a', 'atmel,24c32'] is not valid under any of the given schemas
+arch/arm/boot/dts/am3874-iceboard.dt.yaml: at24cs01@5f: compatible: ['atmel,24cs01'] is not valid under any of the given schemas
+arch/arm/boot/dts/am3874-iceboard.dt.yaml: at24cs08@5c: compatible: ['atmel,24cs08'] is not valid under any of the given schemas
+
+These all look to be real.
+---
+ .../devicetree/bindings/eeprom/at24.txt       |  90 +---------
+ .../devicetree/bindings/eeprom/at24.yaml      | 164 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 166 insertions(+), 90 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/eeprom/at24.yaml
+
+diff --git a/Documentation/devicetree/bindings/eeprom/at24.txt b/Documentation/devicetree/bindings/eeprom/at24.txt
+index 22aead844d0f..c94acbb8cb0c 100644
+--- a/Documentation/devicetree/bindings/eeprom/at24.txt
++++ b/Documentation/devicetree/bindings/eeprom/at24.txt
+@@ -1,89 +1 @@
+-EEPROMs (I2C)
+-
+-Required properties:
+-
+-  - compatible: Must be a "<manufacturer>,<model>" pair. The following <model>
+-                values are supported (assuming "atmel" as manufacturer):
+-
+-                "atmel,24c00",
+-                "atmel,24c01",
+-                "atmel,24cs01",
+-                "atmel,24c02",
+-                "atmel,24cs02",
+-                "atmel,24mac402",
+-                "atmel,24mac602",
+-                "atmel,spd",
+-                "atmel,24c04",
+-                "atmel,24cs04",
+-                "atmel,24c08",
+-                "atmel,24cs08",
+-                "atmel,24c16",
+-                "atmel,24cs16",
+-                "atmel,24c32",
+-                "atmel,24cs32",
+-                "atmel,24c64",
+-                "atmel,24cs64",
+-                "atmel,24c128",
+-                "atmel,24c256",
+-                "atmel,24c512",
+-                "atmel,24c1024",
+-                "atmel,24c2048",
+-
+-                If <manufacturer> is not "atmel", then a fallback must be used
+-                with the same <model> and "atmel" as manufacturer.
+-
+-                Example:
+-                        compatible = "microchip,24c128", "atmel,24c128";
+-
+-                Supported manufacturers are:
+-
+-                "catalyst",
+-                "microchip",
+-                "nxp",
+-                "ramtron",
+-                "renesas",
+-                "rohm",
+-                "st",
+-
+-                Some vendors use different model names for chips which are just
+-                variants of the above. Known such exceptions are listed below:
+-
+-                "nxp,se97b" - the fallback is "atmel,24c02",
+-                "renesas,r1ex24002" - the fallback is "atmel,24c02"
+-                "renesas,r1ex24016" - the fallback is "atmel,24c16"
+-                "renesas,r1ex24128" - the fallback is "atmel,24c128"
+-                "rohm,br24t01" - the fallback is "atmel,24c01"
+-
+-  - reg: The I2C address of the EEPROM.
+-
+-Optional properties:
+-
+-  - pagesize: The length of the pagesize for writing. Please consult the
+-              manual of your device, that value varies a lot. A wrong value
+-              may result in data loss! If not specified, a safety value of
+-              '1' is used which will be very slow.
+-
+-  - read-only: This parameterless property disables writes to the eeprom.
+-
+-  - size: Total eeprom size in bytes.
+-
+-  - no-read-rollover: This parameterless property indicates that the
+-                      multi-address eeprom does not automatically roll over
+-                      reads to the next slave address. Please consult the
+-                      manual of your device.
+-
+-  - wp-gpios: GPIO to which the write-protect pin of the chip is connected.
+-
+-  - address-width: number of address bits (one of 8, 16).
+-
+-  - num-addresses: total number of i2c slave addresses this device takes
+-
+-Example:
+-
+-eeprom@52 {
+-	compatible = "atmel,24c32";
+-	reg = <0x52>;
+-	pagesize = <32>;
+-	wp-gpios = <&gpio1 3 0>;
+-	num-addresses = <8>;
+-};
++This file has been moved to at24.yaml.
+diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
+new file mode 100644
+index 000000000000..036068335a4b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+@@ -0,0 +1,164 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# Copyright 2019 BayLibre SAS
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/eeprom/at24.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: I2C EEPROMs compatible with Atmel's AT24
++
++maintainers:
++  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
++
++select:
++  properties:
++    compatible:
++      contains:
++        pattern: "^atmel,(24(c|cs|mac)[0-9]+|spd)$"
++  required:
++    - compatible
++
++properties:
++  $nodename:
++    pattern: "^eeprom@[0-9a-f]{1,2}$"
++  compatible:
++    oneOf:
++      - allOf:
++          - minItems: 1
++            maxItems: 2
++            items:
++              - pattern: "^(atmel|catalyst|microchip|nxp|ramtron|renesas|rohm|st),(24(c|cs|mac)[0-9]+|spd)$"
++              - pattern: "^atmel,(24(c|cs|mac)[0-9]+|spd)$"
++          - oneOf:
++              - items:
++                  pattern: c00$
++              - items:
++                  pattern: c01$
++              - items:
++                  pattern: c02$
++              - items:
++                  pattern: c04$
++              - items:
++                  pattern: c08$
++              - items:
++                  pattern: c16$
++              - items:
++                  pattern: cs16$
++              - items:
++                  pattern: c32$
++              - items:
++                  pattern: cs32$
++              - items:
++                  pattern: c64$
++              - items:
++                  pattern: cs64$
++              - items:
++                  pattern: c128$
++              - items:
++                  pattern: cs128$
++              - items:
++                  pattern: c256$
++              - items:
++                  pattern: cs256$
++              - items:
++                  pattern: c512$
++              - items:
++                  pattern: cs512$
++              - items:
++                  pattern: c1024$
++              - items:
++                  pattern: cs1024$
++              - items:
++                  pattern: c2048$
++              - items:
++                  pattern: cs2048$
++              - items:
++                  pattern: spd$
++      - items:
++          - const: rohm,br24t01
++          - const: atmel,24c01
++      - items:
++          - const: nxp,se97b
++          - const: atmel,24c02
++      - items:
++          - const: renesas,r1ex24002
++          - const: atmel,24c02
++      - items:
++          - const: renesas,r1ex24016
++          - const: atmel,24c16
++      - items:
++          - const: renesas,r1ex24128
++          - const: atmel,24c128
++
++  reg:
++    maxItems: 1
++
++  pagesize:
++    allOf:
++      - $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      The length of the pagesize for writing. Please consult the
++      manual of your device, that value varies a lot. A wrong value
++      may result in data loss! If not specified, a safety value of
++      '1' is used which will be very slow.
++    enum: [ 1, 8, 16, 32, 64, 128, 258 ]
++    default: 1
++
++  read-only:
++    $ref: /schemas/types.yaml#definitions/flag
++    description:
++      This parameterless property disables writes to the eeprom.
++
++  size:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Total eeprom size in bytes.
++
++  no-read-rollover:
++    $ref: /schemas/types.yaml#definitions/flag
++    description:
++      This parameterless property indicates that the multi-address
++      eeprom does not automatically roll over reads to the next slave
++      address. Please consult the manual of your device.
++
++  wp-gpios:
++    description:
++      GPIO to which the write-protect pin of the chip is connected.
++    maxItems: 1
++
++  address-width:
++    allOf:
++      - $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Number of address bits (one of 8, 16).
++    default: 8
++    enum: [ 8, 16 ]
++
++  num-addresses:
++    allOf:
++      - $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Total number of i2c slave addresses this device takes.
++    default: 1
++    minimum: 1
++    maximum: 8
++
++required:
++  - compatible
++  - reg
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      eeprom@52 {
++          compatible = "microchip,24c32", "atmel,24c32";
++          reg = <0x52>;
++          pagesize = <32>;
++          wp-gpios = <&gpio1 3 0>;
++          num-addresses = <8>;
++      };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a50e97a63bc8..a65e6bcd957b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2687,7 +2687,7 @@ M:	Bartosz Golaszewski <bgolaszewski@baylibre.com>
+ L:	linux-i2c@vger.kernel.org
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/eeprom/at24.txt
++F:	Documentation/devicetree/bindings/eeprom/at24.yaml
+ F:	drivers/misc/eeprom/at24.c
+ 
+ ATA OVER ETHERNET (AOE) DRIVER
+-- 
+2.20.1
+
