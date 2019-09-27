@@ -2,101 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69701C08D5
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2019 17:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8254EC0D24
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2019 23:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727862AbfI0Pom (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Sep 2019 11:44:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42636 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727207AbfI0Pol (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 27 Sep 2019 11:44:41 -0400
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E20D32146E;
-        Fri, 27 Sep 2019 15:44:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569599081;
-        bh=JvAibICL3mYnhHG6USFakLaq5pSAL+F0LFmV8Pd88Vs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qr3k3NSCnvKmuzwCoUSSAj7EJuLfUyurlmvfcyLU6OmHhYUlheh5vMc6YiV/QGg9e
-         QyTenOtE5UHvDnKAoosmj/bRnVgUXK0z43Nfp/tYoYd9KWunj5KHvzOKFvjwHJWLio
-         GOTaZHrOfzx4Fu3kH/36XrtiI60LH1DF2kAOli3o=
-Received: by mail-qk1-f174.google.com with SMTP id x134so2358905qkb.0;
-        Fri, 27 Sep 2019 08:44:40 -0700 (PDT)
-X-Gm-Message-State: APjAAAUqnWd0uSw8Zkr0/4noE5DI0J0IJqNKysQIKT21cxVtZC+YVygp
-        w99r8SSi+rVKG49uYlUSvPxFQbHCkDtyXU3L3Q==
-X-Google-Smtp-Source: APXvYqy1MGJjHwELZ4Bw99jjQEhMXDlYRvnNqs1LnykFuiSzNrCL1BzMpOm8ays235L+R3270SmaXQZtAd7SSGPY3F4=
-X-Received: by 2002:a37:682:: with SMTP id 124mr5220879qkg.393.1569599080064;
- Fri, 27 Sep 2019 08:44:40 -0700 (PDT)
+        id S1726029AbfI0VRu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Sep 2019 17:17:50 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:43560 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726116AbfI0VRu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Sep 2019 17:17:50 -0400
+Received: by mail-pf1-f196.google.com with SMTP id a2so2236437pfo.10
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Sep 2019 14:17:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=fIW9bjsbsDCoAYd1MI1Avm6rTaCkSpKz7mkNvIdoEoY=;
+        b=szfWtmIrwjzdD2PBxRD+UIstHqxjUH+lKlGcUD5u7w9UIwAqdA3JEjexN15j684Jso
+         oSGq/FKn5XDtCM98EUy6YSFFH7LFdleH6+KXChQ7KGfthYAF81uR2G2fK6INd5a9skx5
+         WVNlaL8hFy71wm+zVMraWozeALfoyncDIdipIIi96ILYm7fYv46nFQMMCCZCmxzxYbLV
+         Hac9mUBdnTlL3jd5Z3oz7xAZ4yq4KKCzQEGwLrsw0X2vALxYc7vCThZoGLIHt8bXMlTf
+         yB47vUOkmx0u/c4P7bf6EwZMOytfC9pnNd3AGjHueE2XYuGoReQwYmG9xwgddx1G6igs
+         K5pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=fIW9bjsbsDCoAYd1MI1Avm6rTaCkSpKz7mkNvIdoEoY=;
+        b=dwMxrVV/TcVCrUuHecTaqCZA/jDNpizhpiXFR935f696QBntLSNQcpM0obns0UqRdr
+         zHxzeB0JUbS/tpktzVobEE5GHFB44JWKmtLW+87ucLIDso5SQQi5vqqdgao/9JA9z04n
+         jO6SSZv9LV2ZvwS65RfENIpz89HKyD+Yho1Fzn7AKgQgD84o4A8t683A7GTN2OLcXRoO
+         xxuea8M3yJom8Nv3E3LiTfi2ogdtVaDGSlZIm+eJvO+xwLpPyfllbq6byoro8LYQYQsS
+         7O6Fg5NJzX7TBJd0ud/XwFo7QpogEJwO0fwCTt+qu4WSURp1UqCeW5Lauo5VzUewTLs1
+         IA7g==
+X-Gm-Message-State: APjAAAVwAIER7Qgpw+mHAxThsJF1sKpXkW2HHYKD5D9dxabAuNO0uMKB
+        HL2tyTBz+TXbi+a6CxrdoQdr1g==
+X-Google-Smtp-Source: APXvYqyfFqhb5U9wi2Eswf16arxZHKOY7mHg37ZMOwRLqpoDP9qw2MWHAeoLE6MnWdZroGFRroiMaw==
+X-Received: by 2002:a17:90a:2e8a:: with SMTP id r10mr12786306pjd.128.1569619069365;
+        Fri, 27 Sep 2019 14:17:49 -0700 (PDT)
+Received: from dell ([12.206.46.61])
+        by smtp.gmail.com with ESMTPSA id s18sm5465515pji.30.2019.09.27.14.17.47
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 27 Sep 2019 14:17:48 -0700 (PDT)
+Date:   Fri, 27 Sep 2019 22:17:45 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>, alokc@codeaurora.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, vkoul@kernel.org,
+        linux-i2c@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Subject: Re: [RESEND v3 1/1] i2c: qcom-geni: Disable DMA processing on the
+ Lenovo Yoga C630
+Message-ID: <20190927211745.GF4469@dell>
+References: <20190906061448.GJ26880@dell>
+ <20190906065018.GA1019@kunai>
+ <20190906075600.GL26880@dell>
+ <20190906102355.GA3146@kunai>
+ <20190906105445.GO26880@dell>
+ <20190906183139.GB19123@kunai>
+ <CAF6AEGsHOaR1dRf8xGH5sRa38=S+Y3NvNiAJ9DpMkddWoLBw8g@mail.gmail.com>
+ <20190913142821.GD1022@kunai>
+ <20190913161345.GB8466@tuxbook-pro>
+ <20190913161748.GF1022@kunai>
 MIME-Version: 1.0
-References: <20190927134220.8734-1-robh@kernel.org> <CAMRc=MctTVh99vE+dfd25ienWEjtMNwrM200f1im--fx9ALo7Q@mail.gmail.com>
-In-Reply-To: <CAMRc=MctTVh99vE+dfd25ienWEjtMNwrM200f1im--fx9ALo7Q@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 27 Sep 2019 10:44:29 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+R9wdB521dQtwMiWXEJEB5tGEDYi_efDqZL6xzF9YduA@mail.gmail.com>
-Message-ID: <CAL_Jsq+R9wdB521dQtwMiWXEJEB5tGEDYi_efDqZL6xzF9YduA@mail.gmail.com>
-Subject: Re: [PATCH v4] dt-bindings: at24: convert the binding document to yaml
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Peter Rosin <peda@axentia.se>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190913161748.GF1022@kunai>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Sep 27, 2019 at 10:06 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> pt., 27 wrz 2019 o 15:42 Rob Herring <robh@kernel.org> napisa=C5=82(a):
-> >
-> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> >
-> > Convert the binding document for at24 EEPROMs from txt to yaml. The
-> > compatible property uses a regex pattern to address all the possible
-> > combinations of "vendor,model" strings.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > [robh: rework compatible schema, fix missing allOf for $ref, fix errors=
- in example]
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> > v4:
-> > - Add a $nodename definition
-> >
-> > - Turns out the compatible schema is too complex for generating a 'sele=
-ct'
-> > schema and only a small subset where getting validated. So we need a
-> > custom 'select' schema. This in turn fixes the issue with the nxp,se97b
-> > binding.
->
-> Thanks again!
->
-> >
-> > Now we get a different set of errors checking Arm dts files (omitting
-> > a bunch of node name ones):
-> >
->
-> > arch/arm/boot/dts/at91-dvk_som60.dt.yaml: eeprom@57: compatible: ['gian=
-tec,gt24c32a', 'atmel,24c32'] is not valid under any of the given schemas
->
-> This is because nobody bothered adding 'giantec,gt24c32a' to previous
-> .txt bindings. I'll add this in a follow-up patch.
->
-> > arch/arm/boot/dts/am3874-iceboard.dt.yaml: at24cs01@5f: compatible: ['a=
-tmel,24cs01'] is not valid under any of the given schemas
-> > arch/arm/boot/dts/am3874-iceboard.dt.yaml: at24cs08@5c: compatible: ['a=
-tmel,24cs08'] is not valid under any of the given schemas
-> >
->
-> These look fine at first glance, I'm not sure what the problem here
-> is. I'll take a look at these as soon as I can.
+On Fri, 13 Sep 2019, Wolfram Sang wrote:
 
-Ah, that's my mistake. I guess there's only no 24cs00 variant.
+> 
+> > It seems linux-next is now pulling from the soc.git, rather than
+> > arm-soc.git, but Arnd is still pushing patches to arm-soc.git.
+> 
+> Can you ask them to fix this?
+> 
+> > Arnd says that the patch will be in v5.4 and I merged Arnd's tree and
+> > gave it a spin here and this patch makes it boot. So please merge this
+> > patch for v5.4 as well.
+> 
+> No worries, this is clearly a bugfix. So it will easily go in with the
+> same release as the DTS file.
 
-Rob
+Still not in Mainline.  Is the plan to send this through the -rcs?
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
