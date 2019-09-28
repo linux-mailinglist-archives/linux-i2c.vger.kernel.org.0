@@ -2,32 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6012C11A7
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Sep 2019 19:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF781C11B5
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Sep 2019 20:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726581AbfI1Rvz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 28 Sep 2019 13:51:55 -0400
-Received: from sauhun.de ([88.99.104.3]:36320 "EHLO pokefinder.org"
+        id S1728569AbfI1SMv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 28 Sep 2019 14:12:51 -0400
+Received: from sauhun.de ([88.99.104.3]:36506 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725965AbfI1Rvz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 28 Sep 2019 13:51:55 -0400
+        id S1726026AbfI1SMv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 28 Sep 2019 14:12:51 -0400
 Received: from localhost (unknown [46.183.103.17])
-        by pokefinder.org (Postfix) with ESMTPSA id 2AA842C0489;
-        Sat, 28 Sep 2019 19:51:39 +0200 (CEST)
-Date:   Sat, 28 Sep 2019 19:51:24 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id AEB8C2C0489;
+        Sat, 28 Sep 2019 20:12:48 +0200 (CEST)
+Date:   Sat, 28 Sep 2019 20:12:45 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     =?utf-8?B?QmrDtnJuIEFyZMO2?= <bjorn.ardo@axis.com>
-Cc:     linux-i2c@vger.kernel.org,
-        =?utf-8?B?QmrDtnJuIEFyZMO2?= <bjornar@axis.com>
-Subject: Re: [PATCH v3] i2c: slave-eeprom: Add read only mode
-Message-ID: <20190928175114.GB2196@kunai>
-References: <1567778769-25485-1-git-send-email-bjorn.ardo@axis.com>
- <20190913140907.GA1022@kunai>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] i2c: i801: Bring back Block Process Call support for
+ certain platforms
+Message-ID: <20190928181244.GA12219@kunai>
+References: <20190927110911.23045-1-jarkko.nikula@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4SFOXa2GPu3tIq4H"
+        protocol="application/pgp-signature"; boundary="lrZ03NoBR/3+SXJZ"
 Content-Disposition: inline
-In-Reply-To: <20190913140907.GA1022@kunai>
+In-Reply-To: <20190927110911.23045-1-jarkko.nikula@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -35,42 +36,45 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---4SFOXa2GPu3tIq4H
-Content-Type: text/plain; charset=utf-8
+--lrZ03NoBR/3+SXJZ
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 13, 2019 at 03:09:08PM +0100, Wolfram Sang wrote:
-> On Fri, Sep 06, 2019 at 04:06:09PM +0200, Bj=C3=B6rn Ard=C3=B6 wrote:
-> > Add read-only versions of all EEPROMs. These versions are read-only
-> > on the i2c side, but can be written from the sysfs side.
-> >=20
-> > Signed-off-by: Bj=C3=B6rn Ard=C3=B6 <bjorn.ardo@axis.com>
+On Fri, Sep 27, 2019 at 02:09:11PM +0300, Jarkko Nikula wrote:
+> Commit b84398d6d7f9 ("i2c: i801: Use iTCO version 6 in Cannon Lake PCH
+> and beyond") looks like to drop by accident Block Write-Block Read Process
+> Call support for Intel Sunrisepoint, Lewisburg, Denverton and Kaby Lake.
 >=20
-> Applied to for-next, thanks!
+> That support was added for above and newer platforms by the commit
+> 315cd67c9453 ("i2c: i801: Add Block Write-Block Read Process Call
+> support") so bring it back for above platforms.
+>=20
+> Fixes: b84398d6d7f9 ("i2c: i801: Use iTCO version 6 in Cannon Lake PCH an=
+d beyond")
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-Hmm, I probably did something wrong because it was not in my first pull
-request. I am sorry about that! I added it to my second pull request now.
+Applied to for-current, thanks!
 
 
---4SFOXa2GPu3tIq4H
+--lrZ03NoBR/3+SXJZ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl2PnZIACgkQFA3kzBSg
-KbbkhQ//f8atL8G1NUZHGMswPWUlb13zEMSWtvbIyZiYxbft3APzz/WSXVgmX1nr
-gzjljHsG2Ph492tfP3hwgSO3153CdmKFOdd0ocbpAd2J+3+kLB33B3e4OOBRkBDT
-P3yO/5FvWU69VMkQPrueBfdOLQg32JTujiO6M97a8/3em5pB1IOEGoDlv/yG8iyu
-uCqQFQNK8OJB7dhN10Cc00xr35KWBg1b90Cmog28snb9AU5CbISFvP2+g4njhLzi
-TsmtGB6phCxpJakUXPjKlkLa3JxxnS4QW5d1BBaY3aMN+fbsBLg9PTeTbVpOv7LR
-0ndMulLbyDKA5qwGcc9L0wwaWV5r01bJGL4bx2EwxBISJ2BZs03N6NUP2SnlcU7Z
-vJS+S3tY/IFa94s86GCaB/ABZSrdf9Ys4UUTpVjZlaQ3QtuswVAx5wwgqxfwVjax
-EJ+/XN6a9DnloCVN2rFHQFTCGTcrwNnRCmnWnkz3QGcFmvXg9TJ3pxf77tChzZuW
-pwn6STtDGQ8uIUvz4cbVhZYe+i5953fWURM8HRiQx89LILgFMLocUzyiGFxIzWlW
-YJ3xx925c4VRwIiUlGVtWz2ljvSseNMpA9PF0lR6Qd1vNjggMtnVuFHnYFZPFZAC
-121tSMIY8Kvp+5y2gV5ahJyAJAgcDC8FCbxwcat68IQwVDjx87g=
-=Qbej
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl2PopwACgkQFA3kzBSg
+KbaRwQ//TJS6J6//LjxEJZM6rnVIGEtves1qbySx6L60VFHZF/VET7WNO279RdaH
+QUIcj9EgynQD+qeIxmuHSH4qguDXPRi59G6MCbdQFeQmCRTl1HCK70JFEt7du57X
+DQCqr/9kJgcsoE3NDEk1aaGY580sb1xt174dWX11V43fh8/f87SW17Rtx4wKYAdE
+HFhqfQEyCkCFU71ylxtSzlNqh7ngJkr9DYM2tNugTqJLlnDe1gRLrfS8weXqiGM7
+WYTDukMxfWs2CDcgxYTPzC1WxPJaH9smsScm7rovYGOaqcIEXG+qMfY8RTgRmlrJ
+65DuTIodeBG4UI/QP9Ex32acqMGE3Xe/4Rl9VaB8E4uFQP7kEuRYe5gZne6skKes
+wPmwBRDL3jzOU8qO1bf6Qtbs8U6fhVLQSg7DrddZn7VKcB1cyr7efkczYutF3UO/
+TQQMv4GmkKDdWTHoLWcyhY8jsXzIU7UfVAlfIIUqs0N1UeJrbr5cVfH4isDjcs32
+jyXsRUbQl2Xs5WOICxCs8GWDYs5a+iM50kOMGZ0i/yd80/PQzHzAAaJHc6gJCq3h
+r8uTGkM6ty+AFqTWFtiRDqwnhg0WLxWGzqyhzHaxzls7BdGSP6gttNjhFLWxYtGr
+IZsg9cGyRwzC4WpdD/v8NoPyqhiCo9v6vmfhJOwnJVAm/Ahm3+M=
+=cTBk
 -----END PGP SIGNATURE-----
 
---4SFOXa2GPu3tIq4H--
+--lrZ03NoBR/3+SXJZ--
