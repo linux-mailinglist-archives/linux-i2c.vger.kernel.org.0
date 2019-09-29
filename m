@@ -2,38 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD732C1716
-	for <lists+linux-i2c@lfdr.de>; Sun, 29 Sep 2019 19:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA046C1889
+	for <lists+linux-i2c@lfdr.de>; Sun, 29 Sep 2019 19:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730619AbfI2Rfo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 29 Sep 2019 13:35:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47922 "EHLO mail.kernel.org"
+        id S1729166AbfI2RbJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 29 Sep 2019 13:31:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41522 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729743AbfI2Rfn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 29 Sep 2019 13:35:43 -0400
+        id S1729145AbfI2RbJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 29 Sep 2019 13:31:09 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B2E4421BE5;
-        Sun, 29 Sep 2019 17:35:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 141BE2086A;
+        Sun, 29 Sep 2019 17:31:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569778542;
-        bh=5HZsXufoe1eSsQDatugfLmK36+htBdD6QkpXpsSGt7c=;
+        s=default; t=1569778267;
+        bh=GKjZy4P+9TGkqvMqU59odRlZDEdrfCj2aPgQx1WN0X4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RqkzLSII+yBSqu0VXEJgPrhVoaeE1SIGSb5/L1sOF46D0lkH2X//0ehIVMYY26u3K
-         WJ/knixbLwqa+Kr6b08SM5a2V2yLqIOzLCiQVHARjzQ1nBGdNQSclUVjtc+9FZPNAM
-         YmHTNhH3aYYfNBfXgH7UNKnnoblTxg5WT+ENp2m0=
+        b=dPeIMDbt8K/4jp2QsfkKccJkQ3f2WJCbqv5behT/lhF7v58kQ/Wu4102Bz5y4mUcs
+         y7KgMNM3Iyf9BsKrJVzi2bSHoebP8Ng/2ZqCO9zY6ghj7gAd3KcE7FNWMaoFeCXjGW
+         TyRRyxJ18ohX81syE97imTv5xio/YtgefGqvkOoU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hans de Goede <hdegoede@redhat.com>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 03/23] i2c-cht-wc: Fix lockdep warning
-Date:   Sun, 29 Sep 2019 13:35:13 -0400
-Message-Id: <20190929173535.9744-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 05/49] i2c-cht-wc: Fix lockdep warning
+Date:   Sun, 29 Sep 2019 13:30:05 -0400
+Message-Id: <20190929173053.8400-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190929173535.9744-1-sashal@kernel.org>
-References: <20190929173535.9744-1-sashal@kernel.org>
+In-Reply-To: <20190929173053.8400-1-sashal@kernel.org>
+References: <20190929173053.8400-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -162,10 +162,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 46 insertions(+)
 
 diff --git a/drivers/i2c/busses/i2c-cht-wc.c b/drivers/i2c/busses/i2c-cht-wc.c
-index 190bbbc7bfeeb..29456c8821e7c 100644
+index 66af44bfa67d5..f6546de66fbc8 100644
 --- a/drivers/i2c/busses/i2c-cht-wc.c
 +++ b/drivers/i2c/busses/i2c-cht-wc.c
-@@ -185,6 +185,51 @@ static const struct i2c_algorithm cht_wc_i2c_adap_algo = {
+@@ -178,6 +178,51 @@ static const struct i2c_algorithm cht_wc_i2c_adap_algo = {
  	.smbus_xfer = cht_wc_i2c_adap_smbus_xfer,
  };
  
@@ -217,7 +217,7 @@ index 190bbbc7bfeeb..29456c8821e7c 100644
  /**** irqchip for the client connected to the extchgr i2c adapter ****/
  static void cht_wc_i2c_irq_lock(struct irq_data *data)
  {
-@@ -268,6 +313,7 @@ static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
+@@ -286,6 +331,7 @@ static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
  	adap->adapter.owner = THIS_MODULE;
  	adap->adapter.class = I2C_CLASS_HWMON;
  	adap->adapter.algo = &cht_wc_i2c_adap_algo;
