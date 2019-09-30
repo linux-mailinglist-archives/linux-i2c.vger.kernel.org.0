@@ -2,98 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CABA2C244C
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Sep 2019 17:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 229D4C2754
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Sep 2019 22:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731868AbfI3P2w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 30 Sep 2019 11:28:52 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39698 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732010AbfI3P2w (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Sep 2019 11:28:52 -0400
-Received: by mail-wr1-f68.google.com with SMTP id r3so11867042wrj.6
-        for <linux-i2c@vger.kernel.org>; Mon, 30 Sep 2019 08:28:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nKNYJ+YfKpvtJJY2vQQUQXqOjR+zsvfM3h1aXu/ISL4=;
-        b=H0TYWQ03EdNmCsa24PTRi/DaCpOIJ2BI1utBui9MEd6CPIO/n5FgXT5QaM7G8Byflr
-         IjsUq8JljCgaDgVaAzD8uiJnP7WloIUMKN3Yd5GolIFvfw42I7kWeQ7msUUyIHgOoxmT
-         qeUrgV6e8QoColLYaPZ/uWYidkmbwcECRLvj5XlCZ0prajHp0UTdR+4boOIhRHPLDq9o
-         eI824KIalBfpNDFfEvSm74rwpvE1rV4I603AEVMf/nzPzkTM2snjOj9N/Ljknq6V3HMf
-         EzAsVE3O+DX/VeOsQ2BL9njgaV5cZo/FxQolaudcPZx++VjdnnlQNQcuc+vizfk+Urhx
-         Nb2w==
+        id S1731051AbfI3UxB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 30 Sep 2019 16:53:01 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:38099 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727118AbfI3UxA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Sep 2019 16:53:00 -0400
+Received: by mail-ot1-f65.google.com with SMTP id e11so9605204otl.5;
+        Mon, 30 Sep 2019 13:53:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nKNYJ+YfKpvtJJY2vQQUQXqOjR+zsvfM3h1aXu/ISL4=;
-        b=PlgD5UCBoLx0pF9mx8AifjoYNigvWJH4y8N+QcJ/xdeEpWIYcvGLacdP5EB/Xn62Lw
-         TLEE0N+BP1O/gl48hyaPQoqLH+rgpWeE0VB5hhVi579Y9rdcg/eaPL7whq+PRCvMYevG
-         m6nvZdiCR3I+OUYdQrF8A4eIvIz2aiJdCon5kPEg4KNpkPOMDcU6r8fI1Rhho8c8fJB2
-         TI0mWfvxwufYf2emQegborMEC6vH7pLPGuC/WQhNhSFnwVora0gO6RgbLg6pBa2tA8GW
-         tMhZg+h767M9IlmFsXCgB0hpqRyl9PR/8X+KG8T7GwUhIwBwt32M46q8djtNrbRRvNot
-         F3zw==
-X-Gm-Message-State: APjAAAXy86j8+ZckUnKHkHWsGrwBXY38885+/15HWlzD5/C5my0FwsQP
-        Yk0b/ro1W0PnJzukWcVl6/B1iRrCPFc=
-X-Google-Smtp-Source: APXvYqzP1+989rANQG2Lck5S3rwS82kAY9NARdWl/o2qRDBdRfMkejnRZIf/tpixmscYbkuO/ufQZA==
-X-Received: by 2002:a5d:6a06:: with SMTP id m6mr13698975wru.190.1569857329714;
-        Mon, 30 Sep 2019 08:28:49 -0700 (PDT)
-Received: from radium.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id o19sm12420949wro.50.2019.09.30.08.28.48
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qttcrBHS0kIn8DMgwWljur1/ogNYEuQG7wPRDTGlx3M=;
+        b=Muxh408k0X9cXxPp2LPXLtbDx5bTsAE2n+l+7TzUT76+8ZvhR+RZyJKO1VLGABMME7
+         BanJUeAT86GhLqc+xMrYmJ2efriH0qtl0FYwuwCuDyklNU07Ujn2bRxeYROl3gZ0/oFl
+         79/T7i0lWn8YQy4yN/6h7cRKoC7222y5loj+Fi2+9FYUpr+OYNpISWApr6DerqTrSCRL
+         ukADVYWQgA1mNx0MLZA2rufk7DLn0vcCBXbwysu6PU0eZ2hbmzNC84WZGZCt8kwqj+zD
+         8UZiyjJZ8tjI6xCUlMLY6adYmsNgMCrhqz0PLFBgT+qKHJM7BWhoMVz9atahKt8Leuzx
+         SccQ==
+X-Gm-Message-State: APjAAAXEMmyZzPG5eYfbKYINZkEWFszBctdYY9KdkfqsDkmWGOY0rs0S
+        LaVAjVPOM53/s2R5H3MYXfOXoEQ=
+X-Google-Smtp-Source: APXvYqxBaCMEenuVO/TLEa22+nQKS8epFGf8JVek9VBh07i8c+Qw+sc7bz02Xq20jisGQ0FY5ulbtA==
+X-Received: by 2002:a9d:6084:: with SMTP id m4mr14638230otj.6.1569869959652;
+        Mon, 30 Sep 2019 11:59:19 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 5sm4127490otp.20.2019.09.30.11.59.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2019 08:28:48 -0700 (PDT)
-From:   Fabien Parent <fparent@baylibre.com>
-To:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     matthias.bgg@gmail.com, wsa@the-dreams.de, qii.wang@mediatek.com,
-        drinkcat@chromium.org, hsinyi@chromium.org, tglx@linutronix.de,
-        Fabien Parent <fparent@baylibre.com>
-Subject: [PATCH v2] i2c: i2c-mt65xx: fix NULL ptr dereference
-Date:   Mon, 30 Sep 2019 17:28:46 +0200
-Message-Id: <20190930152846.5062-1-fparent@baylibre.com>
-X-Mailer: git-send-email 2.23.0
+        Mon, 30 Sep 2019 11:59:19 -0700 (PDT)
+Date:   Mon, 30 Sep 2019 13:59:18 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        brendanhiggins@google.com, joel@jms.id.au, andrew@aj.id.au,
+        mark.rutland@arm.com, benh@kernel.crashing.org
+Subject: Re: [PATCH 2/2] dt-bindings: i2c: Aspeed: Add AST2600 compatible
+Message-ID: <20190930185918.GA18431@bogus>
+References: <1568392510-866-1-git-send-email-eajames@linux.ibm.com>
+ <1568392510-866-3-git-send-email-eajames@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1568392510-866-3-git-send-email-eajames@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Since commit abf4923e97c3 ("i2c: mediatek: disable zero-length transfers
-for mt8183"), there is a NULL pointer dereference for all the SoCs
-that don't have any quirk. mtk_i2c_functionality is not checking that
-the quirks pointer is not NULL before starting to use it.
+On Fri, Sep 13, 2019 at 11:35:10AM -0500, Eddie James wrote:
+> Document the AST2600 I2C bus compatible string.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-aspeed.txt | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-aspeed.txt b/Documentation/devicetree/bindings/i2c/i2c-aspeed.txt
+> index 8fbd863..b47f6cc 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-aspeed.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-aspeed.txt
+> @@ -1,4 +1,4 @@
+> -Device tree configuration for the I2C busses on the AST24XX and AST25XX SoCs.
+> +Device tree configuration for the I2C busses on the AST24XX, AST25XX, and AST26XX SoCs.
 
-This commit add a call to i2c_check_quirks which will check whether
-the quirks pointer is set, and if so will check if the IP has the
-NO_ZERO_LEN quirk.
+Perhaps s/buses/busses/ while you're here.
 
-Fixes: abf4923e97c3 ("i2c: mediatek: disable zero-length transfers for mt8183")
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
+Acked-by: Rob Herring <robh@kernel.org>
 
-v2:
-	* use i2c_check_quirks to check the quirks
-
----
- drivers/i2c/busses/i2c-mt65xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index 29eae1bf4f86..2152ec5f535c 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -875,7 +875,7 @@ static irqreturn_t mtk_i2c_irq(int irqno, void *dev_id)
- 
- static u32 mtk_i2c_functionality(struct i2c_adapter *adap)
- {
--	if (adap->quirks->flags & I2C_AQ_NO_ZERO_LEN)
-+	if (i2c_check_quirks(adap, I2C_AQ_NO_ZERO_LEN))
- 		return I2C_FUNC_I2C |
- 			(I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
- 	else
--- 
-2.23.0
-
+>  
+>  Required Properties:
+>  - #address-cells	: should be 1
+> @@ -6,6 +6,7 @@ Required Properties:
+>  - reg			: address offset and range of bus
+>  - compatible		: should be "aspeed,ast2400-i2c-bus"
+>  			  or "aspeed,ast2500-i2c-bus"
+> +			  or "aspeed,ast2600-i2c-bus"
+>  - clocks		: root clock of bus, should reference the APB
+>  			  clock in the second cell
+>  - resets		: phandle to reset controller with the reset number in
+> -- 
+> 1.8.3.1
+> 
