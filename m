@@ -2,109 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7150BC1D99
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Sep 2019 11:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 768DFC2449
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Sep 2019 17:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730218AbfI3JAE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 30 Sep 2019 05:00:04 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:43914 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729852AbfI3JAD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Sep 2019 05:00:03 -0400
-Received: by mail-wr1-f68.google.com with SMTP id q17so10260343wrx.10
-        for <linux-i2c@vger.kernel.org>; Mon, 30 Sep 2019 02:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zZOeGM5g/Vz9YvHwPN9vC5aUhVnW5UBfYl9eXafNvf4=;
-        b=Lyn76f9vD1MZGZC0CloZWBFzuZYEgPQGHGJSrCqM8zunxYseXKWs1vbWY6X8A+vmJW
-         vS1HOMDwoPjsLB13IMwWC7DlI3jNHxuHpuAxz/MtsdnVQ34iPjbQcPwKXHhsR+wRj6D1
-         /H/zZaSDfNVJq2CUJea5tlZaaimiGB/0ag8+AyWPpW7lMwIz5FUy54sXSOxkbY1dHipL
-         Oxt5fyySLlL1axoxnkurOoDbGAygEfcXbayskuydVoi6+vTjR4rcPjQE9xsye0LjD6F2
-         /SUPKvUCM4GSeZ5BwxBJ5rITYUpEIxtNfgWScobQC2v38UlIk7AbMykuX9BdXkbh7VFt
-         ELiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zZOeGM5g/Vz9YvHwPN9vC5aUhVnW5UBfYl9eXafNvf4=;
-        b=DxwxS3ToOvOy3BqMFFHpIEf0ZT/WsTMxOW6ea/y2fORDyIGla/pWeu633KyfBndfB1
-         vPpeKEP3fQp4EHETaE462jmU6t/YiGtUBN94mm331i9ZnXpDIoLzL8KSfPnouSNBN7YG
-         2PVmCjjB7LgTqIVBFMddhr1hs8GVo4fHa8WsJLkaeRCzjf6/69EJuxyB6K9/7j7eTLo4
-         nPXjoQImWPF8lB18KPLj8gt7DqsMX/x83x2fzvwRuGB9Fcx82dUjMkPDkGC1kMvCFsEj
-         XHt9JXI48zUT0Bqh4uyCEHRlIly9FRPnCIgpktp94orjsoo3/mlmpi1EE6gkvDXgVx44
-         h3Mw==
-X-Gm-Message-State: APjAAAU/7uVIr2WYHzZWmh4BshEiMamJk1YznO8yXXXWo3eJC9Y7pgrW
-        MI0RAkXP3Asmbwla9GtEqn++RA==
-X-Google-Smtp-Source: APXvYqzgCmHxkg3EEizdZWBORXV/wp7zumSABBrw5OtQ2GXhrX25c7fTmSGeo5QBXPfJGTITe3vDhQ==
-X-Received: by 2002:adf:9029:: with SMTP id h38mr12058351wrh.155.1569834001777;
-        Mon, 30 Sep 2019 02:00:01 -0700 (PDT)
-Received: from localhost.localdomain (amontpellier-652-1-281-69.w109-210.abo.wanadoo.fr. [109.210.96.69])
-        by smtp.gmail.com with ESMTPSA id m18sm12665723wrg.97.2019.09.30.02.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2019 02:00:01 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Rosin <peda@axentia.se>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v5 0/2] at24: convert the binding document to yaml
-Date:   Mon, 30 Sep 2019 10:59:55 +0200
-Message-Id: <20190930085957.2779-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.23.0
+        id S1731885AbfI3P21 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 30 Sep 2019 11:28:27 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:12236 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731127AbfI3P21 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Sep 2019 11:28:27 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8UFLau3016398;
+        Mon, 30 Sep 2019 17:28:18 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=yJpZfBWTDJMl1ZC5M8BD9X2h5CbjAxaL+Z0ej4FdTgo=;
+ b=up9SvLA/BcQdNv6vMRe8ST2ZUnCZveKCUpa54cYfijgR7ucJcyTJtlPK+oO5WNL7C9YO
+ G2qVmMc4jHQgfjF8zp4UD9JEEDHZ4ZA4HCgMF1Aa918Tf5TQMQsfNWIc0ctbOR5ocVe3
+ b6Bji8Db8sqOIf5atNQW0dsFzuYC3HWt9e+bctpQG8QU0T4zInsGX1EigYogKTo3TT/T
+ QXMPkxJNNRRzWUNTZbz2exF2B6XuxFUhw8w7Eqf3YPSeok0EW9lIVB6qME2HOLjro5oS
+ 07qU5tThzJwDsWmKc92H/fQrjMi2BVJ6kHPVBu4unrsu1I7vfR7pG+Wcz/ob9KE836dD wg== 
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2v9w00v119-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Mon, 30 Sep 2019 17:28:18 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 7331922;
+        Mon, 30 Sep 2019 15:28:14 +0000 (GMT)
+Received: from Webmail-eu.st.com (Safex1hubcas21.st.com [10.75.90.44])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 29BB62B3BF9;
+        Mon, 30 Sep 2019 17:28:14 +0200 (CEST)
+Received: from SAFEX1HUBCAS22.st.com (10.75.90.92) by SAFEX1HUBCAS21.st.com
+ (10.75.90.44) with Microsoft SMTP Server (TLS) id 14.3.439.0; Mon, 30 Sep
+ 2019 17:28:14 +0200
+Received: from localhost (10.48.0.192) by Webmail-ga.st.com (10.75.90.48) with
+ Microsoft SMTP Server (TLS) id 14.3.439.0; Mon, 30 Sep 2019 17:28:12 +0200
+From:   Fabrice Gasnier <fabrice.gasnier@st.com>
+To:     <wsa@the-dreams.de>, <pierre-yves.mordret@st.com>
+CC:     <alain.volmat@st.com>, <alexandre.torgue@st.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>
+Subject: [PATCH] i2c: i2c-stm32f7: fix first byte to send in slave mode
+Date:   Mon, 30 Sep 2019 17:28:01 +0200
+Message-ID: <1569857281-19419-1-git-send-email-fabrice.gasnier@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.48.0.192]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-09-30_09:2019-09-30,2019-09-30 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+The slave-interface documentation [1] states "the bus driver should
+transmit the first byte" upon I2C_SLAVE_READ_REQUESTED slave event:
+- 'val': backend returns first byte to be sent
+The driver currently ignores the 1st byte to send on this event.
 
-The first patch converts the at24 DT binding to yaml. The second adds a new
-compatible special case that's being used undocumented currently.
+Fixes: 60d609f30de2 ("i2c: i2c-stm32f7: Add slave support")
 
-v1 -> v2:
-- modified the compatible property: we now list all possible combinations and
-  non-standard types with appropriate fallbacks to be as strict as possible
-- minor changes to other properties: added constraints, converted to enums
-  where applicable and referenced the types from schema
+[1] https://www.kernel.org/doc/Documentation/i2c/slave-interface
 
-v2 -> v3:
-(Rob Herring:)
-- Here's my reworking of compatible schema and all the other fixes I
-  found. The inner 'oneOf' is probably a little excessive given the number
-  of lines. All it does is ensure both compatible strings have the same
-  part number.
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+---
+ drivers/i2c/busses/i2c-stm32f7.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-v3 -> v4:
-- Add a $nodename definition
-- Turns out the compatible schema is too complex for generating a 'select'
-  schema and only a small subset where getting validated. So we need a
-  custom 'select' schema. This in turn fixes the issue with the nxp,se97b
-  binding.
-
-v4 -> v5:
-- added a new patch extending the list of special cases of the compatible
-  property
-- added comments explaining the schema for the compatible property
-- dropped redundant information from property descriptions (for instance:
-  there's no need to say "This parameterless property" where it's obvious
-  from the type that the property is a flag)
-
-Bartosz Golaszewski (2):
-  dt-bindings: at24: convert the binding document to yaml
-  dt-bindings: at24: add new compatible
-
- .../devicetree/bindings/eeprom/at24.txt       |  90 +--------
- .../devicetree/bindings/eeprom/at24.yaml      | 182 ++++++++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 184 insertions(+), 90 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/eeprom/at24.yaml
-
+diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+index 266d1c2..0af9219 100644
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -1192,6 +1192,8 @@ static void stm32f7_i2c_slave_start(struct stm32f7_i2c_dev *i2c_dev)
+ 			STM32F7_I2C_CR1_TXIE;
+ 		stm32f7_i2c_set_bits(base + STM32F7_I2C_CR1, mask);
+ 
++		/* Write 1st data byte */
++		writel_relaxed(value, base + STM32F7_I2C_TXDR);
+ 	} else {
+ 		/* Notify i2c slave that new write transfer is starting */
+ 		i2c_slave_event(slave, I2C_SLAVE_WRITE_REQUESTED, &value);
 -- 
-2.23.0
+2.7.4
 
