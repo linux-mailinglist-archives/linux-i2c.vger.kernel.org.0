@@ -2,106 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97756C3D75
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2019 19:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07087C3E15
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2019 19:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730523AbfJAQlB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Oct 2019 12:41:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52384 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730481AbfJAQk5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:40:57 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 49DDD2070B;
-        Tue,  1 Oct 2019 16:40:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569948057;
-        bh=aH6ctXhIndO4xFNADjyeEW+RHGG7RRX4yg9ZHsOaVNw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rHIKX/z1jd2pgw/lcnulGZQn65TrsM/IkOUxt9b4r3mgK/oEE0/Qb8+iOYngC65bh
-         Vnc0JtnOq8cP5lqwy77JyCLUFsHHhQ0aOc1SjUNqQU2pAlZi527yw2plN7A29MsiAY
-         r2+KMvAzGZ5eobSpzu4/dJreF8V8RK/T8QScqToA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S1727661AbfJAQj0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Oct 2019 12:39:26 -0400
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:39375 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727562AbfJAQj0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Oct 2019 12:39:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1569947965; x=1601483965;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8vKl6yDkUjVwSIEpS1l7EJEXTANs8Udckbj8KOh+Zes=;
+  b=CStsrV285EVpR0AnerPgPGqPjyI7WBMogxbCSBp2skS5/5+B6+zpJouj
+   /jikUaB9BJuK+7hLGtkZpQ6OhnLyuMPVl1daN+q+PYEYiIpmOCz4C53GE
+   5L7rVWK6UjJl4kyf6NfHOoQadl3qIKnsBJpuUL2NmdN03QTWpyGART7dd
+   M=;
+X-IronPort-AV: E=Sophos;i="5.64,571,1559520000"; 
+   d="scan'208";a="425072078"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1d-f273de60.us-east-1.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 01 Oct 2019 16:39:22 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
+        by email-inbound-relay-1d-f273de60.us-east-1.amazon.com (Postfix) with ESMTPS id 95FB0A2254;
+        Tue,  1 Oct 2019 16:39:18 +0000 (UTC)
+Received: from EX13D02UWC003.ant.amazon.com (10.43.162.199) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Tue, 1 Oct 2019 16:39:18 +0000
+Received: from localhost (10.43.160.153) by EX13D02UWC003.ant.amazon.com
+ (10.43.162.199) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 1 Oct
+ 2019 16:39:16 +0000
+Date:   Tue, 1 Oct 2019 11:39:10 -0500
+From:   Patrick Williams <alpawi@amazon.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Patrick Williams <patrick@stwcx.xyz>,
         Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 58/71] i2c: qcom-geni: Disable DMA processing on the Lenovo Yoga C630
-Date:   Tue,  1 Oct 2019 12:39:08 -0400
-Message-Id: <20191001163922.14735-58-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191001163922.14735-1-sashal@kernel.org>
-References: <20191001163922.14735-1-sashal@kernel.org>
+        Jean Delvare <jdelvare@suse.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Max Staudt <max@enpas.org>,
+        Juergen Fitschen <jfi@ssv-embedded.de>,
+        Elie Morisse <syniurge@gmail.com>,
+        Ajay Gupta <ajayg@nvidia.com>, Stefan Roese <sr@denx.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Baolin Wang <baolin.wang@linaro.org>,
+        "Paul Cercueil" <paul@crapouillou.net>,
+        Enrico Weigelt <info@metux.net>,
+        "Allison Randal" <allison@lohutok.net>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] i2c: pxa: migrate to new i2c_slave APIs
+Message-ID: <20191001163910.GA2307@8c859006a84e.ant.amazon.com>
+References: <20191001160001.2388-1-alpawi@amazon.com>
+ <20191001160001.2388-2-alpawi@amazon.com>
+ <20191001162913.GR32742@smile.fi.intel.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20191001162913.GR32742@smile.fi.intel.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Originating-IP: [10.43.160.153]
+X-ClientProxiedBy: EX13D15UWB001.ant.amazon.com (10.43.161.254) To
+ EX13D02UWC003.ant.amazon.com (10.43.162.199)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Lee Jones <lee.jones@linaro.org>
+Thanks for the review Andy.
 
-[ Upstream commit 127068abe85bf3dee50df51cb039a5a987a4a666 ]
+On Tue, Oct 01, 2019 at 07:29:13PM +0300, Andy Shevchenko wrote:
+> 
+> 
+> On Tue, Oct 01, 2019 at 10:59:59AM -0500, Patrick Williams wrote:
+> There are quite a few people in the Cc list. I'm not sure they all are
+> interested in this. I deliberately dropped few names, sorry, if I was mistaken.
 
-We have a production-level laptop (Lenovo Yoga C630) which is exhibiting
-a rather horrific bug.  When I2C HID devices are being scanned for at
-boot-time the QCom Geni based I2C (Serial Engine) attempts to use DMA.
-When it does, the laptop reboots and the user never sees the OS.
+Agree it was kind of a big list.  Just chose what was given to me by
+get_maintainer.pl.  It seems like there isn't a direct identified
+maintainer of this file.
 
-Attempts are being made to debug the reason for the spontaneous reboot.
-No luck so far, hence the requirement for this hot-fix.  This workaround
-will be removed once we have a viable fix.
+> 
+> > +		if (isr & ISR_RWM) {
+> > +			u8 byte = 0;
+> > +
+> > +			i2c_slave_event(i2c->slave, I2C_SLAVE_READ_REQUESTED,
+> > +					&byte);
+> > +			writel(byte, _IDBR(i2c));
+> > +		} else {
+> > +			i2c_slave_event(i2c->slave, I2C_SLAVE_WRITE_REQUESTED,
+> > +					NULL);
+> > +		}
+> 
+> Hmm... Perhaps
+> 
+> 		u8 byte = 0;
+> 
+> 		i2c_slave_event(i2c->slave, I2C_SLAVE_READ_REQUESTED, &byte);
+> 		if (isr & ISR_RWM)
+> 			writel(byte, _IDBR(i2c));
+> 
 
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-qcom-geni.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+The two different paths also require READ_REQUEST vs WRITE_REQUESTED.  I
+could do a ternary there but it seemed more obvious to just unroll the
+logic.
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index a89bfce5388ee..17abf60c94aeb 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -355,11 +355,13 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- {
- 	dma_addr_t rx_dma;
- 	unsigned long time_left;
--	void *dma_buf;
-+	void *dma_buf = NULL;
- 	struct geni_se *se = &gi2c->se;
- 	size_t len = msg->len;
- 
--	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
-+	if (!of_machine_is_compatible("lenovo,yoga-c630"))
-+		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
-+
- 	if (dma_buf)
- 		geni_se_select_mode(se, GENI_SE_DMA);
- 	else
-@@ -394,11 +396,13 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- {
- 	dma_addr_t tx_dma;
- 	unsigned long time_left;
--	void *dma_buf;
-+	void *dma_buf = NULL;
- 	struct geni_se *se = &gi2c->se;
- 	size_t len = msg->len;
- 
--	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
-+	if (!of_machine_is_compatible("lenovo,yoga-c630"))
-+		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
-+
- 	if (dma_buf)
- 		geni_se_select_mode(se, GENI_SE_DMA);
- 	else
 -- 
-2.20.1
-
+- Patrick
