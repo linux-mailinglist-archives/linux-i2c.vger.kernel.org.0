@@ -2,111 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07087C3E15
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2019 19:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B268C3D95
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2019 19:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727661AbfJAQj0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Oct 2019 12:39:26 -0400
-Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:39375 "EHLO
-        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727562AbfJAQj0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Oct 2019 12:39:26 -0400
+        id S1729985AbfJAQkZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Oct 2019 12:40:25 -0400
+Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:35264 "EHLO
+        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729851AbfJAQkZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Oct 2019 12:40:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1569947965; x=1601483965;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8vKl6yDkUjVwSIEpS1l7EJEXTANs8Udckbj8KOh+Zes=;
-  b=CStsrV285EVpR0AnerPgPGqPjyI7WBMogxbCSBp2skS5/5+B6+zpJouj
-   /jikUaB9BJuK+7hLGtkZpQ6OhnLyuMPVl1daN+q+PYEYiIpmOCz4C53GE
-   5L7rVWK6UjJl4kyf6NfHOoQadl3qIKnsBJpuUL2NmdN03QTWpyGART7dd
-   M=;
+  t=1569948024; x=1601484024;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=B6ZukSVqPXIDGwanru0AxvEjOvXIzvMDbuKH0fi3bms=;
+  b=nPpfREgestedl+iuTO8n5jzvJdO57zsy+ZE6BM0V8syEP+ITTB7dK3PY
+   LHOcyeE/HrmpA4dPswmpT2tNnp6fvbykzK+tt3TuHtl2R1d67OoNsYMTs
+   7Dz+zFqUgTjjuyRCArB3Cp+UzGx8zgIfwhcGtSVgqg+S7O8XrfVAhc3pM
+   I=;
 X-IronPort-AV: E=Sophos;i="5.64,571,1559520000"; 
-   d="scan'208";a="425072078"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1d-f273de60.us-east-1.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 01 Oct 2019 16:39:22 +0000
+   d="scan'208";a="419078825"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1a-16acd5e0.us-east-1.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 01 Oct 2019 16:40:19 +0000
 Received: from EX13MTAUWC001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1d-f273de60.us-east-1.amazon.com (Postfix) with ESMTPS id 95FB0A2254;
-        Tue,  1 Oct 2019 16:39:18 +0000 (UTC)
-Received: from EX13D02UWC003.ant.amazon.com (10.43.162.199) by
+        by email-inbound-relay-1a-16acd5e0.us-east-1.amazon.com (Postfix) with ESMTPS id 080C1A25ED;
+        Tue,  1 Oct 2019 16:40:17 +0000 (UTC)
+Received: from EX13D02UWC001.ant.amazon.com (10.43.162.243) by
  EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Tue, 1 Oct 2019 16:39:18 +0000
-Received: from localhost (10.43.160.153) by EX13D02UWC003.ant.amazon.com
- (10.43.162.199) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 1 Oct
- 2019 16:39:16 +0000
-Date:   Tue, 1 Oct 2019 11:39:10 -0500
+ id 15.0.1367.3; Tue, 1 Oct 2019 16:40:16 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D02UWC001.ant.amazon.com (10.43.162.243) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Tue, 1 Oct 2019 16:40:16 +0000
+Received: from 8c859006a84e.ant.amazon.com (172.26.203.30) by
+ mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP Server id
+ 15.0.1367.3 via Frontend Transport; Tue, 1 Oct 2019 16:40:15 +0000
 From:   Patrick Williams <alpawi@amazon.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Patrick Williams <patrick@stwcx.xyz>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Max Staudt <max@enpas.org>,
-        Juergen Fitschen <jfi@ssv-embedded.de>,
-        Elie Morisse <syniurge@gmail.com>,
-        Ajay Gupta <ajayg@nvidia.com>, Stefan Roese <sr@denx.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Baolin Wang <baolin.wang@linaro.org>,
-        "Paul Cercueil" <paul@crapouillou.net>,
-        Enrico Weigelt <info@metux.net>,
-        "Allison Randal" <allison@lohutok.net>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] i2c: pxa: migrate to new i2c_slave APIs
-Message-ID: <20191001163910.GA2307@8c859006a84e.ant.amazon.com>
-References: <20191001160001.2388-1-alpawi@amazon.com>
- <20191001160001.2388-2-alpawi@amazon.com>
- <20191001162913.GR32742@smile.fi.intel.com>
+CC:     =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>,
+        Patrick Williams <alpawi@amazon.com>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Wolfram Sang <wsa@the-dreams.de>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] i2c: slave-eeprom: initialize empty eeprom properly
+Date:   Tue, 1 Oct 2019 11:40:05 -0500
+Message-ID: <20191001164009.21610-1-alpawi@amazon.com>
+X-Mailer: git-send-email 2.17.2 (Apple Git-113)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20191001162913.GR32742@smile.fi.intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Originating-IP: [10.43.160.153]
-X-ClientProxiedBy: EX13D15UWB001.ant.amazon.com (10.43.161.254) To
- EX13D02UWC003.ant.amazon.com (10.43.162.199)
+Content-Type: text/plain
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Thanks for the review Andy.
+The i2c-slave-eeprom driver emulates at24 class eeprom devices,
+which come initialized with all 1s.  Do the same in the software
+emulation.
 
-On Tue, Oct 01, 2019 at 07:29:13PM +0300, Andy Shevchenko wrote:
-> 
-> 
-> On Tue, Oct 01, 2019 at 10:59:59AM -0500, Patrick Williams wrote:
-> There are quite a few people in the Cc list. I'm not sure they all are
-> interested in this. I deliberately dropped few names, sorry, if I was mistaken.
+Signed-off-by: Patrick Williams <alpawi@amazon.com>
+---
+ drivers/i2c/i2c-slave-eeprom.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Agree it was kind of a big list.  Just chose what was given to me by
-get_maintainer.pl.  It seems like there isn't a direct identified
-maintainer of this file.
-
-> 
-> > +		if (isr & ISR_RWM) {
-> > +			u8 byte = 0;
-> > +
-> > +			i2c_slave_event(i2c->slave, I2C_SLAVE_READ_REQUESTED,
-> > +					&byte);
-> > +			writel(byte, _IDBR(i2c));
-> > +		} else {
-> > +			i2c_slave_event(i2c->slave, I2C_SLAVE_WRITE_REQUESTED,
-> > +					NULL);
-> > +		}
-> 
-> Hmm... Perhaps
-> 
-> 		u8 byte = 0;
-> 
-> 		i2c_slave_event(i2c->slave, I2C_SLAVE_READ_REQUESTED, &byte);
-> 		if (isr & ISR_RWM)
-> 			writel(byte, _IDBR(i2c));
-> 
-
-The two different paths also require READ_REQUEST vs WRITE_REQUESTED.  I
-could do a ternary there but it seemed more obvious to just unroll the
-logic.
-
+diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
+index db9763cb4dae..efee56106251 100644
+--- a/drivers/i2c/i2c-slave-eeprom.c
++++ b/drivers/i2c/i2c-slave-eeprom.c
+@@ -131,6 +131,8 @@ static int i2c_slave_eeprom_probe(struct i2c_client *client, const struct i2c_de
+ 	if (!eeprom)
+ 		return -ENOMEM;
+ 
++	memset(eeprom->buffer, 0xFF, size);
++
+ 	eeprom->idx_write_cnt = 0;
+ 	eeprom->num_address_bytes = flag_addr16 ? 2 : 1;
+ 	eeprom->address_mask = size - 1;
 -- 
-- Patrick
+2.17.2 (Apple Git-113)
+
