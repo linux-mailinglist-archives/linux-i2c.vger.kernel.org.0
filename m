@@ -2,284 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE8FC35DF
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2019 15:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7571C39B2
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2019 18:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388185AbfJANho (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Oct 2019 09:37:44 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:38976 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388261AbfJANho (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Oct 2019 09:37:44 -0400
-Received: by mail-ot1-f67.google.com with SMTP id s22so11532288otr.6;
-        Tue, 01 Oct 2019 06:37:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FovmWZAmPghOw/PD/V9KoIrCAwZ7Z6DVYRn/oNcxwdw=;
-        b=heDbnqF7WflHRXq6CBsD3uCDggy+/6/8WQk6+DezZ70Xw+Mfz/yNrTx6ZTbBTmoKyi
-         M53WblXewGh9U4WwsQJmT0TJUTB1NlnfAcVcjH6DQ8Vg0GUqJQtqETz0Cf1pm417phgk
-         Idvxwo1il/6oR6L70h+JhR3+q5dFmhgKlDgm3cV4GdhuhcnmANFoMB+8gOWIZOeV0dK1
-         6DeORanyNlCRRttqhycGKBdPg0gmCzdWP5zKwMS5F2GVcl6yFgzNB0jm2GEXZtkP/9fQ
-         tHcIXuMArs3rj04kwWi5xeQwBlrPFH5q9bMLGWFxPSrYWGRn5hxXKqU/xIRsMUob8sbz
-         f+Pw==
-X-Gm-Message-State: APjAAAU5JT6MVe9RaYYj5ncOTMZ4LBZjvoTesX4T2kT1hlpQMX3Z7Gph
-        RHJTNqRRbLlvPPhLWwIBG236bb1ATQ==
-X-Google-Smtp-Source: APXvYqxaxRdreIle6LJbVo4aH8TbadosoBq8YKKKRx6nz6eLz30w+/TfgU3CDNPb9S+IfNOHp7GaGA==
-X-Received: by 2002:a9d:39a5:: with SMTP id y34mr19070070otb.100.1569937062789;
-        Tue, 01 Oct 2019 06:37:42 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id w201sm5100451oie.44.2019.10.01.06.37.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2019 06:37:42 -0700 (PDT)
-Date:   Tue, 1 Oct 2019 08:37:41 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Mark Rutland <mark.rutland@arm.com>, Peter Rosin <peda@axentia.se>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: at24: convert the binding document
- to yaml
-Message-ID: <20191001133741.GA3357@bogus>
-References: <20190930085957.2779-1-brgl@bgdev.pl>
- <20190930085957.2779-2-brgl@bgdev.pl>
+        id S1727823AbfJAQAL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Oct 2019 12:00:11 -0400
+Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:9565 "EHLO
+        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727398AbfJAQAL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Oct 2019 12:00:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1569945610; x=1601481610;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=qDD5LT8DtwKPIaKWHMsLpUgPzfzI2haoHG8xYLA7T7o=;
+  b=fXaF52mGGeCZLSuVbHEHCld6mDh3UEUdBPxtyRaYYg+vUWtwkk5AQqHn
+   ts3lbm8FdJuQvOLJ+Lz6bctvjS/tB+dyYzFH0My1U48jSdlP1ExRnMkV9
+   n7tAMc1VBu9BADEgPjY0Au7ebcRYY2Ajj00fkM5bFMh8SUbcCLv7d8MrQ
+   8=;
+X-IronPort-AV: E=Sophos;i="5.64,571,1559520000"; 
+   d="scan'208";a="419068076"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1d-9ec21598.us-east-1.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 01 Oct 2019 16:00:08 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1d-9ec21598.us-east-1.amazon.com (Postfix) with ESMTPS id C54C4A1CA2;
+        Tue,  1 Oct 2019 16:00:07 +0000 (UTC)
+Received: from EX13D02UWB003.ant.amazon.com (10.43.161.48) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Tue, 1 Oct 2019 16:00:07 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D02UWB003.ant.amazon.com (10.43.161.48) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Tue, 1 Oct 2019 16:00:06 +0000
+Received: from 8c859006a84e.ant.amazon.com (172.26.203.30) by
+ mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP Server id
+ 15.0.1367.3 via Frontend Transport; Tue, 1 Oct 2019 16:00:06 +0000
+From:   Patrick Williams <alpawi@amazon.com>
+CC:     Patrick Williams <alpawi@amazon.com>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>
+Subject: [PATCH 0/2] i2c: pxa: migrate to i2c-core-slave APIs
+Date:   Tue, 1 Oct 2019 10:59:58 -0500
+Message-ID: <20191001160001.2388-1-alpawi@amazon.com>
+X-Mailer: git-send-email 2.17.2 (Apple Git-113)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190930085957.2779-2-brgl@bgdev.pl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Sep 30, 2019 at 10:59:56AM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> 
-> Convert the binding document for at24 EEPROMs from txt to yaml. The
-> compatible property uses a regex pattern to address all the possible
-> combinations of "vendor,model" strings.
-> 
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> [robh: rework compatible schema, fix missing allOf for $ref, fix errors in example]
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> [Bartosz: added comments explaining the compatible property]
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> ---
->  .../devicetree/bindings/eeprom/at24.txt       |  90 +--------
->  .../devicetree/bindings/eeprom/at24.yaml      | 179 ++++++++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 181 insertions(+), 90 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/eeprom/at24.yaml
+i2c-pxa has its own i2c slave APIs rather than using the i2c-core
+APIs.  There are no in-tree drivers currently using this custom
+slave API set.
 
+Migrate the i2c-pxa driver from its own i2c slave APIs to the
+i2c-core slave APIs so that in-tree slave devices can be used with
+the i2c-pxa hardware (ex. i2c-slave-eeprom).
 
-> diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> new file mode 100644
-> index 000000000000..aee0890d3b7a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> @@ -0,0 +1,179 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +# Copyright 2019 BayLibre SAS
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/eeprom/at24.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: I2C EEPROMs compatible with Atmel's AT24
-> +
-> +maintainers:
-> +  - Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        pattern: "^atmel,(24(c|cs|mac)[0-9]+|spd)$"
-> +  required:
-> +    - compatible
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^eeprom@[0-9a-f]{1,2}$"
-> +
-> +  # There are multiple known vendors who manufacture EEPROM chips compatible
-> +  # with Atmel's AT24. The compatible string requires either a single item
-> +  # if the memory comes from Atmel (in which case the vendor part must be
-> +  # 'atmel') or two items with the same 'model' part where the vendor part of
-> +  # the first one is the actual manufacturer and the second item is the
-> +  # corresponding 'atmel,<model>' from Atmel.
-> +  #
-> +  # While the below schema would technically allow the following:
-> +  #
-> +  #     compatible = "atmel,24c01", "atmel,24c01";
+Patrick Williams (2):
+  i2c: pxa: migrate to new i2c_slave APIs
+  i2c: pxa: remove unused i2c-slave APIs
 
-This is prevented in the common 'compatible' schema that requires unique 
-items.
+ drivers/i2c/busses/Kconfig            |  1 +
+ drivers/i2c/busses/i2c-pxa.c          | 75 +++++++++++++++++++++------
+ include/linux/i2c-pxa.h               | 18 -------
+ include/linux/platform_data/i2c-pxa.h |  4 --
+ 4 files changed, 61 insertions(+), 37 deletions(-)
+ delete mode 100644 include/linux/i2c-pxa.h
 
-> +  #
-> +  # this obviously must not be used.
-> +  compatible:
-> +    oneOf:
-> +      - allOf:
-> +          - minItems: 1
-> +            maxItems: 2
-> +            items:
-> +              - pattern: "^(atmel|catalyst|microchip|nxp|ramtron|renesas|rohm|st),(24(c|cs|mac)[0-9]+|spd)$"
-> +              - pattern: "^atmel,(24(c|cs|mac)[0-9]+|spd)$"
-> +          - oneOf:
-> +              - items:
-> +                  pattern: c00$
-> +              - items:
-> +                  pattern: c01$
-> +              - items:
-> +                  pattern: c02$
-> +              - items:
-> +                  pattern: c04$
-> +              - items:
-> +                  pattern: c08$
+-- 
+2.17.2 (Apple Git-113)
 
-Need to add the 'cs' variants I missed.
-
-> +              - items:
-> +                  pattern: c16$
-> +              - items:
-> +                  pattern: cs16$
-> +              - items:
-> +                  pattern: c32$
-> +              - items:
-> +                  pattern: cs32$
-> +              - items:
-> +                  pattern: c64$
-> +              - items:
-> +                  pattern: cs64$
-> +              - items:
-> +                  pattern: c128$
-> +              - items:
-> +                  pattern: cs128$
-> +              - items:
-> +                  pattern: c256$
-> +              - items:
-> +                  pattern: cs256$
-> +              - items:
-> +                  pattern: c512$
-> +              - items:
-> +                  pattern: cs512$
-> +              - items:
-> +                  pattern: c1024$
-> +              - items:
-> +                  pattern: cs1024$
-> +              - items:
-> +                  pattern: c2048$
-> +              - items:
-> +                  pattern: cs2048$
-> +              - items:
-> +                  pattern: spd$
-> +      # These are special cases that don't conform to the above pattern.
-> +      # Each requires a standard at24 model as fallback.
-> +      - items:
-> +          - const: rohm,br24t01
-> +          - const: atmel,24c01
-> +      - items:
-> +          - const: nxp,se97b
-> +          - const: atmel,24c02
-> +      - items:
-> +          - const: renesas,r1ex24002
-> +          - const: atmel,24c02
-> +      - items:
-> +          - const: renesas,r1ex24016
-> +          - const: atmel,24c16
-> +      - items:
-> +          - const: renesas,r1ex24128
-> +          - const: atmel,24c128
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  pagesize:
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      The length of the pagesize for writing. Please consult the
-> +      manual of your device, that value varies a lot. A wrong value
-> +      may result in data loss! If not specified, a safety value of
-> +      '1' is used which will be very slow.
-> +    enum: [ 1, 8, 16, 32, 64, 128, 258 ]
-> +    default: 1
-> +
-> +  read-only:
-> +    $ref: /schemas/types.yaml#definitions/flag
-> +    description:
-> +      Disables writes to the eeprom.
-> +
-> +  size:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Total eeprom size in bytes.
-> +
-> +  no-read-rollover:
-> +    $ref: /schemas/types.yaml#definitions/flag
-> +    description:
-> +      Indicates that the multi-address eeprom does not automatically roll
-> +      over reads to the next slave address. Please consult the manual of
-> +      your device.
-> +
-> +  wp-gpios:
-> +    description:
-> +      GPIO to which the write-protect pin of the chip is connected.
-> +    maxItems: 1
-> +
-> +  address-width:
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Number of address bits.
-> +    default: 8
-> +    enum: [ 8, 16 ]
-> +
-> +  num-addresses:
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Total number of i2c slave addresses this device takes.
-> +    default: 1
-> +    minimum: 1
-> +    maximum: 8
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      eeprom@52 {
-> +          compatible = "microchip,24c32", "atmel,24c32";
-> +          reg = <0x52>;
-> +          pagesize = <32>;
-> +          wp-gpios = <&gpio1 3 0>;
-> +          num-addresses = <8>;
-> +      };
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 296de2b51c83..320fc8bba872 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2699,7 +2699,7 @@ M:	Bartosz Golaszewski <bgolaszewski@baylibre.com>
->  L:	linux-i2c@vger.kernel.org
->  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
->  S:	Maintained
-> -F:	Documentation/devicetree/bindings/eeprom/at24.txt
-> +F:	Documentation/devicetree/bindings/eeprom/at24.yaml
->  F:	drivers/misc/eeprom/at24.c
->  
->  ATA OVER ETHERNET (AOE) DRIVER
-> -- 
-> 2.23.0
-> 
