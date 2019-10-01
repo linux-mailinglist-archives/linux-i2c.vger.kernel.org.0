@@ -2,100 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A783C3A80
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2019 18:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70B3C3CDD
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2019 18:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726614AbfJAQ3X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Oct 2019 12:29:23 -0400
-Received: from mga17.intel.com ([192.55.52.151]:55629 "EHLO mga17.intel.com"
+        id S1731140AbfJAQzZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Oct 2019 12:55:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728536AbfJAQ3X (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:29:23 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 09:29:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,571,1559545200"; 
-   d="scan'208";a="221062600"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Oct 2019 09:29:16 -0700
-Received: from andy by smile with local (Exim 4.92.2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1iFL1V-0002p6-Sv; Tue, 01 Oct 2019 19:29:13 +0300
-Date:   Tue, 1 Oct 2019 19:29:13 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Patrick Williams <alpawi@amazon.com>
-Cc:     Patrick Williams <patrick@stwcx.xyz>,
+        id S1732158AbfJAQmp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 1 Oct 2019 12:42:45 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2517A21920;
+        Tue,  1 Oct 2019 16:42:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569948165;
+        bh=z6WyRdHEuXM4BX+2/G9Bv1TDJ64UqpMMW83Y8th40I4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mbBqqh8YNcTRXxoNDYx+qbsvXVi/noLyRvycl4EDUbKusrR3VxQdqNJMtoUIaaj9l
+         Mgunod3pGGM/O5wcUjp4Y2S5oONSbvmDFHQmxhpD6oZwGNluL4fJBiFKlef4hrXcl/
+         FGIiGMPT+lhjlkkDXvRu/bLaqwFTrK/EyPWNbS10=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Wolfram Sang <wsa@the-dreams.de>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Max Staudt <max@enpas.org>,
-        Juergen Fitschen <jfi@ssv-embedded.de>,
-        Elie Morisse <syniurge@gmail.com>,
-        Ajay Gupta <ajayg@nvidia.com>, Stefan Roese <sr@denx.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Baolin Wang <baolin.wang@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Enrico Weigelt <info@metux.net>,
-        Allison Randal <allison@lohutok.net>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: pxa: migrate to new i2c_slave APIs
-Message-ID: <20191001162913.GR32742@smile.fi.intel.com>
-References: <20191001160001.2388-1-alpawi@amazon.com>
- <20191001160001.2388-2-alpawi@amazon.com>
+        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 51/63] i2c: qcom-geni: Disable DMA processing on the Lenovo Yoga C630
+Date:   Tue,  1 Oct 2019 12:41:13 -0400
+Message-Id: <20191001164125.15398-51-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191001164125.15398-1-sashal@kernel.org>
+References: <20191001164125.15398-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191001160001.2388-2-alpawi@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Lee Jones <lee.jones@linaro.org>
 
+[ Upstream commit 127068abe85bf3dee50df51cb039a5a987a4a666 ]
 
-On Tue, Oct 01, 2019 at 10:59:59AM -0500, Patrick Williams wrote:
-> The i2c subsystem was enhanced circa 2015 to support operating as
-> an i2c-slave device.  Prior to that, the i2c-pxa driver supported
-> an i2c-slave but had its own APIs.  There are no existing in-kernel
-> drivers or platforms that utilize the i2c-pxa APIs.
-> 
-> Migrate the i2c-pxa driver to the general i2c-slave APIs so that
-> existing drivers, such as the i2c-slave-eeprom, can be used.
-> 
-> This has been tested with a Marvell EspressoBin, using i2c-pxa and
-> i2c-slave-eeprom, acting as a slave, and a RaspeberryPi 3, using the
-> at24 driver, acting as a master.
+We have a production-level laptop (Lenovo Yoga C630) which is exhibiting
+a rather horrific bug.  When I2C HID devices are being scanned for at
+boot-time the QCom Geni based I2C (Serial Engine) attempts to use DMA.
+When it does, the laptop reboots and the user never sees the OS.
 
-There are quite a few people in the Cc list. I'm not sure they all are
-interested in this. I deliberately dropped few names, sorry, if I was mistaken.
+Attempts are being made to debug the reason for the spontaneous reboot.
+No luck so far, hence the requirement for this hot-fix.  This workaround
+will be removed once we have a viable fix.
 
-> +		if (isr & ISR_RWM) {
-> +			u8 byte = 0;
-> +
-> +			i2c_slave_event(i2c->slave, I2C_SLAVE_READ_REQUESTED,
-> +					&byte);
-> +			writel(byte, _IDBR(i2c));
-> +		} else {
-> +			i2c_slave_event(i2c->slave, I2C_SLAVE_WRITE_REQUESTED,
-> +					NULL);
-> +		}
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/i2c/busses/i2c-qcom-geni.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-Hmm... Perhaps
-
-		u8 byte = 0;
-
-		i2c_slave_event(i2c->slave, I2C_SLAVE_READ_REQUESTED, &byte);
-		if (isr & ISR_RWM)
-			writel(byte, _IDBR(i2c));
-
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index db075bc0d9525..715ddc5d0eac9 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -354,11 +354,13 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ {
+ 	dma_addr_t rx_dma;
+ 	unsigned long time_left;
+-	void *dma_buf;
++	void *dma_buf = NULL;
+ 	struct geni_se *se = &gi2c->se;
+ 	size_t len = msg->len;
+ 
+-	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
++	if (!of_machine_is_compatible("lenovo,yoga-c630"))
++		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
++
+ 	if (dma_buf)
+ 		geni_se_select_mode(se, GENI_SE_DMA);
+ 	else
+@@ -393,11 +395,13 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ {
+ 	dma_addr_t tx_dma;
+ 	unsigned long time_left;
+-	void *dma_buf;
++	void *dma_buf = NULL;
+ 	struct geni_se *se = &gi2c->se;
+ 	size_t len = msg->len;
+ 
+-	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
++	if (!of_machine_is_compatible("lenovo,yoga-c630"))
++		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
++
+ 	if (dma_buf)
+ 		geni_se_select_mode(se, GENI_SE_DMA);
+ 	else
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.20.1
 
