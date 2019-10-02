@@ -2,90 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CADC3E9A
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2019 19:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BEEC47BA
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2019 08:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727661AbfJARb2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Oct 2019 13:31:28 -0400
-Received: from mga18.intel.com ([134.134.136.126]:54419 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727118AbfJARb1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 1 Oct 2019 13:31:27 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 10:31:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,571,1559545200"; 
-   d="scan'208";a="203305761"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002.jf.intel.com with ESMTP; 01 Oct 2019 10:31:23 -0700
-Received: from andy by smile with local (Exim 4.92.2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1iFLzX-0003hq-RB; Tue, 01 Oct 2019 20:31:15 +0300
-Date:   Tue, 1 Oct 2019 20:31:15 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S1726384AbfJBGU6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Oct 2019 02:20:58 -0400
+Received: from bastet.se.axis.com ([195.60.68.11]:47709 "EHLO
+        bastet.se.axis.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726016AbfJBGU6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Oct 2019 02:20:58 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bastet.se.axis.com (Postfix) with ESMTP id 7152918487;
+        Wed,  2 Oct 2019 08:20:55 +0200 (CEST)
+X-Axis-User: NO
+X-Axis-NonUser: YES
+X-Virus-Scanned: Debian amavisd-new at bastet.se.axis.com
+Received: from bastet.se.axis.com ([IPv6:::ffff:127.0.0.1])
+        by localhost (bastet.se.axis.com [::ffff:127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id vvTzjNMkKmrv; Wed,  2 Oct 2019 08:20:54 +0200 (CEST)
+Received: from boulder03.se.axis.com (boulder03.se.axis.com [10.0.8.17])
+        by bastet.se.axis.com (Postfix) with ESMTPS id 8498718466;
+        Wed,  2 Oct 2019 08:20:54 +0200 (CEST)
+Received: from boulder03.se.axis.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 67C101E07C;
+        Wed,  2 Oct 2019 08:20:54 +0200 (CEST)
+Received: from boulder03.se.axis.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5BC4C1E07A;
+        Wed,  2 Oct 2019 08:20:54 +0200 (CEST)
+Received: from seth.se.axis.com (unknown [10.0.2.172])
+        by boulder03.se.axis.com (Postfix) with ESMTP;
+        Wed,  2 Oct 2019 08:20:54 +0200 (CEST)
+Received: from XBOX02.axis.com (xbox02.axis.com [10.0.5.16])
+        by seth.se.axis.com (Postfix) with ESMTP id 4F5C5791;
+        Wed,  2 Oct 2019 08:20:54 +0200 (CEST)
+Received: from [10.88.24.4] (10.0.5.60) by XBOX02.axis.com (10.0.5.16) with
+ Microsoft SMTP Server (TLS) id 15.0.1365.1; Wed, 2 Oct 2019 08:20:54 +0200
+Subject: Re: [PATCH 1/2] i2c: slave-eeprom: initialize empty eeprom properly
 To:     Patrick Williams <alpawi@amazon.com>
-Cc:     Patrick Williams <patrick@stwcx.xyz>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Jean Delvare <jdelvare@suse.de>, Max Staudt <max@enpas.org>,
-        Juergen Fitschen <jfi@ssv-embedded.de>,
-        Elie Morisse <syniurge@gmail.com>,
-        Ajay Gupta <ajayg@nvidia.com>, Stefan Roese <sr@denx.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Baolin Wang <baolin.wang@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Enrico Weigelt <info@metux.net>,
-        Allison Randal <allison@lohutok.net>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: pxa: migrate to new i2c_slave APIs
-Message-ID: <20191001173115.GS32742@smile.fi.intel.com>
-References: <20191001160001.2388-1-alpawi@amazon.com>
- <20191001160001.2388-2-alpawi@amazon.com>
- <20191001162913.GR32742@smile.fi.intel.com>
- <20191001163910.GA2307@8c859006a84e.ant.amazon.com>
+CC:     =?UTF-8?B?QmrDtnJuIEFyZMO2?= <bjornar@axis.com>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Wolfram Sang <wsa@the-dreams.de>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20191001164009.21610-1-alpawi@amazon.com>
+From:   Bjorn Ardo <bjorn.ardo@axis.com>
+Message-ID: <150599be-9125-4ab9-e2a6-e792b41910e6@axis.com>
+Date:   Wed, 2 Oct 2019 08:20:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191001163910.GA2307@8c859006a84e.ant.amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191001164009.21610-1-alpawi@amazon.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: XBOX03.axis.com (10.0.5.17) To XBOX02.axis.com (10.0.5.16)
+X-TM-AS-GCONF: 00
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Oct 01, 2019 at 11:39:10AM -0500, Patrick Williams wrote:
-> Thanks for the review Andy.
-> 
-> On Tue, Oct 01, 2019 at 07:29:13PM +0300, Andy Shevchenko wrote:
-> > 
-> > 
-> > On Tue, Oct 01, 2019 at 10:59:59AM -0500, Patrick Williams wrote:
-> > There are quite a few people in the Cc list. I'm not sure they all are
-> > interested in this. I deliberately dropped few names, sorry, if I was mistaken.
-> 
-> Agree it was kind of a big list.  Just chose what was given to me by
-> get_maintainer.pl.  It seems like there isn't a direct identified
-> maintainer of this file.
-
-Hint: `scripts/get_maintainer.pl --git --git-min-percent=67 ...`
-
-> > > +			i2c_slave_event(i2c->slave, I2C_SLAVE_READ_REQUESTED,
-> > > +					&byte);
-
-> > > +			i2c_slave_event(i2c->slave, I2C_SLAVE_WRITE_REQUESTED,
-> > > +					NULL);
-
-> The two different paths also require READ_REQUEST vs WRITE_REQUESTED.  I
-> could do a ternary there but it seemed more obvious to just unroll the
-> logic.
-
-Ah, I see now.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Hi,
 
 
+I sent in another patch earlier that added support for specifying a file 
+in devicetree to initilize the eeprom from, corresponding to the case of 
+pre-flashed eeprom. Maybe these two patches should be merged so this 
+initialization is only done if no file is specified?
+
+
+/BA
+
+On 10/1/19 6:40 PM, Patrick Williams wrote:
+> The i2c-slave-eeprom driver emulates at24 class eeprom devices,
+> which come initialized with all 1s.  Do the same in the software
+> emulation.
+>
+> Signed-off-by: Patrick Williams <alpawi@amazon.com>
+> ---
+>   drivers/i2c/i2c-slave-eeprom.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
+> index db9763cb4dae..efee56106251 100644
+> --- a/drivers/i2c/i2c-slave-eeprom.c
+> +++ b/drivers/i2c/i2c-slave-eeprom.c
+> @@ -131,6 +131,8 @@ static int i2c_slave_eeprom_probe(struct i2c_client *client, const struct i2c_de
+>   	if (!eeprom)
+>   		return -ENOMEM;
+>   
+> +	memset(eeprom->buffer, 0xFF, size);
+> +
+>   	eeprom->idx_write_cnt = 0;
+>   	eeprom->num_address_bytes = flag_addr16 ? 2 : 1;
+>   	eeprom->address_mask = size - 1;
