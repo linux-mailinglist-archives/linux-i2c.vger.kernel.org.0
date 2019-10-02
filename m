@@ -2,76 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79972C8784
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2019 13:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9D0C8B11
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2019 16:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725951AbfJBLpu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Oct 2019 07:45:50 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37452 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725875AbfJBLpu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 2 Oct 2019 07:45:50 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E126CAC67;
-        Wed,  2 Oct 2019 11:45:48 +0000 (UTC)
-Date:   Wed, 2 Oct 2019 13:46:00 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     <linux-i2c@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [PATCH] i2c: i801: Bring back Block Process Call support for
- certain platforms
-Message-ID: <20191002134600.2cc00e30@endymion>
-In-Reply-To: <20190927110911.23045-1-jarkko.nikula@linux.intel.com>
-References: <20190927110911.23045-1-jarkko.nikula@linux.intel.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1728354AbfJBOTr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Oct 2019 10:19:47 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:45331 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728123AbfJBOT2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Oct 2019 10:19:28 -0400
+Received: by mail-qt1-f196.google.com with SMTP id c21so26491621qtj.12;
+        Wed, 02 Oct 2019 07:19:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:subject:references
+         :in-reply-to:cc:cc:to;
+        bh=q5/Vrt7YbSMYYe+TqRWfnWGfFj48YtOuzlgQybM3rrI=;
+        b=EqVImqspe4KABjB4uM5Lc35aaCX1sI3fKKKVNBCTRpIjd4al64KV3dw/9jGc5ydPDT
+         cIV8XtnxCuWgjGBUSY/2T+cW9TK4RW03hRVGUMRvw8BSP6jrhf/bddb7X6nrmDE2imIO
+         y+HVflUfjEOfgn9IUm7/jRvo+2CxXy9tsUM4G9U/I6A4DCIb2HKYgfSGAfS3xUAIEMi1
+         w/g5tcAoxyIEyDFZgp7rCqRLMu6WxDFqHthJljYQUC2iid6Bxdty3sRslFrYKLYZinux
+         yMwiJLYW+UwdRotWFsgr4ko1/t3Zw5pGE9ZM3ONyRSV1XjvxSpfNsyHHh/Lr4SV74rUz
+         ykZQ==
+X-Gm-Message-State: APjAAAV3zLTkcIVW1N9fpe0px90a8ZCEACz1PbTR1D6lRR+0+PhedpvL
+        PAy+qAdhCsAJAtVUNJRrmg==
+X-Google-Smtp-Source: APXvYqzI8tlDknPTtCYkYMf8YiII8BB2Pn9q3BZ6ZLRPxE5d81/Tdh2KvJ7CO7oGH4jp9psZIS97qw==
+X-Received: by 2002:a0c:b596:: with SMTP id g22mr3230956qve.231.1570025967555;
+        Wed, 02 Oct 2019 07:19:27 -0700 (PDT)
+Received: from localhost ([132.205.230.8])
+        by smtp.gmail.com with ESMTPSA id l185sm9749623qkd.20.2019.10.02.07.19.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Oct 2019 07:19:27 -0700 (PDT)
+Message-ID: <5d94b1ef.1c69fb81.61d87.2984@mx.google.com>
+Date:   Wed, 02 Oct 2019 09:19:24 -0500
+From:   Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: i2c: sh_mobile: Add r8a774b1 support
+References: <1569310619-31071-1-git-send-email-biju.das@bp.renesas.com>
+In-Reply-To: <1569310619-31071-1-git-send-email-biju.das@bp.renesas.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Biju Das <biju.das@bp.renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Simon Horman <horms@verge.net.au>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+To:     Biju Das <biju.das@bp.renesas.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 27 Sep 2019 14:09:11 +0300, Jarkko Nikula wrote:
-> Commit b84398d6d7f9 ("i2c: i801: Use iTCO version 6 in Cannon Lake PCH
-> and beyond") looks like to drop by accident Block Write-Block Read Process
-> Call support for Intel Sunrisepoint, Lewisburg, Denverton and Kaby Lake.
-
-And I reviewed that one :( Sorry for letting it slip through, and
-thanks for catching it.
-
-> That support was added for above and newer platforms by the commit
-> 315cd67c9453 ("i2c: i801: Add Block Write-Block Read Process Call
-> support") so bring it back for above platforms.
+On Tue, 24 Sep 2019 08:36:59 +0100, Biju Das wrote:
+> Document RZ/G2N (R8A774B1) SoC bindings.
 > 
-> Fixes: b84398d6d7f9 ("i2c: i801: Use iTCO version 6 in Cannon Lake PCH and beyond")
-> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Signed-off-by: Biju Das <biju.das@bp.renesas.com>
 > ---
->  drivers/i2c/busses/i2c-i801.c | 1 +
+>  Documentation/devicetree/bindings/i2c/i2c-sh_mobile.txt | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index a4608a047468..1fed7bf00a6d 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1736,6 +1736,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  	case PCI_DEVICE_ID_INTEL_LEWISBURG_SSKU_SMBUS:
->  	case PCI_DEVICE_ID_INTEL_DNV_SMBUS:
->  	case PCI_DEVICE_ID_INTEL_KABYLAKE_PCH_H_SMBUS:
-> +		priv->features |= FEATURE_BLOCK_PROC;
->  		priv->features |= FEATURE_I2C_BLOCK_READ;
->  		priv->features |= FEATURE_IRQ;
->  		priv->features |= FEATURE_SMBUS_PEC;
 
-Too late but still
+Acked-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-
--- 
-Jean Delvare
-SUSE L3 Support
