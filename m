@@ -2,96 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CB2C4862
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2019 09:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082DFC49F5
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2019 10:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726227AbfJBHU5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Oct 2019 03:20:57 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:50850 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726463AbfJBHU5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Oct 2019 03:20:57 -0400
-Received: by mail-wm1-f67.google.com with SMTP id 5so5938736wmg.0
-        for <linux-i2c@vger.kernel.org>; Wed, 02 Oct 2019 00:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=P8FodZSxtce/9VbKtIxl8y+chzA0F3ci9cGAB2QwiVA=;
-        b=XU5TSTRzztZCfDtqzfe7LtjkiX2LxGtZy0/TpyNMpWmwxkl+yCZZMGHT1r+8L19cWp
-         Qmxgw/1gpclM/V1M0uJlsVr6BOoBiWe8cva5Pb3wnlPKKTpwrrrdRp2J+U5AtQMWeb9G
-         wAGdAuJif6QYDLIUd3q2zaq1L4lFPCRbrRzYlFc8TvMeCpG+4OJFaJvYL4tXp/OvsWBZ
-         qinBB0p/YP0ya6k/46fyOUQyKiPuPKNEqBet4e3oCtljlbyXAvZATFdl2jGDnKA2/QcN
-         XSQxHJOJIBs067Ac6vJqq8rYgBZmlX3f9yGCO7vuna6h6yDOhF3yWqCwrQ9gi93deCBc
-         Ii/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=P8FodZSxtce/9VbKtIxl8y+chzA0F3ci9cGAB2QwiVA=;
-        b=RRToDP4LnA0mBYesqUqKWr0OCklPHQEpxhG9NkfFr1/J3xu2EgIoSNkvSl+qdpQQB/
-         1bCUoG+a3FdPmNGd6zbIR2FvCrQj1St+zEEMU3xBCIkt7yQlBjtf/YjOrMRFTfJA9a+i
-         sKQmdCHTeBghYvcWNP0H5pD2PgMhXV/M2aiat093rAt1emJ7vKkQ0aZTSDT27V+PchOZ
-         IGq0cDYOSZDbTNz86usWhN464ChhrZuS/V4kxCkTDXzIlQNKSK2yplBHMOdG8OVb6X44
-         /mCgqyFgUaEPXAPWGK762O4FiHU2vNXx0LWPyVnf2I3p1youAupOYJdjypFMrAgIg7ui
-         kjuQ==
-X-Gm-Message-State: APjAAAXOVGg3dGpoIlmcBBuKgV5nbi+zSqbYvCcIKZdw/OLFZBExEYal
-        7S829B0kq/9pwAKJzTp25v1agQ==
-X-Google-Smtp-Source: APXvYqwpmmYPeIWFm5Mj5G5MRqI9fjHcBbdi1XfHC6f/7VKAtRbHeKSKd+0gQv+rgNHvnNitkiKcrw==
-X-Received: by 2002:a7b:c247:: with SMTP id b7mr1607834wmj.121.1570000854142;
-        Wed, 02 Oct 2019 00:20:54 -0700 (PDT)
-Received: from debian-brgl.home ([2a01:cb1d:af:5b00:6d6c:8493:1ab5:dad7])
-        by smtp.gmail.com with ESMTPSA id n18sm3850640wmi.20.2019.10.02.00.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2019 00:20:53 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Rosin <peda@axentia.se>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 2/2] dt-bindings: at24: add new compatible
-Date:   Wed,  2 Oct 2019 09:20:47 +0200
-Message-Id: <20191002072047.20895-3-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191002072047.20895-1-brgl@bgdev.pl>
-References: <20191002072047.20895-1-brgl@bgdev.pl>
+        id S1727169AbfJBIuD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Oct 2019 04:50:03 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:30907 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725799AbfJBIuC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Oct 2019 04:50:02 -0400
+X-Greylist: delayed 341 seconds by postgrey-1.27 at vger.kernel.org; Wed, 02 Oct 2019 04:50:01 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1570006200;
+        s=strato-dkim-0002; d=fpond.eu;
+        h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=iUttmko10pMSiNzf83MKiTk9CuVcL1m274VDNhwoUvo=;
+        b=fwQnjnwZGpqSYouAPj03EV3kLB+dGJ/RGE5M5UX6f4bOmTXpmL7QDjz9o44g7Pe/nV
+        KwlLnhotooxXgELLLi2HOzeHToCrbYQuIqfzK3W6tpskvn4XY+K6M6pllUhSKqoo/Vvw
+        UidFNpcYmrqDnjvIH36lgIQEmx55paOCwC09aL2RG6MIN+o8SkeCBssl8CDha+0uC1U4
+        ZdKQtPEb3i99mvOMYJiQodU/LiBgQxe7jlAj5h6Efkdfu0/LcESoxdR6V31AMZTuZjon
+        pqYUYEClFPVa1rsYQi1WmN5ZcmgWdTOsdnK+Tq/KKvaFDSX6imJxi41CneU9sOvOBoRK
+        X2Og==
+X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzmt2bYDnKIKaws6YXTsc4="
+X-RZG-CLASS-ID: mo00
+Received: from oxapp05-03.back.ox.d0m.de
+        by smtp-ox.front (RZmta 44.28.0 AUTH)
+        with ESMTPSA id i07086v928htVNM
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Wed, 2 Oct 2019 10:43:55 +0200 (CEST)
+Date:   Wed, 2 Oct 2019 10:43:55 +0200 (CEST)
+From:   Ulrich Hecht <uli@fpond.eu>
+To:     Fabien Parent <fparent@baylibre.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     drinkcat@chromium.org, wsa@the-dreams.de, hsinyi@chromium.org,
+        matthias.bgg@gmail.com, tglx@linutronix.de, qii.wang@mediatek.com
+Message-ID: <1733244772.936156.1570005835848@webmail.strato.com>
+In-Reply-To: <20190930152846.5062-1-fparent@baylibre.com>
+References: <20190930152846.5062-1-fparent@baylibre.com>
+Subject: Re: [PATCH v2] i2c: i2c-mt65xx: fix NULL ptr dereference
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.1-Rev20
+X-Originating-IP: 85.212.176.126
+X-Originating-Client: open-xchange-appsuite
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-arch/arm/boot/dts/at91-dvk_som60.dt.yaml uses the compatible string
-'giantec,gt24c32a' for an at24 EEPROM with a fallback to 'atmel,24c32'.
+> On September 30, 2019 at 5:28 PM Fabien Parent <fparent@baylibre.com> wrote:
+> 
+> 
+> Since commit abf4923e97c3 ("i2c: mediatek: disable zero-length transfers
+> for mt8183"), there is a NULL pointer dereference for all the SoCs
+> that don't have any quirk. mtk_i2c_functionality is not checking that
+> the quirks pointer is not NULL before starting to use it.
+> 
+> This commit add a call to i2c_check_quirks which will check whether
+> the quirks pointer is set, and if so will check if the IP has the
+> NO_ZERO_LEN quirk.
+> 
+> Fixes: abf4923e97c3 ("i2c: mediatek: disable zero-length transfers for mt8183")
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
 
-Add this model as a special case to the binding document.
+Thank you! Tested successfully on Acer R13 Chromebook (mt8173).
 
-Reported-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- Documentation/devicetree/bindings/eeprom/at24.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+Tested-by: Ulrich Hecht <uli@fpond.eu>
 
-diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-index c56f27fde3b3..e8778560d966 100644
---- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-+++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-@@ -107,6 +107,9 @@ properties:
-       - items:
-           - const: renesas,r1ex24016
-           - const: atmel,24c16
-+      - items:
-+          - const: giantec,gt24c32a
-+          - const: atmel,24c32
-       - items:
-           - const: renesas,r1ex24128
-           - const: atmel,24c128
--- 
-2.23.0
-
+CU
+Uli
