@@ -2,81 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45191CB4D1
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2019 09:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC1DCB599
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2019 10:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728264AbfJDHHY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Oct 2019 03:07:24 -0400
-Received: from sauhun.de ([88.99.104.3]:51670 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726119AbfJDHHY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 4 Oct 2019 03:07:24 -0400
-Received: from localhost (p54B33499.dip0.t-ipconnect.de [84.179.52.153])
-        by pokefinder.org (Postfix) with ESMTPSA id 74A7B2C05A3;
-        Fri,  4 Oct 2019 09:07:21 +0200 (CEST)
-Date:   Fri, 4 Oct 2019 09:07:21 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Biju Das <biju.das@bp.renesas.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+        id S1730723AbfJDIA2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Oct 2019 04:00:28 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:51618 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725932AbfJDIA1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Oct 2019 04:00:27 -0400
+X-IronPort-AV: E=Sophos;i="5.67,255,1566831600"; 
+   d="scan'208";a="28064819"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 04 Oct 2019 17:00:26 +0900
+Received: from be1yocto.ree.adwin.renesas.com (unknown [172.29.43.62])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 67F834007544;
+        Fri,  4 Oct 2019 17:00:23 +0900 (JST)
+From:   Biju Das <biju.das@bp.renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Biju Das <biju.das@bp.renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Simon Horman <horms@verge.net.au>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
         Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: i2c: rcar: Add r8a774b1 support
-Message-ID: <20191004070720.GA1405@kunai>
-References: <1569310377-24976-1-git-send-email-biju.das@bp.renesas.com>
- <CAMuHMdXp_u-w9DMbmBZn3G99LexLuQyBR2hRA_0T8Wn130SsZg@mail.gmail.com>
- <OSBPR01MB2103237D77ECCD14A41EEFFAB8860@OSBPR01MB2103.jpnprd01.prod.outlook.com>
- <OSBPR01MB2103AD1CECA6DCD0C1BCE067B89E0@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wRRV7LY7NUeQGEoC"
-Content-Disposition: inline
-In-Reply-To: <OSBPR01MB2103AD1CECA6DCD0C1BCE067B89E0@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: i2c: rcar: Add r8a774b1 support
+Date:   Fri,  4 Oct 2019 08:59:58 +0100
+Message-Id: <1570175998-50891-1-git-send-email-biju.das@bp.renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Document RZ/G2N (R8A774B1) I2C compatibility with the relevant driver
+dt-bindings.
 
---wRRV7LY7NUeQGEoC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Biju Das <biju.das@bp.renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+V1-->V2
+ * Rebased on top of next.
+---
+ Documentation/devicetree/bindings/i2c/renesas,i2c.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/Documentation/devicetree/bindings/i2c/renesas,i2c.txt b/Documentation/devicetree/bindings/i2c/renesas,i2c.txt
+index 3ee5e8f..0660a3e 100644
+--- a/Documentation/devicetree/bindings/i2c/renesas,i2c.txt
++++ b/Documentation/devicetree/bindings/i2c/renesas,i2c.txt
+@@ -7,6 +7,7 @@ Required properties:
+ 	"renesas,i2c-r8a7745" if the device is a part of a R8A7745 SoC.
+ 	"renesas,i2c-r8a77470" if the device is a part of a R8A77470 SoC.
+ 	"renesas,i2c-r8a774a1" if the device is a part of a R8A774A1 SoC.
++	"renesas,i2c-r8a774b1" if the device is a part of a R8A774B1 SoC.
+ 	"renesas,i2c-r8a774c0" if the device is a part of a R8A774C0 SoC.
+ 	"renesas,i2c-r8a7778" if the device is a part of a R8A7778 SoC.
+ 	"renesas,i2c-r8a7779" if the device is a part of a R8A7779 SoC.
+-- 
+2.7.4
 
-> Do you want me to send V2? Or Are you happy to fix this while applying th=
-is patch against changed file name?=20
-
-Please resend.
-
-
---wRRV7LY7NUeQGEoC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl2W76QACgkQFA3kzBSg
-KbYHwg/+Kab+1TaL/jthhpeT8Sz/RD5u/07nTtnb6AaSNEdE6dQRadxxpSUSP88V
-gyh5ZIGQy5WNTIp2CRTNVmq04urTi4mdZndp8tbD/B2R6LJBPAaxkU8YjnGbdRjG
-NLXFMASRg84Xz6GmvakWokblA6ZVMtqhiLWGIS5s7LGJGtyuCSqAnJ0IebEh0yDN
-HPKkc7GEKYBd3aMpWlrMMuUaU37SwaUJFjiEUpNC4b6cvr7nXCZ9eOdbfIdv+tFu
-VztRKuFUCviSbWOEqrzInEdb1C29ThkGWXwhUx4tq5e04iG65+5Kuw1CyiQ54cMc
-iqZmXyhnblsS5vYRiplJMM1VplYLLaiAfGsACiiwHRp0mnY5n4biScGze2z9u4vW
-wKZ3AVHihMcRk7wzmTFxg92mrINmv/Uwjbp0qfw0xA5N0t1WTntzf0abjk+U+wY3
-Sk5o5Su7emXmN+RROC8jR2mV1oXS5fP6knWEUSXvisH0pRwb//WbEuTqJgd1Tfh2
-aThcpJq7+g0F336v5+ehjbRIrTGrxcZuuf7VFDpJsQXTlMRsKkWzlrEtLYXbggGv
-QuipkRIOERUsLTkIlMOEUxZq+TC/Ra/EFLwazkbMcn+V+ZtyvoyE44ZdL7LFXDn1
-t3XMeZDhEO4Qnq8jBCTrwhtndZCcVcnJ3WV5gafwV8/9Yg9c4FA=
-=EkrY
------END PGP SIGNATURE-----
-
---wRRV7LY7NUeQGEoC--
