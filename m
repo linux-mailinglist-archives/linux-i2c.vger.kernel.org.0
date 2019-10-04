@@ -2,66 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B30CB5B8
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2019 10:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92EFCB68D
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2019 10:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731010AbfJDIHz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Oct 2019 04:07:55 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:55007 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728149AbfJDIHz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Oct 2019 04:07:55 -0400
-X-IronPort-AV: E=Sophos;i="5.67,255,1566831600"; 
-   d="scan'208";a="28065772"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 04 Oct 2019 17:07:53 +0900
-Received: from be1yocto.ree.adwin.renesas.com (unknown [172.29.43.62])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 595D240078A1;
-        Fri,  4 Oct 2019 17:07:51 +0900 (JST)
-From:   Biju Das <biju.das@bp.renesas.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     Biju Das <biju.das@bp.renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Simon Horman <horms@verge.net.au>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: i2c: sh_mobile: Add r8a774b1 support
-Date:   Fri,  4 Oct 2019 09:07:26 +0100
-Message-Id: <1570176446-59266-1-git-send-email-biju.das@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S1729226AbfJDIhh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Oct 2019 04:37:37 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58140 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728920AbfJDIhh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 4 Oct 2019 04:37:37 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 22D43AF25;
+        Fri,  4 Oct 2019 08:37:36 +0000 (UTC)
+Date:   Fri, 4 Oct 2019 10:37:48 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Linux I2C <linux-i2c@vger.kernel.org>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] eeprom: at24: Improve confusing log message
+Message-ID: <20191004103748.12076669@endymion>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Document RZ/G2N (R8A774B1) SoC bindings.
+Currently when binding to an spd EEPROM, the at24 drivers logs the
+following message:
 
-Signed-off-by: Biju Das <biju.das@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Rob Herring <robh@kernel.org>
----
-V1-->V2
- * Rebased on top of next.
----
- Documentation/devicetree/bindings/i2c/renesas,iic.txt | 1 +
- 1 file changed, 1 insertion(+)
+256 byte spd EEPROM, read-only, 0 bytes/write
 
-diff --git a/Documentation/devicetree/bindings/i2c/renesas,iic.txt b/Documentation/devicetree/bindings/i2c/renesas,iic.txt
-index 202602e..64d11ff 100644
---- a/Documentation/devicetree/bindings/i2c/renesas,iic.txt
-+++ b/Documentation/devicetree/bindings/i2c/renesas,iic.txt
-@@ -8,6 +8,7 @@ Required properties:
- 			- "renesas,iic-r8a7744" (RZ/G1N)
- 			- "renesas,iic-r8a7745" (RZ/G1E)
- 			- "renesas,iic-r8a774a1" (RZ/G2M)
-+			- "renesas,iic-r8a774b1" (RZ/G2N)
- 			- "renesas,iic-r8a774c0" (RZ/G2E)
- 			- "renesas,iic-r8a7790" (R-Car H2)
- 			- "renesas,iic-r8a7791" (R-Car M2-W)
+The last part is confusing, as by definition you don't write to a
+read-only EEPROM, plus "0 bytes/write" makes no sense whatsoever.
+
+I propose to have a different message for read-only EEPROMs, which
+does not include this last part.
+
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/misc/eeprom/at24.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+--- linux-5.3.orig/drivers/misc/eeprom/at24.c	2019-09-15 23:19:32.000000000 +0200
++++ linux-5.3/drivers/misc/eeprom/at24.c	2019-10-04 10:32:19.110834275 +0200
+@@ -717,9 +717,12 @@ static int at24_probe(struct i2c_client
+ 		return -ENODEV;
+ 	}
+ 
+-	dev_info(dev, "%u byte %s EEPROM, %s, %u bytes/write\n",
+-		 byte_len, client->name,
+-		 writable ? "writable" : "read-only", at24->write_max);
++	if (writable)
++		dev_info(dev, "%u byte %s EEPROM, writable, %u bytes/write\n",
++			 byte_len, client->name, at24->write_max);
++	else
++		dev_info(dev, "%u byte %s EEPROM, read-only\n",
++			 byte_len, client->name);
+ 
+ 	return 0;
+ }
+
+
 -- 
-2.7.4
-
+Jean Delvare
+SUSE L3 Support
