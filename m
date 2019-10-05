@@ -2,75 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F69CC449
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2019 22:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2859DCCC8E
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Oct 2019 22:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388204AbfJDUjp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Oct 2019 16:39:45 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:38997 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388107AbfJDUjp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Oct 2019 16:39:45 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iGUMQ-00047D-Kn; Fri, 04 Oct 2019 22:39:34 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iGUMP-0000YC-L0; Fri, 04 Oct 2019 22:39:33 +0200
-Date:   Fri, 4 Oct 2019 22:39:33 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Claudiu.Beznea@microchip.com
-Cc:     kamel.bouhara@bootlin.com, wsa@the-dreams.de,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        Ludovic.Desroches@microchip.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        thomas.petazzoni@bootlin.com
-Subject: Re: [PATCH 2/4] i2c: at91: implement i2c bus recovery
-Message-ID: <20191004203933.tfhr6cwbsq2hxrov@pengutronix.de>
-References: <20191002144658.7718-1-kamel.bouhara@bootlin.com>
- <20191002144658.7718-3-kamel.bouhara@bootlin.com>
- <08e99a4b-851e-0bee-4c5a-8578b42c283e@microchip.com>
+        id S1728727AbfJEUBx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Oct 2019 16:01:53 -0400
+Received: from mout.gmx.net ([212.227.17.22]:60179 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727980AbfJEUBx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 5 Oct 2019 16:01:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1570305695;
+        bh=qySV3tlxF55Vn/7Dh9FTVARSYZ+YXZdXkb4UesYQYM4=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=BeIKYf+Rmt42RrNTCWaDviRy+ohnDWmmwtQvBURXjRsr2jSBIR1+L+2qplAsJLDTX
+         j1QwiTcRdPJJiX0VdWTEETn54MPWxTnykLV6xEIcksLtDRSZuQRi7VRrx9SNEudkol
+         cqbSl5ELylxm2zwnF1lGFjkwMLcsszF4ft98YGiY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([109.90.233.87]) by mail.gmx.com (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MTzfG-1ihgXF1jiE-00R41C; Sat, 05
+ Oct 2019 22:01:35 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-doc@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] docs: i2c: Fix SPDX-License-Identifier syntax
+Date:   Sat,  5 Oct 2019 22:01:22 +0200
+Message-Id: <20191005200126.25809-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <08e99a4b-851e-0bee-4c5a-8578b42c283e@microchip.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:LMni/TfrfxOuDts2qQNrNG0VhnaXFqUh0VdHKqWXcHWkUxD9WdJ
+ aydOUR7RKdhdSuUNuyJKaLVd3VDkRDRriT57B3ES+TP8te+ViVTdNEIinxeyvOshsp/Ves0
+ diYtv9sOgEzKwXnRfNJ+TTID9RsBV4laTAA3wnthUtO3/rJRp/txF0tmAPnOfJsZN/o0td6
+ EHWAYdcz9MuHG1peO7Y2w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+s/KPiena6U=:C8xDlyRYB+fOBmIf0rMIST
+ p+D472UZ9kalsKpLibPkhl/Ta5qkfibzHgDZA/ulZvnH2hZOvD4G3vR7qdPCxlE18L3eLGqGl
+ 4+dBCVEqt/kR+/JdCdILTA05Q1k7mgRbflfpOJRovtxKUO1dSzPmXmXV+chPCkLhnDKlCoO4p
+ OEtsVH9201GgFe+gdRm+1/+RPpC9XhHEXxLecrxyeFkglwTm+uw5jyapkn4ojhmUKzzMkN/vm
+ 2eGjCF7bbE63bdrZRXNw95EXm/VnEYp5Uqa5NlpfXtzOkhgrq5+XaGhpqgumMBpqcMQO73vrF
+ ++WNdtTTBdhRkoeevePY5eIjAsgODcnbL8vgnbPKhGrX+8lbggN8GApVRdcKa+vrig4T6MDAc
+ fh8jotdqlJQBm5bY1KLnz21lXg1mWM24Lf4NE8mMiz1hgabhdnsu8QHTRkeBOUDtIBzI6TcsB
+ xEF6BPY1PT8LcW6spQCZJJ65klzajkwOOWCweZx3uxw/EkNPydjDVdabilCB75bG/sn8wHpzo
+ sRW+xat21OpTRPuliF/LVuY26K2rPSpvFtjjZLjw04besVhU8P66GgBQRxGALQOFXrGdELcSb
+ XZQBEy2aU6k7RKav2z28pcY91fRF87MbX3d1Qu1+ecdGQCEA+YBxldM0eX+Z6yLO0mdAYX20j
+ WCbWsY0Mo9qdqdMz5vvLONhEQz6uWiNc52SnD/dCNJDMG8DcXpMfHVnJDTENHZfbkoDZW+7NG
+ ahdP+sraNm8oeALOOGX6+qzjHATndEf5XxjAX92/3Cej76eKmOuwwNbttwOcx1IaY1bBRE7wU
+ PQV9cJ/cnEILkTinU3RTQTiqrnG0RS8Vu3bGEiNyqy3U4PRZw03NW8YDYlYdjsWr6L335Ya6i
+ XKJYNFKGgZ4V4xW3o1OY+yrRZumG0zcQ73oRXEaTvmSHqTcYHvvO3XWCX39ZSyAqkl90byfkN
+ zCniWWRto3iGtTAsAL3zKSBfgNwjolWQ+otqceo5mGAK3amWiqc6vZM1N0oOOFYyn24jxo9ya
+ Y0AbQ8JevR+FX5SMqjPhjX4mnC1L0VLxJbmGmU+nCOSSqNND08lfoN8WeC4WU3+2clyNQXKgT
+ IRkC98zwixwLobFzdi3zvhYg6o0Nu3nQ/zsY4y02IAk9WY/hDEmNU62vJRkQQY/x/NXciQDJb
+ dvXvHSQJUj38Hyytw1VcJLTAMt+YQ0utJAjI61RB1P0Sg83k+D2+HiJ/1gATWzPg9q51OFP02
+ +VwpMpwSpY9MtisDf8AyZ29osmVq9fIdkowWnoHb9/vVlVa5UvJtSvefW+rk=
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Oct 04, 2019 at 09:35:23AM +0000, Claudiu.Beznea@microchip.com wrote:
-> Hi Kamel,
-> 
-> On 02.10.2019 17:46, Kamel Bouhara wrote:
-> > +static int at91_init_twi_recovery_info(struct platform_device *pdev,
-> > +				       struct at91_twi_dev *dev)
-> > +{
-> > +	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
-> > +
-> > +	dev->pinctrl = devm_pinctrl_get(&pdev->dev);
-> > +	if (!dev->pinctrl || IS_ERR(dev->pinctrl)) {
-> 
-> You may use IS_ERR_OR_NULL() here.
+ReST directives are introduced with two dots.
 
-Can devm_pinctrl_get return NULL? From a quick look, it cannot.
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ Documentation/i2c/busses/index.rst | 2 +-
+ Documentation/i2c/index.rst        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-rule of thumb: IS_ERR_OR_NULL is wrong as it is a sign of poor return
-value semantics.
+diff --git a/Documentation/i2c/busses/index.rst b/Documentation/i2c/busses=
+/index.rst
+index 97ca4d510816..2a26e251a335 100644
+=2D-- a/Documentation/i2c/busses/index.rst
++++ b/Documentation/i2c/busses/index.rst
+@@ -1,4 +1,4 @@
+-. SPDX-License-Identifier: GPL-2.0
++.. SPDX-License-Identifier: GPL-2.0
 
-Best regards
-Uwe
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ I2C Bus Drivers
+diff --git a/Documentation/i2c/index.rst b/Documentation/i2c/index.rst
+index cd8d020f7ac5..a0fbaf6d0675 100644
+=2D-- a/Documentation/i2c/index.rst
++++ b/Documentation/i2c/index.rst
+@@ -1,4 +1,4 @@
+-. SPDX-License-Identifier: GPL-2.0
++.. SPDX-License-Identifier: GPL-2.0
 
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ I2C/SMBus Subsystem
+=2D-
+2.20.1
+
