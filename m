@@ -2,91 +2,174 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E1ED194B
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2019 21:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61BED1AC3
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2019 23:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730955AbfJIT5b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Oct 2019 15:57:31 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:45475 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730490AbfJIT5a (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Oct 2019 15:57:30 -0400
-Received: by mail-io1-f66.google.com with SMTP id c25so7843542iot.12
-        for <linux-i2c@vger.kernel.org>; Wed, 09 Oct 2019 12:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=okI+WKXZnivApTS1Oqi6dD5Ms0rFCprYxF1H61WduWk=;
-        b=W2dz+cz87MB3KlO/osdr8rJx4Cp7NPTIUr2LulaDoBOB9FoQZ4n7x3v0sKbpcdwYGW
-         u6CL6jsI/b6yC+rmTY1z+uqUNW3zZW7sSoyXVkpkPsebylpwkeB0yhz/Wgv+1MK4WjXq
-         sllPBE5/J6s0Y+8GdxWBcey/AWx9/glFtgI2Qt4OpS5h7lvrC8zyBc4OXlG9CerzI4AT
-         eN0OUMekIE+l/MTewIc01jZYnTA3e3CgY55q0Y7Yw8ci+n8Y7oAIG7Wo8+cwo6nbVqtm
-         G4ilVkC5uCbZMClKKYi2ptD+tDpBKAowkOViFduyuqDbbMPgSQomiVqSVolZEueaimyc
-         28cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=okI+WKXZnivApTS1Oqi6dD5Ms0rFCprYxF1H61WduWk=;
-        b=a36Bif2mG2mA2RaAc6jXluFKzzXkwDIshs8arwBMeJWNVaKAL2hA+aypG99W8ByWEl
-         FJAqy8XCtKvl9e/OXkAYS7LRihQQcCRvZF5uqJwSok1tUFE35XKV+iXl1jq1YiWdYZ33
-         rsmK+qeVR/quu3Ed1b0w0t3a4iv3UGGshJ7ujUbEopzik0lCU0MTbC8rkyPSyAVLOagz
-         zPeGcWM1vcVye2vKMB52Ybj+gAAy3DL1h3iEvqu5hflI+h+gwI1CXUhiuzjqHfHvzQbQ
-         q66ClQ4kkmCs7YkvPRpMWC5GM+YesC9wNWJAuG0h2v+yXU/Foy9HtxLYzSt6criTMQI4
-         uvpA==
-X-Gm-Message-State: APjAAAWuswGJ2NQJpfnkBW3+/K5lwek90YD0Oy7qgTrcJGA0V2f0PRTi
-        64J82TAmFi5sbPS6I79Ng0fxZiqfDfOGfvxzfjI=
-X-Google-Smtp-Source: APXvYqzbSVhiHV33tFYR9+UY4m12+Y5xzFJ9AnM8yqsbuSlsW90Q4GD+jHzMCmKYhkk8MRoLS1RTxY66ACxbh2dk3E8=
-X-Received: by 2002:a02:c7c9:: with SMTP id s9mr5066344jao.81.1570651048428;
- Wed, 09 Oct 2019 12:57:28 -0700 (PDT)
+        id S1731103AbfJIVUg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Oct 2019 17:20:36 -0400
+Received: from mga11.intel.com ([192.55.52.93]:9237 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730490AbfJIVUg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 9 Oct 2019 17:20:36 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Oct 2019 14:20:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,277,1566889200"; 
+   d="scan'208";a="368866255"
+Received: from maru.jf.intel.com ([10.54.51.77])
+  by orsmga005.jf.intel.com with ESMTP; 09 Oct 2019 14:20:35 -0700
+From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
+        Cedric Le Goater <clg@kaod.org>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Subject: [PATCH] i2c: aspeed: fix master pending state handling
+Date:   Wed,  9 Oct 2019 14:20:34 -0700
+Message-Id: <20191009212034.20325-1-jae.hyun.yoo@linux.intel.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Received: by 2002:a6b:6d07:0:0:0:0:0 with HTTP; Wed, 9 Oct 2019 12:57:28 -0700 (PDT)
-Reply-To: eddywilliam0002@gmail.com
-From:   eddy william <davisemm6@gmail.com>
-Date:   Wed, 9 Oct 2019 21:57:28 +0200
-Message-ID: <CAKAY_3XPXVO84O9K1QjiU1-6_Yq1-Byb6bhTX=0m_9h6JOP3fQ@mail.gmail.com>
-Subject: hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hallo
+In case of master pending state, it should not trigger a master
+command, otherwise data could be corrupted because this H/W shares
+the same data buffer for slave and master operations. It also means
+that H/W command queue handling is unreliable because of the buffer
+sharing issue. To fix this issue, it clears command queue if a
+master command is queued in pending state to use S/W solution
+instead of H/W command queue handling. Also, it refines restarting
+mechanism of the pending master command.
 
-Mein Name ist Eddy William. Ich bin von Beruf Rechtsanwalt. Ich m=C3=B6chte
-Ihnen anbieten
-die n=C3=A4chsten Verwandten zu meinem Klienten. Sie erben die Summe von
-($8,5 Millionen US-Dollar)
-Dollar, die mein Kunde vor seinem Tod in der Bank gelassen hat.
+Fixes: 2e57b7cebb98 ("i2c: aspeed: Add multi-master use case support")
+Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-aspeed.c | 54 +++++++++++++++++++++------------
+ 1 file changed, 34 insertions(+), 20 deletions(-)
 
-Mein Mandant ist ein Staatsb=C3=BCrger Ihres Landes, der mit seiner Frau
-bei einem Autounfall ums Leben gekommen ist
-und nur Sohn. Ich werde mit 50% des Gesamtfonds berechtigt sein, w=C3=A4hre=
-nd 50%
-sein f=C3=BCr dich.
-Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere
-Informationen: eddywilliam0002gmail.com
+diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+index fa66951b05d0..7b098ff5f5dd 100644
+--- a/drivers/i2c/busses/i2c-aspeed.c
++++ b/drivers/i2c/busses/i2c-aspeed.c
+@@ -108,6 +108,12 @@
+ #define ASPEED_I2CD_S_TX_CMD				BIT(2)
+ #define ASPEED_I2CD_M_TX_CMD				BIT(1)
+ #define ASPEED_I2CD_M_START_CMD				BIT(0)
++#define ASPEED_I2CD_MASTER_CMDS_MASK					       \
++		(ASPEED_I2CD_M_STOP_CMD |				       \
++		 ASPEED_I2CD_M_S_RX_CMD_LAST |				       \
++		 ASPEED_I2CD_M_RX_CMD |					       \
++		 ASPEED_I2CD_M_TX_CMD |					       \
++		 ASPEED_I2CD_M_START_CMD)
+ 
+ /* 0x18 : I2CD Slave Device Address Register   */
+ #define ASPEED_I2CD_DEV_ADDR_MASK			GENMASK(6, 0)
+@@ -336,18 +342,19 @@ static void aspeed_i2c_do_start(struct aspeed_i2c_bus *bus)
+ 	struct i2c_msg *msg = &bus->msgs[bus->msgs_index];
+ 	u8 slave_addr = i2c_8bit_addr_from_msg(msg);
+ 
+-	bus->master_state = ASPEED_I2C_MASTER_START;
+-
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ 	/*
+ 	 * If it's requested in the middle of a slave session, set the master
+ 	 * state to 'pending' then H/W will continue handling this master
+ 	 * command when the bus comes back to the idle state.
+ 	 */
+-	if (bus->slave_state != ASPEED_I2C_SLAVE_INACTIVE)
++	if (bus->slave_state != ASPEED_I2C_SLAVE_INACTIVE) {
+ 		bus->master_state = ASPEED_I2C_MASTER_PENDING;
++		return;
++	}
+ #endif /* CONFIG_I2C_SLAVE */
+ 
++	bus->master_state = ASPEED_I2C_MASTER_START;
+ 	bus->buf_index = 0;
+ 
+ 	if (msg->flags & I2C_M_RD) {
+@@ -422,20 +429,6 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+ 		}
+ 	}
+ 
+-#if IS_ENABLED(CONFIG_I2C_SLAVE)
+-	/*
+-	 * A pending master command will be started by H/W when the bus comes
+-	 * back to idle state after completing a slave operation so change the
+-	 * master state from 'pending' to 'start' at here if slave is inactive.
+-	 */
+-	if (bus->master_state == ASPEED_I2C_MASTER_PENDING) {
+-		if (bus->slave_state != ASPEED_I2C_SLAVE_INACTIVE)
+-			goto out_no_complete;
+-
+-		bus->master_state = ASPEED_I2C_MASTER_START;
+-	}
+-#endif /* CONFIG_I2C_SLAVE */
+-
+ 	/* Master is not currently active, irq was for someone else. */
+ 	if (bus->master_state == ASPEED_I2C_MASTER_INACTIVE ||
+ 	    bus->master_state == ASPEED_I2C_MASTER_PENDING)
+@@ -462,11 +455,15 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ 		/*
+ 		 * If a peer master starts a xfer immediately after it queues a
+-		 * master command, change its state to 'pending' then H/W will
+-		 * continue the queued master xfer just after completing the
+-		 * slave mode session.
++		 * master command, clear the queued master command and change
++		 * its state to 'pending'. To simplify handling of pending
++		 * cases, it uses S/W solution instead of H/W command queue
++		 * handling.
+ 		 */
+ 		if (unlikely(irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH)) {
++			writel(readl(bus->base + ASPEED_I2C_CMD_REG) &
++				~ASPEED_I2CD_MASTER_CMDS_MASK,
++			       bus->base + ASPEED_I2C_CMD_REG);
+ 			bus->master_state = ASPEED_I2C_MASTER_PENDING;
+ 			dev_dbg(bus->dev,
+ 				"master goes pending due to a slave start\n");
+@@ -629,6 +626,14 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
+ 			irq_handled |= aspeed_i2c_master_irq(bus,
+ 							     irq_remaining);
+ 	}
++
++	/*
++	 * Start a pending master command at here if a slave operation is
++	 * completed.
++	 */
++	if (bus->master_state == ASPEED_I2C_MASTER_PENDING &&
++	    bus->slave_state == ASPEED_I2C_SLAVE_INACTIVE)
++		aspeed_i2c_do_start(bus);
+ #else
+ 	irq_handled = aspeed_i2c_master_irq(bus, irq_remaining);
+ #endif /* CONFIG_I2C_SLAVE */
+@@ -691,6 +696,15 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
+ 		     ASPEED_I2CD_BUS_BUSY_STS))
+ 			aspeed_i2c_recover_bus(bus);
+ 
++		/*
++		 * If timed out and the state is still pending, drop the pending
++		 * master command.
++		 */
++		spin_lock_irqsave(&bus->lock, flags);
++		if (bus->master_state == ASPEED_I2C_MASTER_PENDING)
++			bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
++		spin_unlock_irqrestore(&bus->lock, flags);
++
+ 		return -ETIMEDOUT;
+ 	}
+ 
+-- 
+2.23.0
 
-Vielen Dank im Voraus,
-Mr. Eddy William,
-
-
-
-Hello
-
-My name is Eddy William I am a lawyer by profession. I wish to offer you
-the next of kin to my client. You will inherit the sum of ($8.5 Million)
-dollars my client left in the bank before his death.
-
-My client is a citizen of your country who died in auto crash with his wife
-and only son. I will be entitled with 50% of the total fund while 50% will
-be for you.
-Please contact my private email here for more details:eddywilliam0002gmail.=
-com
-
-Many thanks in advance,
-Mr.Eddy William,
