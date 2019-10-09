@@ -2,435 +2,232 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7B6D1031
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2019 15:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79805D10A0
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2019 15:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731240AbfJINcu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Oct 2019 09:32:50 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42340 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731214AbfJINcu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Oct 2019 09:32:50 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x99DIv0V118137
-        for <linux-i2c@vger.kernel.org>; Wed, 9 Oct 2019 09:32:50 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vhf373qcu-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-i2c@vger.kernel.org>; Wed, 09 Oct 2019 09:32:49 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-i2c@vger.kernel.org> from <clg@kaod.org>;
-        Wed, 9 Oct 2019 14:32:47 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 9 Oct 2019 14:32:42 +0100
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x99DWf0v29425698
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Oct 2019 13:32:41 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 458B1AE05F;
-        Wed,  9 Oct 2019 13:32:41 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24AACAE04D;
-        Wed,  9 Oct 2019 13:32:41 +0000 (GMT)
-Received: from smtp.tls.ibm.com (unknown [9.101.4.1])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Oct 2019 13:32:41 +0000 (GMT)
-Received: from yukon.kaod.org (yukon.tls.ibm.com [9.101.4.25])
-        by smtp.tls.ibm.com (Postfix) with ESMTP id B3E35220121;
-        Wed,  9 Oct 2019 15:32:40 +0200 (CEST)
-Subject: Re: [PATCH 2/5] ARM: dts: aspeed: add I2C buffer mode support
-To:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>
-Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20191007231313.4700-1-jae.hyun.yoo@linux.intel.com>
- <20191007231313.4700-3-jae.hyun.yoo@linux.intel.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-Date:   Wed, 9 Oct 2019 15:32:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        id S1730238AbfJINyy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Oct 2019 09:54:54 -0400
+Received: from esa1.microchip.iphmx.com ([68.232.147.91]:46987 "EHLO
+        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729865AbfJINyx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Oct 2019 09:54:53 -0400
+Received-SPF: Pass (esa1.microchip.iphmx.com: domain of
+  Ludovic.Desroches@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
+  envelope-from="Ludovic.Desroches@microchip.com";
+  x-sender="Ludovic.Desroches@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa1.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
+  envelope-from="Ludovic.Desroches@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa1.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Ludovic.Desroches@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: 2Xl7UaHbX/XBwKudh3GNDw3t7vZb5xSHn+qO3PjAJXY1cjVXcwlc1uVVmakt6K5huOLo6QWmcf
+ blVmeni2K07fxDUzTNq62aDW2f/CZkCmlQ6on9DkCw2+c7McLMRqJFMGhHbJSNc4eQWifsD5+O
+ guWOQJUPi91uhJyZsHbxwYQOHoD2lUPQY3wmZ0v25wjGgpsJijEd27qA+Ekp2qlS+9cxrrq+if
+ bK1sBYo8EpwivEeMKpf0Dzff1qltqg7iRQ8Ij94MhY8BqkSVCQrWUdVSx1gUK2Ba8SM3qa2yp2
+ 8c4=
+X-IronPort-AV: E=Sophos;i="5.67,276,1566889200"; 
+   d="scan'208";a="53595269"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Oct 2019 06:54:52 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 9 Oct 2019 06:54:52 -0700
+Received: from localhost (10.10.85.251) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
+ Transport; Wed, 9 Oct 2019 06:54:51 -0700
+Date:   Wed, 9 Oct 2019 15:55:00 +0200
+From:   Ludovic Desroches <ludovic.desroches@microchip.com>
+To:     Kamel Bouhara <kamel.bouhara@bootlin.com>
+CC:     Wolfram Sang <wsa@the-dreams.de>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/4] i2c: at91: implement i2c bus recovery
+Message-ID: <20191009135500.ufkxcemccwfcfys7@M43218.corp.atmel.com>
+Mail-Followup-To: Kamel Bouhara <kamel.bouhara@bootlin.com>,
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20191002144658.7718-1-kamel.bouhara@bootlin.com>
+ <20191002144658.7718-3-kamel.bouhara@bootlin.com>
 MIME-Version: 1.0
-In-Reply-To: <20191007231313.4700-3-jae.hyun.yoo@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19100913-0028-0000-0000-000003A87C75
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19100913-0029-0000-0000-0000246A8138
-Message-Id: <6f015065-3a45-878d-86b2-0edf10f1f4cb@kaod.org>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-09_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1034 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-1910090127
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20191002144658.7718-3-kamel.bouhara@bootlin.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 08/10/2019 01:13, Jae Hyun Yoo wrote:
-> Byte mode currently this driver uses makes lots of interrupt call
-> which isn't good for performance and it makes the driver very
-> timing sensitive. To improve performance of the driver, this commit
-> adds buffer mode transfer support which uses I2C SRAM buffer
-> instead of using a single byte buffer.
+On Wed, Oct 02, 2019 at 04:46:56PM +0200, Kamel Bouhara wrote:
+> External E-Mail
 > 
-> AST2400:
-> It has 2 KBytes (256 Bytes x 8 pages) of I2C SRAM buffer pool from
-> 0x1e78a800 to 0x1e78afff that can be used for all busses with
-> buffer pool manipulation. To simplify implementation for supporting
-> both AST2400 and AST2500, it assigns each 128 Bytes per bus without
-> using buffer pool manipulation so total 1792 Bytes of I2C SRAM
-> buffer will be used.
 > 
-> AST2500:
-> It has 16 Bytes of individual I2C SRAM buffer per each bus and its
-> range is from 0x1e78a200 to 0x1e78a2df, so it doesn't have 'buffer
-> page selection' bit field in the Function control register, and
-> neither 'base address pointer' bit field in the Pool buffer control
-> register it has. To simplify implementation for supporting both
-> AST2400 and AST2500, it writes zeros on those register bit fields
-> but it's okay because it does nothing in AST2500.
+> Implement i2c bus recovery when slaves devices might hold SDA low.
+> In this case re-assign SCL/SDA to gpios and issue 9 dummy clock pulses
+> until the slave release SDA.
 > 
-> This commit fixes all I2C bus nodes to support buffer mode
-> transfer.
-> 
-> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 
+Hi Kamel,
 
-Reviewed-by: Cédric Le Goater <clg@kaod.org>
+Thanks for adding this new feature. As I see patches only for sama5d3 and
+sama5d4, I assume it has not been tested with a sama5d2, isn't it?
 
+I doubt it works with a sama5d2 because of the pinctrl. I also wonder if it can
+work if we add .strict = true to pinmux_ops which is something plan for the
+future...
+
+Are you able to test these points? It would be nice to be aware of
+possible side effects.
+
+Regards
+
+Ludovic
+
+> Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
 > ---
->  arch/arm/boot/dts/aspeed-g4.dtsi | 47 +++++++++++++++++++-------------
->  arch/arm/boot/dts/aspeed-g5.dtsi | 47 +++++++++++++++++++-------------
->  2 files changed, 56 insertions(+), 38 deletions(-)
+>  drivers/i2c/busses/i2c-at91-master.c | 63 ++++++++++++++++++++++++++++
+>  drivers/i2c/busses/i2c-at91.h        |  8 ++++
+>  2 files changed, 71 insertions(+)
 > 
-> diff --git a/arch/arm/boot/dts/aspeed-g4.dtsi b/arch/arm/boot/dts/aspeed-g4.dtsi
-> index dffb595d30e4..f51b016aa769 100644
-> --- a/arch/arm/boot/dts/aspeed-g4.dtsi
-> +++ b/arch/arm/boot/dts/aspeed-g4.dtsi
-> @@ -420,12 +420,21 @@
->  };
+> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+> index a3fcc35ffd3b..df5bb93f952d 100644
+> --- a/drivers/i2c/busses/i2c-at91-master.c
+> +++ b/drivers/i2c/busses/i2c-at91-master.c
+> @@ -18,11 +18,13 @@
+>  #include <linux/dma-mapping.h>
+>  #include <linux/dmaengine.h>
+>  #include <linux/err.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/pinctrl/consumer.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/platform_data/dma-atmel.h>
+>  #include <linux/pm_runtime.h>
+> @@ -768,6 +770,63 @@ static int at91_twi_configure_dma(struct at91_twi_dev *dev, u32 phy_addr)
+>  	return ret;
+>  }
 >  
->  &i2c {
-> -	i2c_ic: interrupt-controller@0 {
-> -		#interrupt-cells = <1>;
-> -		compatible = "aspeed,ast2400-i2c-ic";
-> +	i2c_gr: i2c-global-regs@0 {
-> +		compatible = "aspeed,ast2400-i2c-gr", "syscon";
->  		reg = <0x0 0x40>;
-> -		interrupts = <12>;
-> -		interrupt-controller;
+> +static void at91_prepare_twi_recovery(struct i2c_adapter *adap)
+> +{
+> +	struct at91_twi_dev *dev = i2c_get_adapdata(adap);
 > +
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges = <0x0 0x0 0x40>;
+> +	pinctrl_select_state(dev->pinctrl, dev->pinctrl_pins_gpio);
+> +}
 > +
-> +		i2c_ic: interrupt-controller@0 {
-> +			#interrupt-cells = <1>;
-> +			compatible = "aspeed,ast2400-i2c-ic";
-> +			reg = <0x0 0x4>;
-> +			interrupts = <12>;
-> +			interrupt-controller;
-> +		};
->  	};
->  
->  	i2c0: i2c-bus@40 {
-> @@ -433,7 +442,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x40 0x40>;
-> +		reg = <0x40 0x40>, <0x800 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -449,7 +458,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x80 0x40>;
-> +		reg = <0x80 0x40>, <0x880 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -465,7 +474,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0xc0 0x40>;
-> +		reg = <0xc0 0x40>, <0x900 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -482,7 +491,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x100 0x40>;
-> +		reg = <0x100 0x40>, <0x980 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -499,7 +508,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x140 0x40>;
-> +		reg = <0x140 0x40>, <0xa00 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -516,7 +525,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x180 0x40>;
-> +		reg = <0x180 0x40>, <0xa80 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -533,7 +542,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x1c0 0x40>;
-> +		reg = <0x1c0 0x40>, <0xb00 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -550,7 +559,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x300 0x40>;
-> +		reg = <0x300 0x40>, <0xb80 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -567,7 +576,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x340 0x40>;
-> +		reg = <0x340 0x40>, <0xc00 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -584,7 +593,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x380 0x40>;
-> +		reg = <0x380 0x40>, <0xc80 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -601,7 +610,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x3c0 0x40>;
-> +		reg = <0x3c0 0x40>, <0xd00 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -618,7 +627,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x400 0x40>;
-> +		reg = <0x400 0x40>, <0xd80 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -635,7 +644,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x440 0x40>;
-> +		reg = <0x440 0x40>, <0xe00 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -652,7 +661,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x480 0x40>;
-> +		reg = <0x480 0x40>, <0xe80 0x80>;
->  		compatible = "aspeed,ast2400-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> diff --git a/arch/arm/boot/dts/aspeed-g5.dtsi b/arch/arm/boot/dts/aspeed-g5.dtsi
-> index e8feb8b66a2f..cbc31ce3fab2 100644
-> --- a/arch/arm/boot/dts/aspeed-g5.dtsi
-> +++ b/arch/arm/boot/dts/aspeed-g5.dtsi
-> @@ -513,12 +513,21 @@
->  };
->  
->  &i2c {
-> -	i2c_ic: interrupt-controller@0 {
-> -		#interrupt-cells = <1>;
-> -		compatible = "aspeed,ast2500-i2c-ic";
-> +	i2c_gr: i2c-global-regs@0 {
-> +		compatible = "aspeed,ast2500-i2c-gr", "syscon";
->  		reg = <0x0 0x40>;
-> -		interrupts = <12>;
-> -		interrupt-controller;
+> +static void at91_unprepare_twi_recovery(struct i2c_adapter *adap)
+> +{
+> +	struct at91_twi_dev *dev = i2c_get_adapdata(adap);
 > +
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges = <0x0 0x0 0x40>;
+> +	pinctrl_select_state(dev->pinctrl, dev->pinctrl_pins_default);
+> +}
 > +
-> +		i2c_ic: interrupt-controller@0 {
-> +			#interrupt-cells = <1>;
-> +			compatible = "aspeed,ast2500-i2c-ic";
-> +			reg = <0x0 0x4>;
-> +			interrupts = <12>;
-> +			interrupt-controller;
-> +		};
->  	};
+> +static int at91_init_twi_recovery_info(struct platform_device *pdev,
+> +				       struct at91_twi_dev *dev)
+> +{
+> +	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+> +
+> +	dev->pinctrl = devm_pinctrl_get(&pdev->dev);
+> +	if (!dev->pinctrl || IS_ERR(dev->pinctrl)) {
+> +		dev_info(dev->dev, "can't get pinctrl, bus recovery not supported\n");
+> +		return PTR_ERR(dev->pinctrl);
+> +	}
+> +
+> +	dev->pinctrl_pins_default = pinctrl_lookup_state(dev->pinctrl,
+> +							 PINCTRL_STATE_DEFAULT);
+> +	dev->pinctrl_pins_gpio = pinctrl_lookup_state(dev->pinctrl,
+> +						      "gpio");
+> +	rinfo->sda_gpiod = devm_gpiod_get(&pdev->dev, "sda", GPIOD_IN);
+> +	if (PTR_ERR(rinfo->sda_gpiod) == -EPROBE_DEFER)
+> +		return -EPROBE_DEFER;
+> +
+> +	rinfo->scl_gpiod = devm_gpiod_get(&pdev->dev, "scl",
+> +					  GPIOD_OUT_HIGH_OPEN_DRAIN);
+> +	if (PTR_ERR(rinfo->scl_gpiod) == -EPROBE_DEFER)
+> +		return -EPROBE_DEFER;
+> +
+> +	if (IS_ERR(rinfo->sda_gpiod) ||
+> +		   IS_ERR(rinfo->scl_gpiod) ||
+> +		   IS_ERR(dev->pinctrl_pins_default) ||
+> +		   IS_ERR(dev->pinctrl_pins_gpio)) {
+> +		dev_info(&pdev->dev, "recovery information incomplete\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	dev_info(&pdev->dev, "using scl%s for recovery\n",
+> +		 rinfo->sda_gpiod ? ",sda" : "");
+> +
+> +	rinfo->prepare_recovery = at91_prepare_twi_recovery;
+> +	rinfo->unprepare_recovery = at91_unprepare_twi_recovery;
+> +	rinfo->recover_bus = i2c_generic_scl_recovery;
+> +	dev->adapter.bus_recovery_info = rinfo;
+> +
+> +	return 0;
+> +}
+> +
+>  int at91_twi_probe_master(struct platform_device *pdev,
+>  			  u32 phy_addr, struct at91_twi_dev *dev)
+>  {
+> @@ -795,6 +854,10 @@ int at91_twi_probe_master(struct platform_device *pdev,
 >  
->  	i2c0: i2c-bus@40 {
-> @@ -526,7 +535,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
+>  	at91_calc_twi_clock(dev);
 >  
-> -		reg = <0x40 0x40>;
-> +		reg = <0x40 0x40>, <0x200 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -542,7 +551,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
+> +	rc = at91_init_twi_recovery_info(pdev, dev);
+> +	if (rc == -EPROBE_DEFER)
+> +		return rc;
+> +
+>  	dev->adapter.algo = &at91_twi_algorithm;
+>  	dev->adapter.quirks = &at91_twi_quirks;
 >  
-> -		reg = <0x80 0x40>;
-> +		reg = <0x80 0x40>, <0x210 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -558,7 +567,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
+> diff --git a/drivers/i2c/busses/i2c-at91.h b/drivers/i2c/busses/i2c-at91.h
+> index 499b506f6128..b89dab55e776 100644
+> --- a/drivers/i2c/busses/i2c-at91.h
+> +++ b/drivers/i2c/busses/i2c-at91.h
+> @@ -141,6 +141,10 @@ struct at91_twi_dev {
+>  	u32 fifo_size;
+>  	struct at91_twi_dma dma;
+>  	bool slave_detected;
+> +	struct i2c_bus_recovery_info rinfo;
+> +	struct pinctrl *pinctrl;
+> +	struct pinctrl_state *pinctrl_pins_default;
+> +	struct pinctrl_state *pinctrl_pins_gpio;
+>  #ifdef CONFIG_I2C_AT91_SLAVE_EXPERIMENTAL
+>  	unsigned smr;
+>  	struct i2c_client *slave;
+> @@ -158,6 +162,10 @@ void at91_init_twi_bus_master(struct at91_twi_dev *dev);
+>  int at91_twi_probe_master(struct platform_device *pdev, u32 phy_addr,
+>  			  struct at91_twi_dev *dev);
 >  
-> -		reg = <0xc0 0x40>;
-> +		reg = <0xc0 0x40>, <0x220 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -575,7 +584,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x100 0x40>;
-> +		reg = <0x100 0x40>, <0x230 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -592,7 +601,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x140 0x40>;
-> +		reg = <0x140 0x40>, <0x240 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -609,7 +618,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x180 0x40>;
-> +		reg = <0x180 0x40>, <0x250 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -626,7 +635,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x1c0 0x40>;
-> +		reg = <0x1c0 0x40>, <0x260 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -643,7 +652,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x300 0x40>;
-> +		reg = <0x300 0x40>, <0x270 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -660,7 +669,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x340 0x40>;
-> +		reg = <0x340 0x40>, <0x280 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -677,7 +686,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x380 0x40>;
-> +		reg = <0x380 0x40>, <0x290 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -694,7 +703,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x3c0 0x40>;
-> +		reg = <0x3c0 0x40>, <0x2a0 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -711,7 +720,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x400 0x40>;
-> +		reg = <0x400 0x40>, <0x2b0 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -728,7 +737,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x440 0x40>;
-> +		reg = <0x440 0x40>, <0x2c0 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
-> @@ -745,7 +754,7 @@
->  		#size-cells = <0>;
->  		#interrupt-cells = <1>;
->  
-> -		reg = <0x480 0x40>;
-> +		reg = <0x480 0x40>, <0x2d0 0x10>;
->  		compatible = "aspeed,ast2500-i2c-bus";
->  		clocks = <&syscon ASPEED_CLK_APB>;
->  		resets = <&syscon ASPEED_RESET_I2C>;
+> +void at91_twi_prepare_recovery(struct i2c_adapter *adap);
+> +void at91_twi_unprepare_recovery(struct i2c_adapter *adap);
+> +void at91_twi_init_recovery_info(struct at91_twi_dev *dev);
+> +
+>  #ifdef CONFIG_I2C_AT91_SLAVE_EXPERIMENTAL
+>  void at91_init_twi_bus_slave(struct at91_twi_dev *dev);
+>  int at91_twi_probe_slave(struct platform_device *pdev, u32 phy_addr,
+> -- 
+> 2.23.0
 > 
-
+> 
