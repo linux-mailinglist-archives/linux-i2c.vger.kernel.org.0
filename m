@@ -2,24 +2,24 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F4AD0B05
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2019 11:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51703D0CCD
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2019 12:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbfJIJXU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Oct 2019 05:23:20 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:39622 "EHLO inva020.nxp.com"
+        id S1727769AbfJIK3D (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Oct 2019 06:29:03 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:41958 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727035AbfJIJXU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 9 Oct 2019 05:23:20 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 52A541A0221;
-        Wed,  9 Oct 2019 11:23:17 +0200 (CEST)
+        id S1726579AbfJIK3D (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 9 Oct 2019 06:29:03 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 89F322000C8;
+        Wed,  9 Oct 2019 12:29:00 +0200 (CEST)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B67BB1A0012;
-        Wed,  9 Oct 2019 11:23:09 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EE0E5200114;
+        Wed,  9 Oct 2019 12:28:52 +0200 (CEST)
 Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 86415402DA;
-        Wed,  9 Oct 2019 17:23:00 +0800 (SGT)
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 3193C402DA;
+        Wed,  9 Oct 2019 18:28:44 +0800 (SGT)
 From:   Biwen Li <biwen.li@nxp.com>
 To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, linux-imx@nxp.com, wsa@the-dreams.de,
@@ -27,9 +27,9 @@ To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, laurentiu.tudor@nxp.com,
         jiafei.pan@nxp.com, xiaobo.xie@nxp.com, Biwen Li <biwen.li@nxp.com>
-Subject: [v2] i2c: imx: support slave mode for imx I2C driver
-Date:   Wed,  9 Oct 2019 17:12:09 +0800
-Message-Id: <20191009091209.14350-1-biwen.li@nxp.com>
+Subject: [RESEND v2] i2c: imx: support slave mode for imx I2C driver
+Date:   Wed,  9 Oct 2019 18:18:02 +0800
+Message-Id: <20191009101802.19309-1-biwen.li@nxp.com>
 X-Mailer: git-send-email 2.9.5
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-i2c-owner@vger.kernel.org
@@ -48,7 +48,7 @@ Change in v2:
  1 file changed, 166 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index a3b61336fe55..aceb3d97bf5c 100644
+index a3b61336fe55..d9858bc63656 100644
 --- a/drivers/i2c/busses/i2c-imx.c
 +++ b/drivers/i2c/busses/i2c-imx.c
 @@ -203,6 +203,7 @@ struct imx_i2c_struct {
@@ -158,7 +158,7 @@ index a3b61336fe55..aceb3d97bf5c 100644
 +	} else if (status & I2SR_IAAS) { /* Addressed as a slave */
 +		if (status & I2SR_SRW) { /* Master wants to read from us*/
 +			dev_dbg(&i2c_imx->adapter.dev, "read requested");
-+			i2c_slave_event(i2c->slave, I2C_SLAVE_READ_REQUESTED, &value);
++			i2c_slave_event(i2c_imx->slave, I2C_SLAVE_READ_REQUESTED, &value);
 +
 +			/* Slave transmit */
 +			ctl |= I2CR_MTX;
