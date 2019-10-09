@@ -2,174 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E61BED1AC3
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2019 23:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2302D1CC6
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Oct 2019 01:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731103AbfJIVUg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Oct 2019 17:20:36 -0400
-Received: from mga11.intel.com ([192.55.52.93]:9237 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730490AbfJIVUg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 9 Oct 2019 17:20:36 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Oct 2019 14:20:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,277,1566889200"; 
-   d="scan'208";a="368866255"
-Received: from maru.jf.intel.com ([10.54.51.77])
-  by orsmga005.jf.intel.com with ESMTP; 09 Oct 2019 14:20:35 -0700
-From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
-        Cedric Le Goater <clg@kaod.org>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH] i2c: aspeed: fix master pending state handling
-Date:   Wed,  9 Oct 2019 14:20:34 -0700
-Message-Id: <20191009212034.20325-1-jae.hyun.yoo@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
+        id S1731103AbfJIXX5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Oct 2019 19:23:57 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:35848 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730955AbfJIXX5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Oct 2019 19:23:57 -0400
+Received: by mail-oi1-f194.google.com with SMTP id k20so3293304oih.3;
+        Wed, 09 Oct 2019 16:23:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=6G6j5//triwk3xD4Q2NO67sGsuWBX7fz1Q5CDaTM4oo=;
+        b=WNoC9+KsSCJYS2KgGc2jzWBe73iViV8sYRRbe7cg75H20IwX7qL0R4Q7IYTUloW5k1
+         uulTn+G9NELagbi4YMXLZ/cBNfbV0MZQLceeRuuVHqbb3ViQNTsgue9B1NeLe21AtqmE
+         ST3U88qZfc+QK14YB6g3jQiGAMh4Ruc51XuFtk3BlH5TkIv+fTIxK8TblbjNUdQ0ZBha
+         pB2Evwk8jbFQ/3J6dH6xz7tsbYyQ0awmEMpdDfCaCsuqQaDe8VXSQk1a0aavlckoTYcW
+         PDSMj9E4/5I7/KfLCEVuAU4Dfr+aez3xnVHwRRkiJ6HH4sd0MB8HSFQkviC5ulVqMwur
+         SluQ==
+X-Gm-Message-State: APjAAAVy/fZSogawWggmZNZo3w6jsmFdnl9p6fEZUyWdeYB9RzdnkDps
+        Ru78QAr7Ew7tRNYGJ5pymg==
+X-Google-Smtp-Source: APXvYqzJgTJPPbbxfeee2bJmvNaVr5twY5I/E/7qtdmrMr6fzT/hlgG9VuCoZMM/C4r9LgJd08JaDQ==
+X-Received: by 2002:aca:5bd5:: with SMTP id p204mr4759058oib.61.1570663435881;
+        Wed, 09 Oct 2019 16:23:55 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l12sm962125oii.48.2019.10.09.16.23.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2019 16:23:55 -0700 (PDT)
+Date:   Wed, 9 Oct 2019 18:23:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Mark Rutland <mark.rutland@arm.com>, Peter Rosin <peda@axentia.se>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: at24: convert the binding document
+ to yaml
+Message-ID: <20191009232354.GA23030@bogus>
+References: <20191002072047.20895-1-brgl@bgdev.pl>
+ <20191002072047.20895-2-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191002072047.20895-2-brgl@bgdev.pl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In case of master pending state, it should not trigger a master
-command, otherwise data could be corrupted because this H/W shares
-the same data buffer for slave and master operations. It also means
-that H/W command queue handling is unreliable because of the buffer
-sharing issue. To fix this issue, it clears command queue if a
-master command is queued in pending state to use S/W solution
-instead of H/W command queue handling. Also, it refines restarting
-mechanism of the pending master command.
+On Wed,  2 Oct 2019 09:20:46 +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> 
+> Convert the binding document for at24 EEPROMs from txt to yaml. The
+> compatible property uses a regex pattern to address all the possible
+> combinations of "vendor,model" strings.
+> 
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> [robh: rework compatible schema, fix missing allOf for $ref, fix errors in example]
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> [Bartosz: added comments explaining the compatible property]
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> ---
+>  .../devicetree/bindings/eeprom/at24.txt       |  90 +--------
+>  .../devicetree/bindings/eeprom/at24.yaml      | 185 ++++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 187 insertions(+), 90 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/eeprom/at24.yaml
+> 
 
-Fixes: 2e57b7cebb98 ("i2c: aspeed: Add multi-master use case support")
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
----
- drivers/i2c/busses/i2c-aspeed.c | 54 +++++++++++++++++++++------------
- 1 file changed, 34 insertions(+), 20 deletions(-)
+Applied, thanks.
 
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index fa66951b05d0..7b098ff5f5dd 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -108,6 +108,12 @@
- #define ASPEED_I2CD_S_TX_CMD				BIT(2)
- #define ASPEED_I2CD_M_TX_CMD				BIT(1)
- #define ASPEED_I2CD_M_START_CMD				BIT(0)
-+#define ASPEED_I2CD_MASTER_CMDS_MASK					       \
-+		(ASPEED_I2CD_M_STOP_CMD |				       \
-+		 ASPEED_I2CD_M_S_RX_CMD_LAST |				       \
-+		 ASPEED_I2CD_M_RX_CMD |					       \
-+		 ASPEED_I2CD_M_TX_CMD |					       \
-+		 ASPEED_I2CD_M_START_CMD)
- 
- /* 0x18 : I2CD Slave Device Address Register   */
- #define ASPEED_I2CD_DEV_ADDR_MASK			GENMASK(6, 0)
-@@ -336,18 +342,19 @@ static void aspeed_i2c_do_start(struct aspeed_i2c_bus *bus)
- 	struct i2c_msg *msg = &bus->msgs[bus->msgs_index];
- 	u8 slave_addr = i2c_8bit_addr_from_msg(msg);
- 
--	bus->master_state = ASPEED_I2C_MASTER_START;
--
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- 	/*
- 	 * If it's requested in the middle of a slave session, set the master
- 	 * state to 'pending' then H/W will continue handling this master
- 	 * command when the bus comes back to the idle state.
- 	 */
--	if (bus->slave_state != ASPEED_I2C_SLAVE_INACTIVE)
-+	if (bus->slave_state != ASPEED_I2C_SLAVE_INACTIVE) {
- 		bus->master_state = ASPEED_I2C_MASTER_PENDING;
-+		return;
-+	}
- #endif /* CONFIG_I2C_SLAVE */
- 
-+	bus->master_state = ASPEED_I2C_MASTER_START;
- 	bus->buf_index = 0;
- 
- 	if (msg->flags & I2C_M_RD) {
-@@ -422,20 +429,6 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
- 		}
- 	}
- 
--#if IS_ENABLED(CONFIG_I2C_SLAVE)
--	/*
--	 * A pending master command will be started by H/W when the bus comes
--	 * back to idle state after completing a slave operation so change the
--	 * master state from 'pending' to 'start' at here if slave is inactive.
--	 */
--	if (bus->master_state == ASPEED_I2C_MASTER_PENDING) {
--		if (bus->slave_state != ASPEED_I2C_SLAVE_INACTIVE)
--			goto out_no_complete;
--
--		bus->master_state = ASPEED_I2C_MASTER_START;
--	}
--#endif /* CONFIG_I2C_SLAVE */
--
- 	/* Master is not currently active, irq was for someone else. */
- 	if (bus->master_state == ASPEED_I2C_MASTER_INACTIVE ||
- 	    bus->master_state == ASPEED_I2C_MASTER_PENDING)
-@@ -462,11 +455,15 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- 		/*
- 		 * If a peer master starts a xfer immediately after it queues a
--		 * master command, change its state to 'pending' then H/W will
--		 * continue the queued master xfer just after completing the
--		 * slave mode session.
-+		 * master command, clear the queued master command and change
-+		 * its state to 'pending'. To simplify handling of pending
-+		 * cases, it uses S/W solution instead of H/W command queue
-+		 * handling.
- 		 */
- 		if (unlikely(irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH)) {
-+			writel(readl(bus->base + ASPEED_I2C_CMD_REG) &
-+				~ASPEED_I2CD_MASTER_CMDS_MASK,
-+			       bus->base + ASPEED_I2C_CMD_REG);
- 			bus->master_state = ASPEED_I2C_MASTER_PENDING;
- 			dev_dbg(bus->dev,
- 				"master goes pending due to a slave start\n");
-@@ -629,6 +626,14 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
- 			irq_handled |= aspeed_i2c_master_irq(bus,
- 							     irq_remaining);
- 	}
-+
-+	/*
-+	 * Start a pending master command at here if a slave operation is
-+	 * completed.
-+	 */
-+	if (bus->master_state == ASPEED_I2C_MASTER_PENDING &&
-+	    bus->slave_state == ASPEED_I2C_SLAVE_INACTIVE)
-+		aspeed_i2c_do_start(bus);
- #else
- 	irq_handled = aspeed_i2c_master_irq(bus, irq_remaining);
- #endif /* CONFIG_I2C_SLAVE */
-@@ -691,6 +696,15 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
- 		     ASPEED_I2CD_BUS_BUSY_STS))
- 			aspeed_i2c_recover_bus(bus);
- 
-+		/*
-+		 * If timed out and the state is still pending, drop the pending
-+		 * master command.
-+		 */
-+		spin_lock_irqsave(&bus->lock, flags);
-+		if (bus->master_state == ASPEED_I2C_MASTER_PENDING)
-+			bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
-+		spin_unlock_irqrestore(&bus->lock, flags);
-+
- 		return -ETIMEDOUT;
- 	}
- 
--- 
-2.23.0
-
+Rob
