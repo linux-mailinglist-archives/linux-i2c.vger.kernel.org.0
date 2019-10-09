@@ -2,137 +2,264 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF03D0962
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2019 10:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F4AD0B05
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2019 11:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729457AbfJIIQx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Oct 2019 04:16:53 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33016 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725914AbfJIIQx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Oct 2019 04:16:53 -0400
-Received: from pendragon.ideasonboard.com (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C16264FF;
-        Wed,  9 Oct 2019 10:16:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1570609011;
-        bh=dfCYYmVUWtdv4zBsKgd4ZyXxFLnPVhNwwZgG6/vSvNg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eVlJScwCub0+GmlR5SL43r9WCQGHvo9eM6c3APruewM0PbYssfq970wql++ufnvrm
-         IEgxyFr9psKDOwHspLVplOYzuPu0y7Z2YECA8WMOwNtwWgwBfXoF2kgdWWUaVSsdKz
-         C1trqy9ctIwsYWPhlB9Hmh24hDRxkzWbPMSNiF9w=
-Date:   Wed, 9 Oct 2019 11:16:48 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] gpu: drm: bridge: sii9234: convert to
- devm_i2c_new_dummy_device
-Message-ID: <20191009081648.GC22998@pendragon.ideasonboard.com>
-References: <20191008203322.3238-1-wsa+renesas@sang-engineering.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191008203322.3238-1-wsa+renesas@sang-engineering.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726765AbfJIJXU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Oct 2019 05:23:20 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:39622 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727035AbfJIJXU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 9 Oct 2019 05:23:20 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 52A541A0221;
+        Wed,  9 Oct 2019 11:23:17 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B67BB1A0012;
+        Wed,  9 Oct 2019 11:23:09 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 86415402DA;
+        Wed,  9 Oct 2019 17:23:00 +0800 (SGT)
+From:   Biwen Li <biwen.li@nxp.com>
+To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, wsa@the-dreams.de,
+        leoyang.li@nxp.com, aisheng.dong@nxp.com, xiaoning.wang@nxp.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, laurentiu.tudor@nxp.com,
+        jiafei.pan@nxp.com, xiaobo.xie@nxp.com, Biwen Li <biwen.li@nxp.com>
+Subject: [v2] i2c: imx: support slave mode for imx I2C driver
+Date:   Wed,  9 Oct 2019 17:12:09 +0800
+Message-Id: <20191009091209.14350-1-biwen.li@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+The patch supports slave mode for imx I2C driver
 
-Thank you for the patch.
+Signed-off-by: Biwen Li <biwen.li@nxp.com>
+---
+Change in v2:
+	- remove MACRO CONFIG_I2C_SLAVE
 
-On Tue, Oct 08, 2019 at 10:33:22PM +0200, Wolfram Sang wrote:
-> Move from the deprecated i2c_new_dummy() to devm_i2c_new_dummy_device().
-> We now get an ERRPTR which we use in error handling and we can skip
-> removal of the created devices.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+ drivers/i2c/busses/i2c-imx.c | 180 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 166 insertions(+), 14 deletions(-)
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
-> 
-> Rebased to v5.4-rc2 since last time. One of the last two users of the
-> old API, so please apply soon, so I can remove the old interface. Only
-> build tested.
-> 
->  drivers/gpu/drm/bridge/sii9234.c | 36 +++++++++++---------------------
->  1 file changed, 12 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/sii9234.c b/drivers/gpu/drm/bridge/sii9234.c
-> index 25d4ad8c7ad6..8a6c85693a88 100644
-> --- a/drivers/gpu/drm/bridge/sii9234.c
-> +++ b/drivers/gpu/drm/bridge/sii9234.c
-> @@ -841,39 +841,28 @@ static int sii9234_init_resources(struct sii9234 *ctx,
->  
->  	ctx->client[I2C_MHL] = client;
->  
-> -	ctx->client[I2C_TPI] = i2c_new_dummy(adapter, I2C_TPI_ADDR);
-> -	if (!ctx->client[I2C_TPI]) {
-> +	ctx->client[I2C_TPI] = devm_i2c_new_dummy_device(&client->dev, adapter,
-> +							 I2C_TPI_ADDR);
-> +	if (IS_ERR(ctx->client[I2C_TPI])) {
->  		dev_err(ctx->dev, "failed to create TPI client\n");
-> -		return -ENODEV;
-> +		return PTR_ERR(ctx->client[I2C_TPI]);
->  	}
->  
-> -	ctx->client[I2C_HDMI] = i2c_new_dummy(adapter, I2C_HDMI_ADDR);
-> -	if (!ctx->client[I2C_HDMI]) {
-> +	ctx->client[I2C_HDMI] = devm_i2c_new_dummy_device(&client->dev, adapter,
-> +							  I2C_HDMI_ADDR);
-> +	if (IS_ERR(ctx->client[I2C_HDMI])) {
->  		dev_err(ctx->dev, "failed to create HDMI RX client\n");
-> -		goto fail_tpi;
-> +		return PTR_ERR(ctx->client[I2C_HDMI]);
->  	}
->  
-> -	ctx->client[I2C_CBUS] = i2c_new_dummy(adapter, I2C_CBUS_ADDR);
-> -	if (!ctx->client[I2C_CBUS]) {
-> +	ctx->client[I2C_CBUS] = devm_i2c_new_dummy_device(&client->dev, adapter,
-> +							  I2C_CBUS_ADDR);
-> +	if (IS_ERR(ctx->client[I2C_CBUS])) {
->  		dev_err(ctx->dev, "failed to create CBUS client\n");
-> -		goto fail_hdmi;
-> +		return PTR_ERR(ctx->client[I2C_CBUS]);
->  	}
->  
->  	return 0;
-> -
-> -fail_hdmi:
-> -	i2c_unregister_device(ctx->client[I2C_HDMI]);
-> -fail_tpi:
-> -	i2c_unregister_device(ctx->client[I2C_TPI]);
-> -
-> -	return -ENODEV;
-> -}
-> -
-> -static void sii9234_deinit_resources(struct sii9234 *ctx)
-> -{
-> -	i2c_unregister_device(ctx->client[I2C_CBUS]);
-> -	i2c_unregister_device(ctx->client[I2C_HDMI]);
-> -	i2c_unregister_device(ctx->client[I2C_TPI]);
->  }
->  
->  static inline struct sii9234 *bridge_to_sii9234(struct drm_bridge *bridge)
-> @@ -950,7 +939,6 @@ static int sii9234_remove(struct i2c_client *client)
->  
->  	sii9234_cable_out(ctx);
->  	drm_bridge_remove(&ctx->bridge);
-> -	sii9234_deinit_resources(ctx);
->  
->  	return 0;
->  }
-
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index a3b61336fe55..aceb3d97bf5c 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -203,6 +203,7 @@ struct imx_i2c_struct {
+ 	struct pinctrl_state *pinctrl_pins_gpio;
+ 
+ 	struct imx_i2c_dma	*dma;
++	struct i2c_client	*slave;
+ };
+ 
+ static const struct imx_i2c_hwdata imx1_i2c_hwdata = {
+@@ -588,23 +589,38 @@ static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx)
+ 	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+ }
+ 
+-static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
++/* Clear interrupt flag bit */
++static void i2c_imx_clr_if_bit(struct imx_i2c_struct *i2c_imx)
+ {
+-	struct imx_i2c_struct *i2c_imx = dev_id;
+-	unsigned int temp;
++	unsigned int status;
+ 
+-	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+-	if (temp & I2SR_IIF) {
+-		/* save status register */
+-		i2c_imx->i2csr = temp;
+-		temp &= ~I2SR_IIF;
+-		temp |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
+-		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
+-		wake_up(&i2c_imx->queue);
+-		return IRQ_HANDLED;
+-	}
++	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
++	status &= ~I2SR_IIF;
++	status |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
++	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR);
++}
+ 
+-	return IRQ_NONE;
++/* Clear arbitration lost bit */
++static void i2c_imx_clr_al_bit(struct imx_i2c_struct *i2c_imx)
++{
++	unsigned int status;
++
++	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
++	status &= ~I2SR_IAL;
++	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR);
++}
++
++static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx)
++{
++	unsigned int status;
++
++	/* Save status register */
++	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
++	i2c_imx->i2csr = status | I2SR_IIF;
++
++	wake_up(&i2c_imx->queue);
++
++	return IRQ_HANDLED;
+ }
+ 
+ static int i2c_imx_dma_write(struct imx_i2c_struct *i2c_imx,
+@@ -1048,11 +1064,147 @@ static u32 i2c_imx_func(struct i2c_adapter *adapter)
+ 		| I2C_FUNC_SMBUS_READ_BLOCK_DATA;
+ }
+ 
++static void i2c_imx_slave_init(struct imx_i2c_struct *i2c_imx)
++{
++	unsigned int temp;
++
++	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
++
++	/* Set slave addr. */
++	imx_i2c_write_reg((i2c_imx->slave->addr << 1), i2c_imx, IMX_I2C_IADR);
++
++	/* Disable i2c module */
++	temp = i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN;
++	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
++
++	/* Reset status register */
++	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx,
++			  IMX_I2C_I2SR);
++
++	/* Enable module and enable interrupt from i2c module */
++	temp = i2c_imx->hwdata->i2cr_ien_opcode | I2CR_IIEN;
++	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
++
++	/* Wait controller to be stable */
++	usleep_range(50, 150);
++}
++
++static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx)
++{
++	unsigned int status, ctl;
++	u8 value;
++
++	if (!i2c_imx->slave) {
++		dev_err(&i2c_imx->adapter.dev, "cannot deal with slave irq,i2c_imx->slave is null");
++		return IRQ_NONE;
++	}
++
++	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
++	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
++	if (status & I2SR_IAL) { /* Arbitration lost */
++		i2c_imx_clr_al_bit(i2c_imx);
++	} else if (status & I2SR_IAAS) { /* Addressed as a slave */
++		if (status & I2SR_SRW) { /* Master wants to read from us*/
++			dev_dbg(&i2c_imx->adapter.dev, "read requested");
++			i2c_slave_event(i2c->slave, I2C_SLAVE_READ_REQUESTED, &value);
++
++			/* Slave transmit */
++			ctl |= I2CR_MTX;
++			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
++
++			/* Send data */
++			imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
++		} else { /* Master wants to write to us */
++			dev_dbg(&i2c_imx->adapter.dev, "write requested");
++			i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_WRITE_REQUESTED, &value);
++
++			/* Slave receive */
++			ctl &= ~I2CR_MTX;
++			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
++			/* Dummy read */
++			imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
++		}
++	} else if (!(ctl & I2CR_MTX)) { /* Receive mode */
++			if (status & I2SR_IBB) { /* No STOP signal detected */
++				ctl &= ~I2CR_MTX;
++				imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
++
++				value = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
++				i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_WRITE_RECEIVED, &value);
++			} else { /* STOP signal is detected */
++				dev_dbg(&i2c_imx->adapter.dev,
++					"STOP signal detected");
++				i2c_slave_event(i2c_imx->slave, I2C_SLAVE_STOP, &value);
++			}
++	} else if (!(status & I2SR_RXAK)) {	/* Transmit mode received ACK */
++		ctl |= I2CR_MTX;
++		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
++
++		i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_READ_PROCESSED, &value);
++
++		imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
++	} else { /* Transmit mode received NAK */
++		ctl &= ~I2CR_MTX;
++		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
++		imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
++	}
++	return IRQ_HANDLED;
++}
++
++static int i2c_imx_reg_slave(struct i2c_client *client)
++{
++	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(client->adapter);
++
++	if (i2c_imx->slave)
++		return -EBUSY;
++
++	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
++	i2c_imx->slave = client;
++
++	i2c_imx_slave_init(i2c_imx);
++
++	return 0;
++}
++
++static int i2c_imx_unreg_slave(struct i2c_client *client)
++{
++	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(client->adapter);
++
++	if (!i2c_imx->slave)
++		return -EINVAL;
++
++	i2c_imx->slave = NULL;
++
++	return 0;
++}
++
+ static const struct i2c_algorithm i2c_imx_algo = {
+ 	.master_xfer	= i2c_imx_xfer,
+ 	.functionality	= i2c_imx_func,
++	.reg_slave	= i2c_imx_reg_slave,
++	.unreg_slave	= i2c_imx_unreg_slave,
+ };
+ 
++static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
++{
++	struct imx_i2c_struct *i2c_imx = dev_id;
++	unsigned int status, ctl;
++	irqreturn_t irq_status = IRQ_NONE;
++
++	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
++	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
++
++	if (status & I2SR_IIF) {
++		i2c_imx_clr_if_bit(i2c_imx);
++		if (ctl & I2CR_MSTA)
++			irq_status = i2c_imx_master_isr(i2c_imx);
++		else
++			irq_status = i2c_imx_slave_isr(i2c_imx);
++	}
++
++	return irq_status;
++}
++
+ static int i2c_imx_probe(struct platform_device *pdev)
+ {
+ 	struct imx_i2c_struct *i2c_imx;
 -- 
-Regards,
+2.17.1
 
-Laurent Pinchart
