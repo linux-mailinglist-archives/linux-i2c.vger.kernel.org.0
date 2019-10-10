@@ -2,153 +2,238 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2075D214C
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Oct 2019 09:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EB4D2664
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Oct 2019 11:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732671AbfJJHEy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Oct 2019 03:04:54 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:47041 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727130AbfJJHEy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Oct 2019 03:04:54 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191010070452euoutp02f6f22007cf8a45d6c7603c65434df514~MNzoS7pui0319703197euoutp02e
-        for <linux-i2c@vger.kernel.org>; Thu, 10 Oct 2019 07:04:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191010070452euoutp02f6f22007cf8a45d6c7603c65434df514~MNzoS7pui0319703197euoutp02e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1570691092;
-        bh=IcYxKHi2Xesm/jrMZDTKLhWj1oXp7N/IpwBAwGTZE3I=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=l3hTUmRw7+YtnUgTw8WBf3k5wL80B4GPq0OZNEP1q1O1NqjWmqLyFrm0Tm+gUhDul
-         Tsj6brbJr9Ty0HVownVILTMZcN83SeDmNUpDS82Toz9thMqMWGwWgpywPNO33Zuybz
-         5YbM/NGv5a/EWEsplhY/SKh59Cu1eYx1d3dSrDW0=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20191010070452eucas1p2536e7967a31f117344e66eeb02092173~MNzn4iXeq0392803928eucas1p2C;
-        Thu, 10 Oct 2019 07:04:52 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 86.B6.04374.418DE9D5; Thu, 10
-        Oct 2019 08:04:52 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191010070451eucas1p1c05d72ce4c3709a82de805e38a087813~MNznRCSDS2845628456eucas1p1E;
-        Thu, 10 Oct 2019 07:04:51 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191010070451eusmtrp100dc99bc5b07635c96c8270177c2b855~MNznQVugT2943929439eusmtrp1V;
-        Thu, 10 Oct 2019 07:04:51 +0000 (GMT)
-X-AuditID: cbfec7f5-4f7ff70000001116-67-5d9ed8148456
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 59.11.04117.318DE9D5; Thu, 10
-        Oct 2019 08:04:51 +0100 (BST)
-Received: from [106.120.51.74] (unknown [106.120.51.74]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191010070450eusmtip29f024496be5d307d3780b94a00b1b2f2~MNzmyPmvx1878018780eusmtip2c;
-        Thu, 10 Oct 2019 07:04:50 +0000 (GMT)
-Subject: Re: [PATCH RESEND] gpu: drm: bridge: analogix-anx78xx: convert to
- i2c_new_dummy_device
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     linux-i2c@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-From:   Andrzej Hajda <a.hajda@samsung.com>
-Message-ID: <97111f38-0820-edf5-8316-58fef6b065cf@samsung.com>
-Date:   Thu, 10 Oct 2019 09:04:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.8.0
+        id S2388026AbfJJJc2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Oct 2019 05:32:28 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:45556 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727727AbfJJJc1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Oct 2019 05:32:27 -0400
+Received: by mail-lf1-f65.google.com with SMTP id r134so3831093lff.12
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Oct 2019 02:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C/wkh/GnDCqsZNIodlB9tNbqA2+NzVOROU2ZLiYiw8c=;
+        b=OSvqdGd/HH6LNxUtzlPkUEUmkHKnfJuBpTU/F2JyAocadOJvBk5t0cXMz76yLL4go6
+         q8m/7SsAuhyIDIVwgqaReMcIBjgl4nokwNaxHKB3Inyr+4Tdx+9B59EIbEJHwa01MSbo
+         fbIs1WZOlrgRXsMwy4NdS17VYdPXkHiPE3qgk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C/wkh/GnDCqsZNIodlB9tNbqA2+NzVOROU2ZLiYiw8c=;
+        b=B+1zXqfT0A6tqFviif2h5WW8Jn1pfPOfdHOO/J1XmDEEbMsijWeR7U9oh82sHtSuLb
+         5OKHgwROu/xFH6wNSQYt7ByErglcQzo/MP9aFxebVvqSStGRQULSjPZwOAxZMLqJEMd+
+         FMS8YDlvT0hp1D6stRT3oH5fZn3U0Wx/HjNZn2rJTNA2OxBWUisdIwZfeOSz9QNVy84F
+         NUC4YRmoR34Zkco4GT1eWUMTiVxYOFJQvYzUohB9UU/Pp/jMIXEaD8aV970dLKI9cXeQ
+         Sf4m+pcQc9ThZLB0Vn5NG7J8jsh2/OdJqlp/V7ZKSCNuSX/ouQKeBLpIhI8894eC5yZA
+         zdXA==
+X-Gm-Message-State: APjAAAUUKu6BLrBg3o94n7p450oJJAb1WAVQUXrPwpVoGNIu6xfkGgSu
+        9vPR+07Fi++KsnXoAk58K2GYKy8+sqF6WAIpfThgDw==
+X-Google-Smtp-Source: APXvYqx9u+tBp+tunckOnU4ovHq/Lwxq2h7DFjTIyiy3FX+VTE6GQYYQgqljs/51buL58PMOEZjAGOIA3WDm2xfSISc=
+X-Received: by 2002:a19:23cc:: with SMTP id j195mr5332104lfj.91.1570699944121;
+ Thu, 10 Oct 2019 02:32:24 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191008203145.3159-1-wsa+renesas@sang-engineering.com>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SaUgUYRju25mdnV1dGVfFN5WihSIlj9QfQ4dmdMyPfgRBSJvYpINr6aq7
-        alqUkprmhavQ4qampWlKeZ9gh4K6mEe5phke1BYqiZBnkZrrKPnveZ/neY8HXhKTvRc6kKGq
-        aE6tYsPkhARv6vo94Go7WhTgsVGH01n9BgG90aTFaOPSPEEPr8xgtOHnME4/1JaK6LS1RUQP
-        tRUQdEe2gs7uP39KwsyPpoiY9uVinHmcli9kenI+Cpjm5SkhM5nRLWB+lFTjzNusPJxZqNt3
-        UXxFciKYCwuN5dTuPtckynZdLxHZaBGnzcjBE9FzcToSk0B5w5uFT0Q6kpAyqgJB7YsqEV8s
-        Ilgt78P5YgHB1LBJtNOyvJaJeKEcQdKYcbuYQ6DNStx0kaQNxUKD3svcYEtdhq6U0q1JGFUj
-        gMrUWcwsEJQzrNV/JsxYSvlAf+v4Fo9TB2HgS/IWb0f5w6+pTiHvsQZDvgk3YzF1FrTGR1se
-        jNoPzXMFGI/tYcz0RGBeBtSMCJbaSrbPPgODrbUCHtvAbHfDNu8EvXmZOI8TYLIiGeOb0xA0
-        1rRivHAcOrs/CM3JsM2rq9vcedoPhqbbCTMNlBWMzlnzN1hBbpMO42kppD2Q8e4DMNnXuD3Q
-        HsoGl4gcJNfvSqbflUa/K43+/95ihFciey5GEx7CabxU3C03DRuuiVGFuAVFhNehzR/rXe9e
-        akGv/17vQBSJ5JZSpaEwQCZkYzXx4R0ISExuK32qLwiQSYPZ+NucOiJQHRPGaTqQI4nL7aV3
-        9kwpZFQIG83d5LhITr2jCkixQyJSKFJtZRdspvNXXo3b+Rf0OB/72mWhRWUeUYKklD9xjnEr
-        I+r4EafvE13uurvWFsrMrD6lb1VQW6pnXeXpl+cuuZxMaJ+tz74q9PaMKjvcYCg0VjVNBPrl
-        HnFdfPJs/Ibu/mq1ad5zZsKg+3aIbrnX6GtpeNdgXFfNhbJFe2MmFXJco2SPumBqDfsPKKmD
-        dl8DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPIsWRmVeSWpSXmKPExsVy+t/xe7rCN+bFGpz4L2HRe+4kk8X/bROZ
-        La58fc9mcfX7S2aLk2+uslh0TlzCbtHx9wujxeVdc9gsDvVFW/Sdc3fg8nh/o5XdY++3BSwe
-        sztmsnqcmHCJyWP7twesHve7jzN5PFu4nsXjQO9kFo/Pm+QCOKP0bIryS0tSFTLyi0tslaIN
-        LYz0DC0t9IxMLPUMjc1jrYxMlfTtbFJSczLLUov07RL0MvZOP81WsJW7YmL3BJYGxmWcXYyc
-        HBICJhLf/vYwdjFycQgJLGWUuLNuJzNEQlxi9/y3ULawxJ9rXWwQRa8ZJf4caWXpYuTgEBZI
-        lNgyyxikRkQgTOLqnDnsIDXMAhuYJP53f2WFaJjBKHHmSzsbSBWbgKbE3803wWxeATuJczvv
-        gm1gEVCVOH+7BSwuKhAhcXjHLEaIGkGJkzOfsIDYnAKuEhOvTAOrYRZQl/gz7xIzhC0vsf3t
-        HChbXOLWk/lMExiFZiFpn4WkZRaSlllIWhYwsqxiFEktLc5Nzy020itOzC0uzUvXS87P3cQI
-        jNxtx35u2cHY9S74EKMAB6MSD++B03NjhVgTy4orcw8xSnAwK4nwLpo1J1aINyWxsiq1KD++
-        qDQntfgQoynQcxOZpUST84FJJa8k3tDU0NzC0tDc2NzYzEJJnLdD4GCMkEB6YklqdmpqQWoR
-        TB8TB6dUA2PF37CefzeluSfXhyYtjU//36igdVX3ZL1o2af3vj2vRK+uztZVK10pXb/j9DuR
-        ZcsY6ndc+X5zj9IhRRsz8/olKpb3bz5UYFzD9ThKK9fll7Zp/K8tHw3l2+7fm83pI7rdbcJX
-        7gXTzKSnXn9YsGblqoY7mz8LVjF3L/nekXD0pD27z63529uVWIozEg21mIuKEwGJ8XFX8gIA
-        AA==
-X-CMS-MailID: 20191010070451eucas1p1c05d72ce4c3709a82de805e38a087813
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191008203222epcas4p4a9ab2b8dd10759e61ce9b1ec4547d13f
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20191008203222epcas4p4a9ab2b8dd10759e61ce9b1ec4547d13f
-References: <CGME20191008203222epcas4p4a9ab2b8dd10759e61ce9b1ec4547d13f@epcas4p4.samsung.com>
-        <20191008203145.3159-1-wsa+renesas@sang-engineering.com>
+References: <1569825869-30640-1-git-send-email-rayagonda.kokatanur@broadcom.com>
+In-Reply-To: <1569825869-30640-1-git-send-email-rayagonda.kokatanur@broadcom.com>
+From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Date:   Thu, 10 Oct 2019 15:02:13 +0530
+Message-ID: <CAHO=5PFSTomeNm4vAKyPmRZXNPBKGT4ck3mB8uOY395uwuVdNg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] i2c: iproc: Add i2c repeated start capability
+To:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Michael Cheng <ccheng@broadcom.com>,
+        Shreesha Rajashekar <shreesha.rajashekar@broadcom.com>,
+        Lori Hikichi <lori.hikichi@broadcom.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Icarus Chau <icarus.chau@broadcom.com>,
+        Ray Jui <ray.jui@broadcom.com>,
+        Shivaraj Shetty <sshetty1@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 08.10.2019 22:31, Wolfram Sang wrote:
-> Move from the deprecated i2c_new_dummy() to i2c_new_dummy_device(). We
-> now get an ERRPTR which we use in error handling.
+Hi Wolfram,
+
+Did you get a chance to review this patch.
+
+Best regards,
+Rayagonda
+
+
+On Mon, Sep 30, 2019 at 12:19 PM Rayagonda Kokatanur
+<rayagonda.kokatanur@broadcom.com> wrote:
 >
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-
-Brian's patch is already applied.
-
-
-Regards
-
-Andrzej
-
-
+> From: Lori Hikichi <lori.hikichi@broadcom.com>
+>
+> Enable handling of i2c repeated start. The current code
+> handles a multi msg i2c transfer as separate i2c bus
+> transactions. This change will now handle this case
+> using the i2c repeated start protocol. The number of msgs
+> in a transfer is limited to two, and must be a write
+> followed by a read.
+>
+> Signed-off-by: Lori Hikichi <lori.hikichi@broadcom.com>
+> Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+> Signed-off-by: Icarus Chau <icarus.chau@broadcom.com>
+> Signed-off-by: Ray Jui <ray.jui@broadcom.com>
+> Signed-off-by: Shivaraj Shetty <sshetty1@broadcom.com>
 > ---
+> changes from v1:
+>  - Address following review comments from Wolfarm Sang,
+>    Use i2c_8bit_addr_from_msg() api instead of decoding i2c_msg struct and
+>    remove check against number of i2c message as it will be taken care
+>    by core using quirks flags.
 >
-> Rebased to v5.4-rc2 since last time. One of the last two users of the
-> old API, so please apply soon, so I can remove the old interface. Only
-> build tested.
+>  drivers/i2c/busses/i2c-bcm-iproc.c | 63 ++++++++++++++++++++++++++++++--------
+>  1 file changed, 50 insertions(+), 13 deletions(-)
 >
->  drivers/gpu/drm/bridge/analogix-anx78xx.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
+> index d7fd76b..e478db7 100644
+> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
+> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+> @@ -81,6 +81,7 @@
+>  #define M_CMD_PROTOCOL_MASK          0xf
+>  #define M_CMD_PROTOCOL_BLK_WR        0x7
+>  #define M_CMD_PROTOCOL_BLK_RD        0x8
+> +#define M_CMD_PROTOCOL_PROCESS       0xa
+>  #define M_CMD_PEC_SHIFT              8
+>  #define M_CMD_RD_CNT_SHIFT           0
+>  #define M_CMD_RD_CNT_MASK            0xff
+> @@ -675,13 +676,20 @@ static int bcm_iproc_i2c_xfer_wait(struct bcm_iproc_i2c_dev *iproc_i2c,
+>         return 0;
+>  }
 >
-> diff --git a/drivers/gpu/drm/bridge/analogix-anx78xx.c b/drivers/gpu/drm/bridge/analogix-anx78xx.c
-> index 3c7cc5af735c..be7756280e41 100644
-> --- a/drivers/gpu/drm/bridge/analogix-anx78xx.c
-> +++ b/drivers/gpu/drm/bridge/analogix-anx78xx.c
-> @@ -1350,10 +1350,10 @@ static int anx78xx_i2c_probe(struct i2c_client *client,
->  
->  	/* Map slave addresses of ANX7814 */
->  	for (i = 0; i < I2C_NUM_ADDRESSES; i++) {
-> -		anx78xx->i2c_dummy[i] = i2c_new_dummy(client->adapter,
-> +		anx78xx->i2c_dummy[i] = i2c_new_dummy_device(client->adapter,
->  						anx78xx_i2c_addresses[i] >> 1);
-> -		if (!anx78xx->i2c_dummy[i]) {
-> -			err = -ENOMEM;
-> +		if (IS_ERR(anx78xx->i2c_dummy[i])) {
-> +			err = PTR_ERR(anx78xx->i2c_dummy[i]);
->  			DRM_ERROR("Failed to reserve I2C bus %02x\n",
->  				  anx78xx_i2c_addresses[i]);
->  			goto err_unregister_i2c;
-
-
+> -static int bcm_iproc_i2c_xfer_single_msg(struct bcm_iproc_i2c_dev *iproc_i2c,
+> -                                        struct i2c_msg *msg)
+> +/*
+> + * If 'process_call' is true, then this is a multi-msg transfer that requires
+> + * a repeated start between the messages.
+> + * More specifically, it must be a write (reg) followed by a read (data).
+> + * The i2c quirks are set to enforce this rule.
+> + */
+> +static int bcm_iproc_i2c_xfer_internal(struct bcm_iproc_i2c_dev *iproc_i2c,
+> +                                       struct i2c_msg *msgs, bool process_call)
+>  {
+>         int i;
+>         u8 addr;
+>         u32 val, tmp, val_intr_en;
+>         unsigned int tx_bytes;
+> +       struct i2c_msg *msg = &msgs[0];
+>
+>         /* check if bus is busy */
+>         if (!!(iproc_i2c_rd_reg(iproc_i2c,
+> @@ -707,14 +715,29 @@ static int bcm_iproc_i2c_xfer_single_msg(struct bcm_iproc_i2c_dev *iproc_i2c,
+>                         val = msg->buf[i];
+>
+>                         /* mark the last byte */
+> -                       if (i == msg->len - 1)
+> -                               val |= BIT(M_TX_WR_STATUS_SHIFT);
+> +                       if (!process_call && (i == msg->len - 1))
+> +                               val |= 1 << M_TX_WR_STATUS_SHIFT;
+>
+>                         iproc_i2c_wr_reg(iproc_i2c, M_TX_OFFSET, val);
+>                 }
+>                 iproc_i2c->tx_bytes = tx_bytes;
+>         }
+>
+> +       /* Process the read message if this is process call */
+> +       if (process_call) {
+> +               msg++;
+> +               iproc_i2c->msg = msg;  /* point to second msg */
+> +
+> +               /*
+> +                * The last byte to be sent out should be a slave
+> +                * address with read operation
+> +                */
+> +               addr = i2c_8bit_addr_from_msg(msg);
+> +               /* mark it the last byte out */
+> +               val = addr | (1 << M_TX_WR_STATUS_SHIFT);
+> +               iproc_i2c_wr_reg(iproc_i2c, M_TX_OFFSET, val);
+> +       }
+> +
+>         /* mark as incomplete before starting the transaction */
+>         if (iproc_i2c->irq)
+>                 reinit_completion(&iproc_i2c->done);
+> @@ -733,7 +756,7 @@ static int bcm_iproc_i2c_xfer_single_msg(struct bcm_iproc_i2c_dev *iproc_i2c,
+>          * underrun interrupt, which will be triggerred when the TX FIFO is
+>          * empty. When that happens we can then pump more data into the FIFO
+>          */
+> -       if (!(msg->flags & I2C_M_RD) &&
+> +       if (!process_call && !(msg->flags & I2C_M_RD) &&
+>             msg->len > iproc_i2c->tx_bytes)
+>                 val_intr_en |= BIT(IE_M_TX_UNDERRUN_SHIFT);
+>
+> @@ -743,6 +766,8 @@ static int bcm_iproc_i2c_xfer_single_msg(struct bcm_iproc_i2c_dev *iproc_i2c,
+>          */
+>         val = BIT(M_CMD_START_BUSY_SHIFT);
+>         if (msg->flags & I2C_M_RD) {
+> +               u32 protocol;
+> +
+>                 iproc_i2c->rx_bytes = 0;
+>                 if (msg->len > M_RX_FIFO_MAX_THLD_VALUE)
+>                         iproc_i2c->thld_bytes = M_RX_FIFO_THLD_VALUE;
+> @@ -758,7 +783,10 @@ static int bcm_iproc_i2c_xfer_single_msg(struct bcm_iproc_i2c_dev *iproc_i2c,
+>                 /* enable the RX threshold interrupt */
+>                 val_intr_en |= BIT(IE_M_RX_THLD_SHIFT);
+>
+> -               val |= (M_CMD_PROTOCOL_BLK_RD << M_CMD_PROTOCOL_SHIFT) |
+> +               protocol = process_call ?
+> +                               M_CMD_PROTOCOL_PROCESS : M_CMD_PROTOCOL_BLK_RD;
+> +
+> +               val |= (protocol << M_CMD_PROTOCOL_SHIFT) |
+>                        (msg->len << M_CMD_RD_CNT_SHIFT);
+>         } else {
+>                 val |= (M_CMD_PROTOCOL_BLK_WR << M_CMD_PROTOCOL_SHIFT);
+> @@ -774,17 +802,24 @@ static int bcm_iproc_i2c_xfer(struct i2c_adapter *adapter,
+>                               struct i2c_msg msgs[], int num)
+>  {
+>         struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(adapter);
+> -       int ret, i;
+> +       bool process_call = false;
+> +       int ret;
+>
+> -       /* go through all messages */
+> -       for (i = 0; i < num; i++) {
+> -               ret = bcm_iproc_i2c_xfer_single_msg(iproc_i2c, &msgs[i]);
+> -               if (ret) {
+> -                       dev_dbg(iproc_i2c->device, "xfer failed\n");
+> -                       return ret;
+> +       if (num == 2) {
+> +               /* Repeated start, use process call */
+> +               process_call = true;
+> +               if (msgs[1].flags & I2C_M_NOSTART) {
+> +                       dev_err(iproc_i2c->device, "Invalid repeated start\n");
+> +                       return -EOPNOTSUPP;
+>                 }
+>         }
+>
+> +       ret = bcm_iproc_i2c_xfer_internal(iproc_i2c, msgs, process_call);
+> +       if (ret) {
+> +               dev_dbg(iproc_i2c->device, "xfer failed\n");
+> +               return ret;
+> +       }
+> +
+>         return num;
+>  }
+>
+> @@ -806,6 +841,8 @@ static uint32_t bcm_iproc_i2c_functionality(struct i2c_adapter *adap)
+>  };
+>
+>  static struct i2c_adapter_quirks bcm_iproc_i2c_quirks = {
+> +       .flags = I2C_AQ_COMB_WRITE_THEN_READ,
+> +       .max_comb_1st_msg_len = M_TX_RX_FIFO_SIZE,
+>         .max_read_len = M_RX_MAX_READ_LEN,
+>  };
+>
+> --
+> 1.9.1
+>
