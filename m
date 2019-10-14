@@ -2,139 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4A2D6171
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Oct 2019 13:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F095DD6184
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Oct 2019 13:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730598AbfJNLhB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Oct 2019 07:37:01 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:47766 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730178AbfJNLhA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 14 Oct 2019 07:37:00 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 23E3A200194;
-        Mon, 14 Oct 2019 13:36:58 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3914320019B;
-        Mon, 14 Oct 2019 13:36:54 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 1F90E402E2;
-        Mon, 14 Oct 2019 19:36:49 +0800 (SGT)
+        id S1730300AbfJNLlx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Oct 2019 07:41:53 -0400
+Received: from mail-eopbgr80051.outbound.protection.outlook.com ([40.107.8.51]:50188
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730097AbfJNLlx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 14 Oct 2019 07:41:53 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WTgvOHjksyttS4WlJGCy+0cW0SAIV7rcBPNIN6ehRqVZwVsR733rrt+XXm7PnhcnuN3+KqGNmSsGtYTNGZQ3ccSQhB+8D2KR+wZ3OAnIiDtjt5vFi2BzGUEo/QCHnAwkBIx/49TJ4+OTkJ1sjp4WPCZdVbjHfCJziXSKZb0WtMnOmBRiEzkHQ/0PxqWJ9FW5eaDfquwgxZRYrbE/YNzb7UiwUaSCZG8JnRjyfNKqYOiCye25NgfZjRozZ4V0zncdGdF59F/CYw2P5/9chcWMDkZjwQj/Mel4UGsvh2lBD18n+EQDy0LKSVyiklCXepRdKVSkD+rM0M7sCgZq7w5Ziw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CpQ0ex7Gexb73flNztlZhgJp92i/JtfdchJxgGIlgoM=;
+ b=JEojb1MpD7uWcpaRDRMX2JrtRDDSnuW9nlBmFepctH1sqx8IEJS9yU+HCBNY310UudLe+Ww4qRfH8enD/ZrJzMJO/me/wAjRLzrXh+QUDbynMlaNUHv7WzHz3MnirUFa76c0q+COaNovekAEiePQOkOtaE7o1T3vEl9RF6bVzn8XHSPcYFKyLe5+KtLXz2prp5+KXVgLXHSxoB1fhwKn7O2ixN/CvNdYU58Y3TcrlnAZXK0svLFt+q0P223n+lmiIvOqoCzam630XicTfgOhcm9wGZGZLhejTpqDJPG+Sy/QDmk5aqbsbf8VBIpN7WSK9IKA/LidXn29rMX4STNXCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CpQ0ex7Gexb73flNztlZhgJp92i/JtfdchJxgGIlgoM=;
+ b=M32b82oBL1s0AO+rKTIC1ZVGx4gAtEl68QCbZ+H1hfonFHfAZjmB2Lgoe9YmGLL3TptJjvcwS2rx7aAfZxE80MQ1OWxOoTzmH0oFGibSUqgpApwIx9oeWSmWSUlmOWvK8k+PlTTgUQ+aHl5VfJRk78d539xv121CvBvFfR2WbKw=
+Received: from DB7PR04MB4490.eurprd04.prod.outlook.com (52.135.138.150) by
+ DB7PR04MB5179.eurprd04.prod.outlook.com (20.176.234.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.17; Mon, 14 Oct 2019 11:41:48 +0000
+Received: from DB7PR04MB4490.eurprd04.prod.outlook.com
+ ([fe80::7804:558a:eef9:cc11]) by DB7PR04MB4490.eurprd04.prod.outlook.com
+ ([fe80::7804:558a:eef9:cc11%7]) with mapi id 15.20.2347.023; Mon, 14 Oct 2019
+ 11:41:48 +0000
 From:   Biwen Li <biwen.li@nxp.com>
-To:     peda@axentia.se, leoyang.li@nxp.com, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Biwen Li <biwen.li@nxp.com>
-Subject: [PATCH 2/2] i2c: mux: pca954x: replace property i2c-mux-idle-disconnect
-Date:   Mon, 14 Oct 2019 19:25:58 +0800
-Message-Id: <20191014112558.3881-2-biwen.li@nxp.com>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20191014112558.3881-1-biwen.li@nxp.com>
+To:     Biwen Li <biwen.li@nxp.com>, "peda@axentia.se" <peda@axentia.se>,
+        Leo Li <leoyang.li@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: RE: [PATCH 1/2] dt-bindings: i2c: replace property
+ i2c-mux-idle-disconnect
+Thread-Topic: [PATCH 1/2] dt-bindings: i2c: replace property
+ i2c-mux-idle-disconnect
+Thread-Index: AQHVgoOwZ96O8ZHg3EmhfguQXwsY4adaAvCw
+Date:   Mon, 14 Oct 2019 11:41:48 +0000
+Message-ID: <DB7PR04MB44906CD36066595307E7848C8F900@DB7PR04MB4490.eurprd04.prod.outlook.com>
 References: <20191014112558.3881-1-biwen.li@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+In-Reply-To: <20191014112558.3881-1-biwen.li@nxp.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=biwen.li@nxp.com; 
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f8dc5766-533b-484c-0e0c-08d7509b7f9e
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: DB7PR04MB5179:|DB7PR04MB5179:
+x-ms-exchange-purlcount: 1
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB7PR04MB5179A7BAC004CBFB8798683C8F900@DB7PR04MB5179.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 01901B3451
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(376002)(396003)(366004)(136003)(199004)(189003)(7696005)(102836004)(6506007)(186003)(76176011)(26005)(11346002)(446003)(256004)(476003)(486006)(44832011)(71190400001)(71200400001)(2906002)(3846002)(6116002)(66066001)(25786009)(14454004)(99286004)(7736002)(305945005)(74316002)(966005)(478600001)(2501003)(6436002)(54906003)(66946007)(76116006)(66476007)(66556008)(64756008)(66446008)(4326008)(316002)(110136005)(9686003)(6306002)(8936002)(229853002)(55016002)(6246003)(33656002)(8676002)(81156014)(81166006)(5660300002)(52536014)(86362001);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB5179;H:DB7PR04MB4490.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IfmxJLOhqWX2tigvCIBdS6Zw0szEaxtJrlZ7WqGqr3oHxy/ZKZ3XaUlBPsidtTARYoKg2herTC2YaLCpoDoyF+JsL/jA7pIQqwOgR/nNsKBYOiXgLTZibFI99AVdsn8wc/FV45lacy+1Rqu8S1BGbTGVMy3WWdtJ3cPwjvbdH78DfJRW1aiSACCiYjwc2fD882SGKjNQAUz2OzO5kg43M1Me+ve6j1XerS8EREfP1z/gxq9ncVZ7URGrubqVTKQbskTh9LuvKqJ6y3IOMeS05p+D+j+m4y9wn2rDx9Gz/Fn+gQm68C9g+1yZbZc5A6XLJVgqUDWyRww56cHhKqD3ZQ0K1Gjx7j+QrPLgfa62oRHBFvXbmlZSy9WTPvWML9WkE6qenkfuU5TPfb9Xk2YXkXFH371i+bCh/5dQTL70KaphRud39VExn4waPViBg2ahRveWA/dZWqeYpZm964C3nA==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8dc5766-533b-484c-0e0c-08d7509b7f9e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Oct 2019 11:41:48.6532
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hyYCe9KoBOwEWsSayQgFKzFukjdPiqFHI+6J1QSDDYiGqjF9y3fG2LP6ZZs7lKdto3xBdHjU1ZNqqoD6hGuAAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5179
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This replaces property i2c-mux-idle-disconnect with idle-state
+Hi Peter, Rob
 
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 44 ++++++++++++++++++++---------
- 1 file changed, 31 insertions(+), 13 deletions(-)
+This patch is a new method for https://lore.kernel.org/patchwork/patch/1132=
+445/
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 923aa3a5a3dc..a330929c4d67 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -86,7 +86,7 @@ struct pca954x {
- 
- 	u8 last_chan;		/* last register value */
- 	/* MUX_IDLE_AS_IS, MUX_IDLE_DISCONNECT or >= 0 for channel */
--	s8 idle_state;
-+	s32 idle_state;
- 
- 	struct i2c_client *client;
- 
-@@ -256,7 +256,7 @@ static int pca954x_deselect_mux(struct i2c_mux_core *muxc, u32 chan)
- {
- 	struct pca954x *data = i2c_mux_priv(muxc);
- 	struct i2c_client *client = data->client;
--	s8 idle_state;
-+	s32 idle_state;
- 
- 	idle_state = READ_ONCE(data->idle_state);
- 	if (idle_state >= 0)
-@@ -411,7 +411,6 @@ static int pca954x_probe(struct i2c_client *client,
- 	struct i2c_adapter *adap = client->adapter;
- 	struct device *dev = &client->dev;
- 	struct device_node *np = dev->of_node;
--	bool idle_disconnect_dt;
- 	struct gpio_desc *gpio;
- 	struct i2c_mux_core *muxc;
- 	struct pca954x *data;
-@@ -462,22 +461,31 @@ static int pca954x_probe(struct i2c_client *client,
- 		}
- 	}
- 
-+	if (of_property_read_u32(np, "idle-state", &data->idle_state))
-+		data->idle_state = MUX_IDLE_AS_IS;
-+
- 	/* Write the mux register at addr to verify
- 	 * that the mux is in fact present. This also
- 	 * initializes the mux to disconnected state.
- 	 */
--	if (i2c_smbus_write_byte(client, 0) < 0) {
-+	if (data->idle_state >= 0){
-+		data->last_chan = data->idle_state;
-+		/* Always enable multiplexer */
-+		ret = i2c_smbus_write_byte(client, data->last_chan |
-+				(data->chip->muxtype == pca954x_ismux ?
-+				 data->chip->enable : 0));
-+	}
-+	else{
-+		data->last_chan = 0;		   /* force the first selection */
-+		/* Disconnect multiplexer */
-+		ret = i2c_smbus_write_byte(client, data->last_chan);
-+	}
-+
-+	if (ret < 0) {
- 		dev_warn(dev, "probe failed\n");
- 		return -ENODEV;
- 	}
- 
--	data->last_chan = 0;		   /* force the first selection */
--	data->idle_state = MUX_IDLE_AS_IS;
--
--	idle_disconnect_dt = np &&
--		of_property_read_bool(np, "i2c-mux-idle-disconnect");
--	if (idle_disconnect_dt)
--		data->idle_state = MUX_IDLE_DISCONNECT;
- 
- 	ret = pca954x_irq_setup(muxc);
- 	if (ret)
-@@ -531,8 +539,18 @@ static int pca954x_resume(struct device *dev)
- 	struct i2c_mux_core *muxc = i2c_get_clientdata(client);
- 	struct pca954x *data = i2c_mux_priv(muxc);
- 
--	data->last_chan = 0;
--	return i2c_smbus_write_byte(client, 0);
-+	if (data->idle_state >= 0){
-+		data->last_chan = data->idle_state;
-+		/* Always enable multiplexer */
-+		return i2c_smbus_write_byte(client, data->last_chan |
-+				(data->chip->muxtype == pca954x_ismux ?
-+				 data->chip->enable : 0));
-+	}
-+	else{
-+		data->last_chan = 0;
-+		/* Disconnect multiplexer */
-+		return i2c_smbus_write_byte(client, data->last_chan);
-+	}
- }
- #endif
- 
--- 
-2.17.1
+Best Regards,
+Biwen Li
+>=20
+> This replaces property i2c-mux-idle-disconnect with idle-state
+>=20
+> Signed-off-by: Biwen Li <biwen.li@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.txt | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.txt
+> b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.txt
+> index 30ac6a60f041..f2db517b1635 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.txt
+> @@ -25,9 +25,7 @@ Required Properties:
+>  Optional Properties:
+>=20
+>    - reset-gpios: Reference to the GPIO connected to the reset input.
+> -  - i2c-mux-idle-disconnect: Boolean; if defined, forces mux to disconne=
+ct
+> all
+> -    children in idle state. This is necessary for example, if there are =
+several
+> -    multiplexers on the bus and the devices behind them use same I2C
+> addresses.
+> +  - idle-state: Please refer to
+> Documentation/devicetree/bindings/mux/mux-controller.txt
+>    - interrupts: Interrupt mapping for IRQ.
+>    - interrupt-controller: Marks the device node as an interrupt controll=
+er.
+>    - #interrupt-cells : Should be two.
+> --
+> 2.17.1
 
