@@ -2,445 +2,181 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A39D6BC5
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2019 00:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D654D6D92
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2019 05:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726143AbfJNWxI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Oct 2019 18:53:08 -0400
-Received: from mail.kmu-office.ch ([178.209.48.109]:32902 "EHLO
-        mail.kmu-office.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726023AbfJNWxH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Oct 2019 18:53:07 -0400
-Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
-        by mail.kmu-office.ch (Postfix) with ESMTPSA id D2B375C2B8E;
-        Tue, 15 Oct 2019 00:53:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
-        t=1571093582;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0ikWvkfhOc4sgAuTFnYkPeFJJI5YHkbKrwEKsY0DxWg=;
-        b=b3TREBCyg7Ie12QOPqe071B3pYMbqWPZsRJtUThrCLUvwRehB0XTGskv5eJ3CvlMmbiD7Y
-        4DHIRdpyYBB5alQgnoqajYvan+AMRzKFmSc8GSba5q0sWNuY6tv9KfGkBhMKvxqmMC7U76
-        fy1Spnv6AS96srFmlmKiqX7akrWDg4k=
+        id S1726426AbfJODR5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Oct 2019 23:17:57 -0400
+Received: from mail-eopbgr20076.outbound.protection.outlook.com ([40.107.2.76]:7907
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726259AbfJODR5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 14 Oct 2019 23:17:57 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MeDISvn++maYwZS6IlEcCOtq10JQGap3e4ho3gB8phelroWinhCy48gqmfsW0gEdtqhDS7LWYCSZmZYuQaSUG9GhyC4LCL55t3ZioVMaMwSG2hZx/UVsuHB0PDPa/p8Vuzj+7MUHg4YjLxYQZ81ympjYNBk2i3HiaTYEwt8TnhPxO3AaE3tc56+YM1o6UnTaPXdtyYer3THQM8xk4vdUvvdTkCFzJ0XePQa1vFvFcRr7+Z71+3eItuom1gs1HZRnmSgGcqNmb/WCPfJdn5aPhgUbD/LHdZtpG7CUkrxXUEEhLDdztVGYEyU7zLEbntjqIVT1dL5jRuxzyZ4j9O8Ytw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=izfC476EAjfnPTI7M+wVRRQlivECgHaHjOzZl7jJA3Q=;
+ b=lhCE8/9M1Ex4nPUhCMWIhan2De95LOVt3GNUqJO4Sxqx0WUrmgEkWv/IUzNy44buZMR0EspByX1g42LrTisgKcBPu66vhcQCvN43sLMVi+PiWqZr+ybMNK/M0r637jWuvOCzassmho0BrZ+AxJezKts7VP5ZmwS33C6k3NvwBWEp7k4KuZ1mQ18xxxrjTpLHsmHejHLE4UKgTN8FRLeYTCMgk/kA7XWa6WpzopRI3t40noZrazIWqA3g0cXr4alUOLxqMbBuTKZ8HjDG7EMiMTJBnM3NjXpprNGazqkID5s+WFHnnhQoIr9QHGnrnUrgGqTNLtgWy6sZOK9WwKS8ww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=izfC476EAjfnPTI7M+wVRRQlivECgHaHjOzZl7jJA3Q=;
+ b=KUubWXhtamc3f2ropf2TYJk+zZPYvY/D9TDMp+DD8fHH6ktopiHJGR/G+knH6EvokcQOFzhoZfMZo7pVmn3rJGvkXeJk3AhsJpvGZkltAooNHXhXhXXgnxH4kv4IRu80EgZF/FrNxumZxFcaaEvX63cWuCIjb8WBz+E+RjAZ55A=
+Received: from DB7PR04MB4490.eurprd04.prod.outlook.com (52.135.138.150) by
+ DB7PR04MB4699.eurprd04.prod.outlook.com (20.176.233.28) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.16; Tue, 15 Oct 2019 03:17:51 +0000
+Received: from DB7PR04MB4490.eurprd04.prod.outlook.com
+ ([fe80::7804:558a:eef9:cc11]) by DB7PR04MB4490.eurprd04.prod.outlook.com
+ ([fe80::7804:558a:eef9:cc11%7]) with mapi id 15.20.2347.023; Tue, 15 Oct 2019
+ 03:17:50 +0000
+From:   Biwen Li <biwen.li@nxp.com>
+To:     Peter Rosin <peda@axentia.se>, Leo Li <leoyang.li@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: RE: [EXT] Re: [PATCH 2/2] i2c: mux: pca954x: replace property
+ i2c-mux-idle-disconnect
+Thread-Topic: [EXT] Re: [PATCH 2/2] i2c: mux: pca954x: replace property
+ i2c-mux-idle-disconnect
+Thread-Index: AQHVgoOwKvhf+7tOikalLMCcBtmwHadaTLYAgAC7wsA=
+Date:   Tue, 15 Oct 2019 03:17:50 +0000
+Message-ID: <DB7PR04MB44906BE3732F777C4DBB67538F930@DB7PR04MB4490.eurprd04.prod.outlook.com>
+References: <20191014112558.3881-1-biwen.li@nxp.com>
+ <20191014112558.3881-2-biwen.li@nxp.com>
+ <f3d1e68e-dfb0-b820-7797-1f0d95fa72dd@axentia.se>
+In-Reply-To: <f3d1e68e-dfb0-b820-7797-1f0d95fa72dd@axentia.se>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=biwen.li@nxp.com; 
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 763337d0-094f-4ac8-7b85-08d7511e42ee
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: DB7PR04MB4699:|DB7PR04MB4699:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB7PR04MB4699B5D170631C8441055B458F930@DB7PR04MB4699.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 01917B1794
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(136003)(366004)(39860400002)(346002)(189003)(199004)(81156014)(81166006)(8936002)(44832011)(8676002)(486006)(9686003)(186003)(7736002)(6436002)(64756008)(66476007)(66556008)(76176011)(66946007)(74316002)(53546011)(66446008)(6506007)(7696005)(66066001)(76116006)(99286004)(476003)(446003)(11346002)(6246003)(86362001)(229853002)(478600001)(2501003)(25786009)(33656002)(4326008)(3846002)(6116002)(14444005)(52536014)(71190400001)(71200400001)(256004)(316002)(14454004)(102836004)(305945005)(55016002)(26005)(54906003)(110136005)(5660300002)(2906002)(4001150100001);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4699;H:DB7PR04MB4490.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +Aht1EnaEg25MM9G5ZSyBtJLFK2X0IcITkZIC6DWZt1qICJ0R7mdWDAGqO/nVdybmxDw7F3LF/Mumqtrm42s0oWoSM8yMQYtF1TepwYaveCoyAEAvNtuE7qnNi9SqAIiU/I28w+oESk9EyiqvY4g/yjMpblgm16+2prBZjjHfNU6DUAmNnuXpykZ683+5EvShlC1n2amyjEbfI7CiWJ3dpZh2Nc3ZdMjiJK9OS2gEaACFB9Sb2bd/EzolwEOtxKLq5dSr3qq+xWaSuKp+iGaMYPfCaLRsyfN3RtzvOlyP/NGfMackN3Myb+/+t2OCRn15XcUmku44tSDVxBj6uq7syYbyXpPuHTzWOCiMYx0KOlkGANyAGzNVE6kYo6i1Qv1UAZoGzDEwFEVclWBcUvkuBHZDaVNyY2E9GbdLhiDpQo=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 15 Oct 2019 00:53:02 +0200
-From:   Stefan Agner <stefan@agner.ch>
-To:     Stefan Lengfeld <contact@stefanchrist.eu>
-Cc:     linux-i2c@vger.kernel.org, wsa+renesas@sang-engineering.com,
-        linux-i2c-owner@vger.kernel.org, s.riedmueller@phytec.de
-Subject: Re: [RFC PATCH 3/3] i2c: imx: implement master_xfer_atomic callback
-In-Reply-To: <20190415213432.8972-4-contact@stefanchrist.eu>
-References: <20190403124019.8947-1-wsa+renesas@sang-engineering.com>
- <20190415213432.8972-1-contact@stefanchrist.eu>
- <20190415213432.8972-4-contact@stefanchrist.eu>
-Message-ID: <1a7f76f33460dd75c52b95a3a9354817@agner.ch>
-X-Sender: stefan@agner.ch
-User-Agent: Roundcube Webmail/1.3.9
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 763337d0-094f-4ac8-7b85-08d7511e42ee
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Oct 2019 03:17:50.9219
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iSOs4JxZ7hmGKHh76mda+/yz6HGDojrcCLBZmVqSko4itXGUpWx6tTp6880aN9MA3Lig350SViEbbcomQMBkGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4699
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi all Stefans, :-)
-
-From the other thread:
-> Currently, no.
-> 
-> I'm doing the kernel work voluntary in my spare time and right now there
-> is not much free time left. I did not submit my master_xfer_atomic patch
-> for the i.MX driver, because I feared breaking the DMA path or other
-> non-i.MX6 platforms for that driver.
-
-Does not look to bad from what I can tell.
-
-> So if you like to invest some time to polish the patch or rewrite it
-> completely, feel free to do it. If you submit a patch for review, I
-> would definitely find some time to test it on my i.MX6 boards and give
-> my Tested-by.
-> 
-> I'm also cc'ing Stefan Riedmueller, because he is currently maintaining
-> the i.MX6 boards at Phytec and is maybe also interested in upstreaming
-> the code.
-
-Not sure yet I can find the time to pick it up. Just looked through the
-code and saw some things I probably would look at/address.
-
-
-On 2019-04-15 23:34, Stefan Lengfeld wrote:
-> Rework the read and write code paths in the driver to support operation
-> in atomic contexts. To achieve this, the driver must not rely on IRQs
-> and not call schedule(), e.g. via a sleep routine, in these cases.
-> 
-> With this patch the driver supports normal operation, DMA transfers and
-> now the polling mode or also called sleep-free or IRQ-less operation. It
-> makes the code not simpler or easier to read, but atomic I2C transfers
-> are needed on some hardware configurations, e.g. to trigger reboots on
-> an external PMIC chip.
-> 
-> The patch is tested on a phyCORE-i.MX6 Solo board.
-> 
-> Signed-off-by: Stefan Lengfeld <contact@stefanchrist.eu>
-> ---
->  drivers/i2c/busses/i2c-imx.c | 128 +++++++++++++++++++++++++----------
->  1 file changed, 93 insertions(+), 35 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index 42fed40198a0..180d803007aa 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -409,7 +409,7 @@ static void i2c_imx_dma_free(struct imx_i2c_struct *i2c_imx)
->  	dma->chan_using = NULL;
->  }
->  
-> -static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy)
-> +static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int
-> for_busy, bool atomic)
->  {
->  	unsigned long orig_jiffies = jiffies;
->  	unsigned int temp;
-> @@ -439,15 +439,39 @@ static int i2c_imx_bus_busy(struct
-> imx_i2c_struct *i2c_imx, int for_busy)
->  				"<%s> I2C bus is busy\n", __func__);
->  			return -ETIMEDOUT;
->  		}
-> -		schedule();
-> +		if (!atomic)
-> +			schedule();
-> +		else
-> +			udelay(100);
->  	}
->  
->  	return 0;
->  }
->  
-> -static int i2c_imx_trx_complete(struct imx_i2c_struct *i2c_imx)
-> +static int i2c_imx_trx_complete(struct imx_i2c_struct *i2c_imx, bool atomic)
->  {
-> -	wait_event_timeout(i2c_imx->queue, i2c_imx->i2csr & I2SR_IIF, HZ / 10);
-> +	if (!atomic) {
-> +		wait_event_timeout(i2c_imx->queue, i2c_imx->i2csr & I2SR_IIF, HZ / 10);
-> +	} else {
-> +		int counter = 0;
-> +
-> +		while (1) {
-> +			unsigned int reg;
-> +
-> +			reg = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
-> +			i2c_imx->i2csr = reg;
-> +			if (reg & I2SR_IIF)
-> +				break;
-> +
-> +			if (counter > 1000) {
-> +				dev_err(&i2c_imx->adapter.dev, "<%s> TXR timeout\n", __func__);
-> +				return -EIO;
-> +			}
-> +			udelay(100);
-> +			counter++;
-> +		}
-> +		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
-
-I think this can be done much nicer with readl_poll_timeout_atomic().
-
-> +	}
->  
->  	if (unlikely(!(i2c_imx->i2csr & I2SR_IIF))) {
->  		dev_dbg(&i2c_imx->adapter.dev, "<%s> Timeout\n", __func__);
-> @@ -525,7 +549,7 @@ static int i2c_imx_clk_notifier_call(struct
-> notifier_block *nb,
->  	return NOTIFY_OK;
->  }
->  
-> -static int i2c_imx_start(struct imx_i2c_struct *i2c_imx)
-> +static int i2c_imx_start(struct imx_i2c_struct *i2c_imx, bool atomic)
->  {
->  	unsigned int temp = 0;
->  	int result;
-> @@ -538,23 +562,32 @@ static int i2c_imx_start(struct imx_i2c_struct *i2c_imx)
->  	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode, i2c_imx, IMX_I2C_I2CR);
->  
->  	/* Wait controller to be stable */
-> -	usleep_range(50, 150);
-> +	if (!atomic)
-> +		usleep_range(50, 150);
-> +	else
-> +		udelay(50);
->  
->  	/* Start I2C transaction */
->  	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  	temp |= I2CR_MSTA;
-
-Should we disable interrupts already here?
-
->  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> -	result = i2c_imx_bus_busy(i2c_imx, 1);
-> +	result = i2c_imx_bus_busy(i2c_imx, 1, atomic);
->  	if (result)
->  		return result;
->  
-> -	temp |= I2CR_IIEN | I2CR_MTX | I2CR_TXAK;
-> +	if (!atomic) {
-> +		temp |= I2CR_IIEN | I2CR_MTX | I2CR_TXAK;
-> +	} else {
-> +		temp |= I2CR_MTX | I2CR_TXAK;
-> +		temp &= ~I2CR_IIEN; /* Disable interrupt */
-> +	}
-> +
->  	temp &= ~I2CR_DMAEN;
->  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
->  	return result;
->  }
->  
-> -static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx)
-> +static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx, bool atomic)
->  {
->  	unsigned int temp = 0;
->  
-> @@ -576,7 +609,7 @@ static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx)
->  	}
->  
->  	if (!i2c_imx->stopped)
-> -		i2c_imx_bus_busy(i2c_imx, 0);
-> +		i2c_imx_bus_busy(i2c_imx, 0, atomic);
->  
->  	/* Disable I2C controller */
->  	temp = i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN,
-> @@ -657,7 +690,7 @@ static int i2c_imx_dma_write(struct imx_i2c_struct *i2c_imx,
->  	/* The last data byte must be transferred by the CPU. */
->  	imx_i2c_write_reg(msgs->buf[msgs->len-1],
->  				i2c_imx, IMX_I2C_I2DR);
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, false);
->  	if (result)
->  		return result;
->  
-> @@ -716,7 +749,7 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
->  
->  	msgs->buf[msgs->len-2] = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
->  	/* read n byte data */
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, false);
->  	if (result)
->  		return result;
->  
-> @@ -729,7 +762,7 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
->  		temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  		temp &= ~(I2CR_MSTA | I2CR_MTX);
->  		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> -		i2c_imx_bus_busy(i2c_imx, 0);
-> +		i2c_imx_bus_busy(i2c_imx, 0, false);
->  	} else {
->  		/*
->  		 * For i2c master receiver repeat restart operation like:
-> @@ -747,7 +780,7 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
->  	return 0;
->  }
->  
-> -static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs)
-> +static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct
-> i2c_msg *msgs, bool atomic)
->  {
->  	int i, result;
->  
-> @@ -756,7 +789,7 @@ static int i2c_imx_write(struct imx_i2c_struct
-> *i2c_imx, struct i2c_msg *msgs)
->  
->  	/* write slave address */
->  	imx_i2c_write_reg(i2c_8bit_addr_from_msg(msgs), i2c_imx, IMX_I2C_I2DR);
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, atomic);
->  	if (result)
->  		return result;
->  	result = i2c_imx_acked(i2c_imx);
-> @@ -770,7 +803,7 @@ static int i2c_imx_write(struct imx_i2c_struct
-> *i2c_imx, struct i2c_msg *msgs)
->  			"<%s> write byte: B%d=0x%X\n",
->  			__func__, i, msgs->buf[i]);
->  		imx_i2c_write_reg(msgs->buf[i], i2c_imx, IMX_I2C_I2DR);
-> -		result = i2c_imx_trx_complete(i2c_imx);
-> +		result = i2c_imx_trx_complete(i2c_imx, atomic);
->  		if (result)
->  			return result;
->  		result = i2c_imx_acked(i2c_imx);
-> @@ -780,7 +813,7 @@ static int i2c_imx_write(struct imx_i2c_struct
-> *i2c_imx, struct i2c_msg *msgs)
->  	return 0;
->  }
->  
-> -static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct
-> i2c_msg *msgs, bool is_lastmsg)
-> +static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct
-> i2c_msg *msgs, bool is_lastmsg, bool atomic)
->  {
->  	int i, result;
->  	unsigned int temp;
-> @@ -793,7 +826,7 @@ static int i2c_imx_read(struct imx_i2c_struct
-> *i2c_imx, struct i2c_msg *msgs, bo
->  
->  	/* write slave address */
->  	imx_i2c_write_reg(i2c_8bit_addr_from_msg(msgs), i2c_imx, IMX_I2C_I2DR);
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, atomic);
->  	if (result)
->  		return result;
->  	result = i2c_imx_acked(i2c_imx);
-> @@ -826,7 +859,7 @@ static int i2c_imx_read(struct imx_i2c_struct
-> *i2c_imx, struct i2c_msg *msgs, bo
->  	for (i = 0; i < msgs->len; i++) {
->  		u8 len = 0;
->  
-> -		result = i2c_imx_trx_complete(i2c_imx);
-> +		result = i2c_imx_trx_complete(i2c_imx, atomic);
->  		if (result)
->  			return result;
->  		/*
-> @@ -854,7 +887,7 @@ static int i2c_imx_read(struct imx_i2c_struct
-> *i2c_imx, struct i2c_msg *msgs, bo
->  				temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  				temp &= ~(I2CR_MSTA | I2CR_MTX);
->  				imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> -				i2c_imx_bus_busy(i2c_imx, 0);
-> +				i2c_imx_bus_busy(i2c_imx, 0, atomic);
->  			} else {
->  				/*
->  				 * For i2c master receiver repeat restart operation like:
-> @@ -885,8 +918,8 @@ static int i2c_imx_read(struct imx_i2c_struct
-> *i2c_imx, struct i2c_msg *msgs, bo
->  	return 0;
->  }
->  
-> -static int i2c_imx_xfer(struct i2c_adapter *adapter,
-> -						struct i2c_msg *msgs, int num)
-> +static int i2c_imx_xfer_common(struct i2c_adapter *adapter,
-> +			       struct i2c_msg *msgs, int num, bool atomic)
->  {
->  	unsigned int i, temp;
->  	int result;
-> @@ -900,11 +933,11 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
->  		goto out;
->  
->  	/* Start I2C transfer */
-> -	result = i2c_imx_start(i2c_imx);
-> +	result = i2c_imx_start(i2c_imx, atomic);
->  	if (result) {
->  		if (i2c_imx->adapter.bus_recovery_info) {
->  			i2c_recover_bus(&i2c_imx->adapter);
-
-Hm, it seems that the generic recovery mechanism uses
-gpiod_get_value_cansleep, so we cannot allow to recover when using
-atomic mode...
-
-> -			result = i2c_imx_start(i2c_imx);
-> +			result = i2c_imx_start(i2c_imx, atomic);
->  		}
->  	}
->  
-> @@ -922,7 +955,7 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
->  			temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  			temp |= I2CR_RSTA;
->  			imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> -			result = i2c_imx_bus_busy(i2c_imx, 1);
-> +			result = i2c_imx_bus_busy(i2c_imx, 1, atomic);
->  			if (result)
->  				goto fail0;
->  		}
-> @@ -946,13 +979,17 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
->  			(temp & I2SR_SRW ? 1 : 0), (temp & I2SR_IIF ? 1 : 0),
->  			(temp & I2SR_RXAK ? 1 : 0));
->  #endif
-> -		if (msgs[i].flags & I2C_M_RD)
-> -			result = i2c_imx_read(i2c_imx, &msgs[i], is_lastmsg);
-> -		else {
-> -			if (i2c_imx->dma && msgs[i].len >= DMA_THRESHOLD)
-> -				result = i2c_imx_dma_write(i2c_imx, &msgs[i]);
-> -			else
-> -				result = i2c_imx_write(i2c_imx, &msgs[i]);
-> +		if (msgs[i].flags & I2C_M_RD) {
-> +			result = i2c_imx_read(i2c_imx, &msgs[i], is_lastmsg, atomic);
-> +		} else {
-> +			if (!atomic) {
-> +				if (i2c_imx->dma && msgs[i].len >= DMA_THRESHOLD)
-> +					result = i2c_imx_dma_write(i2c_imx, &msgs[i]);
-> +				else
-> +					result = i2c_imx_write(i2c_imx, &msgs[i], atomic);
-> +			} else {
-> +				result = i2c_imx_write(i2c_imx, &msgs[i], atomic);
-> +			}
->  		}
->  		if (result)
->  			goto fail0;
-> @@ -960,7 +997,7 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
->  
->  fail0:
->  	/* Stop I2C transfer */
-> -	i2c_imx_stop(i2c_imx);
-> +	i2c_imx_stop(i2c_imx, atomic);
->  
->  	pm_runtime_mark_last_busy(i2c_imx->adapter.dev.parent);
->  	pm_runtime_put_autosuspend(i2c_imx->adapter.dev.parent);
-> @@ -972,6 +1009,18 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
->  	return (result < 0) ? result : num;
->  }
->  
-> +static int i2c_imx_xfer(struct i2c_adapter *adapter,
-> +			struct i2c_msg *msgs, int num)
-> +{
-> +	return i2c_imx_xfer_common(adapter, msgs, num, false);
-> +}
-> +
-> +static int i2c_imx_xfer_atomic(struct i2c_adapter *adapter,
-> +			       struct i2c_msg *msgs, int num)
-> +{
-> +	return i2c_imx_xfer_common(adapter, msgs, num, true);
-> +}
-> +
->  static void i2c_imx_prepare_recovery(struct i2c_adapter *adap)
->  {
->  	struct imx_i2c_struct *i2c_imx;
-> @@ -1044,8 +1093,9 @@ static u32 i2c_imx_func(struct i2c_adapter *adapter)
->  }
->  
->  static const struct i2c_algorithm i2c_imx_algo = {
-> -	.master_xfer	= i2c_imx_xfer,
-> -	.functionality	= i2c_imx_func,
-> +	.master_xfer = i2c_imx_xfer,
-> +	.master_xfer_atomic = i2c_imx_xfer_atomic,
-> +	.functionality = i2c_imx_func,
->  };
->  
->  static int i2c_imx_probe(struct platform_device *pdev)
-> @@ -1123,6 +1173,14 @@ static int i2c_imx_probe(struct platform_device *pdev)
->  	/* Set up platform driver data */
->  	platform_set_drvdata(pdev, i2c_imx);
->  
-> +	/*
-> +	 * Driver's PM callbacks are safe to be called in atomic contexts.
-> +	 * Providing this information to the PM subsystem is required for the
-> +	 * 'master_xfer_atomic' implementation that calls PM routines in IRQ
-> +	 * less/atomic contexts.
-> +	 */
-> +	pm_runtime_irq_safe(&pdev->dev);
-
-Hm, I guess this is about getting around scheduling in rpm_suspend.
-
-This does not look particular pretty as it also affects regular
-operation.
-
-I wonder if its really necessary. It seems that the i2c-omap.c driver
-uses runtime PM as well, but does not use pm_runtime_irq_safe.
-
-From what I can tell pm_runtime_put_autosuspend sets RPM_ASYNC, and
-according to the documentation in __pm_runtime_suspend, it can be called
-when RPM_ASYNC is set...
-
---
-Stefan
-
-
-> +
->  	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
->  	pm_runtime_use_autosuspend(&pdev->dev);
->  	pm_runtime_set_active(&pdev->dev);
+PiANCj4gQ2F1dGlvbjogRVhUIEVtYWlsDQo+IA0KPiBPbiAyMDE5LTEwLTE0IDEzOjI1LCBCaXdl
+biBMaSB3cm90ZToNCj4gPiBUaGlzIHJlcGxhY2VzIHByb3BlcnR5IGkyYy1tdXgtaWRsZS1kaXNj
+b25uZWN0IHdpdGggaWRsZS1zdGF0ZQ0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogQml3ZW4gTGkg
+PGJpd2VuLmxpQG54cC5jb20+DQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvaTJjL211eGVzL2kyYy1t
+dXgtcGNhOTU0eC5jIHwgNDQNCj4gPiArKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLQ0KPiA+
+ICAxIGZpbGUgY2hhbmdlZCwgMzEgaW5zZXJ0aW9ucygrKSwgMTMgZGVsZXRpb25zKC0pDQo+ID4N
+Cj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pMmMvbXV4ZXMvaTJjLW11eC1wY2E5NTR4LmMNCj4g
+PiBiL2RyaXZlcnMvaTJjL211eGVzL2kyYy1tdXgtcGNhOTU0eC5jDQo+ID4gaW5kZXggOTIzYWEz
+YTVhM2RjLi5hMzMwOTI5YzRkNjcgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9pMmMvbXV4ZXMv
+aTJjLW11eC1wY2E5NTR4LmMNCj4gPiArKysgYi9kcml2ZXJzL2kyYy9tdXhlcy9pMmMtbXV4LXBj
+YTk1NHguYw0KPiA+IEBAIC04Niw3ICs4Niw3IEBAIHN0cnVjdCBwY2E5NTR4IHsNCj4gPg0KPiA+
+ICAgICAgIHU4IGxhc3RfY2hhbjsgICAgICAgICAgIC8qIGxhc3QgcmVnaXN0ZXIgdmFsdWUgKi8N
+Cj4gPiAgICAgICAvKiBNVVhfSURMRV9BU19JUywgTVVYX0lETEVfRElTQ09OTkVDVCBvciA+PSAw
+IGZvciBjaGFubmVsICovDQo+ID4gLSAgICAgczggaWRsZV9zdGF0ZTsNCj4gPiArICAgICBzMzIg
+aWRsZV9zdGF0ZTsNCj4gPg0KPiA+ICAgICAgIHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQ7DQo+
+ID4NCj4gPiBAQCAtMjU2LDcgKzI1Niw3IEBAIHN0YXRpYyBpbnQgcGNhOTU0eF9kZXNlbGVjdF9t
+dXgoc3RydWN0DQo+ID4gaTJjX211eF9jb3JlICptdXhjLCB1MzIgY2hhbikgIHsNCj4gPiAgICAg
+ICBzdHJ1Y3QgcGNhOTU0eCAqZGF0YSA9IGkyY19tdXhfcHJpdihtdXhjKTsNCj4gPiAgICAgICBz
+dHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50ID0gZGF0YS0+Y2xpZW50Ow0KPiA+IC0gICAgIHM4IGlk
+bGVfc3RhdGU7DQo+ID4gKyAgICAgczMyIGlkbGVfc3RhdGU7DQo+ID4NCj4gPiAgICAgICBpZGxl
+X3N0YXRlID0gUkVBRF9PTkNFKGRhdGEtPmlkbGVfc3RhdGUpOw0KPiA+ICAgICAgIGlmIChpZGxl
+X3N0YXRlID49IDApDQo+ID4gQEAgLTQxMSw3ICs0MTEsNiBAQCBzdGF0aWMgaW50IHBjYTk1NHhf
+cHJvYmUoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwNCj4gPiAgICAgICBzdHJ1Y3QgaTJjX2Fk
+YXB0ZXIgKmFkYXAgPSBjbGllbnQtPmFkYXB0ZXI7DQo+ID4gICAgICAgc3RydWN0IGRldmljZSAq
+ZGV2ID0gJmNsaWVudC0+ZGV2Ow0KPiA+ICAgICAgIHN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAgPSBk
+ZXYtPm9mX25vZGU7DQo+ID4gLSAgICAgYm9vbCBpZGxlX2Rpc2Nvbm5lY3RfZHQ7DQo+ID4gICAg
+ICAgc3RydWN0IGdwaW9fZGVzYyAqZ3BpbzsNCj4gPiAgICAgICBzdHJ1Y3QgaTJjX211eF9jb3Jl
+ICptdXhjOw0KPiA+ICAgICAgIHN0cnVjdCBwY2E5NTR4ICpkYXRhOw0KPiA+IEBAIC00NjIsMjIg
+KzQ2MSwzMSBAQCBzdGF0aWMgaW50IHBjYTk1NHhfcHJvYmUoc3RydWN0IGkyY19jbGllbnQNCj4g
+KmNsaWVudCwNCj4gPiAgICAgICAgICAgICAgIH0NCj4gPiAgICAgICB9DQo+ID4NCj4gPiArICAg
+ICBpZiAob2ZfcHJvcGVydHlfcmVhZF91MzIobnAsICJpZGxlLXN0YXRlIiwgJmRhdGEtPmlkbGVf
+c3RhdGUpKQ0KPiA+ICsgICAgICAgICAgICAgZGF0YS0+aWRsZV9zdGF0ZSA9IE1VWF9JRExFX0FT
+X0lTOw0KPiA+ICsNCj4gPiAgICAgICAvKiBXcml0ZSB0aGUgbXV4IHJlZ2lzdGVyIGF0IGFkZHIg
+dG8gdmVyaWZ5DQo+ID4gICAgICAgICogdGhhdCB0aGUgbXV4IGlzIGluIGZhY3QgcHJlc2VudC4g
+VGhpcyBhbHNvDQo+ID4gICAgICAgICogaW5pdGlhbGl6ZXMgdGhlIG11eCB0byBkaXNjb25uZWN0
+ZWQgc3RhdGUuDQo+ID4gICAgICAgICovDQo+ID4gLSAgICAgaWYgKGkyY19zbWJ1c193cml0ZV9i
+eXRlKGNsaWVudCwgMCkgPCAwKSB7DQo+ID4gKyAgICAgaWYgKGRhdGEtPmlkbGVfc3RhdGUgPj0g
+MCl7DQo+IA0KPiBTcGFjZSBiZWZvcmUgew0KT2theSwgZ290IGl0LCBJIHdpbGwgYWRkIGl0IGlu
+IHYyLg0KPiANCj4gPiArICAgICAgICAgICAgIGRhdGEtPmxhc3RfY2hhbiA9IGRhdGEtPmlkbGVf
+c3RhdGU7DQo+IA0KPiBkYXRhLT5sYXN0X2NoYW4gc2hvdWxkIGhhdmUgdGhlIGFjdHVhbCByZWdp
+c3RlciB2YWx1ZSwgaS5lLiAodW50ZXN0ZWQpDQpPa2F5LCBnb3QgaXQsIEkgd2lsbCBhZGp1c3Qg
+aXQgaW4gdjIuDQo+IA0KPiAgICAgICAgICAgICAgICAgaWYgKGRhdGEtPmNoaXAtPm11eHR5cGUg
+PT0gcGNhOTU0eF9pc211eCkNCj4gICAgICAgICAgICAgICAgICAgICAgICAgZGF0YS0+bGFzdF9j
+aGFuID0gZGF0YS0+aWRsZV9zdGF0ZSB8DQo+IGRhdGEtPmNoaXAtPmVuYWJsZTsNCj4gICAgICAg
+ICAgICAgICAgIGVsc2UNCj4gICAgICAgICAgICAgICAgICAgICAgICAgZGF0YS0+bGFzdF9jaGFu
+ID0gMSA8PCBkYXRhLT5pZGxlX3N0YXRlOw0KPiANCj4gICAgICAgICAgICAgICAgIHJldCA9IGky
+Y19zbWJ1c193cml0ZV9ieXRlKGNsaWVudCwgZGF0YS0+bGFzdF9jaGFuKTsNCj4gDQo+IEJ1dCBz
+aW5jZSB0aGlzIHJlZ3ZhbCBjYWxjdWxhdGlvbiBpcyBub3cgbmVlZGVkIGluIHRocmVlIHBsYWNl
+cywgaXQgc2hvdWxkIGJlDQo+IG1vdmVkIHRvIGEgaGVscGVyIGZ1bmN0aW9uLg0KWW91IGFyZSBy
+aWdodCwgSSB3aWxsIGFkZCBhIGhlbHBlciBmdW5jdGlvbiBpbiB2Mi4NCj4gDQo+ID4gKyAgICAg
+ICAgICAgICAvKiBBbHdheXMgZW5hYmxlIG11bHRpcGxleGVyICovDQo+ID4gKyAgICAgICAgICAg
+ICByZXQgPSBpMmNfc21idXNfd3JpdGVfYnl0ZShjbGllbnQsIGRhdGEtPmxhc3RfY2hhbiB8DQo+
+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKGRhdGEtPmNoaXAtPm11eHR5cGUgPT0N
+Cj4gcGNhOTU0eF9pc211eCA/DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRh
+dGEtPmNoaXAtPmVuYWJsZSA6IDApKTsNCj4gPiArICAgICB9DQo+ID4gKyAgICAgZWxzZXsNCj4g
+DQo+IFNwYWNlIGJlZm9yZSB7DQpHb3QgaXQsIEkgd2lsbCBhZGQgaXQgaW4gdjIuDQo+IA0KPiBO
+YXR1cmFsbHksIHlvdSBoYXZlIHRoZSBleGFjdCBzYW1lIGlzc3VlcyBpbiB0aGUgcGNhOTU0eF9y
+ZXN1bWUgaHVuaywNCj4gYmVsb3cuDQpHb3QgaXQNCj4gDQo+ID4gKyAgICAgICAgICAgICBkYXRh
+LT5sYXN0X2NoYW4gPSAwOyAgICAgICAgICAgICAgIC8qIGZvcmNlIHRoZSBmaXJzdA0KPiBzZWxl
+Y3Rpb24gKi8NCj4gPiArICAgICAgICAgICAgIC8qIERpc2Nvbm5lY3QgbXVsdGlwbGV4ZXIgKi8N
+Cj4gPiArICAgICAgICAgICAgIHJldCA9IGkyY19zbWJ1c193cml0ZV9ieXRlKGNsaWVudCwgZGF0
+YS0+bGFzdF9jaGFuKTsNCj4gPiArICAgICB9DQo+ID4gKw0KPiA+ICsgICAgIGlmIChyZXQgPCAw
+KSB7DQo+ID4gICAgICAgICAgICAgICBkZXZfd2FybihkZXYsICJwcm9iZSBmYWlsZWRcbiIpOw0K
+PiA+ICAgICAgICAgICAgICAgcmV0dXJuIC1FTk9ERVY7DQo+ID4gICAgICAgfQ0KPiA+DQo+ID4g
+LSAgICAgZGF0YS0+bGFzdF9jaGFuID0gMDsgICAgICAgICAgICAgICAvKiBmb3JjZSB0aGUgZmly
+c3Qgc2VsZWN0aW9uICovDQo+ID4gLSAgICAgZGF0YS0+aWRsZV9zdGF0ZSA9IE1VWF9JRExFX0FT
+X0lTOw0KPiA+IC0NCj4gPiAtICAgICBpZGxlX2Rpc2Nvbm5lY3RfZHQgPSBucCAmJg0KPiA+IC0g
+ICAgICAgICAgICAgb2ZfcHJvcGVydHlfcmVhZF9ib29sKG5wLCAiaTJjLW11eC1pZGxlLWRpc2Nv
+bm5lY3QiKTsNCj4gPiAtICAgICBpZiAoaWRsZV9kaXNjb25uZWN0X2R0KQ0KPiA+IC0gICAgICAg
+ICAgICAgZGF0YS0+aWRsZV9zdGF0ZSA9IE1VWF9JRExFX0RJU0NPTk5FQ1Q7DQo+IA0KPiBJbiBj
+YXNlIHRoZSBpZGxlLXN0YXRlIHByb3BlcnR5IGlzIG1pc3NpbmcsIHlvdSBuZWVkIHRvIGZhbGwg
+YmFjayB0byB0aGUgb2xkDQo+IGJlaGF2aW9yIGFuZCBoYW5kbGUgaTJjLW11eC1pZGxlLWRpc2Nv
+bm5lY3QgYXMgYmVmb3JlLg0KT2theSwgZ290IGl0LCBJIHdpbGwgYWRkIGl0IGluIHYyLg0KPiAN
+Cj4gQ2hlZXJzLA0KPiBQZXRlcg0KPiANCj4gPg0KPiA+ICAgICAgIHJldCA9IHBjYTk1NHhfaXJx
+X3NldHVwKG11eGMpOw0KPiA+ICAgICAgIGlmIChyZXQpDQo+ID4gQEAgLTUzMSw4ICs1MzksMTgg
+QEAgc3RhdGljIGludCBwY2E5NTR4X3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ID4gICAg
+ICAgc3RydWN0IGkyY19tdXhfY29yZSAqbXV4YyA9IGkyY19nZXRfY2xpZW50ZGF0YShjbGllbnQp
+Ow0KPiA+ICAgICAgIHN0cnVjdCBwY2E5NTR4ICpkYXRhID0gaTJjX211eF9wcml2KG11eGMpOw0K
+PiA+DQo+ID4gLSAgICAgZGF0YS0+bGFzdF9jaGFuID0gMDsNCj4gPiAtICAgICByZXR1cm4gaTJj
+X3NtYnVzX3dyaXRlX2J5dGUoY2xpZW50LCAwKTsNCj4gPiArICAgICBpZiAoZGF0YS0+aWRsZV9z
+dGF0ZSA+PSAwKXsNCj4gPiArICAgICAgICAgICAgIGRhdGEtPmxhc3RfY2hhbiA9IGRhdGEtPmlk
+bGVfc3RhdGU7DQo+ID4gKyAgICAgICAgICAgICAvKiBBbHdheXMgZW5hYmxlIG11bHRpcGxleGVy
+ICovDQo+ID4gKyAgICAgICAgICAgICByZXR1cm4gaTJjX3NtYnVzX3dyaXRlX2J5dGUoY2xpZW50
+LCBkYXRhLT5sYXN0X2NoYW4gfA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIChk
+YXRhLT5jaGlwLT5tdXh0eXBlID09DQo+IHBjYTk1NHhfaXNtdXggPw0KPiA+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICBkYXRhLT5jaGlwLT5lbmFibGUgOiAwKSk7DQo+ID4gKyAgICAg
+fQ0KPiA+ICsgICAgIGVsc2V7DQo+ID4gKyAgICAgICAgICAgICBkYXRhLT5sYXN0X2NoYW4gPSAw
+Ow0KPiA+ICsgICAgICAgICAgICAgLyogRGlzY29ubmVjdCBtdWx0aXBsZXhlciAqLw0KPiA+ICsg
+ICAgICAgICAgICAgcmV0dXJuIGkyY19zbWJ1c193cml0ZV9ieXRlKGNsaWVudCwgZGF0YS0+bGFz
+dF9jaGFuKTsNCj4gPiArICAgICB9DQo+ID4gIH0NCj4gPiAgI2VuZGlmDQo+ID4NCj4gPg0KDQo=
