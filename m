@@ -2,63 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AADBED7663
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2019 14:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05678D76FD
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2019 15:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725810AbfJOMV6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Oct 2019 08:21:58 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:31054 "EHLO
+        id S1727329AbfJONDe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Oct 2019 09:03:34 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:10150 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727383AbfJOMV6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Oct 2019 08:21:58 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9FCFmPp020760;
-        Tue, 15 Oct 2019 14:21:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=wOAgDQIJnROZAAJDyr+SKVedGsOlBqMHloQwYXC54zg=;
- b=hbMN9KfBnbPvy/ENhoWH7nIonEnhqLmUYAPxlpPks/UlEic8jbAl5cVYd+aZuBuLdM4C
- b7ftUgxaN4UbOgBhRBm03r0EE0AHUMkNeBlifUJpSmOHdpfEMzfAXgA2SATjcp9NSXD9
- ExbS9cAXItEO2DkPj9uxOQdlTUkPp5CwtXaKJd6/zvzfXi4ibNVZGw+EivPSH0+xLEDb
- buSqd+kwRC60njyxokkAektWw1bBHYialOyfZVKw7AszIhE6EftQmmwSWKq/fNm8klye
- FV9rVspCXZOTv02SySdFxGFY91bYhgrGeBH4NVPx/dbgLriZ8IMzXGTeYwTSq9FYn60Y 7Q== 
+        by vger.kernel.org with ESMTP id S1726236AbfJONDd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Oct 2019 09:03:33 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9FD19iU028733;
+        Tue, 15 Oct 2019 15:03:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=VHS+BxJ9bqoSYa+xH/IlFL4fMa0/Sv3mZVO6EbWq22c=;
+ b=0Lj58A9xHYrxKdris99TmusVli4cURzyHTxxKuLM7DKc4aq6Qe/2a5y2kZbCOr/QZwTY
+ OPdz2wDm6ziwgXKcppkiWLBH33LxmcGX6nbjkUtd6yS7Hvoywy9xZX12wnd0yxlyyGcR
+ dfAzfeLIzRZcvxat5fWjIUqgE3ahLoqEc8WsbWEbWmYJ/MxaAf22DYvrDpSre0WdZ7Fb
+ PzHVq1hX780fNsak25CV4sMZnKuiYLzS11o7nSi5rxCiyXn4+eveluM2VK5cEkU5IGta
+ xajiHrem7QQCYzcu0eAZ75UyryHND4Opg/FlSSFIYHwDbPsFBbJ0bAr3FJR3E3HXZpga 8A== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2vk4kx0375-1
+        by mx07-00178001.pphosted.com with ESMTP id 2vk4a18aw0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Oct 2019 14:21:51 +0200
+        Tue, 15 Oct 2019 15:03:10 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9C251100034;
-        Tue, 15 Oct 2019 14:21:50 +0200 (CEST)
-Received: from Webmail-eu.st.com (Safex1hubcas21.st.com [10.75.90.44])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8E2952C7E81;
-        Tue, 15 Oct 2019 14:21:50 +0200 (CEST)
-Received: from SAFEX1HUBCAS23.st.com (10.75.90.46) by SAFEX1HUBCAS21.st.com
- (10.75.90.44) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 15 Oct
- 2019 14:21:50 +0200
-Received: from [10.48.0.192] (10.48.0.192) by webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 15 Oct 2019 14:21:50
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BCB6F10002A;
+        Tue, 15 Oct 2019 15:03:09 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8EA7D206463;
+        Tue, 15 Oct 2019 15:03:09 +0200 (CEST)
+Received: from localhost (10.75.127.49) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 15 Oct 2019 15:03:09
  +0200
-Subject: Re: [PATCH] i2c: i2c-stm32f7: fix a race in slave mode with
- arbitration loss irq
-To:     <wsa@the-dreams.de>
-CC:     <pierre-yves.mordret@st.com>, <alain.volmat@st.com>,
-        <alexandre.torgue@st.com>, <linux-i2c@vger.kernel.org>,
+From:   Alain Volmat <alain.volmat@st.com>
+To:     <wsa@the-dreams.de>, <robh+dt@kernel.org>
+CC:     <mark.rutland@arm.com>, <pierre-yves.mordret@st.com>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1569919869-3218-1-git-send-email-fabrice.gasnier@st.com>
-From:   Fabrice Gasnier <fabrice.gasnier@st.com>
-Message-ID: <e53f9766-632d-0417-7a6e-7cf3e08f471e@st.com>
-Date:   Tue, 15 Oct 2019 14:21:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>
+Subject: [PATCH] i2c: i2c-stm32f7: rework slave_id allocation
+Date:   Tue, 15 Oct 2019 15:03:09 +0200
+Message-ID: <1571144589-3066-1-git-send-email-alain.volmat@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <1569919869-3218-1-git-send-email-fabrice.gasnier@st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.0.192]
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG5NODE2.st.com (10.75.127.14) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-15_05:2019-10-15,2019-10-15 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
@@ -66,75 +59,33 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 10/1/19 10:51 AM, Fabrice Gasnier wrote:
-> When in slave mode, an arbitration loss (ARLO) may be detected before the
-> slave had a chance to detect the stop condition (STOPF in ISR).
-> This is seen when two master + slave adapters switch their roles. It
-> provokes the i2c bus to be stuck, busy as SCL line is stretched.
-> - the I2C_SLAVE_STOP event is never generated due to STOPF flag is set but
->   don't generate an irq (race with ARLO irq, STOPIE is masked). STOPF flag
->   remains set until next master xfer (e.g. when STOPIE irq get unmasked).
->   In this case, completion is generated too early: immediately upon new
->   transfer request (then it doesn't send all data).
-> - Some data get stuck in TXDR register. As a consequence, the controller
->   stretches the SCL line: the bus gets busy until a future master transfer
->   triggers the bus busy / recovery mechanism (this can take time... and
->   may never happen at all)
-> 
-> So choice is to let the STOPF being detected by the slave isr handler,
-> to properly handle this stop condition. E.g. don't mask IRQs in error
-> handler, when the slave is running.
-> 
-> Fixes: 60d609f30de2 ("i2c: i2c-stm32f7: Add slave support")
-> 
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
-> ---
+The IP can handle two slave addresses. One address can either be
+7 bits or 10 bits while the other can only be 7 bits.
+In order to ensure that a 10 bits address can always be allocated
+(assuming there is only one 7 bits address already allocated),
+pick up the 7-bits only address slot in priority when performing a 7-bits
+address allocation.
 
+Fixes: 60d609f3 ("i2c: i2c-stm32f7: Add slave support")
 
-Hi Wolfram, all,
+Signed-off-by: Alain Volmat <alain.volmat@st.com>
+---
+ drivers/i2c/busses/i2c-stm32f7.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Gentle reminder on this patch.
+diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+index d36cf08461f7..cfae01b15243 100644
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -1265,7 +1265,7 @@ static int stm32f7_i2c_get_free_slave_id(struct stm32f7_i2c_dev *i2c_dev,
+ 	 * slave[0] supports 7-bit and 10-bit slave address
+ 	 * slave[1] supports 7-bit slave address only
+ 	 */
+-	for (i = 0; i < STM32F7_I2C_MAX_SLAVE; i++) {
++	for (i = STM32F7_I2C_MAX_SLAVE - 1; i >= 0; i--) {
+ 		if (i == 1 && (slave->flags & I2C_CLIENT_PEC))
+ 			continue;
+ 		if (!i2c_dev->slave[i]) {
+-- 
+2.7.4
 
-Thanks in advance !
-Best Regards,
-Fabrice
-
->  drivers/i2c/busses/i2c-stm32f7.c | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-> index 266d1c2..3a8ab0c 100644
-> --- a/drivers/i2c/busses/i2c-stm32f7.c
-> +++ b/drivers/i2c/busses/i2c-stm32f7.c
-> @@ -1501,7 +1501,7 @@ static irqreturn_t stm32f7_i2c_isr_error(int irq, void *data)
->  	void __iomem *base = i2c_dev->base;
->  	struct device *dev = i2c_dev->dev;
->  	struct stm32_i2c_dma *dma = i2c_dev->dma;
-> -	u32 mask, status;
-> +	u32 status;
->  
->  	status = readl_relaxed(i2c_dev->base + STM32F7_I2C_ISR);
->  
-> @@ -1526,12 +1526,15 @@ static irqreturn_t stm32f7_i2c_isr_error(int irq, void *data)
->  		f7_msg->result = -EINVAL;
->  	}
->  
-> -	/* Disable interrupts */
-> -	if (stm32f7_i2c_is_slave_registered(i2c_dev))
-> -		mask = STM32F7_I2C_XFER_IRQ_MASK;
-> -	else
-> -		mask = STM32F7_I2C_ALL_IRQ_MASK;
-> -	stm32f7_i2c_disable_irq(i2c_dev, mask);
-> +	if (!i2c_dev->slave_running) {
-> +		u32 mask;
-> +		/* Disable interrupts */
-> +		if (stm32f7_i2c_is_slave_registered(i2c_dev))
-> +			mask = STM32F7_I2C_XFER_IRQ_MASK;
-> +		else
-> +			mask = STM32F7_I2C_ALL_IRQ_MASK;
-> +		stm32f7_i2c_disable_irq(i2c_dev, mask);
-> +	}
->  
->  	/* Disable dma */
->  	if (i2c_dev->use_dma) {
-> 
