@@ -2,50 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF324D8BBB
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Oct 2019 10:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE8AD8C76
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Oct 2019 11:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390195AbfJPIwG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Oct 2019 04:52:06 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:44225 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726640AbfJPIwF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Oct 2019 04:52:05 -0400
-Received: by mail-ot1-f66.google.com with SMTP id 21so19447109otj.11
-        for <linux-i2c@vger.kernel.org>; Wed, 16 Oct 2019 01:52:05 -0700 (PDT)
+        id S1732425AbfJPJYD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Oct 2019 05:24:03 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:36345 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726480AbfJPJYC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Oct 2019 05:24:02 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 67so19539447oto.3
+        for <linux-i2c@vger.kernel.org>; Wed, 16 Oct 2019 02:24:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=dPjxIqYiQMK7Ofdf/JlPzBSeuo9jOahvRGdRDASGN2s=;
-        b=SFdfarNnHtNI12aadwAX1PA+lcyBra2O93CQ5jgTksmGrPBuUX2j7KjE1zMCJV6NCq
-         2NwmnApS/gGaghIMth4CIP7UV0aFL+o5UzAtPYpsQ2RDacaIs7n64yYylopV1qye4ggg
-         D6tbvpJRhy5PRwb0ReYlt3BBwnZFEWtClyFf89dU8ea7acAQ6qFNayeus+wG52MveEsY
-         OKfV17lSo3IOHrU8Y+UPnQ4bm8tmSBmXnYg3elJRDCu9xSv+YV+46eVOhTSlpc/yOk7B
-         gDX7eqAcrxTMXcj8qZ1U+hmo0NOEDJB9+jX0wFcCGz5mVKH6tazSFuWqWyRRFgbEySWP
-         tkrQ==
+        bh=p8pJoM0ENpD7cPZmUFAlLWpRSZm4q/f1/sdGdo3mDmc=;
+        b=iyxaXeX36m9qf2HH3niBnPwUoEE1FlTLodrghx7+X+V9LI2vxlA5X1gCA2gUJNPbF2
+         GiasUkTLPB3yHT1B/NFJ6EwdKD5pXT/y5ljgs52qoiQHy1Y4DYEqqeLDlJS/CD8bzCsx
+         L/l+2j7WKlfwhKcF2XeTHSNdRkriKlSRrhZtE1uN4d39G59jNn230CyLbSWdzJ98BTUH
+         MsoOwNjFEU8OmoQG8Xg5WYWLJ3lQz+uPY1LwvMiwCH3EsahaLtM4sw8nkXtPFDlBC1o8
+         Ia3YonHtIU8gm8S9xuByaongFMiJG6zJUdiWvG4LXtgb1BAcye3oBVRRLOjilouBF7g6
+         UHHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=dPjxIqYiQMK7Ofdf/JlPzBSeuo9jOahvRGdRDASGN2s=;
-        b=kie+b4vpYJOTYhgxiLs7JtgX47Z5SOxvjVW9AkTQtJDanwZgSvx3YwNWlzzgN+5sdb
-         iE8ezwY4rXYq7Vbbo97hUea42NK6yGPWk3ePY6qR7V+jhvLzU0V4i8sMWP1/ufpaXHab
-         Q02l6FSe+tgr2VKlO8bdeq1231siPVkjTbdwko1QCrhYK+u4C0HWVYog1aY9eecSLaiI
-         UthpaQeiCbzAn/JM/BSuHTgbPqpg5UI82rK7XZF6NYomnKsC+j+Gk/izwOT9DbRHEs9p
-         fhRAt56rs3kBz0kDI5lZwkdIw5q8gd0cn5GPzUK6qtlU2zqDK6pAmVB1/+BF0qMCRJr4
-         GqEQ==
-X-Gm-Message-State: APjAAAVb8dT3orb+Z2nh6inuKNjEGclyFuKS95LQwG5QYnsh5mkcBQyM
-        8zclG27CfjEZiZ5TyhCiPN834gE8y/oPd2Ptk7fjOg==
-X-Google-Smtp-Source: APXvYqxblxvM0RvE21tzdlGawQKnicY3rYBnxOfyuVfeGdaMwjfElinoWHn2qUXT+uKhp7VX24vqtv0plGLv/rHukO8=
-X-Received: by 2002:a9d:7dd6:: with SMTP id k22mr8950112otn.256.1571215924573;
- Wed, 16 Oct 2019 01:52:04 -0700 (PDT)
+        bh=p8pJoM0ENpD7cPZmUFAlLWpRSZm4q/f1/sdGdo3mDmc=;
+        b=OeqsYnVxYgoHUDnWqpaF4hYwwDyxwAZd5KMACXy+kvrxyd0XJ1HUHuxFfZXTYrGUNS
+         XUHitXsRJiDjTts/EgsNUDbbuLGEndaSWfXVyGgdX5GSDb6kchJtA3wsBdV4KKrIMBmo
+         Y5fK5q84mY+m76rdh0fG4JJqJYKjn25M5nw6B3i7ntAZw16eCtzq/QOGNxmEzBTdME8o
+         WFv32liCLGra+8OKinKJ5VMzAW5bxwK1LC5AMD51xcBeFVnRweqguXi3y65+3180LEjy
+         Sh/sGVo0yhJbmWiaBq3QO3XLNiueHiEmKhwhakHjnoZShDJBia9YvJmg28bHbiydoN36
+         Po2Q==
+X-Gm-Message-State: APjAAAU54oaa+D7u3MpXhAA5poOziCEf5uekvajIEmsPOD85aJLYyld0
+        ivLASO2J6CINJ97hwoAwvSeHnz6HEnQ7rKa8dt9CpQ==
+X-Google-Smtp-Source: APXvYqwH8ALi8/54BtHQw9b9gkj8XcepGDeCb+uKP1gFVUcvx8HgB3MYoDtqpwImKN/nmyCHqk0VPK2qllOPLsTxihw=
+X-Received: by 2002:a9d:344a:: with SMTP id v68mr33814442otb.85.1571217841165;
+ Wed, 16 Oct 2019 02:24:01 -0700 (PDT)
 MIME-Version: 1.0
 References: <20191016075110.8240-1-bibby.hsieh@mediatek.com>
 In-Reply-To: <20191016075110.8240-1-bibby.hsieh@mediatek.com>
 From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Wed, 16 Oct 2019 10:51:53 +0200
-Message-ID: <CAMpxmJUrvZ2Vwk5p8ky8WD-buNZk2b+3vDzj9+D9VqBpd4XtRA@mail.gmail.com>
+Date:   Wed, 16 Oct 2019 11:23:50 +0200
+Message-ID: <CAMpxmJX7p8ZFQrpeSNAiM4uf6W2MfYbE98stYpHi+GtQyh-pxg@mail.gmail.com>
 Subject: Re: [PATCH v3] misc: eeprom: at24: support pm_runtime control
 To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
 Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
@@ -126,11 +126,6 @@ e
 >
 > +       for (i =3D 0; i < AT24_NUM_SUPPLIES; i++)
 > +               at24->supplies[i].supply =3D at24_supply_names[i];
-
-Please use regulator_bulk_set_supply_names() here.
-
-Bart
-
 > +
 > +       err =3D  devm_regulator_bulk_get(&at24->client[0].client->dev,
 > +                                      AT24_NUM_SUPPLIES, at24->supplies)=
@@ -138,6 +133,13 @@ Bart
 > +       if (err =3D=3D -EPROBE_DEFER)
 > +               return err;
 > +       at24->has_supplies =3D !err;
+
+One more thing I noticed: we should only set has_supplies to NULL if
+the error code returned by regulator_bulk_get is ENODEV. Other errors
+should break the execution of probe().
+
+Bart
+
 > +
 >         at24->wp_gpio =3D devm_gpiod_get_optional(dev, "wp", GPIOD_OUT_HI=
 GH);
