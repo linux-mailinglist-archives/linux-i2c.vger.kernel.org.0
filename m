@@ -2,114 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D15A2DA55D
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2019 08:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1ACDA63B
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2019 09:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389053AbfJQGOZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Oct 2019 02:14:25 -0400
-Received: from mail-qt1-f171.google.com ([209.85.160.171]:43651 "EHLO
-        mail-qt1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731726AbfJQGOZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Oct 2019 02:14:25 -0400
-Received: by mail-qt1-f171.google.com with SMTP id t20so1904183qtr.10
-        for <linux-i2c@vger.kernel.org>; Wed, 16 Oct 2019 23:14:24 -0700 (PDT)
+        id S2408057AbfJQHSy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Oct 2019 03:18:54 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38263 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408058AbfJQHSy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Oct 2019 03:18:54 -0400
+Received: by mail-ot1-f66.google.com with SMTP id e11so1018323otl.5
+        for <linux-i2c@vger.kernel.org>; Thu, 17 Oct 2019 00:18:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=SSycC+6FLXhjLvO+eUNuIjWKaeeqP5Qat7UwzKeLNrc=;
-        b=Q+5CxomMgCIuC811bGWVLqai3qJaMmwh0GRCQJhvQ6vVu8IIFArRU0cpmmsnmN/ass
-         uhaeYa6PoijW/wlmpLyzkIwDPnypt7XyezWbs3c3AIvUXLkfbGjE+fQfj1dwf6B+Q1s9
-         aEbk4TmWXzVivz7KRfiQUdTyY0Hk519+pctLY=
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Dw+2kyt8ZMql5PW0RjpSf5DicMdc5oV3hUAm5kX6zkw=;
+        b=RZus7gBvqMYLWCGht7/0F3/UnIcaEnxoSdE4aI1+vvuvdlhhQZC/FgU6YBMj6sHLw/
+         9TgL9Atz7XxmkX8hy4+wnW5evRtmGF/papUQLH9ePZGassZg/rjcJv3BWnn6gcXKKH2Y
+         bshGGkvxBECqxZs6+Yx4DfGfUhjOAuql1XC3QSWt4yyIz1On2QfRaa19zgZu3TnIkZKh
+         wf3wJZXjIKAlXCBhsBY6f77PSepHaPQgFkNb5uL1qzbjklx3eH2bGYmrqXdnE9dLTQZh
+         OysTFMav+QJDKh8ysvEaV3ZZNOaYQEKTpwI/p51bPTOoA5sl8CWaaMgZ0aT6GPcEzDsw
+         uoHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=SSycC+6FLXhjLvO+eUNuIjWKaeeqP5Qat7UwzKeLNrc=;
-        b=cp0o/nWzfR5ossr9YFFkCoJEUjsl0wD8zwWLXMQ1CJ0xGE7tx129rgZMtQjulkOar0
-         IPfPvnOEKouM77eK7tTzAOyWwvxq9RZQxwPe2Burrasn2fuqe6963/T5otwfSpqAJkrB
-         ZCFeHZ9BT2UmXFESm2ZQDSj/8aZaa/TTbnYuMFMlhAe5SDxf15K51dPCmamMw6/20ALs
-         AtUYizOr61hBmraMApK34D1lloA/9AwDUachjfG0VzXHncdfxRt6N4TY+nCffTSJSKvx
-         wWgGud1FrqA0Aw0R0OS+bLRDekQon+sStrWLNgSGYE+zoWCqVq2ep+VcQqufybFuTQKp
-         JnKw==
-X-Gm-Message-State: APjAAAXNWkEvleS5e/9wLVqjJMRN4vD1YgV5amFN/iKV4jPAkukHausl
-        LtvzvPFMji+SfQtkZ4PHT+QAszFkBMv/qiGAFjA=
-X-Google-Smtp-Source: APXvYqybdSTvJP4mqxmA02QqX34n8BkIiZfZkjF04g5uxjmwq02WKO6wV9i3aSGwmn5+EmR6PpqWfL4/8c2snFqWktU=
-X-Received: by 2002:ac8:1207:: with SMTP id x7mr2116697qti.255.1571292863733;
- Wed, 16 Oct 2019 23:14:23 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Dw+2kyt8ZMql5PW0RjpSf5DicMdc5oV3hUAm5kX6zkw=;
+        b=BC9UWaoTNUMP8WG7r5c6ztRGyZoWP5YvF76nsJqabZa85Ge0nTIQDCjZvU2GU8IXCf
+         CfleP8BrHOD5n5xBHg2GYFkcc8Kq0lobq7lJqDDPI5c7nfBe0lC2JjFYyQ5+iDJs4KQF
+         pjyzKSnfgAwlaXRMJda3HyLHCOyd4GVlij8cjby59RcUMF1svNGN/aOH7w90uPuynsNP
+         9yKrjE5gEIsogIhoxHRiDPYUjsCOaLp+cdpFyIkj9XLsB6vTNN+LvDR9Y6I7aVOLAxpN
+         H5Gvl3/NrmvEoa38nLXsH+8OkDWG+rPR2bVNktQAb4fox2fRQUEyhWtWaH2b/f3Fyjkl
+         r06w==
+X-Gm-Message-State: APjAAAUQ0AfcIzqJhBJU2Hv+ALuERsHu14iRPGWtzzSiJKMoVRe/4n31
+        u70Map5/xwNJf4QqeUpjH0vlGtZ3BjJV2h3/fDnhaA==
+X-Google-Smtp-Source: APXvYqxyw047Hzq8OkGQCQ9WHBEgq0fMgYn7GHVJwWuxJfHwQwOYTLn37/trpQyuPInkhwLZfQ2CveWgxgWMMkLqXLg=
+X-Received: by 2002:a9d:344a:: with SMTP id v68mr1848021otb.85.1571296732442;
+ Thu, 17 Oct 2019 00:18:52 -0700 (PDT)
 MIME-Version: 1.0
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Thu, 17 Oct 2019 06:14:12 +0000
-Message-ID: <CACPK8XdqFkPgCQcgpM5C_YwfJ86Lmk=hG5zTcfbCDCMncXCJMg@mail.gmail.com>
-Subject: AST2600 i2c irq issue
-To:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        linux-i2c@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
-        Eddie James <eajames@linux.ibm.com>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
+References: <20191016075110.8240-1-bibby.hsieh@mediatek.com>
+ <20191016075110.8240-2-bibby.hsieh@mediatek.com> <CAMpxmJWiSaXiPeDFOZvx5krp31wJmMuRM4iV-O6fHqBN_nQz7g@mail.gmail.com>
+In-Reply-To: <CAMpxmJWiSaXiPeDFOZvx5krp31wJmMuRM4iV-O6fHqBN_nQz7g@mail.gmail.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Thu, 17 Oct 2019 09:18:41 +0200
+Message-ID: <CAMpxmJXKUwGn+Ud7kN1eam5_CUDuKxeG=vUMXFrC9v8MkHFd3g@mail.gmail.com>
+Subject: Re: [PATCH v1] dt-binding: eeprom: at24: add supply properties
+To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-devicetree <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I have been doing bringup of the ast2600. It contains i2c buses that
-are register compatible with the ast2500, and I am running them
-without buffer or DMA mode. This is with v5.3.6, with no patches other
-than adding the compatible string:
+=C5=9Br., 16 pa=C5=BA 2019 o 10:40 Bartosz Golaszewski
+<bgolaszewski@baylibre.com> napisa=C5=82(a):
+>
+> =C5=9Br., 16 pa=C5=BA 2019 o 09:51 Bibby Hsieh <bibby.hsieh@mediatek.com>=
+ napisa=C5=82(a):
+> >
+> > In some platforms, they disable the power-supply of eeprom
+> > and i2c due to power consumption reduction.
+> >
+> > This patch add two supply properties: power-supply, i2c-supply.
+> >
+> > Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+> > ---
+> >  Documentation/devicetree/bindings/eeprom/at24.txt | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/eeprom/at24.txt b/Docume=
+ntation/devicetree/bindings/eeprom/at24.txt
+> > index 22aead844d0f..71a534577bcf 100644
+> > --- a/Documentation/devicetree/bindings/eeprom/at24.txt
+> > +++ b/Documentation/devicetree/bindings/eeprom/at24.txt
+> > @@ -78,6 +78,10 @@ Optional properties:
+> >
+> >    - num-addresses: total number of i2c slave addresses this device tak=
+es
+> >
+> > +  - power-supply: phandle of the regulator that provides the supply vo=
+ltage.
+>
+> The pin is called vcc in the datasheet, I think it would be better to
+> reflect that here.
+>
+> Bart
+>
+> > +
+> > +  - i2c-supply: phandle to the regulator that provides power to i2c.
+> > +
+> >  Example:
+> >
+> >  eeprom@52 {
+> > --
+> > 2.18.0
+> >
 
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -938,6 +938,10 @@ static const struct of_device_id
-aspeed_i2c_bus_of_table[] = {
-                .compatible = "aspeed,ast2500-i2c-bus",
-                .data = aspeed_i2c_25xx_get_clk_reg_val,
-        },
-+       {
-+               .compatible = "aspeed,ast2600-i2c-bus",
-+               .data = aspeed_i2c_25xx_get_clk_reg_val,
-+       },
-        { },
- };
+Hi Bibby,
 
+I noticed that my patch converting the at24 bindings to yaml is in
+next now - please add this change on top of current next right away as
+it will conflict during merge window.
 
-I see this behavior:
-
-[   20.981417] aspeed-i2c-bus 1e78a280.i2c-bus: master failed to RX
-[   20.988259] aspeed-i2c-bus 1e78a280.i2c-bus: irq handled != irq.
-expected 0x00000014, but was 0x00000010
-[   22.451265] aspeed-i2c-bus 1e78a200.i2c-bus: master failed to STOP.
-irq_status:0x0
-[   22.459909] aspeed-i2c-bus 1e78a200.i2c-bus: irq handled != irq.
-expected 0x00000010, but was 0x00000000
-[   22.470604] aspeed-i2c-bus 1e78a200.i2c-bus: irq handled != irq.
-expected 0x00000011, but was 0x00000000
-[   29.156951] aspeed-i2c-bus 1e78a280.i2c-bus: master failed to STOP.
-irq_status:0x0
-[   29.165601] aspeed-i2c-bus 1e78a280.i2c-bus: irq handled != irq.
-expected 0x00000010, but was 0x00000000
-
-It happens on boot, and can also be triggered by placing load on the
-system. In particular, if I copy a large amount of data to the flash.
-
-The IRQs are being served on one of the CPUs:
-
- 29:          0          0     GIC-0 142 Level     1e78a080.i2c-bus
- 30:          0          0     GIC-0 143 Level     1e78a100.i2c-bus
- 31:          0          0     GIC-0 144 Level     1e78a180.i2c-bus
- 32:     302596          0     GIC-0 145 Level     1e78a200.i2c-bus
- 33:     197340          0     GIC-0 146 Level     1e78a280.i2c-bus
- 34:     196900          0     GIC-0 147 Level     1e78a300.i2c-bus
- 35:          0          0     GIC-0 149 Level     1e78a400.i2c-bus
- 36:       2199          0     GIC-0 151 Level     1e78a500.i2c-bus
- 37:          0          0     GIC-0 152 Level     1e78a580.i2c-bus
- 38:       3407          0     GIC-0 153 Level     1e78a600.i2c-bus
- 39:          0          0     GIC-0 154 Level     1e78a680.i2c-bus
- 40:          0          0     GIC-0 155 Level     1e78a700.i2c-bus
-
-Following a hunch, I booted the system with SMP disabled (it's a dual
-core part). The issue did not reproduce.
-
-This suggests the driver is lacking locking. I am yet to do any
-detailed debugging.
-
-Have you seen any behavior like this?
+Bart
