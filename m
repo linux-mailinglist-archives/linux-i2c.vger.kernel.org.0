@@ -2,174 +2,237 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23635DF140
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Oct 2019 17:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8868DF3A5
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Oct 2019 18:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729056AbfJUPYA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Oct 2019 11:24:00 -0400
-Received: from mail-eopbgr40101.outbound.protection.outlook.com ([40.107.4.101]:11453
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727140AbfJUPYA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 21 Oct 2019 11:24:00 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jC8hkpDEVIBf4ubqsjy0iX01/ZU2kSs8n1ZTj/ji5ZNCIvv66l2D/c5nYQQ2BMLsR3tDhgNHn/TaEkU04FlN9D62v/b6jkTHY0JHk1eRAudk6TxIWgLVFO4Dma/MHFbk8LZKTdPdKor8mTzcBqwnVMNqsOVNdjCuRtNNyj6b95SRdiG/9906r0jE9YKqZcBYSH0/KRVVqCPs1d2ZqGo2R/x1APb7nIoiddtG4skAUJBF793+/14Smv6S5tBRVtLVDCBNhnbxkNGhBBCKHax8C20/gQYI057sI5DX8H0SWG3gtCC3PDFsn1W1CtJLKh8v2dTz0pxhbyMMkgtmkrqC1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rx6kOuyc4Ro67mNwa4n9HD0kzfxFP2ooqXnUoypIvHQ=;
- b=dRc5jgRnP3hlElKmsQWg9/GCfNfce0jWtuADj+YeLs5gr+2xG9Ok+drRcPqWzl3sZzQw3xtW63dyKaqJL8OyAF1aNeEx9NRDcUi4A6OjfyYMq5awUXtTIhXq+dKhD2kttsRUsX1OEK98rBRFmkr8dNj+kBAWkmfPVjYa/FQa60mm1vb4IZMmVkKLsKU8QgsQZJyFZxbgIMsd7w0bwQviyzPPsXfLd/fMXkmerF1I1+C9F/INoQaXM+qRJaA87TIKHRywrrCBZHYC7T9szsH13EUc06qZriztzlYChBIl9lMZSh58f9RycAyhiSIE7LvHcJIEgU7zBZSn7Xq1ilfMBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rx6kOuyc4Ro67mNwa4n9HD0kzfxFP2ooqXnUoypIvHQ=;
- b=fzDD2u5aRXAute0K6/4EeocrMjvoO69WoMsL52No+LF7FPokCjsfSr+3Yg7UKNW/UYRGey+dIqy4b2SRtKHFAtNkaiX9pYF7lvZuVWywROTL7M2r88QRuhTM99G7hEnfI07U7krFpePJFhqwJutEtVD4ts6pj0Z79Bq2e2IqZFw=
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com (52.134.66.158) by
- DB3PR0202MB3435.eurprd02.prod.outlook.com (52.134.65.156) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.21; Mon, 21 Oct 2019 15:23:15 +0000
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::c5b8:6014:87a4:1afe]) by DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::c5b8:6014:87a4:1afe%7]) with mapi id 15.20.2347.029; Mon, 21 Oct 2019
- 15:23:15 +0000
-From:   Peter Rosin <peda@axentia.se>
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        "Eugen.Hristev@microchip.com" <Eugen.Hristev@microchip.com>
-CC:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "Ludovic.Desroches@microchip.com" <Ludovic.Desroches@microchip.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "Nicolas.Ferre@microchip.com" <Nicolas.Ferre@microchip.com>
-Subject: Re: [PATCH v5 0/9] i2c: add support for filters
-Thread-Topic: [PATCH v5 0/9] i2c: add support for filters
-Thread-Index: AQHVaHpLr7113TR4Hk2itVe9BFeajadO9gMAgBZqJ4CAABXHgA==
-Date:   Mon, 21 Oct 2019 15:23:15 +0000
-Message-ID: <f5bd0c1f-9a72-6661-146b-ef5de77e31ff@axentia.se>
-References: <1568189911-31641-1-git-send-email-eugen.hristev@microchip.com>
- <c17182ac-67dd-d11f-5daf-066bf446b969@microchip.com>
- <20191021140515.GC26782@ninjato>
-In-Reply-To: <20191021140515.GC26782@ninjato>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-x-originating-ip: [213.112.138.100]
-x-clientproxiedby: HE1PR07CA0034.eurprd07.prod.outlook.com
- (2603:10a6:7:66::20) To DB3PR0202MB3434.eurprd02.prod.outlook.com
- (2603:10a6:8:5::30)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peda@axentia.se; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ec7f5e47-6753-432f-46e0-08d7563a97e1
-x-ms-traffictypediagnostic: DB3PR0202MB3435:
-x-microsoft-antispam-prvs: <DB3PR0202MB34353FA956C351DE96B30572BC690@DB3PR0202MB3435.eurprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-forefront-prvs: 0197AFBD92
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39830400003)(346002)(396003)(136003)(376002)(366004)(199004)(189003)(11346002)(7736002)(31686004)(8936002)(71200400001)(71190400001)(508600001)(31696002)(5660300002)(446003)(86362001)(316002)(476003)(2616005)(305945005)(3846002)(25786009)(7416002)(6116002)(256004)(14444005)(486006)(2906002)(76176011)(52116002)(2501003)(6436002)(58126008)(229853002)(66476007)(66556008)(64756008)(66446008)(99286004)(66066001)(110136005)(65806001)(54906003)(6486002)(66946007)(36756003)(6512007)(14454004)(26005)(81166006)(81156014)(186003)(102836004)(6246003)(4001150100001)(53546011)(386003)(65956001)(6506007)(4326008)(8676002);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3435;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: axentia.se does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pWuxGBn7XG4yM+XRDcuNA6uQV2R9rqrWZFoSen+1zMWiegUU8TS0Oi9iS1F3KPF7I73E2u7p7IsaBxYFXVzRQ28xtnhjrXKO29DOgfBk1JHBdAG491iuKX6Ls5vprySq2TZVSlq5HWYAtb9PLt1AwG+/heNEjlmnpLrNEtughdhGiQcgZ6VwRRSuoibm4t8OV5s1eKxiy9vHn0sae07UHjtfP5M6xvBahCpbw0crNfd+t/4HX58lIg9+0YfEEVH1fQCihApZ99fKIJHpM0WKzXO5LaA2bZ77fhwOg424i9/9FKSvvw2cBcAQzuBKphtlO+WUHdL5GIPb2yYzx5uTjIG+CYnB1uuCkqSgwE0o2l39ZPH7HG412CDiGoTl18zUksAPNjHwIQceR/R7sc2uzRo5ptwndHvqhbFtGrlAts++9HOaia1V/BoXRhvktL6q
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <542A5BB2F1351346977B834EB3C11628@eurprd02.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1727110AbfJUQxY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Oct 2019 12:53:24 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:43963 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726819AbfJUQxX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Oct 2019 12:53:23 -0400
+Received: by mail-oi1-f195.google.com with SMTP id t84so11607771oih.10
+        for <linux-i2c@vger.kernel.org>; Mon, 21 Oct 2019 09:53:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nME/u4wI5q7AJCWRntyQc1gYZ6SnFLLKHzwttb67YQg=;
+        b=ANM/9pGQCCRmP60MJp6F2IZL2/+kh4DvZzJgN5ruRc5/KKDrkzOI6eGWqk5arUiMnl
+         n5uJMwLNx/vdUFy0jtJU+7/O9ZXur4yuWDaq/lto9qlhFTqELcl/BGaykcjQ/Xj/aP7n
+         1Wg+yqZr/hgIFkdPWnUxgPudc8mRCm++qMe1nn39ESs6I3w8CuDI2GSJeXW9SD8oXEJg
+         S2gHFBor60qswX4oVTud3YLWPH+PrPHRwxPreWnm/7ZCBtUImY9Auuqf6GE9dPjWjrcl
+         b7TlwS3EDVGNeYhc+/m4WcKid5QbulySnWRs3LZ0mg8b/EbRYwEqomvK077ty95G5L0N
+         0LVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nME/u4wI5q7AJCWRntyQc1gYZ6SnFLLKHzwttb67YQg=;
+        b=GXUBjp9CrPQBGUDKQAlJ9TQ5mzw6pYZAiVc3Q2v3jvxVYeOrQ7gtbCsWN1J3bJt55R
+         yYYEHQa2P0tV/HjixtfU8Nk6HGVvt0HLaGfncNnNgVUB3fkmSjWn7hZFLVtrgdYbzwp0
+         FMvxwcZ0byFIItX60al5cDgnKx+ECp8hBZEoJ5Oc1bLzt75dLMO4Kh2E3GHJJTlCaci7
+         3VCX0l0kHwvp3pcruir8iqzCUBIFHVe2XquGnfDrRj2I0wDxy4ViT1CCaWekRYONZrAF
+         5wHH8egxEzYOHyN+oJwz7lOoLHRpuuhOMewXCH42i932TFSd3uat7vqtRKmULuDThTCf
+         wqLQ==
+X-Gm-Message-State: APjAAAVJU6MOzR5T12md9A72vv+g6tewcfyyMM46bIyQOglPTxRijqtP
+        KW8a33+aQEJu0FozhvpDGKGqjwTUl63woTIwAibaAw==
+X-Google-Smtp-Source: APXvYqxjZetmSAuwdImynDYdA645vx8AolO5E5PQGhh0YXQ0H7WAJxAzbDzKZZ7dICJ8hM0CCasF/CzS3vLnQnEVDWM=
+X-Received: by 2002:aca:5c06:: with SMTP id q6mr20229589oib.175.1571676802458;
+ Mon, 21 Oct 2019 09:53:22 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec7f5e47-6753-432f-46e0-08d7563a97e1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2019 15:23:15.3938
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 546Ctu3x6wdXrmmTcp/2Pd2JUwyCfmDKIbZrO++SlVOT1TPMI85NgE3ijiiYqSb9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3435
+References: <20191018082557.3696-1-bibby.hsieh@mediatek.com>
+In-Reply-To: <20191018082557.3696-1-bibby.hsieh@mediatek.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Mon, 21 Oct 2019 18:53:11 +0200
+Message-ID: <CAMpxmJUrY9YK==6Mf5MoRTUDwmXJ6v5EM-VLXCNXJ8ZNK+xHyA@mail.gmail.com>
+Subject: Re: [PATCH v4] misc: eeprom: at24: support pm_runtime control
+To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2019-10-21 16:05, Wolfram Sang wrote:
-> On Mon, Oct 07, 2019 at 07:53:21AM +0000, Eugen.Hristev@microchip.com wro=
-te:
->>
->>
->> On 11.09.2019 11:24, Eugen Hristev - M18282 wrote:
->>> From: Eugen Hristev <eugen.hristev@microchip.com>
->>>
->>> Hello,
->>>
->>> This series adds support for analog and digital filters for i2c control=
-lers
->>>
->>> This series is based on the series:
->>> [PATCH v2 0/9] i2c: at91: filters support for at91 SoCs
->>> and later
->>> [PATCH v4 0/9] i2c: add support for filters
->>> and enhanced to add the bindings for all controllers plus an extra bind=
-ings
->>> for the width of the spikes in nanoseconds (digital filters) and cut-of=
-f
->>> frequency (analog filters)
->>>
->>> First, bindings are created for
->>> 'i2c-analog-filter'
->>> 'i2c-digital-filter'
->>> 'i2c-digital-filter-width-ns'
->>> 'i2c-analog-filter-cutoff-frequency'
->>>
->>> The support is added in the i2c core to retrieve filter width/cutoff fr=
-equency
->>> and add it to the timings structure.
->>> Next, the at91 driver is enhanced for supporting digital filter, advanc=
-ed
->>> digital filter (with selectable spike width) and the analog filter.
->>>
->>> Finally the device tree for two boards are modified to make use of the
->>> new properties.
->>>
->>> This series is the result of the comments on the ML in the direction
->>> requested: to make the bindings globally available for i2c drivers.
->>>
->>> Changes in v5:
->>> - renamed i2c-filter-width-ns to i2c-digital-filter-width-ns as this
->>> is applicable only to digital filter
->>> - created new binding i2c-digital-filter-width-ns for analog filters.
->>
->> Hello Wolfram and Peter,
->>
->> Are you happy with the changes in this version? I haven't heard from you=
-=20
->> since this latest update.
->> I am interested to know if anymore changes are required or maybe we can=
-=20
->> move further with this support.
->=20
-> So, I had a look now and I am happy. I will give Peter one more day to
-> comment, otherwise I'll apply it tomorrow.
+pt., 18 pa=C5=BA 2019 o 10:26 Bibby Hsieh <bibby.hsieh@mediatek.com> napisa=
+=C5=82(a):
+>
+> Although in the most platforms, the power of eeprom and i2c
+> are alway on, some platforms disable the eeprom and i2c power
+> in order to meet low power request.
+> This patch add the pm_runtime ops to control power to support
+> all platforms.
+>
+> Changes since v3:
+>  - remove redundant calling function
+>  - change SIMPLE_DEV_PM_OPS to SET_RUNTIME_PM_OPS
+>  - change supply name
+>
+> Changes since v2:
+>  - rebase onto v5.4-rc1
+>  - pm_runtime_disable and regulator_bulk_disable at
+>    err return in probe function
+>
+> Changes since v1:
+>  - remove redundant code
+>  - fixup coding style
+>
+> Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+> ---
+>  drivers/misc/eeprom/at24.c | 64 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index 2cccd82a3106..68ced4f25916 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/nvmem-provider.h>
+>  #include <linux/regmap.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/gpio/consumer.h>
+>
+>  /* Address pointer is 16 bit. */
+> @@ -67,6 +68,12 @@
+>   * which won't work on pure SMBus systems.
+>   */
+>
+> +static const char * const at24_supply_names[] =3D {
+> +       "vcc", "i2c",
+> +};
+> +
+> +#define AT24_NUM_SUPPLIES ARRAY_SIZE(at24_supply_names)
+> +
+>  struct at24_client {
+>         struct i2c_client *client;
+>         struct regmap *regmap;
+> @@ -91,6 +98,8 @@ struct at24_data {
+>
+>         struct gpio_desc *wp_gpio;
+>
+> +       bool has_supplies;
+> +       struct regulator_bulk_data supplies[AT24_NUM_SUPPLIES];
+>         /*
+>          * Some chips tie up multiple I2C addresses; dummy devices reserv=
+e
+>          * them for us, and we'll use them with SMBus calls.
+> @@ -662,6 +671,17 @@ static int at24_probe(struct i2c_client *client)
+>         at24->client[0].client =3D client;
+>         at24->client[0].regmap =3D regmap;
+>
+> +       regulator_bulk_set_supply_names(at24->supplies,
+> +                                       at24_supply_names, AT24_NUM_SUPPL=
+IES);
+> +       err =3D  devm_regulator_bulk_get(&at24->client[0].client->dev,
+> +                                      AT24_NUM_SUPPLIES, at24->supplies)=
+;
+> +       if (err =3D=3D -ENODEV)
+> +               at24->has_supplies =3D NULL;
 
-I had another read-through and only found one nit which is in a separate
-message. You can add
+I just gave this a spin and noticed that this will never happen - the
+regulator core will use a dummy regulator if none is defined in DT.
+The only way for this to make sense would be to use
+regulator_get_optional() for each supply separately. But actually I
+think we should just leave it this way and remove this if. In the end:
+this chip needs some power supply, so dummy regulator makes sense.
 
-Reviewed-by: Peter Rosin <peda@axentia.se>
+Bart
 
-for the whole series.
-
-Cheers,
-Peter
-
-> Thanks for your patience and keeping at it!
->=20
-
+> +       else if (err =3D=3D 0)
+> +               at24->has_supplies =3D !err;
+> +       else
+> +               return err;
+> +
+>         at24->wp_gpio =3D devm_gpiod_get_optional(dev, "wp", GPIOD_OUT_HI=
+GH);
+>         if (IS_ERR(at24->wp_gpio))
+>                 return PTR_ERR(at24->wp_gpio);
+> @@ -701,6 +721,14 @@ static int at24_probe(struct i2c_client *client)
+>
+>         i2c_set_clientdata(client, at24);
+>
+> +       if (at24->has_supplies) {
+> +               err =3D regulator_bulk_enable(AT24_NUM_SUPPLIES, at24->su=
+pplies);
+> +               if (err) {
+> +                       dev_err(dev, "Failed to enable power regulators\n=
+");
+> +                       return err;
+> +               }
+> +       }
+> +
+>         /* enable runtime pm */
+>         pm_runtime_set_active(dev);
+>         pm_runtime_enable(dev);
+> @@ -713,6 +741,9 @@ static int at24_probe(struct i2c_client *client)
+>         pm_runtime_idle(dev);
+>         if (err) {
+>                 pm_runtime_disable(dev);
+> +               if (at24->has_supplies)
+> +                       regulator_bulk_disable(AT24_NUM_SUPPLIES,
+> +                                              at24->supplies);
+>                 return -ENODEV;
+>         }
+>
+> @@ -725,15 +756,48 @@ static int at24_probe(struct i2c_client *client)
+>
+>  static int at24_remove(struct i2c_client *client)
+>  {
+> +       struct at24_data *at24 =3D i2c_get_clientdata(client);
+> +
+>         pm_runtime_disable(&client->dev);
+>         pm_runtime_set_suspended(&client->dev);
+> +       if (at24->has_supplies)
+> +               regulator_bulk_disable(AT24_NUM_SUPPLIES, at24->supplies)=
+;
+> +
+> +       return 0;
+> +}
+> +
+> +static int __maybe_unused at24_suspend(struct device *dev)
+> +{
+> +       struct i2c_client *client =3D to_i2c_client(dev);
+> +       struct at24_data *at24 =3D i2c_get_clientdata(client);
+> +
+> +       if (at24->has_supplies)
+> +               return regulator_bulk_disable(AT24_NUM_SUPPLIES,
+> +                                             at24->supplies);
+> +
+> +       return 0;
+> +}
+> +
+> +static int __maybe_unused at24_resume(struct device *dev)
+> +{
+> +       struct i2c_client *client =3D to_i2c_client(dev);
+> +       struct at24_data *at24 =3D i2c_get_clientdata(client);
+> +
+> +       if (at24->has_supplies)
+> +               return regulator_bulk_enable(AT24_NUM_SUPPLIES,
+> +                                            at24->supplies);
+>
+>         return 0;
+>  }
+>
+> +static const struct dev_pm_ops at24_pm_ops =3D {
+> +       SET_RUNTIME_PM_OPS(at24_suspend, at24_resume, NULL)
+> +};
+> +
+>  static struct i2c_driver at24_driver =3D {
+>         .driver =3D {
+>                 .name =3D "at24",
+> +               .pm =3D &at24_pm_ops,
+>                 .of_match_table =3D at24_of_match,
+>                 .acpi_match_table =3D ACPI_PTR(at24_acpi_ids),
+>         },
+> --
+> 2.18.0
+>
