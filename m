@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC27FDF12C
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Oct 2019 17:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23635DF140
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Oct 2019 17:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727140AbfJUPUy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Oct 2019 11:20:54 -0400
-Received: from mail-eopbgr30121.outbound.protection.outlook.com ([40.107.3.121]:16389
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        id S1729056AbfJUPYA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Oct 2019 11:24:00 -0400
+Received: from mail-eopbgr40101.outbound.protection.outlook.com ([40.107.4.101]:11453
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726847AbfJUPUy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 21 Oct 2019 11:20:54 -0400
+        id S1727140AbfJUPYA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 21 Oct 2019 11:24:00 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RpB3mIPsi8s3jBl1ZMERJOHM0VCFASgH7ObwLKttHTVm6uHmYHqf01Diod4FG0iQDW8n4SabLpou4+awyXzQd/1vKpav4X6e/kfP+zZXx5Z+c1F/MFUWnECyqVvf30BXWgrQMP7EOenkE2rE9qWQX88QdMS7tfgKbeYkeL4OkSYUem+mWeTipf3ADeMHLJEa/S+OtavO77MGbvrzHQKwbTCYyWtGY0gzJttYrunbNEmVsSqBQYNwdoLZu2uZwNUQXaFn67iYbSmIBWbe2baHHyAAQ8jt1iaFDwamuLNq5VMKJoQDGSmHwf3dOXPnOsdyeJtvvSS/UzAUaItI9lkLww==
+ b=jC8hkpDEVIBf4ubqsjy0iX01/ZU2kSs8n1ZTj/ji5ZNCIvv66l2D/c5nYQQ2BMLsR3tDhgNHn/TaEkU04FlN9D62v/b6jkTHY0JHk1eRAudk6TxIWgLVFO4Dma/MHFbk8LZKTdPdKor8mTzcBqwnVMNqsOVNdjCuRtNNyj6b95SRdiG/9906r0jE9YKqZcBYSH0/KRVVqCPs1d2ZqGo2R/x1APb7nIoiddtG4skAUJBF793+/14Smv6S5tBRVtLVDCBNhnbxkNGhBBCKHax8C20/gQYI057sI5DX8H0SWG3gtCC3PDFsn1W1CtJLKh8v2dTz0pxhbyMMkgtmkrqC1A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=76ShwPSz2IqcgJODhwTIqS3Hj9czJddBBjiNKAfdNvQ=;
- b=aTIC+4pSu4sKiVMCg0+cuyjQL/ogHG1xJuVwjE/Z6FUm9Ay7WqX+uJQSgzpxX3ASvvH+IFYLCjCPpnQITI/Sn6k3Eoslcmxp+Pn6z4gm0TS0RG7ziMv9Mdqfgu0+8n1nIAo/cb/0KNHaX0xDGE76dUIaS3iqNVRYKgnAxF2H1v7sDi1GkiUxGymvbJapKs64Jp8Y4x0zWAtUNwVBTHpypcwR8b28qZ+YUp+buTGhWftR5155OxsXyIN2RlteZ1mx6wVhuF4bCtFkYkM2BgHReSV93pjB9epleW8DobXvHhaVgDhfORR2Z65usiaBfw4ZqMxjAU/JBKSJbJDtVASTdQ==
+ bh=rx6kOuyc4Ro67mNwa4n9HD0kzfxFP2ooqXnUoypIvHQ=;
+ b=dRc5jgRnP3hlElKmsQWg9/GCfNfce0jWtuADj+YeLs5gr+2xG9Ok+drRcPqWzl3sZzQw3xtW63dyKaqJL8OyAF1aNeEx9NRDcUi4A6OjfyYMq5awUXtTIhXq+dKhD2kttsRUsX1OEK98rBRFmkr8dNj+kBAWkmfPVjYa/FQa60mm1vb4IZMmVkKLsKU8QgsQZJyFZxbgIMsd7w0bwQviyzPPsXfLd/fMXkmerF1I1+C9F/INoQaXM+qRJaA87TIKHRywrrCBZHYC7T9szsH13EUc06qZriztzlYChBIl9lMZSh58f9RycAyhiSIE7LvHcJIEgU7zBZSn7Xq1ilfMBQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
  dkim=pass header.d=axentia.se; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=76ShwPSz2IqcgJODhwTIqS3Hj9czJddBBjiNKAfdNvQ=;
- b=Ym+th3QnW4XtDGi8kfR16HE5C7oHW4gnjs4RUISaZS/4AWvfrniLEbWuyFxkEBRj1INT7IKlRA8fe3onUCj+btf6w50PaiWQJETNJOEaA6uujCYXsW5Md7E4sqmFPkWAZGKYkaq0cwZmGxPvckBmAzdbjkQwrOk9xLxgdANrBsw=
+ bh=rx6kOuyc4Ro67mNwa4n9HD0kzfxFP2ooqXnUoypIvHQ=;
+ b=fzDD2u5aRXAute0K6/4EeocrMjvoO69WoMsL52No+LF7FPokCjsfSr+3Yg7UKNW/UYRGey+dIqy4b2SRtKHFAtNkaiX9pYF7lvZuVWywROTL7M2r88QRuhTM99G7hEnfI07U7krFpePJFhqwJutEtVD4ts6pj0Z79Bq2e2IqZFw=
 Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com (52.134.66.158) by
  DB3PR0202MB3435.eurprd02.prod.outlook.com (52.134.65.156) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.21; Mon, 21 Oct 2019 15:20:45 +0000
+ 15.20.2347.21; Mon, 21 Oct 2019 15:23:15 +0000
 Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com
  ([fe80::c5b8:6014:87a4:1afe]) by DB3PR0202MB3434.eurprd02.prod.outlook.com
  ([fe80::c5b8:6014:87a4:1afe%7]) with mapi id 15.20.2347.029; Mon, 21 Oct 2019
- 15:20:44 +0000
+ 15:23:15 +0000
 From:   Peter Rosin <peda@axentia.se>
-To:     "Eugen.Hristev@microchip.com" <Eugen.Hristev@microchip.com>,
-        "wsa@the-dreams.de" <wsa@the-dreams.de>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        "Eugen.Hristev@microchip.com" <Eugen.Hristev@microchip.com>
+CC:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
         "Ludovic.Desroches@microchip.com" <Ludovic.Desroches@microchip.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
@@ -46,16 +46,17 @@ To:     "Eugen.Hristev@microchip.com" <Eugen.Hristev@microchip.com>,
         <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-CC:     "Nicolas.Ferre@microchip.com" <Nicolas.Ferre@microchip.com>
-Subject: Re: [PATCH v5 3/9] i2c: add support for filters optional properties
-Thread-Topic: [PATCH v5 3/9] i2c: add support for filters optional properties
-Thread-Index: AQHVaHpW6NWckaLWlEK4ND0k79ASNKdldToA
-Date:   Mon, 21 Oct 2019 15:20:44 +0000
-Message-ID: <d7172480-0ba3-3412-aebf-353bfe8d6f66@axentia.se>
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "Nicolas.Ferre@microchip.com" <Nicolas.Ferre@microchip.com>
+Subject: Re: [PATCH v5 0/9] i2c: add support for filters
+Thread-Topic: [PATCH v5 0/9] i2c: add support for filters
+Thread-Index: AQHVaHpLr7113TR4Hk2itVe9BFeajadO9gMAgBZqJ4CAABXHgA==
+Date:   Mon, 21 Oct 2019 15:23:15 +0000
+Message-ID: <f5bd0c1f-9a72-6661-146b-ef5de77e31ff@axentia.se>
 References: <1568189911-31641-1-git-send-email-eugen.hristev@microchip.com>
- <1568189911-31641-4-git-send-email-eugen.hristev@microchip.com>
-In-Reply-To: <1568189911-31641-4-git-send-email-eugen.hristev@microchip.com>
+ <c17182ac-67dd-d11f-5daf-066bf446b969@microchip.com>
+ <20191021140515.GC26782@ninjato>
+In-Reply-To: <20191021140515.GC26782@ninjato>
 Accept-Language: en-US, sv-SE
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -63,89 +64,112 @@ X-MS-TNEF-Correlator:
 user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 x-originating-ip: [213.112.138.100]
-x-clientproxiedby: HE1PR0902CA0016.eurprd09.prod.outlook.com
- (2603:10a6:3:e5::26) To DB3PR0202MB3434.eurprd02.prod.outlook.com
+x-clientproxiedby: HE1PR07CA0034.eurprd07.prod.outlook.com
+ (2603:10a6:7:66::20) To DB3PR0202MB3434.eurprd02.prod.outlook.com
  (2603:10a6:8:5::30)
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=peda@axentia.se; 
 x-ms-exchange-messagesentrepresentingtype: 1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c754882a-b071-4299-ac44-08d7563a3dde
+x-ms-office365-filtering-correlation-id: ec7f5e47-6753-432f-46e0-08d7563a97e1
 x-ms-traffictypediagnostic: DB3PR0202MB3435:
-x-microsoft-antispam-prvs: <DB3PR0202MB3435005AB262E2F422C5D1C2BC690@DB3PR0202MB3435.eurprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-microsoft-antispam-prvs: <DB3PR0202MB34353FA956C351DE96B30572BC690@DB3PR0202MB3435.eurprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
 x-forefront-prvs: 0197AFBD92
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39830400003)(346002)(396003)(136003)(376002)(366004)(199004)(189003)(11346002)(7736002)(31686004)(8936002)(71200400001)(71190400001)(508600001)(31696002)(5660300002)(446003)(86362001)(316002)(476003)(2616005)(305945005)(3846002)(25786009)(7416002)(6116002)(256004)(14444005)(486006)(2906002)(76176011)(52116002)(2501003)(6436002)(58126008)(229853002)(66476007)(66556008)(64756008)(66446008)(99286004)(66066001)(110136005)(65806001)(6486002)(66946007)(36756003)(6512007)(14454004)(26005)(2201001)(81166006)(81156014)(186003)(102836004)(6246003)(53546011)(386003)(65956001)(6506007)(4326008)(8676002)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3435;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39830400003)(346002)(396003)(136003)(376002)(366004)(199004)(189003)(11346002)(7736002)(31686004)(8936002)(71200400001)(71190400001)(508600001)(31696002)(5660300002)(446003)(86362001)(316002)(476003)(2616005)(305945005)(3846002)(25786009)(7416002)(6116002)(256004)(14444005)(486006)(2906002)(76176011)(52116002)(2501003)(6436002)(58126008)(229853002)(66476007)(66556008)(64756008)(66446008)(99286004)(66066001)(110136005)(65806001)(54906003)(6486002)(66946007)(36756003)(6512007)(14454004)(26005)(81166006)(81156014)(186003)(102836004)(6246003)(4001150100001)(53546011)(386003)(65956001)(6506007)(4326008)(8676002);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3435;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: axentia.se does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kNrx0wY9c9k6i0NWt0s75nCLUdA/Mynbt5QUpjaCJgrRsyEBOJCUi03dWaQa5bThZ1BGlz2R3pn7Kvz6iwhkVcEY20nqCJwVq0/4OgIQ4OvO6p1mhgtob/n2NDhNx7AVN7rPNeGrjGaSs7Q/zXJIL/KgqGtNcP/V9zP0Msod7BfXZ/Om54Fb9J/uHUhD9PUqp6JvYI7OGh30AX2sd2hsgMfPyzsEdoZBPA7sZEUzjo7pZB2z8dUBi5TRpg4bM/7mOPCxI+KVODRRHDYa254AACDwfCpGjNid4BuW3N9eJlYbKiU7V1R/E+qJyO1GwHtwgvMXKKJSAQr2zJuQ1SQJb/GpDHkk0ngROEDtw78twvoGUdjzCY2W0ohlcXHKkU03jYS5i+I8KF9XxuCeXf+v1CjF71b6Jc+hT5P5QYHZSK+DkX/ldB+v9xkC46AnCIFf
+x-microsoft-antispam-message-info: pWuxGBn7XG4yM+XRDcuNA6uQV2R9rqrWZFoSen+1zMWiegUU8TS0Oi9iS1F3KPF7I73E2u7p7IsaBxYFXVzRQ28xtnhjrXKO29DOgfBk1JHBdAG491iuKX6Ls5vprySq2TZVSlq5HWYAtb9PLt1AwG+/heNEjlmnpLrNEtughdhGiQcgZ6VwRRSuoibm4t8OV5s1eKxiy9vHn0sae07UHjtfP5M6xvBahCpbw0crNfd+t/4HX58lIg9+0YfEEVH1fQCihApZ99fKIJHpM0WKzXO5LaA2bZ77fhwOg424i9/9FKSvvw2cBcAQzuBKphtlO+WUHdL5GIPb2yYzx5uTjIG+CYnB1uuCkqSgwE0o2l39ZPH7HG412CDiGoTl18zUksAPNjHwIQceR/R7sc2uzRo5ptwndHvqhbFtGrlAts++9HOaia1V/BoXRhvktL6q
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6E26C7A80CEE0D4A864CA97F250362B5@eurprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <542A5BB2F1351346977B834EB3C11628@eurprd02.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: c754882a-b071-4299-ac44-08d7563a3dde
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2019 15:20:44.6237
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec7f5e47-6753-432f-46e0-08d7563a97e1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2019 15:23:15.3938
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 4ee68585-03e1-4785-942a-df9c1871a234
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xDMbMiuCutJ1QtJiuQUjyCOz16iOAVxg2mYN66hGFEXJyqegeyEi437VAzJj4MVO
+X-MS-Exchange-CrossTenant-userprincipalname: 546Ctu3x6wdXrmmTcp/2Pd2JUwyCfmDKIbZrO++SlVOT1TPMI85NgE3ijiiYqSb9
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3435
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gMjAxOS0wOS0xMSAxMDoyNCwgRXVnZW4uSHJpc3RldkBtaWNyb2NoaXAuY29tIHdyb3RlOg0K
-PiBGcm9tOiBFdWdlbiBIcmlzdGV2IDxldWdlbi5ocmlzdGV2QG1pY3JvY2hpcC5jb20+DQo+IA0K
-PiBpMmMtZGlnaXRhbC1maWx0ZXItd2lkdGgtbnM6DQo+IFRoaXMgb3B0aW9uYWwgdGltaW5nIHBy
-b3BlcnR5IHNwZWNpZmllcyB0aGUgd2lkdGggb2YgdGhlIHNwaWtlcyBvbiB0aGUgaTJjDQo+IGxp
-bmVzIChpbiBucykgdGhhdCBjYW4gYmUgZmlsdGVyZWQgb3V0IGJ5IGJ1aWx0LWluIGRpZ2l0YWwg
-ZmlsdGVycyB3aGljaCBhcmUNCj4gZW1iZWRkZWQgaW4gc29tZSBpMmMgY29udHJvbGxlcnMuDQo+
-IGkyYy1hbmFsb2ctZmlsdGVyLWN1dG9mZi1mcmVxdWVuY3k6DQo+IFRoaXMgb3B0aW9uYWwgdGlt
-aW5nIHByb3BlcnR5IHNwZWNpZmllcyB0aGUgY3V0b2ZmIGZyZXF1ZW5jeSBvZiBhIGxvdy1wYXNz
-DQo+IGFuYWxvZyBmaWx0ZXIgYnVpbHQtaW4gaTJjIGNvbnRyb2xsZXJzLiBUaGlzIGxvdyBwYXNz
-IGZpbHRlciBpcyB1c2VkIHRvIGZpbHRlcg0KPiBvdXQgaGlnaCBmcmVxdWVuY3kgbm9pc2Ugb24g
-dGhlIGkyYyBsaW5lcy4gU3BlY2lmaWVkIGluIEh6Lg0KPiBJbmNsdWRlIHRoZXNlIHByb3BlcnRp
-ZXMgaW4gdGhlIHRpbWluZ3Mgc3RydWN0dXJlIGFuZCByZWFkIHRoZW0gYXMgaW50ZWdlcnMuDQo+
-IA0KPiBTaWduZWQtb2ZmLWJ5OiBFdWdlbiBIcmlzdGV2IDxldWdlbi5ocmlzdGV2QG1pY3JvY2hp
-cC5jb20+DQo+IC0tLQ0KPiAgZHJpdmVycy9pMmMvaTJjLWNvcmUtYmFzZS5jIHwgNiArKysrKysN
-Cj4gIGluY2x1ZGUvbGludXgvaTJjLmggICAgICAgICB8IDYgKysrKysrDQo+ICAyIGZpbGVzIGNo
-YW5nZWQsIDEyIGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9p
-MmMtY29yZS1iYXNlLmMgYi9kcml2ZXJzL2kyYy9pMmMtY29yZS1iYXNlLmMNCj4gaW5kZXggOWM0
-NDBmYS4uYzlmY2IxNiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9pMmMvaTJjLWNvcmUtYmFzZS5j
-DQo+ICsrKyBiL2RyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2UuYw0KPiBAQCAtMTY1OCw2ICsxNjU4
-LDEyIEBAIHZvaWQgaTJjX3BhcnNlX2Z3X3RpbWluZ3Moc3RydWN0IGRldmljZSAqZGV2LCBzdHJ1
-Y3QgaTJjX3RpbWluZ3MgKnQsIGJvb2wgdXNlX2RlDQo+ICAJCXQtPnNkYV9mYWxsX25zID0gdC0+
-c2NsX2ZhbGxfbnM7DQo+ICANCj4gIAlkZXZpY2VfcHJvcGVydHlfcmVhZF91MzIoZGV2LCAiaTJj
-LXNkYS1ob2xkLXRpbWUtbnMiLCAmdC0+c2RhX2hvbGRfbnMpOw0KPiArDQo+ICsJZGV2aWNlX3By
-b3BlcnR5X3JlYWRfdTMyKGRldiwgImkyYy1kaWdpdGFsLWZpbHRlci13aWR0aC1ucyIsDQo+ICsJ
-CQkJICZ0LT5kaWdpdGFsX2ZpbHRlcl93aWR0aF9ucyk7DQo+ICsNCj4gKwlkZXZpY2VfcHJvcGVy
-dHlfcmVhZF91MzIoZGV2LCAiaTJjLWFuYWxvZy1maWx0ZXItY3V0b2ZmLWZyZXF1ZW5jeSIsDQo+
-ICsJCQkJICZ0LT5hbmFsb2dfZmlsdGVyX2N1dG9mZl9mcmVxX2h6KTsNCj4gIH0NCj4gIEVYUE9S
-VF9TWU1CT0xfR1BMKGkyY19wYXJzZV9md190aW1pbmdzKTsNCj4gIA0KPiBkaWZmIC0tZ2l0IGEv
-aW5jbHVkZS9saW51eC9pMmMuaCBiL2luY2x1ZGUvbGludXgvaTJjLmgNCj4gaW5kZXggZmE1NTUy
-Yy4uMjZjZTE0MyAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51eC9pMmMuaA0KPiArKysgYi9p
-bmNsdWRlL2xpbnV4L2kyYy5oDQo+IEBAIC01NzUsNiArNTc1LDEwIEBAIHN0cnVjdCBpMmNfbG9j
-a19vcGVyYXRpb25zIHsNCj4gICAqIEBzY2xfaW50X2RlbGF5X25zOiB0aW1lIElQIGNvcmUgYWRk
-aXRpb25hbGx5IG5lZWRzIHRvIHNldHVwIFNDTCBpbiBucw0KPiAgICogQHNkYV9mYWxsX25zOiB0
-aW1lIFNEQSBzaWduYWwgdGFrZXMgdG8gZmFsbCBpbiBuczsgdChmKSBpbiB0aGUgSTJDIHNwZWNp
-ZmljYXRpb24NCj4gICAqIEBzZGFfaG9sZF9uczogdGltZSBJUCBjb3JlIGFkZGl0aW9uYWxseSBu
-ZWVkcyB0byBob2xkIFNEQSBpbiBucw0KPiArICogQGRpZ2l0YWxfZmlsdGVyX3dpZHRoX25zOiB3
-aWR0aCBpbiBucyBvZiBzcGlrZXMgb24gaTJjIGxpbmVzIHRoYXQgdGhlIElQIGNvcmUNCj4gKyAq
-CQkJICAgICBkaWdpdGFsIGZpbHRlciBjYW4gZmlsdGVyIG91dA0KPiArICogQGFuYWxvZ19maWx0
-ZXJfY3V0b2ZmX2ZyZXFfaHo6IHRocmVzaG9sZCBmcmVxdWVuY3kgZm9yIHRoZSBsb3cgcGFzcyBJ
-UCBjb3JlDQo+ICsJCQkgICAgICBhbmFsb2cgZmlsdGVyDQoNClRoZSBpbmRlbnRhdGlvbiBpcyBh
-IGxpdHRsZSBiaXQgZXhjZXNzaXZlIGFuZCBhbHNvIG9mZi4gT3RoZXIgY29tbWVudHMgaW4gdGhl
-DQpmaWxlIGp1c3QgdXNlcyBhIHNpbmdsZSB0YWIgYWZ0ZXIgdGhlIGFzdGVyaXNrIGluIHRoaXMg
-c2NlbmFyaW8uIEFsc28sIHRoZSBsYXN0DQpvZiB0aGUgbmV3IGxpbmVzIGlzIG1pc3NpbmcgdGhh
-dCBsZWFkaW5nIGFzdGVyaXNrLg0KDQpDaGVlcnMsDQpQZXRlcg0KDQo+ICAgKi8NCj4gIHN0cnVj
-dCBpMmNfdGltaW5ncyB7DQo+ICAJdTMyIGJ1c19mcmVxX2h6Ow0KPiBAQCAtNTgzLDYgKzU4Nyw4
-IEBAIHN0cnVjdCBpMmNfdGltaW5ncyB7DQo+ICAJdTMyIHNjbF9pbnRfZGVsYXlfbnM7DQo+ICAJ
-dTMyIHNkYV9mYWxsX25zOw0KPiAgCXUzMiBzZGFfaG9sZF9uczsNCj4gKwl1MzIgZGlnaXRhbF9m
-aWx0ZXJfd2lkdGhfbnM7DQo+ICsJdTMyIGFuYWxvZ19maWx0ZXJfY3V0b2ZmX2ZyZXFfaHo7DQo+
-ICB9Ow0KPiAgDQo+ICAvKioNCj4gDQoNCg==
+On 2019-10-21 16:05, Wolfram Sang wrote:
+> On Mon, Oct 07, 2019 at 07:53:21AM +0000, Eugen.Hristev@microchip.com wro=
+te:
+>>
+>>
+>> On 11.09.2019 11:24, Eugen Hristev - M18282 wrote:
+>>> From: Eugen Hristev <eugen.hristev@microchip.com>
+>>>
+>>> Hello,
+>>>
+>>> This series adds support for analog and digital filters for i2c control=
+lers
+>>>
+>>> This series is based on the series:
+>>> [PATCH v2 0/9] i2c: at91: filters support for at91 SoCs
+>>> and later
+>>> [PATCH v4 0/9] i2c: add support for filters
+>>> and enhanced to add the bindings for all controllers plus an extra bind=
+ings
+>>> for the width of the spikes in nanoseconds (digital filters) and cut-of=
+f
+>>> frequency (analog filters)
+>>>
+>>> First, bindings are created for
+>>> 'i2c-analog-filter'
+>>> 'i2c-digital-filter'
+>>> 'i2c-digital-filter-width-ns'
+>>> 'i2c-analog-filter-cutoff-frequency'
+>>>
+>>> The support is added in the i2c core to retrieve filter width/cutoff fr=
+equency
+>>> and add it to the timings structure.
+>>> Next, the at91 driver is enhanced for supporting digital filter, advanc=
+ed
+>>> digital filter (with selectable spike width) and the analog filter.
+>>>
+>>> Finally the device tree for two boards are modified to make use of the
+>>> new properties.
+>>>
+>>> This series is the result of the comments on the ML in the direction
+>>> requested: to make the bindings globally available for i2c drivers.
+>>>
+>>> Changes in v5:
+>>> - renamed i2c-filter-width-ns to i2c-digital-filter-width-ns as this
+>>> is applicable only to digital filter
+>>> - created new binding i2c-digital-filter-width-ns for analog filters.
+>>
+>> Hello Wolfram and Peter,
+>>
+>> Are you happy with the changes in this version? I haven't heard from you=
+=20
+>> since this latest update.
+>> I am interested to know if anymore changes are required or maybe we can=
+=20
+>> move further with this support.
+>=20
+> So, I had a look now and I am happy. I will give Peter one more day to
+> comment, otherwise I'll apply it tomorrow.
+
+I had another read-through and only found one nit which is in a separate
+message. You can add
+
+Reviewed-by: Peter Rosin <peda@axentia.se>
+
+for the whole series.
+
+Cheers,
+Peter
+
+> Thanks for your patience and keeping at it!
+>=20
+
