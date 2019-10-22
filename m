@@ -2,171 +2,187 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 173F8DFE3E
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2019 09:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5266FDFFE2
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2019 10:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728346AbfJVH1N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Oct 2019 03:27:13 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:44613 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387791AbfJVH1N (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Oct 2019 03:27:13 -0400
-Received: by mail-ed1-f67.google.com with SMTP id r16so12036878edq.11
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2019 00:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=MFBdspS+xXFxCKlkyDP++/fjuIK+Mo0RkCyzgsveOkc=;
-        b=QiMI6e1JKV7CbDfGfSqJ4kgFGr4RhfoKQAuFhznIHBVkvsJj8D0I1mO6uvXGwdldfN
-         2d6dVyNIhVDBZIf3NVyImcj3owO2CE5hAG7ksGLI7NI3BC9oopz35zMz9SUo9xeNFruZ
-         JWnc01pWW1i7L8vBkC7ifwbmt2gRAui8ghU+k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MFBdspS+xXFxCKlkyDP++/fjuIK+Mo0RkCyzgsveOkc=;
-        b=gB7x5wFuRMNZI7GZC7M5Ims2eMsElnpKOxAZMgA3qxhOEgRFvG3IN79neRamA/Q+Y+
-         m8MXD8b0spciDNwEEum9wKUNj/3iKnQtLLqa7uF1C3njREr+5uNJmm0AGedYrBmtrH1p
-         ApJ74ee8CIfBt1GGrM9mw2ua7nGWOEOO8p47vdXECvG1uMjBCIsoQGwbcCmRmh7d1Fpe
-         jbZDAspQfwU4PvSwYGUfp585Os44c62xKpH5c8mafy5WACT2CF6TxxxkzypcCIzSqOHn
-         ouAxr+PV8O2RTha27ywRTZt/Cij1/4Qsl8wMC3MNWItPB4/lBcQ4WifP7vEOExlG1bw7
-         GZ9w==
-X-Gm-Message-State: APjAAAU5Fvz7TeCpqQh3mMmvtcSMVZqabCOzfVgW3MXZO2DRD3dCaAai
-        JKIlsK4Skp3Tlte9WYpGQrhBrhTJVfvTBA==
-X-Google-Smtp-Source: APXvYqzEGKYfFwMEFBdhII8mlW3a+mY4AOxjhzh+UB8H7UvMWeTRtZUVoSzOZxKCks9ur7kxt8Ibsg==
-X-Received: by 2002:aa7:d8c6:: with SMTP id k6mr29507123eds.87.1571729228868;
-        Tue, 22 Oct 2019 00:27:08 -0700 (PDT)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id p88sm393102edd.22.2019.10.22.00.27.07
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2019 00:27:08 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id q13so11762866wrs.12
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2019 00:27:07 -0700 (PDT)
-X-Received: by 2002:a5d:4491:: with SMTP id j17mr1985919wrq.46.1571729226926;
- Tue, 22 Oct 2019 00:27:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191018082557.3696-1-bibby.hsieh@mediatek.com> <CAMpxmJUrY9YK==6Mf5MoRTUDwmXJ6v5EM-VLXCNXJ8ZNK+xHyA@mail.gmail.com>
-In-Reply-To: <CAMpxmJUrY9YK==6Mf5MoRTUDwmXJ6v5EM-VLXCNXJ8ZNK+xHyA@mail.gmail.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Tue, 22 Oct 2019 16:26:53 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5BEcE0m7Jg1ZnmrF+jwH6Yn8+vYqT1L2wc2zkZ5vRCRAg@mail.gmail.com>
-Message-ID: <CAAFQd5BEcE0m7Jg1ZnmrF+jwH6Yn8+vYqT1L2wc2zkZ5vRCRAg@mail.gmail.com>
-Subject: Re: [PATCH v4] misc: eeprom: at24: support pm_runtime control
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
+        id S2387479AbfJVIpX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Oct 2019 04:45:23 -0400
+Received: from mail-eopbgr00121.outbound.protection.outlook.com ([40.107.0.121]:26593
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388490AbfJVIpX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 22 Oct 2019 04:45:23 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NH6ICw/aGJGLXiBO1oiObwDqLU8GftqOiP767cGnR6reQmnHQbqaylRVOjUs3ra76WMR/MFiD9KnzY6YoGyMVHEypYoa5msaAvgSSG7XIG6oJGqsl5lzSF97t/6dvCUL3VKV0OJMqOBzScXdAU6GLzkwd4haGWxp52j8Kc3IhYc4gkgaC6wgaMi3k6cVR5tmjR2g3E7IOrLIJ2xFndjCYvk6I3map847qZe9+HAJc7dxLsIurSjyq8Z5BIjoAY2q42yTVzvHH6QW7UAFh0c3VQ73QYnxTnF0PT7Y4El4OuUM5H/kWEpf1nSanZScQuaYrRtYI3eFZRwc95O3uaiDhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9RDd6uHjnaIl18b9/q1LJ/A6qy5517LdOU+CAcC+MiA=;
+ b=TxUdCh5SdODfPQD99jlSdzEnyonsC3uFG8BBHuS6QBU7bZsVMrI5XqbCuWrA9YzpXrJFO4MwkRjt8o4RNERUo4BroFjIkYvbiQ2Y3KG17fG8QFQSvSsDo6R7OUSjY6Q4iNezPhLZ3+n29KL0a3vJMQksRjLZo5S+bqVYkEUyB/JjsY7gJCzch/e6JOC3YFAVpCogEYOhPk0kHuo8xKJ41fkM+kA6jWzcm8NAXmhEYsmpdb9DUyp5PIK8/hKXu0xk8Cs3TP+95WJwjoAZJdWwzEC16uuckWdz6Miqlw47s32jaQX1RGtH/pazmvM7S9YeG6orbU82gLhPOYuG/z5q4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9RDd6uHjnaIl18b9/q1LJ/A6qy5517LdOU+CAcC+MiA=;
+ b=JyGeA52ffsz9qpXXEdEFFSALP+9cfSZIWSCbTjEQYDTKNRLN3yCTggqufdCYkiKHlwRInQhR5iL8Pqv+zqs5gZn4m5VQgEhX0KrpdXAzCASaJN7RE5wWnTDQEdGjuG/b8t8R0HJXfgNjgEAXiEVnbDYRABoCiR1kJaUuEXs6xTA=
+Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com (52.134.66.158) by
+ DB3PR0202MB3340.eurprd02.prod.outlook.com (52.134.67.15) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2367.24; Tue, 22 Oct 2019 08:45:18 +0000
+Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com
+ ([fe80::c5b8:6014:87a4:1afe]) by DB3PR0202MB3434.eurprd02.prod.outlook.com
+ ([fe80::c5b8:6014:87a4:1afe%7]) with mapi id 15.20.2347.029; Tue, 22 Oct 2019
+ 08:45:17 +0000
+From:   Peter Rosin <peda@axentia.se>
+To:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        linux-devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
+        Cedric Le Goater <clg@kaod.org>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Subject: Re: [PATCH i2c-next 1/2] dt-bindings: i2c: aspeed: add hardware
+ timeout support
+Thread-Topic: [PATCH i2c-next 1/2] dt-bindings: i2c: aspeed: add hardware
+ timeout support
+Thread-Index: AQHViE2KU5aZojIjkUqCdR4ab3gQm6dlt3EA///tFICAALTpgA==
+Date:   Tue, 22 Oct 2019 08:45:17 +0000
+Message-ID: <b98827fa-462a-060b-efc7-27fe5d7742ff@axentia.se>
+References: <20191021202414.17484-1-jae.hyun.yoo@linux.intel.com>
+ <20191021202414.17484-2-jae.hyun.yoo@linux.intel.com>
+ <0a629f7b-b829-c332-27d8-dc825205ff72@axentia.se>
+ <7abf933b-cb18-10af-9c1b-163ec65ffae5@linux.intel.com>
+In-Reply-To: <7abf933b-cb18-10af-9c1b-163ec65ffae5@linux.intel.com>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+x-originating-ip: [213.112.138.100]
+x-clientproxiedby: HE1PR0102CA0053.eurprd01.prod.exchangelabs.com
+ (2603:10a6:7:7d::30) To DB3PR0202MB3434.eurprd02.prod.outlook.com
+ (2603:10a6:8:5::30)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peda@axentia.se; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9c73b2ee-2f98-46ee-46ee-08d756cc29f3
+x-ms-traffictypediagnostic: DB3PR0202MB3340:
+x-microsoft-antispam-prvs: <DB3PR0202MB3340855FD970AFD95B1783C4BC680@DB3PR0202MB3340.eurprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 01986AE76B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(136003)(346002)(366004)(396003)(39830400003)(199004)(52314003)(189003)(6512007)(54906003)(6436002)(99286004)(6506007)(386003)(53546011)(6246003)(229853002)(110136005)(58126008)(6486002)(25786009)(66066001)(65806001)(65956001)(102836004)(8936002)(4326008)(26005)(52116002)(76176011)(81156014)(81166006)(8676002)(316002)(5660300002)(186003)(7416002)(71200400001)(256004)(14444005)(66946007)(305945005)(6116002)(3846002)(86362001)(31696002)(66446008)(64756008)(66556008)(66476007)(4001150100001)(2906002)(11346002)(476003)(486006)(36756003)(508600001)(14454004)(31686004)(446003)(71190400001)(7736002)(2616005)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3340;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: axentia.se does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fn4FipVxJlznXQexa6vcgCYlFcElZLKNZhs5iuxQcsBnm/aFtkVR7sY6nYcq96lVeMoS02TKUIRn0vT7GYzk7fbPwwAHcbs05kU/5e1JYkJQQ+/eRT6cmbCsE99AJOP7CXhpSz2sAf1KRxTdo6G4y/fh18aNXmRGBUmbZc4yDWP5doupqeXgd5vBLhzr0f7WUMq/i1u8lv03V9jpuN6XoNWvwQkSu1klbawffZ+rhWqhwQP/jgdpnK5k9eKiM+cufKCcCQCA0WEe3tLtPLQZmid7jlXzviqmyqkrjLBwMprFQ/DTDUsT7vD10z3NAtiVcYkBD0DjnM0SRAYxhHO0Aoe8ilUQ+6KbaOfj5AqO9Fspfn2Q6jX2HRdX5rr78DIljv3Fq+NLdR+jZ3wOsi33SxOBqe9JqIZu5TSfPwkOMxkkzKYJHOnxnTErmSfhqTWG
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7084A791E746C8458A822A468C1DDC13@eurprd02.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c73b2ee-2f98-46ee-46ee-08d756cc29f3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Oct 2019 08:45:17.8657
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: s/uZAiNNWtS+LEk6fQyPy4opUMAHDU6rylu/WPazBum4gEOjYR6VHXTGI8UWBELj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3340
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Oct 22, 2019 at 1:53 AM Bartosz Golaszewski
-<bgolaszewski@baylibre.com> wrote:
->
-> pt., 18 pa=C5=BA 2019 o 10:26 Bibby Hsieh <bibby.hsieh@mediatek.com> napi=
-sa=C5=82(a):
-> >
-> > Although in the most platforms, the power of eeprom and i2c
-> > are alway on, some platforms disable the eeprom and i2c power
-> > in order to meet low power request.
-> > This patch add the pm_runtime ops to control power to support
-> > all platforms.
-> >
-> > Changes since v3:
-> >  - remove redundant calling function
-> >  - change SIMPLE_DEV_PM_OPS to SET_RUNTIME_PM_OPS
-> >  - change supply name
-> >
-> > Changes since v2:
-> >  - rebase onto v5.4-rc1
-> >  - pm_runtime_disable and regulator_bulk_disable at
-> >    err return in probe function
-> >
-> > Changes since v1:
-> >  - remove redundant code
-> >  - fixup coding style
-> >
-> > Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
-> > ---
-> >  drivers/misc/eeprom/at24.c | 64 ++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 64 insertions(+)
-> >
-> > diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-> > index 2cccd82a3106..68ced4f25916 100644
-> > --- a/drivers/misc/eeprom/at24.c
-> > +++ b/drivers/misc/eeprom/at24.c
-> > @@ -22,6 +22,7 @@
-> >  #include <linux/nvmem-provider.h>
-> >  #include <linux/regmap.h>
-> >  #include <linux/pm_runtime.h>
-> > +#include <linux/regulator/consumer.h>
-> >  #include <linux/gpio/consumer.h>
-> >
-> >  /* Address pointer is 16 bit. */
-> > @@ -67,6 +68,12 @@
-> >   * which won't work on pure SMBus systems.
-> >   */
-> >
-> > +static const char * const at24_supply_names[] =3D {
-> > +       "vcc", "i2c",
-> > +};
-> > +
-> > +#define AT24_NUM_SUPPLIES ARRAY_SIZE(at24_supply_names)
-> > +
-> >  struct at24_client {
-> >         struct i2c_client *client;
-> >         struct regmap *regmap;
-> > @@ -91,6 +98,8 @@ struct at24_data {
-> >
-> >         struct gpio_desc *wp_gpio;
-> >
-> > +       bool has_supplies;
-> > +       struct regulator_bulk_data supplies[AT24_NUM_SUPPLIES];
-> >         /*
-> >          * Some chips tie up multiple I2C addresses; dummy devices rese=
-rve
-> >          * them for us, and we'll use them with SMBus calls.
-> > @@ -662,6 +671,17 @@ static int at24_probe(struct i2c_client *client)
-> >         at24->client[0].client =3D client;
-> >         at24->client[0].regmap =3D regmap;
-> >
-> > +       regulator_bulk_set_supply_names(at24->supplies,
-> > +                                       at24_supply_names, AT24_NUM_SUP=
-PLIES);
-> > +       err =3D  devm_regulator_bulk_get(&at24->client[0].client->dev,
-> > +                                      AT24_NUM_SUPPLIES, at24->supplie=
-s);
-> > +       if (err =3D=3D -ENODEV)
-> > +               at24->has_supplies =3D NULL;
->
-> I just gave this a spin and noticed that this will never happen - the
-> regulator core will use a dummy regulator if none is defined in DT.
-> The only way for this to make sense would be to use
-> regulator_get_optional() for each supply separately. But actually I
-> think we should just leave it this way and remove this if. In the end:
-> this chip needs some power supply, so dummy regulator makes sense.
-
-Thanks for testing. I'd still like to make sure what happens on non-DT
-platforms.
-
-I can see that the core returns the dummy regulator if
-have_full_constraints() [1]. That is always true for DT systems, but
-for others it's false by default, unless someone explicitly calls
-regulator_has_full_constraints() [2].
-
-[1] https://elixir.bootlin.com/linux/v5.4-rc2/source/drivers/regulator/core=
-.c#L1787
-[2] https://elixir.bootlin.com/linux/v5.4-rc2/source/drivers/regulator/core=
-.c#L120
-
-Best regards,
-Tomasz
+T24gMjAxOS0xMC0yMSAyMzo1NywgSmFlIEh5dW4gWW9vIHdyb3RlOg0KPiBIaSBQZXRlciwNCj4g
+DQo+IE9uIDEwLzIxLzIwMTkgMjowNSBQTSwgUGV0ZXIgUm9zaW4gd3JvdGU6DQo+PiBPbiAyMDE5
+LTEwLTIxIDIyOjI0LCBKYWUgSHl1biBZb28gd3JvdGU6DQo+Pj4gQXBwZW5kIGEgYmluZGluZyB0
+byBzdXBwb3J0IGhhcmR3YXJlIHRpbWVvdXQgZmVhdHVyZS4NCj4+Pg0KPj4+IFNpZ25lZC1vZmYt
+Ynk6IEphZSBIeXVuIFlvbyA8amFlLmh5dW4ueW9vQGxpbnV4LmludGVsLmNvbT4NCj4+PiAtLS0N
+Cj4+PiAgIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLWFzcGVlZC50
+eHQgfCAyICsrDQo+Pj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+Pj4NCj4+
+PiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMt
+YXNwZWVkLnR4dCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLWFz
+cGVlZC50eHQNCj4+PiBpbmRleCBiNDdmNmNjYjE5NmEuLjEzM2JmZWRmNGNkZCAxMDA2NDQNCj4+
+PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2kyYy1hc3BlZWQu
+dHh0DQo+Pj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMt
+YXNwZWVkLnR4dA0KPj4+IEBAIC0xNyw2ICsxNyw4IEBAIE9wdGlvbmFsIFByb3BlcnRpZXM6DQo+
+Pj4gICAtIGJ1cy1mcmVxdWVuY3kJOiBmcmVxdWVuY3kgb2YgdGhlIGJ1cyBjbG9jayBpbiBIeiBk
+ZWZhdWx0cyB0byAxMDAga0h6IHdoZW4gbm90DQo+Pj4gICAJCSAgc3BlY2lmaWVkDQo+Pj4gICAt
+IG11bHRpLW1hc3Rlcgk6IHN0YXRlcyB0aGF0IHRoZXJlIGlzIGFub3RoZXIgbWFzdGVyIGFjdGl2
+ZSBvbiB0aGlzIGJ1cy4NCj4+PiArLSBhc3BlZWQsaHctdGltZW91dC1tcwk6IEhhcmR3YXJlIHRp
+bWVvdXQgaW4gbWlsbGlzZWNvbmRzLiBJZiBpdCdzIG5vdA0KPj4+ICsJCQkgIHNwZWNpZmllZCwg
+dGhlIEgvVyB0aW1lb3V0IGZlYXR1cmUgd2lsbCBiZSBkaXNhYmxlZC4NCj4+PiAgIA0KPj4+ICAg
+RXhhbXBsZToNCj4+PiAgIA0KPj4+DQo+Pg0KPj4gU29tZSBTTUJ1cyBjbGllbnRzIHN1cHBvcnQg
+YSBzbWJ1cy10aW1lb3V0LWRpc2FibGUgYmluZGluZyBmb3IgZGlzYWJsaW5nDQo+PiB0aW1lb3V0
+cyBsaWtlIHRoaXMsIGZvciBjYXNlcyB3aGVyZSB0aGUgSTJDIGFkYXB0ZXIgaW4gcXVlc3Rpb24g
+b24gb2NjYXNpb24NCj4+IGlzIHVuYWJsZSB0byBrZWVwIHRoZSBwYWNlLiBBZGRpbmcgdGhhdCBw
+cm9wZXJ0eSB0aHVzIGF2b2lkcyB1bmRlc2lyZWQNCj4+IHRpbWVvdXRzIHdoZW4gdGhlIGNsaWVu
+dCBpcyBTTUJ1cyBjb25mb3JtYW50IHdpdGhvdXQgaXQuIFlvdXIgbmV3IGJpbmRpbmcNCj4+IGlz
+IHRoZSByZXZlcnNlIHNpdHVhdGlvbiwgd2hlcmUgeW91IHdhbnQgdG8gYWRkIGEgdGltZW91dCB3
+aGVyZSBvbmUgaXMNCj4+IG90aGVyd2lzZSBtaXNzaW5nLg0KPj4NCj4+IEFueXdheSwgc2luY2Ug
+STJDIGRvZXMgbm90IGhhdmUgYSBzcGVjaWZpZWQgbG93ZXN0IHBvc3NpYmxlIGZyZXF1ZW5jeSwg
+dGhpcw0KPj4gZmVlbHMgbGlrZSBzb21ldGhpbmcgdGhhdCBpcyBtb3JlIGluIHRoZSBTTUJ1cyBh
+cmVuYS4gU2hvdWxkIHRoZSBwcm9wZXJ0eQ0KPj4gcGVyaGFwcyBiZSBhIGdlbmVyaWMgcHJvcGVy
+dHkgbmFtZWQgc21idXMtdGltZW91dC1tcywgb3Igc29tZXRoaW5nIGxpa2UNCj4+IHRoYXQ/DQo+
+IA0KPiBXZWxsLCBJIHRyaWVkIHVwc3RyZWFtaW5nIG9mIHRoZSBnZW5lcmljIHRpbWVvdXQgcHJv
+cGVydHkgYSB5ZWFyIGFnbyBidXQNCj4gSSBhZ3JlZWQgdGhhdCB0aGUgZ2VuZXJpYyBidXMgdGlt
+ZW91dCBwcm9wZXJ0eSBjYW4gYmUgc2V0IGJ5IGFuIGlvY3RsDQo+IGNvbW1hbmQgc28gaXQgZGlk
+bid0IG5lZWQgdG8gYmUgYWRkZWQgaW50byBkZXZpY2UgdHJlZSBhdCB0aGF0IHRpbWUuIE5vdA0K
+PiBzdXJlIGlmIGFueSBuZWVkIGhhcyBjb21lIHJlY2VudGx5IGJ1dCBJIGhhdmVuJ3QgaGVhcmQg
+dGhhdC4gVGhpcyBkcml2ZXINCj4gc3RpbGwgdXNlcyB0aGUgZ2VuZXJpYyB0aW1lb3V0IHByb3Bl
+cnR5IHdoaWNoIGlzIHByb3ZpZGVkIGJ5IGkyYyBjb3JlDQo+IGZvciBoYW5kbGluZyBjb21tYW5k
+IHRpbWVvdXRzLCBhbmQgaXQncyBvdXQgb2Ygc2NvcGUgZnJvbSB0aGlzIHBhdGNoDQo+IHNlcmll
+cy4NCj4gDQo+PiBJZiB0aGUgYWJvdmUgaXMgbm90IHdhbnRlZCBvciBhcHByb3ByaWF0ZSwgdGhl
+biBJIHdvdWxkIHBlcnNvbmFsbHkgcHJlZmVyDQo+PiBhc3BlZWQsYnVzLXRpbWVvdXQtbXMgb3Zl
+ciBhc3BlZWQsaHctdGltZW91dC1tcy4gVG8gbWUsIGh3LXRpbWVvdXQtbXMgc291bmRzDQo+PiBs
+aWtlIGEgKG1vcmUgc2VyaW91cykgdGltZW91dCBiZXR3ZWVuIHRoZSBDUFUgYW5kIHRoZSBJMkMg
+cGVyaXBoZXJhbCB1bml0DQo+PiBvciBzb21ldGhpbmcgbGlrZSB0aGF0LiBCdXQgSSBkb24ndCBj
+YXJlIGRlZXBseS4uLg0KPiANCj4gQ2hhbmdlcyBJIHN1Ym1pdHRlZCBpbiB0aGlzIHBhdGNoIHNl
+dCBpcyBmb3IgYSBkaWZmZXJlbnQgcHVycG9zZSB3aGljaA0KPiBpcyB2ZXJ5IEFzcGVlZCBIL1cg
+c3BlY2lmaWMsIGFuZCBhY3R1YWxseSBpdCdzIGEgbW9yZSBzZXJpb3VzIHRpbWVvdXQNCj4gc2V0
+dGluZyBpbmRlZWQuIElmIHRoaXMgSC9XIGlzIHVzZWQgaW4gbXVsdGktbWFzdGVyIGVudmlyb25t
+ZW50LCBpdA0KPiBjb3VsZCBtZWV0IGEgSC9XIGhhbmcgdGhhdCBmcmVlemVzIGl0c2VsZiBpbiBz
+bGF2ZSBtb2RlIGFuZCBpdCBjYW4ndA0KPiBlc2NhcGUgZnJvbSB0aGUgc3RhdGUuIFRvIHJlc29s
+dmUgdGhlIHNwZWNpZmljIGNhc2UsIHRoaXMgSC9XIHByb3ZpZGVzDQo+IHNlbGYtcmVjb3Zlcnkg
+ZmVhdHVyZSB3aGljaCBtb25pdG9ycyBhYm5vcm1hbCBzdGF0ZSBvZiBTREEsIFNDTCBhbmQgaXRz
+DQo+IEgvVyBzdGF0ZSBtYWNoaW5lIHVzaW5nIHRoZSB0aW1lb3V0IHNldHRpbmcgdG8gZGV0ZXJt
+aW5lIHRoZSBlc2NhcGUNCj4gY29uZGl0aW9uLg0KDQpBcmUgeW91IHNheWluZyB0aGF0IHRoZSBh
+c3BlZWQgSFcgaXMgYnVnZ3kgYW5kIHRoYXQgdGhpcyBhYm5vcm1hbCBzdGF0ZQ0KaXMgc2VsZiBp
+bmZsaWN0ZWQgYnkgdGhlIGFzcGVlZCBIVyBldmVuIGlmIG90aGVyIG1hc3RlcnMgb24gdGhlIGJ1
+cw0KYmVoYXZlIHNhbmVseT8gQmVjYXVzZSBJIGRpZG4ndCBxdWl0ZSByZWFkIGl0IHRoYXQgd2F5
+IGF0IGFsbC4uLg0KDQpUbyBtZSwgaXQgc291bmRlZCAqZXhhY3RseSogbGlrZSB0aGUgc3RhdGUg
+STJDIGNsaWVudHMgZW5kIHVwIGluIHdoZW4gYW4NCkkyQyBtYXN0ZXIgImRpZXMiIGFuZCBzdG9w
+cyBjb21tdW5pY2F0aW5nIGluIHRoZSBtaWRkbGUgb2YgYSB0cmFuc2FjdGlvbi4NCkkuZS4gdGhl
+IHRoaW5nIHRoYXQgdGhlIFNNQnVzIHRpbWVvdXQgaXMgZGVzaWduZWQgdG8gcHJldmVudCAoYW5k
+IHRoZQ0Kc3RhdGUgdGhlIEkyQyBuaW5lLWNsay1yZWNvdmVyeSBzZXF1ZW5jZSBhZGRyZXNzZXMp
+LiBUaGUgb25seSB0d2lzdCAodGhhdA0KSSBzYXcpIHdhcyB0aGF0IHRoZSBhc3BlZWQgSFcgaXMg
+YWxzbyBhIG1hc3RlciBhbmQgdGhhdCB0aGUgYXNwZWVkIG1hc3Rlcg0KZHJpdmVyIGlzIGNvbXBs
+ZXRlbHkgbG9ja2VkIG91dCBmcm9tIHRoZSBidXMgd2hpbGUgc29tZSBvYm5veGlvdXMgbWFzdGVy
+DQpmYWlscyB0byBjb21wbGV0ZSBpdHMgdHJhbnNhY3Rpb24gKG9yIHdoYXRldmVyIGl0IHdhcyB1
+cCB0bykuDQoNCklmIHRoaXMgY2FuIG9ubHkgYmUgdHJpZ2dlcmVkIHdoZW4gdGhlIEhXIGlzIGFj
+dGluZyBhcyBhIHNsYXZlLCBhbmQgYnkNCmFib3J0ZWQgb3Igb3RoZXJ3aXNlIGZ1bmt5IG1hc3Rl
+ciBhY3Rpdml0eSBvbiB0aGUgYnVzLCB0aGVuIEkgd291bGRuJ3QNCmNhbGwgaXQgYW4gSFcgaXNz
+dWUuIFRoZW4gaXQgd291bGQgYmUgYSBidXMgaXNzdWUuIEkuZS4gc29tZXRoaW5nIG5lZWRpbmcN
+CmEgYnVzLXRpbWVvdXQgaW5zdGVhZCBvZiBhIGh3LXRpbWVvdXQuDQoNCkkgZG9uJ3QgaGF2ZSB0
+aGUgc3BlY2lmaWNzLCBzbyBJIGNhbid0IHRlbGwgd2hpY2ggd2F5IGl0IGlzLiBJJ20ganVzdA0K
+cmVhY3RpbmcgdG8gdGhlIHByZXNlbnRlZCBpbmZvcm1hdGlvbi4NCg0KQ2hlZXJzLA0KUGV0ZXIN
+Cg0KPiBHZW5lcmFsbHksIHRoaXMgSC9XIHRpbWVvdXQgdmFsdWUgaXMgc21hbGxlciB0aGFuIHRo
+ZSBnZW5lcmljIGJ1cw0KPiB0aW1lb3V0IHZhbHVlIChJJ20gdXNpbmcgMzAwbXMgZm9yIHRoZSBI
+L1cgdGltZW91dCB3aGlsZSBJJ20gdXNpbmcgMQ0KPiBzZWNvbmQgZm9yIHRoZSBnZW5lcmljIGJ1
+cyB0aW1lb3V0KSBzbyBJIHRoaW5rIGl0IHNob3VsZCBiZQ0KPiBkaXN0aW5ndWlzaGVkIGZyb20g
+dGhlIGdlbmVyaWMgYnVzIHRpbWVvdXQuDQo+IA0KPiBUaGFua3MsDQo+IA0KPiBKYWUNCj4gDQoN
+Cg==
