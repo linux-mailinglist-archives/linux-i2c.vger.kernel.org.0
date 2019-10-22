@@ -2,200 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE06E0227
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2019 12:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33202E02B1
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2019 13:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388251AbfJVKeM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Oct 2019 06:34:12 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:39681 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388259AbfJVKeM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Oct 2019 06:34:12 -0400
-Received: by mail-ed1-f66.google.com with SMTP id l25so1218180edt.6
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2019 03:34:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=e68YLYvcFbaqOJn4XNlThbOgu3ucI6lxgXX12qn4Gzk=;
-        b=Lv76N7FolD/PooIHeSV5UCr3GbiI+68yzlIptjne99kvjVfVaaCnVSLNdcSd9GYw2b
-         3jHqdSiggQyK767cWlGQTbdOPkbhAW6ZkrVLwgJoPGyKs0lDh6JP+1nIi4HFtHyp5HZm
-         KJf0XTmhHlDeqQ1MMXjMRizE1bEyEFJBfzWAI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=e68YLYvcFbaqOJn4XNlThbOgu3ucI6lxgXX12qn4Gzk=;
-        b=jmrkZgoF3+qpcd5acCjmiqNJn+hZ/EEI4oZoWTaJWGknUOrh34vWu7hFc9BPCgFMHJ
-         NIqVcInKlzGfM03u36sImWNPTvJGPFGWgU4mTCMHbkrQssoFrDKVcmz69ttLVcI/44WW
-         kJ8p3obD3OaxGuDm8FnfzCsKX55Zo65gMaU1KeWBvFKLxcYDFsasxjdYlJsbcbLbuC9m
-         JUCHoCnjSTReOzwYWV/1YwyvjtIwhBnGYKXhLQ+S4C4tXtjghQ8kydmMt1KKrb23s/j9
-         Y3THC8NOHVFLt+0IBHSyODV8iQRFDYr6XiyFZHUaRVVJXH5ESl6Z8ZnI/mOk6fkM4DiE
-         xixQ==
-X-Gm-Message-State: APjAAAXSAk1Z1gA0gpPV9QGc5J+WFF/LyOfyRNKbRlgxlkctZNnMz9+n
-        v313uczQ93RMQhKTB5UqVapnghQJvOv+UA==
-X-Google-Smtp-Source: APXvYqxkB2d52jYD8Np7B6eUKxsSF6x0Z8Y3NhemWvGrTWrbNQh2/HR4tKq13jLr2egSyW6sYrq+DQ==
-X-Received: by 2002:a17:906:745:: with SMTP id z5mr27283250ejb.41.1571740450642;
-        Tue, 22 Oct 2019 03:34:10 -0700 (PDT)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id i63sm682789edi.65.2019.10.22.03.34.07
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2019 03:34:08 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id c2so12205659wrr.10
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2019 03:34:07 -0700 (PDT)
-X-Received: by 2002:a5d:4491:: with SMTP id j17mr2758012wrq.46.1571740446976;
- Tue, 22 Oct 2019 03:34:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191018082557.3696-1-bibby.hsieh@mediatek.com>
- <CAMpxmJUrY9YK==6Mf5MoRTUDwmXJ6v5EM-VLXCNXJ8ZNK+xHyA@mail.gmail.com>
- <CAAFQd5BEcE0m7Jg1ZnmrF+jwH6Yn8+vYqT1L2wc2zkZ5vRCRAg@mail.gmail.com> <CAMpxmJU_Vws0oGf+GQCEbs-NHFCniO8c2CbXrKy9oEVC_KUhMQ@mail.gmail.com>
-In-Reply-To: <CAMpxmJU_Vws0oGf+GQCEbs-NHFCniO8c2CbXrKy9oEVC_KUhMQ@mail.gmail.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Tue, 22 Oct 2019 19:33:54 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5D=T+x7j+Lst8AQt0epLckPJv_bXtNGs3Dk=kbdbfw53Q@mail.gmail.com>
-Message-ID: <CAAFQd5D=T+x7j+Lst8AQt0epLckPJv_bXtNGs3Dk=kbdbfw53Q@mail.gmail.com>
-Subject: Re: [PATCH v4] misc: eeprom: at24: support pm_runtime control
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        id S2387795AbfJVLTP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Oct 2019 07:19:15 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:33278 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387405AbfJVLTO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Oct 2019 07:19:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=qr4z6oo7+Ton4jDBY5r2uXEtGOqskUXoAvq8PxTdUVk=; b=ZuOmX8stWnXGunirZHU1q4j3k
+        ay81XB280IBkZfnGDl22OZu5tQRwnWkZo+UdYaElANVOV4nNu4y15+N60Zyi2nxCaWmztdRUeF08f
+        XVlT2e+s2zY8s82Ik3WuUJxyKRZtzhKCIespxxhwqBZgyeoW0AjoMWfyCxnsvpXr5OzvM=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iMsBx-0006S8-FB; Tue, 22 Oct 2019 11:19:09 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 715442743259; Tue, 22 Oct 2019 12:19:08 +0100 (BST)
+Date:   Tue, 22 Oct 2019 12:19:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
         linux-i2c <linux-i2c@vger.kernel.org>,
         Nicolas Boichat <drinkcat@chromium.org>,
         srv_heupstream <srv_heupstream@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         linux-devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4] misc: eeprom: at24: support pm_runtime control
+Message-ID: <20191022111908.GC5554@sirena.co.uk>
+References: <20191018082557.3696-1-bibby.hsieh@mediatek.com>
+ <CAMpxmJUrY9YK==6Mf5MoRTUDwmXJ6v5EM-VLXCNXJ8ZNK+xHyA@mail.gmail.com>
+ <CAAFQd5BEcE0m7Jg1ZnmrF+jwH6Yn8+vYqT1L2wc2zkZ5vRCRAg@mail.gmail.com>
+ <CAMpxmJU_Vws0oGf+GQCEbs-NHFCniO8c2CbXrKy9oEVC_KUhMQ@mail.gmail.com>
+ <CAAFQd5D=T+x7j+Lst8AQt0epLckPJv_bXtNGs3Dk=kbdbfw53Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="H8ygTp4AXg6deix2"
+Content-Disposition: inline
+In-Reply-To: <CAAFQd5D=T+x7j+Lst8AQt0epLckPJv_bXtNGs3Dk=kbdbfw53Q@mail.gmail.com>
+X-Cookie: Whip it, whip it good!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Oct 22, 2019 at 6:00 PM Bartosz Golaszewski
-<bgolaszewski@baylibre.com> wrote:
->
-> wt., 22 pa=C5=BA 2019 o 09:27 Tomasz Figa <tfiga@chromium.org> napisa=C5=
-=82(a):
-> >
-> > On Tue, Oct 22, 2019 at 1:53 AM Bartosz Golaszewski
-> > <bgolaszewski@baylibre.com> wrote:
-> > >
-> > > pt., 18 pa=C5=BA 2019 o 10:26 Bibby Hsieh <bibby.hsieh@mediatek.com> =
-napisa=C5=82(a):
-> > > >
-> > > > Although in the most platforms, the power of eeprom and i2c
-> > > > are alway on, some platforms disable the eeprom and i2c power
-> > > > in order to meet low power request.
-> > > > This patch add the pm_runtime ops to control power to support
-> > > > all platforms.
-> > > >
-> > > > Changes since v3:
-> > > >  - remove redundant calling function
-> > > >  - change SIMPLE_DEV_PM_OPS to SET_RUNTIME_PM_OPS
-> > > >  - change supply name
-> > > >
-> > > > Changes since v2:
-> > > >  - rebase onto v5.4-rc1
-> > > >  - pm_runtime_disable and regulator_bulk_disable at
-> > > >    err return in probe function
-> > > >
-> > > > Changes since v1:
-> > > >  - remove redundant code
-> > > >  - fixup coding style
-> > > >
-> > > > Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
-> > > > ---
-> > > >  drivers/misc/eeprom/at24.c | 64 ++++++++++++++++++++++++++++++++++=
-++++
-> > > >  1 file changed, 64 insertions(+)
-> > > >
-> > > > diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.=
-c
-> > > > index 2cccd82a3106..68ced4f25916 100644
-> > > > --- a/drivers/misc/eeprom/at24.c
-> > > > +++ b/drivers/misc/eeprom/at24.c
-> > > > @@ -22,6 +22,7 @@
-> > > >  #include <linux/nvmem-provider.h>
-> > > >  #include <linux/regmap.h>
-> > > >  #include <linux/pm_runtime.h>
-> > > > +#include <linux/regulator/consumer.h>
-> > > >  #include <linux/gpio/consumer.h>
-> > > >
-> > > >  /* Address pointer is 16 bit. */
-> > > > @@ -67,6 +68,12 @@
-> > > >   * which won't work on pure SMBus systems.
-> > > >   */
-> > > >
-> > > > +static const char * const at24_supply_names[] =3D {
-> > > > +       "vcc", "i2c",
-> > > > +};
-> > > > +
-> > > > +#define AT24_NUM_SUPPLIES ARRAY_SIZE(at24_supply_names)
-> > > > +
-> > > >  struct at24_client {
-> > > >         struct i2c_client *client;
-> > > >         struct regmap *regmap;
-> > > > @@ -91,6 +98,8 @@ struct at24_data {
-> > > >
-> > > >         struct gpio_desc *wp_gpio;
-> > > >
-> > > > +       bool has_supplies;
-> > > > +       struct regulator_bulk_data supplies[AT24_NUM_SUPPLIES];
-> > > >         /*
-> > > >          * Some chips tie up multiple I2C addresses; dummy devices =
-reserve
-> > > >          * them for us, and we'll use them with SMBus calls.
-> > > > @@ -662,6 +671,17 @@ static int at24_probe(struct i2c_client *clien=
-t)
-> > > >         at24->client[0].client =3D client;
-> > > >         at24->client[0].regmap =3D regmap;
-> > > >
-> > > > +       regulator_bulk_set_supply_names(at24->supplies,
-> > > > +                                       at24_supply_names, AT24_NUM=
-_SUPPLIES);
-> > > > +       err =3D  devm_regulator_bulk_get(&at24->client[0].client->d=
-ev,
-> > > > +                                      AT24_NUM_SUPPLIES, at24->sup=
-plies);
-> > > > +       if (err =3D=3D -ENODEV)
-> > > > +               at24->has_supplies =3D NULL;
-> > >
-> > > I just gave this a spin and noticed that this will never happen - the
-> > > regulator core will use a dummy regulator if none is defined in DT.
-> > > The only way for this to make sense would be to use
-> > > regulator_get_optional() for each supply separately. But actually I
-> > > think we should just leave it this way and remove this if. In the end=
-:
-> > > this chip needs some power supply, so dummy regulator makes sense.
-> >
-> > Thanks for testing. I'd still like to make sure what happens on non-DT
-> > platforms.
-> >
-> > I can see that the core returns the dummy regulator if
-> > have_full_constraints() [1]. That is always true for DT systems, but
-> > for others it's false by default, unless someone explicitly calls
-> > regulator_has_full_constraints() [2].
-> >
->
-> Not tested yet, but from the code it looks like it will then keep
-> returning EPROBE_DEFER which doesn't sound right really, especially
-> since we're printing an error message too. Shouldn't it be -ENODEV?
 
-That's an interesting finding. Liam, Mark, what's the proper way to
-bulk get optional regulators?
+--H8ygTp4AXg6deix2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Best regards,
-Tomasz
+On Tue, Oct 22, 2019 at 07:33:54PM +0900, Tomasz Figa wrote:
+> On Tue, Oct 22, 2019 at 6:00 PM Bartosz Golaszewski
 
->
-> Bart
->
-> > [1] https://elixir.bootlin.com/linux/v5.4-rc2/source/drivers/regulator/=
-core.c#L1787
-> > [2] https://elixir.bootlin.com/linux/v5.4-rc2/source/drivers/regulator/=
-core.c#L120
-> >
-> > Best regards,
-> > Tomasz
+> > > I can see that the core returns the dummy regulator if
+> > > have_full_constraints() [1]. That is always true for DT systems, but
+> > > for others it's false by default, unless someone explicitly calls
+> > > regulator_has_full_constraints() [2].
+
+ACPI systems are also always marked as having full constraints, only
+systems with board files will see this.
+
+> > Not tested yet, but from the code it looks like it will then keep
+> > returning EPROBE_DEFER which doesn't sound right really, especially
+> > since we're printing an error message too. Shouldn't it be -ENODEV?
+
+> That's an interesting finding. Liam, Mark, what's the proper way to
+> bulk get optional regulators?
+
+The ambiguously named regulator_get_optional().  This should *only* be
+used for regulators that may be physically absent in the system, other
+regulators should use normal regulator_get().  It is vanishingly
+unlikely that all the supplies for a device will be optional.
+
+--H8ygTp4AXg6deix2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2u5asACgkQJNaLcl1U
+h9AI3gf8COsJvW+lx7Lpb6/0susCMMK1GWIj6oVow1u666q9ibEgppq/FkU7GN39
+F2GCBXXn6YIwykHAsYTA/WjJuwjzQWjYJTO84MQT5HSNq6WUsKOoIBfzHVV3o6Od
+8AcmZbpv7tlMbhxZR/wdByOlH4ulTixx8G8hpzykLpcMzf05NzlWPDBuYgrDVTPH
+hu2GkxZLiWrVknzE1aFOpE4X636PIPIFz/e1gAA3VNiWjts9kuC2lpL+jhDO1QOf
+oVlnSn7TUvOFazxIeMSmLPsOap3dOcFcpXreyQxRD9d6tvgZ8IR/cOCP5f+468Wn
+/5ZyzRHMaUjaP3TuIXnIfjmaZmBePg==
+=KAhK
+-----END PGP SIGNATURE-----
+
+--H8ygTp4AXg6deix2--
