@@ -2,209 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C10BEDFC4A
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2019 05:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853B6DFC83
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2019 06:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387544AbfJVDwH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Oct 2019 23:52:07 -0400
-Received: from mail-eopbgr00077.outbound.protection.outlook.com ([40.107.0.77]:23206
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387535AbfJVDwG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 21 Oct 2019 23:52:06 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d+K9ZCZk+zKqWgM127YEQvXSnmRwDL1lReebrLguTPdpqFM4ZnBSx1WO8OPvGt4doSebUEvJrcoO1IRFshyI/UqaEotnFxy+MO9Q6jOyXt1O98ztsZypwboAy/vRk7PRlqhr9C8Gz+QQBrDzUht99RHZ84aFfnAB3jDRm8KPh5B4bP+O9WvgnXtw8pqz0IEGgHr9iI02aeZwQQh7cN/K8dnjzDhSpNrxhtboTTK/tmVRGSmTVXgewMn3iQuUUlXB4pqUTjvTN9YFeae0gxUVUulyub3/NjjEyaKOFKYVKIIpyixsnvhPHsbfdHEq8T7OYE908+RcFRKDv2eUXXVGcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mQ0dvUmPUYBYrL8PGpnq3i4yFo2N8D7UTBgiGdy809Q=;
- b=bsE4qVF2dKW5uCrg6lQsHkLH2vmhwJA0ubkMa6t8N4Q8YmTHwdt06JksPZ/ZsN8taBVPGxjscir7B/DbTfjUVVPWn4+ZqLddQEnOQ6nwo8+/ItqkR9So0PMy7Mz1oEMRHkmJ5RuZze0S6Xt79jBdkI6OynHwUWd8DxczQmfVviXsuuCAVhHVwFK3m1OY36MwtvPMQblblCdtSv3fcpzlE5lPWV+5TRDgRNw03rhfHSP64LfKc91sboi+RHBlTrL7AfH3SjQB++Ffa0N1kMKXdrkb5gPQbDWVu8BoSyETjjBpdhYFMIr2awGA4Dq7VKsJXaCm4HbRhoR+h967+gryXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mQ0dvUmPUYBYrL8PGpnq3i4yFo2N8D7UTBgiGdy809Q=;
- b=RlDiFd6PxyC8RQGrWwQoZlYZeHm1cJhmaPq8Lc8USb9WyceT3JJduBTG9efEdhOYtneTzxqvnpAJd0GpI9CSYI9SdQQRCXUcgWpWkjs1Ilrmua5cjH0eOSimUBJ2zsq7DXovMiqRXV9nuI4s9dzZQmTqR8z644b1lWecpP/8icg=
-Received: from DB7PR04MB4490.eurprd04.prod.outlook.com (52.135.138.150) by
- DB7PR04MB4076.eurprd04.prod.outlook.com (52.134.110.153) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2367.24; Tue, 22 Oct 2019 03:51:57 +0000
-Received: from DB7PR04MB4490.eurprd04.prod.outlook.com
- ([fe80::7804:558a:eef9:cc11]) by DB7PR04MB4490.eurprd04.prod.outlook.com
- ([fe80::7804:558a:eef9:cc11%7]) with mapi id 15.20.2367.022; Tue, 22 Oct 2019
- 03:51:57 +0000
+        id S1730903AbfJVEXC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Oct 2019 00:23:02 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:55990 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729133AbfJVEXC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 22 Oct 2019 00:23:02 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 663D01A0039;
+        Tue, 22 Oct 2019 06:23:00 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A78B61A05CF;
+        Tue, 22 Oct 2019 06:22:56 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 1D0FD4030B;
+        Tue, 22 Oct 2019 12:22:52 +0800 (SGT)
 From:   Biwen Li <biwen.li@nxp.com>
-To:     Peter Rosin <peda@axentia.se>, Leo Li <leoyang.li@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [EXT] Re: [v4,2/2] i2c: mux: pca954x: support property idle-state
-Thread-Topic: [EXT] Re: [v4,2/2] i2c: mux: pca954x: support property
- idle-state
-Thread-Index: AQHVh+cyMyKMRhMm/km0I8f2DYDpKadlFPEAgADiXRA=
-Date:   Tue, 22 Oct 2019 03:51:57 +0000
-Message-ID: <DB7PR04MB44906D1B767F0FDE5AE5E3FF8F680@DB7PR04MB4490.eurprd04.prod.outlook.com>
-References: <20191021080048.47189-1-biwen.li@nxp.com>
- <20191021080048.47189-2-biwen.li@nxp.com>
- <07b1e1d8-4112-d9b1-2a05-21da09fa020c@axentia.se>
-In-Reply-To: <07b1e1d8-4112-d9b1-2a05-21da09fa020c@axentia.se>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=biwen.li@nxp.com; 
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: f55f8891-da65-438e-6ac7-08d756a32fae
-x-ms-traffictypediagnostic: DB7PR04MB4076:|DB7PR04MB4076:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB40760FEFDE6545D7AE9B36C58F680@DB7PR04MB4076.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 01986AE76B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(376002)(346002)(396003)(136003)(366004)(189003)(199004)(81156014)(8676002)(99286004)(81166006)(256004)(478600001)(76176011)(7696005)(14444005)(14454004)(9686003)(71200400001)(71190400001)(25786009)(6436002)(476003)(2906002)(55016002)(54906003)(110136005)(74316002)(229853002)(486006)(7736002)(2501003)(44832011)(4001150100001)(86362001)(4326008)(6246003)(305945005)(102836004)(446003)(8936002)(26005)(11346002)(186003)(52536014)(6506007)(5660300002)(53546011)(316002)(66446008)(64756008)(66556008)(66476007)(6116002)(33656002)(76116006)(66946007)(3846002)(66066001);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4076;H:DB7PR04MB4490.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XJLJlHflPCN+FV2Qqy8FVaRs5JW4fGuk+Jv+mZdvGHlaiZsE4PlRKBwN1boIF2BXt6hPDoPtU5JlMXc5WIFlu9Qsg4JfmhzKYxw8xfxI7BjIaOjpFoEimCVMeWowXjldw4aQ7l4c/ePy8S4cc2Xu+d2VTKT4rmFwyaPAK+5HC4a3n5ih9WX9BSgsHX29aFR1SP7bQFXFOzKJxoU6ygACZpbcZv7uNEX0iHlF1cGphnQBUNDfzFQQDcm92Ob4l78L5WQbXCLTqfclSbmlSHAnA1FLh4tRBbkxPYcff7+xnYBiSvJ8KtxEnRjWNHoRhrNC9xG5TvdzS4e4fydfFNOGkT63NXD848DvI+L0zuhJBVrohbY6TKcAgQ67ZpIfy9MNIODubtY1B4vX0bwnOEONZOcgi1eUNZx+KEAbzbaXsU0OlBbaquEIUOv2IPotwHiy
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f55f8891-da65-438e-6ac7-08d756a32fae
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Oct 2019 03:51:57.2774
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 33lgrHMrQtnE9jt0/Tz/evNch9tbCt98UmFe/hDkQUEfEXUkN+nguBJnd4v4NDSwF6lNW3pwrUn5U4rDATzjuw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4076
+To:     peda@axentia.se, leoyang.li@nxp.com, robh+dt@kernel.org,
+        mark.rutland@arm.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Biwen Li <biwen.li@nxp.com>
+Subject: [v5,1/3] dt-bindings: i2c: support property idle-state
+Date:   Tue, 22 Oct 2019 12:11:50 +0800
+Message-Id: <20191022041152.3663-1-biwen.li@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PiBDYXV0aW9uOiBFWFQgRW1haWwNCj4gDQo+IE9uIDIwMTktMTAtMjEgMTA6MDAsIEJpd2VuIExp
-IHdyb3RlOg0KPiA+IFRoaXMgc3VwcG9ydHMgcHJvcGVydHkgaWRsZS1zdGF0ZQ0KPiA+DQo+IA0K
-PiBZb3Ugc2hvdWxkIGV4cGFuZCB0aGlzIGEgbGl0dGxlIGJpdCB0byBleHBsYWluIHRoYXQgaWRs
-ZS1zdGF0ZSwgaWYgcHJlc2VudCwgb3ZlcnJpZGVzDQo+IGkyYy1tdXgtaWRsZS1kaXNjb25uZWN0
-LiBZb3UgY291bGQgYWxzbyBtZW50aW9uIHlvdXIgdXNlIGNhc2Ugd2hlcmUgeW91IG5lZWQNCj4g
-dG8gYXZvaWQgZGlzY29ubmVjdHMgb24gcHJvYmUvcmVzdW1lLg0KT2theSwgZ290IGl0LiBJIHdp
-bGwgYWRkIHNvbWUgaW5mb3JtYXRpb24gaW4gdjUuDQo+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEJp
-d2VuIExpIDxiaXdlbi5saUBueHAuY29tPg0KPiA+IC0tLQ0KPiA+IENoYW5nZSBpbiB2NDoNCj4g
-PiAgICAgICAtIHJlbmFtZSBmdW5jdGlvbg0KPiA+ICAgICAgICAgcGNhOTU0eF9jYWxjdWxhdGVf
-Y2hhbiAtPiBwY2E5NTR4X3JlZ3ZhbA0KPiA+DQo+ID4gQ2hhbmdlIGluIHYzOg0KPiA+ICAgICAg
-IC0gdXBkYXRlIHN1YmplY3QgYW5kIGRlc2NyaXB0aW9uDQo+ID4gICAgICAgLSBhZGQgYSBoZWxw
-ZXIgZnVuY3Rpb24gcGNhOTU0eF9jYWxjdWxhdGVfY2hhbigpDQo+ID4NCj4gPiBDaGFuZ2UgaW4g
-djI6DQo+ID4gICAgICAgLSB1cGRhdGUgc3ViamVjdCBhbmQgZGVzY3JpcHRpb24NCj4gPiAgICAg
-ICAtIGFkZCBwcm9wZXJ0eSBpZGxlLXN0YXRlDQo+ID4NCj4gPiAgZHJpdmVycy9pMmMvbXV4ZXMv
-aTJjLW11eC1wY2E5NTR4LmMgfCA1OQ0KPiA+ICsrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0t
-DQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAzNiBpbnNlcnRpb25zKCspLCAyMyBkZWxldGlvbnMoLSkN
-Cj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9tdXhlcy9pMmMtbXV4LXBjYTk1NHgu
-Yw0KPiA+IGIvZHJpdmVycy9pMmMvbXV4ZXMvaTJjLW11eC1wY2E5NTR4LmMNCj4gPiBpbmRleCA5
-MjNhYTNhNWEzZGMuLmU1NjZjNGNkOGJhNSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2kyYy9t
-dXhlcy9pMmMtbXV4LXBjYTk1NHguYw0KPiA+ICsrKyBiL2RyaXZlcnMvaTJjL211eGVzL2kyYy1t
-dXgtcGNhOTU0eC5jDQo+ID4gQEAgLTg2LDcgKzg2LDcgQEAgc3RydWN0IHBjYTk1NHggew0KPiA+
-DQo+ID4gICAgICAgdTggbGFzdF9jaGFuOyAgICAgICAgICAgLyogbGFzdCByZWdpc3RlciB2YWx1
-ZSAqLw0KPiA+ICAgICAgIC8qIE1VWF9JRExFX0FTX0lTLCBNVVhfSURMRV9ESVNDT05ORUNUIG9y
-ID49IDAgZm9yIGNoYW5uZWwgKi8NCj4gPiAtICAgICBzOCBpZGxlX3N0YXRlOw0KPiA+ICsgICAg
-IHMzMiBpZGxlX3N0YXRlOw0KPiA+DQo+ID4gICAgICAgc3RydWN0IGkyY19jbGllbnQgKmNsaWVu
-dDsNCj4gPg0KPiA+IEBAIC0yMjksMjAgKzIyOSwyMyBAQCBzdGF0aWMgaW50IHBjYTk1NHhfcmVn
-X3dyaXRlKHN0cnVjdCBpMmNfYWRhcHRlcg0KPiAqYWRhcCwNCj4gPiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBJMkNfU01CVVNfQllURSwgJmR1bW15KTsgIH0NCj4gPg0KPiA+ICtzdGF0
-aWMgdTggcGNhOTU0eF9yZWd2YWwoc3RydWN0IHBjYTk1NHggKmRhdGEsIHU4IGNoYW4pIHsNCj4g
-PiArICAgICAvKiB3ZSBtYWtlIHN3aXRjaGVzIGxvb2sgbGlrZSBtdXhlcywgbm90IHN1cmUgaG93
-IHRvIGJlIHNtYXJ0ZXINCj4gPiArKi8NCj4gDQo+IEkga25vdyB5b3UgYXJlIGp1c3QgbW92aW5n
-IHRoZSBjb21tZW50IGFyb3VuZCwgYnV0IHBsZWFzZSBmaXggdGhlIHNlbnRlbmNlIHRvDQo+IHN0
-YXJ0IHdpdGggYSBjYXBpdGFsIGxldHRlciBhbmQgZW5kIHdpdGggYSBwZXJpb2QuIFNvcnJ5IEkg
-ZGlkbid0IGNhdGNoIHRoaXMgaW4gdjMuDQpPa2F5LCBnb3QgaXQsIEkgd2lsbCBmaXggaXQgaW4g
-djUuDQo+IA0KPiA+ICsgICAgIGlmIChkYXRhLT5jaGlwLT5tdXh0eXBlID09IHBjYTk1NHhfaXNt
-dXgpDQo+ID4gKyAgICAgICAgICAgICByZXR1cm4gY2hhbiB8IGRhdGEtPmNoaXAtPmVuYWJsZTsN
-Cj4gPiArICAgICBlbHNlDQo+ID4gKyAgICAgICAgICAgICByZXR1cm4gMSA8PCBjaGFuOw0KPiA+
-ICt9DQo+ID4gKw0KPiA+ICBzdGF0aWMgaW50IHBjYTk1NHhfc2VsZWN0X2NoYW4oc3RydWN0IGky
-Y19tdXhfY29yZSAqbXV4YywgdTMyIGNoYW4pDQo+ID4gew0KPiA+ICAgICAgIHN0cnVjdCBwY2E5
-NTR4ICpkYXRhID0gaTJjX211eF9wcml2KG11eGMpOw0KPiA+ICAgICAgIHN0cnVjdCBpMmNfY2xp
-ZW50ICpjbGllbnQgPSBkYXRhLT5jbGllbnQ7DQo+ID4gLSAgICAgY29uc3Qgc3RydWN0IGNoaXBf
-ZGVzYyAqY2hpcCA9IGRhdGEtPmNoaXA7DQo+ID4gICAgICAgdTggcmVndmFsOw0KPiA+ICAgICAg
-IGludCByZXQgPSAwOw0KPiA+DQo+ID4gLSAgICAgLyogd2UgbWFrZSBzd2l0Y2hlcyBsb29rIGxp
-a2UgbXV4ZXMsIG5vdCBzdXJlIGhvdyB0byBiZSBzbWFydGVyICovDQo+ID4gLSAgICAgaWYgKGNo
-aXAtPm11eHR5cGUgPT0gcGNhOTU0eF9pc211eCkNCj4gPiAtICAgICAgICAgICAgIHJlZ3ZhbCA9
-IGNoYW4gfCBjaGlwLT5lbmFibGU7DQo+ID4gLSAgICAgZWxzZQ0KPiA+IC0gICAgICAgICAgICAg
-cmVndmFsID0gMSA8PCBjaGFuOw0KPiA+IC0NCj4gPiArICAgICByZWd2YWwgPSBwY2E5NTR4X3Jl
-Z3ZhbChkYXRhLCAodTgpKGNoYW4gJiAweGZmKSk7DQo+IA0KPiBCb3RoIGEgbWFzayBhbmQgYSBj
-YXN0IHRvIGRvIHdoYXQgdGhlIGNvbXBpbGVyIHNob3VsZCBiZSBkb2luZyBhbGwgYnkgaXRzZWxm
-Pw0KPiBJZiB5b3UgbmVlZCB0byBraWxsIGEgd2FybmluZywgb3Igc29tZXRoaW5nLCBwbGVhc2Ug
-ZG8ganVzdCBvbmUgb3IgdGhlbS4gQnV0DQo+IHBlcnNvbmFsbHkgSSBwcmVmZXIgdGhlIHNob3J0
-LCBzd2VldCBhbmQgdW5jbHV0dGVyZWQ6DQpPa2F5LCBnb3QgaXQsIHRoYW5rcy4gSSB3aWxsIGFk
-anVzdCBpdCBpbiB2NS4NCj4gDQo+ICAgICAgICAgcmVndmFsID0gcGNhOTU0eF9yZWd2YWwoZGF0
-YSwgY2hhbik7DQo+IA0KPiA+ICAgICAgIC8qIE9ubHkgc2VsZWN0IHRoZSBjaGFubmVsIGlmIGl0
-cyBkaWZmZXJlbnQgZnJvbSB0aGUgbGFzdCBjaGFubmVsICovDQo+ID4gICAgICAgaWYgKGRhdGEt
-Pmxhc3RfY2hhbiAhPSByZWd2YWwpIHsNCj4gPiAgICAgICAgICAgICAgIHJldCA9IHBjYTk1NHhf
-cmVnX3dyaXRlKG11eGMtPnBhcmVudCwgY2xpZW50LCByZWd2YWwpOw0KPiA+IEBAIC0yNTYsNyAr
-MjU5LDcgQEAgc3RhdGljIGludCBwY2E5NTR4X2Rlc2VsZWN0X211eChzdHJ1Y3QNCj4gPiBpMmNf
-bXV4X2NvcmUgKm11eGMsIHUzMiBjaGFuKSAgew0KPiA+ICAgICAgIHN0cnVjdCBwY2E5NTR4ICpk
-YXRhID0gaTJjX211eF9wcml2KG11eGMpOw0KPiA+ICAgICAgIHN0cnVjdCBpMmNfY2xpZW50ICpj
-bGllbnQgPSBkYXRhLT5jbGllbnQ7DQo+ID4gLSAgICAgczggaWRsZV9zdGF0ZTsNCj4gPiArICAg
-ICBzMzIgaWRsZV9zdGF0ZTsNCj4gPg0KPiA+ICAgICAgIGlkbGVfc3RhdGUgPSBSRUFEX09OQ0Uo
-ZGF0YS0+aWRsZV9zdGF0ZSk7DQo+ID4gICAgICAgaWYgKGlkbGVfc3RhdGUgPj0gMCkNCj4gPiBA
-QCAtNDAyLDYgKzQwNSwxNyBAQCBzdGF0aWMgdm9pZCBwY2E5NTR4X2NsZWFudXAoc3RydWN0IGky
-Y19tdXhfY29yZQ0KPiAqbXV4YykNCj4gPiAgICAgICBpMmNfbXV4X2RlbF9hZGFwdGVycyhtdXhj
-KTsNCj4gPiAgfQ0KPiA+DQo+ID4gK3N0YXRpYyBpbnQgcGNhOTU0eF9pbml0KHN0cnVjdCBpMmNf
-Y2xpZW50ICpjbGllbnQsIHN0cnVjdCBwY2E5NTR4DQo+ID4gKypkYXRhKSB7DQo+ID4gKyAgICAg
-aWYgKGRhdGEtPmlkbGVfc3RhdGUgPj0gMCkgew0KPiA+ICsgICAgICAgICAgICAgZGF0YS0+bGFz
-dF9jaGFuID0gcGNhOTU0eF9yZWd2YWwoZGF0YSwNCj4gPiArKHU4KShkYXRhLT5pZGxlX3N0YXRl
-ICYgMHhmZikpOw0KPiANCj4gRGl0by4NCg0KR290IGl0LCB0aGFua3MuDQo+IA0KPiA+ICsgICAg
-IH0gZWxzZSB7DQo+ID4gKyAgICAgICAgICAgICAvKiBEaXNjb25uZWN0IG11bHRpcGxleGVyICov
-DQo+ID4gKyAgICAgICAgICAgICBkYXRhLT5sYXN0X2NoYW4gPSAwOw0KPiA+ICsgICAgIH0NCj4g
-PiArICAgICByZXR1cm4gaTJjX3NtYnVzX3dyaXRlX2J5dGUoY2xpZW50LCBkYXRhLT5sYXN0X2No
-YW4pOw0KPiANCj4gSGVyZSdzIGFub3RoZXIgdGhpbmcgSSBtaXNzZWQgaW4gdGhlIGVhcmxpZXIg
-aXRlcmF0aW9ucy4gSWYgaTJjX3NtYnVzX3dyaXRlX2J5dGUNCj4gZmFpbHMgaGVyZSwgSSB0aGlu
-ayB5b3Ugc2hvdWxkIHNldCBkYXRhLT5sYXN0X2NoYW4gdG8gemVyby4gRm9yIHRoZSBjYWxsIGZy
-b20gcHJvYmUNCj4gaXQgb2J2aW91c2x5IGRvZXNuJ3QgbWF0dGVyIG11Y2gsIGJ1dCBJIHRoaW5r
-IHRoZSBjYWxsIGR1cmluZyByZXN1bWUgaXMgYmV0dGVyIG9mZg0KPiB3aXRoIHN1Y2ggZXh0cmEg
-cHJlY2F1dGlvbiBpbiBwbGFjZS4NCllvdSBhcmUgcmlnaHQuIEkgd2lsbCBhZGQgZXh0cmEgcHJl
-Y2F1dGlvbiBpbiB2NS4NCj4gDQo+IENoZWVycywNCj4gUGV0ZXINCj4gDQo+ID4gK30NCj4gPiAr
-DQo+ID4gIC8qDQo+ID4gICAqIEkyQyBpbml0L3Byb2JpbmcvZXhpdCBmdW5jdGlvbnMNCj4gPiAg
-ICovDQo+ID4gQEAgLTQxMSw3ICs0MjUsNiBAQCBzdGF0aWMgaW50IHBjYTk1NHhfcHJvYmUoc3Ry
-dWN0IGkyY19jbGllbnQgKmNsaWVudCwNCj4gPiAgICAgICBzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFk
-YXAgPSBjbGllbnQtPmFkYXB0ZXI7DQo+ID4gICAgICAgc3RydWN0IGRldmljZSAqZGV2ID0gJmNs
-aWVudC0+ZGV2Ow0KPiA+ICAgICAgIHN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAgPSBkZXYtPm9mX25v
-ZGU7DQo+ID4gLSAgICAgYm9vbCBpZGxlX2Rpc2Nvbm5lY3RfZHQ7DQo+ID4gICAgICAgc3RydWN0
-IGdwaW9fZGVzYyAqZ3BpbzsNCj4gPiAgICAgICBzdHJ1Y3QgaTJjX211eF9jb3JlICptdXhjOw0K
-PiA+ICAgICAgIHN0cnVjdCBwY2E5NTR4ICpkYXRhOw0KPiA+IEBAIC00NjIsMjMgKzQ3NSwyNCBA
-QCBzdGF0aWMgaW50IHBjYTk1NHhfcHJvYmUoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwNCj4g
-PiAgICAgICAgICAgICAgIH0NCj4gPiAgICAgICB9DQo+ID4NCj4gPiAtICAgICAvKiBXcml0ZSB0
-aGUgbXV4IHJlZ2lzdGVyIGF0IGFkZHIgdG8gdmVyaWZ5DQo+ID4gKyAgICAgZGF0YS0+aWRsZV9z
-dGF0ZSA9IE1VWF9JRExFX0FTX0lTOw0KPiA+ICsgICAgIGlmIChvZl9wcm9wZXJ0eV9yZWFkX3Uz
-MihucCwgImlkbGUtc3RhdGUiLCAmZGF0YS0+aWRsZV9zdGF0ZSkpIHsNCj4gPiArICAgICAgICAg
-ICAgIGlmIChucCAmJiBvZl9wcm9wZXJ0eV9yZWFkX2Jvb2wobnAsDQo+ICJpMmMtbXV4LWlkbGUt
-ZGlzY29ubmVjdCIpKQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICBkYXRhLT5pZGxlX3N0YXRl
-ID0gTVVYX0lETEVfRElTQ09OTkVDVDsNCj4gPiArICAgICB9DQo+ID4gKw0KPiA+ICsgICAgIC8q
-DQo+ID4gKyAgICAgICogV3JpdGUgdGhlIG11eCByZWdpc3RlciBhdCBhZGRyIHRvIHZlcmlmeQ0K
-PiA+ICAgICAgICAqIHRoYXQgdGhlIG11eCBpcyBpbiBmYWN0IHByZXNlbnQuIFRoaXMgYWxzbw0K
-PiA+IC0gICAgICAqIGluaXRpYWxpemVzIHRoZSBtdXggdG8gZGlzY29ubmVjdGVkIHN0YXRlLg0K
-PiA+ICsgICAgICAqIGluaXRpYWxpemVzIHRoZSBtdXggdG8gYSBjaGFubmVsDQo+ID4gKyAgICAg
-ICogb3IgZGlzY29ubmVjdGVkIHN0YXRlLg0KPiA+ICAgICAgICAqLw0KPiA+IC0gICAgIGlmIChp
-MmNfc21idXNfd3JpdGVfYnl0ZShjbGllbnQsIDApIDwgMCkgew0KPiA+ICsgICAgIHJldCA9IHBj
-YTk1NHhfaW5pdChjbGllbnQsIGRhdGEpOw0KPiA+ICsgICAgIGlmIChyZXQgPCAwKSB7DQo+ID4g
-ICAgICAgICAgICAgICBkZXZfd2FybihkZXYsICJwcm9iZSBmYWlsZWRcbiIpOw0KPiA+ICAgICAg
-ICAgICAgICAgcmV0dXJuIC1FTk9ERVY7DQo+ID4gICAgICAgfQ0KPiA+DQo+ID4gLSAgICAgZGF0
-YS0+bGFzdF9jaGFuID0gMDsgICAgICAgICAgICAgICAvKiBmb3JjZSB0aGUgZmlyc3Qgc2VsZWN0
-aW9uICovDQo+ID4gLSAgICAgZGF0YS0+aWRsZV9zdGF0ZSA9IE1VWF9JRExFX0FTX0lTOw0KPiA+
-IC0NCj4gPiAtICAgICBpZGxlX2Rpc2Nvbm5lY3RfZHQgPSBucCAmJg0KPiA+IC0gICAgICAgICAg
-ICAgb2ZfcHJvcGVydHlfcmVhZF9ib29sKG5wLCAiaTJjLW11eC1pZGxlLWRpc2Nvbm5lY3QiKTsN
-Cj4gPiAtICAgICBpZiAoaWRsZV9kaXNjb25uZWN0X2R0KQ0KPiA+IC0gICAgICAgICAgICAgZGF0
-YS0+aWRsZV9zdGF0ZSA9IE1VWF9JRExFX0RJU0NPTk5FQ1Q7DQo+ID4gLQ0KPiA+ICAgICAgIHJl
-dCA9IHBjYTk1NHhfaXJxX3NldHVwKG11eGMpOw0KPiA+ICAgICAgIGlmIChyZXQpDQo+ID4gICAg
-ICAgICAgICAgICBnb3RvIGZhaWxfY2xlYW51cDsNCj4gPiBAQCAtNTMxLDggKzU0NSw3IEBAIHN0
-YXRpYyBpbnQgcGNhOTU0eF9yZXN1bWUoc3RydWN0IGRldmljZSAqZGV2KQ0KPiA+ICAgICAgIHN0
-cnVjdCBpMmNfbXV4X2NvcmUgKm11eGMgPSBpMmNfZ2V0X2NsaWVudGRhdGEoY2xpZW50KTsNCj4g
-PiAgICAgICBzdHJ1Y3QgcGNhOTU0eCAqZGF0YSA9IGkyY19tdXhfcHJpdihtdXhjKTsNCj4gPg0K
-PiA+IC0gICAgIGRhdGEtPmxhc3RfY2hhbiA9IDA7DQo+ID4gLSAgICAgcmV0dXJuIGkyY19zbWJ1
-c193cml0ZV9ieXRlKGNsaWVudCwgMCk7DQo+ID4gKyAgICAgcmV0dXJuIHBjYTk1NHhfaW5pdChj
-bGllbnQsIGRhdGEpOw0KPiA+ICB9DQo+ID4gICNlbmRpZg0KPiA+DQo+ID4NCg0K
+This supports property idle-state
+
+Signed-off-by: Biwen Li <biwen.li@nxp.com>
+---
+Change in v5:
+	- none
+
+Change in v4:
+	- none
+
+Change in v3:
+	- update subject and description
+	- add some information for property idle-state
+
+Change in v2:
+	- update subject and description
+	- add property idle-state
+
+ Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.txt b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.txt
+index 30ac6a60f041..7abda506b828 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.txt
++++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.txt
+@@ -25,6 +25,8 @@ Required Properties:
+ Optional Properties:
+ 
+   - reset-gpios: Reference to the GPIO connected to the reset input.
++  - idle-state: if present, overrides i2c-mux-idle-disconnect,
++    Please refer to Documentation/devicetree/bindings/mux/mux-controller.txt
+   - i2c-mux-idle-disconnect: Boolean; if defined, forces mux to disconnect all
+     children in idle state. This is necessary for example, if there are several
+     multiplexers on the bus and the devices behind them use same I2C addresses.
+-- 
+2.17.1
+
