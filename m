@@ -2,54 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 943C8DFB92
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2019 04:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EA1DFB9B
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2019 04:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730494AbfJVCXz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Oct 2019 22:23:55 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:45087 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730370AbfJVCXz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Oct 2019 22:23:55 -0400
-X-UUID: b37edfc96e36415cb91f859bb3dd4aac-20191022
-X-UUID: b37edfc96e36415cb91f859bb3dd4aac-20191022
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        id S1730738AbfJVCZe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Oct 2019 22:25:34 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:41047 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729573AbfJVCZd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Oct 2019 22:25:33 -0400
+X-UUID: caea0f03342d45e499b882d25fcff76c-20191022
+X-UUID: caea0f03342d45e499b882d25fcff76c-20191022
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
         (envelope-from <bibby.hsieh@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1111580350; Tue, 22 Oct 2019 10:23:50 +0800
+        with ESMTP id 361787558; Tue, 22 Oct 2019 10:25:28 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
  mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 22 Oct 2019 10:23:47 +0800
+ 15.0.1395.4; Tue, 22 Oct 2019 10:25:25 +0800
 Received: from [172.21.77.4] (172.21.77.4) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 22 Oct 2019 10:23:48 +0800
-Message-ID: <1571711028.561.0.camel@mtksdaap41>
+ Transport; Tue, 22 Oct 2019 10:25:26 +0800
+Message-ID: <1571711126.561.2.camel@mtksdaap41>
 Subject: Re: [PATCH v4] misc: eeprom: at24: support pm_runtime control
 From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-CC:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
+To:     Tomasz Figa <tfiga@chromium.org>
+CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        "Nicolas Boichat" <drinkcat@chromium.org>,
         srv_heupstream <srv_heupstream@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        linux-devicetree <devicetree@vger.kernel.org>
-Date:   Tue, 22 Oct 2019 10:23:48 +0800
-In-Reply-To: <CAMpxmJUrY9YK==6Mf5MoRTUDwmXJ6v5EM-VLXCNXJ8ZNK+xHyA@mail.gmail.com>
+        "Mark Rutland" <mark.rutland@arm.com>, <devicetree@vger.kernel.org>
+Date:   Tue, 22 Oct 2019 10:25:26 +0800
+In-Reply-To: <CAAFQd5DuETr-N8efWYz7F-qrw1R-gL6fss2Ag1XezapojiakhQ@mail.gmail.com>
 References: <20191018082557.3696-1-bibby.hsieh@mediatek.com>
-         <CAMpxmJUrY9YK==6Mf5MoRTUDwmXJ6v5EM-VLXCNXJ8ZNK+xHyA@mail.gmail.com>
+         <CAAFQd5DuETr-N8efWYz7F-qrw1R-gL6fss2Ag1XezapojiakhQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-MTK:  N
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 2019-10-21 at 18:53 +0200, Bartosz Golaszewski wrote:
-> pt., 18 paź 2019 o 10:26 Bibby Hsieh <bibby.hsieh@mediatek.com> napisał(a):
+On Fri, 2019-10-18 at 18:24 +0900, Tomasz Figa wrote:
+> Hi Bibby,
+> 
+> On Fri, Oct 18, 2019 at 5:26 PM Bibby Hsieh <bibby.hsieh@mediatek.com> wrote:
 > >
 > > Although in the most platforms, the power of eeprom and i2c
 > > are alway on, some platforms disable the eeprom and i2c power
@@ -121,23 +123,19 @@ On Mon, 2019-10-21 at 18:53 +0200, Bartosz Golaszewski wrote:
 > > +       if (err == -ENODEV)
 > > +               at24->has_supplies = NULL;
 > 
-> I just gave this a spin and noticed that this will never happen - the
-> regulator core will use a dummy regulator if none is defined in DT.
-> The only way for this to make sense would be to use
-> regulator_get_optional() for each supply separately. But actually I
-> think we should just leave it this way and remove this if. In the end:
-> this chip needs some power supply, so dummy regulator makes sense.
-> 
-> Bart
-OK, I will remove this if in next version.
-
-Thanks for the experiment.:D
-
-Bibby
-
+> has_supplies is a bool, so the right value would be false.
 > 
 > > +       else if (err == 0)
+> 
+> nit: One would typically use !err here as the condition.
+> 
 > > +               at24->has_supplies = !err;
+> 
+> In this branch, err is always 0, so !err is always true and we can
+> just directly assign true to the field.
+
+Got it.
+> 
 > > +       else
 > > +               return err;
 > > +
@@ -179,6 +177,22 @@ Bibby
 > >         pm_runtime_set_suspended(&client->dev);
 > > +       if (at24->has_supplies)
 > > +               regulator_bulk_disable(AT24_NUM_SUPPLIES, at24->supplies);
+> 
+> It's a weird behavior, but pm_runtime_disable() doesn't guarantee that
+> the device is actually resumed after the call returns. See [1].
+> We should move the regulator disable before we call
+> pm_runtime_set_suspended() and add !pm_runtime_status_suspended() as
+> an additional condition to the if.
+> 
+OK, I will modify it in the next version.
+
+> By the way, that behavior is actually contradicting other parts of the
+> runtime PM core. For example pm_runtime_active() returns true if
+> dev->power.disable_depth is non-zero, but as per the above, the device
+> could as well be suspended. Rafael, is this expected?
+> 
+> [1] https://elixir.bootlin.com/linux/v5.4-rc2/source/drivers/base/power/runtime.c#L1316
+> 
 > > +
 > > +       return 0;
 > > +}
@@ -209,17 +223,14 @@ Bibby
 > >
 > > +static const struct dev_pm_ops at24_pm_ops = {
 > > +       SET_RUNTIME_PM_OPS(at24_suspend, at24_resume, NULL)
-> > +};
-> > +
-> >  static struct i2c_driver at24_driver = {
-> >         .driver = {
-> >                 .name = "at24",
-> > +               .pm = &at24_pm_ops,
-> >                 .of_match_table = at24_of_match,
-> >                 .acpi_match_table = ACPI_PTR(at24_acpi_ids),
-> >         },
-> > --
-> > 2.18.0
-> >
+> 
+> Do we also need pm_runtime_force_suspend() and
+> pm_runtime_force_resume() as system sleep PM ops or it isn't possible
+> for the device to be runtime active when entering the system suspend?
+Yes, you're right, I will add those two function as system sleep PM ops.
+
+> 
+> Best regards,
+> Tomasz
 
 
