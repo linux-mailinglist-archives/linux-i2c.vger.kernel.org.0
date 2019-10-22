@@ -2,75 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83140DFC85
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2019 06:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9DE0DFCE6
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2019 06:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730980AbfJVEXE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Oct 2019 00:23:04 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:56030 "EHLO inva020.nxp.com"
+        id S1726024AbfJVE46 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Oct 2019 00:56:58 -0400
+Received: from sauhun.de ([88.99.104.3]:54142 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729133AbfJVEXE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 22 Oct 2019 00:23:04 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 397301A0009;
-        Tue, 22 Oct 2019 06:23:02 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 788A81A05EE;
-        Tue, 22 Oct 2019 06:22:58 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id E4D4740245;
-        Tue, 22 Oct 2019 12:22:53 +0800 (SGT)
-From:   Biwen Li <biwen.li@nxp.com>
-To:     peda@axentia.se, leoyang.li@nxp.com, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Biwen Li <biwen.li@nxp.com>
-Subject: [v5,3/3] arm64: dts: fsl-ls208xa-rdb: fix an errata E-00013
-Date:   Tue, 22 Oct 2019 12:11:52 +0800
-Message-Id: <20191022041152.3663-3-biwen.li@nxp.com>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20191022041152.3663-1-biwen.li@nxp.com>
-References: <20191022041152.3663-1-biwen.li@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1725788AbfJVE46 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 22 Oct 2019 00:56:58 -0400
+Received: from localhost (x4e37421f.dyn.telefonica.de [78.55.66.31])
+        by pokefinder.org (Postfix) with ESMTPSA id 884872C0139;
+        Tue, 22 Oct 2019 06:56:56 +0200 (CEST)
+Date:   Tue, 22 Oct 2019 06:56:56 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Cc:     Peter Rosin <peda@axentia.se>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
+        Cedric Le Goater <clg@kaod.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Subject: Re: [PATCH i2c-next 1/2] dt-bindings: i2c: aspeed: add hardware
+ timeout support
+Message-ID: <20191022045655.GA975@kunai>
+References: <20191021202414.17484-1-jae.hyun.yoo@linux.intel.com>
+ <20191021202414.17484-2-jae.hyun.yoo@linux.intel.com>
+ <0a629f7b-b829-c332-27d8-dc825205ff72@axentia.se>
+ <7abf933b-cb18-10af-9c1b-163ec65ffae5@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WIyZ46R2i8wDzkSu"
+Content-Disposition: inline
+In-Reply-To: <7abf933b-cb18-10af-9c1b-163ec65ffae5@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Specify a channel zero in idle state to
-avoid enterring tri-stated state for PCA9547.
-About E-00013:
-	- Description: I2C1 and I2C3 buses
-	  are missing pull-up.
-	- Impact: When the PCA954x device is tri-stated, the I2C bus
-	  will float. This makes the I2C bus and its associated
-	  downstream devices inaccessible.
-	- Hardware fix: Populate resistors R189 and R190 for I2C1
-	  and resistors R228 and R229 for I2C3.
-	- Software fix: Remove the tri-state option from the PCA954x
-	  driver(PCA954x always on enable status, specify a
-	  channel zero in dts to fix the errata E-00013).
 
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
----
-Change in v5:
-	- specify a channel zero when pca9547 in idle state.
+--WIyZ46R2i8wDzkSu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
- arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi
-index 6fd7f63085c9..412f1bc0db5f 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi
-@@ -49,6 +49,7 @@
- 		reg = <0x75>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-+		idle-state = <0>;
- 		i2c@1 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
--- 
-2.17.1
+> Changes I submitted in this patch set is for a different purpose which
+> is very Aspeed H/W specific, and actually it's a more serious timeout
+> setting indeed. If this H/W is used in multi-master environment, it
+> could meet a H/W hang that freezes itself in slave mode and it can't
+> escape from the state. To resolve the specific case, this H/W provides
+> self-recovery feature which monitors abnormal state of SDA, SCL and its
+> H/W state machine using the timeout setting to determine the escape
+> condition.
 
+Thanks for the summary. I just wonder on what the timeout value depends.
+Do we really need to put in DT or can we derive it e.g. from the
+compatible value in the driver?
+
+
+--WIyZ46R2i8wDzkSu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl2ujBMACgkQFA3kzBSg
+KbYZZg/+ILRBsr6VA2yU97i07DYrhNgIs0GsfqAA3zqC+JhbF/dyORbZWno4fIxZ
++qHvJ6pTQCR/jWA4aP1kO/NL9EU3nWIICyZHIFJpXBtwrH9mGP1+hlnyrWc2uaZC
+JpOw3AKSYevrQb0RksLu16ZddmlMHO0+Qi2rkhh4LGcsdCiUZRSOEeoaQkiyS3Cy
+hsb1uqiGFQFdq/gFv08rpW2ja7TGS/HMzs8RdXlOI03bL6ORXU9QCV6H2oIBl00v
+9YQYHo9lV5PtRTweCpaN0o+9XLmP1y4A7kHS1lr9YVoRVT67HniEisum3t6UPR2H
+B5Ha1IVzBYuqtoq0vhuiowNVmV9OROoM+alQxhw3g6HPT0K+d5GmD9k6aPNXWCod
+rBT7QTBslplAZJNo6R2tGvh0wIYWU0PMJ+ZSsS9YdigSqMXfd8C1p2R6ZphdyCk7
+dHfEaPa4iuUGYaJWiHFROYni/GhG1EBN3kpUSphG5ETA6Ur16blwXyAZy7oVm5xO
+IsIVfsJYBiV/1O77xE7FUF8gXpIalsLLH7/AXH80JexMqZBpu5hg6N6GhbN7K4rl
+wZBpfCNq9Rvy65BvFL4Vmw2elrZmo9S7vYs907eZ1ZJNWB9TVpqe+z0c9FNMuAKx
+o1ZttPvRuKUhoQTMnQ734eW74vmmrl4IfguSGshRymILa5AaX1Q=
+=INXh
+-----END PGP SIGNATURE-----
+
+--WIyZ46R2i8wDzkSu--
