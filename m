@@ -2,79 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7139E3A8F
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 20:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DDBE3ABB
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 20:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406407AbfJXSDN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Oct 2019 14:03:13 -0400
-Received: from mga18.intel.com ([134.134.136.126]:2753 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406106AbfJXSDN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 24 Oct 2019 14:03:13 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Oct 2019 11:03:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,225,1569308400"; 
-   d="scan'208";a="349783476"
-Received: from yoojae-mobl1.amr.corp.intel.com (HELO [10.7.153.148]) ([10.7.153.148])
-  by orsmga004.jf.intel.com with ESMTP; 24 Oct 2019 11:03:13 -0700
-Subject: Re: AST2600 i2c irq issue
-To:     Eddie James <eajames@linux.vnet.ibm.com>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Eddie James <eajames@linux.ibm.com>
-References: <CACPK8XdqFkPgCQcgpM5C_YwfJ86Lmk=hG5zTcfbCDCMncXCJMg@mail.gmail.com>
- <f9fecc04-2a9a-4cbd-a1ff-ffb680b0fec2@linux.vnet.ibm.com>
- <dbb8635e-a95a-3951-cd65-3428adc461ec@linux.intel.com>
- <8c62b118777c44d1bf8e1a3c32175644@TWMBX02.aspeed.com>
- <333e959f-9296-b6d5-9442-b979a8abd50d@linux.vnet.ibm.com>
-From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Message-ID: <5508f358-77b8-f5f7-2577-79da25e4e5ea@linux.intel.com>
-Date:   Thu, 24 Oct 2019 11:03:13 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2404921AbfJXSOj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Oct 2019 14:14:39 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:41275 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404839AbfJXSOj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Oct 2019 14:14:39 -0400
+Received: by mail-pg1-f196.google.com with SMTP id l3so1249302pgr.8;
+        Thu, 24 Oct 2019 11:14:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=3o1fYiOdIiEj4DynNzDC32x1qEAi7S57H0c8INilQ88=;
+        b=G+0/8N8qyVZhWupWMutng1rz2daYhHjuCxwpwgsI7LiTP/woH0ls5AIyEWuaJVSJbQ
+         wMJgDkDOzNjqda5Rc+m4KKgBdnjmbe1T/ZvwClkjKvcdj6bkG/tPGeRK5ZMPq0Ryk88P
+         QsZ/Z3wRTGWGYVmoyxWZTxnFzQ6lzOZQmrgQ5Gg4yyUsmIDVY+EyZXeEiGLtq7xc7wxi
+         ojMcH4GF4VoGo3Abj/ipvA+ph5AWVyH/AhBKCab9/Pty4kSgRK56UdeQ7CPiNav7zwkt
+         su/tSArX8Hqczd8nKjITgjSgPHJFhextbnaIUQJ0JAbV7xkoLqK/Wq/f9JNsgEYTIoL0
+         UvwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3o1fYiOdIiEj4DynNzDC32x1qEAi7S57H0c8INilQ88=;
+        b=BxuLZQQxD0baEf8deKrJZPUfk/loYeLOEDhOyRCCuetB4qg4HYqJZfw4Wsw1DZBzDf
+         bRTt6uSsjD6fduDP5tXRDtScnOawI/BbNAhMOH/rO9ZX4LSCFudEFlbrUMdQIgFotxzv
+         oTDLFkHMiSUlkHygkQJH2RlDO6pSXNC3qYmA0suqYDTfr2KJwucW4bKaJVO8X+RtXyul
+         t1ALs9GStSG3xjfPzA7V/aNxXVe93O4Jamq0LcrwwFIsyc4/R+J4IwWK3PwsFhfWGqEO
+         mf9g0XG1r05iSf9mTrUzp3WMFeVXxgRBAt8bMz72fXBrMKKgfYER+91F/sHntIJxZhul
+         73KQ==
+X-Gm-Message-State: APjAAAUawQb082Rnp1sJrHqpo7EbAIIOK7A/X/g6B/F18LRgDDDZZied
+        QY90FvUyizjyTnclTGQV+ZyPdp4r
+X-Google-Smtp-Source: APXvYqz5YHKoUKY17EVt9DxGnRRu5c2Nc9tAAD0aFrpV68QDOv29HFwplmGrRlW6MXDrCX7rJE/BfA==
+X-Received: by 2002:aa7:8e91:: with SMTP id a17mr5360720pfr.109.1571940878326;
+        Thu, 24 Oct 2019 11:14:38 -0700 (PDT)
+Received: from SD ([106.222.8.16])
+        by smtp.gmail.com with ESMTPSA id q11sm9820746pgq.71.2019.10.24.11.14.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2019 11:14:37 -0700 (PDT)
+Date:   Thu, 24 Oct 2019 23:44:24 +0530
+From:   Saiyam Doshi <saiyamdoshi.in@gmail.com>
+To:     linux@roeck-us.net, peda@axentia.se
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: muxes: pca9541: use BIT() macro
+Message-ID: <20191024181354.GA6889@SD>
+References: <20190905180423.GA7477@SD>
 MIME-Version: 1.0
-In-Reply-To: <333e959f-9296-b6d5-9442-b979a8abd50d@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190905180423.GA7477@SD>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Eddie,
+Any update / review comment on this?
 
-On 10/22/2019 1:24 PM, Eddie James wrote:
-
-[...]
-
-> 7: irq[00000000] before[rx] after[stop]
-
-'irq[]' here and '10[]' below are the same register. This log means an
-interrupt came with empty status.
-
->      00[00008001]
->      04[007ee005]
->      08[00000000]
->      0c[0000607f]
->      10[00000004]    <<< this is interesting. this has changed since the 
-> start of the interrupt handler.
-
-The interrupt status was updated lately at here. Looks like there is a
-timing gap in H/W between interrupt triggering and status updating. I
-haven't seen this issue in previous H/W versions.
-
-This issue can be resolved by your patch but ultimately this issue
-should be fixed in AST2600 A1 revision H/W if possible so that we can
-remove the unnecessary interrupt handling.
-
-Thanks,
-
-Jae
+-Saiyam
