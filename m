@@ -2,77 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E32FE362C
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 17:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D039EE3740
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 17:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409576AbfJXPHa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Oct 2019 11:07:30 -0400
-Received: from sauhun.de ([88.99.104.3]:41692 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407327AbfJXPHa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 24 Oct 2019 11:07:30 -0400
-Received: from localhost (x4d0d4399.dyn.telefonica.de [77.13.67.153])
-        by pokefinder.org (Postfix) with ESMTPSA id AB61C2C011D;
-        Thu, 24 Oct 2019 17:07:27 +0200 (CEST)
-Date:   Thu, 24 Oct 2019 17:07:26 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Codrin.Ciubotariu@microchip.com
-Cc:     kamel.bouhara@bootlin.com, linux-arm-kernel@lists.infradead.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        Ludovic.Desroches@microchip.com, devicetree@vger.kernel.org,
-        thomas.petazzoni@bootlin.com
-Subject: Re: [PATCH 2/4] i2c: at91: implement i2c bus recovery
-Message-ID: <20191024150726.GA1120@kunai>
-References: <20191002144658.7718-1-kamel.bouhara@bootlin.com>
- <20191002144658.7718-3-kamel.bouhara@bootlin.com>
- <20191021202044.GB3607@kunai>
- <724d3470-0561-1b3f-c826-bc16c74a8c0a@bootlin.com>
- <1e70ae35-052b-67cc-27c4-1077c211efd0@microchip.com>
+        id S2409830AbfJXPzi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Oct 2019 11:55:38 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54630 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2405564AbfJXPzi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 24 Oct 2019 11:55:38 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 0F698B230;
+        Thu, 24 Oct 2019 15:55:37 +0000 (UTC)
+Date:   Thu, 24 Oct 2019 17:55:50 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     <linux-i2c@vger.kernel.org>, Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH 1/2] i2c: i801: Add support for Intel Jasper Lake
+Message-ID: <20191024175550.5dd6d2b1@endymion>
+In-Reply-To: <20191024105726.10802-1-jarkko.nikula@linux.intel.com>
+References: <20191024105726.10802-1-jarkko.nikula@linux.intel.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9amGYk9869ThD9tj"
-Content-Disposition: inline
-In-Reply-To: <1e70ae35-052b-67cc-27c4-1077c211efd0@microchip.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, 24 Oct 2019 13:57:25 +0300, Jarkko Nikula wrote:
+> Add support for SMBus controller on Intel Jasper Lake PCH-N.
+> 
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> ---
+>  Documentation/i2c/busses/i2c-i801.rst | 1 +
+>  drivers/i2c/busses/Kconfig            | 1 +
+>  drivers/i2c/busses/i2c-i801.c         | 4 ++++
+>  3 files changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/i2c/busses/i2c-i801.rst b/Documentation/i2c/busses/i2c-i801.rst
+> index 2a570c214880..aa4a0e26e9b9 100644
+> --- a/Documentation/i2c/busses/i2c-i801.rst
+> +++ b/Documentation/i2c/busses/i2c-i801.rst
+> @@ -42,6 +42,7 @@ Supported adapters:
+>    * Intel Comet Lake (PCH)
+>    * Intel Elkhart Lake (PCH)
+>    * Intel Tiger Lake (PCH)
+> +  * Intel Jasper Lake (PCH)
+>  
+>     Datasheets: Publicly available at the Intel website
+>  
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 146ce40d8e0a..89cb8d7c4853 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -145,6 +145,7 @@ config I2C_I801
+>  	    Comet Lake (PCH)
+>  	    Elkhart Lake (PCH)
+>  	    Tiger Lake (PCH)
+> +	    Jasper Lake (PCH)
+>  
+>  	  This driver can also be built as a module.  If so, the module
+>  	  will be called i2c-i801.
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index f1c714acc280..01a29beb5da0 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -66,6 +66,7 @@
+>   * Comet Lake (PCH)		0x02a3	32	hard	yes	yes	yes
+>   * Elkhart Lake (PCH)		0x4b23	32	hard	yes	yes	yes
+>   * Tiger Lake-LP (PCH)		0xa0a3	32	hard	yes	yes	yes
+> + * Jasper Lake-N (PCH)		0x4da3	32	hard	yes	yes	yes
+>   *
+>   * Features supported by this driver:
+>   * Software PEC				no
+> @@ -223,6 +224,7 @@
+>  #define PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS		0x34a3
+>  #define PCI_DEVICE_ID_INTEL_5_3400_SERIES_SMBUS		0x3b30
+>  #define PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS		0x4b23
+> +#define PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS		0x4da3
+>  #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
+>  #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
+>  #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS		0x8ca2
+> @@ -1071,6 +1073,7 @@ static const struct pci_device_id i801_ids[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS) },
+>  	{ 0, }
+>  };
+>  
+> @@ -1752,6 +1755,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  	case PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS:
+>  	case PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS:
+>  	case PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS:
+> +	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS:
+>  		priv->features |= FEATURE_BLOCK_PROC;
+>  		priv->features |= FEATURE_I2C_BLOCK_READ;
+>  		priv->features |= FEATURE_IRQ;
 
---9amGYk9869ThD9tj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-
-> So at the beginning of a new transfer, we should check if SDA (or SCL?)=
-=20
-> is low and, if it's true, only then we should try recover the bus.
-
-Yes, this is the proper time to do it. Remember, I2C does not define a
-timeout.
-
-
---9amGYk9869ThD9tj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl2xvikACgkQFA3kzBSg
-KbY2xw/9FIdBm3lKLqDZpmKjcsD3wcKioeBhtRCD82gnXZgkMqSlbbQQRf8y8ZKe
-KAun1rTcj+rHtvzH20i+alDXQzChwwJAS9ZxORyWPurh0sRTwGDH5z8Bl1Sm8kUp
-6dMDTGNrWwFGV0iQmHzF17n545X7ho/QHlTmpQi23SxS0sOJGPz5D8drDlWS0eBq
-MFrDt9jqeCRV2u68gntAWoMoTHUr5klUizS+p8Jrt3yMIfriH1uPc3VGa5xuuLVI
-al5YrR9bB0zgYZatgoxnZ6Q5KkInb1DkZIZNRmJP+4QoTMo97HHW+ZrsNJUD9mw5
-Uuoh2NTgVGkbuCXRDzVsDOoEEMVM1qmmZxNfeXPtIO6jWbZID8ZaWbsgAfV4SXnQ
-eeeZkH8ZuO19KhSeS6/El283JSMuvl89njtXd7l6/hcY41ndFOkjtjEDs/7Ed7RJ
-SB0dnavo3zYhzyMJ1IjhtIEIc3+cRZRy7HmBxgovyuEYYCF+re6I8HLjvo2/aYuC
-+s7J45zgY/9lqcnJRMz6iL7yIAFyoptYVVq5V065QWCyeKDNmVNBg3XP24ETd879
-060Xp1xPeZQU/Pe6D+j7fzfYDyg94Hi9a7P7TT4ZwatTm8LCObi5g7FCCuq5OQPM
-eY9Z7YHvo7yo4rYM1tqbAoYA0ZUxXj9IxGI8uIr0L3lBjLIJAI0=
-=cVZT
------END PGP SIGNATURE-----
-
---9amGYk9869ThD9tj--
+-- 
+Jean Delvare
+SUSE L3 Support
