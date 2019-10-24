@@ -2,141 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C5EE2D62
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 11:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8681CE2F9F
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 12:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389046AbfJXJcx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Oct 2019 05:32:53 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:37176 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732686AbfJXJcx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Oct 2019 05:32:53 -0400
-Received: by mail-ed1-f65.google.com with SMTP id r4so18112759edy.4
-        for <linux-i2c@vger.kernel.org>; Thu, 24 Oct 2019 02:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HlmghVPRqXMDHcFCrytgGe2/PcZ6/wl0Jdf37zxv8NU=;
-        b=f8xfaILpiaFdUq6D8A3pkLgL5b7uNqoBpjJdiqWLF1jdE22Zfswa373xjwwewCF80q
-         +XXBcmwyQaOZBCH/V6et1zLRiyX9ubQdRERpKzS6sgIQ53tyvC84dT0sYlWp+itahXzq
-         CgmLVfucy11zd3XKhypZOkjILl1CpA4cpMXiE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HlmghVPRqXMDHcFCrytgGe2/PcZ6/wl0Jdf37zxv8NU=;
-        b=E9rhrzRbHtVNBYR9x5X/Qm4EJTtJKarxdktYpAo2igqsjzD1g4Zm5EbFDh22Iasz3V
-         QPjfJiEAEc4NwNOOhFAHXU1MKPNSoRPVCuNX4VB06KyKhyj8g3oUeFJm6xvRhUV/8iHH
-         yWGKCz5QaLfADlS8UlNv1SrdSwiWkQFvu/soebeaX9lSySep4jjqbSc2rrSL4LnCpaag
-         UYslQwCjVeJOY/avHROrQcfQBki8Ki9KsRp6H1oXca0YtmhStRgiRn6j/5mvLbgE1kZI
-         ISnvV6cvXKnAOZ97enEMVO8j/Vc7eLE80tmhDfuoxU//Qtc8nvexR+ZXFasZizpCOWv9
-         aTSA==
-X-Gm-Message-State: APjAAAUdDIIkwFLOhHjxG4ba0sJyh9sPuHmK2n+pslNPJ3nMyHb+30ND
-        BXFLjeioxhLMegrmrjmUQHFFKm43Lltulw==
-X-Google-Smtp-Source: APXvYqxsxm8FGk4cRESXCHt5pjSWVVMucWxB5Db6S8JfljdBtDRcVhg3u40hfs9iISqxzmQ/cbbC2w==
-X-Received: by 2002:a17:906:8155:: with SMTP id z21mr18376594ejw.180.1571909571149;
-        Thu, 24 Oct 2019 02:32:51 -0700 (PDT)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id l49sm434992edb.3.2019.10.24.02.32.50
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Oct 2019 02:32:50 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id e11so16548100wrv.4
-        for <linux-i2c@vger.kernel.org>; Thu, 24 Oct 2019 02:32:50 -0700 (PDT)
-X-Received: by 2002:adf:e446:: with SMTP id t6mr2857004wrm.7.1571909569678;
- Thu, 24 Oct 2019 02:32:49 -0700 (PDT)
+        id S1726986AbfJXK5d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Oct 2019 06:57:33 -0400
+Received: from mga07.intel.com ([134.134.136.100]:24927 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725852AbfJXK5d (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 24 Oct 2019 06:57:33 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Oct 2019 03:57:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,224,1569308400"; 
+   d="scan'208";a="398369119"
+Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.180])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Oct 2019 03:57:30 -0700
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@the-dreams.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH 1/2] i2c: i801: Add support for Intel Jasper Lake
+Date:   Thu, 24 Oct 2019 13:57:25 +0300
+Message-Id: <20191024105726.10802-1-jarkko.nikula@linux.intel.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <20191018082557.3696-1-bibby.hsieh@mediatek.com>
- <20191018082557.3696-2-bibby.hsieh@mediatek.com> <CAMpxmJW_HQnL8i5FnKcVUs=ZyrnaFe6X+oqG38-v=O05d5vNxw@mail.gmail.com>
- <CAAFQd5CA_53uDo6QdRcvqJ5shUG5K25f+WXCn9OYMHfSgwLMSA@mail.gmail.com> <CAMpxmJWzEER4iBo9-WhmumuH1nmWYvy=xud+=7wzp3op8-P7uw@mail.gmail.com>
-In-Reply-To: <CAMpxmJWzEER4iBo9-WhmumuH1nmWYvy=xud+=7wzp3op8-P7uw@mail.gmail.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 24 Oct 2019 18:32:38 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DNdmm4sn1JNPhnuMor50ZP4EJmymtS4hB4WkNHmKOs6w@mail.gmail.com>
-Message-ID: <CAAFQd5DNdmm4sn1JNPhnuMor50ZP4EJmymtS4hB4WkNHmKOs6w@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-binding: eeprom: at24: add supply properties
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 5:40 PM Bartosz Golaszewski
-<bgolaszewski@baylibre.com> wrote:
->
-> czw., 24 pa=C5=BA 2019 o 09:02 Tomasz Figa <tfiga@chromium.org> napisa=C5=
-=82(a):
-> >
-> > On Thu, Oct 24, 2019 at 3:22 PM Bartosz Golaszewski
-> > <bgolaszewski@baylibre.com> wrote:
-> > >
-> > > pt., 18 pa=C5=BA 2019 o 10:26 Bibby Hsieh <bibby.hsieh@mediatek.com> =
-napisa=C5=82(a):
-> > > >
-> > > > In some platforms, they disable the power-supply of eeprom and i2c =
-due
-> > > > to power consumption reduction.
-> > > >
-> > > > This patch add two supply properties: vcc-supply, i2c-supply.
-> > > >
-> > > > Changes since v1:
-> > > >  - change supply name
-> > > >  - rebase to next
-> > > >
-> > > > Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/eeprom/at24.yaml | 8 ++++++++
-> > > >  1 file changed, 8 insertions(+)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/D=
-ocumentation/devicetree/bindings/eeprom/at24.yaml
-> > > > index e8778560d966..578487a5d9b7 100644
-> > > > --- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-> > > > +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> > > > @@ -167,6 +167,14 @@ properties:
-> > > >      minimum: 1
-> > > >      maximum: 8
-> > > >
-> > > > +  vcc-supply:
-> > > > +    description:
-> > > > +      phandle of the regulator that provides the supply voltage.
-> > > > +
-> > > > +  i2c-sypply:
-> > > > +    description:
-> > > > +      phandle to the regulator that provides power to i2c.
-> > > > +
-> > >
-> > > Something was bothering me about this patch so I came back to take a
-> > > look. Can you explain what i2c actually stands for in this doc? I hop=
-e
-> > > I'm misinterpreting something and it isn't that the driver disables
-> > > the regulator powering the i2c bus controller?
-> >
-> > In our case it's the regulator that the I2C bus is pulled up to.
-> >
->
-> Then it has nothing to do with a generic EEPROM driver IMO. I think
-> you need to add the control for this regulator to your i2c controller
-> driver and create a power domain where the EEPROM would be lower in
-> hierarchy.
+Add support for SMBus controller on Intel Jasper Lake PCH-N.
 
-While I agree that the generic EEPROM driver may not be the best place
-to do it, neither is a driver for a specific SoC i2c controller. The
-hardware design is not specific to any particular i2c controller.
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+ Documentation/i2c/busses/i2c-i801.rst | 1 +
+ drivers/i2c/busses/Kconfig            | 1 +
+ drivers/i2c/busses/i2c-i801.c         | 4 ++++
+ 3 files changed, 6 insertions(+)
 
-Perhaps we need the generic i2c core to take into account an
-i2c-supply? Wolfram, any thoughts on this?
+diff --git a/Documentation/i2c/busses/i2c-i801.rst b/Documentation/i2c/busses/i2c-i801.rst
+index 2a570c214880..aa4a0e26e9b9 100644
+--- a/Documentation/i2c/busses/i2c-i801.rst
++++ b/Documentation/i2c/busses/i2c-i801.rst
+@@ -42,6 +42,7 @@ Supported adapters:
+   * Intel Comet Lake (PCH)
+   * Intel Elkhart Lake (PCH)
+   * Intel Tiger Lake (PCH)
++  * Intel Jasper Lake (PCH)
+ 
+    Datasheets: Publicly available at the Intel website
+ 
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 146ce40d8e0a..89cb8d7c4853 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -145,6 +145,7 @@ config I2C_I801
+ 	    Comet Lake (PCH)
+ 	    Elkhart Lake (PCH)
+ 	    Tiger Lake (PCH)
++	    Jasper Lake (PCH)
+ 
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called i2c-i801.
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index f1c714acc280..01a29beb5da0 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -66,6 +66,7 @@
+  * Comet Lake (PCH)		0x02a3	32	hard	yes	yes	yes
+  * Elkhart Lake (PCH)		0x4b23	32	hard	yes	yes	yes
+  * Tiger Lake-LP (PCH)		0xa0a3	32	hard	yes	yes	yes
++ * Jasper Lake-N (PCH)		0x4da3	32	hard	yes	yes	yes
+  *
+  * Features supported by this driver:
+  * Software PEC				no
+@@ -223,6 +224,7 @@
+ #define PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS		0x34a3
+ #define PCI_DEVICE_ID_INTEL_5_3400_SERIES_SMBUS		0x3b30
+ #define PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS		0x4b23
++#define PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS		0x4da3
+ #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
+ #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
+ #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS		0x8ca2
+@@ -1071,6 +1073,7 @@ static const struct pci_device_id i801_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS) },
+ 	{ 0, }
+ };
+ 
+@@ -1752,6 +1755,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	case PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS:
+ 	case PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS:
+ 	case PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS:
++	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS:
+ 		priv->features |= FEATURE_BLOCK_PROC;
+ 		priv->features |= FEATURE_I2C_BLOCK_READ;
+ 		priv->features |= FEATURE_IRQ;
+-- 
+2.23.0
 
-Best regards,
-Tomasz
