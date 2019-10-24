@@ -2,84 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE75E2FA0
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 12:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 169BAE3307
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 14:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731522AbfJXK5e (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Oct 2019 06:57:34 -0400
-Received: from mga07.intel.com ([134.134.136.100]:24927 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725852AbfJXK5e (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 24 Oct 2019 06:57:34 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Oct 2019 03:57:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,224,1569308400"; 
-   d="scan'208";a="398369126"
-Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.180])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Oct 2019 03:57:32 -0700
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@the-dreams.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH 2/2] i2c: i801: Add support for Intel Comet Lake PCH-H
-Date:   Thu, 24 Oct 2019 13:57:26 +0300
-Message-Id: <20191024105726.10802-2-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191024105726.10802-1-jarkko.nikula@linux.intel.com>
-References: <20191024105726.10802-1-jarkko.nikula@linux.intel.com>
+        id S1731582AbfJXMwP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Oct 2019 08:52:15 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:8508 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731315AbfJXMwP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Oct 2019 08:52:15 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9OCpL3a031995;
+        Thu, 24 Oct 2019 14:52:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=NTyg2cKVDskIQP5k+lTXj0XW5CLq2Yn3o933I6C84NA=;
+ b=EE6ULXMaQF8YbBV5UrS6beaGs5rVC1yLwC8wbX7WYWmp9CYme0oO/s+Dmh1pici70vGJ
+ Sc4L5iztdNtA0KpVciDpHynRxkRbseq5UJ6rx6kWFgXbFdiYpTcnqOnpxWsgRCvOpIE3
+ BMrviEj+qesKjJwzdNOVv+1QjEPhKgf/OiPIjNz6iH0ZM1XAQSJ4zBPC/hTnqXZDrarN
+ hNhluXCrYT0rZnPTEWHCHqxzDpRBwqyLcusmgYL6XPJ2uP1qiniTYJzdbOKzeFeJHuZA
+ PEXHk51YMInySfvsEdk3IMDQMyWss1y5Bdftu9uhisPg6O0EN5x7m78ivuV+dB3BYgiE dg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2vt9s51qwu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Oct 2019 14:52:03 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D001710002A;
+        Thu, 24 Oct 2019 14:52:01 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 68D382BAB98;
+        Thu, 24 Oct 2019 14:52:01 +0200 (CEST)
+Received: from localhost (10.75.127.48) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 24 Oct 2019 14:52:01
+ +0200
+From:   Alain Volmat <alain.volmat@st.com>
+To:     <wsa@the-dreams.de>, <pierre-yves.mordret@st.com>
+CC:     <alain.volmat@st.com>, <alexandre.torgue@st.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>
+Subject: [PATCH] i2c: i2c-stm32f7: report dma error during probe
+Date:   Thu, 24 Oct 2019 14:52:00 +0200
+Message-ID: <1571921521-8502-1-git-send-email-alain.volmat@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-24_08:2019-10-23,2019-10-24 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add support for another Intel Comet Lake variant.
+Distinguish between the case where dma information is not provided
+within the DT and the case of an error during the dma init.
+Exit the probe with error in case of an error during dma init.
 
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Fixes: bb8822cbbc53 ("i2c: i2c-stm32: Add generic DMA API")
+
+Signed-off-by: Alain Volmat <alain.volmat@st.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/i2c/busses/i2c-stm32.c   | 16 ++++++++--------
+ drivers/i2c/busses/i2c-stm32f7.c |  9 +++++++++
+ 2 files changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 01a29beb5da0..df02040d36d5 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -64,6 +64,7 @@
-  * Cedar Fork (PCH)		0x18df	32	hard	yes	yes	yes
-  * Ice Lake-LP (PCH)		0x34a3	32	hard	yes	yes	yes
-  * Comet Lake (PCH)		0x02a3	32	hard	yes	yes	yes
-+ * Comet Lake-H (PCH)		0x06a3	32	hard	yes	yes	yes
-  * Elkhart Lake (PCH)		0x4b23	32	hard	yes	yes	yes
-  * Tiger Lake-LP (PCH)		0xa0a3	32	hard	yes	yes	yes
-  * Jasper Lake-N (PCH)		0x4da3	32	hard	yes	yes	yes
-@@ -206,6 +207,7 @@
+diff --git a/drivers/i2c/busses/i2c-stm32.c b/drivers/i2c/busses/i2c-stm32.c
+index 07d5dfce68d4..1da347e6a358 100644
+--- a/drivers/i2c/busses/i2c-stm32.c
++++ b/drivers/i2c/busses/i2c-stm32.c
+@@ -20,13 +20,13 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
  
- /* Older devices have their ID defined in <linux/pci_ids.h> */
- #define PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS		0x02a3
-+#define PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS		0x06a3
- #define PCI_DEVICE_ID_INTEL_BAYTRAIL_SMBUS		0x0f12
- #define PCI_DEVICE_ID_INTEL_CDF_SMBUS			0x18df
- #define PCI_DEVICE_ID_INTEL_DNV_SMBUS			0x19df
-@@ -1071,6 +1073,7 @@ static const struct pci_device_id i801_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CANNONLAKE_LP_SMBUS) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS) },
-@@ -1753,6 +1756,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	case PCI_DEVICE_ID_INTEL_CDF_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS:
-+	case PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS:
+ 	dma = devm_kzalloc(dev, sizeof(*dma), GFP_KERNEL);
+ 	if (!dma)
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	/* Request and configure I2C TX dma channel */
+-	dma->chan_tx = dma_request_slave_channel(dev, "tx");
+-	if (!dma->chan_tx) {
++	dma->chan_tx = dma_request_chan(dev, "tx");
++	if (IS_ERR(dma->chan_tx)) {
+ 		dev_dbg(dev, "can't request DMA tx channel\n");
+-		ret = -EINVAL;
++		ret = PTR_ERR(dma->chan_tx);
+ 		goto fail_al;
+ 	}
+ 
+@@ -42,10 +42,10 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
+ 	}
+ 
+ 	/* Request and configure I2C RX dma channel */
+-	dma->chan_rx = dma_request_slave_channel(dev, "rx");
+-	if (!dma->chan_rx) {
++	dma->chan_rx = dma_request_chan(dev, "rx");
++	if (IS_ERR(dma->chan_rx)) {
+ 		dev_err(dev, "can't request DMA rx channel\n");
+-		ret = -EINVAL;
++		ret = PTR_ERR(dma->chan_rx);
+ 		goto fail_tx;
+ 	}
+ 
+@@ -75,7 +75,7 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
+ 	devm_kfree(dev, dma);
+ 	dev_info(dev, "can't use DMA\n");
+ 
+-	return NULL;
++	return ERR_PTR(ret);
+ }
+ 
+ void stm32_i2c_dma_free(struct stm32_i2c_dma *dma)
+diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+index d36cf08461f7..cc8ba8f49ae6 100644
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -1950,6 +1950,15 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
+ 	i2c_dev->dma = stm32_i2c_dma_request(i2c_dev->dev, phy_addr,
+ 					     STM32F7_I2C_TXDR,
+ 					     STM32F7_I2C_RXDR);
++	if (PTR_ERR(i2c_dev->dma) == -ENODEV)
++		i2c_dev->dma = NULL;
++	else if (IS_ERR(i2c_dev->dma)) {
++		ret = PTR_ERR(i2c_dev->dma);
++		if (ret != -EPROBE_DEFER)
++			dev_err(&pdev->dev,
++				"Failed to request dma error %i\n", ret);
++		goto clk_free;
++	}
+ 
+ 	platform_set_drvdata(pdev, i2c_dev);
+ 
 -- 
-2.23.0
+2.7.4
 
