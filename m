@@ -2,73 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4937EE3BC0
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 21:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D34E3CCE
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 22:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392411AbfJXTEK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Oct 2019 15:04:10 -0400
-Received: from sauhun.de ([88.99.104.3]:44100 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390604AbfJXTEK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 24 Oct 2019 15:04:10 -0400
-Received: from localhost (x4d0bc9de.dyn.telefonica.de [77.11.201.222])
-        by pokefinder.org (Postfix) with ESMTPSA id 4C7302C011D;
-        Thu, 24 Oct 2019 21:04:08 +0200 (CEST)
-Date:   Thu, 24 Oct 2019 21:04:07 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Beniamino Galvani <b.galvani@gmail.com>
-Subject: Re: [PATCH] dt-bindings: i2c: meson: convert to yaml
-Message-ID: <20191024190407.GG1870@kunai>
-References: <20191021140053.9525-1-narmstrong@baylibre.com>
+        id S1726137AbfJXUN2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Oct 2019 16:13:28 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:50087 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725811AbfJXUN2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Oct 2019 16:13:28 -0400
+Received: from localhost (unknown [78.193.40.249])
+        (Authenticated sender: kamel.bouhara@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 3545B200002;
+        Thu, 24 Oct 2019 20:13:24 +0000 (UTC)
+From:   Kamel Bouhara <kamel.bouhara@bootlin.com>
+To:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Kamel Bouhara <kamel.bouhara@bootlin.com>
+Subject: [PATCH v2 0/5] Add i2c bus recovery support for Atmel SoCs
+Date:   Thu, 24 Oct 2019 22:12:57 +0200
+Message-Id: <20191024201302.23376-1-kamel.bouhara@bootlin.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="df+09Je9rNq3P+GE"
-Content-Disposition: inline
-In-Reply-To: <20191021140053.9525-1-narmstrong@baylibre.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Some Atmel SoCs actually doesn't support the clear command for recovery.
+This patch serie merge the two support for both i2c bus recovery
+mechanism (clear command and gpio/pinctrl).
 
---df+09Je9rNq3P+GE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Codrin Ciubotariu (1):
+  i2c: at91: Send bus clear command if SCL or SDA is down
 
+Kamel Bouhara (4):
+  dt-bindings: i2c: at91: document optional bus recovery properties
+  i2c: at91: implement i2c bus recovery
+  ARM: at91/dt: sama5d3: add i2c gpio pinctrl
+  ARM: at91/dt: sama5d4: add i2c gpio pinctrl
 
-> +maintainers:
-> +  - Neil Armstrong <narmstrong@baylibre.com>
-> +  - Beniamino Galvani <b.galvani@gmail.com>
+ .../devicetree/bindings/i2c/i2c-at91.txt      | 10 +++
+ arch/arm/boot/dts/sama5d3.dtsi                | 33 ++++++-
+ arch/arm/boot/dts/sama5d4.dtsi                | 33 ++++++-
+ drivers/i2c/busses/i2c-at91-core.c            |  8 ++
+ drivers/i2c/busses/i2c-at91-master.c          | 86 +++++++++++++++++++
+ drivers/i2c/busses/i2c-at91.h                 | 15 +++-
+ 6 files changed, 178 insertions(+), 7 deletions(-)
 
-I need an ack from Beniamino for this.
+--
+2.23.0
 
-Also, do you want to maintain only this file or also the driver? The
-latter would be much appreciated, of course!
-
-
---df+09Je9rNq3P+GE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl2x9aMACgkQFA3kzBSg
-KbYdvg/+I66+7PaxoK7MBHF/nRgJqPVDLQhjQDooZshe6FUVx8HXsHSFQDULtRqi
-tIw9QoVOtDxrcF+Z+v6XqdOXEZhN1d8pai4kIQqwT1v3xoAcmxIubyws2E8YqCGp
-IXaQmA8BY/cDVmPzTlbJwFVGoMWMsNCCAJV4iwJtwAlVUZIrxTsvg768wgdW5LIf
-NVhBmLpzL/Hsq5G21rQA2oYk4FNZDCSjFARRTxGRVC05mzqRHTmyM3SMC94HKDS9
-i5X37Hxxa/0SlrdE/33pg6mqULeZ87tP8BADAsKpbAuCFQqZ2OrUNbZwn8wajOLE
-E4Z4svOFOhXryo7N4T4wWW7wcOAXhybE65YrHFrLcqfTrYaXqc4gKDdOyC0ve5g+
-EtYxDjsJe+7YGIl/HDw9/YiGglcCwAYnIKAtVn+RFwtCWvfJWJ+mBQcOj4B/GWl2
-zaOhW6y4mAgiFezJg2B6j7BbZKUYI5usECiGU2QCI862/OTicX5nliEO1KYl4XXi
-BIPVmSdQSgjT/OqzrzgwsZlhRIzH1ON/aFKI+BaWC4a5vuUmB0vJa8/x5wnDQxNU
-RUWY2dmH/3FeBpz2h6lqBfIJZmxYxRopUJyPsXe/rR+11Hgch/zjyt2LOvCWlcP0
-sPNMJmBFnW+hFz2fGNdlIlzzOTP3zNX6pJftw2lROMWtn6VhDT8=
-=GtGt
------END PGP SIGNATURE-----
-
---df+09Je9rNq3P+GE--
