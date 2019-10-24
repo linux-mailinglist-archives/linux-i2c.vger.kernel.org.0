@@ -2,36 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F69E2A32
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 08:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6787CE2A3B
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 08:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437662AbfJXGAu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Oct 2019 02:00:50 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:32342 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2437661AbfJXGAt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Oct 2019 02:00:49 -0400
-X-UUID: d888ebe06c4041608b2375c0b900c989-20191024
-X-UUID: d888ebe06c4041608b2375c0b900c989-20191024
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        id S2406893AbfJXGEA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Oct 2019 02:04:00 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:14369 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2406889AbfJXGEA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Oct 2019 02:04:00 -0400
+X-UUID: 3bec40a697444fdcbf4aa6d7898e7e84-20191024
+X-UUID: 3bec40a697444fdcbf4aa6d7898e7e84-20191024
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <bibby.hsieh@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 710901994; Thu, 24 Oct 2019 14:00:43 +0800
+        with ESMTP id 2054280823; Thu, 24 Oct 2019 14:03:56 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
  mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 24 Oct 2019 14:00:36 +0800
+ 15.0.1395.4; Thu, 24 Oct 2019 14:03:53 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 24 Oct 2019 14:00:36 +0800
+ Transport; Thu, 24 Oct 2019 14:03:53 +0800
 From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
 To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         <linux-i2c@vger.kernel.org>
 CC:     <tfiga@chromium.org>, <drinkcat@chromium.org>,
         <srv_heupstream@mediatek.com>,
         Bibby Hsieh <bibby.hsieh@mediatek.com>
-Subject: [PATCH v6] misc: eeprom: at24: support pm_runtime control
-Date:   Thu, 24 Oct 2019 14:00:36 +0800
-Message-ID: <20191024060036.8553-1-bibby.hsieh@mediatek.com>
+Subject: [PATCH v7] misc: eeprom: at24: support pm_runtime control
+Date:   Thu, 24 Oct 2019 14:03:54 +0800
+Message-ID: <20191024060354.8638-1-bibby.hsieh@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
