@@ -2,242 +2,199 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFE5E2670
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 00:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7A6E274A
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2019 02:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407933AbfJWWi3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Oct 2019 18:38:29 -0400
-Received: from mail-eopbgr10082.outbound.protection.outlook.com ([40.107.1.82]:56582
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2407932AbfJWWi3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 23 Oct 2019 18:38:29 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eVbz0LDSDNKlTXY2Veze+j6fN60by2tOGkJ8cdxb9SJZeZ6KGrMYt45Bu43PsgbPLjQwWxZpxymg6rZHBhAp6scJEceZ3mgpu/P9quIfLWvMg2ADxDpyo9JlFoDOd81WxUfROFZDaCuc7MCvKfeuRRFHcf3rGY6QQmSstsKyn0W+YFdZEpccwFK82jHZ8gyPbYTRTX5PE1DOtpbTLr9Gpbu3/U9kFXl7stgz35ln3su+peC4cIdP5yk1gVTN5dSQnjjOCrymdsfnRX+MBGONjljVZO2LjgWzCEB/gxjmhO7l2eU8AoJnn0uSXYDHwuygdNtarS44o3ZAChsaNLLkTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EoQRCEfNXNrQDJU47b6YenutGsGzlkyDoNFRQ8by2GM=;
- b=Qv/bkT2h6Ur7rdUjW8q2Yb04/jbPCf7mmSqzh8F5IB5QSE57awbpGqr6ASJ6bx3Yyz5x/iAgqhWwwrCGvnc7QK40AkxjwtVYbwRKJkhO2u1UUiSERLokpz8f+lx+RzD9Zmn6BshBNkmlo2tqgs2WPsmZZ9mL3pHV6nXhd75fj5vX+o99LtFLBxxCE2E0nL8GiotL1ktXSE7Kg2rPZo4nJKcgZAkvwrUs5p1MN366vfKNWrfNpKwhgs+FlC8CKSKsvWGbqw/d5m5fFeQhuTEna32Gn4J+SP0It58LXQ9bfE3+Kn5SX4hTlfhvUcT8gEYkwvTzY/T3thGG1vfezH8SIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EoQRCEfNXNrQDJU47b6YenutGsGzlkyDoNFRQ8by2GM=;
- b=cLdx0NDfgwccl0zdkbAP+uOIPaX3RwyVJZ+GN2NBXXqzOtr6K1pDtMxvrGC0meCSmjxMBzLoEx75p/2zKjepD73PCYc/P5D0HEtXSoYSfWnv6RtVY+lFN469ZnIaMhXYBX4Ju4xdZ3QGYdRZVhdRrRWvELUiA/odtzCEQoPk5q0=
-Received: from DB6PR0501MB2456.eurprd05.prod.outlook.com (10.168.74.140) by
- DB6PR0501MB2856.eurprd05.prod.outlook.com (10.172.225.143) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2387.20; Wed, 23 Oct 2019 22:38:23 +0000
-Received: from DB6PR0501MB2456.eurprd05.prod.outlook.com
- ([fe80::50c4:787c:ed7b:d5c8]) by DB6PR0501MB2456.eurprd05.prod.outlook.com
- ([fe80::50c4:787c:ed7b:d5c8%7]) with mapi id 15.20.2367.027; Wed, 23 Oct 2019
- 22:38:23 +0000
-From:   Khalil Blaiech <kblaiech@mellanox.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-CC:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        David Woods <dwoods@mellanox.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        arm-soc <arm@kernel.org>, Vadim Pasternak <vadimp@mellanox.com>,
-        Michael Shych <michaelsh@mellanox.com>
-Subject: RE: [PATCH v5 1/2] i2c: i2c-mlx: I2C SMBus driver for Mellanox
- BlueField SoC
-Thread-Topic: [PATCH v5 1/2] i2c: i2c-mlx: I2C SMBus driver for Mellanox
- BlueField SoC
-Thread-Index: AQHU5mdYihyNcDmbo0CrVZIGy1iNb6aK1D8AgN893fA=
-Date:   Wed, 23 Oct 2019 22:38:23 +0000
-Message-ID: <DB6PR0501MB24560BE0C979E76ECE1ECCF3A66B0@DB6PR0501MB2456.eurprd05.prod.outlook.com>
-References: <cover.1553887255.git.kblaiech@mellanox.com>
- <a544f56367316bd13ba015b879a5efaf1f18d19f.1553887256.git.kblaiech@mellanox.com>
- <20190603210844.GA3795@kunai>
-In-Reply-To: <20190603210844.GA3795@kunai>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=kblaiech@mellanox.com; 
-x-originating-ip: [216.156.69.42]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: b6acd8e3-9508-435c-5a02-08d75809b644
-x-ms-traffictypediagnostic: DB6PR0501MB2856:|DB6PR0501MB2856:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB6PR0501MB2856EC84F56A174C87FD67CAA66B0@DB6PR0501MB2856.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 019919A9E4
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(366004)(346002)(376002)(396003)(136003)(199004)(189003)(305945005)(74316002)(54906003)(81156014)(66446008)(76116006)(6436002)(316002)(107886003)(66556008)(64756008)(66066001)(25786009)(446003)(66476007)(11346002)(4326008)(486006)(478600001)(229853002)(66946007)(6246003)(26005)(55016002)(52536014)(102836004)(99286004)(476003)(9686003)(6916009)(3846002)(6116002)(76176011)(71190400001)(81166006)(6506007)(186003)(86362001)(5660300002)(256004)(8936002)(2906002)(7736002)(14454004)(14444005)(7696005)(33656002)(71200400001)(8676002)(2004002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB6PR0501MB2856;H:DB6PR0501MB2456.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: usImagzd4mcS8g0yAidvIl2ngrF+zbsrKIytrCPsr0kb/BZMcpEd0LfoKijjKxsHQaJVCIbuY0NmbbycBcF+fJl6LNAEJGR1LJuhDe87pJ88DFb8Uy56GbX8qJNTzUEwIbu26AFjfF2op2fP3zF+ioeYy3VaJoNsJNQcif8M5SU2md+6U5UWNkgRZFI0F1MMd2d+i+sUcJbNEUUiccq4N16b737czcOYEIsuACOu6sFRyIECHC+8Q+VOPoiPS1VDZDROobwzntC6IzzQrTPM3TsD/vWg1dP+0/TjOLA+gUbYi0YNlMdmlfxj08bjKjf47yZPoKO+ScqjLGVJjWz+iGBv1LxyDfLuWwlbGhGoBAWpJpCHpN2F8evBwwytEwGI0yY30ZOnaOTDws1ObE6MK9wUrD7CDGJXyVMWY3//UIptGvM1AU92r1qA2NmKEEcT
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S2392811AbfJXAKE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Oct 2019 20:10:04 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:34217 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392810AbfJXAKE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Oct 2019 20:10:04 -0400
+Received: by mail-pl1-f195.google.com with SMTP id k7so10930939pll.1
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Oct 2019 17:10:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3tImeg5272b34Iznxl7Petu49srNSrEFj8p4qE+iFB8=;
+        b=j21CTRG74DBey/56enrbYiNGRYUPHKf+Tt4cBnF1QjdGfWVCI7X7Rwoqt6cT7bOaRw
+         7qZF93FyhuNm2QYaQ6kkpgf2uKDOo1xl5aqWPocz3W8JZY74y516CmEidWbXfhhi2u2l
+         NDPWN5fI5tZn1g7oTRrN/OeBPyG2FvgyICzdB17Z5kQPH5mAyHyf3jrxg5HR5ObDd4fR
+         i91ry+bfumEB7bzLIO07dvh9qvwOeEybFytCibn2Tlzcia5qTC+qbzosHR8IOHwafrnB
+         PQRiR7tCXtAMfYdKXHEQadMwwox57seDQtLF1BJ86dBvf0oEvX00KLZ3Jy6KJCJ02W1a
+         yMig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3tImeg5272b34Iznxl7Petu49srNSrEFj8p4qE+iFB8=;
+        b=owU8ZvZhwX2c/cPkloIj6oSN5waGH1h1yh8JU9E9UYvByk+wfpGOyDEXRY2BAd3WNx
+         HAE2W8MHAFTbGrg77bpAoaTcUEnp3fdfGK49oIe+jPM8EbN9d0DWbNqcgaC3FJi4rTjK
+         qSv4hcFhP6lVNmVJU+Ja3JmK6Y+OHGEn881Pe5FZcqo3mMuDmThK4u1ytXO7rnbd+hsu
+         Y3bx72lh+zf9x1m+LlzCknp7e376tQjYbWm4jnPzXueg8JvPsxpn9iDWNvun/ZV0QOtZ
+         INkn4+ILJri+nTi63alsFb4w19eSojkbJZ+5sgKsQd5rA7n+CQkhTVWZBX+IRPtak797
+         qZ9g==
+X-Gm-Message-State: APjAAAXjKOKpZ0IfJ5DWlh+E03vLXx/XmO/ytehAtTf9VU5zqkH/XukH
+        /G+XRzgkDtrrXvxjSILM+icG0UlHNJGJ87BdylTZXQ==
+X-Google-Smtp-Source: APXvYqwVTdv5flgYg4yFFEBd0ungWO8pwYhfFAqkTY5/02eGxtUR/KpgK/9utcjmJ2eIkJGmMlBL+VCw2nZBAe+Eol0=
+X-Received: by 2002:a17:902:b189:: with SMTP id s9mr6980823plr.325.1571875802336;
+ Wed, 23 Oct 2019 17:10:02 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6acd8e3-9508-435c-5a02-08d75809b644
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Oct 2019 22:38:23.1117
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: I7YrDZvrkf6A86eRYLmVXZfxVTNohcun0GrGx4jleVfRrAER6WqAs1Jido7Dd3MTiPYXJrOIxO9lUolWEvkMYg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0501MB2856
+References: <20191021202414.17484-1-jae.hyun.yoo@linux.intel.com>
+ <20191021202414.17484-2-jae.hyun.yoo@linux.intel.com> <0a629f7b-b829-c332-27d8-dc825205ff72@axentia.se>
+ <7abf933b-cb18-10af-9c1b-163ec65ffae5@linux.intel.com> <b98827fa-462a-060b-efc7-27fe5d7742ff@axentia.se>
+ <7806ece8-1d7c-7aa8-20af-6f5f964bec64@linux.intel.com> <6eba3e62-9215-0c39-258b-7abfb394bc48@axentia.se>
+In-Reply-To: <6eba3e62-9215-0c39-258b-7abfb394bc48@axentia.se>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 23 Oct 2019 17:09:51 -0700
+Message-ID: <CAFd5g46Zv6E=PcU6=aX65rg2TRY5y3nWB8CYjGJioU_zpfcOUw@mail.gmail.com>
+Subject: Re: [PATCH i2c-next 1/2] dt-bindings: i2c: aspeed: add hardware
+ timeout support
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
+        Cedric Le Goater <clg@kaod.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-V29sZnJhbSwNCg0KQXBvbG9naWVzIGZvciB0aGUgbGF0ZSByZXBseTsgSSd2ZSBiZWVuIHF1aXRl
-IGJ1c3kgaW4gdGhlIHN1bW1lciBhbmQNCmNvdWxkbid0IGFkZHJlc3MgeW91ciBjb21tZW50cyBl
-YXJsaWVyLg0KDQpQbGVhc2Ugbm90ZSB0aGF0IEkgYW0gdHJ5aW5nIHRvIGJlIGFjdGl2ZSBhbmQg
-cmVzcGVjdGZ1bCBhcyBtdWNoIGFzDQpwb3NzaWJsZSwgYW5kIEkgYW0gc29ycnkgaWYgSSBnYXZl
-IHlvdSBhIGJhZCBpbXByZXNzaW9uLiBUaGF0IHdhc24ndA0KbXkgaW50ZW50aW9uLg0KDQpBbmQg
-YWdhaW4sIHRoYW5rIHlvdSBmb3IgaGF2aW5nIHRha2VuIHRoZSB0aW1lIHRvIHJldmlldyB0aGlz
-IGNoYW5nZQ0KYW5kIGZvciB0aGUgZmVlZGJhY2suDQoNCj4gDQo+IEhpIEtoYWxpbCwNCj4gDQo+
-IEkgYW0gc29ycnkgZm9yIHRoZSBsb25nIHdhaXQuIEFuIGlsbG5lc3MgbWFkZSBhIG1lc3Mgb3V0
-IG9mIG15IHNjaGVkdWxlLg0KPiANCj4gT24gRnJpLCBNYXIgMjksIDIwMTkgYXQgMDM6NDA6MjhQ
-TSAtMDQwMCwgS2hhbGlsIEJsYWllY2ggd3JvdGU6DQo+ID4gQWRkZWQgQmx1ZUZpZWxkIEkyQyBk
-cml2ZXIgdG8gb2ZmZXIgbWFzdGVyIGFuZCBzbGF2ZSBzdXBwb3J0IGZvcg0KPiA+IE1lbGxhbm94
-IEJsdWVGaWVsZCBTb0NzLiAgVGhlIGRyaXZlciBpbXBsZW1lbnRzIGFuIFNNQnVzIGFkYXB0ZXIN
-Cj4gPiBhbmQgaW50ZXJmYWNlcyB0byBtdWx0aXBsZSBidXNzZXMgdGhhdCBjYW4gYmUgcHJvYmVk
-IHVzaW5nIGJvdGgNCj4gPiBBQ1BJIGFuZCBEZXZpY2UgVHJlZSBpbmZyYXN0cnVjdHVyZXMuDQo+
-ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBLaGFsaWwgQmxhaWVjaCA8a2JsYWllY2hAbWVsbGFub3gu
-Y29tPg0KPiANCj4gQXJlIHlvdSBvciBvbmUgb2YgdGhlIGF1dGhvcnMgd2lsbGluZyB0byBtYWlu
-dGFpbiB0aGlzIGRyaXZlcj8gVGhlbiwgYQ0KPiBNQUlOVEFJTkVSUyBlbnRyeSB3b3VsZCBiZSBn
-cmVhdC4NCg0KWWVzLCBJIGFtIHRoZSBhdXRob3Igb2YgdGhlIGRyaXZlci4gSSB3aWxsIGFkZCBh
-biBlbnRyeSB0byB0aGUgTUFJTlRBSU5FUlMNCm9uY2Ugd2UgbWFrZSBwcm9ncmVzcyB3aXRoIHRo
-ZSByZXZpZXcgb2YgdGhlIGNvZGUuDQoNCj4gDQo+IFBsZWFzZSBydW4gJ2NoZWNrcGF0Y2ggLS1z
-dHJpY3QnIG9uIHRoaXMgcGF0Y2guIEkgdGhpbmsgdGhlIGV4dHJhIGNoZWNrcw0KPiBtYWtlIGFs
-bCBzZW5zZSBoZXJlLg0KDQpQbGVhc2Ugbm90ZSB0aGF0IEkgZml4ZWQgbW9zdCBvZiB0aGUgZXJy
-b3JzIHJlcG9ydGVkIGJ5ICItLXN0cmljdCIgZmxhZywgYnV0DQpjb3VsZG4ndCBzZWUgdGhvc2Ug
-aXNzdWVzLg0KDQo+IA0KPiBNeSBjb2RlIGNoZWNrZXJzIHNheSB0aGlzLCBwbGVhc2UgY2hlY2s6
-DQo+IA0KPiAgICAgQ1BQQ0hFQ0sNCj4gZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tbHguYzo0NzQ6
-MTc6IHdhcm5pbmc6ICdpbycgaXMgb2YgdHlwZSAndm9pZCAqJy4gV2hlbg0KPiB1c2luZyB2b2lk
-IHBvaW50ZXJzIGluIGNhbGN1bGF0aW9ucywgdGhlIGJlaGF2aW91ciBpcyB1bmRlZmluZWQuDQo+
-IFthcml0aE9wZXJhdGlvbnNPblZvaWRQb2ludGVyXQ0KPiAgd3JpdGVsKHZhbCwgaW8gKyByZWcp
-Ow0KPiAgICAgICAgICAgICAgICAgXg0KPiBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLW1seC5jOjQ3
-OToxODogd2FybmluZzogJ2lvJyBpcyBvZiB0eXBlICd2b2lkIConLiBXaGVuDQo+IHVzaW5nIHZv
-aWQgcG9pbnRlcnMgaW4gY2FsY3VsYXRpb25zLCB0aGUgYmVoYXZpb3VyIGlzIHVuZGVmaW5lZC4N
-Cj4gW2FyaXRoT3BlcmF0aW9uc09uVm9pZFBvaW50ZXJdDQo+ICByZXR1cm4gcmVhZGwoaW8gKyBy
-ZWcpOw0KPiAgICAgICAgICAgICAgICAgIF4NCj4gZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tbHgu
-Yzo2Njc6MTk6IHdhcm5pbmc6IFNoaWZ0aW5nIHNpZ25lZCAzMi1iaXQgdmFsdWUgYnkNCj4gMzEg
-Yml0cyBpcyB1bmRlZmluZWQgYmVoYXZpb3VyIFtzaGlmdFRvb01hbnlCaXRzU2lnbmVkXQ0KPiAg
-Y29tbWFuZCB8PSAweDEgICA8PCBNQVNURVJfTE9DS19CSVRfT0ZGOw0KPiAgICAgICAgICAgICAg
-ICAgICBeDQo+IGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbWx4LmM6MTk3NToyNjogd2FybmluZzog
-U2hpZnRpbmcgc2lnbmVkIDMyLWJpdCB2YWx1ZSBieQ0KPiAzMSBiaXRzIGlzIHVuZGVmaW5lZCBi
-ZWhhdmlvdXIgW3NoaWZ0VG9vTWFueUJpdHNTaWduZWRdDQo+ICBjb250cm9sMzIgfD0gMCAgICAg
-ICAgICA8PCBTTEFWRV9MT0NLX0JJVF9PRkY7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICBe
-DQo+IA0KPiAgIENDICAgICAgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tbHgubw0KPiBkcml2ZXJz
-L2kyYy9idXNzZXMvaTJjLW1seC5jOiBJbiBmdW5jdGlvbiDigJhtbHhfc2xhdmVfZW5hYmxl4oCZ
-Og0KPiBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLW1seC5jOjE1ODI6Nzogd2FybmluZzogdmFyaWFi
-bGUg4oCYZXhpc3TigJkgc2V0IGJ1dCBub3QgdXNlZA0KPiBbLVd1bnVzZWQtYnV0LXNldC12YXJp
-YWJsZV0NCj4gDQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvaTJjL2J1c3Nlcy9LY29uZmlnICAgfCAg
-IDEzICsNCj4gPiAgZHJpdmVycy9pMmMvYnVzc2VzL01ha2VmaWxlICB8ICAgIDEgKw0KPiA+ICBk
-cml2ZXJzL2kyYy9idXNzZXMvaTJjLW1seC5jIHwgMjUxMw0KPiArKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysNCj4gDQo+IFRoaXMgZHJpdmVyIGlzIGh1Z2UgYW5kIEkg
-YW0gd2lsbGluZyB0byBhc3Npc3Qgd2l0aCB0aGUgSTJDIHBhcnRzLg0KPiBIb3dldmVyLCB0aGVy
-ZSBhcmUgc29tZSBnZW5lcmljIEtlcm5lbCBjb2RpbmcgaXNzdWVzIHdoaWNoIEknZCBsaWtlIHRv
-DQo+IGJlIHNvcnRlZCBvdXQgZmlyc3QuIEkgYW0gYWRkaW5nIHR3byBtb3JlIHBlb3BsZSBmcm9t
-IE1lbGxhbm94IHdobyBhcmUNCj4gYWN0aXZlIGluIHRoZSBJMkMgd29ybGQsIG1heWJlIHRoZXkg
-Y2FuIGhlbHAgb3V0IGhlcmUuIE5vIG9mZmVuY2UsIHlldCBJDQo+IGhhdmUgdG8gZGVsZWdhdGUg
-c3VjaCB0aGluZ3MgdG8gZm9jdXMgb24gSTJDIHBhcnRzIGJlY2F1c2UgbXkgc3BhcmUgdGltZQ0K
-PiBpcyB2ZXJ5IGxpbWl0ZWQuDQo+IA0KDQpJIHRoaW5rIGl0IGlzIGEgZ29vZCBpZGVhLiBUaGFu
-a3MuDQoNCj4gPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4gPiArDQo+
-ID4gKy8qDQo+ID4gKyAqICBNZWxsYW5veCBpMmMgYnVzIGRyaXZlcg0KPiA+ICsgKg0KPiA+ICsg
-KiAgQ29weXJpZ2h0IChDKSAyMDE5IE1lbGxhbm94IFRlY2hub2xvZ2llcywgTHRkLg0KPiA+ICsg
-Kg0KPiA+ICsgKiAgVGhpcyBwcm9ncmFtIGlzIGZyZWUgc29mdHdhcmU7IHlvdSBjYW4gcmVkaXN0
-cmlidXRlIGl0IGFuZC9vciBtb2RpZnkNCj4gPiArICogIGl0IHVuZGVyIHRoZSB0ZXJtcyBvZiB0
-aGUgR05VIEdlbmVyYWwgUHVibGljIExpY2Vuc2UgdjIuMCBhcyBwdWJsaXNoZWQNCj4gPiArICog
-IGJ5IHRoZSBGcmVlIFNvZnR3YXJlIEZvdW5kYXRpb24uDQo+ID4gKyAqDQo+ID4gKyAqICBUaGlz
-IHByb2dyYW0gaXMgZGlzdHJpYnV0ZWQgaW4gdGhlIGhvcGUgdGhhdCBpdCB3aWxsIGJlIHVzZWZ1
-bCwNCj4gPiArICogIGJ1dCBXSVRIT1VUIEFOWSBXQVJSQU5UWTsgd2l0aG91dCBldmVuIHRoZSBp
-bXBsaWVkIHdhcnJhbnR5IG9mDQo+ID4gKyAqICBNRVJDSEFOVEFCSUxJVFkgb3IgRklUTkVTUyBG
-T1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UuICBTZWUgdGhlDQo+ID4gKyAqICBHTlUgR2VuZXJhbCBQ
-dWJsaWMgTGljZW5zZSBmb3IgbW9yZSBkZXRhaWxzLg0KPiANCj4gWW91IGNhbiBza2lwIHRoaXMs
-IHlvdSBoYXZlIGEgU1BEWCBpZGVudGlmaWVyIGFscmVhZHkuIEl0IGRvZXNuJ3QgbWF0Y2gNCj4g
-d2l0aCB0aGUgTU9EVUxFX0xJQ0VOU0UgYXQgdGhlIGVuZCwgdGhvdWdoIQ0KDQpEb25lLg0KDQo+
-IA0KPiA+ICsgKi8NCj4gPiArDQo+ID4gKyNpbmNsdWRlIDxsaW51eC9kZWxheS5oPg0KPiA+ICsj
-aW5jbHVkZSA8bGludXgvZXJyLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9pbnRlcnJ1cHQuaD4N
-Cj4gPiArI2luY2x1ZGUgPGxpbnV4L2lvLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9zdHJpbmcu
-aD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L2kyYy5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgva2Vy
-bmVsLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCj4gPiArI2luY2x1ZGUgPGxp
-bnV4L29mX2RldmljZS5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+
-DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9zbGFiLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9hY3Bp
-Lmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9tdXRleC5oPg0KPiA+ICsNCj4gPiArI2RlZmluZSBN
-TFhfSTJDX0RSSVZFUl9OQU1FICAgICAgICAiaTJjLW1seCINCj4gDQo+IFRoaXMgaXMgdW51c2Vk
-Lg0KDQpSZW1vdmVkLg0KDQo+IA0KPiA+ICsjZGVmaW5lIE1MWF9JMkNfRFJJVkVSX1ZFUlNJT04g
-ICAgICIxLjAiDQo+IA0KPiBXZSBkb24ndCB1c2UgdGhpcyBhbnltb3JlLg0KDQpSZW1vdmVkLg0K
-DQo+IA0KPiA+ICsjZGVmaW5lIE1MWF9JMkNfRFJJVkVSX0RFU0NSSVBUSU9OICJNZWxsYW5veCBJ
-MkMgYnVzIGRyaXZlciINCj4gPiArDQo+ID4gKyNkZWZpbmUgTUxYX0kyQ19CTFVFRklFTEQxX0NP
-TVBBVCAgICJtZWxsYW5veCxpMmMtbWx4YmYxIg0KPiA+ICsjZGVmaW5lIE1MWF9JMkNfQkxVRUZJ
-RUxEMl9DT01QQVQgICAibWVsbGFub3gsaTJjLW1seGJmMiINCj4gPiArDQo+ID4gKyNkZWZpbmUg
-TUxYX0kyQ19CTFVFRklFTEQxX0FDUElISUQgICJNTE5YQkYwMyINCj4gPiArI2RlZmluZSBNTFhf
-STJDX0JMVUVGSUVMRDJfQUNQSUhJRCAgIk1MTlhCRjIzIg0KPiANCj4gSSB0aGluayB0aG9zZSBk
-ZWZpbmVzIGFyZSBub3QgbmVlZGVkLCBzZWUgbGF0ZXIuDQoNClJlbW92ZWQuDQoNCj4gDQo+ID4g
-Kw0KPiA+ICsjZGVmaW5lIEkyQ19TTUJVU19JTlZBTElEICAgICAgIDB4ZmYNCj4gPiArI2lmbmRl
-ZiBJMkNfRlVOQ19TTUJVU19IT1NUX05PVElGWQ0KPiANCj4gPz8gSW4gd2hhdCBjYXNlIGlzIHRo
-aXMgbm90IGRlZmluZWQ/DQoNClRoaXMgaGFzIGJlZW4gcmVtb3ZlZCBzaW5jZSBpdCBpcyBub3Qg
-cmVhbGx5IHVzZWQgYW5kIG5vdCBmdWxseSB0ZXN0ZWQuDQoNCj4gDQo+ID4gKyNkZWZpbmUgSTJD
-X0ZVTkNfU01CVVNfSE9TVF9OT1RJRlkgICAgICAweDEwMDAwMDAwDQo+ID4gKyNlbmRpZg0KPiA+
-ICsNCj4gPiArI2RlZmluZSBJMkNfU01CVVNfTUFYICAgICAgICAgICAzDQo+ID4gKw0KPiA+ICsv
-KiBEZWZpbmVzIHdoYXQgZnVuY3Rpb25hbGl0eSBpcyBwcmVzZW50ICovDQo+ID4gKyNkZWZpbmUg
-TUxYX0kyQ19GVU5DX1NNQlVTX0JMT0NLIFwNCj4gPiArCShJMkNfRlVOQ19TTUJVU19CTE9DS19E
-QVRBIHwNCj4gSTJDX0ZVTkNfU01CVVNfQkxPQ0tfUFJPQ19DQUxMKQ0KPiA+ICsNCj4gPiArI2Rl
-ZmluZSBNTFhfSTJDX0ZVTkNfU01CVVNfREVGQVVMVCBcDQo+ID4gKwkoSTJDX0ZVTkNfU01CVVNf
-QllURSAgICAgIHwgSTJDX0ZVTkNfU01CVVNfQllURV9EQVRBIHwgXA0KPiA+ICsJIEkyQ19GVU5D
-X1NNQlVTX1dPUkRfREFUQSB8IEkyQ19GVU5DX1NNQlVTX0kyQ19CTE9DSyB8DQo+IFwNCj4gPiAr
-CSBJMkNfRlVOQ19TTUJVU19QUk9DX0NBTEwgfA0KPiBJMkNfRlVOQ19TTUJVU19IT1NUX05PVElG
-WSkNCj4gPiArDQo+ID4gKyNkZWZpbmUgTUxYX0kyQ19GVU5DX0FMTCBcDQo+ID4gKwkoTUxYX0ky
-Q19GVU5DX1NNQlVTX0RFRkFVTFQgfA0KPiBNTFhfSTJDX0ZVTkNfU01CVVNfQkxPQ0sgfCBcDQo+
-ID4gKwkgSTJDX0ZVTkNfU01CVVNfUVVJQ0sgfCBJMkNfRlVOQ19TTEFWRSkNCj4gPiArDQo+ID4g
-Ky8qDQo+ID4gKyAqIFRZVSBTaGFyZWQgcmVzb3VyY2VzIGluIEJsdWVGaWVsZCAxDQo+ID4gKyAq
-Lw0KPiA+ICsNCj4gPiArI2RlZmluZSBCTFVFRklFTEQxX1RZVV9DT0FMRVNDRV9BRERSICAgIDB4
-MDI4MDEzMDANCj4gPiArI2RlZmluZSBCTFVFRklFTEQxX1RZVV9DT0FMRVNDRV9TSVpFICAgIDB4
-MDEwDQo+ID4gKw0KPiA+ICsjZGVmaW5lIEJMVUVGSUVMRDFfVFlVX0dQSU9fQUREUiAgICAgICAg
-MHgwMjgwMjAwMA0KPiA+ICsjZGVmaW5lIEJMVUVGSUVMRDFfVFlVX0dQSU9fU0laRSAgICAgICAg
-MHgxMDANCj4gPiArDQo+ID4gKyNkZWZpbmUgQkxVRUZJRUxEMV9UWVVfQ09SRVBMTF9BRERSICAg
-ICAweDAyODAwMzU4DQo+ID4gKyNkZWZpbmUgQkxVRUZJRUxEMV9UWVVfQ09SRVBMTF9TSVpFICAg
-ICAweDAwOA0KPiA+ICsNCj4gPiArLyoNCj4gPiArICogVFlVIFNoYXJlZCByZXNvdXJjZXMgaW4g
-Qmx1ZUZpZWxkIDINCj4gPiArICovDQo+ID4gKw0KPiA+ICsjZGVmaW5lIEJMVUVGSUVMRDJfVFlV
-X0NPQUxFU0NFX0FERFIgICAgMHgwMjgwMTY4MA0KPiA+ICsjZGVmaW5lIEJMVUVGSUVMRDJfVFlV
-X0NPQUxFU0NFX1NJWkUgICAgMHgwMTANCj4gPiArDQo+ID4gKyNkZWZpbmUgQkxVRUZJRUxEMl9U
-WVVfR1BJT19BRERSICAgICAgICAweDAyODAyMDAwIC8qIEZJWE1FICovDQo+ID4gKyNkZWZpbmUg
-QkxVRUZJRUxEMl9UWVVfR1BJT19TSVpFICAgICAgICAweDEwMCAvKiBGSVhNRSAqLw0KPiANCj4g
-U28sIHdoYXQgYWJvdXQgdGhpcyBGSVhNRT8NCg0KRml4ZWQuDQoNCj4gDQo+IC4uLiAoc2tpcHBp
-bmcgYSBsb3Qgb2YgbGluZXMpDQoNClRoYXQncyBmaW5lLg0KDQo+IA0KPiANCj4gPiArc3RhdGlj
-IGludCBtbHhfaTJjX29mX3Byb2JlKHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IG1seF9pMmNf
-cHJpdiAqcHJpdikNCj4gPiArew0KPiA+ICsJaW50IGJ1c19pZCA9IC0xOw0KPiA+ICsJaW50IGVy
-cm9yOw0KPiA+ICsNCj4gPiArCWlmIChkZXYtPm9mX25vZGUpIHsNCj4gPiArCQllcnJvciA9IGRl
-dmljZV9wcm9wZXJ0eV9yZWFkX3N0cmluZyhkZXYsICJjb21wYXRpYmxlIiwNCj4gPiArCQkJCQkJ
-ICAgICZwcml2LT5jb21wYXQpOw0KPiA+ICsJCWlmIChlcnJvcikNCj4gPiArCQkJcmV0dXJuIC1F
-SU5WQUw7DQo+ID4gKw0KPiA+ICsJCWlmICghc3RyY21wKHByaXYtPmNvbXBhdCwgaTJjX2JmMV9j
-b21wYXQpKQ0KPiA+ICsJCQlwcml2LT5kZXZ0eXBlID0gTUxYX0kyQ19CTFVFRklFTEQxOw0KPiA+
-ICsJCWVsc2UgaWYgKCFzdHJjbXAocHJpdi0+Y29tcGF0LCBpMmNfYmYyX2NvbXBhdCkpDQo+ID4g
-KwkJCXByaXYtPmRldnR5cGUgPSBNTFhfSTJDX0JMVUVGSUVMRDI7DQo+IA0KPiBXaHkgZG9uJ3Qg
-eW91IHBvcHVsYXRlIHRoZSAuZGF0YS1tZW1iZXIgb2YgdGhlIHN0cnVjdCBvZl9kZXZpY2VfaWQg
-YW5kDQo+IHVzZSB0aGVuIG9mX2RldmljZV9nZXRfbWF0Y2hfZGF0YSgpIHRvIGdldCB0aGUgZGV2
-dHlwZSBvciBzb21lIGNvbmZpZw0KPiBkYXRhPyBJIGd1ZXNzIHNvbWV0aGluZyBzaW1pbGFyIGNv
-dWxkIGJlIGRvbmUgZm9yIEFDUEkuIFRoZW4sIHlvdSBhbHNvDQo+IHdvdWxkbid0IG5lZWQgI2Rl
-ZmluZXMgZm9yIHRoZSBjb21wYXRpYmxlIHN0cmluZy4NCg0KRG9uZS4NCg0KPiANCj4gPiArDQo+
-ID4gKwkJYnVzX2lkID0gb2ZfYWxpYXNfZ2V0X2lkKGRldi0+b2Zfbm9kZSwgImkyYyIpOw0KPiA+
-ICsJCWlmIChidXNfaWQgPj0gMCkNCj4gPiArCQkJcHJpdi0+YnVzID0gYnVzX2lkOw0KPiA+ICsJ
-fQ0KPiA+ICsNCj4gPiArCWlmIChXQVJOKGJ1c19pZCA8IDAsICJjb3VsZG4ndCBnZXQgYnVzIGlk
-IikpDQo+ID4gKwkJcmV0dXJuIGJ1c19pZDsNCj4gPiArDQo+ID4gKwlyZXR1cm4gMDsNCj4gPiAr
-fQ0KPiA+ICtNT0RVTEVfTElDRU5TRSgiR1BMIik7DQo+IA0KPiBUaGlzIGRvZXNuJ3QgbWF0Y2gg
-dGhlIFNQRFggaWRlbnRpZmllciENCg0KTXkgYmFkLiBTb3JyeSBhYm91dCB0aGF0Lg0KDQo+IA0K
-PiBBbmQgZnJvbSBhIGdsaW1wc2UsIHRoZXJlIGFyZSBtb3JlIGdlbmVyaWMgdGhpbmdzIHRvIGJl
-IGZvdW5kIGluIHRoZXJlLg0KPiBJdCB3aWxsIGFsc28gYmUgaGVscGZ1bCB0byBjaGVjayByZWNl
-bnQgcmV2aWV3cyBvZiBuZXcgZHJpdmVycyBhbmQgY2hlY2sNCj4gaWYgdGhlIGlzc3VlcyBmb3Vu
-ZCB0aGVyZSBhcmUgYWxzbyByZWxldmFudCBoZXJlLg0KPiANCj4gU28sIG15IGltcHJlc3Npb24g
-aXMgdGhhdCB0aGlzIGRyaXZlciBpcyBub3QgYmFkLCB5ZXQgaXQgbmVlZHMgYSBnZW5lcmFsDQo+
-IHJldmlldyBmaXJzdC4gV2l0aCBNZWxsYW5veCBiZWluZyBzdWNoIGEgbGFyZ2UgY29udHJpYnV0
-b3IgdG8gdGhlIEtlcm5lbA0KPiAoY29vbCEpLCBJIGhvcGUgd2UgY2FuIGZpbmQgc29tZSBhc3Np
-c3RhbmNlICJpbnRlcm5hbGx5Ii4NCg0KQWdyZWUuDQoNClBsZWFzZSBub3RlIHRoYXQgdGhlIGRy
-aXZlciBjb2RlIGhhcyBiZWVuIHJldmlld2VkIGFuZCB0ZXN0ZWQgaW50ZXJuYWxseTsNCkkgYWxz
-byBhZGRlZCBWYWRpbSwgYW5kIE1pY2hhZWwgd2hvIG1pZ2h0IGhlbHAvYXNzaXN0IHdpdGggdGhl
-IHJldmlldw0KcHJvY2Vzcy4NCg0KPiANCj4gVGhhbmtzIGFuZCBraW5kIHJlZ2FyZHMsDQo+IA0K
-PiAgICBXb2xmcmFtDQoNClRoYW5rcywNCi1LaGFsaWwNCg==
+On Wed, Oct 23, 2019 at 2:17 PM Peter Rosin <peda@axentia.se> wrote:
+>
+> On 2019-10-22 19:44, Jae Hyun Yoo wrote:
+> > On 10/22/2019 1:45 AM, Peter Rosin wrote:
+> >> On 2019-10-21 23:57, Jae Hyun Yoo wrote:
+> >>> Hi Peter,
+> >>>
+> >>> On 10/21/2019 2:05 PM, Peter Rosin wrote:
+> >>>> On 2019-10-21 22:24, Jae Hyun Yoo wrote:
+> >>>>> Append a binding to support hardware timeout feature.
+> >>>>>
+> >>>>> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> >>>>> ---
+> >>>>>    Documentation/devicetree/bindings/i2c/i2c-aspeed.txt | 2 ++
+> >>>>>    1 file changed, 2 insertions(+)
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/i2c/i2c-aspeed.txt b/Documentation/devicetree/bindings/i2c/i2c-aspeed.txt
+> >>>>> index b47f6ccb196a..133bfedf4cdd 100644
+> >>>>> --- a/Documentation/devicetree/bindings/i2c/i2c-aspeed.txt
+> >>>>> +++ b/Documentation/devicetree/bindings/i2c/i2c-aspeed.txt
+> >>>>> @@ -17,6 +17,8 @@ Optional Properties:
+> >>>>>    - bus-frequency        : frequency of the bus clock in Hz defaults to 100 kHz when not
+> >>>>>                     specified
+> >>>>>    - multi-master : states that there is another master active on this bus.
+> >>>>> +- aspeed,hw-timeout-ms   : Hardware timeout in milliseconds. If it's not
+> >>>>> +                   specified, the H/W timeout feature will be disabled.
+> >>>>>
+> >>>>>    Example:
+> >>>>>
+> >>>>>
+> >>>>
+> >>>> Some SMBus clients support a smbus-timeout-disable binding for disabling
+> >>>> timeouts like this, for cases where the I2C adapter in question on occasion
+> >>>> is unable to keep the pace. Adding that property thus avoids undesired
+> >>>> timeouts when the client is SMBus conformant without it. Your new binding
+> >>>> is the reverse situation, where you want to add a timeout where one is
+> >>>> otherwise missing.
+> >>>>
+> >>>> Anyway, since I2C does not have a specified lowest possible frequency, this
+> >>>> feels like something that is more in the SMBus arena. Should the property
+> >>>> perhaps be a generic property named smbus-timeout-ms, or something like
+> >>>> that?
+> >>>
+> >>> Well, I tried upstreaming of the generic timeout property a year ago but
+> >>> I agreed that the generic bus timeout property can be set by an ioctl
+> >>> command so it didn't need to be added into device tree at that time. Not
+> >>> sure if any need has come recently but I haven't heard that. This driver
+> >>> still uses the generic timeout property which is provided by i2c core
+> >>> for handling command timeouts, and it's out of scope from this patch
+> >>> series.
+> >>>
+> >>>> If the above is not wanted or appropriate, then I would personally prefer
+> >>>> aspeed,bus-timeout-ms over aspeed,hw-timeout-ms. To me, hw-timeout-ms sounds
+> >>>> like a (more serious) timeout between the CPU and the I2C peripheral unit
+> >>>> or something like that. But I don't care deeply...
+> >>>
+> >>> Changes I submitted in this patch set is for a different purpose which
+> >>> is very Aspeed H/W specific, and actually it's a more serious timeout
+> >>> setting indeed. If this H/W is used in multi-master environment, it
+> >>> could meet a H/W hang that freezes itself in slave mode and it can't
+> >>> escape from the state. To resolve the specific case, this H/W provides
+> >>> self-recovery feature which monitors abnormal state of SDA, SCL and its
+> >>> H/W state machine using the timeout setting to determine the escape
+> >>> condition.
+> >>
+> >> Are you saying that the aspeed HW is buggy and that this abnormal state
+> >> is self inflicted by the aspeed HW even if other masters on the bus
+> >> behave sanely? Because I didn't quite read it that way at all...
+> >
+> > I don't think it's an Aspeed HW bug. Actually, this HW can be exposed to
+> > very severe environments if it is used as a Baseboard Management
+> > Controller which needs two or more multi-masters on a bus depends on
+> > HW design. Also, it should expect unknown or buggy device attachment
+> > on a bus through add-on card slots. Aspeed HW provides HW timeout
+> > feature to support exceptional cases handling which comes from the
+> > severe use cases.
+> >
+> >> To me, it sounded *exactly* like the state I2C clients end up in when an
+> >> I2C master "dies" and stops communicating in the middle of a transaction.
+> >> I.e. the thing that the SMBus timeout is designed to prevent (and the
+> >> state the I2C nine-clk-recovery sequence addresses). The only twist (that
+> >> I saw) was that the aspeed HW is also a master and that the aspeed master
+> >> driver is completely locked out from the bus while some obnoxious master
+> >> fails to complete its transaction (or whatever it was up to).
+> >
+> > If this HW runs on a single-master bus, any master dying issue will be
+> > cured by recovery logic which this driver already has and the logic uses
+> > the bus timeout setting you are saying.
+> >
+> > This patch set is mainly focusing on a 'slave mode hang' issue on a
+> > 'multi-master' bus which can't be covered by the recovery logic.
+> >
+> >> If this can only be triggered when the HW is acting as a slave, and by
+> >> aborted or otherwise funky master activity on the bus, then I wouldn't
+> >> call it an HW issue. Then it would be a bus issue. I.e. something needing
+> >> a bus-timeout instead of a hw-timeout.
+> >
+> > Here is an example. In a multi-node BMC system, a peer master can be
+> > shutdown in the middle of transaction, then this Aspeed HW keeps waiting
+> > for a next event from the peer master but it can't happen because the
+> > peer master was already shutdown. If we enable the 'slave inactive
+> > timeout feature' using the HW timeout setting, the this HW can escape
+> > from the waiting state. If we don't, this HW hangs forever in the
+> > waiting state and it's the reason why I implemented this patch set.
+> >
+> > The hw-timeout setting needs fine tuning depends on HW environment so
+> > it should be different from the bus-timeout.
+>
+> Yeah, ok, so you're basically confirming everything I said. I do
+> sense some confusion though, as you come across as a bit
+> defensive and seem to think that I am against the whole notion of
+> the patches. And that's not the case at all! My only issue is
+> with the naming. And I happen to think hw-timeout-ms is a really
+> bad name. It's way too broad and can mean just about anything.
+> When I read that, I think of some workaround for broken hardware,
+> not normal things like the other masters on the bus doing
+> confusing things. Funky bus activity from remote masters is
+> simply not an HW issue in my book, at least not an HW issue on
+> the local side of the bus. It's just something you *must expect*.
+
+Sorry for not jumping in earlier, but I agree with Peter.
+
+I like the name bus-timeout-ms better. It was not immediately clear
+from reading your commit descriptions what this was all about.
+
+Cheers!
