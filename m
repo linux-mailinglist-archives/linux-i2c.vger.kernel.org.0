@@ -2,151 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25609E4EA5
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Oct 2019 16:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60D3E55A2
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Oct 2019 23:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406101AbfJYOMk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 25 Oct 2019 10:12:40 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:12404 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405765AbfJYOMk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Oct 2019 10:12:40 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9PE5ub0022030;
-        Fri, 25 Oct 2019 16:12:33 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=xxw6sfSBb2ziAGzEHx/zRRrJwSGgjzjjHssHA3fCJJQ=;
- b=RLIcONLNhTxfGnumeDhL8EbUmMIKOhVIPwY7JvR89xewpCIDHP6zdOLiNn80Liq4rUNU
- gKZa9r4+tEKdoefOgXXNWhSy6CjVgvSit/IYvVzR5kZLKCHlNvixlxlgDwo8L07INtaF
- ZfZUfV5MK7eL6YHLlJY7oxd22gR205i5QcXKactpPnPrCtPoOX3YdnRPej4Pys7Vb/nT
- qcFNtbG2wfJoU0IdlUmzGhkr7U7vEcOgxkrHM3rGfPkP8Gz2y18zSAawK1zQ0p4YtgWk
- yT4vXtIaC7fgdKYpu+pCvOe2UEvWUAaW0MfZ2yhgkK5rqza82wX0XhM9TMLbpzWIoyza iA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2vt9s4g6x5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Oct 2019 16:12:33 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3847D100034;
-        Fri, 25 Oct 2019 16:12:33 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag5node2.st.com [10.75.127.14])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2A9982AB34A;
-        Fri, 25 Oct 2019 16:12:33 +0200 (CEST)
-Received: from [10.129.5.11] (10.75.127.45) by SFHDAG5NODE2.st.com
- (10.75.127.14) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 25 Oct
- 2019 16:12:25 +0200
-Subject: Re: [PATCH] i2c: i2c-stm32f7: report dma error during probe
-To:     Alain Volmat <alain.volmat@st.com>, <wsa@the-dreams.de>
-CC:     <alexandre.torgue@st.com>, <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>
-References: <1571921521-8502-1-git-send-email-alain.volmat@st.com>
-From:   Pierre Yves MORDRET <pierre-yves.mordret@st.com>
-Message-ID: <fbb063f9-8f16-00ba-1a5b-deb58c711e26@st.com>
-Date:   Fri, 25 Oct 2019 16:12:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1725944AbfJYVKD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Oct 2019 17:10:03 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:34100 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725283AbfJYVKD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Oct 2019 17:10:03 -0400
+Received: by mail-oi1-f196.google.com with SMTP id 83so2539115oii.1;
+        Fri, 25 Oct 2019 14:10:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=d7m38wEP3cWWPKZavVh4QqPT2NxfQZN9J+ih9n10QDc=;
+        b=Bgj0Hb5kkq7sw5xcNCEvNYyFvw18S7PrMLu3rewoGpPByjM2NazFD0XL6g424LJSML
+         aIgI38S5G94S+DUdAA4Xgd0Pu1ftCB3ZmpHKOS1PdY5PWXUIuOCpRbyRmYA+0PGOcC+f
+         Fhw4l7augwpNJd7XIxsR1e41XbHfZvbQVg508pwkNOx56CHriEO2i+jNFMzdRzkqMgL8
+         wtO05cSTFQkyBpqK3YZAu2RwaYgQhDA1GlgP9+C2B2KZ5mNDjq3Y9UABfgIMrGPXZLsC
+         Q294uao7YxDKVW2RImTsAtutPUDAmCGNprI2Zqx9f+3XIY/K8/eAPjlsgSRKhya6ZG6c
+         zfSg==
+X-Gm-Message-State: APjAAAXlQbZr9Zcoc4G55tHIgumMS4sgaQF6+m52pwTEwST32jIbAcEh
+        f4jRn/IrE688MbKKxT8Te0l8W6g=
+X-Google-Smtp-Source: APXvYqwMdDzj7VpTwlpKBzbm1vx4GRa3h4b/Ol8HbT8QPQu0jiUwRDiRAWIWfNdFfGcGA55gSFCUgQ==
+X-Received: by 2002:aca:7595:: with SMTP id q143mr4820191oic.103.1572037802036;
+        Fri, 25 Oct 2019 14:10:02 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id b12sm1095339otp.72.2019.10.25.14.10.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2019 14:10:01 -0700 (PDT)
+Date:   Fri, 25 Oct 2019 16:10:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-devicetree <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2] dt-binding: eeprom: at24: add supply properties
+Message-ID: <20191025211000.GA8235@bogus>
+References: <20191018082557.3696-1-bibby.hsieh@mediatek.com>
+ <20191018082557.3696-2-bibby.hsieh@mediatek.com>
+ <CAMpxmJW_HQnL8i5FnKcVUs=ZyrnaFe6X+oqG38-v=O05d5vNxw@mail.gmail.com>
+ <CAAFQd5CA_53uDo6QdRcvqJ5shUG5K25f+WXCn9OYMHfSgwLMSA@mail.gmail.com>
+ <CAMpxmJWzEER4iBo9-WhmumuH1nmWYvy=xud+=7wzp3op8-P7uw@mail.gmail.com>
+ <CAAFQd5DNdmm4sn1JNPhnuMor50ZP4EJmymtS4hB4WkNHmKOs6w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1571921521-8502-1-git-send-email-alain.volmat@st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG5NODE1.st.com (10.75.127.13) To SFHDAG5NODE2.st.com
- (10.75.127.14)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-25_08:2019-10-25,2019-10-25 signatures=0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAFQd5DNdmm4sn1JNPhnuMor50ZP4EJmymtS4hB4WkNHmKOs6w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi
-
-Looks good for me
-
-Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
-
-Regards
-
-On 10/24/19 2:52 PM, Alain Volmat wrote:
-> Distinguish between the case where dma information is not provided
-> within the DT and the case of an error during the dma init.
-> Exit the probe with error in case of an error during dma init.
+On Thu, Oct 24, 2019 at 06:32:38PM +0900, Tomasz Figa wrote:
+> On Thu, Oct 24, 2019 at 5:40 PM Bartosz Golaszewski
+> <bgolaszewski@baylibre.com> wrote:
+> >
+> > czw., 24 paź 2019 o 09:02 Tomasz Figa <tfiga@chromium.org> napisał(a):
+> > >
+> > > On Thu, Oct 24, 2019 at 3:22 PM Bartosz Golaszewski
+> > > <bgolaszewski@baylibre.com> wrote:
+> > > >
+> > > > pt., 18 paź 2019 o 10:26 Bibby Hsieh <bibby.hsieh@mediatek.com> napisał(a):
+> > > > >
+> > > > > In some platforms, they disable the power-supply of eeprom and i2c due
+> > > > > to power consumption reduction.
+> > > > >
+> > > > > This patch add two supply properties: vcc-supply, i2c-supply.
+> > > > >
+> > > > > Changes since v1:
+> > > > >  - change supply name
+> > > > >  - rebase to next
+> > > > >
+> > > > > Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+> > > > > ---
+> > > > >  Documentation/devicetree/bindings/eeprom/at24.yaml | 8 ++++++++
+> > > > >  1 file changed, 8 insertions(+)
+> > > > >
+> > > > > diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
+> > > > > index e8778560d966..578487a5d9b7 100644
+> > > > > --- a/Documentation/devicetree/bindings/eeprom/at24.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+> > > > > @@ -167,6 +167,14 @@ properties:
+> > > > >      minimum: 1
+> > > > >      maximum: 8
+> > > > >
+> > > > > +  vcc-supply:
+> > > > > +    description:
+> > > > > +      phandle of the regulator that provides the supply voltage.
+> > > > > +
+> > > > > +  i2c-sypply:
+> > > > > +    description:
+> > > > > +      phandle to the regulator that provides power to i2c.
+> > > > > +
+> > > >
+> > > > Something was bothering me about this patch so I came back to take a
+> > > > look. Can you explain what i2c actually stands for in this doc? I hope
+> > > > I'm misinterpreting something and it isn't that the driver disables
+> > > > the regulator powering the i2c bus controller?
+> > >
+> > > In our case it's the regulator that the I2C bus is pulled up to.
+> > >
+> >
+> > Then it has nothing to do with a generic EEPROM driver IMO. I think
+> > you need to add the control for this regulator to your i2c controller
+> > driver and create a power domain where the EEPROM would be lower in
+> > hierarchy.
 > 
-> Fixes: bb8822cbbc53 ("i2c: i2c-stm32: Add generic DMA API")
+> While I agree that the generic EEPROM driver may not be the best place
+> to do it, neither is a driver for a specific SoC i2c controller. The
+> hardware design is not specific to any particular i2c controller.
 > 
-> Signed-off-by: Alain Volmat <alain.volmat@st.com>
-> ---
->  drivers/i2c/busses/i2c-stm32.c   | 16 ++++++++--------
->  drivers/i2c/busses/i2c-stm32f7.c |  9 +++++++++
->  2 files changed, 17 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-stm32.c b/drivers/i2c/busses/i2c-stm32.c
-> index 07d5dfce68d4..1da347e6a358 100644
-> --- a/drivers/i2c/busses/i2c-stm32.c
-> +++ b/drivers/i2c/busses/i2c-stm32.c
-> @@ -20,13 +20,13 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
->  
->  	dma = devm_kzalloc(dev, sizeof(*dma), GFP_KERNEL);
->  	if (!dma)
-> -		return NULL;
-> +		return ERR_PTR(-ENOMEM);
->  
->  	/* Request and configure I2C TX dma channel */
-> -	dma->chan_tx = dma_request_slave_channel(dev, "tx");
-> -	if (!dma->chan_tx) {
-> +	dma->chan_tx = dma_request_chan(dev, "tx");
-> +	if (IS_ERR(dma->chan_tx)) {
->  		dev_dbg(dev, "can't request DMA tx channel\n");
-> -		ret = -EINVAL;
-> +		ret = PTR_ERR(dma->chan_tx);
->  		goto fail_al;
->  	}
->  
-> @@ -42,10 +42,10 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
->  	}
->  
->  	/* Request and configure I2C RX dma channel */
-> -	dma->chan_rx = dma_request_slave_channel(dev, "rx");
-> -	if (!dma->chan_rx) {
-> +	dma->chan_rx = dma_request_chan(dev, "rx");
-> +	if (IS_ERR(dma->chan_rx)) {
->  		dev_err(dev, "can't request DMA rx channel\n");
-> -		ret = -EINVAL;
-> +		ret = PTR_ERR(dma->chan_rx);
->  		goto fail_tx;
->  	}
->  
-> @@ -75,7 +75,7 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
->  	devm_kfree(dev, dma);
->  	dev_info(dev, "can't use DMA\n");
->  
-> -	return NULL;
-> +	return ERR_PTR(ret);
->  }
->  
->  void stm32_i2c_dma_free(struct stm32_i2c_dma *dma)
-> diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-> index d36cf08461f7..cc8ba8f49ae6 100644
-> --- a/drivers/i2c/busses/i2c-stm32f7.c
-> +++ b/drivers/i2c/busses/i2c-stm32f7.c
-> @@ -1950,6 +1950,15 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
->  	i2c_dev->dma = stm32_i2c_dma_request(i2c_dev->dev, phy_addr,
->  					     STM32F7_I2C_TXDR,
->  					     STM32F7_I2C_RXDR);
-> +	if (PTR_ERR(i2c_dev->dma) == -ENODEV)
-> +		i2c_dev->dma = NULL;
-> +	else if (IS_ERR(i2c_dev->dma)) {
-> +		ret = PTR_ERR(i2c_dev->dma);
-> +		if (ret != -EPROBE_DEFER)
-> +			dev_err(&pdev->dev,
-> +				"Failed to request dma error %i\n", ret);
-> +		goto clk_free;
-> +	}
->  
->  	platform_set_drvdata(pdev, i2c_dev);
->  
-> 
+> Perhaps we need the generic i2c core to take into account an
+> i2c-supply? Wolfram, any thoughts on this?
+
+Sounds good to me. Maybe 'bus-supply' instead to indicate it's supposed 
+to be for the bus and not other things. It should reside in the I2C 
+controller's node (or mux ports) though.
+
+Rob
