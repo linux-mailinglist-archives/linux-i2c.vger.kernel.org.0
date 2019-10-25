@@ -2,123 +2,120 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD50E4986
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Oct 2019 13:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EFBE4E0F
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Oct 2019 16:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbfJYLNo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 25 Oct 2019 07:13:44 -0400
-Received: from albert.telenet-ops.be ([195.130.137.90]:43722 "EHLO
-        albert.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726417AbfJYLNo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Oct 2019 07:13:44 -0400
-Received: from ramsan ([84.195.182.253])
-        by albert.telenet-ops.be with bizsmtp
-        id HnDi210045USYZQ06nDiaV; Fri, 25 Oct 2019 13:13:42 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1iNxSN-0003rD-SW; Fri, 25 Oct 2019 13:08:35 +0200
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1iNvlG-00068o-No; Fri, 25 Oct 2019 11:19:58 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH resend] i2c: core: Use DEVICE_ATTR_RW() helper macros
-Date:   Fri, 25 Oct 2019 11:19:50 +0200
-Message-Id: <20191025091950.23563-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
+        id S2395212AbfJYOEj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Oct 2019 10:04:39 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:36329 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2395206AbfJYOEi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Oct 2019 10:04:38 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9PDuBtP028321;
+        Fri, 25 Oct 2019 16:04:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=6Ht0zZxdeBCxT8SIBqaJnpSGpFwNjqaDeglBn/VrO3w=;
+ b=0BIlOeQSsfPknWnAKmzTKfZ1WxZOkuAIOg7bvNrhnz03goBTWB/ZKl/fARBIcXwySHb7
+ rUa2rmTeWjDAvlteKeaNh3+rS323DdXO4YKTYgsy/GIR+7EGEqgIbrseqF1Vnyj5BfP9
+ DrMDAiqEiXqeHL6bvBka3MXKoWwiCmliaHP2H2UAU+14Swr2iYmhSMu84FF8ZdnPWDsw
+ vthdwaU+05MCs7wEUKfmZzomEgXkTtsuXPTB/+inaJUOECbERcWCGNwpvq86ge4EpwKL
+ 1ytaduFZxRFR7t1mtK0GVAfGpKmN0bAfCHJdZK/JcBy9YzanWqSwcGVexr30U41PJHBg aA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2vt9s2058n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Oct 2019 16:04:26 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5A93C100034;
+        Fri, 25 Oct 2019 16:04:25 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4D3822C38A2;
+        Fri, 25 Oct 2019 16:04:25 +0200 (CEST)
+Received: from localhost (10.75.127.47) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 25 Oct 2019 16:04:24
+ +0200
+From:   Alain Volmat <alain.volmat@st.com>
+To:     <wsa@the-dreams.de>, <pierre-yves.mordret@st.com>
+CC:     <alain.volmat@st.com>, <alexandre.torgue@st.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>
+Subject: [PATCH] i2c: i2c-stm32f7: fix & reorder remove & probe error handling
+Date:   Fri, 25 Oct 2019 16:04:24 +0200
+Message-ID: <1572012264-31996-1-git-send-email-alain.volmat@st.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG3NODE3.st.com (10.75.127.9) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-25_08:2019-10-25,2019-10-25 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Convert the i2c core sysfs attributes from DEVICE_ATTR() to
-DEVICE_ATTR_RW(), to reduce boilerplate.
-This requires renaming some functions.
+Add missing dma channels free calls in case of error during probe
+and reorder the remove function so that dma channels are freed after
+the i2c adapter is deleted.
+Overall, reorder the remove function so that probe error handling order
+and remove function order are same.
 
-Although no suitable macro exists for the delete_device attribute,
-rename i2c_sysfs_delete_device() to delete_device_store() for
-consistency.
+Fixes: 7ecc8cfde553 ("i2c: i2c-stm32f7: Add DMA support")
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Alain Volmat <alain.volmat@st.com>
 ---
- drivers/i2c/i2c-core-base.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ drivers/i2c/busses/i2c-stm32f7.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 5f6a4985f2bc8f33..8f6940063c294b9c 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -449,15 +449,15 @@ static void i2c_client_dev_release(struct device *dev)
- }
+diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+index d36cf08461f7..f8ef203dabfc 100644
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -1980,6 +1980,11 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
+ 	pm_runtime_set_suspended(i2c_dev->dev);
+ 	pm_runtime_dont_use_autosuspend(i2c_dev->dev);
  
- static ssize_t
--show_name(struct device *dev, struct device_attribute *attr, char *buf)
-+name_show(struct device *dev, struct device_attribute *attr, char *buf)
++	if (i2c_dev->dma) {
++		stm32_i2c_dma_free(i2c_dev->dma);
++		i2c_dev->dma = NULL;
++	}
++
+ clk_free:
+ 	clk_disable_unprepare(i2c_dev->clk);
+ 
+@@ -1990,21 +1995,21 @@ static int stm32f7_i2c_remove(struct platform_device *pdev)
  {
- 	return sprintf(buf, "%s\n", dev->type == &i2c_client_type ?
- 		       to_i2c_client(dev)->name : to_i2c_adapter(dev)->name);
+ 	struct stm32f7_i2c_dev *i2c_dev = platform_get_drvdata(pdev);
+ 
+-	if (i2c_dev->dma) {
+-		stm32_i2c_dma_free(i2c_dev->dma);
+-		i2c_dev->dma = NULL;
+-	}
+-
+ 	i2c_del_adapter(&i2c_dev->adap);
+ 	pm_runtime_get_sync(i2c_dev->dev);
+ 
+-	clk_disable_unprepare(i2c_dev->clk);
+-
+ 	pm_runtime_put_noidle(i2c_dev->dev);
+ 	pm_runtime_disable(i2c_dev->dev);
+ 	pm_runtime_set_suspended(i2c_dev->dev);
+ 	pm_runtime_dont_use_autosuspend(i2c_dev->dev);
+ 
++	if (i2c_dev->dma) {
++		stm32_i2c_dma_free(i2c_dev->dma);
++		i2c_dev->dma = NULL;
++	}
++
++	clk_disable_unprepare(i2c_dev->clk);
++
+ 	return 0;
  }
--static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
-+static DEVICE_ATTR_RO(name);
  
- static ssize_t
--show_modalias(struct device *dev, struct device_attribute *attr, char *buf)
-+modalias_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
- 	struct i2c_client *client = to_i2c_client(dev);
- 	int len;
-@@ -472,7 +472,7 @@ show_modalias(struct device *dev, struct device_attribute *attr, char *buf)
- 
- 	return sprintf(buf, "%s%s\n", I2C_MODULE_PREFIX, client->name);
- }
--static DEVICE_ATTR(modalias, S_IRUGO, show_modalias, NULL);
-+static DEVICE_ATTR_RO(modalias);
- 
- static struct attribute *i2c_dev_attrs[] = {
- 	&dev_attr_name.attr,
-@@ -1039,8 +1039,8 @@ EXPORT_SYMBOL_GPL(i2c_adapter_depth);
-  * the user to provide incorrect parameters.
-  */
- static ssize_t
--i2c_sysfs_new_device(struct device *dev, struct device_attribute *attr,
--		     const char *buf, size_t count)
-+new_device_store(struct device *dev, struct device_attribute *attr,
-+		 const char *buf, size_t count)
- {
- 	struct i2c_adapter *adap = to_i2c_adapter(dev);
- 	struct i2c_board_info info;
-@@ -1095,7 +1095,7 @@ i2c_sysfs_new_device(struct device *dev, struct device_attribute *attr,
- 
- 	return count;
- }
--static DEVICE_ATTR(new_device, S_IWUSR, NULL, i2c_sysfs_new_device);
-+static DEVICE_ATTR_WO(new_device);
- 
- /*
-  * And of course let the users delete the devices they instantiated, if
-@@ -1107,8 +1107,8 @@ static DEVICE_ATTR(new_device, S_IWUSR, NULL, i2c_sysfs_new_device);
-  * the user to delete the wrong device.
-  */
- static ssize_t
--i2c_sysfs_delete_device(struct device *dev, struct device_attribute *attr,
--			const char *buf, size_t count)
-+delete_device_store(struct device *dev, struct device_attribute *attr,
-+		    const char *buf, size_t count)
- {
- 	struct i2c_adapter *adap = to_i2c_adapter(dev);
- 	struct i2c_client *client, *next;
-@@ -1151,7 +1151,7 @@ i2c_sysfs_delete_device(struct device *dev, struct device_attribute *attr,
- 	return res;
- }
- static DEVICE_ATTR_IGNORE_LOCKDEP(delete_device, S_IWUSR, NULL,
--				   i2c_sysfs_delete_device);
-+				  delete_device_store);
- 
- static struct attribute *i2c_adapter_attrs[] = {
- 	&dev_attr_name.attr,
 -- 
-2.17.1
+2.7.4
 
