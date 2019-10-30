@@ -2,40 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7CA5EA02A
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Oct 2019 16:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D720EA058
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Oct 2019 16:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728245AbfJ3PyB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 30 Oct 2019 11:54:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55354 "EHLO mail.kernel.org"
+        id S1727680AbfJ3Pzo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 30 Oct 2019 11:55:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57288 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726913AbfJ3PyA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 30 Oct 2019 11:54:00 -0400
+        id S1728645AbfJ3Pzm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 30 Oct 2019 11:55:42 -0400
 Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB9DA20874;
-        Wed, 30 Oct 2019 15:53:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C07A92173E;
+        Wed, 30 Oct 2019 15:55:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572450839;
-        bh=2kUUZAC+wtzg7AMNOy1KGj2017jVYF+ynzXc66sbHiY=;
+        s=default; t=1572450941;
+        bh=ajrQFUpHfoZrFxmZ57IP0Y32djqaiWekFynq+8+EYS8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ewn/aYDFDR4hyW/GvIg8aa5IK7WkNvqLJOI1oTlbHl/un53oNYDVEG4Bb4kzSmDxH
-         3F4WvESegvHXLJeSvGd1N2TM4BLu+mIrwRgMS5HfaIb9mzWWaedZFf/01ouFqAnIct
-         rzEqej8SBLv/25Dl2TsyZ8wFygu+QO1i1jdTZBKY=
+        b=xikIvcNKjV59W4m+PWW+O/Crf4wBCAQfMtc9qb894kpXhEThH9iruisqhzMH4/wjn
+         mJmz2w3r3ypuBP5Nm2gIH+8ar+OzOaLu9lAl2y2LFordD4d9JvZCpfc9GpoRUEWiZF
+         Wh3HJLdo1U05VnPn/5ok1u35IVixU0PftjOpNTZc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Joel Stanley <joel@jms.id.au>, Tao Ren <taoren@fb.com>,
+Cc:     Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 63/81] i2c: aspeed: fix master pending state handling
-Date:   Wed, 30 Oct 2019 11:49:09 -0400
-Message-Id: <20191030154928.9432-63-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 33/38] i2c: stm32f7: fix a race in slave mode with arbitration loss irq
+Date:   Wed, 30 Oct 2019 11:54:01 -0400
+Message-Id: <20191030155406.10109-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191030154928.9432-1-sashal@kernel.org>
-References: <20191030154928.9432-1-sashal@kernel.org>
+In-Reply-To: <20191030155406.10109-1-sashal@kernel.org>
+References: <20191030155406.10109-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,141 +44,72 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+From: Fabrice Gasnier <fabrice.gasnier@st.com>
 
-[ Upstream commit 1f0d9cbeec9bb0a1c2013342836f2c9754d6502b ]
+[ Upstream commit 6d6b0d0d5afc8c4c84b08261260ba11dfa5206f2 ]
 
-In case of master pending state, it should not trigger a master
-command, otherwise data could be corrupted because this H/W shares
-the same data buffer for slave and master operations. It also means
-that H/W command queue handling is unreliable because of the buffer
-sharing issue. To fix this issue, it clears command queue if a
-master command is queued in pending state to use S/W solution
-instead of H/W command queue handling. Also, it refines restarting
-mechanism of the pending master command.
+When in slave mode, an arbitration loss (ARLO) may be detected before the
+slave had a chance to detect the stop condition (STOPF in ISR).
+This is seen when two master + slave adapters switch their roles. It
+provokes the i2c bus to be stuck, busy as SCL line is stretched.
+- the I2C_SLAVE_STOP event is never generated due to STOPF flag is set but
+  don't generate an irq (race with ARLO irq, STOPIE is masked). STOPF flag
+  remains set until next master xfer (e.g. when STOPIE irq get unmasked).
+  In this case, completion is generated too early: immediately upon new
+  transfer request (then it doesn't send all data).
+- Some data get stuck in TXDR register. As a consequence, the controller
+  stretches the SCL line: the bus gets busy until a future master transfer
+  triggers the bus busy / recovery mechanism (this can take time... and
+  may never happen at all)
 
-Fixes: 2e57b7cebb98 ("i2c: aspeed: Add multi-master use case support")
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Acked-by: Joel Stanley <joel@jms.id.au>
-Tested-by: Tao Ren <taoren@fb.com>
+So choice is to let the STOPF being detected by the slave isr handler,
+to properly handle this stop condition. E.g. don't mask IRQs in error
+handler, when the slave is running.
+
+Fixes: 60d609f30de2 ("i2c: i2c-stm32f7: Add slave support")
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
 Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-aspeed.c | 54 +++++++++++++++++++++------------
- 1 file changed, 34 insertions(+), 20 deletions(-)
+ drivers/i2c/busses/i2c-stm32f7.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index fa66951b05d06..7b098ff5f5dd3 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -108,6 +108,12 @@
- #define ASPEED_I2CD_S_TX_CMD				BIT(2)
- #define ASPEED_I2CD_M_TX_CMD				BIT(1)
- #define ASPEED_I2CD_M_START_CMD				BIT(0)
-+#define ASPEED_I2CD_MASTER_CMDS_MASK					       \
-+		(ASPEED_I2CD_M_STOP_CMD |				       \
-+		 ASPEED_I2CD_M_S_RX_CMD_LAST |				       \
-+		 ASPEED_I2CD_M_RX_CMD |					       \
-+		 ASPEED_I2CD_M_TX_CMD |					       \
-+		 ASPEED_I2CD_M_START_CMD)
+diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+index 48521bc8a4d23..362b23505f214 100644
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -1488,7 +1488,7 @@ static irqreturn_t stm32f7_i2c_isr_error(int irq, void *data)
+ 	void __iomem *base = i2c_dev->base;
+ 	struct device *dev = i2c_dev->dev;
+ 	struct stm32_i2c_dma *dma = i2c_dev->dma;
+-	u32 mask, status;
++	u32 status;
  
- /* 0x18 : I2CD Slave Device Address Register   */
- #define ASPEED_I2CD_DEV_ADDR_MASK			GENMASK(6, 0)
-@@ -336,18 +342,19 @@ static void aspeed_i2c_do_start(struct aspeed_i2c_bus *bus)
- 	struct i2c_msg *msg = &bus->msgs[bus->msgs_index];
- 	u8 slave_addr = i2c_8bit_addr_from_msg(msg);
+ 	status = readl_relaxed(i2c_dev->base + STM32F7_I2C_ISR);
  
--	bus->master_state = ASPEED_I2C_MASTER_START;
--
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- 	/*
- 	 * If it's requested in the middle of a slave session, set the master
- 	 * state to 'pending' then H/W will continue handling this master
- 	 * command when the bus comes back to the idle state.
- 	 */
--	if (bus->slave_state != ASPEED_I2C_SLAVE_INACTIVE)
-+	if (bus->slave_state != ASPEED_I2C_SLAVE_INACTIVE) {
- 		bus->master_state = ASPEED_I2C_MASTER_PENDING;
-+		return;
+@@ -1513,12 +1513,15 @@ static irqreturn_t stm32f7_i2c_isr_error(int irq, void *data)
+ 		f7_msg->result = -EINVAL;
+ 	}
+ 
+-	/* Disable interrupts */
+-	if (stm32f7_i2c_is_slave_registered(i2c_dev))
+-		mask = STM32F7_I2C_XFER_IRQ_MASK;
+-	else
+-		mask = STM32F7_I2C_ALL_IRQ_MASK;
+-	stm32f7_i2c_disable_irq(i2c_dev, mask);
++	if (!i2c_dev->slave_running) {
++		u32 mask;
++		/* Disable interrupts */
++		if (stm32f7_i2c_is_slave_registered(i2c_dev))
++			mask = STM32F7_I2C_XFER_IRQ_MASK;
++		else
++			mask = STM32F7_I2C_ALL_IRQ_MASK;
++		stm32f7_i2c_disable_irq(i2c_dev, mask);
 +	}
- #endif /* CONFIG_I2C_SLAVE */
  
-+	bus->master_state = ASPEED_I2C_MASTER_START;
- 	bus->buf_index = 0;
- 
- 	if (msg->flags & I2C_M_RD) {
-@@ -422,20 +429,6 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
- 		}
- 	}
- 
--#if IS_ENABLED(CONFIG_I2C_SLAVE)
--	/*
--	 * A pending master command will be started by H/W when the bus comes
--	 * back to idle state after completing a slave operation so change the
--	 * master state from 'pending' to 'start' at here if slave is inactive.
--	 */
--	if (bus->master_state == ASPEED_I2C_MASTER_PENDING) {
--		if (bus->slave_state != ASPEED_I2C_SLAVE_INACTIVE)
--			goto out_no_complete;
--
--		bus->master_state = ASPEED_I2C_MASTER_START;
--	}
--#endif /* CONFIG_I2C_SLAVE */
--
- 	/* Master is not currently active, irq was for someone else. */
- 	if (bus->master_state == ASPEED_I2C_MASTER_INACTIVE ||
- 	    bus->master_state == ASPEED_I2C_MASTER_PENDING)
-@@ -462,11 +455,15 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- 		/*
- 		 * If a peer master starts a xfer immediately after it queues a
--		 * master command, change its state to 'pending' then H/W will
--		 * continue the queued master xfer just after completing the
--		 * slave mode session.
-+		 * master command, clear the queued master command and change
-+		 * its state to 'pending'. To simplify handling of pending
-+		 * cases, it uses S/W solution instead of H/W command queue
-+		 * handling.
- 		 */
- 		if (unlikely(irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH)) {
-+			writel(readl(bus->base + ASPEED_I2C_CMD_REG) &
-+				~ASPEED_I2CD_MASTER_CMDS_MASK,
-+			       bus->base + ASPEED_I2C_CMD_REG);
- 			bus->master_state = ASPEED_I2C_MASTER_PENDING;
- 			dev_dbg(bus->dev,
- 				"master goes pending due to a slave start\n");
-@@ -629,6 +626,14 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
- 			irq_handled |= aspeed_i2c_master_irq(bus,
- 							     irq_remaining);
- 	}
-+
-+	/*
-+	 * Start a pending master command at here if a slave operation is
-+	 * completed.
-+	 */
-+	if (bus->master_state == ASPEED_I2C_MASTER_PENDING &&
-+	    bus->slave_state == ASPEED_I2C_SLAVE_INACTIVE)
-+		aspeed_i2c_do_start(bus);
- #else
- 	irq_handled = aspeed_i2c_master_irq(bus, irq_remaining);
- #endif /* CONFIG_I2C_SLAVE */
-@@ -691,6 +696,15 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
- 		     ASPEED_I2CD_BUS_BUSY_STS))
- 			aspeed_i2c_recover_bus(bus);
- 
-+		/*
-+		 * If timed out and the state is still pending, drop the pending
-+		 * master command.
-+		 */
-+		spin_lock_irqsave(&bus->lock, flags);
-+		if (bus->master_state == ASPEED_I2C_MASTER_PENDING)
-+			bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
-+		spin_unlock_irqrestore(&bus->lock, flags);
-+
- 		return -ETIMEDOUT;
- 	}
- 
+ 	/* Disable dma */
+ 	if (i2c_dev->use_dma) {
 -- 
 2.20.1
 
