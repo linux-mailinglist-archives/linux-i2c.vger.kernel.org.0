@@ -2,39 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C98EA13F
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Oct 2019 17:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5AFEA105
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Oct 2019 17:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726878AbfJ3QAX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 30 Oct 2019 12:00:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57300 "EHLO mail.kernel.org"
+        id S1728076AbfJ3P4x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 30 Oct 2019 11:56:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58464 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728043AbfJ3Pzo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 30 Oct 2019 11:55:44 -0400
+        id S1727638AbfJ3P4w (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 30 Oct 2019 11:56:52 -0400
 Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE1A6217D9;
-        Wed, 30 Oct 2019 15:55:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 01DF52080F;
+        Wed, 30 Oct 2019 15:56:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572450943;
-        bh=+r78vgMnDR87npOWjtfsxJzphjSo8BM6zb8n59LRG3M=;
+        s=default; t=1572451011;
+        bh=hxzDfQPmSOSmyltI5rLJZbhymPePo8SAfCesBa43av0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UIsrDZOtwV2SKdI78zQ8+dRWEv7MK+Q8PztIoNb1F6tkTwQWqjUd/JthhTL0r0liA
-         DcwHz3MRenEtoiY6ChvoHSDzAkRDN/SAfLfA/NQ8bt1y+0uz+lTQ1fI9NL7QR8KTVZ
-         0ATs14SZFE7c76C9q+TycV+8I259/oU+WiXAENRI=
+        b=oc+V8JCpSmCuq4yXl2noBDds0AmwYMtdYXtYaxbpHb4BRCqW63Dk8PUtrx3MilEcz
+         2yufURLAMP9+nB0UCilw+CyMDQDVTuFetBHkYLDVueHNNVSsEMV0+EcRb8VGD3S2l1
+         YuAK8OuJXWDjOcErMVdX3H7YcleEueJ3n/MRXGJU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alain Volmat <alain.volmat@st.com>,
         Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 34/38] i2c: stm32f7: remove warning when compiling with W=1
-Date:   Wed, 30 Oct 2019 11:54:02 -0400
-Message-Id: <20191030155406.10109-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 21/24] i2c: stm32f7: remove warning when compiling with W=1
+Date:   Wed, 30 Oct 2019 11:55:52 -0400
+Message-Id: <20191030155555.10494-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191030155406.10109-1-sashal@kernel.org>
-References: <20191030155406.10109-1-sashal@kernel.org>
+In-Reply-To: <20191030155555.10494-1-sashal@kernel.org>
+References: <20191030155555.10494-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,11 +67,11 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 362b23505f214..f4e3613f9361b 100644
+index d8cbe149925b5..14f60751729e7 100644
 --- a/drivers/i2c/busses/i2c-stm32f7.c
 +++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -297,7 +297,7 @@ struct stm32f7_i2c_dev {
- 	bool use_dma;
+@@ -219,7 +219,7 @@ struct stm32f7_i2c_dev {
+ 	struct stm32f7_i2c_timings timing;
  };
  
 -/**
