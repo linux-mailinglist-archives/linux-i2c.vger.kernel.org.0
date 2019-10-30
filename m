@@ -2,36 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D6FEA0E6
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Oct 2019 17:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C98EA13F
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Oct 2019 17:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727374AbfJ3Pzk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 30 Oct 2019 11:55:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57242 "EHLO mail.kernel.org"
+        id S1726878AbfJ3QAX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 30 Oct 2019 12:00:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728641AbfJ3Pzj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 30 Oct 2019 11:55:39 -0400
+        id S1728043AbfJ3Pzo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 30 Oct 2019 11:55:44 -0400
 Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 626D8217F9;
-        Wed, 30 Oct 2019 15:55:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DE1A6217D9;
+        Wed, 30 Oct 2019 15:55:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572450939;
-        bh=JDr0T7LlkJ8UHSj7zH/ZxVkHytUH/XKb4qVDCm8HdCU=;
+        s=default; t=1572450943;
+        bh=+r78vgMnDR87npOWjtfsxJzphjSo8BM6zb8n59LRG3M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uZodgQtSqxjgGbj9Jsw3LWC81uaj7aEUUD3bTV8znDy++J5tR4Czv9sEkEVFZOQak
-         QjsbOaQ4OWGyOjSRT9NgjfkTvle9fPfJ0WTaciku/JZ8haFobmMikdQaJAT2rcqlt5
-         rySdFBH/kkKYGcPlNkRp+r0rgPRKzcV/Mx+s0CAc=
+        b=UIsrDZOtwV2SKdI78zQ8+dRWEv7MK+Q8PztIoNb1F6tkTwQWqjUd/JthhTL0r0liA
+         DcwHz3MRenEtoiY6ChvoHSDzAkRDN/SAfLfA/NQ8bt1y+0uz+lTQ1fI9NL7QR8KTVZ
+         0ATs14SZFE7c76C9q+TycV+8I259/oU+WiXAENRI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Fabrice Gasnier <fabrice.gasnier@st.com>,
+Cc:     Alain Volmat <alain.volmat@st.com>,
         Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 32/38] i2c: stm32f7: fix first byte to send in slave mode
-Date:   Wed, 30 Oct 2019 11:54:00 -0400
-Message-Id: <20191030155406.10109-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 34/38] i2c: stm32f7: remove warning when compiling with W=1
+Date:   Wed, 30 Oct 2019 11:54:02 -0400
+Message-Id: <20191030155406.10109-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191030155406.10109-1-sashal@kernel.org>
 References: <20191030155406.10109-1-sashal@kernel.org>
@@ -44,39 +44,41 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Fabrice Gasnier <fabrice.gasnier@st.com>
+From: Alain Volmat <alain.volmat@st.com>
 
-[ Upstream commit 02e64276c6dbcc4c5f39844f33d18180832a58f3 ]
+[ Upstream commit 348e46fbb4cdb2aead79aee1fd8bb25ec5fd25db ]
 
-The slave-interface documentation [1] states "the bus driver should
-transmit the first byte" upon I2C_SLAVE_READ_REQUESTED slave event:
-- 'val': backend returns first byte to be sent
-The driver currently ignores the 1st byte to send on this event.
+Remove the following warning:
 
-[1] https://www.kernel.org/doc/Documentation/i2c/slave-interface
+drivers/i2c/busses/i2c-stm32f7.c:315:
+warning: cannot understand function prototype:
+'struct stm32f7_i2c_spec i2c_specs[] =
 
-Fixes: 60d609f30de2 ("i2c: i2c-stm32f7: Add slave support")
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+Replace a comment starting with /** by simply /* to avoid having
+it interpreted as a kernel-doc comment.
+
+Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
+Signed-off-by: Alain Volmat <alain.volmat@st.com>
 Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
 Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-stm32f7.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/i2c/busses/i2c-stm32f7.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index ac9c9486b834c..48521bc8a4d23 100644
+index 362b23505f214..f4e3613f9361b 100644
 --- a/drivers/i2c/busses/i2c-stm32f7.c
 +++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1177,6 +1177,8 @@ static void stm32f7_i2c_slave_start(struct stm32f7_i2c_dev *i2c_dev)
- 			STM32F7_I2C_CR1_TXIE;
- 		stm32f7_i2c_set_bits(base + STM32F7_I2C_CR1, mask);
+@@ -297,7 +297,7 @@ struct stm32f7_i2c_dev {
+ 	bool use_dma;
+ };
  
-+		/* Write 1st data byte */
-+		writel_relaxed(value, base + STM32F7_I2C_TXDR);
- 	} else {
- 		/* Notify i2c slave that new write transfer is starting */
- 		i2c_slave_event(slave, I2C_SLAVE_WRITE_REQUESTED, &value);
+-/**
++/*
+  * All these values are coming from I2C Specification, Version 6.0, 4th of
+  * April 2014.
+  *
 -- 
 2.20.1
 
