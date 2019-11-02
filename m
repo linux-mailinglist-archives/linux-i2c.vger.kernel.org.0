@@ -2,63 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BE4ECB3C
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Nov 2019 23:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE27DECD97
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Nov 2019 07:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726230AbfKAWPr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 1 Nov 2019 18:15:47 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:57090 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725989AbfKAWPr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Nov 2019 18:15:47 -0400
-X-Greylist: delayed 1151 seconds by postgrey-1.27 at vger.kernel.org; Fri, 01 Nov 2019 18:15:46 EDT
-Received: from [88.147.30.77] (port=48590 helo=[192.168.77.50])
-        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1iQeuH-008E5q-0w; Fri, 01 Nov 2019 22:56:33 +0100
-Subject: Re: [PATCH resend] i2c: core: Use DEVICE_ATTR_RW() helper macros
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191025091950.23563-1-geert+renesas@glider.be>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <9ac7a889-ca10-649e-9404-1f785645f8b8@lucaceresoli.net>
-Date:   Fri, 1 Nov 2019 22:56:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726329AbfKBGWN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 2 Nov 2019 02:22:13 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36061 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725956AbfKBGWN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 2 Nov 2019 02:22:13 -0400
+Received: by mail-wr1-f68.google.com with SMTP id w18so11668722wrt.3;
+        Fri, 01 Nov 2019 23:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zhzCe9gexEx43QvM7xg8LGu1dhIv2+i6xu5dgHafDF4=;
+        b=kwLnMiSMatRxSK1C76ObCExaPa9R1/4BJEHxx4D1XjeiecZuJ2/NVbjoC4Ph/eJ/2c
+         RBOFwFKJImzh6GFcR5REGOsZiPm1EyZf5LViYrAM2YRo+OXh4tecrokck7kfBE9RpxIC
+         QTOvF1QlG0sdyLRcdI1muyz0WwVPzncurGKQH+losdQ7UINUTxzJfX+X4K54Au/xkqir
+         7DR79TKROUSQJ3ZfNdWabSGR3v/9EzbgQVsO/Rg7M7WoolGWIkdKNd3/rhR9C7VruSXe
+         HBwC7tDoUo57wB732gk+BCWqZL2be9kJ2Z3I/0Qq6H9cKZ81tv2Yl1078ZGLLf+APkTK
+         i6gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zhzCe9gexEx43QvM7xg8LGu1dhIv2+i6xu5dgHafDF4=;
+        b=ZCcioDf8vi5QS4T00S1dGsDJTaMAH22yaiCMmY+DFX/BKjYqFOJNQPwkz7humQsiVd
+         DRs3mTAa9ELpg3sdZue90Jx2wjvVyQZrsbBelKVWp0ho3AMKCJYjuAJBbTmLhNJHqzji
+         Aj+NuDkoMPzjOaTDjKXE2NDbtFRVC/nwqE2vFl+Vw/uJhh8HyXKmKKG2tQdrsbl+NhbY
+         M6t7Y2DWhSqEYq6zv7VdV6zZpJDFHHKZtKNj9rlTinFUSgdAaDYGX+XHlfJ7EScLCn5z
+         xCA//Uul9ocT9dQLYl6awK7YkpAQIXn5UWZs1Oztii2hQ7+J/Cbd2wcr4l3eiDHmO7Sp
+         RrMA==
+X-Gm-Message-State: APjAAAWB+iICh9qkzDhtNgp/EvSNcTzp2GQNwi/1E5RYXv+8NBPEfIJY
+        WJCY74lTiogXVPhbEos75Qsy1F3c8YA=
+X-Google-Smtp-Source: APXvYqzU8cyqw+/oDcKoSvzWSB/BEN+evKPThPEccSytbmI1say7JB4C0XssYGtF7LAmI3cV/QR2KA==
+X-Received: by 2002:a5d:4612:: with SMTP id t18mr13307058wrq.255.1572675729879;
+        Fri, 01 Nov 2019 23:22:09 -0700 (PDT)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.gmail.com with ESMTPSA id u68sm11432918wmu.12.2019.11.01.23.22.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Nov 2019 23:22:09 -0700 (PDT)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH v2] i2c: imx-lpi2c: add clk_disable_unprepare calls
+Date:   Sat,  2 Nov 2019 14:21:49 +0800
+Message-Id: <20191102062149.3957-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <20191025091950.23563-1-geert+renesas@glider.be>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Geert,
+The driver forgets to call clk_disable_unprepare when probe fails
+and remove.
+Add the two calls to fix the problem.
 
-On 25/10/19 11:19, Geert Uytterhoeven wrote:
-> Convert the i2c core sysfs attributes from DEVICE_ATTR() to
-> DEVICE_ATTR_RW(), to reduce boilerplate.
-> This requires renaming some functions.
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+---
+Changes in v2:
+  - Adjust the call order to make it consistent in probe failure and
+    removal.
 
-Nitpicking: it's DEVICE_ATTR_RO and _WO, not _RW (both here and in the
-subject). I'd replace with 'DEVICE_ATTR_*()'.
+ drivers/i2c/busses/i2c-imx-lpi2c.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-With this fixed:
- Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-
+diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+index c92b56485fa6..f964693c0901 100644
+--- a/drivers/i2c/busses/i2c-imx-lpi2c.c
++++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+@@ -618,6 +618,7 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ rpm_disable:
++	clk_disable_unprepare(lpi2c_imx->clk);
+ 	pm_runtime_put(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
+@@ -630,6 +631,7 @@ static int lpi2c_imx_remove(struct platform_device *pdev)
+ 	struct lpi2c_imx_struct *lpi2c_imx = platform_get_drvdata(pdev);
+ 
+ 	i2c_del_adapter(&lpi2c_imx->adapter);
++	clk_disable_unprepare(lpi2c_imx->clk);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
 -- 
-Luca
+2.23.0
+
