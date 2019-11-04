@@ -2,83 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 669F1EE2FD
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2019 16:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE51EE5A8
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2019 18:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727796AbfKDPBD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 4 Nov 2019 10:01:03 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52933 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727788AbfKDPBD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 4 Nov 2019 10:01:03 -0500
-Received: by mail-wm1-f68.google.com with SMTP id c17so9664259wmk.2;
-        Mon, 04 Nov 2019 07:01:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BT9YBqZKiz2HvVHCMcbm7iccT4OKFPOob8w/3y/w+v0=;
-        b=FaSodyjqCmumV/TI2UFoHmOMF5dU8qpXnDR/6g8ZCMlTjZxbIOUmDoeb1AnVwHanzy
-         rl7SRzfoYF3NBlcUcKzef1i8DuJfgIPjKfisMn7spZcGTjOT/pMsHSuf5EjtALtPTPBc
-         pqM/DvR9Fmi5yx0vX8O3R0Pik/x2sudIzNUh31s8yn59geRGi/mlbJSq+ZMEHOf4S62g
-         E0WI2oRnHdGK7kCjDvn3xD9k3c4Kg8OKX0tl86VfnEXtQugQg7kaMP1CkVOVprtdimRy
-         PXdspFR7bbRdkQr1FMUIKkQ6+rYBZxaSkA0BvbM0IGMAZwqMk7V5r4W5ZkJhDy/DuIrG
-         qTJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BT9YBqZKiz2HvVHCMcbm7iccT4OKFPOob8w/3y/w+v0=;
-        b=Ygmsa0ONSMksV7Hr987DGXt1tbV6vLvPlQpeCxRylwFz0aZEJTeVnpG3oTJJVSj4+t
-         85aXT3DxZKNHAtU6avdZdvrIFI5A34lCsTPAS/r99K/cUp78+cAaKm99TfjR1tj7cv2Y
-         C1A5X7V0AENR/s/BYH6QESjgODUYRT6ZnaoaDM6pAn063eGL/cKYG+eTDeiWHRqmOl1U
-         O9L8T+CZp2/sk3rdRjLxdOu4sNb3FJyA8q66gHApNCIa60WGptLj8FWmYuNjt1Y/4wz9
-         YulshQ3CoEzy9arkWju9bQZl3XhlO4zRGNOX8daU9xJfzVTh9WWsThtjf7Pe4NI10BQ6
-         2dLQ==
-X-Gm-Message-State: APjAAAVoSYw1Naq9X9lDogATDk+7lSqtzgFAYIPosX2B16nzYsRAaIS1
-        8Hp/0L8qpIrpYa19y+kzaQtFG8UnxXA=
-X-Google-Smtp-Source: APXvYqywGRSQBr9zY0NjGjdjmaAK99TtLJdTvgBXgMEVATksrpdgAlZ/2mjRQBlZqUAt6uzAJOlOPw==
-X-Received: by 2002:a7b:c84b:: with SMTP id c11mr16963467wml.158.1572879660689;
-        Mon, 04 Nov 2019 07:01:00 -0800 (PST)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.gmail.com with ESMTPSA id o25sm21377302wro.21.2019.11.04.07.00.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2019 07:01:00 -0800 (PST)
-From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] i2c: hix5hd2: add missed clk_disable_unprepare in remove
-Date:   Mon,  4 Nov 2019 23:00:48 +0800
-Message-Id: <20191104150049.6366-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.23.0
+        id S1728064AbfKDRQr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 4 Nov 2019 12:16:47 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:51523 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727989AbfKDRQr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 4 Nov 2019 12:16:47 -0500
+Received: from [109.168.11.45] (port=55668 helo=[192.168.101.73])
+        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1iRfy8-007lIY-J6; Mon, 04 Nov 2019 18:16:44 +0100
+Subject: Re: [PATCH] i2c: xiic: Fix kerneldoc warnings
+To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        linux-i2c@vger.kernel.org
+Cc:     michal.simek@xilinx.com
+References: <1572615563-31751-1-git-send-email-shubhrajyoti.datta@xilinx.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <f0a66b3c-17a1-8fb0-ee89-1dc8d0668d8c@lucaceresoli.net>
+Date:   Mon, 4 Nov 2019 18:16:44 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <1572615563-31751-1-git-send-email-shubhrajyoti.datta@xilinx.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The driver forgets to disable and unprepare clk when remove.
-Add a call to clk_disable_unprepare to fix it.
+Hi Shubhrajyoti,
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
----
- drivers/i2c/busses/i2c-hix5hd2.c | 1 +
- 1 file changed, 1 insertion(+)
+On 01/11/19 14:39, Shubhrajyoti Datta wrote:
+> Fix the below warning by adding the description of clock and dev.
+> 
+> drivers/i2c/busses/i2c-xiic.c:57: info: Scanning doc for struct xiic_i2c
+> drivers/i2c/busses/i2c-xiic.c:84: warning: Function parameter or member
+> 'dev' not described in 'xiic_i2c'
+> drivers/i2c/busses/i2c-xiic.c:84: warning: Function parameter or member
+> 'clk' not described in 'xiic_i2c'
+> 
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> ---
+>  drivers/i2c/busses/i2c-xiic.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+> index 0c51c0f..e212a9c 100644
+> --- a/drivers/i2c/busses/i2c-xiic.c
+> +++ b/drivers/i2c/busses/i2c-xiic.c
+> @@ -55,6 +55,7 @@ enum xiic_endian {
+> 
+>  /**
+>   * struct xiic_i2c - Internal representation of the XIIC I2C bus
+> + * @dev:       Pointer to device structure
+>   * @base:      Memory base of the HW registers
+>   * @wait:      Wait queue for callers
+>   * @adap:      Kernel adapter representation
+> @@ -66,6 +67,7 @@ enum xiic_endian {
+>   * @rx_msg:    Current RX message
+>   * @rx_pos:    Position within current RX message
+>   * @endianness: big/little-endian byte order
+> + * @clk:       Pointer to struct clk
 
-diff --git a/drivers/i2c/busses/i2c-hix5hd2.c b/drivers/i2c/busses/i2c-hix5hd2.c
-index 8497c7a95dd4..224f830f77f9 100644
---- a/drivers/i2c/busses/i2c-hix5hd2.c
-+++ b/drivers/i2c/busses/i2c-hix5hd2.c
-@@ -477,6 +477,7 @@ static int hix5hd2_i2c_remove(struct platform_device *pdev)
- 	i2c_del_adapter(&priv->adap);
- 	pm_runtime_disable(priv->dev);
- 	pm_runtime_set_suspended(priv->dev);
-+	clk_disable_unprepare(priv->clk);
- 
- 	return 0;
- }
+'Pointer to struct clk' does not say anything that is not already
+obvious from the 'struct clk *clk' below. I understand you are simply
+fixing a kernel-doc warning, but I'd rather document this field as
+'Input clock' or 'AXI4-Lite input clock', which gives at least a bit of
+extra information (even though not much more, because clock management
+is really simple for this device).
+
+Just my 2c,
 -- 
-2.23.0
-
+Luca
