@@ -2,23 +2,25 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9BAF152E
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2019 12:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5364AF162F
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2019 13:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729732AbfKFLde (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Nov 2019 06:33:34 -0500
-Received: from enpas.org ([46.38.239.100]:45828 "EHLO mail.enpas.org"
+        id S1731608AbfKFMjj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Nov 2019 07:39:39 -0500
+Received: from enpas.org ([46.38.239.100]:45940 "EHLO mail.enpas.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725856AbfKFLde (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 6 Nov 2019 06:33:34 -0500
+        id S1727652AbfKFMjj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 6 Nov 2019 07:39:39 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 0B71DFFDB0;
-        Wed,  6 Nov 2019 11:33:30 +0000 (UTC)
+        by mail.enpas.org (Postfix) with ESMTPSA id 905CBFFC18;
+        Wed,  6 Nov 2019 12:39:37 +0000 (UTC)
+Subject: Re: [RFC PATCH 01/12] i2c: replace i2c_new_probed_device with an
+ ERR_PTR variant
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-i2c@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org
 References: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
- <20191106095033.25182-3-wsa+renesas@sang-engineering.com>
+ <20191106095033.25182-2-wsa+renesas@sang-engineering.com>
 From:   Max Staudt <max@enpas.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
@@ -92,50 +94,22 @@ Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
  qowubYXvP+RW4E9h6/NwGzS3Sbw7dRC6HK7xeSjmnzgrbbdF3TbHa5WHGZ3MLFQqbMuSn1Gn
  a0dBnIpkQG5yGknQjCL7SGEun1siNzluV19nLu66YRJsZ1HE9RgbMhTe2Ca8bWH1985ra4GV
  urZIw0nz8zec+73Bv/qF4GHHftLYfA==
-Subject: Re: [RFC PATCH 02/12] i2c: icy: convert to i2c_new_scanned_device
-Message-ID: <6c979da5-d913-e2d9-9766-478a50d905f7@enpas.org>
-Date:   Wed, 6 Nov 2019 12:33:30 +0100
+Message-ID: <678c90fb-00f6-6b31-90dd-cde41f730d53@enpas.org>
+Date:   Wed, 6 Nov 2019 13:39:36 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <20191106095033.25182-3-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20191106095033.25182-2-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 11/06/2019 10:50 AM, Wolfram Sang wrote:
-> Move from the deprecated i2c_new_probed_device() to the new
-> i2c_new_scanned_device(). Make use of the new ERRPTR if suitable.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/i2c/busses/i2c-icy.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-icy.c b/drivers/i2c/busses/i2c-icy.c
-> index 8382eb64b424..07baa4d8de39 100644
-> --- a/drivers/i2c/busses/i2c-icy.c
-> +++ b/drivers/i2c/busses/i2c-icy.c
-> @@ -188,10 +188,10 @@ static int icy_probe(struct zorro_dev *z,
->  		ltc2990_info.fwnode = new_fwnode;
->  
->  		i2c->ltc2990_client =
-> -			i2c_new_probed_device(&i2c->adapter,
-> -					      &ltc2990_info,
-> -					      icy_ltc2990_addresses,
-> -					      NULL);
-> +			i2c_new_scanned_device(&i2c->adapter,
-> +					       &ltc2990_info,
-> +					       icy_ltc2990_addresses,
-> +					       NULL);
+I'm not an I2C expert, but as far as I can see: This patch looks useful and well done to me.
+Thanks for moving forward on making the interfaces use ERR_PTR instead of NULL.
 
-Looks good, thank you for patching this!
+Max
 
-i2c_unregister_device() checks the pointer using IS_ERR_OR_NULL(), so the simple logic in i2c-icy (where the pointer is not checked on i2c_new_scanned_device()) still works.
-
-
-Acked-by: Max Staudt <max@enpas.org>
