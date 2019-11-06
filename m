@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36769F208C
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2019 22:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140C2F20AE
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2019 22:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732651AbfKFVV2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Nov 2019 16:21:28 -0500
-Received: from sauhun.de ([88.99.104.3]:59014 "EHLO pokefinder.org"
+        id S1732790AbfKFVWG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Nov 2019 16:22:06 -0500
+Received: from sauhun.de ([88.99.104.3]:59040 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732608AbfKFVV1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 6 Nov 2019 16:21:27 -0500
+        id S1732635AbfKFVV2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 6 Nov 2019 16:21:28 -0500
 Received: from localhost (p54B33505.dip0.t-ipconnect.de [84.179.53.5])
-        by pokefinder.org (Postfix) with ESMTPSA id 9DDF52C0558;
-        Wed,  6 Nov 2019 22:21:25 +0100 (CET)
+        by pokefinder.org (Postfix) with ESMTPSA id 3881C2C055F;
+        Wed,  6 Nov 2019 22:21:26 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-i2c@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 08/17] media: pci: saa7164: saa7164-dvb: convert to use i2c_new_client_device()
-Date:   Wed,  6 Nov 2019 22:21:08 +0100
-Message-Id: <20191106212120.27983-9-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 09/17] media: pci: smipcie: smipcie-main: convert to use i2c_new_client_device()
+Date:   Wed,  6 Nov 2019 22:21:09 +0100
+Message-Id: <20191106212120.27983-10-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191106212120.27983-1-wsa+renesas@sang-engineering.com>
 References: <20191106212120.27983-1-wsa+renesas@sang-engineering.com>
@@ -38,72 +38,24 @@ out.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/media/pci/saa7164/saa7164-dvb.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ drivers/media/pci/smipcie/smipcie-main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/saa7164/saa7164-dvb.c b/drivers/media/pci/saa7164/saa7164-dvb.c
-index 05ab4734ea67..6a527dbc1daf 100644
---- a/drivers/media/pci/saa7164/saa7164-dvb.c
-+++ b/drivers/media/pci/saa7164/saa7164-dvb.c
-@@ -116,8 +116,8 @@ static int si2157_attach(struct saa7164_port *port, struct i2c_adapter *adapter,
+diff --git a/drivers/media/pci/smipcie/smipcie-main.c b/drivers/media/pci/smipcie/smipcie-main.c
+index 1fb78462e081..9ca0fc3e6f80 100644
+--- a/drivers/media/pci/smipcie/smipcie-main.c
++++ b/drivers/media/pci/smipcie/smipcie-main.c
+@@ -484,8 +484,8 @@ static struct i2c_client *smi_add_i2c_client(struct i2c_adapter *adapter,
+ 	struct i2c_client *client;
  
- 	request_module(bi.type);
+ 	request_module(info->type);
+-	client = i2c_new_device(adapter, info);
+-	if (client == NULL || client->dev.driver == NULL)
++	client = i2c_new_client_device(adapter, info);
++	if (!i2c_client_has_driver(client))
+ 		goto err_add_i2c_client;
  
--	tuner = i2c_new_device(adapter, &bi);
--	if (tuner == NULL || tuner->dev.driver == NULL)
-+	tuner = i2c_new_client_device(adapter, &bi);
-+	if (!i2c_client_has_driver(tuner))
- 		return -ENODEV;
- 
- 	if (!try_module_get(tuner->dev.driver->owner)) {
-@@ -637,9 +637,9 @@ int saa7164_dvb_register(struct saa7164_port *port)
- 			info.addr = 0xc8 >> 1;
- 			info.platform_data = &si2168_config;
- 			request_module(info.type);
--			client_demod = i2c_new_device(&dev->i2c_bus[2].i2c_adap,
-+			client_demod = i2c_new_client_device(&dev->i2c_bus[2].i2c_adap,
- 						      &info);
--			if (!client_demod || !client_demod->dev.driver)
-+			if (!i2c_client_has_driver(client_demod))
- 				goto frontend_detach;
- 
- 			if (!try_module_get(client_demod->dev.driver->owner)) {
-@@ -657,9 +657,9 @@ int saa7164_dvb_register(struct saa7164_port *port)
- 			info.addr = 0xc0 >> 1;
- 			info.platform_data = &si2157_config;
- 			request_module(info.type);
--			client_tuner = i2c_new_device(&dev->i2c_bus[0].i2c_adap,
-+			client_tuner = i2c_new_client_device(&dev->i2c_bus[0].i2c_adap,
- 						      &info);
--			if (!client_tuner || !client_tuner->dev.driver) {
-+			if (!i2c_client_has_driver(client_tuner)) {
- 				module_put(client_demod->dev.driver->owner);
- 				i2c_unregister_device(client_demod);
- 				goto frontend_detach;
-@@ -682,9 +682,9 @@ int saa7164_dvb_register(struct saa7164_port *port)
- 			info.addr = 0xcc >> 1;
- 			info.platform_data = &si2168_config;
- 			request_module(info.type);
--			client_demod = i2c_new_device(&dev->i2c_bus[2].i2c_adap,
-+			client_demod = i2c_new_client_device(&dev->i2c_bus[2].i2c_adap,
- 						      &info);
--			if (!client_demod || !client_demod->dev.driver)
-+			if (!i2c_client_has_driver(client_demod))
- 				goto frontend_detach;
- 
- 			if (!try_module_get(client_demod->dev.driver->owner)) {
-@@ -702,9 +702,9 @@ int saa7164_dvb_register(struct saa7164_port *port)
- 			info.addr = 0xc0 >> 1;
- 			info.platform_data = &si2157_config;
- 			request_module(info.type);
--			client_tuner = i2c_new_device(&dev->i2c_bus[1].i2c_adap,
-+			client_tuner = i2c_new_client_device(&dev->i2c_bus[1].i2c_adap,
- 						      &info);
--			if (!client_tuner || !client_tuner->dev.driver) {
-+			if (!i2c_client_has_driver(client_tuner)) {
- 				module_put(client_demod->dev.driver->owner);
- 				i2c_unregister_device(client_demod);
- 				goto frontend_detach;
+ 	if (!try_module_get(client->dev.driver->owner)) {
 -- 
 2.20.1
 
