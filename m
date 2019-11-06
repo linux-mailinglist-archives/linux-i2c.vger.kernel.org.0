@@ -2,25 +2,26 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A97F12BF
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2019 10:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF787F12DA
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2019 10:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727628AbfKFJug (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Nov 2019 04:50:36 -0500
-Received: from sauhun.de ([88.99.104.3]:50164 "EHLO pokefinder.org"
+        id S1731215AbfKFJuh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Nov 2019 04:50:37 -0500
+Received: from sauhun.de ([88.99.104.3]:50174 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727239AbfKFJug (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 6 Nov 2019 04:50:36 -0500
+        id S1727257AbfKFJuh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 6 Nov 2019 04:50:37 -0500
 Received: from localhost (p54B33505.dip0.t-ipconnect.de [84.179.53.5])
-        by pokefinder.org (Postfix) with ESMTPSA id C36BD2C0548;
-        Wed,  6 Nov 2019 10:50:34 +0100 (CET)
+        by pokefinder.org (Postfix) with ESMTPSA id 591002C054A;
+        Wed,  6 Nov 2019 10:50:35 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Max Staudt <max@enpas.org>, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 02/12] i2c: icy: convert to i2c_new_scanned_device
-Date:   Wed,  6 Nov 2019 10:50:20 +0100
-Message-Id: <20191106095033.25182-3-wsa+renesas@sang-engineering.com>
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 03/12] macintosh: convert to i2c_new_scanned_device
+Date:   Wed,  6 Nov 2019 10:50:21 +0100
+Message-Id: <20191106095033.25182-4-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
 References: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
@@ -36,28 +37,29 @@ i2c_new_scanned_device(). Make use of the new ERRPTR if suitable.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-icy.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-icy.c b/drivers/i2c/busses/i2c-icy.c
-index 8382eb64b424..07baa4d8de39 100644
---- a/drivers/i2c/busses/i2c-icy.c
-+++ b/drivers/i2c/busses/i2c-icy.c
-@@ -188,10 +188,10 @@ static int icy_probe(struct zorro_dev *z,
- 		ltc2990_info.fwnode = new_fwnode;
+Build tested only. RFC, please comment and/or ack, but don't apply yet.
+
+ drivers/macintosh/therm_windtunnel.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/macintosh/therm_windtunnel.c b/drivers/macintosh/therm_windtunnel.c
+index 8c744578122a..f15fec5e1cb6 100644
+--- a/drivers/macintosh/therm_windtunnel.c
++++ b/drivers/macintosh/therm_windtunnel.c
+@@ -321,10 +321,10 @@ do_attach( struct i2c_adapter *adapter )
  
- 		i2c->ltc2990_client =
--			i2c_new_probed_device(&i2c->adapter,
--					      &ltc2990_info,
--					      icy_ltc2990_addresses,
--					      NULL);
-+			i2c_new_scanned_device(&i2c->adapter,
-+					       &ltc2990_info,
-+					       icy_ltc2990_addresses,
-+					       NULL);
- 	}
+ 		memset(&info, 0, sizeof(struct i2c_board_info));
+ 		strlcpy(info.type, "therm_ds1775", I2C_NAME_SIZE);
+-		i2c_new_probed_device(adapter, &info, scan_ds1775, NULL);
++		i2c_new_scanned_device(adapter, &info, scan_ds1775, NULL);
  
- 	return 0;
+ 		strlcpy(info.type, "therm_adm1030", I2C_NAME_SIZE);
+-		i2c_new_probed_device(adapter, &info, scan_adm1030, NULL);
++		i2c_new_scanned_device(adapter, &info, scan_adm1030, NULL);
+ 
+ 		if( x.thermostat && x.fan ) {
+ 			x.running = 1;
 -- 
 2.20.1
 
