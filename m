@@ -2,26 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF787F12DA
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2019 10:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AA9F12E3
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2019 10:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731215AbfKFJuh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Nov 2019 04:50:37 -0500
-Received: from sauhun.de ([88.99.104.3]:50174 "EHLO pokefinder.org"
+        id S1728559AbfKFJvN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Nov 2019 04:51:13 -0500
+Received: from sauhun.de ([88.99.104.3]:50186 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727257AbfKFJuh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S1727485AbfKFJuh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
         Wed, 6 Nov 2019 04:50:37 -0500
 Received: from localhost (p54B33505.dip0.t-ipconnect.de [84.179.53.5])
-        by pokefinder.org (Postfix) with ESMTPSA id 591002C054A;
+        by pokefinder.org (Postfix) with ESMTPSA id E43422C054E;
         Wed,  6 Nov 2019 10:50:35 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 03/12] macintosh: convert to i2c_new_scanned_device
-Date:   Wed,  6 Nov 2019 10:50:21 +0100
-Message-Id: <20191106095033.25182-4-wsa+renesas@sang-engineering.com>
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 04/12] platform: chrome: convert to i2c_new_scanned_device
+Date:   Wed,  6 Nov 2019 10:50:22 +0100
+Message-Id: <20191106095033.25182-5-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
 References: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
@@ -40,26 +41,63 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Build tested only. RFC, please comment and/or ack, but don't apply yet.
 
- drivers/macintosh/therm_windtunnel.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/platform/chrome/chromeos_laptop.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/macintosh/therm_windtunnel.c b/drivers/macintosh/therm_windtunnel.c
-index 8c744578122a..f15fec5e1cb6 100644
---- a/drivers/macintosh/therm_windtunnel.c
-+++ b/drivers/macintosh/therm_windtunnel.c
-@@ -321,10 +321,10 @@ do_attach( struct i2c_adapter *adapter )
+diff --git a/drivers/platform/chrome/chromeos_laptop.c b/drivers/platform/chrome/chromeos_laptop.c
+index 8723bcf10c93..4f3651fcd9fe 100644
+--- a/drivers/platform/chrome/chromeos_laptop.c
++++ b/drivers/platform/chrome/chromeos_laptop.c
+@@ -63,7 +63,7 @@ struct acpi_peripheral {
+ struct chromeos_laptop {
+ 	/*
+ 	 * Note that we can't mark this pointer as const because
+-	 * i2c_new_probed_device() changes passed in I2C board info, so.
++	 * i2c_new_scanned_device() changes passed in I2C board info, so.
+ 	 */
+ 	struct i2c_peripheral *i2c_peripherals;
+ 	unsigned int num_i2c_peripherals;
+@@ -87,8 +87,8 @@ chromes_laptop_instantiate_i2c_device(struct i2c_adapter *adapter,
+ 	 * address we scan secondary addresses. In any case the client
+ 	 * structure gets assigned primary address.
+ 	 */
+-	client = i2c_new_probed_device(adapter, info, addr_list, NULL);
+-	if (!client && alt_addr) {
++	client = i2c_new_scanned_device(adapter, info, addr_list, NULL);
++	if (IS_ERR(client) && alt_addr) {
+ 		struct i2c_board_info dummy_info = {
+ 			I2C_BOARD_INFO("dummy", info->addr),
+ 		};
+@@ -97,9 +97,9 @@ chromes_laptop_instantiate_i2c_device(struct i2c_adapter *adapter,
+ 		};
+ 		struct i2c_client *dummy;
  
- 		memset(&info, 0, sizeof(struct i2c_board_info));
- 		strlcpy(info.type, "therm_ds1775", I2C_NAME_SIZE);
--		i2c_new_probed_device(adapter, &info, scan_ds1775, NULL);
-+		i2c_new_scanned_device(adapter, &info, scan_ds1775, NULL);
+-		dummy = i2c_new_probed_device(adapter, &dummy_info,
+-					      alt_addr_list, NULL);
+-		if (dummy) {
++		dummy = i2c_new_scanned_device(adapter, &dummy_info,
++					       alt_addr_list, NULL);
++		if (!IS_ERR(dummy)) {
+ 			pr_debug("%d-%02x is probed at %02x\n",
+ 				 adapter->nr, info->addr, dummy->addr);
+ 			i2c_unregister_device(dummy);
+@@ -107,12 +107,14 @@ chromes_laptop_instantiate_i2c_device(struct i2c_adapter *adapter,
+ 		}
+ 	}
  
- 		strlcpy(info.type, "therm_adm1030", I2C_NAME_SIZE);
--		i2c_new_probed_device(adapter, &info, scan_adm1030, NULL);
-+		i2c_new_scanned_device(adapter, &info, scan_adm1030, NULL);
+-	if (!client)
++	if (IS_ERR(client)) {
++		client = NULL;
+ 		pr_debug("failed to register device %d-%02x\n",
+ 			 adapter->nr, info->addr);
+-	else
++	} else {
+ 		pr_debug("added i2c device %d-%02x\n",
+ 			 adapter->nr, info->addr);
++	}
  
- 		if( x.thermostat && x.fan ) {
- 			x.running = 1;
+ 	return client;
+ }
 -- 
 2.20.1
 
