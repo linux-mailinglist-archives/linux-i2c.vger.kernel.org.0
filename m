@@ -2,26 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B3DF20B7
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2019 22:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86767F20B2
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2019 22:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728096AbfKFVVX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S1732141AbfKFVVX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Wed, 6 Nov 2019 16:21:23 -0500
-Received: from sauhun.de ([88.99.104.3]:58976 "EHLO pokefinder.org"
+Received: from sauhun.de ([88.99.104.3]:58986 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727949AbfKFVVW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 6 Nov 2019 16:21:22 -0500
+        id S1727973AbfKFVVX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 6 Nov 2019 16:21:23 -0500
 Received: from localhost (p54B33505.dip0.t-ipconnect.de [84.179.53.5])
-        by pokefinder.org (Postfix) with ESMTPSA id 0C5FC2C054A;
+        by pokefinder.org (Postfix) with ESMTPSA id 90CEF2C054E;
         Wed,  6 Nov 2019 22:21:21 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-i2c@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH 01/17] i2c: add helper to check if a client has a driver attached
-Date:   Wed,  6 Nov 2019 22:21:01 +0100
-Message-Id: <20191106212120.27983-2-wsa+renesas@sang-engineering.com>
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 02/17] media: dvb-core: dvbdev: convert to use i2c_new_client_device()
+Date:   Wed,  6 Nov 2019 22:21:02 +0100
+Message-Id: <20191106212120.27983-3-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191106212120.27983-1-wsa+renesas@sang-engineering.com>
 References: <20191106212120.27983-1-wsa+renesas@sang-engineering.com>
@@ -32,30 +33,29 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Factoring out something used in the media subsystem. As an improvement,
-it bails out on both, NULL and ERRPTR.
+Use the newer API returning an ERRPTR and use the new helper to bail
+out.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- include/linux/i2c.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/dvb-core/dvbdev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index aaf57d9b41db..93b315c9a062 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -850,6 +850,11 @@ extern void i2c_del_driver(struct i2c_driver *driver);
- #define i2c_add_driver(driver) \
- 	i2c_register_driver(THIS_MODULE, driver)
- 
-+static inline bool i2c_client_has_driver(struct i2c_client *client)
-+{
-+	return !IS_ERR_OR_NULL(client) && client->dev.driver;
-+}
-+
- extern struct i2c_client *i2c_use_client(struct i2c_client *client);
- extern void i2c_release_client(struct i2c_client *client);
- 
+diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
+index 917fe034af37..80b6a71aa33e 100644
+--- a/drivers/media/dvb-core/dvbdev.c
++++ b/drivers/media/dvb-core/dvbdev.c
+@@ -983,8 +983,8 @@ struct i2c_client *dvb_module_probe(const char *module_name,
+ 	board_info->addr = addr;
+ 	board_info->platform_data = platform_data;
+ 	request_module(module_name);
+-	client = i2c_new_device(adap, board_info);
+-	if (client == NULL || client->dev.driver == NULL) {
++	client = i2c_new_client_device(adap, board_info);
++	if (!i2c_client_has_driver(client)) {
+ 		kfree(board_info);
+ 		return NULL;
+ 	}
 -- 
 2.20.1
 
