@@ -2,80 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36512EF782
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Nov 2019 09:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A58F12E5
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2019 10:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730528AbfKEIrb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Nov 2019 03:47:31 -0500
-Received: from m12-11.163.com ([220.181.12.11]:43786 "EHLO m12-11.163.com"
+        id S1730886AbfKFJvW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Nov 2019 04:51:22 -0500
+Received: from sauhun.de ([88.99.104.3]:50146 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725806AbfKEIrb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 5 Nov 2019 03:47:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Mime-Version:Message-ID; bh=lH+jz
-        Gdxy7IvVSVSVo6MZm80v9GuSQGvFMsJ7zCs8xY=; b=bNt5s5YFkuTwaVPmD28Fw
-        7lGTaBaO4Za6cBv/Gx9NoI9F00ZERiI7AnsWSlZh+QSZPrvUoxErv+8clsrsqL2F
-        oynBb0KJ+IxxU1ZoTx4y4xggViiAVaGbeHiZiyJeMsLICcfKwyTYB1e+9jfYF+HU
-        y6DJLgjdlUrWQV9vW+b+vY=
-Received: from SKY-20180422ZRB (unknown [202.100.50.59])
-        by smtp7 (Coremail) with SMTP id C8CowABnh8MIN8FdEx3ABw--.37827S2;
-        Tue, 05 Nov 2019 16:47:09 +0800 (CST)
-Date:   Tue, 5 Nov 2019 16:47:53 +0800
-From:   "sxauwsk@163.com" <sxauwsk@163.com>
-To:     "Shubhrajyoti Datta" <shubhrajyoti.datta@gmail.com>
-Cc:     "Michal Simek" <michal.simek@xilinx.com>,
-        "Shubhrajyoti Datta" <shubhrajyoti.datta@xilinx.com>,
-        "Wolfram Sang" <wsa@the-dreams.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: Re: [PATCH v2] i2c: cadence: try reset when master receive arbitration lost
-References: <20190219012447.5900-1-sxauwsk@163.com>, 
-        <CAKfKVtEwHcydp=+hNhG91h3qbMoYOPq7jEYjbuAVrWXT53DC3Q@mail.gmail.com>
-X-Priority: 3
-X-GUID: 186E92E8-E129-42B5-B97D-0BAC69171ADB
-X-Has-Attach: no
-X-Mailer: Foxmail 7.2.14.406[cn]
-Mime-Version: 1.0
-Message-ID: <2019110516474778997625@163.com>
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: base64
-X-CM-TRANSID: C8CowABnh8MIN8FdEx3ABw--.37827S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WFyxtFyUGF4Dtr18Cw15Jwb_yoW8Gr1Dpa
-        y8G3s3CF4DJrn2vrsrZ3WDuF90grWxGF98KF15Xw1kuas8G34qyFy2kan8tFyxGrWDAwn0
-        qFsYv34j9a4DZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07b1dgAUUUUU=
-X-Originating-IP: [202.100.50.59]
-X-CM-SenderInfo: 5v0d34lvn6il2tof0z/1tbiDg5kJlXluZcLIAAAs3
+        id S1726143AbfKFJug (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 6 Nov 2019 04:50:36 -0500
+Received: from localhost (p54B33505.dip0.t-ipconnect.de [84.179.53.5])
+        by pokefinder.org (Postfix) with ESMTPSA id 65D0A2C053B;
+        Wed,  6 Nov 2019 10:50:33 +0100 (CET)
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [RFC PATCH 00/12] i2c: replace i2c_new_probed_device with an ERR_PTR variant
+Date:   Wed,  6 Nov 2019 10:50:18 +0100
+Message-Id: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PkhpIFNoaWthaSwKPgo+T24gVHVlLCBGZWIgMTksIDIwMTkgYXQgODoxOSBBTSBTaGlrYWkgV2Fu
-ZyA8c3hhdXdza0AxNjMuY29tPiB3cm90ZToKPj4KPj4gV2hlbiB0aGUgYWRhcHRlciByZWNlaXZl
-IGFyYml0cmF0aW9uIGxvc3QgZXJyb3IgaW50ZXJydXB0cywKPj4gY2Ruc19pMmNfbWFzdGVyX3hm
-ZXIgcmV0dXJuIHRvIHRoZSBjYWxsZXIgZGlyZWN0bHkgaW5zdGVhZCBvZiByZXNldHRpbmcKPj4g
-dGhlIGFkYXB0ZXIgd2hpY2ggcmVzdWx0ZWQgaW4gdGhlIGFkYXB0ZXIgYmVpbmcgb3V0IG9mIGNv
-bnRyb2wuCj4+Cj4+IFNvIHdoZW4gZHJpdmVyIGRldGVjdCBlcnJfc3RhdHVzIHN1Y2ggYXMgYXJi
-aXRyYXRpb24gbG9zdCwKPj4gdGhlbiB0cnkgdG8gcmVwYWlyIGFuZCBmaXggaXQuCj4+Cj5JIGFt
-IG1pc3NpbmcgdGhlIGlzc3VlIHRoYXQgeW91IGFyZSBmYWNpbmcuCj5Zb3UgYXJlIGhhdmluZyBh
-IG11bHRpbWFzdGVyIHNjZW5hcmlvIGFuZCBnZXR0aW5nIGFyYml0cmF0aW9uIGxvc3QuCj4KPnRo
-ZSBjdXJyZW50IGNvZGUgd291bGQgYXR0ZW1wdCBhIHJldHJ5IGRpZCB0aGF0IGxlYWQgdG8gYW55
-IGlzc3Vlcz8KPgo+Q2FuIHlvdSBleHBsYWluIHRoZSBpc3N1ZSB0aGF0IHlvdSBhcmUgZmFjaW5n
-PyAKCk9mIGNvdXJjZSwgwqBUaGUgZm9sbG93aW5nIGRlc2NyaWJlIG15IHNpdHVhdGlvbi4KCklu
-IG15IHByb2R1Y3QsIMKgVG91Y2hzY3JlZW4gY29ubmVjdCB0byB6eW5xLTcwMDAgWEM3WjAxMCBi
-eSBpMmMgYnVzKCBKdXN0IGNvbm5lY3Qgb25seSBvbmUgaTJjLWRldmljZSBvZiB0b3VjaHNjcmVl
-biksIMKgCndoZW4gdXNlciB0YXAgVG91Y2hzY3JlZW4sIFRvdWNoc2NyZWVuIGludGVycnVwdCBz
-ZW5kIHRvIENQVSBhbmQgbm90aWZ5ZWQgaTJjLWRyaXZlciB0byBvYnRhaW4gbG9jYXRpb24gZGF0
-YSBieSBpMmMtYnVzLCDCoAoKd2hlbiBUYXAgdGhlIHNjcmVlbiBmcmVxdWVudGx5LCDCoHNvbWV0
-aW1lcyBDUFUgZ2V0IGludGVycnVwdCBmcm9tIHRvdWNoc2NyZWVuIGFuZCB0cnkgdG8gb2J0YWlu
-IGRhdGEsIMKgdGhlbiBkZXRlY3QgYXJiaXRyYXRpb24gbG9zdCwKQWx0aG91Z2ggaTJjLWRyaXZl
-ciB0cnkgdGhyZWUgdGltZXMsIMKgaXQncyB1c2VsZXNzLgrCoMKgCkFjdHVhbGx5IGkyYyBjbG9j
-ay1saW5lIGFuZCBkYXRhLWxpbmUga2VlcCBoaWdoLCB0aGF0IG1lYW4gaTJjIGJ1cyBmcmVlLgpP
-bmNlIHRoaXMgc2l0dWF0aW9uIG9jY3VyLCBpMmMtY29udHJvbCBkaWQndCB3b3JrIGFueW5heSBi
-dXQgY3B1IHJlY2VpdmUgaW50ZXJycHV0cyBzdGlsbC4KCkkgYW0gc29ycnkgdGhhdCBJIGhhdmUn
-dCBmb3VuZCBhIGdvb2Qgc29sdXRpb24gZm9yIHRoaXMgaXNzdXNlOwo=
+From: Wolfram Sang <wsa@the-dreams.de>
 
+In the on-going mission to let i2c_new_* calls return an ERR_PTR instead
+of NULL, here is a series converting i2c_new_probed_device(). A new
+function called i2c_new_scanned_device() is introduced with the new
+retval, but for now, a compatibility helper is provided until all users
+are converted. The rest of the patches convert all current in-tree
+users.
+
+Note that these patches are RFC because I want feedback on the approach
+and hopefully collect acks on the driver conversions. If all goes well,
+I'll apply the first two patches for the next merge window. Then, once
+this dependency is upstream, I'll resend this series with all issues
+fixed and acks collected.
+
+Core changes tested on a Renesas Salvator-XS board (R-Car M3-N), driver
+patches build tested by me and buildbot.
+
+Wolfram Sang (12):
+  i2c: replace i2c_new_probed_device with an ERR_PTR variant
+  i2c: icy: convert to i2c_new_scanned_device
+  macintosh: convert to i2c_new_scanned_device
+  platform: chrome: convert to i2c_new_scanned_device
+  video: fbdev: matrox: convert to i2c_new_scanned_device
+  input: mouse: convert to i2c_new_scanned_device
+  media: pci: cx23885: convert to i2c_new_scanned_device
+  media: pci: cx88: convert to i2c_new_scanned_device
+  media: pci: bt8xx: convert to i2c_new_scanned_device
+  media: pci: cx18: convert to i2c_new_scanned_device
+  media: pci: ivtv: convert to i2c_new_scanned_device
+  media: v4l2-core: convert to i2c_new_scanned_device
+
+ Documentation/i2c/instantiating-devices.rst | 10 ++++-----
+ Documentation/i2c/writing-clients.rst       |  8 +++----
+ drivers/i2c/busses/i2c-icy.c                |  8 +++----
+ drivers/i2c/i2c-core-base.c                 | 25 ++++++++++++++++-----
+ drivers/input/mouse/psmouse-smbus.c         |  8 ++++---
+ drivers/macintosh/therm_windtunnel.c        |  4 ++--
+ drivers/media/pci/bt8xx/bttv-input.c        |  6 ++---
+ drivers/media/pci/cx18/cx18-i2c.c           |  2 +-
+ drivers/media/pci/cx23885/cx23885-i2c.c     |  4 ++--
+ drivers/media/pci/cx88/cx88-input.c         |  2 +-
+ drivers/media/pci/ivtv/ivtv-i2c.c           |  6 ++---
+ drivers/media/pci/ivtv/ivtv-i2c.h           |  2 +-
+ drivers/media/v4l2-core/v4l2-i2c.c          | 10 ++++-----
+ drivers/platform/chrome/chromeos_laptop.c   | 18 ++++++++-------
+ drivers/video/fbdev/matrox/i2c-matroxfb.c   |  4 ++--
+ include/linux/i2c.h                         | 12 +++++++---
+ 16 files changed, 76 insertions(+), 53 deletions(-)
+
+-- 
+2.20.1
 
