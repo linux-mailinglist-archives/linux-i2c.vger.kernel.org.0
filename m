@@ -2,113 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CCFF292B
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2019 09:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76580F2BAF
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2019 10:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727408AbfKGId7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 7 Nov 2019 03:33:59 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:33420 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726925AbfKGId7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Nov 2019 03:33:59 -0500
-Received: by mail-wm1-f67.google.com with SMTP id a17so3501138wmb.0
-        for <linux-i2c@vger.kernel.org>; Thu, 07 Nov 2019 00:33:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=s8siO8c5nG2oA4yleva52f8UrXXloSdu8Edj03PJpK0=;
-        b=JRkRa/R1N2W5Q9fECuduw7TIszePzpuIf+wxSx2MpS7SVRD2xH3wNupZLXTrfgmaJh
-         mGoLnytxEdFYu1k8s1FTzVDv/O0IW/WSVdoccxvdGjvYKtdyrKLfx+CzEHFryhCO3JAw
-         KYb8NmrLgGyx511ItajYvxS7EXqMNegvbQbqg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=s8siO8c5nG2oA4yleva52f8UrXXloSdu8Edj03PJpK0=;
-        b=pvuhjgcU1gbrNTmwrsE2XUTMm/Q7r5FehmoiejzkdkSbdmyVEebvBTvXTw/J/rM5bJ
-         62QcK9uEZ2ah5tcsMVtIwvkECp141EBpyclkz71tDMXFzkKvsjiwFXy5+Tor6nyXeqMd
-         j6oQW1mewk6eRG+mMCNz8GTIElgE4tvg0tYfk5vyTQFpFaBJOxiYImbwVURO8ghvbW07
-         1R/mUeFLVI+BOhRHHA8tniPDuadxBLrSEN6UPiwSpS1deaUfKK8CiU94F2ZQwAbwE1XG
-         LajzMqqIme+HTubPDEDh0lkhrX1yU43kVubAg3cOF5Vum2t1/eXVxaN8MvjBb8pnFKPc
-         SvqA==
-X-Gm-Message-State: APjAAAVN3mpNHES1cKF7pna9G3PhnYCvQOrXj7x6Dysl+18d+dvy50zr
-        kbE/fvU8lCmD3Pb6fGDINYD+QA==
-X-Google-Smtp-Source: APXvYqxKMCfhiclD4wFqY8ApTHpX3Q1Ro0gZKnJrP51xrd4JOijhRLOYoIdKgYqifQ0PrRuhN8PtPg==
-X-Received: by 2002:a1c:4946:: with SMTP id w67mr1729615wma.16.1573115636920;
-        Thu, 07 Nov 2019 00:33:56 -0800 (PST)
-Received: from phenom.ffwll.local (212-51-149-96.fiber7.init7.net. [212.51.149.96])
-        by smtp.gmail.com with ESMTPSA id v128sm2249296wmb.14.2019.11.07.00.33.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2019 00:33:56 -0800 (PST)
-Date:   Thu, 7 Nov 2019 09:33:54 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: Re: [RFC PATCH 05/12] video: fbdev: matrox: convert to
- i2c_new_scanned_device
-Message-ID: <20191107083354.GK23790@phenom.ffwll.local>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-References: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
- <20191106095033.25182-6-wsa+renesas@sang-engineering.com>
+        id S2388034AbfKGJ7c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 7 Nov 2019 04:59:32 -0500
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:54467 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727434AbfKGJ7c (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Nov 2019 04:59:32 -0500
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA79unK7010798;
+        Thu, 7 Nov 2019 10:59:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=2DOWtu8jCuxYV13WHI7tGlkOex/ugFLRvmjsqa3AGzE=;
+ b=FOSRhCJjNn32aKkzEJTN3A1O5PriISPyOomQwedz3yh3T7+GKAwsi6T7C022D3PCYLlP
+ 6DEsPRsy1zzYM481yuDCvMMC4Os/kjVUXZsvVet5916FDF9IXDea7cYeulbypBZkKxhv
+ LNPfT43muLoFLr9WER2hxIZjtFPQxv+kL9hCbpqhlgwbiNe+Wlc9QRwehvb1KLWaNLUT
+ b7l1JL7zADTysPkn5iWVkrcm7e8DNblznLSG7venTTYj5WpGwMeFopnGMcYPHeJYpZu9
+ kgS+GssbIJhMInfD7SEp6iLqVrLCYoAucSKGR9BDzhpdO8Nb1hURP6pxqVRmsInOecGK fQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2w41vdvdce-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Nov 2019 10:59:18 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 430B910002A;
+        Thu,  7 Nov 2019 10:59:18 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag6node2.st.com [10.75.127.17])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 347922AA4DB;
+        Thu,  7 Nov 2019 10:59:18 +0100 (CET)
+Received: from SFHDAG6NODE3.st.com (10.75.127.18) by SFHDAG6NODE2.st.com
+ (10.75.127.17) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 7 Nov
+ 2019 10:59:17 +0100
+Received: from SFHDAG6NODE3.st.com ([fe80::d04:5337:ab17:b6f6]) by
+ SFHDAG6NODE3.st.com ([fe80::d04:5337:ab17:b6f6%20]) with mapi id
+ 15.00.1473.003; Thu, 7 Nov 2019 10:59:17 +0100
+From:   Patrice CHOTARD <patrice.chotard@st.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 10/17] media: platform: sti: c8sectpfe: c8sectpfe-dvb:
+ convert to use i2c_new_client_device()
+Thread-Topic: [PATCH 10/17] media: platform: sti: c8sectpfe: c8sectpfe-dvb:
+ convert to use i2c_new_client_device()
+Thread-Index: AQHVlOgn5rnZLf3S8UOcZMZWPlClMKd/aXSA
+Date:   Thu, 7 Nov 2019 09:59:17 +0000
+Message-ID: <e4fd1be9-9406-7701-9864-56981d486f6f@st.com>
+References: <20191106212120.27983-1-wsa+renesas@sang-engineering.com>
+ <20191106212120.27983-11-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20191106212120.27983-11-wsa+renesas@sang-engineering.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.48]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <CB0A9BA7A9BF554983B74248C1130533@st.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191106095033.25182-6-wsa+renesas@sang-engineering.com>
-X-Operating-System: Linux phenom 5.2.0-3-amd64 
-User-Agent: Mutt/1.12.2 (2019-09-21)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-07_02:2019-11-07,2019-11-07 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 06, 2019 at 10:50:23AM +0100, Wolfram Sang wrote:
-> Move from the deprecated i2c_new_probed_device() to the new
-> i2c_new_scanned_device(). Make use of the new ERRPTR if suitable.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Ack for merging through whatever tree you think this should best land
-through.
--Daniel
-
-> ---
-> 
-> Build tested only. RFC, please comment and/or ack, but don't apply yet.
-> 
->  drivers/video/fbdev/matrox/i2c-matroxfb.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/video/fbdev/matrox/i2c-matroxfb.c b/drivers/video/fbdev/matrox/i2c-matroxfb.c
-> index 34e2659c3189..e2e4705e3fe0 100644
-> --- a/drivers/video/fbdev/matrox/i2c-matroxfb.c
-> +++ b/drivers/video/fbdev/matrox/i2c-matroxfb.c
-> @@ -191,8 +191,8 @@ static void* i2c_matroxfb_probe(struct matrox_fb_info* minfo) {
->  				0x1b, I2C_CLIENT_END
->  			};
->  
-> -			i2c_new_probed_device(&m2info->maven.adapter,
-> -					      &maven_info, addr_list, NULL);
-> +			i2c_new_scanned_device(&m2info->maven.adapter,
-> +					       &maven_info, addr_list, NULL);
->  		}
->  	}
->  	return m2info;
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+SGkNCg0KT24gMTEvNi8xOSAxMDoyMSBQTSwgV29sZnJhbSBTYW5nIHdyb3RlOg0KPiBVc2UgdGhl
+IG5ld2VyIEFQSSByZXR1cm5pbmcgYW4gRVJSUFRSIGFuZCB1c2UgdGhlIG5ldyBoZWxwZXIgdG8g
+YmFpbA0KPiBvdXQuDQo+DQo+IFNpZ25lZC1vZmYtYnk6IFdvbGZyYW0gU2FuZyA8d3NhK3JlbmVz
+YXNAc2FuZy1lbmdpbmVlcmluZy5jb20+DQo+IC0tLQ0KPiAgZHJpdmVycy9tZWRpYS9wbGF0Zm9y
+bS9zdGkvYzhzZWN0cGZlL2M4c2VjdHBmZS1kdmIuYyB8IDQgKystLQ0KPiAgMSBmaWxlIGNoYW5n
+ZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4NCj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvbWVkaWEvcGxhdGZvcm0vc3RpL2M4c2VjdHBmZS9jOHNlY3RwZmUtZHZiLmMgYi9kcml2
+ZXJzL21lZGlhL3BsYXRmb3JtL3N0aS9jOHNlY3RwZmUvYzhzZWN0cGZlLWR2Yi5jDQo+IGluZGV4
+IGE3OTI1MGE3ZjgxMi4uMTAzODcyMjY2NTY1IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL21lZGlh
+L3BsYXRmb3JtL3N0aS9jOHNlY3RwZmUvYzhzZWN0cGZlLWR2Yi5jDQo+ICsrKyBiL2RyaXZlcnMv
+bWVkaWEvcGxhdGZvcm0vc3RpL2M4c2VjdHBmZS9jOHNlY3RwZmUtZHZiLmMNCj4gQEAgLTE3MCw4
+ICsxNzAsOCBAQCBpbnQgYzhzZWN0cGZlX2Zyb250ZW5kX2F0dGFjaChzdHJ1Y3QgZHZiX2Zyb250
+ZW5kICoqZmUsDQo+ICANCj4gIAkJLyogYXR0YWNoIHR1bmVyICovDQo+ICAJCXJlcXVlc3RfbW9k
+dWxlKCJ0ZGExODIxMiIpOw0KPiAtCQljbGllbnQgPSBpMmNfbmV3X2RldmljZSh0c2luLT5pMmNf
+YWRhcHRlciwgJnRkYTE4MjEyX2luZm8pOw0KPiAtCQlpZiAoIWNsaWVudCB8fCAhY2xpZW50LT5k
+ZXYuZHJpdmVyKSB7DQo+ICsJCWNsaWVudCA9IGkyY19uZXdfY2xpZW50X2RldmljZSh0c2luLT5p
+MmNfYWRhcHRlciwgJnRkYTE4MjEyX2luZm8pOw0KPiArCQlpZiAoIWkyY19jbGllbnRfaGFzX2Ry
+aXZlcihjbGllbnQpKSB7DQo+ICAJCQlkdmJfZnJvbnRlbmRfZGV0YWNoKCpmZSk7DQo+ICAJCQly
+ZXR1cm4gLUVOT0RFVjsNCj4gIAkJfQ0KDQpSZXZpZXdlZC1ieTogUGF0cmljZSBDaG90YXJkIDxw
+YXRyaWNlLmNob3RhcmRAc3QuY29tPg0KDQoNClRoYW5rcw0K
