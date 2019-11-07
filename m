@@ -2,98 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76580F2BAF
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2019 10:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D78F2CE4
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2019 11:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388034AbfKGJ7c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 7 Nov 2019 04:59:32 -0500
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:54467 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727434AbfKGJ7c (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Nov 2019 04:59:32 -0500
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA79unK7010798;
-        Thu, 7 Nov 2019 10:59:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=2DOWtu8jCuxYV13WHI7tGlkOex/ugFLRvmjsqa3AGzE=;
- b=FOSRhCJjNn32aKkzEJTN3A1O5PriISPyOomQwedz3yh3T7+GKAwsi6T7C022D3PCYLlP
- 6DEsPRsy1zzYM481yuDCvMMC4Os/kjVUXZsvVet5916FDF9IXDea7cYeulbypBZkKxhv
- LNPfT43muLoFLr9WER2hxIZjtFPQxv+kL9hCbpqhlgwbiNe+Wlc9QRwehvb1KLWaNLUT
- b7l1JL7zADTysPkn5iWVkrcm7e8DNblznLSG7venTTYj5WpGwMeFopnGMcYPHeJYpZu9
- kgS+GssbIJhMInfD7SEp6iLqVrLCYoAucSKGR9BDzhpdO8Nb1hURP6pxqVRmsInOecGK fQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2w41vdvdce-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Nov 2019 10:59:18 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 430B910002A;
-        Thu,  7 Nov 2019 10:59:18 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag6node2.st.com [10.75.127.17])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 347922AA4DB;
-        Thu,  7 Nov 2019 10:59:18 +0100 (CET)
-Received: from SFHDAG6NODE3.st.com (10.75.127.18) by SFHDAG6NODE2.st.com
- (10.75.127.17) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 7 Nov
- 2019 10:59:17 +0100
-Received: from SFHDAG6NODE3.st.com ([fe80::d04:5337:ab17:b6f6]) by
- SFHDAG6NODE3.st.com ([fe80::d04:5337:ab17:b6f6%20]) with mapi id
- 15.00.1473.003; Thu, 7 Nov 2019 10:59:17 +0100
-From:   Patrice CHOTARD <patrice.chotard@st.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 10/17] media: platform: sti: c8sectpfe: c8sectpfe-dvb:
- convert to use i2c_new_client_device()
-Thread-Topic: [PATCH 10/17] media: platform: sti: c8sectpfe: c8sectpfe-dvb:
- convert to use i2c_new_client_device()
-Thread-Index: AQHVlOgn5rnZLf3S8UOcZMZWPlClMKd/aXSA
-Date:   Thu, 7 Nov 2019 09:59:17 +0000
-Message-ID: <e4fd1be9-9406-7701-9864-56981d486f6f@st.com>
-References: <20191106212120.27983-1-wsa+renesas@sang-engineering.com>
- <20191106212120.27983-11-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20191106212120.27983-11-wsa+renesas@sang-engineering.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.48]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CB0A9BA7A9BF554983B74248C1130533@st.com>
-Content-Transfer-Encoding: base64
+        id S1728183AbfKGKzd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 7 Nov 2019 05:55:33 -0500
+Received: from mga03.intel.com ([134.134.136.65]:64776 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727528AbfKGKzd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 7 Nov 2019 05:55:33 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Nov 2019 02:55:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,278,1569308400"; 
+   d="scan'208";a="353764483"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 07 Nov 2019 02:55:31 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 42B3AFC; Thu,  7 Nov 2019 12:55:29 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH v1] i2c: i801: Correct Intel Jasper Lake PCH naming
+Date:   Thu,  7 Nov 2019 12:55:29 +0200
+Message-Id: <20191107105529.22825-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.24.0.rc1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-07_02:2019-11-07,2019-11-07 signatures=0
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGkNCg0KT24gMTEvNi8xOSAxMDoyMSBQTSwgV29sZnJhbSBTYW5nIHdyb3RlOg0KPiBVc2UgdGhl
-IG5ld2VyIEFQSSByZXR1cm5pbmcgYW4gRVJSUFRSIGFuZCB1c2UgdGhlIG5ldyBoZWxwZXIgdG8g
-YmFpbA0KPiBvdXQuDQo+DQo+IFNpZ25lZC1vZmYtYnk6IFdvbGZyYW0gU2FuZyA8d3NhK3JlbmVz
-YXNAc2FuZy1lbmdpbmVlcmluZy5jb20+DQo+IC0tLQ0KPiAgZHJpdmVycy9tZWRpYS9wbGF0Zm9y
-bS9zdGkvYzhzZWN0cGZlL2M4c2VjdHBmZS1kdmIuYyB8IDQgKystLQ0KPiAgMSBmaWxlIGNoYW5n
-ZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4NCj4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvbWVkaWEvcGxhdGZvcm0vc3RpL2M4c2VjdHBmZS9jOHNlY3RwZmUtZHZiLmMgYi9kcml2
-ZXJzL21lZGlhL3BsYXRmb3JtL3N0aS9jOHNlY3RwZmUvYzhzZWN0cGZlLWR2Yi5jDQo+IGluZGV4
-IGE3OTI1MGE3ZjgxMi4uMTAzODcyMjY2NTY1IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL21lZGlh
-L3BsYXRmb3JtL3N0aS9jOHNlY3RwZmUvYzhzZWN0cGZlLWR2Yi5jDQo+ICsrKyBiL2RyaXZlcnMv
-bWVkaWEvcGxhdGZvcm0vc3RpL2M4c2VjdHBmZS9jOHNlY3RwZmUtZHZiLmMNCj4gQEAgLTE3MCw4
-ICsxNzAsOCBAQCBpbnQgYzhzZWN0cGZlX2Zyb250ZW5kX2F0dGFjaChzdHJ1Y3QgZHZiX2Zyb250
-ZW5kICoqZmUsDQo+ICANCj4gIAkJLyogYXR0YWNoIHR1bmVyICovDQo+ICAJCXJlcXVlc3RfbW9k
-dWxlKCJ0ZGExODIxMiIpOw0KPiAtCQljbGllbnQgPSBpMmNfbmV3X2RldmljZSh0c2luLT5pMmNf
-YWRhcHRlciwgJnRkYTE4MjEyX2luZm8pOw0KPiAtCQlpZiAoIWNsaWVudCB8fCAhY2xpZW50LT5k
-ZXYuZHJpdmVyKSB7DQo+ICsJCWNsaWVudCA9IGkyY19uZXdfY2xpZW50X2RldmljZSh0c2luLT5p
-MmNfYWRhcHRlciwgJnRkYTE4MjEyX2luZm8pOw0KPiArCQlpZiAoIWkyY19jbGllbnRfaGFzX2Ry
-aXZlcihjbGllbnQpKSB7DQo+ICAJCQlkdmJfZnJvbnRlbmRfZGV0YWNoKCpmZSk7DQo+ICAJCQly
-ZXR1cm4gLUVOT0RFVjsNCj4gIAkJfQ0KDQpSZXZpZXdlZC1ieTogUGF0cmljZSBDaG90YXJkIDxw
-YXRyaWNlLmNob3RhcmRAc3QuY29tPg0KDQoNClRoYW5rcw0K
+There is no suffix applied to Intel Jasper Lake PCH. Remove it from
+the comments and definitions.
+
+Fixes: e0c61c04791a ("i2c: i801: Add support for Intel Jasper Lake")
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-i801.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index df02040d36d5..2de184bbd21f 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -67,7 +67,7 @@
+  * Comet Lake-H (PCH)		0x06a3	32	hard	yes	yes	yes
+  * Elkhart Lake (PCH)		0x4b23	32	hard	yes	yes	yes
+  * Tiger Lake-LP (PCH)		0xa0a3	32	hard	yes	yes	yes
+- * Jasper Lake-N (PCH)		0x4da3	32	hard	yes	yes	yes
++ * Jasper Lake (PCH)		0x4da3	32	hard	yes	yes	yes
+  *
+  * Features supported by this driver:
+  * Software PEC				no
+@@ -226,7 +226,7 @@
+ #define PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS		0x34a3
+ #define PCI_DEVICE_ID_INTEL_5_3400_SERIES_SMBUS		0x3b30
+ #define PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS		0x4b23
+-#define PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS		0x4da3
++#define PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS		0x4da3
+ #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
+ #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
+ #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS		0x8ca2
+@@ -1076,7 +1076,7 @@ static const struct pci_device_id i801_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS) },
+ 	{ 0, }
+ };
+ 
+@@ -1759,7 +1759,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	case PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS:
+ 	case PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS:
+ 	case PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS:
++	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS:
+ 		priv->features |= FEATURE_BLOCK_PROC;
+ 		priv->features |= FEATURE_I2C_BLOCK_READ;
+ 		priv->features |= FEATURE_IRQ;
+-- 
+2.24.0.rc1
+
