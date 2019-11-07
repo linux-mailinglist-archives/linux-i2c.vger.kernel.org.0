@@ -2,105 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC498F2789
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2019 07:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CCFF292B
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2019 09:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726951AbfKGGNV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 7 Nov 2019 01:13:21 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:45259 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725763AbfKGGNU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Nov 2019 01:13:20 -0500
-Received: by mail-ed1-f66.google.com with SMTP id b5so884968eds.12;
-        Wed, 06 Nov 2019 22:13:19 -0800 (PST)
+        id S1727408AbfKGId7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 7 Nov 2019 03:33:59 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:33420 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726925AbfKGId7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Nov 2019 03:33:59 -0500
+Received: by mail-wm1-f67.google.com with SMTP id a17so3501138wmb.0
+        for <linux-i2c@vger.kernel.org>; Thu, 07 Nov 2019 00:33:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b6XwzsC8T7k6SsHnaEqnkGYpU/j8kgJJS6Ga6U3GP2U=;
-        b=VIWMNYO2uJZ/ucdnjhZQPeoGhFSDz7GxnECCBYJyaZJo/aA767Fx5wQZ4G/kd3863l
-         WR+hwk509J/YPOvBRlwBfmWKJc4lub6uj+fHcMJDnxPfKLwVzsJP8m9F7TgmUe/ySThl
-         zbAwfLtePYTJyT8qGRn6P+d2j3706q2iMY1q841WLX7iBaLfO1hd2p5HJoao2wa4QT0X
-         mnASaMI2n5wraePRgoghikEcm95gEjyWQFfZjxHckPpJyD0HOlrKPZ9kSryeA/OA7uq1
-         bvA/UwDlyJOredDzeHpZaB4mqzuryo+geg847EC/h+YGoK2FAL2fPej4N0lfUZPjkPIa
-         2GRw==
+        d=ffwll.ch; s=google;
+        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=s8siO8c5nG2oA4yleva52f8UrXXloSdu8Edj03PJpK0=;
+        b=JRkRa/R1N2W5Q9fECuduw7TIszePzpuIf+wxSx2MpS7SVRD2xH3wNupZLXTrfgmaJh
+         mGoLnytxEdFYu1k8s1FTzVDv/O0IW/WSVdoccxvdGjvYKtdyrKLfx+CzEHFryhCO3JAw
+         KYb8NmrLgGyx511ItajYvxS7EXqMNegvbQbqg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b6XwzsC8T7k6SsHnaEqnkGYpU/j8kgJJS6Ga6U3GP2U=;
-        b=lDTFys77s5QZksQoW1+vVyuWiKK6E79z7UTuaPThYeg7YbOkWlMI8t4iDEhFfZjFlf
-         A6YxEK8HqCH5z0QwHmfwQTm8n7a1RNQIRjEXnQuInAT9KXaUiu5ceL9eNiIzS+2KiiYH
-         8lk4hZOJRNU+TDLmkjQStrJetM+Bc6qHF2lSfX81Ys6IP6gCze7a/E6KjZQTtX/XsYHg
-         THAsVfHyN9+Ft2cYciwRI7nSClWzxVvSJ7mrPz9/iVFqFswkuyiiuyFoLIJUGj5Nxwzi
-         0QFnlbBozMDBQzFxEwTuaWfFQN1rKLLkl32ZZASaYGJ1/E7z4jsqFK99ohjPHORcOAni
-         25iw==
-X-Gm-Message-State: APjAAAXJL9vdiJv9Xc+N1rbvLNV8GcTM71tfPU5k/3DYI7iQoAGXK7Au
-        WMJcyMTH2hu8mdhrIlKnW8vfJDZjMp/LvIF1A6Q=
-X-Google-Smtp-Source: APXvYqxj/w79RiUGYwYctucmAuZQHkD9r7iRqtiJ1jcGgNDephBLrz0OaK8DOQ1VZYQaV1p3rxYY1qHMkE/UXCrdf8s=
-X-Received: by 2002:a17:906:698b:: with SMTP id i11mr1353680ejr.97.1573107198964;
- Wed, 06 Nov 2019 22:13:18 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=s8siO8c5nG2oA4yleva52f8UrXXloSdu8Edj03PJpK0=;
+        b=pvuhjgcU1gbrNTmwrsE2XUTMm/Q7r5FehmoiejzkdkSbdmyVEebvBTvXTw/J/rM5bJ
+         62QcK9uEZ2ah5tcsMVtIwvkECp141EBpyclkz71tDMXFzkKvsjiwFXy5+Tor6nyXeqMd
+         j6oQW1mewk6eRG+mMCNz8GTIElgE4tvg0tYfk5vyTQFpFaBJOxiYImbwVURO8ghvbW07
+         1R/mUeFLVI+BOhRHHA8tniPDuadxBLrSEN6UPiwSpS1deaUfKK8CiU94F2ZQwAbwE1XG
+         LajzMqqIme+HTubPDEDh0lkhrX1yU43kVubAg3cOF5Vum2t1/eXVxaN8MvjBb8pnFKPc
+         SvqA==
+X-Gm-Message-State: APjAAAVN3mpNHES1cKF7pna9G3PhnYCvQOrXj7x6Dysl+18d+dvy50zr
+        kbE/fvU8lCmD3Pb6fGDINYD+QA==
+X-Google-Smtp-Source: APXvYqxKMCfhiclD4wFqY8ApTHpX3Q1Ro0gZKnJrP51xrd4JOijhRLOYoIdKgYqifQ0PrRuhN8PtPg==
+X-Received: by 2002:a1c:4946:: with SMTP id w67mr1729615wma.16.1573115636920;
+        Thu, 07 Nov 2019 00:33:56 -0800 (PST)
+Received: from phenom.ffwll.local (212-51-149-96.fiber7.init7.net. [212.51.149.96])
+        by smtp.gmail.com with ESMTPSA id v128sm2249296wmb.14.2019.11.07.00.33.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Nov 2019 00:33:56 -0800 (PST)
+Date:   Thu, 7 Nov 2019 09:33:54 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [RFC PATCH 05/12] video: fbdev: matrox: convert to
+ i2c_new_scanned_device
+Message-ID: <20191107083354.GK23790@phenom.ffwll.local>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+References: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
+ <20191106095033.25182-6-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-References: <20190219012447.5900-1-sxauwsk@163.com> <CAKfKVtEwHcydp=+hNhG91h3qbMoYOPq7jEYjbuAVrWXT53DC3Q@mail.gmail.com>
- <2019110516474778997625@163.com>
-In-Reply-To: <2019110516474778997625@163.com>
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
-Date:   Thu, 7 Nov 2019 11:43:07 +0530
-Message-ID: <CAKfKVtH8OvA9Hku8V2CxRkX8hiouLzsEJTTDQWgBtQF8PGXyBQ@mail.gmail.com>
-Subject: Re: Re: [PATCH v2] i2c: cadence: try reset when master receive
- arbitration lost
-To:     "sxauwsk@163.com" <sxauwsk@163.com>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191106095033.25182-6-wsa+renesas@sang-engineering.com>
+X-Operating-System: Linux phenom 5.2.0-3-amd64 
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Shikai,
+On Wed, Nov 06, 2019 at 10:50:23AM +0100, Wolfram Sang wrote:
+> Move from the deprecated i2c_new_probed_device() to the new
+> i2c_new_scanned_device(). Make use of the new ERRPTR if suitable.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-On Tue, Nov 5, 2019 at 2:18 PM sxauwsk@163.com <sxauwsk@163.com> wrote:
->
-> >Hi Shikai,
-> >
-> >On Tue, Feb 19, 2019 at 8:19 AM Shikai Wang <sxauwsk@163.com> wrote:
-> >>
-> >> When the adapter receive arbitration lost error interrupts,
-> >> cdns_i2c_master_xfer return to the caller directly instead of resetting
-> >> the adapter which resulted in the adapter being out of control.
-> >>
-> >> So when driver detect err_status such as arbitration lost,
-> >> then try to repair and fix it.
-> >>
-> >I am missing the issue that you are facing.
-> >You are having a multimaster scenario and getting arbitration lost.
-> >
-> >the current code would attempt a retry did that lead to any issues?
-> >
-> >Can you explain the issue that you are facing?
->
-> Of cource,  The following describe my situation.
->
-> In my product,  Touchscreen connect to zynq-7000 XC7Z010 by i2c bus( Just connect only one i2c-device of touchscreen),
-> when user tap Touchscreen, Touchscreen interrupt send to CPU and notifyed i2c-driver to obtain location data by i2c-bus,
+Ack for merging through whatever tree you think this should best land
+through.
+-Daniel
 
-So it is single master single slave.
->
-> when Tap the screen frequently,  sometimes CPU get interrupt from touchscreen and try to obtain data,  then detect arbitration lost,
-the arbitration lost is surprising in non-multimaster scenario.
-Is there any other master in the configuration that we may not be triggering.
-Or can  you probe the lines?
+> ---
+> 
+> Build tested only. RFC, please comment and/or ack, but don't apply yet.
+> 
+>  drivers/video/fbdev/matrox/i2c-matroxfb.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/video/fbdev/matrox/i2c-matroxfb.c b/drivers/video/fbdev/matrox/i2c-matroxfb.c
+> index 34e2659c3189..e2e4705e3fe0 100644
+> --- a/drivers/video/fbdev/matrox/i2c-matroxfb.c
+> +++ b/drivers/video/fbdev/matrox/i2c-matroxfb.c
+> @@ -191,8 +191,8 @@ static void* i2c_matroxfb_probe(struct matrox_fb_info* minfo) {
+>  				0x1b, I2C_CLIENT_END
+>  			};
+>  
+> -			i2c_new_probed_device(&m2info->maven.adapter,
+> -					      &maven_info, addr_list, NULL);
+> +			i2c_new_scanned_device(&m2info->maven.adapter,
+> +					       &maven_info, addr_list, NULL);
+>  		}
+>  	}
+>  	return m2info;
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
 
-> Although i2c-driver try three times,  it's useless.
-
-You get bus busy? what is the issue.
->
-> Actually i2c clock-line and data-line keep high, that mean i2c bus free.
-> Once this situation occur, i2c-control did't work anynay but cpu receive interrputs still.
->
-> I am sorry that I have't found a good solution for this issuse;
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
