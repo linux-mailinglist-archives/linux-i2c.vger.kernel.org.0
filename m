@@ -2,73 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D3DF4195
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Nov 2019 09:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DA6F423F
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Nov 2019 09:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726672AbfKHIBn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 8 Nov 2019 03:01:43 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:60009 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725975AbfKHIBn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Nov 2019 03:01:43 -0500
-Received: from [109.168.11.45] (port=39820 helo=[192.168.101.73])
-        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1iSzDA-0015oN-C7; Fri, 08 Nov 2019 09:01:40 +0100
-Subject: Re: [RFC PATCH 01/12] i2c: replace i2c_new_probed_device with an
- ERR_PTR variant
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
- <20191106095033.25182-2-wsa+renesas@sang-engineering.com>
- <cd25c799-bb10-aa59-8705-b079eff2165e@lucaceresoli.net>
- <20191107192236.GA961@kunai>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <9a7efd33-8a7e-1e2e-11f8-64c2ab900a4c@lucaceresoli.net>
-Date:   Fri, 8 Nov 2019 09:01:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727459AbfKHIhD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 8 Nov 2019 03:37:03 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:47986 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726987AbfKHIhD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Nov 2019 03:37:03 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0ThUQNT9_1573202209;
+Received: from localhost(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0ThUQNT9_1573202209)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 08 Nov 2019 16:37:01 +0800
+From:   Wen Yang <wenyang@linux.alibaba.com>
+To:     wsa@the-dreams.de
+Cc:     zhiche.yy@alibaba-inc.com, xlpang@linux.alibaba.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wen Yang <wenyang@linux.alibaba.com>
+Subject: [PATCH] i2c: core: fix use after free in of_i2c_notify
+Date:   Fri,  8 Nov 2019 16:36:48 +0800
+Message-Id: <20191108083648.56503-1-wenyang@linux.alibaba.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <20191107192236.GA961@kunai>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+We can't use "adap" after it has been freed.
 
-On 07/11/19 20:22, Wolfram Sang wrote:
-> Hi Luca,
-> 
->> I beg your pardon for the newbie question, perhaps a stupid one, kind of
->> nitpicking, and not even strictly related to this patch, but what's the
->> reason for these functions being declared extern?
-> 
-> I did this for consistency reasons. I agree that the 'extern' keyword
-> could need some second thought, yet I think that should be a seperate
-> patchset. And that does not have priority for me, so if someone is
-> interested... :)
+Fixes: 5bf4fa7daea6 ("i2c: break out OF support into separate file")
+Signed-off-by: Wen Yang <wenyang@linux.alibaba.com>
+Cc: Wolfram Sang <wsa@the-dreams.de>
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/i2c/i2c-core-of.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Ok, got it!
-
-And then:
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-Bye,
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index 6f632d54..7eb4199 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -245,14 +245,14 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+ 		}
+ 
+ 		client = of_i2c_register_device(adap, rd->dn);
+-		put_device(&adap->dev);
+-
+ 		if (IS_ERR(client)) {
+ 			dev_err(&adap->dev, "failed to create client for '%pOF'\n",
+ 				 rd->dn);
++			put_device(&adap->dev);
+ 			of_node_clear_flag(rd->dn, OF_POPULATED);
+ 			return notifier_from_errno(PTR_ERR(client));
+ 		}
++		put_device(&adap->dev);
+ 		break;
+ 	case OF_RECONFIG_CHANGE_REMOVE:
+ 		/* already depopulated? */
 -- 
-Luca
+1.8.3.1
+
