@@ -2,132 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15787F799F
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2019 18:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CFFF7AAC
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2019 19:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbfKKRSV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Nov 2019 12:18:21 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37948 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726927AbfKKRSV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Nov 2019 12:18:21 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id E7CE328FCBA
-Subject: Re: [PATCH] i2c: i2c-cros-ec-tunnel: Make the device acpi compatible
-To:     Akshu Agrawal <akshu.agrawal@amd.com>
-Cc:     cychiang@chromium.org, rrangel@chromium.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20191111161431.26293-1-akshu.agrawal@amd.com>
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Message-ID: <a5f6a3a9-8eb7-58fd-a624-718374c2437f@collabora.com>
-Date:   Mon, 11 Nov 2019 18:18:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726845AbfKKSW0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Nov 2019 13:22:26 -0500
+Received: from static-dsl-170.87-197-152.telecom.sk ([87.197.152.170]:59338
+        "EHLO sldom.sldom" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726821AbfKKSW0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Nov 2019 13:22:26 -0500
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by sldom.sldom (Postfix) with SMTP id 250E11D59EA;
+        Fri,  8 Nov 2019 11:53:31 +0100 (CET)
+Received: from [183.54.230.173] by 127.0.0.1 with ESMTP id <945372-37985>; Fri, 08 Nov 2019 11:49:43 +0100
+Message-ID: <m91$$j7-p09h782a$95o@rgix.m2zo>
+From:   "Simon Oliver" <olivia_simon@lihat.dds-akaun.com>
+Reply-To: "Simon Oliver" <olivia_simon@lihat.dds-akaun.com>
+To:     ss4356@bp-petrochina.com.cn
+Subject: Seeking Investment Opportunities
+Date:   Fri, 08 Nov 19 11:49:43 GMT
+X-Mailer: Microsoft Outlook Express 5.50.4522.1200
 MIME-Version: 1.0
-In-Reply-To: <20191111161431.26293-1-akshu.agrawal@amd.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/alternative;
+        boundary="_FB8_.D.A20D..20."
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Akshu,
 
-Thanks for sending this upstream and improve CrOS EC
+--_FB8_.D.A20D..20.
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-On 11/11/19 17:14, Akshu Agrawal wrote:
-> Add ACPI entry and use device_property_read to get fw value
-> which is common to both dtsi and acpi.
-> 
-> Signed-off-by: Akshu Agrawal <akshu.agrawal@amd.com>
-> ---
->  drivers/i2c/busses/i2c-cros-ec-tunnel.c | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-cros-ec-tunnel.c b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-> index c551aa96a2e3..958161c71985 100644
-> --- a/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-> +++ b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-> @@ -3,6 +3,7 @@
->  //
->  // Copyright (C) 2013 Google, Inc.
->  
-> +#include <linux/acpi.h>
->  #include <linux/module.h>
->  #include <linux/i2c.h>
->  #include <linux/platform_data/cros_ec_commands.h>
-> @@ -240,7 +241,6 @@ static const struct i2c_algorithm ec_i2c_algorithm = {
->  
->  static int ec_i2c_probe(struct platform_device *pdev)
->  {
-> -	struct device_node *np = pdev->dev.of_node;
->  	struct cros_ec_device *ec = dev_get_drvdata(pdev->dev.parent);
->  	struct device *dev = &pdev->dev;
->  	struct ec_i2c_device *bus = NULL;
-> @@ -256,7 +256,7 @@ static int ec_i2c_probe(struct platform_device *pdev)
->  	if (bus == NULL)
->  		return -ENOMEM;
->  
-> -	err = of_property_read_u32(np, "google,remote-bus", &remote_bus);
-> +	err = device_property_read_u32(dev, "google,remote-bus", &remote_bus);
->  	if (err) {
->  		dev_err(dev, "Couldn't read remote-bus property\n");
->  		return err;
-> @@ -271,7 +271,7 @@ static int ec_i2c_probe(struct platform_device *pdev)
->  	bus->adap.algo = &ec_i2c_algorithm;
->  	bus->adap.algo_data = bus;
->  	bus->adap.dev.parent = &pdev->dev;
-> -	bus->adap.dev.of_node = np;
-> +	bus->adap.dev.of_node = pdev->dev.of_node;
+I consider it very important to introduce to you my client who is interest=
+ed to invest $250 million to $500 million dollars in a reputable project  =
+investment, She is well known in her country holding a political office .
 
-That change is not really needed/(related) but as np was only used here I'm fine
-with it.
+She deserve a secret investment outside her country without direct involve=
+ment.  she needs an experience individual or company that can profitably i=
+nvestment and manage the above funds for the period of 15 years or more.
 
->  	bus->adap.retries = I2C_MAX_RETRIES;
->  
->  	err = i2c_add_adapter(&bus->adap);
-> @@ -291,19 +291,24 @@ static int ec_i2c_remove(struct platform_device *dev)
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_OF
->  static const struct of_device_id cros_ec_i2c_of_match[] = {
->  	{ .compatible = "google,cros-ec-i2c-tunnel" },
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, cros_ec_i2c_of_match);
-> -#endif
-> +
-> +static const struct acpi_device_id cros_ec_i2c_tunnel_acpi_id[] = {
-> +	{ "GOOG001A", 0 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(acpi, cros_ec_i2c_tunnel_acpi_id);
->  
->  static struct platform_driver ec_i2c_tunnel_driver = {
->  	.probe = ec_i2c_probe,
->  	.remove = ec_i2c_remove,
->  	.driver = {
->  		.name = "cros-ec-i2c-tunnel",
-> +		.acpi_match_table = ACPI_PTR(cros_ec_i2c_tunnel_acpi_id),
->  		.of_match_table = of_match_ptr(cros_ec_i2c_of_match),
->  	},
->  };
-> 
+Forward your details to me for further discussion (e.g)  Your name, Teleph=
+one number and Occupation.
 
-Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Thank you
+Oliver Simon
 
-Question: Is this supported on older firmwares or is only expected to work on
-newer ACPI-based devices?
+--_FB8_.D.A20D..20.--
 
-Thanks,
- Enric
