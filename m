@@ -2,115 +2,155 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 415A8F7047
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2019 10:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5FCF71D6
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2019 11:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726902AbfKKJQb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Nov 2019 04:16:31 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:47113 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726768AbfKKJQa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Nov 2019 04:16:30 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id D10C34BB;
-        Mon, 11 Nov 2019 04:16:28 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 11 Nov 2019 04:16:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=767pSBRJ5shuYMbgPGJ/NNfiJLw
-        uGxahyROFUAPFCyc=; b=QL7E7y/EkKZiIaXtSdO5xlErh7sWmESOBvYArr7CVfp
-        eQzc3UERDa9ID9hdy2lFIlSKG6qxAErTf3njeANYlVShDy6UuKgA7ijVOvSazPcr
-        g3wjoXv9ZEYeqkbXvf0xTRSWRhXoa1JYrOQt2QjNXGY0UjKrpaPoCwunhc7kKjpb
-        /frGGcTi8OBPNTf8rvHE3WO9zkj3pDCRuchNBLsC22DpVKVMK6qSAL+QAJF0ZvId
-        utlEu3dYSA+MdZeJj/OfIlrYwLTu+kHwKlBxe0T/sjFJirwbVVtvZg9tz2skBtgb
-        uIRhrA1vAjindtTZDdMuPzbNunRo9atznS0r8/pQOhQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=767pSB
-        RJ5shuYMbgPGJ/NNfiJLwuGxahyROFUAPFCyc=; b=bDztKrrAvA8V+7wLK3MLVe
-        m8W/bcOJD8KxIyKB8OkXlQb0Y3RFA6OsgJx61wa5oIIG5+hDfQVPgsl7LWhb0p/+
-        CT+mslvrBRj7y02GVeqDbQxbQquw6kAu7SXKQrHIr36J5XLqTphRRnaHX2zJKrLw
-        3Du7MBVCEO7FZh58iviSUnQ9aA2j/QYYn9KDTo4a3JdK/+Z3yrKKPdciuyhU5crQ
-        3LWP5KfWvJZ4dxW4zBxAXjNSxkKfjlqolNIGNH/8oH88a1nWMsEoD8yWATMpcd8X
-        A+gaQo3VAbFQXhxOkPn9ubd42Yyj/3VBXnDOW/SoYSsYkQGIgiRVKAFeL6ey8jVw
-        ==
-X-ME-Sender: <xms:6ybJXeu0x1QJJObgsILvHQe3sOcXCVOvVrYyrT1UytIqV59h2uVRsQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedruddvjedgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
-    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
-    vehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:6ybJXZfJyvDt3neyds_yxO2il2OqimVf6hPU5EQM6QAV3J2PtmykCA>
-    <xmx:6ybJXXZ18rQyPBzQhbADNALFi019tBRuNUERxXgmFmzdQVC9g2o3Ww>
-    <xmx:6ybJXUVQZqXp4-UBlASkwi0BVT8d-IaH2XgMqMnhdOezzcBG0xRdbg>
-    <xmx:7CbJXe0xMG9EQdfRsehkw-9hE_MmqmKB8aUY2nxGKil6KH1KfHK83w>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 0FF8F3060060;
-        Mon, 11 Nov 2019 04:16:26 -0500 (EST)
-Date:   Mon, 11 Nov 2019 10:16:24 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     "# 4 . 7" <stable@vger.kernel.org>, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [BACKPORT 4.14.y 04/18] usb: dwc3: Allow disabling of
- metastability workaround
-Message-ID: <20191111091624.GA4139389@kroah.com>
-References: <20190905161759.28036-1-mathieu.poirier@linaro.org>
- <20190905161759.28036-5-mathieu.poirier@linaro.org>
- <20190910143601.GD3362@kroah.com>
- <CANLsYkwkq2fLWsGXHxr2tSBLHdfe4JXgu8ehuD1FOEQeDAPNnA@mail.gmail.com>
+        id S1726845AbfKKK1d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Nov 2019 05:27:33 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:43501 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726804AbfKKK1d (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Nov 2019 05:27:33 -0500
+Received: by mail-lj1-f194.google.com with SMTP id y23so13144829ljh.10
+        for <linux-i2c@vger.kernel.org>; Mon, 11 Nov 2019 02:27:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=LmDGe9nbcft4FfiC7VIPeLGhuJNW2Ho/gKIE1PaBIMA=;
+        b=pbYmS+sj9/Xg+7ygHJVkcwG3oGaI6xvEK6pqHKXVilldcg8RhYL++hW4UcEGOkgi3p
+         naFdSam+osJp3j3+k5kpCH7NDhuKUGSJD3WxAxb7bXKITg3ZzHrlfzcnHtnmRx9rBKr9
+         AgRgmwtTxgONi09FwKLX4FoPpir/In2HHlxUSfr2hWFfL/18fkEQP3mTkO5s3XtH389D
+         xS82ENU156O2lG4d7w0gOXua4jXYaJTOUpF52WK1OI2Dl4evobrRvYoR+ihQzxLYcKKy
+         HDwq+SiStMhXGrC39ckB2pi92kHK76a7500BRdvjXy5o80BkEUlrJVxmHGmXBiw2cAQD
+         4tkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=LmDGe9nbcft4FfiC7VIPeLGhuJNW2Ho/gKIE1PaBIMA=;
+        b=sX1/yq7GK9pdAuR2fcT6vzloC6hGlfn0dCmjUEWyz4DNDZLKKB5vLq02MvSbAA5Vwu
+         gliVltXzx/guaq+ZwtC8+wol3Gpxea7GrIljYNqMbTxqCmGQuSyk8+pfLPxaw9i1nZ0d
+         xwZuLgePonLlgQWpk0KHgapA77SjQsuHVQ+stNtgO1W/gC7xWbIj5Mn6lbECzhJXPVuX
+         jfeRhdu0nQQeIOzi7hzlnE7zvEJMOUF5TOg8lsLVtbEr06tZaxqnBWfVno18QBLCh00s
+         sPfKcdP8syeXa6Y5UDxxQgZqn/Z8auN3CE9AZ17Htiiiu6g2DwfpXODKKIGb+YGtv+yi
+         wIxA==
+X-Gm-Message-State: APjAAAVKSLrq1BCAPkDZwmIyirxj5iIa0dEVzhOfVT6HW3V4Q0+/BdEd
+        KcOtg12m9zmwcjm+rkuOt846pg==
+X-Google-Smtp-Source: APXvYqwrAfWdClrHsOovnWIo78k9n+aSyR28Ot4/nVq05+jBIEmotXV5NGxizzM6V8YJ1+vpvGmeiQ==
+X-Received: by 2002:a2e:9a55:: with SMTP id k21mr13959899ljj.85.1573468051139;
+        Mon, 11 Nov 2019 02:27:31 -0800 (PST)
+Received: from localhost (h-93-159.A463.priv.bahnhof.se. [46.59.93.159])
+        by smtp.gmail.com with ESMTPSA id 4sm7272360lfa.95.2019.11.11.02.27.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2019 02:27:30 -0800 (PST)
+Date:   Mon, 11 Nov 2019 11:27:30 +0100
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.de>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] i2c: remove helpers for ref-counting clients
+Message-ID: <20191111102730.GA30651@bigcity.dyn.berto.se>
+References: <20191109212615.9254-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CANLsYkwkq2fLWsGXHxr2tSBLHdfe4JXgu8ehuD1FOEQeDAPNnA@mail.gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191109212615.9254-1-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 08:01:40AM -0600, Mathieu Poirier wrote:
-> On Tue, 10 Sep 2019 at 08:36, Greg KH <greg@kroah.com> wrote:
-> >
-> > On Thu, Sep 05, 2019 at 10:17:45AM -0600, Mathieu Poirier wrote:
-> > > From: Roger Quadros <rogerq@ti.com>
-> > >
-> > > commit 42bf02ec6e420e541af9a47437d0bdf961ca2972 upstream
-> > >
-> > > Some platforms (e.g. TI's DRA7 USB2 instance) have more trouble
-> > > with the metastability workaround as it supports only
-> > > a High-Speed PHY and the PHY can enter into an Erratic state [1]
-> > > when the controller is set in SuperSpeed mode as part of
-> > > the metastability workaround.
-> > >
-> > > This causes upto 2 seconds delay in enumeration on DRA7's USB2
-> > > instance in gadget mode.
-> > >
-> > > If these platforms can be better off without the workaround,
-> > > provide a device tree property to suggest that so the workaround
-> > > is avoided.
-> > >
-> > > [1] Device mode enumeration trace showing PHY Erratic Error.
-> > >      irq/90-dwc3-969   [000] d...    52.323145: dwc3_event: event (00000901): Erratic Error [U0]
-> > >      irq/90-dwc3-969   [000] d...    52.560646: dwc3_event: event (00000901): Erratic Error [U0]
-> > >      irq/90-dwc3-969   [000] d...    52.798144: dwc3_event: event (00000901): Erratic Error [U0]
-> >
-> > Does the DT also need to get updated with this new id for this?  Is that
-> > a separate patch somewhere?
-> 
-> The upstream commit is:
-> 
-> b8c9c6fa2002 ARM: dts: dra7: Disable USB metastability workaround for USB2
-> 
-> Should I just send the latter or you prefer a resend with both patches?
+Hi Wolfram,
 
-I've queued this up now, along with the rest of this series, thanks.
+Thanks for your work.
 
-greg k-h
+On 2019-11-09 22:26:15 +0100, Wolfram Sang wrote:
+> There are no in-tree users of these helpers anymore, and there
+> shouldn't. Most use cases went away once the driver model started to
+> refcount for us. There have been users like the media subsystem, but
+> they all switched to better refcounting methods meanwhile. Media did
+> this in 2008. Last user (IPMI) left 2018. Remove this cruft.
+
+Nice to clean out some old stuff :-)
+
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
+> ---
+>  drivers/i2c/i2c-core-base.c | 32 --------------------------------
+>  include/linux/i2c.h         |  3 ---
+>  2 files changed, 35 deletions(-)
+> 
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 9c55d24c7a30..5a44a92ed1fb 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -1743,38 +1743,6 @@ EXPORT_SYMBOL(i2c_del_driver);
+>  
+>  /* ------------------------------------------------------------------------- */
+>  
+> -/**
+> - * i2c_use_client - increments the reference count of the i2c client structure
+> - * @client: the client being referenced
+> - *
+> - * Each live reference to a client should be refcounted. The driver model does
+> - * that automatically as part of driver binding, so that most drivers don't
+> - * need to do this explicitly: they hold a reference until they're unbound
+> - * from the device.
+> - *
+> - * A pointer to the client with the incremented reference counter is returned.
+> - */
+> -struct i2c_client *i2c_use_client(struct i2c_client *client)
+> -{
+> -	if (client && get_device(&client->dev))
+> -		return client;
+> -	return NULL;
+> -}
+> -EXPORT_SYMBOL(i2c_use_client);
+> -
+> -/**
+> - * i2c_release_client - release a use of the i2c client structure
+> - * @client: the client being no longer referenced
+> - *
+> - * Must be called when a user of a client is finished with it.
+> - */
+> -void i2c_release_client(struct i2c_client *client)
+> -{
+> -	if (client)
+> -		put_device(&client->dev);
+> -}
+> -EXPORT_SYMBOL(i2c_release_client);
+> -
+>  struct i2c_cmd_arg {
+>  	unsigned	cmd;
+>  	void		*arg;
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index 8f512b992acd..23583f76c6dc 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -861,9 +861,6 @@ static inline bool i2c_client_has_driver(struct i2c_client *client)
+>  	return !IS_ERR_OR_NULL(client) && client->dev.driver;
+>  }
+>  
+> -extern struct i2c_client *i2c_use_client(struct i2c_client *client);
+> -extern void i2c_release_client(struct i2c_client *client);
+> -
+>  /* call the i2c_client->command() of all attached clients with
+>   * the given arguments */
+>  extern void i2c_clients_command(struct i2c_adapter *adap,
+> -- 
+> 2.20.1
+> 
+
+-- 
+Regards,
+Niklas Söderlund
