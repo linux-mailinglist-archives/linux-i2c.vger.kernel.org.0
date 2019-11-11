@@ -2,35 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2654F805A
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2019 20:42:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E127DF8064
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2019 20:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727181AbfKKTmE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Nov 2019 14:42:04 -0500
-Received: from sauhun.de ([88.99.104.3]:49384 "EHLO pokefinder.org"
+        id S1727398AbfKKTp2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Nov 2019 14:45:28 -0500
+Received: from sauhun.de ([88.99.104.3]:49440 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727149AbfKKTmE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 11 Nov 2019 14:42:04 -0500
+        id S1726946AbfKKTp1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 Nov 2019 14:45:27 -0500
 Received: from localhost (x4db75ae4.dyn.telefonica.de [77.183.90.228])
-        by pokefinder.org (Postfix) with ESMTPSA id 985922C0428;
-        Mon, 11 Nov 2019 20:42:02 +0100 (CET)
-Date:   Mon, 11 Nov 2019 20:42:02 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id EDD8C2C0428;
+        Mon, 11 Nov 2019 20:45:25 +0100 (CET)
+Date:   Mon, 11 Nov 2019 20:45:25 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Alain Volmat <alain.volmat@st.com>
-Cc:     pierre-yves.mordret@st.com, alexandre.torgue@st.com,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@st.com
-Subject: Re: [PATCH] i2c: i2c-stm32f7: fix & reorder remove & probe error
- handling
-Message-ID: <20191111194202.GD1608@kunai>
-References: <1572012264-31996-1-git-send-email-alain.volmat@st.com>
+To:     shubhrajyoti.datta@gmail.com
+Cc:     linux-i2c@vger.kernel.org, michal.simek@xilinx.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: Re: [PATCHv2] i2c: xiic: Fix kerneldoc warnings
+Message-ID: <20191111194525.GE1608@kunai>
+References: <1572931665-24560-1-git-send-email-shubhrajyoti.datta@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VV4b6MQE+OnNyhkM"
+        protocol="application/pgp-signature"; boundary="EgVrEAR5UttbsTXg"
 Content-Disposition: inline
-In-Reply-To: <1572012264-31996-1-git-send-email-alain.volmat@st.com>
+In-Reply-To: <1572931665-24560-1-git-send-email-shubhrajyoti.datta@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -38,43 +34,47 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---VV4b6MQE+OnNyhkM
+--EgVrEAR5UttbsTXg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 25, 2019 at 04:04:24PM +0200, Alain Volmat wrote:
-> Add missing dma channels free calls in case of error during probe
-> and reorder the remove function so that dma channels are freed after
-> the i2c adapter is deleted.
-> Overall, reorder the remove function so that probe error handling order
-> and remove function order are same.
+On Tue, Nov 05, 2019 at 10:57:45AM +0530, shubhrajyoti.datta@gmail.com wrot=
+e:
+> From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 >=20
-> Fixes: 7ecc8cfde553 ("i2c: i2c-stm32f7: Add DMA support")
+> Fix the below warning by adding the description of clock and dev.
 >=20
-> Signed-off-by: Alain Volmat <alain.volmat@st.com>
+> drivers/i2c/busses/i2c-xiic.c:57: info: Scanning doc for struct xiic_i2c
+> drivers/i2c/busses/i2c-xiic.c:84: warning: Function parameter or member
+> 'dev' not described in 'xiic_i2c'
+> drivers/i2c/busses/i2c-xiic.c:84: warning: Function parameter or member
+> 'clk' not described in 'xiic_i2c'
+>=20
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 
 Applied to for-next, thanks!
 
 
---VV4b6MQE+OnNyhkM
+--EgVrEAR5UttbsTXg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl3JuYkACgkQFA3kzBSg
-KbYcnRAAq1jv0t+cBFdjV0cAyRRX0WL1Iv9MAU84u/vxXm3x5WV277AuXXWzofmd
-XqKJsLIq6lSoh20bC+LHePMkmQ+T8oX6C8c4wjmqzls5Uq2St0evOX39JoQa+yFu
-Q+/S1xdhPIjOzqJbwtEw/iVZ3KaHzEsTJEBpQEhH786eiv1vfkUiAKFrJ7KLSEMs
-BUsNPYE/b+EasW9rylAPjoVp6ALXxPU8ScXQq4H8mh7Ifvlp01kx8Vi4ukI0niXQ
-W+VtoiCxEjRTIx9EaeVZAzcbVouvePqp8hB7GP5+ys5s8bXaTnJcSc86Uu5tY9Ax
-0oZ1s1irGqpDz67hb5inyDvC0d0cvhaqNcqW5Ez6tCA4A0sKYETGfRWXMmFIbNTd
-8j8M2Ecq+twpTpwoMwtYMLwkFJvVhizOM7MSYctisgGkhZcLzNVq2CzJ1bEIVk3I
-qSQT4JfDWiVCpt/aUSrxdrzAarpbKIbfKmBtNlXKkOu2g4QTioty1LxntndndIpC
-HHgk7ZuoqnDk2IQdzv7MJiBDVEmAZICPCZ/dESjNnZuQ/W45Iuc28CZiYpDW+mmh
-64zfpSo/jAp9ZVoU0Imp+zKCtuqldEEAScptvP3e06kMuNsZRuShAl1DAudYfFIf
-Y8NeKiE3ex/XEW5c5jLlt7o9oc0ipoOd0CPALRJjXnjyl4DICFE=
-=exY/
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl3JulUACgkQFA3kzBSg
+KbYZVw//TTZ0eVWifTkXHkxrAMgzWsx1Z0wbMRoYCCM5NaJapOcaDJyiNKT5y1hv
+q0nEgFhFwvWXaGvZGD3mNZ1MkmaIuXSyyrWRxUxwmo6c+do4yXOhGTWvhKjCkJUK
++Bweo/Rcpzv/4Yqpksv9lxHfuobWym8q1RWErHpsU2BO7xmgP7w++W2r25d0J7JQ
+S6iZi+0cyGYSbfUr1jmmAUAi+I7CgFGltEC+2CgddAar3Zgs4T7ymQZ4Z5mKUzPG
+Yk38nzt81dQJffHpkNvTs+0SsOf/+pBatJoUP3fIPTzn2PLvdPDjXd/4SL0IXPgA
+6Ep9tkUrS/DSs5N5PdJnf88hKii9Oa4N+fIxxteQM9HOdu/uRR2asduNWij/osf/
+GUoK+3OEPrqe63aIACDBr6XGj22tsPtzhCd8q3l0O9D8+kLj21kzcHxpBtM1l50J
+4Zi3sHzdYucfQwZ2BnYyAqLOccgFDSvPI3XFNjcyDjb6cHt8qFXjIMvtp9xXmaye
+iE3XPJBQnlTH/4XLU6WS6EvqpPHbOnnXuYAGx1IOMZz8NgZgKRpCdIVocyhw3jr9
+irxM0SWGqc47VWjZBs+oGHsL77/oFEZnnndUcMWSf4VWXL8mybXon6SQgxC2DRer
+J0PexqKOibJtSAmflq9CxFjieEB+qIquxDm/EiJcwUTS141eybQ=
+=w5OC
 -----END PGP SIGNATURE-----
 
---VV4b6MQE+OnNyhkM--
+--EgVrEAR5UttbsTXg--
