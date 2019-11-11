@@ -2,33 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0FEF8045
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2019 20:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2654F805A
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2019 20:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726879AbfKKTh4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Nov 2019 14:37:56 -0500
-Received: from sauhun.de ([88.99.104.3]:49332 "EHLO pokefinder.org"
+        id S1727181AbfKKTmE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Nov 2019 14:42:04 -0500
+Received: from sauhun.de ([88.99.104.3]:49384 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726927AbfKKTh4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 11 Nov 2019 14:37:56 -0500
+        id S1727149AbfKKTmE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 Nov 2019 14:42:04 -0500
 Received: from localhost (x4db75ae4.dyn.telefonica.de [77.183.90.228])
-        by pokefinder.org (Postfix) with ESMTPSA id 685522C0428;
-        Mon, 11 Nov 2019 20:37:54 +0100 (CET)
-Date:   Mon, 11 Nov 2019 20:37:54 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 985922C0428;
+        Mon, 11 Nov 2019 20:42:02 +0100 (CET)
+Date:   Mon, 11 Nov 2019 20:42:02 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-amlogic@lists.infradead.org,
+To:     Alain Volmat <alain.volmat@st.com>
+Cc:     pierre-yves.mordret@st.com, alexandre.torgue@st.com,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Beniamino Galvani <b.galvani@gmail.com>
-Subject: Re: [PATCH] dt-bindings: i2c: meson: convert to yaml
-Message-ID: <20191111193753.GC1608@kunai>
-References: <20191021140053.9525-1-narmstrong@baylibre.com>
+        fabrice.gasnier@st.com
+Subject: Re: [PATCH] i2c: i2c-stm32f7: fix & reorder remove & probe error
+ handling
+Message-ID: <20191111194202.GD1608@kunai>
+References: <1572012264-31996-1-git-send-email-alain.volmat@st.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1SQmhf2mF2YjsYvc"
+        protocol="application/pgp-signature"; boundary="VV4b6MQE+OnNyhkM"
 Content-Disposition: inline
-In-Reply-To: <20191021140053.9525-1-narmstrong@baylibre.com>
+In-Reply-To: <1572012264-31996-1-git-send-email-alain.volmat@st.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -36,39 +38,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---1SQmhf2mF2YjsYvc
+--VV4b6MQE+OnNyhkM
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 21, 2019 at 04:00:53PM +0200, Neil Armstrong wrote:
-> Now that we have the DT validation in place, let's convert the device tree
-> bindings for the Amlogic I2C Controller over to YAML schemas.
+On Fri, Oct 25, 2019 at 04:04:24PM +0200, Alain Volmat wrote:
+> Add missing dma channels free calls in case of error during probe
+> and reorder the remove function so that dma channels are freed after
+> the i2c adapter is deleted.
+> Overall, reorder the remove function so that probe error handling order
+> and remove function order are same.
 >=20
-> Cc: Beniamino Galvani <b.galvani@gmail.com>
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> Fixes: 7ecc8cfde553 ("i2c: i2c-stm32f7: Add DMA support")
+>=20
+> Signed-off-by: Alain Volmat <alain.volmat@st.com>
 
 Applied to for-next, thanks!
 
 
---1SQmhf2mF2YjsYvc
+--VV4b6MQE+OnNyhkM
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl3JuJEACgkQFA3kzBSg
-KbYj7Q//TuutjZs/aYraDB/ReEVZnqZHRljwGBj13He80LQ7/a51QrsqPtpUiC66
-VjqFNwHsFJ2eaEco1ehZBrqAqTRcqemg8N9SljOMEN/RSTlsoOIWwgkOgQRHiVyz
-HlhJCTg+Hd+1z+gnrx5PbabR1JRgc3Fg+NBPTklP0UEbd0M30519TjaJyJc1K/cn
-aZJy8GEIGRlcMT6pksS8ul6OmpnID1UIQ/vceNVB0rX3ECPoZYWWJQqcdfCw7RZW
-MzoJkxU5QC8/QsbnT8Q0rpmrgCzWf7R19FUBjlCtAOPkYmdh2i8psHvdCd56L+b4
-RXgfQjuQM43kG5xlQhVB0SDnURTm4hNDkdjVTQYzc/GabY01pkNiDRvHWHx0n7Lu
-pP/F/0gj/tcu9U4Euohq8/yGpKbdl8/E46SeG57squt/Sczd34gkObBtxtCzUt1N
-XzUk/PKvcH3Dd5KwU+MuHe3AJtblaaLR7ux0CpEFm9tOH7rBfd7lO5g5ThpH2Wg+
-JwC1zUsm5ufcArkpDX5LBGw+deR1hDs5lAeyQrX0f9UiJmHM+VHIcEr+laCOJlYj
-cc32DEktiKMXj/BOxLdoUCWyMnoAmCXC+s3xp50H69Sy/bAMjqeZkx/B8Jpnh8Gl
-hvkjmZjECULGcyXiwlzuDrsaO4VVaXs9I0uqNfdiaBxExyiTz5s=
-=8zQO
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl3JuYkACgkQFA3kzBSg
+KbYcnRAAq1jv0t+cBFdjV0cAyRRX0WL1Iv9MAU84u/vxXm3x5WV277AuXXWzofmd
+XqKJsLIq6lSoh20bC+LHePMkmQ+T8oX6C8c4wjmqzls5Uq2St0evOX39JoQa+yFu
+Q+/S1xdhPIjOzqJbwtEw/iVZ3KaHzEsTJEBpQEhH786eiv1vfkUiAKFrJ7KLSEMs
+BUsNPYE/b+EasW9rylAPjoVp6ALXxPU8ScXQq4H8mh7Ifvlp01kx8Vi4ukI0niXQ
+W+VtoiCxEjRTIx9EaeVZAzcbVouvePqp8hB7GP5+ys5s8bXaTnJcSc86Uu5tY9Ax
+0oZ1s1irGqpDz67hb5inyDvC0d0cvhaqNcqW5Ez6tCA4A0sKYETGfRWXMmFIbNTd
+8j8M2Ecq+twpTpwoMwtYMLwkFJvVhizOM7MSYctisgGkhZcLzNVq2CzJ1bEIVk3I
+qSQT4JfDWiVCpt/aUSrxdrzAarpbKIbfKmBtNlXKkOu2g4QTioty1LxntndndIpC
+HHgk7ZuoqnDk2IQdzv7MJiBDVEmAZICPCZ/dESjNnZuQ/W45Iuc28CZiYpDW+mmh
+64zfpSo/jAp9ZVoU0Imp+zKCtuqldEEAScptvP3e06kMuNsZRuShAl1DAudYfFIf
+Y8NeKiE3ex/XEW5c5jLlt7o9oc0ipoOd0CPALRJjXnjyl4DICFE=
+=exY/
 -----END PGP SIGNATURE-----
 
---1SQmhf2mF2YjsYvc--
+--VV4b6MQE+OnNyhkM--
