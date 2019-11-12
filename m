@@ -2,88 +2,142 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F63F8A62
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 Nov 2019 09:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 320F7F8AEC
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Nov 2019 09:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725821AbfKLIT5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 12 Nov 2019 03:19:57 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:34048 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725811AbfKLIT5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Nov 2019 03:19:57 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAC8HbWf001225;
-        Tue, 12 Nov 2019 09:19:45 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=v4gTBAxsgJ7NKkWijREg7mahBipp4rc6jcfGG/NsFI0=;
- b=CIiJnElyeqyya4SwztKSMIIb+ShthqGBFDvSx+z2/v7kGyurVxpqNeRJm3KC22Hgmek4
- UvA7WexYTj78WTwf9+aIHPtWbneFzDGWSAdUiuSUDsZAWB/c1eRyHCZDW5gmHQDyiVQF
- V90jQl5QYrr5hYCRXvIv8pS0zpdGO/NFJQ4JJrAmjZGZko5WtsKHcM0QtyvNdAbxbT5g
- aQLPU7ymC+pFU7gKPjIgoiay9TNuXNi5vVWSKnmCCUriGuX9ctpICERweNSDM1txx8cf
- pWMrZsVL9uhaKGKXD20GGnJF0mBlv8aONdLIa0ETu4b3MaLliSncGSNqTkKsgZNCrpD1 HA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2w7pstrp5v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Nov 2019 09:19:45 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4688510002A;
-        Tue, 12 Nov 2019 09:19:45 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2C20C2AA4E5;
-        Tue, 12 Nov 2019 09:19:45 +0100 (CET)
-Received: from localhost (10.75.127.45) by SFHDAG3NODE2.st.com (10.75.127.8)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 12 Nov 2019 09:19:44
- +0100
-From:   Alain Volmat <alain.volmat@st.com>
-To:     <wsa@the-dreams.de>, <pierre-yves.mordret@st.com>
-CC:     <alain.volmat@st.com>, <alexandre.torgue@st.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>
-Subject: [PATCH] i2c: i2c-stm32f7: fix 10-bits check in slave free id search loop
-Date:   Tue, 12 Nov 2019 09:19:44 +0100
-Message-ID: <1573546784-28182-1-git-send-email-alain.volmat@st.com>
-X-Mailer: git-send-email 2.7.4
+        id S1725821AbfKLIp7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 12 Nov 2019 03:45:59 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:54128 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725775AbfKLIp7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Nov 2019 03:45:59 -0500
+Received: from [109.168.11.45] (port=49434 helo=[192.168.101.73])
+        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1iURoC-001OEo-QE; Tue, 12 Nov 2019 09:45:56 +0100
+Subject: Re: [PATCH v2] i2c: use void pointers for supplying data for reads
+ and writes
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+References: <20191112005826.GA96746@dtor-ws>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <f1bda5eb-b3ad-e7e1-f832-54a62e708d9c@lucaceresoli.net>
+Date:   Tue, 12 Nov 2019 09:45:56 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG5NODE3.st.com (10.75.127.15) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-12_02:2019-11-11,2019-11-12 signatures=0
+In-Reply-To: <20191112005826.GA96746@dtor-ws>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Fix a typo in the free slave id search loop. Instead of I2C_CLIENT_PEC,
-it should have been I2C_CLIENT_TEN. The slave id 1 can only handle 7-bit
-addresses and thus is not eligible in case of 10-bit addresses.
-As a matter of fact none of the slave id support I2C_CLIENT_PEC, overall
-check is performed at the beginning of the stm32f7_i2c_reg_slave function.
+Hi Dmitry,
 
-Fixes: 60d609f30de2 ("i2c: i2c-stm32f7: Add slave support")
+On 12/11/19 01:58, Dmitry Torokhov wrote:
+> There is no need to force users of i2c_master_send()/i2c_master_recv()
+> and other i2c read/write bulk data API to cast everything into u8
+> pointers.  While everything can be considered byte stream, the drivers
+> are usually work with more structured data.
+> 
+> Let's switch the APIs to accept [const] void pointers to cut amount of
+> casting needed.
+> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Signed-off-by: Alain Volmat <alain.volmat@st.com>
----
- drivers/i2c/busses/i2c-stm32f7.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I agree on the principle, but I have a question, see below.
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index b9a082f64d58..b2634afe066d 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1268,7 +1268,7 @@ static int stm32f7_i2c_get_free_slave_id(struct stm32f7_i2c_dev *i2c_dev,
- 	 * slave[1] supports 7-bit slave address only
- 	 */
- 	for (i = STM32F7_I2C_MAX_SLAVE - 1; i >= 0; i--) {
--		if (i == 1 && (slave->flags & I2C_CLIENT_PEC))
-+		if (i == 1 && (slave->flags & I2C_CLIENT_TEN))
- 			continue;
- 		if (!i2c_dev->slave[i]) {
- 			*id = i;
+[...]
+>  s32 i2c_smbus_read_i2c_block_data_or_emulated(const struct i2c_client *client,
+> -					      u8 command, u8 length, u8 *values)
+> +					      u8 command, u8 length, void *values)
+>  {
+>  	u8 i = 0;
+>  	int status;
+> @@ -647,8 +648,7 @@ s32 i2c_smbus_read_i2c_block_data_or_emulated(const struct i2c_client *client,
+>  			status = i2c_smbus_read_word_data(client, command + i);
+>  			if (status < 0)
+>  				return status;
+> -			values[i] = status & 0xff;
+> -			values[i + 1] = status >> 8;
+> +			put_unaligned_le16(status, values + i);
+
+The switch to put_unaligned_le16() looks unrelated, is it?
+
+>  			i += 2;
+>  		}
+>  	}
+> @@ -657,7 +657,7 @@ s32 i2c_smbus_read_i2c_block_data_or_emulated(const struct i2c_client *client,
+>  		status = i2c_smbus_read_byte_data(client, command + i);
+>  		if (status < 0)
+>  			return status;
+> -		values[i] = status;
+> +		*(u8 *)(values + i) = status;
+
+My preference is to use an u8* helper variable in these cases:
+
+s32 i2c_smbus_read_i2c_block_data_or_emulated(const struct i2c_client
+*client,
+-			      u8 command, u8 length, u8 *values)
++			      u8 command, u8 length, void *buf)
+ {
++	u8 *bytes = buf;
+@@
+-		values[i] = status;
++		bytes[i] = status;
+
+This clarifies we are accessing the raw bytes, avoids typecasts in the
+middle of code for readability and avoids void pointer math.
+
+PS: look, it's exactly what you do in the max1363.c file below! :)
+
+> diff --git a/drivers/iio/adc/max1363.c b/drivers/iio/adc/max1363.c
+> index 5c2cc61b666e7..48ed76a0e83d4 100644
+> --- a/drivers/iio/adc/max1363.c
+> +++ b/drivers/iio/adc/max1363.c
+> @@ -182,9 +182,9 @@ struct max1363_state {
+>  	struct regulator		*vref;
+>  	u32				vref_uv;
+>  	int				(*send)(const struct i2c_client *client,
+> -						const char *buf, int count);
+> +						const void *buf, int count);
+>  	int				(*recv)(const struct i2c_client *client,
+> -						char *buf, int count);
+> +						void *buf, int count);
+>  };
+>  
+>  #define MAX1363_MODE_SINGLE(_num, _mask) {				\
+> @@ -310,27 +310,29 @@ static const struct max1363_mode
+>  	return NULL;
+>  }
+>  
+> -static int max1363_smbus_send(const struct i2c_client *client, const char *buf,
+> +static int max1363_smbus_send(const struct i2c_client *client, const void *buf,
+>  		int count)
+>  {
+> +	const u8 *data = buf;
+
+Here it is! ^
+
 -- 
-2.7.4
-
+Luca
