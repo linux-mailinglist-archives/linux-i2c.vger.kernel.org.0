@@ -2,128 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF04FB39C
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2019 16:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2531EFB46D
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2019 16:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727655AbfKMPXL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Nov 2019 10:23:11 -0500
-Received: from laurent.telenet-ops.be ([195.130.137.89]:48014 "EHLO
-        laurent.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726812AbfKMPXL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Nov 2019 10:23:11 -0500
-Received: from ramsan ([84.195.182.253])
-        by laurent.telenet-ops.be with bizsmtp
-        id RTP72100K5USYZQ01TP7FR; Wed, 13 Nov 2019 16:23:08 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1iUuU7-00066b-Jn; Wed, 13 Nov 2019 16:23:07 +0100
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1iUuU7-0003e5-HW; Wed, 13 Nov 2019 16:23:07 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
+        id S1727001AbfKMP6I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Nov 2019 10:58:08 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:43675 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728207AbfKMP6I (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Nov 2019 10:58:08 -0500
+Received: by mail-wr1-f66.google.com with SMTP id n1so2951051wra.10
+        for <linux-i2c@vger.kernel.org>; Wed, 13 Nov 2019 07:58:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Nz+99DY1vtb4B2oWIA46L7hZabZIvbw2T8kl9hWG2gk=;
+        b=DXgFiu4lILYTs9n5lHUhF8xNPnSnFBr9ht2PUt4ZPdCg9ckokovjhNN4dY+olPuVbw
+         wSoINPCBjwoJ6/LDW+Jo99gPjVTUWpkP3w9Tf4Lr1GVHw9zv11CnpE3CNn0eX2zywyI+
+         ylywQMAKrxHe9O76kngAvJh41RrlLbWp15LefkIMjeGVjCD8SLXw+jJL1wZvs7xr9NFN
+         5ZSr4kxEhx/giG6qC6X3QZaghloh/Ns4RMocliamI2Th4zLg3toMXVlDjy2KVvqtk68H
+         r12SRUw5iQ7uMECmjvBhxNwb91UTW0MGvmyfUlVh6kDgRilGqeIaDrXZ5+hYpF5bjCiz
+         CpoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Nz+99DY1vtb4B2oWIA46L7hZabZIvbw2T8kl9hWG2gk=;
+        b=cllhrsv4CCUP15AcVznDEXpmHnHiTFMd0MPlWIZiaRkOV/vivPsWJJvy/9JWVzWDGm
+         vcWvpnAjb9TGPd+OxdBajzjI06daQsh0DfQ3mTmEoYQKtdakEkKzw7blNs/PLnE+KXz4
+         IaTzXtAk8G3TLYEtIhxU6d7+CiwvldbVMRJAR+7zIH8M7YKFncHHYIGIC9DzpCf1ypt9
+         Mv2tfqjXVjgBqRh+JlL22+Cqg++VpbdeUkXk860OLSvd60Awrh9AwIpc4DUH2dKOj0RV
+         ambwmLVBrz5uw7cOPuCkRb3lhDE/kJRV2yK8yI/LstDBInBeaVlU1xlX7y2s4nWF8xtx
+         QLBw==
+X-Gm-Message-State: APjAAAXAXxX1zjSZxKBZgzbJ3LzSvQrmjLw9p0gPd6g3rKpUsUzpiXKC
+        eDQdw8LaZLchcJVS8zYWRYVVKQ==
+X-Google-Smtp-Source: APXvYqySs1oVmBb9JkCeXqIpSip6q4ZfY/oe3ZrC0J1nXqbQJ1zK59poqBScj9DtoaBQp4g4ov0M3A==
+X-Received: by 2002:adf:ab4c:: with SMTP id r12mr3381185wrc.3.1573660686804;
+        Wed, 13 Nov 2019 07:58:06 -0800 (PST)
+Received: from debian-brgl.home (lfbn-1-7087-108.w90-116.abo.wanadoo.fr. [90.116.255.108])
+        by smtp.gmail.com with ESMTPSA id p15sm2495440wmb.10.2019.11.13.07.58.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Nov 2019 07:58:06 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2] i2c: core: Use DEVICE_ATTR_*() helper macros
-Date:   Wed, 13 Nov 2019 16:23:06 +0100
-Message-Id: <20191113152306.13968-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
+Cc:     linux-i2c@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [GIT PULL] at24: updates for v5.5
+Date:   Wed, 13 Nov 2019 16:58:03 +0100
+Message-Id: <20191113155803.20630-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Convert the i2c core sysfs attributes from DEVICE_ATTR() to
-DEVICE_ATTR_*(), to reduce boilerplate.
-This requires renaming some functions.
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Although no suitable macro exists for the delete_device attribute,
-rename i2c_sysfs_delete_device() to delete_device_store() for
-consistency.
+Hi Wolfram,
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
----
-v2:
-  - s/DEVICE_ATTR_RW/DEVICE_ATTR_*/ in summary and description,
-  - Add Reviewed-by.
----
- drivers/i2c/i2c-core-base.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+this release there's only a small but useful change from Jean fixing a
+confusing log message for read-only EEPROMs. Please pull.
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 6a5183cffdfc3e82..c87bf5bcab3f1349 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -449,15 +449,15 @@ static void i2c_client_dev_release(struct device *dev)
- }
- 
- static ssize_t
--show_name(struct device *dev, struct device_attribute *attr, char *buf)
-+name_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
- 	return sprintf(buf, "%s\n", dev->type == &i2c_client_type ?
- 		       to_i2c_client(dev)->name : to_i2c_adapter(dev)->name);
- }
--static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
-+static DEVICE_ATTR_RO(name);
- 
- static ssize_t
--show_modalias(struct device *dev, struct device_attribute *attr, char *buf)
-+modalias_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
- 	struct i2c_client *client = to_i2c_client(dev);
- 	int len;
-@@ -472,7 +472,7 @@ show_modalias(struct device *dev, struct device_attribute *attr, char *buf)
- 
- 	return sprintf(buf, "%s%s\n", I2C_MODULE_PREFIX, client->name);
- }
--static DEVICE_ATTR(modalias, S_IRUGO, show_modalias, NULL);
-+static DEVICE_ATTR_RO(modalias);
- 
- static struct attribute *i2c_dev_attrs[] = {
- 	&dev_attr_name.attr,
-@@ -1039,8 +1039,8 @@ EXPORT_SYMBOL_GPL(i2c_adapter_depth);
-  * the user to provide incorrect parameters.
-  */
- static ssize_t
--i2c_sysfs_new_device(struct device *dev, struct device_attribute *attr,
--		     const char *buf, size_t count)
-+new_device_store(struct device *dev, struct device_attribute *attr,
-+		 const char *buf, size_t count)
- {
- 	struct i2c_adapter *adap = to_i2c_adapter(dev);
- 	struct i2c_board_info info;
-@@ -1095,7 +1095,7 @@ i2c_sysfs_new_device(struct device *dev, struct device_attribute *attr,
- 
- 	return count;
- }
--static DEVICE_ATTR(new_device, S_IWUSR, NULL, i2c_sysfs_new_device);
-+static DEVICE_ATTR_WO(new_device);
- 
- /*
-  * And of course let the users delete the devices they instantiated, if
-@@ -1107,8 +1107,8 @@ static DEVICE_ATTR(new_device, S_IWUSR, NULL, i2c_sysfs_new_device);
-  * the user to delete the wrong device.
-  */
- static ssize_t
--i2c_sysfs_delete_device(struct device *dev, struct device_attribute *attr,
--			const char *buf, size_t count)
-+delete_device_store(struct device *dev, struct device_attribute *attr,
-+		    const char *buf, size_t count)
- {
- 	struct i2c_adapter *adap = to_i2c_adapter(dev);
- 	struct i2c_client *client, *next;
-@@ -1151,7 +1151,7 @@ i2c_sysfs_delete_device(struct device *dev, struct device_attribute *attr,
- 	return res;
- }
- static DEVICE_ATTR_IGNORE_LOCKDEP(delete_device, S_IWUSR, NULL,
--				   i2c_sysfs_delete_device);
-+				  delete_device_store);
- 
- static struct attribute *i2c_adapter_attrs[] = {
- 	&dev_attr_name.attr,
--- 
-2.17.1
+Bartosz
 
+The following changes since commit 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c:
+
+  Linux 5.4-rc1 (2019-09-30 10:35:40 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/at24-v5.5-updates-for-wolfram
+
+for you to fetch changes up to 285be87c79e173f08af5e1a6417a106fb14934b7:
+
+  eeprom: at24: Improve confusing log message (2019-10-04 10:46:39 +0200)
+
+----------------------------------------------------------------
+at24: updates for v5.5
+
+- print a proper log message for read-only EEPROMs
+
+----------------------------------------------------------------
+Jean Delvare (1):
+      eeprom: at24: Improve confusing log message
+
+ drivers/misc/eeprom/at24.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
