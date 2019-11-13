@@ -2,83 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 259B8FA2FF
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2019 03:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26430FACD7
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2019 10:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729682AbfKMCAh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 12 Nov 2019 21:00:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55936 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730527AbfKMCAg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 12 Nov 2019 21:00:36 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 907F02053B;
-        Wed, 13 Nov 2019 02:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573610436;
-        bh=xI+skwa8kTa6/wPWYDcvAJcHAf1EsrACC8CuciHJb3o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NGXPbuPCYGFWpKPFb3irvi2xQIcFu0qPgEqRCw+qxXK0XSaJlYY2Asx+oDLbu4UTE
-         BZPFid82nel9ZtoKvJA5ZOBJRDMRAJiWBkn7D9TfFEOyPSUgvYbsbhjRya5iWSB5tY
-         vWqaY0ModYcQefxdCjdYg3uu1IhHsUAS0aBF40bo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 36/68] i2c: brcmstb: Allow enabling the driver on DSL SoCs
-Date:   Tue, 12 Nov 2019 20:59:00 -0500
-Message-Id: <20191113015932.12655-36-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191113015932.12655-1-sashal@kernel.org>
-References: <20191113015932.12655-1-sashal@kernel.org>
+        id S1727401AbfKMJV4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Nov 2019 04:21:56 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:45454 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727349AbfKMJVz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Nov 2019 04:21:55 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAD9LORl115392;
+        Wed, 13 Nov 2019 03:21:24 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573636884;
+        bh=bocIryoBPyj8pPA5BMCglgJkJ0wRBeHW9ff7aMwZThs=;
+        h=From:To:CC:Subject:Date;
+        b=ZDkkfobG3G01ya8X5Y5QDhthFWkjDIffhk0mEJtgujEm5REZl6L2mRyqgOVCDY4Qc
+         ealmFughEQnUXLBRwAKX4zJFc6Ywqg4BK5WNpTN9b8Pefqlr6dgWCSXokO1U6Ebwrv
+         xHaTMROYpfSaX26Xef0h8TV/azN1BrKHa4PXgvx0=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xAD9LOTw050017
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 13 Nov 2019 03:21:24 -0600
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 13
+ Nov 2019 03:21:06 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 13 Nov 2019 03:21:06 -0600
+Received: from feketebors.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAD9LJ1G056807;
+        Wed, 13 Nov 2019 03:21:20 -0600
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+To:     <ludovic.desroches@microchip.com>, <agross@kernel.org>,
+        <wsa+renesas@sang-engineering.com>, <ldewangan@nvidia.com>
+CC:     <vkoul@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <digetx@gmail.com>,
+        <linux-tegra@vger.kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <bjorn.andersson@linaro.org>
+Subject: [PATCH 0/4] i2c: Use dma_request_chan() directly for channel request
+Date:   Wed, 13 Nov 2019 11:22:31 +0200
+Message-ID: <20191113092235.30440-1-peter.ujfalusi@ti.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+Hi,
 
-[ Upstream commit e1eba2ea54a2de0e4c58d87270d25706bb77b844 ]
+I'm going through the tree to remove dma_request_slave_channel_reason() as it
+is just:
+#define dma_request_slave_channel_reason(dev, name) \
+	dma_request_chan(dev, name)
 
-ARCH_BCM_63XX which is used by ARM-based DSL SoCs from Broadcom uses the
-same controller, make it possible to select the STB driver and update
-the Kconfig and help text a bit.
-
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Regards,
+Peter
 ---
- drivers/i2c/busses/Kconfig | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Peter Ujfalusi (4):
+  i2c: at91: Use dma_request_chan() directly for channel request
+  i2c: qup: Use dma_request_chan() directly for channel request
+  i2c: sh_mobile: Use dma_request_chan() directly for channel request
+  i2c: tegra: Use dma_request_chan() directly for channel request
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index d252276feadf6..759c621a860a9 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -397,12 +397,13 @@ config I2C_BCM_KONA
- 	  If you do not need KONA I2C interface, say N.
- 
- config I2C_BRCMSTB
--	tristate "BRCM Settop I2C controller"
--	depends on ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
-+	tristate "BRCM Settop/DSL I2C controller"
-+	depends on ARCH_BRCMSTB || BMIPS_GENERIC || ARCH_BCM_63XX || \
-+		   COMPILE_TEST
- 	default y
- 	help
- 	  If you say yes to this option, support will be included for the
--	  I2C interface on the Broadcom Settop SoCs.
-+	  I2C interface on the Broadcom Settop/DSL SoCs.
- 
- 	  If you do not need I2C interface, say N.
- 
+ drivers/i2c/busses/i2c-at91-master.c | 4 ++--
+ drivers/i2c/busses/i2c-qup.c         | 4 ++--
+ drivers/i2c/busses/i2c-sh_mobile.c   | 2 +-
+ drivers/i2c/busses/i2c-tegra.c       | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
+
 -- 
-2.20.1
+Peter
+
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
 
