@@ -2,37 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B91D0FA0E9
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2019 02:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB13FA55E
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2019 03:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728615AbfKMBxf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 12 Nov 2019 20:53:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43368 "EHLO mail.kernel.org"
+        id S1728555AbfKMBxX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 12 Nov 2019 20:53:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42982 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728608AbfKMBxf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 12 Nov 2019 20:53:35 -0500
+        id S1727527AbfKMBxX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 12 Nov 2019 20:53:23 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 94DB32245C;
-        Wed, 13 Nov 2019 01:53:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 05C4B222CD;
+        Wed, 13 Nov 2019 01:53:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573610014;
-        bh=ZMIpm2eGoF1gz+prN8Rj5RSMJQK+YlymFSmMKKZXimg=;
+        s=default; t=1573610002;
+        bh=nn7wuo1qLQGHzAKEC4nO1MUzJUASpsgxIwya/ME3rxQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A1qUoaXMmn2gGh81d06JuSEIal686YXWxsT7dj6D3TT+9gqHiW+QKT5Bs7Qlu4oaO
-         ZFSpPUTrDSCVkvCPGGpmMgtPFhrHHOBMmBgUJX4nQYB/YTffRpsogDwSYdG3kSOrQj
-         R2xTSAP5FqYNpsmA1sH5WHo24ilUFqQQbi+TB/sE=
+        b=za+aWDN884a9VARfLObYhCo/v4wHvc31yUgGXprRpcnjWFIEeuo3xgpI9KxkQht7R
+         ub6EoEEDTDoNYK1zdsKedvG/vyTwowpPV+35WnkAgH2GNLrACvHv6JhBingGfJe/yZ
+         sH6kT8CkwNUpYOOfQw5QYfXGyqeESkKrv33FxHIs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 118/209] i2c: tegra: use core to detect 'no zero length' quirk
-Date:   Tue, 12 Nov 2019 20:48:54 -0500
-Message-Id: <20191113015025.9685-118-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 109/209] i2c: brcmstb: Allow enabling the driver on DSL SoCs
+Date:   Tue, 12 Nov 2019 20:48:45 -0500
+Message-Id: <20191113015025.9685-109-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191113015025.9685-1-sashal@kernel.org>
 References: <20191113015025.9685-1-sashal@kernel.org>
@@ -45,42 +43,42 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-[ Upstream commit c96c0f2683804b710531e7b754dcd02b5ded6d4a ]
+[ Upstream commit e1eba2ea54a2de0e4c58d87270d25706bb77b844 ]
 
-And don't reimplement in the driver.
+ARCH_BCM_63XX which is used by ARM-based DSL SoCs from Broadcom uses the
+same controller, make it possible to select the STB driver and update
+the Kconfig and help text a bit.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Acked-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-tegra.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/i2c/busses/Kconfig | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index ef13b6ce9d8de..47d196c026ba6 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -684,9 +684,6 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 8f803812ea244..ee6dd1b84fac8 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -433,12 +433,13 @@ config I2C_BCM_KONA
+ 	  If you do not need KONA I2C interface, say N.
  
- 	tegra_i2c_flush_fifos(i2c_dev);
+ config I2C_BRCMSTB
+-	tristate "BRCM Settop I2C controller"
+-	depends on ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
++	tristate "BRCM Settop/DSL I2C controller"
++	depends on ARCH_BRCMSTB || BMIPS_GENERIC || ARCH_BCM_63XX || \
++		   COMPILE_TEST
+ 	default y
+ 	help
+ 	  If you say yes to this option, support will be included for the
+-	  I2C interface on the Broadcom Settop SoCs.
++	  I2C interface on the Broadcom Settop/DSL SoCs.
  
--	if (msg->len == 0)
--		return -EINVAL;
--
- 	i2c_dev->msg_buf = msg->buf;
- 	i2c_dev->msg_buf_remaining = msg->len;
- 	i2c_dev->msg_err = I2C_ERR_NONE;
-@@ -831,6 +828,7 @@ static const struct i2c_algorithm tegra_i2c_algo = {
+ 	  If you do not need I2C interface, say N.
  
- /* payload size is only 12 bit */
- static const struct i2c_adapter_quirks tegra_i2c_quirks = {
-+	.flags = I2C_AQ_NO_ZERO_LEN,
- 	.max_read_len = 4096,
- 	.max_write_len = 4096 - 12,
- };
 -- 
 2.20.1
 
