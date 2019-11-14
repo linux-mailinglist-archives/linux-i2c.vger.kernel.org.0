@@ -2,143 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A424FB900
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2019 20:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F29CFBE98
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Nov 2019 05:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbfKMTjl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Nov 2019 14:39:41 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:41418 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726074AbfKMTjl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Nov 2019 14:39:41 -0500
-Received: by mail-pf1-f195.google.com with SMTP id p26so2325650pfq.8;
-        Wed, 13 Nov 2019 11:39:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=39/fJscXRyO2tYaTDAmRXtA6OWbN1sBYki5/jAnURBo=;
-        b=iB7wHma6xYIop3/jfiI7hxqBowv9/bAorX/gpCTAW7wp7dGC8DKnIlf2L0cDsUk4As
-         I83bG0o6ey0N1lThj05XGwUnk5MLOoOBZTApwdy7DfkglZ5T9DIU1lI6WrddI+Ofc9zP
-         yjTdfVrlum1LQndX02NvJb6gaaeApX8j3rdPwv2IgGftGUPresI23oFltJtj2TQ9ShCJ
-         GCG0pH+tt/0GkKQhiu768kmt0nBv4uytEhvZ33tNcj0miQ2hE48ZHPmDgjlZsccK+mr8
-         ZnmiZ1FYhiM9M3HSUA6aPE8tomZ/Ln7WTjR4iXulhYJ4CUsQEJEYkPJ5Wki1gsIA2y7M
-         5xMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=39/fJscXRyO2tYaTDAmRXtA6OWbN1sBYki5/jAnURBo=;
-        b=SKdfqtYyoLA5y+iqDbnLStBSJSqjfCy46G5YsDSaOwX1CKZ0YV2SDRGRdEpjQHqfFJ
-         hT6hd/VLfB7BD3qGyTJS/crCfVDsKMgjbxzJEjWY9B2bUAo+IrVDhiElAHyHr864wukM
-         9016blDB6n/1WMQ6XONkzOsjrdr5X0wLxp4xppprJ3CVRYO/lqfEzwKqVzfjbWSgHwgU
-         FTNgPRY5Uy1duxqdEjvogsZTNzaMzIpKA2EfuI3t3EHyXHQc3szVnWlBvBWaSAKXS51m
-         Si+Ez70QUwXidx/ugAgLKVCXgN85FqGt6K+Ngjkc9tIDcCslXbV+igGffyJIMOtBYAVj
-         RxhQ==
-X-Gm-Message-State: APjAAAXmfEmOXn+yHORNce8UkBb24qAM71eiEn1FSYvzm9mG5R7JTJ0/
-        iVXxEuwoXsHCaImtHOJOicGEwPFf
-X-Google-Smtp-Source: APXvYqzCJ0h7L3tV2w2hiUfe0mtCLjc6i4Zta1V4vXoE3g2Fr3JU55Z4PJr9U1mFysn5hQu/3ddH1g==
-X-Received: by 2002:a17:90a:a114:: with SMTP id s20mr7315017pjp.44.1573673980497;
-        Wed, 13 Nov 2019 11:39:40 -0800 (PST)
-Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id u9sm4006218pfm.102.2019.11.13.11.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2019 11:39:39 -0800 (PST)
-Date:   Wed, 13 Nov 2019 11:39:37 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-iio@vger.kernel.orgi,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] i2c: smbus: use get/put_unaligned_le16 when
- working with word data
-Message-ID: <20191113193937.GQ13374@dtor-ws>
-References: <20191112203132.163306-1-dmitry.torokhov@gmail.com>
- <20191112203132.163306-3-dmitry.torokhov@gmail.com>
- <099e8f9c-354a-8756-a79b-e66c72d36aa7@lucaceresoli.net>
+        id S1726564AbfKNEeJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Nov 2019 23:34:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59558 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726489AbfKNEeJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 13 Nov 2019 23:34:09 -0500
+Received: from localhost (unknown [223.226.110.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2795B206D7;
+        Thu, 14 Nov 2019 04:34:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573706048;
+        bh=SGpk8140mUhxZXo2Ev8/kpQcKWP15GUUxAEbXYtBsWg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oIZMhJ5K+XBwp8GAEXboiBikxQp5szBN6TknjOfPpaKNIiBWpdQj9+xk1dUSFN3CO
+         M5nt2P2K6hqPKsJaGo5KHebPPDw7nn5onk9YuLLi6NAavR2EG+UYqdfUSW0VUH1020
+         WwhMLv+4OlRupxihhZ33Vrft41g3F9JPywjQXxDQ=
+Date:   Thu, 14 Nov 2019 10:04:04 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
+Cc:     ludovic.desroches@microchip.com, agross@kernel.org,
+        wsa+renesas@sang-engineering.com, ldewangan@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, digetx@gmail.com,
+        linux-tegra@vger.kernel.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, bjorn.andersson@linaro.org
+Subject: Re: [PATCH 0/4] i2c: Use dma_request_chan() directly for channel
+ request
+Message-ID: <20191114043404.GG952516@vkoul-mobl>
+References: <20191113092235.30440-1-peter.ujfalusi@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <099e8f9c-354a-8756-a79b-e66c72d36aa7@lucaceresoli.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191113092235.30440-1-peter.ujfalusi@ti.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Luca,
-
-On Wed, Nov 13, 2019 at 10:47:42AM +0100, Luca Ceresoli wrote:
-> Hi Dmitry,
+On 13-11-19, 11:22, Peter Ujfalusi wrote:
+> Hi,
 > 
-> On 12/11/19 21:31, Dmitry Torokhov wrote:
-> > It is potentially more performant, and also shows intent more clearly,
-> > to use get_unaligned_le16() and put_unaligned_le16() when working with
-> > word data.
-> > 
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > 
-> > ---
-> > 
-> > Changes in v3:
-> > - split put_unaligned_le16 into a separate patch
-> > - more call sites converted to get/put_unaligned_le16
-> > 
-> >  drivers/i2c/i2c-core-smbus.c | 12 +++++-------
-> >  1 file changed, 5 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
-> > index f8708409b4dbc..7b4e2270eeda1 100644
-> > --- a/drivers/i2c/i2c-core-smbus.c
-> > +++ b/drivers/i2c/i2c-core-smbus.c
-> > @@ -15,6 +15,7 @@
-> >  #include <linux/i2c.h>
-> >  #include <linux/i2c-smbus.h>
-> >  #include <linux/slab.h>
-> > +#include <asm/unaligned.h>
-> >  
-> >  #include "i2c-core.h"
-> >  
-> > @@ -370,8 +371,7 @@ static s32 i2c_smbus_xfer_emulated(struct i2c_adapter *adapter, u16 addr,
-> >  			msg[1].len = 2;
-> >  		else {
-> >  			msg[0].len = 3;
-> > -			msgbuf0[1] = data->word & 0xff;
-> > -			msgbuf0[2] = data->word >> 8;
-> > +			put_unaligned_le16(data->word, msgbuf0 + 1);
-> >  		}
-> >  		break;
-> >  	case I2C_SMBUS_PROC_CALL:
-> > @@ -379,8 +379,7 @@ static s32 i2c_smbus_xfer_emulated(struct i2c_adapter *adapter, u16 addr,
-> >  		read_write = I2C_SMBUS_READ;
-> >  		msg[0].len = 3;
-> >  		msg[1].len = 2;
-> > -		msgbuf0[1] = data->word & 0xff;
-> > -		msgbuf0[2] = data->word >> 8;
-> > +		put_unaligned_le16(data->word, msgbuf0 + 1);
-> >  		break;
-> >  	case I2C_SMBUS_BLOCK_DATA:
-> >  		if (read_write == I2C_SMBUS_READ) {
-> > @@ -487,7 +486,7 @@ static s32 i2c_smbus_xfer_emulated(struct i2c_adapter *adapter, u16 addr,
-> >  			break;
-> >  		case I2C_SMBUS_WORD_DATA:
-> >  		case I2C_SMBUS_PROC_CALL:
-> > -			data->word = msgbuf1[0] | (msgbuf1[1] << 8);
-> > +			data->word = get_unaligned_le16(msgbuf1);
-> 
-> Well, msgbuf1 cannot be unaligned, so it looks like you just need to
-> convert little endian to host endian. Perhaps __le16_to_cpu(msgbuf1) is
-> better (and equally or more efficient).
+> I'm going through the tree to remove dma_request_slave_channel_reason() as it
+> is just:
+> #define dma_request_slave_channel_reason(dev, name) \
+> 	dma_request_chan(dev, name)
 
-Well, msgbuf1 (as is any other variable unless adjusted by special
-alignment attribute) is naturally aligned for its own data type (which
-for u8 means it can start at any address), but that does not mean that
-is is aligned for the purpose of storing word data. In fact, the
-preceding msgbuf0 variable is 32 + 3 = 35 bytes long, which means that
-msgbuf1 is starting on an odd address, and is definitely not aligned for
-word access and using __le16_to_cpu to fetch that word will trap on some
-architectures.
-
-Thanks.
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
 
 -- 
-Dmitry
+~Vinod
