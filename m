@@ -2,73 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 305DAFE6BC
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Nov 2019 22:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871B2FE77A
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Nov 2019 23:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbfKOVCE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 15 Nov 2019 16:02:04 -0500
-Received: from sauhun.de ([88.99.104.3]:43742 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726550AbfKOVCE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 15 Nov 2019 16:02:04 -0500
-Received: from localhost (p54B33606.dip0.t-ipconnect.de [84.179.54.6])
-        by pokefinder.org (Postfix) with ESMTPSA id 185802C03E3;
-        Fri, 15 Nov 2019 22:02:02 +0100 (CET)
-Date:   Fri, 15 Nov 2019 22:02:01 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Wen Yang <wenyang@linux.alibaba.com>
-Cc:     zhiche.yy@alibaba-inc.com, xlpang@linux.alibaba.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: core: fix use after free in of_i2c_notify
-Message-ID: <20191115210201.GB8973@kunai>
-References: <20191108083648.56503-1-wenyang@linux.alibaba.com>
+        id S1726890AbfKOWQC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 15 Nov 2019 17:16:02 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:39046 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726766AbfKOWQC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Nov 2019 17:16:02 -0500
+Received: by mail-oi1-f193.google.com with SMTP id v138so9989470oif.6
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Nov 2019 14:16:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VrwTiEGJlLLo81xG+S86aYgrEKB8cGFUXed3sRPs9qE=;
+        b=eB8wJcgdGhhyBcAt4UQTmjUOGFBU7OkqAgrkZGfp8JozZCZkqY7OROEpsordbzwzkv
+         4JIF00v4yJzmsVdFuOzdcuDEyz6VwbuPAdUduqa0BP03Z29k+PaI5bKdwzprwRrhaEd7
+         CFbNQJCtm3tgoBjrDWvh2rcAk8/kXJQPKxGy2F0YMxCNZSkqc0LJJoI13QgjwUXxFG1T
+         dugHUvn4F6sZlojrwJ/Y4pV+4r02QoSupqvcMZqqjY3c64cp3fFPY3umkKOsnOwk5V2I
+         4Rk3UMl6TSTKrs/HyxjepeXidehTuL/tLldnFiddeh/UERCEZNaLx6uWsfVdloHZf/mz
+         o4TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VrwTiEGJlLLo81xG+S86aYgrEKB8cGFUXed3sRPs9qE=;
+        b=GTMq0LHlID5YRb1xSnUF25YmN2Z+I34wZmayiG/qdO64qw8X7uMjgazSGN9EoTdYiI
+         YoW+vfriNa7IL3Fx6etqbUkoDCorMQA0X9JXiQSU2A7KOkHNA8ITxuXYQ/3DP4I8fw3+
+         b6oVxTXItMYlQxhtipQh8jMveY5ssFBSrjMxJKkIMx6lY2Ossqh16DsyO6SBCokCz/GO
+         9i/CX5zHPq3jjTQzpLX+B+gLbSCPv4ZUfjfRZXPlYZx8avdotyd/QKKf9f5b3zxHO5XA
+         zrFTVG7b3oIVzmTSpJXChRG2kj5ojFIptNdPnNbzA0AuWZyTHKrRkjIVAPJ/UBGcF3Ek
+         m/8Q==
+X-Gm-Message-State: APjAAAXVIwjI7pXK8Ms5k0KtlYk5eGtUJcyyo69egAWrdj8Pd5FLWAzc
+        CUQJsxJAaZjN/uBOEKVwEVemU7fIOn6fr4YrAQuecQ==
+X-Google-Smtp-Source: APXvYqy7mAtMxI3Pn+9esu39unW7sjkUaLc6FCEsywtYoQXoGbpJVLJ1jrXK/jfSSxC3nmtTbth86MiAe0XIzLcH//c=
+X-Received: by 2002:aca:f514:: with SMTP id t20mr9577132oih.24.1573856160984;
+ Fri, 15 Nov 2019 14:16:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7ZAtKRhVyVSsbBD2"
-Content-Disposition: inline
-In-Reply-To: <20191108083648.56503-1-wenyang@linux.alibaba.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191115045049.261104-1-saravanak@google.com> <20191115053201.GA800105@kroah.com>
+ <20191115091035.GA2227@kunai>
+In-Reply-To: <20191115091035.GA2227@kunai>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 15 Nov 2019 14:15:25 -0800
+Message-ID: <CAGETcx9isTDaRW0KgdWVHxxTKdERB4DPeQyCa9QWXniNTpuZ_A@mail.gmail.com>
+Subject: Re: [PATCH v1] i2c: of: Populate fwnode in of_i2c_get_board_info()
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        linux-i2c@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, Nov 15, 2019 at 1:10 AM Wolfram Sang <wsa@the-dreams.de> wrote:
+>
+> On Fri, Nov 15, 2019 at 01:32:01PM +0800, Greg Kroah-Hartman wrote:
+> > On Thu, Nov 14, 2019 at 08:50:48PM -0800, Saravana Kannan wrote:
+> > > This allows the of_devlink feature to work across i2c devices too. This
+> > > avoid unnecessary probe deferrals of i2c devices, defers consumers of
+> > > i2c devices till the i2c devices probe, and allows i2c drivers to
+> > > implement sync_state() callbacks.
+> > >
+> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > ---
+> > > The of_devlink feature is present in driver-core-next branch. It started
+> > > off with [1] but it has been improving since then.
+> > >
+> > > [1] -- https://lore.kernel.org/linux-acpi/20190904211126.47518-1-saravanak@google.com/
+> > >
+> > >  drivers/i2c/i2c-core-of.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> >
+> > Wolfram, I can take this through my tree now if you have no objections
+> > to this.
+>
+> What would be the advantage?
 
---7ZAtKRhVyVSsbBD2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Of the patch or of him picking it up?
 
-On Fri, Nov 08, 2019 at 04:36:48PM +0800, Wen Yang wrote:
-> We can't use "adap" after it has been freed.
->=20
-> Fixes: 5bf4fa7daea6 ("i2c: break out OF support into separate file")
-> Signed-off-by: Wen Yang <wenyang@linux.alibaba.com>
-> Cc: Wolfram Sang <wsa@the-dreams.de>
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+Advantage of the patch is in the commit text. Details of of_devlink
+are also provided in the link I gave earlier.
 
-Applied to for-current, thanks!
+Advantage of Greg picking it up: This patch will get tested/seen with
+the set of changes (of_devlink) with which it'll have the biggest
+functional impact.
 
-
---7ZAtKRhVyVSsbBD2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl3PEkkACgkQFA3kzBSg
-KbaqzBAAoQV5GxF7KrMUwnwhRzNrDaYURGV+A1ny13BABQ40jF9rK8gRwDGurOg1
-NG765QeVNZBNUIsOYlJsUxfJb5MdMIDhDS1+O4TizvEodpJVu9z9j4fMfxvxKGtW
-prFwnUxvFYVySpfo2zbreBgQ1zX1DO0J1TX50wxnm53IXcl4lqz/KKKNH5J3EYmc
-vs68S/3iwjU50xGFecnmBlojog35sXWtXZbLu0FXrR5R0lqzMOS30jzeHi6SoIzw
-giL+CQoDqbLv2ucQXFsSI4PIhTVEniSgr1lOiouNkAMEkfTH/ByhugNtQZkh8QcZ
-KjfwmKXTcbzngK0QubQOQo7v2sAxIs7fPoi6HUrFeTWKaw6LRjQ/u3jAR0ag84i8
-WO2oN0PYu7DEeI1fNkfeX1jeFU2nCF6poBs/xaMNd08mtFRN8WETb8/CCHcqpDbO
-VxWyDqeKorF8/OQWn9YxMuRPwGhFnL0nhwRn6fgHL5eCW2+6ct+tYL+r4jUROGk2
-eYRSw+iuYUodcjGdc1Y3VBoNgfREIuLR11ITp/evegrwGPm6UNy3TGCobVyY3AWR
-6oXoLO8A0FkbW5Cy5FhdLr1SHmKrfKXUaP6aw96Er+FqysHQRE50zJi48+ev7gjT
-e1L66WOhy7QXfn9wP0cyuoSKl5HjjrLPzhlwE2u4D0ZTm5ZSv+I=
-=ug3Z
------END PGP SIGNATURE-----
-
---7ZAtKRhVyVSsbBD2--
+-Saravana
