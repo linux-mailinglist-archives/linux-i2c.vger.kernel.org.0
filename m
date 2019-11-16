@@ -2,35 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A45FAFF29D
-	for <lists+linux-i2c@lfdr.de>; Sat, 16 Nov 2019 17:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D362FF1E6
+	for <lists+linux-i2c@lfdr.de>; Sat, 16 Nov 2019 17:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728979AbfKPPoa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 16 Nov 2019 10:44:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49264 "EHLO mail.kernel.org"
+        id S1729649AbfKPPrL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 16 Nov 2019 10:47:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53758 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728968AbfKPPo1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:44:27 -0500
+        id S1729640AbfKPPrK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:47:10 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 30A5C2072D;
-        Sat, 16 Nov 2019 15:44:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3808B20855;
+        Sat, 16 Nov 2019 15:47:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919066;
-        bh=by66fafWIkFfkatStvHYRKlIhFEru2T56686wGJEHj4=;
+        s=default; t=1573919229;
+        bh=vBFYOrfj1IE1io4Th6lrRDVblv4ioYm1LhZ/3QjbwXI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M732/L/InWX7ylwULntQBASo+DgSH3XomiCAHcmyr97R9JNQEdk7qD6Me17SY+jV0
-         r9cCzuogJeDc9NGJlQL2l3jrYCzheWRV8CxTnuBxzithYgUFZnCym8KGaJ6/H1AoEs
-         SYvVsANqyWreL6WckIA9RMwrVtYzD9cBb//coQ0I=
+        b=qrv1Mcu36ifwDY0mTHiqicnCikOK+0RnmxKMgiVQpVERWe5I+Fikhz0axdw4cDLFg
+         2bAy2nnHJN9HEQNEX0CdU5IOwFIYCTupPooht6IzF7tnh4LCVB/eZ3jmdEmox8NjT5
+         kmknYtwZDC2n1JQYgOnva1RLWnPxgN61auYjvKt4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 139/237] i2c: uniphier-f: fix race condition when IRQ is cleared
-Date:   Sat, 16 Nov 2019 10:39:34 -0500
-Message-Id: <20191116154113.7417-139-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 234/237] i2c: uniphier-f: fix timeout error after reading 8 bytes
+Date:   Sat, 16 Nov 2019 10:41:09 -0500
+Message-Id: <20191116154113.7417-234-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
 References: <20191116154113.7417-1-sashal@kernel.org>
@@ -45,68 +45,92 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Masahiro Yamada <yamada.masahiro@socionext.com>
 
-[ Upstream commit eaba68785c2d24ebf1f0d46c24e11b79cc2f94c7 ]
+[ Upstream commit c2a653deaa81f5a750c0dfcbaf9f8e5195cbe4a5 ]
 
-The current IRQ handler clears all the IRQ status bits when it bails
-out. This is dangerous because it might clear away the status bits
-that have just been set while processing the current handler. If this
-happens, the IRQ event for the latest transfer is lost forever.
+I was totally screwed up in commit eaba68785c2d ("i2c: uniphier-f:
+fix race condition when IRQ is cleared"). Since that commit, if the
+number of read bytes is multiple of the FIFO size (8, 16, 24... bytes),
+the STOP condition could be issued twice, depending on the timing.
+If this happens, the controller will go wrong, resulting in the timeout
+error.
 
-The IRQ status bits must be cleared *before* the next transfer is
-kicked.
+It was more than 3 years ago when I wrote this driver, so my memory
+about this hardware was vague. Please let me correct the description
+in the commit log of eaba68785c2d.
 
-Fixes: 6a62974b667f ("i2c: uniphier_f: add UniPhier FIFO-builtin I2C driver")
+Clearing the IRQ status on exiting the IRQ handler is absolutely
+fine. This controller makes a pause while any IRQ status is asserted.
+If the IRQ status is cleared first, the hardware may start the next
+transaction before the IRQ handler finishes what it supposed to do.
+
+This partially reverts the bad commit with clear comments so that I
+will never repeat this mistake.
+
+I also investigated what is happening at the last moment of the read
+mode. The UNIPHIER_FI2C_INT_RF interrupt is asserted a bit earlier
+(by half a period of the clock cycle) than UNIPHIER_FI2C_INT_RB.
+
+I consulted a hardware engineer, and I got the following information:
+
+UNIPHIER_FI2C_INT_RF
+    asserted at the falling edge of SCL at the 8th bit.
+
+UNIPHIER_FI2C_INT_RB
+    asserted at the rising edge of SCL at the 9th (ACK) bit.
+
+In order to avoid calling uniphier_fi2c_stop() twice, check the latter
+interrupt. I also commented this because it is obscure hardware internal.
+
+Fixes: eaba68785c2d ("i2c: uniphier-f: fix race condition when IRQ is cleared")
 Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-uniphier-f.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-uniphier-f.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-uniphier-f.c b/drivers/i2c/busses/i2c-uniphier-f.c
-index bbd5b137aa216..928ea9930d17e 100644
+index 928ea9930d17e..dd0687e36a47b 100644
 --- a/drivers/i2c/busses/i2c-uniphier-f.c
 +++ b/drivers/i2c/busses/i2c-uniphier-f.c
-@@ -143,9 +143,10 @@ static void uniphier_fi2c_set_irqs(struct uniphier_fi2c_priv *priv)
- 	writel(priv->enabled_irqs, priv->membase + UNIPHIER_FI2C_IE);
- }
- 
--static void uniphier_fi2c_clear_irqs(struct uniphier_fi2c_priv *priv)
-+static void uniphier_fi2c_clear_irqs(struct uniphier_fi2c_priv *priv,
-+				     u32 mask)
- {
--	writel(-1, priv->membase + UNIPHIER_FI2C_IC);
-+	writel(mask, priv->membase + UNIPHIER_FI2C_IC);
- }
- 
- static void uniphier_fi2c_stop(struct uniphier_fi2c_priv *priv)
-@@ -172,6 +173,8 @@ static irqreturn_t uniphier_fi2c_interrupt(int irq, void *dev_id)
+@@ -173,8 +173,6 @@ static irqreturn_t uniphier_fi2c_interrupt(int irq, void *dev_id)
  		"interrupt: enabled_irqs=%04x, irq_status=%04x\n",
  		priv->enabled_irqs, irq_status);
  
-+	uniphier_fi2c_clear_irqs(priv, irq_status);
-+
+-	uniphier_fi2c_clear_irqs(priv, irq_status);
+-
  	if (irq_status & UNIPHIER_FI2C_INT_STOP)
  		goto complete;
  
-@@ -250,8 +253,6 @@ static irqreturn_t uniphier_fi2c_interrupt(int irq, void *dev_id)
+@@ -214,7 +212,13 @@ static irqreturn_t uniphier_fi2c_interrupt(int irq, void *dev_id)
+ 
+ 	if (irq_status & (UNIPHIER_FI2C_INT_RF | UNIPHIER_FI2C_INT_RB)) {
+ 		uniphier_fi2c_drain_rxfifo(priv);
+-		if (!priv->len)
++		/*
++		 * If the number of bytes to read is multiple of the FIFO size
++		 * (msg->len == 8, 16, 24, ...), the INT_RF bit is set a little
++		 * earlier than INT_RB. We wait for INT_RB to confirm the
++		 * completion of the current message.
++		 */
++		if (!priv->len && (irq_status & UNIPHIER_FI2C_INT_RB))
+ 			goto data_done;
+ 
+ 		if (unlikely(priv->flags & UNIPHIER_FI2C_MANUAL_NACK)) {
+@@ -253,6 +257,13 @@ static irqreturn_t uniphier_fi2c_interrupt(int irq, void *dev_id)
  	}
  
  handled:
--	uniphier_fi2c_clear_irqs(priv);
--
++	/*
++	 * This controller makes a pause while any bit of the IRQ status is
++	 * asserted. Clear the asserted bit to kick the controller just before
++	 * exiting the handler.
++	 */
++	uniphier_fi2c_clear_irqs(priv, irq_status);
++
  	spin_unlock(&priv->lock);
  
  	return IRQ_HANDLED;
-@@ -340,7 +341,7 @@ static int uniphier_fi2c_master_xfer_one(struct i2c_adapter *adap,
- 		priv->flags |= UNIPHIER_FI2C_STOP;
- 
- 	reinit_completion(&priv->comp);
--	uniphier_fi2c_clear_irqs(priv);
-+	uniphier_fi2c_clear_irqs(priv, U32_MAX);
- 	writel(UNIPHIER_FI2C_RST_TBRST | UNIPHIER_FI2C_RST_RBRST,
- 	       priv->membase + UNIPHIER_FI2C_RST);	/* reset TX/RX FIFO */
- 
 -- 
 2.20.1
 
