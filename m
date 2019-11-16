@@ -2,135 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7D2FF08D
-	for <lists+linux-i2c@lfdr.de>; Sat, 16 Nov 2019 17:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF14AFF3FC
+	for <lists+linux-i2c@lfdr.de>; Sat, 16 Nov 2019 17:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731093AbfKPQG2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 16 Nov 2019 11:06:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59158 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730625AbfKPPut (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:50:49 -0500
-Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 76AFC21826;
-        Sat, 16 Nov 2019 15:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919448;
-        bh=vBFYOrfj1IE1io4Th6lrRDVblv4ioYm1LhZ/3QjbwXI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QDjgWBGjDjiT8pQN0bIj08BqOXQlRlGns4YaOjGmit/SeFgrZiDF/6jVJiOxxZrCg
-         jelsM9pQL6Eqpu8ZPIIEsB8DSkoNuiqTxFKIfQStsRFbS9Q1DFZ4YMv+sJLpL8ZYYU
-         WqR3k8PMR+Twxw6LrOjxVyVWaWIr1dohm2vPVL+0=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 147/150] i2c: uniphier-f: fix timeout error after reading 8 bytes
-Date:   Sat, 16 Nov 2019 10:47:25 -0500
-Message-Id: <20191116154729.9573-147-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191116154729.9573-1-sashal@kernel.org>
-References: <20191116154729.9573-1-sashal@kernel.org>
+        id S1727837AbfKPQlx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 16 Nov 2019 11:41:53 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:46617 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727687AbfKPQlx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 16 Nov 2019 11:41:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1573922511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rieJJMhberbdtMUK9h8xQqVA5re21QebbZ42Q+bEccA=;
+        b=J9xJomuFOqhocQ9O98IzE9S6D1MH4yxYY2yR774H+Q87LN3n2+flU/RJi3Si05/RKa6aOU
+        h5jc9Aqmp+xuPdA0mS5CZ4KgpNmnc3PY9aaXz9HGxJXoqDn3MElrtmxem7sveOubtQUF+V
+        EWIwV3YRKsubJP2OxB/AezN+3rD39eA=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-212-3rY4nvUoPHuToycnFVJx1w-1; Sat, 16 Nov 2019 11:41:46 -0500
+Received: by mail-wr1-f70.google.com with SMTP id y3so11600314wrm.12
+        for <linux-i2c@vger.kernel.org>; Sat, 16 Nov 2019 08:41:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qP9qXptu1iumfZdm4TD6Ahp2yjsqgBao1/DCi2rpxH0=;
+        b=fS2vEb7QasRLwA76kKYpu+PmAD9t6cUCy3lQx3N4JvwQhg70EmBHSn20WdOcxfj7Rj
+         PsRBmLYccR2S/XrH3nwop+KhAAYjqi4Xch3i9eZwnxwM6jew9AjWplJDG2kb7tmBcA4S
+         mgLYfyD1ePCW8DCzF4gPWBLdMztNcLQ3wUnJGUcQDERrilzUmHIvG4ukKP0i7a+HmEnh
+         +NXkLe1U2r1XyS40IwEMIRIyLy9DuFC9VFfPk0c1SiB64SeZ89X6yKQjiE1sNP6t81Bz
+         OdirgqGyT+JxxGUN0F3/HBqiuwlKYA87Vs7ZEfODgnbBKmfXdJjWRL7ywc9uUdHUbc6X
+         j4VA==
+X-Gm-Message-State: APjAAAWKBpyrF7L4u/9o34HhJeSnYxeG5iYxKLU6jwWVogKoqoiMy4hM
+        f6s+7MEklgInO+5I8qqJuejR7Y/XgqVknKLyAfNJ1AiSB1IlSECu/CF4ipHTzzgOYxawXkp14aT
+        aPHELXhrke6PZtbs5crJk
+X-Received: by 2002:a05:6000:1206:: with SMTP id e6mr21516277wrx.113.1573922505272;
+        Sat, 16 Nov 2019 08:41:45 -0800 (PST)
+X-Google-Smtp-Source: APXvYqwBEdg1RV6Rn9vhpufQzBH4HFASZZ+VzcZmLE4ePDmmdJUuzFmiMVrJ28S+UR8Oz8LAXb5eFA==
+X-Received: by 2002:a05:6000:1206:: with SMTP id e6mr21516258wrx.113.1573922505036;
+        Sat, 16 Nov 2019 08:41:45 -0800 (PST)
+Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
+        by smtp.gmail.com with ESMTPSA id t13sm15322975wrr.88.2019.11.16.08.41.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Nov 2019 08:41:44 -0800 (PST)
+Subject: Re: [PATCH v2] i2c: acpi: Force bus speed to 400KHz if a Silead
+ touchscreen is present
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        youling 257 <youling257@gmail.com>
+References: <20191113182938.279299-1-hdegoede@redhat.com>
+ <20191114204815.GC7213@kunai>
+ <c67a085b-8013-ef03-b5b2-431ea64ca97a@redhat.com>
+ <20191115205641.GA8973@kunai>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <d340cd7b-c819-58a0-f5ee-efe0665cf4df@redhat.com>
+Date:   Sat, 16 Nov 2019 17:41:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191115205641.GA8973@kunai>
+Content-Language: en-US
+X-MC-Unique: 3rY4nvUoPHuToycnFVJx1w-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Masahiro Yamada <yamada.masahiro@socionext.com>
+Hi,
 
-[ Upstream commit c2a653deaa81f5a750c0dfcbaf9f8e5195cbe4a5 ]
+On 15-11-2019 21:56, Wolfram Sang wrote:
+>=20
+>> Well it is configuring the bus at a speed where not all devices
+>> can work, where as there is another speed where all devices do work.
+>> With that said I'm open to a different wording for the warning. Feel
+>> free to modify this before you add it to your tree.
+>=20
+> Changed the message to "DSDT uses known not-working I2C bus speed %d,
+> forcing it to %d\n" and applied to for-current, thanks!
 
-I was totally screwed up in commit eaba68785c2d ("i2c: uniphier-f:
-fix race condition when IRQ is cleared"). Since that commit, if the
-number of read bytes is multiple of the FIFO size (8, 16, 24... bytes),
-the STOP condition could be issued twice, depending on the timing.
-If this happens, the controller will go wrong, resulting in the timeout
-error.
+The new message sounds good to me, thanks.
 
-It was more than 3 years ago when I wrote this driver, so my memory
-about this hardware was vague. Please let me correct the description
-in the commit log of eaba68785c2d.
+Regards,
 
-Clearing the IRQ status on exiting the IRQ handler is absolutely
-fine. This controller makes a pause while any IRQ status is asserted.
-If the IRQ status is cleared first, the hardware may start the next
-transaction before the IRQ handler finishes what it supposed to do.
-
-This partially reverts the bad commit with clear comments so that I
-will never repeat this mistake.
-
-I also investigated what is happening at the last moment of the read
-mode. The UNIPHIER_FI2C_INT_RF interrupt is asserted a bit earlier
-(by half a period of the clock cycle) than UNIPHIER_FI2C_INT_RB.
-
-I consulted a hardware engineer, and I got the following information:
-
-UNIPHIER_FI2C_INT_RF
-    asserted at the falling edge of SCL at the 8th bit.
-
-UNIPHIER_FI2C_INT_RB
-    asserted at the rising edge of SCL at the 9th (ACK) bit.
-
-In order to avoid calling uniphier_fi2c_stop() twice, check the latter
-interrupt. I also commented this because it is obscure hardware internal.
-
-Fixes: eaba68785c2d ("i2c: uniphier-f: fix race condition when IRQ is cleared")
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-uniphier-f.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-uniphier-f.c b/drivers/i2c/busses/i2c-uniphier-f.c
-index 928ea9930d17e..dd0687e36a47b 100644
---- a/drivers/i2c/busses/i2c-uniphier-f.c
-+++ b/drivers/i2c/busses/i2c-uniphier-f.c
-@@ -173,8 +173,6 @@ static irqreturn_t uniphier_fi2c_interrupt(int irq, void *dev_id)
- 		"interrupt: enabled_irqs=%04x, irq_status=%04x\n",
- 		priv->enabled_irqs, irq_status);
- 
--	uniphier_fi2c_clear_irqs(priv, irq_status);
--
- 	if (irq_status & UNIPHIER_FI2C_INT_STOP)
- 		goto complete;
- 
-@@ -214,7 +212,13 @@ static irqreturn_t uniphier_fi2c_interrupt(int irq, void *dev_id)
- 
- 	if (irq_status & (UNIPHIER_FI2C_INT_RF | UNIPHIER_FI2C_INT_RB)) {
- 		uniphier_fi2c_drain_rxfifo(priv);
--		if (!priv->len)
-+		/*
-+		 * If the number of bytes to read is multiple of the FIFO size
-+		 * (msg->len == 8, 16, 24, ...), the INT_RF bit is set a little
-+		 * earlier than INT_RB. We wait for INT_RB to confirm the
-+		 * completion of the current message.
-+		 */
-+		if (!priv->len && (irq_status & UNIPHIER_FI2C_INT_RB))
- 			goto data_done;
- 
- 		if (unlikely(priv->flags & UNIPHIER_FI2C_MANUAL_NACK)) {
-@@ -253,6 +257,13 @@ static irqreturn_t uniphier_fi2c_interrupt(int irq, void *dev_id)
- 	}
- 
- handled:
-+	/*
-+	 * This controller makes a pause while any bit of the IRQ status is
-+	 * asserted. Clear the asserted bit to kick the controller just before
-+	 * exiting the handler.
-+	 */
-+	uniphier_fi2c_clear_irqs(priv, irq_status);
-+
- 	spin_unlock(&priv->lock);
- 
- 	return IRQ_HANDLED;
--- 
-2.20.1
+Hans
 
