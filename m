@@ -2,159 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C822102F4E
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Nov 2019 23:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D69103540
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2019 08:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727226AbfKSWaZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Nov 2019 17:30:25 -0500
-Received: from mail-eopbgr40110.outbound.protection.outlook.com ([40.107.4.110]:8366
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726025AbfKSWaZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 19 Nov 2019 17:30:25 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TWWYCsfNUQwuHvR+h4Uka/PISvaJdo6HXT5eGy6GPoh/gIwUMRKV/09xWuYn37MvmYIUICmLP5KjYisYsoaOT/DvQEhyPmDOgCOybKJe2/ZgexElN/1qaA4JPRaRqiaM7PtVqD71/2EzLbYumhVMxE4SZ/MhlEmf0Ur+u0YK3tbsGVTOJUcqQMDP9komWjI4GoB9XJI+xZ6YuXCXLGheCNo7BNpwA47gSwSr2MFw6mM380l+AzDPm7nlmtyWSDkLH0W/DuIv3Ob8EQ6oZijxEqUL8WzUPZLEoMhKBGBxWihFIK0Q3xbvcb8smtwF0WBDwktuIEhPo0PpOL/XDhxvqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k/VSrS/n5InuP5tEJCL71Pa5tjEe6M0q8kgMJqdj/Mw=;
- b=YrZHnQabuNEIdE5oaY2/KcZFHlP/mPhqcigUKb7cMaJLzVNh5Cq+VBE5Yx0Us2Meyz4xmETU36of9lVHK26pLBC7nyjYuk/al3dkJ4goMvw5F/1LRPHYKSeyAeFJOq7t8MigQiE5QnrqcMOb98rgyoDlOWpwZXfn9r9dxzJKGvF1wI9AyhSLfMjrqt9QaSeQVEWevTxlRcgiUL8tN83ibHJZw+Xn5nRVIMcipBth6ODbMTbNSMLRmReJXcjAlGXFRez2RnrPkW8xqMh0ieiiAkFY30cIdpmyj1R7xmXM1Sv0nS/S8/9/fD1zgO11Ed/wgshih+1gntvtDcodxnIlpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k/VSrS/n5InuP5tEJCL71Pa5tjEe6M0q8kgMJqdj/Mw=;
- b=iPrivwnJZzG86aYb0QPrKnz9ITNzCE1fi9mtLYaDWPxcZLL+SWkdInNnjFBq7TtDFLoVqIag5sIprQaIhKHqi8BsVbWgNCtLw0sAJYq9RYQrueEX81J+1sLyUhD3B7YUjvAEyDgzBOdsZwTuElbhHPzKVr2gY+jpGjPVh//kC1k=
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com (52.134.66.158) by
- DB3PR0202MB3513.eurprd02.prod.outlook.com (52.134.68.10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2451.30; Tue, 19 Nov 2019 22:30:21 +0000
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::477:9510:3e3:f8ca]) by DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::477:9510:3e3:f8ca%7]) with mapi id 15.20.2474.015; Tue, 19 Nov 2019
- 22:30:19 +0000
-From:   Peter Rosin <peda@axentia.se>
-To:     Tali Perry <tali.perry1@gmail.com>,
-        "avifishman70@gmail.com" <avifishman70@gmail.com>,
-        "tmaimon77@gmail.com" <tmaimon77@gmail.com>,
-        "venture@google.com" <venture@google.com>,
-        "yuenn@google.com" <yuenn@google.com>,
-        "benjaminfair@google.com" <benjaminfair@google.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "wsa@the-dreams.de" <wsa@the-dreams.de>,
-        "jdelvare@suse.de" <jdelvare@suse.de>,
-        "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "arnd@arndb.de" <arnd@arndb.de>, "max@enpas.org" <max@enpas.org>,
-        "krzysztof.adamski@nokia.com" <krzysztof.adamski@nokia.com>,
-        "syniurge@gmail.com" <syniurge@gmail.com>,
-        "puwen@hygon.cn" <puwen@hygon.cn>,
-        "jfi@ssv-embedded.de" <jfi@ssv-embedded.de>,
-        "sr@denx.de" <sr@denx.de>,
-        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
-        "kdasu.kdev@gmail.com" <kdasu.kdev@gmail.com>,
-        "enric.balletbo@collabora.com" <enric.balletbo@collabora.com>,
-        "baolin.wang@linaro.org" <baolin.wang@linaro.org>,
-        "ludovic.desroches@microchip.com" <ludovic.desroches@microchip.com>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 1/2] dt-bindings: i2c: npcm7xx: * add binding for i2c
- controller
-Thread-Topic: [PATCH v5 1/2] dt-bindings: i2c: npcm7xx: * add binding for i2c
- controller
-Thread-Index: AQHVnu54E09/kMD0Sk6PJN8U0wqzjqeTE/aA
-Date:   Tue, 19 Nov 2019 22:30:19 +0000
-Message-ID: <a599e9e7-6b00-2bbc-407a-8f48b17b43c5@axentia.se>
-References: <20191119144930.227241-1-tali.perry1@gmail.com>
- <20191119144930.227241-2-tali.perry1@gmail.com>
-In-Reply-To: <20191119144930.227241-2-tali.perry1@gmail.com>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
-x-originating-ip: [213.112.138.100]
-x-clientproxiedby: AM0PR05CA0049.eurprd05.prod.outlook.com
- (2603:10a6:208:be::26) To DB3PR0202MB3434.eurprd02.prod.outlook.com
- (2603:10a6:8:5::30)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peda@axentia.se; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6dbfa4d7-2ba0-475b-b7b3-08d76d400f2d
-x-ms-traffictypediagnostic: DB3PR0202MB3513:
-x-microsoft-antispam-prvs: <DB3PR0202MB351311F23EA34548BF0A7AE6BC4C0@DB3PR0202MB3513.eurprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 022649CC2C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(396003)(39830400003)(366004)(136003)(346002)(199004)(189003)(53546011)(14444005)(52116002)(256004)(14454004)(36756003)(58126008)(11346002)(5660300002)(4001150100001)(7416002)(86362001)(508600001)(2201001)(54906003)(110136005)(7406005)(316002)(2501003)(76176011)(71200400001)(386003)(6116002)(31686004)(71190400001)(7736002)(66066001)(65806001)(25786009)(81166006)(4326008)(26005)(229853002)(99286004)(65956001)(6246003)(81156014)(6506007)(66446008)(64756008)(66476007)(486006)(6486002)(66556008)(446003)(2906002)(186003)(8676002)(31696002)(66946007)(2616005)(305945005)(6436002)(476003)(3846002)(8936002)(102836004)(6512007)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3513;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: axentia.se does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gWbsGoklobIuGWcp2TnxqrMMP9RUPwCtcXAP+puQe306aIzqKHQgRRlokWzzbKICUAR8ME+jc1HYJaNq+5shbR00LEbSPoPDpAxyyl6ksGdaSouCPss6tdXaezbCxAsQli3eNPQ0Hknf84yeM/qUFwHENBFnNWiFOShwGzKx6RgbaQzKCzYRICInZL5QPHq8N/WXaupifg47x8jIRAAclSE6XV/fPgBFaKLYtugVHcwiyrOBl+UVzSogmR3uGLXmYzXe+21JYyD6yKdX1q2O8GPUhkopHnRWca4YFSKbEd6E+RHAnklETIklKxaMdqqpAojF+O2PDCyuVk9fDnPAXccwZxBP1ufRTaljSzzM64j5zQ12Goa99K/xEuecmckDY457HLPkbVQg2m3WioYxMEYPlI/EeWU6KrFbAIavJpITDwYB9heqLtRZ5z37ukfe
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C6B6B04574D64B46A7E1AA33AC408CDD@eurprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727719AbfKTHhj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 Nov 2019 02:37:39 -0500
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:45152 "EHLO
+        herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726647AbfKTHhj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 20 Nov 2019 02:37:39 -0500
+Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id xAK7apQb024885;
+        Wed, 20 Nov 2019 09:36:51 +0200
+Received: by taln60.nuvoton.co.il (Postfix, from userid 20088)
+        id 58EE060329; Wed, 20 Nov 2019 09:36:51 +0200 (IST)
+From:   Tali Perry <tali.perry1@gmail.com>
+To:     robh+dt@kernel.org, mark.rutland@arm.com, yuenn@google.com,
+        venture@google.com, benjaminfair@google.com,
+        avifishman70@gmail.com, joel@jms.id.au, tmaimon77@gmail.com,
+        wsa@the-dreams.de, syniurge@gmail.com
+Cc:     linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tali Perry <tali.perry1@gmail.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 0/2] i2c: npcm: add NPCM i2c controller driver
+Date:   Wed, 20 Nov 2019 09:36:20 +0200
+Message-Id: <20191120073622.37938-1-tali.perry1@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6dbfa4d7-2ba0-475b-b7b3-08d76d400f2d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Nov 2019 22:30:19.8102
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SHrF/mfdGwrMxHzdfdxrMjN7frT3F/D8YfkpNQshMAoHoek2tVEtcJ0saBNDFDHU
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3513
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gMjAxOS0xMS0xOSAxNTo0OSwgVGFsaSBQZXJyeSB3cm90ZToNCj4gIGR0LWJpbmRpbmdzOiBp
-MmM6IG5wY203eHg6ICogYWRkIGJpbmRpbmcgZm9yIGkyYyBjb250cm9sbGVyDQoNCkkgbWlzc2lu
-ZyBhbiBlbXB0eSBsaW5lIGJlZm9yZSB0aGUgYmxvY2sgb2YgdGFncywgYnV0IHRoZSBiaWdnZXIg
-cHJvYmxlbQ0KaXMgdGhlIHJlcGVhdGVkIHN1YmplY3QgbGluZS4gQWxzbywgdGhlICcqJyBpbiB0
-aGUgc3ViamVjdCBtYWtlcyBubw0Kc2Vuc2UgdG8gbWUuDQoNCj4gU2lnbmVkLW9mZi1ieTogVGFs
-aSBQZXJyeSA8dGFsaS5wZXJyeTFAZ21haWwuY29tPg0KPiBSZXZpZXdlZC1ieTogUm9iIEhlcnJp
-bmcgPHJvYmhAa2VybmVsLm9yZz4NCj4gLS0tDQo+ICAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy9p
-MmMvaTJjLW5wY203eHgudHh0ICAgfCAyOSArKysrKysrKysrKysrKysrKysrDQo+ICAxIGZpbGUg
-Y2hhbmdlZCwgMjkgaW5zZXJ0aW9ucygrKQ0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50
-YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLW5wY203eHgudHh0DQo+IA0KPiBkaWZm
-IC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMtbnBjbTd4
-eC50eHQgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2kyYy1ucGNtN3h4
-LnR4dA0KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAuLjBlY2Fl
-OTUwNzQ4Yg0KPiAtLS0gL2Rldi9udWxsDQo+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy9pMmMvaTJjLW5wY203eHgudHh0DQo+IEBAIC0wLDAgKzEsMjkgQEANCj4gK051
-dm90b24gTlBDTTdYWCBJMkMgYnVzDQo+ICsNCj4gK1RoZSBOUENNNzUweCBpbmNsdWRlcyBzaXh0
-ZWVuIEkyQyBidXMgY29udHJvbGxlcnMuIEFsbCBDb250cm9sbGVycyBzdXBwb3J0DQo+ICtib3Ro
-IG1hc3RlciBhbmQgc2xhdmUgbW9kZS4gRWFjaCBjb250cm9sbGVyIGhhcyB0d28gMTYgYnl0ZSBI
-VyBGSUZPIGZvciBUWCBhbmQNCj4gK1JYLg0KPiArDQo+ICtSZXF1aXJlZCBwcm9wZXJ0aWVzOg0K
-PiArLSBjb21wYXRpYmxlICAgICAgOiBtdXN0IGJlICJudXZvdG9uLG5wY203NTAtaTJjIg0KPiAr
-LSByZWcgICAgICAgICAgICAgOiBPZmZzZXQgYW5kIGxlbmd0aCBvZiB0aGUgcmVnaXN0ZXIgc2V0
-IGZvciB0aGUgZGV2aWNlLg0KPiArLSBpbnRlcnJ1cHRzICAgICAgOiBDb250YWluIHRoZSBJMkMg
-aW50ZXJydXB0IHdpdGggZmxhZ3MgZm9yIGZhbGxpbmcgZWRnZS4NCj4gKy0gY2xvY2tzICAgICAg
-ICAgIDogcGhhbmRsZSBvZiBJMkMgcmVmZXJlbmNlIGNsb2NrLg0KPiArDQo+ICtPcHRpb25hbDoN
-Cj4gKy0gYnVzLWZyZXF1ZW5jeSAgIDogQ29udGFpbiB0aGUgSTJDIGJ1cyBmcmVxdWVuY3ksDQo+
-ICsJCQl0aGUgZGVmYXVsdCBJMkMgYnVzIGZyZXF1ZW5jeSBpcyAxMDAwMDAuDQo+ICstIHBpbmN0
-cmwtMCAgICAgICA6IG11c3QgYmUgPCZzbWJYX3BpbnM+LCBYIGlzIG1vZHVsZSBudW1iZXINCj4g
-KwkJCShvbiBOUENNN1hYIGl0J3MgMCB0byAxNSkNCg0KSXNuJ3QgdGhpcyBhIHN0cmFuZ2UgcmVx
-dWlyZW1lbnQ/IEFtIEksIGFzIGEgZGV2aWNlIHRyZWUgYXV0aG9yLCBub3QgZnJlZSB0bw0KdXNl
-IGFueSBsYWJlbCBuYW1lcyBJIHdhbnQ/IFN1cmVseSwgd2hhdCBpcyBpbXBvcnRhbnQgaXMgd2hh
-dCB0aGUgbGFiZWwgcmVmZXJzDQp0byBhbmQgbm90IGl0cyBuYW1lPw0KDQpDaGVlcnMsDQpQZXRl
-cg0KDQo+ICstIHBpbmN0cmwtbmFtZXMgICA6IHNob3VsZCBiZSBzZXQgdG8gImRlZmF1bHQiDQo+
-ICtFeGFtcGxlOg0KPiArDQo+ICsJaTJjMDogaTJjQDgwMDAwIHsNCj4gKwkJY29tcGF0aWJsZSA9
-ICJudXZvdG9uLG5wY203NTAtaTJjIjsNCj4gKwkJcmVnID0gPDB4ODAwMDAgMHgxMDAwPjsNCj4g
-KwkJY2xvY2tzID0gPCZjbGsgTlBDTTdYWF9DTEtfQVBCMj47DQo+ICsJCWJ1cy1mcmVxdWVuY3kg
-PSA8MTAwMDAwPjsNCj4gKwkJaW50ZXJydXB0cyA9IDxHSUNfU1BJIDY0IElSUV9UWVBFX0xFVkVM
-X0hJR0g+Ow0KPiArCQlwaW5jdHJsLW5hbWVzID0gImRlZmF1bHQiOw0KPiArCQlwaW5jdHJsLTAg
-PSA8JnNtYjBfcGlucz47DQo+ICsJfTsNCj4gDQoNCg==
+This patch set adds i2c controller support 
+for the Nuvoton NPCM Baseboard Management Controller (BMC).
+
+NPCM7xx includes 16 I2C controllers. This driver operates the controller.
+This module also includes a slave mode.
+
+---
+v6 -> v5:
+	- Update documentation
+
+v5 -> v4:
+	- support recovery
+	- master-slave switch support needed for IPMB
+
+v4 -> v3:
+	- typo on cover letter.
+
+v3 -> v2:
+	- fix dt binding: compatible name: omit "bus"
+
+v2 -> v1:
+	- run check patch in strict mode.
+	- use linux crc.
+	- define regs in constant offset without base.
+	- remove debug prints.
+	- no declarations for local functions.
+	
+v1: initial version
+
+Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+---
+Tali Perry (2):
+  Added device tree binding documentation for Nuvoton BMC NPCM I2C
+    controller.
+  Add Nuvoton NPCM BMC I2C controller driver.
+
+ .../devicetree/bindings/i2c/i2c-npcm7xx.txt   |   29 +
+ drivers/i2c/busses/Kconfig                    |   11 +
+ drivers/i2c/busses/Makefile                   |    1 +
+ drivers/i2c/busses/i2c-npcm7xx.c              | 2486 +++++++++++++++++
+ 4 files changed, 2527 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-npcm7xx.txt
+ create mode 100644 drivers/i2c/busses/i2c-npcm7xx.c
+
+-- 
+2.22.0
+
