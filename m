@@ -2,98 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A5D104EC2
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2019 10:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D64E104FCF
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2019 10:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726132AbfKUJKy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Nov 2019 04:10:54 -0500
-Received: from mx2.suse.de ([195.135.220.15]:41892 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726014AbfKUJKy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 21 Nov 2019 04:10:54 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 942DCAF42;
-        Thu, 21 Nov 2019 09:10:52 +0000 (UTC)
-Date:   Thu, 21 Nov 2019 10:10:51 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Linux I2C <linux-i2c@vger.kernel.org>
-Cc:     Corey Minyard <cminyard@mvista.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH] i2c: i2c-smbus: Don't filter out duplicate alerts
-Message-ID: <20191121101051.71859534@endymion>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1726197AbfKUJy6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 Nov 2019 04:54:58 -0500
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:45274 "EHLO
+        herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726170AbfKUJy6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Nov 2019 04:54:58 -0500
+Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id xAL9rxav021978;
+        Thu, 21 Nov 2019 11:54:00 +0200
+Received: by taln60.nuvoton.co.il (Postfix, from userid 20088)
+        id 8C38E60329; Thu, 21 Nov 2019 11:53:59 +0200 (IST)
+From:   Tali Perry <tali.perry1@gmail.com>
+To:     robh+dt@kernel.org, mark.rutland@arm.com, yuenn@google.com,
+        venture@google.com, benjaminfair@google.com,
+        avifishman70@gmail.com, joel@jms.id.au, tmaimon77@gmail.com,
+        wsa@the-dreams.de, syniurge@gmail.com
+Cc:     linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tali Perry <tali.perry1@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        kbuild test robot <lkp@intel.com>
+Subject: [PATCH v7 0/2] i2c: npcm: add NPCM i2c controller driver
+Date:   Thu, 21 Nov 2019 11:53:48 +0200
+Message-Id: <20191121095350.158689-1-tali.perry1@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Corey Minyard <cminyard@mvista.com>
+This patch set adds i2c controller support 
+for the Nuvoton NPCM Baseboard Management Controller (BMC).
 
-Getting the same alert twice in a row is legal and normal,
-especially on a fast device (like running in qemu).  Kind of
-like interrupts.  So don't report duplicate alerts, and deliver
-them normally.
+NPCM7xx includes 16 I2C controllers. This driver operates the controller.
+This module also includes a slave mode.
 
-[JD: Fixed subject]
-
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
 ---
-That's a 4-year-old patch from Corey which I stumbled upon this
-morning. I was supposed to test it on my ADM1032 evaluation board but
-never got to it. Sorry about that. It turns out that I no longer have
-any system with a parallel port to test it.
 
-I think the patch is correct and whatever the problem was on my ADM1032
-evaluation board, it should be fixed differently. Maybe it was a wrong
-trigger type, or alerts must be disabled temporarily during processing,
-or the hardware is actually bogus and it would be up to the device
-driver to ignore alerts for some time after receiving one. Whatever,
-let's apply the fix now and deal with this problem later if/when it
-resurfaces.
+v7 -> v6:
+	- Rebased on Linux 5.4-rc8  (was Linux 5.4-rc7).
+	- Fix issue found by kbuild test robot (redundant include).
+	- Note: left a warning related to fall through. This fall through is
+	  intentional.
+	
+v6 -> v5:
+	- Update documentation
 
- drivers/i2c/i2c-smbus.c | 7 -------
- 1 file changed, 7 deletions(-)
+v5 -> v4:
+	- support recovery
+	- master-slave switch support needed for IPMB
 
-diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-index 94765a8..cecd423 100644
---- a/drivers/i2c/i2c-smbus.c
-+++ b/drivers/i2c/i2c-smbus.c
-@@ -75,7 +75,6 @@ static void smbus_alert(struct work_struct *work)
- {
- 	struct i2c_smbus_alert *alert;
- 	struct i2c_client *ara;
--	unsigned short prev_addr = 0;	/* Not a valid address */
- 
- 	alert = container_of(work, struct i2c_smbus_alert, alert);
- 	ara = alert->ara;
-@@ -99,18 +98,12 @@ static void smbus_alert(struct work_struct *work)
- 		data.flag = status & 1;
- 		data.addr = status >> 1;
- 
--		if (data.addr == prev_addr) {
--			dev_warn(&ara->dev, "Duplicate SMBALERT# from dev "
--				"0x%02x, skipping\n", data.addr);
--			break;
--		}
- 		dev_dbg(&ara->dev, "SMBALERT# from dev 0x%02x, flag %d\n",
- 			data.addr, data.flag);
- 
- 		/* Notify driver for the device which issued the alert */
- 		device_for_each_child(&ara->adapter->dev, &data,
- 				      smbus_do_alert);
--		prev_addr = data.addr;
- 	}
- 
- 	/* We handled all alerts; re-enable level-triggered IRQs */
+v4 -> v3:
+	- typo on cover letter.
+
+v3 -> v2:
+	- fix dt binding: compatible name: omit "bus"
+
+v2 -> v1:
+	- run check patch in strict mode.
+	- use linux crc.
+	- define regs in constant offset without base.
+	- remove debug prints.
+	- no declarations for local functions.
+	
+v1: initial version
+
+Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reported-by: kbuild test robot <lkp@intel.com>
+
+---
+Tali Perry (2):
+  Added device tree binding documentation for Nuvoton BMC NPCM I2C
+    controller.
+  Add Nuvoton NPCM BMC I2C controller driver.
+
+ .../devicetree/bindings/i2c/i2c-npcm7xx.txt   |   29 +
+ drivers/i2c/busses/Kconfig                    |   11 +
+ drivers/i2c/busses/Makefile                   |    1 +
+ drivers/i2c/busses/i2c-npcm7xx.c              | 2485 +++++++++++++++++
+ 4 files changed, 2526 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-npcm7xx.txt
+ create mode 100644 drivers/i2c/busses/i2c-npcm7xx.c
 
 
+base-commit: af42d3466bdc8f39806b26f593604fdc54140bcb
 -- 
-Jean Delvare
-SUSE L3 Support
+2.22.0
+
