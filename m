@@ -2,123 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD39104E1B
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2019 09:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33FD5104EBB
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2019 10:07:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726658AbfKUIhP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Nov 2019 03:37:15 -0500
-Received: from mx2.suse.de ([195.135.220.15]:48636 "EHLO mx1.suse.de"
+        id S1726197AbfKUJG4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 Nov 2019 04:06:56 -0500
+Received: from mail-eopbgr740058.outbound.protection.outlook.com ([40.107.74.58]:53716
+        "EHLO NAM01-BN3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726396AbfKUIhP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 21 Nov 2019 03:37:15 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 124D3B268;
-        Thu, 21 Nov 2019 08:37:13 +0000 (UTC)
-Date:   Thu, 21 Nov 2019 09:37:10 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     <linux-i2c@vger.kernel.org>, Wolfram Sang <wsa@the-dreams.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: Re: [PATCH v2] i2c: i801: Correct Intel Jasper Lake SOC naming
-Message-ID: <20191121093710.5997917f@endymion>
-In-Reply-To: <20191120151932.40269-1-andriy.shevchenko@linux.intel.com>
-References: <20191120151932.40269-1-andriy.shevchenko@linux.intel.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1726170AbfKUJGz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 21 Nov 2019 04:06:55 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fUNddtynFw4tbJbVLVEmVAgG3g3fMQZjtrFENT2grfYxzIB3/3XZAeLPNoty2KYZnfVF5y8OJ7za05Dt+ywN4R3lcmkxLVUL5QC3XQwR0YIdf6sYv7dhT5f0//QE1jI0h+0cuadN0P4jBbMRm7w4fqMqrbeBq2Z5chCSpUVPf4Bwg4Rv0GuI4xJ0gdwWPnMC1r6eZZZDEbmBqYEyApE0BHhde53Dk5a9NYtqOT0ajY/XMj+fBTh8rQ1eyRUYVCdLerzzJQU+SH1uJyokUmuEBz3SjkYwbh2oZlecLHCc82QtHNszs6Y/580p2tQ60T8F9PmSIU9cDvcJ+0K2xjtCVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i+4z02INYpeY6l3JRbOXIlsxdd40cwARpzeOolD7X1A=;
+ b=GpJvoQav9Cm5VP2Y7vZnWJYNmfnFB9WZ03osO4kWv68wHU39T8WY0S0Te3C/X3ri5NqmK+938GxTYoY4GKqxckM9JyynNXmPukR2LVZLHrT662RKcxdWCmOgCQDt7TYASICYMJXyJRKhtLJuK/FH80rULR4/RZaqN5XjvL03s80y6S4mnufz59Ra8QqWVocF4Oeeqilfv+fP30IG1ifrWhWx8gVxZU1KX0uU8Q45skalJMGmJBDi2U+iZCDbPpn3AP8HJr5gSn2PuVYipqwyjhDoCmCDiPF3ioF8t+qwk5FpKOekyocku5w8BpqqpjJAi4GNrTbUZASTJT1XjkTMkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i+4z02INYpeY6l3JRbOXIlsxdd40cwARpzeOolD7X1A=;
+ b=plQ2nB4XYZIOy6Ic60eUbMTKkmJPRzG7lKojQjw92rsDXbMlPrz5MkpAldvOXiZmfz04BmvCIi1f4Fh61Wy/AnPGB2RmxnzEfpairRzZAFKxZ09RUx9MkYpqi+Xe1b1g7vEkKkvCjlqTKzX2GxtX6LXac3WJoZ8kmtXKLGAtmIQ=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=Akshu.Agrawal@amd.com; 
+Received: from MN2PR12MB2878.namprd12.prod.outlook.com (20.179.80.143) by
+ MN2PR12MB3583.namprd12.prod.outlook.com (20.178.241.76) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2451.30; Thu, 21 Nov 2019 09:06:52 +0000
+Received: from MN2PR12MB2878.namprd12.prod.outlook.com
+ ([fe80::305d:cfb0:baaf:7008]) by MN2PR12MB2878.namprd12.prod.outlook.com
+ ([fe80::305d:cfb0:baaf:7008%4]) with mapi id 15.20.2451.031; Thu, 21 Nov 2019
+ 09:06:52 +0000
+From:   Akshu Agrawal <akshu.agrawal@amd.com>
+Cc:     akshu.agrawal@amd.com, rrangel@chromium.org,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] i2c: i2c-cros-ec-tunnel: Fix slave device enumeration
+Date:   Thu, 21 Nov 2019 14:36:17 +0530
+Message-Id: <20191121090620.75569-1-akshu.agrawal@amd.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: MAXPR0101CA0039.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:d::25) To MN2PR12MB2878.namprd12.prod.outlook.com
+ (2603:10b6:208:aa::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [165.204.156.251]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: e733823c-48d4-4ad0-bdf4-08d76e6225ba
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3583:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3583E9768D7645FC44200F1CF84E0@MN2PR12MB3583.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2887;
+X-Forefront-PRVS: 0228DDDDD7
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(136003)(376002)(396003)(346002)(199004)(189003)(51416003)(86362001)(52116002)(6666004)(99286004)(2906002)(186003)(81156014)(26005)(6116002)(8676002)(16586007)(4326008)(50466002)(81166006)(8936002)(2616005)(50226002)(3846002)(6436002)(6506007)(386003)(54906003)(44832011)(316002)(36756003)(4744005)(1671002)(1076003)(6486002)(14454004)(66066001)(48376002)(25786009)(47776003)(6512007)(5660300002)(66946007)(478600001)(66476007)(66556008)(109986005)(305945005)(7736002)(266003);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR12MB3583;H:MN2PR12MB2878.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+Received-SPF: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tCb94M0V9s2gz+klgg0ujjzojkJO/XAxGVIYLSy4XB4qNcMlmuUmFJ01xWoLLpps0GXmHlaBvCVR0ULtOzQwaI1luyt1jE9nITzviPTORDHabrdfEdqduPG2i+EM/4s032Lp0icG0tg6zztq7OehiYQ4IzgXMlwvP2u/Wy9xsXWJjaX7TNgUBLtPMWxnpGvWWODkRv+mNYhj35kSuW2DKj4NOdJ2TIhGkIyU5TDuGTJ6j2RSVVAGONKn+eSL2nBdrkJ53oEd1Hb1LHn5txJ7NLn237L3Lum3zGddx5GXQW+f5tFL/lgmvqa8Ic/Ax0v+Y79n6y89ljn6b1JDL59MulvBlzfXe8YR98vNETOciDJq8vjVn323A88QxLUcrJWNFysoNYHvb1UhUuGpGSMAR1wGoV1utkbdxLYSrzwfRQA6R0bq49LHg/h1TtzlpPLg
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e733823c-48d4-4ad0-bdf4-08d76e6225ba
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2019 09:06:52.0687
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VVc0hXsGk780421ItFrEABnzmmn0TbtCDV4Xy0T9KIdSLRfsJUkgWJPoBVdSUuMvAQwacfqcKc6FpML2RsFqQQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3583
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 20 Nov 2019 17:19:32 +0200, Andy Shevchenko wrote:
-> There is no suffix applied to Intel Jasper Lake SOC. Remove it
-> from the comments and definitions. Besides that, it's a SOC,
-> thus replace PCH with SOC where it appropriate.
-> 
-> Fixes: e0c61c04791a ("i2c: i801: Add support for Intel Jasper Lake")
-> Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: PCH -> SOC (Jarkko)
->  Documentation/i2c/busses/i2c-i801.rst | 2 +-
->  drivers/i2c/busses/Kconfig            | 2 +-
->  drivers/i2c/busses/i2c-i801.c         | 8 ++++----
->  3 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/i2c/busses/i2c-i801.rst b/Documentation/i2c/busses/i2c-i801.rst
-> index aa4a0e26e9b9..b83da0e94184 100644
-> --- a/Documentation/i2c/busses/i2c-i801.rst
-> +++ b/Documentation/i2c/busses/i2c-i801.rst
-> @@ -42,7 +42,7 @@ Supported adapters:
->    * Intel Comet Lake (PCH)
->    * Intel Elkhart Lake (PCH)
->    * Intel Tiger Lake (PCH)
-> -  * Intel Jasper Lake (PCH)
-> +  * Intel Jasper Lake (SOC)
->  
->     Datasheets: Publicly available at the Intel website
->  
-> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> index 45ca099e7315..71e5ee263dce 100644
-> --- a/drivers/i2c/busses/Kconfig
-> +++ b/drivers/i2c/busses/Kconfig
-> @@ -145,7 +145,7 @@ config I2C_I801
->  	    Comet Lake (PCH)
->  	    Elkhart Lake (PCH)
->  	    Tiger Lake (PCH)
-> -	    Jasper Lake (PCH)
-> +	    Jasper Lake (SOC)
->  
->  	  This driver can also be built as a module.  If so, the module
->  	  will be called i2c-i801.
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index df02040d36d5..f5e69fe56532 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -67,7 +67,7 @@
->   * Comet Lake-H (PCH)		0x06a3	32	hard	yes	yes	yes
->   * Elkhart Lake (PCH)		0x4b23	32	hard	yes	yes	yes
->   * Tiger Lake-LP (PCH)		0xa0a3	32	hard	yes	yes	yes
-> - * Jasper Lake-N (PCH)		0x4da3	32	hard	yes	yes	yes
-> + * Jasper Lake (SOC)		0x4da3	32	hard	yes	yes	yes
->   *
->   * Features supported by this driver:
->   * Software PEC				no
-> @@ -226,7 +226,7 @@
->  #define PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS		0x34a3
->  #define PCI_DEVICE_ID_INTEL_5_3400_SERIES_SMBUS		0x3b30
->  #define PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS		0x4b23
-> -#define PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS		0x4da3
-> +#define PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS		0x4da3
->  #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
->  #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
->  #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS		0x8ca2
-> @@ -1076,7 +1076,7 @@ static const struct pci_device_id i801_ids[] = {
->  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS) },
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS) },
->  	{ 0, }
->  };
->  
-> @@ -1759,7 +1759,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  	case PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS:
->  	case PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS:
->  	case PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS:
-> -	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_N_SMBUS:
-> +	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS:
->  		priv->features |= FEATURE_BLOCK_PROC;
->  		priv->features |= FEATURE_I2C_BLOCK_READ;
->  		priv->features |= FEATURE_IRQ;
+During adding of the adapter the slave device registration
+use to fail as the acpi companion field was not populated.
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Akshu Agrawal <akshu.agrawal@amd.com>
+---
+ drivers/i2c/busses/i2c-cros-ec-tunnel.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
+diff --git a/drivers/i2c/busses/i2c-cros-ec-tunnel.c b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
+index c551aa96a2e3..aca8070393bd 100644
+--- a/drivers/i2c/busses/i2c-cros-ec-tunnel.c
++++ b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
+@@ -273,6 +273,7 @@ static int ec_i2c_probe(struct platform_device *pdev)
+ 	bus->adap.dev.parent = &pdev->dev;
+ 	bus->adap.dev.of_node = np;
+ 	bus->adap.retries = I2C_MAX_RETRIES;
++	ACPI_COMPANION_SET(&bus->adap.dev, ACPI_COMPANION(&pdev->dev));
+ 
+ 	err = i2c_add_adapter(&bus->adap);
+ 	if (err)
 -- 
-Jean Delvare
-SUSE L3 Support
+2.17.1
+
