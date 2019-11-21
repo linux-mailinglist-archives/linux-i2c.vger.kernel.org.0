@@ -2,67 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1776E1055B5
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2019 16:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FE5105A81
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2019 20:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbfKUPgA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Nov 2019 10:36:00 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:33425 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726477AbfKUPgA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Nov 2019 10:36:00 -0500
-Received: from orion.localdomain ([95.115.120.75]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MJmX3-1iIkaN1UBl-00K6ei; Thu, 21 Nov 2019 16:35:58 +0100
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     wsa@the-dreams.de, linux-i2c@vger.kernel.org
-Subject: [PATCH] i2c: i2c-core-base: tiny indention cleanup
-Date:   Thu, 21 Nov 2019 16:35:41 +0100
-Message-Id: <20191121153541.26402-1-info@metux.net>
-X-Mailer: git-send-email 2.11.0
-X-Provags-ID: V03:K1:L6EOFn0STmgsIK79q6tHtVhD0cjobzcbBwLr/SzPFpeQYjM9ZPH
- 59kFgTeDOjgMu0BJwpi0Po+upOXAx5352VOKzodWRd/ICCM6bs1hWDv4+3aS1oYHfsh/JsO
- 1TXW1V5s4qjNlaiLMZumITx3xohQXbnA0XCf5dRpX2huSDBVKeqNmzkAAWKoenpuc40/BpO
- K1/ILPOhUPgEUbd2+bC7g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:F5VK7nogLpA=:itMk1bZoeMJBvG8RKb5XiB
- j9m9mNAX3NcSPoBLEKZq4WzRAPpdZrpXIrnG2mUzBcN6OJ0eSpIQpE6/4a/x6/OxrluaQq2R5
- K9FsgyuFWQTzfUF7gQCp+Jj/T6EB2BsYdGQdBPA4+pzOxtqPAmxy1ta0fg80jP1tQCtqtnMxE
- rr/UJXFaIB9CPkSRUVoo9wZkg8yV8Benw7MJDU4cIsDJulaeUcfbcoMBb4CwKrAosSETXw6n1
- jnRP27seoP1hym6tbNkLIz+4/af9FNO3gDXBgNl/xgNFK4WQNAAoV0lCv7UtyY9uHhisCCd+d
- gL7600g0lGfY9gnmFaNKWbq885IEhd5aSKDeu2ael07hN9FrzSmM5ciXSUw1P1ChSokYA25yV
- ruog1oPU3Vn1nUQFlORzqnUIlw62ut3p6iEmCp/W3L15xDXrNpsZl2OtI3w+/95vG2d/aHAxZ
- R8A9BEw7iM/JakRMWq/OTpOcd0eM7TnwAa1+ldqPHJ9lGcg97Wyx1S8gI5ADCH9BXsX/dsyIL
- HLNvBBYROx21318ys79g8ocFKVJSou6lb693nM0Rr16MEhGedlMG+H80QTxsVHlOIc4n9EyxV
- NcYJJgolGZHrDLXYOkiQs+orwFB2vUuW87L9dQWMcFYVx3RKmZuDnVfKsGgHVRMoyNY6/gvsP
- id0JwGzIotOqaFGWBlvgdjznaDudIt7ZgrJGP3GEOIFnGyqcItUVB8Cr7D9iLN1o4m7fW77V5
- EcwWqvB4OOBu6gjSJwR5eZShq2io6REFqlvBhrye0jyAjS+HQICS4vftOMlBYbKQ97r9t8851
- EPusDa/XoWqIs21tFBVlsZ8uRSX5Qx3FP2/S5TbvA6mkWx04q7oAm7S//tRaXzvc3ErZs+qeS
- LD7M948AEpB5fZlDA2Jg==
+        id S1726676AbfKUTjc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 Nov 2019 14:39:32 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:36171 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726293AbfKUTjc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Nov 2019 14:39:32 -0500
+Received: by mail-oi1-f195.google.com with SMTP id j7so4330038oib.3;
+        Thu, 21 Nov 2019 11:39:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=c4KjpD+ns0ACXFE5v6l81aoQVHuHJsxlS4JefMC5EMY=;
+        b=CE49zIfQ1Fq8wUnUj/AAwpB/UTdeb++Z1Ad1f8tWJGWazHg1369dTQ4I8ZXg3Jt4sd
+         bA4VUgkIQfyr01XMzjZxEpTYJ/khoRB6e0iiltPTf3YViG+m1oikNJSEGtubLG5Gq4Mx
+         ErI6ipMjg+KlEK9paGek6hdgB9eVwuIYO6RbLvCZrCHRcEs4qozuLhyGAwXzuF33TrTC
+         ga18j6Y8UmqO9uFjTRnU2pSSYNhCtrGSgs24vn2e+aKWs1NcoQhiVmY+nQZc1OLwxWCQ
+         4GaGvsgJaiogMNm7rPHq/xnoEMeT0lU1zcM0Y3qy+1dne0XIFL3P2HWT3YjldRxcCpgM
+         plAg==
+X-Gm-Message-State: APjAAAUboo/L8iiR5l0lMbXT8XIis5bFLm8pH4QidIXQqjAe4LJjEWjC
+        Eh4hkLXUCIm86JUeklYA6w==
+X-Google-Smtp-Source: APXvYqw+O/5gVYMGrcCumNOlMYDrrdD4XmwLhJA1mxJFW4xVlHhGW1dwTOU1ghWvK2UUGvx0UeKwSA==
+X-Received: by 2002:aca:1715:: with SMTP id j21mr8631035oii.6.1574365171174;
+        Thu, 21 Nov 2019 11:39:31 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id u204sm1229289oig.35.2019.11.21.11.39.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Nov 2019 11:39:30 -0800 (PST)
+Date:   Thu, 21 Nov 2019 13:39:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Alain Volmat <alain.volmat@st.com>
+Cc:     wsa@the-dreams.de, robh+dt@kernel.org, mark.rutland@arm.com,
+        pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@st.com
+Subject: Re: [PATCH v2] dt-bindings: i2c: stm32: Migrate i2c-stm32
+ documentation to yaml
+Message-ID: <20191121193929.GA6676@bogus>
+References: <1574342866-8348-1-git-send-email-alain.volmat@st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1574342866-8348-1-git-send-email-alain.volmat@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
----
- drivers/i2c/i2c-core-base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 21 Nov 2019 14:27:46 +0100, Alain Volmat wrote:
+> The document was migrated to Yaml format and renamed st,stm32-i2c.yaml
+> 
+> Signed-off-by: Alain Volmat <alain.volmat@st.com>
+> ---
+> v2: remove i2c-scl.*time description, ref (moved into i2c-controller.yaml
+>     push the st,syscfg-fmt into the if compatible st,stm32f7 part
+>     fix the st,syscfg-fmt ref syntax and set minItems/maxItems to 3
+>     make the clock-frequency part common and only keep enum in the st,stm32f4 case
+>     remove unnecesary minItems/maxItems
+>     remove address-cells/size-cells from required fields
+> ---
+>  .../devicetree/bindings/i2c/i2c-stm32.txt          |  65 ----------
+>  .../devicetree/bindings/i2c/st,stm32-i2c.yaml      | 141 +++++++++++++++++++++
+>  2 files changed, 141 insertions(+), 65 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-stm32.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+> 
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 5f6a4985f2bc..68be4e89d16a 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -2326,7 +2326,7 @@ struct i2c_adapter *i2c_get_adapter(int nr)
- 	else
- 		adapter = NULL;
- 
-- exit:
-+exit:
- 	mutex_unlock(&core_lock);
- 	return adapter;
- }
--- 
-2.11.0
+Applied, thanks.
 
+Rob
