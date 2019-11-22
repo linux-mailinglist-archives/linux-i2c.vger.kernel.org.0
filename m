@@ -2,953 +2,259 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 407EE105D5B
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2019 00:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9885F105DD7
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2019 01:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726695AbfKUXpg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Nov 2019 18:45:36 -0500
-Received: from mail-io1-f68.google.com ([209.85.166.68]:46793 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbfKUXpf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Nov 2019 18:45:35 -0500
-Received: by mail-io1-f68.google.com with SMTP id i11so5656314iol.13
-        for <linux-i2c@vger.kernel.org>; Thu, 21 Nov 2019 15:45:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xVRgrLSCAFxYcp99UUv/8W7CrNBLjuLXqwGlUdfznH4=;
-        b=hD2T2mJU38DbdWzcb5auwQSXdeGCfccahv78ZqhqF4dluyI3MAFauUjDkcYRnuDaX1
-         2eVVRprveqA5cZEdFjc+tgCJ1hxwnsJjzmG4u6nKTcFEEhW1QE+akJybQee8fpTYPJiK
-         arlTXD3fPF9jByFHbNtp+KcZQh7AKTJ1t/Bjg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xVRgrLSCAFxYcp99UUv/8W7CrNBLjuLXqwGlUdfznH4=;
-        b=Ef1PZ2jAhextPeQ5XBgsRYEOJtb2CYgHlquW9KwblV7JA/8Pi8MdsK2nnvJb2+ky9J
-         xzYQGNx8uTv0tSX+hXks7RAcOMmXvJ1iepHjLTGC8se3LKKjlSm27yMXbol3y1U4PYOG
-         0yPMn2dxjUSq+TbVxhTBactGX0txd9A+uuP0YoKKG9dr5Kh0/W3zzlOkIkCvdd0vUOQE
-         tWWQE5oQvMVsvWpy94HjVJ76MVSe+eLQjIUl6EquUFdJItVg88tMK3hI+P7iWlyMHNaB
-         LjfoSOZ9F6x6qZDkELeneXhP2/iNfIAfnldvWC+BkeOdYwFfGF8AmpmfhiI5Uw6ra2sn
-         6nig==
-X-Gm-Message-State: APjAAAUi5u9OagKMYWKgoTX602B1xxQibJP3u2oOrS0i/P+KP4S1CDUv
-        v0LMVTNF3Lr2T+1eXBxEsnJfkQ==
-X-Google-Smtp-Source: APXvYqxHV0td2ruD1zRIQzusvrXHIP0baWCmRtvIR53/XBsyPdhJhro8EKZQraYM5cJgOjAEpmY5kg==
-X-Received: by 2002:a5d:9e10:: with SMTP id h16mr9705425ioh.27.1574379933688;
-        Thu, 21 Nov 2019 15:45:33 -0800 (PST)
-Received: from localhost ([2620:15c:183:0:82e0:aef8:11bc:24c4])
-        by smtp.gmail.com with ESMTPSA id c83sm1539820iof.48.2019.11.21.15.45.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Nov 2019 15:45:33 -0800 (PST)
-From:   Raul E Rangel <rrangel@chromium.org>
-To:     enric.balletbo@collabora.com
-Cc:     Raul E Rangel <rrangel@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-iio@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i2c@vger.kernel.org, Enrico Granata <egranata@chromium.org>,
-        linux-rtc@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Benson Leung <bleung@chromium.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Akshu Agrawal <akshu.agrawal@amd.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH] platform/chrome: cros_ec: Rename cros_ec_dev to cros_ec_mfd_dev
-Date:   Thu, 21 Nov 2019 16:45:29 -0700
-Message-Id: <20191121164458.1.Ie5c276b95210779fc2ca5651e46552236795b6b9@changeid>
-X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
+        id S1726408AbfKVAxF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 Nov 2019 19:53:05 -0500
+Received: from mail-eopbgr30138.outbound.protection.outlook.com ([40.107.3.138]:52567
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726265AbfKVAxE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 21 Nov 2019 19:53:04 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IcrUBuNxtvBWaXNUB9ouPOyzqt2RP7BDKYpUg36cKi3dhv3HwGvYaeBZwEHyurttPMy/E+oIzjamt8dC5btLF6RbU0gPS62J7BSPNLFNBzyD7kZpvz9UzQKOMK4JDaq0nP6YvHojKz76g26Vin9qMMLq8oMh/e9UwvXZVrUURkvIhP4cnUt37cdjnDZG4CLuF+2+wL1u5XcIqL04WfiyjDbeQt1iDJYw/YVWQUnAXUNEOnhoy4ysHNUhIK6ZKzqXZoVyvv27rz9jQMoPqD+FHwvKQ9Gk86NFPAgcgcY6rpBfpmG1QVJGrme4IInH/osZS5yq86c7m1acl1VUqXHw0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=atvMMR5DMA5tiHnWrgAvmn8AtOpcQS6vGCTs/CwYwco=;
+ b=ZF4/hGa+onSmltbl444CJd4NZnkt5UJVihyORamFnNXEQ7j6UyRw0tbQHNY9Wy5wgW449QlOyNehiGCkDAFxJrnrfA1CHHfxWk9Nj3sYghDZzAakEqvO/Z8xs1Tzp+BpLrVzNHHiC7X56t6YUjSnnxzF8gyFH2tSiDUKQHPoiK/VfGQsAlqGdmR+1htFN47ad3/18VP0IYGC3HFV2Om/7b9zVnlc4kndnMh/0cXk/UuUjWWtpltonlYna4I2+KyaxNAJOn7M3HlUYDoYE4E2yP0SS/w9t3XepvC303BKOKV2poUDVCTVfaeL9WSxd2H/bQPitag78H9BRAZxNKx2Tg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=atvMMR5DMA5tiHnWrgAvmn8AtOpcQS6vGCTs/CwYwco=;
+ b=MjH/SOaYrBFLNCPbTTo4jrJQOdSPcii5bhsUg69lttk5BSfmLZzjcNeJj+j98vcycFe12Oqwmp/6R60wyavFAKszAoomjWP7yqzgvH4Mn4tFN+AfOGNygL8hvGpbdRRcK4KmeT8BP0muyPvjgSWbWWe17TLtVj7h1xbg+Ghqa6Q=
+Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com (52.134.66.158) by
+ DB3PR0202MB3388.eurprd02.prod.outlook.com (52.134.67.27) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2474.17; Fri, 22 Nov 2019 00:52:59 +0000
+Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com
+ ([fe80::477:9510:3e3:f8ca]) by DB3PR0202MB3434.eurprd02.prod.outlook.com
+ ([fe80::477:9510:3e3:f8ca%7]) with mapi id 15.20.2474.021; Fri, 22 Nov 2019
+ 00:52:59 +0000
+From:   Peter Rosin <peda@axentia.se>
+To:     Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: Re: [PATCH] i2c: mux: pca954x: Disable cacheing of the last channel
+Thread-Topic: [PATCH] i2c: mux: pca954x: Disable cacheing of the last channel
+Thread-Index: AQHVmsPurZy7ZtYH5UOEuWcdG58cQaeRk7YAgAI+hYCAApaTAA==
+Date:   Fri, 22 Nov 2019 00:52:58 +0000
+Message-ID: <b9eaaba2-dcfd-0c97-f088-21acf269a92f@axentia.se>
+References: <1573719422-7414-1-git-send-email-shubhrajyoti.datta@gmail.com>
+ <6d135b8a-cdba-e6a6-7738-cbc94cdb7ec0@axentia.se>
+ <CAKfKVtE=ufzc=_EjPR2WKt4qf0sdOB=a7f-BRP-ZffMaemxGBw@mail.gmail.com>
+In-Reply-To: <CAKfKVtE=ufzc=_EjPR2WKt4qf0sdOB=a7f-BRP-ZffMaemxGBw@mail.gmail.com>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
+x-originating-ip: [213.112.138.100]
+x-clientproxiedby: HE1PR0102CA0001.eurprd01.prod.exchangelabs.com
+ (2603:10a6:7:14::14) To DB3PR0202MB3434.eurprd02.prod.outlook.com
+ (2603:10a6:8:5::30)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peda@axentia.se; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 541da69b-6bc3-4cdb-026b-08d76ee6511b
+x-ms-traffictypediagnostic: DB3PR0202MB3388:
+x-microsoft-antispam-prvs: <DB3PR0202MB33883E90853204E98D1B3E6EBC490@DB3PR0202MB3388.eurprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 02296943FF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(39830400003)(136003)(346002)(376002)(366004)(51914003)(199004)(189003)(52314003)(4326008)(2616005)(102836004)(11346002)(446003)(2906002)(6246003)(186003)(6506007)(386003)(6486002)(53546011)(76176011)(52116002)(58126008)(54906003)(26005)(316002)(6916009)(86362001)(229853002)(71200400001)(71190400001)(99286004)(31696002)(81156014)(81166006)(8676002)(31686004)(8936002)(305945005)(6116002)(4001150100001)(256004)(3846002)(508600001)(65806001)(5660300002)(14454004)(6436002)(66066001)(25786009)(65956001)(6512007)(36756003)(14444005)(66446008)(64756008)(66556008)(66476007)(66946007)(7736002);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3388;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: axentia.se does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jzmLepXAXHPtfGBtVdeKVpc21F9hlIDI2Ec/7gue1CD6WZDUS7v2IMxErJiwixSfKpnUCSlIHnS6yrqDTM8e0Av6abApvgAww8RXzOyG5Yf7Pp8DHPgo+/2VjxIOg8CEE79bePtJ3Z6WC1sJc9S/x/uha8M9Ekumf45n43WXYXjyvEZxgUVBaf68cY4mYfNjF3VT0P45V47EKSqd58SRdSjTSkwv0aHMRHm5b3b0biP8/c4/lZ9K6ni4g8l0SkZkVJ9/WZoLuKCRfy7VXaNUNLIM6EEip9GilECCxHOnvUMDeNfUi7wYuO2yw7dmMDnOtcOPSp9zK+o48kUHYLeKqsevX8ahPl5aI3qHZX+UJwphEDf2Y4MPG+4OqdKnOgmaQTL8U9uHNsNNDGxDTo1UXNE4afycaog3AQ22TF9FDHprys0BwjrQ+sjSbFcBJw9E
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2FCD58675F2E9840B8DF314BD9EEF44D@eurprd02.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: 541da69b-6bc3-4cdb-026b-08d76ee6511b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2019 00:52:58.1140
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ph+1h8a13dsJM00hqhofl48A124nYwrw1GQXYfHzUApcdFojb9ItVa0zXhVBmz8P
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3388
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-It's very confusing having cros_ec_dev and cros_ec_device. This makes it
-clear you are dealing with the mfd device.
-
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
----
-This is based on top of the i2c acpi tunnel patches:
-https://lore.kernel.org/patchwork/project/lkml/list/?series=419791
-
- drivers/i2c/busses/i2c-cros-ec-tunnel.c       |  2 +-
- drivers/iio/accel/cros_ec_accel_legacy.c      |  2 +-
- .../common/cros_ec_sensors/cros_ec_sensors.c  |  2 +-
- .../cros_ec_sensors/cros_ec_sensors_core.c    |  2 +-
- .../cros_ec_sensors/cros_ec_sensors_ring.c    |  2 +-
- drivers/iio/light/cros_ec_light_prox.c        |  2 +-
- drivers/iio/pressure/cros_ec_baro.c           |  2 +-
- .../media/platform/cros-ec-cec/cros-ec-cec.c  |  2 +-
- drivers/mfd/cros_ec_dev.c                     | 14 ++++-----
- drivers/platform/chrome/cros_ec_chardev.c     | 21 +++++++-------
- drivers/platform/chrome/cros_ec_debugfs.c     | 16 +++++-----
- drivers/platform/chrome/cros_ec_lightbar.c    | 29 ++++++++++---------
- drivers/platform/chrome/cros_ec_pd_sysfs.c    |  6 ++--
- drivers/platform/chrome/cros_ec_pd_update.c   | 20 ++++++-------
- drivers/platform/chrome/cros_ec_sysfs.c       | 16 +++++-----
- drivers/platform/chrome/cros_ec_vbc.c         |  8 ++---
- drivers/platform/chrome/cros_usbpd_logger.c   |  6 ++--
- drivers/power/supply/cros_usbpd-charger.c     |  6 ++--
- drivers/rtc/rtc-cros-ec.c                     |  2 +-
- include/linux/mfd/cros_ec.h                   |  8 ++---
- .../linux/platform_data/cros_ec_pd_update.h   |  4 +--
- 21 files changed, 87 insertions(+), 85 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-cros-ec-tunnel.c b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-index 2e3217678fa3..48e8dceb9496 100644
---- a/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-+++ b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-@@ -176,7 +176,7 @@ static int ec_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg i2c_msgs[],
- {
- 	struct ec_i2c_device *bus = adap->algo_data;
- 	struct device *dev = bus->dev;
--	struct cros_ec_dev *ec = dev_get_drvdata(dev->parent);
-+	struct cros_ec_mfd_dev *ec = dev_get_drvdata(dev->parent);
- 	const u16 bus_num = bus->remote_bus;
- 	int request_len;
- 	int response_len;
-diff --git a/drivers/iio/accel/cros_ec_accel_legacy.c b/drivers/iio/accel/cros_ec_accel_legacy.c
-index fcc3f999e482..a6a8421460ac 100644
---- a/drivers/iio/accel/cros_ec_accel_legacy.c
-+++ b/drivers/iio/accel/cros_ec_accel_legacy.c
-@@ -163,7 +163,7 @@ static const struct iio_chan_spec cros_ec_accel_legacy_channels[] = {
- static int cros_ec_accel_legacy_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct cros_ec_dev *ec = dev_get_drvdata(dev->parent);
-+	struct cros_ec_mfd_dev *ec = dev_get_drvdata(dev->parent);
- 	struct iio_dev *indio_dev;
- 	struct cros_ec_sensors_core_state *state;
- 	int ret;
-diff --git a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
-index 8108e5017998..6111b25d77ca 100644
---- a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
-+++ b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors.c
-@@ -222,7 +222,7 @@ static const struct iio_info ec_sensors_info = {
- static int cros_ec_sensors_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(dev->parent);
- 	struct iio_dev *indio_dev;
- 	struct cros_ec_sensors_state *state;
- 	struct iio_chan_spec *channel;
-diff --git a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-index 77f18f734658..cdfd46cbbd03 100644
---- a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-+++ b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-@@ -196,7 +196,7 @@ int cros_ec_sensors_core_init(struct platform_device *pdev,
- {
- 	struct device *dev = &pdev->dev;
- 	struct cros_ec_sensors_core_state *state = iio_priv(indio_dev);
--	struct cros_ec_dev *ec = dev_get_drvdata(pdev->dev.parent);
-+	struct cros_ec_mfd_dev *ec = dev_get_drvdata(pdev->dev.parent);
- 	struct cros_ec_sensor_platform *sensor_platform = dev_get_platdata(dev);
- 	u32 ver_mask;
- 	int frequencies[ARRAY_SIZE(state->frequencies) / 2] = { 0 };
-diff --git a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_ring.c b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_ring.c
-index 6b034edc06bf..52568fd5126f 100644
---- a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_ring.c
-+++ b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_ring.c
-@@ -1057,7 +1057,7 @@ static const struct iio_chan_spec cros_ec_ring_channels[] = {
- static int cros_ec_ring_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(dev->parent);
- 	struct cros_ec_device *ec_device;
- 	struct iio_dev *indio_dev;
- 	struct iio_buffer *buffer;
-diff --git a/drivers/iio/light/cros_ec_light_prox.c b/drivers/iio/light/cros_ec_light_prox.c
-index e501e7c8a6e1..12bf8c2785c6 100644
---- a/drivers/iio/light/cros_ec_light_prox.c
-+++ b/drivers/iio/light/cros_ec_light_prox.c
-@@ -365,7 +365,7 @@ static const struct iio_info cros_ec_light_prox_info = {
- static int cros_ec_light_prox_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(dev->parent);
- 	struct iio_dev *indio_dev;
- 	struct cros_ec_light_prox_state *state;
- 	struct iio_chan_spec *channel;
-diff --git a/drivers/iio/pressure/cros_ec_baro.c b/drivers/iio/pressure/cros_ec_baro.c
-index a8f52503d02a..a2486269be2c 100644
---- a/drivers/iio/pressure/cros_ec_baro.c
-+++ b/drivers/iio/pressure/cros_ec_baro.c
-@@ -119,7 +119,7 @@ static const struct iio_info cros_ec_baro_info = {
- static int cros_ec_baro_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(dev->parent);
- 	struct iio_dev *indio_dev;
- 	struct cros_ec_baro_state *state;
- 	struct iio_chan_spec *channel;
-diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-index 4a3b3810fd89..3d29f93549c5 100644
---- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-+++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-@@ -259,7 +259,7 @@ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
- 
- static int cros_ec_cec_probe(struct platform_device *pdev)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pdev->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pdev->dev.parent);
- 	struct cros_ec_device *cros_ec = ec_dev->ec_dev;
- 	struct cros_ec_cec *cros_ec_cec;
- 	struct device *hdmi_dev;
-diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-index 61b20e061f75..763fd9ecf037 100644
---- a/drivers/mfd/cros_ec_dev.c
-+++ b/drivers/mfd/cros_ec_dev.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * cros_ec_dev - expose the Chrome OS Embedded Controller to user-space
-+ * cros_ec_mfd_dev - expose the Chrome OS Embedded Controller to user-space
-  *
-  * Copyright (C) 2014 Google, Inc.
-  */
-@@ -125,7 +125,7 @@ static struct mfd_cell cros_ec_fw_cells[] = {
- 	},
- };
- 
--int cros_ec_check_features(struct cros_ec_dev *ec, int feature)
-+int cros_ec_check_features(struct cros_ec_mfd_dev *ec, int feature)
- {
- 	struct cros_ec_command *msg;
- 	int ret;
-@@ -167,7 +167,7 @@ static void cros_ec_class_release(struct device *dev)
-  * Return the number of MEMS sensors supported.
-  * Return < 0 in case of error.
-  */
--static int cros_ec_get_sensor_count(struct cros_ec_dev *ec)
-+static int cros_ec_get_sensor_count(struct cros_ec_mfd_dev *ec)
- {
- 	/*
- 	 * Issue a command to get the number of sensor reported.
-@@ -205,7 +205,7 @@ static int cros_ec_get_sensor_count(struct cros_ec_dev *ec)
- 	return sensor_count;
- }
- 
--static void cros_ec_sensors_register(struct cros_ec_dev *ec)
-+static void cros_ec_sensors_register(struct cros_ec_mfd_dev *ec)
- {
- 	/*
- 	 * Issue a command to get the number of sensor reported.
-@@ -345,7 +345,7 @@ static const struct mfd_cell cros_ec_accel_legacy_cells[] = {
- 	}
- };
- 
--static void cros_ec_accel_legacy_register(struct cros_ec_dev *ec)
-+static void cros_ec_accel_legacy_register(struct cros_ec_mfd_dev *ec)
- {
- 	struct cros_ec_device *ec_dev = ec->ec_dev;
- 	u8 status;
-@@ -414,7 +414,7 @@ static int ec_device_probe(struct platform_device *pdev)
- 	struct device_node *node;
- 	struct device *dev = &pdev->dev;
- 	struct cros_ec_platform *ec_platform = dev_get_platdata(dev);
--	struct cros_ec_dev *ec = kzalloc(sizeof(*ec), GFP_KERNEL);
-+	struct cros_ec_mfd_dev *ec = kzalloc(sizeof(*ec), GFP_KERNEL);
- 	int i;
- 
- 	if (!ec)
-@@ -523,7 +523,7 @@ static int ec_device_probe(struct platform_device *pdev)
- 
- static int ec_device_remove(struct platform_device *pdev)
- {
--	struct cros_ec_dev *ec = dev_get_drvdata(&pdev->dev);
-+	struct cros_ec_mfd_dev *ec = dev_get_drvdata(&pdev->dev);
- 
- 	mfd_remove_devices(ec->dev);
- 	device_unregister(&ec->class_dev);
-diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
-index 74ded441bb50..ed862e7a4b52 100644
---- a/drivers/platform/chrome/cros_ec_chardev.c
-+++ b/drivers/platform/chrome/cros_ec_chardev.c
-@@ -32,12 +32,12 @@
- #define CROS_MAX_EVENT_LEN	PAGE_SIZE
- 
- struct chardev_data {
--	struct cros_ec_dev *ec_dev;
-+	struct cros_ec_mfd_dev *ec_dev;
- 	struct miscdevice misc;
- };
- 
- struct chardev_priv {
--	struct cros_ec_dev *ec_dev;
-+	struct cros_ec_mfd_dev *ec_dev;
- 	struct notifier_block notifier;
- 	wait_queue_head_t wait_event;
- 	unsigned long event_mask;
-@@ -52,7 +52,7 @@ struct ec_event {
- 	u8 data[0];
- };
- 
--static int ec_get_version(struct cros_ec_dev *ec, char *str, int maxlen)
-+static int ec_get_version(struct cros_ec_mfd_dev *ec, char *str, int maxlen)
- {
- 	static const char * const current_image_name[] = {
- 		"unknown", "read-only", "read-write", "invalid",
-@@ -161,7 +161,7 @@ static struct ec_event *cros_ec_chardev_fetch_event(struct chardev_priv *priv,
- static int cros_ec_chardev_open(struct inode *inode, struct file *filp)
- {
- 	struct miscdevice *mdev = filp->private_data;
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(mdev->parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(mdev->parent);
- 	struct chardev_priv *priv;
- 	int ret;
- 
-@@ -204,7 +204,7 @@ static ssize_t cros_ec_chardev_read(struct file *filp, char __user *buffer,
- 	char msg[sizeof(struct ec_response_get_version) +
- 		 sizeof(CROS_EC_DEV_VERSION)];
- 	struct chardev_priv *priv = filp->private_data;
--	struct cros_ec_dev *ec_dev = priv->ec_dev;
-+	struct cros_ec_mfd_dev *ec_dev = priv->ec_dev;
- 	size_t count;
- 	int ret;
- 
-@@ -254,7 +254,7 @@ static ssize_t cros_ec_chardev_read(struct file *filp, char __user *buffer,
- static int cros_ec_chardev_release(struct inode *inode, struct file *filp)
- {
- 	struct chardev_priv *priv = filp->private_data;
--	struct cros_ec_dev *ec_dev = priv->ec_dev;
-+	struct cros_ec_mfd_dev *ec_dev = priv->ec_dev;
- 	struct ec_event *event, *e;
- 
- 	blocking_notifier_chain_unregister(&ec_dev->ec_dev->event_notifier,
-@@ -272,7 +272,8 @@ static int cros_ec_chardev_release(struct inode *inode, struct file *filp)
- /*
-  * Ioctls
-  */
--static long cros_ec_chardev_ioctl_xcmd(struct cros_ec_dev *ec, void __user *arg)
-+static long cros_ec_chardev_ioctl_xcmd(struct cros_ec_mfd_dev *ec,
-+				       void __user *arg)
- {
- 	struct cros_ec_command *s_cmd;
- 	struct cros_ec_command u_cmd;
-@@ -314,7 +315,7 @@ static long cros_ec_chardev_ioctl_xcmd(struct cros_ec_dev *ec, void __user *arg)
- 	return ret;
- }
- 
--static long cros_ec_chardev_ioctl_readmem(struct cros_ec_dev *ec,
-+static long cros_ec_chardev_ioctl_readmem(struct cros_ec_mfd_dev *ec,
- 					   void __user *arg)
- {
- 	struct cros_ec_device *ec_dev = ec->ec_dev;
-@@ -343,7 +344,7 @@ static long cros_ec_chardev_ioctl(struct file *filp, unsigned int cmd,
- 				   unsigned long arg)
- {
- 	struct chardev_priv *priv = filp->private_data;
--	struct cros_ec_dev *ec = priv->ec_dev;
-+	struct cros_ec_mfd_dev *ec = priv->ec_dev;
- 
- 	if (_IOC_TYPE(cmd) != CROS_EC_DEV_IOC)
- 		return -ENOTTY;
-@@ -374,7 +375,7 @@ static const struct file_operations chardev_fops = {
- 
- static int cros_ec_chardev_probe(struct platform_device *pdev)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pdev->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pdev->dev.parent);
- 	struct cros_ec_platform *ec_platform = dev_get_platdata(ec_dev->dev);
- 	struct chardev_data *data;
- 
-diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
-index 6ae484989d1f..0281fb8a3427 100644
---- a/drivers/platform/chrome/cros_ec_debugfs.c
-+++ b/drivers/platform/chrome/cros_ec_debugfs.c
-@@ -39,7 +39,7 @@
-  * @panicinfo_blob: panicinfo debugfs blob
-  */
- struct cros_ec_debugfs {
--	struct cros_ec_dev *ec;
-+	struct cros_ec_mfd_dev *ec;
- 	struct dentry *dir;
- 	/* EC log */
- 	struct circ_buf log_buffer;
-@@ -61,7 +61,7 @@ static void cros_ec_console_log_work(struct work_struct *__work)
- 		container_of(to_delayed_work(__work),
- 			     struct cros_ec_debugfs,
- 			     log_poll_work);
--	struct cros_ec_dev *ec = debug_info->ec;
-+	struct cros_ec_mfd_dev *ec = debug_info->ec;
- 	struct circ_buf *cb = &debug_info->log_buffer;
- 	struct cros_ec_command snapshot_msg = {
- 		.command = EC_CMD_CONSOLE_SNAPSHOT + ec->cmd_offset,
-@@ -294,7 +294,7 @@ static const struct file_operations cros_ec_uptime_fops = {
- 	.llseek = default_llseek,
- };
- 
--static int ec_read_version_supported(struct cros_ec_dev *ec)
-+static int ec_read_version_supported(struct cros_ec_mfd_dev *ec)
- {
- 	struct ec_params_get_cmd_versions_v1 *params;
- 	struct ec_response_get_cmd_versions *response;
-@@ -325,7 +325,7 @@ static int ec_read_version_supported(struct cros_ec_dev *ec)
- 
- static int cros_ec_create_console_log(struct cros_ec_debugfs *debug_info)
- {
--	struct cros_ec_dev *ec = debug_info->ec;
-+	struct cros_ec_mfd_dev *ec = debug_info->ec;
- 	char *buf;
- 	int read_params_size;
- 	int read_response_size;
-@@ -421,7 +421,7 @@ static int cros_ec_create_panicinfo(struct cros_ec_debugfs *debug_info)
- 
- static int cros_ec_debugfs_probe(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec = dev_get_drvdata(pd->dev.parent);
- 	struct cros_ec_platform *ec_platform = dev_get_platdata(ec->dev);
- 	const char *name = ec_platform->ec_name;
- 	struct cros_ec_debugfs *debug_info;
-@@ -464,7 +464,7 @@ static int cros_ec_debugfs_probe(struct platform_device *pd)
- 
- static int cros_ec_debugfs_remove(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec = dev_get_drvdata(pd->dev.parent);
- 
- 	debugfs_remove_recursive(ec->debug_info->dir);
- 	cros_ec_cleanup_console_log(ec->debug_info);
-@@ -474,7 +474,7 @@ static int cros_ec_debugfs_remove(struct platform_device *pd)
- 
- static int __maybe_unused cros_ec_debugfs_suspend(struct device *dev)
- {
--	struct cros_ec_dev *ec = dev_get_drvdata(dev);
-+	struct cros_ec_mfd_dev *ec = dev_get_drvdata(dev);
- 
- 	if (ec->debug_info->log_buffer.buf)
- 		cancel_delayed_work_sync(&ec->debug_info->log_poll_work);
-@@ -484,7 +484,7 @@ static int __maybe_unused cros_ec_debugfs_suspend(struct device *dev)
- 
- static int __maybe_unused cros_ec_debugfs_resume(struct device *dev)
- {
--	struct cros_ec_dev *ec = dev_get_drvdata(dev);
-+	struct cros_ec_mfd_dev *ec = dev_get_drvdata(dev);
- 
- 	if (ec->debug_info->log_buffer.buf)
- 		schedule_delayed_work(&ec->debug_info->log_poll_work, 0);
-diff --git a/drivers/platform/chrome/cros_ec_lightbar.c b/drivers/platform/chrome/cros_ec_lightbar.c
-index c0f2eec35a48..1ddc1b63f5b9 100644
---- a/drivers/platform/chrome/cros_ec_lightbar.c
-+++ b/drivers/platform/chrome/cros_ec_lightbar.c
-@@ -83,7 +83,8 @@ static int lb_throttle(void)
- 	return ret;
- }
- 
--static struct cros_ec_command *alloc_lightbar_cmd_msg(struct cros_ec_dev *ec)
-+static struct cros_ec_command *
-+alloc_lightbar_cmd_msg(struct cros_ec_mfd_dev *ec)
- {
- 	struct cros_ec_command *msg;
- 	int len;
-@@ -103,7 +104,7 @@ static struct cros_ec_command *alloc_lightbar_cmd_msg(struct cros_ec_dev *ec)
- 	return msg;
- }
- 
--static int get_lightbar_version(struct cros_ec_dev *ec,
-+static int get_lightbar_version(struct cros_ec_mfd_dev *ec,
- 				uint32_t *ver_ptr, uint32_t *flg_ptr)
- {
- 	struct ec_params_lightbar *param;
-@@ -156,7 +157,7 @@ static ssize_t version_show(struct device *dev,
- 			    struct device_attribute *attr, char *buf)
- {
- 	uint32_t version = 0, flags = 0;
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 	int ret;
- 
- 	ret = lb_throttle();
-@@ -178,7 +179,7 @@ static ssize_t brightness_store(struct device *dev,
- 	struct cros_ec_command *msg;
- 	int ret;
- 	unsigned int val;
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 
- 	if (kstrtouint(buf, 0, &val))
- 		return -EINVAL;
-@@ -222,7 +223,7 @@ static ssize_t led_rgb_store(struct device *dev, struct device_attribute *attr,
- {
- 	struct ec_params_lightbar *param;
- 	struct cros_ec_command *msg;
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 	unsigned int val[4];
- 	int ret, i = 0, j = 0, ok = 0;
- 
-@@ -294,7 +295,7 @@ static ssize_t sequence_show(struct device *dev,
- 	struct ec_response_lightbar *resp;
- 	struct cros_ec_command *msg;
- 	int ret;
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 
- 	msg = alloc_lightbar_cmd_msg(ec);
- 	if (!msg)
-@@ -328,7 +329,7 @@ static ssize_t sequence_show(struct device *dev,
- 	return ret;
- }
- 
--static int lb_send_empty_cmd(struct cros_ec_dev *ec, uint8_t cmd)
-+static int lb_send_empty_cmd(struct cros_ec_mfd_dev *ec, uint8_t cmd)
- {
- 	struct ec_params_lightbar *param;
- 	struct cros_ec_command *msg;
-@@ -359,7 +360,7 @@ static int lb_send_empty_cmd(struct cros_ec_dev *ec, uint8_t cmd)
- 	return ret;
- }
- 
--static int lb_manual_suspend_ctrl(struct cros_ec_dev *ec, uint8_t enable)
-+static int lb_manual_suspend_ctrl(struct cros_ec_mfd_dev *ec, uint8_t enable)
- {
- 	struct ec_params_lightbar *param;
- 	struct cros_ec_command *msg;
-@@ -399,7 +400,7 @@ static ssize_t sequence_store(struct device *dev, struct device_attribute *attr,
- 	struct cros_ec_command *msg;
- 	unsigned int num;
- 	int ret, len;
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 
- 	for (len = 0; len < count; len++)
- 		if (!isalnum(buf[len]))
-@@ -447,7 +448,7 @@ static ssize_t program_store(struct device *dev, struct device_attribute *attr,
- 	int extra_bytes, max_size, ret;
- 	struct ec_params_lightbar *param;
- 	struct cros_ec_command *msg;
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 
- 	/*
- 	 * We might need to reject the program for size reasons. The EC
-@@ -555,7 +556,7 @@ static struct attribute_group cros_ec_lightbar_attr_group = {
- 
- static int cros_ec_lightbar_probe(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
- 	struct cros_ec_platform *pdata = dev_get_platdata(ec_dev->dev);
- 	struct device *dev = &pd->dev;
- 	int ret;
-@@ -588,7 +589,7 @@ static int cros_ec_lightbar_probe(struct platform_device *pd)
- 
- static int cros_ec_lightbar_remove(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
- 
- 	sysfs_remove_group(&ec_dev->class_dev.kobj,
- 			   &cros_ec_lightbar_attr_group);
-@@ -601,7 +602,7 @@ static int cros_ec_lightbar_remove(struct platform_device *pd)
- 
- static int __maybe_unused cros_ec_lightbar_resume(struct device *dev)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(dev->parent);
- 
- 	if (userspace_control)
- 		return 0;
-@@ -611,7 +612,7 @@ static int __maybe_unused cros_ec_lightbar_resume(struct device *dev)
- 
- static int __maybe_unused cros_ec_lightbar_suspend(struct device *dev)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(dev->parent);
- 
- 	if (userspace_control)
- 		return 0;
-diff --git a/drivers/platform/chrome/cros_ec_pd_sysfs.c b/drivers/platform/chrome/cros_ec_pd_sysfs.c
-index ebda601c1b79..8b28ed5cde46 100644
---- a/drivers/platform/chrome/cros_ec_pd_sysfs.c
-+++ b/drivers/platform/chrome/cros_ec_pd_sysfs.c
-@@ -31,7 +31,7 @@ static umode_t cros_ec_pd_attrs_are_visible(struct kobject *kobj,
- 					    struct attribute *a, int n)
- {
- 	struct device *dev = container_of(kobj, struct device, kobj);
--	struct cros_ec_dev *ec = container_of(dev, struct cros_ec_dev,
-+	struct cros_ec_mfd_dev *ec = container_of(dev, struct cros_ec_mfd_dev,
- 					      class_dev);
- 	struct ec_params_usb_pd_rw_hash_entry hash_entry;
- 	struct ec_params_usb_pd_discovery_entry discovery_entry;
-@@ -95,7 +95,7 @@ static struct attribute_group cros_ec_pd_attr_group = {
- 
- static int cros_ec_pd_sysfs_probe(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
- 	struct device *dev = &pd->dev;
- 	int ret;
- 
-@@ -109,7 +109,7 @@ static int cros_ec_pd_sysfs_probe(struct platform_device *pd)
- 
- static int cros_ec_pd_sysfs_remove(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
- 
- 	sysfs_remove_group(&ec_dev->class_dev.kobj, &cros_ec_pd_attr_group);
- 
-diff --git a/drivers/platform/chrome/cros_ec_pd_update.c b/drivers/platform/chrome/cros_ec_pd_update.c
-index 30f56e9b6c1f..ef85fadb39de 100644
---- a/drivers/platform/chrome/cros_ec_pd_update.c
-+++ b/drivers/platform/chrome/cros_ec_pd_update.c
-@@ -35,7 +35,7 @@
-  */
- #define DRV_NAME "cros-ec-pd-update"
- 
--struct cros_ec_dev *cros_ec_pd_ec;
-+struct cros_ec_mfd_dev *cros_ec_pd_ec;
- EXPORT_SYMBOL_GPL(cros_ec_pd_ec);
- 
- /* Allow disabling of the update for testing purposes */
-@@ -187,7 +187,7 @@ EXPORT_SYMBOL_GPL(cros_ec_pd_firmware_images);
-  * @insize: Size of indata
-  */
- static int cros_ec_pd_command(struct device *dev,
--			      struct cros_ec_dev *pd_dev,
-+			      struct cros_ec_mfd_dev *pd_dev,
- 			      int command,
- 			      uint8_t *outdata,
- 			      int outsize,
-@@ -230,8 +230,8 @@ static int cros_ec_pd_command(struct device *dev,
-  * @pd_dev: EC PD device
-  * @port: Port # on device
-  */
--static int cros_ec_pd_enter_gfu(struct device *dev, struct cros_ec_dev *pd_dev,
--				int port)
-+static int cros_ec_pd_enter_gfu(struct device *dev,
-+				struct cros_ec_mfd_dev *pd_dev, int port)
- {
- 	int rv;
- 	struct ec_params_usb_pd_set_mode_request set_mode_request;
-@@ -254,7 +254,7 @@ static int cros_ec_pd_enter_gfu(struct device *dev, struct cros_ec_dev *pd_dev,
- 
- int cros_ec_pd_get_status(
- 		struct device *dev,
--		struct cros_ec_dev *pd_dev,
-+		struct cros_ec_mfd_dev *pd_dev,
- 		int port,
- 		struct ec_params_usb_pd_rw_hash_entry *hash_entry,
- 		struct ec_params_usb_pd_discovery_entry *discovery_entry)
-@@ -288,7 +288,7 @@ EXPORT_SYMBOL_GPL(cros_ec_pd_get_status);
-  * @fw: FW update image to inform the EC of
-  */
- static int cros_ec_pd_send_hash_entry(struct device *dev,
--				      struct cros_ec_dev *pd_dev,
-+				      struct cros_ec_mfd_dev *pd_dev,
- 				      const struct cros_ec_pd_firmware_image
- 						   *fw)
- {
-@@ -311,7 +311,7 @@ static int cros_ec_pd_send_hash_entry(struct device *dev,
-  * @pd_cmd: fw_update command
-  */
- static int cros_ec_pd_send_fw_update_cmd(struct device *dev,
--					 struct cros_ec_dev *pd_dev,
-+					 struct cros_ec_mfd_dev *pd_dev,
- 					 struct ec_params_usb_pd_fw_update
- 						*pd_cmd)
- {
-@@ -330,7 +330,7 @@ static int cros_ec_pd_send_fw_update_cmd(struct device *dev,
-  * @num_ports: Holds number of ports, on command success
-  */
- static int cros_ec_pd_get_num_ports(struct device *dev,
--				    struct cros_ec_dev *pd_dev,
-+				    struct cros_ec_mfd_dev *pd_dev,
- 				    int *num_ports)
- {
- 	struct ec_response_usb_pd_ports resp;
-@@ -356,7 +356,7 @@ static int cros_ec_pd_get_num_ports(struct device *dev,
-  * @port: Port# to which update device is attached
-  */
- static int cros_ec_pd_fw_update(struct cros_ec_pd_update_data *drv_data,
--				struct cros_ec_dev *pd_dev,
-+				struct cros_ec_mfd_dev *pd_dev,
- 				const struct firmware *fw,
- 				uint8_t port)
- {
-@@ -548,7 +548,7 @@ static enum cros_ec_pd_find_update_firmware_result cros_ec_find_update_firmware(
-  * @pd_dev: EC PD device
-  */
- static uint32_t cros_ec_pd_get_host_event_status(struct device *dev,
--						 struct cros_ec_dev *pd_dev)
-+						 struct cros_ec_mfd_dev *pd_dev)
- {
- 	int ret;
- 	struct ec_response_host_event_status host_event_status;
-diff --git a/drivers/platform/chrome/cros_ec_sysfs.c b/drivers/platform/chrome/cros_ec_sysfs.c
-index 74d36b8d4f46..dc0859cb5f90 100644
---- a/drivers/platform/chrome/cros_ec_sysfs.c
-+++ b/drivers/platform/chrome/cros_ec_sysfs.c
-@@ -57,7 +57,7 @@ static ssize_t reboot_store(struct device *dev,
- 	int got_cmd = 0, offset = 0;
- 	int i;
- 	int ret;
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 
- 	msg = kmalloc(sizeof(*msg) + sizeof(*param), GFP_KERNEL);
- 	if (!msg)
-@@ -118,7 +118,7 @@ static ssize_t version_show(struct device *dev,
- 	struct cros_ec_command *msg;
- 	int ret;
- 	int count = 0;
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 
- 	msg = kmalloc(sizeof(*msg) + EC_HOST_PARAM_SIZE, GFP_KERNEL);
- 	if (!msg)
-@@ -216,7 +216,7 @@ static ssize_t flashinfo_show(struct device *dev,
- 	struct ec_response_flash_info *resp;
- 	struct cros_ec_command *msg;
- 	int ret;
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 
- 	msg = kmalloc(sizeof(*msg) + sizeof(*resp), GFP_KERNEL);
- 	if (!msg)
-@@ -247,7 +247,7 @@ static ssize_t flashinfo_show(struct device *dev,
- static ssize_t kb_wake_angle_show(struct device *dev,
- 				  struct device_attribute *attr, char *buf)
- {
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 	struct ec_response_motion_sense *resp;
- 	struct ec_params_motion_sense *param;
- 	struct cros_ec_command *msg;
-@@ -280,7 +280,7 @@ static ssize_t kb_wake_angle_store(struct device *dev,
- 				   struct device_attribute *attr,
- 				   const char *buf, size_t count)
- {
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 	struct ec_params_motion_sense *param;
- 	struct cros_ec_command *msg;
- 	u16 angle;
-@@ -328,7 +328,7 @@ static umode_t cros_ec_ctrl_visible(struct kobject *kobj,
- 				    struct attribute *a, int n)
- {
- 	struct device *dev = container_of(kobj, struct device, kobj);
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 
- 	if (a == &dev_attr_kb_wake_angle.attr && !ec->has_kb_wake_angle)
- 		return 0;
-@@ -343,7 +343,7 @@ static struct attribute_group cros_ec_attr_group = {
- 
- static int cros_ec_sysfs_probe(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
- 	struct device *dev = &pd->dev;
- 	int ret;
- 
-@@ -356,7 +356,7 @@ static int cros_ec_sysfs_probe(struct platform_device *pd)
- 
- static int cros_ec_sysfs_remove(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
- 
- 	sysfs_remove_group(&ec_dev->class_dev.kobj, &cros_ec_attr_group);
- 
-diff --git a/drivers/platform/chrome/cros_ec_vbc.c b/drivers/platform/chrome/cros_ec_vbc.c
-index f11a1283e5c8..6bcc8f6f4965 100644
---- a/drivers/platform/chrome/cros_ec_vbc.c
-+++ b/drivers/platform/chrome/cros_ec_vbc.c
-@@ -19,7 +19,7 @@ static ssize_t vboot_context_read(struct file *filp, struct kobject *kobj,
- 				  loff_t pos, size_t count)
- {
- 	struct device *dev = container_of(kobj, struct device, kobj);
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 	struct cros_ec_device *ecdev = ec->ec_dev;
- 	struct ec_params_vbnvcontext *params;
- 	struct cros_ec_command *msg;
-@@ -59,7 +59,7 @@ static ssize_t vboot_context_write(struct file *filp, struct kobject *kobj,
- 				   loff_t pos, size_t count)
- {
- 	struct device *dev = container_of(kobj, struct device, kobj);
--	struct cros_ec_dev *ec = to_cros_ec_dev(dev);
-+	struct cros_ec_mfd_dev *ec = to_cros_ec_dev(dev);
- 	struct cros_ec_device *ecdev = ec->ec_dev;
- 	struct ec_params_vbnvcontext *params;
- 	struct cros_ec_command *msg;
-@@ -109,7 +109,7 @@ static struct attribute_group cros_ec_vbc_attr_group = {
- 
- static int cros_ec_vbc_probe(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
- 	struct device *dev = &pd->dev;
- 	int ret;
- 
-@@ -124,7 +124,7 @@ static int cros_ec_vbc_probe(struct platform_device *pd)
- 
- static int cros_ec_vbc_remove(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
- 
- 	sysfs_remove_group(&ec_dev->class_dev.kobj,
- 			   &cros_ec_vbc_attr_group);
-diff --git a/drivers/platform/chrome/cros_usbpd_logger.c b/drivers/platform/chrome/cros_usbpd_logger.c
-index 2430e8b82810..56aac618736b 100644
---- a/drivers/platform/chrome/cros_usbpd_logger.c
-+++ b/drivers/platform/chrome/cros_usbpd_logger.c
-@@ -28,7 +28,7 @@
- 
- struct logger_data {
- 	struct device *dev;
--	struct cros_ec_dev *ec_dev;
-+	struct cros_ec_mfd_dev *ec_dev;
- 	u8 ec_buffer[CROS_USBPD_BUFFER_SIZE];
- 	struct delayed_work log_work;
- 	struct workqueue_struct *log_workqueue;
-@@ -61,7 +61,7 @@ static int append_str(char *buf, int pos, const char *fmt, ...)
- 
- static struct ec_response_pd_log *ec_get_log_entry(struct logger_data *logger)
- {
--	struct cros_ec_dev *ec_dev = logger->ec_dev;
-+	struct cros_ec_mfd_dev *ec_dev = logger->ec_dev;
- 	struct cros_ec_command *msg;
- 	int ret;
- 
-@@ -194,7 +194,7 @@ static void cros_usbpd_log_check(struct work_struct *work)
- 
- static int cros_usbpd_logger_probe(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
- 	struct device *dev = &pd->dev;
- 	struct logger_data *logger;
- 
-diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-index 6bcd4d4f95d9..a3926edeca28 100644
---- a/drivers/power/supply/cros_usbpd-charger.c
-+++ b/drivers/power/supply/cros_usbpd-charger.c
-@@ -44,7 +44,7 @@ struct port_data {
- 
- struct charger_data {
- 	struct device *dev;
--	struct cros_ec_dev *ec_dev;
-+	struct cros_ec_mfd_dev *ec_dev;
- 	struct cros_ec_device *ec_device;
- 	int num_charger_ports;
- 	int num_usbpd_ports;
-@@ -101,7 +101,7 @@ static int cros_usbpd_charger_ec_command(struct charger_data *charger,
- 					 void *indata,
- 					 unsigned int insize)
- {
--	struct cros_ec_dev *ec_dev = charger->ec_dev;
-+	struct cros_ec_mfd_dev *ec_dev = charger->ec_dev;
- 	struct cros_ec_command *msg;
- 	int ret;
- 
-@@ -592,7 +592,7 @@ static void cros_usbpd_charger_unregister_notifier(void *data)
- 
- static int cros_usbpd_charger_probe(struct platform_device *pd)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pd->dev.parent);
- 	struct cros_ec_device *ec_device = ec_dev->ec_dev;
- 	struct power_supply_desc *psy_desc;
- 	struct device *dev = &pd->dev;
-diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
-index 6909e01936d9..fbc54915b4c5 100644
---- a/drivers/rtc/rtc-cros-ec.c
-+++ b/drivers/rtc/rtc-cros-ec.c
-@@ -321,7 +321,7 @@ static SIMPLE_DEV_PM_OPS(cros_ec_rtc_pm_ops, cros_ec_rtc_suspend,
- 
- static int cros_ec_rtc_probe(struct platform_device *pdev)
- {
--	struct cros_ec_dev *ec_dev = dev_get_drvdata(pdev->dev.parent);
-+	struct cros_ec_mfd_dev *ec_dev = dev_get_drvdata(pdev->dev.parent);
- 	struct cros_ec_device *cros_ec = ec_dev->ec_dev;
- 	struct cros_ec_rtc *cros_ec_rtc;
- 	struct rtc_time tm;
-diff --git a/include/linux/mfd/cros_ec.h b/include/linux/mfd/cros_ec.h
-index 7d3d58f4e358..565a9903b15e 100644
---- a/include/linux/mfd/cros_ec.h
-+++ b/include/linux/mfd/cros_ec.h
-@@ -11,7 +11,7 @@
- #include <linux/device.h>
- 
- /**
-- * struct cros_ec_dev - ChromeOS EC device entry point.
-+ * struct cros_ec_mfd_dev - ChromeOS EC device entry point.
-  * @class_dev: Device structure used in sysfs.
-  * @ec_dev: cros_ec_device structure to talk to the physical device.
-  * @dev: Pointer to the platform device.
-@@ -20,7 +20,7 @@
-  * @cmd_offset: Offset to apply for each command.
-  * @features: Features supported by the EC.
-  */
--struct cros_ec_dev {
-+struct cros_ec_mfd_dev {
- 	struct device class_dev;
- 	struct cros_ec_device *ec_dev;
- 	struct device *dev;
-@@ -30,7 +30,7 @@ struct cros_ec_dev {
- 	u32 features[2];
- };
- 
--#define to_cros_ec_dev(dev)  container_of(dev, struct cros_ec_dev, class_dev)
-+#define to_cros_ec_dev(dev) container_of(dev, struct cros_ec_mfd_dev, class_dev)
- 
- /**
-  * cros_ec_check_features - Test for the presence of EC features
-@@ -41,6 +41,6 @@ struct cros_ec_dev {
-  * @msg: One of ec_feature_code values
-  * @return: 1 if supported, 0 if not
-  */
--int cros_ec_check_features(struct cros_ec_dev *ec, int feature);
-+int cros_ec_check_features(struct cros_ec_mfd_dev *ec, int feature);
- 
- #endif /* __LINUX_MFD_CROS_EC_H */
-diff --git a/include/linux/platform_data/cros_ec_pd_update.h b/include/linux/platform_data/cros_ec_pd_update.h
-index eea0cb6e1f91..ea4a64dca84c 100644
---- a/include/linux/platform_data/cros_ec_pd_update.h
-+++ b/include/linux/platform_data/cros_ec_pd_update.h
-@@ -97,13 +97,13 @@ enum cros_ec_pd_find_update_firmware_result {
-  */
- int cros_ec_pd_get_status(
- 		struct device *dev,
--		struct cros_ec_dev *pd_dev,
-+		struct cros_ec_mfd_dev *pd_dev,
- 		int port,
- 		struct ec_params_usb_pd_rw_hash_entry *hash_entry,
- 		struct ec_params_usb_pd_discovery_entry *discovery_entry);
- 
- /* Store our PD device pointer so we can send update-related commands. */
--extern struct cros_ec_dev *cros_ec_pd_ec;
-+extern struct cros_ec_mfd_dev *cros_ec_pd_ec;
- 
- /*
-  * firmware_images - Keep this updated with the latest RW FW + hash for each
--- 
-2.24.0.432.g9d3f5f5b63-goog
-
+T24gMjAxOS0xMS0yMCAxMDoyMSwgU2h1YmhyYWp5b3RpIERhdHRhIHdyb3RlOg0KPiBIaSBQZXRl
+ciAsDQo+IHRoYW5rcyBmb3IgdGhlIHJldmlldywNCj4gDQo+IE9uIFR1ZSwgTm92IDE5LCAyMDE5
+IGF0IDQ6MzUgQU0gUGV0ZXIgUm9zaW4gPHBlZGFAYXhlbnRpYS5zZT4gd3JvdGU6DQo+Pg0KPj4g
+T24gMjAxOS0xMS0xNCAwOToxNywgc2h1YmhyYWp5b3RpLmRhdHRhQGdtYWlsLmNvbSB3cm90ZToN
+Cj4+PiBGcm9tOiBTaHViaHJhanlvdGkgRGF0dGEgPHNodWJocmFqeW90aS5kYXR0YUB4aWxpbngu
+Y29tPg0KPj4+DQo+Pj4gSW4gY2FzZSBvZiBtdWx0aW1hc3RlciBjb25maWd1cmF0aW9uIHRoZSBs
+YXN0IGNoYW5uZWwgY2FjaGVkIHZhbHVlIGlzDQo+Pj4gbm90IHJlbGlhYmxlLiBCYXNpY2FsbHkg
+dGhlIGZpcnN0IHByb2Nlc3Nvci9tYXN0ZXIgZG9lcyBhIHdyaXRlIHRvIHRoZQ0KPj4+IG11eCBh
+bmQgdGhlbiB0byB0aGUgaW50ZW5kZWQgc2xhdmUsIGl0IGNhY2hlcyB0aGUgdmFsdWUuDQo+Pj4g
+Tm93IHRoZSBzZWNvbmQgcHJvY2Vzc29yL3Byb2Nlc3NvciBkb2VzIGEgd3JpdGUgdG8gbXV4IG9u
+IGFub3RoZXINCj4+PiBjaGFubmVsIGFuZCB3cml0ZXMgdG8gYW5vdGhlciBzbGF2ZS4NCj4+PiBU
+aGUgZmlyc3QgcHJvY2Vzc29yL21hc3RlciB3aGVuIGl0IGF0dGVtcHRzIHRvIHdyaXRlIHRoZSBz
+bGF2ZQ0KPj4+IHNraXBzIHRoZSBtdXggYXMgaXQgcmVsaWVzIG9uIHRoZSBtdXggY2hhbm5lbCBi
+ZWluZyB0aGUgc2FtZSBhcyB0aGUNCj4+PiBpbnRlbmRlZC4gVGhpcyBjYXVzZXMgYW4gaXNzdWUu
+DQo+Pj4NCj4+PiBUbyBmaXggdGhhdCB3cml0ZSBhbHdheXMgdG8gdGhlIG11eCBhZGRyZXNzLg0K
+Pj4NCj4+IFRoYW5rcyBmb3IgeW91ciBwYXRjaC4NCj4+DQo+PiBIb3dldmVyLCBJIGRvbid0IHJl
+YWxseSBzZWUgaG93IHRoaXMgZml4ZXMgYW55dGhpbmcuIElmIHlvdSBoYXZlDQo+PiBtdWx0aXBs
+ZSBtYXN0ZXJzIGNvbXBldGluZyBmb3IgdGhlIHNhbWUgbXV4LCBhbGwgYmV0cyBhcmUgb2ZmIGFu
+ZCBhbnkNCj4+IHNvbHV0aW9uIG5vdCBpbnZvbHZpbmcgYW4gb3V0LW9mLWJhbmQgY2hhbm5lbCB3
+aGVyZSB0aGUgbWFzdGVycyBjYW4NCj4+IGNvb3JkaW5hdGUgd2lsbCBiZSByYWN5LCBicm9rZW4g
+YW5kIGRhbmdlcm91cy4NCj4+IEFuZCBzaW5jZSB5b3UgbmVlZCB0aGF0DQo+PiBleHRyYSBjaGFu
+bmVsIGFueXdheSwgaXQgbWlnaHQgYXMgd2VsbCBhbHNvIGJlIHVzZWQgdG8gY29vcmRpbmF0ZSB3
+aGVuDQo+PiB0aGUgY2FjaGUgbmVlZHMgdG8gYmUgaW52YWxpZGF0ZWQuDQo+Pg0KPj4gQXQgdGhl
+IHZlcnkgbGVhc3QsIGFsbCBsaW1pdGF0aW9ucyBuZWVkcyB0byBiZSBjYXJlZnVsbHkgZG9jdW1l
+bnRlZCwNCj4+IGJ1dCB0aGF0IGRvZXMgbm90IG1lYW4gdGhhdCBJIHdpbGwgZXZlciBsaWtlIGl0
+LiBJbiBzaG9ydCwgSSdtIGV4dHJlbWVseQ0KPj4gcmVsdWN0YW50IHRvIGFkZCBhIGdsZ2xsaWtl
+IHRoaXMuDQo+Pg0KPj4gQ2hlZXJzLA0KPj4gUGV0ZXINCj4gDQo+IEkgYWdyZWUgZG9lcyB0aGUg
+YmVsb3cgcGF0Y2ggbWFrZSBzZW5zZS4NCg0KVGhpcyBwYXRjaCBpcyBzZXZlcmVseSB3aGl0ZS1z
+cGFjZSBkYW1hZ2VkIGFuZCBJIGhhdmUgYSBoYXJkIHRpbWUgcmVhZGluZw0KdGhlIGRldGFpbHMg
+c28gcGxlYXNlIGZpeCB5b3VyIHNldHVwLiBIb3dldmVyLCBJIGdhdGhlciB0aGUgaWRlYSBpcyB0
+bw0KcmVseSBvbiBoYXZpbmcgYWxsIG1hc3RlcnMgY29uZmlndXJlZCB0byBpZGxlIHRoZSBtdXgg
+d2hlbiB0aGV5IGRvbid0IHVzZQ0KaXQuIFRoYXQncyBhbHNvIHJhY3kgc2luY2UgbXVsdGlwbGUg
+bWFzdGVycyBjYW4gYWxsIHJlYWQgdGhlIHplcm8sIGFuZA0KZGVkdWNlIHRoYXQgdGhlIG11eCBp
+cyBmcmVlLCB0aGVuIGFsbCBvZiB0aGVtIHdyaXRlIHRoZWlyIHRoaW5nIHRvIHRoZQ0KbXV4LCBh
+bmQgcHJvY2VlZCBhcyBpZiB0aGV5IG93biBpdC4gVGhhdCBzcGVsbHMgZGlzYXN0ZXIuIEFsc28s
+IEknbSBub3QNCnN1cmUgdGhlIDEgc2Vjb25kIHRpbWVvdXQgaXMgT0sgc2luY2UgdGhlIHRoZSBy
+b290IGFkYXB0ZXIgKGFsb25nIHdpdGgNCnRoZSBtdXgpIGFyZSBwb3RlbnRpYWxseSBsb2NrZWQg
+Zm9yIHRoaXMgZHVyYXRpb24sIHRodXMgYmxvY2tpbmcgYWxsIG90aGVyDQpJMkMgdHJhZmZpYy4N
+Cg0KQWxzbywgaWYgeW91IGFyZSByZWx5aW5nIG9uIHRoZSBtdXggYmVpbmcgaWRsZSB3aGVuIHVu
+dXNlZCwgdGhlbiB5b3Ugd2lsbA0KZWZmZWN0aXZlbHkgbm90IGhhdmUgYSBjYWNoZSByZWdhcmRs
+ZXNzIG9mIHRoaXMgcGF0Y2gsIGFuZCB0aGUgZHJpdmVyIHdpbGwNCnNldCB0aGUgZGVzaXJlZCB2
+YWx1ZSBvbiBlYWNoIHRyYW5zYWN0aW9uLCB3aGljaCBtZWFuIHRoYXQgdGhlIG5hbWluZyBvZg0K
+dGhpcyBuZXcgZmVhdHVyZSBpcyB3cm9uZy4gTWF5YmUgbmFtZSBpdCBzb21ldGhpbmcgd2l0aCAi
+Y29vcmRpbmF0aW9uIiAoYQ0KYml0IGxvbmcpIG9yICJhcmJpdHJhdGlvbiIgb3Igc29tZXRoaW5n
+IHN1Y2ggaW5zdGVhZD8NCg0KSXQgc2VlbXMgeW91ciBoYXJkd2FyZSBkZXNpZ25lcnMgZGlkbid0
+IHRoaW5rIHRoaW5ncyB0aHJvdWdoIHByb3Blcmx5LA0KYmVjYXVzZSBJIGNhbid0IHNlZSBhIHNh
+bmUgd2F5IHRvIGZpeCB0aGUgcmFjZS4gTm90IHdpdGhvdXQgYSBzZXBhcmF0ZQ0KY29tbXVuaWNh
+dGlvbnMgY2hhbm5lbCB3aGVyZSB0aGUgbWFzdGVycyBjYW4gY29vcmRpbmF0ZS4gQnV0IEkgYmV0
+IHRoYXQNCmNoYW5uZWwsIGlmIGl0IGV2ZW4gZXhpc3RzLCBpcyBwcmV0dHkgZGFtbiBoYXJkIHRv
+IHVzZSBpZiBpdCB3YXNuJ3QNCmRlc2lnbmVkIGluIGZyb20gdGhlIHN0YXJ0Lg0KDQpJIHRoaW5r
+IHRoZSB0cmFkaXRpb25hbCB3YXkgdG8gc29sdmUgeW91ciBwcm9ibGVtIGlzIHRvIGhhdmUgdGhl
+IG1hc3RlcnMNCmNvb3JkaW5hdGUgdmlhIHNvbWUgaTJjIGFyYml0cmF0b3Igc3VjaCBhcyB0aGUg
+aTJjLWFyYi1ncGlvLWNoYWxsZW5nZQ0KZHJpdmVyIG9yIGEgcGNhOTU0MSBjaGlwIG9yIHNvbWV0
+aGluZy4gVGhlbiB0aGUgbXV4aW5nIHRyYW5zYWN0aW9ucywNCndoaWNoIGNvbnNpc3Qgb2YgbXVs
+dGlwbGUgSTJDIHRyYW5zZmVycywgY2FuIGJlIGhhbmRsZWQgYXMgYSB1bml0Lg0KDQpJLmUuIHdp
+dGggaTJjLWFyYi1ncGlvLWNoYWxsZW5nZSwgeW91IGhhdmUgdHdvIGdwaW8gbGluZXMgd2hlcmUg
+dHdvDQptYXN0ZXJzIGNhbiBjb29yZGluYXRlLCBhbmQgZXZlbiBpZiB0aGV5IGFyZSBib3RoIG9u
+IHRoZSBzYW1lIEkyQyBidXMsDQp0aGV5IGNhbiBhY3R1YWxseSB1c2UgdGhlIG11eCBpZiBhbmQg
+b25seSBpZiBpdCBpcyBrbm93biB0byBiZSBmcmVlLg0KDQoJCQkgICAgICAgLi0tLS0tLS0uDQoJ
+bWFzdGVyIDEgIC0tLS0tLS4gICAgICB8ICAgICAgIHwtLS0tLT4NCgkgfCAgXgkJfCAgICAgIHwg
+ICAgICAgfC0tLS0tPg0KCSB8ICB8CQl8LS0tLS0+fCAgbXV4ICB8ICAuDQoJIFYgIHwJCXwgICAg
+ICB8ICAgICAgIHwgIC4NCgltYXN0ZXIgMiAgLS0tLS0tJyAgICAgIHwgICAgICAgfC0tLS0tPg0K
+CQkJICAgICAgICctLS0tLS0tJw0KDQpUaGUgcGNhOTU0MSBjYW4gYWxzbyBoYW5kbGUgdHdvIG1h
+c3RlcnMsIGJ1dCBpbiB0aGF0IGNhc2UgdGhlIG1hc3RlcnMgYXJlDQpub3QgcmVhbGx5IG9uIHRo
+ZSBzYW1lIEkyQyBidXMsIGF0IGxlYXN0IG5vdCBhdCB0aGUgc2FtZSB0aW1lLg0KDQoJCQkuLS0t
+LS0tLS0tLS0uICAgICAgLi0tLS0tLS0uDQoJbWFzdGVyIDEgIC0tLS0tPnwgICAgICAgICAgIHwg
+ICAgICB8ICAgICAgIHwtLS0tLT4NCgkJCXwgICAgICAgICAgIHwgICAgICB8ICAgICAgIHwtLS0t
+LT4NCgkJCXwgIHBjYTk1NDEgIHwtLS0tLT58ICBtdXggIHwgIC4NCgkJCXwgICAgICAgICAgIHwg
+ICAgICB8ICAgICAgIHwgIC4NCgltYXN0ZXIgMiAgLS0tLS0+fCAgICAgICAgICAgfCAgICAgIHwg
+ICAgICAgfC0tLS0tPg0KCQkJJy0tLS0tLS0tLS0tJyAgICAgICctLS0tLS0tJw0KDQpJZiB5b3Ug
+ZG9uJ3QgaGF2ZSBzb21ldGhpbmcgbGlrZSB0aGF0IGluIHlvdXIgc2NoZW1hdGljcywgSSB0aGlu
+ayB5b3UNCmFyZSBqdXN0IFNPTCwgYW5kIGFueXRoaW5nIHlvdSB0cnkgd2lsbCBiZSBicm9rZW4g
+aW4gb25lIHdheSBvciBhbm90aGVyLg0KDQpUcnlpbmcgdG8gdXNlIHRoZSByZWdpc3RlciBpbiB0
+aGUgbXV4IGZvciB0aGUgbmVlZGVkIGNvb3JkaW5hdGlvbiBzZWVtcw0KdmVyeSBkaWZmaWN1bHQu
+IE1heWJlIGlmIHRoZXJlIHdhcyBhIHBhaXIgb2YgdW51c2VkIHJlZ2lzdGVycyBpbiBzb21lDQpv
+dGhlciBkZXZpY2Ugb24gdGhlIGJ1cywgb3IgYSBjb3VwbGUgb2YgbWVtb3J5IGxvY2F0aW9ucyBp
+biBhbiBlZXByb20gb3INCnNvbWV0aGluZywgdGhlbiB0aGF0IGNvdWxkIHBlcmhhcHMgYmUgdXNl
+ZCBhcyB0aGUgaTJjLWFyYi1ncGlvLWNoYWxsZW5nZQ0KdXNlcyB0aGUgZ3Bpb3MuIEkuZS4gd3Jp
+dGUgYSBuZXcgaTJjLWFyYi1yZWctY2hhbGxlbmdlIGRyaXZlciBvcg0Kc29tZXRoaW5nLCBpZiB5
+b3Ugc2VlIHdoYXQgSSBtZWFuLiBIbW0sIG9uIHNlY29uZCB0aG91Z2h0LCBlZXByb21zIG1pZ2h0
+DQpub3QgYmUgc28gZ29vZCBpZiB5b3UgZXhwZWN0IHRvIG11eCBmcmVxdWVudGx5Li4uDQoNCkZp
+bmFsbHksIEkgbm90aWNlZCBhIGNvdXBsZSBvZiBzcGVsbGluZyBtaXN0YWtlcyBiZWxvdy4NCg0K
+PiBGcm9tIDBjYTY1NDIwYjY1NTE0NTk0YTgyNTJkMWU5ZWViYTY0YmVhMDFkYTYgTW9uIFNlcCAx
+NyAwMDowMDowMCAyMDAxDQo+IEZyb206IFNodWJocmFqeW90aSBEYXR0YSA8c2h1YmhyYWp5b3Rp
+LmRhdHRhQHhpbGlueC5jb20+DQo+IERhdGU6IEZyaSwgMzAgQXVnIDIwMTkgMTE6MTU6MjUgKzA1
+MzANCj4gU3ViamVjdDogW1BBVENIXSBpMmM6IG11eDogcGNhOTU0eDogRGlzYWJsZSBjYWNoZWlu
+ZyBvZiB0aGUgbGFzdCBjaGFubmVsDQoNCiJjYWNoaW5nIiwgYXMgc29tZW9uZSBlbHNlIGFscmVh
+ZHkgbWVudGlvbmVkLg0KDQo+IA0KPiBJbiBjYXNlIG9mIG11bHRpbWFzdGVyIGNvbmZpZ3VyYXRp
+b24gdGhlIGxhc3QgY2hhbm5lbCBjYWNoZWQgdmFsdWUgaXMNCj4gbm90IHJlbGlhYmxlLiBUbyBm
+aXggdGhhdCB3cml0ZSBhbHdheXMgdG8gdGhlIG11eCBhZGRyZXNzLg0KPiBBbHNvIHVzZSB0aGUg
+MCBjaGFubmVsIGRpc2FibGUgdG8gYXJiaXRyYXRlLiBJZiBkaXNhYmxlZCBvbmx5IHRoZW4gd3Jp
+dGUuDQo+IEVsc2Ugd2FpdCBmb3IgaXQgdG8gYmUgZGlzYWJsZWQuDQo+IA0KPiBTaWduZWQtb2Zm
+LWJ5OiBTaHViaHJhanlvdGkgRGF0dGEgPHNodWJocmFqeW90aS5kYXR0YUB4aWxpbnguY29tPg0K
+PiAtLS0NCj4gDQo+ICAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLW11eC1wY2E5NTR4
+LnR4dCAgICB8ICAxICsNCj4gIGRyaXZlcnMvaTJjL211eGVzL2kyYy1tdXgtcGNhOTU0eC5jICAg
+ICAgICAgICAgICAgIHwgNDkgKysrKysrKysrKysrKysrKysrKy0tLQ0KPiAgMiBmaWxlcyBjaGFu
+Z2VkLCA0NSBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvaTJjL211eGVzL2kyYy1tdXgtcGNhOTU0eC5jDQo+IGIvZHJpdmVycy9pMmMvbXV4
+ZXMvaTJjLW11eC1wY2E5NTR4LmMNCj4gaW5kZXggOTIzYWEzYS4uYTdlM2FhOSAxMDA2NDQNCj4g
+LS0tIGEvZHJpdmVycy9pMmMvbXV4ZXMvaTJjLW11eC1wY2E5NTR4LmMNCj4gKysrIGIvZHJpdmVy
+cy9pMmMvbXV4ZXMvaTJjLW11eC1wY2E5NTR4LmMNCj4gQEAgLTQyLDYgKzQyLDcgQEANCj4gICNp
+bmNsdWRlIDxsaW51eC9pMmMtbXV4Lmg+DQo+ICAjaW5jbHVkZSA8bGludXgvaW50ZXJydXB0Lmg+
+DQo+ICAjaW5jbHVkZSA8bGludXgvaXJxLmg+DQo+ICsjaW5jbHVkZSA8bGludXgvamlmZmllcy5o
+Pg0KPiAgI2luY2x1ZGUgPGxpbnV4L21vZHVsZS5oPg0KPiAgI2luY2x1ZGUgPGxpbnV4L29mLmg+
+DQo+ICAjaW5jbHVkZSA8bGludXgvb2ZfZGV2aWNlLmg+DQo+IEBAIC01NSw2ICs1Niw4IEBADQo+
+IA0KPiAgI2RlZmluZSBQQ0E5NTRYX0lSUV9PRkZTRVQgNA0KPiANCj4gKyNkZWZpbmUgTVVYX0NI
+QU5fVElNRU9VVF9VUyAxMDAwMDAwDQo+ICsNCj4gIGVudW0gcGNhX3R5cGUgew0KPiAgIHBjYV85
+NTQwLA0KPiAgIHBjYV85NTQyLA0KPiBAQCAtODUsNiArODgsOCBAQCBzdHJ1Y3QgcGNhOTU0eCB7
+DQo+ICAgY29uc3Qgc3RydWN0IGNoaXBfZGVzYyAqY2hpcDsNCj4gDQo+ICAgdTggbGFzdF9jaGFu
+OyAvKiBsYXN0IHJlZ2lzdGVyIHZhbHVlICovDQo+ICsgdTggbGFzdF9jaGFuX3VuY2hhY2hlZDsg
+Lyogd3JpdGUgY2hhbm5lbCByZWdpc3RlciBhbHdheXMgKi8NCg0KLi4uX3VuY2FjaGVkDQoNCkJ1
+dCwgc2luY2UgYSByZW5hbWUgbWlnaHQgYmUgaW4gb3JkZXIsIEkgZG9uJ3Qga25vdyBob3cgcmVs
+ZXZhbnQgdGhhdA0KaXMuLi4NCg0KQ2hlZXJzLA0KUGV0ZXINCg0KPiArIGJvb2wgY2hhbm5lbF9z
+ZWw7DQo+ICAgLyogTVVYX0lETEVfQVNfSVMsIE1VWF9JRExFX0RJU0NPTk5FQ1Qgb3IgPj0gMCBm
+b3IgY2hhbm5lbCAqLw0KPiAgIHM4IGlkbGVfc3RhdGU7DQo+IA0KPiBAQCAtMjI5LDYgKzIzNCwy
+MyBAQCBzdGF0aWMgaW50IHBjYTk1NHhfcmVnX3dyaXRlKHN0cnVjdCBpMmNfYWRhcHRlciAqYWRh
+cCwNCj4gICBJMkNfU01CVVNfQllURSwgJmR1bW15KTsNCj4gIH0NCj4gDQo+ICsvKg0KPiArICog
+UmVhZCBmcm9tIGNoaXAgcmVnaXN0ZXIuIERvbid0IHVzZSBpMmNfdHJhbnNmZXIoKS9pMmNfc21i
+dXNfeGZlcigpDQo+ICsgKiBhcyB0aGV5IHdpbGwgdHJ5IHRvIGxvY2sgYWRhcHRlciBhIHNlY29u
+ZCB0aW1lLg0KPiArICovDQo+ICtzdGF0aWMgaW50IHBjYTk1NHhfcmVnX3JlYWQoc3RydWN0IGky
+Y19hZGFwdGVyICphZGFwLA0KPiArICAgICBzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LCB1OCB2
+YWwpDQo+ICt7DQo+ICsgdW5pb24gaTJjX3NtYnVzX2RhdGEgZGF0YTsNCj4gKyBpbnQgcmV0Ow0K
+PiArDQo+ICsgcmV0ID0gX19pMmNfc21idXNfeGZlcihhZGFwLCBjbGllbnQtPmFkZHIsIGNsaWVu
+dC0+ZmxhZ3MsDQo+ICsgICAgICAgIEkyQ19TTUJVU19SRUFELCB2YWwsDQo+ICsgICAgICAgIEky
+Q19TTUJVU19CWVRFLCAmZGF0YSk7DQo+ICsNCj4gKyByZXR1cm4gcmV0ID8gcmV0IDogIGRhdGEu
+Ynl0ZTsNCj4gK30NCj4gKw0KPiAgc3RhdGljIGludCBwY2E5NTR4X3NlbGVjdF9jaGFuKHN0cnVj
+dCBpMmNfbXV4X2NvcmUgKm11eGMsIHUzMiBjaGFuKQ0KPiAgew0KPiAgIHN0cnVjdCBwY2E5NTR4
+ICpkYXRhID0gaTJjX211eF9wcml2KG11eGMpOw0KPiBAQCAtMjM2LDYgKzI1OCw3IEBAIHN0YXRp
+YyBpbnQgcGNhOTU0eF9zZWxlY3RfY2hhbihzdHJ1Y3QgaTJjX211eF9jb3JlDQo+ICptdXhjLCB1
+MzIgY2hhbikNCj4gICBjb25zdCBzdHJ1Y3QgY2hpcF9kZXNjICpjaGlwID0gZGF0YS0+Y2hpcDsN
+Cj4gICB1OCByZWd2YWw7DQo+ICAgaW50IHJldCA9IDA7DQo+ICsgdW5zaWduZWQgbG9uZyB0aW1l
+b3V0ID0gamlmZmllcyArIHVzZWNzX3RvX2ppZmZpZXMoTVVYX0NIQU5fVElNRU9VVF9VUyk7DQo+
+IA0KPiAgIC8qIHdlIG1ha2Ugc3dpdGNoZXMgbG9vayBsaWtlIG11eGVzLCBub3Qgc3VyZSBob3cg
+dG8gYmUgc21hcnRlciAqLw0KPiAgIGlmIChjaGlwLT5tdXh0eXBlID09IHBjYTk1NHhfaXNtdXgp
+DQo+IEBAIC0yNDMsMTMgKzI2NiwyNiBAQCBzdGF0aWMgaW50IHBjYTk1NHhfc2VsZWN0X2NoYW4o
+c3RydWN0DQo+IGkyY19tdXhfY29yZSAqbXV4YywgdTMyIGNoYW4pDQo+ICAgZWxzZQ0KPiAgIHJl
+Z3ZhbCA9IDEgPDwgY2hhbjsNCj4gDQo+ICsgaWYgKCFkYXRhLT5sYXN0X2NoYW5fdW5jaGFjaGVk
+KSB7DQo+ICAgLyogT25seSBzZWxlY3QgdGhlIGNoYW5uZWwgaWYgaXRzIGRpZmZlcmVudCBmcm9t
+IHRoZSBsYXN0IGNoYW5uZWwgKi8NCj4gLSBpZiAoZGF0YS0+bGFzdF9jaGFuICE9IHJlZ3ZhbCkg
+ew0KPiAtIHJldCA9IHBjYTk1NHhfcmVnX3dyaXRlKG11eGMtPnBhcmVudCwgY2xpZW50LCByZWd2
+YWwpOw0KPiAtIGRhdGEtPmxhc3RfY2hhbiA9IHJldCA8IDAgPyAwIDogcmVndmFsOw0KPiArIGlm
+IChkYXRhLT5sYXN0X2NoYW4gIT0gcmVndmFsKSB7DQo+ICsgcmV0ID0gcGNhOTU0eF9yZWdfd3Jp
+dGUobXV4Yy0+cGFyZW50LCBjbGllbnQsIHJlZ3ZhbCk7DQo+ICsgZGF0YS0+bGFzdF9jaGFuID0g
+cmV0IDwgMCA/IDAgOiByZWd2YWw7DQo+ICsgfQ0KPiArIHJldHVybiByZXQ7DQo+ICAgfQ0KPiAN
+Cj4gLSByZXR1cm4gcmV0Ow0KPiArIGRvIHsNCj4gKyByZXQgPSBwY2E5NTR4X3JlZ19yZWFkKG11
+eGMtPnBhcmVudCwgY2xpZW50LCAwKTsNCj4gKyBpZiAocmV0ID09IDApIHsNCj4gKyByZXQgPSBw
+Y2E5NTR4X3JlZ193cml0ZShtdXhjLT5wYXJlbnQsIGNsaWVudCwgcmVndmFsKTsNCj4gKyBkYXRh
+LT5jaGFubmVsX3NlbCA9IHRydWU7DQo+ICsgcmV0dXJuIHJldDsNCj4gKyB9DQo+ICsgbXNsZWVw
+KDIwKTsNCj4gKyB9IHdoaWxlICh0aW1lX2lzX2FmdGVyX2VxX2ppZmZpZXModGltZW91dCkpOw0K
+PiArIGRhdGEtPmNoYW5uZWxfc2VsID0gZmFsc2U7DQo+ICsgcmV0dXJuIC1FVElNRURPVVQ7DQo+
+ICB9DQo+IA0KPiAgc3RhdGljIGludCBwY2E5NTR4X2Rlc2VsZWN0X211eChzdHJ1Y3QgaTJjX211
+eF9jb3JlICptdXhjLCB1MzIgY2hhbikNCj4gQEAgLTI1OSw3ICsyOTUsNyBAQCBzdGF0aWMgaW50
+IHBjYTk1NHhfZGVzZWxlY3RfbXV4KHN0cnVjdA0KPiBpMmNfbXV4X2NvcmUgKm11eGMsIHUzMiBj
+aGFuKQ0KPiAgIHM4IGlkbGVfc3RhdGU7DQo+IA0KPiAgIGlkbGVfc3RhdGUgPSBSRUFEX09OQ0Uo
+ZGF0YS0+aWRsZV9zdGF0ZSk7DQo+IC0gaWYgKGlkbGVfc3RhdGUgPj0gMCkNCj4gKyBpZiAoaWRs
+ZV9zdGF0ZSA+PSAwICYmICBkYXRhLT5jaGFubmVsX3NlbCkNCj4gICAvKiBTZXQgdGhlIG11eCBi
+YWNrIHRvIGEgcHJlZGV0ZXJtaW5lZCBjaGFubmVsICovDQo+ICAgcmV0dXJuIHBjYTk1NHhfc2Vs
+ZWN0X2NoYW4obXV4YywgaWRsZV9zdGF0ZSk7DQo+IA0KPiBAQCAtNDc5LDYgKzUxNSw5IEBAIHN0
+YXRpYyBpbnQgcGNhOTU0eF9wcm9iZShzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LA0KPiAgIGlm
+IChpZGxlX2Rpc2Nvbm5lY3RfZHQpDQo+ICAgZGF0YS0+aWRsZV9zdGF0ZSA9IE1VWF9JRExFX0RJ
+U0NPTk5FQ1Q7DQo+IA0KPiArIGRhdGEtPmxhc3RfY2hhbl91bmNoYWNoZWQgPSBucCAmJg0KPiAr
+IG9mX3Byb3BlcnR5X3JlYWRfYm9vbChucCwgIm5vLWNoYW5uZWwtY2FjaGUiKTsNCj4gKw0KPiAg
+IHJldCA9IHBjYTk1NHhfaXJxX3NldHVwKG11eGMpOw0KPiAgIGlmIChyZXQpDQo+ICAgZ290byBm
+YWlsX2NsZWFudXA7DQo+IA0KDQo=
