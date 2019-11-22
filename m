@@ -2,148 +2,159 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FDB1068A5
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2019 10:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F211068DD
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2019 10:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbfKVJKZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Nov 2019 04:10:25 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:34888 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbfKVJKZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Nov 2019 04:10:25 -0500
-Received: by mail-ed1-f65.google.com with SMTP id r16so5348530edq.2;
-        Fri, 22 Nov 2019 01:10:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xJF8jXeg6xvlTusMZZszgFmib3HFwE1D3cegxFqQ0JU=;
-        b=WjDEp/NdqbL/aK7NWSKTsFWoaBkW9t2+kFeqjbWn3wnzJsb4AgY6XDAFn2cDZdcQrQ
-         HlQO5Ta2E1ZQOyuh2N24tocZTEE87wdHHKW7KDoTZARsiG2XN2cNz6cW9ngLmuOIIZnW
-         tF2Uw7wYGIiBLlVMp1U1wfstnEWssmtXLARFb8K3u58zexVHSSABpCbzUYL4VyX48Ao0
-         KGyzs+ZHBq3eAdS0RO0Wap48y0hXo5+uvLWh95imJWykIDWizSqh2FCJf0bBUsNbYxe5
-         SSC32tS0JXqoKuzZr0EohqZV86hQKtGGtXaSohgyzR6nzL3D9/8UaVUOBSx5YixWMMO6
-         X5jw==
+        id S1726417AbfKVJcC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Nov 2019 04:32:02 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:23121 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726364AbfKVJcC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Nov 2019 04:32:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574415120;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DoDZy46uKDi4GzZqKHF4v0IZkSk/7/aoKA8jH0rjeS0=;
+        b=LHFx+JvOeGRfkYmceH33XPWhBjygo+XXBQUO0qO+gsaj6z9BB7NJrmsUj4VaZ6FHOEgA/K
+        3fBkLay4Xrz8POi4VQrM1mMwbyILoTCzqcRJVUYW6++LSNlWA8UiB5FDaiIIMXJpIRF7Oi
+        BzJDi/Ioq+sI11DwXFne1sHdZV258Rs=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-230-V78fDNrtPnKsyry5UyHBiQ-1; Fri, 22 Nov 2019 04:31:56 -0500
+Received: by mail-qk1-f197.google.com with SMTP id l21so3907786qke.21
+        for <linux-i2c@vger.kernel.org>; Fri, 22 Nov 2019 01:31:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xJF8jXeg6xvlTusMZZszgFmib3HFwE1D3cegxFqQ0JU=;
-        b=nlcngwRSAdgRUF1vwE8jLvX80r0dt03EGKOuP/T//4THqHVLZ751oQodmVSOOChyOa
-         8dbmQRAuKw9/3QUG+7GcKBr2T5UZLAdtI8yLNZafgGQW8mNvCIeW6P+4caYmkSO0Jw+l
-         ZdBn1Nq67rXnx5TFLhOu+wbXEFogRbnUbGteXJNRC9gqiioZ7z0g+bUcyAOoAP5KZecV
-         8GXS1qeYHH3Og0/G9oSWfM3g/SF3mZ/dbREZbfexQjwRrbHMKP+y50MmxNx1h1XbgIHI
-         oRSh4U1Z3Y+nJh70hY6SACvuxZTvtODVnJ/HgHDhJ7sWpHXiVo/D3LrpGqs/eYhRwb00
-         taKw==
-X-Gm-Message-State: APjAAAVoIztylibngQMyIr3VWM0yYv+zAk//3fji1ym4Hu/6E64Lp2ou
-        eWhg/LMFPFfNwccz74DeXbPCl+eft/HLtvuBtWVBGg==
-X-Google-Smtp-Source: APXvYqxwyuOc14aMFvMq0SVA6m5mbpFCLy5mif6Nx2xn+USp4UQDt1qTnW7pdA9rReGLSxKVsGoHIlFv+iKx5O7Fcgs=
-X-Received: by 2002:a17:906:698b:: with SMTP id i11mr20495989ejr.97.1574413822609;
- Fri, 22 Nov 2019 01:10:22 -0800 (PST)
+        bh=JlU5TxJJYJcA55zvxuKAcCWK3844Z5TRyqoE20NoTVY=;
+        b=rDBJu7U+SqRy+9OMayvgyLWMTdvEOaIWAQXw99pnwy/2bZa/KwdT2w/eqiIqeLuv/A
+         A5SHihjOH8ZoL3gMOB2DVBqxs1Y4L3p/I/wygPUosur9LlLP5njxf5CXOvGi5evvfhpB
+         1nwbXngIN4lCMch+uHMBGE9mI5W+d98+qvseYHsmOMxlkpSNzxnAZWJjysqdL6p1AIrU
+         lG/sDMm5WZ5a0Vfpugn+3F6h4wSOKCVTbFMuhIhXZqMzPVg4IMMqCV3FLr9tP2CLO6MI
+         0rbSLZSbFBR7qC2lSVPUZGhlYCjCNR1Obap1n7MgQvkpWe9sHcl0wB6iMbR6iK41lxov
+         IaNw==
+X-Gm-Message-State: APjAAAXo9Y7H+u36ryHo2GY89Sen3SOaOw//THnOL3dHg51JX73PWxOQ
+        QKW2q1Y4/f0WRQh8inUfBsRHX1iV8l9AGVNZXshaWFC4D/Y/wedqnpbZbODWF7HedcTb2czx6kH
+        FGWygKQDYBK8wjprUqn73+ovSAkZ5nZqOEAL2
+X-Received: by 2002:ac8:6757:: with SMTP id n23mr778399qtp.345.1574415116461;
+        Fri, 22 Nov 2019 01:31:56 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzVKRfO7wfJ4RTGrhgqBSUwX/B3aKrHxhMTszKmhSLo74jhXD7Rb/fSKVXRmqeLl4oFjcVM9RTjE+Ny/ZD/kTA=
+X-Received: by 2002:ac8:6757:: with SMTP id n23mr778369qtp.345.1574415116049;
+ Fri, 22 Nov 2019 01:31:56 -0800 (PST)
 MIME-Version: 1.0
-References: <1573719422-7414-1-git-send-email-shubhrajyoti.datta@gmail.com>
- <6d135b8a-cdba-e6a6-7738-cbc94cdb7ec0@axentia.se> <CAKfKVtE=ufzc=_EjPR2WKt4qf0sdOB=a7f-BRP-ZffMaemxGBw@mail.gmail.com>
- <b9eaaba2-dcfd-0c97-f088-21acf269a92f@axentia.se> <CAKfKVtHuzWqH4Su1vC2oMMxvUPiGjvZsBJtYSXxx+rG7Ub1pSQ@mail.gmail.com>
- <9408fca3-8673-0a1d-0ba7-8bfca0c028be@axentia.se>
-In-Reply-To: <9408fca3-8673-0a1d-0ba7-8bfca0c028be@axentia.se>
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
-Date:   Fri, 22 Nov 2019 14:40:11 +0530
-Message-ID: <CAKfKVtHCuJEpd2JnqTREt-AR91C8UEi7UY9-hadgEO+eWNH6Cw@mail.gmail.com>
-Subject: Re: [PATCH] i2c: mux: pca954x: Disable cacheing of the last channel
-To:     Peter Rosin <peda@axentia.se>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20191121101051.71859534@endymion> <20191122032719.GQ3556@minyard.net>
+In-Reply-To: <20191122032719.GQ3556@minyard.net>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 22 Nov 2019 10:31:45 +0100
+Message-ID: <CAO-hwJLc2MJ_gBM=29hz1WZLTO_jwC0x_P+e+c1kezeFxG55DA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: i2c-smbus: Don't filter out duplicate alerts
+To:     cminyard@mvista.com
+Cc:     Jean Delvare <jdelvare@suse.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>
+X-MC-Unique: V78fDNrtPnKsyry5UyHBiQ-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Nov 22, 2019 at 2:13 PM Peter Rosin <peda@axentia.se> wrote:
+On Fri, Nov 22, 2019 at 4:27 AM Corey Minyard <cminyard@mvista.com> wrote:
 >
-> On 2019-11-22 05:38, Shubhrajyoti Datta wrote:
-> > On Fri, Nov 22, 2019 at 6:23 AM Peter Rosin <peda@axentia.se> wrote:
-> >>
-> >> On 2019-11-20 10:21, Shubhrajyoti Datta wrote:
-> >>> Hi Peter ,
-> >>> thanks for the review,
-> >>>
-> >>> On Tue, Nov 19, 2019 at 4:35 AM Peter Rosin <peda@axentia.se> wrote:
-> >>>>
-> >>>> On 2019-11-14 09:17, shubhrajyoti.datta@gmail.com wrote:
-> >>>>> From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> >>>>>
-> >>>>> In case of multimaster configuration the last channel cached value is
-> >>>>> not reliable. Basically the first processor/master does a write to the
-> >>>>> mux and then to the intended slave, it caches the value.
-> >>>>> Now the second processor/processor does a write to mux on another
-> >>>>> channel and writes to another slave.
-> >>>>> The first processor/master when it attempts to write the slave
-> >>>>> skips the mux as it relies on the mux channel being the same as the
-> >>>>> intended. This causes an issue.
-> >>>>>
-> >>>>> To fix that write always to the mux address.
-> >>>>
-> >>>> Thanks for your patch.
-> >>>>
-> >>>> However, I don't really see how this fixes anything. If you have
-> >>>> multiple masters competing for the same mux, all bets are off and any
-> >>>> solution not involving an out-of-band channel where the masters can
-> >>>> coordinate will be racy, broken and dangerous.
-> >>>> And since you need that
-> >>>> extra channel anyway, it might as well also be used to coordinate when
-> >>>> the cache needs to be invalidated.
-> >>>>
-> >>>> At the very least, all limitations needs to be carefully documented,
-> >>>> but that does not mean that I will ever like it. In short, I'm extremely
-> >>>> reluctant to add a glgllike this.
-> >>>>
-> >>>> Cheers,
-> >>>> Peter
-> >>>
-> >>> I agree does the below patch make sense.
-> >>
-> >> This patch is severely white-space damaged and I have a hard time reading
-> >> the details so please fix your setup. However, I gather the idea is to
-> >> rely on having all masters configured to idle the mux when they don't use
-> >> it. That's also racy since multiple masters can all read the zero, and
-> >> deduce that the mux is free, then all of them write their thing to the
-> >> mux, and proceed as if they own it. That spells disaster.
-> > However since the bus is locked when the master is transacting others
-> > will get bus
-> > busy or an arbitration lost if they start together.
+> On Thu, Nov 21, 2019 at 10:10:51AM +0100, Jean Delvare wrote:
+> > From: Corey Minyard <cminyard@mvista.com>
+> >
+> > Getting the same alert twice in a row is legal and normal,
+> > especially on a fast device (like running in qemu).  Kind of
+> > like interrupts.  So don't report duplicate alerts, and deliver
+> > them normally.
+> >
+> > [JD: Fixed subject]
+> >
+> > Signed-off-by: Corey Minyard <cminyard@mvista.com>
+> > Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> > ---
+> > That's a 4-year-old patch from Corey which I stumbled upon this
+> > morning. I was supposed to test it on my ADM1032 evaluation board but
+> > never got to it. Sorry about that. It turns out that I no longer have
+> > any system with a parallel port to test it.
 >
-> Not necessarily, since a muxed transaction with some slave on the other
-> side of the mux will consist of (at least) four independent transfers (with
-> this patch).
+> Thanks.  This hasn't been a huge deal, since the only system that is
+> affected at the moment (AFAIK) is the qemu test environment that I use.
+> But it will be nice to have this for when something real actually uses
+> this.
 >
-> 1. check that the mux state is idle
-> 2. set the mux to the intended child bus
-> 3. do the "useful" transfer to the slave on the child bus
-> 4. reset the mux to idle
+> -corey
 >
-> Two masters might very well get past 1 without noticing each other, which
-> is the big fail in your patch. They might also very well get past 2 without
-> running into arbitration. You cannot be sure that a master is able to put
-> these four transactions on the bus back-to-back, at least not in the Linux
-> case (there might e.g. be a reschedule to some totally unrelated work). And
-> even if you could, two masters could in theory be completely in sync so that
-> both masters think they have succeeded right until they want to set some bit
-> in the mux register differently. So, it's just fragile. And even if they do
-> run into each other on 1 or 2 on the I2C bus level, you have no code for
-> handling that so they will probably just retry a bit later. In other words,
-> the race is on, and getting more than one master past 1 before any of them
-> hit 2 is enough to get into trouble.
->
-> The problem is that, without coordination, the other masters do not see
-> these four transactions as a unit. You *need* arbitration on a higher
-> level than individual transfers.
-I agree will get back once I check some arbitration mechanism like
-hardware spinlock
-or gpio stuff thanks.
+> >
+> > I think the patch is correct and whatever the problem was on my ADM1032
+> > evaluation board, it should be fixed differently. Maybe it was a wrong
+> > trigger type, or alerts must be disabled temporarily during processing,
+> > or the hardware is actually bogus and it would be up to the device
+> > driver to ignore alerts for some time after receiving one. Whatever,
+> > let's apply the fix now and deal with this problem later if/when it
+> > resurfaces.
+> >
+> >  drivers/i2c/i2c-smbus.c | 7 -------
+> >  1 file changed, 7 deletions(-)
+> >
+> > diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+> > index 94765a8..cecd423 100644
+> > --- a/drivers/i2c/i2c-smbus.c
+> > +++ b/drivers/i2c/i2c-smbus.c
+> > @@ -75,7 +75,6 @@ static void smbus_alert(struct work_struct *work)
+> >  {
+> >       struct i2c_smbus_alert *alert;
+> >       struct i2c_client *ara;
+> > -     unsigned short prev_addr =3D 0;   /* Not a valid address */
+> >
+> >       alert =3D container_of(work, struct i2c_smbus_alert, alert);
+> >       ara =3D alert->ara;
+> > @@ -99,18 +98,12 @@ static void smbus_alert(struct work_struct *work)
+> >               data.flag =3D status & 1;
+> >               data.addr =3D status >> 1;
+> >
+> > -             if (data.addr =3D=3D prev_addr) {
+> > -                     dev_warn(&ara->dev, "Duplicate SMBALERT# from dev=
+ "
+> > -                             "0x%02x, skipping\n", data.addr);
+> > -                     break;
+> > -             }
 
+I assume that the SMB alert client (ara) is the one responsible for
+sending the data.addr, and so it would make sense to consider that as
+long as the client sends the address, there is something to process.
+
+With that (probably dumb) comment, the patch is:
+Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+
+Note that I have no SMBus alert device to test this, but the patch
+looks correct to me.
+
+Cheers,
+Benjamin
+
+> >               dev_dbg(&ara->dev, "SMBALERT# from dev 0x%02x, flag %d\n"=
+,
+> >                       data.addr, data.flag);
+> >
+> >               /* Notify driver for the device which issued the alert */
+> >               device_for_each_child(&ara->adapter->dev, &data,
+> >                                     smbus_do_alert);
+> > -             prev_addr =3D data.addr;
+> >       }
+> >
+> >       /* We handled all alerts; re-enable level-triggered IRQs */
+> >
+> >
+> > --
+> > Jean Delvare
+> > SUSE L3 Support
 >
-> Cheers,
-> Peter
+
