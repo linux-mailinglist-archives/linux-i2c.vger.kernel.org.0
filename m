@@ -2,225 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDE21094D1
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Nov 2019 21:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8052B1096F2
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Nov 2019 00:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727127AbfKYUrn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Nov 2019 15:47:43 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:43759 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727125AbfKYUrn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Nov 2019 15:47:43 -0500
-Received: by mail-io1-f66.google.com with SMTP id p12so10511819iog.10
-        for <linux-i2c@vger.kernel.org>; Mon, 25 Nov 2019 12:47:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yRthWhVooEbY4LLswcY+HNZfo00aKn8lxMNAxWAnSJU=;
-        b=l8luzNR1GrYEngxObM+5QY6Ua4KZx4IXyh2HNwmQ5WGA2UYDllVmfVPMygsEjyn24v
-         pnghUdBXH6XWq8WcgNPPpeszL9SL6dlMPLfdcOuq1jTmT3YTIpDobJL8eWYkI+AXrGbQ
-         GBH/x5YZaRCqMnvaYJBjzK85MZQ1VG2ZkBQBQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yRthWhVooEbY4LLswcY+HNZfo00aKn8lxMNAxWAnSJU=;
-        b=qrFC3rAQ4y0i4Q0gzmmNokm+W6K5PNsKCLcZL8XI1mhzvSVQVGOJXzukWm/LD2NM16
-         xQpo04dUR2avW7Bemz3/98ySg6ltV/WN0EzhRya+sKN+zAwhvO6uFBelIGkmWH0GJULV
-         KP+ivgV6+UQ7FxdG2U2DgDiOtXlhTG16YVVWATbJ9KrIdym3No721t2p8iPev05akXZB
-         /myB7QwDHxK3MLQ0khiQDl03ztRqMRn45KnJ6XHgXkTrjKBJNCJW5BnBZ0nWURMwPZ4L
-         x9IzDu0VHOpX44PQgrZoXNwgSxQOniFbBeKv0PnXcpubZD1U4Zakp3bVtURzc+CM49go
-         20Pg==
-X-Gm-Message-State: APjAAAXFTRawzDYZumz4j0+u2mooEIeYzE0g4fxTjU7L9+Q8FrNYile8
-        o8Zsr7JFvGAFXcCX3abrlfLPbA==
-X-Google-Smtp-Source: APXvYqx52hdZpWhasD8RAEyrtFMQFu686GZUdkwzFpSpR2FZXnWH6evmDOU2A4WhWLPKvJM/4okZaA==
-X-Received: by 2002:a6b:4f0a:: with SMTP id d10mr8253598iob.134.1574714861816;
-        Mon, 25 Nov 2019 12:47:41 -0800 (PST)
-Received: from localhost ([2620:15c:183:0:82e0:aef8:11bc:24c4])
-        by smtp.gmail.com with ESMTPSA id h14sm2507640ilc.87.2019.11.25.12.47.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Nov 2019 12:47:41 -0800 (PST)
-From:   Raul E Rangel <rrangel@chromium.org>
-To:     enric.balletbo@collabora.com, Wolfram Sang <wsa@the-dreams.de>
-Cc:     Akshu.Agrawal@amd.com, Raul E Rangel <rrangel@chromium.org>,
-        Akshu Agrawal <akshu.agrawal@amd.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-i2c@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Benson Leung <bleung@chromium.org>
-Subject: [PATCH v2 2/2] platform/chrome: i2c: i2c-cros-ec-tunnel: Convert i2c tunnel to MFD Cell
-Date:   Mon, 25 Nov 2019 13:47:30 -0700
-Message-Id: <20191125134551.v2.2.Iddc7dd74f893297cb932e9825d413e7890633b3d@changeid>
-X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
-In-Reply-To: <20191125204730.187000-1-rrangel@chromium.org>
-References: <20191125204730.187000-1-rrangel@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726947AbfKYXhP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Nov 2019 18:37:15 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:35833 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725912AbfKYXhP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Nov 2019 18:37:15 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 5C4D7527B;
+        Mon, 25 Nov 2019 18:37:13 -0500 (EST)
+Received: from imap2 ([10.202.2.52])
+  by compute4.internal (MEProxy); Mon, 25 Nov 2019 18:37:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
+        mime-version:message-id:in-reply-to:references:date:from:to
+        :subject:content-type; s=fm1; bh=ncriW7ZaZvfQAqjJ9CabdLFVncnOVKJ
+        862KZb8NOlOE=; b=NkipfqBkuZ4AXdbRmxhoqgisaN1XxSTi3kyxhLIhwBZzEIH
+        mVGmsguYxWurjyCvNjfl5pJqWM5sK7K6GVIRiz0I0ejsxjbk0nWPJd6j0IDU1AU5
+        bBYLz9WDOfye2fPk0BK5/TP1AHUrf22h1ffYlCUEiTyzmJFp1ldWPljsp2msxNlg
+        PnZjnskEApqjBTJYWG3Cghay0vevbXVvgo9gUhZDstrwEj01DiyjVnvppOL4qUDo
+        0IVuLR226XHY2HuYrzBvnwXiu04JK8OanmQh1Fc3G9S3LJbF5PdyjAArg/Oz2i2C
+        bNjK9td4JGPNtfQIUepZK/HiaIHfMNSbcS9BF5Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=ncriW7
+        ZaZvfQAqjJ9CabdLFVncnOVKJ862KZb8NOlOE=; b=gAkEqD43/G23hkF6xMx0wh
+        QLIH3eaTcj7jvo6+5Wjlza+5tWZUpxNCDUJBXCNUsls+hNS4ctlPkd5311yMzPCo
+        Z/DKE6PZHXbuc+PBaAjMJU9aUhmSN1Bp6fTXefk93MYvFdtS+j+QsO8asw4o7MsH
+        QEvU7hbcwkYRYtaFBKYe7WOiwNHP89rewuO10bEHiXHE3Bx2zEuqngXBX+Ithbo8
+        CAPS+QJqrSoNqKnYO/UaslT5+5/Y4d4hWhSKFqJoP3SN6H7Rx513erEl1RAOYt3T
+        Bhe6HwTF+e6BqEIlilfgdUy5W/imBTAsSayNEstbbx91sFBe3x2AehRis3HZlrag
+        ==
+X-ME-Sender: <xms:qGXcXYFcJTtMu5t3od6KQcIzz4LUe-ruDuXTPVBXBTJX4_QDUSI9bA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudeivddgudduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuffhomh
+    grihhnpehkvghrnhgvlhdrohhrghenucfrrghrrghmpehmrghilhhfrhhomheprghnughr
+    vgifsegrjhdrihgurdgruhenucevlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:qGXcXdKzIaIVyktBSBXW2v6jRStgJAdgsg1HSKNxAF0k3LE7fW1oeA>
+    <xmx:qGXcXdh10fl-eZoHzznF8WLXSlJj7ivGkIcV8dHgEQLgxvyXKifZGA>
+    <xmx:qGXcXTl63bMfZP57wWNP3qYCn8V3-bc5kqfVgjFcdmLbX-LSxPHWVA>
+    <xmx:qWXcXfN55iZ9JNu8mzdN_wZLSf4iOKYa7-mYj7mN31ezNk55BLLSjg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6BA06E00A3; Mon, 25 Nov 2019 18:37:12 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.1.7-578-g826f590-fmstable-20191119v1
+Mime-Version: 1.0
+Message-Id: <ff44cecd-7e05-4e5d-b88f-2d6af6fd8b8b@www.fastmail.com>
+In-Reply-To: <20191125202937.23133-1-roy.van.doormaal@prodrive-technologies.com>
+References: <20191125202937.23133-1-roy.van.doormaal@prodrive-technologies.com>
+Date:   Tue, 26 Nov 2019 10:08:36 +1030
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Roy van Doormaal" <roy.van.doormaal@prodrive-technologies.com>,
+        "Brendan Higgins" <brendanhiggins@google.com>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
+        "Joel Stanley" <joel@jms.id.au>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Jason Cooper" <jason@lakedaemon.net>,
+        "Marc Zyngier" <maz@kernel.org>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+Subject: Re: [PATCH] irqchip/aspeed-i2c-ic: Fix irq domain name memory leak
+Content-Type: text/plain
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If the i2c-cros-ec-tunnel driver is compiled into the kernel, it is
-possible that i2c-cros-ec-tunnel could be probed before cros_ec_XXX
-has finished initializing and setting the drvdata. This would cause a
-NULL pointer panic.
 
-Converting this driver over to an MFD solves the problem and aligns with
-where the cros_ec is going.
 
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
----
-You can now see the device node lives under the mfd device.
+On Tue, 26 Nov 2019, at 06:59, Roy van Doormaal wrote:
+> The aspeed irqchip driver overwrites the default irq domain name,
+> but doesn't free the existing domain name.
+> This patch frees the irq domain name before overwriting it.
+> 
+> kmemleak trace:
+> 
+> unreferenced object 0xb8004c40 (size 64):
+> comm "swapper", pid 0, jiffies 4294937303 (age 747.660s)
+> hex dump (first 32 bytes):
+> 3a 61 68 62 3a 61 70 62 3a 62 75 73 40 31 65 37 :ahb:apb:bus@1e7
+> 38 61 30 30 30 3a 69 6e 74 65 72 72 75 70 74 2d 8a000:interrupt-
+> backtrace:
+> [<086b59b8>] kmemleak_alloc+0xa8/0xc0
+> [<b5a3490c>] __kmalloc_track_caller+0x118/0x1a0
+> [<f59c7ced>] kvasprintf+0x5c/0xc0
+> [<49275eec>] kasprintf+0x30/0x50
+> [<5713064b>] __irq_domain_add+0x184/0x25c
+> [<53c594d0>] aspeed_i2c_ic_of_init+0x9c/0x128
+> [<d8d7017e>] of_irq_init+0x1ec/0x314
+> [<f8405bf1>] irqchip_init+0x1c/0x24
+> [<7ef974b3>] init_IRQ+0x30/0x90
+> [<87a1438f>] start_kernel+0x28c/0x458
+> [< (null)>] (null)
+> [<f0763fdf>] 0xffffffff
+> 
+> Signed-off-by: Roy van Doormaal <roy.van.doormaal@prodrive-technologies.com>
+> ---
+>  drivers/irqchip/irq-aspeed-i2c-ic.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/irqchip/irq-aspeed-i2c-ic.c 
+> b/drivers/irqchip/irq-aspeed-i2c-ic.c
+> index 8d591c179f81..8081b8483a79 100644
+> --- a/drivers/irqchip/irq-aspeed-i2c-ic.c
+> +++ b/drivers/irqchip/irq-aspeed-i2c-ic.c
+> @@ -92,6 +92,8 @@ static int __init aspeed_i2c_ic_of_init(struct 
+> device_node *node,
+>  		goto err_iounmap;
+>  	}
+>  
+> +	if (i2c_ic->irq_domain->flags & IRQ_DOMAIN_NAME_ALLOCATED)
+> +		kfree(i2c_ic->irq_domain->name);
+>  	i2c_ic->irq_domain->name = "aspeed-i2c-domain";
 
-$ find /sys/bus/platform/devices/cros-ec-dev.0.auto/cros-ec-i2c-tunnel.12.auto/ -iname firmware_node -exec ls -l '{}' \;
-/sys/bus/platform/devices/cros-ec-dev.0.auto/cros-ec-i2c-tunnel.12.auto/firmware_node -> ../../../../../../LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:1c/PNP0C09:00/GOOG0004:00/GOOG0012:00
-/sys/bus/platform/devices/cros-ec-dev.0.auto/cros-ec-i2c-tunnel.12.auto/i2c-9/firmware_node -> ../../../../../../../LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:1c/PNP0C09:00/GOOG0004:00/GOOG0012:00
-/sys/bus/platform/devices/cros-ec-dev.0.auto/cros-ec-i2c-tunnel.12.auto/i2c-9/i2c-10EC5682:00/firmware_node -> ../../../../../../../../LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:1c/PNP0C09:00/GOOG0004:00/GOOG0012:00/10EC5682:00
+Given that the name is no-longer allocated I think you need to clear the
+IRQ_DOMAIN_NAME_ALLOCATED bit from flags to avoid attempting to
+free the const string in irq_domain_remove():
 
-Changes in v2:
-- Moved i2c tunnel into cros_ec_platform_cells
-- Requires https://lkml.org/lkml/2019/11/21/208 to correctly enumerate.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/irq/irqdomain.c?h=v5.4#n263
 
- drivers/i2c/busses/i2c-cros-ec-tunnel.c | 36 +++++++++----------------
- drivers/mfd/cros_ec_dev.c               |  9 +++++++
- 2 files changed, 22 insertions(+), 23 deletions(-)
+Or do a kstrdup().
 
-diff --git a/drivers/i2c/busses/i2c-cros-ec-tunnel.c b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-index 5d91e33eb600..2e3217678fa3 100644
---- a/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-+++ b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-@@ -6,6 +6,7 @@
- #include <linux/acpi.h>
- #include <linux/module.h>
- #include <linux/i2c.h>
-+#include <linux/mfd/cros_ec.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
- #include <linux/platform_device.h>
-@@ -27,7 +28,6 @@
- struct ec_i2c_device {
- 	struct device *dev;
- 	struct i2c_adapter adap;
--	struct cros_ec_device *ec;
- 
- 	u16 remote_bus;
- 
-@@ -176,6 +176,7 @@ static int ec_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg i2c_msgs[],
- {
- 	struct ec_i2c_device *bus = adap->algo_data;
- 	struct device *dev = bus->dev;
-+	struct cros_ec_dev *ec = dev_get_drvdata(dev->parent);
- 	const u16 bus_num = bus->remote_bus;
- 	int request_len;
- 	int response_len;
-@@ -183,6 +184,16 @@ static int ec_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg i2c_msgs[],
- 	int result;
- 	struct cros_ec_command *msg;
- 
-+	if (!ec) {
-+		dev_err(dev, "%s: ec is missing!\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	if (!ec->ec_dev) {
-+		dev_err(dev, "%s: ec->ec_dev is missing!\n", __func__);
-+		return -EINVAL;
-+	}
-+
- 	request_len = ec_i2c_count_message(i2c_msgs, num);
- 	if (request_len < 0) {
- 		dev_warn(dev, "Error constructing message %d\n", request_len);
-@@ -212,7 +223,7 @@ static int ec_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg i2c_msgs[],
- 	msg->outsize = request_len;
- 	msg->insize = response_len;
- 
--	result = cros_ec_cmd_xfer_status(bus->ec, msg);
-+	result = cros_ec_cmd_xfer_status(ec->ec_dev, msg);
- 	if (result < 0) {
- 		dev_err(dev, "Error transferring EC i2c message %d\n", result);
- 		goto exit;
-@@ -241,17 +252,11 @@ static const struct i2c_algorithm ec_i2c_algorithm = {
- 
- static int ec_i2c_probe(struct platform_device *pdev)
- {
--	struct cros_ec_device *ec = dev_get_drvdata(pdev->dev.parent);
- 	struct device *dev = &pdev->dev;
- 	struct ec_i2c_device *bus = NULL;
- 	u32 remote_bus;
- 	int err;
- 
--	if (!ec->cmd_xfer) {
--		dev_err(dev, "Missing sendrecv\n");
--		return -EINVAL;
--	}
--
- 	bus = devm_kzalloc(dev, sizeof(*bus), GFP_KERNEL);
- 	if (bus == NULL)
- 		return -ENOMEM;
-@@ -263,7 +268,6 @@ static int ec_i2c_probe(struct platform_device *pdev)
- 	}
- 	bus->remote_bus = remote_bus;
- 
--	bus->ec = ec;
- 	bus->dev = dev;
- 
- 	bus->adap.owner = THIS_MODULE;
-@@ -292,25 +296,11 @@ static int ec_i2c_remove(struct platform_device *dev)
- 	return 0;
- }
- 
--static const struct of_device_id cros_ec_i2c_of_match[] = {
--	{ .compatible = "google,cros-ec-i2c-tunnel" },
--	{},
--};
--MODULE_DEVICE_TABLE(of, cros_ec_i2c_of_match);
--
--static const struct acpi_device_id cros_ec_i2c_tunnel_acpi_id[] = {
--	{ "GOOG0012", 0 },
--	{ }
--};
--MODULE_DEVICE_TABLE(acpi, cros_ec_i2c_tunnel_acpi_id);
--
- static struct platform_driver ec_i2c_tunnel_driver = {
- 	.probe = ec_i2c_probe,
- 	.remove = ec_i2c_remove,
- 	.driver = {
- 		.name = "cros-ec-i2c-tunnel",
--		.acpi_match_table = ACPI_PTR(cros_ec_i2c_tunnel_acpi_id),
--		.of_match_table = of_match_ptr(cros_ec_i2c_of_match),
- 	},
- };
- 
-diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-index 1efdba18f20b..04f8fc5772f0 100644
---- a/drivers/mfd/cros_ec_dev.c
-+++ b/drivers/mfd/cros_ec_dev.c
-@@ -101,12 +101,21 @@ static const struct cros_feature_to_cells cros_subdevices[] = {
- 	},
- };
- 
-+static const struct mfd_cell_acpi_match cros_ec_i2c_tunnel_acpi_match = {
-+	.pnpid = "GOOG0012"
-+};
-+
- static const struct mfd_cell cros_ec_platform_cells[] = {
- 	{ .name = "cros-ec-chardev", },
- 	{ .name = "cros-ec-debugfs", },
- 	{ .name = "cros-ec-lightbar", },
- 	{ .name = "cros-ec-pd-sysfs" },
- 	{ .name = "cros-ec-sysfs", },
-+	{
-+		.name = "cros-ec-i2c-tunnel",
-+		.acpi_match = &cros_ec_i2c_tunnel_acpi_match,
-+		.of_compatible = "google,cros-ec-i2c-tunnel"
-+	},
- };
- 
- static const struct mfd_cell cros_ec_vbc_cells[] = {
--- 
-2.24.0.432.g9d3f5f5b63-goog
-
+Andrew
