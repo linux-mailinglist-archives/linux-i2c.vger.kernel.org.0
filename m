@@ -2,31 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC92F10906F
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Nov 2019 15:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D598610908C
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Nov 2019 15:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728021AbfKYOxk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Nov 2019 09:53:40 -0500
-Received: from sauhun.de ([88.99.104.3]:55016 "EHLO pokefinder.org"
+        id S1728410AbfKYO6w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Nov 2019 09:58:52 -0500
+Received: from sauhun.de ([88.99.104.3]:55066 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728299AbfKYOxk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 25 Nov 2019 09:53:40 -0500
+        id S1728196AbfKYO6w (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 25 Nov 2019 09:58:52 -0500
 Received: from localhost (x4e37056e.dyn.telefonica.de [78.55.5.110])
-        by pokefinder.org (Postfix) with ESMTPSA id CF02F2C0456;
-        Mon, 25 Nov 2019 15:53:38 +0100 (CET)
-Date:   Mon, 25 Nov 2019 15:53:38 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 371DA2C0456;
+        Mon, 25 Nov 2019 15:58:50 +0100 (CET)
+Date:   Mon, 25 Nov 2019 15:58:49 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: Re: [PATCH v2] i2c: i801: Correct Intel Jasper Lake SOC naming
-Message-ID: <20191125145338.GC2412@kunai>
-References: <20191120151932.40269-1-andriy.shevchenko@linux.intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Peter Rosin <peda@axentia.se>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: Fix Kconfig indentation
+Message-ID: <20191125145849.GD2412@kunai>
+References: <1574306363-29424-1-git-send-email-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8NvZYKFJsRX2Djef"
+        protocol="application/pgp-signature"; boundary="cQXOx3fnlpmgJsTP"
 Content-Disposition: inline
-In-Reply-To: <20191120151932.40269-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <1574306363-29424-1-git-send-email-krzk@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -34,41 +34,49 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---8NvZYKFJsRX2Djef
+--cQXOx3fnlpmgJsTP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 20, 2019 at 05:19:32PM +0200, Andy Shevchenko wrote:
-> There is no suffix applied to Intel Jasper Lake SOC. Remove it
-> from the comments and definitions. Besides that, it's a SOC,
-> thus replace PCH with SOC where it appropriate.
+On Thu, Nov 21, 2019 at 04:19:23AM +0100, Krzysztof Kozlowski wrote:
+> Adjust indentation from spaces to tab (+optional two spaces) as in
+> coding style with command like:
+> 	$ sed -e 's/^        /\t/' -i */Kconfig
 >=20
-> Fixes: e0c61c04791a ("i2c: i801: Add support for Intel Jasper Lake")
-> Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+>=20
+> ---
+>=20
+> Changes since v1:
+> 1. Fix also 7-space and tab+1 space indentation issues.
+> ---
+>  drivers/i2c/busses/Kconfig | 22 +++++++++++-----------
+>  drivers/i2c/muxes/Kconfig  | 18 +++++++++---------
 
-Applied to for-next (i.e. 5.5.), thanks!
+Peter, I'd like to apply this for 5.5. so we don't have to deal with
+whitespace conflicts during the next cycle. Are you fine with me picking
+it up for muxes?
 
 
---8NvZYKFJsRX2Djef
+--cQXOx3fnlpmgJsTP
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl3b6vIACgkQFA3kzBSg
-Kba1Gg/+JkPMsgAelqVwPdIhAGEd/vvUdGXKaZ9Pv7k2T/RKKUH/WGXhwi8Qe/+G
-UYLEtLKfXispHMyJScFezFVlXqk7iy1rEjZAfsos5H3lq0utTq2NG+J4X4VZxYi8
-0SBqLaMSxGqVNVyaNARSz5lSnAeIGVLqRmeLl46p2s6zGStVR5U9KZRABRQdgk3j
-ChpiKBvMqcmD0dpKeAceHaeACUXqjNHjrNCdoYGjlqLZVyxQ0oyNIDBD8SPjvHyJ
-WxT2wynZREQaZwg247Izqi5ITfxB6fUvBz72bZqEKy3B/ZPyR1P1wyUnoCryqMZv
-Ayvqvh3uIjA1KCFbplr7kpmCqrxyz/GCSwL7LM+q03OWquTcKDxc17/eOd3rvwHE
-GH3URnPng8JNmsbJjIpIWjDT2YRwxSXKxc0pxlTrbIUJYSAD+t9aW1RcGLxXhnlv
-2L9fpNnEV6g7ds7valgAxqCauNl52JuDNr4k+kPtUeAZYcrSx/Qi7pWzm4chzBpb
-3FeEm6NnRtQnDw3bxwlP5KDstEwe6k0WqARoI78aCGBfLIaP5SA/7mSDNQXVg2do
-wTjewZV4LCbO+EgtSGK9TG6WAFOo4wRITME9DUPQUsvzXsZZ2GWnskV5MWv1rXKo
-iPucCyA9RYhVrfN4bNL5iN0KADBlMnTDdBLG+h33SpOjdRT3/I0=
-=qvlQ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl3b7CkACgkQFA3kzBSg
+KbYcbxAAlLTnbKDY7JeTE45Y+5GmbWZqpE32VWbcAleUoU12p2NTufGyRB9WMgbh
+TbdF6PEyH590IUjnfwfAG6Xfh5qrF/JaSu4vOgRUxMWxIeBFlK5Lw3DsMSjv5f80
+sTRTNeKA6qXLb4lZ1J2HBsk0tym2n2XROkpRBOOPyT8vxtTwWn66zS/Fnk8rOyG+
+SGOhSwQ/jO+sIDLyZFaNSLssKs0gQE8Roaqv64uT5EZMaFSBlHO2Jb2ErOOZ06fp
+rLiC2jO01O6PLDkZs8wiemPEXvgukdb5ld7C1Qs4ZL11m2aaEzyYoJeFuJyHiP81
+Grl1mhGLSFVXdONGyEa/sW1COVk2106qUNJQ1kuQOy0EKc/8xtqJnPVOrErVDkgF
+govrszAlBPUYAZlV+It3uB206Fn1jQlecDbgsgw+ECRyN7I3P/CCfisbolgQ+C6w
+aa5VLB+0sIGNMw4130Y8eHoXNlAz33tkDuCvCNh6C+gRxL3JQMSOicrM5c0alKyB
+AtoaVG5Vul05v723IXAhojoIt0/fyQo+/1ndAgPNMFNN5PJ6YZWCFvMWkMJ6ob5n
+dQJahJ8/2pV4wrSFraQ2aYg1ej9coJKEvfCbps8YBJUQ4ESvwvHyvR78oNVzkKX7
+HR2cRUQzEd1dQ8adzH62TUujoozrXwwd+HfQ0jUNzt3lVIMp41g=
+=O37+
 -----END PGP SIGNATURE-----
 
---8NvZYKFJsRX2Djef--
+--cQXOx3fnlpmgJsTP--
