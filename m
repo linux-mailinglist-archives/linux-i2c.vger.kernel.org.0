@@ -2,144 +2,122 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A80109E66
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Nov 2019 13:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D88C10A8F3
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Nov 2019 04:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727587AbfKZM5i (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 26 Nov 2019 07:57:38 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:58740 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727209AbfKZM5i (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 Nov 2019 07:57:38 -0500
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DE8DD554;
-        Tue, 26 Nov 2019 13:57:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1574773057;
-        bh=J9SzQZZPDUF5VtY95t1tVID5XUuA7MYxXWRRT7k349g=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=eLeEpl5KayW23pUQb4nw2XYnussurEHLl2duq02gNZXpQfsbNhDJjIPTbbfKDHZ4l
-         Xbjqw9kXSY2TQxJSvyNQj2rCMzk62Nq9LR0zvRGGpB8sBMW/hyOuXWxEpdaM7WGRtW
-         brSEvVlObnrdkS12fInKUQr/dG52S+ti7l3seVuo=
-Subject: Re: [PATCH v2] i2c: core: Use DEVICE_ATTR_*() helper macros
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191113152306.13968-1-geert+renesas@glider.be>
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Message-ID: <1abe3b18-2914-c2a6-ce41-169953d3579b@ideasonboard.com>
-Date:   Tue, 26 Nov 2019 12:57:33 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726673AbfK0DAS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 26 Nov 2019 22:00:18 -0500
+Received: from mail-il1-f194.google.com ([209.85.166.194]:43670 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726655AbfK0DAS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 Nov 2019 22:00:18 -0500
+Received: by mail-il1-f194.google.com with SMTP id r9so19615769ilq.10;
+        Tue, 26 Nov 2019 19:00:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lw4cD3kutaFDVddLCV0RjxviVHYVABRcCS8zz30AG+0=;
+        b=OouLQInOKxdSo4FTdg/pBT7Fpkk1edne0elU51TUMQZjVJKm7zPO5gCxM1OvtKBlU5
+         v3lauUCs0ZwjrtIzn1kh0g7M2eGdbE6zIu2XYpbA2Ao/xx4I2M+ak8oZpQ1b6FCmI3oL
+         ZOQ2Jnef5vyDbwLb0CSZhvMh94TiKtCFv9JIK+veM+V+Yg7xTwUbG5exFZRC1/9dW+ai
+         LaZKYD6p7qFcOgtAl70qDVAqlDFfX5twFN7a9erlw2ZhitvxgUwevuLPf/ezBFurAsWg
+         rrDhUtWR8x8Na3ZvS4FD0VwSITWKUEuwDtGTh7xdxYLv/lnSFo4tKje+X9nZmEcRo+2v
+         /9Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lw4cD3kutaFDVddLCV0RjxviVHYVABRcCS8zz30AG+0=;
+        b=Pi/x5bixw8fKR3zIOzE7lGHioIndnYW3z/Lf3keI0fbMnMCU65B5CwK5xW2J4Y2IbS
+         OZHAicT/zLwPfX/eV0xz8H9v6ILJbAMjWZFSnI+UEL4UfGFU7i6NQNM3OTp+wxhNTvFb
+         pl9j3ZswtcVyzZ8/ajGgN6rgTPgE3XyDlEBmvvRh1WLuGTntQZ31A1rYZJn6IKl0/EuY
+         tLlA7ggYTpSizDcpf2ZyAecaA7PUv2L8FQdYJ2q0T6Y+VXtyxfbw1/C+2mtd+k+CsT5T
+         puOHvKfg9W0orrJGJ2GD/JxUlfvO/mzL50jnG+n3AjlZ6gp1hcxHoTb/fidnISLfvwLz
+         7huw==
+X-Gm-Message-State: APjAAAXMq1+UkXs/k0sNAbqFu7DfkWr6WEkC0+lhphYFMLKljHkrPvTa
+        wlEnItYrQvCHwcKJwjw9b1ecImuN+WaeVTwm5j28cEdaFEY=
+X-Google-Smtp-Source: APXvYqwyCmvjyH63xSGHWUUd6kRK418eApS3s0JA5VWS0Cx+dj4KmScQLo4MuMuhkKyqT76Sytp9I1lJvZbCCtEqRA4=
+X-Received: by 2002:a92:7949:: with SMTP id u70mr33215605ilc.42.1574823617736;
+ Tue, 26 Nov 2019 19:00:17 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191113152306.13968-1-geert+renesas@glider.be>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+References: <1574162632-65848-1-git-send-email-mine260309@gmail.com>
+ <20191125144857.GA2412@kunai> <20191126115243.673fc164@endymion>
+In-Reply-To: <20191126115243.673fc164@endymion>
+From:   Lei YU <mine260309@gmail.com>
+Date:   Wed, 27 Nov 2019 11:00:07 +0800
+Message-ID: <CAARXrtkcr+OALyXW75t9WAifmn1aMPqtVgS7fEb6d_i0F9XdRw@mail.gmail.com>
+Subject: Re: [PATCH v2] docs: i2c: Fix return value of i2c_smbus_xxx functions
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Geert,
+On Tue, Nov 26, 2019 at 6:52 PM Jean Delvare <jdelvare@suse.de> wrote:
+>
+> On Mon, 25 Nov 2019 15:48:57 +0100, Wolfram Sang wrote:
+> > On Tue, Nov 19, 2019 at 07:23:52PM +0800, Lei YU wrote:
+> > > In i2c/dev-interface.rst it said
+> > >
+> > > > All these transactions return -1 on failure
+> > >
+> > > But actually the i2c_smbus_xxx functions return negative error numbers
+> > > on failure, instead of -1.
+> > >
+> > > Fix the document and remove the following sentence.
+> > >
+> > > Signed-off-by: Lei YU <mine260309@gmail.com>
+> > > ---
+> > >  Documentation/i2c/dev-interface.rst | 9 ++++-----
+> > >  1 file changed, 4 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/Documentation/i2c/dev-interface.rst b/Documentation/i2c/dev-interface.rst
+> > > index 69c23a3..f2f2b28 100644
+> > > --- a/Documentation/i2c/dev-interface.rst
+> > > +++ b/Documentation/i2c/dev-interface.rst
+> > > @@ -163,11 +163,10 @@ for details) through the following functions::
+> > >    __s32 i2c_smbus_write_block_data(int file, __u8 command, __u8 length,
+> > >                                     __u8 *values);
+> > >
+> > > -All these transactions return -1 on failure; you can read errno to see
+> > > -what happened. The 'write' transactions return 0 on success; the
+> > > -'read' transactions return the read value, except for read_block, which
+> > > -returns the number of values read. The block buffers need not be longer
+> > > -than 32 bytes.
+> > > +All these transactions return a negative error number on failure.
+> > > +The 'write' transactions return 0 on success; the 'read' transactions
+> > > +return the read value, except for read_block, which returns the number
+> > > +of values read. The block buffers need not be longer than 32 bytes.
+> >
+> > I think the correct solution is to remove this paragraph entirely.
+> > Because the returned value does not depend on the kernel but on the
+> > libi2c version. Check this commit from 2012 in the i2c-tools repo:
+> >
+> > 330bba2 ("libi2c: Properly propagate real error codes on read errors")
+> >
+> > So, I think we should document it there. Jean, what do you think?
+>
+> I would go further and move half of the document to i2c-tools. i2c-dev
+> itself only provides the ioctls. Everything on top of that is in libi2c
+> now, so the kernel documentation should point to libi2c and the
+> detailed documentation should come with libi2c.
 
-On 13/11/2019 15:23, Geert Uytterhoeven wrote:
-> Convert the i2c core sysfs attributes from DEVICE_ATTR() to
-> DEVICE_ATTR_*(), to reduce boilerplate.
-> This requires renaming some functions.
+Yeah, I sent the patch to simply fix the "return -1" issue, which is misleading.
+But if the whole paragraph or the whole document is not valid anymore,
+it needs to be fixed.
 
-Seems a nice cleanup.
+>
+> So I guess I should review the whole document now to see what needs to
+> be updated, what should stay, and what should move.
 
+Thanks, please help to fix the whole document so that others get the
+correct information :)
 
-> Although no suitable macro exists for the delete_device attribute,
-> rename i2c_sysfs_delete_device() to delete_device_store() for
-> consistency.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
-
-> ---
-> v2:
->   - s/DEVICE_ATTR_RW/DEVICE_ATTR_*/ in summary and description,
->   - Add Reviewed-by.
-> ---
->  drivers/i2c/i2c-core-base.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 6a5183cffdfc3e82..c87bf5bcab3f1349 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -449,15 +449,15 @@ static void i2c_client_dev_release(struct device *dev)
->  }
->  
->  static ssize_t
-> -show_name(struct device *dev, struct device_attribute *attr, char *buf)
-> +name_show(struct device *dev, struct device_attribute *attr, char *buf)
->  {
->  	return sprintf(buf, "%s\n", dev->type == &i2c_client_type ?
->  		       to_i2c_client(dev)->name : to_i2c_adapter(dev)->name);
->  }
-> -static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
-> +static DEVICE_ATTR_RO(name);
->  
->  static ssize_t
-> -show_modalias(struct device *dev, struct device_attribute *attr, char *buf)
-> +modalias_show(struct device *dev, struct device_attribute *attr, char *buf)
->  {
->  	struct i2c_client *client = to_i2c_client(dev);
->  	int len;
-> @@ -472,7 +472,7 @@ show_modalias(struct device *dev, struct device_attribute *attr, char *buf)
->  
->  	return sprintf(buf, "%s%s\n", I2C_MODULE_PREFIX, client->name);
->  }
-> -static DEVICE_ATTR(modalias, S_IRUGO, show_modalias, NULL);
-> +static DEVICE_ATTR_RO(modalias);
->  
->  static struct attribute *i2c_dev_attrs[] = {
->  	&dev_attr_name.attr,
-> @@ -1039,8 +1039,8 @@ EXPORT_SYMBOL_GPL(i2c_adapter_depth);
->   * the user to provide incorrect parameters.
->   */
->  static ssize_t
-> -i2c_sysfs_new_device(struct device *dev, struct device_attribute *attr,
-> -		     const char *buf, size_t count)
-> +new_device_store(struct device *dev, struct device_attribute *attr,
-> +		 const char *buf, size_t count)
->  {
->  	struct i2c_adapter *adap = to_i2c_adapter(dev);
->  	struct i2c_board_info info;
-> @@ -1095,7 +1095,7 @@ i2c_sysfs_new_device(struct device *dev, struct device_attribute *attr,
->  
->  	return count;
->  }
-> -static DEVICE_ATTR(new_device, S_IWUSR, NULL, i2c_sysfs_new_device);
-> +static DEVICE_ATTR_WO(new_device);
->  
->  /*
->   * And of course let the users delete the devices they instantiated, if
-> @@ -1107,8 +1107,8 @@ static DEVICE_ATTR(new_device, S_IWUSR, NULL, i2c_sysfs_new_device);
->   * the user to delete the wrong device.
->   */
->  static ssize_t
-> -i2c_sysfs_delete_device(struct device *dev, struct device_attribute *attr,
-> -			const char *buf, size_t count)
-> +delete_device_store(struct device *dev, struct device_attribute *attr,
-> +		    const char *buf, size_t count)
->  {
->  	struct i2c_adapter *adap = to_i2c_adapter(dev);
->  	struct i2c_client *client, *next;
-> @@ -1151,7 +1151,7 @@ i2c_sysfs_delete_device(struct device *dev, struct device_attribute *attr,
->  	return res;
->  }
->  static DEVICE_ATTR_IGNORE_LOCKDEP(delete_device, S_IWUSR, NULL,
-> -				   i2c_sysfs_delete_device);
-> +				  delete_device_store);
->  
->  static struct attribute *i2c_adapter_attrs[] = {
->  	&dev_attr_name.attr,
-> 
-
+>
+> --
+> Jean Delvare
+> SUSE L3 Support
