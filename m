@@ -2,168 +2,225 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F91810C65C
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Nov 2019 11:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBBF10C702
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Nov 2019 11:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbfK1KG2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Nov 2019 05:06:28 -0500
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:53140 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726133AbfK1KG1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Nov 2019 05:06:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=kAzGthTrVHAi7AX7oK1GGCcOfI4R/DIxoI7QEs76F5I=; b=na5oiyEis1GUKanh4lMUFOTQP
-        J1oTldWRG73YC7hsRSkSgrbMnI/UJrIbPiuHgWklDRuw+9e+E51uXkR+y2SAkIIJAKn/gsWjdocDX
-        +iUIcjua9ImyXRvVIajZawYfXc6kkyJB3OpoZuJhT7zETEpjE1ISyx7O7qYYEVzhIIBaSVqmWSh5O
-        JZygnJsgB3phfXJpHt30IYBn2Azng9gyu3oeTNnft1LCnTJ05Jv+1GW89fvBF9tQPm/9U/Hn/UIf6
-        ugkQWqXR5sLTG3JJhnqBta6dJoiW5pVv9yDwinXXd+zZm78mgtSbs4I0UnJ0ptbAD7XQWUYHYll6K
-        1OlkN0hkQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45710)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1iaGgi-0000GT-Rg; Thu, 28 Nov 2019 10:06:17 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1iaGgf-0001Bf-SB; Thu, 28 Nov 2019 10:06:13 +0000
-Date:   Thu, 28 Nov 2019 10:06:13 +0000
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Peng Ma <peng.ma@nxp.com>
-Cc:     "linux@rempel-privat.de" <linux@rempel-privat.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        id S1726252AbfK1Kpl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Nov 2019 05:45:41 -0500
+Received: from mail-eopbgr10046.outbound.protection.outlook.com ([40.107.1.46]:14522
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726133AbfK1Kpl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 28 Nov 2019 05:45:41 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jlo/9LtLgDS5hPFpXHsyTvak8T5myrfNE7RztDWmAggItOWLCF308uqF0HeTcQl1PRSmtKFXdFZQGTA9i4HRMauDlqPSCqMuPwGGBQ6H02tWK4ZC56o+MUxMKmJillBPXZRqfFN8Lvw72cNPr3q9OaqMo5AlEJsLYXswy1XA7+uhrdSllTIbkHm6bcspU5azPV0nQ3UKqFA+kAoex2vpFP5HGOdSbYoHURaB7BGoxSsP5pkQbewGsJUd6G7NAepZ2BTwvyZx9IWzGhtMwUD6c+jX35BlRL+Q5eujHAF/rOgmPhzpouW1m9PyS/vIB+Nv0S4iyQsQB7yswZPddNgoag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4IHFQwfVcN/lhRBCE6oD5XdukFjm6FraK6Xg4thYQ5w=;
+ b=VznF1tdRAnEwOvlFO7IsZ08T145TEEHTV4JjHqtGlUZ+F6aFC9QYqn1Dema2w0Mn1uVqd3xHcmq7RDBp9jPxIr1jpNJee8PNeRbfZtAnJsnxED539yb3ou4VJPaXcl+lu3RpTLBICGCkYtLOKEfB8UjocYm52YRTadMhFHhWcMYA1bJKk9EdYyKz6LgYks7YO3WI16DAQemzYfXuUX7PpMPr3ZnIJNFhoPN1vhD2+kFcV+0bntOIOwNnyQgB3dvEVBKiKRnF8iVlFtMydP3AFfZMpVri2LPJnQ+GQelAnV31Dd5uo4AVUKiLtCVzJ+ZeGj8XsAyaOsnoWJaYxQEZBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4IHFQwfVcN/lhRBCE6oD5XdukFjm6FraK6Xg4thYQ5w=;
+ b=TEDldWtOGlALVn45/zD/DCYtsMhnmVH88ErYL/gQynE7xe8n213+D2VAEg8eDTuvt1q/iXiVAB6klpdoYf8Le1/oe4tPvxSEH1pvsC7zK9PhjWEUY7e5XUwbyXHo5JM9s5gMoFSsIyvlfwbYNuMA+FZcnscWSgh8JRprAIcGufY=
+Received: from DB7PR04MB4490.eurprd04.prod.outlook.com (52.135.138.150) by
+ DB7PR04MB5356.eurprd04.prod.outlook.com (20.178.85.213) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2474.19; Thu, 28 Nov 2019 10:45:35 +0000
+Received: from DB7PR04MB4490.eurprd04.prod.outlook.com
+ ([fe80::4182:4692:ffbd:43a0]) by DB7PR04MB4490.eurprd04.prod.outlook.com
+ ([fe80::4182:4692:ffbd:43a0%6]) with mapi id 15.20.2495.014; Thu, 28 Nov 2019
+ 10:45:35 +0000
+From:   Biwen Li <biwen.li@nxp.com>
+To:     Peter Rosin <peda@axentia.se>, Leo Li <leoyang.li@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i2c: imx: Defer probing if EDMA not available
-Message-ID: <20191128100613.GI25745@shell.armlinux.org.uk>
-References: <20191127071136.5240-1-peng.ma@nxp.com>
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: RE: [EXT] Re: [v5,2/3] i2c: mux: pca954x: support property idle-state
+Thread-Topic: [EXT] Re: [v5,2/3] i2c: mux: pca954x: support property
+ idle-state
+Thread-Index: AQHViJBl22hUmzXlbUux/Avv7TBADKeTPQeAgA1gCVA=
+Date:   Thu, 28 Nov 2019 10:45:35 +0000
+Message-ID: <DB7PR04MB44904A8D92798893BDCDD96F8F470@DB7PR04MB4490.eurprd04.prod.outlook.com>
+References: <20191022041152.3663-1-biwen.li@nxp.com>
+ <20191022041152.3663-2-biwen.li@nxp.com>
+ <34f48838-be4f-57d6-c9fd-a8e0f6150129@axentia.se>
+In-Reply-To: <34f48838-be4f-57d6-c9fd-a8e0f6150129@axentia.se>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=biwen.li@nxp.com; 
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 4baa8e8e-7872-4340-b7bf-08d773f019ad
+x-ms-traffictypediagnostic: DB7PR04MB5356:|DB7PR04MB5356:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB7PR04MB5356C1AB99245D7E35C7E9B08F470@DB7PR04MB5356.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0235CBE7D0
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(376002)(366004)(396003)(136003)(189003)(199004)(31014005)(51444003)(8936002)(64756008)(66556008)(99286004)(3846002)(66946007)(6436002)(33656002)(2501003)(6116002)(14454004)(55016002)(186003)(52536014)(9686003)(4001150100001)(478600001)(6506007)(54906003)(110136005)(76176011)(71190400001)(316002)(66066001)(53546011)(74316002)(71200400001)(8676002)(25786009)(11346002)(14444005)(7736002)(4326008)(26005)(102836004)(7696005)(305945005)(256004)(66476007)(66446008)(86362001)(6246003)(81156014)(229853002)(76116006)(2906002)(5660300002)(446003)(81166006)(44832011);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB5356;H:DB7PR04MB4490.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: sJHt4fvsBya2oT9/hng53NaS3VeF+Nf5UrIx7q/Tng3cgGz8V99PZHYNe5X9cYPxKAb6QkoBn2AqyiEeDWzfZhoVW163RquDNFl+CW1iyJZdy5qduWIXHM2YYJkN3/40v0/sfZYJrngsKhnWtRXSc8qU0EhDiPqevcPIxuZ8fSa8WXameb5TuzJNo32MISlbYwF6aJWEWigKlLnpjL3u9PpE+e2nj4I4gjqUbsiklUtoWVyWxDfgVILaKS6bP8umlUtBzczeV2QKwRaz2qRKxu/0kPPLXTLlLc0A4w9x3WGmOOvkvWjHD+m2t41cYYnJiXziOHhq9eU2iXP5iZOl4nqx/KkEijOYCe4fwHzt97QyawSSghG0DhjEGAS/rbFffT1Lxo0pprRxMjUzc68B+/I1UoxZLLQAtfqJRjZpooArzZL9PXpmlTYrxevMsxyI
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191127071136.5240-1-peng.ma@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4baa8e8e-7872-4340-b7bf-08d773f019ad
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2019 10:45:35.5125
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fXc878hIKaeu8tZssMzUQX6xtD4hieJcTxyOa8UkPkjzKD/ms55v1e0czwtSN2PlwUJy7hu3JqEKW87UX10Rhw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5356
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 27, 2019 at 07:12:09AM +0000, Peng Ma wrote:
-> EDMA may be not available or defered due to dependencies on
-> other modules, If these scenarios is encountered, we should
-> defer probing.
-
-This has been tried before in this form, and it causes regressions.
-
-> Signed-off-by: Peng Ma <peng.ma@nxp.com>
-> ---
->  drivers/i2c/busses/i2c-imx.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index 40111a3..c2b0693 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -369,8 +369,8 @@ static void i2c_imx_reset_regs(struct imx_i2c_struct *i2c_imx)
->  }
->  
->  /* Functions for DMA support */
-> -static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
-> -						dma_addr_t phy_addr)
-> +static int i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
-> +			       dma_addr_t phy_addr)
->  {
->  	struct imx_i2c_dma *dma;
->  	struct dma_slave_config dma_sconfig;
-> @@ -379,7 +379,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
->  
->  	dma = devm_kzalloc(dev, sizeof(*dma), GFP_KERNEL);
->  	if (!dma)
-> -		return;
-> +		return -ENOMEM;
->  
->  	dma->chan_tx = dma_request_chan(dev, "tx");
->  	if (IS_ERR(dma->chan_tx)) {
-> @@ -424,7 +424,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
->  	dev_info(dev, "using %s (tx) and %s (rx) for DMA transfers\n",
->  		dma_chan_name(dma->chan_tx), dma_chan_name(dma->chan_rx));
->  
-> -	return;
-> +	return 0;
->  
->  fail_rx:
->  	dma_release_channel(dma->chan_rx);
-> @@ -432,6 +432,8 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
->  	dma_release_channel(dma->chan_tx);
->  fail_al:
->  	devm_kfree(dev, dma);
-> +
-> +	return ret;
-
-Some platforms don't have EDMA.  Doesn't this force everyone who wants
-I2C to have DMA?  The last attempt at this had:
-
-	/* return successfully if there is no dma support */
-	return ret == -ENODEV ? 0 : ret;
-
-here because of exactly this.
-
->  }
->  
->  static void i2c_imx_dma_callback(void *arg)
-> @@ -1605,10 +1607,14 @@ static int i2c_imx_probe(struct platform_device *pdev)
->  	dev_info(&i2c_imx->adapter.dev, "IMX I2C adapter registered\n");
->  
->  	/* Init DMA config if supported */
-> -	i2c_imx_dma_request(i2c_imx, phy_addr);
-> +	ret = i2c_imx_dma_request(i2c_imx, phy_addr);
-> +	if (ret == -EPROBE_DEFER)
-> +		goto i2c_adapter_remove;
-
-This happens _after_ the adapter has been published to the rest of the
-kernel.  Claiming resources after publication is racy - the adapter may
-be in use by a request at this point.  Secondly, there's been problems
-with this causing regressions when EDMA is built as a module and i2c-imx
-is built-in.
-
-See e8c220fac415 ("Revert "i2c: imx: improve the error handling in
-i2c_imx_dma_request()"") when exactly what you're proposing was tried
-and ended up having to be reverted.
-
-AFAIK nothing has changed since, so merely reinstating the known to be
-broken code, thereby reintroducing the same (and more) problems, isn't
-going to be acceptable.
-
-Sorry, but this gets a big NAK from me.
-
->  
->  	return 0;   /* Return OK */
->  
-> +i2c_adapter_remove:
-> +	i2c_del_adapter(&i2c_imx->adapter);
->  clk_notifier_unregister:
->  	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
->  rpm_disable:
-> -- 
-> 2.9.5
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+PiBIaSENCj4gDQo+IEkgaGFkIGEgc2Vjb25kIHJlYWQgb2YgdGhpcyBwYXRjaCwgYW5kIGZvdW5k
+IGEgbmV3IGlzc3VlLg0KPiANCj4gT24gMjAxOS0xMC0yMiAwNjoxMSwgQml3ZW4gTGkgd3JvdGU6
+DQo+ID4gVGhpcyBzdXBwb3J0cyBwcm9wZXJ0eSBpZGxlLXN0YXRlLGlmIHByZXNlbnQsIG92ZXJy
+aWRlcw0KPiA+IGkyYy1tdXgtaWRsZS1kaXNjb25uZWN0Lg0KPiA+DQo+ID4gTXkgdXNlIGNhc2Vz
+Og0KPiA+ICAgICAgIC0gVXNlIHRoZSBwcm9wZXJ0eSBpZGxlLXN0YXRlIHRvIGZpeA0KPiA+ICAg
+ICAgICAgYW4gZXJyYXRhIG9uIExTMjA4NUFSREIgYW5kIExTMjA4OEFSREIuDQo+ID4gICAgICAg
+LSBFcnJhdGEgaWQ6IEUtMDAwMTMoYm9hcmQgTFMyMDg1QVJEQiBhbmQNCj4gPiAgICAgICAgIExT
+MjA4OEFSREIgcmV2aXNpb24gb24gUmV2LkIsIFJldi5DIGFuZCBSZXYuRCkuDQo+ID4gICAgICAg
+LSBBYm91dCBFLTAwMDEzOg0KPiA+ICAgICAgICAgLSBEZXNjcmlwdGlvbjogSTJDMSBhbmQgSTJD
+MyBidXNlcw0KPiA+ICAgICAgICAgICBhcmUgbWlzc2luZyBwdWxsLXVwLg0KPiA+ICAgICAgICAg
+LSBJbXBhY3Q6IFdoZW4gdGhlIFBDQTk1NHggZGV2aWNlIGlzIHRyaS1zdGF0ZWQsIHRoZSBJMkMg
+YnVzDQo+ID4gICAgICAgICAgIHdpbGwgZmxvYXQuIFRoaXMgbWFrZXMgdGhlIEkyQyBidXMgYW5k
+IGl0cyBhc3NvY2lhdGVkDQo+ID4gICAgICAgICAgIGRvd25zdHJlYW0gZGV2aWNlcyBpbmFjY2Vz
+c2libGUuDQo+ID4gICAgICAgICAtIEhhcmR3YXJlIGZpeDogUG9wdWxhdGUgcmVzaXN0b3JzIFIx
+ODkgYW5kIFIxOTAgZm9yIEkyQzENCj4gPiAgICAgICAgICAgYW5kIHJlc2lzdG9ycyBSMjI4IGFu
+ZCBSMjI5IGZvciBJMkMzLg0KPiA+ICAgICAgICAgLSBTb2Z0d2FyZSBmaXg6IFJlbW92ZSB0aGUg
+dHJpLXN0YXRlIG9wdGlvbiBmcm9tIHRoZSBQQ0E5NTR4DQo+ID4gICAgICAgICAgIGRyaXZlcihQ
+Q0E5NTR4IGFsd2F5cyBvbiBlbmFibGUgc3RhdHVzLCBzcGVjaWZ5IGENCj4gPiAgICAgICAgICAg
+Y2hhbm5lbCB6ZXJvIGluIGR0cyB0byBmaXggdGhlIGVycmF0YSBFLTAwMDEzKS4NCj4gPg0KPiA+
+IFNpZ25lZC1vZmYtYnk6IEJpd2VuIExpIDxiaXdlbi5saUBueHAuY29tPg0KPiA+IC0tLQ0KPiA+
+IENoYW5nZSBpbiB2NToNCj4gPiAgICAgICAtIGFkZCBleHRyYSBwcmVjYXV0aW9uIGZvciBwY2E5
+NTR4X2luaXQNCj4gPg0KPiA+IENoYW5nZSBpbiB2NDoNCj4gPiAgICAgICAtIHJlbmFtZSBmdW5j
+dGlvbg0KPiA+ICAgICAgICAgcGNhOTU0eF9jYWxjdWxhdGVfY2hhbiAtPiBwY2E5NTR4X3JlZ3Zh
+bA0KPiA+DQo+ID4gQ2hhbmdlIGluIHYzOg0KPiA+ICAgICAgIC0gdXBkYXRlIHN1YmplY3QgYW5k
+IGRlc2NyaXB0aW9uDQo+ID4gICAgICAgLSBhZGQgYSBoZWxwZXIgZnVuY3Rpb24gcGNhOTU0eF9j
+YWxjdWxhdGVfY2hhbigpDQo+ID4NCj4gPiBDaGFuZ2UgaW4gdjI6DQo+ID4gICAgICAgLSB1cGRh
+dGUgc3ViamVjdCBhbmQgZGVzY3JpcHRpb24NCj4gPiAgICAgICAtIGFkZCBwcm9wZXJ0eSBpZGxl
+LXN0YXRlDQo+ID4NCj4gPiAgZHJpdmVycy9pMmMvbXV4ZXMvaTJjLW11eC1wY2E5NTR4LmMgfCA2
+Nw0KPiA+ICsrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tDQo+ID4gIDEgZmlsZSBjaGFuZ2Vk
+LCA0NCBpbnNlcnRpb25zKCspLCAyMyBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL2kyYy9tdXhlcy9pMmMtbXV4LXBjYTk1NHguYw0KPiA+IGIvZHJpdmVycy9pMmMv
+bXV4ZXMvaTJjLW11eC1wY2E5NTR4LmMNCj4gPiBpbmRleCA5MjNhYTNhNWEzZGMuLjIxOGJhMWE1
+ZWQ3ZSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2kyYy9tdXhlcy9pMmMtbXV4LXBjYTk1NHgu
+Yw0KPiA+ICsrKyBiL2RyaXZlcnMvaTJjL211eGVzL2kyYy1tdXgtcGNhOTU0eC5jDQo+ID4gQEAg
+LTg2LDcgKzg2LDcgQEAgc3RydWN0IHBjYTk1NHggew0KPiA+DQo+ID4gICAgICAgdTggbGFzdF9j
+aGFuOyAgICAgICAgICAgLyogbGFzdCByZWdpc3RlciB2YWx1ZSAqLw0KPiA+ICAgICAgIC8qIE1V
+WF9JRExFX0FTX0lTLCBNVVhfSURMRV9ESVNDT05ORUNUIG9yID49IDAgZm9yIGNoYW5uZWwgKi8N
+Cj4gPiAtICAgICBzOCBpZGxlX3N0YXRlOw0KPiA+ICsgICAgIHMzMiBpZGxlX3N0YXRlOw0KPiA+
+DQo+ID4gICAgICAgc3RydWN0IGkyY19jbGllbnQgKmNsaWVudDsNCj4gPg0KPiA+IEBAIC0yMjks
+MjAgKzIyOSwyMyBAQCBzdGF0aWMgaW50IHBjYTk1NHhfcmVnX3dyaXRlKHN0cnVjdCBpMmNfYWRh
+cHRlcg0KPiAqYWRhcCwNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBJMkNfU01C
+VVNfQllURSwgJmR1bW15KTsgIH0NCj4gPg0KPiA+ICtzdGF0aWMgdTggcGNhOTU0eF9yZWd2YWwo
+c3RydWN0IHBjYTk1NHggKmRhdGEsIHU4IGNoYW4pIHsNCj4gPiArICAgICAvKiBXZSBtYWtlIHN3
+aXRjaGVzIGxvb2sgbGlrZSBtdXhlcywgbm90IHN1cmUgaG93IHRvIGJlIHNtYXJ0ZXIuICovDQo+
+ID4gKyAgICAgaWYgKGRhdGEtPmNoaXAtPm11eHR5cGUgPT0gcGNhOTU0eF9pc211eCkNCj4gPiAr
+ICAgICAgICAgICAgIHJldHVybiBjaGFuIHwgZGF0YS0+Y2hpcC0+ZW5hYmxlOw0KPiA+ICsgICAg
+IGVsc2UNCj4gPiArICAgICAgICAgICAgIHJldHVybiAxIDw8IGNoYW47DQo+ID4gK30NCj4gPiAr
+DQo+ID4gIHN0YXRpYyBpbnQgcGNhOTU0eF9zZWxlY3RfY2hhbihzdHJ1Y3QgaTJjX211eF9jb3Jl
+ICptdXhjLCB1MzIgY2hhbikNCj4gPiB7DQo+ID4gICAgICAgc3RydWN0IHBjYTk1NHggKmRhdGEg
+PSBpMmNfbXV4X3ByaXYobXV4Yyk7DQo+ID4gICAgICAgc3RydWN0IGkyY19jbGllbnQgKmNsaWVu
+dCA9IGRhdGEtPmNsaWVudDsNCj4gPiAtICAgICBjb25zdCBzdHJ1Y3QgY2hpcF9kZXNjICpjaGlw
+ID0gZGF0YS0+Y2hpcDsNCj4gPiAgICAgICB1OCByZWd2YWw7DQo+ID4gICAgICAgaW50IHJldCA9
+IDA7DQo+ID4NCj4gPiAtICAgICAvKiB3ZSBtYWtlIHN3aXRjaGVzIGxvb2sgbGlrZSBtdXhlcywg
+bm90IHN1cmUgaG93IHRvIGJlIHNtYXJ0ZXIgKi8NCj4gPiAtICAgICBpZiAoY2hpcC0+bXV4dHlw
+ZSA9PSBwY2E5NTR4X2lzbXV4KQ0KPiA+IC0gICAgICAgICAgICAgcmVndmFsID0gY2hhbiB8IGNo
+aXAtPmVuYWJsZTsNCj4gPiAtICAgICBlbHNlDQo+ID4gLSAgICAgICAgICAgICByZWd2YWwgPSAx
+IDw8IGNoYW47DQo+ID4gLQ0KPiA+ICsgICAgIHJlZ3ZhbCA9IHBjYTk1NHhfcmVndmFsKGRhdGEs
+IGNoYW4pOw0KPiA+ICAgICAgIC8qIE9ubHkgc2VsZWN0IHRoZSBjaGFubmVsIGlmIGl0cyBkaWZm
+ZXJlbnQgZnJvbSB0aGUgbGFzdCBjaGFubmVsICovDQo+ID4gICAgICAgaWYgKGRhdGEtPmxhc3Rf
+Y2hhbiAhPSByZWd2YWwpIHsNCj4gPiAgICAgICAgICAgICAgIHJldCA9IHBjYTk1NHhfcmVnX3dy
+aXRlKG11eGMtPnBhcmVudCwgY2xpZW50LCByZWd2YWwpOw0KPiA+IEBAIC0yNTYsNyArMjU5LDcg
+QEAgc3RhdGljIGludCBwY2E5NTR4X2Rlc2VsZWN0X211eChzdHJ1Y3QNCj4gPiBpMmNfbXV4X2Nv
+cmUgKm11eGMsIHUzMiBjaGFuKSAgew0KPiA+ICAgICAgIHN0cnVjdCBwY2E5NTR4ICpkYXRhID0g
+aTJjX211eF9wcml2KG11eGMpOw0KPiA+ICAgICAgIHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQg
+PSBkYXRhLT5jbGllbnQ7DQo+ID4gLSAgICAgczggaWRsZV9zdGF0ZTsNCj4gPiArICAgICBzMzIg
+aWRsZV9zdGF0ZTsNCj4gPg0KPiA+ICAgICAgIGlkbGVfc3RhdGUgPSBSRUFEX09OQ0UoZGF0YS0+
+aWRsZV9zdGF0ZSk7DQo+ID4gICAgICAgaWYgKGlkbGVfc3RhdGUgPj0gMCkNCj4gPiBAQCAtNDAy
+LDYgKzQwNSwyNSBAQCBzdGF0aWMgdm9pZCBwY2E5NTR4X2NsZWFudXAoc3RydWN0IGkyY19tdXhf
+Y29yZQ0KPiAqbXV4YykNCj4gPiAgICAgICBpMmNfbXV4X2RlbF9hZGFwdGVycyhtdXhjKTsNCj4g
+PiAgfQ0KPiA+DQo+ID4gK3N0YXRpYyBpbnQgcGNhOTU0eF9pbml0KHN0cnVjdCBpMmNfY2xpZW50
+ICpjbGllbnQsIHN0cnVjdCBwY2E5NTR4DQo+ID4gKypkYXRhKSB7DQo+ID4gKyAgICAgaW50IHJl
+dDsNCj4gPiArICAgICBpZiAoZGF0YS0+aWRsZV9zdGF0ZSA+PSAwKSB7DQo+ID4gKyAgICAgICAg
+ICAgICBkYXRhLT5sYXN0X2NoYW4gPSBwY2E5NTR4X3JlZ3ZhbChkYXRhLCBkYXRhLT5pZGxlX3N0
+YXRlKTsNCj4gPiArICAgICB9IGVsc2Ugew0KPiA+ICsgICAgICAgICAgICAgLyogRGlzY29ubmVj
+dCBtdWx0aXBsZXhlciAqLw0KPiA+ICsgICAgICAgICAgICAgZGF0YS0+bGFzdF9jaGFuID0gMDsN
+Cj4gPiArICAgICB9DQo+ID4gKyAgICAgcmV0ID0gaTJjX3NtYnVzX3dyaXRlX2J5dGUoY2xpZW50
+LCBkYXRhLT5sYXN0X2NoYW4pOw0KPiA+ICsgICAgIGlmIChyZXQgPCAwKSB7DQo+ID4gKyAgICAg
+ICAgICAgICBkYXRhLT5sYXN0X2NoYW4gPSAwOw0KPiA+ICsgICAgICAgICAgICAgZGV2X2Vycigm
+Y2xpZW50LT5kZXYsICJmYWlsZWQgdG8gdmVyaWZ5IHRoZSBtdXgsIFwNCj4gPiArICAgICAgICAg
+ICAgICAgICAgICAgdGhlIG11eCBtYXliZSBub3QgcHJlc2VudCBpbiBmYWN0XG4iKTsNCj4gDQo+
+IFRoaXMgZGV2X2VyciB3aWxsIHRyaWdnZXIgb24gcHJvYmUgZmFpbHVyZSwgd2hpY2ggYWxyZWFk
+eSBwcmludHMgYSBtZXNzYWdlIG9uDQo+IGZhaWx1cmUuIElmIHlvdSB0aGluayB5b3UgbmVlZCBh
+IG1lc3NhZ2UgaWYgdGhpcyBmYWlscyBpbiByZXN1bWUsIEkgdGhpbmsgdGhhdA0KPiBtZXNzYWdl
+IG5lZWRzIHRvIGJlIHByaW50ZWQgaW4gcmVzdW1lIGluc3RlYWQgb2YgaGVyZS4gQnV0IHRoZSBt
+ZXNzYWdlIHNlZW1zDQo+IHRhcmdldGVkIGF0IHRoZSBwcm9iZSBmYWlsdXJlLCB3aGljaCBpcyBh
+biBhcmd1bWVudCBmb3Igc2ltcGx5IHJlbW92aW5nIGl0LiBJdCBpcw0KPiBhbHNvIG5vdCBkZXNp
+cmFibGUgdG8gc3BsaXQgYSBzdHJpbmcgd2l0aCB0aGF0IHRlY2huaXF1ZS4gSXQncyBnZW5lcmFs
+bHkgYmV0dGVyIHRvDQo+ICJ1c2UgdGhpcyB0ZWNobmlxdWUgdG8gZG8gc3RyaW5nIGNvbnRpbnVh
+dGlvbiBvbiBhIG5ldyINCj4gImxpbmUuIiBIb3dldmVyLCBzcGxpdHRpbmcgc3RyaW5ncyBvdmVy
+IG11bHRpcGxlIGxpbmVzIGFyZSBmcm93bmVkIHVwb24gc2luY2UgaXQNCj4gYnJlYWtzIGdyZXBw
+aW5nIGZvciB0aGUgZXJyb3IgbWVzc2FnZS4gVGhlIGxhbmd1YWdlIGlzIGFsc28gYSBiaXQgc3Ry
+YW5nZS4NCj4gDQo+IEFnYWluLCBzb3JyeSBmb3Igbm90IGJlaW5nIGFibGUgdG8gYmUgYXMgcmVz
+cG9uc2l2ZSBhcyBJIHdvdWxkIGhhdmUgbGlrZWQsIGFuZA0KPiB0aGFua3MgZm9yIHlvdXIgcGF0
+aWVuY2UhDQpPa2F5LCBnb3QgaXQsIHRoYW5rcywgSSB3aWxsIGFkanVzdCBpdCBpbiB2Ni4NCkJl
+c3QgUmVnYXJkcywNCkJpd2VuIExpDQo+IA0KPiBDaGVlcnMsDQo+IFBldGVyDQo+IA0KPiA+ICsg
+ICAgIH0NCj4gPiArDQo+ID4gKyAgICAgcmV0dXJuIHJldDsNCj4gPiArfQ0KPiA+ICsNCj4gPiAg
+LyoNCj4gPiAgICogSTJDIGluaXQvcHJvYmluZy9leGl0IGZ1bmN0aW9ucw0KPiA+ICAgKi8NCj4g
+PiBAQCAtNDExLDcgKzQzMyw2IEBAIHN0YXRpYyBpbnQgcGNhOTU0eF9wcm9iZShzdHJ1Y3QgaTJj
+X2NsaWVudCAqY2xpZW50LA0KPiA+ICAgICAgIHN0cnVjdCBpMmNfYWRhcHRlciAqYWRhcCA9IGNs
+aWVudC0+YWRhcHRlcjsNCj4gPiAgICAgICBzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmY2xpZW50LT5k
+ZXY7DQo+ID4gICAgICAgc3RydWN0IGRldmljZV9ub2RlICpucCA9IGRldi0+b2Zfbm9kZTsNCj4g
+PiAtICAgICBib29sIGlkbGVfZGlzY29ubmVjdF9kdDsNCj4gPiAgICAgICBzdHJ1Y3QgZ3Bpb19k
+ZXNjICpncGlvOw0KPiA+ICAgICAgIHN0cnVjdCBpMmNfbXV4X2NvcmUgKm11eGM7DQo+ID4gICAg
+ICAgc3RydWN0IHBjYTk1NHggKmRhdGE7DQo+ID4gQEAgLTQ2MiwyMyArNDgzLDI0IEBAIHN0YXRp
+YyBpbnQgcGNhOTU0eF9wcm9iZShzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LA0KPiA+ICAgICAg
+ICAgICAgICAgfQ0KPiA+ICAgICAgIH0NCj4gPg0KPiA+IC0gICAgIC8qIFdyaXRlIHRoZSBtdXgg
+cmVnaXN0ZXIgYXQgYWRkciB0byB2ZXJpZnkNCj4gPiArICAgICBkYXRhLT5pZGxlX3N0YXRlID0g
+TVVYX0lETEVfQVNfSVM7DQo+ID4gKyAgICAgaWYgKG9mX3Byb3BlcnR5X3JlYWRfdTMyKG5wLCAi
+aWRsZS1zdGF0ZSIsICZkYXRhLT5pZGxlX3N0YXRlKSkgew0KPiA+ICsgICAgICAgICAgICAgaWYg
+KG5wICYmIG9mX3Byb3BlcnR5X3JlYWRfYm9vbChucCwNCj4gImkyYy1tdXgtaWRsZS1kaXNjb25u
+ZWN0IikpDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgIGRhdGEtPmlkbGVfc3RhdGUgPSBNVVhf
+SURMRV9ESVNDT05ORUNUOw0KPiA+ICsgICAgIH0NCj4gPiArDQo+ID4gKyAgICAgLyoNCj4gPiAr
+ICAgICAgKiBXcml0ZSB0aGUgbXV4IHJlZ2lzdGVyIGF0IGFkZHIgdG8gdmVyaWZ5DQo+ID4gICAg
+ICAgICogdGhhdCB0aGUgbXV4IGlzIGluIGZhY3QgcHJlc2VudC4gVGhpcyBhbHNvDQo+ID4gLSAg
+ICAgICogaW5pdGlhbGl6ZXMgdGhlIG11eCB0byBkaXNjb25uZWN0ZWQgc3RhdGUuDQo+ID4gKyAg
+ICAgICogaW5pdGlhbGl6ZXMgdGhlIG11eCB0byBhIGNoYW5uZWwNCj4gPiArICAgICAgKiBvciBk
+aXNjb25uZWN0ZWQgc3RhdGUuDQo+ID4gICAgICAgICovDQo+ID4gLSAgICAgaWYgKGkyY19zbWJ1
+c193cml0ZV9ieXRlKGNsaWVudCwgMCkgPCAwKSB7DQo+ID4gKyAgICAgcmV0ID0gcGNhOTU0eF9p
+bml0KGNsaWVudCwgZGF0YSk7DQo+ID4gKyAgICAgaWYgKHJldCA8IDApIHsNCj4gPiAgICAgICAg
+ICAgICAgIGRldl93YXJuKGRldiwgInByb2JlIGZhaWxlZFxuIik7DQo+ID4gICAgICAgICAgICAg
+ICByZXR1cm4gLUVOT0RFVjsNCj4gPiAgICAgICB9DQo+ID4NCj4gPiAtICAgICBkYXRhLT5sYXN0
+X2NoYW4gPSAwOyAgICAgICAgICAgICAgIC8qIGZvcmNlIHRoZSBmaXJzdCBzZWxlY3Rpb24gKi8N
+Cj4gPiAtICAgICBkYXRhLT5pZGxlX3N0YXRlID0gTVVYX0lETEVfQVNfSVM7DQo+ID4gLQ0KPiA+
+IC0gICAgIGlkbGVfZGlzY29ubmVjdF9kdCA9IG5wICYmDQo+ID4gLSAgICAgICAgICAgICBvZl9w
+cm9wZXJ0eV9yZWFkX2Jvb2wobnAsICJpMmMtbXV4LWlkbGUtZGlzY29ubmVjdCIpOw0KPiA+IC0g
+ICAgIGlmIChpZGxlX2Rpc2Nvbm5lY3RfZHQpDQo+ID4gLSAgICAgICAgICAgICBkYXRhLT5pZGxl
+X3N0YXRlID0gTVVYX0lETEVfRElTQ09OTkVDVDsNCj4gPiAtDQo+ID4gICAgICAgcmV0ID0gcGNh
+OTU0eF9pcnFfc2V0dXAobXV4Yyk7DQo+ID4gICAgICAgaWYgKHJldCkNCj4gPiAgICAgICAgICAg
+ICAgIGdvdG8gZmFpbF9jbGVhbnVwOw0KPiA+IEBAIC01MzEsOCArNTUzLDcgQEAgc3RhdGljIGlu
+dCBwY2E5NTR4X3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ID4gICAgICAgc3RydWN0IGky
+Y19tdXhfY29yZSAqbXV4YyA9IGkyY19nZXRfY2xpZW50ZGF0YShjbGllbnQpOw0KPiA+ICAgICAg
+IHN0cnVjdCBwY2E5NTR4ICpkYXRhID0gaTJjX211eF9wcml2KG11eGMpOw0KPiA+DQo+ID4gLSAg
+ICAgZGF0YS0+bGFzdF9jaGFuID0gMDsNCj4gPiAtICAgICByZXR1cm4gaTJjX3NtYnVzX3dyaXRl
+X2J5dGUoY2xpZW50LCAwKTsNCj4gPiArICAgICByZXR1cm4gcGNhOTU0eF9pbml0KGNsaWVudCwg
+ZGF0YSk7DQo+ID4gIH0NCj4gPiAgI2VuZGlmDQo+ID4NCj4gPg0KDQo=
