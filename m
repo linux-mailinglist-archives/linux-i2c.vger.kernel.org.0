@@ -2,455 +2,381 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C22610D3C5
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2019 11:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C06D910DAB8
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2019 22:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726770AbfK2KRk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 29 Nov 2019 05:17:40 -0500
-Received: from mail-eopbgr40054.outbound.protection.outlook.com ([40.107.4.54]:15170
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725892AbfK2KRk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 29 Nov 2019 05:17:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MHy3Y38ugQP0VyjKeO/86dRsSEmWqmxT/NyPXTnutnSqdwgNyfmZP/Q7RYO28bQ8Yg1ld4+wsrFtOS+R4IQ8/bK/cv6AujAn1QmWjgLNAPbDUIb5Crdnl5gQzM54sKFGbRzbCM9RZjbcFbf2xhu3eAsqjImQgLpSoWHljnTJzZ8CzNoopYLRGNiIqC2pfTQGvvmWG38PyUZJJv6vtbjvQZPi/dpEXklwZnw6Jzl8YU5Ih5crUVGG4Z8gGV+FM6F0S2Q2E0ivXewmT7m8cEtorpBE1hdwx7htn0cHhBhCouAcY8puq2sM9//fYse3ogKK0MZsu23EddlKw5QDwVvvlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CiVLXgQ523JN4Mk0uAB3Yx3bTek8RLmEl5/ws1Z/2tE=;
- b=LcbBiRmWaYV13rusmi2cFwG0uTVPjLUEr9CDSKPkThxGtlVqkEBnGrc8KplcXvg01NnGPpgvcdeAPkXwScQH6KFzFVAStr4WkAl6prxa1+ryjnrm2kt3HZ0vvqjnTTH9i39ZyqYK/7E82wkI8T9rFNfslreDEp19vpt61PT5tkpF1b5b5JaNdZLHJDbOftXZ5BVztMvaMG5L0qiCUivO/GwPaDkRvkU4z39E1WmBjaLmRnynTWAxLaNrbcpGgm5EMOokDKbgx6FR81drlHK7e9lAfvKaSb/VCJdfCvI01wOOq7Lfhqokg5HOGx9f8FYylMqrkLmu/nb969f7P4SMXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CiVLXgQ523JN4Mk0uAB3Yx3bTek8RLmEl5/ws1Z/2tE=;
- b=en+YQ2hYohhPAKLCgNzP+EIprX61FNggWkfVhlEp6CwMdbkussIkPsit6jlddUG+KLHpnAPUYhcg4d6m5C853Kk7lbjAWY0H4DD6fwb2TKOK/zcVZe8aoSEvU+KWGVNn5ACv4/sCHf9CHb65Ydb2pnJXimBpxWxBEqoAricf3WQ=
-Received: from DB7PR04MB4490.eurprd04.prod.outlook.com (52.135.138.150) by
- DB7PR04MB5946.eurprd04.prod.outlook.com (20.178.104.151) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2474.19; Fri, 29 Nov 2019 10:17:30 +0000
-Received: from DB7PR04MB4490.eurprd04.prod.outlook.com
- ([fe80::4182:4692:ffbd:43a0]) by DB7PR04MB4490.eurprd04.prod.outlook.com
- ([fe80::4182:4692:ffbd:43a0%6]) with mapi id 15.20.2495.014; Fri, 29 Nov 2019
- 10:17:30 +0000
-From:   Biwen Li <biwen.li@nxp.com>
-To:     Clark Wang <xiaoning.wang@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "wsa@the-dreams.de" <wsa@the-dreams.de>,
-        Leo Li <leoyang.li@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "o.rempel@pengutronix.de" <o.rempel@pengutronix.de>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Jiafei Pan <jiafei.pan@nxp.com>,
-        Xiaobo Xie <xiaobo.xie@nxp.com>
-Subject: RE: [v5] i2c: imx: support slave mode for imx I2C driver
-Thread-Topic: [v5] i2c: imx: support slave mode for imx I2C driver
-Thread-Index: AQHVppQxnceFGU0hbkmDRwYjgnSxe6eh6RcAgAAB6kA=
-Date:   Fri, 29 Nov 2019 10:17:30 +0000
-Message-ID: <DB7PR04MB44905DA8682FDE307D148D8C8F460@DB7PR04MB4490.eurprd04.prod.outlook.com>
-References: <20191129090513.2150-1-biwen.li@nxp.com>
- <AM6PR04MB5016FB583456A866AF7CAED6F3460@AM6PR04MB5016.eurprd04.prod.outlook.com>
-In-Reply-To: <AM6PR04MB5016FB583456A866AF7CAED6F3460@AM6PR04MB5016.eurprd04.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=biwen.li@nxp.com; 
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: f75dac26-24dd-4270-b525-08d774b557de
-x-ms-traffictypediagnostic: DB7PR04MB5946:|DB7PR04MB5946:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB59463E792379A548B7A2F92F8F460@DB7PR04MB5946.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1388;
-x-forefront-prvs: 0236114672
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(136003)(396003)(39860400002)(366004)(189003)(199004)(13464003)(229853002)(5660300002)(55016002)(6246003)(9686003)(6436002)(66066001)(2501003)(71200400001)(71190400001)(478600001)(99286004)(256004)(14454004)(14444005)(25786009)(4326008)(54906003)(110136005)(66946007)(66476007)(81156014)(316002)(7736002)(76116006)(74316002)(7696005)(11346002)(86362001)(76176011)(305945005)(8936002)(64756008)(66446008)(66556008)(8676002)(81166006)(33656002)(6506007)(44832011)(26005)(2201001)(102836004)(2906002)(186003)(3846002)(6116002)(53546011)(446003)(52536014)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB5946;H:DB7PR04MB4490.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FpxaONy+trMcSmQmchZ63G1iZCnIs0RQY6nE1OaBl5Xhb559ONa/IPajK2z9oVgaCTn7NkW7i1tJuM14JdMYgmqXoUj27PaoDrmaxWcKUSg/hQJQIbXstAc3f0g75j+SimWuEYWGcz0oiCwZ5K+oCAjSL/TIQTuY3BhY4mw2XvdJT9P1I7G1wMpZ+u0Sj40BIwoRWTKza2okGn0Xay+Y2MDzdlMBEia1FEnI5YrUmNLZHBmQGKv75xXnEzNWpeuyfJ7CuIMWT3owtI/AhHZOtq/h/BV7CO80ZpAtAK+F0NIc8BwWIgrHWhCKL5tMHTWHj2zlk0eNEcbcOzjIc1XKmKYnjKIVse7Glcxr9TC5KsyR7sH0SNh8IkS4v1TzkJBy20BOBFsaAYlv00y4DCoAAHHaklLSaTMTsnJu/J/+C1ulUdBOHTlnMWqyXXrpivtH
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727116AbfK2VFK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 29 Nov 2019 16:05:10 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:43972 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727051AbfK2VFJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Nov 2019 16:05:09 -0500
+Received: by mail-io1-f70.google.com with SMTP id b17so8540353ioh.10
+        for <linux-i2c@vger.kernel.org>; Fri, 29 Nov 2019 13:05:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=MOavzUREPQ8i/q84h2ZPB6MhiH5OTrZWV4yOEWUafz8=;
+        b=L3LqsMY0GTsCHRU6VqRc5fK/24RcLVHaTH/LVHY/LtAmkgyos2G0DdWzcBM1X4v5iv
+         BjOe6W6z6I73NxXhZlI0+xF/Hxd+SxrvOTyzWqErir0JWBFHPJ9tBo1dd/co0l2cT/x/
+         aqvaTxcc31gmNWLnGJh0waqUnovxf4PekU/97zGUxIdOCrXhqTuzb0RSoYUMJ8RkmKJX
+         X1moi0ERKS6qDoUS+kjc9DNOk4MM8h8nJlmU2FfkUlmk7Zh/XI0JE+9gAH2hYxDri0Zr
+         mzUgcG08IZqj4B0fTimkNXzS1lBNQIB/K1syokGytYX7vhmPgZQjKZkMC/TwoX8huNAD
+         ad3Q==
+X-Gm-Message-State: APjAAAWHZgmfram6/XJtCIwGVUEqN43XAt2ooEB0MF6aJAsYGRVkdk7S
+        KAfNpZU8bYTvttfsRDnbjTA5nl8zwBnT7OTYQtodDbhQKrkE
+X-Google-Smtp-Source: APXvYqxDioRseda04LZuKuLqGzexp22qflDTHv5gavNLGv+jJ3l2gJFBiSo/iUlMH8VsU9mxo2MW7TN7q89fwYa9bm3Df3h16Ocn
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f75dac26-24dd-4270-b525-08d774b557de
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2019 10:17:30.7041
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: juvuZnZUwpkiNaYJNKXxUlOkNPURkBI+kPl6PrdAbquwj0dG6eMffgSDxx7GfFS9t3slcQ5dBCo/rdJ0NmRwxQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5946
+X-Received: by 2002:a02:a15d:: with SMTP id m29mr2667010jah.88.1575061508388;
+ Fri, 29 Nov 2019 13:05:08 -0800 (PST)
+Date:   Fri, 29 Nov 2019 13:05:08 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b50c8b05988295f0@google.com>
+Subject: possible deadlock in i2c_transfer
+From:   syzbot <syzbot+136e62496b7564bb81cf@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, wsa@the-dreams.de
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
->=20
->=20
-> > -----Original Message-----
-> > From: Biwen Li <biwen.li@nxp.com>
-> > Sent: Friday, November 29, 2019 17:05
-> > To: shawnguo@kernel.org; s.hauer@pengutronix.de;
-> > kernel@pengutronix.de; festevam@gmail.com; dl-linux-imx <linux-
-> > imx@nxp.com>; wsa@the-dreams.de; Leo Li <leoyang.li@nxp.com>; Aisheng
-> > Dong <aisheng.dong@nxp.com>; Clark Wang <xiaoning.wang@nxp.com>;
-> > o.rempel@pengutronix.de
-> > Cc: linux-i2c@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > linux-arm- kernel@lists.infradead.org; Laurentiu Tudor
-> > <laurentiu.tudor@nxp.com>; Jiafei Pan <jiafei.pan@nxp.com>; Xiaobo Xie
-> > <xiaobo.xie@nxp.com>; Biwen Li <biwen.li@nxp.com>
-> > Subject: [v5] i2c: imx: support slave mode for imx I2C driver
-> >
-> > The patch supports slave mode for imx I2C driver
-> >
-> > Signed-off-by: Biwen Li <biwen.li@nxp.com>
-> > ---
-> > Change in v5:
-> > 	- fix a bug that cannot determine in what mode(master mode or
-> > 	  slave mode)
-> >
-> > Change in v4:
-> > 	- add MACRO CONFIG_I2C_SLAVE to fix compilation issue
-> >
-> > Change in v3:
-> > 	- support layerscape and i.mx platform
-> >
-> > Change in v2:
-> > 	- remove MACRO CONFIG_I2C_SLAVE
-> >
-> >
-> >  drivers/i2c/busses/i2c-imx.c | 216
-> > ++++++++++++++++++++++++++++++++---
-> >  1 file changed, 198 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-imx.c
-> > b/drivers/i2c/busses/i2c-imx.c index
-> > a3b61336fe55..52f70de16900 100644
-> > --- a/drivers/i2c/busses/i2c-imx.c
-> > +++ b/drivers/i2c/busses/i2c-imx.c
-> > @@ -203,6 +203,9 @@ struct imx_i2c_struct {
-> >  	struct pinctrl_state *pinctrl_pins_gpio;
-> >
-> >  	struct imx_i2c_dma	*dma;
-> > +#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> > +	struct i2c_client	*slave;
-> > +#endif
-> >  };
-> >
-> >  static const struct imx_i2c_hwdata imx1_i2c_hwdata =3D { @@ -279,6
-> > +282,14 @@ static inline unsigned char imx_i2c_read_reg(struct
-> > imx_i2c_struct *i2c_imx,
-> >  	return readb(i2c_imx->base + (reg << i2c_imx->hwdata->regshift));  }
-> >
-> > +/* Set up i2c controller register and i2c status register to default
-> > +value. */ static void i2c_imx_reset_regs(struct imx_i2c_struct
-> > +*i2c_imx) {
-> > +	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN,
-> > +			i2c_imx, IMX_I2C_I2CR);
-> > +	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx,
-> > +IMX_I2C_I2SR); }
-> > +
-> >  /* Functions for DMA support */
-> >  static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
-> >  						dma_addr_t phy_addr)
-> > @@ -588,23 +599,33 @@ static void i2c_imx_stop(struct imx_i2c_struct
-> > *i2c_imx)
-> >  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);  }
-> >
-> > -static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
-> > +/* Clear interrupt flag bit */
-> > +static void i2c_imx_clr_if_bit(unsigned int status, struct
-> > +imx_i2c_struct *i2c_imx)
-> >  {
-> > -	struct imx_i2c_struct *i2c_imx =3D dev_id;
-> > -	unsigned int temp;
-> > +	status &=3D ~I2SR_IIF;
-> > +	status |=3D (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
-> > +	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR); }
-> >
-> > -	temp =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
-> > -	if (temp & I2SR_IIF) {
-> > -		/* save status register */
-> > -		i2c_imx->i2csr =3D temp;
-> > -		temp &=3D ~I2SR_IIF;
-> > -		temp |=3D (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
-> > -		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
-> > -		wake_up(&i2c_imx->queue);
-> > -		return IRQ_HANDLED;
-> > -	}
-> > +/* Clear arbitration lost bit */
-> > +static void i2c_imx_clr_al_bit(unsigned int status, struct
-> > +imx_i2c_struct *i2c_imx) {
-> > +	status &=3D ~I2SR_IAL;
-> > +	status |=3D (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IAL);
-> > +	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR); }
-> >
-> > -	return IRQ_NONE;
-> > +static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx) =
-{
-> > +	unsigned int status;
-> > +
-> > +	/* Save status register */
-> > +	status =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
-> > +	i2c_imx->i2csr =3D status | I2SR_IIF;
-> > +
-> > +	wake_up(&i2c_imx->queue);
-> > +
-> > +	return IRQ_HANDLED;
-> >  }
->=20
-> Hi Biwen,
->=20
-> We only use i2c_imx->i2csr for IIF judgement in i2c_imx_trx_complete(), c=
-an we
-Currently maybe we just use the I2SR_IIF, but other bit of i2c status regis=
-ter will be used
-in the future.
-In another hand, i2csr represent value in i2c status register, unless we ch=
-anged the meaning.
-> use this code:
-> static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx) {
-> 	i2c_imx->i2csr =3D I2SR_IIF;
->=20
-> 	wake_up(&i2c_imx->queue);
->=20
-> 	return IRQ_HANDLED;
-> }
-> Or even put these three lines to isr function directly?=20
-> i2c_imx_master_isr() is only called when if (status & I2SR_IIF) is true, =
-so no need
-> to read register again here.
-I add i2c_imx_master_isr to let the code clearly. Although read register ag=
-ain, but with advanced compiler
-and more powerfull cpu, the performance won't have significant impact.
-Thank you for your suggestions.
+Hello,
 
-Best Regards,
-Biwen Li
->=20
-> Regards,
-> Clark Wang
->=20
->=20
-> >
-> >  static int i2c_imx_dma_write(struct imx_i2c_struct *i2c_imx, @@
-> > -900,6
-> > +921,13 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
-> >
-> >  	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
-> >
-> > +#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> > +	if (i2c_imx->slave) {
-> > +		dev_err(&i2c_imx->adapter.dev, "Please not do operations
-> > of master mode in slave mode");
-> > +		return -EBUSY;
-> > +	}
-> > +#endif
-> > +
-> >  	result =3D pm_runtime_get_sync(i2c_imx->adapter.dev.parent);
-> >  	if (result < 0)
-> >  		goto out;
-> > @@ -1048,11 +1076,166 @@ static u32 i2c_imx_func(struct i2c_adapter
-> > *adapter)
-> >  		| I2C_FUNC_SMBUS_READ_BLOCK_DATA;
-> >  }
-> >
-> > +#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> > +static int i2c_imx_slave_init(struct imx_i2c_struct *i2c_imx) {
-> > +	int temp;
-> > +
-> > +	/* Resume */
-> > +	temp =3D pm_runtime_get_sync(i2c_imx->adapter.dev.parent);
-> > +	if (temp < 0) {
-> > +		dev_err(&i2c_imx->adapter.dev, "failed to resume i2c
-> > controller");
-> > +		return temp;
-> > +	}
-> > +
-> > +	/* Set slave addr. */
-> > +	imx_i2c_write_reg((i2c_imx->slave->addr << 1), i2c_imx,
-> > IMX_I2C_IADR);
-> > +
-> > +	i2c_imx_reset_regs(i2c_imx);
-> > +
-> > +	/* Enable module */
-> > +	temp =3D i2c_imx->hwdata->i2cr_ien_opcode;
-> > +	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> > +
-> > +	/* Enable interrupt from i2c module */
-> > +	temp |=3D I2CR_IIEN;
-> > +	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> > +
-> > +	/* Wait controller to be stable */
-> > +	usleep_range(50, 150);
-> > +	return 0;
-> > +}
-> > +
-> > +static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx) {
-> > +	unsigned int status, ctl;
-> > +	u8 value;
-> > +
-> > +	if (!i2c_imx->slave) {
-> > +		dev_err(&i2c_imx->adapter.dev, "cannot deal with slave
-> > irq,i2c_imx->slave is null");
-> > +		return IRQ_NONE;
-> > +	}
-> > +
-> > +	status =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
-> > +	ctl =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
-> > +	if (status & I2SR_IAL) { /* Arbitration lost */
-> > +		i2c_imx_clr_al_bit(status, i2c_imx);
-> > +	} else if (status & I2SR_IAAS) { /* Addressed as a slave */
-> > +		if (status & I2SR_SRW) { /* Master wants to read from us*/
-> > +			dev_dbg(&i2c_imx->adapter.dev, "read requested");
-> > +			i2c_slave_event(i2c_imx->slave,
-> > I2C_SLAVE_READ_REQUESTED, &value);
-> > +
-> > +			/* Slave transmit */
-> > +			ctl |=3D I2CR_MTX;
-> > +			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
-> > +
-> > +			/* Send data */
-> > +			imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
-> > +		} else { /* Master wants to write to us */
-> > +			dev_dbg(&i2c_imx->adapter.dev, "write requested");
-> > +			i2c_slave_event(i2c_imx->slave,
-> > 	I2C_SLAVE_WRITE_REQUESTED, &value);
-> > +
-> > +			/* Slave receive */
-> > +			ctl &=3D ~I2CR_MTX;
-> > +			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
-> > +			/* Dummy read */
-> > +			imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
-> > +		}
-> > +	} else if (!(ctl & I2CR_MTX)) { /* Receive mode */
-> > +			if (status & I2SR_IBB) { /* No STOP signal detected */
-> > +				ctl &=3D ~I2CR_MTX;
-> > +				imx_i2c_write_reg(ctl, i2c_imx,
-> > IMX_I2C_I2CR);
-> > +
-> > +				value =3D imx_i2c_read_reg(i2c_imx,
-> > IMX_I2C_I2DR);
-> > +				i2c_slave_event(i2c_imx->slave,
-> > 	I2C_SLAVE_WRITE_RECEIVED, &value);
-> > +			} else { /* STOP signal is detected */
-> > +				dev_dbg(&i2c_imx->adapter.dev,
-> > +					"STOP signal detected");
-> > +				i2c_slave_event(i2c_imx->slave,
-> > I2C_SLAVE_STOP, &value);
-> > +			}
-> > +	} else if (!(status & I2SR_RXAK)) {	/* Transmit mode received
-> > ACK */
-> > +		ctl |=3D I2CR_MTX;
-> > +		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
-> > +
-> > +		i2c_slave_event(i2c_imx->slave,
-> > 	I2C_SLAVE_READ_PROCESSED, &value);
-> > +
-> > +		imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
-> > +	} else { /* Transmit mode received NAK */
-> > +		ctl &=3D ~I2CR_MTX;
-> > +		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
-> > +		imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
-> > +	}
-> > +	return IRQ_HANDLED;
-> > +}
-> > +
-> > +static int i2c_imx_reg_slave(struct i2c_client *client) {
-> > +	struct imx_i2c_struct *i2c_imx =3D i2c_get_adapdata(client->adapter);
-> > +	int ret;
-> > +	if (i2c_imx->slave)
-> > +		return -EBUSY;
-> > +
-> > +	i2c_imx->slave =3D client;
-> > +
-> > +	ret =3D i2c_imx_slave_init(i2c_imx);
-> > +	if (ret < 0)
-> > +		dev_err(&i2c_imx->adapter.dev, "failed to switch to slave
-> > mode");
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int i2c_imx_unreg_slave(struct i2c_client *client) {
-> > +	struct imx_i2c_struct *i2c_imx =3D i2c_get_adapdata(client->adapter);
-> > +	int ret;
-> > +
-> > +	if (!i2c_imx->slave)
-> > +		return -EINVAL;
-> > +
-> > +	/* Reset slave address. */
-> > +	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
-> > +
-> > +	i2c_imx_reset_regs(i2c_imx);
-> > +
-> > +	i2c_imx->slave =3D NULL;
-> > +
-> > +	/* Suspend */
-> > +	ret =3D pm_runtime_put_sync(i2c_imx->adapter.dev.parent);
-> > +	if (ret < 0)
-> > +		dev_err(&i2c_imx->adapter.dev, "failed to suspend i2c
-> > controller");
-> > +
-> > +	return ret;
-> > +}
-> > +#endif
-> > +
-> >  static const struct i2c_algorithm i2c_imx_algo =3D {
-> >  	.master_xfer	=3D i2c_imx_xfer,
-> >  	.functionality	=3D i2c_imx_func,
-> > +#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> > +	.reg_slave	=3D i2c_imx_reg_slave,
-> > +	.unreg_slave	=3D i2c_imx_unreg_slave,
-> > +#endif
-> >  };
-> >
-> > +static irqreturn_t i2c_imx_isr(int irq, void *dev_id) {
-> > +	struct imx_i2c_struct *i2c_imx =3D dev_id;
-> > +	unsigned int status;
-> > +
-> > +	status =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
-> > +
-> > +	if (status & I2SR_IIF) {
-> > +		i2c_imx_clr_if_bit(status, i2c_imx); #if
-> > +IS_ENABLED(CONFIG_I2C_SLAVE)
-> > +		if (i2c_imx->slave)
-> > +			return i2c_imx_slave_isr(i2c_imx); #endif
-> > +		return i2c_imx_master_isr(i2c_imx);
-> > +	}
-> > +
-> > +	return IRQ_NONE;
-> > +}
-> > +
-> >  static int i2c_imx_probe(struct platform_device *pdev)  {
-> >  	struct imx_i2c_struct *i2c_imx;
-> > @@ -1148,10 +1331,7 @@ static int i2c_imx_probe(struct platform_device
-> > *pdev)
-> >  	clk_notifier_register(i2c_imx->clk, &i2c_imx->clk_change_nb);
-> >  	i2c_imx_set_clk(i2c_imx, clk_get_rate(i2c_imx->clk));
-> >
-> > -	/* Set up chip registers to defaults */
-> > -	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN,
-> > -			i2c_imx, IMX_I2C_I2CR);
-> > -	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx,
-> > IMX_I2C_I2SR);
-> > +	i2c_imx_reset_regs(i2c_imx);
-> >
-> >  	/* Init optional bus recovery function */
-> >  	ret =3D i2c_imx_init_recovery_info(i2c_imx, pdev);
-> > --
-> > 2.17.1
+syzbot found the following crash on:
 
+HEAD commit:    32b5e2b2 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=117c767ee00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d88612251f7691bd
+dashboard link: https://syzkaller.appspot.com/bug?extid=136e62496b7564bb81cf
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14d808a6e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1652d82ae00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+136e62496b7564bb81cf@syzkaller.appspotmail.com
+
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+============================================
+WARNING: possible recursive locking detected
+5.4.0-syzkaller #0 Not tainted
+--------------------------------------------
+kworker/1:1/78 is trying to acquire lock:
+ffff8881c5c58208 (i2c_register_adapter){+.+.}, at: i2c_lock_bus  
+include/linux/i2c.h:755 [inline]
+ffff8881c5c58208 (i2c_register_adapter){+.+.}, at: __i2c_lock_bus_helper  
+drivers/i2c/i2c-core.h:44 [inline]
+ffff8881c5c58208 (i2c_register_adapter){+.+.}, at: i2c_transfer+0x1d3/0x3b0  
+drivers/i2c/i2c-core-base.c:2041
+
+but task is already holding lock:
+ffff8881d51925c0 (i2c_register_adapter){+.+.}, at: i2c_lock_bus  
+include/linux/i2c.h:755 [inline]
+ffff8881d51925c0 (i2c_register_adapter){+.+.}, at: __i2c_lock_bus_helper  
+drivers/i2c/i2c-core.h:44 [inline]
+ffff8881d51925c0 (i2c_register_adapter){+.+.}, at: i2c_transfer+0x1d3/0x3b0  
+drivers/i2c/i2c-core-base.c:2041
+
+other info that might help us debug this:
+  Possible unsafe locking scenario:
+
+        CPU0
+        ----
+   lock(i2c_register_adapter);
+   lock(i2c_register_adapter);
+
+  *** DEADLOCK ***
+
+  May be due to missing lock nesting notation
+
+7 locks held by kworker/1:1/78:
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at:  
+__write_once_size include/linux/compiler.h:226 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at:  
+arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at: atomic64_set  
+include/asm-generic/atomic-instrumented.h:855 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at:  
+atomic_long_set include/asm-generic/atomic-long.h:40 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at: set_work_data  
+kernel/workqueue.c:615 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at:  
+set_work_pool_and_clear_pending kernel/workqueue.c:642 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at:  
+process_one_work+0x827/0x1530 kernel/workqueue.c:2235
+  #1: ffff8881d8ec7dd0 ((work_completion)(&hub->events)){+.+.}, at:  
+process_one_work+0x85b/0x1530 kernel/workqueue.c:2239
+  #2: ffff8881d51c7200 (&dev->mutex){....}, at: device_lock  
+include/linux/device.h:1493 [inline]
+  #2: ffff8881d51c7200 (&dev->mutex){....}, at: hub_event+0x1b2/0x3860  
+drivers/usb/core/hub.c:5498
+  #3: ffff8881cf9eb200 (&dev->mutex){....}, at: device_lock  
+include/linux/device.h:1493 [inline]
+  #3: ffff8881cf9eb200 (&dev->mutex){....}, at: __device_attach+0x7b/0x360  
+drivers/base/dd.c:871
+  #4: ffff8881cf9ec190 (&dev->mutex){....}, at: device_lock  
+include/linux/device.h:1493 [inline]
+  #4: ffff8881cf9ec190 (&dev->mutex){....}, at: __device_attach+0x7b/0x360  
+drivers/base/dd.c:871
+  #5: ffff8881d5123180 (&dev->mutex){....}, at: device_lock  
+include/linux/device.h:1493 [inline]
+  #5: ffff8881d5123180 (&dev->mutex){....}, at: __device_attach+0x7b/0x360  
+drivers/base/dd.c:871
+  #6: ffff8881d51925c0 (i2c_register_adapter){+.+.}, at: i2c_lock_bus  
+include/linux/i2c.h:755 [inline]
+  #6: ffff8881d51925c0 (i2c_register_adapter){+.+.}, at:  
+__i2c_lock_bus_helper drivers/i2c/i2c-core.h:44 [inline]
+  #6: ffff8881d51925c0 (i2c_register_adapter){+.+.}, at:  
+i2c_transfer+0x1d3/0x3b0 drivers/i2c/i2c-core-base.c:2041
+
+stack backtrace:
+CPU: 1 PID: 78 Comm: kworker/1:1 Not tainted 5.4.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xef/0x16e lib/dump_stack.c:118
+  print_deadlock_bug kernel/locking/lockdep.c:2371 [inline]
+  check_deadlock kernel/locking/lockdep.c:2412 [inline]
+  validate_chain kernel/locking/lockdep.c:2955 [inline]
+  __lock_acquire.cold+0x114/0x288 kernel/locking/lockdep.c:3955
+  lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4485
+  __rt_mutex_lock kernel/locking/rtmutex.c:1471 [inline]
+  rt_mutex_lock_nested+0x3e/0x60 kernel/locking/rtmutex.c:1484
+  i2c_lock_bus include/linux/i2c.h:755 [inline]
+  __i2c_lock_bus_helper drivers/i2c/i2c-core.h:44 [inline]
+  i2c_transfer+0x1d3/0x3b0 drivers/i2c/i2c-core-base.c:2041
+  tc90522_master_xfer.part.0+0x65c/0xbf0  
+drivers/media/dvb-frontends/tc90522.c:708
+  tc90522_master_xfer+0x35/0x4e drivers/media/dvb-frontends/tc90522.c:643
+  __i2c_transfer drivers/i2c/i2c-core-base.c:1984 [inline]
+  __i2c_transfer+0x49d/0x1620 drivers/i2c/i2c-core-base.c:1949
+  i2c_transfer drivers/i2c/i2c-core-base.c:2045 [inline]
+  i2c_transfer+0x1e6/0x3b0 drivers/i2c/i2c-core-base.c:2016
+  dvb_pll_attach+0x228/0x850 drivers/media/dvb-frontends/dvb-pll.c:816
+  dvb_pll_probe+0xfe/0x174 drivers/media/dvb-frontends/dvb-pll.c:884
+  i2c_device_probe+0x74e/0xa40 drivers/i2c/i2c-core-base.c:389
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x1480/0x1c20 drivers/base/core.c:2487
+  i2c_new_client_device+0x57f/0x9b0 drivers/i2c/i2c-core-base.c:777
+  i2c_new_device+0x19/0x50 drivers/i2c/i2c-core-base.c:820
+  dvb_module_probe+0xf9/0x220 drivers/media/dvb-core/dvbdev.c:986
+  friio_tuner_attach+0x12b/0x1d0 drivers/media/usb/dvb-usb-v2/gl861.c:457
+  dvb_usbv2_adapter_frontend_init  
+drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:676 [inline]
+  dvb_usbv2_adapter_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:805  
+[inline]
+  dvb_usbv2_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:866 [inline]
+  dvb_usbv2_probe.cold+0x2550/0x25d7  
+drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:981
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x1480/0x1c20 drivers/base/core.c:2487
+  usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x1480/0x1c20 drivers/base/core.c:2487
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
+  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+  port_event drivers/usb/core/hub.c:5470 [inline]
+  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 2
+usb 1-1: new high-speed USB device number 3 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 3
+usb 1-1: new high-speed USB device number 4 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 4
+usb 1-1: new high-speed USB device number 5 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 5
+usb 1-1: new high-speed USB device number 6 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 6
+usb 1-1: new high-speed USB device number 7 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 7
+usb 1-1: new high-speed USB device number 8 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 8
+usb 1-1: new high-speed USB device number 9 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 9
+usb 1-1: new high-speed USB device number 10 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 10
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
