@@ -2,160 +2,331 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 220E810E752
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Dec 2019 10:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E14610E804
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Dec 2019 10:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726115AbfLBJBU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 Dec 2019 04:01:20 -0500
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:60529 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726087AbfLBJBT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Dec 2019 04:01:19 -0500
-Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
-  Eugen.Hristev@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
-  envelope-from="Eugen.Hristev@microchip.com";
-  x-sender="Eugen.Hristev@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa6.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
-  envelope-from="Eugen.Hristev@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa6.microchip.iphmx.com; spf=Pass smtp.mailfrom=Eugen.Hristev@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: +g/1ZStFkDyxlWwCsRVIP6xBWOwoH+2WC1A/DtFhqVxKOEFMEHCOBR/RTbewKj8TeaSr65WSVA
- BsJ3a/DL2wvkIPiDePxvG3HmT9yoHuexzNDvh83EG7U0RTNwnBGARDoLRBF4Y4QtQRbhtOQPK5
- e297WYRROjnYX9NbO8fytggl2CDP+V28mrpm9oLk7HXbqCOd2EmNxTMBPJ0y6v/YL0ptBlRGez
- Iq+27QV7nm7gdtevnCGovht3i+g2P9IA8Td6LKHo2AnYJw5471pws3TmVLqm15JUU66ClstO+n
- 9Vg=
-X-IronPort-AV: E=Sophos;i="5.69,268,1571727600"; 
-   d="scan'208";a="56244110"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Dec 2019 02:01:19 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 2 Dec 2019 02:01:18 -0700
-Received: from NAM02-BL2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Mon, 2 Dec 2019 02:01:18 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R3bbcsimqSWojY5kMuhoCsKrIanu8/0XcqE2o8DYI02Y326WdRXhTt2ppr2rsFI7sutl/a2QIjHOIM87gepoTxkDzHsMD5rnSVrjjJm4hQ4q9S7AVSF1lWAMchrXCcDQvmeBujaK1pJaacrHRY1OmzhPtHNjYHXXyVKn/2JGRTORUESLEuNAySgArci6X4NxhGQ5ZBCOGmieLIg3E1sDemcvqItrZdBU0qX86rFIDLkMmu+49gYIzUJk7qLSZcXDyQDyf2uhUV636zvNyaKkM5huRZiRJ8WH9/mw/NeDu5Ki8Ijx5w86kLcQ+N3oFdHwULHNwy2dGOGsoaxR06O1Sg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qkw4z/3vCUlvnrz3f1OxecHB+Swzihx9E8604zMW8SE=;
- b=H9bRl6qOH4a3xRmDXhiuMn7wESgupV9S6smAY+jnC5mOJlXOlUvdWMehcAyfA1U5l4RW5shC95BTsMLgZc/UulLrMptgjE8bZyZM78B7768FRWbSTs8JxSlnKmhzqMH69oQPbuoc7LyV34a3vDn+NM4kXd8IN2YD8zHX7GnF0ytRoFdCP3YpVV98dCL2LDitGX6SUjOlAxsXclXPM09WIqJCJuSng5PVHFpzNU1ZfW747Q76QgTJZuekwbwtd+a5dVitfpdPRTIfJXT517Z3X+J69iJ7MlhqOyzV64IOyn1w8hMjopvcG+Qmmq4gtMf0GXb3WOZb6Zrmt1XjaYgzwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qkw4z/3vCUlvnrz3f1OxecHB+Swzihx9E8604zMW8SE=;
- b=dsMnb2v2Pq1559rWFV9OOCcsl5jUgPaYCyZnD2mj6EgLqMmWHZwV/jm0eNIOGGsxsY0JqAQwwxzYAqfrhZkgkATCfxUkvTxyc0MXUEnnY+g/p8ta8m3G8nhe34RoWQTdCbeLVrdX/wftZYn5pVhHA9OjPgBS5FLHvUNuxspUaXw=
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
- DM5PR11MB1482.namprd11.prod.outlook.com (10.172.34.13) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2495.22; Mon, 2 Dec 2019 09:01:17 +0000
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::9039:e0e8:9032:20c1]) by DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::9039:e0e8:9032:20c1%12]) with mapi id 15.20.2495.014; Mon, 2 Dec 2019
- 09:01:17 +0000
-From:   <Eugen.Hristev@microchip.com>
-To:     <robh+dt@kernel.org>, <Ludovic.Desroches@microchip.com>,
-        <wsa@the-dreams.de>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <peda@axentia.se>
-CC:     <Codrin.Ciubotariu@microchip.com>, <Nicolas.Ferre@microchip.com>,
-        <Eugen.Hristev@microchip.com>
-Subject: [PATCH v2 2/3] i2c: at91: fix clk_offset for sam9x60
-Thread-Topic: [PATCH v2 2/3] i2c: at91: fix clk_offset for sam9x60
-Thread-Index: AQHVqO8OzLdBo17vRkajx8p6uElnnA==
-Date:   Mon, 2 Dec 2019 09:01:17 +0000
-Message-ID: <1575277244-6507-1-git-send-email-eugen.hristev@microchip.com>
-References: <1575276957-5615-2-git-send-email-eugen.hristev@microchip.com>
-In-Reply-To: <1575276957-5615-2-git-send-email-eugen.hristev@microchip.com>
-Accept-Language: en-US, ro-RO
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: AM0PR02CA0090.eurprd02.prod.outlook.com
- (2603:10a6:208:154::31) To DM5PR11MB1242.namprd11.prod.outlook.com
- (2603:10b6:3:14::8)
-x-mailer: git-send-email 2.7.4
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [94.177.32.156]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 26e7d654-16aa-4005-7ab3-08d7770630ba
-x-ms-traffictypediagnostic: DM5PR11MB1482:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM5PR11MB14821155256C037242DAF31BE8430@DM5PR11MB1482.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-forefront-prvs: 0239D46DB6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(39860400002)(136003)(346002)(396003)(376002)(199004)(189003)(14454004)(305945005)(2906002)(6512007)(4326008)(54906003)(110136005)(4744005)(316002)(71190400001)(71200400001)(76176011)(5660300002)(6436002)(6486002)(2501003)(256004)(2201001)(36756003)(11346002)(386003)(6506007)(446003)(102836004)(52116002)(2616005)(186003)(26005)(7736002)(86362001)(81156014)(50226002)(8676002)(8936002)(107886003)(14444005)(25786009)(6116002)(81166006)(66556008)(66476007)(66446008)(64756008)(66946007)(99286004)(66066001)(478600001)(3846002)(138113003);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1482;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rYonHbOcABI4FcPucQINXhW7TWhmPM0A7/KkpiYLF0RxDAHV64Emr/LHNM1EECq/ncNLHU7YxvjCn8UyO5blNhTFdppRWUc0XYZD/VQ8x/Ci4cgdK1Q7iKkuP1MM8kI98NUQhCrWwFRWxfDmeq+52u/X/Uq6oI1VhFG2ttWb9Ji/3SiiHYzTOSKEh9F/jYTsPqfarTVROUccaEZSo3LcxLH4rMiFJoytTdVDU4M7G6EDYy71Dezzt9Jn9yW5t9zONoH6nxdD9z0B7yT3QcdhG55UBIIc+rHKKtOJkXr8ZcrOy9MrnrVA4OjhikZQYyWr2kKvihlS6zLN49osRhu27n0RlH6XsNR6isZauiuqEO4YSTgZUFN6fFzFERQltusZeM+nL5pg/ZD+EGS8PWrgPdfUE3FOY7BZmha+RicL9QqJT2koZCuIyzjz2afThpNB
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1727388AbfLBJzP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 2 Dec 2019 04:55:15 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:39705 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726115AbfLBJzN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Dec 2019 04:55:13 -0500
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1ibiQ9-00037w-Qs; Mon, 02 Dec 2019 10:55:09 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <sha@pengutronix.de>)
+        id 1ibiQ9-0002FL-5L; Mon, 02 Dec 2019 10:55:09 +0100
+Date:   Mon, 2 Dec 2019 10:55:09 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Biwen Li <biwen.li@nxp.com>
+Cc:     shawnguo@kernel.org, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, wsa@the-dreams.de, leoyang.li@nxp.com,
+        aisheng.dong@nxp.com, xiaoning.wang@nxp.com,
+        o.rempel@pengutronix.de, xiaobo.xie@nxp.com,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jiafei.pan@nxp.com, linux-arm-kernel@lists.infradead.org,
+        laurentiu.tudor@nxp.com
+Subject: Re: [v5] i2c: imx: support slave mode for imx I2C driver
+Message-ID: <20191202095509.ynxq2dyri36i2fwk@pengutronix.de>
+References: <20191129090513.2150-1-biwen.li@nxp.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26e7d654-16aa-4005-7ab3-08d7770630ba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2019 09:01:17.1009
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UwKBC7i8C7pe17a/myUXqNWFsn933Q69gpPyyxHynlF9oJV06K0un5IEq2h/hjZ7cMl44pd+i/dYWVH/6888Pv7xy7IcYF++fAcJIXTBTwU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1482
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191129090513.2150-1-biwen.li@nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 10:17:41 up 147 days, 15:27, 130 users,  load average: 0.08, 0.17,
+ 0.24
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Eugen Hristev <eugen.hristev@microchip.com>
+Hi,
 
-In SAM9X60 datasheet, FLEX_TWI_CWGR register rescription mentions clock
-offset of 3 cycles (compared to 4 in eg. SAMA5D3).
-This is the same offset as in SAMA5D2.
+Some more comments inline.
 
-Fixes: b00277923743 ("i2c: at91: add new platform support for sam9x60")
-Suggested-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
----
+On Fri, Nov 29, 2019 at 05:05:13PM +0800, Biwen Li wrote:
+> The patch supports slave mode for imx I2C driver
+> 
+> Signed-off-by: Biwen Li <biwen.li@nxp.com>
+> ---
+> Change in v5:
+> 	- fix a bug that cannot determine in what mode(master mode or
+> 	  slave mode)
+> 
+> Change in v4:
+> 	- add MACRO CONFIG_I2C_SLAVE to fix compilation issue
+> 
+> Change in v3:
+> 	- support layerscape and i.mx platform
+> 
+> Change in v2:
+> 	- remove MACRO CONFIG_I2C_SLAVE
+> 
+> 
+>  drivers/i2c/busses/i2c-imx.c | 216 ++++++++++++++++++++++++++++++++---
+>  1 file changed, 198 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index a3b61336fe55..52f70de16900 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -203,6 +203,9 @@ struct imx_i2c_struct {
+>  	struct pinctrl_state *pinctrl_pins_gpio;
+>  
+>  	struct imx_i2c_dma	*dma;
+> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
+> +	struct i2c_client	*slave;
+> +#endif
+>  };
+>  
+>  static const struct imx_i2c_hwdata imx1_i2c_hwdata = {
+> @@ -279,6 +282,14 @@ static inline unsigned char imx_i2c_read_reg(struct imx_i2c_struct *i2c_imx,
+>  	return readb(i2c_imx->base + (reg << i2c_imx->hwdata->regshift));
+>  }
+>  
+> +/* Set up i2c controller register and i2c status register to default value. */
+> +static void i2c_imx_reset_regs(struct imx_i2c_struct *i2c_imx)
+> +{
+> +	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN,
+> +			i2c_imx, IMX_I2C_I2CR);
+> +	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx, IMX_I2C_I2SR);
+> +}
+> +
+>  /* Functions for DMA support */
+>  static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
+>  						dma_addr_t phy_addr)
+> @@ -588,23 +599,33 @@ static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx)
+>  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+>  }
+>  
+> -static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
+> +/* Clear interrupt flag bit */
+> +static void i2c_imx_clr_if_bit(unsigned int status, struct imx_i2c_struct *i2c_imx)
+>  {
+> -	struct imx_i2c_struct *i2c_imx = dev_id;
+> -	unsigned int temp;
+> +	status &= ~I2SR_IIF;
+> +	status |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
+> +	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR);
+> +}
+>  
+> -	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+> -	if (temp & I2SR_IIF) {
+> -		/* save status register */
+> -		i2c_imx->i2csr = temp;
+> -		temp &= ~I2SR_IIF;
+> -		temp |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
+> -		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
+> -		wake_up(&i2c_imx->queue);
+> -		return IRQ_HANDLED;
+> -	}
+> +/* Clear arbitration lost bit */
+> +static void i2c_imx_clr_al_bit(unsigned int status, struct imx_i2c_struct *i2c_imx)
+> +{
 
-Sorry, wrong subject line. Modified to SAM9X60 .
+Can you please remove some of the really obvious comments? When a
+function is named clr_al_bit, then it doesn't need a comment which says
+that this function really does this. There are more comments like this
+in the patch.
 
+> +	status &= ~I2SR_IAL;
+> +	status |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IAL);
+> +	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR);
+> +}
+>  
+> -	return IRQ_NONE;
+> +static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx)
+> +{
+> +	unsigned int status;
+> +
+> +	/* Save status register */
+> +	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+> +	i2c_imx->i2csr = status | I2SR_IIF;
 
- drivers/i2c/busses/i2c-at91-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Instead of reading the status register again you could set
+i2c_imx->i2csr in the caller.
 
-diff --git a/drivers/i2c/busses/i2c-at91-core.c b/drivers/i2c/busses/i2c-at=
-91-core.c
-index e13af48..5137e62 100644
---- a/drivers/i2c/busses/i2c-at91-core.c
-+++ b/drivers/i2c/busses/i2c-at91-core.c
-@@ -174,7 +174,7 @@ static struct at91_twi_pdata sama5d2_config =3D {
-=20
- static struct at91_twi_pdata sam9x60_config =3D {
- 	.clk_max_div =3D 7,
--	.clk_offset =3D 4,
-+	.clk_offset =3D 3,
- 	.has_unre_flag =3D true,
- 	.has_alt_cmd =3D true,
- 	.has_hold_field =3D true,
---=20
-2.7.4
+> +
+> +	wake_up(&i2c_imx->queue);
+> +
+> +	return IRQ_HANDLED;
+>  }
+>  
+>  static int i2c_imx_dma_write(struct imx_i2c_struct *i2c_imx,
+> @@ -900,6 +921,13 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
+>  
+>  	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
+>  
+> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
+> +	if (i2c_imx->slave) {
+> +		dev_err(&i2c_imx->adapter.dev, "Please not do operations of master mode in slave mode");
+> +		return -EBUSY;
+> +	}
+> +#endif
+> +
+>  	result = pm_runtime_get_sync(i2c_imx->adapter.dev.parent);
+>  	if (result < 0)
+>  		goto out;
+> @@ -1048,11 +1076,166 @@ static u32 i2c_imx_func(struct i2c_adapter *adapter)
+>  		| I2C_FUNC_SMBUS_READ_BLOCK_DATA;
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
+> +static int i2c_imx_slave_init(struct imx_i2c_struct *i2c_imx)
+> +{
+> +	int temp;
+> +
+> +	/* Resume */
+> +	temp = pm_runtime_get_sync(i2c_imx->adapter.dev.parent);
+> +	if (temp < 0) {
+> +		dev_err(&i2c_imx->adapter.dev, "failed to resume i2c controller");
+> +		return temp;
+> +	}
+> +
+> +	/* Set slave addr. */
+> +	imx_i2c_write_reg((i2c_imx->slave->addr << 1), i2c_imx, IMX_I2C_IADR);
+> +
+> +	i2c_imx_reset_regs(i2c_imx);
+> +
+> +	/* Enable module */
+> +	temp = i2c_imx->hwdata->i2cr_ien_opcode;
+> +	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+> +
+> +	/* Enable interrupt from i2c module */
+> +	temp |= I2CR_IIEN;
+> +	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
 
+Do these have to be two register accesses?
+
+> +
+> +	/* Wait controller to be stable */
+> +	usleep_range(50, 150);
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx)
+> +{
+> +	unsigned int status, ctl;
+> +	u8 value;
+> +
+> +	if (!i2c_imx->slave) {
+> +		dev_err(&i2c_imx->adapter.dev, "cannot deal with slave irq,i2c_imx->slave is null");
+> +		return IRQ_NONE;
+> +	}
+
+This function is never called with !i2c_imx->slave.
+
+> +
+> +	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+> +	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+> +	if (status & I2SR_IAL) { /* Arbitration lost */
+> +		i2c_imx_clr_al_bit(status, i2c_imx);
+> +	} else if (status & I2SR_IAAS) { /* Addressed as a slave */
+> +		if (status & I2SR_SRW) { /* Master wants to read from us*/
+> +			dev_dbg(&i2c_imx->adapter.dev, "read requested");
+> +			i2c_slave_event(i2c_imx->slave, I2C_SLAVE_READ_REQUESTED, &value);
+> +
+> +			/* Slave transmit */
+> +			ctl |= I2CR_MTX;
+> +			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +
+> +			/* Send data */
+> +			imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
+> +		} else { /* Master wants to write to us */
+> +			dev_dbg(&i2c_imx->adapter.dev, "write requested");
+> +			i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_WRITE_REQUESTED, &value);
+> +
+> +			/* Slave receive */
+> +			ctl &= ~I2CR_MTX;
+> +			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +			/* Dummy read */
+> +			imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> +		}
+> +	} else if (!(ctl & I2CR_MTX)) { /* Receive mode */
+> +			if (status & I2SR_IBB) { /* No STOP signal detected */
+> +				ctl &= ~I2CR_MTX;
+> +				imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +
+> +				value = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> +				i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_WRITE_RECEIVED, &value);
+> +			} else { /* STOP signal is detected */
+> +				dev_dbg(&i2c_imx->adapter.dev,
+> +					"STOP signal detected");
+> +				i2c_slave_event(i2c_imx->slave, I2C_SLAVE_STOP, &value);
+> +			}
+> +	} else if (!(status & I2SR_RXAK)) {	/* Transmit mode received ACK */
+> +		ctl |= I2CR_MTX;
+> +		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +
+> +		i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_READ_PROCESSED, &value);
+> +
+> +		imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
+> +	} else { /* Transmit mode received NAK */
+> +		ctl &= ~I2CR_MTX;
+> +		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +		imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> +	}
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int i2c_imx_reg_slave(struct i2c_client *client)
+> +{
+> +	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(client->adapter);
+> +	int ret;
+> +	if (i2c_imx->slave)
+> +		return -EBUSY;
+> +
+> +	i2c_imx->slave = client;
+> +
+> +	ret = i2c_imx_slave_init(i2c_imx);
+> +	if (ret < 0)
+> +		dev_err(&i2c_imx->adapter.dev, "failed to switch to slave mode");
+
+The caller already reports an error. No need to do it here again.
+
+> +
+> +	return ret;
+> +}
+> +
+> +static int i2c_imx_unreg_slave(struct i2c_client *client)
+> +{
+> +	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(client->adapter);
+> +	int ret;
+> +
+> +	if (!i2c_imx->slave)
+> +		return -EINVAL;
+> +
+> +	/* Reset slave address. */
+> +	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
+> +
+> +	i2c_imx_reset_regs(i2c_imx);
+> +
+> +	i2c_imx->slave = NULL;
+> +
+> +	/* Suspend */
+> +	ret = pm_runtime_put_sync(i2c_imx->adapter.dev.parent);
+> +	if (ret < 0)
+> +		dev_err(&i2c_imx->adapter.dev, "failed to suspend i2c controller");
+
+I doubt this message is useful.
+
+Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
