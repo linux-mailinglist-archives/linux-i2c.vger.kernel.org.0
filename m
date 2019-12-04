@@ -2,292 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61802112B7A
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2019 13:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DE4112BB6
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2019 13:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727268AbfLDM3t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 4 Dec 2019 07:29:49 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:36823 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726604AbfLDM3t (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 Dec 2019 07:29:49 -0500
-Received: from [109.168.11.45] (port=60292 helo=pc-ceresoli.dev.aim)
-        by hostingweb31.netsons.net with esmtpa (Exim 4.92)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1icTms-00DmHO-1W; Wed, 04 Dec 2019 13:29:46 +0100
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     linux-i2c@vger.kernel.org
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: remove unneeded 'extern' from function declatations
-Date:   Wed,  4 Dec 2019 13:29:36 +0100
-Message-Id: <20191204122936.20101-1-luca@lucaceresoli.net>
-X-Mailer: git-send-email 2.24.0
+        id S1727867AbfLDMnD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 4 Dec 2019 07:43:03 -0500
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:46361 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727864AbfLDMnA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 Dec 2019 07:43:00 -0500
+Received: by mail-qt1-f196.google.com with SMTP id 38so7506477qtb.13
+        for <linux-i2c@vger.kernel.org>; Wed, 04 Dec 2019 04:42:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=AkbuvF8WWOeGkFuNbpEiUPeHs0D9XYCrvYJnn3sJBPk0l/N+bAJ+lU7by52a8c0/XL
+         X5y/+uJVi5SRPzgKpD7LZp2RSO63H/dWhNB+Sgv8CnTmnW6HnNvEkrD3pvFKiHue+ji0
+         Cyct4Vs7hozR5hYKDh8cJJMkT72K9aPHj93bK1Ew++bIIM698i5hGwNXpwVN8RyOlTlg
+         ekVZP06isuUhwZwFxkLwU0Sye3HMnEDkq9yUmWZzxA1JTm8RzibEufZxYTJilauyHwzc
+         pKJFDkaXtzzvkeOyU7ajhljX9QykaA8Ur2FHYJunK1Sxosbxld4ODKAYs9j7AB06Aipc
+         jW5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=L9m4pM2mZlGLLrjjged2wpCe8n8VeVI6AP1aOQUV7loQhH6OoajhpiOrlW9rj6goQ/
+         cy1s4QIivVGPTjiTLERdk+whg1P2rHtROGbcHHgaKgJU2giwb7Hgc/eXF8igjRKl/mwj
+         lKw3QueMS296kilrxyggsrHSmH9FUZp5n9YEOr3Zxu3/HTOCgBjKn98k9Vj+XAesqG3U
+         pmTDK1Up3Q0AnZuppd6DXVvRd7cFs8TaG9Ud6ORnPN21spLpPY6hy9WpJuXpAU01c9kR
+         r31DlEXQfx0Gkp2SgdJq0L7V2f6xvodbdEGH+7dWqe33iNKl/8YT3bQ8+GhgWZiaMZkZ
+         MnWw==
+X-Gm-Message-State: APjAAAVWWraif/J4muLa8RHHUBYtiaMCAJ+PUW/R3KIKzkhkNTmSFiLO
+        y1PD2SaW8IdrzC5FtCdsIhqkvMy5lu/OIhF41f8=
+X-Google-Smtp-Source: APXvYqzw3gCG5cnmI6368TWfhjS/+LLSHd6b95oZCOsPTpsAjIN23auDStB1pQ1PTnMah1qk6gl8uYsnTPaZ7k01uH0=
+X-Received: by 2002:ac8:4a81:: with SMTP id l1mr2434940qtq.357.1575463377714;
+ Wed, 04 Dec 2019 04:42:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Received: by 2002:ac8:2f0c:0:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:42:57 -0800 (PST)
+Reply-To: moneygram.1820@outlook.fr
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
+        <westernunion.benin982@gmail.com>
+Date:   Wed, 4 Dec 2019 13:42:57 +0100
+Message-ID: <CAP=nHBJXiPmPL21x=_0BHWRk_3N3Yax+tTxcFi=t=AhN7g==1Q@mail.gmail.com>
+Subject: God has remembered your prayers I have already sent you Money Gram
+ payment of $5000.00 today, MG 1029-8096
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-According to coding-style.rst, extern should not be specified for
-exported functions.
+Attn, dear Beneficiary.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- include/linux/i2c.h | 117 +++++++++++++++++++++-----------------------
- 1 file changed, 56 insertions(+), 61 deletions(-)
+God has remembered your prayers
+I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
+This is because we have finally concluded to effect your transfer
+funds of $4.8,000.000usd
+through MONEY GRAM International Fund transfer Service
+Each payment will be sending to you by $5000.00 daily until the
+($4.8,000.000usd) is completely transferred
+we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
+So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
 
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index d2f786706657..ee5bd19e0b00 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -50,8 +50,8 @@ struct property_entry;
-  * transmit an arbitrary number of messages without interruption.
-  * @count must be be less than 64k since msg.len is u16.
-  */
--extern int i2c_transfer_buffer_flags(const struct i2c_client *client,
--				     char *buf, int count, u16 flags);
-+int i2c_transfer_buffer_flags(const struct i2c_client *client,
-+			      char *buf, int count, u16 flags);
- 
- /**
-  * i2c_master_recv - issue a single I2C message in master receive mode
-@@ -115,11 +115,9 @@ static inline int i2c_master_send_dmasafe(const struct i2c_client *client,
- 
- /* Transfer num messages.
-  */
--extern int i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
--			int num);
-+int i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num);
- /* Unlocked flavor */
--extern int __i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
--			  int num);
-+int __i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num);
- 
- /* This is the very generalized SMBus access routine. You probably do not
-    want to use this, though; one of the functions below may be much easier,
-@@ -138,16 +136,14 @@ s32 __i2c_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
- /* Now follow the 'nice' access routines. These also document the calling
-    conventions of i2c_smbus_xfer. */
- 
--extern s32 i2c_smbus_read_byte(const struct i2c_client *client);
--extern s32 i2c_smbus_write_byte(const struct i2c_client *client, u8 value);
--extern s32 i2c_smbus_read_byte_data(const struct i2c_client *client,
--				    u8 command);
--extern s32 i2c_smbus_write_byte_data(const struct i2c_client *client,
--				     u8 command, u8 value);
--extern s32 i2c_smbus_read_word_data(const struct i2c_client *client,
--				    u8 command);
--extern s32 i2c_smbus_write_word_data(const struct i2c_client *client,
--				     u8 command, u16 value);
-+s32 i2c_smbus_read_byte(const struct i2c_client *client);
-+s32 i2c_smbus_write_byte(const struct i2c_client *client, u8 value);
-+s32 i2c_smbus_read_byte_data(const struct i2c_client *client, u8 command);
-+s32 i2c_smbus_write_byte_data(const struct i2c_client *client,
-+			      u8 command, u8 value);
-+s32 i2c_smbus_read_word_data(const struct i2c_client *client, u8 command);
-+s32 i2c_smbus_write_word_data(const struct i2c_client *client,
-+			      u8 command, u16 value);
- 
- static inline s32
- i2c_smbus_read_word_swapped(const struct i2c_client *client, u8 command)
-@@ -165,19 +161,18 @@ i2c_smbus_write_word_swapped(const struct i2c_client *client,
- }
- 
- /* Returns the number of read bytes */
--extern s32 i2c_smbus_read_block_data(const struct i2c_client *client,
--				     u8 command, u8 *values);
--extern s32 i2c_smbus_write_block_data(const struct i2c_client *client,
--				      u8 command, u8 length, const u8 *values);
-+s32 i2c_smbus_read_block_data(const struct i2c_client *client,
-+			      u8 command, u8 *values);
-+s32 i2c_smbus_write_block_data(const struct i2c_client *client,
-+			       u8 command, u8 length, const u8 *values);
- /* Returns the number of read bytes */
--extern s32 i2c_smbus_read_i2c_block_data(const struct i2c_client *client,
--					 u8 command, u8 length, u8 *values);
--extern s32 i2c_smbus_write_i2c_block_data(const struct i2c_client *client,
--					  u8 command, u8 length,
--					  const u8 *values);
--extern s32
--i2c_smbus_read_i2c_block_data_or_emulated(const struct i2c_client *client,
--					  u8 command, u8 length, u8 *values);
-+s32 i2c_smbus_read_i2c_block_data(const struct i2c_client *client,
-+				  u8 command, u8 length, u8 *values);
-+s32 i2c_smbus_write_i2c_block_data(const struct i2c_client *client,
-+				   u8 command, u8 length, const u8 *values);
-+s32 i2c_smbus_read_i2c_block_data_or_emulated(const struct i2c_client *client,
-+					      u8 command, u8 length,
-+					      u8 *values);
- int i2c_get_device_id(const struct i2c_client *client,
- 		      struct i2c_device_identity *id);
- #endif /* I2C */
-@@ -336,10 +331,10 @@ struct i2c_client {
- };
- #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
- 
--extern struct i2c_client *i2c_verify_client(struct device *dev);
--extern struct i2c_adapter *i2c_verify_adapter(struct device *dev);
--extern const struct i2c_device_id *i2c_match_id(const struct i2c_device_id *id,
--					const struct i2c_client *client);
-+struct i2c_client *i2c_verify_client(struct device *dev);
-+struct i2c_adapter *i2c_verify_adapter(struct device *dev);
-+const struct i2c_device_id *i2c_match_id(const struct i2c_device_id *id,
-+					 const struct i2c_client *client);
- 
- static inline struct i2c_client *kobj_to_i2c_client(struct kobject *kobj)
- {
-@@ -368,9 +363,9 @@ enum i2c_slave_event {
- 	I2C_SLAVE_STOP,
- };
- 
--extern int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
--extern int i2c_slave_unregister(struct i2c_client *client);
--extern bool i2c_detect_slave_mode(struct device *dev);
-+int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
-+int i2c_slave_unregister(struct i2c_client *client);
-+bool i2c_detect_slave_mode(struct device *dev);
- 
- static inline int i2c_slave_event(struct i2c_client *client,
- 				  enum i2c_slave_event event, u8 *val)
-@@ -439,10 +434,10 @@ struct i2c_board_info {
-  * with integrated I2C, a config eeprom, sensors, and a codec that's
-  * used in conjunction with the primary hardware.
-  */
--extern struct i2c_client *
-+struct i2c_client *
- i2c_new_device(struct i2c_adapter *adap, struct i2c_board_info const *info);
- 
--extern struct i2c_client *
-+struct i2c_client *
- i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *info);
- 
- /* If you don't know the exact address of an I2C device, use this variant
-@@ -451,39 +446,39 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
-  * it must return 1 on successful probe, 0 otherwise. If it is not provided,
-  * a default probing method is used.
-  */
--extern struct i2c_client *
-+struct i2c_client *
- i2c_new_scanned_device(struct i2c_adapter *adap,
- 		       struct i2c_board_info *info,
- 		       unsigned short const *addr_list,
- 		       int (*probe)(struct i2c_adapter *adap, unsigned short addr));
- 
--extern struct i2c_client *
-+struct i2c_client *
- i2c_new_probed_device(struct i2c_adapter *adap,
- 		       struct i2c_board_info *info,
- 		       unsigned short const *addr_list,
- 		       int (*probe)(struct i2c_adapter *adap, unsigned short addr));
- 
- /* Common custom probe functions */
--extern int i2c_probe_func_quick_read(struct i2c_adapter *adap, unsigned short addr);
-+int i2c_probe_func_quick_read(struct i2c_adapter *adap, unsigned short addr);
- 
- /* For devices that use several addresses, use i2c_new_dummy() to make
-  * client handles for the extra addresses.
-  */
--extern struct i2c_client *
-+struct i2c_client *
- i2c_new_dummy(struct i2c_adapter *adap, u16 address);
- 
--extern struct i2c_client *
-+struct i2c_client *
- i2c_new_dummy_device(struct i2c_adapter *adapter, u16 address);
- 
--extern struct i2c_client *
-+struct i2c_client *
- devm_i2c_new_dummy_device(struct device *dev, struct i2c_adapter *adap, u16 address);
- 
--extern struct i2c_client *
-+struct i2c_client *
- i2c_new_ancillary_device(struct i2c_client *client,
--				const char *name,
--				u16 default_addr);
-+			 const char *name,
-+			 u16 default_addr);
- 
--extern void i2c_unregister_device(struct i2c_client *client);
-+void i2c_unregister_device(struct i2c_client *client);
- #endif /* I2C */
- 
- /* Mainboard arch_initcall() code should register all its I2C devices.
-@@ -491,7 +486,7 @@ extern void i2c_unregister_device(struct i2c_client *client);
-  * Modules for add-on boards must use other calls.
-  */
- #ifdef CONFIG_I2C_BOARDINFO
--extern int
-+int
- i2c_register_board_info(int busnum, struct i2c_board_info const *info,
- 			unsigned n);
- #else
-@@ -845,12 +840,12 @@ static inline void i2c_mark_adapter_resumed(struct i2c_adapter *adap)
- /* administration...
-  */
- #if IS_ENABLED(CONFIG_I2C)
--extern int i2c_add_adapter(struct i2c_adapter *adap);
--extern void i2c_del_adapter(struct i2c_adapter *adap);
--extern int i2c_add_numbered_adapter(struct i2c_adapter *adap);
-+int i2c_add_adapter(struct i2c_adapter *adap);
-+void i2c_del_adapter(struct i2c_adapter *adap);
-+int i2c_add_numbered_adapter(struct i2c_adapter *adap);
- 
--extern int i2c_register_driver(struct module *owner, struct i2c_driver *driver);
--extern void i2c_del_driver(struct i2c_driver *driver);
-+int i2c_register_driver(struct module *owner, struct i2c_driver *driver);
-+void i2c_del_driver(struct i2c_driver *driver);
- 
- /* use a define to avoid include chaining to get THIS_MODULE */
- #define i2c_add_driver(driver) \
-@@ -858,12 +853,12 @@ extern void i2c_del_driver(struct i2c_driver *driver);
- 
- /* call the i2c_client->command() of all attached clients with
-  * the given arguments */
--extern void i2c_clients_command(struct i2c_adapter *adap,
--				unsigned int cmd, void *arg);
-+void i2c_clients_command(struct i2c_adapter *adap,
-+			 unsigned int cmd, void *arg);
- 
--extern struct i2c_adapter *i2c_get_adapter(int nr);
--extern void i2c_put_adapter(struct i2c_adapter *adap);
--extern unsigned int i2c_adapter_depth(struct i2c_adapter *adapter);
-+struct i2c_adapter *i2c_get_adapter(int nr);
-+void i2c_put_adapter(struct i2c_adapter *adap);
-+unsigned int i2c_adapter_depth(struct i2c_adapter *adapter);
- 
- void i2c_parse_fw_timings(struct device *dev, struct i2c_timings *t, bool use_defaults);
- 
-@@ -935,15 +930,15 @@ int i2c_handle_smbus_host_notify(struct i2c_adapter *adap, unsigned short addr);
- 
- #if IS_ENABLED(CONFIG_OF)
- /* must call put_device() when done with returned i2c_client device */
--extern struct i2c_client *of_find_i2c_device_by_node(struct device_node *node);
-+struct i2c_client *of_find_i2c_device_by_node(struct device_node *node);
- 
- /* must call put_device() when done with returned i2c_adapter device */
--extern struct i2c_adapter *of_find_i2c_adapter_by_node(struct device_node *node);
-+struct i2c_adapter *of_find_i2c_adapter_by_node(struct device_node *node);
- 
- /* must call i2c_put_adapter() when done with returned i2c_adapter device */
- struct i2c_adapter *of_get_i2c_adapter_by_node(struct device_node *node);
- 
--extern const struct of_device_id
-+const struct of_device_id
- *i2c_of_match_device(const struct of_device_id *matches,
- 		     struct i2c_client *client);
- 
--- 
-2.24.0
+Contact person Mrs. Alan Ude
+Dir. MONEY GRAM Service,Benin
+Phone number: +229 98856728
+E-mail: moneygram.1820@outlook.fr
 
+Ask him to give you the complete mtcn, sender name, question and
+answer to enable you
+pick up the $5000.00 sent today,
+Also you are instructed to re-confirm your information's
+to Mrs.Alan Ude as listed below to avoid wrong transactions.
+
+(1Your Full name:............................................
+(2 Phone number.....................................................
+(3 Contact address:.....................................
+(4 Age:..................................................................
+(5 Country..............................................
+(6) Sex .................................................................
+(7) your occupation...........................................
+
+(8)Passport/By Attach or Drivers License Number:
+Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
+Note please: I have paid service fees for you but the only money you
+are required
+to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
+pick up your transfer today.
+
+Send it to via Money Gram
+Receiver's Name-----Alan Ude
+Country----------Benin
+Address-----------Cotonou
+Quest--------Honest
+Ans-----------Trust
+
+I done all my best for you to receive your transfer now ok.
+We need your urgent reply
+Best Regards
+Rev.Dr Emmanuel Okoye
+CEO Ecobank-benin
+
+If we did not receive it urgent from you today,
+I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
+representative.
