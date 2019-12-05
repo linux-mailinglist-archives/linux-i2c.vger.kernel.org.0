@@ -2,113 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EE51142EB
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Dec 2019 15:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D1E11433B
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Dec 2019 16:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729430AbfLEOpM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Dec 2019 09:45:12 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:46643 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729236AbfLEOpM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Dec 2019 09:45:12 -0500
-Received: from [109.168.11.45] (port=37310 helo=[192.168.101.73])
-        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1icsNR-008eai-1O; Thu, 05 Dec 2019 15:45:09 +0100
-Subject: Re: [PATCH] i2c: avoid ifdeffery in I2C drivers with optional slave
- support
-To:     Sascha Hauer <s.hauer@pengutronix.de>, linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@the-dreams.de>, Biwen Li <biwen.li@nxp.com>
-References: <20191204095348.9192-1-s.hauer@pengutronix.de>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <f1d9e12b-2636-5624-bfde-ac556817b697@lucaceresoli.net>
-Date:   Thu, 5 Dec 2019 15:45:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
-MIME-Version: 1.0
-In-Reply-To: <20191204095348.9192-1-s.hauer@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+        id S1729668AbfLEPFU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Dec 2019 10:05:20 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:36788 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729662AbfLEPFU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Dec 2019 10:05:20 -0500
+Received: by mail-pg1-f194.google.com with SMTP id k3so1091471pgc.3;
+        Thu, 05 Dec 2019 07:05:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=7bEhOG/2EY2mJWxk7Xm4exoHqU8RZOoMa2hQWDN+lQs=;
+        b=YEoeSk2gVSG/NiA/aEiud3jjEBRH9fNXqvKHwhE3o0+B/gB1bpLc8awHMs0LHasyzV
+         2dt5ezXj/UaNrrYwuibkCaR3pFEAxM8C3LHvp24K3dAD+D86ll7lMoR/vCXXFfjCGTo/
+         jpb/DnGj/jPERjFVLAUQ/RFWWYMlCEAlV6LstWQa1oHD88oXEFUCaDaCWT5wSqvovAeG
+         VoKoax+EarF1tRo1fqTPjeWN1w29CPVFVcp6Mq8/GH5rP+71HyWfwNdHJpjHTuvKOlHG
+         SI5HR/1XMha3hwQKldS5Y/xSSMzB+l/MwjiC5IXRvSugB/D6yPbkMJ6XQOAw961Fe1DX
+         ZC6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=7bEhOG/2EY2mJWxk7Xm4exoHqU8RZOoMa2hQWDN+lQs=;
+        b=s812pXeWQHsVkf0Ln1hiDJ4vTmdNvmd/emISPhtl5RxDi40sjt1P6GfgwvjjBbDetA
+         Rg4Z36cdVbi9zybD2ctf1tdGgW4LZJ26V0FsxLN4c+vJR9UOvYT/0EASM3XvmOYthCmE
+         zHTcNS8syUAT0zcp6lbPXRWuUPSw3KkczrWGrHhlSUYyloxmRZnQ+3+PddrVydmKYGt2
+         pYLnfQsWLKzFjiou8XYA/U9cCuGrAXlheU5B3DyFirpGD4tInp2bKbjYFaYmiWltX+0G
+         VlEcs28bYqbDrJU5MaF9Ugy1GKHkY8pxAaJ22dxa8ykn8HMmhQUT/isNezvzzDtitDAV
+         seAg==
+X-Gm-Message-State: APjAAAVpnlG74PqWeJGPUR9VT5b92o/crclCj0/2UuD+jE5ih/yPkdOI
+        ryRy6zotAik/phgjvUfUehI=
+X-Google-Smtp-Source: APXvYqzPBGy7vhlj1xp/CVXQM1TZerI1zsHPjK8tLeZzMnMnoG+pNDijOrqVGATYnVMv04y9SdNdUw==
+X-Received: by 2002:a63:1a11:: with SMTP id a17mr9692495pga.126.1575558319634;
+        Thu, 05 Dec 2019 07:05:19 -0800 (PST)
+Received: from localhost.localdomain ([211.243.117.64])
+        by smtp.gmail.com with ESMTPSA id h128sm13606742pfe.172.2019.12.05.07.05.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2019 07:05:19 -0800 (PST)
+From:   Hyunki Koo <hyunki00.koo@gmail.com>
+To:     wsa@the-dreams.de
+Cc:     Hyunki Koo <hyunki00.koo@samsung.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Max Staudt <max@enpas.org>,
+        Juergen Fitschen <jfi@ssv-embedded.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Elie Morisse <syniurge@gmail.com>, Stefan Roese <sr@denx.de>,
+        Baolin Wang <baolin.wang@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ANDROID: i2c: exynos5: remove default enable in Kconfig
+Date:   Fri,  6 Dec 2019 00:04:58 +0900
+Message-Id: <20191205150500.21762-1-hyunki00.koo@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Sascha,
+From: Hyunki Koo <hyunki00.koo@samsung.com>
 
-On 04/12/19 10:53, Sascha Hauer wrote:
-> Always add the (un)reg_slave hooks to struct i2c_algorithm, even when
-> I2C slave support is disabled. With the cost of some binary space I2C
-> drivers with optional I2C slave support no longer have to #ifdef
-> the hooks. For the same reason add a stub for i2c_slave_event and make
-> enum i2c_slave_event present without I2C slave support.
-> 
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+There are many exynos device and not all exynos device does not have
+HSI2C controllers. Thus remove select this by default
 
-I like the idea, but I have a question below.
+Signed-off-by: Hyunki Koo <hyunki00.koo@samsung.com>
+---
+ drivers/i2c/busses/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-> ---
->  include/linux/i2c.h | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index d2f786706657..74ebfcb43dd2 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -359,7 +359,6 @@ static inline void i2c_set_clientdata(struct i2c_client *dev, void *data)
->  
->  /* I2C slave support */
->  
-> -#if IS_ENABLED(CONFIG_I2C_SLAVE)
->  enum i2c_slave_event {
->  	I2C_SLAVE_READ_REQUESTED,
->  	I2C_SLAVE_WRITE_REQUESTED,
-> @@ -368,6 +367,7 @@ enum i2c_slave_event {
->  	I2C_SLAVE_STOP,
->  };
->  
-> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
->  extern int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
->  extern int i2c_slave_unregister(struct i2c_client *client);
->  extern bool i2c_detect_slave_mode(struct device *dev);
-> @@ -379,6 +379,11 @@ static inline int i2c_slave_event(struct i2c_client *client,
->  }
->  #else
->  static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
-> +static inline int i2c_slave_event(struct i2c_client *client,
-> +				  enum i2c_slave_event event, u8 *val)
-> +{
-> +	return -EINVAL;
-> +}
->  #endif
->  
->  /**
-> @@ -553,10 +558,8 @@ struct i2c_algorithm {
->  	/* To determine what the adapter supports */
->  	u32 (*functionality)(struct i2c_adapter *adap);
->  
-> -#if IS_ENABLED(CONFIG_I2C_SLAVE)
->  	int (*reg_slave)(struct i2c_client *client);
->  	int (*unreg_slave)(struct i2c_client *client);
-> -#endif
-
-Assuming I2C slave users are a minority, would it make sense to move the
-two slave-related function pointers to a new 'struct i2c_slave_ops' and
-store a 'struct i2c_slave_ops*' here? This would to set a limit to the
-size increase for the majority of users.
-
-Thanks,
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 6a0aa76859f3..3955315f48c7 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -612,7 +612,6 @@ config I2C_EMEV2
+ config I2C_EXYNOS5
+ 	tristate "Exynos5 high-speed I2C driver"
+ 	depends on ARCH_EXYNOS && OF
+-	default y
+ 	help
+ 	  High-speed I2C controller on Exynos5 based Samsung SoCs.
+ 
 -- 
-Luca
+2.17.1
+
