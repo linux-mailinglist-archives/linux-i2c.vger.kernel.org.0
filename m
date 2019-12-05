@@ -2,91 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D1E11433B
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Dec 2019 16:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1027B11438D
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Dec 2019 16:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729668AbfLEPFU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Dec 2019 10:05:20 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36788 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729662AbfLEPFU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Dec 2019 10:05:20 -0500
-Received: by mail-pg1-f194.google.com with SMTP id k3so1091471pgc.3;
-        Thu, 05 Dec 2019 07:05:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=7bEhOG/2EY2mJWxk7Xm4exoHqU8RZOoMa2hQWDN+lQs=;
-        b=YEoeSk2gVSG/NiA/aEiud3jjEBRH9fNXqvKHwhE3o0+B/gB1bpLc8awHMs0LHasyzV
-         2dt5ezXj/UaNrrYwuibkCaR3pFEAxM8C3LHvp24K3dAD+D86ll7lMoR/vCXXFfjCGTo/
-         jpb/DnGj/jPERjFVLAUQ/RFWWYMlCEAlV6LstWQa1oHD88oXEFUCaDaCWT5wSqvovAeG
-         VoKoax+EarF1tRo1fqTPjeWN1w29CPVFVcp6Mq8/GH5rP+71HyWfwNdHJpjHTuvKOlHG
-         SI5HR/1XMha3hwQKldS5Y/xSSMzB+l/MwjiC5IXRvSugB/D6yPbkMJ6XQOAw961Fe1DX
-         ZC6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=7bEhOG/2EY2mJWxk7Xm4exoHqU8RZOoMa2hQWDN+lQs=;
-        b=s812pXeWQHsVkf0Ln1hiDJ4vTmdNvmd/emISPhtl5RxDi40sjt1P6GfgwvjjBbDetA
-         Rg4Z36cdVbi9zybD2ctf1tdGgW4LZJ26V0FsxLN4c+vJR9UOvYT/0EASM3XvmOYthCmE
-         zHTcNS8syUAT0zcp6lbPXRWuUPSw3KkczrWGrHhlSUYyloxmRZnQ+3+PddrVydmKYGt2
-         pYLnfQsWLKzFjiou8XYA/U9cCuGrAXlheU5B3DyFirpGD4tInp2bKbjYFaYmiWltX+0G
-         VlEcs28bYqbDrJU5MaF9Ugy1GKHkY8pxAaJ22dxa8ykn8HMmhQUT/isNezvzzDtitDAV
-         seAg==
-X-Gm-Message-State: APjAAAVpnlG74PqWeJGPUR9VT5b92o/crclCj0/2UuD+jE5ih/yPkdOI
-        ryRy6zotAik/phgjvUfUehI=
-X-Google-Smtp-Source: APXvYqzPBGy7vhlj1xp/CVXQM1TZerI1zsHPjK8tLeZzMnMnoG+pNDijOrqVGATYnVMv04y9SdNdUw==
-X-Received: by 2002:a63:1a11:: with SMTP id a17mr9692495pga.126.1575558319634;
-        Thu, 05 Dec 2019 07:05:19 -0800 (PST)
-Received: from localhost.localdomain ([211.243.117.64])
-        by smtp.gmail.com with ESMTPSA id h128sm13606742pfe.172.2019.12.05.07.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2019 07:05:19 -0800 (PST)
-From:   Hyunki Koo <hyunki00.koo@gmail.com>
-To:     wsa@the-dreams.de
-Cc:     Hyunki Koo <hyunki00.koo@samsung.com>,
+        id S1729187AbfLEP33 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Dec 2019 10:29:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59294 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726028AbfLEP33 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 5 Dec 2019 10:29:29 -0500
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4286624653;
+        Thu,  5 Dec 2019 15:29:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1575559768;
+        bh=NMm0/3XxuzYATSrBmkGz2JzVxQjnOlc5/5CPMSabyOE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LcDzJEL4CKtdqpWOmTmqLWocNjuQ+85SZvwibD0RVzpXYsft26NOCaHlHBuddGuj6
+         NdU/VnuqqgGK+g2CzuIkyn8FhOJngQA9QEYSiRxF8K7Vyh21I1dHw/1+ha9Yb+oDgJ
+         DHJ2pAb6+nEVYMMvh0sovbXOKkseGpmKEBOaPB2U=
+Received: by mail-lj1-f178.google.com with SMTP id e28so4032509ljo.9;
+        Thu, 05 Dec 2019 07:29:28 -0800 (PST)
+X-Gm-Message-State: APjAAAXTTXkN3aV4j6iPpdx1T4WMFe/vuJh0xAm8WHZo6DcWZW6LyFWQ
+        LM+aOb1E1q6eB+przUUG8Gwz/ZiaYVr8cP9XvVo=
+X-Google-Smtp-Source: APXvYqy3vunKQdsEkMwS0MLF+dMbKsGSvNEtu7hlvqcw9Q9bM3/Wn6K7JcsMr8ryLkDM0QohCmuXR8Qi8xqF7voNyCs=
+X-Received: by 2002:a2e:9d9a:: with SMTP id c26mr5974608ljj.225.1575559766374;
+ Thu, 05 Dec 2019 07:29:26 -0800 (PST)
+MIME-Version: 1.0
+References: <20191205150500.21762-1-hyunki00.koo@gmail.com>
+In-Reply-To: <20191205150500.21762-1-hyunki00.koo@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Thu, 5 Dec 2019 16:29:15 +0100
+X-Gmail-Original-Message-ID: <CAJKOXPemBE2AHW4aju+SzvHA-rRCNwYhpHpG8ThsY_W2v1tzoA@mail.gmail.com>
+Message-ID: <CAJKOXPemBE2AHW4aju+SzvHA-rRCNwYhpHpG8ThsY_W2v1tzoA@mail.gmail.com>
+Subject: Re: [PATCH] ANDROID: i2c: exynos5: remove default enable in Kconfig
+To:     Hyunki Koo <hyunki00.koo@gmail.com>
+Cc:     wsa@the-dreams.de, Hyunki Koo <hyunki00.koo@samsung.com>,
         Jean Delvare <jdelvare@suse.de>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Max Staudt <max@enpas.org>,
         Juergen Fitschen <jfi@ssv-embedded.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
         Elie Morisse <syniurge@gmail.com>, Stefan Roese <sr@denx.de>,
         Baolin Wang <baolin.wang@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ANDROID: i2c: exynos5: remove default enable in Kconfig
-Date:   Fri,  6 Dec 2019 00:04:58 +0900
-Message-Id: <20191205150500.21762-1-hyunki00.koo@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        linux-i2c@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Hyunki Koo <hyunki00.koo@samsung.com>
+On Thu, 5 Dec 2019 at 16:05, Hyunki Koo <hyunki00.koo@gmail.com> wrote:
+>
+> From: Hyunki Koo <hyunki00.koo@samsung.com>
+>
+> There are many exynos device and not all exynos device does not have
+> HSI2C controllers. Thus remove select this by default
+>
+> Signed-off-by: Hyunki Koo <hyunki00.koo@samsung.com>
+> ---
+>  drivers/i2c/busses/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
 
-There are many exynos device and not all exynos device does not have
-HSI2C controllers. Thus remove select this by default
+Thanks for the patch but this is not a proper solution because:
+1. Basically you disabled this driver on exynos, multi_v7 and ARMv8 defconfigs.
+2. We provide one kernel for all ARMv7 Exynos and one for all ARMv8
+platforms therefore this driver should be there. Having unnecessary
+driver also does not hurt - it will not match by compatible.
 
-Signed-off-by: Hyunki Koo <hyunki00.koo@samsung.com>
----
- drivers/i2c/busses/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+So really no.
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 6a0aa76859f3..3955315f48c7 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -612,7 +612,6 @@ config I2C_EMEV2
- config I2C_EXYNOS5
- 	tristate "Exynos5 high-speed I2C driver"
- 	depends on ARCH_EXYNOS && OF
--	default y
- 	help
- 	  High-speed I2C controller on Exynos5 based Samsung SoCs.
- 
--- 
-2.17.1
+Best regards,
+Krzysztof
 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 6a0aa76859f3..3955315f48c7 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -612,7 +612,6 @@ config I2C_EMEV2
+>  config I2C_EXYNOS5
+>         tristate "Exynos5 high-speed I2C driver"
+>         depends on ARCH_EXYNOS && OF
+> -       default y
+>         help
+>           High-speed I2C controller on Exynos5 based Samsung SoCs.
+>
+> --
+> 2.17.1
+>
