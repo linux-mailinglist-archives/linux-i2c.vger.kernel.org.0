@@ -2,126 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B314B114CDC
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Dec 2019 08:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9528B114CF2
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Dec 2019 08:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726302AbfLFHoQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Dec 2019 02:44:16 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37987 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725858AbfLFHoQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Dec 2019 02:44:16 -0500
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1id8Hf-0002mD-IM; Fri, 06 Dec 2019 08:44:15 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <sha@pengutronix.de>)
-        id 1id8Hf-0007h2-3x; Fri, 06 Dec 2019 08:44:15 +0100
-Date:   Fri, 6 Dec 2019 08:44:15 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
-        Biwen Li <biwen.li@nxp.com>
-Subject: Re: [PATCH] i2c: avoid ifdeffery in I2C drivers with optional slave
- support
-Message-ID: <20191206074415.r245aqlj4ysenh4z@pengutronix.de>
-References: <20191204095348.9192-1-s.hauer@pengutronix.de>
- <f1d9e12b-2636-5624-bfde-ac556817b697@lucaceresoli.net>
+        id S1726653AbfLFHyA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Dec 2019 02:54:00 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:41568 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726184AbfLFHyA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Dec 2019 02:54:00 -0500
+Received: by mail-pl1-f194.google.com with SMTP id bd4so2376547plb.8;
+        Thu, 05 Dec 2019 23:53:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=snNOF+7AD33j18lB/I6AK+czBNstt4GlkeBdfRsweyU=;
+        b=mUxqFrrkJcxJKQhpVO8x/3U7Pug8siGRMcLVYR0ahd6M5xuLylod2cZDu/wAXo515h
+         /h/hc/xqnuO96wcqsE9J1GbyH+WHv9JN0nKJfkykDWfot3NYrNkg/eSOCbYmOcB11kxm
+         92+WCkuLm2i2hoBcX1ALKYhQqldQN+R59G5JSUO3vWd1uj8D78J5zcvwxY0kKv3sqHEg
+         gyvk9uuMZIAhxo/obH2WocE3wmQpBWEdQ2/rHhIoXimgpsSJFWrTPWLb+E0bMK08rAdZ
+         ahGfbN3v+zQIDlo2ktLzz4SVi3nId2d2iCSDoJr15FGZj++0JlGt1ObYAOlG6MusHBX2
+         rW/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=snNOF+7AD33j18lB/I6AK+czBNstt4GlkeBdfRsweyU=;
+        b=CaGBsgj9kb6qjZjEDQOuOFsCPQiFwLJ1dT5T0i4GFdM/GnWThJLTLdMMQhyYoA39UT
+         bBiT9EBLKeukChg+XGqUCsPY2M2mhWDxFHzcTtE4/c4RGXQzE4HzwupxNJAeiKwQ9VVn
+         +Tsw8KpsERBvk97zrf9Wdk+/bNYPxtHJNs7T45ssbE9QfhgZwbb8koU+tpROw9JQIC4G
+         +Dd77gltakr65HgUMrbd38lJGem1qOsGSE1bSjuzES2B3jCzAzc1C/9ftK0mWtZfN6s0
+         Mq4xiqC5bIPWC3P1wLMJ0Tvx8GQErpQ2jFpVI6vh3htmAI+dL8whqtU9gfav4XX9FKCM
+         bvEw==
+X-Gm-Message-State: APjAAAWTSmcxy2dGuVgpDtU3mU2hw7vBoFIsgakusx3aUK6EzuW1P+v9
+        Kh02VKvzQ+7vFwYZAiJfy28=
+X-Google-Smtp-Source: APXvYqxHkR+7Llp+tRbYSlR2porllKhK1tgi+6QcyAgR588qnBX4LlKwZdHNPfBb2jhVVdzxuOjSYQ==
+X-Received: by 2002:a17:902:7292:: with SMTP id d18mr13345926pll.2.1575618839651;
+        Thu, 05 Dec 2019 23:53:59 -0800 (PST)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.gmail.com with ESMTPSA id b11sm14895828pfd.83.2019.12.05.23.53.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2019 23:53:59 -0800 (PST)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Jan Glauber <jglauber@cavium.com>,
+        David Daney <david.daney@cavium.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH] i2c: thunderx: Add missed pci_release_regions
+Date:   Fri,  6 Dec 2019 15:53:49 +0800
+Message-Id: <20191206075349.18297-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f1d9e12b-2636-5624-bfde-ac556817b697@lucaceresoli.net>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:40:15 up 151 days, 13:50, 141 users,  load average: 0.18, 0.12,
- 0.12
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Dec 05, 2019 at 03:45:09PM +0100, Luca Ceresoli wrote:
-> Hi Sascha,
-> 
-> On 04/12/19 10:53, Sascha Hauer wrote:
-> > Always add the (un)reg_slave hooks to struct i2c_algorithm, even when
-> > I2C slave support is disabled. With the cost of some binary space I2C
-> > drivers with optional I2C slave support no longer have to #ifdef
-> > the hooks. For the same reason add a stub for i2c_slave_event and make
-> > enum i2c_slave_event present without I2C slave support.
-> > 
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> 
-> I like the idea, but I have a question below.
-> 
-> > ---
-> >  include/linux/i2c.h | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> > index d2f786706657..74ebfcb43dd2 100644
-> > --- a/include/linux/i2c.h
-> > +++ b/include/linux/i2c.h
-> > @@ -359,7 +359,6 @@ static inline void i2c_set_clientdata(struct i2c_client *dev, void *data)
-> >  
-> >  /* I2C slave support */
-> >  
-> > -#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> >  enum i2c_slave_event {
-> >  	I2C_SLAVE_READ_REQUESTED,
-> >  	I2C_SLAVE_WRITE_REQUESTED,
-> > @@ -368,6 +367,7 @@ enum i2c_slave_event {
-> >  	I2C_SLAVE_STOP,
-> >  };
-> >  
-> > +#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> >  extern int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
-> >  extern int i2c_slave_unregister(struct i2c_client *client);
-> >  extern bool i2c_detect_slave_mode(struct device *dev);
-> > @@ -379,6 +379,11 @@ static inline int i2c_slave_event(struct i2c_client *client,
-> >  }
-> >  #else
-> >  static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
-> > +static inline int i2c_slave_event(struct i2c_client *client,
-> > +				  enum i2c_slave_event event, u8 *val)
-> > +{
-> > +	return -EINVAL;
-> > +}
-> >  #endif
-> >  
-> >  /**
-> > @@ -553,10 +558,8 @@ struct i2c_algorithm {
-> >  	/* To determine what the adapter supports */
-> >  	u32 (*functionality)(struct i2c_adapter *adap);
-> >  
-> > -#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> >  	int (*reg_slave)(struct i2c_client *client);
-> >  	int (*unreg_slave)(struct i2c_client *client);
-> > -#endif
-> 
-> Assuming I2C slave users are a minority, would it make sense to move the
-> two slave-related function pointers to a new 'struct i2c_slave_ops' and
-> store a 'struct i2c_slave_ops*' here? This would to set a limit to the
-> size increase for the majority of users.
+The driver forgets to call pci_release_regions() in probe failure
+and remove.
+Add the missed calls to fix it.
 
-Would be doable I guess. I have no strong opinion here, but that would
-be done as a separate patch anyway, so should prevent this one from
-being merged.
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+---
+ drivers/i2c/busses/i2c-thunderx-pcidrv.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-Sascha
-
+diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
+index 19f8eec38717..31f7e254e99f 100644
+--- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
++++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
+@@ -172,8 +172,10 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
+ 		return ret;
+ 
+ 	i2c->twsi_base = pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
+-	if (!i2c->twsi_base)
+-		return -EINVAL;
++	if (!i2c->twsi_base) {
++		ret = -EINVAL;
++		goto error_release_regions;
++	}
+ 
+ 	thunder_i2c_clock_enable(dev, i2c);
+ 	ret = device_property_read_u32(dev, "clock-frequency", &i2c->twsi_freq);
+@@ -189,16 +191,16 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
+ 
+ 	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSIX);
+ 	if (ret < 0)
+-		goto error;
++		goto error_disable_clock;
+ 
+ 	ret = devm_request_irq(dev, pci_irq_vector(pdev, 0), octeon_i2c_isr, 0,
+ 			       DRV_NAME, i2c);
+ 	if (ret)
+-		goto error;
++		goto error_disable_clock;
+ 
+ 	ret = octeon_i2c_init_lowlevel(i2c);
+ 	if (ret)
+-		goto error;
++		goto error_disable_clock;
+ 
+ 	octeon_i2c_set_clock(i2c);
+ 
+@@ -214,7 +216,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
+ 
+ 	ret = i2c_add_adapter(&i2c->adap);
+ 	if (ret)
+-		goto error;
++		goto error_disable_clock;
+ 
+ 	dev_info(i2c->dev, "Probed. Set system clock to %u\n", i2c->sys_freq);
+ 
+@@ -224,8 +226,10 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
+ 
+ 	return 0;
+ 
+-error:
++error_disable_clock:
+ 	thunder_i2c_clock_disable(dev, i2c->clk);
++error_release_regions:
++	pci_release_regions(pdev);
+ 	return ret;
+ }
+ 
+@@ -236,6 +240,7 @@ static void thunder_i2c_remove_pci(struct pci_dev *pdev)
+ 	thunder_i2c_smbus_remove(i2c);
+ 	thunder_i2c_clock_disable(&pdev->dev, i2c->clk);
+ 	i2c_del_adapter(&i2c->adap);
++	pci_release_regions(pdev);
+ }
+ 
+ static const struct pci_device_id thunder_i2c_pci_id_table[] = {
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.24.0
+
