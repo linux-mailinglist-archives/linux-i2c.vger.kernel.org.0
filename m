@@ -2,140 +2,141 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9528B114CF2
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Dec 2019 08:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5726114DAF
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Dec 2019 09:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726653AbfLFHyA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Dec 2019 02:54:00 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:41568 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726184AbfLFHyA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Dec 2019 02:54:00 -0500
-Received: by mail-pl1-f194.google.com with SMTP id bd4so2376547plb.8;
-        Thu, 05 Dec 2019 23:53:59 -0800 (PST)
+        id S1726464AbfLFIdT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Dec 2019 03:33:19 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:40768 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726088AbfLFIdT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Dec 2019 03:33:19 -0500
+Received: by mail-lj1-f194.google.com with SMTP id s22so6730890ljs.7
+        for <linux-i2c@vger.kernel.org>; Fri, 06 Dec 2019 00:33:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=snNOF+7AD33j18lB/I6AK+czBNstt4GlkeBdfRsweyU=;
-        b=mUxqFrrkJcxJKQhpVO8x/3U7Pug8siGRMcLVYR0ahd6M5xuLylod2cZDu/wAXo515h
-         /h/hc/xqnuO96wcqsE9J1GbyH+WHv9JN0nKJfkykDWfot3NYrNkg/eSOCbYmOcB11kxm
-         92+WCkuLm2i2hoBcX1ALKYhQqldQN+R59G5JSUO3vWd1uj8D78J5zcvwxY0kKv3sqHEg
-         gyvk9uuMZIAhxo/obH2WocE3wmQpBWEdQ2/rHhIoXimgpsSJFWrTPWLb+E0bMK08rAdZ
-         ahGfbN3v+zQIDlo2ktLzz4SVi3nId2d2iCSDoJr15FGZj++0JlGt1ObYAOlG6MusHBX2
-         rW/g==
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=afeE7KQp+zTESPS60PIhW/zIilWCcKXxfycXI9iyjFU=;
+        b=fvA7sOqimBrWk15Y5LuGetRC1vdyjr3uNXNv28Dz9izZ8MJppvRTWJGg5K4BKbbUvK
+         JPVi9Oj/sTwayMX2Qai7OjMfxGNVmbW0jgM8CI5HHFUtuDrTa/XLmzUmO92bLsTicroJ
+         iwHtwRWd4rgOUkKBUrGyVj5iDi7Q0Fo/bbvxtHOt6N+pUn0/wgpd6Px9OGRQ6mUtyCPI
+         8UX48v0EyGcI+YIH6ohjgl6IzNh3uwlZyH5Vsq83/Up9IIMRwbdbCQKA3EfUwAXCp7w8
+         jR6cgU0DWTVcVnUTqc4BCrHXCjM+C+vOAP+CzSznfPPl4HfSdkB5XitB67xNngzZSHSh
+         liWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=snNOF+7AD33j18lB/I6AK+czBNstt4GlkeBdfRsweyU=;
-        b=CaGBsgj9kb6qjZjEDQOuOFsCPQiFwLJ1dT5T0i4GFdM/GnWThJLTLdMMQhyYoA39UT
-         bBiT9EBLKeukChg+XGqUCsPY2M2mhWDxFHzcTtE4/c4RGXQzE4HzwupxNJAeiKwQ9VVn
-         +Tsw8KpsERBvk97zrf9Wdk+/bNYPxtHJNs7T45ssbE9QfhgZwbb8koU+tpROw9JQIC4G
-         +Dd77gltakr65HgUMrbd38lJGem1qOsGSE1bSjuzES2B3jCzAzc1C/9ftK0mWtZfN6s0
-         Mq4xiqC5bIPWC3P1wLMJ0Tvx8GQErpQ2jFpVI6vh3htmAI+dL8whqtU9gfav4XX9FKCM
-         bvEw==
-X-Gm-Message-State: APjAAAWTSmcxy2dGuVgpDtU3mU2hw7vBoFIsgakusx3aUK6EzuW1P+v9
-        Kh02VKvzQ+7vFwYZAiJfy28=
-X-Google-Smtp-Source: APXvYqxHkR+7Llp+tRbYSlR2porllKhK1tgi+6QcyAgR588qnBX4LlKwZdHNPfBb2jhVVdzxuOjSYQ==
-X-Received: by 2002:a17:902:7292:: with SMTP id d18mr13345926pll.2.1575618839651;
-        Thu, 05 Dec 2019 23:53:59 -0800 (PST)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.gmail.com with ESMTPSA id b11sm14895828pfd.83.2019.12.05.23.53.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=afeE7KQp+zTESPS60PIhW/zIilWCcKXxfycXI9iyjFU=;
+        b=TMCADx2u39RvDWP2umevY4B8bTMMDAhF1LVfkgVQNc7errKJoURPXj7w5gzMGth25l
+         klfdrv8Y9fNj4q/CfR2gjykERBvc/iWbY/V384hE9iXxZP1rb7XjmUDB+u1OvSmceN7T
+         rg5oql3Vo+nxTbrreC3h70dGBYQIGC0iVwa2fgifnQSbgL9bosRsFqYu0MhgW36kZSBK
+         aYILPQmQ2mNvQU+HfV3C8ScH34N5yDev3wwQsd59At6jl9voLdPYvdBPG1zVCORqYgwu
+         HCQZpc/6IzAeXf9TMbPd6+9yrrbhnwiQIMqvi0ZL7XdVyEuunHPSBJkgXppy+nTActn9
+         72GQ==
+X-Gm-Message-State: APjAAAWS/x0ZqNntMSvL4mXJ4T+RUTIlG4rgT6MDBKDqiSmm5o2Xds7s
+        H3CSG/HkF3PSDhnqKE54j9NsTaE+VqY=
+X-Google-Smtp-Source: APXvYqyvs6nIc1TFZhbvUOXCq4RxP88xw1dO4X12w+meMjgforHykpFtFzReUDyeu/+1xJvZD4XXLA==
+X-Received: by 2002:a2e:9e55:: with SMTP id g21mr7777743ljk.245.1575621197174;
+        Fri, 06 Dec 2019 00:33:17 -0800 (PST)
+Received: from localhost (h-93-159.A463.priv.bahnhof.se. [46.59.93.159])
+        by smtp.gmail.com with ESMTPSA id f7sm6044841ljp.62.2019.12.06.00.33.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2019 23:53:59 -0800 (PST)
-From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     Jan Glauber <jglauber@cavium.com>,
-        David Daney <david.daney@cavium.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] i2c: thunderx: Add missed pci_release_regions
-Date:   Fri,  6 Dec 2019 15:53:49 +0800
-Message-Id: <20191206075349.18297-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.24.0
+        Fri, 06 Dec 2019 00:33:16 -0800 (PST)
+Date:   Fri, 6 Dec 2019 09:33:15 +0100
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] i2c: remove i2c_new_dummy() API
+Message-ID: <20191206083315.GH28879@bigcity.dyn.berto.se>
+References: <20191206002322.12801-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20191206002322.12801-1-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The driver forgets to call pci_release_regions() in probe failure
-and remove.
-Add the missed calls to fix it.
+Hi Wolfram,
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
----
- drivers/i2c/busses/i2c-thunderx-pcidrv.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+Thanks for your work.
 
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-index 19f8eec38717..31f7e254e99f 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -172,8 +172,10 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 		return ret;
- 
- 	i2c->twsi_base = pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
--	if (!i2c->twsi_base)
--		return -EINVAL;
-+	if (!i2c->twsi_base) {
-+		ret = -EINVAL;
-+		goto error_release_regions;
-+	}
- 
- 	thunder_i2c_clock_enable(dev, i2c);
- 	ret = device_property_read_u32(dev, "clock-frequency", &i2c->twsi_freq);
-@@ -189,16 +191,16 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 
- 	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSIX);
- 	if (ret < 0)
--		goto error;
-+		goto error_disable_clock;
- 
- 	ret = devm_request_irq(dev, pci_irq_vector(pdev, 0), octeon_i2c_isr, 0,
- 			       DRV_NAME, i2c);
- 	if (ret)
--		goto error;
-+		goto error_disable_clock;
- 
- 	ret = octeon_i2c_init_lowlevel(i2c);
- 	if (ret)
--		goto error;
-+		goto error_disable_clock;
- 
- 	octeon_i2c_set_clock(i2c);
- 
-@@ -214,7 +216,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 
- 	ret = i2c_add_adapter(&i2c->adap);
- 	if (ret)
--		goto error;
-+		goto error_disable_clock;
- 
- 	dev_info(i2c->dev, "Probed. Set system clock to %u\n", i2c->sys_freq);
- 
-@@ -224,8 +226,10 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 
- 	return 0;
- 
--error:
-+error_disable_clock:
- 	thunder_i2c_clock_disable(dev, i2c->clk);
-+error_release_regions:
-+	pci_release_regions(pdev);
- 	return ret;
- }
- 
-@@ -236,6 +240,7 @@ static void thunder_i2c_remove_pci(struct pci_dev *pdev)
- 	thunder_i2c_smbus_remove(i2c);
- 	thunder_i2c_clock_disable(&pdev->dev, i2c->clk);
- 	i2c_del_adapter(&i2c->adap);
-+	pci_release_regions(pdev);
- }
- 
- static const struct pci_device_id thunder_i2c_pci_id_table[] = {
+On 2019-12-06 01:23:22 +0100, Wolfram Sang wrote:
+> All in-kernel users have been converted to
+> {devm_}i2c_new_dummy_device(). Remove the old API.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
+> ---
+>  drivers/i2c/i2c-core-base.c | 23 -----------------------
+>  include/linux/i2c.h         |  6 ------
+>  2 files changed, 29 deletions(-)
+> 
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 9333c865d4a9..9f8dcd3f8385 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -896,29 +896,6 @@ struct i2c_client *i2c_new_dummy_device(struct i2c_adapter *adapter, u16 address
+>  }
+>  EXPORT_SYMBOL_GPL(i2c_new_dummy_device);
+>  
+> -/**
+> - * i2c_new_dummy - return a new i2c device bound to a dummy driver
+> - * @adapter: the adapter managing the device
+> - * @address: seven bit address to be used
+> - * Context: can sleep
+> - *
+> - * This deprecated function has the same functionality as @i2c_new_dummy_device,
+> - * it just returns NULL instead of an ERR_PTR in case of an error for
+> - * compatibility with current I2C API. It will be removed once all users are
+> - * converted.
+> - *
+> - * This returns the new i2c client, which should be saved for later use with
+> - * i2c_unregister_device(); or NULL to indicate an error.
+> - */
+> -struct i2c_client *i2c_new_dummy(struct i2c_adapter *adapter, u16 address)
+> -{
+> -	struct i2c_client *ret;
+> -
+> -	ret = i2c_new_dummy_device(adapter, address);
+> -	return IS_ERR(ret) ? NULL : ret;
+> -}
+> -EXPORT_SYMBOL_GPL(i2c_new_dummy);
+> -
+>  struct i2c_dummy_devres {
+>  	struct i2c_client *client;
+>  };
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index d2f786706657..d1baf8d57536 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -466,12 +466,6 @@ i2c_new_probed_device(struct i2c_adapter *adap,
+>  /* Common custom probe functions */
+>  extern int i2c_probe_func_quick_read(struct i2c_adapter *adap, unsigned short addr);
+>  
+> -/* For devices that use several addresses, use i2c_new_dummy() to make
+> - * client handles for the extra addresses.
+> - */
+> -extern struct i2c_client *
+> -i2c_new_dummy(struct i2c_adapter *adap, u16 address);
+> -
+>  extern struct i2c_client *
+>  i2c_new_dummy_device(struct i2c_adapter *adapter, u16 address);
+>  
+> -- 
+> 2.20.1
+> 
+
 -- 
-2.24.0
-
+Regards,
+Niklas Söderlund
