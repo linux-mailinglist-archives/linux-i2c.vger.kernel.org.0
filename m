@@ -2,93 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E44E114A36
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Dec 2019 01:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E1C114CB0
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Dec 2019 08:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726037AbfLFAXq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Dec 2019 19:23:46 -0500
-Received: from sauhun.de ([88.99.104.3]:35496 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725959AbfLFAXq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 5 Dec 2019 19:23:46 -0500
-Received: from localhost (p54B33754.dip0.t-ipconnect.de [84.179.55.84])
-        by pokefinder.org (Postfix) with ESMTPSA id D98032C0484;
-        Fri,  6 Dec 2019 01:23:42 +0100 (CET)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH] i2c: remove i2c_new_dummy() API
-Date:   Fri,  6 Dec 2019 01:23:22 +0100
-Message-Id: <20191206002322.12801-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726501AbfLFHiZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Dec 2019 02:38:25 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:38211 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725858AbfLFHiY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Dec 2019 02:38:24 -0500
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1id8Bx-0001yw-23; Fri, 06 Dec 2019 08:38:21 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <sha@pengutronix.de>)
+        id 1id8Bw-0007V9-1B; Fri, 06 Dec 2019 08:38:20 +0100
+Date:   Fri, 6 Dec 2019 08:38:20 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Biwen Li <biwen.li@nxp.com>, shawnguo@kernel.org,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        wsa@the-dreams.de, leoyang.li@nxp.com, aisheng.dong@nxp.com,
+        xiaoning.wang@nxp.com, xiaobo.xie@nxp.com,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jiafei.pan@nxp.com, linux-arm-kernel@lists.infradead.org,
+        laurentiu.tudor@nxp.com
+Subject: Re: [v6] i2c: imx: support slave mode for imx I2C driver
+Message-ID: <20191206073819.lntjjxpcjm5yrb7y@pengutronix.de>
+References: <20191203114809.21226-1-biwen.li@nxp.com>
+ <20191204100005.r56huywxa7h3c6zr@pengutronix.de>
+ <9a1a00c1-e9fa-36a1-0e79-3492d9b98d9f@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a1a00c1-e9fa-36a1-0e79-3492d9b98d9f@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:32:55 up 151 days, 13:43, 140 users,  load average: 0.05, 0.13,
+ 0.13
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-All in-kernel users have been converted to
-{devm_}i2c_new_dummy_device(). Remove the old API.
+On Thu, Dec 05, 2019 at 12:43:46PM +0100, Oleksij Rempel wrote:
+> Hi,
+> 
+> On 04.12.19 11:00, Sascha Hauer wrote:
+> > Hi,
+> > 
+> > The patch looks ok to me now, but I still do not like the #ifdeffery
+> > around CONFIG_I2C_SLAVE. With the patch I just sent (You are on Cc:)
+> > we could apply the following on your patch which makes it more readable
+> > and increases compile coverage.
+> > 
+> > Wolfram, Biwen, what do you think?
+> 
+> 
+> RCAR depends on slave:
+> config I2C_RCAR
+> 
+>         tristate "Renesas R-Car I2C Controller"
+> 
+>         depends on ARCH_RENESAS || COMPILE_TEST
+> 
+>         select I2C_SLAVE
+> see:
+> drivers/i2c/busses/i2c-rcar.c
+> 
+> So, I would suggest to do the same in imx.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/i2c/i2c-core-base.c | 23 -----------------------
- include/linux/i2c.h         |  6 ------
- 2 files changed, 29 deletions(-)
+I suggested that to v1 of this patch. If we agree though that I2C slave
+support deserves an extra Kconfig option we should also make the drivers
+cope with that situation. Otherwise we would better make I2C slave
+support non optional.
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 9333c865d4a9..9f8dcd3f8385 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -896,29 +896,6 @@ struct i2c_client *i2c_new_dummy_device(struct i2c_adapter *adapter, u16 address
- }
- EXPORT_SYMBOL_GPL(i2c_new_dummy_device);
- 
--/**
-- * i2c_new_dummy - return a new i2c device bound to a dummy driver
-- * @adapter: the adapter managing the device
-- * @address: seven bit address to be used
-- * Context: can sleep
-- *
-- * This deprecated function has the same functionality as @i2c_new_dummy_device,
-- * it just returns NULL instead of an ERR_PTR in case of an error for
-- * compatibility with current I2C API. It will be removed once all users are
-- * converted.
-- *
-- * This returns the new i2c client, which should be saved for later use with
-- * i2c_unregister_device(); or NULL to indicate an error.
-- */
--struct i2c_client *i2c_new_dummy(struct i2c_adapter *adapter, u16 address)
--{
--	struct i2c_client *ret;
--
--	ret = i2c_new_dummy_device(adapter, address);
--	return IS_ERR(ret) ? NULL : ret;
--}
--EXPORT_SYMBOL_GPL(i2c_new_dummy);
--
- struct i2c_dummy_devres {
- 	struct i2c_client *client;
- };
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index d2f786706657..d1baf8d57536 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -466,12 +466,6 @@ i2c_new_probed_device(struct i2c_adapter *adap,
- /* Common custom probe functions */
- extern int i2c_probe_func_quick_read(struct i2c_adapter *adap, unsigned short addr);
- 
--/* For devices that use several addresses, use i2c_new_dummy() to make
-- * client handles for the extra addresses.
-- */
--extern struct i2c_client *
--i2c_new_dummy(struct i2c_adapter *adap, u16 address);
--
- extern struct i2c_client *
- i2c_new_dummy_device(struct i2c_adapter *adapter, u16 address);
- 
+Sascha
+
 -- 
-2.20.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
