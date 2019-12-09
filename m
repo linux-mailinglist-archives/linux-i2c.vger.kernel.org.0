@@ -2,17 +2,17 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD4D1174B9
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2019 19:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408161174B1
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2019 19:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbfLISmx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 9 Dec 2019 13:42:53 -0500
-Received: from mail.bugwerft.de ([46.23.86.59]:34222 "EHLO mail.bugwerft.de"
+        id S1727115AbfLISnk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 9 Dec 2019 13:43:40 -0500
+Received: from mail.bugwerft.de ([46.23.86.59]:34226 "EHLO mail.bugwerft.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726483AbfLISmw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 9 Dec 2019 13:42:52 -0500
+        id S1726522AbfLISmx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 9 Dec 2019 13:42:53 -0500
 Received: from zenbar.fritz.box (pD95EF75D.dip0.t-ipconnect.de [217.94.247.93])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id 294F82E5CEC;
+        by mail.bugwerft.de (Postfix) with ESMTPSA id BD5552E5CED;
         Mon,  9 Dec 2019 18:29:14 +0000 (UTC)
 From:   Daniel Mack <daniel@zonque.org>
 To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
@@ -21,9 +21,9 @@ To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
 Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         broonie@kernel.org, lee.jones@linaro.org, lars@metafoo.de,
         pascal.huerst@gmail.com, Daniel Mack <daniel@zonque.org>
-Subject: [PATCH 07/10] i2c: Add driver for AD242x bus controller
-Date:   Mon,  9 Dec 2019 19:35:08 +0100
-Message-Id: <20191209183511.3576038-9-daniel@zonque.org>
+Subject: [PATCH 08/10] gpio: Add driver for AD242x GPIO controllers
+Date:   Mon,  9 Dec 2019 19:35:09 +0100
+Message-Id: <20191209183511.3576038-10-daniel@zonque.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191209183511.3576038-1-daniel@zonque.org>
 References: <20191209183511.3576038-1-daniel@zonque.org>
@@ -34,239 +34,288 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This device must be instantiated as a sub-device of the AD242x MFD
-device.
+This driver makes the 8 GPIOs on AD242x nodes available to consumers.
 
-In order to access remote I2C peripherals, the master node is configured
-to the slave node number and the remote I2C client address on the remote
-side, and then the payload is sent to the BUS client of the master node,
-which transparently proxies the traffic through.
+Apart from that, it also allows putting the GPIO lines in a 'gpio over
+distance' mode. This mirrors the state of several GPIOs in the topology
+without further interaction by any driver. For instance, when a GPIO pin
+on the master node is put in input mode, and another one on a slave node
+is in output mode, they can be linked together through virtual ports.
+Then, the pin on the slave node will reflect the logical level on
+whatever is applied to the respective pin on the master node.
 
 Signed-off-by: Daniel Mack <daniel@zonque.org>
 ---
- drivers/i2c/busses/Kconfig      |  10 ++
- drivers/i2c/busses/Makefile     |   1 +
- drivers/i2c/busses/i2c-ad242x.c | 178 ++++++++++++++++++++++++++++++++
- 3 files changed, 189 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-ad242x.c
+ drivers/gpio/Kconfig       |   6 +
+ drivers/gpio/Makefile      |   1 +
+ drivers/gpio/gpio-ad242x.c | 229 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 236 insertions(+)
+ create mode 100644 drivers/gpio/gpio-ad242x.c
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 6a0aa76859f3..b9cf049bedb0 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -365,6 +365,16 @@ config I2C_POWERMAC
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 8adffd42f8cb..c8af1159a585 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -845,6 +845,12 @@ endmenu
+ menu "I2C GPIO expanders"
+ 	depends on I2C
  
- comment "I2C system bus drivers (mostly embedded / system-on-chip)"
- 
-+config I2C_AD242X
-+	tristate "Analog Devices AD242x"
++config GPIO_AD242X
++	tristate "AD242x A2B GPIO controller"
 +	depends on MFD_AD242X
 +	help
-+	  If you say yes to this option, support will be included for the
-+	  I2C bus controller function of AD242x slave nodes.
++	  This option enables support for GPIOs on AD242x A2B nodes.
 +
-+	  This driver can also be built as a module.  If so, the module
-+	  will be called i2c-ad242x.
-+
- config I2C_ALTERA
- 	tristate "Altera Soft IP I2C"
- 	depends on (ARCH_SOCFPGA || NIOS2) && OF
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 3ab8aebc39c9..57c31ea8a477 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -32,6 +32,7 @@ obj-$(CONFIG_I2C_HYDRA)		+= i2c-hydra.o
- obj-$(CONFIG_I2C_POWERMAC)	+= i2c-powermac.o
- 
- # Embedded system I2C/SMBus host controller drivers
-+obj-$(CONFIG_I2C_AD242X)	+= i2c-ad242x.o
- obj-$(CONFIG_I2C_ALTERA)	+= i2c-altera.o
- obj-$(CONFIG_I2C_AMD_MP2)	+= i2c-amd-mp2-pci.o i2c-amd-mp2-plat.o
- obj-$(CONFIG_I2C_ASPEED)	+= i2c-aspeed.o
-diff --git a/drivers/i2c/busses/i2c-ad242x.c b/drivers/i2c/busses/i2c-ad242x.c
+ config GPIO_ADP5588
+ 	tristate "ADP5588 I2C GPIO expander"
+ 	help
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 34eb8b2b12dd..2490ce6e6905 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -22,6 +22,7 @@ obj-$(CONFIG_GPIO_104_IDI_48)		+= gpio-104-idi-48.o
+ obj-$(CONFIG_GPIO_104_IDIO_16)		+= gpio-104-idio-16.o
+ obj-$(CONFIG_GPIO_74X164)		+= gpio-74x164.o
+ obj-$(CONFIG_GPIO_74XX_MMIO)		+= gpio-74xx-mmio.o
++obj-$(CONFIG_GPIO_AD242X)		+= gpio-ad242x.o
+ obj-$(CONFIG_GPIO_ADNP)			+= gpio-adnp.o
+ obj-$(CONFIG_GPIO_ADP5520)		+= gpio-adp5520.o
+ obj-$(CONFIG_GPIO_ADP5588)		+= gpio-adp5588.o
+diff --git a/drivers/gpio/gpio-ad242x.c b/drivers/gpio/gpio-ad242x.c
 new file mode 100644
-index 000000000000..b94056653898
+index 000000000000..8970e434b56a
 --- /dev/null
-+++ b/drivers/i2c/busses/i2c-ad242x.c
-@@ -0,0 +1,178 @@
++++ b/drivers/gpio/gpio-ad242x.c
+@@ -0,0 +1,229 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +
++#include <linux/clk.h>
 +#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/i2c.h>
++#include <linux/gpio/driver.h>
 +#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
 +#include <linux/mfd/ad242x.h>
++#include <linux/module.h>
 +#include <linux/of.h>
 +#include <linux/platform_device.h>
 +#include <linux/regmap.h>
 +
-+struct ad242x_i2c {
-+	struct device		*dev;
-+	struct ad242x_node	*node;
-+	struct i2c_adapter	adap;
-+	u32			node_index;
++struct ad242x_gpio {
++	struct gpio_chip chip;
++	struct ad242x_node *node;
++	u32 gpio_od_mask;
 +};
 +
-+static int ad242x_set_addr(struct ad242x_node *mnode,
-+			   struct ad242x_i2c_bus *bus,
-+			   uint8_t node_id, uint8_t addr)
++static int ad242x_gpio_request(struct gpio_chip *chip, unsigned int gpio)
 +{
-+	int ret;
-+	uint8_t buf[2] = { AD242X_CHIP, addr };
++	struct ad242x_gpio *ad242x_gpio = gpiochip_get_data(chip);
 +
-+	ret = regmap_update_bits(mnode->regmap, AD242X_NODEADR,
-+				 AD242X_NODEADR_PERI | AD242X_NODEADR_MASK,
-+				 node_id);
-+	if (ret < 0)
-+		return ret;
++	if (gpio == 0 && ad242x_node_is_master(ad242x_gpio->node))
++		return -EBUSY;
 +
-+	/*
-+	 * We can't use the slave's regmap here as it holds the same
-+	 * lock we also need to guard this context.
-+	 */
-+	ret = i2c_transfer_buffer_flags(bus->client,
-+					buf, sizeof(buf), 0);
-+	if (ret < 0)
-+		return ret;
++	if (ad242x_gpio->gpio_od_mask & BIT(gpio))
++		return -EBUSY;
 +
-+	return regmap_update_bits(mnode->regmap, AD242X_NODEADR,
-+				  AD242X_NODEADR_PERI, AD242X_NODEADR_PERI);
++	return 0;
 +}
 +
-+static int ad242x_i2c_xfer(struct i2c_adapter *adap,
-+			   struct i2c_msg msgs[], int num)
++static int ad242x_gpio_get_value(struct gpio_chip *chip, unsigned int gpio)
 +{
-+	struct ad242x_i2c *i2c = adap->algo_data;
-+	struct ad242x_i2c_bus *bus = ad242x_master_get_bus(i2c->node->master);
-+	struct ad242x_node *mnode = ad242x_master_get_node(i2c->node->master);
-+	int ret, i, current_addr = -1;
++	struct ad242x_gpio *ad242x_gpio = gpiochip_get_data(chip);
++	struct regmap *regmap = ad242x_gpio->node->regmap;
++	unsigned int val;
++	int ret;
 +
-+	mutex_lock(&bus->mutex);
++	ret = regmap_read(regmap, AD242X_GPIODAT_IN, &val);
++	if (ret < 0)
++		return ret;
 +
-+	for (i = 0; i < num; i++) {
-+		struct i2c_msg *msg = msgs + i;
++	return !!(val & BIT(gpio));
++}
 +
-+		if (msg->addr != current_addr) {
-+			ret = ad242x_set_addr(mnode, bus,
-+					      i2c->node->id, msg->addr);
-+			if (ret < 0) {
-+				dev_err(i2c->node->dev,
-+					"Cannot set address: %d\n", ret);
-+				break;
-+			}
++static void ad242x_gpio_set_value(struct gpio_chip *chip,
++				  unsigned int gpio, int value)
++{
++	struct ad242x_gpio *ad242x_gpio = gpiochip_get_data(chip);
++	struct regmap *regmap = ad242x_gpio->node->regmap;
++	uint8_t bit = BIT(gpio);
++	int ret;
 +
-+			current_addr = msg->addr;
++	if (value)
++		ret = regmap_write(regmap, AD242X_GPIODAT_SET, bit);
++	else
++		ret = regmap_write(regmap, AD242X_GPIODAT_CLR, bit);
++
++	if (ret < 0)
++		dev_err(ad242x_gpio->node->dev,
++			"Unable to set GPIO #%d: %d\n", gpio, ret);
++}
++
++static int ad242x_gpio_direction_input(struct gpio_chip *chip,
++				       unsigned int gpio)
++{
++	struct ad242x_gpio *ad242x_gpio = gpiochip_get_data(chip);
++	struct regmap *regmap = ad242x_gpio->node->regmap;
++	uint8_t bit = BIT(gpio);
++	int ret;
++
++	ret = regmap_update_bits(regmap, AD242X_GPIOOEN, bit, 0);
++	if (ret < 0)
++		return ret;
++
++	ret = regmap_update_bits(regmap, AD242X_GPIOIEN, bit, bit);
++	if (ret < 0)
++		return ret;
++
++	ret = regmap_update_bits(regmap, AD242X_INTMSK1, bit, bit);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int ad242x_gpio_direction_output(struct gpio_chip *chip,
++					unsigned int gpio, int value)
++{
++	struct ad242x_gpio *ad242x_gpio = gpiochip_get_data(chip);
++	struct regmap *regmap = ad242x_gpio->node->regmap;
++	uint8_t bit = BIT(gpio);
++	int ret;
++
++	ret = regmap_update_bits(regmap, AD242X_GPIOIEN, bit, 0);
++	if (ret < 0)
++		return ret;
++
++	ret = regmap_update_bits(regmap, AD242X_GPIOOEN, bit, bit);
++	if (ret < 0)
++		return ret;
++
++	ret = regmap_update_bits(regmap, AD242X_INTMSK1, bit, 0);
++	if (ret < 0)
++		return ret;
++
++	ad242x_gpio_set_value(chip, gpio, value);
++
++	return 0;
++}
++
++static int ad242x_gpio_over_distance_init(struct device *dev,
++					  struct ad242x_gpio *ad242x_gpio)
++{
++	struct regmap *regmap = ad242x_gpio->node->regmap;
++	struct device_node *np, *child_np;
++	int ret = 0;
++
++	np = of_get_child_by_name(dev->of_node, "gpio-over-distance");
++	if (!np)
++		return 0;
++
++	for_each_available_child_of_node(np, child_np) {
++		u32 reg, port_mask, bit;
++		bool output, inv;
++
++		ret = of_property_read_u32(child_np, "reg", &reg);
++		if (ret < 0)
++			continue;
++
++		ret = of_property_read_u32(child_np, "adi,virtual-port-mask",
++					   &port_mask);
++		if (ret < 0)
++			continue;
++
++		if (reg > 7) {
++			ret = -EINVAL;
++			break;
 +		}
 +
-+		ret = i2c_transfer_buffer_flags(bus->client,
-+						msg->buf, msg->len, msg->flags);
++		bit = BIT(reg);
++
++		ret = regmap_update_bits(regmap, AD242X_GPIODEN, bit, bit);
 +		if (ret < 0)
 +			break;
++
++		ret = regmap_write(regmap, AD242X_GPIOD_MSK(reg), port_mask);
++		if (ret < 0)
++			break;
++
++		output = of_property_read_bool(child_np, "adi,gpio-output");
++		ret = regmap_update_bits(regmap, AD242X_GPIOOEN,
++					 bit, output ? bit : 0);
++		if (ret < 0)
++			break;
++
++		inv = of_property_read_bool(child_np, "adi,gpio-inverted");
++		ret = regmap_update_bits(regmap, AD242X_GPIODINV,
++					 bit, inv ? bit : 0);
++		if (ret < 0)
++			break;
++
++		ad242x_gpio->gpio_od_mask |= bit;
++		dev_info(dev,
++			 "pin %d set up as gpio-over-distance, port mask 0x%02x\n",
++			 reg, port_mask);
 +	}
 +
-+	mutex_unlock(&bus->mutex);
++	of_node_put(np);
 +
-+	return ret < 0 ? ret : num;
++	return ret;
 +}
 +
-+static u32 ad242x_i2c_functionality(struct i2c_adapter *adap)
-+{
-+	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-+}
-+
-+static const struct i2c_algorithm ad242x_i2c_algorithm = {
-+	.master_xfer	= ad242x_i2c_xfer,
-+	.functionality	= ad242x_i2c_functionality,
-+};
-+
-+static int ad242x_i2c_probe(struct platform_device *pdev)
++static int ad242x_gpio_probe(struct platform_device *pdev)
 +{
 +	struct device *dev = &pdev->dev;
-+	struct ad242x_node *node;
-+	struct ad242x_i2c *i2c;
-+	u32 freq, val = 0;
++	struct ad242x_gpio *ad242x_gpio;
 +	int ret;
 +
 +	if (!dev->of_node)
 +		return -ENODEV;
 +
-+	node = dev_get_drvdata(dev->parent);
-+	if ((node->caps & AD242X_CAPABILITY_I2C) == 0) {
-+		dev_err(dev, "Node %d has no I2C capability", node->id);
-+		return -ENOTSUPP;
-+	}
-+
-+	if (ad242x_node_is_master(node))
-+		return -EINVAL;
-+
-+	freq = ad242x_master_get_clk_rate(node->master);
-+	if (freq == 44100)
-+		val |= AD242X_I2CCFG_FRAMERATE;
-+
-+	if (!of_property_read_u32(dev->of_node, "clock-frequency", &freq)) {
-+		if (freq == 400000)
-+			val |= AD242X_I2CCFG_DATARATE;
-+		else if (freq != 100000)
-+			dev_warn(dev, "Unsupported frequency %d\n", freq);
-+	}
-+
-+	ret = regmap_write(node->regmap, AD242X_I2CCFG, val);
-+	if (ret < 0)
-+		return ret;
-+
-+	i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
-+	if (!i2c)
++	ad242x_gpio = devm_kzalloc(dev, sizeof(*ad242x_gpio), GFP_KERNEL);
++	if (!ad242x_gpio)
 +		return -ENOMEM;
 +
-+	i2c->node = node;
-+	i2c->adap.algo = &ad242x_i2c_algorithm;
-+	i2c->adap.algo_data = i2c;
-+	i2c->adap.dev.parent = dev;
-+	i2c->adap.dev.of_node = dev->of_node;
-+	i2c_set_adapdata(&i2c->adap, i2c);
-+	strlcpy(i2c->adap.name, "ad242x remote I2C bus",
-+		sizeof(i2c->adap.name));
++	ad242x_gpio->node = dev_get_drvdata(dev->parent);
 +
-+	ret = i2c_add_adapter(&i2c->adap);
++	ad242x_gpio->chip.request = ad242x_gpio_request;
++	ad242x_gpio->chip.direction_input = ad242x_gpio_direction_input;
++	ad242x_gpio->chip.direction_output = ad242x_gpio_direction_output;
++	ad242x_gpio->chip.get = ad242x_gpio_get_value;
++	ad242x_gpio->chip.set = ad242x_gpio_set_value;
++	ad242x_gpio->chip.can_sleep = 1;
++	ad242x_gpio->chip.base = -1;
++	ad242x_gpio->chip.ngpio = 8;
++	ad242x_gpio->chip.label = "ad242x-gpio";
++	ad242x_gpio->chip.owner = THIS_MODULE;
++	ad242x_gpio->chip.parent = dev;
++
++	dev_info(dev, "A2B node ID %d\n", ad242x_gpio->node->id);
++
++	ret = ad242x_gpio_over_distance_init(dev, ad242x_gpio);
 +	if (ret < 0) {
-+		dev_err(dev, "error registering adapter: %d\n", ret);
++		dev_err(dev, "GPIO over distance init failed: %d\n", ret);
 +		return ret;
 +	}
 +
-+	dev_info(dev, "ad242x i2c driver, node ID %d\n", node->id);
-+	platform_set_drvdata(pdev, i2c);
-+
-+	return 0;
++	return devm_gpiochip_add_data(dev, &ad242x_gpio->chip, ad242x_gpio);
 +}
 +
-+static int ad242x_i2c_remove(struct platform_device *dev)
-+{
-+	struct ad242x_i2c *i2c = platform_get_drvdata(dev);
-+
-+	i2c_del_adapter(&i2c->adap);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id ad242x_i2c_of_match[] = {
-+	{ .compatible = "adi,ad2428w-i2c" },
-+	{ }
++static const struct of_device_id ad242x_gpio_of_match[] = {
++	{ .compatible = "adi,ad2428w-gpio", },
++	{}
 +};
-+MODULE_DEVICE_TABLE(of, ad242x_i2c_of_match);
++MODULE_DEVICE_TABLE(of, ad242x_gpio_of_match);
 +
-+static struct platform_driver ad242x_i2c_driver = {
++static struct platform_driver ad242x_gpio_driver = {
 +	.driver = {
-+		.name = "ad242x-i2c",
-+		.of_match_table = ad242x_i2c_of_match,
++		.name = "ad242x-gpio",
++		.of_match_table = ad242x_gpio_of_match,
 +	},
-+	.probe = ad242x_i2c_probe,
-+	.remove = ad242x_i2c_remove,
++	.probe = ad242x_gpio_probe,
 +};
++module_platform_driver(ad242x_gpio_driver);
 +
-+module_platform_driver(ad242x_i2c_driver);
-+MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("AD242x GPIO driver");
++MODULE_AUTHOR("Daniel Mack <daniel@zonque.org>");
++MODULE_LICENSE("GPL v2");
 -- 
 2.23.0
 
