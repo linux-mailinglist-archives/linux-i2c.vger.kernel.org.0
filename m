@@ -2,18 +2,18 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6337711749F
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2019 19:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C66117494
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2019 19:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbfLISnP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 9 Dec 2019 13:43:15 -0500
-Received: from mail.bugwerft.de ([46.23.86.59]:34260 "EHLO mail.bugwerft.de"
+        id S1727002AbfLISnO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 9 Dec 2019 13:43:14 -0500
+Received: from mail.bugwerft.de ([46.23.86.59]:34256 "EHLO mail.bugwerft.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726822AbfLISm7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S1726780AbfLISm7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
         Mon, 9 Dec 2019 13:42:59 -0500
 Received: from zenbar.fritz.box (pD95EF75D.dip0.t-ipconnect.de [217.94.247.93])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id A76232E5CDE;
-        Mon,  9 Dec 2019 18:29:06 +0000 (UTC)
+        by mail.bugwerft.de (Postfix) with ESMTPSA id 33BBC2E5CE1;
+        Mon,  9 Dec 2019 18:29:09 +0000 (UTC)
 From:   Daniel Mack <daniel@zonque.org>
 To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-i2c@vger.kernel.org, alsa-devel@alsa-project.org,
@@ -21,9 +21,9 @@ To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
 Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         broonie@kernel.org, lee.jones@linaro.org, lars@metafoo.de,
         pascal.huerst@gmail.com, Daniel Mack <daniel@zonque.org>
-Subject: [PATCH 03/10] dt-bindings: gpio: Add documentation for ad242x GPIO controllers
-Date:   Mon,  9 Dec 2019 19:35:03 +0100
-Message-Id: <20191209183511.3576038-4-daniel@zonque.org>
+Subject: [PATCH 03/10] dt-bindings: gpio: Add documentation for AD242x GPIO controllers
+Date:   Mon,  9 Dec 2019 19:35:04 +0100
+Message-Id: <20191209183511.3576038-5-daniel@zonque.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191209183511.3576038-1-daniel@zonque.org>
 References: <20191209183511.3576038-1-daniel@zonque.org>
