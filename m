@@ -2,78 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C46AC116F37
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2019 15:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B019B1174A4
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2019 19:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727496AbfLIOli (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 9 Dec 2019 09:41:38 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:45780 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726687AbfLIOli (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 9 Dec 2019 09:41:38 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id 5505B28B60A
-Subject: Re: [PATCH 4/4] platform/chrome: i2c: i2c-cros-ec-tunnel: Convert i2c
- tunnel to MFD Cell
-To:     Lee Jones <lee.jones@linaro.org>,
-        Raul E Rangel <rrangel@chromium.org>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, Akshu.Agrawal@amd.com,
-        Guenter Roeck <groeck@chromium.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i2c@vger.kernel.org, Benson Leung <bleung@chromium.org>
-References: <20191121211053.48861-1-rrangel@chromium.org>
- <20191121140830.4.Iddc7dd74f893297cb932e9825d413e7890633b3d@changeid>
- <20191209131745.GM3468@dell>
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Message-ID: <6f6b0ac7-37d8-e2a1-3249-223905c2a5b1@collabora.com>
-Date:   Mon, 9 Dec 2019 15:41:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1727016AbfLISnP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 9 Dec 2019 13:43:15 -0500
+Received: from mail.bugwerft.de ([46.23.86.59]:34254 "EHLO mail.bugwerft.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726675AbfLISm7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 9 Dec 2019 13:42:59 -0500
+Received: from zenbar.fritz.box (pD95EF75D.dip0.t-ipconnect.de [217.94.247.93])
+        by mail.bugwerft.de (Postfix) with ESMTPSA id 3EC8A2E5CCC;
+        Mon,  9 Dec 2019 18:29:03 +0000 (UTC)
+From:   Daniel Mack <daniel@zonque.org>
+To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        broonie@kernel.org, lee.jones@linaro.org, lars@metafoo.de,
+        pascal.huerst@gmail.com, Daniel Mack <daniel@zonque.org>
+Subject: [PATCH 00/10] mfd: Add support for Analog Devices A2B transceiver
+Date:   Mon,  9 Dec 2019 19:35:00 +0100
+Message-Id: <20191209183511.3576038-1-daniel@zonque.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <20191209131745.GM3468@dell>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Lee,
+This patch series adds support for Analog Device's AD242x A2B
+transceivers.
 
-On 9/12/19 14:17, Lee Jones wrote:
-> On Thu, 21 Nov 2019, Raul E Rangel wrote:
-> 
->> If the i2c-cros-ec-tunnel driver is compiled into the kernel, it is
->> possible that i2c-cros-ec-tunnel could be probed before cros_ec_XXX
->> has finished initializing and setting the drvdata. This would cause a
->> NULL pointer panic.
->>
->> Converting this driver over to an MFD solves the problem and aligns with
->> where the cros_ec is going.
->>
->> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
->> ---
->> You can now see the device node lives under the mfd device.
->>
->> $ find /sys/bus/platform/devices/cros-ec-dev.0.auto/cros-ec-i2c-tunnel.12.auto/ -iname firmware_node -exec ls -l '{}' \;
->> /sys/bus/platform/devices/cros-ec-dev.0.auto/cros-ec-i2c-tunnel.12.auto/firmware_node -> ../../../../../../LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:1c/PNP0C09:00/GOOG0004:00/GOOG0012:00
->> /sys/bus/platform/devices/cros-ec-dev.0.auto/cros-ec-i2c-tunnel.12.auto/i2c-9/firmware_node -> ../../../../../../../LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:1c/PNP0C09:00/GOOG0004:00/GOOG0012:00
->> /sys/bus/platform/devices/cros-ec-dev.0.auto/cros-ec-i2c-tunnel.12.auto/i2c-9/i2c-10EC5682:00/firmware_node -> ../../../../../../../../LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:1c/PNP0C09:00/GOOG0004:00/GOOG0012:00/10EC5682:00
->>
->>  drivers/i2c/busses/i2c-cros-ec-tunnel.c | 36 +++++++++----------------
->>  drivers/mfd/cros_ec_dev.c               | 19 +++++++++++++
-> 
-> For my own reference:
->   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> 
+  https://www.analog.com/media/en/technical-documentation/user-guides/AD242x_TRM_Rev1.1.pdf
 
-Note that there is a v2 for this patch and I did some comments [1]
+These transceivers are used to form an audio network by connecting the
+parts in a daisy-chain. On top of audio, the devices expose some other
+functions such as GPIO, programmable clock outputs and remote-side I2C
+bus master. The first node in the chain is called the master node, and
+all other devices are called slave nodes. Up to 15 such devices can be
+connected this way.
+
+The master device responds on two addresses on the I2C bus. The primary
+one is used to access all registers in the master node itself, the
+secondary is for accessing remote nodes after prior setup through the
+master node. In the driver stack, these details are hidden behind
+specific regmap configs.
+
+The driver stack is implemented as MFD core and companion drivers that
+can be registered as sub-devices in DT. Drivers for these sub-devices
+can be used for both master and slave nodes, as they just interface
+with the node's regmap.
+
+The master node is responsible for discovering all the slave nodes at
+probe time, and it needs to take the used audio and routing modes in
+each of the slave devices into account in order to pre-calculate the
+bus-timings correctly. Hence, this bus is not hot-pluggable.
+
+Transceivers can both receive and provide audio, and streams can be
+routed from one node to any other, including many others. The tricky
+bit is how to expose the audio routing in DT in a sane way.
+The way it is implemented here, the slave nodes specify the number of
+slots they each consume and generate, and which thereof they forward
+from one side to the other. This mimics the internal register
+structure and should allow for even exotic setups.
+
+Please let me know what you think and what could be improved.
+
 
 Thanks,
- Enric
+Daniel
 
-[1] https://patchwork.ozlabs.org/patch/1200560/
+
+Daniel Mack (10):
+  dt-bindings: mfd: Add documentation for ad242x
+  dt-bindings: i2c: Add documentation for ad242x i2c controllers
+  dt-bindings: gpio: Add documentation for AD242x GPIO controllers
+  dt-bindings: clock: Add documentation for AD242x clock providers
+  dt-bindings: sound: Add documentation for AD242x codecs
+  mfd: Add core driver for AD242x A2B transceivers
+  i2c: Add driver for AD242x bus controller
+  gpio: Add driver for AD242x GPIO controllers
+  clk: Add support for AD242x clock output providers
+  ASoC: Add codec component for AD242x nodes
+
+ .../bindings/clock/adi,ad242x-clk.yaml        |  32 +
+ .../bindings/gpio/adi,ad242x-gpio.yaml        |  65 ++
+ .../bindings/i2c/adi,ad242x-i2c.yaml          |  31 +
+ .../bindings/mfd/adi,ad242x-bus.yaml          |  29 +
+ .../bindings/mfd/adi,ad242x-master.yaml       | 235 +++++++
+ .../bindings/mfd/adi,ad242x-slave.yaml        | 108 ++++
+ .../bindings/sound/adi,ad242x-codec.yaml      |  31 +
+ drivers/clk/Kconfig                           |   6 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-ad242x.c                      | 231 +++++++
+ drivers/gpio/Kconfig                          |   6 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-ad242x.c                    | 229 +++++++
+ drivers/i2c/busses/Kconfig                    |  10 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-ad242x.c               | 178 +++++
+ drivers/mfd/Kconfig                           |  11 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ad242x-bus.c                      |  42 ++
+ drivers/mfd/ad242x-master.c                   | 611 ++++++++++++++++++
+ drivers/mfd/ad242x-node.c                     | 262 ++++++++
+ drivers/mfd/ad242x-slave.c                    | 234 +++++++
+ include/dt-bindings/clock/adi,ad242x.h        |   9 +
+ include/linux/mfd/ad242x.h                    | 400 ++++++++++++
+ sound/soc/codecs/Kconfig                      |   5 +
+ sound/soc/codecs/Makefile                     |   2 +
+ sound/soc/codecs/ad242x.c                     | 338 ++++++++++
+ 27 files changed, 3109 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/adi,ad242x-clk.yaml
+ create mode 100644 Documentation/devicetree/bindings/gpio/adi,ad242x-gpio.yaml
+ create mode 100644 Documentation/devicetree/bindings/i2c/adi,ad242x-i2c.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/adi,ad242x-bus.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/adi,ad242x-master.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/adi,ad242x-slave.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/adi,ad242x-codec.yaml
+ create mode 100644 drivers/clk/clk-ad242x.c
+ create mode 100644 drivers/gpio/gpio-ad242x.c
+ create mode 100644 drivers/i2c/busses/i2c-ad242x.c
+ create mode 100644 drivers/mfd/ad242x-bus.c
+ create mode 100644 drivers/mfd/ad242x-master.c
+ create mode 100644 drivers/mfd/ad242x-node.c
+ create mode 100644 drivers/mfd/ad242x-slave.c
+ create mode 100644 include/dt-bindings/clock/adi,ad242x.h
+ create mode 100644 include/linux/mfd/ad242x.h
+ create mode 100644 sound/soc/codecs/ad242x.c
+
+-- 
+2.23.0
+
