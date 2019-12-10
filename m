@@ -2,173 +2,265 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8058D117A27
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2019 23:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 900EE117D6B
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2019 02:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727527AbfLIWyW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 9 Dec 2019 17:54:22 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:45920 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727621AbfLIWyW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 9 Dec 2019 17:54:22 -0500
-Received: by mail-pl1-f195.google.com with SMTP id w7so6409920plz.12
-        for <linux-i2c@vger.kernel.org>; Mon, 09 Dec 2019 14:54:20 -0800 (PST)
+        id S1726602AbfLJB73 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 9 Dec 2019 20:59:29 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:40542 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726562AbfLJB73 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 9 Dec 2019 20:59:29 -0500
+Received: by mail-lj1-f194.google.com with SMTP id s22so17952532ljs.7;
+        Mon, 09 Dec 2019 17:59:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=GZbS2xfEltGE7F6nx/Sqk3zKGRtEeNKmrbNzg2JwiAc=;
-        b=mUW88DZZcUm77HMOxXwdlW6E09GhqoZdMi73UXyZvqXuxha8a/66J2NeEmajC50CRk
-         uppHSqsk6KZHN5slwK1hx8E1lS59JSJvffgtzvzQCCxoXvGEDs9g6yOrYKjrRQc0U2VJ
-         F14XddSIXzsYYLvZsaRRw8i6eGlXsRTa8DVQOtQgFAg4WGiZIXhzticlJkngYIiqZUiS
-         zYvyRcJUcIUxVNQf3PvH7XVTAVQq++X8LmuBCfi53vTg7GhZ2oC5qsbIOHt1PGov85IV
-         P+2JlSX9fuav7dYzPqKnHewt2fbwfzjZ+dAb5juXdJEkLzYajGr6Yer6SwKDajIRbAit
-         eEXg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WXjnsGwtfZqka2R7m7SW8ohrhA4KQPsG5oGGT/Eq4lE=;
+        b=nGOqDbVIDsNymrvYh2TB0OljcXoFPk2skPUIFhcJ0CCsq4T4dzrf0eXLpsvQPEKiMV
+         uHtc9eKl7+c4TpfptpoZLmdg95uSn5gCrwtHCFUNmFhw1LIytg33J/VCyKupyzC/b7SE
+         R4lbQOsayLpXkhUv65TU9iKtGhmuv4eBqmo/VgWw9tuCIdzx6rYtAAHIXB4paGnGo4S0
+         LVGNh731ZaFCgDAniLL/9f71isbFMbDWzfcQwewhCFOUFM572VVTSPsEiBIJhkKhMx4D
+         3LSZnhTw/F+ltIzYio3KckVh9E7ZFEHP1/6YhNlM9Kt2CFBDtdWzSKvw+6YN7OTPnop+
+         q+GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=GZbS2xfEltGE7F6nx/Sqk3zKGRtEeNKmrbNzg2JwiAc=;
-        b=Ty7ImHZFeJtwVpUSPmKCcD5WyQwCZ9YwUqGDaKprQhZKef5lnR4gj5e99dNEtOnxbi
-         W9QQtEYyjQufKjA+L06AR0nwhXMTxv4oBSnwL88rEmPa3Onenxny6ycfAy59oNmhSomv
-         2arheTc0tB5r859eLx//gKt7Ny4XnqZcBYRoekLuFkfF4rdcdxg5NMMjSd3zfvwmcc9f
-         Gt4+RAJ/OHJiBP6c7HohtLXsTAA0d/uc7zTd9R1sZsjhY4SBskNR+t5Hj9kVAT99sVEu
-         l8WT5gJlqfdVVNLnWefoNOKOmT16DLQtI9JtP0CpkBzzTJJ+BAwM1ipyvVB+q+LkZE67
-         9lfw==
-X-Gm-Message-State: APjAAAV6OEM9vuCqyOEEjRsYrSUNoIZg5KhwPC4gRWjdZ9yAQ0uYcaj3
-        xOMH+RYh9k9TxxYaoUURGrI3gQ==
-X-Google-Smtp-Source: APXvYqwNJMLkK5JvNCFW6hNtE0esgiRwTzkpNVJU4zltb0IL3k5qCFuUjWhWC1FqrZ+fqHmQWyHuQg==
-X-Received: by 2002:a17:902:d883:: with SMTP id b3mr1804416plz.231.1575932059858;
-        Mon, 09 Dec 2019 14:54:19 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id a25sm499720pfo.116.2019.12.09.14.54.18
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 09 Dec 2019 14:54:19 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Jian Hu <jian.hu@amlogic.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Jian Hu <jian.hu@amlogic.com>, "Rob Herring" <robh@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        linux-amlogic@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: meson-a1: add I2C nodes
-In-Reply-To: <20191202111253.94872-1-jian.hu@amlogic.com>
-References: <20191202111253.94872-1-jian.hu@amlogic.com>
-Date:   Mon, 09 Dec 2019 14:54:18 -0800
-Message-ID: <7hsgltqfdx.fsf@baylibre.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WXjnsGwtfZqka2R7m7SW8ohrhA4KQPsG5oGGT/Eq4lE=;
+        b=En5SAlppLenyYpsz8SaoDilhY8kefetfcoS+L9q7LPx6KIaMc2GptJqULMeFuh+nXk
+         9BHNAoGodnRwSnJ69EArUcm1P1rt9T9XWltO8R5SP+RNIVCFlecyrwB3/5y06k3rCL7x
+         0t+fHmyH6nAm8DJ8YVrIIG3cyH4H9bcKreOu2UP34Y9OQ/HBB3lG8CCpDHmxAoiCxAgZ
+         wfd7OLbhXE2YOfpjJv2TkcahrVq/WdCnUdI7zOzQ3vWSWB6QOeTT4lOU5ldNW/BblVjS
+         A2cOaKfAfnfiR5h7UpvqZw/6OVlpMN0Tl8h6hcccXpQu3qT8/ZsGRTSQ5uRrOYrJoWTW
+         Zjlg==
+X-Gm-Message-State: APjAAAWpOKjbJEFbCmpS6HJC2AY6cw4xJDafdfqSNRGNgovKGigs22p3
+        wYATOuAzsnsMTjs8uTV05xo=
+X-Google-Smtp-Source: APXvYqzXzj2axJHCfw5NsyZKOoiIpVJJDlKRN+9uTg6Fc6rDns5lO/XPi2aBSj/mp4iZpgJ/uOTngg==
+X-Received: by 2002:a2e:9587:: with SMTP id w7mr18233740ljh.42.1575943166017;
+        Mon, 09 Dec 2019 17:59:26 -0800 (PST)
+Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.gmail.com with ESMTPSA id a24sm756856ljp.97.2019.12.09.17.59.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Dec 2019 17:59:25 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] i2c: tegra: Support atomic transfers
+Date:   Tue, 10 Dec 2019 04:58:56 +0300
+Message-Id: <20191210015856.5268-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Jian,
+System shutdown may happen with interrupts being disabled and in this case
+I2C core rejects transfers if atomic transfer isn't supported by driver.
 
-Jian Hu <jian.hu@amlogic.com> writes:
+There were several occurrences where I found my Nexus 7 completely
+discharged despite of being turned off and then one day I spotted this in
+the log:
 
-> There are four I2C controllers in A1 series,
-> Share the same comptible with AXG.The I2C nodes
-> depend on pinmux and clock controller.
->
-> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> ---
->  arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 149 ++++++++++++++++++++++
->  1 file changed, 149 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> index eab2ecd36aa8..d0a73d953f5e 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> @@ -16,6 +16,13 @@
->  	#address-cells = <2>;
->  	#size-cells = <2>;
->  
-> +	aliases {
-> +		i2c0 = &i2c0;
-> +		i2c1 = &i2c1;
-> +		i2c2 = &i2c2;
-> +		i2c3 = &i2c3;
-> +	};
-> +
->  	cpus {
->  		#address-cells = <2>;
->  		#size-cells = <0>;
-> @@ -117,6 +124,46 @@
->  				};
->  			};
->  
-> +			i2c0: i2c@1400 {
-> +				compatible = "amlogic,meson-axg-i2c";
-> +				reg = <0x0 0x1400 0x0 0x24>;
+ reboot: Power down
+ ------------[ cut here ]------------
+ WARNING: CPU: 0 PID: 1 at drivers/i2c/i2c-core.h:40 i2c_transfer+0x95/0x9c
+ No atomic I2C transfer handler for 'i2c-1'
+ Modules linked in: tegra30_devfreq
+ CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted 5.4.0-next-20191202-00120-gf7ecd80fb803-dirty #3195
+ Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+ [<c010e4b5>] (unwind_backtrace) from [<c010a0fd>] (show_stack+0x11/0x14)
+ [<c010a0fd>] (show_stack) from [<c09995e5>] (dump_stack+0x85/0x94)
+ [<c09995e5>] (dump_stack) from [<c011f3d1>] (__warn+0xc1/0xc4)
+ [<c011f3d1>] (__warn) from [<c011f691>] (warn_slowpath_fmt+0x61/0x78)
+ [<c011f691>] (warn_slowpath_fmt) from [<c069a8dd>] (i2c_transfer+0x95/0x9c)
+ [<c069a8dd>] (i2c_transfer) from [<c05667f1>] (regmap_i2c_read+0x4d/0x6c)
+ [<c05667f1>] (regmap_i2c_read) from [<c0563601>] (_regmap_raw_read+0x99/0x1cc)
+ [<c0563601>] (_regmap_raw_read) from [<c0563757>] (_regmap_bus_read+0x23/0x38)
+ [<c0563757>] (_regmap_bus_read) from [<c056293d>] (_regmap_read+0x3d/0xfc)
+ [<c056293d>] (_regmap_read) from [<c0562d3b>] (_regmap_update_bits+0x87/0xc4)
+ [<c0562d3b>] (_regmap_update_bits) from [<c0563add>] (regmap_update_bits_base+0x39/0x50)
+ [<c0563add>] (regmap_update_bits_base) from [<c056fd39>] (max77620_pm_power_off+0x29/0x2c)
+ [<c056fd39>] (max77620_pm_power_off) from [<c013bbdd>] (__do_sys_reboot+0xe9/0x170)
+ [<c013bbdd>] (__do_sys_reboot) from [<c0101001>] (ret_fast_syscall+0x1/0x28)
+ Exception stack(0xde907fa8 to 0xde907ff0)
+ 7fa0:                   00000000 00000000 fee1dead 28121969 4321fedc 00000000
+ 7fc0: 00000000 00000000 00000000 00000058 00000000 00000000 00000000 00000000
+ 7fe0: 0045adf0 bed9abb8 004444a0 b6c666d0
+ ---[ end trace bdd18f87595b1a5e ]---
 
-The AXG DT files use 0x20 for the length.  You are using 0x24.  I don't
-see any additional registers added to the driver, so this doesn't look right.
+The atomic transferring is implemented by enforcing PIO mode for the
+transfer and by polling interrupt status until transfer is completed or
+failed.
 
-> +				interrupts = <GIC_SPI 32 IRQ_TYPE_EDGE_RISING>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				clocks = <&clkc_periphs CLKID_I2C_M_A>;
-> +				status = "disabled";
-> +			};
-> +
-> +			i2c1: i2c@5c00 {
-> +				compatible = "amlogic,meson-axg-i2c";
-> +				reg = <0x0 0x5c00 0x0 0x24>;
-> +				interrupts = <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				clocks = <&clkc_periphs CLKID_I2C_M_B>;
-> +				status = "disabled";
-> +			};
-> +
-> +			i2c2: i2c@6800 {
-> +				compatible = "amlogic,meson-axg-i2c";
-> +				reg = <0x0 0x6800 0x0 0x24>;
-> +				interrupts = <GIC_SPI 76 IRQ_TYPE_EDGE_RISING>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				clocks = <&clkc_periphs CLKID_I2C_M_C>;
-> +				status = "disabled";
-> +			};
-> +
-> +			i2c3: i2c@6c00 {
-> +				compatible = "amlogic,meson-axg-i2c";
-> +				reg = <0x0 0x6c00 0x0 0x24>;
-> +				interrupts = <GIC_SPI 78 IRQ_TYPE_EDGE_RISING>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				clocks = <&clkc_periphs CLKID_I2C_M_D>;
-> +				status = "disabled";
-> +			};
-> +
->  			uart_AO: serial@1c00 {
->  				compatible = "amlogic,meson-gx-uart",
->  					     "amlogic,meson-ao-uart";
-> @@ -171,3 +218,105 @@
->  		#clock-cells = <0>;
->  	};
->  };
-> +
-> +&periphs_pinctrl {
-> +	i2c0_f11_pins:i2c0-f11 {
-> +		mux {
-> +			groups = "i2c0_sck_f11",
-> +				"i2c0_sda_f12";
-> +			function = "i2c0";
-> +			bias-pull-up;
-> +			drive-strength-microamp = <3000>;
+Now system shuts down properly every time.
 
-Can you also add some comment to the changelog about the need for
-drive-strength compared to AXG.
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 87 +++++++++++++++++++++++++++++++---
+ 1 file changed, 80 insertions(+), 7 deletions(-)
 
-> +		};
-> +	};
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index a98bf31d0e5c..19acf3e75605 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -17,6 +17,7 @@
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+ #include <linux/kernel.h>
++#include <linux/ktime.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/pinctrl/consumer.h>
+@@ -279,6 +280,7 @@ struct tegra_i2c_dev {
+ 	unsigned int dma_buf_size;
+ 	bool is_curr_dma_xfer;
+ 	struct completion dma_complete;
++	bool is_curr_atomic_xfer;
+ };
+ 
+ static void dvc_writel(struct tegra_i2c_dev *i2c_dev, u32 val,
+@@ -999,6 +1001,44 @@ static void tegra_i2c_config_fifo_trig(struct tegra_i2c_dev *i2c_dev,
+ 	i2c_writel(i2c_dev, val, reg);
+ }
+ 
++static unsigned long
++tegra_i2c_poll_completion_timeout(struct tegra_i2c_dev *i2c_dev,
++				  unsigned int timeout_ms)
++{
++	ktime_t ktime = ktime_get();
++	ktime_t ktimeout = ktime_add_ms(ktime, timeout_ms);
++
++	do {
++		u32 status = i2c_readl(i2c_dev, I2C_INT_STATUS);
++
++		if (status) {
++			tegra_i2c_isr(i2c_dev->irq, i2c_dev);
++
++			if (completion_done(&i2c_dev->msg_complete)) {
++				s64 delta = ktime_ms_delta(ktimeout, ktime);
++
++				return msecs_to_jiffies(delta) ?: 1;
++			}
++		}
++
++		ktime = ktime_get();
++
++	} while (ktime_before(ktime, ktimeout));
++
++	return 0;
++}
++
++static unsigned long
++tegra_i2c_wait_msg_completion_timeout(struct tegra_i2c_dev *i2c_dev,
++				      unsigned int timeout_ms)
++{
++	if (i2c_dev->is_curr_atomic_xfer)
++		return tegra_i2c_poll_completion_timeout(i2c_dev, timeout_ms);
++
++	return wait_for_completion_timeout(&i2c_dev->msg_complete,
++					   msecs_to_jiffies(timeout_ms));
++}
++
+ static int tegra_i2c_issue_bus_clear(struct i2c_adapter *adap)
+ {
+ 	struct tegra_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
+@@ -1020,8 +1060,7 @@ static int tegra_i2c_issue_bus_clear(struct i2c_adapter *adap)
+ 	i2c_writel(i2c_dev, reg, I2C_BUS_CLEAR_CNFG);
+ 	tegra_i2c_unmask_irq(i2c_dev, I2C_INT_BUS_CLR_DONE);
+ 
+-	time_left = wait_for_completion_timeout(&i2c_dev->msg_complete,
+-						msecs_to_jiffies(50));
++	time_left = tegra_i2c_wait_msg_completion_timeout(i2c_dev, 50);
+ 	if (time_left == 0) {
+ 		dev_err(i2c_dev->dev, "timed out for bus clear\n");
+ 		return -ETIMEDOUT;
+@@ -1066,7 +1105,8 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 
+ 	xfer_size = ALIGN(xfer_size, BYTES_PER_FIFO_WORD);
+ 	i2c_dev->is_curr_dma_xfer = (xfer_size > I2C_PIO_MODE_MAX_LEN) &&
+-				    i2c_dev->dma_buf;
++				    i2c_dev->dma_buf &&
++				    !i2c_dev->is_curr_atomic_xfer;
+ 	tegra_i2c_config_fifo_trig(i2c_dev, xfer_size);
+ 	dma = i2c_dev->is_curr_dma_xfer;
+ 	/*
+@@ -1202,8 +1242,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 					      i2c_dev->tx_dma_chan);
+ 	}
+ 
+-	time_left = wait_for_completion_timeout(&i2c_dev->msg_complete,
+-						msecs_to_jiffies(xfer_time));
++	time_left = tegra_i2c_wait_msg_completion_timeout(i2c_dev, xfer_time);
+ 	tegra_i2c_mask_irq(i2c_dev, int_mask);
+ 
+ 	if (time_left == 0) {
+@@ -1270,6 +1309,38 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 	return ret ?: i;
+ }
+ 
++static int tegra_i2c_xfer_atomic(struct i2c_adapter *adap,
++				 struct i2c_msg msgs[], int num)
++{
++	struct tegra_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
++	int ret;
++
++	i2c_dev->is_curr_atomic_xfer = true;
++
++	WARN_ON_ONCE(i2c_dev->irq_disabled);
++
++	if (!i2c_dev->irq_disabled) {
++		disable_irq_nosync(i2c_dev->irq);
++		i2c_dev->irq_disabled = true;
++	}
++
++	ret = tegra_i2c_xfer(adap, msgs, num);
++
++	/*
++	 * Interrupt will be enabled after hardware reset which happens in
++	 * a case of transfer failure. For successful transfers interrupt
++	 * need to be re-enabled.
++	 */
++	if (i2c_dev->irq_disabled) {
++		enable_irq(i2c_dev->irq);
++		i2c_dev->irq_disabled = false;
++	}
++
++	i2c_dev->is_curr_atomic_xfer = false;
++
++	return ret;
++}
++
+ static u32 tegra_i2c_func(struct i2c_adapter *adap)
+ {
+ 	struct tegra_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
+@@ -1297,8 +1368,9 @@ static void tegra_i2c_parse_dt(struct tegra_i2c_dev *i2c_dev)
+ }
+ 
+ static const struct i2c_algorithm tegra_i2c_algo = {
+-	.master_xfer	= tegra_i2c_xfer,
+-	.functionality	= tegra_i2c_func,
++	.master_xfer		= tegra_i2c_xfer,
++	.master_xfer_atomic	= tegra_i2c_xfer_atomic,
++	.functionality		= tegra_i2c_func,
+ };
+ 
+ /* payload size is only 12 bit */
+@@ -1607,6 +1679,7 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 		goto unprepare_fast_clk;
+ 	}
+ 
++	pm_runtime_irq_safe(&pdev->dev);
+ 	pm_runtime_enable(&pdev->dev);
+ 	if (!pm_runtime_enabled(&pdev->dev))
+ 		ret = tegra_i2c_runtime_resume(&pdev->dev);
+-- 
+2.24.0
 
-Kevin
