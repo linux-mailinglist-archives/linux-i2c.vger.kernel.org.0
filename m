@@ -2,168 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF33C117DEB
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2019 03:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD001184BA
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2019 11:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbfLJCqL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 9 Dec 2019 21:46:11 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:48644 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726509AbfLJCqL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 9 Dec 2019 21:46:11 -0500
-Received: from [10.28.39.99] (10.28.39.99) by mail-sz.amlogic.com (10.28.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Tue, 10 Dec
- 2019 10:46:42 +0800
-Subject: Re: [PATCH] arm64: dts: meson-a1: add I2C nodes
-To:     Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
+        id S1727219AbfLJKRU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Dec 2019 05:17:20 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:54840 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727143AbfLJKRU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Dec 2019 05:17:20 -0500
+Received: by mail-wm1-f68.google.com with SMTP id b11so2473885wmj.4
+        for <linux-i2c@vger.kernel.org>; Tue, 10 Dec 2019 02:17:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=xmLlcTghzPFIQ8mfUoSKx274MOGK7c0q1BOLA3zin5c=;
+        b=fcSvCZuDu/jCInvDVS5idg2zFC+JxUezgWsEzS5YwYFM1JFAhzC92Nm24kZZOmk094
+         RfkjjBX4Tl7pVGKiTXkb6ZXjC8C5cdJ/xvvMdZu5xSlYUlCaPYcv4skpDFMDdUy6wKkE
+         j81+cogTRKJl+jY4iIEWkAoeVhuzbSa1Sg3rYZ2J/NAC82qC8k4qMSaQ9SRIMQ1Xs9VM
+         XIeopc2OHN73WVTc7bcO1iL6c8KxgROgkxyPTdf8WVQ+OZrbg/S39bH4Efd6uV/iI781
+         OYm3bzPYAf5N4zJXWgkloQEMKq6WKNRc1Jp54ueSiHCXeH4J9ka0xLNn64pC13mRi3qz
+         2oMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=xmLlcTghzPFIQ8mfUoSKx274MOGK7c0q1BOLA3zin5c=;
+        b=lnWfQ14JitIWPJv7p8wbalPTAlpcgQKTZ7u1kGJyxdWSs8e9ZAruBAwtWCDTVvHKJ6
+         Y2IP3qFNN/0EeutKZOaPPYq3AQ0juEUq9U2E7RQ+Nbg3r9W+s7L3ZEg5QGf8dEPAOTOX
+         mqaCxnA2zxNucWdYpCKBz1cHs/naSKqPgTwXb0hkWZrV+09IcsHRv1J66nSp7vVc2TUv
+         McXy3n5nmSZL+7prLKGg0IaIw6MOFNUV2K9cUovWC9WZ/WC0hDcYhLhGKmn33A9F2hSs
+         TUbc7jmW1VeUlMjVTbnL2KJ6WzO3B1zcHHNEVy7XU+w7hT9fQqprqUrkUUt4SD+o3v2X
+         hcrw==
+X-Gm-Message-State: APjAAAWqJdIXSUtMC3l6WISVbhg+PAt0aNFmhdy4WFN9S6KKQih60ZT8
+        FMurQ2ThQMDyqh959p5qyokJ/Q==
+X-Google-Smtp-Source: APXvYqwVnyN4tOCPyX/fALkBBhtIPe2HLM6zr6GYhucBkFtEKMV/e/35eKhQlSa5MVPgf6uQKl+RIQ==
+X-Received: by 2002:a05:600c:507:: with SMTP id i7mr4398123wmc.135.1575973037693;
+        Tue, 10 Dec 2019 02:17:17 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id g2sm2697067wrw.76.2019.12.10.02.17.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Dec 2019 02:17:17 -0800 (PST)
+References: <20191202111253.94872-1-jian.hu@amlogic.com>
+User-agent: mu4e 1.3.3; emacs 26.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Jian Hu <jian.hu@amlogic.com>,
         Neil Armstrong <narmstrong@baylibre.com>
-CC:     Rob Herring <robh@kernel.org>,
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        "Rob Herring" <robh@kernel.org>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Wolfram Sang <wsa@the-dreams.de>,
         Mark Rutland <mark.rutland@arm.com>,
         Jianxin Pan <jianxin.pan@amlogic.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20191202111253.94872-1-jian.hu@amlogic.com>
- <7hsgltqfdx.fsf@baylibre.com>
-From:   Jian Hu <jian.hu@amlogic.com>
-Message-ID: <e90e00e1-c868-ce09-6f79-deb62da72b43@amlogic.com>
-Date:   Tue, 10 Dec 2019 10:46:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        linux-amlogic@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: meson-a1: add I2C nodes
+In-reply-to: <20191202111253.94872-1-jian.hu@amlogic.com>
+Date:   Tue, 10 Dec 2019 11:17:16 +0100
+Message-ID: <1j8snkh4cz.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-In-Reply-To: <7hsgltqfdx.fsf@baylibre.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.28.39.99]
-X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
- (10.28.11.5)
+Content-Type: text/plain
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Kevin
 
-Thanks for your review
+On Mon 02 Dec 2019 at 12:12, Jian Hu <jian.hu@amlogic.com> wrote:
 
-On 2019/12/10 6:54, Kevin Hilman wrote:
-> Hi Jian,
-> 
-> Jian Hu <jian.hu@amlogic.com> writes:
-> 
->> There are four I2C controllers in A1 series,
->> Share the same comptible with AXG.The I2C nodes
->> depend on pinmux and clock controller.
->>
->> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
->> ---
->>   arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 149 ++++++++++++++++++++++
->>   1 file changed, 149 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
->> index eab2ecd36aa8..d0a73d953f5e 100644
->> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
->> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
->> @@ -16,6 +16,13 @@
->>   	#address-cells = <2>;
->>   	#size-cells = <2>;
->>   
->> +	aliases {
->> +		i2c0 = &i2c0;
->> +		i2c1 = &i2c1;
->> +		i2c2 = &i2c2;
->> +		i2c3 = &i2c3;
->> +	};
->> +
->>   	cpus {
->>   		#address-cells = <2>;
->>   		#size-cells = <0>;
->> @@ -117,6 +124,46 @@
->>   				};
->>   			};
->>   
->> +			i2c0: i2c@1400 {
->> +				compatible = "amlogic,meson-axg-i2c";
->> +				reg = <0x0 0x1400 0x0 0x24>;
-> 
-> The AXG DT files use 0x20 for the length.  You are using 0x24.  I don't
-> see any additional registers added to the driver, so this doesn't look right.
-In fact, For G12 series and A1, the length should be 0x24. A new 
-register is added, And it is for IRQ handler timeout. If the 
-transmission is exceeding a limited time, it will abort the 
-transmission.Now the function is not used, There is completion to deal 
-the timeout in the driver. I will set the length 0x20 becouse of the new 
-register is not used.
-> 
->> +				interrupts = <GIC_SPI 32 IRQ_TYPE_EDGE_RISING>;
->> +				#address-cells = <1>;
->> +				#size-cells = <0>;
->> +				clocks = <&clkc_periphs CLKID_I2C_M_A>;
->> +				status = "disabled";
->> +			};
->> +
->> +			i2c1: i2c@5c00 {
->> +				compatible = "amlogic,meson-axg-i2c";
->> +				reg = <0x0 0x5c00 0x0 0x24>;
->> +				interrupts = <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
->> +				#address-cells = <1>;
->> +				#size-cells = <0>;
->> +				clocks = <&clkc_periphs CLKID_I2C_M_B>;
->> +				status = "disabled";
->> +			};
->> +
->> +			i2c2: i2c@6800 {
->> +				compatible = "amlogic,meson-axg-i2c";
->> +				reg = <0x0 0x6800 0x0 0x24>;
->> +				interrupts = <GIC_SPI 76 IRQ_TYPE_EDGE_RISING>;
->> +				#address-cells = <1>;
->> +				#size-cells = <0>;
->> +				clocks = <&clkc_periphs CLKID_I2C_M_C>;
->> +				status = "disabled";
->> +			};
->> +
->> +			i2c3: i2c@6c00 {
->> +				compatible = "amlogic,meson-axg-i2c";
->> +				reg = <0x0 0x6c00 0x0 0x24>;
->> +				interrupts = <GIC_SPI 78 IRQ_TYPE_EDGE_RISING>;
->> +				#address-cells = <1>;
->> +				#size-cells = <0>;
->> +				clocks = <&clkc_periphs CLKID_I2C_M_D>;
->> +				status = "disabled";
->> +			};
->> +
->>   			uart_AO: serial@1c00 {
->>   				compatible = "amlogic,meson-gx-uart",
->>   					     "amlogic,meson-ao-uart";
->> @@ -171,3 +218,105 @@
->>   		#clock-cells = <0>;
->>   	};
->>   };
->> +
->> +&periphs_pinctrl {
->> +	i2c0_f11_pins:i2c0-f11 {
->> +		mux {
->> +			groups = "i2c0_sck_f11",
->> +				"i2c0_sda_f12";
->> +			function = "i2c0";
->> +			bias-pull-up;
->> +			drive-strength-microamp = <3000>;
-> 
-> Can you also add some comment to the changelog about the need for
-> drive-strength compared to AXG.
-OK, Drive strength function is added for GPIO pins from G12 series.
-So does A1 series.
-> 
->> +		};
->> +	};
-> 
-> Kevin
-> 
-> .
-> 
+> There are four I2C controllers in A1 series,
+> Share the same comptible with AXG.The I2C nodes
+> depend on pinmux and clock controller.
+>
+> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> ---
+>  arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 149 ++++++++++++++++++++++
+>  1 file changed, 149 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> index eab2ecd36aa8..d0a73d953f5e 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> @@ -16,6 +16,13 @@
+>  	#address-cells = <2>;
+>  	#size-cells = <2>;
+>  
+> +	aliases {
+> +		i2c0 = &i2c0;
+> +		i2c1 = &i2c1;
+> +		i2c2 = &i2c2;
+> +		i2c3 = &i2c3;
+> +	};
+> +
+
+I wonder if assigning i2c bus alias in the SoC dtsi is such a good idea.
+
+Such aliases are usually assigned as needed by each board design:
+meson-a1-ad401.dts in your case.
