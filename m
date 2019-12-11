@@ -2,113 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 137C511B712
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Dec 2019 17:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3010C11C10E
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2019 01:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731257AbfLKPMy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Dec 2019 10:12:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35362 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730636AbfLKPMx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:12:53 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A87032467F;
-        Wed, 11 Dec 2019 15:12:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576077173;
-        bh=oAgvk0szn6Zv2vG5haaR1xbFC4wzoPEwZ9AaSte1z44=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PuihQRM1WOHMj0sM1QkAkRa1QCgm0uO0YBti4wkSxcgVYvtN139T2/cCIBYbjF5zE
-         Q5wMrY8THjhc+wGoJai0pmfXREy7T7NLuBB4D0zbhTRc7+RKUA3nvcQk/MaaIXCH9R
-         kEw/iws8ZLUxvq4wiDhZRqNavNYby4rm62hX+Urw=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alain Volmat <alain.volmat@st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 058/134] i2c: stm32f7: fix & reorder remove & probe error handling
-Date:   Wed, 11 Dec 2019 10:10:34 -0500
-Message-Id: <20191211151150.19073-58-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191211151150.19073-1-sashal@kernel.org>
-References: <20191211151150.19073-1-sashal@kernel.org>
+        id S1727084AbfLLAHF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Dec 2019 19:07:05 -0500
+Received: from vegas.theobroma-systems.com ([144.76.126.164]:56555 "EHLO
+        mail.theobroma-systems.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726897AbfLLAHE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Dec 2019 19:07:04 -0500
+X-Greylist: delayed 1656 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Dec 2019 19:07:03 EST
+Received: from ip092042140082.rev.nessus.at ([92.42.140.82]:60538 helo=localhost.localdomain)
+        by mail.theobroma-systems.com with esmtpsa (TLS1.2:RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <christoph.muellner@theobroma-systems.com>)
+        id 1ifBZm-0001xP-07; Thu, 12 Dec 2019 00:39:26 +0100
+From:   christoph.muellner@theobroma-systems.com
+To:     Till Harbaum <till@harbaum.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        christoph.muellner@theobroma-systems.com
+Subject: [PATCH] i2c: tiny-usb: Correct I2C fault codes.
+Date:   Thu, 12 Dec 2019 00:39:05 +0100
+Message-Id: <20191211233905.84056-1-christoph.muellner@theobroma-systems.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Alain Volmat <alain.volmat@st.com>
+From: Christoph Müllner <christoph.muellner@theobroma-systems.com>
 
-[ Upstream commit 53aaaa5d9b1e95eb40e877fbffa6f964a8394bb7 ]
+This patch changes the I2C fault codes according to the specified
+values in Documentation/i2c/fault-codes.
 
-Add missing dma channels free calls in case of error during probe
-and reorder the remove function so that dma channels are freed after
-the i2c adapter is deleted.
-Overall, reorder the remove function so that probe error handling order
-and remove function order are same.
-
-Fixes: 7ecc8cfde553 ("i2c: i2c-stm32f7: Add DMA support")
-Signed-off-by: Alain Volmat <alain.volmat@st.com>
-Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Christoph Müllner <christoph.muellner@theobroma-systems.com>
 ---
- drivers/i2c/busses/i2c-stm32f7.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/i2c/busses/i2c-tiny-usb.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index b24e7b937f210..84cfed17ff4f5 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1985,6 +1985,11 @@ pm_disable:
- 	pm_runtime_set_suspended(i2c_dev->dev);
- 	pm_runtime_dont_use_autosuspend(i2c_dev->dev);
+diff --git a/drivers/i2c/busses/i2c-tiny-usb.c b/drivers/i2c/busses/i2c-tiny-usb.c
+index 43e3603489ee..7279ca0eaa2d 100644
+--- a/drivers/i2c/busses/i2c-tiny-usb.c
++++ b/drivers/i2c/busses/i2c-tiny-usb.c
+@@ -84,7 +84,7 @@ static int usb_xfer(struct i2c_adapter *adapter, struct i2c_msg *msgs, int num)
+ 				     pmsg->buf, pmsg->len) != pmsg->len) {
+ 				dev_err(&adapter->dev,
+ 					"failure reading data\n");
+-				ret = -EREMOTEIO;
++				ret = -EIO;
+ 				goto out;
+ 			}
+ 		} else {
+@@ -94,7 +94,7 @@ static int usb_xfer(struct i2c_adapter *adapter, struct i2c_msg *msgs, int num)
+ 				      pmsg->buf, pmsg->len) != pmsg->len) {
+ 				dev_err(&adapter->dev,
+ 					"failure writing data\n");
+-				ret = -EREMOTEIO;
++				ret = -EIO;
+ 				goto out;
+ 			}
+ 		}
+@@ -102,13 +102,13 @@ static int usb_xfer(struct i2c_adapter *adapter, struct i2c_msg *msgs, int num)
+ 		/* read status */
+ 		if (usb_read(adapter, CMD_GET_STATUS, 0, 0, pstatus, 1) != 1) {
+ 			dev_err(&adapter->dev, "failure reading status\n");
+-			ret = -EREMOTEIO;
++			ret = -EIO;
+ 			goto out;
+ 		}
  
-+	if (i2c_dev->dma) {
-+		stm32_i2c_dma_free(i2c_dev->dma);
-+		i2c_dev->dma = NULL;
-+	}
-+
- clk_free:
- 	clk_disable_unprepare(i2c_dev->clk);
- 
-@@ -1995,21 +2000,21 @@ static int stm32f7_i2c_remove(struct platform_device *pdev)
- {
- 	struct stm32f7_i2c_dev *i2c_dev = platform_get_drvdata(pdev);
- 
--	if (i2c_dev->dma) {
--		stm32_i2c_dma_free(i2c_dev->dma);
--		i2c_dev->dma = NULL;
--	}
--
- 	i2c_del_adapter(&i2c_dev->adap);
- 	pm_runtime_get_sync(i2c_dev->dev);
- 
--	clk_disable_unprepare(i2c_dev->clk);
--
- 	pm_runtime_put_noidle(i2c_dev->dev);
- 	pm_runtime_disable(i2c_dev->dev);
- 	pm_runtime_set_suspended(i2c_dev->dev);
- 	pm_runtime_dont_use_autosuspend(i2c_dev->dev);
- 
-+	if (i2c_dev->dma) {
-+		stm32_i2c_dma_free(i2c_dev->dma);
-+		i2c_dev->dma = NULL;
-+	}
-+
-+	clk_disable_unprepare(i2c_dev->clk);
-+
- 	return 0;
- }
- 
+ 		dev_dbg(&adapter->dev, "  status = %d\n", *pstatus);
+ 		if (*pstatus == STATUS_ADDRESS_NAK) {
+-			ret = -EREMOTEIO;
++			ret = -ENXIO;
+ 			goto out;
+ 		}
+ 	}
 -- 
-2.20.1
+2.23.0
 
