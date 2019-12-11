@@ -2,239 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D62D811A302
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Dec 2019 04:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BDD211A582
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Dec 2019 08:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbfLKD2O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Dec 2019 22:28:14 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:56887 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726687AbfLKD2O (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Dec 2019 22:28:14 -0500
-Received: from droid15-sz.amlogic.com (10.28.8.25) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Wed, 11 Dec 2019
- 11:28:41 +0800
-From:   Jian Hu <jian.hu@amlogic.com>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-CC:     Jian Hu <jian.hu@amlogic.com>, Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v2] arm64: dts: meson-a1: add I2C nodes
-Date:   Wed, 11 Dec 2019 11:28:02 +0800
-Message-ID: <20191211032802.83309-1-jian.hu@amlogic.com>
-X-Mailer: git-send-email 2.24.0
+        id S1728141AbfLKH7E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Dec 2019 02:59:04 -0500
+Received: from sauhun.de ([88.99.104.3]:47760 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726983AbfLKH7E (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 11 Dec 2019 02:59:04 -0500
+Received: from localhost (p54B33103.dip0.t-ipconnect.de [84.179.49.3])
+        by pokefinder.org (Postfix) with ESMTPSA id 3F4D72C05C1;
+        Wed, 11 Dec 2019 08:59:02 +0100 (CET)
+Date:   Wed, 11 Dec 2019 08:59:01 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/17] i2c: add helper to check if a client has a driver
+ attached
+Message-ID: <20191211075901.GB1161@ninjato>
+References: <20191106212120.27983-1-wsa+renesas@sang-engineering.com>
+ <20191106212120.27983-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.8.25]
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wzJLGUyc3ArbnUjN"
+Content-Disposition: inline
+In-Reply-To: <20191106212120.27983-2-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-There are four I2C controllers in A1 series,
-Share the same comptible with AXG. Compared to AXG,
-Drive strength feature is newly added in A1.
-This patch depends on A1 clock driver.
 
-Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+--wzJLGUyc3ArbnUjN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
----
-This patch depends on A1 clock patchset at[0]
+On Wed, Nov 06, 2019 at 10:21:01PM +0100, Wolfram Sang wrote:
+> Factoring out something used in the media subsystem. As an improvement,
+> it bails out on both, NULL and ERRPTR.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Changes since v1 at [1]:
--change reg length to 0x20
--assign i2c bus alias in dts file
--add new feature note compared to AXG in changelog
+I picked it up myself now, so we can start using it right away.
 
-[0] https://lkml.kernel.org/r/20191206074052.15557-1-jian.hu@amlogic.com
-[1] https://lkml.kernel.org/r/20191202111253.94872-1-jian.hu@amlogic.com
----
----
- .../arm64/boot/dts/amlogic/meson-a1-ad401.dts |   4 +
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi     | 142 ++++++++++++++++++
- 2 files changed, 146 insertions(+)
+Applied to for-current, thanks!
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1-ad401.dts b/arch/arm64/boot/dts/amlogic/meson-a1-ad401.dts
-index 69c25c68c358..2d0457976233 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1-ad401.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1-ad401.dts
-@@ -13,6 +13,10 @@
- 
- 	aliases {
- 		serial0 = &uart_AO_B;
-+		i2c0 = &i2c0;
-+		i2c1 = &i2c1;
-+		i2c2 = &i2c2;
-+		i2c3 = &i2c3;
- 	};
- 
- 	chosen {
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-index eab2ecd36aa8..66d5206a57de 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-@@ -117,6 +117,46 @@
- 				};
- 			};
- 
-+			i2c0: i2c@1400 {
-+				compatible = "amlogic,meson-axg-i2c";
-+				reg = <0x0 0x1400 0x0 0x20>;
-+				interrupts = <GIC_SPI 32 IRQ_TYPE_EDGE_RISING>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				clocks = <&clkc_periphs CLKID_I2C_M_A>;
-+				status = "disabled";
-+			};
-+
-+			i2c1: i2c@5c00 {
-+				compatible = "amlogic,meson-axg-i2c";
-+				reg = <0x0 0x5c00 0x0 0x20>;
-+				interrupts = <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				clocks = <&clkc_periphs CLKID_I2C_M_B>;
-+				status = "disabled";
-+			};
-+
-+			i2c2: i2c@6800 {
-+				compatible = "amlogic,meson-axg-i2c";
-+				reg = <0x0 0x6800 0x0 0x20>;
-+				interrupts = <GIC_SPI 76 IRQ_TYPE_EDGE_RISING>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				clocks = <&clkc_periphs CLKID_I2C_M_C>;
-+				status = "disabled";
-+			};
-+
-+			i2c3: i2c@6c00 {
-+				compatible = "amlogic,meson-axg-i2c";
-+				reg = <0x0 0x6c00 0x0 0x20>;
-+				interrupts = <GIC_SPI 78 IRQ_TYPE_EDGE_RISING>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				clocks = <&clkc_periphs CLKID_I2C_M_D>;
-+				status = "disabled";
-+			};
-+
- 			uart_AO: serial@1c00 {
- 				compatible = "amlogic,meson-gx-uart",
- 					     "amlogic,meson-ao-uart";
-@@ -171,3 +211,105 @@
- 		#clock-cells = <0>;
- 	};
- };
-+
-+&periphs_pinctrl {
-+	i2c0_f11_pins:i2c0-f11 {
-+		mux {
-+			groups = "i2c0_sck_f11",
-+				"i2c0_sda_f12";
-+			function = "i2c0";
-+			bias-pull-up;
-+			drive-strength-microamp = <3000>;
-+		};
-+	};
-+
-+	i2c0_f9_pins:i2c0-f9 {
-+		mux {
-+			groups = "i2c0_sck_f9",
-+				"i2c0_sda_f10";
-+			function = "i2c0";
-+			bias-pull-up;
-+			drive-strength-microamp = <3000>;
-+		};
-+	};
-+
-+	i2c1_x_pins:i2c1-x {
-+		mux {
-+			groups = "i2c1_sck_x",
-+				"i2c1_sda_x";
-+			function = "i2c1";
-+			bias-pull-up;
-+			drive-strength-microamp = <3000>;
-+		};
-+	};
-+
-+	i2c1_a_pins:i2c1-a {
-+		mux {
-+			groups = "i2c1_sck_a",
-+				"i2c1_sda_a";
-+			function = "i2c1";
-+			bias-pull-up;
-+			drive-strength-microamp = <3000>;
-+		};
-+	};
-+
-+	i2c2_x0_pins:i2c2-x0 {
-+		mux {
-+			groups = "i2c2_sck_x0",
-+				"i2c2_sda_x1";
-+			function = "i2c2";
-+			bias-pull-up;
-+			drive-strength-microamp = <3000>;
-+		};
-+	};
-+
-+	i2c2_x15_pins:i2c2-x15 {
-+		mux {
-+			groups = "i2c2_sck_x15",
-+				"i2c2_sda_x16";
-+			function = "i2c2";
-+			bias-pull-up;
-+			drive-strength-microamp = <3000>;
-+		};
-+	};
-+
-+	i2c2_a4_pins:i2c2-a4 {
-+		mux {
-+			groups = "i2c2_sck_a4",
-+				"i2c2_sda_a5";
-+			function = "i2c2";
-+			bias-pull-up;
-+			drive-strength-microamp = <3000>;
-+		};
-+	};
-+
-+	i2c2_a8_pins:i2c2-a8 {
-+		mux {
-+			groups = "i2c2_sck_a8",
-+				"i2c2_sda_a9";
-+			function = "i2c2";
-+			bias-pull-up;
-+			drive-strength-microamp = <3000>;
-+		};
-+	};
-+
-+	i2c3_x_pins:i2c3-x {
-+		mux {
-+			groups = "i2c3_sck_x",
-+				"i2c3_sda_x";
-+			function = "i2c3";
-+			bias-pull-up;
-+			drive-strength-microamp = <3000>;
-+		};
-+	};
-+
-+	i2c3_f_pins:i2c3-f {
-+		mux {
-+			groups = "i2c3_sck_f",
-+				"i2c3_sda_f";
-+			function = "i2c3";
-+			bias-pull-up;
-+			drive-strength-microamp = <3000>;
-+		};
-+	};
-+};
--- 
-2.24.0
 
+--wzJLGUyc3ArbnUjN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl3wocEACgkQFA3kzBSg
+KbZ43hAAqz+5fi6ryOKPqPuTqiq7QeV1g8DyDLaJNKtBdeZfaSWXezGbkF/x3gsb
+0jP38WFTqBQn2GrsY0PyCgeAVYrxZfiU7B9yIuOUb/INElibFyvWwGg/ApvHQ0Uz
+lzzuFaRNvyNccwmgE96s0TXlrQJLWmIfH3edtAajiOWG0DgxyW0RzuMTiT3Gg8rY
+dZfUJYuregJbUZpTSjGlno6ANJp1TYRXtFWbtIBqlV8EwRVuVPzXRrui9+GDQzYs
+19cK292jttoBLLHLHMh3JXAgtZfiMSKMk70kC1JZTKZOohscFn6KYkvUqSMR7QzI
+jtaytTNhGsiT5tfZZzO0V7vfEE5pw/MBEr5AHxrtpG2t9lcrjGOXnys96P+mei1W
+pTPWOkH20+YUPsmgr5Ri2H9AUF0qgsGj+jkThVpO6+iGNS5RavXs/QWXkzDlWkT8
+csgR+u3r4xSPGZT/+RxgHbDUIU305kVwWOewAa7A3sYfZIG8qnHGrDbxIqHqnxTD
+wMq6MSAevLTBAvF5LDPUOqrofniu9ROHKTMeh64ZlE7qj4cDcD9/Wnz3smmHqi/b
+FngQQ6CL4LQ2FszNDPoEchwxfWyfh7pkBwWwBTEITHws1Sl50FXdbV8wU99+MLoB
+h73PWflvKagFNtgvsy3gHryPj0gLOtX+aNWq8zWq2JdxQHvBts4=
+=l2uc
+-----END PGP SIGNATURE-----
+
+--wzJLGUyc3ArbnUjN--
