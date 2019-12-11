@@ -2,75 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B6D119C42
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2019 23:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1237811A134
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Dec 2019 03:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727059AbfLJWUZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Dec 2019 17:20:25 -0500
-Received: from sauhun.de ([88.99.104.3]:42738 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726874AbfLJWUZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:20:25 -0500
-Received: from localhost (p54B330BE.dip0.t-ipconnect.de [84.179.48.190])
-        by pokefinder.org (Postfix) with ESMTPSA id E385C2C2D3F;
-        Tue, 10 Dec 2019 23:20:23 +0100 (CET)
-Date:   Tue, 10 Dec 2019 23:20:23 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i2c: fix header file kernel-doc warning
-Message-ID: <20191210222023.GB8683@kunai>
-References: <38dde454-d00d-f9b2-18b4-590a2697b368@infradead.org>
+        id S1726835AbfLKCQp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Dec 2019 21:16:45 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:10885 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726500AbfLKCQo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Dec 2019 21:16:44 -0500
+Received: from [10.28.39.99] (10.28.39.99) by mail-sz.amlogic.com (10.28.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Wed, 11 Dec
+ 2019 10:17:13 +0800
+Subject: Re: [PATCH] arm64: dts: meson-a1: add I2C nodes
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+CC:     Kevin Hilman <khilman@baylibre.com>, Rob Herring <robh@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20191202111253.94872-1-jian.hu@amlogic.com>
+ <1j8snkh4cz.fsf@starbuckisacylon.baylibre.com>
+From:   Jian Hu <jian.hu@amlogic.com>
+Message-ID: <be7f27d2-5601-0d0c-9c62-7206e7de0411@amlogic.com>
+Date:   Wed, 11 Dec 2019 10:17:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GID0FwUMdk1T2AWN"
-Content-Disposition: inline
-In-Reply-To: <38dde454-d00d-f9b2-18b4-590a2697b368@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1j8snkh4cz.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.28.39.99]
+X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
+ (10.28.11.5)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi jerome
 
---GID0FwUMdk1T2AWN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for your review
 
-On Sun, Dec 08, 2019 at 08:35:38PM -0800, Randy Dunlap wrote:
-> From: Randy Dunlap <rdunlap@infradead.org>
->=20
-> Fix kernel-doc warning in <linux/i2c.h>.
->=20
-> ../include/linux/i2c.h:337: warning: Function parameter or member 'init_i=
-rq' not described in 'i2c_client'
->=20
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Wolfram Sang <wsa@the-dreams.de>
-> Cc: linux-i2c@vger.kernel.org
-
-Applied to for-current, thanks!
-
-
---GID0FwUMdk1T2AWN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl3wGicACgkQFA3kzBSg
-KbaABA/9F47NO54UcK/oj7DAszc0UiMVDcg/IM/VNDQd82MmB4LIXz72qGd1mZ81
-L0pUCRuGsesDI6ZM3k8uzvw5BUWrHhI82yLd12S2dXtaR1X8wOoygabo/rAUn2Sy
-ApyB/X6FC2Wr/cTOdjhx8XHL+DnDdKT3H0tD5RlwCCG7m3DvVebhqiKGCIXrjgTU
-3CxPEV+dgOyVQ02oUnq+EB1jL/9VCsYNMnjn3LFqIByebGKp9NUvuOCPo1wHjqOs
-bR+FrB68DxYdneJSnbrinvKBnsG85UZ0AluWUGQRMxC26d9gj4kPJC7YBfXVyIcT
-Cew/OKlQdNKzPxMxh8UjgFkS+jpvbb2R0bZgecvfIfxxBb1B46ud+2hzz+Gn90fU
-zCScUB96ORxqUceJ31zqHGGlM3TNjKlsItmawOsxmSjG3e5E15xJ3YCdkQhNhLTK
-dcdd5FeWOyqVQ1lvRCP5cHgtHKG71jp6XIEMMWmiXFPWfErDVCXv1qIFGusRpRlo
-B1RHoM9+HSli6umS9A1Dg0BN6udAE3OxBw+cXwtEM04pjSf+JUBPSdnM+O8QA/uV
-AvOVM7R4bfbEKtURlV9OD82NIC9Q1MWw08VNn+R8bYIT5vQ05a7vSHDP3WXEzWv3
-Qvm160uxx0JUehQ3fyVXz53qfiYWaG2sbpNV7jp+yp5fJSXoKfo=
-=pHIK
------END PGP SIGNATURE-----
-
---GID0FwUMdk1T2AWN--
+On 2019/12/10 18:17, Jerome Brunet wrote:
+> 
+> On Mon 02 Dec 2019 at 12:12, Jian Hu <jian.hu@amlogic.com> wrote:
+> 
+>> There are four I2C controllers in A1 series,
+>> Share the same comptible with AXG.The I2C nodes
+>> depend on pinmux and clock controller.
+>>
+>> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+>> ---
+>>   arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 149 ++++++++++++++++++++++
+>>   1 file changed, 149 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+>> index eab2ecd36aa8..d0a73d953f5e 100644
+>> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+>> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+>> @@ -16,6 +16,13 @@
+>>   	#address-cells = <2>;
+>>   	#size-cells = <2>;
+>>   
+>> +	aliases {
+>> +		i2c0 = &i2c0;
+>> +		i2c1 = &i2c1;
+>> +		i2c2 = &i2c2;
+>> +		i2c3 = &i2c3;
+>> +	};
+>> +
+> 
+> I wonder if assigning i2c bus alias in the SoC dtsi is such a good idea.
+> 
+> Such aliases are usually assigned as needed by each board design:
+> meson-a1-ad401.dts in your case.
+> 
+You are right, I will set i2c bus alias in dts file.
+> .
+> 
