@@ -2,32 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3010C11C10E
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2019 01:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DEB11C125
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2019 01:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727084AbfLLAHF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Dec 2019 19:07:05 -0500
-Received: from vegas.theobroma-systems.com ([144.76.126.164]:56555 "EHLO
+        id S1727127AbfLLAM5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Dec 2019 19:12:57 -0500
+Received: from vegas.theobroma-systems.com ([144.76.126.164]:52765 "EHLO
         mail.theobroma-systems.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726897AbfLLAHE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Dec 2019 19:07:04 -0500
-X-Greylist: delayed 1656 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Dec 2019 19:07:03 EST
-Received: from ip092042140082.rev.nessus.at ([92.42.140.82]:60538 helo=localhost.localdomain)
+        by vger.kernel.org with ESMTP id S1727067AbfLLAM5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Dec 2019 19:12:57 -0500
+Received: from 212-186-62-102.cable.dynamic.surfer.at ([212.186.62.102]:35684 helo=cm.fritz.box)
         by mail.theobroma-systems.com with esmtpsa (TLS1.2:RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <christoph.muellner@theobroma-systems.com>)
-        id 1ifBZm-0001xP-07; Thu, 12 Dec 2019 00:39:26 +0100
+        id 1ifC6A-0002dD-Ow; Thu, 12 Dec 2019 01:12:54 +0100
 From:   christoph.muellner@theobroma-systems.com
-To:     Till Harbaum <till@harbaum.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        christoph.muellner@theobroma-systems.com
+Cc:     =?UTF-8?q?Christoph=20M=C3=BCllner?= 
+        <christoph.muellner@theobroma-systems.com>,
+        Till Harbaum <till@harbaum.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: [PATCH] i2c: tiny-usb: Correct I2C fault codes.
-Date:   Thu, 12 Dec 2019 00:39:05 +0100
-Message-Id: <20191211233905.84056-1-christoph.muellner@theobroma-systems.com>
+Date:   Thu, 12 Dec 2019 01:12:50 +0100
+Message-Id: <20191212001251.85344-1-christoph.muellner@theobroma-systems.com>
 X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
