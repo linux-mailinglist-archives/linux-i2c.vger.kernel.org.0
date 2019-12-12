@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC3511DA12
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2019 00:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA4711DA16
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2019 00:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731300AbfLLXfN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Dec 2019 18:35:13 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:39152 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730979AbfLLXfN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Dec 2019 18:35:13 -0500
-Received: by mail-lj1-f196.google.com with SMTP id e10so569139ljj.6;
-        Thu, 12 Dec 2019 15:35:11 -0800 (PST)
+        id S1731320AbfLLXfP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Dec 2019 18:35:15 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:38535 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726427AbfLLXfO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Dec 2019 18:35:14 -0500
+Received: by mail-lf1-f65.google.com with SMTP id r14so569009lfm.5;
+        Thu, 12 Dec 2019 15:35:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1cVsLJFz89Vu7CJdRahLgph9ywbohEGqsx2SWyRDeTQ=;
-        b=qvoQ62DKFza17wtpugsAb+eXLIKAXhiZjbSwnk4o3pFzMdgApDHILny97csQi2n2D6
-         s+XKapMvMMDYIm+GmKYFp2fO8ID+v+qAqukQw0ruC9gM5YwZAJub4g1inJQpq8sEnHat
-         ZZIorWo/dNBekYGecksgzlGYfe4T5LRRhOWq97i9CVHIfA1RqwqapReypOtF+ZZMEScL
-         Qoakwl3sky70ppEFv+GJpEe8w8CSYq5N5QDmCpMhhbhnSw0mgmxL5HBxPAsR6zy829pq
-         2YIhFrED5+dFTwHt4sxFkDEvcgzRlfD5PQUja4wqAbOWKXLq8DGXom0OrD3ijIMLKcVt
-         K4BQ==
+        bh=aO85qqdL2qrngMuzPa0x+Jh/Nqd2OFRkhn4wziOGIHI=;
+        b=VhHKdukWWAl0HfgdTVlu+e+gJekUvy8NWwa4sOZgVoGH/BGdRJa1E04dIJgHW3EBVu
+         gKUjcyt9LLYQ6PSObvsPJxyPqrlZ7Hc6WiIGqU6RVdSJe3mYVzpAKTbWP99AgMcETNIa
+         3THlPU1k4Cox+e3Seih+r4md/pJ1z3Ve+NpNz9fkyoOKSfnasMAlH7yGn7e7HSWS/cNO
+         +DGDJfrRLJ6G8JvCo7d17u7wxGBgKlSQa8W2NXFJuG7SB61CKWXlSZy51JmxOTuVTYgG
+         ZaEPRfG8EM+9hYzhlbSTKedU1XdpLJrOwrh3ZONPyTZ+tkEnnN/nIS9JSKG2dSlbZHEH
+         Noiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1cVsLJFz89Vu7CJdRahLgph9ywbohEGqsx2SWyRDeTQ=;
-        b=kVJX3bmrBHIKJuQgQ3MItcDt62hrM1rrHqNG4amcaz7Z5IFtL64Zjs8m6MgQ7/A4fj
-         KSZc+bhN4TUa4LRUS+7tpSo0oFb/BQjP8hOEL6wZ77xqLaliO/7+kNQhi8dUHtmosgRT
-         umenvC+nECgjYSYmdC41D/ku5bilsbJu/k03OyoidPGg7+00UWCqBpsyCvWmGJbLOx4x
-         AZ8Gdoqq5aVi4FY2vVgUWaBs0SB5FK+JJQuaWYK6ItPWIK00g9iF06xkNaTTm1aJfKtk
-         o6anZPV9mBbPtTEA7EnMAnyo7DPaH3kLYNSYeuywh1CFUIoZxp5/bHJ9+lYCSzP33g7S
-         B6Cg==
-X-Gm-Message-State: APjAAAXMbgWtwvrhE+DoT89C6mJIxnNveyxG9CjvlXJpv3njwXga5dVs
-        ZQY7ivoVOZXAPGLjK1XtrK8=
-X-Google-Smtp-Source: APXvYqyjZO5T9LxNXzegg/i9RFDt2Dlhrdk0GASmx5EGlwGUoNiJdI2G95w6Qn1Q9DskdAc/wE1LNA==
-X-Received: by 2002:a2e:9b58:: with SMTP id o24mr7585247ljj.197.1576193710577;
-        Thu, 12 Dec 2019 15:35:10 -0800 (PST)
+        bh=aO85qqdL2qrngMuzPa0x+Jh/Nqd2OFRkhn4wziOGIHI=;
+        b=hwurfULxS5BYQrfKt7QUuA2C+ph6OlryxRknQNEqxcVn93avD+mRq097hcEoYxy34M
+         qrODhyu1u+WHRUvyZkCC905lAHTJOIx4QtGM0QWMSfdTZaUkko5qgBpvScZlzg5QYcvK
+         eD3EYMULvqDFL4Y3YfibkhMswMcvAoVlLfDDTyjV4qtV2OGDk7tWyaSK2IfFifztgdPu
+         rl1P03uQa0gCfV3IqpGVp1sGBl7qFizFFKmZDVMUbFd5LraozFObwDpywo9g8bigWD4p
+         MguFLnf4m47wW5kxnD4wYxSoq6cjLSuedfI1NlAWdOMRvglXmIDOaIsoVGVncEYTVayS
+         PjPQ==
+X-Gm-Message-State: APjAAAXstgshLEqkQqnPnm+WjplgHo8Co4q0Maoa9KibNnrCepbxjarq
+        EakX0IJekIJswBcVC3GbR9o=
+X-Google-Smtp-Source: APXvYqwxBrytrV61kYH19ZVGWsUDa7/qZ5Ys6fgRynMwL6Xtk/yXgq02a0rkTlDCqLm8dRSqToQdDg==
+X-Received: by 2002:ac2:44a3:: with SMTP id c3mr7189472lfm.1.1576193711543;
+        Thu, 12 Dec 2019 15:35:11 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id q27sm3764283ljm.25.2019.12.12.15.35.09
+        by smtp.gmail.com with ESMTPSA id q27sm3764283ljm.25.2019.12.12.15.35.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2019 15:35:10 -0800 (PST)
+        Thu, 12 Dec 2019 15:35:11 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -51,9 +51,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Wolfram Sang <wsa@the-dreams.de>
 Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/3] i2c: tegra: Rename I2C_PIO_MODE_MAX_LEN to I2C_PIO_MODE_PREFERRED_LEN
-Date:   Fri, 13 Dec 2019 02:34:27 +0300
-Message-Id: <20191212233428.14648-3-digetx@gmail.com>
+Subject: [PATCH v1 3/3] i2c: tegra: Fix suspending in active runtime PM state
+Date:   Fri, 13 Dec 2019 02:34:28 +0300
+Message-Id: <20191212233428.14648-4-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191212233428.14648-1-digetx@gmail.com>
 References: <20191212233428.14648-1-digetx@gmail.com>
@@ -64,44 +64,52 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DMA is preferred for a larger transfers, while PIO is preferred for a
-smaller transfers to avoid unnecessary DMA overhead. There is no strict
-size limitations for the PIO-mode transfers, so let's rename the constant
-for clarity.
+I noticed that sometime I2C clock is kept enabled during suspend-resume.
+This happens because runtime PM defers dynamic suspension and thus it may
+happen that runtime PM is in active state when system enters into suspend.
+In particular I2C controller that is used for CPU's DVFS is often kept ON
+during suspend because CPU's voltage scaling happens quite often.
+
+Note: we marked runtime PM as IRQ-safe during the driver's probe in the
+"Support atomic transfers" patch, thus it's okay to enforce runtime PM
+suspend/resume in the NOIRQ phase which is used for the system-level
+suspend/resume of the driver.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 799c343571bc..b3ecdd87e91f 100644
+index b3ecdd87e91f..d309a314f4d6 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -130,11 +130,10 @@
- #define I2C_PACKET_HEADER_SIZE			12
+@@ -1790,9 +1790,14 @@ static int tegra_i2c_remove(struct platform_device *pdev)
+ static int __maybe_unused tegra_i2c_suspend(struct device *dev)
+ {
+ 	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
++	int err;
  
- /*
-- * Upto I2C_PIO_MODE_MAX_LEN bytes, controller will use PIO mode,
-- * above this, controller will use DMA to fill FIFO.
-- * MAX PIO len is 20 bytes excluding packet header.
-+ * Up to 32 bytes, controller will use PIO mode, above this, controller will
-+ * use DMA to fill FIFO. MAX PIO length is 20 bytes (excluding packet header).
-  */
--#define I2C_PIO_MODE_MAX_LEN			32
-+#define I2C_PIO_MODE_PREFERRED_LEN		32
+ 	i2c_mark_adapter_suspended(&i2c_dev->adapter);
  
- /*
-  * msg_end_type: The bus control which need to be send at end of transfer.
-@@ -1105,7 +1104,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 		xfer_size = msg->len + I2C_PACKET_HEADER_SIZE;
++	err = pm_runtime_force_suspend(dev);
++	if (err < 0)
++		return err;
++
+ 	return 0;
+ }
  
- 	xfer_size = ALIGN(xfer_size, BYTES_PER_FIFO_WORD);
--	i2c_dev->is_curr_dma_xfer = (xfer_size > I2C_PIO_MODE_MAX_LEN) &&
-+	i2c_dev->is_curr_dma_xfer = (xfer_size > I2C_PIO_MODE_PREFERRED_LEN) &&
- 				    i2c_dev->dma_buf &&
- 				    !i2c_dev->is_curr_atomic_xfer;
- 	tegra_i2c_config_fifo_trig(i2c_dev, xfer_size);
+@@ -1813,6 +1818,10 @@ static int __maybe_unused tegra_i2c_resume(struct device *dev)
+ 	if (err)
+ 		return err;
+ 
++	err = pm_runtime_force_resume(dev);
++	if (err < 0)
++		return err;
++
+ 	i2c_mark_adapter_resumed(&i2c_dev->adapter);
+ 
+ 	return 0;
 -- 
 2.24.0
 
