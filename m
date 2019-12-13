@@ -2,139 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D238B11E3C8
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2019 13:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CED1911E4D7
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2019 14:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727053AbfLMMqZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 Dec 2019 07:46:25 -0500
-Received: from mailgw02.mediatek.com ([216.200.240.185]:36355 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727050AbfLMMqY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Dec 2019 07:46:24 -0500
-X-UUID: 69c1bf4fdee64f56bb10b7bf5823af4c-20191213
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=f1qK2+7LZodsQlO7o2fhFIATRwJd4H3mQKGMDaRrhWg=;
-        b=S2CBRI9IIeLbtgqzvQhYB6IxXK+S2jUQNv6LzqYBSJ9q/hCJ2g8mM//wmqh39b48Dz4ghWXDBi2MAh/nbJH0ujUwgYusT5fTB1q2wD6/TIB3EPG2JRb6A5j3bo8/Q/mMJkGDNzEeaGzD8fWZ0fpJPlTdNzn4xo3vsPA68fFDBuE=;
-X-UUID: 69c1bf4fdee64f56bb10b7bf5823af4c-20191213
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <bibby.hsieh@mediatek.com>)
-        (musrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 34509982; Fri, 13 Dec 2019 04:46:22 -0800
-Received: from mtkmbs07n2.mediatek.inc ((172.21.101.141)) by
- mtkmbs07n2.mediatek.inc ((172.21.101.141)) with ShadowRedundancy id
- 15.0.1395.4; Fri, 13 Dec 2019 12:45:29 +0000
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Fri, 13 Dec 2019 17:07:52 +0800
-Received: from [172.21.77.4] (172.21.77.4) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 13 Dec 2019 17:07:35 +0800
-Message-ID: <1576228087.2242.0.camel@mtksdaap41>
-Subject: Re: [PATCH v8 3/4] misc: eeprom: at24: support pm_runtime control
-From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-CC:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        linux-devicetree <devicetree@vger.kernel.org>
-Date:   Fri, 13 Dec 2019 17:08:07 +0800
-In-Reply-To: <CAMpxmJWh3YMkn_1B=nJLmRRXn9uD2kU4grf8c+sMbWtKFZOv=w@mail.gmail.com>
-References: <20191213081230.23494-1-bibby.hsieh@mediatek.com>
-         <20191213081230.23494-4-bibby.hsieh@mediatek.com>
-         <CAMpxmJWh3YMkn_1B=nJLmRRXn9uD2kU4grf8c+sMbWtKFZOv=w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1727434AbfLMNoW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 Dec 2019 08:44:22 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:35085 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727346AbfLMNoW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Dec 2019 08:44:22 -0500
+Received: by mail-wr1-f68.google.com with SMTP id g17so6719981wro.2;
+        Fri, 13 Dec 2019 05:44:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GpEHeLLjWdENoSnNBLHaBrCZ+jWm2qDipLurc5jJAnQ=;
+        b=EPl5GEVMJkQZsmPJrhP3AloFf1HZa+bj7wFwOa2Rywv5rEhsxsMfBJUK6YwOE2tV/Z
+         2CmghTHAYFKcVRuzo2lJ0dYDpWMdOFkE2JLFbsc/MSYsUR3WaJEMqv3bgcavzSADeJf3
+         iwJYob/L7bOptli8LJ1bpdVR/ElumqJJ7K4RnFeoBo4lNuyerEgJMRMkDfcBj6athMAj
+         cbFUPziq15mWQIIxo8CYohx6YlyaLhL+qkwK81LnT5ZV8z0vjatZ1DLDXUxWVD1rVClQ
+         rjvkXDMPlZe2ZC333AlIGWiISmumnx283Fw2tkRhL0XYo6xmEkEF7hWcuOccWjK/u+ma
+         xdlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GpEHeLLjWdENoSnNBLHaBrCZ+jWm2qDipLurc5jJAnQ=;
+        b=TQJ18pisa0ezpu2G8pCsY6zkeUOtZFnmC8uc2isu83PprS+7Q+msLgISXctbwOLGNG
+         DHOf3lzQ5PcZRcJRSZ9kTHplV6z1CI08SkWD/1UC4WmwTt+RRf8TW0zqXc9ub30MregU
+         BLH2DgAD1SQTD32Vlcks83UBI/yWxzRrkvWq65U0yeemMnKAI1bEygL447gFsc248e+w
+         ctS+R7S6wrRm0ZuSUEYSNqUfHrilz1vBJwpYVJaFc/1I4vkJq9R+eM4w4oQH4lwhptnJ
+         h5fOj+JsTYQi/fXmI3g6BRFy9GbcaHRcRucknb0e2IyfUMQCM2nIs+S6Cxie5rxxw0Sj
+         0q8g==
+X-Gm-Message-State: APjAAAWaaq4OlKgy8NplunkgL3VuoiMODGa1VkG8b/Ad3T0z5JVng66O
+        d3jgwRezzlLr95MuFyRGpv4=
+X-Google-Smtp-Source: APXvYqwK59DBB1IZ8Xx7fyJcujAO7oDx1rubmErxbAopfmbA5FTxCe+V4/pd2kk5wyHmIObgfLhuYg==
+X-Received: by 2002:adf:ea0f:: with SMTP id q15mr12512899wrm.324.1576244660382;
+        Fri, 13 Dec 2019 05:44:20 -0800 (PST)
+Received: from localhost (pD9E518ED.dip0.t-ipconnect.de. [217.229.24.237])
+        by smtp.gmail.com with ESMTPSA id e6sm10031483wru.44.2019.12.13.05.44.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2019 05:44:19 -0800 (PST)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH] i2c: tegra: Restore pinmux on system resume
+Date:   Fri, 13 Dec 2019 14:44:17 +0100
+Message-Id: <20191213134417.222720-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gRnJpLCAyMDE5LTEyLTEzIGF0IDEwOjAyICswMTAwLCBCYXJ0b3N6IEdvbGFzemV3c2tpIHdy
-b3RlOg0KPiBwdC4sIDEzIGdydSAyMDE5IG8gMDk6NDcgQmliYnkgSHNpZWggPGJpYmJ5LmhzaWVo
-QG1lZGlhdGVrLmNvbT4gbmFwaXNhxYIoYSk6DQo+ID4NCj4gPiBBbHRob3VnaCBpbiB0aGUgbW9z
-dCBwbGF0Zm9ybXMsIHRoZSBwb3dlciBvZiBlZXByb20gYXJlIGFsd2F5DQo+ID4gb24sIHNvbWUg
-cGxhdGZvcm1zIGRpc2FibGUgdGhlIGVlcHJvbSBwb3dlciBpbiBvcmRlciB0byBtZWV0DQo+ID4g
-bG93IHBvd2VyIHJlcXVlc3QuIFRoaXMgcGF0Y2ggYWRkIHRoZSBwbV9ydW50aW1lIG9wcyB0byBj
-b250cm9sDQo+ID4gcG93ZXIgdG8gc3VwcG9ydCBhbGwgcGxhdGZvcm1zLg0KPiA+DQo+ID4gU2ln
-bmVkLW9mZi1ieTogQmliYnkgSHNpZWggPGJpYmJ5LmhzaWVoQG1lZGlhdGVrLmNvbT4NCj4gPiAt
-LS0NCj4gPiAgZHJpdmVycy9taXNjL2VlcHJvbS9hdDI0LmMgfCA0MCArKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNDAgaW5zZXJ0aW9u
-cygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWlzYy9lZXByb20vYXQyNC5jIGIv
-ZHJpdmVycy9taXNjL2VlcHJvbS9hdDI0LmMNCj4gPiBpbmRleCAwNjgxZDVmZGQ1MzguLjA2YWUy
-Y2MzMmY3OSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL21pc2MvZWVwcm9tL2F0MjQuYw0KPiA+
-ICsrKyBiL2RyaXZlcnMvbWlzYy9lZXByb20vYXQyNC5jDQo+ID4gQEAgLTIyLDYgKzIyLDcgQEAN
-Cj4gPiAgI2luY2x1ZGUgPGxpbnV4L252bWVtLXByb3ZpZGVyLmg+DQo+ID4gICNpbmNsdWRlIDxs
-aW51eC9yZWdtYXAuaD4NCj4gPiAgI2luY2x1ZGUgPGxpbnV4L3BtX3J1bnRpbWUuaD4NCj4gPiAr
-I2luY2x1ZGUgPGxpbnV4L3JlZ3VsYXRvci9jb25zdW1lci5oPg0KPiA+ICAjaW5jbHVkZSA8bGlu
-dXgvZ3Bpby9jb25zdW1lci5oPg0KPiA+DQo+ID4gIC8qIEFkZHJlc3MgcG9pbnRlciBpcyAxNiBi
-aXQuICovDQo+ID4gQEAgLTkxLDYgKzkyLDcgQEAgc3RydWN0IGF0MjRfZGF0YSB7DQo+ID4NCj4g
-PiAgICAgICAgIHN0cnVjdCBncGlvX2Rlc2MgKndwX2dwaW87DQo+ID4NCj4gPiArICAgICAgIHN0
-cnVjdCByZWd1bGF0b3IgKnZjY19yZWc7DQo+ID4gICAgICAgICAvKg0KPiA+ICAgICAgICAgICog
-U29tZSBjaGlwcyB0aWUgdXAgbXVsdGlwbGUgSTJDIGFkZHJlc3NlczsgZHVtbXkgZGV2aWNlcyBy
-ZXNlcnZlDQo+ID4gICAgICAgICAgKiB0aGVtIGZvciB1cywgYW5kIHdlJ2xsIHVzZSB0aGVtIHdp
-dGggU01CdXMgY2FsbHMuDQo+ID4gQEAgLTY2Miw2ICs2NjQsMTIgQEAgc3RhdGljIGludCBhdDI0
-X3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQpDQo+ID4gICAgICAgICBhdDI0LT5jbGll
-bnRbMF0uY2xpZW50ID0gY2xpZW50Ow0KPiA+ICAgICAgICAgYXQyNC0+Y2xpZW50WzBdLnJlZ21h
-cCA9IHJlZ21hcDsNCj4gPg0KPiA+ICsgICAgICAgYXQyNC0+dmNjX3JlZyA9IGRldm1fcmVndWxh
-dG9yX2dldChkZXYsICJ2Y2MiKTsNCj4gPiArICAgICAgIGlmIChJU19FUlIoYXQyNC0+dmNjX3Jl
-ZykpIHsNCj4gPiArICAgICAgICAgICAgICAgZGV2X2VycihkZXYsICJmYWlsZWQgdG8gZ2V0IGF0
-MjQgVkNDIHJlZ3VsYXRvclxuIik7DQo+IA0KPiBUaGUgcmVndWxhdG9yIGNvcmUgaXMgcXVpdGUg
-dmVyYm9zZSBpbiBpdHMgZXJyb3IgbWVzc2FnZXMgd2hlbiBjYWxsaW5nDQo+IHJlZ3VsYXRvcl9n
-ZXQoKSAtIHlvdSBkb24ndCBuZWVkIHRvIGFkZCB5b3VycyBoZXJlLiBKdXN0IHJldHVybiB0aGUN
-Cj4gZXJyb3IgY29kZS4NCg0KT2ssIHdpbGwgcmVtb3ZlIGl0Lg0KDQo+IA0KPiA+ICsgICAgICAg
-ICAgICAgICByZXR1cm4gUFRSX0VSUihhdDI0LT52Y2NfcmVnKTsNCj4gPiArICAgICAgIH0NCj4g
-PiArDQo+ID4gICAgICAgICBhdDI0LT53cF9ncGlvID0gZGV2bV9ncGlvZF9nZXRfb3B0aW9uYWwo
-ZGV2LCAid3AiLCBHUElPRF9PVVRfSElHSCk7DQo+ID4gICAgICAgICBpZiAoSVNfRVJSKGF0MjQt
-PndwX2dwaW8pKQ0KPiA+ICAgICAgICAgICAgICAgICByZXR1cm4gUFRSX0VSUihhdDI0LT53cF9n
-cGlvKTsNCj4gPiBAQCAtNzAxLDYgKzcwOSwxMiBAQCBzdGF0aWMgaW50IGF0MjRfcHJvYmUoc3Ry
-dWN0IGkyY19jbGllbnQgKmNsaWVudCkNCj4gPg0KPiA+ICAgICAgICAgaTJjX3NldF9jbGllbnRk
-YXRhKGNsaWVudCwgYXQyNCk7DQo+ID4NCj4gPiArICAgICAgIGVyciA9IHJlZ3VsYXRvcl9lbmFi
-bGUoYXQyNC0+dmNjX3JlZyk7DQo+ID4gKyAgICAgICBpZiAoZXJyKSB7DQo+ID4gKyAgICAgICAg
-ICAgICAgIGRldl9lcnIoZGV2LCAiRmFpbGVkIHRvIGVuYWJsZSBhdDI0IHZjYyByZWd1bGF0b3Jc
-biIpOw0KPiANCj4gRHJvcCB0aGUgYXQyNCBuYW1lIC0gZGV2X2VycigpIHdpbGwgcHJpbnQgdGhl
-IGRldmljZSBuYW1lIGZvciB5b3UuDQo+IA0KT2suDQo+ID4gKyAgICAgICAgICAgICAgIHJldHVy
-biBlcnI7DQo+ID4gKyAgICAgICB9DQo+ID4gKw0KPiA+ICAgICAgICAgLyogZW5hYmxlIHJ1bnRp
-bWUgcG0gKi8NCj4gPiAgICAgICAgIHBtX3J1bnRpbWVfc2V0X2FjdGl2ZShkZXYpOw0KPiA+ICAg
-ICAgICAgcG1fcnVudGltZV9lbmFibGUoZGV2KTsNCj4gPiBAQCAtNzEzLDYgKzcyNyw3IEBAIHN0
-YXRpYyBpbnQgYXQyNF9wcm9iZShzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50KQ0KPiA+ICAgICAg
-ICAgcG1fcnVudGltZV9pZGxlKGRldik7DQo+ID4gICAgICAgICBpZiAoZXJyKSB7DQo+ID4gICAg
-ICAgICAgICAgICAgIHBtX3J1bnRpbWVfZGlzYWJsZShkZXYpOw0KPiA+ICsgICAgICAgICAgICAg
-ICByZWd1bGF0b3JfZGlzYWJsZShhdDI0LT52Y2NfcmVnKTsNCj4gPiAgICAgICAgICAgICAgICAg
-cmV0dXJuIC1FTk9ERVY7DQo+ID4gICAgICAgICB9DQo+ID4NCj4gPiBAQCAtNzI5LDE0ICs3NDQs
-MzkgQEAgc3RhdGljIGludCBhdDI0X3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQpDQo+
-ID4gIHN0YXRpYyBpbnQgYXQyNF9yZW1vdmUoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCkNCj4g
-PiAgew0KPiA+ICAgICAgICAgcG1fcnVudGltZV9kaXNhYmxlKCZjbGllbnQtPmRldik7DQo+ID4g
-KyAgICAgICBpZiAocG1fcnVudGltZV9zdGF0dXNfc3VzcGVuZGVkKCZjbGllbnQtPmRldikpDQo+
-ID4gKyAgICAgICAgICAgICAgIHJlZ3VsYXRvcl9kaXNhYmxlKGF0MjQtPnZjY19yZWcpOw0KPiAN
-Cj4gV2h5IGRpZG4ndCB5b3UgZml4IHRoZSBpbnZlcnRlZCBsb2dpYyBoZXJlIGFzIEkgcG9pbnRl
-ZCBvdXQgYmFjayBpbiB2Ng0KPiBvZiB0aGlzIHNlcmllcz8NCj4gDQpTb3JyeSBmb3IgbWlzc2lu
-ZyBpdCBhZ2Fpbi4uLg0KSSB3aWxsIGFkZCBpbnZlcnQgbmV4dCB2ZXJzaW9uLg0KDQpCaWJieQ0K
-PiBCYXJ0DQo+IA0KPiA+ICAgICAgICAgcG1fcnVudGltZV9zZXRfc3VzcGVuZGVkKCZjbGllbnQt
-PmRldik7DQo+ID4NCj4gPiAgICAgICAgIHJldHVybiAwOw0KPiA+ICB9DQo+ID4NCj4gPiArc3Rh
-dGljIGludCBfX21heWJlX3VudXNlZCBhdDI0X3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQ0K
-PiA+ICt7DQo+ID4gKyAgICAgICBzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50ID0gdG9faTJjX2Ns
-aWVudChkZXYpOw0KPiA+ICsgICAgICAgc3RydWN0IGF0MjRfZGF0YSAqYXQyNCA9IGkyY19nZXRf
-Y2xpZW50ZGF0YShjbGllbnQpOw0KPiA+ICsNCj4gPiArICAgICAgIHJldHVybiByZWd1bGF0b3Jf
-ZGlzYWJsZShhdDI0LT52Y2NfcmVnKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCBf
-X21heWJlX3VudXNlZCBhdDI0X3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ID4gK3sNCj4g
-PiArICAgICAgIHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQgPSB0b19pMmNfY2xpZW50KGRldik7
-DQo+ID4gKyAgICAgICBzdHJ1Y3QgYXQyNF9kYXRhICphdDI0ID0gaTJjX2dldF9jbGllbnRkYXRh
-KGNsaWVudCk7DQo+ID4gKw0KPiA+ICsgICAgICAgcmV0dXJuIHJlZ3VsYXRvcl9lbmFibGUoYXQy
-NC0+dmNjX3JlZyk7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgZGV2
-X3BtX29wcyBhdDI0X3BtX29wcyA9IHsNCj4gPiArICAgICAgIFNFVF9TWVNURU1fU0xFRVBfUE1f
-T1BTKHBtX3J1bnRpbWVfZm9yY2Vfc3VzcGVuZCwNCj4gPiArICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHBtX3J1bnRpbWVfZm9yY2VfcmVzdW1lKQ0KPiA+ICsgICAgICAgU0VUX1JVTlRJ
-TUVfUE1fT1BTKGF0MjRfc3VzcGVuZCwgYXQyNF9yZXN1bWUsIE5VTEwpDQo+ID4gK307DQo+ID4g
-Kw0KPiA+ICBzdGF0aWMgc3RydWN0IGkyY19kcml2ZXIgYXQyNF9kcml2ZXIgPSB7DQo+ID4gICAg
-ICAgICAuZHJpdmVyID0gew0KPiA+ICAgICAgICAgICAgICAgICAubmFtZSA9ICJhdDI0IiwNCj4g
-PiArICAgICAgICAgICAgICAgLnBtID0gJmF0MjRfcG1fb3BzLA0KPiA+ICAgICAgICAgICAgICAg
-ICAub2ZfbWF0Y2hfdGFibGUgPSBhdDI0X29mX21hdGNoLA0KPiA+ICAgICAgICAgICAgICAgICAu
-YWNwaV9tYXRjaF90YWJsZSA9IEFDUElfUFRSKGF0MjRfYWNwaV9pZHMpLA0KPiA+ICAgICAgICAg
-fSwNCj4gPiAtLQ0KPiA+IDIuMTguMA0KDQo=
+From: Thierry Reding <treding@nvidia.com>
+
+Depending on the board design, the I2C controllers found on Tegra SoCs
+may require pinmuxing in order to function. This is done as part of the
+driver's runtime suspend/resume operations. However, the PM core does
+not allow devices to go into runtime suspend during system sleep to
+avoid potential races with the suspend/resume of their parents.
+
+As a result of this, when Tegra SoCs resume from system suspend, their
+I2C controllers may have lost the pinmux state in hardware, whereas the
+pinctrl subsystem is not aware of this. To fix this, make sure that if
+the I2C controller is not runtime suspended, the runtime suspend code is
+still executed in order to disable the module clock (which we don't need
+to be enabled during sleep) and set the pinmux to the idle state.
+
+Conversely, make sure that the I2C controller is properly resumed when
+waking up from sleep so that pinmux settings are properly restored.
+
+This fixes a bug seen with DDC transactions to an HDMI monitor timing
+out when resuming from system suspend.
+
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index a98bf31d0e5c..dae2a3d7b512 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -1710,10 +1710,14 @@ static int tegra_i2c_remove(struct platform_device *pdev)
+ static int __maybe_unused tegra_i2c_suspend(struct device *dev)
+ {
+ 	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
++	int err = 0;
+ 
+ 	i2c_mark_adapter_suspended(&i2c_dev->adapter);
+ 
+-	return 0;
++	if (!pm_runtime_status_suspended(dev))
++		err = tegra_i2c_runtime_suspend(dev);
++
++	return err;
+ }
+ 
+ static int __maybe_unused tegra_i2c_resume(struct device *dev)
+@@ -1729,9 +1733,11 @@ static int __maybe_unused tegra_i2c_resume(struct device *dev)
+ 	if (err)
+ 		return err;
+ 
+-	err = tegra_i2c_runtime_suspend(dev);
+-	if (err)
+-		return err;
++	if (pm_runtime_status_suspended(dev)) {
++		err = tegra_i2c_runtime_suspend(dev);
++		if (err)
++			return err;
++	}
+ 
+ 	i2c_mark_adapter_resumed(&i2c_dev->adapter);
+ 
+-- 
+2.23.0
 
