@@ -2,108 +2,161 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE8B11E694
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2019 16:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408B211E9A2
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2019 19:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727840AbfLMPbm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 Dec 2019 10:31:42 -0500
-Received: from sauhun.de ([88.99.104.3]:47680 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727827AbfLMPbm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 13 Dec 2019 10:31:42 -0500
-Received: from localhost (p54B3318D.dip0.t-ipconnect.de [84.179.49.141])
-        by pokefinder.org (Postfix) with ESMTPSA id 1D82F2C04D3;
-        Fri, 13 Dec 2019 16:31:40 +0100 (CET)
-Date:   Fri, 13 Dec 2019 16:31:39 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for 5.5
-Message-ID: <20191213153136.GA3396@kunai>
+        id S1728527AbfLMSBl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 Dec 2019 13:01:41 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:33015 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726404AbfLMSBl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Dec 2019 13:01:41 -0500
+Received: by mail-lf1-f68.google.com with SMTP id n25so182309lfl.0;
+        Fri, 13 Dec 2019 10:01:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=P2fLhpKaXrNbLsGuII7YB7/yEJSelZ85p6b5L7lTKzs=;
+        b=DM0300Zk/3f1Zlhsj3gyk4qYp3WfTYEXzuNgPSY8fPT8wfSXtI3MH1Xlnpmq9mkz8R
+         JN+bfY3fU8TuoLdWsQVbyco4vPUXXnXlSG9NgnRxPr7709AomAiDz4d29Ne9Vyjhszj7
+         wk8dbzATX0g/F6/9tSVNV/Mwg+TooHOHF6rJRDkXHdiFvrNIiaqwdcBR8ya+Q3+1ybNv
+         Y6g9JIzr8S8zMpWwOUPugzDsKJ1uTrR0SZwdGrizDP+4kS7w1umgCOX528AV3xzLj3Kk
+         Tacr8benfbFFHooYnk3Fi6+xZwG48Fa90Lp+fxx6Z5Ch4y+xrHXAiI3bAS1rlIDXNebs
+         IbXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=P2fLhpKaXrNbLsGuII7YB7/yEJSelZ85p6b5L7lTKzs=;
+        b=daQYP2u2aihLJOoYwdeumYtLysa1gcagpsuNhCcOBqjXQiKAW++K3zjSkZuVV+Uzmk
+         cID6fjVJNrIMRpkQ970/GIts30rasR3yoPsA69xWBf/0rs5wD8KDp9fRvAcQpjbNpNgL
+         MkzL8NrLYIFFynXDVgAj+F5DtoWCPGqLuAQCYnXAqdFdCQteC1iVsPezmX4z34WWveAM
+         BcuTgtMnLHMGOMnKstflySMIcuuA4uB9OqQ/GX9+fZHzLcHhprEOWhKjr5lJR+I70mEP
+         lljZQp2862bLKBfJnvVm5jG5CxUnubsc46DcFNQWJWJr/9PQQsqkHxiBKc/nM5RNqs9Q
+         YAkw==
+X-Gm-Message-State: APjAAAW7txKWoRK9l/hm1GqTSItZF9n0DvdaHfjZz6KhvHumcN8fFHtl
+        KWghilBq1shkqLpo8YKr1HLrgr49
+X-Google-Smtp-Source: APXvYqwO8brRkhwwl/lTHbp5OPCmIMztJP1+CZgCIWJ8N6W3wkUM8eXcLmrSlqTMAt4HJykxaUewgQ==
+X-Received: by 2002:ac2:498e:: with SMTP id f14mr9755035lfl.172.1576260098015;
+        Fri, 13 Dec 2019 10:01:38 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id l28sm4877916lfk.21.2019.12.13.10.01.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Dec 2019 10:01:37 -0800 (PST)
+Subject: Re: [PATCH v1 3/3] i2c: tegra: Fix suspending in active runtime PM
+ state
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Mikko Perttunen <cyndis@kapsi.fi>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191212233428.14648-1-digetx@gmail.com>
+ <20191212233428.14648-4-digetx@gmail.com> <20191213134746.GA222809@ulmo>
+ <3c2b16c0-3e66-d809-b263-f27cf925e203@gmail.com>
+Message-ID: <1ed725c9-361b-c920-d532-dd640c3ca59f@gmail.com>
+Date:   Fri, 13 Dec 2019 21:01:36 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5vNYLRcllDrimb99"
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <3c2b16c0-3e66-d809-b263-f27cf925e203@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+13.12.2019 17:04, Dmitry Osipenko пишет:
+> 13.12.2019 16:47, Thierry Reding пишет:
+>> On Fri, Dec 13, 2019 at 02:34:28AM +0300, Dmitry Osipenko wrote:
+>>> I noticed that sometime I2C clock is kept enabled during suspend-resume.
+>>> This happens because runtime PM defers dynamic suspension and thus it may
+>>> happen that runtime PM is in active state when system enters into suspend.
+>>> In particular I2C controller that is used for CPU's DVFS is often kept ON
+>>> during suspend because CPU's voltage scaling happens quite often.
+>>>
+>>> Note: we marked runtime PM as IRQ-safe during the driver's probe in the
+>>> "Support atomic transfers" patch, thus it's okay to enforce runtime PM
+>>> suspend/resume in the NOIRQ phase which is used for the system-level
+>>> suspend/resume of the driver.
+>>>
+>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>> ---
+>>>  drivers/i2c/busses/i2c-tegra.c | 9 +++++++++
+>>>  1 file changed, 9 insertions(+)
+>>
+>> I've recently discussed this with Rafael in the context of runtime PM
+>> support in the Tegra DRM driver and my understanding is that you're not
+>> supposed to force runtime PM suspension like this.
+>>
+>> I had meant to send out an alternative patch to fix this, which I've
+>> done now:
+>>
+>> 	http://patchwork.ozlabs.org/patch/1209148/
+>>
+>> That's more in line with what Rafael and I had discussed in the other
+>> thread and should address the issue that you're seeing as well.
+> 
+> Well, either me or you are still having some misunderstanding of the
+> runtime PM :) To my knowledge there are a lot of drivers that enforce
+> suspension of the runtime PM during system's suspend, it should be a
+> right thing to do especially in a context of the Tegra I2C driver
+> because we're using asynchronous pm_runtime_put() and thus at the time
+> of system's suspending, the runtime PM could be ON (as I wrote in the
+> commit message) and then Terga's I2C driver manually disables the clock
+> on resume (woopsie).
 
---5vNYLRcllDrimb99
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Actually, looks like it's not the asynchronous pm_runtime_put() is the
+cause of suspending in active state. I see that only one of three I2C
+controllers is suspended in the enabled state, maybe some child (I2C
+client) device keeps it awake, will try to find out.
 
-Linus,
+> By invoking pm_runtime_force_suspend() on systems's suspend, the runtime
+> PM executes tegra_i2c_runtime_suspend() if device is in active state. On
+> system resume, pm_runtime_force_resume() either keeps device in a
+> suspended state or resumes it, say if for userspace disabled the runtime
+> PM for the I2C controller.
+> 
+> Rafael, could you please clarify whether my patch is doing a wrong thing?
+> 
+>>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+>>> index b3ecdd87e91f..d309a314f4d6 100644
+>>> --- a/drivers/i2c/busses/i2c-tegra.c
+>>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>>> @@ -1790,9 +1790,14 @@ static int tegra_i2c_remove(struct platform_device *pdev)
+>>>  static int __maybe_unused tegra_i2c_suspend(struct device *dev)
+>>>  {
+>>>  	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+>>> +	int err;
+>>>  
+>>>  	i2c_mark_adapter_suspended(&i2c_dev->adapter);
+>>>  
+>>> +	err = pm_runtime_force_suspend(dev);
+>>> +	if (err < 0)
+>>> +		return err;
+>>> +
+>>>  	return 0;
+>>>  }
+>>>  
+>>> @@ -1813,6 +1818,10 @@ static int __maybe_unused tegra_i2c_resume(struct device *dev)
+>>>  	if (err)
+>>>  		return err;
+>>>  
+>>> +	err = pm_runtime_force_resume(dev);
+>>> +	if (err < 0)
+>>> +		return err;
+>>> +
+>>>  	i2c_mark_adapter_resumed(&i2c_dev->adapter);
+>>>  
+>>>  	return 0;
+>>> -- 
+>>> 2.24.0
+>>>
+> 
 
-I2C has some core changes this time. A removal of an old API where all
-in-kernel users have been converted as of v5.5-rc1. A kdoc fix. And, a
-new helper which ideally should have been added during the merge window.
-I hope it is still okay because it will make dependencies for the next
-API conversion a tad easier and it cannot cause regressions.
-
-Thanks,
-
-   Wolfram
-
-
-The following changes since commit e42617b825f8073569da76dc4510bfa019b1c35a:
-
-  Linux 5.5-rc1 (2019-12-08 14:57:55 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-
-for you to fetch changes up to 8c9312a925ad859daefd0f443ef3b6dc7157d881:
-
-  i2c: add helper to check if a client has a driver attached (2019-12-11 08=
-:39:07 +0100)
-
-----------------------------------------------------------------
-Randy Dunlap (1):
-      i2c: fix header file kernel-doc warning
-
-Wolfram Sang (2):
-      i2c: remove i2c_new_dummy() API
-      i2c: add helper to check if a client has a driver attached
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Luca Ceresoli (2):
-      (Test) i2c: remove i2c_new_dummy() API
-      (Rev.) i2c: remove i2c_new_dummy() API
-
-Niklas S=C3=B6derlund (1):
-      (Rev.) i2c: remove i2c_new_dummy() API
-
- drivers/i2c/i2c-core-base.c | 23 -----------------------
- include/linux/i2c.h         | 12 ++++++------
- 2 files changed, 6 insertions(+), 29 deletions(-)
-
---5vNYLRcllDrimb99
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl3zrtMACgkQFA3kzBSg
-KbaM3A/+Jg208F340YKBZgoNpyP2iQxruScJma5aAkhrHTn0wSqzCSsJbyYdVf9c
-MlnTMwmJFoLuOIrTNYKCYT7KZOtPWy8W2YiKWeILJtngl1wfQt25exKunnZ6V8KJ
-9XRXzXtC1K/Mf4rR9QmQeSwIcd5/hWUoUFssl6N4Jaq/IUkac7NHfE45bj8ZpdxX
-XzIDVpauGplL4o4G1eVgm6Z9159UzsbWBsxRXKsfRss3dA0mncq5rM99/NlTOwiF
-ymyoBlJd5uOImr8w4vqEfSLNzjjFVPG/ohJuumWJ+ASLrDsUWevjf/RzIeomJCmT
-DwCk8oHVQ56+XYtC2fP40hDgMg8ZCcvRNjZPHAw8n1ea8iSSTqwtSeFgKXi+k1S3
-cgTteMPqy46Wo3bsYeSqtHo0OmbmZtRC0NSG8Uju/lXZiijIxcbl6KDR/xj4DJC0
-eGIByzyBPseSRQQ1k9XozObRrcGtUeQP1GMWq/K3gk8hyATFEYlRmDMfkNZ66MZY
-l++zQJNLYblxUT/mg3IgwWXe+iXKSFeJxq10KovvdkuOBIYCjwqOtoy5rfOLOvO5
-U+BAJDiQhBy3z2dTi70WVlwq1TIJKeTfq/PMtgHw/j7V9eAtLsT5aphdY3AetPwI
-qjNBIwoOftDxofPn/4rbFvAIU88d6g0r4pU2ZodNf9s2y5oVelM=
-=UpLx
------END PGP SIGNATURE-----
-
---5vNYLRcllDrimb99--
