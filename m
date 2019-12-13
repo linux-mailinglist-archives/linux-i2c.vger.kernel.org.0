@@ -2,188 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 152B911E255
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2019 11:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D238B11E3C8
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2019 13:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726757AbfLMKvH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 Dec 2019 05:51:07 -0500
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:45278 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725948AbfLMKvH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Dec 2019 05:51:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=eE4y8gsP10bYUZzcVYOhJBg5DwSCvVSdn/DLmbL2E+c=; b=KG2Q9xxGPQbHwOnzaFTeiWqv4
-        MuzEQ0Mo63HBPb6xDidwbS+UxlTKXjYsOz5Rre7ybDEqTIEhVtAKLNr1ynkXWlvSi3D/arx+JZ3N8
-        YFBKUjVbMACt0wP04qZzq8vO4IXjdYdPZvE4DDM2iLkIhHZfUO8Fo8RMiC4o/34LinF5a0dYucLi5
-        TUwavlFDK6tAG9W9VyaXt4fHQKB/1TlRbEl4ThYBvfIarfWAbrEv9SnX6mZSfDGv9kzpGfu41OeWM
-        mhO3sEVGlWYM283yIdijjSph58GOP4dp39WCnfVWjx3iAQbtNao5IQCMJd9Hio/TQ/WHsaLpyk+M/
-        tceFikAqw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52398)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ifiX7-0004Il-Di; Fri, 13 Dec 2019 10:50:53 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ifiX0-0007pM-S5; Fri, 13 Dec 2019 10:50:46 +0000
-Date:   Fri, 13 Dec 2019 10:50:46 +0000
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Peng Ma <peng.ma@nxp.com>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux@rempel-privat.de" <linux@rempel-privat.de>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Bogdan Florin Vlad <bogdan.vlad@nxp.com>,
-        BOUGH CHEN <haibo.chen@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Fancy Fang <chen.fang@nxp.com>, Han Xu <han.xu@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Iuliana Prodan <iuliana.prodan@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Jun Li <jun.li@nxp.com>, Leo Zhang <leo.zhang@nxp.com>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Mircea Pop <mircea.pop@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Peter Chen <peter.chen@nxp.com>,
-        Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>,
-        Robert Chiras <robert.chiras@nxp.com>,
-        Robin Gong <yibin.gong@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Ying Liu <victor.liu@nxp.com>,
-        Zening Wang <zening.wang@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH] i2c: imx: Defer probing if EDMA not available
-Message-ID: <20191213105046.GQ25745@shell.armlinux.org.uk>
-References: <20191127071136.5240-1-peng.ma@nxp.com>
- <20191128100613.GI25745@shell.armlinux.org.uk>
- <VI1PR04MB4431CF7F051F9439C84F84FAED5A0@VI1PR04MB4431.eurprd04.prod.outlook.com>
- <20191211104347.GA25745@shell.armlinux.org.uk>
- <VI1PR04MB44313AA19A4F81BA1AD9BC5CED5A0@VI1PR04MB4431.eurprd04.prod.outlook.com>
- <20191211114230.GC25745@shell.armlinux.org.uk>
- <VI1PR04MB4431DF2E270FC45A6CC878A9ED550@VI1PR04MB4431.eurprd04.prod.outlook.com>
- <20191212105857.GE25745@shell.armlinux.org.uk>
- <VI1PR04MB44318D7C92B6A29D04840B0DED540@VI1PR04MB4431.eurprd04.prod.outlook.com>
+        id S1727053AbfLMMqZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 Dec 2019 07:46:25 -0500
+Received: from mailgw02.mediatek.com ([216.200.240.185]:36355 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727050AbfLMMqY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Dec 2019 07:46:24 -0500
+X-UUID: 69c1bf4fdee64f56bb10b7bf5823af4c-20191213
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=f1qK2+7LZodsQlO7o2fhFIATRwJd4H3mQKGMDaRrhWg=;
+        b=S2CBRI9IIeLbtgqzvQhYB6IxXK+S2jUQNv6LzqYBSJ9q/hCJ2g8mM//wmqh39b48Dz4ghWXDBi2MAh/nbJH0ujUwgYusT5fTB1q2wD6/TIB3EPG2JRb6A5j3bo8/Q/mMJkGDNzEeaGzD8fWZ0fpJPlTdNzn4xo3vsPA68fFDBuE=;
+X-UUID: 69c1bf4fdee64f56bb10b7bf5823af4c-20191213
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <bibby.hsieh@mediatek.com>)
+        (musrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 34509982; Fri, 13 Dec 2019 04:46:22 -0800
+Received: from mtkmbs07n2.mediatek.inc ((172.21.101.141)) by
+ mtkmbs07n2.mediatek.inc ((172.21.101.141)) with ShadowRedundancy id
+ 15.0.1395.4; Fri, 13 Dec 2019 12:45:29 +0000
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 13 Dec 2019 17:07:52 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 13 Dec 2019 17:07:35 +0800
+Message-ID: <1576228087.2242.0.camel@mtksdaap41>
+Subject: Re: [PATCH v8 3/4] misc: eeprom: at24: support pm_runtime control
+From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+CC:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        linux-devicetree <devicetree@vger.kernel.org>
+Date:   Fri, 13 Dec 2019 17:08:07 +0800
+In-Reply-To: <CAMpxmJWh3YMkn_1B=nJLmRRXn9uD2kU4grf8c+sMbWtKFZOv=w@mail.gmail.com>
+References: <20191213081230.23494-1-bibby.hsieh@mediatek.com>
+         <20191213081230.23494-4-bibby.hsieh@mediatek.com>
+         <CAMpxmJWh3YMkn_1B=nJLmRRXn9uD2kU4grf8c+sMbWtKFZOv=w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <VI1PR04MB44318D7C92B6A29D04840B0DED540@VI1PR04MB4431.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Dec 13, 2019 at 10:33:51AM +0000, Peng Ma wrote:
-> 
-> 
-> >-----Original Message-----
-> >From: Russell King - ARM Linux admin <linux@armlinux.org.uk>
-> >Sent: 2019年12月12日 18:59
-> >To: Peng Ma <peng.ma@nxp.com>
-> >Cc: shawnguo@kernel.org; s.hauer@pengutronix.de;
-> >linux-kernel@vger.kernel.org; linux@rempel-privat.de; Abel Vesa
-> ><abel.vesa@nxp.com>; Aisheng Dong <aisheng.dong@nxp.com>; Anson Huang
-> ><anson.huang@nxp.com>; Bogdan Florin Vlad <bogdan.vlad@nxp.com>;
-> >BOUGH CHEN <haibo.chen@nxp.com>; Clark Wang
-> ><xiaoning.wang@nxp.com>; Daniel Baluta <daniel.baluta@nxp.com>; Fancy
-> >Fang <chen.fang@nxp.com>; Han Xu <han.xu@nxp.com>; Horia Geanta
-> ><horia.geanta@nxp.com>; Iuliana Prodan <iuliana.prodan@nxp.com>; Jacky
-> >Bai <ping.bai@nxp.com>; Joakim Zhang <qiangqing.zhang@nxp.com>; Jun Li
-> ><jun.li@nxp.com>; Leo Zhang <leo.zhang@nxp.com>; Leonard Crestez
-> ><leonard.crestez@nxp.com>; Mircea Pop <mircea.pop@nxp.com>; Mirela
-> >Rabulea <mirela.rabulea@nxp.com>; Peng Fan <peng.fan@nxp.com>; Peter
-> >Chen <peter.chen@nxp.com>; Ranjani Vaidyanathan
-> ><ranjani.vaidyanathan@nxp.com>; Robert Chiras <robert.chiras@nxp.com>;
-> >Robin Gong <yibin.gong@nxp.com>; Shenwei Wang
-> ><shenwei.wang@nxp.com>; Viorel Suman <viorel.suman@nxp.com>; Ying Liu
-> ><victor.liu@nxp.com>; Zening Wang <zening.wang@nxp.com>;
-> >kernel@pengutronix.de; festevam@gmail.com;
-> >linux-arm-kernel@lists.infradead.org; linux-i2c@vger.kernel.org
-> >Subject: Re: [EXT] Re: [PATCH] i2c: imx: Defer probing if EDMA not available
-> >
-> >Caution: EXT Email
-> >
-> >On Thu, Dec 12, 2019 at 03:09:32AM +0000, Peng Ma wrote:
-> >> Hello Russell,
-> >>
-> >> Thanks very much for your strict guidance and comments.
-> >> I realized it is hard to us that we want to i2c used edma when edma
-> >> probe after i2c probe.
-> >
-> >I have no problem with that aim.  I'm just very concerned by the proposed
-> >implementation, especially when it has already been proven to cause
-> >regressions in the kernel. I seem to remember that the infinite loop caused
-> >other issues, such as the system being unable to complete booting.
-> >
-> >> I look forward to discussing with you as below, if you like.
-> >> Thanks.
-> >>
-> >> You say I could do this:
-> >> "So, if you want to do this (and yes, I'd also encourage it to be
-> >> conditional on EDMA being built-in, as I2C is commonly used as a way
-> >> to get at RTCs, which are read before kernel modules can be loaded)
-> >> then you MUST move
-> >> i2c_imx_dma_request() before
-> >> i2c_add_numbered_adapter() to avoid the infinite loop."
-> >>
-> >> Even if I do this, It's hard to avoid the infinite loop of i2c probe caused by
-> >EDMA(build-in) initialization failure.
-> >
-> >It isn't clear what you mean here.
-> >
-> >If EDMA fails to probe (because fsl_edma_probe() returns an error other than
-> >EPROBE_DEFER) then of_dma_find_controller() will return NULL. That will be
-> >propagated down through i2c_imx_dma_request(). This is no different from the
-> >case where EDMA is built as a module. It is also no different from the case
-> >where EDMA hasn't yet been probed.
-> >
-> Hello Russell,
-> 
-> The result of my test is not like that, It is still with probe loop, the test config as follows:
+T24gRnJpLCAyMDE5LTEyLTEzIGF0IDEwOjAyICswMTAwLCBCYXJ0b3N6IEdvbGFzemV3c2tpIHdy
+b3RlOg0KPiBwdC4sIDEzIGdydSAyMDE5IG8gMDk6NDcgQmliYnkgSHNpZWggPGJpYmJ5LmhzaWVo
+QG1lZGlhdGVrLmNvbT4gbmFwaXNhxYIoYSk6DQo+ID4NCj4gPiBBbHRob3VnaCBpbiB0aGUgbW9z
+dCBwbGF0Zm9ybXMsIHRoZSBwb3dlciBvZiBlZXByb20gYXJlIGFsd2F5DQo+ID4gb24sIHNvbWUg
+cGxhdGZvcm1zIGRpc2FibGUgdGhlIGVlcHJvbSBwb3dlciBpbiBvcmRlciB0byBtZWV0DQo+ID4g
+bG93IHBvd2VyIHJlcXVlc3QuIFRoaXMgcGF0Y2ggYWRkIHRoZSBwbV9ydW50aW1lIG9wcyB0byBj
+b250cm9sDQo+ID4gcG93ZXIgdG8gc3VwcG9ydCBhbGwgcGxhdGZvcm1zLg0KPiA+DQo+ID4gU2ln
+bmVkLW9mZi1ieTogQmliYnkgSHNpZWggPGJpYmJ5LmhzaWVoQG1lZGlhdGVrLmNvbT4NCj4gPiAt
+LS0NCj4gPiAgZHJpdmVycy9taXNjL2VlcHJvbS9hdDI0LmMgfCA0MCArKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNDAgaW5zZXJ0aW9u
+cygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWlzYy9lZXByb20vYXQyNC5jIGIv
+ZHJpdmVycy9taXNjL2VlcHJvbS9hdDI0LmMNCj4gPiBpbmRleCAwNjgxZDVmZGQ1MzguLjA2YWUy
+Y2MzMmY3OSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL21pc2MvZWVwcm9tL2F0MjQuYw0KPiA+
+ICsrKyBiL2RyaXZlcnMvbWlzYy9lZXByb20vYXQyNC5jDQo+ID4gQEAgLTIyLDYgKzIyLDcgQEAN
+Cj4gPiAgI2luY2x1ZGUgPGxpbnV4L252bWVtLXByb3ZpZGVyLmg+DQo+ID4gICNpbmNsdWRlIDxs
+aW51eC9yZWdtYXAuaD4NCj4gPiAgI2luY2x1ZGUgPGxpbnV4L3BtX3J1bnRpbWUuaD4NCj4gPiAr
+I2luY2x1ZGUgPGxpbnV4L3JlZ3VsYXRvci9jb25zdW1lci5oPg0KPiA+ICAjaW5jbHVkZSA8bGlu
+dXgvZ3Bpby9jb25zdW1lci5oPg0KPiA+DQo+ID4gIC8qIEFkZHJlc3MgcG9pbnRlciBpcyAxNiBi
+aXQuICovDQo+ID4gQEAgLTkxLDYgKzkyLDcgQEAgc3RydWN0IGF0MjRfZGF0YSB7DQo+ID4NCj4g
+PiAgICAgICAgIHN0cnVjdCBncGlvX2Rlc2MgKndwX2dwaW87DQo+ID4NCj4gPiArICAgICAgIHN0
+cnVjdCByZWd1bGF0b3IgKnZjY19yZWc7DQo+ID4gICAgICAgICAvKg0KPiA+ICAgICAgICAgICog
+U29tZSBjaGlwcyB0aWUgdXAgbXVsdGlwbGUgSTJDIGFkZHJlc3NlczsgZHVtbXkgZGV2aWNlcyBy
+ZXNlcnZlDQo+ID4gICAgICAgICAgKiB0aGVtIGZvciB1cywgYW5kIHdlJ2xsIHVzZSB0aGVtIHdp
+dGggU01CdXMgY2FsbHMuDQo+ID4gQEAgLTY2Miw2ICs2NjQsMTIgQEAgc3RhdGljIGludCBhdDI0
+X3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQpDQo+ID4gICAgICAgICBhdDI0LT5jbGll
+bnRbMF0uY2xpZW50ID0gY2xpZW50Ow0KPiA+ICAgICAgICAgYXQyNC0+Y2xpZW50WzBdLnJlZ21h
+cCA9IHJlZ21hcDsNCj4gPg0KPiA+ICsgICAgICAgYXQyNC0+dmNjX3JlZyA9IGRldm1fcmVndWxh
+dG9yX2dldChkZXYsICJ2Y2MiKTsNCj4gPiArICAgICAgIGlmIChJU19FUlIoYXQyNC0+dmNjX3Jl
+ZykpIHsNCj4gPiArICAgICAgICAgICAgICAgZGV2X2VycihkZXYsICJmYWlsZWQgdG8gZ2V0IGF0
+MjQgVkNDIHJlZ3VsYXRvclxuIik7DQo+IA0KPiBUaGUgcmVndWxhdG9yIGNvcmUgaXMgcXVpdGUg
+dmVyYm9zZSBpbiBpdHMgZXJyb3IgbWVzc2FnZXMgd2hlbiBjYWxsaW5nDQo+IHJlZ3VsYXRvcl9n
+ZXQoKSAtIHlvdSBkb24ndCBuZWVkIHRvIGFkZCB5b3VycyBoZXJlLiBKdXN0IHJldHVybiB0aGUN
+Cj4gZXJyb3IgY29kZS4NCg0KT2ssIHdpbGwgcmVtb3ZlIGl0Lg0KDQo+IA0KPiA+ICsgICAgICAg
+ICAgICAgICByZXR1cm4gUFRSX0VSUihhdDI0LT52Y2NfcmVnKTsNCj4gPiArICAgICAgIH0NCj4g
+PiArDQo+ID4gICAgICAgICBhdDI0LT53cF9ncGlvID0gZGV2bV9ncGlvZF9nZXRfb3B0aW9uYWwo
+ZGV2LCAid3AiLCBHUElPRF9PVVRfSElHSCk7DQo+ID4gICAgICAgICBpZiAoSVNfRVJSKGF0MjQt
+PndwX2dwaW8pKQ0KPiA+ICAgICAgICAgICAgICAgICByZXR1cm4gUFRSX0VSUihhdDI0LT53cF9n
+cGlvKTsNCj4gPiBAQCAtNzAxLDYgKzcwOSwxMiBAQCBzdGF0aWMgaW50IGF0MjRfcHJvYmUoc3Ry
+dWN0IGkyY19jbGllbnQgKmNsaWVudCkNCj4gPg0KPiA+ICAgICAgICAgaTJjX3NldF9jbGllbnRk
+YXRhKGNsaWVudCwgYXQyNCk7DQo+ID4NCj4gPiArICAgICAgIGVyciA9IHJlZ3VsYXRvcl9lbmFi
+bGUoYXQyNC0+dmNjX3JlZyk7DQo+ID4gKyAgICAgICBpZiAoZXJyKSB7DQo+ID4gKyAgICAgICAg
+ICAgICAgIGRldl9lcnIoZGV2LCAiRmFpbGVkIHRvIGVuYWJsZSBhdDI0IHZjYyByZWd1bGF0b3Jc
+biIpOw0KPiANCj4gRHJvcCB0aGUgYXQyNCBuYW1lIC0gZGV2X2VycigpIHdpbGwgcHJpbnQgdGhl
+IGRldmljZSBuYW1lIGZvciB5b3UuDQo+IA0KT2suDQo+ID4gKyAgICAgICAgICAgICAgIHJldHVy
+biBlcnI7DQo+ID4gKyAgICAgICB9DQo+ID4gKw0KPiA+ICAgICAgICAgLyogZW5hYmxlIHJ1bnRp
+bWUgcG0gKi8NCj4gPiAgICAgICAgIHBtX3J1bnRpbWVfc2V0X2FjdGl2ZShkZXYpOw0KPiA+ICAg
+ICAgICAgcG1fcnVudGltZV9lbmFibGUoZGV2KTsNCj4gPiBAQCAtNzEzLDYgKzcyNyw3IEBAIHN0
+YXRpYyBpbnQgYXQyNF9wcm9iZShzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50KQ0KPiA+ICAgICAg
+ICAgcG1fcnVudGltZV9pZGxlKGRldik7DQo+ID4gICAgICAgICBpZiAoZXJyKSB7DQo+ID4gICAg
+ICAgICAgICAgICAgIHBtX3J1bnRpbWVfZGlzYWJsZShkZXYpOw0KPiA+ICsgICAgICAgICAgICAg
+ICByZWd1bGF0b3JfZGlzYWJsZShhdDI0LT52Y2NfcmVnKTsNCj4gPiAgICAgICAgICAgICAgICAg
+cmV0dXJuIC1FTk9ERVY7DQo+ID4gICAgICAgICB9DQo+ID4NCj4gPiBAQCAtNzI5LDE0ICs3NDQs
+MzkgQEAgc3RhdGljIGludCBhdDI0X3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQpDQo+
+ID4gIHN0YXRpYyBpbnQgYXQyNF9yZW1vdmUoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCkNCj4g
+PiAgew0KPiA+ICAgICAgICAgcG1fcnVudGltZV9kaXNhYmxlKCZjbGllbnQtPmRldik7DQo+ID4g
+KyAgICAgICBpZiAocG1fcnVudGltZV9zdGF0dXNfc3VzcGVuZGVkKCZjbGllbnQtPmRldikpDQo+
+ID4gKyAgICAgICAgICAgICAgIHJlZ3VsYXRvcl9kaXNhYmxlKGF0MjQtPnZjY19yZWcpOw0KPiAN
+Cj4gV2h5IGRpZG4ndCB5b3UgZml4IHRoZSBpbnZlcnRlZCBsb2dpYyBoZXJlIGFzIEkgcG9pbnRl
+ZCBvdXQgYmFjayBpbiB2Ng0KPiBvZiB0aGlzIHNlcmllcz8NCj4gDQpTb3JyeSBmb3IgbWlzc2lu
+ZyBpdCBhZ2Fpbi4uLg0KSSB3aWxsIGFkZCBpbnZlcnQgbmV4dCB2ZXJzaW9uLg0KDQpCaWJieQ0K
+PiBCYXJ0DQo+IA0KPiA+ICAgICAgICAgcG1fcnVudGltZV9zZXRfc3VzcGVuZGVkKCZjbGllbnQt
+PmRldik7DQo+ID4NCj4gPiAgICAgICAgIHJldHVybiAwOw0KPiA+ICB9DQo+ID4NCj4gPiArc3Rh
+dGljIGludCBfX21heWJlX3VudXNlZCBhdDI0X3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQ0K
+PiA+ICt7DQo+ID4gKyAgICAgICBzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50ID0gdG9faTJjX2Ns
+aWVudChkZXYpOw0KPiA+ICsgICAgICAgc3RydWN0IGF0MjRfZGF0YSAqYXQyNCA9IGkyY19nZXRf
+Y2xpZW50ZGF0YShjbGllbnQpOw0KPiA+ICsNCj4gPiArICAgICAgIHJldHVybiByZWd1bGF0b3Jf
+ZGlzYWJsZShhdDI0LT52Y2NfcmVnKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCBf
+X21heWJlX3VudXNlZCBhdDI0X3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ID4gK3sNCj4g
+PiArICAgICAgIHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQgPSB0b19pMmNfY2xpZW50KGRldik7
+DQo+ID4gKyAgICAgICBzdHJ1Y3QgYXQyNF9kYXRhICphdDI0ID0gaTJjX2dldF9jbGllbnRkYXRh
+KGNsaWVudCk7DQo+ID4gKw0KPiA+ICsgICAgICAgcmV0dXJuIHJlZ3VsYXRvcl9lbmFibGUoYXQy
+NC0+dmNjX3JlZyk7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgZGV2
+X3BtX29wcyBhdDI0X3BtX29wcyA9IHsNCj4gPiArICAgICAgIFNFVF9TWVNURU1fU0xFRVBfUE1f
+T1BTKHBtX3J1bnRpbWVfZm9yY2Vfc3VzcGVuZCwNCj4gPiArICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHBtX3J1bnRpbWVfZm9yY2VfcmVzdW1lKQ0KPiA+ICsgICAgICAgU0VUX1JVTlRJ
+TUVfUE1fT1BTKGF0MjRfc3VzcGVuZCwgYXQyNF9yZXN1bWUsIE5VTEwpDQo+ID4gK307DQo+ID4g
+Kw0KPiA+ICBzdGF0aWMgc3RydWN0IGkyY19kcml2ZXIgYXQyNF9kcml2ZXIgPSB7DQo+ID4gICAg
+ICAgICAuZHJpdmVyID0gew0KPiA+ICAgICAgICAgICAgICAgICAubmFtZSA9ICJhdDI0IiwNCj4g
+PiArICAgICAgICAgICAgICAgLnBtID0gJmF0MjRfcG1fb3BzLA0KPiA+ICAgICAgICAgICAgICAg
+ICAub2ZfbWF0Y2hfdGFibGUgPSBhdDI0X29mX21hdGNoLA0KPiA+ICAgICAgICAgICAgICAgICAu
+YWNwaV9tYXRjaF90YWJsZSA9IEFDUElfUFRSKGF0MjRfYWNwaV9pZHMpLA0KPiA+ICAgICAgICAg
+fSwNCj4gPiAtLQ0KPiA+IDIuMTguMA0KDQo=
 
-So you haven't tested the scenario that causes the problem.  How
-convenient for you.
-
-> 1.EDMA build-in
-> 2.return -EINVAL top of fsl_edma_probe when edma probe
-> 3.i2c probe with original patch, I put the i2c_imx_dma_request in front of i2c_add_numbered_adapter or used original patch.
-> 
-> I send you the function of_dma_request_slave_channel could explain it last mail,
-> "Return -EPROBE_DEFER" depends on:
-> 1. edma not probe or probe failed
-> 2. There is edma node in DTS and I2C with edma property
-
-Correct.
-
-I'm sorry, but my patience is wearing very thin. I've explained the
-problem in detail, I've explained how you can reproduce it, but it
-seems I'm not being listened to. So, I don't have anything further to
-add to this discussion that hasn't already been said.
-
-Consider any patch that adds *any* path that can return -EPROBE_DEFER
-after a successful call to i2c_add_numbered_adapter() or its similar
-functions to be NAK'd by myself on account of this infinite probe loop
-that has been proven in previous kernels to occur.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
