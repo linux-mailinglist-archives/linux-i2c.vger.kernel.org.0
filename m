@@ -2,104 +2,135 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B0E11F92A
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Dec 2019 17:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E0511FB0B
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Dec 2019 21:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726292AbfLOQjK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 15 Dec 2019 11:39:10 -0500
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:53418 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726136AbfLOQjK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 15 Dec 2019 11:39:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=VARlzsIIpVbI1D3nL/jFJAegy6MvdDOvMduKw8KuaL4=; b=030O05AvaUfqxwWn0Yra1A3dJb
-        8IG7fLw9fdFucu5K6NQyz+TVNKzsNDKMsYH9as2xo/BAFST56uQqK5GcKt7zujT8UW4oJ1e/LKLot
-        jwUqUrwr6XbImhcsMiSDQKcln6RJFe92hj0e0p58flk7en8YsEnWyGrmygpDSQPXYyIUJWYll+rXD
-        ezNaWejAVDHmJJ9JrQbN/nNgxzRXDAK6Q8adJENxWu2hHuvrFHgL3CIhKky7VfdPkHg1G77osieP2
-        R6kkYSiP6rVVefADFZXu+eGbYBTdobe1putJ6LK6J63ty0tDaR8bR3mnKb4q+1yxm2g0/gHJSQ6oU
-        TMxuQoiw==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([2001:4d48:ad52:3201:222:68ff:fe15:37dd]:43990 helo=rmk-PC.armlinux.org.uk)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1igWvC-0001qP-F0; Sun, 15 Dec 2019 16:39:06 +0000
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1igWvB-0001ib-PV; Sun, 15 Dec 2019 16:39:05 +0000
-From:   Russell King <rmk+kernel@armlinux.org.uk>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org
-Subject: [PATCH] i2c: fix bus recovery stop mode timing
+        id S1726346AbfLOU1X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 15 Dec 2019 15:27:23 -0500
+Received: from mail.bugwerft.de ([46.23.86.59]:51232 "EHLO mail.bugwerft.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726146AbfLOU1X (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 15 Dec 2019 15:27:23 -0500
+Received: from [192.168.178.200] (p57BC9BBE.dip0.t-ipconnect.de [87.188.155.190])
+        by mail.bugwerft.de (Postfix) with ESMTPSA id 0143A2E79BE;
+        Sun, 15 Dec 2019 20:20:57 +0000 (UTC)
+Subject: Re: [PATCH 07/10] i2c: Add driver for AD242x bus controller
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        broonie@kernel.org, lee.jones@linaro.org, lars@metafoo.de,
+        pascal.huerst@gmail.com
+References: <20191209183511.3576038-1-daniel@zonque.org>
+ <20191209183511.3576038-9-daniel@zonque.org>
+ <64adf5d7-754a-f1da-aa9b-11579c5a2780@lucaceresoli.net>
+ <20191212163315.GA3932@kunai>
+From:   Daniel Mack <daniel@zonque.org>
+Autocrypt: addr=daniel@zonque.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <482316ef-775a-cb7b-015e-e00463503e6b@zonque.org>
+Date:   Sun, 15 Dec 2019 21:27:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Disposition: inline
+In-Reply-To: <20191212163315.GA3932@kunai>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1igWvB-0001ib-PV@rmk-PC.armlinux.org.uk>
-Date:   Sun, 15 Dec 2019 16:39:05 +0000
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The I2C specification states that tsu:sto for standard mode timing must
-be at minimum 4us. Pictographically, this is:
+Hi,
 
-SCL: ____/~~~~~~~~~
-SDA: _________/~~~~
-       ->|    |<- 4us minimum
+Thanks for the review!
 
-We are currently waiting 2.5us between asserting SCL and SDA, which is
-in violation of the standard. Adjust the timings to ensure that we meet
-what is stipulated as the minimum timings to ensure that all devices
-correctly interpret the STOP bus transition.
+On 12/12/2019 5:33 pm, Wolfram Sang wrote:
+> Hi Luca,
+> 
+> thanks for the review!
+> 
+>> good, but I think there's a problem in this function. A "normal"
+>> master_xfer function issues a repeated start between one msg and the
+>> next one, at least in the typical case where all msgs have the same
+>> slave address. Your implementation breaks repeated start. At first sight
+>> we might need more complex code here to coalesce all consecutive msgs
+>> with the same address into a single i2c_transfer() call.
+> 
+> Note that it is by far the standard case that all messages in a transfer
+> have the same client address (99,999%?). But technically, this is not a
+> requirement and the repeated start on the bus is totally independent of
+> the addresses used. It is just a master wanting to send without being
+> interrupted by another master.
 
-This is more important than trying to generate a square wave with even
-duty cycle.
+I'm not quite sure I understand.
 
-Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
----
- drivers/i2c/i2c-core-base.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+Let's assume the following setup. An i2c client (some driver code) is
+sending a list of messages to the a2b xfer function, which in turn is
+logically connected to a 'real' i2c bus master that'll put the data on
+the wire.
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 5f6a4985f2bc..9f35edb960b9 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -186,10 +186,11 @@ int i2c_generic_scl_recovery(struct i2c_adapter *adap)
- 	 * If we can set SDA, we will always create a STOP to ensure additional
- 	 * pulses will do no harm. This is achieved by letting SDA follow SCL
- 	 * half a cycle later. Check the 'incomplete_write_byte' fault injector
--	 * for details.
-+	 * for details. Note that we must honour tsu:sto, 4us, but lets use 5us
-+	 * here for simplicity.
- 	 */
- 	bri->set_scl(adap, scl);
--	ndelay(RECOVERY_NDELAY / 2);
-+	ndelay(RECOVERY_NDELAY);
- 	if (bri->set_sda)
- 		bri->set_sda(adap, scl);
- 	ndelay(RECOVERY_NDELAY / 2);
-@@ -210,8 +211,13 @@ int i2c_generic_scl_recovery(struct i2c_adapter *adap)
- 
- 		scl = !scl;
- 		bri->set_scl(adap, scl);
--		/* Creating STOP again, see above */
--		ndelay(RECOVERY_NDELAY / 2);
-+		if (scl)  {
-+			/* Honour minimum tsu:sto */
-+			ndelay(RECOVERY_NDELAY);
-+		} else {
-+			/* Honour minimum tf and thd:dat */
-+			ndelay(RECOVERY_NDELAY / 2);
-+		}
- 		if (bri->set_sda)
- 			bri->set_sda(adap, scl);
- 		ndelay(RECOVERY_NDELAY / 2);
--- 
-2.20.1
+The a2b code has to tell the 'master node' the final destination of the
+payload by programming registers on its primary i2c address, and then
+forwards the messages to its secondary i2c address. The layout of the
+messages don't change, and neither do the flags; i2c messages are being
+sent as i2c messages, except their addresses are changed, a bit like NAT
+in networking. That procedure is described on page 3-4 of the TRM,
+"Remote Peripheral I2C Accesses".
 
+The 'real' i2c master that handles the hardware bus is responsible for
+adding start conditions, and as the messages as such are untouched, I
+believe it should do the right thing. The code in my xfer functions
+merely suppresses reprogramming remote addresses by remembering the last
+one that was used, but that is independent of the start conditions on
+the wire.
+
+Maybe I'm missing anything. Could you provide an example that explains
+in which case this approach would leads to issues?
+
+
+Thanks,
+Daniel
