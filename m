@@ -2,89 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F07E711F1D9
-	for <lists+linux-i2c@lfdr.de>; Sat, 14 Dec 2019 13:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB64F11F8B6
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Dec 2019 17:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725872AbfLNMgn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 14 Dec 2019 07:36:43 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:46664 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725809AbfLNMgm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 Dec 2019 07:36:42 -0500
-Received: by mail-lf1-f66.google.com with SMTP id f15so1141019lfl.13
-        for <linux-i2c@vger.kernel.org>; Sat, 14 Dec 2019 04:36:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=fJa75y0L0Mte3o44RoVK6QVz1zNg35Ej9jrCEVMf/1U=;
-        b=jsYieRzHexso6CGM2aZXxieqPTJMD2KqrpKMQGEfY1Yq2lFLx3TLr0Pca4J1w1VcnV
-         2hgwSgnNOxOhfhiQUZQh9mkWPeU8WID1TH47jQL5GeOvBNR/KI6mrC/7PEefbV4AmFDO
-         1jUdLcNbAZ6Lq81m4FtLYN4E5pw3iKs0vO/VnQV2ggj+s10o6NoxEIv6EbsEIlNdPPHy
-         +dCwZwZ0xrZTDC7OTAtyW9ahDHFwXa25CteaA0j41RNplYSUxjIxshRVxCcQP5ZlL2nn
-         tuEvrH2kQkUY41dwv5o0jkliV82Vc+yspRZIk8s677AdIULXcoeIUpy2W/VMMY/2OSSv
-         nw0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=fJa75y0L0Mte3o44RoVK6QVz1zNg35Ej9jrCEVMf/1U=;
-        b=JYsurLzuZYonGI8G+68dU2IsXDRp6BhcAS0scN9f64AN+zIzvda7Lz5rpWWhbBFWg7
-         vIj2+RgNyfSQy7wBYdzV2/TNLLs7CVu2CZ5BYxXxVvgL3lM/95yK7lHEkW4Sxh++6lJ1
-         zQQKhknZ/Hh2xJT77t+fpGXSArgAOHKgGs6i0We5LDeRoqIFHA464IPWAG9yl3JkUiwr
-         wgyYbX+zXPLNF3DVNViezXET/HGNeSobQAWodZ20HRK7HUQHAWy2cQAP4h3ArIr+bQAu
-         +esovHwXdyfzTNXcX9a8ugZmjAiDdYWpTvLLlU+OvLBuR4gbxpIop3NuL9qMswNc/h84
-         kwQg==
-X-Gm-Message-State: APjAAAVoJv3MKc7xQGStHpbvmVUMGueT0FgEmlHHJyteivyaEW6bXwnn
-        8Yp6iV6caWaujaGREsUBTMqSiYzF/Qd3y4MY5Fk=
-X-Google-Smtp-Source: APXvYqwYXtlOCbAFJh63Ztml7WXrqTqOm1ZVDEsEwu+/flDyBVoiZhTy2QstgkrsNB2qu/ND/tpt8UbGgM+vScmIVaE=
-X-Received: by 2002:ac2:5a48:: with SMTP id r8mr11063106lfn.179.1576327000839;
- Sat, 14 Dec 2019 04:36:40 -0800 (PST)
+        id S1726292AbfLOQEu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 15 Dec 2019 11:04:50 -0500
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:53020 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726118AbfLOQEt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 15 Dec 2019 11:04:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:To:From:Date:Reply-To:Cc:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=/p4ykpq1ejTofgAKGBhQ+NP36Dj2qDg2eAs6w+SVgr8=; b=t3yZT76TRpvyaMhhZoTHkETeL
+        Tr9EX/XhaOvoW0xlhQQ6KilgdOdsZVhwCMW5X/Aow9pNka6DNuwYyaD5WxwlBIpz3kvmKTVheix0n
+        dzSQpi0Vjg6JGAGc58SVUAhthtyRchkNOeYXXxvEtZXQ5AGOerub4ZCIYqlgMtbN9sWAjHlpSbdLB
+        6Y/BTQWXq/UQVI8sO9KKc+a7yVXonIXbZqWlQw3tTRu8rLlInpdk2tO98poLf3Nt28JV7hpLLmvFP
+        dDvzj9dDWaUerzJqDjQUqnJerMmScs57NJ7WXdTfPfhfs11+QsiqYAnjQA9rVllyiTMzlBmrEWdpC
+        tb69tkCmw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:53380)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1igWNy-0001fo-AF; Sun, 15 Dec 2019 16:04:46 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1igWNw-0001Wx-UO; Sun, 15 Dec 2019 16:04:44 +0000
+Date:   Sun, 15 Dec 2019 16:04:44 +0000
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     linux-i2c@vger.kernel.org
+Subject: [PATCH 00/12] i2c-pxa cleanups
+Message-ID: <20191215160444.GB25745@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Received: by 2002:ab3:6148:0:0:0:0:0 with HTTP; Sat, 14 Dec 2019 04:36:40
- -0800 (PST)
-Reply-To: mismariamabdul@gmail.com
-From:   Mis Mariam Maalouf <tiffanygeorge550@gmail.com>
-Date:   Sat, 14 Dec 2019 20:36:40 +0800
-Message-ID: <CAPkxXYQpXXUf9uz1oUAnPPdbUpkhvYZo=t3Lrb2j1x2J6hth3Q@mail.gmail.com>
-Subject: =?UTF-8?Q?Gr=C3=BC=C3=9Fe_an_dich=2C_mein_lieber_Freund?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Gr=C3=BC=C3=9Fe an dich, mein lieber Freund,
+Hi,
 
-Mein Name ist Mariam Maalouf, ich schreibe Ihnen diese Nachricht mit
-Tr=C3=A4nen in den Augen. Der andauernde B=C3=BCrgerkrieg in meinem Land Sy=
-rien
-hat mein Leben so sehr beeinflusst. Ich habe letztes Jahr meine
-Familie verloren. Mein Vater war vor seinem Tod ein reicher
-Gesch=C3=A4ftsmann, er machte =C3=96l- und Gasgesch=C3=A4fte, er machte auc=
-h
-Goldgesch=C3=A4fte. Er hat ein gro=C3=9Fes Geld verdient (25 MILLIONEN
-DREIHUNDERT TAUSEND US-DOLLAR). Das Geld ist bei der First Gulf Bank
-in Dubai (VAE) hinterlegt der Krieg und das T=C3=B6ten in Syrien jetzt.
+This series cleans up the i2c-pxa code via the following changes:
 
-Bitte helfen Sie mir, das Geld zu erhalten, und wir k=C3=B6nnen
-vereinbaren, dass Sie es investieren, bis ich mich von meiner
-Krankheit erholt habe und zu Ihnen komme.
+1. replace i2c_pxa_addr_byte() with the functional equivalent
+   i2c_8bit_addr_from_msg().
 
-Ich m=C3=B6chte Sie zum Gesch=C3=A4ftspartner meines verstorbenen Vaters
-ernennen, und die First Gulf Bank in Dubai =C3=BCberweist Ihnen das Geld.
-Ich werde Ihnen alle Unterlagen und Informationen zur Einzahlung des
-Geldes zusenden.
+2. removing unnecessary headers, and rearranging those that remain
+   in alphabetical order.
 
-Bitte lassen Sie mich wissen, ob Sie dies f=C3=BCr mich tun k=C3=B6nnen. Di=
-es
-ist meine wahre Geschichte. Bitte, ich brauche Ihre Hilfe.
+3. rearranging functions in the file to flow better; particularly
+   placing the PIO specific functions next to the PIO algorithm
+   structure, so all the PIO mode related code is together.  This
+   eliminates the forward declaration of i2c_pxa_handler().
 
-Sie k=C3=B6nnen mich per E-Mail kontaktieren (mis.mariam.maalouf2@gmail.com=
-)
+4. group the register bitfield definitions, which were split over two
+   separate locations in the file, into a single location, and add
+   some definitions for the IBMR register.
 
-Mit freundlichen Gr=C3=BC=C3=9Fen,
+5. always set the 'fm' and 'hs' members for each hardware type; the
+   storage for these members is always allocated, we don't need to
+   bloat the code (neither runtime, nor in the source) for this.
 
-Mis Mariam Maalouf
+6. move definitions private to i2c-pxa out of the platform data
+   header; platforms have no business knowing these details.
+
+7. group all driver-based IDs match (platform and OF) to one common
+   location rather than at either end of the file.
+
+8. fix i2c_pxa_scream_blue_murder()'s log output to be printed on a
+   single line as it was intended, rather than being printed one
+   entry per line - which makes it difficult to read particularly
+   when it has been enabled and you're getting lots of them.  Also
+   fix decode_bits() output in the same way.
+
+9. fix i2c_pxa_wait_bus_not_busy() boundary condition, so that a
+   coincidental success and timeout results in the function being
+   successful rather than failing. (This has never been seen in
+   practice, but was spotted while reviewing the code.)
+
+All in all, these changes should have (and have had so far) no
+observable impact on the driver; therefore, I do not see any reason
+to backport any of these changes to stable trees.
+
+ drivers/i2c/busses/i2c-pxa.c          | 595 ++++++++++++++++++----------------
+ include/linux/platform_data/i2c-pxa.h |  48 ---
+ 2 files changed, 318 insertions(+), 325 deletions(-)
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+According to speedtest.net: 11.9Mbps down 500kbps up
