@@ -2,101 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CAB1205B2
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2019 13:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 363A61206F9
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2019 14:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727763AbfLPM37 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 Dec 2019 07:29:59 -0500
-Received: from sauhun.de ([88.99.104.3]:39798 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727727AbfLPM3x (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 16 Dec 2019 07:29:53 -0500
-Received: from localhost (p54B33297.dip0.t-ipconnect.de [84.179.50.151])
-        by pokefinder.org (Postfix) with ESMTPSA id 620C62C2D92;
-        Mon, 16 Dec 2019 13:29:52 +0100 (CET)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] platform: chrome: convert to i2c_new_scanned_device
-Date:   Mon, 16 Dec 2019 13:29:51 +0100
-Message-Id: <20191216122951.3679-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191216122951.3679-1-wsa+renesas@sang-engineering.com>
-References: <20191216122951.3679-1-wsa+renesas@sang-engineering.com>
+        id S1727667AbfLPNUg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 Dec 2019 08:20:36 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:43222 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727653AbfLPNUg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Dec 2019 08:20:36 -0500
+Received: by mail-io1-f65.google.com with SMTP id s2so6826375iog.10
+        for <linux-i2c@vger.kernel.org>; Mon, 16 Dec 2019 05:20:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=fJa75y0L0Mte3o44RoVK6QVz1zNg35Ej9jrCEVMf/1U=;
+        b=iQWXWRrRxp7t/t1QYXQ0392a5oPHUtQD5ZTPXDTTD0RHK7zLr0DaHwlHDOD8whyuFK
+         NoSlSw5HSahUX3mHEoZrZH1w9oJj/zf4e0OHBba7+SCnFhOH5zj80z6TS0EzHfQ18oHF
+         QzNY7Yym8ZmEFfg1MCD/y9cZFNJAX3waH1O9jy/NZ84ACd3YhvzLriei8g3FzwEz5Gvz
+         PUslJeDLe+XuNrUJVTOqGs2dW+h/8RnFwJ28rIrniLfcUvfn+97P8sjtBx0DRBEGnz+5
+         OqSEKRDkTYT2ryCz82/ROBeugSQCv8ob75/fIJqmBXCEHfraX6ig4TxejbcmRjlkLWpP
+         086g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=fJa75y0L0Mte3o44RoVK6QVz1zNg35Ej9jrCEVMf/1U=;
+        b=p4zT07UabD1MBrqhz7m/LkqOjPp8ST681lh+9YrrAmQovRJNIwKYjJn1fqLPrwchy2
+         xhVaFsWe0JBsJMTfyUaZiSnVjmq8OG/uPods/Rghy+gV7BA7tleyXLRPO66TVWE/e39T
+         yf317pVvNouiHLs7p3EqxDbiNr2s5+DxCWe9EpMaSFtc/7HQpueywNSpIIsahMfqHc6y
+         KxkmoWrdItXQ+ozfzOONhe1FJoqBGNHFDT+fYVxs9X/hbQpL2RLWcMhhl4nV1+owQTOW
+         rH4W/kz6zOiagAPojCXYQPX03lGPAmFhZl46r3gNak+FGqRicuLDDQShHeBtkytfN0UA
+         A79w==
+X-Gm-Message-State: APjAAAVzeWFM4BYRgE82zX2mlh9y6mA5fbqpLd38LBOjVWzPO773z776
+        nUpnfVyGJkLPt/7ykAQiqAoGMHyhqPfE6j3zXlw=
+X-Google-Smtp-Source: APXvYqzKUWOcK1Yh7Qx/uPn+G+VWQKybjBDNRyDStVB/Rn7gMAtFr043PYpGZvXV8aNq0I0i3Os5S28JTm8CcwKBB08=
+X-Received: by 2002:a02:cdd9:: with SMTP id m25mr11456570jap.123.1576502435452;
+ Mon, 16 Dec 2019 05:20:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a92:bb4c:0:0:0:0:0 with HTTP; Mon, 16 Dec 2019 05:20:34
+ -0800 (PST)
+Reply-To: mis.mariam.maalouf3@gmail.com
+From:   Mis Mariam Maalouf <mariamabdul523@gmail.com>
+Date:   Mon, 16 Dec 2019 21:20:34 +0800
+Message-ID: <CAM4KC+xzRHB3w_H8RUatdn6t+8muBEO5W6y1uskEbq-kXorJHA@mail.gmail.com>
+Subject: =?UTF-8?Q?Gr=C3=BC=C3=9Fe_an_dich=2C_mein_lieber_Freund?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Move from the deprecated i2c_new_probed_device() to the new
-i2c_new_scanned_device(). Make use of the new ERRPTR if suitable.
+Gr=C3=BC=C3=9Fe an dich, mein lieber Freund,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
-Build tested only.
+Mein Name ist Mariam Maalouf, ich schreibe Ihnen diese Nachricht mit
+Tr=C3=A4nen in den Augen. Der andauernde B=C3=BCrgerkrieg in meinem Land Sy=
+rien
+hat mein Leben so sehr beeinflusst. Ich habe letztes Jahr meine
+Familie verloren. Mein Vater war vor seinem Tod ein reicher
+Gesch=C3=A4ftsmann, er machte =C3=96l- und Gasgesch=C3=A4fte, er machte auc=
+h
+Goldgesch=C3=A4fte. Er hat ein gro=C3=9Fes Geld verdient (25 MILLIONEN
+DREIHUNDERT TAUSEND US-DOLLAR). Das Geld ist bei der First Gulf Bank
+in Dubai (VAE) hinterlegt der Krieg und das T=C3=B6ten in Syrien jetzt.
 
- drivers/platform/chrome/chromeos_laptop.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+Bitte helfen Sie mir, das Geld zu erhalten, und wir k=C3=B6nnen
+vereinbaren, dass Sie es investieren, bis ich mich von meiner
+Krankheit erholt habe und zu Ihnen komme.
 
-diff --git a/drivers/platform/chrome/chromeos_laptop.c b/drivers/platform/chrome/chromeos_laptop.c
-index 8723bcf10c93..4f3651fcd9fe 100644
---- a/drivers/platform/chrome/chromeos_laptop.c
-+++ b/drivers/platform/chrome/chromeos_laptop.c
-@@ -63,7 +63,7 @@ struct acpi_peripheral {
- struct chromeos_laptop {
- 	/*
- 	 * Note that we can't mark this pointer as const because
--	 * i2c_new_probed_device() changes passed in I2C board info, so.
-+	 * i2c_new_scanned_device() changes passed in I2C board info, so.
- 	 */
- 	struct i2c_peripheral *i2c_peripherals;
- 	unsigned int num_i2c_peripherals;
-@@ -87,8 +87,8 @@ chromes_laptop_instantiate_i2c_device(struct i2c_adapter *adapter,
- 	 * address we scan secondary addresses. In any case the client
- 	 * structure gets assigned primary address.
- 	 */
--	client = i2c_new_probed_device(adapter, info, addr_list, NULL);
--	if (!client && alt_addr) {
-+	client = i2c_new_scanned_device(adapter, info, addr_list, NULL);
-+	if (IS_ERR(client) && alt_addr) {
- 		struct i2c_board_info dummy_info = {
- 			I2C_BOARD_INFO("dummy", info->addr),
- 		};
-@@ -97,9 +97,9 @@ chromes_laptop_instantiate_i2c_device(struct i2c_adapter *adapter,
- 		};
- 		struct i2c_client *dummy;
- 
--		dummy = i2c_new_probed_device(adapter, &dummy_info,
--					      alt_addr_list, NULL);
--		if (dummy) {
-+		dummy = i2c_new_scanned_device(adapter, &dummy_info,
-+					       alt_addr_list, NULL);
-+		if (!IS_ERR(dummy)) {
- 			pr_debug("%d-%02x is probed at %02x\n",
- 				 adapter->nr, info->addr, dummy->addr);
- 			i2c_unregister_device(dummy);
-@@ -107,12 +107,14 @@ chromes_laptop_instantiate_i2c_device(struct i2c_adapter *adapter,
- 		}
- 	}
- 
--	if (!client)
-+	if (IS_ERR(client)) {
-+		client = NULL;
- 		pr_debug("failed to register device %d-%02x\n",
- 			 adapter->nr, info->addr);
--	else
-+	} else {
- 		pr_debug("added i2c device %d-%02x\n",
- 			 adapter->nr, info->addr);
-+	}
- 
- 	return client;
- }
--- 
-2.20.1
+Ich m=C3=B6chte Sie zum Gesch=C3=A4ftspartner meines verstorbenen Vaters
+ernennen, und die First Gulf Bank in Dubai =C3=BCberweist Ihnen das Geld.
+Ich werde Ihnen alle Unterlagen und Informationen zur Einzahlung des
+Geldes zusenden.
 
+Bitte lassen Sie mich wissen, ob Sie dies f=C3=BCr mich tun k=C3=B6nnen. Di=
+es
+ist meine wahre Geschichte. Bitte, ich brauche Ihre Hilfe.
+
+Sie k=C3=B6nnen mich per E-Mail kontaktieren (mis.mariam.maalouf2@gmail.com=
+)
+
+Mit freundlichen Gr=C3=BC=C3=9Fen,
+
+Mis Mariam Maalouf
