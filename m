@@ -2,135 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E0511FB0B
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Dec 2019 21:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7D811FF5B
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2019 09:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726346AbfLOU1X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 15 Dec 2019 15:27:23 -0500
-Received: from mail.bugwerft.de ([46.23.86.59]:51232 "EHLO mail.bugwerft.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726146AbfLOU1X (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 15 Dec 2019 15:27:23 -0500
-Received: from [192.168.178.200] (p57BC9BBE.dip0.t-ipconnect.de [87.188.155.190])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id 0143A2E79BE;
-        Sun, 15 Dec 2019 20:20:57 +0000 (UTC)
-Subject: Re: [PATCH 07/10] i2c: Add driver for AD242x bus controller
+        id S1726808AbfLPIE4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 Dec 2019 03:04:56 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:44218 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726730AbfLPIEz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Dec 2019 03:04:55 -0500
+X-UUID: 56e57f349beb4683b05ad0bb6a7846d1-20191216
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=82ESi6iY1tfeizYCebSWspq8FkC9BPXlTu8jQJs9eog=;
+        b=BaFq03J+NvBOFysstdQDfAEjRM28Td2XgtGq5uaj1l9cNA3GhIzYtkHWEn/Nlv5h6DWVhvhVr1CcT5Vi9Li7LNHhTZv1GZ7UzXnqK+DfZ1vqqWR9Js8ZHvkK0aLlYq1pyoaGY2DUH+Xk7rIYrL/jWthHo2LENuBSjueC/ysoBAw=;
+X-UUID: 56e57f349beb4683b05ad0bb6a7846d1-20191216
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <bibby.hsieh@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 289590106; Mon, 16 Dec 2019 16:04:47 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 16 Dec 2019 16:04:29 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 16 Dec 2019 16:04:28 +0800
+From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
 To:     Wolfram Sang <wsa@the-dreams.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        broonie@kernel.org, lee.jones@linaro.org, lars@metafoo.de,
-        pascal.huerst@gmail.com
-References: <20191209183511.3576038-1-daniel@zonque.org>
- <20191209183511.3576038-9-daniel@zonque.org>
- <64adf5d7-754a-f1da-aa9b-11579c5a2780@lucaceresoli.net>
- <20191212163315.GA3932@kunai>
-From:   Daniel Mack <daniel@zonque.org>
-Autocrypt: addr=daniel@zonque.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <482316ef-775a-cb7b-015e-e00463503e6b@zonque.org>
-Date:   Sun, 15 Dec 2019 21:27:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        <linux-i2c@vger.kernel.org>
+CC:     <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <srv_heupstream@mediatek.com>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <devicetree@vger.kernel.org>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>
+Subject: [PATCH v9 0/4] add power control in i2c and at24
+Date:   Mon, 16 Dec 2019 16:04:41 +0800
+Message-ID: <20191216080445.8747-1-bibby.hsieh@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <20191212163315.GA3932@kunai>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+QWx0aG91Z2ggaW4gdGhlIG1vc3QgcGxhdGZvcm1zLCB0aGUgcG93ZXIgb2YgZWVwcm9tIGFuZCBp
+MmMNCmFyZSBhbHdheSBvbiwgc29tZSBwbGF0Zm9ybXMgZGlzYWJsZSB0aGUgZWVwcm9tIGFuZCBp
+MmMgcG93ZXINCmluIG9yZGVyIHRvIG1lZXQgbG93IHBvd2VyIHJlcXVlc3QuDQpUaGlzIHBhdGNo
+IGFkZCB0aGUgcG1fcnVudGltZSBvcHMgdG8gY29udHJvbCBwb3dlciB0byBzdXBwb3J0DQphbGwg
+cGxhdGZvcm1zLg0KDQpDaGFuZ2VzIHNpbmNlIHY4Og0KIC0gZml4dXAgc29tZSB3cm9uZyBjb2Rl
+DQogLSByZW1vdmUgcmVkdW5kYW50IG1lc3NhZ2UNCg0KQ2hhbmdlcyBzaW5jZSB2NzoNCiAtIGFk
+ZCBiaW5kaW5nIGRlc2NyaWJlIHN1cHBseSBwcm9wZXJ0eSBpbiBpMmMgYW5kIGF0MjQuDQogLSBt
+b3ZlIGkyYyBidXMgc3VwcGx5IGNvbnRyb2wgaW4gaTJjLWNvcmUuDQogLSByZWJhc2Ugb250byB2
+NS41LXJjMQ0KDQpDaGFuZ2VzIHNpbmNlIHY2Og0KIC0gYWRkIGJhY2sgZXJyb3IgY2hlY2sgZm9y
+IGRldm1fcmVndWxhdG9yX2J1bGtfZ2V0KCkNCg0KQ2hhbmdlcyBzaW5jZSB2NToNCiAtIHJlbW92
+ZSBoYXNfc3VwcGxpZXMNCg0KQ2hhbmdlcyBzaW5jZSB2NDoNCiAtIGFkZCBzeXN0ZW0gc2xlZXAg
+UE0gb3BzDQogLSBtb3ZlIHJlZ3VsYXRvcl9idWxrX2Rpc2FibGUgYmVmb3JlIHN1c3BlbmQoKQ0K
+IC0gZml4ZXMgZXJyb3IgaGFuZGxpbmcNCg0KQ2hhbmdlcyBzaW5jZSB2MzoNCiAtIHJlbW92ZSBy
+ZWR1bmRhbnQgY2FsbGluZyBmdW5jdGlvbg0KIC0gY2hhbmdlIFNJTVBMRV9ERVZfUE1fT1BTIHRv
+IFNFVF9SVU5USU1FX1BNX09QUw0KIC0gY2hhbmdlIHN1cHBseSBuYW1lDQoNCkNoYW5nZXMgc2lu
+Y2UgdjI6DQogLSByZWJhc2Ugb250byB2NS40LXJjMQ0KIC0gcG1fcnVudGltZV9kaXNhYmxlIGFu
+ZCByZWd1bGF0b3JfYnVsa19kaXNhYmxlIGF0DQogICBlcnIgcmV0dXJuIGluIHByb2JlIGZ1bmN0
+aW9uDQoNCkNoYW5nZXMgc2luY2UgdjE6DQogLSByZW1vdmUgcmVkdW5kYW50IGNvZGUNCiAtIGZp
+eHVwIGNvZGluZyBzdHlsZQ0KDQpCaWJieSBIc2llaCAoNCk6DQogIGR0LWJpbmRpbmc6IGVlcHJv
+bTogYXQyNDogYWRkIHZjYy1zdXBwbHkgcHJvcGVydHkNCiAgZHQtYmluZGluZzogaTJjOiBhZGQg
+YnVzLXN1cHBseSBwcm9wZXJ0eQ0KICBtaXNjOiBlZXByb206IGF0MjQ6IHN1cHBvcnQgcG1fcnVu
+dGltZSBjb250cm9sDQogIGkyYzogY29yZTogc3VwcG9ydCBidXMgcmVndWxhdG9yIGNvbnRyb2xs
+aW5nIGluIGFkYXB0ZXINCg0KIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL2VlcHJvbS9hdDI0Lnlh
+bWwgICAgICB8ICA0ICsrDQogRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9p
+MmMudHh0IHwgIDMgKw0KIGRyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2UuYyAgICAgICAgICAgICAg
+ICAgICB8IDY1ICsrKysrKysrKysrKysrKysrKysNCiBkcml2ZXJzL21pc2MvZWVwcm9tL2F0MjQu
+YyAgICAgICAgICAgICAgICAgICAgfCAzOCArKysrKysrKysrKw0KIGluY2x1ZGUvbGludXgvaTJj
+LmggICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAzICsNCiA1IGZpbGVzIGNoYW5nZWQsIDEx
+MyBpbnNlcnRpb25zKCspDQoNCi0tIA0KMi4xOC4wDQo=
 
-Thanks for the review!
-
-On 12/12/2019 5:33 pm, Wolfram Sang wrote:
-> Hi Luca,
-> 
-> thanks for the review!
-> 
->> good, but I think there's a problem in this function. A "normal"
->> master_xfer function issues a repeated start between one msg and the
->> next one, at least in the typical case where all msgs have the same
->> slave address. Your implementation breaks repeated start. At first sight
->> we might need more complex code here to coalesce all consecutive msgs
->> with the same address into a single i2c_transfer() call.
-> 
-> Note that it is by far the standard case that all messages in a transfer
-> have the same client address (99,999%?). But technically, this is not a
-> requirement and the repeated start on the bus is totally independent of
-> the addresses used. It is just a master wanting to send without being
-> interrupted by another master.
-
-I'm not quite sure I understand.
-
-Let's assume the following setup. An i2c client (some driver code) is
-sending a list of messages to the a2b xfer function, which in turn is
-logically connected to a 'real' i2c bus master that'll put the data on
-the wire.
-
-The a2b code has to tell the 'master node' the final destination of the
-payload by programming registers on its primary i2c address, and then
-forwards the messages to its secondary i2c address. The layout of the
-messages don't change, and neither do the flags; i2c messages are being
-sent as i2c messages, except their addresses are changed, a bit like NAT
-in networking. That procedure is described on page 3-4 of the TRM,
-"Remote Peripheral I2C Accesses".
-
-The 'real' i2c master that handles the hardware bus is responsible for
-adding start conditions, and as the messages as such are untouched, I
-believe it should do the right thing. The code in my xfer functions
-merely suppresses reprogramming remote addresses by remembering the last
-one that was used, but that is independent of the start conditions on
-the wire.
-
-Maybe I'm missing anything. Could you provide an example that explains
-in which case this approach would leads to issues?
-
-
-Thanks,
-Daniel
