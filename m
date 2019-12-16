@@ -2,143 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA9F11FF5D
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2019 09:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5895011FF68
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2019 09:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbfLPIE5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 Dec 2019 03:04:57 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:13911 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726786AbfLPIE4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Dec 2019 03:04:56 -0500
-X-UUID: c8f5f4b278d145098dd38853d2390b96-20191216
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=s3VDr+KypIZQMNtzcL1MZfrjjB45VFucbpb/fMpVBlA=;
-        b=iv5VhmyWVsuG3i6T2ywmOg3nDIgWU3mFSeCYcKEYORcDX9T0j+jTHYVsMu3nJaFH7TZWL2H5+zMaEYabtfOHYYxfkPOxXIlbLNeG5Gj70CjZ3bMCfEPbsBTRs2lmRB9ScU0OHgOrDX6RCoWIQtF5MLGmiUbYJzg/gTKIbzaiLEw=;
-X-UUID: c8f5f4b278d145098dd38853d2390b96-20191216
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
-        (envelope-from <bibby.hsieh@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1431117915; Mon, 16 Dec 2019 16:04:48 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 16 Dec 2019 16:04:31 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 16 Dec 2019 16:04:28 +0800
-From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        <linux-i2c@vger.kernel.org>
-CC:     <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <srv_heupstream@mediatek.com>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <devicetree@vger.kernel.org>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>
-Subject: [PATCH v9 4/4] i2c: core: support bus regulator controlling in adapter
-Date:   Mon, 16 Dec 2019 16:04:45 +0800
-Message-ID: <20191216080445.8747-5-bibby.hsieh@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20191216080445.8747-1-bibby.hsieh@mediatek.com>
-References: <20191216080445.8747-1-bibby.hsieh@mediatek.com>
+        id S1726861AbfLPII3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 Dec 2019 03:08:29 -0500
+Received: from mail-ua1-f66.google.com ([209.85.222.66]:35034 "EHLO
+        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726664AbfLPII3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Dec 2019 03:08:29 -0500
+Received: by mail-ua1-f66.google.com with SMTP id y23so1770462ual.2
+        for <linux-i2c@vger.kernel.org>; Mon, 16 Dec 2019 00:08:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q6wmtqrWytSgVVPaG+tJiiZU+H7YE7GNP+DoOxtH1VI=;
+        b=Q5x+BktaOm2b3vqBHMvP5gzjjoxagKJ79ZZToE4NJrZ47jD69ofO1gQcxdrv3AgM+1
+         4OaRDkeeLIr3Qcnzc+ndcMDhKYlIx7NFEDP+nr09xZo+x6EH1CjzS+Gk8yewKOxcXour
+         fgsEnvJqJ5ymbKxwAdF9OuuMDz6Za6gzyXqPzxyM/TgAyX4v8M6WRbEbiZVPzGSvmSl2
+         w84dXiQJjoT5pZ5r/sxd4bgs1WgI8vTIws4k5w+VAFSZmAyrIanEcKNjEJiraO9TFO8f
+         HB3tbj/39d1t/rlYDtNIpWRDpcWcWIG1lsiCQXaOj/XHJcATVvQv8jCdMp1hPNXZM9A2
+         8H5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q6wmtqrWytSgVVPaG+tJiiZU+H7YE7GNP+DoOxtH1VI=;
+        b=cj+xC1gk5+seUMtTS5JJEvR30LZ6p+SGZdlXVe4TXHv3nIajvj1IS9AB+EOuqHyANO
+         iAvDpJ56h5Jicxl4Y/8sKn9JhFZqrqZhbn2aoDUfwePvrhDo9rwo7pInD3g9BVhFOz/P
+         xI3pdaLKgVqENOKxblWXsovpSsQkU9VIsAG17XJqcxiRDzG4jzsubYfRExZ2pUCPYl6w
+         MTl5ZZ9rYiGbPsxyg5oI+kyxyySpkpTLENvUouUjoi5eY8Cs4OKygxEArR/Fb2UPaIRr
+         8xnjKcuKbkb9an5r/JMKHqH2hBMdyhPYGBvlYkVPzUIQAO3+xHS4owwZ9d0Q+G/e3IwU
+         E0uQ==
+X-Gm-Message-State: APjAAAVWlyD84bdHqtkyUPeiQ2tzNREeQxQVSXEvFns4+UprIwfc9u+n
+        /cHo6bitp8gMBstXXuikFrJaF8vStBgubGPfLYMkBA==
+X-Google-Smtp-Source: APXvYqwTmNQL9yAF4ysRmXvFWucNUjVzF64EIGjJntMayVn5WjwCpACT1hjuTxdjff5Z5fVgnzInp5q0Ayr6YWbMa9w=
+X-Received: by 2002:ab0:2716:: with SMTP id s22mr22593797uao.20.1576483708557;
+ Mon, 16 Dec 2019 00:08:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <20191210154157.21930-1-ktouil@baylibre.com> <20191210154157.21930-2-ktouil@baylibre.com>
+In-Reply-To: <20191210154157.21930-2-ktouil@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 16 Dec 2019 09:08:17 +0100
+Message-ID: <CACRpkdZb6OppcdCcaQ9abdkDJMk4escyyEm1TMB75rRxoN5e2A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: nvmem: new optional property write-protect-gpios
+To:     Khouloud Touil <ktouil@baylibre.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        baylibre-upstreaming@groups.io,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-i2c <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-QWx0aG91Z2ggaW4gdGhlIG1vc3QgcGxhdGZvcm1zLCB0aGUgYnVzIHBvd2VyIG9mIGkyYw0KYXJl
-IGFsd2F5IG9uLCBzb21lIHBsYXRmb3JtcyBkaXNhYmxlIHRoZSBpMmMgYnVzIHBvd2VyDQppbiBv
-cmRlciB0byBtZWV0IGxvdyBwb3dlciByZXF1ZXN0Lg0KDQpXZSBnZXQgYW5kIGVuYWJsZSBidWxr
-IHJlZ3VsYXRvciBpbiBpMmMgYWRhcHRlciBkZXZpY2UuDQoNClNpZ25lZC1vZmYtYnk6IEJpYmJ5
-IEhzaWVoIDxiaWJieS5oc2llaEBtZWRpYXRlay5jb20+DQotLS0NCiBkcml2ZXJzL2kyYy9pMmMt
-Y29yZS1iYXNlLmMgfCA2NSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQog
-aW5jbHVkZS9saW51eC9pMmMuaCAgICAgICAgIHwgIDMgKysNCiAyIGZpbGVzIGNoYW5nZWQsIDY4
-IGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2Uu
-YyBiL2RyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2UuYw0KaW5kZXggOTMzM2M4NjVkNGE5Li5lOTVl
-YmQwYWYyMDAgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL2kyYy9pMmMtY29yZS1iYXNlLmMNCisrKyBi
-L2RyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2UuYw0KQEAgLTMwNiw2ICszMDYsNyBAQCBzdGF0aWMg
-aW50IGkyY19zbWJ1c19ob3N0X25vdGlmeV90b19pcnEoY29uc3Qgc3RydWN0IGkyY19jbGllbnQg
-KmNsaWVudCkNCiBzdGF0aWMgaW50IGkyY19kZXZpY2VfcHJvYmUoc3RydWN0IGRldmljZSAqZGV2
-KQ0KIHsNCiAJc3RydWN0IGkyY19jbGllbnQJKmNsaWVudCA9IGkyY192ZXJpZnlfY2xpZW50KGRl
-dik7DQorCXN0cnVjdCBpMmNfYWRhcHRlcgkqYWRhcCA9IGNsaWVudC0+YWRhcHRlcjsNCiAJc3Ry
-dWN0IGkyY19kcml2ZXIJKmRyaXZlcjsNCiAJaW50IHN0YXR1czsNCiANCkBAIC0zNzEsNiArMzcy
-LDEyIEBAIHN0YXRpYyBpbnQgaTJjX2RldmljZV9wcm9iZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQog
-DQogCWRldl9kYmcoZGV2LCAicHJvYmVcbiIpOw0KIA0KKwlzdGF0dXMgPSByZWd1bGF0b3JfZW5h
-YmxlKGFkYXAtPmJ1c19yZWcpOw0KKwlpZiAoc3RhdHVzICE9IDApIHsNCisJCWRldl9lcnIoJmFk
-YXAtPmRldiwgIkZhaWxlZCB0byBlbmFibGUgcG93ZXIgcmVndWxhdG9yXG4iKTsNCisJCWdvdG8g
-ZXJyX2NsZWFyX3dha2V1cF9pcnE7DQorCX0NCisNCiAJc3RhdHVzID0gb2ZfY2xrX3NldF9kZWZh
-dWx0cyhkZXYtPm9mX25vZGUsIGZhbHNlKTsNCiAJaWYgKHN0YXR1cyA8IDApDQogCQlnb3RvIGVy
-cl9jbGVhcl93YWtldXBfaXJxOw0KQEAgLTQwNyw2ICs0MTQsNyBAQCBzdGF0aWMgaW50IGkyY19k
-ZXZpY2VfcHJvYmUoc3RydWN0IGRldmljZSAqZGV2KQ0KIHN0YXRpYyBpbnQgaTJjX2RldmljZV9y
-ZW1vdmUoc3RydWN0IGRldmljZSAqZGV2KQ0KIHsNCiAJc3RydWN0IGkyY19jbGllbnQJKmNsaWVu
-dCA9IGkyY192ZXJpZnlfY2xpZW50KGRldik7DQorCXN0cnVjdCBpMmNfYWRhcHRlciAgICAgICph
-ZGFwID0gY2xpZW50LT5hZGFwdGVyOw0KIAlzdHJ1Y3QgaTJjX2RyaXZlcgkqZHJpdmVyOw0KIAlp
-bnQgc3RhdHVzID0gMDsNCiANCkBAIC00MjAsNiArNDI4LDggQEAgc3RhdGljIGludCBpMmNfZGV2
-aWNlX3JlbW92ZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQogCX0NCiANCiAJZGV2X3BtX2RvbWFpbl9k
-ZXRhY2goJmNsaWVudC0+ZGV2LCB0cnVlKTsNCisJaWYgKCFwbV9ydW50aW1lX3N0YXR1c19zdXNw
-ZW5kZWQoJmFkYXAtPmRldikpDQorCQlyZWd1bGF0b3JfZGlzYWJsZShhZGFwLT5idXNfcmVnKTsN
-CiANCiAJZGV2X3BtX2NsZWFyX3dha2VfaXJxKCZjbGllbnQtPmRldik7DQogCWRldmljZV9pbml0
-X3dha2V1cCgmY2xpZW50LT5kZXYsIGZhbHNlKTsNCkBAIC00MzEsNiArNDQxLDU0IEBAIHN0YXRp
-YyBpbnQgaTJjX2RldmljZV9yZW1vdmUoc3RydWN0IGRldmljZSAqZGV2KQ0KIAlyZXR1cm4gc3Rh
-dHVzOw0KIH0NCiANCisjaWZkZWYgQ09ORklHX1BNX1NMRUVQDQorc3RhdGljIGludCBpMmNfcmVz
-dW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCit7DQorCXN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQg
-PSBpMmNfdmVyaWZ5X2NsaWVudChkZXYpOw0KKwlzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXAgPSBj
-bGllbnQtPmFkYXB0ZXI7DQorDQorCXJldHVybiBwbV9nZW5lcmljX3Jlc3VtZSgmYWRhcC0+ZGV2
-KTsNCit9DQorDQorc3RhdGljIGludCBpMmNfc3VzcGVuZChzdHJ1Y3QgZGV2aWNlICpkZXYpDQor
-ew0KKwlzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50ID0gaTJjX3ZlcmlmeV9jbGllbnQoZGV2KTsN
-CisJc3RydWN0IGkyY19hZGFwdGVyICphZGFwID0gY2xpZW50LT5hZGFwdGVyOw0KKw0KKwlyZXR1
-cm4gcG1fZ2VuZXJpY19zdXNwZW5kKCZhZGFwLT5kZXYpOw0KK30NCisjZW5kaWYNCisNCisjaWZk
-ZWYgQ09ORklHX1BNDQorc3RhdGljIGludCBpMmNfcnVudGltZV9yZXN1bWUoc3RydWN0IGRldmlj
-ZSAqZGV2KQ0KK3sNCisJc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCA9IGkyY192ZXJpZnlfY2xp
-ZW50KGRldik7DQorCXN0cnVjdCBpMmNfYWRhcHRlciAqYWRhcCA9IGNsaWVudC0+YWRhcHRlcjsN
-CisNCisJcG1fZ2VuZXJpY19ydW50aW1lX3Jlc3VtZSgmYWRhcC0+ZGV2KTsNCisNCisJcmV0dXJu
-IHJlZ3VsYXRvcl9lbmFibGUoYWRhcC0+YnVzX3JlZyk7DQorfQ0KKw0KK3N0YXRpYyBpbnQgaTJj
-X3J1bnRpbWVfc3VzcGVuZChzdHJ1Y3QgZGV2aWNlICpkZXYpDQorew0KKwlzdHJ1Y3QgaTJjX2Ns
-aWVudCAqY2xpZW50ID0gaTJjX3ZlcmlmeV9jbGllbnQoZGV2KTsNCisJc3RydWN0IGkyY19hZGFw
-dGVyICphZGFwID0gY2xpZW50LT5hZGFwdGVyOw0KKw0KKwlwbV9nZW5lcmljX3J1bnRpbWVfc3Vz
-cGVuZCgmYWRhcC0+ZGV2KTsNCisNCisJaWYgKCFwbV9ydW50aW1lX3N0YXR1c19zdXNwZW5kZWQo
-JmFkYXAtPmRldikpDQorCQlyZXR1cm4gcmVndWxhdG9yX2Rpc2FibGUoY2xpZW50LT5hZGFwdGVy
-LT5idXNfcmVnKTsNCisNCisJcmV0dXJuIDA7DQorfQ0KKyNlbmRpZg0KKw0KK3N0YXRpYyBjb25z
-dCBzdHJ1Y3QgZGV2X3BtX29wcyBpMmNfZGV2aWNlX3BtID0gew0KKwlTRVRfU1lTVEVNX1NMRUVQ
-X1BNX09QUyhpMmNfc3VzcGVuZCwgaTJjX3Jlc3VtZSkNCisJU0VUX1JVTlRJTUVfUE1fT1BTKGky
-Y19ydW50aW1lX3N1c3BlbmQsIGkyY19ydW50aW1lX3Jlc3VtZSwgTlVMTCkNCit9Ow0KKw0KIHN0
-YXRpYyB2b2lkIGkyY19kZXZpY2Vfc2h1dGRvd24oc3RydWN0IGRldmljZSAqZGV2KQ0KIHsNCiAJ
-c3RydWN0IGkyY19jbGllbnQgKmNsaWVudCA9IGkyY192ZXJpZnlfY2xpZW50KGRldik7DQpAQCAt
-NDg4LDYgKzU0Niw3IEBAIHN0cnVjdCBidXNfdHlwZSBpMmNfYnVzX3R5cGUgPSB7DQogCS5wcm9i
-ZQkJPSBpMmNfZGV2aWNlX3Byb2JlLA0KIAkucmVtb3ZlCQk9IGkyY19kZXZpY2VfcmVtb3ZlLA0K
-IAkuc2h1dGRvd24JPSBpMmNfZGV2aWNlX3NodXRkb3duLA0KKwkucG0JCT0gJmkyY19kZXZpY2Vf
-cG0sDQogfTsNCiBFWFBPUlRfU1lNQk9MX0dQTChpMmNfYnVzX3R5cGUpOw0KIA0KQEAgLTEzNTEs
-NiArMTQxMCwxMSBAQCBzdGF0aWMgaW50IGkyY19yZWdpc3Rlcl9hZGFwdGVyKHN0cnVjdCBpMmNf
-YWRhcHRlciAqYWRhcCkNCiAJCWdvdG8gb3V0X3JlZzsNCiANCiAJZGV2X2RiZygmYWRhcC0+ZGV2
-LCAiYWRhcHRlciBbJXNdIHJlZ2lzdGVyZWRcbiIsIGFkYXAtPm5hbWUpOw0KKwlhZGFwLT5idXNf
-cmVnID0gZGV2bV9yZWd1bGF0b3JfZ2V0KCZhZGFwLT5kZXYsICJidXMiKTsNCisJaWYgKElTX0VS
-UihhZGFwLT5idXNfcmVnKSkgew0KKwkJcmVzID0gUFRSX0VSUihhZGFwLT5idXNfcmVnKTsNCisJ
-CWdvdG8gb3V0X3JlZzsNCisJfQ0KIA0KIAlwbV9ydW50aW1lX25vX2NhbGxiYWNrcygmYWRhcC0+
-ZGV2KTsNCiAJcG1fc3VzcGVuZF9pZ25vcmVfY2hpbGRyZW4oJmFkYXAtPmRldiwgdHJ1ZSk7DQpA
-QCAtMTU4MCw2ICsxNjQ0LDcgQEAgdm9pZCBpMmNfZGVsX2FkYXB0ZXIoc3RydWN0IGkyY19hZGFw
-dGVyICphZGFwKQ0KIAlkZXZfZGJnKCZhZGFwLT5kZXYsICJhZGFwdGVyIFslc10gdW5yZWdpc3Rl
-cmVkXG4iLCBhZGFwLT5uYW1lKTsNCiANCiAJcG1fcnVudGltZV9kaXNhYmxlKCZhZGFwLT5kZXYp
-Ow0KKwlkZXZtX3JlZ3VsYXRvcl9wdXQoYWRhcC0+YnVzX3JlZyk7DQogDQogCWkyY19ob3N0X25v
-dGlmeV9pcnFfdGVhcmRvd24oYWRhcCk7DQogDQpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9p
-MmMuaCBiL2luY2x1ZGUvbGludXgvaTJjLmgNCmluZGV4IGQyZjc4NjcwNjY1Ny4uODMzYjgxYTY4
-MGRhIDEwMDY0NA0KLS0tIGEvaW5jbHVkZS9saW51eC9pMmMuaA0KKysrIGIvaW5jbHVkZS9saW51
-eC9pMmMuaA0KQEAgLTE1LDYgKzE1LDcgQEANCiAjaW5jbHVkZSA8bGludXgvZGV2aWNlLmg+CS8q
-IGZvciBzdHJ1Y3QgZGV2aWNlICovDQogI2luY2x1ZGUgPGxpbnV4L3NjaGVkLmg+CS8qIGZvciBj
-b21wbGV0aW9uICovDQogI2luY2x1ZGUgPGxpbnV4L211dGV4Lmg+DQorI2luY2x1ZGUgPGxpbnV4
-L3JlZ3VsYXRvci9jb25zdW1lci5oPg0KICNpbmNsdWRlIDxsaW51eC9ydG11dGV4Lmg+DQogI2lu
-Y2x1ZGUgPGxpbnV4L2lycWRvbWFpbi5oPgkJLyogZm9yIEhvc3QgTm90aWZ5IElSUSAqLw0KICNp
-bmNsdWRlIDxsaW51eC9vZi5oPgkJLyogZm9yIHN0cnVjdCBkZXZpY2Vfbm9kZSAqLw0KQEAgLTMz
-MCw2ICszMzEsNyBAQCBzdHJ1Y3QgaTJjX2NsaWVudCB7DQogCWludCBpbml0X2lycTsJCQkvKiBp
-cnEgc2V0IGF0IGluaXRpYWxpemF0aW9uCSovDQogCWludCBpcnE7CQkJLyogaXJxIGlzc3VlZCBi
-eSBkZXZpY2UJCSovDQogCXN0cnVjdCBsaXN0X2hlYWQgZGV0ZWN0ZWQ7DQorDQogI2lmIElTX0VO
-QUJMRUQoQ09ORklHX0kyQ19TTEFWRSkNCiAJaTJjX3NsYXZlX2NiX3Qgc2xhdmVfY2I7CS8qIGNh
-bGxiYWNrIGZvciBzbGF2ZSBtb2RlCSovDQogI2VuZGlmDQpAQCAtNzIzLDYgKzcyNSw3IEBAIHN0
-cnVjdCBpMmNfYWRhcHRlciB7DQogCWNvbnN0IHN0cnVjdCBpMmNfYWRhcHRlcl9xdWlya3MgKnF1
-aXJrczsNCiANCiAJc3RydWN0IGlycV9kb21haW4gKmhvc3Rfbm90aWZ5X2RvbWFpbjsNCisJc3Ry
-dWN0IHJlZ3VsYXRvciAqYnVzX3JlZzsNCiB9Ow0KICNkZWZpbmUgdG9faTJjX2FkYXB0ZXIoZCkg
-Y29udGFpbmVyX29mKGQsIHN0cnVjdCBpMmNfYWRhcHRlciwgZGV2KQ0KIA0KLS0gDQoyLjE4LjAN
-Cg==
+On Tue, Dec 10, 2019 at 4:42 PM Khouloud Touil <ktouil@baylibre.com> wrote:
 
+> +  wp-gpios:
+> +    description:
+> +      GPIO to which the write-protect pin of the chip is connected.
+> +      The write-protect GPIO is asserted, when it's driven high
+> +      (logical '1') to block the write operation. It's deasserted,
+> +      when it's driven low (logical '0') to allow writing.
+> +    maxItems: 1
+
+OK I guess we can't get it less convoluted. This section is consistent.
+
+>  patternProperties:
+>    "^.*@[0-9a-f]+$":
+>      type: object
+> @@ -66,6 +74,7 @@ examples:
+>        qfprom: eeprom@700000 {
+>            #address-cells = <1>;
+>            #size-cells = <1>;
+> +          wp-gpios = <&gpio1 3 0>;
+
+In the example please use the include for GPIO:
+
+#include <dt-bindings/gpio/gpio.h>
+
+wp-gpios = <&gpio1 3 GPIO_ACTIVE_HIGH>;
+
+You can just put the #include directive right before the
+example, it should work fine.
+
+Yours,
+Linus Walleij
