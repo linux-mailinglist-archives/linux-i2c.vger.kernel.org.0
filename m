@@ -2,97 +2,257 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 126CA120346
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2019 12:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22385120494
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2019 12:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727629AbfLPLDz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 Dec 2019 06:03:55 -0500
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:37874 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727619AbfLPLDz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Dec 2019 06:03:55 -0500
-Received: by mail-qt1-f195.google.com with SMTP id w47so5445973qtk.4
-        for <linux-i2c@vger.kernel.org>; Mon, 16 Dec 2019 03:03:54 -0800 (PST)
+        id S1727453AbfLPL7I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 Dec 2019 06:59:08 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:39066 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727241AbfLPL7I (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Dec 2019 06:59:08 -0500
+Received: by mail-ed1-f68.google.com with SMTP id v16so4756727edy.6
+        for <linux-i2c@vger.kernel.org>; Mon, 16 Dec 2019 03:59:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KyT8iX33k7sFRkYd4RU7rY84Ij+yNZq0ApEE/O2fu+4=;
-        b=c+nMPYIjLlikLb2ZpmWU4U9s9hyYGvdF3o6ckh0KkdQWhoWxbaPpDXJjUfQoEjL4hs
-         JiqsWAkvw7+QhnYVC6Hm589MhvP5vdsHr/5C7CCmG19vVxIFQ8vQOct17sSzVFBr+E9w
-         WFZ53+XrUR+uIO3iN0ibxCexTTT377SJSCEV3v8jLXqTN1pJmxZz6+r8cnSemfqwTKtg
-         lN8RVRkPGWkVjY9s7IVZsYQfZ6VNmu+6leKlecJSTaLumd7U5JjtK1V1VzQIyZpbPQE1
-         9hXv3CvWDoV2MBW6kEiIztHmOeAZWFr6dl7BYg39nXpZM9umvUJBAdNswAK4F/Jp0GIj
-         GNhQ==
+         :cc;
+        bh=OdxYjoNvvAigHgcFiC0RbqBfDi1gELByEUzUPakRzAU=;
+        b=QS4oJUXMBR1LKAmIRfNd7TsTPRvZM+p35ulJJJ0tqyFHzhtpDodYo5LQgsYohpMD38
+         jd2GpYZzmeFrxdjcvVHDIEQU5Ob37zkgIrdMFcPd6V+3m11xQam+VZueAHmC/FTDgrce
+         M3ruBdp8qqJK+f4rArJwqJ1LXk+sdQpFvLVbA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KyT8iX33k7sFRkYd4RU7rY84Ij+yNZq0ApEE/O2fu+4=;
-        b=D/oyMi0cvllFvTR3WVdCPE1zLbUusJ6MIBtsnqjBKx4kpxUNup5OKLAzixNdd3sMBZ
-         ZrLdi9qO6WsHdmUiAWABejMjumHVaCwCFc5EHNFMtroBgHVEtkaipU+tG8aaoqUtps4q
-         AuTk3yxxtydaEdtU36QHOUtTdz+je7LQtddXvnQl+ynXDc1AbeYdubQi2RK1AABSqSSe
-         d685cJa5EyFu2EqUwK1lvxoJ7iixaLm53P74aUtK1SF5SR4iogeLCli+ZXf8zMn9pUe7
-         N0iEB7Yg7us+rSDl0vkeOApC/OqEizsTXek4OZgxtI3uoeS/F15PqinzeSFqm6oRVmwq
-         8yQw==
-X-Gm-Message-State: APjAAAUvHAQZDq5djGwZ4hdjvMs9fw+5BWXqxcRVFUh3nx6fa35Gr9C0
-        QDbTvJyFK+7qOtoVbfnHsiIJeZvLFyuQSLjnUbeH4g==
-X-Google-Smtp-Source: APXvYqzw6JZzysee+REdRGrquVmuOvAlaSakT5VJ1hcbEefqMpv5n487ZNnV9cdF1eId5+6AYmJ11V8kLlSsj2qNIv0=
-X-Received: by 2002:ac8:5208:: with SMTP id r8mr23685802qtn.131.1576494234130;
- Mon, 16 Dec 2019 03:03:54 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=OdxYjoNvvAigHgcFiC0RbqBfDi1gELByEUzUPakRzAU=;
+        b=cghlPv14+klaLsnFGYdXmuwwQXEEi74VwT1DZhb9HLVQWu837bifPScMFPDnVnbjGp
+         PPntXnTIdWIScp2iojpLLRNLvj1TDD230TpH3Q1MPZN/4mzOBJqBJvL4KWI5Tc9F7EUl
+         pLPoydbhdf2X5EOd3Yh2dM5T8g6Zam/Np9kSPsg5wC0gHmt4l5IUDd31hBtJYJYwWSf+
+         9bP6yCCK/ZgnLF7rVwvEhuSZtaFxa/2tBYmvq3HmyRBt6QMDqt+VX+Nhow7y4pQFh6Rr
+         vkSgkIuZtNm1kaPkVuVnjkUTztG83E7XPQGvDU6OKKZl06L5Zhy4BLINTDGsz59t9DG1
+         /Urw==
+X-Gm-Message-State: APjAAAWUvNcbOIchPtHVHDLlIl/DVCFDVslVnpJKN9IJ5AsLFxwzFEDF
+        7hlT2BI7sEJeQNMLD4j2jSPnbESMFQnUiA==
+X-Google-Smtp-Source: APXvYqwVdiSu1t+JsrSJ6HxLgTalRAuJ+ho5nyXJttMgGCE8/PHV2tZ1OOQSJayoxwM1Eq4lhGY4tQ==
+X-Received: by 2002:a50:d5c9:: with SMTP id g9mr17740490edj.131.1576497542967;
+        Mon, 16 Dec 2019 03:59:02 -0800 (PST)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id t25sm88042edt.60.2019.12.16.03.59.01
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Dec 2019 03:59:02 -0800 (PST)
+Received: by mail-wr1-f45.google.com with SMTP id y11so6894316wrt.6
+        for <linux-i2c@vger.kernel.org>; Mon, 16 Dec 2019 03:59:01 -0800 (PST)
+X-Received: by 2002:adf:f586:: with SMTP id f6mr28927980wro.46.1576497541085;
+ Mon, 16 Dec 2019 03:59:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20191210154157.21930-1-ktouil@baylibre.com> <20191210154157.21930-5-ktouil@baylibre.com>
- <CACRpkdbHLv2R+XvCjCaEgaztUqpmHWCmSAqHABkkstJREkmfVw@mail.gmail.com>
-In-Reply-To: <CACRpkdbHLv2R+XvCjCaEgaztUqpmHWCmSAqHABkkstJREkmfVw@mail.gmail.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Mon, 16 Dec 2019 12:03:42 +0100
-Message-ID: <CAMpxmJWGRskDudwLpzVZKvYb=Gbcxy6s0gCLUUFkgLq-CYEiZg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] eeprom: at24: remove the write-protect pin support
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Khouloud Touil <ktouil@baylibre.com>,
+References: <20191216080445.8747-1-bibby.hsieh@mediatek.com> <20191216080445.8747-5-bibby.hsieh@mediatek.com>
+In-Reply-To: <20191216080445.8747-5-bibby.hsieh@mediatek.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Mon, 16 Dec 2019 20:58:49 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5CU79CnRkpo8bpijMCvtzKAkQXj6nadt3YyQSCcq5roXQ@mail.gmail.com>
+Message-ID: <CAAFQd5CU79CnRkpo8bpijMCvtzKAkQXj6nadt3YyQSCcq5roXQ@mail.gmail.com>
+Subject: Re: [PATCH v9 4/4] i2c: core: support bus regulator controlling in adapter
+To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        baylibre-upstreaming@groups.io,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-i2c <linux-i2c@vger.kernel.org>
+        linux-devicetree <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-pon., 16 gru 2019 o 09:13 Linus Walleij <linus.walleij@linaro.org> napisa=
-=C5=82(a):
->
-> On Tue, Dec 10, 2019 at 4:42 PM Khouloud Touil <ktouil@baylibre.com> wrot=
-e:
->
-> > NVMEM framework is an interface for the at24 EEPROMs as well as for
-> > other drivers, instead of passing the wp-gpios over the different
-> > drivers each time, it would be better to pass it over the NVMEM
-> > subsystem once and for all.
-> >
-> > Removing the support for the write-protect pin after adding it to the
-> > NVMEM subsystem.
-> >
-> > Signed-off-by: Khouloud Touil <ktouil@baylibre.com>
->
-> I wonder if this needs to be in the same patch that adds it to
-> the NVMEM subsystem, so as to avoid both code paths being
-> taken between the two patches (bisectability..)
->
-> However that is not the biggest thing in the universe and I'm
-> no bisectability-perfectionist, so:
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->
-> Yours,
-> Linus Walleij
+Hi Bibby,
 
-AFAIK Khouloud tested it and it's bisectable thanks to using the
-optional gpiod_get() variant.
+On Mon, Dec 16, 2019 at 5:04 PM Bibby Hsieh <bibby.hsieh@mediatek.com> wrote:
+>
+> Although in the most platforms, the bus power of i2c
+> are alway on, some platforms disable the i2c bus power
+> in order to meet low power request.
+>
+> We get and enable bulk regulator in i2c adapter device.
+>
+> Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+> ---
+>  drivers/i2c/i2c-core-base.c | 65 +++++++++++++++++++++++++++++++++++++
+>  include/linux/i2c.h         |  3 ++
+>  2 files changed, 68 insertions(+)
+>
+
+Thanks for the patch! Please see my comments below.
+
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 9333c865d4a9..e95ebd0af200 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -306,6 +306,7 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
+>  static int i2c_device_probe(struct device *dev)
+>  {
+>         struct i2c_client       *client = i2c_verify_client(dev);
+> +       struct i2c_adapter      *adap = client->adapter;
+>         struct i2c_driver       *driver;
+>         int status;
+>
+> @@ -371,6 +372,12 @@ static int i2c_device_probe(struct device *dev)
+>
+>         dev_dbg(dev, "probe\n");
+>
+> +       status = regulator_enable(adap->bus_reg);
+> +       if (status != 0) {
+> +               dev_err(&adap->dev, "Failed to enable power regulator\n");
+> +               goto err_clear_wakeup_irq;
+> +       }
+> +
+>         status = of_clk_set_defaults(dev->of_node, false);
+>         if (status < 0)
+>                 goto err_clear_wakeup_irq;
+> @@ -407,6 +414,7 @@ static int i2c_device_probe(struct device *dev)
+>  static int i2c_device_remove(struct device *dev)
+>  {
+>         struct i2c_client       *client = i2c_verify_client(dev);
+> +       struct i2c_adapter      *adap = client->adapter;
+>         struct i2c_driver       *driver;
+>         int status = 0;
+>
+> @@ -420,6 +428,8 @@ static int i2c_device_remove(struct device *dev)
+>         }
+>
+>         dev_pm_domain_detach(&client->dev, true);
+> +       if (!pm_runtime_status_suspended(&adap->dev))
+> +               regulator_disable(adap->bus_reg);
+>
+>         dev_pm_clear_wake_irq(&client->dev);
+>         device_init_wakeup(&client->dev, false);
+> @@ -431,6 +441,54 @@ static int i2c_device_remove(struct device *dev)
+>         return status;
+>  }
+>
+> +#ifdef CONFIG_PM_SLEEP
+> +static int i2c_resume(struct device *dev)
+> +{
+> +       struct i2c_client *client = i2c_verify_client(dev);
+> +       struct i2c_adapter *adap = client->adapter;
+
+We need to ensure here that if the slave device was not runtime
+suspended before the system suspend, the regulator is enabled before
+the slave's resume callback is called.
+
+> +
+> +       return pm_generic_resume(&adap->dev);
+> +}
+> +
+> +static int i2c_suspend(struct device *dev)
+> +{
+> +       struct i2c_client *client = i2c_verify_client(dev);
+> +       struct i2c_adapter *adap = client->adapter;
+> +
+> +       return pm_generic_suspend(&adap->dev);
+
+We need to ensure that the regulator is disabled when the system suspends.
+
+> +}
+> +#endif
+> +
+> +#ifdef CONFIG_PM
+> +static int i2c_runtime_resume(struct device *dev)
+> +{
+> +       struct i2c_client *client = i2c_verify_client(dev);
+> +       struct i2c_adapter *adap = client->adapter;
+> +
+> +       pm_generic_runtime_resume(&adap->dev);
+
+Why adap->dev? This callback is expected to execute a PM operation on
+the I2C slave device.
+
+Also, don't we need some error handling here?
+
+> +
+> +       return regulator_enable(adap->bus_reg);
+> +}
+> +
+> +static int i2c_runtime_suspend(struct device *dev)
+> +{
+> +       struct i2c_client *client = i2c_verify_client(dev);
+> +       struct i2c_adapter *adap = client->adapter;
+> +
+> +       pm_generic_runtime_suspend(&adap->dev);
+
+Ditto.
+
+> +
+> +       if (!pm_runtime_status_suspended(&adap->dev))
+
+Since we just executed a suspend operation on the device, how is it
+possible that it isn't suspended?
+
+> +               return regulator_disable(client->adapter->bus_reg);
+> +
+> +       return 0;
+> +}
+> +#endif
+> +
+> +static const struct dev_pm_ops i2c_device_pm = {
+> +       SET_SYSTEM_SLEEP_PM_OPS(i2c_suspend, i2c_resume)
+> +       SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume, NULL)
+> +};
+> +
+>  static void i2c_device_shutdown(struct device *dev)
+>  {
+>         struct i2c_client *client = i2c_verify_client(dev);
+> @@ -488,6 +546,7 @@ struct bus_type i2c_bus_type = {
+>         .probe          = i2c_device_probe,
+>         .remove         = i2c_device_remove,
+>         .shutdown       = i2c_device_shutdown,
+> +       .pm             = &i2c_device_pm,
+>  };
+>  EXPORT_SYMBOL_GPL(i2c_bus_type);
+>
+> @@ -1351,6 +1410,11 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
+>                 goto out_reg;
+>
+>         dev_dbg(&adap->dev, "adapter [%s] registered\n", adap->name);
+> +       adap->bus_reg = devm_regulator_get(&adap->dev, "bus");
+> +       if (IS_ERR(adap->bus_reg)) {
+> +               res = PTR_ERR(adap->bus_reg);
+> +               goto out_reg;
+> +       }
+>
+>         pm_runtime_no_callbacks(&adap->dev);
+>         pm_suspend_ignore_children(&adap->dev, true);
+> @@ -1580,6 +1644,7 @@ void i2c_del_adapter(struct i2c_adapter *adap)
+>         dev_dbg(&adap->dev, "adapter [%s] unregistered\n", adap->name);
+>
+>         pm_runtime_disable(&adap->dev);
+> +       devm_regulator_put(adap->bus_reg);
+>
+>         i2c_host_notify_irq_teardown(adap);
+>
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index d2f786706657..833b81a680da 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -15,6 +15,7 @@
+>  #include <linux/device.h>      /* for struct device */
+>  #include <linux/sched.h>       /* for completion */
+>  #include <linux/mutex.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/rtmutex.h>
+>  #include <linux/irqdomain.h>           /* for Host Notify IRQ */
+>  #include <linux/of.h>          /* for struct device_node */
+> @@ -330,6 +331,7 @@ struct i2c_client {
+>         int init_irq;                   /* irq set at initialization    */
+>         int irq;                        /* irq issued by device         */
+>         struct list_head detected;
+> +
+
+Unnecessary change.
 
 Best regards,
-Bartosz Golaszewski
+Tomasz
