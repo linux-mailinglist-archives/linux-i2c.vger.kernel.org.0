@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5895011FF68
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2019 09:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD5011FF70
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2019 09:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726861AbfLPII3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 Dec 2019 03:08:29 -0500
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:35034 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726664AbfLPII3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Dec 2019 03:08:29 -0500
-Received: by mail-ua1-f66.google.com with SMTP id y23so1770462ual.2
-        for <linux-i2c@vger.kernel.org>; Mon, 16 Dec 2019 00:08:29 -0800 (PST)
+        id S1726764AbfLPIKI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 Dec 2019 03:10:08 -0500
+Received: from mail-vk1-f193.google.com ([209.85.221.193]:36643 "EHLO
+        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726718AbfLPIKF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Dec 2019 03:10:05 -0500
+Received: by mail-vk1-f193.google.com with SMTP id i4so1377691vkc.3
+        for <linux-i2c@vger.kernel.org>; Mon, 16 Dec 2019 00:10:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=q6wmtqrWytSgVVPaG+tJiiZU+H7YE7GNP+DoOxtH1VI=;
-        b=Q5x+BktaOm2b3vqBHMvP5gzjjoxagKJ79ZZToE4NJrZ47jD69ofO1gQcxdrv3AgM+1
-         4OaRDkeeLIr3Qcnzc+ndcMDhKYlIx7NFEDP+nr09xZo+x6EH1CjzS+Gk8yewKOxcXour
-         fgsEnvJqJ5ymbKxwAdF9OuuMDz6Za6gzyXqPzxyM/TgAyX4v8M6WRbEbiZVPzGSvmSl2
-         w84dXiQJjoT5pZ5r/sxd4bgs1WgI8vTIws4k5w+VAFSZmAyrIanEcKNjEJiraO9TFO8f
-         HB3tbj/39d1t/rlYDtNIpWRDpcWcWIG1lsiCQXaOj/XHJcATVvQv8jCdMp1hPNXZM9A2
-         8H5w==
+        bh=OaW5Hnc1v0arti4eZTySZ/4BhiMhUg3N5njmRM9tic4=;
+        b=y8bMJA3mew2fcZQ7cpXVf/KhayFi/B2k/6eZ6N9Sv26pXuVqEg0g0meW5SHvNxQfq1
+         CXwOdlE68eobeKxZqVXVuPhvmAKrGBZ00op1yOHOqf2RzzZdbivN1O9T7iqMgHbtag1E
+         VwmOxqjG6r1lXxi/Bd4ob/QiGnbJlx+9Lu8ssLMLyoKWTFehEF3qpaCr65WL/1kTblAG
+         9beDIfbJ4JyuJkm7MsuQyUcsPH+1zGPW3RNrZr2X6/HicmoX3P81W77kszgcHAAcSs8G
+         McuF9QkoLFHowla+BmUpoKkQvBWQlDRfJ3F6f+bUotqCHKyHtS6h6fzgLXT6tDAI0Da1
+         FeOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=q6wmtqrWytSgVVPaG+tJiiZU+H7YE7GNP+DoOxtH1VI=;
-        b=cj+xC1gk5+seUMtTS5JJEvR30LZ6p+SGZdlXVe4TXHv3nIajvj1IS9AB+EOuqHyANO
-         iAvDpJ56h5Jicxl4Y/8sKn9JhFZqrqZhbn2aoDUfwePvrhDo9rwo7pInD3g9BVhFOz/P
-         xI3pdaLKgVqENOKxblWXsovpSsQkU9VIsAG17XJqcxiRDzG4jzsubYfRExZ2pUCPYl6w
-         MTl5ZZ9rYiGbPsxyg5oI+kyxyySpkpTLENvUouUjoi5eY8Cs4OKygxEArR/Fb2UPaIRr
-         8xnjKcuKbkb9an5r/JMKHqH2hBMdyhPYGBvlYkVPzUIQAO3+xHS4owwZ9d0Q+G/e3IwU
-         E0uQ==
-X-Gm-Message-State: APjAAAVWlyD84bdHqtkyUPeiQ2tzNREeQxQVSXEvFns4+UprIwfc9u+n
-        /cHo6bitp8gMBstXXuikFrJaF8vStBgubGPfLYMkBA==
-X-Google-Smtp-Source: APXvYqwTmNQL9yAF4ysRmXvFWucNUjVzF64EIGjJntMayVn5WjwCpACT1hjuTxdjff5Z5fVgnzInp5q0Ayr6YWbMa9w=
-X-Received: by 2002:ab0:2716:: with SMTP id s22mr22593797uao.20.1576483708557;
- Mon, 16 Dec 2019 00:08:28 -0800 (PST)
+        bh=OaW5Hnc1v0arti4eZTySZ/4BhiMhUg3N5njmRM9tic4=;
+        b=Jg2VjxnmXnSYYtz7PqhCwidB4M7ArszLHdeHImhWH6ovg+1VSRZFq/bRM5h+FHx3Zh
+         HOKfg8m4DwigDaUYz/Eopo9sGIW7uzMsSigQbmdidYvw2XH7TZBSCjIrkuMhsBZ6gWo9
+         7uqOhIqypBxn923J241U+QAK4Ij4JGJ1E3TyOVFGVCCSZJ8+bubwzQRqqSNQNRy5r2kS
+         WEaB96L1AoV3YrNJ6usk7eOP2qOytApKh74RcOZ+4E8iYLw7bIi6PZsi0ygYWb7w+r6T
+         YTjxhpM8J27os5vC+aai/DmXhZY5LSSU9jB9aTNiSquTOUB0f3r0OoZyShtjmg4Aef9Z
+         X5BA==
+X-Gm-Message-State: APjAAAVdcVAKZ21xMFyOKzBovBISobfIxU1fb1N7FPTx8hZyuXmFvG7d
+        Cm5hS76jyUj6pXBEPt7Gugh6MPOCXyF6qGmPWIGTaw==
+X-Google-Smtp-Source: APXvYqxrAb1mbxQGpITUr96izDI9QHkdc32NxrkBD2ZJlXCzk+6QUM2DiUNw2b1ZYAJSZRzpOYold++C0qlU8ALpepg=
+X-Received: by 2002:a1f:add3:: with SMTP id w202mr1458047vke.30.1576483803676;
+ Mon, 16 Dec 2019 00:10:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20191210154157.21930-1-ktouil@baylibre.com> <20191210154157.21930-2-ktouil@baylibre.com>
-In-Reply-To: <20191210154157.21930-2-ktouil@baylibre.com>
+References: <20191210154157.21930-1-ktouil@baylibre.com> <20191210154157.21930-3-ktouil@baylibre.com>
+In-Reply-To: <20191210154157.21930-3-ktouil@baylibre.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 16 Dec 2019 09:08:17 +0100
-Message-ID: <CACRpkdZb6OppcdCcaQ9abdkDJMk4escyyEm1TMB75rRxoN5e2A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: nvmem: new optional property write-protect-gpios
+Date:   Mon, 16 Dec 2019 09:09:52 +0100
+Message-ID: <CACRpkdZPO+nBA=H0qJUiSq2iA0BDg=n3Ez5wPgnrtLc3MYdpJw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] nvmem: add support for the write-protect pin
 To:     Khouloud Touil <ktouil@baylibre.com>
 Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -64,33 +64,25 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Tue, Dec 10, 2019 at 4:42 PM Khouloud Touil <ktouil@baylibre.com> wrote:
 
-> +  wp-gpios:
-> +    description:
-> +      GPIO to which the write-protect pin of the chip is connected.
-> +      The write-protect GPIO is asserted, when it's driven high
-> +      (logical '1') to block the write operation. It's deasserted,
-> +      when it's driven low (logical '0') to allow writing.
-> +    maxItems: 1
+> The write-protect pin handling looks like a standard property that
+> could benefit other users if available in the core nvmem framework.
+>
+> Instead of modifying all the memory drivers to check this pin, make
+> the NVMEM subsystem check if the write-protect GPIO being passed
+> through the nvmem_config or defined in the device tree and pull it
+> low whenever writing to the memory.
+>
+> There was a suggestion for introducing the gpiodesc from pdata, but
+> as pdata is already removed it could be replaced by adding it to
+> nvmem_config.
+>
+> Reference: https://lists.96boards.org/pipermail/dev/2018-August/001056.html
+>
+> Signed-off-by: Khouloud Touil <ktouil@baylibre.com>
 
-OK I guess we can't get it less convoluted. This section is consistent.
-
->  patternProperties:
->    "^.*@[0-9a-f]+$":
->      type: object
-> @@ -66,6 +74,7 @@ examples:
->        qfprom: eeprom@700000 {
->            #address-cells = <1>;
->            #size-cells = <1>;
-> +          wp-gpios = <&gpio1 3 0>;
-
-In the example please use the include for GPIO:
-
-#include <dt-bindings/gpio/gpio.h>
-
-wp-gpios = <&gpio1 3 GPIO_ACTIVE_HIGH>;
-
-You can just put the #include directive right before the
-example, it should work fine.
+This is consistent IMO, we just specify that WP is active high
+as in "when it is high, it actively protects against writing", so:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij
