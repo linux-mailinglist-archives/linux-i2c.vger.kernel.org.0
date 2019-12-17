@@ -2,385 +2,122 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0573122668
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2019 09:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7DB1226C6
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2019 09:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbfLQIOp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Dec 2019 03:14:45 -0500
-Received: from out28-169.mail.aliyun.com ([115.124.28.169]:47179 "EHLO
-        out28-169.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726734AbfLQIOo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Dec 2019 03:14:44 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.46939-0.010306-0.520304;DS=CONTINUE|ham_alarm|0.00590902-0.000709764-0.993381;FP=13680077501297591483|3|2|10|0|-1|-1|-1;HT=e02c03310;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.GIuIYRX_1576570455;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GIuIYRX_1576570455)
-          by smtp.aliyun-inc.com(10.147.40.44);
-          Tue, 17 Dec 2019 16:14:35 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        paul.burton@mips.com, paulburton@kernel.org, mark.rutland@arm.com,
-        paul@crapouillou.net, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, 2374286503@qq.com
-Subject: [PATCH v3 2/2] I2C: JZ4780: Add support for the X1000.
-Date:   Tue, 17 Dec 2019 16:14:10 +0800
-Message-Id: <1576570450-122556-4-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1576570450-122556-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1576570450-122556-1-git-send-email-zhouyanjie@wanyeetech.com>
+        id S1726710AbfLQIfq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Dec 2019 03:35:46 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:46783 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726520AbfLQIfp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Dec 2019 03:35:45 -0500
+Received: from [37.163.141.23] (port=40521 helo=[192.168.43.3])
+        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1ih8KT-0002cv-Fc; Tue, 17 Dec 2019 09:35:41 +0100
+Subject: Re: [PATCH 07/10] i2c: Add driver for AD242x bus controller
+To:     Daniel Mack <daniel@zonque.org>, Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        broonie@kernel.org, lee.jones@linaro.org, lars@metafoo.de,
+        pascal.huerst@gmail.com
+References: <20191209183511.3576038-1-daniel@zonque.org>
+ <20191209183511.3576038-9-daniel@zonque.org>
+ <64adf5d7-754a-f1da-aa9b-11579c5a2780@lucaceresoli.net>
+ <20191212163315.GA3932@kunai>
+ <482316ef-775a-cb7b-015e-e00463503e6b@zonque.org>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <4f2e1332-eac3-e54d-5de8-b84a76cb1a34@lucaceresoli.net>
+Date:   Tue, 17 Dec 2019 09:35:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <482316ef-775a-cb7b-015e-e00463503e6b@zonque.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add support for probing i2c driver on the X1000 Soc from Ingenic.
-call the corresponding fifo parameter according to the device
-model obtained from the devicetree.
+Hi Daniel,
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-Acked-by: Paul Cercueil <paul@crapouillou.net>
----
+On 15/12/19 21:27, Daniel Mack wrote:
+> Hi,
+> 
+> Thanks for the review!
+> 
+> On 12/12/2019 5:33 pm, Wolfram Sang wrote:
+>> Hi Luca,
+>>
+>> thanks for the review!
+>>
+>>> good, but I think there's a problem in this function. A "normal"
+>>> master_xfer function issues a repeated start between one msg and the
+>>> next one, at least in the typical case where all msgs have the same
+>>> slave address. Your implementation breaks repeated start. At first sight
+>>> we might need more complex code here to coalesce all consecutive msgs
+>>> with the same address into a single i2c_transfer() call.
+>>
+>> Note that it is by far the standard case that all messages in a transfer
+>> have the same client address (99,999%?). But technically, this is not a
+>> requirement and the repeated start on the bus is totally independent of
+>> the addresses used. It is just a master wanting to send without being
+>> interrupted by another master.
+> 
+> I'm not quite sure I understand.
+> 
+> Let's assume the following setup. An i2c client (some driver code) is
+> sending a list of messages to the a2b xfer function, which in turn is
+> logically connected to a 'real' i2c bus master that'll put the data on
+> the wire.
+> 
+> The a2b code has to tell the 'master node' the final destination of the
+> payload by programming registers on its primary i2c address, and then
+> forwards the messages to its secondary i2c address. The layout of the
+> messages don't change, and neither do the flags; i2c messages are being
+> sent as i2c messages, except their addresses are changed, a bit like NAT
+> in networking. That procedure is described on page 3-4 of the TRM,
+> "Remote Peripheral I2C Accesses".
+> 
+> The 'real' i2c master that handles the hardware bus is responsible for
+> adding start conditions, and as the messages as such are untouched, I
+> believe it should do the right thing. The code in my xfer functions
+> merely suppresses reprogramming remote addresses by remembering the last
+> one that was used, but that is independent of the start conditions on
+> the wire.
 
-Notes:
-    v1->v2:
-    Add code to check device_get_match_data(), if it return a NULL ptr,
-    then print an error message and return -ENODEV.
-    
-    v2->v3:
-    Fix coding-style issues.
+My concern is not about the start condition, it's about the *repeated*
+start condition.
 
- drivers/i2c/busses/i2c-jz4780.c | 156 +++++++++++++++++++++++++++++-----------
- 1 file changed, 116 insertions(+), 40 deletions(-)
+The first question is whether the A2B chips can do it. What if the host
+processor sets a slave chip address and then issues two messages
+separated by a repeated start condition? Will the slave transceiver emit
+a repeated start condition too?
 
-diff --git a/drivers/i2c/busses/i2c-jz4780.c b/drivers/i2c/busses/i2c-jz4780.c
-index 25dcd73..16a67a6 100644
---- a/drivers/i2c/busses/i2c-jz4780.c
-+++ b/drivers/i2c/busses/i2c-jz4780.c
-@@ -4,6 +4,7 @@
-  *
-  * Copyright (C) 2006 - 2009 Ingenic Semiconductor Inc.
-  * Copyright (C) 2015 Imagination Technologies
-+ * Copyright (C) 2019 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-  */
- 
- #include <linux/bitops.h>
-@@ -17,6 +18,7 @@
- #include <linux/io.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-@@ -55,6 +57,7 @@
- #define JZ4780_I2C_ACKGC	0x98
- #define JZ4780_I2C_ENSTA	0x9C
- #define JZ4780_I2C_SDAHD	0xD0
-+#define X1000_I2C_SDAHD		0x7C
- 
- #define JZ4780_I2C_CTRL_STPHLD		BIT(7)
- #define JZ4780_I2C_CTRL_SLVDIS		BIT(6)
-@@ -73,6 +76,8 @@
- #define JZ4780_I2C_STA_TFNF		BIT(1)
- #define JZ4780_I2C_STA_ACT		BIT(0)
- 
-+#define X1000_I2C_DC_STOP		BIT(9)
-+
- static const char * const jz4780_i2c_abrt_src[] = {
- 	"ABRT_7B_ADDR_NOACK",
- 	"ABRT_10ADDR1_NOACK",
-@@ -130,18 +135,33 @@ static const char * const jz4780_i2c_abrt_src[] = {
- #define JZ4780_I2CFLCNT_ADJUST(n)	(((n) - 1) < 8 ? 8 : ((n) - 1))
- 
- #define JZ4780_I2C_FIFO_LEN	16
--#define TX_LEVEL		3
--#define RX_LEVEL		(JZ4780_I2C_FIFO_LEN - TX_LEVEL - 1)
-+
-+#define X1000_I2C_FIFO_LEN	64
- 
- #define JZ4780_I2C_TIMEOUT	300
- 
- #define BUFSIZE 200
- 
-+enum ingenic_i2c_version {
-+	ID_JZ4780,
-+	ID_X1000,
-+};
-+
-+/* ingenic_i2c_config: SoC specific config data. */
-+struct ingenic_i2c_config {
-+	enum ingenic_i2c_version version;
-+
-+	int fifosize;
-+	int tx_level;
-+	int rx_level;
-+};
-+
- struct jz4780_i2c {
- 	void __iomem		*iomem;
- 	int			 irq;
- 	struct clk		*clk;
- 	struct i2c_adapter	 adap;
-+	const struct ingenic_i2c_config *cdata;
- 
- 	/* lock to protect rbuf and wbuf between xfer_rd/wr and irq handler */
- 	spinlock_t		lock;
-@@ -340,11 +360,18 @@ static int jz4780_i2c_set_speed(struct jz4780_i2c *i2c)
- 
- 	if (hold_time >= 0) {
- 		/*i2c hold time enable */
--		hold_time |= JZ4780_I2C_SDAHD_HDENB;
--		jz4780_i2c_writew(i2c, JZ4780_I2C_SDAHD, hold_time);
-+		if (i2c->cdata->version >= ID_X1000) {
-+			jz4780_i2c_writew(i2c, X1000_I2C_SDAHD, hold_time);
-+		} else {
-+			hold_time |= JZ4780_I2C_SDAHD_HDENB;
-+			jz4780_i2c_writew(i2c, JZ4780_I2C_SDAHD, hold_time);
-+		}
- 	} else {
- 		/* disable hold time */
--		jz4780_i2c_writew(i2c, JZ4780_I2C_SDAHD, 0);
-+		if (i2c->cdata->version >= ID_X1000)
-+			jz4780_i2c_writew(i2c, X1000_I2C_SDAHD, 0);
-+		else
-+			jz4780_i2c_writew(i2c, JZ4780_I2C_SDAHD, 0);
- 	}
- 
- 	return 0;
-@@ -359,9 +386,11 @@ static int jz4780_i2c_cleanup(struct jz4780_i2c *i2c)
- 	spin_lock_irqsave(&i2c->lock, flags);
- 
- 	/* can send stop now if need */
--	tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
--	tmp &= ~JZ4780_I2C_CTRL_STPHLD;
--	jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	if (i2c->cdata->version < ID_X1000) {
-+		tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
-+		tmp &= ~JZ4780_I2C_CTRL_STPHLD;
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	}
- 
- 	/* disable all interrupts first */
- 	jz4780_i2c_writew(i2c, JZ4780_I2C_INTM, 0);
-@@ -399,11 +428,19 @@ static int jz4780_i2c_prepare(struct jz4780_i2c *i2c)
- 	return jz4780_i2c_enable(i2c);
- }
- 
--static void jz4780_i2c_send_rcmd(struct jz4780_i2c *i2c, int cmd_count)
-+static void jz4780_i2c_send_rcmd(struct jz4780_i2c *i2c,
-+								 int cmd_count,
-+								 int cmd_left)
- {
- 	int i;
- 
--	for (i = 0; i < cmd_count; i++)
-+	for (i = 0; i < cmd_count - 1; i++)
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_DC, JZ4780_I2C_DC_READ);
-+
-+	if ((cmd_left == 0) && (i2c->cdata->version >= ID_X1000))
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_DC,
-+				JZ4780_I2C_DC_READ | X1000_I2C_DC_STOP);
-+	else
- 		jz4780_i2c_writew(i2c, JZ4780_I2C_DC, JZ4780_I2C_DC_READ);
- }
- 
-@@ -458,37 +495,44 @@ static irqreturn_t jz4780_i2c_irq(int irqno, void *dev_id)
- 
- 		rd_left = i2c->rd_total_len - i2c->rd_data_xfered;
- 
--		if (rd_left <= JZ4780_I2C_FIFO_LEN)
-+		if (rd_left <= i2c->cdata->fifosize)
- 			jz4780_i2c_writew(i2c, JZ4780_I2C_RXTL, rd_left - 1);
- 	}
- 
- 	if (intst & JZ4780_I2C_INTST_TXEMP) {
- 		if (i2c->is_write == 0) {
- 			int cmd_left = i2c->rd_total_len - i2c->rd_cmd_xfered;
--			int max_send = (JZ4780_I2C_FIFO_LEN - 1)
-+			int max_send = (i2c->cdata->fifosize - 1)
- 					 - (i2c->rd_cmd_xfered
- 					 - i2c->rd_data_xfered);
- 			int cmd_to_send = min(cmd_left, max_send);
- 
- 			if (i2c->rd_cmd_xfered != 0)
- 				cmd_to_send = min(cmd_to_send,
--						  JZ4780_I2C_FIFO_LEN
--						  - TX_LEVEL - 1);
-+						  i2c->cdata->fifosize
-+						  - i2c->cdata->tx_level - 1);
- 
- 			if (cmd_to_send) {
--				jz4780_i2c_send_rcmd(i2c, cmd_to_send);
- 				i2c->rd_cmd_xfered += cmd_to_send;
-+				cmd_left = i2c->rd_total_len -
-+						i2c->rd_cmd_xfered;
-+				jz4780_i2c_send_rcmd(i2c,
-+						cmd_to_send, cmd_left);
-+
- 			}
- 
--			cmd_left = i2c->rd_total_len - i2c->rd_cmd_xfered;
- 			if (cmd_left == 0) {
- 				intmsk = jz4780_i2c_readw(i2c, JZ4780_I2C_INTM);
- 				intmsk &= ~JZ4780_I2C_INTM_MTXEMP;
- 				jz4780_i2c_writew(i2c, JZ4780_I2C_INTM, intmsk);
- 
--				tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
--				tmp &= ~JZ4780_I2C_CTRL_STPHLD;
--				jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+				if (i2c->cdata->version < ID_X1000) {
-+					tmp = jz4780_i2c_readw(i2c,
-+							JZ4780_I2C_CTRL);
-+					tmp &= ~JZ4780_I2C_CTRL_STPHLD;
-+					jz4780_i2c_writew(i2c,
-+							JZ4780_I2C_CTRL, tmp);
-+				}
- 			}
- 		} else {
- 			unsigned short data;
-@@ -497,23 +541,26 @@ static irqreturn_t jz4780_i2c_irq(int irqno, void *dev_id)
- 			i2c_sta = jz4780_i2c_readw(i2c, JZ4780_I2C_STA);
- 
- 			while ((i2c_sta & JZ4780_I2C_STA_TFNF) &&
--			       (i2c->wt_len > 0)) {
-+					(i2c->wt_len > 0)) {
- 				i2c_sta = jz4780_i2c_readw(i2c, JZ4780_I2C_STA);
- 				data = *i2c->wbuf;
- 				data &= ~JZ4780_I2C_DC_READ;
--				jz4780_i2c_writew(i2c, JZ4780_I2C_DC,
--						  data);
-+				if ((!i2c->stop_hold) && (i2c->cdata->version >=
-+						ID_X1000))
-+					data |= X1000_I2C_DC_STOP;
-+				jz4780_i2c_writew(i2c, JZ4780_I2C_DC, data);
- 				i2c->wbuf++;
- 				i2c->wt_len--;
- 			}
- 
- 			if (i2c->wt_len == 0) {
--				if (!i2c->stop_hold) {
-+				if ((!i2c->stop_hold) && (i2c->cdata->version <
-+						ID_X1000)) {
- 					tmp = jz4780_i2c_readw(i2c,
--							       JZ4780_I2C_CTRL);
-+							JZ4780_I2C_CTRL);
- 					tmp &= ~JZ4780_I2C_CTRL_STPHLD;
--					jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL,
--							  tmp);
-+					jz4780_i2c_writew(i2c,
-+							JZ4780_I2C_CTRL, tmp);
- 				}
- 
- 				jz4780_i2c_trans_done(i2c);
-@@ -567,20 +614,22 @@ static inline int jz4780_i2c_xfer_read(struct jz4780_i2c *i2c,
- 	i2c->rd_data_xfered = 0;
- 	i2c->rd_cmd_xfered = 0;
- 
--	if (len <= JZ4780_I2C_FIFO_LEN)
-+	if (len <= i2c->cdata->fifosize)
- 		jz4780_i2c_writew(i2c, JZ4780_I2C_RXTL, len - 1);
- 	else
--		jz4780_i2c_writew(i2c, JZ4780_I2C_RXTL, RX_LEVEL);
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_RXTL, i2c->cdata->rx_level);
- 
--	jz4780_i2c_writew(i2c, JZ4780_I2C_TXTL, TX_LEVEL);
-+	jz4780_i2c_writew(i2c, JZ4780_I2C_TXTL, i2c->cdata->tx_level);
- 
- 	jz4780_i2c_writew(i2c, JZ4780_I2C_INTM,
- 			  JZ4780_I2C_INTM_MRXFL | JZ4780_I2C_INTM_MTXEMP
- 			  | JZ4780_I2C_INTM_MTXABT | JZ4780_I2C_INTM_MRXOF);
- 
--	tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
--	tmp |= JZ4780_I2C_CTRL_STPHLD;
--	jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	if (i2c->cdata->version < ID_X1000) {
-+		tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
-+		tmp |= JZ4780_I2C_CTRL_STPHLD;
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	}
- 
- 	spin_unlock_irqrestore(&i2c->lock, flags);
- 
-@@ -626,14 +675,16 @@ static inline int jz4780_i2c_xfer_write(struct jz4780_i2c *i2c,
- 	i2c->wbuf = buf;
- 	i2c->wt_len = len;
- 
--	jz4780_i2c_writew(i2c, JZ4780_I2C_TXTL, TX_LEVEL);
-+	jz4780_i2c_writew(i2c, JZ4780_I2C_TXTL, i2c->cdata->tx_level);
- 
- 	jz4780_i2c_writew(i2c, JZ4780_I2C_INTM, JZ4780_I2C_INTM_MTXEMP
- 					| JZ4780_I2C_INTM_MTXABT);
- 
--	tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
--	tmp |= JZ4780_I2C_CTRL_STPHLD;
--	jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	if (i2c->cdata->version < ID_X1000) {
-+		tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
-+		tmp |= JZ4780_I2C_CTRL_STPHLD;
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	}
- 
- 	spin_unlock_irqrestore(&i2c->lock, flags);
- 
-@@ -716,8 +767,25 @@ static const struct i2c_algorithm jz4780_i2c_algorithm = {
- 	.functionality	= jz4780_i2c_functionality,
- };
- 
-+static const struct ingenic_i2c_config jz4780_i2c_config = {
-+	.version = ID_JZ4780,
-+
-+	.fifosize = JZ4780_I2C_FIFO_LEN,
-+	.tx_level = JZ4780_I2C_FIFO_LEN / 2,
-+	.rx_level = JZ4780_I2C_FIFO_LEN / 2 - 1,
-+};
-+
-+static const struct ingenic_i2c_config x1000_i2c_config = {
-+	.version = ID_X1000,
-+
-+	.fifosize = X1000_I2C_FIFO_LEN,
-+	.tx_level = X1000_I2C_FIFO_LEN / 2,
-+	.rx_level = X1000_I2C_FIFO_LEN / 2 - 1,
-+};
-+
- static const struct of_device_id jz4780_i2c_of_matches[] = {
--	{ .compatible = "ingenic,jz4780-i2c", },
-+	{ .compatible = "ingenic,jz4780-i2c", .data = &jz4780_i2c_config },
-+	{ .compatible = "ingenic,x1000-i2c", .data = &x1000_i2c_config },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, jz4780_i2c_of_matches);
-@@ -734,6 +802,12 @@ static int jz4780_i2c_probe(struct platform_device *pdev)
- 	if (!i2c)
- 		return -ENOMEM;
- 
-+	i2c->cdata = device_get_match_data(&pdev->dev);
-+	if (!i2c->cdata) {
-+		dev_err(&pdev->dev, "Error: No device match found\n");
-+		return -ENODEV;
-+	}
-+
- 	i2c->adap.owner		= THIS_MODULE;
- 	i2c->adap.algo		= &jz4780_i2c_algorithm;
- 	i2c->adap.algo_data	= i2c;
-@@ -777,9 +851,11 @@ static int jz4780_i2c_probe(struct platform_device *pdev)
- 
- 	dev_info(&pdev->dev, "Bus frequency is %d KHz\n", i2c->speed);
- 
--	tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
--	tmp &= ~JZ4780_I2C_CTRL_STPHLD;
--	jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	if (i2c->cdata->version < ID_X1000) {
-+		tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
-+		tmp &= ~JZ4780_I2C_CTRL_STPHLD;
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	}
- 
- 	jz4780_i2c_writew(i2c, JZ4780_I2C_INTM, 0x0);
- 
+If the answer is "yes", then the issue moves to the driver code. A
+master xfer function receives a set of messages that are normally
+emitted with a repeated start between each other. But ad242x_i2c_xfer()
+splits the msgs and calls i2c_transfer_buffer_flags() with one msg at a
+time. i2c_transfer_buffer_flags() then will emit a stop condition.
+
+This is not necessarily a problem, unless multi-master is used, but if
+there are limitations or deviations from the standard they should at
+least be well known and documented.
+
 -- 
-2.7.4
-
+Luca
