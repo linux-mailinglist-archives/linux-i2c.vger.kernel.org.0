@@ -2,74 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B607123100
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2019 16:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 705AE123490
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2019 19:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727916AbfLQP7h (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Dec 2019 10:59:37 -0500
-Received: from sauhun.de ([88.99.104.3]:54186 "EHLO pokefinder.org"
+        id S1727843AbfLQSRa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Dec 2019 13:17:30 -0500
+Received: from mail.bugwerft.de ([46.23.86.59]:41202 "EHLO mail.bugwerft.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726933AbfLQP7h (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 17 Dec 2019 10:59:37 -0500
-Received: from localhost (p54B330AA.dip0.t-ipconnect.de [84.179.48.170])
-        by pokefinder.org (Postfix) with ESMTPSA id 683062C2D6D;
-        Tue, 17 Dec 2019 16:59:35 +0100 (CET)
-Date:   Tue, 17 Dec 2019 16:59:35 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: sh_mobile: Document r8a77961 support
-Message-ID: <20191217155934.GD14061@ninjato>
-References: <20191205134025.6256-1-geert+renesas@glider.be>
+        id S1726722AbfLQSRa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 17 Dec 2019 13:17:30 -0500
+Received: from [192.168.178.106] (pD95EF574.dip0.t-ipconnect.de [217.94.245.116])
+        by mail.bugwerft.de (Postfix) with ESMTPSA id 6E681281A97;
+        Tue, 17 Dec 2019 18:11:03 +0000 (UTC)
+Subject: Re: [PATCH 07/10] i2c: Add driver for AD242x bus controller
+To:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        broonie@kernel.org, lee.jones@linaro.org, lars@metafoo.de,
+        pascal.huerst@gmail.com
+References: <20191209183511.3576038-1-daniel@zonque.org>
+ <20191209183511.3576038-9-daniel@zonque.org>
+ <64adf5d7-754a-f1da-aa9b-11579c5a2780@lucaceresoli.net>
+ <20191212163315.GA3932@kunai>
+ <482316ef-775a-cb7b-015e-e00463503e6b@zonque.org>
+ <4f2e1332-eac3-e54d-5de8-b84a76cb1a34@lucaceresoli.net>
+From:   Daniel Mack <daniel@zonque.org>
+Message-ID: <a55f7642-3ea1-e762-b5fc-8ff10b83ccc7@zonque.org>
+Date:   Tue, 17 Dec 2019 19:17:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Xm/fll+QQv+hsKip"
-Content-Disposition: inline
-In-Reply-To: <20191205134025.6256-1-geert+renesas@glider.be>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <4f2e1332-eac3-e54d-5de8-b84a76cb1a34@lucaceresoli.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Luca,
 
---Xm/fll+QQv+hsKip
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 12/17/19 9:35 AM, Luca Ceresoli wrote:
+> On 15/12/19 21:27, Daniel Mack wrote:
 
-On Thu, Dec 05, 2019 at 02:40:25PM +0100, Geert Uytterhoeven wrote:
-> Document support for the IIC controller in the Renesas R-Car M3-W+
-> (R8A77961) SoC.
->=20
-> No driver update is needed.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>> The a2b code has to tell the 'master node' the final destination of the
+>> payload by programming registers on its primary i2c address, and then
+>> forwards the messages to its secondary i2c address. The layout of the
+>> messages don't change, and neither do the flags; i2c messages are being
+>> sent as i2c messages, except their addresses are changed, a bit like NAT
+>> in networking. That procedure is described on page 3-4 of the TRM,
+>> "Remote Peripheral I2C Accesses".
+>>
+>> The 'real' i2c master that handles the hardware bus is responsible for
+>> adding start conditions, and as the messages as such are untouched, I
+>> believe it should do the right thing. The code in my xfer functions
+>> merely suppresses reprogramming remote addresses by remembering the last
+>> one that was used, but that is independent of the start conditions on
+>> the wire.
+> 
+> My concern is not about the start condition, it's about the *repeated*
+> start condition.
+> 
+> The first question is whether the A2B chips can do it. What if the host
+> processor sets a slave chip address and then issues two messages
+> separated by a repeated start condition? Will the slave transceiver emit
+> a repeated start condition too?
 
-Applied to for-next, thanks!
+Ah, alright. Thanks for taking the time to explain. I'll have to do some 
+measurements with a hardware analyzer. Will revisit this then, and 
+either provide an implementation that handles such cases correctly, or a 
+comment to explain that the hardware can't do it.
 
 
---Xm/fll+QQv+hsKip
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl34+2YACgkQFA3kzBSg
-KbZHzg//fgctwWGyfANapHr1Fh5xtKfLAfb/ThCEPorrRCfl+6N35YZhrLBExfs6
-+WJ3382DzJ8xQp5lvQgtOAvtzI5AgCpTuTTTY0LNUGyD5sHlOE+DDvSOICd/T5Up
-iPMUrJGXp0Zn5GxM9G0DynlXqg82xclYlW6FGSCnH6t0hgQ2gs+8o6ipOMb+vQGA
-U5qEkINF/IlrHkEJyX1+O4RAxNjg5r7HoUy5idkJdDeGvO5qqiwxxMurb7PFuM4S
-2rxT6uklsO6tUTYlsKGHzUYA9J/GckqeCnrROTLQD+6eV15OTLKm5JQihUpFPnte
-e6zBrCtgLgIa3vJcgRUoZnB2ePezf0dcBKffy6+V7GBkSiAO17YMB3UrgVLrOVnt
-iV06RXnPgl1XOcZU/ZvDAEu0LcPhR+Pni3/mHPExA82xgksbxu8l5H2HPX7DkuyW
-UK8sCOKB9T95KSGSkmG4w2NOD+m5lnvlagQXtbokdP0r8X7MUanDgJynnBktZnCR
-Z/4xtJS1eEn2htIbX5nkYgXv3oryLRl8Z/uSbBqw2/JX8ZuvSmpuA08lLARRDG7K
-YA38h+8PMe+1jhsf6lQmqMEJ/BJi6cqoFYfM4spQ50TUcj+/6K3yq0x2F1GwT7ZG
-5n9HjVUuDejK4ovdbvKm/Lb2zr19Ehr+75+qjq4SQ4c3qjsX0jc=
-=PVXq
------END PGP SIGNATURE-----
-
---Xm/fll+QQv+hsKip--
+Best regards,
+Daniel
