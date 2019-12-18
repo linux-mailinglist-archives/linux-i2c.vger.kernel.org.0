@@ -2,68 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E54A124A0E
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2019 15:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 312C0124B1E
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2019 16:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727114AbfLROrm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 Dec 2019 09:47:42 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:44153 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726921AbfLROrm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Dec 2019 09:47:42 -0500
-Received: by mail-ot1-f68.google.com with SMTP id h9so218297otj.11;
-        Wed, 18 Dec 2019 06:47:41 -0800 (PST)
+        id S1727363AbfLRPOC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 Dec 2019 10:14:02 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:34799 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727185AbfLRPNy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Dec 2019 10:13:54 -0500
+Received: by mail-il1-f193.google.com with SMTP id s15so2007731iln.1
+        for <linux-i2c@vger.kernel.org>; Wed, 18 Dec 2019 07:13:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
+        b=Q3vp2fJ40VWpq9rX2ikiWTUrhuiQJXzCeUu43e1oIIOk8rzGCPMljco+W3g3Sdt7mK
+         0zMp27lNXT81ott0dYeyE6wCdI4c1wfi5qCqRmoGIMvdtgle/6NMWI0GJrkD30CBojRq
+         hZbdgtbn9F/6uhvfSLkMdN7NhUpQoMVScRn9uDFKZJxofy0MWDF6kZw53YXeVt8sjWjA
+         Dd9TBzj4Ogplv/txGap2r0I252pQP7l7XSY4YOVhZ7qL539zlqhtO9W4mad505PIZ9Xp
+         yYy+XyL34oyC2pvEIWTDP8EMj+Gj6Cu0eHyc7GTPTD7Enq1rjLHU3JyAyX8LQzaLW/WP
+         +a+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9JLTGSjx4epFr9aJly8qsWvTUxLCwGGxHdvswveyO1o=;
-        b=rsAvp+yKTGugxZc2WYD8VZ6TSvKHtw9pdsZ64u31zyPrsboN0yblRmp7H/+7RuA/eC
-         SWfqFZTpdKNU1Kan2o94U9Of/9TOcmxpDwm9mO6GPKdE7aPQ5CbwohsJl1j5Ob6qnUnO
-         GqCteXOeo3WYtp/xG3ymC8cOO1XHcQs8YySZKZF3sXo1R5uyl0embVTWuJXiYwD9nx4b
-         E2GuMiHRRA4Si5YXsTITF3nLcZw1kXAJuwo9vF7Ui9gBXpI+pgm7UO0VM4UspDp7p9/p
-         g4LUkcbwzr9pWqIVIqdLJtrhYm+nSf9SrPGDupF9z0b6NQNBj45LXDTC0yMX0/d1bvez
-         quMg==
-X-Gm-Message-State: APjAAAXybFqL6kIkRtgpHDgtoK3OMixR/gIqhkQPRZayesPA9rBYz1wW
-        28r9pS6z24C2Asx7GQbkBg==
-X-Google-Smtp-Source: APXvYqwz2Qbm5BCFt7CSQBZ32REd/5ribF2PL6nZT2AkT0pFaXNiiZxHyy54+Ws+UndhfTHOCoJ+nA==
-X-Received: by 2002:a9d:798e:: with SMTP id h14mr2880229otm.257.1576680461033;
-        Wed, 18 Dec 2019 06:47:41 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id c7sm844612otm.63.2019.12.18.06.47.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2019 06:47:39 -0800 (PST)
-Date:   Wed, 18 Dec 2019 08:47:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-i2c@vger.kernel.org, tfiga@chromium.org,
-        drinkcat@chromium.org, srv_heupstream@mediatek.com,
-        robh+dt@kernel.org, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, Bibby Hsieh <bibby.hsieh@mediatek.com>
-Subject: Re: [PATCH v9 2/4] dt-binding: i2c: add bus-supply property
-Message-ID: <20191218144738.GA1265@bogus>
-References: <20191216080445.8747-1-bibby.hsieh@mediatek.com>
- <20191216080445.8747-3-bibby.hsieh@mediatek.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
+        b=dhxPzfX/XOpGblV2QqpDqosB0M85VVzNMf56U+85sSGFmGDc8BuAdlu0xdcF/c093h
+         kUyTd+P8zVgTGG+8AMn5H37zApUAdMF1T56P+EjeKyCtpD1juAwJSxrDhxOijpS5TPxy
+         XQ4YdxIyVYa4xEzKT0gitKKnLmbGo+Ecy5PkL2ej9qqbvrCOfzix7i5BzNm4zX5HKJ5m
+         FrSMcmqWzmfX1zf3QhpMM+PSh65d0aTqdo7Ie1GY4VgB1rG1oRf7m0bEa9ja9cs88KMV
+         TZ+mLUh3HY/83+HWdZULlnRreHwnZpTwzAD4FJZuD/x9boVxNP7AfciuFWnxM13OLMQu
+         +NeA==
+X-Gm-Message-State: APjAAAWvbCfehJai4MTVSiar3M7Q3AyPlIIQ1a63WcHh9CsKBCEmOjk9
+        BJj9uDRX0IahRZd/XVLQHurfMzbgafEkmXsTig==
+X-Google-Smtp-Source: APXvYqzpDMY1kfzvQTGFYFDuSf5Wkv4RFsY3uCP+mpqq6wLn7kqjCTzLCYufYBbbmMCBsVo5PHwr9dpQEEDI7K8RY00=
+X-Received: by 2002:a92:cc90:: with SMTP id x16mr2363556ilo.269.1576682033220;
+ Wed, 18 Dec 2019 07:13:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191216080445.8747-3-bibby.hsieh@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a02:6603:0:0:0:0:0 with HTTP; Wed, 18 Dec 2019 07:13:52
+ -0800 (PST)
+Reply-To: dhl.expresscourier102156@outlook.fr
+From:   "MS. MARYANNA B. THOMASON" <info.zennitbankplcnigerian@gmail.com>
+Date:   Wed, 18 Dec 2019 16:13:52 +0100
+Message-ID: <CABHzvrnY8Lhdw4Y2q97jvAVrRpM9CVLFkw=Ved7y1GhGqHiAdw@mail.gmail.com>
+Subject: I WANT TO YOU TO TREAT THIS EMAIL VERY URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 16 Dec 2019 16:04:43 +0800, Bibby Hsieh wrote:
-> In some platforms, they disable the power-supply of i2c due
-> to power consumption reduction. This patch add bus-supply property.
-> 
-> Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c.txt | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+Attn Dear.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Urgent delivery Notification of your ATM MASTER CARD, Dhl-Benin is
+ready for delivery of your ATM Master card worth $15.800=E2=80=99000=E2=80=
+=9900, as
+approved this morning, Date, 18/12/2019. Through the Intruction from
+INTERNATIONAL MONETARY FUNDS, I.M.F official Directors.
+
+REGISTRATION NO :EG58945
+PARCEL NUMBER: 140479
+Delivery Schuleded now,
+Finally all we required from you is your ATM Card Proccessing Delivery
+fees $19.00 only which you must send to this DHL service to enable us
+dispatch the parcel to your destination today.
+
+Here is our receiving payment details.
+You are advised to send it Via Money Gram Service.
+
+Receiver's Name--------Alan Ude
+Country-------Benin Republic.
+City/ Address--------Cotonou
+Test Question--------In God
+Answer-------We Trust
+Amount------------$US19.00 only
+Mtcn-------------
+Sender's Name-------
+
+Your delivery  ATM card worth $15.800=E2=80=99000=E2=80=9900,
+Is Due for delivery to your address today upon confirmation of
+required fee from you asap.
+
+Call us on this phone number for any inquiry. +229 62819378
+Awaiting your urgent response.
+
+MS. MARYANNA B. THOMASON, Shipment director, DHL Express
+Courier Company-Benin
