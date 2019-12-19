@@ -2,77 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC0F125679
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2019 23:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5FC125F56
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Dec 2019 11:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726750AbfLRWSl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 Dec 2019 17:18:41 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:43255 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726387AbfLRWSj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Dec 2019 17:18:39 -0500
-Received: by mail-oi1-f195.google.com with SMTP id x14so2026621oic.10;
-        Wed, 18 Dec 2019 14:18:38 -0800 (PST)
+        id S1726652AbfLSKlA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 19 Dec 2019 05:41:00 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:53384 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726633AbfLSKlA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Dec 2019 05:41:00 -0500
+Received: by mail-wm1-f65.google.com with SMTP id m24so4903326wmc.3
+        for <linux-i2c@vger.kernel.org>; Thu, 19 Dec 2019 02:40:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=49qmWNja8xWso4FeogRKBed5tqhunvxH+zJEA9gDNVo=;
+        b=qbFafTkFmyywvhBYciuQ3n1+/mmUkFLWR8BJphIutx7kwEgWB9lJrcRyzOIODV2w3Y
+         zw8uHtLpaS5kFHEF8S2lZZzKUDY+vuv1iTR14FcgsRkP1P6YBoNHfCiDw5tWnoza0Yoc
+         /5o3L9striqLhCHOUlqlznNCCbAFKrwqdqiSV265orvYlTr7odHYHosqUSdOyqo1Ooy8
+         6FynyISDkFzrOm4zC5eUCgZjBKO73rnESRvs4LzNkpEiW4N2SG6eDxRfvlvuUSXCQTf4
+         axsvHI4mflaKMO4Scn/tSoyWXo1TkA3LV8ZJ8LgKu4qreR57u0SYISP6fK54fh3dW8YT
+         Qtag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=/4DCBGTzV25UqwiiGbHriQAr3E9Rn3IXXhGkvh3a7hY=;
-        b=BREEZcCPj36BE8OL53AQ3mt3dRIZkN/CTNHC+FjFicSGOusz39qUsKLKrNHWZ98UHa
-         sMAxcoMbWDN5vQApNbkN4OxhLhdFozrJ/y8LTFc072XePZHeCuB4Gxc9/0V0YzXF0ejA
-         eH/UehlU8HR7v+8xcgV0qbdBnwLgTxDKGMlx9L3TewCBgKl4oDizA8xA/6SqywXSILMV
-         I1AFUOPJlRhGIOFpc0Csso+sAh4AiWoTnls0toG5L2NQQDtOVtvAFQoT5YvWeW2wJHT9
-         jpULjMV0CbZGHYLSx0fWIT9ljkVXI5BuUZFLzSNanTvbLcXfmrP4MjcLxTAgshlua4rA
-         DV9w==
-X-Gm-Message-State: APjAAAU39tVsW9QaB7k0Bb2WK5ElDAvu2focxUvBWDDqAzrkz7TWg9PM
-        nVy3ZrwROwyH63yE0nX+5Q==
-X-Google-Smtp-Source: APXvYqxn0yvz4TRVwtiUKNKpafKpf6Hjnbe2ieMd81LDvcEqkQUy8kwzMvieUr8SBs9uriNVboNWpw==
-X-Received: by 2002:aca:f305:: with SMTP id r5mr1618542oih.174.1576707518439;
-        Wed, 18 Dec 2019 14:18:38 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v25sm413787ote.61.2019.12.18.14.18.37
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=49qmWNja8xWso4FeogRKBed5tqhunvxH+zJEA9gDNVo=;
+        b=eO4hEi2yv5+H/si+JL/OzdgF+dRdIjQZ/auSFR89YL4o2aoeG5o8J7q4n24nh4BJLG
+         ff8XlQVdKONpcIxFH0kegTzApt6V16tYTgCcg+8NYQZnnbpX2GmWhCPwiioMOVr+5yoh
+         Y486e8GZneo4zRH+eJsZ4vnoe79NCgWTJmZjdY/T4+4ilrmiNHKSUN98z2KFO3aYub4L
+         HIgNmbd4sMGed6YwAmnbWc4I+9NO6BdQVS1PUu7b3DScceAS5Hw6F6Z/8tklcHaB4cSH
+         PrfNXKjsZMu3Vc81z9blvQhqN+i7gh7QGFvqhUfeUUwXCW3fdvtKjuuxTlSkQVvMLHYH
+         IV4w==
+X-Gm-Message-State: APjAAAWBZxuNl5LX3S4j4fzgz+RFIDqQrwJoj7tX6bWMJwvQE1TYofi4
+        lV3Xo4kXFXghjmDrey6GR0tjQjk2Fjw=
+X-Google-Smtp-Source: APXvYqyZugbpqDnyGJArKzPiCHxj0Wjc81Rwcv4smK9lbk6Kyz6C/SJo9vmJBreM3F6OKgwcDkXoqg==
+X-Received: by 2002:a05:600c:20c7:: with SMTP id y7mr9484733wmm.21.1576752058023;
+        Thu, 19 Dec 2019 02:40:58 -0800 (PST)
+Received: from debian-brgl.home (amontpellier-652-1-53-230.w109-210.abo.wanadoo.fr. [109.210.44.230])
+        by smtp.gmail.com with ESMTPSA id l17sm5925128wro.77.2019.12.19.02.40.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2019 14:18:37 -0800 (PST)
-Date:   Wed, 18 Dec 2019 16:18:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
-        mark.rutland@arm.com, paul@crapouillou.net,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, 2374286503@qq.com
-Subject: Re: [PATCH v3 1/2] dt-bindings: I2C: Add X1000 bindings.
-Message-ID: <20191218221836.GA24317@bogus>
-References: <1576570450-122556-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1576570450-122556-3-git-send-email-zhouyanjie@wanyeetech.com>
+        Thu, 19 Dec 2019 02:40:57 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     linux-i2c@vger.kernel.org
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH] eeprom: at24: sort headers alphabetically
+Date:   Thu, 19 Dec 2019 11:40:55 +0100
+Message-Id: <20191219104055.6483-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1576570450-122556-3-git-send-email-zhouyanjie@wanyeetech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 17 Dec 2019 16:14:09 +0800, =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= wrote:
-> Add the I2C bindings for the X1000 Soc from Ingenic.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
-> 
-> Notes:
->     v1->v2:
->     No change.
->     
->     v2->v3:
->     No change.
-> 
->  Documentation/devicetree/bindings/i2c/i2c-jz4780.txt | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+For consistency and easier maintenance: sort the headers alphabetically.
+
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ drivers/misc/eeprom/at24.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+index 86de3c192c80..4ed52f94a308 100644
+--- a/drivers/misc/eeprom/at24.c
++++ b/drivers/misc/eeprom/at24.c
+@@ -6,24 +6,24 @@
+  * Copyright (C) 2008 Wolfram Sang, Pengutronix
+  */
+ 
+-#include <linux/kernel.h>
++#include <linux/acpi.h>
++#include <linux/bitops.h>
++#include <linux/delay.h>
++#include <linux/gpio/consumer.h>
++#include <linux/i2c.h>
+ #include <linux/init.h>
++#include <linux/jiffies.h>
++#include <linux/kernel.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
+-#include <linux/slab.h>
+-#include <linux/delay.h>
+ #include <linux/mutex.h>
+-#include <linux/mod_devicetable.h>
+-#include <linux/bitops.h>
+-#include <linux/jiffies.h>
+-#include <linux/property.h>
+-#include <linux/acpi.h>
+-#include <linux/i2c.h>
+ #include <linux/nvmem-provider.h>
+-#include <linux/regmap.h>
++#include <linux/of_device.h>
+ #include <linux/pm_runtime.h>
++#include <linux/property.h>
++#include <linux/regmap.h>
+ #include <linux/regulator/consumer.h>
+-#include <linux/gpio/consumer.h>
++#include <linux/slab.h>
+ 
+ /* Address pointer is 16 bit. */
+ #define AT24_FLAG_ADDR16	BIT(7)
+-- 
+2.23.0
+
