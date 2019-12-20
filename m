@@ -2,88 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF4412780C
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2019 10:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A99261279B6
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2019 12:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727185AbfLTJZS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 20 Dec 2019 04:25:18 -0500
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:38142 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727169AbfLTJZS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Dec 2019 04:25:18 -0500
-Received: by mail-ed1-f67.google.com with SMTP id i16so7583793edr.5;
-        Fri, 20 Dec 2019 01:25:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iW+E0xO4cl6Le/pRNkxzyx+ZKt3kccSYLfBkkXeukuc=;
-        b=t3WLxxKLD6EyG4OWlTU0Yqy9yEt2NHUh7m7Tfcpbw7RONe59MDpw+50lv3mxZSKIJL
-         hFXjbe+NYTJdx7GcAuoatJSZY6X5abT1JOdQPSeCEWlcoXlPh1GUie/idKjswhEvESx4
-         LudnV3hZPi1nHjK0Pygnfvj9sb2j3V+bABKTAdFKhIum99YT5vZFibC8tW9eKaYW3A4h
-         pgvFSXzcg+g2EtDOFqVXlRazJ6JaX4nhwfbzZzO15sroSIjpOonciRFrLQcir6bPE3nI
-         DB3+AKlgjZbWm3Ld/YyVjTquc/MY3eOKrd+Koz6IQCvapMSLU7NlAMNZuxlNS4IyYGpJ
-         +8xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iW+E0xO4cl6Le/pRNkxzyx+ZKt3kccSYLfBkkXeukuc=;
-        b=fts/8h2pDs1uurcVxHu3WOvHVpFwwqV7UV95zjj7rHYOz4aD9XXy/MeZ306LSpvWBg
-         bHrM52kP+XUym8mLNIKa/eeQleZASVv7sj4Qs9fn3dOmUJ3hLQF1rocbFqCvGXJq7Qeq
-         XFTr0RxUz0GJ7wGrBcPzrQSArlXaQYKVMvS6UKEJbuQa8ygdrjfJk5PF5x7ECaq1gTKY
-         s4QeuC6WcFM8GxIkKH9o5e+uzhxPlDQwjG3B/oUbTSYYYceOTIkqeNXy5paqMIQtt34F
-         56hfTpxhuyRVpRA7rpBQUKKIeg1Z5KitQU0iSLs5bJeGYG+pOj6w/qtwfs7P3OfvBTAU
-         TO9w==
-X-Gm-Message-State: APjAAAUeVjiw1GPZ0vv+NLmf9nV+Dg1xLV8rIqa6YTUPSv2ShBlfsMsD
-        YkM1TBdKeM2bBJlGdAa3VYuyfgq8Ht6Yr3g/hig=
-X-Google-Smtp-Source: APXvYqy/qbLAr14kvPkMt9+niEqKtVDn0hoTqq90t+dQcT6zO67x9oZ4UOtDOv+a63LpLJonq1R9Evt6oB3TgV3dC10=
-X-Received: by 2002:a05:6402:12d1:: with SMTP id k17mr14587034edx.291.1576833917042;
- Fri, 20 Dec 2019 01:25:17 -0800 (PST)
+        id S1727216AbfLTLAB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Dec 2019 06:00:01 -0500
+Received: from imap2.colo.codethink.co.uk ([78.40.148.184]:37746 "EHLO
+        imap2.colo.codethink.co.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727177AbfLTLAB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Dec 2019 06:00:01 -0500
+Received: from [167.98.27.226] (helo=rainbowdash.codethink.co.uk)
+        by imap2.colo.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
+        id 1iiG0h-0003wk-Uw; Fri, 20 Dec 2019 10:59:56 +0000
+Received: from ben by rainbowdash.codethink.co.uk with local (Exim 4.92.3)
+        (envelope-from <ben@rainbowdash.codethink.co.uk>)
+        id 1iiG0h-001bVy-NA; Fri, 20 Dec 2019 10:59:55 +0000
+From:   "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
+To:     linux-kernel@lists.codethink.co.uk
+Cc:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
+        Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org
+Subject: [PATCH] i2c-amd756: share definition of amd756_smbus
+Date:   Fri, 20 Dec 2019 10:59:54 +0000
+Message-Id: <20191220105954.382490-1-ben.dooks@codethink.co.uk>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-References: <20191219124120.53754-1-radu_nicolae.pirea@upb.ro>
- <20191219130501.GA958@kunai> <6504123809effc310ade02dbb8a63f10db6b6c92.camel@upb.ro>
-In-Reply-To: <6504123809effc310ade02dbb8a63f10db6b6c92.camel@upb.ro>
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
-Date:   Fri, 20 Dec 2019 14:55:05 +0530
-Message-ID: <CAKfKVtFqbtovQGQuzgCYzTu4bHOmAOmTz-tZMD89iUkMPc8awA@mail.gmail.com>
-Subject: Re: [PATCH] i2c: cadence: Added slave support
-To:     Radu Pirea <radu_nicolae.pirea@upb.ro>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Chirag Parekh <chirag.parekh@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi ,
+Add a shared header to declare amd756_smbus that is used
+by two files, to remove the following sparse warning:
 
-On Thu, Dec 19, 2019 at 7:00 PM Radu Pirea <radu_nicolae.pirea@upb.ro> wrote:
->
-> On Thu, 2019-12-19 at 14:05 +0100, Wolfram Sang wrote:
-> > > +/**
-> > > + * enum cdns_i2c_mode - I2C Controller current operating mode
-> > > + *
-> > > + * @CDNS_I2C_MODE_SLAVE:       I2C controller operating in slave
-> > > mode
-> > > + * @CDNS_I2C_MODE_MASTER:      I2C Controller operating in master
-> > > mode
-> > > + */
-> >
-> > Can't the hardware operate as master and slave at the same time?
-> >
->
-> Of course, it can. If the driver has a slave registered wait and
-> listens and if the subsystem needs to use the controller as master, the
-> driver changes the state of the controller to master, sends and reads
-> data from the bus and after this change the state of the controller to
-> slave.
+drivers/i2c/busses/i2c-amd756.c:286:20: warning: symbol 'amd756_smbus' was not declared. Should it be static?
 
-However that should be done only if no master is talking to the slave right?
+Signed-off-by: Ben Dooks (Codethink) <ben.dooks@codethink.co.uk>
+---
 
-> In cdns_i2c_master_xfer is done all the magic.
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: linux-i2c@vger.kernel.org
+---
+ drivers/i2c/busses/i2c-amd756-s4882.c | 2 +-
+ drivers/i2c/busses/i2c-amd756.c       | 2 ++
+ drivers/i2c/busses/i2c-amd756.h       | 4 ++++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/i2c/busses/i2c-amd756.h
+
+diff --git a/drivers/i2c/busses/i2c-amd756-s4882.c b/drivers/i2c/busses/i2c-amd756-s4882.c
+index 063274388a75..741b9309d8b6 100644
+--- a/drivers/i2c/busses/i2c-amd756-s4882.c
++++ b/drivers/i2c/busses/i2c-amd756-s4882.c
+@@ -27,7 +27,7 @@
+ #include <linux/i2c.h>
+ #include <linux/mutex.h>
+ 
+-extern struct i2c_adapter amd756_smbus;
++#include "i2c-amd756.h"
+ 
+ static struct i2c_adapter *s4882_adapter;
+ static struct i2c_algorithm *s4882_algo;
+diff --git a/drivers/i2c/busses/i2c-amd756.c b/drivers/i2c/busses/i2c-amd756.c
+index ef1307a258e9..86ee8d102d69 100644
+--- a/drivers/i2c/busses/i2c-amd756.c
++++ b/drivers/i2c/busses/i2c-amd756.c
+@@ -32,6 +32,8 @@
+ #include <linux/acpi.h>
+ #include <linux/io.h>
+ 
++#include "i2c-amd756.h"
++
+ /* AMD756 SMBus address offsets */
+ #define SMB_ADDR_OFFSET		0xE0
+ #define SMB_IOSIZE		16
+diff --git a/drivers/i2c/busses/i2c-amd756.h b/drivers/i2c/busses/i2c-amd756.h
+new file mode 100644
+index 000000000000..f3db35939b5c
+--- /dev/null
++++ b/drivers/i2c/busses/i2c-amd756.h
+@@ -0,0 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/* Copyright (c) 2019 Ben Dooks <ben.dooks@codetrhink.co.uk> */
++
++extern struct i2c_adapter amd756_smbus;
+-- 
+2.24.0
+
