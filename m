@@ -2,78 +2,237 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEA2127293
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2019 01:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 731F41277CE
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2019 10:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726986AbfLTAxV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Dec 2019 19:53:21 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:56311 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726952AbfLTAxV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Dec 2019 19:53:21 -0500
-Received: from mail-wr1-f69.google.com ([209.85.221.69])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <chia-lin.kao@canonical.com>)
-        id 1ii6Xf-0006Hc-FB
-        for linux-i2c@vger.kernel.org; Fri, 20 Dec 2019 00:53:19 +0000
-Received: by mail-wr1-f69.google.com with SMTP id b13so3046980wrx.22
-        for <linux-i2c@vger.kernel.org>; Thu, 19 Dec 2019 16:53:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=r6cmxM6rKUa5WEmp8g58JXaLKMxJgyJXFiTAqkjbopM=;
-        b=VLjOWDnHpK58YXv2WbV58E5GlfSMtz7HP8aqu56gFgt1p3d1N548p+OYTqvVXkmuBN
-         pulOXxKzWYjl/WzTebL7RE6YlEXxeE7KIz/nj5MR/jr9xw9J05et82FRvx7EwGDW4aVJ
-         ZiwQQcJ6O+0jyMejegOzybUN05852p3YpprTi0zGe/lORaDbxwWY2JaSfAjLxIQIP4w9
-         mu3D+v6KrLKlP9rNgYpeONNKV4fc338NUrwrP0Low2AYJVJjgnlXVNkSR7rqNrhLJMuE
-         +iSOJSSXzF1xXiIfy9Kgg1VFn9P+ngfTLxz80X18cjCezuXkljSA0HIo8Y8eyZj9sd0O
-         Us/Q==
-X-Gm-Message-State: APjAAAVs6OkeYNxZb6pFj7gcSSwGp7h3G0lrfxb288Cr6Kn+CScEI3Ah
-        6TAB96EToN0tATOP9wnhSoSMhuBBudGyKgDW0a2L6FHVC7w5gURvsmGe2ECD+GTH85SzMs9LoN9
-        jsgkoFxdzmQhY02NCzAizHpXKqpG+x2vnMcZwu8SvQ4zFNGkAHh6t+Q==
-X-Received: by 2002:a5d:6a0f:: with SMTP id m15mr12180183wru.40.1576803199227;
-        Thu, 19 Dec 2019 16:53:19 -0800 (PST)
-X-Google-Smtp-Source: APXvYqzdzISWMi9U/prGwTLelorymmIjBxwo5jgA4FzcqLgluj1X1BdArbNRcI00mT67dWeDZDlIovXopF27WYfHnxA=
-X-Received: by 2002:a5d:6a0f:: with SMTP id m15mr12180172wru.40.1576803198993;
- Thu, 19 Dec 2019 16:53:18 -0800 (PST)
+        id S1727211AbfLTJQT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Dec 2019 04:16:19 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:9320 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727192AbfLTJQS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Dec 2019 04:16:18 -0500
+Received: from droid15-sz.amlogic.com (10.28.8.25) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Fri, 20 Dec 2019
+ 17:16:51 +0800
+From:   Jian Hu <jian.hu@amlogic.com>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+CC:     Jian Hu <jian.hu@amlogic.com>, Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v3] arm64: dts: meson-a1: add I2C nodes
+Date:   Fri, 20 Dec 2019 17:16:11 +0800
+Message-ID: <20191220091611.36319-1-jian.hu@amlogic.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-From:   AceLan Kao <acelan.kao@canonical.com>
-Date:   Fri, 20 Dec 2019 08:53:08 +0800
-Message-ID: <CAFv23Qnh2AD-Mgr=v1Ojxaob4aBjUTD+-oLdmyXzBPe0oS6vtw@mail.gmail.com>
-Subject: In power saving mode i2c_nvidia_gpu modules affect power consumption
- a lot
-To:     Ajay Gupta <ajayg@nvidia.com>, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.8.25]
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi all,
+There are four I2C controllers in A1 series,
+Share the same comptible with AXG. Compared to AXG,
+Drive strength feature is newly added in A1.
 
-We encountered an issue that while switching to power saving mode(use
-iGPU), the power consumption goes up to 40 Watt, and after removed
-i2c_nvidia_gpu, it becomes 5 Watt.
+Signed-off-by: Jian Hu <jian.hu@amlogic.com>
 
-I've tried to check the driver to see if it can tell it's under power
-saving mode and found that the first time you call
-gpu_i2c_check_status(), it got 0 from readl(), and the second and the
-following readl(), it returns 0xe0000000. It looks like an error code
-combined with I2C_MST_CNTL_STATUS_NO_ACK and
-I2C_MST_CNTL_STATUS_TIMEOUT.
+---
+This patch depends on A1 clock patchset at [0][3]
 
-Moreover, i2c_nvidia_gpu module seems depends on intel_lpss driver
-since it provides i2c interface. So if we can to use the above
-behavior to check its status, the system have to load intel_lpss
-first. But currently, it seems not possible to load modules in our
-order.
+Changes since v1 at [1]:
+-change reg length to 0x20
+-assign i2c bus alias in dts file
+-add new feature note compared to AXG in changelog
 
-So, I'm wondering if we have other method to check and not load
-i2c_nvidia_gpu module or if it's possible to check why loading
-i2c_nvidia_gpu affects power consumption a lot.
+Changes since v2 at [2]:
+-remove the dependence the commit description
+-remove i2c alias in dtsi
+-reorder the i2c nodes
+-reorder the i2c pins
 
-Thanks.
+[0] https://lkml.kernel.org/r/20191206074052.15557-1-jian.hu@amlogic.com
+[1] https://lkml.kernel.org/r/20191202111253.94872-1-jian.hu@amlogic.com
+[2] https://lkml.kernel.org/r/20191211032802.83309-1-jian.hu@amlogic.com
+[3] https://lkml.kernel.org/r/20191206074052.15557-1-jian.hu@amlogic.com
+---
+---
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 142 ++++++++++++++++++++++
+ 1 file changed, 142 insertions(+)
 
-Best regards,
-AceLan Kao.
+diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+index eab2ecd36aa8..1542eeee699d 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+@@ -117,6 +117,16 @@
+ 				};
+ 			};
+ 
++			i2c0: i2c@1400 {
++				compatible = "amlogic,meson-axg-i2c";
++				reg = <0x0 0x1400 0x0 0x20>;
++				interrupts = <GIC_SPI 32 IRQ_TYPE_EDGE_RISING>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				clocks = <&clkc_periphs CLKID_I2C_M_A>;
++				status = "disabled";
++			};
++
+ 			uart_AO: serial@1c00 {
+ 				compatible = "amlogic,meson-gx-uart",
+ 					     "amlogic,meson-ao-uart";
+@@ -136,6 +146,36 @@
+ 				clock-names = "xtal", "pclk", "baud";
+ 				status = "disabled";
+ 			};
++
++			i2c1: i2c@5c00 {
++				compatible = "amlogic,meson-axg-i2c";
++				reg = <0x0 0x5c00 0x0 0x20>;
++				interrupts = <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				clocks = <&clkc_periphs CLKID_I2C_M_B>;
++				status = "disabled";
++			};
++
++			i2c2: i2c@6800 {
++				compatible = "amlogic,meson-axg-i2c";
++				reg = <0x0 0x6800 0x0 0x20>;
++				interrupts = <GIC_SPI 76 IRQ_TYPE_EDGE_RISING>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				clocks = <&clkc_periphs CLKID_I2C_M_C>;
++				status = "disabled";
++			};
++
++			i2c3: i2c@6c00 {
++				compatible = "amlogic,meson-axg-i2c";
++				reg = <0x0 0x6c00 0x0 0x20>;
++				interrupts = <GIC_SPI 78 IRQ_TYPE_EDGE_RISING>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				clocks = <&clkc_periphs CLKID_I2C_M_D>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		gic: interrupt-controller@ff901000 {
+@@ -171,3 +211,105 @@
+ 		#clock-cells = <0>;
+ 	};
+ };
++
++&periphs_pinctrl {
++	i2c0_f9_pins:i2c0-f9 {
++		mux {
++			groups = "i2c0_sck_f9",
++				"i2c0_sda_f10";
++			function = "i2c0";
++			bias-pull-up;
++			drive-strength-microamp = <3000>;
++		};
++	};
++
++	i2c0_f11_pins:i2c0-f11 {
++		mux {
++			groups = "i2c0_sck_f11",
++				"i2c0_sda_f12";
++			function = "i2c0";
++			bias-pull-up;
++			drive-strength-microamp = <3000>;
++		};
++	};
++
++	i2c1_a_pins:i2c1-a {
++		mux {
++			groups = "i2c1_sck_a",
++				"i2c1_sda_a";
++			function = "i2c1";
++			bias-pull-up;
++			drive-strength-microamp = <3000>;
++		};
++	};
++
++	i2c1_x_pins:i2c1-x {
++		mux {
++			groups = "i2c1_sck_x",
++				"i2c1_sda_x";
++			function = "i2c1";
++			bias-pull-up;
++			drive-strength-microamp = <3000>;
++		};
++	};
++
++	i2c2_a4_pins:i2c2-a4 {
++		mux {
++			groups = "i2c2_sck_a4",
++				"i2c2_sda_a5";
++			function = "i2c2";
++			bias-pull-up;
++			drive-strength-microamp = <3000>;
++		};
++	};
++
++	i2c2_a8_pins:i2c2-a8 {
++		mux {
++			groups = "i2c2_sck_a8",
++				"i2c2_sda_a9";
++			function = "i2c2";
++			bias-pull-up;
++			drive-strength-microamp = <3000>;
++		};
++	};
++
++	i2c2_x0_pins:i2c2-x0 {
++		mux {
++			groups = "i2c2_sck_x0",
++				"i2c2_sda_x1";
++			function = "i2c2";
++			bias-pull-up;
++			drive-strength-microamp = <3000>;
++		};
++	};
++
++	i2c2_x15_pins:i2c2-x15 {
++		mux {
++			groups = "i2c2_sck_x15",
++				"i2c2_sda_x16";
++			function = "i2c2";
++			bias-pull-up;
++			drive-strength-microamp = <3000>;
++		};
++	};
++
++	i2c3_f_pins:i2c3-f {
++		mux {
++			groups = "i2c3_sck_f",
++				"i2c3_sda_f";
++			function = "i2c3";
++			bias-pull-up;
++			drive-strength-microamp = <3000>;
++		};
++	};
++
++	i2c3_x_pins:i2c3-x {
++		mux {
++			groups = "i2c3_sck_x",
++				"i2c3_sda_x";
++			function = "i2c3";
++			bias-pull-up;
++			drive-strength-microamp = <3000>;
++		};
++	};
++};
+-- 
+2.24.0
+
