@@ -2,58 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F177129F4F
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Dec 2019 09:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB20B12A294
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Dec 2019 15:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726201AbfLXIqB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Dec 2019 03:46:01 -0500
-Received: from mail-io1-f67.google.com ([209.85.166.67]:34603 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbfLXIqA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Dec 2019 03:46:00 -0500
-Received: by mail-io1-f67.google.com with SMTP id z193so18559207iof.1
-        for <linux-i2c@vger.kernel.org>; Tue, 24 Dec 2019 00:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
-        b=oSNTlT55S3VMpFl+4fySqC3u4YoAoztGfoVSP3wFAPYFWsXQI1giXiHsJxeVgA8wKV
-         hwULOTryEx3lBfxk63gUH81C2gQlAZlpm+aJQe+/8QTFExYby4VXgAHOExxmkLh2JtdG
-         TiTDoeJwiEsRsob2+npOsu1HTE5l3KD8qzz/VgAKRx1Duv9MQ59SrgwEmUHNA+ZhhElO
-         FLyTrc29L41ygHkbyLYW+d4tggvOE/k3tBa1QgwGaKmT05FNAOOQsBLQoIO1VpMQ67Vd
-         aruBW7fco12liiTMGrdJ76u//KWiZN1ELjv5lB+Lg5aB3LosSk3HmcjI9v9Dl0cnEnaF
-         MVfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
-        b=PCc5sIAUjoWwIVmBX1Fkh79v+xGXouiuNk8L0iSr3TQUjSgDfnEmSG2kqmbrRfAU2y
-         Uc3Lxj+wsbf/Ts/Jl+8WaSmhig0IEAT2c0dook+BGjk9szC05Yp1Ra3tjgjEVpzmXbWt
-         +WjQy1Om4OGibVky+GmuwztAo9dUwwjyacHl0PcJ2txL7fnXb8j2BvmnBkKnPGIt0XqK
-         S51WdWiG4lhjsge81d0lC9jxXKaZeVEIA4VZ51bWzT18Na49bTufzSbY1Cb3yWorPSc1
-         4YFjrfeP2km0Suu4jLMUxt7+KUBldbgEFvcM1MlmVl/idlAJLyguSKd1iZm7R/DS0BvX
-         dgIA==
-X-Gm-Message-State: APjAAAV7wzQ16b5LGrmOsKT+UTAk0JTe+04r8DFMQwMcx6GyX6aVdhEV
-        jXulSkr96W7+rpZm3f4mVoa0YaW7g3vEy6jRsUY=
-X-Google-Smtp-Source: APXvYqzDXPiusXd90IvAVlyEbeO6jCMdOyb5CPbz+Z0EDnXal3aG8RcvJ2u/hlIr8XoTCaRoauJNJKQwlLXTh0fOni4=
-X-Received: by 2002:a5d:9158:: with SMTP id y24mr4336955ioq.298.1577177159339;
- Tue, 24 Dec 2019 00:45:59 -0800 (PST)
+        id S1726171AbfLXOoq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 24 Dec 2019 09:44:46 -0500
+Received: from ns1.univ-skikda.dz ([193.194.68.2]:40177 "HELO
+        ms1.univ-skikda.dz" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with SMTP id S1726128AbfLXOoq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Dec 2019 09:44:46 -0500
+X-Greylist: delayed 418 seconds by postgrey-1.27 at vger.kernel.org; Tue, 24 Dec 2019 09:44:43 EST
+Received: from localhost (localhost [127.0.0.1])
+        by ms1.univ-skikda.dz (Postfix) with ESMTP id 631F47C97A0;
+        Tue, 24 Dec 2019 15:38:34 +0100 (CET)
+Received: from ms1.univ-skikda.dz ([127.0.0.1])
+        by localhost (ms1.univ-skikda.dz [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id pSjjBaTocrIR; Tue, 24 Dec 2019 15:38:29 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by ms1.univ-skikda.dz (Postfix) with ESMTP id 0CCB67C9791;
+        Tue, 24 Dec 2019 15:38:29 +0100 (CET)
+X-Virus-Scanned: amavisd-new at univ-skikda.dz
+Received: from ms1.univ-skikda.dz ([127.0.0.1])
+        by localhost (ms1.univ-skikda.dz [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id YzrsbmrVRAsD; Tue, 24 Dec 2019 15:38:28 +0100 (CET)
+Received: from ms1.univ-skikda.dz (ms1.univ-skikda.dz [172.16.20.30])
+        by ms1.univ-skikda.dz (Postfix) with ESMTP id A83257C979E;
+        Tue, 24 Dec 2019 15:38:27 +0100 (CET)
+Date:   Tue, 24 Dec 2019 15:38:27 +0100 (CET)
+From:   Mme =?utf-8?Q?Philom=C3=A8ne?= LOPES <a.addala@univ-skikda.dz>
+Reply-To: Mme =?utf-8?Q?Philom=C3=A8ne?= LOPES <lop.philomene@gmail.com>
+To:     lop.philomene@gmail.com
+Message-ID: <1401641638.72170.1577198307659.JavaMail.zimbra@univ-skikda.dz>
+Subject: Projet Humanitaire
 MIME-Version: 1.0
-Received: by 2002:ac0:f302:0:0:0:0:0 with HTTP; Tue, 24 Dec 2019 00:45:58
- -0800 (PST)
-Reply-To: bethnatividad9@gmail.com
-From:   Beth Nat <clementidibia1960@gmail.com>
-Date:   Tue, 24 Dec 2019 08:45:58 +0000
-Message-ID: <CAEG=icH-SN5dpsQRSZpGxr6Zs1qfbZ=LtCEFq=gRxqcGeKyiKw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [197.234.221.104]
+X-Mailer: Zimbra 8.0.5_GA_5839 (zclient/8.0.5_GA_5839)
+Thread-Topic: Projet Humanitaire
+Thread-Index: Bl+fWceKJ332Wte6GGUG8AuGvvEaKw==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-How are you today my dear? i saw your profile and it interests me, i
-am a Military nurse from USA. Can we be friend? I want to know more
-about you.
+
+Bonjour,
+
+Je soussignée Mme Philomène LOPES de nationalité française. Je vous envoie ce présent message afin de solliciter votre accord pour la réalisation d'un projet de donation. Ayant perdu mon époux et mon enfant de 8 ans au cours d'un accident tragique et mortel Il y a quelques années, je n'ai ni famille ni enfant qui pourra bénéficier de ma fortune.
+
+Actuellement hospitalisée aux États-Unis pour un cancer en phase terminale, je décide de faire don de ma fortune afin que vous puissiez réaliser les œuvres de charité de votre choix.
+
+Une somme de un million cinq cent mille dollars américain en banque en Afrique de l’ouest où je m’étais installée après la mort de mon mari et mon enfant.
+Merci me de répondre pour plus de détails.
+
+Sincèrement
+Mme LOPES
+E-mail: lop.philomene@gmail.com
