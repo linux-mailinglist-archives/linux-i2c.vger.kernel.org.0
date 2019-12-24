@@ -2,98 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EDD128AAF
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 Dec 2019 18:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7216D129E72
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Dec 2019 08:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726114AbfLUR66 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 Dec 2019 12:58:58 -0500
-Received: from mail-sender240.upb.ro ([141.85.13.240]:34520 "EHLO mx.upb.ro"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726107AbfLUR66 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 21 Dec 2019 12:58:58 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mx.upb.ro (Postfix) with ESMTP id 4D484B56279B;
-        Sat, 21 Dec 2019 19:58:55 +0200 (EET)
-Received: from mx.upb.ro ([127.0.0.1])
-        by localhost (mx.upb.ro [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id rS-wCd-Av3WE; Sat, 21 Dec 2019 19:58:53 +0200 (EET)
-Received: from localhost (localhost [127.0.0.1])
-        by mx.upb.ro (Postfix) with ESMTP id 89D7EB56279C;
-        Sat, 21 Dec 2019 19:58:53 +0200 (EET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mx.upb.ro 89D7EB56279C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=upb.ro;
-        s=96342B8A-77E4-11E5-BA93-D93D0963A2DF; t=1576951133;
-        bh=X+42fjabk+WLOB1bPd12eCpPGYMZu89kQtWGOPGu13I=;
-        h=Message-ID:From:To:Date:MIME-Version;
-        b=dZumlSXGZqk7S3vz0l3XH/E8QmWrWWByIdVC01rPRR7aoeOkRxc3uj07nRP6x9y7A
-         PmxsYJL7TXSM3eOnSIIgub/Fue2hFRpmw8e+EJ6S77WDFyNbt/WlDuMA//J0hlldMu
-         quytGl4caIT7zp5A4K1MSOTs2ONSdh17zC7RjTG0=
-X-Virus-Scanned: amavisd-new at upb.ro
-Received: from mx.upb.ro ([127.0.0.1])
-        by localhost (mx.upb.ro [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5FG3taiS2m5M; Sat, 21 Dec 2019 19:58:53 +0200 (EET)
-Received: from sabertoorh (unknown [86.120.75.237])
-        by mx.upb.ro (Postfix) with ESMTPSA id ECE47B56279B;
-        Sat, 21 Dec 2019 19:58:52 +0200 (EET)
-Message-ID: <0a09d9ed5fc5ae6c651491dead5f81bfecdbca4b.camel@upb.ro>
-Subject: Re: [PATCH] i2c: cadence: Added slave support
-From:   Radu Nicolae Pirea <radu_nicolae.pirea@upb.ro>
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Date:   Sat, 21 Dec 2019 19:58:50 +0200
-In-Reply-To: <CAKfKVtFqbtovQGQuzgCYzTu4bHOmAOmTz-tZMD89iUkMPc8awA@mail.gmail.com>
-References: <20191219124120.53754-1-radu_nicolae.pirea@upb.ro>
-         <20191219130501.GA958@kunai>
-         <6504123809effc310ade02dbb8a63f10db6b6c92.camel@upb.ro>
-         <CAKfKVtFqbtovQGQuzgCYzTu4bHOmAOmTz-tZMD89iUkMPc8awA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.2 
+        id S1726047AbfLXHc3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Dec 2019 02:32:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57908 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726037AbfLXHc3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 24 Dec 2019 02:32:29 -0500
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 68302206B7;
+        Tue, 24 Dec 2019 07:32:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1577172748;
+        bh=e5Lx3fav9aHPYbQQLVJ8r8urYsQzhkPfNR/pW89IEzY=;
+        h=In-Reply-To:References:Cc:From:To:Subject:Date:From;
+        b=PVIP/PkURFqmzZPXEhTK+7hdJGt4rFx3a65T+psJM2DkPh6q9hIHwk44H8ZMbvFrd
+         pBnyZt15MphKr7xhE8x8Noymtxtox9Hpdrn1GpNvhEaUa/tp8paBn2AgzuMahysl3k
+         4FuRhM56J6bhoOXik71QYxVB7Hce3NCHpFVY4YvM=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20191209183511.3576038-6-daniel@zonque.org>
+References: <20191209183511.3576038-1-daniel@zonque.org> <20191209183511.3576038-6-daniel@zonque.org>
+Cc:     mturquette@baylibre.com, robh+dt@kernel.org, broonie@kernel.org,
+        lee.jones@linaro.org, lars@metafoo.de, pascal.huerst@gmail.com,
+        Daniel Mack <daniel@zonque.org>
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Daniel Mack <daniel@zonque.org>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/10] dt-bindings: clock: Add documentation for AD242x clock providers
+User-Agent: alot/0.8.1
+Date:   Mon, 23 Dec 2019 23:32:27 -0800
+Message-Id: <20191224073228.68302206B7@mail.kernel.org>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 2019-12-20 at 14:55 +0530, Shubhrajyoti Datta wrote:
-> Hi ,
-> 
-> On Thu, Dec 19, 2019 at 7:00 PM Radu Pirea <radu_nicolae.pirea@upb.ro
-> > wrote:
-> > On Thu, 2019-12-19 at 14:05 +0100, Wolfram Sang wrote:
-> > > > +/**
-> > > > + * enum cdns_i2c_mode - I2C Controller current operating mode
-> > > > + *
-> > > > + * @CDNS_I2C_MODE_SLAVE:       I2C controller operating in
-> > > > slave
-> > > > mode
-> > > > + * @CDNS_I2C_MODE_MASTER:      I2C Controller operating in
-> > > > master
-> > > > mode
-> > > > + */
-> > > 
-> > > Can't the hardware operate as master and slave at the same time?
-> > > 
-> > 
-> > Of course, it can. If the driver has a slave registered wait and
-> > listens and if the subsystem needs to use the controller as master,
-> > the
-> > driver changes the state of the controller to master, sends and
-> > reads
-> > data from the bus and after this change the state of the controller
-> > to
-> > slave.
-> 
-> However that should be done only if no master is talking to the slave
-> right?
+Quoting Daniel Mack (2019-12-09 10:35:05)
+> diff --git a/Documentation/devicetree/bindings/clock/adi,ad242x-clk.yaml =
+b/Documentation/devicetree/bindings/clock/adi,ad242x-clk.yaml
+> new file mode 100644
+> index 000000000000..f434b3e4928e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/adi,ad242x-clk.yaml
+> @@ -0,0 +1,32 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/clock/adi,ad242x-clk.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Analog Devices AD242x clock provider
+> +
+> +maintainers:
+> +  - Daniel Mack <daniel@zonque.org>
+> +
+> +description: |
+> +  This module is part of the AD242x MFD device. For more details and an =
+example
+> +  refer to Documentation/devicetree/bindings/mfd/ad242x.yaml.
 
-Yes. The state of the slave must be IDLE, otherwise
-cdns_i2c_master_xfer will return -EAGAIN.
+I think we usually leave off Documentation/devicetree/ from paths when
+they're inside the bindings directory.
 
-> 
-> > In cdns_i2c_master_xfer is done all the magic.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,ad2428w-clk
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  clock-output-names:
+> +    minItems: 2
+> +    maxItems: 2
+> +    description: |
+> +      Array of two strings to use as names for the generated output cloc=
+ks
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> \ No newline at end of file
+
+Why no newline at end of file? Is there an example?
 
