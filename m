@@ -2,78 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CBA12A764
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Dec 2019 11:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C1012B391
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2019 10:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726420AbfLYKhi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Dec 2019 05:37:38 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:42330 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726025AbfLYKhi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 25 Dec 2019 05:37:38 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7667620084C;
-        Wed, 25 Dec 2019 11:37:36 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 6741F2007D4;
-        Wed, 25 Dec 2019 11:37:32 +0100 (CET)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 17BCB402B3;
-        Wed, 25 Dec 2019 18:37:27 +0800 (SGT)
-From:   Biwen Li <biwen.li@nxp.com>
-To:     peda@axentia.se, leoyang.li@nxp.com, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Biwen Li <biwen.li@nxp.com>
-Subject: [RESEND v6,3/3] arm64: dts: fsl-ls208xa-rdb: fix an errata E-00013
-Date:   Wed, 25 Dec 2019 18:36:24 +0800
-Message-Id: <20191225103624.48342-3-biwen.li@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191225103624.48342-1-biwen.li@nxp.com>
-References: <20191225103624.48342-1-biwen.li@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726197AbfL0Jk3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Dec 2019 04:40:29 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:42584 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725904AbfL0Jk3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 27 Dec 2019 04:40:29 -0500
+X-Greylist: delayed 345 seconds by postgrey-1.27 at vger.kernel.org; Fri, 27 Dec 2019 04:40:28 EST
+Received: from localhost.localdomain (unknown [159.226.5.100])
+        by APP-01 (Coremail) with SMTP id qwCowAB3fLgr0AVewOdMCg--.31S3;
+        Fri, 27 Dec 2019 17:34:35 +0800 (CST)
+From:   Xu Wang <vulab@iscas.ac.cn>
+To:     wsa@the-dreams.de
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] i2c: Fix a potential use after free
+Date:   Fri, 27 Dec 2019 09:34:32 +0000
+Message-Id: <1577439272-10362-1-git-send-email-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: qwCowAB3fLgr0AVewOdMCg--.31S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrZr4kWF15Cr4UuryfGr43trb_yoWxZwbEka
+        4UA3ZrWr95Crs8ur15AFW5ZryrKFZYq39Y9w10qrZ3Aa4Ygr17WFWUZ3y3Ww4Ygr1DW3W3
+        W3WqgrWxX3sxZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb28YjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_GFWl42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07joD73UUUUU=
+X-Originating-IP: [159.226.5.100]
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiBgURA10TefpTAQAAsO
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Specify a channel zero in idle state to
-avoid enterring tri-stated state for PCA9547.
-About E-00013:
-	- Description: I2C1 and I2C3 buses
-	  are missing pull-up.
-	- Impact: When the PCA954x device is tri-stated, the I2C bus
-	  will float. This makes the I2C bus and its associated
-	  downstream devices inaccessible.
-	- Hardware fix: Populate resistors R189 and R190 for I2C1
-	  and resistors R228 and R229 for I2C3.
-	- Software fix: Remove the tri-state option from the PCA954x
-	  driver(PCA954x always on enable status, specify a
-	  channel zero in dts to fix the errata E-00013).
+Free the adap structure only after we are done using it.
+This patch just moves the put_device() down a bit to avoid the
+use after free.
 
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
+Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
 ---
-Change in v6:
-	- none
+ drivers/i2c/i2c-core-base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Change in v5:
-	- specify a channel zero when pca9547 in idle state.
-
- arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi
-index 6fd7f63085c9..412f1bc0db5f 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi
-@@ -49,6 +49,7 @@
- 		reg = <0x75>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-+		idle-state = <0>;
- 		i2c@1 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 9f8dcd3..160d43e 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -2301,8 +2301,8 @@ void i2c_put_adapter(struct i2c_adapter *adap)
+ 	if (!adap)
+ 		return;
+ 
+-	put_device(&adap->dev);
+ 	module_put(adap->owner);
++	put_device(&adap->dev);
+ }
+ EXPORT_SYMBOL(i2c_put_adapter);
+ 
 -- 
-2.17.1
+2.7.4
 
