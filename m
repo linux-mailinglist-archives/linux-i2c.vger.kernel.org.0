@@ -2,135 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F4812BF6A
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2019 23:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B82A112CD26
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2019 07:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726377AbfL1WR0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 28 Dec 2019 17:17:26 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:38206 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbfL1WR0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 28 Dec 2019 17:17:26 -0500
-Received: by mail-lj1-f194.google.com with SMTP id w1so8001236ljh.5;
-        Sat, 28 Dec 2019 14:17:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PiNNr9K9qIQQnPJ6yZ/V1JmcG7noCNBTXNqtHbq6dTk=;
-        b=F+JDMOlP2X3eFRRcURDvQX83S7gq7aV3tR5j/dAe2MVbdwz3hcXg05rEdZl1uWBCUZ
-         SHqXf/4kRfxBZqKIsaUywdeF2U1kjCJjFzeXh9iy9Y/DEg8uw9Vn0MbGve28AcAzlhsZ
-         yn5Nj/K+r3KvTG1STPRrfIDvJEbFPSwcDV7cEXPiETlR/5kWi39qPjzcvkRFN1ZKne6D
-         VID6jrDXWW2GvVWwMuoLbsIhD37FPRAowx2xyw1xqjbNuXi9x1gmeABHXrTsZDZmNKL+
-         3MchmnXstIQ3RW8+XjMRpvPIo4XZaLPVJR1J6iSASLvW7dZVhfq913iQ68VcaGjJlBA6
-         XK+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PiNNr9K9qIQQnPJ6yZ/V1JmcG7noCNBTXNqtHbq6dTk=;
-        b=ekOvDA3s0iETD5jyfwdUZi+akVp1pRv2hwxPciKf9kF9Y1qOXsrpA7Z7dS8k8+EuoP
-         zPL58uyyYatmA2QWy8LaHTtH2Ps37FaXFdT7DYRtXhhLHaUtjS9U85XLzRdXe4KynVqG
-         qWtHYRfCs7tliVGy9f9QVWRiCI31x5GH8DVOI59c+5qEY2ulHuTaGNkVX36fWcZxW7pT
-         QJSpkcRCMbJopJHKBqSpzLqvUCDWTACM1qiUboPLNLQhuRQSSj7AuCe26TrGUkqKqK4r
-         W+D2OFK5O9WRhyrZDebgQiBA6zsX7UGjNWWmTAZZbgH7lBNhGjNEr398aCtpkb97FJi/
-         oqWQ==
-X-Gm-Message-State: APjAAAXyTRGN/AmFwVjFG8K6yam2Eqqeqj75zsyfs1rEfertsdaBjP5X
-        HBoov93+AXzUN5Vj6gAFs2g=
-X-Google-Smtp-Source: APXvYqwe6eRGb0lzPDGmWiVte7AMHiY7SA5qKagpCMQ/3OvM0RD+ONdohmoLYCzKP90k2d88sFkDuA==
-X-Received: by 2002:a2e:9ad8:: with SMTP id p24mr32131220ljj.148.1577571444214;
-        Sat, 28 Dec 2019 14:17:24 -0800 (PST)
-Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id y10sm15209584ljm.93.2019.12.28.14.17.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Dec 2019 14:17:23 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] i2c: tegra: Use relaxed versions of readl/writel
-Date:   Sun, 29 Dec 2019 01:16:54 +0300
-Message-Id: <20191228221654.28842-7-digetx@gmail.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191228221654.28842-1-digetx@gmail.com>
-References: <20191228221654.28842-1-digetx@gmail.com>
+        id S1727136AbfL3GDE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 30 Dec 2019 01:03:04 -0500
+Received: from vuizook.err.no ([178.255.151.162]:60962 "EHLO vuizook.err.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727115AbfL3GDE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 30 Dec 2019 01:03:04 -0500
+X-Greylist: delayed 998 seconds by postgrey-1.27 at vger.kernel.org; Mon, 30 Dec 2019 01:03:03 EST
+Received: from p576124-ipngn200707tokaisakaetozai.aichi.ocn.ne.jp ([122.31.139.124] helo=glandium.org)
+        by vuizook.err.no with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mh@glandium.org>)
+        id 1ilnsl-0003LE-7D; Mon, 30 Dec 2019 05:46:23 +0000
+Received: from glandium by goemon.lan with local (Exim 4.92)
+        (envelope-from <mh@glandium.org>)
+        id 1ilnsi-000LHA-KC; Mon, 30 Dec 2019 14:46:20 +0900
+Date:   Mon, 30 Dec 2019 14:46:20 +0900
+From:   Mike Hommey <mh@glandium.org>
+To:     linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: I2C/SMBus support for Threadripper 39x0X?
+Message-ID: <20191230054620.lesgynpyghprzmsh@glandium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-GPG-Fingerprint: 182E 161D 1130 B9FC CD7D  B167 E42A A04F A6AA 8C72
+User-Agent: NeoMutt/20180716
+X-Spam-Status: (score 0.9): No, score=0.9 required=5.0 tests=SPF_FAIL,SPF_HELO_FAIL autolearn=disabled version=3.4.2
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-There is nothing to synchronize in regards to memory accesses for PIO
-transfers and for DMA transfers the DMA API takes care of the syncing.
+Hi,
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/i2c/busses/i2c-tegra.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+I recently built a machine with a Threadripper 3970X and a Gigabyte
+TRX40 Aorus pro wifi, and while it works for most of everything with
+5.5 rc3 or rc4, I do have an issue with SMBus support, which I was
+supposing is why I'm not seeing any readings for e.g. CPU fans with
+lm-sensors.
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 0e88c7aa7cd5..a39de5012128 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -284,12 +284,12 @@ struct tegra_i2c_dev {
- static void dvc_writel(struct tegra_i2c_dev *i2c_dev, u32 val,
- 		       unsigned long reg)
- {
--	writel(val, i2c_dev->base + reg);
-+	writel_relaxed(val, i2c_dev->base + reg);
- }
- 
- static u32 dvc_readl(struct tegra_i2c_dev *i2c_dev, unsigned long reg)
- {
--	return readl(i2c_dev->base + reg);
-+	return readl_relaxed(i2c_dev->base + reg);
- }
- 
- /*
-@@ -307,16 +307,16 @@ static unsigned long tegra_i2c_reg_addr(struct tegra_i2c_dev *i2c_dev,
- static void i2c_writel(struct tegra_i2c_dev *i2c_dev, u32 val,
- 		       unsigned long reg)
- {
--	writel(val, i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
-+	writel_relaxed(val, i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
- 
- 	/* Read back register to make sure that register writes completed */
- 	if (reg != I2C_TX_FIFO)
--		readl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
-+		readl_relaxed(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
- }
- 
- static u32 i2c_readl(struct tegra_i2c_dev *i2c_dev, unsigned long reg)
- {
--	return readl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
-+	return readl_relaxed(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
- }
- 
- static void i2c_writesl(struct tegra_i2c_dev *i2c_dev, void *data,
-@@ -689,12 +689,13 @@ static int tegra_i2c_wait_for_config_load(struct tegra_i2c_dev *i2c_dev)
- 		i2c_writel(i2c_dev, I2C_MSTR_CONFIG_LOAD, I2C_CONFIG_LOAD);
- 
- 		if (i2c_dev->is_curr_atomic_xfer)
--			err = readl_poll_timeout_atomic(addr, val, val == 0,
--							1000,
--							I2C_CONFIG_LOAD_TIMEOUT);
-+			err = readl_relaxed_poll_timeout_atomic(
-+						addr, val, val == 0, 1000,
-+						I2C_CONFIG_LOAD_TIMEOUT);
- 		else
--			err = readl_poll_timeout(addr, val, val == 0, 1000,
--						 I2C_CONFIG_LOAD_TIMEOUT);
-+			err = readl_relaxed_poll_timeout(
-+						addr, val, val == 0, 1000,
-+						I2C_CONFIG_LOAD_TIMEOUT);
- 
- 		if (err) {
- 			dev_warn(i2c_dev->dev,
--- 
-2.24.0
+The i2c-piix4 driver loads, but does nothing, leaving this message in
+dmesg:
 
+[    2.711213] ACPI Warning: SystemIO range 0x0000000000000B00-0x0000000000000B08 conflicts with OpRegion 0x0000000000000B00-0x0000000000000B0F (\GSA1.SMBI) (20191018/utaddress-213)
+[    2.711218] ACPI: If an ACPI driver is available for this device, you should use it instead of the native driver
+
+Instrumenting the module, I can see it comes from
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/i2c/busses/i2c-piix4.c?id=fd6988496e79a6a4bdb514a4655d2920209eb85d#n323
+
+If I remove the check, the module loads and dmesg says:
+
+[ 7589.210039] piix4_smbus 0000:00:14.0: SMBus Host Controller at 0xb00, revision 0
+[ 7589.210041] piix4_smbus 0000:00:14.0: Using register 0x02 for SMBus port selection
+
+and now i2cdetect -l does find the smbus adapter, which it didn't find
+before the change.
+
+i2c-6   smbus           SMBus PIIX4 adapter port 2 at 0b00      SMBus adapter
+i2c-5   smbus           SMBus PIIX4 adapter port 0 at 0b00      SMBus adapter
+
+sensors-detect doesn't find any sensors in there, though (only SPD
+EEPROMs), so that may not be where my missing sensors are.
+
+In any case, the SMBus adapter is currently not initialized without tweaking the
+module.
+
+I should add, though, that during boot, I see a bunch of these in dmesg:
+
+[    0.388399] ACPI BIOS Error (bug): Failure creating named object [\_SB.I2CA.WT1A], AE_ALREADY_EXISTS (20191018/dswload2-324)
+[    0.388405] ACPI Error: AE_ALREADY_EXISTS, During name lookup/catalog (20191018/psobject-221)
+[    0.388407] ACPI: Skipping parse of AML opcode: OpcodeName unavailable (0x5B82)
+[    0.388408] ACPI BIOS Error (bug): Failure creating named object [\_SB.I2CA.MT1A], AE_ALREADY_EXISTS (20191018/dswload2-324)
+[    0.388411] ACPI Error: AE_ALREADY_EXISTS, During name lookup/catalog (20191018/psobject-221)
+[    0.388412] ACPI: Skipping parse of AML opcode: OpcodeName unavailable (0x5B82)
+(and many more similar ones)
+
+I don't know if they'd be related, but dumping the ACPI tables, it looks
+like there are "only" duplicates between the DSDT and one of the SSDT
+tables.
+
+Cheers,
+
+Mike
