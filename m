@@ -2,99 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3898D12DA3F
-	for <lists+linux-i2c@lfdr.de>; Tue, 31 Dec 2019 17:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC19712DA4F
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 Dec 2019 17:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727054AbfLaQOi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 Dec 2019 11:14:38 -0500
-Received: from sauhun.de ([88.99.104.3]:51582 "EHLO pokefinder.org"
+        id S1727054AbfLaQ15 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 Dec 2019 11:27:57 -0500
+Received: from sauhun.de ([88.99.104.3]:51772 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727064AbfLaQOh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 31 Dec 2019 11:14:37 -0500
+        id S1726060AbfLaQ15 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 31 Dec 2019 11:27:57 -0500
 Received: from localhost (p5486C426.dip0.t-ipconnect.de [84.134.196.38])
-        by pokefinder.org (Postfix) with ESMTPSA id 908992C07CF;
-        Tue, 31 Dec 2019 17:14:35 +0100 (CET)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
+        by pokefinder.org (Postfix) with ESMTPSA id DAAE52C04EC;
+        Tue, 31 Dec 2019 17:27:54 +0100 (CET)
+Date:   Tue, 31 Dec 2019 17:27:51 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         Luca Ceresoli <luca@lucaceresoli.net>,
         Kieran Bingham <kieran@ksquared.org.uk>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [RFC PATCH 5/5] simple test case for the I2C alias functionality
-Date:   Tue, 31 Dec 2019 17:14:00 +0100
-Message-Id: <20191231161400.1688-6-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
+        Vladimir Zapolskiy <vz@mleia.com>
+Subject: Re: [RFC PATCH 0/5] i2c: implement mechanism to retrieve an alias
+ device
+Message-ID: <20191231162751.65o3fv47xahw5hyk@katana>
 References: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="fev4q57wgq2w35tj"
+Content-Disposition: inline
+In-Reply-To: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Not for upstream!
 
-Not-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/i2c/i2c-core-base.c |  2 +-
- sound/soc/codecs/ak4642.c   | 20 ++++++++++++++++++++
- 2 files changed, 21 insertions(+), 1 deletion(-)
+--fev4q57wgq2w35tj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 0cc4a5c49a15..97d3e9f8dfa7 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1307,7 +1307,7 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
- 		adap->lock_ops = &i2c_adapter_lock_ops;
- 
- 	adap->locked_flags = 0;
--	adap->alias_idx = 0x08;	/* first valid I2C address */
-+	adap->alias_idx = 0x3e;	/* first valid I2C address */
- 	rt_mutex_init(&adap->bus_lock);
- 	rt_mutex_init(&adap->mux_lock);
- 	mutex_init(&adap->userspace_clients_lock);
-diff --git a/sound/soc/codecs/ak4642.c b/sound/soc/codecs/ak4642.c
-index 353237025514..d34476b80b41 100644
---- a/sound/soc/codecs/ak4642.c
-+++ b/sound/soc/codecs/ak4642.c
-@@ -639,6 +639,25 @@ static int ak4642_i2c_probe(struct i2c_client *i2c,
- 	struct regmap *regmap;
- 	struct ak4642_priv *priv;
- 	struct clk *mcko = NULL;
-+struct i2c_client *test, *test2, *test3;
-+
-+test = i2c_new_alias_device(i2c->adapter);
-+printk(KERN_INFO "****** wsa: %08x %08x\n", test->addr, i2c->adapter->alias_idx);
-+
-+test2 = i2c_new_alias_device(i2c->adapter);
-+printk(KERN_INFO "****** wsa: %08x %08x\n", test2->addr, i2c->adapter->alias_idx);
-+
-+//i2c_unregister_device(test2);
-+//printk(KERN_INFO "****** wsa: %08x %08x\n", test2->addr, i2c->adapter->alias_idx);
-+
-+i2c_unregister_device(test);
-+printk(KERN_INFO "****** wsa: %08x %08x\n", test->addr, i2c->adapter->alias_idx);
-+
-+test = i2c_new_alias_device(i2c->adapter);
-+printk(KERN_INFO "****** wsa: %08x %08x\n", test->addr, i2c->adapter->alias_idx);
-+
-+test3 = i2c_new_alias_device(i2c->adapter);
-+printk(KERN_INFO "****** wsa: %08x %08x\n", test3->addr, i2c->adapter->alias_idx);
- 
- 	if (np) {
- 		const struct of_device_id *of_id;
-@@ -659,6 +678,7 @@ static int ak4642_i2c_probe(struct i2c_client *i2c,
- 		return -EINVAL;
- 	}
- 
-+
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
--- 
-2.20.1
 
+> Anyhow, I hope this series is useful to you and will spawn fruitful
+> discussion.
+
+A branch is here (it depends on i2c/for-next):
+
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c_alias_device
+
+and buildbot is happy, too.
+
+
+--fev4q57wgq2w35tj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4LdwAACgkQFA3kzBSg
+KbZcmA//U8ySTg4ta5gcVIQK5vkyYCpuqdTzdZgqxUDcDVMycYryZgGl5L1ND69+
+O3YI3+WMwWa1uXoasAv/+M1nzaoCViX78d1usoZ/OhmYdluRnEqvUqU5PVpFv3Ik
+dIyN9lhWSKva+p1JMNDb6tEa6EeN3v6I0k4CPmhnsbh/eLAX48JgKL4QdX+JoXhE
+NfBLLryAHSioAzbYjeUgKrvNWeOw9cl9jzK/WQvVeTXFFeZX24NaKus1Hk0c9iBx
+1/qsIvS3mKFXsgc9sxWj3mEvNZqMPDhheFUBJPm1sFfle5VbmgULmyl37op4RbMm
+rbIhyVN7L2uf8P1I3lTly3ebPQ4HihMbQCsjLHWBEs5OoHPmLRSAekpR5xe6w7rP
+CKNOZzH6KgcQPhOfJwtfu4OfEd1QJub2aznZQTQwfkGPAQ71c03pqxaYo2nWTkkT
+oZPaIBdaEGUyzHmKCgqgdbLFcZy3Jx/lg8SrgOke9/tTqe/CHibo6DnKRQTEyJL1
+qbxOO5hX6QFu34ZblG6CuRnYXRXVa2Xxtgiqc6zqnbV5xvIlSqzTgyvQEoSL3SEy
+a13CVO7Y+v24SWpGsBCvnao8bcUWVlhrfx+kYVpnLcaszoN09HGuWq0xgjjCjNiQ
+OqAnRwHUHzozBby2dloVOosEnzOwdCo+ZCooQmqSPtGn3pVvNVE=
+=0z1N
+-----END PGP SIGNATURE-----
+
+--fev4q57wgq2w35tj--
