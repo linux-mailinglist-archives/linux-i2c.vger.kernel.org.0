@@ -2,17 +2,17 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E64D112DA39
-	for <lists+linux-i2c@lfdr.de>; Tue, 31 Dec 2019 17:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3898D12DA3F
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 Dec 2019 17:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727111AbfLaQOh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 Dec 2019 11:14:37 -0500
-Received: from sauhun.de ([88.99.104.3]:51566 "EHLO pokefinder.org"
+        id S1727054AbfLaQOi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 Dec 2019 11:14:38 -0500
+Received: from sauhun.de ([88.99.104.3]:51582 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727070AbfLaQOg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 31 Dec 2019 11:14:36 -0500
+        id S1727064AbfLaQOh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 31 Dec 2019 11:14:37 -0500
 Received: from localhost (p5486C426.dip0.t-ipconnect.de [84.134.196.38])
-        by pokefinder.org (Postfix) with ESMTPSA id 1B3F42C07CD;
+        by pokefinder.org (Postfix) with ESMTPSA id 908992C07CF;
         Tue, 31 Dec 2019 17:14:35 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
@@ -23,9 +23,9 @@ Cc:     linux-renesas-soc@vger.kernel.org,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Vladimir Zapolskiy <vz@mleia.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [RFC PATCH 4/5] i2c: core: add simple caching to the 'alias' scanning
-Date:   Tue, 31 Dec 2019 17:13:59 +0100
-Message-Id: <20191231161400.1688-5-wsa+renesas@sang-engineering.com>
+Subject: [RFC PATCH 5/5] simple test case for the I2C alias functionality
+Date:   Tue, 31 Dec 2019 17:14:00 +0100
+Message-Id: <20191231161400.1688-6-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
 References: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
@@ -36,86 +36,65 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add some simple caching of the last used alias to skip some unneeded
-scanning of the I2C bus. When freeing the device, the cache will be set
-back.
+Not for upstream!
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Not-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/i2c-core-base.c | 15 ++++++++++++++-
- include/linux/i2c.h         |  2 ++
- 2 files changed, 16 insertions(+), 1 deletion(-)
+ drivers/i2c/i2c-core-base.c |  2 +-
+ sound/soc/codecs/ak4642.c   | 20 ++++++++++++++++++++
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 5a010e7e698f..0cc4a5c49a15 100644
+index 0cc4a5c49a15..97d3e9f8dfa7 100644
 --- a/drivers/i2c/i2c-core-base.c
 +++ b/drivers/i2c/i2c-core-base.c
-@@ -830,6 +830,8 @@ EXPORT_SYMBOL_GPL(i2c_new_device);
-  */
- void i2c_unregister_device(struct i2c_client *client)
- {
-+	struct i2c_adapter *adap = client->adapter;
-+
- 	if (IS_ERR_OR_NULL(client))
- 		return;
- 
-@@ -840,6 +842,14 @@ void i2c_unregister_device(struct i2c_client *client)
- 
- 	if (ACPI_COMPANION(&client->dev))
- 		acpi_device_clear_enumerated(ACPI_COMPANION(&client->dev));
-+
-+	i2c_lock_bus(adap, I2C_LOCK_SEGMENT);
-+
-+	if (client->flags & I2C_CLIENT_ALIAS && client->addr < adap->alias_idx)
-+		adap->alias_idx = client->addr;
-+
-+	i2c_unlock_bus(adap, I2C_LOCK_SEGMENT);
-+
- 	device_unregister(&client->dev);
- }
- EXPORT_SYMBOL_GPL(i2c_unregister_device);
-@@ -1297,6 +1307,7 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
+@@ -1307,7 +1307,7 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
  		adap->lock_ops = &i2c_adapter_lock_ops;
  
  	adap->locked_flags = 0;
-+	adap->alias_idx = 0x08;	/* first valid I2C address */
+-	adap->alias_idx = 0x08;	/* first valid I2C address */
++	adap->alias_idx = 0x3e;	/* first valid I2C address */
  	rt_mutex_init(&adap->bus_lock);
  	rt_mutex_init(&adap->mux_lock);
  	mutex_init(&adap->userspace_clients_lock);
-@@ -2249,10 +2260,12 @@ struct i2c_client *i2c_new_alias_device(struct i2c_adapter *adap)
+diff --git a/sound/soc/codecs/ak4642.c b/sound/soc/codecs/ak4642.c
+index 353237025514..d34476b80b41 100644
+--- a/sound/soc/codecs/ak4642.c
++++ b/sound/soc/codecs/ak4642.c
+@@ -639,6 +639,25 @@ static int ak4642_i2c_probe(struct i2c_client *i2c,
+ 	struct regmap *regmap;
+ 	struct ak4642_priv *priv;
+ 	struct clk *mcko = NULL;
++struct i2c_client *test, *test2, *test3;
++
++test = i2c_new_alias_device(i2c->adapter);
++printk(KERN_INFO "****** wsa: %08x %08x\n", test->addr, i2c->adapter->alias_idx);
++
++test2 = i2c_new_alias_device(i2c->adapter);
++printk(KERN_INFO "****** wsa: %08x %08x\n", test2->addr, i2c->adapter->alias_idx);
++
++//i2c_unregister_device(test2);
++//printk(KERN_INFO "****** wsa: %08x %08x\n", test2->addr, i2c->adapter->alias_idx);
++
++i2c_unregister_device(test);
++printk(KERN_INFO "****** wsa: %08x %08x\n", test->addr, i2c->adapter->alias_idx);
++
++test = i2c_new_alias_device(i2c->adapter);
++printk(KERN_INFO "****** wsa: %08x %08x\n", test->addr, i2c->adapter->alias_idx);
++
++test3 = i2c_new_alias_device(i2c->adapter);
++printk(KERN_INFO "****** wsa: %08x %08x\n", test3->addr, i2c->adapter->alias_idx);
  
- 	i2c_lock_bus(adap, I2C_LOCK_SEGMENT);
+ 	if (np) {
+ 		const struct of_device_id *of_id;
+@@ -659,6 +678,7 @@ static int ak4642_i2c_probe(struct i2c_client *i2c,
+ 		return -EINVAL;
+ 	}
  
--	for (addr = 0x08; addr < 0x78; addr++) {
-+	for (addr = adap->alias_idx; addr < 0x78; addr++) {
- 		ret = i2c_scan_for_client(adap, addr, i2c_unlocked_read_byte_probe);
- 		if (ret == -ENODEV) {
- 			alias = i2c_new_dummy_device(adap, addr);
-+			alias->flags |= I2C_CLIENT_ALIAS;
-+			adap->alias_idx = addr + 1;
- 			dev_dbg(&adap->dev, "Found alias: 0x%x\n", addr);
- 			break;
- 		}
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 583ca2aec022..6427c2db5ee0 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -309,6 +309,7 @@ struct i2c_driver {
- struct i2c_client {
- 	unsigned short flags;		/* div., see below		*/
- #define I2C_CLIENT_PEC		0x04	/* Use Packet Error Checking */
-+#define I2C_CLIENT_ALIAS	0x08	/* client is an alias */
- #define I2C_CLIENT_TEN		0x10	/* we have a ten bit chip address */
- 					/* Must equal I2C_M_TEN below */
- #define I2C_CLIENT_SLAVE	0x20	/* we are the slave */
-@@ -715,6 +716,7 @@ struct i2c_adapter {
- 	const struct i2c_adapter_quirks *quirks;
- 
- 	struct irq_domain *host_notify_domain;
-+	u16 alias_idx;
- };
- #define to_i2c_adapter(d) container_of(d, struct i2c_adapter, dev)
- 
++
+ 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
 -- 
 2.20.1
 
