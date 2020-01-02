@@ -2,37 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5248B12EB00
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jan 2020 22:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F3C12EB0C
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jan 2020 22:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725783AbgABVDm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Jan 2020 16:03:42 -0500
-Received: from sauhun.de ([88.99.104.3]:49546 "EHLO pokefinder.org"
+        id S1725837AbgABVNa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Jan 2020 16:13:30 -0500
+Received: from sauhun.de ([88.99.104.3]:50000 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725837AbgABVDm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 2 Jan 2020 16:03:42 -0500
+        id S1725783AbgABVNa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 2 Jan 2020 16:13:30 -0500
 Received: from localhost (x4dbfb270.dyn.telefonica.de [77.191.178.112])
-        by pokefinder.org (Postfix) with ESMTPSA id 4DF7F2C0162;
-        Thu,  2 Jan 2020 22:03:36 +0100 (CET)
-Date:   Thu, 2 Jan 2020 22:03:35 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 0694E2C0162;
+        Thu,  2 Jan 2020 22:13:27 +0100 (CET)
+Date:   Thu, 2 Jan 2020 22:13:27 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Luca Ceresoli <luca@lucaceresoli.net>,
         Kieran Bingham <kieran@ksquared.org.uk>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Vladimir Zapolskiy <vz@mleia.com>
 Subject: Re: [RFC PATCH 3/5] i2c: core: add function to request an alias
-Message-ID: <20200102210335.GA1030@kunai>
+Message-ID: <20200102211327.GB1030@kunai>
 References: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
  <20191231161400.1688-4-wsa+renesas@sang-engineering.com>
  <20200101165515.GC6226@pendragon.ideasonboard.com>
+ <e008939f-531d-f7dc-4c3c-937476213030@lucaceresoli.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IS0zKkzwUGydFO0o"
+        protocol="application/pgp-signature"; boundary="dTy3Mrz/UPE2dbVg"
 Content-Disposition: inline
-In-Reply-To: <20200101165515.GC6226@pendragon.ideasonboard.com>
+In-Reply-To: <e008939f-531d-f7dc-4c3c-937476213030@lucaceresoli.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -40,86 +41,62 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---IS0zKkzwUGydFO0o
+--dTy3Mrz/UPE2dbVg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Laurent,
+Hi Luca,
 
-> > +	i2c_lock_bus(adap, I2C_LOCK_SEGMENT);
-> > +
-> > +	for (addr =3D 0x08; addr < 0x78; addr++) {
-> > +		ret =3D i2c_scan_for_client(adap, addr, i2c_unlocked_read_byte_probe=
-);
-> > +		if (ret =3D=3D -ENODEV) {
-> > +			alias =3D i2c_new_dummy_device(adap, addr);
-> > +			dev_dbg(&adap->dev, "Found alias: 0x%x\n", addr);
-> > +			break;
-> > +		}
-> > +	}
+> > This looks quite inefficient, especially if the beginning of the range
+> > is populated with devices. Furthermore, I think there's a high risk of
+> > false negatives, as acquiring a free address and reprogramming the
+> > client to make use of it are separate operations.
 >=20
-> This looks quite inefficient, especially if the beginning of the range
-> is populated with devices.
+> Right. Applying the alias could raise other errors, thus one would need
+> i2c_new_alias_device() to keep the alias locked until programming it has
+> either failed or has been successfully programmed.
 
-Well, we have to start somewhere? And actually, the range from 0x08
-onwards is the least used I encountered so far. What would you suggest?
+Please see my reply to Laurent, I don't think it is racy. But please
+elaborate if you think I am wrong.
 
-> Furthermore, I think there's a high risk of
-> false negatives, as acquiring a free address and reprogramming the
-> client to make use of it are separate operations. Another call to
-> i2c_new_alias_device() could occur in-between.
+> > What happened to the idea of reporting busy address ranges in the
+> > firmware (DT, ACPI, ...) ?
+>=20
+> Indeed that's how I remember it as well, and I'm a bit suspicious about
+> sending out probe messages that might have side effects (even if the
+> false negative issue mentioned by Laurent were solved). You know, I've
+> been taught to "expect the worse" :) so I'd like to better understand
+> what are the strong reasons in favor of probing, as well as the
+> potential side effects.
 
-This is why the whole function is protected using i2c_lock_bus. No other
-device can scan simultaneously. And once we have the dummy device
-registered, it is blocked like any other registered device. As we
-register the dummy device with the lock being held, I don't see how the
-above race can happen.
+As I said to Laurent, too, I think the risk that a bus is not fully
+described is higher than a device which does not respond to a read_byte.
+In both cases, we would wrongly use an address in use.
 
-> There's also the issue
-> that I2C hasn't been designed for scanning, so some devices may not
-> appreciate this.
-
-This is inevitable. What GMSL and FPD-Link do is very non-I2Cish. I
-don't see a "perfect" solution. We could skip this transaction and rely
-only on that all devices are pre-registered. Yet, I think the
-requirement that all busses *must* be fully described is more dangerous.
-I'd rather risk that some rare device doesn't like the transaction. I
-think a byte_read is the best we can do. Much better than a quick
-command, for sure.
-
-> What happened to the idea of reporting busy address ranges in the
-> firmware (DT, ACPI, ...) ?
-
-Fully in place. All pre-registered devices won't be considered because
-i2c_scan_for_client() uses i2c_check_addr_busy(). Did you think the new
-helper only relies on the transfer sent out? This is not the case, the
-transfer is only the final safety measure for so far unclaimed
-addresses.
-
-All the best for 2020,
+Also, all the best for you in 2020!
 
    Wolfram
 
 
---IS0zKkzwUGydFO0o
+--dTy3Mrz/UPE2dbVg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4OWqMACgkQFA3kzBSg
-KbaKbw/7BoMpk9HHHxqD8zOHyF60xbaxeSUVg/eheu9sMVeT0/z08gj0/N+YD6Us
-sxus8hEcDApf/FJ2fXgIVWIK8ekZeR9TmyKb+QPgDqAYCJdwpqKCWkoA45Idk16g
-cEY1s0mR+W6+8gK8ILKq1sMx0Tu4UGNqYQPi37S/g1EO9+8zVqYu3+YvPSjBy/mK
-zOUpIAMFijK76lmByor14+fUH2WAgeWMIc4KghEBLBXfe5MemRPOrEayIlSU17ol
-w7D88Q+1JGg0uqb0X/NrSObIu5cb2N2SVWjreiuqFJwe7h0oFxBruMGlJwgo2pZf
-ZA8/UqpslJV5Im3v8gc+WSHgflLwIz8KvZaZTS/+FmhF+raNEKQ3UHS8woM5KnVK
-wSIHMePb/MGDHFybSCJTaZy+1jg0JXZRTakBuCPcOXbXKH4eb5ZPMspXgipYHNYI
-LZ8v1jydSpr+Wt2KLsj6XS06NCA5O5ARQjFjJbv2Ddckzc2Ju1lmta0qHqjgAwUP
-E/chLCIpQROZs5iyRbCYD0Iir540lDGxMIGoHjhvHjp71TbAb8H9E2rxk9OcGNaP
-2ngSBOVjKBNkQffOqbjngOmc/L2zFapq4lBh4tTyXkah2qHTaVFl61Ol6fJ+5FHp
-xLJyqDhmJB0ozqNJChHLtCNFgwe23YQ4ptKCpcyfWyv+Ls7/CwM=
-=xKSg
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4OXPcACgkQFA3kzBSg
+KbZxRw//YHEcEWbTuhwt3Cq3XI305L3vMkgMBmKl6YIPwJkASlA+JsKFJeskatPx
+4vzx3BemXe29Mt+GcQ6J8Isi3d8dqB5u+gsZlR8/2jL08hFmB++bnGqWHYzzyFye
+ppXYuX9xhXNzEnK2Bd24SoguRATKifW++ZySwTPFoqKy4rJ4hE2tijBkJ8uPlKsP
+nudkVwDxuFEH4DcIh9n/XeRYy95dFuqpM70FYWSqSYEyjMeT4OpNHb7hb6pusTqZ
+qklOxZc8wLf35I4GrBDMs9OUtFzobPRRDmOzBYmkAN7MGkPLSfohpvYvWKhlUi3T
+X1RIb7+m3Jp1lPgo4ZIbAWzYFzZdHv9EWNZNKkwioNRFKJQ/D4tnKwBKxGRSXqhQ
+Fbf9mdBj+XO5ZwsN3Mz8vzHwwYUFerGKpe07u2GJ4hegoA36ZfC6AAg890W6oVQA
+SUHq/Z8HwDyEd8MKOu7B49PrywEJVu+bg9tgDgAMOsLxsaKo+OcOkAavaT2ITCAO
+sT/cb978WChsE7aE3cn6tLL4BLgOIWYyuK73y8WPFZdO9t4jCURhsPFKpJQdcwOb
+Xs8peXBcTp0npcN9YX7tjdTwpJ2UjIGNsgcMARzfyGfCfSBIU4nWB8TTA4maAqF0
+AWNyts+QzOXOewoTX1CRTDrH/kVAI4LYPw66NIqIZ8ExDbtNy74=
+=Cy7J
 -----END PGP SIGNATURE-----
 
---IS0zKkzwUGydFO0o--
+--dTy3Mrz/UPE2dbVg--
