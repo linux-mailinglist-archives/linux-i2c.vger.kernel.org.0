@@ -2,70 +2,130 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE09812E914
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jan 2020 18:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9252612EA1E
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jan 2020 19:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgABRGT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Jan 2020 12:06:19 -0500
-Received: from mail-io1-f68.google.com ([209.85.166.68]:38655 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726125AbgABRGT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Jan 2020 12:06:19 -0500
-Received: by mail-io1-f68.google.com with SMTP id v3so38921961ioj.5
-        for <linux-i2c@vger.kernel.org>; Thu, 02 Jan 2020 09:06:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vbeGgWiwaN14SP6RADHxU0ZkFByo7evE/fTu+huoaas=;
-        b=EwK/iV64nbL4ocWWfmlaskYW+j3yl/sA6y/45qlt20N+QIdTHHKSlE8x/2fRWFPE8R
-         UOJopxp1+nXHIZdZAyQ+IhQI4ZxTYRZrUvSXjX8wcGqZnzy2Zdv8tffqbJVfmPTQpIdL
-         HKwWGe32/rupFf0GATcCAmgBSafgInHZAkb+inWMWCg/Nr08SBeePR5cZosqtXMIZkV4
-         hoRm3UlhYrne9wAesS0p4Wtle1WZwh6iN2kbT2i/9+Mt5o0QpP+SRmEyJ5as+x3/UeBI
-         UT7KQBHBAAaM+qj09O/ZhQ+O+ZEoOainj2lyLDZg4wGaIorbBNM9r4GFvjd2rCuz8g0G
-         HtKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vbeGgWiwaN14SP6RADHxU0ZkFByo7evE/fTu+huoaas=;
-        b=fwe6fcjw90pw6nBDIGXDzi7XvZFd5JTwxA03Wgn/UXkDoVPkoT7Kp6AkCrG17bJogm
-         05RTgiWZ8FpzliddcmfWr9VBpyrej6zZJmrqEvsF827c8kiP0FosYZqMP71///RvBtYS
-         2U5PRO8jTxG9ijtfoLAMDgtqDBY5wJrRejJU7zY2ZBJSqptLJpPDNKSnXop2WG2slL9O
-         1mgBCR7by0R0qx3DUsWOcd7GZMajahWKODZGNj8k13vOgPwReA80X5tATDuVIHzy01qr
-         BXunznhEmZFWBvFLzn3hG3Hel7LK2lXQ39YakElWH6bHW+YhPcCwlM8XN9Zh/kT3FsD1
-         80vg==
-X-Gm-Message-State: APjAAAUUCDv7IpzA96Da9FBGe5x3sKiSxPZCEGrDWOTDi+yWlqhFLl/x
-        /Ox+OihaIpn6zuimxy1qqWOVkHgsa0aADrgDxqyMMFZLzOA=
-X-Google-Smtp-Source: APXvYqzYcsu5E3mcDThFu0rMkSWUQLYhK7cUrx3GPZ2TR6vHWFYJAncgtgX9Nt4cIOL/XdZHzzFuzsV49LAPRiTxN8E=
-X-Received: by 2002:a02:40e:: with SMTP id 14mr63858858jab.102.1577984778452;
- Thu, 02 Jan 2020 09:06:18 -0800 (PST)
+        id S1728099AbgABS6x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Jan 2020 13:58:53 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:37182 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727951AbgABS6x (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Jan 2020 13:58:53 -0500
+Received: from [88.147.81.4] (port=37292 helo=[192.168.77.51])
+        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1in5gH-003XTs-Fv; Thu, 02 Jan 2020 19:58:49 +0100
+Subject: Re: [RFC PATCH 3/5] i2c: core: add function to request an alias
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran@ksquared.org.uk>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Vladimir Zapolskiy <vz@mleia.com>
+References: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
+ <20191231161400.1688-4-wsa+renesas@sang-engineering.com>
+ <20200101165515.GC6226@pendragon.ideasonboard.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <e008939f-531d-f7dc-4c3c-937476213030@lucaceresoli.net>
+Date:   Thu, 2 Jan 2020 19:58:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-References: <20191219105558.26479-1-brgl@bgdev.pl>
-In-Reply-To: <20191219105558.26479-1-brgl@bgdev.pl>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 2 Jan 2020 18:06:07 +0100
-Message-ID: <CAMRc=MdexCWZyQOfno0czWgy9EXN+8O_RmEpHxXz0R9tMD3g7g@mail.gmail.com>
-Subject: Re: [PATCH] eeprom: at24: update the license tag
-To:     linux-i2c <linux-i2c@vger.kernel.org>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200101165515.GC6226@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-czw., 19 gru 2019 o 11:56 Bartosz Golaszewski <brgl@bgdev.pl> napisa=C5=82(=
-a):
->
-> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
->
-> The current GPL v2.0 or later SPDX tag is 'GPL-2.0-or-later' as defined
-> at https://spdx.org/licenses/.
->
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Hi Wolfram,
 
-Patch applied.
+thanks for having started working on this!
 
-Bart
+On 01/01/20 17:55, Laurent Pinchart wrote:
+> Hi Wolfram,
+> 
+> Thank you for the patch.
+> 
+> On Tue, Dec 31, 2019 at 05:13:58PM +0100, Wolfram Sang wrote:
+>> Some devices are able to reprogram their I2C address at runtime. This
+>> can prevent address collisions when one is able to activate and
+>> reprogram these devices one by one. For that to work, they need to be
+>> assigned an unused address. This new functions allows drivers to request
+>> for such an address. It assumes all non-occupied addresses are free. It
+>> will then send a message to such a free address to make sure there is
+>> really nothing listening there.
+>>
+>> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>> ---
+>>  drivers/i2c/i2c-core-base.c | 22 ++++++++++++++++++++++
+>>  include/linux/i2c.h         |  2 ++
+>>  2 files changed, 24 insertions(+)
+>>
+>> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+>> index 51bd953ddfb2..5a010e7e698f 100644
+>> --- a/drivers/i2c/i2c-core-base.c
+>> +++ b/drivers/i2c/i2c-core-base.c
+>> @@ -2241,6 +2241,28 @@ static int i2c_detect(struct i2c_adapter *adapter, struct i2c_driver *driver)
+>>  	return err;
+>>  }
+>>  
+> 
+> Missing kerneldoc, but you already know about this.
+> 
+>> +struct i2c_client *i2c_new_alias_device(struct i2c_adapter *adap)
+>> +{
+>> +	struct i2c_client *alias = ERR_PTR(-EBUSY);
+>> +	int ret;
+>> +	u16 addr;
+>> +
+>> +	i2c_lock_bus(adap, I2C_LOCK_SEGMENT);
+>> +
+>> +	for (addr = 0x08; addr < 0x78; addr++) {
+>> +		ret = i2c_scan_for_client(adap, addr, i2c_unlocked_read_byte_probe);
+>> +		if (ret == -ENODEV) {
+>> +			alias = i2c_new_dummy_device(adap, addr);
+>> +			dev_dbg(&adap->dev, "Found alias: 0x%x\n", addr);
+>> +			break;
+>> +		}
+>> +	}
+> 
+> This looks quite inefficient, especially if the beginning of the range
+> is populated with devices. Furthermore, I think there's a high risk of
+> false negatives, as acquiring a free address and reprogramming the
+> client to make use of it are separate operations.
+
+Right. Applying the alias could raise other errors, thus one would need
+i2c_new_alias_device() to keep the alias locked until programming it has
+either failed or has been successfully programmed.
+
+> Another call to
+> i2c_new_alias_device() could occur in-between. There's also the issue
+> that I2C hasn't been designed for scanning, so some devices may not
+> appreciate this.
+> 
+> What happened to the idea of reporting busy address ranges in the
+> firmware (DT, ACPI, ...) ?
+
+Indeed that's how I remember it as well, and I'm a bit suspicious about
+sending out probe messages that might have side effects (even if the
+false negative issue mentioned by Laurent were solved). You know, I've
+been taught to "expect the worse" :) so I'd like to better understand
+what are the strong reasons in favor of probing, as well as the
+potential side effects.
+
+-- 
+Luca
