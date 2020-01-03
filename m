@@ -2,114 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0493012F90D
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2020 15:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9241112FD93
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2020 21:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727590AbgACOJq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Jan 2020 09:09:46 -0500
-Received: from mail-eopbgr20117.outbound.protection.outlook.com ([40.107.2.117]:49125
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727523AbgACOJq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 3 Jan 2020 09:09:46 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hDVNu0jAvGZtgqvtBMPHyssmUzt8teKYJVp9EogUGixCQrnudS/t+0+pyI7PfngXq5tUtlX9TCKxlbbJbIkrh1EnELJpxZ5YEEL3jzrjcbPoR3Lo1zqCMUZeYJIqk/MpdroiaBtUYWpJ+j6JEOboanttgFNYdkZScNmeeVS2mOYP2N0L6W6swTDfKDJ4oezy3kSKWts/+phMoTXxzSGLkc2Ob+DKtSiemIO30uW/iK/p6yZ4WbFU8LYFnWqaX4BwFZ6R05QkXIHx3BibOepG8eiEdVbcz7QoWhWRrt8TxeSIKYRgtL2m+SknL8xLPdS7V70LMr9DbQpEd2fxQby+jQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cShSEfCVVMryirvGQoXMoi9ICBV4ncbKW0T5GKBLZus=;
- b=dElmaKIiQvEGBUK+VDZRneQK+ccX/L9zZh5NvDWpfmSktdhMOoXLCANWt5LLi8MTls601n5ogvG3qA1LU/18sAR4KfTxjj7CmdUMU6aE9HmQeczsKmKS+gJkkW2vk7/Bii75tOdP94oIKYNaEqEXts4c1CFZVu0nmJC29fEZ5hZmgf7MECIYz5SvXjOUY03+F/lmVEpdTWl/nNexifltHY2nxGNIBk2hICNQKwS9EaVv56FJpeDGZuN9GeHPlA/gQzr0387I8tdEuXqI8No3sMKuklXWQdxM8LL+kiMS8VPD0CQlfAI4PNLz0aIIGlDZp5QMBV0MTSaw5SEiiOosJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cShSEfCVVMryirvGQoXMoi9ICBV4ncbKW0T5GKBLZus=;
- b=Cei77W7yw4M15hwooHm/dgMVLUoc9C7Ux2bJw3BzxkKj7B8frWzgVrjFOWkvWuumWd0mVVraj3L1VxDjyEQVD9uty0A+mo8/PktIs7g+/HCq89jEbbF6HE+O2ftOqIlIButsx+Ste4rNBox8P9nNik4x6Mi547/zqjMCN6SBzRg=
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com (52.134.66.158) by
- DB3PR0202MB3339.eurprd02.prod.outlook.com (52.134.71.32) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2581.11; Fri, 3 Jan 2020 14:09:41 +0000
-Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::cd85:a8a5:da14:db13]) by DB3PR0202MB3434.eurprd02.prod.outlook.com
- ([fe80::cd85:a8a5:da14:db13%7]) with mapi id 15.20.2581.013; Fri, 3 Jan 2020
- 14:09:41 +0000
-Received: from [192.168.13.3] (213.112.138.4) by HE1PR0301CA0009.eurprd03.prod.outlook.com (2603:10a6:3:76::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2602.12 via Frontend Transport; Fri, 3 Jan 2020 14:09:40 +0000
-From:   Peter Rosin <peda@axentia.se>
-To:     Biwen Li <biwen.li@nxp.com>,
-        "leoyang.li@nxp.com" <leoyang.li@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [RESEND v6,3/3] arm64: dts: fsl-ls208xa-rdb: fix an errata
- E-00013
-Thread-Topic: [RESEND v6,3/3] arm64: dts: fsl-ls208xa-rdb: fix an errata
- E-00013
-Thread-Index: AQHVuw9Ujcuz4BtLx0O84aN221u8IqfZCL8A
-Date:   Fri, 3 Jan 2020 14:09:41 +0000
-Message-ID: <d91b3dfa-e0dc-9697-b69b-463ee7a92945@axentia.se>
-References: <20191225103624.48342-1-biwen.li@nxp.com>
- <20191225103624.48342-3-biwen.li@nxp.com>
-In-Reply-To: <20191225103624.48342-3-biwen.li@nxp.com>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
-x-originating-ip: [213.112.138.4]
-x-clientproxiedby: HE1PR0301CA0009.eurprd03.prod.outlook.com
- (2603:10a6:3:76::19) To DB3PR0202MB3434.eurprd02.prod.outlook.com
- (2603:10a6:8:5::30)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peda@axentia.se; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 67fbf095-bcfb-4623-c957-08d790569384
-x-ms-traffictypediagnostic: DB3PR0202MB3339:
-x-microsoft-antispam-prvs: <DB3PR0202MB33398336D02189BCBE551728BC230@DB3PR0202MB3339.eurprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-forefront-prvs: 0271483E06
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(396003)(346002)(376002)(366004)(39830400003)(199004)(189003)(66946007)(81166006)(2906002)(8676002)(4001150100001)(31696002)(31686004)(86362001)(8936002)(36756003)(81156014)(4326008)(66446008)(64756008)(66556008)(66476007)(6486002)(16576012)(316002)(956004)(2616005)(16526019)(186003)(508600001)(53546011)(4744005)(71200400001)(5660300002)(52116002)(110136005)(54906003)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3339;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: axentia.se does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: i53TtIKP7BRTfZoEB6SdimBIu/OYXiZRPG5SE04Aqy64RFZALU8ajFp5jpoQKEYiVkGqb/44Z8L91jTWhJPodarLrqrpR2UVfvcTi+9qMJVLcZ8ZjDeHTvnSfIox4KLvNkgRS4f428WnRAttYfk5k9U+pNtOtYxa9jmSc7AHpH2eFsbBQCPaGI8c7b/HCCYObL7CnuhnsO4nGZKf0lRxRmON12HrQg38uwHf/7/k8l8o8PoZUXN8GgFwQe0OfNrfwgkPuvB5q4pX51SMampluE+OEkJm+TngsF690gRmx1Nz7oFFBlTpJH+MYGOpyeHdwN4m8nNVzr8niUGSqBZfWSst6kwutNyDPX+izIPC2lNERWiDSM6v7Od1PRXTUscihhqfORW1tVjKNLXeEHVoMwwTqzG4EzC7yxYuHRNMrufh9DjF7enHQTBigwZOqu8B
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0182C24504F98C44BE63F353BF72716F@eurprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1728664AbgACUTw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Jan 2020 15:19:52 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:41660 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728701AbgACUTr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Jan 2020 15:19:47 -0500
+Received: by mail-pg1-f194.google.com with SMTP id x8so23872659pgk.8
+        for <linux-i2c@vger.kernel.org>; Fri, 03 Jan 2020 12:19:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=AWCc/ylFmQ91zZEJrbKovcmODhKduqUVkKGxHK8uCtVvWppAnjCzAVhlqtuTB6Zv3H
+         fwGfadWPG5OWx3vtouAanI9rAb4+nCSTS9ougZHH94RmFVRXusGOhSeq6LcZbXUbpYke
+         LecHuReAxOHZIAlNr0puF8IN10taJseJbu/8dZmgE65qy44VHc90CsjCbMPz9YIW56uc
+         KAocddCq9fbTe+4eLEe4ukQAx3KuF/S8Bs/5ss0PU18bAsmodPObJCziaNGvW+fW97nj
+         vqPpR6NvW2UHqccwDYrcuioTdRRCTX8F5vGOe97A6Uj5iUQG4sbm5c76feOsNIPb/J8O
+         nOKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=TdG20m7jrKHF8+KOsVTDqc4dGsVapVmWngV+vAIdkMZvPnjH6W0MB0DSzAAcMKILNC
+         gGxDJQWWrOamqhAbohM0EQkfF5mCCEaYSzDJUQFYldIJATkSvY8/ppZgHLAoLm9Afe8f
+         TOOkVx0S4yVy34ElTEWhQ/BlIR2cD61CpujQ5O2W3sr49zfGkfLpz9+lyXuoiW4wGyLn
+         Uo7ZW1fijDjydAefCkYM3rrjqZJ1i6rgZY9Yf702+O9uFzzNp20k2TyeL85EAySK+/Ez
+         rf47sXErzty/toa066YHox3IlODl3lx41mvnXjbqxSFaXQBm8gv26iPvhQa6dbJZkhA2
+         7iBQ==
+X-Gm-Message-State: APjAAAV2fJxW4vvGwjLo/sap16Nd9npGLLyOgvy+eeHEeRDvqGjmW/ek
+        gavHjZkTzckHunhYnFX9sCzfPq4zt2BpuJ9SXCQRbPz2v5M=
+X-Google-Smtp-Source: APXvYqwTD0MzQRfSqMjBdpNUeZAJzfDvhrEGhXGCrMyvXGb//+N8M9ASxsqTbkQfP5NbaV7n6hKI5gEfY+hOjDS6Fyg=
+X-Received: by 2002:ad4:478b:: with SMTP id z11mr69635758qvy.185.1578082785331;
+ Fri, 03 Jan 2020 12:19:45 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67fbf095-bcfb-4623-c957-08d790569384
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2020 14:09:41.4563
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4VvNziGgr53XnubFZ7BZRx+NvnF+jpN6bgDU7CmU0HEFBYrokHQRHNSoc4G1N2sP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3339
+Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:19:45 -0800 (PST)
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
+        <westernunion.benin982@gmail.com>
+Date:   Fri, 3 Jan 2020 21:19:45 +0100
+Message-ID: <CAP=nHBKxfmbdRg7q4-1jdSUL6+zok9agasMSrXV5CsEJEmZz3A@mail.gmail.com>
+Subject: I promise you must be happy today, God has uplifted you and your
+ family ok
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gMjAxOS0xMi0yNSAxMTozNiwgQml3ZW4gTGkgd3JvdGU6DQo+IFNwZWNpZnkgYSBjaGFubmVs
-IHplcm8gaW4gaWRsZSBzdGF0ZSB0bw0KPiBhdm9pZCBlbnRlcnJpbmcgdHJpLXN0YXRlZCBzdGF0
-ZSBmb3IgUENBOTU0Ny4NCj4gQWJvdXQgRS0wMDAxMzoNCj4gCS0gRGVzY3JpcHRpb246IEkyQzEg
-YW5kIEkyQzMgYnVzZXMNCj4gCSAgYXJlIG1pc3NpbmcgcHVsbC11cC4NCj4gCS0gSW1wYWN0OiBX
-aGVuIHRoZSBQQ0E5NTR4IGRldmljZSBpcyB0cmktc3RhdGVkLCB0aGUgSTJDIGJ1cw0KPiAJICB3
-aWxsIGZsb2F0LiBUaGlzIG1ha2VzIHRoZSBJMkMgYnVzIGFuZCBpdHMgYXNzb2NpYXRlZA0KPiAJ
-ICBkb3duc3RyZWFtIGRldmljZXMgaW5hY2Nlc3NpYmxlLg0KPiAJLSBIYXJkd2FyZSBmaXg6IFBv
-cHVsYXRlIHJlc2lzdG9ycyBSMTg5IGFuZCBSMTkwIGZvciBJMkMxDQo+IAkgIGFuZCByZXNpc3Rv
-cnMgUjIyOCBhbmQgUjIyOSBmb3IgSTJDMy4NCj4gCS0gU29mdHdhcmUgZml4OiBSZW1vdmUgdGhl
-IHRyaS1zdGF0ZSBvcHRpb24gZnJvbSB0aGUgUENBOTU0eA0KPiAJICBkcml2ZXIoUENBOTU0eCBh
-bHdheXMgb24gZW5hYmxlIHN0YXR1cywgc3BlY2lmeSBhDQo+IAkgIGNoYW5uZWwgemVybyBpbiBk
-dHMgdG8gZml4IHRoZSBlcnJhdGEgRS0wMDAxMykuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBCaXdl
-biBMaSA8Yml3ZW4ubGlAbnhwLmNvbT4NCg0KRm9yIHRoaXMgcGF0Y2gsIGdldF9tYWludGFpbmVy
-LnBsIHN1Z2dlc3RzIGEgZmV3IG1vcmUgcmVjaXBpZW50cyB0aGF0DQp5b3UgbmVlZCB0byBzZWVr
-IHJldmlld3MvYWNrcyBmcm9tLg0KDQpDaGVlcnMsDQpQZXRlcg0K
+Dear Friend
+
+i hope all is well with you,if so, glory be to God almighty. I'm very
+happy to inform you, about my success in getting payment funds under
+the cooperation of a new partner from United States of
+America.Presently I am in uk for investment projects with my own share
+of the total sum. I didn't forget your past efforts. IMF finally
+approved your compensation payment funds this morning by prepaid (ATM)
+Debit card of US$12,500.000.00Million Dollars, Since you not received
+this payment yet, I was not certified
+but it is not your fault and not my fault, I hold nothing against
+you.than bank official whom has been detaining the transfer in the
+bank, trying to claim your funds by themselves.
+
+Therefore, in appreciation of your effort I have raised an
+International prepaid (ATM) Debit card of US$12,500.000.00 in your
+favor as compensation to you.
+
+Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
+on His  e-mail Address (mikebenz550@aol.com
+
+ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
+the money is in Prepaid (ATM) Debit card, not cash, so you need to
+send to him,
+your full name
+address  where the prepaid (ATM) Debit card will be delivered to you,
+including your cell phone number. Finally, I left explicit
+instructions with him, on how to send the (ATM CARD) to you.
+
+The Prepaid (ATM) Debit card, will be send to you through my
+Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
+my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
+Below is his contact information:
+
+NAME : MIKE BENZ
+EMAIL ADDRESS: mikebenz550@aol.com
+Text Him, (256) 284-4886
+
+Request for Delivery of the Prepaid (ATM) Debit card  to you today.
+Note, please I have paid for the whole service fees for you, so the
+only money you will send to my Diplomatic Agent Mr. Mike Benz is
+$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
+ok.
+Let me know once you receive this Card at your address.
+Best regards,
+Rev.Dr, George Adadar
