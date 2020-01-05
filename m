@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D8D130A7F
-	for <lists+linux-i2c@lfdr.de>; Sun,  5 Jan 2020 23:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECC5130A87
+	for <lists+linux-i2c@lfdr.de>; Sun,  5 Jan 2020 23:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727441AbgAEWvj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 5 Jan 2020 17:51:39 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:40685 "EHLO
+        id S1727189AbgAEWvt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 5 Jan 2020 17:51:49 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:57735 "EHLO
         hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727186AbgAEWvi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 Jan 2020 17:51:38 -0500
+        by vger.kernel.org with ESMTP id S1727187AbgAEWvj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 Jan 2020 17:51:39 -0500
 Received: from [37.160.42.38] (port=5507 helo=melee.fritz.box)
         by hostingweb31.netsons.net with esmtpa (Exim 4.92)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1ioEkC-00GSqI-8c; Sun, 05 Jan 2020 23:51:36 +0100
+        id 1ioEkD-00GSqI-65; Sun, 05 Jan 2020 23:51:37 +0100
 From:   Luca Ceresoli <luca@lucaceresoli.net>
 To:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
         Wolfram Sang <wsa@the-dreams.de>,
         Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
-Subject: [PATCH 17/26] docs: i2c: i2c-protocol: fix typo
-Date:   Sun,  5 Jan 2020 23:50:03 +0100
-Message-Id: <20200105225012.11701-17-luca@lucaceresoli.net>
+Subject: [PATCH 18/26] docs: i2c: i2c-protocol: fix punctuation
+Date:   Sun,  5 Jan 2020 23:50:04 +0100
+Message-Id: <20200105225012.11701-18-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200105225012.11701-1-luca@lucaceresoli.net>
 References: <20200105224006.10321-1-luca@lucaceresoli.net>
@@ -44,7 +44,7 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The subject is plural, fix the verb.
+Remove misplaced dot before colon.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
@@ -52,18 +52,18 @@ Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Documentation/i2c/smbus-protocol.rst b/Documentation/i2c/smbus-protocol.rst
-index 3c0fb3a2044d..de7285de5e93 100644
+index de7285de5e93..7350e4b2c2fa 100644
 --- a/Documentation/i2c/smbus-protocol.rst
 +++ b/Documentation/i2c/smbus-protocol.rst
-@@ -145,7 +145,7 @@ SMBus Write Word
- Implemented by i2c_smbus_write_word_data()
+@@ -146,7 +146,7 @@ Implemented by i2c_smbus_write_word_data()
  
  This is the opposite of the Read Word operation. 16 bits
--of data is written to a device, to the designated register that is
-+of data are written to a device, to the designated register that is
- specified through the Comm byte.::
+ of data are written to a device, to the designated register that is
+-specified through the Comm byte.::
++specified through the Comm byte::
  
    S Addr Wr [A] Comm [A] DataLow [A] DataHigh [A] P
+ 
 -- 
 2.24.1
 
