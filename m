@@ -2,34 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B2F131273
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2020 14:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6B113129F
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2020 14:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726173AbgAFNBO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Jan 2020 08:01:14 -0500
-Received: from sauhun.de ([88.99.104.3]:38608 "EHLO pokefinder.org"
+        id S1726515AbgAFNNX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Jan 2020 08:13:23 -0500
+Received: from sauhun.de ([88.99.104.3]:38672 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726080AbgAFNBO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 6 Jan 2020 08:01:14 -0500
+        id S1726173AbgAFNNX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 6 Jan 2020 08:13:23 -0500
 Received: from localhost (p54B338AC.dip0.t-ipconnect.de [84.179.56.172])
-        by pokefinder.org (Postfix) with ESMTPSA id BB7592C0686;
-        Mon,  6 Jan 2020 14:01:12 +0100 (CET)
-Date:   Mon, 6 Jan 2020 14:01:09 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id D41522C0686;
+        Mon,  6 Jan 2020 14:13:20 +0100 (CET)
+Date:   Mon, 6 Jan 2020 14:13:19 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Jean Delvare <jdelvare@suse.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     Lei YU <mine260309@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] docs: i2c: Fix return value of i2c_smbus_xxx functions
-Message-ID: <20200106130056.GA1290@ninjato>
-References: <1574162632-65848-1-git-send-email-mine260309@gmail.com>
- <20191125144857.GA2412@kunai>
- <20191126115243.673fc164@endymion>
+To:     Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: fix bus recovery stop mode timing
+Message-ID: <20200106131319.GB1290@ninjato>
+References: <E1igWvB-0001ib-PV@rmk-PC.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6sX45UoQRIJXqkqR"
+        protocol="application/pgp-signature"; boundary="yLVHuoLXiP9kZBkt"
 Content-Disposition: inline
-In-Reply-To: <20191126115243.673fc164@endymion>
+In-Reply-To: <E1igWvB-0001ib-PV@rmk-PC.armlinux.org.uk>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -37,65 +33,70 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---6sX45UoQRIJXqkqR
+--yLVHuoLXiP9kZBkt
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
+Russell,
 
-> > > -All these transactions return -1 on failure; you can read errno to s=
-ee
-> > > -what happened. The 'write' transactions return 0 on success; the
-> > > -'read' transactions return the read value, except for read_block, wh=
-ich
-> > > -returns the number of values read. The block buffers need not be lon=
-ger
-> > > -than 32 bytes.
-> > > +All these transactions return a negative error number on failure.
-> > > +The 'write' transactions return 0 on success; the 'read' transactions
-> > > +return the read value, except for read_block, which returns the numb=
-er
-> > > +of values read. The block buffers need not be longer than 32 bytes. =
-=20
-> >=20
-> > I think the correct solution is to remove this paragraph entirely.
-> > Because the returned value does not depend on the kernel but on the
-> > libi2c version. Check this commit from 2012 in the i2c-tools repo:
-> >=20
-> > 330bba2 ("libi2c: Properly propagate real error codes on read errors")
-> >=20
-> > So, I think we should document it there. Jean, what do you think?
+On Sun, Dec 15, 2019 at 04:39:05PM +0000, Russell King wrote:
+> The I2C specification states that tsu:sto for standard mode timing must
+> be at minimum 4us. Pictographically, this is:
 >=20
-> I would go further and move half of the document to i2c-tools. i2c-dev
-> itself only provides the ioctls. Everything on top of that is in libi2c
-> now, so the kernel documentation should point to libi2c and the
-> detailed documentation should come with libi2c.
+> SCL: ____/~~~~~~~~~
+> SDA: _________/~~~~
+>        ->|    |<- 4us minimum
 >=20
-> So I guess I should review the whole document now to see what needs to
-> be updated, what should stay, and what should move.
+> We are currently waiting 2.5us between asserting SCL and SDA, which is
+> in violation of the standard. Adjust the timings to ensure that we meet
+> what is stipulated as the minimum timings to ensure that all devices
+> correctly interpret the STOP bus transition.
+>=20
+> This is more important than trying to generate a square wave with even
+> duty cycle.
 
-Maybe you can collaborate with Luca on this who just revamped a lot of
-the docs? Putting him on CC and marking this patch as 'Deferred'.
+Ack.
+
+> Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+
+> -		/* Creating STOP again, see above */
+
+Can we keep this comment, though? I think it still has value together
+with the other comment above it.
+
+> -		ndelay(RECOVERY_NDELAY / 2);
+> +		if (scl)  {
+> +			/* Honour minimum tsu:sto */
+> +			ndelay(RECOVERY_NDELAY);
+> +		} else {
+> +			/* Honour minimum tf and thd:dat */
+> +			ndelay(RECOVERY_NDELAY / 2);
+> +		}
+
+Thanks,
+
+   Wolfram
 
 
---6sX45UoQRIJXqkqR
+--yLVHuoLXiP9kZBkt
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4TL5UACgkQFA3kzBSg
-KbaiNg//cY5iFBrA2+43SMBoEDIkgtFwG+ro0IKYEDqL9pYlSZVkhaFhDpK0J7U7
-tmsZzHlfrSAOr7Biq/QuMXRHvDp6kDTKCCIlUdXXT+GhquYIPDyCkwwt4Oa8nT1O
-666gN0OCI4ZahsEqNm22RD0E5sDLTZlAUz4DNQY94g95hG36sAeJRj2M+tC9pzaa
-4rZp06P+IJ8kqNEFZX13e3z3xsRwAG4wrBWzYrlNWsHkyCblz0svqTHxoAiSN+lX
-Byv569JFAOkPqEgNSPTeI0j4I7A3o1BIM/kAnqgfkfFHGEKW0nPScZtqQMqe+G4w
-zJ9tF3oNfBkpBX+4sfDrpIsPEmzEL2MUHDIQhyfwagf1DWVhcKF4OvM5kXDRf6By
-NBmTkf8eZIwoXTYOqgfBASmsx3cInCcam3aqczp1OxMQdixVqV1Xftdo6p7YCZJV
-v/+cCc1rZu/SODaWz6uh/wWBKceDmL2RJwft2oe8meYAJrtTRS63XHlJALrTF1vJ
-jHrKTjtReKUH36fNxNPn4w/0DMcySWlayk3G6R4vAs1eZte27eeyo0bl9z8uEAHi
-nutigACt9hQpP15kv4gz9ikp8c0sPnlBQ5lLzTvNMBMaJ806kuTQ0dp0UJlR/OR4
-KA5hXOBuvhyNXgoDlW3sehBEKEpOIKoabGBG5V2Meg5CzPFoyeA=
-=Wc1M
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4TMm8ACgkQFA3kzBSg
+KbYsohAAkYc3F+hEq+6jb6N0PikbKCHvfjTqS6p5LBWVuQklvZ9MJKU/KH6MYnSe
+Zn7QwfPddsE1WIBZSBxTMkVdi8K6FA1qp5DhNCGJA6ju3YdzS2Ml/b55bZAwEooh
+Uc4MM9sia8vd1M9SmJdTz1Al3cvFUk28nySsJ+7FutjDXszrJl+48QROM2Re/lpW
+MvjGdPWqmGEKF9zRarCsCyi/8CY5HweqVPifUOsdhxS9IeS9CwWxwJ7ijS+vaH07
+jHbSPiIFnENO8Y8t+FWEIXGXSHiPB0cb0ZQ+nHTOAqLjT8bUd0p2Jq/H+B+JNs0Z
+2pQe9Wt+wzDxikuHOd9eoHUqn/t6duM2dY4HOXRNSLRjd/m2frLa/FSUtvlVL+ld
+AQJ8zqYxvyrcD5MIuOvC7871Ws8TLFrmxSoNo7+5Aa33DrgQtIONJAQacGRog9pB
+GbgOUArmVsLPOEKr71/bXqTqQ88DdpEVF1KGK3On+dw67Bu6tvhYpiwxwagl8OsW
+yn/cNPjZuHTFftxMyqDgggJB7sB1scc7LvEvZEuLGW5G8wiLhqaMAWHhHojvteSw
+3POawMOnNADSuIzqCyPy1+ivyaqq2EcwzBnoO/2Y+mY1ZRs1PLP6NQuw5XdWSHL4
+Cw76xFYc8tU3giGZlfntTBf0RXHhsEObUu5NWI5p6l8eLVGqgtw=
+=xWNC
 -----END PGP SIGNATURE-----
 
---6sX45UoQRIJXqkqR--
+--yLVHuoLXiP9kZBkt--
