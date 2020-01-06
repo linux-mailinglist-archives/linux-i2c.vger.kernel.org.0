@@ -2,30 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3280131312
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2020 14:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC741313B3
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2020 15:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726340AbgAFNj3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Jan 2020 08:39:29 -0500
-Received: from sauhun.de ([88.99.104.3]:38836 "EHLO pokefinder.org"
+        id S1726307AbgAFOfS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Jan 2020 09:35:18 -0500
+Received: from sauhun.de ([88.99.104.3]:39296 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726292AbgAFNj3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 6 Jan 2020 08:39:29 -0500
+        id S1726303AbgAFOfS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 6 Jan 2020 09:35:18 -0500
 Received: from localhost (p54B338AC.dip0.t-ipconnect.de [84.179.56.172])
-        by pokefinder.org (Postfix) with ESMTPSA id 7CB782C0686;
-        Mon,  6 Jan 2020 14:39:27 +0100 (CET)
-Date:   Mon, 6 Jan 2020 14:39:27 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id C0F512C0686;
+        Mon,  6 Jan 2020 15:35:15 +0100 (CET)
+Date:   Mon, 6 Jan 2020 15:35:15 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 00/12] i2c-pxa cleanups
-Message-ID: <20200106133927.GC1290@ninjato>
-References: <20191215160444.GB25745@shell.armlinux.org.uk>
+To:     Eugen.Hristev@microchip.com
+Cc:     robh@kernel.org, Ludovic.Desroches@microchip.com, peda@axentia.se,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Codrin.Ciubotariu@microchip.com
+Subject: Re: [PATCH v3 2/4] i2c: at91: fix clk_offset for sam9x60
+Message-ID: <20200106143515.GD1290@ninjato>
+References: <1575886763-19089-1-git-send-email-eugen.hristev@microchip.com>
+ <1575886763-19089-2-git-send-email-eugen.hristev@microchip.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SO98HVl1bnMOfKZd"
+        protocol="application/pgp-signature"; boundary="BZaMRJmqxGScZ8Mx"
 Content-Disposition: inline
-In-Reply-To: <20191215160444.GB25745@shell.armlinux.org.uk>
+In-Reply-To: <1575886763-19089-2-git-send-email-eugen.hristev@microchip.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -33,52 +37,45 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---SO98HVl1bnMOfKZd
+--BZaMRJmqxGScZ8Mx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Russell,
+On Mon, Dec 09, 2019 at 10:20:02AM +0000, Eugen.Hristev@microchip.com wrote:
+> From: Eugen Hristev <eugen.hristev@microchip.com>
+>=20
+> In SAM9X60 datasheet, FLEX_TWI_CWGR register description mentions clock
+> offset of 3 cycles (compared to 4 in eg. SAMA5D3).
+> This is the same offset as in SAMA5D2.
+>=20
+> Fixes: b00277923743 ("i2c: at91: add new platform support for sam9x60")
+> Suggested-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+> Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-> All in all, these changes should have (and have had so far) no
-> observable impact on the driver; therefore, I do not see any reason
-> to backport any of these changes to stable trees.
-
-Thanks for the detailed explanations. The series looks good to me. There
-are some checkpatch reports about using "BIT()" and multiline comment
-style, but I am not pedantic about these. Especially since the overall
-readabililty of the driver definately gets improved.
-
-Where Murphy's Law kicks in, though, is that after 2 years of silence,
-we had a change in the pxa driver applied in Nov 2019. So, this series
-doesn't apply on my for-next. Checking against v5.4, the merge conflicts
-do not look super hard, but also not trivial, so I'd like to ask you if
-you can rebase the series to v5.5-rc1 or later? I'd rather see this done
-by someone who has more indepth experience with the driver and HW to
-test.
-
-Thanks,
-
-   Wolfram
+Applied to for-current, thanks!
 
 
---SO98HVl1bnMOfKZd
+--BZaMRJmqxGScZ8Mx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4TOIsACgkQFA3kzBSg
-KbZWDw/+IzmUQSAZaWxkrT2+VyYvcTsjgBTma5q6Azn+BcvhV9skA1ygF2uP85mc
-XIPag2SIL5HIeqPbt3RmqkMV3g6CsB1RUTg3iXCfqb1modDAcTm8BTyE9wJLYDQI
-qaQfSMJ7/nTx/C7IRN8rLvm+SvZjkHElzTP8fNl/gKMii+WN9Z0kBZ99uoCyKDP7
-LZ0M4n3HDhE21yAaBjQNNpdA/hwjblel72K5Q8ztuL+paj8KuqT59ifCBZrvOU69
-MilgaoQq0d/nsgHcOOzbEoLRwAAT5gQweOydLE7mV9MkZvNllBv9inBmcE42EvPh
-FOQSq7WdZMKjz7QZMOy1EhTmDDU//RTykw/A7J9XpQdPHl3d5psyLozYaUokF+Jr
-aUW7YhCkfkzg9QgzRYjnNgzXlNjhog7Ud3P0nH/cfW9N8z/K3IClA/GUVg+5kSSW
-JQBB/mFQshhWps9dHuzFEgxsK5ybw4GoReEpj7c+6bQp5/7jYC2r74XnD1C3CFGR
-QAui8OOWrhHkHcbNG1LOfVgv2vPO2/n8wbhRBjnJNOT7Kt1f9bJwoE8Fe290t/Xl
-/JoWjS9sWIjfLWEboHAbMbrQlTLmeJLEpG+Gz1M6/WW+KIoWAIEXTXIsQXtELeAP
-yfZ2nCx6pSBP2h2yZngsN3LiwWtiQXgYxwYOdWLy/6KnEZwRvt4=
-=qvz3
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4TRZ8ACgkQFA3kzBSg
+KbZD2g//eV3AhB8wlN/36GjEs1MJvsA2qKyPEJ3/JSCxkTKVzSmCKlaSI+1m+Tru
+gN/sS4PgGkX3U6K77jkaSNALzKysK0cxjwcRThveO5sm6DxSsF3uckT7ZNoFDqlG
++etqwW0B82L8vwL4GoylkTt5VkeRm0QVwR+agvBiMYcU4FskcpUWf/jHtJrPd3eq
+YasS3WIr0IDNxl62S3MNDUCYo9MnF/6HX8fS9oSnO0FwkeUiB+MthODPDTxt3GtZ
+J+Mpmg4bvgJqcuMflVLfB28R0pijHnaIC6rUH2kHftCx7sq5qZmsU6LApkrFl2kL
+b8YTlEvRlfDSB+f288W1eDsSAJmIQm2/EIDfPthoVUyHGkYos6yFDh9wwMgjS9Xp
+6iiDAHiek4Rr8JKjVIo92lnFgs7X6Xmcjcw2IO0TsqltjgTsKimyDxscz+Bhn4MZ
+Yv3uL6KxisenKoergopCx9U4LWIBFJEvcSJT+jBYf6p7/kwdRuQfGf1RsJU42d22
+7mrp6Pc/zvJQ9xRGT8DtBWhdKFTc6rQ9rojMtBwsvbtUDzxgKCYJM0q68n0V8ito
+p9HmfCvqoSU1KdLnaQdYPsmrIJ4siL8GR6ReXqffqspyRnnd4+/gTVt9235IbUpp
+EUFcYCaguYrtSyWE8Y0Vc8DMmm38gDA6LyvGwIlsP2o864xlPjA=
+=iI+X
 -----END PGP SIGNATURE-----
 
---SO98HVl1bnMOfKZd--
+--BZaMRJmqxGScZ8Mx--
