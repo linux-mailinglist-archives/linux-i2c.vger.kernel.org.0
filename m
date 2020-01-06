@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E7F130B32
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2020 02:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6294130B2B
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2020 02:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727340AbgAFBFE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 5 Jan 2020 20:05:04 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:36922 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727319AbgAFBEp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 Jan 2020 20:04:45 -0500
-Received: by mail-lj1-f194.google.com with SMTP id o13so37840110ljg.4;
-        Sun, 05 Jan 2020 17:04:43 -0800 (PST)
+        id S1727307AbgAFBE7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 5 Jan 2020 20:04:59 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:36427 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727340AbgAFBEq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 Jan 2020 20:04:46 -0500
+Received: by mail-lj1-f196.google.com with SMTP id r19so49270642ljg.3;
+        Sun, 05 Jan 2020 17:04:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ANgiDb8lZrIeT4lzak+4/Bj4JKSfzatLnqU517vszuw=;
-        b=bCZh7sn1VUvH4O8G0t9GV9IBXWVCKvjhvK3J7hNAKqBVyma4FAawu2PyQL+11wh5Ig
-         KJau3GSNxmHNdZzk6l3CwH6KMbrXvr8qKXXouURwpID6QypBTlZLUHBIpkxm7JdH/JVj
-         uajomTXxkHyjOCW7cqzjVmr388s1TkJKWh0Yo/Wym9W90MHs0s06sf+aAYEXvX7NNaO4
-         kVX8Lb2ngT9SqO+K8dQxr201hjhWVajhWi2h3lKD89sxAoBFYCCgEt4U4fLFV84rVSAi
-         VyINIGrLZGi/b7FfWHs/MAigdBuy5l366RHUtHg+bVbqpXtLgm9z6/AgquNVw38FpUYz
-         8WvA==
+        bh=UQFgmvNzzMNkQGJ6E3WQRfYtR4IleSz/24HtNaKqzaA=;
+        b=qaVEUiIi+bUfSZo5f5O17+9PBG1k9KPpT3pyWQPJ+uVPGornWnWDU+jhE6QRisZZZ8
+         Tj10Ajeo5Ja0branooSpUBnwYO7eusz0C+JLvkeMUgYbs2hj3Kpu5BLDpAJ9YFcfWTw7
+         zSsO7oLRDy5gy8BYhWg1I1Ur883iOWYh4EfA3UTPQUxn2LW0/tWyb8yWOVEgFfFgeMga
+         cHx+Na4OQV0afyxvVp8fxTcmHgdMMMsDRCSqAOjmVxwjVFv86q3ybnPOvdbznbxHvKjX
+         ginCjPZ6R8aMpkb78P7OLKhJZa10aSsoWttTcq7iGss/dSzZt4WzH9h29C/BXzRdg5yr
+         DD+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ANgiDb8lZrIeT4lzak+4/Bj4JKSfzatLnqU517vszuw=;
-        b=IAj41B4+MfrEEzo9KPARy8NdKR9OUGpjGnjHGIX28aNXM9DKS4rm8vbnltYGn7dhhF
-         eWME7UgeDOieLoiaECZPZG0rL2ouEDG6CPq9w5knF+7lvCwbl6kwrYkfOl+zCooP6rVg
-         IywqqUchIHKmsAS5wgr9XS+4CIPnF55pC1iRv8sIvElkD3oxDqNxblJnIg2FKHhF1JnP
-         5SB7f3E8xauYY9T8oTcU+lNHfXl8y2T3V8CmzHTrwtoUbEDEV2GhxHuuuRK1UDMc2Esd
-         TBK3rA8DosK2viXzakjS7WLgwiW8cEQCcfOQawWZpayZbc/O0rpuC9V+UCF7b9O28rv5
-         lXyw==
-X-Gm-Message-State: APjAAAVwmeo09qdzRg496NHWNnrJu+y2cPiqJI7SNufdoq77ASap8UEy
-        dXbBDIhlvNj4jLBVU15t3zg=
-X-Google-Smtp-Source: APXvYqyvt0gDop+YZPMkwrWE6qLA4t5qEf9AbN3ZjV4IOv2YAihOdvy//l0QPSSgh3utm9HHhNZjkg==
-X-Received: by 2002:a2e:858b:: with SMTP id b11mr53286291lji.135.1578272682891;
-        Sun, 05 Jan 2020 17:04:42 -0800 (PST)
+        bh=UQFgmvNzzMNkQGJ6E3WQRfYtR4IleSz/24HtNaKqzaA=;
+        b=gcVb45yyFd3DCDQB1YFyyQe+81H39D9xiH+IuatSt8FEQzeDGLxgHDAeGUjvm0K1mE
+         K5BpL5av6JG7KjewC8zo3h8uHUcbtW2EHs/aCM2jizNQNnf+UNDXEg0NChXBldfPyLbc
+         MaMSU5r0+eQVdMOvlgVByfOQK0uI/sDeJKRTXrGAV9E15ksDhijUo2GnZVzicsZxQ0qw
+         MfYcdoCQOX5hOhvHnlZW8suhTJdx/Jk/WziPT4x+BIjr2ak26wS/lj3y/mDkp2Etdrif
+         J7a/nPJ8k741o63hf9phrhaIqoZuXGaJIvp4amh95Axo24FsysWz3+Kr1lkBswFR9lJD
+         a+JQ==
+X-Gm-Message-State: APjAAAVoWhzR9t62TFK/iq9t5Nfw0WuKtc+3DFb8dCZw11sHiYN6I/Qf
+        q80QtSz4vVRxTzzxD5hrkrg=
+X-Google-Smtp-Source: APXvYqyp3TAJLD/r+ZHYJre/8ERqD2FFylo4FcuxqdjDyBwU/wM4mR9zjzbovdLTpi/seEyO+/+VwQ==
+X-Received: by 2002:a2e:b177:: with SMTP id a23mr54620658ljm.202.1578272683782;
+        Sun, 05 Jan 2020 17:04:43 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
         by smtp.gmail.com with ESMTPSA id a19sm28245910ljb.103.2020.01.05.17.04.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jan 2020 17:04:42 -0800 (PST)
+        Sun, 05 Jan 2020 17:04:43 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -52,9 +52,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Wolfram Sang <wsa@the-dreams.de>
 Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 8/9] i2c: tegra: Always terminate DMA transfer
-Date:   Mon,  6 Jan 2020 04:04:22 +0300
-Message-Id: <20200106010423.5890-9-digetx@gmail.com>
+Subject: [PATCH v3 9/9] i2c: tegra: Check DMA completion status in addition to left time
+Date:   Mon,  6 Jan 2020 04:04:23 +0300
+Message-Id: <20200106010423.5890-10-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20200106010423.5890-1-digetx@gmail.com>
 References: <20200106010423.5890-1-digetx@gmail.com>
@@ -65,47 +65,32 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-It is possible that I2C could error out in the middle of DMA transfer and
-in this case DMA channel needs to be reset, otherwise a follow up transfer
-will fail because DMA channel stays blocked.
+It is more robust to check completion status in addition to the left time
+in a case of DMA transfer because transfer's completion happens in two
+phases [one is ISR, other is tasklet] and thus it is possible that DMA is
+completed while I2C completion awaiting times out because of the deferred
+notification done by the DMA driver. The DMA completion status becomes
+100% actual after DMA synchronization. This fixes spurious DMA timeouts
+when system is under load.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 1a390e1bff72..3c7c86d4b0e4 100644
+index 3c7c86d4b0e4..cbc2ad49043e 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1220,11 +1220,12 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 		time_left = tegra_i2c_wait_completion_timeout(
- 				i2c_dev, &i2c_dev->dma_complete, xfer_time);
+@@ -1224,7 +1224,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 					 i2c_dev->rx_dma_chan :
+ 					 i2c_dev->tx_dma_chan);
  
-+		dmaengine_terminate_sync(i2c_dev->msg_read ?
-+					 i2c_dev->rx_dma_chan :
-+					 i2c_dev->tx_dma_chan);
-+
- 		if (time_left == 0) {
+-		if (time_left == 0) {
++		if (!time_left && !completion_done(&i2c_dev->dma_complete)) {
  			dev_err(i2c_dev->dev, "DMA transfer timeout\n");
--			dmaengine_terminate_sync(i2c_dev->msg_read ?
--						 i2c_dev->rx_dma_chan :
--						 i2c_dev->tx_dma_chan);
  			tegra_i2c_init(i2c_dev, true);
  			return -ETIMEDOUT;
- 		}
-@@ -1237,11 +1238,6 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf,
- 			       msg->len);
- 		}
--
--		if (i2c_dev->msg_err != I2C_ERR_NONE)
--			dmaengine_synchronize(i2c_dev->msg_read ?
--					      i2c_dev->rx_dma_chan :
--					      i2c_dev->tx_dma_chan);
- 	}
- 
- 	time_left = tegra_i2c_wait_completion_timeout(
 -- 
 2.24.0
 
