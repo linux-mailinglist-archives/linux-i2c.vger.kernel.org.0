@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2B1130B31
+	by mail.lfdr.de (Postfix) with ESMTP id 35E7F130B32
 	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2020 02:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727336AbgAFBEo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 5 Jan 2020 20:04:44 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:40654 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727307AbgAFBEo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 Jan 2020 20:04:44 -0500
-Received: by mail-lj1-f195.google.com with SMTP id u1so49239679ljk.7;
-        Sun, 05 Jan 2020 17:04:42 -0800 (PST)
+        id S1727340AbgAFBFE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 5 Jan 2020 20:05:04 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:36922 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727319AbgAFBEp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 Jan 2020 20:04:45 -0500
+Received: by mail-lj1-f194.google.com with SMTP id o13so37840110ljg.4;
+        Sun, 05 Jan 2020 17:04:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AmQ89GILhlx/U5P8wU6P6IdbZMbjFb3kbbiTdTM2PN8=;
-        b=b9SFcRGUcwEA7bpeM1e9rApZKfIA/IjrZ1BS1JitW1dH4TSjYjDhNpfcKkLEhVnKa9
-         XcV08CvSrQIBwybwMUpRtaFsRedHXoxagtSjasGrhN8Xqvurc20N7LhlyRUtxA/i0dXw
-         UDzJJVMOfZq4IqFh7EgrrSoGwShfwkEbZMT6+ybqlC8TcThG8r9XZx7+K3vV32IBztum
-         vrpEDbfgHl0ZPDmFdoUnL5sYNV0xCdhyYl0N38k+mJzDbASF/kiX2cYmAs/zfnFjPLjB
-         w5wPMLThnoMASFvclTEHnPFprIDyZgLexyN/2csG6l7g5XzvwiCTxJrFgdv31NANTvBz
-         RUDQ==
+        bh=ANgiDb8lZrIeT4lzak+4/Bj4JKSfzatLnqU517vszuw=;
+        b=bCZh7sn1VUvH4O8G0t9GV9IBXWVCKvjhvK3J7hNAKqBVyma4FAawu2PyQL+11wh5Ig
+         KJau3GSNxmHNdZzk6l3CwH6KMbrXvr8qKXXouURwpID6QypBTlZLUHBIpkxm7JdH/JVj
+         uajomTXxkHyjOCW7cqzjVmr388s1TkJKWh0Yo/Wym9W90MHs0s06sf+aAYEXvX7NNaO4
+         kVX8Lb2ngT9SqO+K8dQxr201hjhWVajhWi2h3lKD89sxAoBFYCCgEt4U4fLFV84rVSAi
+         VyINIGrLZGi/b7FfWHs/MAigdBuy5l366RHUtHg+bVbqpXtLgm9z6/AgquNVw38FpUYz
+         8WvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AmQ89GILhlx/U5P8wU6P6IdbZMbjFb3kbbiTdTM2PN8=;
-        b=qVt3JZc0M0PdNG466H/xcwQRWUsUWZfEkx7DVfEQLJcxnnNIlrhXLSwXLzbl3MT2hE
-         ueNWmxC5aVjvxRYltaZVTtznO00KvDxRBFGrDy3926BQpHyFBMZ8LMWVMGD2Vna358/e
-         dOIseHpWrKGnB1R1jVe3CmM7c3Di75nozSNWJ65GeAecNpHuPs43j27VwmxqFsIqu7SP
-         w3VE7iymZa/qx/8ZbvwGE4qk0oFfO55pUpJVwpMNy8Gk7gStbl6uJX9kdWMig68GVJws
-         6jrQKnUAfItWjFq8qh7OjBjD1kyYkawpbUII1JBbyNxIyHYnwLAXQNacnsTQA4Bo3TUQ
-         YNAA==
-X-Gm-Message-State: APjAAAVtf3IK8UWD3eVuNtjbDWLKGs5GG6fTHDSRAMawiwtf5MreJ2R3
-        3vEh/N9/mFjvpYkFIoJwSVM=
-X-Google-Smtp-Source: APXvYqzFhYK6TKgdScDuTqQQPBTj4Hr5hSZQFj76V4+2+JTJtYVfU6Z8YuBz+vd9KNsuSCP0Rj4dPg==
-X-Received: by 2002:a2e:7009:: with SMTP id l9mr59107035ljc.96.1578272682061;
+        bh=ANgiDb8lZrIeT4lzak+4/Bj4JKSfzatLnqU517vszuw=;
+        b=IAj41B4+MfrEEzo9KPARy8NdKR9OUGpjGnjHGIX28aNXM9DKS4rm8vbnltYGn7dhhF
+         eWME7UgeDOieLoiaECZPZG0rL2ouEDG6CPq9w5knF+7lvCwbl6kwrYkfOl+zCooP6rVg
+         IywqqUchIHKmsAS5wgr9XS+4CIPnF55pC1iRv8sIvElkD3oxDqNxblJnIg2FKHhF1JnP
+         5SB7f3E8xauYY9T8oTcU+lNHfXl8y2T3V8CmzHTrwtoUbEDEV2GhxHuuuRK1UDMc2Esd
+         TBK3rA8DosK2viXzakjS7WLgwiW8cEQCcfOQawWZpayZbc/O0rpuC9V+UCF7b9O28rv5
+         lXyw==
+X-Gm-Message-State: APjAAAVwmeo09qdzRg496NHWNnrJu+y2cPiqJI7SNufdoq77ASap8UEy
+        dXbBDIhlvNj4jLBVU15t3zg=
+X-Google-Smtp-Source: APXvYqyvt0gDop+YZPMkwrWE6qLA4t5qEf9AbN3ZjV4IOv2YAihOdvy//l0QPSSgh3utm9HHhNZjkg==
+X-Received: by 2002:a2e:858b:: with SMTP id b11mr53286291lji.135.1578272682891;
         Sun, 05 Jan 2020 17:04:42 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id a19sm28245910ljb.103.2020.01.05.17.04.41
+        by smtp.gmail.com with ESMTPSA id a19sm28245910ljb.103.2020.01.05.17.04.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jan 2020 17:04:41 -0800 (PST)
+        Sun, 05 Jan 2020 17:04:42 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -52,9 +52,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Wolfram Sang <wsa@the-dreams.de>
 Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 7/9] clk: tegra: Fix double-free in tegra_clk_init()
-Date:   Mon,  6 Jan 2020 04:04:21 +0300
-Message-Id: <20200106010423.5890-8-digetx@gmail.com>
+Subject: [PATCH v3 8/9] i2c: tegra: Always terminate DMA transfer
+Date:   Mon,  6 Jan 2020 04:04:22 +0300
+Message-Id: <20200106010423.5890-9-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20200106010423.5890-1-digetx@gmail.com>
 References: <20200106010423.5890-1-digetx@gmail.com>
@@ -65,31 +65,47 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-It's unlikely to happen in practice ever, but makes static checkers happy.
+It is possible that I2C could error out in the middle of DMA transfer and
+in this case DMA channel needs to be reset, otherwise a follow up transfer
+will fail because DMA channel stays blocked.
 
-Fixes: 535f296d47de ("clk: tegra: Add suspend and resume support on Tegra210")
-Reported-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/clk/tegra/clk.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-tegra.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk.c b/drivers/clk/tegra/clk.c
-index e6bd6d1ea012..f6cdce441cf7 100644
---- a/drivers/clk/tegra/clk.c
-+++ b/drivers/clk/tegra/clk.c
-@@ -231,8 +231,10 @@ struct clk ** __init tegra_clk_init(void __iomem *regs, int num, int banks)
- 	periph_banks = banks;
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 1a390e1bff72..3c7c86d4b0e4 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -1220,11 +1220,12 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 		time_left = tegra_i2c_wait_completion_timeout(
+ 				i2c_dev, &i2c_dev->dma_complete, xfer_time);
  
- 	clks = kcalloc(num, sizeof(struct clk *), GFP_KERNEL);
--	if (!clks)
-+	if (!clks) {
- 		kfree(periph_clk_enb_refcnt);
-+		return NULL;
-+	}
++		dmaengine_terminate_sync(i2c_dev->msg_read ?
++					 i2c_dev->rx_dma_chan :
++					 i2c_dev->tx_dma_chan);
++
+ 		if (time_left == 0) {
+ 			dev_err(i2c_dev->dev, "DMA transfer timeout\n");
+-			dmaengine_terminate_sync(i2c_dev->msg_read ?
+-						 i2c_dev->rx_dma_chan :
+-						 i2c_dev->tx_dma_chan);
+ 			tegra_i2c_init(i2c_dev, true);
+ 			return -ETIMEDOUT;
+ 		}
+@@ -1237,11 +1238,6 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf,
+ 			       msg->len);
+ 		}
+-
+-		if (i2c_dev->msg_err != I2C_ERR_NONE)
+-			dmaengine_synchronize(i2c_dev->msg_read ?
+-					      i2c_dev->rx_dma_chan :
+-					      i2c_dev->tx_dma_chan);
+ 	}
  
- 	clk_num = num;
- 
+ 	time_left = tegra_i2c_wait_completion_timeout(
 -- 
 2.24.0
 
