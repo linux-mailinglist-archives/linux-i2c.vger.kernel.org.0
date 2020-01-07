@@ -2,87 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B05881323BD
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2020 11:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F741323C1
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2020 11:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgAGKgS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Jan 2020 05:36:18 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:35862 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727177AbgAGKgR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jan 2020 05:36:17 -0500
-Received: by mail-lf1-f66.google.com with SMTP id n12so38513951lfe.3
-        for <linux-i2c@vger.kernel.org>; Tue, 07 Jan 2020 02:36:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=sG/kXuqLeJvqG1lAcs804RB5cd4ar5VVtWwgAsRdZ/s=;
-        b=GtBPym2vWmXC28LTMAxnKxk7zjFcA0gTofCfYp/e1hRMRUzc/l8OWm9FZJZ6TDraA2
-         q4bBSbz5y+eUEcdjmWNedK3ESN4gfVo8PNP7tyo830m/EXIkvN1LvV6g5cu8IzmZufSV
-         z0Nagz0pJgHNuua3MtsiJsbWnaFNeNuD9wevv9jvuPn68bVazL3RAwXefpB3OPj5CrXh
-         4/5bEiBbEQ0fKbcZ5BrnqRAHjAqdP0ALSVrbLbL7Mpum3/cQG9wIzWYkzMCXi3qgMAO3
-         362Lw4Cj5hzHVXE85YnlCuF5u8wufzrOhJY+WEL03UrbpyzNNgJ3CKci3Yr256HLyHmU
-         XaAg==
+        id S1727790AbgAGKgj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Jan 2020 05:36:39 -0500
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:37900 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727559AbgAGKgj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jan 2020 05:36:39 -0500
+Received: by mail-qt1-f195.google.com with SMTP id n15so44926875qtp.5;
+        Tue, 07 Jan 2020 02:36:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=sG/kXuqLeJvqG1lAcs804RB5cd4ar5VVtWwgAsRdZ/s=;
-        b=n0sdTU0xpS+s4SRQbPE8Oh1xDeeQAuqkS5jY+O3p/cj0UArmijEwpZXv2uzzU+Khq9
-         4P6akhgPKNO145z2UzUYN2R9pONFUrRtrhclnQcdh9PuRro/c/A+fx20SegYA5EfO486
-         DeKO7dvoLTXk1UBlUC8A6zd76+zDZAk2D0MoWe0vVLVXu8FRMcZSFUQkJjfWMWLGmaye
-         RifhABfFECFcaSmu4cFTaW0T2wlKHr+MxAqZHqqkI0W6PQAzlP2TshHODFWaT8y9Rxac
-         Nq51HTNfzaugfZRUeUWhoiP/OVg4UYamJ0bWiGLvYv6Yi6SfEGlzetsgX1SKbhlraJht
-         06Ng==
-X-Gm-Message-State: APjAAAXkp6wHUqPJQoo0rSNo15xGcZ7eMMkJ7xyvuwVpdHOQHQjsbpah
-        3Te5fhlR/PPEH6JPeQWyuZ2mWdqSkmY0BZ4dbTQKoA==
-X-Google-Smtp-Source: APXvYqwtSih7jQpztMo/SWJRjyemZlwG1+gqydx7vYHxxHiA9/nJ8znZ/8sEt3hdZ1WVHXFNFrrCHonuUSWxZhzsjpg=
-X-Received: by 2002:a19:8a41:: with SMTP id m62mr58979605lfd.5.1578393374908;
- Tue, 07 Jan 2020 02:36:14 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=QeSF/6JJEtY7qU4oYuTuPQ5X5Y2Ft7PgpKJsvHUjbvY=;
+        b=AvyzLP4XRqS/pfZie32tTqHu4MMHK6KfvXA4ZVHMf1OWgAwiYzh2oiozgP/AQVeppa
+         CHTImlcXGBbRwFonfgBxEXart8kX8JQoKT9RAfGsKLXk0MGPJRS8mLdr8Hw3aNCqc8P5
+         iCjvlcpFU7sqImCVVW/z8e2WAg9sCFoCj8xqgFY7WPWz3ekbNbuYibKkvxnOmJNCYOcr
+         woQ/gFhgA2sPr8eE1MrC9xtrEg9r7o0SuUqc9ayx36hTiFJHIeS7GceijFk0xTAD2LUX
+         QwZh+JAIjdIWAB9bHlZJa2lMWq/hDWGEAWiDOZutdXfr/ctlhvh2pPKDg6VyQhH0e7t2
+         UM2Q==
+X-Gm-Message-State: APjAAAVXSONFJ6vfnQD4UFva/oiFUxJwU95Wq4SJzHESJBbwmagdigmw
+        /dxQMj4BqOHL7aHiKWYJrdrebdooucc7yu9eYpIytG/I
+X-Google-Smtp-Source: APXvYqwC6fFX2xmVnSH0aCX5ekhjzhS2hXu7vSXUVbW2d2twnaRosSmB7f9ngkjda/0SXH3Se+jYLSi75YwFwWq/QWg=
+X-Received: by 2002:ac8:958:: with SMTP id z24mr79726402qth.40.1578393398188;
+ Tue, 07 Jan 2020 02:36:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20191230172751.17985-1-krzk@kernel.org> <20191230172751.17985-4-krzk@kernel.org>
-In-Reply-To: <20191230172751.17985-4-krzk@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 7 Jan 2020 11:36:04 +0100
-Message-ID: <CACRpkdaKPWott93XQp1iWMO6m6TqqW+iuN33PnSDOnOMMdCEbg@mail.gmail.com>
-Subject: Re: [PATCH 4/5] i2c: stu300: Use proper printk format for iomem pointer
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Max Staudt <max@enpas.org>,
-        Juergen Fitschen <jfi@ssv-embedded.de>,
-        Elie Morisse <syniurge@gmail.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
+ <20191231161400.1688-2-wsa+renesas@sang-engineering.com> <bf17ebe6-550e-dcd2-c5c4-ff669519ef79@bingham.xyz>
+ <CAMuHMdXVxeF0bCV8tNMr_0D-HudXBMXycs=LXCxJX=wKzjQZgw@mail.gmail.com> <20200107102557.GA1135@ninjato>
+In-Reply-To: <20200107102557.GA1135@ninjato>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 Jan 2020 11:36:26 +0100
+Message-ID: <CAMuHMdWM0PoqLuAP2qjCjejNQ8FaArnkAT0gnd96xp3yJKLE-A@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/5] i2c: core: refactor scanning for a client
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Kieran Bingham <kieran@ksquared.org.uk>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vladimir Zapolskiy <vz@mleia.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Dec 30, 2019 at 6:28 PM Krzysztof Kozlowski <krzk@kernel.org> wrote=
-:
+Hi Wolfram,
 
-> iomem pointers should be printed with pointer format to hide the
-> actual value and fix warnings when compiling on 64-bit platform (e.g. wit=
-h
-> COMPILE_TEST):
+On Tue, Jan 7, 2020 at 11:26 AM Wolfram Sang <wsa@the-dreams.de> wrote:
+> > Quoting GregKH:
+> > | We really do not want WARN_ON() anywhere, as that causes systems with
+> > | panic-on-warn to reboot.
+> >
+> > https://lore.kernel.org/lkml/20191121135743.GA552517@kroah.com/
 >
->     drivers/i2c/busses/i2c-stu300.c: In function =E2=80=98stu300_wait_whi=
-le_busy=E2=80=99:
->     drivers/i2c/busses/i2c-stu300.c:446:76: warning:
->         cast from pointer to integer of different size [-Wpointer-to-int-=
-cast]
->
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Huh? This renders WARN completely useless, or? If somebody wants panic
+> on warn, this person should get it?
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+I also have my doubts...
 
-Yours,
-Linus Walleij
+> If we don't add a stack trace, we only know that *someone* registered an
+> invalid address. Finding out who can be annoying. Kieran spotted this
+> correctly.
+
+What other information will you have in the backtrace, that you don't have
+available inside the function?
+Would printing the i2c_driver name be sufficient?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
