@@ -2,92 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 352B413302E
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2020 20:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86979133548
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2020 22:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728595AbgAGT6H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Jan 2020 14:58:07 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:39709 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728379AbgAGT6H (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jan 2020 14:58:07 -0500
-Received: by mail-wm1-f66.google.com with SMTP id 20so78002wmj.4;
-        Tue, 07 Jan 2020 11:58:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=qWHIdGhD+EJuvy5rVg/Q3JciPO3S68IDp+JUWwtxNmM=;
-        b=ISwI41kPCzgOhZigcVVBkpceXXSaPu8gw/c59H5cWPm4RsWfxi/xCuDg2ly2Ri6erz
-         j7jG1PE9t2n+wUUa8//feEO6ooyU0B+H1Hgpm+nbTHxpG20eQ0G7gk2AJRu5Wb7PrlBw
-         Z3FU+jHY2tp993D5cbQuO2v3Dhqfn0nWzPC0MN8bTLEcHJGBPSvmHZeVoO8izZig5o7R
-         2Yvc8vg+7hXVc0lf/2oXVmW95tESkqADJ1dmOndy19Xib1/R6Wadz2fYN4Aw80VZaR8A
-         TP3fPOlGtA8FFZzI7eXZrbwP6HlJ2YvL2MZDsl4LgcyyNJ+wuJnoZ5Fg6G9yNU+UFDzo
-         TVKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:references:date
-         :in-reply-to:message-id:user-agent:mime-version;
-        bh=qWHIdGhD+EJuvy5rVg/Q3JciPO3S68IDp+JUWwtxNmM=;
-        b=cNn2znEXKXyKQQv8WMSEGpDNsJAKxgKfxr+HaP/RMjg91a+YpC9b56/le9oMTUnlIo
-         ssxJbkituXHqIZo7e99GYx667nu0pUhz3uMXJ/ic13cjhy6YIJKVc5t+/h3U74p9GAu6
-         eZ6MqpkjqyBCoLRJNviB0TFxDPQFVxG8tZQ+20/EO7L+9b5soymN0/cdVxNiBKRlGPdF
-         H25VN7jNl9utDQNMHwvDjRwm6v1EvaXbGU/qqxRG8mTRouQWo6pxA20RmyuMEzbkkMhl
-         1b6zxCwy85CEvM2ylwD0eUWrDwMVTwfCRXkSR8Fs4JyDWrof1wH2FynyCbqrW7R3PvyR
-         i9Vg==
-X-Gm-Message-State: APjAAAUpw7Vk9wqZSrY1JthI0DQYd6o3JsJzh9vdKZ3aj2fhgZUpNvX3
-        QFAv8i03b1aid/TCVj7i8dI=
-X-Google-Smtp-Source: APXvYqzxhBclv4EvKHOkAs2D8bUcFMaBo0tGJ+96epd1UbfU2gqJRvtQFqGiz4YfXD07A1DkOjKsPg==
-X-Received: by 2002:a1c:541b:: with SMTP id i27mr56202wmb.137.1578427085197;
-        Tue, 07 Jan 2020 11:58:05 -0800 (PST)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
-        by smtp.gmail.com with ESMTPSA id r15sm801978wmh.21.2020.01.07.11.58.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2020 11:58:04 -0800 (PST)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
-        (envelope-from <peter@korsgaard.com>)
-        id 1iouzL-0004oj-Kh; Tue, 07 Jan 2020 20:58:03 +0100
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/12] i2c: ocores: convert to use i2c_new_client_device()
-References: <20200107174748.9616-1-wsa+renesas@sang-engineering.com>
-        <20200107174748.9616-5-wsa+renesas@sang-engineering.com>
-        <87muazjewd.fsf@dell.be.48ers.dk> <20200107193125.GA10117@ninjato>
-Date:   Tue, 07 Jan 2020 20:58:03 +0100
-In-Reply-To: <20200107193125.GA10117@ninjato> (Wolfram Sang's message of "Tue,
-        7 Jan 2020 20:31:25 +0100")
-Message-ID: <87imlnjayc.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1727300AbgAGVyV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Jan 2020 16:54:21 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:49803 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726462AbgAGVyV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jan 2020 16:54:21 -0500
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.145]) with ESMTPA (Nemesis) id
+ 1N2m3G-1jpOIO1L2a-013AA7; Tue, 07 Jan 2020 22:54:08 +0100
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Wolfram Sang <wsa@the-dreams.de>,
+        Jean Delvare <jdelvare@suse.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Max Staudt <max@enpas.org>,
+        Juergen Fitschen <jfi@ssv-embedded.de>,
+        Elie Morisse <syniurge@gmail.com>, Stefan Roese <sr@denx.de>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: s3c24xx: allow compile-testing
+Date:   Tue,  7 Jan 2020 22:53:53 +0100
+Message-Id: <20200107215406.1632417-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:NpK3sX5pFkd/JLqlZIwVdbCMtqdosujy4GpurPiyLlULllqXjnV
+ ItYXEsoIMXdYpt2SXLN62KNjVttSo0Sp2632rLaGASGBsO0/D5xsgDJ+mZEZ5H1RR6mQagy
+ 3cd47T585pyGNY+pdheaMnMoj8OkgwWfEAxYyoOhUcKOKY6zV7+cTB77OPP8Ca8K4xUFRGE
+ DQsoP9ScC80dUXnxX7ZbA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:i37LVIsjxXE=:i37t2FrmOrMxqElfl79e1M
+ CPJXnt/ieI3aVmtn2+2kIFx0Nvc+0txJZOcIh+UtbPkxY8B+CMnoKROggFZ6hCoEvlg0PYWXj
+ WOkx/eazdHJ8QiGjuJXlh6RiEjg7pKREuJ4zSmWOWytcTZVwDuY9tAHuejlPu+UWevEyFV898
+ zVMKkNLfPhpr+RbaREHg+NVnnqvHlaQKBkwwgWs51Xmkl/ih4zrdPEQWb6U2pIFrVYKLLEcDK
+ q3V6ppnTIJf7buBYG0RF4fHEfhUL0hKTShSvJXDevGv3MySc0sDEv8E48BIJPCebve0zeNFT3
+ GAHkWgGZOnXWZb1Qwu0lA1kHs+SE1yLBZ4Ezz6WFGia5uaEcfN4PlGrdahjZ/XiTYkmm7akzJ
+ 7BRPimS9pbF6/01ZU6f7rC/VqIP8s6+4Kz6xVbaiZnUaMCDpyvEYN1HVL+ST/pgz6HrNU4WMT
+ LKtG4pVQwb6mcAgKruUlKBCdq4lgjzm+3f58Z/kXbLDD4j0KhOD7/oB/PO3QYZ2KdSxWVy8xv
+ SgitZqFAqPYPCO8qPDHGfGuAqmRVHdQiQyhsR/o3xtgKnR+GOAkSDSjvUBU+p2h4ccKPq4xHZ
+ DWKDrJZGzDAzrsrFaEuHUIo8AIP8FSWrIwJPwQMci9KRtuvrJEXyRNBWacH0ASJSN6roee9dv
+ 3VUJPlubBFIIzF15MaYc9HWDwDLOr0jo2vL4pnViFTI97zxj//bSJyc6mzbInsLArZZGHDBuF
+ PidlWEbu4tTGBztLbu0us5/BZvwTz8ufT9Ur+Xh6fxzKQwj1OA1wgGMCBxIqJr8qdrtaZ67VP
+ Whv1+HapD0jrowNbrE+GaIxifz1zvf/I0wSPBIQZrAiBNpVc11HT+wgAYSQ+iNWctbmq7ysLV
+ Ie2gtqVeAL4sZyBDkK8g==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
->>>>> "Wolfram" == Wolfram Sang <wsa@the-dreams.de> writes:
+The PHY_EXYNOS5250_SATA driver can now be selected on
+any platform for compile testing, but this results in a Kconfig
+warning:
 
- > Hi Peter,
- > a happy new year to you!
+WARNING: unmet direct dependencies detected for I2C_S3C2410
+  Depends on [n]: I2C [=y] && HAS_IOMEM [=y] && HAVE_S3C2410_I2C [=n]
+  Selected by [y]:
+  - PHY_EXYNOS5250_SATA [=y] && (SOC_EXYNOS5250 || COMPILE_TEST [=y]) && HAS_IOMEM [=y] && OF [=y]
 
-thanks, You too!
+Allow the I2C driver to be compile-tested as well.
 
- >> > Move away from the deprecated API and return the shiny new ERRPTR where
- >> > useful.
- >> 
- >> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
- >> 
- >> I didn't follow the discussion, but I don't see any returns anywhere?
+Fixes: 1544133d48c3 ("phy: Enable compile testing for some of drivers")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/i2c/busses/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Yeah, an ERRPTR is not "useful" here. However, the old API is going to
- > be removed, so your driver is converted, too.
-
-Ok, great.
-
-Reviewed-by: Peter Korsgaard <peter@korsgaard.com>
-
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 6a0aa76859f3..ac453c16483d 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -933,7 +933,7 @@ config HAVE_S3C2410_I2C
+ 
+ config I2C_S3C2410
+ 	tristate "S3C2410 I2C Driver"
+-	depends on HAVE_S3C2410_I2C
++	depends on HAVE_S3C2410_I2C || COMPILE_TEST
+ 	help
+ 	  Say Y here to include support for I2C controller in the
+ 	  Samsung SoCs.
 -- 
-Bye, Peter Korsgaard
+2.20.0
+
