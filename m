@@ -2,93 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D71FD132D79
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2020 18:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3493F132E82
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2020 19:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728553AbgAGRsd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Jan 2020 12:48:33 -0500
-Received: from sauhun.de ([88.99.104.3]:53350 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728588AbgAGRsX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 7 Jan 2020 12:48:23 -0500
-Received: from localhost (p5486CF8B.dip0.t-ipconnect.de [84.134.207.139])
-        by pokefinder.org (Postfix) with ESMTPSA id 458E22C3955;
-        Tue,  7 Jan 2020 18:48:22 +0100 (CET)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH 12/12] docs: i2c: use the new API in 'writing-clients'
-Date:   Tue,  7 Jan 2020 18:47:46 +0100
-Message-Id: <20200107174748.9616-13-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200107174748.9616-1-wsa+renesas@sang-engineering.com>
+        id S1728235AbgAGScy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Jan 2020 13:32:54 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:36484 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727925AbgAGScy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jan 2020 13:32:54 -0500
+Received: by mail-wr1-f65.google.com with SMTP id z3so585775wru.3;
+        Tue, 07 Jan 2020 10:32:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version;
+        bh=9rUb//wruX/PB3VMyS1Pm9EFxT4vC3jruLB5BaMw4AA=;
+        b=U7PiWz1dhOity7JtewGh+kA6b171KSeF+f4TsOl/3aGPyTrcklmpup9Mjb1QYAkXyE
+         9NmZjBrof9L/C8Fee0ak6XXBT7eC30C2k8LT6Spvpcd12gwaSMgkkIKBy9K4r7yLarDK
+         HF0CS2ZJF27yzhZ4NMP3gEirELZ5sptnvhYDZno5E5GHG5qD9Cq+bc2Fprt+zrAMtuzi
+         mpUZP3/7ZQ1q5SzFxdEdJC/lN0jzBQpZnoXT0uC/0pLeOzZLHsfHO+jRdeAB9aDcIl0J
+         5QSJyQeB4ef1tiV8ctw3Z6llBjPNUpqDguRf3J4cM72I3SiX1GTtVLo3o/7RMJcoe/K9
+         1CPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:references:date
+         :in-reply-to:message-id:user-agent:mime-version;
+        bh=9rUb//wruX/PB3VMyS1Pm9EFxT4vC3jruLB5BaMw4AA=;
+        b=A3vbsyoYBsTlLEeFWx9ezVo1iIiBQJ675GChex/Yw0WvoQbHFBPWo/t4j91d8J1mWW
+         xtM7gR2W1ML8XuwGc1XxiWq/j7+LdDk82WADTVr6uwzQx69vPJJj08IqSzxkhMF3woA8
+         v+i2DQsUA8+G2SeHOXVRL2IvobUbLWqADN4xMb7gcU4hTOKzthvnAg2J4w3UcRrfjpGq
+         6BStENIQXLqWJ7YbEYa2xsmmCYrif5Rk7HLdLoqcHVQoaM0239Vyh11H/xeZCi/Jn5fU
+         fNs6Y4muNw6ltKHRX7YzV0UxGm+3hpd+Xd7VNLBRVHZIdayp7TKmliPa36pFqwYxwYbj
+         l+NA==
+X-Gm-Message-State: APjAAAUlNVg1PdrytCTl4iS+C30IBlO4A1dyKSD9l/9VQCN6xJgigIsp
+        quEnHnNCR4AlZgpCAdZPWAh0hLQI
+X-Google-Smtp-Source: APXvYqyyGK9YIuqCIQZXVWfTT0UHxgqa4A6ZbpvORQgkIz5E4dv6EIaXr340vnSbordut5Y5FhEXSg==
+X-Received: by 2002:a5d:4651:: with SMTP id j17mr420989wrs.237.1578421971891;
+        Tue, 07 Jan 2020 10:32:51 -0800 (PST)
+Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
+        by smtp.gmail.com with ESMTPSA id i5sm532246wml.31.2020.01.07.10.32.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jan 2020 10:32:51 -0800 (PST)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+        (envelope-from <peter@korsgaard.com>)
+        id 1iotes-0003GA-Gq; Tue, 07 Jan 2020 19:32:50 +0100
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/12] i2c: ocores: convert to use i2c_new_client_device()
 References: <20200107174748.9616-1-wsa+renesas@sang-engineering.com>
+        <20200107174748.9616-5-wsa+renesas@sang-engineering.com>
+Date:   Tue, 07 Jan 2020 19:32:50 +0100
+In-Reply-To: <20200107174748.9616-5-wsa+renesas@sang-engineering.com> (Wolfram
+        Sang's message of "Tue, 7 Jan 2020 18:47:38 +0100")
+Message-ID: <87muazjewd.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-i2c_new_device is deprecated, use i2c_new_client_device. Also, align a
-paragraph while here.
+>>>>> "Wolfram" == Wolfram Sang <wsa+renesas@sang-engineering.com> writes:
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- Documentation/i2c/writing-clients.rst | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ > Move away from the deprecated API and return the shiny new ERRPTR where
+ > useful.
 
-diff --git a/Documentation/i2c/writing-clients.rst b/Documentation/i2c/writing-clients.rst
-index ced309b5e0cc..0336909ca01b 100644
---- a/Documentation/i2c/writing-clients.rst
-+++ b/Documentation/i2c/writing-clients.rst
-@@ -175,8 +175,8 @@ Device Creation
- If you know for a fact that an I2C device is connected to a given I2C bus,
- you can instantiate that device by simply filling an i2c_board_info
- structure with the device address and driver name, and calling
--i2c_new_device().  This will create the device, then the driver core will
--take care of finding the right driver and will call its probe() method.
-+i2c_new_client_device().  This will create the device, then the driver core
-+will take care of finding the right driver and will call its probe() method.
- If a driver supports different device types, you can specify the type you
- want using the type field.  You can also specify an IRQ and platform data
- if needed.
-@@ -186,14 +186,14 @@ don't know the exact address it uses.  This happens on TV adapters for
- example, where the same driver supports dozens of slightly different
- models, and I2C device addresses change from one model to the next.  In
- that case, you can use the i2c_new_scanned_device() variant, which is
--similar to i2c_new_device(), except that it takes an additional list of
--possible I2C addresses to probe.  A device is created for the first
-+similar to i2c_new_client_device(), except that it takes an additional list
-+of possible I2C addresses to probe.  A device is created for the first
- responsive address in the list.  If you expect more than one device to be
- present in the address range, simply call i2c_new_scanned_device() that
- many times.
+ > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+I didn't follow the discussion, but I don't see any returns anywhere?
+
+ > ---
+ > Build tested only.
+
+ >  drivers/i2c/busses/i2c-ocores.c | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+
+ > diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
+ > index ca8b3ecfa93d..f5fc75b65a19 100644
+ > --- a/drivers/i2c/busses/i2c-ocores.c
+ > +++ b/drivers/i2c/busses/i2c-ocores.c
+ > @@ -731,7 +731,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ >  	/* add in known devices to the bus */
+ >  	if (pdata) {
+ >  		for (i = 0; i < pdata->num_devices; i++)
+ > -			i2c_new_device(&i2c->adap, pdata->devices + i);
+ > +			i2c_new_client_device(&i2c->adap, pdata->devices + i);
+ >  	}
  
--The call to i2c_new_device() or i2c_new_scanned_device() typically happens
--in the I2C bus driver. You may want to save the returned i2c_client
-+The call to i2c_new_client_device() or i2c_new_scanned_device() typically
-+happens in the I2C bus driver. You may want to save the returned i2c_client
- reference for later use.
- 
- 
-@@ -236,11 +236,11 @@ possible.
- Device Deletion
- ---------------
- 
--Each I2C device which has been created using i2c_new_device() or
--i2c_new_scanned_device() can be unregistered by calling
-+Each I2C device which has been created using i2c_new_client_device()
-+or i2c_new_scanned_device() can be unregistered by calling
- i2c_unregister_device().  If you don't call it explicitly, it will be
--called automatically before the underlying I2C bus itself is removed, as a
--device can't survive its parent in the device driver model.
-+called automatically before the underlying I2C bus itself is removed,
-+as a device can't survive its parent in the device driver model.
- 
- 
- Initializing the driver
+ >  	return 0;
+ > -- 
+ > 2.20.1
+
+
 -- 
-2.20.1
-
+Bye, Peter Korsgaard
