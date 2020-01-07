@@ -2,80 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 850CE1322FC
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2020 10:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11ACA132303
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2020 10:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727658AbgAGJxK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Jan 2020 04:53:10 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:37397 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbgAGJxJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jan 2020 04:53:09 -0500
-Received: by mail-ot1-f68.google.com with SMTP id k14so75721552otn.4;
-        Tue, 07 Jan 2020 01:53:09 -0800 (PST)
+        id S1727084AbgAGJyC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Jan 2020 04:54:02 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:44266 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726565AbgAGJyC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jan 2020 04:54:02 -0500
+Received: by mail-ot1-f65.google.com with SMTP id h9so73097977otj.11;
+        Tue, 07 Jan 2020 01:54:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rcKJiBOHF/a0+MDVGltwkYmA7kAiSShXv3OfBucNo/w=;
-        b=spnwUusnFCnaGf0nGyhvYIrZK7fZxpchw6XZAQvKRpfSTstjz1xbvLHYrIer0tt1NQ
-         pOmR9iHuZCi+Xad2SBPYWR6XjJkc4WH7f3RhtWQkE6vD+CgiLwJIigIoZNqKDFrTCOi7
-         ekkK6FQuLloN7K5IWcCA84W2PhEU4sDup6KXC05A4Xxe9Lasl3W4GTxQgROtxvrI9bd6
-         q9tMJfTKCxvF+uud38NFqdU1SayNNThFi/oRzzlSbqgduMZHY3uh04R+StFmSVF4ESxl
-         NTcdfFFqTxRKvTLoH8H8z21jlPBhA70Ue0eYGza7RPMIyHLRyx+YU+ZjKOKrdfSJXYgf
-         EnLA==
-X-Gm-Message-State: APjAAAU2zApQ8IQFnvMckrK9/w5ky0goBRLpYuAYc5ANu/OU/zxkuzeR
-        TbAhQBPYuloBuxZ1Rhvfa5fE9o92Le7TkqYwgCQ=
-X-Google-Smtp-Source: APXvYqyijdjeyq4HJ5FCDcI015uTWnvTRQoFeaQRgxTWy1DfLN1zgBL6llgNmNnOtPrGgkpTZXmDGjkn5Is6S8EHkt8=
-X-Received: by 2002:a9d:62c7:: with SMTP id z7mr111166052otk.189.1578390788841;
- Tue, 07 Jan 2020 01:53:08 -0800 (PST)
+        bh=s/kMF/bJ1LDeS7SpyIbqm4OFqc7vZ2oyDMR/GikRQIw=;
+        b=QNA+eFE72GrsOPHyI40Xztm3c2n4U1a7cNQAKoqcp1Em9qPeYMt9Wp5QjJ8rtz34f9
+         9I660F4JJn+3kVEAMwkmu8hm7K/4Tai9hO1IP2n6QAHCNmIA4W1ISlXoKPkgQ6PZ6Pax
+         ccH51MuCFYsRsp987DlENGLKJcLUOwz7slknt2I+DiY6ZaMdYjgHq+113PfiYIUMWUv7
+         ZcQIN/Y8dw38YSM87dQ4ypv54SQhYzzWNSWJChMMWe7zn2mhwqV2sqrAILfO8mhGaX/A
+         ekyfc0Yfo2HvQaXQ7zH3QgFzPrE67nZBKLAOSkOR2sXbN64WUcb7bJYxYxTKJ1iUlKzB
+         TUSw==
+X-Gm-Message-State: APjAAAXtkPUpwAtr4zXhMc3ZJFzMPj7CczpiS1+Vr5DsMkwPeZfMvx94
+        376W6jyTW4NyCEB03WGdHHbvxljRqaQe9k0xu4pjTxMh
+X-Google-Smtp-Source: APXvYqw+QsF3UKmg3Vi8I2d1cNzaVtGjgunAa52mgg6hD2hLvZCebPx8bMgoN7esxIepasZ1i391EWiUVVyZBaCx2+s=
+X-Received: by 2002:a9d:dc1:: with SMTP id 59mr21737883ots.250.1578390841476;
+ Tue, 07 Jan 2020 01:54:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20200106045833.1725-1-masahiroy@kernel.org>
-In-Reply-To: <20200106045833.1725-1-masahiroy@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Jan 2020 10:52:57 +0100
-Message-ID: <CAJZ5v0jBEq+GiTP8V4ZzQvR9qbSBdEz_P8EZNX7yNZMzTjB86Q@mail.gmail.com>
-Subject: Re: [PATCH] treewide: remove redundent IS_ERR() before error code check
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mtd@lists.infradead.org, netdev <netdev@vger.kernel.org>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
+ <20191231161400.1688-2-wsa+renesas@sang-engineering.com> <bf17ebe6-550e-dcd2-c5c4-ff669519ef79@bingham.xyz>
+In-Reply-To: <bf17ebe6-550e-dcd2-c5c4-ff669519ef79@bingham.xyz>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 Jan 2020 10:53:50 +0100
+Message-ID: <CAMuHMdXVxeF0bCV8tNMr_0D-HudXBMXycs=LXCxJX=wKzjQZgw@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/5] i2c: core: refactor scanning for a client
+To:     Kieran Bingham <kieran@ksquared.org.uk>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vladimir Zapolskiy <vz@mleia.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jan 6, 2020 at 6:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> 'PTR_ERR(p) == -E*' is a stronger condition than IS_ERR(p).
-> Hence, IS_ERR(p) is unneeded.
->
-> The semantic patch that generates this commit is as follows:
->
-> // <smpl>
-> @@
-> expression ptr;
-> constant error_code;
-> @@
-> -IS_ERR(ptr) && (PTR_ERR(ptr) == - error_code)
-> +PTR_ERR(ptr) == - error_code
-> // </smpl>
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
+Hi Kieran,
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Jan 7, 2020 at 10:26 AM Kieran Bingham <kieran@ksquared.org.uk> wrote:
+> This looks reasonable to me, I see Laurent has a concern over the use of
+> a WARN to present a backtrace, but I think in this instance it will be
+> useful as it will facilitate identifying what code path provided the
+> incorrect address.
 
-for the acpi/scan.c change, but there seems to be a typo in the subject:
+Quoting GregKH:
+| We really do not want WARN_ON() anywhere, as that causes systems with
+| panic-on-warn to reboot.
 
-s/redundent/redundant/
+https://lore.kernel.org/lkml/20191121135743.GA552517@kroah.com/
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
