@@ -2,26 +2,26 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C75A11343DA
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2020 14:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 329481343E8
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2020 14:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbgAHNcI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Jan 2020 08:32:08 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:46804 "EHLO
+        id S1727357AbgAHNfC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Jan 2020 08:35:02 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:46856 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726254AbgAHNcI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jan 2020 08:32:08 -0500
+        with ESMTP id S1726254AbgAHNfC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jan 2020 08:35:02 -0500
 Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C60D152F;
-        Wed,  8 Jan 2020 14:32:05 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 551A252F;
+        Wed,  8 Jan 2020 14:34:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1578490326;
-        bh=Pobrlhmqc6PtlGm7VqiJXf2RU2NMg6C4wsRkYYh1+uw=;
+        s=mail; t=1578490499;
+        bh=jbLlVNKkGLVxypHxH6YqRqkkTKsMSdWIrRDZdJhWYiA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o7ELkoOeO92pzbS4grY5jnXjzdNt/3XOu6+nkMiE2gvV6puMGXJaV1q60I7Tly2xO
-         TykbVfCanVtu9JOQLDd38wVIIeomkguEJL3IBjkom4xGkJF4A+ssSDXm4RiOtaihij
-         bJab3OfTw8iAJwL3UT6iwgWrTGhce4DYMsDpFhzU=
-Date:   Wed, 8 Jan 2020 15:31:53 +0200
+        b=H7wpInwZV5RUfVE/uesvodZK7eSOo26vDFC0bD2qEMM+3gaH2Pl6ItYvUx6OJH52b
+         2b90tw1DzakdI4lUWFp9mhQ27N4C0PRavBwknGoUy8QaDZGSeizN+JOTrLU2WGmDUO
+         E/F9yOkdv1irhEf0Bh6/nceMeso8udppnm4GK1O0=
+Date:   Wed, 8 Jan 2020 15:34:47 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Wolfram Sang <wsa@the-dreams.de>
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
@@ -31,7 +31,7 @@ Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Vladimir Zapolskiy <vz@mleia.com>
 Subject: Re: [RFC PATCH 3/5] i2c: core: add function to request an alias
-Message-ID: <20200108133153.GB4884@pendragon.ideasonboard.com>
+Message-ID: <20200108133447.GC4884@pendragon.ideasonboard.com>
 References: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
  <20191231161400.1688-4-wsa+renesas@sang-engineering.com>
  <20200101165515.GC6226@pendragon.ideasonboard.com>
@@ -39,46 +39,56 @@ References: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
  <20200102211327.GB1030@kunai>
  <cc2a10ab-9f05-2c61-3a37-0e5e0184e379@lucaceresoli.net>
  <20200103001056.GJ4843@pendragon.ideasonboard.com>
- <b9394a6c-1268-7cf8-6c00-e914735bc268@lucaceresoli.net>
- <20200107171357.GO4871@pendragon.ideasonboard.com>
- <20200108132708.GC834@kunai>
+ <20200108131929.GA834@kunai>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200108132708.GC834@kunai>
+In-Reply-To: <20200108131929.GA834@kunai>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jan 08, 2020 at 02:27:08PM +0100, Wolfram Sang wrote:
+On Wed, Jan 08, 2020 at 02:19:29PM +0100, Wolfram Sang wrote:
 > 
-> > > It would be nice, but I'm not sure this is really doable. Say the DT for
-> > > board X lists all the used slave addresses. Then the kernel would assume
-> > > all the other addresses are available. But then somebody includes the DT
-> > > of board X in the DT for product Z, based on board X + add-on board Y.
-> > > Add-on board Y has 2 I2C chips, but only one is described in DT. Now the
-> > > kernel still thinks it knows all the used address, but this is wrong.
+> > > > As I said to Laurent, too, I think the risk that a bus is not fully
+> > > > described is higher than a device which does not respond to a read_byte.
+> > > > In both cases, we would wrongly use an address in use.
 > > 
-> > That's the fault of the system integrator though. We can't prevent
-> > people from making incorrect DT, and we shouldn't go to great length to
-> > still support them.
+> > I don't fully agree with this, I think we shouldn't impose a penalty on
+> > every user because some device trees don't fully describe the hardware.
 > 
-> Currently, there is no paradigm that all I2C busses must be fully
-> described. Enforcing it now all of a sudden is not too user-friendly,
-> or?
+> I haven't decided yet. However, my general preference is that for a
+> generic OS like Linux, saftey comes first, then performance. If you have
+> a fully described DT, then the overhead will be 1 read_byte transaction
+> per requested alias at probe time. We could talk about using quick_read
+> to half the overhead. You could even patch it away, if it is too much
+> for $customer.
+> 
+> > I think we should, at the very least, skip the probe and rely on DT if
+> > DT explicitly states that all used addresses are listed. We discussed a
+> > property to report addresses used by devices not described in DT, if
+> > that property is listed I would prefer trusting DT.
+> 
+> Yeah, we discussed this property and I have no intentions of dropping
+> it. I haven't though of including it into this series, but it probably
+> makes sense. We don't have to define much anyhow, just state what
+> already exists, I guess.
+> 
+> From Documentation/devicetree/bindings/i2c/i2c-ocores.txt:
+> 
+> 	dummy@60 {
+> 		compatible = "dummy";
+> 		reg = <0x60>;
+> 	};
+> 
+> I think "dummy" is generic enough to be described in i2c.txt.
 
-We're only enforcing it for systems that want to make use of this new
-API, so it's not breaking backward compatibility.
+We may want a compatible value that guarantees noone will ever match it
+:-) I was imagining a single property at the bus level with multiple
+ranges instead, but dummy nodes could be OK too.
 
-> Especially since calling read_byte once is not necessarily "great
-> length" in my book. If you have 8 cameras on a 400kHz bus, the 8 * 18
-> bits should take 360us if I am not mistaken?
-
-That's assuming the first scanned address is free. There could also be
-I2C-controller I2C muxes or gates in front of the bus. Things can
-quickly get more expensive.
 
 -- 
 Regards,
