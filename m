@@ -2,95 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 329481343E8
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2020 14:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A941343ED
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2020 14:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727357AbgAHNfC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Jan 2020 08:35:02 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:46856 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726254AbgAHNfC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jan 2020 08:35:02 -0500
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 551A252F;
-        Wed,  8 Jan 2020 14:34:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1578490499;
-        bh=jbLlVNKkGLVxypHxH6YqRqkkTKsMSdWIrRDZdJhWYiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H7wpInwZV5RUfVE/uesvodZK7eSOo26vDFC0bD2qEMM+3gaH2Pl6ItYvUx6OJH52b
-         2b90tw1DzakdI4lUWFp9mhQ27N4C0PRavBwknGoUy8QaDZGSeizN+JOTrLU2WGmDUO
-         E/F9yOkdv1irhEf0Bh6/nceMeso8udppnm4GK1O0=
-Date:   Wed, 8 Jan 2020 15:34:47 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        id S1727542AbgAHNfg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Jan 2020 08:35:36 -0500
+Received: from sauhun.de ([88.99.104.3]:35174 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726144AbgAHNfg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 8 Jan 2020 08:35:36 -0500
+Received: from localhost (p54B332C6.dip0.t-ipconnect.de [84.179.50.198])
+        by pokefinder.org (Postfix) with ESMTPSA id B768F2C05CE;
+        Wed,  8 Jan 2020 14:35:33 +0100 (CET)
+Date:   Wed, 8 Jan 2020 14:35:33 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Kieran Bingham <kieran@ksquared.org.uk>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Vladimir Zapolskiy <vz@mleia.com>
 Subject: Re: [RFC PATCH 3/5] i2c: core: add function to request an alias
-Message-ID: <20200108133447.GC4884@pendragon.ideasonboard.com>
+Message-ID: <20200108133533.GD834@kunai>
 References: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
  <20191231161400.1688-4-wsa+renesas@sang-engineering.com>
- <20200101165515.GC6226@pendragon.ideasonboard.com>
- <e008939f-531d-f7dc-4c3c-937476213030@lucaceresoli.net>
- <20200102211327.GB1030@kunai>
- <cc2a10ab-9f05-2c61-3a37-0e5e0184e379@lucaceresoli.net>
- <20200103001056.GJ4843@pendragon.ideasonboard.com>
- <20200108131929.GA834@kunai>
+ <6760a242-ff0f-c981-68d4-7b9665124e21@bingham.xyz>
+ <20200107171119.GN4871@pendragon.ideasonboard.com>
+ <61344235-9e66-0d89-89cd-1adef2e0bce1@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fOHHtNG4YXGJ0yqR"
 Content-Disposition: inline
-In-Reply-To: <20200108131929.GA834@kunai>
+In-Reply-To: <61344235-9e66-0d89-89cd-1adef2e0bce1@ideasonboard.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jan 08, 2020 at 02:19:29PM +0100, Wolfram Sang wrote:
-> 
-> > > > As I said to Laurent, too, I think the risk that a bus is not fully
-> > > > described is higher than a device which does not respond to a read_byte.
-> > > > In both cases, we would wrongly use an address in use.
-> > 
-> > I don't fully agree with this, I think we shouldn't impose a penalty on
-> > every user because some device trees don't fully describe the hardware.
-> 
-> I haven't decided yet. However, my general preference is that for a
-> generic OS like Linux, saftey comes first, then performance. If you have
-> a fully described DT, then the overhead will be 1 read_byte transaction
-> per requested alias at probe time. We could talk about using quick_read
-> to half the overhead. You could even patch it away, if it is too much
-> for $customer.
-> 
-> > I think we should, at the very least, skip the probe and rely on DT if
-> > DT explicitly states that all used addresses are listed. We discussed a
-> > property to report addresses used by devices not described in DT, if
-> > that property is listed I would prefer trusting DT.
-> 
-> Yeah, we discussed this property and I have no intentions of dropping
-> it. I haven't though of including it into this series, but it probably
-> makes sense. We don't have to define much anyhow, just state what
-> already exists, I guess.
-> 
-> From Documentation/devicetree/bindings/i2c/i2c-ocores.txt:
-> 
-> 	dummy@60 {
-> 		compatible = "dummy";
-> 		reg = <0x60>;
-> 	};
-> 
-> I think "dummy" is generic enough to be described in i2c.txt.
 
-We may want a compatible value that guarantees noone will ever match it
-:-) I was imagining a single property at the bus level with multiple
-ranges instead, but dummy nodes could be OK too.
+--fOHHtNG4YXGJ0yqR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
--- 
-Regards,
+> >> I.e. if say the adv748x had in DT defined aliases at 0x08, 0x09,
+> >> 0x0A..., but not yet probed (thus no device is listening at these
+> >> addresses) ... and then a max9286 came along and asked for 'any' spare
+> >> address with this call, would it be given 0x08 first?
 
-Laurent Pinchart
+You have a point here. Ancillary addresses are not blocked until the
+driver probes, this is true. I wonder now if we should handle multiple
+addresses in i2c-core-of.c somehow, too? It does block the first <reg>
+entry, but not all.
+
+
+> The core 'could' parse all reg entries, and conclude that any extended
+> entries within a device node are aliases as well, which should be
+> reserved, but I don't think it could know if the device is actually
+> going to be enabled by a driver (well, it could look it up).
+
+We could argue that if it is described in DT, it should be blocked in
+any case, or?
+
+> But it would also have to traverse any i2c-muxes too!
+
+I probably need a second thought about muxes as well.
+
+
+--fOHHtNG4YXGJ0yqR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4V2qUACgkQFA3kzBSg
+Kbb+Kg/+O8VkFfWJl/ew66Saw1uSeNl111a72csopfJd9PT0Q2lcAGFpWqUDl6Er
+JmzII1qp/PNpQ37sX4HmayOmOwmBm2RpboKlG9Yk+cNH8T8SdP3WdiChHNJMUOFJ
+O7lpmlofGNNWWUUGG+uizFytSpvem0qYrKmSr9igzGsUk4y7XrSSezWpHfVPkFux
+ToRlTdnPZ5hiXP0X0GjLvPHYHbJbpV2eQEu+6wGlT8yioaVr6IHp46rRHoogAluE
+Uzluol2v2/WOwIMF+rWOKVLs77/DbJxW87FyKFDSKwfY0B8VtyKFer5C9/C+BLUq
+6Z49igRuhSKcWQtb6bd3w5LOQhuKxwIB72ErzNPVib5U180NaydBiZIeeZ+nObCZ
+FR3dvoTXREHPS74dqqZxGotGrusPLxSnFSPGyHWX3TwKnCVA+aRGRYjYiX1nkhkA
+hOyKEpe4m0PVLDC5myfWAU5elczV4ktk/yWZiHZ97ZHklvnuGZ1EwEq8OZDU0Cs1
+KgNKth4mv1Ql9hI77HBmJEBNl2ZvZxBP4fpfpNzI8S7r3QQ9cTY0gebv+ULx7GRA
+DiM0Ff44jAr6yx3PFfRhIplWpNNvMeXMYkay1BCb08bqUOefwOtpTISR5jSPtK1E
+hpazu2jZptg5vktkWusm/zsI+UqJ1Kvon1pv+Bp5NSPh+Qs+zNc=
+=3uSa
+-----END PGP SIGNATURE-----
+
+--fOHHtNG4YXGJ0yqR--
