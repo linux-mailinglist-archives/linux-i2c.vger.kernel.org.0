@@ -2,93 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69455134534
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2020 15:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C372134D01
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2020 21:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727600AbgAHOlG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Jan 2020 09:41:06 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:38437 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728192AbgAHOlG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jan 2020 09:41:06 -0500
-Received: by mail-wr1-f67.google.com with SMTP id y17so3659848wrh.5
-        for <linux-i2c@vger.kernel.org>; Wed, 08 Jan 2020 06:41:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=S7xoAln3fOM+jvS1KIvkJxVxft9QSlWu8b5r3lNZwN8=;
-        b=eRuJFAPbzJXJYkheudLwq5PnI59MRQzkP8BGccVcMAr84cEfiUK5zgfssZpku2m2Jg
-         PgyTWI3JRaN+6F8atGmrwSX+mBPueTUxbu7HihPpVcjLHtV7ZjFpsdb1iEpcGvAGHFgm
-         x4q4CdpsqUU0mesh/9Of36wXBjySG9yTre7HAAEPNBGYUsG+u+7NNZ/YyVORfJ+QN1Kl
-         pY0tsF0Osk3dVFa0LfXqTfjHPLBCGHp0o7B1eqUzHzK5vyD4obpY5no0G8X0ZAqT02OP
-         IpQQtstYJN9NXoMdvc7KPAGFX9HrYBZlqeJDnBgGqL3SrGiFoRSPM+HyIf+7+HV1o6dZ
-         +YFA==
+        id S1726875AbgAHUSD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Jan 2020 15:18:03 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:35794 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726702AbgAHUSD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jan 2020 15:18:03 -0500
+Received: by mail-oi1-f196.google.com with SMTP id k4so3866140oik.2
+        for <linux-i2c@vger.kernel.org>; Wed, 08 Jan 2020 12:18:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=S7xoAln3fOM+jvS1KIvkJxVxft9QSlWu8b5r3lNZwN8=;
-        b=hPt7uDa4h9WJ+5cS52IxnxIo3qVHWK3GXiRrb+99SdCsLsyhySXO9Xqi1IsgfhrPqv
-         MUJtenNdN3SfG6HEsv4zWx0/GX7r0ftbFBTyXcgvYPTVNQg7gsAzCEt75ajkbsbCqTK1
-         +Cnq6nlm0S9VXBJaDFru5VNhkLI9rhiR+ySRgXVYvyjDINwfe4LaZ5SiuzSE/C5qoguU
-         vECsbT4X/IJvTbItKy4bEOi74Hqa+tvSmHkXmpLmzr+vf5x4OyMSTHDfzugCghL8XdTB
-         7UUFzHJNhmvCxXtLT0dTAvfU1Cnm4FHoLMRrFXA20g+jfbRK4+gLsz07cxfF8wulg2WV
-         gbuw==
-X-Gm-Message-State: APjAAAVQzTJ+uonKc7ZbzP3lQ9kpsslIBzsvjbGCuKAWgk8GtjN8OOB9
-        srOvx0PEI9+RWtM1/F6t5KLNDHHIDk7NgVc9jjU=
-X-Google-Smtp-Source: APXvYqz1Up/yZ2caZhZCkehmh22v4EdfbQjqPeehfbrzYa1A1OQW260IeyrX4Gc2AyIru1e7PV+hKQ7wfL8RC8ULDKs=
-X-Received: by 2002:adf:dc86:: with SMTP id r6mr5315643wrj.68.1578494464034;
- Wed, 08 Jan 2020 06:41:04 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UM9Yhyyn+nTPYkkQGog0oC/YJwVnBTJCjtlyMYqJ2Ow=;
+        b=rYlP5mHnIBpnjYUfGSDmMhMNzDL8siJFAqMgdgMMe+CENFVmzBsjoai8J9Ck2g4BFJ
+         bEldq/0oHfybt5Ib+K+0mZbM7DAyjs8fO5vOQScXDU0il7RMEwx9MX4DiaedtKMbYk9X
+         1KCmsrYMpE82r4b5wnkxJFKTfdCfU7K3WinHlTbSTB6WeFMC3LhLPCEKXGWgjapeqv6R
+         bTsVMKkVwyK2syEGGu989g/twrlRaAsPbob/vg3C8ae5wXSs7XPOfimUlEDDz87s9bBE
+         Dtmo4MqIZCTniudN9Den8Cy8wbkiXtkLVaTrOuDh3zo/3cgHcrGxYpMcrMLRZG6vbc0f
+         OWlA==
+X-Gm-Message-State: APjAAAVzmBOY2yAQ5gFtnY2uIsXux0hsDOUEUB0mT/ID05ys0/Lqf4FJ
+        cJzfcrSmMjRmV4Kp3IL44SqsC04=
+X-Google-Smtp-Source: APXvYqxb772sg7LkL6RuujKtO407y6mrl/4Jt09vdSHKvtrCBYEtInRHvEU8l9NY8cIQEB0rl/eTtA==
+X-Received: by 2002:a54:4e08:: with SMTP id a8mr306632oiy.77.1578514681801;
+        Wed, 08 Jan 2020 12:18:01 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id n17sm1443269otq.46.2020.01.08.12.18.00
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jan 2020 12:18:00 -0800 (PST)
+Received: from rob (uid 1000)
+        (envelope-from rob@rob-hp-laptop)
+        id 2208fa
+        by rob-hp-laptop (DragonFly Mail Agent v0.11);
+        Wed, 08 Jan 2020 14:17:59 -0600
+Date:   Wed, 8 Jan 2020 14:17:59 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, Julia Lawall <julia.lawall@lip6.fr>,
+        linux-mtd@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] treewide: remove redundent IS_ERR() before error code
+ check
+Message-ID: <20200108201759.GA28519@bogus>
+References: <20200106045833.1725-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a5d:6684:0:0:0:0:0 with HTTP; Wed, 8 Jan 2020 06:41:01 -0800 (PST)
-From:   "Rev. pierre claver malgo" <rev.pierreclavermalgo@gmail.com>
-Date:   Wed, 8 Jan 2020 07:41:01 -0700
-X-Google-Sender-Auth: 39DV7uiJQCYxiA-lqZulHU1wKag
-Message-ID: <CAK=koNPtFp5wT0DMS7iJc0AjYrpbfmn5dMWq5Yd-FAaBF0Rnsw@mail.gmail.com>
-Subject: Season Greetings Dear Friend.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200106045833.1725-1-masahiroy@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Greetings to you dear friend and compliments of the Season.
+On Mon,  6 Jan 2020 13:58:33 +0900, Masahiro Yamada wrote:
+> 'PTR_ERR(p) == -E*' is a stronger condition than IS_ERR(p).
+> Hence, IS_ERR(p) is unneeded.
+> 
+> The semantic patch that generates this commit is as follows:
+> 
+> // <smpl>
+> @@
+> expression ptr;
+> constant error_code;
+> @@
+> -IS_ERR(ptr) && (PTR_ERR(ptr) == - error_code)
+> +PTR_ERR(ptr) == - error_code
+> // </smpl>
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+>  crypto/af_alg.c                      | 2 +-
+>  drivers/acpi/scan.c                  | 2 +-
+>  drivers/char/hw_random/bcm2835-rng.c | 2 +-
+>  drivers/char/hw_random/omap-rng.c    | 4 ++--
+>  drivers/clk/clk.c                    | 2 +-
+>  drivers/dma/mv_xor_v2.c              | 2 +-
+>  drivers/gpio/gpiolib-devres.c        | 2 +-
+>  drivers/gpio/gpiolib-of.c            | 8 ++++----
+>  drivers/gpio/gpiolib.c               | 2 +-
+>  drivers/i2c/busses/i2c-mv64xxx.c     | 5 ++---
+>  drivers/i2c/busses/i2c-synquacer.c   | 2 +-
+>  drivers/mtd/ubi/build.c              | 2 +-
+>  drivers/of/device.c                  | 2 +-
+>  drivers/pci/controller/pci-tegra.c   | 2 +-
+>  drivers/phy/phy-core.c               | 4 ++--
+>  drivers/spi/spi-orion.c              | 3 +--
+>  drivers/video/fbdev/imxfb.c          | 2 +-
+>  fs/ext4/super.c                      | 2 +-
+>  fs/f2fs/node.c                       | 2 +-
+>  fs/ocfs2/suballoc.c                  | 2 +-
+>  fs/sysfs/group.c                     | 2 +-
+>  net/core/dev.c                       | 2 +-
+>  net/core/filter.c                    | 2 +-
+>  net/xfrm/xfrm_policy.c               | 2 +-
+>  sound/soc/codecs/ak4104.c            | 3 +--
+>  sound/soc/codecs/cs4270.c            | 3 +--
+>  sound/soc/codecs/tlv320aic32x4.c     | 6 ++----
+>  sound/soc/sunxi/sun4i-spdif.c        | 2 +-
+>  28 files changed, 35 insertions(+), 41 deletions(-)
+> 
 
-Please do welcome this letter and assist me in this charitable
-investment project in your country. My names are Rev. Pierre Claver
-Malgo, I'm diagnose with brain tumor disease which has gotten to a
-very bad stage, without any family members and no child. Therefore my
-dear, i believed that you will not expose or betray this trust and
-confident that I am about to entrust on you for the mutual benefit of
-the orphans and the less privileges ones in the world today. I have
-some funds I inherited from my late husband, the total sum of ($
-9,500,000.00, Nine Million Five Hundred Thousand Dollars) deposited
-with the Bank, with my name as the legal rightful next of kin's.
-Having known my present health status, I decided to entrust this fund
-to you believing that you will utilize it the way i am going to
-instruct herein. However I need you to assist me and reclaim this
-money out from the bank and use it for humanitarian Charity works, for
-orphanages and gives justice and help to the poor, needy and to
-promote the words of God and the effort that the house of God will be
-maintained says The Lord. Jeremiah 22:15-16.
-
-It will be my pleasure to compensate you with 35 % percent of the
-total money for your effort in handling the transaction, 5 % percent
-for any expenses that may occur during the international transfer
-process while 60% of the money will go to the charity project. Contact
-me through my private email ( rev.pierreclavermalgo@gmail.com ).
-
-I need your sincerity and ability to carry out the transaction and
-fulfill my final wish in implementing the charitable project that
-requires absolute trust and devotion without any failure. I will be
-glad to see that the bank has finally release and transfer the fund
-into your bank account in your country even before I die here in the
-hospital, because of my present health status everything need to be
-process rapidly as soon as possible. Urgently waiting to hear from
-you, if only you are interested for further details of the transaction
-and execution of this humanitarian project for the glory and honor of
-God the merciful compassionate.
-
-May Bless you and your family.
-Yours Rev. Pierre Claver Malgo
+Acked-by: Rob Herring <robh@kernel.org>
