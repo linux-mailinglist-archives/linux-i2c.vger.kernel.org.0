@@ -2,96 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 018A7134401
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2020 14:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69455134534
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2020 15:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726830AbgAHNiu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Jan 2020 08:38:50 -0500
-Received: from sauhun.de ([88.99.104.3]:35240 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726144AbgAHNiu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 8 Jan 2020 08:38:50 -0500
-Received: from localhost (p54B332C6.dip0.t-ipconnect.de [84.179.50.198])
-        by pokefinder.org (Postfix) with ESMTPSA id 7D61C2C05CE;
-        Wed,  8 Jan 2020 14:38:48 +0100 (CET)
-Date:   Wed, 8 Jan 2020 14:38:48 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Kieran Bingham <kieran@ksquared.org.uk>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Vladimir Zapolskiy <vz@mleia.com>
-Subject: Re: [RFC PATCH 3/5] i2c: core: add function to request an alias
-Message-ID: <20200108133848.GE834@kunai>
-References: <20191231161400.1688-4-wsa+renesas@sang-engineering.com>
- <20200101165515.GC6226@pendragon.ideasonboard.com>
- <e008939f-531d-f7dc-4c3c-937476213030@lucaceresoli.net>
- <20200102211327.GB1030@kunai>
- <cc2a10ab-9f05-2c61-3a37-0e5e0184e379@lucaceresoli.net>
- <20200103001056.GJ4843@pendragon.ideasonboard.com>
- <b9394a6c-1268-7cf8-6c00-e914735bc268@lucaceresoli.net>
- <20200107171357.GO4871@pendragon.ideasonboard.com>
- <20200108132708.GC834@kunai>
- <20200108133153.GB4884@pendragon.ideasonboard.com>
+        id S1727600AbgAHOlG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Jan 2020 09:41:06 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:38437 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728192AbgAHOlG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jan 2020 09:41:06 -0500
+Received: by mail-wr1-f67.google.com with SMTP id y17so3659848wrh.5
+        for <linux-i2c@vger.kernel.org>; Wed, 08 Jan 2020 06:41:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=S7xoAln3fOM+jvS1KIvkJxVxft9QSlWu8b5r3lNZwN8=;
+        b=eRuJFAPbzJXJYkheudLwq5PnI59MRQzkP8BGccVcMAr84cEfiUK5zgfssZpku2m2Jg
+         PgyTWI3JRaN+6F8atGmrwSX+mBPueTUxbu7HihPpVcjLHtV7ZjFpsdb1iEpcGvAGHFgm
+         x4q4CdpsqUU0mesh/9Of36wXBjySG9yTre7HAAEPNBGYUsG+u+7NNZ/YyVORfJ+QN1Kl
+         pY0tsF0Osk3dVFa0LfXqTfjHPLBCGHp0o7B1eqUzHzK5vyD4obpY5no0G8X0ZAqT02OP
+         IpQQtstYJN9NXoMdvc7KPAGFX9HrYBZlqeJDnBgGqL3SrGiFoRSPM+HyIf+7+HV1o6dZ
+         +YFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=S7xoAln3fOM+jvS1KIvkJxVxft9QSlWu8b5r3lNZwN8=;
+        b=hPt7uDa4h9WJ+5cS52IxnxIo3qVHWK3GXiRrb+99SdCsLsyhySXO9Xqi1IsgfhrPqv
+         MUJtenNdN3SfG6HEsv4zWx0/GX7r0ftbFBTyXcgvYPTVNQg7gsAzCEt75ajkbsbCqTK1
+         +Cnq6nlm0S9VXBJaDFru5VNhkLI9rhiR+ySRgXVYvyjDINwfe4LaZ5SiuzSE/C5qoguU
+         vECsbT4X/IJvTbItKy4bEOi74Hqa+tvSmHkXmpLmzr+vf5x4OyMSTHDfzugCghL8XdTB
+         7UUFzHJNhmvCxXtLT0dTAvfU1Cnm4FHoLMRrFXA20g+jfbRK4+gLsz07cxfF8wulg2WV
+         gbuw==
+X-Gm-Message-State: APjAAAVQzTJ+uonKc7ZbzP3lQ9kpsslIBzsvjbGCuKAWgk8GtjN8OOB9
+        srOvx0PEI9+RWtM1/F6t5KLNDHHIDk7NgVc9jjU=
+X-Google-Smtp-Source: APXvYqz1Up/yZ2caZhZCkehmh22v4EdfbQjqPeehfbrzYa1A1OQW260IeyrX4Gc2AyIru1e7PV+hKQ7wfL8RC8ULDKs=
+X-Received: by 2002:adf:dc86:: with SMTP id r6mr5315643wrj.68.1578494464034;
+ Wed, 08 Jan 2020 06:41:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u5E4XgoOPWr4PD9E"
-Content-Disposition: inline
-In-Reply-To: <20200108133153.GB4884@pendragon.ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a5d:6684:0:0:0:0:0 with HTTP; Wed, 8 Jan 2020 06:41:01 -0800 (PST)
+From:   "Rev. pierre claver malgo" <rev.pierreclavermalgo@gmail.com>
+Date:   Wed, 8 Jan 2020 07:41:01 -0700
+X-Google-Sender-Auth: 39DV7uiJQCYxiA-lqZulHU1wKag
+Message-ID: <CAK=koNPtFp5wT0DMS7iJc0AjYrpbfmn5dMWq5Yd-FAaBF0Rnsw@mail.gmail.com>
+Subject: Season Greetings Dear Friend.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Greetings to you dear friend and compliments of the Season.
 
---u5E4XgoOPWr4PD9E
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please do welcome this letter and assist me in this charitable
+investment project in your country. My names are Rev. Pierre Claver
+Malgo, I'm diagnose with brain tumor disease which has gotten to a
+very bad stage, without any family members and no child. Therefore my
+dear, i believed that you will not expose or betray this trust and
+confident that I am about to entrust on you for the mutual benefit of
+the orphans and the less privileges ones in the world today. I have
+some funds I inherited from my late husband, the total sum of ($
+9,500,000.00, Nine Million Five Hundred Thousand Dollars) deposited
+with the Bank, with my name as the legal rightful next of kin's.
+Having known my present health status, I decided to entrust this fund
+to you believing that you will utilize it the way i am going to
+instruct herein. However I need you to assist me and reclaim this
+money out from the bank and use it for humanitarian Charity works, for
+orphanages and gives justice and help to the poor, needy and to
+promote the words of God and the effort that the house of God will be
+maintained says The Lord. Jeremiah 22:15-16.
 
+It will be my pleasure to compensate you with 35 % percent of the
+total money for your effort in handling the transaction, 5 % percent
+for any expenses that may occur during the international transfer
+process while 60% of the money will go to the charity project. Contact
+me through my private email ( rev.pierreclavermalgo@gmail.com ).
 
-> > Currently, there is no paradigm that all I2C busses must be fully
-> > described. Enforcing it now all of a sudden is not too user-friendly,
-> > or?
->=20
-> We're only enforcing it for systems that want to make use of this new
-> API, so it's not breaking backward compatibility.
+I need your sincerity and ability to carry out the transaction and
+fulfill my final wish in implementing the charitable project that
+requires absolute trust and devotion without any failure. I will be
+glad to see that the bank has finally release and transfer the fund
+into your bank account in your country even before I die here in the
+hospital, because of my present health status everything need to be
+process rapidly as soon as possible. Urgently waiting to hear from
+you, if only you are interested for further details of the transaction
+and execution of this humanitarian project for the glory and honor of
+God the merciful compassionate.
 
-Well, even new systems might need to update old DTSIs which they
-include.
-
-> > Especially since calling read_byte once is not necessarily "great
-> > length" in my book. If you have 8 cameras on a 400kHz bus, the 8 * 18
-> > bits should take 360us if I am not mistaken?
->=20
-> That's assuming the first scanned address is free. There could also be
-> I2C-controller I2C muxes or gates in front of the bus. Things can
-> quickly get more expensive.
-
-Not on a fully described bus, or? The first address will always be free.
-
-
---u5E4XgoOPWr4PD9E
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4V22gACgkQFA3kzBSg
-KbZLFQ/9GpXNnz0qcNsDZBGp6yxzHDdlmj3QeAhzeF5MLv5a57Lf3KlEHEjq3OV4
-gQ+F9Y6/Gu4N0vrz7u+QPTABY5JwsY7fT9MjIWeMwWxL1GdeaEzCVtXYAnA7Aklz
-fvJVr+KljKtC1WIXnHgjfTf1FdOPYHMUNAPHAfszanLQnytIL0a+fb+IjkvZ7/Tw
-B9/XHl7I9gGo7ZvXp3XFrkQzSKx8DBbTSYC7pp6XZ3WZhs3GIU3lOvzOl7Hkr25e
-8A8LGJYfln+XzYUC7LioMKkqliKhCynYrDvM6/OAls3Q65UKA775aMOWg8oUnsVc
-fWi0nNtJZ2ZbUxJRRl/vqfBp4U7z3WqLUbDP4GSjgKpxYGM74T/Tc96NPW0E0Qt2
-S18Ldx4Buq7e8ugblYOAwNv1wNXGIJPDf0xiUk5cExQfBu3LCpZj8xEgQhJiGYru
-qKUkIQ4lZ9iBZKqjbAIi4C4QctWwray/Etq96QzM1f1jYzXjTOYWBtE0oYv17Gc3
-lNTHE8EFlVzrny1qmbBn+eM6HCH+cZBsOKsrt4nB0nmDCI+mJVxfE+IJmToy5nHZ
-OQ7IJ6XlA9B/xkFxR2RD2XjjA1P0nQRf4rthlzKSMU1i0mFucAhnRZPKJmdvOiUB
-gxoGruxsCLzGRNggUgIl6TfnzNUDgsy0YIWJMo2GKYdjalUnjeY=
-=KyCL
------END PGP SIGNATURE-----
-
---u5E4XgoOPWr4PD9E--
+May Bless you and your family.
+Yours Rev. Pierre Claver Malgo
