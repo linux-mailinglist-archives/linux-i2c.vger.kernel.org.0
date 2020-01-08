@@ -2,92 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0576B1343D0
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2020 14:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 644081343D5
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2020 14:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726401AbgAHN1M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Jan 2020 08:27:12 -0500
-Received: from sauhun.de ([88.99.104.3]:35074 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726087AbgAHN1K (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 8 Jan 2020 08:27:10 -0500
-Received: from localhost (p54B332C6.dip0.t-ipconnect.de [84.179.50.198])
-        by pokefinder.org (Postfix) with ESMTPSA id D6CE02C05CE;
-        Wed,  8 Jan 2020 14:27:08 +0100 (CET)
-Date:   Wed, 8 Jan 2020 14:27:08 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        id S1726254AbgAHN3U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Jan 2020 08:29:20 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:36612 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726087AbgAHN3T (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jan 2020 08:29:19 -0500
+Received: by mail-oi1-f194.google.com with SMTP id c16so2604044oic.3;
+        Wed, 08 Jan 2020 05:29:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xhnarkk62w7a7yP83H+FKmaWfy84TkPqDtlmyUDyNco=;
+        b=shA+LQBLwE0ZOwZBPYX9X9/7aXE5RvmfI+MRQxrR2CxVpgUQ+Lx8QbMBEGvEr1l5uS
+         Lmez+Shi/zD9VxIKZCtKfVF8AQUZkF89vJEaE1d3LZslneoBsi6R6b5kundyxpZV0zz3
+         0Fs/Fm8HdVPq9qtKE2l/F4e/F4en5JeMnQXlEJ6WgYAngMqUrX11EueiWkwjkPpcdR1Q
+         NQDLPOBtQwBokv0rMIt8t+QYNt52HYarpHayzCxHkxtjPqJdUIeYXy0YR6dRsv6HGZty
+         SilGlyU4VTNPRg+Y0bgx1r9oQHc253CAL0oVGbNsIjbAEgB99cbK8rUHkGLxtRd4Mxce
+         eEwA==
+X-Gm-Message-State: APjAAAULF6uCPFtP3h8UJKMeH5Mq/6WGIeOfE22MzpcWx1v09DNsCWG9
+        CAiyA0GIjoyOA4cEqIaUodU6vQ8rZUT6HcjuZGA=
+X-Google-Smtp-Source: APXvYqz3EBoSzDsood5JnY9kbBwLjL7/ztqKUabUDI/upA95l+kHAVOvcBjougjqqjqjQdwDnGNST3AuKEqviQr34C8=
+X-Received: by 2002:aca:1a06:: with SMTP id a6mr2813526oia.148.1578490158856;
+ Wed, 08 Jan 2020 05:29:18 -0800 (PST)
+MIME-Version: 1.0
+References: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
+ <20191231161400.1688-4-wsa+renesas@sang-engineering.com> <20200101165515.GC6226@pendragon.ideasonboard.com>
+ <e008939f-531d-f7dc-4c3c-937476213030@lucaceresoli.net> <20200102211327.GB1030@kunai>
+ <cc2a10ab-9f05-2c61-3a37-0e5e0184e379@lucaceresoli.net> <20200103001056.GJ4843@pendragon.ideasonboard.com>
+ <20200108131929.GA834@kunai>
+In-Reply-To: <20200108131929.GA834@kunai>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 8 Jan 2020 14:29:07 +0100
+Message-ID: <CAMuHMdX4mCw3pSGEzJUk9PRtnTwu-_R7TdxdDhJgzPAdbVKi1Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/5] i2c: core: add function to request an alias
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Kieran Bingham <kieran@ksquared.org.uk>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Vladimir Zapolskiy <vz@mleia.com>
-Subject: Re: [RFC PATCH 3/5] i2c: core: add function to request an alias
-Message-ID: <20200108132708.GC834@kunai>
-References: <20191231161400.1688-1-wsa+renesas@sang-engineering.com>
- <20191231161400.1688-4-wsa+renesas@sang-engineering.com>
- <20200101165515.GC6226@pendragon.ideasonboard.com>
- <e008939f-531d-f7dc-4c3c-937476213030@lucaceresoli.net>
- <20200102211327.GB1030@kunai>
- <cc2a10ab-9f05-2c61-3a37-0e5e0184e379@lucaceresoli.net>
- <20200103001056.GJ4843@pendragon.ideasonboard.com>
- <b9394a6c-1268-7cf8-6c00-e914735bc268@lucaceresoli.net>
- <20200107171357.GO4871@pendragon.ideasonboard.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gr/z0/N6AeWAPJVB"
-Content-Disposition: inline
-In-Reply-To: <20200107171357.GO4871@pendragon.ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram,
 
---gr/z0/N6AeWAPJVB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jan 8, 2020 at 2:20 PM Wolfram Sang <wsa@the-dreams.de> wrote:
+> > > > As I said to Laurent, too, I think the risk that a bus is not fully
+> > > > described is higher than a device which does not respond to a read_byte.
+> > > > In both cases, we would wrongly use an address in use.
+> >
+> > I don't fully agree with this, I think we shouldn't impose a penalty on
+> > every user because some device trees don't fully describe the hardware.
+>
+> I haven't decided yet. However, my general preference is that for a
+> generic OS like Linux, saftey comes first, then performance. If you have
+> a fully described DT, then the overhead will be 1 read_byte transaction
+> per requested alias at probe time. We could talk about using quick_read
+> to half the overhead. You could even patch it away, if it is too much
+> for $customer.
+>
+> > I think we should, at the very least, skip the probe and rely on DT if
+> > DT explicitly states that all used addresses are listed. We discussed a
+> > property to report addresses used by devices not described in DT, if
+> > that property is listed I would prefer trusting DT.
+>
+> Yeah, we discussed this property and I have no intentions of dropping
+> it. I haven't though of including it into this series, but it probably
+> makes sense. We don't have to define much anyhow, just state what
+> already exists, I guess.
+>
+> From Documentation/devicetree/bindings/i2c/i2c-ocores.txt:
+>
+>         dummy@60 {
+>                 compatible = "dummy";
+>                 reg = <0x60>;
+>         };
+>
+> I think "dummy" is generic enough to be described in i2c.txt.
 
+Dummy-the-node or dummy-the-compatible value?
+Probably dummy nodes should have no compatible value at all?
 
-> > It would be nice, but I'm not sure this is really doable. Say the DT for
-> > board X lists all the used slave addresses. Then the kernel would assume
-> > all the other addresses are available. But then somebody includes the DT
-> > of board X in the DT for product Z, based on board X + add-on board Y.
-> > Add-on board Y has 2 I2C chips, but only one is described in DT. Now the
-> > kernel still thinks it knows all the used address, but this is wrong.
->=20
-> That's the fault of the system integrator though. We can't prevent
-> people from making incorrect DT, and we shouldn't go to great length to
-> still support them.
+Gr{oetje,eeting}s,
 
-Currently, there is no paradigm that all I2C busses must be fully
-described. Enforcing it now all of a sudden is not too user-friendly,
-or? Especially since calling read_byte once is not necessarily "great
-length" in my book. If you have 8 cameras on a 400kHz bus, the 8 * 18
-bits should take 360us if I am not mistaken?
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---gr/z0/N6AeWAPJVB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4V2KwACgkQFA3kzBSg
-KbYc6A//clREGfV+3ngdxoXUQHbE1cQlQ7+nwFe1i7Iu7YFPVHS5qJ/+YmA8/HPS
-qNlHZlQJUCUrCuarIpHScSWzlOkJAr76K+u6WT5hVHkzSxP7NLIGRLdM35xwhDxe
-G0kFrc94Nb0HpaKJfE9l4chECaTl7e0iJ8vV/aSfzS+ftZOTRAIJDxDjDCezjvvC
-HojYRv58dS/6tySa4le95Zy7bG1VVyAZixmhT6I8IX+wRsr63VAsOQggda+Z73dz
-MnC2KpBodyIj4e8yYHQbeXCR/VDti1waZvLgJL3htnfGnFuO5syyAUmgRy5hVDcy
-Vq3apMlUkI6i3NCpYMrww/MZTSlp4jw7lF1W4Y9ZMUFzeWWxfGO9TiFcXxIF5jly
-skdTI2e3+A+W34mOMLQ28zlZ2C1TRPnI/beZ62bkjDAE/hTSmwSDAvt8+zf17+N1
-pV3bimDQLSGKkQIsAwgpCUiLml0ZEioYioMD6L/uSM3DMlBvGi7ySgF97NCzXhqf
-IWeRjDRO/JDwvgC5JxBjnk3qtD/815g9b2eGtMhtfGqsGm6qIbgEV33ZrjkW0QOp
-JwpoEWtK/NZJ5N7PAgYPd3Im6DP1NoCh7sNShU4TVaqIcjltac9jDAZ5MtmWCA79
-bT6RKumFoNUG9N5gN5W7oXmi06A9ieBab4sipKY7lzhEl/3sAIQ=
-=L83f
------END PGP SIGNATURE-----
-
---gr/z0/N6AeWAPJVB--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
