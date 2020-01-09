@@ -2,80 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9115D1362C0
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 22:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B27D013631D
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 23:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725791AbgAIVlI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Jan 2020 16:41:08 -0500
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:59130 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725763AbgAIVlI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jan 2020 16:41:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=1CEGALxxCt60dkPM/9o3pNjK/xYFlCaTlDJJUbF6OBQ=; b=j6n5s6bnpsPGF9mSoPuJe2OkE
-        38W4nCVlHL1lmlhI5JIYA5ZfaNrB3qdIVyv15Wm21KNA3UAKcqXnvVqkiiUIU0mWwycmKAtafqgFU
-        I/Ojl6Pl7AcvAHpNm8zTOSmXyJtEleoG4tSMubkPipH93qIOa5o+kQYNJ5lHGjeFjiUhj4oxTkcRX
-        iOKJeVuckDwEsgcIRje5KiF4/3768xyDr1NyshPw927+0uWYagZsz75iQLKHwO34zZXEgZxLYtXKl
-        jiALfzl3+x8o+j3SvIs3YfPyiYLUBF1TKryZrWwB+fvAAWtS5l2hh66NDiDfagEQPtOhnz8vu6Gw7
-        r3ESKd17g==;
-Received: from shell.armlinux.org.uk ([2001:4d48:ad52:3201:5054:ff:fe00:4ec]:52794)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ipfY7-0007V5-UE; Thu, 09 Jan 2020 21:41:04 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ipfY7-0000qF-46; Thu, 09 Jan 2020 21:41:03 +0000
-Date:   Thu, 9 Jan 2020 21:41:03 +0000
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: fix bus recovery stop mode timing
-Message-ID: <20200109214103.GU25745@shell.armlinux.org.uk>
-References: <E1igWvB-0001ib-PV@rmk-PC.armlinux.org.uk>
- <20200109212410.GA3046@ninjato>
+        id S1725919AbgAIWPf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Jan 2020 17:15:35 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:55537 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725840AbgAIWPf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jan 2020 17:15:35 -0500
+Received: from [88.149.160.229] (port=59042 helo=[192.168.77.51])
+        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1ipg5U-003Orv-BB; Thu, 09 Jan 2020 23:15:32 +0100
+Subject: Re: [PATCH v2] docs: i2c: Fix return value of i2c_smbus_xxx functions
+To:     Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@the-dreams.de>
+Cc:     Lei YU <mine260309@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1574162632-65848-1-git-send-email-mine260309@gmail.com>
+ <20191125144857.GA2412@kunai> <20191126115243.673fc164@endymion>
+ <20200106130056.GA1290@ninjato> <20200109173929.1b42e0a6@endymion>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <0bf8bf55-525f-fd4e-0f10-fe0efad9ecb2@lucaceresoli.net>
+Date:   Thu, 9 Jan 2020 23:15:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200109212410.GA3046@ninjato>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200109173929.1b42e0a6@endymion>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jan 09, 2020 at 10:24:10PM +0100, Wolfram Sang wrote:
-> On Sun, Dec 15, 2019 at 04:39:05PM +0000, Russell King wrote:
-> > The I2C specification states that tsu:sto for standard mode timing must
-> > be at minimum 4us. Pictographically, this is:
-> > 
-> > SCL: ____/~~~~~~~~~
-> > SDA: _________/~~~~
-> >        ->|    |<- 4us minimum
-> > 
-> > We are currently waiting 2.5us between asserting SCL and SDA, which is
-> > in violation of the standard. Adjust the timings to ensure that we meet
-> > what is stipulated as the minimum timings to ensure that all devices
-> > correctly interpret the STOP bus transition.
-> > 
-> > This is more important than trying to generate a square wave with even
-> > duty cycle.
-> > 
-> > Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
-> 
-> Applied to for-current with the comment kept, thanks!
+Hi Jean,
 
-Thanks.  Sorry, I haven't had _any_ time what so ever to do anything
-further on any of the I2C patches I submitted in December - this is
-the first day since the weekend that I've actually had much time at
-the computer, and I've had other stuff to attend to.
+On 09/01/20 17:39, Jean Delvare wrote:
+> On Mon, 6 Jan 2020 14:01:09 +0100, Wolfram Sang wrote:
+>>> I would go further and move half of the document to i2c-tools. i2c-dev
+>>> itself only provides the ioctls. Everything on top of that is in libi2c
+>>> now, so the kernel documentation should point to libi2c and the
+>>> detailed documentation should come with libi2c.
+>>>
+>>> So I guess I should review the whole document now to see what needs to
+>>> be updated, what should stay, and what should move.  
+>>
+>> Maybe you can collaborate with Luca on this who just revamped a lot of
+>> the docs? Putting him on CC and marking this patch as 'Deferred'.
+> 
+> I'm resuming my work on this. Luca, can you point me to your changes to
+> Documentation/i2c/dev-interface.rst so that I can adjust my own changes
+> to fit on top?
+
+Commits 4 and 26 of this series:
+
+https://patchwork.ozlabs.org/project/linux-i2c/list/?series=151292
+
+Pretty trivial patches anyway, I haven't really tackled that specific
+file so far, which is good as you are planning to remove all/most of it.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+Luca
