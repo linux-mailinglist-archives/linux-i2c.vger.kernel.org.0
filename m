@@ -2,106 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68155135655
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 10:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2D8135620
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 10:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729831AbgAIJ5v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Jan 2020 04:57:51 -0500
-Received: from mx2.suse.de ([195.135.220.15]:38054 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729944AbgAIJ5v (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 9 Jan 2020 04:57:51 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 702DBC27F;
-        Thu,  9 Jan 2020 09:57:49 +0000 (UTC)
-Date:   Thu, 9 Jan 2020 09:42:28 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 06/12] i2c: taos-evm: convert to use
- i2c_new_client_device()
-Message-ID: <20200109094228.2e058653@endymion>
-In-Reply-To: <20200108115822.20871d77@endymion>
-References: <20200107174748.9616-1-wsa+renesas@sang-engineering.com>
-        <20200107174748.9616-7-wsa+renesas@sang-engineering.com>
-        <20200108115822.20871d77@endymion>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1729493AbgAIJsI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Jan 2020 04:48:08 -0500
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:43777 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729825AbgAIJsH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jan 2020 04:48:07 -0500
+Received: by mail-qk1-f195.google.com with SMTP id t129so5357798qke.10
+        for <linux-i2c@vger.kernel.org>; Thu, 09 Jan 2020 01:48:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=kFt5sINwCshN7f9XPeO36FD74hM2+ZVDRrYbGF8loWg=;
+        b=MC9xf9MeaTGS0ORWl9iQ4wapynYiCn/Ktx+vvFlfK7odU2KpzoA3/BD2X7r+BBwEUj
+         AJ+a/oeCIJjWrmW+5Jkmq9Yz9BZKT3Bmjjfzm56uBKhiMmmYCEBALZMqSORH3orOG9Qe
+         TAgbPzK5lBIgc+Er5fKe809mLb5nhY4ThWFYcg73GSGOAZbFnxeBRDy1jP/4ew9PsA3N
+         K5n2c3kN97ulvkzH79saWCh2c62itzxld2703wwno5bBSesTGCIUGJHKceWczsTpMIz1
+         GFHWXdjGPtiqukwIyrP4OipPnI1rXSeO7ZUlKGAtio6wR4aDkXYfl3sLVndplD62fp2K
+         TjWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kFt5sINwCshN7f9XPeO36FD74hM2+ZVDRrYbGF8loWg=;
+        b=jBcSlyMcrWcc4re15+RruS2QcctUr28jwVeeImgd+pqPH5snh3AIozsitVFK+PICRB
+         rN7OMLpkrYLKMPdGJbhtDCPBG7OppW3a7pg8LGKx3JdszmKZ6Mr7QvxG453uYACXiM2z
+         wstYnvwtWt0an7rdJIy1SvgL9DQNSv7smUHQLYIHeefs+b7Pjajq7z6Q+g6lF8NiJbug
+         eSC6huHvLM5VvMzM3HaAuKCv/yydIApdMSkRvX+7uGk+LcLrxiDBX/Bz+Su7PsUpwGve
+         oOBBo/O7QVmjsDn4Nt3ylBsY9xAwFUMYM/Q8CsMnkuKjSheLSjpn4PHoeCJGg6mK47Gw
+         D08A==
+X-Gm-Message-State: APjAAAW5A7P0nDJ51Vdl393l2JLMGSBe369HDkbbZjEZa6mcuc19J9OJ
+        PnkYfO48Gwa/hhlqedHcnyKr+NWAmKT78Qr5/hNC9h/4
+X-Google-Smtp-Source: APXvYqwtJLDiExkWMnInqbVktQr9vDV/d5lmAhlTP7G0mBpb6RfrkdSR6eG91YtmQ+x9YK8qMe3vwS9aE/HYkSbCbkg=
+X-Received: by 2002:a05:620a:12cf:: with SMTP id e15mr8766111qkl.120.1578563287029;
+ Thu, 09 Jan 2020 01:48:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20200107092922.18408-1-ktouil@baylibre.com> <20200107092922.18408-5-ktouil@baylibre.com>
+ <20200108205447.GA16981@bogus>
+In-Reply-To: <20200108205447.GA16981@bogus>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Thu, 9 Jan 2020 10:47:56 +0100
+Message-ID: <CAMpxmJXffr-S51udNmUyMHz687jAoBKrYspNypfUUqjOD45zxQ@mail.gmail.com>
+Subject: Re: [PATCH v4 4/5] dt-bindings: at25: add reference for the wp-gpios property
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Khouloud Touil <ktouil@baylibre.com>,
+        baylibre-upstreaming@groups.io,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi again Wolfram,
-
-On Wed, 8 Jan 2020 11:58:22 +0100, Jean Delvare wrote:
-> On Tue, 7 Jan 2020 18:47:40 +0100, Wolfram Sang wrote:
-> > Move away from the deprecated API and return the shiny new ERRPTR where
-> > useful.
-> > 
-> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+=C5=9Br., 8 sty 2020 o 21:54 Rob Herring <robh@kernel.org> napisa=C5=82(a):
+>
+> On Tue,  7 Jan 2020 10:29:21 +0100, Khouloud Touil wrote:
+> > As the at25 uses the NVMEM subsystem, and the property is now being
+> > handled, adding reference for it in the device tree binding document,
+> > which allows to specify the GPIO line to which the write-protect pin
+> > is connected.
+> >
+> > Signed-off-by: Khouloud Touil <ktouil@baylibre.com>
 > > ---
-> > Build tested only.
-> > 
-> >  drivers/i2c/busses/i2c-taos-evm.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/i2c/busses/i2c-taos-evm.c b/drivers/i2c/busses/i2c-taos-evm.c
-> > index 0bff3f3a8779..b4050f5b6746 100644
-> > --- a/drivers/i2c/busses/i2c-taos-evm.c
-> > +++ b/drivers/i2c/busses/i2c-taos-evm.c
-> > @@ -49,10 +49,10 @@ static struct i2c_client *taos_instantiate_device(struct i2c_adapter *adapter)
-> >  	if (!strncmp(adapter->name, "TAOS TSL2550 EVM", 16)) {
-> >  		dev_info(&adapter->dev, "Instantiating device %s at 0x%02x\n",
-> >  			tsl2550_info.type, tsl2550_info.addr);
-> > -		return i2c_new_device(adapter, &tsl2550_info);
-> > +		return i2c_new_client_device(adapter, &tsl2550_info);
-> >  	}
-> >  
-> > -	return NULL;
-> > +	return ERR_PTR(-ENODEV);
-> >  }
-> >  
-> >  static int taos_smbus_xfer(struct i2c_adapter *adapter, u16 addr,  
-> 
-> Looks good to me, although ideally the caller should handle the error
-> instead of ignoring it. But that's out of scope for this conversion
-> patch, I'll look into submitting an update on top.
+> >  Documentation/devicetree/bindings/eeprom/at25.txt | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-I take that back. taos_instantiate_device() is instantiating an
-optional slave device on the bus. If that fails, the bus is still
-usable, therefore failing the whole registration would be inappropriate.
+Hi Greg,
 
-Makes me wonder if return ERR_PTR(-ENODEV) is the right thing to do in
-the fallback case. The i2c-taos-evm driver was designed to support
-multiple TAOS evaluation module types, even though the only one fully
-supported right now is the only one I own (TSL2550). The driver can
-still be used with other modules, just no slave device will be
-instantiated. It can still be done later from user-space.
+AT25 patches usually go through the char-misc tree. In this case
+however, the change depends on the other patches in this series. Can
+you ack this and I'll take it through the AT24 tree exceptionally?
 
-In my opinion -ENODEV should only be used for "I expected a device but
-could not find it". For the case where we simply don't know what slave
-device to instantiate, NULL seems more appropriate, as it's not an
-error.
-
-What do you think? Either way I agree it doesn't make much practical
-difference in the end as i2c_unregister_device() will deal gracefully
-with both.
-
-> So:
-> 
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
-> 
-> I'll also try to revive my evaluation module to give it some testing.
-
-That I did, and it works fine, as expected :-)
-
-Tested-by: Jean Delvare <jdelvare@suse.de>
-
--- 
-Jean Delvare
-SUSE L3 Support
+Best regards,
+Bartosz Golaszewski
