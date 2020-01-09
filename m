@@ -2,29 +2,29 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF72135D22
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 16:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D98F7135D16
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 16:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728988AbgAIPpV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Jan 2020 10:45:21 -0500
-Received: from mga18.intel.com ([134.134.136.126]:35711 "EHLO mga18.intel.com"
+        id S1730916AbgAIPor (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Jan 2020 10:44:47 -0500
+Received: from mga11.intel.com ([192.55.52.93]:17759 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728357AbgAIPpU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 9 Jan 2020 10:45:20 -0500
+        id S1732547AbgAIPoi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 9 Jan 2020 10:44:38 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jan 2020 07:45:07 -0800
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jan 2020 07:44:37 -0800
 X-IronPort-AV: E=Sophos;i="5.69,414,1571727600"; 
-   d="scan'208";a="303904700"
+   d="scan'208";a="371333764"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jan 2020 07:45:05 -0800
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jan 2020 07:44:35 -0800
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 14ABE207DD;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 15C8B20B52;
         Thu,  9 Jan 2020 17:44:33 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1ipa01-000555-Ck; Thu, 09 Jan 2020 17:45:29 +0200
+        id 1ipa01-000558-Du; Thu, 09 Jan 2020 17:45:29 +0200
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa@the-dreams.de>,
@@ -32,98 +32,100 @@ Cc:     Wolfram Sang <wsa@the-dreams.de>,
         linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>
-Subject: [PATCH v3 1/5] i2c: Allow driver to manage the device's power state during probe
-Date:   Thu,  9 Jan 2020 17:45:25 +0200
-Message-Id: <20200109154529.19484-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH v3 2/5] ACPI: Add a convenience function to tell a device is suspended in probe
+Date:   Thu,  9 Jan 2020 17:45:26 +0200
+Message-Id: <20200109154529.19484-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200109154529.19484-1-sakari.ailus@linux.intel.com>
 References: <20200109154529.19484-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Enable drivers to tell ACPI that there's no need to power on a device for
-probe. Drivers should still perform this by themselves if there's a need
-to. In some cases powering on the device during probe is undesirable, and
-this change enables a driver to choose what fits best for it.
+Add a convenience function to tell whether a device is suspended for probe
+or remove, for busses where the custom is that drivers don't need to
+resume devices in probe, or suspend them in their remove handlers.
 
+Returns false on non-ACPI systems.
+
+Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/i2c/i2c-core-base.c | 15 ++++++++++++---
- include/linux/i2c.h         |  3 +++
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ drivers/acpi/device_pm.c | 35 +++++++++++++++++++++++++++++++++++
+ include/linux/acpi.h     |  5 +++++
+ 2 files changed, 40 insertions(+)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 9f8dcd3f83850..7bf1699c9044d 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -303,6 +303,14 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
- 	return irq > 0 ? irq : -ENXIO;
+diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+index 5e4a8860a9c0c..87393020276d8 100644
+--- a/drivers/acpi/device_pm.c
++++ b/drivers/acpi/device_pm.c
+@@ -1348,4 +1348,39 @@ int acpi_dev_pm_attach(struct device *dev, bool power_on)
+ 	return 1;
  }
- 
-+static bool probe_low_power(struct device *dev)
+ EXPORT_SYMBOL_GPL(acpi_dev_pm_attach);
++
++/**
++ * acpi_dev_low_power_state_probe - Tell if a device is in a low power state
++ *				    during probe
++ * @dev: The device
++ *
++ * Tell whether a given device is in a low power state during the driver's probe
++ * or remove operation.
++ *
++ * Drivers of devices on certain busses such as I²C can generally assume (on
++ * ACPI based systems) that the devices they control are powered on without
++ * driver having to do anything about it. Using struct
++ * device_driver.probe_low_power and "probe-low-power" property, this can be
++ * negated and the driver has full control of the device power management.
++ * Always returns false on non-ACPI based systems. True is returned on ACPI
++ * based systems iff the device is in a low power state during probe or remove.
++ */
++bool acpi_dev_low_power_state_probe(struct device *dev)
 +{
-+	struct i2c_driver *driver = to_i2c_driver(dev->driver);
++	int power_state;
++	int ret;
 +
-+	return driver->probe_low_power &&
-+		device_property_present(dev, "probe-low-power");
++	if (!is_acpi_device_node(dev_fwnode(dev)))
++		return false;
++
++	ret = acpi_device_get_power(ACPI_COMPANION(dev), &power_state);
++	if (ret) {
++		dev_warn(dev, "Cannot obtain power state (%d)\n", ret);
++		return false;
++	}
++
++	return power_state != ACPI_STATE_D0;
 +}
++EXPORT_SYMBOL_GPL(acpi_dev_low_power_state_probe);
 +
- static int i2c_device_probe(struct device *dev)
+ #endif /* CONFIG_PM */
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 0f37a7d5fa774..fd00853074e1a 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -926,6 +926,7 @@ int acpi_dev_resume(struct device *dev);
+ int acpi_subsys_runtime_suspend(struct device *dev);
+ int acpi_subsys_runtime_resume(struct device *dev);
+ int acpi_dev_pm_attach(struct device *dev, bool power_on);
++bool acpi_dev_low_power_state_probe(struct device *dev);
+ #else
+ static inline int acpi_dev_runtime_suspend(struct device *dev) { return 0; }
+ static inline int acpi_dev_runtime_resume(struct device *dev) { return 0; }
+@@ -935,6 +936,10 @@ static inline int acpi_dev_pm_attach(struct device *dev, bool power_on)
  {
- 	struct i2c_client	*client = i2c_verify_client(dev);
-@@ -375,7 +383,8 @@ static int i2c_device_probe(struct device *dev)
- 	if (status < 0)
- 		goto err_clear_wakeup_irq;
- 
--	status = dev_pm_domain_attach(&client->dev, true);
-+	status = dev_pm_domain_attach(&client->dev,
-+				      !probe_low_power(&client->dev));
- 	if (status)
- 		goto err_clear_wakeup_irq;
- 
-@@ -397,7 +406,7 @@ static int i2c_device_probe(struct device *dev)
  	return 0;
+ }
++static inline bool acpi_dev_low_power_state_probe(struct device *dev)
++{
++	return false;
++}
+ #endif
  
- err_detach_pm_domain:
--	dev_pm_domain_detach(&client->dev, true);
-+	dev_pm_domain_detach(&client->dev, !probe_low_power(&client->dev));
- err_clear_wakeup_irq:
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
-@@ -419,7 +428,7 @@ static int i2c_device_remove(struct device *dev)
- 		status = driver->remove(client);
- 	}
- 
--	dev_pm_domain_detach(&client->dev, true);
-+	dev_pm_domain_detach(&client->dev, !probe_low_power(&client->dev));
- 
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 582ef05ec07ed..6d0d6af393c56 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -229,6 +229,8 @@ enum i2c_alert_protocol {
-  * @address_list: The I2C addresses to probe (for detect)
-  * @clients: List of detected clients we created (for i2c-core use only)
-  * @disable_i2c_core_irq_mapping: Tell the i2c-core to not do irq-mapping
-+ * @probe_low_power: Let the driver manage the device's power state
-+ *		     during probe and remove.
-  *
-  * The driver.owner field should be set to the module owner of this driver.
-  * The driver.name field should be set to the name of this driver.
-@@ -289,6 +291,7 @@ struct i2c_driver {
- 	struct list_head clients;
- 
- 	bool disable_i2c_core_irq_mapping;
-+	bool probe_low_power;
- };
- #define to_i2c_driver(d) container_of(d, struct i2c_driver, driver)
- 
+ #if defined(CONFIG_ACPI) && defined(CONFIG_PM_SLEEP)
 -- 
 2.20.1
 
