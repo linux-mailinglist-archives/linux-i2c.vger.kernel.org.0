@@ -2,128 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C30135D11
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 16:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF050135E7C
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 17:39:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732576AbgAIPom (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Jan 2020 10:44:42 -0500
-Received: from mga02.intel.com ([134.134.136.20]:3757 "EHLO mga02.intel.com"
+        id S1728159AbgAIQjc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Jan 2020 11:39:32 -0500
+Received: from mx2.suse.de ([195.135.220.15]:34116 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732548AbgAIPol (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 9 Jan 2020 10:44:41 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jan 2020 07:44:41 -0800
-X-IronPort-AV: E=Sophos;i="5.69,414,1571727600"; 
-   d="scan'208";a="227826443"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jan 2020 07:44:38 -0800
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 2F22220F4E;
-        Thu,  9 Jan 2020 17:44:33 +0200 (EET)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1ipa01-00055H-HW; Thu, 09 Jan 2020 17:45:29 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>
-Subject: [PATCH v3 5/5] at24: Support probing while off
-Date:   Thu,  9 Jan 2020 17:45:29 +0200
-Message-Id: <20200109154529.19484-6-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200109154529.19484-1-sakari.ailus@linux.intel.com>
-References: <20200109154529.19484-1-sakari.ailus@linux.intel.com>
+        id S1730477AbgAIQjc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 9 Jan 2020 11:39:32 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id BCFD9AD73;
+        Thu,  9 Jan 2020 16:39:30 +0000 (UTC)
+Date:   Thu, 9 Jan 2020 17:39:29 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Lei YU <mine260309@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] docs: i2c: Fix return value of i2c_smbus_xxx
+ functions
+Message-ID: <20200109173929.1b42e0a6@endymion>
+In-Reply-To: <20200106130056.GA1290@ninjato>
+References: <1574162632-65848-1-git-send-email-mine260309@gmail.com>
+        <20191125144857.GA2412@kunai>
+        <20191126115243.673fc164@endymion>
+        <20200106130056.GA1290@ninjato>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In certain use cases (where the chip is part of a camera module, and the
-camera module is wired together with a camera privacy LED), powering on
-the device during probe is undesirable. Add support for the at24 to
-execute probe while being powered off. For this to happen, a hint in form
-of a device property is required from the firmware.
+On Mon, 6 Jan 2020 14:01:09 +0100, Wolfram Sang wrote:
+> > I would go further and move half of the document to i2c-tools. i2c-dev
+> > itself only provides the ioctls. Everything on top of that is in libi2c
+> > now, so the kernel documentation should point to libi2c and the
+> > detailed documentation should come with libi2c.
+> > 
+> > So I guess I should review the whole document now to see what needs to
+> > be updated, what should stay, and what should move.  
+> 
+> Maybe you can collaborate with Luca on this who just revamped a lot of
+> the docs? Putting him on CC and marking this patch as 'Deferred'.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/misc/eeprom/at24.c | 31 +++++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 10 deletions(-)
+I'm resuming my work on this. Luca, can you point me to your changes to
+Documentation/i2c/dev-interface.rst so that I can adjust my own changes
+to fit on top?
 
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 0681d5fdd538a..41ac65d1e5d41 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -564,6 +564,7 @@ static int at24_probe(struct i2c_client *client)
- 	bool i2c_fn_i2c, i2c_fn_block;
- 	unsigned int i, num_addresses;
- 	struct at24_data *at24;
-+	bool low_power;
- 	struct regmap *regmap;
- 	bool writable;
- 	u8 test_byte;
-@@ -701,19 +702,24 @@ static int at24_probe(struct i2c_client *client)
- 
- 	i2c_set_clientdata(client, at24);
- 
--	/* enable runtime pm */
--	pm_runtime_set_active(dev);
-+	low_power = acpi_dev_low_power_state_probe(&client->dev);
-+	if (!low_power)
-+		pm_runtime_set_active(dev);
-+
- 	pm_runtime_enable(dev);
- 
- 	/*
--	 * Perform a one-byte test read to verify that the
--	 * chip is functional.
-+	 * Perform a one-byte test read to verify that the chip is functional,
-+	 * unless powering on the device is to be avoided during probe (i.e.
-+	 * it's powered off right now).
- 	 */
--	err = at24_read(at24, 0, &test_byte, 1);
--	pm_runtime_idle(dev);
--	if (err) {
--		pm_runtime_disable(dev);
--		return -ENODEV;
-+	if (!low_power) {
-+		err = at24_read(at24, 0, &test_byte, 1);
-+		pm_runtime_idle(dev);
-+		if (err) {
-+			pm_runtime_disable(dev);
-+			return -ENODEV;
-+		}
- 	}
- 
- 	if (writable)
-@@ -728,8 +734,12 @@ static int at24_probe(struct i2c_client *client)
- 
- static int at24_remove(struct i2c_client *client)
- {
-+	bool low_power;
-+
- 	pm_runtime_disable(&client->dev);
--	pm_runtime_set_suspended(&client->dev);
-+	low_power = acpi_dev_low_power_state_probe(&client->dev);
-+	if (!low_power)
-+		pm_runtime_set_suspended(&client->dev);
- 
- 	return 0;
- }
-@@ -743,6 +753,7 @@ static struct i2c_driver at24_driver = {
- 	.probe_new = at24_probe,
- 	.remove = at24_remove,
- 	.id_table = at24_ids,
-+	.probe_low_power = true,
- };
- 
- static int __init at24_init(void)
+Thanks,
 -- 
-2.20.1
-
+Jean Delvare
+SUSE L3 Support
