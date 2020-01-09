@@ -2,76 +2,271 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9E6134E1C
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2020 21:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 888B213518A
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 03:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727205AbgAHUyv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Jan 2020 15:54:51 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42121 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726836AbgAHUyv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jan 2020 15:54:51 -0500
-Received: by mail-ot1-f68.google.com with SMTP id 66so4956782otd.9
-        for <linux-i2c@vger.kernel.org>; Wed, 08 Jan 2020 12:54:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jf75AHX9cWk938eoPABkjnqB5jtoAKhCXPRF42yiNM0=;
-        b=KaKK/2zW/5X5FYArjEafFVBv28N3k/6QI+A4ak2OQNfTwHNrdM1F47pp2XeyqzhysX
-         WV+rRN1lbsoGY66utycXyL//jsOTiJX7suW/vN9cecHIHYZj8oa/57Z8jPEFz1+050Kb
-         yBSnS5ViPZdvVGH+DmxfiLvAiTbPX7pzpD8PDWVhxKLheep0Hwlj57OKCfBvEgYD20YC
-         c6SFe+QzaUgYGEgABUQNipcMdfGJTsgG1gQUK26tuJ/GcKJKMFHrAt2b5K88EXKW4y5V
-         rvE9bxvkh9vNRXCc+cl3c9o58lDnhTH0Y2xEt3Mb7jNgVgd//0dW1OONthy/Rr8kDhq5
-         TbXQ==
-X-Gm-Message-State: APjAAAXaeddLRE5xoVSCHxRsRoN/pDR03v0Tur5alFdO4ro0o2tl1t5z
-        77CCMIoLF1AHKYi5RVjgYZPkwcY=
-X-Google-Smtp-Source: APXvYqwZ7ilKGbnzqvupRrpSVk/TVCJvcB5zeWMxUN58U85D/ZG6FRfEy8iRDvsTXrQkY3B+fgigHw==
-X-Received: by 2002:a05:6830:194:: with SMTP id q20mr5932196ota.92.1578516890207;
-        Wed, 08 Jan 2020 12:54:50 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q13sm1516646otc.5.2020.01.08.12.54.48
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jan 2020 12:54:48 -0800 (PST)
-Received: from rob (uid 1000)
-        (envelope-from rob@rob-hp-laptop)
-        id 2208fa
-        by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Wed, 08 Jan 2020 14:54:47 -0600
-Date:   Wed, 8 Jan 2020 14:54:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Khouloud Touil <ktouil@baylibre.com>
-Cc:     bgolaszewski@baylibre.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, srinivas.kandagatla@linaro.org,
-        baylibre-upstreaming@groups.io, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linus.walleij@linaro.org, Khouloud Touil <ktouil@baylibre.com>
-Subject: Re: [PATCH v4 4/5] dt-bindings: at25: add reference for the wp-gpios
- property
-Message-ID: <20200108205447.GA16981@bogus>
-References: <20200107092922.18408-1-ktouil@baylibre.com>
- <20200107092922.18408-5-ktouil@baylibre.com>
+        id S1727995AbgAICmw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Jan 2020 21:42:52 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:32303 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727989AbgAICmw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jan 2020 21:42:52 -0500
+Received: from [10.28.39.63] (10.28.39.63) by mail-sz.amlogic.com (10.28.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 9 Jan
+ 2020 10:43:14 +0800
+Subject: Re: [PATCH v3] arm64: dts: meson-a1: add I2C nodes
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+CC:     Kevin Hilman <khilman@baylibre.com>, Rob Herring <robh@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20191220091611.36319-1-jian.hu@amlogic.com>
+ <1ja76zsi4r.fsf@starbuckisacylon.baylibre.com>
+From:   Jian Hu <jian.hu@amlogic.com>
+Message-ID: <484f2273-80d2-87fe-2637-33f5313c580d@amlogic.com>
+Date:   Thu, 9 Jan 2020 10:43:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200107092922.18408-5-ktouil@baylibre.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1ja76zsi4r.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.28.39.63]
+X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
+ (10.28.11.5)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue,  7 Jan 2020 10:29:21 +0100, Khouloud Touil wrote:
-> As the at25 uses the NVMEM subsystem, and the property is now being
-> handled, adding reference for it in the device tree binding document,
-> which allows to specify the GPIO line to which the write-protect pin
-> is connected.
-> 
-> Signed-off-by: Khouloud Touil <ktouil@baylibre.com>
-> ---
->  Documentation/devicetree/bindings/eeprom/at25.txt | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+Hi Jerome
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks for your review
+
+On 2020/1/7 17:58, Jerome Brunet wrote:
+> 
+> On Fri 20 Dec 2019 at 10:16, Jian Hu <jian.hu@amlogic.com> wrote:
+> 
+>> There are four I2C controllers in A1 series,
+>> Share the same comptible with AXG. Compared to AXG,
+>> Drive strength feature is newly added in A1.
+>>
+>> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+>>
+>> ---
+>> This patch depends on A1 clock patchset at [0][3]
+>>
+>> Changes since v1 at [1]:
+>> -change reg length to 0x20
+>> -assign i2c bus alias in dts file
+>> -add new feature note compared to AXG in changelog
+>>
+>> Changes since v2 at [2]:
+>> -remove the dependence the commit description
+>> -remove i2c alias in dtsi
+>> -reorder the i2c nodes
+>> -reorder the i2c pins
+>>
+>> [0] https://lkml.kernel.org/r/20191206074052.15557-1-jian.hu@amlogic.com
+>> [1] https://lkml.kernel.org/r/20191202111253.94872-1-jian.hu@amlogic.com
+>> [2] https://lkml.kernel.org/r/20191211032802.83309-1-jian.hu@amlogic.com
+>> [3] https://lkml.kernel.org/r/20191206074052.15557-1-jian.hu@amlogic.com
+>> ---
+>> ---
+>>   arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 142 ++++++++++++++++++++++
+>>   1 file changed, 142 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+>> index eab2ecd36aa8..1542eeee699d 100644
+>> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+>> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+>> @@ -117,6 +117,16 @@
+>>   				};
+>>   			};
+>>   
+>> +			i2c0: i2c@1400 {
+>> +				compatible = "amlogic,meson-axg-i2c";
+>> +				reg = <0x0 0x1400 0x0 0x20>;
+>> +				interrupts = <GIC_SPI 32 IRQ_TYPE_EDGE_RISING>;
+>> +				#address-cells = <1>;
+>> +				#size-cells = <0>;
+>> +				clocks = <&clkc_periphs CLKID_I2C_M_A>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>>   			uart_AO: serial@1c00 {
+>>   				compatible = "amlogic,meson-gx-uart",
+>>   					     "amlogic,meson-ao-uart";
+>> @@ -136,6 +146,36 @@
+>>   				clock-names = "xtal", "pclk", "baud";
+>>   				status = "disabled";
+>>   			};
+>> +
+>> +			i2c1: i2c@5c00 {
+>> +				compatible = "amlogic,meson-axg-i2c";
+>> +				reg = <0x0 0x5c00 0x0 0x20>;
+>> +				interrupts = <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
+>> +				#address-cells = <1>;
+>> +				#size-cells = <0>;
+>> +				clocks = <&clkc_periphs CLKID_I2C_M_B>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			i2c2: i2c@6800 {
+>> +				compatible = "amlogic,meson-axg-i2c";
+>> +				reg = <0x0 0x6800 0x0 0x20>;
+>> +				interrupts = <GIC_SPI 76 IRQ_TYPE_EDGE_RISING>;
+>> +				#address-cells = <1>;
+>> +				#size-cells = <0>;
+>> +				clocks = <&clkc_periphs CLKID_I2C_M_C>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			i2c3: i2c@6c00 {
+>> +				compatible = "amlogic,meson-axg-i2c";
+>> +				reg = <0x0 0x6c00 0x0 0x20>;
+>> +				interrupts = <GIC_SPI 78 IRQ_TYPE_EDGE_RISING>;
+>> +				#address-cells = <1>;
+>> +				#size-cells = <0>;
+>> +				clocks = <&clkc_periphs CLKID_I2C_M_D>;
+>> +				status = "disabled";
+>> +			};
+>>   		};
+>>   
+>>   		gic: interrupt-controller@ff901000 {
+>> @@ -171,3 +211,105 @@
+>>   		#clock-cells = <0>;
+>>   	};
+>>   };
+>> +
+>> +&periphs_pinctrl {
+> 
+> Why is this not directly under the periphs_pinctrl node ?
+> 
+OK, I will put them under periphs_pinctrl node
+>> +	i2c0_f9_pins:i2c0-f9 {
+>                       ^
+>                       Missing space here. Same for the other nodes
+> 
+>> +		mux {
+>> +			groups = "i2c0_sck_f9",
+>> +				"i2c0_sda_f10";
+>> +			function = "i2c0";
+>> +			bias-pull-up;
+> 
+> Most device we have seen so far have the pull-up on the PCB.
+> 
+> If you look at the other dts file, the i2c pad bias is disabled. If the
+> pull-up resistor is missing on the PCB, this setting can overloaded in
+> the board dt.
+> 
+> Bottom line please put "bias-disable" or justify why a1 is different
+> from the SoC.
+Yes, there is pull-up resistor on PCB, I will replace it as
+'bias-disable'
+> 
+>> +			drive-strength-microamp = <3000>;
+>> +		};
+>> +	};
+>> +
+>> +	i2c0_f11_pins:i2c0-f11 {
+>> +		mux {
+>> +			groups = "i2c0_sck_f11",
+>> +				"i2c0_sda_f12";
+>> +			function = "i2c0";
+>> +			bias-pull-up;
+>> +			drive-strength-microamp = <3000>;
+>> +		};
+>> +	};
+>> +
+>> +	i2c1_a_pins:i2c1-a {
+>> +		mux {
+>> +			groups = "i2c1_sck_a",
+>> +				"i2c1_sda_a";
+>> +			function = "i2c1";
+>> +			bias-pull-up;
+>> +			drive-strength-microamp = <3000>;
+>> +		};
+>> +	};
+>> +
+>> +	i2c1_x_pins:i2c1-x {
+>> +		mux {
+>> +			groups = "i2c1_sck_x",
+>> +				"i2c1_sda_x";
+>> +			function = "i2c1";
+>> +			bias-pull-up;
+>> +			drive-strength-microamp = <3000>;
+>> +		};
+>> +	};
+>> +
+>> +	i2c2_a4_pins:i2c2-a4 {
+>> +		mux {
+>> +			groups = "i2c2_sck_a4",
+>> +				"i2c2_sda_a5";
+>> +			function = "i2c2";
+>> +			bias-pull-up;
+>> +			drive-strength-microamp = <3000>;
+>> +		};
+>> +	};
+>> +
+>> +	i2c2_a8_pins:i2c2-a8 {
+>> +		mux {
+>> +			groups = "i2c2_sck_a8",
+>> +				"i2c2_sda_a9";
+>> +			function = "i2c2";
+>> +			bias-pull-up;
+>> +			drive-strength-microamp = <3000>;
+>> +		};
+>> +	};
+>> +
+>> +	i2c2_x0_pins:i2c2-x0 {
+>> +		mux {
+>> +			groups = "i2c2_sck_x0",
+>> +				"i2c2_sda_x1";
+>> +			function = "i2c2";
+>> +			bias-pull-up;
+>> +			drive-strength-microamp = <3000>;
+>> +		};
+>> +	};
+>> +
+>> +	i2c2_x15_pins:i2c2-x15 {
+>> +		mux {
+>> +			groups = "i2c2_sck_x15",
+>> +				"i2c2_sda_x16";
+>> +			function = "i2c2";
+>> +			bias-pull-up;
+>> +			drive-strength-microamp = <3000>;
+>> +		};
+>> +	};
+>> +
+>> +	i2c3_f_pins:i2c3-f {
+>> +		mux {
+>> +			groups = "i2c3_sck_f",
+>> +				"i2c3_sda_f";
+>> +			function = "i2c3";
+>> +			bias-pull-up;
+>> +			drive-strength-microamp = <3000>;
+>> +		};
+>> +	};
+>> +
+>> +	i2c3_x_pins:i2c3-x {
+>> +		mux {
+>> +			groups = "i2c3_sck_x",
+>> +				"i2c3_sda_x";
+>> +			function = "i2c3";
+>> +			bias-pull-up;
+>> +			drive-strength-microamp = <3000>;
+>> +		};
+>> +	};
+>> +};
+> 
+> .
+> 
