@@ -2,136 +2,277 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06419135301
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 07:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA601353D9
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 08:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727749AbgAIGD5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Jan 2020 01:03:57 -0500
-Received: from mail-dm6nam10on2045.outbound.protection.outlook.com ([40.107.93.45]:27840
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727854AbgAIGD5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 9 Jan 2020 01:03:57 -0500
-Received: from BN7PR02CA0022.namprd02.prod.outlook.com (2603:10b6:408:20::35)
- by BN8PR02MB5858.namprd02.prod.outlook.com (2603:10b6:408:bc::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2602.11; Thu, 9 Jan
- 2020 06:03:56 +0000
-Received: from CY1NAM02FT053.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e45::204) by BN7PR02CA0022.outlook.office365.com
- (2603:10b6:408:20::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2602.12 via Frontend
- Transport; Thu, 9 Jan 2020 06:03:56 +0000
-Authentication-Results: spf=softfail (sender IP is 149.199.60.83)
- smtp.mailfrom=gmail.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=fail action=none header.from=gmail.com;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- gmail.com discourages use of 149.199.60.83 as permitted sender)
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- CY1NAM02FT053.mail.protection.outlook.com (10.152.74.165) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2623.9
- via Frontend Transport; Thu, 9 Jan 2020 06:03:55 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
-        (envelope-from <shubhrajyoti.datta@gmail.com>)
-        id 1ipQvD-0007LU-Ca
-        for linux-i2c@vger.kernel.org; Wed, 08 Jan 2020 22:03:55 -0800
-Received: from localhost ([127.0.0.1] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <shubhrajyoti.datta@gmail.com>)
-        id 1ipQv8-00064X-92; Wed, 08 Jan 2020 22:03:50 -0800
-Received: from [10.140.6.59] (helo=xhdshubhraj40.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <shubhrajyoti.datta@gmail.com>)
-        id 1ipQv7-00063H-GT; Wed, 08 Jan 2020 22:03:49 -0800
-From:   shubhrajyoti.datta@gmail.com
-To:     linux-i2c@vger.kernel.org
-Cc:     michal.simek@xilinx.com,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH 4/4] i2c: xiic: Fix the clocking across bind unbind
-Date:   Thu,  9 Jan 2020 11:33:39 +0530
-Message-Id: <1578549819-14110-4-git-send-email-shubhrajyoti.datta@gmail.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1578549819-14110-1-git-send-email-shubhrajyoti.datta@gmail.com>
-References: <1578549819-14110-1-git-send-email-shubhrajyoti.datta@gmail.com>
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-Result: No--4.759-7.0-31-1
-X-imss-scan-details: No--4.759-7.0-31-1;No--4.759-5.0-31-1
-X-TM-AS-User-Approved-Sender: No;No
-X-TM-AS-Result-Xfilter: Match text exemption rules:No
-X-EOPAttributedMessage: 0
-X-Matching-Connectors: 132230234359640700;(f9e945fa-a09a-4caa-7158-08d2eb1d8c44);()
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(396003)(136003)(376002)(346002)(39860400002)(189003)(199004)(107886003)(6666004)(316002)(356004)(9786002)(86362001)(5660300002)(76482006)(82202003)(36756003)(55446002)(70586007)(4326008)(73392003)(8936002)(6916009)(70206006)(2906002)(8676002)(9686003)(26005)(498600001)(336012)(2616005)(81166006)(426003)(81156014);DIR:OUT;SFP:1101;SCL:1;SRVR:BN8PR02MB5858;H:xsj-pvapsmtpgw01;FPR:;SPF:SoftFail;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
+        id S1728269AbgAIHsC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Jan 2020 02:48:02 -0500
+Received: from esa1.microchip.iphmx.com ([68.232.147.91]:21655 "EHLO
+        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728184AbgAIHsC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jan 2020 02:48:02 -0500
+Received-SPF: Pass (esa1.microchip.iphmx.com: domain of
+  Ludovic.Desroches@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
+  envelope-from="Ludovic.Desroches@microchip.com";
+  x-sender="Ludovic.Desroches@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa1.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
+  envelope-from="Ludovic.Desroches@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa1.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Ludovic.Desroches@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: bWlFSeDW8nza6EHS6ZKDGqzEBeVWt8PfOpZ1P0KFfyVmA2I+3DlTM2CZwCwTMxL8gXoF+DytV4
+ PZsEESUhROUp5fw3cK1C4QkQ8qUnOxmCOf4h1FTGWolpdMrfvtAQTDvDK5sm38zb2uloV3qe2E
+ WxqeXswRMIp+O/MIT5pkCRReJu3B/fdNJ83ljMm8BcDxaGa2F3pOjCrnKVYHDxrPceimdrf2V/
+ X1RmD8scsFtok4SWaCY5KPdBLL9119KJEyiUYHGCYjKsWqM8EOpt9835xfd7UMRLHejY0YyhW1
+ jzk=
+X-IronPort-AV: E=Sophos;i="5.69,413,1571727600"; 
+   d="scan'208";a="64145399"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jan 2020 00:48:00 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 9 Jan 2020 00:47:59 -0700
+Received: from localhost (10.10.85.251) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
+ Transport; Thu, 9 Jan 2020 00:47:58 -0700
+Date:   Thu, 9 Jan 2020 08:47:29 +0100
+From:   Ludovic Desroches <ludovic.desroches@microchip.com>
+To:     Codrin Ciubotariu - M19940 <Codrin.Ciubotariu@microchip.com>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kamel.bouhara@bootlin.com" <kamel.bouhara@bootlin.com>,
+        "wsa@the-dreams.de" <wsa@the-dreams.de>,
+        "Nicolas Ferre - M43238" <Nicolas.Ferre@microchip.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "robh@kernel.org" <robh@kernel.org>
+Subject: Re: [PATCH v2 3/6] i2c: at91: Send bus clear command if SCL is down
+Message-ID: <20200109074729.zare4va5ugbq62f3@M43218.corp.atmel.com>
+Mail-Followup-To: Codrin Ciubotariu - M19940 <Codrin.Ciubotariu@microchip.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kamel.bouhara@bootlin.com" <kamel.bouhara@bootlin.com>,
+        "wsa@the-dreams.de" <wsa@the-dreams.de>,
+        Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "robh@kernel.org" <robh@kernel.org>
+References: <20200103094821.13185-1-codrin.ciubotariu@microchip.com>
+ <20200103094821.13185-4-codrin.ciubotariu@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4cc09d11-c7f8-4e5e-6446-08d794c9b609
-X-MS-TrafficTypeDiagnostic: BN8PR02MB5858:
-X-Microsoft-Antispam-PRVS: <BN8PR02MB58586DF14DD1401C5EB167BE87390@BN8PR02MB5858.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
-X-Forefront-PRVS: 02778BF158
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OhuXPdrTj5UOTRPzPAR6LXW7a+6UNnq+7XvbvSatS746XDyT/pxzbO8mxIAykVrCPvM5aU8aBJXCTQ3MP80lDugHE/TfKy6KaHqtnO08+EUh8eE+KNwdG8O1lbwXX7KxxzqS87qMT2U/8sLcK/ZL1aq0AEzJhhRzEmPhv4mBisbnsUugkz9ESVB/s/cpGAMGdUDRykKXxSOhf5GHo2kSQI4tOSs2ydrsjSFq+TU0jaTEcVR6zT/DxVTSvQGPkVw+dy4E1ssWhCeI8kPTVEnXwH9eqo38dpw4zzjRUZot5r31ibsfbhe0A1LA6pQSaIbdLgEQG3MyNk/zmy6MRJsmuxG5fcXdEbVHJIyuKIanlT2vleHto6p6pGSltCuOjfgjnkXKUCcRaU8FhnWAEfnVJMgWqGcMlkVjldUkc6mKxDlYQ0OvhXl6Te2cAiT3kMJO
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2020 06:03:55.8349
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cc09d11-c7f8-4e5e-6446-08d794c9b609
-X-MS-Exchange-CrossTenant-Id: 5afe0b00-7697-4969-b663-5eab37d5f47e
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5afe0b00-7697-4969-b663-5eab37d5f47e;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR02MB5858
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200103094821.13185-4-codrin.ciubotariu@microchip.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+On Fri, Jan 03, 2020 at 09:49:07AM +0000, Codrin Ciubotariu - M19940 wrote:
+> After a transfer timeout, some faulty I2C slave devices might hold down
+> the SCL pin. We can generate a bus clear command, hoping that the slave
+> might release the pins.
+> 
+> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-The recommendation is that the the set_active should be done
-withruntine disabled.
-Also fix the remove path for clocking.
+This patch may conflict with another one removing the explicit set to
+false.
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
----
- drivers/i2c/busses/i2c-xiic.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+> ---
+> 
+> Changes in v2:
+>  - use CLEAR command only if SDA is down; update patch subject to
+>    reflect this;
+>  - CLEAR command is no longer used for sama5d2, only sam9x60;
+> 
+>  drivers/i2c/busses/i2c-at91-core.c   |  9 ++++++++
+>  drivers/i2c/busses/i2c-at91-master.c | 32 +++++++++++++++++++++++-----
+>  drivers/i2c/busses/i2c-at91.h        |  7 +++++-
+>  3 files changed, 42 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-at91-core.c b/drivers/i2c/busses/i2c-at91-core.c
+> index e13af4874976..128eafc05adb 100644
+> --- a/drivers/i2c/busses/i2c-at91-core.c
+> +++ b/drivers/i2c/busses/i2c-at91-core.c
+> @@ -71,6 +71,7 @@ static struct at91_twi_pdata at91rm9200_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata at91sam9261_config = {
+> @@ -82,6 +83,7 @@ static struct at91_twi_pdata at91sam9261_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata at91sam9260_config = {
+> @@ -93,6 +95,7 @@ static struct at91_twi_pdata at91sam9260_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata at91sam9g20_config = {
+> @@ -104,6 +107,7 @@ static struct at91_twi_pdata at91sam9g20_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata at91sam9g10_config = {
+> @@ -115,6 +119,7 @@ static struct at91_twi_pdata at91sam9g10_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static const struct platform_device_id at91_twi_devtypes[] = {
+> @@ -148,6 +153,7 @@ static struct at91_twi_pdata at91sam9x5_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata sama5d4_config = {
+> @@ -159,6 +165,7 @@ static struct at91_twi_pdata sama5d4_config = {
+>  	.has_dig_filtr = true,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata sama5d2_config = {
+> @@ -170,6 +177,7 @@ static struct at91_twi_pdata sama5d2_config = {
+>  	.has_dig_filtr = true,
+>  	.has_adv_dig_filtr = true,
+>  	.has_ana_filtr = true,
+> +	.has_clear_cmd = false,	/* due to errata, CLEAR cmd is not working */
 
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index 7d2a8c1..30e42bb 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -798,10 +798,10 @@ static int xiic_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 	i2c->dev = &pdev->dev;
--	pm_runtime_enable(i2c->dev);
- 	pm_runtime_set_autosuspend_delay(i2c->dev, XIIC_PM_TIMEOUT);
- 	pm_runtime_use_autosuspend(i2c->dev);
- 	pm_runtime_set_active(i2c->dev);
-+	pm_runtime_enable(i2c->dev);
- 	ret = devm_request_threaded_irq(&pdev->dev, irq, xiic_isr,
- 					xiic_process, IRQF_ONESHOT,
- 					pdev->name, i2c);
-@@ -859,14 +859,16 @@ static int xiic_i2c_remove(struct platform_device *pdev)
- 	/* remove adapter & data */
- 	i2c_del_adapter(&i2c->adap);
- 
--	ret = clk_prepare_enable(i2c->clk);
--	if (ret) {
--		dev_err(&pdev->dev, "Unable to enable clock.\n");
-+	ret = pm_runtime_get_sync(i2c->dev);
-+	if (ret < 0)
- 		return ret;
--	}
-+
- 	xiic_deinit(i2c);
-+	pm_runtime_put_sync(i2c->dev);
- 	clk_disable_unprepare(i2c->clk);
- 	pm_runtime_disable(&pdev->dev);
-+	pm_runtime_set_suspended(&pdev->dev);
-+	pm_runtime_dont_use_autosuspend(&pdev->dev);
- 
- 	return 0;
- }
--- 
-2.1.1
+In this case it's probably worth keeping it.
 
+Ludovic
+
+>  };
+>  
+>  static struct at91_twi_pdata sam9x60_config = {
+> @@ -181,6 +189,7 @@ static struct at91_twi_pdata sam9x60_config = {
+>  	.has_dig_filtr = true,
+>  	.has_adv_dig_filtr = true,
+>  	.has_ana_filtr = true,
+> +	.has_clear_cmd = true,
+>  };
+>  
+>  static const struct of_device_id atmel_twi_dt_ids[] = {
+> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+> index c55e8ff35201..8c4f20317847 100644
+> --- a/drivers/i2c/busses/i2c-at91-master.c
+> +++ b/drivers/i2c/busses/i2c-at91-master.c
+> @@ -480,7 +480,7 @@ static int at91_do_twi_transfer(struct at91_twi_dev *dev)
+>  	unsigned long time_left;
+>  	bool has_unre_flag = dev->pdata->has_unre_flag;
+>  	bool has_alt_cmd = dev->pdata->has_alt_cmd;
+> -	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+> +	bool has_clear_cmd = dev->pdata->has_clear_cmd;
+>  
+>  	/*
+>  	 * WARNING: the TXCOMP bit in the Status Register is NOT a clear on
+> @@ -641,10 +641,32 @@ static int at91_do_twi_transfer(struct at91_twi_dev *dev)
+>  			       AT91_TWI_THRCLR | AT91_TWI_LOCKCLR);
+>  	}
+>  
+> -	if (rinfo->get_sda && !(rinfo->get_sda(&dev->adapter))) {
+> -		dev_dbg(dev->dev,
+> -			"SDA is down; clear bus using gpio\n");
+> -		i2c_recover_bus(&dev->adapter);
+> +	/*
+> +	 * some faulty I2C slave devices might hold SDA down;
+> +	 * we can send a bus clear command, hoping that the pins will be
+> +	 * released
+> +	 */
+> +	if (has_clear_cmd) {
+> +		if (!(dev->transfer_status & AT91_TWI_SDA)) {
+> +			dev_dbg(dev->dev,
+> +				"SDA is down; sending bus clear command\n");
+> +			if (dev->use_alt_cmd) {
+> +				unsigned int acr;
+> +
+> +				acr = at91_twi_read(dev, AT91_TWI_ACR);
+> +				acr &= ~AT91_TWI_ACR_DATAL_MASK;
+> +				at91_twi_write(dev, AT91_TWI_ACR, acr);
+> +			}
+> +			at91_twi_write(dev, AT91_TWI_CR, AT91_TWI_CLEAR);
+> +		}
+> +	} else {
+> +		struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+> +
+> +		if (rinfo->get_sda && !(rinfo->get_sda(&dev->adapter))) {
+> +			dev_dbg(dev->dev,
+> +				"SDA is down; clear bus using gpio\n");
+> +			i2c_recover_bus(&dev->adapter);
+> +		}
+>  	}
+>  
+>  	return ret;
+> diff --git a/drivers/i2c/busses/i2c-at91.h b/drivers/i2c/busses/i2c-at91.h
+> index eb335b71e775..80f77d523346 100644
+> --- a/drivers/i2c/busses/i2c-at91.h
+> +++ b/drivers/i2c/busses/i2c-at91.h
+> @@ -36,6 +36,7 @@
+>  #define	AT91_TWI_SVDIS		BIT(5)	/* Slave Transfer Disable */
+>  #define	AT91_TWI_QUICK		BIT(6)	/* SMBus quick command */
+>  #define	AT91_TWI_SWRST		BIT(7)	/* Software Reset */
+> +#define	AT91_TWI_CLEAR		BIT(15) /* Bus clear command */
+>  #define	AT91_TWI_ACMEN		BIT(16) /* Alternative Command Mode Enable */
+>  #define	AT91_TWI_ACMDIS		BIT(17) /* Alternative Command Mode Disable */
+>  #define	AT91_TWI_THRCLR		BIT(24) /* Transmit Holding Register Clear */
+> @@ -69,6 +70,8 @@
+>  #define	AT91_TWI_NACK		BIT(8)	/* Not Acknowledged */
+>  #define	AT91_TWI_EOSACC		BIT(11)	/* End Of Slave Access */
+>  #define	AT91_TWI_LOCK		BIT(23) /* TWI Lock due to Frame Errors */
+> +#define	AT91_TWI_SCL		BIT(24) /* TWI SCL status */
+> +#define	AT91_TWI_SDA		BIT(25) /* TWI SDA status */
+>  
+>  #define	AT91_TWI_INT_MASK \
+>  	(AT91_TWI_TXCOMP | AT91_TWI_RXRDY | AT91_TWI_TXRDY | AT91_TWI_NACK \
+> @@ -81,7 +84,8 @@
+>  #define	AT91_TWI_THR		0x0034	/* Transmit Holding Register */
+>  
+>  #define	AT91_TWI_ACR		0x0040	/* Alternative Command Register */
+> -#define	AT91_TWI_ACR_DATAL(len)	((len) & 0xff)
+> +#define	AT91_TWI_ACR_DATAL_MASK	GENMASK(15, 0)
+> +#define	AT91_TWI_ACR_DATAL(len)	((len) & AT91_TWI_ACR_DATAL_MASK)
+>  #define	AT91_TWI_ACR_DIR	BIT(8)
+>  
+>  #define AT91_TWI_FILTR		0x0044
+> @@ -118,6 +122,7 @@ struct at91_twi_pdata {
+>  	bool has_dig_filtr;
+>  	bool has_adv_dig_filtr;
+>  	bool has_ana_filtr;
+> +	bool has_clear_cmd;
+>  	struct at_dma_slave dma_slave;
+>  };
+>  
+> -- 
+> 2.20.1
