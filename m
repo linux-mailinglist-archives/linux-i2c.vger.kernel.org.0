@@ -2,256 +2,253 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 921F6135789
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 11:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5072E13579A
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 12:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728871AbgAIK60 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Jan 2020 05:58:26 -0500
-Received: from esa1.microchip.iphmx.com ([68.232.147.91]:54093 "EHLO
-        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728635AbgAIK60 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jan 2020 05:58:26 -0500
-Received-SPF: Pass (esa1.microchip.iphmx.com: domain of
-  Codrin.Ciubotariu@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
-  envelope-from="Codrin.Ciubotariu@microchip.com";
-  x-sender="Codrin.Ciubotariu@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa1.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
-  envelope-from="Codrin.Ciubotariu@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa1.microchip.iphmx.com; spf=Pass smtp.mailfrom=Codrin.Ciubotariu@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: QYKj7tIxen8k/VvWKZWpceZ07mo8qS9AzN6qr53fJPErJi9C4blICBugmhxM+xE0hxlqaJ2w8S
- 9HGaSgkqBEg4cF5VGcA3G8om8oe/bPShzg6h7KDcrkD36TULrT58fMimVOu4JPVjwSpISbaSQC
- vBbnEdYnyRYVzVxRGMJoLlAULNviJGwuUk/529TDBrciQfOEebuWMazXUhuooB6hx8QAlMpeBD
- ew1Q2VC+Q9r77qGoOeN7tbDa8dvKfogJKMRvawXkQ20EPhnkaukL9AwohdXhvzzomJYxedVl38
- oto=
-X-IronPort-AV: E=Sophos;i="5.69,413,1571727600"; 
-   d="scan'208";a="64161692"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jan 2020 03:58:24 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 9 Jan 2020 03:58:24 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Thu, 9 Jan 2020 03:58:24 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ccP2BiSIGOfXyQMacdyQ/XrikSZ1EYfWDskBthegYbrqAc9iWd2V82TfD4EVWUHdcVdU3pF4ybF7N4ndXHGTxRbL4oVnO5LAMHuM4Wx6W17nQk658F2Obzb2qeLUrfA1fRVBwfnOITZMc/bbIQoczft+briX08ZRzRS2WFtqwG3hJ3vnZ2dgpmWKCJjik869/F/botlEn0YNdMKIcxRubQ6hiv7lqsS109rcRJKi4FmapS9h0bwXdYwHzjd2tWwu/mBG0Eh0O43f8Lv3f6jitUbU6S/baVl1GysHdoejQD1SOwP7OJaevsJwJh6+/+lysDIn33sGZU6wECxS8KE62Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nga0iz9/QYJBv3QYpNa9zz6EiB8yXbFsJpNGO9Czt2U=;
- b=Z1+05fAPWxezzsF1DviU8STU+uiWPbKWKLswkdB57DnNhmF6yLOUfzzcsY19zv0Qra/XdX9u/ZhZkx5EFGjbiKx5HAKPHrM2vS8IL8g7VMqNaBL99D9WULtqVDTAnoBSRLpQ0kZhNpzamo68mHDpQQqqj7HjYiydmRPLWsHOcpTETGpQgNC2+kzDxKsJleoGVLpJasCGIBH5C4imUk/kVFVgoVX1H1y+woCx4zk1J/WcH1IeAa5S96q8RDgwsOSdW0i/jvXgKguxSAum0MXhmH0n6P/NFnzcYhp2oz8bWyZ1dqQKEH8jeOIHl94+D57btgadRM6h6XWwpMgmAXQE6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nga0iz9/QYJBv3QYpNa9zz6EiB8yXbFsJpNGO9Czt2U=;
- b=KPfD1z63yvyyaVf1kDp+Ix/ECvKJh9yQYVesuGtyKaO8whH17fv0w4zTIVPg8ZOLzEaZ9WKWjnewGvCLuYCbz5bAQtCW0xlwKUZsgPEzGDDFgY0hlQ/DDDXX9l5v1LZuevuSm9SOI1HycreE+h3T5Hwmc97WXZZrcpw6vehFVM8=
-Received: from BY5PR11MB4497.namprd11.prod.outlook.com (52.132.255.220) by
- BY5PR11MB4212.namprd11.prod.outlook.com (52.132.255.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2623.9; Thu, 9 Jan 2020 10:58:22 +0000
-Received: from BY5PR11MB4497.namprd11.prod.outlook.com
- ([fe80::6189:c32:b55b:b3fd]) by BY5PR11MB4497.namprd11.prod.outlook.com
- ([fe80::6189:c32:b55b:b3fd%5]) with mapi id 15.20.2623.011; Thu, 9 Jan 2020
- 10:58:22 +0000
-From:   <Codrin.Ciubotariu@microchip.com>
-To:     <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kamel.bouhara@bootlin.com>,
-        <wsa@the-dreams.de>, <Nicolas.Ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <robh@kernel.org>
+        id S1729714AbgAILGH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Jan 2020 06:06:07 -0500
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:51174 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728635AbgAILGH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jan 2020 06:06:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=SzztYWTbiunX74NBuJ72EKUZqsEhO3b6F7xEF35LviA=; b=iE1AHF50bzSbeDbrpOtZ8V0FM
+        ofRSXRsbv73bQQkZVI3nXbbv/8qNhiCgl53RQyo4bZKKx9k7EHVIsTRBc7/TKjNr/5y6hbee/QRbM
+        AhTPKEwT4zanjDAqe9Zu0VAGTmC5F0cV2RJjZaftkTW9xbBGB+lHK7HTUhi/n/GPNT17B8Mli0vTa
+        vIiRKfAM00YUxNGckKs7CuAXcLdVTc1eHwMQAH/0+UI46CM1VpnloVtcrNKQeRXfCbT+u1cThuJd9
+        D5T325/73opZ2Jo2FvlZQMVjMbCxgGnZ8nVLQDplt5/ZtQP+1ya+tEHsLX/5I9cMH4xP0Q8o7Fzh4
+        CaaEZdUSQ==;
+Received: from shell.armlinux.org.uk ([2001:4d48:ad52:3201:5054:ff:fe00:4ec]:52606)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1ipVdX-0004a1-Em; Thu, 09 Jan 2020 11:05:59 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1ipVdV-0000RW-LY; Thu, 09 Jan 2020 11:05:57 +0000
+Date:   Thu, 9 Jan 2020 11:05:57 +0000
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Codrin.Ciubotariu@microchip.com
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        robh@kernel.org, alexandre.belloni@bootlin.com,
+        kamel.bouhara@bootlin.com, wsa@the-dreams.de,
+        Ludovic.Desroches@microchip.com
 Subject: Re: [PATCH v2 3/6] i2c: at91: Send bus clear command if SCL is down
-Thread-Topic: [PATCH v2 3/6] i2c: at91: Send bus clear command if SCL is down
-Thread-Index: AQHVwhsKlTodLDZUaUCcsTrXKcjnqKfh/d+AgAA1VIA=
-Date:   Thu, 9 Jan 2020 10:58:22 +0000
-Message-ID: <d2fb2414-5c7f-3bc0-caf5-8927e6a2ccee@microchip.com>
+Message-ID: <20200109110557.GO25745@shell.armlinux.org.uk>
 References: <20200103094821.13185-1-codrin.ciubotariu@microchip.com>
  <20200103094821.13185-4-codrin.ciubotariu@microchip.com>
- <20200109074729.zare4va5ugbq62f3@M43218.corp.atmel.com>
-In-Reply-To: <20200109074729.zare4va5ugbq62f3@M43218.corp.atmel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [94.177.32.156]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bc09237f-6bd5-48f6-bb45-08d794f2d830
-x-ms-traffictypediagnostic: BY5PR11MB4212:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR11MB42121C8E3C22D369B3C97AE2E7390@BY5PR11MB4212.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 02778BF158
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(396003)(136003)(346002)(39860400002)(376002)(199004)(55674003)(189003)(2906002)(6506007)(71200400001)(6512007)(53546011)(76116006)(64756008)(91956017)(6486002)(31696002)(2616005)(478600001)(86362001)(66446008)(66946007)(8936002)(36756003)(66476007)(81166006)(81156014)(8676002)(66556008)(5660300002)(186003)(26005)(110136005)(31686004)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:BY5PR11MB4212;H:BY5PR11MB4497.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FeMgfYLbjHmmIO1u7ZWWRPSkRpjxECmukWRxvGJ0Eb7tyuxHO4hbIXyn90Y9AD3cuHACtktsqZM4vm0GLCCwHHYsLp5I0C5syiBf4/CPDbNScy10CUKiUGq+ImIJhsvynNUdA7Y5XMhMeEpxtM6KMOQO+VN1E+Jerlz9DUPhbq0eS21/mIMPz9l7mN3o8AHx7Ctw35o9mchY1EJigEbh/nTIz3Jz73pOMV3Mfj1e43BR0pUQZrDhuISvE0k6kAqqw0GyoD2p1DH5ANZLTRapJBUzeXMSZwHpL9uYt7K4Q2D7SxoPfY/1o7wJkUIAhkrARcWCcKC4DiRKaXZWhvR4NMsWzNFTrEss3Aw9Q8khHs0Eu1D1IKU8/w5WtvKIdzN49r8iEZV5JQUXPl+XuRC38QTfN98HfD8a6IqWnYIlbPMIDCEYBpOsCTmSzkgTEJUXXsHduyCJ3I6MEu2TQ9Nu19FhSvFZdEbVC5BGr1U0hWRqjuUBp5B+cEtL2v7Liiq0
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D40C8276CAF1624DAE30D3A67E4C4F07@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc09237f-6bd5-48f6-bb45-08d794f2d830
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2020 10:58:22.5094
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: H+HglKda2hLlL9wOgz6qo974QAUJxZ8bEM6quGCH7rxGmL2T5pHFKxdesDsobgKJdsvMYh7J1r0RUzYbN5cPiCbUqtMcCiSj/7z1xA9tfcY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4212
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200103094821.13185-4-codrin.ciubotariu@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gMDkuMDEuMjAyMCAwOTo0NywgTHVkb3ZpYyBEZXNyb2NoZXMgd3JvdGU6DQo+IE9uIEZyaSwg
-SmFuIDAzLCAyMDIwIGF0IDA5OjQ5OjA3QU0gKzAwMDAsIENvZHJpbiBDaXVib3Rhcml1IC0gTTE5
-OTQwIHdyb3RlOg0KPj4gQWZ0ZXIgYSB0cmFuc2ZlciB0aW1lb3V0LCBzb21lIGZhdWx0eSBJMkMg
-c2xhdmUgZGV2aWNlcyBtaWdodCBob2xkIGRvd24NCj4+IHRoZSBTQ0wgcGluLiBXZSBjYW4gZ2Vu
-ZXJhdGUgYSBidXMgY2xlYXIgY29tbWFuZCwgaG9waW5nIHRoYXQgdGhlIHNsYXZlDQo+PiBtaWdo
-dCByZWxlYXNlIHRoZSBwaW5zLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IENvZHJpbiBDaXVib3Rh
-cml1IDxjb2RyaW4uY2l1Ym90YXJpdUBtaWNyb2NoaXAuY29tPg0KPiANCj4gVGhpcyBwYXRjaCBt
-YXkgY29uZmxpY3Qgd2l0aCBhbm90aGVyIG9uZSByZW1vdmluZyB0aGUgZXhwbGljaXQgc2V0IHRv
-DQo+IGZhbHNlLg0KDQpZZXMsIEV1Z2VuJ3MgcGF0Y2hlcyBnb3QgYWNjZXB0ZWQgaW4gdGhlIG1l
-YW50aW1lLiBJIHdpbGwgcmViYXNlIGFuZCANCmFkYXB0IHRvIHRoZSBuZXcgc3R5bGUuDQoNCj4g
-DQo+PiAtLS0NCj4+DQo+PiBDaGFuZ2VzIGluIHYyOg0KPj4gICAtIHVzZSBDTEVBUiBjb21tYW5k
-IG9ubHkgaWYgU0RBIGlzIGRvd247IHVwZGF0ZSBwYXRjaCBzdWJqZWN0IHRvDQo+PiAgICAgcmVm
-bGVjdCB0aGlzOw0KPj4gICAtIENMRUFSIGNvbW1hbmQgaXMgbm8gbG9uZ2VyIHVzZWQgZm9yIHNh
-bWE1ZDIsIG9ubHkgc2FtOXg2MDsNCj4+DQo+PiAgIGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtYXQ5
-MS1jb3JlLmMgICB8ICA5ICsrKysrKysrDQo+PiAgIGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtYXQ5
-MS1tYXN0ZXIuYyB8IDMyICsrKysrKysrKysrKysrKysrKysrKysrLS0tLS0NCj4+ICAgZHJpdmVy
-cy9pMmMvYnVzc2VzL2kyYy1hdDkxLmggICAgICAgIHwgIDcgKysrKystDQo+PiAgIDMgZmlsZXMg
-Y2hhbmdlZCwgNDIgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hdDkxLWNvcmUuYyBiL2RyaXZlcnMvaTJjL2J1
-c3Nlcy9pMmMtYXQ5MS1jb3JlLmMNCj4+IGluZGV4IGUxM2FmNDg3NDk3Ni4uMTI4ZWFmYzA1YWRi
-IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hdDkxLWNvcmUuYw0KPj4g
-KysrIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hdDkxLWNvcmUuYw0KPj4gQEAgLTcxLDYgKzcx
-LDcgQEAgc3RhdGljIHN0cnVjdCBhdDkxX3R3aV9wZGF0YSBhdDkxcm05MjAwX2NvbmZpZyA9IHsN
-Cj4+ICAgCS5oYXNfZGlnX2ZpbHRyID0gZmFsc2UsDQo+PiAgIAkuaGFzX2Fkdl9kaWdfZmlsdHIg
-PSBmYWxzZSwNCj4+ICAgCS5oYXNfYW5hX2ZpbHRyID0gZmFsc2UsDQo+PiArCS5oYXNfY2xlYXJf
-Y21kID0gZmFsc2UsDQo+PiAgIH07DQo+PiAgIA0KPj4gICBzdGF0aWMgc3RydWN0IGF0OTFfdHdp
-X3BkYXRhIGF0OTFzYW05MjYxX2NvbmZpZyA9IHsNCj4+IEBAIC04Miw2ICs4Myw3IEBAIHN0YXRp
-YyBzdHJ1Y3QgYXQ5MV90d2lfcGRhdGEgYXQ5MXNhbTkyNjFfY29uZmlnID0gew0KPj4gICAJLmhh
-c19kaWdfZmlsdHIgPSBmYWxzZSwNCj4+ICAgCS5oYXNfYWR2X2RpZ19maWx0ciA9IGZhbHNlLA0K
-Pj4gICAJLmhhc19hbmFfZmlsdHIgPSBmYWxzZSwNCj4+ICsJLmhhc19jbGVhcl9jbWQgPSBmYWxz
-ZSwNCj4+ICAgfTsNCj4+ICAgDQo+PiAgIHN0YXRpYyBzdHJ1Y3QgYXQ5MV90d2lfcGRhdGEgYXQ5
-MXNhbTkyNjBfY29uZmlnID0gew0KPj4gQEAgLTkzLDYgKzk1LDcgQEAgc3RhdGljIHN0cnVjdCBh
-dDkxX3R3aV9wZGF0YSBhdDkxc2FtOTI2MF9jb25maWcgPSB7DQo+PiAgIAkuaGFzX2RpZ19maWx0
-ciA9IGZhbHNlLA0KPj4gICAJLmhhc19hZHZfZGlnX2ZpbHRyID0gZmFsc2UsDQo+PiAgIAkuaGFz
-X2FuYV9maWx0ciA9IGZhbHNlLA0KPj4gKwkuaGFzX2NsZWFyX2NtZCA9IGZhbHNlLA0KPj4gICB9
-Ow0KPj4gICANCj4+ICAgc3RhdGljIHN0cnVjdCBhdDkxX3R3aV9wZGF0YSBhdDkxc2FtOWcyMF9j
-b25maWcgPSB7DQo+PiBAQCAtMTA0LDYgKzEwNyw3IEBAIHN0YXRpYyBzdHJ1Y3QgYXQ5MV90d2lf
-cGRhdGEgYXQ5MXNhbTlnMjBfY29uZmlnID0gew0KPj4gICAJLmhhc19kaWdfZmlsdHIgPSBmYWxz
-ZSwNCj4+ICAgCS5oYXNfYWR2X2RpZ19maWx0ciA9IGZhbHNlLA0KPj4gICAJLmhhc19hbmFfZmls
-dHIgPSBmYWxzZSwNCj4+ICsJLmhhc19jbGVhcl9jbWQgPSBmYWxzZSwNCj4+ICAgfTsNCj4+ICAg
-DQo+PiAgIHN0YXRpYyBzdHJ1Y3QgYXQ5MV90d2lfcGRhdGEgYXQ5MXNhbTlnMTBfY29uZmlnID0g
-ew0KPj4gQEAgLTExNSw2ICsxMTksNyBAQCBzdGF0aWMgc3RydWN0IGF0OTFfdHdpX3BkYXRhIGF0
-OTFzYW05ZzEwX2NvbmZpZyA9IHsNCj4+ICAgCS5oYXNfZGlnX2ZpbHRyID0gZmFsc2UsDQo+PiAg
-IAkuaGFzX2Fkdl9kaWdfZmlsdHIgPSBmYWxzZSwNCj4+ICAgCS5oYXNfYW5hX2ZpbHRyID0gZmFs
-c2UsDQo+PiArCS5oYXNfY2xlYXJfY21kID0gZmFsc2UsDQo+PiAgIH07DQo+PiAgIA0KPj4gICBz
-dGF0aWMgY29uc3Qgc3RydWN0IHBsYXRmb3JtX2RldmljZV9pZCBhdDkxX3R3aV9kZXZ0eXBlc1td
-ID0gew0KPj4gQEAgLTE0OCw2ICsxNTMsNyBAQCBzdGF0aWMgc3RydWN0IGF0OTFfdHdpX3BkYXRh
-IGF0OTFzYW05eDVfY29uZmlnID0gew0KPj4gICAJLmhhc19kaWdfZmlsdHIgPSBmYWxzZSwNCj4+
-ICAgCS5oYXNfYWR2X2RpZ19maWx0ciA9IGZhbHNlLA0KPj4gICAJLmhhc19hbmFfZmlsdHIgPSBm
-YWxzZSwNCj4+ICsJLmhhc19jbGVhcl9jbWQgPSBmYWxzZSwNCj4+ICAgfTsNCj4+ICAgDQo+PiAg
-IHN0YXRpYyBzdHJ1Y3QgYXQ5MV90d2lfcGRhdGEgc2FtYTVkNF9jb25maWcgPSB7DQo+PiBAQCAt
-MTU5LDYgKzE2NSw3IEBAIHN0YXRpYyBzdHJ1Y3QgYXQ5MV90d2lfcGRhdGEgc2FtYTVkNF9jb25m
-aWcgPSB7DQo+PiAgIAkuaGFzX2RpZ19maWx0ciA9IHRydWUsDQo+PiAgIAkuaGFzX2Fkdl9kaWdf
-ZmlsdHIgPSBmYWxzZSwNCj4+ICAgCS5oYXNfYW5hX2ZpbHRyID0gZmFsc2UsDQo+PiArCS5oYXNf
-Y2xlYXJfY21kID0gZmFsc2UsDQo+PiAgIH07DQo+PiAgIA0KPj4gICBzdGF0aWMgc3RydWN0IGF0
-OTFfdHdpX3BkYXRhIHNhbWE1ZDJfY29uZmlnID0gew0KPj4gQEAgLTE3MCw2ICsxNzcsNyBAQCBz
-dGF0aWMgc3RydWN0IGF0OTFfdHdpX3BkYXRhIHNhbWE1ZDJfY29uZmlnID0gew0KPj4gICAJLmhh
-c19kaWdfZmlsdHIgPSB0cnVlLA0KPj4gICAJLmhhc19hZHZfZGlnX2ZpbHRyID0gdHJ1ZSwNCj4+
-ICAgCS5oYXNfYW5hX2ZpbHRyID0gdHJ1ZSwNCj4+ICsJLmhhc19jbGVhcl9jbWQgPSBmYWxzZSwJ
-LyogZHVlIHRvIGVycmF0YSwgQ0xFQVIgY21kIGlzIG5vdCB3b3JraW5nICovDQo+IA0KPiBJbiB0
-aGlzIGNhc2UgaXQncyBwcm9iYWJseSB3b3J0aCBrZWVwaW5nIGl0Lg0KDQpZZXMsIEkgYWxzbyB0
-aGluayBpdCdzIHVzZWZ1bCB0byBsZXQgdGhpcyBvbmUuDQoNClRoYW5rcyBhbmQgYmVzdCByZWdh
-cmRzLA0KQ29kcmluDQoNCj4gDQo+IEx1ZG92aWMNCj4gDQo+PiAgIH07DQo+PiAgIA0KPj4gICBz
-dGF0aWMgc3RydWN0IGF0OTFfdHdpX3BkYXRhIHNhbTl4NjBfY29uZmlnID0gew0KPj4gQEAgLTE4
-MSw2ICsxODksNyBAQCBzdGF0aWMgc3RydWN0IGF0OTFfdHdpX3BkYXRhIHNhbTl4NjBfY29uZmln
-ID0gew0KPj4gICAJLmhhc19kaWdfZmlsdHIgPSB0cnVlLA0KPj4gICAJLmhhc19hZHZfZGlnX2Zp
-bHRyID0gdHJ1ZSwNCj4+ICAgCS5oYXNfYW5hX2ZpbHRyID0gdHJ1ZSwNCj4+ICsJLmhhc19jbGVh
-cl9jbWQgPSB0cnVlLA0KPj4gICB9Ow0KPj4gICANCj4+ICAgc3RhdGljIGNvbnN0IHN0cnVjdCBv
-Zl9kZXZpY2VfaWQgYXRtZWxfdHdpX2R0X2lkc1tdID0gew0KPj4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvaTJjL2J1c3Nlcy9pMmMtYXQ5MS1tYXN0ZXIuYyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMt
-YXQ5MS1tYXN0ZXIuYw0KPj4gaW5kZXggYzU1ZThmZjM1MjAxLi44YzRmMjAzMTc4NDcgMTAwNjQ0
-DQo+PiAtLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWF0OTEtbWFzdGVyLmMNCj4+ICsrKyBi
-L2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtYXQ5MS1tYXN0ZXIuYw0KPj4gQEAgLTQ4MCw3ICs0ODAs
-NyBAQCBzdGF0aWMgaW50IGF0OTFfZG9fdHdpX3RyYW5zZmVyKHN0cnVjdCBhdDkxX3R3aV9kZXYg
-KmRldikNCj4+ICAgCXVuc2lnbmVkIGxvbmcgdGltZV9sZWZ0Ow0KPj4gICAJYm9vbCBoYXNfdW5y
-ZV9mbGFnID0gZGV2LT5wZGF0YS0+aGFzX3VucmVfZmxhZzsNCj4+ICAgCWJvb2wgaGFzX2FsdF9j
-bWQgPSBkZXYtPnBkYXRhLT5oYXNfYWx0X2NtZDsNCj4+IC0Jc3RydWN0IGkyY19idXNfcmVjb3Zl
-cnlfaW5mbyAqcmluZm8gPSAmZGV2LT5yaW5mbzsNCj4+ICsJYm9vbCBoYXNfY2xlYXJfY21kID0g
-ZGV2LT5wZGF0YS0+aGFzX2NsZWFyX2NtZDsNCj4+ICAgDQo+PiAgIAkvKg0KPj4gICAJICogV0FS
-TklORzogdGhlIFRYQ09NUCBiaXQgaW4gdGhlIFN0YXR1cyBSZWdpc3RlciBpcyBOT1QgYSBjbGVh
-ciBvbg0KPj4gQEAgLTY0MSwxMCArNjQxLDMyIEBAIHN0YXRpYyBpbnQgYXQ5MV9kb190d2lfdHJh
-bnNmZXIoc3RydWN0IGF0OTFfdHdpX2RldiAqZGV2KQ0KPj4gICAJCQkgICAgICAgQVQ5MV9UV0lf
-VEhSQ0xSIHwgQVQ5MV9UV0lfTE9DS0NMUik7DQo+PiAgIAl9DQo+PiAgIA0KPj4gLQlpZiAocmlu
-Zm8tPmdldF9zZGEgJiYgIShyaW5mby0+Z2V0X3NkYSgmZGV2LT5hZGFwdGVyKSkpIHsNCj4+IC0J
-CWRldl9kYmcoZGV2LT5kZXYsDQo+PiAtCQkJIlNEQSBpcyBkb3duOyBjbGVhciBidXMgdXNpbmcg
-Z3Bpb1xuIik7DQo+PiAtCQlpMmNfcmVjb3Zlcl9idXMoJmRldi0+YWRhcHRlcik7DQo+PiArCS8q
-DQo+PiArCSAqIHNvbWUgZmF1bHR5IEkyQyBzbGF2ZSBkZXZpY2VzIG1pZ2h0IGhvbGQgU0RBIGRv
-d247DQo+PiArCSAqIHdlIGNhbiBzZW5kIGEgYnVzIGNsZWFyIGNvbW1hbmQsIGhvcGluZyB0aGF0
-IHRoZSBwaW5zIHdpbGwgYmUNCj4+ICsJICogcmVsZWFzZWQNCj4+ICsJICovDQo+PiArCWlmICho
-YXNfY2xlYXJfY21kKSB7DQo+PiArCQlpZiAoIShkZXYtPnRyYW5zZmVyX3N0YXR1cyAmIEFUOTFf
-VFdJX1NEQSkpIHsNCj4+ICsJCQlkZXZfZGJnKGRldi0+ZGV2LA0KPj4gKwkJCQkiU0RBIGlzIGRv
-d247IHNlbmRpbmcgYnVzIGNsZWFyIGNvbW1hbmRcbiIpOw0KPj4gKwkJCWlmIChkZXYtPnVzZV9h
-bHRfY21kKSB7DQo+PiArCQkJCXVuc2lnbmVkIGludCBhY3I7DQo+PiArDQo+PiArCQkJCWFjciA9
-IGF0OTFfdHdpX3JlYWQoZGV2LCBBVDkxX1RXSV9BQ1IpOw0KPj4gKwkJCQlhY3IgJj0gfkFUOTFf
-VFdJX0FDUl9EQVRBTF9NQVNLOw0KPj4gKwkJCQlhdDkxX3R3aV93cml0ZShkZXYsIEFUOTFfVFdJ
-X0FDUiwgYWNyKTsNCj4+ICsJCQl9DQo+PiArCQkJYXQ5MV90d2lfd3JpdGUoZGV2LCBBVDkxX1RX
-SV9DUiwgQVQ5MV9UV0lfQ0xFQVIpOw0KPj4gKwkJfQ0KPj4gKwl9IGVsc2Ugew0KPj4gKwkJc3Ry
-dWN0IGkyY19idXNfcmVjb3ZlcnlfaW5mbyAqcmluZm8gPSAmZGV2LT5yaW5mbzsNCj4+ICsNCj4+
-ICsJCWlmIChyaW5mby0+Z2V0X3NkYSAmJiAhKHJpbmZvLT5nZXRfc2RhKCZkZXYtPmFkYXB0ZXIp
-KSkgew0KPj4gKwkJCWRldl9kYmcoZGV2LT5kZXYsDQo+PiArCQkJCSJTREEgaXMgZG93bjsgY2xl
-YXIgYnVzIHVzaW5nIGdwaW9cbiIpOw0KPj4gKwkJCWkyY19yZWNvdmVyX2J1cygmZGV2LT5hZGFw
-dGVyKTsNCj4+ICsJCX0NCj4+ICAgCX0NCj4+ICAgDQo+PiAgIAlyZXR1cm4gcmV0Ow0KPj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtYXQ5MS5oIGIvZHJpdmVycy9pMmMvYnVz
-c2VzL2kyYy1hdDkxLmgNCj4+IGluZGV4IGViMzM1YjcxZTc3NS4uODBmNzdkNTIzMzQ2IDEwMDY0
-NA0KPj4gLS0tIGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hdDkxLmgNCj4+ICsrKyBiL2RyaXZl
-cnMvaTJjL2J1c3Nlcy9pMmMtYXQ5MS5oDQo+PiBAQCAtMzYsNiArMzYsNyBAQA0KPj4gICAjZGVm
-aW5lCUFUOTFfVFdJX1NWRElTCQlCSVQoNSkJLyogU2xhdmUgVHJhbnNmZXIgRGlzYWJsZSAqLw0K
-Pj4gICAjZGVmaW5lCUFUOTFfVFdJX1FVSUNLCQlCSVQoNikJLyogU01CdXMgcXVpY2sgY29tbWFu
-ZCAqLw0KPj4gICAjZGVmaW5lCUFUOTFfVFdJX1NXUlNUCQlCSVQoNykJLyogU29mdHdhcmUgUmVz
-ZXQgKi8NCj4+ICsjZGVmaW5lCUFUOTFfVFdJX0NMRUFSCQlCSVQoMTUpIC8qIEJ1cyBjbGVhciBj
-b21tYW5kICovDQo+PiAgICNkZWZpbmUJQVQ5MV9UV0lfQUNNRU4JCUJJVCgxNikgLyogQWx0ZXJu
-YXRpdmUgQ29tbWFuZCBNb2RlIEVuYWJsZSAqLw0KPj4gICAjZGVmaW5lCUFUOTFfVFdJX0FDTURJ
-UwkJQklUKDE3KSAvKiBBbHRlcm5hdGl2ZSBDb21tYW5kIE1vZGUgRGlzYWJsZSAqLw0KPj4gICAj
-ZGVmaW5lCUFUOTFfVFdJX1RIUkNMUgkJQklUKDI0KSAvKiBUcmFuc21pdCBIb2xkaW5nIFJlZ2lz
-dGVyIENsZWFyICovDQo+PiBAQCAtNjksNiArNzAsOCBAQA0KPj4gICAjZGVmaW5lCUFUOTFfVFdJ
-X05BQ0sJCUJJVCg4KQkvKiBOb3QgQWNrbm93bGVkZ2VkICovDQo+PiAgICNkZWZpbmUJQVQ5MV9U
-V0lfRU9TQUNDCQlCSVQoMTEpCS8qIEVuZCBPZiBTbGF2ZSBBY2Nlc3MgKi8NCj4+ICAgI2RlZmlu
-ZQlBVDkxX1RXSV9MT0NLCQlCSVQoMjMpIC8qIFRXSSBMb2NrIGR1ZSB0byBGcmFtZSBFcnJvcnMg
-Ki8NCj4+ICsjZGVmaW5lCUFUOTFfVFdJX1NDTAkJQklUKDI0KSAvKiBUV0kgU0NMIHN0YXR1cyAq
-Lw0KPj4gKyNkZWZpbmUJQVQ5MV9UV0lfU0RBCQlCSVQoMjUpIC8qIFRXSSBTREEgc3RhdHVzICov
-DQo+PiAgIA0KPj4gICAjZGVmaW5lCUFUOTFfVFdJX0lOVF9NQVNLIFwNCj4+ICAgCShBVDkxX1RX
-SV9UWENPTVAgfCBBVDkxX1RXSV9SWFJEWSB8IEFUOTFfVFdJX1RYUkRZIHwgQVQ5MV9UV0lfTkFD
-SyBcDQo+PiBAQCAtODEsNyArODQsOCBAQA0KPj4gICAjZGVmaW5lCUFUOTFfVFdJX1RIUgkJMHgw
-MDM0CS8qIFRyYW5zbWl0IEhvbGRpbmcgUmVnaXN0ZXIgKi8NCj4+ICAgDQo+PiAgICNkZWZpbmUJ
-QVQ5MV9UV0lfQUNSCQkweDAwNDAJLyogQWx0ZXJuYXRpdmUgQ29tbWFuZCBSZWdpc3RlciAqLw0K
-Pj4gLSNkZWZpbmUJQVQ5MV9UV0lfQUNSX0RBVEFMKGxlbikJKChsZW4pICYgMHhmZikNCj4+ICsj
-ZGVmaW5lCUFUOTFfVFdJX0FDUl9EQVRBTF9NQVNLCUdFTk1BU0soMTUsIDApDQo+PiArI2RlZmlu
-ZQlBVDkxX1RXSV9BQ1JfREFUQUwobGVuKQkoKGxlbikgJiBBVDkxX1RXSV9BQ1JfREFUQUxfTUFT
-SykNCj4+ICAgI2RlZmluZQlBVDkxX1RXSV9BQ1JfRElSCUJJVCg4KQ0KPj4gICANCj4+ICAgI2Rl
-ZmluZSBBVDkxX1RXSV9GSUxUUgkJMHgwMDQ0DQo+PiBAQCAtMTE4LDYgKzEyMiw3IEBAIHN0cnVj
-dCBhdDkxX3R3aV9wZGF0YSB7DQo+PiAgIAlib29sIGhhc19kaWdfZmlsdHI7DQo+PiAgIAlib29s
-IGhhc19hZHZfZGlnX2ZpbHRyOw0KPj4gICAJYm9vbCBoYXNfYW5hX2ZpbHRyOw0KPj4gKwlib29s
-IGhhc19jbGVhcl9jbWQ7DQo+PiAgIAlzdHJ1Y3QgYXRfZG1hX3NsYXZlIGRtYV9zbGF2ZTsNCj4+
-ICAgfTsNCj4+ICAgDQo+PiAtLSANCj4+IDIuMjAuMQ0K
+On Fri, Jan 03, 2020 at 09:49:07AM +0000, Codrin.Ciubotariu@microchip.com wrote:
+> After a transfer timeout, some faulty I2C slave devices might hold down
+> the SCL pin. We can generate a bus clear command, hoping that the slave
+> might release the pins.
+> 
+> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> ---
+> 
+> Changes in v2:
+>  - use CLEAR command only if SDA is down; update patch subject to
+>    reflect this;
+
+Given this change, shouldn't the commit message above be updated?
+
+>  - CLEAR command is no longer used for sama5d2, only sam9x60;
+> 
+>  drivers/i2c/busses/i2c-at91-core.c   |  9 ++++++++
+>  drivers/i2c/busses/i2c-at91-master.c | 32 +++++++++++++++++++++++-----
+>  drivers/i2c/busses/i2c-at91.h        |  7 +++++-
+>  3 files changed, 42 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-at91-core.c b/drivers/i2c/busses/i2c-at91-core.c
+> index e13af4874976..128eafc05adb 100644
+> --- a/drivers/i2c/busses/i2c-at91-core.c
+> +++ b/drivers/i2c/busses/i2c-at91-core.c
+> @@ -71,6 +71,7 @@ static struct at91_twi_pdata at91rm9200_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata at91sam9261_config = {
+> @@ -82,6 +83,7 @@ static struct at91_twi_pdata at91sam9261_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata at91sam9260_config = {
+> @@ -93,6 +95,7 @@ static struct at91_twi_pdata at91sam9260_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata at91sam9g20_config = {
+> @@ -104,6 +107,7 @@ static struct at91_twi_pdata at91sam9g20_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata at91sam9g10_config = {
+> @@ -115,6 +119,7 @@ static struct at91_twi_pdata at91sam9g10_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static const struct platform_device_id at91_twi_devtypes[] = {
+> @@ -148,6 +153,7 @@ static struct at91_twi_pdata at91sam9x5_config = {
+>  	.has_dig_filtr = false,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata sama5d4_config = {
+> @@ -159,6 +165,7 @@ static struct at91_twi_pdata sama5d4_config = {
+>  	.has_dig_filtr = true,
+>  	.has_adv_dig_filtr = false,
+>  	.has_ana_filtr = false,
+> +	.has_clear_cmd = false,
+>  };
+>  
+>  static struct at91_twi_pdata sama5d2_config = {
+> @@ -170,6 +177,7 @@ static struct at91_twi_pdata sama5d2_config = {
+>  	.has_dig_filtr = true,
+>  	.has_adv_dig_filtr = true,
+>  	.has_ana_filtr = true,
+> +	.has_clear_cmd = false,	/* due to errata, CLEAR cmd is not working */
+>  };
+>  
+>  static struct at91_twi_pdata sam9x60_config = {
+> @@ -181,6 +189,7 @@ static struct at91_twi_pdata sam9x60_config = {
+>  	.has_dig_filtr = true,
+>  	.has_adv_dig_filtr = true,
+>  	.has_ana_filtr = true,
+> +	.has_clear_cmd = true,
+>  };
+>  
+>  static const struct of_device_id atmel_twi_dt_ids[] = {
+> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+> index c55e8ff35201..8c4f20317847 100644
+> --- a/drivers/i2c/busses/i2c-at91-master.c
+> +++ b/drivers/i2c/busses/i2c-at91-master.c
+> @@ -480,7 +480,7 @@ static int at91_do_twi_transfer(struct at91_twi_dev *dev)
+>  	unsigned long time_left;
+>  	bool has_unre_flag = dev->pdata->has_unre_flag;
+>  	bool has_alt_cmd = dev->pdata->has_alt_cmd;
+> -	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+> +	bool has_clear_cmd = dev->pdata->has_clear_cmd;
+>  
+>  	/*
+>  	 * WARNING: the TXCOMP bit in the Status Register is NOT a clear on
+> @@ -641,10 +641,32 @@ static int at91_do_twi_transfer(struct at91_twi_dev *dev)
+>  			       AT91_TWI_THRCLR | AT91_TWI_LOCKCLR);
+>  	}
+>  
+> -	if (rinfo->get_sda && !(rinfo->get_sda(&dev->adapter))) {
+> -		dev_dbg(dev->dev,
+> -			"SDA is down; clear bus using gpio\n");
+> -		i2c_recover_bus(&dev->adapter);
+> +	/*
+> +	 * some faulty I2C slave devices might hold SDA down;
+> +	 * we can send a bus clear command, hoping that the pins will be
+> +	 * released
+> +	 */
+> +	if (has_clear_cmd) {
+> +		if (!(dev->transfer_status & AT91_TWI_SDA)) {
+> +			dev_dbg(dev->dev,
+> +				"SDA is down; sending bus clear command\n");
+> +			if (dev->use_alt_cmd) {
+> +				unsigned int acr;
+> +
+> +				acr = at91_twi_read(dev, AT91_TWI_ACR);
+> +				acr &= ~AT91_TWI_ACR_DATAL_MASK;
+> +				at91_twi_write(dev, AT91_TWI_ACR, acr);
+> +			}
+> +			at91_twi_write(dev, AT91_TWI_CR, AT91_TWI_CLEAR);
+> +		}
+> +	} else {
+> +		struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+> +
+> +		if (rinfo->get_sda && !(rinfo->get_sda(&dev->adapter))) {
+> +			dev_dbg(dev->dev,
+> +				"SDA is down; clear bus using gpio\n");
+> +			i2c_recover_bus(&dev->adapter);
+> +		}
+>  	}
+>  
+>  	return ret;
+> diff --git a/drivers/i2c/busses/i2c-at91.h b/drivers/i2c/busses/i2c-at91.h
+> index eb335b71e775..80f77d523346 100644
+> --- a/drivers/i2c/busses/i2c-at91.h
+> +++ b/drivers/i2c/busses/i2c-at91.h
+> @@ -36,6 +36,7 @@
+>  #define	AT91_TWI_SVDIS		BIT(5)	/* Slave Transfer Disable */
+>  #define	AT91_TWI_QUICK		BIT(6)	/* SMBus quick command */
+>  #define	AT91_TWI_SWRST		BIT(7)	/* Software Reset */
+> +#define	AT91_TWI_CLEAR		BIT(15) /* Bus clear command */
+>  #define	AT91_TWI_ACMEN		BIT(16) /* Alternative Command Mode Enable */
+>  #define	AT91_TWI_ACMDIS		BIT(17) /* Alternative Command Mode Disable */
+>  #define	AT91_TWI_THRCLR		BIT(24) /* Transmit Holding Register Clear */
+> @@ -69,6 +70,8 @@
+>  #define	AT91_TWI_NACK		BIT(8)	/* Not Acknowledged */
+>  #define	AT91_TWI_EOSACC		BIT(11)	/* End Of Slave Access */
+>  #define	AT91_TWI_LOCK		BIT(23) /* TWI Lock due to Frame Errors */
+> +#define	AT91_TWI_SCL		BIT(24) /* TWI SCL status */
+> +#define	AT91_TWI_SDA		BIT(25) /* TWI SDA status */
+>  
+>  #define	AT91_TWI_INT_MASK \
+>  	(AT91_TWI_TXCOMP | AT91_TWI_RXRDY | AT91_TWI_TXRDY | AT91_TWI_NACK \
+> @@ -81,7 +84,8 @@
+>  #define	AT91_TWI_THR		0x0034	/* Transmit Holding Register */
+>  
+>  #define	AT91_TWI_ACR		0x0040	/* Alternative Command Register */
+> -#define	AT91_TWI_ACR_DATAL(len)	((len) & 0xff)
+> +#define	AT91_TWI_ACR_DATAL_MASK	GENMASK(15, 0)
+> +#define	AT91_TWI_ACR_DATAL(len)	((len) & AT91_TWI_ACR_DATAL_MASK)
+>  #define	AT91_TWI_ACR_DIR	BIT(8)
+>  
+>  #define AT91_TWI_FILTR		0x0044
+> @@ -118,6 +122,7 @@ struct at91_twi_pdata {
+>  	bool has_dig_filtr;
+>  	bool has_adv_dig_filtr;
+>  	bool has_ana_filtr;
+> +	bool has_clear_cmd;
+>  	struct at_dma_slave dma_slave;
+>  };
+>  
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+According to speedtest.net: 11.9Mbps down 500kbps up
