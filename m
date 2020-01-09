@@ -2,84 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D3E135545
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 10:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0391355C1
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 10:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729051AbgAIJMv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Jan 2020 04:12:51 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46330 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728448AbgAIJMv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 9 Jan 2020 04:12:51 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 7462EB9EB;
-        Thu,  9 Jan 2020 09:12:49 +0000 (UTC)
-Date:   Thu, 9 Jan 2020 09:54:58 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 02/12] i2c: i801: convert to use i2c_new_client_device()
-Message-ID: <20200109095458.62499f28@endymion>
-In-Reply-To: <20200107174748.9616-3-wsa+renesas@sang-engineering.com>
-References: <20200107174748.9616-1-wsa+renesas@sang-engineering.com>
-        <20200107174748.9616-3-wsa+renesas@sang-engineering.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1729494AbgAIJ3A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Jan 2020 04:29:00 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:37155 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729460AbgAIJ3A (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jan 2020 04:29:00 -0500
+Received: from [109.168.11.45] (port=60086 helo=[192.168.101.73])
+        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1ipU7d-00FOyB-S4; Thu, 09 Jan 2020 10:28:57 +0100
+Subject: Re: [PATCH 1/4] i2c: xiic: Fix kerneldoc warnings
+To:     shubhrajyoti.datta@gmail.com, linux-i2c@vger.kernel.org
+Cc:     michal.simek@xilinx.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+References: <1578549819-14110-1-git-send-email-shubhrajyoti.datta@gmail.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <81cf9f79-f11c-4392-d920-cc003015f743@lucaceresoli.net>
+Date:   Thu, 9 Jan 2020 10:28:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <1578549819-14110-1-git-send-email-shubhrajyoti.datta@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 7 Jan 2020 18:47:36 +0100, Wolfram Sang wrote:
-> Move away from the deprecated API and return the shiny new ERRPTR where
-> useful.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> Build tested only.
-> 
->  drivers/i2c/busses/i2c-i801.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index f5e69fe56532..44db3a91d32d 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1142,7 +1142,7 @@ static void dmi_check_onboard_device(u8 type, const char *name,
->  		memset(&info, 0, sizeof(struct i2c_board_info));
->  		info.addr = dmi_devices[i].i2c_addr;
->  		strlcpy(info.type, dmi_devices[i].i2c_type, I2C_NAME_SIZE);
-> -		i2c_new_device(adap, &info);
-> +		i2c_new_client_device(adap, &info);
->  		break;
->  	}
->  }
-> @@ -1296,7 +1296,7 @@ static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
->  	memset(&info, 0, sizeof(struct i2c_board_info));
->  	info.addr = dell_lis3lv02d_devices[i].i2c_addr;
->  	strlcpy(info.type, "lis3lv02d", I2C_NAME_SIZE);
-> -	i2c_new_device(&priv->adapter, &info);
-> +	i2c_new_client_device(&priv->adapter, &info);
->  }
->  
->  /* Register optional slaves */
-> @@ -1312,7 +1312,7 @@ static void i801_probe_optional_slaves(struct i801_priv *priv)
->  		memset(&info, 0, sizeof(struct i2c_board_info));
->  		info.addr = apanel_addr;
->  		strlcpy(info.type, "fujitsu_apanel", I2C_NAME_SIZE);
-> -		i2c_new_device(&priv->adapter, &info);
-> +		i2c_new_client_device(&priv->adapter, &info);
->  	}
->  
->  	if (dmi_name_in_vendors("FUJITSU"))
+Hi Shubhrajyoti,
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+On 09/01/20 07:03, shubhrajyoti.datta@gmail.com wrote:
+> From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> 
+> Fix the below warning by adding the description of clock and dev.
+> 
+> drivers/i2c/busses/i2c-xiic.c:57: info: Scanning doc for struct xiic_i2c
+> drivers/i2c/busses/i2c-xiic.c:84: warning: Function parameter or member
+> 'dev' not described in 'xiic_i2c'
+> drivers/i2c/busses/i2c-xiic.c:84: warning: Function parameter or member
+> 'clk' not described in 'xiic_i2c'
+> 
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 
-Thanks,
+This patch has already been applied (in an improved version) and is in
+mainline now.
+
 -- 
-Jean Delvare
-SUSE L3 Support
+Luca
