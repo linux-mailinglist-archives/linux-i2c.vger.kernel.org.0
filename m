@@ -2,29 +2,29 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C00135D18
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 16:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C30135D11
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2020 16:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732549AbgAIPoi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Jan 2020 10:44:38 -0500
-Received: from mga09.intel.com ([134.134.136.24]:4559 "EHLO mga09.intel.com"
+        id S1732576AbgAIPom (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Jan 2020 10:44:42 -0500
+Received: from mga02.intel.com ([134.134.136.20]:3757 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730913AbgAIPoi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 9 Jan 2020 10:44:38 -0500
+        id S1732548AbgAIPol (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 9 Jan 2020 10:44:41 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jan 2020 07:44:37 -0800
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jan 2020 07:44:41 -0800
 X-IronPort-AV: E=Sophos;i="5.69,414,1571727600"; 
-   d="scan'208";a="246707087"
+   d="scan'208";a="227826443"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jan 2020 07:44:35 -0800
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Jan 2020 07:44:38 -0800
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 2407420F35;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 2F22220F4E;
         Thu,  9 Jan 2020 17:44:33 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1ipa01-00055E-G9; Thu, 09 Jan 2020 17:45:29 +0200
+        id 1ipa01-00055H-HW; Thu, 09 Jan 2020 17:45:29 +0200
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa@the-dreams.de>,
@@ -32,9 +32,9 @@ Cc:     Wolfram Sang <wsa@the-dreams.de>,
         linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>
-Subject: [PATCH v3 4/5] media: i2c: imx319: Support probe while the device is off
-Date:   Thu,  9 Jan 2020 17:45:28 +0200
-Message-Id: <20200109154529.19484-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v3 5/5] at24: Support probing while off
+Date:   Thu,  9 Jan 2020 17:45:29 +0200
+Message-Id: <20200109154529.19484-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200109154529.19484-1-sakari.ailus@linux.intel.com>
 References: <20200109154529.19484-1-sakari.ailus@linux.intel.com>
@@ -45,80 +45,85 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Rajmohan Mani <rajmohan.mani@intel.com>
+In certain use cases (where the chip is part of a camera module, and the
+camera module is wired together with a camera privacy LED), powering on
+the device during probe is undesirable. Add support for the at24 to
+execute probe while being powered off. For this to happen, a hint in form
+of a device property is required from the firmware.
 
-Tell ACPI device PM code that the driver supports the device being powered
-off when the driver's probe function is entered.
-
-Signed-off-by: Rajmohan Mani <rajmohan.mani@intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/imx319.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ drivers/misc/eeprom/at24.c | 31 +++++++++++++++++++++----------
+ 1 file changed, 21 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/i2c/imx319.c b/drivers/media/i2c/imx319.c
-index 17c2e4b41221e..3bb87154dd2cd 100644
---- a/drivers/media/i2c/imx319.c
-+++ b/drivers/media/i2c/imx319.c
-@@ -2424,6 +2424,7 @@ static struct imx319_hwcfg *imx319_get_hwcfg(struct device *dev)
- static int imx319_probe(struct i2c_client *client)
- {
- 	struct imx319 *imx319;
+diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+index 0681d5fdd538a..41ac65d1e5d41 100644
+--- a/drivers/misc/eeprom/at24.c
++++ b/drivers/misc/eeprom/at24.c
+@@ -564,6 +564,7 @@ static int at24_probe(struct i2c_client *client)
+ 	bool i2c_fn_i2c, i2c_fn_block;
+ 	unsigned int i, num_addresses;
+ 	struct at24_data *at24;
 +	bool low_power;
- 	int ret;
- 	u32 i;
+ 	struct regmap *regmap;
+ 	bool writable;
+ 	u8 test_byte;
+@@ -701,19 +702,24 @@ static int at24_probe(struct i2c_client *client)
  
-@@ -2436,11 +2437,14 @@ static int imx319_probe(struct i2c_client *client)
- 	/* Initialize subdev */
- 	v4l2_i2c_subdev_init(&imx319->sd, client, &imx319_subdev_ops);
+ 	i2c_set_clientdata(client, at24);
  
--	/* Check module identity */
--	ret = imx319_identify_module(imx319);
--	if (ret) {
--		dev_err(&client->dev, "failed to find sensor: %d", ret);
--		goto error_probe;
+-	/* enable runtime pm */
+-	pm_runtime_set_active(dev);
 +	low_power = acpi_dev_low_power_state_probe(&client->dev);
++	if (!low_power)
++		pm_runtime_set_active(dev);
++
+ 	pm_runtime_enable(dev);
+ 
+ 	/*
+-	 * Perform a one-byte test read to verify that the
+-	 * chip is functional.
++	 * Perform a one-byte test read to verify that the chip is functional,
++	 * unless powering on the device is to be avoided during probe (i.e.
++	 * it's powered off right now).
+ 	 */
+-	err = at24_read(at24, 0, &test_byte, 1);
+-	pm_runtime_idle(dev);
+-	if (err) {
+-		pm_runtime_disable(dev);
+-		return -ENODEV;
 +	if (!low_power) {
-+		/* Check module identity */
-+		ret = imx319_identify_module(imx319);
-+		if (ret) {
-+			dev_err(&client->dev, "failed to find sensor: %d", ret);
-+			goto error_probe;
++		err = at24_read(at24, 0, &test_byte, 1);
++		pm_runtime_idle(dev);
++		if (err) {
++			pm_runtime_disable(dev);
++			return -ENODEV;
 +		}
  	}
  
- 	imx319->hwcfg = imx319_get_hwcfg(&client->dev);
-@@ -2493,10 +2497,10 @@ static int imx319_probe(struct i2c_client *client)
- 		goto error_media_entity;
+ 	if (writable)
+@@ -728,8 +734,12 @@ static int at24_probe(struct i2c_client *client)
  
- 	/*
--	 * Device is already turned on by i2c-core with ACPI domain PM.
--	 * Enable runtime PM and turn off the device.
-+	 * Don't set the device's state to active if it's in a low power state.
- 	 */
--	pm_runtime_set_active(&client->dev);
+ static int at24_remove(struct i2c_client *client)
+ {
++	bool low_power;
++
+ 	pm_runtime_disable(&client->dev);
+-	pm_runtime_set_suspended(&client->dev);
++	low_power = acpi_dev_low_power_state_probe(&client->dev);
 +	if (!low_power)
-+		pm_runtime_set_active(&client->dev);
- 	pm_runtime_enable(&client->dev);
- 	pm_runtime_idle(&client->dev);
++		pm_runtime_set_suspended(&client->dev);
  
-@@ -2536,7 +2540,7 @@ static const struct dev_pm_ops imx319_pm_ops = {
- };
- 
- static const struct acpi_device_id imx319_acpi_ids[] = {
--	{ "SONY319A" },
-+	{ "SONY319A", },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(acpi, imx319_acpi_ids);
-@@ -2549,6 +2553,7 @@ static struct i2c_driver imx319_i2c_driver = {
- 	},
- 	.probe_new = imx319_probe,
- 	.remove = imx319_remove,
+ 	return 0;
+ }
+@@ -743,6 +753,7 @@ static struct i2c_driver at24_driver = {
+ 	.probe_new = at24_probe,
+ 	.remove = at24_remove,
+ 	.id_table = at24_ids,
 +	.probe_low_power = true,
  };
- module_i2c_driver(imx319_i2c_driver);
  
+ static int __init at24_init(void)
 -- 
 2.20.1
 
