@@ -2,74 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD501368B0
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jan 2020 09:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A0A136BCD
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jan 2020 12:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726508AbgAJIB6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Jan 2020 03:01:58 -0500
-Received: from sauhun.de ([88.99.104.3]:56170 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726401AbgAJIB6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 10 Jan 2020 03:01:58 -0500
-Received: from localhost (p54B33279.dip0.t-ipconnect.de [84.179.50.121])
-        by pokefinder.org (Postfix) with ESMTPSA id BF2762C06B3;
-        Fri, 10 Jan 2020 09:01:56 +0100 (CET)
-Date:   Fri, 10 Jan 2020 09:01:53 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: fix bus recovery stop mode timing
-Message-ID: <20200110080153.GA1057@ninjato>
-References: <E1igWvB-0001ib-PV@rmk-PC.armlinux.org.uk>
- <20200109212410.GA3046@ninjato>
- <20200109214103.GU25745@shell.armlinux.org.uk>
+        id S1727825AbgAJLQ1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 Jan 2020 06:16:27 -0500
+Received: from mail-io1-f66.google.com ([209.85.166.66]:40182 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727818AbgAJLQ0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Jan 2020 06:16:26 -0500
+Received: by mail-io1-f66.google.com with SMTP id x1so1664268iop.7
+        for <linux-i2c@vger.kernel.org>; Fri, 10 Jan 2020 03:16:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=E0kTgke7i7no5YSGmsSsdd4ls6keOfUqGJvkD2ZqyfQ=;
+        b=NnePBo6iCOPCCl8M3uUdxEi3EwgCfLxTravxBpRnXZlApT5tkOTYTwa5YdVOdf7Hqr
+         InO7lLE8tbhmVGA1ABlD/sztCr/eIMOczIR1fivwLrjTlnuDqqwhfKKtW8tvpugFxWmg
+         GNWAbWWujCvRjDbYEgDo7yrXAnrF7U7Hadn/or4/SYCnqQufiOsdeyAjytF9tveiYn+f
+         oWbAHJ3uG61eS+jpIPo+RDY2SZBE1Gyzfup2d5vmYkV6IHtdsM+h0vWbki//QJRuoPKr
+         t4U9hrqfIvz7+5UwF01sXX3QDVTz5ySaxHMVN8NN3icKAsX7aGNIo9vnQSu1nuFU4vQr
+         P0KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=E0kTgke7i7no5YSGmsSsdd4ls6keOfUqGJvkD2ZqyfQ=;
+        b=gQzW4X8gEfbBlq+rimVxwwNmiBBC7zH3d6CJdU7C3btxj/OmSR7/a/ZRThoG/ymBRZ
+         VGg8gsC0V1KUa8hHsk/bxQAPhgsI80NKjLcMb34DsCIA3FB1WrbkuTvnmxvN01I9DVSR
+         Y9CMVqLIsb/CBrYfVcykPP/UK4Gv0plFZGB2tLeWQnuhpiwViuXEt8Q7QwahNYcWyb22
+         yZ/EMkUQF7eKdZshu49SIW9/FQ1BGrZNW5uvwe21vdfmYF4ps0Ki8A0YIX33mu0d7Wrv
+         cYZXt0Ruu3F1abtowF6M2FoiQGPqa4OOLMQFjTZVgApdoBz+uH1ryeea0uSmIXgB52V1
+         JQiQ==
+X-Gm-Message-State: APjAAAWwPaGD+htgWBul1alJzOlZff8zTab5BtwUd3OYn8XHR3lHsucs
+        POOnAcchIE29mQR8CpRxicQVhl10+IEnO/3NMdqu8w==
+X-Google-Smtp-Source: APXvYqwPTjV6sa9yurHRzaTSTH6oKZ7TDKuE4ojDTaVsHmqgvbewwCwQ+R1EOsG5qONsmgHQ1T36FBP4nbNDi2uHV78=
+X-Received: by 2002:a5d:8952:: with SMTP id b18mr2031946iot.40.1578654985955;
+ Fri, 10 Jan 2020 03:16:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BOKacYhQ+x31HxR3"
-Content-Disposition: inline
-In-Reply-To: <20200109214103.GU25745@shell.armlinux.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200109154529.19484-1-sakari.ailus@linux.intel.com> <20200109154529.19484-6-sakari.ailus@linux.intel.com>
+In-Reply-To: <20200109154529.19484-6-sakari.ailus@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 10 Jan 2020 12:16:14 +0100
+Message-ID: <CAMRc=MfqRqtW=nMuKFcpLrBHYg7wwPboUEvYpj2sBXM8yWEM_w@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] at24: Support probing while off
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Tomasz Figa <tfiga@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+czw., 9 sty 2020 o 16:44 Sakari Ailus <sakari.ailus@linux.intel.com> napisa=
+=C5=82(a):
+>
+> In certain use cases (where the chip is part of a camera module, and the
+> camera module is wired together with a camera privacy LED), powering on
+> the device during probe is undesirable. Add support for the at24 to
+> execute probe while being powered off. For this to happen, a hint in form
+> of a device property is required from the firmware.
+>
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
---BOKacYhQ+x31HxR3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Why am I not Cc'ed on this patch?
 
-
-> > Applied to for-current with the comment kept, thanks!
->=20
-> Thanks.  Sorry, I haven't had _any_ time what so ever to do anything
-> further on any of the I2C patches I submitted in December - this is
-> the first day since the weekend that I've actually had much time at
-> the computer, and I've had other stuff to attend to.
-
-No worries, I know that too well. Most important, thanks for the fix,
-great to have it.
-
-
---BOKacYhQ+x31HxR3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4YL20ACgkQFA3kzBSg
-KbZUTRAAiB6Pyry71LQZaNpqN7jV6Jfg9xWxBqLXGkRmbD3l/abeisN1zYCLrzbi
-6DTISun7GAH/qpcA6C4UeobPpj1sl3WKY94T2MgID/biAA6C/Gs/y61mjmHrwFxP
-1zdRj2MjrJxCw9SnIKoOMGYEYZHFH8esxK6m9bITZgmhOtsaH4shaR5Bea6MK21a
-OQ+eXaCx8V9bElVgut/kcy0psS3JrK2q16V5lVjfY2QSPkHzqQ37sX3kuWo5bpnY
-yHUcc+KNczl6EL02Nu8TlwcuXIXzFdIUrjQagCg4NQdshOAJMlR9YginsK89sKkF
-sPADuafYwZL+b2bx80Vkyiaowt9sbEdEpaXpQ+Pedl0ZtqgSBwwcX1yX4jaOq5Yk
-kLXJcnjekSYonSteCDOrTJ1KJzaK7ibBovZZ+cj2j5pB5Qz2Az1pbfhnxJEwoo0s
-39/luJRrjpXjMw1x8k9FvbTV9YBQChIdsAyN1aM9EKDZVSU5SB/+ZGUGq4Wx86xy
-fCFneC25U6ngWmib3pevxiGismaNY4s8/yP79CVZWdz99myeTRqh0LsvvyFk+0B8
-gDEIx1eyF8RfNXvA/S5Hi7TVgGV7fwhEq/PI9+Gzcpsyo8G8FPoX4tZbtXJVaoWm
-ycDdePkSgfPhaRxLFhuCm0RwqnAh8htnfDaG5JOvAJtCd/gc36w=
-=ZaWo
------END PGP SIGNATURE-----
-
---BOKacYhQ+x31HxR3--
+Bart
