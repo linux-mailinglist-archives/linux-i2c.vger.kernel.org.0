@@ -2,97 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1461136C00
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jan 2020 12:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B289138375
+	for <lists+linux-i2c@lfdr.de>; Sat, 11 Jan 2020 21:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727717AbgAJLcY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Jan 2020 06:32:24 -0500
-Received: from mail-il1-f193.google.com ([209.85.166.193]:41797 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727833AbgAJLcW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Jan 2020 06:32:22 -0500
-Received: by mail-il1-f193.google.com with SMTP id f10so1512683ils.8
-        for <linux-i2c@vger.kernel.org>; Fri, 10 Jan 2020 03:32:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6vZ3i0ACJsvtUUtpcXPXYAyzu7/orFMlNRJwZ/DecAE=;
-        b=kL/Co5LE5HonXQt0kBSSk3dt8JhyLrNcFhBDGbiYgEAaWkv1Puis/asJlEBzQB46Ch
-         xMM7tLnalKW4JXu2Fd3hs2BIl11Tpr5quruv5JWZZL2PUJPJz/A50tlZzvVFVtxraP9I
-         bv8XR5D3NJdOEGNCisf6g/jZIGPGh4eR7ZVdFHqB/TDv0V/7vQuVAAl1G8RlOmOmvDFw
-         oJyf+9QHjCCUiE/D0XAFpqZZmGQibIPun+ACV+hFcFbzqJr7cs3sNZ93ZUgH8Xq4UjpM
-         JDax9lUYJ2ZK+AKZ6yqPOcg9Y4IXKqA0vt/Kk9gXqbZF+EWu0nVaF7shG++1howTBi7X
-         eaow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6vZ3i0ACJsvtUUtpcXPXYAyzu7/orFMlNRJwZ/DecAE=;
-        b=p7sdU0RYvtLsoNjBmrl+JZDvDGt7CIx2YOVXDIYVhfzhHq/a0qlYvX8ovEd2gmIL3q
-         H+5uzuhcouekJTZrz3Eq1PDIny+bQPJzQYVBJznhTPht5nY7N/JLAsnKnfPhITtvsB3L
-         M9gfAkpbLo0hmmu6HP6cQINF9H5ItaUhdcICSH9mOv6OAa0wuNwoQJhnZuzh4omXp9JX
-         9SiMGn1MffAMaafsbMaEFvnUqTqzz0/gVkbjKHkyZCpO3hdZQrvSvXtzQs0hPa015XRJ
-         avKZ/1ykbtsJBWEUvrL9LTc1rihSwQvqBgMX/8D8Hm7l6cOwhzgKaTZtMI4D8ML88LZ6
-         yE6w==
-X-Gm-Message-State: APjAAAXZWRbW9+YMlWw5pvGgtzWKb9YD6oojT9vIkO5E/o9hSWSh11HR
-        YsHNX7Lu465h9tDRopdl9WUU6PLR5h9bZJn7e1R0jQ==
-X-Google-Smtp-Source: APXvYqz0bgtDRAx1G7UDm6V7rhYVa6QaXBuJyg25e91VF1x0+DZw3AFQviBXm01q2UvtAk9x2VvP91vpxv5TNVeCcdY=
-X-Received: by 2002:a92:3b98:: with SMTP id n24mr2060356ilh.189.1578655940535;
- Fri, 10 Jan 2020 03:32:20 -0800 (PST)
+        id S1731063AbgAKUHO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 11 Jan 2020 15:07:14 -0500
+Received: from sauhun.de ([88.99.104.3]:47180 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731046AbgAKUHO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 11 Jan 2020 15:07:14 -0500
+Received: from localhost (p54B3334B.dip0.t-ipconnect.de [84.179.51.75])
+        by pokefinder.org (Postfix) with ESMTPSA id AA6E62C06AC;
+        Sat, 11 Jan 2020 21:07:11 +0100 (CET)
+Date:   Sat, 11 Jan 2020 21:07:11 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for 5.5
+Message-ID: <20200111200704.GA5308@kunai>
 MIME-Version: 1.0
-References: <20200109154529.19484-1-sakari.ailus@linux.intel.com>
- <20200109154529.19484-6-sakari.ailus@linux.intel.com> <CAMRc=MfqRqtW=nMuKFcpLrBHYg7wwPboUEvYpj2sBXM8yWEM_w@mail.gmail.com>
- <20200110112851.GC5440@paasikivi.fi.intel.com>
-In-Reply-To: <20200110112851.GC5440@paasikivi.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 10 Jan 2020 12:31:41 +0100
-Message-ID: <CAMRc=MfJgMFDgpb4HmUhj7kioZUgP2zaOiXk0Pw=C7t-GuLagA@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] at24: Support probing while off
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Tomasz Figa <tfiga@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2oS5YaxWCcQjTEyO"
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-pt., 10 sty 2020 o 12:28 Sakari Ailus <sakari.ailus@linux.intel.com> napisa=
-=C5=82(a):
->
-> Hi Bartosz,
->
-> On Fri, Jan 10, 2020 at 12:16:14PM +0100, Bartosz Golaszewski wrote:
-> > czw., 9 sty 2020 o 16:44 Sakari Ailus <sakari.ailus@linux.intel.com> na=
-pisa=C5=82(a):
-> > >
-> > > In certain use cases (where the chip is part of a camera module, and =
-the
-> > > camera module is wired together with a camera privacy LED), powering =
-on
-> > > the device during probe is undesirable. Add support for the at24 to
-> > > execute probe while being powered off. For this to happen, a hint in =
-form
-> > > of a device property is required from the firmware.
-> > >
-> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> >
-> > Why am I not Cc'ed on this patch?
->
-> I'll make sure you'll be cc'd on any future versions of the patch.
->
 
-Thanks. Please make sure this applies on top of my for-next branch[1].
-We've had a couple changes in the driver this cycle.
+--2oS5YaxWCcQjTEyO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Bart
+Linus,
 
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+=66rom I2C world, here are two driver bugfixes, a documentation fix, and a
+removal of a spec violation for the bus recovery algorithm in the core.
+
+Please pull.
+
+Thanks,
+
+   Wolfram
+
+
+The following changes since commit c79f46a282390e0f5b306007bf7b11a46d529538:
+
+  Linux 5.5-rc5 (2020-01-05 14:23:27 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-curre=
+nt
+
+for you to fetch changes up to cf8ce8b80f8bf9669f6ec4e71e16668430febdac:
+
+  i2c: fix bus recovery stop mode timing (2020-01-09 22:21:08 +0100)
+
+----------------------------------------------------------------
+Eugen Hristev (2):
+      i2c: at91: fix clk_offset for sam9x60
+      dt-bindings: i2c: at91: fix i2c-sda-hold-time-ns documentation for sa=
+m9x60
+
+Russell King (1):
+      i2c: fix bus recovery stop mode timing
+
+Stefan Wahren (1):
+      i2c: bcm2835: Store pointer to bus clock
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Codrin Ciubotariu (1):
+      (Rev.) i2c: at91: fix clk_offset for sam9x60
+
+ Documentation/devicetree/bindings/i2c/i2c-at91.txt |  6 ++++--
+ drivers/i2c/busses/i2c-at91-core.c                 |  2 +-
+ drivers/i2c/busses/i2c-bcm2835.c                   | 17 ++++++++---------
+ drivers/i2c/i2c-core-base.c                        | 13 ++++++++++---
+ 4 files changed, 23 insertions(+), 15 deletions(-)
+
+--2oS5YaxWCcQjTEyO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4aKuMACgkQFA3kzBSg
+KbYAAg/+Ihepsp+HZa8Pjwu8DvfIOAKWINVVXObI/1oftlpqKwnEICzdvLc7/zJt
+enIztwdaxXkPx51hwJXRQlATlAE5GkrBmG++NsM/ltiajFCcXyzYjHF1hwtiOGbS
+ZDbKu7TGHrWZXDCgR3ZpymyvE1dgqXyxSBAJzf/iejTx0wWqdSRq2Bvxo+XsZnww
+ye/zZbY8ToH1+94ruckgksx05yiB0YHXFgwuNapI79jJSgbKHUyVy11Ab6LPGOlu
+5tsov6tmUnpOhiaXeEoDZwrPAsPMpgboui+lzQ9DdCVD0rWTsY3dwBuruRFHcYsp
+bn8WcHEfmYgTMg3/RWxqQDGaZ4MBI+gX2Ld8has6p3/qu55ijgT6seXIDbbr5q2N
+ifDAK5tEoUxVHXN4ZZhY1uVGkaWtmiP/ASmOyLad9kUWMj7IIUsEMfTuBSOum+q6
+IEZB1EpOBN43fq09oyL9KeqeF9+/eL5gNECie8iie8VZ5vPd/fzNDA44iJzUI5Rp
++j8sWu3y6xB6ml1LZS0LiTMAqfVi1y0gKmr/MnoTFb8UILr8k+knhiQPvtaard8m
+cj48SovVgRZ9GaCr8dG4Uc3BLboo8mwPJAFRUTXRPc84h/ed823+n2PzKixkLOZy
+aGl8eZuxH2ZIQufEsheu6ICWBYCHsYyzz7LQPplwpboIERxs47g=
+=nWNm
+-----END PGP SIGNATURE-----
+
+--2oS5YaxWCcQjTEyO--
