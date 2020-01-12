@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8507138737
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Jan 2020 18:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBAA138738
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Jan 2020 18:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733129AbgALRRn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 12 Jan 2020 12:17:43 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:42022 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732762AbgALRRm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Jan 2020 12:17:42 -0500
-Received: by mail-lj1-f195.google.com with SMTP id y4so7417629ljj.9;
+        id S1733153AbgALRRp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 12 Jan 2020 12:17:45 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:39812 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728734AbgALRRn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Jan 2020 12:17:43 -0500
+Received: by mail-lf1-f67.google.com with SMTP id y1so5134161lfb.6;
         Sun, 12 Jan 2020 09:17:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tlNU9EUj3qjMJkvdyrf3SyjicgidrNBQwoqOOwsuvfM=;
-        b=boWiFTwbY2L7ablBt/qB3/1LiL/NpNhY61QyTTEn61/81dtiAIv3J33m5wTG1lEs4t
-         0lT/Jp5uaPecEYzrhvT2ZyL+xBbpL4SQDkU5vTaIJYe8CMATi6YKnhhW3qg/N3XEeNG8
-         Ygy5NQyvvt005EndxvIJYDHGTlO7vIHy2q00Fuha5hLzMqkXk/1qdawN1BzAtSGCKisX
-         cNd/BRd0BzsN8XJ406Sp7yiHXhjzWfCaA7cZnugTuOjXblfLFTaVPDb84gTDmkClLE/s
-         l9rpiPivAQTUtCdhfY3tRmGOJXT3sc/B1mG2N7MTPpsz5INdlQlEFAH5WPe0MDmPvGOq
-         7Nzw==
+        bh=boftLlCVTiCXcZl17ggg/i9GnkxPrBq2/azgLeosNdc=;
+        b=Ss1uB9IqTcBQuWmvl8XgQHGygt9/V59mKPWQMYzSzAdsmG5PYHBhb3Lv/BWvPg6LDh
+         MKgtCzJgOayubGM4Z8PsghsmMLLj+rEiSSLtCOcftzD1XoJBeP0wzQOirab4EFYFbyGb
+         Fm8GEt1kxJ/TPiMbSEuIN/qfgkg+B2l+gLipIQ21L81OxIUYpqi9fRJIhiPl8QfACqOu
+         E1z/dh/wNU800lELQt7Fl9ntLr/5BRyoI/yClrQd6dIk4CJ2EvWXwpXQCmCAG3TdBEbJ
+         WxvzObFsOhbhkzMpVZStswd2m5Qb7X6UJZIHBh2fiJGlIlHH4bKM8BIw1yBb0xsm713k
+         SJaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tlNU9EUj3qjMJkvdyrf3SyjicgidrNBQwoqOOwsuvfM=;
-        b=rpzhSF+hCUW4jEEmJJzFl5o0sRuzaJj7B3JEHJtF6ozDSspgZixYFFh9bwIlSYckW3
-         +COMiw/cbdxo2anX85wk7Kjvf7B4d32SZdbz2PlfwnRP2LX037XjSH9y797hxTOWeLbC
-         SEB/vEgo8btUkLtTWZSEIIPtZT+bZfXs2xFNtVomvrvczyQ8+s4lzvJrlTrgYkJ3Ex4/
-         9S2C5Sn7Rk4+g3hgJ+kEBJ7cxBp13qx3sTdDXlgiriJTYqYZEmTbdbQB3cWZcMThj+Tf
-         ZVYJgR1ahNAMn7aGfRLK0PjayqS7iLZcvAdEMvEIJ+nYo6wcRUmaoGDshWweFRBFcC7F
-         GwmA==
-X-Gm-Message-State: APjAAAULa2iUqUei1e/k4suUUUmNoKT+0RRkroqH6r1wIfnr3O25IZ+T
-        xF3OmgLx5bvzcSWJPvt+so0=
-X-Google-Smtp-Source: APXvYqwLXR3FL2dRnCmfY1hPgK+AaHxdxc//QILhGhZzYiUxEzO0RrHVFKDfkcXv6+lMgBeu6iAqQw==
-X-Received: by 2002:a2e:858f:: with SMTP id b15mr6358563lji.275.1578849460326;
-        Sun, 12 Jan 2020 09:17:40 -0800 (PST)
+        bh=boftLlCVTiCXcZl17ggg/i9GnkxPrBq2/azgLeosNdc=;
+        b=Claen69xzbFxnvhrVa6JSPcuoM2OxM0DBHTrEUae14TgH+gM+u3XlZM+pmOKJe3/2T
+         RGTIEPd96vAkoAtntNHTm0ftTyW8jnpA6etvbeoAWYJ6D/GPQLFDS1rht6lAsyYJf21c
+         7LMvRJMsYQ+aoYTCB1je/FtBcT2CaLs9Q545APuJS1/IjwjfYWtQStABKye81IXjj2sc
+         Idw/6jwrt/0QbkMEAc2pmi53KgSNLp+TaLI6GCtAmlL5kVb8LqumvX98EA1rUH3N7nPW
+         XloTV5ZhT/o4K7C3lANBiKt9/byOebvc6GDibxdVTTAnRdgEcFL0Oy9d7On5N/5sBqeJ
+         I9gg==
+X-Gm-Message-State: APjAAAVJUxGbknZBONqcnFxFkMyQDyfE1pyS0PRAHr1MImQnX5R+LTiW
+        Ckkm/Veq5PAqpown6C+9mnNg+1W9
+X-Google-Smtp-Source: APXvYqw13KxUpRZe++3Awv6Z4yxVSUrVrzJen5tGSQKoKEGmNfPc38wZDRcFNFvQkYH3gDdEKBRhug==
+X-Received: by 2002:a19:2d0d:: with SMTP id k13mr7455372lfj.12.1578849461233;
+        Sun, 12 Jan 2020 09:17:41 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id i13sm4506628ljg.89.2020.01.12.09.17.39
+        by smtp.gmail.com with ESMTPSA id i13sm4506628ljg.89.2020.01.12.09.17.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jan 2020 09:17:39 -0800 (PST)
+        Sun, 12 Jan 2020 09:17:40 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -52,9 +52,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Wolfram Sang <wsa@the-dreams.de>
 Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/8] i2c: tegra: Fix suspending in active runtime PM state
-Date:   Sun, 12 Jan 2020 20:14:23 +0300
-Message-Id: <20200112171430.27219-2-digetx@gmail.com>
+Subject: [PATCH v4 2/8] i2c: tegra: Properly disable runtime PM on driver's probe error
+Date:   Sun, 12 Jan 2020 20:14:24 +0300
+Message-Id: <20200112171430.27219-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20200112171430.27219-1-digetx@gmail.com>
 References: <20200112171430.27219-1-digetx@gmail.com>
@@ -65,49 +65,76 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I noticed that sometime I2C clock is kept enabled during suspend-resume.
-This happens because runtime PM defers dynamic suspension and thus it may
-happen that runtime PM is in active state when system enters into suspend.
-In particular I2C controller that is used for CPU's DVFS is often kept ON
-during suspend because CPU's voltage scaling happens quite often.
+One of the recent Tegra I2C commits made a change that resumes runtime PM
+during driver's probe, but it missed to put the RPM in a case of error.
+Note that it's not correct to use pm_runtime_status_suspended because it
+breaks RPM refcounting.
 
 Fixes: 8ebf15e9c869 ("i2c: tegra: Move suspend handling to NOIRQ phase")
 Tested-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/i2c/busses/i2c-tegra.c | 29 +++++++++++++++++++----------
+ 1 file changed, 19 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index a98bf31d0e5c..79d19f6ce94e 100644
+index 79d19f6ce94e..61339c665ebd 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1710,9 +1710,14 @@ static int tegra_i2c_remove(struct platform_device *pdev)
- static int __maybe_unused tegra_i2c_suspend(struct device *dev)
- {
- 	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
-+	int err;
+@@ -1608,14 +1608,18 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 	}
  
- 	i2c_mark_adapter_suspended(&i2c_dev->adapter);
+ 	pm_runtime_enable(&pdev->dev);
+-	if (!pm_runtime_enabled(&pdev->dev))
++	if (!pm_runtime_enabled(&pdev->dev)) {
+ 		ret = tegra_i2c_runtime_resume(&pdev->dev);
+-	else
++		if (ret < 0) {
++			dev_err(&pdev->dev, "runtime resume failed\n");
++			goto unprepare_div_clk;
++		}
++	} else {
+ 		ret = pm_runtime_get_sync(i2c_dev->dev);
+-
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "runtime resume failed\n");
+-		goto unprepare_div_clk;
++		if (ret < 0) {
++			dev_err(&pdev->dev, "runtime resume failed\n");
++			goto disable_rpm;
++		}
+ 	}
  
-+	err = pm_runtime_force_suspend(dev);
-+	if (err < 0)
-+		return err;
+ 	if (i2c_dev->is_multimaster_mode) {
+@@ -1623,7 +1627,7 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 		if (ret < 0) {
+ 			dev_err(i2c_dev->dev, "div_clk enable failed %d\n",
+ 				ret);
+-			goto disable_rpm;
++			goto put_rpm;
+ 		}
+ 	}
+ 
+@@ -1671,11 +1675,16 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 	if (i2c_dev->is_multimaster_mode)
+ 		clk_disable(i2c_dev->div_clk);
+ 
+-disable_rpm:
+-	pm_runtime_disable(&pdev->dev);
+-	if (!pm_runtime_status_suspended(&pdev->dev))
++put_rpm:
++	if (pm_runtime_enabled(&pdev->dev))
++		pm_runtime_put_sync(&pdev->dev);
++	else
+ 		tegra_i2c_runtime_suspend(&pdev->dev);
+ 
++disable_rpm:
++	if (pm_runtime_enabled(&pdev->dev))
++		pm_runtime_disable(&pdev->dev);
 +
- 	return 0;
- }
+ unprepare_div_clk:
+ 	clk_unprepare(i2c_dev->div_clk);
  
-@@ -1733,6 +1738,10 @@ static int __maybe_unused tegra_i2c_resume(struct device *dev)
- 	if (err)
- 		return err;
- 
-+	err = pm_runtime_force_resume(dev);
-+	if (err < 0)
-+		return err;
-+
- 	i2c_mark_adapter_resumed(&i2c_dev->adapter);
- 
- 	return 0;
 -- 
 2.24.0
 
