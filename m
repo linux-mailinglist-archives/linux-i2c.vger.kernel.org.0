@@ -2,19 +2,19 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9FD139BE9
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2020 22:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2ACF139C1A
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2020 23:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728877AbgAMVxo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 Jan 2020 16:53:44 -0500
-Received: from sauhun.de ([88.99.104.3]:42866 "EHLO pokefinder.org"
+        id S1728911AbgAMWDS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Jan 2020 17:03:18 -0500
+Received: from sauhun.de ([88.99.104.3]:43048 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728802AbgAMVxn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 13 Jan 2020 16:53:43 -0500
+        id S1728769AbgAMWDS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 13 Jan 2020 17:03:18 -0500
 Received: from localhost (p54B332D5.dip0.t-ipconnect.de [84.179.50.213])
-        by pokefinder.org (Postfix) with ESMTPSA id B54BC2C06DA;
-        Mon, 13 Jan 2020 22:53:41 +0100 (CET)
-Date:   Mon, 13 Jan 2020 22:53:41 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 02A7E2C06DA;
+        Mon, 13 Jan 2020 23:03:15 +0100 (CET)
+Date:   Mon, 13 Jan 2020 23:03:15 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
@@ -22,14 +22,15 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         Mikko Perttunen <cyndis@kapsi.fi>, linux-i2c@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/8] NVIDIA Tegra I2C driver fixes and improvements
-Message-ID: <20200113215341.GA2689@ninjato>
+Subject: Re: [PATCH v4 4/8] i2c: tegra: Support atomic transfers
+Message-ID: <20200113220315.GB2689@ninjato>
 References: <20200112171430.27219-1-digetx@gmail.com>
+ <20200112171430.27219-5-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wRRV7LY7NUeQGEoC"
+        protocol="application/pgp-signature"; boundary="mxv5cy4qt+RJ9ypb"
 Content-Disposition: inline
-In-Reply-To: <20200112171430.27219-1-digetx@gmail.com>
+In-Reply-To: <20200112171430.27219-5-digetx@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -37,49 +38,47 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---wRRV7LY7NUeQGEoC
+--mxv5cy4qt+RJ9ypb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jan 12, 2020 at 08:14:22PM +0300, Dmitry Osipenko wrote:
-> Hello,
->=20
-> This patchset adds support for atomic transfers which are required for
-> shutting down machine properly. Secondly, a (not)suspending I2C and some
-> other things are fixed/improved by this small series as well. Please revi=
-ew
-> and apply, thanks in advance!
->=20
-> Changelog:
->=20
-> v4: Removed the "clk: tegra: Fix double-free in tegra_clk_init()" patch
->     from this series, which was added by accident in v3.
->=20
->     Added Thierry's tested-by to the patches.
+On Sun, Jan 12, 2020 at 08:14:26PM +0300, Dmitry Osipenko wrote:
+> System shutdown may happen with interrupts being disabled and in this case
+> I2C core rejects transfers if atomic transfer isn't supported by driver.
 
-Looks good to me. I think all these patches should go to v5.6, let me
-know if patches 1 and/or 2 should go to v5.5?
+Well, not quite. The core complains about it nowadays, but does not
+reject messages. It will try the same behaviour as before. It will just
+inform the user that somethings is tried which may not work. I probably
+should update the error message printed saying that the transfer is
+still tried.
+
+> There were several occurrences where I found my Nexus 7 completely
+> discharged despite of being turned off and then one day I spotted this in
+> the log:
+
+Given my reasoning above, that should have happened before the warning
+was printed as well? Because same behaviour. I'd be surprised if there
+was a change...
 
 
---wRRV7LY7NUeQGEoC
+--mxv5cy4qt+RJ9ypb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4c5uEACgkQFA3kzBSg
-KbaNOg/8Djo9bVYyGrlZcv32vzUo/Ey82Z5EzFt9OvJt3HJZjk9P0968XqubSUDM
-avR6DhJR9xaVLfgqJRmQvxA3nnNm4N1k4ezckknwoDeiWdUNqt4MWWFxJuc7ropM
-ehzoaGRgp+Q8ERRHdo/dJtJcrvl/IkanWZWik9VbhrtsTexKXwpGV0hx8KvkqOhP
-HU3bO/WJR1s7bfrxPHvMmp0GYcqEsqiZ1R910oYka0QDo4cAc3HjLllN5IpnfKo7
-azK1cd70TjVzYoFXHX+wrU0n+8XqoRLRjZxVEoLAMt+UpS+LBXNI+29xB0jkx2+m
-/EFg2yaS65zltyvhnR/eMiFj2qrVZ+Rx8oz8ZJOYVlw5pZkWN1SbbBZg+s7G/NCq
-TDFzkCtyprj9KDDdH9Vu+ahChiEm9X2+LkG0jKAo/c/GGXgyRjv6DqIJshPD+T7z
-h1+IuakJCUd2HAVcL5hjKLfg4QpbKGn2DJhV3AnjbLTIhTrVujv/8KWtgNj+c7JQ
-UoEPA1g5j6CXe5jxWNV7eO9hlkaZSekZ17kQ3y5/3hf0ZbqVU95ffiWHAv/KFMC+
-zlLSXD6iZznJUX44mBoLaRltNJn6KFAhL1kU7q8lePCbRbSIcdaVkofJ16Kbr/tv
-ExY+wXPXhu39HstjFveuKcC0L9zm5bTBBu3zw12zE9uxfXUHRjI=
-=qKVs
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4c6SMACgkQFA3kzBSg
+KbYdthAAktOJQ5liEIA8J0/p6JdKT4r55B/YAQUW+Vd92Za2knjAl4G08A+jI5m9
+yY+R3VsS8liSafqyrpYJayW3MjBr609srwUidjT466OnnbrlHNUWP++bMwc2bd4r
+D5GJnDeVtjroIHk5pFj4558MS/a4sNkw91dxl/17f4/pyUQknD3mECg9riV+fTx/
+jCMJC75pbI/fc8kbfE67kNUUs9sXZqgfvnJkwtAQ9fwv1k00qD9WH9Hh5dhI2Hra
+H6FInqMrsW+bGYXIK4L9WlNejumo7nPjP1sv3pbq7pjt+EXzHwRO4oNwHWGm41jL
+7nZg42H5wRYislDFUdxjQgTnwHa6zUdhQONt6i7ZPYoTOSh9nm/jWpLJBvKki9BI
+sdslfOHTvrIKcWtDwb77Afv57//ZRX1nMUk0+qun7oIGORjFtCT4QyB1gAWdehTw
+Wh4hiTLQrAmUj7l8XeVjiKjtcqHxJn2rG8MK/mQgjskdpH9wrb1l7n2Ckyyk8K0y
+y59nhZkDlEdamuwYcmQKrmw8UJGWASoG45ULHkwKKb+I90Jp47H9ShlB13Lja0a6
+/+/FWKMEXNR9bRQ3NStOswfPMPJM2gzgm2YEbXLkaBCmz6i6zztuBzX8WIHPhmwx
+4OtSMUKr51lY88iBWl2XtTr819iMR8C+ewU1I2R309Q7W5Wr18Q=
+=ZZXy
 -----END PGP SIGNATURE-----
 
---wRRV7LY7NUeQGEoC--
+--mxv5cy4qt+RJ9ypb--
