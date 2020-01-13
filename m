@@ -2,96 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 348F713873B
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Jan 2020 18:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E5B138B57
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2020 06:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733174AbgALRRt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 12 Jan 2020 12:17:49 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:44726 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732827AbgALRRs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Jan 2020 12:17:48 -0500
-Received: by mail-lj1-f196.google.com with SMTP id u71so7388632lje.11;
-        Sun, 12 Jan 2020 09:17:47 -0800 (PST)
+        id S1726277AbgAMFwg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Jan 2020 00:52:36 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:44007 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733212AbgAMFw0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jan 2020 00:52:26 -0500
+Received: by mail-oi1-f193.google.com with SMTP id p125so7171984oif.10
+        for <linux-i2c@vger.kernel.org>; Sun, 12 Jan 2020 21:52:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=j37XV7ANVgjgiPiKALeBvbZ2E7R44griMSfBNJCXDRY=;
-        b=YxUlMTYbP+mjKXblNt3Ko1I8Jd2YHZyBb2kSWgutntGD7ceWE5nsjMXw/Y4NHChWUf
-         J+J7PZUxpgM1oYBudKBrN4Zc9yVM7fYDb427zOP5VDEEf2XNQOja9/CkHaE+Gfc3TpVr
-         b5nU5fliYiZSzVWNoiS6QW4NGbuKq0ZdzivY8XSxobdzenNv5gtq0PDcWXMc/uHGOlWN
-         7CdDVkoEFshUVMHnvu4DloGPxuzADOtf1haMuED4lrOyokDFg2JavcuujPbyWqqNiVL6
-         ce2yiIuHOEfs4rZaSqiZZRwV8tDJuCge5WmHgXsdtu6qniD68gnwONBur9gL7hGpr0kt
-         FOSw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
+        b=El5YZgtDEXJCHEtZrRB1ujEJT5GnrR9nqQvx3oNXkD1KXWKAy5lE4fahagwXmNRBuY
+         Z373bCStdjZZAvrcMmyjZhqXNYKD7qS8gpQ1uKt4Zm/CJYofbOmd6y2KCfdaIf8lu4gx
+         e04Qq2Wd5k0QzXhgODgXLh9+BTAbr7mIJG1kvrHD2cB5892G2QaMtoQjZ8YbwAsn/v/R
+         qN1ulSwy8kLJzDOOwwvDkEa6g0paOaNUUW6lO8NcaOsOsQMTh2eV34LXY/bnRxfyDcL+
+         OFIAYoYpyWTxvo4nB11oXa8J2BNLiFXnr18VfN4DCPOmpXqWPT8f/9GzmZX8VWLxs4VK
+         s+8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=j37XV7ANVgjgiPiKALeBvbZ2E7R44griMSfBNJCXDRY=;
-        b=OrIZkqLGsOc0x1Ld/B6i6R7aWHYEhAICLJj15THflX4c8FvQUnsoPPrg8H78k/dwTf
-         kbCyXjaB8TRPoKg1LsoWpHaEZwp6oXCHCxUPDVw6/kgWNE276Orr4/ELRlZm23OO8hDK
-         +FE89YTdH+HcGxS0y8KEBUFpSBbz5U1rKRLK22pYznuAu+OkExkaLbeFSk8o6WrJ35q0
-         1suEfLpiPCUgXe4k5um2QbQHrDVDerNSFGwyvW+W4uBiF34RjzdPuNJYQqiJ45xPyWt/
-         F1I1GgJmt8uI2D1Y2L3kQIY+gsiOnUAZde5KgtxblER3GpPHLAKApTX4WoBfU6OoTcrd
-         DUUQ==
-X-Gm-Message-State: APjAAAXq58jM0jjW+r3XX7ldwo+ZO3sp4/RrEk4BrqH375buJhrwyJ4q
-        uhTKZfeEYOLddZLLiICWqZw=
-X-Google-Smtp-Source: APXvYqzlP6fpT09HuEaM6B6VsCvyBoTGQq8J42WIHVzQfkxVIvgUVYUlaqr9rJXF7adKs+hbwC2ZWA==
-X-Received: by 2002:a2e:2c16:: with SMTP id s22mr8379264ljs.248.1578849466466;
-        Sun, 12 Jan 2020 09:17:46 -0800 (PST)
-Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id i13sm4506628ljg.89.2020.01.12.09.17.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jan 2020 09:17:46 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 8/8] i2c: tegra: Check DMA completion status in addition to left time
-Date:   Sun, 12 Jan 2020 20:14:30 +0300
-Message-Id: <20200112171430.27219-9-digetx@gmail.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20200112171430.27219-1-digetx@gmail.com>
-References: <20200112171430.27219-1-digetx@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
+        b=cd9gvTK6JrSnJWc79V26fBs1y+DDZFazYetrzDhvtpzba+JaVzyyR2NWtSGrX1u9/w
+         FJCo+T+kIPQTyAXGscwPc8g6LqBJK61HrJkrbvYJVm565qOteiM1hT25unASbSGhlWjI
+         +WKw9abs34HNYaLvmpFFn4reZhHsqb/ZxugHV0XnNR7Y6Cavp01KMmJS1FiyV8fhg6z7
+         bxQZN+Nvs5SA8040rEnP1qbAE/Ws2DY+36KXOnljACF96685NJtGaERPVfQUvt+7tqgS
+         4EDsaOkk4qT85irc16rhh2donNuxkWe91WQZYGAiTIxeWaHTCtdElEsPOqr0THAY3fGB
+         Bb/g==
+X-Gm-Message-State: APjAAAUNAeb+TU3R3dAj4PQMXx5OzIZBvUg68MSGikkt0A77Un+IJLZb
+        5XXmW/AM2t7T/Z5/UKMg78+5unrBehzuZMCY2+YH4E4I
+X-Google-Smtp-Source: APXvYqy7JhGBt0ZjJ/1t4CT74GIhTuvbOMnCynReBbsGRcTAfZPwoiLBCe9XiPA9xaK1JAPmy14eucUMWI9DLkbKsUo=
+X-Received: by 2002:a54:4713:: with SMTP id k19mr11513430oik.113.1578894745174;
+ Sun, 12 Jan 2020 21:52:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a4a:41cb:0:0:0:0:0 with HTTP; Sun, 12 Jan 2020 21:52:24
+ -0800 (PST)
+Reply-To: rickschaech@gmail.com
+From:   Rick Schaech <cathben72@gmail.com>
+Date:   Mon, 13 Jan 2020 01:52:24 -0400
+Message-ID: <CAEcBxO=TAnFn5LzizHa22hUC0Db5FuiZJF28m=yX3_9m--jRqg@mail.gmail.com>
+Subject: I wait for your swift response,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-It is more robust to check completion status in addition to the left time
-in a case of DMA transfer because transfer's completion happens in two
-phases [one is ISR, other is tasklet] and thus it is possible that DMA is
-completed while I2C completion awaiting times out because of the deferred
-notification done by the DMA driver. The DMA completion status becomes
-100% actual after DMA synchronization. This fixes spurious DMA timeouts
-when system is under load.
+Dear, I'm Mr Rick Schaech, I am the General Account Auditor, Though i
+know we have not meet each other before but sometimes in life God have
+a reason of bringing two people from two different countries together
+as business partners or life partners.
 
-Tested-by: Thierry Reding <treding@nvidia.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/i2c/busses/i2c-tegra.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+My dear friend, I have the sum of 15.7 Million USD i wish to put in
+your name due to the death of my late client who died several years
+ago as his next of kin column still remain blank. Though the internet
+medium is highly abuse these days but am assuring you that this
+transaction is legitimate and I am contacting you that we may have a
+deal, note for your cooperation and collaboration 40% of the sum will
+be for you while the other 60% will be for me as well. I wait for your
+swift response for more details. please forward your response to my
+personal E-mail: rickschaech@gmail.com
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 3c7c86d4b0e4..cbc2ad49043e 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1224,7 +1224,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 					 i2c_dev->rx_dma_chan :
- 					 i2c_dev->tx_dma_chan);
- 
--		if (time_left == 0) {
-+		if (!time_left && !completion_done(&i2c_dev->dma_complete)) {
- 			dev_err(i2c_dev->dev, "DMA transfer timeout\n");
- 			tegra_i2c_init(i2c_dev, true);
- 			return -ETIMEDOUT;
--- 
-2.24.0
-
+Yours sincerely,
+Rick Schaech.
