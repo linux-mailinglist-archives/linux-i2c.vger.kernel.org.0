@@ -2,105 +2,143 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10658139EE9
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2020 02:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9503139F03
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2020 02:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729459AbgANB15 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 Jan 2020 20:27:57 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:43811 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727556AbgANB1z (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jan 2020 20:27:55 -0500
-Received: by mail-lj1-f193.google.com with SMTP id a13so12340563ljm.10;
-        Mon, 13 Jan 2020 17:27:54 -0800 (PST)
+        id S1728946AbgANBgz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Jan 2020 20:36:55 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:33439 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728890AbgANBgz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jan 2020 20:36:55 -0500
+Received: by mail-lj1-f194.google.com with SMTP id y6so12424461lji.0;
+        Mon, 13 Jan 2020 17:36:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9J+ZBDrrbAWIuYb9veix6cNQ5A4bHUrnUSJB4zcW68k=;
-        b=ZdLGHd8ALoHsOB7Odi9BlE3MBkQlCtuLWt/omzqH2vJyZA1f7nzweh/ne+kv87A165
-         MW9iHcqmiclnGk2LCki08DEjy7Yb5TrxILnjxsQAP8mhgYh7yzHScwn3AaeFJBtombzW
-         cvL2Nohgsi4uDiTCtrkxmz3zafTIfjdBhofs2M66VHxO/XmEpV0HtHNPuE9frVX9AF7Y
-         46yzJv50UpQKZs8GbG94m+lQ3CP72m5dCV6utACRjHVlLKHK9tOY524mQHUuOSm489p4
-         PiSBJt2FoKKvXSGvod22r3Zd5Nes64D4HrAVMQD0S0vsFX1fjOq5cFKVRS4Z2cwfZ9jB
-         YcZg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uF6UZR9f3d7Yjfa9laRfwCmmuu+6naaxEbh0ObEw+mQ=;
+        b=a1IOONMcSxwSEnPv31PMEX52cvRNGbv7QC0r74+O6Z4J/hTF/zARnxXVrWcjDmxEBv
+         C2WmQnOFMM9qNfKr3I/0jNqDwukNTMY7MaTfbq4s6sQhqu6VEdN1ofb3PJQ8XJP0ASrt
+         HVrIAB4s9e6oJ7Z15ly49Urj6isu4a4RyIBzY0zNYUeT32YPcAa/Fp2xZCu3qRV2IPo7
+         dAkayLuXozFB+VqilSSDWBx/OdSK+z4LV6bV4C0yT3TMqzpGLe/F9LVN8g/T7VbY+k68
+         oc54Vx1ZzX+2B3uH4nCne3ffNW6bMxXpS567JR3F/IfbiZJu6Bqdc92Ao4R3MqmYf0NF
+         0d/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=9J+ZBDrrbAWIuYb9veix6cNQ5A4bHUrnUSJB4zcW68k=;
-        b=RvarO9fHWCkr2AJ1b117AkTcCTVy3uxltrauN56sk14/41GjwR5MW8Ty6r1ctiR3LU
-         /cRlfjqbJXnzorB3E34Il/F3O6DacZUhs+TgXdHKNWzb9tDbM62YVcUHDMfTmJl7DrWS
-         casMtC7ycg824UfHhkRkGj/1BB/tIfBU3hC7rD29XS1iiPKVrOVUN2497id0zBrPWQaV
-         H1ZRQ4fbt3l2y2JcTh6WNFFHdt3aq5C4WYjPKkSqZOepWAL8LhRCiflCverIBVxmq2gL
-         RzxnSSugAKJN0SDQ7O9G70N3qgO7Y772AvvBtBEwi8qU4KCaEktfbcfNoVXagWKeIQ7Q
-         C89Q==
-X-Gm-Message-State: APjAAAUm9SxmLNbOQUZ+k6gQDiPPyeQGNTEk31/vEJwo9H4eSwYpihKx
-        kFTgto3rk9aMC9rsciLt7v98mnbC
-X-Google-Smtp-Source: APXvYqzzO9l1yft9CikyOnAO3k3mUKutKwk/sQe+BlAogzYNR1k2D/EI85SPG+Ynq1mZQJOxpLfLxQ==
-X-Received: by 2002:a2e:8916:: with SMTP id d22mr11919214lji.19.1578965273521;
-        Mon, 13 Jan 2020 17:27:53 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id s12sm6698527ljs.96.2020.01.13.17.27.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jan 2020 17:27:52 -0800 (PST)
-Subject: Re: [PATCH v4 4/8] i2c: tegra: Support atomic transfers
+        bh=uF6UZR9f3d7Yjfa9laRfwCmmuu+6naaxEbh0ObEw+mQ=;
+        b=Ms9Rkp/DNzvtMv1f6w0jToDvmF9ZSALf5MklUJhJl4lFyXLqJN/rhFOH2pZvJP+mc0
+         9DFnXB2j73mqKvfDAbc8+mZPMMl0UH54wWA7XohopbcIO8YcH9qXh1ThtiL8iuUxisjG
+         GCNSlfGY1hlXdN5OUgFlF0xUmf0uDkOJVdenwiyYDUwyNOyu7pp0Q9oSDz3eJfedpQ5W
+         3l992lLnmet/PyPk5pZrBEYTVf/bZPcBtxusLsKa5pP5pY9YoT7JLbrLqZB9J1nD2l9N
+         FS+YNQCZam9Qqmo6DE3Ub2+kfYiFm18NvcyaCb9DmeP6xzC5GCp4UcKdSUZC9iLI37BK
+         l50Q==
+X-Gm-Message-State: APjAAAUkO2FIVeZjyjA4/YOyi/1L8XjvFojZeTh1rRgja4SNeObPzkgX
+        iYomYO2th3RkcYN12OPGNn4=
+X-Google-Smtp-Source: APXvYqy47LEIr5xWPc77nLKWS+AxL6vpFOpdeIeKV/gicbCiBcQaR2/2WEpjBkuMjdSQuC5Mrf8btQ==
+X-Received: by 2002:a2e:88d6:: with SMTP id a22mr11843091ljk.163.1578965813355;
+        Mon, 13 Jan 2020 17:36:53 -0800 (PST)
+Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.gmail.com with ESMTPSA id m189sm6427627lfd.92.2020.01.13.17.36.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2020 17:36:52 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
+To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200112171430.27219-1-digetx@gmail.com>
- <20200112171430.27219-5-digetx@gmail.com> <20200113220315.GB2689@ninjato>
- <86f71bfe-7d17-0bf4-edda-13c84301a598@gmail.com>
-Message-ID: <49fbcb5d-011b-8ace-15f9-a36d4ae30397@gmail.com>
-Date:   Tue, 14 Jan 2020 04:26:52 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/8] NVIDIA Tegra I2C driver fixes and improvements
+Date:   Tue, 14 Jan 2020 04:34:34 +0300
+Message-Id: <20200114013442.28448-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <86f71bfe-7d17-0bf4-edda-13c84301a598@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-14.01.2020 01:52, Dmitry Osipenko пишет:
-> 14.01.2020 01:03, Wolfram Sang пишет:
->> On Sun, Jan 12, 2020 at 08:14:26PM +0300, Dmitry Osipenko wrote:
->>> System shutdown may happen with interrupts being disabled and in this case
->>> I2C core rejects transfers if atomic transfer isn't supported by driver.
->>
->> Well, not quite. The core complains about it nowadays, but does not
->> reject messages. It will try the same behaviour as before. It will just
->> inform the user that somethings is tried which may not work. I probably
->> should update the error message printed saying that the transfer is
->> still tried.
-> 
-> Indeed, now I'm recalling noticing that the transfer actually should
-> happen despite of the error message, but then completely forgot to
-> update the commit's message. I can update the message and send out v5,
-> if you're thinking that it's worthwhile to do.
+Hello,
 
-I have time to do it now, will send v5 shortly.
+This patchset adds support for atomic transfers which are required for
+shutting down machine properly. Secondly, a (not)suspending I2C and some
+other things are fixed/improved by this small series as well. Please review
+and apply, thanks in advance!
 
-And yes, clarifying the error message could be helpful. Although,
-perhaps it won't help much to drivers which may schedule during the
-atomic transfer.
+Changelog:
 
->>> There were several occurrences where I found my Nexus 7 completely
->>> discharged despite of being turned off and then one day I spotted this in
->>> the log:
->>
->> Given my reasoning above, that should have happened before the warning
->> was printed as well? Because same behaviour. I'd be surprised if there
->> was a change...
-> 
-> Pretty sure that it was happening before, but I wasn't paying much
-> attention back then.
-> 
+v5: Improved commit message of the "Support atomic transfers" patch,
+    thanks to Wolfram Sang.
+
+    Added explicit stable tags to these patches:
+
+      i2c: tegra: Fix suspending in active runtime PM state
+      i2c: tegra: Properly disable runtime PM on driver's probe error
+
+v4: Removed the "clk: tegra: Fix double-free in tegra_clk_init()" patch
+    from this series, which was added by accident in v3.
+
+    Added Thierry's tested-by to the patches.
+
+v3: The "Prevent interrupt triggering after transfer timeout" and "Support
+    atomic transfers" patches got extra very minor improvements. The
+    completion now is passed directly to tegra_i2c_poll_completion_timeout(),
+    for consistency.
+
+    Added two new patches that firm up DMA transfer handling:
+
+      i2c: tegra: Always terminate DMA transfer
+      i2c: tegra: Check DMA completion status in addition to left time
+
+v2: The series is renamed from "Tegra I2C: Support atomic transfers and
+    correct suspend/resume" to "NVIDIA Tegra I2C driver fixes and
+    improvements" because it now contains some more various changes.
+
+    New patches in v2:
+
+      i2c: tegra: Correct unwinding order on driver's probe error
+      i2c: tegra: Prevent interrupt triggering after transfer timeout
+      i2c: tegra: Use relaxed versions of readl/writel
+
+    The "Rename I2C_PIO_MODE_MAX_LEN to I2C_PIO_MODE_PREFERRED_LEN" got an
+    improved wording for the code's comment to I2C_PIO_MODE_PREFERRED_LEN.
+
+    The "Support atomic transfers" also got some very minor tuning, like
+    s/in_interrupt()/i2c_dev->is_curr_atomic_xfer/ in dvc_writel() that was
+    missed in v1.
+
+v1: The "i2c: tegra: Support atomic transfers" previously was sent out as
+    a separate patch, but later I spotted that suspend/resume doesn't
+    work properly. The "i2c: tegra: Fix suspending in active runtime PM
+    state" patch depends on the atomic patch because there is a need to
+    active IRQ-safe mode for the runtime PM by both patches.
+
+    I fixed a missed doc-comment of the newly added "is_curr_atomic_xfer"
+    structure field and added additional comment that explains why IRQ needs
+    to be disabled for the atomic transfer in the "Support atomic transfers"
+    patch.
+
+    Lastly, I added a minor "i2c: tegra: Rename .." patch that helps to
+    follow driver's code.
+
+Dmitry Osipenko (8):
+  i2c: tegra: Fix suspending in active runtime PM state
+  i2c: tegra: Properly disable runtime PM on driver's probe error
+  i2c: tegra: Prevent interrupt triggering after transfer timeout
+  i2c: tegra: Support atomic transfers
+  i2c: tegra: Rename I2C_PIO_MODE_MAX_LEN to I2C_PIO_MODE_PREFERRED_LEN
+  i2c: tegra: Use relaxed versions of readl/writel
+  i2c: tegra: Always terminate DMA transfer
+  i2c: tegra: Check DMA completion status in addition to left time
+
+ drivers/i2c/busses/i2c-tegra.c | 216 ++++++++++++++++++++++-----------
+ 1 file changed, 144 insertions(+), 72 deletions(-)
+
+-- 
+2.24.0
+
