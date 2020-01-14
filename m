@@ -2,83 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8538013A36F
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2020 10:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1642213AC85
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2020 15:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728935AbgANJGZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 Jan 2020 04:06:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45354 "EHLO mail.kernel.org"
+        id S1728791AbgANOmS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Jan 2020 09:42:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52732 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725860AbgANJGY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 14 Jan 2020 04:06:24 -0500
-Received: from PC-kkoz.proceq.com (unknown [213.160.61.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1727285AbgANOmR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 14 Jan 2020 09:42:17 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 426A324655;
-        Tue, 14 Jan 2020 09:06:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 46E642467D;
+        Tue, 14 Jan 2020 14:42:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578992784;
-        bh=xHEq0cIdKqev7KZs75cgmcmftzh7L7N3M6qGIbXNz8Y=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=gaul7AfCo4oNymqOZlbeiUthJaRz3l3JrhQqXcivr1KLkJIUe2AuQxY95K2XO7deh
-         kq8I+w6VvUE1rOAaWom1uTtBRLo5wE6mD77Ka3bDlaArwGa712UU4D0k5aYwzixBkq
-         kdF/mhDlq5auEQrNSOTzx8W1uQ/iJo+ipm+wIND0=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH v2 4/4] i2c: stu300: Use proper printk format for iomem pointer
-Date:   Tue, 14 Jan 2020 10:06:05 +0100
-Message-Id: <1578992765-1418-4-git-send-email-krzk@kernel.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1578992765-1418-1-git-send-email-krzk@kernel.org>
-References: <1578992765-1418-1-git-send-email-krzk@kernel.org>
+        s=default; t=1579012936;
+        bh=c6LDYtQqnB7DdTApZcqmNGiY6xvHi2T3M3/D6FiMHZ8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GG71RzVGoQnmwIOM+Sjez36iAzpuKlEX/vL0U2OC8n9fVurxtuqYtE8Jbhii2w2wb
+         qghMy7naE0sJOsomIhpEmM0Nf3jhKVZFKqBGDmUzIfkNDytSL0ec35H+dF76QS5Fht
+         zjf4D6M+cmkYtt7ipHfr9fcMFynJnwVvLJNNHo+8=
+Date:   Tue, 14 Jan 2020 15:42:14 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Khouloud Touil <ktouil@baylibre.com>,
+        baylibre-upstreaming@groups.io,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v4 4/5] dt-bindings: at25: add reference for the wp-gpios
+ property
+Message-ID: <20200114144214.GA1898224@kroah.com>
+References: <20200107092922.18408-1-ktouil@baylibre.com>
+ <20200107092922.18408-5-ktouil@baylibre.com>
+ <20200108205447.GA16981@bogus>
+ <CAMpxmJXffr-S51udNmUyMHz687jAoBKrYspNypfUUqjOD45zxQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMpxmJXffr-S51udNmUyMHz687jAoBKrYspNypfUUqjOD45zxQ@mail.gmail.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-iomem pointers should be printed with pointer format to hide the
-actual value and fix warnings when compiling on 64-bit platform (e.g. with
-COMPILE_TEST):
+On Thu, Jan 09, 2020 at 10:47:56AM +0100, Bartosz Golaszewski wrote:
+> śr., 8 sty 2020 o 21:54 Rob Herring <robh@kernel.org> napisał(a):
+> >
+> > On Tue,  7 Jan 2020 10:29:21 +0100, Khouloud Touil wrote:
+> > > As the at25 uses the NVMEM subsystem, and the property is now being
+> > > handled, adding reference for it in the device tree binding document,
+> > > which allows to specify the GPIO line to which the write-protect pin
+> > > is connected.
+> > >
+> > > Signed-off-by: Khouloud Touil <ktouil@baylibre.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/eeprom/at25.txt | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> >
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> Hi Greg,
+> 
+> AT25 patches usually go through the char-misc tree. In this case
+> however, the change depends on the other patches in this series. Can
+> you ack this and I'll take it through the AT24 tree exceptionally?
 
-    drivers/i2c/busses/i2c-stu300.c: In function ‘stu300_wait_while_busy’:
-    drivers/i2c/busses/i2c-stu300.c:446:76: warning:
-        cast from pointer to integer of different size [-Wpointer-to-int-cast]
-
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
----
-
-Changes since v1:
-1. Add Linus' review tag.
----
- drivers/i2c/busses/i2c-stu300.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-stu300.c b/drivers/i2c/busses/i2c-stu300.c
-index 8c3e2d409d63..42e0a53e7fa4 100644
---- a/drivers/i2c/busses/i2c-stu300.c
-+++ b/drivers/i2c/busses/i2c-stu300.c
-@@ -444,7 +444,7 @@ static int stu300_wait_while_busy(struct stu300_dev *dev)
- 		       "Attempt: %d\n", i+1);
- 
- 		dev_err(&dev->pdev->dev, "base address = "
--			"0x%08x, reinit hardware\n", (u32) dev->virtbase);
-+			"0x%p, reinit hardware\n", dev->virtbase);
- 
- 		(void) stu300_init_hw(dev);
- 	}
--- 
-2.7.4
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
