@@ -2,200 +2,253 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4800413B9EC
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2020 07:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4ED13BC23
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2020 10:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726018AbgAOGt2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Jan 2020 01:49:28 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:38194 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725999AbgAOGt2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Jan 2020 01:49:28 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00F6mYZl121915;
-        Wed, 15 Jan 2020 06:49:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=lYoGdj7qyQcXB7YUUM0rRrZCxgR0nkiytXKRZt+8U1M=;
- b=X10t+faxbd5eUFFh/jKYl0f7pM84EA809EuK/cUrdP53rVRRriP23hUvmlgeNMGbf52C
- 9fqFqGNQIlpnQ8gtyzK2BE4+fPzST6SbmsS42lkcrrNEelIKBrP/kFL0IlhIOoe2s+LY
- OzwKi9MSi3LPSA2o2/eiHn1+wMVfIv8ijpta1yWHeVD9/unsR8+oktwVauts/pvfrcbT
- Yt5b7hqaShJ3pT9KdDfjn39LHNEuJtZyOqrHubJvIvEax2ooxKZnEmFrb1boOqw37X0r
- tnSV6zcY73EMkwK4t8CFyvIvgNVlqTTumZ5tH8M8qL4ZlgNKijZZND1Pi+vsbvc4KwGC bw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2xf73yjebw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jan 2020 06:49:20 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00F6nFCh166658;
-        Wed, 15 Jan 2020 06:49:19 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2xh8etehj3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jan 2020 06:49:18 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 00F6n4Pn015863;
-        Wed, 15 Jan 2020 06:49:04 GMT
-Received: from kadam (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 14 Jan 2020 22:49:03 -0800
-Date:   Wed, 15 Jan 2020 09:49:26 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     syzbot <syzbot+8c8dedc0ba9e03f6c79e@syzkaller.appspotmail.com>
-Cc:     jdelvare@suse.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: KASAN: stack-out-of-bounds Read in i801_isr
-Message-ID: <20200115064925.GG3719@kadam>
-References: <0000000000009d6d71059c27ecf1@google.com>
+        id S1729248AbgAOJNr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Jan 2020 04:13:47 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:21760 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726472AbgAOJNr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Jan 2020 04:13:47 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00F97uiE022040;
+        Wed, 15 Jan 2020 10:13:21 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=ni4sk7BmfFV8dBipKNtMBnDIMCa/YeRtyCHWq5PbRVY=;
+ b=nyqyk/3UYEGBTmtjj9ZyRvRRBgYzLcPz6UD5z6ZsZqucJM9tjqETmrh6h1jksBpRA2oR
+ W9CxkzD2oOQPzbkd1NQOYT0FgX6x+Y6p81YX/BzY/DH+zNIgmj7wFMlwXGKiu37hsan+
+ uS3L+HWaOu9kAop3iMliAUIVgxJ+hqWC7/ZSsR4IFWBSYf9tlIGNgwyjtxyiKoP23BCJ
+ IJZ9bNZjZnN11oRnp+JHzsC0/kcbfX75Ul/OjfqtLx0B8V+9m8G1cw35zVQo6BoP4etH
+ zaoWtuCgHFb/PysaluYxJ0XU9RtnI4VURiU5uzF+p85mEv2KFTaVbFoAMV/IxOx3zPvw 6Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2xf78saa4r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Jan 2020 10:13:21 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 34145100034;
+        Wed, 15 Jan 2020 10:13:21 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag5node2.st.com [10.75.127.14])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1534F21CA94;
+        Wed, 15 Jan 2020 10:13:21 +0100 (CET)
+Received: from [10.48.1.171] (10.75.127.44) by SFHDAG5NODE2.st.com
+ (10.75.127.14) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 15 Jan
+ 2020 10:13:20 +0100
+Subject: Re: [PATCH 4/6] i2c: i2c-stm32f7: add PM_SLEEP suspend/resume support
+To:     Alain Volmat <alain.volmat@st.com>, <wsa@the-dreams.de>,
+        <robh+dt@kernel.org>
+CC:     <mark.rutland@arm.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@st.com>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>
+References: <1578317314-17197-1-git-send-email-alain.volmat@st.com>
+ <1578317314-17197-5-git-send-email-alain.volmat@st.com>
+From:   Pierre Yves MORDRET <pierre-yves.mordret@st.com>
+Message-ID: <5f930987-2a15-3a82-654d-2db8fd528876@st.com>
+Date:   Wed, 15 Jan 2020 10:13:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000009d6d71059c27ecf1@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9500 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001150054
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9500 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001150054
+In-Reply-To: <1578317314-17197-5-git-send-email-alain.volmat@st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG5NODE1.st.com (10.75.127.13) To SFHDAG5NODE2.st.com
+ (10.75.127.14)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-15_01:2020-01-15,2020-01-14 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-#syz dup: KASAN: vmalloc-out-of-bounds Write in i801_isr
+Hi all,
 
-On Tue, Jan 14, 2020 at 10:36:10PM -0800, syzbot wrote:
-> Hello,
+Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
+
+Regards
+
+On 1/6/20 2:28 PM, Alain Volmat wrote:
+> Backup/restore I2C registers as part of the suspend/resume
+> handlers. The device is marked as suspended to ensure that
+> transfers are rejected during the suspended period.
 > 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    452424cd Merge branch 'parisc-5.5-3' of git://git.kernel.o..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17f7ac21e00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d9290aeb7e6cf1c4
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8c8dedc0ba9e03f6c79e
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> userspace arch: i386
-> 
-> Unfortunately, I don't have any reproducer for this crash yet.
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+8c8dedc0ba9e03f6c79e@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: stack-out-of-bounds in i801_isr_byte_done
-> drivers/i2c/busses/i2c-i801.c:603 [inline]
-> BUG: KASAN: stack-out-of-bounds in i801_isr
-> drivers/i2c/busses/i2c-i801.c:663 [inline]
-> BUG: KASAN: stack-out-of-bounds in i801_isr+0xcb7/0xcf0
-> drivers/i2c/busses/i2c-i801.c:644
-> Read of size 1 at addr ffffc9000beb7d38 by task syz-executor.3/2994
-> 
-> CPU: 1 PID: 2994 Comm: syz-executor.3 Not tainted 5.5.0-rc6-syzkaller #0
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS
-> rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-> Call Trace:
->  <IRQ>
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x197/0x210 lib/dump_stack.c:118
->  print_address_description.constprop.0.cold+0x5/0x30b mm/kasan/report.c:374
->  __kasan_report.cold+0x1b/0x41 mm/kasan/report.c:506
->  kasan_report+0x12/0x20 mm/kasan/common.c:639
->  __asan_report_load1_noabort+0x14/0x20 mm/kasan/generic_report.c:132
->  i801_isr_byte_done drivers/i2c/busses/i2c-i801.c:603 [inline]
->  i801_isr drivers/i2c/busses/i2c-i801.c:663 [inline]
->  i801_isr+0xcb7/0xcf0 drivers/i2c/busses/i2c-i801.c:644
->  __handle_irq_event_percpu+0x15d/0x970 kernel/irq/handle.c:149
->  handle_irq_event_percpu+0x74/0x160 kernel/irq/handle.c:189
->  handle_irq_event+0xa7/0x134 kernel/irq/handle.c:206
->  handle_fasteoi_irq+0x281/0x670 kernel/irq/chip.c:725
->  generic_handle_irq_desc include/linux/irqdesc.h:156 [inline]
->  do_IRQ+0xde/0x280 arch/x86/kernel/irq.c:250
->  common_interrupt+0xf/0xf arch/x86/entry/entry_64.S:607
-> RIP: 0010:ffs arch/x86/include/asm/bitops.h:297 [inline]
-> RIP: 0010:__do_softirq+0x227/0x98c kernel/softirq.c:280
-> Code: c7 c0 e8 34 93 89 48 c1 e8 03 42 80 3c 30 00 0f 85 b1 06 00 00 48 83
-> 3d ce 32 93 01 00 0f 84 d6 05 00 00 fb 66 0f 1f 44 00 00 <b8> ff ff ff ff 48
-> c7 45 c8 00 91 80 89 0f bc 45 d4 83 c0 01 89 45
-> RSP: 0018:ffffc900004e8f18 EFLAGS: 00000282 ORIG_RAX: ffffffffffffffdd
-> RAX: 1ffffffff132669d RBX: ffff88801eccdf00 RCX: 0000000000000002
-> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88801ecce794
-> RBP: ffffc900004e8f98 R08: 1ffffffff165e7a6 R09: fffffbfff165e7a7
-> R10: fffffbfff165e7a6 R11: ffffffff8b2f3d37 R12: 0000000000000000
-> R13: 0000000000000000 R14: dffffc0000000000 R15: 0000000000000000
->  invoke_softirq kernel/softirq.c:373 [inline]
->  irq_exit+0x19b/0x1e0 kernel/softirq.c:413
->  exiting_irq arch/x86/include/asm/apic.h:536 [inline]
->  smp_apic_timer_interrupt+0x1a3/0x610 arch/x86/kernel/apic/apic.c:1137
->  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
->  </IRQ>
-> RIP: 0010:arch_local_irq_restore arch/x86/include/asm/paravirt.h:752
-> [inline]
-> RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:160
-> [inline]
-> RIP: 0010:_raw_spin_unlock_irqrestore+0x90/0xe0
-> kernel/locking/spinlock.c:191
-> Code: 48 c7 c0 d8 34 93 89 48 ba 00 00 00 00 00 fc ff df 48 c1 e8 03 80 3c
-> 10 00 75 39 48 83 3d 7f e0 be 01 00 74 24 48 89 df 57 9d <0f> 1f 44 00 00 bf
-> 01 00 00 00 e8 11 36 7c f9 65 8b 05 12 ca 2d 78
-> RSP: 0018:ffffc9000c6e7b90 EFLAGS: 00000282 ORIG_RAX: ffffffffffffff13
-> RAX: 1ffffffff132669b RBX: 0000000000000282 RCX: 0000000000000006
-> RDX: dffffc0000000000 RSI: 0000000000000008 RDI: 0000000000000282
-> RBP: ffffc9000c6e7ba0 R08: 1ffffffff165e7a6 R09: fffffbfff165e7a7
-> R10: fffffbfff165e7a6 R11: ffffffff8b2f3d37 R12: ffff88802a79d158
-> R13: ffff88802a79d150 R14: 0000000000000282 R15: ffff88802a79d158
->  kthread_queue_work+0xa4/0x160 kernel/kthread.c:829
->  kthread_flush_worker+0xca/0x110 kernel/kthread.c:1165
->  loop_unprepare_queue drivers/block/loop.c:894 [inline]
->  __loop_clr_fd+0x5d9/0xd80 drivers/block/loop.c:1157
->  loop_clr_fd drivers/block/loop.c:1237 [inline]
->  lo_ioctl+0x2bd/0x1460 drivers/block/loop.c:1606
->  lo_compat_ioctl+0xb6/0x110 drivers/block/loop.c:1782
->  compat_blkdev_ioctl+0x274/0x1c30 block/compat_ioctl.c:422
->  __do_compat_sys_ioctl fs/compat_ioctl.c:214 [inline]
->  __se_compat_sys_ioctl fs/compat_ioctl.c:142 [inline]
->  __ia32_compat_sys_ioctl+0x233/0x610 fs/compat_ioctl.c:142
->  do_syscall_32_irqs_on arch/x86/entry/common.c:337 [inline]
->  do_fast_syscall_32+0x27b/0xe16 arch/x86/entry/common.c:408
->  entry_SYSENTER_compat+0x70/0x7f arch/x86/entry/entry_64_compat.S:139
-> RIP: 0023:0xf7fe2a39
-> Code: 00 00 00 89 d3 5b 5e 5f 5d c3 b8 80 96 98 00 eb c4 8b 04 24 c3 8b 1c
-> 24 c3 8b 34 24 c3 8b 3c 24 c3 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90
-> 90 90 eb 0d 90 90 90 90 90 90 90 90 90 90 90 90
-> RSP: 002b:00000000f5dddf08 EFLAGS: 00000292 ORIG_RAX: 0000000000000036
-> RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 0000000000004c01
-> RDX: 0000000000000000 RSI: 000000000812d000 RDI: 0000000000000000
-> RBP: 00000000f5dde158 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> 
-> 
-> Memory state around the buggy address:
->  ffffc9000beb7c00: f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9
->  ffffc9000beb7c80: f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9
-> > ffffc9000beb7d00: f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9
->                                         ^
->  ffffc9000beb7d80: f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9
->  ffffc9000beb7e00: f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9
-> ==================================================================
-> 
-> 
+> Signed-off-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
+> Signed-off-by: Alain Volmat <alain.volmat@st.com>
 > ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>  drivers/i2c/busses/i2c-stm32f7.c | 117 +++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 113 insertions(+), 4 deletions(-)
 > 
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+> index b2634afe066d..5c3e8ac6ad92 100644
+> --- a/drivers/i2c/busses/i2c-stm32f7.c
+> +++ b/drivers/i2c/busses/i2c-stm32f7.c
+> @@ -169,6 +169,24 @@
+>  #define STM32F7_AUTOSUSPEND_DELAY		(HZ / 100)
+>  
+>  /**
+> + * struct stm32f7_i2c_regs - i2c f7 registers backup
+> + * @cr1: Control register 1
+> + * @cr2: Control register 2
+> + * @oar1: Own address 1 register
+> + * @oar2: Own address 2 register
+> + * @pecr: PEC register
+> + * @tmgr: Timing register
+> + */
+> +struct stm32f7_i2c_regs {
+> +	u32 cr1;
+> +	u32 cr2;
+> +	u32 oar1;
+> +	u32 oar2;
+> +	u32 pecr;
+> +	u32 tmgr;
+> +};
+> +
+> +/**
+>   * struct stm32f7_i2c_spec - private i2c specification timing
+>   * @rate: I2C bus speed (Hz)
+>   * @rate_min: 80% of I2C bus speed (Hz)
+> @@ -276,6 +294,7 @@ struct stm32f7_i2c_msg {
+>   * @timing: I2C computed timings
+>   * @slave: list of slave devices registered on the I2C bus
+>   * @slave_running: slave device currently used
+> + * @backup_regs: backup of i2c controller registers (for suspend/resume)
+>   * @slave_dir: transfer direction for the current slave device
+>   * @master_mode: boolean to know in which mode the I2C is running (master or
+>   * slave)
+> @@ -298,6 +317,7 @@ struct stm32f7_i2c_dev {
+>  	struct stm32f7_i2c_timings timing;
+>  	struct i2c_client *slave[STM32F7_I2C_MAX_SLAVE];
+>  	struct i2c_client *slave_running;
+> +	struct stm32f7_i2c_regs backup_regs;
+>  	u32 slave_dir;
+>  	bool master_mode;
+>  	struct stm32_i2c_dma *dma;
+> @@ -2027,8 +2047,7 @@ static int stm32f7_i2c_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_PM
+> -static int stm32f7_i2c_runtime_suspend(struct device *dev)
+> +static int __maybe_unused stm32f7_i2c_runtime_suspend(struct device *dev)
+>  {
+>  	struct stm32f7_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+>  
+> @@ -2038,7 +2057,7 @@ static int stm32f7_i2c_runtime_suspend(struct device *dev)
+>  	return 0;
+>  }
+>  
+> -static int stm32f7_i2c_runtime_resume(struct device *dev)
+> +static int __maybe_unused stm32f7_i2c_runtime_resume(struct device *dev)
+>  {
+>  	struct stm32f7_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+>  	int ret;
+> @@ -2053,11 +2072,101 @@ static int stm32f7_i2c_runtime_resume(struct device *dev)
+>  
+>  	return 0;
+>  }
+> -#endif
+> +
+> +static int __maybe_unused
+> +stm32f7_i2c_regs_backup(struct stm32f7_i2c_dev *i2c_dev)
+> +{
+> +	int ret;
+> +	struct stm32f7_i2c_regs *backup_regs = &i2c_dev->backup_regs;
+> +
+> +	ret = pm_runtime_get_sync(i2c_dev->dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	backup_regs->cr1 = readl_relaxed(i2c_dev->base + STM32F7_I2C_CR1);
+> +	backup_regs->cr2 = readl_relaxed(i2c_dev->base + STM32F7_I2C_CR2);
+> +	backup_regs->oar1 = readl_relaxed(i2c_dev->base + STM32F7_I2C_OAR1);
+> +	backup_regs->oar2 = readl_relaxed(i2c_dev->base + STM32F7_I2C_OAR2);
+> +	backup_regs->pecr = readl_relaxed(i2c_dev->base + STM32F7_I2C_PECR);
+> +	backup_regs->tmgr = readl_relaxed(i2c_dev->base + STM32F7_I2C_TIMINGR);
+> +
+> +	pm_runtime_put_sync(i2c_dev->dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int __maybe_unused
+> +stm32f7_i2c_regs_restore(struct stm32f7_i2c_dev *i2c_dev)
+> +{
+> +	u32 cr1;
+> +	int ret;
+> +	struct stm32f7_i2c_regs *backup_regs = &i2c_dev->backup_regs;
+> +
+> +	ret = pm_runtime_get_sync(i2c_dev->dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	cr1 = readl_relaxed(i2c_dev->base + STM32F7_I2C_CR1);
+> +	if (cr1 & STM32F7_I2C_CR1_PE)
+> +		stm32f7_i2c_clr_bits(i2c_dev->base + STM32F7_I2C_CR1,
+> +				     STM32F7_I2C_CR1_PE);
+> +
+> +	writel_relaxed(backup_regs->tmgr, i2c_dev->base + STM32F7_I2C_TIMINGR);
+> +	writel_relaxed(backup_regs->cr1 & ~STM32F7_I2C_CR1_PE,
+> +		       i2c_dev->base + STM32F7_I2C_CR1);
+> +	if (backup_regs->cr1 & STM32F7_I2C_CR1_PE)
+> +		stm32f7_i2c_set_bits(i2c_dev->base + STM32F7_I2C_CR1,
+> +				     STM32F7_I2C_CR1_PE);
+> +	writel_relaxed(backup_regs->cr2, i2c_dev->base + STM32F7_I2C_CR2);
+> +	writel_relaxed(backup_regs->oar1, i2c_dev->base + STM32F7_I2C_OAR1);
+> +	writel_relaxed(backup_regs->oar2, i2c_dev->base + STM32F7_I2C_OAR2);
+> +	writel_relaxed(backup_regs->pecr, i2c_dev->base + STM32F7_I2C_PECR);
+> +
+> +	pm_runtime_put_sync(i2c_dev->dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int __maybe_unused stm32f7_i2c_suspend(struct device *dev)
+> +{
+> +	struct stm32f7_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	i2c_mark_adapter_suspended(&i2c_dev->adap);
+> +	ret = stm32f7_i2c_regs_backup(i2c_dev);
+> +	if (ret < 0) {
+> +		i2c_mark_adapter_resumed(&i2c_dev->adap);
+> +		return ret;
+> +	}
+> +
+> +	pinctrl_pm_select_sleep_state(dev);
+> +	pm_runtime_force_suspend(dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused stm32f7_i2c_resume(struct device *dev)
+> +{
+> +	struct stm32f7_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = pm_runtime_force_resume(dev);
+> +	if (ret < 0)
+> +		return ret;
+> +	pinctrl_pm_select_default_state(dev);
+> +
+> +	ret = stm32f7_i2c_regs_restore(i2c_dev);
+> +	if (ret < 0)
+> +		return ret;
+> +	i2c_mark_adapter_resumed(&i2c_dev->adap);
+> +
+> +	return 0;
+> +}
+>  
+>  static const struct dev_pm_ops stm32f7_i2c_pm_ops = {
+>  	SET_RUNTIME_PM_OPS(stm32f7_i2c_runtime_suspend,
+>  			   stm32f7_i2c_runtime_resume, NULL)
+> +	SET_SYSTEM_SLEEP_PM_OPS(stm32f7_i2c_suspend, stm32f7_i2c_resume)
+>  };
+>  
+>  static const struct of_device_id stm32f7_i2c_match[] = {
 > 
-> -- 
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000009d6d71059c27ecf1%40google.com.
