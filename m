@@ -2,33 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFBA513CAE9
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2020 18:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE6213CAEA
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2020 18:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbgAOR0Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Jan 2020 12:26:24 -0500
-Received: from sauhun.de ([88.99.104.3]:38752 "EHLO pokefinder.org"
+        id S1728909AbgAOR0a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Jan 2020 12:26:30 -0500
+Received: from sauhun.de ([88.99.104.3]:38770 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726778AbgAOR0Y (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 15 Jan 2020 12:26:24 -0500
+        id S1726778AbgAOR03 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 15 Jan 2020 12:26:29 -0500
 Received: from localhost (p54B33239.dip0.t-ipconnect.de [84.179.50.57])
-        by pokefinder.org (Postfix) with ESMTPSA id E1EC22C0742;
-        Wed, 15 Jan 2020 18:26:21 +0100 (CET)
-Date:   Wed, 15 Jan 2020 18:26:19 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 2CD132C0742;
+        Wed, 15 Jan 2020 18:26:28 +0100 (CET)
+Date:   Wed, 15 Jan 2020 18:26:27 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 3/3] i2c: parport: move include file into main source
-Message-ID: <20200115172618.GA1239@ninjato>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.de>
+Subject: Re: [PATCH 1/3] i2c: parport-light: remove driver
+Message-ID: <20200115172627.GB1239@ninjato>
 References: <20200113210643.5033-1-wsa+renesas@sang-engineering.com>
- <20200113210643.5033-4-wsa+renesas@sang-engineering.com>
- <20200115151743.63e6b02d@endymion>
+ <20200113210643.5033-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pWyiEgJYm5f9v55/"
+        protocol="application/pgp-signature"; boundary="f2QGlHpHGjS2mn6Y"
 Content-Disposition: inline
-In-Reply-To: <20200115151743.63e6b02d@endymion>
+In-Reply-To: <20200113210643.5033-2-wsa+renesas@sang-engineering.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -36,55 +34,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---pWyiEgJYm5f9v55/
+--f2QGlHpHGjS2mn6Y
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > +module_param(type, int, 0);
-> > +MODULE_PARM_DESC(type,
-> > +	"Type of adapter:\n"
-> > +	" 0 =3D Philips adapter\n"
-> > +	" 1 =3D home brew teletext adapter\n"
-> > +	" 2 =3D Velleman K8000 adapter\n"
-> > +	" 3 =3D ELV adapter\n"
-> > +	" 4 =3D ADM1032 evaluation board\n"
-> > +	" 5 =3D ADM1025, ADM1030 and ADM1031 evaluation boards\n"
-> > +	" 6 =3D Barco LPT->DVI (K5800236) adapter\n"
-> > +	" 7 =3D One For All JP1 parallel port adapter\n"
-> > +	" 8 =3D VCT-jig\n"
-> > +);
+On Mon, Jan 13, 2020 at 10:06:41PM +0100, Wolfram Sang wrote:
+> The justification of a light version of the parport driver was less
+> overhead for embedded systems. Well, today, even if an embedded system
+> still has a parport, it surely can handle the fully-fledged parport
+> driver. Remove it to reduce the maintenance burden.
 >=20
-> Isn't it considered a better practice to keep the module_param (and
-> MODULE_PARM_DESC) close to the declaration of the variable itself so
-> that correctness can be easily verified and changing the type later
-> would be easier?
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-I tried it for both module parameters and it looks much better, in deed.
-So, fixed it while applying, thanks for the suggestions!
-
-Applied to for-next!
+Applied to for-next, thanks!
 
 
---pWyiEgJYm5f9v55/
+--f2QGlHpHGjS2mn6Y
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4fSzIACgkQFA3kzBSg
-KbbeUA/9EXPtJq97HunOJULb9s7k6hWbGwavD2JLEeljSvI/2/1NdsMqsN4rJ14y
-2iRhCsOglTDv30KvJ96GHJdkibvLRhzB3ltTZfP53qhObrw9J0UWraJOoPZ0/Hx2
-NDX5X5zEvPBWhyH7IOMqQJZePbIuMl8oVZ9BbzWC0mbG9RP2t0xEcBF7KCn0vgWf
-qoYqoiWvybimT+7L61jv2r5/QyjKhsbZRVhFmBzP+54XksGkSlMerxvHWXS+pXfR
-AuYho9cBxjRixIhkXrxh9BkQrhJ0bSq2z+Pf+EnbOaAf4uxsJ96iqozkHuDNSUKb
-iIw71ZI8IGm2W3YUWB2BuVgKxLEwtLvFq9Y09PINmVXVYQr3BYLr5qsXADoXvPJ2
-utn9GZwZmHOaiPOfK/gsvYn22Qq13VfW3KqUq0U5nwT8QyHo9XfKFsUenj18JUhV
-BuZ26j4N6X1NXewB1z2qsNZ1WmTFLtri9O52UKPRjojqatDKs4C15Ztu63i8Npod
-fYnY6+R4MU/ezXT2GtzKU7JLNAKRw43ybHw4GPqYVEzY9bv6pbP8MFPo2L/OKQ7h
-n7gXYP8VZsKu3XUR3wS8Zq3VzDWLbID/NmTu8dmAeq4WOh8zsYTV7RuzNp2Mmbud
-zVZyEOViGDAgWTkd/xTOpaoEFZ34F7Hru7b1pFrMRYSQN6dhgCI=
-=MeCn
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4fS0MACgkQFA3kzBSg
+KbZvJw//e4NbuWYj1ezrmJ5r6BIJ8emvvOBtnzTmbTcuauNdzGA4pj5dSNOy0iCY
+zILAti9+BHc96jAiMpVr5Sq3n1+/ECgfT4TO5+Z81MpFyKre0VneUhBUkfiTBEA+
+N9Y3LwvfcZCvatcPh61oVwYhBn1n2FbH5D2oYqdGRws7c70FzcjD2Sr98OyJu6jU
+M4HOjAKO2P88larxU+oyWcw8IOHBemZKtvRHJRbwHMvtOoFAwNZlrnJWBDv1OVjX
+ZnG6joxdxnIVoLrTJtvzt1fR2o2BYT4vXJTcq0KJgEpWh/uCxSuLHctVAyZYytLk
+f7207BKUagfs2tXPhNTGboWSArwIiP+wFWC29BuLR39L5MJkRRIuZlVTSPi/5JJI
+i+L0EKgLlov57ISZAlZt3jMjiolLCW6vL0Mr3VpjZYa0vFbCBNWMYQ32mKwTf8q6
+N1qrapOCaAdB+3p4hFRrhN7hV0mLIHUJNlOnz8lGPbiivGjx4Po+j+xX7OrotyBU
+t3cbVyAB8IbBLqUQNo9BCZrWqU8wlT2+1uqDA23Dk5gn0jE/ib1F08WhqVPB+/wh
+5kwThdESysSFXGsOzoyTosywYcTP390fEoLPJQSp882Mse69i3JkyAxLTqJF58Oe
+UPtwrikBSvszQPYO0suk2d/vZegohm+fwo9MfxQ5M68/qH8Zr38=
+=oO4b
 -----END PGP SIGNATURE-----
 
---pWyiEgJYm5f9v55/--
+--f2QGlHpHGjS2mn6Y--
