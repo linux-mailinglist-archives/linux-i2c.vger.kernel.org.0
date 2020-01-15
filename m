@@ -2,89 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B150113C5BD
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2020 15:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFBA513CAE9
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2020 18:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbgAOORq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Jan 2020 09:17:46 -0500
-Received: from mx2.suse.de ([195.135.220.15]:45684 "EHLO mx2.suse.de"
+        id S1726574AbgAOR0Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Jan 2020 12:26:24 -0500
+Received: from sauhun.de ([88.99.104.3]:38752 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726248AbgAOORp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 15 Jan 2020 09:17:45 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 289C0AD19;
-        Wed, 15 Jan 2020 14:17:44 +0000 (UTC)
-Date:   Wed, 15 Jan 2020 15:17:43 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org
+        id S1726778AbgAOR0Y (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 15 Jan 2020 12:26:24 -0500
+Received: from localhost (p54B33239.dip0.t-ipconnect.de [84.179.50.57])
+        by pokefinder.org (Postfix) with ESMTPSA id E1EC22C0742;
+        Wed, 15 Jan 2020 18:26:21 +0100 (CET)
+Date:   Wed, 15 Jan 2020 18:26:19 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org
 Subject: Re: [PATCH 3/3] i2c: parport: move include file into main source
-Message-ID: <20200115151743.63e6b02d@endymion>
-In-Reply-To: <20200113210643.5033-4-wsa+renesas@sang-engineering.com>
+Message-ID: <20200115172618.GA1239@ninjato>
 References: <20200113210643.5033-1-wsa+renesas@sang-engineering.com>
-        <20200113210643.5033-4-wsa+renesas@sang-engineering.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+ <20200113210643.5033-4-wsa+renesas@sang-engineering.com>
+ <20200115151743.63e6b02d@endymion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pWyiEgJYm5f9v55/"
+Content-Disposition: inline
+In-Reply-To: <20200115151743.63e6b02d@endymion>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 13 Jan 2020 22:06:43 +0100, Wolfram Sang wrote:
-> After removal of the parport-light driver, this include is used by the
-> parport driver exclusively and can be included in the main source.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/i2c/busses/i2c-parport.c | 100 ++++++++++++++++++++++++++++-
->  drivers/i2c/busses/i2c-parport.h | 106 -------------------------------
->  2 files changed, 99 insertions(+), 107 deletions(-)
->  delete mode 100644 drivers/i2c/busses/i2c-parport.h
-> 
-> diff --git a/drivers/i2c/busses/i2c-parport.c b/drivers/i2c/busses/i2c-parport.c
-> index e8ed882de402..d03d22812eef 100644
-> --- a/drivers/i2c/busses/i2c-parport.c
-> +++ b/drivers/i2c/busses/i2c-parport.c
-> (...)
-> @@ -42,6 +125,7 @@ static LIST_HEAD(adapter_list);
->  static DEFINE_MUTEX(adapter_list_lock);
->  #define MAX_DEVICE 4
->  static int parport[MAX_DEVICE] = {0, -1, -1, -1};
-> +static int type = -1;
->  
->  
->  /* ----- Low-level parallel port access ----------------------------------- */
-> @@ -318,5 +402,19 @@ MODULE_PARM_DESC(parport,
->  		 " Default is one device connected to parport0.\n"
->  );
->  
-> +module_param(type, int, 0);
-> +MODULE_PARM_DESC(type,
-> +	"Type of adapter:\n"
-> +	" 0 = Philips adapter\n"
-> +	" 1 = home brew teletext adapter\n"
-> +	" 2 = Velleman K8000 adapter\n"
-> +	" 3 = ELV adapter\n"
-> +	" 4 = ADM1032 evaluation board\n"
-> +	" 5 = ADM1025, ADM1030 and ADM1031 evaluation boards\n"
-> +	" 6 = Barco LPT->DVI (K5800236) adapter\n"
-> +	" 7 = One For All JP1 parallel port adapter\n"
-> +	" 8 = VCT-jig\n"
-> +);
 
-Isn't it considered a better practice to keep the module_param (and
-MODULE_PARM_DESC) close to the declaration of the variable itself so
-that correctness can be easily verified and changing the type later
-would be easier?
+--pWyiEgJYm5f9v55/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Other than that, I'm fine with the change, thanks for doing this.
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> > +module_param(type, int, 0);
+> > +MODULE_PARM_DESC(type,
+> > +	"Type of adapter:\n"
+> > +	" 0 =3D Philips adapter\n"
+> > +	" 1 =3D home brew teletext adapter\n"
+> > +	" 2 =3D Velleman K8000 adapter\n"
+> > +	" 3 =3D ELV adapter\n"
+> > +	" 4 =3D ADM1032 evaluation board\n"
+> > +	" 5 =3D ADM1025, ADM1030 and ADM1031 evaluation boards\n"
+> > +	" 6 =3D Barco LPT->DVI (K5800236) adapter\n"
+> > +	" 7 =3D One For All JP1 parallel port adapter\n"
+> > +	" 8 =3D VCT-jig\n"
+> > +);
+>=20
+> Isn't it considered a better practice to keep the module_param (and
+> MODULE_PARM_DESC) close to the declaration of the variable itself so
+> that correctness can be easily verified and changing the type later
+> would be easier?
 
--- 
-Jean Delvare
-SUSE L3 Support
+I tried it for both module parameters and it looks much better, in deed.
+So, fixed it while applying, thanks for the suggestions!
+
+Applied to for-next!
+
+
+--pWyiEgJYm5f9v55/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4fSzIACgkQFA3kzBSg
+KbbeUA/9EXPtJq97HunOJULb9s7k6hWbGwavD2JLEeljSvI/2/1NdsMqsN4rJ14y
+2iRhCsOglTDv30KvJ96GHJdkibvLRhzB3ltTZfP53qhObrw9J0UWraJOoPZ0/Hx2
+NDX5X5zEvPBWhyH7IOMqQJZePbIuMl8oVZ9BbzWC0mbG9RP2t0xEcBF7KCn0vgWf
+qoYqoiWvybimT+7L61jv2r5/QyjKhsbZRVhFmBzP+54XksGkSlMerxvHWXS+pXfR
+AuYho9cBxjRixIhkXrxh9BkQrhJ0bSq2z+Pf+EnbOaAf4uxsJ96iqozkHuDNSUKb
+iIw71ZI8IGm2W3YUWB2BuVgKxLEwtLvFq9Y09PINmVXVYQr3BYLr5qsXADoXvPJ2
+utn9GZwZmHOaiPOfK/gsvYn22Qq13VfW3KqUq0U5nwT8QyHo9XfKFsUenj18JUhV
+BuZ26j4N6X1NXewB1z2qsNZ1WmTFLtri9O52UKPRjojqatDKs4C15Ztu63i8Npod
+fYnY6+R4MU/ezXT2GtzKU7JLNAKRw43ybHw4GPqYVEzY9bv6pbP8MFPo2L/OKQ7h
+n7gXYP8VZsKu3XUR3wS8Zq3VzDWLbID/NmTu8dmAeq4WOh8zsYTV7RuzNp2Mmbud
+zVZyEOViGDAgWTkd/xTOpaoEFZ34F7Hru7b1pFrMRYSQN6dhgCI=
+=MeCn
+-----END PGP SIGNATURE-----
+
+--pWyiEgJYm5f9v55/--
