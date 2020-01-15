@@ -2,31 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DED7613CAEB
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2020 18:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B24613CB17
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2020 18:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726778AbgAOR0e (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Jan 2020 12:26:34 -0500
-Received: from sauhun.de ([88.99.104.3]:38784 "EHLO pokefinder.org"
+        id S1726778AbgAOReB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Jan 2020 12:34:01 -0500
+Received: from sauhun.de ([88.99.104.3]:38860 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728913AbgAOR0d (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 15 Jan 2020 12:26:33 -0500
+        id S1726418AbgAOReA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 15 Jan 2020 12:34:00 -0500
 Received: from localhost (p54B33239.dip0.t-ipconnect.de [84.179.50.57])
-        by pokefinder.org (Postfix) with ESMTPSA id 469F62C39C2;
-        Wed, 15 Jan 2020 18:26:32 +0100 (CET)
-Date:   Wed, 15 Jan 2020 18:26:31 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 907FF2C0742;
+        Wed, 15 Jan 2020 18:33:58 +0100 (CET)
+Date:   Wed, 15 Jan 2020 18:33:58 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.de>
-Subject: Re: [PATCH 2/3] i2c: parport: simplify Kconfig description
-Message-ID: <20200115172631.GC1239@ninjato>
-References: <20200113210643.5033-1-wsa+renesas@sang-engineering.com>
- <20200113210643.5033-3-wsa+renesas@sang-engineering.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] i2c: tegra: Fix suspending in active runtime PM
+ state
+Message-ID: <20200115173358.GD1239@ninjato>
+References: <20200114013442.28448-1-digetx@gmail.com>
+ <20200114013442.28448-2-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="32u276st3Jlj2kUU"
+        protocol="application/pgp-signature"; boundary="2Z2K0IlrPCVsbNpk"
 Content-Disposition: inline
-In-Reply-To: <20200113210643.5033-3-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20200114013442.28448-2-digetx@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -34,38 +39,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---32u276st3Jlj2kUU
+--2Z2K0IlrPCVsbNpk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 13, 2020 at 10:06:42PM +0100, Wolfram Sang wrote:
-> The driver is not 'new' anymore, so remove details from the driver it
-> surpassed.
+On Tue, Jan 14, 2020 at 04:34:35AM +0300, Dmitry Osipenko wrote:
+> I noticed that sometime I2C clock is kept enabled during suspend-resume.
+> This happens because runtime PM defers dynamic suspension and thus it may
+> happen that runtime PM is in active state when system enters into suspend.
+> In particular I2C controller that is used for CPU's DVFS is often kept ON
+> during suspend because CPU's voltage scaling happens quite often.
 >=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Fixes: 8ebf15e9c869 ("i2c: tegra: Move suspend handling to NOIRQ phase")
+> Cc: <stable@vger.kernel.org> # v5.4+
+> Tested-by: Thierry Reding <treding@nvidia.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
-Applied to for-next, thanks!
+Applied to for-current, thanks!
 
 
---32u276st3Jlj2kUU
+--2Z2K0IlrPCVsbNpk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4fS0cACgkQFA3kzBSg
-KbYfQw//ec/rIONFvvPUh1AgdBt50hh6eqEFo8x8SB7AQ9DxmDvPRCcpGbfCuK2Q
-YshA1OW/olCn9lpqtotraqRtPTprDL0uvu7kOtUCZAaQPFqK6ptSz7BqjpgoCEWj
-oP97iMaEp4PdIR93+0IX91bsQ8Mi1sWBv/c/IlbCnarvVkDmTsXRuX/XDoCud4Gj
-7RtIZxDRzLoSWe4hHtqz3Ix7MW8UOnZogWu9MRK8MmsmbvxBFUwjgYHB9p3n1XLN
-kZRQatpCpu67s3l+4oDLC/6LdiNBnmrU7e3wGq7TbbuGMzNrDvYO/xsP8/ge0N5A
-y1Hu/lRNO4DZCcY1+8VxVXM1gpeZH/gCFO/BYtbClLiyA42s/jN1f/oX3RP45b78
-ELr3Yd8rkjJH7xgu8PtOiw/nHzOQCWJMetxQlLA6g/zIKko5VP+WjSQJ9Gz3nnXW
-wxZmt73bcBovk2LONfR5wASNWFJbCXa+NEGCPyI1i+H6tV4gqn171BxuEbOQp6Jh
-MDelZto7UkWNgZsH7Glntgp3blxvK5c5YdIEFpJGH80YXcn2UNPGPxy4aVLQOYDT
-rqBwY/xd+e63/U9MaGdmbC7qXM/wAwLNsMsVN0zmM/Eq+GkBxLkkB49ddgBAsWLB
-Uz4MtehMflC0KSi4wgqi6KW7B7AMJ6Jat1E/pmgAfyVOafwQXd4=
-=/cP+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4fTQUACgkQFA3kzBSg
+KbZRQQ//X0M2uETYY4ocrCKvkYWSCrKJoUsfcN6Kfkw/EfgXBWXsL7pB0v8HZtdM
+A6aLwrsMQgtmTDrEVkit9y8m4VHm6hRxgY85R/GJZO1QPWXK88M1R2QUbzNmZDcm
+owqVD5oCJnWgj6fyvQcDCkt5ke+anW3GnYUnMuP7kT6OPBbKNxQ2xzaPLO962zA4
+sBGsHTnyvyMDh8Y529FxwuD3txYVt17UCEjnIp2iN4YRdMR68tLZnIFaREQrSbSo
+8okn2VEJ7VZl2seQHTOBmmxBUy8GXoTGCnfOJo12dFzN2pS3EvuyCeEuF3etouem
+UJRZ5vYjwungQMHXsTcoN37GJwyyow4o81BgoFgRd2S69KpFPLkEQxXIQRqf+poI
+DugedIUViEOS+mipoM3Xd+0qsIubFz2pYNqrW29TAHD48xvi3iCAsY2emFxsCynq
+Hox3mLqyHzcsP6yWdNd6xiwoyuux7q5O0Qkm4Wvn0WF9h4LxkOVWYQr0RUjG1OnI
+0I6IEdj+CtkuOK9JyFfpDk9mJHdt93CBpX1Y0dG6bRVNbLCyIUzwxXaYMOd+F7ZK
+tA1B55Kdp5cPkRYA2XARyL7LaBSBucZUzBDnU64cCTio9r0AZLmb4p3yuVY5qQU5
+TD2Hz6tL/YLuS44kjqkqkQnMj6iaT4JnMdUYBo9Ew4CK0CphCHo=
+=bdEc
 -----END PGP SIGNATURE-----
 
---32u276st3Jlj2kUU--
+--2Z2K0IlrPCVsbNpk--
