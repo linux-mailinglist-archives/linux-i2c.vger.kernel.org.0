@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC92913CD9B
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2020 21:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECDE813CD9E
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2020 21:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729025AbgAOUDC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Jan 2020 15:03:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60018 "EHLO mail.kernel.org"
+        id S1729637AbgAOUDI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Jan 2020 15:03:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60126 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726566AbgAOUDC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 15 Jan 2020 15:03:02 -0500
+        id S1726566AbgAOUDH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 15 Jan 2020 15:03:07 -0500
 Received: from localhost.localdomain (unknown [194.230.155.229])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58CF7222C3;
-        Wed, 15 Jan 2020 20:02:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DEF4E2465A;
+        Wed, 15 Jan 2020 20:03:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579118581;
-        bh=Fjhdo6tlNS+TM3exEZ1PBARDjQL/dzKue6ba+z8ZYOo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=OFIW95j6vpOtPHUV4Da+AM9JfDfFmXyWSd8Qe0zAg1LJJ1e9I9p0o6FKptZng7Ttt
-         0z7cwdG3fmmy+KXQK7b2z59qzrmycXk0oS4ThcYm18a2z4TBN4kTeCmNreuOLYuo8A
-         3KVwtJg+jgMx3U7faNDRY/x3uX7pgOSRvjQJwDX4=
+        s=default; t=1579118587;
+        bh=9g6+dZpdTD4bqzARd0MbhKZ9rSsEMK9QC14qdMzDSzw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AVhGUWuiAfSORCjGMfcuZ8sZjSjgQ/qarkNsPAhLbxzLEvxzoj7FeIDFQ2AWZJl9o
+         Gc/Wbz4LROqMns6yBmLJ8sY4z5CkOxsBNkyLxiCoqJALQwPUMvc4IoI5hV8R6xCsuT
+         JzPoyuYaleAzxQslbf4QWQWLDhchd6kbAI4YlIvA=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Wolfram Sang <wsa@the-dreams.de>
 Cc:     Vladimir Zapolskiy <vz@mleia.com>,
@@ -33,10 +33,12 @@ Cc:     Vladimir Zapolskiy <vz@mleia.com>,
         Jean Delvare <jdelvare@suse.de>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v3 1/3] i2c: pmcmsp: Use proper printk format for resource_size_t
-Date:   Wed, 15 Jan 2020 21:02:48 +0100
-Message-Id: <20200115200250.10849-1-krzk@kernel.org>
+Subject: [PATCH v3 2/3] i2c: pnx: Use proper printk format for resource_size_t
+Date:   Wed, 15 Jan 2020 21:02:49 +0100
+Message-Id: <20200115200250.10849-2-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200115200250.10849-1-krzk@kernel.org>
+References: <20200115200250.10849-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -49,10 +51,10 @@ resource_size_t should be printed with its own size-independent format
 to fix warnings when compiling on 64-bit platform (e.g. with
 COMPILE_TEST):
 
-    drivers/i2c/busses/i2c-pmcmsp.c: In function ‘pmcmsptwi_probe’:
-    drivers/i2c/busses/i2c-pmcmsp.c:276:25: warning:
+    drivers/i2c/busses/i2c-pnx.c: In function ‘i2c_pnx_probe’:
+    drivers/i2c/busses/i2c-pnx.c:737:47: warning:
         format ‘%x’ expects argument of type ‘unsigned int’,
-        but argument 3 has type ‘resource_size_t {aka long long unsigned int}’ [-Wformat=]
+        but argument 5 has type ‘resource_size_t {aka long long unsigned int}’ [-Wformat=]
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
@@ -64,33 +66,24 @@ Changes since v2:
 Changes since v1:
 1. Use %pap, not %pa[p].
 ---
- drivers/i2c/busses/i2c-pmcmsp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/i2c/busses/i2c-pnx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-pmcmsp.c b/drivers/i2c/busses/i2c-pmcmsp.c
-index 4fde74eb34a7..5d89c7c1b3a8 100644
---- a/drivers/i2c/busses/i2c-pmcmsp.c
-+++ b/drivers/i2c/busses/i2c-pmcmsp.c
-@@ -274,8 +274,8 @@ static int pmcmsptwi_probe(struct platform_device *pldev)
- 	if (!request_mem_region(res->start, resource_size(res),
- 				pldev->name)) {
- 		dev_err(&pldev->dev,
--			"Unable to get memory/io address region 0x%08x\n",
--			res->start);
-+			"Unable to get memory/io address region %pap\n",
-+			&res->start);
- 		rc = -EBUSY;
- 		goto ret_err;
- 	}
-@@ -285,7 +285,7 @@ static int pmcmsptwi_probe(struct platform_device *pldev)
- 						resource_size(res));
- 	if (!pmcmsptwi_data.iobase) {
- 		dev_err(&pldev->dev,
--			"Unable to ioremap address 0x%08x\n", res->start);
-+			"Unable to ioremap address %pap\n", &res->start);
- 		rc = -EIO;
- 		goto ret_unreserve;
- 	}
+diff --git a/drivers/i2c/busses/i2c-pnx.c b/drivers/i2c/busses/i2c-pnx.c
+index 6e0e546ef83f..686c06f31625 100644
+--- a/drivers/i2c/busses/i2c-pnx.c
++++ b/drivers/i2c/busses/i2c-pnx.c
+@@ -734,8 +734,8 @@ static int i2c_pnx_probe(struct platform_device *pdev)
+ 	if (ret < 0)
+ 		goto out_clock;
+ 
+-	dev_dbg(&pdev->dev, "%s: Master at %#8x, irq %d.\n",
+-		alg_data->adapter.name, res->start, alg_data->irq);
++	dev_dbg(&pdev->dev, "%s: Master at %pap, irq %d.\n",
++		alg_data->adapter.name, &res->start, alg_data->irq);
+ 
+ 	return 0;
+ 
 -- 
 2.17.1
 
