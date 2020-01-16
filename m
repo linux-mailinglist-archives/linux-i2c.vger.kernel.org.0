@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0DF13E5BD
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jan 2020 18:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5883113F931
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jan 2020 20:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387501AbgAPRQ3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Jan 2020 12:16:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60690 "EHLO mail.kernel.org"
+        id S1729449AbgAPTX3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Jan 2020 14:23:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36770 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389686AbgAPROG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:14:06 -0500
+        id S1730546AbgAPQxK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 16 Jan 2020 11:53:10 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 55B65246B8;
-        Thu, 16 Jan 2020 17:14:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 34D792073A;
+        Thu, 16 Jan 2020 16:53:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194845;
-        bh=uuGNeJ84tj3vKL1hOiXrjSINcWLgGHxFYDVBn4t2+3A=;
+        s=default; t=1579193589;
+        bh=OEnWGrgvNT9GZVvzp8phpkWRl3yWQ6tbihlsEPw0Iro=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UYgEdbjuAnjKzCukJwtEqmFa1qOmv6E7qbiYeOxQb4MYhJOMWQ28zjx1s4iUxUm6/
-         4i/S96Q57fYLBZxCA4YnfH6n1zAU81Mn13r2ZenSio8W0sdSxVireRvqf3s5DwWlaM
-         ULH1TWqdfH7MNLbSdr2+lsNfig2EEwJPtwSovYDs=
+        b=wl77zXH6Rt0yOHyUvXXjRyPqln1kwY8Vrmkam4XPKHR9AbcFPMryWM9QkCZEhV0vf
+         YL7gqy7ZPlncSb1u/fpIvW70GxahkQylu+7iEehoo4N7CoTFE+7PJoFR+zPhQ+gHk9
+         m9d7HkzEKVXxAuj9nS6+O5N34nz0NJUwdyB7wc1g=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alain Volmat <alain.volmat@st.com>,
@@ -31,12 +31,12 @@ Cc:     Alain Volmat <alain.volmat@st.com>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 643/671] i2c: stm32f7: report dma error during probe
-Date:   Thu, 16 Jan 2020 12:04:41 -0500
-Message-Id: <20200116170509.12787-380-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 129/205] i2c: stm32f7: report dma error during probe
+Date:   Thu, 16 Jan 2020 11:41:44 -0500
+Message-Id: <20200116164300.6705-129-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
-References: <20200116170509.12787-1-sashal@kernel.org>
+In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
+References: <20200116164300.6705-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 17 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-stm32.c b/drivers/i2c/busses/i2c-stm32.c
-index d75fbcbf02ef..667f8032f8ef 100644
+index 07d5dfce68d4..1da347e6a358 100644
 --- a/drivers/i2c/busses/i2c-stm32.c
 +++ b/drivers/i2c/busses/i2c-stm32.c
-@@ -21,13 +21,13 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
+@@ -20,13 +20,13 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
  
  	dma = devm_kzalloc(dev, sizeof(*dma), GFP_KERNEL);
  	if (!dma)
@@ -86,7 +86,7 @@ index d75fbcbf02ef..667f8032f8ef 100644
  		goto fail_al;
  	}
  
-@@ -43,10 +43,10 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
+@@ -42,10 +42,10 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
  	}
  
  	/* Request and configure I2C RX dma channel */
@@ -100,7 +100,7 @@ index d75fbcbf02ef..667f8032f8ef 100644
  		goto fail_tx;
  	}
  
-@@ -76,7 +76,7 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
+@@ -75,7 +75,7 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
  	devm_kfree(dev, dma);
  	dev_info(dev, "can't use DMA\n");
  
@@ -110,10 +110,10 @@ index d75fbcbf02ef..667f8032f8ef 100644
  
  void stm32_i2c_dma_free(struct stm32_i2c_dma *dma)
 diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index f4e3613f9361..af32a14550de 100644
+index 84cfed17ff4f..37a76516e203 100644
 --- a/drivers/i2c/busses/i2c-stm32f7.c
 +++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1914,6 +1914,15 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
+@@ -1955,6 +1955,15 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
  	i2c_dev->dma = stm32_i2c_dma_request(i2c_dev->dev, phy_addr,
  					     STM32F7_I2C_TXDR,
  					     STM32F7_I2C_RXDR);
@@ -127,8 +127,8 @@ index f4e3613f9361..af32a14550de 100644
 +		goto clk_free;
 +	}
  
- 	ret = i2c_add_adapter(adap);
- 	if (ret)
+ 	platform_set_drvdata(pdev, i2c_dev);
+ 
 -- 
 2.20.1
 
