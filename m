@@ -2,133 +2,194 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5883113F931
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jan 2020 20:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD25814175A
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Jan 2020 12:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729449AbgAPTX3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Jan 2020 14:23:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36770 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730546AbgAPQxK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:53:10 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        id S1728949AbgARL6r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 18 Jan 2020 06:58:47 -0500
+Received: from egyptian.birch.relay.mailchannels.net ([23.83.209.56]:51905
+        "EHLO egyptian.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727118AbgARL6r (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 18 Jan 2020 06:58:47 -0500
+X-Sender-Id: dreamhost|x-authsender|fuga@studiofuga.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 1B3275A0C3F;
+        Sat, 18 Jan 2020 11:58:46 +0000 (UTC)
+Received: from pdx1-sub0-mail-a52.g.dreamhost.com (100-96-15-240.trex.outbound.svc.cluster.local [100.96.15.240])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 6CEF65A0F4F;
+        Sat, 18 Jan 2020 11:58:45 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|fuga@studiofuga.com
+Received: from pdx1-sub0-mail-a52.g.dreamhost.com ([TEMPUNAVAIL].
+ [64.90.62.162])
+        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
+        by 0.0.0.0:2500 (trex/5.18.5);
+        Sat, 18 Jan 2020 11:58:46 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|fuga@studiofuga.com
+X-MailChannels-Auth-Id: dreamhost
+X-Trouble-Unite: 177e267b4dcf2b01_1579348725877_4092681736
+X-MC-Loop-Signature: 1579348725877:3218048286
+X-MC-Ingress-Time: 1579348725876
+Received: from pdx1-sub0-mail-a52.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a52.g.dreamhost.com (Postfix) with ESMTP id 8CB51B0C3F;
+        Sat, 18 Jan 2020 03:58:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=studiofuga.com; h=from:to
+        :cc:subject:date:message-id; s=studiofuga.com; bh=oZe21OIXYOv92t
+        t3O1BKTEcmdmY=; b=Q0DFtLn9LXzov6Ud+CxQoLRa1NOJ8Y0DysmQF/ACwhtXsx
+        U9aTzIWTPNngSsvmkGZp8ptkN2pYsymRDlncmUFIB4YNmFR0bEoH2Sc9TmPRaFXO
+        I7fyAB325Zffp3uZj0SiFd73TJeio7KX0yZut42wHL0kiUaT3/ADXOB7OeKXU=
+Received: from MintPad.studiofuga.local (unknown [5.102.6.226])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 34D792073A;
-        Thu, 16 Jan 2020 16:53:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193589;
-        bh=OEnWGrgvNT9GZVvzp8phpkWRl3yWQ6tbihlsEPw0Iro=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wl77zXH6Rt0yOHyUvXXjRyPqln1kwY8Vrmkam4XPKHR9AbcFPMryWM9QkCZEhV0vf
-         YL7gqy7ZPlncSb1u/fpIvW70GxahkQylu+7iEehoo4N7CoTFE+7PJoFR+zPhQ+gHk9
-         m9d7HkzEKVXxAuj9nS6+O5N34nz0NJUwdyB7wc1g=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alain Volmat <alain.volmat@st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 129/205] i2c: stm32f7: report dma error during probe
-Date:   Thu, 16 Jan 2020 11:41:44 -0500
-Message-Id: <20200116164300.6705-129-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
-References: <20200116164300.6705-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        (Authenticated sender: fuga@studiofuga.com)
+        by pdx1-sub0-mail-a52.g.dreamhost.com (Postfix) with ESMTPSA id C2796B0C42;
+        Sat, 18 Jan 2020 03:58:40 -0800 (PST)
+X-DH-BACKEND: pdx1-sub0-mail-a52
+From:   Federico Fuga <fuga@studiofuga.com>
+Cc:     Federico Fuga <fuga@studiofuga.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: mv64xxx: Implement I2C_M_RECV_LEN and I2C_FUNC_SMBUS_READ_BLOCK_DATA
+Date:   Sat, 18 Jan 2020 12:58:20 +0100
+Message-Id: <20200118115820.9080-1-fuga@studiofuga.com>
+X-Mailer: git-send-email 2.17.1
+X-VR-OUT-STATUS: OK
+X-VR-OUT-SCORE: -55
+X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedugedruddtgdeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucggtfgfnhhsuhgsshgtrhhisggvpdfftffgtefojffquffvnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenmhhishhsihhnghcuvffquchfihgvlhguucdlfedtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvffufffkofestddtredtredttdenucfhrhhomhephfgvuggvrhhitghoucfhuhhgrgcuoehfuhhgrgesshhtuhguihhofhhughgrrdgtohhmqeenucfkphephedruddtvddriedrvddvieenucfrrghrrghmpehmohguvgepshhmthhppdhhvghlohepofhinhhtrfgrugdrshhtuhguihhofhhughgrrdhlohgtrghlpdhinhgvthephedruddtvddriedrvddviedprhgvthhurhhnqdhprghthhephfgvuggvrhhitghoucfhuhhgrgcuoehfuhhgrgesshhtuhguihhofhhughgrrdgtohhmqedpmhgrihhlfhhrohhmpehfuhhgrgesshhtuhguihhofhhughgrrdgtohhmpdhnrhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedt
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Alain Volmat <alain.volmat@st.com>
+The i2c_mv64xxx driver doesn't implement the I2C_M_REC_LEN function
+essential to allow blocks with variable length to be read from an i2c
+ slave.
+This is needed to implement the SMBus Read Block Data function.
 
-[ Upstream commit d77eceb2de99f5d7e0c645bad15511fe1af59e09 ]
+This patch implements the function by changing the bytes_left and
+msg len on the fly if the flag is specified.
 
-Distinguish between the case where dma information is not provided
-within the DT and the case of an error during the dma init.
-Exit the probe with error in case of an error during dma init.
+It has been successfully tested on Allwinner A33 with a special
+i2c chip that returns variable length blocks on reading.
 
-Fixes: bb8822cbbc53 ("i2c: i2c-stm32: Add generic DMA API")
-Signed-off-by: Alain Volmat <alain.volmat@st.com>
-Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Federico Fuga <fuga@studiofuga.com>
 ---
- drivers/i2c/busses/i2c-stm32.c   | 16 ++++++++--------
- drivers/i2c/busses/i2c-stm32f7.c |  9 +++++++++
- 2 files changed, 17 insertions(+), 8 deletions(-)
+ drivers/i2c/busses/i2c-mv64xxx.c | 67 +++++++++++++++++++++++++-------
+ 1 file changed, 53 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-stm32.c b/drivers/i2c/busses/i2c-stm32.c
-index 07d5dfce68d4..1da347e6a358 100644
---- a/drivers/i2c/busses/i2c-stm32.c
-+++ b/drivers/i2c/busses/i2c-stm32.c
-@@ -20,13 +20,13 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
+diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
+index a5a95ea5b81a..cff9cb20bcc9 100644
+--- a/drivers/i2c/busses/i2c-mv64xxx.c
++++ b/drivers/i2c/busses/i2c-mv64xxx.c
+@@ -128,6 +128,7 @@ struct mv64xxx_i2c_data {
+ 	u32			addr1;
+ 	u32			addr2;
+ 	u32			bytes_left;
++	u32         effective_length;
+ 	u32			byte_posn;
+ 	u32			send_stop;
+ 	u32			block;
+@@ -333,7 +334,18 @@ static void mv64xxx_i2c_send_start(struct mv64xxx_i2c_data *drv_data)
+ {
+ 	drv_data->msg = drv_data->msgs;
+ 	drv_data->byte_posn = 0;
+-	drv_data->bytes_left = drv_data->msg->len;
++
++    /* If we should retrieve the length from the buffer, make sure */
++	/* to read enough bytes to avoid sending the */
++	/* STOP bit after the read if the first byte */
++	if (drv_data->msg->flags & I2C_M_RECV_LEN) {
++		drv_data->effective_length = -1;
++		drv_data->bytes_left = 3;
++	} else {
++		drv_data->effective_length = drv_data->msg->len;
++		drv_data->bytes_left = drv_data->msg->len;
++	}
++
+ 	drv_data->aborting = 0;
+ 	drv_data->rc = 0;
  
- 	dma = devm_kzalloc(dev, sizeof(*dma), GFP_KERNEL);
- 	if (!dma)
--		return NULL;
-+		return ERR_PTR(-ENOMEM);
- 
- 	/* Request and configure I2C TX dma channel */
--	dma->chan_tx = dma_request_slave_channel(dev, "tx");
--	if (!dma->chan_tx) {
-+	dma->chan_tx = dma_request_chan(dev, "tx");
-+	if (IS_ERR(dma->chan_tx)) {
- 		dev_dbg(dev, "can't request DMA tx channel\n");
--		ret = -EINVAL;
-+		ret = PTR_ERR(dma->chan_tx);
- 		goto fail_al;
- 	}
- 
-@@ -42,10 +42,10 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
- 	}
- 
- 	/* Request and configure I2C RX dma channel */
--	dma->chan_rx = dma_request_slave_channel(dev, "rx");
--	if (!dma->chan_rx) {
-+	dma->chan_rx = dma_request_chan(dev, "rx");
-+	if (IS_ERR(dma->chan_rx)) {
- 		dev_err(dev, "can't request DMA rx channel\n");
--		ret = -EINVAL;
-+		ret = PTR_ERR(dma->chan_rx);
- 		goto fail_tx;
- 	}
- 
-@@ -75,7 +75,7 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
- 	devm_kfree(dev, dma);
- 	dev_info(dev, "can't use DMA\n");
- 
--	return NULL;
-+	return ERR_PTR(ret);
+@@ -342,6 +354,42 @@ static void mv64xxx_i2c_send_start(struct mv64xxx_i2c_data *drv_data)
+ 	       drv_data->reg_base + drv_data->reg_offsets.control);
  }
  
- void stm32_i2c_dma_free(struct stm32_i2c_dma *dma)
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 84cfed17ff4f..37a76516e203 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1955,6 +1955,15 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
- 	i2c_dev->dma = stm32_i2c_dma_request(i2c_dev->dev, phy_addr,
- 					     STM32F7_I2C_TXDR,
- 					     STM32F7_I2C_RXDR);
-+	if (PTR_ERR(i2c_dev->dma) == -ENODEV)
-+		i2c_dev->dma = NULL;
-+	else if (IS_ERR(i2c_dev->dma)) {
-+		ret = PTR_ERR(i2c_dev->dma);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(&pdev->dev,
-+				"Failed to request dma error %i\n", ret);
-+		goto clk_free;
++static void
++mv64xxx_i2c_do_send_stop(struct mv64xxx_i2c_data *drv_data)
++{
++	drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_INTEN;
++	writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_STOP,
++		drv_data->reg_base + drv_data->reg_offsets.control);
++	drv_data->block = 0;
++	if (drv_data->errata_delay)
++		udelay(5);
++
++	wake_up(&drv_data->waitq);
++}
++
++static void
++mv64xxx_i2c_do_read_data(struct mv64xxx_i2c_data *drv_data)
++{
++	u8 data;
++
++	data = readl(drv_data->reg_base + drv_data->reg_offsets.data);
++	drv_data->msg->buf[drv_data->byte_posn++] = data;
++
++	if (drv_data->effective_length == -1) {
++		/* length=0 should not be allowed, but is indeed possible.
++		 * To avoid locking the chip, we keep reading at least 2 bytes
++		 */
++		if (data < 1)
++			data = 1;
++		drv_data->effective_length = data+1;
++		drv_data->bytes_left = data+1;
++		drv_data->msg->len = data+1;
 +	}
++
++	writel(drv_data->cntl_bits,
++		drv_data->reg_base + drv_data->reg_offsets.control);
++}
++
+ static void
+ mv64xxx_i2c_do_action(struct mv64xxx_i2c_data *drv_data)
+ {
+@@ -392,23 +440,13 @@ mv64xxx_i2c_do_action(struct mv64xxx_i2c_data *drv_data)
+ 		break;
  
- 	platform_set_drvdata(pdev, i2c_dev);
+ 	case MV64XXX_I2C_ACTION_RCV_DATA:
+-		drv_data->msg->buf[drv_data->byte_posn++] =
+-			readl(drv_data->reg_base + drv_data->reg_offsets.data);
+-		writel(drv_data->cntl_bits,
+-			drv_data->reg_base + drv_data->reg_offsets.control);
++	    mv64xxx_i2c_do_read_data(drv_data);
+ 		break;
  
+ 	case MV64XXX_I2C_ACTION_RCV_DATA_STOP:
+ 		drv_data->msg->buf[drv_data->byte_posn++] =
+ 			readl(drv_data->reg_base + drv_data->reg_offsets.data);
+-		drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_INTEN;
+-		writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_STOP,
+-			drv_data->reg_base + drv_data->reg_offsets.control);
+-		drv_data->block = 0;
+-		if (drv_data->errata_delay)
+-			udelay(5);
+-
+-		wake_up(&drv_data->waitq);
++	    mv64xxx_i2c_do_send_stop(drv_data);
+ 		break;
+ 
+ 	case MV64XXX_I2C_ACTION_INVALID:
+@@ -706,7 +744,8 @@ mv64xxx_i2c_can_offload(struct mv64xxx_i2c_data *drv_data)
+ static u32
+ mv64xxx_i2c_functionality(struct i2c_adapter *adap)
+ {
+-	return I2C_FUNC_I2C | I2C_FUNC_10BIT_ADDR | I2C_FUNC_SMBUS_EMUL;
++	return I2C_FUNC_I2C | I2C_FUNC_10BIT_ADDR |
++		I2C_FUNC_SMBUS_READ_BLOCK_DATA | I2C_FUNC_SMBUS_EMUL;
+ }
+ 
+ static int
 -- 
-2.20.1
+2.17.1
 
