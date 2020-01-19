@@ -2,101 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BA8141E72
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 Jan 2020 15:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D011141F95
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 Jan 2020 19:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbgASOOR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 19 Jan 2020 09:14:17 -0500
-Received: from sauhun.de ([88.99.104.3]:35136 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726860AbgASOOR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 19 Jan 2020 09:14:17 -0500
-Received: from localhost (p54B335BB.dip0.t-ipconnect.de [84.179.53.187])
-        by pokefinder.org (Postfix) with ESMTPSA id 459CD2C018B;
-        Sun, 19 Jan 2020 15:14:12 +0100 (CET)
-Date:   Sun, 19 Jan 2020 15:14:09 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for 5.5
-Message-ID: <20200119141343.GA1191@ninjato>
+        id S1728981AbgASSoq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 19 Jan 2020 13:44:46 -0500
+Received: from mail-il1-f195.google.com ([209.85.166.195]:41089 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728898AbgASSoi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 Jan 2020 13:44:38 -0500
+Received: by mail-il1-f195.google.com with SMTP id f10so25481138ils.8
+        for <linux-i2c@vger.kernel.org>; Sun, 19 Jan 2020 10:44:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
+        b=gmKBxPx84PXNKr5CdAEsBl4o6OI0Ul1T9kdeNuOonXVMsPZvHaiVfrF6wsqmkO6amC
+         OhpUNNF3SMjaFtPDB5q+oWHWGLwTM1KQcLAEAJsxead1wkkS8vgEkLcKKIbpXv93k89C
+         Il/b6fig8uFQ2ful9dClSdBh6ES0WHCRI487g5LzaF7Sg904xrrN8vXROMW6UBU7S6v1
+         1KY36Pw5SyxrOXfagNts4/xbaFFgof1/AzREyQlil09RYVWfcnHmKvyC/eKHTr8xAdVR
+         8OHIBUIT1uRPI/WtlHnD2gmL8PhGi3ea1Do5nFE3xaprr/6eI7i7Fk2drMcN+8BwExKd
+         ZFxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
+        b=j4rAuTE4QxyM8yGfUCCXFHf4lS0Sy1uwaC+qjoIkLFrvhbyquxBHigJEXMvTTNAEh9
+         u+iFjFYhzLvHnOMI/rKrlIHjO4pGyHK8Jd8v75c74IhGWdnttvY+pRfTKrdWGSMvjJLc
+         GxBKtp0LJTGH3APtykPCi+OD4B/SydJi9T2YjYYcePzGfstuRWpWBO7qJv5zdR3SbJ2E
+         pnYhWdmVW8Nr+TcxWsdic60Foria7zY13Ne8nwFP+GAxENwJWqih4DBfvnJG1JBZyJAY
+         6lMrGx2FmBkZgiBO2U2Vm6Pu1dHNY8ttj3A90yp1UdC4wrDc/9os0zj+lAUs0cB8ltSt
+         IB9w==
+X-Gm-Message-State: APjAAAWn6+mKUMWf1B9G/yRkX6zC3mcNHOuPW8Bs77w8m0OZQNCTK/mS
+        4qalH3p6fQFPDL5B26EK98tLt/aWebXYp8vg2TU=
+X-Google-Smtp-Source: APXvYqw0/+WGODIUvKkziyHBLuQsuF4sA8inGcr6D1fE0jlGptJu92UkXoVDxAQCBYSMyoJXI0/9BUQNIZC+z8C9ask=
+X-Received: by 2002:a92:5c52:: with SMTP id q79mr7225189ilb.11.1579459477506;
+ Sun, 19 Jan 2020 10:44:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="azLHFNyN32YCQGCU"
-Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:37
+ -0800 (PST)
+Reply-To: favordens@email.com
+From:   Favor Desmond <contecindy5@gmail.com>
+Date:   Sun, 19 Jan 2020 18:44:37 +0000
+Message-ID: <CAOfCPNxP6Zd30BF2yc=mXgSsiq_K60AW+CVH-5JzXJEsBrwaJA@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---azLHFNyN32YCQGCU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Linus,
-
-I2C has some more driver bugfixes for 5.5, two RPM fixes and one leak fix.
-
-Please pull.
-
-Thanks,
-
-   Wolfram
-
-
-The following changes since commit b3a987b0264d3ddbb24293ebff10eddfc472f653:
-
-  Linux 5.5-rc6 (2020-01-12 16:55:08 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-
-for you to fetch changes up to e64175776d06a8ceebbfd349d7e66a4a46ca39ef:
-
-  i2c: iop3xx: Fix memory leak in probe error path (2020-01-15 20:31:27 +0100)
-
-----------------------------------------------------------------
-Dmitry Osipenko (2):
-      i2c: tegra: Fix suspending in active runtime PM state
-      i2c: tegra: Properly disable runtime PM on driver's probe error
-
-Krzysztof Kozlowski (1):
-      i2c: iop3xx: Fix memory leak in probe error path
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Thierry Reding (2):
-      (Test) i2c: tegra: Properly disable runtime PM on driver's probe error
-      (Test) i2c: tegra: Fix suspending in active runtime PM state
-
- drivers/i2c/busses/i2c-iop3xx.c | 12 ++++++++----
- drivers/i2c/busses/i2c-tegra.c  | 38 ++++++++++++++++++++++++++++----------
- 2 files changed, 36 insertions(+), 14 deletions(-)
-
---azLHFNyN32YCQGCU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4kZBMACgkQFA3kzBSg
-KbbfcA//cPVBfn1Z/EkmqobVXOhclIarujUbV2dFcSEYB4J7Q2j4r0nXr0M7YX9y
-Ok1dtO7WvlY1Yvf8NvXQTTvJfffPGbe3ikEWc+HyWYOfOQYEa4Jhficp4BXNE8Dr
-MFxCUeH5iPgeq1SCt/jf829E4TpC8N4pObuhpmAUXBuD2PdPxZUQEsTkgV8QH9/W
-ZxDM7SMg6vl97Y17ETAV678rmLjnqbfT5MXUwrJ8u6TMbBYqkbwBQq5CVFJnwCxV
-gS1lmCr0vwuCeDeNUkToBoUw2HAN9P71B1GJeQZLFZ7KOcbolNe5tlEV6j89UWIy
-bVhhuOjeAT3nDBJu9GTg9rJ0whkkPjDHOznvEjHwPBO1dB55FG0nImG/zmVLbHfg
-JWel19CDFse2YzgsNSta7YlQKHtSIGPF4eG9j89UsMF0LwrYJiq3SXyJdaXDvcIW
-SDRttdaaSP2wD9/3y8kTu80Ed6qeqpFP+SvgsOp5Kfcd9oR15fVLnDpCX0PrGMr8
-y4hB75JOlUIUTYeFZ78xM4e/afd4f7BJuC/WRvaPXJ8hjnslsm2PpOmjscStXVmc
-vC4mfdEa2CX4TSpR6T35CXUoL7ZVCOhc3SvZO3gVK8EdtloyNFxiPwiifxrMbjFp
-Rex4jwa7plOoUUrGSVhBVo/Art2tMWo49LuddGpqSzx9JGGSnZc=
-=Gcrl
------END PGP SIGNATURE-----
-
---azLHFNyN32YCQGCU--
+Hello Dear
+Greetings to you,I am Favor Desmond from Ivory coast currently living
+in  Togo Republic,I would like to know you more, so that i can tell
+you little amount myself and my photo, email address is
+favordens@email.com
+Thanks
+Favor
