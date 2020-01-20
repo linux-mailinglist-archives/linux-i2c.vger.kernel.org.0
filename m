@@ -2,119 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C706A143201
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Jan 2020 20:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B6C143387
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Jan 2020 22:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726345AbgATTNS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 Jan 2020 14:13:18 -0500
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:39256 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726136AbgATTNS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Jan 2020 14:13:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=K1E0o2DxlrJwSfNgmy4WvKOt3Yqm57bPqg5WRquLr0U=; b=joA0bIefk8aK1Bwi53wxzi5xw
-        puybWrvQO6aeFhnHGc0knxMwWz7kzRWPQXHhld4l+ErzKBtS5h87b//+pvEC593oH3yQPw6tkwRTt
-        8Sgz4JxLFMhyKE0tCYM8WUDHTZYu5Lr4BlWuIFhmBFaT1wc8d3ODgMullbUrol/9vRA1JcGGJeUUo
-        D4JXgQygUuwx7Hr1Xe4FB/0uWnqGl4Xt0/j57tOuYWkQh74h7DqV/40r6Pv+L0ytQwAipwYsNdiQh
-        jmt1y7anv/bkcK5wO+v9LRYVUpKoOrvPTLbd4JWMz1zM2+t4z9FbBtGLDHf8TpQIZeGnGS3TMsFqI
-        yDtLr4hbQ==;
-Received: from shell.armlinux.org.uk ([2001:4d48:ad52:3201:5054:ff:fe00:4ec]:57548)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1itcU5-0008LX-UU; Mon, 20 Jan 2020 19:13:14 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1itcU3-00035S-SI; Mon, 20 Jan 2020 19:13:11 +0000
-Date:   Mon, 20 Jan 2020 19:13:11 +0000
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 01/12] i2c: pxa: use official address byte helper
-Message-ID: <20200120191311.GE25745@shell.armlinux.org.uk>
-References: <20191215160444.GB25745@shell.armlinux.org.uk>
- <E1igWOT-0005Dp-Sb@rmk-PC.armlinux.org.uk>
- <c3d57cc4-5ec4-492f-e233-580ac1aba2cd@axentia.se>
+        id S1726942AbgATVyK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 20 Jan 2020 16:54:10 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:36509 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726752AbgATVyJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Jan 2020 16:54:09 -0500
+Received: from [212.124.162.70] (port=49808 helo=[192.168.77.51])
+        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1itezm-000CuJ-GG; Mon, 20 Jan 2020 22:54:06 +0100
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH 02/26] docs: i2c: summary: extend introduction
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
+References: <20200105224006.10321-1-luca@lucaceresoli.net>
+ <20200105225012.11701-1-luca@lucaceresoli.net>
+ <20200105225012.11701-2-luca@lucaceresoli.net>
+ <20200120102730.4eb9116b@endymion>
+Message-ID: <4a772de1-cb81-37bb-4170-9d19d56aaaac@lucaceresoli.net>
+Date:   Mon, 20 Jan 2020 22:54:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c3d57cc4-5ec4-492f-e233-580ac1aba2cd@axentia.se>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200120102730.4eb9116b@endymion>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8BIT
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 05:03:26PM +0000, Peter Rosin wrote:
-> On 2019-12-15 17:05, Russell King wrote:
-> > i2c-pxa was created before i2c_8bit_addr_from_msg() was implemented,
-> > and used its own i2c_pxa_addr_byte() which is functionally the same.
-> > Sadly, it was never updated to use this new helper. Switch it over.
-> > 
-> > Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
-> > ---
-> >  drivers/i2c/busses/i2c-pxa.c | 21 +++++++--------------
-> >  1 file changed, 7 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/drivers/i2c/busses/i2c-pxa.c b/drivers/i2c/busses/i2c-pxa.c
-> > index 2c3c3d6935c0..966000923e8e 100644
-> > --- a/drivers/i2c/busses/i2c-pxa.c
-> > +++ b/drivers/i2c/busses/i2c-pxa.c
-> > @@ -675,25 +675,18 @@ static void i2c_pxa_slave_stop(struct pxa_i2c *i2c)
-> >   * PXA I2C Master mode
-> >   */
-> >  
-> > -static inline unsigned int i2c_pxa_addr_byte(struct i2c_msg *msg)
-> > -{
-> > -	unsigned int addr = (msg->addr & 0x7f) << 1;
-> > -
-> > -	if (msg->flags & I2C_M_RD)
-> > -		addr |= 1;
-> > -
-> > -	return addr;
-> > -}
-> > -
-> >  static inline void i2c_pxa_start_message(struct pxa_i2c *i2c)
-> >  {
-> >  	u32 icr;
-> > +	u8 addr;
-> > +
-> > +	addr = i2c_8bit_addr_from_msg(i2c->msg);
-> >  
-> >  	/*
-> >  	 * Step 1: target slave address into IDBR
-> >  	 */
-> > -	writel(i2c_pxa_addr_byte(i2c->msg), _IDBR(i2c));
-> > -	i2c->req_slave_addr = i2c_pxa_addr_byte(i2c->msg);
-> > +	writel(addr, _IDBR(i2c));
-> > +	i2c->req_slave_addr = addr;
-> 
-> You are introducing a temporary variable (addr) here...
-> 
-> >  
-> >  	/*
-> >  	 * Step 2: initiate the write.
-> > @@ -1006,8 +999,8 @@ static void i2c_pxa_irq_txempty(struct pxa_i2c *i2c, u32 isr)
-> >  		/*
-> >  		 * Write the next address.
-> >  		 */
-> > -		writel(i2c_pxa_addr_byte(i2c->msg), _IDBR(i2c));
-> > -		i2c->req_slave_addr = i2c_pxa_addr_byte(i2c->msg);
-> > +		writel(i2c_8bit_addr_from_msg(i2c->msg), _IDBR(i2c));
-> > +		i2c->req_slave_addr = i2c_8bit_addr_from_msg(i2c->msg);
-> 
-> ...but not here. But it seems like the same pattern. Any particular reason for
-> that difference?
+Hi Jean,
 
-No real reason.  If I assign i2c->req_slave_addr first, I don't need
-a separate variable...
+On 20/01/20 10:27, Jean Delvare wrote:
+> On Sun,  5 Jan 2020 23:49:48 +0100, Luca Ceresoli wrote:
+>> - state the "official" name (I²C, not I2C, according to the spec) at
+>>    the beginning but keep using the more practical I2C elsewhere
+>>  - mention some known different names
+>>  - add link to the specification document
+> 
+> Indentation is inconsistent.
+
+Weird, this looks OK in my git log and my inbox, wrong on patchwork.
+Perhaps starting an e-mail with a space breaks something? I'll try to
+avoid that in the future.
+
+>> diff --git a/Documentation/i2c/summary.rst b/Documentation/i2c/summary.rst
+>> index 3a24eac17375..b7d3e620155b 100644
+>> --- a/Documentation/i2c/summary.rst
+>> +++ b/Documentation/i2c/summary.rst
+>> @@ -2,12 +2,18 @@
+>>  I2C and SMBus
+>>  =============
+>>  
+>> -I2C (pronounce: I squared C) is a protocol developed by Philips. It is a
+>> -slow two-wire protocol (variable speed, up to 400 kHz), with a high speed
+>> -extension (3.4 MHz).  It provides an inexpensive bus for connecting many
+>> -types of devices with infrequent or low bandwidth communications needs.
+>> -I2C is widely used with embedded systems.  Some systems use variants that
+>> -don't meet branding requirements, and so are not advertised as being I2C.
+>> +I²C (pronounce: I squared C and written I2C in the kernel documentation) is
+>> +a protocol developed by Philips. It is a slow two-wire protocol (variable
+>> +speed, up to 400 kHz), with a high speed extension (3.4 MHz).  It provides
+>> +an inexpensive bus for connecting many types of devices with infrequent or
+>> +low bandwidth communications needs.  I2C is widely used with embedded
+>> +systems.  Some systems use variants that don't meet branding requirements,
+>> +and so are not advertised as being I2C but with different names, e.g. TWI
+>> +(Two Wire Interface), IIC.
+> 
+> Maybe that's just me but "but with different names" sounds strange to
+> me in the sentence construct. Maybe "but come under different names"
+> instead?
+
+What I mean is "...are not advertised as being I2C but [are advertised]
+with different names". Looks equally clear to me, but since it has to be
+clear to readers, I'll take your suggestion for v2.
+
+Thanks for all the review work. I'm not going to reply to each e-mail
+individually, but each of your suggestions will be taken in v2 unless I
+reply differently.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+Luca
+
