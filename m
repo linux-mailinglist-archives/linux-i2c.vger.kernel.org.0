@@ -2,111 +2,145 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C40A7143E2F
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Jan 2020 14:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2DC5144173
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Jan 2020 17:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729174AbgAUNlv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 Jan 2020 08:41:51 -0500
-Received: from mga02.intel.com ([134.134.136.20]:28735 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729159AbgAUNlt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 21 Jan 2020 08:41:49 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Jan 2020 05:41:49 -0800
-X-IronPort-AV: E=Sophos;i="5.70,346,1574150400"; 
-   d="scan'208";a="275304981"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Jan 2020 05:41:45 -0800
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 9EA1620B1D;
-        Tue, 21 Jan 2020 15:41:39 +0200 (EET)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1ittn4-0005K5-1c; Tue, 21 Jan 2020 15:41:58 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>,
-        linux-media@vger.kernel.org,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>
-Subject: [PATCH v4 6/6] Documentation: ACPI: Document probe-low-power _DSD property
-Date:   Tue, 21 Jan 2020 15:41:57 +0200
-Message-Id: <20200121134157.20396-7-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200121134157.20396-1-sakari.ailus@linux.intel.com>
-References: <20200121134157.20396-1-sakari.ailus@linux.intel.com>
+        id S1729414AbgAUQDL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 21 Jan 2020 11:03:11 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45847 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729937AbgAUQDE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Jan 2020 11:03:04 -0500
+Received: by mail-ot1-f65.google.com with SMTP id 59so3336383otp.12;
+        Tue, 21 Jan 2020 08:03:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3uhVIJum8giozCbBAOAWfX0RCY6W6sw6Ypl8FcWQYgw=;
+        b=gjnBgvKuRoIHcy/7hapOzadDpTWIpf9+Eq/Y08/QYvaBjHphHnnuUgtDOSHLg38EZu
+         P4QwcAdxFv4WO/DU5wWV/TWEncKxhCtf2Nk2v+QABtmBWrHlh0XKyinQP94WQNzdPOnH
+         eU5YJ31FSo1SG35pvOvEdO/UZt78wnJ5XQMcIBQEmoguSSgu2Th2E84MSIhbecTBYfh4
+         siOzoKI9xlLFL3Hzs+9dXA6rODGNAagp34WKpO87Ppv3Fvj9kOn37Z5cICRY1Vtxa64+
+         xcLUMsBxFyWs9AIw7nYD++0Xe3Vaz6SMBAwPyDD1EkcEJpklZrHMBWIOmnoqDnWKJ319
+         KzZQ==
+X-Gm-Message-State: APjAAAVKj4tHv25eq1NeDsk+XHXcQCrJtrZx8QWGEjUa3l3sBM3A/NRA
+        djcGwCd89fkssadXC4sxey3FSRMGMyAyZx7n1Tw=
+X-Google-Smtp-Source: APXvYqw6XT5EzbITnd9lPUjkFNyWUErkpjeaTNijKjeAsb/nf2EtB/i7hY+Prsk+BHDYhDqQd3i9Wde9kUjQ1TdRaCg=
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr4157514otd.266.1579622583933;
+ Tue, 21 Jan 2020 08:03:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20200109154529.19484-1-sakari.ailus@linux.intel.com>
+ <20200109154529.19484-3-sakari.ailus@linux.intel.com> <CAJZ5v0hfGateSt-_EBuyHqLYi5NR4PUFB=wDF+Gu+9-tFXuohg@mail.gmail.com>
+ <20200121090946.GX5440@paasikivi.fi.intel.com>
+In-Reply-To: <20200121090946.GX5440@paasikivi.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 21 Jan 2020 17:02:52 +0100
+Message-ID: <CAJZ5v0gEO_QesTg2oqA-9dYbPJ5Gsm5H8wvSRQTLeww0o2vx3g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] ACPI: Add a convenience function to tell a device
+ is suspended in probe
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
+        Tomasz Figa <tfiga@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Document the probe-low-power _DSD property and how it is used with I²C
-drivers.
+On Tue, Jan 21, 2020 at 10:09 AM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Hi Rafael,
+>
+> Thank you for the review.
+>
+> On Mon, Jan 13, 2020 at 11:41:12AM +0100, Rafael J. Wysocki wrote:
+> > On Thu, Jan 9, 2020 at 4:44 PM Sakari Ailus
+> > <sakari.ailus@linux.intel.com> wrote:
+> > >
+> > > Add a convenience function to tell whether a device is suspended for probe
+> > > or remove, for busses where the custom is that drivers don't need to
+> > > resume devices in probe, or suspend them in their remove handlers.
+> > >
+> > > Returns false on non-ACPI systems.
+> > >
+> > > Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > ---
+> > >  drivers/acpi/device_pm.c | 35 +++++++++++++++++++++++++++++++++++
+> > >  include/linux/acpi.h     |  5 +++++
+> > >  2 files changed, 40 insertions(+)
+> > >
+> > > diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+> > > index 5e4a8860a9c0c..87393020276d8 100644
+> > > --- a/drivers/acpi/device_pm.c
+> > > +++ b/drivers/acpi/device_pm.c
+> > > @@ -1348,4 +1348,39 @@ int acpi_dev_pm_attach(struct device *dev, bool power_on)
+> > >         return 1;
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(acpi_dev_pm_attach);
+> > > +
+> > > +/**
+> > > + * acpi_dev_low_power_state_probe - Tell if a device is in a low power state
+> >
+> > "Check the current ACPI power state of a device."
+>
+> Sounds good.
+>
+> >
+> > > + *                                 during probe
+> >
+> > Why is this limited to probe?
+>
+> Well.. that was the purpose. It could be used at other times, too, I guess,
+> but most of the time runtime PM is the right interface for doing that.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- .../acpi/dsd/probe-low-power.rst              | 28 +++++++++++++++++++
- Documentation/firmware-guide/acpi/index.rst   |  1 +
- 2 files changed, 29 insertions(+)
- create mode 100644 Documentation/firmware-guide/acpi/dsd/probe-low-power.rst
+PM-runtime is a layer above this one.
 
-diff --git a/Documentation/firmware-guide/acpi/dsd/probe-low-power.rst b/Documentation/firmware-guide/acpi/dsd/probe-low-power.rst
-new file mode 100644
-index 0000000000000..e0343ffefe071
---- /dev/null
-+++ b/Documentation/firmware-guide/acpi/dsd/probe-low-power.rst
-@@ -0,0 +1,28 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======================================
-+Probing I²C devices in low power state
-+======================================
-+
-+Introduction
-+============
-+
-+In some cases it may be preferred to leave certain devices powered off for
-+the entire system bootup if powering on these devices has adverse side
-+effects, beyond just powering on the said device. The _DSD property
-+"probe-low-power" has been defined for this purpose.
-+
-+How it works
-+============
-+
-+The property "probe-low-power" boolean property may be used to tell Linux
-+that the I²C framework should instruct the kernel ACPI framework to leave
-+the device in the low power state. If the driver indicates its support for
-+this in its struct i2c_driver.probe_low_power field and the
-+"probe-low-power" property is present, the device will not be powered on
-+for probe.
-+
-+The downside is that as the device is not powered on, even if there's a
-+problem with the device, the driver likely probes just fine but the first
-+user will find out the device doesn't work, instead of a failure at probe
-+time. This feature should thus be used sparingly.
-diff --git a/Documentation/firmware-guide/acpi/index.rst b/Documentation/firmware-guide/acpi/index.rst
-index ad3b5afdae77e..4e4ac675c0ff8 100644
---- a/Documentation/firmware-guide/acpi/index.rst
-+++ b/Documentation/firmware-guide/acpi/index.rst
-@@ -11,6 +11,7 @@ ACPI Support
-    dsd/graph
-    dsd/data-node-references
-    dsd/leds
-+   dsd/probe-low-power
-    enumeration
-    osi
-    method-customizing
--- 
-2.20.1
+It is mostly about the coordination between devices, reference
+counting etc which this is about device power states.
 
+> >
+> > The function actually checks whether or not the ACPI power state of
+> > the device is low-power at the call time (except that it is a bit racy
+> > with respect to _set_power(), so it may not work as expected if called
+> > in parallel with that one).
+> >
+> > Maybe drop the "probe" part of the name (actually, I would call this
+> > function acpi_dev_state_low_power()) and add a paragraph about the
+> > potential race with _set_power() to the description?
+>
+> Agreed, I'll use the text you provided below.
+>
+> >
+> > > + * @dev: The device
+> >
+> > "Physical device the ACPI power state of which to check".
+>
+> Ok.
+>
+> >
+> > > + *
+> > > + * Tell whether a given device is in a low power state during the driver's probe
+> > > + * or remove operation.
+> > > + *
+> > > + * Drivers of devices on certain busses such as I涎 can generally assume (on
+> > > + * ACPI based systems) that the devices they control are powered on without
+> > > + * driver having to do anything about it. Using struct
+> > > + * device_driver.probe_low_power and "probe-low-power" property, this can be
+> > > + * negated and the driver has full control of the device power management.
+> >
+> > The above information belongs somewhere else in my view.
+>
+> How about putting it to the DSD ReST property documentation, perhaps with a
+> little bit more context? I can add another patch for that.
+
+Yes, something like that.
