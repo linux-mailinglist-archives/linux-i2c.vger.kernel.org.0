@@ -2,55 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA46D145415
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jan 2020 12:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B101454E1
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jan 2020 14:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729316AbgAVLtC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Jan 2020 06:49:02 -0500
-Received: from mx2.suse.de ([195.135.220.15]:48402 "EHLO mx2.suse.de"
+        id S1728731AbgAVNNX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Jan 2020 08:13:23 -0500
+Received: from sauhun.de ([88.99.104.3]:40682 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728981AbgAVLtC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 22 Jan 2020 06:49:02 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 38C5BB131;
-        Wed, 22 Jan 2020 11:49:00 +0000 (UTC)
-Date:   Wed, 22 Jan 2020 12:48:59 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 15/26] docs: i2c: smbus-protocol: enable kernel-doc
- function syntax
-Message-ID: <20200122124859.52ceac75@endymion>
-In-Reply-To: <211da679-154f-15e3-52d3-a24d50c526cf@lucaceresoli.net>
-References: <20200105224006.10321-1-luca@lucaceresoli.net>
-        <20200105225012.11701-1-luca@lucaceresoli.net>
-        <20200105225012.11701-15-luca@lucaceresoli.net>
-        <20200120154444.7c1d3863@endymion>
-        <211da679-154f-15e3-52d3-a24d50c526cf@lucaceresoli.net>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1726204AbgAVNNX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 22 Jan 2020 08:13:23 -0500
+Received: from localhost (p54B33378.dip0.t-ipconnect.de [84.179.51.120])
+        by pokefinder.org (Postfix) with ESMTPSA id B256B2C0713;
+        Wed, 22 Jan 2020 14:13:20 +0100 (CET)
+Date:   Wed, 22 Jan 2020 14:13:20 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Rishi Gupta <gupt21@gmail.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        wsa+renesas@sang-engineering.com, gregkh@linuxfoundation.org,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] HID: mcp2221: add usb to i2c-smbus host bridge driver
+Message-ID: <20200122131320.GA20984@ninjato>
+References: <1579581860-29560-1-git-send-email-gupt21@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3MwIy2ne0vdjdPXF"
+Content-Disposition: inline
+In-Reply-To: <1579581860-29560-1-git-send-email-gupt21@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 21 Jan 2020 18:31:23 +0100, Luca Ceresoli wrote:
-> By extrapolation I guess you want to review the few remaining patches.
-> Correnct? In this case I'd wait for that before sending out v2.
 
-Yes, and I'm just done with it. Sorry it took so long but I was doing
-it as a background task as my work schedule allowed.
+--3MwIy2ne0vdjdPXF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-One last thing you may want to fix: there's one occurrence of "stop
-bit" left in Documentation/i2c/writing-clients.rst.
+On Tue, Jan 21, 2020 at 10:14:20AM +0530, Rishi Gupta wrote:
+> MCP2221 is a USB HID to I2C/SMbus host bridge device. This
+> commit implements i2c and smbus host adapter support. 7-bit
+> address and i2c multi-message transaction is also supported.
+>=20
+> Signed-off-by: Rishi Gupta <gupt21@gmail.com>
 
-Thanks,
--- 
-Jean Delvare
-SUSE L3 Support
+My main concern is there are quite some limitations in mcp_i2c_xfer().
+Looking at them, I think we should just drop it. This seems to be an
+SMBus controller, not I2C. Or?
+
+
+--3MwIy2ne0vdjdPXF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4oSmwACgkQFA3kzBSg
+KbYUUQ//QRTq13acJjQ3rK7tv03qoLYBTDze3sLkt3dr/yc6ZTQAlXxHGEWdCAzE
+zGI4hOu0rpLt+Rm1KQsQo/FDgU7fy4BXSi9oe5zr5TPRctWVAV3MpcqRq0CIRDwP
+TcQ7QsXawtCRtwhlOOVzYMqK8DOkeXQncs0qT3ilqpruBA5gbmJanMyVpNU9hQMG
+i9fYTdYNBgnydG7TqvCA5Vn2hOQuwIJjt/vNFhDu5dum9koKe+K3P1Ns7TtqeCcA
+xB4YL0eQydWNrS0U0nKQoT8L7cwWOwQEa6Nk6zKLIsKRLFbYdQu0KpEBi+KEmzCC
+jXHL9B221rG6fvgDp0VaPCRrQzdexgu2tIAH2TQHVReK9+wZOFVIvz135Y3lj3sR
+TcORLIPjziA62yQwTWA839liZEYlAAyEcwOUL0U7w7TYMu49SJ0o79nj+Skw3kUt
+SwSqq9LLlWO7UJ09omKhikj3zgfBGz7e9V4dCUqZLcSntGEK3yDZBFqXwKGqT3sd
+GiAEZu6zocdiZxX5CdUQhJQmUMJHNqD/xYTS6PqKwIu/Kg9jffUgwylV+j4Pmbv5
+m/cetIceeRk3DXZ2RUCt0KZBg0UrwueiuBYetiETINRkgDlzNI9FjHYJROFN61ph
+ux8Dp4L2SaGrwScrrH+2fiQdpl3RBDNYG7L1ssJCLjXN6pW6jvI=
+=hhi+
+-----END PGP SIGNATURE-----
+
+--3MwIy2ne0vdjdPXF--
