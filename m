@@ -2,51 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CC2146580
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2020 11:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF9D14663D
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2020 12:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726590AbgAWKRn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Jan 2020 05:17:43 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46590 "EHLO mx2.suse.de"
+        id S1726743AbgAWK7g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Jan 2020 05:59:36 -0500
+Received: from sauhun.de ([88.99.104.3]:52104 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726099AbgAWKRn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 23 Jan 2020 05:17:43 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 8C291AEE9;
-        Thu, 23 Jan 2020 10:17:41 +0000 (UTC)
-Date:   Thu, 23 Jan 2020 11:17:40 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Linux I2C <linux-i2c@vger.kernel.org>
-Cc:     Lei YU <mine260309@gmail.com>, Wolfram Sang <wsa@the-dreams.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH 1/2] libi2c: Add a manual page to document the API
-Message-ID: <20200123111740.728666a7@endymion>
-In-Reply-To: <20200123110355.4cb793ce@endymion>
-References: <20200123105246.67732e33@endymion>
-        <20200123110355.4cb793ce@endymion>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1728921AbgAWK7K (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 23 Jan 2020 05:59:10 -0500
+Received: from localhost (p54B335E9.dip0.t-ipconnect.de [84.179.53.233])
+        by pokefinder.org (Postfix) with ESMTPSA id C8C832C00DA;
+        Thu, 23 Jan 2020 11:59:08 +0100 (CET)
+Date:   Thu, 23 Jan 2020 11:59:08 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg KH <greg@kroah.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 1/2] i2c: Enable compile testing for some of drivers
+Message-ID: <20200123105908.GE1105@ninjato>
+References: <1578384779-15487-1-git-send-email-krzk@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zjcmjzIkjQU2rmur"
+Content-Disposition: inline
+In-Reply-To: <1578384779-15487-1-git-send-email-krzk@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 23 Jan 2020 11:03:55 +0100, Jean Delvare wrote:
-> It is good practice for a library to come with a complete API description.
-> 
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> ---
->  lib/libi2c.3 |  137 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 137 insertions(+)
-> (...)
 
-I just realized I forgot the integration with the Makefile so that the
-manual page will get installed. Sorry about that, I'll fix that in v2.
+--zjcmjzIkjQU2rmur
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Jean Delvare
-SUSE L3 Support
+On Tue, Jan 07, 2020 at 09:12:58AM +0100, Krzysztof Kozlowski wrote:
+> Some of the I2C bus drivers can be compile tested to increase build
+> coverage.  This requires also:
+> 1. Adding dependencies on COMMON_CLK for BCM2835 and Meson I2C
+>    controllers,
+> 2. Adding 'if' conditional to 'default y' so they will not get enabled
+>    by default on all other architectures,
+> 3. Limiting few compile test options to supported architectures (which
+>    provide the readsX()/writesX() primitives).
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+>=20
+
+Applied to for-next with the zx chunk removed, thanks!
+
+
+--zjcmjzIkjQU2rmur
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4pfHgACgkQFA3kzBSg
+KbYnrg/9HyJVjx09jFKG5CydmnTSMXzOKZ7M9Ck+0pdZwsLKttoMrJjFabpiqykr
+A7AOaTgkaQQLK79xHuVHwu5bYCzwVtRBElFNQzwYyFmeIfAd2Cf2LoMBzOC0T7DP
+/nMkU+2PEmeTSZtDuBLLNrckEpw0gcbaXZhLrWIcXaZHpglbonZxa/2DJSEfpLj2
+Z5rpZ17O4X20GEjJ6cunddM7mmNFmoB6I/kYsaOsOmrR0xCXVV+j+IPArvvCj0hQ
+8+LNK/KredOVKemDkXjdYPUXry3l56jTCbiOHumuKCKFL/+bskmvjVhmg7mMaCHd
+fHi3n2/UQFxTinDSWQjQTcd85HQkQIuIK0FAqRhAP3illfHaEZ/Vmt0Yh5+dnutu
+RUkzlrx17lbmOjChb5SJ1Sc7AbJiXT4N/6q3ZmaJv+S+Aa3imwcXmJIDtFzVJd3T
+Q/7noIG4fWOfp+d8ajt3lTJSq0r6eWZjMSAU/gxmG3RYZNikLTpNFcn4gBIIRfzK
+Um1pj+g6leb7Wp2wOS/ONBMdDkLCRgBv9nhhlvQgPfR8me2iJh9ndJFFRWFWxzQc
+v8hEuez1m9rPVG77Kg7CTdIUJcxzjziEP8kTmtlfXB0nfbhG7+XWUsIYeCPnJFqs
+je7itrWyURZUNEZePmRyCRAu2EAwxTy+BIYg68e0WuwfN/CNpXY=
+=RIMX
+-----END PGP SIGNATURE-----
+
+--zjcmjzIkjQU2rmur--
