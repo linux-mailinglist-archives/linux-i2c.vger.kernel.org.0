@@ -2,91 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C12146853
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2020 13:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEC214695F
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2020 14:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbgAWMq0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Jan 2020 07:46:26 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:53115 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbgAWMq0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Jan 2020 07:46:26 -0500
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id S1727307AbgAWNmg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Jan 2020 08:42:36 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:51040 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726780AbgAWNmf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Jan 2020 08:42:35 -0500
+Received: from [109.168.11.45] (port=39406 helo=[192.168.101.73])
+        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
         (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iubsM-0004im-Jb; Thu, 23 Jan 2020 13:46:22 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iubsI-000588-JH; Thu, 23 Jan 2020 13:46:18 +0100
-Date:   Thu, 23 Jan 2020 13:46:18 +0100
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg KH <greg@kroah.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 1/2] i2c: Enable compile testing for some of drivers
-Message-ID: <20200123124618.ijzasifjbbmzyh4d@pengutronix.de>
-References: <1578384779-15487-1-git-send-email-krzk@kernel.org>
- <20200123091228.GB1105@ninjato>
- <20200123093120.GA2365@pi3>
- <20200123094107.GD1105@ninjato>
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1iuckj-0008wR-HM; Thu, 23 Jan 2020 14:42:33 +0100
+Subject: Re: [PATCH 2/2] docs: i2c: dev-interface: document the actual
+ implementation
+To:     Wolfram Sang <wsa@the-dreams.de>, Jean Delvare <jdelvare@suse.de>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Lei YU <mine260309@gmail.com>
+References: <20200123105246.67732e33@endymion>
+ <20200123111137.5899fa5a@endymion> <20200123110909.GG1105@ninjato>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <ffac66db-0b58-b832-f6b5-d1a1da7a1da9@lucaceresoli.net>
+Date:   Thu, 23 Jan 2020 14:42:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200123094107.GD1105@ninjato>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20200123110909.GG1105@ninjato>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 10:41:07AM +0100, Wolfram Sang wrote:
-> On Thu, Jan 23, 2020 at 10:31:20AM +0100, Krzysztof Kozlowski wrote:
-> > On Thu, Jan 23, 2020 at 10:12:28AM +0100, Wolfram Sang wrote:
-> > > 
-> > > >  config I2C_ZX2967
-> > > >  	tristate "ZTE ZX2967 I2C support"
-> > > > -	depends on ARCH_ZX
-> > > > -	default y
-> > > > +	depends on ARCH_ZX || (COMPILE_TEST && (ARC || ARM || ARM64 || M68K || RISCV || SUPERH || SPARC))
-> > > > +	# COMPILE_TEST needs architectures with readsX()/writesX() primitives
-> > > 
-> > > The list of archs neither looks pretty nor very maintainable. My
-> > > suggestion is that we leave this out of COMPILE_TEST until we have
-> > > something like ARCH_HAS_READS or something. What do you think?
-> > 
-> > Indeed it does not look good. However having compile testing allows
-> > kbuild to run sparse and smatch which already started pointing minor
-> > issues in existing drivers.
-> > 
-> > Yeah... pros and cons... I don't have a strong opinion to keep it. Since
-> > patch is important, maybe let's just skip this part?
+Hi Jean, Wolfram,
+
+On 23/01/20 12:09, Wolfram Sang wrote:
+> On Thu, Jan 23, 2020 at 11:11:37AM +0100, Jean Delvare wrote:
+>> The old i2c-dev API based on inline functions is long gone, we have
+>> libi2c now which implements the same as real functions and comes with
+>> complete API documentation. Update the dev-interface documentation
+>> file accordingly to only mention what can be done without the
+>> library, and redirect the reader to the libi2c manual page for the
+>> rest.
+>>
+>> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+>> Reported-by: Lei YU <mine260309@gmail.com>
+>> Cc: Wolfram Sang <wsa@the-dreams.de>
+>> Cc: Luca Ceresoli <luca@lucaceresoli.net>
 > 
-> Yeah, let's skip it for now. If you or someone is keen on having it,
-> something like ARCH_HAS_READS (<- needs better name) should be
-> introduced so we can use it here. But that can/should be handled
-> incrementally.
+> I wonder if we shouldn't move the 'C library'  paragraph before the 'C
+> example'? To make sure people are aware of it (and use it) early before
+> digging into the low-level C code?
 
-Isn't this "HAS_IOMEM" already today? The driver compiles for me on
-amd64, too, so ...
-
-Best regards
-Uwe
+I agree, it would be better. For the rest it look good.
 
 -- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Luca
