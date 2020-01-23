@@ -2,38 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B141464EF
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2020 10:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1AC91464F3
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2020 10:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728931AbgAWJv2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Jan 2020 04:51:28 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:33270 "EHLO
+        id S1729037AbgAWJve (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Jan 2020 04:51:34 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:45194 "EHLO
         hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728925AbgAWJv2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Jan 2020 04:51:28 -0500
-Received: from [109.168.11.45] (port=37332 helo=[192.168.101.73])
+        by vger.kernel.org with ESMTP id S1728925AbgAWJvc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Jan 2020 04:51:32 -0500
+Received: from [109.168.11.45] (port=37336 helo=[192.168.101.73])
         by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
         (Exim 4.92)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1iuZ93-000Abs-Ae; Thu, 23 Jan 2020 10:51:25 +0100
-Subject: Re: [PATCH 21/26] docs: i2c: instantiating-devices: rearrange static
- instatiation
-To:     Jean Delvare <jdelvare@suse.de>
+        id 1iuZ98-000AeN-2k; Thu, 23 Jan 2020 10:51:30 +0100
+Subject: Re: [PATCH 15/26] docs: i2c: smbus-protocol: enable kernel-doc
+ function syntax
+To:     Wolfram Sang <wsa@the-dreams.de>, Jean Delvare <jdelvare@suse.de>
 Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@the-dreams.de>,
         Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
 References: <20200105224006.10321-1-luca@lucaceresoli.net>
  <20200105225012.11701-1-luca@lucaceresoli.net>
- <20200105225012.11701-21-luca@lucaceresoli.net>
- <20200121190231.6e88bbdc@endymion>
+ <20200105225012.11701-15-luca@lucaceresoli.net>
+ <20200120154444.7c1d3863@endymion>
+ <211da679-154f-15e3-52d3-a24d50c526cf@lucaceresoli.net>
+ <20200122152608.40f7c90c@endymion> <20200122153747.GA21343@ninjato>
 From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <8d5f681a-e8fb-a657-24df-8a4e85615282@lucaceresoli.net>
-Date:   Thu, 23 Jan 2020 10:51:25 +0100
+Message-ID: <37504278-2fea-f894-542c-c0a4f142eb9e@lucaceresoli.net>
+Date:   Thu, 23 Jan 2020 10:51:29 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20200121190231.6e88bbdc@endymion>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200122153747.GA21343@ninjato>
+Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -51,167 +52,30 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Jean,
+Hi,
 
-On 21/01/20 19:02, Jean Delvare wrote:
-> On Sun,  5 Jan 2020 23:50:07 +0100, Luca Ceresoli wrote:
->> Among the "static" instantiation methods the "board file" method is
->> described first. Move it as last, since it is being replaced by the other
->> methods.
+On 22/01/20 16:37, Wolfram Sang wrote:
+> On Wed, Jan 22, 2020 at 03:26:08PM +0100, Jean Delvare wrote:
+>> On Tue, 21 Jan 2020 18:31:23 +0100, Luca Ceresoli wrote:
+>>> Good point. For v2 I added a new patch to use "Implemented by" also in
+>>> i2c-protocol.rst.
 >>
->> Also fix subsubsection heading syntax and remove the "Method 1[abc]"
->> prefix as the subsubsection structure clarifies the logical hierarchy.
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> ---
->>  Documentation/i2c/instantiating-devices.rst | 98 ++++++++++++---------
->>  1 file changed, 54 insertions(+), 44 deletions(-)
->>
->> diff --git a/Documentation/i2c/instantiating-devices.rst b/Documentation/i2c/instantiating-devices.rst
->> index 5debaafef64d..cbcafb36b417 100644
->> --- a/Documentation/i2c/instantiating-devices.rst
->> +++ b/Documentation/i2c/instantiating-devices.rst
->> @@ -9,54 +9,27 @@ reason, the kernel code must instantiate I2C devices explicitly. There are
->>  several ways to achieve this, depending on the context and requirements.
->>  
->>  
->> -Method 1a: Declare the I2C devices by bus number
->> -------------------------------------------------
->> +Method 1: Declare the I2C devices statically
->> +--------------------------------------------
->>  
->>  This method is appropriate when the I2C bus is a system bus as is the case
->> -for many embedded systems. On such systems, each I2C bus has a number
->> -which is known in advance. It is thus possible to pre-declare the I2C
->> -devices which live on this bus. This is done with an array of struct
->> -i2c_board_info which is registered by calling i2c_register_board_info().
->> +for many embedded systems. On such systems, each I2C bus has a number which
->> +is known in advance. It is thus possible to pre-declare the I2C devices
->> +which live on this bus.
->>  
->> -Example (from omap2 h4)::
->> +This information is provided to the kernel in a different way on different
->> +architectures: device tree, ACPI or board files.
->>  
->> -  static struct i2c_board_info h4_i2c_board_info[] __initdata = {
->> -	{
->> -		I2C_BOARD_INFO("isp1301_omap", 0x2d),
->> -		.irq		= OMAP_GPIO_IRQ(125),
->> -	},
->> -	{	/* EEPROM on mainboard */
->> -		I2C_BOARD_INFO("24c01", 0x52),
->> -		.platform_data	= &m24c01,
->> -	},
->> -	{	/* EEPROM on cpu card */
->> -		I2C_BOARD_INFO("24c01", 0x57),
->> -		.platform_data	= &m24c01,
->> -	},
->> -  };
->> -
->> -  static void __init omap_h4_init(void)
->> -  {
->> -	(...)
->> -	i2c_register_board_info(1, h4_i2c_board_info,
->> -			ARRAY_SIZE(h4_i2c_board_info));
->> -	(...)
->> -  }
->> -
->> -The above code declares 3 devices on I2C bus 1, including their respective
->> -addresses and custom data needed by their drivers. When the I2C bus in
->> -question is registered, the I2C devices will be instantiated automatically
->> -by i2c-core.
->> +When the I2C bus in question is registered, the I2C devices will be
->> +instantiated automatically by i2c-core. The devices will be automatically
->> +unbound and destroyed when the I2C bus they sit on goes away (if ever).
->>  
->> -The devices will be automatically unbound and destroyed when the I2C bus
->> -they sit on goes away (if ever.)
->>  
->> +Declare the I2C devices via devicetree
->> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->>  
->> -Method 1b: Declare the I2C devices via devicetree
->> --------------------------------------------------
->> -
->> -This method has the same implications as method 1a. The declaration of I2C
->> -devices is here done via devicetree as subnodes of the master controller.
->> +On platforms using devicetree the declaration of I2C devices is done in
+>> BTW... I don't know how Wolfram feels about it, but I don't think
+>> documentation changes need to be split to such fine-grained patches.
 > 
-> I suggest adding a comma between "devicetree" and "the" to make the
-> sentence easier to read.
+> I don't mind too much. I think for a first version, fine grained can
+> make review more easy. Maybe the second version could be less patches.
+> Yet for me, since patchwork can handle series of patches, the amount
+> doesn't matter too much. I am super happy that Luca did the work and you
+> did the review!
 
-OK.
-
->> +subnodes of the master controller.
->>  
->>  Example::
->>  
->> @@ -81,14 +54,51 @@ Here, two devices are attached to the bus using a speed of 100kHz. For
->>  additional properties which might be needed to set up the device, please refer
->>  to its devicetree documentation in Documentation/devicetree/bindings/.
->>  
->> -
->> -Method 1c: Declare the I2C devices via ACPI
->> --------------------------------------------
->> +Declare the I2C devices via ACPI
->> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->>  
->>  ACPI can also describe I2C devices. There is special documentation for this
->>  which is currently located at :doc:`../firmware-guide/acpi/enumeration` .
->>  
->>  
->> +Declare the I2C devices in board files
->> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->> +
->> +In many embedded architectures devicetree has replaced the old hardware
-> 
-> Same here between "architectures" and "devicetree".
-> 
->> +description based on board files, but the latter are still used in old
->> +code. Instantiating I2C devices via board files is done with an array of
->> +struct i2c_board_info which is registered by calling
->> +i2c_register_board_info().
->> +
->> +Example (from omap2 h4)::
->> +
->> +  static struct i2c_board_info h4_i2c_board_info[] __initdata = {
->> +	{
->> +		I2C_BOARD_INFO("isp1301_omap", 0x2d),
->> +		.irq		= OMAP_GPIO_IRQ(125),
->> +	},
->> +	{	/* EEPROM on mainboard */
->> +		I2C_BOARD_INFO("24c01", 0x52),
->> +		.platform_data	= &m24c01,
->> +	},
->> +	{	/* EEPROM on cpu card */
->> +		I2C_BOARD_INFO("24c01", 0x57),
->> +		.platform_data	= &m24c01,
->> +	},
->> +  };
->> +
->> +  static void __init omap_h4_init(void)
->> +  {
->> +	(...)
->> +	i2c_register_board_info(1, h4_i2c_board_info,
->> +			ARRAY_SIZE(h4_i2c_board_info));
->> +	(...)
->> +  }
->> +
->> +The above code declares 3 devices on I2C bus 1, including their respective
->> +addresses and custom data needed by their drivers.
->> +
->> +
->>  Method 2: Instantiate the devices explicitly
->>  --------------------------------------------
->>  
-> 
-> 
-> You have some inconsistency in your spacing between subsections, some
-> have 1 blank line before while some have 2. I think 1 is enough. At any
-> rate it should be consistent.
-
-I chose to have 2 lines as it is what was used (consistently) before my
-changes.
+I initially split this work in fine-grained patches for better reviewing
+and also because some of the changes were not expected in the beginning:
+while working at an improvement I noticed an unrelated one was needed.
+But I agree the result is quite awkward. Coalescing some of them now
+would be painful, so I'm sending v2 as is. But I'm tackling the
+remaining sections later, and I'm going to do that work in a smaller
+number of patches.
 
 -- 
 Luca
