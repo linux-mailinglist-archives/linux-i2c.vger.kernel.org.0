@@ -2,99 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F29251464B7
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2020 10:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9EE1464DB
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2020 10:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726099AbgAWJlK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Jan 2020 04:41:10 -0500
-Received: from sauhun.de ([88.99.104.3]:51474 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726026AbgAWJlK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 23 Jan 2020 04:41:10 -0500
-Received: from localhost (p54B335E9.dip0.t-ipconnect.de [84.179.53.233])
-        by pokefinder.org (Postfix) with ESMTPSA id DC3322C00DA;
-        Thu, 23 Jan 2020 10:41:07 +0100 (CET)
-Date:   Thu, 23 Jan 2020 10:41:07 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg KH <greg@kroah.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 1/2] i2c: Enable compile testing for some of drivers
-Message-ID: <20200123094107.GD1105@ninjato>
-References: <1578384779-15487-1-git-send-email-krzk@kernel.org>
- <20200123091228.GB1105@ninjato>
- <20200123093120.GA2365@pi3>
+        id S1726103AbgAWJvC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Jan 2020 04:51:02 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:49978 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726099AbgAWJvC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Jan 2020 04:51:02 -0500
+Received: from [109.168.11.45] (port=37326 helo=[192.168.101.73])
+        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1iuZ8d-000AMk-Sr; Thu, 23 Jan 2020 10:50:59 +0100
+Subject: Re: [PATCH 23/26] docs: i2c: old-module-parameters: fix internal
+ hyperlink
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
+References: <20200105224006.10321-1-luca@lucaceresoli.net>
+ <20200105225012.11701-1-luca@lucaceresoli.net>
+ <20200105225012.11701-23-luca@lucaceresoli.net>
+ <20200122111625.6685b606@endymion>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <59e5698f-b4df-ca71-a60f-aebdac56873f@lucaceresoli.net>
+Date:   Thu, 23 Jan 2020 10:50:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EY/WZ/HvNxOox07X"
-Content-Disposition: inline
-In-Reply-To: <20200123093120.GA2365@pi3>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200122111625.6685b606@endymion>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Jean,
 
---EY/WZ/HvNxOox07X
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 22/01/20 11:16, Jean Delvare wrote:
+> On Sun,  5 Jan 2020 23:50:09 +0100, Luca Ceresoli wrote:
+>> Use ReST syntax so that a proper hyperlink is generated.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> ---
+>>  Documentation/i2c/old-module-parameters.rst | 3 +--
+>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/i2c/old-module-parameters.rst b/Documentation/i2c/old-module-parameters.rst
+>> index 78a6950e5763..0503d2f0b127 100644
+>> --- a/Documentation/i2c/old-module-parameters.rst
+>> +++ b/Documentation/i2c/old-module-parameters.rst
+>> @@ -12,8 +12,7 @@ address), "force" (to forcibly attach the driver to a given device) and
+>>  With the conversion of the I2C subsystem to the standard device driver
+>>  binding model, it became clear that these per-module parameters were no
+>>  longer needed, and that a centralized implementation was possible. The new,
+>> -sysfs-based interface is described in the documentation file
+>> -"instantiating-devices", section "Method 4: Instantiate from user-space".
+>> +sysfs-based interface is described in :doc:`instantiating-devices`.
+> 
+> I object to removing the reference to the section. I think this is
+> saving the reader some time so it is valuable.
 
-On Thu, Jan 23, 2020 at 10:31:20AM +0100, Krzysztof Kozlowski wrote:
-> On Thu, Jan 23, 2020 at 10:12:28AM +0100, Wolfram Sang wrote:
-> >=20
-> > >  config I2C_ZX2967
-> > >  	tristate "ZTE ZX2967 I2C support"
-> > > -	depends on ARCH_ZX
-> > > -	default y
-> > > +	depends on ARCH_ZX || (COMPILE_TEST && (ARC || ARM || ARM64 || M68K=
- || RISCV || SUPERH || SPARC))
-> > > +	# COMPILE_TEST needs architectures with readsX()/writesX() primitiv=
-es
-> >=20
-> > The list of archs neither looks pretty nor very maintainable. My
-> > suggestion is that we leave this out of COMPILE_TEST until we have
-> > something like ARCH_HAS_READS or something. What do you think?
->=20
-> Indeed it does not look good. However having compile testing allows
-> kbuild to run sparse and smatch which already started pointing minor
-> issues in existing drivers.
->=20
-> Yeah... pros and cons... I don't have a strong opinion to keep it. Since
-> patch is important, maybe let's just skip this part?
+I agree, re-added in v2.
 
-Yeah, let's skip it for now. If you or someone is keen on having it,
-something like ARCH_HAS_READS (<- needs better name) should be
-introduced so we can use it here. But that can/should be handled
-incrementally.
-
-
---EY/WZ/HvNxOox07X
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4pai8ACgkQFA3kzBSg
-KbZuMA/+MDdZn6LKAYPb/hGGIvu1E0SYz615wqwiPR0e0E+41UdROF/YpdKyisqD
-oMbbHYOilLd2KIF/7Df+LnU4UHjGj3PV7U6+uO2ZHYxHlZHY1jLLk4zaS/2U6IUm
-AQ+ItfGt6ShpBeShwTtMTeTB9HRh9Btpyv5fvD3Y0Y5g/u/nTzTx3a9wqnUPQy7g
-JNrazF6w1k//66RxU4X1hRj/8Bw50C3Cubj/1CI09BtNhjSECeGXVti9658ujvU2
-d10NY4tUyAPw4SL+nbT3BTAQprJLQWa91s5aDBQa3EheulM17deLNux97Sj7lwv9
-y2Uhsgm1gEsy2rskMvxeKMr0nj6YfA782FbLY7cCXAApUR2moJqIwM1JWGCY8Oqw
-VdT1oPG46f29CeW9JvEv7OPp9WfhODMnvbd22tY2sy9GmsToRqRZV9qfSlRAbgiX
-xVJ2UiZT85Phdk19o3xcHAtYXQlzG1PARVkYrEaSN9hd6RHZirojM4WyWNQ1Jge7
-5KBdmjzVjj9RBaV1XKxVdoAht6Sghesog5S+k13eB2a/UURXOgOEZX+1M4QfoLBM
-/uoguJSkyRXSUUVThcZGXCgu3j6yRVUTBM/ZLDzT5yNgQRzfcdLtuvn0xuUoj+pH
-WarmvqCuPGb840nx3XN0POZr30iIus/U+HVCEQw2//9MLEjQh3M=
-=iauM
------END PGP SIGNATURE-----
-
---EY/WZ/HvNxOox07X--
+-- 
+Luca
