@@ -2,95 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8101148953
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Jan 2020 15:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57822148ACB
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Jan 2020 15:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729188AbgAXOeK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Jan 2020 09:34:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40408 "EHLO mail.kernel.org"
+        id S2388792AbgAXO5f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Jan 2020 09:57:35 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49048 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392120AbgAXOTu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 24 Jan 2020 09:19:50 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8C70B208C4;
-        Fri, 24 Jan 2020 14:19:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579875589;
-        bh=xsufd/3xikqPueUSEBJ072fdiuQ2sXUKcf5CwU+7fu0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lFqpKdt5Ua8AiRayuEzupqIbwoyb7C991o0XwgVyvgqImkIlaiPdvpWaoPLrZKrO9
-         gfIbbRPTQC9hDSDaV1euoNZqwQHMdQtjFPp99iVf44DMnWDz51uFHk4t1IoI4RF9Qx
-         29vUcvIxczz5MKVs7HhWBDOZNuC90PTYDKLfFAQQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        kbuild test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
+        id S2387544AbgAXO5e (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 24 Jan 2020 09:57:34 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id E5131AFBF;
+        Fri, 24 Jan 2020 14:57:32 +0000 (UTC)
+Date:   Fri, 24 Jan 2020 15:57:31 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
         Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 079/107] i2c: iop3xx: Fix memory leak in probe error path
-Date:   Fri, 24 Jan 2020 09:17:49 -0500
-Message-Id: <20200124141817.28793-79-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200124141817.28793-1-sashal@kernel.org>
-References: <20200124141817.28793-1-sashal@kernel.org>
+        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 11/28] docs: i2c: smbus: fix link syntax
+Message-ID: <20200124155731.5573076a@endymion>
+In-Reply-To: <20200123135103.20540-12-luca@lucaceresoli.net>
+References: <20200123135103.20540-1-luca@lucaceresoli.net>
+        <20200123135103.20540-12-luca@lucaceresoli.net>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzk@kernel.org>
+On Thu, 23 Jan 2020 14:50:46 +0100, Luca Ceresoli wrote:
+> Use the proper ReST syntax to generate a valid hyperlink.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-[ Upstream commit e64175776d06a8ceebbfd349d7e66a4a46ca39ef ]
+Subject line is incorrect, it should have "smbus-protocol:" instead of
+"smbus:" for consistency with the other patches.
 
-When handling devm_gpiod_get_optional() errors, free the memory already
-allocated.  This fixes Smatch warnings:
+Other than that this is still
 
-    drivers/i2c/busses/i2c-iop3xx.c:437 iop3xx_i2c_probe() warn: possible memory leak of 'new_adapter'
-    drivers/i2c/busses/i2c-iop3xx.c:442 iop3xx_i2c_probe() warn: possible memory leak of 'new_adapter'
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-Fixes: fdb7e884ad61 ("i2c: iop: Use GPIO descriptors")
-Reported-by: kbuild test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-iop3xx.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+> ---
+>  Documentation/i2c/smbus-protocol.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/i2c/smbus-protocol.rst b/Documentation/i2c/smbus-protocol.rst
+> index e30eb1d274c6..1600b09ec0be 100644
+> --- a/Documentation/i2c/smbus-protocol.rst
+> +++ b/Documentation/i2c/smbus-protocol.rst
+> @@ -27,8 +27,8 @@ a different protocol operation entirely.
+>  Each transaction type corresponds to a functionality flag. Before calling a
+>  transaction function, a device driver should always check (just once) for
+>  the corresponding functionality flag to ensure that the underlying I2C
+> -adapter supports the transaction in question. See
+> -<file:Documentation/i2c/functionality.rst> for the details.
+> +adapter supports the transaction in question. See :doc:`functionality` for
+> +the details.
+>  
+>  
+>  Key to symbols
 
-diff --git a/drivers/i2c/busses/i2c-iop3xx.c b/drivers/i2c/busses/i2c-iop3xx.c
-index 38556381f4cad..2f8b8050a2233 100644
---- a/drivers/i2c/busses/i2c-iop3xx.c
-+++ b/drivers/i2c/busses/i2c-iop3xx.c
-@@ -433,13 +433,17 @@ iop3xx_i2c_probe(struct platform_device *pdev)
- 	adapter_data->gpio_scl = devm_gpiod_get_optional(&pdev->dev,
- 							 "scl",
- 							 GPIOD_ASIS);
--	if (IS_ERR(adapter_data->gpio_scl))
--		return PTR_ERR(adapter_data->gpio_scl);
-+	if (IS_ERR(adapter_data->gpio_scl)) {
-+		ret = PTR_ERR(adapter_data->gpio_scl);
-+		goto free_both;
-+	}
- 	adapter_data->gpio_sda = devm_gpiod_get_optional(&pdev->dev,
- 							 "sda",
- 							 GPIOD_ASIS);
--	if (IS_ERR(adapter_data->gpio_sda))
--		return PTR_ERR(adapter_data->gpio_sda);
-+	if (IS_ERR(adapter_data->gpio_sda)) {
-+		ret = PTR_ERR(adapter_data->gpio_sda);
-+		goto free_both;
-+	}
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (!res) {
+
 -- 
-2.20.1
-
+Jean Delvare
+SUSE L3 Support
