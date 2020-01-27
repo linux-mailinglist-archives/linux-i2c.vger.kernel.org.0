@@ -2,338 +2,149 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B980C149C41
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Jan 2020 19:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5222B149F50
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2020 08:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbgAZSWF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 26 Jan 2020 13:22:05 -0500
-Received: from stcim.de ([78.46.90.227]:51374 "EHLO stcim.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725838AbgAZSWF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 26 Jan 2020 13:22:05 -0500
-X-Greylist: delayed 1738 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 Jan 2020 13:22:04 EST
-Received: from [2001:4dd4:d47c:0:a288:b4ff:fee5:f5cc] (helo=porty)
-        by stcim with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <contact@stefanchrist.eu>)
-        id 1ivm5m-0006yu-6v; Sun, 26 Jan 2020 18:53:02 +0100
-Date:   Sun, 26 Jan 2020 18:53:01 +0100
-From:   Stefan Lengfeld <contact@stefanchrist.eu>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     linux@rempel-privat.de, kernel@pengutronix.de, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        stefan@agner.ch, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Stefan Riedmueller <s.riedmueller@phytec.de>
-Subject: Re: [PATCH] i2c: imx: implement master_xfer_atomic callback
-Message-ID: <20200126175301.upbrn5bx46wangbc@porty>
-References: <20200120093650.12911-1-m.felsch@pengutronix.de>
+        id S1725938AbgA0HoB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Jan 2020 02:44:01 -0500
+Received: from mail-dm6nam10on2048.outbound.protection.outlook.com ([40.107.93.48]:22880
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725955AbgA0HoB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 27 Jan 2020 02:44:01 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J9/14reeoaR1SzulVyIMWsq5HsGE1oqp77hyGYuMtiUBl4aczY0gMKOJUF0siclTWnRHWKn9bOIp6Te52ccfjKHCHuzlNgjRgttyY5grMpkdXvxkkNGHtUCm0MjqxF5lB8907cDE6qEvf/hzGhdsLWU38sAd3gLPbLpfFP5F6SrQ67nwiJK+vWwHwElB8bVyH2Q8lptEdmuhsPz8vjWk+R05+fTJn8QLpWp8hF31f/p/quHPRb9L0IbkusxVQiQoQF4ZaO1JiocDbTeGUZG8oFwiWFfypVM6QC1BdyIaPmlG6QQentvV/X0Zobi/apHKdWTZgeSgx+e6BuVo8e3sdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g1B+qZ9dfWNERlUgfFFMnX9UV8NdsKDjBLbX91Lwkgs=;
+ b=EB1EWxe1c/4T9fwfLgW2zj3u8gRYCHgP1agrd89TUM6WP+a2GjvTJc6S1NWrfYpMu33KPpDu+m4WrFFwwtLri2aOK0ezl5sWTfYxBe+X7wXGaNA+hFIJs06tNQXmJrj96KCFSkXFo/706ZlE7Rcw4QDbaCTmDleUVyWvPa9+m3J2L1QI2RqD42OMqI/IDSe4hSnTcLyiO2EBUCa+lHQMIlUlLR4CP9mWCKsrafSuzpnO2uRmIfsfbL6JIl8h8iOGxz+i1lNp+SJXAxuiaaoOGIEYbS9rpSIoRsUsZe/HqvGVvwA9K3/TdoE3qjrz7ZEE+Kb5DmQ0uHD4GAZ3j25qGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=canonical.com smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g1B+qZ9dfWNERlUgfFFMnX9UV8NdsKDjBLbX91Lwkgs=;
+ b=PKkggIux6jyXjnko7kDgQfN8+AshuZwi1h53WehkssNTSbwjaa4dTxh+w/WP0TUZdNcf0pOEiYEAFUQR/tXuAYVSCCZ5uqZzagDSCgkcdxP2/Ktz409lSc1O1LYjSCoUInqxWC//mEoJqrY5+8xiLg33M7tirsJNVXKj5rdumJQ=
+Received: from BN7PR02CA0012.namprd02.prod.outlook.com (2603:10b6:408:20::25)
+ by DM6PR02MB4603.namprd02.prod.outlook.com (2603:10b6:5:21::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.24; Mon, 27 Jan
+ 2020 07:43:58 +0000
+Received: from CY1NAM02FT019.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::209) by BN7PR02CA0012.outlook.office365.com
+ (2603:10b6:408:20::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.21 via Frontend
+ Transport; Mon, 27 Jan 2020 07:43:58 +0000
+Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; canonical.com; dkim=none (message not signed)
+ header.d=none;canonical.com; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ CY1NAM02FT019.mail.protection.outlook.com (10.152.75.177) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2665.18
+ via Frontend Transport; Mon, 27 Jan 2020 07:43:57 +0000
+Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1ivz3t-0007hD-BI; Sun, 26 Jan 2020 23:43:57 -0800
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1ivz3o-0002hP-7m; Sun, 26 Jan 2020 23:43:52 -0800
+Received: from xsj-pvapsmtp01 (xsj-mail.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 00R7hhGF023667;
+        Sun, 26 Jan 2020 23:43:43 -0800
+Received: from [172.30.17.107]
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <michals@xilinx.com>)
+        id 1ivz3e-0002g0-Qt; Sun, 26 Jan 2020 23:43:43 -0800
+Subject: Re: [PATCH][next] i2c: xiic: fix indentation issue
+To:     Colin King <colin.king@canonical.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200126154257.41336-1-colin.king@canonical.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+Message-ID: <e20558ec-bf4e-9348-f6cb-a37c5dbbb2de@xilinx.com>
+Date:   Mon, 27 Jan 2020 08:43:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
+In-Reply-To: <20200126154257.41336-1-colin.king@canonical.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200120093650.12911-1-m.felsch@pengutronix.de>
-X-PGP-Key: https://stefanchrist.eu/personal/Stefan_Lengfeld_0xE44A23B289092311.asc
-User-Agent: NeoMutt/20180716
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(396003)(376002)(346002)(136003)(199004)(189003)(478600001)(44832011)(426003)(9786002)(26005)(31696002)(2616005)(2906002)(186003)(36756003)(336012)(81156014)(8676002)(81166006)(5660300002)(110136005)(316002)(31686004)(8936002)(70586007)(70206006)(356004)(4744005)(4326008);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR02MB4603;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;A:1;MX:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8af5a681-e7f0-4edf-2859-08d7a2fcaae9
+X-MS-TrafficTypeDiagnostic: DM6PR02MB4603:
+X-Microsoft-Antispam-PRVS: <DM6PR02MB4603C5B944B6E783D1BAD0BFC60B0@DM6PR02MB4603.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:1923;
+X-Forefront-PRVS: 02951C14DC
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mPCFp7oYvK23gWIsQUxUQG+uIkMLJNLxnt08NFHHHqQz+hqCDrMUcW7uggAbEG23imp1gkVs3IUaf+Li10b2xJFWAYHteKqb/uvJP6YXeoQSfhem3EcmjJHGkQD2JCEZt++dkB4+8g6ssSbqz3rtiMM5VEJnBcFHf857LrKOWLghuaC3TEXLBJ1oXX5jDJLVl9XKEVZ6frAy+6hLczCLbRPUwccuhIOyI8rm6POl5fJZa5iD/CjEYJvUWHQen3OSvNKOWYZ7p1JUeuQLT3+buZmFnxfWd8RniEtcN4mB5HVyaa0OvIkUWZtUBtOwrGUdLlBXVLBk7+cbpZEy6nKAigg4qIP18CE5LlMaKx99MVfpksZoqSXvSk7OL98uH0bs53+x+t+cOXk+NCuXUic/QpPplkJ0UKGueXgEMImbhdND2Yup8tQg2zp+N/JZGAEY
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2020 07:43:57.7798
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8af5a681-e7f0-4edf-2859-08d7a2fcaae9
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4603
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Marco,
-
-On Mon, Jan 20, 2020 at 10:36:50AM +0100, Marco Felsch wrote:
-> From: Stefan Lengfeld <contact@stefanchrist.eu>
+On 26. 01. 20 16:42, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> Rework the read and write code paths in the driver to support operation
-> in atomic contexts. To achieve this, the driver must not rely on IRQs
-> and not call schedule(), e.g. via a sleep routine, in these cases.
+> There is a statment that is indented one level too deeply, remove
+
+typo             ^
+
+> the extraneous tab.
 > 
-> With this patch the driver supports normal operation, DMA transfers and
-> now the polling mode or also called sleep-free or IRQ-less operation. It
-> makes the code not simpler or easier to read, but atomic I2C transfers
-> are needed on some hardware configurations, e.g. to trigger reboots on
-> an external PMIC chip.
-> 
-> Signed-off-by: Stefan Lengfeld <contact@stefanchrist.eu>
-> [m.felsch@pengutronix.de: integrate https://patchwork.ozlabs.org/patch/1085943/ review feedback]
-
-nitpick(personal taste): This line can be wrapped to make the commit
-message more readable in the output of 'git log'.
-
-> [m.felsch@pengutronix.de: adapt commit message]
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-
-Tested-by: Stefan Lengfeld <contact@stefanchrist.eu>
-
-on a phyCORE-i.MX6 Quad with baseboard phyBOARD-Mira.
-
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 > ---
-> Hi,
+>  drivers/i2c/busses/i2c-xiic.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> I picked Stefan Lengfeld RFC patch [1] and added Stefan Agner's review
-> feedback [1]. Checkpatch complains about a few 80 char violations. I
-> kept those to gain readability.
-> 
-> Regards,
->   Marco
-> 
-> [1] https://patchwork.ozlabs.org/patch/1085943/
-> 
-> Changes:
-> - general: adapt commit message
-> - general: fix some 80char line issues
-> - general: s/if(!atomic)/if(atomic)/
-
-+1 avoiding negations are good for readability.
-
-> - i2c_imx_trx_complete: use readb_poll_timeout_atomic()
-> - i2c_imx_trx_complete: adapt poll_timeout and add poll_timeout calc comment
-> - i2c_imx_start: simplify irq disable
-> - i2c_imx_xfer_common: don't allow bus recovery within atomic context
-> - i2c_imx_probe: drop pm_runtime_irq_safe usage and instead:
->   * i2c_imx_xfer_common: move rpm calls into i2c_imx_xfer
->   * i2c_imx_xfer_common: add clk_enable/disable for i2c_imx_xfer_atomic
-
-Ack and thanks.
-
-If you like, you can take over the authorship of this patch, because you
-improved it substantially. To take the fame and the blame ;-) Otherwise
-I'm also still fine being the author.
-
-One additionally nitpick below.
-
-> ---
->  drivers/i2c/busses/i2c-imx.c | 146 +++++++++++++++++++++++++----------
->  1 file changed, 105 insertions(+), 41 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index a3b61336fe55..79d5b37fd8a1 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -34,6 +34,7 @@
->  #include <linux/init.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
-> +#include <linux/iopoll.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> @@ -414,7 +415,7 @@ static void i2c_imx_dma_free(struct imx_i2c_struct *i2c_imx)
->  	dma->chan_using = NULL;
->  }
->  
-> -static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy)
-> +static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool atomic)
->  {
->  	unsigned long orig_jiffies = jiffies;
->  	unsigned int temp;
-> @@ -444,15 +445,37 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy)
->  				"<%s> I2C bus is busy\n", __func__);
->  			return -ETIMEDOUT;
+> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+> index b17d30c9ab40..90c1c362394d 100644
+> --- a/drivers/i2c/busses/i2c-xiic.c
+> +++ b/drivers/i2c/busses/i2c-xiic.c
+> @@ -261,7 +261,7 @@ static int xiic_clear_rx_fifo(struct xiic_i2c *i2c)
+>  		xiic_getreg8(i2c, XIIC_DRR_REG_OFFSET);
+>  		if (time_after(jiffies, timeout)) {
+>  			dev_err(i2c->dev, "Failed to clear rx fifo\n");
+> -				return -ETIMEDOUT;
+> +			return -ETIMEDOUT;
 >  		}
-> -		schedule();
-> +		if (atomic)
-> +			udelay(100);
-> +		else
-> +			schedule();
 >  	}
->  
->  	return 0;
->  }
->  
-> -static int i2c_imx_trx_complete(struct imx_i2c_struct *i2c_imx)
-> +static int i2c_imx_trx_complete(struct imx_i2c_struct *i2c_imx, bool atomic)
->  {
-> -	wait_event_timeout(i2c_imx->queue, i2c_imx->i2csr & I2SR_IIF, HZ / 10);
-> +	if (atomic) {
-> +		void __iomem *addr = i2c_imx->base + (IMX_I2C_I2SR << i2c_imx->hwdata->regshift);
-> +		unsigned int regval;
-> +
-> +		/*
-> +		 * The formula for the poll timeout is documented in the RM
-> +		 * Rev.5 on page 1878:
-> +		 *     T_min = 10/F_scl
-> +		 * Set the value hard as it is done for the non-atomic use-case.
-> +		 * Use 10 kHz for the calculation since this is the minimum
-> +		 * allowed SMBus frequency. Also add an offset of 100us since it
-> +		 * turned out that the I2SR_IIF bit isn't set correctly within
-> +		 * the minimum timeout in polling mode.
-> +		 */
-> +		readb_poll_timeout_atomic(addr, regval, regval & I2SR_IIF, 5, 1000 + 100);
 
-Nice.
+When fixed.
 
-> +		i2c_imx->i2csr = regval;
-> +		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
-> +	} else {
-> +		wait_event_timeout(i2c_imx->queue, i2c_imx->i2csr & I2SR_IIF, HZ / 10);
-> +	}
->  
->  	if (unlikely(!(i2c_imx->i2csr & I2SR_IIF))) {
->  		dev_dbg(&i2c_imx->adapter.dev, "<%s> Timeout\n", __func__);
-> @@ -530,7 +553,7 @@ static int i2c_imx_clk_notifier_call(struct notifier_block *nb,
->  	return NOTIFY_OK;
->  }
->  
-> -static int i2c_imx_start(struct imx_i2c_struct *i2c_imx)
-> +static int i2c_imx_start(struct imx_i2c_struct *i2c_imx, bool atomic)
->  {
->  	unsigned int temp = 0;
->  	int result;
-> @@ -543,23 +566,29 @@ static int i2c_imx_start(struct imx_i2c_struct *i2c_imx)
->  	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode, i2c_imx, IMX_I2C_I2CR);
->  
->  	/* Wait controller to be stable */
-> -	usleep_range(50, 150);
-> +	if (atomic)
-> +		udelay(50);
-> +	else
-> +		usleep_range(50, 150);
->  
->  	/* Start I2C transaction */
->  	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  	temp |= I2CR_MSTA;
->  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> -	result = i2c_imx_bus_busy(i2c_imx, 1);
-> +	result = i2c_imx_bus_busy(i2c_imx, 1, atomic);
->  	if (result)
->  		return result;
->  
->  	temp |= I2CR_IIEN | I2CR_MTX | I2CR_TXAK;
-> +	if (atomic)
-> +		temp &= ~I2CR_IIEN; /* Disable interrupt */
-> +
->  	temp &= ~I2CR_DMAEN;
->  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
->  	return result;
->  }
->  
-> -static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx)
-> +static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx, bool atomic)
->  {
->  	unsigned int temp = 0;
->  
-> @@ -581,7 +610,7 @@ static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx)
->  	}
->  
->  	if (!i2c_imx->stopped)
-> -		i2c_imx_bus_busy(i2c_imx, 0);
-> +		i2c_imx_bus_busy(i2c_imx, 0, atomic);
->  
->  	/* Disable I2C controller */
->  	temp = i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN,
-> @@ -662,7 +691,7 @@ static int i2c_imx_dma_write(struct imx_i2c_struct *i2c_imx,
->  	/* The last data byte must be transferred by the CPU. */
->  	imx_i2c_write_reg(msgs->buf[msgs->len-1],
->  				i2c_imx, IMX_I2C_I2DR);
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, false);
->  	if (result)
->  		return result;
->  
-> @@ -721,7 +750,7 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
->  
->  	msgs->buf[msgs->len-2] = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
->  	/* read n byte data */
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, false);
->  	if (result)
->  		return result;
->  
-> @@ -734,7 +763,7 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
->  		temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  		temp &= ~(I2CR_MSTA | I2CR_MTX);
->  		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> -		i2c_imx_bus_busy(i2c_imx, 0);
-> +		i2c_imx_bus_busy(i2c_imx, 0, false);
->  	} else {
->  		/*
->  		 * For i2c master receiver repeat restart operation like:
-> @@ -752,7 +781,8 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
->  	return 0;
->  }
->  
-> -static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs)
-> +static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs,
-> +			 bool atomic)
->  {
->  	int i, result;
->  
-> @@ -761,7 +791,7 @@ static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs)
->  
->  	/* write slave address */
->  	imx_i2c_write_reg(i2c_8bit_addr_from_msg(msgs), i2c_imx, IMX_I2C_I2DR);
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, atomic);
->  	if (result)
->  		return result;
->  	result = i2c_imx_acked(i2c_imx);
-> @@ -775,7 +805,7 @@ static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs)
->  			"<%s> write byte: B%d=0x%X\n",
->  			__func__, i, msgs->buf[i]);
->  		imx_i2c_write_reg(msgs->buf[i], i2c_imx, IMX_I2C_I2DR);
-> -		result = i2c_imx_trx_complete(i2c_imx);
-> +		result = i2c_imx_trx_complete(i2c_imx, atomic);
->  		if (result)
->  			return result;
->  		result = i2c_imx_acked(i2c_imx);
-> @@ -785,7 +815,8 @@ static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs)
->  	return 0;
->  }
->  
-> -static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs, bool is_lastmsg)
-> +static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs,
-> +			bool is_lastmsg, bool atomic)
->  {
->  	int i, result;
->  	unsigned int temp;
-> @@ -798,7 +829,7 @@ static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs, bo
->  
->  	/* write slave address */
->  	imx_i2c_write_reg(i2c_8bit_addr_from_msg(msgs), i2c_imx, IMX_I2C_I2DR);
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, atomic);
->  	if (result)
->  		return result;
->  	result = i2c_imx_acked(i2c_imx);
-> @@ -831,7 +862,7 @@ static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs, bo
->  	for (i = 0; i < msgs->len; i++) {
->  		u8 len = 0;
->  
-> -		result = i2c_imx_trx_complete(i2c_imx);
-> +		result = i2c_imx_trx_complete(i2c_imx, atomic);
->  		if (result)
->  			return result;
->  		/*
-> @@ -859,7 +890,7 @@ static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs, bo
->  				temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  				temp &= ~(I2CR_MSTA | I2CR_MTX);
->  				imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> -				i2c_imx_bus_busy(i2c_imx, 0);
-> +				i2c_imx_bus_busy(i2c_imx, 0, atomic);
->  			} else {
->  				/*
->  				 * For i2c master receiver repeat restart operation like:
-> @@ -890,8 +921,8 @@ static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs, bo
->  	return 0;
->  }
->  
-> -static int i2c_imx_xfer(struct i2c_adapter *adapter,
-> -						struct i2c_msg *msgs, int num)
-> +static int i2c_imx_xfer_common(struct i2c_adapter *adapter,
-> +			       struct i2c_msg *msgs, int num, bool atomic)
+Acked-by: Michal Simek <michal.simek@xilinx.com>
 
-nitpick(cleanup): The function argument 'struct i2c_adapter *adapter'
-can be replaced with 'struct imx_i2c_struct *i2c_imx'. The adapter
-pointer is already 'dereferenced' in the calling functions
+Thanks,
+Michal
 
-	i2c_imx_xfer() and
-	i2c_imx_xfer_atomic()
 
-This avoids the second call 'i2c_get_adapdata(adapter)' some lines
-below.
 
-Kind regards,
-Stefan
+
+
+
