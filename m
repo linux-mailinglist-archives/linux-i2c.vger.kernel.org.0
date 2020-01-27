@@ -2,126 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B226914A0AB
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2020 10:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F1314A179
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2020 11:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729353AbgA0J0Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Jan 2020 04:26:24 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:50017 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729213AbgA0J0X (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Jan 2020 04:26:23 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212])
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1iw0ez-0007hO-Eo; Mon, 27 Jan 2020 09:26:21 +0000
+        id S1727441AbgA0KIh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Jan 2020 05:08:37 -0500
+Received: from mail-eopbgr70125.outbound.protection.outlook.com ([40.107.7.125]:57038
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726179AbgA0KIh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 27 Jan 2020 05:08:37 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S8o7ZdSYN3EEGG8yUBJoIzVJ0i5/1ZtZtk8G02+oxZSAb9YVPccDI9hh0TRSlcsIftSKdL+8NtBu5TShg6tmungIKsI0dWRfEkgh4H3vwOSqhqO/3gw3sJjBz3Ez+U/GQwD5tnfbGi6+iMfw7zPn73sxp1eVEo40m9QtTiM8DuRL8KRkDvxFipBzHcJvv4dcjLK7xw0m/5kEG80Zsv9qFlkeW8W3NNe5adKq4Dk1NNlQ5GdZrRUBJK1S6MijGlF4UelvYqpHStX8ajOjQakmlsGa/b3aTvlw7gJvQKyiAoyUQPvzjgkfP1xVP8UzEpFcUaY53v92tbncbjbnKCCSAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DP0visv+1QQ5bROCjSnALyf+03E81AE1jRd+Qoncw9I=;
+ b=Xzz825vIFblXtFEa9ERXFgAcO9iirCtCPc0x9fDcHUEhHWsv6f0oJHMUnSoeSx9jkDMJ+TQxbp6JncW5aukQp9ML1GZyEkE+k5iEhsJvsJqaXQy0kxfq5vWjGeqrubg6JhXa6rsFTZ91zJ/SOYjBNGrNPFdzuX6hg1sw6AOlMNffyPiwXb0ujQI20oiiiTYF4mI6dHs+/Aka4E1u1UeUuH6OmXNmFycrEDmcwvAuxbq7nyIIRPHYAs6zt7jo8evvyoXJTmihdixz7T7kjTZyyIhNDzigp0HW2tGT8W3J6Z1RWR6L055QBKWAdo80jgzKoxEVpNH48+JRSHBoiKeUKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DP0visv+1QQ5bROCjSnALyf+03E81AE1jRd+Qoncw9I=;
+ b=FRyn74VXwmahYqgllGoNfXytT2z7/s0wRReA25ZjcZS+XPtMuiUA4jyCs9T7Vpvr6yilYXJPwKIdycoPaO4PuBrhCtNNSTFS2WxGIAoEAR0Qnhp9Q70v5TQ7dXX6ou73miwOqjIljvNOx7qaMuaB7WkE8O++l3C3Cx+nRYYbw/s=
+Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com (52.134.66.158) by
+ DB3PR0202MB3385.eurprd02.prod.outlook.com (52.134.73.20) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2665.24; Mon, 27 Jan 2020 10:08:27 +0000
+Received: from DB3PR0202MB3434.eurprd02.prod.outlook.com
+ ([fe80::cd85:a8a5:da14:db13]) by DB3PR0202MB3434.eurprd02.prod.outlook.com
+ ([fe80::cd85:a8a5:da14:db13%7]) with mapi id 15.20.2665.017; Mon, 27 Jan 2020
+ 10:08:27 +0000
+Received: from [192.168.13.3] (213.112.138.4) by HE1PR0502CA0009.eurprd05.prod.outlook.com (2603:10a6:3:e3::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.21 via Frontend Transport; Mon, 27 Jan 2020 10:08:26 +0000
+From:   Peter Rosin <peda@axentia.se>
+To:     Colin Ian King <colin.king@canonical.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH][next] i2c: xiic: fix indentation issue
-To:     Michal Simek <michal.simek@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Thread-Topic: [PATCH][next] i2c: xiic: fix indentation issue
+Thread-Index: AQHV1F9MXsnBtPvzREO9EfvLgEq5Laf+IjwAgAAcsYCAAAvAAA==
+Date:   Mon, 27 Jan 2020 10:08:27 +0000
+Message-ID: <a49786b8-bf71-727b-0785-62bd606a159b@axentia.se>
 References: <20200126154257.41336-1-colin.king@canonical.com>
  <e20558ec-bf4e-9348-f6cb-a37c5dbbb2de@xilinx.com>
-From:   Colin Ian King <colin.king@canonical.com>
-Autocrypt: addr=colin.king@canonical.com; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <6558ccbc-56f7-b30d-df02-1eaf07072c4d@canonical.com>
-Date:   Mon, 27 Jan 2020 09:26:21 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <e20558ec-bf4e-9348-f6cb-a37c5dbbb2de@xilinx.com>
-Content-Type: text/plain; charset=utf-8
+ <6558ccbc-56f7-b30d-df02-1eaf07072c4d@canonical.com>
+In-Reply-To: <6558ccbc-56f7-b30d-df02-1eaf07072c4d@canonical.com>
+Accept-Language: en-US, sv-SE
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+x-originating-ip: [213.112.138.4]
+x-clientproxiedby: HE1PR0502CA0009.eurprd05.prod.outlook.com
+ (2603:10a6:3:e3::19) To DB3PR0202MB3434.eurprd02.prod.outlook.com
+ (2603:10a6:8:5::30)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peda@axentia.se; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 04a5fcc8-d9ec-4e3b-f6fd-08d7a310da38
+x-ms-traffictypediagnostic: DB3PR0202MB3385:
+x-microsoft-antispam-prvs: <DB3PR0202MB3385DCFE13C48A008737D6D6BC0B0@DB3PR0202MB3385.eurprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 02951C14DC
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39830400003)(396003)(366004)(346002)(376002)(136003)(189003)(199004)(31686004)(86362001)(31696002)(71200400001)(316002)(53546011)(16576012)(110136005)(54906003)(2906002)(508600001)(6486002)(81156014)(4326008)(81166006)(8676002)(36756003)(52116002)(8936002)(16526019)(956004)(5660300002)(186003)(66946007)(26005)(2616005)(66446008)(66556008)(66476007)(64756008);DIR:OUT;SFP:1102;SCL:1;SRVR:DB3PR0202MB3385;H:DB3PR0202MB3434.eurprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: axentia.se does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nTmqrX7L85eAPXLwoqtrSiB0Ww9Obmah/st+/PPDzESY20UE2IFLAee8GsGBHzjPtKfDhaMWHiuB9HId/VEWu70E4RDO+XvB2JbzGJ8mg92EoQ6RX4C1pojFwHkmRLaSCkZPAENXwwd3qSNhz3288Aqb8ltEIZaBPz1NBBFDWdk59Wgi7OWLpKcMnG5ZQJWMAKBRp2l28gmXYSFf7cDZ6mjTl4Paoo1kYNreE0vfv4TYrXX6uaq5uZc7RSlZ7AKxX6xv9MZRA7ZqAOw4LPZx1gpOF+aqG9/yYKSv1UQPNyBekuyHIdXSzNQ3c0TlGhaYsCyduxUUKOtEO0wX0Zf5b65Sr0gdEEDm+Blx7+m2ChhXg06Bb936ZRCoRhWqD/dYY1idGb+jT1Q+V/bxcpj980V9tjaB02uTxfz1SQMMcPkQqss/UM3IEBvoSHkzDi38
+x-ms-exchange-antispam-messagedata: hJ2Y9a8/a632aDFErlh72/weW8YqCwbyiOTlioeq0+51itwbB/j3dqPaQXwCjpk/x2ZH1Mjm0TdSHSXm/QdNvazx98etRddBqiqsgdpTLl5/6FrehOg6vbkd4Iu/BAVQb+j6bIlMgphuHxI60gXLcw==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9D4CE742CE73534BAB68505071BDB30E@eurprd02.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04a5fcc8-d9ec-4e3b-f6fd-08d7a310da38
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jan 2020 10:08:27.4743
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: X09dddJvbhKD2KKSdpp3wwyFKPDPOCchtlXTAa6CYqtN04ZseZ64P5ghd1lxlJHy
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3385
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 27/01/2020 07:43, Michal Simek wrote:
-> On 26. 01. 20 16:42, Colin King wrote:
->> From: Colin Ian King <colin.king@canonical.com>
->>
->> There is a statment that is indented one level too deeply, remove
-> 
-> typo             ^
-
-Can this be fixed when the patch is applied rather than sending a V2?
-
-Colin
-
-> 
->> the extraneous tab.
->>
->> Signed-off-by: Colin Ian King <colin.king@canonical.com>
->> ---
->>  drivers/i2c/busses/i2c-xiic.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
->> index b17d30c9ab40..90c1c362394d 100644
->> --- a/drivers/i2c/busses/i2c-xiic.c
->> +++ b/drivers/i2c/busses/i2c-xiic.c
->> @@ -261,7 +261,7 @@ static int xiic_clear_rx_fifo(struct xiic_i2c *i2c)
->>  		xiic_getreg8(i2c, XIIC_DRR_REG_OFFSET);
->>  		if (time_after(jiffies, timeout)) {
->>  			dev_err(i2c->dev, "Failed to clear rx fifo\n");
->> -				return -ETIMEDOUT;
->> +			return -ETIMEDOUT;
->>  		}
->>  	}
-> 
-> When fixed.
-> 
-> Acked-by: Michal Simek <michal.simek@xilinx.com>
-> 
-> Thanks,
-> Michal
-> 
-> 
-> 
-> 
-> 
-> 
-
+T24gMjAyMC0wMS0yNyAxMDoyNiwgQ29saW4gSWFuIEtpbmcgd3JvdGU6DQo+IE9uIDI3LzAxLzIw
+MjAgMDc6NDMsIE1pY2hhbCBTaW1layB3cm90ZToNCj4+IE9uIDI2LiAwMS4gMjAgMTY6NDIsIENv
+bGluIEtpbmcgd3JvdGU6DQo+Pj4gRnJvbTogQ29saW4gSWFuIEtpbmcgPGNvbGluLmtpbmdAY2Fu
+b25pY2FsLmNvbT4NCj4+Pg0KPj4+IFRoZXJlIGlzIGEgc3RhdG1lbnQgdGhhdCBpcyBpbmRlbnRl
+ZCBvbmUgbGV2ZWwgdG9vIGRlZXBseSwgcmVtb3ZlDQo+Pg0KPj4gdHlwbyAgICAgICAgICAgICBe
+DQo+IA0KPiBDYW4gdGhpcyBiZSBmaXhlZCB3aGVuIHRoZSBwYXRjaCBpcyBhcHBsaWVkIHJhdGhl
+ciB0aGFuIHNlbmRpbmcgYSBWMj8NCg0KSXQgY2FuLCBidXQgSSB0aGluayB5b3Ugd2lsbCBtYWtl
+IGl0IGVhc2llciBmb3IgV29sZnJhbSBpZiB5b3Ugc2VuZCBhIHYyLg0KV2hpY2ggaXMgdGhlIHJp
+Z2h0IHRoaW5nIHRvIGRvIGFueXdheSBzaW5jZSB5b3UgYXJlIG1pc3NpbmcgYSBGaXhlcyB0YWcu
+DQpJIHRoaW5rIHlvdSBzaG91bGQgaGF2ZSBvbmUsIHNpbmNlIGl0IGlzIGJvcmRlcmxpbmUgaWYg
+dGhpcyBwYXRjaCBpcyBnb2luZw0KdG8gbWFrZSBpdCBiZWZvcmUgNS42Lg0KDQpDaGVlcnMsDQpQ
+ZXRlcg0KDQo+IENvbGluDQo+IA0KPj4NCj4+PiB0aGUgZXh0cmFuZW91cyB0YWIuDQo+Pj4NCj4+
+PiBTaWduZWQtb2ZmLWJ5OiBDb2xpbiBJYW4gS2luZyA8Y29saW4ua2luZ0BjYW5vbmljYWwuY29t
+Pg0KPj4+IC0tLQ0KPj4+ICBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLXhpaWMuYyB8IDIgKy0NCj4+
+PiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+Pj4NCj4+
+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy14aWljLmMgYi9kcml2ZXJzL2ky
+Yy9idXNzZXMvaTJjLXhpaWMuYw0KPj4+IGluZGV4IGIxN2QzMGM5YWI0MC4uOTBjMWMzNjIzOTRk
+IDEwMDY0NA0KPj4+IC0tLSBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMteGlpYy5jDQo+Pj4gKysr
+IGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy14aWljLmMNCj4+PiBAQCAtMjYxLDcgKzI2MSw3IEBA
+IHN0YXRpYyBpbnQgeGlpY19jbGVhcl9yeF9maWZvKHN0cnVjdCB4aWljX2kyYyAqaTJjKQ0KPj4+
+ICAJCXhpaWNfZ2V0cmVnOChpMmMsIFhJSUNfRFJSX1JFR19PRkZTRVQpOw0KPj4+ICAJCWlmICh0
+aW1lX2FmdGVyKGppZmZpZXMsIHRpbWVvdXQpKSB7DQo+Pj4gIAkJCWRldl9lcnIoaTJjLT5kZXYs
+ICJGYWlsZWQgdG8gY2xlYXIgcnggZmlmb1xuIik7DQo+Pj4gLQkJCQlyZXR1cm4gLUVUSU1FRE9V
+VDsNCj4+PiArCQkJcmV0dXJuIC1FVElNRURPVVQ7DQo+Pj4gIAkJfQ0KPj4+ICAJfQ0KPj4NCj4+
+IFdoZW4gZml4ZWQuDQo+Pg0KPj4gQWNrZWQtYnk6IE1pY2hhbCBTaW1layA8bWljaGFsLnNpbWVr
+QHhpbGlueC5jb20+DQo+Pg0KPj4gVGhhbmtzLA0KPj4gTWljaGFsDQo+Pg0KPj4NCj4+DQo+Pg0K
+Pj4NCj4+DQo+IA0KDQo=
