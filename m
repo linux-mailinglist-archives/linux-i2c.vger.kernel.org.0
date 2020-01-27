@@ -2,62 +2,164 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E69D714A493
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2020 14:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4122014A7D6
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2020 17:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgA0NJ0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Jan 2020 08:09:26 -0500
-Received: from mail-lf1-f46.google.com ([209.85.167.46]:43777 "EHLO
-        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgA0NJZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Jan 2020 08:09:25 -0500
-Received: by mail-lf1-f46.google.com with SMTP id 9so6132875lfq.10
-        for <linux-i2c@vger.kernel.org>; Mon, 27 Jan 2020 05:09:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=MBbZSDAQmj2xEPju2e2Tf9R/P8YHDPPWVxmNEAp8kcI=;
-        b=lV5LF8KH7cxeGfaYJnJULLbXnLSKXwxDmtQuSTmGadjXtOh+14dYDuRT3X0cuGtxCS
-         IgY70wqGpJ5Cf+aoTs5vBd3iAj9fBLF15T+nBl1Iu+hQd7gKUaY9UAHn1qYUxxLKgIrI
-         xhuWHoxEY7cwdHwmV6ph0PLpL2+RSgxrce/AqZ5GBg939f4MBRsrpf5wD7KiXrQzvr+F
-         N8z5ka+3f2G+Y6ZHDK3PezuFVRPCtaiCMkYU1m2OGEM6r8Yt8UyKsAfB3UMS7rixMgd3
-         kquCCUOqL3kIe+3aS8XDHbAvUOuvyCRcSUvXK+YYwrE+DPh/FfQB/CwMQfj90LiWAAlh
-         i2Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=MBbZSDAQmj2xEPju2e2Tf9R/P8YHDPPWVxmNEAp8kcI=;
-        b=b9M21UuGJoZR0WCfHjO7EkXqf2OPZxUW89tOYgBNn149V2L/Rq2v6U0GNmiXkGJtgI
-         QzOS6qaN+dZF3n96mXrVCTQjjnSvt5nFn4n4ncMzsS/TmcVN/YKqCebUtKpXugA5Qms/
-         UeOxH+Zi7/qjuhH7lHhEyV9K5y3yrtGhA8O+ufc910EkpPzOyXrZSJ6i+gHXjL5ZcLTb
-         PgN1xZCPYCsUNxVpHRoFaDpEbQsHejR1bijnbH1/MdH4qC4lyTK/389IAJs69WNujd3q
-         5hMv/JT/kcCW5+mu4couPZWlNCYZ6h2zDFF8HcDowxqWID8ir2drueMEd4ba8z9zzLzB
-         ZxZg==
-X-Gm-Message-State: APjAAAUBDKydJ8NDF4sxY0xTY6LsCFUlTCT95NR7jNeUaChC7ULjpO2N
-        S5GPFjRoh2LFWoonfpnsK+n3rffXk6W4OpjWPPYXkJyF
-X-Google-Smtp-Source: APXvYqw87bzqDQ2LKIB+2hQNtOo2jGvdjzOADR24Sa3bRFsgO9YXSR8SrS3jbVATlUN4eHHwrpmQTAstKJOBCwTgAo8=
-X-Received: by 2002:ac2:42ca:: with SMTP id n10mr2835609lfl.215.1580130563680;
- Mon, 27 Jan 2020 05:09:23 -0800 (PST)
-MIME-Version: 1.0
-From:   Tali Perry <tali.perry1@gmail.com>
-Date:   Mon, 27 Jan 2020 15:09:49 +0200
-Message-ID: <CAHb3i=sF_mAMzSCLJ2O0mQz1RadHyL8pVsGB1i_a5ZbGL+Yncw@mail.gmail.com>
-Subject: npcm-i2c driver
-To:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729636AbgA0QNJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Jan 2020 11:13:09 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:33582 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729470AbgA0QNJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Jan 2020 11:13:09 -0500
+Received: from localhost.localdomain (p200300CB87166A002102C4F03A4721D7.dip0.t-ipconnect.de [IPv6:2003:cb:8716:6a00:2102:c4f0:3a47:21d7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id DF01628CAE7;
+        Mon, 27 Jan 2020 16:13:05 +0000 (GMT)
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, bleung@chromium.org,
+        enric.balletbo@collabora.com, groeck@chromium.org,
+        dafna.hirschfeld@collabora.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, helen.koike@collabora.com,
+        ezequiel@collabora.com, kernel@collabora.com, dafna3@gmail.com
+Subject: [PATCH] dt-bindings: convert i2c-cros-ec-tunnel.txt to yaml
+Date:   Mon, 27 Jan 2020 17:12:13 +0100
+Message-Id: <20200127161213.13339-1-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Convert the binding file i2c-cros-ec-tunnel.txt to yaml format.
 
-Please note the following patch is waiting for review:
+This was tested and verified on ARM and ARM64 with:
 
-https://patchwork.ozlabs.org/patch/1198846/
+make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/i2c/i2c-cros-ec-tunnel.yaml
+make dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/i2c/i2c-cros-ec-tunnel.yaml
 
-Any comment will be very much appreciated.
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ .../bindings/i2c/i2c-cros-ec-tunnel.txt       | 39 ------------
+ .../bindings/i2c/i2c-cros-ec-tunnel.yaml      | 61 +++++++++++++++++++
+ 2 files changed, 61 insertions(+), 39 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-cros-ec-tunnel.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-cros-ec-tunnel.yaml
 
-Thanks,
-Tali Perry
-Nuvoton Technologies
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-cros-ec-tunnel.txt b/Documentation/devicetree/bindings/i2c/i2c-cros-ec-tunnel.txt
+deleted file mode 100644
+index 898f030eba62..000000000000
+--- a/Documentation/devicetree/bindings/i2c/i2c-cros-ec-tunnel.txt
++++ /dev/null
+@@ -1,39 +0,0 @@
+-I2C bus that tunnels through the ChromeOS EC (cros-ec)
+-======================================================
+-On some ChromeOS board designs we've got a connection to the EC (embedded
+-controller) but no direct connection to some devices on the other side of
+-the EC (like a battery and PMIC).  To get access to those devices we need
+-to tunnel our i2c commands through the EC.
+-
+-The node for this device should be under a cros-ec node like google,cros-ec-spi
+-or google,cros-ec-i2c.
+-
+-
+-Required properties:
+-- compatible: google,cros-ec-i2c-tunnel
+-- google,remote-bus: The EC bus we'd like to talk to.
+-
+-Optional child nodes:
+-- One node per I2C device connected to the tunnelled I2C bus.
+-
+-
+-Example:
+-	cros-ec@0 {
+-		compatible = "google,cros-ec-spi";
+-
+-		...
+-
+-		i2c-tunnel {
+-			compatible = "google,cros-ec-i2c-tunnel";
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			google,remote-bus = <0>;
+-
+-			battery: sbs-battery@b {
+-				compatible = "sbs,sbs-battery";
+-				reg = <0xb>;
+-				sbs,poll-retry-count = <1>;
+-			};
+-		};
+-	}
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-cros-ec-tunnel.yaml b/Documentation/devicetree/bindings/i2c/i2c-cros-ec-tunnel.yaml
+new file mode 100644
+index 000000000000..c1383e607f47
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/i2c-cros-ec-tunnel.yaml
+@@ -0,0 +1,61 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/i2c-cros-ec-tunnel.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: I2C bus that tunnels through the ChromeOS EC (cros-ec)
++
++maintainers:
++  - Benson Leung <bleung@chromium.org>
++  - Enric Balletbo i Serra <enric.balletbo@collabora.com>
++  - Guenter Roeck <groeck@chromium.org>
++
++description: |
++  On some ChromeOS board designs we've got a connection to the EC (embedded
++  controller) but no direct connection to some devices on the other side of
++  the EC (like a battery and PMIC). To get access to those devices we need
++  to tunnel our i2c commands through the EC.
++  The node for this device should be under a cros-ec node like google,cros-ec-spi
++  or google,cros-ec-i2c.
++
++properties:
++  compatible:
++    const:
++      google,cros-ec-i2c-tunnel
++
++  google,remote-bus:
++    $ref: "/schemas/types.yaml#/definitions/uint32"
++    description: The EC bus we'd like to talk to.
++
++  "#address-cells": true
++  "#size-cells": true
++
++patternProperties:
++  "^.*@[0-9a-f]+$":
++    type: object
++    description: One node per I2C device connected to the tunnelled I2C bus.
++
++additionalProperties: false
++
++required:
++  - compatible
++  - google,remote-bus
++
++examples:
++  - |
++    cros-ec@0 {
++        compatible = "google,cros-ec-spi";
++        i2c-tunnel {
++            compatible = "google,cros-ec-i2c-tunnel";
++            #address-cells = <1>;
++            #size-cells = <0>;
++            google,remote-bus = <0>;
++
++            battery: sbs-battery@b {
++                compatible = "sbs,sbs-battery";
++                reg = <0xb>;
++                sbs,poll-retry-count = <1>;
++            };
++        };
++    };
+-- 
+2.17.1
+
