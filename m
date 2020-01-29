@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D03114CE41
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jan 2020 17:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A771314CE30
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jan 2020 17:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727129AbgA2QWt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Jan 2020 11:22:49 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:47246 "EHLO
+        id S1727186AbgA2QWx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Jan 2020 11:22:53 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:46449 "EHLO
         hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726645AbgA2QWt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jan 2020 11:22:49 -0500
+        by vger.kernel.org with ESMTP id S1727161AbgA2QWx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jan 2020 11:22:53 -0500
 Received: from [109.168.11.45] (port=34038 helo=pc-ceresoli.dev.aim)
         by hostingweb31.netsons.net with esmtpa (Exim 4.92)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1iwq74-005NDl-DZ; Wed, 29 Jan 2020 17:22:46 +0100
+        id 1iwq78-005NDl-Q1; Wed, 29 Jan 2020 17:22:50 +0100
 From:   Luca Ceresoli <luca@lucaceresoli.net>
 To:     linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
         Wolfram Sang <wsa@the-dreams.de>,
         Jean Delvare <jdelvare@suse.de>, Peter Rosin <peda@axentia.se>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 16/28] docs: i2c: smbus-protocol: fix kernel-doc function syntax
-Date:   Wed, 29 Jan 2020 16:19:41 +0100
-Message-Id: <20200129151953.31582-17-luca@lucaceresoli.net>
+Subject: [PATCH v3 17/28] docs: i2c: smbus-protocol: fix typo
+Date:   Wed, 29 Jan 2020 16:19:42 +0100
+Message-Id: <20200129151953.31582-18-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200129151953.31582-1-luca@lucaceresoli.net>
 References: <20200129151953.31582-1-luca@lucaceresoli.net>
@@ -45,37 +45,32 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-This clarifies these are functions (and would/will adds a hyperlink to the
-function documentation if/when documented).
+The subject is plural, fix the verb.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Reviewed-by: Jean Delvare <jdelvare@suse.de>
+
 ---
- Documentation/i2c/smbus-protocol.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+
+Changes in v2:
+ - fix subject line (Jean Delvare)
+---
+ Documentation/i2c/smbus-protocol.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Documentation/i2c/smbus-protocol.rst b/Documentation/i2c/smbus-protocol.rst
-index 997945e90419..3c0fb3a2044d 100644
+index 3c0fb3a2044d..de7285de5e93 100644
 --- a/Documentation/i2c/smbus-protocol.rst
 +++ b/Documentation/i2c/smbus-protocol.rst
-@@ -118,7 +118,7 @@ byte. But this time, the data is a complete word (16 bits)::
+@@ -145,7 +145,7 @@ SMBus Write Word
+ Implemented by i2c_smbus_write_word_data()
  
- Functionality flag: I2C_FUNC_SMBUS_READ_WORD_DATA
+ This is the opposite of the Read Word operation. 16 bits
+-of data is written to a device, to the designated register that is
++of data are written to a device, to the designated register that is
+ specified through the Comm byte.::
  
--Note the convenience function i2c_smbus_read_word_swapped is
-+Note the convenience function i2c_smbus_read_word_swapped() is
- available for reads where the two data bytes are the other way
- around (not SMBus compliant, but very popular.)
- 
-@@ -152,7 +152,7 @@ specified through the Comm byte.::
- 
- Functionality flag: I2C_FUNC_SMBUS_WRITE_WORD_DATA
- 
--Note the convenience function i2c_smbus_write_word_swapped is
-+Note the convenience function i2c_smbus_write_word_swapped() is
- available for writes where the two data bytes are the other way
- around (not SMBus compliant, but very popular.)
- 
+   S Addr Wr [A] Comm [A] DataLow [A] DataHigh [A] P
 -- 
 2.25.0
 
