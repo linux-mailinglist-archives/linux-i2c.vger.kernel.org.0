@@ -2,80 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F9B14CE3D
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jan 2020 17:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969AD14D21E
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jan 2020 21:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727263AbgA2QXM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Jan 2020 11:23:12 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:53570 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727192AbgA2QWz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jan 2020 11:22:55 -0500
-Received: from [109.168.11.45] (port=34038 helo=pc-ceresoli.dev.aim)
-        by hostingweb31.netsons.net with esmtpa (Exim 4.92)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1iwq7B-005NDl-FM; Wed, 29 Jan 2020 17:22:53 +0100
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Jean Delvare <jdelvare@suse.de>, Peter Rosin <peda@axentia.se>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 28/28] docs: i2c: writing-clients: properly name the stop condition
-Date:   Wed, 29 Jan 2020 16:19:53 +0100
-Message-Id: <20200129151953.31582-29-luca@lucaceresoli.net>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200129151953.31582-1-luca@lucaceresoli.net>
-References: <20200129151953.31582-1-luca@lucaceresoli.net>
+        id S1726259AbgA2UwO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Jan 2020 15:52:14 -0500
+Received: from sauhun.de ([88.99.104.3]:41528 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726708AbgA2UwO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 29 Jan 2020 15:52:14 -0500
+Received: from localhost (p5486CF2C.dip0.t-ipconnect.de [84.134.207.44])
+        by pokefinder.org (Postfix) with ESMTPSA id 9840A2C06AB;
+        Wed, 29 Jan 2020 21:52:11 +0100 (CET)
+Date:   Wed, 29 Jan 2020 21:52:11 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: parport: fix spelling mistake: "Atmost" -> "At most"
+Message-ID: <20200129205211.GA7586@ninjato>
+References: <20200125202020.12861-1-colin.king@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LQksG6bCIzRHxTLp"
+Content-Disposition: inline
+In-Reply-To: <20200125202020.12861-1-colin.king@canonical.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-In I2C there is no such thing as a "stop bit". Use the proper naming: "stop
-condition".
+--LQksG6bCIzRHxTLp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reported-by: Jean Delvare <jdelvare@suse.de>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+On Sat, Jan 25, 2020 at 08:20:20PM +0000, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+>=20
+> There is a spelling mistake in a module parameter description.
+> Fix it.
+>=20
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
----
+Applied to for-next, thanks!
 
-This patch is new in v2.
----
- Documentation/i2c/writing-clients.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/i2c/writing-clients.rst b/Documentation/i2c/writing-clients.rst
-index 82aa33c964d3..978cc8210bf3 100644
---- a/Documentation/i2c/writing-clients.rst
-+++ b/Documentation/i2c/writing-clients.rst
-@@ -357,9 +357,9 @@ read/written.
- 
- This sends a series of messages. Each message can be a read or write,
- and they can be mixed in any way. The transactions are combined: no
--stop bit is sent between transaction. The i2c_msg structure contains
--for each message the client address, the number of bytes of the message
--and the message data itself.
-+stop condition is issued between transaction. The i2c_msg structure
-+contains for each message the client address, the number of bytes of the
-+message and the message data itself.
- 
- You can read the file ``i2c-protocol`` for more information about the
- actual I2C protocol.
--- 
-2.25.0
+--LQksG6bCIzRHxTLp
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4x8HcACgkQFA3kzBSg
+KbYpPw//b0fRja5Omd9dQyuGA50jUD9ErFfzBopDwUdwGfOCdoaQfS+Dn4OJQxG8
+vtu94uKnUXLDq/gXBJJFJ9MgQrf6gM+pQd/oA4ae0Yh6rj3VlAdOKj0AQ+DDAnZ2
+Gtp3hYpzNX61IUjJ1LTx37tZ1kOJmGRfPTVuTQrmPk+8St4+OhT7gfOA6ORSM7np
+yduIyq5BKqMicFJK2iCpIUDxC94qRTEbGEkVCP9OUU3BM8erXnDleawdsmbZzGTc
+1S3+s/NlRuRqVbnrjE77VncNXKcDAV91TpZIgupVgIdyGfA5UVQtrNbcbE6Rgs31
+Ky/8qDYpkP1votujcc7DPZQ92lIol3C10o2S7WYzsGU5Vf5HZiNEW/UTJMi/GLd2
+yV0zBfE8GqNu478ibJz9eKIFb+7RLjhi/r6tGV4Jdbw/9i0Mr0PkwAGmIsjN8qqO
+1UkZ5/no9qDg3uIzeFcXjmuklmxQhglGV4Vs3uWhcdjMJQTEaFPZ8xAjw+keMmMq
+ECSaw29sus3QwEZPoOUdV2aqRU+ntUYE5RNCVDFjDgGfuwYEvY4LuesM5WCfFVWD
+VqYfLP9x4wqfkBQNe7S5oGuKOFVnEMOCeRZZYsewitqzzAMWePjN22QCr3Q9dV/m
+9YMcG0SxRqqH0nq4lbkL6yDzUJmCiCszqhOeb7iwInSh1MRlTz0=
+=RItn
+-----END PGP SIGNATURE-----
+
+--LQksG6bCIzRHxTLp--
