@@ -2,19 +2,19 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 094AF14D7D0
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2020 09:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 640B914D7D8
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2020 09:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbgA3IiM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 Jan 2020 03:38:12 -0500
-Received: from sauhun.de ([88.99.104.3]:46586 "EHLO pokefinder.org"
+        id S1726879AbgA3Ija (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 Jan 2020 03:39:30 -0500
+Received: from sauhun.de ([88.99.104.3]:46616 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726757AbgA3IiM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 30 Jan 2020 03:38:12 -0500
+        id S1726871AbgA3Ij3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 30 Jan 2020 03:39:29 -0500
 Received: from localhost (p54B33261.dip0.t-ipconnect.de [84.179.50.97])
-        by pokefinder.org (Postfix) with ESMTPSA id 0929F2C0697;
-        Thu, 30 Jan 2020 09:38:11 +0100 (CET)
-Date:   Thu, 30 Jan 2020 09:38:10 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 943C62C0697;
+        Thu, 30 Jan 2020 09:39:27 +0100 (CET)
+Date:   Thu, 30 Jan 2020 09:39:27 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Alain Volmat <alain.volmat@st.com>
 Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
@@ -24,15 +24,16 @@ Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         fabrice.gasnier@st.com
-Subject: Re: [PATCH 4/6] i2c: i2c-stm32f7: add PM_SLEEP suspend/resume support
-Message-ID: <20200130083810.GG2208@ninjato>
+Subject: Re: [PATCH 5/6] i2c: i2c-stm32f7: allow controller to be
+ wakeup-source
+Message-ID: <20200130083927.GH2208@ninjato>
 References: <1578317314-17197-1-git-send-email-alain.volmat@st.com>
- <1578317314-17197-5-git-send-email-alain.volmat@st.com>
+ <1578317314-17197-6-git-send-email-alain.volmat@st.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oOB74oR0WcNeq9Zb"
+        protocol="application/pgp-signature"; boundary="qM81t570OJUP5TU/"
 Content-Disposition: inline
-In-Reply-To: <1578317314-17197-5-git-send-email-alain.volmat@st.com>
+In-Reply-To: <1578317314-17197-6-git-send-email-alain.volmat@st.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -40,40 +41,55 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---oOB74oR0WcNeq9Zb
+--qM81t570OJUP5TU/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 06, 2020 at 02:28:32PM +0100, Alain Volmat wrote:
-> Backup/restore I2C registers as part of the suspend/resume
-> handlers. The device is marked as suspended to ensure that
-> transfers are rejected during the suspended period.
+On Mon, Jan 06, 2020 at 02:28:33PM +0100, Alain Volmat wrote:
+> Allow the i2c-stm32f7 controller to become a wakeup-source
+> of the system. In such case, when a slave is registered to the
+> I2C controller, receiving a I2C message targeting that registered
+> slave address wakes up the suspended system.
 >=20
-> Signed-off-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
+> In order to be able to wake-up, the I2C controller DT node
+> must have the property wakeup-source defined and a slave
+> must be registered.
+>=20
 > Signed-off-by: Alain Volmat <alain.volmat@st.com>
 
 Applied to for-next, thanks!
 
+> +static void stm32f7_i2c_enable_wakeup(struct stm32f7_i2c_dev *i2c_dev,
+> +				      bool enable)
+> +{
+> +	void __iomem *base =3D i2c_dev->base;
+> +	u32 mask =3D STM32F7_I2C_CR1_WUPEN;
 
---oOB74oR0WcNeq9Zb
+=2E..
+
+I wondered why we can't move this more up to avoid the forward
+declaration?
+
+
+--qM81t570OJUP5TU/
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4yle4ACgkQFA3kzBSg
-KbY32g/+MsJU/Mz6bHmAAS9cTmzSotAvgy/o+WUUunotmJ7EHIyl25iZjMCFrs2z
-Xi3Gk59qbPt4oMVu1wQNhT7NDbvjyyfltJPFyRjevxMfBKwcMGdd6lI4W+jsogCk
-JtzOEIkiDrSXFqrC58/zjxbTV6vxpR0gtvbhnvVUvhtcAaVEWtrKm+f3NE7XoDt3
-E4IhMehFrxlHxaBtzJUzlEyUrv0rRav4knChHnpAgtCHIh5wOVdj2PAMTibteAJ2
-56Mt6MvU+W+vs6enYkDcFCtEu9sgOZF1RM3ozUurkI98Efqn/21M2fP7WtxZMDih
-Ai/bVREnuAeJWI8LA65h9diLll6Wfi+QKlgh8Lq1XQmIfsPtv9kZGD3jCLZ9AEcJ
-Gv//iQpUstLg728O+atN0pTYLyQ0Tuync+LxYnqyFHclpqFb4nwe37zF2gzVMkY8
-H5Xaz+I7jqzG+I42img+kcLYIYbmT7Wjq/LJdivpAA8EzETeLzxX0QVroIDXzcOs
-vGrk26aCR8xAfST/6KAb7AC8G5HSIDYFzsfbGhYMYm6jVvXw2pZYBXGsxtxTOXJ8
-S8GsbiiY+3sND5foLLbEAtqpNgDNnJsPxS3R8MwES/2MiuPp+yEk1oinnS8cY6li
-lom0Vqb3JaX8OQjZDu6uYyPAvhm2ED4jCCSMSvdMJNZtojtASKo=
-=yyQ3
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4ylj8ACgkQFA3kzBSg
+Kbb0+Q//eaBISWaovu0/fjF7dgoFWHYguEvUxYTzaNb1jIXCpTrU12BTSrrZOLFc
+h6iAjfi0aCQYqlbLomSoHp1n3PgcbdB+tTTbdZ5wjNllQmnsHnDrSh8ybp+mejOp
+kG/vpYXrWE130JwFsY/iYAsJ5BSHMb2MoYv/5KYvV8iRlmI+s2tg3GU4fy2QUlpQ
+CfOB5AcHT7IYm014VVqkhjrChUVVNbmmxque4UXs2YZnB8UU1TJ1kQfkoTtvfCkc
+iK/11FS5XmPzls6f5910QqmaYiT8zEAky9SFXCxWw62D41/1cYO/TkN7gOMC4mOl
+X0uWutwDU3OCOdFyj0BRXwuWTB61CZ0zF//j6Fhq2cCdgw6PDjU18XHXIj8OHZtj
+RfWic1AJREBjlNTrfQhzEC2gmdT6OTjTxSVJKF3+w++zf2kDDFAGO0YF4QuP1JLV
+EcggXX5rFHxDJlMSL9Xn4n0GPg0YhJj6tGmfEbWZGx++TZ2C2cNs98sdtXHcoyCY
+l8PNu4GqYkcFyEwtl2WN3WGR4aIH9Wg5UaHt8PU+AILcg2lG0hX6aROuAhOsackv
+h71zxFIm4QQ/mZKc5TQ11l5+GUIGhhdhKHv9jNwVA//fI2VNzH/SQIm+i8RRofle
+qpoIdShu+NtY4n3OPkLb40egkG1SbD9yUpz09ua13Gj4xYwFU60=
+=G8QU
 -----END PGP SIGNATURE-----
 
---oOB74oR0WcNeq9Zb--
+--qM81t570OJUP5TU/--
