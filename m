@@ -2,140 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB11E14D5E6
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2020 06:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D90D14D734
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2020 09:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbgA3FLj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 Jan 2020 00:11:39 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:43143 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726415AbgA3FLj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Jan 2020 00:11:39 -0500
-X-UUID: 94b7b1f6af034ef6a864822b6c11a7e0-20200130
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=JoSkWzJhL3K78ZPY26NsC48gyU9x1jqMz9T3mvBicXc=;
-        b=a4oEgEetRAIlORGNIf0QwQnZ4PtLosMvG3j0XZSaBIAtME9CY/mp6ZP1/NNjwBEfHs9pfmyg+paG1ToB1nqFhrHmdBji7E5cq7f6HHFxlW0vSFLEs9x6MKzx72T2z4Z7YL/+OxuDiWs3sMSs6UxBpTc4HKHrs2m6ipeFJ4M8GAI=;
-X-UUID: 94b7b1f6af034ef6a864822b6c11a7e0-20200130
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <bibby.hsieh@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 680416610; Thu, 30 Jan 2020 13:11:31 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 30 Jan 2020 13:10:46 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 30 Jan 2020 13:11:33 +0800
-From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        <linux-i2c@vger.kernel.org>
-CC:     <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <srv_heupstream@mediatek.com>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <devicetree@vger.kernel.org>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>
-Subject: [PATCH v11 2/2] i2c: core: support bus regulator controlling in adapter
-Date:   Thu, 30 Jan 2020 13:11:28 +0800
-Message-ID: <20200130051128.14878-3-bibby.hsieh@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200130051128.14878-1-bibby.hsieh@mediatek.com>
-References: <20200130051128.14878-1-bibby.hsieh@mediatek.com>
+        id S1726721AbgA3IDN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 Jan 2020 03:03:13 -0500
+Received: from sauhun.de ([88.99.104.3]:46338 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726464AbgA3IDN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 30 Jan 2020 03:03:13 -0500
+Received: from localhost (p54B33261.dip0.t-ipconnect.de [84.179.50.97])
+        by pokefinder.org (Postfix) with ESMTPSA id 6EABE2C0697;
+        Thu, 30 Jan 2020 09:03:11 +0100 (CET)
+Date:   Thu, 30 Jan 2020 09:03:07 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     alex.williams@ettus.com
+Cc:     mical.simek@xilinx.com, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alex Williams <alex.williams@ni.com>
+Subject: Re: [PATCH] i2c: cadence: Handle transfer_size rollover
+Message-ID: <20200130080307.GA2208@ninjato>
+References: <20190131213957.11568-1-alex.williams@ettus.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="J/dobhs11T7y2rNN"
+Content-Disposition: inline
+In-Reply-To: <20190131213957.11568-1-alex.williams@ettus.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-QWx0aG91Z2ggaW4gdGhlIG1vc3QgcGxhdGZvcm1zLCB0aGUgYnVzIHBvd2VyIG9mIGkyYw0KYXJl
-IGFsd2F5IG9uLCBzb21lIHBsYXRmb3JtcyBkaXNhYmxlIHRoZSBpMmMgYnVzIHBvd2VyDQppbiBv
-cmRlciB0byBtZWV0IGxvdyBwb3dlciByZXF1ZXN0Lg0KDQpXZSBnZXQgYW5kIGVuYWJsZSBidWxr
-IHJlZ3VsYXRvciBpbiBpMmMgYWRhcHRlciBkZXZpY2UuDQoNClNpZ25lZC1vZmYtYnk6IEJpYmJ5
-IEhzaWVoIDxiaWJieS5oc2llaEBtZWRpYXRlay5jb20+DQotLS0NCiBkcml2ZXJzL2kyYy9pMmMt
-Y29yZS1iYXNlLmMgfCA4MSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQog
-aW5jbHVkZS9saW51eC9pMmMuaCAgICAgICAgIHwgIDIgKw0KIDIgZmlsZXMgY2hhbmdlZCwgODMg
-aW5zZXJ0aW9ucygrKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9pMmMvaTJjLWNvcmUtYmFzZS5j
-IGIvZHJpdmVycy9pMmMvaTJjLWNvcmUtYmFzZS5jDQppbmRleCA5MzMzYzg2NWQ0YTkuLjBmYmFi
-MWMzZDU0MiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2UuYw0KKysrIGIv
-ZHJpdmVycy9pMmMvaTJjLWNvcmUtYmFzZS5jDQpAQCAtMzA2LDYgKzMwNiw3IEBAIHN0YXRpYyBp
-bnQgaTJjX3NtYnVzX2hvc3Rfbm90aWZ5X3RvX2lycShjb25zdCBzdHJ1Y3QgaTJjX2NsaWVudCAq
-Y2xpZW50KQ0KIHN0YXRpYyBpbnQgaTJjX2RldmljZV9wcm9iZShzdHJ1Y3QgZGV2aWNlICpkZXYp
-DQogew0KIAlzdHJ1Y3QgaTJjX2NsaWVudAkqY2xpZW50ID0gaTJjX3ZlcmlmeV9jbGllbnQoZGV2
-KTsNCisJc3RydWN0IGkyY19hZGFwdGVyCSphZGFwID0gY2xpZW50LT5hZGFwdGVyOw0KIAlzdHJ1
-Y3QgaTJjX2RyaXZlcgkqZHJpdmVyOw0KIAlpbnQgc3RhdHVzOw0KIA0KQEAgLTM3MSw2ICszNzIs
-MTIgQEAgc3RhdGljIGludCBpMmNfZGV2aWNlX3Byb2JlKHN0cnVjdCBkZXZpY2UgKmRldikNCiAN
-CiAJZGV2X2RiZyhkZXYsICJwcm9iZVxuIik7DQogDQorCXN0YXR1cyA9IHJlZ3VsYXRvcl9lbmFi
-bGUoYWRhcC0+YnVzX3JlZ3VsYXRvcik7DQorCWlmIChzdGF0dXMgIT0gMCkgew0KKwkJZGV2X2Vy
-cigmYWRhcC0+ZGV2LCAiRmFpbGVkIHRvIGVuYWJsZSBwb3dlciByZWd1bGF0b3JcbiIpOw0KKwkJ
-Z290byBlcnJfY2xlYXJfd2FrZXVwX2lycTsNCisJfQ0KKw0KIAlzdGF0dXMgPSBvZl9jbGtfc2V0
-X2RlZmF1bHRzKGRldi0+b2Zfbm9kZSwgZmFsc2UpOw0KIAlpZiAoc3RhdHVzIDwgMCkNCiAJCWdv
-dG8gZXJyX2NsZWFyX3dha2V1cF9pcnE7DQpAQCAtNDA3LDYgKzQxNCw3IEBAIHN0YXRpYyBpbnQg
-aTJjX2RldmljZV9wcm9iZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQogc3RhdGljIGludCBpMmNfZGV2
-aWNlX3JlbW92ZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQogew0KIAlzdHJ1Y3QgaTJjX2NsaWVudAkq
-Y2xpZW50ID0gaTJjX3ZlcmlmeV9jbGllbnQoZGV2KTsNCisJc3RydWN0IGkyY19hZGFwdGVyICAg
-ICAgKmFkYXAgPSBjbGllbnQtPmFkYXB0ZXI7DQogCXN0cnVjdCBpMmNfZHJpdmVyCSpkcml2ZXI7
-DQogCWludCBzdGF0dXMgPSAwOw0KIA0KQEAgLTQyMCw2ICs0MjgsOCBAQCBzdGF0aWMgaW50IGky
-Y19kZXZpY2VfcmVtb3ZlKHN0cnVjdCBkZXZpY2UgKmRldikNCiAJfQ0KIA0KIAlkZXZfcG1fZG9t
-YWluX2RldGFjaCgmY2xpZW50LT5kZXYsIHRydWUpOw0KKwlpZiAoIXBtX3J1bnRpbWVfc3RhdHVz
-X3N1c3BlbmRlZCgmY2xpZW50LT5kZXYpKQ0KKwkJcmVndWxhdG9yX2Rpc2FibGUoYWRhcC0+YnVz
-X3JlZ3VsYXRvcik7DQogDQogCWRldl9wbV9jbGVhcl93YWtlX2lycSgmY2xpZW50LT5kZXYpOw0K
-IAlkZXZpY2VfaW5pdF93YWtldXAoJmNsaWVudC0+ZGV2LCBmYWxzZSk7DQpAQCAtNDMxLDYgKzQ0
-MSw3MSBAQCBzdGF0aWMgaW50IGkyY19kZXZpY2VfcmVtb3ZlKHN0cnVjdCBkZXZpY2UgKmRldikN
-CiAJcmV0dXJuIHN0YXR1czsNCiB9DQogDQorI2lmZGVmIENPTkZJR19QTV9TTEVFUA0KK3N0YXRp
-YyBpbnQgaTJjX3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQorew0KKwlzdHJ1Y3QgaTJjX2Ns
-aWVudCAqY2xpZW50ID0gaTJjX3ZlcmlmeV9jbGllbnQoZGV2KTsNCisJc3RydWN0IGkyY19hZGFw
-dGVyICphZGFwID0gY2xpZW50LT5hZGFwdGVyOw0KKwlpbnQgZXJyOw0KKw0KKwlpZiAocG1fcnVu
-dGltZV9zdGF0dXNfc3VzcGVuZGVkKCZjbGllbnQtPmRldikpIHsNCisJCWVyciA9IHJlZ3VsYXRv
-cl9lbmFibGUoYWRhcC0+YnVzX3JlZ3VsYXRvcik7DQorCQlpZiAoZXJyKQ0KKwkJCXJldHVybiBl
-cnI7DQorCX0NCisNCisJcmV0dXJuIHBtX2dlbmVyaWNfcmVzdW1lKCZjbGllbnQtPmRldik7DQor
-fQ0KKw0KK3N0YXRpYyBpbnQgaTJjX3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQ0KK3sNCisJ
-c3RydWN0IGkyY19jbGllbnQgKmNsaWVudCA9IGkyY192ZXJpZnlfY2xpZW50KGRldik7DQorCXN0
-cnVjdCBpMmNfYWRhcHRlciAqYWRhcCA9IGNsaWVudC0+YWRhcHRlcjsNCisJaW50IGVycjsNCisN
-CisJaWYgKCFwbV9ydW50aW1lX3N0YXR1c19zdXNwZW5kZWQoJmNsaWVudC0+ZGV2KSkgew0KKwkJ
-ZXJyID0gcmVndWxhdG9yX2Rpc2FibGUoYWRhcC0+YnVzX3JlZ3VsYXRvcik7DQorCQlpZiAoZXJy
-KQ0KKwkJCXJldHVybiBlcnI7DQorCX0NCisNCisJcmV0dXJuIHBtX2dlbmVyaWNfc3VzcGVuZCgm
-Y2xpZW50LT5kZXYpOw0KK30NCisjZW5kaWYNCisNCisjaWZkZWYgQ09ORklHX1BNDQorc3RhdGlj
-IGludCBpMmNfcnVudGltZV9yZXN1bWUoc3RydWN0IGRldmljZSAqZGV2KQ0KK3sNCisJc3RydWN0
-IGkyY19jbGllbnQgKmNsaWVudCA9IGkyY192ZXJpZnlfY2xpZW50KGRldik7DQorCXN0cnVjdCBp
-MmNfYWRhcHRlciAqYWRhcCA9IGNsaWVudC0+YWRhcHRlcjsNCisJaW50IGVycjsNCisNCisJZXJy
-ID0gcmVndWxhdG9yX2VuYWJsZShhZGFwLT5idXNfcmVndWxhdG9yKTsNCisJaWYgKGVycikNCisJ
-CXJldHVybiBlcnI7DQorDQorCXJldHVybiBwbV9nZW5lcmljX3J1bnRpbWVfcmVzdW1lKCZjbGll
-bnQtPmRldik7DQorfQ0KKw0KK3N0YXRpYyBpbnQgaTJjX3J1bnRpbWVfc3VzcGVuZChzdHJ1Y3Qg
-ZGV2aWNlICpkZXYpDQorew0KKwlzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50ID0gaTJjX3Zlcmlm
-eV9jbGllbnQoZGV2KTsNCisJc3RydWN0IGkyY19hZGFwdGVyICphZGFwID0gY2xpZW50LT5hZGFw
-dGVyOw0KKwlpbnQgZXJyOw0KKw0KKwllcnIgPSBwbV9nZW5lcmljX3J1bnRpbWVfc3VzcGVuZCgm
-Y2xpZW50LT5kZXYpOw0KKwlpZiAoZXJyKQ0KKwkJcmV0dXJuIGVycjsNCisNCisJcmV0dXJuIHJl
-Z3VsYXRvcl9kaXNhYmxlKGFkYXAtPmJ1c19yZWd1bGF0b3IpOw0KK30NCisjZW5kaWYNCisNCitz
-dGF0aWMgY29uc3Qgc3RydWN0IGRldl9wbV9vcHMgaTJjX2RldmljZV9wbSA9IHsNCisJU0VUX1NZ
-U1RFTV9TTEVFUF9QTV9PUFMoaTJjX3N1c3BlbmQsIGkyY19yZXN1bWUpDQorCVNFVF9SVU5USU1F
-X1BNX09QUyhpMmNfcnVudGltZV9zdXNwZW5kLCBpMmNfcnVudGltZV9yZXN1bWUsIE5VTEwpDQor
-fTsNCisNCiBzdGF0aWMgdm9pZCBpMmNfZGV2aWNlX3NodXRkb3duKHN0cnVjdCBkZXZpY2UgKmRl
-dikNCiB7DQogCXN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQgPSBpMmNfdmVyaWZ5X2NsaWVudChk
-ZXYpOw0KQEAgLTQ4OCw2ICs1NjMsNyBAQCBzdHJ1Y3QgYnVzX3R5cGUgaTJjX2J1c190eXBlID0g
-ew0KIAkucHJvYmUJCT0gaTJjX2RldmljZV9wcm9iZSwNCiAJLnJlbW92ZQkJPSBpMmNfZGV2aWNl
-X3JlbW92ZSwNCiAJLnNodXRkb3duCT0gaTJjX2RldmljZV9zaHV0ZG93biwNCisJLnBtCQk9ICZp
-MmNfZGV2aWNlX3BtLA0KIH07DQogRVhQT1JUX1NZTUJPTF9HUEwoaTJjX2J1c190eXBlKTsNCiAN
-CkBAIC0xMzUxLDYgKzE0MjcsMTEgQEAgc3RhdGljIGludCBpMmNfcmVnaXN0ZXJfYWRhcHRlcihz
-dHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXApDQogCQlnb3RvIG91dF9yZWc7DQogDQogCWRldl9kYmco
-JmFkYXAtPmRldiwgImFkYXB0ZXIgWyVzXSByZWdpc3RlcmVkXG4iLCBhZGFwLT5uYW1lKTsNCisJ
-YWRhcC0+YnVzX3JlZ3VsYXRvciA9IGRldm1fcmVndWxhdG9yX2dldCgmYWRhcC0+ZGV2LCAiYnVz
-Iik7DQorCWlmIChJU19FUlIoYWRhcC0+YnVzX3JlZ3VsYXRvcikpIHsNCisJCXJlcyA9IFBUUl9F
-UlIoYWRhcC0+YnVzX3JlZ3VsYXRvcik7DQorCQlnb3RvIG91dF9yZWc7DQorCX0NCiANCiAJcG1f
-cnVudGltZV9ub19jYWxsYmFja3MoJmFkYXAtPmRldik7DQogCXBtX3N1c3BlbmRfaWdub3JlX2No
-aWxkcmVuKCZhZGFwLT5kZXYsIHRydWUpOw0KZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvaTJj
-LmggYi9pbmNsdWRlL2xpbnV4L2kyYy5oDQppbmRleCBkMmY3ODY3MDY2NTcuLmQ4NGZmNzgxOGE2
-YiAxMDA2NDQNCi0tLSBhL2luY2x1ZGUvbGludXgvaTJjLmgNCisrKyBiL2luY2x1ZGUvbGludXgv
-aTJjLmgNCkBAIC0xNSw2ICsxNSw3IEBADQogI2luY2x1ZGUgPGxpbnV4L2RldmljZS5oPgkvKiBm
-b3Igc3RydWN0IGRldmljZSAqLw0KICNpbmNsdWRlIDxsaW51eC9zY2hlZC5oPgkvKiBmb3IgY29t
-cGxldGlvbiAqLw0KICNpbmNsdWRlIDxsaW51eC9tdXRleC5oPg0KKyNpbmNsdWRlIDxsaW51eC9y
-ZWd1bGF0b3IvY29uc3VtZXIuaD4NCiAjaW5jbHVkZSA8bGludXgvcnRtdXRleC5oPg0KICNpbmNs
-dWRlIDxsaW51eC9pcnFkb21haW4uaD4JCS8qIGZvciBIb3N0IE5vdGlmeSBJUlEgKi8NCiAjaW5j
-bHVkZSA8bGludXgvb2YuaD4JCS8qIGZvciBzdHJ1Y3QgZGV2aWNlX25vZGUgKi8NCkBAIC03MjMs
-NiArNzI0LDcgQEAgc3RydWN0IGkyY19hZGFwdGVyIHsNCiAJY29uc3Qgc3RydWN0IGkyY19hZGFw
-dGVyX3F1aXJrcyAqcXVpcmtzOw0KIA0KIAlzdHJ1Y3QgaXJxX2RvbWFpbiAqaG9zdF9ub3RpZnlf
-ZG9tYWluOw0KKwlzdHJ1Y3QgcmVndWxhdG9yICpidXNfcmVndWxhdG9yOw0KIH07DQogI2RlZmlu
-ZSB0b19pMmNfYWRhcHRlcihkKSBjb250YWluZXJfb2YoZCwgc3RydWN0IGkyY19hZGFwdGVyLCBk
-ZXYpDQogDQotLSANCjIuMTguMA0K
 
+--J/dobhs11T7y2rNN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jan 31, 2019 at 01:39:57PM -0800, alex.williams@ettus.com wrote:
+> From: Alex Williams <alex.williams@ni.com>
+>=20
+> Under certain conditions, Cadence's I2C controller's transfer_size
+> register will roll over and generate invalid read transactions. Before
+> this change, the ISR relied solely on the RXDV bit to determine when to
+> write more data to the user's buffer. The invalid read data would cause
+> overruns, smashing stacks and worse.
+>=20
+> This change stops the buffer writes to the requested boundary and
+> reports the error. The controller will be reset so normal transactions
+> may resume.
+>=20
+> Signed-off-by: Alex Williams <alex.williams@ni.com>
+
+Applied to for-next with another Rev-by from Michal given in another
+thread, thanks!
+
+
+--J/dobhs11T7y2rNN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4yjbcACgkQFA3kzBSg
+Kbb8RxAAiCoAtge6yROLbqYc4Ruq1gKWnE76UU2AbpwSK1GEFdyKat70l9hN0Edb
+7ISc+b+z9X8gYfm8Sx8CjKoqC+B4ldxyZM+hNCOzkMfzbIGUNTllajhZIAb5MEhI
+E405O36pd94ogiFGcTALsgtLgfaC2HDzVTqm5xOyJqJRte+W0palPx4UL6+33PbR
+QYmMkPhA+6AUlnCXsrtDjM13eg3u6gRn/IG/ZfztOPufyzsE3sHaMgyqLhE1puI/
+5N3kjDQQAfespuTspjLm8S7J4cqSxEYpieog6II6NGCRFQTsfiYv6iHCzyywJ5Xk
+t5CgEaqnqZBzr8WFWmpgngz33RrYBTEOPbM5WScvVKaMfm3bKAP20Q23yEaDwZAC
+SfI0SQJAyJ9EZi/z2NuDRi8QgED5hoqchWN0MT9VYhGsSEfZA4q4LiECkHL8Zg85
+VxZMCZcfQHzER3epg0P3imvP5slj6L4LhSzg2mu9JdHUSqcsjIA16E+Di9kZ/eCF
+rJkh8Sb4tK1ClVlnTW4/YtmfC7Ru0XrN5ZFeugZxUurByG5Q3NtezkJHAzrVJGFz
+L3AbX0Fl7lA3/nX/astrsUgG4sXoOG7bWW/7FiA0jWPrX+WglbEbXZQ64I6MXN5E
+TOjyGoxiXCU2zyrlqeiHwf7XDRmzMpxAOLYZjmKgibcX1OcjLBw=
+=WTaX
+-----END PGP SIGNATURE-----
+
+--J/dobhs11T7y2rNN--
