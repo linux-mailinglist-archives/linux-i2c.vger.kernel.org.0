@@ -2,73 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F69F150616
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2020 13:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD98F15072A
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2020 14:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727970AbgBCMX5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Feb 2020 07:23:57 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:36879 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727907AbgBCMX5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Feb 2020 07:23:57 -0500
-Received: by mail-wr1-f65.google.com with SMTP id w15so17831113wru.4;
-        Mon, 03 Feb 2020 04:23:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3v/Vs0yeJ3ecKwEer6nb6dCD848+syrgOhZ1MgNf01o=;
-        b=fqKSl7X0LutSAY99vuoVKB6cxiwFTzr1G1eDlVI4oxgGt1QDruCijmCtNXclpwOHuZ
-         QZYJX0eD5KbnjcYZ+GKYovEqcwIJHduocWVnh5DQLcRSMrEgBx08vGgevNZiHExlkfQg
-         ffp+pNGtx0xx2HKY+Cs8TCU/9xjNnFlRe1vJZCGGAWl/OJgEyjTazaK5LVQiffqf0e1N
-         1CwIF57bt2Pmi4WFSRwapdwYDQRi4+t5c2WbdlZsiSBG7WI9GEmHds24MBZkLVGBFxRx
-         jbJeQDCEpgL/s0lv8L6Mdy78gOp7vFBvxoIF1RWQCDAkz8qdbxUIlJ/r+EEqgKr4VIUT
-         Dr/w==
-X-Gm-Message-State: APjAAAXVskE183SbV+q8jt3k3TBc35xpZx8hhIdBOX7Xna64Z3X5atey
-        Sb157QCu/40FF2/dYqEbvQ==
-X-Google-Smtp-Source: APXvYqzm7oTIsPC2zqv1FVF4iP/x1vKYv6xy17lG21/YsbaWyAoqw9qpdPt25TTkhLOPw4zWj+CrZQ==
-X-Received: by 2002:a5d:620b:: with SMTP id y11mr15162486wru.230.1580732635248;
-        Mon, 03 Feb 2020 04:23:55 -0800 (PST)
-Received: from rob-hp-laptop ([212.187.182.163])
-        by smtp.gmail.com with ESMTPSA id n1sm25145622wrw.52.2020.02.03.04.23.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2020 04:23:54 -0800 (PST)
-Received: (nullmailer pid 26802 invoked by uid 1000);
-        Mon, 03 Feb 2020 12:23:52 -0000
-Date:   Mon, 3 Feb 2020 12:23:52 +0000
-From:   Rob Herring <robh@kernel.org>
-To:     Alain Volmat <alain.volmat@st.com>
-Cc:     wsa@the-dreams.de, robh+dt@kernel.org, mark.rutland@arm.com,
-        pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@st.com, alain.volmat@st.com
-Subject: Re: [PATCH 2/5] dt-bindings: i2c: i2c-stm32f7: add st,stm32mp15-i2c
- compatible
-Message-ID: <20200203122352.GA26745@bogus>
-References: <1579795970-22319-1-git-send-email-alain.volmat@st.com>
- <1579795970-22319-3-git-send-email-alain.volmat@st.com>
+        id S1727198AbgBCN1E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Feb 2020 08:27:04 -0500
+Received: from mx2.suse.de ([195.135.220.15]:42348 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727077AbgBCN1E (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 3 Feb 2020 08:27:04 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id DBDA8AD07;
+        Mon,  3 Feb 2020 13:27:02 +0000 (UTC)
+Date:   Mon, 3 Feb 2020 14:27:01 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Lei YU <mine260309@gmail.com>
+Subject: Re: [PATCH 2/2] docs: i2c: dev-interface: document the actual
+ implementation
+Message-ID: <20200203142701.5c1db1ba@endymion>
+In-Reply-To: <ffac66db-0b58-b832-f6b5-d1a1da7a1da9@lucaceresoli.net>
+References: <20200123105246.67732e33@endymion>
+        <20200123111137.5899fa5a@endymion>
+        <20200123110909.GG1105@ninjato>
+        <ffac66db-0b58-b832-f6b5-d1a1da7a1da9@lucaceresoli.net>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1579795970-22319-3-git-send-email-alain.volmat@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 23 Jan 2020 17:12:47 +0100, Alain Volmat wrote:
-> Add a new stm32mp15 specific compatible to handle FastMode+
-> registers which are different on the stm32mp15 compared
-> to the stm32f7 or stm32h7.
-> 
-> Signed-off-by: Alain Volmat <alain.volmat@st.com>
-> ---
->  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
+Hi Luca, Wolfram,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Thu, 23 Jan 2020 14:42:33 +0100, Luca Ceresoli wrote:
+> On 23/01/20 12:09, Wolfram Sang wrote:
+> > On Thu, Jan 23, 2020 at 11:11:37AM +0100, Jean Delvare wrote:  
+> >> The old i2c-dev API based on inline functions is long gone, we have
+> >> libi2c now which implements the same as real functions and comes with
+> >> complete API documentation. Update the dev-interface documentation
+> >> file accordingly to only mention what can be done without the
+> >> library, and redirect the reader to the libi2c manual page for the
+> >> rest.
+> >>
+> >> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> >> Reported-by: Lei YU <mine260309@gmail.com>
+> >> Cc: Wolfram Sang <wsa@the-dreams.de>
+> >> Cc: Luca Ceresoli <luca@lucaceresoli.net>  
+> > 
+> > I wonder if we shouldn't move the 'C library'  paragraph before the 'C
+> > example'? To make sure people are aware of it (and use it) early before
+> > digging into the low-level C code?  
+> 
+> I agree, it would be better. For the rest it look good.
+
+Hmmm. It's not like you can do everything with libi2c so you should
+always use it. There are several things that can't be done with libi2c
+so you will have to do them "manually". Anything that doesn't fit in the
+SMBus specification basically. As a matter of fact, i2ctransfer does
+not use libi2c.
+
+Also, even when using libi2c, you still need to explicitly open the
+device node, set the slave address, and close the device when you are
+done (just seeing that's missing from the C example but it should be
+added). So the C example is still relevant even if you use libi2c.
+
+So I'm not sure swapping the sections makes that much sense. What would
+help on the other hand is to add a pointer to the C library section at
+the point of the C example where using the library would simplify the
+code. Would that work for you?
+
+-- 
+Jean Delvare
+SUSE L3 Support
