@@ -2,83 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2F8150358
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2020 10:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE881504DA
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2020 12:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727827AbgBCJ1C (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Feb 2020 04:27:02 -0500
-Received: from mga06.intel.com ([134.134.136.31]:27459 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727817AbgBCJ1C (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 3 Feb 2020 04:27:02 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Feb 2020 01:23:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,397,1574150400"; 
-   d="scan'208";a="219325171"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga007.jf.intel.com with ESMTP; 03 Feb 2020 01:23:36 -0800
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1iyXxC-0004QY-2u; Mon, 03 Feb 2020 11:23:38 +0200
-Date:   Mon, 3 Feb 2020 11:23:38 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S1727575AbgBCLE5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Feb 2020 06:04:57 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:38583 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727554AbgBCLE4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Feb 2020 06:04:56 -0500
+Received: by mail-ot1-f68.google.com with SMTP id z9so13211204oth.5;
+        Mon, 03 Feb 2020 03:04:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=39ey6dAvb7XEBXTbA1g4KlU1WTF7xT5pdjYUkxwmTMU=;
+        b=J2lTEKU3fkx4Keh+2hfhaG+6pzAmp7ZRaN8oE8BKHjUt+TMaWFyJRyN5z29XYO38XU
+         cv+1r6rbo2GW/ghF+o+eGF9+VGorr2s4Ipc9BsxgyaH7iVUxoFYmH7xr9Nok/RCA+3tG
+         lgc4vGrdw8mMVGruyuRf+/81MM2d3v9EQjTTz08ed01CKBq5COT6ujNbLFXLMSpT3YfU
+         xvXuJSYebA7LK/MSZmG3NDGerb1H6ZmuXMGC3VIt6LOb6feQQ70rOqSeH+tCOnAJpkOe
+         EFvAhfjguzzONYgDKovU8ooPg6IDBvh43TXFsquEpfmttiFMb3RaCS7GC555zDZzxsxz
+         W6rg==
+X-Gm-Message-State: APjAAAX7muTCi10cnTT3z1fuZhuY/RKYjO46Lv1aw8M0KVXoUFOlbNYR
+        MZmz1k96Me6UCtPmWf95Ls014BXYgPAuL1T92jY=
+X-Google-Smtp-Source: APXvYqwiD1gMIppQtu9gB4G8UbdXVz2d8mTCHH7J5oQ6OMEMxQVhqrXC8gY9DjZgRWIukbhAWVTGH7dwjt5uq8xZFAU=
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr17528161otd.266.1580727894844;
+ Mon, 03 Feb 2020 03:04:54 -0800 (PST)
+MIME-Version: 1.0
+References: <1580693767-5185-1-git-send-email-guohanjun@huawei.com>
+In-Reply-To: <1580693767-5185-1-git-send-email-guohanjun@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 3 Feb 2020 12:04:43 +0100
+Message-ID: <CAJZ5v0jBbhyueE4LGp5NWKz_o2edY1EDuhaomVuSj=CmdjU_yg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] ACPI / APD: Add clock frequency for Hisilicon
+ Hip08-Lite I2C controller
 To:     Hanjun Guo <guohanjun@huawei.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linuxarm@huawei.com, Sheng Feng <fengsheng5@huawei.com>
-Subject: Re: [PATCH v2 2/2] i2c: designware: Add ACPI HID for Hisilicon
- Hip08-Lite I2C controller
-Message-ID: <20200203092338.GY32742@smile.fi.intel.com>
-References: <1580693767-5185-1-git-send-email-guohanjun@huawei.com>
- <1580693767-5185-2-git-send-email-guohanjun@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1580693767-5185-2-git-send-email-guohanjun@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        Sheng Feng <fengsheng5@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Feb 03, 2020 at 09:36:07AM +0800, Hanjun Guo wrote:
-> Add ACPI HID HISI02A3 for Hisilicon Hip08 Lite, which has different
-> clock frequency from Hip08 for I2C controller.
-> 
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
+On Mon, Feb 3, 2020 at 2:41 AM Hanjun Guo <guohanjun@huawei.com> wrote:
+>
+> I2C clock frequency of Designware ip for Hisilicon Hip08 Lite
+> is 125M, use a new ACPI HID to enable it.
+>
 > Tested-by: Sheng Feng <fengsheng5@huawei.com>
 > Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
 > ---
->  drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-> index 16dd338..3b7d58c 100644
-> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-> @@ -130,6 +130,7 @@ static int dw_i2c_acpi_configure(struct platform_device *pdev)
->  	{ "APMC0D0F", 0 },
->  	{ "HISI02A1", 0 },
->  	{ "HISI02A2", 0 },
-> +	{ "HISI02A3", 0 },
->  	{ }
+>
+> v2:
+>  - Reverse the order of the two patches suggested by Andy;
+>
+>  drivers/acpi/acpi_apd.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
+> index 71511ae..ba2612e 100644
+> --- a/drivers/acpi/acpi_apd.c
+> +++ b/drivers/acpi/acpi_apd.c
+> @@ -161,6 +161,11 @@ static int st_misc_setup(struct apd_private_data *pdata)
+>         .fixed_clk_rate = 250000000,
 >  };
->  MODULE_DEVICE_TABLE(acpi, dw_i2c_acpi_match);
-> -- 
-> 1.7.12.4
-> 
+>
+> +static const struct apd_device_desc hip08_lite_i2c_desc = {
+> +       .setup = acpi_apd_setup,
+> +       .fixed_clk_rate = 125000000,
+> +};
+> +
+>  static const struct apd_device_desc thunderx2_i2c_desc = {
+>         .setup = acpi_apd_setup,
+>         .fixed_clk_rate = 125000000,
+> @@ -243,6 +248,7 @@ static int acpi_apd_create_device(struct acpi_device *adev,
+>         { "CAV9007",  APD_ADDR(thunderx2_i2c_desc) },
+>         { "HISI02A1", APD_ADDR(hip07_i2c_desc) },
+>         { "HISI02A2", APD_ADDR(hip08_i2c_desc) },
+> +       { "HISI02A3", APD_ADDR(hip08_lite_i2c_desc) },
+>         { "HISI0173", APD_ADDR(hip08_spi_desc) },
+>         { "NXP0001", APD_ADDR(nxp_i2c_desc) },
+>  #endif
+> --
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Both patches in the series applied as 5.6 material, thanks!
