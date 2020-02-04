@@ -2,81 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 258531521BD
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Feb 2020 22:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EC91521CD
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Feb 2020 22:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727514AbgBDVOo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Feb 2020 16:14:44 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:37038 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727412AbgBDVOo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Feb 2020 16:14:44 -0500
-Received: by mail-pj1-f68.google.com with SMTP id m13so1962778pjb.2
-        for <linux-i2c@vger.kernel.org>; Tue, 04 Feb 2020 13:14:44 -0800 (PST)
+        id S1727387AbgBDVSI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Feb 2020 16:18:08 -0500
+Received: from mail-ua1-f65.google.com ([209.85.222.65]:39717 "EHLO
+        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727620AbgBDVSH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Feb 2020 16:18:07 -0500
+Received: by mail-ua1-f65.google.com with SMTP id 73so31194uac.6
+        for <linux-i2c@vger.kernel.org>; Tue, 04 Feb 2020 13:18:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=sJ6dt4IAx4lLUXsNXyTvXPa3oissv4BK7c1F70A7bh8=;
-        b=oRSdIwhJN0CghtS9RntV6TwOsdvFrxSFJjT6YQdAQnM2F+VX+syfEAu3ehPlGD1jWf
-         BRSf1W4q4aBPpwq14CYmdOrmUNcI4nkmCgB/IHekGeVgTR/XKpWfVyoo7nO1MoauhY/3
-         UoqObmqt9o+bSi8pbgkIT7OQF2qPX2omMb1FvlHsasHZU1S8yRbs+AVgeD3fr/1+lzKt
-         t9cEQd9Gud35qSLkVw5cogBK30lPAUZ2dWD1a/3a9ZTE0VIoFYwSu7/wItIUMyaGXOZb
-         os2Y2ITzMrVQics/jxxFQHM55f70Y/ISAv+mvHEz9jJ7m1JLJ9BJIyRU+qrwIqkkvajG
-         Z3jA==
+        bh=+YV7XvdlsIH5IDESBp45bVi5suaLif02bOusLL/UcAg=;
+        b=bphTE9jnt5pwshYrT5bVIe6w+pYy2uTHTOXG6zCT/v03+zOC2lc8VCPBqK8yQrSx/5
+         mdNdS0Hg9A8cnU6gYq/C50cIyByUlThuUSRMW9Hn/rWs/3L7rWzw4UvULJ4VQWtnGpRg
+         xa9In03NU2Po3Hd6I1ppVTeQh0gOd3walkFVE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sJ6dt4IAx4lLUXsNXyTvXPa3oissv4BK7c1F70A7bh8=;
-        b=KFRQsN+8pLJusCvHbvS94+TP5RwLMm/SexeU7NgU1i5RnP3C/6BL2r2YH6FzWa8H9m
-         e37bEo7dgVXTRVLvgHPMN/3SqQNwTt4cYx8hOkyM0aSYTQfdzui6S0zygANRHHgXVOzo
-         8/y+iKrxbI7rljtTmnVaRgP89QNBOsJxiUuyoPzhAux6iQ/WeZZKJ44Uh3qV63dZNy2X
-         zFaFtzNcHJYHdAk3pWI7sT1QcxMkPUe7pSSZ4QuIqKh+QP937vja0b76LflUAagkY2VI
-         ni8Ql2PdOkAuN9RYtNwcGWbuYG8/BdGgkJa9N78J/ZHo5kyR6zij4iVUfpl7W0DlboIV
-         1qOA==
-X-Gm-Message-State: APjAAAWOZe7+h+B5EnxRUDeWQBY5ntln/sD5ZuliH5lJt3oaDCNHKD/W
-        2hOz7X705FD5o2UJXTNW8+tuCyWmvtIUZKEiuVxt5A==
-X-Google-Smtp-Source: APXvYqxlNPmkXWAk4ntFo8+j7vPZz1JM/Js336XATIdIxno0pMF0BYtKzho9m+KZys/drne1OuHaScjgbBxZP4jx/Sg=
-X-Received: by 2002:a17:90a:c390:: with SMTP id h16mr1318164pjt.131.1580850883761;
- Tue, 04 Feb 2020 13:14:43 -0800 (PST)
+        bh=+YV7XvdlsIH5IDESBp45bVi5suaLif02bOusLL/UcAg=;
+        b=uUgkypcIJrno5LKIqcSHLmNMQjJROMrVhtfsoi0gInheYnd/UikrHn7bmLVLeWjP+3
+         dWQg6m/uh9+BqbPirR3x4LmKKr/E2Rt7OhtA2Z20/PA3upB466Cyy8n0zF/awcRToD2Z
+         /n3Bv+OW1emyFlm3itEP/qwZc41IoqpVU280bMsTgyv/bA6esQRk0ruRFGGtrnBGEKfs
+         syO+FGpkZeJ4RLzP8ws+w0rlWlHG+b8VdFuuewI2WtRK9SHs3sJxIx6z49ZMCsfkbUSB
+         5H3d37KFQcSeph/dhzDNe99y3VQLoux2GuPmtUuUwLmtKy2f4Nys3QqgQZCcy8hCCWsL
+         m74A==
+X-Gm-Message-State: APjAAAUtX/BC3d6EY2NPRY8vmVwqXXBFTkPnvT3yYtAX25mIy3u8vjaU
+        HVK952Lbz9sk3nf2QNQwQr7bI3+PxPE=
+X-Google-Smtp-Source: APXvYqxps+/sVNzfZfIweq6NsB+CPzsMd8Yz8xhhPweLPignvl0svPIw7KC1Q9m8/9CouVIHMI/2sw==
+X-Received: by 2002:ab0:2358:: with SMTP id h24mr2409574uao.67.1580851086783;
+        Tue, 04 Feb 2020 13:18:06 -0800 (PST)
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
+        by smtp.gmail.com with ESMTPSA id d191sm4160842vka.37.2020.02.04.13.18.05
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Feb 2020 13:18:06 -0800 (PST)
+Received: by mail-vs1-f48.google.com with SMTP id t12so12427107vso.13
+        for <linux-i2c@vger.kernel.org>; Tue, 04 Feb 2020 13:18:05 -0800 (PST)
+X-Received: by 2002:a67:e342:: with SMTP id s2mr19486104vsm.198.1580851085540;
+ Tue, 04 Feb 2020 13:18:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20200204193152.124980-1-swboyd@chromium.org> <20200204193152.124980-3-swboyd@chromium.org>
-In-Reply-To: <20200204193152.124980-3-swboyd@chromium.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 4 Feb 2020 13:14:31 -0800
-Message-ID: <CAFd5g4536r2p7Dg3Hv=BbdmgkiT+FvBvp+NYV6dzocEmaDFi+A@mail.gmail.com>
-Subject: Re: [PATCH 2/3] i2c: qcom-geni: Grow a dev pointer to simplify code
+References: <20200204193152.124980-1-swboyd@chromium.org> <20200204193152.124980-2-swboyd@chromium.org>
+In-Reply-To: <20200204193152.124980-2-swboyd@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 4 Feb 2020 13:17:54 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=Wf99AkNqtJ_W92sDNGS3dKQN3FK3960-=Oq8sJf7kKVA@mail.gmail.com>
+Message-ID: <CAD=FV=Wf99AkNqtJ_W92sDNGS3dKQN3FK3960-=Oq8sJf7kKVA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] i2c: qcom-geni: Let firmware specify irq trigger flags
 To:     Stephen Boyd <swboyd@chromium.org>
 Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
         Girish Mahadevan <girishm@codeaurora.org>,
         Dilip Kota <dkota@codeaurora.org>,
-        Alok Chauhan <alokc@codeaurora.org>,
-        Douglas Anderson <dianders@chromium.org>
+        Alok Chauhan <alokc@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Feb 4, 2020 at 11:32 AM Stephen Boyd <swboyd@chromium.org> wrote:
+Hi,
+
+On Tue, Feb 4, 2020 at 11:31 AM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> Some lines are long here. Use a struct dev pointer to shorten lines and
-> simplify code. The clk_get() call can fail because of EPROBE_DEFER
-> problems too, so just remove the error print message because it isn't
-> useful.
+> We don't need to force IRQF_TRIGGER_HIGH here as the DT or ACPI tables
+> should take care of this for us. Just use 0 instead so that we use the
+> flags from the firmware. Also, remove specify dev_name() for the irq
+> name so that we can get better information in /proc/interrupts about
+> which device is generating interrupts.
 >
 > Cc: Girish Mahadevan <girishm@codeaurora.org>
 > Cc: Dilip Kota <dkota@codeaurora.org>
 > Cc: Alok Chauhan <alokc@codeaurora.org>
 > Cc: Douglas Anderson <dianders@chromium.org>
 > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  drivers/i2c/busses/i2c-qcom-geni.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-I personally am indifferent to &pdev->dev vs. just dev, but not
-printing an error in the case of a defer is a definite improvement.
-
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
