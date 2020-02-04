@@ -2,58 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EC91521CD
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Feb 2020 22:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21CC1521D6
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Feb 2020 22:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727387AbgBDVSI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Feb 2020 16:18:08 -0500
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:39717 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727620AbgBDVSH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Feb 2020 16:18:07 -0500
-Received: by mail-ua1-f65.google.com with SMTP id 73so31194uac.6
-        for <linux-i2c@vger.kernel.org>; Tue, 04 Feb 2020 13:18:07 -0800 (PST)
+        id S1727446AbgBDVSy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Feb 2020 16:18:54 -0500
+Received: from mail-vk1-f196.google.com ([209.85.221.196]:34396 "EHLO
+        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727458AbgBDVSx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Feb 2020 16:18:53 -0500
+Received: by mail-vk1-f196.google.com with SMTP id w67so5629498vkf.1
+        for <linux-i2c@vger.kernel.org>; Tue, 04 Feb 2020 13:18:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+YV7XvdlsIH5IDESBp45bVi5suaLif02bOusLL/UcAg=;
-        b=bphTE9jnt5pwshYrT5bVIe6w+pYy2uTHTOXG6zCT/v03+zOC2lc8VCPBqK8yQrSx/5
-         mdNdS0Hg9A8cnU6gYq/C50cIyByUlThuUSRMW9Hn/rWs/3L7rWzw4UvULJ4VQWtnGpRg
-         xa9In03NU2Po3Hd6I1ppVTeQh0gOd3walkFVE=
+        bh=ig51N1g6KEOgKY3CEDTkDorjmkcG1hiofbCpAcjU/P0=;
+        b=MbThkf17ZqdxHDxIYXmCBNWXk/NFKFXqv0PotnuvrnwkaoezorZsnAXOkc9nD6Bag/
+         r5bgOiJxr07kUK8bfSFBJ/udvgZlfFuV8+5j4ko/r+AWxOMYXFEi7dhzaXHuNjAyC0gc
+         24b2xgB4p1oVhuE8CNVmGyy0jlvsb0dAasjrI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+YV7XvdlsIH5IDESBp45bVi5suaLif02bOusLL/UcAg=;
-        b=uUgkypcIJrno5LKIqcSHLmNMQjJROMrVhtfsoi0gInheYnd/UikrHn7bmLVLeWjP+3
-         dWQg6m/uh9+BqbPirR3x4LmKKr/E2Rt7OhtA2Z20/PA3upB466Cyy8n0zF/awcRToD2Z
-         /n3Bv+OW1emyFlm3itEP/qwZc41IoqpVU280bMsTgyv/bA6esQRk0ruRFGGtrnBGEKfs
-         syO+FGpkZeJ4RLzP8ws+w0rlWlHG+b8VdFuuewI2WtRK9SHs3sJxIx6z49ZMCsfkbUSB
-         5H3d37KFQcSeph/dhzDNe99y3VQLoux2GuPmtUuUwLmtKy2f4Nys3QqgQZCcy8hCCWsL
-         m74A==
-X-Gm-Message-State: APjAAAUtX/BC3d6EY2NPRY8vmVwqXXBFTkPnvT3yYtAX25mIy3u8vjaU
-        HVK952Lbz9sk3nf2QNQwQr7bI3+PxPE=
-X-Google-Smtp-Source: APXvYqxps+/sVNzfZfIweq6NsB+CPzsMd8Yz8xhhPweLPignvl0svPIw7KC1Q9m8/9CouVIHMI/2sw==
-X-Received: by 2002:ab0:2358:: with SMTP id h24mr2409574uao.67.1580851086783;
-        Tue, 04 Feb 2020 13:18:06 -0800 (PST)
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
-        by smtp.gmail.com with ESMTPSA id d191sm4160842vka.37.2020.02.04.13.18.05
+        bh=ig51N1g6KEOgKY3CEDTkDorjmkcG1hiofbCpAcjU/P0=;
+        b=T3FIzKpPkPNzQuwNMbIbLqNxZIuPqCf67Y7A8kU9HyrQ647V+5cRsnjHAWfPQgalNc
+         PDd2Ps7J12lJPleF65scPb++u1+euLno1mLQcFEZ1Wr2LbIdDGImUxkwKUo4vXAj2Y57
+         VJWvHYQFR2pJB4O7CSQ448AXvQOzx0UYNTYPIsdcu3jmZG7FZmuHmdF8Q/b3BxSnE0ls
+         CPpOg8tO4hUR3rKiB3Oz2pvNDPCcvE6nY3+547c6IW1TDEkwo3vmVjsrMIGLjnkX5aM7
+         wo9qcKCp8xhOdaIbHnDLXEPasWDC9wcgEc1lv6OIoGqNddhs46aae0cjtn8cH9780EE2
+         fiCQ==
+X-Gm-Message-State: APjAAAV99MZTorAqqOGpBZjZ3ddNmbyHkZaIOHkgk1eSuuVxrq8bvKJt
+        7N0vlPnTIWdQ9WOytPQoaHAfp944rbo=
+X-Google-Smtp-Source: APXvYqxNiG7gDish9D9sZ8GSB2p8e6FRJg/Z5lC3mb31/FkblmQzedPNXpcdQ4WDqieJgFGtjg0dnw==
+X-Received: by 2002:a1f:4d85:: with SMTP id a127mr18383421vkb.67.1580851132478;
+        Tue, 04 Feb 2020 13:18:52 -0800 (PST)
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
+        by smtp.gmail.com with ESMTPSA id p4sm6624001vsg.10.2020.02.04.13.18.51
         for <linux-i2c@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Feb 2020 13:18:06 -0800 (PST)
-Received: by mail-vs1-f48.google.com with SMTP id t12so12427107vso.13
-        for <linux-i2c@vger.kernel.org>; Tue, 04 Feb 2020 13:18:05 -0800 (PST)
-X-Received: by 2002:a67:e342:: with SMTP id s2mr19486104vsm.198.1580851085540;
- Tue, 04 Feb 2020 13:18:05 -0800 (PST)
+        Tue, 04 Feb 2020 13:18:51 -0800 (PST)
+Received: by mail-vs1-f41.google.com with SMTP id t12so12428526vso.13
+        for <linux-i2c@vger.kernel.org>; Tue, 04 Feb 2020 13:18:51 -0800 (PST)
+X-Received: by 2002:a67:ec4a:: with SMTP id z10mr18832183vso.73.1580851131312;
+ Tue, 04 Feb 2020 13:18:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20200204193152.124980-1-swboyd@chromium.org> <20200204193152.124980-2-swboyd@chromium.org>
-In-Reply-To: <20200204193152.124980-2-swboyd@chromium.org>
+References: <20200204193152.124980-1-swboyd@chromium.org> <20200204193152.124980-3-swboyd@chromium.org>
+In-Reply-To: <20200204193152.124980-3-swboyd@chromium.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 4 Feb 2020 13:17:54 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=Wf99AkNqtJ_W92sDNGS3dKQN3FK3960-=Oq8sJf7kKVA@mail.gmail.com>
-Message-ID: <CAD=FV=Wf99AkNqtJ_W92sDNGS3dKQN3FK3960-=Oq8sJf7kKVA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] i2c: qcom-geni: Let firmware specify irq trigger flags
+Date:   Tue, 4 Feb 2020 13:18:40 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=W-2jrpSbHoTLJ7MzVAhR=4hKnVyjdtgUQCs=Qr4ptOfg@mail.gmail.com>
+Message-ID: <CAD=FV=W-2jrpSbHoTLJ7MzVAhR=4hKnVyjdtgUQCs=Qr4ptOfg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] i2c: qcom-geni: Grow a dev pointer to simplify code
 To:     Stephen Boyd <swboyd@chromium.org>
 Cc:     Wolfram Sang <wsa@the-dreams.de>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -74,11 +74,10 @@ Hi,
 
 On Tue, Feb 4, 2020 at 11:31 AM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> We don't need to force IRQF_TRIGGER_HIGH here as the DT or ACPI tables
-> should take care of this for us. Just use 0 instead so that we use the
-> flags from the firmware. Also, remove specify dev_name() for the irq
-> name so that we can get better information in /proc/interrupts about
-> which device is generating interrupts.
+> Some lines are long here. Use a struct dev pointer to shorten lines and
+> simplify code. The clk_get() call can fail because of EPROBE_DEFER
+> problems too, so just remove the error print message because it isn't
+> useful.
 >
 > Cc: Girish Mahadevan <girishm@codeaurora.org>
 > Cc: Dilip Kota <dkota@codeaurora.org>
@@ -86,7 +85,82 @@ On Tue, Feb 4, 2020 at 11:31 AM Stephen Boyd <swboyd@chromium.org> wrote:
 > Cc: Douglas Anderson <dianders@chromium.org>
 > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 > ---
->  drivers/i2c/busses/i2c-qcom-geni.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/i2c/busses/i2c-qcom-geni.c | 51 ++++++++++++++----------------
+>  1 file changed, 24 insertions(+), 27 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index 3e13b54ce3f8..192a8f622f3d 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -502,45 +502,42 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>         struct resource *res;
+>         u32 proto, tx_depth;
+>         int ret;
+> +       struct device *dev = &pdev->dev;
+>
+> -       gi2c = devm_kzalloc(&pdev->dev, sizeof(*gi2c), GFP_KERNEL);
+> +       gi2c = devm_kzalloc(dev, sizeof(*gi2c), GFP_KERNEL);
+>         if (!gi2c)
+>                 return -ENOMEM;
+>
+> -       gi2c->se.dev = &pdev->dev;
+> -       gi2c->se.wrapper = dev_get_drvdata(pdev->dev.parent);
+> +       gi2c->se.dev = dev;
+> +       gi2c->se.wrapper = dev_get_drvdata(dev->parent);
+>         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -       gi2c->se.base = devm_ioremap_resource(&pdev->dev, res);
+> +       gi2c->se.base = devm_ioremap_resource(dev, res);
+>         if (IS_ERR(gi2c->se.base))
+>                 return PTR_ERR(gi2c->se.base);
+>
+> -       gi2c->se.clk = devm_clk_get(&pdev->dev, "se");
+> -       if (IS_ERR(gi2c->se.clk) && !has_acpi_companion(&pdev->dev)) {
+> +       gi2c->se.clk = devm_clk_get(dev, "se");
+> +       if (IS_ERR(gi2c->se.clk) && !has_acpi_companion(dev)) {
+>                 ret = PTR_ERR(gi2c->se.clk);
+> -               dev_err(&pdev->dev, "Err getting SE Core clk %d\n", ret);
+>                 return ret;
+>         }
+
+As with my response to your similar SPI change [1], there are cases
+where this print could have informed us about other errors besides
+EPROBE_DEFER, but it does seem rather unlikely so I'm OK w/ your
+change.
+
+I'm wondering why you didn't further clean this up, though.  You could
+have fully gotten rid of the braces by just doing:
+
+return PTR_ERR(gi2c->se.clk);
+
+
+> -       ret = device_property_read_u32(&pdev->dev, "clock-frequency",
+> -                                                       &gi2c->clk_freq_out);
+> +       ret = device_property_read_u32(dev, "clock-frequency",
+> +                                      &gi2c->clk_freq_out);
+>         if (ret) {
+> -               dev_info(&pdev->dev,
+> -                       "Bus frequency not specified, default to 100kHz.\n");
+> +               dev_info(dev, "Bus frequency not specified, default to 100kHz.\n");
+>                 gi2c->clk_freq_out = KHZ(100);
+>         }
+>
+> -       if (has_acpi_companion(&pdev->dev))
+> -               ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(&pdev->dev));
+> +       if (has_acpi_companion(dev))
+> +               ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(dev));
+>
+>         gi2c->irq = platform_get_irq(pdev, 0);
+> -       if (gi2c->irq < 0) {
+> -               dev_err(&pdev->dev, "IRQ error for i2c-geni\n");
+> +       if (gi2c->irq < 0)
+
+Commit message doesn't mention removing this print, though checking
+platform_get_irq() it looks like it already spams in the case where a
+non-EPROBE_DEFER error is returned so I think you're good.
+
+[1] https://lore.kernel.org/r/CAD=FV=U6Yiv5i4PdDFqNhp0STqAvVi_=F_iuKyonx=MsOQFABQ@mail.gmail.com
+
+
+In any case above things aren't terribly important, so:
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
