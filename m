@@ -2,141 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C38D1538F9
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2020 20:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117D11555D3
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Feb 2020 11:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727454AbgBETXE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Feb 2020 14:23:04 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:35282 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727415AbgBETXE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Feb 2020 14:23:04 -0500
-Received: by mail-pl1-f195.google.com with SMTP id g6so1286216plt.2
-        for <linux-i2c@vger.kernel.org>; Wed, 05 Feb 2020 11:23:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AB0mPtmmhd4uES+XsmfG8LIdv1jJKRW24bbomYl8aD8=;
-        b=IR4EUOI0PS96fst6PUpnxAAEiyW5vWCWKy8OEOWvsK8wU19s5K8fn5ulk+vD0NiP0d
-         XdiYMotREZ5jrLS4LMRoc/UwPGFNnTSNuez1UQq1FQVHSm9jTg2DDBA3LjitJHnA/E11
-         oQUQusgGsNiqFFOm9vX+YkH3CPwHT6d/oXFig=
+        id S1726860AbgBGKgN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Feb 2020 05:36:13 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:32945 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726827AbgBGKgN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Feb 2020 05:36:13 -0500
+Received: by mail-ot1-f68.google.com with SMTP id b18so1739452otp.0;
+        Fri, 07 Feb 2020 02:36:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AB0mPtmmhd4uES+XsmfG8LIdv1jJKRW24bbomYl8aD8=;
-        b=s4yy2D2v6VSNHtVelXkRMu1nyDeVkIu7plUymJbhszHOFwEkmXuR5qf9DhiGotcgXN
-         DGyMBN0VaRpEHbjTRsBBJwNHhF61nlSG+pITcOgbfe3XaJyATNiJUKNywE5GlbstOlDj
-         38BaFw/Tv5uC4bkZO5t+R0MDDGn/m5Yq9lzPaQ+FzynzgFErxDGoLrTDvrp5Exr4Ms4D
-         gaNJunXzDUYW+58Bje8QLgwSlLtIE5rccBu+6i0ijSBqYCxekhuNX+OUc7Sknb2gAZvV
-         RlYUVhdA+dLklc7KVzH98amDocclmR5lmR9cwNKUoVE/ijhsDlqeenK5Myxl7ostis0f
-         aDMA==
-X-Gm-Message-State: APjAAAWSPxnZ1GP1k9JZx8V0vwv0RRdOCpfE+J22ybhSvC5FLija1s5A
-        3lkcay1L3RCy4kgn31UGxBFm9Kz2OK4=
-X-Google-Smtp-Source: APXvYqyLLZwJORlgU1YWy2dv2sz3baiBjgGjcqCX3S/3kK7QyuWIeJag6P/sTJgjw9LeLvhQHH0gQA==
-X-Received: by 2002:a17:902:b190:: with SMTP id s16mr33845395plr.299.1580930583956;
-        Wed, 05 Feb 2020 11:23:03 -0800 (PST)
-Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:172e:4646:c089:ce59])
-        by smtp.gmail.com with ESMTPSA id c6sm535886pgk.78.2020.02.05.11.23.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2020 11:23:03 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Akshu Agrawal <akshu.agrawal@amd.com>,
-        linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS)
-Subject: [PATCH v2 16/17] i2c: cros-ec-tunnel: Use cros_ec_cmd()
-Date:   Wed,  5 Feb 2020 11:22:51 -0800
-Message-Id: <20200205192253.187649-1-pmalani@chromium.org>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Ke+WNyb6rR3WzEL9YKuJlioft1ziahQrUrNAPPji+7w=;
+        b=eDmpHvYummr6HEzV8GQ2km7mCZsnvkHoFhw7vdxIUGUTF86+Gl1OtBNU/chmmTQnor
+         /XBK7kiuzrN7OkdTG4BSkKfeYq0hkI5ytKYix/HzMHR3jwU9w8cloBcYuqMW90ndD8q6
+         UNLOBN3gGWI3rLsraZzihR6PB2rAnh1TILG6FOItzQDP40xbJNWvE4hMedT++6nnbbJJ
+         yoTsUHAO3ORXj8stAn4sE8qsk1LAOr6p48fAAF/xQ1eo19xFFAl9NJyA6w0fmZYSA+V/
+         xH/Hy2afgeq8j0DyiL+X1VQtEhyl9BIWGCZxpx+JulQ1xXOdHpJIQVaUWVyFsbUU4M3W
+         kyBQ==
+X-Gm-Message-State: APjAAAV8S3E9EgmEb8fcrgLxdSTTd8asVOvU+UoWoPGxeuSLGV+nrZdh
+        mmZXoCwZKO8RxR2wNcCPo+GC3fashvgbwWTP7HM=
+X-Google-Smtp-Source: APXvYqzaQ94yC64aqXo1L233ZgdYksMrCRP5ICZZj7rdYa5peH58KMKZXFOKVMHDOsFqqywNKm8QTL9LdL6B9vvbPRA=
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr2216689otd.266.1581071773104;
+ Fri, 07 Feb 2020 02:36:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 7 Feb 2020 11:36:02 +0100
+Message-ID: <CAJZ5v0iWhN=pxnedntPn5kriN-uEULvTjHADtJj59a5W14a4sQ@mail.gmail.com>
+Subject: [GIT PULL] Additional ACPI updates for v5.6-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Replace cros_ec_cmd_xfer_status() calls with the new function
-cros_ec_cmd() which takes care of the EC message struct setup and
-subsequent cleanup (which is a common pattern among users of
-cros_ec_cmd_xfer_status).
+Hi Linus,
 
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
+Please pull from the tag
 
-Changes in v2:
-- Updated to use new function name and parameter list.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-5.6-rc1-3
 
- drivers/i2c/busses/i2c-cros-ec-tunnel.c | 22 ++++++++--------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
+with top-most commit dec0a81a7814c8a876e663e0627468e6b1a7d2fb
 
-diff --git a/drivers/i2c/busses/i2c-cros-ec-tunnel.c b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-index 958161c71985d9..d0e0db2008d1ca 100644
---- a/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-+++ b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-@@ -179,9 +179,8 @@ static int ec_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg i2c_msgs[],
- 	const u16 bus_num = bus->remote_bus;
- 	int request_len;
- 	int response_len;
--	int alloc_size;
- 	int result;
--	struct cros_ec_command *msg;
-+	void *ec_buf;
- 
- 	request_len = ec_i2c_count_message(i2c_msgs, num);
- 	if (request_len < 0) {
-@@ -196,36 +195,31 @@ static int ec_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg i2c_msgs[],
- 		return response_len;
- 	}
- 
--	alloc_size = max(request_len, response_len);
--	msg = kmalloc(sizeof(*msg) + alloc_size, GFP_KERNEL);
--	if (!msg)
-+	ec_buf = kmalloc(max(request_len, response_len), GFP_KERNEL);
-+	if (!ec_buf)
- 		return -ENOMEM;
- 
--	result = ec_i2c_construct_message(msg->data, i2c_msgs, num, bus_num);
-+	result = ec_i2c_construct_message(ec_buf, i2c_msgs, num, bus_num);
- 	if (result) {
- 		dev_err(dev, "Error constructing EC i2c message %d\n", result);
- 		goto exit;
- 	}
- 
--	msg->version = 0;
--	msg->command = EC_CMD_I2C_PASSTHRU;
--	msg->outsize = request_len;
--	msg->insize = response_len;
--
--	result = cros_ec_cmd_xfer_status(bus->ec, msg);
-+	result = cros_ec_cmd(bus->ec, 0, EC_CMD_I2C_PASSTHRU, ec_buf,
-+			     request_len, ec_buf, response_len, NULL);
- 	if (result < 0) {
- 		dev_err(dev, "Error transferring EC i2c message %d\n", result);
- 		goto exit;
- 	}
- 
--	result = ec_i2c_parse_response(msg->data, i2c_msgs, &num);
-+	result = ec_i2c_parse_response(ec_buf, i2c_msgs, &num);
- 	if (result < 0)
- 		goto exit;
- 
- 	/* Indicate success by saying how many messages were sent */
- 	result = num;
- exit:
--	kfree(msg);
-+	kfree(ec_buf);
- 	return result;
- }
- 
--- 
-2.25.0.341.g760bfbb309-goog
+ i2c: designware: Add ACPI HID for Hisilicon Hip08-Lite I2C controller
 
+on top of commit ffda81b69fce50f2543be99ef2d7c77dffc1ebc1
+
+ Merge tag 'acpi-5.6-rc1-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive additional ACPI updates for 5.6-rc1.
+
+These add Hisilicon Hip08-Lite I2C controller clock frequency
+support to the ACPI driver for AMD SoCs (APD) and to the Designware
+I2C driver (Hanjun Guo).
+
+Thanks!
+
+
+---------------
+
+Hanjun Guo (2):
+      ACPI / APD: Add clock frequency for Hisilicon Hip08-Lite I2C controller
+      i2c: designware: Add ACPI HID for Hisilicon Hip08-Lite I2C controller
+
+---------------
+
+ drivers/acpi/acpi_apd.c                     | 6 ++++++
+ drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
+ 2 files changed, 7 insertions(+)
