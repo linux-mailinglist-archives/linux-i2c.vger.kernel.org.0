@@ -2,37 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6499159BB0
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Feb 2020 22:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A5D159BA3
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Feb 2020 22:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727434AbgBKVxh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Feb 2020 16:53:37 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([81.169.146.223]:27397 "EHLO
-        mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727199AbgBKVxh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Feb 2020 16:53:37 -0500
-X-Greylist: delayed 705 seconds by postgrey-1.27 at vger.kernel.org; Tue, 11 Feb 2020 16:53:36 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581458015;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=HJKkK+L/+IvQc4t06WFqnt4bWf+FyU8DIYq2eP8LWiA=;
-        b=s51fYI4EvPLeXNxVY0tPMkf89Y7ZX5Mq+04NyMdg2PAUXcJA89U2pb6zpEYf93NMO7
-        BVBeE7nST2oSNPjjoWkj/l2KcNj1ewigi7qeN6XbdnmtfrG2ykhIvOiqQ2aG3mJJCKbz
-        4pJmFb8E5QZnmX/HZbq7f+ZYIwWDEvo34NSdPb7o+qYAVpKG6Yy45P5T9UADZSWj5fhp
-        ZZmP0KU7YU5DMgYag2/iMSAdX6C2TPRTgk+Ks6gwRVt/yA90KmCj43M5bS8/80wSxdgw
-        903Mg1EOxHOqLr4zNEsjuZ9Eilnasgxy2sRj5vxu6aZK1HL8ZBj9dtbX6n5nPM5JjVTh
-        3Naw==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M0P2mp10IM"
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1BLfh0EV
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Tue, 11 Feb 2020 22:41:43 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
+        id S1727581AbgBKVtV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Feb 2020 16:49:21 -0500
+Received: from mail.andi.de1.cc ([85.214.55.253]:45244 "EHLO mail.andi.de1.cc"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727043AbgBKVtU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 11 Feb 2020 16:49:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Type:MIME-Version:References:
+        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=1jBWyPqMrzGV+HgABFq6zy5XXPza8yinORW6h9VLx9o=; b=IQytAEHkFWeDt0l+Eixp3Mc8E
+        FD8nT06U5+KhlqrSIhE5LA7e2YNmJ+8PuNxuytAwQexxw32EIjZIQeX4Ajc37jkTTKhmhOKkXNol5
+        Kr3ts38EX4B811dW5iJwdpYrDiCshDcrUG0nX4/F+SXNiNgjrGAWhMQ2xIDP3wTle0KRM=;
+Received: from p200300ccff0bd500e2cec3fffe93fc31.dip0.t-ipconnect.de ([2003:cc:ff0b:d500:e2ce:c3ff:fe93:fc31] helo=eeepc)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1j1dOj-0004Pf-Fl; Tue, 11 Feb 2020 22:48:49 +0100
+Received: from [::1] (helo=localhost)
+        by eeepc with esmtp (Exim 4.92)
+        (envelope-from <andreas@kemnade.info>)
+        id 1j1dOi-0003ve-P9; Tue, 11 Feb 2020 22:48:48 +0100
+Date:   Tue, 11 Feb 2020 22:48:40 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Discussions about the Letux Kernel <letux-kernel@openphoenux.org>,
+        Paul Cercueil <paul@crapouillou.net>,
         Paul Boddie <paul@boddie.org.uk>,
         Alex Smith <alex.smith@imgtec.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -44,56 +45,73 @@ To:     Paul Cercueil <paul@crapouillou.net>,
         Daniel Vetter <daniel@ffwll.ch>,
         "David S. Miller" <davem@davemloft.net>,
         Linus Walleij <linus.walleij@linaro.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
         Andi Kleen <ak@linux.intel.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        =?UTF-8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>,
+        Petr =?UTF-8?Q?=C5=A0tetiar?= <ynezz@true.cz>,
         Richard Fontana <rfontana@redhat.com>,
         Allison Randal <allison@lohutok.net>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, letux-kernel@openphoenux.org,
+        Stephen Boyd <swboyd@chromium.org>, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
         kernel@pyra-handheld.com
-Subject: [PATCH 14/14] MIPS: DTS: CI20: fix interrupt for pcf8563 RTC
-Date:   Tue, 11 Feb 2020 22:41:31 +0100
-Message-Id: <9d300f1bac15ef4a91052973f2ed593dd2513656.1581457290.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <cover.1581457290.git.hns@goldelico.com>
+Subject: Re: [Letux-kernel] [PATCH 07/14] MIPS: DTS: CI20: fix PMU
+ definitions for ACT8600
+Message-ID: <20200211224840.40bf549d@kemnade.info>
+In-Reply-To: <aa9725056a1d2bfb490a1c912f34302de0e27fad.1581457290.git.hns@goldelico.com>
 References: <cover.1581457290.git.hns@goldelico.com>
+        <aa9725056a1d2bfb490a1c912f34302de0e27fad.1581457290.git.hns@goldelico.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ boundary="Sig_/tv7EBQvO_xk_m_DPrEdmChx"; protocol="application/pgp-signature"
+X-Spam-Score: -1.0 (-)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Interrupts should not be specified by interrupt line but by
-gpio parent and reference.
+--Sig_/tv7EBQvO_xk_m_DPrEdmChx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- arch/mips/boot/dts/ingenic/ci20.dts | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On Tue, 11 Feb 2020 22:41:24 +0100
+"H. Nikolaus Schaller" <hns@goldelico.com> wrote:
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index 8f9d182566db..4bacefa2cfce 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -298,7 +298,9 @@ Optional input supply properties:
- 		rtc@51 {
- 			compatible = "nxp,pcf8563";
- 			reg = <0x51>;
--			interrupts = <110>;
-+
-+			interrupt-parent = <&gpf>;
-+			interrupts = <30 IRQ_TYPE_LEVEL_LOW>;
- 		};
- };
- 
--- 
-2.23.0
+> There is a ACT8600 on the CI20 board and the bindings of the
+> ACT8865 driver have changed without updating the CI20 device
+> tree. Therefore the PMU can not be probed successfully and
+> is running in power-on reset state.
+>=20
+> Fix DT to match the latest act8865-regulator bindings.
+>=20
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+hmm, what about a Fixes: tag here? Sounds like a regression.
 
+Regards,
+Andreas
+
+--Sig_/tv7EBQvO_xk_m_DPrEdmChx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEPIWxmAFyOaBcwCpFl4jFM1s/ye8FAl5DITkACgkQl4jFM1s/
+ye+rRw/+LUooQ7fIDcxBsFY9+xZRq6snbWx9wkMgAycU5UuVyjUZEzYUizVNm8pT
+FfSwVCGf0hHXaz+2Xnm8d6Igp0ii2IWf7LQmE+eoLOOPWeEGIN74eIWXZ+OkJcG8
+33+weHfRRx5Lx0SpRKx8g6nIQbGPXs9fWYB3ZjJwei+9DelyNKUqTbJY5xbAxeP5
+C6qzOVgO9Py459cXYEXH3HsmW6vATceC+wZQO737h0IF3rclYsdTtNjBhELIT4xG
+EgirCfreDPbCn3Y6g2AnAjqk151ssuhEF/p2JWu8VeNIegpksj2BbIRvKG3uWXc6
+1sG6EkJ+E8gCdDOhc500PeLdWVPCWk9h9m7w/KMAuCqEr00uY313ya0nfp7EpDSu
+oznxzkbQoP1Sy+zUYoaMJ759HELay07sHqI9juk7sLX7DXYeOKdxsoqOk45hEN0o
+jU67WS/h6GvsKUgRBKxX0NidVnIikg1/XiMLjBaPyF+Hwq6eq4VL7DTc/86+6u6h
+Anv+s3/C0hWq/de/Wr95j+yHtQQy8DMZ73bo8IwaihXbvuaW3IcgWj+lhACwvOjD
+nEyj+GAnnBERn7rhRVrGdYgF8Uyq7u9yjOt87EjSPOfRxsOBW4zLFRG8GRiFAmbF
+PQtd/UwQ17zKvCf3dezqrXcfQ3rOs9nxHT33IRmzbcPx5hiPwaA=
+=WkOg
+-----END PGP SIGNATURE-----
+
+--Sig_/tv7EBQvO_xk_m_DPrEdmChx--
