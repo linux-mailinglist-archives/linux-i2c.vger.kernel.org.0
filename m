@@ -2,34 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 966E0159BB8
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Feb 2020 22:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DEC159BC1
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Feb 2020 22:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727549AbgBKVxi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Feb 2020 16:53:38 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([81.169.146.176]:23467 "EHLO
+        id S1727561AbgBKVxm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Feb 2020 16:53:42 -0500
+Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.124]:22643 "EHLO
         mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727279AbgBKVxh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Feb 2020 16:53:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581458015;
+        with ESMTP id S1727054AbgBKVxl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Feb 2020 16:53:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581458017;
         s=strato-dkim-0002; d=goldelico.com;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=l2ioSw/GBEgoEsJDqdX898kUDDw9CYiqWmti4ETUA48=;
-        b=bu8KkI9hIzWf0Pbr1ExLGXwv8IBZGVTFyeEM/F0CQFj1ZkjepEBc/tdSJAI1VYwdiO
-        ItNlMiTzTiTyHBkDE9kov76ydjAdTArST3OAPC093wHH1VDEI2KogUlTQnJSb8/rIeY8
-        kbzok9Cr7lokB1nyDkuFJUPa49bMuwhlUfL1QQZOuBc77KU8Bg70nOs4vBFtuPRW22nw
-        Wq8rCOzP5mM4tarq9WaXYDOAfZuq+uKFqIqyruU3blEonuoj8P2BG7MtiU5GdavpGMKd
-        iyydeyyhF0g0CnBKgWOXlJqV9cLXuu+r0ziKSdw4p7kz7V0PhPkgNa3YJSTNy6u0Bjqh
-        z/iQ==
+        bh=tc4xhvDjnfG1jLVOTwuj+X2pkCzFOljdsKLqfh9DWVg=;
+        b=BKd4cwNbev5BpNDGSIKOQJ1DWPGF6yDd5eRVl20luwaB022uEp0PL9W90bp+FoNxuK
+        +2bGXTAOwm9YFFsQpAyim0MxQuvVkMFrFui0G+9ssCTQClcLhRcCfHGe/3uwA1hzuPOx
+        SJpJPO99UaKrKwrjmcpO9gYSJAjocrh3ZF3hptuTZRU2BHREvYIMrl2YEl7RW/PC3esR
+        YkyquKsty377OR2YWZLAUnlFYXV2OCiJIxIseL8XLiqnjrffkeS1cMzepxLjujcIpffj
+        ALHpds3Ja4IK6nkM761M8p9xdDND8NhAWLQ5dVsBR1rDgnrS4VIwbPSGAaq7WJZUQG3E
+        NS5g==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M0P2mp10IM"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1BLfa0EL
+        with ESMTPSA id U06217w1BLfb0EM
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Tue, 11 Feb 2020 22:41:36 +0100 (CET)
+        Tue, 11 Feb 2020 22:41:37 +0100 (CET)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     Paul Cercueil <paul@crapouillou.net>,
         Paul Boddie <paul@boddie.org.uk>,
@@ -57,9 +57,9 @@ Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
         linux-gpio@vger.kernel.org, letux-kernel@openphoenux.org,
         kernel@pyra-handheld.com
-Subject: [PATCH 05/14] MIPS: CI20: defconfig: configure for supporting modules
-Date:   Tue, 11 Feb 2020 22:41:22 +0100
-Message-Id: <b490287210e46565733209197ffdae3bc90137dc.1581457290.git.hns@goldelico.com>
+Subject: [PATCH 06/14] MIPS: CI20: defconfig: compile leds-gpio driver into the kernel and configure for LED triggers
+Date:   Tue, 11 Feb 2020 22:41:23 +0100
+Message-Id: <235c328ff497b5e14009ad9f4e12d2db9520f4d9.1581457290.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1581457290.git.hns@goldelico.com>
 References: <cover.1581457290.git.hns@goldelico.com>
@@ -70,24 +70,35 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Not all drivers need to be compiled into the kernel.
-Support building and loading of kernel modules.
+DTS has been augmented to add some gpio-leds. We need the leds-gpio driver
+and enable the triggers.
 
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- arch/mips/configs/ci20_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/configs/ci20_defconfig | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
-index be41df2a81fb..e0d3c9d4c2ae 100644
+index e0d3c9d4c2ae..30a47a7a2994 100644
 --- a/arch/mips/configs/ci20_defconfig
 +++ b/arch/mips/configs/ci20_defconfig
-@@ -1,4 +1,5 @@
- # CONFIG_LOCALVERSION_AUTO is not set
-+CONFIG_MODULES=y
- CONFIG_KERNEL_XZ=y
- CONFIG_SYSVIPC=y
- CONFIG_POSIX_MQUEUE=y
+@@ -167,3 +167,16 @@ CONFIG_STACKTRACE=y
+ # CONFIG_FTRACE is not set
+ CONFIG_CMDLINE_BOOL=y
+ CONFIG_CMDLINE="earlycon console=ttyS4,115200 clk_ignore_unused"
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_MTD=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_BACKLIGHT=m
++CONFIG_LEDS_TRIGGER_CPU=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
++CONFIG_LEDS_TRIGGER_TRANSIENT=y
++CONFIG_LEDS_TRIGGER_CAMERA=m
 -- 
 2.23.0
 
