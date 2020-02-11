@@ -2,88 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D069F158DB0
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Feb 2020 12:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B938158E27
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Feb 2020 13:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728353AbgBKLpA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 11 Feb 2020 06:45:00 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:51110 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727566AbgBKLpA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Feb 2020 06:45:00 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-251-tq3gBPkLNuGQBoRjzQM1HQ-1; Tue, 11 Feb 2020 11:44:55 +0000
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 11 Feb 2020 11:44:55 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 11 Feb 2020 11:44:55 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Gustavo A. R. Silva'" <gustavo@embeddedor.com>,
-        Thor Thayer <thor.thayer@linux.intel.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] i2c: altera: Use 64-bit arithmetic instead of 32-bit
-Thread-Topic: [PATCH] i2c: altera: Use 64-bit arithmetic instead of 32-bit
-Thread-Index: AQHV4L9fxboVqkeMN0ihu69bh4WHLagV3sgQ
-Date:   Tue, 11 Feb 2020 11:44:55 +0000
-Message-ID: <03166245b78c4d85b004dcf746e4e6ee@AcuMS.aculab.com>
-References: <20200210192656.GA8412@embeddedor>
-In-Reply-To: <20200210192656.GA8412@embeddedor>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1727847AbgBKMPf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Feb 2020 07:15:35 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:36641 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727805AbgBKMPf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 11 Feb 2020 07:15:35 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48H1v86MR5z9sRR;
+        Tue, 11 Feb 2020 23:15:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1581423333;
+        bh=nfIHWvxD1KXgZayLaDPdRduSASGIy1jBmLpNhsQMQOY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=JDvmOMq5dj0TejzEIA8r2RgJbIu9D2vCzDwraAhiTwJnRHu+4JU3h1Z4qhb0w0oy+
+         /eNplDF/yYViIH/K9rUeZQioSaSCo//Wj/6XVovSgHX5UkjGk/aFGNAB0NUelHGDRa
+         GdMdhkjjQ2dlrho8aJMvfgnCQUoaiN2YThiFF3XZDQtBGqpQAi0bVXxz15JAd4/Ir/
+         2siNeAUWm6TGTRqBfTT2FU44rdRGcFNSYF/EDRxmbPbczzus73uLVnrUYhFzgrOy+o
+         qCrj5ZtMsWG5T6T3DRgcmNZQeR/8XcOOtJqnlJRV3y8jKDP0XkatSSrslValrN0Z7t
+         241iD3ZC1xbBg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH RESEND] macintosh: convert to i2c_new_scanned_device
+In-Reply-To: <20200210170401.5357-1-wsa+renesas@sang-engineering.com>
+References: <20200210170401.5357-1-wsa+renesas@sang-engineering.com>
+Date:   Tue, 11 Feb 2020 23:15:17 +1100
+Message-ID: <87ftfhz5ey.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-MC-Unique: tq3gBPkLNuGQBoRjzQM1HQ-1
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Gustavo A. R. Silva
-> Sent: 10 February 2020 19:27
-> 
-> Add suffix ULL to constant 300 in order to avoid a potential integer
-> overflow and give the compiler complete information about the proper
-> arithmetic to use. Notice that this constant is being used in a context
-> that expects an expression of type u64, but it's currently evaluated
-> using 32-bit arithmetic.
-> 
-> Addresses-Coverity: 1458369 ("Unintentional integer overflow")
-> Fixes: 0560ad576268 ("i2c: altera: Add Altera I2C Controller driver")
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Wolfram Sang <wsa+renesas@sang-engineering.com> writes:
+> Move from the deprecated i2c_new_probed_device() to the new
+> i2c_new_scanned_device(). No functional change for this driver because
+> it doesn't check the return code anyhow.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > ---
->  drivers/i2c/busses/i2c-altera.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-altera.c b/drivers/i2c/busses/i2c-altera.c
-> index 5255d3755411..526f453f0ff7 100644
-> --- a/drivers/i2c/busses/i2c-altera.c
-> +++ b/drivers/i2c/busses/i2c-altera.c
-> @@ -171,7 +171,8 @@ static void altr_i2c_init(struct altr_i2c_dev *idev)
->  	/* SCL Low Time */
->  	writel(t_low, idev->base + ALTR_I2C_SCL_LOW);
->  	/* SDA Hold Time, 300ns */
-> -	writel(div_u64(300 * clk_mhz, 1000), idev->base + ALTR_I2C_SDA_HOLD);
-> +	writel(div_u64(300ULL * clk_mhz, 1000),
-> +	       idev->base + ALTR_I2C_SDA_HOLD);
+>
+> I can take this via I2C tree if this makes things easier...
 
-Why not factor out the 100?
-It may then be you can do 32bit arithmetic (3 * clk_mhz / 10).
-If clk_mhz is MHz (not mHz) then the sum will never wrap 32 bits.
+Yes please. Sorry I missed it before.
 
-	David
+Acked-by: Michael Ellerman <mpe@ellerman.id.au>
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+cheers
 
+>  drivers/macintosh/therm_windtunnel.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/macintosh/therm_windtunnel.c b/drivers/macintosh/therm_windtunnel.c
+> index 8c744578122a..f15fec5e1cb6 100644
+> --- a/drivers/macintosh/therm_windtunnel.c
+> +++ b/drivers/macintosh/therm_windtunnel.c
+> @@ -321,10 +321,10 @@ do_attach( struct i2c_adapter *adapter )
+>  
+>  		memset(&info, 0, sizeof(struct i2c_board_info));
+>  		strlcpy(info.type, "therm_ds1775", I2C_NAME_SIZE);
+> -		i2c_new_probed_device(adapter, &info, scan_ds1775, NULL);
+> +		i2c_new_scanned_device(adapter, &info, scan_ds1775, NULL);
+>  
+>  		strlcpy(info.type, "therm_adm1030", I2C_NAME_SIZE);
+> -		i2c_new_probed_device(adapter, &info, scan_adm1030, NULL);
+> +		i2c_new_scanned_device(adapter, &info, scan_adm1030, NULL);
+>  
+>  		if( x.thermostat && x.fan ) {
+>  			x.running = 1;
+> -- 
+> 2.20.1
