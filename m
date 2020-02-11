@@ -2,34 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C2A159BAE
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Feb 2020 22:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 693FB159BC7
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Feb 2020 22:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727429AbgBKVxh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Feb 2020 16:53:37 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.120]:13064 "EHLO
+        id S1727573AbgBKVxm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Feb 2020 16:53:42 -0500
+Received: from mo4-p04-ob.smtp.rzone.de ([81.169.146.176]:32392 "EHLO
         mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727029AbgBKVxg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Feb 2020 16:53:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581458014;
+        with ESMTP id S1727529AbgBKVxl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Feb 2020 16:53:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581458017;
         s=strato-dkim-0002; d=goldelico.com;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=tz5FT9e8j/vOF6dHesX7jElKIt8MXbKvwaqQV2chsVc=;
-        b=Hn42g1Ri6Kv+i6TcCfCCQFFFRRDWRUdkljDeRuGTJA/h0nS6YIDJQPxDwxUG9VSSxq
-        0DsMir+XMZC1E4rdTebI8ZwG2BHR+0ucaOxV5aUFp3a8X6FCyQ25bwWE8K8wnby+NBn+
-        nWQib1cp7iLe7TmoSsQ9YcAn6yIVWl5mBK0sDTvXtcWko7pfzOoAVWJn9naJVrYq4LOJ
-        VBMajR0W9uisXCg6HEEBXCoJS+qpAMwh6/4zEjMIjjKWzct1fiOn4TgPfwW7GZWtTbir
-        BJPUd5apki3iT3eTIaKCq2PR7fKHFfWwUPu8MnsntT7PUaFUQ+G/bkauc3TAf7onRxvi
-        w6EQ==
+        bh=3bosFD/maVT7s0PxPwS4PL1iP9bgaYLTqR2vJvqzmIk=;
+        b=Z5XK0/7LLbJegyHtTRM1Ba6h6GlO9i7wP+AUgGN/AJh6Asf4Tq7+PSD/L8PKA1kpmv
+        MrnjmtQHwDV//WgtBItDVtdbLssef6fiu/AzQx2EELIU/+19yGOKgEjz8T7h4JI/JcBy
+        Bng5SaCptKWGkLbC9XqdE7pink2p5ouxDCRsD6VCm9Uhtb/KCmW0pYR5XrD5ATAG+fjB
+        tq/zPkzhwzt2OvnenCTREeDTnhdQoXqQpqB6rBTJOqodKeg9/42SWtUqvEH2n4DOIBtt
+        +RZ4wPCXc28TVVk+a+40++4vEOIJGHL/ehZ9G4251V47Qqp8EqK6tidZgbzpCK9Nn9vi
+        wqtw==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M0P2mp10IM"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1BLfe0EQ
+        with ESMTPSA id U06217w1BLff0ES
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Tue, 11 Feb 2020 22:41:40 +0100 (CET)
+        Tue, 11 Feb 2020 22:41:41 +0100 (CET)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     Paul Cercueil <paul@crapouillou.net>,
         Paul Boddie <paul@boddie.org.uk>,
@@ -57,9 +57,9 @@ Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
         linux-gpio@vger.kernel.org, letux-kernel@openphoenux.org,
         kernel@pyra-handheld.com
-Subject: [PATCH 10/14] MIPS: DTS: CI20: add DT node for IR sensor
-Date:   Tue, 11 Feb 2020 22:41:27 +0100
-Message-Id: <5ba2ba43f06955bbfcd8465271bb01cfc1101d13.1581457290.git.hns@goldelico.com>
+Subject: [PATCH 11/14] MIPS: CI20: defconfig: compile gpio-ir driver
+Date:   Tue, 11 Feb 2020 22:41:28 +0100
+Message-Id: <4cda1587b8e380db7b2b921dfcd21e73c001505b.1581457290.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1581457290.git.hns@goldelico.com>
 References: <cover.1581457290.git.hns@goldelico.com>
@@ -70,34 +70,26 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Alex Smith <alex.smith@imgtec.com>
+The CI20 board has a gpio based IR receiver.
 
-The infrared sensor on the CI20 board is connected to a GPIO and can
-be operated by using the gpio-ir-recv driver. Add a DT node for the
-sensor to allow that driver to be used.
-
-Signed-off-by: Alex Smith <alex.smith@imgtec.com>
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- arch/mips/boot/dts/ingenic/ci20.dts | 5 +++++
+ arch/mips/configs/ci20_defconfig | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index e1364f941c7d..b4a820313992 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -62,6 +62,11 @@
- 		enable-active-high;
- 	};
- 
-+	ir: ir-receiver {
-+		compatible = "gpio-ir-receiver";
-+		gpios = <&gpe 3 GPIO_ACTIVE_LOW>;
-+	};
-+
- 	wlan0_power: fixedregulator@1 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "wlan0_power";
+diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
+index 74e5775b8a05..0458ea4d54e8 100644
+--- a/arch/mips/configs/ci20_defconfig
++++ b/arch/mips/configs/ci20_defconfig
+@@ -181,3 +181,8 @@ CONFIG_LEDS_TRIGGER_CPU=y
+ CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
+ CONFIG_LEDS_TRIGGER_TRANSIENT=y
+ CONFIG_LEDS_TRIGGER_CAMERA=m
++CONFIG_LIRC=y
++CONFIG_MEDIA_SUPPORT=m
++CONFIG_RC_DEVICES=y
++CONFIG_IR_GPIO_CIR=m
++CONFIG_IR_GPIO_TX=m
 -- 
 2.23.0
 
