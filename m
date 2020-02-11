@@ -2,31 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 693FB159BC7
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Feb 2020 22:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5532A159BB7
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Feb 2020 22:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727573AbgBKVxm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Feb 2020 16:53:42 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([81.169.146.176]:32392 "EHLO
+        id S1727433AbgBKVxh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Feb 2020 16:53:37 -0500
+Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.121]:36025 "EHLO
         mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727529AbgBKVxl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Feb 2020 16:53:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581458017;
+        with ESMTP id S1727052AbgBKVxh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Feb 2020 16:53:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581458015;
         s=strato-dkim-0002; d=goldelico.com;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=3bosFD/maVT7s0PxPwS4PL1iP9bgaYLTqR2vJvqzmIk=;
-        b=Z5XK0/7LLbJegyHtTRM1Ba6h6GlO9i7wP+AUgGN/AJh6Asf4Tq7+PSD/L8PKA1kpmv
-        MrnjmtQHwDV//WgtBItDVtdbLssef6fiu/AzQx2EELIU/+19yGOKgEjz8T7h4JI/JcBy
-        Bng5SaCptKWGkLbC9XqdE7pink2p5ouxDCRsD6VCm9Uhtb/KCmW0pYR5XrD5ATAG+fjB
-        tq/zPkzhwzt2OvnenCTREeDTnhdQoXqQpqB6rBTJOqodKeg9/42SWtUqvEH2n4DOIBtt
-        +RZ4wPCXc28TVVk+a+40++4vEOIJGHL/ehZ9G4251V47Qqp8EqK6tidZgbzpCK9Nn9vi
-        wqtw==
+        bh=dZbZVnixfoO3ZI6/71WGGwComZxww6jvUSKhufZA4ck=;
+        b=WP+g4oxBU419Lx3k/MqxYw2XP3wOnBvNuwHMFJloU/FHLFUuK47adrLXIvr8uFNY/H
+        xrJL1sKq05KGYpA4Bq+t9UGcrIXKC3zdkLGMNwUdJg2+trP4pDB3BoS2CQY/SWyHX7Ot
+        s4L06w0HiAinaZin4e1panQ3uqMXBYNXZl26CAkAyZZRSDmTztRuFGhsC4SW6HukBPui
+        BxXp159SKs+rnqaNivxRchQNDKf8zgCwClM5BEQu5htPWKmAYPDqAKDKdgbeGrol0/mO
+        sBgYbGlHJMDINh8PH99gyki9O/PTPe7Bgab6D40mKSPyL+XvmQOOA+bK5Wg4j7Q0XLvZ
+        6SLw==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M0P2mp10IM"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1BLff0ES
+        with ESMTPSA id U06217w1BLff0ET
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
         Tue, 11 Feb 2020 22:41:41 +0100 (CET)
@@ -57,9 +57,9 @@ Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
         linux-gpio@vger.kernel.org, letux-kernel@openphoenux.org,
         kernel@pyra-handheld.com
-Subject: [PATCH 11/14] MIPS: CI20: defconfig: compile gpio-ir driver
-Date:   Tue, 11 Feb 2020 22:41:28 +0100
-Message-Id: <4cda1587b8e380db7b2b921dfcd21e73c001505b.1581457290.git.hns@goldelico.com>
+Subject: [PATCH 12/14] MIPS: DTS: CI20: add DT node for SW1 as Enter button
+Date:   Tue, 11 Feb 2020 22:41:29 +0100
+Message-Id: <be2a188b8f36db4c9e21dfd73fef89d25dc5299e.1581457290.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1581457290.git.hns@goldelico.com>
 References: <cover.1581457290.git.hns@goldelico.com>
@@ -70,26 +70,47 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The CI20 board has a gpio based IR receiver.
+The SW1 button can be used as a simple one-button keyboard
+and is connected to PD17.
+
+Note: SW1 has a second meaning to change the boot sequence
+when pressed while powering on.
 
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- arch/mips/configs/ci20_defconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/mips/boot/dts/ingenic/ci20.dts | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
-index 74e5775b8a05..0458ea4d54e8 100644
---- a/arch/mips/configs/ci20_defconfig
-+++ b/arch/mips/configs/ci20_defconfig
-@@ -181,3 +181,8 @@ CONFIG_LEDS_TRIGGER_CPU=y
- CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
- CONFIG_LEDS_TRIGGER_TRANSIENT=y
- CONFIG_LEDS_TRIGGER_CAMERA=m
-+CONFIG_LIRC=y
-+CONFIG_MEDIA_SUPPORT=m
-+CONFIG_RC_DEVICES=y
-+CONFIG_IR_GPIO_CIR=m
-+CONFIG_IR_GPIO_TX=m
+diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+index b4a820313992..8f9d182566db 100644
+--- a/arch/mips/boot/dts/ingenic/ci20.dts
++++ b/arch/mips/boot/dts/ingenic/ci20.dts
+@@ -4,6 +4,7 @@
+ #include "jz4780.dtsi"
+ #include <dt-bindings/clock/ingenic,tcu.h>
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
+ 
+ / {
+ 	compatible = "img,ci20", "ingenic,jz4780";
+@@ -25,6 +26,17 @@
+ 		       0x30000000 0x30000000>;
+ 	};
+ 
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		sw1 {
++			label = "ci20:sw1";
++			linux,code = <KEY_ENTER>;
++			gpios = <&gpd 17 GPIO_ACTIVE_HIGH>;
++			wakeup-source;
++		};
++	};
++
+ 	leds {
+ 		compatible = "gpio-leds";
+ 
 -- 
 2.23.0
 
