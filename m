@@ -2,33 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D879915BB37
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2020 10:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2693615BB3C
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2020 10:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729551AbgBMJKC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Feb 2020 04:10:02 -0500
-Received: from sauhun.de ([88.99.104.3]:45230 "EHLO pokefinder.org"
+        id S1729526AbgBMJKv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Feb 2020 04:10:51 -0500
+Received: from sauhun.de ([88.99.104.3]:45284 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729515AbgBMJKC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 13 Feb 2020 04:10:02 -0500
+        id S1729515AbgBMJKv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 13 Feb 2020 04:10:51 -0500
 Received: from localhost (p54B33627.dip0.t-ipconnect.de [84.179.54.39])
-        by pokefinder.org (Postfix) with ESMTPSA id CD4352C07AD;
-        Thu, 13 Feb 2020 10:09:59 +0100 (CET)
-Date:   Thu, 13 Feb 2020 10:09:59 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 06EB52C08AC;
+        Thu, 13 Feb 2020 10:10:48 +0100 (CET)
+Date:   Thu, 13 Feb 2020 10:10:47 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Thor Thayer <thor.thayer@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: altera: Fix potential integer overflow
-Message-ID: <20200213090959.GA2123@ninjato>
-References: <20200211144704.GA6461@embeddedor>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Alex Smith <alex.smith@imgtec.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>,
+        Richard Fontana <rfontana@redhat.com>,
+        Allison Randal <allison@lohutok.net>,
+        Stephen Boyd <swboyd@chromium.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        letux-kernel@openphoenux.org, kernel@pyra-handheld.com
+Subject: Re: i2c: jz4780: silence log flood on txabrt
+Message-ID: <20200213091047.GB2123@ninjato>
+References: <cover.1581457290.git.hns@goldelico.com>
+ <7facef52af9cff6ebe26ff321a7fd4f1ac640f74.1581457290.git.hns@goldelico.com>
+ <20200212094628.GB1143@ninjato>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="45Z9DzgjV8m4Oswq"
+        protocol="application/pgp-signature"; boundary="uZ3hkaAS1mZxFaxD"
 Content-Disposition: inline
-In-Reply-To: <20200211144704.GA6461@embeddedor>
+In-Reply-To: <20200212094628.GB1143@ninjato>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -36,52 +58,41 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---45Z9DzgjV8m4Oswq
+--uZ3hkaAS1mZxFaxD
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 11, 2020 at 08:47:04AM -0600, Gustavo A. R. Silva wrote:
-> Factor out 100 from the equation and do 32-bit arithmetic (3 * clk_mhz / =
-10)
-> instead of 64-bit.
+On Wed, Feb 12, 2020 at 10:46:28AM +0100, Wolfram Sang wrote:
 >=20
-> Notice that clk_mhz is MHz, so the multiplication will never wrap 32 bits
-> and there is no need for div_u64().
+> The printout for txabrt is way too talkative. Reduce it to the minimum,
+> the rest can be gained by I2C core debugging and datasheet information.
+> Also, make it a debug printout, it won't help the regular user.
+>=20
+> Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
 
-Was there ever? With
-
-	u32 clk_mhz =3D clk_get_rate(idev->i2c_clk) / 1000000;
-
-a later multiplication with 300 should not wrap u32?
-
->  	/* SDA Hold Time, 300ns */
-> -	writel(div_u64(300 * clk_mhz, 1000), idev->base + ALTR_I2C_SDA_HOLD);
-> +	writel(3 * clk_mhz / 10, idev->base + ALTR_I2C_SDA_HOLD);
-
-The change itself is OK, yet I wonder about the comment above:
-
-'clk_mhz * 0.3' will not give a constant 300ns, or?
+Applied to for-current, thanks!
 
 
---45Z9DzgjV8m4Oswq
+--uZ3hkaAS1mZxFaxD
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5FEmMACgkQFA3kzBSg
-KbY1uw/7BhPcgJIcLbjs58paXf+DrYXcCzE4JXUpsxHft1b1iZ35nwkka2gUVbj0
-S2Hi9JqDetiMdhVWHYPjFb04Qe1vyfZa69zwWYjMCwMgLZUUBTDCd8a2enehWBAD
-DAE9DClhtvYWAHbl4BoQTqgFCjwmP5mit8EZjKY79SgfS7ZVPuKWCFOYUztWPBtc
-1UnG2ZtT8eHTl/rrOMND+8+c0HYDuXBuNPCK6QVNX80yhtDgNfVpufQDTHXGgGV8
-CMCmrvHu0To49H2Qj4sSZs/wQQX4u3eMqsS4PARW0UQm8jB/6+EmYoHJH4u87XBg
-7KMQMPeQbMFuU998ns4R9Z32ouhwK+yQunjxL/Fezn9dhX/p6TxdvYu9difsmnPG
-vTPSs8yHSq2AYgfQ0DwWivV6cNEvfdFd7PiAnBBZCO+JDfziPfoqRGFz+do0O9Fm
-SHCm907tybkTtilG1EsgrSWTO04H9V9L7bq8mWc7eG+V7u1+YGkEwKH/38EgnQx1
-em1FinZ/lLglFc17TEvEuapeRO5Nec120q6MHCEkHjuC6cz4SbWesLQnWStWmsBa
-1TTBJT6D9ED0np3F8N7cNKHqbaCTB6V7rCLGgbm4PMKHK81TK/VL+Ya5/WluMv2f
-UtzX/DEoqDxsARBstFHP47bYJlPJCMF4a4CQcRR5ko6kWKXWjYE=
-=R290
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5FEpcACgkQFA3kzBSg
+KbaDmg/+LPu/HFCGDpbL6wSNLy+ddtuDJAdLMW+RLR22jamJt0hmY7Yq5ZkUOeXf
+SxZakdTgTh2D20e4hIEePPUa/cU9TaqfFl67OoLwaIMSVxJn2drOIKKPjqnr5Wbr
+bKX/GhVDAWzBDvg1tMMFZM1G056Q2t+wU5yePYnGdccwFdiak3BKE/Cve3cwSDyq
+hrUIy3ktDy481Cx7q8Lls9rgNGdHEkFPp9cwwT/GkPuPeVOSVQHsZpDcpjlAcMF2
+EkPOTN5o4aRLaFU2zoH+3k6vR+Mf/2KkArKvw8sR4cTVidZ/nqfJIE98Od9vOOGw
+qMm6JT5bns80N9MbRG21RCZ73yDyFChPk1OthQybZrmMB9WPwGshenRXqgX4IxZh
+HRK8HV3d9xRnACbbYsg1SHGtFy0W+FNzU0DEqw5Vg4gZ8P24ZTUEYMghO7BIcv25
+e0qVDNa0DveRvh1zcAGkTB2y0wUDd+Ti3X4/pcIN9FKiAArG5YpGy8YJf4jgfVEP
+gSeLCyfGrT0rJEzORfLo6dw4VrRqr6znBQ0Wk8IQP5++mXxXx5QN7ybNwflu+z/M
+v1579VU4ne2tK8J/+PDZPgciFc8Aj+U8ncDq/zE1+0SdL6HNCXnKO0fh321KgSyK
+cFOdRG+9zHBTeV67Gtr4Y/DrKCyacPDTgctE2SLT2FZXRvPwGpw=
+=dZR8
 -----END PGP SIGNATURE-----
 
---45Z9DzgjV8m4Oswq--
+--uZ3hkaAS1mZxFaxD--
