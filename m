@@ -2,18 +2,18 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C91115CCA0
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2020 21:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D06215CD74
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2020 22:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728051AbgBMUzH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Feb 2020 15:55:07 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37024 "EHLO
+        id S1727856AbgBMVrV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Feb 2020 16:47:21 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37462 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728288AbgBMUzH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Feb 2020 15:55:07 -0500
+        with ESMTP id S1727772AbgBMVrV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Feb 2020 16:47:21 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dafna)
-        with ESMTPSA id 5146929099D
+        with ESMTPSA id A1ED228DA7F
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     robh+dt@kernel.org, mark.rutland@arm.com, bleung@chromium.org,
@@ -21,9 +21,9 @@ Cc:     robh+dt@kernel.org, mark.rutland@arm.com, bleung@chromium.org,
         dafna.hirschfeld@collabora.com, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, helen.koike@collabora.com,
         ezequiel@collabora.com, kernel@collabora.com, dafna3@gmail.com
-Subject: [PATCH v2] dt-bindings: i2c: cros-ec-tunnel: convert i2c-cros-ec-tunnel.txt to yaml
-Date:   Thu, 13 Feb 2020 21:54:51 +0100
-Message-Id: <20200213205451.19899-1-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v3 1/2] dt-bindings: i2c: cros-ec-tunnel: convert i2c-cros-ec-tunnel.txt to yaml
+Date:   Thu, 13 Feb 2020 22:46:55 +0100
+Message-Id: <20200213214656.9801-1-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -44,6 +44,10 @@ Changes since v1:
 - changing the license to (GPL-2.0-only OR BSD-2-Clause)
 - removing "Guenter Roeck <groeck@chromium.org>" from the maintainers list
 - adding ref: /schemas/i2c/i2c-controller.yaml
+
+Changes since v2:
+- adding another patch that fixes a warning found by this patch
+
 
  .../bindings/i2c/i2c-cros-ec-tunnel.txt       | 39 ------------
  .../bindings/i2c/i2c-cros-ec-tunnel.yaml      | 63 +++++++++++++++++++
