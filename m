@@ -2,76 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA7B15EF79
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Feb 2020 18:48:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B0D15F729
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Feb 2020 20:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388958AbgBNP7h (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 14 Feb 2020 10:59:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44486 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388953AbgBNP7f (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:59:35 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5C99A24688;
-        Fri, 14 Feb 2020 15:59:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695975;
-        bh=k1sVeab+9d4zC3g2vP/8WxrH+7ZK4bXHgO/WnXajlcc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ogECddBm/4fFmzr+L+3bUSr7wuvziLWXZXZpveO+V4i3ZRPdivSVfdsAWwsg5oGxO
-         JDHXb5cb6tZm+df1cgp4bk1CDxv6o9uZ+bl+FF+Z9uFhuQmbwkvDCkVKTMoJq9lb7L
-         jtvDtKHkEEL0i42jR+H6wEjnkw5mLGRYsu1GlW/0=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Raul E Rangel <rrangel@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        id S2387508AbgBNTu5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 14 Feb 2020 14:50:57 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:38482 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388678AbgBNTu4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Feb 2020 14:50:56 -0500
+Received: by mail-wr1-f67.google.com with SMTP id y17so12278400wrh.5
+        for <linux-i2c@vger.kernel.org>; Fri, 14 Feb 2020 11:50:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=RC5diiaR31GO1rhNQqP799z+UvDMaz6Wswnev5LOZWQ=;
+        b=nxT8uiE/z52YUercio9Z5U9t7IR3335+MJiJlP80FZE6VyMExWaZrdmMWfDGExAHJH
+         UyKPXipXu0iaHR4UEWlfizHzMWSOaQxyrEdJJR783jkcXSGK9VsyV01m2xMT0Mw8wlbO
+         AaGiC16TBHGyAKgukrHgBCtrmcFsmgrF8VJJq46pfS7/biBsMnKlXrp9aIxSIXpEtxtR
+         PLM75PKRSTkJnEZE5X9BssKTdQqAQ9xFVsjDPMDtFdM5VT2ICVDPbK3G/1E4QLJcjL04
+         PtD8CJCvmor2gmivTA7eV+66UuAsYVEzIRikVpVo0FnB49W3iDElogQ0zRQxZRC0XeSm
+         dj0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=RC5diiaR31GO1rhNQqP799z+UvDMaz6Wswnev5LOZWQ=;
+        b=GCBjKWWkxxLnxeEHlFSl59+iPVc7vTh0FVDue9F1TeiavNIHGGCafgN6R+CHR6MCP3
+         xo34vd9BnfCaK4eaOKzirXwmVncr7cVEisSC5aDKCFJn4gBnHXXg6BZMWDlR5dyVDHJF
+         tyj8O6LNghvebWNKB93XLgbFTOjT1v+CuyS06cXaQIxpzUb/tVYPY4OEa0BH89Q9CR3J
+         X9KrouZ+K7O54NfnDd2+xr2oWinkmMFstNuyYu8SGurjem/FTbM8j0LZLuQ2ov8uJ72k
+         2zG1R9gTSoGPSUbQhz5XSv1M5UXbGQ3uA90RGl2nrnns40a8vMHu5yhLBtbq5Fch/Ln3
+         K7jQ==
+X-Gm-Message-State: APjAAAV4q1yvTKNWJYO87X/TBIBGiBh/mkxlebZFgKtnOUdfkqTxaKdy
+        3y5m4zjTTSV7uFp/KIoJvidGUA==
+X-Google-Smtp-Source: APXvYqxJ0lDeRgZFQoYhh/V5X69ykQbrkOdOXgABmMtigig5INOR94v2BGam/S6IxkftSmbnVRCbIg==
+X-Received: by 2002:a5d:540f:: with SMTP id g15mr5387293wrv.86.1581709854692;
+        Fri, 14 Feb 2020 11:50:54 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id 21sm8793510wmo.8.2020.02.14.11.50.53
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 14 Feb 2020 11:50:54 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Jian Hu <jian.hu@amlogic.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Jian Hu <jian.hu@amlogic.com>, "Rob Herring" <robh@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 501/542] i2c: cros-ec-tunnel: Fix ACPI identifier
-Date:   Fri, 14 Feb 2020 10:48:13 -0500
-Message-Id: <20200214154854.6746-501-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
-References: <20200214154854.6746-1-sashal@kernel.org>
+        Mark Rutland <mark.rutland@arm.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        linux-amlogic@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v4] arm64: dts: meson-a1: add I2C nodes
+In-Reply-To: <20200109031756.176547-1-jian.hu@amlogic.com>
+References: <20200109031756.176547-1-jian.hu@amlogic.com>
+Date:   Fri, 14 Feb 2020 11:50:51 -0800
+Message-ID: <7htv3t9cdg.fsf@baylibre.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Raul E Rangel <rrangel@chromium.org>
+Jian Hu <jian.hu@amlogic.com> writes:
 
-[ Upstream commit b49f8e0e7bd17b968129790e40f9e2566f4f95ec ]
+> There are four I2C controllers in A1 series,
+> Share the same comptible with AXG. Compared to AXG,
+> Drive strength feature is newly added in A1.
+>
+> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+>
+> ---
+> This patch depends on A1 clock patchset at [0][3]
 
-The initial patch was using the incorrect identifier.
+Just FYI, due the dependency, I'm waiting on the clock series to merge
+before queuing this.  When the clock series is ready, please repost this
+since it no longer applies to current mainline.
 
-Fixes: 9af1563a5486 ("i2c: cros-ec-tunnel: Make the device acpi compatible")
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-Acked-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-cros-ec-tunnel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
 
-diff --git a/drivers/i2c/busses/i2c-cros-ec-tunnel.c b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-index 8a2db3ac3b3c7..790ea3fda693b 100644
---- a/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-+++ b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-@@ -299,7 +299,7 @@ static const struct of_device_id cros_ec_i2c_of_match[] = {
- MODULE_DEVICE_TABLE(of, cros_ec_i2c_of_match);
- 
- static const struct acpi_device_id cros_ec_i2c_tunnel_acpi_id[] = {
--	{ "GOOG001A", 0 },
-+	{ "GOOG0012", 0 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(acpi, cros_ec_i2c_tunnel_acpi_id);
--- 
-2.20.1
-
+Kevin
