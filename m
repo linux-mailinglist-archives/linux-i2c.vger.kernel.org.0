@@ -2,39 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 056FD15E661
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Feb 2020 17:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B57C15E49C
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Feb 2020 17:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392203AbgBNQrl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 14 Feb 2020 11:47:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54920 "EHLO mail.kernel.org"
+        id S2405794AbgBNQYE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 14 Feb 2020 11:24:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60626 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404275AbgBNQUz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:20:55 -0500
+        id S2405790AbgBNQYD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:24:03 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8203A2473E;
-        Fri, 14 Feb 2020 16:20:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0DF7524787;
+        Fri, 14 Feb 2020 16:24:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697254;
+        s=default; t=1581697442;
         bh=SONkKqbwf5JAh6hTaH2JVn6iDfa5NTZtilJALl4Cgsw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZNWN39TgsLG4OFE97Wm5M0ZgB4eorKYxWkjtBvFnqm0uY3sD88vq8MRCnaWzQGlbS
-         ro6j5h6fDJN32BsR0Ssa9UCUIVIPzcO/Ah2zLqEOsVbH+OzVSSz8RObVmPDqPY5m/d
-         TpVcJMwEvBaXVBE2HhQqzP73r+Q1qNvwFgL0j9ZM=
+        b=OjoANu1nmTwJhOYrn5Jk9eVa+2z17D2to7I7ZfqPyZ8gh2daM/qRRCSP/h3egjkvN
+         9lj3WJwdPH501CqxdOB3b0HuxZFSM+o1BlZGoDF6hj0344F8sIDSSVWtxUXJoHv4aA
+         fOH4B5Z06GPPVjbGsreFpN2dG1kucwlKNqqSQ+/Q=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
         Jean Delvare <jdelvare@suse.de>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 171/186] docs: i2c: writing-clients: properly name the stop condition
-Date:   Fri, 14 Feb 2020 11:17:00 -0500
-Message-Id: <20200214161715.18113-171-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 128/141] docs: i2c: writing-clients: properly name the stop condition
+Date:   Fri, 14 Feb 2020 11:21:08 -0500
+Message-Id: <20200214162122.19794-128-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
-References: <20200214161715.18113-1-sashal@kernel.org>
+In-Reply-To: <20200214162122.19794-1-sashal@kernel.org>
+References: <20200214162122.19794-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
