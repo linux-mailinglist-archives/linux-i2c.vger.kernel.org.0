@@ -2,62 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52262160CA2
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Feb 2020 09:13:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5686E160CBD
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Feb 2020 09:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727996AbgBQIN2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Feb 2020 03:13:28 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:54735 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726932AbgBQIN1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Feb 2020 03:13:27 -0500
-Received: from [109.168.11.45] (port=53996 helo=[192.168.101.73])
-        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1j3bWv-004PuW-4C; Mon, 17 Feb 2020 09:13:25 +0100
-Subject: Re: [PATCH] i2c: omap: use devm_platform_ioremap_resource()
-To:     qiwuchen55@gmail.com, vigneshr@ti.com, tony@atomide.com,
-        aaro.koskinen@iki.fi
-Cc:     linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
-        chenqiwu <chenqiwu@xiaomi.com>
-References: <1581755803-11242-1-git-send-email-qiwuchen55@gmail.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <0e6c38d0-e3fd-de24-a24e-33aa4168bcee@lucaceresoli.net>
-Date:   Mon, 17 Feb 2020 09:13:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726932AbgBQISD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Feb 2020 03:18:03 -0500
+Received: from sauhun.de ([88.99.104.3]:58544 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727332AbgBQISD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 17 Feb 2020 03:18:03 -0500
+Received: from localhost (p54B3307E.dip0.t-ipconnect.de [84.179.48.126])
+        by pokefinder.org (Postfix) with ESMTPSA id E568D2C0746;
+        Mon, 17 Feb 2020 09:18:00 +0100 (CET)
+Date:   Mon, 17 Feb 2020 09:17:58 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Robert Richter <rrichter@marvell.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Phil Reid <preid@electromag.com.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        George Cherian <gcherian@marvell.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] i2c: convert SMBus alert setup function to return an
+ ERRPTR
+Message-ID: <20200217081758.GA2814@ninjato>
+References: <20200210172929.6001-1-wsa+renesas@sang-engineering.com>
+ <20200210172929.6001-2-wsa+renesas@sang-engineering.com>
+ <20200217075837.2agub5deqdpet3ce@rric.localdomain>
 MIME-Version: 1.0
-In-Reply-To: <1581755803-11242-1-git-send-email-qiwuchen55@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AhhlLboLdkugWU4S"
+Content-Disposition: inline
+In-Reply-To: <20200217075837.2agub5deqdpet3ce@rric.localdomain>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
 
-On 15/02/20 09:36, qiwuchen55@gmail.com wrote:
-> From: chenqiwu <chenqiwu@xiaomi.com>
-> 
-> Use a new API devm_platform_ioremap_resource() to simplify code.
-> 
-> Signed-off-by: chenqiwu <chenqiwu@xiaomi.com>
+--AhhlLboLdkugWU4S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 
--- 
-Luca
+> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>=20
+> > -struct i2c_client *i2c_setup_smbus_alert(struct i2c_adapter *adapter,
+> > +struct i2c_client *i2c_install_smbus_alert(struct i2c_adapter *adapter,
+> >  					 struct i2c_smbus_alert_setup *setup);
+>=20
+> This function naming is a bit odd. It creates a struct i2c_client.
+> Then, there is also i2c_new_client_device() and i2c_new_device(). For
+> i2c_new_client_device() there are no users at all outside of
+> i2c-core-base.c (except for Falcon NIC), it is only a wrapper.
+
+i2c_new_device (and friends) returned NULL on error. I am currently
+converting all i2c_new_* functions to return an ERRPTR. So,
+i2c_new_client_device is the new function, i2c_new_device is deprecated.
+If you check v5.6-rc1, you will find many more users. Similarily,
+i2c_new_dummy is deprecated (and removed already), i2c_new_dummy_device
+is the new thing.
+
+> So how about reducing the interface to those both only to:?
+>=20
+>  i2c_new_device()
+>  i2c_new_device_smbus()
+
+Given the above, it would be:
+
+	i2c_new_client_device()
+	i2c_new_smbus_device()
+
+Yet, I think this is too vague. Maybe
+
+	i2c_new_smbus_alert_device()
+
+? Note that I never used SMBus Alert, so I am happy for feedback from
+people actually using it.
+
+Thanks for the comment!
+
+
+--AhhlLboLdkugWU4S
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5KTDIACgkQFA3kzBSg
+KbY2Tg/9ERLUoo/puQvUCT2DmwNLxguPXMBXpvLqfU/dSnClgrzdH5Mct7sMnLqQ
+k2Vs0mnQNMWXMmX2Nxl7Mmp14iI9nbBuSGmSQa8TVdeCcJO5snPaCS8i52E7tfmI
+otYuwegi91DmoWw4ETyoT/xSKuD9R90lUeBVfN4xxTlkEUpX1JbOnSHoFqH374Ne
+aQLWs4z4IRHK/FO+hvbkStYtTq1zLhFSk+/3so5C3mjp/hGF8C7nufjOqS5MOR4j
+OQqU8cmzzGQUoXoZkKJ08Jj2/zw/fdFgsCnN3iZOLsBn4ChrIKGjdZH3XhmKeKYa
+xB9EF/zPs4bXXsIoJrAZ57a3aglYpberK29W0+oo9pJ/F8bMd+bBFojp/UAM0DDR
+zvFhmU6N0UUIRI7+otYl84wZ/xUVnnHOhi/qPjMheDCnCK7QtShYysKEDpfy1gSY
+cBbatkIe183a+kUrQqaU43uA0sour2JxViLzjCvLoLtSqbwy2YReV+PRRgN5xlqR
+Bm2lTXOX+7dy06y4h5tECKCoKXM2Ek/BNkvXJPq6KF/j82gEEqlc3P86bvZwoIwy
+DHqjM3N3JtHLOwtKwl2jCV/+SnHaprkW6fCrGiPougarDdSI8iH+AFdQvPxC2/zH
+wq6S85inc5KI2mxUHtmj65UDLYtKSMUHyJ8QxJt+WpRKOkaIfSQ=
+=yipG
+-----END PGP SIGNATURE-----
+
+--AhhlLboLdkugWU4S--
