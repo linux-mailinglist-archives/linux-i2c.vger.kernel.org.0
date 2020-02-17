@@ -2,68 +2,165 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F0D1613F3
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Feb 2020 14:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 251241614C8
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Feb 2020 15:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728661AbgBQNvk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Feb 2020 08:51:40 -0500
-Received: from mail-lf1-f46.google.com ([209.85.167.46]:46780 "EHLO
-        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726704AbgBQNvk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Feb 2020 08:51:40 -0500
-Received: by mail-lf1-f46.google.com with SMTP id z26so11891356lfg.13
-        for <linux-i2c@vger.kernel.org>; Mon, 17 Feb 2020 05:51:39 -0800 (PST)
+        id S1728760AbgBQOet (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Feb 2020 09:34:49 -0500
+Received: from mail-il1-f195.google.com ([209.85.166.195]:38982 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726873AbgBQOer (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Feb 2020 09:34:47 -0500
+Received: by mail-il1-f195.google.com with SMTP id f70so14407889ill.6
+        for <linux-i2c@vger.kernel.org>; Mon, 17 Feb 2020 06:34:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=CWUnOwLrFtKopb+Y60N9EGpBz7+GIUoJzcWtgfbxsSQ=;
-        b=JTeaPukF+f2GTlxgis2eIc6Eh3uBqTsFYQDRI2xfOvbwJqvMKIlC67SpE/WjBly5Pg
-         onoWLb4ghtw99mSvYt4FPjKN8irX2uf7jKGvJaS//5flZNr3Ic5ygzPr1+yWhyRmyEXo
-         y2pcz95ZL+O02jmtW9byIFgbTTPpj88t+UWJfmZI7ak9haLB3vtpKoP5IajaiuZmAtXV
-         791SKL9sGfvDVFMw9kshnqD3m9KZgDPKNbOBQm48OVFHO8KGf17mvfqU2E3dZ61Wzd8N
-         OK9nixjkGCBlyGncQk+5X/VjCKMuCf7KQAdqOGfB6Sr7oT6QgubPAWW0WgWvUuVBcbyG
-         aJOw==
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=sYSA9gH5D5QpjxpnnA/foVNSE8oIoSs3/0w1wFARKFA=;
+        b=WRDJvcS8ymr5ylA0UtB/67GmGZlM/1gESH2KXwDfgkuE/OV3VvkijsWD//rIjkTp+/
+         3hqMXipaSN4FEmKuuj8U9V8yMz6PPmOmpjeCQeNX5UlPNQw48w7DBB32NR4fuMQIaR58
+         yLrsthNgb1+PE/pnm3Re2Un53IWzQ/T8cZv5A8Ui84o2GB34SysBLLOfKn0OY+pW80PU
+         WL8chP1WdNh35DgAPQrvBWSN3dNuk5A8WqAZCvKvZ8z0tpWa+OlfblDJHCDC0KcXZ5Tr
+         6cDyMcg+IoFSILBmpeqABcqwPqv/M4fzd9Y2+PT6Ek9gnQBZX0iMVQh5f4dTxL2Fu2kT
+         MXZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=CWUnOwLrFtKopb+Y60N9EGpBz7+GIUoJzcWtgfbxsSQ=;
-        b=W7T7E0GDcLWxNX+bPS2Z6N5fxmepoLVSpgR0VRkvoy5/dJE6Kf7tkvs9+7WQtadmrp
-         jM15faewriaT+QGMzk97ZHkjMwwB51zMCL1mfP0qkgz3G532kLYWl2+Yw0EePMCTzjG8
-         wks2DGyyRk5njizIOqFAnSXJpHtB2ZnLJ4ovb5ytPeIQRN6vWShRrGO/XKzFhnJAtcI9
-         CgxGm2jnf4PnTspQUgzBpdxGRePfKb1mMxrgCjbeafm8ZadNjYX/Kodq6D441D0pZMcp
-         gZr8u6mTxM/3TZQWvmZ5P1EfJmDSHHF4qASVUFL2n4vhCmKTYxBLRerxDXxDNUysY/1s
-         cd2Q==
-X-Gm-Message-State: APjAAAXxdLZ+CNmYoFQZWWnCJt+jRfAcXTV1uoUOPBtHhgy10viCjFc1
-        E+2bHD+nQ4gTjKO6vOGnqFJloyZ7jONMBhlCyFrK+C49
-X-Google-Smtp-Source: APXvYqxER8D/hfn0d4TynDMh7hFSDaWVGBHDmUgoBmO8riwZNCOHQ7OOCG9qCnORtDTJYKSTchiiVWlTo3cs75r+DUY=
-X-Received: by 2002:ac2:5f68:: with SMTP id c8mr7895674lfc.196.1581947498723;
- Mon, 17 Feb 2020 05:51:38 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=sYSA9gH5D5QpjxpnnA/foVNSE8oIoSs3/0w1wFARKFA=;
+        b=m+fSufzsj8xvJ+P1VOo6jhmWld98hfPTDGKEN0HXR10iXhSBuDlcT66t8qtALApRfh
+         E7SSALTRlWGworZX5XdN0eynyp7hGoM61rczh4suKPnhsW2cwXiqqGnAQAwpcx2gEGE2
+         LGHsmunBiROFn5LSSpJm3gSlB0yK2xC/gEeIMLp+o6UrTMA2qeu2wxdUu+D8iPLGv2q9
+         sRB2a4Yqsc+gS32KNiSif0SwOcKbGJHQ4nTU+jigKBIwRe3jRs+EFXxNi6YH4m0CY7i0
+         Wmr7CSdhB6O2UU2wa8RLjQxMjGBQlV45L57V0Gcm3TmHGk57uswy4EsyA8BuF46E7S2m
+         JSkQ==
+X-Gm-Message-State: APjAAAVn6vopFGJEQVFW0EltEtwqN580eqALM5BZpheZGVAorf6IPcWo
+        gBIfYlQNrzYepWPG4dqvudDy21ABieAUFC3ihJ9iOw==
+X-Google-Smtp-Source: APXvYqzi/1eGUH3va8zyTePwxOHIk4rV1thytDj390MDtFkW1a2+0h5oVnoRFXF3ZcGU+SYhkA3e9JGh2GSzypVxjyU=
+X-Received: by 2002:a92:9c1c:: with SMTP id h28mr14256156ili.189.1581950085177;
+ Mon, 17 Feb 2020 06:34:45 -0800 (PST)
 MIME-Version: 1.0
-From:   Tali Perry <tali.perry1@gmail.com>
-Date:   Mon, 17 Feb 2020 15:52:14 +0200
-Message-ID: <CAHb3i=uXLgjT-emHeJzHGG5L_0z94ZwDYcX5vtaDf8+Eh90ziQ@mail.gmail.com>
-Subject: npcm-I2c driver
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+References: <20200107092922.18408-1-ktouil@baylibre.com> <20200107092922.18408-3-ktouil@baylibre.com>
+ <CAMuHMdVv+FRnf6fvjEeu50W5PB-Gh2V8Th1h__vt6guMwk2xNQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdVv+FRnf6fvjEeu50W5PB-Gh2V8Th1h__vt6guMwk2xNQ@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 17 Feb 2020 15:34:34 +0100
+Message-ID: <CAMRc=Mf0-gQJH8Se4sFBCkRNE=b4ww=SWges-7GPD2jsivrv1Q@mail.gmail.com>
+Subject: Re: [PATCH v4 2/5] nvmem: add support for the write-protect pin
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Khouloud Touil <ktouil@baylibre.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        baylibre-upstreaming@groups.io,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+czw., 30 sty 2020 o 09:06 Geert Uytterhoeven <geert@linux-m68k.org> napisa=
+=C5=82(a):
+>
+> Hi Khouloud,
+>
+> On Tue, Jan 7, 2020 at 10:30 AM Khouloud Touil <ktouil@baylibre.com> wrot=
+e:
+> > The write-protect pin handling looks like a standard property that
+> > could benefit other users if available in the core nvmem framework.
+> >
+> > Instead of modifying all the memory drivers to check this pin, make
+> > the NVMEM subsystem check if the write-protect GPIO being passed
+> > through the nvmem_config or defined in the device tree and pull it
+> > low whenever writing to the memory.
+> >
+> > There was a suggestion for introducing the gpiodesc from pdata, but
+> > as pdata is already removed it could be replaced by adding it to
+> > nvmem_config.
+> >
+> > Reference: https://lists.96boards.org/pipermail/dev/2018-August/001056.=
+html
+> >
+> > Signed-off-by: Khouloud Touil <ktouil@baylibre.com>
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+>
+> Thanks for your patch!
+>
+> > --- a/drivers/nvmem/core.c
+> > +++ b/drivers/nvmem/core.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/module.h>
+> >  #include <linux/nvmem-consumer.h>
+> >  #include <linux/nvmem-provider.h>
+> > +#include <linux/gpio/consumer.h>
+> >  #include <linux/of.h>
+> >  #include <linux/slab.h>
+> >  #include "nvmem.h"
+> > @@ -54,8 +55,14 @@ static int nvmem_reg_read(struct nvmem_device *nvmem=
+, unsigned int offset,
+> >  static int nvmem_reg_write(struct nvmem_device *nvmem, unsigned int of=
+fset,
+> >                            void *val, size_t bytes)
+> >  {
+> > -       if (nvmem->reg_write)
+> > -               return nvmem->reg_write(nvmem->priv, offset, val, bytes=
+);
+> > +       int ret;
+> > +
+> > +       if (nvmem->reg_write) {
+> > +               gpiod_set_value_cansleep(nvmem->wp_gpio, 0);
+> > +               ret =3D nvmem->reg_write(nvmem->priv, offset, val, byte=
+s);
+> > +               gpiod_set_value_cansleep(nvmem->wp_gpio, 1);
+> > +               return ret;
+> > +       }
+> >
+> >         return -EINVAL;
+> >  }
+> > @@ -338,6 +345,14 @@ struct nvmem_device *nvmem_register(const struct n=
+vmem_config *config)
+> >                 kfree(nvmem);
+> >                 return ERR_PTR(rval);
+> >         }
+> > +       if (config->wp_gpio)
+> > +               nvmem->wp_gpio =3D config->wp_gpio;
+> > +       else
+> > +               nvmem->wp_gpio =3D gpiod_get_optional(config->dev, "wp"=
+,
+> > +                                                   GPIOD_OUT_HIGH);
+>
+> Shouldn't this GPIO be released in nvmem_release(), by calling gpiod_put(=
+)?
+>
 
-Just a reminder,
-please take a look at this patch.
-This patch is a new driver for npcm-i2c.
-The patch has been waiting patiently for several months now...
+Hi Geert,
 
+Khouloud already sent out a patch but I think it still doesn't fix all
+the problems.
 
-https://patchwork.ozlabs.org/patch/1198846/
+While we should call gpiod_put() for the descs we request - we must
+not do it for the desc we get over the config structure. Unless... we
+make descs reference counted with kref and add gpiod_ref() helper.
+That way we could increase the reference counter in the upper branch
+of the if and not do it in the lower. Calling gpiod_put() would
+internally call kref_put(). Does it make sense? I think that a
+function that's called gpiod_put() but doesn't really use reference
+counting is misleading anyway.
 
+> Once that's implemented, I assume it will be auto-released on registratio=
+n
+> failure by the call to put_device()?
 
-Thanks,
+No, I think this is another leak - why would put_device() lead to
+freeing any resources? Am I missing something?
 
-Tali Perry
-Nuvoton Technologies
+Bart
