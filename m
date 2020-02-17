@@ -2,174 +2,172 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 284A9160F72
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Feb 2020 11:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887B01612E8
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Feb 2020 14:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728817AbgBQKBs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Feb 2020 05:01:48 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:22344 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726397AbgBQKBr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Feb 2020 05:01:47 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01H9v07K012051;
-        Mon, 17 Feb 2020 02:01:09 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pfpt0818; bh=NuwKRN4OmdJZGjIO2uVXLEr9jFygoWVGQrxrz8GCASw=;
- b=UD0aZZwOYjqeDCinRQgHaqQT6iSuYMHleFevOXQU/W//LGPPstQohpyZ2xxhavezEiDV
- gw9wBcgrK7RBlKtkCtxfUSStSbApGQu6nq+bnGl2nKKxmn8viA5iYTTxSnNjUX16sUp7
- zWTOurIALXZz0gvHhWdT7ox9JSlTGE3Gk1CPQhp7Y1H6ud+JgoudXbN8gbOenxQgWj4m
- rRYhXUIG3bc/cC+P8p2lypA8hK7jwQ03BfelvcRPBG/msa2+Iqp01cqgOpYGSokqBr/P
- bfCjTHSEiESaMtFXhUukszBEwBM5+aLloyg2wwC+NqRPau8Kgao8tg4ONMJ81qcURII0 Ig== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2y6h1sxhxu-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 17 Feb 2020 02:01:09 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 17 Feb
- 2020 02:01:07 -0800
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 17 Feb
- 2020 02:01:07 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.175)
- by SC-EXCH01.marvell.com (10.93.176.81) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Mon, 17 Feb 2020 02:01:06 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q5Vz/sGmuG/xzSs/K/0vfwMe9IneG004UfvHxOELR6z7b2BDwcnGgrItu+7R9bTA9MBjbqALo36tfjRsulhc3rljsyaZMzU2hZilFbUbh/Kt3gsXc3Zjj8qpz9PvAESNGrQaDh2x2T1AN4/k2wI9/MqHgc4X891p01DCU/+4RhHpTcdbHDYxYS6ox9CYy2x0cRBm35ubA0MjpnqUS3ddgD7PR5PUdRuemAi+wXd9VszwebKhbeQGw+nuy76eYZe7woHP5jmTGjGF/qEvejf7FkjHTzteoJKIhWcx0VZcFNsCYSid0rmYiaLsh3G4ApaupQFRY5/BfZ8L0WKfBu1CDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NuwKRN4OmdJZGjIO2uVXLEr9jFygoWVGQrxrz8GCASw=;
- b=f2NapgGTQGNiFOSVgYE3MjYtReDjhd4cLXsrIUXIziSr8UkbfxXCyWmDnS5abNkNoe2rda7U5Zsq/A2rr0bZbVSfydjluHO1PBoGnBAX+C0pAr3tabycvpg3pP2nzoTVO+3djf5hf9vnfuVzqy/2dXxNgu0k4S6DPiJB9G4aR2eSTaCx1TXKXc/mJy+SSv2jXZ6TEoXRAekArXIHPKLrVwWbV/2UvR/vbktQtGrJ34FtvaeVA9q/nnrzH9ctstIglzclIIcEmb9vR6ak1P/CDgGhdTjaG+HNMfVIxi1yqjRc5R6ib9qfbcUQUoVsthJLL5s9Z32on9IRIZZeZTUifA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
+        id S1729076AbgBQNPM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Feb 2020 08:15:12 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:38045 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729041AbgBQNPM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Feb 2020 08:15:12 -0500
+Received: by mail-wr1-f65.google.com with SMTP id y17so19670796wrh.5
+        for <linux-i2c@vger.kernel.org>; Mon, 17 Feb 2020 05:15:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NuwKRN4OmdJZGjIO2uVXLEr9jFygoWVGQrxrz8GCASw=;
- b=IaFtapNoVVAdNmyMymJPBXAki2lSLLWd+PyvtlPFgkwuuhGGgO+2KIWVPaW7nNxBjZFi5L4suwK3JVDCdyOj+8DZ3BLzl/zLN4RNuPLbLXhvUg5CidQogLcDtNyzqFZP0qnW/xknOHGspScK8Av5f08+X4tnC0j4wEygdTqiKSA=
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com (10.255.237.10) by
- MN2PR18MB3040.namprd18.prod.outlook.com (20.179.84.14) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2729.29; Mon, 17 Feb 2020 10:01:04 +0000
-Received: from MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::30c4:52fe:fdf8:faff]) by MN2PR18MB3408.namprd18.prod.outlook.com
- ([fe80::30c4:52fe:fdf8:faff%7]) with mapi id 15.20.2729.032; Mon, 17 Feb 2020
- 10:01:04 +0000
-Date:   Mon, 17 Feb 2020 11:00:57 +0100
-From:   Robert Richter <rrichter@marvell.com>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-CC:     Wolfram Sang <wsa@the-dreams.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        <linux-i2c@vger.kernel.org>,
-        "Benjamin Tissoires" <benjamin.tissoires@redhat.com>,
-        Phil Reid <preid@electromag.com.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        George Cherian <gcherian@marvell.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] i2c: convert SMBus alert setup function to return an
- ERRPTR
-Message-ID: <20200217100056.di54osv76xlcnhdj@rric.localdomain>
-References: <20200210172929.6001-1-wsa+renesas@sang-engineering.com>
- <20200210172929.6001-2-wsa+renesas@sang-engineering.com>
- <20200217075837.2agub5deqdpet3ce@rric.localdomain>
- <20200217081758.GA2814@ninjato>
- <64a14944-ed27-9f4f-6d1b-e31508c92692@lucaceresoli.net>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64a14944-ed27-9f4f-6d1b-e31508c92692@lucaceresoli.net>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-ClientProxiedBy: HE1PR0701CA0076.eurprd07.prod.outlook.com
- (2603:10a6:3:64::20) To MN2PR18MB3408.namprd18.prod.outlook.com
- (2603:10b6:208:165::10)
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=drss39w0znhLtWEMxoMFTDQiwBKNc2/yMB0OGM4BPBE=;
+        b=tlefjaaWWdG9709HEt7hX/znNS9f06BoJtUQMXV+DvbSFVfB9w0VsPTQpTO9AkwusO
+         cYgCC65QPxMSAqE/OCeShx1oAnszOJahFgalVSPTikQ3Ok5bVK591WZhjh8R1hHIQExC
+         vJvdziJ++yrH36+IKbWPkzjPHSZ/xbhFPKm+LHfvh+5jiBMl2uDFX19Fc94DPKyq5Ecf
+         FqcTmjbQ+CSQPOJ46p3qQqbQ23NRsxCr87FMK26Rsvvsnr5GEoMOt4GzzBQeEzfcIqAh
+         ZYpQ/ubRB8szSuib819Udar6gAP5TmqJdWOHqmYljkFJ1c6VeHXxAaRZsB+oIh9D9IFe
+         /PeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=drss39w0znhLtWEMxoMFTDQiwBKNc2/yMB0OGM4BPBE=;
+        b=q/opshDtuyw4hoKmpVH1/VDDOUd1XS2vhCaXOdy0G+veUR+uqKGPDjh19epg1LJKUF
+         3SmJ6uMTy+3ShI2nPK/EbMsBPv6G7zO4bJGE5fCF1rQlABIOeilZApW3iAfvOP+G4HPz
+         ifrJIuZfE6xPT9yQ3R9DTKHcL0xlbuu6jNAVTiAaT6PKkWnM9fROFphcRtWS8ysIpU4v
+         8Rk7R0USP+s8HrwDAukEdHlb/7tTkWhuHOlzcKDmDjl0HCO4ub0nGGdCiPirfDLYiPTb
+         rMdcBn5/b6Y1Z0epJTQeS4VjOhM9EWyk1IYOhprO4KoibvswKjqSuwTheIzj7+rZkmic
+         LoNw==
+X-Gm-Message-State: APjAAAXMnwMyl8QoGbMlOlLNmTp8WJDByG2xxbaxyExtiiRdblb95SI+
+        To9ASn8sBK56ko0grG2MHbyU/Gj4oNMtXNivoYDNzg==
+X-Google-Smtp-Source: APXvYqxej90xsjchpzV4UDgecT0jeLmM99BF9yJ9BtoVfchl2OABBjKypdZ5nHop/NJ9drP294akxGMbMC/cIwVKEJk=
+X-Received: by 2002:adf:f401:: with SMTP id g1mr21799460wro.129.1581945310491;
+ Mon, 17 Feb 2020 05:15:10 -0800 (PST)
 MIME-Version: 1.0
-Received: from rric.localdomain (31.208.96.227) by HE1PR0701CA0076.eurprd07.prod.outlook.com (2603:10a6:3:64::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2750.8 via Frontend Transport; Mon, 17 Feb 2020 10:01:02 +0000
-X-Originating-IP: [31.208.96.227]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2fae5329-6107-49be-03a6-08d7b3904cd0
-X-MS-TrafficTypeDiagnostic: MN2PR18MB3040:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MN2PR18MB3040290F1BB8A9D4BA66F37FD9160@MN2PR18MB3040.namprd18.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 0316567485
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(346002)(136003)(396003)(39860400002)(376002)(199004)(189003)(7696005)(86362001)(52116002)(6916009)(54906003)(316002)(956004)(1076003)(53546011)(6506007)(5660300002)(478600001)(186003)(16526019)(2906002)(15650500001)(81166006)(8936002)(66556008)(81156014)(66946007)(66476007)(9686003)(6666004)(55016002)(8676002)(4326008)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3040;H:MN2PR18MB3408.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-Received-SPF: None (protection.outlook.com: marvell.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9ozb8iYjEnmbHPTJoZDonWC6LyYEus7zYYjOc+2pUYSM2qe9I06kAOSsarmdqy76aykWuPahrkvJfvrsC+XVR0bWIFH3aVPES86SKtg6r6NVv/X4M9KSpc/DRFTM6J0IxiOUPq33udjI6kpdt2ceaUuyZJl8Psh7PsvtCy/ZA4+F9tM4Vf5qtxNY8cFTPN/MXQrkZH1ORZ2CBKclxCOj1V39ZQpwvcn7JS/FqseNhFZuTOevhxeeghWHncuLswefL8RXleYqnzo0l7WRF4XgQN8adoYX6n9N+9AaIyrVGAm9VxG0EQ+qkFQIRc546p+aRQg+yBr5lFGO/r1gsGXT5Il8vPAhJIXSx3EKpwSsVAuH2kPmm28gqWNR7BPUWVTofVxn8E911lHtuBgePtCxAzUURRmabwLDv8AFYhBQ1mf3FRrtUcly5naWfuH5zrHr
-X-MS-Exchange-AntiSpam-MessageData: LV9zAUn7e0ZfFzGDKt4sv4KTsQtnWRYkzKT1z5nmcAzhKS7wxUxrd2zqKqwCPwGxGu4rMh8jl0rr0/SBNPhbQ+9vxnYMQk3mjExiBChtvpzIXT8cRUDUt+sz28RUACWtvQKzAlRtzkUqBxY6TP1/HQ==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2fae5329-6107-49be-03a6-08d7b3904cd0
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2020 10:01:04.5415
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EKhZNtobrcmxXaj7fM9ezUE8NptNzhuAUDkvHlieL8dharlzCzg++IRezB6OvmBavG9dpW8nyeNetLmH7wzwsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3040
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-17_05:2020-02-14,2020-02-17 signatures=0
+References: <20200107092922.18408-1-ktouil@baylibre.com> <20200107092922.18408-3-ktouil@baylibre.com>
+ <CAMuHMdVv+FRnf6fvjEeu50W5PB-Gh2V8Th1h__vt6guMwk2xNQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdVv+FRnf6fvjEeu50W5PB-Gh2V8Th1h__vt6guMwk2xNQ@mail.gmail.com>
+From:   Khouloud Touil <ktouil@baylibre.com>
+Date:   Mon, 17 Feb 2020 14:14:59 +0100
+Message-ID: <CALL1Z1z4450depX-X5VC=r3J7fRkTCkFP5re_ULHiS6O1KQ3rA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/5] nvmem: add support for the write-protect pin
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        baylibre-upstreaming@groups.io,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 17.02.20 10:14:52, Luca Ceresoli wrote:
-> Hi,
-> 
-> On 17/02/20 09:17, Wolfram Sang wrote:
-> > 
-> >>> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> >>
-> >>> -struct i2c_client *i2c_setup_smbus_alert(struct i2c_adapter *adapter,
-> >>> +struct i2c_client *i2c_install_smbus_alert(struct i2c_adapter *adapter,
-> >>>  					 struct i2c_smbus_alert_setup *setup);
-> >>
-> >> This function naming is a bit odd. It creates a struct i2c_client.
-> >> Then, there is also i2c_new_client_device() and i2c_new_device(). For
-> >> i2c_new_client_device() there are no users at all outside of
-> >> i2c-core-base.c (except for Falcon NIC), it is only a wrapper.
-> > 
-> > i2c_new_device (and friends) returned NULL on error. I am currently
-> > converting all i2c_new_* functions to return an ERRPTR. So,
-> > i2c_new_client_device is the new function, i2c_new_device is deprecated.
-> > If you check v5.6-rc1, you will find many more users. Similarily,
-> > i2c_new_dummy is deprecated (and removed already), i2c_new_dummy_device
-> > is the new thing.
-> > 
-> >> So how about reducing the interface to those both only to:?
-> >>
-> >>  i2c_new_device()
-> >>  i2c_new_device_smbus()
-> > 
-> > Given the above, it would be:
-> > 
-> > 	i2c_new_client_device()
-> > 	i2c_new_smbus_device()
-> > 
-> > Yet, I think this is too vague. Maybe
-> > 
-> > 	i2c_new_smbus_alert_device()
-> 
-> I always found the function naming a bit messy in the linux i2c
-> implementation. Among the names proposed in this thread,
-> i2c_new_smbus_alert_device() is the only one that makes sense to me for
-> the new function: it is not vague, and it is coherent with other names
-> of recently introduced functions (i2c_new_*_device()). Of course the
-> "alert device" is not a real device, but it looks like it is as it has
-> its own "slave" address. So I vote for this name...
+Le jeu. 30 janv. 2020 =C3=A0 09:06, Geert Uytterhoeven
+<geert@linux-m68k.org> a =C3=A9crit :
+>
+> Hi Khouloud,
+>
+> On Tue, Jan 7, 2020 at 10:30 AM Khouloud Touil <ktouil@baylibre.com> wrot=
+e:
+> > The write-protect pin handling looks like a standard property that
+> > could benefit other users if available in the core nvmem framework.
+> >
+> > Instead of modifying all the memory drivers to check this pin, make
+> > the NVMEM subsystem check if the write-protect GPIO being passed
+> > through the nvmem_config or defined in the device tree and pull it
+> > low whenever writing to the memory.
+> >
+> > There was a suggestion for introducing the gpiodesc from pdata, but
+> > as pdata is already removed it could be replaced by adding it to
+> > nvmem_config.
+> >
+> > Reference: https://lists.96boards.org/pipermail/dev/2018-August/001056.=
+html
+> >
+> > Signed-off-by: Khouloud Touil <ktouil@baylibre.com>
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+>
+> Thanks for your patch!
+>
+> > --- a/drivers/nvmem/core.c
+> > +++ b/drivers/nvmem/core.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/module.h>
+> >  #include <linux/nvmem-consumer.h>
+> >  #include <linux/nvmem-provider.h>
+> > +#include <linux/gpio/consumer.h>
+> >  #include <linux/of.h>
+> >  #include <linux/slab.h>
+> >  #include "nvmem.h"
+> > @@ -54,8 +55,14 @@ static int nvmem_reg_read(struct nvmem_device *nvmem=
+, unsigned int offset,
+> >  static int nvmem_reg_write(struct nvmem_device *nvmem, unsigned int of=
+fset,
+> >                            void *val, size_t bytes)
+> >  {
+> > -       if (nvmem->reg_write)
+> > -               return nvmem->reg_write(nvmem->priv, offset, val, bytes=
+);
+> > +       int ret;
+> > +
+> > +       if (nvmem->reg_write) {
+> > +               gpiod_set_value_cansleep(nvmem->wp_gpio, 0);
+> > +               ret =3D nvmem->reg_write(nvmem->priv, offset, val, byte=
+s);
+> > +               gpiod_set_value_cansleep(nvmem->wp_gpio, 1);
+> > +               return ret;
+> > +       }
+> >
+> >         return -EINVAL;
+> >  }
+> > @@ -338,6 +345,14 @@ struct nvmem_device *nvmem_register(const struct n=
+vmem_config *config)
+> >                 kfree(nvmem);
+> >                 return ERR_PTR(rval);
+> >         }
+> > +       if (config->wp_gpio)
+> > +               nvmem->wp_gpio =3D config->wp_gpio;
+> > +       else
+> > +               nvmem->wp_gpio =3D gpiod_get_optional(config->dev, "wp"=
+,
+> > +                                                   GPIOD_OUT_HIGH);
+>
+> Shouldn't this GPIO be released in nvmem_release(), by calling gpiod_put(=
+)?
+>
+> Once that's implemented, I assume it will be auto-released on registratio=
+n
+> failure by the call to put_device()?
 
-Yes, better fix the naming now that the i/f is new. As all these
-function create a i2c_client struct, the whole set of functions could
-be also named i2c_client_create*() with specialized functions such as
-i2c_client_create_smbus() or so. It will be clear it is a subset.
+Hello Geert,
 
-Anyway, it's just a function name, but while reading the code it was
-not obvious to me that i2c_install_smbus_alert() is actually a subset
-of i2c_new_client_device(). That said, I like the i2c_client_create*()
-variants.
+Thanks for your review.
+Yes you are right, I will add that
 
--Robert
+Khouloud,
+>
+> > +       if (IS_ERR(nvmem->wp_gpio))
+> > +               return PTR_ERR(nvmem->wp_gpio);
+> > +
+> >
+> >         kref_init(&nvmem->refcnt);
+> >         INIT_LIST_HEAD(&nvmem->cells);
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
