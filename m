@@ -2,460 +2,169 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8001627A2
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Feb 2020 15:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 373F516363E
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Feb 2020 23:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbgBROE6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Feb 2020 09:04:58 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54935 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726556AbgBROE6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Feb 2020 09:04:58 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1j43UY-00010B-Ra; Tue, 18 Feb 2020 15:04:50 +0100
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1j43UV-0002LM-Fa; Tue, 18 Feb 2020 15:04:47 +0100
-Date:   Tue, 18 Feb 2020 15:04:47 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     linux@rempel-privat.de, kernel@pengutronix.de, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        stefan@agner.ch, wsa+renesas@sang-engineering.com
-Cc:     Stefan Lengfeld <contact@stefanchrist.eu>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH] i2c: imx: implement master_xfer_atomic callback
-Message-ID: <20200218140447.x5zj3dczmsdlrrds@pengutronix.de>
-References: <20200120093650.12911-1-m.felsch@pengutronix.de>
+        id S1726422AbgBRWey (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 18 Feb 2020 17:34:54 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:37806 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726415AbgBRWey (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Feb 2020 17:34:54 -0500
+Received: by mail-pj1-f68.google.com with SMTP id m13so1630968pjb.2
+        for <linux-i2c@vger.kernel.org>; Tue, 18 Feb 2020 14:34:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=2eKXLdS2SZDwMdln7XhHDX3a3+819OaM4/wB+easctg=;
+        b=UdvCc28GYQs6m40ZXxJ3q6FDb0m33BsrjUc/CPdR1o9n5xyA+FAgsxOGOBAWTUdDWe
+         n1SFmNeodzj4qU3RuxrvUWvAtj7oAtKcOS59IHI4M9ySisy3rZtLt4NkRXSjv7NoBYRJ
+         moTU3/iM4xOtiA8zT8vT/PoO19KfiXP/2iKGI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2eKXLdS2SZDwMdln7XhHDX3a3+819OaM4/wB+easctg=;
+        b=bU4n7v4vVRfbrQxziNkJFzkFKRFV8gAaE7B1/RfKcadziO8oxUtVX5acAMBZe94ysp
+         TIrkYyRDgHRmMh41ONS0GdTY9ENq3g+HhEk8M0cB/Z13U9IKa/RXzJxpzwaFOA4krbOq
+         90+6mD2/GwBONnwQiH1Rc6fegUDjTk5uTDqo5Uo2ZJc+VNfkOrSLbf1JaLr8jSurLB3S
+         TKyki0j2kk3MYesUXMaD8qbY/Gy4Ohu1nILp49xWDWrV8Jrck2DnFlxZ7xR8PY0loy5S
+         dz9NspL8cXumZBN07SPSciJO37yA0bU14jPDo4AtfXLb+PqGaDWA8MWvyrWvp4lXy+6B
+         V6kQ==
+X-Gm-Message-State: APjAAAUdxvru4bOM9+1+u9WiOAXXwWlbdjgdAD1ppdmxpWACV+CTHwmV
+        paQJx9oyBwEIK9dnmh4Nbdopjw==
+X-Google-Smtp-Source: APXvYqzber3G1fDzSXxp/hMZGp+hlW3bIrQzQO+2dgbacLrctSydXRQwbTAiQI7JCjGq8z+fCcnjDQ==
+X-Received: by 2002:a17:90a:d807:: with SMTP id a7mr5507545pjv.15.1582065292004;
+        Tue, 18 Feb 2020 14:34:52 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id f3sm5781941pga.38.2020.02.18.14.34.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Feb 2020 14:34:51 -0800 (PST)
+Date:   Tue, 18 Feb 2020 14:34:50 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org
+Subject: Re: [PATCH 2/6] tty: serial: qcom_geni_serial: Add interconnect
+ support
+Message-ID: <20200218223450.GE15781@google.com>
+References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
+ <1581946205-27189-3-git-send-email-akashast@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200120093650.12911-1-m.felsch@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 15:02:00 up 95 days,  5:20, 124 users,  load average: 0.32, 0.20,
- 0.12
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <1581946205-27189-3-git-send-email-akashast@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-added: wsa+renesas@sang-engineering.com
-
-Hi Wolfram,
-
-gentle ping..
-
-Oleksij already added his ack. There was a nitpick from Stefan Agner
-which I would apply if necessary.
-
-Regards,
-  Marco
-
-On 20-01-20 10:36, Marco Felsch wrote:
-> From: Stefan Lengfeld <contact@stefanchrist.eu>
+On Mon, Feb 17, 2020 at 07:00:01PM +0530, Akash Asthana wrote:
+> Get the interconnect paths for Uart based Serial Engine device
+> and vote according to the baud rate requirement of the driver.
 > 
-> Rework the read and write code paths in the driver to support operation
-> in atomic contexts. To achieve this, the driver must not rely on IRQs
-> and not call schedule(), e.g. via a sleep routine, in these cases.
-> 
-> With this patch the driver supports normal operation, DMA transfers and
-> now the polling mode or also called sleep-free or IRQ-less operation. It
-> makes the code not simpler or easier to read, but atomic I2C transfers
-> are needed on some hardware configurations, e.g. to trigger reboots on
-> an external PMIC chip.
-> 
-> Signed-off-by: Stefan Lengfeld <contact@stefanchrist.eu>
-> [m.felsch@pengutronix.de: integrate https://patchwork.ozlabs.org/patch/1085943/ review feedback]
-> [m.felsch@pengutronix.de: adapt commit message]
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
 > ---
-> Hi,
+>  drivers/tty/serial/qcom_geni_serial.c | 84 ++++++++++++++++++++++++++++++-----
+>  1 file changed, 74 insertions(+), 10 deletions(-)
 > 
-> I picked Stefan Lengfeld RFC patch [1] and added Stefan Agner's review
-> feedback [1]. Checkpatch complains about a few 80 char violations. I
-> kept those to gain readability.
-> 
-> Regards,
->   Marco
-> 
-> [1] https://patchwork.ozlabs.org/patch/1085943/
-> 
-> Changes:
-> - general: adapt commit message
-> - general: fix some 80char line issues
-> - general: s/if(!atomic)/if(atomic)/
-> - i2c_imx_trx_complete: use readb_poll_timeout_atomic()
-> - i2c_imx_trx_complete: adapt poll_timeout and add poll_timeout calc comment
-> - i2c_imx_start: simplify irq disable
-> - i2c_imx_xfer_common: don't allow bus recovery within atomic context
-> - i2c_imx_probe: drop pm_runtime_irq_safe usage and instead:
->   * i2c_imx_xfer_common: move rpm calls into i2c_imx_xfer
->   * i2c_imx_xfer_common: add clk_enable/disable for i2c_imx_xfer_atomic
-> ---
->  drivers/i2c/busses/i2c-imx.c | 146 +++++++++++++++++++++++++----------
->  1 file changed, 105 insertions(+), 41 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index a3b61336fe55..79d5b37fd8a1 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -34,6 +34,7 @@
->  #include <linux/init.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
-> +#include <linux/iopoll.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> @@ -414,7 +415,7 @@ static void i2c_imx_dma_free(struct imx_i2c_struct *i2c_imx)
->  	dma->chan_using = NULL;
->  }
->  
-> -static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy)
-> +static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool atomic)
->  {
->  	unsigned long orig_jiffies = jiffies;
->  	unsigned int temp;
-> @@ -444,15 +445,37 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy)
->  				"<%s> I2C bus is busy\n", __func__);
->  			return -ETIMEDOUT;
->  		}
-> -		schedule();
-> +		if (atomic)
-> +			udelay(100);
-> +		else
-> +			schedule();
->  	}
->  
->  	return 0;
->  }
->  
-> -static int i2c_imx_trx_complete(struct imx_i2c_struct *i2c_imx)
-> +static int i2c_imx_trx_complete(struct imx_i2c_struct *i2c_imx, bool atomic)
->  {
-> -	wait_event_timeout(i2c_imx->queue, i2c_imx->i2csr & I2SR_IIF, HZ / 10);
-> +	if (atomic) {
-> +		void __iomem *addr = i2c_imx->base + (IMX_I2C_I2SR << i2c_imx->hwdata->regshift);
-> +		unsigned int regval;
-> +
-> +		/*
-> +		 * The formula for the poll timeout is documented in the RM
-> +		 * Rev.5 on page 1878:
-> +		 *     T_min = 10/F_scl
-> +		 * Set the value hard as it is done for the non-atomic use-case.
-> +		 * Use 10 kHz for the calculation since this is the minimum
-> +		 * allowed SMBus frequency. Also add an offset of 100us since it
-> +		 * turned out that the I2SR_IIF bit isn't set correctly within
-> +		 * the minimum timeout in polling mode.
-> +		 */
-> +		readb_poll_timeout_atomic(addr, regval, regval & I2SR_IIF, 5, 1000 + 100);
-> +		i2c_imx->i2csr = regval;
-> +		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
-> +	} else {
-> +		wait_event_timeout(i2c_imx->queue, i2c_imx->i2csr & I2SR_IIF, HZ / 10);
-> +	}
->  
->  	if (unlikely(!(i2c_imx->i2csr & I2SR_IIF))) {
->  		dev_dbg(&i2c_imx->adapter.dev, "<%s> Timeout\n", __func__);
-> @@ -530,7 +553,7 @@ static int i2c_imx_clk_notifier_call(struct notifier_block *nb,
->  	return NOTIFY_OK;
->  }
->  
-> -static int i2c_imx_start(struct imx_i2c_struct *i2c_imx)
-> +static int i2c_imx_start(struct imx_i2c_struct *i2c_imx, bool atomic)
->  {
->  	unsigned int temp = 0;
->  	int result;
-> @@ -543,23 +566,29 @@ static int i2c_imx_start(struct imx_i2c_struct *i2c_imx)
->  	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode, i2c_imx, IMX_I2C_I2CR);
->  
->  	/* Wait controller to be stable */
-> -	usleep_range(50, 150);
-> +	if (atomic)
-> +		udelay(50);
-> +	else
-> +		usleep_range(50, 150);
->  
->  	/* Start I2C transaction */
->  	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  	temp |= I2CR_MSTA;
->  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> -	result = i2c_imx_bus_busy(i2c_imx, 1);
-> +	result = i2c_imx_bus_busy(i2c_imx, 1, atomic);
->  	if (result)
->  		return result;
->  
->  	temp |= I2CR_IIEN | I2CR_MTX | I2CR_TXAK;
-> +	if (atomic)
-> +		temp &= ~I2CR_IIEN; /* Disable interrupt */
-> +
->  	temp &= ~I2CR_DMAEN;
->  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
->  	return result;
->  }
->  
-> -static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx)
-> +static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx, bool atomic)
->  {
->  	unsigned int temp = 0;
->  
-> @@ -581,7 +610,7 @@ static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx)
->  	}
->  
->  	if (!i2c_imx->stopped)
-> -		i2c_imx_bus_busy(i2c_imx, 0);
-> +		i2c_imx_bus_busy(i2c_imx, 0, atomic);
->  
->  	/* Disable I2C controller */
->  	temp = i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN,
-> @@ -662,7 +691,7 @@ static int i2c_imx_dma_write(struct imx_i2c_struct *i2c_imx,
->  	/* The last data byte must be transferred by the CPU. */
->  	imx_i2c_write_reg(msgs->buf[msgs->len-1],
->  				i2c_imx, IMX_I2C_I2DR);
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, false);
->  	if (result)
->  		return result;
->  
-> @@ -721,7 +750,7 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
->  
->  	msgs->buf[msgs->len-2] = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
->  	/* read n byte data */
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, false);
->  	if (result)
->  		return result;
->  
-> @@ -734,7 +763,7 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
->  		temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  		temp &= ~(I2CR_MSTA | I2CR_MTX);
->  		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> -		i2c_imx_bus_busy(i2c_imx, 0);
-> +		i2c_imx_bus_busy(i2c_imx, 0, false);
->  	} else {
->  		/*
->  		 * For i2c master receiver repeat restart operation like:
-> @@ -752,7 +781,8 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
->  	return 0;
->  }
->  
-> -static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs)
-> +static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs,
-> +			 bool atomic)
->  {
->  	int i, result;
->  
-> @@ -761,7 +791,7 @@ static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs)
->  
->  	/* write slave address */
->  	imx_i2c_write_reg(i2c_8bit_addr_from_msg(msgs), i2c_imx, IMX_I2C_I2DR);
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, atomic);
->  	if (result)
->  		return result;
->  	result = i2c_imx_acked(i2c_imx);
-> @@ -775,7 +805,7 @@ static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs)
->  			"<%s> write byte: B%d=0x%X\n",
->  			__func__, i, msgs->buf[i]);
->  		imx_i2c_write_reg(msgs->buf[i], i2c_imx, IMX_I2C_I2DR);
-> -		result = i2c_imx_trx_complete(i2c_imx);
-> +		result = i2c_imx_trx_complete(i2c_imx, atomic);
->  		if (result)
->  			return result;
->  		result = i2c_imx_acked(i2c_imx);
-> @@ -785,7 +815,8 @@ static int i2c_imx_write(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs)
->  	return 0;
->  }
->  
-> -static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs, bool is_lastmsg)
-> +static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs,
-> +			bool is_lastmsg, bool atomic)
->  {
->  	int i, result;
->  	unsigned int temp;
-> @@ -798,7 +829,7 @@ static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs, bo
->  
->  	/* write slave address */
->  	imx_i2c_write_reg(i2c_8bit_addr_from_msg(msgs), i2c_imx, IMX_I2C_I2DR);
-> -	result = i2c_imx_trx_complete(i2c_imx);
-> +	result = i2c_imx_trx_complete(i2c_imx, atomic);
->  	if (result)
->  		return result;
->  	result = i2c_imx_acked(i2c_imx);
-> @@ -831,7 +862,7 @@ static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs, bo
->  	for (i = 0; i < msgs->len; i++) {
->  		u8 len = 0;
->  
-> -		result = i2c_imx_trx_complete(i2c_imx);
-> +		result = i2c_imx_trx_complete(i2c_imx, atomic);
->  		if (result)
->  			return result;
->  		/*
-> @@ -859,7 +890,7 @@ static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs, bo
->  				temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  				temp &= ~(I2CR_MSTA | I2CR_MTX);
->  				imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> -				i2c_imx_bus_busy(i2c_imx, 0);
-> +				i2c_imx_bus_busy(i2c_imx, 0, atomic);
->  			} else {
->  				/*
->  				 * For i2c master receiver repeat restart operation like:
-> @@ -890,8 +921,8 @@ static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs, bo
->  	return 0;
->  }
->  
-> -static int i2c_imx_xfer(struct i2c_adapter *adapter,
-> -						struct i2c_msg *msgs, int num)
-> +static int i2c_imx_xfer_common(struct i2c_adapter *adapter,
-> +			       struct i2c_msg *msgs, int num, bool atomic)
->  {
->  	unsigned int i, temp;
->  	int result;
-> @@ -900,16 +931,16 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
->  
->  	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
->  
-> -	result = pm_runtime_get_sync(i2c_imx->adapter.dev.parent);
-> -	if (result < 0)
-> -		goto out;
-> -
->  	/* Start I2C transfer */
-> -	result = i2c_imx_start(i2c_imx);
-> +	result = i2c_imx_start(i2c_imx, atomic);
->  	if (result) {
-> -		if (i2c_imx->adapter.bus_recovery_info) {
-> +		/*
-> +		 * Bus recovery uses gpiod_get_value_cansleep() which is not
-> +		 * allowed within atomic context.
-> +		 */
-> +		if (!atomic && i2c_imx->adapter.bus_recovery_info) {
->  			i2c_recover_bus(&i2c_imx->adapter);
-> -			result = i2c_imx_start(i2c_imx);
-> +			result = i2c_imx_start(i2c_imx, atomic);
->  		}
->  	}
->  
-> @@ -927,7 +958,7 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
->  			temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  			temp |= I2CR_RSTA;
->  			imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> -			result = i2c_imx_bus_busy(i2c_imx, 1);
-> +			result = i2c_imx_bus_busy(i2c_imx, 1, atomic);
->  			if (result)
->  				goto fail0;
->  		}
-> @@ -951,13 +982,14 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
->  			(temp & I2SR_SRW ? 1 : 0), (temp & I2SR_IIF ? 1 : 0),
->  			(temp & I2SR_RXAK ? 1 : 0));
->  #endif
-> -		if (msgs[i].flags & I2C_M_RD)
-> -			result = i2c_imx_read(i2c_imx, &msgs[i], is_lastmsg);
-> -		else {
-> -			if (i2c_imx->dma && msgs[i].len >= DMA_THRESHOLD)
-> +		if (msgs[i].flags & I2C_M_RD) {
-> +			result = i2c_imx_read(i2c_imx, &msgs[i], is_lastmsg, atomic);
-> +		} else {
-> +			if (!atomic &&
-> +			    i2c_imx->dma && msgs[i].len >= DMA_THRESHOLD)
->  				result = i2c_imx_dma_write(i2c_imx, &msgs[i]);
->  			else
-> -				result = i2c_imx_write(i2c_imx, &msgs[i]);
-> +				result = i2c_imx_write(i2c_imx, &msgs[i], atomic);
->  		}
->  		if (result)
->  			goto fail0;
-> @@ -965,18 +997,49 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
->  
->  fail0:
->  	/* Stop I2C transfer */
-> -	i2c_imx_stop(i2c_imx);
-> -
-> -	pm_runtime_mark_last_busy(i2c_imx->adapter.dev.parent);
-> -	pm_runtime_put_autosuspend(i2c_imx->adapter.dev.parent);
-> +	i2c_imx_stop(i2c_imx, atomic);
->  
-> -out:
->  	dev_dbg(&i2c_imx->adapter.dev, "<%s> exit with: %s: %d\n", __func__,
->  		(result < 0) ? "error" : "success msg",
->  			(result < 0) ? result : num);
->  	return (result < 0) ? result : num;
->  }
->  
-> +static int i2c_imx_xfer(struct i2c_adapter *adapter,
-> +			struct i2c_msg *msgs, int num)
-> +{
-> +	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(adapter);
-> +	int result;
-> +
-> +	result = pm_runtime_get_sync(i2c_imx->adapter.dev.parent);
-> +	if (result < 0)
-> +		return result;
-> +
-> +	result = i2c_imx_xfer_common(adapter, msgs, num, false);
-> +
-> +	pm_runtime_mark_last_busy(i2c_imx->adapter.dev.parent);
-> +	pm_runtime_put_autosuspend(i2c_imx->adapter.dev.parent);
-> +
-> +	return result;
-> +}
-> +
-> +static int i2c_imx_xfer_atomic(struct i2c_adapter *adapter,
-> +			       struct i2c_msg *msgs, int num)
-> +{
-> +	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(adapter);
-> +	int result;
-> +
-> +	result = clk_enable(i2c_imx->clk);
-> +	if (result)
-> +		return result;
-> +
-> +	result = i2c_imx_xfer_common(adapter, msgs, num, true);
-> +
-> +	clk_disable(i2c_imx->clk);
-> +
-> +	return result;
-> +}
-> +
->  static void i2c_imx_prepare_recovery(struct i2c_adapter *adap)
->  {
->  	struct imx_i2c_struct *i2c_imx;
-> @@ -1049,8 +1112,9 @@ static u32 i2c_imx_func(struct i2c_adapter *adapter)
->  }
->  
->  static const struct i2c_algorithm i2c_imx_algo = {
-> -	.master_xfer	= i2c_imx_xfer,
-> -	.functionality	= i2c_imx_func,
-> +	.master_xfer = i2c_imx_xfer,
-> +	.master_xfer_atomic = i2c_imx_xfer_atomic,
-> +	.functionality = i2c_imx_func,
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index 191abb1..a8fb2b7 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -174,6 +174,35 @@ static struct qcom_geni_serial_port qcom_geni_console_port = {
+>  	},
 >  };
 >  
->  static int i2c_imx_probe(struct platform_device *pdev)
-> -- 
-> 2.20.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+> +static int geni_serial_icc_get(struct geni_se *se)
+> +{
+> +	if (!se)
+> +		return -EINVAL;
+> +
+> +	se->icc_path[GENI_TO_CORE] = of_icc_get(se->dev, "qup-core");
+> +	if (IS_ERR(se->icc_path[GENI_TO_CORE]))
+> +		return PTR_ERR(se->icc_path[GENI_TO_CORE]);
+> +
+> +	se->icc_path[CPU_TO_GENI] = of_icc_get(se->dev, "qup-config");
+> +	if (IS_ERR(se->icc_path[CPU_TO_GENI])) {
+> +		icc_put(se->icc_path[GENI_TO_CORE]);
+> +		se->icc_path[GENI_TO_CORE] = NULL;
+> +		return PTR_ERR(se->icc_path[CPU_TO_GENI]);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +void geni_serial_icc_put(struct geni_se *se)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(se->icc_path); i++) {
+> +		icc_put(se->icc_path[i]);
+> +		se->icc_path[i] = NULL;
+> +	}
+> +}
+> +
+>  static int qcom_geni_serial_request_port(struct uart_port *uport)
+>  {
+>  	struct platform_device *pdev = to_platform_device(uport->dev);
+> @@ -949,6 +978,12 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+>  	ser_clk_cfg = SER_CLK_EN;
+>  	ser_clk_cfg |= clk_div << CLK_DIV_SHFT;
+>  
+> +	/* Put BW vote only on CPU path as driver supports FIFO mode only */
+> +	port->se.avg_bw_cpu = Bps_to_icc(baud);
+> +	port->se.peak_bw_cpu = Bps_to_icc(2 * baud);
+> +	icc_set_bw(port->se.icc_path[CPU_TO_GENI], port->se.avg_bw_cpu,
+> +			port->se.peak_bw_cpu);
+> +
+>  	/* parity */
+>  	tx_trans_cfg = readl(uport->membase + SE_UART_TX_TRANS_CFG);
+>  	tx_parity_cfg = readl(uport->membase + SE_UART_TX_PARITY_CFG);
+> @@ -1179,11 +1214,20 @@ static void qcom_geni_serial_pm(struct uart_port *uport,
+>  	if (old_state == UART_PM_STATE_UNDEFINED)
+>  		old_state = UART_PM_STATE_OFF;
+>  
+> -	if (new_state == UART_PM_STATE_ON && old_state == UART_PM_STATE_OFF)
+> +	if (new_state == UART_PM_STATE_ON && old_state == UART_PM_STATE_OFF) {
+> +		/* Put BW vote for core clocks and CPU */
+> +		icc_set_bw(port->se.icc_path[GENI_TO_CORE],
+> +			port->se.avg_bw_core, port->se.peak_bw_core);
+> +		icc_set_bw(port->se.icc_path[CPU_TO_GENI], port->se.avg_bw_cpu,
+> +			port->se.peak_bw_cpu);
+>  		geni_se_resources_on(&port->se);
+> -	else if (new_state == UART_PM_STATE_OFF &&
+> -			old_state == UART_PM_STATE_ON)
+> +	} else if (new_state == UART_PM_STATE_OFF &&
+> +			old_state == UART_PM_STATE_ON) {
+>  		geni_se_resources_off(&port->se);
+> +		/* Remove BW vote from core clocks and CPU */
+> +		icc_set_bw(port->se.icc_path[GENI_TO_CORE], 0, 0);
+> +		icc_set_bw(port->se.icc_path[CPU_TO_GENI], 0, 0);
+> +	}
+>  }
+>  
+>  static const struct uart_ops qcom_geni_console_pops = {
+> @@ -1274,15 +1318,30 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+>  	port->rx_fifo_depth = DEF_FIFO_DEPTH_WORDS;
+>  	port->tx_fifo_width = DEF_FIFO_WIDTH_BITS;
+>  
+> +	ret = geni_serial_icc_get(&port->se);
+> +	if (ret)
+> +		return ret;
+> +	/* Set the bus quota to a reasonable value */
+> +	port->se.avg_bw_core = console ? Bps_to_icc(1000) :
+> +		Bps_to_icc(CORE_2X_50_MHZ);
+> +	port->se.peak_bw_core = console ? Bps_to_icc(1000) :
+> +		Bps_to_icc(CORE_2X_100_MHZ);
+> +	port->se.avg_bw_cpu = Bps_to_icc(1000);
+> +	port->se.avg_bw_cpu = Bps_to_icc(1000);
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+I guess you mean 'peak_bw_cpu'?
