@@ -2,163 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CDD16365D
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Feb 2020 23:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C367B163CEE
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2020 07:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726438AbgBRWrL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Feb 2020 17:47:11 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:39435 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726461AbgBRWrL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Feb 2020 17:47:11 -0500
-Received: by mail-pl1-f194.google.com with SMTP id g6so8689528plp.6
-        for <linux-i2c@vger.kernel.org>; Tue, 18 Feb 2020 14:47:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=focsb7O7M7LZXv1BjQxj6gFRUP9YP36BqaMZFS6X++s=;
-        b=F54FGwb9xvr3THcPcYljDLalOKVE0LMxiJ8ZkI9zFOpfZxJn0u9PfFddllc5OXOTDT
-         sNc8UtfvLCT/boM7yzmGeTKmJ95XSPri/VPN4SK6O80CNp4OvwsO7qrr2YdqyEpIxbPH
-         vi9BrwpSI0UKidHfCxCiuQTuYYw1wsM1ImhK0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=focsb7O7M7LZXv1BjQxj6gFRUP9YP36BqaMZFS6X++s=;
-        b=gKxb7JQ3w2VrXxxE9D+8Qq+hVfEDX0QOQ+ZhfS/jh5BUJ0hrvqJkHis6rQu+T7B4pB
-         D82aZ12EL+sAeQsJWTDTn92Khi0gVHdqVVEQoZMdkInyPJbb3yiwIXVb4tBBtAezK5ck
-         MdNJT14WEQaqF0TkZ873fL+I7a23x/h9IVeXPcyLZwe3opTUTO4ZEbwtr/016TmxOH9c
-         2sVRsYV9UrMtr4llWrZokdAS87j3x4UN/CoAOArjHiGd3VAiITtqtFIEI+WqgULi4HE8
-         oMmm+sWH7kjROUyjZS8w+Hkw9DETXEQOoH6H8WDlP6fevMyRtgkEDEEvt1jHNunLrO7l
-         eTbA==
-X-Gm-Message-State: APjAAAVhCP8lxzNT/LY4t0wV/xaaBIMUL7D+QNe1QmOG/4y94D0KkikJ
-        CtnQR2Hl1tHjObhQYt8wLnbEBw==
-X-Google-Smtp-Source: APXvYqzqLkaYLCnozHjZ+EA1d3mHYozNsxvPd2mLKnFoZLI4SdFV/xWMMXE1mzXjLDf+X/H8vWNXnQ==
-X-Received: by 2002:a17:90a:3ae5:: with SMTP id b92mr5150415pjc.26.1582066030963;
-        Tue, 18 Feb 2020 14:47:10 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id t65sm24994pfd.178.2020.02.18.14.47.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Feb 2020 14:47:10 -0800 (PST)
-Date:   Tue, 18 Feb 2020 14:47:09 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org
-Subject: Re: [PATCH 3/6] i2c: i2c-qcom-geni: Add interconnect support
-Message-ID: <20200218224709.GF15781@google.com>
-References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
- <1581946205-27189-4-git-send-email-akashast@codeaurora.org>
+        id S1726156AbgBSGK5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Feb 2020 01:10:57 -0500
+Received: from zmail.nuczu.edu.ua ([91.234.43.158]:44388 "EHLO
+        zmail.nuczu.edu.ua" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726096AbgBSGK5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Feb 2020 01:10:57 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by zmail.nuczu.edu.ua (Postfix) with ESMTP id 7A2486C4A8A;
+        Wed, 19 Feb 2020 01:01:39 +0200 (EET)
+Received: from zmail.nuczu.edu.ua ([127.0.0.1])
+        by localhost (zmail.nuczu.edu.ua [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id hmqx0pO0E3rl; Wed, 19 Feb 2020 01:01:38 +0200 (EET)
+Received: from localhost (localhost [127.0.0.1])
+        by zmail.nuczu.edu.ua (Postfix) with ESMTP id B3BE26C2751;
+        Tue, 18 Feb 2020 23:33:49 +0200 (EET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zmail.nuczu.edu.ua B3BE26C2751
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nuczu.edu.ua;
+        s=A52E72AE-E4EF-11E9-9906-53CE3145A657; t=1582061630;
+        bh=o+H3O7n1+zJcXo0FhJs7spyf8HmE4ClnBa/Y2Gk0DL0=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=YZ0wMSkbKdF+8D52Dp0/SRs29ynTyxqAYKNjmcxg1DGGlbTyq64aOC5T1+SHZYg6g
+         xnTbNmfL/ZPDABtYDvKpt38lsFSZGfQxAFp4BfhXP7Bjw0mm+75Zbt+AYW6Qdq40lm
+         1M3/h/m5RPNu/XDhm19AUNPmNN/NsM3Rl/GiwQtsWsy5UL7YLq3mj8UFrupnlaePhn
+         4vzg4x77YCcaZSdlk3JqwwsOc7FVO2xfb3BbZvAcZmBZjoYS1bIbw6b7TSmIB8F8GL
+         4G/RaHUknknSxea3mQy7EfDSfjF/aHwMoXJaLuuzG1EFi+8vO27A2w9ddLsxmNQ1zj
+         WAdX89ah+SSAg==
+X-Virus-Scanned: amavisd-new at nuczu.edu.ua
+Received: from zmail.nuczu.edu.ua ([127.0.0.1])
+        by localhost (zmail.nuczu.edu.ua [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ExKAjhN7KmgZ; Tue, 18 Feb 2020 23:33:49 +0200 (EET)
+Received: from [10.109.183.140] (unknown [105.12.3.161])
+        by zmail.nuczu.edu.ua (Postfix) with ESMTPSA id D77AE4F934D;
+        Tue, 18 Feb 2020 21:57:52 +0200 (EET)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1581946205-27189-4-git-send-email-akashast@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Euro?=
+To:     Recipients <dushkin@nuczu.edu.ua>
+From:   ''Michael weirsky'' <dushkin@nuczu.edu.ua>
+Date:   Tue, 18 Feb 2020 21:57:43 +0200
+Reply-To: mikeweirskyspende@gmail.com
+Message-Id: <20200218195752.D77AE4F934D@zmail.nuczu.edu.ua>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 07:00:02PM +0530, Akash Asthana wrote:
-> Get the interconnect paths for I2C based Serial Engine device
-> and vote according to the bus speed of the driver.
-> 
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> ---
->  drivers/i2c/busses/i2c-qcom-geni.c | 84 ++++++++++++++++++++++++++++++++++++--
->  1 file changed, 80 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 17abf60c..5de10a1 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -163,6 +163,44 @@ static void qcom_geni_i2c_conf(struct geni_i2c_dev *gi2c)
->  	writel_relaxed(val, gi2c->se.base + SE_I2C_SCL_COUNTERS);
->  }
->  
-> +static int geni_i2c_icc_get(struct geni_se *se)
-> +{
-> +	if (!se)
-> +		return -EINVAL;
+Lieber Freund,
 
-check is not needed
+Ich bin Herr Mike Weirsky, New Jersey, Vereinigte Staaten von Amerika, der =
+Mega-Gewinner von $ 273million In Mega Millions Jackpot, spende ich an 5 zu=
+f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
+il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
+meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
+und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
+Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
+ spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen.
+Das ist dein Spendencode: [MW530342019]
+www.youtube.com/watch?v=3Dun8yRTmrYMY
 
-> +
-> +	se->icc_path[GENI_TO_CORE] = of_icc_get(se->dev, "qup-core");
-> +	if (IS_ERR(se->icc_path[GENI_TO_CORE]))
-> +		return PTR_ERR(se->icc_path[GENI_TO_CORE]);
-> +
-> +	se->icc_path[CPU_TO_GENI] = of_icc_get(se->dev, "qup-config");
-> +	if (IS_ERR(se->icc_path[CPU_TO_GENI])) {
-> +		icc_put(se->icc_path[GENI_TO_CORE]);
-> +		se->icc_path[GENI_TO_CORE] = NULL;
+Antworten Sie mit dem SPENDE-CODE an diese =
 
-echoing Bjorn's comments on 'tty: serial: qcom_geni_serial: Add
-interconnect support', resetting is not needed since _probe() will
-fail.
 
-> +		return PTR_ERR(se->icc_path[CPU_TO_GENI]);
-> +	}
-> +
-> +	se->icc_path[GENI_TO_DDR] = of_icc_get(se->dev, "qup-memory");
-> +	if (IS_ERR(se->icc_path[GENI_TO_DDR])) {
-> +		icc_put(se->icc_path[GENI_TO_CORE]);
-> +		se->icc_path[GENI_TO_CORE] = NULL;
+E-Mail:mikeweirskyspende@gmail.com
 
-ditto
+Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
 
-> +		icc_put(se->icc_path[CPU_TO_GENI]);
-> +		se->icc_path[CPU_TO_GENI] = NULL;
-
-ditto
-
-> +		return PTR_ERR(se->icc_path[GENI_TO_DDR]);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +void geni_i2c_icc_put(struct geni_se *se)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(se->icc_path); i++) {
-> +		icc_put(se->icc_path[i]);
-> +		se->icc_path[i] = NULL;
-
-not needed
-
-> +	}
-> +}
-> +
->  static void geni_i2c_err_misc(struct geni_i2c_dev *gi2c)
->  {
->  	u32 m_cmd = readl_relaxed(gi2c->se.base + SE_GENI_M_CMD0);
-> @@ -563,17 +601,34 @@ static int geni_i2c_probe(struct platform_device *pdev)
->  	gi2c->adap.dev.of_node = pdev->dev.of_node;
->  	strlcpy(gi2c->adap.name, "Geni-I2C", sizeof(gi2c->adap.name));
->  
-> +	ret = geni_i2c_icc_get(&gi2c->se);
-> +	if (ret)
-> +		return ret;
-> +	/* Set the bus quota to a reasonable value */
-> +	gi2c->se.avg_bw_core = Bps_to_icc(1000);
-> +	gi2c->se.peak_bw_core = Bps_to_icc(CORE_2X_100_MHZ);
-> +	gi2c->se.avg_bw_cpu = Bps_to_icc(1000);
-> +	gi2c->se.peak_bw_cpu = Bps_to_icc(1000);
-> +	gi2c->se.avg_bw_ddr = Bps_to_icc(gi2c->clk_freq_out);
-> +	gi2c->se.peak_bw_ddr = Bps_to_icc(2 * gi2c->clk_freq_out);
-> +
-> +	/* Vote for core clocks and CPU for register access */
-> +	icc_set_bw(gi2c->se.icc_path[GENI_TO_CORE], gi2c->se.avg_bw_core,
-> +				gi2c->se.peak_bw_core);
-> +	icc_set_bw(gi2c->se.icc_path[CPU_TO_GENI], gi2c->se.avg_bw_cpu,
-> +				gi2c->se.peak_bw_cpu);
-
-error handling needed?
+Gr=C3=BC=C3=9Fe
+Herr Mike Weirsky
