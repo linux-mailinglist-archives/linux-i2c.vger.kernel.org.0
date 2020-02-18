@@ -2,103 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 839CB161F7D
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Feb 2020 04:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08717161FCB
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Feb 2020 05:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726346AbgBRDTZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Feb 2020 22:19:25 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41618 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726415AbgBRDTZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Feb 2020 22:19:25 -0500
-Received: by mail-pg1-f196.google.com with SMTP id 70so10213965pgf.8
-        for <linux-i2c@vger.kernel.org>; Mon, 17 Feb 2020 19:19:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BjESBNNd4zA4/xXm+Fx/7whm6bU5Bz00evekQd0atG0=;
-        b=dPNOklRfcHZVXvg7ClWdTf50p7mBZKJAOS/1kBxt364yg0SJ9NR2pVzUhYQuie/Vhb
-         mMRua+uI+pbN+WPIdh+Sp/JKzbQwQLrs9Jtmznr471cIt8KfuuFsaGh2Gy2t0OS/5MI9
-         GmmZaMoaQ6ayO1vMiuBacWdRTEHEfEsjEktWphi9e+nTd8RtfLmsxK3SN1sQg+eHMq/D
-         bx4wl0/OdxKOkFPybOPCCuqlMZJQCovzuLYDT5vsmpJbFgIfr53TcRdhQkTmunM9b088
-         WJB9Sd0BOYjxO1iOl71fPb6cCIGNn0KD0MoMnnBDIvAbMnHa5BWc7ROU1gsbb92mq4Ar
-         vzRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BjESBNNd4zA4/xXm+Fx/7whm6bU5Bz00evekQd0atG0=;
-        b=hNw9Yh3lmWcSlnc3O2KUL44vfq5UHAXw6CQRpoQaYHLSfWBC2GyIRQtlVBP4T52JBO
-         luvqPB/ERJD1IWsKSZZs0qTQtAW2uBGH1kuEj15Qd8Gr8g2we5A1h/lJtk+8TEpkHvHR
-         fq/U47LypjTFW/ILlp4jOMSst61CSW5H4+QDgA/4uyh+NvCJDenGSbNr4BB5MmBafupy
-         erbak0VMA9Da4qhBEXFMlKotpsAGI3n+LwXMli/XoCtQHT8hA5sR5vIeDR8aPkRhK/bz
-         A8yyKSI2cezILkpwzh+40XdgueKCcCak0OqW3L0LATlWhIhFkGd6sa8vxs4o+ViENM7+
-         N89A==
-X-Gm-Message-State: APjAAAXRkUIGfAToz3gAwGxwsYK43zpd+/J9/3KcW3KdyUaienkfrLjD
-        F8DnChmO+2kVDTT+68gaaoOPAg==
-X-Google-Smtp-Source: APXvYqxYWtCDEG+AexP7+FJdG6S5k/Ny4QSg9Cetbw2G9McmCV5S+hbhBPCqRdjRY+7F1vGcUuaOLA==
-X-Received: by 2002:a63:8b44:: with SMTP id j65mr20230161pge.272.1581995964276;
-        Mon, 17 Feb 2020 19:19:24 -0800 (PST)
-Received: from ripper (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id t28sm1773258pfq.122.2020.02.17.19.19.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2020 19:19:23 -0800 (PST)
-Date:   Mon, 17 Feb 2020 19:18:30 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org, wsa@the-dreams.de,
-        broonie@kernel.org, mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org
-Subject: Re: [PATCH 6/6] arm64: dts: sc7180: Add interconnect for QUP and QSPI
-Message-ID: <20200218031830.GX955802@ripper>
-References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
- <1581946205-27189-7-git-send-email-akashast@codeaurora.org>
+        id S1726261AbgBRE2A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Feb 2020 23:28:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50040 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726245AbgBRE2A (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 17 Feb 2020 23:28:00 -0500
+Received: from localhost (unknown [223.226.112.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4DE6320801;
+        Tue, 18 Feb 2020 04:27:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582000080;
+        bh=3V8dtSEEWYHUrJAqgoaRipJSzzAa9HknhsjFmrC5md8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u/q51Np8cszHYONgdUOCTiUZ26Sn+q2eS77mb2OY7fCacfGmXAnVNaeWvLYQuU+CC
+         eZXGIxNgg7Y/Eyfu7v4aild2SSZe5BvQCcLjDRbgg+FwXNiSZHUANcksFVf1LQKCtR
+         2Kvz1TxNjdG+InsFKuUU/LuALsr+sz2zR/yjvbKU=
+Date:   Tue, 18 Feb 2020 09:57:55 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     wsa@the-dreams.de, Loic Poulain <loic.poulain@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, todor.too@gmail.com,
+        linux-i2c@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Todor Tomov <todor.tomov@linaro.org>
+Subject: Re: [PATCH v2 1/3] i2c: Add Qualcomm CCI I2C driver
+Message-ID: <20200218042755.GZ2618@vkoul-mobl>
+References: <1577784397-28682-1-git-send-email-loic.poulain@linaro.org>
+ <CAMZdPi_CYWgCjCLW3TCCAPFnbmn3LYGrzrah+p-_+xZkYbmTPQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1581946205-27189-7-git-send-email-akashast@codeaurora.org>
+In-Reply-To: <CAMZdPi_CYWgCjCLW3TCCAPFnbmn3LYGrzrah+p-_+xZkYbmTPQ@mail.gmail.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon 17 Feb 05:30 PST 2020, Akash Asthana wrote:
+Hi Wolfram,
 
-> Add interconnect ports for GENI QUPs and QSPI to set bus capabilities.
+On 24-01-20, 09:13, Loic Poulain wrote:
+> On Tue, 31 Dec 2019 at 10:23, Loic Poulain <loic.poulain@linaro.org> wrote:
+> >
+> > This commit adds I2C bus support for the Camera Control Interface
+> > (CCI) I2C controller found on the Qualcomm SoC processors. This I2C
+> > controller supports two masters and they are registered to the core.
+> >
+> > CCI versions supported in the driver are MSM8916 and MSM8996.
+> >
+> > This is a rework of the patch posted by Vinod:
+> > https://patchwork.kernel.org/patch/10569961/
+> >
+> > With additional fixes + most of the comments addressed.
+> >
+> > Signed-off-by: Todor Tomov <todor.tomov@linaro.org>
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+> > ---
+> >  v2: Remove clock rates config from driver (done via assigned clock)
+> >      Added CCI timeout recovery from Ricardo's patch:
+> >         https://www.spinics.net/lists/linux-i2c/msg36973.html
 > 
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> ---
-> Note:
->  - This patch depends on series https://patchwork.kernel.org/cover/11313817/
->    [Add SC7180 interconnect provider driver]. It won't compile without that.
-> 
->  arch/arm64/boot/dts/qcom/sc7180.dtsi | 199 +++++++++++++++++++++++++++++++++++
->  1 file changed, 199 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index cc5a94f..04569c9 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -352,6 +352,14 @@
->  				interrupts = <GIC_SPI 601 IRQ_TYPE_LEVEL_HIGH>;
->  				#address-cells = <1>;
->  				#size-cells = <0>;
-> +				interconnects = <&qup_virt MASTER_QUP_CORE_0
-> +						&qup_virt SLAVE_QUP_CORE_0>,
-> +						<&gem_noc MASTER_APPSS_PROC
-> +						&config_noc SLAVE_QUP_0>,
-> +						<&aggre1_noc MASTER_QUP_0
-> +						&mc_virt SLAVE_EBI1>;
+> Any feedback on this series?
 
-Please ignore the 80-char "limit" and write this as:
-				interconnects = <&qup_virt MASTER_QUP_CORE_0 &qup_virt SLAVE_QUP_CORE_0>,
-						<&gem_noc ...>,
-						<&aggre1_noc ...>;
+Can you please take some time and review the series and provide feedback
+to Loic, this series has been pending for a long time now
 
-Regards,
-Bjorn
+Thanks
+-- 
+~Vinod
