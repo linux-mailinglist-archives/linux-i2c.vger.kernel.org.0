@@ -2,90 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9618E1645F2
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2020 14:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24566164D5A
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2020 19:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgBSNte (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 Feb 2020 08:49:34 -0500
-Received: from mail27.static.mailgun.info ([104.130.122.27]:34446 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726551AbgBSNte (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Feb 2020 08:49:34 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1582120174; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=nlOJ2QjC76fp//IJNgKlJ1in/DYwlbd9Ta/pZD7AXdY=; b=xHqG61oYnbQIEuNKZDbtGLUE9Kykcpx8JrP43P1gAi7Kq2wjup1+0fUqVtivIdgVbROmos11
- IDyQ3T4/+lfObnELqWOPAFykOZ1bE0TguJxmn+QqvJ6n/hm91QwPu7qQkR8RCybDFIcQhTcH
- ZzLpc4cik6T3N2vh+KkeGBynOF0=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e4d3ce1.7fe2ec9228f0-smtp-out-n01;
- Wed, 19 Feb 2020 13:49:21 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4EA97C447A0; Wed, 19 Feb 2020 13:49:20 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.252.222.65] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 555F8C43383;
-        Wed, 19 Feb 2020 13:49:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 555F8C43383
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH 6/6] arm64: dts: sc7180: Add interconnect for QUP and QSPI
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org, wsa@the-dreams.de,
-        broonie@kernel.org, mark.rutland@arm.com, robh+dt@kernel.org,
+        id S1726609AbgBSSJx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Feb 2020 13:09:53 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:33430 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726645AbgBSSJw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Feb 2020 13:09:52 -0500
+Received: by mail-pf1-f194.google.com with SMTP id n7so471815pfn.0
+        for <linux-i2c@vger.kernel.org>; Wed, 19 Feb 2020 10:09:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=DT9b2JqUNcas1GieQOO1UADd6ZveitNnuHA65yQ4esE=;
+        b=gNqxcpByNWRFu0kl0YvLf68XNvjty9vaYNkQyj4UDT0CK1Ig4GRS+PwQznc7FIMoK6
+         TgXzwabcsTBPFnXM77EN8+5Zku0ln7/W1A8zwCJHQiwcJA/d9ndPnODOU14PDRDcC6ai
+         7moER/4RsiWjejAX48uDiH3/nQWS4BpmwI9qA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DT9b2JqUNcas1GieQOO1UADd6ZveitNnuHA65yQ4esE=;
+        b=ujr3rFWD9j+78f6SHFgmRLo0pPvxqQ8b5vgb05qJlHM6jRhE6SA56HqLEWAtGdLhwb
+         /Mb2sJA6uTB9IT8hAztCHDaizdGW1A5AsIB0nJYLnVI/P+3wjo+gZM+oJyH2njVzI8ii
+         3tHWqbztE7w5fOW4cbRKHFQ1HvLOpgRX3a9WsTyyM8QjxGXJWGsdxn2LZNmKNp5e1TsH
+         RfyznQj6CVQvpBYAootIAJl/DJInth9GyXAdJPgYiTFvRK7e1kb9AzwnTAMcoeKsRITe
+         7ZyqUyVnhB+oCm1sknC63dZEZ3OrQGvnnjfAVx97jbRA42xFgb7Ku8r0dXvkQzO0VZjf
+         lgcQ==
+X-Gm-Message-State: APjAAAWj0raUsiPc3dLPnADrHRIjfgqoKjdpzLv/KOurMvWA6Baggzuf
+        LgSphr/RhPAfjXBRtSeD0WHdGQ==
+X-Google-Smtp-Source: APXvYqyBuOdfaFMKcgQz2InWVMXt9wu5jkvAcdKhlsUWQ2aZek1+MLFnc2VNa4KJ8eoMdzeMh4L0gg==
+X-Received: by 2002:aa7:96b6:: with SMTP id g22mr27963352pfk.206.1582135791976;
+        Wed, 19 Feb 2020 10:09:51 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id q21sm281382pff.105.2020.02.19.10.09.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Feb 2020 10:09:51 -0800 (PST)
+Date:   Wed, 19 Feb 2020 10:09:50 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
         linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, swboyd@chromium.org,
         mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org
+        linux-serial@vger.kernel.org, dianders@chromium.org
+Subject: Re: [PATCH 4/6] spi: spi-geni-qcom: Add interconnect support
+Message-ID: <20200219180950.GA24720@google.com>
 References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
- <1581946205-27189-7-git-send-email-akashast@codeaurora.org>
- <20200218031830.GX955802@ripper>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <f82a28c7-63a4-b0e8-3902-5614dfed0f78@codeaurora.org>
-Date:   Wed, 19 Feb 2020 19:19:11 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+ <1581946205-27189-5-git-send-email-akashast@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <20200218031830.GX955802@ripper>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1581946205-27189-5-git-send-email-akashast@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Bjorn,
+On Mon, Feb 17, 2020 at 07:00:03PM +0530, Akash Asthana wrote:
+> Get the interconnect paths for SPI based Serial Engine device
+> and vote according to the current bus speed of the driver.
+> 
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> ---
+>  drivers/spi/spi-geni-qcom.c | 65 ++++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 62 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+> index c397242..a066ef26 100644
+> --- a/drivers/spi/spi-geni-qcom.c
+> +++ b/drivers/spi/spi-geni-qcom.c
+> @@ -608,16 +653,25 @@ static int spi_geni_remove(struct platform_device *pdev)
+>  	spi_unregister_master(spi);
+>  
+>  	free_irq(mas->irq, spi);
+> +	geni_spi_icc_put(&mas->se);
+>  	pm_runtime_disable(&pdev->dev);
+>  	return 0;
+>  }
+>  
+>  static int __maybe_unused spi_geni_runtime_suspend(struct device *dev)
+>  {
+> +	int ret;
+>  	struct spi_master *spi = dev_get_drvdata(dev);
+>  	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+>  
+> -	return geni_se_resources_off(&mas->se);
+> +	ret = geni_se_resources_off(&mas->se);
+> +	if (ret)
+> +		return ret;
+> +
+> +	icc_set_bw(mas->se.icc_path[GENI_TO_CORE], 0, 0);
 
->> +				interconnects = <&qup_virt MASTER_QUP_CORE_0
->> +						&qup_virt SLAVE_QUP_CORE_0>,
->> +						<&gem_noc MASTER_APPSS_PROC
->> +						&config_noc SLAVE_QUP_0>,
->> +						<&aggre1_noc MASTER_QUP_0
->> +						&mc_virt SLAVE_EBI1>;
-> Please ignore the 80-char "limit" and write this as:
-> 				interconnects = <&qup_virt MASTER_QUP_CORE_0 &qup_virt SLAVE_QUP_CORE_0>,
-> 						<&gem_noc ...>,
-> 						<&aggre1_noc ...>;
->
-> Regards,
-> Bjorn
+This causes my SC7180 system to reset at boot time:
 
-ok
+[    3.509652] qcom-qmp-phy 88e9000.phy-wrapper: Registered Qcom-QMP phy
+[    3.516956] qcom-qusb2-phy 88e3000.phy: Registered Qcom-QUSB2 phy
+[    3.524450] geni_se_qup 8c0000.geniqup: Adding to iommu group 4
+[    3.533896] spi_master spi0: will run message pump with realtime priority
+<reset>
 
-Regards,
-
-Akash
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+The system does not reset when passing 'Bps_to_icc(1000)' (=> 1) instead of 0.
