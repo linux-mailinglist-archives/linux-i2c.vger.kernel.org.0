@@ -2,17 +2,17 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E53A7166494
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Feb 2020 18:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5321664A7
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Feb 2020 18:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728869AbgBTRZz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 Feb 2020 12:25:55 -0500
-Received: from sauhun.de ([88.99.104.3]:35088 "EHLO pokefinder.org"
+        id S1728874AbgBTRZ4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 Feb 2020 12:25:56 -0500
+Received: from sauhun.de ([88.99.104.3]:35130 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727709AbgBTRZz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S1728654AbgBTRZz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
         Thu, 20 Feb 2020 12:25:55 -0500
 Received: from localhost (p5486CC48.dip0.t-ipconnect.de [84.134.204.72])
-        by pokefinder.org (Postfix) with ESMTPSA id 1ED662C1EBE;
+        by pokefinder.org (Postfix) with ESMTPSA id A6F8A2C1EBF;
         Thu, 20 Feb 2020 18:25:52 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
@@ -25,9 +25,9 @@ Cc:     linux-renesas-soc@vger.kernel.org, linux-i3c@lists.infradead.org,
         Vladimir Zapolskiy <vz@mleia.com>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [RFC PATCH 3/7] i2c: allow DT nodes without 'compatible'
-Date:   Thu, 20 Feb 2020 18:23:59 +0100
-Message-Id: <20200220172403.26062-4-wsa+renesas@sang-engineering.com>
+Subject: [RFC PATCH 4/7] i2c: of: remove superfluous parameter from exported function
+Date:   Thu, 20 Feb 2020 18:24:00 +0100
+Message-Id: <20200220172403.26062-5-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200220172403.26062-1-wsa+renesas@sang-engineering.com>
 References: <20200220172403.26062-1-wsa+renesas@sang-engineering.com>
@@ -38,98 +38,86 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Sometimes, we have unknown devices in a system and still want to block
-their address. For that, we allow DT nodes with only a 'reg' property.
-These devices will be bound to the "dummy" driver but with the name
-"reserved". That way, we can distinguish them and even hand them over to
-the "dummy" driver later when they are really requested using
-i2c_new_ancillary_device().
+'dev' is only used for printing an error message. However, that
+information is not needed because '%pOF' fully describes the location of
+the error. Drop the 'dev' and remove the superfluous parameter.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- Documentation/devicetree/bindings/i2c/i2c-ocores.txt | 1 -
- Documentation/devicetree/bindings/i2c/i2c.txt        | 4 +++-
- drivers/i2c/i2c-core-base.c                          | 1 +
- drivers/i2c/i2c-core-of.c                            | 8 +++-----
- drivers/i2c/i2c-core.h                               | 1 +
- 5 files changed, 8 insertions(+), 7 deletions(-)
+ drivers/i2c/i2c-core-of.c | 7 +++----
+ drivers/i3c/master.c      | 2 +-
+ include/linux/i2c.h       | 6 ++----
+ 3 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-index 6b25a80ae8d3..2762effdd270 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-@@ -50,7 +50,6 @@ Examples:
- 		reg-io-width = <1>;	/* 8 bit read/write */
- 
- 		dummy@60 {
--			compatible = "dummy";
- 			reg = <0x60>;
- 		};
- 	};
-diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-index 9a53df4243c6..989b315e09dc 100644
---- a/Documentation/devicetree/bindings/i2c/i2c.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c.txt
-@@ -21,7 +21,9 @@ flags can be attached to the address. I2C_TEN_BIT_ADDRESS is used to mark a 10
- bit address. It is needed to avoid the ambiguity between e.g. a 7 bit address
- of 0x50 and a 10 bit address of 0x050 which, in theory, can be on the same bus.
- Another flag is I2C_OWN_SLAVE_ADDRESS to mark addresses on which we listen to
--be devices ourselves.
-+be devices ourselves. The 'reg' property of a child is required. The
-+'compatible' property is not. Empty 'compatible' child entries can be used to
-+describe unknown devices or addresses which shall be blocked for other reasons.
- 
- Optional properties
- -------------------
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 8df2fa10c48a..4000a4384306 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -854,6 +854,7 @@ EXPORT_SYMBOL_GPL(i2c_unregister_device);
- 
- static const struct i2c_device_id dummy_id[] = {
- 	{ I2C_DUMMY_DRV_NAME, 0 },
-+	{ I2C_RESERVED_DRV_NAME, 0 },
- 	{ },
- };
- 
 diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-index 6787c1f71483..d8d111ad6c85 100644
+index d8d111ad6c85..710704cd583e 100644
 --- a/drivers/i2c/i2c-core-of.c
 +++ b/drivers/i2c/i2c-core-of.c
-@@ -27,17 +27,15 @@ int of_i2c_get_board_info(struct device *dev, struct device_node *node,
+@@ -19,8 +19,7 @@
  
- 	memset(info, 0, sizeof(*info));
+ #include "i2c-core.h"
  
--	if (of_modalias_node(node, info->type, sizeof(info->type)) < 0) {
--		dev_err(dev, "of_i2c: modalias failure on %pOF\n", node);
--		return -EINVAL;
--	}
--
+-int of_i2c_get_board_info(struct device *dev, struct device_node *node,
+-			  struct i2c_board_info *info)
++int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info)
+ {
+ 	u32 addr;
+ 	int ret;
+@@ -29,7 +28,7 @@ int of_i2c_get_board_info(struct device *dev, struct device_node *node,
+ 
  	ret = of_property_read_u32(node, "reg", &addr);
  	if (ret) {
- 		dev_err(dev, "of_i2c: invalid reg on %pOF\n", node);
+-		dev_err(dev, "of_i2c: invalid reg on %pOF\n", node);
++		pr_err("of_i2c: invalid reg on %pOF\n", node);
  		return ret;
  	}
  
-+	if (of_modalias_node(node, info->type, sizeof(info->type)) < 0)
-+		strlcpy(info->type, I2C_RESERVED_DRV_NAME, sizeof(I2C_RESERVED_DRV_NAME));
-+
- 	if (addr & I2C_TEN_BIT_ADDRESS) {
- 		addr &= ~I2C_TEN_BIT_ADDRESS;
- 		info->flags |= I2C_CLIENT_TEN;
-diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
-index fb89fabf84d3..77b3a925ed95 100644
---- a/drivers/i2c/i2c-core.h
-+++ b/drivers/i2c/i2c-core.h
-@@ -23,6 +23,7 @@ int i2c_dev_irq_from_resources(const struct resource *resources,
- 			       unsigned int num_resources);
+@@ -69,7 +68,7 @@ static struct i2c_client *of_i2c_register_device(struct i2c_adapter *adap,
  
- #define I2C_DUMMY_DRV_NAME "dummy"
-+#define I2C_RESERVED_DRV_NAME "reserved"
+ 	dev_dbg(&adap->dev, "of_i2c: register %pOF\n", node);
  
- /*
-  * We only allow atomic transfers for very late communication, e.g. to send
+-	ret = of_i2c_get_board_info(&adap->dev, node, &info);
++	ret = of_i2c_get_board_info(node, &info);
+ 	if (ret)
+ 		return ERR_PTR(ret);
+ 
+diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
+index 7f8f896fa0c3..cc0549a9fc64 100644
+--- a/drivers/i3c/master.c
++++ b/drivers/i3c/master.c
+@@ -1943,7 +1943,7 @@ of_i3c_master_add_i2c_boardinfo(struct i3c_master_controller *master,
+ 	if (!boardinfo)
+ 		return -ENOMEM;
+ 
+-	ret = of_i2c_get_board_info(dev, node, &boardinfo->base);
++	ret = of_i2c_get_board_info(node, &boardinfo->base);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index f834687989f7..d84aaf0d83d5 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -942,8 +942,7 @@ const struct of_device_id
+ *i2c_of_match_device(const struct of_device_id *matches,
+ 		     struct i2c_client *client);
+ 
+-int of_i2c_get_board_info(struct device *dev, struct device_node *node,
+-			  struct i2c_board_info *info);
++int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info);
+ 
+ #else
+ 
+@@ -969,8 +968,7 @@ static inline const struct of_device_id
+ 	return NULL;
+ }
+ 
+-static inline int of_i2c_get_board_info(struct device *dev,
+-					struct device_node *node,
++static inline int of_i2c_get_board_info(struct device_node *node,
+ 					struct i2c_board_info *info)
+ {
+ 	return -ENOTSUPP;
 -- 
 2.20.1
 
