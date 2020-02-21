@@ -2,41 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A58911679C0
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Feb 2020 10:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7BC1679C9
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Feb 2020 10:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728107AbgBUJsk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Feb 2020 04:48:40 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:41351 "EHLO
+        id S1728167AbgBUJuO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Feb 2020 04:50:14 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:44011 "EHLO
         mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727142AbgBUJsk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Feb 2020 04:48:40 -0500
-Received: by mail-ot1-f65.google.com with SMTP id r27so1455639otc.8;
-        Fri, 21 Feb 2020 01:48:39 -0800 (PST)
+        with ESMTP id S1727150AbgBUJuO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Feb 2020 04:50:14 -0500
+Received: by mail-ot1-f65.google.com with SMTP id p8so1447921oth.10;
+        Fri, 21 Feb 2020 01:50:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uIi0c0G5Zb0Jw5ypN9sLASPQpOpXkoB2JbMIvsoRlKU=;
-        b=UclMjFAuAV1kAwedwAHcV8UzQWdlayQz+SAZsLLuOeez26hKTozvjWe/1jiwfipf67
-         WpsRg+wL4q4vyukT6lcHN6/B5Qe1isJODO1u6yiZuH6o81LlzB0fHXmL2gpAvyzlS/iR
-         QoLmBsvmGi7k/HOVD3SD+5lcBI88YVKF75W5wmMpK+TAFgrinaP0t50j6Q5Z9aQn1gkd
-         pOEEyzPBh5AuvqiFOV3C2gjp0pgYsIg2A7Nker5ICYUZ/4LYFnKr1BYRuk90V46P7dA3
-         vNb8z26M/uIbfRqsS/gvckwl0IYzaxMuBSoLx9j71z79iOplVOe6yhVcQMRz5rj5XdKO
-         oGwQ==
-X-Gm-Message-State: APjAAAV7UcncDfsQYtRGzXRfiSWQ4TpkLQLGIZSq5WQgL/IjctFDFcJz
-        550NfDeplfKfvXjk+Q/5eF77HHMipZRwlbTZz7I=
-X-Google-Smtp-Source: APXvYqzCfDGAqcLdudcohpMobUQi25VoP3sGfFSGSDz0m/c8bEwK2Ubq4fI8d2E03xtKyfavurE7PLjwAUBVVtlYtvQ=
-X-Received: by 2002:a9d:7984:: with SMTP id h4mr27799290otm.297.1582278518775;
- Fri, 21 Feb 2020 01:48:38 -0800 (PST)
+        bh=LGtPhAVjIvRquefayqs6YiIA/tNdWVoN+WLDPh1u7gE=;
+        b=MvypmPBbjmipDMALQTb/Kz6EUsxFrmfj9XTg25swESgqg2fdIRrb7z9lEdnA4MN4FK
+         4w6kiqpXck/bhiBkMnn3usG90+InPrvLb7g6vsIxGGCSRNPO81V6R6LqY+ANhUCFatrE
+         PzNx9vTDqd9nfspRnsNZw1I+C/i6PMwglk5+fVFesyGlMVkADhu+LMOp62d+/zcmUUIh
+         SOXF2K6jhLY8H/0rfoPW8SxPqK3rNlnolNNMMFjFFIUXh81V0O5Z6WbG2a/OsQDLW1Dn
+         VRef4stnGCNJ1RJpyy+7Kye7tb9dp1eFr7q4CovRDTyixB5TojNC38TUEtET7SJqTvK+
+         WS6w==
+X-Gm-Message-State: APjAAAV4DuWk1iihnZF6YW2elnBQq99Ser9QcGQ77kvNdw9yueuqyVNW
+        UHAU1aABDr+iSMWNbyDmTpqw6i9xJQ6ZIzqLdWs=
+X-Google-Smtp-Source: APXvYqwm+9QUakxr4sAH21zwcX7ad8NwXiWnkq/zDR06hcy6RD3aCDm8gQ7zDkbZbqGMQTUgWgb5ROsz2Bqdvv3L3xg=
+X-Received: by 2002:a9d:5c0c:: with SMTP id o12mr12558550otk.145.1582278613276;
+ Fri, 21 Feb 2020 01:50:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20200220172403.26062-1-wsa+renesas@sang-engineering.com>
- <20200220172403.26062-4-wsa+renesas@sang-engineering.com> <CAMuHMdWaPfc050dZiRr+gAFzsdjSo9Vo70ztWgrMGPJxLUqupw@mail.gmail.com>
-In-Reply-To: <CAMuHMdWaPfc050dZiRr+gAFzsdjSo9Vo70ztWgrMGPJxLUqupw@mail.gmail.com>
+References: <20200220172403.26062-1-wsa+renesas@sang-engineering.com> <20200220172403.26062-5-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20200220172403.26062-5-wsa+renesas@sang-engineering.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 21 Feb 2020 10:48:27 +0100
-Message-ID: <CAMuHMdXGvRRJUU7fOszPuKcvHA2ttpLTvQ5=9h3vVWPYFUbjaQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/7] i2c: allow DT nodes without 'compatible'
+Date:   Fri, 21 Feb 2020 10:50:02 +0100
+Message-ID: <CAMuHMdW-foZ+o1RbvEH8xX_zPa0sJ_kqRX+u4=bFRFNCHbLdwg@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/7] i2c: of: remove superfluous parameter from
+ exported function
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
@@ -56,39 +56,15 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 10:45 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
-> On Thu, Feb 20, 2020 at 6:26 PM Wolfram Sang
-> <wsa+renesas@sang-engineering.com> wrote:
-> > Sometimes, we have unknown devices in a system and still want to block
-> > their address. For that, we allow DT nodes with only a 'reg' property.
-> > These devices will be bound to the "dummy" driver but with the name
-> > "reserved". That way, we can distinguish them and even hand them over to
-> > the "dummy" driver later when they are really requested using
-> > i2c_new_ancillary_device().
-> >
-> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Thu, Feb 20, 2020 at 6:26 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> 'dev' is only used for printing an error message. However, that
+> information is not needed because '%pOF' fully describes the location of
+> the error. Drop the 'dev' and remove the superfluous parameter.
 >
-> Thanks for your patch!
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-FTR, depending on the extra dummy removed.
-
-> but one question below.
->
-> > --- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> > +++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> > @@ -50,7 +50,6 @@ Examples:
-> >                 reg-io-width = <1>;     /* 8 bit read/write */
-> >
-> >                 dummy@60 {
-> > -                       compatible = "dummy";
-> >                         reg = <0x60>;
-> >                 };
-> >         };
->
-> There's a second instance to remove 18 lines below.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 
