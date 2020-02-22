@@ -2,38 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10177168EE8
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Feb 2020 13:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 901B0168EED
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Feb 2020 13:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727046AbgBVMkJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Feb 2020 07:40:09 -0500
-Received: from sauhun.de ([88.99.104.3]:53676 "EHLO pokefinder.org"
+        id S1727030AbgBVMp0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 22 Feb 2020 07:45:26 -0500
+Received: from sauhun.de ([88.99.104.3]:53746 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726839AbgBVMkI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 22 Feb 2020 07:40:08 -0500
+        id S1726839AbgBVMp0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 22 Feb 2020 07:45:26 -0500
 Received: from localhost (p5486C6B7.dip0.t-ipconnect.de [84.134.198.183])
-        by pokefinder.org (Postfix) with ESMTPSA id 291152C07F9;
-        Sat, 22 Feb 2020 13:40:02 +0100 (CET)
-Date:   Sat, 22 Feb 2020 13:40:01 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 361D12C07F9;
+        Sat, 22 Feb 2020 13:45:24 +0100 (CET)
+Date:   Sat, 22 Feb 2020 13:45:23 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Alain Volmat <alain.volmat@st.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
-        pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@st.com
-Subject: Re: [PATCH 3/5] i2c: i2c-stm32f7: add a new st,stm32mp15-i2c
- compatible
-Message-ID: <20200222124001.GH1716@kunai>
-References: <1579795970-22319-1-git-send-email-alain.volmat@st.com>
- <1579795970-22319-4-git-send-email-alain.volmat@st.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Jean Delvare <khali@linux-fr.org>,
+        Daniel Kurtz <djkurtz@chromium.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot <syzbot+ed71512d469895b5b34e@syzkaller.appspotmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: Re: [PATCH] i2c: i801: Fix memory corruption in i801_isr_byte_done()
+Message-ID: <20200222124523.GI1716@kunai>
+References: <0000000000009586b2059c13c7e1@google.com>
+ <20200114073406.qaq3hbrhtx76fkes@kili.mountain>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KscVNZbUup0vZz0f"
+        protocol="application/pgp-signature"; boundary="1E1Oui4vdubnXi3o"
 Content-Disposition: inline
-In-Reply-To: <1579795970-22319-4-git-send-email-alain.volmat@st.com>
+In-Reply-To: <20200114073406.qaq3hbrhtx76fkes@kili.mountain>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -41,43 +38,63 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---KscVNZbUup0vZz0f
+--1E1Oui4vdubnXi3o
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 23, 2020 at 05:12:48PM +0100, Alain Volmat wrote:
-> Add a new stm32mp15 specific compatible to handle FastMode+
-> registers handling which is different on the stm32mp15 compared
-> to the stm32f7 or stm32h7.
-> Indeed, on the stm32mp15, the FastMode+ set and clear registers
-> are separated while on the other platforms (F7 or H7) the control
-> is done in a unique register.
+On Tue, Jan 14, 2020 at 10:34:06AM +0300, Dan Carpenter wrote:
+> Assigning "priv->data[-1] =3D priv->len;" obviously doesn't make sense.
+> What it does is it ends up corrupting the last byte of priv->len so
+> priv->len becomes a very high number.
 >=20
-> Signed-off-by: Alain Volmat <alain.volmat@st.com>
+> Reported-by: syzbot+ed71512d469895b5b34e@syzkaller.appspotmail.com
+> Fixes: d3ff6ce40031 ("i2c-i801: Enable IRQ for byte_by_byte transactions")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
 
-Looks good (patch 2 as well). You'd only need to adapt the naming if you
-change the naming in patch 1, obviously.
+Daniel, Jean: what do you think?
+Also, adding Jarkko to CC who works a lot with this driver...
 
+> Untested.
+>=20
+>  drivers/i2c/busses/i2c-i801.c | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index f5e69fe56532..420d8025901e 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -584,7 +584,6 @@ static void i801_isr_byte_done(struct i801_priv *priv)
+>  					"SMBus block read size is %d\n",
+>  					priv->len);
+>  			}
+> -			priv->data[-1] =3D priv->len;
+>  		}
+> =20
+>  		/* Read next byte */
+> --=20
+> 2.11.0
+>=20
 
---KscVNZbUup0vZz0f
+--1E1Oui4vdubnXi3o
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5RISEACgkQFA3kzBSg
-KbaaDw//TvaXXxfk/UfcOGsDNuLxbiqLPHG3i6DtQPijfEd93ekH6LKIwE5kpDV2
-pbsCUtpHku3mQvQyPScHSdgyMyqbd31mwDSB8waFOfG4SuNDDJXxqo5GltD62/8w
-HSBfAAvF4TM58QMDIaDYokrUhVZm5BJ/Cofv2z4+jBx4uRBWC829pmxvuf/sHWbo
-gti4PZZLQRMbBs6i9/7ShPsLmn4NffZ6+U2GDyVl11EmYdhOP0fMVFPgnbS/0Z7C
-/xfuMFs5Cu3wyq1oHNF0//SurRD4b1YfENh87h+cjYElICT5EUZ+Yv65TPTE4Xpf
-lWUGKKVcJ6nGoYOLCJOz1YoG/cRUtxSG+RCQXVAkwyHuoswOl8UrWyPUuuOh51xf
-AvrobB4WbHE3Z0KtGryxl3q2XEnoA5XHQTl8vOKiPfJTQYsRTb300Oh1Ym25E2H1
-Oj3iUlI2EL2VC+hleMywRQgXZLtGyNL2C2xphOmASWRBC2zVVGcrfr8eaA5V+5AU
-LvFKZPIjVaLa8suLgoxqatPo7d52ZskkXpzOtKOLp5joFYxjaNxjJDRLmlGCaa4g
-EcErYOqMz3SJQuV8jyG+zNrmzZh8/1oQx6u7hkKzU2c0XaPCJhtjv8dXpMYS0Eqf
-eP6JDxzkRYh4GT2xc2GwLpEL9Ysy31G1yw2RhKurA6rRGHJpkMo=
-=epcM
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5RImMACgkQFA3kzBSg
+KbZC0Q/+LOrn7S2BHakC6ciFfhoKlx1JKC1Ts+NkP4nKMIvrQMjYOREwWfvUvMRn
+a1el8fzdk5NbUIp9RVmh0yt+YKxLzcWKKAWjusc8yiTWgJXapVe2Cc2pT/xEER8A
+3APVZAmE7QvSWqbcCjYkBB6KoicYVKvOlIq2sr8OBdE5ERqgUhkGWB9LUh9syAn2
+qLCkfXj9emCWAvV4AvcLk21rG4MlpqMSmzJUlP+nx/fHOkaFAFcUGwj4pHb25iUd
+2a/JWiPpQ2dRX0+jVFL4S0TVCKGjvnvBOr+N3Dt2zQkDa9Ci1HvwAvwTgoRH1qc2
+kgmDm4A6po9WNgz8AhITH+IjuP5ozjEPQHixhOG9r2/BV3LrDnUuhoZboxd/WZSN
+5BLgOQvXbM7kS30droYZDMKCN9hE/TvphA/LuN45/LrzoCLOkMeiJOFGSrLCXZ1c
+bjQuM41PRtsv/kcG4UHkoXCnt9b5f10Pe+qiw4pedI3+4yL1DGZLu6OQMIrO/Yih
+yPNHocAQNoiGIMEKx2mC6gHra+LkHAUsHI+xutxO77VRmiHhQwf+z82P0CMTQSWz
+6gnfkZMG0YM1EASYLaa+7MGvd/Cglg+/oMr5cOfKvE6rZAZMg4kSuTmm0lFWd3eH
+t/YSAUEr8FsE32jUOjcShuLle3UDTeT6VHtCUPs9riSI28T0pR4=
+=hhzM
 -----END PGP SIGNATURE-----
 
---KscVNZbUup0vZz0f--
+--1E1Oui4vdubnXi3o--
