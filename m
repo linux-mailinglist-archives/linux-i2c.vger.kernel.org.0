@@ -2,126 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A8A16870E
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Feb 2020 19:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD68A168E5D
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Feb 2020 12:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729430AbgBUSzE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Feb 2020 13:55:04 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:32901 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729397AbgBUSzD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 Feb 2020 13:55:03 -0500
-Received: by mail-pj1-f68.google.com with SMTP id m7so2460815pjs.0
-        for <linux-i2c@vger.kernel.org>; Fri, 21 Feb 2020 10:55:03 -0800 (PST)
+        id S1726763AbgBVLNT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 22 Feb 2020 06:13:19 -0500
+Received: from mail-il1-f182.google.com ([209.85.166.182]:42003 "EHLO
+        mail-il1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726726AbgBVLNT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Feb 2020 06:13:19 -0500
+Received: by mail-il1-f182.google.com with SMTP id x2so3844369ila.9;
+        Sat, 22 Feb 2020 03:13:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3+q3lISbQqmoylcBRX0ljpGoH0evC7W0clNtAhnO7FQ=;
-        b=Xi5iYhOPTrQ6EU9L943ymywszhoCRb8ARJiJLMdagjqcqJTyajoSGSJRg5QxNFBIwy
-         3NDfb/GUW55SOwFqspg5Umn0kSorcmpey7vBTP4INB2fRATLO6GmkH1CymdJbBE4s6tg
-         stDsf1azXbWaeyqf53yxNu2CMLudRWlmFST+k=
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=Ht5BoY4Unpl7Z+knQPBoIyIniKZQ/PndFQpeGScWNOg=;
+        b=t6NTppqn5wJdtw8VlyZ/AvOHefL6e7n8KWG0Aqnmn7EDo/i2+7IrUswKcKOUyTrVYo
+         8VOXuZt9Ea2d3EjMk8D0CFXhD/SZeIan12eFWJgj7+w3v5sxPq1PgpX0uwZskLPqA/Zo
+         DYP3e629pM/elBqIJ9vqJXpEZPeBvC51DpciCpyan9s0u+zYej2P2wcgr7IkCS5I68WX
+         QYX1w445QTOsSaF6ZLdOcHOcCqfHqcz6ixZz62vrnjBAbidktsnHyUuR+/M0SIZhEzSy
+         q/FONZZXIMmlpMq56VKluxHYQcWv/VQ3BB+XvSYIAmfzYujDl0JZL5qI1JPq3xzzEVhO
+         fNcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3+q3lISbQqmoylcBRX0ljpGoH0evC7W0clNtAhnO7FQ=;
-        b=cOdIpYzxge70OHnJyIlXP6jlIMquMBy+KrnefOsFU/RY7md2RKBe/oN/wRC8p6kAcA
-         P3jPrrRq6ryJzfHMZW5gxfW58a+6WF/6fM+u5SMst6IFi9JcUnu4KYf7utQgi00OmZ3A
-         GNpEKWqKjjxfeTU7H0/abA2hvs3X2VqIFFX0fO8bN05s3xXCah7imQETDQWrhnvj+7eL
-         Ep8wLWYqV9hDs0TuukVZ97LXwjGmnYEK9sYK9vicl+hoDl0B9ULPjXuTBdUztNgRxQQF
-         vy0LKT7ybEiU30E7oShrfPNivVzfa7+XnrhJrGAqwiIBGhdPDUDxUsn9cZHQ4wslAgAU
-         xtxQ==
-X-Gm-Message-State: APjAAAW2zhXboI0S4lySZwZ6swTwDS0xEtInUA9F5Mduq/TaE1q4tPI/
-        08P8niyhY+7qEskOfHAS5gzjlQ==
-X-Google-Smtp-Source: APXvYqyv82hKSXxUsomJM1cmTiw8XflthqfyydrvvXesPzmnC85d6kZ2ovwi5gzQL5Xq2CwIatIObw==
-X-Received: by 2002:a17:902:401:: with SMTP id 1mr36917442ple.177.1582311302745;
-        Fri, 21 Feb 2020 10:55:02 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id h13sm3367390pjc.9.2020.02.21.10.55.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 10:55:01 -0800 (PST)
-Date:   Fri, 21 Feb 2020 10:55:00 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org
-Subject: Re: [PATCH 4/6] spi: spi-geni-qcom: Add interconnect support
-Message-ID: <20200221185500.GE24720@google.com>
-References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
- <1581946205-27189-5-git-send-email-akashast@codeaurora.org>
- <20200219180950.GA24720@google.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Ht5BoY4Unpl7Z+knQPBoIyIniKZQ/PndFQpeGScWNOg=;
+        b=LGXjzO2uGzP/j1Fcw+HD+LyAhoNSVfr9caRL7afrO40BW5uRn/oPDj8JNDrgaOu+kK
+         9SNn0I5Mu0tIGtpYUKGSTNLXjgzxjEPgV2Z+uCLwDqrHfreSwQgLXbZX7JvqyqIOrCDE
+         o8PCb6rDcJZPob806lsnfflxdEha1fuD3hFpSd1BPty97ad25juGMOjqyzKls4nk0xbc
+         j9SA5GjEjpwYuhlJDu/NdD4tqy7A4mTNEcdcx30kJGErou//4DMlGGYxX81WRh6bWqrn
+         9DwZERBXtBz5EDyhOMIgGSbLRtLvn46P3sucnHzL2t7IPJKKHZsUbreuzw0zI9lIIG87
+         hjoA==
+X-Gm-Message-State: APjAAAVJDqDnePdlfYo/1M6NUL8uOB1TzysgFidWvB91K52/cCKs7DXZ
+        Op2r0llXrLoCtXbSf2LGIuC6LxPIs3eXmqdH0xw=
+X-Google-Smtp-Source: APXvYqyZYteqVWyvhXrnoZ3cXXqYSvKuW7cUtmxNri/Z/UE90+7L+OEOo8VOF6Ymoo34PWyws9+OcdufW7YTbDFjzQY=
+X-Received: by 2002:a05:6e02:f0f:: with SMTP id x15mr42502883ilj.298.1582369998523;
+ Sat, 22 Feb 2020 03:13:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200219180950.GA24720@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Martin Volf <martin.volf.42@gmail.com>
+Date:   Sat, 22 Feb 2020 12:13:07 +0100
+Message-ID: <CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com>
+Subject: [regression] nct6775 does not load in 5.4 and 5.5, bisected to b84398d6d7f90080
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 10:09:50AM -0800, Matthias Kaehlcke wrote:
-> On Mon, Feb 17, 2020 at 07:00:03PM +0530, Akash Asthana wrote:
-> > Get the interconnect paths for SPI based Serial Engine device
-> > and vote according to the current bus speed of the driver.
-> > 
-> > Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> > ---
-> >  drivers/spi/spi-geni-qcom.c | 65 ++++++++++++++++++++++++++++++++++++++++++---
-> >  1 file changed, 62 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-> > index c397242..a066ef26 100644
-> > --- a/drivers/spi/spi-geni-qcom.c
-> > +++ b/drivers/spi/spi-geni-qcom.c
-> > @@ -608,16 +653,25 @@ static int spi_geni_remove(struct platform_device *pdev)
-> >  	spi_unregister_master(spi);
-> >  
-> >  	free_irq(mas->irq, spi);
-> > +	geni_spi_icc_put(&mas->se);
-> >  	pm_runtime_disable(&pdev->dev);
-> >  	return 0;
-> >  }
-> >  
-> >  static int __maybe_unused spi_geni_runtime_suspend(struct device *dev)
-> >  {
-> > +	int ret;
-> >  	struct spi_master *spi = dev_get_drvdata(dev);
-> >  	struct spi_geni_master *mas = spi_master_get_devdata(spi);
-> >  
-> > -	return geni_se_resources_off(&mas->se);
-> > +	ret = geni_se_resources_off(&mas->se);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	icc_set_bw(mas->se.icc_path[GENI_TO_CORE], 0, 0);
-> 
-> This causes my SC7180 system to reset at boot time:
-> 
-> [    3.509652] qcom-qmp-phy 88e9000.phy-wrapper: Registered Qcom-QMP phy
-> [    3.516956] qcom-qusb2-phy 88e3000.phy: Registered Qcom-QUSB2 phy
-> [    3.524450] geni_se_qup 8c0000.geniqup: Adding to iommu group 4
-> [    3.533896] spi_master spi0: will run message pump with realtime priority
-> <reset>
-> 
-> The system does not reset when passing 'Bps_to_icc(1000)' (=> 1) instead of 0.
+Hello,
 
-I found this is related with the use of 'earlycon'.
+hardware monitoring sensors NCT6796D on my Asus PRIME Z390M-PLUS
+motherboard with Intel i7-9700 CPU don't work with 5.4 and newer linux
+kernels, the driver nct6775 does not load.
 
-There is a short window where the early console and the 'real' console coexist:
+It is working OK in version 5.3. I have used almost all released stable
+versions from 5.3.8 to 5.3.16; I didn't try older kernels.
 
-[    3.858122] printk: console [ttyMSM0] enabled
-[    3.875692] printk: bootconsole [qcom_geni0] disabled
+Even on new kernels the sensors-detect finds the sensors:
+        Found `Nuvoton NCT6796D Super IO Sensors' Success!
+            (address 0x290, driver `nct6775')
+but "modprobe nct6775" says:
+        ERROR: could not insert 'nct6775': No such device
+There is nothing interesting in dmesg.
 
-The reset probably occurs when the early console tries to write, but the ICC is
-effectively disabled because ttyMSM0 and the other geni ports are runtime
-suspended.
+git bisect found out the first bad commit is
+b84398d6d7f900805662b1619223fd644d862d7c,
+i2c: i801: Use iTCO version 6 in Cannon Lake PCH and beyond
 
-In any case that's not an issue of the SPI driver, but needs to be addressed
-somewhere in the console/UART code.
+Unfortunately I am not able to revert it in v5.4 to confirm it is really
+the culprit.
+
+Is there a way to have working hwmon sensors on my system in newer linux
+kernels?
+
+Thanks,
+
+Martin
+
+--8<--
+lspci
+00:00.0 Host bridge: Intel Corporation 8th Gen Core 8-core Desktop
+Processor Host Bridge/DRAM Registers [Coffee Lake S] (rev 0d)
+00:02.0 VGA compatible controller: Intel Corporation UHD Graphics 630
+(Desktop 9 Series) (rev 02)
+00:14.0 USB controller: Intel Corporation Cannon Lake PCH USB 3.1 xHCI
+Host Controller (rev 10)
+00:14.2 RAM memory: Intel Corporation Cannon Lake PCH Shared SRAM (rev 10)
+00:16.0 Communication controller: Intel Corporation Cannon Lake PCH
+HECI Controller (rev 10)
+00:17.0 SATA controller: Intel Corporation Cannon Lake PCH SATA AHCI
+Controller (rev 10)
+00:1b.0 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
+Port #17 (rev f0)
+00:1c.0 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
+Port #1 (rev f0)
+00:1c.6 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
+Port #7 (rev f0)
+00:1d.0 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
+Port #9 (rev f0)
+00:1f.0 ISA bridge: Intel Corporation Z390 Chipset LPC/eSPI Controller (rev 10)
+00:1f.3 Audio device: Intel Corporation Cannon Lake PCH cAVS (rev 10)
+00:1f.4 SMBus: Intel Corporation Cannon Lake PCH SMBus Controller (rev 10)
+00:1f.5 Serial bus controller [0c80]: Intel Corporation Cannon Lake
+PCH SPI Controller (rev 10)
+00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection (7)
+I219-V (rev 10)
