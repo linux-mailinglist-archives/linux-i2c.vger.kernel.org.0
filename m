@@ -2,19 +2,19 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3BB168E82
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Feb 2020 12:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 898E7168E91
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Feb 2020 12:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbgBVLeB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Feb 2020 06:34:01 -0500
-Received: from sauhun.de ([88.99.104.3]:53062 "EHLO pokefinder.org"
+        id S1726763AbgBVLog (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 22 Feb 2020 06:44:36 -0500
+Received: from sauhun.de ([88.99.104.3]:53152 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726821AbgBVLeB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 22 Feb 2020 06:34:01 -0500
+        id S1726883AbgBVLog (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 22 Feb 2020 06:44:36 -0500
 Received: from localhost (p5486C6B7.dip0.t-ipconnect.de [84.134.198.183])
-        by pokefinder.org (Postfix) with ESMTPSA id 4BB2A2C07F9;
-        Sat, 22 Feb 2020 12:33:59 +0100 (CET)
-Date:   Sat, 22 Feb 2020 12:33:58 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 2399A2C07F9;
+        Sat, 22 Feb 2020 12:44:34 +0100 (CET)
+Date:   Sat, 22 Feb 2020 12:44:33 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
@@ -22,15 +22,15 @@ Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         kamel.bouhara@bootlin.com, Nicolas.Ferre@microchip.com,
         alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
         robh@kernel.org, peda@axentia.se, linux@armlinux.org.uk
-Subject: Re: [PATCH v3 2/6] i2c: at91: implement i2c bus recovery
-Message-ID: <20200222113358.GB1716@kunai>
+Subject: Re: [PATCH v3 3/6] i2c: at91: Send bus clear command if SDA is down
+Message-ID: <20200222114433.GC1716@kunai>
 References: <20200115115422.17097-1-codrin.ciubotariu@microchip.com>
- <20200115115422.17097-3-codrin.ciubotariu@microchip.com>
+ <20200115115422.17097-4-codrin.ciubotariu@microchip.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+g7M9IMkV8truYOl"
+        protocol="application/pgp-signature"; boundary="2/5bycvrmDh4d1IB"
 Content-Disposition: inline
-In-Reply-To: <20200115115422.17097-3-codrin.ciubotariu@microchip.com>
+In-Reply-To: <20200115115422.17097-4-codrin.ciubotariu@microchip.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -38,45 +38,82 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---+g7M9IMkV8truYOl
+--2/5bycvrmDh4d1IB
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 15, 2020 at 01:54:18PM +0200, Codrin Ciubotariu wrote:
-> From: Kamel Bouhara <kamel.bouhara@bootlin.com>
+On Wed, Jan 15, 2020 at 01:54:19PM +0200, Codrin Ciubotariu wrote:
+> After a transfer timeout, some faulty I2C slave devices might hold down
+> the SDA pin. We can generate a bus clear command, hoping that the slave
+> might release the pins.
+> If the CLEAR command is not supported, we will use gpio recovery, if
+> available, to reset the bus.
 >=20
-> Implement i2c bus recovery when slaves devices might hold SDA low.
-> In this case re-assign SCL/SDA to gpios and issue 9 dummy clock pulses
-> until the slave release SDA.
->=20
-> Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
 > Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-Applied to for-next, thanks!
+One thing to improve:
 
-The implementation is very similar to i2c-imx. Maybe we should move this
-mechanism into the core somewhen...
+> +	/*
+> +	 * some faulty I2C slave devices might hold SDA down;
+> +	 * we can send a bus clear command, hoping that the pins will be
+> +	 * released
+> +	 */
+> +	if (has_clear_cmd) {
+> +		if (!(dev->transfer_status & AT91_TWI_SDA)) {
+> +			dev_dbg(dev->dev,
+> +				"SDA is down; sending bus clear command\n");
+> +			if (dev->use_alt_cmd) {
+> +				unsigned int acr;
+> +
+> +				acr =3D at91_twi_read(dev, AT91_TWI_ACR);
+> +				acr &=3D ~AT91_TWI_ACR_DATAL_MASK;
+> +				at91_twi_write(dev, AT91_TWI_ACR, acr);
+> +			}
+> +			at91_twi_write(dev, AT91_TWI_CR, AT91_TWI_CLEAR);
+> +		}
+
+The inner if-block should be a seperate function, then you could do in
+probe:
+
+	if (has_clear_cmd)
+		rinfo->recover_bus =3D <the above function>;
+	else
+		rinfo->recover_bus =3D i2c_generic_scl_recovery;
+
+Then, i2c_recover_bus() will always do the right thing. More readable
+and better maintainable IMO.
+
+If this is not possible (maybe I overlooked some logic), then maybe this
+will work:
+
+	rinfo->recover_bus =3D <your custom function>;
+
+and put the
+
+	if (has_clear_cmd)
+
+block there.
 
 
---+g7M9IMkV8truYOl
+--2/5bycvrmDh4d1IB
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5REaYACgkQFA3kzBSg
-Kbb/5BAAjIRoPQE9LABWbJpndp9jLdUzU84jFgAC8Doa8diKtDq4FRlalY3b3N+D
-ciV1rCm+jDxHbvrtSkzoB4zzqVwoHbCYG2UqCDeb6kGQW+64oCn2PaRGETahlzTt
-t6xJGm/VCwYNoDOTlp6M27TWtP89PAIc2byd6YgejLdkPld5gfYatdWT5WIv4zci
-ayDRoh7drxaSKT3umNfixWaafLSLnrVP4ylTA+2FZ2mgp9luw6y6scnSj0Yyk0do
-elir7QNRItWLYJdtEI5oo2Jfm8wII5P0V3MMS9RWK3diOheswZBdJuX7mEMHXHLz
-7hqFRGpkW9U0/7kXfFaLBQWJFAANZeoNHVKg7MyA9rIbRwAqrngy6uVwZD1KPtxn
-DIYRKZotx/PNmOOaZEMGuwwU70vM9ff0b/ZOYQtYBTzwYDDirXO/ZGipUFLyfaIl
-sfvCQB6FNb8f8qQpOip20ecYjorUP4duRY2kK0ZTvfqJQTyQi7ziRPLVSB1ukNv+
-LG8jlj0RyWojDK/jl0lTUW4mbncWkqBMhWigd5nIJp5qAGRZLfCjKW+xhGos7CNc
-AJAYLMyGhVazIidpUhju9zqqsTMNXVLwbmwqXd76TmK4hhneqjJqN+uRndSiZNY8
-EfnrgyJ6mdYSBxh6MhBZ6fw/s1FplEMs1SR5aOMN1LzGdYIoQg0=
-=BEk4
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5RFCEACgkQFA3kzBSg
+KbawZQ//djH+GtmK3cq1f/dFHYW7brVxy999V22SKk3jREpntfZkN3nb23ARpOvR
+JxIHA71f3FR5XIIyLWV0xzU04ZsmwZctcQ5jS15KPNHzHShSRgXWq0ioGAjzxkX2
+AKqutS55+2qUGELcX7C/KKeIaLLOfzdvrol4ZPqowCaMrP/DbqcNh/7qL2JB244N
+5giSlvyaOmOMIO8ZdMqrA85G+OwHMDcChti8Ba9TxzSmDJRas46XQ9HkwvEEpdca
+iUoPbSj3hFaAlplTUVs/j4NlOV0fIjxeC3fGYgXTVIGOD1KvGfh4+f+YI2lV9YDx
+lAHcIM6fUTx0+uC4dFWJdaqq+9QfyxHPnCOiH8wIr8XKDvOQbAIu2kP/C80QvhL3
+WeK3fl/JMwxLC3b4fFeAvki9Kdzt42IFK2EDXw/uWyDa39Vl1smk3vRDqHkDzKoB
+DUZ+BWF9VB/y5qdgN2lvT510u0oiCMW0EuaOgZHrvvB08+e7Z5PNZvJb+JzUaXYo
+oSVCsdevMNE7yBX+aBjjOegU8p2ip9jIHCGRiKALM1ab1Vr1co/x3U02hecgTBNd
+VOfHwyBQbdukaExvFAmcrCBeWDOCLUj1F6Wy8g38hBhwKcT1kG/xqYflmQdeTKJk
+taBIAgbnPcMxpcqh+yphRZv69GXo3KQ9fwygszyHw4KWp4d0p50=
+=P68w
 -----END PGP SIGNATURE-----
 
---+g7M9IMkV8truYOl--
+--2/5bycvrmDh4d1IB--
