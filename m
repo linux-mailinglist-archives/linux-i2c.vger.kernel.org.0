@@ -2,35 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 898E7168E91
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Feb 2020 12:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B4A168E9A
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Feb 2020 12:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726763AbgBVLog (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Feb 2020 06:44:36 -0500
-Received: from sauhun.de ([88.99.104.3]:53152 "EHLO pokefinder.org"
+        id S1727259AbgBVLvN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 22 Feb 2020 06:51:13 -0500
+Received: from sauhun.de ([88.99.104.3]:53212 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726883AbgBVLog (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 22 Feb 2020 06:44:36 -0500
+        id S1727186AbgBVLvN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 22 Feb 2020 06:51:13 -0500
 Received: from localhost (p5486C6B7.dip0.t-ipconnect.de [84.134.198.183])
-        by pokefinder.org (Postfix) with ESMTPSA id 2399A2C07F9;
-        Sat, 22 Feb 2020 12:44:34 +0100 (CET)
-Date:   Sat, 22 Feb 2020 12:44:33 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 7187A2C07F9;
+        Sat, 22 Feb 2020 12:51:11 +0100 (CET)
+Date:   Sat, 22 Feb 2020 12:51:11 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kamel.bouhara@bootlin.com, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
-        robh@kernel.org, peda@axentia.se, linux@armlinux.org.uk
-Subject: Re: [PATCH v3 3/6] i2c: at91: Send bus clear command if SDA is down
-Message-ID: <20200222114433.GC1716@kunai>
-References: <20200115115422.17097-1-codrin.ciubotariu@microchip.com>
- <20200115115422.17097-4-codrin.ciubotariu@microchip.com>
+To:     Martin Volf <martin.volf.42@gmail.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [regression] nct6775 does not load in 5.4 and 5.5, bisected to
+ b84398d6d7f90080
+Message-ID: <20200222115111.GD1716@kunai>
+References: <CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2/5bycvrmDh4d1IB"
+        protocol="application/pgp-signature"; boundary="WChQLJJJfbwij+9x"
 Content-Disposition: inline
-In-Reply-To: <20200115115422.17097-4-codrin.ciubotariu@microchip.com>
+In-Reply-To: <CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -38,82 +38,103 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---2/5bycvrmDh4d1IB
+--WChQLJJJfbwij+9x
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 15, 2020 at 01:54:19PM +0200, Codrin Ciubotariu wrote:
-> After a transfer timeout, some faulty I2C slave devices might hold down
-> the SDA pin. We can generate a bus clear command, hoping that the slave
-> might release the pins.
-> If the CLEAR command is not supported, we will use gpio recovery, if
-> available, to reset the bus.
+Hi Martin,
+
+On Sat, Feb 22, 2020 at 12:13:07PM +0100, Martin Volf wrote:
+> Hello,
 >=20
-> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> hardware monitoring sensors NCT6796D on my Asus PRIME Z390M-PLUS
+> motherboard with Intel i7-9700 CPU don't work with 5.4 and newer linux
+> kernels, the driver nct6775 does not load.
+>=20
+> It is working OK in version 5.3. I have used almost all released stable
+> versions from 5.3.8 to 5.3.16; I didn't try older kernels.
+>=20
+> Even on new kernels the sensors-detect finds the sensors:
+>         Found `Nuvoton NCT6796D Super IO Sensors' Success!
+>             (address 0x290, driver `nct6775')
+> but "modprobe nct6775" says:
+>         ERROR: could not insert 'nct6775': No such device
+> There is nothing interesting in dmesg.
+>=20
+> git bisect found out the first bad commit is
+> b84398d6d7f900805662b1619223fd644d862d7c,
+> i2c: i801: Use iTCO version 6 in Cannon Lake PCH and beyond
+>=20
+> Unfortunately I am not able to revert it in v5.4 to confirm it is really
+> the culprit.
+>=20
+> Is there a way to have working hwmon sensors on my system in newer linux
+> kernels?
 
-One thing to improve:
+Well, it worked before, so I am quite sure it can be fixed. Thank you
+very much for your detailed regression report! Sadly, I am not familiar
+enough with those drivers, but you put the right people on CC, so I
+think you will get more feedback within the next days. I'll keep an eye
+on this, too.
 
-> +	/*
-> +	 * some faulty I2C slave devices might hold SDA down;
-> +	 * we can send a bus clear command, hoping that the pins will be
-> +	 * released
-> +	 */
-> +	if (has_clear_cmd) {
-> +		if (!(dev->transfer_status & AT91_TWI_SDA)) {
-> +			dev_dbg(dev->dev,
-> +				"SDA is down; sending bus clear command\n");
-> +			if (dev->use_alt_cmd) {
-> +				unsigned int acr;
-> +
-> +				acr =3D at91_twi_read(dev, AT91_TWI_ACR);
-> +				acr &=3D ~AT91_TWI_ACR_DATAL_MASK;
-> +				at91_twi_write(dev, AT91_TWI_ACR, acr);
-> +			}
-> +			at91_twi_write(dev, AT91_TWI_CR, AT91_TWI_CLEAR);
-> +		}
+Happy hacking,
 
-The inner if-block should be a seperate function, then you could do in
-probe:
+   Wolfram
 
-	if (has_clear_cmd)
-		rinfo->recover_bus =3D <the above function>;
-	else
-		rinfo->recover_bus =3D i2c_generic_scl_recovery;
+>=20
+> Thanks,
+>=20
+> Martin
+>=20
+> --8<--
+> lspci
+> 00:00.0 Host bridge: Intel Corporation 8th Gen Core 8-core Desktop
+> Processor Host Bridge/DRAM Registers [Coffee Lake S] (rev 0d)
+> 00:02.0 VGA compatible controller: Intel Corporation UHD Graphics 630
+> (Desktop 9 Series) (rev 02)
+> 00:14.0 USB controller: Intel Corporation Cannon Lake PCH USB 3.1 xHCI
+> Host Controller (rev 10)
+> 00:14.2 RAM memory: Intel Corporation Cannon Lake PCH Shared SRAM (rev 10)
+> 00:16.0 Communication controller: Intel Corporation Cannon Lake PCH
+> HECI Controller (rev 10)
+> 00:17.0 SATA controller: Intel Corporation Cannon Lake PCH SATA AHCI
+> Controller (rev 10)
+> 00:1b.0 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
+> Port #17 (rev f0)
+> 00:1c.0 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
+> Port #1 (rev f0)
+> 00:1c.6 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
+> Port #7 (rev f0)
+> 00:1d.0 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
+> Port #9 (rev f0)
+> 00:1f.0 ISA bridge: Intel Corporation Z390 Chipset LPC/eSPI Controller (r=
+ev 10)
+> 00:1f.3 Audio device: Intel Corporation Cannon Lake PCH cAVS (rev 10)
+> 00:1f.4 SMBus: Intel Corporation Cannon Lake PCH SMBus Controller (rev 10)
+> 00:1f.5 Serial bus controller [0c80]: Intel Corporation Cannon Lake
+> PCH SPI Controller (rev 10)
+> 00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection (7)
+> I219-V (rev 10)
 
-Then, i2c_recover_bus() will always do the right thing. More readable
-and better maintainable IMO.
-
-If this is not possible (maybe I overlooked some logic), then maybe this
-will work:
-
-	rinfo->recover_bus =3D <your custom function>;
-
-and put the
-
-	if (has_clear_cmd)
-
-block there.
-
-
---2/5bycvrmDh4d1IB
+--WChQLJJJfbwij+9x
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5RFCEACgkQFA3kzBSg
-KbawZQ//djH+GtmK3cq1f/dFHYW7brVxy999V22SKk3jREpntfZkN3nb23ARpOvR
-JxIHA71f3FR5XIIyLWV0xzU04ZsmwZctcQ5jS15KPNHzHShSRgXWq0ioGAjzxkX2
-AKqutS55+2qUGELcX7C/KKeIaLLOfzdvrol4ZPqowCaMrP/DbqcNh/7qL2JB244N
-5giSlvyaOmOMIO8ZdMqrA85G+OwHMDcChti8Ba9TxzSmDJRas46XQ9HkwvEEpdca
-iUoPbSj3hFaAlplTUVs/j4NlOV0fIjxeC3fGYgXTVIGOD1KvGfh4+f+YI2lV9YDx
-lAHcIM6fUTx0+uC4dFWJdaqq+9QfyxHPnCOiH8wIr8XKDvOQbAIu2kP/C80QvhL3
-WeK3fl/JMwxLC3b4fFeAvki9Kdzt42IFK2EDXw/uWyDa39Vl1smk3vRDqHkDzKoB
-DUZ+BWF9VB/y5qdgN2lvT510u0oiCMW0EuaOgZHrvvB08+e7Z5PNZvJb+JzUaXYo
-oSVCsdevMNE7yBX+aBjjOegU8p2ip9jIHCGRiKALM1ab1Vr1co/x3U02hecgTBNd
-VOfHwyBQbdukaExvFAmcrCBeWDOCLUj1F6Wy8g38hBhwKcT1kG/xqYflmQdeTKJk
-taBIAgbnPcMxpcqh+yphRZv69GXo3KQ9fwygszyHw4KWp4d0p50=
-=P68w
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5RFa8ACgkQFA3kzBSg
+KbbkDw/8D/PpB5Muukf4L8rPt0Q0BAL/ZO7cmlwGKXUxZgm2f3KaqDqSYqrHFQs1
+ACTDyyyg6q1RMNiHZQ6LMCBLvWHfgjtBeJcDhTgzFcA7CV+xDrpOan8+8mBHnd8X
+q/vGIGXoBUREZqiGDkCkWu1Pty3nmbsdNgKXy0fc0Ej8q5Apr8dUJ+VU4r7ZzOt4
+naHsYdb3oxyYIu7pNYIM1j64wfivCP6T5pnlfP3JdQkOZfL0dQuW0g3NTcr5n3Gg
+aEdazPNQuN9HB4KH+wqaztxC9LqlCd++gVFx43rakydhVjVnh6BrYIGKkZoAhr4f
+OyvPvyF2QWit0tr2UA5u4OIQUS3kzjW8FzvezozsVRjW/5qmDj2xZ/hesvK5oG+S
+K6uMhABJd8bbBH6Z4/0v/kVgpe0WzMb7qrW125SygYqqckm4WvQ7CprgBIEMXUSg
+7wzYbTU+f8bdT0XD/neK0YueQmutM+smcStwCAGtRPtDgfeCS6OBlfyoJTt22pYT
+Wmaat8iCnX0T2nGXbevLgAI9IE7cbQdvRWCowpBTmQ9So7d9FtI2xhrGbn8xevhs
+tycC0knPDkLmpM6NTibte5PkfIhJLcSEWp3NLzXoqCrFJMV2UoN4eQ2fvnFlvM2E
+Q07PfpWT2mnpl7SGY7EItIIXdeJ/4aDfqr2GemEqnSJao27gUvs=
+=lEKr
 -----END PGP SIGNATURE-----
 
---2/5bycvrmDh4d1IB--
+--WChQLJJJfbwij+9x--
