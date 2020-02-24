@@ -2,50 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D945816ADB3
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2020 18:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B9C16ADCA
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2020 18:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbgBXRjS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Feb 2020 12:39:18 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36784 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727890AbgBXRjR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Feb 2020 12:39:17 -0500
-Received: by mail-pg1-f195.google.com with SMTP id d9so5520801pgu.3;
-        Mon, 24 Feb 2020 09:39:17 -0800 (PST)
+        id S1727474AbgBXRkx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Feb 2020 12:40:53 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:44329 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727108AbgBXRkx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Feb 2020 12:40:53 -0500
+Received: by mail-pf1-f194.google.com with SMTP id y5so5699315pfb.11;
+        Mon, 24 Feb 2020 09:40:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QEO8rTktMvRi8FtiFiyJa1SjpwFUmvt+6z/DR6CHzlc=;
-        b=BkOYsO85JBCOFoHCw2dvRsiIEv//20PB4jPPY6MkUNR+zbwfatSCClbHttFb1wPQ09
-         JvwXCZYPxBOlLsRS4pzV7kdXeZPgfbddAJBmtB56tle1mFh5PzsgaHDk/gMsL9Qb/6Vz
-         cPU5+ioBfq81FSe4FUzea6IX7B0bxg2EorNVnIIqre1jKxcNigHkOd2oNQl2qvWLXZA0
-         f3l4Sr5+7+fKkiKpbyJtwFeeAn85FMjleZ9wnhQI/2w3fNwdlncPrBIHc2XHBAzKWZhb
-         isAjE2igvzqjF3+VZWvHnP6Lmcro9RB69BSlChTNj2IwDFZQ+EF5MMUXK5L8CjpMW02B
-         sqpw==
+        bh=+MzVlJLpy0Myu6XtjU+oJu/3L77UvEbkJbcHWndy0Mw=;
+        b=IUS3pY1l9zVYZ+tFKN38Bpv8qVINuwxCKkZ39IQeABEv+SgMtv+eR41iYTi/zjUU/P
+         xqy7G8pn/unCdRYHZIug7nIzZkzKltl1TioC0e0H02pDmuNcyi2JKoKQlsZzkfVpEUNa
+         5Umm3QFfkTxgUyTsFpCteaha9/THoo5jwWJz46pfrCeaZD++PYj9OUrE45vleWZzaoDR
+         wlUWfupYOAXJDreZQaDuaoOJLov3xsSj/37Jyj1g6KZg94YI2RP+es+D1BAAGMwcGYrt
+         2ieoMuqR36kyPu/gcgAx4bCFRrgfFfl3aZjVqNm1gZ0b5hXaN1hgAED9Dnn4eEfeIzmf
+         7TBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=QEO8rTktMvRi8FtiFiyJa1SjpwFUmvt+6z/DR6CHzlc=;
-        b=SrNE6tc1aBR3d2ijqNMcNCGkPFE6vQELTHTOjJu5ewcSmPV3WV8ezEiktrAB79Q7wg
-         HfitALWbfZ4HtiHSkllSmDV9kOqwFFysKM9TJ8oewpupd/6+2iYFHLPF9krM0pQ4V3jk
-         g0hL0+BHeaJhQG5tl5nfAGWkLNKDJyzh8YLSoxiCYve+R3VfJNBZMOG2oGlPyG1T7YK6
-         K7LU0Hff8lR7jH5khE49ismyFE/pSDUT1VxHefYyozhl4GjBX9NODUkqdbQ6PACXaefX
-         vm3FdaWX2aVohjD9+8q3ES8bmxf4gBkXizQnzbvoUMUHL4snmlVjxEnI3VR+KBDc0n5h
-         1bYw==
-X-Gm-Message-State: APjAAAWiqxopTFZgmm9Wnt2+QM1A+Fa07UA/xwd8aYc11F2rG/A0OTpy
-        X4mU6oNBRZefr94Cp1jIrQP81lhi
-X-Google-Smtp-Source: APXvYqyfgF/YFSdXOWoBOSqpXVi5iH4JEg2sA5QjqwWDlhCicysDKINzvP95J4Eb/cQ6Qjbi7SZPvA==
-X-Received: by 2002:a65:56c6:: with SMTP id w6mr55910617pgs.167.1582565957016;
-        Mon, 24 Feb 2020 09:39:17 -0800 (PST)
+        bh=+MzVlJLpy0Myu6XtjU+oJu/3L77UvEbkJbcHWndy0Mw=;
+        b=lO08hn5jKXTAOOiIO1SVZWWeLvi0yQGbFRDarob7kn1hxZ1Go2rtNreYPkzcJKMg1p
+         YSFPkD6lHU3TSjEpUcZcLwLrpaFWaikcw5R8fKXIUsFJ86MDiC63IRYlK0AOcnlKr6LP
+         zmHzNYEYqaB/hK1byxJVY0BH9oTxrNoemavsJKSm9IGChBOK79TrzzB2YvnP8B4jl/vr
+         Z6H+Eew66ffClMT9xANkjVdnHw23lIY7lu1ihhQTr4emfx3wEiCroPXt//4dX33evy8I
+         2Q35fv3l0hycfRn8fZ/JDDbXqlbNQGzn/5MpywiIsGkNQ8PV9i1XifW5tdHN/x/M3w0Q
+         d2eg==
+X-Gm-Message-State: APjAAAXLVZvfCTb5EioYWZISab9BlSoHglCbBghq2DJZnXkVzd1JwmyW
+        OORucheUTcbR985dMI9wVy3ZgZ+E
+X-Google-Smtp-Source: APXvYqxRc5TdrIdfYjLIUgdJXNPXUlnhYtY2UdOofyCCjYFE+t0Aixa7rsG+uPt36ghvj2a76AQiMg==
+X-Received: by 2002:a63:2ad7:: with SMTP id q206mr51629358pgq.194.1582566051946;
+        Mon, 24 Feb 2020 09:40:51 -0800 (PST)
 Received: from [10.67.50.18] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id g13sm13389828pgh.82.2020.02.24.09.39.15
+        by smtp.googlemail.com with ESMTPSA id e28sm3038730pgn.21.2020.02.24.09.40.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Feb 2020 09:39:15 -0800 (PST)
-Subject: Re: [PATCH 04/89] i2c: brcmstb: Allow to compile it on BCM2835
+        Mon, 24 Feb 2020 09:40:51 -0800 (PST)
+Subject: Re: [PATCH 01/89] dt-bindings: i2c: brcmstb: Convert the BRCMSTB
+ binding to a schema
 To:     Maxime Ripard <maxime@cerno.tech>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Eric Anholt <eric@anholt.net>
@@ -58,9 +59,11 @@ Cc:     dri-devel@lists.freedesktop.org,
         Phil Elwell <phil@raspberrypi.com>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org
 References: <cover.6c896ace9a5a7840e9cec008b553cbb004ca1f91.1582533919.git-series.maxime@cerno.tech>
- <0ec2a26c7492b1ef6554d3bdada7a6fb8b41ab1c.1582533919.git-series.maxime@cerno.tech>
+ <6649111e9c585f267762bb6c6dd96128e5cfb4ba.1582533919.git-series.maxime@cerno.tech>
 From:   Florian Fainelli <f.fainelli@gmail.com>
 Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  xsDiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
@@ -116,12 +119,12 @@ Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  HvsHIcv4lxCWkFXkwsuWqzEKK6kxVpRDoEQPDj+Oy/ZJ5fYuMbkdHrlegwoQ64LrqdmiVVPC
  TwQYEQIADwIbDAUCVF/S8QUJHlwd3wAKCRBhV5kVtWN2Do+FAJ956xSz2XpDHql+Wg/2qv3b
  G10n8gCguORqNGMsVRxrlLs7/himep7MrCc=
-Message-ID: <86695f21-367e-7dbc-bdd5-b908f798118d@gmail.com>
-Date:   Mon, 24 Feb 2020 09:39:14 -0800
+Message-ID: <eb977d8f-66ee-ae71-bf5c-2a187bde6874@gmail.com>
+Date:   Mon, 24 Feb 2020 09:40:49 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <0ec2a26c7492b1ef6554d3bdada7a6fb8b41ab1c.1582533919.git-series.maxime@cerno.tech>
+In-Reply-To: <6649111e9c585f267762bb6c6dd96128e5cfb4ba.1582533919.git-series.maxime@cerno.tech>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -131,14 +134,15 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 On 2/24/20 1:06 AM, Maxime Ripard wrote:
-> The BCM2711, supported by ARCH_BCM2835, also has a controller by the
-> brcmstb driver so let's allow it to be compiled on that platform.
+> Switch the DT binding to a YAML schema to enable the DT validation.
 > 
 > Cc: Kamal Dasu <kdasu.kdev@gmail.com>
 > Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
 > Cc: Wolfram Sang <wsa@the-dreams.de>
 > Cc: bcm-kernel-feedback-list@broadcom.com
 > Cc: linux-i2c@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
 > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
 Acked-by: Florian Fainelli <f.fainelli@gmail.com>
