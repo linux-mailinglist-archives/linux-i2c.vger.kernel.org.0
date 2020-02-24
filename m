@@ -2,105 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F1016AC18
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2020 17:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7EE16AD62
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2020 18:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbgBXQs7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Feb 2020 11:48:59 -0500
-Received: from mail-eopbgr1400092.outbound.protection.outlook.com ([40.107.140.92]:20832
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726762AbgBXQs7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 24 Feb 2020 11:48:59 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UgtCMyETZ3uMd7QctPh0EAQqnOHlrW34vFwpL9oEub3t0lFUbOR9bXVDA9HWfZf5NKxUDswMD2rXcgL7oEXHKffLm+qLqmlMRVGkihaMJYidIlYCo0d2XlsCWhKQVbuhczXbbWoEnXKg4sgcahxovIez87Pr4TlBuqkBjzp8pqpnEZR8Q9ZVRhONo/o1k58kxREv5VbowVxds+9K2EBB5gZP9XgkJva1K74odF13/+vBVTZr46+uzA+NrtBMcrmzYbnPrLKaVCab98dVtFwlqT2rJwWAbsHZ5WvxmTlneCkz5GyWzlJA5YD7CjyxlX2O/R4ot9bl64RxCyGKXKcd0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xl94WL0v1dtv0tFLF+fSaNug8NkhsC3vYv6dkBV9APg=;
- b=bsD4nymhcigOhCr1EXtKFjUJH+5uY2ac7JlI4GwcJ9YRjBpeZXOQy0TTwgrKRCWEm4utqCrWcbjKjrSjZYSv2xCKWVnTmGplcnRyh4q8qT4SdG/qpo2q7qCNLAlD0qgFM1zTv76NeCCTxe3O45TeqIKC0/1mH381lC6y2nNOilij7F8fJHjTvbiO9IaCHfu0igAUBSATQB4UVjDqwa49yK1GSqsayPL9KjBK8drsZ5DTRCMIHLDaL8jilNZxwD0YMUc30+GsTMAmDi4dfDgmO/L5/Drpv0dd/eLP4tqVVs5/lH/0FBMJMO8+CN8WYnAq6jKiVRNn+pHLANno/+G0gw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
+        id S1727644AbgBXR3R (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Feb 2020 12:29:17 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:38837 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727711AbgBXR3R (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Feb 2020 12:29:17 -0500
+Received: by mail-wr1-f65.google.com with SMTP id e8so11376623wrm.5
+        for <linux-i2c@vger.kernel.org>; Mon, 24 Feb 2020 09:29:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xl94WL0v1dtv0tFLF+fSaNug8NkhsC3vYv6dkBV9APg=;
- b=cH/L29oW4QS2+ia9ZqKs5yfNmNCwxpNtwMusotoxUbxh5OTWD3+tJC5lhe+lcugH0U+lDe6m3Ej3+8h3ymMGGN5HtUFOQ3bLdshl7NV6yaHSkscqextiKbkqHNJIox8aVNUEQHiM2q7RjJSYuIbcl7Bs1kjFS/Ab+qFL6GnzbXM=
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com (52.133.163.12) by
- TY1PR01MB1785.jpnprd01.prod.outlook.com (52.133.163.150) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2750.17; Mon, 24 Feb 2020 16:48:54 +0000
-Received: from TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::8870:97e4:a63c:67ea]) by TY1PR01MB1562.jpnprd01.prod.outlook.com
- ([fe80::8870:97e4:a63c:67ea%7]) with mapi id 15.20.2750.021; Mon, 24 Feb 2020
- 16:48:54 +0000
-From:   Chris Brandt <Chris.Brandt@renesas.com>
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=OXnM2pHHZadO4iep0ax68m51bnsYuUuM4flKV/57dGc=;
+        b=KMYb3/bw2nzCMsWW9coIYOq2v8S2fai3yvZ5P5k3eEFgNa5QCFyKzj677hkFdRXmqz
+         +E0wDyVDKtBmFZq27Ca5np/cs1511c9iNTUNlrDN7CGWU9HlPDTxF0PNl8YRucOBPA6w
+         9hwM5haFMVZ/BhKWnnv6K3LzlCD1grKJRX4UY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=OXnM2pHHZadO4iep0ax68m51bnsYuUuM4flKV/57dGc=;
+        b=qYph8WWljVcPA2YEPuMOsuGyvMCLzPeEmT7yYquj1abEoiL7dNC0LiikP4nYWsD7GY
+         F3LPv9NmLdFmtGX86q4vOnU2O2jlC5wqYF41UvKowl8UmrT4/qW1WX8R+2J3rAnH4uVW
+         iO8C90fxHBMhpgviRV9y1ZSj4pirOQsoTcTCPQW0tQ4pwU9vmoOqwOhw3qpDDZ1xXK/5
+         WB9Z2sGLDZ6Re8Z++4C6/qA6FA5Eut2F/bF9ICGvaojje7yoKxnh4d89TE6FG3DJ2h3C
+         6eQcWYagdA2jhnQKdSHkysT6d3Br8qls3wyk3CPWTBQBBk/jElyUFvg+cZIK3shcvldg
+         qWpQ==
+X-Gm-Message-State: APjAAAU2HnafqKI203J88QorxzZWaadYKeNYd9FrEyyyqhF2Ckj7Y19z
+        y1gNZiVi8jJojFTRY9tiExcIRg==
+X-Google-Smtp-Source: APXvYqzqHfEAHfGn6GN4xNBuPzwzb+clbFdqWMkJLBLKqLtSBSbZAP6uDsoCHUwr4/bryZr0JeGrHw==
+X-Received: by 2002:a5d:4f8b:: with SMTP id d11mr64826068wru.87.1582565355451;
+        Mon, 24 Feb 2020 09:29:15 -0800 (PST)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id c9sm69157wmc.47.2020.02.24.09.29.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Feb 2020 09:29:14 -0800 (PST)
+Subject: Re: [PATCH v1 08/40] i2c: bcm-iproc: Use generic definitions for bus
+ frequencies
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: RE: [PATCH v1 26/40] i2c: riic: Use generic definitions for bus
- frequencies
-Thread-Topic: [PATCH v1 26/40] i2c: riic: Use generic definitions for bus
- frequencies
-Thread-Index: AQHV6yVJtqL7FvgJoEehWc6SU5dao6gqjbhQ
-Date:   Mon, 24 Feb 2020 16:48:54 +0000
-Message-ID: <TY1PR01MB1562EA8B9260B64E08843E168AEC0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
+Cc:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>
 References: <20200224151530.31713-1-andriy.shevchenko@linux.intel.com>
- <20200224151530.31713-26-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20200224151530.31713-26-andriy.shevchenko@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY2JyYW5kdDAxXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctODhmYjJjOWEtNTcyNS0xMWVhLWFhNWQtOTRlNmY3Njc5M2FlXGFtZS10ZXN0XDg4ZmIyYzljLTU3MjUtMTFlYS1hYTVkLTk0ZTZmNzY3OTNhZWJvZHkudHh0IiBzej0iNjAxIiB0PSIxMzIyNzAzNjUzMjIwOTkzODQiIGg9IlRkQU9ZYk1CSzFKV2IzZG9iT256alhrQW9CND0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
-x-dg-rorf: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Chris.Brandt@renesas.com; 
-x-originating-ip: [24.206.39.126]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 20d68f04-d9dd-4091-0e30-08d7b9496f13
-x-ms-traffictypediagnostic: TY1PR01MB1785:
-x-microsoft-antispam-prvs: <TY1PR01MB1785373164C65B9B4C74B1818AEC0@TY1PR01MB1785.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2276;
-x-forefront-prvs: 032334F434
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(366004)(396003)(346002)(39860400002)(376002)(199004)(189003)(86362001)(66476007)(4744005)(66946007)(76116006)(316002)(64756008)(66556008)(66446008)(2906002)(7696005)(186003)(478600001)(81156014)(81166006)(9686003)(33656002)(8936002)(55016002)(26005)(5660300002)(71200400001)(52536014)(110136005)(6506007)(8676002)(41533002);DIR:OUT;SFP:1102;SCL:1;SRVR:TY1PR01MB1785;H:TY1PR01MB1562.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6RcoZbJ5Uot9WZ1eifeBTRGBFLG5C2yBh/z9cNhfg/2m775IM0/enJH4XDqeZfB+8j8+K6OG0bUCuGsKJ9xdfMY7hbfZr/x0SXKCkNhblCNnzf+XQahIz5GqK/r3ueHB7d9OskVI5v5YLzbiTqYS4YCCSbcf3aNcW7zZWxyEY02yxw7K1Ndr+Xt2pdnU088YSLEkfkr/mxUVPqWAC8tj6FK4x69C3kVN5avGTfRPcwWoWYG7tk0cbTuCOVpTipIZUHVQr1ee7hCUwWMC5OhzE6+sXGunfo0iiFBivxx7j/dieBiJFF73tFAb/ByYnEXAPWDqAsFrtmMy2+dGc59tzQRYFOneP/aP/kmfLOzBl2/HoxJw8BT/m6BJPtTTippHA5QQY6khUTWn+7s10dM6HlI8Hg5hIXXqqHpzAaeJN91qimDrgsCKCJEGGbM/y6ZIKeauK7ygeRrwGIsCVM9+TyuS2K3erN95efd8P7ER/2xMVFGdRg6269uP5z7OAylj
-x-ms-exchange-antispam-messagedata: rBPbCqnV5qOMDjSFu7592VuieHU5srpfdVkc7x7PSG4BMSgWRNtqAMnzRFM0sw9wrqVz+KGPm1grMdxnmyVhJscUaMQd/Z07zDvT1cPjGcvHiyEdvuBuytveaErLC+PEykFpV0DBczASpVI2KvXLuA==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <20200224151530.31713-8-andriy.shevchenko@linux.intel.com>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <ac206455-b557-1699-4f57-b02b99bf86a7@broadcom.com>
+Date:   Mon, 24 Feb 2020 09:29:11 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20d68f04-d9dd-4091-0e30-08d7b9496f13
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2020 16:48:54.2326
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hmQdfHN4KyvgHYxR7eHwEZ3jd9LspcLCy/uI0bePq2GHDiPXah6owW4BgQIgpfbUOTKY7iP7OYQIWIxAqTgCqV5FHq0lavv2y7lrElpO2cU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PR01MB1785
+In-Reply-To: <20200224151530.31713-8-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Feb 24, 2020 1, Andy Shevchenko wrote:
-> Subject: [PATCH v1 26/40] i2c: riic: Use generic definitions for bus
-> frequencies
->=20
-> Since we have generic definitions for bus frequencies, let's use them.
->=20
-> Cc: Chris Brandt <chris.brandt@renesas.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/i2c/busses/i2c-riic.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Thanks Andy.
 
-Reviewed-by: Chris Brandt <chris.brandt@renesas.com>
+On 2020-02-24 7:14 a.m., Andy Shevchenko wrote:
+> Since we have generic definitions for bus frequencies, let's use them.
+>
+> Cc: Ray Jui <rjui@broadcom.com>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Scott Branden <scott.branden@broadcom.com>
+> ---
+>   drivers/i2c/busses/i2c-bcm-iproc.c | 14 +++++++-------
+>   1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
+> index 30efb7913b2e..627ad88dcf04 100644
+> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
+> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+> @@ -858,25 +858,25 @@ static int bcm_iproc_i2c_cfg_speed(struct bcm_iproc_i2c_dev *iproc_i2c)
+>   	if (ret < 0) {
+>   		dev_info(iproc_i2c->device,
+>   			"unable to interpret clock-frequency DT property\n");
+> -		bus_speed = 100000;
+> +		bus_speed = I2C_STANDARD_MODE_FREQ;
+>   	}
+>   
+> -	if (bus_speed < 100000) {
+> +	if (bus_speed < I2C_STANDARD_MODE_FREQ) {
+>   		dev_err(iproc_i2c->device, "%d Hz bus speed not supported\n",
+>   			bus_speed);
+>   		dev_err(iproc_i2c->device,
+>   			"valid speeds are 100khz and 400khz\n");
+>   		return -EINVAL;
+> -	} else if (bus_speed < 400000) {
+> -		bus_speed = 100000;
+> +	} else if (bus_speed < I2C_FAST_MODE_FREQ) {
+> +		bus_speed = I2C_STANDARD_MODE_FREQ;
+>   	} else {
+> -		bus_speed = 400000;
+> +		bus_speed = I2C_FAST_MODE_FREQ;
+>   	}
+>   
+>   	iproc_i2c->bus_speed = bus_speed;
+>   	val = iproc_i2c_rd_reg(iproc_i2c, TIM_CFG_OFFSET);
+>   	val &= ~BIT(TIM_CFG_MODE_400_SHIFT);
+> -	val |= (bus_speed == 400000) << TIM_CFG_MODE_400_SHIFT;
+> +	val |= (bus_speed == I2C_FAST_MODE_FREQ) << TIM_CFG_MODE_400_SHIFT;
+>   	iproc_i2c_wr_reg(iproc_i2c, TIM_CFG_OFFSET, val);
+>   
+>   	dev_info(iproc_i2c->device, "bus set to %u Hz\n", bus_speed);
+> @@ -1029,7 +1029,7 @@ static int bcm_iproc_i2c_resume(struct device *dev)
+>   	/* configure to the desired bus speed */
+>   	val = iproc_i2c_rd_reg(iproc_i2c, TIM_CFG_OFFSET);
+>   	val &= ~BIT(TIM_CFG_MODE_400_SHIFT);
+> -	val |= (iproc_i2c->bus_speed == 400000) << TIM_CFG_MODE_400_SHIFT;
+> +	val |= (iproc_i2c->bus_speed == I2C_FAST_MODE_FREQ) << TIM_CFG_MODE_400_SHIFT;
+>   	iproc_i2c_wr_reg(iproc_i2c, TIM_CFG_OFFSET, val);
+>   
+>   	bcm_iproc_i2c_enable_disable(iproc_i2c, true);
 
