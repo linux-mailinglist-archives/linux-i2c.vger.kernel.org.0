@@ -2,51 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B9C16ADCA
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2020 18:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3611B16ADED
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2020 18:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727474AbgBXRkx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Feb 2020 12:40:53 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44329 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727108AbgBXRkx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Feb 2020 12:40:53 -0500
-Received: by mail-pf1-f194.google.com with SMTP id y5so5699315pfb.11;
-        Mon, 24 Feb 2020 09:40:52 -0800 (PST)
+        id S1727479AbgBXRpE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Feb 2020 12:45:04 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:42181 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727474AbgBXRpE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Feb 2020 12:45:04 -0500
+Received: by mail-ed1-f65.google.com with SMTP id e10so12874257edv.9;
+        Mon, 24 Feb 2020 09:45:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+MzVlJLpy0Myu6XtjU+oJu/3L77UvEbkJbcHWndy0Mw=;
-        b=IUS3pY1l9zVYZ+tFKN38Bpv8qVINuwxCKkZ39IQeABEv+SgMtv+eR41iYTi/zjUU/P
-         xqy7G8pn/unCdRYHZIug7nIzZkzKltl1TioC0e0H02pDmuNcyi2JKoKQlsZzkfVpEUNa
-         5Umm3QFfkTxgUyTsFpCteaha9/THoo5jwWJz46pfrCeaZD++PYj9OUrE45vleWZzaoDR
-         wlUWfupYOAXJDreZQaDuaoOJLov3xsSj/37Jyj1g6KZg94YI2RP+es+D1BAAGMwcGYrt
-         2ieoMuqR36kyPu/gcgAx4bCFRrgfFfl3aZjVqNm1gZ0b5hXaN1hgAED9Dnn4eEfeIzmf
-         7TBQ==
+        bh=67fEgIo9zzjCq2cuI1Fk8dvCkAayQ97WCPRGpbQg75Q=;
+        b=uSNSfSUfApPvd1/RX8RUbQKKpq/UQT8OpztfVuf7hUF2vBYnQL9y+9HWsCHpbkDd9m
+         pvI6DQK6c/7vs4Znj4ghweLPP9fQku7pAbmOrzxvTnKDWoKBTW19QL51XG1hsAHdhLV4
+         VnNYo76rIKCgTisoGoGv7SiqyIKA/TlJpgPg/QnvNpTLTDJseZpTqp9RPVFe/gsny/kU
+         /NBdpVqNeF5LdmaGpSWsxg7Cvj6KS/giul+nKc5/HpVou8jRmjC29goKhTguTCMQZBqP
+         xog1Tl0Zfhw3wCjYKuGb4mCauppCzLxCBm6auZLWwHBcncqWjUHIs9Wno+L7U5Y46usy
+         OeCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=+MzVlJLpy0Myu6XtjU+oJu/3L77UvEbkJbcHWndy0Mw=;
-        b=lO08hn5jKXTAOOiIO1SVZWWeLvi0yQGbFRDarob7kn1hxZ1Go2rtNreYPkzcJKMg1p
-         YSFPkD6lHU3TSjEpUcZcLwLrpaFWaikcw5R8fKXIUsFJ86MDiC63IRYlK0AOcnlKr6LP
-         zmHzNYEYqaB/hK1byxJVY0BH9oTxrNoemavsJKSm9IGChBOK79TrzzB2YvnP8B4jl/vr
-         Z6H+Eew66ffClMT9xANkjVdnHw23lIY7lu1ihhQTr4emfx3wEiCroPXt//4dX33evy8I
-         2Q35fv3l0hycfRn8fZ/JDDbXqlbNQGzn/5MpywiIsGkNQ8PV9i1XifW5tdHN/x/M3w0Q
-         d2eg==
-X-Gm-Message-State: APjAAAXLVZvfCTb5EioYWZISab9BlSoHglCbBghq2DJZnXkVzd1JwmyW
-        OORucheUTcbR985dMI9wVy3ZgZ+E
-X-Google-Smtp-Source: APXvYqxRc5TdrIdfYjLIUgdJXNPXUlnhYtY2UdOofyCCjYFE+t0Aixa7rsG+uPt36ghvj2a76AQiMg==
-X-Received: by 2002:a63:2ad7:: with SMTP id q206mr51629358pgq.194.1582566051946;
-        Mon, 24 Feb 2020 09:40:51 -0800 (PST)
+        bh=67fEgIo9zzjCq2cuI1Fk8dvCkAayQ97WCPRGpbQg75Q=;
+        b=gOGevrQPEwb4UFodpRSoado4EoFew9O5psoA7oCfIJn7WWSQW77pe38iMxiXx5RjGp
+         cLx/5v9F0fBCqKuDivELNuOMmogFmM7P1aMdKaUYjZfSKc2TkSOhh1DeKYg5WagK2ihT
+         46sRhniow/66oCcSQKKWR0BZLWuEl+6DhDJPgM8MalfW8NvIfb7I/zkptqWl0hLCqLHZ
+         xaR2T/zaTdMahrhWX+YkocQeZ5pkcSXkqVA9tS0pIjVImwPkOQNOr28m8E9rvB7lHodn
+         CIwCRgEvcNyeICIUYi3QAiwsqP6x557ZBAbYzdVgEScM87vv7hXB/qOVaxL2wG6z/rJo
+         HuaA==
+X-Gm-Message-State: APjAAAWy8Cxck1Q7RsqSs0TeNRBsiO1FhE1vrHsyqKxGRRm5cesRYpw8
+        hVF/SMwBYyTrjz5U6JW3s0+bQmif
+X-Google-Smtp-Source: APXvYqzpANUtq+X3kjA7XW1vOUgg7t6jX9FBe3hdx1JrNs8oxBnqXjVoZmoMBFCzZxDHR5Lz44tOFw==
+X-Received: by 2002:a05:6402:1595:: with SMTP id c21mr49388775edv.32.1582566301683;
+        Mon, 24 Feb 2020 09:45:01 -0800 (PST)
 Received: from [10.67.50.18] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id e28sm3038730pgn.21.2020.02.24.09.40.50
+        by smtp.googlemail.com with ESMTPSA id u9sm852559ejj.49.2020.02.24.09.44.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Feb 2020 09:40:51 -0800 (PST)
-Subject: Re: [PATCH 01/89] dt-bindings: i2c: brcmstb: Convert the BRCMSTB
- binding to a schema
+        Mon, 24 Feb 2020 09:45:00 -0800 (PST)
+Subject: Re: [PATCH 03/89] i2c: brcmstb: Support BCM2711 HDMI BSC controllers
 To:     Maxime Ripard <maxime@cerno.tech>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Eric Anholt <eric@anholt.net>
@@ -59,11 +58,9 @@ Cc:     dri-devel@lists.freedesktop.org,
         Phil Elwell <phil@raspberrypi.com>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
 References: <cover.6c896ace9a5a7840e9cec008b553cbb004ca1f91.1582533919.git-series.maxime@cerno.tech>
- <6649111e9c585f267762bb6c6dd96128e5cfb4ba.1582533919.git-series.maxime@cerno.tech>
+ <1ed75ec6dc9310afd768c0bbfd8e73268e8cdfa9.1582533919.git-series.maxime@cerno.tech>
 From:   Florian Fainelli <f.fainelli@gmail.com>
 Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  xsDiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
@@ -119,12 +116,12 @@ Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  HvsHIcv4lxCWkFXkwsuWqzEKK6kxVpRDoEQPDj+Oy/ZJ5fYuMbkdHrlegwoQ64LrqdmiVVPC
  TwQYEQIADwIbDAUCVF/S8QUJHlwd3wAKCRBhV5kVtWN2Do+FAJ956xSz2XpDHql+Wg/2qv3b
  G10n8gCguORqNGMsVRxrlLs7/himep7MrCc=
-Message-ID: <eb977d8f-66ee-ae71-bf5c-2a187bde6874@gmail.com>
-Date:   Mon, 24 Feb 2020 09:40:49 -0800
+Message-ID: <da7943a6-8fcc-6c79-e54e-c8d59dacf24c@gmail.com>
+Date:   Mon, 24 Feb 2020 09:44:56 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <6649111e9c585f267762bb6c6dd96128e5cfb4ba.1582533919.git-series.maxime@cerno.tech>
+In-Reply-To: <1ed75ec6dc9310afd768c0bbfd8e73268e8cdfa9.1582533919.git-series.maxime@cerno.tech>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -134,17 +131,46 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 On 2/24/20 1:06 AM, Maxime Ripard wrote:
-> Switch the DT binding to a YAML schema to enable the DT validation.
+> The HDMI blocks in the BCM2771 have an i2c controller to retrieve the
+> EDID. This block is split into two parts, the BSC and the AUTO_I2C,
+> lying in two separate register areas.
+> 
+> The AUTO_I2C block has a mailbox-like interface and will take away the
+> BSC control from the CPU if enabled. However, the BSC is the actually
+> the same controller than the one supported by the brcmstb driver, and
+> the AUTO_I2C doesn't really bring any immediate benefit.
+> 
+> Let's use the BSC then, but let's also tie the AUTO_I2C registers with a
+> separate compatible so that we can enable AUTO_I2C if needed in the
+> future.
+> 
+> The AUTO_I2C is enabled by default at boot though, so we first need to
+> release the BSC from the AUTO_I2C control.
 > 
 > Cc: Kamal Dasu <kdasu.kdev@gmail.com>
 > Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
 > Cc: Wolfram Sang <wsa@the-dreams.de>
 > Cc: bcm-kernel-feedback-list@broadcom.com
 > Cc: linux-i2c@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
 > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+[snip]
+
+> @@ -705,6 +737,7 @@ static SIMPLE_DEV_PM_OPS(brcmstb_i2c_pm, brcmstb_i2c_suspend,
+>  static const struct of_device_id brcmstb_i2c_of_match[] = {
+>  	{.compatible = "brcm,brcmstb-i2c"},
+>  	{.compatible = "brcm,brcmper-i2c"},
+> +	{.compatible = "brcm,bcm2711-hdmi-i2c"},
+
+You could have added the bcm2711_release_bsc here as a function attached
+with the of_device_id::data member of the structure and do:
+
+if (data && data->init_func)
+	rc = data->init_func(dev);
+
+But we can defer that until we have a second compatible string that
+requires the same approach.
+
+Akked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
 Florian
