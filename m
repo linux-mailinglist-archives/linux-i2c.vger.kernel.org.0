@@ -2,41 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2245616A19D
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2020 10:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4E316A196
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2020 10:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728178AbgBXJQG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Feb 2020 04:16:06 -0500
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:51351 "EHLO
+        id S1727825AbgBXJQE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Feb 2020 04:16:04 -0500
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:42993 "EHLO
         wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728318AbgBXJQF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Feb 2020 04:16:05 -0500
+        by vger.kernel.org with ESMTP id S1727709AbgBXJQE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Feb 2020 04:16:04 -0500
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Mon, 24 Feb 2020 04:16:04 EST
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 5AF454CD;
+        by mailnew.west.internal (Postfix) with ESMTP id 5BB97546;
         Mon, 24 Feb 2020 04:08:56 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
+Received: from mailfrontend1 ([10.202.2.162])
   by compute3.internal (MEProxy); Mon, 24 Feb 2020 04:08:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=8vrsYnMg3+xlG
-        wkxA2xqTXt5S7dQQOBwNLJokfKT5TI=; b=MeEGm8ydYTSDljDyxAs5wLbVVWQrV
-        ZLc+D4bpc6kIWpyJTtjbRUZAdIm7Ho4neycCK2r7oX5b2WQI9O4AzKdlL+6zzD9z
-        eMCb0E8IAaRikxxmmaHPI7zNa6oaMXBPgho3XFDnZPz+B8muLWHE+JnIAtPMbST2
-        WdqreU0RTYMSF5vcnSBLgUTYhP/FTo9lRBtqt90SUajuBoeWphrqja3NHLAtJTS6
-        h7BL0HGfEE9KUUfOTuOmIcUYR/6dd0cEJCF8Ta6jc0hmC+3Ms+YXvSxbbY5WV129
-        By0cqCutzcXGKC8E2by+EnNBJlvoqtgGMjR9FE0Y/cHbnHh0twqb1BtjA==
+        :mime-version:content-transfer-encoding; s=fm2; bh=aifkvOv9zRXxq
+        ekpFLQ5g38F+d5Q84waAiGnY1d0dKA=; b=zHSiWKUe7BUqGibMMMhnFdpnYy8Dx
+        oByM038YZepKvUtdWuQOGr4vYJJH9F0OXpnbuIR8Oi9jApxP8tU/KhBqsTvvV0vv
+        DBzJbXqetR8TFArPMUR4aAdst0uwvyqrEswOvxYjWBCMBlfJFLU/YXW9z7rKsAak
+        3Hcdqbf/X3I1z4Wl15Pqc6U0YYJK/aSMuyGT5qcVlW1YA2uX7uSNW6ekTn7fi5CV
+        8kWH1lNMF529NADRn/OZ3fK5b9Q1SVmPUoOFbAJyNTr5rKYJG3mJz27Ma/z9D634
+        ipagutWNS5u8BY/ky45mBV9MkeqoTONvZuVFcT7YhP+UfpRoVorbj39TQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; bh=8vrsYnMg3+xlGwkxA2xqTXt5S7dQQOBwNLJokfKT5TI=; b=zzlQpzty
-        TQi+s9EWJWK2dZJ3xg6Rrr/ChaWBFHaPKGXqTxduw6vEWfblw87uof8xbmFmV0gL
-        OIMvoutCNzlimhGippaMJBNmnY4cpX/eoQuovotdlX2c581aEfwKruTrQfnQm5zc
-        VRMs8gUwP9ELDykd49fk7oJrrN3rCYShYffseJQvf9ARD4xiVlohsb9/KoVgWg8A
-        WJLsLegxr3un88Js5NBTyDIjCvOoIa7f7xf1PHhBg5ljrEFHe40tB9riscSvmK+2
-        YZax7iskHT1iH3bBjKnTujW1TF/Nw4wxjMvde5xhVebtGILX5orSXl7ffljcDmsu
-        Zsvn3NTHszT1qA==
-X-ME-Sender: <xms:ppJTXjTmQpTuM8_FjJ4Lcv_wIY6cYU5OJjn656Dm8k2QC7jyeh2s4w>
+        fm2; bh=aifkvOv9zRXxqekpFLQ5g38F+d5Q84waAiGnY1d0dKA=; b=1xcIzN5f
+        gOFRqaiMEamDf/QyBFmL3lGKaSkXDVmJ06S7KxJyJwWUB+e02yoWwp2dH07UIs7j
+        wNYuDq5URg95zfqdoX0Y9ASNBL0yRpDFu/aDAHrclGclYCaEneolDmbF3UDwkjSb
+        VE5q1lvq1lC89HOT15zID9Fp+Ius0vuU8uV9kL6aQN9fmO18FPR8qyb3LPwGZbgy
+        T6Xcd51F8lY05CZk1Tx9q0nJ+TF6rex6ZJYjl5m0hrhk3qfTQ3CEnVzW144+wIlT
+        sDZvj+cRAL6/GlOsGtJVbQirT7dggba8UdUEh4Cp4fKffVghdjHHT/lKkCXzMMHu
+        5W2oIRe8JwfVUA==
+X-ME-Sender: <xms:p5JTXs19rhtFYaY82D5yzQIgVw_brvbEr9V3ZjcvahqdWYbtQazwRA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrledtucetufdoteggodetrfdotffvucfrrh
     hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
     lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
@@ -44,13 +45,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrledtucetufdoteggodetrfdotf
     phgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecukfhppeeltddrkeelrd
     eikedrjeeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhho
     mhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:ppJTXsWL0OGsKJoUQUu_qHB-GBs4IF5zq4_afrl4OfY2LE01e5Y-uQ>
-    <xmx:ppJTXoeLpU0IHK2dJP-nL9wOWpJ8K7n9H_DjmfWma_018eFICKL2-A>
-    <xmx:ppJTXvwR_zBnusltx-lZlhZShIXI-9zuW-QuSh6E4tbH3lE8Vzjxww>
-    <xmx:qJJTXsdgiH4mN_Q1Y_kAZwvirdItS31sFpZWycjD-4YKr5qjkm-WTw22ksI>
+X-ME-Proxy: <xmx:p5JTXrWzcu65fd7BNERv_UFmOuaodSuZEZXYkz_g9Gq58rIyBqpvRA>
+    <xmx:p5JTXv4O0vZWktqygUmnO0ZcINf3962OKgvpqa68gqn4WiB58E-dEQ>
+    <xmx:p5JTXqKfD_YNibKbolYbPLwtJTxnXmem66a4ya7ztWp2upEv2HM_3w>
+    <xmx:qJJTXnWek_2MGiM6ogkQRZ99oSOfnPswzMty1JkG9z9WdVLowfdLRlYP4hw>
 Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id E275F3060F9B;
-        Mon, 24 Feb 2020 04:08:53 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 502763280064;
+        Mon, 24 Feb 2020 04:08:55 -0500 (EST)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Eric Anholt <eric@anholt.net>
@@ -65,9 +66,9 @@ Cc:     dri-devel@lists.freedesktop.org,
         Kamal Dasu <kdasu.kdev@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
-Subject: [PATCH 03/89] i2c: brcmstb: Support BCM2711 HDMI BSC controllers
-Date:   Mon, 24 Feb 2020 10:06:05 +0100
-Message-Id: <1ed75ec6dc9310afd768c0bbfd8e73268e8cdfa9.1582533919.git-series.maxime@cerno.tech>
+Subject: [PATCH 04/89] i2c: brcmstb: Allow to compile it on BCM2835
+Date:   Mon, 24 Feb 2020 10:06:06 +0100
+Message-Id: <0ec2a26c7492b1ef6554d3bdada7a6fb8b41ab1c.1582533919.git-series.maxime@cerno.tech>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.6c896ace9a5a7840e9cec008b553cbb004ca1f91.1582533919.git-series.maxime@cerno.tech>
 References: <cover.6c896ace9a5a7840e9cec008b553cbb004ca1f91.1582533919.git-series.maxime@cerno.tech>
@@ -78,21 +79,8 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The HDMI blocks in the BCM2771 have an i2c controller to retrieve the
-EDID. This block is split into two parts, the BSC and the AUTO_I2C,
-lying in two separate register areas.
-
-The AUTO_I2C block has a mailbox-like interface and will take away the
-BSC control from the CPU if enabled. However, the BSC is the actually
-the same controller than the one supported by the brcmstb driver, and
-the AUTO_I2C doesn't really bring any immediate benefit.
-
-Let's use the BSC then, but let's also tie the AUTO_I2C registers with a
-separate compatible so that we can enable AUTO_I2C if needed in the
-future.
-
-The AUTO_I2C is enabled by default at boot though, so we first need to
-release the BSC from the AUTO_I2C control.
+The BCM2711, supported by ARCH_BCM2835, also has a controller by the
+brcmstb driver so let's allow it to be compiled on that platform.
 
 Cc: Kamal Dasu <kdasu.kdev@gmail.com>
 Cc: Florian Fainelli <f.fainelli@gmail.com>
@@ -101,66 +89,21 @@ Cc: bcm-kernel-feedback-list@broadcom.com
 Cc: linux-i2c@vger.kernel.org
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/i2c/busses/i2c-brcmstb.c | 33 +++++++++++++++++++++++++++++++++-
- 1 file changed, 33 insertions(+)
+ drivers/i2c/busses/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-brcmstb.c b/drivers/i2c/busses/i2c-brcmstb.c
-index 506991596b68..169a2836922d 100644
---- a/drivers/i2c/busses/i2c-brcmstb.c
-+++ b/drivers/i2c/busses/i2c-brcmstb.c
-@@ -580,6 +580,31 @@ static void brcmstb_i2c_set_bsc_reg_defaults(struct brcmstb_i2c_dev *dev)
- 	brcmstb_i2c_set_bus_speed(dev);
- }
- 
-+#define AUTOI2C_CTRL0		0x26c
-+#define AUTOI2C_CTRL0_RELEASE_BSC	BIT(1)
-+
-+static int bcm2711_release_bsc(struct brcmstb_i2c_dev *dev)
-+{
-+	struct platform_device *pdev = to_platform_device(dev->device);
-+	struct resource *iomem;
-+	void __iomem *autoi2c;
-+
-+	/* Map hardware registers */
-+	iomem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "auto-i2c");
-+	autoi2c = devm_ioremap_resource(&pdev->dev, iomem);
-+	if (IS_ERR(autoi2c))
-+		return PTR_ERR(autoi2c);
-+
-+	writel(AUTOI2C_CTRL0_RELEASE_BSC, autoi2c + AUTOI2C_CTRL0);
-+	devm_iounmap(&pdev->dev, autoi2c);
-+
-+	/* We need to reset the controller after the release */
-+	dev->bsc_regmap->iic_enable = 0;
-+	bsc_writel(dev, dev->bsc_regmap->iic_enable, iic_enable);
-+
-+	return 0;
-+}
-+
- static int brcmstb_i2c_probe(struct platform_device *pdev)
- {
- 	int rc = 0;
-@@ -609,6 +634,13 @@ static int brcmstb_i2c_probe(struct platform_device *pdev)
- 		goto probe_errorout;
- 	}
- 
-+	if (of_device_is_compatible(dev->device->of_node,
-+				    "brcm,bcm2711-hdmi-i2c")) {
-+		rc = bcm2711_release_bsc(dev);
-+		if (rc)
-+			goto probe_errorout;
-+	}
-+
- 	rc = of_property_read_string(dev->device->of_node, "interrupt-names",
- 				     &int_name);
- 	if (rc < 0)
-@@ -705,6 +737,7 @@ static SIMPLE_DEV_PM_OPS(brcmstb_i2c_pm, brcmstb_i2c_suspend,
- static const struct of_device_id brcmstb_i2c_of_match[] = {
- 	{.compatible = "brcm,brcmstb-i2c"},
- 	{.compatible = "brcm,brcmper-i2c"},
-+	{.compatible = "brcm,bcm2711-hdmi-i2c"},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, brcmstb_i2c_of_match);
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 2ddca08f8a76..9b8494de4a59 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -476,7 +476,7 @@ config I2C_BCM_KONA
+ config I2C_BRCMSTB
+ 	tristate "BRCM Settop/DSL I2C controller"
+ 	depends on ARCH_BRCMSTB || BMIPS_GENERIC || ARCH_BCM_63XX || \
+-		   COMPILE_TEST
++		   COMPILE_TEST || ARCH_BCM2835
+ 	default y
+ 	help
+ 	  If you say yes to this option, support will be included for the
 -- 
 git-series 0.9.1
