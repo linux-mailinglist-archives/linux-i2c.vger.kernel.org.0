@@ -2,89 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6724116BBB8
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 09:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95E316BE83
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 11:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729767AbgBYIWf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Feb 2020 03:22:35 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:40981 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729747AbgBYIWf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Feb 2020 03:22:35 -0500
-Received: by mail-pg1-f196.google.com with SMTP id 70so6502065pgf.8;
-        Tue, 25 Feb 2020 00:22:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zYvdy1dlyG33XXcH8cycU4rJytEQhmpUSBqvZa/d8dQ=;
-        b=leF+SeHkU9KHPJujKtFktQqfyi7nBtzEEvxTt7zXhwN9GEl7gxArJzC/ba7zAve7/8
-         r30o8coHvD1mIXbONeS2j2D0h+zKvU4JW6qe+OtCI2tJZc8qmIJwrHcd3UjnWxG+hk3a
-         DJ8+hD+EKWTZbIrVA8xFCn+2WBAwGb9wVzeG4TxDsdMEJIzMlN3k8PmpoqzHv0n/5e4V
-         Q/z9W3cjSfu0IR7RKuurJVTiF16/LZ+BDuvJUqSnA6tggZG1zQLMvNz9Ijzl6XJ9nzkf
-         8/VOTUAGg9Mj8eC1zAXA1hgFkJH8q0QUsgKjLcOPdmSltABPbrivS3Z6tU6SQPzWWAIG
-         rQWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zYvdy1dlyG33XXcH8cycU4rJytEQhmpUSBqvZa/d8dQ=;
-        b=c/2OMqgjnmMzFEwZMIRN6pZM2ZTfxIgyalI4OmR7AVf0LlR2o5E+n0lHtzYxzicZl0
-         N5nqJ72NzLXAzuAO+nzaJMC7CGb8SLfTcmqTClwcwzlV/UIHUGZDUsHWl8RZLtKaGbB0
-         0z5M/YabUlCgdwq3pdACR7kDKQIyk61ENqBw5zXSqii8ulEnN5vDBJ7UhzZf3uTFoA/R
-         qh/4RqOUkDkTawNMvHBccS9q/2ouZtKxdYlRiB9EpCOKmJ7L9+fUrsRf0N1v1BuoMl/7
-         KvEkM4PwdJD3dmSteDTnpBkVZiDNV7a7ZSyOFxmK3hhnVE71Vakkb3K7UP2m5ijoqA88
-         LsAw==
-X-Gm-Message-State: APjAAAVfDAjQzTMfMYMz+KgJjSunBtpK3czutRRFQ26za0W5whHRd6bT
-        +CMrHpinvtCywVVSNrqoCKF5WDaPmAQm9M3Wt8c=
-X-Google-Smtp-Source: APXvYqx4fDstjE6svyQGrI6q6r4kT9nzOqn1UVbhnEtq+Pn6utzOkdfpkg0toXU8mnGTj66irjefgr/49LcAJA8yFY0=
-X-Received: by 2002:a65:6459:: with SMTP id s25mr22565585pgv.74.1582618954453;
- Tue, 25 Feb 2020 00:22:34 -0800 (PST)
+        id S1730041AbgBYKWj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Feb 2020 05:22:39 -0500
+Received: from sauhun.de ([88.99.104.3]:36756 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729952AbgBYKWj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 Feb 2020 05:22:39 -0500
+Received: from localhost (p5486CE6D.dip0.t-ipconnect.de [84.134.206.109])
+        by pokefinder.org (Postfix) with ESMTPSA id B4EBA2C08C2;
+        Tue, 25 Feb 2020 11:22:36 +0100 (CET)
+Date:   Tue, 25 Feb 2020 11:22:33 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH v1 01/40] i2c: qup: Move bus frequency definitions to
+ i2c.h
+Message-ID: <20200225102233.GA3677@ninjato>
+References: <20200224151530.31713-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <1582498270-50674-1-git-send-email-schaecsn@gmx.net>
-In-Reply-To: <1582498270-50674-1-git-send-email-schaecsn@gmx.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 25 Feb 2020 10:22:23 +0200
-Message-ID: <CAHp75Veoj8ZpqAoGGAphjPQDn0i+5c_WS3U+mRMiinCuK0YBYQ@mail.gmail.com>
-Subject: Re: [PATCH 0/1] i2c: imc: Add support for Intel iMC SMBus host controller.
-To:     Stefan Schaeckeler <schaecsn@gmx.net>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="J/dobhs11T7y2rNN"
+Content-Disposition: inline
+In-Reply-To: <20200224151530.31713-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Feb 24, 2020 at 12:54 AM Stefan Schaeckeler <schaecsn@gmx.net> wrote:
->
-> This patch is based on Andy Lutomirski's iMC SMBus driver patch-set
-> https://lkml.org/lkml/2016/4/28/926. It never made it into the kernel. I hope
-> this rewrite will:
 
-Thanks for the patch!
-I'll review the code later.
+--J/dobhs11T7y2rNN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I think the better to have a documentation file where you describe
-stuff like enumeration and so on for this drivers (under Documentation
-folder).
+Hi Andy,
 
-> Stefan Schaeckeler (1):
->   i2c: imc: Add support for Intel iMC SMBus host controller.
->
->  MAINTAINERS                  |   5 +
->  drivers/i2c/busses/Kconfig   |  15 ++
->  drivers/i2c/busses/Makefile  |   1 +
->  drivers/i2c/busses/i2c-imc.c | 515 +++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 536 insertions(+)
->  create mode 100644 drivers/i2c/busses/i2c-imc.c
->
-> --
-> 2.11.0
->
+On Mon, Feb 24, 2020 at 05:14:51PM +0200, Andy Shevchenko wrote:
+> Move bus frequency definitions to i2c.h for wider use.
+>=20
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+A cover letter would have been nice so we could discuss the general
+appraoch there. And to read more about the motivation.
+
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -39,6 +39,13 @@ enum i2c_slave_event;
+>  typedef int (*i2c_slave_cb_t)(struct i2c_client *client,
+>  			      enum i2c_slave_event event, u8 *val);
+> =20
+> +#define HZ_PER_KHZ			1000
+
+Unlike Jarkko, I think such macros help readability when calculating
+frequencies within drivers. However, they shouldn't be local to I2C if
+we agree on them. They should be available Linux-wide. There are some
+other (few) local implementations already.
+
+> +
+> +/* I2C Frequency Modes */
+> +#define I2C_STANDARD_MODE_FREQ		(100 * HZ_PER_KHZ)
+> +#define I2C_FAST_MODE_FREQ		(400 * HZ_PER_KHZ)
+> +#define I2C_FAST_MODE_PLUS_FREQ		(1000 * HZ_PER_KHZ)
+
+For such a header, I'd prefer the plain number, though. There will be
+enough review to make sure we get it right ;) Furthermore, I'd prefer to
+have 'MAX' in there, e.g. I2C_MAX_STANDARD_MODE_FREQ etc. Just to make
+clear that I2C can have other bus speeds as well.
+
+And finally, I'd think all driver patches should be squashed into one,
+and all core ones into one etc. Or?
+
+Thanks,
+
+   Wolfram
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+--J/dobhs11T7y2rNN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5U9WUACgkQFA3kzBSg
+KbZUVA/9GtyDtsHjyN7s71CWfWYSm6btgldTq/79Su7Cr4kkXIjvV0TSsAgNS8/R
+/RjkQycxilvOr7fGYoBzAK95TGHGKNgbCDInltkHStBgtoRIoUYWvVBKb9pA7aZD
+HS59qIEPFSX37rBfCRT4bUMN1t0zni9ejyMKNR9KdOWamcoZXTd/sEQ8wI3cR0GH
+6kvIrUPIXSK7HaG17jCzk+0RKQM2CwqgErFpUejDjvQHJR/Gi+pBRLWnLF0jxV75
+fD5VTiMo8wcgLli7U00FVp/IiYAoJ8qMtu6UNd4GiyeueJVcuANw0i8gUyS8vk/P
+kBO25YiKmmbB4QS7RoxKs6VuWgfMG89Rfj+W9dD8dL3lOxA7kL7Y8YKNolivAwKN
+/8eqtf4ASUag/0mqDUjU2zK8LRCiZbdFh1LnJA2L7AY4j3Sk7RUSbY6UnO1y54ne
+lgvNechATSAuXOsaEihD3BVBZwwDUXZMBKP51zs7Qa9iLxDl29+mT2092rhbCgXi
+Ur6dbUFmL3QJmzw/vtIbaIG+QqJSbH4fx1zJgGCcF9IN4UPG7X08bQ9xbekKradm
+xys7luJQHaNudZilUqKVWTZrOgafmcVgvIpo8bFxmgvpgebYz0Kbwirsc8zNSR0z
+z3ti1+mFCnEe+e/17bRU1yebFMqNLGI89zbNGY31n7L/3+hCjZs=
+=4bYb
+-----END PGP SIGNATURE-----
+
+--J/dobhs11T7y2rNN--
