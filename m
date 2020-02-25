@@ -2,113 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA3016BEBE
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 11:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E29C816BEF1
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 11:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730242AbgBYK27 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Feb 2020 05:28:59 -0500
-Received: from mail-lf1-f50.google.com ([209.85.167.50]:42996 "EHLO
-        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730267AbgBYK27 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Feb 2020 05:28:59 -0500
-Received: by mail-lf1-f50.google.com with SMTP id 83so9341103lfh.9
-        for <linux-i2c@vger.kernel.org>; Tue, 25 Feb 2020 02:28:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=Xt5gQY8jFB58VXdpXhD78knoaZZIRVN1gIxs+GjvtcY=;
-        b=eczlL2B8ndUO2ZveCZ9xAm6QfeO2ZsoGzkSrpq9tUeFzVQpDcXrQnD2i1cokWy/kNH
-         zBraQYQo6JC8xfCrx4aaCB9krjVYzzNhuFfq0fpJcB5/719sU9d6FXbRspLIz3rr1yO4
-         T8eRcDltNpChrUD5QZ3fG3lGL5kFv8z6PKNrZit5hL8Ik8vjpqgnfljeECMoR9pThZA2
-         6ZtOyR2QJL0LM0eFZIDw2UJU+KLr+sYbACoxCgdtUND3jSaW+AHKnAg3DdTpHP2QSUxI
-         7BdCTvBwlqhxbnJ5zp3l79LI0EJdvjV06eRiT+R32F75VtMqV3HyMBz5aK9sOENCGkik
-         supw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=Xt5gQY8jFB58VXdpXhD78knoaZZIRVN1gIxs+GjvtcY=;
-        b=JlYXd63jorbhe2HHAghCu4pY304sJMCbr54jqgYllCIplOdFHSCnTDjFgy2F/ljyyd
-         XntHNg5H2rBMVhjRnxje/2ezpy4hs+DfoOTtn/8f8xWKzG9i6zV6j8RcBPwTyj34E6+l
-         UAn66klBlM123Ll/qjzdQ8is7H50NwVA1s3P556hpEFpqllbgLTFxwJIRr4r8Ik+MIqH
-         fcmp2YQ4L0wcv8z7sRyw/Hi223EqxsD92zM+pu1QfjEzinkVvnTS4pzJqumWB7mbcIJK
-         O9TNHOowrOfbJdHL6P3lIv4LnVKOXlAzTKlrmBAi5N8RkCrc4wv+SWqCU/QlSzlrtt3V
-         rRFA==
-X-Gm-Message-State: APjAAAUsSPw1uU2zGumU2LDImVwJFpmOumpbng/S4gqC0iusm28ogRaB
-        LmAC33BigmmQ81uRxjE37CaWzpYyZUZXk1eJVrQHxeQu
-X-Google-Smtp-Source: APXvYqyDnEM7/bmFrgy9wNMvHyIEpCb10Bbu369dWbopn8AK7ZlR5qKnmTqCM41vUItA2K453sp93QcsqRGlCaSCWw8=
-X-Received: by 2002:a19:c38e:: with SMTP id t136mr14664384lff.153.1582626537261;
- Tue, 25 Feb 2020 02:28:57 -0800 (PST)
+        id S1730337AbgBYKiU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Feb 2020 05:38:20 -0500
+Received: from mga17.intel.com ([192.55.52.151]:6271 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730336AbgBYKiU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 Feb 2020 05:38:20 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 02:38:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,483,1574150400"; 
+   d="scan'208";a="231421689"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Feb 2020 02:38:18 -0800
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1j6XbE-004dS4-JF; Tue, 25 Feb 2020 12:38:00 +0200
+Date:   Tue, 25 Feb 2020 12:38:00 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Baolin Wang <baolin.wang7@gmail.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Subject: Re: [PATCH v1 31/40] i2c: spdr: Use generic definitions for bus
+ frequencies
+Message-ID: <20200225103800.GE10400@smile.fi.intel.com>
+References: <20200224151530.31713-1-andriy.shevchenko@linux.intel.com>
+ <20200224151530.31713-31-andriy.shevchenko@linux.intel.com>
+ <CADBw62reMCohyi-HHbyXpUdBB-ZsN8newHgUyy_cJ3vnfS1W2A@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAHb3i=uXLgjT-emHeJzHGG5L_0z94ZwDYcX5vtaDf8+Eh90ziQ@mail.gmail.com>
- <CAHb3i=vA76p6iXt0Q8ZECSj8r_Ltv_c7U1W21r_aD4HsLuJPrA@mail.gmail.com>
-In-Reply-To: <CAHb3i=vA76p6iXt0Q8ZECSj8r_Ltv_c7U1W21r_aD4HsLuJPrA@mail.gmail.com>
-From:   Tali Perry <tali.perry1@gmail.com>
-Date:   Tue, 25 Feb 2020 12:29:35 +0200
-Message-ID: <CAHb3i=shEPFMmVJG=MTP-t9UqNfxMoyVqRnr9WDFMg1S=_TeSg@mail.gmail.com>
-Subject: Re: npcm-I2c driver
-To:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADBw62reMCohyi-HHbyXpUdBB-ZsN8newHgUyy_cJ3vnfS1W2A@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+On Tue, Feb 25, 2020 at 08:49:24AM +0800, Baolin Wang wrote:
+> On Mon, Feb 24, 2020 at 11:15 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > Since we have generic definitions for bus frequencies, let's use them.
+> >
+> > Cc: Orson Zhai <orsonzhai@gmail.com>
+> > Cc: Baolin Wang <baolin.wang7@gmail.com>
+> > Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> Can you fix the typo in the subject line by changing 'spdr' to 'sprd'?
 
-Just a reminder,
-please take a look at this patch.
-This patch is a new driver for npcm-i2c.
-The patch has been waiting patiently for several months now...
+Sure.
+
+> Otherwise looks good to me. Thanks.
+> Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
+
+Thanks!
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-https://patchwork.ozlabs.org/patch/1198846/
-
-
-Thanks,
-
-Tali Perry
-Nuvoton Technologies
-
-On Wed, Feb 19, 2020 at 11:39 AM Tali Perry <tali.perry1@gmail.com> wrote:
->
-> Hi,
->
-> Just a reminder,
-> please take a look at this patch.
-> This patch is a new driver for npcm-i2c.
-> The patch has been waiting patiently for several months now...
->
->
-> https://patchwork.ozlabs.org/patch/1198846/
->
->
-> Thanks,
->
-> Tali Perry
-> Nuvoton Technologies
->
->
-> ---------- Forwarded message ---------
-> From: Tali Perry <tali.perry1@gmail.com>
-> Date: Mon, Feb 17, 2020 at 3:52 PM
-> Subject: npcm-I2c driver
-> To: Wolfram Sang <wsa@the-dreams.de>
-> Cc: <linux-i2c@vger.kernel.org>, OpenBMC Maillist <openbmc@lists.ozlabs.org>
->
->
-> Hi,
->
-> Just a reminder,
-> please take a look at this patch.
-> This patch is a new driver for npcm-i2c.
-> The patch has been waiting patiently for several months now...
->
->
-> https://patchwork.ozlabs.org/patch/1198846/
->
->
-> Thanks,
->
-> Tali Perry
-> Nuvoton Technologies
