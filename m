@@ -2,95 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5A816EDA6
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 19:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA06A16EEE0
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 20:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731405AbgBYSPC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Feb 2020 13:15:02 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:38873 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728367AbgBYSPC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Feb 2020 13:15:02 -0500
-Received: by mail-oi1-f194.google.com with SMTP id r137so242528oie.5;
-        Tue, 25 Feb 2020 10:15:02 -0800 (PST)
+        id S1730984AbgBYTTg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Feb 2020 14:19:36 -0500
+Received: from mail-pj1-f53.google.com ([209.85.216.53]:37733 "EHLO
+        mail-pj1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727298AbgBYTTg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Feb 2020 14:19:36 -0500
+Received: by mail-pj1-f53.google.com with SMTP id m13so128180pjb.2
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Feb 2020 11:19:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BYRJlgXmUyclP4eYH8OvDIdap+q+/WDF/KFpEgL6TEg=;
+        b=D9+bgmLRVNidRRPbjIcW0LnHWKsV5pjwmAMMhKXdqAHjbZj9rLHwbsCRwSbR1GFghx
+         XjK+UpXT0CsDcGpN8FpV6cxK8XlONUKgwqd02ZTcF1FZUyZ/Kb8T0MiHN92CY6YJrf9e
+         UryaBG+EtdiSqzWC4UOtkEUbXgORXa+xgsl4SC9e2dVp2CKJFQDUITp10RyJKlbzIH7p
+         aLEMKbDdCe5bXaFT2XUBMTEdhKXd5kut3BK6Hb98eMn+ycDSpzPifzNV92VL/wudhD2p
+         KnGmX1EY9JtWhlUWLm8XtD1bInjEyXzR/1+9mtBMHoDqUl5Ly+fqysxMmkhCbpbCiwSx
+         cDHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sRPxV5iSvPN80K6tvKNtciXRBCMachxheO+dmsdwNT0=;
-        b=Nr6Hz9U0nsRcJnZ9q4TNOERxSlQMNcuhl6QlpT8EX3rG2/0hs+CRSoFFGitmqo1uIf
-         13RMOsr0IgZk6fcdT/eMQMlEPg+emdbwTLg2HidVP/ps1k9FsoVuzE/FQWLyjQuxRKPY
-         msEL+fZjGRCEb3SKDHXLSapXCVLfBrA0utrx0vFK1uLmBofXknw544Zd/etGNYj3U/P8
-         WjSYW1NWL4Uu9Oyoi7USzwdbVOPRkxzsYvyp7kx7q3C8cxro7a/8TmIa7WW1heTGEL1X
-         z28j1kQEufnulKBoLcXlVqhcke52yFO2hNQor3VbKPN/0CotY5FohaNS/8XnSxtCAFc3
-         AhDA==
-X-Gm-Message-State: APjAAAWRU+kDss3hIEQswV/jQKw8vANBpDzdCb1cHB3Nqq34C8ut69L5
-        NCeL6hxRvrPQWzmFbO1MyQ==
-X-Google-Smtp-Source: APXvYqxWUUIv2aQqOuCp8OaRKWv2QrkvHU2RtzwROvmadfZZRS7+D+CIBSg3H3p92q957/Sr7GWDHg==
-X-Received: by 2002:aca:5f87:: with SMTP id t129mr199368oib.36.1582654501742;
-        Tue, 25 Feb 2020 10:15:01 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id i6sm5902042oto.62.2020.02.25.10.15.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2020 10:15:01 -0800 (PST)
-Received: (nullmailer pid 601 invoked by uid 1000);
-        Tue, 25 Feb 2020 18:15:00 -0000
-Date:   Tue, 25 Feb 2020 12:15:00 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Eric Anholt <eric@anholt.net>, devicetree@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-i2c@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: Re: [PATCH 02/89] dt-bindings: i2c: brcmstb: Add BCM2711
- BSC/AUTO-I2C  binding
-Message-ID: <20200225181500.GA538@bogus>
-References: <cover.6c896ace9a5a7840e9cec008b553cbb004ca1f91.1582533919.git-series.maxime@cerno.tech>
- <9e427ff22fa40b7146b44aee6468559499deb1f1.1582533919.git-series.maxime@cerno.tech>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BYRJlgXmUyclP4eYH8OvDIdap+q+/WDF/KFpEgL6TEg=;
+        b=t/QO+/9WC7uckXkppmzUxacjwl+scnuHwNdphpNs9wp/iHVLxdoLkzQZGpX67FYzUL
+         u8f7yNnVBsESvdsCqZv/i6ckd5mrklup49cALN1kHC4+YQ5peQb/7BIjwMfW7ZOUzI2g
+         TJkiFeCsxYziTzEKDjN+pXSDkpfhbckBVphvyMS4m8aVRI2AV3g9Jl12Up/fbVeGcMjQ
+         8B/raFkuhH4Tgp79zceoDf1rO8fXec0+b6+zqrqmfsSeiljRy2MXTpayBrn/Nw3i2Yde
+         heaFMzlLlmu9MGYGEnSs+vwpHQs73qrzmquLP35n/uIWXXSIvi+EcjleVS6U0sEyUgwQ
+         RkxA==
+X-Gm-Message-State: APjAAAXJqUvpGgNf43IwH6Ff+KCfbccqA2WmNkyqqvao58eVBzoJPAqM
+        BsyvTd6nXlORfcqttTfDrwtVyHBudv4KlZMulHcEsQ==
+X-Google-Smtp-Source: APXvYqynvpJsBhRquSqsnjud6EMIcbWLDTtJxWF6YXJ0G1G3afx8Rqfd6DqsVvZbGqF/W/agnTfgf2jRjxu1bg5HkZ4=
+X-Received: by 2002:a17:90a:c390:: with SMTP id h16mr535781pjt.131.1582658375237;
+ Tue, 25 Feb 2020 11:19:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9e427ff22fa40b7146b44aee6468559499deb1f1.1582533919.git-series.maxime@cerno.tech>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CAHb3i=uXLgjT-emHeJzHGG5L_0z94ZwDYcX5vtaDf8+Eh90ziQ@mail.gmail.com>
+ <CAHb3i=vA76p6iXt0Q8ZECSj8r_Ltv_c7U1W21r_aD4HsLuJPrA@mail.gmail.com> <CAHb3i=shEPFMmVJG=MTP-t9UqNfxMoyVqRnr9WDFMg1S=_TeSg@mail.gmail.com>
+In-Reply-To: <CAHb3i=shEPFMmVJG=MTP-t9UqNfxMoyVqRnr9WDFMg1S=_TeSg@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 25 Feb 2020 11:19:24 -0800
+Message-ID: <CAFd5g45aLgZ9=YzJPVWELkmeSf_8WdngXn_7-32sw_xOSTD7sg@mail.gmail.com>
+Subject: Re: npcm-I2c driver
+To:     Tali Perry <tali.perry1@gmail.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 24 Feb 2020 10:06:04 +0100, Maxime Ripard wrote:
-> The HDMI blocks in the BCM2771 have an i2c controller to retrieve the
-> EDID. This block is split into two parts, the BSC and the AUTO_I2C,
-> lying in two separate register areas.
-> 
-> The AUTO_I2C block has a mailbox-like interface and will take away the
-> BSC control from the CPU if enabled. However, the BSC is the actually
-> the same controller than the one supported by the brcmstb driver, and
-> the AUTO_I2C doesn't really bring any immediate benefit.
-> 
-> We can model it in the DT as a single device with two register range,
-> which will allow us to use or or the other in the driver without
-> changing anything in the DT.
-> 
-> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Wolfram Sang <wsa@the-dreams.de>
-> Cc: bcm-kernel-feedback-list@broadcom.com
-> Cc: linux-i2c@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
->  Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml | 40 ++++++-
->  1 file changed, 39 insertions(+), 1 deletion(-)
-> 
+On Tue, Feb 25, 2020 at 2:29 AM Tali Perry <tali.perry1@gmail.com> wrote:
+>
+> Hi,
+>
+> Just a reminder,
+> please take a look at this patch.
+> This patch is a new driver for npcm-i2c.
+> The patch has been waiting patiently for several months now...
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Observation as a bystander: I looked at this and my first reaction was
+that it looked like Wolfram was waiting on a response from you. I just
+looked at this again now and realized that you had responded to
+Wolfram with a question.
+
+What you want would probably be more obvious if you sent a ping email
+in response to the email where you are looking for a response. Also,
+responding to the original email makes it easier for reviewers to
+respond to your email rather than have to look it up in their inbox.
+
+Also, please don't top post.
+
+> https://patchwork.ozlabs.org/patch/1198846/
+>
+>
+> Thanks,
+>
+> Tali Perry
+> Nuvoton Technologies
+>
+> On Wed, Feb 19, 2020 at 11:39 AM Tali Perry <tali.perry1@gmail.com> wrote:
+> >
+> > Hi,
+> >
+> > Just a reminder,
+> > please take a look at this patch.
+> > This patch is a new driver for npcm-i2c.
+> > The patch has been waiting patiently for several months now...
+> >
+> >
+> > https://patchwork.ozlabs.org/patch/1198846/
+> >
+> >
+> > Thanks,
+> >
+> > Tali Perry
+> > Nuvoton Technologies
+> >
+> >
+> > ---------- Forwarded message ---------
+> > From: Tali Perry <tali.perry1@gmail.com>
+> > Date: Mon, Feb 17, 2020 at 3:52 PM
+> > Subject: npcm-I2c driver
+> > To: Wolfram Sang <wsa@the-dreams.de>
+> > Cc: <linux-i2c@vger.kernel.org>, OpenBMC Maillist <openbmc@lists.ozlabs.org>
+> >
+> >
+> > Hi,
+> >
+> > Just a reminder,
+> > please take a look at this patch.
+> > This patch is a new driver for npcm-i2c.
+> > The patch has been waiting patiently for several months now...
+> >
+> >
+> > https://patchwork.ozlabs.org/patch/1198846/
+> >
+> >
+> > Thanks,
+> >
+> > Tali Perry
+> > Nuvoton Technologies
