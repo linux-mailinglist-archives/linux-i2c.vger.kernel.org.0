@@ -2,165 +2,515 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B5216EF02
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 20:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2F516EF83
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 21:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731429AbgBYTal (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Feb 2020 14:30:41 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:52539 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728753AbgBYTak (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Feb 2020 14:30:40 -0500
-Received: by mail-pj1-f65.google.com with SMTP id ep11so143376pjb.2
-        for <linux-i2c@vger.kernel.org>; Tue, 25 Feb 2020 11:30:40 -0800 (PST)
+        id S1731245AbgBYUBL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Feb 2020 15:01:11 -0500
+Received: from mail-pj1-f54.google.com ([209.85.216.54]:51576 "EHLO
+        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731223AbgBYUBK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Feb 2020 15:01:10 -0500
+Received: by mail-pj1-f54.google.com with SMTP id fa20so192258pjb.1
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Feb 2020 12:01:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=c7YvBhKYaRcug4SwCX6amT8Yl2lrmhMSeuLnOwXOQgU=;
-        b=RmxfSUoSe9xuTRu3f6VvCjX9p3RqTXhWYFzxRKDqm+y+JTdxrf832YSyahg7MZHNLX
-         xPJ2kfmZTGtuVhfDmeeI2m3eLecVz5um8uOSdxZNnifiBTLy/ZzPCVo7WiCz/lyxUok6
-         FWNVoaH1gkLXuOBrEU7qUhC+MMtTUR0yvbIhclvQTQKShrsbsa40s2xq9HGpuZsX5+tv
-         I+cIv38b4L6tdkJYnodzLG8SbLgqZz/SyCc33w4YePCS7JW64TnWRI3gPc2HmTNY+3gS
-         +esf0ZNXY+FkNEn6yHHD9N6Et03JhmWvGDVQW5olU6DN7Qh7Ryv4stkQrnZJKfjQ/jxK
-         w1Qg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KjRFlsfuxT4vxziXeRHss8nPZaf91ZUGhPDlLtdF30A=;
+        b=Op4CdOv9JYW/HfVxGkG/EoCql9hYePMyovqlYGe4tHzpWSLQkvPxYOHk6ygv8cP0re
+         DBxudk62DrsgYY4E3XljVsXrw8Tpyd+n/eiWMw/YEljhoJQ4e9/KnEWPT1IO86EiPi2x
+         2XoCbuDAG7iZ3tmNWSLjqq7z9yArIhX9PodEomS2MBb8MDD6vx8stMDk7WEdck6yL8uP
+         fuAMKI97JSGNmQoHNnpr04RwC9wPOhnVheG0VdM0BFcVHbBuvfL/kAmpb2YuqHOzD5tJ
+         e/jORxYy/3U0rfiiKGqRO3dL4Je4cUlsByba8HHhmfsuJxPjfX54B+1T0Qj2ylVWIWJR
+         dJtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=c7YvBhKYaRcug4SwCX6amT8Yl2lrmhMSeuLnOwXOQgU=;
-        b=TomV+BIUhwLAvSuUeVmsI7DYhCyfYsZflbBuu4V43KoD88ux1M9e3CM9ReCa93+VMW
-         mT8PeCMDNwKKDHoJ5m03QL1s0WMjK1hNd7UiuYPhSQZ1hMVHSvwxb0YZMZh/13oXzVr1
-         kgIobeqHfZXrJHU2PqXzhTpneDtWucDMi+o/jfQtP7vOrNYdX1WY4zpuSLfpojlE3QOa
-         fJahvC9b6vZfIpq3OU0VuJZUQNjG1InYpphEwz0hN1iv2YDxcNBF3af35keeoN2ZXfUJ
-         ppwY/w59/QFVCMWuViv2FO94LNQg063YbgnvuVsdMDJTgz8GUKIDlkAu3qYyF+0+cDdt
-         L0jA==
-X-Gm-Message-State: APjAAAVnbVlXqwQxKe5C0erthcSqTulKExDr/Vj6RJ+j03PeoSUTRXia
-        OkvGp6iSt0M7v/tjhBV8t6Rr9a3T782VVMTOwOmPJg==
-X-Google-Smtp-Source: APXvYqwIehtIWayl8Y2Zzqxv3rR2U4RBBVtCMsCkBtRJPuhdGxnRrSPGxX3OGXxqFFIKBjfFx9viR7GDqI+5iiuIcmo=
-X-Received: by 2002:a17:90a:858a:: with SMTP id m10mr587460pjn.117.1582659039680;
- Tue, 25 Feb 2020 11:30:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20191121095350.158689-1-tali.perry1@gmail.com>
- <20191121095350.158689-3-tali.perry1@gmail.com> <20191125151618.GE2412@kunai>
- <CAHb3i=tGTcu2q15E5CL_od1rDgRDyx=ygoGSCu88AfBrnFn71w@mail.gmail.com> <CAHb3i=s+u1gHXwi7j7V_N-c8f8n7c1XB3QhkY8EAJuv6PA5GNw@mail.gmail.com>
-In-Reply-To: <CAHb3i=s+u1gHXwi7j7V_N-c8f8n7c1XB3QhkY8EAJuv6PA5GNw@mail.gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KjRFlsfuxT4vxziXeRHss8nPZaf91ZUGhPDlLtdF30A=;
+        b=ssYg/+zeP4hz5JeMOczyC0fzpcUZiZOD0N8nETIU+4YUqv8NBE76rx1ED2nzgPoa4i
+         AgcFXzGxTkEEO/YYT+M1NkiOIkwK5WxMc9H2cMSRg3TaoRUo4vhOEe33fNJcwNVW5uo7
+         /k3Xsfrs3zPjzSvO4HKsJWqQLq0bQJty5EZ/1XRmDYVZkBW+sRHJ9mRzupsyGnei6MC9
+         M07TJe4R+bOpN9JVf6L/kkSsUUZQPoa0PZqBU2TbUcWOuNAoHiu8JZJF26pr2pWNWOoR
+         DV2Z+ygeSAxcsN6vjTEGClHtokEB0WXawNwwHuF4gljIhqYNr9yE6vIxLoN2ad1TEPQu
+         UV+g==
+X-Gm-Message-State: APjAAAXGAAmKCAFHRfU9xKe0IbUFOthwki6VXSSs90CU3pw1JxANAE5M
+        Pr1DFmZRLZ4uB2kNhEc9K/OVfg==
+X-Google-Smtp-Source: APXvYqwvDgAPn3GEozg3alU/iO6tq1c2UYPLL6tkdKM/d2mLJdS9Dqy+EuJ9hlzatZgL4KmyeSBNQw==
+X-Received: by 2002:a17:902:b714:: with SMTP id d20mr189231pls.272.1582660869611;
+        Tue, 25 Feb 2020 12:01:09 -0800 (PST)
+Received: from google.com ([2620:15c:2cb:1:e90c:8e54:c2b4:29e7])
+        by smtp.gmail.com with ESMTPSA id l1sm4388979pjb.28.2020.02.25.12.01.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Feb 2020 12:01:09 -0800 (PST)
+Date:   Tue, 25 Feb 2020 12:01:04 -0800
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 25 Feb 2020 11:30:22 -0800
-Message-ID: <CAFd5g47z8Lo1usLRDLL32Pw8LB40+bpcbnJdcvW5ffoVhKM-uA@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] i2c: npcm: Add Nuvoton NPCM I2C controller driver
 To:     Tali Perry <tali.perry1@gmail.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Tomer Maimon <tmaimon77@gmail.com>, syniurge@gmail.com,
-        linux-i2c@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, yuenn@google.com,
+        venture@google.com, benjaminfair@google.com,
+        avifishman70@gmail.com, joel@jms.id.au, tmaimon77@gmail.com,
+        wsa@the-dreams.de, syniurge@gmail.com, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/2] i2c: npcm: Add Nuvoton NPCM I2C controller driver
+Message-ID: <20200225200104.GA105722@google.com>
+References: <20191121095350.158689-1-tali.perry1@gmail.com>
+ <20191121095350.158689-3-tali.perry1@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191121095350.158689-3-tali.perry1@gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Nov 26, 2019 at 1:23 AM Tali Perry <tali.perry1@gmail.com> wrote:
->
-> Hi Wolfram,
->
-> Thanks for your comments.
->
-> The NPCM7XX BMC I2C\SMB controller HW module supports both SMB and I2C.
-> It's main features are:
-> 1. Supports Fast-Mode (400 KHz clock) I2C and Fast-Mode-plus (1 MHz clock=
-) I2C
-> 2. Supports the =E2=80=98fairness=E2=80=99 arbitration protocol defined b=
-y the MCTP
-> SMBus/I2C Transport Binding Specification v1.0.0
-> 3. 32KB packets : this is an I2C spec limitation. The HW has no limit
-> on packets size. It has a 16 bytes FIFO which can be reloaded over and
-> over.
-> 4. w\o size byte (for SMB block protocol).
-> 5. Both master and slave. It can also replace modes in run time
-> (requirement for IPMB and MCTP).
-> 6. Bus timing is selected to support both specs.
->
-> Originally the HW spec stated SMB everywhere .
+On Thu, Nov 21, 2019 at 11:53:50AM +0200, Tali Perry wrote:
+> Add Nuvoton NPCM BMC i2c controller driver.
+> 
+> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> ---
+>  drivers/i2c/busses/Kconfig       |   11 +
+>  drivers/i2c/busses/Makefile      |    1 +
+>  drivers/i2c/busses/i2c-npcm7xx.c | 2485 ++++++++++++++++++++++++++++++
+>  3 files changed, 2497 insertions(+)
+>  create mode 100644 drivers/i2c/busses/i2c-npcm7xx.c
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 146ce40d8e0a..9091b93aaf90 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -786,6 +786,17 @@ config I2C_NOMADIK
+>  	  I2C interface from ST-Ericsson's Nomadik and Ux500 architectures,
+>  	  as well as the STA2X11 PCIe I/O HUB.
+>  
+> +config I2C_NPCM7XX
+> +	tristate "Nuvoton I2C Controller"
+> +	depends on ARCH_NPCM7XX
 
-Alright, so it sounds like the HW supports I2C and also has SMBus
-specific support?
+This should also depend on "|| COMPILE_TEST"
 
-> Should I rename the SMB to I2C all over the driver?
+> +	select I2C_SLAVE
 
-If the HW supports general I2C; then yes, you should use the I2C
-naming scheme. If you have SMBus specific support for some things, it
-might be helpful to tag on smb in the name for only those
-functions/data structures.
+Personally, I would prefer if this was optional, but it's up to you.
 
-Also, please don't top-post.
+> +	help
+> +	  If you say yes to this option, support will be included for the
+> +	  Nuvoton I2C controller.
 
-> On Tue, Nov 26, 2019 at 8:47 AM Tali Perry <tali.perry1@gmail.com> wrote:
-> >
-> > Hi Wolfram,
-> >
-> > Thanks for your comments.
-> >
-> > The NPCM7XX BMC I2C\SMB controller HW module supports both SMB and I2C.
-> > It's main features are:
-> > 1. Supports Fast-Mode (400 KHz clock) I2C and Fast-Mode-plus (1 MHz clo=
-ck) I2C
-> > 2. Supports the =E2=80=98fairness=E2=80=99 arbitration protocol defined=
- by the MCTP SMBus/I2C Transport Binding Specification v1.0.0
-> > 3. 32KB packets : this is an I2C spec limitation. The HW has no limit o=
-n packets size. It has a 16 bytes FIFO which can be reloaded over and over.
-> > 4. w\o size byte (for SMB block protocol).
-> > 5. Both master and slave. It can also replace modes in run time (requir=
-ement for IPMB and MCTP).
-> > 6. Bus timing is selected to support both specs.
-> >
-> > Originally the HW spec stated SMB everywhere .
-> >
-> > Should I rename the SMB to I2C all over the driver?
+Might want to elaborate about the capabilities of the driver/hardware.
 
-And please don't reiterate yourself like this; it can confuse the conversat=
-ion.
+> +	  This driver can also be built as a module.  If so, the module
+> +	  will be called i2c-npcm7xx.
 
-> > On Mon, Nov 25, 2019 at 5:16 PM Wolfram Sang <wsa@the-dreams.de> wrote:
-> >>
-> >> On Thu, Nov 21, 2019 at 11:53:50AM +0200, Tali Perry wrote:
-> >> > Add Nuvoton NPCM BMC i2c controller driver.
-> >> >
-> >> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-> >>
-> >> Looking at all this SMB_* naming of the registers and also the quirks,
-> >> this looks more like an SMBUS controller to me?
-> >>
-> >> > +     // currently I2C slave IF only supports single byte operations=
-.
-> >> > +     // in order to utilyze the npcm HW FIFO, the driver will ask f=
-or 16bytes
-> >> > +     // at a time, pack them in buffer, and then transmit them all =
-together
-> >> > +     // to the FIFO and onward to the bus .
-> >> > +     // NACK on read will be once reached to bus->adap->quirks->max=
-_read_len
-> >> > +     // sending a NACK whever the backend requests for it is not su=
-pported.
-> >>
-> >> This for example...
-> >>
-> >> > +static const struct i2c_adapter_quirks npcm_i2c_quirks =3D {
-> >> > +     .max_read_len =3D 32768,
-> >> > +     .max_write_len =3D 32768,
-> >> > +     .max_num_msgs =3D 2,
-> >> > +     .flags =3D I2C_AQ_COMB_WRITE_THEN_READ
-> >> > +};
-> >>
-> >> ... and this. Like SMBus with the only exception of being able to send
-> >> 32K in a row. Or?
-> >>
+Probably unnecessary; this follows the pattern that most other I2C
+drivers do.
+
+>  config I2C_OCORES
+>  	tristate "OpenCores I2C Controller"
+>  	help
+> diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+> index 3ab8aebc39c9..4af59a806f3c 100644
+> --- a/drivers/i2c/busses/Makefile
+> +++ b/drivers/i2c/busses/Makefile
+> @@ -81,6 +81,7 @@ obj-$(CONFIG_I2C_MT7621)	+= i2c-mt7621.o
+>  obj-$(CONFIG_I2C_MV64XXX)	+= i2c-mv64xxx.o
+>  obj-$(CONFIG_I2C_MXS)		+= i2c-mxs.o
+>  obj-$(CONFIG_I2C_NOMADIK)	+= i2c-nomadik.o
+> +obj-$(CONFIG_I2C_NPCM7XX)	+= i2c-npcm7xx.o
+>  obj-$(CONFIG_I2C_OCORES)	+= i2c-ocores.o
+>  obj-$(CONFIG_I2C_OMAP)		+= i2c-omap.o
+>  obj-$(CONFIG_I2C_OWL)		+= i2c-owl.o
+> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+> new file mode 100644
+> index 000000000000..ce9699d56835
+> --- /dev/null
+> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
+> @@ -0,0 +1,2485 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Nuvoton NPCM7xx SMB Controller driver
+> + *
+> + * Copyright (C) 2018 Nuvoton Technologies tali.perry@nuvoton.com
+
+You should update the date.
+
+> + */
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/errno.h>
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/jiffies.h>
+> +
+> +#define I2C_VERSION "0.1.0"
+
+nit: You only use this macro in one place. I think it would be clearer
+to just use the raw string there.
+
+> +
+> +enum smb_mode {
+> +	SMB_SLAVE = 1,
+> +	SMB_MASTER
+> +};
+
+Please use proper namespacing.
+
+> +/*
+> + * External SMB Interface driver xfer indication values, which indicate status
+> + * of the bus.
+> + */
+> +enum smb_state_ind {
+> +	SMB_NO_STATUS_IND = 0,
+> +	SMB_SLAVE_RCV_IND = 1,
+> +	SMB_SLAVE_XMIT_IND = 2,
+> +	SMB_SLAVE_XMIT_MISSING_DATA_IND = 3,
+> +	SMB_SLAVE_RESTART_IND = 4,
+> +	SMB_SLAVE_DONE_IND = 5,
+> +	SMB_MASTER_DONE_IND = 6,
+> +	SMB_NACK_IND = 8,
+> +	SMB_BUS_ERR_IND = 9,
+> +	SMB_WAKE_UP_IND = 10,
+> +	SMB_BLOCK_BYTES_ERR_IND = 12,
+> +	SMB_SLAVE_RCV_MISSING_DATA_IND = 14,
+> +};
+> +
+> +// SMBus Operation type values
+> +enum smb_oper {
+> +	SMB_NO_OPER = 0,
+> +	SMB_WRITE_OPER = 1,
+> +	SMB_READ_OPER = 2
+> +};
+> +
+> +// SMBus Bank (FIFO mode)
+> +enum smb_bank {
+> +	SMB_BANK_0 = 0,
+> +	SMB_BANK_1 = 1
+> +};
+> +
+> +// Internal SMB states values (for the SMB module state machine).
+> +enum smb_state {
+> +	SMB_DISABLE = 0,
+> +	SMB_IDLE,
+> +	SMB_MASTER_START,
+> +	SMB_SLAVE_MATCH,
+> +	SMB_OPER_STARTED,
+> +	SMB_STOP_PENDING
+> +};
+> +
+> +// Module supports setting multiple own slave addresses
+> +enum smb_addr {
+> +	SMB_SLAVE_ADDR1 = 0,
+> +	SMB_SLAVE_ADDR2,
+> +	SMB_SLAVE_ADDR3,
+> +	SMB_SLAVE_ADDR4,
+> +	SMB_SLAVE_ADDR5,
+> +	SMB_SLAVE_ADDR6,
+> +	SMB_SLAVE_ADDR7,
+> +	SMB_SLAVE_ADDR8,
+> +	SMB_SLAVE_ADDR9,
+> +	SMB_SLAVE_ADDR10,
+> +	SMB_GC_ADDR,
+> +	SMB_ARP_ADDR
+> +};
+> +
+> +// global regs
+> +static struct regmap *gcr_regmap;
+> +static struct regmap *clk_regmap;
+
+It's generally best to avoid global variables.
+
+> +#define NPCM_I2CSEGCTL  0xE4
+> +#define I2CSEGCTL_VAL	0x0333F000
+
+What is this value? It doesn't look like a register offset.
+
+> +// Common regs
+> +#define NPCM_SMBSDA			0x000
+> +#define NPCM_SMBST			0x002
+> +#define NPCM_SMBCST			0x004
+> +#define NPCM_SMBCTL1			0x006
+> +#define NPCM_SMBADDR1			0x008
+> +#define NPCM_SMBCTL2			0x00A
+> +#define NPCM_SMBADDR2			0x00C
+> +#define NPCM_SMBCTL3			0x00E
+> +#define NPCM_SMBCST2			0x018
+> +#define NPCM_SMBCST3			0x019
+> +#define SMB_VER				0x01F
+
+nit: I am guessing these are not 12 bit values. Can you use just two digits?
+
+> +// BANK 0 regs
+> +#define NPCM_SMBADDR3			0x010
+> +#define NPCM_SMBADDR7			0x011
+> +#define NPCM_SMBADDR4			0x012
+> +#define NPCM_SMBADDR8			0x013
+> +#define NPCM_SMBADDR5			0x014
+> +#define NPCM_SMBADDR9			0x015
+> +#define NPCM_SMBADDR6			0x016
+> +#define NPCM_SMBADDR10			0x017
+> +
+> +// SMBADDR array: because the addr regs are sprinkled all over the address space
+> +const int  NPCM_SMBADDR[10] = {NPCM_SMBADDR1, NPCM_SMBADDR2, NPCM_SMBADDR3,
+
+Please only use all caps for macros.
+
+> +			       NPCM_SMBADDR4, NPCM_SMBADDR5, NPCM_SMBADDR6,
+> +			       NPCM_SMBADDR7, NPCM_SMBADDR8, NPCM_SMBADDR9,
+> +			       NPCM_SMBADDR10};
+> +
+> +#define NPCM_SMBCTL4			0x01A
+> +#define NPCM_SMBCTL5			0x01B
+> +#define NPCM_SMBSCLLT			0x01C // SCL Low Time
+> +#define NPCM_SMBFIF_CTL			0x01D // FIFO Control
+> +#define NPCM_SMBSCLHT			0x01E // SCL High Time
+> +
+> +// BANK 1 regs
+> +#define NPCM_SMBFIF_CTS			0x010 // Both FIFOs Control and status
+> +#define NPCM_SMBTXF_CTL			0x012 // Tx-FIFO Control
+> +#define NPCM_SMBT_OUT			0x014 // Bus T.O.
+> +#define NPCM_SMBPEC			0x016 // PEC Data
+> +#define NPCM_SMBTXF_STS			0x01A // Tx-FIFO Status
+> +#define NPCM_SMBRXF_STS			0x01C // Rx-FIFO Status
+> +#define NPCM_SMBRXF_CTL			0x01E // Rx-FIFO Control
+> +
+> +// NPCM_SMBST reg fields
+> +#define NPCM_SMBST_XMIT			BIT(0)
+> +#define NPCM_SMBST_MASTER		BIT(1)
+> +#define NPCM_SMBST_NMATCH		BIT(2)
+> +#define NPCM_SMBST_STASTR		BIT(3)
+> +#define NPCM_SMBST_NEGACK		BIT(4)
+> +#define NPCM_SMBST_BER			BIT(5)
+> +#define NPCM_SMBST_SDAST		BIT(6)
+> +#define NPCM_SMBST_SLVSTP		BIT(7)
+> +
+> +// NPCM_SMBCST reg fields
+> +#define NPCM_SMBCST_BUSY		BIT(0)
+> +#define NPCM_SMBCST_BB			BIT(1)
+> +#define NPCM_SMBCST_MATCH		BIT(2)
+> +#define NPCM_SMBCST_GCMATCH		BIT(3)
+> +#define NPCM_SMBCST_TSDA		BIT(4)
+> +#define NPCM_SMBCST_TGSCL		BIT(5)
+> +#define NPCM_SMBCST_MATCHAF		BIT(6)
+> +#define NPCM_SMBCST_ARPMATCH		BIT(7)
+> +
+> +// NPCM_SMBCTL1 reg fields
+> +#define NPCM_SMBCTL1_START		BIT(0)
+> +#define NPCM_SMBCTL1_STOP		BIT(1)
+> +#define NPCM_SMBCTL1_INTEN		BIT(2)
+> +#define NPCM_SMBCTL1_EOBINTE		BIT(3)
+> +#define NPCM_SMBCTL1_ACK		BIT(4)
+> +#define NPCM_SMBCTL1_GCMEN		BIT(5)
+> +#define NPCM_SMBCTL1_NMINTE		BIT(6)
+> +#define NPCM_SMBCTL1_STASTRE		BIT(7)
+> +
+> +// RW1S fields (inside a RW reg):
+> +#define NPCM_SMBCTL1_RWS_FIELDS	  (NPCM_SMBCTL1_START | NPCM_SMBCTL1_STOP | \
+> +				   NPCM_SMBCTL1_ACK)
+> +// NPCM_SMBADDR reg fields
+> +#define NPCM_SMBADDR_A			GENMASK(6, 0)
+> +#define NPCM_SMBADDR_SAEN		BIT(7)
+> +
+> +// NPCM_SMBCTL2 reg fields
+> +#define SMBCTL2_ENABLE			BIT(0)
+> +#define SMBCTL2_SCLFRQ6_0		GENMASK(7, 1)
+> +
+> +// NPCM_SMBCTL3 reg fields
+> +#define SMBCTL3_SCLFRQ8_7		GENMASK(1, 0)
+> +#define SMBCTL3_ARPMEN			BIT(2)
+> +#define SMBCTL3_IDL_START		BIT(3)
+> +#define SMBCTL3_400K_MODE		BIT(4)
+> +#define SMBCTL3_BNK_SEL			BIT(5)
+> +#define SMBCTL3_SDA_LVL			BIT(6)
+> +#define SMBCTL3_SCL_LVL			BIT(7)
+> +
+> +// NPCM_SMBCST2 reg fields
+> +#define NPCM_SMBCST2_MATCHA1F		BIT(0)
+> +#define NPCM_SMBCST2_MATCHA2F		BIT(1)
+> +#define NPCM_SMBCST2_MATCHA3F		BIT(2)
+> +#define NPCM_SMBCST2_MATCHA4F		BIT(3)
+> +#define NPCM_SMBCST2_MATCHA5F		BIT(4)
+> +#define NPCM_SMBCST2_MATCHA6F		BIT(5)
+> +#define NPCM_SMBCST2_MATCHA7F		BIT(5)
+> +#define NPCM_SMBCST2_INTSTS		BIT(7)
+> +
+> +// NPCM_SMBCST3 reg fields
+> +#define NPCM_SMBCST3_MATCHA8F		BIT(0)
+> +#define NPCM_SMBCST3_MATCHA9F		BIT(1)
+> +#define NPCM_SMBCST3_MATCHA10F		BIT(2)
+> +#define NPCM_SMBCST3_EO_BUSY		BIT(7)
+> +
+> +// NPCM_SMBCTL4 reg fields
+> +#define SMBCTL4_HLDT			GENMASK(5, 0)
+> +#define SMBCTL4_LVL_WE			BIT(7)
+> +
+> +// NPCM_SMBCTL5 reg fields
+> +#define SMBCTL5_DBNCT			GENMASK(3, 0)
+> +
+> +// NPCM_SMBFIF_CTS reg fields
+> +#define NPCM_SMBFIF_CTS_RXF_TXE		BIT(1)
+> +#define NPCM_SMBFIF_CTS_RFTE_IE		BIT(3)
+> +#define NPCM_SMBFIF_CTS_CLR_FIFO	BIT(6)
+> +#define NPCM_SMBFIF_CTS_SLVRSTR		BIT(7)
+> +
+> +// NPCM_SMBTXF_CTL reg fields
+> +#define NPCM_SMBTXF_CTL_TX_THR		GENMASK(4, 0)
+> +#define NPCM_SMBTXF_CTL_THR_TXIE	BIT(6)
+> +
+> +// NPCM_SMBT_OUT reg fields
+> +#define NPCM_SMBT_OUT_TO_CKDIV		GENMASK(5, 0)
+> +#define NPCM_SMBT_OUT_T_OUTIE		BIT(6)
+> +#define NPCM_SMBT_OUT_T_OUTST		BIT(7)
+> +
+> +// NPCM_SMBTXF_STS reg fields
+> +#define NPCM_SMBTXF_STS_TX_BYTES	GENMASK(4, 0)
+> +#define NPCM_SMBTXF_STS_TX_THST		BIT(6)
+> +
+> +// NPCM_SMBRXF_STS reg fields
+> +#define NPCM_SMBRXF_STS_RX_BYTES	GENMASK(4, 0)
+> +#define NPCM_SMBRXF_STS_RX_THST		BIT(6)
+> +
+> +// NPCM_SMBFIF_CTL reg fields
+> +#define NPCM_SMBFIF_CTL_FIFO_EN		BIT(4)
+> +
+> +// NPCM_SMBRXF_CTL reg fields
+> +#define NPCM_SMBRXF_CTL_RX_THR		GENMASK(4, 0)
+> +#define NPCM_SMBRXF_CTL_LAST_PEC	BIT(5)
+> +#define NPCM_SMBRXF_CTL_THR_RXIE	BIT(6)
+> +
+> +#define SMBUS_FIFO_SIZE			16
+> +
+> +// SMB_VER reg fields
+> +#define SMB_VER_VERSION			GENMASK(6, 0)
+> +#define SMB_VER_FIFO_EN			BIT(7)
+> +
+> +// stall/stuck timeout
+> +const unsigned int DEFAULT_STALL_COUNT =	25;
+> +
+> +// retries in a loop for master abort
+> +const unsigned int RETRIES_NUM =	10000;
+> +
+> +// SMBus spec. values in KHZ
+> +const unsigned int SMBUS_FREQ_MIN = 10;
+> +const unsigned int SMBUS_FREQ_MAX = 1000;
+> +const unsigned int SMBUS_FREQ_100KHZ = 100;
+> +const unsigned int SMBUS_FREQ_400KHZ = 400;
+> +const unsigned int SMBUS_FREQ_1MHZ = 1000;
+
+Does the hardware only support these clock speeds?
+
+> +// SCLFRQ min/max field values
+> +const unsigned int SCLFRQ_MIN = 10;
+> +const unsigned int SCLFRQ_MAX = 511;
+> +
+> +// SCLFRQ field position
+> +#define SCLFRQ_0_TO_6		GENMASK(6, 0)
+> +#define SCLFRQ_7_TO_8		GENMASK(8, 7)
+> +
+> +const unsigned int SMB_NUM_OF_ADDR = 10;
+> +
+> +#define NPCM_I2C_EVENT_START	BIT(0)
+> +#define NPCM_I2C_EVENT_STOP	BIT(1)
+> +#define NPCM_I2C_EVENT_ABORT	BIT(2)
+> +#define NPCM_I2C_EVENT_WRITE	BIT(3)
+> +
+> +#define NPCM_I2C_EVENT_READ	BIT(4)
+> +#define NPCM_I2C_EVENT_BER	BIT(5)
+> +#define NPCM_I2C_EVENT_NACK	BIT(6)
+> +#define NPCM_I2C_EVENT_TO	BIT(7)
+> +
+> +#define NPCM_I2C_EVENT_EOB	BIT(8)
+> +#define NPCM_I2C_EVENT_STALL	BIT(9)
+> +#define NPCM_I2C_EVENT_CB	BIT(10)
+> +#define NPCM_I2C_EVENT_DONE	BIT(11)
+> +
+> +#define NPCM_I2C_EVENT_READ1	BIT(12)
+> +#define NPCM_I2C_EVENT_READ2	BIT(13)
+> +#define NPCM_I2C_EVENT_READ3	BIT(14)
+> +#define NPCM_I2C_EVENT_READ4	BIT(15)
+> +
+> +#define NPCM_I2C_EVENT_NMATCH_SLV	BIT(16)
+> +#define NPCM_I2C_EVENT_NMATCH_MSTR	BIT(17)
+> +#define NPCM_I2C_EVENT_BER_SLV		BIT(18)
+> +
+> +#define NPCM_I2C_EVENT_LOG(event)	(bus->event_log |= event)
+> +
+> +// Status of one SMBus module
+> +struct npcm_i2c {
+> +	struct i2c_adapter	adap;
+> +	struct device		*dev;
+> +	unsigned char __iomem	*reg;
+> +	spinlock_t		lock;   /* IRQ synchronization */
+> +	struct completion	cmd_complete;
+> +	int			irq;
+> +	int			cmd_err;
+> +	struct i2c_msg		*msgs;
+> +	int			msgs_num;
+> +	int			num;
+> +	u32			apb_clk;
+> +	struct i2c_bus_recovery_info rinfo;
+> +	enum smb_state		state;
+> +	enum smb_oper		operation;
+> +	enum smb_mode		master_or_slave;
+> +	enum smb_state_ind	stop_ind;
+> +	u8			dest_addr;
+> +	u8			*rd_buf;
+> +	u16			rd_size;
+> +	u16			rd_ind;
+> +	u8			*wr_buf;
+> +	u16			wr_size;
+> +	u16			wr_ind;
+> +	bool			fifo_use;
+> +
+> +	// PEC bit mask per slave address.
+> +	//		1: use PEC for this address,
+> +	//		0: do not use PEC for this address
+> +	u16			PEC_mask;
+> +	bool			PEC_use;
+> +	bool			read_block_use;
+> +	u8			int_cnt;
+> +	u32			event_log;
+> +	u32			event_log_prev;
+> +	u32			clk_period_us;
+> +	unsigned long		int_time_stamp;
+> +	unsigned long		bus_freq; // in kHz
+> +	u32			xmits;
+> +
+> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
+
+Aha! It appears that selecting I2C_SLAVE is unnecessary.
+
+Since you already ifdeffed out all the I2C slave code, can you put it in
+a separate patch to make this easier to review?
+
+> +	u8			own_slave_addr;
+> +	struct i2c_client	*slave;
+> +
+> +	// currently I2C slave IF only supports single byte operations.
+> +	// in order to utilyze the npcm HW FIFO, the driver will ask for 16bytes
+> +	// at a time, pack them in buffer, and then transmit them all together
+> +	// to the FIFO and onward to the bus .
+> +	// NACK on read will be once reached to bus->adap->quirks->max_read_len
+> +	// sending a NACK whever the backend requests for it is not supported.
+> +
+> +	// This module can be master and slave at the same time. separate ptrs
+> +	// and counters:
+> +	int			slv_rd_size;
+> +	int			slv_rd_ind;
+> +	int			slv_wr_size;
+> +	int			slv_wr_ind;
+> +	u8			slv_rd_buf[SMBUS_FIFO_SIZE];
+> +	u8			slv_wr_buf[SMBUS_FIFO_SIZE];
+> +#endif
+> +};
+
+Cheers!
