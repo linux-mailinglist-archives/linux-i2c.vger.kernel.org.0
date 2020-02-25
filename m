@@ -2,128 +2,165 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA06A16EEE0
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 20:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B5216EF02
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 20:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730984AbgBYTTg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Feb 2020 14:19:36 -0500
-Received: from mail-pj1-f53.google.com ([209.85.216.53]:37733 "EHLO
-        mail-pj1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727298AbgBYTTg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Feb 2020 14:19:36 -0500
-Received: by mail-pj1-f53.google.com with SMTP id m13so128180pjb.2
-        for <linux-i2c@vger.kernel.org>; Tue, 25 Feb 2020 11:19:35 -0800 (PST)
+        id S1731429AbgBYTal (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Feb 2020 14:30:41 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:52539 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728753AbgBYTak (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Feb 2020 14:30:40 -0500
+Received: by mail-pj1-f65.google.com with SMTP id ep11so143376pjb.2
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Feb 2020 11:30:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BYRJlgXmUyclP4eYH8OvDIdap+q+/WDF/KFpEgL6TEg=;
-        b=D9+bgmLRVNidRRPbjIcW0LnHWKsV5pjwmAMMhKXdqAHjbZj9rLHwbsCRwSbR1GFghx
-         XjK+UpXT0CsDcGpN8FpV6cxK8XlONUKgwqd02ZTcF1FZUyZ/Kb8T0MiHN92CY6YJrf9e
-         UryaBG+EtdiSqzWC4UOtkEUbXgORXa+xgsl4SC9e2dVp2CKJFQDUITp10RyJKlbzIH7p
-         aLEMKbDdCe5bXaFT2XUBMTEdhKXd5kut3BK6Hb98eMn+ycDSpzPifzNV92VL/wudhD2p
-         KnGmX1EY9JtWhlUWLm8XtD1bInjEyXzR/1+9mtBMHoDqUl5Ly+fqysxMmkhCbpbCiwSx
-         cDHg==
+         :cc:content-transfer-encoding;
+        bh=c7YvBhKYaRcug4SwCX6amT8Yl2lrmhMSeuLnOwXOQgU=;
+        b=RmxfSUoSe9xuTRu3f6VvCjX9p3RqTXhWYFzxRKDqm+y+JTdxrf832YSyahg7MZHNLX
+         xPJ2kfmZTGtuVhfDmeeI2m3eLecVz5um8uOSdxZNnifiBTLy/ZzPCVo7WiCz/lyxUok6
+         FWNVoaH1gkLXuOBrEU7qUhC+MMtTUR0yvbIhclvQTQKShrsbsa40s2xq9HGpuZsX5+tv
+         I+cIv38b4L6tdkJYnodzLG8SbLgqZz/SyCc33w4YePCS7JW64TnWRI3gPc2HmTNY+3gS
+         +esf0ZNXY+FkNEn6yHHD9N6Et03JhmWvGDVQW5olU6DN7Qh7Ryv4stkQrnZJKfjQ/jxK
+         w1Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BYRJlgXmUyclP4eYH8OvDIdap+q+/WDF/KFpEgL6TEg=;
-        b=t/QO+/9WC7uckXkppmzUxacjwl+scnuHwNdphpNs9wp/iHVLxdoLkzQZGpX67FYzUL
-         u8f7yNnVBsESvdsCqZv/i6ckd5mrklup49cALN1kHC4+YQ5peQb/7BIjwMfW7ZOUzI2g
-         TJkiFeCsxYziTzEKDjN+pXSDkpfhbckBVphvyMS4m8aVRI2AV3g9Jl12Up/fbVeGcMjQ
-         8B/raFkuhH4Tgp79zceoDf1rO8fXec0+b6+zqrqmfsSeiljRy2MXTpayBrn/Nw3i2Yde
-         heaFMzlLlmu9MGYGEnSs+vwpHQs73qrzmquLP35n/uIWXXSIvi+EcjleVS6U0sEyUgwQ
-         RkxA==
-X-Gm-Message-State: APjAAAXJqUvpGgNf43IwH6Ff+KCfbccqA2WmNkyqqvao58eVBzoJPAqM
-        BsyvTd6nXlORfcqttTfDrwtVyHBudv4KlZMulHcEsQ==
-X-Google-Smtp-Source: APXvYqynvpJsBhRquSqsnjud6EMIcbWLDTtJxWF6YXJ0G1G3afx8Rqfd6DqsVvZbGqF/W/agnTfgf2jRjxu1bg5HkZ4=
-X-Received: by 2002:a17:90a:c390:: with SMTP id h16mr535781pjt.131.1582658375237;
- Tue, 25 Feb 2020 11:19:35 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=c7YvBhKYaRcug4SwCX6amT8Yl2lrmhMSeuLnOwXOQgU=;
+        b=TomV+BIUhwLAvSuUeVmsI7DYhCyfYsZflbBuu4V43KoD88ux1M9e3CM9ReCa93+VMW
+         mT8PeCMDNwKKDHoJ5m03QL1s0WMjK1hNd7UiuYPhSQZ1hMVHSvwxb0YZMZh/13oXzVr1
+         kgIobeqHfZXrJHU2PqXzhTpneDtWucDMi+o/jfQtP7vOrNYdX1WY4zpuSLfpojlE3QOa
+         fJahvC9b6vZfIpq3OU0VuJZUQNjG1InYpphEwz0hN1iv2YDxcNBF3af35keeoN2ZXfUJ
+         ppwY/w59/QFVCMWuViv2FO94LNQg063YbgnvuVsdMDJTgz8GUKIDlkAu3qYyF+0+cDdt
+         L0jA==
+X-Gm-Message-State: APjAAAVnbVlXqwQxKe5C0erthcSqTulKExDr/Vj6RJ+j03PeoSUTRXia
+        OkvGp6iSt0M7v/tjhBV8t6Rr9a3T782VVMTOwOmPJg==
+X-Google-Smtp-Source: APXvYqwIehtIWayl8Y2Zzqxv3rR2U4RBBVtCMsCkBtRJPuhdGxnRrSPGxX3OGXxqFFIKBjfFx9viR7GDqI+5iiuIcmo=
+X-Received: by 2002:a17:90a:858a:: with SMTP id m10mr587460pjn.117.1582659039680;
+ Tue, 25 Feb 2020 11:30:39 -0800 (PST)
 MIME-Version: 1.0
-References: <CAHb3i=uXLgjT-emHeJzHGG5L_0z94ZwDYcX5vtaDf8+Eh90ziQ@mail.gmail.com>
- <CAHb3i=vA76p6iXt0Q8ZECSj8r_Ltv_c7U1W21r_aD4HsLuJPrA@mail.gmail.com> <CAHb3i=shEPFMmVJG=MTP-t9UqNfxMoyVqRnr9WDFMg1S=_TeSg@mail.gmail.com>
-In-Reply-To: <CAHb3i=shEPFMmVJG=MTP-t9UqNfxMoyVqRnr9WDFMg1S=_TeSg@mail.gmail.com>
+References: <20191121095350.158689-1-tali.perry1@gmail.com>
+ <20191121095350.158689-3-tali.perry1@gmail.com> <20191125151618.GE2412@kunai>
+ <CAHb3i=tGTcu2q15E5CL_od1rDgRDyx=ygoGSCu88AfBrnFn71w@mail.gmail.com> <CAHb3i=s+u1gHXwi7j7V_N-c8f8n7c1XB3QhkY8EAJuv6PA5GNw@mail.gmail.com>
+In-Reply-To: <CAHb3i=s+u1gHXwi7j7V_N-c8f8n7c1XB3QhkY8EAJuv6PA5GNw@mail.gmail.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 25 Feb 2020 11:19:24 -0800
-Message-ID: <CAFd5g45aLgZ9=YzJPVWELkmeSf_8WdngXn_7-32sw_xOSTD7sg@mail.gmail.com>
-Subject: Re: npcm-I2c driver
+Date:   Tue, 25 Feb 2020 11:30:22 -0800
+Message-ID: <CAFd5g47z8Lo1usLRDLL32Pw8LB40+bpcbnJdcvW5ffoVhKM-uA@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] i2c: npcm: Add Nuvoton NPCM I2C controller driver
 To:     Tali Perry <tali.perry1@gmail.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Tomer Maimon <tmaimon77@gmail.com>, syniurge@gmail.com,
+        linux-i2c@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Feb 25, 2020 at 2:29 AM Tali Perry <tali.perry1@gmail.com> wrote:
+On Tue, Nov 26, 2019 at 1:23 AM Tali Perry <tali.perry1@gmail.com> wrote:
 >
-> Hi,
+> Hi Wolfram,
 >
-> Just a reminder,
-> please take a look at this patch.
-> This patch is a new driver for npcm-i2c.
-> The patch has been waiting patiently for several months now...
+> Thanks for your comments.
+>
+> The NPCM7XX BMC I2C\SMB controller HW module supports both SMB and I2C.
+> It's main features are:
+> 1. Supports Fast-Mode (400 KHz clock) I2C and Fast-Mode-plus (1 MHz clock=
+) I2C
+> 2. Supports the =E2=80=98fairness=E2=80=99 arbitration protocol defined b=
+y the MCTP
+> SMBus/I2C Transport Binding Specification v1.0.0
+> 3. 32KB packets : this is an I2C spec limitation. The HW has no limit
+> on packets size. It has a 16 bytes FIFO which can be reloaded over and
+> over.
+> 4. w\o size byte (for SMB block protocol).
+> 5. Both master and slave. It can also replace modes in run time
+> (requirement for IPMB and MCTP).
+> 6. Bus timing is selected to support both specs.
+>
+> Originally the HW spec stated SMB everywhere .
 
-Observation as a bystander: I looked at this and my first reaction was
-that it looked like Wolfram was waiting on a response from you. I just
-looked at this again now and realized that you had responded to
-Wolfram with a question.
+Alright, so it sounds like the HW supports I2C and also has SMBus
+specific support?
 
-What you want would probably be more obvious if you sent a ping email
-in response to the email where you are looking for a response. Also,
-responding to the original email makes it easier for reviewers to
-respond to your email rather than have to look it up in their inbox.
+> Should I rename the SMB to I2C all over the driver?
 
-Also, please don't top post.
+If the HW supports general I2C; then yes, you should use the I2C
+naming scheme. If you have SMBus specific support for some things, it
+might be helpful to tag on smb in the name for only those
+functions/data structures.
 
-> https://patchwork.ozlabs.org/patch/1198846/
->
->
-> Thanks,
->
-> Tali Perry
-> Nuvoton Technologies
->
-> On Wed, Feb 19, 2020 at 11:39 AM Tali Perry <tali.perry1@gmail.com> wrote:
+Also, please don't top-post.
+
+> On Tue, Nov 26, 2019 at 8:47 AM Tali Perry <tali.perry1@gmail.com> wrote:
 > >
-> > Hi,
+> > Hi Wolfram,
 > >
-> > Just a reminder,
-> > please take a look at this patch.
-> > This patch is a new driver for npcm-i2c.
-> > The patch has been waiting patiently for several months now...
+> > Thanks for your comments.
 > >
+> > The NPCM7XX BMC I2C\SMB controller HW module supports both SMB and I2C.
+> > It's main features are:
+> > 1. Supports Fast-Mode (400 KHz clock) I2C and Fast-Mode-plus (1 MHz clo=
+ck) I2C
+> > 2. Supports the =E2=80=98fairness=E2=80=99 arbitration protocol defined=
+ by the MCTP SMBus/I2C Transport Binding Specification v1.0.0
+> > 3. 32KB packets : this is an I2C spec limitation. The HW has no limit o=
+n packets size. It has a 16 bytes FIFO which can be reloaded over and over.
+> > 4. w\o size byte (for SMB block protocol).
+> > 5. Both master and slave. It can also replace modes in run time (requir=
+ement for IPMB and MCTP).
+> > 6. Bus timing is selected to support both specs.
 > >
-> > https://patchwork.ozlabs.org/patch/1198846/
+> > Originally the HW spec stated SMB everywhere .
 > >
-> >
-> > Thanks,
-> >
-> > Tali Perry
-> > Nuvoton Technologies
-> >
-> >
-> > ---------- Forwarded message ---------
-> > From: Tali Perry <tali.perry1@gmail.com>
-> > Date: Mon, Feb 17, 2020 at 3:52 PM
-> > Subject: npcm-I2c driver
-> > To: Wolfram Sang <wsa@the-dreams.de>
-> > Cc: <linux-i2c@vger.kernel.org>, OpenBMC Maillist <openbmc@lists.ozlabs.org>
-> >
-> >
-> > Hi,
-> >
-> > Just a reminder,
-> > please take a look at this patch.
-> > This patch is a new driver for npcm-i2c.
-> > The patch has been waiting patiently for several months now...
-> >
-> >
-> > https://patchwork.ozlabs.org/patch/1198846/
-> >
-> >
-> > Thanks,
-> >
-> > Tali Perry
-> > Nuvoton Technologies
+> > Should I rename the SMB to I2C all over the driver?
+
+And please don't reiterate yourself like this; it can confuse the conversat=
+ion.
+
+> > On Mon, Nov 25, 2019 at 5:16 PM Wolfram Sang <wsa@the-dreams.de> wrote:
+> >>
+> >> On Thu, Nov 21, 2019 at 11:53:50AM +0200, Tali Perry wrote:
+> >> > Add Nuvoton NPCM BMC i2c controller driver.
+> >> >
+> >> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> >>
+> >> Looking at all this SMB_* naming of the registers and also the quirks,
+> >> this looks more like an SMBUS controller to me?
+> >>
+> >> > +     // currently I2C slave IF only supports single byte operations=
+.
+> >> > +     // in order to utilyze the npcm HW FIFO, the driver will ask f=
+or 16bytes
+> >> > +     // at a time, pack them in buffer, and then transmit them all =
+together
+> >> > +     // to the FIFO and onward to the bus .
+> >> > +     // NACK on read will be once reached to bus->adap->quirks->max=
+_read_len
+> >> > +     // sending a NACK whever the backend requests for it is not su=
+pported.
+> >>
+> >> This for example...
+> >>
+> >> > +static const struct i2c_adapter_quirks npcm_i2c_quirks =3D {
+> >> > +     .max_read_len =3D 32768,
+> >> > +     .max_write_len =3D 32768,
+> >> > +     .max_num_msgs =3D 2,
+> >> > +     .flags =3D I2C_AQ_COMB_WRITE_THEN_READ
+> >> > +};
+> >>
+> >> ... and this. Like SMBus with the only exception of being able to send
+> >> 32K in a row. Or?
+> >>
