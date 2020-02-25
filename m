@@ -2,76 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C499816C3EF
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 15:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2975816C403
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 15:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729207AbgBYOcr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Feb 2020 09:32:47 -0500
-Received: from sauhun.de ([88.99.104.3]:39480 "EHLO pokefinder.org"
+        id S1729906AbgBYOfr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Feb 2020 09:35:47 -0500
+Received: from mga05.intel.com ([192.55.52.43]:22044 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729065AbgBYOcr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 Feb 2020 09:32:47 -0500
-Received: from localhost (p5486CE6D.dip0.t-ipconnect.de [84.134.206.109])
-        by pokefinder.org (Postfix) with ESMTPSA id C03252C1F2F;
-        Tue, 25 Feb 2020 15:32:45 +0100 (CET)
-Date:   Tue, 25 Feb 2020 15:32:45 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Laine Jaakko EXT <ext-jaakko.laine@vaisala.com>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Shubhrajyoti Datta <shubhraj@xilinx.com>
-Subject: Re: [PATCH] i2c: xiic: Support disabling multi-master in DT
-Message-ID: <20200225143245.GF3677@ninjato>
-References: <20200218135627.24739-1-ext-jaakko.laine@vaisala.com>
- <481fe028-0ec6-eca3-7436-ebbb8527f3d8@xilinx.com>
- <AM0PR06MB518514EE9C057CB129079825D4ED0@AM0PR06MB5185.eurprd06.prod.outlook.com>
- <20200225141357.GE3677@ninjato>
- <AM0PR06MB5185341478B6919A9CC22271D4ED0@AM0PR06MB5185.eurprd06.prod.outlook.com>
+        id S1729895AbgBYOfr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 Feb 2020 09:35:47 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 06:35:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,484,1574150400"; 
+   d="scan'208";a="436276291"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Feb 2020 06:35:43 -0800
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1j6bJJ-004ft5-Lt; Tue, 25 Feb 2020 16:35:45 +0200
+Date:   Tue, 25 Feb 2020 16:35:45 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Martin Volf <martin.volf.42@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] i2c: i801: Do not add ICH_RES_IO_SMI if PMC device
+ is not present
+Message-ID: <20200225143545.GM10400@smile.fi.intel.com>
+References: <20200225123802.88984-1-mika.westerberg@linux.intel.com>
+ <20200225123802.88984-4-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oFbHfjnMgUMsrGjO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM0PR06MB5185341478B6919A9CC22271D4ED0@AM0PR06MB5185.eurprd06.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200225123802.88984-4-mika.westerberg@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Feb 25, 2020 at 03:38:02PM +0300, Mika Westerberg wrote:
+> Martin noticed that nct6775 driver does not load properly on his system
+> in v5.4+ kernels. The issue was bisected to commit b84398d6d7f9 ("i2c:
+> i801: Use iTCO version 6 in Cannon Lake PCH and beyond") but it is
+> likely not the culprit because the faulty code has been in the driver
+> already since commit 9424693035a5 ("i2c: i801: Create iTCO device on
+> newer Intel PCHs"). So more likely some commit that added PCI IDs of
+> recent chipsets made the driver to create the iTCO_wdt device on Martins
+> system.
+> 
+> The issue was debugged to be PCI configuration access to the PMC device
+> that is not present. This returns all 1's when read and this caused the
+> iTCO_wdt driver to accidentally request resourses used by nct6775.
+> 
+> Fix this by checking that the PMC device is there and only then populate
+> the iTCO_wdt ICH_RES_IO_SMI resource. Since the resource is now optional
+> the iTCO_wdt driver should continue to work on recent systems without it.
 
---oFbHfjnMgUMsrGjO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
+
+>  	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
+> -					tco_res, 3, &spt_tco_platform_data,
+> +					tco_res, nres + 1, &spt_tco_platform_data,
+>  					sizeof(spt_tco_platform_data));
+
+Perhaps use the same pattern as below, i.e.
+
+	nres++;
+	return ...(..., nres, ...);
+
+?
+
+...
+
+>  	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
+> -					tco_res, 2, &cnl_tco_platform_data,
+> +					tco_res, nres, &cnl_tco_platform_data,
+>  					sizeof(cnl_tco_platform_data));
+
+Ditto.
+
+...
+
+> +	nres++;
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> > My favourite is to change alignment to be just one space. Then, we have
-> > a bit of overhead now, but never again in the future.
->=20
-> Ok, I will add that change as separate patch to V2 patch series.
-
-Perfect, thanks!
-
---oFbHfjnMgUMsrGjO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5VMAkACgkQFA3kzBSg
-KbZ1eRAAj2o2lLo5F8N3ORBhy3oJ7RSWBJf5ri4niPjoNKlN2ui2uKIUVAbcM3sC
-DQ6gqmtB+dg+9JyqhN0V943tC5wCz/Cu7A4iLc2z1PEH5v/ksRmLylSwOUbapaSB
-tmD2nzOM9EbMrvrwdt6tbjoS/EaqhE8G3T9Svy077tQ5xJjL5mNNxbes9W88cHRR
-sQu+SPaz+TYW7OP32PXQ2YW/vj1SLRuDjEyGSZP7iZhDFQONeBBqRWA2bLuAXPcB
-Hm6YwolYqOtZvEq8tIphQz/R1W8ZekYGddLMns8KYQxnVUUR63agleMO6Gy1E+sr
-Gxlyku0pRenu8sNB+dvHPx9Vs8VPLsYmocTGwW3Z7NJNPl0tucs0KLM030iLGxWg
-r5xjGnoPQ0sdr/4ZUI8YN4cNCUTnacHZLhNw1QB6YSYmHbqjvcCyqjkXcK/j75TT
-5yOOd6b0hekUqlqWQ69jnEZoXB45RoJiAvYXn6EKlkcu123ZCYtdu7Wk8qqE5Yqf
-CjNwqupYVg0gdwUR7mihYnD0glOBRS+BdFZtUisXZC77JdgfIygZ5NaTwRL4r3zH
-zrKkIg6R3sb77KP1w/r+ZbuMGZGl1XbErKBGGZSsT9C/N7VRaUImMI2KhYK1Z8j5
-yQfYIPW71AR2FIXYUV9MCt5i5VhBVvAP2vLvqL+3LVHHSjChSy8=
-=fkfy
------END PGP SIGNATURE-----
-
---oFbHfjnMgUMsrGjO--
