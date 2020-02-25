@@ -2,94 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3252116BBAA
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 09:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6724116BBB8
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2020 09:22:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729458AbgBYISI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Feb 2020 03:18:08 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54815 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729360AbgBYISI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Feb 2020 03:18:08 -0500
-Received: from soja.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:13da])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <o.rempel@pengutronix.de>)
-        id 1j6VPq-00010n-7U; Tue, 25 Feb 2020 09:18:06 +0100
-Subject: Re: [PATCH v1 18/40] i2c: imx: Use generic definitions for bus
- frequencies
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-References: <20200224151530.31713-1-andriy.shevchenko@linux.intel.com>
- <20200224151530.31713-18-andriy.shevchenko@linux.intel.com>
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-Message-ID: <b4a843bf-8beb-608b-a532-0d3de50c63cd@pengutronix.de>
-Date:   Tue, 25 Feb 2020 09:18:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1729767AbgBYIWf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Feb 2020 03:22:35 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40981 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729747AbgBYIWf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Feb 2020 03:22:35 -0500
+Received: by mail-pg1-f196.google.com with SMTP id 70so6502065pgf.8;
+        Tue, 25 Feb 2020 00:22:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zYvdy1dlyG33XXcH8cycU4rJytEQhmpUSBqvZa/d8dQ=;
+        b=leF+SeHkU9KHPJujKtFktQqfyi7nBtzEEvxTt7zXhwN9GEl7gxArJzC/ba7zAve7/8
+         r30o8coHvD1mIXbONeS2j2D0h+zKvU4JW6qe+OtCI2tJZc8qmIJwrHcd3UjnWxG+hk3a
+         DJ8+hD+EKWTZbIrVA8xFCn+2WBAwGb9wVzeG4TxDsdMEJIzMlN3k8PmpoqzHv0n/5e4V
+         Q/z9W3cjSfu0IR7RKuurJVTiF16/LZ+BDuvJUqSnA6tggZG1zQLMvNz9Ijzl6XJ9nzkf
+         8/VOTUAGg9Mj8eC1zAXA1hgFkJH8q0QUsgKjLcOPdmSltABPbrivS3Z6tU6SQPzWWAIG
+         rQWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zYvdy1dlyG33XXcH8cycU4rJytEQhmpUSBqvZa/d8dQ=;
+        b=c/2OMqgjnmMzFEwZMIRN6pZM2ZTfxIgyalI4OmR7AVf0LlR2o5E+n0lHtzYxzicZl0
+         N5nqJ72NzLXAzuAO+nzaJMC7CGb8SLfTcmqTClwcwzlV/UIHUGZDUsHWl8RZLtKaGbB0
+         0z5M/YabUlCgdwq3pdACR7kDKQIyk61ENqBw5zXSqii8ulEnN5vDBJ7UhzZf3uTFoA/R
+         qh/4RqOUkDkTawNMvHBccS9q/2ouZtKxdYlRiB9EpCOKmJ7L9+fUrsRf0N1v1BuoMl/7
+         KvEkM4PwdJD3dmSteDTnpBkVZiDNV7a7ZSyOFxmK3hhnVE71Vakkb3K7UP2m5ijoqA88
+         LsAw==
+X-Gm-Message-State: APjAAAVfDAjQzTMfMYMz+KgJjSunBtpK3czutRRFQ26za0W5whHRd6bT
+        +CMrHpinvtCywVVSNrqoCKF5WDaPmAQm9M3Wt8c=
+X-Google-Smtp-Source: APXvYqx4fDstjE6svyQGrI6q6r4kT9nzOqn1UVbhnEtq+Pn6utzOkdfpkg0toXU8mnGTj66irjefgr/49LcAJA8yFY0=
+X-Received: by 2002:a65:6459:: with SMTP id s25mr22565585pgv.74.1582618954453;
+ Tue, 25 Feb 2020 00:22:34 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200224151530.31713-18-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:13da
-X-SA-Exim-Mail-From: o.rempel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+References: <1582498270-50674-1-git-send-email-schaecsn@gmx.net>
+In-Reply-To: <1582498270-50674-1-git-send-email-schaecsn@gmx.net>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 25 Feb 2020 10:22:23 +0200
+Message-ID: <CAHp75Veoj8ZpqAoGGAphjPQDn0i+5c_WS3U+mRMiinCuK0YBYQ@mail.gmail.com>
+Subject: Re: [PATCH 0/1] i2c: imc: Add support for Intel iMC SMBus host controller.
+To:     Stefan Schaeckeler <schaecsn@gmx.net>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, Feb 24, 2020 at 12:54 AM Stefan Schaeckeler <schaecsn@gmx.net> wrote:
+>
+> This patch is based on Andy Lutomirski's iMC SMBus driver patch-set
+> https://lkml.org/lkml/2016/4/28/926. It never made it into the kernel. I hope
+> this rewrite will:
 
+Thanks for the patch!
+I'll review the code later.
 
-On 24.02.20 16:15, Andy Shevchenko wrote:
-> Since we have generic definitions for bus frequencies, let's use them.
-> 
-> Cc: Oleksij Rempel <linux@rempel-privat.de>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+I think the better to have a documentation file where you describe
+stuff like enumeration and so on for this drivers (under Documentation
+folder).
 
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Stefan Schaeckeler (1):
+>   i2c: imc: Add support for Intel iMC SMBus host controller.
+>
+>  MAINTAINERS                  |   5 +
+>  drivers/i2c/busses/Kconfig   |  15 ++
+>  drivers/i2c/busses/Makefile  |   1 +
+>  drivers/i2c/busses/i2c-imc.c | 515 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 536 insertions(+)
+>  create mode 100644 drivers/i2c/busses/i2c-imc.c
+>
+> --
+> 2.11.0
+>
 
-> ---
->   drivers/i2c/busses/i2c-imx.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index a3b61336fe55..f5ed0f38904c 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -49,9 +49,6 @@
->   /* This will be the driver name the kernel reports */
->   #define DRIVER_NAME "imx-i2c"
->   
-> -/* Default value */
-> -#define IMX_I2C_BIT_RATE	100000	/* 100kHz */
-> -
->   /*
->    * Enable DMA if transfer byte size is bigger than this threshold.
->    * As the hardware request, it must bigger than 4 bytes.\
-> @@ -1139,7 +1136,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
->   		goto rpm_disable;
->   
->   	/* Set up clock divider */
-> -	i2c_imx->bitrate = IMX_I2C_BIT_RATE;
-> +	i2c_imx->bitrate = I2C_STANDARD_MODE_FREQ;
->   	ret = of_property_read_u32(pdev->dev.of_node,
->   				   "clock-frequency", &i2c_imx->bitrate);
->   	if (ret < 0 && pdata && pdata->bitrate)
-> 
-
-Kind regards,
-Oleksij Rempel
 
 -- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+With Best Regards,
+Andy Shevchenko
