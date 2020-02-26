@@ -2,65 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2493C170035
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Feb 2020 14:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F4F170465
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Feb 2020 17:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbgBZNj0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Feb 2020 08:39:26 -0500
-Received: from mga04.intel.com ([192.55.52.120]:24376 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726673AbgBZNjZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 26 Feb 2020 08:39:25 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 05:39:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,488,1574150400"; 
-   d="scan'208";a="350390585"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 26 Feb 2020 05:39:21 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 26 Feb 2020 15:39:21 +0200
-Date:   Wed, 26 Feb 2020 15:39:21 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Martin Volf <martin.volf.42@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] watchdog: iTCO_wdt: Export vendorsupport
-Message-ID: <20200226133921.GS2667@lahna.fi.intel.com>
-References: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
- <20200226132122.62805-2-mika.westerberg@linux.intel.com>
- <5e56f8b1-c411-69bd-6e02-c0dde3db69dd@roeck-us.net>
+        id S1727158AbgBZQa4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Feb 2020 11:30:56 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:40833 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726148AbgBZQa4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Feb 2020 11:30:56 -0500
+Received: by mail-oi1-f196.google.com with SMTP id a142so79450oii.7;
+        Wed, 26 Feb 2020 08:30:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ACI9a0q/BgBWalLw0K2YIrmMcsUsmnK2gwfSs/vtPsM=;
+        b=a4uMtxyJ8IeuixiuhCZfXkR5LESIy/KizK7mCbkMPvJuS08MHSVWMX/OG34Ojl8FPz
+         7IaRWLRWp4kqROXlyQ6BPvgID46inDRzrlYtIKhd3yRI9/XwWsYhqNyeXWvNGglUkdGz
+         Jiotf9/+iHBMWdyu3oK/Qk6+th6Ph2fqHSjenDN3ipEwhWVwjELABY5Cs7EtXgBIn5zR
+         W513jzd9KSAvAEq1Fh6bxOfnApYezJ3srghIp644RADyhcTYBJd2lODVFfJHhE3rn/wu
+         idab83vrmCQJWz/I5vn/KmrNbZWDeYddC67xEswzOSom4E+ha95g8oF+VnSXzRWIFIU2
+         mDjQ==
+X-Gm-Message-State: APjAAAVj0hZkkrN77P4Xtw08YI0CzEstEcMkFmqSb4agMrorIjmDlrAF
+        h3dGWbmXjE107GXTOhwkfaTUpOSt7g==
+X-Google-Smtp-Source: APXvYqwK0Rc7BM7k+hjejM3j3aYFkebquxvpYKt0YbE8+SJreIg9fwmtnodQ6siCckcxVnFX0VTn2g==
+X-Received: by 2002:aca:4d06:: with SMTP id a6mr3839205oib.27.1582734655656;
+        Wed, 26 Feb 2020 08:30:55 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id n19sm951525oig.57.2020.02.26.08.30.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Feb 2020 08:30:55 -0800 (PST)
+Received: (nullmailer pid 26591 invoked by uid 1000);
+        Wed, 26 Feb 2020 16:30:54 -0000
+Date:   Wed, 26 Feb 2020 10:30:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-i3c@lists.infradead.org,
+        Kieran Bingham <kieran@ksquared.org.uk>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [RFC PATCH 3/7] i2c: allow DT nodes without 'compatible'
+Message-ID: <20200226163054.GA26533@bogus>
+References: <20200220172403.26062-1-wsa+renesas@sang-engineering.com>
+ <20200220172403.26062-4-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5e56f8b1-c411-69bd-6e02-c0dde3db69dd@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200220172403.26062-4-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Feb 26, 2020 at 05:32:40AM -0800, Guenter Roeck wrote:
-> On 2/26/20 5:21 AM, Mika Westerberg wrote:
-> > In preparation for making ->smi_res optional the iTCO_wdt driver needs
-> > to know whether vendorsupport is being set to non-zero. For this reason
-> > export the variable.
-> > 
-> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On Thu, 20 Feb 2020 18:23:59 +0100, Wolfram Sang wrote:
+> Sometimes, we have unknown devices in a system and still want to block
+> their address. For that, we allow DT nodes with only a 'reg' property.
+> These devices will be bound to the "dummy" driver but with the name
+> "reserved". That way, we can distinguish them and even hand them over to
+> the "dummy" driver later when they are really requested using
+> i2c_new_ancillary_device().
 > 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-ocores.txt | 1 -
+>  Documentation/devicetree/bindings/i2c/i2c.txt        | 4 +++-
+>  drivers/i2c/i2c-core-base.c                          | 1 +
+>  drivers/i2c/i2c-core-of.c                            | 8 +++-----
+>  drivers/i2c/i2c-core.h                               | 1 +
+>  5 files changed, 8 insertions(+), 7 deletions(-)
+> 
 
-Thanks!
-
-> I assume you'll send the series upstream in one go (through i2c ?).
-> If not, please let me and Wim know.
-
-Yes, I was hoping that Wolfram could take these through his I2C tree.
+Acked-by: Rob Herring <robh@kernel.org>
