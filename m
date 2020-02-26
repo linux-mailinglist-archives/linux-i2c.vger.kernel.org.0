@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E09170014
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Feb 2020 14:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22A1170019
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Feb 2020 14:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727018AbgBZNcq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Feb 2020 08:32:46 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:33159 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726867AbgBZNcp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Feb 2020 08:32:45 -0500
-Received: by mail-pf1-f194.google.com with SMTP id n7so1488492pfn.0;
-        Wed, 26 Feb 2020 05:32:43 -0800 (PST)
+        id S1726906AbgBZNdE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Feb 2020 08:33:04 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:51113 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726867AbgBZNdE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Feb 2020 08:33:04 -0500
+Received: by mail-pj1-f67.google.com with SMTP id r67so1268297pjb.0;
+        Wed, 26 Feb 2020 05:33:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=q0cvKvc9VIsT5KqQD5jJEe/etF1MUJtiez3YIEAtkto=;
-        b=EbFlCPjtSTCXDactd+zbcbLZI2sCLbK+tTcZA7W8EICz4NiyHCPUnxly8ZT8Fp70w4
-         S/FxJnm49eSmb8o3ZJzDI3Fcu5Oc2WFjqED6lwdYnvd+wD04mV2uhymxusemFWk2RzaH
-         mX99ZsHmJJ/gapRzppGFsoJ0slP+WozRCCpWA7Nr6zb+2CGp2+ylua0pdpWdGgOyVugl
-         LamXGLnlXUE2+P8pTZ8XDKttAg8Urm4sxqSicbRChcAyHCM9s+NIyhihwNzUjDmC6t8a
-         arV6ygI+y0bdh9/8HTdvPLyK2zWF81YbOKus5Kgy2U8ZCwy7aYhhDTo0OAX1VwdrP3w3
-         Y0+w==
+        bh=ugA4PvlHlEoN902t1rkNTkcHB6J4KdRZYzHNdSIl+2k=;
+        b=EddzZKC1rEFRw4FcRf9MHBHOSertUe+bBZW2hjyP5QR8cugW5OmcOQNU5Wg+WJ2JI7
+         bi2LVKDNthLKfi8bF++83gxhHpZyhYMYWAD2ZH26nYpEsHBPSIRuwdm9CsDXYeKkIb0p
+         C8SQucZy1c33NAumJpHKDCX1TzaF9GJAvH8u+VYPen19i9c51sZ02JiI7OHDTmS827nX
+         RY9fknH93TJGmRoguwDlY64k0zwK/TP7fxEWGKo75ayou+mFthFHhQ6sV5vIj6hnDxyD
+         mIZPrVwTy+hqF4lAmmYjff8CLZM3MavvBB5Swi4FPArfvpJYRJJdL+CS9DUOfPoWovRB
+         BitQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=q0cvKvc9VIsT5KqQD5jJEe/etF1MUJtiez3YIEAtkto=;
-        b=KgWvkfjpEp5FB8K6n4Q8h82fSexhfNcZe7PI7eoRjQ1bSa7yYRJP615HIJDDEW/V+T
-         dlT7zQRudTxmZ8redA2MQLLWrNOGJkYT1R8FUvtYNG52m/vnO2EdeMypUfYxYmDdD2eJ
-         b70wDxshc9izsOCJP+aLfmR/uxWZQ6z7zrha9ZBuoyy94qJokSfxOA+p/XVcPCLiEDO3
-         /qDi7ZVL+Y47CVKSSYHuTRiOcSTpCRkiOI0w8Aj2UC5vASy7DGpBRIf5WWo9lru5V28f
-         x89iirGEQkdz7LiBUYeAjd02AOW/GJyn+fOPeK+MbKPWwbN4prXXDMOEcVM6GmdS/CPr
-         Vu7w==
-X-Gm-Message-State: APjAAAXAoitYf0LJk9/fo6+ey/cskWmF//F9HefMvuaombgOwsR3VXR0
-        8dFdnqTsa15V64NrTIf1KK9Slf55
-X-Google-Smtp-Source: APXvYqxtmiqERaozZbLvMQDitIpuR84h75S5C9UGEJv0sQ8DPrxaBt8L5MTKj6Zs5ptAggMOsR7n9w==
-X-Received: by 2002:aa7:848c:: with SMTP id u12mr4254011pfn.12.1582723963073;
-        Wed, 26 Feb 2020 05:32:43 -0800 (PST)
+        bh=ugA4PvlHlEoN902t1rkNTkcHB6J4KdRZYzHNdSIl+2k=;
+        b=c3k/S/r5d0tKyLWqGpkIbPPcG7DsDB4MwsIqpfH0uunyGD4u5agRHN3PNAPPC4N4/9
+         WcguNNg2iboI7SlaEJimNfs56v8N4eQnhROMwtjTUOjjvQNMqkiHJpSacmMpSS/dxO7Q
+         VALn2GofYpNqDqZgBMV/0eDPnvw7Of/Tezh3pTM1lPe/Z28ayekRyk/fX2AkGYz3Ri/M
+         tXbsUAyd3gIVADP+PDkNZi6h9RiovWcXTGgcujDOvf8ZVqavdRoJoXOHfGQzh4epML5p
+         aWy0x/yz5TO4G+z6dHf9kd0JZGdzFXFXfSqCTu4QNh7m3LLqtt5YlvsAhZ3C8Vk2vgS4
+         Aujg==
+X-Gm-Message-State: APjAAAVnMsCS1ea8TOuRD6hlx+Gz2h+YexXohCxR9cQyOKgAO7FYoZZJ
+        75mwU8fmgk8urqTBnsgxCqWAXe56
+X-Google-Smtp-Source: APXvYqxAYJJGIt+2qVo2jkrYYMTkGWotcFY/Aafr1Qw6dTIbvXcovIsDuDUbleXtu0jXHkT2KiFGPg==
+X-Received: by 2002:a17:90a:ac0f:: with SMTP id o15mr5165322pjq.133.1582723982564;
+        Wed, 26 Feb 2020 05:33:02 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a10sm2997491pgm.81.2020.02.26.05.32.41
+        by smtp.gmail.com with ESMTPSA id g7sm3339812pfq.33.2020.02.26.05.33.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Feb 2020 05:32:42 -0800 (PST)
-Subject: Re: [PATCH v2 1/3] watchdog: iTCO_wdt: Export vendorsupport
+        Wed, 26 Feb 2020 05:33:02 -0800 (PST)
+Subject: Re: [PATCH v2 2/3] watchdog: iTCO_wdt: Make ICH_RES_IO_SMI optional
 To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Jean Delvare <jdelvare@suse.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -57,7 +57,7 @@ Cc:     Martin Volf <martin.volf.42@gmail.com>,
         linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
- <20200226132122.62805-2-mika.westerberg@linux.intel.com>
+ <20200226132122.62805-3-mika.westerberg@linux.intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -102,12 +102,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <5e56f8b1-c411-69bd-6e02-c0dde3db69dd@roeck-us.net>
-Date:   Wed, 26 Feb 2020 05:32:40 -0800
+Message-ID: <8565beae-e7b3-c683-cd39-5af869513f1a@roeck-us.net>
+Date:   Wed, 26 Feb 2020 05:33:00 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200226132122.62805-2-mika.westerberg@linux.intel.com>
+In-Reply-To: <20200226132122.62805-3-mika.westerberg@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -117,101 +117,67 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 On 2/26/20 5:21 AM, Mika Westerberg wrote:
-> In preparation for making ->smi_res optional the iTCO_wdt driver needs
-> to know whether vendorsupport is being set to non-zero. For this reason
-> export the variable.
+> The iTCO_wdt driver only needs ICH_RES_IO_SMI I/O resource when either
+> turn_SMI_watchdog_clear_off module parameter is set to match ->iTCO_version
+> (or higher), and when legacy iTCO_vendorsupport is set. Modify the driver
+> so that ICH_RES_IO_SMI is optional if the two conditions are not met.
 > 
 > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-I assume you'll send the series upstream in one go (through i2c ?).
-If not, please let me and Wim know.
-
-Thanks,
-Guenter
-
 > ---
->  drivers/watchdog/iTCO_vendor.h         |  2 ++
->  drivers/watchdog/iTCO_vendor_support.c | 16 +++++++++-------
->  2 files changed, 11 insertions(+), 7 deletions(-)
+>  drivers/watchdog/iTCO_wdt.c | 28 ++++++++++++++++------------
+>  1 file changed, 16 insertions(+), 12 deletions(-)
 > 
-> diff --git a/drivers/watchdog/iTCO_vendor.h b/drivers/watchdog/iTCO_vendor.h
-> index 0f7373ba10d5..69e92e692ae0 100644
-> --- a/drivers/watchdog/iTCO_vendor.h
-> +++ b/drivers/watchdog/iTCO_vendor.h
-> @@ -1,10 +1,12 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  /* iTCO Vendor Specific Support hooks */
->  #ifdef CONFIG_ITCO_VENDOR_SUPPORT
-> +extern int iTCO_vendorsupport;
->  extern void iTCO_vendor_pre_start(struct resource *, unsigned int);
->  extern void iTCO_vendor_pre_stop(struct resource *);
->  extern int iTCO_vendor_check_noreboot_on(void);
->  #else
-> +#define iTCO_vendorsupport				0
->  #define iTCO_vendor_pre_start(acpibase, heartbeat)	{}
->  #define iTCO_vendor_pre_stop(acpibase)			{}
->  #define iTCO_vendor_check_noreboot_on()			1
-> diff --git a/drivers/watchdog/iTCO_vendor_support.c b/drivers/watchdog/iTCO_vendor_support.c
-> index 4f1b96f59349..cf0eaa04b064 100644
-> --- a/drivers/watchdog/iTCO_vendor_support.c
-> +++ b/drivers/watchdog/iTCO_vendor_support.c
-> @@ -39,8 +39,10 @@
->  /* Broken BIOS */
->  #define BROKEN_BIOS		911
+> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+> index 156360e37714..e707c4797f76 100644
+> --- a/drivers/watchdog/iTCO_wdt.c
+> +++ b/drivers/watchdog/iTCO_wdt.c
+> @@ -459,13 +459,25 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  	if (!p->tco_res)
+>  		return -ENODEV;
 >  
-> -static int vendorsupport;
-> -module_param(vendorsupport, int, 0);
-> +int iTCO_vendorsupport;
-> +EXPORT_SYMBOL(iTCO_vendorsupport);
+> -	p->smi_res = platform_get_resource(pdev, IORESOURCE_IO, ICH_RES_IO_SMI);
+> -	if (!p->smi_res)
+> -		return -ENODEV;
+> -
+>  	p->iTCO_version = pdata->version;
+>  	p->pci_dev = to_pci_dev(dev->parent);
+>  
+> +	p->smi_res = platform_get_resource(pdev, IORESOURCE_IO, ICH_RES_IO_SMI);
+> +	if (p->smi_res) {
+> +		/* The TCO logic uses the TCO_EN bit in the SMI_EN register */
+> +		if (!devm_request_region(dev, p->smi_res->start,
+> +					 resource_size(p->smi_res),
+> +					 pdev->name)) {
+> +			pr_err("I/O address 0x%04llx already in use, device disabled\n",
+> +			       (u64)SMI_EN(p));
+> +			return -EBUSY;
+> +		}
+> +	} else if (iTCO_vendorsupport ||
+> +		   turn_SMI_watchdog_clear_off >= p->iTCO_version) {
+> +		pr_err("SMI I/O resource is missing\n");
+> +		return -ENODEV;
+> +	}
 > +
-> +module_param_named(vendorsupport, iTCO_vendorsupport, int, 0);
->  MODULE_PARM_DESC(vendorsupport, "iTCO vendor specific support mode, default="
->  			"0 (none), 1=SuperMicro Pent3, 911=Broken SMI BIOS");
+>  	iTCO_wdt_no_reboot_bit_setup(p, pdata);
 >  
-> @@ -152,7 +154,7 @@ static void broken_bios_stop(struct resource *smires)
->  void iTCO_vendor_pre_start(struct resource *smires,
->  			   unsigned int heartbeat)
->  {
-> -	switch (vendorsupport) {
-> +	switch (iTCO_vendorsupport) {
->  	case SUPERMICRO_OLD_BOARD:
->  		supermicro_old_pre_start(smires);
->  		break;
-> @@ -165,7 +167,7 @@ EXPORT_SYMBOL(iTCO_vendor_pre_start);
+>  	/*
+> @@ -492,14 +504,6 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  	/* Set the NO_REBOOT bit to prevent later reboots, just for sure */
+>  	p->update_no_reboot_bit(p->no_reboot_priv, true);
 >  
->  void iTCO_vendor_pre_stop(struct resource *smires)
->  {
-> -	switch (vendorsupport) {
-> +	switch (iTCO_vendorsupport) {
->  	case SUPERMICRO_OLD_BOARD:
->  		supermicro_old_pre_stop(smires);
->  		break;
-> @@ -178,7 +180,7 @@ EXPORT_SYMBOL(iTCO_vendor_pre_stop);
->  
->  int iTCO_vendor_check_noreboot_on(void)
->  {
-> -	switch (vendorsupport) {
-> +	switch (iTCO_vendorsupport) {
->  	case SUPERMICRO_OLD_BOARD:
->  		return 0;
->  	default:
-> @@ -189,13 +191,13 @@ EXPORT_SYMBOL(iTCO_vendor_check_noreboot_on);
->  
->  static int __init iTCO_vendor_init_module(void)
->  {
-> -	if (vendorsupport == SUPERMICRO_NEW_BOARD) {
-> +	if (iTCO_vendorsupport == SUPERMICRO_NEW_BOARD) {
->  		pr_warn("Option vendorsupport=%d is no longer supported, "
->  			"please use the w83627hf_wdt driver instead\n",
->  			SUPERMICRO_NEW_BOARD);
->  		return -EINVAL;
->  	}
-> -	pr_info("vendor-support=%d\n", vendorsupport);
-> +	pr_info("vendor-support=%d\n", iTCO_vendorsupport);
->  	return 0;
->  }
->  
+> -	/* The TCO logic uses the TCO_EN bit in the SMI_EN register */
+> -	if (!devm_request_region(dev, p->smi_res->start,
+> -				 resource_size(p->smi_res),
+> -				 pdev->name)) {
+> -		pr_err("I/O address 0x%04llx already in use, device disabled\n",
+> -		       (u64)SMI_EN(p));
+> -		return -EBUSY;
+> -	}
+>  	if (turn_SMI_watchdog_clear_off >= p->iTCO_version) {
+>  		/*
+>  		 * Bit 13: TCO_EN -> 0
 > 
 
