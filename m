@@ -2,26 +2,26 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B96316FFCA
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Feb 2020 14:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B38F16FFCD
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Feb 2020 14:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726992AbgBZNV3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Feb 2020 08:21:29 -0500
-Received: from mga06.intel.com ([134.134.136.31]:39882 "EHLO mga06.intel.com"
+        id S1726901AbgBZNV2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Feb 2020 08:21:28 -0500
+Received: from mga02.intel.com ([134.134.136.20]:17462 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726892AbgBZNV2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S1726277AbgBZNV2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
         Wed, 26 Feb 2020 08:21:28 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 05:21:27 -0800
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 05:21:27 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,488,1574150400"; 
-   d="scan'208";a="231395659"
+   d="scan'208";a="410603466"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 26 Feb 2020 05:21:23 -0800
+  by orsmga005.jf.intel.com with ESMTP; 26 Feb 2020 05:21:23 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id AC008418; Wed, 26 Feb 2020 15:21:22 +0200 (EET)
+        id BA74044B; Wed, 26 Feb 2020 15:21:22 +0200 (EET)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
@@ -33,9 +33,9 @@ Cc:     Martin Volf <martin.volf.42@gmail.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] watchdog: iTCO_wdt: Make ICH_RES_IO_SMI optional
-Date:   Wed, 26 Feb 2020 16:21:21 +0300
-Message-Id: <20200226132122.62805-3-mika.westerberg@linux.intel.com>
+Subject: [PATCH v2 3/3] i2c: i801: Do not add ICH_RES_IO_SMI for the iTCO_wdt device
+Date:   Wed, 26 Feb 2020 16:21:22 +0300
+Message-Id: <20200226132122.62805-4-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
 References: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
@@ -46,65 +46,129 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The iTCO_wdt driver only needs ICH_RES_IO_SMI I/O resource when either
-turn_SMI_watchdog_clear_off module parameter is set to match ->iTCO_version
-(or higher), and when legacy iTCO_vendorsupport is set. Modify the driver
-so that ICH_RES_IO_SMI is optional if the two conditions are not met.
+Martin noticed that nct6775 driver does not load properly on his system
+in v5.4+ kernels. The issue was bisected to commit b84398d6d7f9 ("i2c:
+i801: Use iTCO version 6 in Cannon Lake PCH and beyond") but it is
+likely not the culprit because the faulty code has been in the driver
+already since commit 9424693035a5 ("i2c: i801: Create iTCO device on
+newer Intel PCHs"). So more likely some commit that added PCI IDs of
+recent chipsets made the driver to create the iTCO_wdt device on Martins
+system.
 
+The issue was debugged to be PCI configuration access to the PMC device
+that is not present. This returns all 1's when read and this caused the
+iTCO_wdt driver to accidentally request resourses used by nct6775.
+
+It turns out that the SMI resource is only required for some ancient
+systems, not the ones supported by this driver. For this reason do not
+populate the SMI resource at all and drop all the related code. The
+driver now always populates the main I/O resource and only in case of SPT
+(Intel Sunrisepoint) compatible devices it adds another resource for the
+NO_REBOOT bit. These two resources are of different types so
+platform_get_resource() used by the iTCO_wdt driver continues to find
+the both resources at index 0.
+
+Link: https://lore.kernel.org/linux-hwmon/CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com/
+Fixes: 9424693035a5 ("i2c: i801: Create iTCO device on newer Intel PCHs")
+Reported-by: Martin Volf <martin.volf.42@gmail.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/watchdog/iTCO_wdt.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 45 ++++++++++-------------------------
+ 1 file changed, 12 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-index 156360e37714..e707c4797f76 100644
---- a/drivers/watchdog/iTCO_wdt.c
-+++ b/drivers/watchdog/iTCO_wdt.c
-@@ -459,13 +459,25 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
- 	if (!p->tco_res)
- 		return -ENODEV;
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index ca4f096fef74..a9c03f5c3482 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -132,11 +132,6 @@
+ #define TCOBASE		0x050
+ #define TCOCTL		0x054
  
--	p->smi_res = platform_get_resource(pdev, IORESOURCE_IO, ICH_RES_IO_SMI);
--	if (!p->smi_res)
--		return -ENODEV;
+-#define ACPIBASE		0x040
+-#define ACPIBASE_SMI_OFF	0x030
+-#define ACPICTRL		0x044
+-#define ACPICTRL_EN		0x080
 -
- 	p->iTCO_version = pdata->version;
- 	p->pci_dev = to_pci_dev(dev->parent);
+ #define SBREG_BAR		0x10
+ #define SBREG_SMBCTRL		0xc6000c
+ #define SBREG_SMBCTRL_DNV	0xcf000c
+@@ -1553,7 +1548,7 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 		pci_bus_write_config_byte(pci_dev->bus, devfn, 0xe1, hidden);
+ 	spin_unlock(&p2sb_spinlock);
  
-+	p->smi_res = platform_get_resource(pdev, IORESOURCE_IO, ICH_RES_IO_SMI);
-+	if (p->smi_res) {
-+		/* The TCO logic uses the TCO_EN bit in the SMI_EN register */
-+		if (!devm_request_region(dev, p->smi_res->start,
-+					 resource_size(p->smi_res),
-+					 pdev->name)) {
-+			pr_err("I/O address 0x%04llx already in use, device disabled\n",
-+			       (u64)SMI_EN(p));
-+			return -EBUSY;
-+		}
-+	} else if (iTCO_vendorsupport ||
-+		   turn_SMI_watchdog_clear_off >= p->iTCO_version) {
-+		pr_err("SMI I/O resource is missing\n");
-+		return -ENODEV;
-+	}
-+
- 	iTCO_wdt_no_reboot_bit_setup(p, pdata);
+-	res = &tco_res[ICH_RES_MEM_OFF];
++	res = &tco_res[1];
+ 	if (pci_dev->device == PCI_DEVICE_ID_INTEL_DNV_SMBUS)
+ 		res->start = (resource_size_t)base64_addr + SBREG_SMBCTRL_DNV;
+ 	else
+@@ -1563,7 +1558,7 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 	res->flags = IORESOURCE_MEM;
  
+ 	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
+-					tco_res, 3, &spt_tco_platform_data,
++					tco_res, 2, &spt_tco_platform_data,
+ 					sizeof(spt_tco_platform_data));
+ }
+ 
+@@ -1576,17 +1571,16 @@ static struct platform_device *
+ i801_add_tco_cnl(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 		 struct resource *tco_res)
+ {
+-	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
+-					tco_res, 2, &cnl_tco_platform_data,
+-					sizeof(cnl_tco_platform_data));
++	return platform_device_register_resndata(&pci_dev->dev,
++			"iTCO_wdt", -1, tco_res, 1, &cnl_tco_platform_data,
++			sizeof(cnl_tco_platform_data));
+ }
+ 
+ static void i801_add_tco(struct i801_priv *priv)
+ {
+-	u32 base_addr, tco_base, tco_ctl, ctrl_val;
+ 	struct pci_dev *pci_dev = priv->pci_dev;
+-	struct resource tco_res[3], *res;
+-	unsigned int devfn;
++	struct resource tco_res[2], *res;
++	u32 tco_base, tco_ctl;
+ 
+ 	/* If we have ACPI based watchdog use that instead */
+ 	if (acpi_has_watchdog())
+@@ -1601,30 +1595,15 @@ static void i801_add_tco(struct i801_priv *priv)
+ 		return;
+ 
+ 	memset(tco_res, 0, sizeof(tco_res));
+-
+-	res = &tco_res[ICH_RES_IO_TCO];
+-	res->start = tco_base & ~1;
+-	res->end = res->start + 32 - 1;
+-	res->flags = IORESOURCE_IO;
+-
  	/*
-@@ -492,14 +504,6 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
- 	/* Set the NO_REBOOT bit to prevent later reboots, just for sure */
- 	p->update_no_reboot_bit(p->no_reboot_priv, true);
+-	 * Power Management registers.
++	 * Always populate the main iTCO IO resource here. The second entry
++	 * for NO_REBOOT MMIO is filled by the SPT specific function.
+ 	 */
+-	devfn = PCI_DEVFN(PCI_SLOT(pci_dev->devfn), 2);
+-	pci_bus_read_config_dword(pci_dev->bus, devfn, ACPIBASE, &base_addr);
+-
+-	res = &tco_res[ICH_RES_IO_SMI];
+-	res->start = (base_addr & ~1) + ACPIBASE_SMI_OFF;
+-	res->end = res->start + 3;
++	res = &tco_res[0];
++	res->start = tco_base & ~1;
++	res->end = res->start + 32 - 1;
+ 	res->flags = IORESOURCE_IO;
  
--	/* The TCO logic uses the TCO_EN bit in the SMI_EN register */
--	if (!devm_request_region(dev, p->smi_res->start,
--				 resource_size(p->smi_res),
--				 pdev->name)) {
--		pr_err("I/O address 0x%04llx already in use, device disabled\n",
--		       (u64)SMI_EN(p));
--		return -EBUSY;
--	}
- 	if (turn_SMI_watchdog_clear_off >= p->iTCO_version) {
- 		/*
- 		 * Bit 13: TCO_EN -> 0
+-	/*
+-	 * Enable the ACPI I/O space.
+-	 */
+-	pci_bus_read_config_dword(pci_dev->bus, devfn, ACPICTRL, &ctrl_val);
+-	ctrl_val |= ACPICTRL_EN;
+-	pci_bus_write_config_dword(pci_dev->bus, devfn, ACPICTRL, ctrl_val);
+-
+ 	if (priv->features & FEATURE_TCO_CNL)
+ 		priv->tco_pdev = i801_add_tco_cnl(priv, pci_dev, tco_res);
+ 	else
 -- 
 2.25.0
 
