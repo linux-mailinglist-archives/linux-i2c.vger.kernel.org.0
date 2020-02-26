@@ -2,52 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9097A170008
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Feb 2020 14:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E09170014
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Feb 2020 14:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726764AbgBZNbi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Feb 2020 08:31:38 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:38801 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726700AbgBZNbi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Feb 2020 08:31:38 -0500
-Received: by mail-pg1-f194.google.com with SMTP id d6so1313188pgn.5;
-        Wed, 26 Feb 2020 05:31:35 -0800 (PST)
+        id S1727018AbgBZNcq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Feb 2020 08:32:46 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:33159 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726867AbgBZNcp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Feb 2020 08:32:45 -0500
+Received: by mail-pf1-f194.google.com with SMTP id n7so1488492pfn.0;
+        Wed, 26 Feb 2020 05:32:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=yXaNdZxxeeLiYteK+gGmD0B4XKL5Bja5LliTny0rgdg=;
-        b=PcdwUo/xQWD99Xft/fjNSpbQRlKzeHSfRif3GFk+9DuvCOVs4dak2XNo3SI3E8+o4p
-         HGl/iBPRREanS0DV9NwITNXXa/WL+bn6LUUddAq1PPq7Blg7KRElsMC4H5v7yIWCYvG9
-         vlHATJLhYnAIrek5bMSAU8tbbVhgnIgnqFBv+plUIU3qe/mFd92JNZ7wDUZT/+IvSYVd
-         XwU0G8Y/dOPEWqGY6BP+s7oXaNwVbACvpowGPwExUa+B1HlgJF7+rS0CIro4jcZRJk4q
-         4+4A6wQUt8OBAVfnVEt/8TFCke0NZCYi0he8bgeUjoxInyFqU80ZPmh9kCnDcfRQILHj
-         szJQ==
+        bh=q0cvKvc9VIsT5KqQD5jJEe/etF1MUJtiez3YIEAtkto=;
+        b=EbFlCPjtSTCXDactd+zbcbLZI2sCLbK+tTcZA7W8EICz4NiyHCPUnxly8ZT8Fp70w4
+         S/FxJnm49eSmb8o3ZJzDI3Fcu5Oc2WFjqED6lwdYnvd+wD04mV2uhymxusemFWk2RzaH
+         mX99ZsHmJJ/gapRzppGFsoJ0slP+WozRCCpWA7Nr6zb+2CGp2+ylua0pdpWdGgOyVugl
+         LamXGLnlXUE2+P8pTZ8XDKttAg8Urm4sxqSicbRChcAyHCM9s+NIyhihwNzUjDmC6t8a
+         arV6ygI+y0bdh9/8HTdvPLyK2zWF81YbOKus5Kgy2U8ZCwy7aYhhDTo0OAX1VwdrP3w3
+         Y0+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=yXaNdZxxeeLiYteK+gGmD0B4XKL5Bja5LliTny0rgdg=;
-        b=W+1HodJpaDvXaWm5Mv10uR0me+IA8QrUYSEP2oA6vyE5k26H8yZsJeJb+3tSgkNv7S
-         tFVE3wjCPq2HbNAEKnZW2lBHq7PypsHrXNwXSL7P3womDi1FtSCp8e7Tl6En6owkjDM0
-         PkETixI7jwwO4ZCICw02sbKx1gQczBsxk3OETViCr9e2hQYcl0fsMmKvzGhBLtRbkNtc
-         6S98xbQ9db4y45d1tWbpnrq8QIXiNXASx2TMXuaa/SXmOyBjufbpx7WVRhQvi3BJ+s2p
-         nPwNny6y71ISs9vsAR0FPY6zzJfGgCcL138Ve2Q6tPNocpdFFMHJG5JWvhC+rDRlJdro
-         ambQ==
-X-Gm-Message-State: APjAAAWCZN385aUceEIGPP1wXdc/aTnItSJJ9RPFbEpQqGDGTcGPZbeC
-        SnLzHzmn5OtkGHIU/Xud2B+R05qg
-X-Google-Smtp-Source: APXvYqyJQYBrhFe7lEeksu+YwmsbVehOyqUuDKB3U044IYLa2XRTprU1xNVPxiQcmch37KE9763sww==
-X-Received: by 2002:a63:5423:: with SMTP id i35mr3913634pgb.179.1582723894710;
-        Wed, 26 Feb 2020 05:31:34 -0800 (PST)
+        bh=q0cvKvc9VIsT5KqQD5jJEe/etF1MUJtiez3YIEAtkto=;
+        b=KgWvkfjpEp5FB8K6n4Q8h82fSexhfNcZe7PI7eoRjQ1bSa7yYRJP615HIJDDEW/V+T
+         dlT7zQRudTxmZ8redA2MQLLWrNOGJkYT1R8FUvtYNG52m/vnO2EdeMypUfYxYmDdD2eJ
+         b70wDxshc9izsOCJP+aLfmR/uxWZQ6z7zrha9ZBuoyy94qJokSfxOA+p/XVcPCLiEDO3
+         /qDi7ZVL+Y47CVKSSYHuTRiOcSTpCRkiOI0w8Aj2UC5vASy7DGpBRIf5WWo9lru5V28f
+         x89iirGEQkdz7LiBUYeAjd02AOW/GJyn+fOPeK+MbKPWwbN4prXXDMOEcVM6GmdS/CPr
+         Vu7w==
+X-Gm-Message-State: APjAAAXAoitYf0LJk9/fo6+ey/cskWmF//F9HefMvuaombgOwsR3VXR0
+        8dFdnqTsa15V64NrTIf1KK9Slf55
+X-Google-Smtp-Source: APXvYqxtmiqERaozZbLvMQDitIpuR84h75S5C9UGEJv0sQ8DPrxaBt8L5MTKj6Zs5ptAggMOsR7n9w==
+X-Received: by 2002:aa7:848c:: with SMTP id u12mr4254011pfn.12.1582723963073;
+        Wed, 26 Feb 2020 05:32:43 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b1sm3166268pfp.44.2020.02.26.05.31.32
+        by smtp.gmail.com with ESMTPSA id a10sm2997491pgm.81.2020.02.26.05.32.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Feb 2020 05:31:33 -0800 (PST)
-Subject: Re: [PATCH v2 3/3] i2c: i801: Do not add ICH_RES_IO_SMI for the
- iTCO_wdt device
+        Wed, 26 Feb 2020 05:32:42 -0800 (PST)
+Subject: Re: [PATCH v2 1/3] watchdog: iTCO_wdt: Export vendorsupport
 To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Jean Delvare <jdelvare@suse.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -58,7 +57,7 @@ Cc:     Martin Volf <martin.volf.42@gmail.com>,
         linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
- <20200226132122.62805-4-mika.westerberg@linux.intel.com>
+ <20200226132122.62805-2-mika.westerberg@linux.intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -103,12 +102,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <f8549db6-de8a-2205-5cef-f0cb457a21f1@roeck-us.net>
-Date:   Wed, 26 Feb 2020 05:31:31 -0800
+Message-ID: <5e56f8b1-c411-69bd-6e02-c0dde3db69dd@roeck-us.net>
+Date:   Wed, 26 Feb 2020 05:32:40 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200226132122.62805-4-mika.westerberg@linux.intel.com>
+In-Reply-To: <20200226132122.62805-2-mika.westerberg@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -118,131 +117,101 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 On 2/26/20 5:21 AM, Mika Westerberg wrote:
-> Martin noticed that nct6775 driver does not load properly on his system
-> in v5.4+ kernels. The issue was bisected to commit b84398d6d7f9 ("i2c:
-> i801: Use iTCO version 6 in Cannon Lake PCH and beyond") but it is
-> likely not the culprit because the faulty code has been in the driver
-> already since commit 9424693035a5 ("i2c: i801: Create iTCO device on
-> newer Intel PCHs"). So more likely some commit that added PCI IDs of
-> recent chipsets made the driver to create the iTCO_wdt device on Martins
-> system.
+> In preparation for making ->smi_res optional the iTCO_wdt driver needs
+> to know whether vendorsupport is being set to non-zero. For this reason
+> export the variable.
 > 
-> The issue was debugged to be PCI configuration access to the PMC device
-> that is not present. This returns all 1's when read and this caused the
-> iTCO_wdt driver to accidentally request resourses used by nct6775.
-> 
-> It turns out that the SMI resource is only required for some ancient
-> systems, not the ones supported by this driver. For this reason do not
-> populate the SMI resource at all and drop all the related code. The
-> driver now always populates the main I/O resource and only in case of SPT
-> (Intel Sunrisepoint) compatible devices it adds another resource for the
-> NO_REBOOT bit. These two resources are of different types so
-> platform_get_resource() used by the iTCO_wdt driver continues to find
-> the both resources at index 0.
-> 
-> Link: https://lore.kernel.org/linux-hwmon/CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com/
-> Fixes: 9424693035a5 ("i2c: i801: Create iTCO device on newer Intel PCHs")
-> Reported-by: Martin Volf <martin.volf.42@gmail.com>
 > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
+I assume you'll send the series upstream in one go (through i2c ?).
+If not, please let me and Wim know.
+
+Thanks,
+Guenter
+
 > ---
->  drivers/i2c/busses/i2c-i801.c | 45 ++++++++++-------------------------
->  1 file changed, 12 insertions(+), 33 deletions(-)
+>  drivers/watchdog/iTCO_vendor.h         |  2 ++
+>  drivers/watchdog/iTCO_vendor_support.c | 16 +++++++++-------
+>  2 files changed, 11 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index ca4f096fef74..a9c03f5c3482 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -132,11 +132,6 @@
->  #define TCOBASE		0x050
->  #define TCOCTL		0x054
+> diff --git a/drivers/watchdog/iTCO_vendor.h b/drivers/watchdog/iTCO_vendor.h
+> index 0f7373ba10d5..69e92e692ae0 100644
+> --- a/drivers/watchdog/iTCO_vendor.h
+> +++ b/drivers/watchdog/iTCO_vendor.h
+> @@ -1,10 +1,12 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+>  /* iTCO Vendor Specific Support hooks */
+>  #ifdef CONFIG_ITCO_VENDOR_SUPPORT
+> +extern int iTCO_vendorsupport;
+>  extern void iTCO_vendor_pre_start(struct resource *, unsigned int);
+>  extern void iTCO_vendor_pre_stop(struct resource *);
+>  extern int iTCO_vendor_check_noreboot_on(void);
+>  #else
+> +#define iTCO_vendorsupport				0
+>  #define iTCO_vendor_pre_start(acpibase, heartbeat)	{}
+>  #define iTCO_vendor_pre_stop(acpibase)			{}
+>  #define iTCO_vendor_check_noreboot_on()			1
+> diff --git a/drivers/watchdog/iTCO_vendor_support.c b/drivers/watchdog/iTCO_vendor_support.c
+> index 4f1b96f59349..cf0eaa04b064 100644
+> --- a/drivers/watchdog/iTCO_vendor_support.c
+> +++ b/drivers/watchdog/iTCO_vendor_support.c
+> @@ -39,8 +39,10 @@
+>  /* Broken BIOS */
+>  #define BROKEN_BIOS		911
 >  
-> -#define ACPIBASE		0x040
-> -#define ACPIBASE_SMI_OFF	0x030
-> -#define ACPICTRL		0x044
-> -#define ACPICTRL_EN		0x080
-> -
->  #define SBREG_BAR		0x10
->  #define SBREG_SMBCTRL		0xc6000c
->  #define SBREG_SMBCTRL_DNV	0xcf000c
-> @@ -1553,7 +1548,7 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
->  		pci_bus_write_config_byte(pci_dev->bus, devfn, 0xe1, hidden);
->  	spin_unlock(&p2sb_spinlock);
+> -static int vendorsupport;
+> -module_param(vendorsupport, int, 0);
+> +int iTCO_vendorsupport;
+> +EXPORT_SYMBOL(iTCO_vendorsupport);
+> +
+> +module_param_named(vendorsupport, iTCO_vendorsupport, int, 0);
+>  MODULE_PARM_DESC(vendorsupport, "iTCO vendor specific support mode, default="
+>  			"0 (none), 1=SuperMicro Pent3, 911=Broken SMI BIOS");
 >  
-> -	res = &tco_res[ICH_RES_MEM_OFF];
-> +	res = &tco_res[1];
->  	if (pci_dev->device == PCI_DEVICE_ID_INTEL_DNV_SMBUS)
->  		res->start = (resource_size_t)base64_addr + SBREG_SMBCTRL_DNV;
->  	else
-> @@ -1563,7 +1558,7 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
->  	res->flags = IORESOURCE_MEM;
+> @@ -152,7 +154,7 @@ static void broken_bios_stop(struct resource *smires)
+>  void iTCO_vendor_pre_start(struct resource *smires,
+>  			   unsigned int heartbeat)
+>  {
+> -	switch (vendorsupport) {
+> +	switch (iTCO_vendorsupport) {
+>  	case SUPERMICRO_OLD_BOARD:
+>  		supermicro_old_pre_start(smires);
+>  		break;
+> @@ -165,7 +167,7 @@ EXPORT_SYMBOL(iTCO_vendor_pre_start);
 >  
->  	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
-> -					tco_res, 3, &spt_tco_platform_data,
-> +					tco_res, 2, &spt_tco_platform_data,
->  					sizeof(spt_tco_platform_data));
+>  void iTCO_vendor_pre_stop(struct resource *smires)
+>  {
+> -	switch (vendorsupport) {
+> +	switch (iTCO_vendorsupport) {
+>  	case SUPERMICRO_OLD_BOARD:
+>  		supermicro_old_pre_stop(smires);
+>  		break;
+> @@ -178,7 +180,7 @@ EXPORT_SYMBOL(iTCO_vendor_pre_stop);
+>  
+>  int iTCO_vendor_check_noreboot_on(void)
+>  {
+> -	switch (vendorsupport) {
+> +	switch (iTCO_vendorsupport) {
+>  	case SUPERMICRO_OLD_BOARD:
+>  		return 0;
+>  	default:
+> @@ -189,13 +191,13 @@ EXPORT_SYMBOL(iTCO_vendor_check_noreboot_on);
+>  
+>  static int __init iTCO_vendor_init_module(void)
+>  {
+> -	if (vendorsupport == SUPERMICRO_NEW_BOARD) {
+> +	if (iTCO_vendorsupport == SUPERMICRO_NEW_BOARD) {
+>  		pr_warn("Option vendorsupport=%d is no longer supported, "
+>  			"please use the w83627hf_wdt driver instead\n",
+>  			SUPERMICRO_NEW_BOARD);
+>  		return -EINVAL;
+>  	}
+> -	pr_info("vendor-support=%d\n", vendorsupport);
+> +	pr_info("vendor-support=%d\n", iTCO_vendorsupport);
+>  	return 0;
 >  }
 >  
-> @@ -1576,17 +1571,16 @@ static struct platform_device *
->  i801_add_tco_cnl(struct i801_priv *priv, struct pci_dev *pci_dev,
->  		 struct resource *tco_res)
->  {
-> -	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
-> -					tco_res, 2, &cnl_tco_platform_data,
-> -					sizeof(cnl_tco_platform_data));
-> +	return platform_device_register_resndata(&pci_dev->dev,
-> +			"iTCO_wdt", -1, tco_res, 1, &cnl_tco_platform_data,
-> +			sizeof(cnl_tco_platform_data));
->  }
->  
->  static void i801_add_tco(struct i801_priv *priv)
->  {
-> -	u32 base_addr, tco_base, tco_ctl, ctrl_val;
->  	struct pci_dev *pci_dev = priv->pci_dev;
-> -	struct resource tco_res[3], *res;
-> -	unsigned int devfn;
-> +	struct resource tco_res[2], *res;
-> +	u32 tco_base, tco_ctl;
->  
->  	/* If we have ACPI based watchdog use that instead */
->  	if (acpi_has_watchdog())
-> @@ -1601,30 +1595,15 @@ static void i801_add_tco(struct i801_priv *priv)
->  		return;
->  
->  	memset(tco_res, 0, sizeof(tco_res));
-> -
-> -	res = &tco_res[ICH_RES_IO_TCO];
-> -	res->start = tco_base & ~1;
-> -	res->end = res->start + 32 - 1;
-> -	res->flags = IORESOURCE_IO;
-> -
->  	/*
-> -	 * Power Management registers.
-> +	 * Always populate the main iTCO IO resource here. The second entry
-> +	 * for NO_REBOOT MMIO is filled by the SPT specific function.
->  	 */
-> -	devfn = PCI_DEVFN(PCI_SLOT(pci_dev->devfn), 2);
-> -	pci_bus_read_config_dword(pci_dev->bus, devfn, ACPIBASE, &base_addr);
-> -
-> -	res = &tco_res[ICH_RES_IO_SMI];
-> -	res->start = (base_addr & ~1) + ACPIBASE_SMI_OFF;
-> -	res->end = res->start + 3;
-> +	res = &tco_res[0];
-> +	res->start = tco_base & ~1;
-> +	res->end = res->start + 32 - 1;
->  	res->flags = IORESOURCE_IO;
->  
-> -	/*
-> -	 * Enable the ACPI I/O space.
-> -	 */
-> -	pci_bus_read_config_dword(pci_dev->bus, devfn, ACPICTRL, &ctrl_val);
-> -	ctrl_val |= ACPICTRL_EN;
-> -	pci_bus_write_config_dword(pci_dev->bus, devfn, ACPICTRL, ctrl_val);
-> -
->  	if (priv->features & FEATURE_TCO_CNL)
->  		priv->tco_pdev = i801_add_tco_cnl(priv, pci_dev, tco_res);
->  	else
 > 
 
