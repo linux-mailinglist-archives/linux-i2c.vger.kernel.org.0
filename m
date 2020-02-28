@@ -2,34 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88EE4173DC8
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2020 18:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8D7173DDD
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2020 18:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725928AbgB1RAg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Feb 2020 12:00:36 -0500
-Received: from sauhun.de ([88.99.104.3]:59830 "EHLO pokefinder.org"
+        id S1726418AbgB1RDp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Feb 2020 12:03:45 -0500
+Received: from sauhun.de ([88.99.104.3]:59882 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbgB1RAg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 28 Feb 2020 12:00:36 -0500
+        id S1725876AbgB1RDp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 28 Feb 2020 12:03:45 -0500
 Received: from localhost (p54B3301B.dip0.t-ipconnect.de [84.179.48.27])
-        by pokefinder.org (Postfix) with ESMTPSA id 5EB2E2C1F3E;
-        Fri, 28 Feb 2020 18:00:34 +0100 (CET)
-Date:   Fri, 28 Feb 2020 18:00:33 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id D2A142C1E8B;
+        Fri, 28 Feb 2020 18:03:42 +0100 (CET)
+Date:   Fri, 28 Feb 2020 18:03:42 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     linux-i2c@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        debian-powerpc@lists.debian.org,
-        Mathieu Malaterre <malat@debian.org>,
-        Erhard Furtner <erhard_f@mailbox.org>
-Subject: Re: [PATCH] macintosh: therm_windtunnel: fix regression when
- instantiating devices
-Message-ID: <20200228170033.GB1130@ninjato>
-References: <20200225141229.5424-1-wsa@the-dreams.de>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Martin Volf <martin.volf.42@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] i2c: i801: Fix iTCO_wdt resource creation if PMC
+ is not present
+Message-ID: <20200228170342.GC1130@ninjato>
+References: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l76fUT7nc3MelDdI"
+        protocol="application/pgp-signature"; boundary="da4uJneut+ArUgXk"
 Content-Disposition: inline
-In-Reply-To: <20200225141229.5424-1-wsa@the-dreams.de>
+In-Reply-To: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -37,57 +41,68 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---l76fUT7nc3MelDdI
+--da4uJneut+ArUgXk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 25, 2020 at 03:12:29PM +0100, Wolfram Sang wrote:
-> Removing attach_adapter from this driver caused a regression for at
-> least some machines. Those machines had the sensors described in their
-> DT, too, so they didn't need manual creation of the sensor devices. The
-> old code worked, though, because manual creation came first. Creation of
-> DT devices then failed later and caused error logs, but the sensors
-> worked nonetheless because of the manually created devices.
+On Wed, Feb 26, 2020 at 04:21:19PM +0300, Mika Westerberg wrote:
+> Hi all,
 >=20
-> When removing attach_adaper, manual creation now comes later and loses
-> the race. The sensor devices were already registered via DT, yet with
-> another binding, so the driver could not be bound to it.
+> This series aims to fix the issue reported by Martin Volf [1] that preven=
+ts
+> the nct6775 driver from loading.
 >=20
-> This fix refactors the code to remove the race and only manually creates
-> devices if there are no DT nodes present. Also, the DT binding is updated
-> to match both, the DT and manually created devices. Because we don't
-> know which device creation will be used at runtime, the code to start
-> the kthread is moved to do_probe() which will be called by both methods.
+> I added Fixes tag to the last patch but not stable tag because the other
+> two patches it depends are not really stable material IMO. Please let me
+> know if there is a better way to organize these :)
 >=20
-> Fixes: 3e7bed52719d ("macintosh: therm_windtunnel: drop using attach_adap=
-ter")
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D201723
-> Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-> Tested-by: Erhard Furtner <erhard_f@mailbox.org>
-> Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+> I tested this on Intel Whiskey Lake based system (CNL derived) and on Com=
+et
+> Lake-V based system (SPT derived and the iTCO_wdt still works and I can s=
+ee
+> the expected resources in /proc/ioports and /proc/iomem.
+>=20
+> The previous version of the patch series can be found here:
+>=20
+>   https://lore.kernel.org/linux-hwmon/20200225123802.88984-1-mika.westerb=
+erg@linux.intel.com/
+>=20
+> Changes from the previous version:
+>=20
+>   * Call request_region() also for iTCO_vendorsupport
+>   * Drop the core populating ICH_RES_IO_SMI completely from i2c-i801.c
+>=20
+> [1] https://lore.kernel.org/linux-hwmon/CAM1AHpQ4196tyD=3DHhBu-2donSsuoga=
+bkfP03v1YF26Q7_BgvgA@mail.gmail.com/
 
-Applied to for-current, thanks!
+I can take this series via I2C. Just wanted to let you know that I am
+aiming for rc5, because I'd like to have this in linux-next for a week
+to make sure we don't regress again (despite all precautions) somewhere
+else.
+
+Thanks to everyone to get this regression handled in such a concentrated
+manner!
 
 
---l76fUT7nc3MelDdI
+--da4uJneut+ArUgXk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5ZRzEACgkQFA3kzBSg
-KbaKYRAArEKx3JwNEQp6n8EAAguvg0kWe0Jex0jFkCmXjPvaDkffabFrEWUFIIu8
-UESwqMz04pzW3T9XdinJYW7098SiwEx+T7NbnQUpw2vlRUP0573lVQvZ0vdGn2Sg
-SfaaTKPU2DO2CecjVgHuh0Z3jjym18XuydtoUJIQ3GQkG6AiqvNs8Lo9KtgCBu9b
-DKCq7mqygihBerunNH/oZ3Ul6YUKE3jbYXPYzxdMCvupFLbFnYUMDRLUXyIeIMbi
-dQOZS7ZNw+WdbUcQCseaevRUgGDhjvj0bjmqllwN6DOZOmYe99yI3HUn7y5KU7Mx
-OBKK5RzeR7Nc8CfQ+7KtQXWJ1fwP8t7PJmLZuaZYcJuKX3rT9gNTqRHPfXi2OqG/
-ijtVsl20BgrMUuMD6y4RLPN5BoM17KJPji4iqdf85MpNCRhxSbeTHZsK9lpjP5LC
-LR2hN56JdSP9yZupQSwnfNBuZi/tR6G3gcix1Uuxzu8c2mFQ3ROwE/vrSSbsrD8o
-lpVI9TEbxsA7O4W5tHiG47QfyvvNGapkK2KmssGUEu2tobOInB7B3RRyX3xgybGh
-+sy2P0MJnV6l3YLXLR3tnNejJmlGo06S7niQLQan4z4yKaLYZreMveNcX8XjxLJ2
-HDjwuM+eQJalSTkMed26011pXb9PA14RMKJHnVVaYAJ7D5BuqSk=
-=wDPc
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5ZR+4ACgkQFA3kzBSg
+Kbb29A//YUY3JKyYa6plCWxNQj6H12cc6EdXrS4lOnESwx89pq9ITm98Juu/VPqe
+41Y0idzm2RNeq9ez7J6lxzGfYul5TkAxex+FGirUlp5GwrtrpRq2WFptcCR66Vx3
+Tx4hw4bnValX5pWvQegGpvCX0kvFvMu4/Lv47C8nCWEljm0L0j144MTgXfgzCRKb
+1iElopnX9Y7c0p5SaJUmM13WjHi9Y4TloOjmeIcGjOpEcQ0YzdsPeFfuGpn17FhX
+Ninbdux+DM94gWEuK6e3Xc3HAyz3zQDN9b1MR0A/0UqjoeEUspa2yvSOEOcNcDDH
+KyD7No8DbVNc6n8dLmncQqf+jZ4yN2hPMy/6YaJGhjk40hJI8M1cYC3jVqj8bnYA
+ItjrjV7QANSUwP+Kne2qCf5rQ10P18SJXaDd8s8cWXBmOh1Y6U9XsaDRrbfuXBO1
+t0Lr6ssJZ3/RCu+X8wVMAIqgBQkhV57T0HItN8xeNhS8HpSopXank5tKVhQaUx7N
+vy4E8AoTO/T/mkNdjiUFfhDCxRqUElM5V5gtYJEl+B5Bx//2f1doGMBa0A+UIOk4
+oMsevqtEXyPacx7U7gaXbverDoLwppf2zNclJ9aSopCDoyHUBTjbvIw2aHQA3oyz
+uvhVF1Re0owL3aqfAuXbPQtUdLMdJRELXEIa0dcwOi89leiCdmc=
+=71Zy
 -----END PGP SIGNATURE-----
 
---l76fUT7nc3MelDdI--
+--da4uJneut+ArUgXk--
