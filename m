@@ -2,81 +2,528 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 536F817580B
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Mar 2020 11:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8021F1758A8
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Mar 2020 11:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727124AbgCBKMQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 Mar 2020 05:12:16 -0500
-Received: from mga03.intel.com ([134.134.136.65]:26807 "EHLO mga03.intel.com"
+        id S1727267AbgCBKu4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 2 Mar 2020 05:50:56 -0500
+Received: from mga18.intel.com ([134.134.136.126]:28466 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727076AbgCBKMQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 2 Mar 2020 05:12:16 -0500
+        id S1726874AbgCBKu4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 2 Mar 2020 05:50:56 -0500
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Mar 2020 02:12:14 -0800
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Mar 2020 02:50:55 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,506,1574150400"; 
-   d="scan'208";a="351511538"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 02 Mar 2020 02:12:11 -0800
-Received: by lahna (sSMTP sendmail emulation); Mon, 02 Mar 2020 12:12:10 +0200
-Date:   Mon, 2 Mar 2020 12:12:10 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Martin Volf <martin.volf.42@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] i2c: i801: Fix iTCO_wdt resource creation if PMC
- is not present
-Message-ID: <20200302101210.GW2667@lahna.fi.intel.com>
-References: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
- <20200228170342.GC1130@ninjato>
+   d="scan'208";a="262733829"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Mar 2020 02:50:51 -0800
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1j8iez-0066vK-MN; Mon, 02 Mar 2020 12:50:53 +0200
+Date:   Mon, 2 Mar 2020 12:50:53 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tali Perry <tali.perry1@gmail.com>
+Cc:     brendanhiggins@google.com, avifishman70@gmail.com,
+        tmaimon77@gmail.com, kfting@nuvoton.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        wsa@the-dreams.de, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 2/3] i2c: npcm7xx: Add Nuvoton NPCM I2C controller
+ driver
+Message-ID: <20200302105053.GO1224808@smile.fi.intel.com>
+References: <20200301223201.185450-1-tali.perry1@gmail.com>
+ <20200301223201.185450-3-tali.perry1@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200228170342.GC1130@ninjato>
+In-Reply-To: <20200301223201.185450-3-tali.perry1@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 06:03:42PM +0100, Wolfram Sang wrote:
-> On Wed, Feb 26, 2020 at 04:21:19PM +0300, Mika Westerberg wrote:
-> > Hi all,
-> > 
-> > This series aims to fix the issue reported by Martin Volf [1] that prevents
-> > the nct6775 driver from loading.
-> > 
-> > I added Fixes tag to the last patch but not stable tag because the other
-> > two patches it depends are not really stable material IMO. Please let me
-> > know if there is a better way to organize these :)
-> > 
-> > I tested this on Intel Whiskey Lake based system (CNL derived) and on Comet
-> > Lake-V based system (SPT derived and the iTCO_wdt still works and I can see
-> > the expected resources in /proc/ioports and /proc/iomem.
-> > 
-> > The previous version of the patch series can be found here:
-> > 
-> >   https://lore.kernel.org/linux-hwmon/20200225123802.88984-1-mika.westerberg@linux.intel.com/
-> > 
-> > Changes from the previous version:
-> > 
-> >   * Call request_region() also for iTCO_vendorsupport
-> >   * Drop the core populating ICH_RES_IO_SMI completely from i2c-i801.c
-> > 
-> > [1] https://lore.kernel.org/linux-hwmon/CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com/
-> 
-> I can take this series via I2C. Just wanted to let you know that I am
-> aiming for rc5, because I'd like to have this in linux-next for a week
-> to make sure we don't regress again (despite all precautions) somewhere
-> else.
+On Mon, Mar 02, 2020 at 12:32:00AM +0200, Tali Perry wrote:
+> Add Nuvoton NPCM BMC I2C controller driver.
 
-Makes sense, thanks!
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/errno.h>
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/jiffies.h>
+
+...
+
+> +enum i2c_mode {
+> +	I2C_MASTER,
+
+> +	I2C_SLAVE
+
+If it's not a terminator line (like MAX or something like that) it's better to
+have comma at the end. This applies to all enum:s in your code.
+
+> +};
+
+...
+
+> +// I2Cus Operation type values
+
+It's funny style of comments when you have different for multi-line ones. I
+don't know Wolfram's opinion on that, but at least for me looks like a bit of
+consistency should be applied.
+
+Also in some of them you missed English grammar / punctuation.
+
+> +enum i2c_oper {
+> +	I2C_NO_OPER = 0,
+> +	I2C_WRITE_OPER = 1,
+> +	I2C_READ_OPER = 2
+
+If it's not hardware related values, why we need to define them explicitly?
+
+> +};
+
+...
+
+> +#define NPCM_I2CCTL1_RWS_FIELDS	  (NPCM_I2CCTL1_START | NPCM_I2CCTL1_STOP | \
+> +				   NPCM_I2CCTL1_ACK)
+
+Better do like
+
+#define FOO			\
+	(BAR | BAZ)
+
+...
+
+> +const unsigned int RETRIES_NUM =	10000;
+
+> +const unsigned int I2C_FREQ_MIN = 10;
+> +const unsigned int I2C_FREQ_MAX = 1000;
+> +const unsigned int I2C_FREQ_100KHZ = 100;
+> +const unsigned int I2C_FREQ_400KHZ = 400;
+> +const unsigned int I2C_FREQ_1MHZ = 1000;
+
+> +const unsigned int SCLFRQ_MIN = 10;
+> +const unsigned int SCLFRQ_MAX = 511;
+
+> +const unsigned int I2C_NUM_OF_ADDR = 10;
+
+Hmm... Why they are not defines?
+
+...
+
+> +// Status of one I2C module
+> +struct npcm_i2c {
+> +	struct i2c_adapter	adap;
+> +	struct device		*dev;
+> +	unsigned char __iomem	*reg;
+
+> +	spinlock_t		lock;   /* IRQ synchronization */
+
+Perhaps you describe all of the fields in kernel-doc format?
+
+> +	struct completion	cmd_complete;
+> +	int			irq;
+> +	int			cmd_err;
+> +	struct i2c_msg		*msgs;
+> +	int			msgs_num;
+> +	int			num;
+> +	u32			apb_clk;
+> +	struct i2c_bus_recovery_info rinfo;
+> +	enum i2c_state		state;
+> +	enum i2c_oper		operation;
+> +	enum i2c_mode		master_or_slave;
+> +	enum i2c_state_ind	stop_ind;
+> +	u8			dest_addr;
+> +	u8			*rd_buf;
+> +	u16			rd_size;
+> +	u16			rd_ind;
+> +	u8			*wr_buf;
+> +	u16			wr_size;
+> +	u16			wr_ind;
+> +	bool			fifo_use;
+> +
+> +	// PEC bit mask per slave address.
+> +	//		1: use PEC for this address,
+> +	//		0: do not use PEC for this address
+
+Ditto.
+
+> +	u16			PEC_mask;
+> +	bool			PEC_use;
+> +	bool			read_block_use;
+> +	u8			int_cnt;
+> +	u32			event_log;
+> +	u32			event_log_prev;
+> +	u32			clk_period_us;
+> +	unsigned long		int_time_stamp;
+> +	unsigned long		bus_freq; // in kHz
+> +	u32			xmits;
+> +
+> +};
+
+...
+
+> +static inline void npcm_i2c_select_bank(struct npcm_i2c *bus,
+> +					enum i2c_bank bank)
+> +{
+> +	if (bank == I2C_BANK_0)
+> +		iowrite8(ioread8(bus->reg + NPCM_I2CCTL3) & ~I2CCTL3_BNK_SEL,
+> +			 bus->reg + NPCM_I2CCTL3);
+> +	else
+> +		iowrite8(ioread8(bus->reg + NPCM_I2CCTL3) | I2CCTL3_BNK_SEL,
+> +			 bus->reg + NPCM_I2CCTL3);
+
+Usual patter (better to read) is
+
+	u8 value;
+
+	value = ioread8(...);
+	if (a)
+		val ...;
+	else
+		val ...;
+	iowrite8(val, ...);
+
+> +}
+
+...
+
+> +static inline void npcm_i2c_rd_byte(struct npcm_i2c *bus, u8 *data)
+> +{
+> +	*data = ioread8(bus->reg + NPCM_I2CSDA);
+> +}
+
+Hmm... why not u8 as return type?
+
+...
+
+> +static inline u16 npcm_i2c_get_index(struct npcm_i2c *bus)
+> +{
+> +	u16 index = 0;
+> +
+> +	if (bus->operation == I2C_READ_OPER)
+> +		index = bus->rd_ind;
+> +	else if (bus->operation == I2C_WRITE_OPER)
+> +		index = bus->wr_ind;
+> +
+> +	return index;
+
+Why do you need temporary variable?
+
+	if (a)
+		return X;
+	if (b)
+		return Y;
+	return 0;
+
+> +}
+
+...
+
+> +static inline bool npcm_i2c_is_quick(struct npcm_i2c *bus)
+> +{
+> +	if (bus->wr_size == 0 && bus->rd_size == 0)
+> +		return true;
+> +	return false;
+
+	return bus->wr_size == 0 && bus->rd_size == 0;
+
+> +}
+
+...
+
+> +static void npcm_i2c_disable(struct npcm_i2c *bus)
+> +{
+> +	int i;
+> +
+> +	// select bank 0 for I2C addresses
+> +	npcm_i2c_select_bank(bus, I2C_BANK_0);
+> +
+> +	// Slave addresses removal
+> +	for (i = I2C_SLAVE_ADDR1; i < I2C_NUM_OF_ADDR; i++)
+> +		iowrite8(0, bus->reg + npcm_i2caddr[i]);
+> +
+> +	npcm_i2c_select_bank(bus, I2C_BANK_1);
+> +
+
+> +	// Disable module.
+> +	iowrite8(ioread8(bus->reg + NPCM_I2CCTL2) & ~I2CCTL2_ENABLE,
+> +		 bus->reg + NPCM_I2CCTL2);
+
+
+Usual pattern
+
+	value = ioread8(...);
+	value ...;
+	iowrite(value, ...);
+
+> +
+> +	bus->state = I2C_DISABLE;
+> +}
+
+...
+
+> +
+> +static void npcm_i2c_enable(struct npcm_i2c *bus)
+> +{
+> +	iowrite8((ioread8(bus->reg + NPCM_I2CCTL2) | I2CCTL2_ENABLE),
+> +		 bus->reg + NPCM_I2CCTL2);
+
+Ditto. Applies to all your code.
+
+> +
+> +	bus->state = I2C_IDLE;
+> +}
+
+...
+
+> +static bool npcm_i2c_wait_for_bus_free(struct npcm_i2c *bus, bool may_sleep)
+> +{
+> +	int cnt = 0;
+> +	int max_count = 2; /* wait for 2 ms */
+> +
+> +	if (may_sleep)
+> +		might_sleep();
+> +	else
+> +		max_count = max_count * 100; /* since each delay is 10 us */
+
+> +	while  (ioread8(bus->reg + NPCM_I2CCST) & NPCM_I2CCST_BUSY) {
+> +		if (cnt < max_count) {
+> +			if (may_sleep)
+> +				msleep_interruptible(1);
+> +			else
+> +				udelay(10);
+> +			cnt++;
+> +
+> +		} else {
+> +			bus->cmd_err = -EAGAIN;
+> +			return false;
+> +		}
+> +	}
+
+NIH of readx_poll_timeout{_atomic}().
+
+> +	return true;
+> +}
+
+...
+
+> +static inline void npcm_i2c_eob_int(struct npcm_i2c *bus, bool enable)
+> +{
+> +	// Clear EO_BUSY pending bit:
+> +	iowrite8(ioread8(bus->reg + NPCM_I2CCST3) | NPCM_I2CCST3_EO_BUSY,
+> +		 bus->reg + NPCM_I2CCST3);
+> +
+> +	if (enable) {
+> +		iowrite8((ioread8(bus->reg + NPCM_I2CCTL1) |
+> +			 NPCM_I2CCTL1_EOBINTE)  & ~NPCM_I2CCTL1_RWS_FIELDS,
+> +			 bus->reg + NPCM_I2CCTL1);
+> +	} else {
+> +		iowrite8(ioread8(bus->reg + NPCM_I2CCTL1) &
+> +			 ~NPCM_I2CCTL1_EOBINTE & ~NPCM_I2CCTL1_RWS_FIELDS,
+> +			 bus->reg + NPCM_I2CCTL1);
+> +	}
+
+Hard to follow. See above comments.
+
+> +}
+
+...
+
+> +	return (bool)FIELD_GET(NPCM_I2CTXF_STS_TX_THST, tx_fifo_sts);
+
+!! will do better than explicit casting.
+Ditto for the rest.
+
+...
+
+> +static int  npcm_i2c_slave_enable_l(struct npcm_i2c *bus,
+> +				    enum i2c_addr addr_type, u8 addr,
+> +				    bool enable);
+
+Why is it here? Do you have recursion / circular dependency?
+
+...
+
+> +	if (!msgs)
+> +		return;
+
+Is it possible?
+
+> +	if (completion_done(&bus->cmd_complete) == true)
+
+' == true' is redundant. Same for ' == false' (use ! instead).
+
+> +		return;
+
+...
+
+> +static void npcm_i2c_write_to_fifo_master(struct npcm_i2c *bus,
+> +					  u16 max_bytes_to_send)
+> +{
+> +	// Fill the FIFO, while the FIFO is not full and there are more bytes to
+> +	// write
+
+> +	if (max_bytes_to_send == 0)
+> +		return;
+
+Duplicate check, thus redundant.
+
+> +	while ((max_bytes_to_send--) && (I2C_HW_FIFO_SIZE -
+> +					 npcm_i2c_get_fifo_fullness(bus))) {
+
+Badly formatted line. Moreover, too many parentheses.
+
+> +		if (bus->wr_ind < bus->wr_size)
+> +			npcm_i2c_wr_byte(bus, bus->wr_buf[bus->wr_ind++]);
+> +		else
+> +			npcm_i2c_wr_byte(bus, 0xFF);
+> +	}
+> +}
+
+...
+
+> +		rxf_ctl = min_t(u16, (u16)nread, (u16)I2C_HW_FIFO_SIZE);
+
+Explicit casting when use min_t()? It's strange. Have you chance to read what
+min_t() does?
+
+...
+
+> +
+> +static int npcm_i2c_master_abort(struct npcm_i2c *bus)
+> +{
+
+> +	int ret = 0;
+
+I don't see why this variable is needed.
+
+> +
+> +	NPCM_I2C_EVENT_LOG(NPCM_I2C_EVENT_ABORT);
+> +
+> +	// Only current master is allowed to issue Stop Condition
+> +	if (npcm_i2c_is_master(bus)) {
+> +		npcm_i2c_eob_int(bus, true);
+> +		npcm_i2c_master_stop(bus);
+> +
+> +		// Clear NEGACK, STASTR and BER bits
+> +		iowrite8(NPCM_I2CST_BER | NPCM_I2CST_NEGACK | NPCM_I2CST_STASTR,
+> +			 bus->reg + NPCM_I2CST);
+> +	}
+> +
+> +	return ret;
+> +}
+
+...
+
+> +	pr_debug("i2c%d get SCL 0x%08X\n", bus->num, ret);
+
+Do you need this in production code?
+
+> +	return (ret >> (offset)) & 0x01;
+
+Too many parentheses, but why not simple
+	return !!(ret & BIT(offset));
+?
+
+Same for the rest similar code.
+
+...
+
+> +static int npcm_i2c_get_SDA(struct i2c_adapter *_adap)
+> +{
+> +	unsigned int ret = 0;
+> +	struct npcm_i2c *bus = container_of(_adap, struct npcm_i2c, adap);
+
+> +	u32 offset = 0;
+> +
+> +	offset = 0;
+
+What the point?
+
+> +	ret = FIELD_GET(I2CCTL3_SDA_LVL, ioread32(bus->reg + NPCM_I2CCTL3));
+> +
+> +	pr_debug("i2c%d get SDA 0x%08X\n", bus->num, ret);
+> +
+> +	return (ret >> (offset)) & 0x01;
+> +}
+
+I (almost) stopped here, I thing this driver needs more work (style,
+refactoring, etc) before real review.
+
+...
+
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	dev_dbg(bus->dev, "resource: %pR\n", res);
+> +	bus->reg = devm_ioremap_resource(&pdev->dev, res);
+
+devm_platform_ioremap_resource();
+
+> +	if (IS_ERR((bus)->reg))
+> +		return PTR_ERR((bus)->reg);
+
+...
+
+> +	bus->irq = platform_get_irq(pdev, 0);
+> +	if (bus->irq < 0) {
+
+> +		dev_err(bus->dev, "I2C platform_get_irq error\n");
+
+Redundant.
+
+> +		return -ENODEV;
+> +	}
+
+...
+
+> +	dev_dbg(bus->dev, "irq = %d\n", bus->irq);
+
+Why?! There are other means to get this information.
+
+> +	ret = devm_request_irq(&pdev->dev, bus->irq, npcm_i2c_bus_irq, 0,
+> +			       dev_name(&pdev->dev), (void *)bus);
+
+Explicit casting?!
+
+...
+
+> +	pr_info("npcm7xx I2C bus %d is registered\n", bus->adap.nr);
+
+Noise.
+
+...
+
+> +static const struct of_device_id npcm_i2c_bus_of_table[] = {
+> +	{ .compatible = "nuvoton,npcm750-i2c", },
+
+> +	{},
+
+For terminator line comma is redundant.
+
+> +};
+
+...
+
+> +MODULE_VERSION("0.1.1");
+
+What the point?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
