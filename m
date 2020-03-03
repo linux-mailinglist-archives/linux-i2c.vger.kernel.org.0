@@ -2,89 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3982F176123
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Mar 2020 18:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF1D177505
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Mar 2020 12:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727152AbgCBRfm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 Mar 2020 12:35:42 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:39351 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726997AbgCBRfm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Mar 2020 12:35:42 -0500
-Received: by mail-lf1-f65.google.com with SMTP id n30so230588lfh.6;
-        Mon, 02 Mar 2020 09:35:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+Ye8JOMYu3KUEXBI9a+PVBJSVB7KxcW9KKrC8f1zJ54=;
-        b=upJzOjhy2lmZxP8hF0aSUpHPT2GOtAEt6zE+bWnSG8tiy++hsjpnb9IQ+Ej3uAkWmz
-         oidV/ihLP2ybcvf7eDhIe1XTpIqfux/6tL/jQo7p6/8bJtUcsNhD++wV3wntbflRjpwt
-         aaIQ4fbY+AExrfOY9kpydmvdEJoLx/gpGXdzbMzoxS/A6rRCL/olqoZtCsbaF+Le6OC0
-         h4fk4tojHsMItBo+5Qny+aC2ScsYamcl6mDFlR8y1XSm36cu092AC3XfjdM3iV98Falq
-         USmRq5GznBBWLmsE3+gqMeXrY1/VQnARfM6BrGbHZBeFYyC6Qu/WLEkqo4IHnhGr8jFV
-         T0Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+Ye8JOMYu3KUEXBI9a+PVBJSVB7KxcW9KKrC8f1zJ54=;
-        b=r9OWGW4ZNODuYeR0NwWMkM4oRdQyYlalBMXDx6jX7f8R3o5tVg7caLbCm4pCoZmmuh
-         +hYFCm/2QbQftlAZnyr4YogHJQ7UpHQPPEJYenHIERIZiopuUoiXK4QOVWrfFmm7qVSO
-         5kSq2Y7cDWkZc8/iav97QIHI/sAaZt8GKF3YSB1rZi88Sc/5j5lqF//k+Qhab65mE8yp
-         cBnGVn8IWBkGg33CfbVb10ZtYUN1v2NMpClmizzMH94/dKMf16acpSbzNGakfMlgWaVU
-         l08RGReq/rA/b8+M9MOUJCJwGZy/eg7Hc1rF4XIEByK4nAbbMq+R88WTCzq2iqzj8yvg
-         2TeQ==
-X-Gm-Message-State: ANhLgQ1Pc+MrkJs3SS09o+7ZK3l7NTv7rn5/6xwxLaQoQhsGy+GW7B4K
-        rENic2WRKyzGyzCbAtFnoQZmsCJU
-X-Google-Smtp-Source: ADFU+vvBvSsw+grH09drAKkAsqMI2RyWtkWYoGftLUpOYmEd3fzMzeIjfNxKWlIxUhVItQb3hNwH5A==
-X-Received: by 2002:a19:230d:: with SMTP id j13mr111585lfj.189.1583170539899;
-        Mon, 02 Mar 2020 09:35:39 -0800 (PST)
-Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id u6sm1534403lff.35.2020.03.02.09.35.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2020 09:35:39 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] i2c: tegra: Make timeout error more informative
-Date:   Mon,  2 Mar 2020 20:35:12 +0300
-Message-Id: <20200302173512.2743-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S1728599AbgCCLJA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 Mar 2020 06:09:00 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:60919 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727880AbgCCLJA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 3 Mar 2020 06:09:00 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48WvQc1wlyz9sPR;
+        Tue,  3 Mar 2020 22:08:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1583233737;
+        bh=k64NAu+e8vHywQUsmy2fGAqOQOwSxRoTHJg5kp4QCCQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=UypcrMBp8z4HaDPrg6/sUKX90uFz55RsiEwy4YCz4HtwSBAOHDnc8kzhdwoNYREud
+         cu1JyMV+ssNOyVlvixyo2/sxRrxy6SmWDHwjhYHMUZx68LXugkm5Eywy0WqibCrllE
+         +V2jJ2lWVvo8cVWUlUGgB3q2eEegxr+EnGNrywoZGkm/5lyHdIbTrvlwTWlbpMmZ1q
+         rxgPlXdymysKRtuFneCGX9QaIZDa3QdHnAs9nON4TIMOJTiRzNPo88crzoMT7KYIct
+         QK6HOjqNxY+YyRpkrEylQUovQfTqguDlKuRVwvm4kWo1fsZEfOfwORevzcwFzgVgzg
+         ROzxxIupN3Kqw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Wolfram Sang <wsa@the-dreams.de>, linuxppc-dev@lists.ozlabs.org
+Cc:     linux-i2c@vger.kernel.org, debian-powerpc@lists.debian.org,
+        Mathieu Malaterre <malat@debian.org>,
+        Erhard Furtner <erhard_f@mailbox.org>
+Subject: Re: [PATCH] macintosh: therm_windtunnel: fix regression when instantiating devices
+In-Reply-To: <20200228170033.GB1130@ninjato>
+References: <20200225141229.5424-1-wsa@the-dreams.de> <20200228170033.GB1130@ninjato>
+Date:   Tue, 03 Mar 2020 22:08:52 +1100
+Message-ID: <87y2shr8zf.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The I2C timeout error message doesn't tell us what exactly failed and some
-I2C client drivers do not clarify the error either. Adding WARN_ON_ONCE()
-results in a stacktrace being dumped into KMSG, which is very useful for
-debugging purposes.
+Wolfram Sang <wsa@the-dreams.de> writes:
+> On Tue, Feb 25, 2020 at 03:12:29PM +0100, Wolfram Sang wrote:
+>> Removing attach_adapter from this driver caused a regression for at
+>> least some machines. Those machines had the sensors described in their
+>> DT, too, so they didn't need manual creation of the sensor devices. The
+>> old code worked, though, because manual creation came first. Creation of
+>> DT devices then failed later and caused error logs, but the sensors
+>> worked nonetheless because of the manually created devices.
+>> 
+>> When removing attach_adaper, manual creation now comes later and loses
+>> the race. The sensor devices were already registered via DT, yet with
+>> another binding, so the driver could not be bound to it.
+>> 
+>> This fix refactors the code to remove the race and only manually creates
+>> devices if there are no DT nodes present. Also, the DT binding is updated
+>> to match both, the DT and manually created devices. Because we don't
+>> know which device creation will be used at runtime, the code to start
+>> the kthread is moved to do_probe() which will be called by both methods.
+>> 
+>> Fixes: 3e7bed52719d ("macintosh: therm_windtunnel: drop using attach_adapter")
+>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=201723
+>> Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+>> Tested-by: Erhard Furtner <erhard_f@mailbox.org>
+>> Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+>
+> Applied to for-current, thanks!
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/i2c/busses/i2c-tegra.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks.
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index cbc2ad49043e..b2bb19e05248 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1245,7 +1245,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 
- 	tegra_i2c_mask_irq(i2c_dev, int_mask);
- 
--	if (time_left == 0) {
-+	if (WARN_ON_ONCE(time_left == 0)) {
- 		dev_err(i2c_dev->dev, "i2c transfer timed out\n");
- 		tegra_i2c_init(i2c_dev, true);
- 		return -ETIMEDOUT;
--- 
-2.25.1
-
+cheers
