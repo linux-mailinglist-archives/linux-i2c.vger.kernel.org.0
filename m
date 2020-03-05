@@ -2,85 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9BB17A7A5
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Mar 2020 15:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9235617A94D
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Mar 2020 16:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgCEOgb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Mar 2020 09:36:31 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:39653 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726682AbgCEOg1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Mar 2020 09:36:27 -0500
-Received: by mail-wm1-f66.google.com with SMTP id j1so5988351wmi.4;
-        Thu, 05 Mar 2020 06:36:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=QlXzIeykIQUpEBdYcwxd+wvAWmRVIxL3eGhm6mPv2tU=;
-        b=bLCvUgvqw8iVKbPkM4EtHEjlr9hoXI6ts2HiI7NyS33acPByckia3FvdKNdmCw+shk
-         dzqU7y7L3wfAuvNZSkXea2DmXqj9gOftfhhf3HnhWtGd5rQgdfsWBmyIvQpcTFftHPYr
-         Yy2JE8V7sk/cTfBwh0xdC4AX7qlqgQAqPpUyOikjfX4/zrT0gDtySOja6ziWgHJZS7TF
-         THFlRkQYf2xwcxogTqSRleSo5Tsxrdc5y+ksVnpEU38JWpZVU4NbBZH+hSfcYeqZ3oto
-         inPT+91oHpIhwEjHmow5anaiUDsBUjQPRKyQv7iJ+9RFwOB7JR28vmSJIx7EqUGuay9f
-         X79A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=QlXzIeykIQUpEBdYcwxd+wvAWmRVIxL3eGhm6mPv2tU=;
-        b=KVy8ZaYAnP6yoPhwdk1sC6ZAHsAUN3ZgAaedb5uF16FzJaCyh/W2WpsNLtGzh8JUir
-         UtOP93zCdL77Iux8rGbMQpiwbXRjTUcPBU0f0NM/k6kP4NfoAMNFdEFKNOjCrJw8h/eT
-         Ujf2hzVfwtkFWFOOtBpo+GvgnP5oHcPoKcCT9ehUUrJDM4v9bXMlT/W/WscfTOClsb9X
-         Gq4yxqjI4Ja3iFOyQ6+mWw3YZkynArSSEjzRZlg+Ac4TNqsICFznfZeHQUDkgVVvYJqY
-         ShAc1nL9lnqTxbSFuMYzcKBxfUDUjYVPaoDVsy/6qRZSHtHgvjdRRM+pk1vVADc6DGOe
-         rv0Q==
-X-Gm-Message-State: ANhLgQ3UZZlj4X4P/J+vcXUDbyfjt4NT5VGO+7QFmjVA5AeeQq5w2Ism
-        HRESlNWdBhi9dhOrk40oTpo=
-X-Google-Smtp-Source: ADFU+vsdfwf4i6qjYFXBcYbvtQoEzb0ZAfQyCvkvWDrzRecAr1kQ48Dp8uEzHOKDHtF8X0uY5u9yIg==
-X-Received: by 2002:a7b:c3d4:: with SMTP id t20mr4123131wmj.102.1583418984953;
-        Thu, 05 Mar 2020 06:36:24 -0800 (PST)
-Received: from debian.home (ip51ccf9cd.speed.planet.nl. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id g201sm9365124wme.23.2020.03.05.06.36.24
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 05 Mar 2020 06:36:24 -0800 (PST)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 5/5] dt-bindings: i2c: i2c-rk3x: add description for px30
-Date:   Thu,  5 Mar 2020 15:36:11 +0100
-Message-Id: <20200305143611.10733-5-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200305143611.10733-1-jbx6244@gmail.com>
-References: <20200305143611.10733-1-jbx6244@gmail.com>
+        id S1726957AbgCEPxz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Mar 2020 10:53:55 -0500
+Received: from mga06.intel.com ([134.134.136.31]:42076 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726275AbgCEPxz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 5 Mar 2020 10:53:55 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Mar 2020 07:53:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,518,1574150400"; 
+   d="scan'208";a="387534728"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 05 Mar 2020 07:53:53 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id BB148D7; Thu,  5 Mar 2020 17:53:52 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/5] i2c: mux: pca954x: Refactor pca954x_irq_handler()
+Date:   Thu,  5 Mar 2020 17:53:48 +0200
+Message-Id: <20200305155352.39095-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The description below is already in use for px30.dtsi,
-but was somehow never added to a document, so add
-"rockchip,px30-i2c", "rockchip,rk3399-i2c"
-for i2c nodes on a px30 platform to i2c-rk3x.yaml.
+Refactor pca954x_irq_handler() to:
+  - use for_each_set_bit() macro
+  - use IRQ_RETVAL() macro
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Above change makes code easy to read and understand.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/i2c/muxes/i2c-mux-pca954x.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-index edee8f699..61eac76c8 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-@@ -33,6 +33,7 @@ properties:
-           - const: rockchip,rk3288-i2c
-       - items:
-           - enum:
-+            - rockchip,px30-i2c
-             - rockchip,rk3308-i2c
-             - rockchip,rk3328-i2c
-           - const: rockchip,rk3399-i2c
+diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+index a0d926ae3f86..819ff95e64ba 100644
+--- a/drivers/i2c/muxes/i2c-mux-pca954x.c
++++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+@@ -327,21 +327,18 @@ static DEVICE_ATTR_RW(idle_state);
+ static irqreturn_t pca954x_irq_handler(int irq, void *dev_id)
+ {
+ 	struct pca954x *data = dev_id;
+-	unsigned int child_irq;
+-	int ret, i, handled = 0;
++	unsigned long pending;
++	int ret, i;
+ 
+ 	ret = i2c_smbus_read_byte(data->client);
+ 	if (ret < 0)
+ 		return IRQ_NONE;
+ 
+-	for (i = 0; i < data->chip->nchans; i++) {
+-		if (ret & BIT(PCA954X_IRQ_OFFSET + i)) {
+-			child_irq = irq_linear_revmap(data->irq, i);
+-			handle_nested_irq(child_irq);
+-			handled++;
+-		}
+-	}
+-	return handled ? IRQ_HANDLED : IRQ_NONE;
++	pending = ret >> PCA954X_IRQ_OFFSET;
++	for_each_set_bit(i, &pending, data->chip->nchans)
++		handle_nested_irq(irq_linear_revmap(data->irq, i));
++
++	return IRQ_RETVAL(pending);
+ }
+ 
+ static int pca954x_irq_set_type(struct irq_data *idata, unsigned int type)
 -- 
-2.11.0
+2.25.1
 
