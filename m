@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E65C17AA4B
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Mar 2020 17:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8612417AA6F
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Mar 2020 17:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726004AbgCEQOV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Mar 2020 11:14:21 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:27708 "EHLO
+        id S1726080AbgCEQWz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Mar 2020 11:22:55 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:21494 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725974AbgCEQOV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Mar 2020 11:14:21 -0500
+        by vger.kernel.org with ESMTP id S1725938AbgCEQWz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Mar 2020 11:22:55 -0500
 Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 025G3QmW009175;
-        Thu, 5 Mar 2020 17:12:54 +0100
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 025GDcWA018220;
+        Thu, 5 Mar 2020 17:21:36 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=cMLs7eDXHEDMMPOZpufrBHDmcC2zNpnEq/WUyKmW9rQ=;
- b=DJVaX8Ul7xoUyrxkhu3Kjxdng2g4ay0rJEYsdNCkVlPzrCzF47AutVcjFjTe4N+mIdBr
- VO6XPZCv+fM20BQ1YU0pFF1pt+RWXhRc91aUa313aOZLIH4TtFamsXqEoVaNQHjxWU9j
- tss+REooaVPEQhbvJr6jvJBwoL6hCy0sH4Hz00XJB/BflHX1dFYgSfpivSPYY9G2G2Xd
- kWvxsYIpwmz2SgKGDKc3p4bUOGal2P7thUbhffYULfNXSkn5zkJRRieeQL2+HxgMyQjm
- /fSsdpJpysi/l790jzDJt+1GaOvcy/CWUqkgjO/p1UO1vMuFCXdvq8ZCX/9Y5tCgZRT1 iA== 
+ bh=LvBEUXCsVOTgxrzjAE0ag3c1os2BGH0KQX/PJr+ZV2M=;
+ b=cfWcOi9Gn0emDPo39ZF3uHrz7nOdNRgfE0Zo4ktYOre1yzKGJG6yunCH6lYeZpmvflEi
+ UJaIZjZZT293jHVhAVJt89tra2hlhMYFxQVgDYPwgY2F5EtNr7qCCNFR7gRLbGMmuWvI
+ LMwOKqS0+l3ykVAOnxoCyb045SSdXu0xUXn4Rp111KEmzzfWwG7FNRNgj/G4NLLFO3Or
+ JwEnC9NC4p3n/be3sbeqPnamTSReaUVGzTlJu1mZkntKxvOyEljS5zwohOhhp5f/5Asn
+ cLzKWaSoxYFFJ+F7HZ3OIIVbD9nBCcp+62btTYP11SSlvpD1NaiTDUIwb5AKbnnCi9JM 6w== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2yfdyd9pcn-1
+        by mx07-00178001.pphosted.com with ESMTP id 2yfdyd9qyt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Mar 2020 17:12:54 +0100
+        Thu, 05 Mar 2020 17:21:36 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5F2DF100034;
-        Thu,  5 Mar 2020 17:12:45 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7685F10004A;
+        Thu,  5 Mar 2020 17:21:32 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag5node2.st.com [10.75.127.14])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E7E252C38CF;
-        Thu,  5 Mar 2020 17:12:44 +0100 (CET)
-Received: from [10.48.1.172] (10.75.127.46) by SFHDAG5NODE2.st.com
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1A12A2D376D;
+        Thu,  5 Mar 2020 17:21:32 +0100 (CET)
+Received: from [10.48.1.172] (10.75.127.47) by SFHDAG5NODE2.st.com
  (10.75.127.14) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 5 Mar
- 2020 17:12:43 +0100
+ 2020 17:21:30 +0100
 Subject: Re: [PATCH v2 3/3] i2c: drivers: Use generic definitions for bus
  frequencies
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -84,8 +84,8 @@ CC:     Thor Thayer <thor.thayer@linux.intel.com>,
 References: <20200227122129.65516-1-andriy.shevchenko@linux.intel.com>
  <20200227122129.65516-3-andriy.shevchenko@linux.intel.com>
 From:   Pierre Yves MORDRET <pierre-yves.mordret@st.com>
-Message-ID: <4a403531-cf0b-0581-1851-e27c4ebed0e5@st.com>
-Date:   Thu, 5 Mar 2020 17:12:42 +0100
+Message-ID: <5404d318-6475-23d8-2bc2-bdb34b2e1223@st.com>
+Date:   Thu, 5 Mar 2020 17:21:30 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
@@ -93,8 +93,8 @@ In-Reply-To: <20200227122129.65516-3-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG5NODE2.st.com
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG4NODE2.st.com (10.75.127.11) To SFHDAG5NODE2.st.com
  (10.75.127.14)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-03-05_05:2020-03-05,2020-03-05 signatures=0
@@ -103,7 +103,7 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi andy
+Hi Andy
 
 For i2c-stm32f4.c and i2c-stm32f7.c
 
