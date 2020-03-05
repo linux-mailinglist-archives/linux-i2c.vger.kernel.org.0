@@ -2,78 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC382179FF4
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Mar 2020 07:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1259B17A3FA
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Mar 2020 12:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbgCEGZd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Mar 2020 01:25:33 -0500
-Received: from mga03.intel.com ([134.134.136.65]:55516 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725839AbgCEGZd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 5 Mar 2020 01:25:33 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Mar 2020 22:25:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,517,1574150400"; 
-   d="scan'208";a="232855280"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Mar 2020 22:25:30 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1j9jwn-000Aql-SZ; Thu, 05 Mar 2020 14:25:29 +0800
-Date:   Thu, 5 Mar 2020 14:25:22 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Loic Poulain <loic.poulain@linaro.org>
-Cc:     kbuild-all@lists.01.org, wsa@the-dreams.de, vkoul@kernel.org,
-        bjorn.andersson@linaro.org, robert.foss@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Todor Tomov <todor.tomov@linaro.org>
-Subject: [PATCH] i2c: fix semicolon.cocci warnings
-Message-ID: <20200305062522.GA95406@1cd0c43c5f30>
-References: <1583340776-27865-1-git-send-email-loic.poulain@linaro.org>
+        id S1727101AbgCELQQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Mar 2020 06:16:16 -0500
+Received: from ulan.pagasa.dost.gov.ph ([202.90.128.205]:47754 "EHLO
+        mailgw.pagasa.dost.gov.ph" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725880AbgCELQQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Mar 2020 06:16:16 -0500
+X-Greylist: delayed 1274 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Mar 2020 06:16:06 EST
+Received: from webmail.pagasa.dost.int ([10.10.11.8])
+        by mailgw.pagasa.dost.gov.ph  with ESMTP id 025AseSK006737-025AseSM006737
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 5 Mar 2020 18:54:40 +0800
+Received: from localhost (localhost [127.0.0.1])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2FB4F2981A90;
+        Thu,  5 Mar 2020 18:46:49 +0800 (PST)
+Received: from webmail.pagasa.dost.int ([127.0.0.1])
+        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id r7J1A0N3aHYl; Thu,  5 Mar 2020 18:46:48 +0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2232C2981A4C;
+        Thu,  5 Mar 2020 18:46:48 +0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 webmail.pagasa.dost.int 2232C2981A4C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pagasa.dost.gov.ph;
+        s=96B9A03E-48B0-11EA-A7E8-92F42F537CE2; t=1583405208;
+        bh=RC75T5p3JPNk7JUNB+lH0UfaFQO1Ac584gPL3SIL6h8=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=vwxX3L8Z7uHnDJPZBIix9IBQi0XMBiY4sLQTc/9+h6pT2FHeTz61v6B+3f3w6WhXh
+         jUdnW3+FuZCvkf1pcG3LkjpsYvCQO7zO587a10BanpMqFFL6zPGTaTUsrqnCnsqpAd
+         CtN8Atz3iXBEFHZeiXsfNfnWSfk0n7tqEffbmBy8=
+X-Virus-Scanned: amavisd-new at pagasa.dost.int
+Received: from webmail.pagasa.dost.int ([127.0.0.1])
+        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id WT2tTJV-1oie; Thu,  5 Mar 2020 18:46:47 +0800 (PST)
+Received: from webmail.pagasa.dost.int (webmail.pagasa.dost.int [10.11.1.8])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 5119729819D2;
+        Thu,  5 Mar 2020 18:46:46 +0800 (PST)
+Date:   Thu, 5 Mar 2020 18:46:46 +0800 (PST)
+From:   "Juanito S. Galang" <juanito.galang@pagasa.dost.gov.ph>
+Message-ID: <1980644409.3575157.1583405206290.JavaMail.zimbra@pagasa.dost.gov.ph>
+Subject: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1583340776-27865-1-git-send-email-loic.poulain@linaro.org>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Zimbra 8.8.15_GA_3899 (ZimbraWebClient - GC79 (Win)/8.8.15_GA_3895)
+Thread-Index: lWYDQbv6QI/eIWKrWUD3NPCXqIIr9A==
+Thread-Topic: 
+X-FEAS-DKIM: Valid
+Authentication-Results: mailgw.pagasa.dost.gov.ph;
+        dkim=pass header.i=@pagasa.dost.gov.ph
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: kbuild test robot <lkp@intel.com>
-
-drivers/i2c/busses/i2c-qcom-cci.c:261:49-50: Unneeded semicolon
 
 
- Remove unneeded semicolon.
-
-Generated by: scripts/coccinelle/misc/semicolon.cocci
-
-Fixes: 7c495c97e573 ("i2c: Add Qualcomm CCI I2C driver")
-CC: Loic Poulain <loic.poulain@linaro.org>
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
-
-url:    https://github.com/0day-ci/linux/commits/Loic-Poulain/i2c-Add-Qualcomm-CCI-I2C-driver/20200305-051618
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-
- i2c-qcom-cci.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/drivers/i2c/busses/i2c-qcom-cci.c
-+++ b/drivers/i2c/busses/i2c-qcom-cci.c
-@@ -258,7 +258,7 @@ static int cci_init(struct cci *cci)
- 		const struct hw_params *hw = &cci->data->params[mode];
- 
- 		val = hw->thigh << 16 | hw->tlow;
--		writel(val, cci->base + CCI_I2C_Mm_SCL_CTL(i));;
-+		writel(val, cci->base + CCI_I2C_Mm_SCL_CTL(i));
- 
- 		val = hw->tsu_sto << 16 | hw->tsu_sta;
- 		writel(val, cci->base + CCI_I2C_Mm_SDA_CTL_0(i));
+Herzlichen Gl=C3=BCckwunsch Lieber Beg=C3=BCnstigter,Sie erhalten diese E-M=
+ail von der Robert Bailey Foundation. Ich bin ein pensionierter Regierungsa=
+ngestellter aus Harlem und ein Gewinner des Powerball Lottery Jackpot im We=
+rt von 343,8 Millionen US-Dollar. Ich bin der gr=C3=B6=C3=9Fte Jackpot-Gewi=
+nner in der Geschichte der New Yorker Lotterie im US-Bundesstaat Amerika. I=
+ch habe diese Lotterie am 27. Oktober 2018 gewonnen und m=C3=B6chte Sie dar=
+=C3=BCber informieren, dass Google in Zusammenarbeit mit Microsoft Ihre "E-=
+Mail-Adresse" auf meine Bitte, einen Spendenbetrag von 3.000.000,00 Million=
+en Euro zu erhalten, =C3=BCbermittelt hat. Ich spende diese 3 Millionen Eur=
+o an Sie, um den Wohlt=C3=A4tigkeitsheimen und armen Menschen in Ihrer Geme=
+inde zu helfen, damit wir die Welt f=C3=BCr alle verbessern k=C3=B6nnen.Wei=
+tere Informationen finden Sie auf der folgenden Website, damit Sie nicht sk=
+eptisch sind
+Diese Spende von 3 Mio. EUR.https://nypost.com/2018/11/14/meet-the-winner-o=
+f-the-biggest-lottery-jackpot-in-new-york-history/Sie k=C3=B6nnen auch mein=
+ YouTube f=C3=BCr mehr Best=C3=A4tigung aufpassen:
+https://www.youtube.com/watch?v=3DH5vT18Ysavc
+Bitte beachten Sie, dass alle Antworten an (robertdonation7@gmail.com=C2=A0=
+ ) gesendet werden, damit wir das k=C3=B6nnen
+Fahren Sie fort, um das gespendete Geld an Sie zu =C3=BCberweisen.E-Mail: r=
+obertdonation7@gmail.comFreundliche Gr=C3=BC=C3=9Fe,
+Robert Bailey
+* * * * * * * * * * * * * * * *
+Powerball Jackpot Gewinner
