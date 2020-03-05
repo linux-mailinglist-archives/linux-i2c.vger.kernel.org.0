@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8226817ABA0
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Mar 2020 18:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A888E17ABB9
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Mar 2020 18:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728071AbgCERP1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Mar 2020 12:15:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42198 "EHLO mail.kernel.org"
+        id S1728262AbgCERPt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Mar 2020 12:15:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42672 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728061AbgCERP0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 5 Mar 2020 12:15:26 -0500
+        id S1728255AbgCERPt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 5 Mar 2020 12:15:49 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E32A8208CD;
-        Thu,  5 Mar 2020 17:15:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1743D20848;
+        Thu,  5 Mar 2020 17:15:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583428525;
+        s=default; t=1583428548;
         bh=+P8sB4H5yi+g9UNuOWK2JO1vju8lSiUvedGXcJ/u/nk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FZV/5FWHwEOZ3T6tvBrHPVPs8+xsM61xr3+UaTYIXeGNV1DfvXEHlUeMpmBNqgDSx
-         Z6cu7RUiNUsaGhuEGm3e/0FfrlkTKJKVxjGCjMhYVRKylOkVw++70Yfe7Uo0YK8MI0
-         DD5KoD0KFeDK6d3QMDP1a3X3Ssk7acEqudEvaJVY=
+        b=H/9wTZ8vG+O8Yey7uCX/WltamwmOcrG1F7UJkvtSsgJ/nO2GuS2ah8P9tJpMVsNbu
+         rzfZI9J1oJYQTm0/rzR2BlpWj3GbgwAB59Tzs/mUC7gf8uvJyyvGYI9rBTOZy1QaE8
+         xpBZOEin9QVvkJ2GNvC62BxvN/zWE4VFBx62PsaQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
@@ -30,12 +30,12 @@ Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         Thor Thayer <thor.thayer@linux.intel.com>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 07/31] i2c: altera: Fix potential integer overflow
-Date:   Thu,  5 Mar 2020 12:14:51 -0500
-Message-Id: <20200305171516.30028-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 06/19] i2c: altera: Fix potential integer overflow
+Date:   Thu,  5 Mar 2020 12:15:27 -0500
+Message-Id: <20200305171540.30250-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200305171516.30028-1-sashal@kernel.org>
-References: <20200305171516.30028-1-sashal@kernel.org>
+In-Reply-To: <20200305171540.30250-1-sashal@kernel.org>
+References: <20200305171540.30250-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
