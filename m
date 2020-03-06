@@ -2,251 +2,171 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CF517B601
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Mar 2020 06:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 288A417B82A
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Mar 2020 09:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725905AbgCFFJg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Mar 2020 00:09:36 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:34163 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725873AbgCFFJg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Mar 2020 00:09:36 -0500
-Received: by mail-ed1-f68.google.com with SMTP id c21so1029729edt.1
-        for <linux-i2c@vger.kernel.org>; Thu, 05 Mar 2020 21:09:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xZYcAFCRfiU8IC1aEhbNImLFdWHB/dWx7Z2x+6oYnQY=;
-        b=QwI8X4XSRWCyhG4KAwGwxYslryd/7Jc4pgc6bamB+7k/Wg3ZYJCzb5KdHJdF4I3K1+
-         kghCM7SFCM5/MDeXraAdl8Ej+GVbTeNbR+1T3A5ZxMW3rm+81WZUS6HokDOZ/GX2K1B4
-         7DrtusQNmqqju0VVUgOIBzEHV4gdJV0G9MbsI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xZYcAFCRfiU8IC1aEhbNImLFdWHB/dWx7Z2x+6oYnQY=;
-        b=RtLk1+5ZzzxtZ5ilb/kArWtHk8J8t2nlpIi07NE7E6uCCJ78e1JYzgWpeF0r85cFhD
-         5YCW+5vFlrmyKlJ/my0IsD4rao+ByKQ3Rle0aJCxxDUjPDvhjPoQTagK3YkFMMtHGYNU
-         sffiKIQA2antQxV08ampHNOJ/cwR/TfRq5e8fwM7zxPDRMuavH7Gtl5wUHqFbxSbo5Oz
-         DkXdN5HMj+lzfKhScgYZcXcH77KFMIO3WmNtMu5wiqH0X7hQMqDeUxQi9TSiZcPFhvna
-         ycuzXI76M7FnGJCkKn0eA4/kRE/FWdy0/IPFuw/y+1ReXIr5vma21Fqh9Z8e8r2dl9df
-         LqqA==
-X-Gm-Message-State: ANhLgQ0vjRMPpsmoJvUgGR3RaSbXeDF+5cflQd0K/aQyl1ZyUHSbu+SE
-        SbJmpN+jEM7cqgQYmg/ChPHQTMRpTR0VdQ==
-X-Google-Smtp-Source: ADFU+vty/dVA5w5OoRrY4CbOsPluqsUwvP/X8mCZ8kuzLAViDlBTBYnkaufDtklGq5fAHozpvHuSuQ==
-X-Received: by 2002:a50:8e08:: with SMTP id 8mr1179328edw.92.1583471372670;
-        Thu, 05 Mar 2020 21:09:32 -0800 (PST)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
-        by smtp.gmail.com with ESMTPSA id v21sm445839eda.44.2020.03.05.21.09.30
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Mar 2020 21:09:31 -0800 (PST)
-Received: by mail-wm1-f51.google.com with SMTP id p9so932211wmc.2
-        for <linux-i2c@vger.kernel.org>; Thu, 05 Mar 2020 21:09:30 -0800 (PST)
-X-Received: by 2002:a1c:6a13:: with SMTP id f19mr1793277wmc.134.1583471370159;
- Thu, 05 Mar 2020 21:09:30 -0800 (PST)
+        id S1726182AbgCFIOK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Mar 2020 03:14:10 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:16026 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726091AbgCFIOK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Mar 2020 03:14:10 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02689Z1i020959;
+        Fri, 6 Mar 2020 09:13:04 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=Y/1IjyrIz/Z5gdOL7YpWM+B/LueTN04lM7OU+fz/AMg=;
+ b=GP9HEt3U9OhMigJIMdbQns7xWDwaf7hv2mRa0o5zddR2T3L6naoGn6T7oyFlQtWTQN5k
+ ZSKB6HFFy6f1B55/ZP96YmAcgopkH2nWz/vn6KHrA55XI6aRHIVmLDaXuYEyWvg383UU
+ AjUjCQcFgvJ1ix7OD9MOGGraQIERwhvxgk7W6B2S1PAv092ge767uRWOK6Xl8yl5wCEB
+ ITah7qvMRCsMwXZLEgCoKf0ig170Bhmt0enNitnCcUMr6fYQt/H9gRe/SnB1pWPyUhXc
+ cDB4DB61ZuW0r3hCztAY0dpJL49UKmv0bI7phnq+INqlKX137XdZ6Zk8idCN2/tUDcvj Pw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2yfdyde5fk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Mar 2020 09:13:04 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4FB85100039;
+        Fri,  6 Mar 2020 09:12:58 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag5node2.st.com [10.75.127.14])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C892C21F69B;
+        Fri,  6 Mar 2020 09:12:57 +0100 (CET)
+Received: from [10.251.16.74] (10.75.127.48) by SFHDAG5NODE2.st.com
+ (10.75.127.14) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Mar
+ 2020 09:12:53 +0100
+Subject: Re: [PATCH v2 3/3] i2c: drivers: Use generic definitions for bus
+ frequencies
+To:     <yamada.masahiro@socionext.com>,
+        <andriy.shevchenko@linux.intel.com>, <wsa@the-dreams.de>,
+        <linux-i2c@vger.kernel.org>
+CC:     <thor.thayer@linux.intel.com>, <syniurge@gmail.com>,
+        <nehal-bakulchandra.shah@amd.com>, <shyam-sundar.s-k@amd.com>,
+        <brendanhiggins@google.com>, <krzysztof.adamski@nokia.com>,
+        <f.fainelli@gmail.com>, <rjui@broadcom.com>,
+        <scott.branden@broadcom.com>, <michal.simek@xilinx.com>,
+        <mika.westerberg@linux.intel.com>, <jarkko.nikula@linux.intel.com>,
+        <baruch@tkos.co.il>, <linux@roeck-us.net>, <masahiroy@kernel.org>,
+        <kgene@kernel.org>, <krzk@kernel.org>, <aisheng.dong@nxp.com>,
+        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
+        <o.rempel@pengutronix.de>, <vz@mleia.com>,
+        <matthias.bgg@gmail.com>, <gregory.clement@bootlin.com>,
+        <linus.walleij@linaro.org>, <afaerber@suse.de>,
+        <manivannan.sadhasivam@linaro.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <chris.brandt@renesas.com>,
+        <heiko@sntech.de>, <baohua@kernel.org>, <orsonzhai@gmail.com>,
+        <baolin.wang7@gmail.com>, <zhang.lyra@gmail.com>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <patrice.chotard@st.com>, <ardb@kernel.org>,
+        <ldewangan@nvidia.com>, <digetx@gmail.com>
+References: <20200227122129.65516-1-andriy.shevchenko@linux.intel.com>
+ <20200227122129.65516-3-andriy.shevchenko@linux.intel.com>
+ <e713926d87564555af67723dce092c2f@SOC-EX01V.e01.socionext.com>
+From:   Pierre Yves MORDRET <pierre-yves.mordret@st.com>
+Message-ID: <11ed800d-8113-9b54-d0c5-99d98bfaa5a2@st.com>
+Date:   Fri, 6 Mar 2020 09:12:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20200306034946.11223-1-bibby.hsieh@mediatek.com> <20200306034946.11223-3-bibby.hsieh@mediatek.com>
-In-Reply-To: <20200306034946.11223-3-bibby.hsieh@mediatek.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 6 Mar 2020 14:09:18 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DTVt=3khWjYxwA5V43wN8JcuS4nc5a6nYvBr7diXu_2Q@mail.gmail.com>
-Message-ID: <CAAFQd5DTVt=3khWjYxwA5V43wN8JcuS4nc5a6nYvBr7diXu_2Q@mail.gmail.com>
-Subject: Re: [PATCH v12 2/2] i2c: core: support bus regulator controlling in adapter
-To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <e713926d87564555af67723dce092c2f@SOC-EX01V.e01.socionext.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: base64
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG5NODE2.st.com
+ (10.75.127.14)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-06_02:2020-03-05,2020-03-06 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Bibby,
-
-On Fri, Mar 6, 2020 at 12:49 PM Bibby Hsieh <bibby.hsieh@mediatek.com> wrote:
->
-> Although in the most platforms, the bus power of i2c
-> are alway on, some platforms disable the i2c bus power
-> in order to meet low power request.
->
-> We get and enable bulk regulator in i2c adapter device.
->
-> Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
-> ---
->  drivers/i2c/i2c-core-base.c | 81 +++++++++++++++++++++++++++++++++++++
->  include/linux/i2c.h         |  2 +
->  2 files changed, 83 insertions(+)
->
-
-Thanks for the patch. Unfortunately there are still some issues left.
-Please check my comments inline.
-
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index cefad0881942..4a1cee8389b4 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -313,6 +313,7 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
->  static int i2c_device_probe(struct device *dev)
->  {
->         struct i2c_client       *client = i2c_verify_client(dev);
-> +       struct i2c_adapter      *adap = client->adapter;
->         struct i2c_driver       *driver;
->         int status;
->
-> @@ -378,6 +379,12 @@ static int i2c_device_probe(struct device *dev)
->
->         dev_dbg(dev, "probe\n");
->
-> +       status = regulator_enable(adap->bus_regulator);
-> +       if (status != 0) {
-
-I'd make the check < 0, as the API doesn't specify the non-negative
-values explicitly.
-
-> +               dev_err(&adap->dev, "Failed to enable power regulator\n");
-> +               goto err_clear_wakeup_irq;
-> +       }
-> +
->         status = of_clk_set_defaults(dev->of_node, false);
->         if (status < 0)
->                 goto err_clear_wakeup_irq;
-> @@ -414,6 +421,7 @@ static int i2c_device_probe(struct device *dev)
->  static int i2c_device_remove(struct device *dev)
->  {
->         struct i2c_client       *client = i2c_verify_client(dev);
-> +       struct i2c_adapter      *adap = client->adapter;
->         struct i2c_driver       *driver;
->         int status = 0;
->
-> @@ -427,6 +435,8 @@ static int i2c_device_remove(struct device *dev)
->         }
->
->         dev_pm_domain_detach(&client->dev, true);
-> +       if (!pm_runtime_status_suspended(&client->dev))
-> +               regulator_disable(adap->bus_regulator);
->
->         dev_pm_clear_wake_irq(&client->dev);
->         device_init_wakeup(&client->dev, false);
-> @@ -438,6 +448,71 @@ static int i2c_device_remove(struct device *dev)
->         return status;
->  }
->
-> +#ifdef CONFIG_PM_SLEEP
-> +static int i2c_resume_early(struct device *dev)
-> +{
-> +       struct i2c_client *client = i2c_verify_client(dev);
-> +       struct i2c_adapter *adap = client->adapter;
-> +       int err;
-> +
-> +       if (pm_runtime_status_suspended(&client->dev)) {
-> +               err = regulator_enable(adap->bus_regulator);
-> +               if (err)
-> +                       return err;
-> +       }
-> +
-> +       return pm_generic_resume_early(&client->dev);
-> +}
-> +
-> +static int i2c_suspend_late(struct device *dev)
-> +{
-> +       struct i2c_client *client = i2c_verify_client(dev);
-> +       struct i2c_adapter *adap = client->adapter;
-> +       int err;
-> +
-> +       if (!pm_runtime_status_suspended(&client->dev)) {
-> +               err = regulator_disable(adap->bus_regulator);
-> +               if (err)
-> +                       return err;
-> +       }
-> +
-> +       return pm_generic_suspend_late(&client->dev);
-
-Let's think a bit more about the order of operations above. It could
-end up with following sequence:
-
-- regulator_disable()
-- pm_generic_suspend_late()
-  - some_i2c_device_suspend_late()
-    - i2c_transfer() - ERROR because the bus regulator is disabled
-
-We can only disable the regulator once the i2c client driver finished
-its callback and suspended fully, which should guarantee no further
-I2C accesses.
-
-> +}
-> +#endif
-> +
-> +#ifdef CONFIG_PM
-> +static int i2c_runtime_resume(struct device *dev)
-> +{
-> +       struct i2c_client *client = i2c_verify_client(dev);
-> +       struct i2c_adapter *adap = client->adapter;
-> +       int err;
-> +
-> +       err = regulator_enable(adap->bus_regulator);
-> +       if (err)
-> +               return err;
-> +
-> +       return pm_generic_runtime_resume(&client->dev);
-> +}
-> +
-> +static int i2c_runtime_suspend(struct device *dev)
-> +{
-> +       struct i2c_client *client = i2c_verify_client(dev);
-> +       struct i2c_adapter *adap = client->adapter;
-> +       int err;
-> +
-> +       err = pm_generic_runtime_suspend(&client->dev);
-> +       if (err)
-> +               return err;
-> +
-> +       return regulator_disable(adap->bus_regulator);
-> +}
-> +#endif
-> +
-> +static const struct dev_pm_ops i2c_device_pm = {
-> +       SET_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late, i2c_resume_early)
-
-We wanted to set the late/early ops, but this macro sets the regular
-suspend/resume ops. SET_LATE_SYSTEM_SLEEP_PM_OPS should be used
-instead.
-
-> +       SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume, NULL)
-> +};
-> +
->  static void i2c_device_shutdown(struct device *dev)
->  {
->         struct i2c_client *client = i2c_verify_client(dev);
-> @@ -495,6 +570,7 @@ struct bus_type i2c_bus_type = {
->         .probe          = i2c_device_probe,
->         .remove         = i2c_device_remove,
->         .shutdown       = i2c_device_shutdown,
-> +       .pm             = &i2c_device_pm,
->  };
->  EXPORT_SYMBOL_GPL(i2c_bus_type);
->
-> @@ -1334,6 +1410,11 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
->                 goto out_reg;
->
->         dev_dbg(&adap->dev, "adapter [%s] registered\n", adap->name);
-> +       adap->bus_regulator = devm_regulator_get(&adap->dev, "bus");
-> +       if (IS_ERR(adap->bus_regulator)) {
-> +               res = PTR_ERR(adap->bus_regulator);
-> +               goto out_reg;
-> +       }
-
-Wouldn't it be better to move this code before the dev_dbg() call? It
-could be confusing if the debug log says "registered" and then the
-devm_regulator_get() fails.
-
-Best regards,
-Tomasz
+SGkgQW5keQ0KDQpGb3IgaTJjLXN0bTMyZjQuYyBhbmQgaTJjLXN0bTMyZjcuYw0KDQpSZXZp
+ZXdlZC1ieTogUGllcnJlLVl2ZXMgTU9SRFJFVCA8cGllcnJlLXl2ZXMubW9yZHJldEBzdC5j
+b20+DQoNClRoYW5rcw0KDQpPbiAyLzI3LzIwIDE6NDIgUE0sIHlhbWFkYS5tYXNhaGlyb0Bz
+b2Npb25leHQuY29tIHdyb3RlOg0KPiBIaSBBbmR5LCBXb2xmcmFtLA0KPiANCj4gLS0tLS1P
+cmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQW5keSBTaGV2Y2hlbmtvIDxhbmRyaXku
+c2hldmNoZW5rb0BsaW51eC5pbnRlbC5jb20+IA0KPiBTZW50OiBUaHVyc2RheSwgRmVicnVh
+cnkgMjcsIDIwMjAgOToyMSBQTQ0KPiBUbzogV29sZnJhbSBTYW5nIDx3c2FAdGhlLWRyZWFt
+cy5kZT47IGxpbnV4LWkyY0B2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IEFuZHkgU2hldmNoZW5r
+byA8YW5kcml5LnNoZXZjaGVua29AbGludXguaW50ZWwuY29tPjsgVGhvciBUaGF5ZXIgPHRo
+b3IudGhheWVyQGxpbnV4LmludGVsLmNvbT47IEVsaWUgTW9yaXNzZSA8c3luaXVyZ2VAZ21h
+aWwuY29tPjsgTmVoYWwgU2hhaCA8bmVoYWwtYmFrdWxjaGFuZHJhLnNoYWhAYW1kLmNvbT47
+IFNoeWFtIFN1bmRhciBTIEsgPHNoeWFtLXN1bmRhci5zLWtAYW1kLmNvbT47IEJyZW5kYW4g
+SGlnZ2lucyA8YnJlbmRhbmhpZ2dpbnNAZ29vZ2xlLmNvbT47IEtyenlzenRvZiBBZGFtc2tp
+IDxrcnp5c3p0b2YuYWRhbXNraUBub2tpYS5jb20+OyBGbG9yaWFuIEZhaW5lbGxpIDxmLmZh
+aW5lbGxpQGdtYWlsLmNvbT47IFJheSBKdWkgPHJqdWlAYnJvYWRjb20uY29tPjsgU2NvdHQg
+QnJhbmRlbiA8c2NvdHQuYnJhbmRlbkBicm9hZGNvbS5jb20+OyBNaWNoYWwgU2ltZWsgPG1p
+Y2hhbC5zaW1la0B4aWxpbnguY29tPjsgTWlrYSBXZXN0ZXJiZXJnIDxtaWthLndlc3RlcmJl
+cmdAbGludXguaW50ZWwuY29tPjsgSmFya2tvIE5pa3VsYSA8amFya2tvLm5pa3VsYUBsaW51
+eC5pbnRlbC5jb20+OyBCYXJ1Y2ggU2lhY2ggPGJhcnVjaEB0a29zLmNvLmlsPjsgR3VlbnRl
+ciBSb2VjayA8bGludXhAcm9lY2stdXMubmV0PjsgS3VramluIEtpbSA8a2dlbmVAa2VybmVs
+Lm9yZz47IEtyenlzenRvZiBLb3psb3dza2kgPGtyemtAa2VybmVsLm9yZz47IERvbmcgQWlz
+aGVuZyA8YWlzaGVuZy5kb25nQG54cC5jb20+OyBTaGF3biBHdW8gPHNoYXduZ3VvQGtlcm5l
+bC5vcmc+OyBTYXNjaGEgSGF1ZXIgPHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGU+OyBPbGVrc2lq
+IFJlbXBlbCA8by5yZW1wZWxAcGVuZ3V0cm9uaXguZGU+OyBWbGFkaW1pciBaYXBvbHNraXkg
+PHZ6QG1sZWlhLmNvbT47IE1hdHRoaWFzIEJydWdnZXIgPG1hdHRoaWFzLmJnZ0BnbWFpbC5j
+b20+OyBHcmVnb3J5IENMRU1FTlQgPGdyZWdvcnkuY2xlbWVudEBib290bGluLmNvbT47IExp
+bnVzIFdhbGxlaWogPGxpbnVzLndhbGxlaWpAbGluYXJvLm9yZz47IEFuZHJlYXMgRsOkcmJl
+ciA8YWZhZXJiZXJAc3VzZS5kZT47IE1hbml2YW5uYW4gU2FkaGFzaXZhbSA8bWFuaXZhbm5h
+bi5zYWRoYXNpdmFtQGxpbmFyby5vcmc+OyBBbmR5IEdyb3NzIDxhZ3Jvc3NAa2VybmVsLm9y
+Zz47IEJqb3JuIEFuZGVyc3NvbiA8Ympvcm4uYW5kZXJzc29uQGxpbmFyby5vcmc+OyBDaHJp
+cyBCcmFuZHQgPGNocmlzLmJyYW5kdEByZW5lc2FzLmNvbT47IEhlaWtvIFN0dWVibmVyIDxo
+ZWlrb0BzbnRlY2guZGU+OyBCYXJyeSBTb25nIDxiYW9odWFAa2VybmVsLm9yZz47IE9yc29u
+IFpoYWkgPG9yc29uemhhaUBnbWFpbC5jb20+OyBCYW9saW4gV2FuZyA8YmFvbGluLndhbmc3
+QGdtYWlsLmNvbT47IENodW55YW4gWmhhbmcgPHpoYW5nLmx5cmFAZ21haWwuY29tPjsgUGll
+cnJlLVl2ZXMgTU9SRFJFVCA8cGllcnJlLXl2ZXMubW9yZHJldEBzdC5jb20+OyBNYXhpbWUg
+Q29xdWVsaW4gPG1jb3F1ZWxpbi5zdG0zMkBnbWFpbC5jb20+OyBBbGV4YW5kcmUgVG9yZ3Vl
+IDxhbGV4YW5kcmUudG9yZ3VlQHN0LmNvbT47IFBhdHJpY2UgQ2hvdGFyZCA8cGF0cmljZS5j
+aG90YXJkQHN0LmNvbT47IEFyZCBCaWVzaGV1dmVsIDxhcmRiQGtlcm5lbC5vcmc+OyBMYXht
+YW4gRGV3YW5nYW4gPGxkZXdhbmdhbkBudmlkaWEuY29tPjsgRG1pdHJ5IE9zaXBlbmtvIDxk
+aWdldHhAZ21haWwuY29tPjsgWWFtYWRhLCBNYXNhaGlyby/lsbHnlLAg55yf5byYIDx5YW1h
+ZGEubWFzYWhpcm9Ac29jaW9uZXh0LmNvbT4NCj4gU3ViamVjdDogW1BBVENIIHYyIDMvM10g
+aTJjOiBkcml2ZXJzOiBVc2UgZ2VuZXJpYyBkZWZpbml0aW9ucyBmb3IgYnVzIGZyZXF1ZW5j
+aWVzDQo+IA0KPiBTaW5jZSB3ZSBoYXZlIGdlbmVyaWMgZGVmaW5pdGlvbnMgZm9yIGJ1cyBm
+cmVxdWVuY2llcywgbGV0J3MgdXNlIHRoZW0uDQo+IA0KPiBDYzogVGhvciBUaGF5ZXIgPHRo
+b3IudGhheWVyQGxpbnV4LmludGVsLmNvbT4NCj4gQWNrZWQtYnk6IEVsaWUgTW9yaXNzZSA8
+c3luaXVyZ2VAZ21haWwuY29tPg0KPiBBY2tlZC1ieTogTmVoYWwgU2hhaCA8bmVoYWwtYmFr
+dWxjaGFuZHJhLnNoYWhAYW1kLmNvbT4NCj4gQ2M6IFNoeWFtIFN1bmRhciBTIEsgPHNoeWFt
+LXN1bmRhci5zLWtAYW1kLmNvbT4NCj4gUmV2aWV3ZWQtYnk6IEJyZW5kYW4gSGlnZ2lucyA8
+YnJlbmRhbmhpZ2dpbnNAZ29vZ2xlLmNvbT4NCj4gQ2M6IEtyenlzenRvZiBBZGFtc2tpIDxr
+cnp5c3p0b2YuYWRhbXNraUBub2tpYS5jb20+DQo+IENjOiBGbG9yaWFuIEZhaW5lbGxpIDxm
+LmZhaW5lbGxpQGdtYWlsLmNvbT4NCj4gQ2M6IFJheSBKdWkgPHJqdWlAYnJvYWRjb20uY29t
+Pg0KPiBBY2tlZC1ieTogU2NvdHQgQnJhbmRlbiA8c2NvdHQuYnJhbmRlbkBicm9hZGNvbS5j
+b20+DQo+IENjOiBNaWNoYWwgU2ltZWsgPG1pY2hhbC5zaW1la0B4aWxpbnguY29tPg0KPiBS
+ZXZpZXdlZC1ieTogTWlrYSBXZXN0ZXJiZXJnIDxtaWthLndlc3RlcmJlcmdAbGludXguaW50
+ZWwuY29tPg0KPiBBY2tlZC1ieTogSmFya2tvIE5pa3VsYSA8amFya2tvLm5pa3VsYUBsaW51
+eC5pbnRlbC5jb20+DQo+IEFja2VkLWJ5OiBCYXJ1Y2ggU2lhY2ggPGJhcnVjaEB0a29zLmNv
+LmlsPg0KPiBSZXZpZXdlZC1ieTogR3VlbnRlciBSb2VjayA8bGludXhAcm9lY2stdXMubmV0
+Pg0KPiBDYzogS3VramluIEtpbSA8a2dlbmVAa2VybmVsLm9yZz4NCj4gQ2M6IEtyenlzenRv
+ZiBLb3psb3dza2kgPGtyemtAa2VybmVsLm9yZz4NCj4gQ2M6IERvbmcgQWlzaGVuZyA8YWlz
+aGVuZy5kb25nQG54cC5jb20+DQo+IENjOiBTaGF3biBHdW8gPHNoYXduZ3VvQGtlcm5lbC5v
+cmc+DQo+IENjOiBTYXNjaGEgSGF1ZXIgPHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGU+DQo+IEFj
+a2VkLWJ5OiBPbGVrc2lqIFJlbXBlbCA8by5yZW1wZWxAcGVuZ3V0cm9uaXguZGU+DQo+IEFj
+a2VkLWJ5OiBWbGFkaW1pciBaYXBvbHNraXkgPHZ6QG1sZWlhLmNvbT4NCj4gQ2M6IE1hdHRo
+aWFzIEJydWdnZXIgPG1hdHRoaWFzLmJnZ0BnbWFpbC5jb20+DQo+IENjOiBHcmVnb3J5IENM
+RU1FTlQgPGdyZWdvcnkuY2xlbWVudEBib290bGluLmNvbT4NCj4gUmV2aWV3ZWQtYnk6IExp
+bnVzIFdhbGxlaWogPGxpbnVzLndhbGxlaWpAbGluYXJvLm9yZz4NCj4gQ2M6ICJBbmRyZWFz
+IEbDpHJiZXIiIDxhZmFlcmJlckBzdXNlLmRlPg0KPiBSZXZpZXdlZC1ieTogTWFuaXZhbm5h
+biBTYWRoYXNpdmFtIDxtYW5pdmFubmFuLnNhZGhhc2l2YW1AbGluYXJvLm9yZz4NCj4gQ2M6
+IEFuZHkgR3Jvc3MgPGFncm9zc0BrZXJuZWwub3JnPg0KPiBDYzogQmpvcm4gQW5kZXJzc29u
+IDxiam9ybi5hbmRlcnNzb25AbGluYXJvLm9yZz4NCj4gUmV2aWV3ZWQtYnk6IENocmlzIEJy
+YW5kdCA8Y2hyaXMuYnJhbmR0QHJlbmVzYXMuY29tPg0KPiBDYzogSGVpa28gU3R1ZWJuZXIg
+PGhlaWtvQHNudGVjaC5kZT4NCj4gQ2M6IEJhcnJ5IFNvbmcgPGJhb2h1YUBrZXJuZWwub3Jn
+Pg0KPiBDYzogT3Jzb24gWmhhaSA8b3Jzb256aGFpQGdtYWlsLmNvbT4NCj4gUmV2aWV3ZWQt
+Ynk6IEJhb2xpbiBXYW5nIDxiYW9saW4ud2FuZzdAZ21haWwuY29tPg0KPiBDYzogQ2h1bnlh
+biBaaGFuZyA8emhhbmcubHlyYUBnbWFpbC5jb20+DQo+IENjOiBQaWVycmUtWXZlcyBNT1JE
+UkVUIDxwaWVycmUteXZlcy5tb3JkcmV0QHN0LmNvbT4NCj4gQ2M6IE1heGltZSBDb3F1ZWxp
+biA8bWNvcXVlbGluLnN0bTMyQGdtYWlsLmNvbT4NCj4gQ2M6IEFsZXhhbmRyZSBUb3JndWUg
+PGFsZXhhbmRyZS50b3JndWVAc3QuY29tPg0KPiBDYzogUGF0cmljZSBDaG90YXJkIDxwYXRy
+aWNlLmNob3RhcmRAc3QuY29tPg0KPiBBY2tlZC1ieTogQXJkIEJpZXNoZXV2ZWwgPGFyZGJA
+a2VybmVsLm9yZz4NCj4gQ2M6IExheG1hbiBEZXdhbmdhbiA8bGRld2FuZ2FuQG52aWRpYS5j
+b20+DQo+IENjOiBEbWl0cnkgT3NpcGVua28gPGRpZ2V0eEBnbWFpbC5jb20+DQo+IENjOiBN
+YXNhaGlybyBZYW1hZGEgPHlhbWFkYS5tYXNhaGlyb0Bzb2Npb25leHQuY29tPg0KPiANCj4g
+UGxlYXNlIHJlcGxhY2UgQ2Mgd2l0aCBteQ0KPiANCj4gQWNrZWQtYnk6IE1hc2FoaXJvIFlh
+bWFkYSA8eWFtYWRhLm1hc2FoaXJvQHNvY2lvbmV4dC5jb20+DQo+IA0KPiBUaGFua3MuDQo+
+IA0KPiAtLS0NCj4gdjI6DQo+ICAgc3F1YXNoIHRvIG9uZSBwYXRjaCAoV29sZnJhbSkNCj4g
+ICB1c2VkIE1BWCBpbiB0aGUgZGVmaW5pdGlvbiBuYW1lcyAoV29sZnJhbSkNCj4gICBkcm9w
+cGVkIEhaX1BFUl8qDQo+ICAgYWRkZWQgY29sbGVjdGVkIHRhZ3MNCj4gDQo=
