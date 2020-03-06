@@ -2,116 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1DE17BF9F
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Mar 2020 14:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F3017BFBB
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Mar 2020 14:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726300AbgCFNys (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Mar 2020 08:54:48 -0500
-Received: from mga17.intel.com ([192.55.52.151]:41481 "EHLO mga17.intel.com"
+        id S1726982AbgCFN6v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Mar 2020 08:58:51 -0500
+Received: from mga05.intel.com ([192.55.52.43]:43059 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726182AbgCFNys (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 6 Mar 2020 08:54:48 -0500
+        id S1726498AbgCFN6v (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 6 Mar 2020 08:58:51 -0500
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 05:54:46 -0800
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 05:58:50 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,522,1574150400"; 
-   d="scan'208";a="287977630"
+   d="scan'208";a="241173912"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 Mar 2020 05:54:43 -0800
+  by orsmga003.jf.intel.com with ESMTP; 06 Mar 2020 05:58:48 -0800
 Received: from andy by smile with local (Exim 4.93)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jADR7-007NGR-NA; Fri, 06 Mar 2020 15:54:45 +0200
-Date:   Fri, 6 Mar 2020 15:54:45 +0200
+        id 1jADV4-007NJe-Un; Fri, 06 Mar 2020 15:58:50 +0200
+Date:   Fri, 6 Mar 2020 15:58:50 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sergey.Semin@baikalelectronics.ru
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] i2c: designeware: Add Baikal-T1 SoC DW I2C specifics
- support
-Message-ID: <20200306135445.GE1748204@smile.fi.intel.com>
-References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH v1 2/5] i2c: mux: pca954x: Make use of device properties
+Message-ID: <20200306135850.GF1748204@smile.fi.intel.com>
+References: <20200305155352.39095-1-andriy.shevchenko@linux.intel.com>
+ <20200305155352.39095-2-andriy.shevchenko@linux.intel.com>
+ <cf0cf14f-4e43-2a9c-63ed-f5f03ea7b114@axentia.se>
+ <20200306095413.GQ1224808@smile.fi.intel.com>
+ <b19fb2ed-054a-3fc5-41d4-6ecf3ae1597b@axentia.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
+In-Reply-To: <b19fb2ed-054a-3fc5-41d4-6ecf3ae1597b@axentia.se>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-First of all, I got only 3 out of 6 patches. Are you sure you properly prepared
-the series?
-
-On Fri, Mar 06, 2020 at 04:19:49PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> From: Serge Semin <fancer.lancer@gmail.com>
-
-Same comment as per DMA series, try next time to link the cover letter to the
-series correctly.
-
-> There are three DW I2C controllers embedded into the Baikal-T1 SoC. Two
-> of them are normal with standard DW I2C IP-core configurations and registers
-> accessible over normal MMIO space - so they are acceptable by the available
-> DW I2C driver with no modification.
-
-> But there is a third, which is a bit
-> different. Its registers are indirectly accessed be means of "command/data
-> in/data out" registers tuple. In order to have it also supported by the DW
-> I2C driver, we must modify the code a bit. This is a main purpose of this
-> patchset.
+On Fri, Mar 06, 2020 at 12:48:14PM +0100, Peter Rosin wrote:
+> On 2020-03-06 10:54, Andy Shevchenko wrote:
+> > On Thu, Mar 05, 2020 at 09:05:56PM +0000, Peter Rosin wrote:
+> >> On 2020-03-05 16:53, Andy Shevchenko wrote:
+> >>> Device property API allows to gather device resources from different sources,
+> >>> such as ACPI. Convert the drivers to unleash the power of device property API.
+> > 
+> > ...
+> > 
+> >>>  static const struct i2c_device_id pca954x_id[] = {
+> >>> -	{ "pca9540", pca_9540 },
+> >>> -	{ "pca9542", pca_9542 },
+> >>> -	{ "pca9543", pca_9543 },
+> >>> -	{ "pca9544", pca_9544 },
+> >>> -	{ "pca9545", pca_9545 },
+> >>> -	{ "pca9546", pca_9546 },
+> >>> -	{ "pca9547", pca_9547 },
+> >>> -	{ "pca9548", pca_9548 },
+> >>> -	{ "pca9846", pca_9846 },
+> >>> -	{ "pca9847", pca_9847 },
+> >>> -	{ "pca9848", pca_9848 },
+> >>> -	{ "pca9849", pca_9849 },
+> >>> +	{ "pca9540", .driver_data = (kernel_ulong_t)&chips[pca_9540] },
+> >>> +	{ "pca9542", .driver_data = (kernel_ulong_t)&chips[pca_9542] },
+> >>> +	{ "pca9543", .driver_data = (kernel_ulong_t)&chips[pca_9543] },
+> >>> +	{ "pca9544", .driver_data = (kernel_ulong_t)&chips[pca_9544] },
+> >>> +	{ "pca9545", .driver_data = (kernel_ulong_t)&chips[pca_9545] },
+> >>> +	{ "pca9546", .driver_data = (kernel_ulong_t)&chips[pca_9546] },
+> >>> +	{ "pca9547", .driver_data = (kernel_ulong_t)&chips[pca_9547] },
+> >>> +	{ "pca9548", .driver_data = (kernel_ulong_t)&chips[pca_9548] },
+> >>> +	{ "pca9846", .driver_data = (kernel_ulong_t)&chips[pca_9846] },
+> >>> +	{ "pca9847", .driver_data = (kernel_ulong_t)&chips[pca_9847] },
+> >>> +	{ "pca9848", .driver_data = (kernel_ulong_t)&chips[pca_9848] },
+> >>> +	{ "pca9849", .driver_data = (kernel_ulong_t)&chips[pca_9849] },
+> >>
+> >> It feels odd/wrong to specifically name .driver_data when .name is not there.
+> >> None or both...
+> > 
+> > I will add .name as well.
+> > 
+> >>> +	data->chip = device_get_match_data(dev);
+> >>>  	if (!data->chip)
+> >>>  		data->chip = &chips[id->driver_data];
+> >>
+> >> These two lines no longer make any sence.
+> > 
+> > Please elaborate.
+> > 
+> > IIRC Javier explained once that I²C ID table is still good to have to allow
+> > enumeration from user space.
 > 
-> First of all traditionally we replaced the legacy plain text-based dt-binding
-> file with yaml-based one. Then we found and fixed a bug in the DW I2C FIFO size
-> detection algorithm which tried to do it too early before dw_readl/dw_writel
-> methods could be used.
+> id->driver_data is no longer an integer index into chips[]. So, for the I2C
+> ID table case, either device_get_match_data returns the .driver_data as-is
+> from the pca954x_id array, or it returns NULL (I don't know which it is).
 
-So far so good (looks like, I think colleagues of mine and myself will review
-individual patches later on).
+No, you took it wrong. device_get_match_data() operates with ACPI/DT tables.
 
-> Finally we introduced a platform-specific flag
-> ACCESS_INDIRECT, which would enable the indirect access to the DW I2C registers
-> implemented for one of the Baikal-T1 SoC DW I2C controllers. See the commit
-> message of the corresponding patch for details.
+> In the first case, if (!data->chip) ...; is useless dead code. In the latter
+> case, it should be
+> 
+> 	if (!data->chip)
+> 		data->chip = (whatever-type-chip-is *)id->driver_data;
+> 
+> (If it's this latter case, I get the feeling that changing the .driver_data
+> of pca954x_id is an orthogonal change that has little to do with using
+> device properties instead of of-specifics.)
 
-This is quite questionable. In Intel SoCs we have indirect I²C controllers to
-access (inside PMIC, for example). The approach used to do that is usually to
-have an IPC mechanism and specific bus controller driver. See i2c-cht-wc.c for
-instance.
-
-I'm not sure if it makes a lot of duplication and if actually switching I²C
-DesignWare driver to regmap API will solve it. At least that is the second
-approach I would consider.
-
-But I'll wait others to comment on this. We have to settle the solution before
-going further.
-
-> This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
-> commit 98d54f81e36b ("Linux 5.6-rc4").
-
-`git format-patch --base ...` should do the job.
-
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-
-Same comment as per UART patch. Who is the Alexey in relation to the work done?
+But this comment is good, seems I missed that and actually change is not needed
+indeed.
 
 -- 
 With Best Regards,
