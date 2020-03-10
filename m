@@ -2,34 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 224D917F2D7
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Mar 2020 10:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10AF17F359
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Mar 2020 10:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726331AbgCJJMB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Mar 2020 05:12:01 -0400
-Received: from sauhun.de ([88.99.104.3]:46284 "EHLO pokefinder.org"
+        id S1726420AbgCJJTi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Mar 2020 05:19:38 -0400
+Received: from sauhun.de ([88.99.104.3]:46356 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726195AbgCJJMA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 10 Mar 2020 05:12:00 -0400
+        id S1726202AbgCJJTh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 10 Mar 2020 05:19:37 -0400
 Received: from localhost (p54B33196.dip0.t-ipconnect.de [84.179.49.150])
-        by pokefinder.org (Postfix) with ESMTPSA id 9A0582C1EB6;
-        Tue, 10 Mar 2020 10:11:58 +0100 (CET)
-Date:   Tue, 10 Mar 2020 10:11:55 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 36CBA2C1EB6;
+        Tue, 10 Mar 2020 10:19:36 +0100 (CET)
+Date:   Tue, 10 Mar 2020 10:19:35 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     linux-i2c@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        debian-powerpc@lists.debian.org,
-        Mathieu Malaterre <malat@debian.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Erhard Furtner <erhard_f@mailbox.org>
-Subject: Re: [PATCH] macintosh: windfarm: fix MODINFO regression
-Message-ID: <20200310091155.GA1987@ninjato>
-References: <20200303125046.5157-1-wsa@the-dreams.de>
+To:     linux-i2c@vger.kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] i2c: powermac: correct comment about custom handling
+Message-ID: <20200310091935.GB1987@ninjato>
+References: <20200225142613.7169-1-wsa@the-dreams.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qMm9M+Fa2AknHoGS"
+        protocol="application/pgp-signature"; boundary="/NkBOFFp2J2Af1nK"
 Content-Disposition: inline
-In-Reply-To: <20200303125046.5157-1-wsa@the-dreams.de>
+In-Reply-To: <20200225142613.7169-1-wsa@the-dreams.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -37,51 +33,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---qMm9M+Fa2AknHoGS
+--/NkBOFFp2J2Af1nK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 03, 2020 at 01:50:46PM +0100, Wolfram Sang wrote:
-> Commit af503716ac14 made sure OF devices get an OF style modalias with
-> I2C events. It assumed all in-tree users were converted, yet it missed
-> some Macintosh drivers.
+On Tue, Feb 25, 2020 at 03:26:13PM +0100, Wolfram Sang wrote:
+> The comment had some flaws which are now fixed:
+> - the prefix is 'MAC' not 'AAPL'
+> - no kernel coding style and too short length
+> - 'we do' instead of 'we to'
 >=20
-> Add an OF module device table for all windfarm drivers to make them
-> automatically load again.
->=20
-> Fixes: af503716ac14 ("i2c: core: report OF style module alias for devices=
- registered via OF")
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D199471
-> Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-> Tested-by: Erhard Furtner <erhard_f@mailbox.org>
 > Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
 
-Michael, I can take this via I2C again, if you ack it.
-
-Thanks,
-
-   Wolfram
+Applied to for-next, thanks!
 
 
---qMm9M+Fa2AknHoGS
+--/NkBOFFp2J2Af1nK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5nWdcACgkQFA3kzBSg
-KbbDexAAoT6EkAdzdK+5cS24d9RczslflX/i4KO3FuBZhFXWgQPB++xI9bsVnx1K
-lDnpYLkhuIhXBvpb0Mx34aXQmFHnlosUxF9Pgt/cPertcgLlgA2Fx9U6e6AZH7VI
-xIzwCmTnaFEQC+3U+x34Ytad+4/v/YT94Mw/7Q4WlQ+f2IZpXZHLaegVwTaULv45
-4+cuAY8YCAW0dPRjbUiX0W405w3kAWY/J5l1rOAbYfoS+at/c+L5qvDrUuOLdiUe
-Jlh74Wrq428xd9xmRFfkp3WoOed4AD/tYghY+lzUof5OOp/iNb8nSqZbc40bjK2R
-KrwK5yrQUb8kAL2DDGPKNMUkCpbQtUdRCKATf4cXMhF8M59mVme1rIzsrzF4uAsT
-mVgeLE+KBLcIvf9APQlZb/SUuWYw3vxaCocgA1Dzr6yxXKxgDJhRR7Ys43aB5USo
-cgiMbrKaiTtfsRwXUONpZZi4QFRkz0hv7QL1DUXPM84E0G4rsBa5eGCxYByz+Lm1
-gjflQ8znE6LsF9SbnJJPEe7jfyPkOvLrf4EwlkfG77UWM1tMemfO+gUCCKIzDZSk
-VIIc4kZgfRFntRoPYVNoVpK/4Cx4ghsXj/+bNod2mAxd+dLS10v3QWyO1dQyGJ1U
-GUNVoye0M7ntf7TvmMnCfIc0oDBDSxfVVPmsajLs6/jhCPUZ5qk=
-=/cbP
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5nW6cACgkQFA3kzBSg
+KbZo7RAAlKU05fSDBuu5f+b9c5Ayd8ND1JVgOFlLm7CrMI729HVJSnWoPYJA53hr
+IzunFX0sVieS4TF3UAG4yePmJ1ZQ+vdPnXR3LrhqSBQTCKVGEogvHF8sI6AsESkg
+s+4G7b9sWdgsU6dcVbpOyze1tH694TK2I0h581cMMSnCXyoSIQcVHRr3Oy3QfeQF
+vYYRv6Ew+Ag5dkBGIoqbCm0DHvLzaU2CI5Ni3cIADUmHZ8IRU4rhR04Cj29TT3jt
+dKHEWybzfJO01GFMa5vlvRfgE5bTlNlM7z3bmj+7QZO/F6GvqH7h0sl/tLBgGoRU
+ALoT0EkjttmnzH73bMwDt/WKWMSR8wnJs1Mp9sEPnefraBvZBSRDydz6ZynT895P
+s6OtWv7QdfuOnktj+zHxYyduVHSWh8U6QS+kPRls5KV5ohDCSpomAHOnq41RMvk5
+JJFlPxivN17td07xM2Th9Vd4uO+iNEvowIKjzTcFRzm8K8JZ1Vu55Bc6liN9dpIb
+yJl9OSHKO5q60b0s/OMgUqmnGdGesELnnr/w5OqO7rdvWlnxuW+XIrw1ZGubKGzq
+6+vXbuXcXIFzZiYc4TDvAlTvkcFp5QCHRniCcrXSXUhCJlNUJvqmxi1jpFzR92GC
+ekniJBTj/ZNmbtGCtg8GUz/s1TWhYICTmmzFGOfhHfGy14Ne5f0=
+=2z/6
 -----END PGP SIGNATURE-----
 
---qMm9M+Fa2AknHoGS--
+--/NkBOFFp2J2Af1nK--
