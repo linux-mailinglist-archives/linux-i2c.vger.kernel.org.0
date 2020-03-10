@@ -2,102 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FE717F565
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Mar 2020 11:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2186F17F622
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Mar 2020 12:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725937AbgCJKw0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Mar 2020 06:52:26 -0400
-Received: from sauhun.de ([88.99.104.3]:47354 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726170AbgCJKw0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 10 Mar 2020 06:52:26 -0400
-Received: from localhost (p54B33196.dip0.t-ipconnect.de [84.179.49.150])
-        by pokefinder.org (Postfix) with ESMTPSA id 02A962C1EB6;
-        Tue, 10 Mar 2020 11:52:24 +0100 (CET)
-Date:   Tue, 10 Mar 2020 11:52:24 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Francesco Lavra <francescolavra.fl@gmail.com>
-Cc:     tangbin <tangbin@cmss.chinamobile.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c:i2c-core-of:remove redundant dev_err message
-Message-ID: <20200310105224.GO1987@ninjato>
-References: <20200226103901.21520-1-tangbin@cmss.chinamobile.com>
- <0757d83b-203c-fe40-a8ac-665953d7d336@gmail.com>
+        id S1726390AbgCJLV0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Mar 2020 07:21:26 -0400
+Received: from mail.11d01.mspz7.gob.ec ([190.152.145.91]:37728 "EHLO
+        mail.11d01.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725937AbgCJLV0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Mar 2020 07:21:26 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 1AC092F6E98F;
+        Tue, 10 Mar 2020 03:37:47 -0500 (-05)
+Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id A3N1zkFwZ29t; Tue, 10 Mar 2020 03:37:46 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 340D62F6D897;
+        Tue, 10 Mar 2020 03:09:06 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.9.2 mail.11d01.mspz7.gob.ec 340D62F6D897
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=11d01.mspz7.gob.ec;
+        s=50CBC7E4-8BED-11E9-AF6C-F1A741A224D3; t=1583827747;
+        bh=o+H3O7n1+zJcXo0FhJs7spyf8HmE4ClnBa/Y2Gk0DL0=;
+        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
+         From:Date:Reply-To:Message-Id;
+        b=OgXtTgpt8kaLumfdyXvt2vBYDc7SVFonT7YluUKvubXyl7Bbb5ojc9AuPJohp3OM5
+         dFKQbcHoDwc17KQ7n1MleiJNbWm2a/g4cAv/VzzjDC+WtuNTODoDv2fJxFQcDohPt0
+         JwrbwzIZI9qwplPt7dGuSV6y+yEawmsx3akByIzE=
+X-Virus-Scanned: amavisd-new at 11d01.mspz7.gob.ec
+Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id VZ4mIiyQyjAK; Tue, 10 Mar 2020 03:09:05 -0500 (-05)
+Received: from [10.19.167.32] (unknown [105.0.4.171])
+        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTPSA id 4AD0C2F6B755;
+        Tue, 10 Mar 2020 02:44:17 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7gLe/sNPhR777EPF"
-Content-Disposition: inline
-In-Reply-To: <0757d83b-203c-fe40-a8ac-665953d7d336@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
+To:     Recipients <ronald.pena@11d01.mspz7.gob.ec>
+From:   ''Michael weirsky'' <ronald.pena@11d01.mspz7.gob.ec>
+Date:   Tue, 10 Mar 2020 10:13:46 +0200
+Reply-To: mikeweirskyspende@gmail.com
+Message-Id: <20200310074419.4AD0C2F6B755@mail.11d01.mspz7.gob.ec>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Lieber Freund,
 
---7gLe/sNPhR777EPF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ich bin Herr Mike Weirsky, New Jersey, Vereinigte Staaten von Amerika, der =
+Mega-Gewinner von $ 273million In Mega Millions Jackpot, spende ich an 5 zu=
+f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
+il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
+meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
+und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
+Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
+ spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen.
+Das ist dein Spendencode: [MW530342019]
+www.youtube.com/watch?v=3Dun8yRTmrYMY
 
-On Wed, Feb 26, 2020 at 11:58:41AM +0100, Francesco Lavra wrote:
-> On 2/26/20 11:39 AM, tangbin wrote:
-> > of_i2c_register_device already contains error message, so remove
-> > the redundant dev_err message
-> >=20
-> > Signed-off-by: tangbin <tangbin@cmss.chinamobile.com>
-> > ---
-> >   drivers/i2c/i2c-core-of.c | 6 +-----
-> >   1 file changed, 1 insertion(+), 5 deletions(-)
-> >=20
-> > diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-> > index 6787c1f71..7b0a786d3 100644
-> > --- a/drivers/i2c/i2c-core-of.c
-> > +++ b/drivers/i2c/i2c-core-of.c
-> > @@ -103,9 +103,7 @@ void of_i2c_register_devices(struct i2c_adapter *ad=
-ap)
-> >   		client =3D of_i2c_register_device(adap, node);
-> >   		if (IS_ERR(client)) {
-> > -			dev_err(&adap->dev,
-> > -				 "Failed to create I2C device for %pOF\n",
-> > -				 node);
-> > +			return PTR_ERR(client);
->=20
-> This looks like an unrelated (and wrong) change. Why would you alter the
-> semantics of of_i2c_register_devices()? Besides, this function doesn't ha=
-ve
-> a return value.
-
-Right. This is not correct.
-
-In general, tangbin has a point, the error reporting is doubled. Lower
-layers already report, so both(!) callers of of_i2c_register_device do
-not need to. Since I am refactoring all this anyhow in "[RFC PATCH 5/7]
-i2c: of: error message unification", I think I will just drop error
-reporting in the callers there when resending the series (giving tanbin
-credits for the removal).
-
-Is this okay with everyone?
+Antworten Sie mit dem SPENDE-CODE an diese =
 
 
---7gLe/sNPhR777EPF
-Content-Type: application/pgp-signature; name="signature.asc"
+E-Mail:mikeweirskyspende@gmail.com
 
------BEGIN PGP SIGNATURE-----
+Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5ncWQACgkQFA3kzBSg
-KbZpcA//S4jnQJB+biCG8KuwbviA/gQmWDm7X4Y6lR9SOVNmv6fT2RlljBaTXFtN
-E1s4Cxc23bkUomFNEnfH7tGJcFGnTXJdPtxmuYG7v9h6caK0bWTOUVrH0PDB0eSD
-cy+okiDoySmdMBoxGnqHOPeZnbB6IQlEb91HiXS/VvMdluCbcHqRUQ45yNtYys0L
-RpmNwcOxL1E/NHG2GetQ5NyZLSC0IONaATOvEUkSpfthWar6u0EcMcUgCr4RruQS
-/9Wm34MxU3G42tCDlxHjcf4JB7G535wwZh5hoFPkiUK/UWmPeTF60XqhsJvE9HHP
-k4kbWurWFcDh+EOtj8wT3RH4gmBmEt0PhMTDeH0t4thlVhajjjEhPfuFs+1U0VRR
-6vn1yBBQs0wyNuKeJQDUCoJ6pIxF1Iwl1nxABuY5u9bF2+1BCpOKZpRRvmcbbhTS
-xk3IO/9rU8/7DDuPMOEFXKAg3YSgmYnfEcrSkQew7ZWSuf07wGT4FgvssSFlVnhd
-XHwwGzSC/ni6ngjrdc+woRI8EebLww9wvtvbeocnV/cdddSyvCBKYX1MSsMVEBLX
-QXorfLdiUFdojkxCZFyQNEqgodI/LRZi9QKGrw/5BQcWRrUVnrzgBtcnfIjvTOGX
-fXmgYy+4/2j3+LazmApRzWp9JPOGe2FP440iHlcHYQGgsPS1RBQ=
-=OV/r
------END PGP SIGNATURE-----
-
---7gLe/sNPhR777EPF--
+Gr=C3=BC=C3=9Fe
+Herr Mike Weirsky
