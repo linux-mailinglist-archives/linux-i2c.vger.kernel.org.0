@@ -2,81 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D66517F725
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Mar 2020 13:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CC417F76F
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Mar 2020 13:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726273AbgCJMLo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Mar 2020 08:11:44 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:44228 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726205AbgCJMLo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Mar 2020 08:11:44 -0400
-Received: by mail-qt1-f193.google.com with SMTP id h16so9380918qtr.11;
-        Tue, 10 Mar 2020 05:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jt79snC5Ck9GdmHCqifHja5JE72+04hwhwUIgFwsoJs=;
-        b=VLyKRhXJYcg7RCztvHPC9b5FOb1qSWoZtV8BdnSN3AdCLBYYMgTE0uzPo2ZFZd89Xg
-         izUpwCqX9zyCviNlSYJwGzvHjr92hUIod8weznD4ibUp/acnhsVS1+QzQ1FMuaWfCd9d
-         tHV+hP8oDm4yhTkJfKUZ7u30+58yage84D+gpLtmO55OkHYVrMkc6B6XQ8OgTfSy8jQR
-         dk7FISurLCF5GD6yfv1WiqfW/UPP9bS32/T2QaS9zktlrDpfqfx4LO2uUZr0zsBA8Z7w
-         n00JURu8YcopR4WOHu35w+DmZjH2aJT0f1v3Yl1ZZFnKcs4DOGTq2GH5j86IJrv0DyxZ
-         9/vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jt79snC5Ck9GdmHCqifHja5JE72+04hwhwUIgFwsoJs=;
-        b=qDcwDdIlCHLIb1yFh1Oqr9V285gWSqH7CJ1n5MM0X+VMlHdgeYU3t5oF7AAVzeuBI1
-         iWfiHquF/F6BeEPTUrXxQ/isXfeVTxKsh+Xm/YCxq4752YBimwzC3CgeRE+EyavetJdh
-         lqN+sXSvLNPJDDkXtdFY9kQp5ziQh/U8mRx6+DIs1mwlxjUyRNRpPP4GRyTd0anadHpS
-         4SrWnUA1VR7+Xif96x0704XYbvLCVLbjykXYZubWYGjvnemhb7Qk8jXzkUBqeE+/9u4F
-         sD3BYQ1Bq5BB6HqDUq2NVVKym4Pb6OT+uSc3FJbzd9hFJJvVWw0PSHlzLiU8slcYuP5T
-         EWxw==
-X-Gm-Message-State: ANhLgQ2+ZVXIhC1xLrZOaUCacVUwb/gb8mr9aJSL/+/5BDv7aJ3xwvB+
-        wgocP8eOY92FcxPmPiAOTIjDfDtxwqv47Op9CgU=
-X-Google-Smtp-Source: ADFU+vskPzc35t1H25E3s3HpAGVBfpG0vWNTuqrpxtNONzwU0XuGsG+Qih97IXnwq96KiNHIm7cDbMcmX/J1juGftow=
-X-Received: by 2002:ac8:4c8f:: with SMTP id j15mr19147393qtv.232.1583842302771;
- Tue, 10 Mar 2020 05:11:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <1580185137-11255-1-git-send-email-gupt21@gmail.com> <nycvar.YFH.7.76.2003101241580.19500@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.2003101241580.19500@cbobk.fhfr.pm>
-From:   rishi gupta <gupt21@gmail.com>
-Date:   Tue, 10 Mar 2020 17:41:31 +0530
-Message-ID: <CALUj-gvUthgPRFBje3uJf03S_Fh2m5Ez6JX-A3-mvdW9TYvHhg@mail.gmail.com>
+        id S1726382AbgCJM3g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Mar 2020 08:29:36 -0400
+Received: from sauhun.de ([88.99.104.3]:48178 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726331AbgCJM3g (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 10 Mar 2020 08:29:36 -0400
+Received: from localhost (p54B33196.dip0.t-ipconnect.de [84.179.49.150])
+        by pokefinder.org (Postfix) with ESMTPSA id CED972C1EB6;
+        Tue, 10 Mar 2020 13:29:34 +0100 (CET)
+Date:   Tue, 10 Mar 2020 13:29:34 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Rishi Gupta <gupt21@gmail.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        wsa+renesas@sang-engineering.com, gregkh@linuxfoundation.org,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v3] HID: mcp2221: add usb to i2c-smbus host bridge
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        wsa+renesas@sang-engineering.com,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <20200310122934.GA13896@ninjato>
+References: <1580185137-11255-1-git-send-email-gupt21@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nFreZHaLTZJo0R7j"
+Content-Disposition: inline
+In-Reply-To: <1580185137-11255-1-git-send-email-gupt21@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I am really grateful to you and all other maintainers.
-You really do a lot work; code review is a manual and time consuming task.
 
-Regards,
-Rishi
+--nFreZHaLTZJo0R7j
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Mar 10, 2020 at 5:12 PM Jiri Kosina <jikos@kernel.org> wrote:
->
-> On Tue, 28 Jan 2020, Rishi Gupta wrote:
->
-> > MCP2221 is a USB HID to I2C/SMbus host bridge device. This
-> > commit implements i2c and smbus host adapter support. 7-bit
-> > address and i2c multi-message transaction is also supported.
->
-> Applied; sorry this took me a bit longer to review.
->
-> --
-> Jiri Kosina
-> SUSE Labs
->
+
+> +	if (num == 1) {
+> +		if (msgs->flags & I2C_M_RD) {
+> +			ret = mcp_i2c_smbus_read(mcp, msgs, MCP2221_I2C_RD_DATA,
+> +							0, 0, NULL);
+> +		} else {
+> +			ret = mcp_i2c_write(mcp, msgs, MCP2221_I2C_WR_DATA, 1);
+> +		}
+> +		if (ret)
+> +			goto exit;
+> +		ret = num;
+> +	} else if (num == 2) {
+> +		/* Ex transaction; send reg address and read its contents */
+> +		if (msgs[0].addr == msgs[1].addr &&
+> +			!(msgs[0].flags & I2C_M_RD) &&
+> +			 (msgs[1].flags & I2C_M_RD)) {
+> +
+> +			ret = mcp_i2c_write(mcp, &msgs[0],
+> +						MCP2221_I2C_WR_NO_STOP, 0);
+> +			if (ret)
+> +				goto exit;
+> +
+> +			ret = mcp_i2c_smbus_read(mcp, &msgs[1],
+> +						MCP2221_I2C_RD_RPT_START,
+> +						0, 0, NULL);
+> +			if (ret)
+> +				goto exit;
+> +			ret = num;
+> +		} else {
+> +			dev_err(&adapter->dev,
+> +				"unsupported multi-msg i2c transaction\n");
+> +			ret = -EOPNOTSUPP;
+> +		}
+> +	} else {
+> +		dev_err(&adapter->dev,
+> +			"unsupported multi-msg i2c transaction\n");
+> +		ret = -EOPNOTSUPP;
+> +	}
+
+Have a look at struct i2c_adapter_quirks and especially the flags to let
+the I2C core do the sanity checks from here.
+
+
+--nFreZHaLTZJo0R7j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5niCoACgkQFA3kzBSg
+Kbbcbw/7BH9KSGZnx60OjlH4kqubSsU/7webUKwIWx40VdSbxBmccq49gipAxmP5
+k1fMwsW0uCKcslR/iJ7R88cM8BLP1led1JCbGsbZ2AYMs1liYrcz/np7xxVG5NqZ
+33L+D2OyXovtD+9gQudVIF593s0BipaL3FBDvmSayBs/qZldA1OKrt5xKshu6Gu3
+twzjtixSLjQnqxhydQ0rva5i0Wccd5X++VTthF1zCfydoN9Yuj+wfu+surk2y9fP
+Nou7eizASM27B5yl4T4VJgzrAZZmq2Mq3HeY1/fZ5ic9rIATj819xGOw0NqBpgsr
+MgZiUh0shBJenx4gXYD+oZxUxaqGQFb12V88vfWnIw+0l4n5L54sfVhTXmAZE2zC
+yMZ5oBLvrQfO6dDGPz5PKYqN1hS0YM+pGaGBi3Fx8mna3QvdbZFe4bLNNvA0wcsX
+vg4UgMvfavZAAjpCQtkY8p7ew1dFyOs5eLinYsnVuF9T1KcjOFWlx90/+GOMYeoZ
+TzxD2TFDjc8/7Jp60r+IkDgpLwH8/YxsBoy9ESzSi7MBzQLuSw7hju5OATmQ/Sld
+oGMy9aUtIEVW2Y/t6P2XbMeFOBGwc0zXO1pWVKS6Pqj1yqYf7QcHWcjwd2CyAyif
+Dr9fv+gGmqZ+hEED4tRPQMuzbXvVbax3IlNOOI4rYT8c3LuKUx8=
+=rvj5
+-----END PGP SIGNATURE-----
+
+--nFreZHaLTZJo0R7j--
