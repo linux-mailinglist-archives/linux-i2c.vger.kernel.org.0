@@ -2,74 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2186F17F622
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Mar 2020 12:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E1217F59B
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Mar 2020 12:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726390AbgCJLV0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Mar 2020 07:21:26 -0400
-Received: from mail.11d01.mspz7.gob.ec ([190.152.145.91]:37728 "EHLO
-        mail.11d01.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbgCJLV0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Mar 2020 07:21:26 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 1AC092F6E98F;
-        Tue, 10 Mar 2020 03:37:47 -0500 (-05)
-Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id A3N1zkFwZ29t; Tue, 10 Mar 2020 03:37:46 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 340D62F6D897;
-        Tue, 10 Mar 2020 03:09:06 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.9.2 mail.11d01.mspz7.gob.ec 340D62F6D897
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=11d01.mspz7.gob.ec;
-        s=50CBC7E4-8BED-11E9-AF6C-F1A741A224D3; t=1583827747;
-        bh=o+H3O7n1+zJcXo0FhJs7spyf8HmE4ClnBa/Y2Gk0DL0=;
-        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
-         From:Date:Reply-To:Message-Id;
-        b=OgXtTgpt8kaLumfdyXvt2vBYDc7SVFonT7YluUKvubXyl7Bbb5ojc9AuPJohp3OM5
-         dFKQbcHoDwc17KQ7n1MleiJNbWm2a/g4cAv/VzzjDC+WtuNTODoDv2fJxFQcDohPt0
-         JwrbwzIZI9qwplPt7dGuSV6y+yEawmsx3akByIzE=
-X-Virus-Scanned: amavisd-new at 11d01.mspz7.gob.ec
-Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id VZ4mIiyQyjAK; Tue, 10 Mar 2020 03:09:05 -0500 (-05)
-Received: from [10.19.167.32] (unknown [105.0.4.171])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTPSA id 4AD0C2F6B755;
-        Tue, 10 Mar 2020 02:44:17 -0500 (-05)
-Content-Type: text/plain; charset="utf-8"
+        id S1726197AbgCJLEm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Mar 2020 07:04:42 -0400
+Received: from ozlabs.org ([203.11.71.1]:48981 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726202AbgCJLEl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 10 Mar 2020 07:04:41 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48cC0M5QPwz9sQx;
+        Tue, 10 Mar 2020 22:04:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1583838279;
+        bh=9olihnyJ9M44PKnq28KcPbYYogv3DH93xRCS2PT0tFk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=DFPUeF3q1+xx/iAP21Mb6aBdyFZ0VQFHfaselndP8UP4Mk7+vfhbG/8it1/tdvmg6
+         8/cCkdrJdLVPMcIyUQk0p6qKS8z5/9Mo/IvYlJyDWRxa5O1DyFnRv0f9GKic7PyMKE
+         QxLNv9XlpzH4m0qr11rEMBNssOUL3j1qzsPRoahcKf33Re5kXXEztTg+eysqEU8+iL
+         jxiBUCNlJw3tm9ML60UvzJaENGzfssLqpQNMxES5vcvPSvLzSgUZhVxU2b25n/SfUS
+         62k4GyaCra5SFQYixKIbELcWkgdvkAr8Ai3UlntXSlOIvY6GNOTJbwWMLlu1743LQH
+         fcuodpshZ9CgA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Wolfram Sang <wsa@the-dreams.de>, linuxppc-dev@lists.ozlabs.org
+Cc:     linux-i2c@vger.kernel.org, debian-powerpc@lists.debian.org,
+        Mathieu Malaterre <malat@debian.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Erhard Furtner <erhard_f@mailbox.org>
+Subject: Re: [PATCH] macintosh: windfarm: fix MODINFO regression
+In-Reply-To: <20200303125046.5157-1-wsa@the-dreams.de>
+References: <20200303125046.5157-1-wsa@the-dreams.de>
+Date:   Tue, 10 Mar 2020 22:04:25 +1100
+Message-ID: <87zhcoii86.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
-To:     Recipients <ronald.pena@11d01.mspz7.gob.ec>
-From:   ''Michael weirsky'' <ronald.pena@11d01.mspz7.gob.ec>
-Date:   Tue, 10 Mar 2020 10:13:46 +0200
-Reply-To: mikeweirskyspende@gmail.com
-Message-Id: <20200310074419.4AD0C2F6B755@mail.11d01.mspz7.gob.ec>
+Content-Type: text/plain
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Lieber Freund,
+Wolfram Sang <wsa@the-dreams.de> writes:
 
-Ich bin Herr Mike Weirsky, New Jersey, Vereinigte Staaten von Amerika, der =
-Mega-Gewinner von $ 273million In Mega Millions Jackpot, spende ich an 5 zu=
-f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
-il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
-meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
-und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
-Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
- spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen.
-Das ist dein Spendencode: [MW530342019]
-www.youtube.com/watch?v=3Dun8yRTmrYMY
+> Commit af503716ac14 made sure OF devices get an OF style modalias with
+> I2C events. It assumed all in-tree users were converted, yet it missed
+> some Macintosh drivers.
+>
+> Add an OF module device table for all windfarm drivers to make them
+> automatically load again.
+>
+> Fixes: af503716ac14 ("i2c: core: report OF style module alias for devices registered via OF")
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=199471
+> Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+> Tested-by: Erhard Furtner <erhard_f@mailbox.org>
+> Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+> ---
+>
+> This should also help with this: https://lists.debian.org/debian-powerpc/2020/01/msg00062.html
+> Some more testing would be appreciated because lm75 also has some code
+> changes I can't test myself obviusly.
+>
+> By grepping, I found some more potential candidates (using a "MAC,"
+> prefix but not defining a OF MODULE DEVICE TABLE). Does someone know
+> about bugreports filed for those? I don't want to change them for no
+> reason:
+>
+> drivers/macintosh/ams/ams-i2c.c
+> drivers/macintosh/therm_adt746x.c
+> sound/aoa/codecs/onyx.c
+> sound/aoa/codecs/tas.c
+> sound/ppc/keywest.c
+>
+> Happy hacking,
+>
+>    Wolfram
+>
+>  drivers/macintosh/windfarm_ad7417_sensor.c  |  7 +++++++
+>  drivers/macintosh/windfarm_fcu_controls.c   |  7 +++++++
+>  drivers/macintosh/windfarm_lm75_sensor.c    | 16 +++++++++++++++-
+>  drivers/macintosh/windfarm_lm87_sensor.c    |  7 +++++++
+>  drivers/macintosh/windfarm_max6690_sensor.c |  7 +++++++
+>  drivers/macintosh/windfarm_smu_sat.c        |  7 +++++++
+>  6 files changed, 50 insertions(+), 1 deletion(-)
 
-Antworten Sie mit dem SPENDE-CODE an diese =
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
+cheers
 
-E-Mail:mikeweirskyspende@gmail.com
-
-Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
-
-Gr=C3=BC=C3=9Fe
-Herr Mike Weirsky
