@@ -2,114 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAA217F929
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Mar 2020 13:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C40E417FD3C
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Mar 2020 14:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729355AbgCJMyZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Mar 2020 08:54:25 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:36029 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729350AbgCJMyX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Mar 2020 08:54:23 -0400
-Received: by mail-qk1-f193.google.com with SMTP id u25so12557091qkk.3;
-        Tue, 10 Mar 2020 05:54:22 -0700 (PDT)
+        id S1729792AbgCJN0q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Mar 2020 09:26:46 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:33624 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728043AbgCJN0p (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Mar 2020 09:26:45 -0400
+Received: by mail-lj1-f194.google.com with SMTP id f13so14135714ljp.0;
+        Tue, 10 Mar 2020 06:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4gPRUE/8c5unfeblSQvhYpKxeSuVZhZNXJJMTut3+xc=;
-        b=XkznGvkaYBTUY217XQ+/JcQlXuOsrjWrLd6qvYVsRlLicZNCjg+d1sTOEeWvFDBjed
-         ZUQFiYxNYCClkr65W3vIB7yabWXsorUCj9aoLmomRhnyGmNzS97zSfSpHywipgu2WlML
-         5GQjtgI93aBcWLFmFWtro9CmlXquwSClaP6pI8JhmVxxHoD+ywnBhYIi0tL5byG53uHe
-         HOh3OK35wClm2ks6crxtZTJmPM1XzoHgk/pmQ3S/3FEKsFWVaHcUpEs4Li1XwIw9Eij7
-         l3eZfqtzF8TEb9w+VUtY2cK+IIlD/WcB23bnYGWkxIH/bCgp91JtqG+n3saW1kbB6HGz
-         07jw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=OFEfv78mqxElApVv1PrLdhetmsXCx++xAuLsijmT7RU=;
+        b=MPjkwmXIAf3FWyEgLP72VjHIRYpfGhG20UY8BhN66PsNpd4eGCduEIgthZsYBz4n9C
+         5H9OfqJmEgjp2Du2id90Wx5m8OyU9+TmYOjINHJkzc1MiJV6yIfrsGPCiafRVAOWGSuI
+         1Gs+jLcTEOpUsyfNPXJF25iNTJOrR8OVSF9/i3xeJiy8Y6D57slJhMk+tWGFtq3QujnP
+         mciLBxJjYSs+Px/jakxMHhE/edRBjYPhwpCEOW7gEDNifraZRlkCfEkeqfeNmacRF/kx
+         qhxV+c2mGxh8SBUwtPRh02MYUUi5QbY75MS43mhKGPjlYRn3XXCTvXwUoHI55oLqsOkD
+         bbfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4gPRUE/8c5unfeblSQvhYpKxeSuVZhZNXJJMTut3+xc=;
-        b=NCOg7YCbAvKQHwGhs0qvOzf8I6su65P9a+E50imI6lUwlMGid9USmjS/APlZTv8ryO
-         /Hqr4Xey0NxaRPqZ36fvuaccNRHFNDrxsTW5fk8wpwkjwf7fMskYucrWRQwkhhm+fNmz
-         FV5zpvm5f9kO8sFTNTGwfnTNPhRAH2OdMiCHF/N+9xzas4BHvucVLUcMQxpX7KTJqDCz
-         WyG5UUC5pp+XFDgiYWkwsh/b+8tkclRvSvoVUBBk7diP9/SnbwqrexK7jXksmUvlxKkW
-         /b4Z2jflslLdcAvgX2U58uooGyKdXcrN6XdFJtUXE9w+OOpEAJO+diuVUE0stslIptNi
-         PwrQ==
-X-Gm-Message-State: ANhLgQ1nKO/VtkW8wHApSt5FV8XxvnIp7vwnkHYiOgl/sxeW3uEpW1J8
-        UxrRV73nXNdp4X78621mjbjYSpoYjm8Nfa37+Pg=
-X-Google-Smtp-Source: ADFU+vvDgu6r2lvGrzD+aENtSuJiR4ntDHyMa/Gp9A1Gub6RnDjugtxTlXjHNfyjGwMDnaqFEam8O6u6HzvTy4j0zEU=
-X-Received: by 2002:a05:620a:22cd:: with SMTP id o13mr10800851qki.160.1583844862180;
- Tue, 10 Mar 2020 05:54:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <1580185137-11255-1-git-send-email-gupt21@gmail.com> <20200310122934.GA13896@ninjato>
-In-Reply-To: <20200310122934.GA13896@ninjato>
-From:   rishi gupta <gupt21@gmail.com>
-Date:   Tue, 10 Mar 2020 18:24:10 +0530
-Message-ID: <CALUj-guKqkRKVKDa1U+gv0rLx23zc5cFT3Qnakp4muk9LSUYfQ@mail.gmail.com>
-Subject: Re: [PATCH v3] HID: mcp2221: add usb to i2c-smbus host bridge
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OFEfv78mqxElApVv1PrLdhetmsXCx++xAuLsijmT7RU=;
+        b=WfPklX4tjngMs3psv/VlVntfAMWekYLHNpA3vkNHc9XyL575gYOpHI2v09EcxJfUbA
+         0K4UekBNGdr7Cp6HAP1u6I8aE9QiqlRk9Oquks2B8ID7IFaajf/nb8KaW8Ksv74bX7zC
+         qfMHFY6Es5WNoiVBqACJmngb35k6H3AXVWNTNbXM2UMoP/QW85Mj1fCHy3bBsGKJPWrV
+         WUKDrfTmFAEPj/u12YYMLHULHkfW2ViBIG9q1AxPIDzfsxgeHYlRc/Z1v/si7X/rDfdY
+         KlXaT13q9Hk58BMTcDXQe3lpsn5wEH/1poaQsmZDzUaqA5VMomALjM3o265RcRa6VNM5
+         d8lQ==
+X-Gm-Message-State: ANhLgQ2h63mwAj4hKZlTXL9dQRn43KDEr+hZdPvhAKHVKoGzjCob1HuW
+        owJPnt4KjiMw15rkYLT48K0MiP8n
+X-Google-Smtp-Source: ADFU+vs0D5hsfb7X1yf/tpe6lP/YNwM1B9Ae7W/yTvjMuZrOxV1xdmC8WTPJFzqs51fKWHW5jAXXMQ==
+X-Received: by 2002:a05:651c:114:: with SMTP id a20mr12995219ljb.122.1583846803027;
+        Tue, 10 Mar 2020 06:26:43 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-39-224.dynamic.spd-mgts.ru. [94.29.39.224])
+        by smtp.googlemail.com with ESMTPSA id j24sm8742473lji.76.2020.03.10.06.26.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Mar 2020 06:26:42 -0700 (PDT)
+Subject: Re: [PATCH v1] i2c: tegra: Make timeout error more informative
 To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        wsa+renesas@sang-engineering.com,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200302173512.2743-1-digetx@gmail.com>
+ <20200310113706.GW1987@ninjato>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <017aad72-9872-a4aa-dc99-bd7d08c0db14@gmail.com>
+Date:   Tue, 10 Mar 2020 16:26:41 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20200310113706.GW1987@ninjato>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I will send two more patches in sometime.
+10.03.2020 14:37, Wolfram Sang пишет:
+> On Mon, Mar 02, 2020 at 08:35:12PM +0300, Dmitry Osipenko wrote:
+>> The I2C timeout error message doesn't tell us what exactly failed and some
+>> I2C client drivers do not clarify the error either. Adding WARN_ON_ONCE()
+>> results in a stacktrace being dumped into KMSG, which is very useful for
+>> debugging purposes.
+> 
+> This is good for debugging, in deed, yet not good in the generic case.
+> Timeouts are not an exception on the I2C bus (think of an EEPROM which
+> is busy during an erase cycle), so it shouldn't be printed at all.
+> 
+> This prinout should rather be dropped or at least be dev_dbg.
 
-Patch 1: Define i2c_adapter_quirks to let i2c core check msg's order,
-type and length
-              As of now this driver itself is doing this sanity.
-
-Patch 2: Add support for GPIO functionality
-
-On Tue, Mar 10, 2020 at 5:59 PM Wolfram Sang <wsa@the-dreams.de> wrote:
->
->
-> > +     if (num == 1) {
-> > +             if (msgs->flags & I2C_M_RD) {
-> > +                     ret = mcp_i2c_smbus_read(mcp, msgs, MCP2221_I2C_RD_DATA,
-> > +                                                     0, 0, NULL);
-> > +             } else {
-> > +                     ret = mcp_i2c_write(mcp, msgs, MCP2221_I2C_WR_DATA, 1);
-> > +             }
-> > +             if (ret)
-> > +                     goto exit;
-> > +             ret = num;
-> > +     } else if (num == 2) {
-> > +             /* Ex transaction; send reg address and read its contents */
-> > +             if (msgs[0].addr == msgs[1].addr &&
-> > +                     !(msgs[0].flags & I2C_M_RD) &&
-> > +                      (msgs[1].flags & I2C_M_RD)) {
-> > +
-> > +                     ret = mcp_i2c_write(mcp, &msgs[0],
-> > +                                             MCP2221_I2C_WR_NO_STOP, 0);
-> > +                     if (ret)
-> > +                             goto exit;
-> > +
-> > +                     ret = mcp_i2c_smbus_read(mcp, &msgs[1],
-> > +                                             MCP2221_I2C_RD_RPT_START,
-> > +                                             0, 0, NULL);
-> > +                     if (ret)
-> > +                             goto exit;
-> > +                     ret = num;
-> > +             } else {
-> > +                     dev_err(&adapter->dev,
-> > +                             "unsupported multi-msg i2c transaction\n");
-> > +                     ret = -EOPNOTSUPP;
-> > +             }
-> > +     } else {
-> > +             dev_err(&adapter->dev,
-> > +                     "unsupported multi-msg i2c transaction\n");
-> > +             ret = -EOPNOTSUPP;
-> > +     }
->
-> Have a look at struct i2c_adapter_quirks and especially the flags to let
-> the I2C core do the sanity checks from here.
->
+Oh, well. I'll keep this debugging applied locally then, it's quite
+unfortunate when something fails silently :)
