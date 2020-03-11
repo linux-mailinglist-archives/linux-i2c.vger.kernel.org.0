@@ -2,101 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 453C71811F4
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Mar 2020 08:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716CE1812E3
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Mar 2020 09:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726310AbgCKHaW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Mar 2020 03:30:22 -0400
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:36985 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728459AbgCKHaU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Mar 2020 03:30:20 -0400
-Received: by mail-ua1-f66.google.com with SMTP id h32so363240uah.4
-        for <linux-i2c@vger.kernel.org>; Wed, 11 Mar 2020 00:30:18 -0700 (PDT)
+        id S1728255AbgCKI1H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Mar 2020 04:27:07 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:33356 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726362AbgCKI1H (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Mar 2020 04:27:07 -0400
+Received: by mail-qk1-f195.google.com with SMTP id p62so1290048qkb.0
+        for <linux-i2c@vger.kernel.org>; Wed, 11 Mar 2020 01:27:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BPmOcXQ3X99zHwJqpB3nsuNuIevnyBfADR/rHEtNRP8=;
-        b=0BNBnlt0yW57VD8zwOmvzW2sMziTU7mHMcMb/HOT0kuqJeFVpOc5fUJ6z9I4fFzjcB
-         HtH1k4B+xEpqyI2Q0sX9RTaK11jmWJh18wZtJamFmwhIs2JBzlf25q9B1Zq3iAO7UQaN
-         2oqkIsPspe2v/YbOo80/tyqJQDagTe6a+FkRZn0R73XKkTnZaF7793JlZ85CTjMpTdPf
-         1jV2RqUXIZphPLvicgDxaYlIw6wTBz7k5E533El1oCe7Owad7QXcRN+jP0Qmva8sgdXG
-         YDctySDeLCpZimi6n1fsxU+B19JswHyXUTI9Q6rO2WkfHChuS0TCwoAWt2Jmsax5ukXl
-         HvDw==
+         :cc:content-transfer-encoding;
+        bh=Vuzfa5Ii3C+114ZZwPqdNHymYuyp0hGwxEjG+i+rX1M=;
+        b=KK2szt1h7nFFVCO3f9nxfC++kUNef5i7vZty9U/gBtxe1i+yMWak1f4jIR5Kb4+ZLA
+         4vw5Iye+6iBjmx4V99eSyyfZWKslZbhILLwKA+Fh0R3xZ4NGcf7fD2K+qr0lK8OL/e1j
+         HEvSqaPf47seotvIOR/52luoXum5Qp7c7fwsU135RB1sY9c8iV1SxIsluGw4hoP8ENKU
+         6Dc3TfE8HEo36qIXRqrCwGcnJ8/oVPIEMnJh0529oXSU0ZV2sLh+72GfO4C5jjxotBCF
+         ZU43ziooQvVB2uodGzLDDFl0uwQyXL4tiyfagbq7qk+JhQfeh5xNtG0zV0/ao45KwBlg
+         xzvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BPmOcXQ3X99zHwJqpB3nsuNuIevnyBfADR/rHEtNRP8=;
-        b=B2CVSLxvOiMk1sAIUR12gVenVdiREPQtb3BQ3M8rnmGF3BMWidDi3gOnsBM2DCBfOS
-         cDAd5ytjmmUzDXn04RS2rs1fvRp7xSYwmS1ArzI3FpFxkBYsLdfo0QRmlQaANEK7rvEm
-         g30nlbC+85kUPlm5OTqXe7nVjcbC/9z4uvhXBjOVc5SXnd63z+F388biYJ8S8IXvBL5P
-         IorLm6OO2/Ym8zFEPOP+Doc1JooDqfwaLAo3/rUOlcun0I7MW2UKDJLaoogBMz7xbSuc
-         5J9nA/IiaMc87egXFxnNImUMzu2NHyiTHV59PtFsiBqHL4xyXL66w0l3xI972YlgR42s
-         cmhA==
-X-Gm-Message-State: ANhLgQ326j3p4z3jZ5UHVquNd2eIQ9Z1XZYv4ohXKygC8qSIswxiXZ+5
-        SqkfNPSsrIBM+Bg4KY15A7SnWs3igkST7KFzDHpItA==
-X-Google-Smtp-Source: ADFU+vs0Dvq9z7hlChVBga5EnnnCXMWgmos410ryGreZya3+Vz6NMZ91SWJ54I7K3Dhw1Fs8MAk1q3q7PPUo08uzlI4=
-X-Received: by 2002:ab0:7518:: with SMTP id m24mr806098uap.60.1583911817488;
- Wed, 11 Mar 2020 00:30:17 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Vuzfa5Ii3C+114ZZwPqdNHymYuyp0hGwxEjG+i+rX1M=;
+        b=aG+WL3/ixTjk2wUv5/NME9UGXPQBtjXLwOgRW/E5CCIutIjqwWpn0mU7hA4We6S26u
+         Ic1ZLTjwxkIB9HfqPEJrunJ/YDBsYNjflmXOFlSnnJWjV/2AsrJteC7xwKiiU8X+pI4Z
+         +zuIquPM2JYz8iZ2Zejbt5n0nXsQss+9uXX8/eElLnIbLmFQzGaZ3VyA+IkEjPnIR4DH
+         rvPv/8Nc2a+by3zQ5Y+4KBGdOLDSJj7SUdVGtb5x/gNujcTJgoW9QQusEwBtkH2oCCm1
+         iLGsA0qzfSofDF362EIn9vLV3iRWY+kWMKAHR54N8HLOzxFNuOIlxxLmInzXZeEvSo1T
+         iSHg==
+X-Gm-Message-State: ANhLgQ0bV7ASkCE1u1C4JOuqTGSJKdYsTTv29hXnWVpJJs+iswo+SY+W
+        Lgvwc+7ACVWzo+wqEXPwAFSAuRUDt+6ME9j9kyqUJAGI
+X-Google-Smtp-Source: ADFU+vtRG2ZTrHb7CXb7FLMFpUdds0tOVt2N9o3unR9wlTcKNLgyYsV64mnNuo/+Q1Bnfi60U9+WJIUiDfOg7LEc+Cc=
+X-Received: by 2002:a37:b9c7:: with SMTP id j190mr1583102qkf.21.1583915225914;
+ Wed, 11 Mar 2020 01:27:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200310154358.39367-1-swboyd@chromium.org> <20200310154358.39367-2-swboyd@chromium.org>
-In-Reply-To: <20200310154358.39367-2-swboyd@chromium.org>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Wed, 11 Mar 2020 13:00:00 +0530
-Message-ID: <CAHLCerOx8-iUn0QHO4mDs2M9ncmpEvY7TyM9Tg-_wz9C0Thxug@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] i2c: qcom-geni: Let firmware specify irq trigger flags
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-i2c@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Alok Chauhan <alokc@codeaurora.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Brendan Higgins <brendanhiggins@google.com>
+References: <20200310205841.123084-1-michael.auchter@ni.com>
+In-Reply-To: <20200310205841.123084-1-michael.auchter@ni.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Wed, 11 Mar 2020 09:26:54 +0100
+Message-ID: <CAMpxmJXBN_qTwHpcD-anHVB-uhatuN-PZDUUe6boD0GoFiMVXw@mail.gmail.com>
+Subject: Re: [PATCH] misc: eeprom: at24: fix regulator underflow
+To:     Michael Auchter <michael.auchter@ni.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 10, 2020 at 9:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
+wt., 10 mar 2020 o 21:59 Michael Auchter <michael.auchter@ni.com> napisa=C5=
+=82(a):
 >
-> We don't need to force IRQF_TRIGGER_HIGH here as the DT or ACPI tables
-> should take care of this for us. Just use 0 instead so that we use the
-> flags from the firmware. Also, remove specify dev_name() for the irq
-> name so that we can get better information in /proc/interrupts about
-> which device is generating interrupts.
+> The at24 driver attempts to read a byte from the device to validate that
+> it's actually present, and if not, disables the vcc regulator and
+> returns -ENODEV. However, between the read and the error handling path,
+> pm_runtime_idle() is called and invokes the driver's suspend callback,
+> which also disables the vcc regulator. This leads to an underflow of the
+> regulator enable count if the EEPROM is not present.
 >
-
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
-
-> Cc: Alok Chauhan <alokc@codeaurora.org>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> Move the pm_runtime_suspend() call to be after the error handling path
+> to resolve this.
+>
+> Signed-off-by: Michael Auchter <michael.auchter@ni.com>
 > ---
->  drivers/i2c/busses/i2c-qcom-geni.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/misc/eeprom/at24.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 17abf60c94ae..4efca130035a 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -549,8 +549,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
->         init_completion(&gi2c->done);
->         spin_lock_init(&gi2c->lock);
->         platform_set_drvdata(pdev, gi2c);
-> -       ret = devm_request_irq(&pdev->dev, gi2c->irq, geni_i2c_irq,
-> -                              IRQF_TRIGGER_HIGH, "i2c_geni", gi2c);
-> +       ret = devm_request_irq(&pdev->dev, gi2c->irq, geni_i2c_irq, 0,
-> +                              dev_name(&pdev->dev), gi2c);
->         if (ret) {
->                 dev_err(&pdev->dev, "Request_irq failed:%d: err:%d\n",
->                         gi2c->irq, ret);
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index 031eb64549af..282c9ef68ed2 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -712,13 +712,14 @@ static int at24_probe(struct i2c_client *client)
+>          * chip is functional.
+>          */
+>         err =3D at24_read(at24, 0, &test_byte, 1);
+> -       pm_runtime_idle(dev);
+>         if (err) {
+>                 pm_runtime_disable(dev);
+>                 regulator_disable(at24->vcc_reg);
+>                 return -ENODEV;
+>         }
+>
+> +       pm_runtime_idle(dev);
+> +
+>         if (writable)
+>                 dev_info(dev, "%u byte %s EEPROM, writable, %u bytes/writ=
+e\n",
+>                          byte_len, client->name, at24->write_max);
 > --
-> Sent by a computer, using git, on the internet
+> 2.24.1
 >
+
+Patch applied for fixes.
+
+Bartosz
