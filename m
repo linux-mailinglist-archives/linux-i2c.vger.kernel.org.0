@@ -2,151 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A545D1813C4
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Mar 2020 09:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B5A181911
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Mar 2020 14:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728593AbgCKI4C (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Mar 2020 04:56:02 -0400
-Received: from mga12.intel.com ([192.55.52.136]:8691 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728150AbgCKI4C (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 11 Mar 2020 04:56:02 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Mar 2020 01:56:00 -0700
-X-IronPort-AV: E=Sophos;i="5.70,540,1574150400"; 
-   d="scan'208";a="277295646"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Mar 2020 01:55:57 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 3E8972096B; Wed, 11 Mar 2020 10:55:55 +0200 (EET)
-Date:   Wed, 11 Mar 2020 10:55:55 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>
-Subject: Re: [PATCH v4 5/6] at24: Support probing while off
-Message-ID: <20200311085555.GH5379@paasikivi.fi.intel.com>
-References: <20200121134157.20396-1-sakari.ailus@linux.intel.com>
- <20200121134157.20396-6-sakari.ailus@linux.intel.com>
- <CAMpxmJU5dG49N2FA0oSQsOfKrCr3KQ1BisON4c+nUJJmZQG=bQ@mail.gmail.com>
+        id S1729358AbgCKNDC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Mar 2020 09:03:02 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:34781 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729442AbgCKNDC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Mar 2020 09:03:02 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1583931781; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=f7e0eWxDfW7nEaHlYSKRi90iftgXxefmOtrDot6oFE0=; b=OzyT8G5maR+SLIXpWDtc/taW8IjnZTtT+Nv8bvH2N3NpMZPVCP8V5EcfYSdOxCSBdzEivnwk
+ X8I5aGLD7SDml3pAn6pGtAvOVo9Z2tpKccS2v27NPlzXM+eMB8EgoVNr7ZDBUdteITPAurps
+ dMEp8MdBCCli2J2LbBPHAgl/aiY=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e68e184.7f6a583953e8-smtp-out-n02;
+ Wed, 11 Mar 2020 13:03:00 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8C30AC433CB; Wed, 11 Mar 2020 13:02:59 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.252.222.65] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 28AAFC433D2;
+        Wed, 11 Mar 2020 13:02:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 28AAFC433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH 0/6] Add interconnect support to UART, I2C, SPI and QSPI
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+References: <1581946205-27189-1-git-send-email-akashast@codeaurora.org>
+ <20200309175954.GX24720@google.com>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <9e0afe90-5480-2db5-48fb-39cd8db6e8d1@codeaurora.org>
+Date:   Wed, 11 Mar 2020 18:32:44 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <20200309175954.GX24720@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMpxmJU5dG49N2FA0oSQsOfKrCr3KQ1BisON4c+nUJJmZQG=bQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Language: en-US
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Bartosz,
 
-Thanks for the reply.
+On 3/9/2020 11:29 PM, Matthias Kaehlcke wrote:
+> Hi Akash,
+>
+> do you plan to re-spin this series in the near future?
+>
+> Thanks
+>
+> Matthias
 
-On Wed, Jan 29, 2020 at 02:36:17PM +0100, Bartosz Golaszewski wrote:
-> wt., 21 sty 2020 o 14:41 Sakari Ailus <sakari.ailus@linux.intel.com> napisał(a):
-> >
-> > In certain use cases (where the chip is part of a camera module, and the
-> > camera module is wired together with a camera privacy LED), powering on
-> > the device during probe is undesirable. Add support for the at24 to
-> > execute probe while being powered off. For this to happen, a hint in form
-> > of a device property is required from the firmware.
-> >
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  drivers/misc/eeprom/at24.c | 31 +++++++++++++++++++++----------
-> >  1 file changed, 21 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-> > index 0681d5fdd538a..5fc1162b67618 100644
-> > --- a/drivers/misc/eeprom/at24.c
-> > +++ b/drivers/misc/eeprom/at24.c
-> > @@ -564,6 +564,7 @@ static int at24_probe(struct i2c_client *client)
-> >         bool i2c_fn_i2c, i2c_fn_block;
-> >         unsigned int i, num_addresses;
-> >         struct at24_data *at24;
-> > +       bool low_power;
-> >         struct regmap *regmap;
-> >         bool writable;
-> >         u8 test_byte;
-> > @@ -701,19 +702,24 @@ static int at24_probe(struct i2c_client *client)
-> >
-> >         i2c_set_clientdata(client, at24);
-> >
-> > -       /* enable runtime pm */
-> > -       pm_runtime_set_active(dev);
-> > +       low_power = acpi_dev_state_low_power(&client->dev);
-> > +       if (!low_power)
-> > +               pm_runtime_set_active(dev);
-> > +
-> >         pm_runtime_enable(dev);
-> >
-> >         /*
-> > -        * Perform a one-byte test read to verify that the
-> > -        * chip is functional.
-> > +        * Perform a one-byte test read to verify that the chip is functional,
-> > +        * unless powering on the device is to be avoided during probe (i.e.
-> > +        * it's powered off right now).
-> >          */
-> > -       err = at24_read(at24, 0, &test_byte, 1);
-> > -       pm_runtime_idle(dev);
-> > -       if (err) {
-> > -               pm_runtime_disable(dev);
-> > -               return -ENODEV;
-> > +       if (!low_power) {
-> > +               err = at24_read(at24, 0, &test_byte, 1);
-> > +               pm_runtime_idle(dev);
-> > +               if (err) {
-> > +                       pm_runtime_disable(dev);
-> > +                       return -ENODEV;
-> > +               }
-> >         }
-> >
-> >         if (writable)
-> > @@ -728,8 +734,12 @@ static int at24_probe(struct i2c_client *client)
-> >
-> >  static int at24_remove(struct i2c_client *client)
-> >  {
-> > +       bool low_power;
-> > +
-> >         pm_runtime_disable(&client->dev);
-> > -       pm_runtime_set_suspended(&client->dev);
-> > +       low_power = acpi_dev_state_low_power(&client->dev);
-> 
-> This is inconsistent. You define the low_power field in the context
-> structure (BTW the name low_power is a bit vague here - without
-> looking at its assignment it would make me think it's about something
-> battery-related, how about 'off_at_probe'?) and instead of reusing
+Hi  Matthias,
 
-The field was called probe_powered_off in v1, but I changed it to
-probe_low_power (and renamed related functions etc.) based on review
-comments --- for the device may not be powered off actually.
+I will re-spin the series by 3/13.
 
-> this field here, you call acpi_dev_state_low_power() again. Either
-> don't store the context for the life-time of the device if not
-> necessary or don't call acpi_dev_state_low_power() at remove, although
-> the commit message doesn't describe whether the latter is done on
-> purpose.
-
-Right. probe-low-power property has the same effect on remove for
-consistency, i.e. the device can remain in low power state during remove.
-This is documented in probe_low_power field documentation in the first
-patch.
-
--- 
 Regards,
 
-Sakari Ailus
+Akash
+
+>
+> On Mon, Feb 17, 2020 at 06:59:59PM +0530, Akash Asthana wrote:
+>> dt-binding patch for UART, I2C and SPI.
+>>   - https://patchwork.kernel.org/patch/11385965/ [Convert QUP bindings
+>> 	to YAML and add ICC, pin swap doc]
+>>
+>> dt-binding patch for QSPI.
+>>   - https://patchwork.kernel.org/cover/11386003/ [Convert QSPI binding
+>> 	to YAML and add interconnect doc]
+>>
+>> Akash Asthana (6):
+>>    soc: qcom: geni: Support for ICC voting
+>>    tty: serial: qcom_geni_serial: Add interconnect support
+>>    i2c: i2c-qcom-geni: Add interconnect support
+>>    spi: spi-geni-qcom: Add interconnect support
+>>    spi: spi-qcom-qspi: Add interconnect support
+>>    arm64: dts: sc7180: Add interconnect for QUP and QSPI
+>>
+>>   arch/arm64/boot/dts/qcom/sc7180.dtsi  | 199 ++++++++++++++++++++++++++++++++++
+>>   drivers/i2c/busses/i2c-qcom-geni.c    |  84 +++++++++++++-
+>>   drivers/spi/spi-geni-qcom.c           |  65 ++++++++++-
+>>   drivers/spi/spi-qcom-qspi.c           |  38 ++++++-
+>>   drivers/tty/serial/qcom_geni_serial.c |  84 ++++++++++++--
+>>   include/linux/qcom-geni-se.h          |  31 ++++++
+>>   6 files changed, 481 insertions(+), 20 deletions(-)
+>>
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
