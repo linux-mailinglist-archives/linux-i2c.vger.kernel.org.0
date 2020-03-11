@@ -2,91 +2,217 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBD4180F8C
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Mar 2020 06:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 341851811F6
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Mar 2020 08:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726853AbgCKFNy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Mar 2020 01:13:54 -0400
-Received: from smtprelay0019.hostedemail.com ([216.40.44.19]:42930 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726855AbgCKFNy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Mar 2020 01:13:54 -0400
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave05.hostedemail.com (Postfix) with ESMTP id 096A6180477B5;
-        Wed, 11 Mar 2020 05:07:04 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 9D5DF837F24C;
-        Wed, 11 Mar 2020 05:07:00 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:541:800:960:967:973:982:988:989:1260:1311:1314:1345:1359:1437:1515:1534:1541:1711:1730:1747:1777:1792:2393:2525:2560:2563:2682:2685:2693:2859:2902:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3352:3865:3866:3867:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:5007:6261:9025:9592:10004:10848:11026:11658:11914:12043:12048:12296:12297:12438:12555:12679:12895:12986:13069:13311:13357:13894:13972:14096:14181:14384:14394:14721:21080:21433:21627:21811:21939:30045:30054:30070:30083,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: shake20_1fd8a6d1c3425
-X-Filterd-Recvd-Size: 2655
-Received: from joe-laptop.perches.com (unknown [47.151.143.254])
-        (Authenticated sender: joe@perches.com)
-        by omf16.hostedemail.com (Postfix) with ESMTPA;
-        Wed, 11 Mar 2020 05:06:58 +0000 (UTC)
-From:   Joe Perches <joe@perches.com>
-To:     Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: [PATCH -next 010/491] ARM/SAMSUNG EXYNOS ARM ARCHITECTURES: Use fallthrough;
-Date:   Tue, 10 Mar 2020 21:51:24 -0700
-Message-Id: <1d569e023b6cb7b8d0da8d1bcccd92e97fe436c8.1583896348.git.joe@perches.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <cover.1583896344.git.joe@perches.com>
-References: <cover.1583896344.git.joe@perches.com>
+        id S1728479AbgCKHap (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Mar 2020 03:30:45 -0400
+Received: from mail-ua1-f66.google.com ([209.85.222.66]:41542 "EHLO
+        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728195AbgCKHao (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Mar 2020 03:30:44 -0400
+Received: by mail-ua1-f66.google.com with SMTP id l7so355162uap.8
+        for <linux-i2c@vger.kernel.org>; Wed, 11 Mar 2020 00:30:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+Nk9d88tir1z9F+OfZqa+RxpSNCU78XfSYzCiKpe64Q=;
+        b=xgQwRmjyFp8+taCvHKFUoeqURRY7TiuLf89r+llmJb6qciItR+j4GtXgiRI5Exwd45
+         8jY928jqPvHCyGb0XL6Yw1dwNw+V6ErLpr7mxnrq88bL4/4l1fxxvnk+5Blu4/kH7/Xh
+         ueBcClS0plhlOrAmI5a1ehlI88tkTnKwZWqqm8hMJRkWRy+Uxw5CgXOrrXvyPuXDCxv0
+         KA1o+PY55P+eaR+1D47waYAVPaIv8GIphtvyWcwDUCvIXPNyBcE+WQBFo2jMEYI2q8hC
+         mq4en4mQHKnr8MdkVJrpwwvrNzg8SMAcgndxI3YXecLM6bqw65F4rBuie5VlWe9l4yiD
+         3zbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+Nk9d88tir1z9F+OfZqa+RxpSNCU78XfSYzCiKpe64Q=;
+        b=nHPZwmU23J3x92jMInM9spzps8YnBSk37eaF3CIe0jzFDLejDa/vHJGmd1uNWuZZ0S
+         FfFnrukhiegrBSeIddFWgYPWeEOcd5Nx5iWfab24k49U64SCNFEHVdoOsc/1WQB4/mL2
+         Zgl0muwPbzkIPGhyogeOv+Cu+Tyd+ICnu/CZwoZYLao13ttPYOk9vwkynvvZNbhMZFh+
+         aCCtuBjFIOWXwzHfGnKQ9PMUpeVGbWwy3x2M4pZWzusUX3Du+bdu/8SHZsCRjulf/JBn
+         Ae/u26YF7rxk6SyW63PFNj3gukr067Nio01WN/p81n8W04qSKZ/OFP8X9jPJ/TwscsqP
+         aLXw==
+X-Gm-Message-State: ANhLgQ2/yDhL49NxA9axMH3GjgdPc/xfiMoAW8c7dIuwyYsEAVeIZ377
+        HRHQx4pSWtcbxO90L/FW3Fgb7ONKiParFn/lhVGzFQ==
+X-Google-Smtp-Source: ADFU+vt1Nj01BNrpKA6Wcf6tdySvJn+95tH2Jbcar3F9/LL7ZtoYmUEKyaT4NHRuBSPHRz11S0Tm9XGr1rpoOymRoko=
+X-Received: by 2002:ab0:3089:: with SMTP id h9mr877616ual.48.1583911843276;
+ Wed, 11 Mar 2020 00:30:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200310154358.39367-1-swboyd@chromium.org> <20200310154358.39367-3-swboyd@chromium.org>
+In-Reply-To: <20200310154358.39367-3-swboyd@chromium.org>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Wed, 11 Mar 2020 13:00:00 +0530
+Message-ID: <CAHLCerNVX844nUwaYHCRQdUhYbpfjRxQQp445bd_v7hnQ3YbyA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] i2c: qcom-geni: Grow a dev pointer to simplify code
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-i2c@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Alok Chauhan <alokc@codeaurora.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Convert the various uses of fallthrough comments to fallthrough;
+On Tue, Mar 10, 2020 at 9:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Some lines are long here. Use a struct dev pointer to shorten lines and
+> simplify code. The clk_get() call can fail because of EPROBE_DEFER
+> problems too, so just remove the error print message because it isn't
+> useful. Finally, platform_get_irq() already prints an error so just
+> remove that error message.
+>
 
-Done via script
-Link: https://lore.kernel.org/lkml/b56602fcf79f849e733e7b521bb0e17895d390fa.1582230379.git.joe.com/
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 
-Signed-off-by: Joe Perches <joe@perches.com>
----
- drivers/clk/samsung/clk-s3c2443.c | 2 +-
- drivers/i2c/busses/i2c-s3c2410.c  | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/clk/samsung/clk-s3c2443.c b/drivers/clk/samsung/clk-s3c2443.c
-index 5f30fe7..c7aba1e 100644
---- a/drivers/clk/samsung/clk-s3c2443.c
-+++ b/drivers/clk/samsung/clk-s3c2443.c
-@@ -387,7 +387,7 @@ void __init s3c2443_common_clk_init(struct device_node *np, unsigned long xti_f,
- 				ARRAY_SIZE(s3c2450_gates));
- 		samsung_clk_register_alias(ctx, s3c2450_aliases,
- 				ARRAY_SIZE(s3c2450_aliases));
--		/* fall through - as s3c2450 extends the s3c2416 clocks */
-+		fallthrough;	/* as s3c2450 extends the s3c2416 clocks */
- 	case S3C2416:
- 		samsung_clk_register_div(ctx, s3c2416_dividers,
- 				ARRAY_SIZE(s3c2416_dividers));
-diff --git a/drivers/i2c/busses/i2c-s3c2410.c b/drivers/i2c/busses/i2c-s3c2410.c
-index c98ef4c..dd1264 100644
---- a/drivers/i2c/busses/i2c-s3c2410.c
-+++ b/drivers/i2c/busses/i2c-s3c2410.c
-@@ -435,8 +435,7 @@ static int i2c_s3c_irq_nextbyte(struct s3c24xx_i2c *i2c, unsigned long iicstat)
- 		 * fall through to the write state, as we will need to
- 		 * send a byte as well
- 		 */
--		/* Fall through */
--
-+		fallthrough;
- 	case STATE_WRITE:
- 		/*
- 		 * we are writing data to the device... check for the
--- 
-2.24.0
-
+> Cc: Alok Chauhan <alokc@codeaurora.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  drivers/i2c/busses/i2c-qcom-geni.c | 57 ++++++++++++++----------------
+>  1 file changed, 26 insertions(+), 31 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index 4efca130035a..2f5fb2e83f95 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -502,45 +502,40 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>         struct resource *res;
+>         u32 proto, tx_depth;
+>         int ret;
+> +       struct device *dev = &pdev->dev;
+>
+> -       gi2c = devm_kzalloc(&pdev->dev, sizeof(*gi2c), GFP_KERNEL);
+> +       gi2c = devm_kzalloc(dev, sizeof(*gi2c), GFP_KERNEL);
+>         if (!gi2c)
+>                 return -ENOMEM;
+>
+> -       gi2c->se.dev = &pdev->dev;
+> -       gi2c->se.wrapper = dev_get_drvdata(pdev->dev.parent);
+> +       gi2c->se.dev = dev;
+> +       gi2c->se.wrapper = dev_get_drvdata(dev->parent);
+>         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -       gi2c->se.base = devm_ioremap_resource(&pdev->dev, res);
+> +       gi2c->se.base = devm_ioremap_resource(dev, res);
+>         if (IS_ERR(gi2c->se.base))
+>                 return PTR_ERR(gi2c->se.base);
+>
+> -       gi2c->se.clk = devm_clk_get(&pdev->dev, "se");
+> -       if (IS_ERR(gi2c->se.clk) && !has_acpi_companion(&pdev->dev)) {
+> -               ret = PTR_ERR(gi2c->se.clk);
+> -               dev_err(&pdev->dev, "Err getting SE Core clk %d\n", ret);
+> -               return ret;
+> -       }
+> +       gi2c->se.clk = devm_clk_get(dev, "se");
+> +       if (IS_ERR(gi2c->se.clk) && !has_acpi_companion(dev))
+> +               return PTR_ERR(gi2c->se.clk);
+>
+> -       ret = device_property_read_u32(&pdev->dev, "clock-frequency",
+> -                                                       &gi2c->clk_freq_out);
+> +       ret = device_property_read_u32(dev, "clock-frequency",
+> +                                      &gi2c->clk_freq_out);
+>         if (ret) {
+> -               dev_info(&pdev->dev,
+> -                       "Bus frequency not specified, default to 100kHz.\n");
+> +               dev_info(dev, "Bus frequency not specified, default to 100kHz.\n");
+>                 gi2c->clk_freq_out = KHZ(100);
+>         }
+>
+> -       if (has_acpi_companion(&pdev->dev))
+> -               ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(&pdev->dev));
+> +       if (has_acpi_companion(dev))
+> +               ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(dev));
+>
+>         gi2c->irq = platform_get_irq(pdev, 0);
+> -       if (gi2c->irq < 0) {
+> -               dev_err(&pdev->dev, "IRQ error for i2c-geni\n");
+> +       if (gi2c->irq < 0)
+>                 return gi2c->irq;
+> -       }
+>
+>         ret = geni_i2c_clk_map_idx(gi2c);
+>         if (ret) {
+> -               dev_err(&pdev->dev, "Invalid clk frequency %d Hz: %d\n",
+> +               dev_err(dev, "Invalid clk frequency %d Hz: %d\n",
+>                         gi2c->clk_freq_out, ret);
+>                 return ret;
+>         }
+> @@ -549,29 +544,29 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>         init_completion(&gi2c->done);
+>         spin_lock_init(&gi2c->lock);
+>         platform_set_drvdata(pdev, gi2c);
+> -       ret = devm_request_irq(&pdev->dev, gi2c->irq, geni_i2c_irq, 0,
+> -                              dev_name(&pdev->dev), gi2c);
+> +       ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq, 0,
+> +                              dev_name(dev), gi2c);
+>         if (ret) {
+> -               dev_err(&pdev->dev, "Request_irq failed:%d: err:%d\n",
+> +               dev_err(dev, "Request_irq failed:%d: err:%d\n",
+>                         gi2c->irq, ret);
+>                 return ret;
+>         }
+>         /* Disable the interrupt so that the system can enter low-power mode */
+>         disable_irq(gi2c->irq);
+>         i2c_set_adapdata(&gi2c->adap, gi2c);
+> -       gi2c->adap.dev.parent = &pdev->dev;
+> -       gi2c->adap.dev.of_node = pdev->dev.of_node;
+> +       gi2c->adap.dev.parent = dev;
+> +       gi2c->adap.dev.of_node = dev->of_node;
+>         strlcpy(gi2c->adap.name, "Geni-I2C", sizeof(gi2c->adap.name));
+>
+>         ret = geni_se_resources_on(&gi2c->se);
+>         if (ret) {
+> -               dev_err(&pdev->dev, "Error turning on resources %d\n", ret);
+> +               dev_err(dev, "Error turning on resources %d\n", ret);
+>                 return ret;
+>         }
+>         proto = geni_se_read_proto(&gi2c->se);
+>         tx_depth = geni_se_get_tx_fifo_depth(&gi2c->se);
+>         if (proto != GENI_SE_I2C) {
+> -               dev_err(&pdev->dev, "Invalid proto %d\n", proto);
+> +               dev_err(dev, "Invalid proto %d\n", proto);
+>                 geni_se_resources_off(&gi2c->se);
+>                 return -ENXIO;
+>         }
+> @@ -581,11 +576,11 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>                                                         true, true, true);
+>         ret = geni_se_resources_off(&gi2c->se);
+>         if (ret) {
+> -               dev_err(&pdev->dev, "Error turning off resources %d\n", ret);
+> +               dev_err(dev, "Error turning off resources %d\n", ret);
+>                 return ret;
+>         }
+>
+> -       dev_dbg(&pdev->dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
+> +       dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
+>
+>         gi2c->suspended = 1;
+>         pm_runtime_set_suspended(gi2c->se.dev);
+> @@ -595,12 +590,12 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>
+>         ret = i2c_add_adapter(&gi2c->adap);
+>         if (ret) {
+> -               dev_err(&pdev->dev, "Error adding i2c adapter %d\n", ret);
+> +               dev_err(dev, "Error adding i2c adapter %d\n", ret);
+>                 pm_runtime_disable(gi2c->se.dev);
+>                 return ret;
+>         }
+>
+> -       dev_dbg(&pdev->dev, "Geni-I2C adaptor successfully added\n");
+> +       dev_dbg(dev, "Geni-I2C adaptor successfully added\n");
+>
+>         return 0;
+>  }
+> --
+> Sent by a computer, using git, on the internet
+>
