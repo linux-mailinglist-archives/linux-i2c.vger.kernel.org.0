@@ -2,77 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BA4183193
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Mar 2020 14:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA451831BA
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Mar 2020 14:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727123AbgCLNc5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Mar 2020 09:32:57 -0400
-Received: from sauhun.de ([88.99.104.3]:42378 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726720AbgCLNc5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 12 Mar 2020 09:32:57 -0400
-Received: from localhost (p54B331A0.dip0.t-ipconnect.de [84.179.49.160])
-        by pokefinder.org (Postfix) with ESMTPSA id 950B12C1ECC;
-        Thu, 12 Mar 2020 14:32:55 +0100 (CET)
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-acpi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        id S1726028AbgCLNii (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Mar 2020 09:38:38 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37358 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727194AbgCLNii (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Mar 2020 09:38:38 -0400
+Received: by mail-ot1-f66.google.com with SMTP id i12so949534otp.4;
+        Thu, 12 Mar 2020 06:38:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LZj5cPIDRAd/O2vyQ2odALBxqPsyj21il1eEEBudhSo=;
+        b=ShU8dPnNiYXDf/bWDjNuLmbrWw3Wn8PJusBaeQkkylqUCegHyNeUs1KBROFHALggDh
+         2w1hQ6o39GBz8+4pkNltI7wix57d/cX92VPgI9u+dY544j7z5yOe3dL7EgWTm0k7f6ui
+         ycMA4gyHyVxob57Z0s2m7el9yCN7ceacixz10qpxk1gttstkP4ecNSTym7hJrvqsSXqO
+         uUqxCrLG7IqG6gNRimx57RgpVuKAVT4cWe6+nHL73MJBIeJM1j2twjhhw8UE/uyjn9qW
+         AZ0x6+2evAYGmSIkCBCqTHwdDr8W6mrWSnZ2ZFAv8Blb87jB+RT0fjmbtujtd9jgGlQJ
+         4e2A==
+X-Gm-Message-State: ANhLgQ3QOAOtjY8tTPGOAwUpnD6vHIjDIpvecaUSKkojVMtbq90ZgpbZ
+        UVH47OcjgH/vTCklqO5RAeJbDzAtVB6IhEMHG0Y=
+X-Google-Smtp-Source: ADFU+vuSh/99ve5kjxmesXn1EBGQ7zk1qjQDub4hZ/WAGoOsllXKp5oQsA09B8Mo6NZKe90UItuDR7/YvIxeTZ9xMXs=
+X-Received: by 2002:a4a:e211:: with SMTP id b17mr4052099oot.79.1584020315784;
+ Thu, 12 Mar 2020 06:38:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200312133244.9564-1-wsa@the-dreams.de>
+In-Reply-To: <20200312133244.9564-1-wsa@the-dreams.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 12 Mar 2020 14:38:24 +0100
+Message-ID: <CAMuHMdXUZF3R7TaB6E96DGbb320fD51w0ycJouOEfR-LwoUZQA@mail.gmail.com>
+Subject: Re: [RFC PATCH] i2c: acpi: put device when verifying client fails
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [RFC PATCH] i2c: acpi: put device when verifying client fails
-Date:   Thu, 12 Mar 2020 14:32:44 +0100
-Message-Id: <20200312133244.9564-1-wsa@the-dreams.de>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Thu, Mar 12, 2020 at 2:32 PM Wolfram Sang <wsa@the-dreams.de> wrote:
+> From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>
+> i2c_verify_client() can fail, so we need to put the device when that
+> happens.
+>
+> Fixes: 525e6fabeae2 ("i2c / ACPI: add support for ACPI reconfigure notifications")
+> Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-i2c_verify_client() can fail, so we need to put the device when that
-happens.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Fixes: 525e6fabeae2 ("i2c / ACPI: add support for ACPI reconfigure notifications")
-Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+Gr{oetje,eeting}s,
 
-RFC because I don't know if it can be that the returned dev is not an
-i2c_client. Yet, since it can happen theoretically, I think we should
-have the checks.
+                        Geert
 
- drivers/i2c/i2c-core-acpi.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 8f3dbc97a057..8b0ff780919b 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -394,9 +394,17 @@ EXPORT_SYMBOL_GPL(i2c_acpi_find_adapter_by_handle);
- static struct i2c_client *i2c_acpi_find_client_by_adev(struct acpi_device *adev)
- {
- 	struct device *dev;
-+	struct i2c_client *client;
- 
- 	dev = bus_find_device_by_acpi_dev(&i2c_bus_type, adev);
--	return dev ? i2c_verify_client(dev) : NULL;
-+	if (!dev)
-+		return NULL;
-+
-+	client = i2c_verify_client(dev);
-+	if (!client)
-+		put_device(dev);
-+
-+	return client;
- }
- 
- static int i2c_acpi_notify(struct notifier_block *nb, unsigned long value,
 -- 
-2.20.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
