@@ -2,112 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F0618343A
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Mar 2020 16:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB03183567
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Mar 2020 16:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727672AbgCLPOv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Mar 2020 11:14:51 -0400
-Received: from mga02.intel.com ([134.134.136.20]:4466 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727455AbgCLPOv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 12 Mar 2020 11:14:51 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Mar 2020 08:14:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,545,1574150400"; 
-   d="scan'208";a="266376041"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Mar 2020 08:14:48 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jCPXu-00916h-38; Thu, 12 Mar 2020 17:14:50 +0200
-Date:   Thu, 12 Mar 2020 17:14:50 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [RFC PATCH] i2c: acpi: put device when verifying client fails
-Message-ID: <20200312151450.GZ1922688@smile.fi.intel.com>
-References: <20200312133244.9564-1-wsa@the-dreams.de>
+        id S1727493AbgCLPur (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Mar 2020 11:50:47 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:40496 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727240AbgCLPuq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Mar 2020 11:50:46 -0400
+Received: by mail-ot1-f65.google.com with SMTP id h17so6753492otn.7;
+        Thu, 12 Mar 2020 08:50:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=VmSnjUg0wpW0rLa5TeV8iHT4CfQoAhuM8tvfmUdklCI=;
+        b=dk/dw4TzGWxjDvOBxagGNuaP763REENZC9LsEIVgPOdedkuZX4tK2foU1JN2Tzlbcw
+         Tq+2lNdbl7R0cdlVFQI9C+q9v6BgkzzLP8E0FB7KO00fZ3csfLdBGLiFaY7u3h6OhDa1
+         sxbOnEtR5rLqWKGdnZdrZewetSJk/EP79J6QGun6/ZBRTO0ZSmV8PIpQrTNOaLvkXAuX
+         cr/H2Dv2Yo9WJN7yHdcddGSa90f6IfyHMPmsTRs/ZAeaMxv9J6wUkQXZhRTOZoKbSU4W
+         woBaKcPzfO7o8BHwIkl++ehtfy/ICGfcihyIZToLwAFFB8H4XGC5dYh9Od0KW+rusFOs
+         Z8xA==
+X-Gm-Message-State: ANhLgQ18yj8UJGYRY20TkIK9Zj4OAAw4U8c40ltQzqP1Ui88A6pIcYp5
+        kzv0nBpSa4RnTuJ01qFnyA==
+X-Google-Smtp-Source: ADFU+vtZdELV7BCrf8YMUOe0vH5ZKPB7JioeAIO2CIRABTehRRGFIR2nr2WBf9t9ELKW/BQbZJCPgw==
+X-Received: by 2002:a9d:404b:: with SMTP id o11mr6582435oti.368.1584028245722;
+        Thu, 12 Mar 2020 08:50:45 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 81sm7075701otu.51.2020.03.12.08.50.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2020 08:50:45 -0700 (PDT)
+Received: (nullmailer pid 25348 invoked by uid 1000);
+        Thu, 12 Mar 2020 15:50:44 -0000
+Date:   Thu, 12 Mar 2020 10:50:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     heiko@sntech.de, robh+dt@kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/5] dt-bindings: i2c: convert rockchip i2c bindings
+ to yaml
+Message-ID: <20200312155044.GA25292@bogus>
+References: <20200305143611.10733-1-jbx6244@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200312133244.9564-1-wsa@the-dreams.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200305143611.10733-1-jbx6244@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 02:32:44PM +0100, Wolfram Sang wrote:
-> From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Thu,  5 Mar 2020 15:36:07 +0100, Johan Jonker wrote:
+> Current dts files with 'i2c' nodes are manually verified.
+> In order to automate this process i2c-rk3x.txt
+> has to be converted to yaml. In the new setup
+> i2c-rk3x.yaml will inherit properties from
+> i2c-controller.yaml.
 > 
-> i2c_verify_client() can fail, so we need to put the device when that
-> happens.
-
-I hope it's not a CoVID-19 makes me mistakenly commented in the first place. :-)
-
-So, theoretically below is possible, but practically it's doubtful.
-
-The I2CSerialBusV2() ACPI resource can be present solely in I²C slave device
-nodes according to the specification. However, we might have two possible cases
-a) screwed up ACPI table;
-b) I²C master which in turn is I²C slave.
-
-While a) has been so far unseen, b) case sounds like plasible for I²C muxes IIUC.
-
-So, I agree with the patch, and sorry for the first reaction.
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Fixes: 525e6fabeae2 ("i2c / ACPI: add support for ACPI reconfigure notifications")
-> Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Also change document name in MAINTAINERS.
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 > ---
-> 
-> RFC because I don't know if it can be that the returned dev is not an
-> i2c_client. Yet, since it can happen theoretically, I think we should
-> have the checks.
-> 
->  drivers/i2c/i2c-core-acpi.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> index 8f3dbc97a057..8b0ff780919b 100644
-> --- a/drivers/i2c/i2c-core-acpi.c
-> +++ b/drivers/i2c/i2c-core-acpi.c
-> @@ -394,9 +394,17 @@ EXPORT_SYMBOL_GPL(i2c_acpi_find_adapter_by_handle);
->  static struct i2c_client *i2c_acpi_find_client_by_adev(struct acpi_device *adev)
->  {
->  	struct device *dev;
-> +	struct i2c_client *client;
->  
->  	dev = bus_find_device_by_acpi_dev(&i2c_bus_type, adev);
-> -	return dev ? i2c_verify_client(dev) : NULL;
-> +	if (!dev)
-> +		return NULL;
-> +
-> +	client = i2c_verify_client(dev);
-> +	if (!client)
-> +		put_device(dev);
-> +
-> +	return client;
->  }
->  
->  static int i2c_acpi_notify(struct notifier_block *nb, unsigned long value,
-> -- 
-> 2.20.1
+>  Documentation/devicetree/bindings/i2c/i2c-rk3x.txt |  68 -----------
+>  .../devicetree/bindings/i2c/i2c-rk3x.yaml          | 129 +++++++++++++++++++++
+>  MAINTAINERS                                        |   2 +-
+>  3 files changed, 130 insertions(+), 69 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-rk3x.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
 > 
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>
