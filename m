@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E97A182EF7
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Mar 2020 12:21:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FFA182F2E
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Mar 2020 12:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727027AbgCLLVj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Mar 2020 07:21:39 -0400
-Received: from sauhun.de ([88.99.104.3]:41300 "EHLO pokefinder.org"
+        id S1726044AbgCLLap (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Mar 2020 07:30:45 -0400
+Received: from sauhun.de ([88.99.104.3]:41382 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726310AbgCLLVj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 12 Mar 2020 07:21:39 -0400
+        id S1725268AbgCLLap (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 12 Mar 2020 07:30:45 -0400
 Received: from localhost (p54B331A0.dip0.t-ipconnect.de [84.179.49.160])
-        by pokefinder.org (Postfix) with ESMTPSA id AB7A02C1ECC;
-        Thu, 12 Mar 2020 12:21:36 +0100 (CET)
-Date:   Thu, 12 Mar 2020 12:21:36 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 66DED2C1ECC;
+        Thu, 12 Mar 2020 12:30:43 +0100 (CET)
+Date:   Thu, 12 Mar 2020 12:30:43 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         linux-i3c@lists.infradead.org,
         Kieran Bingham <kieran@ksquared.org.uk>,
         Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Vladimir Zapolskiy <vz@mleia.com>,
@@ -32,15 +32,16 @@ Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         <devicetree@vger.kernel.org>
 Subject: Re: [RFC PATCH 7/7] i2c: core: hand over reserved devices when
  requesting ancillary addresses
-Message-ID: <20200312112136.GC1013@ninjato>
+Message-ID: <20200312113042.GD1013@ninjato>
 References: <20200220172403.26062-1-wsa+renesas@sang-engineering.com>
  <20200220172403.26062-8-wsa+renesas@sang-engineering.com>
  <CAMuHMdV-dfjukuSKiFg4vb4Ntn+XWU0XwHPxyoaWs1vtQVg4cw@mail.gmail.com>
+ <dc831357-8545-6f6e-71a2-bef282e0bd94@lucaceresoli.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LwW0XdcUbUexiWVK"
+        protocol="application/pgp-signature"; boundary="rz+pwK2yUstbofK6"
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdV-dfjukuSKiFg4vb4Ntn+XWU0XwHPxyoaWs1vtQVg4cw@mail.gmail.com>
+In-Reply-To: <dc831357-8545-6f6e-71a2-bef282e0bd94@lucaceresoli.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -48,35 +49,62 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LwW0XdcUbUexiWVK
+--rz+pwK2yUstbofK6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
-> (perhaps i2c_verify_client() checking dev was not such a great idea, as
->  callers need to act on dev && !verified anyway?)
+> >> +               strlcpy(reserved_client->name, I2C_DUMMY_DRV_NAME, siz=
+eof(client->name));
+>=20
+> Any strong reason for not giving the device a more informative name?
 
-Can be argued. I will have a second thought about it.
+Yes, sadly...
+
+> Reading "dummy" in several /sys/bus/i2c/devices/?-????/name files is not
+> helping. Using the 'name' string that is passed to
+> i2c_new_ancillary_device() would be way better, perhaps prefixed by
+> dev->name. But this opens the question of why not doing it in
+
+=2E.. I never liked the plain "dummy" name as well. However, because
+'name' is what we need to bind to a driver we can't have a more
+descriptive or run-time generated name at that place.
+
+> i2c_new_dummy_device() as well, which currently receives no "name"
+> parameter.
+
+I thought about it but discarded the idea because then you still have
+no connection to the driver which created the dummy device. My
+favourite idea so far is to advertise i2c_new_ancillary_device() instead
+of i2c_new_dummy_device(), because there we already have access to the
+client structure. With that, we could add another link in sysfs to the
+main address and vice-versa.
+
+> Of course this is not strictly related to this patch and can be done in
+> a later step.
+
+Exactly.
 
 
---LwW0XdcUbUexiWVK
+--rz+pwK2yUstbofK6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5qG0AACgkQFA3kzBSg
-KbZ1pw//a08b5SMNFzv8kd0sP91WzfI8fKmIuGx/frUmdIaZ30e5cNuotjUL02ek
-Tswmx+2eMxogD6/Q+N7jNbwFh/YghCpxY/hthdc9XKcwJBtCxzSgZzDyFo65aZ2d
-ZmMR1Yfh3O/bk3fzSU9HcRn9MiBksaPnPNOCQMXhu2BWc1ugDJiM4c8bSiGeqqVd
-4EMjxl+M8x4VvSRv26qwerrjyXWEU7rW0+NoBL704qgIKfgecOARCf8/2L96vX9A
-14U8VtRE6E8z07EvyQHdT+9S/Er0daYI+tb2iAP0S496Zaar/PBeaC8xoSXY1SKK
-lSXlthO8tgycRkyoZuYaai91+KPRq1WpYRPaHqkeVOmGzWR2INk7Ne8v/CRwL9f/
-hUhnMfylrIAE5F1/QRA67HrzFy/yX7bC918wCTk2hrmA8wWkkkn9e2Ab9ToXu9S+
-7rysp5gE82jgf2w/PqPhtkLbhtvcll3K9r9xBb0Mo11saIjk5UskUX4N45RpoIVx
-5Wptct5MKdnEUv2gAj4oNWJ4mvlQOgqfY+KWjjl4usR9KfYfbknhGSPxp4WNqXPX
-KrYPDcWnfFpHqHWPdOrbLd0aTpdxHMyswcj20jkmHPUDs1jnhroa8au5yiG67qEK
-mO2Q2Cvik/4H4A3HL1DuT64wnt5Ev9m35rYC1tYc14+WKkDBarw=
-=8zo1
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5qHWIACgkQFA3kzBSg
+KbYqEA//dr8XFHEYXWhQXqlofteHQgPuqLLgw5ruq9PvVCpv51Scsz/RjoUKvanT
+s3/CZjL+MvvHDvvpKjCpW6/ImDM2KSGalPy0ZAQ0GaOtS2aqaLvieLsnxGPF2FLl
+QLBufHNjG6DOkO6PrQ44SLRFvpKw2iBMihmGyJBRjWWMtPrpgw5fO0omoM3IogPj
+t+W0+Fou6p6dgiTYhGCIOYi8YHAHEZt+HPhBExDRHfbeF3K9IXGwA84m8uTCVEP6
+2XZoR4mjO5fbXGMWp5uhB9EtXridUSmUTavnG/vOFki6i8Nw36bscICAgRVaHk3m
+nhK4s53VEt1EB8dyW61ZUAfBqwwCHKfbmRneKpDtytOi7PS2eHrSTC1hCioparvh
+ifGDynlbyaEbJtxmmp2ukgSxLiO9V3r4HgHnnU7L+yUMUApcVX6o7ftRgMjKK4oj
+rYOnylcJyC151MOY4T+2fSl9VCmkcBsz8K5LoU/iN0TF6/x0W3OQ6Nv1p+t1k2oe
+105gZoZ/9d+7ja7MfJB23p0neb8SE0BVgkFtvLkJyvpyEw3f/JMdE1g3fjCAlb4u
+dB0enc8/ncA+yoGOTtN2ADXCPvteTcfK+GC9/Tlmd1HJwWlIWu24IVYJFAg6a4Ln
+HTILjLrr6L9HRNaemVxKdq1c/fTAPMFJB2ReDoHJokKjoTPULn0=
+=WKGM
 -----END PGP SIGNATURE-----
 
---LwW0XdcUbUexiWVK--
+--rz+pwK2yUstbofK6--
