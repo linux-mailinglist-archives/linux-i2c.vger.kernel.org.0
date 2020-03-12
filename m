@@ -2,140 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0F91830E5
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Mar 2020 14:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BA4183193
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Mar 2020 14:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgCLNKy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Mar 2020 09:10:54 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:33240 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726127AbgCLNKy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Mar 2020 09:10:54 -0400
-Received: by mail-qk1-f193.google.com with SMTP id p62so6022650qkb.0
-        for <linux-i2c@vger.kernel.org>; Thu, 12 Mar 2020 06:10:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Fw7HC8zfyv7xlZ8Y772nkRRedqdvBOfOWFl3YVWCR/U=;
-        b=AdZtKeCPQg9PgXC0gviIyq+JosFZw/cAj9pq91dp7zf89VIQDfzUxGcjz8E8TkavhT
-         RXxwgeNdTPjfEsKrFyHeXoXs7WFrhj9ob0zHAdnhajSny3M5b/maHxghCUkR8VcOIgg8
-         s7uOi1wR/QJzem+7e/rCx/FDiXmep2ZF3NmBzvwQXQZTX9kvfEW9Fl1Zpgba+BubQ0EU
-         sFyIF4FLnctOXb1QrFeHZe455H9ZlDTzReH8Cha5blAUVyxNOr4DMlDMzccRxpGsxaLg
-         4+l1Ydhy9ahwwDJucHO68yg8M6y40megUBqte2rt2btM9CIDfaqWnmrbvt3Burx5y9Lg
-         mD4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Fw7HC8zfyv7xlZ8Y772nkRRedqdvBOfOWFl3YVWCR/U=;
-        b=YYno6/Scq3JI5HrvpQp7czMlHQmWv76zyvIARnstoJqCMzXwpUCLATMTOC6k6L5vgh
-         6zlGvw6Ia/KqjZbX7XScs76GtBDzwFQWQnFO2PT4IRFLrLtVH/Lhgf6dJ9ywBTdGCCYn
-         9nwKENvhUA+BFFvWbeIPqx57/FeA9pidgRE19RzbAzsaiPbjW6AT8pt/Ib4mpDddjD1A
-         XNuLXllHcuQ0u7e1UKaVZcdFTgp/uY7E9cF0hBSzRcGDZg9qSyidBTZJl9wFGsGnSEcD
-         VVmWXelhouw9uobjIFbnLJGbEoHbtA6HdXTRcGrLH6I33fs8bYvtRO61pJe4FzLPFywu
-         4kEg==
-X-Gm-Message-State: ANhLgQ18ls4lxTDsO73oVfeeTzDtVcA4Vz/leXZo8tYZGo3FgEOqaDBi
-        aSvkd6xY2Eu67QVtllTXAzesNo9PyARygT6O0wIsIl8luT4=
-X-Google-Smtp-Source: ADFU+vsmLosOjuDP68r5eZPgol6dnmqRd+ZILVuI3Tk+l4vBb9/VptFkuJxMubd5z3NSwovTdmfxm5comn6Ihs5O5vc=
-X-Received: by 2002:a05:620a:1362:: with SMTP id d2mr7822512qkl.120.1584018652254;
- Thu, 12 Mar 2020 06:10:52 -0700 (PDT)
+        id S1727123AbgCLNc5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Mar 2020 09:32:57 -0400
+Received: from sauhun.de ([88.99.104.3]:42378 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726720AbgCLNc5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 12 Mar 2020 09:32:57 -0400
+Received: from localhost (p54B331A0.dip0.t-ipconnect.de [84.179.49.160])
+        by pokefinder.org (Postfix) with ESMTPSA id 950B12C1ECC;
+        Thu, 12 Mar 2020 14:32:55 +0100 (CET)
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-acpi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [RFC PATCH] i2c: acpi: put device when verifying client fails
+Date:   Thu, 12 Mar 2020 14:32:44 +0100
+Message-Id: <20200312133244.9564-1-wsa@the-dreams.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20200121134157.20396-1-sakari.ailus@linux.intel.com>
- <20200121134157.20396-6-sakari.ailus@linux.intel.com> <CAMpxmJU5dG49N2FA0oSQsOfKrCr3KQ1BisON4c+nUJJmZQG=bQ@mail.gmail.com>
- <20200311085555.GH5379@paasikivi.fi.intel.com>
-In-Reply-To: <20200311085555.GH5379@paasikivi.fi.intel.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Thu, 12 Mar 2020 14:10:32 +0100
-Message-ID: <CAMpxmJVPTKW+sYSJ3dnfF8nLAOKEa4Ob7bpxG0KD3Tkdm+rtYw@mail.gmail.com>
-Subject: Re: [PATCH v4 5/6] at24: Support probing while off
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Tomasz Figa <tfiga@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-=C5=9Br., 11 mar 2020 o 09:56 Sakari Ailus <sakari.ailus@linux.intel.com> n=
-apisa=C5=82(a):
->
-> Hi Bartosz,
->
-> Thanks for the reply.
->
-> On Wed, Jan 29, 2020 at 02:36:17PM +0100, Bartosz Golaszewski wrote:
-> > wt., 21 sty 2020 o 14:41 Sakari Ailus <sakari.ailus@linux.intel.com> na=
-pisa=C5=82(a):
-> > >
-> > > In certain use cases (where the chip is part of a camera module, and =
-the
-> > > camera module is wired together with a camera privacy LED), powering =
-on
-> > > the device during probe is undesirable. Add support for the at24 to
-> > > execute probe while being powered off. For this to happen, a hint in =
-form
-> > > of a device property is required from the firmware.
-> > >
-> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > ---
-> > >  drivers/misc/eeprom/at24.c | 31 +++++++++++++++++++++----------
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-[snip!]
+i2c_verify_client() can fail, so we need to put the device when that
+happens.
 
-> > >
-> > >  static int at24_remove(struct i2c_client *client)
-> > >  {
-> > > +       bool low_power;
-> > > +
-> > >         pm_runtime_disable(&client->dev);
-> > > -       pm_runtime_set_suspended(&client->dev);
-> > > +       low_power =3D acpi_dev_state_low_power(&client->dev);
-> >
-> > This is inconsistent. You define the low_power field in the context
-> > structure (BTW the name low_power is a bit vague here - without
-> > looking at its assignment it would make me think it's about something
-> > battery-related, how about 'off_at_probe'?) and instead of reusing
->
-> The field was called probe_powered_off in v1, but I changed it to
-> probe_low_power (and renamed related functions etc.) based on review
-> comments --- for the device may not be powered off actually.
->
+Fixes: 525e6fabeae2 ("i2c / ACPI: add support for ACPI reconfigure notifications")
+Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-But is it actually ever low-power? What are the possible logical
-states of the device? If I understood correctly: it's either off or on
-at probe - not actually low-power. Am I missing something? In your
-cover letter you're writing: "These patches enable calling (and
-finishing) a driver's probe function without powering on the
-respective device on busses where the practice is to power on the
-device for probe." To me there's no mention of a low-power state,
-which makes the name 'probe_low_power' seem completely unrelated.
+RFC because I don't know if it can be that the returned dev is not an
+i2c_client. Yet, since it can happen theoretically, I think we should
+have the checks.
 
-> > this field here, you call acpi_dev_state_low_power() again. Either
-> > don't store the context for the life-time of the device if not
-> > necessary or don't call acpi_dev_state_low_power() at remove, although
-> > the commit message doesn't describe whether the latter is done on
-> > purpose.
->
-> Right. probe-low-power property has the same effect on remove for
-> consistency, i.e. the device can remain in low power state during remove.
-> This is documented in probe_low_power field documentation in the first
-> patch.
->
+ drivers/i2c/i2c-core-acpi.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Just please don't store any state if you're not using it outside of
-the probe() function.
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index 8f3dbc97a057..8b0ff780919b 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -394,9 +394,17 @@ EXPORT_SYMBOL_GPL(i2c_acpi_find_adapter_by_handle);
+ static struct i2c_client *i2c_acpi_find_client_by_adev(struct acpi_device *adev)
+ {
+ 	struct device *dev;
++	struct i2c_client *client;
+ 
+ 	dev = bus_find_device_by_acpi_dev(&i2c_bus_type, adev);
+-	return dev ? i2c_verify_client(dev) : NULL;
++	if (!dev)
++		return NULL;
++
++	client = i2c_verify_client(dev);
++	if (!client)
++		put_device(dev);
++
++	return client;
+ }
+ 
+ static int i2c_acpi_notify(struct notifier_block *nb, unsigned long value,
+-- 
+2.20.1
 
-Bartosz
