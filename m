@@ -2,109 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FFA182F2E
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Mar 2020 12:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C041182F7D
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Mar 2020 12:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726044AbgCLLap (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Mar 2020 07:30:45 -0400
-Received: from sauhun.de ([88.99.104.3]:41382 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725268AbgCLLap (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 12 Mar 2020 07:30:45 -0400
-Received: from localhost (p54B331A0.dip0.t-ipconnect.de [84.179.49.160])
-        by pokefinder.org (Postfix) with ESMTPSA id 66DED2C1ECC;
-        Thu, 12 Mar 2020 12:30:43 +0100 (CET)
-Date:   Thu, 12 Mar 2020 12:30:43 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        id S1726385AbgCLLog (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Mar 2020 07:44:36 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:54575 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbgCLLog (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Mar 2020 07:44:36 -0400
+X-Originating-IP: 90.66.181.224
+Received: from localhost (lfbn-lyo-1-2013-224.w90-66.abo.wanadoo.fr [90.66.181.224])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 7A727240004;
+        Thu, 12 Mar 2020 11:44:32 +0000 (UTC)
+Date:   Thu, 12 Mar 2020 12:44:32 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         linux-i3c@lists.infradead.org,
         Kieran Bingham <kieran@ksquared.org.uk>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Jacopo Mondi <jacopo@jmondi.org>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>, Jacopo Mondi <jacopo@jmondi.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Vladimir Zapolskiy <vz@mleia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>
-Subject: Re: [RFC PATCH 7/7] i2c: core: hand over reserved devices when
- requesting ancillary addresses
-Message-ID: <20200312113042.GD1013@ninjato>
+Subject: Re: [RFC PATCH 3/7] i2c: allow DT nodes without 'compatible'
+Message-ID: <20200312114432.GA3384@piout.net>
 References: <20200220172403.26062-1-wsa+renesas@sang-engineering.com>
- <20200220172403.26062-8-wsa+renesas@sang-engineering.com>
- <CAMuHMdV-dfjukuSKiFg4vb4Ntn+XWU0XwHPxyoaWs1vtQVg4cw@mail.gmail.com>
- <dc831357-8545-6f6e-71a2-bef282e0bd94@lucaceresoli.net>
+ <20200220172403.26062-4-wsa+renesas@sang-engineering.com>
+ <CAMuHMdWaPfc050dZiRr+gAFzsdjSo9Vo70ztWgrMGPJxLUqupw@mail.gmail.com>
+ <e43eaaf1-a294-902f-9a52-ebf8b29acab1@lucaceresoli.net>
+ <20200312111950.GA1013@ninjato>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rz+pwK2yUstbofK6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dc831357-8545-6f6e-71a2-bef282e0bd94@lucaceresoli.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200312111950.GA1013@ninjato>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 12/03/2020 12:19:51+0100, Wolfram Sang wrote:
+> > Clearly this does not fit the case reported by Alexandre: a device
+> > having a driver which is known to be badly buggy, so we don't want to
+> > instantiate it. But again, this should not affect DT as it is not
+> > describing the HW, but only an implementation detail. Probably disabling
+> > or blacklisting the driver would be a better option there?
+> 
+> "Fixing the driver" is the first thing coming to my mind ;) But yeah,
+> blacklisting would be another good solution. With only the information
+> above, DT is not the right place to fix a broken driver.
+> 
 
---rz+pwK2yUstbofK6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+To be clear, the driver is working properly but the HW isn't. It is a
+PMIC and we need to avoid linux talking to it so the PMIC doesn't end up
+killing the bus.
 
+We end up with a node properly described in the device tree but with
+status = "disabled". The relevance to the discussion was that you know
+what is there and you want to avoid using its address.
 
-> >> +               strlcpy(reserved_client->name, I2C_DUMMY_DRV_NAME, siz=
-eof(client->name));
->=20
-> Any strong reason for not giving the device a more informative name?
+See the pmic node on i2c1 in arch/arm/boot/dts/at91-sama5d3_xplained.dts
+for what I'm referring to.
 
-Yes, sadly...
-
-> Reading "dummy" in several /sys/bus/i2c/devices/?-????/name files is not
-> helping. Using the 'name' string that is passed to
-> i2c_new_ancillary_device() would be way better, perhaps prefixed by
-> dev->name. But this opens the question of why not doing it in
-
-=2E.. I never liked the plain "dummy" name as well. However, because
-'name' is what we need to bind to a driver we can't have a more
-descriptive or run-time generated name at that place.
-
-> i2c_new_dummy_device() as well, which currently receives no "name"
-> parameter.
-
-I thought about it but discarded the idea because then you still have
-no connection to the driver which created the dummy device. My
-favourite idea so far is to advertise i2c_new_ancillary_device() instead
-of i2c_new_dummy_device(), because there we already have access to the
-client structure. With that, we could add another link in sysfs to the
-main address and vice-versa.
-
-> Of course this is not strictly related to this patch and can be done in
-> a later step.
-
-Exactly.
+> > My apologies to Wolfram, I appreciate a lot the effort you are doing,
+> > but before reviewing this patch I have never realized what I tried to
+> > explain above.
+> 
+> All good, Luca! Talking over code usually brings in viewpoints which
+> have been missed so far. This is expected. Actually, I am very happy to
+> have this discussion!
+> 
+> All the best,
+> 
+>    Wolfram
+> 
 
 
---rz+pwK2yUstbofK6
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5qHWIACgkQFA3kzBSg
-KbYqEA//dr8XFHEYXWhQXqlofteHQgPuqLLgw5ruq9PvVCpv51Scsz/RjoUKvanT
-s3/CZjL+MvvHDvvpKjCpW6/ImDM2KSGalPy0ZAQ0GaOtS2aqaLvieLsnxGPF2FLl
-QLBufHNjG6DOkO6PrQ44SLRFvpKw2iBMihmGyJBRjWWMtPrpgw5fO0omoM3IogPj
-t+W0+Fou6p6dgiTYhGCIOYi8YHAHEZt+HPhBExDRHfbeF3K9IXGwA84m8uTCVEP6
-2XZoR4mjO5fbXGMWp5uhB9EtXridUSmUTavnG/vOFki6i8Nw36bscICAgRVaHk3m
-nhK4s53VEt1EB8dyW61ZUAfBqwwCHKfbmRneKpDtytOi7PS2eHrSTC1hCioparvh
-ifGDynlbyaEbJtxmmp2ukgSxLiO9V3r4HgHnnU7L+yUMUApcVX6o7ftRgMjKK4oj
-rYOnylcJyC151MOY4T+2fSl9VCmkcBsz8K5LoU/iN0TF6/x0W3OQ6Nv1p+t1k2oe
-105gZoZ/9d+7ja7MfJB23p0neb8SE0BVgkFtvLkJyvpyEw3f/JMdE1g3fjCAlb4u
-dB0enc8/ncA+yoGOTtN2ADXCPvteTcfK+GC9/Tlmd1HJwWlIWu24IVYJFAg6a4Ln
-HTILjLrr6L9HRNaemVxKdq1c/fTAPMFJB2ReDoHJokKjoTPULn0=
-=WKGM
------END PGP SIGNATURE-----
-
---rz+pwK2yUstbofK6--
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
