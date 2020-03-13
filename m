@@ -2,80 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8ABF183B90
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Mar 2020 22:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D87CC1845F6
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Mar 2020 12:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgCLVnm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Mar 2020 17:43:42 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:36656 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726481AbgCLVnm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Mar 2020 17:43:42 -0400
-Received: by mail-ot1-f66.google.com with SMTP id j14so7990076otq.3;
-        Thu, 12 Mar 2020 14:43:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FS6zflFtBZJ0h4IEljhEJ+diBwLFSLqaaufLslTBNpc=;
-        b=YUto8nOYx1ZT2v6aEqhunHehCqagH7dAiTHoYGHfiULcMi5KcB+CSJVQeKoFBmcRkq
-         6hO2OY8x79I/9QMhgsZDWslHvD4HvNilY4YrDe105O9vENGQI74tyOhW4GEyJ5KjVcpI
-         sflAQsbVb+7HWH3eTCHBAdrR0odeVo91vt48IcJVJZ4ILfDRILA7Pc90atdBYjLbZy/h
-         i5bpiKdxMGy6CKisib7dqV8CY+aH4QMenZFFeZJslvBQKCeLUFWF7TZiZrmKb6S6DyRO
-         m+N3SrJY2YlgQ0aKdoRmI40+sTZiOp20Y2RxZV5CjXffJFnoDY3CRs4nfnF8yWfUZNAZ
-         TG0w==
-X-Gm-Message-State: ANhLgQ2/s7Bci37K0SF24lW9dgJm3G4txsIA0meK3x1kSH25hT4JRDKp
-        ncB29WfB8qL1tZebMWkkSg==
-X-Google-Smtp-Source: ADFU+vsw8ICdjL4f6vlMn6s5eYnygJbkzUnQLy5msXRE9bKJvxZl3+HHEAHH9r/ujWAInwFYD5s0hg==
-X-Received: by 2002:a9d:837:: with SMTP id 52mr7862324oty.354.1584049421550;
-        Thu, 12 Mar 2020 14:43:41 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id t193sm7160303oif.34.2020.03.12.14.43.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 14:43:40 -0700 (PDT)
-Received: (nullmailer pid 30418 invoked by uid 1000);
-        Thu, 12 Mar 2020 21:43:40 -0000
-Date:   Thu, 12 Mar 2020 16:43:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sergey.Semin@baikalelectronics.ru
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] dt-bindings: i2c: dw: Add Baikal-T1 SoC I2C
- controller
-Message-ID: <20200312214340.GA30360@bogus>
-References: <20200306131955.12806-1-Sergey.Semin@baikalelectronics.ru>
- <20200306132018.C268A8030792@mail.baikalelectronics.ru>
+        id S1726628AbgCML3h (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 Mar 2020 07:29:37 -0400
+Received: from mga02.intel.com ([134.134.136.20]:24224 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726492AbgCML3h (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 13 Mar 2020 07:29:37 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Mar 2020 04:29:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,548,1574150400"; 
+   d="scan'208";a="354351002"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 13 Mar 2020 04:29:33 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 13 Mar 2020 13:29:32 +0200
+Date:   Fri, 13 Mar 2020 13:29:32 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [RFC PATCH] i2c: acpi: put device when verifying client fails
+Message-ID: <20200313112932.GA2540@lahna.fi.intel.com>
+References: <20200312133244.9564-1-wsa@the-dreams.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200306132018.C268A8030792@mail.baikalelectronics.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200312133244.9564-1-wsa@the-dreams.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 6 Mar 2020 16:19:52 +0300, <Sergey.Semin@baikalelectronics.ru> wrote:
-> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+On Thu, Mar 12, 2020 at 02:32:44PM +0100, Wolfram Sang wrote:
+> From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > 
-> Just add the "be,bt1-i2c" compatible string to the bindings. The rest of
-> the DW APB I2C properties can be freely used to describe the Baikal-T1
-> I2C controller dts-node.
+> i2c_verify_client() can fail, so we need to put the device when that
+> happens.
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Fixes: 525e6fabeae2 ("i2c / ACPI: add support for ACPI reconfigure notifications")
+> Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > ---
->  Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 2 ++
->  1 file changed, 2 insertions(+)
 > 
+> RFC because I don't know if it can be that the returned dev is not an
+> i2c_client. Yet, since it can happen theoretically, I think we should
+> have the checks.
 
-Acked-by: Rob Herring <robh@kernel.org>
+I agree,
+
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
