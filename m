@@ -2,83 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8CB184940
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Mar 2020 15:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53820184A4D
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Mar 2020 16:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726643AbgCMO0a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 Mar 2020 10:26:30 -0400
-Received: from sauhun.de ([88.99.104.3]:52422 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726551AbgCMO0a (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 13 Mar 2020 10:26:30 -0400
-Received: from localhost (p54B3314F.dip0.t-ipconnect.de [84.179.49.79])
-        by pokefinder.org (Postfix) with ESMTPSA id 9A2C72C1ED4;
-        Fri, 13 Mar 2020 15:26:27 +0100 (CET)
-Date:   Fri, 13 Mar 2020 15:26:27 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Joe Perches <joe@perches.com>
-Cc:     Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH -next 010/491] ARM/SAMSUNG EXYNOS ARM ARCHITECTURES: Use
- fallthrough;
-Message-ID: <20200313142627.GF1852@ninjato>
-References: <cover.1583896344.git.joe@perches.com>
- <1d569e023b6cb7b8d0da8d1bcccd92e97fe436c8.1583896348.git.joe@perches.com>
+        id S1726534AbgCMPMw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 Mar 2020 11:12:52 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:43963 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726446AbgCMPMw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Mar 2020 11:12:52 -0400
+Received: by mail-wr1-f67.google.com with SMTP id b2so6315123wrj.10
+        for <linux-i2c@vger.kernel.org>; Fri, 13 Mar 2020 08:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OybCSL1/Zq4FwBtk2zCVDmcmO3lEWY7XrQCDyI5j3o8=;
+        b=XOZnafQxztFeVvMttr/vlZLzFVI5saRTo/YCYR6WnJfWF9Os8Jcsq+Gb62E+tHMzCf
+         xsa1WrIipKF6ZieAXNqUI0fggEerpFA0TIdVunLQGGs6kOh/46dWw0geeP5nxlqisBaI
+         ckes7Ral5cknz4T0cv7IiMyyLtSbJCnVpRRoJQDQPg/1ouOAwY8BTshyKA6rkzKXC8nv
+         KZjhEDG+bda3qaiITTxywPaJijRRF2TZPsBuSDLoAnjvfM0W/ULk8yfwoP1o6zFzYQZC
+         7vUAq9Xw29H+ape2VZCukCUihXGdPgjo9mF8dZpepqLTmVi9ZB4PbTpBg49MVgwpW8cb
+         jRwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OybCSL1/Zq4FwBtk2zCVDmcmO3lEWY7XrQCDyI5j3o8=;
+        b=uQoHGUGnFmYndKAoEl5EBF2rmbBhsBaV9tMAWQd3rTUFjRggF3rVxSTA6qETIwobQv
+         GlNVKYR78ebd+4QTuo54/itz2mbgisMpPpCetH4ze+YgM3Iy6pfPknXD19FOwS7XhziJ
+         GMDBsCnjNztCJRVAvHB97LUh3s97Dl3rKMkWr+FxLomG6ZFHOLfyOenS38cbVvQGJV2L
+         5us9tpcvEDa+5lRnxG675iFVn1TxdQ3PuLu0TP4eF5EyCXn3UO+59K+sK9k0iqKjnD/I
+         +NK/sTqRM+XzmeiSaP+8sGfZDhbkfC7BMGsvafk1cZVm1EHcxtNHyg2rNTatZeT43ae0
+         D58A==
+X-Gm-Message-State: ANhLgQ3ZkRp4wM7ENBZlHgvpkww1VTkPAKztARTMLWPoUBPs4lfRQDyI
+        pHmhhlLw1wbOa0LdSaaIjmoX4g==
+X-Google-Smtp-Source: ADFU+vu3XtYT7T5Yj+z4ineVAEOrfBLr2Q58Q+N1rfN8Yk3Lw7uEOVQNepyFm+SBiaRCsa6heYPY6A==
+X-Received: by 2002:adf:83c4:: with SMTP id 62mr1362897wre.105.1584112368678;
+        Fri, 13 Mar 2020 08:12:48 -0700 (PDT)
+Received: from localhost.localdomain (lfbn-nic-1-188-94.w2-15.abo.wanadoo.fr. [2.15.37.94])
+        by smtp.gmail.com with ESMTPSA id 7sm5614927wmf.20.2020.03.13.08.12.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Mar 2020 08:12:48 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [GIT PULL] at24: fix for v5.6-rc6
+Date:   Fri, 13 Mar 2020 16:12:46 +0100
+Message-Id: <20200313151246.12356-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NQTVMVnDVuULnIzU"
-Content-Disposition: inline
-In-Reply-To: <1d569e023b6cb7b8d0da8d1bcccd92e97fe436c8.1583896348.git.joe@perches.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
---NQTVMVnDVuULnIzU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Wolfram,
 
-On Tue, Mar 10, 2020 at 09:51:24PM -0700, Joe Perches wrote:
-> Convert the various uses of fallthrough comments to fallthrough;
->=20
-> Done via script
-> Link: https://lore.kernel.org/lkml/b56602fcf79f849e733e7b521bb0e17895d390=
-fa.1582230379.git.joe.com/
->=20
-> Signed-off-by: Joe Perches <joe@perches.com>
+please pull the following fix for a bug introduced during the last merge
+window.
 
-Acked-by: Wolfram Sang <wsa@the-dreams.de> # for the I2C part
+Thanks,
+Bartosz
 
+The following changes since commit 2c523b344dfa65a3738e7039832044aa133c75fb:
 
---NQTVMVnDVuULnIzU
-Content-Type: application/pgp-signature; name="signature.asc"
+  Linux 5.6-rc5 (2020-03-08 17:44:44 -0700)
 
------BEGIN PGP SIGNATURE-----
+are available in the Git repository at:
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5rmBMACgkQFA3kzBSg
-Kba47w/+Lo0vuKn419fTKoi1bZI+iu4cVPczancfBFTyBaGwu2WxMvlfsZPZaWSQ
-ZA0DwyJV/q7C5PiEXjkNhIAK9txlsUpVTcXrmki5X4Z3hG0k5D4HjP0i+6GtqsvX
-yNpn8ebcK94e7HGKwN4Qg16jrh1hy22dd+Bcs7P2wb0zOpv2+VrL8n4ORXZVdSr9
-RjSySKHXxDTTfBpQ+Fe9IHH3ObWFNH4ydniXhiDy5hAZUwYmkm4Lrv0ul5OCglwF
-08LgjIkidixle3PEylgSVE2896WnDF3EgmDrO72uPXunarBbgFz+KaYeEnTTndvO
-s2+fDykbBZye6kNZy89svJ+ljjbqLr5lIgGc/MiAIviJJ7qlq9MS7kWVCvjSROSL
-G/9S5vjw4bxJhobzBmlZbW339Ki3UJDnMYJmGC5zv2eROAKHa3Hw/JXocUvsbE+v
-LbXKVUm4cAMcL6ld0MXYBlDQasGcErb5HSk4huMr0Ye9/pyqycDrg788A2cW29/A
-GovnQqR9rjJ6ebqHAOrFqPf2PnWvfqHqz01/zMyjOW1hYVEdfkH9EjFnuPjI0Ue7
-PLlXv2NS+iSe01qRJaDCR+afknfWHEnCcEJCdua5/cvTFy6Q4MP/jGrod4ZCe7fV
-yd/yi39OamvOtixkid1R84VFKuSrufZ30TYpeoaUTL6IcAdKl0g=
-=3+s9
------END PGP SIGNATURE-----
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git at24-fixes-for-v5.6-rc6
 
---NQTVMVnDVuULnIzU--
+for you to fetch changes up to 58d6fee50e67bb1c69977f1a534ccb17bf58b0f1:
+
+  misc: eeprom: at24: fix regulator underflow (2020-03-12 09:02:34 +0100)
+
+----------------------------------------------------------------
+at24 fixes for v5.6-rc6
+
+- fix regulator underflow bug introduced during the v5.6 merge window
+
+----------------------------------------------------------------
+Michael Auchter (1):
+      misc: eeprom: at24: fix regulator underflow
+
+ drivers/misc/eeprom/at24.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
