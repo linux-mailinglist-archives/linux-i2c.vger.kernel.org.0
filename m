@@ -2,34 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0AAF184918
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Mar 2020 15:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A5718492B
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Mar 2020 15:21:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbgCMOSV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 Mar 2020 10:18:21 -0400
-Received: from sauhun.de ([88.99.104.3]:52296 "EHLO pokefinder.org"
+        id S1726670AbgCMOVO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 Mar 2020 10:21:14 -0400
+Received: from sauhun.de ([88.99.104.3]:52342 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726643AbgCMOSU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 13 Mar 2020 10:18:20 -0400
+        id S1726632AbgCMOVO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 13 Mar 2020 10:21:14 -0400
 Received: from localhost (p54B3314F.dip0.t-ipconnect.de [84.179.49.79])
-        by pokefinder.org (Postfix) with ESMTPSA id 046C02C1ED4;
-        Fri, 13 Mar 2020 15:18:18 +0100 (CET)
-Date:   Fri, 13 Mar 2020 15:18:18 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 0511F2C1ED4;
+        Fri, 13 Mar 2020 15:21:12 +0100 (CET)
+Date:   Fri, 13 Mar 2020 15:21:12 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Alain Volmat <alain.volmat@st.com>
-Cc:     pierre-yves.mordret@st.com, alexandre.torgue@st.com,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@st.com
-Subject: Re: [PATCH v2] i2c: stm32f7: do not backup read-only PECR register
-Message-ID: <20200313141818.GB1852@ninjato>
-References: <1583841521-27897-1-git-send-email-alain.volmat@st.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Alok Chauhan <alokc@codeaurora.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Subject: Re: [PATCH v2 1/3] i2c: qcom-geni: Let firmware specify irq trigger
+ flags
+Message-ID: <20200313142112.GC1852@ninjato>
+References: <20200310154358.39367-1-swboyd@chromium.org>
+ <20200310154358.39367-2-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DKU6Jbt7q3WqK7+M"
+        protocol="application/pgp-signature"; boundary="bKyqfOwhbdpXa4YI"
 Content-Disposition: inline
-In-Reply-To: <1583841521-27897-1-git-send-email-alain.volmat@st.com>
+In-Reply-To: <20200310154358.39367-2-swboyd@chromium.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -37,41 +40,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---DKU6Jbt7q3WqK7+M
-Content-Type: text/plain; charset=utf-8
+--bKyqfOwhbdpXa4YI
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 10, 2020 at 12:58:41PM +0100, Alain Volmat wrote:
-> The PECR register provides received packet computed PEC value.=C2=A0
-> It makes no sense restoring its value after a reset, and anyway,
-> as read-only register it cannot be restored.
+On Tue, Mar 10, 2020 at 08:43:56AM -0700, Stephen Boyd wrote:
+> We don't need to force IRQF_TRIGGER_HIGH here as the DT or ACPI tables
+> should take care of this for us. Just use 0 instead so that we use the
+> flags from the firmware. Also, remove specify dev_name() for the irq
+> name so that we can get better information in /proc/interrupts about
+> which device is generating interrupts.
 >=20
-> Fixes: ea6dd25deeb5 ("i2c: stm32f7: add PM_SLEEP suspend/resume support")
-> Signed-off-by: Alain Volmat <alain.volmat@st.com>
-> Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
+> Cc: Alok Chauhan <alokc@codeaurora.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
 Applied to for-next, thanks!
 
 
---DKU6Jbt7q3WqK7+M
+--bKyqfOwhbdpXa4YI
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5rlioACgkQFA3kzBSg
-KbYrNg/+Ky++rxg6iPtXKX60q2EcDj4GouQCSEoXN0o6ROumzKEVs5unYfRuWk4Y
-P2x4bw3MJxRNySfua/yY3ikdhrxbuRn3wIdsAFDQoWIP/bndenYB4sw524bGhz+y
-7W3R8MvCV5LIaI2Cf11X1R6MXf6eFR62HMFT/7VI/b5yq5N26+gfyhSBEgoBNiDI
-AI6av7tmDawPTDaN3U7x6RBycEy2LDTsUGE3Ys2p+F8QyRvvlBuwKt2CJIRBskH5
-xeASbGRbySf4PM7Q/SKq9YtfHRVZqbF6r0OCZ85sM9npGSNIc5juakehBwlcj5Qa
-a/hhL6mK46uKCEFG1/vvanzDB897rxjYYpIOnyqb5dRu7zjocm+AwGH6rxnWXVBW
-hofMRS6I0u68oYjngddT0dtfZT1DtAoFM0/wFZbheRR+8XzOO3hciFTo/7L31ZFL
-YidMKqk4FK7wAL6dnbYGImudUv5/Q+Nko/KIx9enLA9ojcsiPrbFgn1czR3/BxCU
-3EdrYw6h1qQHAk1nh9urkcjroURMpHYcI3CEurM3MaRVXMIKlHLl/Gy+Z6EigVAr
-EfcPavGIwNvO71TvoiOcZAkDz89JYUBf8qBjGtjpS+RYYFlUX8gQfCAHKuuJiOs7
-q+FNCibSo7yMqO2bU70LzIbL9BdAZXeogMMpWpJxCNGIjz4U3rI=
-=DECc
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5rltgACgkQFA3kzBSg
+KbajIxAAiqJVBYQB8zlv9us/5AbFQZ2APbIdeuxr0PtHfTi5LFEppMyOhmWMlESq
+cIlKMiXrlS7kQk7p2xA2UPBQUvlvlenTYXCEq/4vF0jqEbG46t+V+TC+9uyqI0QZ
+fP9m4BNdnbC1/0riFBxTyrORNfjxCsHD3EMKO6uzMl/vt4z1hu56EOYlmr6OOn9T
+RkTrlijgdkv8+wBfZ0W50EQGnXeAVZvkotXH64mqq3PaP19ujQOU7+gam9E8C++/
+Y8WJA7YTIaBCN8CJe89EBpoq5+nTX/3kPnmos0t9pR9h64EORuc7yxjXUmrBqyio
+zcivVxHyNzdr+7lliVrfK3PinAwnaO093JyEPxsRvzvt8pwcERJNV6YNpR4RDDTj
+iNR2BvuaNPvDk1uhVWB8UOxkj5dOVjRt48LMHELlTSxefnMc1jYuetx2N4ugYAu1
+2h/dZb4rEo0O7fj57H2F/zwVelSJyUsoJ3uoSAYdshoaKkCkMovwnf6J3svVgwoP
+U1JyYS6Fgz+aOxErK3TmjdUXOXfYDFRr3K04hudwUhdyLyJfBHqG7lQ+/EDMb4Qu
+/W5OahDXEGy8SjVjoS80sw0quCTtWxfuqzWwGd2v4qq2+KaM98ZcvJszrMPBe24j
+TohLXhpf8tdW5Gv+jCQ5HE3EppcesDh/mBYk+tqAjW2E0D8TpTI=
+=mlys
 -----END PGP SIGNATURE-----
 
---DKU6Jbt7q3WqK7+M--
+--bKyqfOwhbdpXa4YI--
