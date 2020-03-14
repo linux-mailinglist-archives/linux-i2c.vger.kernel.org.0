@@ -2,65 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A7E1853CD
-	for <lists+linux-i2c@lfdr.de>; Sat, 14 Mar 2020 02:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CBB185805
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Mar 2020 02:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727909AbgCNBRc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 Mar 2020 21:17:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59302 "EHLO mail.kernel.org"
+        id S1726882AbgCOBxt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 14 Mar 2020 21:53:49 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55974 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726591AbgCNBRc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 13 Mar 2020 21:17:32 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A13DC2074A;
-        Sat, 14 Mar 2020 01:17:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584148651;
-        bh=+OILuvouBCX8uMF/DlchLPyrx1JavU6/eR/UOXvuv8c=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=R7xvdtknuSkmlj0jrBNdhaBIycSQ2z7QKYLKtuKhx4O87Qcm/sNM8vE+OeWqk5IlB
-         Zz74RpD+G7TgqxXlffwyX6UUf506YN4U+yRzn0iS+3a8CELbDkU83dsKnanJHrok9c
-         fZimPWbrxN9BfUoGqhYBr+IUC3iseze8NpNOD/YQ=
-Content-Type: text/plain; charset="utf-8"
+        id S1726771AbgCOBxt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 14 Mar 2020 21:53:49 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id B9494AE5C;
+        Sat, 14 Mar 2020 20:41:15 +0000 (UTC)
+Date:   Sat, 14 Mar 2020 21:41:13 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     James Feeney <james@nurealm.net>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: i2c-tools - at24 vs eeprom - decode-dimms fails with the at24
+ module
+Message-ID: <20200314214113.54e48d00@endymion>
+In-Reply-To: <dc5201ea-de3f-f26c-c95e-fca392b521aa@nurealm.net>
+References: <dc5201ea-de3f-f26c-c95e-fca392b521aa@nurealm.net>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1d569e023b6cb7b8d0da8d1bcccd92e97fe436c8.1583896348.git.joe@perches.com>
-References: <cover.1583896344.git.joe@perches.com> <1d569e023b6cb7b8d0da8d1bcccd92e97fe436c8.1583896348.git.joe@perches.com>
-Subject: Re: [PATCH -next 010/491] ARM/SAMSUNG EXYNOS ARM ARCHITECTURES: Use fallthrough;
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Joe Perches <joe@perches.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>
-Date:   Fri, 13 Mar 2020 18:17:30 -0700
-Message-ID: <158414865091.164562.17682025008359421835@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Quoting Joe Perches (2020-03-10 21:51:24)
-> Convert the various uses of fallthrough comments to fallthrough;
->=20
-> Done via script
-> Link: https://lore.kernel.org/lkml/b56602fcf79f849e733e7b521bb0e17895d390=
-fa.1582230379.git.joe.com/
->=20
+Hi James,
 
-This link doesn't work for me. It leads to a redirect for=20
+On Sat, 14 Mar 2020 09:22:57 -0600, James Feeney wrote:
+> The log says "kernel: eeprom 3-0050: eeprom driver is deprecated, please use at24 instead", but decode-dimms will only work with the deprecated eeprom driver.  With the at24 module, "Number of SDRAM DIMMs detected and decoded: 0".  With the eeprom module, "Number of SDRAM DIMMs detected and decoded: 6". This is on Arch Linux, with linux 5.5.9.arch1-2, on an old Asus P6T DELUXE V2 with a Core i7.
 
-https://lore.kernel.org/lkml/b56602fcf79f849e733e7b521bb0e17895d390fa.15822=
-30379.git.joe@perches.com/
+While the legacy eeprom driver (poorly) auto-detected SPD EEPROMs, the
+at24 driver requires SPD EEPOMs to be explicitly enumerated. There is
+work in progress [1] to automate this in some cases (namely x86 systems
+using the i2c-i801 SMBus controller driver) but for now you'll have to
+do it yourself from user-space. How to do that is explained in section 4
+of:
 
->  drivers/clk/samsung/clk-s3c2443.c | 2 +-
+https://www.kernel.org/doc/Documentation/i2c/instantiating-devices
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+TL;DR: Something like:
+
+# echo spd 0x50 > /sys/bus/i2c/devices/i2c-3/new_device
+
+should do the trick, if i2c-3 is your SMBus and you have 1 memory
+module in the first slot. If you have more memory modules, use
+"modprobe i2c-dev ; i2cdetect 0" to find out the proper addresses in
+the 0x50-0x57 range and repeat the command.
+
+I guess I should resubmit this patch set to make it transparent to the
+users.
+
+[1] https://lore.kernel.org/lkml/20191014113950.1f989ba6@endymion/
+
+-- 
+Jean Delvare
+SUSE L3 Support
