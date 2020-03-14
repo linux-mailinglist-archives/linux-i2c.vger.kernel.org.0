@@ -2,54 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E82E185845
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Mar 2020 03:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4FA1858B3
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Mar 2020 03:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727101AbgCOCAI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 14 Mar 2020 22:00:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33116 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727521AbgCOCAG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 14 Mar 2020 22:00:06 -0400
-Subject: Re: [PULL REQUEST] i2c for v5.6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584237606;
-        bh=pIBCVKDT5OjVzX0Y/WdTtLU1ifXffFz1EZ6rK6v36tc=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=Wbm8XsHv1+ocjvw4W70H3KvY323AjcXJ4Qj8uwXNQCOq1DRGXpUSlV0qyRKPly4rm
-         HxKv54TuzycOo9vJLDIeGCKYCJ5xoGurpAVxYT8PsFR/aAsik7Na1bw82MHHMBrmIo
-         MLljiZ3wkqYOStoyTMuZ1M67FvDjha3VOEplx3TI=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200314210830.GA1730@ninjato>
-References: <20200314210830.GA1730@ninjato>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200314210830.GA1730@ninjato>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-X-PR-Tracked-Commit-Id: 92bd1f2e1eed493a73a19012a3a7f1feed0883ff
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d3dca69085e94e52a1d61a34b8e5f73a9f3d7eed
-Message-Id: <158423760614.26381.11563014789632295912.pr-tracker-bot@kernel.org>
-Date:   Sun, 15 Mar 2020 02:00:06 +0000
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        id S1727611AbgCOCSv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 14 Mar 2020 22:18:51 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:42914 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727520AbgCOCSv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 Mar 2020 22:18:51 -0400
+Received: by mail-qk1-f193.google.com with SMTP id e11so19985394qkg.9
+        for <linux-i2c@vger.kernel.org>; Sat, 14 Mar 2020 19:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=rySLrb6e8pdxDloLytBEUWmIP8HvBNLPxIuJLcg1j9c=;
+        b=h9YhYCfhuvcoOK9JuTSnuiXg2cILoy3ExIWXtsaJYq8huKBTSezqcgybwNUJnF31OD
+         8M4XkdAA+wF3Kc0hz30O/kK9eMooTs7yoqdIBJNfvWQnNRWRGMPcYzXrJl2zdeF1j7va
+         J8XdxMT0KmL8llAYJuvJtfAv+moo5flCUCJCh/tlglJ+fFmIUPVbZ1fac7bCjKhbkCn+
+         rZJerUAJLBThHl7kvNkOSCFj/J2Gim7L2OHs8nEEBbbGF0yG+oMEoxI1m7Q6XmwEaoXK
+         TKHu+SSgJteucaBn++J1ylejcFocesa/O0LZlk7VxDKA6TPZDYhdjLA4ADjt7vhRjRdb
+         KZMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=rySLrb6e8pdxDloLytBEUWmIP8HvBNLPxIuJLcg1j9c=;
+        b=ir2nGNZkj6bbMsCLxN4qGV8XP+cC3Ow/MD/YK1CQgP70Ns9Cwy9TopZS/Mr3WBcl0H
+         rpMzVkurk4jffOL1UiY56Z5xPgp8/tXB+COIOAi1UXfFYV0UxfA+5xrUjROL0W1CdHP4
+         XHLGMN8dSTD5kKUy6GbxzMUFwg4JEBdQhrvYlIK1dGboYS4oRrILJYvxbqFvN6+EPQgd
+         SliOFqZIGbv6Zx+xQpvzqpUHWLWjM2TjXjpYZJmz++DzxN552zt744L55a9Zk3H6PZH9
+         XgUX8PJEqqYeT6i3SuHYcI0mGzLcIYeEvuAjSDgbo2eOZccOPnYjGKU70JEG0x6n80Sz
+         oiAQ==
+X-Gm-Message-State: ANhLgQ1ztgglKm3RH+dYrTW8Qk/T81SEeY5ccqKbjhjKq5YNF/BYzVHW
+        KtLD0UIZ0t30/c0XnNLOQW9EWHJt1XSBKJ2whBhZMP99
+X-Google-Smtp-Source: ADFU+vsJ8OZ/Dhr0DwwgkL8CDPySYZHLYuNtMBF50V178xoCgQ3+Wbsy6eqrOFGI1hDMkk7GA6AGM8FMlDHfqPtuVxs=
+X-Received: by 2002:a02:3f4c:: with SMTP id c12mr12249418jaf.115.1584206617074;
+ Sat, 14 Mar 2020 10:23:37 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a02:63c1:0:0:0:0:0 with HTTP; Sat, 14 Mar 2020 10:23:36
+ -0700 (PDT)
+From:   Omar Ousman <omarousman25@gmail.com>
+Date:   Sat, 14 Mar 2020 18:23:36 +0100
+X-Google-Sender-Auth: e3Esaw6NMf2t59gU8aF8hbfxq5E
+Message-ID: <CAOdk3H=BWVFSbBHnPp89pkv5eyhE_YLWx_uztwjom2+untGdDQ@mail.gmail.com>
+Subject: You received my last mail,,,,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Sat, 14 Mar 2020 22:08:49 +0100:
+I am Mr.Omar Ousman, a regional managing director (CORIS BANK
+INTERNATIONAL) Ouagadougou Burkina Faso, in my department we have
+US$9,500.0000 million united state dollars, to transfer into your
+account as a dormant fund.If you are interested to use this fund to
+help the orphans around the world contact and send me your personal
+information for more details to my email omarousman25@gmail.com
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+Your full names..........
+Your country of origin..........
+Your occupation..........
+Your Age..........
+Your Mobile Number..........
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d3dca69085e94e52a1d61a34b8e5f73a9f3d7eed
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Best Regards,
