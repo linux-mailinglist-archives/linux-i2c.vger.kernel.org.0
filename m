@@ -2,66 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CBB185805
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Mar 2020 02:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FA618580F
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Mar 2020 02:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbgCOBxt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 14 Mar 2020 21:53:49 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55974 "EHLO mx2.suse.de"
+        id S1727239AbgCOByQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 14 Mar 2020 21:54:16 -0400
+Received: from sauhun.de ([88.99.104.3]:38226 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726771AbgCOBxt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 14 Mar 2020 21:53:49 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id B9494AE5C;
-        Sat, 14 Mar 2020 20:41:15 +0000 (UTC)
-Date:   Sat, 14 Mar 2020 21:41:13 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     James Feeney <james@nurealm.net>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: i2c-tools - at24 vs eeprom - decode-dimms fails with the at24
- module
-Message-ID: <20200314214113.54e48d00@endymion>
-In-Reply-To: <dc5201ea-de3f-f26c-c95e-fca392b521aa@nurealm.net>
-References: <dc5201ea-de3f-f26c-c95e-fca392b521aa@nurealm.net>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1727519AbgCOByQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 14 Mar 2020 21:54:16 -0400
+Received: from localhost (p5486CB31.dip0.t-ipconnect.de [84.134.203.49])
+        by pokefinder.org (Postfix) with ESMTPSA id D24CC2C1EFA;
+        Sat, 14 Mar 2020 22:08:52 +0100 (CET)
+Date:   Sat, 14 Mar 2020 22:08:49 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.6
+Message-ID: <20200314210830.GA1730@ninjato>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RnlQjJ0d97Da+TV1"
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi James,
 
-On Sat, 14 Mar 2020 09:22:57 -0600, James Feeney wrote:
-> The log says "kernel: eeprom 3-0050: eeprom driver is deprecated, please use at24 instead", but decode-dimms will only work with the deprecated eeprom driver.  With the at24 module, "Number of SDRAM DIMMs detected and decoded: 0".  With the eeprom module, "Number of SDRAM DIMMs detected and decoded: 6". This is on Arch Linux, with linux 5.5.9.arch1-2, on an old Asus P6T DELUXE V2 with a Core i7.
+--RnlQjJ0d97Da+TV1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-While the legacy eeprom driver (poorly) auto-detected SPD EEPROMs, the
-at24 driver requires SPD EEPOMs to be explicitly enumerated. There is
-work in progress [1] to automate this in some cases (namely x86 systems
-using the i2c-i801 SMBus controller driver) but for now you'll have to
-do it yourself from user-space. How to do that is explained in section 4
-of:
+Linus,
 
-https://www.kernel.org/doc/Documentation/i2c/instantiating-devices
+I2C has quite some regression fixes this time. One is also related to
+watchdogs, we have proper acks from Guenter for them.
 
-TL;DR: Something like:
+Please pull.
 
-# echo spd 0x50 > /sys/bus/i2c/devices/i2c-3/new_device
+Thanks,
 
-should do the trick, if i2c-3 is your SMBus and you have 1 memory
-module in the first slot. If you have more memory modules, use
-"modprobe i2c-dev ; i2cdetect 0" to find out the proper addresses in
-the 0x50-0x57 range and repeat the command.
+   Wolfram
 
-I guess I should resubmit this patch set to make it transparent to the
-users.
 
-[1] https://lore.kernel.org/lkml/20191014113950.1f989ba6@endymion/
+The following changes since commit 2c523b344dfa65a3738e7039832044aa133c75fb:
 
--- 
-Jean Delvare
-SUSE L3 Support
+  Linux 5.6-rc5 (2020-03-08 17:44:44 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+for you to fetch changes up to 92bd1f2e1eed493a73a19012a3a7f1feed0883ff:
+
+  Merge tag 'at24-fixes-for-v5.6-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux into i2c/for-current (2020-03-13 16:32:28 +0100)
+
+----------------------------------------------------------------
+Hamish Martin (1):
+      i2c: gpio: suppress error on probe defer
+
+Jarkko Nikula (1):
+      i2c: designware-pci: Fix BUG_ON during device removal
+
+Michael Auchter (1):
+      misc: eeprom: at24: fix regulator underflow
+
+Mika Westerberg (3):
+      watchdog: iTCO_wdt: Export vendorsupport
+      watchdog: iTCO_wdt: Make ICH_RES_IO_SMI optional
+      i2c: i801: Do not add ICH_RES_IO_SMI for the iTCO_wdt device
+
+Wolfram Sang (3):
+      macintosh: windfarm: fix MODINFO regression
+      i2c: acpi: put device when verifying client fails
+      Merge tag 'at24-fixes-for-v5.6-rc6' of git://git.kernel.org/.../brgl/linux into i2c/for-current
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andy Shevchenko (2):
+      (Rev.) i2c: acpi: put device when verifying client fails
+      (Rev.) i2c: designware-pci: Fix BUG_ON during device removal
+
+Erhard Furtner (1):
+      (Test) macintosh: windfarm: fix MODINFO regression
+
+Geert Uytterhoeven (1):
+      (Rev.) i2c: acpi: put device when verifying client fails
+
+Guenter Roeck (3):
+      (Rev.) i2c: i801: Do not add ICH_RES_IO_SMI for the iTCO_wdt device
+      (Rev.) watchdog: iTCO_wdt: Make ICH_RES_IO_SMI optional
+      (Rev.) watchdog: iTCO_wdt: Export vendorsupport
+
+ drivers/i2c/busses/i2c-designware-pcidrv.c  |  1 +
+ drivers/i2c/busses/i2c-gpio.c               |  2 +-
+ drivers/i2c/busses/i2c-i801.c               | 45 ++++++++---------------------
+ drivers/i2c/i2c-core-acpi.c                 | 10 ++++++-
+ drivers/macintosh/windfarm_ad7417_sensor.c  |  7 +++++
+ drivers/macintosh/windfarm_fcu_controls.c   |  7 +++++
+ drivers/macintosh/windfarm_lm75_sensor.c    | 16 +++++++++-
+ drivers/macintosh/windfarm_lm87_sensor.c    |  7 +++++
+ drivers/macintosh/windfarm_max6690_sensor.c |  7 +++++
+ drivers/macintosh/windfarm_smu_sat.c        |  7 +++++
+ drivers/misc/eeprom/at24.c                  |  3 +-
+ drivers/watchdog/iTCO_vendor.h              |  2 ++
+ drivers/watchdog/iTCO_vendor_support.c      | 16 +++++-----
+ drivers/watchdog/iTCO_wdt.c                 | 28 ++++++++++--------
+ 14 files changed, 102 insertions(+), 56 deletions(-)
+
+--RnlQjJ0d97Da+TV1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5tR8oACgkQFA3kzBSg
+Kbb8/g/8DRq7gPMUREIBT75XgWatigy4B5N5doEp744rN6UNdHtJ19NANM+vMH3c
+YBX07YCQ9jLbXS95ewkMUMvpsCJKJ/Du1SYjvgnu1NpuTqqpmOWSmy1cCLRpAknp
+tKMUI8Wr7pMFDomO+er1DM7/ccSXgtcyiA2qDvSXqqw5B+AS4jmM3Qcpju5FsVVY
+dEjNUM3E9bVNi4Npqixe7QAdkPl8/Q4MgwD63enxj5ghL8DZrBPl6QeGkE404PCs
+dsnyycdxBtM4UeMItXzjfaPhWWVOwMnvtW5ggurVhoKs6Ydv51YIyZelvx6IkZv5
+hTULfhs+b4KG5VgjvjhEbiebshAvDP4/LiL7iafHU8tA05wx6k62OvBV6185wo0p
+YIbopI1usa1+Qurwyrcb583Dq50BfxeWWI+RvbHlyN3MhQlTc/ZNGcwg1WlFGh7Q
+i0GJPCuhJMkJd+MqML2DCHu/ep/N2SOAA185I3uuQCPR5ZPMNVbI3Xv3gd+CYZ9p
+Lh2NW4+1EPocvVPvQoWAUgqCYABoptalFuzQqaMvLEpMOVjyVVhIit7wlHlZ/YeX
+kKa7gSK4hPXNl0NnW25jPl6nH+cHGi0PcibYbDfMGZBB8uPYqZ30DcpwVXiRGxAL
+IH5aJ83CGzpvOlQr9tkPO2n9A4peRe7ozPYSYtcDLUkV1CxlTGE=
+=6aWb
+-----END PGP SIGNATURE-----
+
+--RnlQjJ0d97Da+TV1--
