@@ -2,69 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4FA1858B3
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Mar 2020 03:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C61185C92
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Mar 2020 14:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727611AbgCOCSv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 14 Mar 2020 22:18:51 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:42914 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727520AbgCOCSv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 14 Mar 2020 22:18:51 -0400
-Received: by mail-qk1-f193.google.com with SMTP id e11so19985394qkg.9
-        for <linux-i2c@vger.kernel.org>; Sat, 14 Mar 2020 19:18:50 -0700 (PDT)
+        id S1728624AbgCONSL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 15 Mar 2020 09:18:11 -0400
+Received: from resqmta-ch2-04v.sys.comcast.net ([69.252.207.36]:42038 "EHLO
+        resqmta-ch2-04v.sys.comcast.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728582AbgCONSL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 15 Mar 2020 09:18:11 -0400
+X-Greylist: delayed 26273 seconds by postgrey-1.27 at vger.kernel.org; Sun, 15 Mar 2020 09:18:11 EDT
+Received: from resdmta-ch2-02v.sys.comcast.net ([69.252.207.82])
+        by resqmta-ch2-04v.sys.comcast.net with ESMTP
+        id D8gHjYa5dsAwiD8gHjQScy; Sat, 14 Mar 2020 15:26:29 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=rySLrb6e8pdxDloLytBEUWmIP8HvBNLPxIuJLcg1j9c=;
-        b=h9YhYCfhuvcoOK9JuTSnuiXg2cILoy3ExIWXtsaJYq8huKBTSezqcgybwNUJnF31OD
-         8M4XkdAA+wF3Kc0hz30O/kK9eMooTs7yoqdIBJNfvWQnNRWRGMPcYzXrJl2zdeF1j7va
-         J8XdxMT0KmL8llAYJuvJtfAv+moo5flCUCJCh/tlglJ+fFmIUPVbZ1fac7bCjKhbkCn+
-         rZJerUAJLBThHl7kvNkOSCFj/J2Gim7L2OHs8nEEBbbGF0yG+oMEoxI1m7Q6XmwEaoXK
-         TKHu+SSgJteucaBn++J1ylejcFocesa/O0LZlk7VxDKA6TPZDYhdjLA4ADjt7vhRjRdb
-         KZMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=rySLrb6e8pdxDloLytBEUWmIP8HvBNLPxIuJLcg1j9c=;
-        b=ir2nGNZkj6bbMsCLxN4qGV8XP+cC3Ow/MD/YK1CQgP70Ns9Cwy9TopZS/Mr3WBcl0H
-         rpMzVkurk4jffOL1UiY56Z5xPgp8/tXB+COIOAi1UXfFYV0UxfA+5xrUjROL0W1CdHP4
-         XHLGMN8dSTD5kKUy6GbxzMUFwg4JEBdQhrvYlIK1dGboYS4oRrILJYvxbqFvN6+EPQgd
-         SliOFqZIGbv6Zx+xQpvzqpUHWLWjM2TjXjpYZJmz++DzxN552zt744L55a9Zk3H6PZH9
-         XgUX8PJEqqYeT6i3SuHYcI0mGzLcIYeEvuAjSDgbo2eOZccOPnYjGKU70JEG0x6n80Sz
-         oiAQ==
-X-Gm-Message-State: ANhLgQ1ztgglKm3RH+dYrTW8Qk/T81SEeY5ccqKbjhjKq5YNF/BYzVHW
-        KtLD0UIZ0t30/c0XnNLOQW9EWHJt1XSBKJ2whBhZMP99
-X-Google-Smtp-Source: ADFU+vsJ8OZ/Dhr0DwwgkL8CDPySYZHLYuNtMBF50V178xoCgQ3+Wbsy6eqrOFGI1hDMkk7GA6AGM8FMlDHfqPtuVxs=
-X-Received: by 2002:a02:3f4c:: with SMTP id c12mr12249418jaf.115.1584206617074;
- Sat, 14 Mar 2020 10:23:37 -0700 (PDT)
+        d=comcastmailservice.net; s=20180828_2048; t=1584199589;
+        bh=FKoauPgW0BgSTbeebVpBvshI3yu9sxLjXuDRDnk98Z0=;
+        h=Received:Received:Received:Received:Reply-To:To:From:Subject:
+         Message-ID:Date:MIME-Version:Content-Type;
+        b=GoBqpa3KspabG9B5pzToAcWORGGdy3M/7N7HASXMEJzINUS3jIQ/nQvJCfxdymRR4
+         3nAGb3/uag9PNbY9f3qtkFeP7xHhaNngLW+31A0jMDGpS4pH2a1HLEcj6jyXmcfBvm
+         kjxzNd91UeWsaYG85Wt39G8JyaKhYxl5HKbmiAW+6UKSW52CrSXvStV6aBhx4T6gr/
+         N/jgOi2I2PzvRQZtjJbL4T1i5FpAahkJGI7mI4iZK6ZgonCGHdp0B9tVYy3ZAuZE8V
+         grVwiAjR3a48HJWX3viU0AOygttlQ32Nmj11p7eiurF+V77wIP8sLAFmUnV6o0dVLY
+         ugKS06XTHmpOw==
+Received: from resqmta-ch2-09v.sys.comcast.net ([69.252.207.41])
+        by resqmta-ch2-12v.sys.comcast.net with ESMTP
+        id D8OfjJGFNdJNZD8drjiTJ0; Sat, 14 Mar 2020 15:23:59 +0000
+Received: from resomta-ch2-07v.sys.comcast.net ([69.252.207.103])
+        by resqmta-ch2-09v.sys.comcast.net with ESMTP
+        id D8UdjyflidWWZD8csjAS8Y; Sat, 14 Mar 2020 15:22:58 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=comcastmailservice.net; s=20180828_2048; t=1584199378;
+        bh=FKoauPgW0BgSTbeebVpBvshI3yu9sxLjXuDRDnk98Z0=;
+        h=Received:Received:Reply-To:To:From:Subject:Message-ID:Date:
+         MIME-Version:Content-Type;
+        b=pS9CBrlzdAkCu+RMcb+Bdk3hg3zeW9hsz9sLgXxcnRIloOiKnOom6P5EY08nI1rw+
+         dwXbA5GAToxmrZ71rWjUOXJCDGChPQV1JLudNJ814viTxmP447sZAiwR/Ptkab9EFy
+         TOoOPXxsNDXzevoFmbrLZSFTEapuXhM8s3iSK/5P5k8amRdMbB7Nav8xOB1eI46iLe
+         eN+4BuqENpIQzNFr11CnvJKHMfEgzjhzD1uMh9nGEwGn3umwa3w6b9QqD+zdR69Hr0
+         45m6WZ2GQ/s6XFnZKhqkXFW8qstQKdL7HmH7dIleNKRzfLmUSVmbAYkwbScfuKAhsb
+         93wgR2LlybcVA==
+Received: from [IPv6:2001:558:6040:22:2171:426f:b27e:296d]
+ ([IPv6:2001:558:6040:22:2171:426f:b27e:296d])
+        by resomta-ch2-07v.sys.comcast.net with ESMTPSA
+        id D8crjcD6uTpPjD8csjIZ6k; Sat, 14 Mar 2020 15:22:58 +0000
+X-Xfinity-VMeta: sc=-100.00;st=legit
+Reply-To: james@nurealm.net
+To:     linux-i2c@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.de>
+From:   James Feeney <james@nurealm.net>
+Subject: i2c-tools - at24 vs eeprom - decode-dimms fails with the at24 module
+Message-ID: <dc5201ea-de3f-f26c-c95e-fca392b521aa@nurealm.net>
+Date:   Sat, 14 Mar 2020 09:22:57 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Received: by 2002:a02:63c1:0:0:0:0:0 with HTTP; Sat, 14 Mar 2020 10:23:36
- -0700 (PDT)
-From:   Omar Ousman <omarousman25@gmail.com>
-Date:   Sat, 14 Mar 2020 18:23:36 +0100
-X-Google-Sender-Auth: e3Esaw6NMf2t59gU8aF8hbfxq5E
-Message-ID: <CAOdk3H=BWVFSbBHnPp89pkv5eyhE_YLWx_uztwjom2+untGdDQ@mail.gmail.com>
-Subject: You received my last mail,,,,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I am Mr.Omar Ousman, a regional managing director (CORIS BANK
-INTERNATIONAL) Ouagadougou Burkina Faso, in my department we have
-US$9,500.0000 million united state dollars, to transfer into your
-account as a dormant fund.If you are interested to use this fund to
-help the orphans around the world contact and send me your personal
-information for more details to my email omarousman25@gmail.com
-
-Your full names..........
-Your country of origin..........
-Your occupation..........
-Your Age..........
-Your Mobile Number..........
-
-Best Regards,
+The log says "kernel: eeprom 3-0050: eeprom driver is deprecated, please use at24 instead", but decode-dimms will only work with the deprecated eeprom driver.  With the at24 module, "Number of SDRAM DIMMs detected and decoded: 0".  With the eeprom module, "Number of SDRAM DIMMs detected and decoded: 6". This is on Arch Linux, with linux 5.5.9.arch1-2, on an old Asus P6T DELUXE V2 with a Core i7.
