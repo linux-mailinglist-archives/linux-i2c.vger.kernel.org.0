@@ -2,208 +2,194 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E181A18604D
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Mar 2020 23:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1473186444
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Mar 2020 05:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729278AbgCOWtO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 15 Mar 2020 18:49:14 -0400
-Received: from resqmta-ch2-03v.sys.comcast.net ([69.252.207.35]:50982 "EHLO
-        resqmta-ch2-03v.sys.comcast.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729274AbgCOWtO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 15 Mar 2020 18:49:14 -0400
-Received: from resomta-ch2-17v.sys.comcast.net ([69.252.207.113])
-        by resqmta-ch2-03v.sys.comcast.net with ESMTP
-        id Dbk5j360Y8K6ODc4GjpWSA; Sun, 15 Mar 2020 22:49:13 +0000
+        id S1729503AbgCPEyx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 Mar 2020 00:54:53 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:38676 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729423AbgCPEyx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Mar 2020 00:54:53 -0400
+Received: by mail-pf1-f193.google.com with SMTP id z5so9240202pfn.5
+        for <linux-i2c@vger.kernel.org>; Sun, 15 Mar 2020 21:54:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=comcastmailservice.net; s=20180828_2048; t=1584312553;
-        bh=zyxWYRhrMQUBE/gi3NYDTUS5olE1r8EDblNLZJWBGAs=;
-        h=Received:Received:Reply-To:Subject:To:From:Message-ID:Date:
-         MIME-Version:Content-Type;
-        b=W34mi4EQDipP3MgdJgarSDG8If2+Cq7qRIFwJqhAoaUHJETjDsVHD3EHKWpwwuBCS
-         Pra/GGrJK5IZBmJsRUJwsefx/DXZ0jG3kLMz0X/GVxKN3riAwQSTdhBsDrfM3a027g
-         ALTEnyNmwp0qBMKWWSlcDEO/2oF5BMrPdClF6v/xhdoNPdHY7G1dTKaU9f/OJ9swbR
-         g8TwDSArubIWct5ilzgzdF2QxcxmDX2VnJNNme3/rWGKo53mDt/0mX3jNg6ucCDhS7
-         pxqtV3x7RdQGxyxvd8XsV/25ynL49+4BVnGhvLEqxpyFXDkGOg4YEOkQW0MUAD6KoK
-         J+R8rXRMyp5EA==
-Received: from [IPv6:2001:558:6040:22:2171:426f:b27e:296d]
- ([IPv6:2001:558:6040:22:2171:426f:b27e:296d])
-        by resomta-ch2-17v.sys.comcast.net with ESMTPSA
-        id Dc49jSIv6yNKeDc4DjSbVb; Sun, 15 Mar 2020 22:49:10 +0000
-X-Xfinity-VMeta: sc=-100.00;st=legit
-Reply-To: james@nurealm.net
-Subject: Re: i2c-tools - at24 vs eeprom - decode-dimms fails with the at24
- module
-To:     Jean Delvare <jdelvare@suse.de>
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9Z2+6iLDWp3RJ4bB7RGT/0cC1cQYDTuNcNrDo7JamCQ=;
+        b=apEifhWq0eZLVwBL5SvekwukLGJ344J427itKTRvYFQjR0hu1vxOScBeormiSGE6AZ
+         9wrcRtLTmZKmkvbdlZbJzdZxaXnNNrLTZXcXE6FYkCJccZks0TC8yWQuBojQNLd4f7aa
+         bQcqzBaAwpWtfsQZTQDKRzOzug8RFYsXJ0wJbyiG5NVhwcYs4ypQYKfI3gKa2KBkGpLk
+         Q9PlPZSrbgBtJZqVfMaQr7nJ02/ECeelcLTJYnfnLoGkUWaKhGYroEZEHLQzWbYM870u
+         FJQK3DSFT/YazLpQZ1zxpQIzCaiYCCyV88mDXb+8cl8tcR57tH3OrXWJVjVc1FHj0+9q
+         /DYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9Z2+6iLDWp3RJ4bB7RGT/0cC1cQYDTuNcNrDo7JamCQ=;
+        b=GD/lMHoP5zyyFN4q3ytoZERuOaGSFo5HkPXrprDUuAb7fTp4gDSs+Rb3eOZ/5Q6tpa
+         ByuUC1ba6WlqG/BQ21oDA2LpuTxI8PgNo63KN07HCQ0lGNcxxzSLCC0Bw+szyyY2c5XO
+         M9SpPgXoD16keqOCLgPlNOT0FuxCCz5pdpSYvj9HPuhJQ6gjrDJMm1A6WbxQIws5/HIq
+         I1oDyx29J6WwobmpFfZdYVgvmafL6bPXTncPvordK32QlNN8MtHNfTWKXbY5qfBvE+TL
+         OOLDyo31X8ChHaUhUpBdSfGsG4S/oh7zctAsVd8PszE1qHODLR8KgNlyRqyMjIXtwKDw
+         uEUg==
+X-Gm-Message-State: ANhLgQ2GK2KFSrhtkPzM/5miqr5AShRDrPFAj73a9XKf0ksLgVxVEXcJ
+        pHq0vrDNLmF2OlqOxMgi1qA=
+X-Google-Smtp-Source: ADFU+vuEaZnhIRtOMoes2PtyJPmprreQakYA6spCyyTCIVml/D9Y29UUl5YwNyhaPWgNcDm8Vqq9oQ==
+X-Received: by 2002:a63:5d04:: with SMTP id r4mr117473pgb.241.1584334489998;
+        Sun, 15 Mar 2020 21:54:49 -0700 (PDT)
+Received: from pek-khao-d2.corp.ad.wrs.com (unknown-105-123.windriver.com. [147.11.105.123])
+        by smtp.gmail.com with ESMTPSA id 6sm24424468pfx.69.2020.03.15.21.54.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Mar 2020 21:54:49 -0700 (PDT)
+Date:   Mon, 16 Mar 2020 12:54:42 +0800
+From:   Kevin Hao <haokexin@gmail.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
 Cc:     linux-i2c@vger.kernel.org
-References: <dc5201ea-de3f-f26c-c95e-fca392b521aa@nurealm.net>
- <20200314214113.54e48d00@endymion>
-From:   James Feeney <james@nurealm.net>
-Message-ID: <312c4863-9b18-df13-fdf2-d183e192f15c@nurealm.net>
-Date:   Sun, 15 Mar 2020 16:49:05 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+Subject: Re: [PATCH] i2c: dev: Fix the race between the release of i2c_dev
+ and cdev
+Message-ID: <20200316045442.GA3585076@pek-khao-d2.corp.ad.wrs.com>
+References: <20191011150014.28177-1-haokexin@gmail.com>
+ <20191125193204.GA14257@kunai>
 MIME-Version: 1.0
-In-Reply-To: <20200314214113.54e48d00@endymion>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="8t9RHnE3ZwKMSgU+"
+Content-Disposition: inline
+In-Reply-To: <20191125193204.GA14257@kunai>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hey Jean
 
-On 3/14/20 2:41 PM, Jean Delvare wrote:
-> While the legacy eeprom driver (poorly) auto-detected SPD EEPROMs, the
-> at24 driver requires SPD EEPOMs to be explicitly enumerated. There is
-> work in progress [1] to automate this in some cases (namely x86 systems
-> using the i2c-i801 SMBus controller driver) but for now you'll have to
-> do it yourself from user-space. How to do that is explained in section 4
-> of:
-> 
-> https://www.kernel.org/doc/Documentation/i2c/instantiating-devices
-> ...
-> If you have more memory modules, use
-> "modprobe i2c-dev ; i2cdetect 0" to find out the proper addresses in
-> the 0x50-0x57 range and repeat the command.
->
-> I guess I should resubmit this patch set to make it transparent to the
-> users.
-> 
-> [1] https://lore.kernel.org/lkml/20191014113950.1f989ba6@endymion/
+--8t9RHnE3ZwKMSgU+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for that!
+On Mon, Nov 25, 2019 at 08:32:04PM +0100, Wolfram Sang wrote:
+> Hi Kevin,
+>=20
+> On Fri, Oct 11, 2019 at 11:00:14PM +0800, Kevin Hao wrote:
+> > The struct cdev is embedded in the struct i2c_dev. In the current code,
+> > we would free the i2c_dev struct directly in put_i2c_dev(), but the
+> > cdev is manged by a kobject, and the release of it is not predictable.
+> > So it is very possible that the i2c_dev is freed before the cdev is
+> > entirely released. We can easily get the following call trace with
+> > CONFIG_DEBUG_KOBJECT_RELEASE and CONFIG_DEBUG_OBJECTS_TIMERS enabled.
+> >   ODEBUG: free active (active state 0) object type: timer_list hint: de=
+layed_work_timer_fn+0x0/0x38
+> >   WARNING: CPU: 19 PID: 1 at lib/debugobjects.c:325 debug_print_object+=
+0xb0/0xf0
+> >   Modules linked in:
+> >   CPU: 19 PID: 1 Comm: swapper/0 Tainted: G        W         5.2.20-yoc=
+to-standard+ #120
+> >   Hardware name: Marvell OcteonTX CN96XX board (DT)
+> >   pstate: 80c00089 (Nzcv daIf +PAN +UAO)
+> >   pc : debug_print_object+0xb0/0xf0
+> >   lr : debug_print_object+0xb0/0xf0
+> >   sp : ffff00001292f7d0
+> >   x29: ffff00001292f7d0 x28: ffff800b82151788
+> >   x27: 0000000000000001 x26: ffff800b892c0000
+> >   x25: ffff0000124a2558 x24: 0000000000000000
+> >   x23: ffff00001107a1d8 x22: ffff0000116b5088
+> >   x21: ffff800bdc6afca8 x20: ffff000012471ae8
+> >   x19: ffff00001168f2c8 x18: 0000000000000010
+> >   x17: 00000000fd6f304b x16: 00000000ee79de43
+> >   x15: ffff800bc0e80568 x14: 79616c6564203a74
+> >   x13: 6e6968207473696c x12: 5f72656d6974203a
+> >   x11: ffff0000113f0018 x10: 0000000000000000
+> >   x9 : 000000000000001f x8 : 0000000000000000
+> >   x7 : ffff0000101294cc x6 : 0000000000000000
+> >   x5 : 0000000000000000 x4 : 0000000000000001
+> >   x3 : 00000000ffffffff x2 : 0000000000000000
+> >   x1 : 387fc15c8ec0f200 x0 : 0000000000000000
+> >   Call trace:
+> >    debug_print_object+0xb0/0xf0
+> >    __debug_check_no_obj_freed+0x19c/0x228
+> >    debug_check_no_obj_freed+0x1c/0x28
+> >    kfree+0x250/0x440
+> >    put_i2c_dev+0x68/0x78
+> >    i2cdev_detach_adapter+0x60/0xc8
+> >    i2cdev_notifier_call+0x3c/0x70
+> >    notifier_call_chain+0x8c/0xe8
+> >    blocking_notifier_call_chain+0x64/0x88
+> >    device_del+0x74/0x380
+> >    device_unregister+0x54/0x78
+> >    i2c_del_adapter+0x278/0x2d0
+> >    unittest_i2c_bus_remove+0x3c/0x80
+> >    platform_drv_remove+0x30/0x50
+> >    device_release_driver_internal+0xf4/0x1c0
+> >    driver_detach+0x58/0xa0
+> >    bus_remove_driver+0x84/0xd8
+> >    driver_unregister+0x34/0x60
+> >    platform_driver_unregister+0x20/0x30
+> >    of_unittest_overlay+0x8d4/0xbe0
+> >    of_unittest+0xae8/0xb3c
+> >    do_one_initcall+0xac/0x450
+> >    do_initcall_level+0x208/0x224
+> >    kernel_init_freeable+0x2d8/0x36c
+> >    kernel_init+0x18/0x108
+> >    ret_from_fork+0x10/0x1c
+> >   irq event stamp: 3934661
+> >   hardirqs last  enabled at (3934661): [<ffff00001009fa04>] debug_excep=
+tion_exit+0x4c/0x58
+> >   hardirqs last disabled at (3934660): [<ffff00001009fb14>] debug_excep=
+tion_enter+0xa4/0xe0
+> >   softirqs last  enabled at (3934654): [<ffff000010081d94>] __do_softir=
+q+0x46c/0x628
+> >   softirqs last disabled at (3934649): [<ffff0000100b4a1c>] irq_exit+0x=
+104/0x118
+> >=20
+> > This is a common issue when using cdev embedded in a struct.
+> > Fortunately, we already have a mechanism to solve this kind of issue.
+> > Please see commit 233ed09d7fda ("chardev: add helper function to
+> > register char devs with a struct device") for more detail.
+> >=20
+> > In this patch, we choose to embed the struct device into the i2c_dev,
+> > and use the API provided by the commit 233ed09d7fda to make sure that
+> > the release of i2c_dev and cdev are in sequence.
+> >=20
+> > Signed-off-by: Kevin Hao <haokexin@gmail.com>
+>=20
+> Very good patch description! Thank you for the patch, lifecycle issues
+> are subtle, so I am looking forward to get this fixed.
+>=20
+> The patch looks good to me, sadly I didn't have the time to test it
+> properly yet. If other people could give their Tested-by or Rev-by, then
+> I'll try to bring it into v5.5. Otherwise it will get priority for 5.6.
 
-Hmm - Still, let me point-out some of the "obvious", from my naive perspective.
+Hi Wolfram,
 
-1) Simply saying that "the legacy eeprom driver (poorly) auto-detected SPD EEPROMs" is *not* communicating an explanation as to *how* the at24 driver is "better" than the eeprom driver.  So, I'm at a loss there, noting, in contrast, that the eeprom driver "just works".  The at24 driver clearly did not "fix" this "poor auto-detection" behavior.
+It seems that this doesn't go to v5.6, do you still have any concerns about=
+ this?
 
-2) Where i2cdetect says "WARNING! This program can confuse your I2C bus, cause data loss and worse!", and where the document "instantiating-devices" says "Given the huge number of mainboards out there, it is next to impossible to build an exhaustive list of the hardware monitoring chips being used", and "Explicit device instantiation (methods 1 and 2) is much preferred for it is safer", fails to disclose the actual "measure" of "confuse", "unsafe", and "worse".  Again, I am at a loss, since, together, this merely suggests that i2c device auto-detection and enumeration is a "hard" and "unsolved" problem.  Is it really an "unsolved" problem?  i2cdetect seems to "work for me", and I've never seen a problem arise from running sensors-detect.
+Thanks,
+Kevin
 
-3) Noting the disclaimers with "[PATCH 3/4] i2c: smbus: Add a way to instantiate SPD EEPROMs automatically", which has "Only works if all filled slots have the same memory type" and "Only works on systems with 1 to 4 memory slots", I can observe that this patch would not even help, in my case, where the board has 6 memory slots.
-
-What did you mean by "make it transparent to the users"?  What is "it"?  Are you describing "auto-detection"?  Or, the difficulty of "auto-detection" and the need for manual enumeration?
-
-Given the circumstances, the sort of resolutions that come to mind include:
-
-1) Provide more "intrusive" documentation for the at24 driver, so that that users will be informed about the need for manual explicit device enumeration with this driver, for instance, presenting the information you provided to me in your email.  How, in the boot process, will you recommend that this manual explicit device enumeration be automated?
-
-2) Or, incorporate the functionality of i2cdetect into the at24 driver itself, perhaps with a parameter to enable or disable this "feature", *and* explain in detail the actual nature and "measure" of possible corruption from auto-detection - "worse", "unsafe", "confuse".
-
-Not articulating and enumerating instances of "worse", "unsafe", and "confuse", is not a "solution" to the auto-detection problem, but is just avoiding the problem.  I would be better to help the user deal with the issue.
-
-Of course, auto-detection sounds hard, and I'm being naive, so forgive me.
-
-I would argue that it is better to provide automatic detection and a warning to "check" that the auto-detection "worked" without causing problems, than to provide *no* auto-detection and remain silent.  In some way, proper use of the at24 driver must be easily "discoverable" by the user.  Better to provide a path to follow, than just failing silently, though maybe it is less challenging to just provide better documentation for the at24 driver.
-
-To the issue of manual instantiation, I found, after some reading and practice:
-
-$ sudo i2cdetect -l
-i2c-3   i2c             Radeon i2c bit bus 0x93                 I2C adapter
-i2c-10  i2c             NVIDIA i2c adapter 0 at 3:00.0          I2C adapter
-i2c-1   i2c             Radeon i2c bit bus 0x91                 I2C adapter
-i2c-8   i2c             card0-DP-1                              I2C adapter
-i2c-6   i2c             Radeon i2c bit bus 0x96                 I2C adapter
-i2c-4   i2c             Radeon i2c bit bus 0x94                 I2C adapter
-i2c-11  i2c             NVIDIA i2c adapter 6 at 3:00.0          I2C adapter
-i2c-2   i2c             Radeon i2c bit bus 0x92                 I2C adapter
-i2c-0   i2c             Radeon i2c bit bus 0x90                 I2C adapter
-i2c-9   smbus           SMBus I801 adapter at 0400              SMBus adapter
-i2c-7   i2c             Radeon i2c bit bus 0x97                 I2C adapter
-i2c-5   i2c             Radeon i2c bit bus 0x95                 I2C adapter
-i2c-12  i2c             NVIDIA i2c adapter 10 at 3:00.0         I2C adapter
-
-$ sudo i2cdetect 9
-WARNING! This program can confuse your I2C bus, cause data loss and worse!
-I will probe file /dev/i2c-9.
-I will probe address range 0x08-0x77.
-Continue? [Y/n]
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:                         08 -- -- -- -- -- -- --
-10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- 1e --
-20: 20 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-30: 30 31 32 -- -- -- -- 37 -- -- -- -- -- -- -- --
-40: -- -- -- -- 44 -- -- -- -- -- -- -- -- -- -- --
-50: 50 51 52 53 54 55 -- -- -- -- -- -- -- -- -- --
-60: -- -- -- -- -- -- -- -- -- 69 -- -- -- -- -- --
-70: -- -- -- -- -- -- -- --
-
-$ sudo sh -c 'for i in 0x5{0..5};do echo spd $i > /sys/bus/i2c/devices/i2c-9/new_device;done'
-
-$ decode-dimms
-...
-Number of SDRAM DIMMs detected and decoded: 6
-
-So, that works, but it seems tedious.  Perhaps the same thing could be done by dynamically loading Device Tree Overlays, but that also seems tedious to set up.  I suppose that I would use:
-
-install at24 /usr/bin/modprobe -r eeprom;/usr/bin/sleep 6;for i in 5{0..5};do [ ! -d /sys/bus/i2c/devices/i2c-9/9-00$i ] && echo spd 0x$i > /sys/bus/i2c/devices/i2c-9/new_device;done;/usr/bin/modprobe --ignore-install at24 $CMDLINE_OPTS
-
-and
-
-remove at24 for i in 5{0..5};do [ -d /sys/bus/i2c/devices/i2c-9/9-00$i -a `cat /sys/bus/i2c/devices/i2c-9/9-00$i/name` = spd ] && echo 0x$i > /sys/bus/i2c/devices/i2c-9/delete_device;done; /usr/bin/modprobe -r --ignore-remove at24 $CMDLINE_OPT
-
-
-But then, we see at man 8 modprobe.d, regarding "install modulename command...":
-
-      The long term future of this command as a solution to the problem of providing additional module
-      dependencies is not assured and it is intended to replace this command with a warning about its
-      eventual removal or deprecation at some point in a future release. Its use complicates the automated
-      determination of module dependencies by distribution utilities, such as mkinitrd (because these now
-      need to somehow interpret what the install commands might be doing. In a perfect world, modules
-      would provide all dependency information without the use of this command and work is underway to
-      implement soft dependency support within the Linux kernel.
-           ...
- COMPATIBILITY
-      A future version of kmod will come with a strong warning to avoid use of the install as explained
-      above. This will happen once support for soft dependencies in the kernel is complete. That support
-      will complement the existing softdep support within this utility by providing such dependencies
-      directly within the modules.
-
-This leads me to the impression that the at24 driver is being considered "faulty", simply because it fails to do its own configuration.  What are the "rules" about "proper" module and driver functionality?
-
-But, you say the long-term plan is already to automate this, using the i2c-i801 SMBus controller driver?  So, modprobe is just a temporary work-around - hopefully.
-
-The kernel *did* autoload the at24 driver at "echo spd 0x50 > /sys/bus/i2c/devices/i2c-9/new_device", but the at24 module must be explicitly loaded anyway, to actually invoke the modprobe command.  Oddly, with the eeprom driver loaded, it is not possible to write to "delete_device", which instead responds with "sh: line 0: echo: write error: No such file or directory".  Removing eeprom will delete its devices, but removing at24 will not.  The documentation is contradictory about correct behavior.  But then, if the at24 devices are configured, and the eeprom driver is loaded, the eeprom driver will not delete the at24 devices, and will fail to configure its own devices when loaded.  The at24 driver also cannot delete the eeprom devices, when both drivers are loaded.  Of course loading both drivers is not "normal".
-
-We see at Documentation/i2c/instantiating-devices:
-
- Method 2: Instantiate the devices explicitly
- ...
- The driver which instantiated the I2C device is responsible for destroying it on cleanup.
-
-but then:
-
- Method 4: Instantiate from user-space
- ...
- You can also instantiate the device before the driver is loaded or even
- available, and you don't need to know what driver the device needs.
-
-Those "recommendations" or "rules" appear to be contradictory, and there is no author attribution with the Documentation to determine to whom to appeal for clarification.
-
-As an aside, I notice that when the eeprom driver is removed at the same time that the at24 driver is being loaded, using the modprobe command shown above, but without the sleep, there are lots of errors showing with dmesg, whether or not the eeprom module was actually already loaded:
-
-i2c i2c-9: new_device: Instantiated device spd at 0x50
-...
-at24 9-0050: 256 byte spd EEPROM, read-only
-...
-i2c i2c-9: Failed to register i2c client spd at 0x50 (-16)
-...
-i2c i2c-9: Failed to register i2c client spd at 0x50 (-16)
-...
-
-but the result seems to be correct, with the at24 devices replacing the eeprom devices.  I don't know why these error messages would be generated, unless there is some race condition or something blocking.  Not running "modprobe -r eeprom" immediately before, and presumably overlapping with, "modprobe at24" avoids the error messages.  It's just confusing, since the message states that something failed, when in fact, everything worked.  Perhaps those misleading error messages arise from some odd behavior with "modprobe --remove".  Avoiding the error messages requires a substantial delay between the modprobe remove and install commands, at least 4 seconds, and sometimes 5 or more seconds.  And, as mentioned, removing the eeprom driver *after* the at24 driver is loaded does not actually create at24 spd devices.
-
-BTW, at https://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git/about/ we still see:
-
-eeprom
-  Perl scripts for decoding different types of EEPROMs (SPD, EDID...) These
-  scripts rely on the "eeprom" kernel driver.
-
-even though the eeprom driver is now deprecated.
-
-I hope that these naive outsider observations will be helpful or useful in some way.  Of course, I appreciate the work you do, to make it all possible.
+>=20
+> Kind regards,
+>=20
+>    Wolfram
+>=20
 
 
-James
 
+--8t9RHnE3ZwKMSgU+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEHc6qFoLCZqgJD98Zk1jtMN6usXEFAl5vBpIACgkQk1jtMN6u
+sXEqNQf7Bu4v4WJ7jP7g0SeALS4iNDt3pem2YPDXweeUQw1fnJjXXuAJlDg169kF
+syDKGoRRgo5UrbRY+QiPyHMkJb4Ew196RLFJCUnsH3Hl7TThharztoLV5gtyn5kz
+/4R0REvHAGvsEFe6+qrWh9+wZFkZZLkJRDqQmj09+WYH5hn8nmkDdab+jgVEa+Hq
+cqiHfbp8NmoLxQGWPpHBh3P3pQsSr1LdSTWiS3MYIEpOID+ho37UyNGkna+/B7vq
+IugBP3BgejZON47fTewSi52dmXVegD89Q/zsp3MhYKwJMOHGsZQXZg+TqIgGtpdN
+7eSYZMFZm5A290sU9ZADTgHHlqpemQ==
+=XK9m
+-----END PGP SIGNATURE-----
+
+--8t9RHnE3ZwKMSgU+--
