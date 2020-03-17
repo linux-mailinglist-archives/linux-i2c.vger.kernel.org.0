@@ -2,74 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BCC1876A5
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 01:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 491B2187C1E
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 10:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733064AbgCQALn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 Mar 2020 20:11:43 -0400
-Received: from mail.uic.edu.hk ([61.143.62.86]:48979 "EHLO umgp.uic.edu.hk"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1733047AbgCQALn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 16 Mar 2020 20:11:43 -0400
-X-IronPort-AV: E=Sophos;i="5.43,368,1503331200"; 
-   d="scan'208";a="17243176"
-Received: from unknown (HELO zpmail.uic.edu.hk) ([192.168.111.249])
-  by umgp.uic.edu.hk with ESMTP; 17 Mar 2020 08:11:35 +0800
-Received: from zpmail.uic.edu.hk (localhost [127.0.0.1])
-        by zpmail.uic.edu.hk (Postfix) with ESMTPS id D96D941C05A3;
-        Tue, 17 Mar 2020 08:11:32 +0800 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by zpmail.uic.edu.hk (Postfix) with ESMTP id D554341C0957;
-        Tue, 17 Mar 2020 08:11:31 +0800 (CST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zpmail.uic.edu.hk D554341C0957
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uic.edu.hk;
-        s=6465647E-9D7B-11E8-B17B-42130C7FA3B9; t=1584403892;
-        bh=Wn2BcVyAdGxyDvB/5AnVfCr/iJTzisyuX4dwKssec6E=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=N1pNhkd2l8zz69kDtEsPH5n7SDL70Ak/Rgb/NYqC0+ZCBZFg/G0QkldxXmMRPmztz
-         HwkJ6HHAibMur3rytYhnqKeG349hpGDQCbhvoJdZWkvkFCa93STWbitRqMynzR+Wj5
-         wLEdN7i9CyVDDhspocQMykx6lSGq645dTckJSCrsFHg+uR95rTW6kz2/3F5tST7+Uo
-         ELvvW8oTRw+C3DdE82L8ao85KfwNAx6BRhhB+sNBssPbo3CqQ69/PO1/J9gy3aGO+s
-         FwDrxpCEm2RIo68N7oaYrAjY/FUGCbKk/MsqrV+VDqizldOqfTDFamlvQc82rVkjYy
-         rx6v80NBgwdtg==
-Received: from zpmail.uic.edu.hk ([127.0.0.1])
-        by localhost (zpmail.uic.edu.hk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id gCmMIXxwS0HE; Tue, 17 Mar 2020 08:11:31 +0800 (CST)
-Received: from zpmail.uic.edu.hk (zpmail.uic.edu.hk [192.168.111.249])
-        by zpmail.uic.edu.hk (Postfix) with ESMTP id 1549641C058D;
-        Tue, 17 Mar 2020 08:11:27 +0800 (CST)
-Date:   Tue, 17 Mar 2020 08:11:26 +0800 (CST)
-From:   David Ibe <ylawrence@uic.edu.hk>
-Reply-To: David Ibe <davidibe718@gmail.com>
-Message-ID: <2065446646.63699156.1584403886963.JavaMail.zimbra@uic.edu.hk>
-Subject: 
+        id S1725916AbgCQJfc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Mar 2020 05:35:32 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:61705 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725872AbgCQJfc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Mar 2020 05:35:32 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1584437731; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=dWslmfFJwyoLLIjetdrb1GRyg2NP/CSxii4Vm8lMPvs=; b=ihHgPiahyI6J7SEjoP8rEd5zTrWcENBBJJ1yFoX5BnVntv+81dNgFLmJH8cUZ4zE87mGkJ2o
+ a5gWRSOc1mGGvOj/gRIqP8/16UGbhRv49QoyqNDlLjk9k5UsPucpAMBuTVxskYY1p6kqLsoa
+ 6KDTouLwGVbGATkEz/tZP5mlnrU=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e7099e3.7f212343bce0-smtp-out-n03;
+ Tue, 17 Mar 2020 09:35:31 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 157DCC433BA; Tue, 17 Mar 2020 09:35:31 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.8] (unknown [183.83.138.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DE460C433CB;
+        Tue, 17 Mar 2020 09:35:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DE460C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH V2 6/8] spi: spi-geni-qcom: Add interconnect support
+To:     Mark Brown <broonie@kernel.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org, evgreen@chromium.org
+References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
+ <1584105134-13583-7-git-send-email-akashast@codeaurora.org>
+ <20200313131603.GG5528@sirena.org.uk>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <aa197568-3bac-6962-d39d-3261f68c0514@codeaurora.org>
+Date:   Tue, 17 Mar 2020 15:05:21 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200313131603.GG5528@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.111.160]
-X-Mailer: Zimbra 8.8.15_GA_3829 (ZimbraWebClient - GC80 (Win)/8.8.15_GA_3829)
-Thread-Index: 8IMjdxPQWBZshE+F+QJEttpRaFVxcQ==
-Thread-Topic: 
-To:     unlisted-recipients:; (no To-header on input)
+Content-Language: en-US
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
+On 3/13/2020 6:46 PM, Mark Brown wrote:
+> On Fri, Mar 13, 2020 at 06:42:12PM +0530, Akash Asthana wrote:
+>
+>> +	se->avg_bw_cpu = Bps_to_icc(mas->cur_speed_hz);
+>> +	se->peak_bw_cpu = Bps_to_icc(2 * mas->cur_speed_hz);
+> As I commented on the previous version to no reply there seem to be a
+> lot of cases where the peak bandwidth is just set to double the normal
+> bandwidth without obvious analysis.  Should this default be centralized?
 
-Good Day,                
+Hi Mark,
 
-I am Mr. David Ibe, I work with the International Standards on Auditing, I have seen on records, that several times people has divert your funds into their own personal accounts.
+I misunderstood previous comment on V1 
+patch@https://patchwork.kernel.org/patch/11386479/ as a suggestion to 
+mention comment for peak BW choice if nothing mentioned explicitly (in 
+this case I mentioned assume peak BW twice as average).
 
-Now I am writing to you in respect of the amount which I have been able to send to you through our International United Nations accredited and approved Diplomat, who has arrived Africa, I want you to know that the diplomat would deliver the funds which I have packaged as a diplomatic compensation to you and the amount in the consignment is  $10,000,000.00 United State Dollars.
+I understand in any case I should have ack'ed the comment atleast by 
+replying "ok". I am sorry about it.
 
-I did not disclose the contents to the diplomat, but I told him that it is your compensation from the Auditing Corporate Governance and Stewardship, Auditing and Assurance Standards Board. I want you to know that these funds would help with your financial status as I have seen in records that you have spent a lot trying to receive these funds and I am not demanding so much from you but only 30% for my stress and logistics.
 
-I would like you to get back to me with your personal contact details, so that I can give you the contact information's of the diplomat who has arrived Africa and has been waiting to get your details so that he can proceed with the delivery to you.
+We are taking care of actual throughput requirement in avg_bw vote and 
+the intention of putting peak as twice of avg is to ensure that if high 
+speed peripherals(ex:USB) removes their votes, we shouldn't see any 
+latency issue because of other ICC client who don't vote for their BW 
+requirement or *actual* BW requirement. Factor of 2 is chosen randomly. 
+Please correct/improve me if this is not okay.
 
-Yours Sincerely,
-Kindly forward your details to: mrdavidibe966@gmail.com
-Mr. David Ibe
-International Auditor,
-Corporate Governance and Stewardship
+If this is okay, I will centralize this design for SPI QUP, I2C and UART 
+driver.
+
+Regards,
+
+Akash
+
+
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
