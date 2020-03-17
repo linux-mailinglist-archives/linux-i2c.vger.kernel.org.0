@@ -2,106 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 491B2187C1E
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 10:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02664187C28
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 10:39:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725916AbgCQJfc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Mar 2020 05:35:32 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:61705 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725872AbgCQJfc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Mar 2020 05:35:32 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584437731; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=dWslmfFJwyoLLIjetdrb1GRyg2NP/CSxii4Vm8lMPvs=; b=ihHgPiahyI6J7SEjoP8rEd5zTrWcENBBJJ1yFoX5BnVntv+81dNgFLmJH8cUZ4zE87mGkJ2o
- a5gWRSOc1mGGvOj/gRIqP8/16UGbhRv49QoyqNDlLjk9k5UsPucpAMBuTVxskYY1p6kqLsoa
- 6KDTouLwGVbGATkEz/tZP5mlnrU=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e7099e3.7f212343bce0-smtp-out-n03;
- Tue, 17 Mar 2020 09:35:31 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 157DCC433BA; Tue, 17 Mar 2020 09:35:31 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.8] (unknown [183.83.138.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id DE460C433CB;
-        Tue, 17 Mar 2020 09:35:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DE460C433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V2 6/8] spi: spi-geni-qcom: Add interconnect support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org, evgreen@chromium.org
-References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
- <1584105134-13583-7-git-send-email-akashast@codeaurora.org>
- <20200313131603.GG5528@sirena.org.uk>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <aa197568-3bac-6962-d39d-3261f68c0514@codeaurora.org>
-Date:   Tue, 17 Mar 2020 15:05:21 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1725933AbgCQJjf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Mar 2020 05:39:35 -0400
+Received: from v6.sk ([167.172.42.174]:49946 "EHLO v6.sk"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725916AbgCQJjf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 17 Mar 2020 05:39:35 -0400
+Received: from localhost (v6.sk [IPv6:::1])
+        by v6.sk (Postfix) with ESMTP id D181F60EC2;
+        Tue, 17 Mar 2020 09:39:31 +0000 (UTC)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH 00/28] DT: Improve validation for Marvell SoCs
+Date:   Tue, 17 Mar 2020 10:38:54 +0100
+Message-Id: <20200317093922.20785-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20200313131603.GG5528@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hello World,
 
-On 3/13/2020 6:46 PM, Mark Brown wrote:
-> On Fri, Mar 13, 2020 at 06:42:12PM +0530, Akash Asthana wrote:
->
->> +	se->avg_bw_cpu = Bps_to_icc(mas->cur_speed_hz);
->> +	se->peak_bw_cpu = Bps_to_icc(2 * mas->cur_speed_hz);
-> As I commented on the previous version to no reply there seem to be a
-> lot of cases where the peak bandwidth is just set to double the normal
-> bandwidth without obvious analysis.  Should this default be centralized?
+chained to this message is a set of patches that improve coverage of Device
+Tree validation for devices typically found on Marvell SoCs. It converts most
+of the peripheral binding documentation to YAML and fixes up validation issues
+in the SoC device trees.
 
-Hi Mark,
+It starts with fixing the issues:
 
-I misunderstood previous comment on V1 
-patch@https://patchwork.kernel.org/patch/11386479/ as a suggestion to 
-mention comment for peak BW choice if nothing mentioned explicitly (in 
-this case I mentioned assume peak BW twice as average).
+  [PATCH 01/28] ARM: dts: kirkwood: Fix interrupt controller node name
+  [PATCH 02/28] ARM: dts: dove: Fix interrupt controller node name
+  [PATCH 03/28] ARM: dts: pxa168: Add missing address/size cells to i2c
+  [PATCH 04/28] ARM: dts: pxa168: Fix the gpio interrupt cell number
+  [PATCH 05/28] ARM: dts: pxa3xx: Fix up encoding of the /gpio
+  [PATCH 06/28] ARM: dts: pxa910: Fix the gpio interrupt cell number
+  [PATCH 07/28] ARM: dts: pxa*: Fix up encoding of the /rtc interrupts
+  [PATCH 08/28] ARM: dts: mmp*: Fix up encoding of the /rtc interrupts
+  [PATCH 09/28] ARM: dts: mmp3: fix L2 cache controller node name
+  [PATCH 10/28] ARM: dts: mmp3: fix USB & USB PHY node names
+  [PATCH 11/28] ARM: dts: berlin*: Fix up the SDHCI node names
 
-I understand in any case I should have ack'ed the comment atleast by 
-replying "ok". I am sorry about it.
+Then the binding fixes follow.
+
+When converting .txt binding files that were not written by myself,
+I didn't include the SPDX license tag and set the maintaners: to the
+devicetree@ list. The reason is that the original binding files don't
+contain the information and I didn't want to speak for anyone else and
+make it up.
+
+If this is not the correct thing to do, or the respective binding
+contributors want to clarify the licensing or be listed as maintainers,
+please respond and I'll send an updated patch set. I'm also happy to
+maintain any of these bindings.
+
+  [PATCH 12/28] spi: dt-bindings: spi-controller: Slaves have no
+  [PATCH 13/28] dt-bindings: serial: move Marvell compatible string to
+  [PATCH 14/28] dt-bindings: arm: l2x0: Tauros 3 is PL310 compatible
+  [PATCH 15/28] dt-bindings: arm: mrvl: Add missing compatible strings
+  [PATCH 16/28] dt-bindings: Add "mrvl", a legacy vendor prefix for
+  [PATCH 17/28] dt-bindings: mmc: Fix up clk-phase-sd-hs in an example
+  [PATCH 18/28] dt-bindings: mmc: Fix node name in an example
+  [PATCH 19/28] dt-bindings: mmc: Convert sdhci-pxa to json-schema
+  [PATCH 20/28] dt-bindings: phy: Convert phy-mmp3-usb to json-schema
+  [PATCH 21/28] dt-bindings: gpio: Convert mrvl-gpio to json-schema
+  [PATCH 22/28] dt-bindings: i2c: Convert i2c-pxa to json-schema
+  [PATCH 23/28] dt-bindings: interrupt-controller: Convert mrvl,intc to
+  [PATCH 24/28] dt-bindings: media: Convert marvell,mmp2-ccic to
+  [PATCH 25/28] dt-bindings: rtc: Convert sa1100-rtc to json-schema
+  [PATCH 26/28] dt-bindings: spi: Convert spi-pxa2xx to json-schema
+  [PATCH 27/28] dt-bindings: timer: Convert mrvl,mmp-timer to
+  [PATCH 28/28] dt-bindings: usb: Convert ehci-mv to json-schema
+
+None of the patches depends on any other and they can be applied in any
+order.
+
+Love,
+Lubo
 
 
-We are taking care of actual throughput requirement in avg_bw vote and 
-the intention of putting peak as twice of avg is to ensure that if high 
-speed peripherals(ex:USB) removes their votes, we shouldn't see any 
-latency issue because of other ICC client who don't vote for their BW 
-requirement or *actual* BW requirement. Factor of 2 is chosen randomly. 
-Please correct/improve me if this is not okay.
-
-If this is okay, I will centralize this design for SPI QUP, I2C and UART 
-driver.
-
-Regards,
-
-Akash
-
-
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
