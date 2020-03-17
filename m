@@ -2,18 +2,18 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C5F187D11
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 10:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F9B187C76
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 10:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbgCQJkg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Mar 2020 05:40:36 -0400
-Received: from v6.sk ([167.172.42.174]:50448 "EHLO v6.sk"
+        id S1726039AbgCQJkl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Mar 2020 05:40:41 -0400
+Received: from v6.sk ([167.172.42.174]:50484 "EHLO v6.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726917AbgCQJkf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 17 Mar 2020 05:40:35 -0400
+        id S1726986AbgCQJkk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 17 Mar 2020 05:40:40 -0400
 Received: from localhost (v6.sk [IPv6:::1])
-        by v6.sk (Postfix) with ESMTP id 2B9D16108F;
-        Tue, 17 Mar 2020 09:40:33 +0000 (UTC)
+        by v6.sk (Postfix) with ESMTP id 627AC61090;
+        Tue, 17 Mar 2020 09:40:37 +0000 (UTC)
 From:   Lubomir Rintel <lkundrak@v3.sk>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -40,9 +40,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
         Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH 15/28] dt-bindings: arm: mrvl: Add missing compatible strings
-Date:   Tue, 17 Mar 2020 10:39:09 +0100
-Message-Id: <20200317093922.20785-16-lkundrak@v3.sk>
+Subject: [PATCH 16/28] dt-bindings: Add "mrvl", a legacy vendor prefix for Marvell
+Date:   Tue, 17 Mar 2020 10:39:10 +0100
+Message-Id: <20200317093922.20785-17-lkundrak@v3.sk>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200317093922.20785-1-lkundrak@v3.sk>
 References: <20200317093922.20785-1-lkundrak@v3.sk>
@@ -53,34 +53,28 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add compatible strings for the boards we have in tree. At the same time,
-fix the MMP3 compatible string: the preferred vendor name for Marvell is
-"marvell", not "mrvl", and indeed "marvell,mmp3" has been actively used,
-not "mrvl,mmp3".
+While the preferred vendor prefix is "marvell", "mrvl" is used by many
+older bindings already. Add it, while also marking it deprecated.
 
-Fixes: 95aecb71b84e ("dt-bindings: arm: mrvl: Document MMP3 compatible string")
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml b/Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml
-index 818dfe6de5120..3235ec9e9bad1 100644
---- a/Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml
-+++ b/Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml
-@@ -28,8 +28,11 @@ properties:
-         items:
-           - enum:
-               - mrvl,mmp2-brownstone
-+              - olpc,xo-1.75
-           - const: mrvl,mmp2
-       - description: MMP3 based boards
-         items:
--          - const: mrvl,mmp3
-+          - enum:
-+              - dell,wyse-ariel
-+          - const: marvell,mmp3
- ...
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 23ca95bee2985..1653de506db1a 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -645,6 +645,9 @@ patternProperties:
+     description: Monolithic Power Systems Inc.
+   "^mqmaker,.*":
+     description: mqmaker Inc.
++  "^mrvl,.*":
++    description: Marvell Technology Group Ltd.
++    deprecated: true
+   "^mscc,.*":
+     description: Microsemi Corporation
+   "^msi,.*":
 -- 
 2.25.1
 
