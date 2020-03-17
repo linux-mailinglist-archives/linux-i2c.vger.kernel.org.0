@@ -2,18 +2,18 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD20187CB4
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 10:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFF1187CBB
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 10:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727319AbgCQJl0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Mar 2020 05:41:26 -0400
-Received: from v6.sk ([167.172.42.174]:50908 "EHLO v6.sk"
+        id S1726704AbgCQJla (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Mar 2020 05:41:30 -0400
+Received: from v6.sk ([167.172.42.174]:50944 "EHLO v6.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727278AbgCQJlZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 17 Mar 2020 05:41:25 -0400
+        id S1727332AbgCQJla (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 17 Mar 2020 05:41:30 -0400
 Received: from localhost (v6.sk [IPv6:::1])
-        by v6.sk (Postfix) with ESMTP id 42B8B61094;
-        Tue, 17 Mar 2020 09:41:23 +0000 (UTC)
+        by v6.sk (Postfix) with ESMTP id 3F0D861096;
+        Tue, 17 Mar 2020 09:41:27 +0000 (UTC)
 From:   Lubomir Rintel <lkundrak@v3.sk>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -40,9 +40,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
         Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH 27/28] dt-bindings: timer: Convert mrvl,mmp-timer to json-schema
-Date:   Tue, 17 Mar 2020 10:39:21 +0100
-Message-Id: <20200317093922.20785-28-lkundrak@v3.sk>
+Subject: [PATCH 28/28] dt-bindings: usb: Convert ehci-mv to json-schema
+Date:   Tue, 17 Mar 2020 10:39:22 +0100
+Message-Id: <20200317093922.20785-29-lkundrak@v3.sk>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200317093922.20785-1-lkundrak@v3.sk>
 References: <20200317093922.20785-1-lkundrak@v3.sk>
@@ -53,62 +53,70 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-A straightforward conversion of the mrvl,mmp-timer binding to DT schema
-format using json-schema.
+A straightforward conversion of the ehci-mv binding to DT schema format
+using json-schema.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- .../bindings/timer/mrvl,mmp-timer.txt         | 17 --------
- .../bindings/timer/mrvl,mmp-timer.yaml        | 43 +++++++++++++++++++
- 2 files changed, 43 insertions(+), 17 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
- create mode 100644 Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
+ .../devicetree/bindings/usb/ehci-mv.txt       | 23 -------
+ .../bindings/usb/marvell,pxau2o-ehci.yaml     | 60 +++++++++++++++++++
+ 2 files changed, 60 insertions(+), 23 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/ehci-mv.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
 
-diff --git a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
+diff --git a/Documentation/devicetree/bindings/usb/ehci-mv.txt b/Documentation/devicetree/bindings/usb/ehci-mv.txt
 deleted file mode 100644
-index b8f02c6635219..0000000000000
---- a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
+index 335589895763e..0000000000000
+--- a/Documentation/devicetree/bindings/usb/ehci-mv.txt
 +++ /dev/null
-@@ -1,17 +0,0 @@
--* Marvell MMP Timer controller
+@@ -1,23 +0,0 @@
+-* Marvell PXA/MMP EHCI controller.
 -
 -Required properties:
--- compatible : Should be "mrvl,mmp-timer".
--- reg : Address and length of the register set of timer controller.
--- interrupts : Should be the interrupt number.
 -
--Optional properties:
--- clocks : Should contain a single entry describing the clock input.
+-- compatible: must be "marvell,pxau2o-ehci"
+-- reg: physical base addresses of the controller and length of memory mapped region
+-- interrupts: one EHCI controller interrupt should be described here
+-- clocks: phandle list of usb clocks
+-- clock-names: should be "USBCLK"
+-- phys: phandle for the PHY device
+-- phy-names: should be "usb"
 -
 -Example:
--	timer0: timer@d4014000 {
--		compatible = "mrvl,mmp-timer";
--		reg = <0xd4014000 0x100>;
--		interrupts = <13>;
--		clocks = <&coreclk 2>;
+-
+-	ehci0: usb-ehci@d4208000 {
+-		compatible = "marvell,pxau2o-ehci";
+-		reg = <0xd4208000 0x200>;
+-		interrupts = <44>;
+-		clocks = <&soc_clocks MMP2_CLK_USB>;
+-		clock-names = "USBCLK";
+-		phys = <&usb_otg_phy>;
+-		phy-names = "usb";
 -	};
-diff --git a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
+diff --git a/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml b/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
 new file mode 100644
-index 0000000000000..ebee0b862d493
+index 0000000000000..189025ef1e92e
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
-@@ -0,0 +1,43 @@
++++ b/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
+@@ -0,0 +1,60 @@
++# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
++# Copyright 2019,2020 Lubomir Rintel <lkundrak@v3.sk>
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/timer/mrvl,mmp-timer.yaml#
++$id: http://devicetree.org/schemas/usb/marvell,pxau2o-ehci.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Marvell MMP Timer bindings
++title: Marvell PXA/MMP EHCI bindings
 +
 +maintainers:
-+  - devicetree@vger.kernel.org
++  - Lubomir Rintel <lkundrak@v3.sk>
++
++allOf:
++  - $ref: usb-hcd.yaml#
 +
 +properties:
-+  $nodename:
-+    pattern: '^timer@[a-f0-9]+$'
-+
 +  compatible:
-+    const: mrvl,mmp-timer
++    const: marvell,pxau2o-ehci
 +
 +  reg:
 +    maxItems: 1
@@ -119,20 +127,35 @@ index 0000000000000..ebee0b862d493
 +  clocks:
 +    maxItems: 1
 +
++  clock-names:
++    const: USBCLK
++
++  phys:
++    maxItems: 1
++
++  phy-names:
++    const: usb
++
 +required:
 +  - compatible
 +  - reg
 +  - interrupts
-+
-+additionalProperties: false
++  - clocks
++  - clock-names
++  - phys
++  - phy-names
 +
 +examples:
 +  - |
-+    timer@d4014000 {
-+        compatible = "mrvl,mmp-timer";
-+        reg = <0xd4014000 0x100>;
-+        interrupts = <13>;
-+        clocks = <&coreclk 2>;
++    #include <dt-bindings/clock/marvell,mmp2.h>
++    usb@d4208000 {
++        compatible = "marvell,pxau2o-ehci";
++        reg = <0xd4208000 0x200>;
++        interrupts = <44>;
++        clocks = <&soc_clocks MMP2_CLK_USB>;
++        clock-names = "USBCLK";
++        phys = <&usb_otg_phy>;
++        phy-names = "usb";
 +    };
 +
 +...
