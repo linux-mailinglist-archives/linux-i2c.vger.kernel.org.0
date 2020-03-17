@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A9218863C
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 14:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E7E188669
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 14:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726121AbgCQNsT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Mar 2020 09:48:19 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:40706 "EHLO vps0.lunn.ch"
+        id S1726552AbgCQNyw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Mar 2020 09:54:52 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:40760 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726016AbgCQNsT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 17 Mar 2020 09:48:19 -0400
+        id S1726148AbgCQNyw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 17 Mar 2020 09:54:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
         s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
         Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=bYlQFWOfFv95sQLXQr8vkUotMJgsK9c12/BhzhTTiG8=; b=Q5hrXgSw41E7plUSnoZHt2EQg1
-        Arv6YyudHnKqxSCDvgnG/1p+vDAyc5UWmGp5ZZSKNBNpnzeHnJXmApv2msv7x/CC6the2kvbBGgC8
-        acDMOqO+sJTRIxbjtTtowhoJ65ProLnwtJBGXoq3Ml2+ks8e7eOLbNUZyxGGVZ1qBlT8=;
+        bh=LNq2eKVxIu584aKzn7PR2nMigwhw6HSeqmPI6yI3yWw=; b=bWmkxz+TZfitERg98q+TlX4I//
+        zst6mY+QmHJrhANsZJQ8LrJoSPWark4wkYXLrPqI8aZOkNEhguJXo/ayTy+B+tGEL+52mgAQswzH5
+        8VbKMrKs6/fzNlMAxxhX6X58bBYinAoIgKW4XBAy926duG4w++axND7a+MrA2WCcchSw=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.93)
         (envelope-from <andrew@lunn.ch>)
-        id 1jECZh-0006cx-6s; Tue, 17 Mar 2020 14:48:05 +0100
-Date:   Tue, 17 Mar 2020 14:48:05 +0100
+        id 1jECfz-0006fW-0y; Tue, 17 Mar 2020 14:54:35 +0100
+Date:   Tue, 17 Mar 2020 14:54:35 +0100
 From:   Andrew Lunn <andrew@lunn.ch>
 To:     Lubomir Rintel <lkundrak@v3.sk>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -49,29 +49,34 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 13/28] dt-bindings: serial: move Marvell compatible
- string to 8250 binding doc
-Message-ID: <20200317134805.GO24270@lunn.ch>
+Subject: Re: [PATCH 15/28] dt-bindings: arm: mrvl: Add missing compatible
+ strings
+Message-ID: <20200317135435.GP24270@lunn.ch>
 References: <20200317093922.20785-1-lkundrak@v3.sk>
- <20200317093922.20785-14-lkundrak@v3.sk>
+ <20200317093922.20785-16-lkundrak@v3.sk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200317093922.20785-14-lkundrak@v3.sk>
+In-Reply-To: <20200317093922.20785-16-lkundrak@v3.sk>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 10:39:07AM +0100, Lubomir Rintel wrote:
-> These ports are compatible with NS8250 and handled by the same driver.
-> Get rid of the extra document that fails to document the properties that
-> are actually supported.
+On Tue, Mar 17, 2020 at 10:39:09AM +0100, Lubomir Rintel wrote:
+> Add compatible strings for the boards we have in tree. At the same time,
+> fix the MMP3 compatible string: the preferred vendor name for Marvell is
+> "marvell", not "mrvl", and indeed "marvell,mmp3" has been actively used,
+> not "mrvl,mmp3".
+> 
+> Fixes: 95aecb71b84e ("dt-bindings: arm: mrvl: Document MMP3 compatible string")
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 
-Hi Lubmir
+What is implied by the Fixes: tag? Do you expect this to be
+back ported? Is anything actually broken here?
 
-This is needs a bit closer examination. By the PXA maintainers. It
-appears there are two serial drivers, the 8250 and a PXA specific
-driver.
+Apart from that:
 
-	Andrew
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+
+    Andrew
