@@ -2,18 +2,18 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F9B187C76
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 10:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3355187C7F
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Mar 2020 10:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726039AbgCQJkl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Mar 2020 05:40:41 -0400
-Received: from v6.sk ([167.172.42.174]:50484 "EHLO v6.sk"
+        id S1727027AbgCQJko (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Mar 2020 05:40:44 -0400
+Received: from v6.sk ([167.172.42.174]:50518 "EHLO v6.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726986AbgCQJkk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 17 Mar 2020 05:40:40 -0400
+        id S1727016AbgCQJkn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 17 Mar 2020 05:40:43 -0400
 Received: from localhost (v6.sk [IPv6:::1])
-        by v6.sk (Postfix) with ESMTP id 627AC61090;
-        Tue, 17 Mar 2020 09:40:37 +0000 (UTC)
+        by v6.sk (Postfix) with ESMTP id 7531A61091;
+        Tue, 17 Mar 2020 09:40:41 +0000 (UTC)
 From:   Lubomir Rintel <lkundrak@v3.sk>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -40,9 +40,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
         Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH 16/28] dt-bindings: Add "mrvl", a legacy vendor prefix for Marvell
-Date:   Tue, 17 Mar 2020 10:39:10 +0100
-Message-Id: <20200317093922.20785-17-lkundrak@v3.sk>
+Subject: [PATCH 17/28] dt-bindings: mmc: Fix up clk-phase-sd-hs in an example
+Date:   Tue, 17 Mar 2020 10:39:11 +0100
+Message-Id: <20200317093922.20785-18-lkundrak@v3.sk>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200317093922.20785-1-lkundrak@v3.sk>
 References: <20200317093922.20785-1-lkundrak@v3.sk>
@@ -53,28 +53,33 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-While the preferred vendor prefix is "marvell", "mrvl" is used by many
-older bindings already. Add it, while also marking it deprecated.
+This way the validator can know that the two cells constitute a singlej
+pair of clock phase degrees value, not separate items Otherwise it is
+unhappy:
+
+  mmc-controller.example.dt.yaml: mmc@ab000000: clk-phase-sd-hs:0:
+      [63] is too short
+  mmc-controller.example.dt.yaml: mmc@ab000000: clk-phase-sd-hs:1:
+      [72] is too short
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/devicetree/bindings/mmc/mmc-controller.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 23ca95bee2985..1653de506db1a 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -645,6 +645,9 @@ patternProperties:
-     description: Monolithic Power Systems Inc.
-   "^mqmaker,.*":
-     description: mqmaker Inc.
-+  "^mrvl,.*":
-+    description: Marvell Technology Group Ltd.
-+    deprecated: true
-   "^mscc,.*":
-     description: Microsemi Corporation
-   "^msi,.*":
+diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+index 8fded83c519ad..c9384ed685b8f 100644
+--- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
++++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+@@ -363,7 +363,7 @@ examples:
+         keep-power-in-suspend;
+         wakeup-source;
+         mmc-pwrseq = <&sdhci0_pwrseq>;
+-        clk-phase-sd-hs = <63>, <72>;
++        clk-phase-sd-hs = <63 72>;
+     };
+ 
+   - |
 -- 
 2.25.1
 
