@@ -2,37 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A49C18A62C
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Mar 2020 22:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08FBD18A624
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Mar 2020 22:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727960AbgCRVGO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 Mar 2020 17:06:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54370 "EHLO mail.kernel.org"
+        id S1727533AbgCRVGF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 Mar 2020 17:06:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54474 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727932AbgCRUyk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 18 Mar 2020 16:54:40 -0400
+        id S1727960AbgCRUyn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 18 Mar 2020 16:54:43 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B3B5E2098B;
-        Wed, 18 Mar 2020 20:54:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 400FA208DB;
+        Wed, 18 Mar 2020 20:54:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584564879;
-        bh=XWR/c2mFyUnFBcN4ZvpH7CqF7hzlvBkCtiq0tbgxXLk=;
+        s=default; t=1584564883;
+        bh=D8b8a7WrXA/GjADo5nzuC7SUzmHlHAizf/wjGu4r3mg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uTxgcdKCYwAqUCwZO2VGhTMd1SAQR2KhziCNccTbRIXKYq/pZZbokU5k0yx2bH2Vy
-         CKiKdkTfdKML+FlTNB61/Sn8K/EPVVQ1rzp7DEnsVRfy511zmJDS+QWyEdZCnmLZyA
-         5oI90SmyCPj9S05Og6rAl4QUnxgAPbWUAaw5AC4M=
+        b=lBvfavq/6hKJoEr6YOWQ0Ca7G+3sWX8/OeKyxxmUEgHT16myaptD5LvDwDR6s263p
+         ZZo5cniXAf2kGhtTzxQzQlXBSOICP4b4MDojdttvpbM0Vvwf4pFsZwDMYcRXyf1DK6
+         QEduoIuNn5+98ZfPhSNHJJqZV/HGhmT+2PQ344Fk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Martin Volf <martin.volf.42@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+Cc:     Hamish Martin <hamish.martin@alliedtelesis.co.nz>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 49/73] i2c: i801: Do not add ICH_RES_IO_SMI for the iTCO_wdt device
-Date:   Wed, 18 Mar 2020 16:53:13 -0400
-Message-Id: <20200318205337.16279-49-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 52/73] i2c: gpio: suppress error on probe defer
+Date:   Wed, 18 Mar 2020 16:53:16 -0400
+Message-Id: <20200318205337.16279-52-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200318205337.16279-1-sashal@kernel.org>
 References: <20200318205337.16279-1-sashal@kernel.org>
@@ -45,137 +44,38 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
+From: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
 
-[ Upstream commit 04bbb97d1b732b2d197f103c5818f5c214a4cf81 ]
+[ Upstream commit 3747cd2efe7ecb9604972285ab3f60c96cb753a8 ]
 
-Martin noticed that nct6775 driver does not load properly on his system
-in v5.4+ kernels. The issue was bisected to commit b84398d6d7f9 ("i2c:
-i801: Use iTCO version 6 in Cannon Lake PCH and beyond") but it is
-likely not the culprit because the faulty code has been in the driver
-already since commit 9424693035a5 ("i2c: i801: Create iTCO device on
-newer Intel PCHs"). So more likely some commit that added PCI IDs of
-recent chipsets made the driver to create the iTCO_wdt device on Martins
-system.
+If a GPIO we are trying to use is not available and we are deferring
+the probe, don't output an error message.
+This seems to have been the intent of commit 05c74778858d
+("i2c: gpio: Add support for named gpios in DT") but the error was
+still output due to not checking the updated 'retdesc'.
 
-The issue was debugged to be PCI configuration access to the PMC device
-that is not present. This returns all 1's when read and this caused the
-iTCO_wdt driver to accidentally request resourses used by nct6775.
-
-It turns out that the SMI resource is only required for some ancient
-systems, not the ones supported by this driver. For this reason do not
-populate the SMI resource at all and drop all the related code. The
-driver now always populates the main I/O resource and only in case of SPT
-(Intel Sunrisepoint) compatible devices it adds another resource for the
-NO_REBOOT bit. These two resources are of different types so
-platform_get_resource() used by the iTCO_wdt driver continues to find
-the both resources at index 0.
-
-Link: https://lore.kernel.org/linux-hwmon/CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com/
-Fixes: 9424693035a5 ("i2c: i801: Create iTCO device on newer Intel PCHs")
-[wsa: complete fix needs all of http://patchwork.ozlabs.org/project/linux-i2c/list/?series=160959&state=*]
-Reported-by: Martin Volf <martin.volf.42@gmail.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 05c74778858d ("i2c: gpio: Add support for named gpios in DT")
+Signed-off-by: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-i801.c | 45 ++++++++++-------------------------
- 1 file changed, 12 insertions(+), 33 deletions(-)
+ drivers/i2c/busses/i2c-gpio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index f1c714acc2806..3ff6fbd79b127 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -129,11 +129,6 @@
- #define TCOBASE		0x050
- #define TCOCTL		0x054
+diff --git a/drivers/i2c/busses/i2c-gpio.c b/drivers/i2c/busses/i2c-gpio.c
+index 3a9e840a35466..a4a6825c87583 100644
+--- a/drivers/i2c/busses/i2c-gpio.c
++++ b/drivers/i2c/busses/i2c-gpio.c
+@@ -348,7 +348,7 @@ static struct gpio_desc *i2c_gpio_get_desc(struct device *dev,
+ 	if (ret == -ENOENT)
+ 		retdesc = ERR_PTR(-EPROBE_DEFER);
  
--#define ACPIBASE		0x040
--#define ACPIBASE_SMI_OFF	0x030
--#define ACPICTRL		0x044
--#define ACPICTRL_EN		0x080
--
- #define SBREG_BAR		0x10
- #define SBREG_SMBCTRL		0xc6000c
- #define SBREG_SMBCTRL_DNV	0xcf000c
-@@ -1544,7 +1539,7 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
- 		pci_bus_write_config_byte(pci_dev->bus, devfn, 0xe1, hidden);
- 	spin_unlock(&p2sb_spinlock);
+-	if (ret != -EPROBE_DEFER)
++	if (PTR_ERR(retdesc) != -EPROBE_DEFER)
+ 		dev_err(dev, "error trying to get descriptor: %d\n", ret);
  
--	res = &tco_res[ICH_RES_MEM_OFF];
-+	res = &tco_res[1];
- 	if (pci_dev->device == PCI_DEVICE_ID_INTEL_DNV_SMBUS)
- 		res->start = (resource_size_t)base64_addr + SBREG_SMBCTRL_DNV;
- 	else
-@@ -1554,7 +1549,7 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
- 	res->flags = IORESOURCE_MEM;
- 
- 	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
--					tco_res, 3, &spt_tco_platform_data,
-+					tco_res, 2, &spt_tco_platform_data,
- 					sizeof(spt_tco_platform_data));
- }
- 
-@@ -1567,17 +1562,16 @@ static struct platform_device *
- i801_add_tco_cnl(struct i801_priv *priv, struct pci_dev *pci_dev,
- 		 struct resource *tco_res)
- {
--	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
--					tco_res, 2, &cnl_tco_platform_data,
--					sizeof(cnl_tco_platform_data));
-+	return platform_device_register_resndata(&pci_dev->dev,
-+			"iTCO_wdt", -1, tco_res, 1, &cnl_tco_platform_data,
-+			sizeof(cnl_tco_platform_data));
- }
- 
- static void i801_add_tco(struct i801_priv *priv)
- {
--	u32 base_addr, tco_base, tco_ctl, ctrl_val;
- 	struct pci_dev *pci_dev = priv->pci_dev;
--	struct resource tco_res[3], *res;
--	unsigned int devfn;
-+	struct resource tco_res[2], *res;
-+	u32 tco_base, tco_ctl;
- 
- 	/* If we have ACPI based watchdog use that instead */
- 	if (acpi_has_watchdog())
-@@ -1592,30 +1586,15 @@ static void i801_add_tco(struct i801_priv *priv)
- 		return;
- 
- 	memset(tco_res, 0, sizeof(tco_res));
--
--	res = &tco_res[ICH_RES_IO_TCO];
--	res->start = tco_base & ~1;
--	res->end = res->start + 32 - 1;
--	res->flags = IORESOURCE_IO;
--
- 	/*
--	 * Power Management registers.
-+	 * Always populate the main iTCO IO resource here. The second entry
-+	 * for NO_REBOOT MMIO is filled by the SPT specific function.
- 	 */
--	devfn = PCI_DEVFN(PCI_SLOT(pci_dev->devfn), 2);
--	pci_bus_read_config_dword(pci_dev->bus, devfn, ACPIBASE, &base_addr);
--
--	res = &tco_res[ICH_RES_IO_SMI];
--	res->start = (base_addr & ~1) + ACPIBASE_SMI_OFF;
--	res->end = res->start + 3;
-+	res = &tco_res[0];
-+	res->start = tco_base & ~1;
-+	res->end = res->start + 32 - 1;
- 	res->flags = IORESOURCE_IO;
- 
--	/*
--	 * Enable the ACPI I/O space.
--	 */
--	pci_bus_read_config_dword(pci_dev->bus, devfn, ACPICTRL, &ctrl_val);
--	ctrl_val |= ACPICTRL_EN;
--	pci_bus_write_config_dword(pci_dev->bus, devfn, ACPICTRL, ctrl_val);
--
- 	if (priv->features & FEATURE_TCO_CNL)
- 		priv->tco_pdev = i801_add_tco_cnl(priv, pci_dev, tco_res);
- 	else
+ 	return retdesc;
 -- 
 2.20.1
 
