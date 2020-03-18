@@ -2,275 +2,232 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 034F5189A0E
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Mar 2020 11:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C330B189BD8
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Mar 2020 13:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727177AbgCRK5b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 Mar 2020 06:57:31 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:47718 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727144AbgCRK5b (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Mar 2020 06:57:31 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584529050; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=BphGQItYQ6fMR3oTbwrMavEteXShJM7pnNyyiDwZqHs=; b=H6UwwLZiN9Xya2bZ2SjYM5Lox3PP0n8gGtUo5inTkOKtNL28oYWK13rLFmcaLv1PTM1wsd+i
- 6Pt64ih1FiCFzojkSVR1+AX9WhuXtT5RbYdd4CBEv3Kv4a+ztp85vH54qZLSJ0a3NcLTVC59
- CumIG8VJ9pwWJjTrR3aazF/mLxw=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e71fe91.7f4ba94267d8-smtp-out-n01;
- Wed, 18 Mar 2020 10:57:21 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3AD80C433D2; Wed, 18 Mar 2020 10:57:21 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.8] (unknown [183.83.138.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 38472C433D2;
-        Wed, 18 Mar 2020 10:57:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 38472C433D2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V2 3/8] soc: qcom-geni-se: Add interconnect support to fix
- earlycon crash
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        wsa@the-dreams.de, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-serial@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
- <1584105134-13583-4-git-send-email-akashast@codeaurora.org>
- <20200313204441.GJ144492@google.com>
- <1f86fdf0-df7c-4e4a-d4d8-8b0162e52cb4@codeaurora.org>
- <CAE=gft5GcOeQ5kh1bGen_P0J98g2XaAJ7NrDsxkirDoLtL4GWg@mail.gmail.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <0c7c4316-e93a-537c-871a-b7207dbad5c2@codeaurora.org>
-Date:   Wed, 18 Mar 2020 16:27:11 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726697AbgCRMU3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 Mar 2020 08:20:29 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:43585 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726546AbgCRMU3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Mar 2020 08:20:29 -0400
+Received: by mail-io1-f67.google.com with SMTP id n21so24588549ioo.10
+        for <linux-i2c@vger.kernel.org>; Wed, 18 Mar 2020 05:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dVoMkzgYQUBeeaFssbPW+r4P2HKu0vpJpb49VsywRCo=;
+        b=f5cTNpqqRFSY0EGLfxCvuptPZpDADSjc0o8hQ527ovxzDq/SRQoj0oLH5t1wkyvVE3
+         MUXllplWwbLnd8dT7j7DiUjRO+9F5JtXjZ5p5HUTb5UU9SmoUrbmvhNdF/C5NqOrAc/a
+         D3VEO2Go+Va/hHonMJeAzGYrnfaSM38iHvUfQtDrYo15cA0mt3wfsREYt7CAzRhl834b
+         0OLDil3/1fvQp4xs1owWyu2cpE2oaOIX/GEYBHs5pK2rMYmw1ergIfeRvlffoJ0dq8yX
+         LwW5CmK5xp45LSOFBOgqGCcC9MGB1C7R5OyOgNEU26yNSM7a3W1GJWSECsbQRKKJyWSr
+         RflA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dVoMkzgYQUBeeaFssbPW+r4P2HKu0vpJpb49VsywRCo=;
+        b=oLmlU4V9numnC4GORHUYkv+e5DO4Z5w24+j60zpTg6LdKRbkSqu2NTLglYnLx/xbYm
+         izibbUSi1kbjFtP5yt/QEhSG3vfraQqLXOvK1yVbq8LHjDlb3o2iBR8c0oUy9MiAFgAA
+         jF4xPsfNmsaQ29tPm1oVxdpZTwCcxPxn3Rr81YGs/cSkFcqPxl5kEa1Beges33p2JZOp
+         ufHFPYIDKdir2GGy0FubadXP0Zgwlc1KhEOChw8o/BuzQmIJhU/lVnG6B0XqNQaQtojv
+         JYK+G413Y9x1r03+pONt9PZ0+4WNzVuii7VAhUBwNpXhmDFTLUOOYkiNus4E7u6lJGBW
+         CGhg==
+X-Gm-Message-State: ANhLgQ0nDlyFIMStM/PURhoG15LEyXd4wEhBxKvyU4Mj/ng3dZzq52Cx
+        jim6tr3yWg5KxDGeGkP8n3nNjQpF5EXcJ4U8zMw=
+X-Google-Smtp-Source: ADFU+vv1GjHzmJHkmCm6L4/nFLFSVHjSt5dOeZ0w4/BdGmF6pNvf2Yjs87MdjQe/k9Y7HUaXrnbsb2P1Z8GyfgT91Kk=
+X-Received: by 2002:a05:6602:2098:: with SMTP id a24mr3395500ioa.101.1584534026916;
+ Wed, 18 Mar 2020 05:20:26 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAE=gft5GcOeQ5kh1bGen_P0J98g2XaAJ7NrDsxkirDoLtL4GWg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20200218135627.24739-1-ext-jaakko.laine@vaisala.com>
+In-Reply-To: <20200218135627.24739-1-ext-jaakko.laine@vaisala.com>
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
+Date:   Wed, 18 Mar 2020 17:50:15 +0530
+Message-ID: <CAKfKVtFf+VpinkOGsBFZ2-_PKvx-C1L7G7_uhY2RCvV5dy6L_w@mail.gmail.com>
+Subject: Re: [PATCH] i2c: xiic: Support disabling multi-master in DT
+To:     Laine Jaakko EXT <ext-jaakko.laine@vaisala.com>
+Cc:     "wsa@the-dreams.de" <wsa@the-dreams.de>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Evan
+HI Laine,
 
-On 3/18/2020 12:38 AM, Evan Green wrote:
-> On Tue, Mar 17, 2020 at 3:58 AM Akash Asthana <akashast@codeaurora.org> wrote:
->> Hi Matthias,
->>
->> On 3/14/2020 2:14 AM, Matthias Kaehlcke wrote:
->>> Hi Akash,
->>>
->>> On Fri, Mar 13, 2020 at 06:42:09PM +0530, Akash Asthana wrote:
->>>> V1 patch@https://patchwork.kernel.org/patch/11386469/ caused SC7180 system
->>>> to reset at boot time.
->>> The v1 patch isn't relevant in the commit message, please just describe the
->>> problem. Also the crash only occurs when earlycon is used.
->> ok
->>>> As QUP core clock is shared among all the SE drivers present on particular
->>>> QUP wrapper, the reset seen is due to earlycon usage after QUP core clock
->>>> is put to 0 from other SE drivers before real console comes up.
->>>>
->>>> As earlycon can't vote for it's QUP core need, to fix this add ICC
->>>> support to common/QUP wrapper driver and put vote for QUP core from
->>>> probe on behalf of earlycon and remove vote during sys suspend.
->>> Only removing the vote on suspend isn't ideal, the system might never get
->>> suspended. That said I don't have a really good alternative suggestion.
->>>
->>> One thing you could possibly do is to launch a delayed work, check
->>> console_device() every second or so and remove the vote when it returns
->>> non-NULL. Not claiming this would be a great solution ...
->>>
->>> The cleanest solution might be a notifier when the early console is
->>> unregistered, it seems somewhat over-engineered though ... Then again
->>> other (future) uart drivers with interconnect support might run into
->>> the same problem.
->> We are hitting this problem because QUP core clocks are shared among all
->> the SE driver present in particular QUP wrapper, if other HW controllers
->> has similar architecture we will hit this issue.
->>
->> How about if we expose an API from common driver(geni-se) for putting
->> QUP core BW vote to 0.
->>
->> We call this from console probe just after uart_add_one_port call
->> (console resources are enabled as part of this call) to put core quota
->> to 0 on behalf of earlyconsole?
-> +Georgi
+On Tue, Feb 18, 2020 at 7:29 PM Laine Jaakko EXT
+<ext-jaakko.laine@vaisala.com> wrote:
 >
-> Hm, these boot proxy votes are annoying, since the whole house of
-> cards comes down if you replace these votes in the wrong order.
+> I2C master operating in multimaster mode can get stuck
+> indefinitely if I2C start is detected on bus, but no master
+> has a transaction going.
 >
-> I believe consensus in the other patches was to consolidate most of
-> the interconnect support into the common SE code, right?
-
-I think what Matthias suggested is to maintain ICC functions defined 
-across I2C, SPI and UART as a library in common SE code.
-
-Still every SE driver will interact with ICC framework individually 
-rather than using common SE driver as a bridge.
-
->   Would that
-> help you with these boot proxy votes? What I'm thinking is something
-> along the lines of:
->   * SPI, I2C, UART all call into the new common geni_se_icc_on/off()
-> (or whatever it's called)
->   * If geni_se_icc_off() sees that console UART hasn't voted yet, save
-> the votes but don't actually call icc_set(0) now.
->   * Once uart votes for the first time, call icc_set() on all of SPI,
-> I2C, UART to get things back in sync.
-
-IIUC, you are suggesting to enhancing ICC 
-design@https://patchwork.kernel.org/patch/10774897/ [The very first ICC 
-patch posted during sdm845 timeframe].
-
-Where common SE driver aggregate real time BW requirement from all the 
-SE driver and put net request to ICC framework.
-
-We received comments on that version of ICC to move voting to individual 
-SE driver from common driver. Hence we updated the design accordingly.
-
-Thanks for reviewing
-
-regards,
-
-Akash
-
-> That's a sort of roll-your-own solution for GENI, but we do have this
-> problem elsewhere as well. A more general solution would be to have
-> the interconnect providers prop things up (ie ignore votes to lower
-> bandwidth) until some "go" moment where we feel we've enumerated all
-> devices. I was originally thinking to model this off of something like
-> clk_disable_unused(), but after chatting with Stephen it's clear
-> late_initcall's aren't really indicative of all devices having
-> actually come up. So I'm not sure where the appropriate "go" moment
-> is.
+> This is a weakness in I2C standard, which defines no way
+> to recover, since all masters are indefinitely disallowed
+> from interrupting the currently operating master. A start
+> condition can be created for example by an electromagnetic
+> discharge applied near physical I2C lines. Or a already
+> operating master could get reset immediately after sending
+> a start.
 >
-> -Evan
+> If it is known during device tree creation that only a single
+> I2C master will be present on the bus, this deadlock of the
+> I2C bus could be avoided in the driver by ignoring the
+> bus_is_busy register of the xiic, since bus can never be
+> reserved by any other master.
 >
+> This patch adds this support for detecting multi-master flag
+> in device tree and when not provided, improves I2C reliability
+> by ignoring the therefore unnecessary xiic bus_is_busy register.
 >
->>>> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
->>>> Reported-by: Matthias Kaehlcke <mka@chromium.org>
->>>> ---
->>>>    drivers/soc/qcom/qcom-geni-se.c | 41 +++++++++++++++++++++++++++++++++++++++++
->>>>    1 file changed, 41 insertions(+)
->>>>
->>>> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
->>>> index 7d622ea..d244dfc 100644
->>>> --- a/drivers/soc/qcom/qcom-geni-se.c
->>>> +++ b/drivers/soc/qcom/qcom-geni-se.c
->>>> @@ -90,6 +90,7 @@ struct geni_wrapper {
->>>>       struct device *dev;
->>>>       void __iomem *base;
->>>>       struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
->>>> +    struct icc_path *icc_path_geni_to_core;
->>>>    };
->>>>
->>>>    #define QUP_HW_VER_REG                     0x4
->>>> @@ -747,11 +748,50 @@ static int geni_se_probe(struct platform_device *pdev)
->>>>               }
->>>>       }
->>>>
->>>> +#ifdef CONFIG_SERIAL_EARLYCON
->>>> +    wrapper->icc_path_geni_to_core = devm_of_icc_get(dev, "qup-core");
->>>> +    if (IS_ERR(wrapper->icc_path_geni_to_core))
->>>> +            return PTR_ERR(wrapper->icc_path_geni_to_core);
->>>> +    /*
->>>> +     * Put minmal BW request on core clocks on behalf of early console.
->>>> +     * The vote will be removed in suspend call.
->>>> +     */
->>>> +    ret = icc_set_bw(wrapper->icc_path_geni_to_core, Bps_to_icc(1000),
->>>> +                    Bps_to_icc(1000));
->>>> +    if (ret) {
->>>> +            dev_err(&pdev->dev, "%s: ICC BW voting failed for core\n",
->>>> +                    __func__);
->>>> +            return ret;
->>>> +    }
->>> What is ugly about this is that it's done for every QUP, not only the one
->>> with the early console. Again, I don't have a good solution for it, maybe
->>> it's a limitation we have to live with :(
->> There is one more limitation from QUP core side. Core clocks for both
->> the QUP wrapper runs at same speed.
->>
->> core2x_1 = core2x_2 = max(core2x_1, core2x_2);
->>
->> So with above limitation and if we are removing early con vote from Core
->> when real console comes up. It doesn't matter whether it's done for
->> every QUP or the only with early console.
->>
->>>> +#endif
->>>> +
->>>>       dev_set_drvdata(dev, wrapper);
->>>>       dev_dbg(dev, "GENI SE Driver probed\n");
->>>>       return devm_of_platform_populate(dev);
->>>>    }
->>>>
->>>> +static int __maybe_unused geni_se_sys_suspend(struct device *dev)
->>>> +{
->>>> +    struct geni_wrapper *wrapper = dev_get_drvdata(dev);
->>>> +    int ret;
->>>> +
->>>> +#ifdef CONFIG_SERIAL_EARLYCON
->>>> +    ret = icc_set_bw(wrapper->icc_path_geni_to_core, 0, 0);
->>> I think you only want to do this on the first suspend.
->> Ok, I can add that logic using global variable.
->>> Do we need to handle the case where no 'real' console is configured?
->>> In this case the early console would be active forever and setting
->>> the bandwidths to 0 might cause a similar crash than the one you are
->>> trying to fix. Not sure if that's a real world use case, but wanted to
->>> mention it. Maybe this is an argument of the notifier approach?
->> We can't support earlycon without real console.
->>
->> As earlyconsole doesn't do any kind of resource enablement(SE clocks,
->> pinctrl, etc) it assumes that resources are already enabled from
->> previous stages.
->>
->> So if real console doesn't come up no one will vote for that SE clock,
->> and it will be disabled from clk late_init call which will result into
->> un-clocked access.
->>
->>
->>>> +    if (ret) {
->>>> +            dev_err(dev, "%s: ICC BW remove failed for core\n",
->>>> +                    __func__);
->>>> +            return ret;
->>> Aborting suspend seems too harsh since the QUP should still be fully
->>> functional unless there is a general problem with the interconnects.
->>>
->>> I would suggest to change the log to dev_warn() and return 0.
->> Ok
->>
->> Thanks for reviewing the patch.
->>
->> regards,
->>
->> Akash
->>
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+> Error can be reproduced by pulling I2C SDA -line temporarily low
+> by shorting it to ground, while linux I2C master is operating on
+> it using the xiic driver. The application using the bus will
+> start receiving linux error code 16: "Device or resource busy"
+> indefinitely:
+>
+> kernel: pca953x 0-0020: failed writing register
+> app: Error writing file, error: 16
+>
+> With multi-master disabled device will instead receive error
+> code 5: "I/O error" while SDA is grounded, but recover normal
+> operation once short is removed.
+>
+> kernel: pca953x 0-0020: failed reading register
+> app: Error reading file, error: 5
+>
+> Signed-off-by: Jaakko Laine <ext-jaakko.laine@vaisala.com>
+> ---
+>
+> Applies against Linux 5.6-rc1 from master in
+> https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git
+>
+> I would like to point out that that since this patch disables
+> multimaster mode based on the standard I2C multimaster property
+> in device tree (as it propably should) and since the driver has
+> previously supported multimaster even when this property doesn't
+> exist in device tree, there is a possible backwards
+> compatibility issue:
+>
+> If there are devices relying on the multimaster mode to work
+> without defining the property in device tree, their I2C bus
+> might not work without issues anymore after this patch, since
+> the driver will asume it is the only master on bus and could
+> therefore interrupt the communication of some other master on
+> same bus.
+>
+> Please suggest some alternative fix if this is not acceptable
+> as is. On the other hand supporting multimaster even on a bus
+> with only a single master does currently cause some
+> reliability issues since the bus can get indefinitely stuck.
+> I don't think there exists a I2C protocol compatible way to
+> resolve the deadlock on multimaster bus.
+>
+>  drivers/i2c/busses/i2c-xiic.c | 52 +++++++++++++++++++++--------------
+>  1 file changed, 32 insertions(+), 20 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+> index 90c1c362394d..37f8d6ee0577 100644
+> --- a/drivers/i2c/busses/i2c-xiic.c
+> +++ b/drivers/i2c/busses/i2c-xiic.c
+> @@ -46,19 +46,20 @@ enum xiic_endian {
+>
+>  /**
+>   * struct xiic_i2c - Internal representation of the XIIC I2C bus
+> - * @dev:       Pointer to device structure
+> - * @base:      Memory base of the HW registers
+> - * @wait:      Wait queue for callers
+> - * @adap:      Kernel adapter representation
+> - * @tx_msg:    Messages from above to be sent
+> - * @lock:      Mutual exclusion
+> - * @tx_pos:    Current pos in TX message
+> - * @nmsgs:     Number of messages in tx_msg
+> - * @state:     See STATE_
+> - * @rx_msg:    Current RX message
+> - * @rx_pos:    Position within current RX message
+> - * @endianness: big/little-endian byte order
+> - * @clk:       Pointer to AXI4-lite input clock
+> + * @dev:               Pointer to device structure
+> + * @base:              Memory base of the HW registers
+> + * @wait:              Wait queue for callers
+> + * @adap:              Kernel adapter representation
+> + * @tx_msg:            Messages from above to be sent
+> + * @lock:              Mutual exclusion
+> + * @tx_pos:            Current pos in TX message
+> + * @nmsgs:             Number of messages in tx_msg
+> + * @state:             See STATE_
+> + * @rx_msg:            Current RX message
+> + * @rx_pos:            Position within current RX message
+> + * @endianness:                big/little-endian byte order
+> + * @multimaster:       Indicates bus has multiple masters
+> + * @clk:               Pointer to AXI4-lite input clock
+>   */
+>  struct xiic_i2c {
+>         struct device           *dev;
+> @@ -73,6 +74,7 @@ struct xiic_i2c {
+>         struct i2c_msg          *rx_msg;
+>         int                     rx_pos;
+>         enum xiic_endian        endianness;
+> +       bool                    multimaster;
+>         struct clk *clk;
+>  };
+>
+> @@ -521,19 +523,26 @@ static int xiic_bus_busy(struct xiic_i2c *i2c)
+>  static int xiic_busy(struct xiic_i2c *i2c)
+>  {
+>         int tries = 3;
+> -       int err;
+> +       int err = 0;
+>
+>         if (i2c->tx_msg)
+>                 return -EBUSY;
+>
+> -       /* for instance if previous transfer was terminated due to TX error
+> -        * it might be that the bus is on it's way to become available
+> -        * give it at most 3 ms to wake
+> +       /* In single master mode bus can only be busy, when in use by this
+> +        * driver. If the register indicates bus being busy for some reason we
+> +        * should ignore it, since bus will never be released and i2c will be
+> +        * stuck forever.
+>          */
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+the other thing i was thinking how will multithreading .
+Should we have a lock here.
+
+> -       err = xiic_bus_busy(i2c);
+> -       while (err && tries--) {
+> -               msleep(1);
+> +       if (i2c->multimaster) {
+> +               /* for instance if previous transfer was terminated due to TX
+> +                * error it might be that the bus is on it's way to become
+> +                * available give it at most 3 ms to wake
+> +                */
+>                 err = xiic_bus_busy(i2c);
+> +               while (err && tries--) {
+> +                       msleep(1);
+> +                       err = xiic_bus_busy(i2c);
+> +               }
+>         }
+>
+>         return err;
+> @@ -811,6 +820,9 @@ static int xiic_i2c_probe(struct platform_device *pdev)
+>                 goto err_clk_dis;
+>         }
+>
+> +       i2c->multimaster =
+> +               of_property_read_bool(pdev->dev.of_node, "multi-master");
+> +
+Current will default to mustimaster is 0.
+May be the default should be 1 if not specified.
+>         /*
+>          * Detect endianness
+>          * Try to reset the TX FIFO. Then check the EMPTY flag. If it is not
+> --
+> 2.19.1
+>
