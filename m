@@ -2,36 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FBD18A624
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Mar 2020 22:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B5B18A5F4
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Mar 2020 22:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727533AbgCRVGF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 Mar 2020 17:06:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54474 "EHLO mail.kernel.org"
+        id S1728177AbgCRUzD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 Mar 2020 16:55:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55134 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727960AbgCRUyn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 18 Mar 2020 16:54:43 -0400
+        id S1728167AbgCRUzD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 18 Mar 2020 16:55:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 400FA208DB;
-        Wed, 18 Mar 2020 20:54:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AA275208FE;
+        Wed, 18 Mar 2020 20:55:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584564883;
-        bh=D8b8a7WrXA/GjADo5nzuC7SUzmHlHAizf/wjGu4r3mg=;
+        s=default; t=1584564902;
+        bh=Fw2Y7SJT1KxgyT/KkiFlJP+vzAotUhytvqgs9F+e2yo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lBvfavq/6hKJoEr6YOWQ0Ca7G+3sWX8/OeKyxxmUEgHT16myaptD5LvDwDR6s263p
-         ZZo5cniXAf2kGhtTzxQzQlXBSOICP4b4MDojdttvpbM0Vvwf4pFsZwDMYcRXyf1DK6
-         QEduoIuNn5+98ZfPhSNHJJqZV/HGhmT+2PQ344Fk=
+        b=p2ppZ9trnB7rYkhUn0JRl+dHabjvRGdzdUPoWN1Rv5dCyJcibjWkAo/NnAF+noHk1
+         d0S1SHgAQlxxwsPvBfwm4K1Aj8XPp4uBUksD/Wa/eOy+CJ4zYil8V/YEx8Uw/y347z
+         ZAR/hKZgCyiZGOlm9TOG61fIWAMIznZ6KWsurgjo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hamish Martin <hamish.martin@alliedtelesis.co.nz>,
-        Linus Walleij <linus.walleij@linaro.org>,
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 52/73] i2c: gpio: suppress error on probe defer
-Date:   Wed, 18 Mar 2020 16:53:16 -0400
-Message-Id: <20200318205337.16279-52-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 69/73] i2c: acpi: put device when verifying client fails
+Date:   Wed, 18 Mar 2020 16:53:33 -0400
+Message-Id: <20200318205337.16279-69-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200318205337.16279-1-sashal@kernel.org>
 References: <20200318205337.16279-1-sashal@kernel.org>
@@ -44,38 +47,48 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-[ Upstream commit 3747cd2efe7ecb9604972285ab3f60c96cb753a8 ]
+[ Upstream commit 8daee952b4389729358665fb91949460641659d4 ]
 
-If a GPIO we are trying to use is not available and we are deferring
-the probe, don't output an error message.
-This seems to have been the intent of commit 05c74778858d
-("i2c: gpio: Add support for named gpios in DT") but the error was
-still output due to not checking the updated 'retdesc'.
+i2c_verify_client() can fail, so we need to put the device when that
+happens.
 
-Fixes: 05c74778858d ("i2c: gpio: Add support for named gpios in DT")
-Signed-off-by: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 525e6fabeae2 ("i2c / ACPI: add support for ACPI reconfigure notifications")
+Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-gpio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/i2c-core-acpi.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-gpio.c b/drivers/i2c/busses/i2c-gpio.c
-index 3a9e840a35466..a4a6825c87583 100644
---- a/drivers/i2c/busses/i2c-gpio.c
-+++ b/drivers/i2c/busses/i2c-gpio.c
-@@ -348,7 +348,7 @@ static struct gpio_desc *i2c_gpio_get_desc(struct device *dev,
- 	if (ret == -ENOENT)
- 		retdesc = ERR_PTR(-EPROBE_DEFER);
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index 62a1c92ab803d..ce70b5288472c 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -394,9 +394,17 @@ EXPORT_SYMBOL_GPL(i2c_acpi_find_adapter_by_handle);
+ static struct i2c_client *i2c_acpi_find_client_by_adev(struct acpi_device *adev)
+ {
+ 	struct device *dev;
++	struct i2c_client *client;
  
--	if (ret != -EPROBE_DEFER)
-+	if (PTR_ERR(retdesc) != -EPROBE_DEFER)
- 		dev_err(dev, "error trying to get descriptor: %d\n", ret);
+ 	dev = bus_find_device_by_acpi_dev(&i2c_bus_type, adev);
+-	return dev ? i2c_verify_client(dev) : NULL;
++	if (!dev)
++		return NULL;
++
++	client = i2c_verify_client(dev);
++	if (!client)
++		put_device(dev);
++
++	return client;
+ }
  
- 	return retdesc;
+ static int i2c_acpi_notify(struct notifier_block *nb, unsigned long value,
 -- 
 2.20.1
 
