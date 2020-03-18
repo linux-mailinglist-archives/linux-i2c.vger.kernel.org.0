@@ -2,90 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1F718991E
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Mar 2020 11:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2487C1899CB
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Mar 2020 11:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727144AbgCRKSx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 Mar 2020 06:18:53 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47071 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726586AbgCRKSx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Mar 2020 06:18:53 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jEVme-0005Tb-LH; Wed, 18 Mar 2020 11:18:44 +0100
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jEVme-0000ds-3Q; Wed, 18 Mar 2020 11:18:44 +0100
-Date:   Wed, 18 Mar 2020 11:18:44 +0100
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     linux@rempel-privat.de, s.hauer@pengutronix.de,
-        shawnguo@kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+        id S1726550AbgCRKoI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 Mar 2020 06:44:08 -0400
+Received: from sauhun.de ([88.99.104.3]:46454 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726486AbgCRKoI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 18 Mar 2020 06:44:08 -0400
+Received: from localhost (p54B333FA.dip0.t-ipconnect.de [84.179.51.250])
+        by pokefinder.org (Postfix) with ESMTPSA id 33AAF2C097D;
+        Wed, 18 Mar 2020 11:44:06 +0100 (CET)
+Date:   Wed, 18 Mar 2020 11:44:05 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Tang Bin <tangbin@cmss.chinamobile.com>, linux@rempel-privat.de,
+        s.hauer@pengutronix.de, shawnguo@kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] drivers/i2c/busses/i2c-imx.c:remove duplicate print
  after platform_get_irq()
-Message-ID: <20200318101844.55c273zh242ymxcf@pengutronix.de>
+Message-ID: <20200318104405.rsqiw5og4xbuv6n5@katana>
 References: <20200318100748.17540-1-tangbin@cmss.chinamobile.com>
+ <20200318101844.55c273zh242ymxcf@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="bce44n5wofewyr2x"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200318100748.17540-1-tangbin@cmss.chinamobile.com>
+In-Reply-To: <20200318101844.55c273zh242ymxcf@pengutronix.de>
 User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 06:07:48PM +0800, Tang Bin wrote:
-> We don't need dev_err() message because when something goes wrong,
-> platform_get_irq() has print an error message itself, so we should
-> remove duplicate dev_err().
-> 
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-> ---
->  drivers/i2c/busses/i2c-imx.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index a3b61336f..01fd46682 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1066,10 +1066,8 @@ static int i2c_imx_probe(struct platform_device *pdev)
->  	dev_dbg(&pdev->dev, "<%s>\n", __func__);
->  
->  	irq = platform_get_irq(pdev, 0);
-> -	if (irq < 0) {
-> -		dev_err(&pdev->dev, "can't get irq number\n");
-> +	if (irq < 0)
->  		return irq;
-> -	}
 
-Maybe add a comment for the next person who wonders about an error path
-without error message? Something like:
+--bce44n5wofewyr2x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	irq = platform_get_irq(pdev, 0);
-	if (irq < 0)
-		/*
-		 * platform_get_irq() already issued an error message, so
-		 * fail silently here.
-		 */
-		 return irq;
+Hi Uwe,
 
-And to get some extra kudos mention the commit that modified
-platform_get_irq() to emit a message in the commit log.
+> Maybe add a comment for the next person who wonders about an error path
+> without error message? Something like:
+>=20
+> 	irq =3D platform_get_irq(pdev, 0);
+> 	if (irq < 0)
+> 		/*
+> 		 * platform_get_irq() already issued an error message, so
+> 		 * fail silently here.
+> 		 */
+> 		 return irq;
 
-Best regards
-Uwe
+Hmm, too much boilerplate for my taste. I'd rather assume it will be
+printed during the call.
 
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+> And to get some extra kudos mention the commit that modified
+> platform_get_irq() to emit a message in the commit log.
+
+Yes.
+
+Kind regards,
+
+   Wolfram
+
+
+--bce44n5wofewyr2x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5x+3UACgkQFA3kzBSg
+Kba8nA/+P5T/G4aR4JXxKUJpSsklVKMksLmr30FVYSwIDwRM+ZtiE1Gb5YlxIq2w
+xGrwNdKPkoYaYYfPeV51FgcQ0p6LcVF1SkgFxox8B8ga20m65uyu+/CoSeblzcJ+
+J7OP6D1XHGezNJ75wD6rUO9buqqBhxDOQ1VvQsKxVN6V16Zc4TULuU5CZNh6KbnM
+h//fMAuKK2mubFJVYiDHZCeaFPgCLESrmYmuCup46fPkthkMwZbynpeXo23dvhd4
+5rh8tB1n1DpCz4JICMfyaTlLMD53U3Lkq4UivUmwi3oU17rnhNqfYvggZ+gGmucz
+UNZGT9FiMCRzwidSU9WitQbF8CkkS7+0RhVRf/8T52GtZm8VroRg3apGfp+FpzP3
+Ep/bFgZrBJuDCY/27JtiaGlF4qGSFis0ZvdOnneEC1pzwQ5WuaN0yJw6PdYq5W6X
+Hy2Bn1m9gsnI1DfEF47y6jlDgjmMAt0huqoTKwvWIAJnaE8SQfGIaHsB667c/Vo6
+BEHCeewgbX9crZk5S7P6swVEXIoFAVZYnCAqFowunYx81dKn/VV/mHiuwVw6gy7A
+tnvZh1GvJGAzC5JibIhAfA6ZExGesQRR36XegKDiQm2YrLMH8l0qYmUjkYCWZjE4
+Ejq+5Srx6Sxk+rZxdMmxA8stM2qhn+QFnUtZKJ4g6jdTYeI6720=
+=MP33
+-----END PGP SIGNATURE-----
+
+--bce44n5wofewyr2x--
