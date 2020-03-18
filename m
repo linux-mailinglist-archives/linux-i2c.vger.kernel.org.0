@@ -2,130 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F97D189DF0
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Mar 2020 15:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1586189E8A
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Mar 2020 16:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727187AbgCROdZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 Mar 2020 10:33:25 -0400
-Received: from sauhun.de ([88.99.104.3]:48226 "EHLO pokefinder.org"
+        id S1726974AbgCRPBH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 Mar 2020 11:01:07 -0400
+Received: from sauhun.de ([88.99.104.3]:48398 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726596AbgCROdY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 18 Mar 2020 10:33:24 -0400
+        id S1726930AbgCRPBH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 18 Mar 2020 11:01:07 -0400
 Received: from localhost (p54B333FA.dip0.t-ipconnect.de [84.179.51.250])
-        by pokefinder.org (Postfix) with ESMTPSA id 039522C097D;
-        Wed, 18 Mar 2020 15:33:21 +0100 (CET)
-Date:   Wed, 18 Mar 2020 15:33:21 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-i3c@lists.infradead.org,
+        by pokefinder.org (Postfix) with ESMTPSA id C9FB72C097D;
+        Wed, 18 Mar 2020 16:01:04 +0100 (CET)
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, linux-i3c@lists.infradead.org,
         Kieran Bingham <kieran@ksquared.org.uk>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
         Luca Ceresoli <luca@lucaceresoli.net>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Vladimir Zapolskiy <vz@mleia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [RFC PATCH 6/7] i2c: of: mark a whole array of regs as reserved
-Message-ID: <20200318143321.GB8300@ninjato>
-References: <20200220172403.26062-1-wsa+renesas@sang-engineering.com>
- <20200220172403.26062-7-wsa+renesas@sang-engineering.com>
- <CAMuHMdUvADDozCX6Bd0dDVejpTY-k42naEnB7Q5Z6w7Yg94_Vw@mail.gmail.com>
+        linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [RFC PATCH v2 0/6] i2c: of: reserve unknown and ancillary addresses
+Date:   Wed, 18 Mar 2020 16:00:53 +0100
+Message-Id: <20200318150059.21714-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aVD9QWMuhilNxW9f"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUvADDozCX6Bd0dDVejpTY-k42naEnB7Q5Z6w7Yg94_Vw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+First the changes since V1 for those familiar with this series:
 
---aVD9QWMuhilNxW9f
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+* old patch 1 dropped, not needed anymore after some reimplementation
+  here
+* added tags from last revision (except for patches 5+6 because there
+  were changes in code)
+* patch 5 has a better of-iterator which respects now that addresses
+  might have different #address-cells and such
+* patch 6 now puts the device it obtained
+* one more "dummy" removed fromt the binding docs
 
+TODO: make sure there are no concurrency issues in patch 6 when handling
+the struct i2c_client.
 
-> > +int of_i2c_get_board_info(struct device_node *node, struct i2c_board_i=
-nfo *info)
-> > +{
-> > +       u32 addr;
-> > +       int ret;
-> > +
-> > +       ret =3D of_property_read_u32(node, "reg", &addr);
->=20
-> Perhaps the time is ripe to start considering #address-cells, instead
-> of assuming 1, here ...
+Many thanks to Geert and Luca for the review and discussions!
 
-I think here it is okay because we really want the first entry of the
-first tuple.
+And here the cover-letter for V1:
 
-> > +       of_property_for_each_u32(node, "reg", prop, cur, reg) {
->=20
-> ... and especially here, if this code can ever be reused for i3c, which u=
-ses 3.
+One outcome of my dynamic address assignment RFC series[1] was that we
+need a way to describe an I2C bus in DT fully. This includes unknown
+devices and devices requiring multiple addresses. This series implements
+that.
 
-But here I agree. I reimplemented the code to handle it, and it worked
-with '#address-cells =3D <2>;' as expected. Here is the diff to this
-patch:
+Patches 1 does some preparational refactoring. After patch 2, we can
+have child nodes with an address, but no compatible. Those addresses
+will be marked busy now. They are handled by the dummy driver as well,
+but named "reserved" instead of dummy. Patches 3+4 are again some
+preparational refactoring. After patch 5, all addresses in a 'reg' array
+are now blocked by the I2C core, also using the dummy driver but named
+"reserved". So, we can have something like this:
 
-@@ -16,6 +16,7 @@
- #include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_address.h>
- #include <linux/of_device.h>
- #include <linux/sysfs.h>
-=20
-@@ -75,13 +76,14 @@ static struct i2c_client *of_i2c_register_device(struct=
- i2c_adapter *adap,
- 	struct i2c_client *client, *first_client =3D ERR_PTR(-ENOENT);
- 	struct i2c_board_info info;
- 	bool first_reg =3D true;
--	struct property *prop;
--	const __be32 *cur;
--	u32 reg;
-+	unsigned int i =3D 0;
-+	const __be32 *prop;
-+	u16 reg;
-=20
- 	pr_debug("register %pOF\n", node);
-=20
--	of_property_for_each_u32(node, "reg", prop, cur, reg) {
-+	while ((prop =3D of_get_address(node, i++, NULL, NULL))) {
-+		reg =3D of_read_number(prop, 1);
- 		of_i2c_decode_board_info(node, reg, first_reg, &info);
-=20
- 		client =3D i2c_new_client_device(adap, &info);
+	reserved@13 {
+	       reg = <0x13>, <0x14>;
+	};
 
-Thanks, Geert! I will send out the new version in a few minutes.
+After patch 6 then, i2c_new_ancillary_device is spiced up to look for
+such a reserved address and return it as a good-old "dummy" device.
+Sanity checks include that only a sibling from the same DT node can
+request such an ancillary address. Stealing addresses from other drivers
+is not possible anymore. This is something I envisioned for some time
+now and I am quite happy with the implementation and how things work.
 
+There is only one thing giving me some headache now. There is a danger
+of a regression maybe. If someone has multiple 'reg' entries in the DT
+but never used i2c_new_ancillary_device but i2c_new_dummy_device, then
+things will break now because i2c_new_dummy_device has not enough
+information to convert a "reserved" device to a "dummy" one. It will
+just see the address as busy. However, all binding documentations I
+found which use 'reg' as an array correctly use
+i2c_new_ancillary_device. On the other hand, my search strategy for
+finding such bindings and DTs do not feel perfect to me. Maybe there are
+also some more corner cases in this area, so this series is still RFC.
 
---aVD9QWMuhilNxW9f
-Content-Type: application/pgp-signature; name="signature.asc"
+And some more documentation is needed. Before that, though, the generic
+I2C binding docs need some overhaul, too.
 
------BEGIN PGP SIGNATURE-----
+All tested on a Renesas Lager board (R-Car H2). A git branch can be
+found here:
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5yMS0ACgkQFA3kzBSg
-KbYtfRAAil0f+6TG3T06kRnSNoNLPpEoqabj0ip7Vz7+gSloBvl8lszjT7CP//7R
-9gnjhLFvr6hPVbC64dzimreCL1JGYUtFOhKDl/pPSA+TrEFEARbOCxIbdhgieFC0
-DrSN2Ed+jK7ZRTPdTuT2y6DNf6bbDHo3ihnzd57I2wy6cEsTMdyIJSAnsxfn5QVf
-6EKTCLAeBI9hPd3jDB38ICvQ0Vf9/F9lHRZNOQo1hQwSkUbnyyqf26k8kt/VAnm9
-Ipcvlz8krmqY2FWnC/FlzhKV5lSc9i7VSZJTQOjtO39RHxRAsOytbzc6erlTp9Pz
-V1+Uw8HGIVMbQe1+kpaaJvomxTApQ2HqjTOPTQc/2h9qXUdCdeWFi56oaJzCl7hp
-WHCgqmUCfs4a1V75vuHk2Fj3mPMQsvmjiWrvW5Sz5nvto2GTjKsg2m/v6bdabTxk
-iMFjwBfQVun1ziMQOad0zycEFF+sBtQafAg4zmS/FAyrhGAVI9YQ57Z93dlk7D1L
-YLFvxifo+L5a6/ny1uEL0xrjMoYfiUCTXlySSuywl5dD5jsqBoUWduFXeHo0DezA
-Pe/Vht7ChN7WlI3kDt3X+zCVGmf5WnObEJPrzm39gUNjod7UpW39zgoKQWuF4Rpp
-JCKxZe174onb36K3lz83DRTkg5v5NU1AdVgwqrKM6RjakOs1aXM=
-=Ku4u
------END PGP SIGNATURE-----
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/topic/i2c_alias_device_v2
 
---aVD9QWMuhilNxW9f--
+The I3C list is on CC not only because there is 1-line change in their
+subsystem, but maybe also because they need to be aware of these changes
+for their I2C fallback? I don't really know, let me know if you are not
+interested.
+
+Looking forward to comments!
+
+Happy hacking,
+
+   Wolfram
+
+[1] https://www.spinics.net/lists/linux-i2c/msg43291.html
+
+Wolfram Sang (6):
+  i2c: use DEFINE for the dummy driver name
+  i2c: allow DT nodes without 'compatible'
+  i2c: of: remove superfluous parameter from exported function
+  i2c: of: error message unification
+  i2c: of: mark a whole array of regs as reserved
+  i2c: core: hand over reserved devices when requesting ancillary
+    addresses
+
+ .../devicetree/bindings/i2c/i2c-ocores.txt    |  2 -
+ Documentation/devicetree/bindings/i2c/i2c.txt |  4 +-
+ drivers/i2c/i2c-core-base.c                   | 33 +++++--
+ drivers/i2c/i2c-core-of.c                     | 89 +++++++++++--------
+ drivers/i2c/i2c-core.h                        |  3 +
+ drivers/i3c/master.c                          |  2 +-
+ include/linux/i2c.h                           |  6 +-
+ 7 files changed, 88 insertions(+), 51 deletions(-)
+
+-- 
+2.20.1
+
