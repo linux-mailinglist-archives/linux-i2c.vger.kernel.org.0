@@ -2,47 +2,45 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2F418BBE6
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Mar 2020 17:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB0518BBFE
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Mar 2020 17:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727496AbgCSQJc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Mar 2020 12:09:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47630 "EHLO mail.kernel.org"
+        id S1728120AbgCSQLP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 19 Mar 2020 12:11:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49208 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727064AbgCSQJb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 19 Mar 2020 12:09:31 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        id S1727436AbgCSQLP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 19 Mar 2020 12:11:15 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8F9DF208C3;
-        Thu, 19 Mar 2020 16:09:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3F27E20663;
+        Thu, 19 Mar 2020 16:11:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584634170;
-        bh=QFuqHMWKkiEerMDTcpgGsWBChtJHP2dAeiJte+5yHtU=;
+        s=default; t=1584634274;
+        bh=Oq6OzcJ1pRJcVvHx5D+K9KmKO9NwGHb+oIM0SQfrTGs=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uY30D1IJVRcRBK2B9fm6ObzhPw1OcuQ6AjL1Sbl31AkMpnQyITbcQo67FqiBml04n
-         ibIaY5ScnLxTd3j3uqWZYBnmfqYfvFQNbrvf2Ku1MgINv6t9TSCaWhmGH+SljjA7zU
-         Y/UF4llCpGOqqW8nybbfwI3nev70L/DomHyFsJ0M=
-Received: by mail-yb1-f172.google.com with SMTP id s17so562687ybk.9;
-        Thu, 19 Mar 2020 09:09:30 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ3pB5DuU3+sucltyszQDUEMVz4erO9PddeaLwyTLmU0xTtKcE94
-        +jGsbQShz/3WOTdGhLhvx0bUTZszLuMFM2Bu0w==
-X-Google-Smtp-Source: ADFU+vvOh/l0kOoyAZeUv7XIEUUFdmB7bmrN34m9amh/dorM5bjQaVRBAARghBCDWKGdHkkLJf9QnHfG/DHcWYa2/hI=
-X-Received: by 2002:a25:b5c3:: with SMTP id d3mr5901077ybg.358.1584634169779;
- Thu, 19 Mar 2020 09:09:29 -0700 (PDT)
+        b=KzU80ZHDeVWY/ZNhn0HPi7cNIDTjzPgDKJdmPAv1jjgRoKscNnggHw5HB5RUHV63q
+         nM9OGEN6mPxLr1rnJjWGSLEv4KZ4vZwUvUUl3MEQTedHm0AGmNV4WMICiZrgqotvpx
+         pnDSIKDyMY+KKWeD9jJFnmHMnh6cA5gnf04e2fGA=
+Received: by mail-yb1-f174.google.com with SMTP id g206so565717ybg.11;
+        Thu, 19 Mar 2020 09:11:14 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ39SFbQHZA5wHLdGEf2uFUaC2C4BFqkZOWehVCu5IaHn9u7t7zh
+        UEAPvJDLkjZ2gmcCepQnpJG1jRKBqAnESBWmog==
+X-Google-Smtp-Source: ADFU+vvLsEep/vx8qHUUkolYGJcIcerwEptFuq/LXBSqDUZWP4P71Gah1wXv8Hn1g+bbgxKGowiIJN9Kj3EiKfBUm/U=
+X-Received: by 2002:a5b:48e:: with SMTP id n14mr6129045ybp.462.1584634273454;
+ Thu, 19 Mar 2020 09:11:13 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-14-lkundrak@v3.sk>
- <20200317134805.GO24270@lunn.ch>
-In-Reply-To: <20200317134805.GO24270@lunn.ch>
+In-Reply-To: <20200317093922.20785-14-lkundrak@v3.sk>
 From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 19 Mar 2020 10:09:18 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJZbk29iq5QargTK-VMBoR359dvfQ=VuBkKHFdMfJEU9w@mail.gmail.com>
-Message-ID: <CAL_JsqJZbk29iq5QargTK-VMBoR359dvfQ=VuBkKHFdMfJEU9w@mail.gmail.com>
+Date:   Thu, 19 Mar 2020 10:11:02 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+wG+DTZ8Vxcw=NR2isABGrkoDiBt-uG9+NF6qdWuU62Q@mail.gmail.com>
+Message-ID: <CAL_Jsq+wG+DTZ8Vxcw=NR2isABGrkoDiBt-uG9+NF6qdWuU62Q@mail.gmail.com>
 Subject: Re: [PATCH 13/28] dt-bindings: serial: move Marvell compatible string
  to 8250 binding doc
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Lubomir Rintel <lkundrak@v3.sk>,
-        Linus Walleij <linus.walleij@linaro.org>,
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jason Cooper <jason@lakedaemon.net>,
@@ -55,6 +53,7 @@ Cc:     Lubomir Rintel <lkundrak@v3.sk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mark Brown <broonie@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
         Gregory Clement <gregory.clement@bootlin.com>,
         Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
@@ -76,23 +75,21 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 7:48 AM Andrew Lunn <andrew@lunn.ch> wrote:
+On Tue, Mar 17, 2020 at 3:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
 >
-> On Tue, Mar 17, 2020 at 10:39:07AM +0100, Lubomir Rintel wrote:
-> > These ports are compatible with NS8250 and handled by the same driver.
-> > Get rid of the extra document that fails to document the properties that
-> > are actually supported.
+> These ports are compatible with NS8250 and handled by the same driver.
+> Get rid of the extra document that fails to document the properties that
+> are actually supported.
 >
-> Hi Lubmir
->
-> This is needs a bit closer examination. By the PXA maintainers. It
-> appears there are two serial drivers, the 8250 and a PXA specific
-> driver.
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+> ---
+>  Documentation/devicetree/bindings/serial/8250.txt        | 2 ++
+>  Documentation/devicetree/bindings/serial/mrvl-serial.txt | 4 ----
+>  2 files changed, 2 insertions(+), 4 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/serial/mrvl-serial.txt
 
-Yes, but that is independent of the binding.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-The PXA driver (serial/pxa.c) is already deprecated in favor of
-8250_pxa.c. That was 3.5 years ago now, so maybe time to remove the
-old one.
+I'd really like to see 8250.txt converted to schema.
 
 Rob
