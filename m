@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB0518BBFE
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Mar 2020 17:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8AE18BD0B
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Mar 2020 17:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728120AbgCSQLP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Mar 2020 12:11:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49208 "EHLO mail.kernel.org"
+        id S1728093AbgCSQvx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 19 Mar 2020 12:51:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727436AbgCSQLP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 19 Mar 2020 12:11:15 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        id S1727146AbgCSQvx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 19 Mar 2020 12:51:53 -0400
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3F27E20663;
-        Thu, 19 Mar 2020 16:11:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CEEA208D6;
+        Thu, 19 Mar 2020 16:51:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584634274;
-        bh=Oq6OzcJ1pRJcVvHx5D+K9KmKO9NwGHb+oIM0SQfrTGs=;
+        s=default; t=1584636712;
+        bh=2ze8n/wWhmgGRIbVHJ5udG/S1t4TMsDq+0bbeXYtPok=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KzU80ZHDeVWY/ZNhn0HPi7cNIDTjzPgDKJdmPAv1jjgRoKscNnggHw5HB5RUHV63q
-         nM9OGEN6mPxLr1rnJjWGSLEv4KZ4vZwUvUUl3MEQTedHm0AGmNV4WMICiZrgqotvpx
-         pnDSIKDyMY+KKWeD9jJFnmHMnh6cA5gnf04e2fGA=
-Received: by mail-yb1-f174.google.com with SMTP id g206so565717ybg.11;
-        Thu, 19 Mar 2020 09:11:14 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ39SFbQHZA5wHLdGEf2uFUaC2C4BFqkZOWehVCu5IaHn9u7t7zh
-        UEAPvJDLkjZ2gmcCepQnpJG1jRKBqAnESBWmog==
-X-Google-Smtp-Source: ADFU+vvLsEep/vx8qHUUkolYGJcIcerwEptFuq/LXBSqDUZWP4P71Gah1wXv8Hn1g+bbgxKGowiIJN9Kj3EiKfBUm/U=
-X-Received: by 2002:a5b:48e:: with SMTP id n14mr6129045ybp.462.1584634273454;
- Thu, 19 Mar 2020 09:11:13 -0700 (PDT)
+        b=QyKov4bFHWG3H4hqZq/lODVKCwb4/xh/+2s+wxcX/FYj+zjf13+HhN7+F6mOULrBB
+         vmZMrFP/4fhhqc/NBLvzJF3B7n4gPr2AM+J7JrT/cEV9I4gCg0kQxBKbTnjmTJlCeg
+         FutoxiHKgH9se4LVod9K+eTPSF/xdCCBH2IwvFms=
+Received: by mail-qk1-f170.google.com with SMTP id d11so3815434qko.3;
+        Thu, 19 Mar 2020 09:51:52 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ3sI98XCdliM+lwcqbN3kpkqfwrS002EuDto4BH875pyfycAn+9
+        iBAPvg/lZRa7XLf61TZRptPu3D0XOgMCq+IsUA==
+X-Google-Smtp-Source: ADFU+vsvey+cEo1Zx1LSphcQZh7dQXaoi8CO+gHGsvltymHnmg94ayjCcsPJFezmZufjX/oGzMXW4LGH8CCJv+tB70E=
+X-Received: by 2002:a37:aa92:: with SMTP id t140mr3544418qke.119.1584636711194;
+ Thu, 19 Mar 2020 09:51:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-14-lkundrak@v3.sk>
-In-Reply-To: <20200317093922.20785-14-lkundrak@v3.sk>
+References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-13-lkundrak@v3.sk>
+In-Reply-To: <20200317093922.20785-13-lkundrak@v3.sk>
 From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 19 Mar 2020 10:11:02 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+wG+DTZ8Vxcw=NR2isABGrkoDiBt-uG9+NF6qdWuU62Q@mail.gmail.com>
-Message-ID: <CAL_Jsq+wG+DTZ8Vxcw=NR2isABGrkoDiBt-uG9+NF6qdWuU62Q@mail.gmail.com>
-Subject: Re: [PATCH 13/28] dt-bindings: serial: move Marvell compatible string
- to 8250 binding doc
+Date:   Thu, 19 Mar 2020 10:51:39 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKMHyDeToZfHpkXEQySoUk=pM+B3+VrpkY4WO2hrJP6SQ@mail.gmail.com>
+Message-ID: <CAL_JsqKMHyDeToZfHpkXEQySoUk=pM+B3+VrpkY4WO2hrJP6SQ@mail.gmail.com>
+Subject: Re: [PATCH 12/28] spi: dt-bindings: spi-controller: Slaves have no
+ address cells
 To:     Lubomir Rintel <lkundrak@v3.sk>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
@@ -77,19 +77,11 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Tue, Mar 17, 2020 at 3:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
 >
-> These ports are compatible with NS8250 and handled by the same driver.
-> Get rid of the extra document that fails to document the properties that
-> are actually supported.
->
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> ---
->  Documentation/devicetree/bindings/serial/8250.txt        | 2 ++
->  Documentation/devicetree/bindings/serial/mrvl-serial.txt | 4 ----
->  2 files changed, 2 insertions(+), 4 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/serial/mrvl-serial.txt
+> SPI controllers in slave mode have a single child node that has no
+> address. Enforce #address-cells of zero instead of one.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Geert has fixed this making 'spi-slave' and '#address-cells' mutually exclusive.
 
-I'd really like to see 8250.txt converted to schema.
+https://lore.kernel.org/linux-devicetree/20200306085038.8111-2-geert+renesas@glider.be/
 
 Rob
