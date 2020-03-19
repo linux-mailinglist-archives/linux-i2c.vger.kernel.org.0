@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBCA18C110
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Mar 2020 21:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A4018C115
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Mar 2020 21:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727194AbgCSUMh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Mar 2020 16:12:37 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:34416 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbgCSUMh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Mar 2020 16:12:37 -0400
-Received: by mail-lf1-f68.google.com with SMTP id i1so2020437lfo.1;
-        Thu, 19 Mar 2020 13:12:36 -0700 (PDT)
+        id S1727232AbgCSUMj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 19 Mar 2020 16:12:39 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:35024 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727183AbgCSUMi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Mar 2020 16:12:38 -0400
+Received: by mail-lj1-f195.google.com with SMTP id u12so4036229ljo.2;
+        Thu, 19 Mar 2020 13:12:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7auRkkaZYMMzWg0GGIYKar0A2d3mOqgB5Mc6nhNM3xs=;
-        b=M6RZIvWbXnQCK5Mh2BTTcfuSWh8RxYfhE4K2ty34ZDykLwZhGSAKiSBJ0Kl5Rein3u
-         yQsGwibDYOvWWn68YXv1NAXmELcohDFeLmwdNFVS+FT4sDPKokSB5Q8mw+tpcJFC0Xcu
-         etZP1xJexXellcTA2Ha8oHxgNt9pSGPuMJxBqUjgtSQ4d6dKuIzpxNWajSocel6JT4lm
-         NP2Ac2OvSqGxvyEtbSGJDqN3OG6WfroYc17LsqKduFGO5UjsmH/HwX9DopNYPgpdB3j1
-         pC9dlG5qQjnn+EftdtzbEHONebRDVRzCWRXathBXCu0TT8Bznsrw68L3JnP3yOyIkBG0
-         wMYw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wkLX2s1nqC4/s2saqipeX2z/4ELPxY+SBvbFqtjm2hU=;
+        b=TwydsAJj8fSLn1Uj3o2Haivq/oiV2I2M1hW88D/4YfUQq559qApPr/vx91lKXFlRgy
+         uHBz9/vM5/FYTdnQ71kEZksPThe0VMRZ9ciUuQ/3Iua8Of4BubAkPcHsVbUPqg9gHwUP
+         KWIo2HXFGuoD6hxCOtU8S5C0ZDUkSEknTl61QzUl5obvo/sjgLBUVorEGADx95ICPssc
+         Z6As6Y7spouFWqt93csCiGhD/SInV/g27n2gZEhNfZewJYX5mqsB7UrHsfmvSImzp5O5
+         0A0LY3Vs7Fbl4edAWwTbJbVUKfmuvVZwqafLAOjM73wW0GzTP2tceZTu3ZoesttbJQ0T
+         z61A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7auRkkaZYMMzWg0GGIYKar0A2d3mOqgB5Mc6nhNM3xs=;
-        b=cxEJOKiYUTPvVKV/sqitGKgtXZVm5ioL8aooMgZOoPDFHAogJtFmFOcCkeheYzJgEl
-         tnQSvtOCmofumfb+T7qOUog8x0ZUv0wf/JaMtAM7pzo/oys88lZkVITJb+MHUAiGsBwQ
-         OSGje4TqOpywRot00bU1FLf87tN33LcwQI59s87oAA6Bdpn0u+0tmdziG/r5g0Rjl4SP
-         5niH8pj/vlf+TL9an1AkxNX4C18wQo5mpM5FG1pz9vxE1AeBF/+HopAKfmUp9GVL4hyj
-         EGSarOqNKOAuBv0K8WIIeROvMYsGbfbwhAHDnEmYd6EgPAnPjt6I1WijRgSf2llRBja8
-         VKqA==
-X-Gm-Message-State: ANhLgQ2ApcWj4md6GKcDQRTH4VTKjrNO/tSZ1G6ujaGk3zEAZkTBqEPs
-        EZ8swKMeig3XbvEwMS+flko=
-X-Google-Smtp-Source: ADFU+vtUpVX9hHMM3jbWlFUsrqbFN08htYRQES7lbg0LO4tEzEKU4X6IO1NELO/4IaREk+Tne5Ix/w==
-X-Received: by 2002:a05:6512:31d3:: with SMTP id j19mr3157200lfe.178.1584648755385;
-        Thu, 19 Mar 2020 13:12:35 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wkLX2s1nqC4/s2saqipeX2z/4ELPxY+SBvbFqtjm2hU=;
+        b=Vr5xGtXMkPhuPWoIGgtgy6KwHhHjQhvtCPFLNWYOHvfmwzKrPBphTk/hudc1rTjzpR
+         zqMNavfmgFIPxL9t6tdcb2WfzsbhV6/pQOhwZXGokn54cYHJIEZScUcJnN2nnbd/OrD4
+         fnKudblsjmkza6k1bdiQlv2/teJKZavBB/JSnvCPd6PqjyUsw5j4kLtYeKtvmgAg2o4V
+         cRdYYMPWbhXTGpDybv6nW3XizrCDh1IzyqGfs9+r1QbC+HXKmFslwFqzvWxphy9ReNG4
+         s6P8N741YUfEVYAQ8G8sIkxFXhpl+X03y6fva0Km62UXcscGNz9h5Ph58cFDOvUDRhwf
+         yA/w==
+X-Gm-Message-State: ANhLgQ3o2m0d0sG0QWlDXUrHQY7HOK7GeCSekW3cp7lwyxN1ZJphoRJo
+        gBMR2MFrJ2lX5UlQIarP4co=
+X-Google-Smtp-Source: ADFU+vsJ1IvYqKOAsalgCu/GNkuLPf8EfUK4hU2fz7zgktmlhFHKLUClSRydu3/ewT8BvJgwFzZ6DA==
+X-Received: by 2002:a2e:b4e5:: with SMTP id s5mr3240453ljm.190.1584648756385;
+        Thu, 19 Mar 2020 13:12:36 -0700 (PDT)
 Received: from localhost.localdomain (94-29-39-224.dynamic.spd-mgts.ru. [94.29.39.224])
-        by smtp.gmail.com with ESMTPSA id z21sm2059317ljz.49.2020.03.19.13.12.34
+        by smtp.gmail.com with ESMTPSA id z21sm2059317ljz.49.2020.03.19.13.12.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 13:12:34 -0700 (PDT)
+        Thu, 19 Mar 2020 13:12:35 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -53,10 +53,12 @@ Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         Vinod Koul <vkoul@kernel.org>,
         Dan Williams <dan.j.williams@intel.com>,
         dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/2] NVIDIA Tegra I2C synchronization correction
-Date:   Thu, 19 Mar 2020 23:11:38 +0300
-Message-Id: <20200319201140.17451-1-digetx@gmail.com>
+Subject: [PATCH v1 1/2] i2c: tegra: Better handle case where CPU0 is busy for a long time
+Date:   Thu, 19 Mar 2020 23:11:39 +0300
+Message-Id: <20200319201140.17451-2-digetx@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200319201140.17451-1-digetx@gmail.com>
+References: <20200319201140.17451-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
@@ -64,26 +66,48 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello,
+Boot CPU0 always handle I2C interrupt and under some rare circumstances
+(like running KASAN + NFS root) it may stuck in uninterruptible state for
+a significant time. In this case we will get timeout if I2C transfer is
+running on a sibling CPU, despite of IRQ being raised. In order to handle
+this rare condition, the IRQ status needs to be checked after completion
+timeout.
 
-Recently I found a way to reliably reproduce I2C timeouts that happen due
-to improper synchronizations made by the I2C driver. It's quite easy to
-reproduce the problem when memory is running on a lower freq + there is
-some memory activity + CPU could get busy for a significant time. This
-is the case when KASAN is enabled and CPU is busy while accessing FS via
-NFS. This small series addresses the found problems.
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
-Please note that the "Synchronize DMA before termination" patch implicitly
-depends on the "dmaengine: tegra-apb: Improve DMA synchronization" patch,
-which is sent separately, otherwise DMA synchronization won't happen.
-
-Dmitry Osipenko (2):
-  i2c: tegra: Better handle case where CPU0 is busy for a long time
-  i2c: tegra: Synchronize DMA before termination
-
- drivers/i2c/busses/i2c-tegra.c | 27 ++++++++++++++++++++-------
- 1 file changed, 20 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index cbc2ad49043e..dabb9223990c 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -1034,14 +1034,18 @@ tegra_i2c_wait_completion_timeout(struct tegra_i2c_dev *i2c_dev,
+ 		disable_irq(i2c_dev->irq);
+ 
+ 		/*
+-		 * There is a chance that completion may happen after IRQ
+-		 * synchronization, which is done by disable_irq().
++		 * Under some rare circumstances (like running KASAN +
++		 * NFS root) CPU, which handles interrupt, may stuck in
++		 * uninterruptible state for a significant time.  In this
++		 * case we will get timeout if I2C transfer is running on
++		 * a sibling CPU, despite of IRQ being raised.
++		 *
++		 * In order to handle this rare condition, the IRQ status
++		 * needs to be checked after timeout.
+ 		 */
+-		if (ret == 0 && completion_done(complete)) {
+-			dev_warn(i2c_dev->dev,
+-				 "completion done after timeout\n");
+-			ret = 1;
+-		}
++		if (ret == 0)
++			ret = tegra_i2c_poll_completion_timeout(i2c_dev,
++								complete, 0);
+ 	}
+ 
+ 	return ret;
 -- 
 2.25.1
 
