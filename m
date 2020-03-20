@@ -2,203 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D54B18C8ED
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Mar 2020 09:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B7D18CA3C
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Mar 2020 10:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbgCTIX6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 20 Mar 2020 04:23:58 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:3328 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726527AbgCTIX5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Mar 2020 04:23:57 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02K8D0WO029961;
-        Fri, 20 Mar 2020 09:23:50 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=STMicroelectronics;
- bh=IVUdMwNLOHv5Z1dR+oJVPCmPMgRPVCuDODoFxr3S/1A=;
- b=xKXSF7ZozlWL15opO3RIct5JePmpcU1xdxRQkj+X+QPYXB9AKFG3wDfZMMJ28l6U0/Sf
- yvMus/ZqkI/YIEJvyUvhIGjI8MzKKtWWx2fbmk94hQhjEyDgsu8QTRvdcIyZt7yMEK1J
- 5GsPcpM0t+f/bxPBBuAJHrrlQOSZ6UMDo4vA3PSOhuFVNcT5J55ZHQnckCGFkFlFtJnz
- 4VwXnSgdNt0bZblQu8fsMPCXpPutX1HSCOonrilvAh/KxMqHNLW/6YaIEpwe8Z4N+jOP
- o0EbHt+DSTvvxZZRzPJ6pD830aprxz+tSuCTN8UJXkkV98Dyr1OCtS4SWMIS3fAnfUC5 IQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2yu6xdpuc1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Mar 2020 09:23:50 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 344C510002A;
-        Fri, 20 Mar 2020 09:23:48 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 26B13220963;
-        Fri, 20 Mar 2020 09:23:48 +0100 (CET)
-Received: from gnbcxd0016.gnb.st.com (10.75.127.50) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 20 Mar
- 2020 09:23:47 +0100
-Date:   Fri, 20 Mar 2020 09:23:42 +0100
-From:   Alain Volmat <alain.volmat@st.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Wolfram Sang <wsa@the-dreams.de>, <linux-i2c@vger.kernel.org>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-Subject: Re: [PATCH v3 4/6] i2c: =?iso-8859-1?Q?stm?=
- =?iso-8859-1?Q?32f7=3A_switch_to_I=B2C?= generic property parsing
-Message-ID: <20200320082342.GA30425@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-References: <20200316154929.20886-4-andriy.shevchenko@linux.intel.com>
+        id S1726791AbgCTJY7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Mar 2020 05:24:59 -0400
+Received: from mail.v3.sk ([167.172.186.51]:37792 "EHLO shell.v3.sk"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727000AbgCTJY6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 20 Mar 2020 05:24:58 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id A9501DFC45;
+        Fri, 20 Mar 2020 09:25:15 +0000 (UTC)
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id CB3O09jGeY6v; Fri, 20 Mar 2020 09:25:15 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id D57D7E0028;
+        Fri, 20 Mar 2020 09:25:14 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at zimbra.v3.sk
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id vyhPJH_CqW6F; Fri, 20 Mar 2020 09:25:14 +0000 (UTC)
+Received: from localhost (unknown [109.183.109.54])
+        by zimbra.v3.sk (Postfix) with ESMTPSA id 6BB7CDFC45;
+        Fri, 20 Mar 2020 09:25:14 +0000 (UTC)
+Date:   Fri, 20 Mar 2020 10:24:52 +0100
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 13/28] dt-bindings: serial: move Marvell compatible
+ string to 8250 binding doc
+Message-ID: <20200320092452.GA24507@furthur.local>
+References: <20200317093922.20785-1-lkundrak@v3.sk>
+ <20200317093922.20785-14-lkundrak@v3.sk>
+ <CAL_Jsq+wG+DTZ8Vxcw=NR2isABGrkoDiBt-uG9+NF6qdWuU62Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200316154929.20886-4-andriy.shevchenko@linux.intel.com>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG4NODE1.st.com (10.75.127.10) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
- definitions=2020-03-20_01:2020-03-19,2020-03-20 signatures=0
+In-Reply-To: <CAL_Jsq+wG+DTZ8Vxcw=NR2isABGrkoDiBt-uG9+NF6qdWuU62Q@mail.gmail.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Mar 16, 2020 at 05:49:27PM +0200, Andy Shevchenko wrote:
-> Switch to the new generic functions: i2c_parse_fw_timings().
+On Thu, Mar 19, 2020 at 10:11:02AM -0600, Rob Herring wrote:
+> On Tue, Mar 17, 2020 at 3:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
+> >
+> > These ports are compatible with NS8250 and handled by the same driver.
+> > Get rid of the extra document that fails to document the properties that
+> > are actually supported.
+> >
+> > Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+> > ---
+> >  Documentation/devicetree/bindings/serial/8250.txt        | 2 ++
+> >  Documentation/devicetree/bindings/serial/mrvl-serial.txt | 4 ----
+> >  2 files changed, 2 insertions(+), 4 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/serial/mrvl-serial.txt
 > 
-> While here, replace hard coded values with standard bus frequency definitions.
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > 
-> Cc: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@st.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v3: new patch instead of simple frequency conversion
->  drivers/i2c/busses/i2c-stm32f7.c | 57 +++++++++++++++-----------------
->  1 file changed, 26 insertions(+), 31 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-> index 6418f5982894..18f231f631f5 100644
-> --- a/drivers/i2c/busses/i2c-stm32f7.c
-> +++ b/drivers/i2c/busses/i2c-stm32f7.c
-> @@ -344,9 +344,9 @@ struct stm32f7_i2c_dev {
->   */
->  static struct stm32f7_i2c_spec i2c_specs[] = {
->  	[STM32_I2C_SPEED_STANDARD] = {
-> -		.rate = 100000,
-> -		.rate_min = 80000,
-> -		.rate_max = 100000,
-> +		.rate = I2C_MAX_STANDARD_MODE_FREQ,
-> +		.rate_min = I2C_MAX_STANDARD_MODE_FREQ * 8 / 10,	/* 80% */
-> +		.rate_max = I2C_MAX_STANDARD_MODE_FREQ,
->  		.fall_max = 300,
->  		.rise_max = 1000,
->  		.hddat_min = 0,
-> @@ -356,9 +356,9 @@ static struct stm32f7_i2c_spec i2c_specs[] = {
->  		.h_min = 4000,
->  	},
->  	[STM32_I2C_SPEED_FAST] = {
-> -		.rate = 400000,
-> -		.rate_min = 320000,
-> -		.rate_max = 400000,
-> +		.rate = I2C_MAX_FAST_MODE_FREQ,
-> +		.rate_min = I2C_MAX_FAST_MODE_FREQ * 8 / 10,		/* 80% */
-> +		.rate_max = I2C_MAX_FAST_MODE_FREQ,
->  		.fall_max = 300,
->  		.rise_max = 300,
->  		.hddat_min = 0,
-> @@ -368,9 +368,9 @@ static struct stm32f7_i2c_spec i2c_specs[] = {
->  		.h_min = 600,
->  	},
->  	[STM32_I2C_SPEED_FAST_PLUS] = {
-> -		.rate = 1000000,
-> -		.rate_min = 800000,
-> -		.rate_max = 1000000,
-> +		.rate = I2C_MAX_FAST_MODE_PLUS_FREQ,
-> +		.rate_min = I2C_MAX_FAST_MODE_PLUS_FREQ * 8 / 10,	/* 80% */
-> +		.rate_max = I2C_MAX_FAST_MODE_PLUS_FREQ,
->  		.fall_max = 100,
->  		.rise_max = 120,
->  		.hddat_min = 0,
-> @@ -610,8 +610,25 @@ static int stm32f7_i2c_compute_timing(struct stm32f7_i2c_dev *i2c_dev,
->  static int stm32f7_i2c_setup_timing(struct stm32f7_i2c_dev *i2c_dev,
->  				    struct stm32f7_i2c_setup *setup)
->  {
-> +	struct i2c_timings timings, *t = &timings;
->  	int ret = 0;
->  
-> +	t->bus_freq_hz = I2C_MAX_STANDARD_MODE_FREQ;
-> +	t->scl_rise_ns = i2c_dev->setup.rise_time;
-> +	t->scl_fall_ns = i2c_dev->setup.fall_time;
-> +
-> +	i2c_parse_fw_timings(&pdev->dev, t, false);
+> I'd really like to see 8250.txt converted to schema.
 
-Andy, thanks for the patch.
-Looks fine overall, apart from the above line which should be
+I'll follow up just with that.
 
-        i2c_parse_fw_timings(i2c_dev->dev, t, false);
+Thanks quarantine.
 
-> +
-> +	if (t->bus_freq_hz >= I2C_MAX_FAST_MODE_PLUS_FREQ)
-> +		i2c_dev->speed = STM32_I2C_SPEED_FAST_PLUS;
-> +	else if (t->bus_freq_hz >= I2C_MAX_FAST_MODE_FREQ)
-> +		i2c_dev->speed = STM32_I2C_SPEED_FAST;
-> +	else
-> +		i2c_dev->speed = STM32_I2C_SPEED_STANDARD;
-> +
-> +	i2c_dev->setup.rise_time = t->scl_rise_ns;
-> +	i2c_dev->setup.fall_time = t->scl_fall_ns;
-> +
->  	setup->speed = i2c_dev->speed;
->  	setup->speed_freq = i2c_specs[setup->speed].rate;
->  	setup->clock_src = clk_get_rate(i2c_dev->clk);
-> @@ -1914,7 +1931,6 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
->  	struct stm32f7_i2c_dev *i2c_dev;
->  	const struct stm32f7_i2c_setup *setup;
->  	struct resource *res;
-> -	u32 clk_rate, rise_time, fall_time;
->  	struct i2c_adapter *adap;
->  	struct reset_control *rst;
->  	dma_addr_t phy_addr;
-> @@ -1961,17 +1977,6 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> -	i2c_dev->speed = STM32_I2C_SPEED_STANDARD;
-> -	ret = device_property_read_u32(&pdev->dev, "clock-frequency",
-> -				       &clk_rate);
-> -	if (!ret && clk_rate >= 1000000) {
-> -		i2c_dev->speed = STM32_I2C_SPEED_FAST_PLUS;
-> -	} else if (!ret && clk_rate >= 400000) {
-> -		i2c_dev->speed = STM32_I2C_SPEED_FAST;
-> -	} else if (!ret && clk_rate >= 100000) {
-> -		i2c_dev->speed = STM32_I2C_SPEED_STANDARD;
-> -	}
-> -
->  	rst = devm_reset_control_get(&pdev->dev, NULL);
->  	if (IS_ERR(rst)) {
->  		dev_err(&pdev->dev, "Error: Missing controller reset\n");
-> @@ -2011,16 +2016,6 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
->  	}
->  	i2c_dev->setup = *setup;
->  
-> -	ret = device_property_read_u32(i2c_dev->dev, "i2c-scl-rising-time-ns",
-> -				       &rise_time);
-> -	if (!ret)
-> -		i2c_dev->setup.rise_time = rise_time;
-> -
-> -	ret = device_property_read_u32(i2c_dev->dev, "i2c-scl-falling-time-ns",
-> -				       &fall_time);
-> -	if (!ret)
-> -		i2c_dev->setup.fall_time = fall_time;
-> -
->  	ret = stm32f7_i2c_setup_timing(i2c_dev, &i2c_dev->setup);
->  	if (ret)
->  		goto clk_free;
-> -- 
-> 2.25.1
-> 
+> Rob
+
+Lubo
