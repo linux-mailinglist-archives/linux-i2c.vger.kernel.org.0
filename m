@@ -2,83 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1106A18D674
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Mar 2020 19:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A08118D82E
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Mar 2020 20:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727061AbgCTSB6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 20 Mar 2020 14:01:58 -0400
-Received: from sauhun.de ([88.99.104.3]:50864 "EHLO pokefinder.org"
+        id S1726840AbgCTTMx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Mar 2020 15:12:53 -0400
+Received: from mga09.intel.com ([134.134.136.24]:28090 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727129AbgCTSB5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 20 Mar 2020 14:01:57 -0400
-Received: from localhost (p54B33339.dip0.t-ipconnect.de [84.179.51.57])
-        by pokefinder.org (Postfix) with ESMTPSA id 264CA2C08E7;
-        Fri, 20 Mar 2020 19:01:56 +0100 (CET)
-Date:   Fri, 20 Mar 2020 19:01:50 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Kevin Hao <haokexin@gmail.com>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: dev: Fix the race between the release of i2c_dev
- and cdev
-Message-ID: <20200320180150.GF1282@ninjato>
-References: <20191011150014.28177-1-haokexin@gmail.com>
+        id S1726814AbgCTTMx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 20 Mar 2020 15:12:53 -0400
+IronPort-SDR: Ie59krb4awQNbm5nqRkfUfC5xHz7R21NPWlMkIuRx2+PYfl+49gvFV6EG+Z4r6aAyVdtECl7Qv
+ VMBVySJu5paA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2020 12:12:52 -0700
+IronPort-SDR: HKpVnCX2tRfIwiKi6Vwp+36HvA2NEA9UOo226IfiQvPZxh87GH9jQ/7UiFK2prlR0HbeG+VPW8
+ kkZW7E+SWBUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,285,1580803200"; 
+   d="scan'208";a="238846107"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 20 Mar 2020 12:12:50 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id ECB2CE1; Fri, 20 Mar 2020 21:12:49 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v4 1/6] i2c: core: Provide generic definitions for bus frequencies
+Date:   Fri, 20 Mar 2020 21:12:44 +0200
+Message-Id: <20200320191249.28835-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ni93GHxFvA+th69W"
-Content-Disposition: inline
-In-Reply-To: <20191011150014.28177-1-haokexin@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+There are few maximum bus frequencies being used in the I²C core code.
+Provide generic definitions for bus frequencies and use them in the core.
 
---ni93GHxFvA+th69W
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The drivers may use predefined constants where it is appropriate.
+Some of them are already using these under slightly different names.
+We will convert them later to use newly introduced defines.
 
-Hi Kevin,
+Note, the name of modes are chosen to follow well established naming
+scheme [1].
 
-I am very sorry for not making it for 5.6. I work on it now to make it
-go into v5.7.
+These definitions will also help to avoid typos in the numbers that
+may lead to subtle errors.
 
-> entirely released. We can easily get the following call trace with
-> CONFIG_DEBUG_KOBJECT_RELEASE and CONFIG_DEBUG_OBJECTS_TIMERS enabled.
+[1]: https://en.wikipedia.org/wiki/I%C2%B2C#Differences_between_modes
 
-I didn't get this trace on my ARM32 board (Renesas Lager). Anything more
-I need to do besides activating those options and using i2c-dev?
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v4: no changes
+ drivers/i2c/i2c-core-acpi.c | 2 +-
+ drivers/i2c/i2c-core-base.c | 8 ++++----
+ include/linux/i2c.h         | 8 ++++++++
+ 3 files changed, 13 insertions(+), 5 deletions(-)
 
-> +#include <linux/cdev.h>
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index 8b0ff780919b..c8f42f2037cb 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -318,7 +318,7 @@ static acpi_status i2c_acpi_lookup_speed(acpi_handle handle, u32 level,
+ 		lookup->min_speed = lookup->speed;
+ 
+ 	if (acpi_match_device_ids(adev, i2c_acpi_force_400khz_device_ids) == 0)
+-		lookup->force_speed = 400000;
++		lookup->force_speed = I2C_MAX_FAST_MODE_FREQ;
+ 
+ 	return AE_OK;
+ }
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index cefad0881942..9b2972c7faa2 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1612,13 +1612,13 @@ void i2c_parse_fw_timings(struct device *dev, struct i2c_timings *t, bool use_de
+ 
+ 	ret = device_property_read_u32(dev, "clock-frequency", &t->bus_freq_hz);
+ 	if (ret && use_defaults)
+-		t->bus_freq_hz = 100000;
++		t->bus_freq_hz = I2C_MAX_STANDARD_MODE_FREQ;
+ 
+ 	ret = device_property_read_u32(dev, "i2c-scl-rising-time-ns", &t->scl_rise_ns);
+ 	if (ret && use_defaults) {
+-		if (t->bus_freq_hz <= 100000)
++		if (t->bus_freq_hz <= I2C_MAX_STANDARD_MODE_FREQ)
+ 			t->scl_rise_ns = 1000;
+-		else if (t->bus_freq_hz <= 400000)
++		else if (t->bus_freq_hz <= I2C_MAX_FAST_MODE_FREQ)
+ 			t->scl_rise_ns = 300;
+ 		else
+ 			t->scl_rise_ns = 120;
+@@ -1626,7 +1626,7 @@ void i2c_parse_fw_timings(struct device *dev, struct i2c_timings *t, bool use_de
+ 
+ 	ret = device_property_read_u32(dev, "i2c-scl-falling-time-ns", &t->scl_fall_ns);
+ 	if (ret && use_defaults) {
+-		if (t->bus_freq_hz <= 400000)
++		if (t->bus_freq_hz <= I2C_MAX_FAST_MODE_FREQ)
+ 			t->scl_fall_ns = 300;
+ 		else
+ 			t->scl_fall_ns = 120;
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index f834687989f7..72e759328cee 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -39,6 +39,14 @@ enum i2c_slave_event;
+ typedef int (*i2c_slave_cb_t)(struct i2c_client *client,
+ 			      enum i2c_slave_event event, u8 *val);
+ 
++/* I2C Frequency Modes */
++#define I2C_MAX_STANDARD_MODE_FREQ	100000
++#define I2C_MAX_FAST_MODE_FREQ		400000
++#define I2C_MAX_FAST_MODE_PLUS_FREQ	1000000
++#define I2C_MAX_TURBO_MODE_FREQ		1400000
++#define I2C_MAX_HIGH_SPEED_MODE_FREQ	3400000
++#define I2C_MAX_ULTRA_FAST_MODE_FREQ	5000000
++
+ struct module;
+ struct property_entry;
+ 
+-- 
+2.25.1
 
-This line is not needed. We include this already.
-
-Other than that, the patch looks good. Although I trust you, I like to
-verify the test results.
-
-Kind regards,
-
-   Wolfram
-
-
---ni93GHxFvA+th69W
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl51BQoACgkQFA3kzBSg
-KbZkJg/9FxZThbUyX0dWhpWH06gnu7rRa+vamxAdH3GE6c9RfdSzy5mJFx2RusMo
-dIPcHtf0enptZp4e2jJs7HU21P/U9HoiNepkP/Wi03M4aYU/u9VU08UVngHLNHeI
-L6k6A7XCrylQb76Xu5YqvOB4I+pZSxwaxWh/j+YoP4UorBUjuEsgALlFoPr211jr
-9bOTX57IbOsuIPZ05C0+L7rb0AETJ8KX/4lE3PwmX7j9L5KCT02cH0WA/qr2frvx
-7AcKzdTCwqV4wlPDoD8cL7Jy35fFjamhjDnRo6gWl0mkKOXiUdABV37UKlxcZqd/
-pvxxzkHF6OTcTbg89UbW04WdoDgCRi/NZB5+Pzmh/5fHDyMw7ReB7nhBJjUXmEll
-+vg0Q+ZCfxmY6c9oVhxWlC/b2ASMVwWtXFtvIH+DklCK1nreV6iYlHnClRBgy2tK
-iSDHM6ls01WDMOM97MvjK4R+9xAbTESucC5EfoEYGDGQrgQtuCxUs14kssSqoPCt
-qlnCS8crnB40CEaqjhDraIkZKfhB3b/nYoLeIlFyMmDheM2Qr/4z6kbiwmp/W9zC
-/nd31b28UVgP5kfhLxKMcRSLIHaKSaDS3m+Wxg2XghUwC1pigh4p3wy9zffD9Gu2
-5fa6xAS1vroju6yev0gl/sEID7mx+tdkDW5mhn+XsZEjWzojcNY=
-=GJpq
------END PGP SIGNATURE-----
-
---ni93GHxFvA+th69W--
