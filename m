@@ -2,163 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E69D018C242
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Mar 2020 22:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D346B18C711
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Mar 2020 06:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725768AbgCSV0E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Mar 2020 17:26:04 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:37935 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725895AbgCSV0D (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Mar 2020 17:26:03 -0400
-Received: by mail-lj1-f193.google.com with SMTP id w1so4224891ljh.5;
-        Thu, 19 Mar 2020 14:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=W81z2712/lsE16oa/wUCtdkr9O7SpuC8HdK7sVnpBuA=;
-        b=YCr4LtsXbY+j9Mu+UKGLAVyheYWc4A9sf4TyM+53RvhgsOefh2kAWLATvFt2Qs5DJC
-         E9eDCxi6ePlc6W6wmzqwgUnUtK9XMzVcsZvuen46kWIre39h29FqmzOj2lzoQPPVciVM
-         TE5Nv4sw/ZA6CltouBy29rOPWYqHnWk3Bx5R1UYko9a1HUxM6sek084H8L12iyRqJo22
-         bRuwkzttpgwBcO83lPBJnhFf/Ru76LdQBwgldsdyCtfvDorHKAIHp7csPhLutxaLiTOE
-         JCKO4a+QFM21qSVyacJ+nctMYM5tgI0iMHQIW3qoknkQVYazbO3/Thf9uF6H6N1KLZDg
-         0Usg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=W81z2712/lsE16oa/wUCtdkr9O7SpuC8HdK7sVnpBuA=;
-        b=jP9t0707TG6dj+iNdC5atFAjAKZRqoTnuwalI/Z+YwqG4hGyvIJfbnqt1cglYGKQdW
-         O8My2s4kt2g0JcrupmI8gHK1JoWFAUr6elaPfpLRMhcBp6nNpSX9gaKm13meGSGYEhzq
-         qa/QKb6AtkJgzdLOSM0Ma0SKEY/aRPf7GDEID0sUDJ7X3tqEr79tuL/5H6j94WYRX8MR
-         nvkvWFsWDZwois9sELhglMtSb55geLSpMu95nj867e/gaEOccGYScNFthSHLpupXgJqa
-         ZWcQx+gSkjV89ERfzplpXLXXLI4rPTRq0MAZ/wjJ/CaB1uOPUfuxlaFYfc3Z1QU8WjWv
-         1vTQ==
-X-Gm-Message-State: ANhLgQ3lHqrsej747mWdEbpErd77F4/1VGG/fkVYdlYyelnDzq4LUqSa
-        /bAqKeWrLpxOgLjI8I+F898=
-X-Google-Smtp-Source: ADFU+vvuZ11n+CSlzYp2aiIGYP25euKNdsnajGEsOijGFD2PWVpYzI0izyM9RuLR1ARTBSOg3MsC1Q==
-X-Received: by 2002:a05:651c:10e:: with SMTP id a14mr3385178ljb.134.1584653161240;
-        Thu, 19 Mar 2020 14:26:01 -0700 (PDT)
-Received: from localhost.localdomain (94-29-39-224.dynamic.spd-mgts.ru. [94.29.39.224])
-        by smtp.gmail.com with ESMTPSA id c20sm2284868lfb.60.2020.03.19.14.26.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 14:26:00 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] dmaengine: tegra-apb: Improve DMA synchronization
-Date:   Fri, 20 Mar 2020 00:23:21 +0300
-Message-Id: <20200319212321.3297-2-digetx@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200319212321.3297-1-digetx@gmail.com>
-References: <20200319212321.3297-1-digetx@gmail.com>
+        id S1725883AbgCTFfz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Mar 2020 01:35:55 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:44532 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726030AbgCTFfz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Mar 2020 01:35:55 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1584682555; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=3o1RZ/6bELZAsXOfwev81T339te60gO/KqDzjUk4CZA=; b=bG5Gc8VvxMR/bZ0u4wNH4HNbAwQaVRNRkZ7LTJilwv3yj0qKaDhycHlhD4qGIUdLYypauaHN
+ RrXS6R+P10b1g6I30OiaNIx7YqYWzKEC9WyS+BnQMSMtp4xoBybe4bCXEvo84NVBFW2Y5F7p
+ BNbCamIOOZ3Dg7IvliBF8whS4XY=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e745637.7f9b3d093bc8-smtp-out-n03;
+ Fri, 20 Mar 2020 05:35:51 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D3BAAC44788; Fri, 20 Mar 2020 05:35:51 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.13] (unknown [183.83.138.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A570FC433CB;
+        Fri, 20 Mar 2020 05:35:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A570FC433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH V2 7/8] spi: spi-qcom-qspi: Add interconnect support
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        wsa@the-dreams.de, Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-serial@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>
+References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
+ <1584105134-13583-8-git-send-email-akashast@codeaurora.org>
+ <20200314005817.GN144492@google.com>
+ <3aeb3083-2a31-b269-510d-eb608ff14ce5@codeaurora.org>
+ <CAE=gft58QsgTCUHMHKJhcM9ZxAeMiY16CrbNv2HaTCRqwtmt7A@mail.gmail.com>
+ <e2ee1a60-a379-5c78-355a-64aad451a944@codeaurora.org>
+ <CAE=gft4xL9+GN2NrM9ewyPg0Fog3pnf_sLGjWRNOg7KynNh-Dg@mail.gmail.com>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <f8f7041b-c21e-2c2c-a6e7-b92e7cc3e90b@codeaurora.org>
+Date:   Fri, 20 Mar 2020 11:05:42 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAE=gft4xL9+GN2NrM9ewyPg0Fog3pnf_sLGjWRNOg7KynNh-Dg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Boot CPU0 always handles DMA interrupts and under some rare circumstances
-it could stuck in uninterruptible state for a significant time (like in a
-case of KASAN + NFS root). In this case sibling CPU, which waits for DMA
-transfer completion, will get a DMA transfer timeout. In order to handle
-this rare condition, interrupt status needs to be polled until interrupt
-is handled.
+Hi Evan,
+>> IIUC, you meant to say struct icc_req(inside icc_path) will be saving
+>> avg_bw and peak_bw so no need to save it outside icc_path?
+> Correct, it seems silly to store the same set of values twice in the
+> framework, but with different semantics about who's watching it.
+> -Evan
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
+Thanks for clarification! Yeah make sense not to introduce the structure 
+in ICC framework
 
-Changelog:
+Regards,
 
-v2: Added forgotten wake_up_all() to tegra_dma_terminate_all(), which
-    will wake up waiting threads after transfer's abortion.
+Akash
 
- drivers/dma/tegra20-apb-dma.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
-
-diff --git a/drivers/dma/tegra20-apb-dma.c b/drivers/dma/tegra20-apb-dma.c
-index 26f427e02369..733fda4e7e45 100644
---- a/drivers/dma/tegra20-apb-dma.c
-+++ b/drivers/dma/tegra20-apb-dma.c
-@@ -24,6 +24,7 @@
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
-+#include <linux/wait.h>
- 
- #include "dmaengine.h"
- 
-@@ -202,6 +203,8 @@ struct tegra_dma_channel {
- 	unsigned int slave_id;
- 	struct dma_slave_config dma_sconfig;
- 	struct tegra_dma_channel_regs channel_reg;
-+
-+	struct wait_queue_head wq;
- };
- 
- /* tegra_dma: Tegra DMA specific information */
-@@ -682,6 +685,7 @@ static irqreturn_t tegra_dma_isr(int irq, void *dev_id)
- 		tdc_write(tdc, TEGRA_APBDMA_CHAN_STATUS, status);
- 		tdc->isr_handler(tdc, false);
- 		tasklet_schedule(&tdc->tasklet);
-+		wake_up_all(&tdc->wq);
- 		spin_unlock(&tdc->lock);
- 		return IRQ_HANDLED;
- 	}
-@@ -783,6 +787,7 @@ static int tegra_dma_terminate_all(struct dma_chan *dc)
- 	tegra_dma_resume(tdc);
- 
- 	pm_runtime_put(tdc->tdma->dev);
-+	wake_up_all(&tdc->wq);
- 
- skip_dma_stop:
- 	tegra_dma_abort_all(tdc);
-@@ -798,10 +803,29 @@ static int tegra_dma_terminate_all(struct dma_chan *dc)
- 	return 0;
- }
- 
-+static bool tegra_dma_eoc_interrupt_deasserted(struct tegra_dma_channel *tdc)
-+{
-+	unsigned long flags;
-+	u32 status;
-+
-+	spin_lock_irqsave(&tdc->lock, flags);
-+	status = tdc_read(tdc, TEGRA_APBDMA_CHAN_STATUS);
-+	spin_unlock_irqrestore(&tdc->lock, flags);
-+
-+	return !(status & TEGRA_APBDMA_STATUS_ISE_EOC);
-+}
-+
- static void tegra_dma_synchronize(struct dma_chan *dc)
- {
- 	struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
- 
-+	/*
-+	 * CPU, which handles interrupt, could be busy in
-+	 * uninterruptible state, in this case sibling CPU
-+	 * should wait until interrupt is handled.
-+	 */
-+	wait_event(tdc->wq, tegra_dma_eoc_interrupt_deasserted(tdc));
-+
- 	tasklet_kill(&tdc->tasklet);
- }
- 
-@@ -1495,6 +1519,7 @@ static int tegra_dma_probe(struct platform_device *pdev)
- 		tasklet_init(&tdc->tasklet, tegra_dma_tasklet,
- 			     (unsigned long)tdc);
- 		spin_lock_init(&tdc->lock);
-+		init_waitqueue_head(&tdc->wq);
- 
- 		INIT_LIST_HEAD(&tdc->pending_sg_req);
- 		INIT_LIST_HEAD(&tdc->free_sg_req);
 -- 
-2.25.1
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
