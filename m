@@ -2,68 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D67918D4C3
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Mar 2020 17:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1106A18D674
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Mar 2020 19:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727217AbgCTQqK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 20 Mar 2020 12:46:10 -0400
-Received: from mga06.intel.com ([134.134.136.31]:28643 "EHLO mga06.intel.com"
+        id S1727061AbgCTSB6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Mar 2020 14:01:58 -0400
+Received: from sauhun.de ([88.99.104.3]:50864 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727400AbgCTQqK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 20 Mar 2020 12:46:10 -0400
-IronPort-SDR: 2CE/sYNZEMbeBRzrSlCppkMXUtdyaHDCH32hoCjM5kBRZL07MIy854KRI2f//9jc7pshToh/Sb
- w5dZYpC7hmPg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2020 09:46:09 -0700
-IronPort-SDR: CIAGYUbxhSMPe7D7NLy9hJT50WRcPk/wKCmUiJvPSEQgLOeZIqzrv10hb91yeJ1O3JNuL2d1Pa
- aRt3s40Tey/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,285,1580803200"; 
-   d="scan'208";a="245539878"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga003.jf.intel.com with ESMTP; 20 Mar 2020 09:46:08 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jFKmg-00BVpo-MB; Fri, 20 Mar 2020 18:46:10 +0200
-Date:   Fri, 20 Mar 2020 18:46:10 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
+        id S1727129AbgCTSB5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 20 Mar 2020 14:01:57 -0400
+Received: from localhost (p54B33339.dip0.t-ipconnect.de [84.179.51.57])
+        by pokefinder.org (Postfix) with ESMTPSA id 264CA2C08E7;
+        Fri, 20 Mar 2020 19:01:56 +0100 (CET)
+Date:   Fri, 20 Mar 2020 19:01:50 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Kevin Hao <haokexin@gmail.com>
 Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] i2c: core: Allow override timing properties with 0
-Message-ID: <20200320164610.GG1922688@smile.fi.intel.com>
-References: <20200316154929.20886-1-andriy.shevchenko@linux.intel.com>
- <20200316154929.20886-2-andriy.shevchenko@linux.intel.com>
- <20200320144357.GA1282@ninjato>
- <20200320162326.GD1922688@smile.fi.intel.com>
- <20200320164454.GE1282@ninjato>
+Subject: Re: [PATCH] i2c: dev: Fix the race between the release of i2c_dev
+ and cdev
+Message-ID: <20200320180150.GF1282@ninjato>
+References: <20191011150014.28177-1-haokexin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ni93GHxFvA+th69W"
 Content-Disposition: inline
-In-Reply-To: <20200320164454.GE1282@ninjato>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20191011150014.28177-1-haokexin@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Mar 20, 2020 at 05:44:54PM +0100, Wolfram Sang wrote:
-> On Fri, Mar 20, 2020 at 06:23:26PM +0200, Andy Shevchenko wrote:
-> > On Fri, Mar 20, 2020 at 03:43:57PM +0100, Wolfram Sang wrote:
-> > > 
-> > > > +	struct i2c_timings i2c_t = {0};
-> > > 
-> > > Simply '... = { }'?
-> > 
-> > I prefer C standard over GCC extension.
-> 
-> Okay. I don't care too much. But '{ 0 }' then, with kernel style spacing?
 
-Works for me!
+--ni93GHxFvA+th69W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-With Best Regards,
-Andy Shevchenko
+Hi Kevin,
+
+I am very sorry for not making it for 5.6. I work on it now to make it
+go into v5.7.
+
+> entirely released. We can easily get the following call trace with
+> CONFIG_DEBUG_KOBJECT_RELEASE and CONFIG_DEBUG_OBJECTS_TIMERS enabled.
+
+I didn't get this trace on my ARM32 board (Renesas Lager). Anything more
+I need to do besides activating those options and using i2c-dev?
+
+> +#include <linux/cdev.h>
+
+This line is not needed. We include this already.
+
+Other than that, the patch looks good. Although I trust you, I like to
+verify the test results.
+
+Kind regards,
+
+   Wolfram
 
 
+--ni93GHxFvA+th69W
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl51BQoACgkQFA3kzBSg
+KbZkJg/9FxZThbUyX0dWhpWH06gnu7rRa+vamxAdH3GE6c9RfdSzy5mJFx2RusMo
+dIPcHtf0enptZp4e2jJs7HU21P/U9HoiNepkP/Wi03M4aYU/u9VU08UVngHLNHeI
+L6k6A7XCrylQb76Xu5YqvOB4I+pZSxwaxWh/j+YoP4UorBUjuEsgALlFoPr211jr
+9bOTX57IbOsuIPZ05C0+L7rb0AETJ8KX/4lE3PwmX7j9L5KCT02cH0WA/qr2frvx
+7AcKzdTCwqV4wlPDoD8cL7Jy35fFjamhjDnRo6gWl0mkKOXiUdABV37UKlxcZqd/
+pvxxzkHF6OTcTbg89UbW04WdoDgCRi/NZB5+Pzmh/5fHDyMw7ReB7nhBJjUXmEll
++vg0Q+ZCfxmY6c9oVhxWlC/b2ASMVwWtXFtvIH+DklCK1nreV6iYlHnClRBgy2tK
+iSDHM6ls01WDMOM97MvjK4R+9xAbTESucC5EfoEYGDGQrgQtuCxUs14kssSqoPCt
+qlnCS8crnB40CEaqjhDraIkZKfhB3b/nYoLeIlFyMmDheM2Qr/4z6kbiwmp/W9zC
+/nd31b28UVgP5kfhLxKMcRSLIHaKSaDS3m+Wxg2XghUwC1pigh4p3wy9zffD9Gu2
+5fa6xAS1vroju6yev0gl/sEID7mx+tdkDW5mhn+XsZEjWzojcNY=
+=GJpq
+-----END PGP SIGNATURE-----
+
+--ni93GHxFvA+th69W--
