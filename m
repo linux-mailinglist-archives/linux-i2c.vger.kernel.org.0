@@ -2,19 +2,19 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB64E18E3AB
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 Mar 2020 19:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5F318E3AD
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 Mar 2020 19:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727224AbgCUSc4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 Mar 2020 14:32:56 -0400
-Received: from sauhun.de ([88.99.104.3]:38052 "EHLO pokefinder.org"
+        id S1727015AbgCUSdA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 Mar 2020 14:33:00 -0400
+Received: from sauhun.de ([88.99.104.3]:38074 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727015AbgCUSc4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 21 Mar 2020 14:32:56 -0400
+        id S1727028AbgCUSdA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 21 Mar 2020 14:33:00 -0400
 Received: from localhost (p54B33C59.dip0.t-ipconnect.de [84.179.60.89])
-        by pokefinder.org (Postfix) with ESMTPSA id 4C6E52C1ECA;
-        Sat, 21 Mar 2020 19:32:54 +0100 (CET)
-Date:   Sat, 21 Mar 2020 19:32:53 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id EF69C2C2E9A;
+        Sat, 21 Mar 2020 19:32:58 +0100 (CET)
+Date:   Sat, 21 Mar 2020 19:32:58 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Sergey.Semin@baikalelectronics.ru
 Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
@@ -26,16 +26,16 @@ Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] i2c: designware: Detect the FIFO size in the common
- code
-Message-ID: <20200321183253.GA5632@ninjato>
+Subject: Re: [PATCH 5/6] i2c: designware: Discard i2c_dw_read_comp_param()
+ function
+Message-ID: <20200321183258.GB5632@ninjato>
 References: <20200306131955.12806-1-Sergey.Semin@baikalelectronics.ru>
- <20200306132151.2ABC38030786@mail.baikalelectronics.ru>
+ <20200306132326.74A92803078F@mail.baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tKW2IUtsqtDRztdT"
+        protocol="application/pgp-signature"; boundary="jq0ap7NbKX2Kqbes"
 Content-Disposition: inline
-In-Reply-To: <20200306132151.2ABC38030786@mail.baikalelectronics.ru>
+In-Reply-To: <20200306132326.74A92803078F@mail.baikalelectronics.ru>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -43,27 +43,17 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---tKW2IUtsqtDRztdT
+--jq0ap7NbKX2Kqbes
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 06, 2020 at 04:19:54PM +0300, Sergey.Semin@baikalelectronics.ru=
+On Fri, Mar 06, 2020 at 04:19:56PM +0300, Sergey.Semin@baikalelectronics.ru=
  wrote:
 > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 >=20
-> The problem with detecting the FIFO depth in the platform driver
-> is that in order to implement this we have to access the controller
-> IC_COMP_PARAM_1 register. Currently it's done before the
-> i2c_dw_set_reg_access() method execution, which is errors prone since
-> the method determines the registers endianness and access mode and we
-> can't use dw_readl/dw_writel accessors before this information is
-> retrieved. We also can't move the i2c_dw_set_reg_access() function
-> invocation to after the master/slave probe functions call (when endianness
-> and access mode are determined), since the FIFO depth information is used
-> by them for initializations. So in order to fix the problem we have no
-> choice but to move the FIFO size detection methods to the common code and
-> call it at the probe stage.
+> There is no code left in the kernel which would be using the function.
+> So just remove it.
 >=20
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
@@ -76,24 +66,24 @@ On Fri, Mar 06, 2020 at 04:19:54PM +0300, Sergey.Semin@baikalelectronics.ru=
 Applied to for-next, thanks!
 
 
---tKW2IUtsqtDRztdT
+--jq0ap7NbKX2Kqbes
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl52XdEACgkQFA3kzBSg
-KbbDHw/4rF8enKtmpvMYhWXPtAfQWQsbh/LKy56ASKgJzHsDgaDP6k95R819zoxx
-mNtD3nvIotGgl9YO3SeaVZZnBf0KTAgN53qLY8/h920wuwzGxnB4tGc2+1dE3e/x
-Iix4Z5aXXMSgRL5LHvbng18IYtt4xPlrpZ+YLelZsTSKzO+GDpDGnAOmFp843xS7
-kwh9tJqsEuSO8fzyS/tAOix6GZvxlTu+06sMX831S6rFdgC5tfXQBTgzq5vchlHL
-tK/MJfXeJ/lF1lqr/4n88cBYyWyvyps79B2fsYcVBOQ67AHHCZWqu9m8ojYOKArC
-tLCAgOnleezVIGlWAilysd4a46lmFbp/bJR4d4ooV2m/m9n1M03tN0nFcA90ScwS
-OPT2sZxqCRsUYtZ7D6p30S7v6Hc9DOVUpzvVRtHgxDxFFAhqFzSwmkn2q/OtpT4J
-0yy+TakopOAQWWlJP5EHhLZKWFO1rhg2x4Cge4L/+Ixx4BNw5+Olfg6WaIq66iJT
-QJ/NvjH9Kq+pXtEYV39e/QRQyNn7TkPrUKsl/YtdKT/s+W9izlF2o6EjZROXhzwt
-lrMRE5ZZ0ipzNkEQ2e4kN1Imo5aK1MlaZe3H7WN6CDV536/X7+jHYyTT4uWxJhYf
-/7j7odybyP0cXny85bjsTNm4eqhDEOFZUcdF+TpZ/D3XX6Hp3w==
-=DD9j
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl52XdoACgkQFA3kzBSg
+KbZ+2g/9ET2kP7rBU+hwVtjzUDDKJOTVrejHg2+Gdl+oylMtZzlQRh5+0e78qlPQ
+meV3IgIEsils+e39WEzmeNLaDBbVLxep6hGo6qTr+j7FxCGWcUTaLZxOu+tqApdb
+eABIy77t/XuyS5Cl2BRYnLW5IiXhFMDMT6KtH7k7VxDr0ATzai7HBG3QKwCYrkV/
+aXfVtNFGwa1hFQyVF1Imnpsnwj/VxhSLbQ3BWAUkpc8ian6DXu921xzfuc7otT9I
+v+V6UQJTixCqhdDaPwN3YnZv6jvH2MiK1CwGCAhUmKZi0fK68C0SQlAw9o83ajxT
+dLLxy3n7Gi6QC2BCna16l4dNXP5zjps9sHm6uHTPAXiMmipXnijasWA5FJ9EgEAy
+rmBB/yW6Q7KAIWJu/jW6bFw/Rza12RqFIPZ1ydudD2tQKAiruveF5qdCppxVwprJ
+ST9tm+qnRBxdcm+2l/kSkxLo9f8Y39WJvfU5LCyzQeF2w6lcmbhRjzEj8V7NXvtS
+WwTaqEyVt+hc3B1DEllSC6H8zmY8BPYmEHX09SVlLIxmzzWZiiPVHRIBbM0Qhjwk
+HSuxSOrk6whDZrjoj5Iz0UedJdrYDgnxQzF16Wgj0qvLU+93SRS3r+1Mo0Ey7A/3
+TaY4HCurDKUXg2SX2lc5fJb1Z+pysjZ0uzc4Ok0lWfp1nVQ5Ers=
+=vY7x
 -----END PGP SIGNATURE-----
 
---tKW2IUtsqtDRztdT--
+--jq0ap7NbKX2Kqbes--
