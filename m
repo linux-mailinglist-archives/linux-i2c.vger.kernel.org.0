@@ -2,30 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E419618EA13
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Mar 2020 17:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD5918EA39
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 Mar 2020 17:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726470AbgCVQO7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 22 Mar 2020 12:14:59 -0400
-Received: from sauhun.de ([88.99.104.3]:51334 "EHLO pokefinder.org"
+        id S1726502AbgCVQTZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 22 Mar 2020 12:19:25 -0400
+Received: from sauhun.de ([88.99.104.3]:51408 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726538AbgCVQO7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 22 Mar 2020 12:14:59 -0400
+        id S1725971AbgCVQTZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 22 Mar 2020 12:19:25 -0400
 Received: from localhost (p54B33042.dip0.t-ipconnect.de [84.179.48.66])
-        by pokefinder.org (Postfix) with ESMTPSA id 81B8A2C0064;
-        Sun, 22 Mar 2020 17:14:57 +0100 (CET)
-Date:   Sun, 22 Mar 2020 17:14:57 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id E34CC2C0064;
+        Sun, 22 Mar 2020 17:19:23 +0100 (CET)
+Date:   Sun, 22 Mar 2020 17:19:23 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Chuhong Yuan <hslester96@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: hix5hd2: add missed clk_disable_unprepare in remove
-Message-ID: <20200322161456.GA6766@ninjato>
-References: <20191104150049.6366-1-hslester96@gmail.com>
+To:     Chuhong Yuan <hslester96@gmail.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: imx-lpi2c: add clk_disable_unprepare calls
+Message-ID: <20200322161923.GC6766@ninjato>
+References: <20191102062149.3957-1-hslester96@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a8Wt8u1KmwUX3Y2C"
+        protocol="application/pgp-signature"; boundary="ncSAzJYg3Aa9+CRW"
 Content-Disposition: inline
-In-Reply-To: <20191104150049.6366-1-hslester96@gmail.com>
+In-Reply-To: <20191102062149.3957-1-hslester96@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -33,38 +40,73 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---a8Wt8u1KmwUX3Y2C
+--ncSAzJYg3Aa9+CRW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 04, 2019 at 11:00:48PM +0800, Chuhong Yuan wrote:
-> The driver forgets to disable and unprepare clk when remove.
-> Add a call to clk_disable_unprepare to fix it.
+On Sat, Nov 02, 2019 at 02:21:49PM +0800, Chuhong Yuan wrote:
+> The driver forgets to call clk_disable_unprepare when probe fails
+> and remove.
+> Add the two calls to fix the problem.
 >=20
 > Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+> ---
 
-Applied to for-current, thanks!
+Dong Aisheng, what do you think of this patch?
 
+> Changes in v2:
+>   - Adjust the call order to make it consistent in probe failure and
+>     removal.
+>=20
+>  drivers/i2c/busses/i2c-imx-lpi2c.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-=
+imx-lpi2c.c
+> index c92b56485fa6..f964693c0901 100644
+> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> @@ -618,6 +618,7 @@ static int lpi2c_imx_probe(struct platform_device *pd=
+ev)
+>  	return 0;
+> =20
+>  rpm_disable:
+> +	clk_disable_unprepare(lpi2c_imx->clk);
+>  	pm_runtime_put(&pdev->dev);
+>  	pm_runtime_disable(&pdev->dev);
+>  	pm_runtime_dont_use_autosuspend(&pdev->dev);
+> @@ -630,6 +631,7 @@ static int lpi2c_imx_remove(struct platform_device *p=
+dev)
+>  	struct lpi2c_imx_struct *lpi2c_imx =3D platform_get_drvdata(pdev);
+> =20
+>  	i2c_del_adapter(&lpi2c_imx->adapter);
+> +	clk_disable_unprepare(lpi2c_imx->clk);
+> =20
+>  	pm_runtime_disable(&pdev->dev);
+>  	pm_runtime_dont_use_autosuspend(&pdev->dev);
+> --=20
+> 2.23.0
+>=20
 
---a8Wt8u1KmwUX3Y2C
+--ncSAzJYg3Aa9+CRW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl53jwAACgkQFA3kzBSg
-Kba2Pg//dI6w5vFqspLeTRNaiDFsFq5gDXt9k58j06uWcfGFFtSMKxb0AjH2wMGW
-6YldH/SDxcEClJg/6RtN8qkVSNTvoVl0uM5kUl3ZozMkQ+nvx/LAZ5D0xlF02kem
-sGcqfynPMxS5HOfT0tRZlOPYNqaml3rKv9dFsCkWaSJhXa1nKWT7RDj4kKj8W40/
-+GYQi36WCGouvlghYy8OGX5TKcU1MhVme51RJCE7zZpOFzQPGskqWiBGmxPCNuWv
-weLoSk3+UsOILL13hAIIyDj2MF3+JpIxf2ofPfXUGGQDWKzwlNufWWt+2uhQla8v
-/3h3RdBAGa6SCk4XQ4tYi3PXaIUsqEAML5x4Mfw54q1pdYSws4AWvGIWaI2hJTD8
-0/I4QM6QkWVNRU0jsFWla6G262i9sULSoAziBh2tDYpYu2GjighiSDBAu/flNyit
-BqKqpzrovToAYvCuC8e8Cvl8LtPtxjz/HEJKdu4KREGPPkal5Rke4Iah3PKZp0js
-D89P1S77mczcrXcj7IjvUnlYSeMSmRRt1c0G1Sw415BkfMHJULcQAiv8+ljeJ7u9
-YhRqucPUN+SqJsYA0rkXQ7KoilutnOv7W5JHGob8N3ikpO3bDQzmpeKgOP7ZzDaS
-+EqJ7fQsIVt0/koN2/BPsDnFg0slL8XWUCwLYfCim2eW/2iCU+U=
-=z57U
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl53kAsACgkQFA3kzBSg
+KbbqfBAAr4xo6h3QMRN0UZqEYIpK0gzk/HZOftIiMf9vqWEa/cLiWftCZohgjDOT
+jFS4aO+uyYJKdhT9bEDhoX61nuHXaEQVGBsWOS3Rp+JXvfOIo+vtSeTp64O38mqq
+0+E7GBrQDsqyOHA7Iw3lhQftzQe4MJwE8EsgN9HzCTaEgtnfhBuCScdXiVYBV2Ad
+TmLxHYEtERUnBRD+FiB6+HdrRi3KrrUsKPEZd/Mwe3ENfHi6CTaH8z4OM+f8aHOi
+84cIBxJO7JlSl1JkZ0MQZ6IiL5yEC0RC0Nz871VfrJBRvfdUs+f0mHCk8hATepL+
+fNtZNJIApBteuEhiA/WJ7A4X+QNNaWp60JZdpIUzhljevvGzjO5wK7GIlBZXHzxR
+ApzQcQVDsj2fe054NHSpa2UfK3Z0ZULPa5L/SBZeV8gErQvoBXYXQOhTiucmGM8H
+vnVHegYHx1gHeyIAmEAIJExbjNKDiw0qWPU29AQov1kkpFOlYSgu420x7sFaODY9
+wT+typO0J5LgmA/YMepI5RMYOkB/pG4CkiNuYDxfCBuPjXxpyGTvHHtibnYInt+4
+HV51Rmk5AMcYc8edLM6jrQNPo55fFyAJCgav36h7kf/IiAaL8hvc03MQZt7Tlkqa
+Hds0OeOUO75afYoAjJVg9wC15OXww9V/8fUB39zf9zvdcqA7LKw=
+=ebsn
 -----END PGP SIGNATURE-----
 
---a8Wt8u1KmwUX3Y2C--
+--ncSAzJYg3Aa9+CRW--
