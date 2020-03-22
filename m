@@ -2,36 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B775618E961
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Mar 2020 15:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC5D18E9E8
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 Mar 2020 16:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgCVOaH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 22 Mar 2020 10:30:07 -0400
-Received: from sauhun.de ([88.99.104.3]:50556 "EHLO pokefinder.org"
+        id S1725970AbgCVP4z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 22 Mar 2020 11:56:55 -0400
+Received: from sauhun.de ([88.99.104.3]:51134 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725785AbgCVOaH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 22 Mar 2020 10:30:07 -0400
+        id S1725785AbgCVP4z (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 22 Mar 2020 11:56:55 -0400
 Received: from localhost (p54B33042.dip0.t-ipconnect.de [84.179.48.66])
-        by pokefinder.org (Postfix) with ESMTPSA id 226352C0064;
-        Sun, 22 Mar 2020 15:30:05 +0100 (CET)
-Date:   Sun, 22 Mar 2020 15:30:04 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 6400C2C0064;
+        Sun, 22 Mar 2020 16:56:53 +0100 (CET)
+Date:   Sun, 22 Mar 2020 16:56:52 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Stefan Lengfeld <contact@stefanchrist.eu>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: at91: support atomic write xfer
-Message-ID: <20200322143004.GB1091@ninjato>
-References: <55613934b7d14ae4122b648c20351b63b03a1385.1584851536.git.mirq-linux@rere.qmqm.pl>
+To:     Xu Wang <vulab@iscas.ac.cn>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] i2c: Fix a potential use after free
+Message-ID: <20200322155652.GC1091@ninjato>
+References: <1577439272-10362-1-git-send-email-vulab@iscas.ac.cn>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Pd0ReVV5GZGQvF3a"
+        protocol="application/pgp-signature"; boundary="H8ygTp4AXg6deix2"
 Content-Disposition: inline
-In-Reply-To: <55613934b7d14ae4122b648c20351b63b03a1385.1584851536.git.mirq-linux@rere.qmqm.pl>
+In-Reply-To: <1577439272-10362-1-git-send-email-vulab@iscas.ac.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -39,43 +33,63 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Pd0ReVV5GZGQvF3a
+--H8ygTp4AXg6deix2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Dec 27, 2019 at 09:34:32AM +0000, Xu Wang wrote:
+> Free the adap structure only after we are done using it.
+> This patch just moves the put_device() down a bit to avoid the
+> use after free.
+>=20
+> Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
 
-> +	/* FIXME: only single write request supported to 7-bit addr */
+Do you have a testcase to reproduce it?
 
-Hmm, this is quite limited. Would it be very hard to support multiple
-messages? Or reads? 10 bits don't matter.
+I wonder because we are freeing the device structure which is embedded
+inside the adap structure, not the adap structure itself. Or?
 
-> +	if (!dev->pdata->has_alt_cmd)
-> +		return -EOPNOTSUPP;
+> ---
+>  drivers/i2c/i2c-core-base.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 9f8dcd3..160d43e 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -2301,8 +2301,8 @@ void i2c_put_adapter(struct i2c_adapter *adap)
+>  	if (!adap)
+>  		return;
+> =20
+> -	put_device(&adap->dev);
+>  	module_put(adap->owner);
+> +	put_device(&adap->dev);
+>  }
+>  EXPORT_SYMBOL(i2c_put_adapter);
+> =20
+> --=20
+> 2.7.4
+>=20
 
-We should handle this in probe(), I think:
-
-	if (dev->pdata->has_alt_cmd)
-		at91_twi_algorithm.master_xfer_atomic = at91_twi_xfer_atomic;
-
-
---Pd0ReVV5GZGQvF3a
+--H8ygTp4AXg6deix2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl53dmgACgkQFA3kzBSg
-KbY95g//dGarTg6cS+mlOrvC92nc9FsPDk4ovBNx5QEc5w7VYirESZJCs6+OTJEs
-t0zYn9dzEAo1UVyYUzUetdM2Ma88oB40HCF4lS4A1d2sKzmvxX8niF9YUttD290A
-A3gZIqr3hio6jeXPzFhaDv7IwpnTDDP4pVgQdVnLZdBPeObTIYNzyM+NKmBAivoG
-VFKwRKONuhb1hL29jtqmQeSQCEUWLUKu8d4sEVK72/ONqHUX70M6Is5Xv32nVkb1
-nPZkKMnUr3X0oX1Fa6S33Q7vqLx5eHNlUaD8hAcodhTJluiLw+wVKZdmNl99o8Hm
-7HtEpGFo2jcyTDejstloWX5iPHcPjXIJgtRGwP3PlVWsgWqhTPolM8r025bjJt5E
-FL46Bf656Gfisd6j7xNWQY6JwXw7kzhqPQCbUb0DZddXuYqtuFUswtLBg2/QQ99K
-FdykWp76hOHTqCXFW3V6H7jZRW+J98upcsSQFNyHhjO2hYZ48A3yZ/A4W10R0VAe
-J0fTuK5xLLi7PZn3Q/e/Z56jgoKdmucqcrE7jfBfW5nXtWIWgdcrJO35yBBDU00C
-BGksiCA4Rpi0SHf0UCqqOfu/6bAXGVD9LxPzRc6O+l0qzD6rm7i21ZoXTkOMZQuF
-B2TQW2Z/V8bN8zje+tZC6yvjBi5C9osHCeTMOHTIKpEqPhF3zio=
-=Upnv
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl53isAACgkQFA3kzBSg
+KbYjVQ//YLOOhtSoKVw5BP0gfEP0MKQ3+62E6Jt3VnIw9lP/6HPEuLg47deiPSaq
+cz1bI+JD3u+TlFemJtWKbFn/41I5musXXfDYzmOWrDa3iGJ4M2fTE6BuVkN87pvy
+L3v7Lpbd8yvsA8QPX0UOgyuG0TURtw9T2ZYT3XVnjBeojTbISFaOPz0qyRuVQovn
+S2Ov5aGgRtrHPfsVOfSCKF9Wdq5dfjvQAeQVA7uiHILTvYjVLglUD4ugHjVl7jt+
+Wpy2VAGfz+Ero6V3qSCuOQ7i628NZsg2XQ6dA1Awi8SbiUfE9/LzAfDjRT2ot91U
+JNfLSWQvGCOUfQzLZjkk4WzkF2Q91ocuzpHNatnusnwb+CRAeH9VYsFjVC3qVHMD
+bSWet/OpsbP3b0sz2U0VHmHvdStkwjw9Oczt3u8EC3RoiskUCdLDWDJKcbG8HUyx
+giEmgXaEHKKZw/0Hx4Z1BircivOPboGohzO5mShLuVY69WbQAptjLC+EO2zw5fgg
+rHwhKfc0lTZyfPV81ijcJqDHqMsnLsQLDfsU3h4W8fqGrw/Nr9AJu3FpkeCv1f6U
+0R7QUWbA7SATR4MCGosdCfngwPAHZQ1FOQsOnfwICeXgbNrzuH5srHs4jm5pyOI2
+WhM1EBvqtI2xCLiqNNUuLNT4QPF4VdxsdUdiE2xULM+IMsTkp9c=
+=Urp0
 -----END PGP SIGNATURE-----
 
---Pd0ReVV5GZGQvF3a--
+--H8ygTp4AXg6deix2--
