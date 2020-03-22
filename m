@@ -2,120 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B31F218EA7E
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Mar 2020 17:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F29F18EB5E
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 Mar 2020 19:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgCVQff (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 22 Mar 2020 12:35:35 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:16606 "EHLO rere.qmqm.pl"
+        id S1725997AbgCVSIR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 22 Mar 2020 14:08:17 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41510 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725881AbgCVQff (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 22 Mar 2020 12:35:35 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 48ljmh2nyMzpZ;
-        Sun, 22 Mar 2020 17:35:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1584894932; bh=F2JpJtwjbUC4OboLswzNjH0udha1to+s6UTJnixAQLk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DwyoxYeZu0x1E2x5oeHyfbR/cfOfqq4LaDplQhvFdlI0zymiI2kSMtw7bakAWooru
-         zZMfgl5dSbd5OLpu6veTAPPgdLYJZjNOhoUOzR5YB80rdD2F/G1org45lNeD7SY0mq
-         mZrk/q4q52ZKs4vI5vrVGbWFgpYDIgkVhFEoAuMfxSHCiO6zZDoO1rnBmJZG+MPQE0
-         ZIbn7yTe27TxX+eJ6HpgP5GnlWAdB05Y1U/pVhJjPQnzWm2TOkSM1gaFXQsxtnImjh
-         qReHPIu8RxnNUINuYT5KqM7h6BGX2B0cFjfMoefKKkmhNj0ILyd9gTumM9LVtaeTKJ
-         59xq8FyjXpU7Q==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Sun, 22 Mar 2020 17:35:31 +0100
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Stefan Lengfeld <contact@stefanchrist.eu>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: at91: support atomic write xfer
-Message-ID: <20200322163531.GB25488@qmqm.qmqm.pl>
-References: <6466e066d7cbad20cb6a334ad8e37cdcf521c492.1584822011.git.mirq-linux@rere.qmqm.pl>
- <c789352c-5517-1fd9-980d-f8f6c2017901@gmail.com>
+        id S1725785AbgCVSIR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 22 Mar 2020 14:08:17 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 242A4AD8E;
+        Sun, 22 Mar 2020 18:08:15 +0000 (UTC)
+Date:   Sun, 22 Mar 2020 19:08:13 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Kurtz <djkurtz@chromium.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot <syzbot+ed71512d469895b5b34e@syzkaller.appspotmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: Re: [PATCH] i2c: i801: Fix memory corruption in
+ i801_isr_byte_done()
+Message-ID: <20200322190813.39b92de2@endymion>
+In-Reply-To: <20200320145748.GD1282@ninjato>
+References: <0000000000009586b2059c13c7e1@google.com>
+        <20200114073406.qaq3hbrhtx76fkes@kili.mountain>
+        <20200222124523.GI1716@kunai>
+        <20200320145748.GD1282@ninjato>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c789352c-5517-1fd9-980d-f8f6c2017901@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Mar 22, 2020 at 04:39:58AM +0300, Dmitry Osipenko wrote:
-> 22.03.2020 00:03, Michał Mirosław пишет:
-> > Implement basic support for atomic write - enough to get a simple
-> > write to PMIC on shutdown. Only for chips having ALT_CMD register,
-> > eg. SAMA5D2.
-> > 
-> > Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-> > ---
-> > v2: remove runtime-PM usage
-> >     switch to readl*poll*atomic() for transfer completion wait
-> > ---
-> >  drivers/i2c/busses/i2c-at91-master.c | 69 +++++++++++++++++++++++++++-
-> >  1 file changed, 67 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-> > index ba6fbb9c7390..d9226207157a 100644
-> > --- a/drivers/i2c/busses/i2c-at91-master.c
-> > +++ b/drivers/i2c/busses/i2c-at91-master.c
-> > @@ -21,6 +21,7 @@
-> >  #include <linux/i2c.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/io.h>
-> > +#include <linux/iopoll.h>
-> >  #include <linux/of.h>
-> >  #include <linux/of_device.h>
-> >  #include <linux/platform_device.h>
-> > @@ -709,6 +710,69 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
-> >  	return ret;
-> >  }
-> >  
-> > +static int at91_twi_xfer_atomic(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
-> > +{
-> > +	struct at91_twi_dev *dev = i2c_get_adapdata(adap);
-> > +	unsigned long timeout;
-> > +	struct pinctrl *pins;
-> > +	__u32 stat;
-> > +	int ret;
-> > +
-> > +	/* FIXME: only single write request supported to 7-bit addr */
-> > +	if (num != 1)
-> > +		return -EOPNOTSUPP;
-> > +	if (msg->flags & I2C_M_RD)
-> > +		return -EOPNOTSUPP;
-> > +	if (msg->flags & I2C_M_TEN)
-> > +		return -EOPNOTSUPP;
-> > +	if (msg->len > dev->fifo_size && msg->len > 1)
-> > +		return -EOPNOTSUPP;
-> > +	if (!dev->pdata->has_alt_cmd)
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	pins = pinctrl_get_select_default(&adap->dev);
-> > +
-> > +	ret = clk_prepare_enable(twi_dev->clk);
-> 
-> Hello Michał,
-> 
-> Please see comments to the clk_prepare_enable() and clk_prepare().
-> 
-> /* clk_prepare_enable helps cases using clk_enable in non-atomic context. */
-> static inline int clk_prepare_enable(struct clk *clk)
-> ...
->  * clk_prepare may sleep, which differentiates it from clk_enable.
-> 
+Hi Wolfram,
 
-Yes, it may. Though in this case unlikely. Even though clk_prepare()
-takes a mutex, this is running only after there are no more processes
-in the system, so there are no possible contenders.
+Can you please bounce the previous messages in this thread to me? I was
+apparently not Cc'd so I'm missing the context.
 
-Best Regards,
-Michał Mirosław
+Thanks,
+Jean
+
+On Fri, 20 Mar 2020 15:57:48 +0100, Wolfram Sang wrote:
+> On Sat, Feb 22, 2020 at 01:45:23PM +0100, Wolfram Sang wrote:
+> > On Tue, Jan 14, 2020 at 10:34:06AM +0300, Dan Carpenter wrote:  
+> > > Assigning "priv->data[-1] = priv->len;" obviously doesn't make sense.
+> > > What it does is it ends up corrupting the last byte of priv->len so
+> > > priv->len becomes a very high number.
+> > > 
+> > > Reported-by: syzbot+ed71512d469895b5b34e@syzkaller.appspotmail.com
+> > > Fixes: d3ff6ce40031 ("i2c-i801: Enable IRQ for byte_by_byte transactions")
+> > > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > > ---  
+> > 
+> > Daniel, Jean: what do you think?
+> > Also, adding Jarkko to CC who works a lot with this driver...  
+> 
+> Ping. Adding more people...
+> 
+> >   
+> > > Untested.
+> > > 
+> > >  drivers/i2c/busses/i2c-i801.c | 1 -
+> > >  1 file changed, 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> > > index f5e69fe56532..420d8025901e 100644
+> > > --- a/drivers/i2c/busses/i2c-i801.c
+> > > +++ b/drivers/i2c/busses/i2c-i801.c
+> > > @@ -584,7 +584,6 @@ static void i801_isr_byte_done(struct i801_priv *priv)
+> > >  					"SMBus block read size is %d\n",
+> > >  					priv->len);
+> > >  			}
+> > > -			priv->data[-1] = priv->len;
+> > >  		}
+> > >  
+> > >  		/* Read next byte */
+> > > -- 
+> > > 2.11.0
+> > >   
