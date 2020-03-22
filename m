@@ -2,45 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20AA518EB76
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Mar 2020 19:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E5D18EB7D
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 Mar 2020 19:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725997AbgCVSUd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 22 Mar 2020 14:20:33 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:36003 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725881AbgCVSUd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 Mar 2020 14:20:33 -0400
-Received: by mail-wr1-f67.google.com with SMTP id 31so7987538wrs.3
-        for <linux-i2c@vger.kernel.org>; Sun, 22 Mar 2020 11:20:31 -0700 (PDT)
+        id S1726137AbgCVSXg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 22 Mar 2020 14:23:36 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:33005 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725997AbgCVSXg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 Mar 2020 14:23:36 -0400
+Received: by mail-wr1-f68.google.com with SMTP id a25so14027549wrd.0
+        for <linux-i2c@vger.kernel.org>; Sun, 22 Mar 2020 11:23:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t3apGQx/GqllZ+jV6S8DJb0vx0h2r4kehTlpy1RNFcU=;
-        b=Gk0AxS+Gybm8fEoRxAq3N95E77QJRP0db6HjhqDBM6FK88AdXw6V6XcmZMwRdiL082
-         zoLzPL95MC67nQWljc0pxZu5mGZxY4iToZCfsEVWXNuNxc7+49IMb8W3IyX0qzeQiPl8
-         VJ0XYQhI3ROie5f1lQQjT7GmdGvzsYZ+tttc0=
+        h=from:to:cc:subject:date:message-id;
+        bh=mJxJlTV4kRRQdamwDKjoIvHLdlpESFc+S0X+geSNFqE=;
+        b=BJaiKVHOu3AzckjfTNAW7nWLG7qzRP4YevQaBhi1qM6EFEruYms/H447/JaITaOGmy
+         1NjCsotimSOEddJqoP6QIXKRGQS/GVnQkV/q5uejX4Q1Eg5S7Xe2QCGoMp48pR5WNb06
+         un+BC6TI3OSW80qWsCZGdBwj6SRhdLm9D702g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t3apGQx/GqllZ+jV6S8DJb0vx0h2r4kehTlpy1RNFcU=;
-        b=EzwDHgzKLZ+EsrrRtcUGxAFwLxBVHmSmZjNRKpfTgBI6ZKhmxRsGDpPyugjox6dA2S
-         l/adc4sIvobra1Ese7NNzdL95W67fXgJN+Tg8eba9X8uX8nR8ZsgVLtutRg4QkcqRZRm
-         85dr6gS/+5VXdan/t1SSN/tCWroFGWvZ8K9SN1z9tfacATA7FTvhZ4ZMdi0VVsMllYUP
-         3mXrepYaME+nE1foPNFv+YEq6ILYORhnEksU+CQ7fp3A01SwiHmcl08Q+183b72MIn36
-         E/F2pHU15SYGSztAk8Ui75F+7E63dtR6p7KS4sbTZDGfgFBIRZBvVivvG2eJZcUUB3T4
-         9r9g==
-X-Gm-Message-State: ANhLgQ3dxSC4+0HKhTvqEUc1dAA3GUQBds2xHU9QesaaHLfjdmUHZ2uI
-        r0/KbzeW2SZWwHe1YGKHdrCuIg==
-X-Google-Smtp-Source: ADFU+vuN11G7CO1C7OcYmWhFxSNN5VvmFXqPfJtw7+8MCIrtSg2PNhWHSoNKE+R4l3s8tIriIiP3Ew==
-X-Received: by 2002:adf:a457:: with SMTP id e23mr25054213wra.21.1584901231022;
-        Sun, 22 Mar 2020 11:20:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=mJxJlTV4kRRQdamwDKjoIvHLdlpESFc+S0X+geSNFqE=;
+        b=ha2oa+2L4u+Cz1Xo3ls6mBW/cL4QzyHzi8IsBUjaHbcbQagi0uggsPVqEf4OQP9svT
+         1VJOnltkwAsIg/jpqTlTjC921liaVPmuMLb63uIfSBagNuGQ8TxLPhEPgHZmm2Jb1Vi0
+         I8eR4mOpPURmHK89hFOjh+Bfou1S1UXRP5T+ViDfPDQqv2XqkWw20kOB79A4Sez+zpjB
+         bB7zj1KJdtexzfPQnA1Ecd9158RpTSBrX22FrKBXXjXNZRnB2ij4oF2DXmNxUeCxNxvi
+         WzQmORdugvr0T+lMkfeU3GkKvPbU7br6aZF4WrqVWP5H/JfuXdKjcwPbqlN/AW4e9ZqG
+         fHEg==
+X-Gm-Message-State: ANhLgQ29ne8RURaZKQ+5HDb9DimS7Vne0iZC9K/hDih4kkkDo+Xj6q7Y
+        SQIz2sRlgn2jNQ87nSzpBiB89g==
+X-Google-Smtp-Source: ADFU+vvcdR4iaQTCyJEtVWF44e2sCFqWNQLkGn043JRn0pdCuYAclM13FTmoxf09QPwSxZnocF2WGQ==
+X-Received: by 2002:adf:b1c1:: with SMTP id r1mr23574240wra.337.1584901414969;
+        Sun, 22 Mar 2020 11:23:34 -0700 (PDT)
 Received: from rayagonda.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id i67sm20157090wri.50.2020.03.22.11.20.27
+        by smtp.gmail.com with ESMTPSA id z6sm18498640wrp.95.2020.03.22.11.23.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Mar 2020 11:20:30 -0700 (PDT)
+        Sun, 22 Mar 2020 11:23:34 -0700 (PDT)
 From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 To:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com,
@@ -51,41 +49,63 @@ To:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
         linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Subject: [PATCH v1 1/1] i2c: iproc: generate stop event for slave writes
-Date:   Sun, 22 Mar 2020 23:50:19 +0530
-Message-Id: <20200322182019.32493-1-rayagonda.kokatanur@broadcom.com>
+Subject: [PATCH v1 1/1] i2c: iproc: add support for SMBUS quick cmd
+Date:   Sun, 22 Mar 2020 23:53:22 +0530
+Message-Id: <20200322182322.32743-1-rayagonda.kokatanur@broadcom.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When slave status is I2C_SLAVE_RX_END, generate I2C_SLAVE_STOP
-event to i2c_client.
+Add support for SMBUS quick command.
 
-Fixes: c245d94ed106 ("i2c: iproc: Add multi byte read-write support for slave mode")
+SMBUS quick command passes single bit of information to the
+slave (target) device. Can be used to turn slave device on or off.
+
+By default i2c_detect tool uses the smbus quick cmd to try and
+detect devices. Without this support it will not detect some slaves.
+
 Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 ---
- drivers/i2c/busses/i2c-bcm-iproc.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/i2c/busses/i2c-bcm-iproc.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-index 30efb7913b2e..b58224b7ba79 100644
+index 30efb7913b2e..6a461e06e6dd 100644
 --- a/drivers/i2c/busses/i2c-bcm-iproc.c
 +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-@@ -360,6 +360,9 @@ static bool bcm_iproc_i2c_slave_isr(struct bcm_iproc_i2c_dev *iproc_i2c,
- 			value = (u8)((val >> S_RX_DATA_SHIFT) & S_RX_DATA_MASK);
- 			i2c_slave_event(iproc_i2c->slave,
- 					I2C_SLAVE_WRITE_RECEIVED, &value);
-+			if (rx_status == I2C_SLAVE_RX_END)
-+				i2c_slave_event(iproc_i2c->slave,
-+						I2C_SLAVE_STOP, &value);
- 		}
- 	} else if (status & BIT(IS_S_TX_UNDERRUN_SHIFT)) {
- 		/* Master read other than start */
+@@ -79,6 +79,7 @@
+ #define M_CMD_STATUS_RX_FIFO_FULL    0x6
+ #define M_CMD_PROTOCOL_SHIFT         9
+ #define M_CMD_PROTOCOL_MASK          0xf
++#define M_CMD_PROTOCOL_QUICK         0x0
+ #define M_CMD_PROTOCOL_BLK_WR        0x7
+ #define M_CMD_PROTOCOL_BLK_RD        0x8
+ #define M_CMD_PROTOCOL_PROCESS       0xa
+@@ -765,7 +766,11 @@ static int bcm_iproc_i2c_xfer_internal(struct bcm_iproc_i2c_dev *iproc_i2c,
+ 	 * number of bytes to read
+ 	 */
+ 	val = BIT(M_CMD_START_BUSY_SHIFT);
+-	if (msg->flags & I2C_M_RD) {
++
++	if (msg->len == 0) {
++		/* SMBUS QUICK Command (Read/Write) */
++		val |= (M_CMD_PROTOCOL_QUICK << M_CMD_PROTOCOL_SHIFT);
++	} else if (msg->flags & I2C_M_RD) {
+ 		u32 protocol;
+ 
+ 		iproc_i2c->rx_bytes = 0;
+@@ -827,8 +832,7 @@ static uint32_t bcm_iproc_i2c_functionality(struct i2c_adapter *adap)
+ {
+ 	u32 val;
+ 
+-	/* We do not support the SMBUS Quick command */
+-	val = I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
++	val = I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+ 
+ 	if (adap->algo->reg_slave)
+ 		val |= I2C_FUNC_SLAVE;
 -- 
 2.17.1
 
