@@ -2,40 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C65118F259
+	by mail.lfdr.de (Postfix) with ESMTP id EDE3618F25A
 	for <lists+linux-i2c@lfdr.de>; Mon, 23 Mar 2020 11:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727805AbgCWKE4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 23 Mar 2020 06:04:56 -0400
+        id S1727788AbgCWKE5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 23 Mar 2020 06:04:57 -0400
 Received: from mga02.intel.com ([134.134.136.20]:5149 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727788AbgCWKE4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S1727804AbgCWKE4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
         Mon, 23 Mar 2020 06:04:56 -0400
-IronPort-SDR: J8ndaMx3w+56MYqtrb2Tao4I9rsvk88DZ2VMnvOm89D8N97D3fIDSgP2nzF0n9AonCq93D96hZ
- +yHV+WPpKkug==
+IronPort-SDR: YhA9lbd/wZruHEckWYYsPY5Nkf7ZRYj74j9WFBEJiHmiUSLL6uGnUx+KWtKLE6yy7rcViIzjCl
+ 4rtkYQJAgBRg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2020 03:04:54 -0700
-IronPort-SDR: Vy9MQXPt24z/Jls2r0hvhLFK95Lv8vpF2yzHD1Nhlp8/M9cW/24MbX8y5qYS6M9f539SawcA/q
- DvQgp4yothWA==
+IronPort-SDR: IKCQokKnvsr9QYjWjgwxcVnECpxGM1jzn02YpZ4oGOkG/x/rBtgqjpH7oeUtrw50BWrzDoWzcl
+ Y+sbIpr1K7yA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.72,296,1580803200"; 
-   d="scan'208";a="239885603"
+   d="scan'208";a="239885606"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga008.jf.intel.com with ESMTP; 23 Mar 2020 03:04:53 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4D8A414B; Mon, 23 Mar 2020 12:04:52 +0200 (EET)
+        id 5D42211D; Mon, 23 Mar 2020 12:04:52 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         linux-i2c@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/2] i2c: designware: Make master module optional
-Date:   Mon, 23 Mar 2020 12:04:50 +0200
-Message-Id: <20200323100451.28808-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/2] i2c: designware: Move configuration routines to respective modules
+Date:   Mon, 23 Mar 2020 12:04:51 +0200
+Message-Id: <20200323100451.28808-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200323100451.28808-1-andriy.shevchenko@linux.intel.com>
+References: <20200323100451.28808-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
@@ -43,145 +45,166 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In some cases we know that the controller will be always used in slave mode and
-master is just a bulk. In order to drop that, introduce a separate configuration
-parameter for master mode. Default it to core to avoid regressions.
+Move configuration routines to respective modules, i.e. master and slave.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/i2c/busses/Kconfig                  | 10 ++++++++++
- drivers/i2c/busses/Makefile                 |  5 ++++-
- drivers/i2c/busses/i2c-designware-core.h    | 19 ++++++++++++++++++-
- drivers/i2c/busses/i2c-designware-master.c  |  4 ++--
- drivers/i2c/busses/i2c-designware-pcidrv.c  |  2 +-
- drivers/i2c/busses/i2c-designware-platdrv.c |  6 +-----
- 6 files changed, 36 insertions(+), 10 deletions(-)
+ drivers/i2c/busses/i2c-designware-core.h    | 12 +++++++
+ drivers/i2c/busses/i2c-designware-master.c  | 24 +++++++++++++
+ drivers/i2c/busses/i2c-designware-platdrv.c | 38 +--------------------
+ drivers/i2c/busses/i2c-designware-slave.c   | 11 ++++++
+ 4 files changed, 48 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 2ddca08f8a76..1df238ff8dd0 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -527,6 +527,16 @@ config I2C_DAVINCI
- config I2C_DESIGNWARE_CORE
- 	tristate
- 
-+config I2C_DESIGNWARE_MASTER
-+	bool "Synopsys DesignWare Master"
-+	default I2C_DESIGNWARE_CORE
-+	help
-+	  If you say yes to this option, support will be included for the
-+	  Synopsys DesignWare I2C master adapter.
-+
-+	  This is not a standalone module, this module compiles together with
-+	  i2c-designware-core.
-+
- config I2C_DESIGNWARE_PLATFORM
- 	tristate "Synopsys DesignWare Platform"
- 	select I2C_DESIGNWARE_CORE
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 25d60889713c..829731d4a1f9 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -49,7 +49,10 @@ obj-$(CONFIG_I2C_CBUS_GPIO)	+= i2c-cbus-gpio.o
- obj-$(CONFIG_I2C_CPM)		+= i2c-cpm.o
- obj-$(CONFIG_I2C_DAVINCI)	+= i2c-davinci.o
- obj-$(CONFIG_I2C_DESIGNWARE_CORE)	+= i2c-designware-core.o
--i2c-designware-core-objs := i2c-designware-common.o i2c-designware-master.o
-+i2c-designware-core-objs := i2c-designware-common.o
-+ifeq ($(CONFIG_I2C_DESIGNWARE_MASTER),y)
-+i2c-designware-core-objs += i2c-designware-master.o
-+endif
- ifeq ($(CONFIG_I2C_DESIGNWARE_SLAVE),y)
- i2c-designware-core-objs += i2c-designware-slave.o
- endif
 diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index b220ad64c38d..2d34c15dca75 100644
+index 2d34c15dca75..ba04fa91de0c 100644
 --- a/drivers/i2c/busses/i2c-designware-core.h
 +++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -314,13 +314,30 @@ static inline void __i2c_dw_disable_nowait(struct dw_i2c_dev *dev)
- 
+@@ -315,13 +315,17 @@ static inline void __i2c_dw_disable_nowait(struct dw_i2c_dev *dev)
  void __i2c_dw_disable(struct dw_i2c_dev *dev);
  
--extern int i2c_dw_probe(struct dw_i2c_dev *dev);
-+#if IS_ENABLED(CONFIG_I2C_DESIGNWARE_MASTER)
-+extern int i2c_dw_probe_master(struct dw_i2c_dev *dev);
-+#else
-+static inline int i2c_dw_probe_master(struct dw_i2c_dev *dev) { return -EINVAL; }
-+#endif
+ #if IS_ENABLED(CONFIG_I2C_DESIGNWARE_MASTER)
++extern void i2c_dw_configure_master(struct dw_i2c_dev *dev);
+ extern int i2c_dw_probe_master(struct dw_i2c_dev *dev);
+ #else
++static inline void i2c_dw_configure_master(struct dw_i2c_dev *dev) { }
+ static inline int i2c_dw_probe_master(struct dw_i2c_dev *dev) { return -EINVAL; }
+ #endif
  #if IS_ENABLED(CONFIG_I2C_DESIGNWARE_SLAVE)
++extern void i2c_dw_configure_slave(struct dw_i2c_dev *dev);
  extern int i2c_dw_probe_slave(struct dw_i2c_dev *dev);
  #else
++static inline void i2c_dw_configure_slave(struct dw_i2c_dev *dev) { }
  static inline int i2c_dw_probe_slave(struct dw_i2c_dev *dev) { return -EINVAL; }
  #endif
  
-+static inline int i2c_dw_probe(struct dw_i2c_dev *dev)
+@@ -338,6 +342,14 @@ static inline int i2c_dw_probe(struct dw_i2c_dev *dev)
+ 	}
+ }
+ 
++static inline void i2c_dw_configure(struct dw_i2c_dev *dev)
 +{
-+	switch (dev->mode) {
-+	case DW_IC_SLAVE:
-+		return i2c_dw_probe_slave(dev);
-+	case DW_IC_MASTER:
-+		return i2c_dw_probe_master(dev);
-+	default:
-+		dev_err(dev->dev, "Wrong operation mode: %d\n", dev->mode);
-+		return -EINVAL;
-+	}
++	if (i2c_detect_slave_mode(dev->dev))
++		i2c_dw_configure_slave(dev);
++	else
++		i2c_dw_configure_master(dev);
 +}
 +
  #if IS_ENABLED(CONFIG_I2C_DESIGNWARE_BAYTRAIL)
  extern int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev);
  #else
 diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index 3a58eef20936..9d2af87f45f1 100644
+index 9d2af87f45f1..66ada723d740 100644
 --- a/drivers/i2c/busses/i2c-designware-master.c
 +++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -678,7 +678,7 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
- 	return 0;
+@@ -632,6 +632,30 @@ static irqreturn_t i2c_dw_isr(int this_irq, void *dev_id)
+ 	return IRQ_HANDLED;
  }
  
--int i2c_dw_probe(struct dw_i2c_dev *dev)
-+int i2c_dw_probe_master(struct dw_i2c_dev *dev)
++void i2c_dw_configure_master(struct dw_i2c_dev *dev)
++{
++	struct i2c_timings *t = &dev->timings;
++
++	dev->functionality = I2C_FUNC_10BIT_ADDR | DW_IC_DEFAULT_FUNCTIONALITY;
++
++	dev->master_cfg = DW_IC_CON_MASTER | DW_IC_CON_SLAVE_DISABLE |
++			  DW_IC_CON_RESTART_EN;
++
++	dev->mode = DW_IC_MASTER;
++
++	switch (t->bus_freq_hz) {
++	case I2C_MAX_STANDARD_MODE_FREQ:
++		dev->master_cfg |= DW_IC_CON_SPEED_STD;
++		break;
++	case I2C_MAX_HIGH_SPEED_MODE_FREQ:
++		dev->master_cfg |= DW_IC_CON_SPEED_HIGH;
++		break;
++	default:
++		dev->master_cfg |= DW_IC_CON_SPEED_FAST;
++	}
++}
++EXPORT_SYMBOL_GPL(i2c_dw_configure_master);
++
+ static void i2c_dw_prepare_recovery(struct i2c_adapter *adap)
  {
- 	struct i2c_adapter *adap = &dev->adapter;
- 	unsigned long irq_flags;
-@@ -745,7 +745,7 @@ int i2c_dw_probe(struct dw_i2c_dev *dev)
- 
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(i2c_dw_probe);
-+EXPORT_SYMBOL_GPL(i2c_dw_probe_master);
- 
- MODULE_DESCRIPTION("Synopsys DesignWare I2C bus master adapter");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 7a0b65b5b5b5..cbab5346e311 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -290,7 +290,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
- 	adap->nr = controller->bus_num;
- 
--	r = i2c_dw_probe(dev);
-+	r = i2c_dw_probe_master(dev);
- 	if (r) {
- 		pci_free_irq_vectors(pdev);
- 		return r;
+ 	struct dw_i2c_dev *dev = i2c_get_adapdata(adap);
 diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index c98befe2a92e..0edcebe2168f 100644
+index 0edcebe2168f..6da7f14cba62 100644
 --- a/drivers/i2c/busses/i2c-designware-platdrv.c
 +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -371,11 +371,7 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+@@ -186,39 +186,6 @@ static inline int dw_i2c_of_configure(struct platform_device *pdev)
+ }
+ #endif
  
- 	pm_runtime_enable(&pdev->dev);
- 
--	if (dev->mode == DW_IC_SLAVE)
--		ret = i2c_dw_probe_slave(dev);
--	else
--		ret = i2c_dw_probe(dev);
+-static void i2c_dw_configure_master(struct dw_i2c_dev *dev)
+-{
+-	struct i2c_timings *t = &dev->timings;
 -
-+	ret = i2c_dw_probe(dev);
+-	dev->functionality = I2C_FUNC_10BIT_ADDR | DW_IC_DEFAULT_FUNCTIONALITY;
+-
+-	dev->master_cfg = DW_IC_CON_MASTER | DW_IC_CON_SLAVE_DISABLE |
+-			  DW_IC_CON_RESTART_EN;
+-
+-	dev->mode = DW_IC_MASTER;
+-
+-	switch (t->bus_freq_hz) {
+-	case I2C_MAX_STANDARD_MODE_FREQ:
+-		dev->master_cfg |= DW_IC_CON_SPEED_STD;
+-		break;
+-	case I2C_MAX_HIGH_SPEED_MODE_FREQ:
+-		dev->master_cfg |= DW_IC_CON_SPEED_HIGH;
+-		break;
+-	default:
+-		dev->master_cfg |= DW_IC_CON_SPEED_FAST;
+-	}
+-}
+-
+-static void i2c_dw_configure_slave(struct dw_i2c_dev *dev)
+-{
+-	dev->functionality = I2C_FUNC_SLAVE | DW_IC_DEFAULT_FUNCTIONALITY;
+-
+-	dev->slave_cfg = DW_IC_CON_RX_FIFO_FULL_HLD_CTRL |
+-			 DW_IC_CON_RESTART_EN | DW_IC_CON_STOP_DET_IFADDRESSED;
+-
+-	dev->mode = DW_IC_SLAVE;
+-}
+-
+ static void dw_i2c_plat_pm_cleanup(struct dw_i2c_dev *dev)
+ {
+ 	pm_runtime_disable(dev->dev);
+@@ -323,10 +290,7 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
  	if (ret)
- 		goto exit_probe;
+ 		goto exit_reset;
  
+-	if (i2c_detect_slave_mode(&pdev->dev))
+-		i2c_dw_configure_slave(dev);
+-	else
+-		i2c_dw_configure_master(dev);
++	i2c_dw_configure(dev);
+ 
+ 	/* Optional interface clock */
+ 	dev->pclk = devm_clk_get_optional(&pdev->dev, "pclk");
+diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+index f5ecf76c0d02..576e7af4e94b 100644
+--- a/drivers/i2c/busses/i2c-designware-slave.c
++++ b/drivers/i2c/busses/i2c-designware-slave.c
+@@ -241,6 +241,17 @@ static const struct i2c_algorithm i2c_dw_algo = {
+ 	.unreg_slave = i2c_dw_unreg_slave,
+ };
+ 
++void i2c_dw_configure_slave(struct dw_i2c_dev *dev)
++{
++	dev->functionality = I2C_FUNC_SLAVE | DW_IC_DEFAULT_FUNCTIONALITY;
++
++	dev->slave_cfg = DW_IC_CON_RX_FIFO_FULL_HLD_CTRL |
++			 DW_IC_CON_RESTART_EN | DW_IC_CON_STOP_DET_IFADDRESSED;
++
++	dev->mode = DW_IC_SLAVE;
++}
++EXPORT_SYMBOL_GPL(i2c_dw_configure_slave);
++
+ int i2c_dw_probe_slave(struct dw_i2c_dev *dev)
+ {
+ 	struct i2c_adapter *adap = &dev->adapter;
 -- 
 2.25.1
 
