@@ -2,41 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E41190B1E
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 11:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A6C190B41
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 11:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727298AbgCXKev (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Mar 2020 06:34:51 -0400
-Received: from sauhun.de ([88.99.104.3]:48924 "EHLO pokefinder.org"
+        id S1727314AbgCXKj2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Mar 2020 06:39:28 -0400
+Received: from sauhun.de ([88.99.104.3]:48972 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727241AbgCXKev (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 24 Mar 2020 06:34:51 -0400
+        id S1727066AbgCXKj2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 24 Mar 2020 06:39:28 -0400
 Received: from localhost (p54B3339A.dip0.t-ipconnect.de [84.179.51.154])
-        by pokefinder.org (Postfix) with ESMTPSA id D13B92C08EF;
-        Tue, 24 Mar 2020 11:34:48 +0100 (CET)
-Date:   Tue, 24 Mar 2020 11:34:48 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 5D60C2C08EF;
+        Tue, 24 Mar 2020 11:39:27 +0100 (CET)
+Date:   Tue, 24 Mar 2020 11:39:27 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v12 1/2] dt-binding: i2c: add bus-supply property
-Message-ID: <20200324103448.GE1134@ninjato>
-References: <20200306034946.11223-1-bibby.hsieh@mediatek.com>
- <20200306034946.11223-2-bibby.hsieh@mediatek.com>
- <20200322130710.GA1091@ninjato>
- <CAAFQd5ANJcReHD_n0LorS+bjE8Cn_W-kY5LNgGG+L+jMmywYfA@mail.gmail.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-i2c@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: [GIT PULL] at24: updates for v5.7
+Message-ID: <20200324103926.GF1134@ninjato>
+References: <20200324081253.881-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tVmo9FyGdCe4F4YN"
+        protocol="application/pgp-signature"; boundary="wtjvnLv0o8UUzur2"
 Content-Disposition: inline
-In-Reply-To: <CAAFQd5ANJcReHD_n0LorS+bjE8Cn_W-kY5LNgGG+L+jMmywYfA@mail.gmail.com>
+In-Reply-To: <20200324081253.881-1-brgl@bgdev.pl>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -44,59 +34,67 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---tVmo9FyGdCe4F4YN
+--wtjvnLv0o8UUzur2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > > +- bus-supply
-> > > +     phandle to the regulator that provides power to i2c.
-> >
-> > I think this is not clear enough. I assume it means the regulator for
-> > driving SCL/SDA? In the coverletter you mention also an EEPROM. In your
-> > case, this is driven by the same regulator? I am skeptical we can
-> > abstract it like this because I2C devices could be driven by various
-> > regulators in the system, so there couldn't be one "bus regulator". The
-> > regulator for the EEPROM should be described in the EEPROM node. So,
-> > this "bus supply" is only for driving SCL/SDA?
+On Tue, Mar 24, 2020 at 09:12:53AM +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 >=20
-> In our case the bus-supply regulator drives the voltage rail to which
-> SCL/SDA are pulled up and there is an EEPROM on the bus, powered by
-> yet another rail. There is also another slave on the bus which uses
-> the same regulator as the bus-supply for its own power.
+> Wolfram,
 >=20
-> In other words, bus-supply only ensures that SCL and SDA are in a
-> usable state. Other consumers need to refer to the regulator in their
-> own supplies if they need it for their own power.
+> please pull the following change in at24 for v5.7. This time it's just
+> a single new ACPI ID.
 >=20
-> Does this answer your questions?
+> The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862=
+b9:
+>=20
+>   Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/at24-=
+updates-for-v5.7
+>=20
+> for you to fetch changes up to 4837621cd61e6b81a182098889143c6c9a06b0f3:
+>=20
+>   eeprom: at24: add TPF0001 ACPI ID for 24c1024 device (2020-02-10 11:03:=
+39 +0100)
+>=20
+> ----------------------------------------------------------------
+> at24 updates for v5.7
+>=20
+> - add a new ACPI ID for 24c1024
+>=20
+> ----------------------------------------------------------------
+> Markus Pietrek (1):
+>       eeprom: at24: add TPF0001 ACPI ID for 24c1024 device
+>=20
+>  drivers/misc/eeprom/at24.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-Yes, this was exactly what I was assuming.
-
-So, I think the above documentation should be changed: s|i2c|SCL/SDA|
-
-D'accord?
+Thanks, pulled!
 
 
---tVmo9FyGdCe4F4YN
+--wtjvnLv0o8UUzur2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl554kQACgkQFA3kzBSg
-KbamcA/+Ll60/Efzo6FG3APE0g6ZjxtUBgbCskbrOq6AAiExxWU0zzl2zcvkimxm
-EzB4MMQDk7XBRnr8IeBNOHgT9F7txegCzrSzCTV8j0peut5akg385S8heeM5b9e+
-udCKQahb2tb8vOCZFOTn9OoguZ+VDNhOYCGIoBcgUCA/YWcuomaxt/VPACI+E558
-TWqhouadPIqQiRLGuF6N+Ya8Tri9i6cURoYa1uZKL/bsnxKc0TkcWiiOzYXmB+Fu
-I6uNg5XJxRzIvYDAeMuWxvUOazNcdJldc1l+neD3HKhKQs+OKyVl25JD7tLpgZNU
-CHQHoItGULjh7sapaG3BbjkW//SHTumw6G6JBYNrjrzA3Tr6gv6+dymXyPKp62sA
-9XFwguFD2LntFyVBsuBs0tN8jycZNkp0wgEXnTetn2gFQP70lXby6wlhTkUahEHf
-WIcDERSPKv7UleKiwaZx9p3KMZisxMMdJZjArKwbLE7xu0iFjwhepD4D4wlmHrT+
-dDVLJJJDShtwpTqSFsGjdo6xDT5Hzx7Vdv/dSBtLk9P+OSj3AwgVA3bG+PnXUzLW
-C5WvW28kFg78c49B7vlYVnNcoxhIJuuloiCeKGXwjba0OZ1nRjHi37VC5Q4S43Mu
-DpVsDnjrkImZub+ijqjHgfLXL5OSV/NVDjrVsCnq8zZlbkHgGgM=
-=/K3S
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl55414ACgkQFA3kzBSg
+Kbb9qQ/+Kaj5u/l97n8Lg7nQLjzaHFAwcJvo6o8++sYzYFLuulKsO2uqvEncpS3i
+106lqR7/G8KlARyol4DadP/t/9ezV7dGBgU8CQa/ymQe8ha1KCFk+8u5BHYPib+b
+DRnYw6jmdR/uoDR/UsUBB+gcBQKbQzs+BUVAzz+0+O1asfaC/alg3eEF9Xp56GGA
+k4tYgb0okfpES1wVg0Oh0DkvIZe/qe+q3Mls/zAOuD4k2jqSy6y3TXugFY4jZ4Pq
+2ttEMm1kwtFLQHTyWvRYVJB8TIrLgoX8YKMNj5YEIJdpLrt+nE9CFGWYNMV7WTN1
+89LQvHpO1tfktJBvYw6P/8Kp33QYD6iGNrYH+cDGvcZJJNA/w0QE73UPPGwMX2Uq
+IqbOiHusp0z/CI4L5arVqPUhIZikWBU3TTHvXS98xd8qA++Q2lDJ/ypB1dAV7rcE
+nTSFh6zXr2N7EaoT1KaPKx1puK9HEbvKuPdzPJkPHngp8qft96ewAJhC72R8npEi
+v6W1fvzi/HAPj3D+rKSxVuqL7iYkOmh0C81yA7m1J50hz2moiITwEqSAhRlWGdEU
+uQuuWmnfxxb4XwQqQgEQI0hdonC6e2Th2NQWKxHUhdqGtih5jI257J0yaStpz4JY
+prn/ME5GaEPPAQuVdVU+9mXNhQD1Mi08x4bdYaQ6WY8aDs+QeJY=
+=1e6Y
 -----END PGP SIGNATURE-----
 
---tVmo9FyGdCe4F4YN--
+--wtjvnLv0o8UUzur2--
