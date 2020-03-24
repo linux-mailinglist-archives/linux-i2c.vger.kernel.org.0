@@ -2,124 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B77B319148A
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 16:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 415941919B2
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 20:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727675AbgCXPfU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Mar 2020 11:35:20 -0400
-Received: from mga04.intel.com ([192.55.52.120]:20383 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727216AbgCXPfU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 24 Mar 2020 11:35:20 -0400
-IronPort-SDR: LgWswiGKgRZcEtQCpX5S3ORFudk+2Zo0lp6rRUAYot75geEy27RdMTAuyYsvdHp0Hn1BWk/mLa
- x5MxbtF0ZSqQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 08:35:20 -0700
-IronPort-SDR: DjgDT7YuDwbDWYF1HGq2qCo2JezbGlElTudi5lGD2km4UWW+ArvxX+SXNRQf/xcxzNHEj84W24
- iUl24loeegPA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,300,1580803200"; 
-   d="scan'208";a="235616865"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2020 08:35:16 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jGlaI-00CZJi-U8; Tue, 24 Mar 2020 17:35:18 +0200
-Date:   Tue, 24 Mar 2020 17:35:18 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     ajayg@nvidia.com, Wolfram Sang <wsa@the-dreams.de>,
-        "open list:I2C CONTROLLER DRIVER FOR NVIDIA GPU" 
-        <linux-i2c@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] i2c: nvidia-gpu: Handle timeout correctly in
- gpu_i2c_check_status()
-Message-ID: <20200324153518.GP1922688@smile.fi.intel.com>
-References: <20200324152812.20231-1-kai.heng.feng@canonical.com>
+        id S1727753AbgCXTN3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Mar 2020 15:13:29 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:42159 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727657AbgCXTN3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Mar 2020 15:13:29 -0400
+Received: by mail-lj1-f195.google.com with SMTP id q19so19791645ljp.9;
+        Tue, 24 Mar 2020 12:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uIAcX2m8QpAWv8TMlh8B6oI/fe2X2DccVFEcYGZNbOk=;
+        b=hsY68UyMWv486CjkFQ9XXWAJnkttldzEOXRVWyB4HW0IaB0FWKpvYrLGJu9q5GY5jg
+         1cOEDDKCayQPZN3XII0yajPYt7sjmCy03V4yDBEQOduR/WMM2rbsZZfWx7/75dibd3q0
+         82cmZEwuXk0PstRFXgmK+z796IHlmYdFK6cUfG45mBpqYH9LEKeBuhObJzl6Q4N4hMT/
+         LakyMoO2nrp9D02bwNWqSLCLJDRlsIrvfsYuOtI5X5n9v3qU0SrDkOFNbTI+QpHmRxgi
+         57B2F8XzqekOoUwhiIniXDeVVQewF6f6nxdDVKaX4DL/DHvqauFGQxZaqtoo85/AqEzs
+         GWQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uIAcX2m8QpAWv8TMlh8B6oI/fe2X2DccVFEcYGZNbOk=;
+        b=R+840oR9XEcL4gixPRNJG58OBW7KnCVS/e6XbUzDahxY+zdzDsq1xxBbibHg/17aQw
+         bKFpX2AfaA6G9usoWSV83lZUa2auAFsmEqxZEFE/0lHlqCLEpx2FCG+wMl2nXyqh74NN
+         VgQYOS0rIxBbXSuwQlGXmgkyfKMiFC1V6ynBUL2tLoyq7oPbGQVZjmj322gkjZfC4scw
+         hk0tADBTe6gFY5gMbQ76cX/QPTVrYtoGCs11fi0zPgHWlsM7Olvb9fiBtmJUmHkFWA9L
+         qxqWDqAs7waFBDveC1XzidBSkpDwB/I069uz7qzXrVK+++/cmzOXrpGHLaXH2Ay0WR61
+         rh2A==
+X-Gm-Message-State: ANhLgQ3qA2GavOcn+jFDvNd9jDca233OPmrNs1oSHMVDW700XFUW2U41
+        5XPAy1NfM2WKdPC+a20tSVU=
+X-Google-Smtp-Source: ADFU+vuC24piMvbglWv/WVI/TWLmal3ArmiApJWvK+KWbm7V9Ezcb26GVi8QzfgpOoA3uvvY/Bl+ZA==
+X-Received: by 2002:a2e:894e:: with SMTP id b14mr8911183ljk.103.1585077206468;
+        Tue, 24 Mar 2020 12:13:26 -0700 (PDT)
+Received: from localhost.localdomain (94-29-39-224.dynamic.spd-mgts.ru. [94.29.39.224])
+        by smtp.gmail.com with ESMTPSA id z23sm6347723ljz.52.2020.03.24.12.13.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2020 12:13:25 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] NVIDIA Tegra I2C synchronization correction
+Date:   Tue, 24 Mar 2020 22:12:15 +0300
+Message-Id: <20200324191217.1829-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200324152812.20231-1-kai.heng.feng@canonical.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 11:28:11PM +0800, Kai-Heng Feng wrote:
-> Nvidia card may come with a "phantom" UCSI device, and its driver gets
-> stuck in probe routine, prevents any system PM operations like suspend.
-> 
-> There's an unaccounted case that the target time can equal to jiffies in
-> gpu_i2c_check_status(), let's solve that by using readl_poll_timeout()
-> instead of jiffies comparison functions. 
-> 
+Hello,
 
-Thank you!
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Recently I found a way to reliably reproduce I2C timeouts that happen due
+to improper synchronizations made by the I2C driver. It's quite easy to
+reproduce the problem when memory is running on a lower freq + there is
+some memory activity + CPU could get busy for a significant time. This
+is the case when KASAN is enabled and CPU is busy while accessing FS via
+NFS. This small series addresses the found problems.
 
+Changelog:
 
-> Fixes: c71bcdcb42a7 ("i2c: add i2c bus driver for NVIDIA GPU")
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
-> v3:
-> - Use readl_poll_timeout to make the retry loop simpler.
-> 
-> v2:
-> - Use a boolean to make sure the operation is timeout or not.
-> 
->  drivers/i2c/busses/i2c-nvidia-gpu.c | 20 ++++++++------------
->  1 file changed, 8 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> index 62e18b4db0ed..f5d25ce00f03 100644
-> --- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-> +++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> @@ -8,6 +8,7 @@
->  #include <linux/delay.h>
->  #include <linux/i2c.h>
->  #include <linux/interrupt.h>
-> +#include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/pci.h>
->  #include <linux/platform_device.h>
-> @@ -75,20 +76,15 @@ static void gpu_enable_i2c_bus(struct gpu_i2c_dev *i2cd)
->  
->  static int gpu_i2c_check_status(struct gpu_i2c_dev *i2cd)
->  {
-> -	unsigned long target = jiffies + msecs_to_jiffies(1000);
->  	u32 val;
-> +	int ret;
->  
-> -	do {
-> -		val = readl(i2cd->regs + I2C_MST_CNTL);
-> -		if (!(val & I2C_MST_CNTL_CYCLE_TRIGGER))
-> -			break;
-> -		if ((val & I2C_MST_CNTL_STATUS) !=
-> -				I2C_MST_CNTL_STATUS_BUS_BUSY)
-> -			break;
-> -		usleep_range(500, 600);
-> -	} while (time_is_after_jiffies(target));
-> -
-> -	if (time_is_before_jiffies(target)) {
-> +	ret = readl_poll_timeout(i2cd->regs + I2C_MST_CNTL, val,
-> +				 !(val & I2C_MST_CNTL_CYCLE_TRIGGER) ||
-> +				 (val & I2C_MST_CNTL_STATUS) != I2C_MST_CNTL_STATUS_BUS_BUSY,
-> +				 500, 1000 * USEC_PER_MSEC);
-> +
-> +	if (ret) {
->  		dev_err(i2cd->dev, "i2c timeout error %x\n", val);
->  		return -ETIMEDOUT;
->  	}
-> -- 
-> 2.17.1
-> 
+v2: - The "Better handle case where CPU0 is busy for a long time" patch
+      now preserves the old behavior where completion is checked after
+      disabling the interrupt, preventing potential race-condition of
+      the completion awaiting vs interrupt syncing.
+
+Dmitry Osipenko (2):
+  i2c: tegra: Better handle case where CPU0 is busy for a long time
+  i2c: tegra: Synchronize DMA before termination
+
+ drivers/i2c/busses/i2c-tegra.c | 36 ++++++++++++++++++++++------------
+ 1 file changed, 24 insertions(+), 12 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
