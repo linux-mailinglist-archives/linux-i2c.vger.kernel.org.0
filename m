@@ -2,104 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 243FC190C82
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 12:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B943E190D8C
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 13:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbgCXLar (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Mar 2020 07:30:47 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:38458 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727148AbgCXLar (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Mar 2020 07:30:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description;
-        bh=pgidfk1CzMJBNlrTU9Rz3yjEi/6uZEwyGV8n3CqpEdg=; b=R/d0WjIIt+6uNMGN5b50i7c+IJ
-        GWccyT591AP+YueGzQdeZsjth3Qxjd9Yr91nwoJizBg36QvBy6NYJxk6EpWInf+INVKW+Dk0ZUVqp
-        gpI18MUks279v9XEQH4i2dWvwkcodknjR/bFp+2J5I6h2pBacXtml0I/9yhOlERpo89YUqEcw1wJz
-        rW6Hd4SecnzilvwlyaVh2zXkqlRocMNHVbg6whForKlqKVjBDcafAILe0hK76OlZdpBujQc+8eJFj
-        C7Ykc1b8I4M70KXtPLqdGUFgEFh0lXRuvQkdybR5wp+GeeTKhEiWIAIhr93/6VcoUrGMZUXceKZs/
-        cka76aCQ==;
-Received: from ip5f5ad4e9.dynamic.kabel-deutschland.de ([95.90.212.233] helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jGhla-0005IZ-SL; Tue, 24 Mar 2020 11:30:43 +0000
-Date:   Tue, 24 Mar 2020 12:30:33 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>, sean@mess.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: A bit confused on i2c communication between modules
-Message-ID: <20200324123033.5538c38d@coco.lan>
-In-Reply-To: <20200324110122.GG1134@ninjato>
-References: <55204992-9060-6008-31c7-c2855f712e70@gmail.com>
-        <20200324082236.2c4d2ae4@coco.lan>
-        <bc91be3d-802c-a58c-bd27-740e15516180@ideasonboard.com>
-        <20200324095810.GC1134@ninjato>
-        <63742e62-d0b6-9d7a-b491-d7969f8ea7e2@ideasonboard.com>
-        <20200324102704.GD1134@ninjato>
-        <7d82a76f-5165-5e7c-bcde-552f527da0d2@ideasonboard.com>
-        <20200324110122.GG1134@ninjato>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1727553AbgCXMcZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Mar 2020 08:32:25 -0400
+Received: from mga09.intel.com ([134.134.136.24]:45700 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727480AbgCXMcZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 24 Mar 2020 08:32:25 -0400
+IronPort-SDR: FSDcOdMviaLo+5ehoxrPgE9IRRjShY6IqNt1/Nx3M/SiiOzUBvcrOOWKOHd/6qDmMgpnjBRcd4
+ fu7pTGXa6QgA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 05:32:25 -0700
+IronPort-SDR: KEprzTmBUoe0Po+c5Nydq2OQK6cTqwNSQnH8aMgyPdArrtysURtSx0t4d1iaim6+XfwFej/aqQ
+ eHaKOfU+i/cg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,300,1580803200"; 
+   d="scan'208";a="357412406"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Mar 2020 05:32:23 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 909CE11D; Tue, 24 Mar 2020 14:32:17 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v5 1/6] i2c: core: Provide generic definitions for bus frequencies
+Date:   Tue, 24 Mar 2020 14:32:11 +0200
+Message-Id: <20200324123216.78113-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Em Tue, 24 Mar 2020 12:01:22 +0100
-Wolfram Sang <wsa@the-dreams.de> escreveu:
+There are few maximum bus frequencies being used in the I²C core code.
+Provide generic definitions for bus frequencies and use them in the core.
 
-> On Tue, Mar 24, 2020 at 10:49:55AM +0000, Kieran Bingham wrote:
-> > +cc: linux-i2c@vger.kernel.org
-> > Moving /this/ to the linux-i2c list ;-)
-> > 
-> > Thanks Wolfram,
-> > 
-> > On 24/03/2020 10:27, Wolfram Sang wrote:  
-> > >   
-> > >> Maybe we should have a whole virtual I2C bus for virtual devices :-)
-> > >>
-> > >> (Hrm, that started out as a joke, and now I'm not sure if it's a real
-> > >> option or not...)  
-> > > 
-> > > Just one final thought: I think this is actually the best option. Zero
-> > > chance of address collisions (which could happen if you have a not
-> > > perfectly-described real HW bus). No RPM mangling of real and virtual
-> > > devices. A clear seperation what is real and what is virtual. Plus, you
-> > > can implement it right away, no need to wait for the dynamic address
-> > > assignment.  
-> > 
-> > Agreed - even better all round! But I presume we don't yet have a
-> > 'virtual' i2c bus? So it's a patch-set to do first? Or is it already
-> > feasible?  
-> 
-> From what I understand, you won't need an API for that. What I
-> understand:
-> 
-> There will be a master device (a DVB or something). This will register
-> its own i2c_adapter with a dummy .xfer callback. The sub-devices will be
-> i2c_clients, then. 
+The drivers may use predefined constants where it is appropriate.
+Some of them are already using these under slightly different names.
+We will convert them later to use newly introduced defines.
 
-Yes. That's what the current drivers that have integrated hardware
-at the same silicon (like rtl28xx) do: their .xfer callback splits the
-I2C addresses reserved for "internal" devices, and use a different set
-of registers to handle those, instead of the normal ones used to
-communicate with a real I2C hardware.
+Note, the name of modes are chosen to follow well established naming
+scheme [1].
 
-The cx231xx uses a different strategy: it has multiple I2C buses, being
-one of them reserved for its own integrated I2C like bus.
+These definitions will also help to avoid typos in the numbers that
+may lead to subtle errors.
 
-> I don't know how you want communication between
-> those. Maybe the .xfer callback will need to do some message parsing?
-> 
+[1]: https://en.wikipedia.org/wiki/I%C2%B2C#Differences_between_modes
 
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v5: no changes
+ drivers/i2c/i2c-core-acpi.c | 2 +-
+ drivers/i2c/i2c-core-base.c | 8 ++++----
+ include/linux/i2c.h         | 8 ++++++++
+ 3 files changed, 13 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index 8b0ff780919b..c8f42f2037cb 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -318,7 +318,7 @@ static acpi_status i2c_acpi_lookup_speed(acpi_handle handle, u32 level,
+ 		lookup->min_speed = lookup->speed;
+ 
+ 	if (acpi_match_device_ids(adev, i2c_acpi_force_400khz_device_ids) == 0)
+-		lookup->force_speed = 400000;
++		lookup->force_speed = I2C_MAX_FAST_MODE_FREQ;
+ 
+ 	return AE_OK;
+ }
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index cefad0881942..9b2972c7faa2 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1612,13 +1612,13 @@ void i2c_parse_fw_timings(struct device *dev, struct i2c_timings *t, bool use_de
+ 
+ 	ret = device_property_read_u32(dev, "clock-frequency", &t->bus_freq_hz);
+ 	if (ret && use_defaults)
+-		t->bus_freq_hz = 100000;
++		t->bus_freq_hz = I2C_MAX_STANDARD_MODE_FREQ;
+ 
+ 	ret = device_property_read_u32(dev, "i2c-scl-rising-time-ns", &t->scl_rise_ns);
+ 	if (ret && use_defaults) {
+-		if (t->bus_freq_hz <= 100000)
++		if (t->bus_freq_hz <= I2C_MAX_STANDARD_MODE_FREQ)
+ 			t->scl_rise_ns = 1000;
+-		else if (t->bus_freq_hz <= 400000)
++		else if (t->bus_freq_hz <= I2C_MAX_FAST_MODE_FREQ)
+ 			t->scl_rise_ns = 300;
+ 		else
+ 			t->scl_rise_ns = 120;
+@@ -1626,7 +1626,7 @@ void i2c_parse_fw_timings(struct device *dev, struct i2c_timings *t, bool use_de
+ 
+ 	ret = device_property_read_u32(dev, "i2c-scl-falling-time-ns", &t->scl_fall_ns);
+ 	if (ret && use_defaults) {
+-		if (t->bus_freq_hz <= 400000)
++		if (t->bus_freq_hz <= I2C_MAX_FAST_MODE_FREQ)
+ 			t->scl_fall_ns = 300;
+ 		else
+ 			t->scl_fall_ns = 120;
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index f834687989f7..72e759328cee 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -39,6 +39,14 @@ enum i2c_slave_event;
+ typedef int (*i2c_slave_cb_t)(struct i2c_client *client,
+ 			      enum i2c_slave_event event, u8 *val);
+ 
++/* I2C Frequency Modes */
++#define I2C_MAX_STANDARD_MODE_FREQ	100000
++#define I2C_MAX_FAST_MODE_FREQ		400000
++#define I2C_MAX_FAST_MODE_PLUS_FREQ	1000000
++#define I2C_MAX_TURBO_MODE_FREQ		1400000
++#define I2C_MAX_HIGH_SPEED_MODE_FREQ	3400000
++#define I2C_MAX_ULTRA_FAST_MODE_FREQ	5000000
++
+ struct module;
+ struct property_entry;
+ 
+-- 
+2.25.1
 
-Thanks,
-Mauro
