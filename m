@@ -2,98 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 302CA191156
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 14:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AE5191225
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 14:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727270AbgCXNlY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Mar 2020 09:41:24 -0400
-Received: from mga04.intel.com ([192.55.52.120]:8751 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726802AbgCXNlY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 24 Mar 2020 09:41:24 -0400
-IronPort-SDR: DU0LTOeq3tLdy7iIGhhd4TZlUgi5cj6DNHqozCkmoIclTWQrTjGeFX+726GIgFLdKDRt4/jZpQ
- tePHbYYT0R3A==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 06:41:23 -0700
-IronPort-SDR: mz4Xnpew8gNVf+t4WQ9755WbYnquKE1Ph32fKffj+U9M+/J22iThmQ/spidK0K23LR84Rrtekq
- OIfjF4WVqWbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,300,1580803200"; 
-   d="scan'208";a="250044696"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga006.jf.intel.com with ESMTP; 24 Mar 2020 06:41:21 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jGjo4-00CXaN-90; Tue, 24 Mar 2020 15:41:24 +0200
-Date:   Tue, 24 Mar 2020 15:41:24 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     ajayg@nvidia.com, Wolfram Sang <wsa@the-dreams.de>,
-        "open list:I2C CONTROLLER DRIVER FOR NVIDIA GPU" 
-        <linux-i2c@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] i2c: nvidia-gpu: Handle timeout correctly in
- gpu_i2c_check_status()
-Message-ID: <20200324134124.GL1922688@smile.fi.intel.com>
-References: <20200324130712.12289-1-kai.heng.feng@canonical.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200324130712.12289-1-kai.heng.feng@canonical.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S1727867AbgCXN5J (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Mar 2020 09:57:09 -0400
+Received: from laurent.telenet-ops.be ([195.130.137.89]:36948 "EHLO
+        laurent.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727876AbgCXN5I (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Mar 2020 09:57:08 -0400
+Received: from ramsan ([84.195.182.253])
+        by laurent.telenet-ops.be with bizsmtp
+        id JDwu2200E5USYZQ01Dwult; Tue, 24 Mar 2020 14:57:07 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jGk34-0006Oe-He; Tue, 24 Mar 2020 14:56:54 +0100
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jGk34-0001kY-Ft; Tue, 24 Mar 2020 14:56:54 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Harish Jenny K N <harish_kandiga@mentor.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     Alexander Graf <graf@amazon.com>,
+        Peter Maydell <peter.maydell@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Phil Reid <preid@electromag.com.au>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qemu-devel@nongnu.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org
+Subject: [PATCH v6 2/8] i2c: i801: Use GPIO_LOOKUP() helper macro
+Date:   Tue, 24 Mar 2020 14:56:47 +0100
+Message-Id: <20200324135653.6676-2-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200324135653.6676-1-geert+renesas@glider.be>
+References: <20200324135328.5796-1-geert+renesas@glider.be>
+ <20200324135653.6676-1-geert+renesas@glider.be>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 09:07:12PM +0800, Kai-Heng Feng wrote:
-> Nvidia card may come with a "phantom" UCSI device, and its driver gets
-> stuck in probe routine, prevents any system PM operations like suspend.
-> 
-> When the target time equals to jiffies, it's not included by
-> time_is_before_jiffies(). So let's use a boolean to make sure the
-> operation is done or timeout.
+i801_add_mux() fills in the GPIO lookup table by manually populating an
+array of gpiod_lookup structures.  Use the existing GPIO_LOOKUP() helper
+macro instead, to relax a dependency on the gpiod_lookup structure's
+member names.
 
-Thank you for an update, my comments below.
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: linux-i2c@vger.kernel.org
+---
+While this patch is a dependency for "[PATCH v6 4/8] gpiolib: Add
+support for GPIO lookup by line name", it can be applied independently.
+But an Acked-by would be nice, too.
 
->  	unsigned long target = jiffies + msecs_to_jiffies(1000);
->  	u32 val;
-> +	bool done = false;
->  
->  	do {
->  		val = readl(i2cd->regs + I2C_MST_CNTL);
-> -		if (!(val & I2C_MST_CNTL_CYCLE_TRIGGER))
-> -			break;
-> -		if ((val & I2C_MST_CNTL_STATUS) !=
-> -				I2C_MST_CNTL_STATUS_BUS_BUSY)
+Cover letter and full series at
+https://lore.kernel.org/r/20200324135328.5796-1-geert+renesas@glider.be/
 
-> +		if (!(val & I2C_MST_CNTL_CYCLE_TRIGGER)
-> +		    || (val & I2C_MST_CNTL_STATUS) !=
-> +				I2C_MST_CNTL_STATUS_BUS_BUSY) {
+v6:
+  - New.
+---
+ drivers/i2c/busses/i2c-i801.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Bad formatting. But see below.
-
-> +			done = true;
->  			break;
-> +		}
->  		usleep_range(500, 600);
->  	} while (time_is_after_jiffies(target));
->  
-> -	if (time_is_before_jiffies(target)) {
-> +	if (!done) {
->  		dev_err(i2cd->dev, "i2c timeout error %x\n", val);
->  		return -ETIMEDOUT;
->  	}
-
-
-Overall it can use simple tries since you already have sleep inside, but
-moreover, you may simple switch to readl_poll_timeout() this entire
-loop.
-
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index ca4f096fef749302..8e64a71bea684cc7 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1444,9 +1444,9 @@ static int i801_add_mux(struct i801_priv *priv)
+ 		return -ENOMEM;
+ 	lookup->dev_id = "i2c-mux-gpio";
+ 	for (i = 0; i < mux_config->n_gpios; i++) {
+-		lookup->table[i].chip_label = mux_config->gpio_chip;
+-		lookup->table[i].chip_hwnum = mux_config->gpios[i];
+-		lookup->table[i].con_id = "mux";
++		lookup->table[i] = (struct gpiod_lookup)
++			GPIO_LOOKUP(mux_config->gpio_chip,
++				    mux_config->gpios[i], "mux", 0);
+ 	}
+ 	gpiod_add_lookup_table(lookup);
+ 	priv->lookup = lookup;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 
