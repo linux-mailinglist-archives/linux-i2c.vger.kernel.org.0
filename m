@@ -2,35 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B261191B92
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 21:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97192191BBD
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 22:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbgCXU5e (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Mar 2020 16:57:34 -0400
-Received: from sauhun.de ([88.99.104.3]:54988 "EHLO pokefinder.org"
+        id S1727040AbgCXVJb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Mar 2020 17:09:31 -0400
+Received: from sauhun.de ([88.99.104.3]:55112 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725941AbgCXU5e (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 24 Mar 2020 16:57:34 -0400
+        id S1726673AbgCXVJb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 24 Mar 2020 17:09:31 -0400
 Received: from localhost (p54B3339A.dip0.t-ipconnect.de [84.179.51.154])
-        by pokefinder.org (Postfix) with ESMTPSA id 4AF8B2C08EF;
-        Tue, 24 Mar 2020 21:57:32 +0100 (CET)
-Date:   Tue, 24 Mar 2020 21:57:31 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 75EA12C08EF;
+        Tue, 24 Mar 2020 22:09:29 +0100 (CET)
+Date:   Tue, 24 Mar 2020 22:09:29 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     ajayg@nvidia.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:I2C CONTROLLER DRIVER FOR NVIDIA GPU" 
-        <linux-i2c@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] i2c: nvidia-gpu: Handle timeout correctly in
- gpu_i2c_check_status()
-Message-ID: <20200324205731.GA7641@ninjato>
-References: <20200324152812.20231-1-kai.heng.feng@canonical.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v5 1/6] i2c: core: Provide generic definitions for bus
+ frequencies
+Message-ID: <20200324210929.GB7641@ninjato>
+References: <20200324123216.78113-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+QahgC5+KEYLbs62"
+        protocol="application/pgp-signature"; boundary="TRYliJ5NKNqkz5bu"
 Content-Disposition: inline
-In-Reply-To: <20200324152812.20231-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20200324123216.78113-1-andriy.shevchenko@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -38,46 +35,52 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---+QahgC5+KEYLbs62
-Content-Type: text/plain; charset=us-ascii
+--TRYliJ5NKNqkz5bu
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 24, 2020 at 11:28:11PM +0800, Kai-Heng Feng wrote:
-> Nvidia card may come with a "phantom" UCSI device, and its driver gets
-> stuck in probe routine, prevents any system PM operations like suspend.
+On Tue, Mar 24, 2020 at 02:32:11PM +0200, Andy Shevchenko wrote:
+> There are few maximum bus frequencies being used in the I=C2=B2C core cod=
+e.
+> Provide generic definitions for bus frequencies and use them in the core.
 >=20
-> There's an unaccounted case that the target time can equal to jiffies in
-> gpu_i2c_check_status(), let's solve that by using readl_poll_timeout()
-> instead of jiffies comparison functions.=20
+> The drivers may use predefined constants where it is appropriate.
+> Some of them are already using these under slightly different names.
+> We will convert them later to use newly introduced defines.
 >=20
-> Fixes: c71bcdcb42a7 ("i2c: add i2c bus driver for NVIDIA GPU")
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Note, the name of modes are chosen to follow well established naming
+> scheme [1].
+>=20
+> These definitions will also help to avoid typos in the numbers that
+> may lead to subtle errors.
+>=20
+> [1]: https://en.wikipedia.org/wiki/I%C2%B2C#Differences_between_modes
+>=20
+> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Looks good to me, thanks Andy for the suggestion!
-
-Waiting for the Rev-by from Ajay (driver maintainer).
+Applied to for-next, thanks!
 
 
---+QahgC5+KEYLbs62
+--TRYliJ5NKNqkz5bu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl56dDcACgkQFA3kzBSg
-Kbb8uBAAr4Rj+iNo4B83HNFlyS8aXWxRCoZFedr5/tcsGUWZpn/P9QnqEUwZytqA
-Duz4QoJc/qKZh1T9xW2f1LLDNC91v5SUVfDaVSDtvgnoq883ZwywMoX5XSwXBxKR
-zY7kRu9VI69omQS9HpeA0mXMMiaTTdj5FTJQWalhX23YwTevJ7uMyzaQzDb6Th55
-pFYL1uAqAT/5s5qhrr18wZAR0IH2MtxVSQRs+Z3a5ZdmOXMNPpqt9Bdol7Xd9o+P
-3W/nsAyybejOEgFU1ylMCmyIioCpEgrebjKc2szjzx8dmA94V1LBYPMhRJPJS5T+
-DksosmGvkmJySlwZdltCbte3Q0Kj57PQVZ5KSCI6JQUnsGPnpC4+JgvixW2c/UWr
-TZIeF22qxBiHf2y3RQFK1QxHr+y03n0jLFSZ/NIWo4iS0YMK11nft0/8SVzlFWep
-fLjwx6DCR9rrhjV703eyaXxJQVsvhbz7QfpO97V6Mr9nQbTDr5qsnXa192HwCDlj
-JxFbpmeFG3tUXTTFLCv0+29/WIa8fQaAJZfBFpw1Ym//p3hhq/mT9jHvFm6uTVV3
-53dUeJ5CqW/NNk/JPucQZA0nOLtrIflV0/E1BEfce2ew8EWF2v8IHv0menDqRV+O
-Ks0yGLDYcgmdAN0FOrZEp14YRTPS00riZLtkYu5oQZzoiIOi9O4=
-=2692
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl56dwgACgkQFA3kzBSg
+KbbTRA/8DiL8b/xtrRSrXFUjBR2im8oXX3QC2PlLZWGdORKM0wPhjGidIVbEQDS9
+L/uDl+bTurkTJ5j20dSnaSqU0X28y80yq5dWpxmZ7+aJtYHYXJsbVkb039TZ1QGJ
+4UrcmVa+jN6t/6UFmgbVnPHY4kPEXfYFzuPEOYJY6q+K5tXUZBTAJ0uDbzY3Eifd
+FfvvX6DxUW6q1F3WGXeWDMm5meqhSirKXatxNiyArRf75Hpx2dNuKwtOBYm4Izb+
+VRihO7ySsNprX1ZFrVvvSTuyOwuqhpARWSR3z/hdZJU1/pmrgh1pePDWPgnA4pNi
+9OgVilxEDSx8mbE3ibRV8get5UySmseLGAoqt909aoamo0fwIQd8ChMXuv8whzH0
+/Z3w4BcKG1LRSpLihRxbuBMJijUVoeaOtWCyVNjgezL1nGUqo08vEttC4LZswgqS
+tjhvV7YLK6wH7HCMlbczKPK78EuHzC2InUCqRx7ES/TC7G0wXwNzvlV5RfZXURRI
+Bv2gQpDGh+2yOd3E+d/jlyfLzydysmku21qWFamPaIVVS98v+7fLXwvzywkzSFR4
+N1WbAzXRhfMh2/3qzjOBjrEU6HVCwPBvTiIWTcTRoEshqODKWKZ/79Y2Hu3HuU0T
+wylxlBzaiN58vdfGF1wBDTqibLNGu/cCeb2tjG3h9+KwZgIfGmM=
+=/3yv
 -----END PGP SIGNATURE-----
 
---+QahgC5+KEYLbs62--
+--TRYliJ5NKNqkz5bu--
