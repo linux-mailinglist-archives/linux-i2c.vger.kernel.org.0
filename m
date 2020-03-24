@@ -2,90 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF54190732
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 09:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42E419074A
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 09:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbgCXIM7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Mar 2020 04:12:59 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:35059 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726166AbgCXIM7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Mar 2020 04:12:59 -0400
-Received: by mail-wr1-f66.google.com with SMTP id d5so7887909wrn.2
-        for <linux-i2c@vger.kernel.org>; Tue, 24 Mar 2020 01:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pBe64QqwGmfJTJzTC1TnFTjmJ3dO097sEXWT3BbQCJ8=;
-        b=KZN8UMO5LD+wBS7m9vD8NgUCOc5MAYnFXyyL4s/kCWCiQbV8WoerLp9F/HzmaA8EfT
-         2NZXZE6GxNkczY6uQ3M+WqHOMsJeESaHmd/uf4SRpg65qVxmgcd1sHXnbxUUJ8Lby0WX
-         63UbAerEwjS0R7mG1+b6gWd41dv5rb5jFJNWQPtiNndYM1MrTSM7k6m/CeD0ELPyDsyM
-         mdyLYQFERaPEish52BJ/ldHQNZ4zgLXWtS2f/CdsMmD/ZrLjB3BZK+2GR1n5b5wVD+gl
-         u6BGGKWV0ug/nx0GzaAgwlMsk13gztfj+MH6t0MG1cVVRs2ul5nUWKEnNmr15BM5DAm+
-         kl8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pBe64QqwGmfJTJzTC1TnFTjmJ3dO097sEXWT3BbQCJ8=;
-        b=nTqcXiy4givblkjn0czAa+JXx41mv/owEznOGrQ6SuEE5kzTDE3811EYOlZo6u2ekQ
-         sqqDfAfy72NZeVrLyTytAUydtMJJ3c04AdzlWqhXz0fJVXMbAuPkl9BkZ409SK0XEaD8
-         fk85Fev+epXG8GxA0wqp1W7Xakk+GF4IrgY8UMTYcHSjlcPYI2UONBtMLHikqg5KA0n4
-         pWcsVc5Cp8gx2zNvX58d4McdrR4ftzU03/4q7+2ecUYA2rf9qBBjNAgXMXSxdDVNAZz8
-         RqypKXC0Km4qDkUr9xxOCesFOUruZnxc3rDMUD+UuYc5OR2sPPcUFtAtMIOoPwUyWXkQ
-         7xVw==
-X-Gm-Message-State: ANhLgQ14BTbV2Q2pN2+L1Eh/lVR06pKL8KrV/Y56LsWKeIw9db62n68P
-        pxgg2lHTeWCXBjPsWVGwz6qePsYqG1I=
-X-Google-Smtp-Source: ADFU+vt4kyypeI2FTaTdEm0GPfpTkqJ5jv/C+uq0NyROaKLBUWk+dx4wjqLh3Cl+5F4in82QPCWLyA==
-X-Received: by 2002:adf:9071:: with SMTP id h104mr35344557wrh.359.1585037577103;
-        Tue, 24 Mar 2020 01:12:57 -0700 (PDT)
-Received: from localhost.localdomain (lfbn-nic-1-65-232.w2-15.abo.wanadoo.fr. [2.15.156.232])
-        by smtp.gmail.com with ESMTPSA id z6sm26105338wrp.95.2020.03.24.01.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 01:12:56 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [GIT PULL] at24: updates for v5.7
-Date:   Tue, 24 Mar 2020 09:12:53 +0100
-Message-Id: <20200324081253.881-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.25.0
+        id S1727132AbgCXINe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Mar 2020 04:13:34 -0400
+Received: from sauhun.de ([88.99.104.3]:47070 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727163AbgCXINd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 24 Mar 2020 04:13:33 -0400
+Received: from localhost (p54B3339A.dip0.t-ipconnect.de [84.179.51.154])
+        by pokefinder.org (Postfix) with ESMTPSA id 7B4FC2C08EF;
+        Tue, 24 Mar 2020 09:13:31 +0100 (CET)
+Date:   Tue, 24 Mar 2020 09:13:28 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v3 3/6] i2c: rcar: Consolidate timings calls in
+ rcar_i2c_clock_calculate()
+Message-ID: <20200324081328.GA1134@ninjato>
+References: <20200316154929.20886-1-andriy.shevchenko@linux.intel.com>
+ <20200316154929.20886-3-andriy.shevchenko@linux.intel.com>
+ <20200323215420.GA10635@ninjato>
+ <20200323220353.GZ1922688@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RnlQjJ0d97Da+TV1"
+Content-Disposition: inline
+In-Reply-To: <20200323220353.GZ1922688@smile.fi.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Wolfram,
+--RnlQjJ0d97Da+TV1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-please pull the following change in at24 for v5.7. This time it's just
-a single new ACPI ID.
+Hi Andy,
 
-The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
+> > Here, the initialization to 0 is missing, so some values are broken.
+>=20
+> Yes, and this is fine. They are not being used. So, the idea is, whenever=
+ we
+> pass "false" as a parameter to the function we must take care of all fiel=
+ds we
+> are using.
 
-  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
+Can be argued. Still, uninitialized values look a little sloppy IMO. I
+had a patch on top of this series to print the generated values as debug
+output, and '0' looks much more intentional there.
 
-are available in the Git repository at:
+> > Why don't we just drop the pointer and init the array directly?
+> >=20
+> > 	struct i2c_timings t =3D {
+> > 		.bus_freq_hz =3D ...
+> > 		...
+> > 	}
+>=20
+> I can do it if you think it's better. I have no strong opinion here.
+> From code prospective I guess it will be something similar anyway.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/at24-updates-for-v5.7
+I like it better. Easier to read in the code, no need for a seperate
+pointer. I can fix it locally here, though.
 
-for you to fetch changes up to 4837621cd61e6b81a182098889143c6c9a06b0f3:
+Thanks!
 
-  eeprom: at24: add TPF0001 ACPI ID for 24c1024 device (2020-02-10 11:03:39 +0100)
+   Wolfram
 
-----------------------------------------------------------------
-at24 updates for v5.7
 
-- add a new ACPI ID for 24c1024
+--RnlQjJ0d97Da+TV1
+Content-Type: application/pgp-signature; name="signature.asc"
 
-----------------------------------------------------------------
-Markus Pietrek (1):
-      eeprom: at24: add TPF0001 ACPI ID for 24c1024 device
+-----BEGIN PGP SIGNATURE-----
 
- drivers/misc/eeprom/at24.c | 1 +
- 1 file changed, 1 insertion(+)
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl55wSMACgkQFA3kzBSg
+KbbZshAAjo6h90zEoefTYiQHK2WtTdzzPLA5mRkgvntt6QUYeBEdNUzOdIRkZ9FH
+aTIcesScVXoUiiy6gthgUql+BNcI0bCY6W+3X5rWVoVreVGFS3uUizsmXIkY9EHr
+iHU7eGXYhXSj/nwNtT+yYjlX7QccJqDwjIM1OXmc5PGk1CbdwFUkppsjXng6HxQk
+SYVjxQZlyB8JwD6LCZD0XsI73X67oFoknwPAysgOh1TCR02vSilVJk+oIsUl+xtI
+78iTHwhcY/8Y5Wfu20hs+BAbAI8oAflzpblzwvypICkLJPMdFd7DBVYrNq4jLxiF
+/MgBg+uIskTn5eS0KHqnl15IdDAF2WzDJVKAZkG9uAFr5cd7B0tYOkZ2M3hNVf46
+j0MO3WELVDoDqhuBOwJgJuJsi5Yvyc7fw3O3OruBJB8z8SefGcyHfzkmb5PVWpPj
+xlvZgAkE/44i+N1yBCCKzxvR4kdssOFxkvdLRAW2//PaWH1Cd+OY5WoHk5VXOLGC
+x55x46eGJl80gnW5G9PojADqyZPrgTpT5yieN8rFDeyGgiupHSjI7BduBMcKe9Gn
+YQ/5lSgzCnwEkt4vNvblIxuMs974+2a31YoBRgeN9UjrkqSuYmC/l6HMVHpiujFB
+liKE+jqMvpCVr9+sz47K2jijyUWPfIzQamv3I+dZWxIF1k5B43E=
+=QNrw
+-----END PGP SIGNATURE-----
+
+--RnlQjJ0d97Da+TV1--
