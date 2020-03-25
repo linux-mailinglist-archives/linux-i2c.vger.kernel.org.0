@@ -2,99 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A621923D1
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Mar 2020 10:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DE7192771
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Mar 2020 12:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725907AbgCYJPE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Mar 2020 05:15:04 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46044 "EHLO mx2.suse.de"
+        id S1727279AbgCYLp2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Mar 2020 07:45:28 -0400
+Received: from mga17.intel.com ([192.55.52.151]:52302 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725903AbgCYJPE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 25 Mar 2020 05:15:04 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 950E3ABD1;
-        Wed, 25 Mar 2020 09:15:01 +0000 (UTC)
-Date:   Wed, 25 Mar 2020 10:14:57 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Harish Jenny K N <harish_kandiga@mentor.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Alexander Graf <graf@amazon.com>,
-        Peter Maydell <peter.maydell@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Phil Reid <preid@electromag.com.au>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <linux-gpio@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <qemu-devel@nongnu.org>,
-        <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v6 2/8] i2c: i801: Use GPIO_LOOKUP() helper macro
-Message-ID: <20200325101457.0fff5bb9@endymion>
-In-Reply-To: <20200324135653.6676-2-geert+renesas@glider.be>
-References: <20200324135328.5796-1-geert+renesas@glider.be>
-        <20200324135653.6676-1-geert+renesas@glider.be>
-        <20200324135653.6676-2-geert+renesas@glider.be>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1726313AbgCYLp2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 25 Mar 2020 07:45:28 -0400
+IronPort-SDR: SSQCXVZTQoGTTgtIergnhl8vLsAhsyKIiqHbhcE0UXVfcGDMT7xO1zYn/y9efJIhHwQD64MH90
+ E5D6+JGyTM/g==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 04:45:28 -0700
+IronPort-SDR: OSzoowj66qDfrFrPJMR2bQE1On/mvQ2xGiNjuZaMTUyvaZir6eL4PCU21dBKvxohuq34NySs1a
+ +4aheidMzaaQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,304,1580803200"; 
+   d="scan'208";a="238501662"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Mar 2020 04:45:26 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jH4TR-00Co9H-J4; Wed, 25 Mar 2020 13:45:29 +0200
+Date:   Wed, 25 Mar 2020 13:45:29 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v1 1/2] i2c: designware: Make master module optional
+Message-ID: <20200325114529.GU1922688@smile.fi.intel.com>
+References: <20200323100451.28808-1-andriy.shevchenko@linux.intel.com>
+ <c3d2d5ff-605a-bdb7-275b-872fdfd10ccd@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c3d2d5ff-605a-bdb7-275b-872fdfd10ccd@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 24 Mar 2020 14:56:47 +0100, Geert Uytterhoeven wrote:
-> i801_add_mux() fills in the GPIO lookup table by manually populating an
-> array of gpiod_lookup structures.  Use the existing GPIO_LOOKUP() helper
-> macro instead, to relax a dependency on the gpiod_lookup structure's
-> member names.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: linux-i2c@vger.kernel.org
-> ---
-> While this patch is a dependency for "[PATCH v6 4/8] gpiolib: Add
-> support for GPIO lookup by line name", it can be applied independently.
-> But an Acked-by would be nice, too.
-> 
-> Cover letter and full series at
-> https://lore.kernel.org/r/20200324135328.5796-1-geert+renesas@glider.be/
-> 
-> v6:
->   - New.
-> ---
->  drivers/i2c/busses/i2c-i801.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index ca4f096fef749302..8e64a71bea684cc7 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1444,9 +1444,9 @@ static int i801_add_mux(struct i801_priv *priv)
->  		return -ENOMEM;
->  	lookup->dev_id = "i2c-mux-gpio";
->  	for (i = 0; i < mux_config->n_gpios; i++) {
-> -		lookup->table[i].chip_label = mux_config->gpio_chip;
-> -		lookup->table[i].chip_hwnum = mux_config->gpios[i];
-> -		lookup->table[i].con_id = "mux";
-> +		lookup->table[i] = (struct gpiod_lookup)
-> +			GPIO_LOOKUP(mux_config->gpio_chip,
-> +				    mux_config->gpios[i], "mux", 0);
->  	}
->  	gpiod_add_lookup_table(lookup);
->  	priv->lookup = lookup;
+On Wed, Mar 25, 2020 at 09:47:47AM +0200, Jarkko Nikula wrote:
+> On 3/23/20 12:04 PM, Andy Shevchenko wrote:
+> > In some cases we know that the controller will be always used in slave mode and
+> > master is just a bulk. In order to drop that, introduce a separate configuration
+> > parameter for master mode. Default it to core to avoid regressions.
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> I think we should go to a opposite direction - reduce the number of
+> I2C_DESIGNWARE_ config options rather than add new ones. We already have 5
+> config options for it.
+> 
+> Size of i2c-designware-core.ko is around 12 kB with all master, slave and
+> Baytrail semaphore code built in so I don't think it justifies the added
+> config complexity. I think distributions will have anyway all of those
+> options set.
+
+I would rather go with conditional based on I²C generic options, like I2C_SLAVE.
+Do we have something similar for master?
+
+> Having those code in separate modules and load only when needed might make
+> sense as that would save a few kB of RAM.
+
+...which makes sense for embedded systems where exactly the device represents
+I²C slave.
 
 -- 
-Jean Delvare
-SUSE L3 Support
+With Best Regards,
+Andy Shevchenko
+
+
