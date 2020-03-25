@@ -2,78 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C24DF19325B
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Mar 2020 22:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDEBE1932F4
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Mar 2020 22:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727356AbgCYVJw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Mar 2020 17:09:52 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:48478 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727253AbgCYVJw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Mar 2020 17:09:52 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 85E2A80307C2;
-        Wed, 25 Mar 2020 21:09:50 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Cv3gjaAA1V8B; Thu, 26 Mar 2020 00:09:49 +0300 (MSK)
-Date:   Thu, 26 Mar 2020 00:09:41 +0300
-From:   Sergey Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/6] dt-bindings: i2c: dw: Add Baikal-T1 SoC I2C
- controller
-Message-ID: <20200325210941.x6wqnlmauxmfkd4j@ubsrv2.baikal.int>
-References: <20200306131955.12806-1-Sergey.Semin@baikalelectronics.ru>
- <20200306132018.C268A8030792@mail.baikalelectronics.ru>
- <20200312214340.GA30360@bogus>
+        id S1726947AbgCYVnP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Mar 2020 17:43:15 -0400
+Received: from mga03.intel.com ([134.134.136.65]:63303 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726081AbgCYVnP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 25 Mar 2020 17:43:15 -0400
+IronPort-SDR: /b3txDayFS56iiHaWEwLVWhH4luxKlprVKcIXo1i1htyxAcGbQio+HMVGKhpmxBXhMhRgDy685
+ tpVDRh6mEkSw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 14:43:15 -0700
+IronPort-SDR: rr/bCDLMnTYSC/0Kfbcst1ekWyjOZ+ZADNTJxnI2myZ1rKDjnbMzJyGsjJ+WOrqXyTkzAZ8k1/
+ TgPtjm/L5djA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,305,1580803200"; 
+   d="scan'208";a="357946830"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Mar 2020 14:43:13 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jHDnw-00Cwo5-B4; Wed, 25 Mar 2020 23:43:16 +0200
+Date:   Wed, 25 Mar 2020 23:43:16 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH v2 1/4] i2c: mux: pca954x: Refactor pca954x_irq_handler()
+Message-ID: <20200325214316.GJ1922688@smile.fi.intel.com>
+References: <20200316160724.37596-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200312214340.GA30360@bogus>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200316160724.37596-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 04:43:40PM -0500, Rob Herring wrote:
-> On Fri, 6 Mar 2020 16:19:52 +0300, <Sergey.Semin@baikalelectronics.ru> wrote:
-> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > Just add the "be,bt1-i2c" compatible string to the bindings. The rest of
-> > the DW APB I2C properties can be freely used to describe the Baikal-T1
-> > I2C controller dts-node.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Paul Burton <paulburton@kernel.org>
-> > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > ---
-> >  Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
+On Mon, Mar 16, 2020 at 06:07:21PM +0200, Andy Shevchenko wrote:
+> Refactor pca954x_irq_handler() to:
+>   - use for_each_set_bit() macro
+>   - use IRQ_RETVAL() macro
 > 
-> Acked-by: Rob Herring <robh@kernel.org>
+> Above change makes code easy to read and understand.
 
-Seeing you and us having doubts regarding our vendor prefix and the
-corresponding patch still hasn't been accepted, in the next patchset release
-perhaps I will have to change the compatible string of this driver. It depends
-on a result of the discussion: https://lkml.org/lkml/2020/3/13/239
+Peter, does this series good in your opinion?
 
-Rob, could you get back to it, so we could come up with a solution?
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: masked pending to prevent handling of spurious IRQs (Peter)
+>  drivers/i2c/muxes/i2c-mux-pca954x.c | 17 +++++++----------
+>  1 file changed, 7 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> index a0d926ae3f86..b764c7c746e9 100644
+> --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
+> +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> @@ -327,21 +327,18 @@ static DEVICE_ATTR_RW(idle_state);
+>  static irqreturn_t pca954x_irq_handler(int irq, void *dev_id)
+>  {
+>  	struct pca954x *data = dev_id;
+> -	unsigned int child_irq;
+> -	int ret, i, handled = 0;
+> +	unsigned long pending;
+> +	int ret, i;
+>  
+>  	ret = i2c_smbus_read_byte(data->client);
+>  	if (ret < 0)
+>  		return IRQ_NONE;
+>  
+> -	for (i = 0; i < data->chip->nchans; i++) {
+> -		if (ret & BIT(PCA954X_IRQ_OFFSET + i)) {
+> -			child_irq = irq_linear_revmap(data->irq, i);
+> -			handle_nested_irq(child_irq);
+> -			handled++;
+> -		}
+> -	}
+> -	return handled ? IRQ_HANDLED : IRQ_NONE;
+> +	pending = (ret >> PCA954X_IRQ_OFFSET) & (BIT(data->chip->nchans) - 1);
+> +	for_each_set_bit(i, &pending, data->chip->nchans)
+> +		handle_nested_irq(irq_linear_revmap(data->irq, i));
+> +
+> +	return IRQ_RETVAL(pending);
+>  }
+>  
+>  static int pca954x_irq_set_type(struct irq_data *idata, unsigned int type)
+> -- 
+> 2.25.1
+> 
 
-Currently most of our team members are leaning towards "baikal,t1" = "vendor,chip"
-prefixes to all the SoC specific devices. So the Baikal-T1 I2C compatible string
-would be renamed to "baikal,t1-i2c". What do you think?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Regards,
--Sergey
+
