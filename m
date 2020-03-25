@@ -2,71 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBA7193040
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Mar 2020 19:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAB6193086
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Mar 2020 19:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727177AbgCYSVS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Mar 2020 14:21:18 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:47894 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727006AbgCYSVS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Mar 2020 14:21:18 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id C62C28030779;
-        Wed, 25 Mar 2020 18:21:10 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id yubzH7thvEhz; Wed, 25 Mar 2020 21:21:10 +0300 (MSK)
-Date:   Wed, 25 Mar 2020 21:21:01 +0300
-From:   Sergey Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Wolfram Sang <wsa@the-dreams.de>
-CC:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/6] i2c: designware: Add Baikal-T1 SoC I2C controller
- support
-Message-ID: <20200325182101.k47u4cjnbv6knsag@ubsrv2.baikal.int>
-References: <20200306131955.12806-1-Sergey.Semin@baikalelectronics.ru>
- <20200306132348.71E638030793@mail.baikalelectronics.ru>
- <20200321183349.GC5632@ninjato>
+        id S1727346AbgCYSg1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Mar 2020 14:36:27 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:14496 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727129AbgCYSg0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Mar 2020 14:36:26 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02PIMLoR009691;
+        Wed, 25 Mar 2020 19:36:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=4smaSaGfx0ev3ozXhDm/hbuZrYNRElVuP+FA/ERuJiw=;
+ b=ByJ3yaD+xINB9VaUHJ/PwlGxKeGleD3vbhjgasPCzJ8qEzXCFhY2U/N1P5DaDMa0wgop
+ Yjm3ep8OrMG79/KbRe7bMxVXw5si2a9hVYZPhgNNKNzeVg+ONNRIuKoyvNRajrS7gB1P
+ j0RXM2+Ih1W/F+Yu0Xz9LCJDpA5SdEtf17gSQ7uurKqEv3jCddjomxh4+kcTsm56kBVI
+ kd52NyWwxGSu8C03L4WsyC/TML0d99vF30GTndQ6RY1+CT8E7CQhiMHmJe5J3nn7oTNw
+ UE7cHLTb5cacry8+s9eakpmAIpUiS6QA5G73Vl8Bl6+wC36coRy1G8BFj3ZtaoTppf0r Yg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2yw8xe7eq5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Mar 2020 19:36:11 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D9CAF10002A;
+        Wed, 25 Mar 2020 19:36:10 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B4C792AD2DB;
+        Wed, 25 Mar 2020 19:36:10 +0100 (CET)
+Received: from localhost (10.75.127.44) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 25 Mar 2020 19:36:10
+ +0100
+From:   Alain Volmat <alain.volmat@st.com>
+To:     <wsa@the-dreams.de>, <robh+dt@kernel.org>
+CC:     <mark.rutland@arm.com>, <pierre-yves.mordret@st.com>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>,
+        <alain.volmat@st.com>
+Subject: [PATCH 0/2] i2c: i2c-stm32f7: allow range of I2C bus frequency
+Date:   Wed, 25 Mar 2020 19:35:59 +0100
+Message-ID: <1585161361-3408-1-git-send-email-alain.volmat@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200321183349.GC5632@ninjato>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG5NODE3.st.com (10.75.127.15) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-25_09:2020-03-24,2020-03-25 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Mar 21, 2020 at 07:33:49PM +0100, Wolfram Sang wrote:
-> On Fri, Mar 06, 2020 at 04:19:58PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > A third I2C controller embedded into the Baikal-T1 SoC is also fully
-> > based on the DW APB I2C core, but its registers are indirectly
-> > accessible via "command/data in/data out" trio. There is no difference
-> > other than that. So in order to have that controller supported by the
-> > common DW APB I2C driver we only need to introduce a new flag
-> > ACCESS_INDIRECT and use the access-registers to reach the I2C controller
-> > normal registers space in the dw_readl/dw_writel methods. Currently this
-> > flag is only enabled for the controllers with "be,bt1-i2c" compatible
-> > string.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> 
-> Patches 2,3, and 6 have comments which should be addressed. Patches 4+5
-> can be dropped when sending next version.
-> 
+This serie introduces the possibility to set bus frequency other
+than 100KHz, 400KHz and 1MHz.
 
-Great! Thanks. I'll have respond on the requests very soon.
+Alain Volmat (2):
+  dt-bindings: i2c: i2c-stm32f7: allow clock-frequency range
+  i2c: i2c-stm32f7: allows for any bus frequency
 
-Regards,
--Sergey
+ .../devicetree/bindings/i2c/st,stm32-i2c.yaml |   8 +-
+ drivers/i2c/busses/i2c-stm32f7.c              | 116 +++++++++---------
+ 2 files changed, 65 insertions(+), 59 deletions(-)
+
