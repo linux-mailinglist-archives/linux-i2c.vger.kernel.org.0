@@ -2,80 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78195191C2C
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Mar 2020 22:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E61191E5F
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Mar 2020 02:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbgCXVrg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Mar 2020 17:47:36 -0400
-Received: from sauhun.de ([88.99.104.3]:55502 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727023AbgCXVrg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 24 Mar 2020 17:47:36 -0400
-Received: from localhost (p54B3339A.dip0.t-ipconnect.de [84.179.51.154])
-        by pokefinder.org (Postfix) with ESMTPSA id AA43C2C08EF;
-        Tue, 24 Mar 2020 22:47:34 +0100 (CET)
-Date:   Tue, 24 Mar 2020 22:47:34 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     ajayg@nvidia.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:I2C CONTROLLER DRIVER FOR NVIDIA GPU" 
-        <linux-i2c@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] i2c: nvidia-gpu: Handle timeout correctly in
- gpu_i2c_check_status()
-Message-ID: <20200324214734.GI7641@ninjato>
-References: <20200324152812.20231-1-kai.heng.feng@canonical.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="K1SnTjlYS/YgcDEx"
-Content-Disposition: inline
-In-Reply-To: <20200324152812.20231-1-kai.heng.feng@canonical.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727113AbgCYBFR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Mar 2020 21:05:17 -0400
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:54817 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727119AbgCYBFR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Mar 2020 21:05:17 -0400
+Received: from Internal Mail-Server by MTLPINE2 (envelope-from kblaiech@mellanox.com)
+        with ESMTPS (AES256-SHA encrypted); 25 Mar 2020 03:05:14 +0200
+Received: from farm-1.mtbu.labs.mlnx (farm-1.mtbu.labs.mlnx [10.15.2.31])
+        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 02P15CmK004060;
+        Tue, 24 Mar 2020 21:05:12 -0400
+Received: (from kblaiech@localhost)
+        by farm-1.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 02P15Bpa024343;
+        Tue, 24 Mar 2020 21:05:11 -0400
+From:   Khalil Blaiech <kblaiech@mellanox.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh@kernel.org>, linux-i2c@vger.kernel.org
+Cc:     Khalil Blaiech <kblaiech@mellanox.com>,
+        Vadim Pasternak <vadimp@mellanox.com>
+Subject: [PATCH v7 0/2] i2c: add driver for Mellanox BlueField SoC
+Date:   Tue, 24 Mar 2020 21:05:06 -0400
+Message-Id: <cover.1585095702.git.kblaiech@mellanox.com>
+X-Mailer: git-send-email 2.1.2
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Add I2C SMBus driver and device tree bindings documentation.
 
---K1SnTjlYS/YgcDEx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The Mellanox BlueField is a System-on-Chip (SoC) that combines
+Arm cores and ConnectX network adapter technology intended to
+accelerate storage network solutions. The Mellanox BlueField
+incorporates various I2C devices that are accessed using SMBus
+protocol, a variant of the I2C protocol. On storage controllers,
+the BlueField SoC is connected to a management controller board,
+e.g., BMC via an I2C bus.
 
-On Tue, Mar 24, 2020 at 11:28:11PM +0800, Kai-Heng Feng wrote:
-> Nvidia card may come with a "phantom" UCSI device, and its driver gets
-> stuck in probe routine, prevents any system PM operations like suspend.
->=20
-> There's an unaccounted case that the target time can equal to jiffies in
-> gpu_i2c_check_status(), let's solve that by using readl_poll_timeout()
-> instead of jiffies comparison functions.=20
->=20
-> Fixes: c71bcdcb42a7 ("i2c: add i2c bus driver for NVIDIA GPU")
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+An I2C driver running on the Arm side is needed to manage the
+hardware I2C controllers. The driver enables a master function
+to transfer data back and forth from/to I2C devices, such as
+EEPROM parts and implements a slave function to handle the BMC
+controller requests.
 
-Applied to for-current, thanks!
+v6->v7:
+	- Fixing kernel coding style issues as suggested by
+	Mellanox internal code reviewers.
+        - Updating the dependency expression in Kconfig.
+        - Fixing various device driver bugs.
+        - Adding an entry to MAINTAINERS file.
+v5->v6:
+        - Fixing kernel coding style issues detected using
+        '--strict' flag.
+	- Updating the device binding documentation to add
+	support for BlueField-2 SoCs.
+v4->v5:
+        - Fixing device driver bug.
+v3->v4:
+	- Review of the device binding documentation to
+	fix format issue and miscellaneous cleanup.
+v2->v3:
+	- Various device driver changes and bug fixes.
+	- Updating the device property in the device binding
+	documentation and file format review.
+v1->v2:
+        - Various device driver changes and bug fixes.
+	- Cleanup of the device binding documentation.
+	
 
+Khalil Blaiech (2):
+  i2c: i2c-mlxbf: I2C SMBus driver for Mellanox BlueField SoC
+  dt-bindings: i2c: I2C binding for Mellanox BlueField SoC
 
---K1SnTjlYS/YgcDEx
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt |   42 +
+ MAINTAINERS                                        |    6 +
+ drivers/i2c/busses/Kconfig                         |   13 +
+ drivers/i2c/busses/Makefile                        |    1 +
+ drivers/i2c/busses/i2c-mlxbf.c                     | 2506 ++++++++++++++++++++
+ 5 files changed, 2568 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
+ create mode 100644 drivers/i2c/busses/i2c-mlxbf.c
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.1.2
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl56f/YACgkQFA3kzBSg
-KbZ5Xw//cOoQa5Y+68tFpZVVLo4CYZCEFIq6rdbNvDMTfJ1zoRXnGBVVO+E/og2s
-Rw3H1V2XIPWhBMlHc/2muuYoP+tNC/O0OV5XWqwPxfCpxhgpoJ4G0MB+MwCTYYH/
-80JeHyvzFNJ/2yJ2vBZRABwnuPdytS8JFADcfMTj2zaK0PDjk49b0Bl6jsAPwK97
-VDDvK8pfF0Qlr97uuU3W1v3OqPqd08B4iOneHGmSdAYS7igDXyKa0+9xmZcT+u1m
-r45F94Co72onsdEmHd5YrzX+KBLztJiERIxgFU89WoUdRDtOkAn0YjgBgan76pPy
-31qtlnJ8x+iRx8R25SnSHVKKfAWPY6Y1pEDJAQWFNpXszjkIa8vSBtnmHe1y7Fbl
-YPFI2I0GHYThxo6B55ivOqHcbotei6/VCTrH05GzcL4qtD4LT6Q6EoSDzghEnh2a
-yrLnnnyQ4Qp2H1ZVx4odW8xrmOLTnnC893jr84tihhDHcYCC6AhxQfmxNq/xiy95
-nVyxm4+804cpSill84Za4lquz2DVQaj80KZJkrUiAKFG/yagvWdiHXPL41bfcElG
-5+Koioad3cw4dc6Bczdb6WrKIcwjZ4dqKtDOpHtEVaY3AvZFXFi3iQfPXc/YvEC+
-AwLMCii1mhUHwSrZ+xK9A0HLsciLjKcYe/jH1XO0MemHKaP/xJo=
-=gmtZ
------END PGP SIGNATURE-----
-
---K1SnTjlYS/YgcDEx--
