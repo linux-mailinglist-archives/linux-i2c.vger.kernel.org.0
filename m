@@ -2,127 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E685F191E60
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Mar 2020 02:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1871921E3
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Mar 2020 08:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727196AbgCYBFR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Mar 2020 21:05:17 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:44431 "EHLO
-        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727113AbgCYBFR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Mar 2020 21:05:17 -0400
-Received: from Internal Mail-Server by MTLPINE1 (envelope-from kblaiech@mellanox.com)
-        with ESMTPS (AES256-SHA encrypted); 25 Mar 2020 03:05:14 +0200
-Received: from farm-1.mtbu.labs.mlnx (farm-1.mtbu.labs.mlnx [10.15.2.31])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 02P15CxQ004066;
-        Tue, 24 Mar 2020 21:05:12 -0400
-Received: (from kblaiech@localhost)
-        by farm-1.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 02P15Cfe024345;
-        Tue, 24 Mar 2020 21:05:12 -0400
-From:   Khalil Blaiech <kblaiech@mellanox.com>
-To:     Rob Herring <robh@kernel.org>, linux-i2c@vger.kernel.org
-Cc:     Khalil Blaiech <kblaiech@mellanox.com>,
-        Vadim Pasternak <vadimp@mellanox.com>
-Subject: [PATCH v7 2/2] dt-bindings: i2c: I2C binding for Mellanox BlueField SoC
-Date:   Tue, 24 Mar 2020 21:05:08 -0400
-Message-Id: <c42ae72cdae9bd2bdc454676b7ddd890a06d17a9.1585095702.git.kblaiech@mellanox.com>
-X-Mailer: git-send-email 2.1.2
-In-Reply-To: <cover.1585095702.git.kblaiech@mellanox.com>
-References: <cover.1585095702.git.kblaiech@mellanox.com>
-In-Reply-To: <cover.1585095702.git.kblaiech@mellanox.com>
-References: <cover.1585095702.git.kblaiech@mellanox.com>
+        id S1726116AbgCYHru (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Mar 2020 03:47:50 -0400
+Received: from mga06.intel.com ([134.134.136.31]:26435 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726104AbgCYHru (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 25 Mar 2020 03:47:50 -0400
+IronPort-SDR: upuYQNI6HogEp+0+muM9yx7ibuwXFnLhSQS1JEVDlYdy4v7jWekMCAEnBWvRsOzzDUNElniuZN
+ Wna/tectSZrA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 00:47:49 -0700
+IronPort-SDR: CWKDasrNs9k2+ejwz0Gb0z2d6E3sPq7aCoal4qYRYOiKyZVTLFTJ2Lo64hUG8B8bq75bOq+VfP
+ MRqXrYNnScog==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,303,1580803200"; 
+   d="scan'208";a="247069010"
+Received: from mylly.fi.intel.com (HELO [10.237.72.51]) ([10.237.72.51])
+  by orsmga003.jf.intel.com with ESMTP; 25 Mar 2020 00:47:48 -0700
+Subject: Re: [PATCH v1 1/2] i2c: designware: Make master module optional
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+References: <20200323100451.28808-1-andriy.shevchenko@linux.intel.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <c3d2d5ff-605a-bdb7-275b-872fdfd10ccd@linux.intel.com>
+Date:   Wed, 25 Mar 2020 09:47:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20200323100451.28808-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Added device tree bindings documentation for Mellanox BlueField
-I2C SMBus controller.
+On 3/23/20 12:04 PM, Andy Shevchenko wrote:
+> In some cases we know that the controller will be always used in slave mode and
+> master is just a bulk. In order to drop that, introduce a separate configuration
+> parameter for master mode. Default it to core to avoid regressions.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>   drivers/i2c/busses/Kconfig                  | 10 ++++++++++
+>   drivers/i2c/busses/Makefile                 |  5 ++++-
+>   drivers/i2c/busses/i2c-designware-core.h    | 19 ++++++++++++++++++-
+>   drivers/i2c/busses/i2c-designware-master.c  |  4 ++--
+>   drivers/i2c/busses/i2c-designware-pcidrv.c  |  2 +-
+>   drivers/i2c/busses/i2c-designware-platdrv.c |  6 +-----
+>   6 files changed, 36 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 2ddca08f8a76..1df238ff8dd0 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -527,6 +527,16 @@ config I2C_DAVINCI
+>   config I2C_DESIGNWARE_CORE
+>   	tristate
+>   
+> +config I2C_DESIGNWARE_MASTER
+> +	bool "Synopsys DesignWare Master"
+> +	default I2C_DESIGNWARE_CORE
+> +	help
+> +	  If you say yes to this option, support will be included for the
+> +	  Synopsys DesignWare I2C master adapter.
+> +
+> +	  This is not a standalone module, this module compiles together with
+> +	  i2c-designware-core.
+> +
 
-Signed-off-by: Khalil Blaiech <kblaiech@mellanox.com>
+I think we should go to a opposite direction - reduce the number of 
+I2C_DESIGNWARE_ config options rather than add new ones. We already have 
+5 config options for it.
 
-v5->v6:
-	- Adding description of an extra resource to be
-	consistent with new BlueField-2 SoCs.
-	- Adding an additional example of device instance.
-v3->v4:
-	- Re-ordering of the property descriptions.
-	- Removing useless register addresses from the
-	resource description.
-	- Definition of default clock-frequency value.
-	- Fixing format issues; removing spaces.
-	- Removing "aliases" from Example section.
-	- Renaming device instance node in Example section.
-v2->v3:
-	- Removing shared resources from the controller
-	instance.
-	- Updating the 'compatible' property and support the
-	second generation of the Mellanox BlueField SoC.
-	- Fixing file format; replacing spaces with tabs.
-v1->v2:
-	- Enumeration of the device resources.
-	- Updating the 'compatible' property to make it less
-	generic.
-	- Removing the 'bus' index property and replace it with
-	standard approach to read the bus identifier.
-	- Getting rid of the 'profile' property.
-	- Using 'clock-frequency' property instead of 'bus-freq'.
-	- Convertion of the clock frequency from KHz to Hz.
-	- Removing useless examples.
+Size of i2c-designware-core.ko is around 12 kB with all master, slave 
+and Baytrail semaphore code built in so I don't think it justifies the 
+added config complexity. I think distributions will have anyway all of 
+those options set.
 
----
- .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
+Having those code in separate modules and load only when needed might 
+make sense as that would save a few kB of RAM.
 
-diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
-new file mode 100644
-index 0000000..566ea86
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
-@@ -0,0 +1,42 @@
-+Device tree configuration for the Mellanox I2C SMBus on BlueField SoCs
-+
-+Required Properties:
-+
-+- compatible : should be "mellanox,i2c-mlxbf1" or "mellanox,i2c-mlxbf2".
-+
-+- reg : address offset and length of the device registers. The
-+	registers consist of the following set of resources:
-+		1) Smbus block registers.
-+		2) Cause master registers.
-+		3) Cause slave registers.
-+		4) Cause coalesce registers (if compatible isn't set
-+		   to "mellanox,i2c-mlxbf1").
-+
-+- interrupts : interrupt number.
-+
-+Optional Properties:
-+
-+- clock-frequency : bus frequency used to configure timing registers;
-+			allowed values are 100000, 400000 and 1000000;
-+			those are expressed in Hz. Default is 100000.
-+
-+Example:
-+
-+i2c@2804000 {
-+	compatible = "mellanox,i2c-mlxbf1";
-+	reg =	<0x02804000 0x800>,
-+		<0x02801200 0x020>,
-+		<0x02801260 0x020>;
-+	interrupts = <57>;
-+	clock-frequency = <100000>;
-+};
-+
-+i2c@2808800 {
-+	compatible = "mellanox,i2c-mlxbf2";
-+	reg =	<0x02808800 0x600>,
-+	        <0x02808e00 0x020>,
-+		<0x02808e20 0x020>,
-+		<0x02808e40 0x010>;
-+	interrupts = <57>;
-+	clock-frequency = <400000>;
-+};
 -- 
-2.1.2
-
+Jarkko
