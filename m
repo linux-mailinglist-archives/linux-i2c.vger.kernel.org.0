@@ -2,33 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF554194A1E
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Mar 2020 22:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9118C194A27
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Mar 2020 22:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbgCZVLh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Mar 2020 17:11:37 -0400
+        id S1727833AbgCZVMB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Mar 2020 17:12:01 -0400
 Received: from sauhun.de ([88.99.104.3]:54372 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727905AbgCZVKH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 26 Mar 2020 17:10:07 -0400
+        id S1727865AbgCZVKD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 26 Mar 2020 17:10:03 -0400
 Received: from localhost (p54B3331F.dip0.t-ipconnect.de [84.179.51.31])
-        by pokefinder.org (Postfix) with ESMTPSA id F1D592C1F94;
-        Thu, 26 Mar 2020 22:10:05 +0100 (CET)
+        by pokefinder.org (Postfix) with ESMTPSA id BECFA2C1F89;
+        Thu, 26 Mar 2020 22:10:01 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "David (ChunMing) Zhou" <David1.Zhou@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/6] drm/amdgpu: convert to use i2c_new_client_device()
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] igb: convert to use i2c_new_client_device()
 Date:   Thu, 26 Mar 2020 22:09:59 +0100
-Message-Id: <20200326211005.13301-2-wsa+renesas@sang-engineering.com>
+Message-Id: <20200326211001.13171-2-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200326211005.13301-1-wsa+renesas@sang-engineering.com>
-References: <20200326211005.13301-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20200326211001.13171-1-wsa+renesas@sang-engineering.com>
+References: <20200326211001.13171-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
@@ -36,26 +34,33 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Move away from the deprecated API.
+Move away from the deprecated API and return the shiny new ERRPTR where
+useful.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_dpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/igb/igb_hwmon.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_dpm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_dpm.c
-index ba1bb95a3cf9..0e8018c9aa8e 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_dpm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_dpm.c
-@@ -856,7 +856,7 @@ void amdgpu_add_thermal_controller(struct amdgpu_device *adev)
- 				const char *name = pp_lib_thermal_controller_names[controller->ucType];
- 				info.addr = controller->ucI2cAddress >> 1;
- 				strlcpy(info.type, name, sizeof(info.type));
--				i2c_new_device(&adev->pm.i2c_bus->adapter, &info);
-+				i2c_new_client_device(&adev->pm.i2c_bus->adapter, &info);
- 			}
- 		} else {
- 			DRM_INFO("Unknown thermal controller type %d at 0x%02x %s fan control\n",
+diff --git a/drivers/net/ethernet/intel/igb/igb_hwmon.c b/drivers/net/ethernet/intel/igb/igb_hwmon.c
+index 3b83747b2700..21a29a0ca7f4 100644
+--- a/drivers/net/ethernet/intel/igb/igb_hwmon.c
++++ b/drivers/net/ethernet/intel/igb/igb_hwmon.c
+@@ -198,11 +198,11 @@ int igb_sysfs_init(struct igb_adapter *adapter)
+ 	}
+ 
+ 	/* init i2c_client */
+-	client = i2c_new_device(&adapter->i2c_adap, &i350_sensor_info);
+-	if (client == NULL) {
++	client = i2c_new_client_device(&adapter->i2c_adap, &i350_sensor_info);
++	if (IS_ERR(client)) {
+ 		dev_info(&adapter->pdev->dev,
+ 			 "Failed to create new i2c device.\n");
+-		rc = -ENODEV;
++		rc = PTR_ERR(client);
+ 		goto exit;
+ 	}
+ 	adapter->i2c_client = client;
 -- 
 2.20.1
 
