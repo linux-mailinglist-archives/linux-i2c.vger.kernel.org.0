@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A346194A11
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Mar 2020 22:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A058194A33
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Mar 2020 22:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727752AbgCZVJy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Mar 2020 17:09:54 -0400
-Received: from sauhun.de ([88.99.104.3]:54332 "EHLO pokefinder.org"
+        id S1727724AbgCZVMb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Mar 2020 17:12:31 -0400
+Received: from sauhun.de ([88.99.104.3]:54342 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726034AbgCZVJx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S1726496AbgCZVJx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
         Thu, 26 Mar 2020 17:09:53 -0400
 Received: from localhost (p54B3331F.dip0.t-ipconnect.de [84.179.51.31])
-        by pokefinder.org (Postfix) with ESMTPSA id 234122C1F8B;
+        by pokefinder.org (Postfix) with ESMTPSA id B20A02C1F84;
         Thu, 26 Mar 2020 22:09:51 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Isely <isely@pobox.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/6] media: usb: hdpvr: convert to use i2c_new_client_device()
-Date:   Thu, 26 Mar 2020 22:09:45 +0100
-Message-Id: <20200326210947.12747-6-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 6/6] media: usb: pvrusb2: convert to use i2c_new_client_device()
+Date:   Thu, 26 Mar 2020 22:09:46 +0100
+Message-Id: <20200326210947.12747-7-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200326210947.12747-1-wsa+renesas@sang-engineering.com>
 References: <20200326210947.12747-1-wsa+renesas@sang-engineering.com>
@@ -33,44 +33,35 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Move away from the deprecated API and return the shiny new ERRPTR where
-useful.
+Move away from the deprecated API.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/media/usb/hdpvr/hdpvr-core.c | 4 ++--
- drivers/media/usb/hdpvr/hdpvr-i2c.c  | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/hdpvr/hdpvr-core.c b/drivers/media/usb/hdpvr/hdpvr-core.c
-index b75c18a012a7..52e05a69c46e 100644
---- a/drivers/media/usb/hdpvr/hdpvr-core.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-core.c
-@@ -363,9 +363,9 @@ static int hdpvr_probe(struct usb_interface *interface,
- 	}
- 
- 	client = hdpvr_register_ir_i2c(dev);
--	if (!client) {
-+	if (IS_ERR(client)) {
- 		v4l2_err(&dev->v4l2_dev, "i2c IR device register failed\n");
--		retval = -ENODEV;
-+		retval = PTR_ERR(client);
- 		goto reg_fail;
- 	}
- #endif
-diff --git a/drivers/media/usb/hdpvr/hdpvr-i2c.c b/drivers/media/usb/hdpvr/hdpvr-i2c.c
-index 785c8508a46e..070559b01b01 100644
---- a/drivers/media/usb/hdpvr/hdpvr-i2c.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-i2c.c
-@@ -44,7 +44,7 @@ struct i2c_client *hdpvr_register_ir_i2c(struct hdpvr_device *dev)
- 	init_data->polling_interval = 405; /* ms, duplicated from Windows */
- 	info.platform_data = init_data;
- 
--	return i2c_new_device(&dev->i2c_adapter, &info);
-+	return i2c_new_client_device(&dev->i2c_adapter, &info);
- }
- 
- static int hdpvr_i2c_read(struct hdpvr_device *dev, int bus,
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
+index 275394bafe7d..63db04fe12d3 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
+@@ -564,7 +564,7 @@ static void pvr2_i2c_register_ir(struct pvr2_hdw *hdw)
+ 		strscpy(info.type, "ir_video", I2C_NAME_SIZE);
+ 		pvr2_trace(PVR2_TRACE_INFO, "Binding %s to i2c address 0x%02x.",
+ 			   info.type, info.addr);
+-		i2c_new_device(&hdw->i2c_adap, &info);
++		i2c_new_client_device(&hdw->i2c_adap, &info);
+ 		break;
+ 	case PVR2_IR_SCHEME_ZILOG:     /* HVR-1950 style */
+ 	case PVR2_IR_SCHEME_24XXX_MCE: /* 24xxx MCE device */
+@@ -579,7 +579,7 @@ static void pvr2_i2c_register_ir(struct pvr2_hdw *hdw)
+ 		strscpy(info.type, "ir_z8f0811_haup", I2C_NAME_SIZE);
+ 		pvr2_trace(PVR2_TRACE_INFO, "Binding %s to i2c address 0x%02x.",
+ 			   info.type, info.addr);
+-		i2c_new_device(&hdw->i2c_adap, &info);
++		i2c_new_client_device(&hdw->i2c_adap, &info);
+ 		break;
+ 	default:
+ 		/* The device either doesn't support I2C-based IR or we
 -- 
 2.20.1
 
