@@ -2,81 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFE2193D76
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Mar 2020 12:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02688193DB7
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Mar 2020 12:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727781AbgCZLAo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Mar 2020 07:00:44 -0400
-Received: from sauhun.de ([88.99.104.3]:48932 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727953AbgCZLAo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 26 Mar 2020 07:00:44 -0400
-Received: from localhost (p54B3331F.dip0.t-ipconnect.de [84.179.51.31])
-        by pokefinder.org (Postfix) with ESMTPSA id A1F5E2C08C2;
-        Thu, 26 Mar 2020 12:00:42 +0100 (CET)
-Date:   Thu, 26 Mar 2020 12:00:42 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [RFC PATCH] i2c: refactor parsing of timings
-Message-ID: <20200326110042.GB1538@ninjato>
-References: <20200326101647.1756-1-wsa+renesas@sang-engineering.com>
- <20200326104701.GM1922688@smile.fi.intel.com>
+        id S1727990AbgCZLPe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Mar 2020 07:15:34 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:37911 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727688AbgCZLPe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Mar 2020 07:15:34 -0400
+Received: by mail-oi1-f194.google.com with SMTP id w2so5127548oic.5;
+        Thu, 26 Mar 2020 04:15:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hhgWZHiLvCZQylXqPbfoONkgweSkSMwYvnlW8CKimmY=;
+        b=H27aAFmq/ixt3ZZ281TizstbDIcAa3jQN/K0ssxoCFa/GP3z706a5EpoGsUBAGqAU6
+         ArIKYztoaIM/Vu2kr9EkMZgovNVgoGviMrAv9u5GfIA4xvxzLBepi/+a2RNPBuc/PwtP
+         Hdb7AFspOqCmhtvIDfqQdEU2MBt53IJgSYKjz+AIqQKJvmNjxJ9/yBTGxEa3IF/7kvq2
+         WTFlEK3p4GhzBteegd3GsWCvpnLWuPlOf3iykDUqiyBMKaw7SwS4UF3oWtbVbKyxPSoM
+         guFlVg2fq8mpkKiXtTD5S0Vb0SPZIqwFHdVDgNnt0tbvD/crcoMzVnX+ZPH1QcGCzSfJ
+         3cFg==
+X-Gm-Message-State: ANhLgQ3djQz0PKYQjqQLKown0ldY0IQQHr5XsS3mIalNdVvYNwvrSaq3
+        VXqSPcZcGfE0c91YmtMoX9N0EEuALGqJhwbQdf7nxsgu
+X-Google-Smtp-Source: ADFU+vtpW4xBBlP1DX7m28ITNU/n5RwmwkNCSP9Ck2I7ciP331jBEKSG3cvhSMmSDkjFegn1O6hWKTV32CjHkwshV/Q=
+X-Received: by 2002:aca:4e57:: with SMTP id c84mr1328778oib.148.1585221333668;
+ Thu, 26 Mar 2020 04:15:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GID0FwUMdk1T2AWN"
-Content-Disposition: inline
-In-Reply-To: <20200326104701.GM1922688@smile.fi.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200326101647.1756-1-wsa+renesas@sang-engineering.com>
+ <CAMuHMdXVy1acwXxD9C==gGve-Xb-oPbF7BOpu1BaT=1gvUTdQQ@mail.gmail.com> <20200326105241.GA1538@ninjato>
+In-Reply-To: <20200326105241.GA1538@ninjato>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 26 Mar 2020 12:15:22 +0100
+Message-ID: <CAMuHMdWmBE5qpouuJfJMvw_TuxbmnQd70CTH3RVaoK6k5eUcqw@mail.gmail.com>
+Subject: Re: [RFC PATCH] i2c: refactor parsing of timings
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram,
 
---GID0FwUMdk1T2AWN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Thu, Mar 26, 2020 at 11:52 AM Wolfram Sang <wsa@the-dreams.de> wrote:
+> > > +{
+> > > +       int ret;
+> > > +
+> > > +       ret = device_property_read_u32(dev, prop_name, cur_val_p);
+> > > +       if (ret && use_def)
+> > > +               *cur_val_p = def_val;
+> >
+> > Alternatively, you could just preinitialize the value with the default value
+> > before calling this function, and ignoring ret.
+> > That would remove the need for both the def_val and use_def parameters.
+>
+> I can't do that because if !use_def and ret, then the value must not be
+> changed.
 
+Of course the preinitialization must still be done conditionally:
 
-> However, looking into the code, I would go a bit further (perhaps as a separate
-> change) and export parsing of clock-frequency, because tons of drivers only
-> need one property, i.e. clock-frequency out of firmware.
+    if (use_defaults)
+            t->foo = DEFAULT_FOO;
+    i2c_parse_timing(dev, "foo-name", &t->foo);
 
-Cool idea. Could be easily something like this (typed from the top of my
-head):
+Gr{oetje,eeting}s,
 
-static inline u32 i2c_parse_fw_bus_speed(struct device *dev)
-{
-	u32 speed;
+                        Geert
 
-	i2c_parse_timing(dev, "clock-frequency", &speed, I2C_MAX_STANDARD_MODE_FREQ, true);
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-	return speed;
-}
-
-Or?
-
-
---GID0FwUMdk1T2AWN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl58i1oACgkQFA3kzBSg
-KbbA2Q/9G737L2tDrk5fYhU1XYx2LS0HeO+o/mzC9sjqcS19znrgxRvzySd4zcrV
-hB4LJZXFM2DQ164UK2X1iAHOYkWNwsjUBcZol2x3wSKm0N6Y9XaMBmU7Viajqgj8
-aM1KMM4OL0Nx89pl0xw7U5o3qJ2fFtrV4A3jgbjetwgCaDI29S6vtjEqSZGCsFat
-Q+DITbl6CFg/irbM4ptnw4zy2Ub60aRJ/pc5sN1JQWSbMhQifxcNdkEdXe66wPf0
-UL/FRFa/jNUYUtEKFBkjtUPVCEf2em4L/VbMFdBw5bHxsuHw/lZ5YtTcPqDTLUfC
-Hor+Dy8MtzgAlLmz+r7YYXL+tR2c6l2fAWqyAW28wemeIMZjT9wg9cWIKBrXkuPP
-HU6lllfvOlHAeAk7PZDFNxUnSxs0aExpRW3vqOVDsdFIwBKIhwj5qk/vBmBtD7E2
-3qk5xcBSDgsowyAijlejHggi2G1rLz486Es3hEj9ZEzgMNobhwRmWHtQMvRAaur/
-0D24+WhZY/fAbBFYK2ozrM0U7ddQAH6srWfjEvQMQfh2qud6ffYkHZ0/kktBJ6zy
-bzi7xuHF4av4GhLUDYxNUfQ2a98o0dTovclVzouZPeND0ps4JjzFFmzPMw5kyUNr
-1nUDS12gImZQFS88l4UW36lfqC+aCVV6HQ/AKkqD4nKjp+qtKVU=
-=O3+t
------END PGP SIGNATURE-----
-
---GID0FwUMdk1T2AWN--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
