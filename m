@@ -2,68 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CDF194A8C
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Mar 2020 22:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CF0194BB5
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Mar 2020 23:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbgCZV17 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Mar 2020 17:27:59 -0400
-Received: from mr85p00im-zteg06021901.me.com ([17.58.23.194]:50513 "EHLO
-        mr85p00im-zteg06021901.me.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727444AbgCZV17 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Mar 2020 17:27:59 -0400
-X-Greylist: delayed 307 seconds by postgrey-1.27 at vger.kernel.org; Thu, 26 Mar 2020 17:27:59 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1585257771; bh=1giZd2owGIj9cpPaRlxOyrqDeGF8FFFXZCqKHweT8Kc=;
-        h=From:To:Subject:Date:Message-Id;
-        b=KCSInXcjW3AwTJydl6bt+xudN4Eo8Vv+9YUY9qh89kVQihw7Na5Y/442yuCgpNPeQ
-         UcLWOX6DvxX1l9TFfGk7nK/mwnFcG6LTDvgM6nJNldp9Q+cnEQ2ZjS37ctQf42nUws
-         svtkyvF5N6ddzt0fhe7E+jRnYf871Exr8/GH8Kp3hHfqHABVbg5iXMJnRaN2FIWIGg
-         BOVPzU4+HNkmpBkJ3RdCOnaO9cuDCTsbKnzK+hZo+uecfTvY5bo/2pyVnCfI2Fk4wg
-         VEGZ9W8Tf8VAye3eeFMF+TZglM8YDGsO4zdLj3lN0Y7EcRH4dtHI2JAb1jcfmuPMta
-         E+5jRVYJbHxAg==
-Received: from localhost (101.220.150.77.rev.sfr.net [77.150.220.101])
-        by mr85p00im-zteg06021901.me.com (Postfix) with ESMTPSA id 6A424720842;
-        Thu, 26 Mar 2020 21:22:51 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Patrice Chotard <patrice.chotard@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     avolmat@me.com
-Subject: [PATCH] i2c: i2c-st: fix missing struct parameter description
-Date:   Thu, 26 Mar 2020 22:22:43 +0100
-Message-Id: <20200326212243.17363-1-avolmat@me.com>
-X-Mailer: git-send-email 2.17.1
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2020-03-26_13:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 clxscore=1011 mlxscore=0
- mlxlogscore=968 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1908290000 definitions=main-2003260156
+        id S1726363AbgCZWof (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Mar 2020 18:44:35 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:54708 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726359AbgCZWoe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Mar 2020 18:44:34 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 85ACB80237;
+        Fri, 27 Mar 2020 11:44:30 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1585262670;
+        bh=2Fu1F56pMbp3D0/7E20eRcBYY0hMFJhwaYQkwhroZrI=;
+        h=From:To:Cc:Subject:Date;
+        b=lUgyuUjL+nbCWsbxquejet2dDMzcwOwoPAzlVc4hupHxy4xdAJzW3/lw+BscH1JbU
+         nb2FOTNMZbAAq/viRyeH9x5MlyjsVkqoV3zmsT3OwKxMZ9FgSPmSQZXVAFbPCOYZfk
+         Qs9PIOF1pLjXBa07dMw3VUNMkDAKjXs99AQ+Rpw4e0kyb1ez1Q69lwR2hw7Zc7el3D
+         icbk5pF9VXAz1BOU7rOGnmE3y/18YVsNVF6d7cLhW9IerGZXrJe1GmR0CQjDRxXORr
+         8ytDoca9W48WOUmzsY/Hp3JxZIn+knj1GIX985icIkD+4XALPoIKYtFzGsq5Zgo8bH
+         84f90qhbmojZQ==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5e7d304a0000>; Fri, 27 Mar 2020 11:44:28 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id DFD1E13EEB7;
+        Fri, 27 Mar 2020 11:44:27 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 07E7928006C; Fri, 27 Mar 2020 11:44:28 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     wsa@the-dreams.de, allison@lohutok.net, info@metux.net,
+        linus.walleij@linaro.org, tglx@linutronix.de
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] i2c: pca-platform: Use platform_irq_get_optional
+Date:   Fri, 27 Mar 2020 11:44:22 +1300
+Message-Id: <20200326224422.31063-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Fix a missing struct parameter description to allow
-warning free W=1 compilation.
+The interrupt is not required so use platform_irq_get_optional() to
+avoid error messages like
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
+  i2c-pca-platform 22080000.i2c: IRQ index 0 not found
+
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
- drivers/i2c/busses/i2c-st.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/i2c/busses/i2c-pca-platform.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-st.c b/drivers/i2c/busses/i2c-st.c
-index 54e1fc8a495e..f7f7b5b64720 100644
---- a/drivers/i2c/busses/i2c-st.c
-+++ b/drivers/i2c/busses/i2c-st.c
-@@ -434,6 +434,7 @@ static void st_i2c_wr_fill_tx_fifo(struct st_i2c_dev *i2c_dev)
- /**
-  * st_i2c_rd_fill_tx_fifo() - Fill the Tx FIFO in read mode
-  * @i2c_dev: Controller's private data
-+ * @max: Maximum amount of data to fill into the Tx FIFO
-  *
-  * This functions fills the Tx FIFO with fixed pattern when
-  * in read mode to trigger clock.
--- 
-2.17.1
+diff --git a/drivers/i2c/busses/i2c-pca-platform.c b/drivers/i2c/busses/i=
+2c-pca-platform.c
+index a7a81846d5b1..635dd697ac0b 100644
+--- a/drivers/i2c/busses/i2c-pca-platform.c
++++ b/drivers/i2c/busses/i2c-pca-platform.c
+@@ -140,7 +140,7 @@ static int i2c_pca_pf_probe(struct platform_device *p=
+dev)
+ 	int ret =3D 0;
+ 	int irq;
+=20
+-	irq =3D platform_get_irq(pdev, 0);
++	irq =3D platform_get_irq_optional(pdev, 0);
+ 	/* If irq is 0, we do polling. */
+ 	if (irq < 0)
+ 		irq =3D 0;
+--=20
+2.25.1
 
