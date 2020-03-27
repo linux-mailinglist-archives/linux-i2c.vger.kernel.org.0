@@ -2,104 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C83AB1958A7
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 15:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5901958E7
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 15:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbgC0OJR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Mar 2020 10:09:17 -0400
-Received: from smtpo.poczta.interia.pl ([217.74.65.155]:45252 "EHLO
-        smtpo.poczta.interia.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726333AbgC0OJR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Mar 2020 10:09:17 -0400
-X-Greylist: delayed 463 seconds by postgrey-1.27 at vger.kernel.org; Fri, 27 Mar 2020 10:09:16 EDT
-X-Interia-R: Interia
-X-Interia-R-IP: 188.121.19.19
-X-Interia-R-Helo: <t480s.localdomain>
-Received: from t480s.localdomain (ipv4-188-121-19-19.net.internetunion.pl [188.121.19.19])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-        Fri, 27 Mar 2020 15:01:28 +0100 (CET)
-Date:   Fri, 27 Mar 2020 15:01:26 +0100
-From:   Slawomir Stepien <sst@poczta.fm>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, krzysztof.adamski@nokia.com,
-        jakub.lewalski@nokia.com, slawomir.stepien@nokia.com,
-        alexander.sverdlin@nokia.com
-Subject: Re: [RFCv3] i2c: hold the core_lock for the whole execution of
- i2c_register_adapter()
-Message-ID: <20200327140126.GA2112@t480s.localdomain>
-References: <20191008163956.GB566933@t480s.localdomain>
- <20200321191532.GF5632@ninjato>
+        id S1727336AbgC0OZa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Mar 2020 10:25:30 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:34146 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbgC0OZa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Mar 2020 10:25:30 -0400
+Received: by mail-wr1-f66.google.com with SMTP id 65so11672224wrl.1;
+        Fri, 27 Mar 2020 07:25:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=peP7S2GwPuZ1IKo8FYOZ1jeo4ELir9xxjxU6GqZTgX4=;
+        b=StriVB/9TjnZWqc9kH0lHNwEqOCxpb0m9aQdojCVw1TQU0oy/QZmPbaIfR9bNuuDue
+         7QSZAxlsnLBkfPYxxgTtuTR7SG4++YVzHqCtUdty6s6uiOdYYad77k+0Xw9ASLhjFAAm
+         ay5WyECrlMw2Zm2a/hdNBiz8O01W0fYEyoGhfJ8zJLc35IS25jRq/W8EnoIxlLXuIgiW
+         V1SW9UcztB62fpCyNNq7iXdVJh4K+Zc68m3LvFEQECRHDZzeIjsZiGDE2NW0a6PXcRRq
+         OCYALWXPpOprqJaK8D3HOoOH8pGbJ6wveEo4cTPqYtePW5d1v4IWdsTgpPwJCfJidDUl
+         5JTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=peP7S2GwPuZ1IKo8FYOZ1jeo4ELir9xxjxU6GqZTgX4=;
+        b=dSz+k0TKUeKj25fxOFLpomp8IIb3GbRqn8oY7PB8lBx0VT4spAii/UFvhfOs6FD+js
+         qwcjq/pC41uhiRFoo1T48sE0ug7YPTkecSXZjPcFyTNDSxTY/TILVVqHFlohehysu+dq
+         v5DH00bpJuxwHqasJstPJWEtRoh0ylAEGGgB12QnLagiunM3Ku7y9vsBKnia9tULH1Sf
+         DoLGsI029dBqsRTP0Kk7y0R56mcg7ujHfuGnJsVzWgpEsTY8efEKAd59lCZskrjLbQxd
+         ui6GoWLLWEctKrI6tRCCqKlWqVu3e2vILf48tWKjXI/dv/nW+tMSAjq2JoB58WTseDDm
+         PoaA==
+X-Gm-Message-State: ANhLgQ0iWCb64s57HqnAInFUMUZ3LN+YhzNBUf1M5ZMTbwldYb5t8/v8
+        wsGfcRFnMnipylNrL33Vnt5Hb3ZBGKTO93sdA+E=
+X-Google-Smtp-Source: ADFU+vsXiZ0/Ce9a1O/msDlNwkE/7qgqmUo4B7/lmX8Z7cLom/fYyI4rkhFAI0E0S/gHRNqEyYdwzjZyyssYophWnCs=
+X-Received: by 2002:a05:6000:111:: with SMTP id o17mr15146245wrx.111.1585319127768;
+ Fri, 27 Mar 2020 07:25:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200321191532.GF5632@ninjato>
-X-Interia-Antivirus: OK
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=interia.pl;
-        s=biztos; t=1585317688;
-        bh=rxFEDd4hzN9lJEGo6ptnbnVgAbUJOJj8JKLgkRs3Mx0=;
-        h=X-Interia-R:X-Interia-R-IP:X-Interia-R-Helo:Date:From:To:Cc:
-         Subject:Message-ID:References:MIME-Version:Content-Type:
-         Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
-         X-Interia-Antivirus;
-        b=VgvOGAwuHaWxSC5s7430SX3ItXtytzkuiGW0OBUfzJHTI9avXOeqClvXH+w7bC4N3
-         9e/GDkp+qkNSyTIyFzOrCg8HiIIJD+qiPIOkdeeAPxLKSLy/ZgKAmuXU9dpCm8dslR
-         bya3otWAgg5BlmEhlusMoDzn9yQ144krtmv3ZjzQ=
+References: <20200326211005.13301-1-wsa+renesas@sang-engineering.com> <20200326211005.13301-7-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20200326211005.13301-7-wsa+renesas@sang-engineering.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 27 Mar 2020 10:25:16 -0400
+Message-ID: <CADnq5_P07b-A-VawLTgiTMSdifxMbWS5kgQV_+0Bw2x_DQHATQ@mail.gmail.com>
+Subject: Re: [PATCH 6/6] drm/radeon: convert to use i2c_new_client_device()
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On mar 21, 2020 20:15, Wolfram Sang wrote:
-> Hi Slawomir,
+On Thu, Mar 26, 2020 at 5:35 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> Move away from the deprecated API.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Hello Wolfram,
+patches 1,6, are:
+Acked-by: Alex Deucher <alexander.deucher@amd.com>
 
-> On Tue, Oct 08, 2019 at 06:39:56PM +0200, Slawomir Stepien wrote:
-> > From: Sławomir Stępień <slawomir.stepien@nokia.com>
-> > 
-> > There is a race condition between the i2c_get_adapter() and the
-> > i2c_add_adapter() if this mutex isn't hold for the whole execution of
-> > i2c_register_adapter().
-> > 
-> > If the mutex isn't locked, it is possible to find idr that points to
-> > adapter that hasn't been registered yet (i.e. it's
-> > kobj.state_initialized is still false), which will end up with warning
-> > message:
-> > 
-> > "... is not initialized, yet kobject_get() is being called."
-> > 
-> > This patch will change how the locking is arranged around
-> > i2c_register_adapter() call and will prevent such situations. The part
-> > of the i2c_register_adapter() that do not need to be under the lock has
-> > been moved to a new function i2c_process_adapter.
-> > 
-> > Signed-off-by: Sławomir Stępień <slawomir.stepien@nokia.com>
-> 
-> Thank you for tackling this one and sorry for the late reply.
-> 
-> Do you have a test case for me so I could reproduce the bad case here?
-
-I don't have any test case ready on hand, but please take a look at this flow:
-
-Note: The assumption is that i2c_add_adapter() and i2c_get_adapter() are called
-from separate threads of execution.
-
-time | i2c_add_adapter()     | i2c_get_adapter()
-------------------------------------------------
-0001 | lock of core_lock     |
-0002 | new idr via idr_alloc |
-0003 | unlock of core_lock   |
-0004 |                       | lock of core_lock
-0005 |                       | idr_find
-0006 |                       | get_device [1]
-0007 | i2c_register_adapter  |
-
-At point [1], the i2c_get_adapter() assumes the device is ready only because it
-was found in idr. It calls get_device() which causes kobject_get() to fail.
-
--- 
-Slawomir Stepien
+> ---
+>  drivers/gpu/drm/radeon/radeon_atombios.c | 4 ++--
+>  drivers/gpu/drm/radeon/radeon_combios.c  | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/radeon_atombios.c b/drivers/gpu/drm/radeon/radeon_atombios.c
+> index 848ef68d9086..5d2591725189 100644
+> --- a/drivers/gpu/drm/radeon/radeon_atombios.c
+> +++ b/drivers/gpu/drm/radeon/radeon_atombios.c
+> @@ -2111,7 +2111,7 @@ static int radeon_atombios_parse_power_table_1_3(struct radeon_device *rdev)
+>                                                                     ucOverdriveThermalController];
+>                         info.addr = power_info->info.ucOverdriveControllerAddress >> 1;
+>                         strlcpy(info.type, name, sizeof(info.type));
+> -                       i2c_new_device(&rdev->pm.i2c_bus->adapter, &info);
+> +                       i2c_new_client_device(&rdev->pm.i2c_bus->adapter, &info);
+>                 }
+>         }
+>         num_modes = power_info->info.ucNumOfPowerModeEntries;
+> @@ -2351,7 +2351,7 @@ static void radeon_atombios_add_pplib_thermal_controller(struct radeon_device *r
+>                                 const char *name = pp_lib_thermal_controller_names[controller->ucType];
+>                                 info.addr = controller->ucI2cAddress >> 1;
+>                                 strlcpy(info.type, name, sizeof(info.type));
+> -                               i2c_new_device(&rdev->pm.i2c_bus->adapter, &info);
+> +                               i2c_new_client_device(&rdev->pm.i2c_bus->adapter, &info);
+>                         }
+>                 } else {
+>                         DRM_INFO("Unknown thermal controller type %d at 0x%02x %s fan control\n",
+> diff --git a/drivers/gpu/drm/radeon/radeon_combios.c b/drivers/gpu/drm/radeon/radeon_combios.c
+> index c3e49c973812..d3c04df7e75d 100644
+> --- a/drivers/gpu/drm/radeon/radeon_combios.c
+> +++ b/drivers/gpu/drm/radeon/radeon_combios.c
+> @@ -2704,7 +2704,7 @@ void radeon_combios_get_power_modes(struct radeon_device *rdev)
+>                                 const char *name = thermal_controller_names[thermal_controller];
+>                                 info.addr = i2c_addr >> 1;
+>                                 strlcpy(info.type, name, sizeof(info.type));
+> -                               i2c_new_device(&rdev->pm.i2c_bus->adapter, &info);
+> +                               i2c_new_client_device(&rdev->pm.i2c_bus->adapter, &info);
+>                         }
+>                 }
+>         } else {
+> @@ -2721,7 +2721,7 @@ void radeon_combios_get_power_modes(struct radeon_device *rdev)
+>                                 const char *name = "f75375";
+>                                 info.addr = 0x28;
+>                                 strlcpy(info.type, name, sizeof(info.type));
+> -                               i2c_new_device(&rdev->pm.i2c_bus->adapter, &info);
+> +                               i2c_new_client_device(&rdev->pm.i2c_bus->adapter, &info);
+>                                 DRM_INFO("Possible %s thermal controller at 0x%02x\n",
+>                                          name, info.addr);
+>                         }
+> --
+> 2.20.1
+>
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
