@@ -2,88 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5E2195A2B
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 16:45:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3DA195A5C
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 16:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727636AbgC0PpM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Mar 2020 11:45:12 -0400
-Received: from sauhun.de ([88.99.104.3]:39060 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726515AbgC0PpL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 27 Mar 2020 11:45:11 -0400
-Received: from localhost (p54B3358F.dip0.t-ipconnect.de [84.179.53.143])
-        by pokefinder.org (Postfix) with ESMTPSA id 232922C08B2;
-        Fri, 27 Mar 2020 16:45:10 +0100 (CET)
-Date:   Fri, 27 Mar 2020 16:45:09 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Sam Ravnborg <sam@ravnborg.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Subject: Re: [PATCH 6/6] drm/radeon: convert to use i2c_new_client_device()
-Message-ID: <20200327154509.GB3971@ninjato>
-References: <20200326211005.13301-1-wsa+renesas@sang-engineering.com>
- <20200326211005.13301-7-wsa+renesas@sang-engineering.com>
- <CADnq5_P07b-A-VawLTgiTMSdifxMbWS5kgQV_+0Bw2x_DQHATQ@mail.gmail.com>
- <20200327152535.GA2191@ravnborg.org>
- <CADnq5_O-pXK1FeT1NfGBdXYZbqF6jmyXJNPgJt5qLaYMLiZy_Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="O5XBE6gyVG5Rl6Rj"
-Content-Disposition: inline
-In-Reply-To: <CADnq5_O-pXK1FeT1NfGBdXYZbqF6jmyXJNPgJt5qLaYMLiZy_Q@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727349AbgC0PzI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Mar 2020 11:55:08 -0400
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:37434 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726900AbgC0PzI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Mar 2020 11:55:08 -0400
+Received: from Internal Mail-Server by MTLPINE1 (envelope-from kblaiech@mellanox.com)
+        with ESMTPS (AES256-SHA encrypted); 27 Mar 2020 18:55:05 +0300
+Received: from farm-1.mtbu.labs.mlnx (farm-1.mtbu.labs.mlnx [10.15.2.31])
+        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 02RFt3wd025225;
+        Fri, 27 Mar 2020 11:55:03 -0400
+Received: (from kblaiech@localhost)
+        by farm-1.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 02RFt3We015215;
+        Fri, 27 Mar 2020 11:55:03 -0400
+From:   Khalil Blaiech <kblaiech@mellanox.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh@kernel.org>, linux-i2c@vger.kernel.org
+Cc:     Khalil Blaiech <kblaiech@mellanox.com>,
+        Vadim Pasternak <vadimp@mellanox.com>
+Subject: [PATCH v8 0/2] i2c: add driver for Mellanox BlueField SoC
+Date:   Fri, 27 Mar 2020 11:54:58 -0400
+Message-Id: <cover.1585323873.git.kblaiech@mellanox.com>
+X-Mailer: git-send-email 2.1.2
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Add I2C SMBus driver and device tree bindings documentation.
 
---O5XBE6gyVG5Rl6Rj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The Mellanox BlueField is a System-on-Chip (SoC) that combines
+Arm cores and ConnectX network adapter technology intended to
+accelerate storage network solutions. The Mellanox BlueField
+incorporates various I2C devices that are accessed using SMBus
+protocol, a variant of the I2C protocol. On storage controllers,
+the BlueField SoC is connected to a management controller board,
+e.g., BMC via an I2C bus.
 
+An I2C driver running on the Arm side is needed to manage the
+hardware I2C controllers. The driver enables a master function
+to transfer data back and forth from/to I2C devices, such as
+EEPROM parts and implements a slave function to handle the BMC
+controller requests.
+---
+v7->v8:
+	- Updating the dependency expression in Kconfig.
+	- Fixing an implicit fallthrough build error.
+v6->v7:
+	- Fixing kernel coding style issues as suggested by
+	Mellanox internal code reviewers.
+	- Updating the dependency expression in Kconfig.
+	- Fixing various device driver bugs.
+	- Adding an entry to MAINTAINERS file.
+v5->v6:
+	- Fixing kernel coding style issues detected using
+	'--strict' flag.
+	- Updating the device binding documentation to add
+	support for BlueField-2 SoCs.
+v4->v5:
+	- Fixing device driver bug.
+v3->v4:
+	- Review of the device binding documentation to
+	fix format issue and miscellaneous cleanup.
+v2->v3:
+	- Various device driver changes and bug fixes.
+	- Updating the device property in the device binding
+	documentation and file format review.
+v1->v2:
+	- Various device driver changes and bug fixes.
+	- Cleanup of the device binding documentation.
 
-> > > > Move away from the deprecated API.
-> > > >
-> > > > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> > >
-> > > patches 1,6, are:
-> > > Acked-by: Alex Deucher <alexander.deucher@amd.com>
-> > Should we commit all to drm-misc-next?
->=20
-> I'm fine to see it go through whatever tree makes sense.
+Khalil Blaiech (2):
+  i2c: i2c-mlxbf: I2C SMBus driver for Mellanox BlueField SoC
+  dt-bindings: i2c: I2C binding for Mellanox BlueField SoC
 
-I'd suggest drm-misc-next to minimize merge conflicts. But I can take it
-via I2C tree, too, if desired.
+ .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt |   42 +
+ MAINTAINERS                                        |    6 +
+ drivers/i2c/busses/Kconfig                         |   13 +
+ drivers/i2c/busses/Makefile                        |    1 +
+ drivers/i2c/busses/i2c-mlxbf.c                     | 2507 ++++++++++++++++++++
+ 5 files changed, 2569 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
+ create mode 100644 drivers/i2c/busses/i2c-mlxbf.c
 
+-- 
+2.1.2
 
---O5XBE6gyVG5Rl6Rj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5+H4UACgkQFA3kzBSg
-Kbbt+Q//bZmtiJw258S5u6Dib6o4qV/VfaFTecO/PvxGk7gMFCCwd1iJJV90BTv9
-pv5FqyUDeC8s1JiBGAzYiN+d9sAY065o018UaHyWuNGLrvypL6e/xMQdDUcfIsZD
-ICbJAUtvmRHAtq3XkvBSCh/aPM/uQi6wDZcm6UL6WQMjL7qRGeY24d68IVP2OBWX
-oliHQMrxDd2A/Xe5znga31ByTC3cB31rhDNHrUBoModp6gMYQB3aHGf1m+QPnjFQ
-tUwnN7ECc9hlJxj/6ok7faDT+DtDNoxdMpKLM2s04O39WQUgFlz0YAinDLblifqZ
-65+pV/wGqT3NP8P6gljisJiENeMh5TH/02XWAxd2NbDwfEarG8RIEI8oOACEzC7J
-FH/qaxGlY1Es+JHDtCltSxVLT9+XtB3Te2t5+R5lTcRpCdoiomvrHD9nLaXKOx5Q
-4YZTDn8ybrnSMd0UOwH+tqYYnXUhfISC/r89ISFsnMJAay8RzAo9lDhr8sD5QtDj
-H1mw/CuVktYfzdXXOYOCvnVh+5+rzvMd6pQb1BfBqxyGkRsMemKBzTTf9+Xfbp1t
-pKu+DyiKAyjorKj0J4mNwBhEIKeGLkgkTvgzi8tp7PSNPveh2lSfDaUq0IS18cN0
-4RKx8WZP/O+SQX5sHKtI4AeFJegLNVbHAkeV9afQ0Z0QnvxNwFo=
-=6umv
------END PGP SIGNATURE-----
-
---O5XBE6gyVG5Rl6Rj--
