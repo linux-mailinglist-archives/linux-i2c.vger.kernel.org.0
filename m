@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1926C195F49
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 20:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4467C195F4C
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 20:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727352AbgC0Txx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Mar 2020 15:53:53 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:38592 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726900AbgC0Txx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Mar 2020 15:53:53 -0400
-Received: by mail-il1-f194.google.com with SMTP id n13so2594810ilm.5;
-        Fri, 27 Mar 2020 12:53:52 -0700 (PDT)
+        id S1727322AbgC0TzY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Mar 2020 15:55:24 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:42049 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbgC0TzY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Mar 2020 15:55:24 -0400
+Received: by mail-il1-f193.google.com with SMTP id f16so9920519ilj.9;
+        Fri, 27 Mar 2020 12:55:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mJE/FmDo61k1Y1kMUmnrw+f/plh9UpOJw+NgcOKyCAM=;
-        b=Nl0RkAkg90RZyQqS9cu6gK7/QKNgAm2NkPeMQSz8Ub14RgVMM/0BOAV5clrvGWfZBo
-         YN9MWImB+ZRHIDErNSW89tHFa4i752oweOMDCeKBjWcl+h56SjjqWXWoD/wlHCBp3j0J
-         mgSye0mcUgDcS6Ez34gGWjeYKmPe3Dw+G7exOGJhUR4MfnGNJB+Tcssq3QkucbgqUX5R
-         PU0TdPt8B1azNXnGG8/snlTCYmsnH4/GhOoQEedTcpZhJ3ZbU2gM/Rg1NXr6LRH/4qxN
-         Rfv+8SIqRtHMENRd73ktN8fPFDcx+WHRqIny8nkuqjqoLLNJEuXrQRxoxkhU/jqZQkMh
-         sNHw==
-X-Gm-Message-State: ANhLgQ3pvpl0E6Zbd9/jP2OWfx1Gv7ljaY/w7e9orDqqsiP04wmA0E1F
-        9rA4seUD6zH2D5dpSGYOwg==
-X-Google-Smtp-Source: ADFU+vv7l6X4QqyDklk801ff+s7+6Bx+Yr+DsrSctVissFQbcxeD7iAKesA6K4k1zLa10W4Ji94BwQ==
-X-Received: by 2002:a92:d0c7:: with SMTP id y7mr841907ila.56.1585338831900;
-        Fri, 27 Mar 2020 12:53:51 -0700 (PDT)
+        bh=csHMLQRL98LenQ/lQbpc93jnwU8kRqtxGH56mtF9FXU=;
+        b=WvKu/ivGejE4Hwf4vzr15vb+mRRxfsHTz1l00dqUZpX3xWclAVX8gZsXG2TCMfWqwJ
+         s3pgZZ7d23GQRo9gfvSdHXxq3+fX80E9y8eZBWjtiP0YT+5fXEAB7IqD4vTIMPHjrYob
+         B7eOLpcsVxd3Xx1JLwAFLg60BTAcfSRDF1H5ViDWtQYOfSiqk47ibp7/WZZtN2PuOb7t
+         bpqzqZWe29Z2rCzf9nTSi2Jtfd2Q52NbX4zMFHcZkWuCHMbM5EFeb7oSXc0nPNCkmY59
+         lqs/XETfHPgwnHvEwPl5Wjo281URi/7CLAE3uFLAE++rRnKIXo0NShcoyBmD4t5npuTr
+         15ug==
+X-Gm-Message-State: ANhLgQ0X9uHhwnIDG8j/WobhSk1HnaZykm4qrJ+9B/vVw5CFU1r1LGF1
+        oQAnaa0WgSSpSbR6v5oitw==
+X-Google-Smtp-Source: ADFU+vvK/OlPRlrv0zdhRACJE4TlaiS+cpaAN0toP14RA+18Djh+2NRPMAxrfVKb7LtTlW0/j9dRrw==
+X-Received: by 2002:a92:39c9:: with SMTP id h70mr826045ilf.74.1585338922613;
+        Fri, 27 Mar 2020 12:55:22 -0700 (PDT)
 Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id w28sm2178668ill.69.2020.03.27.12.53.50
+        by smtp.gmail.com with ESMTPSA id l6sm2204381ilh.27.2020.03.27.12.55.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 12:53:51 -0700 (PDT)
-Received: (nullmailer pid 2012 invoked by uid 1000);
-        Fri, 27 Mar 2020 19:53:49 -0000
-Date:   Fri, 27 Mar 2020 13:53:49 -0600
+        Fri, 27 Mar 2020 12:55:21 -0700 (PDT)
+Received: (nullmailer pid 4525 invoked by uid 1000);
+        Fri, 27 Mar 2020 19:55:20 -0000
+Date:   Fri, 27 Mar 2020 13:55:20 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Lubomir Rintel <lkundrak@v3.sk>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -61,84 +61,88 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 27/28] dt-bindings: timer: Convert mrvl,mmp-timer to
- json-schema
-Message-ID: <20200327195349.GA459@bogus>
+Subject: Re: [PATCH 28/28] dt-bindings: usb: Convert ehci-mv to json-schema
+Message-ID: <20200327195520.GA2235@bogus>
 References: <20200317093922.20785-1-lkundrak@v3.sk>
- <20200317093922.20785-28-lkundrak@v3.sk>
+ <20200317093922.20785-29-lkundrak@v3.sk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200317093922.20785-28-lkundrak@v3.sk>
+In-Reply-To: <20200317093922.20785-29-lkundrak@v3.sk>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 10:39:21AM +0100, Lubomir Rintel wrote:
-> A straightforward conversion of the mrvl,mmp-timer binding to DT schema
-> format using json-schema.
+On Tue, Mar 17, 2020 at 10:39:22AM +0100, Lubomir Rintel wrote:
+> A straightforward conversion of the ehci-mv binding to DT schema format
+> using json-schema.
 > 
 > Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 > ---
->  .../bindings/timer/mrvl,mmp-timer.txt         | 17 --------
->  .../bindings/timer/mrvl,mmp-timer.yaml        | 43 +++++++++++++++++++
->  2 files changed, 43 insertions(+), 17 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
->  create mode 100644 Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
+>  .../devicetree/bindings/usb/ehci-mv.txt       | 23 -------
+>  .../bindings/usb/marvell,pxau2o-ehci.yaml     | 60 +++++++++++++++++++
+>  2 files changed, 60 insertions(+), 23 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/ehci-mv.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
+> diff --git a/Documentation/devicetree/bindings/usb/ehci-mv.txt b/Documentation/devicetree/bindings/usb/ehci-mv.txt
 > deleted file mode 100644
-> index b8f02c6635219..0000000000000
-> --- a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
+> index 335589895763e..0000000000000
+> --- a/Documentation/devicetree/bindings/usb/ehci-mv.txt
 > +++ /dev/null
-> @@ -1,17 +0,0 @@
-> -* Marvell MMP Timer controller
+> @@ -1,23 +0,0 @@
+> -* Marvell PXA/MMP EHCI controller.
 > -
 > -Required properties:
-> -- compatible : Should be "mrvl,mmp-timer".
-> -- reg : Address and length of the register set of timer controller.
-> -- interrupts : Should be the interrupt number.
 > -
-> -Optional properties:
-> -- clocks : Should contain a single entry describing the clock input.
+> -- compatible: must be "marvell,pxau2o-ehci"
+> -- reg: physical base addresses of the controller and length of memory mapped region
+> -- interrupts: one EHCI controller interrupt should be described here
+> -- clocks: phandle list of usb clocks
+> -- clock-names: should be "USBCLK"
+> -- phys: phandle for the PHY device
+> -- phy-names: should be "usb"
 > -
 > -Example:
-> -	timer0: timer@d4014000 {
-> -		compatible = "mrvl,mmp-timer";
-> -		reg = <0xd4014000 0x100>;
-> -		interrupts = <13>;
-> -		clocks = <&coreclk 2>;
+> -
+> -	ehci0: usb-ehci@d4208000 {
+> -		compatible = "marvell,pxau2o-ehci";
+> -		reg = <0xd4208000 0x200>;
+> -		interrupts = <44>;
+> -		clocks = <&soc_clocks MMP2_CLK_USB>;
+> -		clock-names = "USBCLK";
+> -		phys = <&usb_otg_phy>;
+> -		phy-names = "usb";
 > -	};
-> diff --git a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
+> diff --git a/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml b/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
 > new file mode 100644
-> index 0000000000000..ebee0b862d493
+> index 0000000000000..189025ef1e92e
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
-> @@ -0,0 +1,43 @@
+> +++ b/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
 
-License?
+Same license comment.
 
+> +# Copyright 2019,2020 Lubomir Rintel <lkundrak@v3.sk>
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/timer/mrvl,mmp-timer.yaml#
+> +$id: http://devicetree.org/schemas/usb/marvell,pxau2o-ehci.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Marvell MMP Timer bindings
+> +title: Marvell PXA/MMP EHCI bindings
 > +
 > +maintainers:
-> +  - devicetree@vger.kernel.org
-
-Real person?
-
+> +  - Lubomir Rintel <lkundrak@v3.sk>
+> +
+> +allOf:
+> +  - $ref: usb-hcd.yaml#
 > +
 > +properties:
-> +  $nodename:
-> +    pattern: '^timer@[a-f0-9]+$'
-> +
 > +  compatible:
-> +    const: mrvl,mmp-timer
+> +    const: marvell,pxau2o-ehci
 > +
 > +  reg:
 > +    maxItems: 1
@@ -149,20 +153,35 @@ Real person?
 > +  clocks:
 > +    maxItems: 1
 > +
+> +  clock-names:
+> +    const: USBCLK
+> +
+> +  phys:
+> +    maxItems: 1
+> +
+> +  phy-names:
+> +    const: usb
+> +
 > +required:
 > +  - compatible
 > +  - reg
 > +  - interrupts
-> +
-> +additionalProperties: false
+> +  - clocks
+> +  - clock-names
+> +  - phys
+> +  - phy-names
 > +
 > +examples:
 > +  - |
-> +    timer@d4014000 {
-> +        compatible = "mrvl,mmp-timer";
-> +        reg = <0xd4014000 0x100>;
-> +        interrupts = <13>;
-> +        clocks = <&coreclk 2>;
+> +    #include <dt-bindings/clock/marvell,mmp2.h>
+> +    usb@d4208000 {
+> +        compatible = "marvell,pxau2o-ehci";
+> +        reg = <0xd4208000 0x200>;
+> +        interrupts = <44>;
+> +        clocks = <&soc_clocks MMP2_CLK_USB>;
+> +        clock-names = "USBCLK";
+> +        phys = <&usb_otg_phy>;
+> +        phy-names = "usb";
 > +    };
 > +
 > +...
