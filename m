@@ -2,100 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA351959F3
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 16:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A26E195A1C
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 16:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727287AbgC0Pdc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Mar 2020 11:33:32 -0400
-Received: from foss.arm.com ([217.140.110.172]:46882 "EHLO foss.arm.com"
+        id S1726540AbgC0Pnv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Mar 2020 11:43:51 -0400
+Received: from sauhun.de ([88.99.104.3]:39010 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726515AbgC0Pdc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 27 Mar 2020 11:33:32 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2E0031B;
-        Fri, 27 Mar 2020 08:33:31 -0700 (PDT)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 36BCF3F71F;
-        Fri, 27 Mar 2020 08:33:31 -0700 (PDT)
-Date:   Fri, 27 Mar 2020 15:33:29 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     alsa-devel@alsa-project.org, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Takashi Iwai <tiwai@suse.com>
-Subject: Applied "ASoC: pxa: magician: convert to use i2c_new_client_device()" to the asoc tree
-In-Reply-To:  <20200326211010.13471-2-wsa+renesas@sang-engineering.com>
-Message-Id:  <applied-20200326211010.13471-2-wsa+renesas@sang-engineering.com>
-X-Patchwork-Hint: ignore
+        id S1726518AbgC0Pnv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 27 Mar 2020 11:43:51 -0400
+Received: from localhost (p54B3358F.dip0.t-ipconnect.de [84.179.53.143])
+        by pokefinder.org (Postfix) with ESMTPSA id 1F17E2C08B2;
+        Fri, 27 Mar 2020 16:43:48 +0100 (CET)
+Date:   Fri, 27 Mar 2020 16:43:45 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+Cc:     linux-i2c@vger.kernel.org, Derek Basehore <dbasehore@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] i2c: enable async suspend/resume on i2c devices
+Message-ID: <20200327154345.GA3971@ninjato>
+References: <20200327151951.18111-1-ricardo.canuelo@collabora.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YZ5djTAD1cGYuMQK"
+Content-Disposition: inline
+In-Reply-To: <20200327151951.18111-1-ricardo.canuelo@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The patch
 
-   ASoC: pxa: magician: convert to use i2c_new_client_device()
+--YZ5djTAD1cGYuMQK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-has been applied to the asoc tree at
+On Fri, Mar 27, 2020 at 04:19:51PM +0100, Ricardo Ca=C3=B1uelo wrote:
+> This enables the async suspend property for i2c devices. This reduces
+> the suspend/resume time considerably on platforms with multiple i2c
+> devices (such as a trackpad or touchscreen).
+>=20
+> (am from https://patchwork.ozlabs.org/patch/949922/)
+>=20
+> Signed-off-by: Derek Basehore <dbasehore@chromium.org>
+> Reviewed-on: https://chromium-review.googlesource.com/1152411
+> Tested-by: Venkateswarlu V Vinjamuri <venkateswarlu.v.vinjamuri@intel.com>
+> Reviewed-by: Venkateswarlu V Vinjamuri <venkateswarlu.v.vinjamuri@intel.c=
+om>
+> Reviewed-by: Justin TerAvest <teravest@chromium.org>
+> Signed-off-by: Guenter Roeck <groeck@chromium.org>
+> Signed-off-by: Ricardo Ca=C3=B1uelo <ricardo.canuelo@collabora.com>
+> ---
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git 
+Adding linux-pm to CC. I don't know much about internals of async
+suspend. Is there a guide like "what every maintainer needs to know
+about"?
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+> This patch was originally created for chromeos some time ago and I'm
+> evaluating if it's a good candidate for upstreaming.
+>=20
+> By the looks of it I think it was done with chromebooks in mind, but
+> AFAICT this would impact every i2c client in every platform, so I'd like
+> to know your opinion about it.
+>=20
+> As far as I know there was no further investigation or testing on it, so
+> I don't know if it was tested on any other hardware.
+>=20
+> Best,
+> Ricardo
+>=20
+>  drivers/i2c/i2c-core-base.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index cefad0881942..643bc0fe0281 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -769,6 +769,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struc=
+t i2c_board_info const *inf
+>  	client->dev.of_node =3D of_node_get(info->of_node);
+>  	client->dev.fwnode =3D info->fwnode;
+> =20
+> +	device_enable_async_suspend(&client->dev);
+>  	i2c_dev_set_name(adap, client, info);
+> =20
+>  	if (info->properties) {
+> --=20
+> 2.18.0
+>=20
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--YZ5djTAD1cGYuMQK
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-----BEGIN PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5+HywACgkQFA3kzBSg
+KbZk8Q//aQwuwBSXd1/62Rw4lg2C2KusB9AvoeB12oQM2KBFTu4Fdv3bRHSbzI04
++xvEiBjHU7d5p+xhUihNCxFieNzob1XUAsfbeAj4kdc8jyeROuGkMwmVfUrp7ELw
+7fA7A6B7B9v2q1pUmfps7X5e9uq1jJ1HUZWdPAyQASNSUG6S48pxEIApsj3YSveB
+ui0cgweyq40BjmJZwOT2JA0f3QZK6O4BcLpo4ILiYW8rCpub3T77VdJ7JGa2++8g
+W7DMgJRnf+rM2lmKPsEoUrV1nNVGPzQ3xMIsyrM+00MEw3pX/cfrrcLtEaJJrPhI
+gy5pyy6oNMo1dIuurYpesH2HOKU1iwrT9WHz3zOlhRrfT54P2KoLdCIhlQ5YbBfo
+Fakq6V2eOpFTgqIDJ4uZHbHIQ92QojQm/aNV+E7q12lN18y7wz2PnQDpVSGyAAEU
+0tesmwv238xl8wWhZgmtrhSf2nxl0F1pmYjzLyfnggW31xVB0q3YTLgeloaLeTFP
+socKNEVulcHb8VuC5wnLGij2BtRF5TPUaQA38cy0aC6IpDixhjkmMR7l1pHlh+dj
+EZcxzPxcb6AEEPbCgvBvkTZIfmaGPT5s/FRaHjmNo5OLpgy5EicMtl7pHYhlOA5K
+0FcxE8aMUseEja04QChybCfG7QjWcucSIRBbSdQJPrUE4TxMt/E=
+=hV3Y
+-----END PGP SIGNATURE-----
 
-Thanks,
-Mark
-
-From 17fb5433150e8b0b4000a77a21055359a2eab534 Mon Sep 17 00:00:00 2001
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Date: Thu, 26 Mar 2020 22:10:10 +0100
-Subject: [PATCH] ASoC: pxa: magician: convert to use i2c_new_client_device()
-
-Move away from the deprecated API and return the shiny new ERRPTR where
-useful.
-
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Link: https://lore.kernel.org/r/20200326211010.13471-2-wsa+renesas@sang-engineering.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- sound/soc/pxa/magician.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/sound/soc/pxa/magician.c b/sound/soc/pxa/magician.c
-index 6483cff5b73d..3bafd86bfb93 100644
---- a/sound/soc/pxa/magician.c
-+++ b/sound/soc/pxa/magician.c
-@@ -358,10 +358,10 @@ static int __init magician_init(void)
- 	adapter = i2c_get_adapter(0);
- 	if (!adapter)
- 		return -ENODEV;
--	client = i2c_new_device(adapter, i2c_board_info);
-+	client = i2c_new_client_device(adapter, i2c_board_info);
- 	i2c_put_adapter(adapter);
--	if (!client)
--		return -ENODEV;
-+	if (IS_ERR(client))
-+		return PTR_ERR(client);
- 
- 	ret = gpio_request(EGPIO_MAGICIAN_SPK_POWER, "SPK_POWER");
- 	if (ret)
--- 
-2.20.1
-
+--YZ5djTAD1cGYuMQK--
