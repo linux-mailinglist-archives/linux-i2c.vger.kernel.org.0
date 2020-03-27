@@ -2,126 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7332E195A5D
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 16:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE24195BCE
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 18:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727242AbgC0PzK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Mar 2020 11:55:10 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:44542 "EHLO
-        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726900AbgC0PzJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Mar 2020 11:55:09 -0400
-Received: from Internal Mail-Server by MTLPINE2 (envelope-from kblaiech@mellanox.com)
-        with ESMTPS (AES256-SHA encrypted); 27 Mar 2020 18:55:05 +0300
-Received: from farm-1.mtbu.labs.mlnx (farm-1.mtbu.labs.mlnx [10.15.2.31])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 02RFt3CD025231;
-        Fri, 27 Mar 2020 11:55:03 -0400
-Received: (from kblaiech@localhost)
-        by farm-1.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 02RFt3m1015217;
-        Fri, 27 Mar 2020 11:55:03 -0400
-From:   Khalil Blaiech <kblaiech@mellanox.com>
-To:     Rob Herring <robh@kernel.org>, linux-i2c@vger.kernel.org
-Cc:     Khalil Blaiech <kblaiech@mellanox.com>,
-        Vadim Pasternak <vadimp@mellanox.com>
-Subject: [PATCH v8 2/2] dt-bindings: i2c: I2C binding for Mellanox BlueField SoC
-Date:   Fri, 27 Mar 2020 11:55:00 -0400
-Message-Id: <5fe70c61143147afe493f538c6600831c03592a7.1585323873.git.kblaiech@mellanox.com>
-X-Mailer: git-send-email 2.1.2
-In-Reply-To: <cover.1585323873.git.kblaiech@mellanox.com>
-References: <cover.1585323873.git.kblaiech@mellanox.com>
-In-Reply-To: <cover.1585323873.git.kblaiech@mellanox.com>
-References: <cover.1585323873.git.kblaiech@mellanox.com>
+        id S1727473AbgC0RDr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Mar 2020 13:03:47 -0400
+Received: from asavdk4.altibox.net ([109.247.116.15]:52188 "EHLO
+        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726515AbgC0RDr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Mar 2020 13:03:47 -0400
+Received: from ravnborg.org (unknown [158.248.194.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk4.altibox.net (Postfix) with ESMTPS id 38CC780618;
+        Fri, 27 Mar 2020 18:03:44 +0100 (CET)
+Date:   Fri, 27 Mar 2020 18:03:42 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        David Airlie <airlied@linux.ie>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Subject: Re: [PATCH 6/6] drm/radeon: convert to use i2c_new_client_device()
+Message-ID: <20200327170342.GA5572@ravnborg.org>
+References: <20200326211005.13301-1-wsa+renesas@sang-engineering.com>
+ <20200326211005.13301-7-wsa+renesas@sang-engineering.com>
+ <CADnq5_P07b-A-VawLTgiTMSdifxMbWS5kgQV_+0Bw2x_DQHATQ@mail.gmail.com>
+ <20200327152535.GA2191@ravnborg.org>
+ <CADnq5_O-pXK1FeT1NfGBdXYZbqF6jmyXJNPgJt5qLaYMLiZy_Q@mail.gmail.com>
+ <20200327154509.GB3971@ninjato>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200327154509.GB3971@ninjato>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=XpTUx2N9 c=1 sm=1 tr=0
+        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
+        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=LDBv8-xUAAAA:8
+        a=zd2uoN0lAAAA:8 a=jdWeosqewm8peECdMA0A:9 a=CjuIK1q_8ugA:10
+        a=DZeXCJrVpAJBw65Qk4Ds:22
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Added device tree bindings documentation for Mellanox BlueField
-I2C SMBus controller.
+On Fri, Mar 27, 2020 at 04:45:09PM +0100, Wolfram Sang wrote:
+> 
+> > > > > Move away from the deprecated API.
+> > > > >
+> > > > > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> > > >
+> > > > patches 1,6, are:
+> > > > Acked-by: Alex Deucher <alexander.deucher@amd.com>
+> > > Should we commit all to drm-misc-next?
+> > 
+> > I'm fine to see it go through whatever tree makes sense.
+> 
+> I'd suggest drm-misc-next to minimize merge conflicts. But I can take it
+> via I2C tree, too, if desired.
 
-Signed-off-by: Khalil Blaiech <kblaiech@mellanox.com>
----
-v5->v6:
-	- Adding description of an extra resource to be
-	consistent with new BlueField-2 SoCs.
-	- Adding an additional example of device instance.
-v3->v4:
-	- Re-ordering of the property descriptions.
-	- Removing useless register addresses from the
-	resource description.
-	- Definition of default clock-frequency value.
-	- Fixing format issues; removing spaces.
-	- Removing "aliases" from Example section.
-	- Renaming device instance node in Example section.
-v2->v3:
-	- Removing shared resources from the controller
-	instance.
-	- Updating the 'compatible' property and support the
-	second generation of the Mellanox BlueField SoC.
-	- Fixing file format; replacing spaces with tabs.
-v1->v2:
-	- Enumeration of the device resources.
-	- Updating the 'compatible' property to make it less
-	generic.
-	- Removing the 'bus' index property and replace it with
-	standard approach to read the bus identifier.
-	- Getting rid of the 'profile' property.
-	- Using 'clock-frequency' property instead of 'bus-freq'.
-	- Convertion of the clock frequency from KHz to Hz.
-	- Removing useless examples.
----
- .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
+If no-one else speaks up until tomorrow I will land them in
+drm-misc-next.
+Just wanted to make sure it was OK.
 
-diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
-new file mode 100644
-index 0000000..566ea86
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
-@@ -0,0 +1,42 @@
-+Device tree configuration for the Mellanox I2C SMBus on BlueField SoCs
-+
-+Required Properties:
-+
-+- compatible : should be "mellanox,i2c-mlxbf1" or "mellanox,i2c-mlxbf2".
-+
-+- reg : address offset and length of the device registers. The
-+	registers consist of the following set of resources:
-+		1) Smbus block registers.
-+		2) Cause master registers.
-+		3) Cause slave registers.
-+		4) Cause coalesce registers (if compatible isn't set
-+		   to "mellanox,i2c-mlxbf1").
-+
-+- interrupts : interrupt number.
-+
-+Optional Properties:
-+
-+- clock-frequency : bus frequency used to configure timing registers;
-+			allowed values are 100000, 400000 and 1000000;
-+			those are expressed in Hz. Default is 100000.
-+
-+Example:
-+
-+i2c@2804000 {
-+	compatible = "mellanox,i2c-mlxbf1";
-+	reg =	<0x02804000 0x800>,
-+		<0x02801200 0x020>,
-+		<0x02801260 0x020>;
-+	interrupts = <57>;
-+	clock-frequency = <100000>;
-+};
-+
-+i2c@2808800 {
-+	compatible = "mellanox,i2c-mlxbf2";
-+	reg =	<0x02808800 0x600>,
-+	        <0x02808e00 0x020>,
-+		<0x02808e20 0x020>,
-+		<0x02808e40 0x010>;
-+	interrupts = <57>;
-+	clock-frequency = <400000>;
-+};
--- 
-2.1.2
-
+	Sam
