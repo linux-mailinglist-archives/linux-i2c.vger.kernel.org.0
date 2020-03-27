@@ -2,89 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B16B6195339
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 09:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B50E21954C1
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Mar 2020 11:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725956AbgC0IrO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Mar 2020 04:47:14 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:59772 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725946AbgC0IrO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Mar 2020 04:47:14 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02R8gLtS031851;
-        Fri, 27 Mar 2020 09:47:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : subject :
- date : message-id : references : in-reply-to : content-type : content-id :
- content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=YJw8XoTO1v1PRGqYcjUGZSKR+X2/a6Uk4mv/NSHkJo8=;
- b=SnI+snLZWTU/DrJFlg1DOyaQQ0TcS9te3M3/UemSgMwEcK+W/YEWs45YsFX/iEMeZ8Th
- RVi63AgBytgWVMQpl0mXOmy1H8Vq3o8qdBful3gsK9VR7ABDne1VWwlWw6T2PFmi+h3z
- 2lxhYojVMu86AYcWR404xVcthmdBodsxAAT3JXns5rRdY4oTUX0fyKlt+bPfWaP3iRhb
- wehSPUNKi+7Hf4r+R3zhRTJbdT8COLEukz/Ifpqp5M9fE+frmTmsEAPhN30R3y4tRM0e
- H/vkrlbnoR5LvyfCOaMJiAzUH/aTyBoIUp5MC61QFtMibE3fBn3hBGN/eDQ0YqEAUl8V Og== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2ywappgpfx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Mar 2020 09:47:02 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BD9BF100034;
-        Fri, 27 Mar 2020 09:47:01 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag6node1.st.com [10.75.127.16])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B138921F663;
-        Fri, 27 Mar 2020 09:47:01 +0100 (CET)
-Received: from SFHDAG6NODE3.st.com (10.75.127.18) by SFHDAG6NODE1.st.com
- (10.75.127.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 27 Mar
- 2020 09:47:01 +0100
-Received: from SFHDAG6NODE3.st.com ([fe80::d04:5337:ab17:b6f6]) by
- SFHDAG6NODE3.st.com ([fe80::d04:5337:ab17:b6f6%20]) with mapi id
- 15.00.1473.003; Fri, 27 Mar 2020 09:47:01 +0100
-From:   Patrice CHOTARD <patrice.chotard@st.com>
-To:     Alain Volmat <avolmat@me.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: i2c-st: fix missing struct parameter description
-Thread-Topic: [PATCH] i2c: i2c-st: fix missing struct parameter description
-Thread-Index: AQHWA7S25N2xB719JUWj+X22ne9jPKhcEGIA
-Date:   Fri, 27 Mar 2020 08:47:01 +0000
-Message-ID: <0b432170-8ae0-d5c3-7557-fe6d606782f7@st.com>
-References: <20200326212243.17363-1-avolmat@me.com>
-In-Reply-To: <20200326212243.17363-1-avolmat@me.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.51]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <679754E3029C214598936C34C70CF6F2@st.com>
-Content-Transfer-Encoding: base64
+        id S1726418AbgC0KEP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Mar 2020 06:04:15 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40328 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726427AbgC0KEO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Mar 2020 06:04:14 -0400
+Received: by mail-lj1-f196.google.com with SMTP id 19so9537801ljj.7
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Mar 2020 03:04:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qtl1Eialsdl3z7ZP76hLFrTUnrm/Xwed3O3Is0v5u2s=;
+        b=fm1BGbXw3YbyFJAFmqHvsEnrwOu7+/+ujtJ86z5Orejx852KLJeCDtQq+soYhGzfCj
+         2rAfF7PxQg2H2Sgjn2JBjFbILfIVHBT7QxDFDZh2R3HOuTeyVGc0fKnVbnrXO43QCj8x
+         cXlH+JS+Jobqck2T5KLCJ/QxbIlZUnxiWcd/WFLXFPVgiIHA/VQnYBo2xwwlOuCaoBNf
+         PV01d4t1H3eQqxbYRIT2/sc/hXgoikPd8X3chF1TEDLMvJhtp9ZecGoNxVyrMZXDYddu
+         VUti7wxKuFzjCVhJlxMkwTw2df/O1qZUfem6Ydt42/5xj5qm4D1YHiUkYri/dNaN3Cn1
+         sdLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qtl1Eialsdl3z7ZP76hLFrTUnrm/Xwed3O3Is0v5u2s=;
+        b=Mrvw+mjrsrsNCLa+yFF/fE8qjSrniF/RNAR7Bp9LlqDzPnUacy36vNjrXcjdjWbn8G
+         nCj/EY1wtrr7Vob4Cs87S7/RIphoA0JopeUa+X8yOrscJ0B6pmryef0BHrGS/mFc6GOc
+         pr+flyMFbM2BJgQUaI2BttPPAjSKzqV8OgxmzBVEpAtgja9QjlAmee5dGNXw0ZMpGBwD
+         v62LjzbFu7/qnAE5cG0EX5rj/sN6gIQ34ed0bjoYV+D9/MM4drFsFKMZsMcz+j9WgI2v
+         zI18skkKOp/Gq3pSYJwEvc1dS4h9SuOXFkbpOKj7HGRS09w2QArh4voDSLuhdxfUDNTM
+         J6dw==
+X-Gm-Message-State: AGi0PuaoHM1ZBWUUbB8EUjkBiMTi1EoNUGi32TZtTBKRCg0GnsWaR1zW
+        gV+qg4102go2yaZLWqmK3hsWQfY6lx+daBYUq+P0CA==
+X-Google-Smtp-Source: ADFU+vsLFzRSaI0mp4F0YlxEk/ZWtLbeZk2X0x8rIBWVbKHsUZE12xxYtPOS4x7TLee1muHrdP/vfqhKQcCaKg9I0tI=
+X-Received: by 2002:a2e:9605:: with SMTP id v5mr7696484ljh.258.1585303451336;
+ Fri, 27 Mar 2020 03:04:11 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
- definitions=2020-03-27_02:2020-03-26,2020-03-27 signatures=0
+References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-22-lkundrak@v3.sk>
+In-Reply-To: <20200317093922.20785-22-lkundrak@v3.sk>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Mar 2020 11:04:00 +0100
+Message-ID: <CACRpkdaEnODObC7emg2M7Ayn_JkeLuc3HpV4VhJcwaZ+=sDLcg@mail.gmail.com>
+Subject: Re: [PATCH 21/28] dt-bindings: gpio: Convert mrvl-gpio to json-schema
+To:     Lubomir Rintel <lkundrak@v3.sk>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-media@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-rtc@vger.kernel.org,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGkgQWxhaW4NCg0KT24gMy8yNi8yMCAxMDoyMiBQTSwgQWxhaW4gVm9sbWF0IHdyb3RlOg0KPiBG
-aXggYSBtaXNzaW5nIHN0cnVjdCBwYXJhbWV0ZXIgZGVzY3JpcHRpb24gdG8gYWxsb3cNCj4gd2Fy
-bmluZyBmcmVlIFc9MSBjb21waWxhdGlvbi4NCj4NCj4gU2lnbmVkLW9mZi1ieTogQWxhaW4gVm9s
-bWF0IDxhdm9sbWF0QG1lLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLXN0
-LmMgfCAxICsNCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0KPg0KPiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1zdC5jIGIvZHJpdmVycy9pMmMvYnVzc2VzL2ky
-Yy1zdC5jDQo+IGluZGV4IDU0ZTFmYzhhNDk1ZS4uZjdmN2I1YjY0NzIwIDEwMDY0NA0KPiAtLS0g
-YS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLXN0LmMNCj4gKysrIGIvZHJpdmVycy9pMmMvYnVzc2Vz
-L2kyYy1zdC5jDQo+IEBAIC00MzQsNiArNDM0LDcgQEAgc3RhdGljIHZvaWQgc3RfaTJjX3dyX2Zp
-bGxfdHhfZmlmbyhzdHJ1Y3Qgc3RfaTJjX2RldiAqaTJjX2RldikNCj4gIC8qKg0KPiAgICogc3Rf
-aTJjX3JkX2ZpbGxfdHhfZmlmbygpIC0gRmlsbCB0aGUgVHggRklGTyBpbiByZWFkIG1vZGUNCj4g
-ICAqIEBpMmNfZGV2OiBDb250cm9sbGVyJ3MgcHJpdmF0ZSBkYXRhDQo+ICsgKiBAbWF4OiBNYXhp
-bXVtIGFtb3VudCBvZiBkYXRhIHRvIGZpbGwgaW50byB0aGUgVHggRklGTw0KPiAgICoNCj4gICAq
-IFRoaXMgZnVuY3Rpb25zIGZpbGxzIHRoZSBUeCBGSUZPIHdpdGggZml4ZWQgcGF0dGVybiB3aGVu
-DQo+ICAgKiBpbiByZWFkIG1vZGUgdG8gdHJpZ2dlciBjbG9jay4NCg0KUmV2aWV3ZWQtYnk6IFBh
-dHJpY2UgQ2hvdGFyZCA8cGF0cmljZS5jaG90YXJkQHN0LmNvbT4NCg0KVGhhbmtzDQo=
+Hi Lubomir!
+
+Excellent work! Just nitpicks:
+
+On Tue, Mar 17, 2020 at 10:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
+
+> +++ b/Documentation/devicetree/bindings/gpio/mrvl-gpio.yaml
+> @@ -0,0 +1,173 @@
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/mrvl-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell PXA GPIO controller
+
+This binding is lacking a license. Please use the dual GPL+BSD license
+tag.
+
+> +maintainers:
+> +  - devicetree@vger.kernel.org
+
+I don't know if Robert Jarzmik is in on maintaining this, would you accept
+it Robert?
+
+Yours,
+Linus Walleij
