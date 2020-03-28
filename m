@@ -2,32 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D9D196377
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Mar 2020 05:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F6019637A
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Mar 2020 05:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbgC1EC4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 28 Mar 2020 00:02:56 -0400
-Received: from sauhun.de ([88.99.104.3]:46598 "EHLO pokefinder.org"
+        id S1725800AbgC1EDh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 28 Mar 2020 00:03:37 -0400
+Received: from sauhun.de ([88.99.104.3]:46618 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725372AbgC1EC4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 28 Mar 2020 00:02:56 -0400
+        id S1725372AbgC1EDh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 28 Mar 2020 00:03:37 -0400
 Received: from localhost (p5486CEA0.dip0.t-ipconnect.de [84.134.206.160])
-        by pokefinder.org (Postfix) with ESMTPSA id F17042C1F87;
-        Sat, 28 Mar 2020 05:02:53 +0100 (CET)
-Date:   Sat, 28 Mar 2020 05:02:53 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 787572C1F87;
+        Sat, 28 Mar 2020 05:03:35 +0100 (CET)
+Date:   Sat, 28 Mar 2020 05:03:35 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Alain Volmat <avolmat@me.com>
-Cc:     Patrice Chotard <patrice.chotard@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     allison@lohutok.net, info@metux.net, linus.walleij@linaro.org,
+        tglx@linutronix.de, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: i2c-st: fix missing struct parameter description
-Message-ID: <20200328040253.GB1017@kunai>
-References: <20200326212243.17363-1-avolmat@me.com>
+Subject: Re: [PATCH] i2c: pca-platform: Use platform_irq_get_optional
+Message-ID: <20200328040335.GC1017@kunai>
+References: <20200326224422.31063-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="61jdw2sOBCFtR2d/"
+        protocol="application/pgp-signature"; boundary="S1BNGpv0yoYahz37"
 Content-Disposition: inline
-In-Reply-To: <20200326212243.17363-1-avolmat@me.com>
+In-Reply-To: <20200326224422.31063-1-chris.packham@alliedtelesis.co.nz>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -35,39 +35,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---61jdw2sOBCFtR2d/
+--S1BNGpv0yoYahz37
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 26, 2020 at 10:22:43PM +0100, Alain Volmat wrote:
-> Fix a missing struct parameter description to allow
-> warning free W=3D1 compilation.
+On Fri, Mar 27, 2020 at 11:44:22AM +1300, Chris Packham wrote:
+> The interrupt is not required so use platform_irq_get_optional() to
+> avoid error messages like
 >=20
-> Signed-off-by: Alain Volmat <avolmat@me.com>
+>   i2c-pca-platform 22080000.i2c: IRQ index 0 not found
+>=20
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-Applied to for-current, thanks! Please note that the 'i2c-' prefix of
-the driver is dropped because it is redundant in $ubject.
+Applied to for-current, thanks!
 
 
---61jdw2sOBCFtR2d/
+--S1BNGpv0yoYahz37
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5+zG0ACgkQFA3kzBSg
-KbaZLQ//WVJmHFBdAbvHLNhIzPekQipZ/5fg8My9p15tb2DgQEeQj/6OIvj6aDSf
-hq1fZ70fi9lzHAnvHZA60G32TXaq86qd3JPDaVtMCssDyfIzw33vbFe2SCJ9yR8i
-cag28YevGk1SPShruPVjdMOW+MV9/a8wC4CD8qgadW5qJjd+O00pW9xSrygXk8JQ
-s3WgQmJYNOuitS4vx282niWOOC948PUm3bqpby1taGq7knyhxW+M/Kp7Tln2LJ+r
-x4wP0VRZcRCo/LgfXw7xv0F4OTk1Nn4rLv1SFHZ7yJZQn4XIbdmddtu8mpaMvHdq
-LtG7snqpK1LlY/JLHzc2eBioK2dIYc88R7+GeUQAyxibdzuRMaZ0D20H9JGAG2Qr
-NwQ56bhg50ugv4Hy4RO7JDMulcgBOmFTtOpW8/EgALOmaELXU+2qoaOhAUNiNOuC
-Fk+cqV4slzUqg7vjs97krR43B43TnKW2kwqyxR0ffbFXQrlYyLFYuSBOj/Qk4qyy
-9audI17Tbv5Ak8HuoQjyYzHAdg8GSA7qVPLIST9aRBgS+7lFBy7rBsEWpAmyrlGS
-vtvXZ3cOO9GHSa1ZhetyzbSsokLnXSM7dv9P9WWie3Zs/5eO3wxr1yGrX32KCavR
-/BC/BAonzKU9dGrf8WidPCyABqF897bN7FZikH0Dzl1E5RpYU1s=
-=ocy+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5+zJcACgkQFA3kzBSg
+KbYgcA//Zpp/xig5704q/Ep9uojvbhSCw2gS2PY9qhGBcL8cdlHwhpdd4wQlswfX
+oWG72RbZ/HbLoHpFBUuNaWp+OjohPUmSYJ6MyXnAOb3oALtGCtuMU36PPgjRJYkF
+coh5sq7FaYEhkTMXpcVOAB+NyTJJCo/MKb8BJr1hBOmFPg4Fhzk0cg610YT0FCF9
+IS+DIx0rkNKqziBhyxP5Fvh1kX9+xvJaRDFVh3xcmGAFiqfIjPpC3I3604bG845Z
+hgaxt9Bp6kunj2WVIX0ATNRyLEjHi4qaJ6lSq9YW6/gTLvt8dW3sD8seI4fWkpGR
+GoV39XgEbMi2DUIJ+bdI6cxOOdpA3vhOAhBzHt4zvGv2OOUI1DgIK0SoUh/nPmEe
+hx/U/WoL5ku1ydIWKAxy/WLTC/KrcHalDUCe9GbJFFjP6bUD7l9xFb9lrQwmr5XB
+u6n7p6aubZwEV9QN3DZObtxveOKwNxxkPJmOwfFxO6LAKbhkjd5d5/ZDz8g10sDs
+cZirQAFFji6Vhui3L5gq18KdFLIc/LPYjIoKGeOAT9DHtxVSghXvLp8oahuJYlvm
+x/My43bCKPpuvkSOjabRCFGYLutCXbHRnV4y803xdBgDfManUOAVzYR7zjeRtw+W
+7mMoNxh9eNkSo5ERYWK5hgsuj9yFEiEjrR4WXc6xZxiTRoheoUU=
+=ZWKa
 -----END PGP SIGNATURE-----
 
---61jdw2sOBCFtR2d/--
+--S1BNGpv0yoYahz37--
