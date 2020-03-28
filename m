@@ -2,41 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BED161968F0
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Mar 2020 20:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 935CA1968F8
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Mar 2020 20:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727009AbgC1TfF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 28 Mar 2020 15:35:05 -0400
-Received: from sauhun.de ([88.99.104.3]:58286 "EHLO pokefinder.org"
+        id S1727009AbgC1TlG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 28 Mar 2020 15:41:06 -0400
+Received: from sauhun.de ([88.99.104.3]:58344 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726981AbgC1TfF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 28 Mar 2020 15:35:05 -0400
+        id S1725807AbgC1TlF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 28 Mar 2020 15:41:05 -0400
 Received: from localhost (p5486CEA0.dip0.t-ipconnect.de [84.134.206.160])
-        by pokefinder.org (Postfix) with ESMTPSA id C48112C1F57;
-        Sat, 28 Mar 2020 20:35:02 +0100 (CET)
-Date:   Sat, 28 Mar 2020 20:35:02 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id DDE7A2C1F57;
+        Sat, 28 Mar 2020 20:41:03 +0100 (CET)
+Date:   Sat, 28 Mar 2020 20:41:03 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Jean-Baptiste Maneyrol <JManeyrol@invensense.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] iio: imu: inv_mpu6050: convert to use
- i2c_new_client_device()
-Message-ID: <20200328193502.GA1330@kunai>
-References: <20200326210955.12991-1-wsa+renesas@sang-engineering.com>
- <20200326210955.12991-2-wsa+renesas@sang-engineering.com>
- <MN2PR12MB44228DEA7CE19B853292FE38C4CC0@MN2PR12MB4422.namprd12.prod.outlook.com>
- <20200328151310.1dfd04a3@archlinux>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for 5.6
+Message-ID: <20200328194059.GA1632@kunai>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+HP7ph2BbKc20aGI"
+        protocol="application/pgp-signature"; boundary="wac7ysb48OaltWcw"
 Content-Disposition: inline
-In-Reply-To: <20200328151310.1dfd04a3@archlinux>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -44,36 +33,88 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---+HP7ph2BbKc20aGI
+--wac7ysb48OaltWcw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+Linus,
 
-> Note this has missed the coming merge window.  Hope that doesn't matter for your
-> deprecation plans.
+I2C has three more driver bugfixes for you, and two doc improvements
+fixing build warnings while we are here.
 
-No worries. If I can remove it in the cycle after the next, I am happy.
+Please pull.
 
-Thanks!
+Thanks,
 
---+HP7ph2BbKc20aGI
+   Wolfram
+
+
+The following changes since commit fb33c6510d5595144d585aa194d377cf74d31911:
+
+  Linux 5.6-rc6 (2020-03-15 15:01:23 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+for you to fetch changes up to 14c1fe699cad9cb0acda4559c584f136d18fea50:
+
+  i2c: pca-platform: Use platform_irq_get_optional (2020-03-28 05:03:17 +0100)
+
+----------------------------------------------------------------
+Alain Volmat (1):
+      i2c: st: fix missing struct parameter description
+
+Chris Packham (1):
+      i2c: pca-platform: Use platform_irq_get_optional
+
+Chuhong Yuan (1):
+      i2c: hix5hd2: add missed clk_disable_unprepare in remove
+
+Kai-Heng Feng (1):
+      i2c: nvidia-gpu: Handle timeout correctly in gpu_i2c_check_status()
+
+Mauro Carvalho Chehab (1):
+      i2c: fix a doc warning
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Ajay Gupta (2):
+      (Rev.) i2c: nvidia-gpu: Handle timeout correctly in gpu_i2c_check_status()
+      (Test) i2c: nvidia-gpu: Handle timeout correctly in gpu_i2c_check_status()
+
+Andy Shevchenko (1):
+      (Rev.) i2c: nvidia-gpu: Handle timeout correctly in gpu_i2c_check_status()
+
+Patrice Chotard (1):
+      (Rev.) i2c: st: fix missing struct parameter description
+
+ drivers/i2c/busses/i2c-hix5hd2.c      |  1 +
+ drivers/i2c/busses/i2c-nvidia-gpu.c   | 20 ++++++++------------
+ drivers/i2c/busses/i2c-pca-platform.c |  2 +-
+ drivers/i2c/busses/i2c-st.c           |  1 +
+ include/linux/i2c.h                   |  4 ++--
+ 5 files changed, 13 insertions(+), 15 deletions(-)
+
+--wac7ysb48OaltWcw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5/puIACgkQFA3kzBSg
-KbaoHBAAs7uYfJzW2W62SRkJ7BLmqjeMfJlBq/LjXgzG7B2qZ2ndY1ObemD2Qflp
-fGqIgt5FRXIFxuNN52Md0W4iRQ8qoYlluELMnAe4mXlYqROKTOm26PuvS0OB9rWq
-/kVd1LoLj6DqWHVEl8IVjSGm9byltpO+LwT32bQVetRP6Kj6Gai+e9c6Ri15ZN4E
-4ljVMCQij7QLiuwrG4cnOMURbJFlrfEiQlUt4ufQhN/Yixe0xjvv8mEbzZCcwWUd
-5JY1Dj+R7RojHRH1Xpu3bCCtLQ8MfJXj0lae85MGamOqWpHa48kxieDSIigR+2BH
-kaqapRu9voZO3WCK/gABhcPekcRNnIJx/c2FruC3ABpKWsw4izxUbVar2oSHAt0F
-ah9k3ZfzUJQA43Y7WGkzswnikHCde3b4DMOILO6JWs7C/OKEgFIzPY4srSK9YBOi
-2tcC/NG9jfYqSOZGUV6X8UJc0wLZA+85EwJbtfSV9Q5YJt351wLCB9Fa1+ky6nqS
-J5lt6TVvM1+JoO1np7K4uwJFrRA+1xVokxGpOz8Em5EF/10UXn0xCXUCxkhgw8+C
-ifT0aMOW6ZLbU+qlDWaJreh6YHb/l2KO2UWE4325PuakNw8sv7+J6dSBpTPHcGu3
-d6nE4ONH+0UDsVu9fGyZps45AR6HyjD2Ou5XuICHKHrUsl45LEY=
-=bgvz
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5/qEsACgkQFA3kzBSg
+KbbiQg//UzpfE121KV3F7OUw3dwk1En3i69/9EIyJ8s/ivrVCntCMFJWAh38cHnL
+tj+aclUL6I1+LJfhOGSQdCSSs7JT9vrRh7VlFdYRnckWeaPqpCURxAhseH970wT0
+74cD6tS5lTCrgVl/Nvp35EJQrV827URkzM5wRhLnqehrB8PcZ+ZQ53iPe13nJNMO
+AgEDw0jwrv9HfcjWVDIU4sIi8hIVoRoDa99tRmaLs+oXCK5tF5onibBNkPe9UkjI
+zNfsoCUqvdN84RnCmr+wSQwA845Mlgre+yOx1KffFUddtfVbV14IMdhGtjGA7ZCx
+TfReYxJfD4MP3Ara2iT1qZYExv5jakLCrneyzeW2P79M9JM8QU0XiSxvdKLQl8zQ
+t2jOlua8jTkcEgRY87Mh2he+PZgy9KWY6Wp4Gm+0GJRcohLQWYlo6LRx2rzN87Hf
+FbBehZHnbCYpReFIWCiWUJoIyyCYe2l0uUaZcvtdw5dbZZ9riknJjJfvhPNNJRwY
+XBIUMBLpTcrsRv8Q4BX4msMb5Zu1iPwqYMJ37WDiQW0puJBCUC32RzXr+8sP+oIO
+pUQla9UXLpC5HazV1llyYYot1D5rw9zHv+lYN9uLTLwYnjFzG2mkRGRhiqLZKKEO
+YVwlU3hu7mPyeM16djrmdaRHYjgQKoFHzASSrbEK+djUMHjJRi4=
+=1Pp0
 -----END PGP SIGNATURE-----
 
---+HP7ph2BbKc20aGI--
+--wac7ysb48OaltWcw--
