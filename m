@@ -2,77 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 873C8196995
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Mar 2020 22:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB97F196AD4
+	for <lists+linux-i2c@lfdr.de>; Sun, 29 Mar 2020 05:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727755AbgC1Vtl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 28 Mar 2020 17:49:41 -0400
-Received: from asavdk4.altibox.net ([109.247.116.15]:51214 "EHLO
-        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726604AbgC1Vtl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 28 Mar 2020 17:49:41 -0400
-Received: from ravnborg.org (unknown [158.248.194.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk4.altibox.net (Postfix) with ESMTPS id 519CF8040D;
-        Sat, 28 Mar 2020 22:49:39 +0100 (CET)
-Date:   Sat, 28 Mar 2020 22:49:37 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
+        id S1726316AbgC2DTP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 28 Mar 2020 23:19:15 -0400
+Received: from cnc.isely.net ([75.149.91.89]:54423 "EHLO cnc.isely.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726315AbgC2DTP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 28 Mar 2020 23:19:15 -0400
+X-Greylist: delayed 304 seconds by postgrey-1.27 at vger.kernel.org; Sat, 28 Mar 2020 23:19:14 EDT
+Received: from ts3-dock2.isely.net (ts3-dock2.isely.net [::ffff:192.168.23.14])
+  (AUTH: PLAIN isely, TLS: TLSv1/SSLv3,256bits,DHE-RSA-AES256-GCM-SHA384)
+  by cnc.isely.net with ESMTPSA; Sat, 28 Mar 2020 22:14:09 -0500
+  id 0000000000146015.000000005E801281.00004342
+Date:   Sat, 28 Mar 2020 22:14:09 -0500 (CDT)
+From:   Mike Isely <isely@isely.net>
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, nouveau@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] gpu: convert to use new I2C API
-Message-ID: <20200328214937.GA9505@ravnborg.org>
-References: <20200326211005.13301-1-wsa+renesas@sang-engineering.com>
-MIME-Version: 1.0
+cc:     linux-i2c@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Isely <isely@isely.net>
+Subject: Re: [PATCH 6/6] media: usb: pvrusb2: convert to use
+ i2c_new_client_device()
+In-Reply-To: <20200326210947.12747-7-wsa+renesas@sang-engineering.com>
+Message-ID: <alpine.DEB.2.21.2003282213550.11595@sheridan.isely.net>
+References: <20200326210947.12747-1-wsa+renesas@sang-engineering.com> <20200326210947.12747-7-wsa+renesas@sang-engineering.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200326211005.13301-1-wsa+renesas@sang-engineering.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=XpTUx2N9 c=1 sm=1 tr=0
-        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=e5mUnYsNAAAA:8
-        a=Ej2OcDn8OD74Q5IJgyMA:9 a=CjuIK1q_8ugA:10 a=Vxmtnl_E_bksehYqCbjh:22
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Mar 26, 2020 at 10:09:58PM +0100, Wolfram Sang wrote:
-> We are deprecating calls which return NULL in favor of new variants which
-> return an ERR_PTR. Only build tested.
-> 
-> 
-> Wolfram Sang (6):
->   drm/amdgpu: convert to use i2c_new_client_device()
->   drm/gma500: convert to use i2c_new_client_device()
->   drm/i2c/sil164: convert to use i2c_new_client_device()
->   drm/i2c/tda998x: convert to use i2c_new_client_device()
->   drm/nouveau/therm: convert to use i2c_new_client_device()
->   drm/radeon: convert to use i2c_new_client_device()
 
-With the ack from Alex I went ahead and applied the patches to
-drm-misc-next.
+Acked-by: Mike Isely <isely@pobox.com>
 
-	Sam
+On Thu, 26 Mar 2020, Wolfram Sang wrote:
 
+> Move away from the deprecated API.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
+> index 275394bafe7d..63db04fe12d3 100644
+> --- a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
+> +++ b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
+> @@ -564,7 +564,7 @@ static void pvr2_i2c_register_ir(struct pvr2_hdw *hdw)
+>  		strscpy(info.type, "ir_video", I2C_NAME_SIZE);
+>  		pvr2_trace(PVR2_TRACE_INFO, "Binding %s to i2c address 0x%02x.",
+>  			   info.type, info.addr);
+> -		i2c_new_device(&hdw->i2c_adap, &info);
+> +		i2c_new_client_device(&hdw->i2c_adap, &info);
+>  		break;
+>  	case PVR2_IR_SCHEME_ZILOG:     /* HVR-1950 style */
+>  	case PVR2_IR_SCHEME_24XXX_MCE: /* 24xxx MCE device */
+> @@ -579,7 +579,7 @@ static void pvr2_i2c_register_ir(struct pvr2_hdw *hdw)
+>  		strscpy(info.type, "ir_z8f0811_haup", I2C_NAME_SIZE);
+>  		pvr2_trace(PVR2_TRACE_INFO, "Binding %s to i2c address 0x%02x.",
+>  			   info.type, info.addr);
+> -		i2c_new_device(&hdw->i2c_adap, &info);
+> +		i2c_new_client_device(&hdw->i2c_adap, &info);
+>  		break;
+>  	default:
+>  		/* The device either doesn't support I2C-based IR or we
+> 
 
-> 
->  drivers/gpu/drm/amd/amdgpu/amdgpu_dpm.c        | 2 +-
->  drivers/gpu/drm/gma500/tc35876x-dsi-lvds.c     | 8 ++++----
->  drivers/gpu/drm/i2c/sil164_drv.c               | 7 +++++--
->  drivers/gpu/drm/i2c/tda998x_drv.c              | 6 +++---
->  drivers/gpu/drm/nouveau/nvkm/subdev/therm/ic.c | 4 ++--
->  drivers/gpu/drm/radeon/radeon_atombios.c       | 4 ++--
->  drivers/gpu/drm/radeon/radeon_combios.c        | 4 ++--
->  7 files changed, 19 insertions(+), 16 deletions(-)
-> 
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+-- 
+
+Mike Isely
+isely @ isely (dot) net
+PGP: 03 54 43 4D 75 E5 CC 92 71 16 01 E2 B5 F5 C1 E8
