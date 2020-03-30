@@ -2,85 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F01198145
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Mar 2020 18:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6047C1987B3
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 Mar 2020 01:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728994AbgC3QbL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 30 Mar 2020 12:31:11 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59078 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730042AbgC3QbL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 30 Mar 2020 12:31:11 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id C130EAC7C;
-        Mon, 30 Mar 2020 16:31:09 +0000 (UTC)
-Date:   Mon, 30 Mar 2020 18:31:08 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Adam Honse <calcprogrammer1@gmail.com>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: Detect secondary SMBus controller on AMD AM4
- chipsets
-Message-ID: <20200330183108.58c63736@endymion>
-In-Reply-To: <20200329174440.19342-1-calcprogrammer1@gmail.com>
-References: <20200329174440.19342-1-calcprogrammer1@gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1729060AbgC3XCY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 30 Mar 2020 19:02:24 -0400
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:47205 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728987AbgC3XCY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Mar 2020 19:02:24 -0400
+Received: from Internal Mail-Server by MTLPINE2 (envelope-from kblaiech@mellanox.com)
+        with ESMTPS (AES256-SHA encrypted); 31 Mar 2020 02:02:17 +0300
+Received: from farm-1.mtbu.labs.mlnx (farm-1.mtbu.labs.mlnx [10.15.2.31])
+        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 02UN2GJU003816;
+        Mon, 30 Mar 2020 19:02:16 -0400
+Received: (from kblaiech@localhost)
+        by farm-1.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 02UN2FI2011061;
+        Mon, 30 Mar 2020 19:02:15 -0400
+From:   Khalil Blaiech <kblaiech@mellanox.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh@kernel.org>, linux-i2c@vger.kernel.org
+Cc:     Khalil Blaiech <kblaiech@mellanox.com>,
+        Vadim Pasternak <vadimp@mellanox.com>
+Subject: [PATCH v9 0/2] i2c: add driver for Mellanox BlueField SoC
+Date:   Mon, 30 Mar 2020 19:02:10 -0400
+Message-Id: <cover.1585608633.git.kblaiech@mellanox.com>
+X-Mailer: git-send-email 2.1.2
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Adam,
+Add I2C SMBus driver and device tree bindings documentation.
 
-On Sun, 29 Mar 2020 12:44:40 -0500, Adam Honse wrote:
-> The AMD X370 and other AM4 chipsets (A/B/X 3/4/5 parts) and Threadripper equivalents have a secondary SMBus controller at I/O port address 0x0B20.  This bus is used by several manufacturers to control motherboard RGB lighting via embedded controllers.  I have been using this bus in my OpenRGB project to control the Aura RGB on many motherboards and ASRock also uses this bus for their Polychrome RGB controller.
-> 
-> See this kernel bug report: https://bugzilla.kernel.org/show_bug.cgi?id=202587
-> 
-> Thanks,
-> 
-> Adam Honse (calcprogrammer1@gmail.com)
+The Mellanox BlueField is a System-on-Chip (SoC) that combines
+Arm cores and ConnectX network adapter technology intended to
+accelerate storage network solutions. The Mellanox BlueField
+incorporates various I2C devices that are accessed using SMBus
+protocol, a variant of the I2C protocol. On storage controllers,
+the BlueField SoC is connected to a management controller board,
+e.g., BMC via an I2C bus.
 
-In order for this patch to be acceptable, this would need to be turned
-into a proper Signed-off-by statement. Please see:
+An I2C driver running on the Arm side is needed to manage the
+hardware I2C controllers. The driver enables a master function
+to transfer data back and forth from/to I2C devices, such as
+EEPROM parts and implements a slave function to handle the BMC
+controller requests.
+---
+v8->v9:
+	- Fixing implicit declaration of devm_ioremap_nocache
+	and ioremap_nocache build error.
+v7->v8:
+	- Updating the dependency expression in Kconfig.
+	- Fixing an implicit fallthrough build error.
+v6->v7:
+	- Fixing kernel coding style issues as suggested by
+	Mellanox internal code reviewers.
+	- Updating the dependency expression in Kconfig.
+	- Fixing various device driver bugs.
+	- Adding an entry to MAINTAINERS file.
+v5->v6:
+	- Fixing kernel coding style issues detected using
+	'--strict' flag.
+	- Updating the device binding documentation to add
+	support for BlueField-2 SoCs.
+v4->v5:
+	- Fixing device driver bug.
+v3->v4:
+	- Review of the device binding documentation to
+	fix format issue and miscellaneous cleanup.
+v2->v3:
+	- Various device driver changes and bug fixes.
+	- Updating the device property in the device binding
+	documentation and file format review.
+v1->v2:
+	- Various device driver changes and bug fixes.
+	- Cleanup of the device binding documentation.
 
-https://www.kernel.org/doc/html/v5.5/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+Khalil Blaiech (2):
+  i2c: i2c-mlxbf: I2C SMBus driver for Mellanox BlueField SoC
+  dt-bindings: i2c: I2C binding for Mellanox BlueField SoC
 
-> 
-> ---
->  drivers/i2c/busses/i2c-piix4.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-> index 30ded6422e7b..6068364b84f6 100644
-> --- a/drivers/i2c/busses/i2c-piix4.c
-> +++ b/drivers/i2c/busses/i2c-piix4.c
-> @@ -981,6 +981,11 @@ static int piix4_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  		retval = piix4_setup_sb800(dev, id, 1);
->  	}
->  
-> +	if (dev->vendor == PCI_VENDOR_ID_AMD &&
-> +	    dev->device == PCI_DEVICE_ID_AMD_KERNCZ_SMBUS) {
-> +		retval = piix4_setup_sb800(dev, id, 1);
-> +	}
-> +
->  	if (retval > 0) {
->  		/* Try to add the aux adapter if it exists,
->  		 * piix4_add_adapter will clean up if this fails */
-
-I'm a bit worried about this change. Sure it works on the systems which
-do have the second SMBus channel, but what about the systems which
-don't? If there no device revision that needs to be checked to ensure
-that the second channel is present?
-
-This patch needs to be tested on tested on systems with CZ-compatible
-CPUs which do not have the second SMBus channel. Or do you believe they
-all do have it?
+ .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt |   42 +
+ MAINTAINERS                                        |    6 +
+ drivers/i2c/busses/Kconfig                         |   13 +
+ drivers/i2c/busses/Makefile                        |    1 +
+ drivers/i2c/busses/i2c-mlxbf.c                     | 2507 ++++++++++++++++++++
+ 5 files changed, 2569 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
+ create mode 100644 drivers/i2c/busses/i2c-mlxbf.c
 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.1.2
+
