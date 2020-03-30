@@ -2,60 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE3B1979EB
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Mar 2020 12:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C67A1979BE
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Mar 2020 12:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729278AbgC3KyS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 30 Mar 2020 06:54:18 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:36550 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729214AbgC3KyS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 30 Mar 2020 06:54:18 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 422B21A0467;
-        Mon, 30 Mar 2020 12:54:16 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6DF141A0485;
-        Mon, 30 Mar 2020 12:54:11 +0200 (CEST)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 9C675402AA;
-        Mon, 30 Mar 2020 18:54:05 +0800 (SGT)
-From:   Biwen Li <biwen.li@oss.nxp.com>
-To:     leoyang.li@nxp.com, linux@rempel-privat.de, kernel@pengutronix.de,
-        wsa@the-dreams.de
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jiafei.pan@nxp.com, Biwen Li <biwen.li@nxp.com>
-Subject: [PATCH] i2c: slave: support I2C_SLAVE_STOP event for the read transactions
-Date:   Mon, 30 Mar 2020 18:50:38 +0800
-Message-Id: <20200330105038.22546-1-biwen.li@oss.nxp.com>
-X-Mailer: git-send-email 2.17.1
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1729624AbgC3Kwp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 30 Mar 2020 06:52:45 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:33049 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729446AbgC3Kwo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Mar 2020 06:52:44 -0400
+Received: by mail-vs1-f65.google.com with SMTP id y138so10691171vsy.0
+        for <linux-i2c@vger.kernel.org>; Mon, 30 Mar 2020 03:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=I2bZK+Edwp7f1bl38ZDsYZ8gkHoLOp7N+SgwKjOSdbsqnWhmYlKKFyWTTwwdBuA4Vg
+         rwBHnP7ed1EksF/Uo6wi0daOtai1jA53B5b9RrMCwInP8fTj6xlf+N87Jxy7Sxa+QbUF
+         l2GP0Lv6JzwuZiPJAzgKXNfvaR6mAHzPBfBvakflfZ8B4h5bL4zPFQy+qXgn4TFvbTXz
+         A1ohkR077EumDiarvC1dhS/fXXyUHKbnnxfkdMVlwSlZiAQJvL50ZQklv05R+GT0yrBC
+         3q/4vjuGZ1FGpK3Ogg0O4Ce18OqauZECfFoMpKCzkd0qt9LKtlmIkWUwZqPjuntycFFN
+         I7DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=TRc/2zZ4PL4wpjqfSZF5x4kvws9dg6f9lQI7tW2sh1wFntKREkuUA33UFAiLfZ9iWJ
+         EOw5iUhDZHMpubwku6Vo8Dk6dQ1xjE6NrdEZlhVLwgXjQ/sNwhoCMAcbnLh1sE+S8+Ag
+         1sprsPQck8nhWvZjRVqijm++szO5GrMladWH0I7jwh6ljQU40P+vIeqvQDlvjnEf2vN3
+         EmPSVxQNd4UvYQf3zrwsAsyJEUEJeRo3ec0/2C28NVDP99JKwq3c0x1hqNW0Jd1yuWrD
+         zOi6ZMFbvzwsvH+J/lcKV47ZsaRe70lruNp6BZ0dGvhxnNIE4CyQSpXC9XMOudsU3wDA
+         S3Lw==
+X-Gm-Message-State: AGi0PuYe4oLILG27yFl79pXMRa23NhZX6KmklPi3cvy81QDA6/qxUYR5
+        eCqRP35fomQhVnIa0PXuSMAPpwOdSWnck/iG3vw=
+X-Google-Smtp-Source: APiQypIWKERkhJyfw3nllppwlKx4Kg5tACX7YV91IKVmdYpKGJw8tan3l05zjbxOy64C+jzvYjD6e0YtF987t4KsIjw=
+X-Received: by 2002:a67:e24c:: with SMTP id w12mr8442912vse.153.1585565563772;
+ Mon, 30 Mar 2020 03:52:43 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a67:c005:0:0:0:0:0 with HTTP; Mon, 30 Mar 2020 03:52:43
+ -0700 (PDT)
+Reply-To: maryalice00.12@postribe.com
+From:   Maryalice Williams <maryalicewilliams730@gmail.com>
+Date:   Mon, 30 Mar 2020 08:52:43 -0200
+Message-ID: <CAKwdjsr+YKgJk7z-UHX7Zo55cx5RUN3-bw03sWcArP4vbM2B5g@mail.gmail.com>
+Subject: Reply For More Details.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Biwen Li <biwen.li@nxp.com>
-
-Support I2C_SLAVE_STOP event for the read transactions(master read from slave)
-
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
----
- drivers/i2c/busses/i2c-imx.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index 62517a41b32d..1fd0d87885d5 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1464,6 +1464,7 @@ static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx)
- 		ctl &= ~I2CR_MTX;
- 		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
- 		imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
-+		i2c_slave_event(i2c_imx->slave, I2C_SLAVE_STOP, &value);
- 	}
- 	return IRQ_HANDLED;
- }
 -- 
-2.17.1
+My dear,
 
+I am Mrs Maryalice Williams, I want to send you donation of two
+million seven hundred thousand Dollars ($2.7M) for volunteer projects
+in your country due to my ill health that could not permit me. Kindly
+reply for more details, and also send me the following details, as per
+below, your full Name ..........,  Address...........,
+Age...............,  Occupation ...............
+
+Remain blessed,
+Mrs. Maryalice Williams.
