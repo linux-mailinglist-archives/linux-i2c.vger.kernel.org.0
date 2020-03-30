@@ -2,63 +2,145 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2B81970FF
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Mar 2020 01:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BCD197136
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Mar 2020 02:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728548AbgC2XBd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 29 Mar 2020 19:01:33 -0400
-Received: from mail.hgona.gob.ec ([190.11.20.226]:48144 "HELO
-        mail.hgona.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728493AbgC2XBd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 29 Mar 2020 19:01:33 -0400
-X-Greylist: delayed 567 seconds by postgrey-1.27 at vger.kernel.org; Sun, 29 Mar 2020 19:01:23 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hgona.gob.ec (Postfix) with ESMTP id 74E601803334EB;
-        Sun, 29 Mar 2020 17:51:19 -0500 (-05)
-Received: from mail.hgona.gob.ec ([127.0.0.1])
-        by localhost (mail.hgona.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 2NQR46fnt0tk; Sun, 29 Mar 2020 17:51:19 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hgona.gob.ec (Postfix) with ESMTP id 0AE5A180340FA5;
-        Sun, 29 Mar 2020 17:51:19 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.hgona.gob.ec 0AE5A180340FA5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hgona.gob.ec;
-        s=8D03E796-58AC-11EA-8774-F7A3E9E8A8FC; t=1585522279;
-        bh=PT38bPdGjjMgT/v553Mhe/YZXVE/tZfYca1fbT3zz1c=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=Do2529EUqFIM8QuBNvcOCd4WjG6JumhKPfhA89fo3q781Zvj8Y0aKw7M3bWy0PWrg
-         uaeHBFfJ0vWGGHiaE4bR6cS2G75Hglcv90Nn1wOf6uVN7U+/A4pz3zv7TrfHEbyXw+
-         nC8DFEqgrACp4yIBIeytsvkfg3jBdYZfqBW1S0r6rKEiLoPJD0+kcegfAwYpRsGqEU
-         r4INqyMksV43FUvFnfGfzfWBrvhVnUd6f0xe2w6oJm8Dej1fhssS5hYIy8bVCl/q8s
-         y86IvKvXeUlBnmO503cThEjSG8gGNKn77McgRAt9iyIjIs80Ji1PVk0nPz/uR1K9pp
-         EBjDMRf+NCHtA==
-X-Virus-Scanned: amavisd-new at hgona.gob.ec
-Received: from mail.hgona.gob.ec ([127.0.0.1])
-        by localhost (mail.hgona.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id dXWLXb17xsbY; Sun, 29 Mar 2020 17:51:18 -0500 (-05)
-Received: from [192.168.8.100] (unknown [105.9.102.248])
-        by mail.hgona.gob.ec (Postfix) with ESMTPSA id 5A1331803334EB;
-        Sun, 29 Mar 2020 17:51:03 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1727547AbgC3AXG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 29 Mar 2020 20:23:06 -0400
+Received: from sauhun.de ([88.99.104.3]:43912 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726403AbgC3AXG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 29 Mar 2020 20:23:06 -0400
+Received: from localhost (p5486C514.dip0.t-ipconnect.de [84.134.197.20])
+        by pokefinder.org (Postfix) with ESMTPSA id C96C92C0195;
+        Mon, 30 Mar 2020 02:23:02 +0200 (CEST)
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH] i2c: regroup documentation of bindings
+Date:   Mon, 30 Mar 2020 02:22:20 +0200
+Message-Id: <20200330002220.3575-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: SPENDE SPENDE
-To:     Recipients <elisa.jacome@hgona.gob.ec>
-From:   elisa.jacome@hgona.gob.ec
-Date:   Sun, 29 Mar 2020 15:50:47 -0700
-Reply-To: ugbumamamam@gmail.com
-Message-Id: <20200329225104.5A1331803334EB@mail.hgona.gob.ec>
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Mein Name ist CHARLES JACKSON JNR.Ich habe eine Lotterie in H=F6he von 344 =
-Millionen Dollar gewonnen und seitdem hat sich mein Leben positiv ver=E4nde=
-rt. Ich bin derzeit an Krebs erkrankt und so krank. Deshalb habe ich beschl=
-ossen, 7 Millionen Euro an 14 Menschen auszugeben, um den Menschen zu helfe=
-n arm UND diejenigen, die wie die Welt an Corona-Virus erkrankt sind, brauc=
-hen Hilfe. Da ich so krank bin, um eine freundliche Antwort =FCber diese An=
-twort zu erhalten:
-(ugbumamamam@gmail.com)
+Some bindings are for the bus master, some are for the slaves.
+Regroup them and give them seperate headings to make it clear.
+
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ Documentation/devicetree/bindings/i2c/i2c.txt | 63 +++++++++++--------
+ 1 file changed, 38 insertions(+), 25 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
+index 9a53df4243c6..aa74dd0e63e3 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c.txt
++++ b/Documentation/devicetree/bindings/i2c/i2c.txt
+@@ -2,10 +2,10 @@ Generic device tree bindings for I2C busses
+ ===========================================
+ 
+ This document describes generic bindings which can be used to describe I2C
+-busses in a device tree.
++busses and their child devices in a device tree.
+ 
+-Required properties
+--------------------
++Required properties (per bus)
++-----------------------------
+ 
+ - #address-cells  - should be <1>. Read more about addresses below.
+ - #size-cells     - should be <0>.
+@@ -16,18 +16,13 @@ For other required properties e.g. to describe register sets,
+ clocks, etc. check the binding documentation of the specific driver.
+ 
+ The cells properties above define that an address of children of an I2C bus
+-are described by a single value. This is usually a 7 bit address. However,
+-flags can be attached to the address. I2C_TEN_BIT_ADDRESS is used to mark a 10
+-bit address. It is needed to avoid the ambiguity between e.g. a 7 bit address
+-of 0x50 and a 10 bit address of 0x050 which, in theory, can be on the same bus.
+-Another flag is I2C_OWN_SLAVE_ADDRESS to mark addresses on which we listen to
+-be devices ourselves.
++are described by a single value.
+ 
+-Optional properties
+--------------------
++Optional properties (per bus)
++-----------------------------
+ 
+ These properties may not be supported by all drivers. However, if a driver
+-wants to support one of the below features, it should adapt the bindings below.
++wants to support one of the below features, it should adapt these bindings.
+ 
+ - clock-frequency
+ 	frequency of bus clock in Hz.
+@@ -73,31 +68,49 @@ wants to support one of the below features, it should adapt the bindings below.
+ 	i2c bus clock frequency (clock-frequency).
+ 	Specified in Hz.
+ 
+-- interrupts
+-	interrupts used by the device.
+-
+-- interrupt-names
+-	"irq", "wakeup" and "smbus_alert" names are recognized by I2C core,
+-	other names are	left to individual drivers.
+-
+-- host-notify
+-	device uses SMBus host notify protocol instead of interrupt line.
+-
+ - multi-master
+ 	states that there is another master active on this bus. The OS can use
+ 	this information to adapt power management to keep the arbitration awake
+ 	all the time, for example.
+ 
+-- wakeup-source
+-	device can be used as a wakeup source.
++Required properties (per child device)
++--------------------------------------
++
++- compatible
++	name of I2C slave device following generic names recommended practice.
+ 
+ - reg
+-	I2C slave addresses
++	One or many I2C slave addresses. These are usually a 7 bit addresses.
++	However, flags can be attached to an address. I2C_TEN_BIT_ADDRESS is
++	used to mark a 10 bit address. It is needed to avoid the ambiguity
++	between e.g. a 7 bit address of 0x50 and a 10 bit address of 0x050
++	which, in theory, can be on the same bus.
++	Another flag is I2C_OWN_SLAVE_ADDRESS to mark addresses on which we
++	listen to be devices ourselves.
++
++Optional properties (per child device)
++--------------------------------------
++
++These properties may not be supported by all drivers. However, if a driver
++wants to support one of the below features, it should adapt these bindings.
++
++- host-notify
++	device uses SMBus host notify protocol instead of interrupt line.
++
++- interrupts
++	interrupts used by the device.
++
++- interrupt-names
++	"irq", "wakeup" and "smbus_alert" names are recognized by I2C core,
++	other names are	left to individual drivers.
+ 
+ - reg-names
+ 	Names of map programmable addresses.
+ 	It can contain any map needing another address than default one.
+ 
++- wakeup-source
++	device can be used as a wakeup source.
++
+ Binding may contain optional "interrupts" property, describing interrupts
+ used by the device. I2C core will assign "irq" interrupt (or the very first
+ interrupt if not using interrupt names) as primary interrupt for the slave.
+-- 
+2.20.1
+
