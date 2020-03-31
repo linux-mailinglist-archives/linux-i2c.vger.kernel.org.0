@@ -2,258 +2,176 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4421F199CB1
-	for <lists+linux-i2c@lfdr.de>; Tue, 31 Mar 2020 19:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03F0199D3D
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 Mar 2020 19:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727183AbgCaRRh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 Mar 2020 13:17:37 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:36068 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726023AbgCaRRh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Mar 2020 13:17:37 -0400
-Received: by mail-pg1-f193.google.com with SMTP id c23so2241704pgj.3;
-        Tue, 31 Mar 2020 10:17:35 -0700 (PDT)
+        id S1726291AbgCaRwL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 Mar 2020 13:52:11 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:38338 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726199AbgCaRwL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Mar 2020 13:52:11 -0400
+Received: by mail-pl1-f195.google.com with SMTP id w3so8389830plz.5
+        for <linux-i2c@vger.kernel.org>; Tue, 31 Mar 2020 10:52:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ICG30y4zNo3hKOg/q4ebTZ3HatLK/FPtksBkCKfh5oE=;
-        b=lwFH5kmT+xLvy9HSwYOt8c/RcSf5tLMxfoJsICsjA0usmFsli0bz/+4fkqdmDJ5jBJ
-         JUC5rh5EnE7CoBMWczQaQu7OMUhQDZ6zyfUwOwWo2M332Y64DVimNpsOHsbdiAfrSKsj
-         K8pOGk/j3JYJTa4P1eRVAu2p/rr+RT7QhE3StZPZiKLkg8WvC5LNs/+Ih5oGSQzyolyO
-         YNNPQAYFNaea9PXB+ZeI7H3pYAJBT4ARacB9ILpO0JEWsJSqw9wQvd+GcDe7z/CD54bc
-         XvxmLWPInyTqZ9U2/hpPLq0EuGY9/gQDEJRiF3ic4THAw+n3MtLiJQmFVEKm5wqB+6mV
-         NISA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8b3WnZTTNBaPOMDMuIqGibWI1hhFOK4GHv2gbbqH4E4=;
+        b=Y8M8ls/Tz7mnjRLag509mDzeltvzbPfcMsTSXBMrI+rpRmUwjDK1+CkgdTXqyfEhYg
+         bZEmgXc4O3cx/xXKnPBfH/o2pWD2O/S4zuGQxn0PpL3D29pjVHIayEPExxJPcBvm/j+Y
+         ds26z93uo/7QI7TKsqvz0V98b+PNUYfX8DFiY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ICG30y4zNo3hKOg/q4ebTZ3HatLK/FPtksBkCKfh5oE=;
-        b=ifp5Xix2fpM3r3zSNGKlE5gUnjL/ebDk38n/MGdXNHitWU4wqIOCgEMSfWXFONvrx/
-         ewQIPQwHVh615nHTVACKF3Dvify1T/OvniqVZJAH7AwvSVrrNYnhHZIbTvgkMD31Dhxh
-         PFC+Qgw9eWA3W9JFNkjvMwYIHHKFKETNdveLbvhupekIvKkjYBINM/ok1871qZohW6sZ
-         OT4c5Egydc1HO/jlwCsH+018N8sGAIEo19Foth3Yv6oPx9soVOeHmhOViVfH1RL7U6e7
-         QdMSvhrr44C1Vp/zKN1mY4AzbCN0UxzxE4vcnJEVIEjhrvEXo1GdSB7dSU7tarmyeKPW
-         ZhhQ==
-X-Gm-Message-State: AGi0PuaHbbtyH1UN7a5uCQ8c13Jum4/oAmJwSU6liay0PIlWyuQgnxe4
-        dYT32YnPj1xiGoZOWyDPtf33jtx5sCmVr+q/oDCv7590u1c=
-X-Google-Smtp-Source: APiQypITqjeLzwW4boEvUSsGDOoC+q4vHjDm4i1oNqkLNQ44cl3FP6ZfCeBQoQoj9BDo8xbrDf6MQJrhnGaIPsTBxno=
-X-Received: by 2002:a63:7b1d:: with SMTP id w29mr5024588pgc.4.1585675055307;
- Tue, 31 Mar 2020 10:17:35 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8b3WnZTTNBaPOMDMuIqGibWI1hhFOK4GHv2gbbqH4E4=;
+        b=X7yROuVN1SJ9X+jp9DyIFzo+gC6d1Cy3loi0QmLHpY7Cpj2t/z2TvfuOaEcFIktCZS
+         3xu5I0wYRs3/WzyP0yz1y/WdRItqlW8MItz3jumG7xR3oDOdSNzF/M3VA+839q+glow6
+         6OqZGCjLDYaGJ0nEf2XNn1v0ids9sr4MnwzoHSGWyIpc62Xby82k0y5PDVfEWOZxYQky
+         FmlINckWwzIziWYxd249pOESoZfBg784kc44+SlweM8oHcXwxFjjxp6vu8h/XhPrdTTX
+         T3EZPieoA78XOGdBJKAmy3wB2qrfCXNglCuZ1f54ZMgW74mzDSPkSjZisKq3FpMG9VZU
+         3p3w==
+X-Gm-Message-State: AGi0PuYl1rubCyoleBAJ8efL/imjFFcyBmBG1VeaEk1lVlUHtFyCJJgZ
+        MQfV32BzOK2Qq9SRq5/sCyXvGbTVmko=
+X-Google-Smtp-Source: APiQypLEDWt9naJrmZKRq7qNu/KyQtF3te2IOlxl2ISxISRKDGfkLLJ/GDPPR5qiBNFBaLE8bdDXAw==
+X-Received: by 2002:a17:90a:e398:: with SMTP id b24mr16072pjz.113.1585677129802;
+        Tue, 31 Mar 2020 10:52:09 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id i187sm12910140pfg.33.2020.03.31.10.52.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Mar 2020 10:52:09 -0700 (PDT)
+Date:   Tue, 31 Mar 2020 10:52:07 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
+Message-ID: <20200331175207.GG199755@google.com>
+References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
+ <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
 MIME-Version: 1.0
-References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
- <20200306135451.4AF0480307C4@mail.baikalelectronics.ru> <20200331114824.e3uljdymvsjuh6wh@ubsrv2.baikal.int>
- <20200331142530.GM1922688@smile.fi.intel.com> <20200331162813.dnpmyzs35tvkeavx@ubsrv2.baikal.int>
-In-Reply-To: <20200331162813.dnpmyzs35tvkeavx@ubsrv2.baikal.int>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 31 Mar 2020 20:17:28 +0300
-Message-ID: <CAHp75VfOxRdEZ81-rFUrAiQDdruKqhJn_Wh+PJnyB5WL2vMUCQ@mail.gmail.com>
-Subject: Re: [PATCH 0/6] i2c: designeware: Add Baikal-T1 SoC DW I2C specifics support
-To:     Sergey Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 7:29 PM Sergey Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
-> On Tue, Mar 31, 2020 at 05:25:30PM +0300, Andy Shevchenko wrote:
-> > On Tue, Mar 31, 2020 at 02:48:24PM +0300, Sergey Semin wrote:
-> > > On Fri, Mar 06, 2020 at 03:54:45PM +0200, Andy Shevchenko wrote:
+Hi Akash,
 
-...
+On Tue, Mar 31, 2020 at 04:39:30PM +0530, Akash Asthana wrote:
+> Add necessary macros and structure variables to support ICC BW
+> voting from individual SE drivers.
+> 
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> ---
+> Changes in V2:
+>  - As per Bjorn's comment dropped enums for ICC paths, given the three
+>    paths individual members
+> 
+> Changes in V3:
+>  - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
+>  - Add geni_icc_path structure in common header
+> 
+>  drivers/soc/qcom/qcom-geni-se.c | 98 +++++++++++++++++++++++++++++++++++++++++
+>  include/linux/qcom-geni-se.h    | 36 +++++++++++++++
+>  2 files changed, 134 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+> index 7d622ea..9344c14 100644
+> --- a/drivers/soc/qcom/qcom-geni-se.c
+> +++ b/drivers/soc/qcom/qcom-geni-se.c
+> @@ -720,6 +720,104 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+>  }
+>  EXPORT_SYMBOL(geni_se_rx_dma_unprep);
+>  
+> +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
+> +		const char *icc_ddr)
+> +{
+> +	if (icc_core) {
+> +		se->to_core.path = devm_of_icc_get(se->dev, "qup-core");
+> +		if (IS_ERR(se->to_core.path))
+> +			return PTR_ERR(se->to_core.path);
+> +	}
+> +
+> +	if (icc_cpu) {
+> +		se->from_cpu.path = devm_of_icc_get(se->dev, "qup-config");
+> +		if (IS_ERR(se->from_cpu.path))
+> +			return PTR_ERR(se->from_cpu.path);
+> +	}
+> +
+> +	if (icc_ddr) {
+> +		se->to_ddr.path = devm_of_icc_get(se->dev, "qup-memory");
+> +		if (IS_ERR(se->to_ddr.path))
+> +			return PTR_ERR(se->to_ddr.path);
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(geni_icc_get);
+> +
+> +int geni_icc_vote_on(struct geni_se *se)
+> +{
+> +	int ret;
+> +
+> +	if (se->to_core.path) {
+> +		ret = icc_set_bw(se->to_core.path, se->to_core.avg_bw,
+> +			se->to_core.peak_bw);
+> +		if (ret) {
+> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for core\n",
+> +						__func__);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	if (se->from_cpu.path) {
+> +		ret = icc_set_bw(se->from_cpu.path, se->from_cpu.avg_bw,
+> +			se->from_cpu.peak_bw);
+> +		if (ret) {
+> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for cpu\n",
+> +						__func__);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	if (se->to_ddr.path) {
+> +		ret = icc_set_bw(se->to_ddr.path, se->to_ddr.avg_bw,
+> +			se->to_ddr.peak_bw);
+> +		if (ret) {
+> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for ddr\n",
+> +						__func__);
+> +			return ret;
+> +		}
+> +	}
 
-> > > As I see the others have not comments.) Anyway I see your point and h=
-aving the
-> > > regmap-based interface might be better than the approach I've suggest=
-ed
-> > > in this patchset particularly seeing that our DW i2c IP registers are
-> > > hidden behind a system controller register space.
-> > >
-> > > In order to follow your proposition to create a dedicated regmap and =
-to supply
-> > > it to the DW i2c driver, I have to redevelop not only this patchset, =
-but
-> > > also an adjacent drivers. In particular the changes will concern the
-> > > MFD-based System Controller driver (which will instantiate this DW i2=
-c
-> > > controller device), Clocks Control Unit drivers set, and a few
-> > > others. The whole alteration I described in the RFC:
-> > > https://lkml.org/lkml/2020/3/22/393
-> > > You've been in Cc there, so fill free to send your comments regarding
-> > > the changes I suggested. Though this time I hope the solution will
-> > > satisfy everyone, who had issues with patchsets I've recently sent.
-> > >
-> > > Getting back to your comment in the framework of this patchset. The a=
-pproach
-> > > used for CHT Whiskey Cove i2c isn't fully suitable in our case for
-> > > the reason of the DW I2C controller nature. DW I2C controller is a ge=
-neric
-> > > controller and used on many different platforms, while AFAICS CHT Whi=
-skey Cove
-> > > I2C is the SoC-specific used to access a charger-IC. So in the former=
- case we
-> > > may have an arbitrary set of i2c-slaves connected to the controller o=
-n
-> > > different platforms, while on the latter one - there is a fixed set o=
-f
-> > > slaves. In addition due to the same reason the DW I2C IP might be
-> > > embedded into different sub-blocks on different platforms, while the =
-CHT
-> > > Whiskey Cove I2C is known to be a part of Intel CHT WC SoC PMIC.
-> > > For instance Baikal-T1 SoC has one DW I2C controller embedded into th=
-e
-> > > System Controller with indirectly accessible registers and two DW I2C
-> > > interfaces with normal memory mapped registers. Due to this in case o=
-f DW I2C
-> > > driver we can't just "suck" the regmap out from a parental MFD or
-> > > anywhere else as it's done in the CHT Whiskey Cove I2C driver, but in=
-stead
-> > > we should somehow supply a regmap pointer to the driver.
-> > >
-> > > Taking into account all of these we can utilize a combined approach
-> > > implemented in ./drivers/i2c/busses/i2c-cht-wc.c and
-> > > drivers/mfd/intel_quark_i2c_gpio.c . I'll add a regmap pointer field =
-to the
-> > > "struct dw_i2c_platform_data" structure, so in case if there is no
-> > > IORESOURCE_MEM resources available (platform_get_resource() fails), w=
-e
-> > > try to get a regmap pointer from the platform data. If there is no va=
-lid
-> > > regmap available, then completely fail the driver probe procedure. Th=
-ough
-> > > due to this alteration I'll have to change the
-> > > dw_i2c_platform_data.i2c_scl_freq field usage a bit. In case if it's
-> > > zero, then call i2c_parse_fw_timings(). This won't hurt ACPI or dt-le=
-ss
-> > > platforms, but will let us cover a case when regmap is set while i2c
-> > > clock frequency is supposed to be taken from the kernel firmware (lik=
-e
-> > > dtb, etc).
 
-Whiskey Cove case provides an I=C2=B2C controller with specific access. Tha=
-t's it.
-In your case you will need similar glue driver which will utilize
-DesignWare core driver.
+With an array of 'struct geni_icc_path' pointers the above could be
+reduced to:
 
-> > > So if you are Ok with this, I'll send a v2 patchset with correspondin=
-g
-> > > alteration implemented.
-> >
-> > I was thinking about something like this:
-> >
->
-> > 1/ core driver (library + master + slave) is converted to use regmap
->
-> Yes. I also intended to do this just by altering the dw_readl() and
-> dw_writel() methods to work over regmap IO methods if regmap is
-> available.
+	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
+		if (!se->icc_paths[i])
+			continue;
 
-Why? Simple always use regmap API calls. Moreover, regmap provides
-update() which may give a leverage in some cases by dropping r-m-w
-code.
+		ret = icc_set_bw(se->icc_paths[i]->path, se->icc_paths[i]->avg_bw,
+			se->icc_paths[i]->peak_bw);
+		if (ret) {
+			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed\n",
+						__func__);
+			return ret;
+		}
+	}
 
-Core part take a pointer to regmap when instantiate (probe) a driver
-on the device.
+similar for geni_icc_vote_off()
 
-> > 2/ platform and PCI driver may provide regmap MMIO
->
-> Regmap pointer will be also a part of "struct dw_i2c_dev".
+It's just a suggestion, looks also good to me as is.
 
-Yes.
-
-> So if PCI
-> code intends the regmap-based access to the controller registers, then
-> it shall just initialize the regmap pointer in the private i2c-designware=
- data
-> instance of the dw_i2c_dev structure.
-
-Why data is being involved here?
-
-> So, yes, this is also covered by
-> my solution. Though the PCI code will be left untouched, since I can't
-> predict a particular regmap-related use-case of it.
-
-> > 3/ your glue driver will provide different regmap accessors
->
-> I was thinking of developing a more generic version so any platform
-> with a specific access to the DW I2C register could use it just by supply=
-ing
-> the regmap pointer in the dw_i2c_platform_data structure.
-
-regmap is not a platform data.
-
-> Our DW I2C
-> controller also perfectly fits to the generic i2c-designware-platdrv.c
-> driver, so implementing an additional glue-layer would be too much seeing
-> the difference only in the registers mapping.
-
-Register accessing, mapping as far as I understood is the same.
-However, with regmap layer it just an implementation detail of certain
-glue driver.
-
-> Let me explain the difference of our solutions. In case of implementing
-> the glue layer, as you suggest, I would have to do it in a way like the D=
-W PCIe
-> driver is designed. I would need to move the code of current dw_i2c_plat_=
-probe()
-> function to a dedicated method named like dw_i2c_plat_init(pdev, !regmap!=
-),
-> while former method dw_i2c_plat_probe() would just call
-> dw_i2c_plat_init(pdev, !NULL!). Then I would have to create a dedicated
-> glue-driver - i2c-designware-bt1drv.c, which would be bound to a
-> "baikal,t1-sys-i2c" device, try to find a Baikal-T1 System Controller
-> device node (though this would be just a parent device), then would get
-> it' syscon regmap handler, then would initialize a dedicated regmap handl=
-er to
-> indirectly access the DW I2C controller register, then it would call the
-> dw_i2c_plat_init(pdev, !regmap!) method with new regmap handler passed
-> (though the new regmap passing could be also implemented over the
-> platform_data pointer). Also seeing you already have a platform-specific
-> parts in the generic i2c-designware-platdrv.c driver (like ACPI-based
-> platforms and Microsemi Ocelot SoC), there might raise a necessity to
-> unpin that specifics to a dedicated method, since my glue-layer
-> wouldn't need that checks and initializations. Such alteration won't
-> be that easy to implement and regression errors prone, since I don't have
-> other platforms to test it.
->
-> In case of my solution the whole glue-layer part would be moved to
-> the MFD-based Baikal-T1 System Controller driver and a generic
-> platform_data-based interface would be implemented, which would just
-> need to alter the registers mapping part of the i2c-designware-platdrv.c
-> driver. Note that that part would need to be fixed in case of any solutio=
-n.
->
-> So comparing these too approaches, I would select a one, which would
-> need less common code modifications and would provide a generic
-> solution. As I see it would be a platform_data-based design. What do you
-> think?
-
-I think you may look at the existing examples how drivers are
-utilizing regmap layer.
-Along with that look how glue (or let's say quirk in your case)
-drivers are implemented, for example USB or SDHCI comes to my mind.
-
---=20
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
