@@ -2,46 +2,46 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B03F0199D3D
-	for <lists+linux-i2c@lfdr.de>; Tue, 31 Mar 2020 19:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B5F199DF4
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 Mar 2020 20:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726291AbgCaRwL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 Mar 2020 13:52:11 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:38338 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726199AbgCaRwL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Mar 2020 13:52:11 -0400
-Received: by mail-pl1-f195.google.com with SMTP id w3so8389830plz.5
-        for <linux-i2c@vger.kernel.org>; Tue, 31 Mar 2020 10:52:10 -0700 (PDT)
+        id S1726209AbgCaSZC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 Mar 2020 14:25:02 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43386 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726000AbgCaSZC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Mar 2020 14:25:02 -0400
+Received: by mail-pg1-f196.google.com with SMTP id g20so1242403pgk.10
+        for <linux-i2c@vger.kernel.org>; Tue, 31 Mar 2020 11:25:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=8b3WnZTTNBaPOMDMuIqGibWI1hhFOK4GHv2gbbqH4E4=;
-        b=Y8M8ls/Tz7mnjRLag509mDzeltvzbPfcMsTSXBMrI+rpRmUwjDK1+CkgdTXqyfEhYg
-         bZEmgXc4O3cx/xXKnPBfH/o2pWD2O/S4zuGQxn0PpL3D29pjVHIayEPExxJPcBvm/j+Y
-         ds26z93uo/7QI7TKsqvz0V98b+PNUYfX8DFiY=
+        bh=OD4APimgEZMGsgSh2+kf2nEhlo5tym5G5xyWPxzhCFU=;
+        b=cni/Y2VVfTEbC+1+JW9g4Pq7M9qQKO0873cdLiP6lzNX05tOqejyE9L7bRz81oVjqF
+         spmPg4yqW+e+X+BcUzgEpr7F7v9No1oxIyjSapvnXJYoXwgQ2yLTPm+BUrBQZSoCSOUl
+         AKCctgm1lWAEd9zuMEaC49/K/CTSOTfyd5GjA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8b3WnZTTNBaPOMDMuIqGibWI1hhFOK4GHv2gbbqH4E4=;
-        b=X7yROuVN1SJ9X+jp9DyIFzo+gC6d1Cy3loi0QmLHpY7Cpj2t/z2TvfuOaEcFIktCZS
-         3xu5I0wYRs3/WzyP0yz1y/WdRItqlW8MItz3jumG7xR3oDOdSNzF/M3VA+839q+glow6
-         6OqZGCjLDYaGJ0nEf2XNn1v0ids9sr4MnwzoHSGWyIpc62Xby82k0y5PDVfEWOZxYQky
-         FmlINckWwzIziWYxd249pOESoZfBg784kc44+SlweM8oHcXwxFjjxp6vu8h/XhPrdTTX
-         T3EZPieoA78XOGdBJKAmy3wB2qrfCXNglCuZ1f54ZMgW74mzDSPkSjZisKq3FpMG9VZU
-         3p3w==
-X-Gm-Message-State: AGi0PuYl1rubCyoleBAJ8efL/imjFFcyBmBG1VeaEk1lVlUHtFyCJJgZ
-        MQfV32BzOK2Qq9SRq5/sCyXvGbTVmko=
-X-Google-Smtp-Source: APiQypLEDWt9naJrmZKRq7qNu/KyQtF3te2IOlxl2ISxISRKDGfkLLJ/GDPPR5qiBNFBaLE8bdDXAw==
-X-Received: by 2002:a17:90a:e398:: with SMTP id b24mr16072pjz.113.1585677129802;
-        Tue, 31 Mar 2020 10:52:09 -0700 (PDT)
+        bh=OD4APimgEZMGsgSh2+kf2nEhlo5tym5G5xyWPxzhCFU=;
+        b=XH7WV84+7mbBr+kTK6L/3uuTs1HkjG/cyfWky+S7opdh+pKwo57dG3AqFxTeWnsPuC
+         1qhrunaedQ73MucM9p6gyu9cPyGNtV9bsUPAZWWKv5aKEQbc1h2cOSm1kXAbXCzbV0An
+         PIdlPznOLhg7CAiFe13UCWrMkYGYw55r5eZQkCBuqkySCNUYh1mPMzKwoGEa6jTMS2yj
+         2viPvrxYTIEh/t5CyUfEuFo2f0A0eGQfpM6AnhsAcaYeNWLwmnqx2O+zTSheyxyEfYEN
+         idWi3w6ke5Ln7Co6Ipry/SWi/WAKkptSv6FqQnY8uA5mc3nDjPoV0z+B9GSMrxJxgwRw
+         yx7Q==
+X-Gm-Message-State: ANhLgQ0EuyuJpYmVuZrpLYtZnMNHDlmeUwoRpK4KZrbUuCKhbRPFLrfJ
+        yPEvSNVeGgt8myGfxwQvFHXhIg==
+X-Google-Smtp-Source: ADFU+vvkTEocDVBgyI1pOMqmc7wnzKXhmUi3tdwPEyjL7Pj2+Kw4PlEZ3jjHUgkibnILpfJkUubkxA==
+X-Received: by 2002:a65:6805:: with SMTP id l5mr18470841pgt.256.1585679099890;
+        Tue, 31 Mar 2020 11:24:59 -0700 (PDT)
 Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id i187sm12910140pfg.33.2020.03.31.10.52.08
+        by smtp.gmail.com with ESMTPSA id h15sm12963919pfq.10.2020.03.31.11.24.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2020 10:52:09 -0700 (PDT)
-Date:   Tue, 31 Mar 2020 10:52:07 -0700
+        Tue, 31 Mar 2020 11:24:59 -0700 (PDT)
+Date:   Tue, 31 Mar 2020 11:24:57 -0700
 From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Akash Asthana <akashast@codeaurora.org>
 Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
@@ -52,14 +52,15 @@ Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
         mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
         linux-serial@vger.kernel.org, dianders@chromium.org,
         evgreen@chromium.org
-Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
-Message-ID: <20200331175207.GG199755@google.com>
+Subject: Re: [PATCH V3 3/8] soc: qcom-geni-se: Add interconnect support to
+ fix earlycon crash
+Message-ID: <20200331182457.GH199755@google.com>
 References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
+ <1585652976-17481-4-git-send-email-akashast@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
+In-Reply-To: <1585652976-17481-4-git-send-email-akashast@codeaurora.org>
 User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -68,110 +69,113 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Akash,
 
-On Tue, Mar 31, 2020 at 04:39:30PM +0530, Akash Asthana wrote:
-> Add necessary macros and structure variables to support ICC BW
-> voting from individual SE drivers.
+On Tue, Mar 31, 2020 at 04:39:31PM +0530, Akash Asthana wrote:
+> QUP core clock is shared among all the SE drivers present on particular
+> QUP wrapper, the system will reset(unclocked access) if earlycon used after
+> QUP core clock is put to 0 from other SE drivers before real console comes
+> up.
+> 
+> As earlycon can't vote for it's QUP core need, to fix this add ICC
+> support to common/QUP wrapper driver and put vote for QUP core from
+> probe on behalf of earlycon and remove vote during earlycon exit call.
 > 
 > Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> Reported-by: Matthias Kaehlcke <mka@chromium.org>
 > ---
-> Changes in V2:
->  - As per Bjorn's comment dropped enums for ICC paths, given the three
->    paths individual members
+> Change is V3:
+>  - Add geni_remove_earlycon_icc_vote API that will be used by earlycon
+>    exit function to remove ICC vote for earlyconsole.
+>  - Remove suspend/resume hook for geni-se driver as we are no longer
+>    removing earlyconsole ICC vote from system suspend, we are removing
+>    from earlycon exit.
 > 
-> Changes in V3:
->  - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
->  - Add geni_icc_path structure in common header
-> 
->  drivers/soc/qcom/qcom-geni-se.c | 98 +++++++++++++++++++++++++++++++++++++++++
->  include/linux/qcom-geni-se.h    | 36 +++++++++++++++
->  2 files changed, 134 insertions(+)
+>  drivers/soc/qcom/qcom-geni-se.c       | 51 +++++++++++++++++++++++++++++++++++
+>  drivers/tty/serial/qcom_geni_serial.c |  7 +++++
+>  include/linux/qcom-geni-se.h          |  2 ++
+>  3 files changed, 60 insertions(+)
 > 
 > diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> index 7d622ea..9344c14 100644
+> index 9344c14..d30c282 100644
 > --- a/drivers/soc/qcom/qcom-geni-se.c
 > +++ b/drivers/soc/qcom/qcom-geni-se.c
-> @@ -720,6 +720,104 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
->  }
->  EXPORT_SYMBOL(geni_se_rx_dma_unprep);
+> @@ -90,8 +90,11 @@ struct geni_wrapper {
+>  	struct device *dev;
+>  	void __iomem *base;
+>  	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+> +	struct geni_icc_path to_core;
+>  };
 >  
-> +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
-> +		const char *icc_ddr)
+> +struct geni_wrapper *earlycon_wrapper;
+
+should be static
+
+> +
+>  #define QUP_HW_VER_REG			0x4
+>  
+>  /* Common SE registers */
+> @@ -818,6 +821,26 @@ int geni_icc_vote_off(struct geni_se *se)
+>  }
+>  EXPORT_SYMBOL(geni_icc_vote_off);
+>  
+> +void geni_remove_earlycon_icc_vote(void)
 > +{
-> +	if (icc_core) {
-> +		se->to_core.path = devm_of_icc_get(se->dev, "qup-core");
-> +		if (IS_ERR(se->to_core.path))
-> +			return PTR_ERR(se->to_core.path);
-> +	}
+> +	struct geni_wrapper *wrapper = earlycon_wrapper;
+> +	struct device_node *parent = of_get_next_parent(wrapper->dev->of_node);
+> +	struct device_node *child;
 > +
-> +	if (icc_cpu) {
-> +		se->from_cpu.path = devm_of_icc_get(se->dev, "qup-config");
-> +		if (IS_ERR(se->from_cpu.path))
-> +			return PTR_ERR(se->from_cpu.path);
+> +	for_each_child_of_node(parent, child) {
+> +		if (of_device_is_compatible(child, "qcom,geni-se-qup")) {
+> +			wrapper = platform_get_drvdata(of_find_device_by_node(
+> +					child));
+> +			icc_put(wrapper->to_core.path);
+> +			wrapper->to_core.path = NULL;
+> +		}
 > +	}
+> +	of_node_put(parent);
 > +
-> +	if (icc_ddr) {
-> +		se->to_ddr.path = devm_of_icc_get(se->dev, "qup-memory");
-> +		if (IS_ERR(se->to_ddr.path))
-> +			return PTR_ERR(se->to_ddr.path);
-> +	}
-> +
-> +	return 0;
+> +	earlycon_wrapper = NULL;
 > +}
-> +EXPORT_SYMBOL(geni_icc_get);
+> +EXPORT_SYMBOL(geni_remove_earlycon_icc_vote);
+
+I didn't know that consoles have an exit handler, this is way nicer than
+the miscellaneous triggers we discussed earlier :)
+
 > +
-> +int geni_icc_vote_on(struct geni_se *se)
-> +{
-> +	int ret;
-> +
-> +	if (se->to_core.path) {
-> +		ret = icc_set_bw(se->to_core.path, se->to_core.avg_bw,
-> +			se->to_core.peak_bw);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for core\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (se->from_cpu.path) {
-> +		ret = icc_set_bw(se->from_cpu.path, se->from_cpu.avg_bw,
-> +			se->from_cpu.peak_bw);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for cpu\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (se->to_ddr.path) {
-> +		ret = icc_set_bw(se->to_ddr.path, se->to_ddr.avg_bw,
-> +			se->to_ddr.peak_bw);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for ddr\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
+>  static int geni_se_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -845,6 +868,34 @@ static int geni_se_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> +#ifdef CONFIG_SERIAL_EARLYCON
+> +	wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
+> +	if (IS_ERR(wrapper->to_core.path))
+> +		return PTR_ERR(wrapper->to_core.path);
+> +	/*
+> +	 * Put minmal BW request on core clocks on behalf of early console.
+> +	 * The vote will be removed earlycon exit function.
+> +	 *
+> +	 * Note: We are putting vote on each QUP wrapper instead only to which
+> +	 * earlycon is connected because QUP core clock of different wrapper
+> +	 * share same voltage domain. If core1 is put to 0, then core2 will
+> +	 * also run at 0, if not voted. Default ICC vote will be removed ASA
+> +	 * we touch any of the core clock.
+> +	 * core1 = core2 = max(core1, core2)
+> +	 */
 
+I don't really understand this part. According to the comment if we vote
+(let's say) for core2 but not for core1 then:
 
-With an array of 'struct geni_icc_path' pointers the above could be
-reduced to:
+core1: 0
+core2: GENI_DEFAULT_BW
 
-	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
-		if (!se->icc_paths[i])
-			continue;
+core1 = core2 = max(core1, core2)
+  or
+core1 = core2 = max(0, GENI_DEFAULT_BW)
 
-		ret = icc_set_bw(se->icc_paths[i]->path, se->icc_paths[i]->avg_bw,
-			se->icc_paths[i]->peak_bw);
-		if (ret) {
-			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed\n",
-						__func__);
-			return ret;
-		}
-	}
+hence
 
-similar for geni_icc_vote_off()
+core1 = core2 = GENI_DEFAULT_BW
 
-It's just a suggestion, looks also good to me as is.
-
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+What am I missing, why is it necessary to vote for both/all?
