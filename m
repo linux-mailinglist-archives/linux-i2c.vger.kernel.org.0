@@ -2,307 +2,165 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4197C19A284
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Apr 2020 01:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D276D19A4A1
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Apr 2020 07:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731480AbgCaXcO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 Mar 2020 19:32:14 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:39647 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731331AbgCaXcO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Mar 2020 19:32:14 -0400
-Received: by mail-pg1-f194.google.com with SMTP id g32so5095897pgb.6
-        for <linux-i2c@vger.kernel.org>; Tue, 31 Mar 2020 16:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1HVkfCZfA09hqCSwGr9pi3bCsfyBjCkprFJud88h6Eg=;
-        b=LJS0gu5NPnfkn+N8TfYnBTTyF+DE7VO9inN7xOWsdRJ2Yf/pBLhcc3ZWWw10EODhVi
-         g8rPT4+9brsADpP8MdC3CRFnnM/ozbwUqPaa1B9hGMfFsY3gyf80n3dSwiQs4+cLs93K
-         glHidqby5ckbHHxSaPVuKXjN7AMOhTzSLRhftPIRQK1oB0IL3yhoOS1X+bbIJCnuI3+3
-         L2TNkCrcGIB73wdVxAq0gJv5b9B/G3ZYlIR4WnOvfHXCQXCFQMdXHMNqv0u9tDSGbmS9
-         WFQ/RhsBa7yo9P06SNZHiqiwU+b5TL7WdLY0P2D2QMP/l/Z1jjENWM8LJH8ZGqAQpJ0K
-         Y0Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1HVkfCZfA09hqCSwGr9pi3bCsfyBjCkprFJud88h6Eg=;
-        b=FfTqwhOqoS/5AWhs3bdhNx6Z+cmSYXsMj/IpSws2fAex2A55BxzluQwcbsQ3yMwKpV
-         9wC6LTeaMTW1M/gviG6L1q+iCssO/O5m6vsxsGXdUxgwJrWk7q+d3HXkAUVLFnD1tauG
-         s3AQI7pCUYI9mYbOjmQZ1w9qjPniF84fiyEeChkH29VEBcPogy8pvgucEZV3xBWyaCQD
-         hg0y5Gj5JXeEFfHpb+eTG+xTx4rRd571cvBKT9iS9JqfYGBkD5lCIwucxrBppimI1nzI
-         b2GqEaq2m+1A3oFsDGfsWdcR5p2rsv4YbTsET1PiIZNus2HTlp781v0T8ckc8UWbMwmP
-         2skg==
-X-Gm-Message-State: ANhLgQ3ntdNjlylOhnvWNAwd97pnY8mKAfhjHkxEsHB/tDUfbKNjW1SS
-        p15vtztE8B/tqg/MtjI5MF4zNw==
-X-Google-Smtp-Source: ADFU+vvnkx2Csw/AMK/p49sBaVOWuY1loy/APpY6aE13XVgXhALJ7Zl0e6xhwPFi2IfS425Vh5SsQg==
-X-Received: by 2002:a62:30c6:: with SMTP id w189mr20952100pfw.257.1585697532480;
-        Tue, 31 Mar 2020 16:32:12 -0700 (PDT)
-Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id a8sm91544pgg.79.2020.03.31.16.32.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2020 16:32:11 -0700 (PDT)
-Date:   Tue, 31 Mar 2020 16:32:09 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org, wsa@the-dreams.de,
-        broonie@kernel.org, mark.rutland@arm.com, robh+dt@kernel.org,
-        georgi.djakov@linaro.org, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        swboyd@chromium.org, mgautam@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        mka@chromium.org, dianders@chromium.org, evgreen@chromium.org
-Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
-Message-ID: <20200331233209.GF254911@minitux>
-References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
+        id S1731861AbgDAFRS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Apr 2020 01:17:18 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:33357 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731849AbgDAFRS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Apr 2020 01:17:18 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1jJVkZ-0005dO-Qu; Wed, 01 Apr 2020 07:17:15 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1jJVkY-0002PW-JR; Wed, 01 Apr 2020 07:17:14 +0200
+Date:   Wed, 1 Apr 2020 07:17:14 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Biwen Li <biwen.li@oss.nxp.com>
+Cc:     leoyang.li@nxp.com, linux@rempel-privat.de, kernel@pengutronix.de,
+        wsa@the-dreams.de, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jiafei.pan@nxp.com,
+        Biwen Li <biwen.li@nxp.com>
+Subject: Re: [PATCH] i2c: imx: add shutdown interface
+Message-ID: <20200401051714.iz3ophbe2gtqhf4z@pengutronix.de>
+References: <20200330121546.23872-1-biwen.li@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="kxhumlv5b2iba3ot"
 Content-Disposition: inline
-In-Reply-To: <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
+In-Reply-To: <20200330121546.23872-1-biwen.li@oss.nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 06:52:53 up 137 days, 20:11, 145 users,  load average: 0.00, 0.00,
+ 0.00
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue 31 Mar 04:09 PDT 2020, Akash Asthana wrote:
 
-> Add necessary macros and structure variables to support ICC BW
-> voting from individual SE drivers.
-> 
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+--kxhumlv5b2iba3ot
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+thank you for your patch. It is good, but some changes are needed.
+
+This driver has multiple attempts to reset the bus controller to
+initial state:
+- on probe. In this case controller is reset with  same sequence by using
+  I2CR_IEN bit, but no zeroing of IMX_I2C_IADR is made.
+- on module remove. All registers are set to zero. Which is not Vybrid
+  compatible. In this cases, bus controller on Vybrid is not under
+  reset.
+- on shutdown (a new one), this is like probe, but with zeroing of
+  IMX_I2C_IADR.
+
+Why do we need to zero IMX_I2C_IADR if we do a controller reset? Do
+reset is not enough to clear this register? Do we need to set I2CR_IEN
+back on remove and shutdown? The documentation says:
+|I2C enable. Also controls the software reset of the entire I2C.
+|Resetting the bit generates an internal reset to the block.
+
+I would assume, we should disable controller on remove and shutdown,
+and enable it only for probe case.
+
+Please create a new function and use in all 3 cases: probe, remove and
+shutdown. This function should disable the bus controller and clear
+registers (if really needed). Enable should be done only on probe.
+
+Should we disable clock on shutdown as well?
+
+Can you please describe, why i2c shutdown sequence is needed on this
+chip. What problem is fixed with this patch?
+
+
+On Mon, Mar 30, 2020 at 08:15:46PM +0800, Biwen Li wrote:
+> From: Biwen Li <biwen.li@nxp.com>
+>=20
+> Add shutdown interface
+>=20
+> Signed-off-by: Biwen Li <biwen.li@nxp.com>
 > ---
-> Changes in V2:
->  - As per Bjorn's comment dropped enums for ICC paths, given the three
->    paths individual members
-> 
-> Changes in V3:
->  - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
->  - Add geni_icc_path structure in common header
-> 
->  drivers/soc/qcom/qcom-geni-se.c | 98 +++++++++++++++++++++++++++++++++++++++++
->  include/linux/qcom-geni-se.h    | 36 +++++++++++++++
->  2 files changed, 134 insertions(+)
-> 
-> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> index 7d622ea..9344c14 100644
-> --- a/drivers/soc/qcom/qcom-geni-se.c
-> +++ b/drivers/soc/qcom/qcom-geni-se.c
-> @@ -720,6 +720,104 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+>  drivers/i2c/busses/i2c-imx.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 0ab5381aa012..07da42cb0be4 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -1281,6 +1281,16 @@ static int i2c_imx_remove(struct platform_device *=
+pdev)
+>  	return 0;
 >  }
->  EXPORT_SYMBOL(geni_se_rx_dma_unprep);
->  
-> +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
-> +		const char *icc_ddr)
+> =20
+> +static void i2c_imx_shutdown(struct platform_device *pdev)
 > +{
-> +	if (icc_core) {
-
-Afaict it's only this that might be passed as NULL, so please drop these
-conditionals (keep the last one).
-
-> +		se->to_core.path = devm_of_icc_get(se->dev, "qup-core");
-> +		if (IS_ERR(se->to_core.path))
-
-It would be useful to print an error message here (if PTR_ERR(path) !=
--EPROBE_DEFER).
-
-> +			return PTR_ERR(se->to_core.path);
-> +	}
+> +	struct imx_i2c_struct *i2c_imx =3D platform_get_drvdata(pdev);
 > +
-> +	if (icc_cpu) {
-> +		se->from_cpu.path = devm_of_icc_get(se->dev, "qup-config");
-> +		if (IS_ERR(se->from_cpu.path))
-> +			return PTR_ERR(se->from_cpu.path);
-> +	}
-> +
-> +	if (icc_ddr) {
-> +		se->to_ddr.path = devm_of_icc_get(se->dev, "qup-memory");
-> +		if (IS_ERR(se->to_ddr.path))
-> +			return PTR_ERR(se->to_ddr.path);
-> +	}
-> +
-> +	return 0;
+> +	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
+> +	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN,
+> +			i2c_imx, IMX_I2C_I2CR);
+> +	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx, IMX_I2C_I2=
+SR);
 > +}
-> +EXPORT_SYMBOL(geni_icc_get);
 > +
-> +int geni_icc_vote_on(struct geni_se *se)
-> +{
-> +	int ret;
-> +
-> +	if (se->to_core.path) {
-
-icc_set_bw(NULL, ...) is valid and will return 0, so these checks
-doesn't add any value.
-
-> +		ret = icc_set_bw(se->to_core.path, se->to_core.avg_bw,
-> +			se->to_core.peak_bw);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for core\n",
-> +						__func__);
-
-Please drop the __func__, the message is specific enough.
-
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (se->from_cpu.path) {
-> +		ret = icc_set_bw(se->from_cpu.path, se->from_cpu.avg_bw,
-> +			se->from_cpu.peak_bw);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for cpu\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (se->to_ddr.path) {
-> +		ret = icc_set_bw(se->to_ddr.path, se->to_ddr.avg_bw,
-> +			se->to_ddr.peak_bw);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW voting failed for ddr\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(geni_icc_vote_on);
-> +
-> +int geni_icc_vote_off(struct geni_se *se)
-> +{
-> +	int ret;
-> +
-> +	if (se->to_core.path) {
-> +		ret = icc_set_bw(se->to_core.path, 0, 0);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for core\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (se->from_cpu.path) {
-> +		ret = icc_set_bw(se->from_cpu.path, 0, 0);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for cpu\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (se->to_ddr.path) {
-> +		ret = icc_set_bw(se->to_ddr.path, 0, 0);
-> +		if (ret) {
-> +			dev_err_ratelimited(se->dev, "%s: ICC BW remove failed for ddr\n",
-> +						__func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(geni_icc_vote_off);
-
-Given that these two functions only switch the bandwidth request between
-some value and 0, I really think we should carry a "bool enabled" on the
-path and replace these two functions with
-icc_bulk_enable()/icc_bulk_disable().
-
-The added benefit of this would be that you call icc_set_bw() instead of
-changing the geni_icc_path->{avg_bw,peak_bw} and don't need to keep
-track of them here.
-
-Regards,
-Bjorn
-
-> +
->  static int geni_se_probe(struct platform_device *pdev)
+>  static int __maybe_unused i2c_imx_runtime_suspend(struct device *dev)
 >  {
->  	struct device *dev = &pdev->dev;
-> diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
-> index dd46494..a83c86b 100644
-> --- a/include/linux/qcom-geni-se.h
-> +++ b/include/linux/qcom-geni-se.h
-> @@ -6,6 +6,8 @@
->  #ifndef _LINUX_QCOM_GENI_SE
->  #define _LINUX_QCOM_GENI_SE
->  
-> +#include <linux/interconnect.h>
-> +
->  /* Transfer mode supported by GENI Serial Engines */
->  enum geni_se_xfer_mode {
->  	GENI_SE_INVALID,
-> @@ -25,6 +27,12 @@ enum geni_se_protocol_type {
->  struct geni_wrapper;
->  struct clk;
->  
-> +struct geni_icc_path {
-> +	struct icc_path *path;
-> +	unsigned int avg_bw;
-> +	unsigned int peak_bw;
-> +};
-> +
->  /**
->   * struct geni_se - GENI Serial Engine
->   * @base:		Base Address of the Serial Engine's register block
-> @@ -33,6 +41,9 @@ struct clk;
->   * @clk:		Handle to the core serial engine clock
->   * @num_clk_levels:	Number of valid clock levels in clk_perf_tbl
->   * @clk_perf_tbl:	Table of clock frequency input to serial engine clock
-> + * @to_core:	ICC path structure for geni to core
-> + * @from_cpu:	ICC path structure for cpu to geni
-> + * @to_ddr:	ICC path structure for geni to ddr
->   */
->  struct geni_se {
->  	void __iomem *base;
-> @@ -41,6 +52,9 @@ struct geni_se {
->  	struct clk *clk;
->  	unsigned int num_clk_levels;
->  	unsigned long *clk_perf_tbl;
-> +	struct geni_icc_path to_core;
-> +	struct geni_icc_path from_cpu;
-> +	struct geni_icc_path to_ddr;
->  };
->  
->  /* Common SE registers */
-> @@ -229,6 +243,21 @@ struct geni_se {
->  #define GENI_SE_VERSION_MINOR(ver) ((ver & HW_VER_MINOR_MASK) >> HW_VER_MINOR_SHFT)
->  #define GENI_SE_VERSION_STEP(ver) (ver & HW_VER_STEP_MASK)
->  
-> +/*
-> + * Define bandwidth thresholds that cause the underlying Core 2X interconnect
-> + * clock to run at the named frequency. These baseline values are recommended
-> + * by the hardware team, and are not dynamically scaled with GENI bandwidth
-> + * beyond basic on/off.
-> + */
-> +#define CORE_2X_19_2_MHZ		960
-> +#define CORE_2X_50_MHZ			2500
-> +#define CORE_2X_100_MHZ			5000
-> +#define CORE_2X_150_MHZ			7500
-> +#define CORE_2X_200_MHZ			10000
-> +#define CORE_2X_236_MHZ			16383
-> +
-> +#define GENI_DEFAULT_BW			Bps_to_icc(1000)
-> +
->  #if IS_ENABLED(CONFIG_QCOM_GENI_SE)
->  
->  u32 geni_se_get_qup_hw_version(struct geni_se *se);
-> @@ -416,5 +445,12 @@ int geni_se_rx_dma_prep(struct geni_se *se, void *buf, size_t len,
->  void geni_se_tx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len);
->  
->  void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len);
-> +
-> +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
-> +		const char *icc_ddr);
-> +
-> +int geni_icc_vote_on(struct geni_se *se);
-> +
-> +int geni_icc_vote_off(struct geni_se *se);
->  #endif
->  #endif
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+>  	struct imx_i2c_struct *i2c_imx =3D dev_get_drvdata(dev);
+> @@ -1310,6 +1320,7 @@ static const struct dev_pm_ops i2c_imx_pm_ops =3D {
+>  static struct platform_driver i2c_imx_driver =3D {
+>  	.probe =3D i2c_imx_probe,
+>  	.remove =3D i2c_imx_remove,
+> +	.shutdown =3D i2c_imx_shutdown,
+>  	.driver =3D {
+>  		.name =3D DRIVER_NAME,
+>  		.pm =3D &i2c_imx_pm_ops,
+> --=20
+> 2.17.1
+
+
+Regrads,
+Oleksij
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--kxhumlv5b2iba3ot
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEERBNZvwSgvmcMY/T74omh9DUaUbMFAl6EI9IACgkQ4omh9DUa
+UbMuKQ//V36wWPSodbonhJGQXf5sXi3eZrSHrrwlYSF/MYiVCrfCTPmEKCkILSJv
+jWValu7i5lvhDmtsz/NFLdqR14e+cf9zbXVB5pKdSdqLhzJ8FgJxRUx6wBd25nDn
+iI7pGxSZbBqs3pPp9tJgRi8op5pmCTr4nVb4lcKtCnjjoEgrZQGai1LBPIPF4u6d
+z1vWvsYwjyJwv1oArOqRGGshAdbSAWosdc10xcHNcXrqSF2JrrKiFGn9Yv5IT2yH
+M1OZkVBbAFQQM+SxU4Nu+qmOF1qdqIB/3emmncQCUr3BnLkfXsF5yMAzT80Z0+D/
+Fk3OwqH55WG9yaiLqSqHkvBhHKnfigDAZCrSsB8PY78hIrcFRG8bnvRmcZS5zlsV
+V7P4WAoSPN1NvXz4nQLZ8/nCBHa0jqwS+DaHlKEF1py9a+HuJ2gVvSjnGmGcvlnB
+Nh0qZajeBlLW/RX6oGdhEatRQFucETKeN4f1FpV46H10R9TpUvvd5HF3tpsut2z0
+9wkdhOSLOUKxnMR8KspMzuD7/w/n3DZX96CsMLSaSMto0oZwggjQMnsBXt8C6WFJ
+UvIJQbvUdW19yeZDrgOXtAza5nBaUyXD7soaHSmg1AcZxFc4YItv53Dmy0t5EfJM
+3Frx9/yeLknGi25YqQg14A3Eq+Ymtp98bp/m41V1imbKfSsb3ws=
+=ITXi
+-----END PGP SIGNATURE-----
+
+--kxhumlv5b2iba3ot--
