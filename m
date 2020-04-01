@@ -2,140 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0567F19B666
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Apr 2020 21:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE0319B68F
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Apr 2020 21:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732687AbgDATa1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Apr 2020 15:30:27 -0400
-Received: from sauhun.de ([88.99.104.3]:60402 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732244AbgDATa1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 1 Apr 2020 15:30:27 -0400
-Received: from localhost (p54B33220.dip0.t-ipconnect.de [84.179.50.32])
-        by pokefinder.org (Postfix) with ESMTPSA id D87742C1EEC;
-        Wed,  1 Apr 2020 21:30:23 +0200 (CEST)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH] i2c: refactor parsing of timings
-Date:   Wed,  1 Apr 2020 21:30:18 +0200
-Message-Id: <20200401193018.368-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
+        id S1732554AbgDATqy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Apr 2020 15:46:54 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:37617 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732586AbgDATqy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Apr 2020 15:46:54 -0400
+Received: by mail-pl1-f195.google.com with SMTP id x1so389411plm.4
+        for <linux-i2c@vger.kernel.org>; Wed, 01 Apr 2020 12:46:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=/ce+l+iRZG0CueQLUqCcAm+FhjXwOeZQvrFD6a+Pdbk=;
+        b=fCc9uE+XYXB06N48E9h3rQ4SJNQfhzwC50G+TMXvj8kfPBe4kbDLR7b1/oJ+uEuxKc
+         /zyiOEwgGh1jAIInwlsgrzgiU0oI90VjnSLlLTNo58X3/wrlUbKCMZCG3LswFVAZjJin
+         LvE7ziv7OG52tAD9ohxETUiLgLpf2qYRWHzUU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/ce+l+iRZG0CueQLUqCcAm+FhjXwOeZQvrFD6a+Pdbk=;
+        b=BFFBaDR2/y79Md+LYj5OzZ2EZAvCguD9ikYrnie83Qo2UEjZxcInXHamqV3Nw0xKev
+         5nFfKhqpZQN6soT8EGtJUAb0b+zwNvCJq25Kq14eTiBlvsEQyb0FSHlNUgiJdw+uEcGb
+         lnliRJ6ZK2n+NaOYPDw2RL+mE5FdngBH/Eu3qJG+60Xcbz7tU/sT6K4pHGyHRtlwC19C
+         0nZiMiRyEiLEJungFkrUKpU7+dDrjg9RYME2Fji/Eb8lOHnhgUTUpkUMQ1LsjrXOFS99
+         gVwIXHgsmhfz9NncrU9VDPm+6eoFwUjVM1jw7pekAUIxh30JYid71yJKpfep11+4dKCA
+         Dkbw==
+X-Gm-Message-State: ANhLgQ2731zxhS3726wRIqPvI3ChKM+U7Ny4kkfcAB0fXajsDAOdSpmh
+        +TMgVahDnXENlCi0af5U8SuwXg==
+X-Google-Smtp-Source: ADFU+vt/xdibwjNhNGnnuYkq1gCZsQ2pLfGD9zsm2il2lY1sfEB8MLcew8RkcukpAiHbnqsuWeHD3Q==
+X-Received: by 2002:a17:902:9004:: with SMTP id a4mr21923981plp.275.1585770411176;
+        Wed, 01 Apr 2020 12:46:51 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id 132sm2160604pfc.183.2020.04.01.12.46.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Apr 2020 12:46:50 -0700 (PDT)
+Date:   Wed, 1 Apr 2020 12:46:48 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+Subject: Re: [PATCH V3 3/8] soc: qcom-geni-se: Add interconnect support to
+ fix earlycon crash
+Message-ID: <20200401194648.GM199755@google.com>
+References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
+ <1585652976-17481-4-git-send-email-akashast@codeaurora.org>
+ <20200331182457.GH199755@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200331182457.GH199755@google.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When I wanted to print the chosen values to debug output, I concluded
-that a helper function to parse one timing would be helpful.
+On Tue, Mar 31, 2020 at 11:24:57AM -0700, Matthias Kaehlcke wrote:
+> Hi Akash,
+> 
+> On Tue, Mar 31, 2020 at 04:39:31PM +0530, Akash Asthana wrote:
+> > QUP core clock is shared among all the SE drivers present on particular
+> > QUP wrapper, the system will reset(unclocked access) if earlycon used after
+> > QUP core clock is put to 0 from other SE drivers before real console comes
+> > up.
+> > 
+> > As earlycon can't vote for it's QUP core need, to fix this add ICC
+> > support to common/QUP wrapper driver and put vote for QUP core from
+> > probe on behalf of earlycon and remove vote during earlycon exit call.
+> > 
+> > Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> > Reported-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> > Change is V3:
+> >  - Add geni_remove_earlycon_icc_vote API that will be used by earlycon
+> >    exit function to remove ICC vote for earlyconsole.
+> >  - Remove suspend/resume hook for geni-se driver as we are no longer
+> >    removing earlyconsole ICC vote from system suspend, we are removing
+> >    from earlycon exit.
+> > 
+> >  drivers/soc/qcom/qcom-geni-se.c       | 51 +++++++++++++++++++++++++++++++++++
+> >  drivers/tty/serial/qcom_geni_serial.c |  7 +++++
+> >  include/linux/qcom-geni-se.h          |  2 ++
+> >  3 files changed, 60 insertions(+)
+> > 
+> > diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+> > index 9344c14..d30c282 100644
+> > --- a/drivers/soc/qcom/qcom-geni-se.c
+> > +++ b/drivers/soc/qcom/qcom-geni-se.c
+> > @@ -90,8 +90,11 @@ struct geni_wrapper {
+> >  	struct device *dev;
+> >  	void __iomem *base;
+> >  	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+> > +	struct geni_icc_path to_core;
+> >  };
+> >  
+> > +struct geni_wrapper *earlycon_wrapper;
+> 
+> should be static
+> 
+> > +
+> >  #define QUP_HW_VER_REG			0x4
+> >  
+> >  /* Common SE registers */
+> > @@ -818,6 +821,26 @@ int geni_icc_vote_off(struct geni_se *se)
+> >  }
+> >  EXPORT_SYMBOL(geni_icc_vote_off);
+> >  
+> > +void geni_remove_earlycon_icc_vote(void)
+> > +{
+> > +	struct geni_wrapper *wrapper = earlycon_wrapper;
+> > +	struct device_node *parent = of_get_next_parent(wrapper->dev->of_node);
+> > +	struct device_node *child;
+> > +
+> > +	for_each_child_of_node(parent, child) {
+> > +		if (of_device_is_compatible(child, "qcom,geni-se-qup")) {
+> > +			wrapper = platform_get_drvdata(of_find_device_by_node(
+> > +					child));
+> > +			icc_put(wrapper->to_core.path);
+> > +			wrapper->to_core.path = NULL;
+> > +		}
+> > +	}
+> > +	of_node_put(parent);
+> > +
+> > +	earlycon_wrapper = NULL;
+> > +}
+> > +EXPORT_SYMBOL(geni_remove_earlycon_icc_vote);
+> 
+> I didn't know that consoles have an exit handler, this is way nicer than
+> the miscellaneous triggers we discussed earlier :)
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+No wonder I 'missed' this when looking at the console code for possible
+triggers, it is brand new and as of now only exists in -next:
 
-Not RFC anymore because it seems we agreed on the approach. Only change
-since RFC is the use of the ternary operator (Thanks, Geert!). Also
-thanks to Andy for the idea of a seperate helper to get the bus
-frequency. This will be a seperate patchset, though.
+commit ed31685c96e18f773ca11dd1a637974d62130673
+Author: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date:   Mon Feb 3 15:31:30 2020 +0200
 
-Tested on a Renesas Lager board (R-Car H2).
+    console: Introduce ->exit() callback
 
- drivers/i2c/i2c-core-base.c | 69 ++++++++++++++++---------------------
- 1 file changed, 30 insertions(+), 39 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 474baaf8c9e7..be73b498cf64 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1609,6 +1609,18 @@ void i2c_del_adapter(struct i2c_adapter *adap)
- }
- EXPORT_SYMBOL(i2c_del_adapter);
- 
-+static void i2c_parse_timing(struct device *dev, char *prop_name, u32 *cur_val_p,
-+			    u32 def_val, bool use_def)
-+{
-+	int ret;
-+
-+	ret = device_property_read_u32(dev, prop_name, cur_val_p);
-+	if (ret && use_def)
-+		*cur_val_p = def_val;
-+
-+	dev_dbg(dev, "%s: %u\n", prop_name, *cur_val_p);
-+}
-+
- /**
-  * i2c_parse_fw_timings - get I2C related timing parameters from firmware
-  * @dev: The device to scan for I2C timing properties
-@@ -1627,49 +1639,28 @@ EXPORT_SYMBOL(i2c_del_adapter);
-  */
- void i2c_parse_fw_timings(struct device *dev, struct i2c_timings *t, bool use_defaults)
- {
--	int ret;
--
--	ret = device_property_read_u32(dev, "clock-frequency", &t->bus_freq_hz);
--	if (ret && use_defaults)
--		t->bus_freq_hz = I2C_MAX_STANDARD_MODE_FREQ;
--
--	ret = device_property_read_u32(dev, "i2c-scl-rising-time-ns", &t->scl_rise_ns);
--	if (ret && use_defaults) {
--		if (t->bus_freq_hz <= I2C_MAX_STANDARD_MODE_FREQ)
--			t->scl_rise_ns = 1000;
--		else if (t->bus_freq_hz <= I2C_MAX_FAST_MODE_FREQ)
--			t->scl_rise_ns = 300;
--		else
--			t->scl_rise_ns = 120;
--	}
--
--	ret = device_property_read_u32(dev, "i2c-scl-falling-time-ns", &t->scl_fall_ns);
--	if (ret && use_defaults) {
--		if (t->bus_freq_hz <= I2C_MAX_FAST_MODE_FREQ)
--			t->scl_fall_ns = 300;
--		else
--			t->scl_fall_ns = 120;
--	}
--
--	ret = device_property_read_u32(dev, "i2c-scl-internal-delay-ns", &t->scl_int_delay_ns);
--	if (ret && use_defaults)
--		t->scl_int_delay_ns = 0;
-+	bool u = use_defaults;
-+	u32 d;
- 
--	ret = device_property_read_u32(dev, "i2c-sda-falling-time-ns", &t->sda_fall_ns);
--	if (ret && use_defaults)
--		t->sda_fall_ns = t->scl_fall_ns;
-+	i2c_parse_timing(dev, "clock-frequency", &t->bus_freq_hz,
-+			 I2C_MAX_STANDARD_MODE_FREQ, u);
- 
--	ret = device_property_read_u32(dev, "i2c-sda-hold-time-ns", &t->sda_hold_ns);
--	if (ret && use_defaults)
--		t->sda_hold_ns = 0;
-+	d = t->bus_freq_hz <= I2C_MAX_STANDARD_MODE_FREQ ? 1000 :
-+	    t->bus_freq_hz <= I2C_MAX_FAST_MODE_FREQ ? 300 : 120;
-+	i2c_parse_timing(dev, "i2c-scl-rising-time-ns", &t->scl_rise_ns, d, u);
- 
--	ret = device_property_read_u32(dev, "i2c-digital-filter-width-ns", &t->digital_filter_width_ns);
--	if (ret && use_defaults)
--		t->digital_filter_width_ns = 0;
-+	d = t->bus_freq_hz <= I2C_MAX_FAST_MODE_FREQ ? 300 : 120;
-+	i2c_parse_timing(dev, "i2c-scl-falling-time-ns", &t->scl_fall_ns, d, u);
- 
--	ret = device_property_read_u32(dev, "i2c-analog-filter-cutoff-frequency", &t->analog_filter_cutoff_freq_hz);
--	if (ret && use_defaults)
--		t->analog_filter_cutoff_freq_hz = 0;
-+	i2c_parse_timing(dev, "i2c-scl-internal-delay-ns",
-+			 &t->scl_int_delay_ns, 0, u);
-+	i2c_parse_timing(dev, "i2c-sda-falling-time-ns", &t->sda_fall_ns,
-+			 t->scl_fall_ns, u);
-+	i2c_parse_timing(dev, "i2c-sda-hold-time-ns", &t->sda_hold_ns, 0, u);
-+	i2c_parse_timing(dev, "i2c-digital-filter-width-ns",
-+			 &t->digital_filter_width_ns, 0, u);
-+	i2c_parse_timing(dev, "i2c-analog-filter-cutoff-frequency",
-+			 &t->analog_filter_cutoff_freq_hz, 0, u);
- }
- EXPORT_SYMBOL_GPL(i2c_parse_fw_timings);
- 
--- 
-2.20.1
-
+sharp timing!
