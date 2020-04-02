@@ -2,335 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 409C319BEFE
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Apr 2020 12:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D5719BF3A
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Apr 2020 12:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387552AbgDBJ77 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Apr 2020 05:59:59 -0400
-Received: from sauhun.de ([88.99.104.3]:56226 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728135AbgDBJ77 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 2 Apr 2020 05:59:59 -0400
-Received: from localhost (p54B333EE.dip0.t-ipconnect.de [84.179.51.238])
-        by pokefinder.org (Postfix) with ESMTPSA id 98E832C0590;
-        Thu,  2 Apr 2020 11:59:54 +0200 (CEST)
-Date:   Thu, 2 Apr 2020 11:59:53 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for v5.7
-Message-ID: <20200402095948.GA2414@ninjato>
+        id S2387722AbgDBKVl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Apr 2020 06:21:41 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:32786 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387849AbgDBKVk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Apr 2020 06:21:40 -0400
+Received: by mail-vs1-f68.google.com with SMTP id y138so1959311vsy.0
+        for <linux-i2c@vger.kernel.org>; Thu, 02 Apr 2020 03:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=7GXKf40EHZAe1m8hEorb1dTJ1AK4agayreMbhqqIH8g=;
+        b=GXYMGfFQRDRkHm7OY0ZOeBp+nuTSLe0YEIp3Le2bpAmdRALcSx0s/eWsGURcsYMyJZ
+         D0pgag6c2FW0E9waIQgW5AsrVDWWHmzgeF6xtbQGQN/XLaNmotiqj5kuCs2DooyHwqhc
+         xJzcXjY/o025wtuT0sbPVu7bhVmJAKmXmGK/rt3fX8aO4+Jaaup7czWoBC692ZVuMJz/
+         UYpqoR0zM2+N1z+3vl20C6XHqFG2v5H6oWJDl8zTnm3K/W9AGuW4AGABALyPQ8Y2iHAI
+         kaHTVvH5sFWSHw1GVfvRLiKz71I/6j78CdVpVd5NYt6F4crKLdKoG6oM5J7onLX+4M5d
+         dUaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=7GXKf40EHZAe1m8hEorb1dTJ1AK4agayreMbhqqIH8g=;
+        b=fnhLgRAaoYop8RvAeiGphzDrLB66Ce/6JnDfZ8A1oCflrudLEwBQu65suGlK31Ix1s
+         uZ7IZQ5QDfHfnWN0NR/no/JPqjkX5P5Z40zlpGNVF8/rbUQupp8xvMozQxrX+J2pwhm5
+         wtaVZUkH/3YwRiSO0andFvwhEjctFKg8LzaAC07QY1iuPhg8nb1iARQffB+IpadKfkOs
+         QV7BNbTqQvEC0tIvyGA7t/yyZjMI/5vSJhUDwx1c+9UCRptCPt1r7ENXFNn3hzajd0W5
+         94RFLc4WiAQTJMnYaVAzs8CREh8Ub06fLVpkAuNG5YDUZmuzcl4ZqQGM1pYcd1aKLnf9
+         AK/w==
+X-Gm-Message-State: AGi0PuafECNPy90WIcwhaMNJEXpgN1GR7/CSQWwdeH1DQb+cojd07Mh0
+        wipy9UwsDEeDybf/biNh8r6j/Vxd/8QNrcJmThqqgA==
+X-Google-Smtp-Source: APiQypKUV6+eeaGGs5jkHkbqjM9cFZprBr9pA7MC3HcBjfjY4MykhwbLuSYTF8XCDi9aLBRWqZOCdrmWe24+WL5vaJ0=
+X-Received: by 2002:a05:6102:2414:: with SMTP id j20mr1731776vsi.206.1585822898806;
+ Thu, 02 Apr 2020 03:21:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WIyZ46R2i8wDzkSu"
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Jian-Hong Pan <jian-hong@endlessm.com>
+Date:   Thu, 2 Apr 2020 18:22:14 +0800
+Message-ID: <CAPpJ_edj++oy7_EDN95tM+BPdYFOztpCrRh-cfzFrY6unJb1Rw@mail.gmail.com>
+Subject: [BUG] i2c_nvidia_gpu takes long time and makes system suspend &
+ resume failed with NVIDIA cards
+To:     Ajay Gupta <ajayg@nvidia.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        Linux Upstreaming Team <linux@endlessm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi,
 
---WIyZ46R2i8wDzkSu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We got some machines like Acer desktop equipped with NVIDIA GTX 1660
+card, Acer Predator PH315-52 equipped with NVIDIA GeForce RTX 2060
+Mobile and ASUS UX581LV equipped with NNVIDIA GeForce RTX 2060.
+We found them take long time (more than 50 seconds) to resume after
+suspend.  During the resuming time, the screen is blank.  And check
+the dmesg, found the error during resume:
 
-Linus,
+[   28.060831] PM: suspend entry (deep)
+[   28.144260] Filesystems sync: 0.083 seconds
+[   28.150219] Freezing user space processes ...
+[   48.153282] Freezing of tasks failed after 20.003 seconds (1 tasks
+refusing to freeze, wq_busy=0):
+[   48.153447] systemd-udevd   D13440   382    330 0x80004124
+[   48.153457] Call Trace:
+[   48.153504]  ? __schedule+0x272/0x5a0
+[   48.153558]  ? hrtimer_start_range_ns+0x18c/0x2c0
+[   48.153622]  schedule+0x45/0xb0
+[   48.153668]  schedule_hrtimeout_range_clock+0x8f/0x100
+[   48.153738]  ? hrtimer_init_sleeper+0x80/0x80
+[   48.153798]  usleep_range+0x5a/0x80
+[   48.153850]  gpu_i2c_check_status.isra.0+0x3a/0xa0 [i2c_nvidia_gpu]
+[   48.153933]  gpu_i2c_master_xfer+0x155/0x20e [i2c_nvidia_gpu]
+[   48.154012]  __i2c_transfer+0x163/0x4c0
+[   48.154067]  i2c_transfer+0x6e/0xc0
+[   48.154120]  ccg_read+0x11f/0x170 [ucsi_ccg]
+[   48.154182]  get_fw_info+0x17/0x50 [ucsi_ccg]
+[   48.154242]  ucsi_ccg_probe+0xf4/0x200 [ucsi_ccg]
+[   48.154312]  ? ucsi_ccg_init+0xe0/0xe0 [ucsi_ccg]
+[   48.154377]  i2c_device_probe+0x113/0x210
+[   48.154435]  really_probe+0xdf/0x280
+[   48.154487]  driver_probe_device+0x4b/0xc0
+[   48.154545]  device_driver_attach+0x4e/0x60
+[   48.154604]  __driver_attach+0x44/0xb0
+[   48.154657]  ? device_driver_attach+0x60/0x60
+[   48.154717]  bus_for_each_dev+0x6c/0xb0
+[   48.154772]  bus_add_driver+0x172/0x1c0
+[   48.154824]  driver_register+0x67/0xb0
+[   48.154877]  i2c_register_driver+0x39/0x70
+[   48.154932]  ? 0xffffffffc00ac000
+[   48.154978]  do_one_initcall+0x3e/0x1d0
+[   48.155032]  ? free_vmap_area_noflush+0x8d/0xe0
+[   48.155093]  ? _cond_resched+0x10/0x20
+[   48.155145]  ? kmem_cache_alloc_trace+0x3a/0x1b0
+[   48.155208]  do_init_module+0x56/0x200
+[   48.155260]  load_module+0x21fe/0x24e0
+[   48.155322]  ? __do_sys_finit_module+0xbf/0xe0
+[   48.155381]  __do_sys_finit_module+0xbf/0xe0
+[   48.155441]  do_syscall_64+0x3d/0x130
+[   48.156841]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[   48.158074] RIP: 0033:0x7fba3b4bc2a9
+[   48.158707] Code: Bad RIP value.
+[   48.158990] RSP: 002b:00007ffe1da3a6d8 EFLAGS: 00000246 ORIG_RAX:
+0000000000000139
+[   48.159259] RAX: ffffffffffffffda RBX: 000055ca6922c470 RCX: 00007fba3b4bc2a9
+[   48.159566] RDX: 0000000000000000 RSI: 00007fba3b3c0cad RDI: 0000000000000010
+[   48.159842] RBP: 00007fba3b3c0cad R08: 0000000000000000 R09: 0000000000000000
+[   48.160117] R10: 0000000000000010 R11: 0000000000000246 R12: 0000000000000000
+[   48.160412] R13: 000055ca6922f940 R14: 0000000000020000 R15: 000055ca6922c470
 
-I2C has for v5.7:
+I have filed this to bugzilla and more detail:
+https://bugzilla.kernel.org/show_bug.cgi?id=206653
 
-* using defines for bus speeds to avoid mistakes in hardcoded values;
-  lots of small driver updates because of that. Thanks, Andy!
-* API change: i2c_setup_smbus_alert() was renamed to
-  i2c_new_smbus_alert_device() and returns ERRPTR now. All in-tree users
-  have been converted
-* in the core, a rare race condition when deleting the cdev has been
-  fixed. Thanks, Kevin!
-* lots of driver updates. Thanks, everyone!
+Any comment will be appreciated.
 
-What I also want to mention: The amount of review and testing tags given
-was quite high this time. Thank you to these people, too. I hope we can
-keep it like this!
-
-Please pull,
-
-   Wolfram
-
-
-The following changes since commit 16fbf79b0f83bc752cee8589279f1ebfe57b3b6e:
-
-  Linux 5.6-rc7 (2020-03-22 18:31:56 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-5.7
-
-for you to fetch changes up to df576beee53ac97fe0a413430e623e658805891d:
-
-  i2c: rcar: clean up after refactoring i2c_timings (2020-03-31 17:34:29 +0=
-200)
-
-----------------------------------------------------------------
-Alain Volmat (4):
-      i2c: stm32f7: allow controller to be wakeup-source
-      i2c: stm32f7: disable/restore Fast Mode Plus bits in low power modes
-      i2c: stm32f7: add a new st, stm32mp15-i2c compatible
-      i2c: stm32f7: do not backup read-only PECR register
-
-Andy Shevchenko (7):
-      i2c: designware: Fix spelling typos in the comments
-      i2c: core: Provide generic definitions for bus frequencies
-      i2c: core: Allow override timing properties with 0
-      i2c: rcar: Consolidate timings calls in rcar_i2c_clock_calculate()
-      i2c: stm32f7: switch to I=C2=B2C generic property parsing
-      i2c: algo: Use generic definitions for bus frequencies
-      i2c: drivers: Use generic definitions for bus frequencies
-
-Kamel Bouhara (2):
-      dt-bindings: i2c: at91: document optional bus recovery properties
-      i2c: at91: implement i2c bus recovery
-
-Kevin Hao (1):
-      i2c: dev: Fix the race between the release of i2c_dev and cdev
-
-Markus Pietrek (1):
-      eeprom: at24: add TPF0001 ACPI ID for 24c1024 device
-
-Maxime Ripard (3):
-      dt-bindings: i2c: brcmstb: Convert the BRCMSTB binding to a schema
-      dt-bindings: i2c: brcmstb: Add BCM2711 BSC/AUTO-I2C binding
-      i2c: brcmstb: Support BCM2711 HDMI BSC controllers
-
-Peter Ujfalusi (1):
-      i2c: mxs: Use dma_request_chan() instead dma_request_slave_channel()
-
-Serge Semin (2):
-      i2c: designware: Detect the FIFO size in the common code
-      i2c: designware: Discard i2c_dw_read_comp_param() function
-
-Stefan Lengfeld (1):
-      i2c: imx: implement master_xfer_atomic callback
-
-Stephen Boyd (3):
-      i2c: qcom-geni: Let firmware specify irq trigger flags
-      i2c: qcom-geni: Grow a dev pointer to simplify code
-      i2c: qcom-geni: Drop of_platform.h include
-
-Tang Bin (1):
-      i2c: imx: remove duplicate print after platform_get_irq()
-
-Wolfram Sang (8):
-      i2c: dev: keep sorting of includes
-      i2c: powermac: correct comment about custom handling
-      i2c: convert SMBus alert setup function to return an ERRPTR
-      i2c: smbus: remove outdated references to irq level triggers
-      Merge tag 'at24-updates-for-v5.7' of git://git.kernel.org/.../brgl/li=
-nux into i2c/for-5.7
-      Merge tag 'v5.6-rc7' into i2c/for-5.7
-      macintosh: convert to i2c_new_scanned_device
-      i2c: rcar: clean up after refactoring i2c_timings
-
-chenqiwu (2):
-      i2c: use kobj_to_dev() API
-      i2c: omap: use devm_platform_ioremap_resource()
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Alain Volmat (1):
-      (Rev.) i2c: stm32f7: switch to I=C2=B2C generic property parsing
-
-Amit Kucheria (3):
-      (Rev.) i2c: qcom-geni: Drop of_platform.h include
-      (Rev.) i2c: qcom-geni: Grow a dev pointer to simplify code
-      (Rev.) i2c: qcom-geni: Let firmware specify irq trigger flags
-
-Andy Shevchenko (1):
-      (Rev.) i2c: designware: Detect the FIFO size in the common code
-
-Baolin Wang (1):
-      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
-
-Bjorn Andersson (3):
-      (Rev.) i2c: qcom-geni: Drop of_platform.h include
-      (Rev.) i2c: qcom-geni: Grow a dev pointer to simplify code
-      (Rev.) i2c: qcom-geni: Let firmware specify irq trigger flags
-
-Brendan Higgins (4):
-      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
-      (Rev.) i2c: qcom-geni: Drop of_platform.h include
-      (Rev.) i2c: qcom-geni: Grow a dev pointer to simplify code
-      (Rev.) i2c: qcom-geni: Let firmware specify irq trigger flags
-
-Chris Brandt (1):
-      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
-
-Dmitry Osipenko (1):
-      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
-
-Douglas Anderson (3):
-      (Rev.) i2c: qcom-geni: Drop of_platform.h include
-      (Rev.) i2c: qcom-geni: Grow a dev pointer to simplify code
-      (Rev.) i2c: qcom-geni: Let firmware specify irq trigger flags
-
-Geert Uytterhoeven (1):
-      (Rev.) i2c: rcar: clean up after refactoring i2c_timings
-
-Guenter Roeck (1):
-      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
-
-Linus Walleij (1):
-      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
-
-Luca Ceresoli (5):
-      (Rev.) i2c: smbus: remove outdated references to irq level triggers
-      (Rev.) i2c: convert SMBus alert setup function to return an ERRPTR
-      (Test) i2c: omap: use devm_platform_ioremap_resource()
-      (Rev.) i2c: omap: use devm_platform_ioremap_resource()
-      (Rev.) i2c: use kobj_to_dev() API
-
-Manivannan Sadhasivam (1):
-      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
-
-Mika Westerberg (1):
-      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
-
-Nicolas Saenz Julienne (1):
-      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
-
-Pierre-Yves MORDRET (5):
-      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
-      (Rev.) i2c: stm32f7: do not backup read-only PECR register
-      (Rev.) i2c: stm32f7: add a new st, stm32mp15-i2c compatible
-      (Rev.) i2c: stm32f7: disable/restore Fast Mode Plus bits in low power=
- modes
-      (Rev.) i2c: stm32f7: allow controller to be wakeup-source
-
-Rob Herring (3):
-      (Rev.) dt-bindings: i2c: brcmstb: Add BCM2711 BSC/AUTO-I2C binding
-      (Rev.) dt-bindings: i2c: brcmstb: Convert the BRCMSTB binding to a sc=
-hema
-      (Rev.) dt-bindings: i2c: at91: document optional bus recovery propert=
-ies
-
-Stefan Agner (1):
-      (Rev.) i2c: imx: implement master_xfer_atomic callback
-
-Stefan Lengfeld (1):
-      (Test) i2c: imx: implement master_xfer_atomic callback
-
-Thor Thayer (1):
-      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
-
-Vignesh Raghavendra (1):
-      (Rev.) i2c: omap: use devm_platform_ioremap_resource()
-
-Wolfram Sang (2):
-      (Test) i2c: rcar: Consolidate timings calls in rcar_i2c_clock_calcula=
-te()
-      (Test) i2c: core: Allow override timing properties with 0
-
- .../devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml  |  97 ++++++++
- Documentation/devicetree/bindings/i2c/i2c-at91.txt |  10 +
- .../devicetree/bindings/i2c/i2c-brcmstb.txt        |  26 ---
- Documentation/i2c/smbus-protocol.rst               |   2 +-
- MAINTAINERS                                        |   2 +-
- drivers/i2c/algos/i2c-algo-pca.c                   |   6 +-
- drivers/i2c/busses/i2c-altera.c                    |   6 +-
- drivers/i2c/busses/i2c-amd-mp2-plat.c              |  27 ++-
- drivers/i2c/busses/i2c-aspeed.c                    |   2 +-
- drivers/i2c/busses/i2c-at91-master.c               |  78 +++++++
- drivers/i2c/busses/i2c-at91.h                      |   4 +
- drivers/i2c/busses/i2c-axxia.c                     |   4 +-
- drivers/i2c/busses/i2c-bcm-iproc.c                 |  14 +-
- drivers/i2c/busses/i2c-bcm-kona.c                  |   8 +-
- drivers/i2c/busses/i2c-bcm2835.c                   |   2 +-
- drivers/i2c/busses/i2c-brcmstb.c                   |  33 +++
- drivers/i2c/busses/i2c-cadence.c                   |   7 +-
- drivers/i2c/busses/i2c-designware-baytrail.c       |   2 +-
- drivers/i2c/busses/i2c-designware-common.c         |  36 ++-
- drivers/i2c/busses/i2c-designware-core.h           |   2 +-
- drivers/i2c/busses/i2c-designware-master.c         |   4 +-
- drivers/i2c/busses/i2c-designware-pcidrv.c         |   2 +-
- drivers/i2c/busses/i2c-designware-platdrv.c        |  61 ++---
- drivers/i2c/busses/i2c-designware-slave.c          |   4 +-
- drivers/i2c/busses/i2c-digicolor.c                 |   3 +-
- drivers/i2c/busses/i2c-diolan-u2c.c                |  12 +-
- drivers/i2c/busses/i2c-efm32.c                     |   2 +-
- drivers/i2c/busses/i2c-exynos5.c                   |  18 +-
- drivers/i2c/busses/i2c-hix5hd2.c                   |  10 +-
- drivers/i2c/busses/i2c-img-scb.c                   |   4 +-
- drivers/i2c/busses/i2c-imx-lpi2c.c                 |  16 +-
- drivers/i2c/busses/i2c-imx.c                       | 155 +++++++++----
- drivers/i2c/busses/i2c-lpc2k.c                     |   6 +-
- drivers/i2c/busses/i2c-mt65xx.c                    |  21 +-
- drivers/i2c/busses/i2c-mt7621.c                    |   2 +-
- drivers/i2c/busses/i2c-mv64xxx.c                   |   6 +-
- drivers/i2c/busses/i2c-mxs.c                       |  10 +-
- drivers/i2c/busses/i2c-nomadik.c                   |   8 +-
- drivers/i2c/busses/i2c-omap.c                      |   6 +-
- drivers/i2c/busses/i2c-owl.c                       |   9 +-
- drivers/i2c/busses/i2c-parport.c                   |  12 +-
- drivers/i2c/busses/i2c-powermac.c                  |  15 +-
- drivers/i2c/busses/i2c-qcom-geni.c                 |  58 +++--
- drivers/i2c/busses/i2c-qup.c                       |  11 +-
- drivers/i2c/busses/i2c-rcar.c                      |  24 +-
- drivers/i2c/busses/i2c-riic.c                      |   6 +-
- drivers/i2c/busses/i2c-rk3x.c                      |  12 +-
- drivers/i2c/busses/i2c-s3c2410.c                   |   4 +-
- drivers/i2c/busses/i2c-sh_mobile.c                 |   9 +-
- drivers/i2c/busses/i2c-sirf.c                      |   3 +-
- drivers/i2c/busses/i2c-sprd.c                      |   9 +-
- drivers/i2c/busses/i2c-st.c                        |   6 +-
- drivers/i2c/busses/i2c-stm32f4.c                   |  10 +-
- drivers/i2c/busses/i2c-stm32f7.c                   | 245 +++++++++++++++--=
-----
- drivers/i2c/busses/i2c-stu300.c                    |   6 +-
- drivers/i2c/busses/i2c-sun6i-p2wi.c                |   2 +-
- drivers/i2c/busses/i2c-synquacer.c                 |   6 +-
- drivers/i2c/busses/i2c-tegra.c                     |  18 +-
- drivers/i2c/busses/i2c-thunderx-pcidrv.c           |  13 +-
- drivers/i2c/busses/i2c-uniphier-f.c                |   6 +-
- drivers/i2c/busses/i2c-uniphier.c                  |   7 +-
- drivers/i2c/busses/i2c-wmt.c                       |   2 +-
- drivers/i2c/busses/i2c-xlp9xx.c                    |  18 +-
- drivers/i2c/busses/i2c-xlr.c                       |   2 +-
- drivers/i2c/i2c-core-acpi.c                        |   2 +-
- drivers/i2c/i2c-core-base.c                        |  38 ++--
- drivers/i2c/i2c-core-smbus.c                       |  26 +--
- drivers/i2c/i2c-dev.c                              |  50 +++--
- drivers/i2c/i2c-slave-eeprom.c                     |   4 +-
- drivers/i2c/i2c-smbus.c                            |   2 +-
- drivers/macintosh/therm_windtunnel.c               |   4 +-
- drivers/misc/eeprom/at24.c                         |   1 +
- include/linux/i2c-smbus.h                          |   9 +-
- include/linux/i2c.h                                |   8 +
- 74 files changed, 855 insertions(+), 520 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.=
-yaml
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-brcmstb.txt
-
---WIyZ46R2i8wDzkSu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6Ft5AACgkQFA3kzBSg
-KbZC/w/+PT3eWnhfWxuX6foNSprKFu701tQeyuWm40EFbLfZmgksrqsBvLoO95KM
-mIkzBED5CIVQdv1qpkkymsaLjb1CvlrdR4JsdR02dCBsnavMRWYyJIizcR84shnk
-KD/BMSQcbM2hJ5dpoPK6Bz5M1XbHnM++gWe3Z5oihPgD11HV2YWTmtSL8Jm7Ryxx
-p7sdVDrvRq1tNc3cHUK17yNpwafqHBZuRxhliG+RK/ZXEShK9YL5v1hdbDGjpsXB
-TGl8807No1336ovgRL0Sl7W9ASnWUqyfvGq6JLXIW9IZAK767So/vDwYCRnyRFoA
-S7O45XxeZPgu2dC5XsWRoZkPwqnzFgSv9kNqKoX8wFlIiWh+IOV1VqQOILm6f6bi
-H9z5aZoOJO/3WXHEBSwKkkm0/umHzKql7iC3/J5FIxV7isZio8HbE/0aRIvSgURu
-T7Wv3OrVbLnbrxkYtUdvBFzFyHpXFvhaurqxwQKiOWG36byZ7UGYWR+bLXTRd035
-p9oTKrUTezF5gDsk1IvOfOxQhi02bv5TLiaxvBlwo9z8ZDkPxpMKPAKYvSHpWtlU
-bJDyc9P2eL7e7vzjd4l6rrq2sehh0IeKYp0GRn/Wf8ITlyBvuYPBtwg6EYT5PzLG
-WD2rPXfV+n2ckW5GbxKwz5QLBtoK1kal8Wos4QEN/XOkb9lWeos=
-=DHJj
------END PGP SIGNATURE-----
-
---WIyZ46R2i8wDzkSu--
+Thanks,
+Jian-Hong Pan
