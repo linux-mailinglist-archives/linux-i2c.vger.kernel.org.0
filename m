@@ -2,39 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2BF19BE9F
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Apr 2020 11:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409C319BEFE
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Apr 2020 12:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387935AbgDBJ2Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Apr 2020 05:28:24 -0400
-Received: from sauhun.de ([88.99.104.3]:56018 "EHLO pokefinder.org"
+        id S2387552AbgDBJ77 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Apr 2020 05:59:59 -0400
+Received: from sauhun.de ([88.99.104.3]:56226 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725965AbgDBJ2T (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 2 Apr 2020 05:28:19 -0400
+        id S1728135AbgDBJ77 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 2 Apr 2020 05:59:59 -0400
 Received: from localhost (p54B333EE.dip0.t-ipconnect.de [84.179.51.238])
-        by pokefinder.org (Postfix) with ESMTPSA id DB7882C0590;
-        Thu,  2 Apr 2020 11:28:16 +0200 (CEST)
-Date:   Thu, 2 Apr 2020 11:28:13 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 98E832C0590;
+        Thu,  2 Apr 2020 11:59:54 +0200 (CEST)
+Date:   Thu, 2 Apr 2020 11:59:53 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Laine Jaakko EXT <ext-jaakko.laine@vaisala.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH] i2c: xiic: Support disabling multi-master in DT
-Message-ID: <20200402092813.GA986@ninjato>
-References: <20200218135627.24739-1-ext-jaakko.laine@vaisala.com>
- <CAKfKVtFf+VpinkOGsBFZ2-_PKvx-C1L7G7_uhY2RCvV5dy6L_w@mail.gmail.com>
- <AM0PR06MB5185E501349E06428093B62FD4F70@AM0PR06MB5185.eurprd06.prod.outlook.com>
- <20200401143254.GA2409@ninjato>
- <AM0PR06MB5185F8F51316FCD5213F0ABED4C60@AM0PR06MB5185.eurprd06.prod.outlook.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.7
+Message-ID: <20200402095948.GA2414@ninjato>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="17pEHd4RhPHOinZp"
+        protocol="application/pgp-signature"; boundary="WIyZ46R2i8wDzkSu"
 Content-Disposition: inline
-In-Reply-To: <AM0PR06MB5185F8F51316FCD5213F0ABED4C60@AM0PR06MB5185.eurprd06.prod.outlook.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -42,71 +33,304 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---17pEHd4RhPHOinZp
-Content-Type: text/plain; charset=us-ascii
+--WIyZ46R2i8wDzkSu
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jaako,
+Linus,
 
-> > My best bet is to introduce another binding "single-master" which says
-> > clearly that we are the only bus master on that bus.
-> >
-> > Both bindings missing means then "unclear".
-> >
-> > I think this matches reality best.
-> >
-> > Opinions?
+I2C has for v5.7:
 
-> I agree that this sounds like the best option if original binding
-> can't be used, even though it can also be a bit confusing to have 2
-> similar bindings.
+* using defines for bus speeds to avoid mistakes in hardcoded values;
+  lots of small driver updates because of that. Thanks, Andy!
+* API change: i2c_setup_smbus_alert() was renamed to
+  i2c_new_smbus_alert_device() and returns ERRPTR now. All in-tree users
+  have been converted
+* in the core, a rare race condition when deleting the cdev has been
+  fixed. Thanks, Kevin!
+* lots of driver updates. Thanks, everyone!
 
-I think it becomes understandable if we emphasize that "no bindings"
-means "unclear". We need to document it.
+What I also want to mention: The amount of review and testing tags given
+was quite high this time. Thank you to these people, too. I hope we can
+keep it like this!
 
-> How would both bindings existing simultaneously be interpreted? Maybe
-> both existing simultaneously should be considered as an invalid
-> configuration, so that it would be enough to just check the one you
-> need? The other option would be to treat both existing similarly to
-> neither existing, which would require the driver to always check both
-> if checking one.
-
-I am clearly for saying that this is an illegal combination. I'd hope
-this can be expressed in a YAML binding. Yet, my research didn't give me
-an answer. Adding Rob and DT list to CC. Question is:
-
-Can we check if the boolean bindings "multi-master" and "single-master"
-are not applied at the same time? Any other combination is okay, i.e.
-just one of them or none of them.
-
-> Should the new single-master binding also be a general binding for all
-> I2C drivers or a binding just defined for the XIIC driver? Having it
-
-It should definately be global.
-
-Thanks,
+Please pull,
 
    Wolfram
 
 
---17pEHd4RhPHOinZp
+The following changes since commit 16fbf79b0f83bc752cee8589279f1ebfe57b3b6e:
+
+  Linux 5.6-rc7 (2020-03-22 18:31:56 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-5.7
+
+for you to fetch changes up to df576beee53ac97fe0a413430e623e658805891d:
+
+  i2c: rcar: clean up after refactoring i2c_timings (2020-03-31 17:34:29 +0=
+200)
+
+----------------------------------------------------------------
+Alain Volmat (4):
+      i2c: stm32f7: allow controller to be wakeup-source
+      i2c: stm32f7: disable/restore Fast Mode Plus bits in low power modes
+      i2c: stm32f7: add a new st, stm32mp15-i2c compatible
+      i2c: stm32f7: do not backup read-only PECR register
+
+Andy Shevchenko (7):
+      i2c: designware: Fix spelling typos in the comments
+      i2c: core: Provide generic definitions for bus frequencies
+      i2c: core: Allow override timing properties with 0
+      i2c: rcar: Consolidate timings calls in rcar_i2c_clock_calculate()
+      i2c: stm32f7: switch to I=C2=B2C generic property parsing
+      i2c: algo: Use generic definitions for bus frequencies
+      i2c: drivers: Use generic definitions for bus frequencies
+
+Kamel Bouhara (2):
+      dt-bindings: i2c: at91: document optional bus recovery properties
+      i2c: at91: implement i2c bus recovery
+
+Kevin Hao (1):
+      i2c: dev: Fix the race between the release of i2c_dev and cdev
+
+Markus Pietrek (1):
+      eeprom: at24: add TPF0001 ACPI ID for 24c1024 device
+
+Maxime Ripard (3):
+      dt-bindings: i2c: brcmstb: Convert the BRCMSTB binding to a schema
+      dt-bindings: i2c: brcmstb: Add BCM2711 BSC/AUTO-I2C binding
+      i2c: brcmstb: Support BCM2711 HDMI BSC controllers
+
+Peter Ujfalusi (1):
+      i2c: mxs: Use dma_request_chan() instead dma_request_slave_channel()
+
+Serge Semin (2):
+      i2c: designware: Detect the FIFO size in the common code
+      i2c: designware: Discard i2c_dw_read_comp_param() function
+
+Stefan Lengfeld (1):
+      i2c: imx: implement master_xfer_atomic callback
+
+Stephen Boyd (3):
+      i2c: qcom-geni: Let firmware specify irq trigger flags
+      i2c: qcom-geni: Grow a dev pointer to simplify code
+      i2c: qcom-geni: Drop of_platform.h include
+
+Tang Bin (1):
+      i2c: imx: remove duplicate print after platform_get_irq()
+
+Wolfram Sang (8):
+      i2c: dev: keep sorting of includes
+      i2c: powermac: correct comment about custom handling
+      i2c: convert SMBus alert setup function to return an ERRPTR
+      i2c: smbus: remove outdated references to irq level triggers
+      Merge tag 'at24-updates-for-v5.7' of git://git.kernel.org/.../brgl/li=
+nux into i2c/for-5.7
+      Merge tag 'v5.6-rc7' into i2c/for-5.7
+      macintosh: convert to i2c_new_scanned_device
+      i2c: rcar: clean up after refactoring i2c_timings
+
+chenqiwu (2):
+      i2c: use kobj_to_dev() API
+      i2c: omap: use devm_platform_ioremap_resource()
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Alain Volmat (1):
+      (Rev.) i2c: stm32f7: switch to I=C2=B2C generic property parsing
+
+Amit Kucheria (3):
+      (Rev.) i2c: qcom-geni: Drop of_platform.h include
+      (Rev.) i2c: qcom-geni: Grow a dev pointer to simplify code
+      (Rev.) i2c: qcom-geni: Let firmware specify irq trigger flags
+
+Andy Shevchenko (1):
+      (Rev.) i2c: designware: Detect the FIFO size in the common code
+
+Baolin Wang (1):
+      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
+
+Bjorn Andersson (3):
+      (Rev.) i2c: qcom-geni: Drop of_platform.h include
+      (Rev.) i2c: qcom-geni: Grow a dev pointer to simplify code
+      (Rev.) i2c: qcom-geni: Let firmware specify irq trigger flags
+
+Brendan Higgins (4):
+      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
+      (Rev.) i2c: qcom-geni: Drop of_platform.h include
+      (Rev.) i2c: qcom-geni: Grow a dev pointer to simplify code
+      (Rev.) i2c: qcom-geni: Let firmware specify irq trigger flags
+
+Chris Brandt (1):
+      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
+
+Dmitry Osipenko (1):
+      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
+
+Douglas Anderson (3):
+      (Rev.) i2c: qcom-geni: Drop of_platform.h include
+      (Rev.) i2c: qcom-geni: Grow a dev pointer to simplify code
+      (Rev.) i2c: qcom-geni: Let firmware specify irq trigger flags
+
+Geert Uytterhoeven (1):
+      (Rev.) i2c: rcar: clean up after refactoring i2c_timings
+
+Guenter Roeck (1):
+      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
+
+Linus Walleij (1):
+      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
+
+Luca Ceresoli (5):
+      (Rev.) i2c: smbus: remove outdated references to irq level triggers
+      (Rev.) i2c: convert SMBus alert setup function to return an ERRPTR
+      (Test) i2c: omap: use devm_platform_ioremap_resource()
+      (Rev.) i2c: omap: use devm_platform_ioremap_resource()
+      (Rev.) i2c: use kobj_to_dev() API
+
+Manivannan Sadhasivam (1):
+      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
+
+Mika Westerberg (1):
+      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
+
+Nicolas Saenz Julienne (1):
+      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
+
+Pierre-Yves MORDRET (5):
+      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
+      (Rev.) i2c: stm32f7: do not backup read-only PECR register
+      (Rev.) i2c: stm32f7: add a new st, stm32mp15-i2c compatible
+      (Rev.) i2c: stm32f7: disable/restore Fast Mode Plus bits in low power=
+ modes
+      (Rev.) i2c: stm32f7: allow controller to be wakeup-source
+
+Rob Herring (3):
+      (Rev.) dt-bindings: i2c: brcmstb: Add BCM2711 BSC/AUTO-I2C binding
+      (Rev.) dt-bindings: i2c: brcmstb: Convert the BRCMSTB binding to a sc=
+hema
+      (Rev.) dt-bindings: i2c: at91: document optional bus recovery propert=
+ies
+
+Stefan Agner (1):
+      (Rev.) i2c: imx: implement master_xfer_atomic callback
+
+Stefan Lengfeld (1):
+      (Test) i2c: imx: implement master_xfer_atomic callback
+
+Thor Thayer (1):
+      (Rev.) i2c: drivers: Use generic definitions for bus frequencies
+
+Vignesh Raghavendra (1):
+      (Rev.) i2c: omap: use devm_platform_ioremap_resource()
+
+Wolfram Sang (2):
+      (Test) i2c: rcar: Consolidate timings calls in rcar_i2c_clock_calcula=
+te()
+      (Test) i2c: core: Allow override timing properties with 0
+
+ .../devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml  |  97 ++++++++
+ Documentation/devicetree/bindings/i2c/i2c-at91.txt |  10 +
+ .../devicetree/bindings/i2c/i2c-brcmstb.txt        |  26 ---
+ Documentation/i2c/smbus-protocol.rst               |   2 +-
+ MAINTAINERS                                        |   2 +-
+ drivers/i2c/algos/i2c-algo-pca.c                   |   6 +-
+ drivers/i2c/busses/i2c-altera.c                    |   6 +-
+ drivers/i2c/busses/i2c-amd-mp2-plat.c              |  27 ++-
+ drivers/i2c/busses/i2c-aspeed.c                    |   2 +-
+ drivers/i2c/busses/i2c-at91-master.c               |  78 +++++++
+ drivers/i2c/busses/i2c-at91.h                      |   4 +
+ drivers/i2c/busses/i2c-axxia.c                     |   4 +-
+ drivers/i2c/busses/i2c-bcm-iproc.c                 |  14 +-
+ drivers/i2c/busses/i2c-bcm-kona.c                  |   8 +-
+ drivers/i2c/busses/i2c-bcm2835.c                   |   2 +-
+ drivers/i2c/busses/i2c-brcmstb.c                   |  33 +++
+ drivers/i2c/busses/i2c-cadence.c                   |   7 +-
+ drivers/i2c/busses/i2c-designware-baytrail.c       |   2 +-
+ drivers/i2c/busses/i2c-designware-common.c         |  36 ++-
+ drivers/i2c/busses/i2c-designware-core.h           |   2 +-
+ drivers/i2c/busses/i2c-designware-master.c         |   4 +-
+ drivers/i2c/busses/i2c-designware-pcidrv.c         |   2 +-
+ drivers/i2c/busses/i2c-designware-platdrv.c        |  61 ++---
+ drivers/i2c/busses/i2c-designware-slave.c          |   4 +-
+ drivers/i2c/busses/i2c-digicolor.c                 |   3 +-
+ drivers/i2c/busses/i2c-diolan-u2c.c                |  12 +-
+ drivers/i2c/busses/i2c-efm32.c                     |   2 +-
+ drivers/i2c/busses/i2c-exynos5.c                   |  18 +-
+ drivers/i2c/busses/i2c-hix5hd2.c                   |  10 +-
+ drivers/i2c/busses/i2c-img-scb.c                   |   4 +-
+ drivers/i2c/busses/i2c-imx-lpi2c.c                 |  16 +-
+ drivers/i2c/busses/i2c-imx.c                       | 155 +++++++++----
+ drivers/i2c/busses/i2c-lpc2k.c                     |   6 +-
+ drivers/i2c/busses/i2c-mt65xx.c                    |  21 +-
+ drivers/i2c/busses/i2c-mt7621.c                    |   2 +-
+ drivers/i2c/busses/i2c-mv64xxx.c                   |   6 +-
+ drivers/i2c/busses/i2c-mxs.c                       |  10 +-
+ drivers/i2c/busses/i2c-nomadik.c                   |   8 +-
+ drivers/i2c/busses/i2c-omap.c                      |   6 +-
+ drivers/i2c/busses/i2c-owl.c                       |   9 +-
+ drivers/i2c/busses/i2c-parport.c                   |  12 +-
+ drivers/i2c/busses/i2c-powermac.c                  |  15 +-
+ drivers/i2c/busses/i2c-qcom-geni.c                 |  58 +++--
+ drivers/i2c/busses/i2c-qup.c                       |  11 +-
+ drivers/i2c/busses/i2c-rcar.c                      |  24 +-
+ drivers/i2c/busses/i2c-riic.c                      |   6 +-
+ drivers/i2c/busses/i2c-rk3x.c                      |  12 +-
+ drivers/i2c/busses/i2c-s3c2410.c                   |   4 +-
+ drivers/i2c/busses/i2c-sh_mobile.c                 |   9 +-
+ drivers/i2c/busses/i2c-sirf.c                      |   3 +-
+ drivers/i2c/busses/i2c-sprd.c                      |   9 +-
+ drivers/i2c/busses/i2c-st.c                        |   6 +-
+ drivers/i2c/busses/i2c-stm32f4.c                   |  10 +-
+ drivers/i2c/busses/i2c-stm32f7.c                   | 245 +++++++++++++++--=
+----
+ drivers/i2c/busses/i2c-stu300.c                    |   6 +-
+ drivers/i2c/busses/i2c-sun6i-p2wi.c                |   2 +-
+ drivers/i2c/busses/i2c-synquacer.c                 |   6 +-
+ drivers/i2c/busses/i2c-tegra.c                     |  18 +-
+ drivers/i2c/busses/i2c-thunderx-pcidrv.c           |  13 +-
+ drivers/i2c/busses/i2c-uniphier-f.c                |   6 +-
+ drivers/i2c/busses/i2c-uniphier.c                  |   7 +-
+ drivers/i2c/busses/i2c-wmt.c                       |   2 +-
+ drivers/i2c/busses/i2c-xlp9xx.c                    |  18 +-
+ drivers/i2c/busses/i2c-xlr.c                       |   2 +-
+ drivers/i2c/i2c-core-acpi.c                        |   2 +-
+ drivers/i2c/i2c-core-base.c                        |  38 ++--
+ drivers/i2c/i2c-core-smbus.c                       |  26 +--
+ drivers/i2c/i2c-dev.c                              |  50 +++--
+ drivers/i2c/i2c-slave-eeprom.c                     |   4 +-
+ drivers/i2c/i2c-smbus.c                            |   2 +-
+ drivers/macintosh/therm_windtunnel.c               |   4 +-
+ drivers/misc/eeprom/at24.c                         |   1 +
+ include/linux/i2c-smbus.h                          |   9 +-
+ include/linux/i2c.h                                |   8 +
+ 74 files changed, 855 insertions(+), 520 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.=
+yaml
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-brcmstb.txt
+
+--WIyZ46R2i8wDzkSu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6FsCkACgkQFA3kzBSg
-Kbbvtw/+L5wD8ARrOmtDVYzMRtJvbyu1XsD4cZdfx/fHNB3oOKbL65t9dnKWiuRy
-Np7KViYB9VbVGTYtRWPT5EPWUqhtNbRWfEoxONZ02IVVBq8qfl9iIgcXpvrbVU2J
-7m3AJSB8x2A9FJ4iE1o3hPw7zkUKtnXui1nn7MIFO34d6QaU7UgxpQ3pIdITKtIm
-BqUedfcI2zj0cV+V4RsZFUlZLZ7QsVUkcXDd3tsXt/yKnBxPVV/pzqmsQzNrXI3Q
-evWAjIFHmBJzM4B3teelLwsE2toVGVtK/j4x5ZhTSkEpPBnkA++02xAVq+krdM+z
-AMBD8ZIoHwQzjoSNGcoEXprLkQmN2nbfl1dgvRGUPotJ8LDIYo5NyaRy4WYBh6xF
-QjnMQFg29QuuWCfXDKC8vNG1BN/DYUh+8Bzo7HCGiEPd7B/unsFqz7QxW6WCg29G
-MmHi+253Xq9LKDvC6OqB2+Dvc764BGI2xiVu4t4/iXXvWI0VkhCeoZkUdLkx19OR
-LKEw7ipKmhiX4sPvhtD38J6c4XKz1izB+4rzTq7ZZH+Vg1cNtYL3/riIfE9BwxjF
-A6KwJi6vXetZxROIxWTxj8BX9qjbhErOYDCTWPxFlj815S4RfDgqC5oiHIhGGr4m
-Vv3egui9LAtlne0QsqmR0PjP5hQ4fFp+78rjdoHgyyFAtKA9fnA=
-=KFqX
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6Ft5AACgkQFA3kzBSg
+KbZC/w/+PT3eWnhfWxuX6foNSprKFu701tQeyuWm40EFbLfZmgksrqsBvLoO95KM
+mIkzBED5CIVQdv1qpkkymsaLjb1CvlrdR4JsdR02dCBsnavMRWYyJIizcR84shnk
+KD/BMSQcbM2hJ5dpoPK6Bz5M1XbHnM++gWe3Z5oihPgD11HV2YWTmtSL8Jm7Ryxx
+p7sdVDrvRq1tNc3cHUK17yNpwafqHBZuRxhliG+RK/ZXEShK9YL5v1hdbDGjpsXB
+TGl8807No1336ovgRL0Sl7W9ASnWUqyfvGq6JLXIW9IZAK767So/vDwYCRnyRFoA
+S7O45XxeZPgu2dC5XsWRoZkPwqnzFgSv9kNqKoX8wFlIiWh+IOV1VqQOILm6f6bi
+H9z5aZoOJO/3WXHEBSwKkkm0/umHzKql7iC3/J5FIxV7isZio8HbE/0aRIvSgURu
+T7Wv3OrVbLnbrxkYtUdvBFzFyHpXFvhaurqxwQKiOWG36byZ7UGYWR+bLXTRd035
+p9oTKrUTezF5gDsk1IvOfOxQhi02bv5TLiaxvBlwo9z8ZDkPxpMKPAKYvSHpWtlU
+bJDyc9P2eL7e7vzjd4l6rrq2sehh0IeKYp0GRn/Wf8ITlyBvuYPBtwg6EYT5PzLG
+WD2rPXfV+n2ckW5GbxKwz5QLBtoK1kal8Wos4QEN/XOkb9lWeos=
+=DHJj
 -----END PGP SIGNATURE-----
 
---17pEHd4RhPHOinZp--
+--WIyZ46R2i8wDzkSu--
