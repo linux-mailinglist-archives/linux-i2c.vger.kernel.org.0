@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CED581A0258
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Apr 2020 02:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBBD1A0262
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Apr 2020 02:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbgDGADM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Apr 2020 20:03:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38424 "EHLO mail.kernel.org"
+        id S1728401AbgDGADX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Apr 2020 20:03:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38682 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726776AbgDGADL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 6 Apr 2020 20:03:11 -0400
+        id S1726339AbgDGADS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 6 Apr 2020 20:03:18 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F98E2082D;
-        Tue,  7 Apr 2020 00:03:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 84C0B2080C;
+        Tue,  7 Apr 2020 00:03:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586217791;
-        bh=YHs2/2fKbJKHt2TGmwli4BHLGjQ0L9PxyYQF8nAUEOY=;
+        s=default; t=1586217798;
+        bh=1Lqk+doDrlT/SrI8d8AftpDemtX1pC+rrvgWeYNetTI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BeTA5iVFL7vH2KUXW0SsOYUtR+0/2ARrfrUILf9vQPCo6VMLyUIyxOzZx/KrvdnXF
-         hkKA/HmbVJHnLX9y8MCctBIowpBTL8NCNXmI1PSGbXrrIhQy9+fWRtYEykSJGEDVHE
-         9L4wfOcgcNYp6+XtlS0anR0ySO+uesQqlK5zhi7Y=
+        b=j9f/Zkbr7Kgu6gnRTNs3OKHc39jlGjWPUTV1TJ24Eww3EHmN1mvOUKPjCIzEEKuUw
+         mQv4z10/9RYFEfyMDmCB9au5Y+KHBsiwwSv/D35qnKwZQ0H9a4yrZgtMUFPyA4lctI
+         /dE2JZHZ6rT8gbAAwJFX1bcW3WNdMoJKQ0wTGWOk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alain Volmat <avolmat@me.com>,
@@ -30,12 +30,12 @@ Cc:     Alain Volmat <avolmat@me.com>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 5/5] i2c: st: fix missing struct parameter description
-Date:   Mon,  6 Apr 2020 20:03:04 -0400
-Message-Id: <20200407000304.17360-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 4/4] i2c: st: fix missing struct parameter description
+Date:   Mon,  6 Apr 2020 20:03:12 -0400
+Message-Id: <20200407000312.17447-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200407000304.17360-1-sashal@kernel.org>
-References: <20200407000304.17360-1-sashal@kernel.org>
+In-Reply-To: <20200407000312.17447-1-sashal@kernel.org>
+References: <20200407000312.17447-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,10 +61,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/i2c/busses/i2c-st.c b/drivers/i2c/busses/i2c-st.c
-index 1371547ce1a3a..185653b8ec3a2 100644
+index 25020ec777c97..ee0a7d3dd0c65 100644
 --- a/drivers/i2c/busses/i2c-st.c
 +++ b/drivers/i2c/busses/i2c-st.c
-@@ -437,6 +437,7 @@ static void st_i2c_wr_fill_tx_fifo(struct st_i2c_dev *i2c_dev)
+@@ -399,6 +399,7 @@ static void st_i2c_wr_fill_tx_fifo(struct st_i2c_dev *i2c_dev)
  /**
   * st_i2c_rd_fill_tx_fifo() - Fill the Tx FIFO in read mode
   * @i2c_dev: Controller's private data
