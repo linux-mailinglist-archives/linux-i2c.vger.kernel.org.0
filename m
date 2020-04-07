@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8196F1A119E
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Apr 2020 18:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0441A11A2
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Apr 2020 18:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbgDGQiC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Apr 2020 12:38:02 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:39062 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726883AbgDGQiC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Apr 2020 12:38:02 -0400
-Received: by mail-pf1-f195.google.com with SMTP id k15so1044581pfh.6;
-        Tue, 07 Apr 2020 09:38:01 -0700 (PDT)
+        id S1728477AbgDGQiH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Apr 2020 12:38:07 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:34874 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727235AbgDGQiG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Apr 2020 12:38:06 -0400
+Received: by mail-pg1-f195.google.com with SMTP id k5so1992936pga.2;
+        Tue, 07 Apr 2020 09:38:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ifslSu+C6R7yCoP7Ir0UNROtRAlXuwNeH8aNhVeP9vE=;
-        b=cu7kteNBfT93LFyC0rupfTSmQTpUfT6+jKJd3vt0TLtErEER3VHkO45jxFG3eUZUe5
-         m/tZrpPvAgZMdvZ9XtjzFq8kcCT2WLNuqnzA974OdT7QpDNJJ9JgRfcw5fnIV+avHLej
-         8xS3lytP7+b/D5aJ3VLtatfv9AcWdo8QPDZmNLlDPgm0xp1dP8UtpirT1Son7Rccuv5F
-         BkIUyEY8BQlVNoLF9B06P3oB5g1rbUFYpxLJ33qdleH5lM1wiOkuOYJlJg4aL+ftWSvq
-         DTC00RFd6S/mhSJSwiuir1MI0HjmHrUb68ukOJ9LGk/NdSfp+5fXc/b5/i25B9uBcTNC
-         e+5Q==
+        bh=hdJkyJA4DQXKPFAUZLrofPOr39Sm9qcTCxF4bAfmE/Y=;
+        b=fOF7nCzUQJZoKsDaz3OM3MD7cErAofwPUiygWqLcorxuMl3NLIb5r+OkJ9j9/9be4F
+         PtwRZMm00LR2HMIxnccl+XGsz9tu4Ft4D5s9mzik+MlW0S0daZyiSZZKEsy3NgXI8L3x
+         dbBSy7gMOKlFjBlrN3OhpgBTRMsYT3ISWIWW1nVqb2S82mexGR32GTMQgI76oG72HQQ0
+         wohWth2e5VLYEsPa9S3Sdhqn8MfHzNLmZnkDjcFJObItOMoViReV0CCJZgx6gkQ5xVvM
+         MR2QLdO8VAUfmxAfI+gz6ct1K4O0VlCfsvHmb2nhkaHbYfl873B6tHiQETJ6NRpN2MCv
+         TQVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ifslSu+C6R7yCoP7Ir0UNROtRAlXuwNeH8aNhVeP9vE=;
-        b=chohwTWl9C9l+2TH9mi85joSRYwDtEE+wk6ANLi7gMCNlZzIXW3BU/fMxw9Xj7YhcH
-         vSXqiSNmM6cwMVYZ0V4EVlI25BKtAjeDEumaJIGuzc0LzMNdW6ElCvSZtL+CKrZ1iJvz
-         8VdrltgRVGSLLsBoAOaTG/EqoSgXVmz0Om+fHRxnORwpXegr3DnycNHHMrwxlbxCF2Df
-         ocJgBiDTGKoP7VJICm7aDknTESkszJsY2E8i6eAcS1YNFVb3GRN2jPhMx3+J5yB66a2f
-         dmZUnvB4KA5+vwxP+uf9y9id/oxL7Am97Pi51TySfF35L3dBWCKSdcmhXZoj0FPlp4T7
-         YjLA==
-X-Gm-Message-State: AGi0PuYDV+vZ3/71sdqcaqzWJbp40ICRegi5rjZJqgiDvTqkDmZJ+lab
-        hoaak61nPa8YB59NqPpxOns=
-X-Google-Smtp-Source: APiQypK1P2EvOM/scMR7C1RLfSBA5u4++77Gd6tKzRCMSBirW+IQxIslFJ3KZqhCxgZnyPnj7svZxA==
-X-Received: by 2002:a63:eb15:: with SMTP id t21mr2833603pgh.279.1586277481506;
-        Tue, 07 Apr 2020 09:38:01 -0700 (PDT)
+        bh=hdJkyJA4DQXKPFAUZLrofPOr39Sm9qcTCxF4bAfmE/Y=;
+        b=obj8FkCex/qiNMH4HIOAtGmFEq7I1SVwuXwx806dt2JljOYj+L1VsPTI9IgMns6U6T
+         cxlqw8QRaymgVmPQzPYOOOWfdwZjLbndATv1ni+ELXzBD84PFIlGVe/z2LlY8HDDGohj
+         pOBmVZ7dZpd0RY/eoEEnK7gkTozZ3ZzWFMPOiGjbd2CQC8xeUg80G2erlBIgLUfpH4x5
+         ckUPoStKJnyp7Fg8Qf+WVOJExI8ptP+W4RtI7wi8S8q5obZQ2NGWXY38Czjr2IHMs6P/
+         hEQyGp6HYxiC6kf4iPkyIZSwmIX8xpOxGLejMznYOYYJ1mQFQavI/qUWFyerlq2xPvFj
+         bRzA==
+X-Gm-Message-State: AGi0PuYspI/ihKY/v0V02SZdeqNahsOG+eDkTsMRBPoO/wKa6Se1zWs+
+        f+wBQvIeC5h6MVsXX7i03vw=
+X-Google-Smtp-Source: APiQypJy8UFTKojsVLCdd0786n6/aw7aVRh3TWA08xrxOmCbrzfj6rmqIfuD0jnv/7QxyvnjfY44tQ==
+X-Received: by 2002:a63:d84f:: with SMTP id k15mr2752575pgj.137.1586277485728;
+        Tue, 07 Apr 2020 09:38:05 -0700 (PDT)
 Received: from localhost (89.208.244.140.16clouds.com. [89.208.244.140])
-        by smtp.gmail.com with ESMTPSA id d14sm5929518pfr.35.2020.04.07.09.38.00
+        by smtp.gmail.com with ESMTPSA id h16sm765003pfk.38.2020.04.07.09.38.04
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 07 Apr 2020 09:38:01 -0700 (PDT)
+        Tue, 07 Apr 2020 09:38:05 -0700 (PDT)
 From:   Dejin Zheng <zhengdejin5@gmail.com>
 To:     thor.thayer@linux.intel.com, krzysztof.adamski@nokia.com,
         rjui@broadcom.com, sbranden@broadcom.com,
@@ -71,9 +71,9 @@ To:     thor.thayer@linux.intel.com, krzysztof.adamski@nokia.com,
         linux-i2c@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Dejin Zheng <zhengdejin5@gmail.com>
-Subject: [PATCH v1 02/28] i2c: mv64xxx: convert to devm_platform_ioremap_resource
-Date:   Wed,  8 Apr 2020 00:37:15 +0800
-Message-Id: <20200407163741.17615-3-zhengdejin5@gmail.com>
+Subject: [PATCH v1 03/28] i2c: owl: convert to devm_platform_ioremap_resource
+Date:   Wed,  8 Apr 2020 00:37:16 +0800
+Message-Id: <20200407163741.17615-4-zhengdejin5@gmail.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200407163741.17615-1-zhengdejin5@gmail.com>
 References: <20200407163741.17615-1-zhengdejin5@gmail.com>
@@ -89,30 +89,29 @@ contains platform_get_resource and devm_ioremap_resource.
 
 Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
 ---
- drivers/i2c/busses/i2c-mv64xxx.c | 4 +---
+ drivers/i2c/busses/i2c-owl.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
-index febb7c7ea72b..62fb1ecc84a2 100644
---- a/drivers/i2c/busses/i2c-mv64xxx.c
-+++ b/drivers/i2c/busses/i2c-mv64xxx.c
-@@ -877,7 +877,6 @@ mv64xxx_i2c_probe(struct platform_device *pd)
+diff --git a/drivers/i2c/busses/i2c-owl.c b/drivers/i2c/busses/i2c-owl.c
+index b6b5a495118b..c9e7fcac12ae 100644
+--- a/drivers/i2c/busses/i2c-owl.c
++++ b/drivers/i2c/busses/i2c-owl.c
+@@ -399,15 +399,13 @@ static int owl_i2c_probe(struct platform_device *pdev)
  {
- 	struct mv64xxx_i2c_data		*drv_data;
- 	struct mv64xxx_i2c_pdata	*pdata = dev_get_platdata(&pd->dev);
--	struct resource	*r;
- 	int	rc;
+ 	struct device *dev = &pdev->dev;
+ 	struct owl_i2c_dev *i2c_dev;
+-	struct resource *res;
+ 	int ret, irq;
  
- 	if ((!pdata && !pd->dev.of_node))
-@@ -888,8 +887,7 @@ mv64xxx_i2c_probe(struct platform_device *pd)
- 	if (!drv_data)
+ 	i2c_dev = devm_kzalloc(dev, sizeof(*i2c_dev), GFP_KERNEL);
+ 	if (!i2c_dev)
  		return -ENOMEM;
  
--	r = platform_get_resource(pd, IORESOURCE_MEM, 0);
--	drv_data->reg_base = devm_ioremap_resource(&pd->dev, r);
-+	drv_data->reg_base = devm_platform_ioremap_resource(pd, 0);
- 	if (IS_ERR(drv_data->reg_base))
- 		return PTR_ERR(drv_data->reg_base);
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	i2c_dev->base = devm_ioremap_resource(dev, res);
++	i2c_dev->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(i2c_dev->base))
+ 		return PTR_ERR(i2c_dev->base);
  
 -- 
 2.25.0
