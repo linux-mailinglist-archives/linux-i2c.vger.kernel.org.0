@@ -2,76 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBBD1A0262
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Apr 2020 02:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232341A0638
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Apr 2020 07:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728401AbgDGADX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Apr 2020 20:03:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38682 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726339AbgDGADS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 6 Apr 2020 20:03:18 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 84C0B2080C;
-        Tue,  7 Apr 2020 00:03:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586217798;
-        bh=1Lqk+doDrlT/SrI8d8AftpDemtX1pC+rrvgWeYNetTI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j9f/Zkbr7Kgu6gnRTNs3OKHc39jlGjWPUTV1TJ24Eww3EHmN1mvOUKPjCIzEEKuUw
-         mQv4z10/9RYFEfyMDmCB9au5Y+KHBsiwwSv/D35qnKwZQ0H9a4yrZgtMUFPyA4lctI
-         /dE2JZHZ6rT8gbAAwJFX1bcW3WNdMoJKQ0wTGWOk=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alain Volmat <avolmat@me.com>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 4/4] i2c: st: fix missing struct parameter description
-Date:   Mon,  6 Apr 2020 20:03:12 -0400
-Message-Id: <20200407000312.17447-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200407000312.17447-1-sashal@kernel.org>
-References: <20200407000312.17447-1-sashal@kernel.org>
+        id S1726892AbgDGFMq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Apr 2020 01:12:46 -0400
+Received: from mail-yb1-f193.google.com ([209.85.219.193]:46748 "EHLO
+        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726840AbgDGFMn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Apr 2020 01:12:43 -0400
+Received: by mail-yb1-f193.google.com with SMTP id f14so1119951ybr.13
+        for <linux-i2c@vger.kernel.org>; Mon, 06 Apr 2020 22:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
+        b=m9m/DCsFRus/zRmIuphflM5sHyenmkMN/TOEnECOGthbLJHVg8u2+iqtFZpNbyb2/k
+         2tLF//qwyXGtNVJKRleGUy+KbEtVjN+06Aw6FbGL98d5M/QEqB9c9SHaIsBPFlQYoUCh
+         Lj+P9EPUGdvyQRip4KeH3oSvDVhqDTV0IJcbcI66BzYP/b9Y/1y4LF++1q0teLhPl3GM
+         v15gBTxOBB8qvH4CNaCnwdm2sugBL+St8qIlm7SqBWweWj6hdsos1F0mjeWO8qJt64R9
+         xl3tya8AfljNAFdSOkZ4tC7INitomO8JQPFHHcp+JAODUsaup01At9KIYDntXEoTQZb0
+         DmdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
+        b=smlI24pnP0q9ZMh5CzENhzXMOT8dY6/EkksFjuTbWd0+tQL0C+OjJ5JEpJapAX3exN
+         Zx9WGIAn0em33kr7brapgC3RgOj9H3muGfgEDqB/7tOBPIFNFdpxY9tWU0IlupYtd6Mu
+         09Di077ATyMLl8x3ttUCd7Etv9+GLqv2yXn4s71iHVz9TymDf6Jwj6u0nlv31yYUvWVy
+         G40MQsj6X+15SEYrfSxJOvtuix1SletaqtTTWOXjXHOGZUz9QqFTYmfQjwJpycL4ADjy
+         a6nV8rCzLnZcvFCw/unOtXpb+P+5ML/6KctjFIWaH+Vh0gWtspSSw9Jyw3A0CogP8Dxv
+         u0vg==
+X-Gm-Message-State: AGi0PuZNCR2gofUgkrhz9zXgKtCd8TurvrDyU24BG1g4RegSD46Jln8a
+        3BFM20maxyHq5Wab6j6PsogF0Q7R6EsGDK7T62gHyTDEZLU=
+X-Google-Smtp-Source: APiQypIYXniGQUHEpASwiGNjKth4Cu9ElCz4yjrJ2uXbYBYunhfz0887D/TRydUbTstl7MwaeVftG8QxF1P80ST3qos=
+X-Received: by 2002:ab0:a9:: with SMTP id 38mr504317uaj.61.1586236361040; Mon,
+ 06 Apr 2020 22:12:41 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab0:4929:0:0:0:0:0 with HTTP; Mon, 6 Apr 2020 22:12:40 -0700 (PDT)
+From:   SANDRA DEWI <dewisandra154@gmail.com>
+Date:   Tue, 7 Apr 2020 05:12:40 +0000
+Message-ID: <CABRVPWys0xe4CWBkaU0ZXQW+4d=tjDOjyo8cKohc5-VFkWPkcA@mail.gmail.com>
+Subject: whether this is your correct email address or not
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Alain Volmat <avolmat@me.com>
+Dear ,Pastor
 
-[ Upstream commit f491c6687332920e296d0209e366fe2ca7eab1c6 ]
 
-Fix a missing struct parameter description to allow
-warning free W=1 compilation.
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
-Reviewed-by: Patrice Chotard <patrice.chotard@st.com>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-st.c | 1 +
- 1 file changed, 1 insertion(+)
+I have a client who is an oil business man and he made a fixed deposit
+of $26 million USD in my bank, where I am the director of the branch,
+My client died with his entire family in Jordanian
 
-diff --git a/drivers/i2c/busses/i2c-st.c b/drivers/i2c/busses/i2c-st.c
-index 25020ec777c97..ee0a7d3dd0c65 100644
---- a/drivers/i2c/busses/i2c-st.c
-+++ b/drivers/i2c/busses/i2c-st.c
-@@ -399,6 +399,7 @@ static void st_i2c_wr_fill_tx_fifo(struct st_i2c_dev *i2c_dev)
- /**
-  * st_i2c_rd_fill_tx_fifo() - Fill the Tx FIFO in read mode
-  * @i2c_dev: Controller's private data
-+ * @max: Maximum amount of data to fill into the Tx FIFO
-  *
-  * This functions fills the Tx FIFO with fixed pattern when
-  * in read mode to trigger clock.
--- 
-2.20.1
+50% of the fund will be for the church  for the work of God,the
+balance 50% we share it in the ratio of 50/50. Meaning 50% to you and
+50% for me
 
+intervention in the Syrian Civil War 2014 leaving behind no next of
+kin. I Propose to present you as next of kin to claim the funds, if
+interested reply me for full details and how we are to
+
+
+
+proceed to close this deal.
+
+
+
+
+Mrs. Sandra Dewi
+
+
+
+Email  mrsdewi@gmx.com
