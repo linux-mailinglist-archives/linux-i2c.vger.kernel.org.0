@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 354D31A11B7
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Apr 2020 18:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3620D1A11B9
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Apr 2020 18:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729180AbgDGQiy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Apr 2020 12:38:54 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:33136 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729155AbgDGQix (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Apr 2020 12:38:53 -0400
-Received: by mail-pj1-f65.google.com with SMTP id cp9so1293791pjb.0;
-        Tue, 07 Apr 2020 09:38:52 -0700 (PDT)
+        id S1729217AbgDGQi5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Apr 2020 12:38:57 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:40986 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729155AbgDGQi5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Apr 2020 12:38:57 -0400
+Received: by mail-pl1-f195.google.com with SMTP id d24so1437021pll.8;
+        Tue, 07 Apr 2020 09:38:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FANZvv90GSdOPVRNwSkT/JjYzuiEgcdDPySaoRo1XLU=;
-        b=L82qhJU/mSj0Q0GgtgHTADYjxBkzqgPpEanEJ6zf5+ofwz9etA+7gvkAaam+aM2TMo
-         qUe4LA9OjQe9Wijs19BzDqzjD8JpoxF4XZyqSb3lfh4cGOBcMVN3Yh4ar9fvU7143tEw
-         BaJRig2XU2RZpjPo7JVOucMgsEldC+eVATYO/hlvpMBYXpt7D472WH1z45OQNfHRtTvW
-         k7tleIczSAR4525vAaJ/FWgADxlXm2+MUigOhhqzksae3y7BRq5Kh/aHJPy14H/m6RbF
-         5zR99BoJ81Jo9rU8oCrqm6+FO/3Rbc+BuVSvTsXRaDbRSb155M/zl2wJ7LwcfMe1Ar2T
-         xJkg==
+        bh=4eY59J8kVGTXHveCZg1xGNVn3EgzDTtZXVl1RQ6CavE=;
+        b=D1QrSB+FHk165NMYE8d8RnCpqyn88SYSx2C9Ilx2KTYehsT1mmTfh+flUkYA2/xiyW
+         Mic2LPTHf7E2O6hEHFfruNmw/BLvQKGFgUsj4TJVP0Pvs525c2UtVtDWVm/ssg0jMrVc
+         i3pJDlghJLv7NTNWTp5v3NH6AB2wF4l+0gAZCFmrjIVWycB+GtTzyZeUVngGy+ZyiAaU
+         5W8f/ciIPeS1UxH8Ez7F7I1zZLn64HmYBJC6Gu0UA5LQssAGl1d0iY/RLYdF4zS5U5nd
+         qyuEDrn6+JtXQfRAPshjor+kFUqd6926svnnAaEuUgY39FPatT/zyEkcCk8aAWxShOHn
+         3VtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FANZvv90GSdOPVRNwSkT/JjYzuiEgcdDPySaoRo1XLU=;
-        b=AupiccwQscz+iWCVa1lkGfxEI7CWyjmCoPPZ+4wYbw0s/BeI06F1oe+erjYv/umYuh
-         0JcyYvVl+wbHGb42ziwpOzq3cUqWFyAf0ht2GyAyIPcaqCd35OS/RpFwcILdSWvnAti0
-         fn0lBtyHv8Y2yzmkUwMiHq3k37XYTJGIzrwBEoqxplidyb6E+buoPuoyPEgQdFfKiXGl
-         UXPsqpHh14RlZkTjZL/2nLdF1zZfzpvxPYV3kefLCMTME0hz7pnNNMd6g67mmZYTIF1L
-         RvuTeMQxop0bacPvKdhOapjeR9sbpfDnkZ1WZg0FEOgon50R2z2mrCvQzuT5pug6fO56
-         67Tg==
-X-Gm-Message-State: AGi0PuaFSlTg+GNyIvWwDmYKGrBWnWF+AOLCjh9etIija751oLKoPXoB
-        PuWUCmB8Xvg3LsgvrBvYnb0=
-X-Google-Smtp-Source: APiQypKNkXPH8XpsexN2GjOnzw59mmVAIPW5LcWMk6x1zhpo04BMtpG/z7gp2eGVXVdyBIY9rw8tDQ==
-X-Received: by 2002:a17:90a:37ea:: with SMTP id v97mr248621pjb.26.1586277532018;
-        Tue, 07 Apr 2020 09:38:52 -0700 (PDT)
+        bh=4eY59J8kVGTXHveCZg1xGNVn3EgzDTtZXVl1RQ6CavE=;
+        b=hAFhIudWYgbOKVTkmPA4TaFn0KazulNYUuvrHrqD2GwmuFFR/3QZtzIUBmtqFK4Hv2
+         wxhrBHvTGeYwhlFyG6VEyJDhK7TEjPo72OlnnG5fitWjJZioRvXk/lwM4TDnn9FsJ4EJ
+         b+eivHbT5vognzoIML7VhgnVxACwZG9k1dc4RWqhzY+xlN0FTs//YiKuGP2SqTdRiX0K
+         SfdfGJ8EY34Q1h53R6Qpk2MubMHqLU30pKfFkLb2CFYQydXPYX4h5oWRsACh63BcJKW1
+         qF4YclYXGZrWGi4mO4IJZWkepziuRjdKjuX5ag4M1xBbYpyVxPd4StnAwtDVpPjYTFp9
+         T8Zg==
+X-Gm-Message-State: AGi0PubrSsoEZr2dyDyHcQS3B6xYMB6bsidhUkN2FMPDe17DuL4QuXRg
+        6AcIzjXAnOeEIkI27oYSRMg=
+X-Google-Smtp-Source: APiQypKuVTkLYjadIxp+7ZUPaYajyrrCs4O8KLiZqX1WO8qJsd8CKX4jX5cxVLckbnJ0PrEXG+ghYg==
+X-Received: by 2002:a17:90a:2a06:: with SMTP id i6mr151812pjd.99.1586277536048;
+        Tue, 07 Apr 2020 09:38:56 -0700 (PDT)
 Received: from localhost (89.208.244.140.16clouds.com. [89.208.244.140])
-        by smtp.gmail.com with ESMTPSA id 74sm14075439pfy.120.2020.04.07.09.38.50
+        by smtp.gmail.com with ESMTPSA id b25sm14359150pfp.201.2020.04.07.09.38.54
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 07 Apr 2020 09:38:51 -0700 (PDT)
+        Tue, 07 Apr 2020 09:38:55 -0700 (PDT)
 From:   Dejin Zheng <zhengdejin5@gmail.com>
 To:     thor.thayer@linux.intel.com, krzysztof.adamski@nokia.com,
         rjui@broadcom.com, sbranden@broadcom.com,
@@ -71,9 +71,9 @@ To:     thor.thayer@linux.intel.com, krzysztof.adamski@nokia.com,
         linux-i2c@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Dejin Zheng <zhengdejin5@gmail.com>
-Subject: [PATCH v1 13/28] i2c: meson: convert to devm_platform_ioremap_resource
-Date:   Wed,  8 Apr 2020 00:37:26 +0800
-Message-Id: <20200407163741.17615-14-zhengdejin5@gmail.com>
+Subject: [PATCH v1 14/28] i2c: hix5hd2: convert to devm_platform_ioremap_resource
+Date:   Wed,  8 Apr 2020 00:37:27 +0800
+Message-Id: <20200407163741.17615-15-zhengdejin5@gmail.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200407163741.17615-1-zhengdejin5@gmail.com>
 References: <20200407163741.17615-1-zhengdejin5@gmail.com>
@@ -89,30 +89,30 @@ contains platform_get_resource and devm_ioremap_resource.
 
 Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
 ---
- drivers/i2c/busses/i2c-meson.c | 4 +---
+ drivers/i2c/busses/i2c-hix5hd2.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
-index 06b3bed78421..b3bd869281d3 100644
---- a/drivers/i2c/busses/i2c-meson.c
-+++ b/drivers/i2c/busses/i2c-meson.c
-@@ -397,7 +397,6 @@ static int meson_i2c_probe(struct platform_device *pdev)
+diff --git a/drivers/i2c/busses/i2c-hix5hd2.c b/drivers/i2c/busses/i2c-hix5hd2.c
+index 224f830f77f9..4b72cb3b4231 100644
+--- a/drivers/i2c/busses/i2c-hix5hd2.c
++++ b/drivers/i2c/busses/i2c-hix5hd2.c
+@@ -390,7 +390,6 @@ static int hix5hd2_i2c_probe(struct platform_device *pdev)
  {
  	struct device_node *np = pdev->dev.of_node;
- 	struct meson_i2c *i2c;
+ 	struct hix5hd2_i2c_priv *priv;
 -	struct resource *mem;
- 	struct i2c_timings timings;
- 	int irq, ret = 0;
+ 	unsigned int freq;
+ 	int irq, ret;
  
-@@ -422,8 +421,7 @@ static int meson_i2c_probe(struct platform_device *pdev)
- 		return PTR_ERR(i2c->clk);
+@@ -411,8 +410,7 @@ static int hix5hd2_i2c_probe(struct platform_device *pdev)
+ 		}
  	}
  
 -	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	i2c->regs = devm_ioremap_resource(&pdev->dev, mem);
-+	i2c->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(i2c->regs))
- 		return PTR_ERR(i2c->regs);
+-	priv->regs = devm_ioremap_resource(&pdev->dev, mem);
++	priv->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(priv->regs))
+ 		return PTR_ERR(priv->regs);
  
 -- 
 2.25.0
