@@ -2,151 +2,158 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C398D1A12A6
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Apr 2020 19:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6809B1A1359
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Apr 2020 20:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726403AbgDGR0K (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Apr 2020 13:26:10 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:39454 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726380AbgDGR0J (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Apr 2020 13:26:09 -0400
-Received: by mail-pg1-f195.google.com with SMTP id g32so2045011pgb.6
-        for <linux-i2c@vger.kernel.org>; Tue, 07 Apr 2020 10:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=ZXWzUn5Z/Ds74lB18QonI724Tm16GHOO28VZok8MjvU=;
-        b=L0mvs2wqtiIj9fRHO98kqQZpYud4P+3qbxrzYQtdipLQKqrQ8tX0zhG8JQ/93NC1zB
-         8+DZnyc9w0B60yVQbrCqOaD9s7QV/lXlnDR2JS/3swm9GG60HB/XYmRR90pJw1BTxCqt
-         qLwVBkqB/DhZTJ8HinymM6NsGEANczlzV7cOA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=ZXWzUn5Z/Ds74lB18QonI724Tm16GHOO28VZok8MjvU=;
-        b=ZO4IJ/PqMduzuptZ7UdgDkP+vtQbVSPtb7GaybVG+en/1bX6L2LJF4p95TYNYxflYr
-         wXSPkw33W778HnIJdxkxRC/2Llg7dL8l8/93mEDZ0299CPozSWtB6yaiExwtBEtIsVxf
-         na2HiN6ALG38UUkgK2iJvqgZv45WtMrrV5NKTUi6n/QVv798AkJuOERE2NOmTMI0H9lL
-         R2VBeD6Q+wqoRaI28P9T3FXfQjfThFy8E8OqdNHqRlPpqqNZfAjJvBjYBTT+TnmIwBdW
-         lMTfSn2g05DHZZOhnEv584LQ6xp7vKd+ExxHOdOMM08mmOcTv1Afx5OmpVW68E/WKp0I
-         J/5Q==
-X-Gm-Message-State: AGi0PuYdegIChduy+XwPRp4MNz31hi5oaync/bRQVVgNZVznoVpfNTHg
-        bmm+JYUxUe3QfCuYRXnJWchWhg==
-X-Google-Smtp-Source: APiQypKM+2EhYk7aA1CiT7a7eLCNYS1gqFrTlOeiiyvxSG5iNmeFxXjHl39MEtWVRKfEEPlMhQAkwQ==
-X-Received: by 2002:a63:4d57:: with SMTP id n23mr3205051pgl.59.1586280369339;
-        Tue, 07 Apr 2020 10:26:09 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id c10sm13572214pgh.48.2020.04.07.10.26.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Apr 2020 10:26:07 -0700 (PDT)
-Date:   Tue, 7 Apr 2020 10:26:04 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org
-Subject: Re: [PATCH V3 3/8] soc: qcom-geni-se: Add interconnect support to
- fix earlycon crash
-Message-ID: <20200407172604.GQ199755@google.com>
-References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-4-git-send-email-akashast@codeaurora.org>
- <20200331182457.GH199755@google.com>
- <7a4e13bf-a4b7-d75b-df42-bf5e4125258a@codeaurora.org>
+        id S1726386AbgDGSL1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Apr 2020 14:11:27 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:29166 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726339AbgDGSL1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Apr 2020 14:11:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586283085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tuL8jd0KtgUQDBTiliOb/iyftwg57mLjnYugyIVReUI=;
+        b=LCy6B1OARDV2xxaNcCMqbXqZVRhhC055r2DBglhO6pDarcgt9x9nKH7sz3KPCvKMO6B+/H
+        zRGQhtdYPAgavyVQTs6wecPSLhj1uFbE+klyhiBHbq7aN85R86yU5jH8Hu9JQ7usfrN2mT
+        51hVMtme4f38XhvORmbDUsRF3yVj3HA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-27-0TUKg2RqP36k0y_mReO5rQ-1; Tue, 07 Apr 2020 14:11:21 -0400
+X-MC-Unique: 0TUKg2RqP36k0y_mReO5rQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3779B1005510;
+        Tue,  7 Apr 2020 18:11:20 +0000 (UTC)
+Received: from x1.localdomain.com (ovpn-112-63.ams2.redhat.com [10.36.112.63])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1FCED5DDA5;
+        Tue,  7 Apr 2020 18:11:17 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-i2c@vger.kernel.org,
+        linux-acpi@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] i2c: designware: platdrv: Remove DPM_FLAG_SMART_SUSPEND flag on BYT and CHT
+Date:   Tue,  7 Apr 2020 20:11:16 +0200
+Message-Id: <20200407181116.61066-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7a4e13bf-a4b7-d75b-df42-bf5e4125258a@codeaurora.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Akash,
+We already set DPM_FLAG_SMART_PREPARE, so we completely skip all
+callbacks (other then prepare) where possible, quoting from
+dw_i2c_plat_prepare():
 
-On Tue, Apr 07, 2020 at 05:04:17PM +0530, Akash Asthana wrote:
-> Hi Matthias,
-> 
-> 
-> > >   static int geni_se_probe(struct platform_device *pdev)
-> > >   {
-> > >   	struct device *dev = &pdev->dev;
-> > > @@ -845,6 +868,34 @@ static int geni_se_probe(struct platform_device *pdev)
-> > >   		}
-> > >   	}
-> > > +#ifdef CONFIG_SERIAL_EARLYCON
-> > > +	wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
-> > > +	if (IS_ERR(wrapper->to_core.path))
-> > > +		return PTR_ERR(wrapper->to_core.path);
-> > > +	/*
-> > > +	 * Put minmal BW request on core clocks on behalf of early console.
-> > > +	 * The vote will be removed earlycon exit function.
-> > > +	 *
-> > > +	 * Note: We are putting vote on each QUP wrapper instead only to which
-> > > +	 * earlycon is connected because QUP core clock of different wrapper
-> > > +	 * share same voltage domain. If core1 is put to 0, then core2 will
-> > > +	 * also run at 0, if not voted. Default ICC vote will be removed ASA
-> > > +	 * we touch any of the core clock.
-> > > +	 * core1 = core2 = max(core1, core2)
-> > > +	 */
-> > I don't really understand this part. According to the comment if we vote
-> > (let's say) for core2 but not for core1 then:
-> > 
-> > core1: 0
-> > core2: GENI_DEFAULT_BW
-> > 
-> > core1 = core2 = max(core1, core2)
-> >    or
-> > core1 = core2 = max(0, GENI_DEFAULT_BW)
-> > 
-> > hence
-> > 
-> > core1 = core2 = GENI_DEFAULT_BW
-> > 
-> > What am I missing, why is it necessary to vote for both/all?
-> say core1 is for earlycon usecase
-> 
-> There is common switch to control both the QUP core clock. I guess most
-> appropriate description would be     switch = max(vote_on_core1,
-> vote_on_core2) + default_vote.
-> 
-> During early bootup, vote_on_core1 = 0, vote_on_core2 = 0;
-> 
-> As earlycon was working even without voting it's core need because there was
-> some default vote present on the core switch by ICC during bootup.
-> 
-> So if any child(say SPI) of other QUP wrapper resumed and suspended before
-> earlycon wrapper comes up. This will make core clock to run at zero and will
-> cause NOC issue because vote_on_core1 = 0, vote_on_core2 = 0; and it seems
-> default votes from core switch is removed  ASA it's voted on any core.
+        /*
+         * If the ACPI companion device object is present for this device=
+, it
+         * may be accessed during suspend and resume of other devices via=
+ I2C
+         * operation regions, so tell the PM core and middle layers to av=
+oid
+         * skipping system suspend/resume callbacks for it in that case.
+         */
+        return !has_acpi_companion(dev);
 
-Thanks for the explication!
+Also setting the DPM_FLAG_SMART_SUSPEND will cause acpi_subsys_suspend()
+to leave the controller runtime-suspended even if dw_i2c_plat_prepare()
+returned 0.
 
-You are probably totally right, but for some reason my brain still resists
-to get it ...
+Leaving the controller runtime-suspended normally, when the I2C controlle=
+r
+is suspended during the suspend_late phase, is not an issue because
+the pm_runtime_get_sync() done by i2c_dw_xfer() will (runtime-)resume it.
 
-With the above my current interpretation is (assuming earlycon only votes on
-core1):
+But for dw I2C controllers on Bay- and Cherry-Trail devices acpi_lpss.c
+leaves the controller alive until the suspend_noirq phase, because it may
+be used by the _PS3 ACPI methods of PCI devices and PCI devices are left
+powered on until the suspend_noirq phase.
 
-                      core1   core2  default  switch
-early boot              0       0        1       1
-SPI resume (core2)      0       1        0       1
-SPI suspend (core2)     0       0        0       0
-earlycon init 		1	0        0       1
+Between the suspend_late and resume_early phases runtime-pm is disabled.
+So for any ACPI I2C OPRegion accesses done after the suspend_late phase,
+the pm_runtime_get_sync() done by i2c_dw_xfer() is a no-op and the
+controller is left runtime-suspended.
 
+i2c_dw_xfer() has a check to catch this condition (rather then waiting
+for the I2C transfer to timeout because the controller is suspended).
+acpi_subsys_suspend() leaving the controller runtime-suspended in
+combination with an ACPI I2C OPRegion access done after the suspend_late
+phase triggers this check, leading to the following error being logged
+on a Bay Trail based Lenovo Thinkpad 8 tablet:
 
-What is wrong in the above table?
+[   93.275882] i2c_designware 80860F41:00: Transfer while suspended
+[   93.275993] WARNING: CPU: 0 PID: 412 at drivers/i2c/busses/i2c-designw=
+are-master.c:429 i2c_dw_xfer+0x239/0x280
+...
+[   93.276252] Workqueue: kacpi_notify acpi_os_execute_deferred
+[   93.276267] RIP: 0010:i2c_dw_xfer+0x239/0x280
+...
+[   93.276340] Call Trace:
+[   93.276366]  __i2c_transfer+0x121/0x520
+[   93.276379]  i2c_transfer+0x4c/0x100
+[   93.276392]  i2c_acpi_space_handler+0x219/0x510
+[   93.276408]  ? up+0x40/0x60
+[   93.276419]  ? i2c_acpi_notify+0x130/0x130
+[   93.276433]  acpi_ev_address_space_dispatch+0x1e1/0x252
+...
 
-Thanks for bearing with me :)
+So since on BYT and CHT platforms we want ACPI I2c OPRegion accesses
+to work until the suspend_noirq phase, we need the controller to be
+runtime-resumed during the suspend phase if it is runtime-suspended
+suspended at that time. This means that we must not set the
+DPM_FLAG_SMART_SUSPEND on these platforms.
 
-Matthias
+On BYT and CHT we already have a special ACCESS_NO_IRQ_SUSPEND flag
+to make sure the controller stays functional until the suspend_noirq
+phase. This commit makes the driver not set the DPM_FLAG_SMART_SUSPEND
+flag when that flag is set.
+
+Cc: stable@vger.kernel.org
+Fixes: b30f2f65568f ("i2c: designware: Set IRQF_NO_SUSPEND flag for all B=
+YT and CHT controllers")
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/i2c/busses/i2c-designware-platdrv.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/bu=
+sses/i2c-designware-platdrv.c
+index 3b7d58c2fe85..15b4b965b443 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -371,10 +371,16 @@ static int dw_i2c_plat_probe(struct platform_device=
+ *pdev)
+ 	adap->dev.of_node =3D pdev->dev.of_node;
+ 	adap->nr =3D -1;
+=20
+-	dev_pm_set_driver_flags(&pdev->dev,
+-				DPM_FLAG_SMART_PREPARE |
+-				DPM_FLAG_SMART_SUSPEND |
+-				DPM_FLAG_LEAVE_SUSPENDED);
++	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
++		dev_pm_set_driver_flags(&pdev->dev,
++					DPM_FLAG_SMART_PREPARE |
++					DPM_FLAG_LEAVE_SUSPENDED);
++	} else {
++		dev_pm_set_driver_flags(&pdev->dev,
++					DPM_FLAG_SMART_PREPARE |
++					DPM_FLAG_SMART_SUSPEND |
++					DPM_FLAG_LEAVE_SUSPENDED);
++	}
+=20
+ 	/* The code below assumes runtime PM to be disabled. */
+ 	WARN_ON(pm_runtime_enabled(&pdev->dev));
+--=20
+2.26.0
+
