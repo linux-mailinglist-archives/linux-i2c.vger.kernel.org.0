@@ -2,113 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5261A17B7
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 00:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB591A1A65
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 05:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726426AbgDGWH1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Apr 2020 18:07:27 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:43445 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726395AbgDGWH1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Apr 2020 18:07:27 -0400
-Received: by mail-pf1-f194.google.com with SMTP id f206so1433188pfa.10
-        for <linux-i2c@vger.kernel.org>; Tue, 07 Apr 2020 15:07:26 -0700 (PDT)
+        id S1726469AbgDHDzZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Apr 2020 23:55:25 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:36276 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726467AbgDHDzY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Apr 2020 23:55:24 -0400
+Received: by mail-il1-f193.google.com with SMTP id p13so5447321ilp.3
+        for <linux-i2c@vger.kernel.org>; Tue, 07 Apr 2020 20:55:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xQ0CMqBW6HOiKsmKZ6VgVvjTVRhpyHMNm3H4n2IX4C8=;
-        b=Rw68i3XJ5JnnwX/K/8I3yzixlUVsVtJ2etjO5TZhfnYbsajRHoeks03BiJgc4IfBou
-         pplNLgCJb4AibRRMSKpOE+MgNY2ShgtRSuFxsEr0E7TMIntadjYbMmCzEJM82pfk37t5
-         7ySqepJeD5kpr2jRBpC2O3hCv5zKx89jMhXvZIFEkqcwpMe0Zetu9YvY924vkJS9kNyA
-         fq2slWBlcJ0DDuF/xaFlnd5Kx7z+uNpxn1I5a7EeBT7muxR+VxQ0iBnYWNlYN6s/07Gf
-         3u0ljmf5E8+2Jg2asB/+5DNamV2GqzhneAUcBvpTDHXD8SF4Flpjfu8WvXugWRFK67OK
-         pP9Q==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v1S8GWi1CZlxXUpn27IuRTjY7En+a3xk7vnQxT94OX0=;
+        b=nThboyjGdRLt7I9fAp/FzItexduBxEw/BpEq3XLd4eM+aeKds9HB08F+ejcPrWuSP8
+         TWUladmH4ZubXMiLui0hVBNEUVPcChvO69kyL6rpWeSCxAox8mqVqWvIVgGa926WVaYM
+         2iBCI6CdYT50W5d7hNZP5oZMV1mtYcpmn7CW4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xQ0CMqBW6HOiKsmKZ6VgVvjTVRhpyHMNm3H4n2IX4C8=;
-        b=T/EhjEM/OCTcXyJiFLM/6j7lA5XoRjkW4StYXI9OuFGs/4Dfr+Gr4l8mBKYnjLCnqh
-         EYiW9uQLhX7kYek9g0x3I9I8XcZ0IrqNpfYV784ZhRF42sUWi1st+Itr7qqQIMRYbxAL
-         FRvUSkgAmxsxm8cZ3K5BxcJWPtcDceqZezRdn/cOD4Ud92uGGJkPh3erGmK+5wq3ZjzB
-         FJ0koR+a2LZQhDWHD2ZkIL/4Z0pBhhUF0ZJSUrvrbTJN9Ok3Nn7KExQGLSNFEHBY6WmG
-         KB+NXL4Q79rhhR2vXAKDeBwR9Hi9E1Zq70VBRUgiuqePSPOZUcTZWsBCPj/dT5/BMU+n
-         OXTQ==
-X-Gm-Message-State: AGi0PuaP/PCjfeS1bN14+OKCR2bGLF+pOaxrlwvLzf6fFoM6Mna4VX3B
-        E4caiwBYRXauca92DJiZju/a3w==
-X-Google-Smtp-Source: APiQypImyD5jkZCA6R9BSgJ+PmtBP9/LG4f/aJX6aezk6OZplkgeFKHReg6Bg6r/hmACeL/V74aYKw==
-X-Received: by 2002:a62:75d0:: with SMTP id q199mr4566702pfc.72.1586297245671;
-        Tue, 07 Apr 2020 15:07:25 -0700 (PDT)
-Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id r9sm14091252pfg.2.2020.04.07.15.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2020 15:07:24 -0700 (PDT)
-Date:   Tue, 7 Apr 2020 15:07:30 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org, wsa@the-dreams.de,
-        broonie@kernel.org, mark.rutland@arm.com, robh+dt@kernel.org,
-        georgi.djakov@linaro.org, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        swboyd@chromium.org, mgautam@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        mka@chromium.org, dianders@chromium.org, evgreen@chromium.org
-Subject: Re: [PATCH V3 2/8] soc: qcom: geni: Support for ICC voting
-Message-ID: <20200407220730.GK20625@builder.lan>
-References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-3-git-send-email-akashast@codeaurora.org>
- <20200331233209.GF254911@minitux>
- <45191b98-60fa-cd49-3067-d58c128d2c9c@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v1S8GWi1CZlxXUpn27IuRTjY7En+a3xk7vnQxT94OX0=;
+        b=KwJy60415xwTDTcVO4i6DOPoqLFpZ+Dr3qpLbAUlQZhaVZfNR/ZXzKOUJaMkH3jIlC
+         tk6v94cc83LrVsoP396Kh0vJGfESEDjeHkC9mMDXwFQ5cxacUTGl/R4gDMKxmuUwJAxV
+         DGGRgmQfg2/ga4Yf3abzhG2D9nh7nr8XL9oIrl9VjKFWR1Z3zRr246dV2o1XS7s2xOCi
+         PyRB93SU9RDKXJ2TuVTzzmSjvp/DD1Bz+4UC/cgKqYDbBZyLuPFtZeXsbzYu+czA91vk
+         6YDQ3HhVfRk+LvXTP09C1XLeSIp8/DBN7/1Jv4d8Un0S5MSzhBtrxqdEEiUtKVgLESbf
+         cfoA==
+X-Gm-Message-State: AGi0PubeZxXGIVyel/bC4Ef6UyzzPVLd2Xxz4SyUJsoPiZHKSl3Kw205
+        l7ZwxqiJ5FzKA8MdCRIZOwF/5CJ2Bfp74YXUBGkStg==
+X-Google-Smtp-Source: APiQypLxuIlVa72q8L2YzcEgcZkCjhfDxYawFkboKJvblM34qUaicxFbsMcsmoToY/EI/qEcjqDyPPH9ntDkFcfqAi0=
+X-Received: by 2002:a92:afc1:: with SMTP id v62mr5818784ill.308.1586318123748;
+ Tue, 07 Apr 2020 20:55:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <45191b98-60fa-cd49-3067-d58c128d2c9c@codeaurora.org>
+References: <20200407163741.17615-1-zhengdejin5@gmail.com>
+In-Reply-To: <20200407163741.17615-1-zhengdejin5@gmail.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Wed, 8 Apr 2020 11:54:57 +0800
+Message-ID: <CAJMQK-g-Q20fDzy-0DQxoy+dS_USXkZ9DNSqeLmpUJS1OEzbCA@mail.gmail.com>
+Subject: Re: [PATCH v1 00/28] convert to devm_platform_ioremap_resource
+To:     Dejin Zheng <zhengdejin5@gmail.com>
+Cc:     thor.thayer@linux.intel.com, krzysztof.adamski@nokia.com,
+        rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>, nsekhar@ti.com,
+        bgolaszewski@baylibre.com, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        baruch@tkos.co.il, Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        kgene@kernel.org, krzk@kernel.org, paul@crapouillou.net,
+        vz@mleia.com, khilman@baylibre.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        gregory.clement@bootlin.com, rrichter@marvell.com,
+        afaerber@suse.de, manivannan.sadhasivam@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        baohua@kernel.org, linus.walleij@linaro.org, mripard@kernel.org,
+        wens@csie.org, ardb@kernel.org, michal.simek@xilinx.com,
+        gcherian@marvell.com, jun.nie@linaro.org, shawnguo@kernel.org,
+        rayagonda.kokatanur@broadcom.com, lori.hikichi@broadcom.com,
+        nishkadg.linux@gmail.com,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        allison@lohutok.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>, bigeasy@linutronix.de,
+        info@metux.net, hslester96@gmail.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        martin.blumenstingl@googlemail.com,
+        Qii Wang <qii.wang@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Fabien Parent <fparent@baylibre.com>, opensource@jilayne.com,
+        swinslow@gmail.com, linux-i2c@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon 06 Apr 23:45 PDT 2020, Akash Asthana wrote:
+On Wed, Apr 8, 2020 at 12:37 AM Dejin Zheng <zhengdejin5@gmail.com> wrote:
+>
+> this patch sets use devm_platform_ioremap_resource() to simplify code,
+> which contains platform_get_resource() and devm_ioremap_resource(). so
+> use it to replace the platform_get_resource() and
+> devm_ioremap_resource().
+>
+> Dejin Zheng (28):
+>   i2c: img-scb: convert to devm_platform_ioremap_resource
+>   i2c: mv64xxx: convert to devm_platform_ioremap_resource
+>   i2c: owl: convert to devm_platform_ioremap_resource
+>   i2c: exynos5: convert to devm_platform_ioremap_resource
+>   i2c: mt65xx: convert to devm_platform_ioremap_resource
 
-> Hi Bjorn,
-> 
-> On 4/1/2020 5:02 AM, Bjorn Andersson wrote:
-> > On Tue 31 Mar 04:09 PDT 2020, Akash Asthana wrote:
-> > 
-> > > Add necessary macros and structure variables to support ICC BW
-> > > voting from individual SE drivers.
-> > > 
-> > > Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> > > ---
-> > > Changes in V2:
-> > >   - As per Bjorn's comment dropped enums for ICC paths, given the three
-> > >     paths individual members
-> > > 
-> > > Changes in V3:
-> > >   - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
-> > >   - Add geni_icc_path structure in common header
-> > > 
-> > >   drivers/soc/qcom/qcom-geni-se.c | 98 +++++++++++++++++++++++++++++++++++++++++
-> > >   include/linux/qcom-geni-se.h    | 36 +++++++++++++++
-> > >   2 files changed, 134 insertions(+)
-> > > 
-> > > diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> > > index 7d622ea..9344c14 100644
-> > > --- a/drivers/soc/qcom/qcom-geni-se.c
-> > > +++ b/drivers/soc/qcom/qcom-geni-se.c
-> > > @@ -720,6 +720,104 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
-> > >   }
-> > >   EXPORT_SYMBOL(geni_se_rx_dma_unprep);
-> > > +int geni_icc_get(struct geni_se *se, const char *icc_core, const char *icc_cpu,
-> > > +		const char *icc_ddr)
-> > > +{
-> > > +	if (icc_core) {
-> > Afaict it's only this that might be passed as NULL, so please drop these
-> > conditionals (keep the last one).
-> IIUC you're suggesting to drop if (icc_core/cpu) but keep if (icc_ddr) ?
-
-Correct
-
-Thanks,
-Bjorn
+mt65xx seems not in the series.
