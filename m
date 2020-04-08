@@ -2,125 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DE51A218A
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 14:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE20D1A2337
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 15:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728173AbgDHMRf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Apr 2020 08:17:35 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:35244 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727798AbgDHMRf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Apr 2020 08:17:35 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1586348254; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=k3YztnopJljpDNhUQCDDNG8AGHekob6hja/cRl7AZTw=; b=UFNn/xH+D+wUgqGnBt1SftP8ZbOq6NO64OZ2QaJeWKKdbqRO8lCR3P68ouFuTRWGouAjjP0L
- vyJjog9Ma8aJPJ/QPAbe/k8BwOttkM4bzwNWLIir9IXpSqxNdduWK6/W90oGfPmF1IQdEkqN
- Q0emlana+hBQgIKoWD4N+jfiip4=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e8dc0de.7fb8db3359d0-smtp-out-n04;
- Wed, 08 Apr 2020 12:17:34 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 11216C43636; Wed,  8 Apr 2020 12:17:34 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.6] (unknown [183.83.138.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7BE5AC433F2;
-        Wed,  8 Apr 2020 12:17:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7BE5AC433F2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V3 7/8] spi: spi-qcom-qspi: Add interconnect support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de,
-        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org, evgreen@chromium.org
-References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-8-git-send-email-akashast@codeaurora.org>
- <20200331112352.GB4802@sirena.org.uk>
- <f896d6e4-cc86-db46-a9b9-d7c98071b524@codeaurora.org>
- <20200407105542.GA5247@sirena.org.uk>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <48c60fdf-03c6-650a-2671-b8f7cc1e5c82@codeaurora.org>
-Date:   Wed, 8 Apr 2020 17:47:25 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1728621AbgDHNn2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Apr 2020 09:43:28 -0400
+Received: from mga01.intel.com ([192.55.52.88]:3546 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726754AbgDHNn1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 8 Apr 2020 09:43:27 -0400
+IronPort-SDR: cy52Gp4RrHgxtqDf63T65Fo3HKXKm+BgC+j85LQF3t4lTHeHTziD3nO0oKP4q1pdzLyji9J22D
+ BgiJTZdxLKuQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2020 06:43:26 -0700
+IronPort-SDR: dG8z2cw1pW2SWUz2Iv+H2Hq+zJvLpjf1NpEABwKCf/4Wvv6FkMARE+rQalznlXG83l/D+q42s5
+ PuxVzOWdeDYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,358,1580803200"; 
+   d="scan'208";a="244038225"
+Received: from tthayer-hp-z620.an.intel.com (HELO [10.122.105.146]) ([10.122.105.146])
+  by fmsmga008.fm.intel.com with ESMTP; 08 Apr 2020 06:43:20 -0700
+Reply-To: thor.thayer@linux.intel.com
+Subject: Re: [PATCH v1 17/28] i2c: altera: convert to
+ devm_platform_ioremap_resource
+To:     Dejin Zheng <zhengdejin5@gmail.com>, krzysztof.adamski@nokia.com,
+        rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
+        nsekhar@ti.com, bgolaszewski@baylibre.com,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, baruch@tkos.co.il,
+        wsa+renesas@sang-engineering.com, kgene@kernel.org,
+        krzk@kernel.org, paul@crapouillou.net, vz@mleia.com,
+        khilman@baylibre.com, matthias.bgg@gmail.com,
+        gregory.clement@bootlin.com, rrichter@marvell.com,
+        afaerber@suse.de, manivannan.sadhasivam@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        baohua@kernel.org, linus.walleij@linaro.org, mripard@kernel.org,
+        wens@csie.org, ardb@kernel.org, michal.simek@xilinx.com,
+        gcherian@marvell.com, jun.nie@linaro.org, shawnguo@kernel.org,
+        rayagonda.kokatanur@broadcom.com, lori.hikichi@broadcom.com,
+        nishkadg.linux@gmail.com, kstewart@linuxfoundation.org,
+        allison@lohutok.net, gregkh@linuxfoundation.org,
+        tglx@linutronix.de, bigeasy@linutronix.de, info@metux.net,
+        hslester96@gmail.com, narmstrong@baylibre.com,
+        martin.blumenstingl@googlemail.com, qii.wang@mediatek.com,
+        drinkcat@chromium.org, hsinyi@chromium.org, fparent@baylibre.com,
+        opensource@jilayne.com, swinslow@gmail.com,
+        linux-i2c@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20200407163741.17615-1-zhengdejin5@gmail.com>
+ <20200407163741.17615-18-zhengdejin5@gmail.com>
+From:   Thor Thayer <thor.thayer@linux.intel.com>
+Message-ID: <626c205a-2f19-ea80-b817-ab64d51cfff7@linux.intel.com>
+Date:   Wed, 8 Apr 2020 08:43:26 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-In-Reply-To: <20200407105542.GA5247@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200407163741.17615-18-zhengdejin5@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Mark, Evan, Georgi,
+On 4/7/20 11:37 AM, Dejin Zheng wrote:
+> use devm_platform_ioremap_resource() to simplify code, which
+> contains platform_get_resource and devm_ioremap_resource.
+> 
+> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
 
-On 4/7/2020 4:25 PM, Mark Brown wrote:
-> On Tue, Apr 07, 2020 at 03:24:42PM +0530, Akash Asthana wrote:
->> On 3/31/2020 4:53 PM, Mark Brown wrote:
->>>> +	ctrl->avg_bw_cpu = Bps_to_icc(speed_hz);
->>>> +	ctrl->peak_bw_cpu = Bps_to_icc(2 * speed_hz);
->>> I thought you were going to factor this best guess handling of peak
->>> bandwidth out into the core?
->> I can centralize this for SPI, I2C and UART  in Common driver(QUP wrapper)
->> but still for QSPI I have to keep this piece of code as is because It is not
->> child of QUP wrapper(it doesn't use common code).
-> Why not?
->
->> I am not sure whether I can move this " Assume peak_bw as twice of avg_bw if
->> nothing is mentioned explicitly" to ICC core because the factor of 2 is
->> chosen randomly by me.
-> That's the whole point - if this is just a random number then we may as
-> well at least be consistently random.
+Acked-by: Thor Thayer <thor.thayer@linux.intel.com>
 
-Can we centralize below logic of peak_bw selection for all the clients 
-to ICC core?
+> ---
+>   drivers/i2c/busses/i2c-altera.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-altera.c b/drivers/i2c/busses/i2c-altera.c
+> index 1de23b4f3809..7c4c836a3228 100644
+> --- a/drivers/i2c/busses/i2c-altera.c
+> +++ b/drivers/i2c/busses/i2c-altera.c
+> @@ -382,7 +382,6 @@ static const struct i2c_algorithm altr_i2c_algo = {
+>   static int altr_i2c_probe(struct platform_device *pdev)
+>   {
+>   	struct altr_i2c_dev *idev = NULL;
+> -	struct resource *res;
+>   	int irq, ret;
+>   	u32 val;
+>   
+> @@ -390,8 +389,7 @@ static int altr_i2c_probe(struct platform_device *pdev)
+>   	if (!idev)
+>   		return -ENOMEM;
+>   
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	idev->base = devm_ioremap_resource(&pdev->dev, res);
+> +	idev->base = devm_platform_ioremap_resource(pdev, 0);
+>   	if (IS_ERR(idev->base))
+>   		return PTR_ERR(idev->base);
+>   
+> 
 
-"Assume peak_bw requirement as twice of avg_bw, if it is not mentioned 
-explicitly"
-
-===========================================================================
-int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
-{
-         struct icc_node *node;
-         u32 old_avg, old_peak;
-         size_t i;
-         int ret;
-
-         if (!path)
-                 return 0;
-
-         if (WARN_ON(IS_ERR(path) || !path->num_nodes))
-                 return -EINVAL;
-
-+       /*
-+        * Assume peak_bw requirement as twice of avg_bw, if it is not
-+        * mentioned explicitly
-+        */
-+       peak_bw = peak_bw ? peak_bw : 2 * avg_bw;
-===========================================================================
-
-In case if some client really don't want to put peak requirement they 
-can pass avg_bw = peak_bw. As peak_bw <= avg_bw is kind of no-ops.
-
-Regards,
-
-Akash
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
