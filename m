@@ -2,170 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BD61A27BE
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 19:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50E31A2803
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 19:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730506AbgDHRJl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Apr 2020 13:09:41 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:38579 "EHLO
+        id S1727749AbgDHReX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Apr 2020 13:34:23 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:37356 "EHLO
         mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730509AbgDHRJl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Apr 2020 13:09:41 -0400
-Received: by mail-pg1-f195.google.com with SMTP id p8so163673pgi.5
-        for <linux-i2c@vger.kernel.org>; Wed, 08 Apr 2020 10:09:39 -0700 (PDT)
+        with ESMTP id S1727254AbgDHReX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Apr 2020 13:34:23 -0400
+Received: by mail-pg1-f195.google.com with SMTP id r4so3626898pgg.4;
+        Wed, 08 Apr 2020 10:34:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=AHziH+dvb20W54djSeStIqMRFUtsTKUD7rAxti8gSRo=;
-        b=UfCqr7nW9oVwE/+3fDL2f/0drVAie/Gdd49JNzuAxmorHNRLKlrYPhlG11rr3bgejy
-         xkUe3E27ZRhPnu1zmh6s8BOyTOxFWxFtBYB6VVdIzkwz1k1M39weBC9nYeM17DDXtam8
-         cup6jFVztqp+DixZ5tXPe13GR4v5OaprUy27s=
+         :content-disposition:in-reply-to:user-agent;
+        bh=diUjqPLQ86Km63mktmfPd4D5yNo/8RJq9fvckb1eN9g=;
+        b=YEjJAQd1On2AgyUJRQy4wTK1HdRI1u96PY+V6k1/GJTY1ObknIJDXqhiQEaAGJV5fO
+         7qL8m9IUGcYlsU7B1jqdymiDbDkGtA3qwukNf2NTJ+XepQON3Gv9dM6HN3FsGK+Z5WvK
+         PymvA7Z1nKRa6M437qSlWgIibUek3qaLahQBwFSkQ4ZoFmjjSW8Q9jguCUeLv3hxeXMX
+         cDPuhFp0edj2hGSjSir09QzKXKuVHsGVVHZa3VwUNJCP9k2nf77alo7G3TRxsFabgllW
+         pf0001PKVG5JVU+PdT39bVAjUszF+KgP/VCgIxiRD/+0Jfzrodfl6MR6B7d6e3keOErY
+         /Z3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=AHziH+dvb20W54djSeStIqMRFUtsTKUD7rAxti8gSRo=;
-        b=q6FJPc2gzZAX1jtjv4hErgQ9JsqxC+W5gUCw4F+yHRlYiblUJiYani2/uAXEr0qPEe
-         JHXuXEeQip9arjSb+CpiBf3pWPgQ868e5NRTEcofldkWjjEwMaTh2dvwK7VGNxeE2Fwi
-         h0csK1rdwCMvbxlKrdj+qG7kxedhwNNHepwYVUPFl13Q4iZTTG2nE2I9q+jNsMG+5g59
-         DukcC+aSYuc1AnLZ/lYwGPuYnKfpakrs1a4NYIhOX5rKoNv5TttrqRnzERjwGaa7DYot
-         KEMQ2icOURnj5CXR4Iv7vMnC78aGQQ6SPQzKOCdq1mAKZq65W1Bngn7ieQTJ4yLQU0lW
-         yCXg==
-X-Gm-Message-State: AGi0PuaM4Y038DNxg3+z6HZNZOCeJUuHoCLYhMwj1bbXbZRkz7r0nkE3
-        Fb+k/DZxwphWpVDpio0zLGJoRQ==
-X-Google-Smtp-Source: APiQypKGNnlb36etT59dCY18zVMEKPnBzgK1wnTk5VhhNMgMuyWQeel0X5RkoYsKiR6opA9JBVYRoA==
-X-Received: by 2002:a63:1f14:: with SMTP id f20mr7742513pgf.411.1586365778377;
-        Wed, 08 Apr 2020 10:09:38 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id s10sm2317753pfd.124.2020.04.08.10.09.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Apr 2020 10:09:37 -0700 (PDT)
-Date:   Wed, 8 Apr 2020 10:09:36 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org
-Subject: Re: [PATCH V3 3/8] soc: qcom-geni-se: Add interconnect support to
- fix earlycon crash
-Message-ID: <20200408170936.GR199755@google.com>
-References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
- <1585652976-17481-4-git-send-email-akashast@codeaurora.org>
- <20200331182457.GH199755@google.com>
- <7a4e13bf-a4b7-d75b-df42-bf5e4125258a@codeaurora.org>
- <20200407172604.GQ199755@google.com>
- <9e91aaa8-88f0-656f-b9f5-7e64014bad7a@codeaurora.org>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=diUjqPLQ86Km63mktmfPd4D5yNo/8RJq9fvckb1eN9g=;
+        b=rV/WGz3btgvc4zpWB19QRduvP7uDW/GhFmrpl1GTqvkiAljxmdMDQgD0Q/wos7G1Id
+         ZMaD2l65zuFq8F0l38JaPW2y967Bz/4L52cwe6ai3DbTKEWDbu4YPMXVtbR6MYVu3tzl
+         q5RMyUw7F80XYG7vS7AkGiNgBTMINuzCAgJ8qE7wzoLQh6vfFs96q58lxCehGat90ztQ
+         bm4QcECz0zoRUM3e+1972IA/0Gztr7FiUBtrq+x2Auckn+aMwj3n3Jamu7V0BTs6qwqj
+         RzDyySWvp6Ozc0eyZF9Lnwo0FQazJ58wyipiQyR0/v/75YPO17q8V29GNFQuHGj5Y8Az
+         1eng==
+X-Gm-Message-State: AGi0PubM6ZF6MOYJmBgR7yiCo9LJNceahP2SyKPXPHNyYyXq3ytAQmPi
+        N3mM10G4Wr9mIaoQvxiJoTA=
+X-Google-Smtp-Source: APiQypJhnuArGC86MZpxz+jpjlAwckQgyO/fhkizA5Fxjm4ucHJiO5D3vcHjq6h2DzuG6RWQUGtqWg==
+X-Received: by 2002:a63:1a63:: with SMTP id a35mr7653588pgm.197.1586367260599;
+        Wed, 08 Apr 2020 10:34:20 -0700 (PDT)
+Received: from localhost (89.208.244.140.16clouds.com. [89.208.244.140])
+        by smtp.gmail.com with ESMTPSA id y30sm17172574pff.67.2020.04.08.10.34.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 08 Apr 2020 10:34:20 -0700 (PDT)
+Date:   Thu, 9 Apr 2020 01:34:17 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>, thor.thayer@linux.intel.com,
+        krzysztof.adamski@nokia.com, rjui@broadcom.com,
+        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>, nsekhar@ti.com,
+        bgolaszewski@baylibre.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, baruch@tkos.co.il,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        kgene@kernel.org, krzk@kernel.org, paul@crapouillou.net,
+        vz@mleia.com, khilman@baylibre.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        gregory.clement@bootlin.com, rrichter@marvell.com,
+        afaerber@suse.de, manivannan.sadhasivam@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        baohua@kernel.org, linus.walleij@linaro.org, mripard@kernel.org,
+        wens@csie.org, ardb@kernel.org, michal.simek@xilinx.com,
+        gcherian@marvell.com, jun.nie@linaro.org, shawnguo@kernel.org,
+        rayagonda.kokatanur@broadcom.com, lori.hikichi@broadcom.com,
+        nishkadg.linux@gmail.com,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        allison@lohutok.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>, bigeasy@linutronix.de,
+        info@metux.net, hslester96@gmail.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        martin.blumenstingl@googlemail.com,
+        Qii Wang <qii.wang@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Fabien Parent <fparent@baylibre.com>, opensource@jilayne.com,
+        swinslow@gmail.com, linux-i2c@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v1 00/28] convert to devm_platform_ioremap_resource
+Message-ID: <20200408173417.GA25852@nuc8i5>
+References: <20200407163741.17615-1-zhengdejin5@gmail.com>
+ <CAJMQK-g-Q20fDzy-0DQxoy+dS_USXkZ9DNSqeLmpUJS1OEzbCA@mail.gmail.com>
+ <6db77bf6-e1b1-b3fd-8539-7b083b38e7b2@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9e91aaa8-88f0-656f-b9f5-7e64014bad7a@codeaurora.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <6db77bf6-e1b1-b3fd-8539-7b083b38e7b2@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Apr 08, 2020 at 05:08:01PM +0530, Akash Asthana wrote:
-> Hi Matthias,
-> 
-> On 4/7/2020 10:56 PM, Matthias Kaehlcke wrote:
-> > Hi Akash,
-> > 
-> > On Tue, Apr 07, 2020 at 05:04:17PM +0530, Akash Asthana wrote:
-> > > Hi Matthias,
+On Wed, Apr 08, 2020 at 02:29:46PM +0300, Jarkko Nikula wrote:
+> On 4/8/20 6:54 AM, Hsin-Yi Wang wrote:
+> > On Wed, Apr 8, 2020 at 12:37 AM Dejin Zheng <zhengdejin5@gmail.com> wrote:
 > > > 
+> > > this patch sets use devm_platform_ioremap_resource() to simplify code,
+> > > which contains platform_get_resource() and devm_ioremap_resource(). so
+> > > use it to replace the platform_get_resource() and
+> > > devm_ioremap_resource().
 > > > 
-> > > > >    static int geni_se_probe(struct platform_device *pdev)
-> > > > >    {
-> > > > >    	struct device *dev = &pdev->dev;
-> > > > > @@ -845,6 +868,34 @@ static int geni_se_probe(struct platform_device *pdev)
-> > > > >    		}
-> > > > >    	}
-> > > > > +#ifdef CONFIG_SERIAL_EARLYCON
-> > > > > +	wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
-> > > > > +	if (IS_ERR(wrapper->to_core.path))
-> > > > > +		return PTR_ERR(wrapper->to_core.path);
-> > > > > +	/*
-> > > > > +	 * Put minmal BW request on core clocks on behalf of early console.
-> > > > > +	 * The vote will be removed earlycon exit function.
-> > > > > +	 *
-> > > > > +	 * Note: We are putting vote on each QUP wrapper instead only to which
-> > > > > +	 * earlycon is connected because QUP core clock of different wrapper
-> > > > > +	 * share same voltage domain. If core1 is put to 0, then core2 will
-> > > > > +	 * also run at 0, if not voted. Default ICC vote will be removed ASA
-> > > > > +	 * we touch any of the core clock.
-> > > > > +	 * core1 = core2 = max(core1, core2)
-> > > > > +	 */
-> > > > I don't really understand this part. According to the comment if we vote
-> > > > (let's say) for core2 but not for core1 then:
-> > > > 
-> > > > core1: 0
-> > > > core2: GENI_DEFAULT_BW
-> > > > 
-> > > > core1 = core2 = max(core1, core2)
-> > > >     or
-> > > > core1 = core2 = max(0, GENI_DEFAULT_BW)
-> > > > 
-> > > > hence
-> > > > 
-> > > > core1 = core2 = GENI_DEFAULT_BW
-> > > > 
-> > > > What am I missing, why is it necessary to vote for both/all?
-> > > say core1 is for earlycon usecase
-> > > 
-> > > There is common switch to control both the QUP core clock. I guess most
-> > > appropriate description would be     switch = max(vote_on_core1,
-> > > vote_on_core2) + default_vote.
-> > > 
-> > > During early bootup, vote_on_core1 = 0, vote_on_core2 = 0;
-> > > 
-> > > As earlycon was working even without voting it's core need because there was
-> > > some default vote present on the core switch by ICC during bootup.
-> > > 
-> > > So if any child(say SPI) of other QUP wrapper resumed and suspended before
-> > > earlycon wrapper comes up. This will make core clock to run at zero and will
-> > > cause NOC issue because vote_on_core1 = 0, vote_on_core2 = 0; and it seems
-> > > default votes from core switch is removed  ASA it's voted on any core.
-> > Thanks for the explication!
+> > > Dejin Zheng (28):
+> > >    i2c: img-scb: convert to devm_platform_ioremap_resource
+> > >    i2c: mv64xxx: convert to devm_platform_ioremap_resource
+> > >    i2c: owl: convert to devm_platform_ioremap_resource
+> > >    i2c: exynos5: convert to devm_platform_ioremap_resource
+> > >    i2c: mt65xx: convert to devm_platform_ioremap_resource
 > > 
-> > You are probably totally right, but for some reason my brain still resists
-> > to get it ...
+> > mt65xx seems not in the series.
 > > 
-> > With the above my current interpretation is (assuming earlycon only votes on
-> > core1):
-> > 
-> >                        core1   core2  default  switch
-> > early boot              0       0        1       1
-> > SPI resume (core2)      0       1        0       1
-> > SPI suspend (core2)     0       0        0       0
-> > earlycon init 		1	0        0       1
-> > 
-> > 
-> > What is wrong in the above table?
-> > 
-> > Thanks for bearing with me :)
-> NP :)
-> 
-> I guess you meant QUP WRAPPER 1 probe by "earlycon init".
-> 
->                       core1   core2  default  switch	Time
-> early boot              0       0        1       1	0s
-> SPI resume (core2)      0       1        0       1	3.2s
-> SPI suspend (core2)     0       0        0       0	3.3s
-> QUP WRAPPER 1(probe)	1	0        0       1	5s (say)
-> 
-> So switch is at 0 in time interval [3.3, 5] that will make core clock to run at 0.
-> If we use earlycon during this time interval it will reset the board.
-> 
-> Did above answered the query?
+> Looks like patches 5, 6, 9 and 19 are missing.
+>
+Hi Jarkko and Hsin-Yi:
 
-now it finally made 'click', thanks :)
+you're right and thanks very much for your reminding. the gmail
+server told me that "550 5.4.5 Daily user sending quota exceeded."
+in the past 24 hours, so I can not sent any email by this account.
+
+and the gmail server also prevent me send this 4 patches and I
+found the patch can be sent by delete some codes. maybe some
+keywords in the intact patch triggered the gmail filtering system.
+
+I'm trying to send out these patches. I'm so sorry for that.
+
+BR,
+Dejin
+
+> -- 
+> Jarkko
