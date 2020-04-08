@@ -2,132 +2,136 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E50E31A2803
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 19:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7867A1A286B
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 20:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727749AbgDHReX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Apr 2020 13:34:23 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37356 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727254AbgDHReX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Apr 2020 13:34:23 -0400
-Received: by mail-pg1-f195.google.com with SMTP id r4so3626898pgg.4;
-        Wed, 08 Apr 2020 10:34:21 -0700 (PDT)
+        id S1729890AbgDHSXS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Apr 2020 14:23:18 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:36591 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729672AbgDHSXS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Apr 2020 14:23:18 -0400
+Received: by mail-pf1-f195.google.com with SMTP id n10so2799206pff.3;
+        Wed, 08 Apr 2020 11:23:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=diUjqPLQ86Km63mktmfPd4D5yNo/8RJq9fvckb1eN9g=;
-        b=YEjJAQd1On2AgyUJRQy4wTK1HdRI1u96PY+V6k1/GJTY1ObknIJDXqhiQEaAGJV5fO
-         7qL8m9IUGcYlsU7B1jqdymiDbDkGtA3qwukNf2NTJ+XepQON3Gv9dM6HN3FsGK+Z5WvK
-         PymvA7Z1nKRa6M437qSlWgIibUek3qaLahQBwFSkQ4ZoFmjjSW8Q9jguCUeLv3hxeXMX
-         cDPuhFp0edj2hGSjSir09QzKXKuVHsGVVHZa3VwUNJCP9k2nf77alo7G3TRxsFabgllW
-         pf0001PKVG5JVU+PdT39bVAjUszF+KgP/VCgIxiRD/+0Jfzrodfl6MR6B7d6e3keOErY
-         /Z3g==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yXo+ettgksYs9O1p+Jf9F0piOCxyj5fRj6/t504rC0A=;
+        b=HgXA5F5KvS9alyIuiEh1s0XlDejL9XQr4Od9fxGMwEXs6vOMCJvfXF+akeekR26ZjB
+         jYEocfZDqTDsiuUAofVmefmaLs6xubaa6YplFMAkS+Ehoo+TVH4xOpET01Av6BzUUgM1
+         ITftXXslvzUKs09A881sobeFs67Jqpcp7unN2wA6Z9WKnQYTq2brYx0TxGKvQXfVKNdo
+         0a4e0xJhRORmtAi3Qe5fiSoilomSL2WPjG9u8AKuc0zV9ItuiZL5zJGXjIHliWwkPyba
+         2A3kiGeBUvGl8ZvrjcK+EQ3/0ZnY38XcxKumpyKvAqqRrgO5wMqdnqk7XbuBx5TI2WfO
+         Pslw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=diUjqPLQ86Km63mktmfPd4D5yNo/8RJq9fvckb1eN9g=;
-        b=rV/WGz3btgvc4zpWB19QRduvP7uDW/GhFmrpl1GTqvkiAljxmdMDQgD0Q/wos7G1Id
-         ZMaD2l65zuFq8F0l38JaPW2y967Bz/4L52cwe6ai3DbTKEWDbu4YPMXVtbR6MYVu3tzl
-         q5RMyUw7F80XYG7vS7AkGiNgBTMINuzCAgJ8qE7wzoLQh6vfFs96q58lxCehGat90ztQ
-         bm4QcECz0zoRUM3e+1972IA/0Gztr7FiUBtrq+x2Auckn+aMwj3n3Jamu7V0BTs6qwqj
-         RzDyySWvp6Ozc0eyZF9Lnwo0FQazJ58wyipiQyR0/v/75YPO17q8V29GNFQuHGj5Y8Az
-         1eng==
-X-Gm-Message-State: AGi0PubM6ZF6MOYJmBgR7yiCo9LJNceahP2SyKPXPHNyYyXq3ytAQmPi
-        N3mM10G4Wr9mIaoQvxiJoTA=
-X-Google-Smtp-Source: APiQypJhnuArGC86MZpxz+jpjlAwckQgyO/fhkizA5Fxjm4ucHJiO5D3vcHjq6h2DzuG6RWQUGtqWg==
-X-Received: by 2002:a63:1a63:: with SMTP id a35mr7653588pgm.197.1586367260599;
-        Wed, 08 Apr 2020 10:34:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yXo+ettgksYs9O1p+Jf9F0piOCxyj5fRj6/t504rC0A=;
+        b=Q1IAu9g8FFh67Aox1WHfjY7pGOjuiQ13CVQ2q4caNrbJo9at0CCYiJxaY55ZcrsKdi
+         OW+kl4mw2zCfMy45iIasMZ8U1LLoiZn8jgLgAvtxnPBUFDCPplObHoZ0qNkqJqiWNzXn
+         Fe2VQV5SlAwbGb0Lw06h0t9jMdVkzF3pQGFzGg5UjUMKo+0lwWpYeNPUxphiL3YV2Rnn
+         fJLwTiyL0TSpeBpzuHHWe0ln4axPSQpoHHc9DuBFBNh1tqngig92JZBfXWuizseXwmTc
+         KNbSIY+xLwKGaOJC+06a6ElSu6fTUkAkaMXGMfW0JgNWmSZl4I1wEI39zZc8r2du9ZQi
+         CIxg==
+X-Gm-Message-State: AGi0PuaME+yE2G3lsHxXvm6Vq6kB2EkSIl9SgotZEcbmebAc7svQPBJs
+        XhAga6LZjL4UuzybguXBCpI=
+X-Google-Smtp-Source: APiQypIHipVirOkjtSQpEZaco0Pm8g6zqozQ+oV6WMyAIOnsI08w3hBT/EyMu4L0pzIwwWmEonTM4w==
+X-Received: by 2002:a05:6a00:42:: with SMTP id i2mr8980316pfk.108.1586370196715;
+        Wed, 08 Apr 2020 11:23:16 -0700 (PDT)
 Received: from localhost (89.208.244.140.16clouds.com. [89.208.244.140])
-        by smtp.gmail.com with ESMTPSA id y30sm17172574pff.67.2020.04.08.10.34.19
+        by smtp.gmail.com with ESMTPSA id mn18sm214852pjb.13.2020.04.08.11.23.15
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 08 Apr 2020 10:34:20 -0700 (PDT)
-Date:   Thu, 9 Apr 2020 01:34:17 +0800
+        Wed, 08 Apr 2020 11:23:15 -0700 (PDT)
 From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>, thor.thayer@linux.intel.com,
-        krzysztof.adamski@nokia.com, rjui@broadcom.com,
-        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>, nsekhar@ti.com,
-        bgolaszewski@baylibre.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, baruch@tkos.co.il,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        kgene@kernel.org, krzk@kernel.org, paul@crapouillou.net,
-        vz@mleia.com, khilman@baylibre.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        gregory.clement@bootlin.com, rrichter@marvell.com,
-        afaerber@suse.de, manivannan.sadhasivam@linaro.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
-        baohua@kernel.org, linus.walleij@linaro.org, mripard@kernel.org,
-        wens@csie.org, ardb@kernel.org, michal.simek@xilinx.com,
-        gcherian@marvell.com, jun.nie@linaro.org, shawnguo@kernel.org,
-        rayagonda.kokatanur@broadcom.com, lori.hikichi@broadcom.com,
-        nishkadg.linux@gmail.com,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        allison@lohutok.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>, bigeasy@linutronix.de,
-        info@metux.net, hslester96@gmail.com,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        martin.blumenstingl@googlemail.com,
-        Qii Wang <qii.wang@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Fabien Parent <fparent@baylibre.com>, opensource@jilayne.com,
-        swinslow@gmail.com, linux-i2c@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v1 00/28] convert to devm_platform_ioremap_resource
-Message-ID: <20200408173417.GA25852@nuc8i5>
-References: <20200407163741.17615-1-zhengdejin5@gmail.com>
- <CAJMQK-g-Q20fDzy-0DQxoy+dS_USXkZ9DNSqeLmpUJS1OEzbCA@mail.gmail.com>
- <6db77bf6-e1b1-b3fd-8539-7b083b38e7b2@linux.intel.com>
+To:     thor.thayer@linux.intel.com, krzysztof.adamski@nokia.com,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, nsekhar@ti.com,
+        bgolaszewski@baylibre.com, baruch@tkos.co.il,
+        wsa+renesas@sang-engineering.com, kgene@kernel.org,
+        krzk@kernel.org, paul@crapouillou.net, vz@mleia.com,
+        khilman@baylibre.com, gregory.clement@bootlin.com,
+        rrichter@marvell.com, afaerber@suse.de,
+        manivannan.sadhasivam@linaro.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, heiko@sntech.de, baohua@kernel.org,
+        linus.walleij@linaro.org, mripard@kernel.org, wens@csie.org,
+        ardb@kernel.org, gcherian@marvell.com, jun.nie@linaro.org,
+        shawnguo@kernel.org, tglx@linutronix.de, zhouyanjie@wanyeetech.com,
+        martin.blumenstingl@googlemail.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dejin Zheng <zhengdejin5@gmail.com>
+Subject: [PATCH v2 00/24] convert to devm_platform_ioremap_resource
+Date:   Thu,  9 Apr 2020 02:22:47 +0800
+Message-Id: <20200408182311.26869-1-zhengdejin5@gmail.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6db77bf6-e1b1-b3fd-8539-7b083b38e7b2@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Apr 08, 2020 at 02:29:46PM +0300, Jarkko Nikula wrote:
-> On 4/8/20 6:54 AM, Hsin-Yi Wang wrote:
-> > On Wed, Apr 8, 2020 at 12:37 AM Dejin Zheng <zhengdejin5@gmail.com> wrote:
-> > > 
-> > > this patch sets use devm_platform_ioremap_resource() to simplify code,
-> > > which contains platform_get_resource() and devm_ioremap_resource(). so
-> > > use it to replace the platform_get_resource() and
-> > > devm_ioremap_resource().
-> > > 
-> > > Dejin Zheng (28):
-> > >    i2c: img-scb: convert to devm_platform_ioremap_resource
-> > >    i2c: mv64xxx: convert to devm_platform_ioremap_resource
-> > >    i2c: owl: convert to devm_platform_ioremap_resource
-> > >    i2c: exynos5: convert to devm_platform_ioremap_resource
-> > >    i2c: mt65xx: convert to devm_platform_ioremap_resource
-> > 
-> > mt65xx seems not in the series.
-> > 
-> Looks like patches 5, 6, 9 and 19 are missing.
->
-Hi Jarkko and Hsin-Yi:
+this patch sets use devm_platform_ioremap_resource() to simplify code,
+which contains platform_get_resource() and devm_ioremap_resource(). so
+use it to replace the platform_get_resource() and
+devm_ioremap_resource().
 
-you're right and thanks very much for your reminding. the gmail
-server told me that "550 5.4.5 Daily user sending quota exceeded."
-in the past 24 hours, so I can not sent any email by this account.
+v1 -> v2:
+	- delete 4 patches of can not be sent by gmail server.
 
-and the gmail server also prevent me send this 4 patches and I
-found the patch can be sent by delete some codes. maybe some
-keywords in the intact patch triggered the gmail filtering system.
+Dejin Zheng (24):
+  i2c: img-scb: convert to devm_platform_ioremap_resource
+  i2c: mv64xxx: convert to devm_platform_ioremap_resource
+  i2c: owl: convert to devm_platform_ioremap_resource
+  i2c: exynos5: convert to devm_platform_ioremap_resource
+  i2c: zx2967: convert to devm_platform_ioremap_resource
+  i2c: xlp9xx: convert to devm_platform_ioremap_resource
+  i2c: synquacer: convert to devm_platform_ioremap_resource
+  i2c: rk3x: convert to devm_platform_ioremap_resource
+  i2c: qup: convert to devm_platform_ioremap_resource
+  i2c: meson: convert to devm_platform_ioremap_resource
+  i2c: hix5hd2: convert to devm_platform_ioremap_resource
+  i2c: emev2: convert to devm_platform_ioremap_resource
+  i2c: jz4780: convert to devm_platform_ioremap_resource
+  i2c: altera: convert to devm_platform_ioremap_resource
+  i2c: axxia: convert to devm_platform_ioremap_resource
+  i2c: davinci: convert to devm_platform_ioremap_resource
+  i2c: digicolor: convert to devm_platform_ioremap_resource
+  i2c: lpc2k: convert to devm_platform_ioremap_resource
+  i2c: sirf: convert to devm_platform_ioremap_resource
+  i2c: stu300: convert to devm_platform_ioremap_resource
+  i2c: sun6i-p2wi: convert to devm_platform_ioremap_resource
+  i2c: xlr: convert to devm_platform_ioremap_resource
+  i2c: bcm-kona: convert to devm_platform_ioremap_resource
+  i2c: octeon-platdrv: convert to devm_platform_ioremap_resource
 
-I'm trying to send out these patches. I'm so sorry for that.
+ drivers/i2c/busses/i2c-altera.c         | 4 +---
+ drivers/i2c/busses/i2c-axxia.c          | 4 +---
+ drivers/i2c/busses/i2c-bcm-kona.c       | 4 +---
+ drivers/i2c/busses/i2c-davinci.c        | 4 +---
+ drivers/i2c/busses/i2c-digicolor.c      | 4 +---
+ drivers/i2c/busses/i2c-emev2.c          | 4 +---
+ drivers/i2c/busses/i2c-exynos5.c        | 4 +---
+ drivers/i2c/busses/i2c-hix5hd2.c        | 4 +---
+ drivers/i2c/busses/i2c-img-scb.c        | 4 +---
+ drivers/i2c/busses/i2c-jz4780.c         | 4 +---
+ drivers/i2c/busses/i2c-lpc2k.c          | 4 +---
+ drivers/i2c/busses/i2c-meson.c          | 4 +---
+ drivers/i2c/busses/i2c-mv64xxx.c        | 4 +---
+ drivers/i2c/busses/i2c-octeon-platdrv.c | 4 +---
+ drivers/i2c/busses/i2c-owl.c            | 4 +---
+ drivers/i2c/busses/i2c-qup.c            | 4 +---
+ drivers/i2c/busses/i2c-rk3x.c           | 4 +---
+ drivers/i2c/busses/i2c-sirf.c           | 4 +---
+ drivers/i2c/busses/i2c-stu300.c         | 4 +---
+ drivers/i2c/busses/i2c-sun6i-p2wi.c     | 4 +---
+ drivers/i2c/busses/i2c-synquacer.c      | 4 +---
+ drivers/i2c/busses/i2c-xlp9xx.c         | 4 +---
+ drivers/i2c/busses/i2c-xlr.c            | 4 +---
+ drivers/i2c/busses/i2c-zx2967.c         | 4 +---
+ 24 files changed, 24 insertions(+), 72 deletions(-)
 
-BR,
-Dejin
+-- 
+2.25.0
 
-> -- 
-> Jarkko
