@@ -2,79 +2,127 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C61E1A2681
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 17:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC7C1A2787
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 18:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729808AbgDHP4H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Apr 2020 11:56:07 -0400
-Received: from sauhun.de ([88.99.104.3]:44862 "EHLO pokefinder.org"
+        id S1727920AbgDHQwx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Apr 2020 12:52:53 -0400
+Received: from mga11.intel.com ([192.55.52.93]:39886 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729804AbgDHP4H (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 8 Apr 2020 11:56:07 -0400
-Received: from localhost (p54B334FE.dip0.t-ipconnect.de [84.179.52.254])
-        by pokefinder.org (Postfix) with ESMTPSA id AFFBF2C1F39;
-        Wed,  8 Apr 2020 17:56:04 +0200 (CEST)
-Date:   Wed, 8 Apr 2020 17:56:04 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        id S1727187AbgDHQwx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 8 Apr 2020 12:52:53 -0400
+IronPort-SDR: bUEa4mHCG+zQaqSeDh+UY9N6DMkzfF2hf4qsNWUk3GKaQa5JFRBoPabYjNV3ihxyAX2RIllvYv
+ h8lsMaWVRIpg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2020 09:52:53 -0700
+IronPort-SDR: 9WmVBlKA3wfQFS95vRK8j8Lpiv5ZRsE96JSnZjE6rup4aK102b8zzqCcQloTzLfgf1ndMF8P79
+ HanvBb4dWV5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,359,1580803200"; 
+   d="scan'208";a="251614881"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 08 Apr 2020 09:52:49 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 40851130; Wed,  8 Apr 2020 19:52:48 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 33/35] docs: i2c: rename i2c.svg to i2c_bus.svg
-Message-ID: <20200408155604.GA22619@ninjato>
-References: <cover.1586359676.git.mchehab+huawei@kernel.org>
- <bb72db28b4b7d867555b345a49703fdca484957e.1586359676.git.mchehab+huawei@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Max Staudt <max@enpas.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH v1] i2c: icy: Don't use software node when it's an overkill
+Date:   Wed,  8 Apr 2020 19:52:47 +0300
+Message-Id: <20200408165247.13116-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HlL+5n6rz5pIUxbD"
-Content-Disposition: inline
-In-Reply-To: <bb72db28b4b7d867555b345a49703fdca484957e.1586359676.git.mchehab+huawei@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+There is no evidence, including commit message of the original change,
+that software node should be used in the simple case where we would like
+to instantiate an I²C client from board info. Board info contains a member
+to pass device properties for long time. Let's use a simple way over
+the complicated software node approach.
 
---HlL+5n6rz5pIUxbD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 724041ae15ed ("i2c: icy: Add LTC2990 present on 2019 board revision")
+Cc: Max Staudt <max@enpas.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-icy.c | 23 ++++-------------------
+ 1 file changed, 4 insertions(+), 19 deletions(-)
 
-On Wed, Apr 08, 2020 at 05:46:25PM +0200, Mauro Carvalho Chehab wrote:
-> When generating the PDF output, the Documentation/i2c dir
-> will generate an i2c.pdf. The same happens with i2c.svg:
-> it will also produce a file with the same name, at the same dir.
->=20
-> This causes errors when building the PDF output. So, rename the
-> image to i2c_bus.svg.
->=20
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+diff --git a/drivers/i2c/busses/i2c-icy.c b/drivers/i2c/busses/i2c-icy.c
+index 271470f4d8a9..ce68c436f06e 100644
+--- a/drivers/i2c/busses/i2c-icy.c
++++ b/drivers/i2c/busses/i2c-icy.c
+@@ -53,7 +53,7 @@ struct icy_i2c {
+ 
+ 	void __iomem *reg_s0;
+ 	void __iomem *reg_s1;
+-	struct fwnode_handle *ltc2990_fwnode;
++
+ 	struct i2c_client *ltc2990_client;
+ };
+ 
+@@ -109,7 +109,7 @@ static unsigned short const icy_ltc2990_addresses[] = {
+  */
+ static const u32 icy_ltc2990_meas_mode[] = {0, 3};
+ 
+-static const struct property_entry icy_ltc2990_props[] = {
++static const struct property_entry icy_ltc2990_properties[] = {
+ 	PROPERTY_ENTRY_U32_ARRAY("lltc,meas-mode", icy_ltc2990_meas_mode),
+ 	{ }
+ };
+@@ -122,6 +122,7 @@ static int icy_probe(struct zorro_dev *z,
+ 	struct fwnode_handle *new_fwnode;
+ 	struct i2c_board_info ltc2990_info = {
+ 		.type		= "ltc2990",
++		.properties	= icy_ltc2990_properties,
+ 	};
+ 
+ 	i2c = devm_kzalloc(&z->dev, sizeof(*i2c), GFP_KERNEL);
+@@ -173,25 +174,10 @@ static int icy_probe(struct zorro_dev *z,
+ 	 *
+ 	 * See property_entry above for in1, in2, temp3.
+ 	 */
+-	new_fwnode = fwnode_create_software_node(icy_ltc2990_props, NULL);
+-	if (IS_ERR(new_fwnode)) {
+-		dev_info(&z->dev, "Failed to create fwnode for LTC2990, error: %ld\n",
+-			 PTR_ERR(new_fwnode));
+-	} else {
+-		/*
+-		 * Store the fwnode so we can destroy it on .remove().
+-		 * Only store it on success, as fwnode_remove_software_node()
+-		 * is NULL safe, but not PTR_ERR safe.
+-		 */
+-		i2c->ltc2990_fwnode = new_fwnode;
+-		ltc2990_info.fwnode = new_fwnode;
+-
+-		i2c->ltc2990_client =
+-			i2c_new_scanned_device(&i2c->adapter,
++	i2c->ltc2990_client = i2c_new_scanned_device(&i2c->adapter,
+ 					       &ltc2990_info,
+ 					       icy_ltc2990_addresses,
+ 					       NULL);
+-	}
+ 
+ 	return 0;
+ }
+@@ -201,7 +187,6 @@ static void icy_remove(struct zorro_dev *z)
+ 	struct icy_i2c *i2c = dev_get_drvdata(&z->dev);
+ 
+ 	i2c_unregister_device(i2c->ltc2990_client);
+-	fwnode_remove_software_node(i2c->ltc2990_fwnode);
+ 
+ 	i2c_del_adapter(&i2c->adapter);
+ }
+-- 
+2.25.1
 
-Acked-by: Wolfram Sang <wsa@the-dreams.de>
-
-I assume the series goes in via the doc-tree, let me know if I should
-pick it.
-
-
---HlL+5n6rz5pIUxbD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6N9BAACgkQFA3kzBSg
-KbZYFg//bgvPW9JkTSq9PUWDwF0mccgCgpSWBxG7ZGN3XnfeAXbrEbEx1/PyDsco
-ypFw/I6F1jOJayec54haf42fBJZIcK1jwk82lwCXt1rKLnxU9PasfDeDR4YfSnxY
-mPw3At6F7tuzQD2vbz/XBPpXviRvEA4Omimk42XZCtTt+dcrYaTgw5M+88euu8T5
-6SprM3EzpZ5eEcbTD31FV+ok0MrlkLSOhft5qxa8od4lKhes3Zhq2aIFV3qg9JIt
-UAfdBbr9IIJeZbidvZu/dp/LFibHR6FaqiyPqFrURKbiBrU01TdIJ05T/q6pjz27
-i/88c9YeMjuPg7jSXIYYNlN505iM0oNSOw1Y2V53qyyaiFq9wu/pwnKyU0Cw+g7m
-xN0TKT8ZMKLAh5gusPVfY0Z4dvYjTTx/Wi4jI/Yq6PXepHL7gxK+7tcRhQxOkQV2
-2oE/UpYNKdHDDDxUhKQGjrE0tuZGUViiVOAvTvG7n5ycY27YFs/C/ANRh0trrNi0
-/3hocl4c6CcUSwcI+9OpCN6ihmRjrgMYoaFVPevXx0ECE5WodwYBiI4Eh36k+bDr
-NjYBm+WPJ+bZc6uZc+/9l4s1buC65/K+X9OEK1pxGhAAEYMPxl5pzeMmxav9CmUM
-mP6PRsLQr6Pl9EfLJEZJI7dOddd/WTHzbbTNVL9WDYhpphFdg+U=
-=aRzN
------END PGP SIGNATURE-----
-
---HlL+5n6rz5pIUxbD--
