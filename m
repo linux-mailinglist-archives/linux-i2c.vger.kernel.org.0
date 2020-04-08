@@ -2,124 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEF41A1D7A
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 10:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EDD1A1E7C
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 12:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727173AbgDHIfo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Apr 2020 04:35:44 -0400
-Received: from mga01.intel.com ([192.55.52.88]:48032 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727118AbgDHIfo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 8 Apr 2020 04:35:44 -0400
-IronPort-SDR: ohh2LO+BpiwmXk7d55LS1lNHrn0I51vRhNLnC83vSGzvjTHBc5/gXsaNDNgX9wK09EdEMpd6hq
- Zv2x3qRY2YqQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2020 01:35:44 -0700
-IronPort-SDR: Ml5DwRvM0E1lUUriB6givKMJG0Sz//u+lzX89FuDmYI8RV+C0WndlN6uP0xJk8K0i8kT+o3Lw7
- 17+9QPPaBbEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,357,1580803200"; 
-   d="scan'208";a="451528793"
-Received: from mylly.fi.intel.com (HELO [10.237.72.51]) ([10.237.72.51])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Apr 2020 01:35:42 -0700
-Subject: Re: [PATCH] i2c: designware: platdrv: Remove DPM_FLAG_SMART_SUSPEND
- flag on BYT and CHT
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        id S1726642AbgDHKEO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Apr 2020 06:04:14 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34875 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725932AbgDHKEO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Apr 2020 06:04:14 -0400
+Received: by mail-pf1-f195.google.com with SMTP id a13so2193499pfa.2;
+        Wed, 08 Apr 2020 03:04:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=0l2SgjQoUm9XZQWLHdahmUXmkeQjGbkw3tE+oZhCKVs=;
+        b=pwnDjzJ9s4ltda4yGC5klCTFEE8QaNhAa/u7j3EP+/yIokVkfPKvEzGidqZ9FVAKJZ
+         HCfIv8ygTMfIX1eUGAECmcdGhwDz+r6jpWNbjh08mlXTvBMIBCFmooPeEcgzlYrnSojo
+         VGiqfDybdbRtQ3fYcE2WFZF74PH3CUDRyFbCn4Qx/kGBx6UgXuEBHa5GFQLXo8elHT5U
+         u3ukDKJaUxtC/Avln35AQS0d/jskn9xPWtLLGorG5qEFYr3V0Oaow6gJZyUoiMV6GJ2T
+         xHhQLdcxTLc5aPGa5yIfo+Ao3kuOnMp8dfTuMO0bi0y/zeV3wmR/+5GcfxXYSpK92v0j
+         cwAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=0l2SgjQoUm9XZQWLHdahmUXmkeQjGbkw3tE+oZhCKVs=;
+        b=YTrV0XSZTb/MOTDiqMfKrM6lRUEn2t53KVJdRIlhCb1F+LnIj2V8En319ZRulVwc6C
+         TYFAZl6tOPwVh6t33jc/nP8vIcBiyZpDuhvBMDP1GpoJ5wcHnBH396/WgX3pbQJwoecT
+         +WatbYBh+YesjzoXKL6FAEiB7XpYhz5CNDfd7HVlC0RSfldx3kx3q611raGbafnNGc2d
+         0Q84ReeZY0RtsotXaXolh5R0wSiKAC1dolv5ZCede612ERXdnrwvssuznLTFA3JjyqwA
+         U6p625g7belLhnPS5suudbg6SkWwIddz2eVKZrTBd0uc6EcOEBEDp2wPYz1J7Tbw0Z+G
+         WSiA==
+X-Gm-Message-State: AGi0PuZJBEPCn65Fwua8cMDBlrgkG1joe2p3RJZYVa79OyR5LD8Ccsu3
+        rg0cV2RInIUdjbZI6y7Q4uI=
+X-Google-Smtp-Source: APiQypJ2rtu2lzZorHDGO2Y9Nj8eRhkIqFK3//sK3EfN2KbEyI5rBMrG/z5wgIY4NOsELjd1ZatGLg==
+X-Received: by 2002:aa7:93cd:: with SMTP id y13mr6736602pff.213.1586340253160;
+        Wed, 08 Apr 2020 03:04:13 -0700 (PDT)
+Received: from localhost.localdomain ([2409:4072:610d:c995:d0f2:9d90:2f2e:7df9])
+        by smtp.gmail.com with ESMTPSA id i124sm16140306pfg.14.2020.04.08.03.04.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Apr 2020 03:04:12 -0700 (PDT)
+From:   Aishwarya R <aishwaryarj100@gmail.com>
+Cc:     aishwaryarj100@gmail.com,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Wolfram Sang <wsa@the-dreams.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>
-References: <20200407181116.61066-1-hdegoede@redhat.com>
- <CAJZ5v0g2vvCHssUS4QG3UccH-wFNueo_zbAzdVMdHfVwrtyMWg@mail.gmail.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <7eb3c66d-e5ae-6186-d7b4-15f49a131c91@linux.intel.com>
-Date:   Wed, 8 Apr 2020 11:35:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
-MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0g2vvCHssUS4QG3UccH-wFNueo_zbAzdVMdHfVwrtyMWg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <rfontana@redhat.com>,
+        linux-i2c@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: powermac: Simplify reading the "reg" and "i2c-address" property
+Date:   Wed,  8 Apr 2020 15:33:53 +0530
+Message-Id: <20200408100354.17782-1-aishwaryarj100@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 4/7/20 10:30 PM, Rafael J. Wysocki wrote:
-> On Tue, Apr 7, 2020 at 8:11 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> We already set DPM_FLAG_SMART_PREPARE, so we completely skip all
->> callbacks (other then prepare) where possible, quoting from
->> dw_i2c_plat_prepare():
->>
->>          /*
->>           * If the ACPI companion device object is present for this device, it
->>           * may be accessed during suspend and resume of other devices via I2C
->>           * operation regions, so tell the PM core and middle layers to avoid
->>           * skipping system suspend/resume callbacks for it in that case.
->>           */
->>          return !has_acpi_companion(dev);
->>
->> Also setting the DPM_FLAG_SMART_SUSPEND will cause acpi_subsys_suspend()
->> to leave the controller runtime-suspended even if dw_i2c_plat_prepare()
->> returned 0.
->>
->> Leaving the controller runtime-suspended normally, when the I2C controller
->> is suspended during the suspend_late phase, is not an issue because
->> the pm_runtime_get_sync() done by i2c_dw_xfer() will (runtime-)resume it.
->>
->> But for dw I2C controllers on Bay- and Cherry-Trail devices acpi_lpss.c
->> leaves the controller alive until the suspend_noirq phase, because it may
->> be used by the _PS3 ACPI methods of PCI devices and PCI devices are left
->> powered on until the suspend_noirq phase.
->>
->> Between the suspend_late and resume_early phases runtime-pm is disabled.
->> So for any ACPI I2C OPRegion accesses done after the suspend_late phase,
->> the pm_runtime_get_sync() done by i2c_dw_xfer() is a no-op and the
->> controller is left runtime-suspended.
->>
->> i2c_dw_xfer() has a check to catch this condition (rather then waiting
->> for the I2C transfer to timeout because the controller is suspended).
->> acpi_subsys_suspend() leaving the controller runtime-suspended in
->> combination with an ACPI I2C OPRegion access done after the suspend_late
->> phase triggers this check, leading to the following error being logged
->> on a Bay Trail based Lenovo Thinkpad 8 tablet:
->>
->> [   93.275882] i2c_designware 80860F41:00: Transfer while suspended
->> [   93.275993] WARNING: CPU: 0 PID: 412 at drivers/i2c/busses/i2c-designware-master.c:429 i2c_dw_xfer+0x239/0x280
->> ...
->> [   93.276252] Workqueue: kacpi_notify acpi_os_execute_deferred
->> [   93.276267] RIP: 0010:i2c_dw_xfer+0x239/0x280
->> ...
->> [   93.276340] Call Trace:
->> [   93.276366]  __i2c_transfer+0x121/0x520
->> [   93.276379]  i2c_transfer+0x4c/0x100
->> [   93.276392]  i2c_acpi_space_handler+0x219/0x510
->> [   93.276408]  ? up+0x40/0x60
->> [   93.276419]  ? i2c_acpi_notify+0x130/0x130
->> [   93.276433]  acpi_ev_address_space_dispatch+0x1e1/0x252
->> ...
->>
->> So since on BYT and CHT platforms we want ACPI I2c OPRegion accesses
->> to work until the suspend_noirq phase, we need the controller to be
->> runtime-resumed during the suspend phase if it is runtime-suspended
->> suspended at that time. This means that we must not set the
->> DPM_FLAG_SMART_SUSPEND on these platforms.
->>
->> On BYT and CHT we already have a special ACCESS_NO_IRQ_SUSPEND flag
->> to make sure the controller stays functional until the suspend_noirq
->> phase. This commit makes the driver not set the DPM_FLAG_SMART_SUSPEND
->> flag when that flag is set.
-> 
-> OK
-> 
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Use of_property_read_u32 to read the "reg" and "i2c-address" property
+instead of using of_get_property to check the return values.
+
+Signed-off-by: Aishwarya R <aishwaryarj100@gmail.com>
+---
+ drivers/i2c/busses/i2c-powermac.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-powermac.c b/drivers/i2c/busses/i2c-powermac.c
+index d565714c1f13..81506c2dab65 100644
+--- a/drivers/i2c/busses/i2c-powermac.c
++++ b/drivers/i2c/busses/i2c-powermac.c
+@@ -207,18 +207,18 @@ static u32 i2c_powermac_get_addr(struct i2c_adapter *adap,
+ 					   struct pmac_i2c_bus *bus,
+ 					   struct device_node *node)
+ {
+-	const __be32 *prop;
+-	int len;
++	u32 prop;
++	int ret;
+ 
+ 	/* First check for valid "reg" */
+-	prop = of_get_property(node, "reg", &len);
+-	if (prop && (len >= sizeof(int)))
+-		return (be32_to_cpup(prop) & 0xff) >> 1;
++	ret = of_property_read_u32(node, "reg", &prop);
++	if (ret == 0)
++		return (prop & 0xff) >> 1;
+ 
+ 	/* Then check old-style "i2c-address" */
+-	prop = of_get_property(node, "i2c-address", &len);
+-	if (prop && (len >= sizeof(int)))
+-		return (be32_to_cpup(prop) & 0xff) >> 1;
++	ret = of_property_read_u32(node, "i2c-address", &prop);
++	if (ret == 0)
++		return (prop & 0xff) >> 1;
+ 
+ 	/* Now handle some devices with missing "reg" properties */
+ 	if (of_node_name_eq(node, "cereal"))
+-- 
+2.17.1
+
