@@ -2,98 +2,171 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 859701A1FD7
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 13:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037F91A1FF4
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 13:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728468AbgDHL37 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Apr 2020 07:29:59 -0400
-Received: from mga14.intel.com ([192.55.52.115]:2066 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728395AbgDHL37 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 8 Apr 2020 07:29:59 -0400
-IronPort-SDR: YyTWlAq7NwprhHHTFcskxBcjPO9YZks0sLASSbvAJCdDcMVRPXcM9Bn1CPgmL0237MU0/782At
- DXLeAp8H/lJA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2020 04:29:57 -0700
-IronPort-SDR: ifOjrUMVFqW8dexOx0p2lsiqDRjrzWeonqWhKft9FCuq7EOBE+3PYQKqQo2GjV6vSWtaJy9xZg
- ELlRWVCcgpDQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,358,1580803200"; 
-   d="scan'208";a="297212508"
-Received: from mylly.fi.intel.com (HELO [10.237.72.51]) ([10.237.72.51])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Apr 2020 04:29:47 -0700
-Subject: Re: [PATCH v1 00/28] convert to devm_platform_ioremap_resource
-To:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Dejin Zheng <zhengdejin5@gmail.com>
-Cc:     thor.thayer@linux.intel.com, krzysztof.adamski@nokia.com,
-        rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>, nsekhar@ti.com,
-        bgolaszewski@baylibre.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, baruch@tkos.co.il,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        kgene@kernel.org, krzk@kernel.org, paul@crapouillou.net,
-        vz@mleia.com, khilman@baylibre.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        gregory.clement@bootlin.com, rrichter@marvell.com,
-        afaerber@suse.de, manivannan.sadhasivam@linaro.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
-        baohua@kernel.org, linus.walleij@linaro.org, mripard@kernel.org,
-        wens@csie.org, ardb@kernel.org, michal.simek@xilinx.com,
-        gcherian@marvell.com, jun.nie@linaro.org, shawnguo@kernel.org,
-        rayagonda.kokatanur@broadcom.com, lori.hikichi@broadcom.com,
-        nishkadg.linux@gmail.com,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        allison@lohutok.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>, bigeasy@linutronix.de,
-        info@metux.net, hslester96@gmail.com,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        martin.blumenstingl@googlemail.com,
-        Qii Wang <qii.wang@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Fabien Parent <fparent@baylibre.com>, opensource@jilayne.com,
-        swinslow@gmail.com, linux-i2c@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20200407163741.17615-1-zhengdejin5@gmail.com>
- <CAJMQK-g-Q20fDzy-0DQxoy+dS_USXkZ9DNSqeLmpUJS1OEzbCA@mail.gmail.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <6db77bf6-e1b1-b3fd-8539-7b083b38e7b2@linux.intel.com>
-Date:   Wed, 8 Apr 2020 14:29:46 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1728457AbgDHLib (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Apr 2020 07:38:31 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:27629 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728497AbgDHLib (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Apr 2020 07:38:31 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1586345910; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=hB+Rd4GlJbIiaitUMKZYiV6l9cOrq/VA33e0iAC+6sM=; b=MTs9whi0qnh+hlASGxeT6wYcNjItCv4bRAbOLu6dTcYqV7d3tmDqdwaWnmP4YldeLKHg8YiC
+ 5J1UMSCL8/qbpgLP4DdJD+GOOObKapvcpe34pyb4+RXm2YCgvEHvHv1IOysVxMcVzz82BVxk
+ wjCOGnZkiHgxpALorM8PjyOeb2g=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e8db7a4.7f727d34d618-smtp-out-n03;
+ Wed, 08 Apr 2020 11:38:12 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 34A3AC433F2; Wed,  8 Apr 2020 11:38:12 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.6] (unknown [183.83.138.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3A453C433BA;
+        Wed,  8 Apr 2020 11:38:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 3A453C433BA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH V3 3/8] soc: qcom-geni-se: Add interconnect support to fix
+ earlycon crash
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org
+References: <1585652976-17481-1-git-send-email-akashast@codeaurora.org>
+ <1585652976-17481-4-git-send-email-akashast@codeaurora.org>
+ <20200331182457.GH199755@google.com>
+ <7a4e13bf-a4b7-d75b-df42-bf5e4125258a@codeaurora.org>
+ <20200407172604.GQ199755@google.com>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <9e91aaa8-88f0-656f-b9f5-7e64014bad7a@codeaurora.org>
+Date:   Wed, 8 Apr 2020 17:08:01 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <CAJMQK-g-Q20fDzy-0DQxoy+dS_USXkZ9DNSqeLmpUJS1OEzbCA@mail.gmail.com>
+In-Reply-To: <20200407172604.GQ199755@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 4/8/20 6:54 AM, Hsin-Yi Wang wrote:
-> On Wed, Apr 8, 2020 at 12:37 AM Dejin Zheng <zhengdejin5@gmail.com> wrote:
+Hi Matthias,
+
+On 4/7/2020 10:56 PM, Matthias Kaehlcke wrote:
+> Hi Akash,
+>
+> On Tue, Apr 07, 2020 at 05:04:17PM +0530, Akash Asthana wrote:
+>> Hi Matthias,
 >>
->> this patch sets use devm_platform_ioremap_resource() to simplify code,
->> which contains platform_get_resource() and devm_ioremap_resource(). so
->> use it to replace the platform_get_resource() and
->> devm_ioremap_resource().
 >>
->> Dejin Zheng (28):
->>    i2c: img-scb: convert to devm_platform_ioremap_resource
->>    i2c: mv64xxx: convert to devm_platform_ioremap_resource
->>    i2c: owl: convert to devm_platform_ioremap_resource
->>    i2c: exynos5: convert to devm_platform_ioremap_resource
->>    i2c: mt65xx: convert to devm_platform_ioremap_resource
-> 
-> mt65xx seems not in the series.
-> 
-Looks like patches 5, 6, 9 and 19 are missing.
+>>>>    static int geni_se_probe(struct platform_device *pdev)
+>>>>    {
+>>>>    	struct device *dev = &pdev->dev;
+>>>> @@ -845,6 +868,34 @@ static int geni_se_probe(struct platform_device *pdev)
+>>>>    		}
+>>>>    	}
+>>>> +#ifdef CONFIG_SERIAL_EARLYCON
+>>>> +	wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
+>>>> +	if (IS_ERR(wrapper->to_core.path))
+>>>> +		return PTR_ERR(wrapper->to_core.path);
+>>>> +	/*
+>>>> +	 * Put minmal BW request on core clocks on behalf of early console.
+>>>> +	 * The vote will be removed earlycon exit function.
+>>>> +	 *
+>>>> +	 * Note: We are putting vote on each QUP wrapper instead only to which
+>>>> +	 * earlycon is connected because QUP core clock of different wrapper
+>>>> +	 * share same voltage domain. If core1 is put to 0, then core2 will
+>>>> +	 * also run at 0, if not voted. Default ICC vote will be removed ASA
+>>>> +	 * we touch any of the core clock.
+>>>> +	 * core1 = core2 = max(core1, core2)
+>>>> +	 */
+>>> I don't really understand this part. According to the comment if we vote
+>>> (let's say) for core2 but not for core1 then:
+>>>
+>>> core1: 0
+>>> core2: GENI_DEFAULT_BW
+>>>
+>>> core1 = core2 = max(core1, core2)
+>>>     or
+>>> core1 = core2 = max(0, GENI_DEFAULT_BW)
+>>>
+>>> hence
+>>>
+>>> core1 = core2 = GENI_DEFAULT_BW
+>>>
+>>> What am I missing, why is it necessary to vote for both/all?
+>> say core1 is for earlycon usecase
+>>
+>> There is common switch to control both the QUP core clock. I guess most
+>> appropriate description would be     switch = max(vote_on_core1,
+>> vote_on_core2) + default_vote.
+>>
+>> During early bootup, vote_on_core1 = 0, vote_on_core2 = 0;
+>>
+>> As earlycon was working even without voting it's core need because there was
+>> some default vote present on the core switch by ICC during bootup.
+>>
+>> So if any child(say SPI) of other QUP wrapper resumed and suspended before
+>> earlycon wrapper comes up. This will make core clock to run at zero and will
+>> cause NOC issue because vote_on_core1 = 0, vote_on_core2 = 0; and it seems
+>> default votes from core switch is removed  ASA it's voted on any core.
+> Thanks for the explication!
+>
+> You are probably totally right, but for some reason my brain still resists
+> to get it ...
+>
+> With the above my current interpretation is (assuming earlycon only votes on
+> core1):
+>
+>                        core1   core2  default  switch
+> early boot              0       0        1       1
+> SPI resume (core2)      0       1        0       1
+> SPI suspend (core2)     0       0        0       0
+> earlycon init 		1	0        0       1
+>
+>
+> What is wrong in the above table?
+>
+> Thanks for bearing with me :)
+NP :)
+
+I guess you meant QUP WRAPPER 1 probe by "earlycon init".
+
+                       core1   core2  default  switch	Time
+early boot              0       0        1       1	0s
+SPI resume (core2)      0       1        0       1	3.2s
+SPI suspend (core2)     0       0        0       0	3.3s
+QUP WRAPPER 1(probe)	1	0        0       1	5s (say)
+
+So switch is at 0 in time interval [3.3, 5] that will make core clock to run at 0.
+If we use earlycon during this time interval it will reset the board.
+
+Did above answered the query?
+
+Regards,
+Akash
+
+>
+> Matthias
 
 -- 
-Jarkko
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
