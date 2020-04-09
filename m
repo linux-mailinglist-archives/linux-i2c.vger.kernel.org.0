@@ -2,176 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D047B1A2B2B
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Apr 2020 23:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4E41A2CB4
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Apr 2020 02:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728193AbgDHVcs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Apr 2020 17:32:48 -0400
-Received: from enpas.org ([46.38.239.100]:33090 "EHLO mail.enpas.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728005AbgDHVcs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 8 Apr 2020 17:32:48 -0400
-X-Greylist: delayed 501 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Apr 2020 17:32:47 EDT
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 9805EFF816;
-        Wed,  8 Apr 2020 21:24:24 +0000 (UTC)
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20200408165247.13116-1-andriy.shevchenko@linux.intel.com>
-From:   Max Staudt <max@enpas.org>
-Autocrypt: addr=max@enpas.org; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH v1] i2c: icy: Don't use software node when it's an
- overkill
-Message-ID: <5867ca8b-215e-5ccf-bee9-feefc2e507c8@enpas.org>
-Date:   Wed, 8 Apr 2020 23:24:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1726523AbgDIADN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 8 Apr 2020 20:03:13 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:33355 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726508AbgDIADM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Apr 2020 20:03:12 -0400
+Received: by mail-ed1-f67.google.com with SMTP id z65so11087441ede.0;
+        Wed, 08 Apr 2020 17:03:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OByFmC3gKfTNve9VG0Op7WiIWGOfL/8G8+x+MkLwBbI=;
+        b=hIuniLMcvOkbw0P9AXFKH34GwSfgOmUI7defjUM3x4eS28udfC7IjJ5SSHGLzFnkCW
+         aWrxFeZopfwDvYkNdQlFrfXt4a67HVpyb0XLaXhugbuPOD8ARf9TaHUvt/MJswp7KQ6b
+         Tlnon81BwS0Wf2whXnnv5DCaJogLefJtIvPV0Dp7uXXkeZ1kIeL1cXkvl4SiHInA9oI8
+         GLNa3sjDvfEBw+jmD6JelUGEpNlCSOtQhU+YC1HNXrp9+bCGHt/ZFHF4HRcjypg8b+Vo
+         Bt6BKGPdv5rEu5HAHgOjTwfYpsbDIcWVCVpEyHBNAr9SnpG2QkSJ+Hxn/eq9h+5cn3Yg
+         joRQ==
+X-Gm-Message-State: AGi0PuaY2jZYDPmJ+bkmIqXdbACMLY8itEN1JQ4mf2IMc8Q58PPZnsay
+        9JYh2iw0zhCu/1hDIn8aEZiKHtTcFqa+UERpwfg=
+X-Google-Smtp-Source: APiQypL5+guUTQVDH7AvFWHpPLo9j6FcCNuyt0EenSNqXJtZIqpac5YGe6bPaeavJ7JObLfsjPR7mtL6LvDPHLyROeI=
+X-Received: by 2002:aa7:df83:: with SMTP id b3mr8362603edy.61.1586390590894;
+ Wed, 08 Apr 2020 17:03:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200408165247.13116-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200407163741.17615-1-zhengdejin5@gmail.com> <20200407163741.17615-24-zhengdejin5@gmail.com>
+In-Reply-To: <20200407163741.17615-24-zhengdejin5@gmail.com>
+From:   Barry Song <baohua@kernel.org>
+Date:   Thu, 9 Apr 2020 12:02:58 +1200
+Message-ID: <CAGsJ_4yiQed=kPpKJvHiGYJc0y0-qCmvV5+zYRKvBWJYVKrDog@mail.gmail.com>
+Subject: Re: [PATCH v1 23/28] i2c: sirf: convert to devm_platform_ioremap_resource
+To:     Dejin Zheng <zhengdejin5@gmail.com>
+Cc:     thor.thayer@linux.intel.com, krzysztof.adamski@nokia.com,
+        rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
+        Sekhar Nori <nsekhar@ti.com>, bgolaszewski@baylibre.com,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, Baruch Siach <baruch@tkos.co.il>,
+        wsa+renesas@sang-engineering.com, kgene@kernel.org,
+        krzk@kernel.org, paul@crapouillou.net, vz@mleia.com,
+        khilman@baylibre.com, matthias.bgg@gmail.com,
+        gregory.clement@bootlin.com, rrichter@marvell.com,
+        afaerber@suse.de, manivannan.sadhasivam@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        Linus Walleij <linus.walleij@linaro.org>, mripard@kernel.org,
+        wens@csie.org, ardb@kernel.org,
+        Michal Simek <michal.simek@xilinx.com>, gcherian@marvell.com,
+        jun.nie@linaro.org, shawnguo@kernel.org,
+        rayagonda.kokatanur@broadcom.com, lori.hikichi@broadcom.com,
+        nishkadg.linux@gmail.com, kstewart@linuxfoundation.org,
+        allison@lohutok.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>, bigeasy@linutronix.de,
+        info@metux.net, hslester96@gmail.com, narmstrong@baylibre.com,
+        martin.blumenstingl@googlemail.com, qii.wang@mediatek.com,
+        drinkcat@chromium.org, hsinyi@chromium.org, fparent@baylibre.com,
+        opensource@jilayne.com, swinslow@gmail.com,
+        linux-i2c@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Thank you, that looks much nicer indeed. I have also tested it on my Amiga just to be sure - it works.
+Dejin Zheng <zhengdejin5@gmail.com> 于2020年4月8日周三 上午4:39写道：
+>
+> use devm_platform_ioremap_resource() to simplify code, which
+> contains platform_get_resource and devm_ioremap_resource.
+>
+> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
 
+Reviewed-by: Barry Song <baohua@kernel.org>
 
-However, no signature yet because the call stack is giving me a headache:
-
-icy_probe()
- -> i2c_new_scanned_device()
- -> i2c_new_client_device()
- -> device_add_properties()
-
-And here we are in drivers/base/property.c looking at device_add_properties():
-
- * WARNING: The callers should not use this function if it is known that there
- * is no real firmware node associated with @dev! In that case the callers
- * should create a software node and assign it to @dev directly.
-
-
-Why is this warning there? It flies right in the face of what we're trying to achieve here.
-
-It was introduced in 2018 with commit caf35cd52242 .
-
-
-So either the warning is superfluous, or i2c_new_client_device() should be creating a software fwnode, I guess?
-
-
-Thanks
-Max
-
+> ---
+>  drivers/i2c/busses/i2c-sirf.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-sirf.c b/drivers/i2c/busses/i2c-sirf.c
+> index fb7a046b3226..269a71b0ee7f 100644
+> --- a/drivers/i2c/busses/i2c-sirf.c
+> +++ b/drivers/i2c/busses/i2c-sirf.c
+> @@ -272,7 +272,6 @@ static int i2c_sirfsoc_probe(struct platform_device *pdev)
+>  {
+>         struct sirfsoc_i2c *siic;
+>         struct i2c_adapter *adap;
+> -       struct resource *mem_res;
+>         struct clk *clk;
+>         int bitrate;
+>         int ctrl_speed;
+> @@ -310,8 +309,7 @@ static int i2c_sirfsoc_probe(struct platform_device *pdev)
+>         adap = &siic->adapter;
+>         adap->class = I2C_CLASS_DEPRECATED;
+>
+> -       mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -       siic->base = devm_ioremap_resource(&pdev->dev, mem_res);
+> +       siic->base = devm_platform_ioremap_resource(pdev, 0);
+>         if (IS_ERR(siic->base)) {
+>                 err = PTR_ERR(siic->base);
+>                 goto out;
+> --
+> 2.25.0
+>
