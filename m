@@ -2,78 +2,168 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 272891A4732
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Apr 2020 16:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8763C1A480C
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Apr 2020 18:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726181AbgDJOMc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Apr 2020 10:12:32 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:48581 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726177AbgDJOMb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Apr 2020 10:12:31 -0400
-Received: from [5.157.111.77] (port=57222 helo=[192.168.77.62])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1jMu2M-004dr7-2a; Fri, 10 Apr 2020 15:49:38 +0200
-Subject: Re: [RFC PATCH v2 2/6] i2c: allow DT nodes without 'compatible'
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org, linux-i3c@lists.infradead.org,
-        Kieran Bingham <kieran@ksquared.org.uk>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh@kernel.org>
-References: <20200318150059.21714-1-wsa+renesas@sang-engineering.com>
- <20200318150059.21714-3-wsa+renesas@sang-engineering.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <11ca7487-ac07-f714-8573-20d1a0040212@lucaceresoli.net>
-Date:   Fri, 10 Apr 2020 15:49:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726683AbgDJQAt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 Apr 2020 12:00:49 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:61530 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbgDJQAs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Apr 2020 12:00:48 -0400
+Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id efbcdca732cb25c5; Fri, 10 Apr 2020 18:00:46 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans De Goede <hdegoede@redhat.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>
+Subject: [PATCH 6/7] PM: sleep: core: Rename DPM_FLAG_LEAVE_SUSPENDED
+Date:   Fri, 10 Apr 2020 17:57:49 +0200
+Message-ID: <11863688.3RhLv4JJn2@kreacher>
+In-Reply-To: <1888197.j9z7NJ8yPn@kreacher>
+References: <1888197.j9z7NJ8yPn@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <20200318150059.21714-3-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-On 18/03/20 16:00, Wolfram Sang wrote:
-> Sometimes, we have unknown devices in a system and still want to block
-> their address. For that, we allow DT nodes with only a 'reg' property.
-> These devices will be bound to the "dummy" driver but with the name
-> "reserved". That way, we can distinguish them and even hand them over to
-> the "dummy" driver later when they are really requested using
-> i2c_new_ancillary_device().
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Acked-by: Rob Herring <robh@kernel.org>
+Rename DPM_FLAG_LEAVE_SUSPENDED to DPM_FLAG_MAY_SKIP_RESUME which
+matches its purpose more closely.
 
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+No functional impact.
 
-As I said in the reply to v1, I think we should reserve addresses also
-when there is a compatible string but no matching driver, but this is
-another story and can be handled separately.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ Documentation/driver-api/pm/devices.rst     | 4 ++--
+ Documentation/power/pci.rst                 | 2 +-
+ drivers/acpi/acpi_tad.c                     | 2 +-
+ drivers/base/power/main.c                   | 2 +-
+ drivers/i2c/busses/i2c-designware-platdrv.c | 2 +-
+ include/linux/pm.h                          | 6 +++---
+ 6 files changed, 9 insertions(+), 9 deletions(-)
 
+diff --git a/Documentation/driver-api/pm/devices.rst b/Documentation/driver-api/pm/devices.rst
+index 4ace0eba4506..f342c7549b4c 100644
+--- a/Documentation/driver-api/pm/devices.rst
++++ b/Documentation/driver-api/pm/devices.rst
+@@ -803,7 +803,7 @@ general.]
+ However, it often is desirable to leave devices in suspend after system
+ transitions to the working state, especially if those devices had been in
+ runtime suspend before the preceding system-wide suspend (or analogous)
+-transition.  Device drivers can use the ``DPM_FLAG_LEAVE_SUSPENDED`` flag to
++transition.  Device drivers can use the ``DPM_FLAG_MAY_SKIP_RESUME`` flag to
+ indicate to the PM core (and middle-layer code) that they prefer the specific
+ devices handled by them to be left suspended and they have no problems with
+ skipping their system-wide resume callbacks for this reason.  Whether or not the
+@@ -825,7 +825,7 @@ device really can be left in suspend.
+ 
+ For devices whose "noirq", "late" and "early" driver callbacks are invoked
+ directly by the PM core, all of the system-wide resume callbacks are skipped if
+-``DPM_FLAG_LEAVE_SUSPENDED`` is set and the device is in runtime suspend during
++``DPM_FLAG_MAY_SKIP_RESUME`` is set and the device is in runtime suspend during
+ the ``suspend_noirq`` (or analogous) phase or the transition under way is a
+ proper system suspend (rather than anything related to hibernation) and the
+ device's wakeup settings are suitable for runtime PM (that is, it cannot
+diff --git a/Documentation/power/pci.rst b/Documentation/power/pci.rst
+index 9e1408121bea..f09b382b4621 100644
+--- a/Documentation/power/pci.rst
++++ b/Documentation/power/pci.rst
+@@ -1029,7 +1029,7 @@ into D0 going forward), but if it is in runtime suspend in pci_pm_thaw_noirq(),
+ the function will set the power.direct_complete flag for it (to make the PM core
+ skip the subsequent "thaw" callbacks for it) and return.
+ 
+-Setting the DPM_FLAG_LEAVE_SUSPENDED flag means that the driver prefers the
++Setting the DPM_FLAG_MAY_SKIP_RESUME flag means that the driver prefers the
+ device to be left in suspend after system-wide transitions to the working state.
+ This flag is checked by the PM core, but the PCI bus type informs the PM core
+ which devices may be left in suspend from its perspective (that happens during
+diff --git a/drivers/acpi/acpi_tad.c b/drivers/acpi/acpi_tad.c
+index 33a4bcdaa4d7..7d45cce0c3c1 100644
+--- a/drivers/acpi/acpi_tad.c
++++ b/drivers/acpi/acpi_tad.c
+@@ -624,7 +624,7 @@ static int acpi_tad_probe(struct platform_device *pdev)
+ 	 */
+ 	device_init_wakeup(dev, true);
+ 	dev_pm_set_driver_flags(dev, DPM_FLAG_SMART_SUSPEND |
+-				     DPM_FLAG_LEAVE_SUSPENDED);
++				     DPM_FLAG_MAY_SKIP_RESUME);
+ 	/*
+ 	 * The platform bus type layer tells the ACPI PM domain powers up the
+ 	 * device, so set the runtime PM status of it to "active".
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index aa9c8df9fc4b..b6f785024b24 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -1247,7 +1247,7 @@ static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool a
+ 	 * to be skipped.
+ 	 */
+ 	if (atomic_read(&dev->power.usage_count) > 1 ||
+-	    !(dev_pm_test_driver_flags(dev, DPM_FLAG_LEAVE_SUSPENDED) &&
++	    !(dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME) &&
+ 	      dev->power.may_skip_resume))
+ 		dev->power.must_resume = true;
+ 
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index c98befe2a92e..b6270e69f853 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -357,7 +357,7 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ 	dev_pm_set_driver_flags(&pdev->dev,
+ 				DPM_FLAG_SMART_PREPARE |
+ 				DPM_FLAG_SMART_SUSPEND |
+-				DPM_FLAG_LEAVE_SUSPENDED);
++				DPM_FLAG_MAY_SKIP_RESUME);
+ 
+ 	/* The code below assumes runtime PM to be disabled. */
+ 	WARN_ON(pm_runtime_enabled(&pdev->dev));
+diff --git a/include/linux/pm.h b/include/linux/pm.h
+index 28fd444fb5c9..f545666120d0 100644
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -547,7 +547,7 @@ struct pm_subsys_data {
+  * NO_DIRECT_COMPLETE: Do not apply direct-complete optimization to the device.
+  * SMART_PREPARE: Check the return value of the driver's ->prepare callback.
+  * SMART_SUSPEND: No need to resume the device from runtime suspend.
+- * LEAVE_SUSPENDED: Avoid resuming the device during system resume if possible.
++ * MAY_SKIP_RESUME: Avoid resuming the device during system resume if possible.
+  *
+  * Setting SMART_PREPARE instructs bus types and PM domains which may want
+  * system suspend/resume callbacks to be skipped for the device to return 0 from
+@@ -562,13 +562,13 @@ struct pm_subsys_data {
+  * invocations of the ->suspend_late and ->suspend_noirq callbacks provided by
+  * the driver if they decide to leave the device in runtime suspend.
+  *
+- * Setting LEAVE_SUSPENDED informs the PM core and middle-layer code that the
++ * Setting MAY_SKIP_RESUME informs the PM core and middle-layer code that the
+  * driver prefers the device to be left in suspend after system resume.
+  */
+ #define DPM_FLAG_NO_DIRECT_COMPLETE	BIT(0)
+ #define DPM_FLAG_SMART_PREPARE		BIT(1)
+ #define DPM_FLAG_SMART_SUSPEND		BIT(2)
+-#define DPM_FLAG_LEAVE_SUSPENDED	BIT(3)
++#define DPM_FLAG_MAY_SKIP_RESUME	BIT(3)
+ 
+ struct dev_pm_info {
+ 	pm_message_t		power_state;
 -- 
-Luca
+2.16.4
+
+
+
+
