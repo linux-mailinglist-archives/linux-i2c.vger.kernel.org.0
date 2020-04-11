@@ -2,37 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D251A5A9F
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Apr 2020 01:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56171A594E
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Apr 2020 01:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727149AbgDKXGD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 11 Apr 2020 19:06:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40880 "EHLO mail.kernel.org"
+        id S1729023AbgDKXfy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 11 Apr 2020 19:35:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46130 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727136AbgDKXGC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:06:02 -0400
+        id S1727054AbgDKXIw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:08:52 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5D21021775;
-        Sat, 11 Apr 2020 23:06:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8130E21841;
+        Sat, 11 Apr 2020 23:08:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646362;
+        s=default; t=1586646532;
         bh=Z7dgUuRJ5r5MEhPXnn9GB8HCCPn69NV8rnhdFrkPRt8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a2hYYIMBKREcEjm3a8kUtPAD4VjXvxb9tnfllgR61cpMHdbtk3rN6DQxEAjcQG601
-         g5Q37X98a68LNTtnRtP/TSTLqGBX7KXsO95dCUgNRLYW5AyQ6CuhOVEqkV6gcmZGw1
-         f+yg4A9YoZiLzJr72Xe2+o/Zi33wgkFe0XAtxRbA=
+        b=cV5gROJkHZz4GXcxtirUvzn84wOgi3oMhe7ZOCWQwpprGSpvenWeFttdMxDKNHbtN
+         uX+qwjqWIvYcFCrn9SijBaXJJCCLtna8TWT0ERloiyYHKYEXuMNlSWWnUwDdneCZxp
+         S+4XVpAgbcvlJIqUFC2z1QlZ9aSTIOApnJzQx+t0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Kevin Hao <haokexin@gmail.com>, Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 107/149] i2c: dev: Fix the race between the release of i2c_dev and cdev
-Date:   Sat, 11 Apr 2020 19:03:04 -0400
-Message-Id: <20200411230347.22371-107-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 086/121] i2c: dev: Fix the race between the release of i2c_dev and cdev
+Date:   Sat, 11 Apr 2020 19:06:31 -0400
+Message-Id: <20200411230706.23855-86-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200411230347.22371-1-sashal@kernel.org>
-References: <20200411230347.22371-1-sashal@kernel.org>
+In-Reply-To: <20200411230706.23855-1-sashal@kernel.org>
+References: <20200411230706.23855-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
