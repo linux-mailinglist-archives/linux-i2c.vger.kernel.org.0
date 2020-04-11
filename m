@@ -2,37 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B681A5847
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Apr 2020 01:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B121A55EE
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Apr 2020 01:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728821AbgDKX2n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 11 Apr 2020 19:28:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50788 "EHLO mail.kernel.org"
+        id S1730323AbgDKXNF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 11 Apr 2020 19:13:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53896 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729067AbgDKXLS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:11:18 -0400
+        id S1730322AbgDKXNE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:13:04 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 355A721744;
-        Sat, 11 Apr 2020 23:11:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5253F20708;
+        Sat, 11 Apr 2020 23:13:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646677;
-        bh=Z7dgUuRJ5r5MEhPXnn9GB8HCCPn69NV8rnhdFrkPRt8=;
+        s=default; t=1586646784;
+        bh=ErREic7CQ4K4KVEb4wb4iVAIitFY0FZhCJoPXtdih08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UPyG1T8cGnKDpv9aZj0AKLGfOZPFJl5w3VFKS4i1dv6HUCrU4Kt4W1xj4TxS6LYBG
-         yHl5+Lzl1devB08vD9mbhw/K8BdE7f3TNmlyaub2rlmHWo95/W+6EUXR+X4KIQ5z63
-         mMB2FWD0dn9idyTJDBdPBVKfZhay7Pj0C3Kf4ua8=
+        b=kOqhH2c1LqkUZ++kBQes6VmLLWsIHJ2lxVXFDQQLBRAUZ9Wjf41kgK9+BQHIoHFwE
+         tsF4ZPbYtRu0g5f3kz/RV4WOUxCl/d5BmKO4/czueksZ6Qv9Syx+tnVdyNFKpqOWWk
+         xnZQue8fZGSY32cN/UcWz7qWchhvCtA3HXfSV4fA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Kevin Hao <haokexin@gmail.com>, Wolfram Sang <wsa@the-dreams.de>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 075/108] i2c: dev: Fix the race between the release of i2c_dev and cdev
-Date:   Sat, 11 Apr 2020 19:09:10 -0400
-Message-Id: <20200411230943.24951-75-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 49/66] i2c: dev: Fix the race between the release of i2c_dev and cdev
+Date:   Sat, 11 Apr 2020 19:11:46 -0400
+Message-Id: <20200411231203.25933-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200411230943.24951-1-sashal@kernel.org>
-References: <20200411230943.24951-1-sashal@kernel.org>
+In-Reply-To: <20200411231203.25933-1-sashal@kernel.org>
+References: <20200411231203.25933-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -126,10 +126,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 26 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index 2ea4585d18c5e..94beacc41302f 100644
+index cb07651f4b467..cbda91a0cb5f8 100644
 --- a/drivers/i2c/i2c-dev.c
 +++ b/drivers/i2c/i2c-dev.c
-@@ -40,7 +40,7 @@
+@@ -48,7 +48,7 @@
  struct i2c_dev {
  	struct list_head list;
  	struct i2c_adapter *adap;
@@ -138,7 +138,7 @@ index 2ea4585d18c5e..94beacc41302f 100644
  	struct cdev cdev;
  };
  
-@@ -84,12 +84,14 @@ static struct i2c_dev *get_free_i2c_dev(struct i2c_adapter *adap)
+@@ -92,12 +92,14 @@ static struct i2c_dev *get_free_i2c_dev(struct i2c_adapter *adap)
  	return i2c_dev;
  }
  
@@ -155,7 +155,7 @@ index 2ea4585d18c5e..94beacc41302f 100644
  }
  
  static ssize_t name_show(struct device *dev,
-@@ -628,6 +630,14 @@ static const struct file_operations i2cdev_fops = {
+@@ -636,6 +638,14 @@ static const struct file_operations i2cdev_fops = {
  
  static struct class *i2c_dev_class;
  
@@ -170,7 +170,7 @@ index 2ea4585d18c5e..94beacc41302f 100644
  static int i2cdev_attach_adapter(struct device *dev, void *dummy)
  {
  	struct i2c_adapter *adap;
-@@ -644,27 +654,23 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
+@@ -652,27 +662,23 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
  
  	cdev_init(&i2c_dev->cdev, &i2cdev_fops);
  	i2c_dev->cdev.owner = THIS_MODULE;
@@ -210,7 +210,7 @@ index 2ea4585d18c5e..94beacc41302f 100644
  }
  
  static int i2cdev_detach_adapter(struct device *dev, void *dummy)
-@@ -680,9 +686,7 @@ static int i2cdev_detach_adapter(struct device *dev, void *dummy)
+@@ -688,9 +694,7 @@ static int i2cdev_detach_adapter(struct device *dev, void *dummy)
  	if (!i2c_dev) /* attach_adapter must have failed */
  		return 0;
  
