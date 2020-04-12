@@ -2,225 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBD11A56E2
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Apr 2020 01:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBED31A5DD1
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Apr 2020 11:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730643AbgDKXTD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 11 Apr 2020 19:19:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55456 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730636AbgDKXOB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:14:01 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E191621841;
-        Sat, 11 Apr 2020 23:13:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646840;
-        bh=zg7yQ0tIo0mkHFpJNcf+g6QkEEgEZDL9PefIGJlKWrk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cC627y5cTCOkNhs+sZmsldbWjILKtoyEAaGcGGqtTUzC90dTAW/oh32jjOFqoHUdD
-         ExPT95TthUTzmLRB36upXAdJNZ4pTWf7OoBgm9cd/9Y6svDAQ9/0ffPxQPPHXHczzd
-         MiswpivlFXENzxSobV6Re7xuWeDP33smtwMlim0U=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kevin Hao <haokexin@gmail.com>, Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 28/37] i2c: dev: Fix the race between the release of i2c_dev and cdev
-Date:   Sat, 11 Apr 2020 19:13:17 -0400
-Message-Id: <20200411231327.26550-28-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200411231327.26550-1-sashal@kernel.org>
-References: <20200411231327.26550-1-sashal@kernel.org>
+        id S1726988AbgDLJeX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 12 Apr 2020 05:34:23 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:54143 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725878AbgDLJeX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Apr 2020 05:34:23 -0400
+Received: by mail-pj1-f67.google.com with SMTP id cl8so1479788pjb.3
+        for <linux-i2c@vger.kernel.org>; Sun, 12 Apr 2020 02:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=B5NV/1cGE65VgrIJL5pL9fWcgqwNBj4B4/CGY144dBc=;
+        b=MVXiVuUg23gQZifkPDgzy/EZGR1eILUgX0me5MksUuW6ij96h8cneH4wkjBXATmwBk
+         FlhlGZ+kLlTp908vlzqHI7cX3nrsyBxHUyNq1swMb19+RKaILas957dp5vbAQopnXYR6
+         fWqF9zPeomHb4TD98ppIHwoLio1NPl1PcGoLRv31vTW8xSvKn28TMjkEtMB3SqerH75h
+         m1cbVPOlyQB8P3rFpFVCUpoUXAKJAO74VE8z1K3yWsrpjkD2NCDGsZD/EIZEz7aJjs9t
+         qyrbXqUPs8EJwodVuahIpYT37Ho2Q/a5Yh3Ua2a6Fikj9KAaVVDb3gQhAPIjCw9mVm7z
+         riag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=B5NV/1cGE65VgrIJL5pL9fWcgqwNBj4B4/CGY144dBc=;
+        b=LQDVnx+uw3fnAvYbuA2q6iAx4pzwUVC8BXy8cpKLYwMq+Ea+M785pwdPbFc5VvjxmF
+         U4GMIbdVpn+yryg2lBH8rXbDJ9AgZ82Lm2uQMhXlG9AO7dVWFk7WkY12hmMWd5A0c5/2
+         FwREhviRBwDVwHHD7eqald6aq9LmPDVEHQl76oF/+NfM+lGYskFTjpZ3he9fuNmWbxfd
+         8Xy2rv96pm7rjYsn75r3/mTIOcoeTHKWLaXCQ/1BJRaLtEOg6kkRZAZwxay/rUb6JAN+
+         wAAcqFg7dsZIE+i7kAFsqXJslg0F+O6V33fnuIlqmXUWSsK6Sa8reuzVZffNo9UdyyJF
+         2CEQ==
+X-Gm-Message-State: AGi0PuatKFdu7UStTG4e6XolaAJTxX7Bg06CO8I3zAHmaiylXLYULfq4
+        SS6gYiW/xD2RAO9mucwfP7FwcLPFG4erEIsydCx1qnzgFiYgSQ==
+X-Google-Smtp-Source: APiQypLKNd8+f9HoFMfVKQ7chpEzc1cahYCb7YJFdsOyD6k/1kOBPcellkUqzBx0VwWHzJnQZGkt+mZOOu7RBxVo/rk=
+X-Received: by 2002:a17:90b:1b05:: with SMTP id nu5mr15252799pjb.110.1586684063094;
+ Sun, 12 Apr 2020 02:34:23 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+From:   19 90 <nineteenalreadytaken@gmail.com>
+Date:   Sun, 12 Apr 2020 15:34:12 +0600
+Message-ID: <CALDvbXkDBG1C2orB2PDrE5ox4A+kEf07XKCQoBrhjG+UnJniyg@mail.gmail.com>
+Subject: [v6] i2c: imx: support slave mode for imx I2C driver
+To:     biwen.li@nxp.com
+Cc:     linux-i2c@vger.kernel.org, erbolsyn@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Kevin Hao <haokexin@gmail.com>
+Hi, Biwen
 
-[ Upstream commit 1413ef638abae4ab5621901cf4d8ef08a4a48ba6 ]
+Looking forward for your patch -
+http://patchwork.ozlabs.org/patch/1203640/, though would like to know
+following:
 
-The struct cdev is embedded in the struct i2c_dev. In the current code,
-we would free the i2c_dev struct directly in put_i2c_dev(), but the
-cdev is manged by a kobject, and the release of it is not predictable.
-So it is very possible that the i2c_dev is freed before the cdev is
-entirely released. We can easily get the following call trace with
-CONFIG_DEBUG_KOBJECT_RELEASE and CONFIG_DEBUG_OBJECTS_TIMERS enabled.
-  ODEBUG: free active (active state 0) object type: timer_list hint: delayed_work_timer_fn+0x0/0x38
-  WARNING: CPU: 19 PID: 1 at lib/debugobjects.c:325 debug_print_object+0xb0/0xf0
-  Modules linked in:
-  CPU: 19 PID: 1 Comm: swapper/0 Tainted: G        W         5.2.20-yocto-standard+ #120
-  Hardware name: Marvell OcteonTX CN96XX board (DT)
-  pstate: 80c00089 (Nzcv daIf +PAN +UAO)
-  pc : debug_print_object+0xb0/0xf0
-  lr : debug_print_object+0xb0/0xf0
-  sp : ffff00001292f7d0
-  x29: ffff00001292f7d0 x28: ffff800b82151788
-  x27: 0000000000000001 x26: ffff800b892c0000
-  x25: ffff0000124a2558 x24: 0000000000000000
-  x23: ffff00001107a1d8 x22: ffff0000116b5088
-  x21: ffff800bdc6afca8 x20: ffff000012471ae8
-  x19: ffff00001168f2c8 x18: 0000000000000010
-  x17: 00000000fd6f304b x16: 00000000ee79de43
-  x15: ffff800bc0e80568 x14: 79616c6564203a74
-  x13: 6e6968207473696c x12: 5f72656d6974203a
-  x11: ffff0000113f0018 x10: 0000000000000000
-  x9 : 000000000000001f x8 : 0000000000000000
-  x7 : ffff0000101294cc x6 : 0000000000000000
-  x5 : 0000000000000000 x4 : 0000000000000001
-  x3 : 00000000ffffffff x2 : 0000000000000000
-  x1 : 387fc15c8ec0f200 x0 : 0000000000000000
-  Call trace:
-   debug_print_object+0xb0/0xf0
-   __debug_check_no_obj_freed+0x19c/0x228
-   debug_check_no_obj_freed+0x1c/0x28
-   kfree+0x250/0x440
-   put_i2c_dev+0x68/0x78
-   i2cdev_detach_adapter+0x60/0xc8
-   i2cdev_notifier_call+0x3c/0x70
-   notifier_call_chain+0x8c/0xe8
-   blocking_notifier_call_chain+0x64/0x88
-   device_del+0x74/0x380
-   device_unregister+0x54/0x78
-   i2c_del_adapter+0x278/0x2d0
-   unittest_i2c_bus_remove+0x3c/0x80
-   platform_drv_remove+0x30/0x50
-   device_release_driver_internal+0xf4/0x1c0
-   driver_detach+0x58/0xa0
-   bus_remove_driver+0x84/0xd8
-   driver_unregister+0x34/0x60
-   platform_driver_unregister+0x20/0x30
-   of_unittest_overlay+0x8d4/0xbe0
-   of_unittest+0xae8/0xb3c
-   do_one_initcall+0xac/0x450
-   do_initcall_level+0x208/0x224
-   kernel_init_freeable+0x2d8/0x36c
-   kernel_init+0x18/0x108
-   ret_from_fork+0x10/0x1c
-  irq event stamp: 3934661
-  hardirqs last  enabled at (3934661): [<ffff00001009fa04>] debug_exception_exit+0x4c/0x58
-  hardirqs last disabled at (3934660): [<ffff00001009fb14>] debug_exception_enter+0xa4/0xe0
-  softirqs last  enabled at (3934654): [<ffff000010081d94>] __do_softirq+0x46c/0x628
-  softirqs last disabled at (3934649): [<ffff0000100b4a1c>] irq_exit+0x104/0x118
+- Do you plan anything else on this PATCH? There is no update since
+March beginning. I might help with it if you give me instructions
+what's left on your plate.
 
-This is a common issue when using cdev embedded in a struct.
-Fortunately, we already have a mechanism to solve this kind of issue.
-Please see commit 233ed09d7fda ("chardev: add helper function to
-register char devs with a struct device") for more detail.
+- What is the git commit hash your patch's based on?
+   I tried to apply patch to the latest mainline (see below), but got
+1 part of patch failed, but fixed it manually.
 
-In this patch, we choose to embed the struct device into the i2c_dev,
-and use the API provided by the commit 233ed09d7fda to make sure that
-the release of i2c_dev and cdev are in sequence.
+commit c0cc271173b2e1c2d8d0ceaef14e4dfa79eefc0d
 
-Signed-off-by: Kevin Hao <haokexin@gmail.com>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/i2c-dev.c | 48 +++++++++++++++++++++++--------------------
- 1 file changed, 26 insertions(+), 22 deletions(-)
+- Would be helpful if anyone share which kernel builder (Yocto or
+NXP's flex-builder) you use for this driver.
 
-diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index eaa312bc3a3ce..c4066276eb7b9 100644
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -47,7 +47,7 @@
- struct i2c_dev {
- 	struct list_head list;
- 	struct i2c_adapter *adap;
--	struct device *dev;
-+	struct device dev;
- 	struct cdev cdev;
- };
- 
-@@ -91,12 +91,14 @@ static struct i2c_dev *get_free_i2c_dev(struct i2c_adapter *adap)
- 	return i2c_dev;
- }
- 
--static void put_i2c_dev(struct i2c_dev *i2c_dev)
-+static void put_i2c_dev(struct i2c_dev *i2c_dev, bool del_cdev)
- {
- 	spin_lock(&i2c_dev_list_lock);
- 	list_del(&i2c_dev->list);
- 	spin_unlock(&i2c_dev_list_lock);
--	kfree(i2c_dev);
-+	if (del_cdev)
-+		cdev_device_del(&i2c_dev->cdev, &i2c_dev->dev);
-+	put_device(&i2c_dev->dev);
- }
- 
- static ssize_t name_show(struct device *dev,
-@@ -542,6 +544,14 @@ static const struct file_operations i2cdev_fops = {
- 
- static struct class *i2c_dev_class;
- 
-+static void i2cdev_dev_release(struct device *dev)
-+{
-+	struct i2c_dev *i2c_dev;
-+
-+	i2c_dev = container_of(dev, struct i2c_dev, dev);
-+	kfree(i2c_dev);
-+}
-+
- static int i2cdev_attach_adapter(struct device *dev, void *dummy)
- {
- 	struct i2c_adapter *adap;
-@@ -558,27 +568,23 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
- 
- 	cdev_init(&i2c_dev->cdev, &i2cdev_fops);
- 	i2c_dev->cdev.owner = THIS_MODULE;
--	res = cdev_add(&i2c_dev->cdev, MKDEV(I2C_MAJOR, adap->nr), 1);
--	if (res)
--		goto error_cdev;
--
--	/* register this i2c device with the driver core */
--	i2c_dev->dev = device_create(i2c_dev_class, &adap->dev,
--				     MKDEV(I2C_MAJOR, adap->nr), NULL,
--				     "i2c-%d", adap->nr);
--	if (IS_ERR(i2c_dev->dev)) {
--		res = PTR_ERR(i2c_dev->dev);
--		goto error;
-+
-+	device_initialize(&i2c_dev->dev);
-+	i2c_dev->dev.devt = MKDEV(I2C_MAJOR, adap->nr);
-+	i2c_dev->dev.class = i2c_dev_class;
-+	i2c_dev->dev.parent = &adap->dev;
-+	i2c_dev->dev.release = i2cdev_dev_release;
-+	dev_set_name(&i2c_dev->dev, "i2c-%d", adap->nr);
-+
-+	res = cdev_device_add(&i2c_dev->cdev, &i2c_dev->dev);
-+	if (res) {
-+		put_i2c_dev(i2c_dev, false);
-+		return res;
- 	}
- 
- 	pr_debug("i2c-dev: adapter [%s] registered as minor %d\n",
- 		 adap->name, adap->nr);
- 	return 0;
--error:
--	cdev_del(&i2c_dev->cdev);
--error_cdev:
--	put_i2c_dev(i2c_dev);
--	return res;
- }
- 
- static int i2cdev_detach_adapter(struct device *dev, void *dummy)
-@@ -594,9 +600,7 @@ static int i2cdev_detach_adapter(struct device *dev, void *dummy)
- 	if (!i2c_dev) /* attach_adapter must have failed */
- 		return 0;
- 
--	cdev_del(&i2c_dev->cdev);
--	put_i2c_dev(i2c_dev);
--	device_destroy(i2c_dev_class, MKDEV(I2C_MAJOR, adap->nr));
-+	put_i2c_dev(i2c_dev, true);
- 
- 	pr_debug("i2c-dev: adapter [%s] unregistered\n", adap->name);
- 	return 0;
--- 
-2.20.1
-
+Thanks
