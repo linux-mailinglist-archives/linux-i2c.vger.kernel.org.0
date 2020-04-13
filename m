@@ -2,103 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 804ED1A64D5
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Apr 2020 11:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8913A1A652B
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Apr 2020 12:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728481AbgDMJzT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 Apr 2020 05:55:19 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:42414 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727793AbgDMJzT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Apr 2020 05:55:19 -0400
-Received: from [5.157.111.77] (port=45414 helo=[192.168.77.66])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1jNvo9-00A9CE-It; Mon, 13 Apr 2020 11:55:13 +0200
-Subject: Re: [RFC PATCH v2 5/6] i2c: of: mark a whole array of regs as
- reserved
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org, linux-i3c@lists.infradead.org,
-        Kieran Bingham <kieran@ksquared.org.uk>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Vladimir Zapolskiy <vz@mleia.com>, linux-kernel@vger.kernel.org
-References: <20200318150059.21714-1-wsa+renesas@sang-engineering.com>
- <20200318150059.21714-6-wsa+renesas@sang-engineering.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <c4e41b0a-4b9a-0db9-94dc-bbbc2f013133@lucaceresoli.net>
-Date:   Mon, 13 Apr 2020 11:55:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1728110AbgDMK3T (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Apr 2020 06:29:19 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:35321 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727833AbgDMK3S (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Apr 2020 06:29:18 -0400
+Received: by mail-ed1-f66.google.com with SMTP id c7so11401332edl.2;
+        Mon, 13 Apr 2020 03:29:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=BbWHjSsUQrh2BcH16tvNHQAGyd0qaneJDULzKls8PTI=;
+        b=EACqoFiZ7YXHLwEmyEKf/nPegskQGdQBOonHclZldN6+NXmkU0B9/0omQdswXEroeh
+         ZSIBZ9wCtq5xpvymxh3Yod3KAvGMepCyOsRLkiHzwEprXSSwX+NdLCVCuGflwpQs/j5F
+         /NaFz5c7uCdeec6CIAOeKErmCPaMT26o6/7KE9Walu/q9ZhDXYy4bE38L0kgEWZPViEk
+         FvMRMnCzIepQJIXTCe6BJIwKOUgpNWf6wDHD9zB7+c+pK7QFVf4agdSLks2qFHupaW7j
+         0mZ7zEHVVB22kUfrQnfI9c/yxjov7Tnm8gdUJ2PtUMwse61u9kE6fqqXUsiJAqSPVxds
+         pywA==
+X-Gm-Message-State: AGi0PuaUrW1S8Nz0KPCdOU23OLRtd4AwLvnqoTwKagbq3doSR6SPQuTX
+        aqyW9a5RPAm7yoZ8iJucJYY=
+X-Google-Smtp-Source: APiQypIedXmcxclTCvgH+IO52NsgOdHSPUM9V+iK7b0YTTiONfFblt3zVHInsMkfzBnfKdib4MGamw==
+X-Received: by 2002:a05:6402:16d5:: with SMTP id r21mr5822530edx.150.1586773757041;
+        Mon, 13 Apr 2020 03:29:17 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.125])
+        by smtp.googlemail.com with ESMTPSA id w3sm1557471ejf.21.2020.04.13.03.29.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 13 Apr 2020 03:29:16 -0700 (PDT)
+Date:   Mon, 13 Apr 2020 12:29:14 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        patches@opensource.cirrus.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] ARM: mach-s3c64xx: convert to use
+ i2c_new_client_device()
+Message-ID: <20200413102914.GA14922@kozik-lap>
+References: <20200326211014.13591-1-wsa+renesas@sang-engineering.com>
+ <20200326211014.13591-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-In-Reply-To: <20200318150059.21714-6-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Disposition: inline
+In-Reply-To: <20200326211014.13591-2-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
-
-On 18/03/20 16:00, Wolfram Sang wrote:
-> Back then, 'reg' properties in I2C DT bindings only contained one
-> address and this address was assigned a device and, thus, blocked.
-> Meanwhile, chips using multiple addresses are common and the 'reg'
-> property can be an array described by 'reg-names'. This code enhances
-> I2C DT parsing, so it will reserve all addresses described in an array.
-> They will be bound to the 'dummy' driver as 'reserved' iff the first
-> address can be assigned successfully. If that is not the case, the array
-> is not further considered. If one later address of the array can not be
-> assigned, it will be reported but we don't bail out. The driver has to
-> decide if that address is critical or not.
+On Thu, Mar 26, 2020 at 10:10:14PM +0100, Wolfram Sang wrote:
+> Move away from the deprecated API and remove printing a stale 'ret'
+> value.
 > 
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > ---
->  drivers/i2c/i2c-core-of.c | 70 +++++++++++++++++++++++++--------------
->  1 file changed, 46 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-> index f2d09ea0d336..67eb2cd305cf 100644
-> --- a/drivers/i2c/i2c-core-of.c
-> +++ b/drivers/i2c/i2c-core-of.c
-> @@ -16,25 +16,18 @@
->  #include <linux/i2c.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_address.h>
->  #include <linux/of_device.h>
->  #include <linux/sysfs.h>
->  
->  #include "i2c-core.h"
->  
-> -int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info)
-> +static void of_i2c_decode_board_info(struct device_node *node, u32 addr,
-> +				     bool first_addr, struct i2c_board_info *info)
+>  arch/arm/mach-s3c64xx/mach-crag6410-module.c | 7 +++----
 
-While I confirm the patch looks generally OK, let me add the name of
-this function is not quite self-explaining. The difference between "get"
-and "decode" has nothing to do with the different actions these
-functions do, i.e. the new function gets (or: decodes) info about  a
-single address that is passed, the old "get" function gets the info for
-the first address.
+Thanks, applied.
 
-I'd suggest the new function be named of_i2c_get_board_info_one_addr or
-similar. Not super nice, a bit long, but self-explanatory.
+Best regards,
+Krzysztof
 
--- 
-Luca
