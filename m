@@ -2,154 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BADD11A78A4
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Apr 2020 12:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58761A7A2A
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Apr 2020 13:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438543AbgDNKnn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 Apr 2020 06:43:43 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:41694 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438540AbgDNKnh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Apr 2020 06:43:37 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 260612A186E
-Received: by earth.universe (Postfix, from userid 1000)
-        id E27743C08C7; Tue, 14 Apr 2020 12:43:30 +0200 (CEST)
-Date:   Tue, 14 Apr 2020 12:43:30 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Jean Delvare <jdelvare@suse.de>,
-        Wolfram Sang <wsa@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Adam Honse <calcprogrammer1@gmail.com>
-Subject: Re: [PATCH] i2c: piix4: Add second SMBus for X370/X470/X570
-Message-ID: <20200414104330.k46jemtlkmxdrm62@earth.universe>
-References: <20200413150634.474842-1-sebastian.reichel@collabora.com>
- <20200414094158.089dd5ea@endymion>
+        id S2439697AbgDNL4N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Apr 2020 07:56:13 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:37323 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2439703AbgDNL4G (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Apr 2020 07:56:06 -0400
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jOKAb-00006X-JU; Tue, 14 Apr 2020 13:56:01 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jOKAa-0005IN-HU; Tue, 14 Apr 2020 13:56:00 +0200
+Date:   Tue, 14 Apr 2020 13:56:00 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        Biwen Li <biwen.li@nxp.com>
+Subject: Re: [PATCH] i2c: avoid ifdeffery in I2C drivers with optional slave
+ support
+Message-ID: <20200414115600.GM27288@pengutronix.de>
+References: <20191204095348.9192-1-s.hauer@pengutronix.de>
+ <20200409134027.GB1136@ninjato>
+ <20200410112914.67a68e32@endymion>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g7bibnhk6q2xn6m4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200414094158.089dd5ea@endymion>
+In-Reply-To: <20200410112914.67a68e32@endymion>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 13:40:16 up 54 days, 19:10, 93 users,  load average: 0.46, 0.35,
+ 0.22
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, Apr 10, 2020 at 11:29:14AM +0200, Jean Delvare wrote:
+> Hi Wolfram, Sascha,
+> 
+> On Thu, 9 Apr 2020 15:40:27 +0200, Wolfram Sang wrote:
+> > On Wed, Dec 04, 2019 at 10:53:48AM +0100, Sascha Hauer wrote:
+> > > Always add the (un)reg_slave hooks to struct i2c_algorithm, even when
+> > > I2C slave support is disabled. With the cost of some binary space I2C
+> > > drivers with optional I2C slave support no longer have to #ifdef
+> > > the hooks. For the same reason add a stub for i2c_slave_event and make
+> > > enum i2c_slave_event present without I2C slave support.
+> > > 
+> > > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>  
+> > 
+> > This kind of reverts d5fd120e7860 ("i2c: Only include slave support if
+> > selected"), so adding Jean here for more discussion.
+> 
+> That commit made sense then as there was only exactly 1 kernel driver
+> needing this. This might be revisited when more drivers need it.
+> 
+> That being said, as far as I can see only 8 drivers need it today, which
+> isn't that many, and more importantly, several architectures will
+> typically not include support for any of them (i386, x86_64 and s390x
+> for example).
+> 
+> > I don't mind the additional bytes used in i2c_algorithm, so I am in
+> > favor of this approach.
+> 
+> I find it questionable to increase the memory footprint on all x86_64
+> systems out there for a feature they do not need. Sure it's only 16
+> bytes in one structure, but if every subsystem does the same on a
+> regular basis, it adds up.
+> 
+> More importantly I can't see how the ifdef'd members of struct
+> i2c_algorithm are the cause of the problem mentioned by Sascha. He
+> seems to be concerned by drivers with *optional* I2C slave support
+> having ifdefs. Why can't this be solved in these drivers directly? What
+> prevents these drivers from unconditionally selecting I2C_SLAVE if that
+> makes their code more simple? This moves the overhead decision to the
+> device driver instead of forcing it to the whole subsystem across all
+> architectures.
 
---g7bibnhk6q2xn6m4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The drivers could select I2C_SLAVE when they have I2C slave support and
+in fact some drivers do this already. This means that we have the
+overhead of unneeded I2C slave support when we need that driver in the
+Kernel.
 
-Hi,
+I just thought it would be nice to have I2C slave support optional while
+still allowing to avoid ifdefs in the driver. Particularly this doesn't
+look nice:
 
-On Tue, Apr 14, 2020 at 09:41:58AM +0200, Jean Delvare wrote:
-> On Mon, 13 Apr 2020 17:06:34 +0200, Sebastian Reichel wrote:
-> > The second interface can be found on X370, X470 and X570 according
-> > to the bugzilla entry. I only tested with X570 on an ASRock X570
-> > Taichi:
-> >=20
-> > $ lspci -nnv -d 1022:790b
-> > 00:14.0 SMBus [0c05]: Advanced Micro Devices, Inc. [AMD] FCH SMBus Cont=
-roller [1022:790b] (rev 61)
-> > 	Subsystem: ASRock Incorporation FCH SMBus Controller [1849:ffff]
-> > 	Flags: 66MHz, medium devsel
-> > 	Kernel driver in use: piix4_smbus
-> > 	Kernel modules: i2c_piix4, sp5100_tco
-> >=20
-> > Before the patch:
-> >=20
-> > $ i2cdetect -l | grep PIIX4
-> > i2c-1	unknown   	SMBus PIIX4 adapter port 2 at 0b00	N/A
-> > i2c-0	unknown   	SMBus PIIX4 adapter port 0 at 0b00	N/A
-> >=20
-> > After the patch:
-> >=20
-> > $ i2cdetect -l | grep PIIX4
-> > i2c-1	unknown   	SMBus PIIX4 adapter port 2 at 0b00	N/A
-> > i2c-2	unknown   	SMBus PIIX4 adapter port 1 at 0b20	N/A
-> > i2c-0	unknown   	SMBus PIIX4 adapter port 0 at 0b00	N/A
-> >=20
-> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=3D202587
-> > Reported-by: Adam Honse <calcprogrammer1@gmail.com>
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > ---
-> > Hi,
-> >=20
-> > The Bugzilla entry contains a second change, which reduces the timeouts
-> > for quicker operation. I did not include that change, since I do not kn=
-ow
-> > if this is a good idea for all devices supported by this driver. In any
-> > case it should be a separate patch. Let's get the interface working for
-> > now.
-> >=20
-> > -- Sebastian
-> > ---
-> >  drivers/i2c/busses/i2c-piix4.c | 8 +++++---
-> >  1 file changed, 5 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-pi=
-ix4.c
-> > index 30ded6422e7b..3e89143a0ecf 100644
-> > --- a/drivers/i2c/busses/i2c-piix4.c
-> > +++ b/drivers/i2c/busses/i2c-piix4.c
-> > @@ -976,9 +976,11 @@ static int piix4_probe(struct pci_dev *dev, const =
-struct pci_device_id *id)
-> >  		}
-> >  	}
-> > =20
-> > -	if (dev->vendor =3D=3D PCI_VENDOR_ID_AMD &&
-> > -	    dev->device =3D=3D PCI_DEVICE_ID_AMD_HUDSON2_SMBUS) {
-> > -		retval =3D piix4_setup_sb800(dev, id, 1);
-> > +	if (dev->vendor =3D=3D PCI_VENDOR_ID_AMD) {
-> > +		if (dev->device =3D=3D PCI_DEVICE_ID_AMD_HUDSON2_SMBUS ||
-> > +		    dev->device =3D=3D PCI_DEVICE_ID_AMD_KERNCZ_SMBUS) {
-> > +			retval =3D piix4_setup_sb800(dev, id, 1);
-> > +		}
-> >  	}
-> > =20
-> >  	if (retval > 0) {
->=20
-> Adam just sent pretty much the same patch:
->=20
-> https://patchwork.ozlabs.org/project/linux-i2c/patch/20200410204843.3856-=
-1-calcprogrammer1@gmail.com/
->=20
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
->=20
-> I'll leave it to Wolfram which one he wants to apply.
+ static const struct i2c_algorithm i2c_imx_algo = {
+        .master_xfer    = i2c_imx_xfer,
+        .functionality  = i2c_imx_func,
++#if IS_ENABLED(CONFIG_I2C_SLAVE)
++       .reg_slave      = i2c_imx_reg_slave,
++       .unreg_slave    = i2c_imx_unreg_slave,
++#endif
+}
 
-Ok, I wasn't aware of that and thought this patch was forgotten. In
-that case Adam should receive all the credits of course. Feel free
-to take over anything usable from my commit message. The patch from
-Adam is
+The implementation of these functions need ifdefs as well and compile
+coverage gets worse.
 
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Tested-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Yes, we could select I2C_SLAVE from the driver and I don't really care
+which way we choose, the space overhead is marginal either way.
 
-Thanks,
+Sascha
 
--- Sebastian
-
---g7bibnhk6q2xn6m4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6Vk8sACgkQ2O7X88g7
-+pqQ9A/7BwSHbsoaxkGwMB05DN/hCXdFhZ6J0a1e82CQO0cAkivFUFx20qiXZGeV
-5QexoxYj2SW/uHX7zyl9hMCb/iKtf2GqIvSDSQLO7QuZBvc1/9hVX1B3X70CrLH0
-rtWXCHuxdu2OS24Ym6qGYO86NdAI58Dr8amfxOvueBBhSGE4EI6LjsMX7KCKVqof
-IDI7G1hHz2E5cLmvdB07USd+79CnnWMCZTLnOgcRQelkkSaJi732yZyLkJrbmwIN
-Wr+TbVPvOIXE3I4oc9XmgDxFMyB3KN+/aQtOOovmesGDGaI6uhBlh/6eGkMuHR91
-QfyU4Q9v7AS/uVPPHFOtEc8cssNL5lU6thBnp4KV9grioliygX0menXaVitEWSl/
-LLeSkfqARRkSSQtddFZkPQqYM89aoWOgPbhcRnRcM/+K4num6IvIaM2tZIZq01lN
-7KM+a9qF5bLqfxXrQmAGHrmgr0/WbY2akP+3fKnIcP0ZU/r4MQkzMiHtfPAiVOO4
-8AxNDkDjC/PoOFA/eZoVwaO11T/WZCXriWuL5ISr6ykO4KhAZHKpgKnXPUkWoreZ
-mc0X/FR6aOhZ6zygzOZR04yhDAX0QpqygiMiq8ow/Nt/6z2JqXfdo8sqpTEGwNWf
-qq5AQ4D4jnNzfA/RY1BhYFfZsBZaymW0rckKwLwM0by10DBtZcE=
-=7zje
------END PGP SIGNATURE-----
-
---g7bibnhk6q2xn6m4--
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
