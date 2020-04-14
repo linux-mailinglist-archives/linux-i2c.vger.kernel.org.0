@@ -2,131 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB39B1A7FFD
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Apr 2020 16:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA251A807A
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Apr 2020 16:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391081AbgDNOkd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 Apr 2020 10:40:33 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44552 "EHLO mx2.suse.de"
+        id S2405332AbgDNOyY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Apr 2020 10:54:24 -0400
+Received: from mga07.intel.com ([134.134.136.100]:59994 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391068AbgDNOk0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 14 Apr 2020 10:40:26 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 20C0AAFC4;
-        Tue, 14 Apr 2020 14:40:10 +0000 (UTC)
-Date:   Tue, 14 Apr 2020 16:40:09 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        Biwen Li <biwen.li@nxp.com>
-Subject: Re: [PATCH] i2c: avoid ifdeffery in I2C drivers with optional slave
- support
-Message-ID: <20200414164009.53e70067@endymion>
-In-Reply-To: <20200414115600.GM27288@pengutronix.de>
-References: <20191204095348.9192-1-s.hauer@pengutronix.de>
-        <20200409134027.GB1136@ninjato>
-        <20200410112914.67a68e32@endymion>
-        <20200414115600.GM27288@pengutronix.de>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S2405331AbgDNOyV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 14 Apr 2020 10:54:21 -0400
+IronPort-SDR: Tnf+7iZm+UX4ZJ/B6tSJYWouIi3kHNz+9NEZQMUf2poZ1B93ZifUym+MCjJwPZ6x1CvUFedm/y
+ RBV05mEVfwHw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 07:54:17 -0700
+IronPort-SDR: SHf9jv5IL3rdLY0MJo+MhKsrV/9MG3a/3555wa478pgycaHs8dKdOA2y72RSrtGutcUO6hakUD
+ ah9jZfBs4yYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,382,1580803200"; 
+   d="scan'208";a="363394996"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 14 Apr 2020 07:54:15 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Apr 2020 17:54:14 +0300
+Date:   Tue, 14 Apr 2020 17:54:14 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Max Staudt <max@enpas.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v1] i2c: icy: Don't use software node when it's an
+ overkill
+Message-ID: <20200414145414.GJ2828150@kuha.fi.intel.com>
+References: <20200408165247.13116-1-andriy.shevchenko@linux.intel.com>
+ <5867ca8b-215e-5ccf-bee9-feefc2e507c8@enpas.org>
+ <20200409103735.GV3676135@smile.fi.intel.com>
+ <20200409121633.GA1534509@kuha.fi.intel.com>
+ <e2c36d3a-0932-42f5-170a-49432f835fed@enpas.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e2c36d3a-0932-42f5-170a-49432f835fed@enpas.org>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 14 Apr 2020 13:56:00 +0200, Sascha Hauer wrote:
-> On Fri, Apr 10, 2020 at 11:29:14AM +0200, Jean Delvare wrote:
-> > More importantly I can't see how the ifdef'd members of struct
-> > i2c_algorithm are the cause of the problem mentioned by Sascha. He
-> > seems to be concerned by drivers with *optional* I2C slave support
-> > having ifdefs. Why can't this be solved in these drivers directly? What
-> > prevents these drivers from unconditionally selecting I2C_SLAVE if that
-> > makes their code more simple? This moves the overhead decision to the
-> > device driver instead of forcing it to the whole subsystem across all
-> > architectures.  
+On Fri, Apr 10, 2020 at 01:51:58AM +0200, Max Staudt wrote:
+> On 4/9/20 2:16 PM, Heikki Krogerus wrote:
+> > On Thu, Apr 09, 2020 at 01:37:35PM +0300, Andy Shevchenko wrote:
+> >> Heikki, am I correct?
+> > 
+> > In this case it should be possible supply a handle to a software node
+> > with the board info. That should then later replace the fwnode and
+> > properties members once the existing code is converted:
+> > 
+> > [... snip sample patch ...]
+> > 
+> > I2C core would then need to take care of registering that swnode of
+> > course.
 > 
-> The drivers could select I2C_SLAVE when they have I2C slave support and
-> in fact some drivers do this already. This means that we have the
-> overhead of unneeded I2C slave support when we need that driver in the
-> Kernel.
-
-I can't make sense of this statement, sorry. How is I2C slave support
-"unneeded" if your kernel includes at least one kernel which needs it?
-
-It is true that I2C slave support is included in the kernel code as
-soon as any driver selects I2C_SLAVE, even if that driver is not
-currently loaded. The only way around that would be to move the common
-code for it to a separate module and all specific members to different,
-dedicated structures. But that would in turn cause more overhead for
-people who need slave support. The current implementation is the result
-of a trade-off decision I made back then. It is the same design goal
-which explains why I2C_SMBUS is a separate option: many system classes
-do not need it and I did not want to waste memory on these. The
-difference of I2C_SMBUS is that it was large and isolated enough to
-warrant a separate kernel module altogether.
-
-> I just thought it would be nice to have I2C slave support optional while
-> still allowing to avoid ifdefs in the driver. Particularly this doesn't
-> look nice:
+> Are you saying that the comment in property.c is correct, and
+> i2c_new_client_device() shall *not* call device_add_properties() ?
 > 
->  static const struct i2c_algorithm i2c_imx_algo = {
->         .master_xfer    = i2c_imx_xfer,
->         .functionality  = i2c_imx_func,
-> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> +       .reg_slave      = i2c_imx_reg_slave,
-> +       .unreg_slave    = i2c_imx_unreg_slave,
-> +#endif
-> }
+> I mean, the code works and stuff, except that the swnode that
+> device_add_properties() created won't be freed as far as I can see.
 
-Probably a matter of taste, personally I see nothing wrong with it.
+They actually are freed when device_del() is finally called, which is
+pretty damn confusing. That is actually one of the reasons why we
+should avoid the old device_add/del_properties() API.
 
-> 
-> The implementation of these functions need ifdefs as well and compile
-> coverage gets worse.
+> In other words, should the current properties code in i2c_new_client_device()
+> be replaced by something that creates a swnode, just like the i2c-icy driver
+> currently does manually when it instantiates the ltc2990 I2C client?
 
-Sorry but you lost me here. How can I2C slave support be "optional" and
-at the same time going without ifdefs?
+Yes. The subsystem needs to take care of that, not the drivers.
 
-With your patch, device drivers would include slave support even if it
-will never be called because that support was not selected at the i2c
-core level. That's pretty confusing if you ask me.
-
-It is true that code coverage gets harder with additional configuration
-switches, that's the price to pay for being modular.
-
-> Yes, we could select I2C_SLAVE from the driver and I don't really care
-> which way we choose, the space overhead is marginal either way.
-
-With the current design, the idea is indeed to let drivers select
-I2C_SLAVE when they need it. And I think this solves your problem
-nicely as it lets you remove the ifdefs from your driver.
-
-I think it only makes sense to have ifdefs in the driver itself if that
-driver can be used on architectures or systems which will never need
-slave support and others which will need it, and these systems are
-different distribution targets, so that the decision can be made at
-build time. If the decision is not going to be made at build time then
-the ifdefs only clutter the code and have no value.
-
-More generally I think it is important to have design goals and to
-stick to them. The design goal of the current implementation was to let
-architectures which do not need slave support have no overhead at all.
-This comes at the cost of #ifdefs in the i2c core code and increased
-code coverage needs. Usually it should not need #ifdefs in the device
-drivers, with the exception of cross-platform devices mentioned above.
-
-If this is no longer desired and we prefer to have more simple core
-code and better code coverage at the cost of runtime overhead on
-millions of machine, then it can be done but then it must be done
-completely, that is, the I2C_SLAVE symbol goes away entirely and slave
-support is included in the kernel always, as Wolfram suggested in his
-reply. I wouldn't be happy with this move personally but I'm not the
-one making the decision and at least it would make sense.
+thanks,
 
 -- 
-Jean Delvare
-SUSE L3 Support
+heikki
