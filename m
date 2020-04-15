@@ -2,112 +2,204 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3931A998D
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 11:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C3D1A99EB
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 12:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896027AbgDOJwS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 05:52:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34316 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2896006AbgDOJvr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 15 Apr 2020 05:51:47 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 7AEE6AE0D;
-        Wed, 15 Apr 2020 09:51:44 +0000 (UTC)
-Date:   Wed, 15 Apr 2020 11:51:42 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        Biwen Li <biwen.li@nxp.com>
-Subject: Re: [PATCH] i2c: avoid ifdeffery in I2C drivers with optional slave
- support
-Message-ID: <20200415115142.06bc4ea7@endymion>
-In-Reply-To: <20200415051619.GP27288@pengutronix.de>
-References: <20191204095348.9192-1-s.hauer@pengutronix.de>
-        <20200409134027.GB1136@ninjato>
-        <20200410112914.67a68e32@endymion>
-        <20200414115600.GM27288@pengutronix.de>
-        <20200414164009.53e70067@endymion>
-        <20200415051619.GP27288@pengutronix.de>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S2896155AbgDOKHf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 06:07:35 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58675 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2896151AbgDOKHb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 06:07:31 -0400
+Received: from [88.147.20.223] (port=52216 helo=[192.168.77.62])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1jOex1-009EsP-0V; Wed, 15 Apr 2020 12:07:23 +0200
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [RFC PATCH v2 5/6] i2c: of: mark a whole array of regs as
+ reserved
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, linux-i3c@lists.infradead.org,
+        Kieran Bingham <kieran@ksquared.org.uk>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vladimir Zapolskiy <vz@mleia.com>, linux-kernel@vger.kernel.org
+References: <20200318150059.21714-1-wsa+renesas@sang-engineering.com>
+ <20200318150059.21714-6-wsa+renesas@sang-engineering.com>
+Message-ID: <578266c3-1bfb-2d7a-6d95-d40b3d8cd3ab@lucaceresoli.net>
+Date:   Wed, 15 Apr 2020 12:07:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20200318150059.21714-6-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 15 Apr 2020 07:16:19 +0200, Sascha Hauer wrote:
-> On Tue, Apr 14, 2020 at 04:40:09PM +0200, Jean Delvare wrote:
-> > Sorry but you lost me here. How can I2C slave support be "optional" and
-> > at the same time going without ifdefs?  
+Hi,
+
+ 18/03/20 16:00, Wolfram Sang wrote:
+> Back then, 'reg' properties in I2C DT bindings only contained one
+> address and this address was assigned a device and, thus, blocked.
+> Meanwhile, chips using multiple addresses are common and the 'reg'
+> property can be an array described by 'reg-names'. This code enhances
+> I2C DT parsing, so it will reserve all addresses described in an array.
+> They will be bound to the 'dummy' driver as 'reserved' iff the first
+> address can be assigned successfully. If that is not the case, the array
+> is not further considered. If one later address of the array can not be
+> assigned, it will be reported but we don't bail out. The driver has to
+> decide if that address is critical or not.
 > 
-> static int i2c_imx_reg_slave(struct i2c_client *client)
-> {
-> 	if (!IS_ENABLED(CONFIG_I2C_SLAVE))
-> 		return -ESOMETHING;
-> 	...
-> }
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/i2c/i2c-core-of.c | 70 +++++++++++++++++++++++++--------------
+>  1 file changed, 46 insertions(+), 24 deletions(-)
 > 
-> The code is gone without CONFIG_I2C_SLAVE enabled, yet the compile coverage
-> is there.
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index f2d09ea0d336..67eb2cd305cf 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -16,25 +16,18 @@
+>  #include <linux/i2c.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_address.h>
+>  #include <linux/of_device.h>
+>  #include <linux/sysfs.h>
+>  
+>  #include "i2c-core.h"
+>  
+> -int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info)
+> +static void of_i2c_decode_board_info(struct device_node *node, u32 addr,
+> +				     bool first_addr, struct i2c_board_info *info)
+>  {
+> -	u32 addr;
+> -	int ret;
+> -
+>  	memset(info, 0, sizeof(*info));
+>  
+> -	ret = of_property_read_u32(node, "reg", &addr);
+> -	if (ret) {
+> -		pr_err("invalid reg on %pOF\n", node);
+> -		return ret;
+> -	}
+> -
+> -	if (of_modalias_node(node, info->type, sizeof(info->type)) < 0)
+> +	if (!first_addr || of_modalias_node(node, info->type, sizeof(info->type)) < 0)
+>  		strlcpy(info->type, I2C_RESERVED_DRV_NAME, sizeof(I2C_RESERVED_DRV_NAME));
+>  
+>  	if (addr & I2C_TEN_BIT_ADDRESS) {
+> @@ -51,11 +44,27 @@ int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info)
+>  	info->of_node = node;
+>  	info->fwnode = of_fwnode_handle(node);
+>  
+> -	if (of_property_read_bool(node, "host-notify"))
+> -		info->flags |= I2C_CLIENT_HOST_NOTIFY;
+> +	if (first_addr) {
+> +		if (of_property_read_bool(node, "host-notify"))
+> +			info->flags |= I2C_CLIENT_HOST_NOTIFY;
+> +
+> +		if (of_get_property(node, "wakeup-source", NULL))
+> +			info->flags |= I2C_CLIENT_WAKE;
+> +	}
+> +}
+> +
+> +int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info)
+> +{
+> +	u32 addr;
+> +	int ret;
+> +
+> +	ret = of_property_read_u32(node, "reg", &addr);
+> +	if (ret) {
+> +		pr_err("invalid reg on %pOF\n", node);
+> +		return ret;
+> +	}
+>  
+> -	if (of_get_property(node, "wakeup-source", NULL))
+> -		info->flags |= I2C_CLIENT_WAKE;
+> +	of_i2c_decode_board_info(node, addr, true, info);
+>  
+>  	return 0;
+>  }
+> @@ -64,21 +73,34 @@ EXPORT_SYMBOL_GPL(of_i2c_get_board_info);
+>  static struct i2c_client *of_i2c_register_device(struct i2c_adapter *adap,
+>  						 struct device_node *node)
+>  {
+> -	struct i2c_client *client;
+> +	struct i2c_client *client, *first_client = ERR_PTR(-ENOENT);
+>  	struct i2c_board_info info;
+> -	int ret;
+> +	bool first_reg = true;
+> +	unsigned int i = 0;
+> +	const __be32 *prop;
+> +	u16 reg;
+>  
+>  	pr_debug("register %pOF\n", node);
+>  
+> -	ret = of_i2c_get_board_info(node, &info);
+> -	if (ret)
+> -		return ERR_PTR(ret);
+> +	while ((prop = of_get_address(node, i++, NULL, NULL))) {
+> +		reg = of_read_number(prop, 1);
+> +		of_i2c_decode_board_info(node, reg, first_reg, &info);
+> +
+> +		client = i2c_new_client_device(adap, &info);
+> +		if (IS_ERR(client)) {
+> +			pr_err("failure registering addr 0x%02x for %pOF (%ld)\n",
+> +				reg, node, PTR_ERR(client));
+> +			if (first_reg)
+> +				return client;
+> +		}
 
-OK, *now* I see where you were going from the beginning ;-) And that
-makes sense, for drivers which want optional I2C slave support.
+I had an opportunity to runtime test this whole series on top of my TI
+DS90UB95x serdes patches and it generally works fine.
 
-Now I think this is down to 2 questions:
+I noticed however a minor annoyance in the above while loop. During
+probing, these errors are produced:
 
-1* Does the i2c-imx driver actually need optional slave support, or can
-   this support be included unconditionally? Which distributions or
-   builds include this driver, and do they typically enable I2C_SLAVE?
-   I took a look at the SUSE kernel configs and we already have
-   I2C_SLAVE enabled on armv7 and arm64, so it will make no difference
-   there. Only our armv6 config includes this driver without I2C_SLAVE,
-   so that's the only one for which keeping the slave support optional
-   would help. My point is: you stated that you never used slave
-   support, and neither did I, but that's not really relevant. What is
-   relevant is whether kernels including these drivers are being built
-   with I2C_SLAVE or not in practice. If they are then it doesn't
-   matter if individual drivers go the conditional or unconditional
-   way, unless they add their own Kconfig option to explicitly enable
-   slave support (see below).
+  i2c i2c-0: Failed to register i2c client reserved at 0x40 (-16)
+  i2c_of: failure registering addr 0x40 for /ocp/i2c@48070000/des_0@30 (-16)
 
-2* More generally, how many drivers would benefit from your proposed
-   change? At the moment I count 8 drivers selecting I2C_SLAVE, 3 of
-   these have a separate Kconfig option for including slave support
-   which actually makes slave support optional too but in a different
-   way. 1 driver (i2c-slave-eeprom) depends on I2C_SLAVE, and 1 driver
-   (i2c-aspeed) has #ifdefs for optional slave support. So we have a
-   total of 6 drivers which support slave mode unconditionally and 4
-   drivers which have conditional support. That doesn't mean that they
-   are right doing what they do though. Their authors may have gone for
-   unconditional just because they don't like ifdefs, or they may have
-   gone for conditional to play it safe. I'm also wondering why the 3
-   drivers which have a dedicated Kconfig option
-   (I2C_AT91_SLAVE_EXPERIMENTAL, I2C_DESIGNWARE_SLAVE and
-   I2C_PXA_SLAVE) did it that way. Is it on purpose because they
-   actually want to be able to force slave mode off even if support is
-   available at i2c core level? Is it by politeness to not forcibly
-   enable slave mode as soon as the driver is enabled? It matters
-   because in the former case, your proposed change is of no interest to
-   them, while in the latter case it is.
+This is logged as an error, so I assumed probing had failed, instead it
+succeeded. This happens because the first loop iteration (on the first
+'reg') triggers the driver's probe(), which in my case calls
+i2c_new_ancillary_device() to register address 0x40. The second loop
+iteration finds 0x40 in DT and tries to register it as "reserved", but
+it fails. By design the loop continues successfully, but the (double)
+error printed is misleading.
 
-Unfortunately that's a lot of questions in the end and I do not know
-the answers nor am I willing to spend time finding them, sorry.
+Fixing the second error, which comes from the above loop, is easy:
 
-> The patch I sent was a suggestion to do it like that. If that's not
-> wanted I am fine with that and happily select CONFIG_I2C_SLAVE from the
-> driver entry in Kconfig, or better, suggest Biwen Li
-> (https://patchwork.kernel.org/patch/11271067/) to do this.
+ client = i2c_new_client_device(adap, &info);
+ if (IS_ERR(client)) {
+-	pr_err("failure registering addr 0x%02x for %pOF (%ld)\n",
+-		reg, node, PTR_ERR(client));
+ 	if (first_reg)
++		pr_err("failure registering addr 0x%02x for %pOF (%ld)\n",
++			reg, node, PTR_ERR(client));
+ 		return client;
+ }
 
-Well, there are advantages to both approaches, and without answers to
-the questions above, I see no reason to favor one or the other. In such
-situation I tend to stick to what we have. But of course the decision
-is Wolfram's not mine.
+The other error is produced in i2c_new_client_device() and I see no
+obvious way to put an if in front of the dev_err() except checking if
+client->name equals I2C_RESERVED_DRV_NAME.
 
 -- 
-Jean Delvare
-SUSE L3 Support
+Luca
