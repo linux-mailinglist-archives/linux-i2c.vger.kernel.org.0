@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F3A1A9AF8
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 12:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82C01A9AF7
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 12:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408837AbgDOKkW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 06:40:22 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:30736 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2408543AbgDOKY3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 06:24:29 -0400
+        id S2408832AbgDOKkK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 06:40:10 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:15310 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2408555AbgDOKYf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 06:24:35 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1586946264; h=References: In-Reply-To: Message-Id: Date:
+ s=smtp; t=1586946274; h=References: In-Reply-To: Message-Id: Date:
  Subject: Cc: To: From: Sender;
- bh=UHmbG4LfqhHV9oDAiwB048aBzokk4ajlnillzezvToc=; b=aX/jBPcgpwNbJ/sxuPxlTrgkGHtXnZww64hm1DbriUVpR9Gjfo/ta1+2N9QPGt1lIOfQ06tG
- uG4RO4H8r2LEFy0v/qOWpPKKj1HTvj9MUKxyWRAHW/GYs/JEJbe4l/IZ06dw6jdrQyZQ/Lka
- Xr0tNqb/Wc6Vs/8EWtvzvuuORyA=
-X-Mailgun-Sending-Ip: 104.130.122.26
+ bh=8IOcqCvPwawXRKfWomlx42mzQjBnaGjZZ0xUUJGP2mQ=; b=mr4bjF4B2a/nsaWFNqfajT0q6Y42AxeOtS9YMbxI7GPUsN3q5nXmJ9dTXgJd0TsNwFhFtXlE
+ 3MV6Nup0LRFj2cx/zyEEbfON0v2Nl6rRnYNtQOVGQg70lwjcbQE47oYE2sP6Eet5frpE0uw3
+ rFILITFuNlx76KYEB4xHyY6j2b8=
+X-Mailgun-Sending-Ip: 104.130.122.27
 X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
 Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e96e0ca.7f832cb47148-smtp-out-n01;
- Wed, 15 Apr 2020 10:24:10 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5e96e0d3.7fe88b2c9ce0-smtp-out-n03;
+ Wed, 15 Apr 2020 10:24:19 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4BF99C432C2; Wed, 15 Apr 2020 10:24:09 +0000 (UTC)
+        id 9DCDBC433F2; Wed, 15 Apr 2020 10:24:18 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -33,9 +33,9 @@ Received: from akashast-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-O
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 48D58C433CB;
-        Wed, 15 Apr 2020 10:24:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 48D58C433CB
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 30974C433CB;
+        Wed, 15 Apr 2020 10:24:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 30974C433CB
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
 From:   Akash Asthana <akashast@codeaurora.org>
@@ -48,9 +48,9 @@ Cc:     linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-serial@vger.kernel.org, mka@chromium.org,
         dianders@chromium.org, evgreen@chromium.org,
         Akash Asthana <akashast@codeaurora.org>
-Subject: [PATCH V4 2/9] interconnect: Set peak requirement as twice of average
-Date:   Wed, 15 Apr 2020 15:53:11 +0530
-Message-Id: <1586946198-13912-3-git-send-email-akashast@codeaurora.org>
+Subject: [PATCH V4 3/9] soc: qcom: geni: Support for ICC voting
+Date:   Wed, 15 Apr 2020 15:53:12 +0530
+Message-Id: <1586946198-13912-4-git-send-email-akashast@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1586946198-13912-1-git-send-email-akashast@codeaurora.org>
 References: <1586946198-13912-1-git-send-email-akashast@codeaurora.org>
@@ -59,46 +59,187 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Lot of ICC clients are not aware of their actual peak requirement,
-most commonly they tend to guess their peak requirement as
-(some factor) * avg_bw.
-
-Centralize random peak guess as twice of average, out into the core
-to maintain consistency across the clients. Client can always
-override this setting if they got a better idea.
+Add necessary macros and structure variables to support ICC BW
+voting from individual SE drivers.
 
 Signed-off-by: Akash Asthana <akashast@codeaurora.org>
 ---
- drivers/interconnect/core.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Changes in V2:
+ - As per Bjorn's comment dropped enums for ICC paths, given the three
+   paths individual members
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index f5699ed..ad3938e 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -516,6 +516,10 @@ EXPORT_SYMBOL_GPL(icc_set_tag);
-  * The @path can be NULL when the "interconnects" DT properties is missing,
-  * which will mean that no constraints will be set.
-  *
-+ * This function assumes peak_bw as twice of avg_bw, if peak_bw is not mentioned
-+ * explicitly by clients. Clients can pass peak_bw as 0 < peak_bw <=avg_bw to
-+ * make it a noops.
-+ *
-  * Returns 0 on success, or an appropriate error code otherwise.
-  */
- int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
-@@ -531,6 +535,12 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
- 	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
- 		return -EINVAL;
+Changes in V3:
+ - Add geni_icc_get, geni_icc_vote_on and geni_icc_vote_off as helper API.
+ - Add geni_icc_path structure in common header
+
+Changes in V4:
+ - As per Bjorn's comment print error message in geni_icc_get if return
+   value is not -EPROBE_DEFER.
+ - As per Bjorn's comment remove NULL on path before calling icc_set_bw
+   API.
+ - As per Bjorn's comment drop __func__ print.
+ - As per Matthias's comment, make ICC path a array instead of individual
+   member entry in geni_se struct.
+
+Note: I have ignored below check patch suggestion because it was throwing
+      compilation error as 'icc_ddr' is not compile time comstant.
+
+WARNING: char * array declaration might be better as static const
+ - FILE: drivers/soc/qcom/qcom-geni-se.c:726:
+ - const char *icc_names[] = {"qup-core", "qup-config", icc_ddr};
+
+
+ drivers/soc/qcom/qcom-geni-se.c | 61 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/qcom-geni-se.h    | 31 +++++++++++++++++++++
+ 2 files changed, 92 insertions(+)
+
+diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+index 7d622ea..1527bc4 100644
+--- a/drivers/soc/qcom/qcom-geni-se.c
++++ b/drivers/soc/qcom/qcom-geni-se.c
+@@ -720,6 +720,67 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+ }
+ EXPORT_SYMBOL(geni_se_rx_dma_unprep);
  
-+	/*
-+	 * Assume peak requirement as twice of avg requirement, if it is not
-+	 * mentioned explicitly.
-+	 */
-+	peak_bw = peak_bw ? peak_bw : 2 * avg_bw;
++int geni_icc_get(struct geni_se *se, const char *icc_ddr)
++{
++	int i, icc_err;
++	const char *icc_names[] = {"qup-core", "qup-config", icc_ddr};
 +
- 	mutex_lock(&icc_lock);
++	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
++		if (!icc_names[i])
++			continue;
++
++		se->icc_paths[i].path = devm_of_icc_get(se->dev, icc_names[i]);
++		if (IS_ERR(se->icc_paths[i].path))
++			goto icc_get_failure;
++	}
++
++	return 0;
++
++icc_get_failure:
++	icc_err = PTR_ERR(se->icc_paths[i].path);
++	if (icc_err != -EPROBE_DEFER)
++		dev_err_ratelimited(se->dev, "Failed to get path:%d, ret:%d\n",
++					i, icc_err);
++	return icc_err;
++
++}
++EXPORT_SYMBOL(geni_icc_get);
++
++int geni_icc_vote_on(struct geni_se *se)
++{
++	int i, ret;
++
++	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
++		ret = icc_set_bw(se->icc_paths[i].path,
++			se->icc_paths[i].avg_bw, se->icc_paths[i].peak_bw);
++		if (ret) {
++			dev_err_ratelimited(se->dev, "ICC BW voting failed on path:%d, ret:%d\n",
++					i, ret);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL(geni_icc_vote_on);
++
++int geni_icc_vote_off(struct geni_se *se)
++{
++	int i, ret;
++
++	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
++		ret = icc_set_bw(se->icc_paths[i].path, 0, 0);
++		if (ret) {
++			dev_err_ratelimited(se->dev, "ICC BW remove failed on path:%d, ret:%d\n",
++					i, ret);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL(geni_icc_vote_off);
++
+ static int geni_se_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
+index dd46494..b5b9316 100644
+--- a/include/linux/qcom-geni-se.h
++++ b/include/linux/qcom-geni-se.h
+@@ -6,6 +6,8 @@
+ #ifndef _LINUX_QCOM_GENI_SE
+ #define _LINUX_QCOM_GENI_SE
  
- 	old_avg = path->reqs[0].avg_bw;
++#include <linux/interconnect.h>
++
+ /* Transfer mode supported by GENI Serial Engines */
+ enum geni_se_xfer_mode {
+ 	GENI_SE_INVALID,
+@@ -25,6 +27,12 @@ enum geni_se_protocol_type {
+ struct geni_wrapper;
+ struct clk;
+ 
++struct geni_icc_path {
++	struct icc_path *path;
++	unsigned int avg_bw;
++	unsigned int peak_bw;
++};
++
+ /**
+  * struct geni_se - GENI Serial Engine
+  * @base:		Base Address of the Serial Engine's register block
+@@ -33,6 +41,7 @@ struct clk;
+  * @clk:		Handle to the core serial engine clock
+  * @num_clk_levels:	Number of valid clock levels in clk_perf_tbl
+  * @clk_perf_tbl:	Table of clock frequency input to serial engine clock
++ * @icc_paths:		Array of ICC paths for SE
+  */
+ struct geni_se {
+ 	void __iomem *base;
+@@ -41,6 +50,7 @@ struct geni_se {
+ 	struct clk *clk;
+ 	unsigned int num_clk_levels;
+ 	unsigned long *clk_perf_tbl;
++	struct geni_icc_path icc_paths[3];
+ };
+ 
+ /* Common SE registers */
+@@ -229,6 +239,21 @@ struct geni_se {
+ #define GENI_SE_VERSION_MINOR(ver) ((ver & HW_VER_MINOR_MASK) >> HW_VER_MINOR_SHFT)
+ #define GENI_SE_VERSION_STEP(ver) (ver & HW_VER_STEP_MASK)
+ 
++/*
++ * Define bandwidth thresholds that cause the underlying Core 2X interconnect
++ * clock to run at the named frequency. These baseline values are recommended
++ * by the hardware team, and are not dynamically scaled with GENI bandwidth
++ * beyond basic on/off.
++ */
++#define CORE_2X_19_2_MHZ		960
++#define CORE_2X_50_MHZ			2500
++#define CORE_2X_100_MHZ			5000
++#define CORE_2X_150_MHZ			7500
++#define CORE_2X_200_MHZ			10000
++#define CORE_2X_236_MHZ			16383
++
++#define GENI_DEFAULT_BW			Bps_to_icc(1000)
++
+ #if IS_ENABLED(CONFIG_QCOM_GENI_SE)
+ 
+ u32 geni_se_get_qup_hw_version(struct geni_se *se);
+@@ -416,5 +441,11 @@ int geni_se_rx_dma_prep(struct geni_se *se, void *buf, size_t len,
+ void geni_se_tx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len);
+ 
+ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len);
++
++int geni_icc_get(struct geni_se *se, const char *icc_ddr);
++
++int geni_icc_vote_on(struct geni_se *se);
++
++int geni_icc_vote_off(struct geni_se *se);
+ #endif
+ #endif
 -- 
 The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
