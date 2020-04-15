@@ -2,42 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 284641A993A
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 11:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62301A9979
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 11:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895788AbgDOJrC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 05:47:02 -0400
-Received: from sauhun.de ([88.99.104.3]:50536 "EHLO pokefinder.org"
+        id S2895962AbgDOJvG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 05:51:06 -0400
+Received: from sauhun.de ([88.99.104.3]:50644 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2895787AbgDOJrA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 15 Apr 2020 05:47:00 -0400
+        id S2895955AbgDOJvE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 15 Apr 2020 05:51:04 -0400
 Received: from localhost (p54B33507.dip0.t-ipconnect.de [84.179.53.7])
-        by pokefinder.org (Postfix) with ESMTPSA id 5E9472C1F58;
-        Wed, 15 Apr 2020 11:46:57 +0200 (CEST)
-Date:   Wed, 15 Apr 2020 11:46:57 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id EAF5A2C1F58;
+        Wed, 15 Apr 2020 11:51:01 +0200 (CEST)
+Date:   Wed, 15 Apr 2020 11:51:01 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Kieran Bingham <kieran@ksquared.org.uk>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-i3c@lists.infradead.org,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [RFC PATCH v2 2/6] i2c: allow DT nodes without 'compatible'
-Message-ID: <20200415094656.GE1141@ninjato>
-References: <20200318150059.21714-1-wsa+renesas@sang-engineering.com>
- <20200318150059.21714-3-wsa+renesas@sang-engineering.com>
- <74aa4084-588f-1b6f-2256-44588c48edf6@bingham.xyz>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans De Goede <hdegoede@redhat.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH 6/7] PM: sleep: core: Rename DPM_FLAG_LEAVE_SUSPENDED
+Message-ID: <20200415095101.GF1141@ninjato>
+References: <1888197.j9z7NJ8yPn@kreacher>
+ <11863688.3RhLv4JJn2@kreacher>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SNIs70sCzqvszXB4"
+        protocol="application/pgp-signature"; boundary="2FkSFaIQeDFoAt0B"
 Content-Disposition: inline
-In-Reply-To: <74aa4084-588f-1b6f-2256-44588c48edf6@bingham.xyz>
+In-Reply-To: <11863688.3RhLv4JJn2@kreacher>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -45,46 +44,42 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---SNIs70sCzqvszXB4
+--2FkSFaIQeDFoAt0B
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > Sometimes, we have unknown devices in a system and still want to block
-> > their address. For that, we allow DT nodes with only a 'reg' property.
-> > These devices will be bound to the "dummy" driver but with the name
-> > "reserved". That way, we can distinguish them and even hand them over to
-> > the "dummy" driver later when they are really requested using
-> > i2c_new_ancillary_device().
+On Fri, Apr 10, 2020 at 05:57:49PM +0200, Rafael J. Wysocki wrote:
+> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 >=20
-> Oh how I long to be able to give these 'identifiable names' within the
-> system, but that will probably mess up all the driver matching and
-> binding, so would be quite tricky perhaps.
+> Rename DPM_FLAG_LEAVE_SUSPENDED to DPM_FLAG_MAY_SKIP_RESUME which
+> matches its purpose more closely.
+>=20
+> No functional impact.
+>=20
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I haven't found a way yet to use 'name' to give more meaningful
-descriptions to dummies. My best bet so far is to use additional links
-in sysfs.
+Acked-by: Wolfram Sang <wsa@the-dreams.de> # for I2C
 
 
---SNIs70sCzqvszXB4
+--2FkSFaIQeDFoAt0B
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6W2AwACgkQFA3kzBSg
-KbZ74Q//XCUnM5Uqs3MGl93+zlEkU9qid076otxKrc7nkRrR4PlkbIAd6KTkD74F
-ElytalAQei2cjwYeI6rj6gNh1QgIFn5Fp7VE3cmu/QGVGksVNkPlonP+gjsxbvSp
-j+UWFHfi5FxKDgFPdj+0N9UjqsnhLu1zOyAiLw6IXJOSd8uyEX87MWx3Ga60tzwN
-QlZ1B/7Yn1Ysg0Xxtxmr1xtBm+9BzJh0zlBbgSvswju+qLzAVVImbT+WeNloVilz
-PPoynShY7BhHHxMyPX8cXUYD6z8x2OqCDhPQn4Z+rsnq78Oqx+zLr2k/4RylC1BZ
-xSYjqa77r79swX/pn42ycef9pWfuS3tKnja0hFEt3FdIFTW1bJwGDsV1/Q7HFrSL
-+z/ZB/+6EP5oHq95lKtWyaUohGSRjZiMTi2l5EuYW6hS5RyYBYMpHWjG22EwfqK/
-XiH/cPlD0FpEHem9TeiadOhH7DRKzZziLNLI9bNIL29jzQ3xu2LcPZUHp3zJvXD6
-aZoRH7JYWHoyXNrbS/EbPVNW7k4Q1ebgk3oTqz//BUjzqAciLnj6ZMWgqvDGt2ig
-XV1SMC20tyS2NlR6gvGt2tj9y3PEnAUJMHJgIXCv9tIvCRUmBsSBO5BRuc3hc5sO
-+0+tMY/luasA3dfosRj5qwt46+zTB0YKYMRumDhBKmpFB1K5hvU=
-=XY5W
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6W2QUACgkQFA3kzBSg
+KbYLYA//dnjtvhFJWFAsMwE9BkNYmyzOvIsFhJy350O1uwA1j96UNz+9wzWPjHFa
+rUERnUkp16CWA7Na2XRCXTyyk22YwRxqg7pUixYLbCEItXS23jsPl/llXrmK2fjA
+Nmm6XQZfR8jtJYFJKTemE90E0TNgSKMJ6G/Rlinxxlv6bQFSS5fSeScf/gW+R4q5
+wfP+kWWiBxu0sA06TzeHln0CJIk3X+yd7HdkrwrdzUU7np6Zs1nxJ+Fp2BTZ+4VL
+RDOMKkKAcrAxNIW1W7qhWVKx3AOy1BJZXyCvIFTYjmbiSCeGH2E5PbyIreiyhVhp
+E37t3zlYXu2oCkirgF8qYurtUvZnvji7sYJzqDkrY0i5YUOXgLQG/J31kyZ88Fui
+72rWWIPnD6QUZtjo+KvyUtfbk9NhbWTo+/vKVqDo9lJPgwtpMmsmnhKyVPCgOlH8
+IDKZa8bDsYn6yjjzCFh1lW0Pa+H2a++mu56K7nKHXw0XlApez2jYw7i4stFPUi4T
+HVoTmKVSIJj95JUvkBiliO9b8WOf0xuPgjTvAgkb5Z3vBy3rhVOFu/d3TECeXr1E
+oXuBs5c7T2TCh8fNn5HYkFwtY69V3/MjG+tiHAl1a02lxxJ6cZUm8/1X0i0LaiW5
+4HX5suaNxl96rgvGaAZF51jYiZITdUGuWirGA3rpBQRTrnujlJI=
+=03Jn
 -----END PGP SIGNATURE-----
 
---SNIs70sCzqvszXB4--
+--2FkSFaIQeDFoAt0B--
