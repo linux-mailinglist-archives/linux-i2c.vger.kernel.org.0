@@ -2,88 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 920021A9BA4
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 13:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EDA1A9BB7
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 13:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393912AbgDOLCU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 07:02:20 -0400
-Received: from sauhun.de ([88.99.104.3]:52524 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2896701AbgDOLBy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:01:54 -0400
-Received: from localhost (p54B33507.dip0.t-ipconnect.de [84.179.53.7])
-        by pokefinder.org (Postfix) with ESMTPSA id DB0512C1FF1;
-        Wed, 15 Apr 2020 13:01:45 +0200 (CEST)
-Date:   Wed, 15 Apr 2020 13:01:45 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Alain Volmat <alain.volmat@st.com>
-Cc:     pierre-yves.mordret@st.com, alexandre.torgue@st.com,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@st.com
-Subject: Re: [PATCH] i2c: stm32: don't print an error on probe deferral
-Message-ID: <20200415110145.GN1141@ninjato>
-References: <1584642136-15418-1-git-send-email-alain.volmat@st.com>
+        id S2896715AbgDOLFu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 07:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408842AbgDOLDn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 07:03:43 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E473AC061A10
+        for <linux-i2c@vger.kernel.org>; Wed, 15 Apr 2020 04:03:42 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id h2so16882964wmb.4
+        for <linux-i2c@vger.kernel.org>; Wed, 15 Apr 2020 04:03:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=0+mvRsViHtX7K9QeV8vxa3vsUkNlZfKOjncMUliYwFY=;
+        b=xBGqeqRbPXVWiiUbxgEhXzqhm8+4utoknFiMQ2GeDoSoaq957UF0r5Ozhe/ePFxylV
+         grOY7YQfUk2VucGAYiFwQCYWegigxHFgD+PUetMbxEgta+wz4wP0G35R0++BYc1bbvsn
+         hG7GWkJn884XbfqytX4RFrFw5VSp/Ekt1aYTGKOzPqkeMR7Km73j1Gpb1gvcYG0QnqX1
+         mhlUBbYGEwQGSs4bRkTeacdvsq1UBtgangAcQSnvQdJNbdyUkA4RsHnYBhyrr+6VMCqq
+         4MoCPuQZclf/dkJJDRe9T3K3KS5EEjo7EbqK1YwZEEGkbnhaN344JYz9yKgl7BhKnGTW
+         rrIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=0+mvRsViHtX7K9QeV8vxa3vsUkNlZfKOjncMUliYwFY=;
+        b=nWwmSC6tw+eKw//xk6jnmcUe+7U8h/fY3sbY9dEEm+ja3y653BFxuTx60ONRgOOWJT
+         eJQIiGh1TBLNqqrtSH+iftqtSbA72Kw0MaQRSXzid99tr0fqIdegZoqS870nmdXVfhsI
+         hfnV5TyY8SyfZM0YQCdiCWSKODGt3VzmZmtEAvVqAJTsSiZAirshU6Btwu87f1FEgvUH
+         c+hS1acdyum+GeacEK+F4UgvM33Ie85A+lbkdJrRpQ1G4Fmp4MBeN18rEyplIzeTQGvT
+         GzeuMiD/Du023VaEXUmddS0feYsOjSXMC5FcFNo+aP51YS7bkReg+ZIZ9fvTzDbLGSD6
+         fRng==
+X-Gm-Message-State: AGi0PuYl2ds1G07eVVgNPoIHT2y51bs2Qq6rcwOJRhP74jFno4n7Db42
+        eCV+Hr39Cph1aGwC8zmBM9TuCtK/HQE=
+X-Google-Smtp-Source: APiQypKYzMGWG+zMXscvJ4uCuaA8QuvLPgqp0ZkOm8oeOQzmEuU0a08KKg1p2ijuDQzlljeF//y0+A==
+X-Received: by 2002:a1c:4c10:: with SMTP id z16mr4716740wmf.77.1586948621597;
+        Wed, 15 Apr 2020 04:03:41 -0700 (PDT)
+Received: from dell ([95.149.164.124])
+        by smtp.gmail.com with ESMTPSA id u30sm2531311wru.13.2020.04.15.04.03.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2020 04:03:41 -0700 (PDT)
+Date:   Wed, 15 Apr 2020 12:04:42 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] mfd: htc-i2cpld: convert to use
+ i2c_new_client_device()
+Message-ID: <20200415110442.GK2167633@dell>
+References: <20200326211009.13411-1-wsa+renesas@sang-engineering.com>
+ <20200326211009.13411-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ggdAeHltlv4tpqCr"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1584642136-15418-1-git-send-email-alain.volmat@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200326211009.13411-2-wsa+renesas@sang-engineering.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, 26 Mar 2020, Wolfram Sang wrote:
 
---ggdAeHltlv4tpqCr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Move away from the deprecated API and return the shiny new ERRPTR where
+> useful.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/mfd/htc-i2cpld.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
->  	if (IS_ERR(dma->chan_tx)) {
-> -		dev_dbg(dev, "can't request DMA tx channel\n");
->  		ret =3D PTR_ERR(dma->chan_tx);
-> +		if (ret !=3D -EPROBE_DEFER)
-> +			dev_dbg(dev, "can't request DMA tx channel\n");
+Applied, thanks.
 
-dev_dbg for tx...
-
->  		goto fail_al;
->  	}
-> =20
-> @@ -44,8 +45,10 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct dev=
-ice *dev,
->  	/* Request and configure I2C RX dma channel */
->  	dma->chan_rx =3D dma_request_chan(dev, "rx");
->  	if (IS_ERR(dma->chan_rx)) {
-> -		dev_err(dev, "can't request DMA rx channel\n");
->  		ret =3D PTR_ERR(dma->chan_rx);
-> +		if (ret !=3D -EPROBE_DEFER)
-> +			dev_err(dev, "can't request DMA rx channel\n");
-
-=2E.. and dev_err for rx? Intentional?
-
-
---ggdAeHltlv4tpqCr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6W6ZkACgkQFA3kzBSg
-KbaJ5g//Z4m5gD84GPP6vg6sSjL/LyJ6CZd/w08+hP95Uk1K82LELeWPmlaK1ibg
-vSJRO8GeZLYFOYY8LgLc7rzQkHpkvB9xN2TW1wzZlAycvsjBvQtg5Ka1hHfASRuW
-vR90ZA8G9eV5x8mpjEzNLEshHh4vkQlQjzgoO80v/r9ssHKHLDCwn0LAVr0hUEtR
-ewHUTG8UwBsUguxGbnOwmiSdICGw/F46P2i+9LHLgp/2r6QYnjA7f31dWZ8hTOsR
-HExpW9MoEmA9Kz4WeiNrSof/YXKh8I2z1ONzyeRDk+0IuBpHdF9MmY/Lb3wuQB2t
-k9Vx4MF+2uBYS8R/Tv2ivxjxFmh74Zo2tCMXAj1P/AXhXlMtABXTCWNnmREyz4pe
-lgskBVxJtwgybB+2r9RjWBE1uysnlG6GEJe82JP+yhPZfA8huDIGSG63+t5KVE5Y
-LpcWFfEtXiPio2dvsOYCif4kHaCM0eARpY+83NwAokleUbIsovR2jDvvX3IJMtRt
-SZWbMsW99eClAhSfLpxxA24OpgJoXRyhrhKqLPPil9/NucxWNgU1SbRqdmaA4LK2
-inY4gaMa7Nixi1+4efMZYKl+Jqm6z2ayVhjZqONCu57lpoHFx9/wzQtLoOihyBT/
-kObtfYnDh30/N8/6Btj9vpb5pA3NBMLuOKacj9sKZXdA5ipEGNQ=
-=mwAo
------END PGP SIGNATURE-----
-
---ggdAeHltlv4tpqCr--
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
