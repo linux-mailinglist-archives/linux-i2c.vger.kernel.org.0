@@ -2,92 +2,136 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A5F1A9126
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 04:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8701F1A924C
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 07:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729321AbgDOCyc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 Apr 2020 22:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S2393245AbgDOFQY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 01:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727839AbgDOCya (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Apr 2020 22:54:30 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DDAC061A0C;
-        Tue, 14 Apr 2020 19:54:29 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id m16so722254pls.4;
-        Tue, 14 Apr 2020 19:54:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=w/ObdyZe4SYG+GH7RWaWC1pUzVlokN24AFVwo6IaPaI=;
-        b=Kp+mBxf2fNINBhbwQWCKOZAD5VoFyYa7d66LOf524g5ye4u9NKUoyOc81NsFILYD/u
-         gPF8ritxsYzD9aLSGnmDeqeN66slmkDVnGqok3i2R/bJLhXRAnrFYYnRyjTCqp3gkdMZ
-         0pJv53bbzRVLVv7gFQLW7y2VnaMLadI6gRzt5KgQlnWR+i38rf2bS4Z1XsqkhoxdX0vG
-         aWlOZ9dhfgIoPFCgOpM6azK8iRONiRv5ze+lqrJ0282/hG5hmKuJRDJivo6bFytre6No
-         mnpzBUTEvuJMavD8VPgAlUIJXD0LSu0fSITiZNc0eMN1OlQ9ekbw0F5QuSWkskB1eaYW
-         EIng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=w/ObdyZe4SYG+GH7RWaWC1pUzVlokN24AFVwo6IaPaI=;
-        b=ocUSyidBrOYaPLdhcZ6ZZ8qYHXPfj9nennzbW7oRJ0UsFUpwC8NIGltcIxpe16tTP7
-         UJCOozvKdMpVyGsJHLtbGkn6G4vi4LO0cBz5oegCVY8XLf90k5O/mgIo51FJvGoidCkH
-         43domTGGSBeuy5e4FQQN3kbT1nDq7hjPVRNSliDI0Wvb77zwHJjGtueDWMVa+xaN+/Kk
-         2VHncG45g+oR2i+lm0Zs95vpFLRv6BT5dsKxVCnVQvU+tf3pkzYsvUHhp7WXLHPOtJqj
-         gFbXXD6QbOI8pncZV3z6iZLyrei0+jgGdx8prZpRDxl2BirOPiISyMWk9PflBkKjDXEM
-         voaA==
-X-Gm-Message-State: AGi0PuaQKsbWwWklefJptW9dk9HtgAyD/dIOwdJB9+xcm9gxRcNaoRw7
-        MbVGxYgRjdPwuXTXrDMOY0Y=
-X-Google-Smtp-Source: APiQypJnPJv53UlIGNvRX9jheZlHTaxQ05f+cPcg6FOMpCteH6TPHZwCBybS1X+TqkslpYskeJw9Jg==
-X-Received: by 2002:a17:90a:c401:: with SMTP id i1mr3513270pjt.131.1586919269043;
-        Tue, 14 Apr 2020 19:54:29 -0700 (PDT)
-Received: from localhost (89.208.244.140.16clouds.com. [89.208.244.140])
-        by smtp.gmail.com with ESMTPSA id y18sm12100818pfe.82.2020.04.14.19.54.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 14 Apr 2020 19:54:28 -0700 (PDT)
-Date:   Wed, 15 Apr 2020 10:54:26 +0800
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Allison Randal <allison@lohutok.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Shah Nehal-Bakulchandra <Nehal-bakulchandra.Shah@amd.com>,
-        Tang Bin <tangbin@cmss.chinamobile.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v1] i2c: img-scb: remove duplicate dev_err()
-Message-ID: <20200415025426.GB14300@nuc8i5>
-References: <08564c03-3bbd-5518-1a9d-a40b8ca09f48@web.de>
+        with ESMTP id S2393255AbgDOFQX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 01:16:23 -0400
+X-Greylist: delayed 62419 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Apr 2020 22:16:22 PDT
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FB4C061A0C
+        for <linux-i2c@vger.kernel.org>; Tue, 14 Apr 2020 22:16:22 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jOaPM-0003Vy-AM; Wed, 15 Apr 2020 07:16:20 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jOaPL-0005fX-7h; Wed, 15 Apr 2020 07:16:19 +0200
+Date:   Wed, 15 Apr 2020 07:16:19 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        Biwen Li <biwen.li@nxp.com>
+Subject: Re: [PATCH] i2c: avoid ifdeffery in I2C drivers with optional slave
+ support
+Message-ID: <20200415051619.GP27288@pengutronix.de>
+References: <20191204095348.9192-1-s.hauer@pengutronix.de>
+ <20200409134027.GB1136@ninjato>
+ <20200410112914.67a68e32@endymion>
+ <20200414115600.GM27288@pengutronix.de>
+ <20200414164009.53e70067@endymion>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <08564c03-3bbd-5518-1a9d-a40b8ca09f48@web.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200414164009.53e70067@endymion>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 07:00:20 up 55 days, 12:30, 71 users,  load average: 0.35, 0.15,
+ 0.11
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 05:48:41PM +0200, Markus Elfring wrote:
-> > it will print an error message by itself when platform_get_irq()
-> > goes wrong. so don't need dev_err() in here again.
+On Tue, Apr 14, 2020 at 04:40:09PM +0200, Jean Delvare wrote:
+> On Tue, 14 Apr 2020 13:56:00 +0200, Sascha Hauer wrote:
+> > On Fri, Apr 10, 2020 at 11:29:14AM +0200, Jean Delvare wrote:
+> > > More importantly I can't see how the ifdef'd members of struct
+> > > i2c_algorithm are the cause of the problem mentioned by Sascha. He
+> > > seems to be concerned by drivers with *optional* I2C slave support
+> > > having ifdefs. Why can't this be solved in these drivers directly? What
+> > > prevents these drivers from unconditionally selecting I2C_SLAVE if that
+> > > makes their code more simple? This moves the overhead decision to the
+> > > device driver instead of forcing it to the whole subsystem across all
+> > > architectures.  
+> > 
+> > The drivers could select I2C_SLAVE when they have I2C slave support and
+> > in fact some drivers do this already. This means that we have the
+> > overhead of unneeded I2C slave support when we need that driver in the
+> > Kernel.
 > 
-> I suggest to improve the change description.
-> Can you get any further inspiration by previous patches from
-> other contributors according to the presented transformation pattern?
+> I can't make sense of this statement, sorry. How is I2C slave support
+> "unneeded" if your kernel includes at least one kernel which needs it?
+
+I never used I2C slave 
 > 
-> Would you like to adjust any more source files in the mentioned
-> software area?
->
-Hi Markus:
+> It is true that I2C slave support is included in the kernel code as
+> soon as any driver selects I2C_SLAVE, even if that driver is not
+> currently loaded. The only way around that would be to move the common
+> code for it to a separate module and all specific members to different,
+> dedicated structures. But that would in turn cause more overhead for
+> people who need slave support. The current implementation is the result
+> of a trade-off decision I made back then. It is the same design goal
+> which explains why I2C_SMBUS is a separate option: many system classes
+> do not need it and I did not want to waste memory on these. The
+> difference of I2C_SMBUS is that it was large and isolated enough to
+> warrant a separate kernel module altogether.
+> 
+> > I just thought it would be nice to have I2C slave support optional while
+> > still allowing to avoid ifdefs in the driver. Particularly this doesn't
+> > look nice:
+> > 
+> >  static const struct i2c_algorithm i2c_imx_algo = {
+> >         .master_xfer    = i2c_imx_xfer,
+> >         .functionality  = i2c_imx_func,
+> > +#if IS_ENABLED(CONFIG_I2C_SLAVE)
+> > +       .reg_slave      = i2c_imx_reg_slave,
+> > +       .unreg_slave    = i2c_imx_unreg_slave,
+> > +#endif
+> > }
+> 
+> Probably a matter of taste, personally I see nothing wrong with it.
+> 
+> > 
+> > The implementation of these functions need ifdefs as well and compile
+> > coverage gets worse.
+> 
+> Sorry but you lost me here. How can I2C slave support be "optional" and
+> at the same time going without ifdefs?
 
-Thanks for your comments, and maybe we can use coccinelle tools for
-more source files do this change in the mentioned software area.
+static int i2c_imx_reg_slave(struct i2c_client *client)
+{
+	if (!IS_ENABLED(CONFIG_I2C_SLAVE))
+		return -ESOMETHING;
+	...
+}
 
-BR,
-Dejin
-> Regards,
-> Markus
+The code is gone without CONFIG_I2C_SLAVE enabled, yet the compile coverage
+is there.
+
+The patch I sent was a suggestion to do it like that. If that's not
+wanted I am fine with that and happily select CONFIG_I2C_SLAVE from the
+driver entry in Kconfig, or better, suggest Biwen Li
+(https://patchwork.kernel.org/patch/11271067/) to do this.
+
+Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
