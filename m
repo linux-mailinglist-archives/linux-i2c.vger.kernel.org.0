@@ -2,92 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1E31AA9F1
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 16:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6518B1AAAD4
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 16:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394055AbgDOObo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 10:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2392092AbgDOObk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 10:31:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665ABC061A0C
-        for <linux-i2c@vger.kernel.org>; Wed, 15 Apr 2020 07:31:40 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jOj4i-0001Jj-5x; Wed, 15 Apr 2020 16:31:36 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jOj4f-0000B7-TU; Wed, 15 Apr 2020 16:31:33 +0200
-Date:   Wed, 15 Apr 2020 16:31:33 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     wsa@the-dreams.de, o.rempel@pengutronix.de, ardb@kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Shengju Zhang <zhangshengju@cmss.chinamobile.com>
-Subject: Re: [PATCH] i2c: drivers: Avoid unnecessary check in
- efm32_i2c_probe()
-Message-ID: <20200415143133.qwbes5whbqx5jf2j@pengutronix.de>
-References: <20200415140640.19948-1-tangbin@cmss.chinamobile.com>
+        id S2392437AbgDOOss (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 10:48:48 -0400
+Received: from mga01.intel.com ([192.55.52.88]:41552 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392410AbgDOOsp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 15 Apr 2020 10:48:45 -0400
+IronPort-SDR: jefzAtyNPL2aFyVrvRT4e7yJrX7r9F+D1+SkvZdivh5JUIpbhQN/4A4Qpf9GflZqJcycsHbtZ+
+ kE2/qp1oas7w==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2020 07:48:45 -0700
+IronPort-SDR: Ct+IUwSGgAHbIlBIsSHS/DO1ZvO27X+izHK9V+e0OvPxSWtH0hx2p674/R+uEMck4VV11oc3bk
+ D0H7RVajU8uQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,387,1580803200"; 
+   d="scan'208";a="244119198"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Apr 2020 07:48:44 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jOjLL-000oCm-33; Wed, 15 Apr 2020 17:48:47 +0300
+Date:   Wed, 15 Apr 2020 17:48:47 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH v2 1/4] i2c: mux: pca954x: Refactor pca954x_irq_handler()
+Message-ID: <20200415144847.GL185537@smile.fi.intel.com>
+References: <20200316160724.37596-1-andriy.shevchenko@linux.intel.com>
+ <20200325214316.GJ1922688@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200415140640.19948-1-tangbin@cmss.chinamobile.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20200325214316.GJ1922688@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello,
-
-On Wed, Apr 15, 2020 at 10:06:40PM +0800, Tang Bin wrote:
-> The function efm32_i2c_probe() is only called with an
-> openfirmware platform device.Therefore there is no need
-> to check that it has an openfirmware node.
+On Wed, Mar 25, 2020 at 11:43:16PM +0200, Andy Shevchenko wrote:
+> On Mon, Mar 16, 2020 at 06:07:21PM +0200, Andy Shevchenko wrote:
+> > Refactor pca954x_irq_handler() to:
+> >   - use for_each_set_bit() macro
+> >   - use IRQ_RETVAL() macro
+> > 
+> > Above change makes code easy to read and understand.
 > 
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-> Signed-off-by: Shengju Zhang <zhangshengju@cmss.chinamobile.com>
+> Peter, does this series good in your opinion?
 
-Same things apply as in the previous patch. (space after punctuation,
-Sob of sender should be last)
+Peter, Wolfram, this missed previous cycle, any work needs to be done?
 
-> ---
->  drivers/i2c/busses/i2c-efm32.c | 3 ---
->  1 file changed, 3 deletions(-)
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> > v2: masked pending to prevent handling of spurious IRQs (Peter)
+> >  drivers/i2c/muxes/i2c-mux-pca954x.c | 17 +++++++----------
+> >  1 file changed, 7 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> > index a0d926ae3f86..b764c7c746e9 100644
+> > --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
+> > +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> > @@ -327,21 +327,18 @@ static DEVICE_ATTR_RW(idle_state);
+> >  static irqreturn_t pca954x_irq_handler(int irq, void *dev_id)
+> >  {
+> >  	struct pca954x *data = dev_id;
+> > -	unsigned int child_irq;
+> > -	int ret, i, handled = 0;
+> > +	unsigned long pending;
+> > +	int ret, i;
+> >  
+> >  	ret = i2c_smbus_read_byte(data->client);
+> >  	if (ret < 0)
+> >  		return IRQ_NONE;
+> >  
+> > -	for (i = 0; i < data->chip->nchans; i++) {
+> > -		if (ret & BIT(PCA954X_IRQ_OFFSET + i)) {
+> > -			child_irq = irq_linear_revmap(data->irq, i);
+> > -			handle_nested_irq(child_irq);
+> > -			handled++;
+> > -		}
+> > -	}
+> > -	return handled ? IRQ_HANDLED : IRQ_NONE;
+> > +	pending = (ret >> PCA954X_IRQ_OFFSET) & (BIT(data->chip->nchans) - 1);
+> > +	for_each_set_bit(i, &pending, data->chip->nchans)
+> > +		handle_nested_irq(irq_linear_revmap(data->irq, i));
+> > +
+> > +	return IRQ_RETVAL(pending);
+> >  }
+> >  
+> >  static int pca954x_irq_set_type(struct irq_data *idata, unsigned int type)
+> > -- 
+> > 2.25.1
+> > 
 > 
-> diff --git a/drivers/i2c/busses/i2c-efm32.c b/drivers/i2c/busses/i2c-efm32.c
-> index 4de31fae7..4786ef6b2 100644
-> --- a/drivers/i2c/busses/i2c-efm32.c
-> +++ b/drivers/i2c/busses/i2c-efm32.c
-> @@ -312,9 +312,6 @@ static int efm32_i2c_probe(struct platform_device *pdev)
->  	int ret;
->  	u32 clkdiv;
->  
-> -	if (!np)
-> -		return -EINVAL;
-> -
-
-I don't care much about this change. While the statement that this
-driver is only instantiated on dt platforms is probably right,
-explicitly checking for it might still prevent surprises later, serves
-as explicit statement for the driver reader that non-dt isn't supposed
-to work and given that the check is cheap I tend slightly to just keep
-it.
-
-Best regards
-Uwe
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
 
 -- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+With Best Regards,
+Andy Shevchenko
+
+
