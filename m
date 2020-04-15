@@ -2,37 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1DE1A9BCA
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 13:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5ED81A9BE7
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 13:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393931AbgDOLJ3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 07:09:29 -0400
-Received: from sauhun.de ([88.99.104.3]:52766 "EHLO pokefinder.org"
+        id S2896814AbgDOLNP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 07:13:15 -0400
+Received: from sauhun.de ([88.99.104.3]:52850 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393925AbgDOLJS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:09:18 -0400
+        id S2896802AbgDOLM5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:12:57 -0400
 Received: from localhost (p54B33507.dip0.t-ipconnect.de [84.179.53.7])
-        by pokefinder.org (Postfix) with ESMTPSA id 958422C1FF1;
-        Wed, 15 Apr 2020 13:09:16 +0200 (CEST)
-Date:   Wed, 15 Apr 2020 13:09:16 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id C08EA2C1FF1;
+        Wed, 15 Apr 2020 13:12:55 +0200 (CEST)
+Date:   Wed, 15 Apr 2020 13:12:55 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Alain Volmat <alain.volmat@st.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
-        pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@st.com
-Subject: Re: [PATCH v2 2/2] i2c: i2c-stm32f7: allows for any bus frequency
-Message-ID: <20200415110916.GO1141@ninjato>
-References: <1585226661-26262-1-git-send-email-alain.volmat@st.com>
- <1585226661-26262-3-git-send-email-alain.volmat@st.com>
+To:     Aishwarya R <aishwaryarj100@gmail.com>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <rfontana@redhat.com>,
+        linux-i2c@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: powermac: Simplify reading the "reg" and
+ "i2c-address" property
+Message-ID: <20200415111255.GP1141@ninjato>
+References: <20200408100354.17782-1-aishwaryarj100@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Iys0Un1O+0sigPHU"
+        protocol="application/pgp-signature"; boundary="mejza3ZMMA5Za1mX"
 Content-Disposition: inline
-In-Reply-To: <1585226661-26262-3-git-send-email-alain.volmat@st.com>
+In-Reply-To: <20200408100354.17782-1-aishwaryarj100@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -40,65 +41,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Iys0Un1O+0sigPHU
+--mejza3ZMMA5Za1mX
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Alain,
-
-On Thu, Mar 26, 2020 at 01:44:21PM +0100, Alain Volmat wrote:
-> Do not limitate to the 3 (100KHz, 400KHz, 1MHz) bus frequency but
-> instead allows any frequency (if it matches timing requirements).
-> Depending on the requested frequency, use the spec data from either
-> Standard, Fast or Fast Plus mode.
+On Wed, Apr 08, 2020 at 03:33:53PM +0530, Aishwarya R wrote:
+> Use of_property_read_u32 to read the "reg" and "i2c-address" property
+> instead of using of_get_property to check the return values.
 >=20
-> Hardcoding of min/max bus frequencies is removed and is instead computed.
->=20
-> The driver do not use anymore speed identifier but instead handle
-> directly the frequency and figure out the spec data (necessary
-> for the computation of the timing register) based on the frequency.
+> Signed-off-by: Aishwarya R <aishwaryarj100@gmail.com>
 
-Useful improvement!
-
-> +static struct stm32f7_i2c_spec *get_specs(u32 rate)
-
-This is quite a generic namespace. Can we prefix stm32f7_<sth> here?
-
-> +		if (rate <=3D i2c_specs[i].rate)
-> +			return &i2c_specs[i];
-
-Same for i2c_specs here?
-
-> +static u32 get_lower_rate(u32 rate)
-
-Here, too.
-
-Rest looks good to me.
-
-Regards,
-
-   Wolfram
+This is quite a fragile driver. Have you tested it on HW?
 
 
---Iys0Un1O+0sigPHU
+--mejza3ZMMA5Za1mX
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6W61wACgkQFA3kzBSg
-KbZhDA//QrjQyZGByv+sQkmvBPGnIsAXz2Nca2UGy56ln4/UAfHo1NvwTx3mqBJ3
-ovBURYObhG5pCwDi0hi/T0jQTXjTHy5KsA/F/OoF/KnJwruXcUa+vLGfcWztPc3c
-B/n22uncMOcZ84AadcTWe6wBQOQojeV25sEjfkSMMuFvfzRM/r5NXARqxDdIqsV0
-lEtTPBe6ol9wwAZJwYZR3ErrDkic3GBE9aMP8TQzfvsvmMgN/qBWlSEI5Sp9930e
-XSVymfMPebXhdUH6cbfTUZ8S+0+c5i/l3KA/BpV1weltc/EueYz9HH/fCsF2FHNW
-5RNWV9XHSzkhe0f9ryVPmuNuTFNz9/GRzR1TIio3n/VTemC7cZxCVUQo5VURHWc0
-D87DMgOz5dFL48zHLessi8n8/vOpOpweDgMHtPfYzEsIfZIRCjJxXEO+QIMD7cSp
-PT26ks9/zK36lqydCx6Jpo1TLTDNlr/dJY8ag6iQjjSWgxQxm354yFTavOds15Ua
-i1bGeKwYXkhFyH/TsnzX0I503nQpebW+StiPCIUOnKWS5pWA/8YvDVOAdAULOp0s
-pJags5YBAv0Bd8v/mCVnbbzUKXbTuZDIT2f1rbQxl2T4//AfeLhMJ5UPVmczr4DH
-08VuS7rAy0VGCvxXrWnoBgcR99qkXG8jHyecTgZzVVPHLVLT5uo=
-=rnTO
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6W7DcACgkQFA3kzBSg
+KbbKcg/+LuL3CQDRqRDK5QM2XE52jwFinJ8KZNx2KhKdg3UvWQMcWqt+V0ZvVy0F
+NTo355uvwsvO9dtuemowZmBP6QgS6SPBWktIpn7FX73l5CCx4YT9J/LsHYnJOoCR
+2xm3Ai02XtRv3cB6E9jCKXqLz1gxKdmQVDmVcjODqiqDjzppgXuQhsEDeTb6/jpK
+6Blt2slVkB2GYEakAuV5+4lLXdAFb7Gl1+VIGxnBYz0H5eGdzU/i3TC5Zbr3FFWT
+tjaFJmnQIPQc9kjw2vXy/UZagb3KQ+9nJe1/55iF9VyaA8u7wpS8dPBwXLuKuqX9
+PrHffSmjd7MIVvMXEVq/lh3z3cxk4eFKz8uCh+XYBPFVDpTfyupZoa2mxZHqPk4E
+WxpRhoSRY7rG/GyO8dGaMfQdYL+9mX+tDI8is3U4gfUPXqaaTRogZ/85T0Y7rZIN
+xs2IO8SC/e8TAQqQ1SbH4oErJk4QjyK9n+YprFiirsm28U8D0FD7/Kiy8nFny/17
+4j8DB2xTwtyZyVg8OjPojUm00XEPGZEUFdsYgxUW5nesk+lZkDvlVAWgUg0v9rWO
+BjM+OWhc3ShIar6Wp2W8Zog18i5ds4wTYNqMPjI8VUv9muuYxMOUdZGD/oUKcylf
+rMBsGgX0hoTe6KVyd+MP9ER4nhckHKMgemOKQJuF14sFRUi8Ri4=
+=XD4D
 -----END PGP SIGNATURE-----
 
---Iys0Un1O+0sigPHU--
+--mejza3ZMMA5Za1mX--
