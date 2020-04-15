@@ -2,112 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6518B1AAAD4
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 16:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7525A1AABC9
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 17:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392437AbgDOOss (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 10:48:48 -0400
-Received: from mga01.intel.com ([192.55.52.88]:41552 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392410AbgDOOsp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 15 Apr 2020 10:48:45 -0400
-IronPort-SDR: jefzAtyNPL2aFyVrvRT4e7yJrX7r9F+D1+SkvZdivh5JUIpbhQN/4A4Qpf9GflZqJcycsHbtZ+
- kE2/qp1oas7w==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2020 07:48:45 -0700
-IronPort-SDR: Ct+IUwSGgAHbIlBIsSHS/DO1ZvO27X+izHK9V+e0OvPxSWtH0hx2p674/R+uEMck4VV11oc3bk
- D0H7RVajU8uQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,387,1580803200"; 
-   d="scan'208";a="244119198"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga007.fm.intel.com with ESMTP; 15 Apr 2020 07:48:44 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jOjLL-000oCm-33; Wed, 15 Apr 2020 17:48:47 +0300
-Date:   Wed, 15 Apr 2020 17:48:47 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [PATCH v2 1/4] i2c: mux: pca954x: Refactor pca954x_irq_handler()
-Message-ID: <20200415144847.GL185537@smile.fi.intel.com>
-References: <20200316160724.37596-1-andriy.shevchenko@linux.intel.com>
- <20200325214316.GJ1922688@smile.fi.intel.com>
+        id S2506426AbgDOPVX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 11:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730523AbgDOPVT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 11:21:19 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89402C061A0C;
+        Wed, 15 Apr 2020 08:21:19 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id m21so86800pff.13;
+        Wed, 15 Apr 2020 08:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=TD9EaFwapyU2qSwmdAV+2CcChhngrjdNFxDFbshTLXA=;
+        b=nQHhm9l0ZNDWXaN7XXaFI3qlDCdhj8NSO7ZSm5fruqQmQW35do2FunBnlQqUoynJml
+         7c2e+uR7F5xBGen8y2W06zeVM+vbgiJuapzRa0i1IeesJBckwdtEsqD+gdJsKG4IZpk0
+         RhNDLBLzurg6NM2ytlqjt95twMYWiOB+9A+aocJPVbXqlOBHVj+ASQlLntCHK35sAK2w
+         TexAvRixKW3S11SuhrEwLARj4ngTjZxNZTXrlPR304t4pU9GUpmrTEUNshD8igo83tzB
+         /QouN+mwg+vZcYCxQVOYSsC5R8EhMINpUIR67WBOFf9Ne5BXgQGkUVqXDfewT3bBo1En
+         GiwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=TD9EaFwapyU2qSwmdAV+2CcChhngrjdNFxDFbshTLXA=;
+        b=qWEPaqRU1Ugj5BzH914//vzFjtZdseC4S1M2WdJsGJTEclar0t9vGlDEJGZe7pA7Y8
+         f17Mou/hogygHfnHBd7+pN4L9BDZxBkhYPdPyb44cEiKQnL3BcuFgHLbsG3u+WYp4Pq3
+         4P9ZSN92QKeGLxBDaSkfn3ABm/7dsgvXp9k1Ed4JyhhcnwSflgSuyDaniBOWP0aqKW+F
+         /iIt5yal6phVx0ngeK7bGY3QlOuDF3GlfbKAySnL4b9bc83DrS2cgh94eqaHKAHIOwvL
+         NGdzNkSxSqT1uetMFLHi/agobvrHLMaLhlS7lAo8xKXm7GgFAf/W964pilkI9vuym3sQ
+         KVaQ==
+X-Gm-Message-State: AGi0PuZPreOx3/xJNqkgEPV/t6WelUcdxPoAhkeNqM6epofSaq77D1R5
+        bfO1yjyh3K6fXa4sLkoERfY=
+X-Google-Smtp-Source: APiQypJRhNbAHK0EFpWTqY0QbAfoOd1yshvCg1EAyFwL+3WmQGnMSjZt9J5Dr/nxaaynNOq/WSuEBg==
+X-Received: by 2002:a63:4c1:: with SMTP id 184mr8174060pge.156.1586964078973;
+        Wed, 15 Apr 2020 08:21:18 -0700 (PDT)
+Received: from localhost (89.208.244.140.16clouds.com. [89.208.244.140])
+        by smtp.gmail.com with ESMTPSA id a129sm14160190pfb.127.2020.04.15.08.21.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 15 Apr 2020 08:21:18 -0700 (PDT)
+Date:   Wed, 15 Apr 2020 23:21:15 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Allison Randal <allison@lohutok.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        Shah Nehal-Bakulchandra <Nehal-bakulchandra.Shah@amd.com>,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: i2c: img-scb: remove duplicate dev_err()
+Message-ID: <20200415152115.GA17519@nuc8i5>
+References: <08564c03-3bbd-5518-1a9d-a40b8ca09f48@web.de>
+ <20200415025426.GB14300@nuc8i5>
+ <b5db65f5-f236-9e22-98df-07629a827738@web.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200325214316.GJ1922688@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b5db65f5-f236-9e22-98df-07629a827738@web.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Mar 25, 2020 at 11:43:16PM +0200, Andy Shevchenko wrote:
-> On Mon, Mar 16, 2020 at 06:07:21PM +0200, Andy Shevchenko wrote:
-> > Refactor pca954x_irq_handler() to:
-> >   - use for_each_set_bit() macro
-> >   - use IRQ_RETVAL() macro
-> > 
-> > Above change makes code easy to read and understand.
+On Wed, Apr 15, 2020 at 07:47:41AM +0200, Markus Elfring wrote:
+> > Thanks for your comments, and maybe we can use coccinelle tools for
+> > more source files do this change in the mentioned software area.
 > 
-> Peter, does this series good in your opinion?
+> I found 19 source files (for example in the directory “drivers/i2c”
+> of the software “Linux next-20200408”) which seem to contain similar
+> update candidates according to a known transformation pattern.
+> Would you like to take another look at corresponding change possibilities?
+>
+yes, I want to do it and thanks for your info.
 
-Peter, Wolfram, this missed previous cycle, any work needs to be done?
+BR,
+Dejin
 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> > v2: masked pending to prevent handling of spurious IRQs (Peter)
-> >  drivers/i2c/muxes/i2c-mux-pca954x.c | 17 +++++++----------
-> >  1 file changed, 7 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-> > index a0d926ae3f86..b764c7c746e9 100644
-> > --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-> > +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-> > @@ -327,21 +327,18 @@ static DEVICE_ATTR_RW(idle_state);
-> >  static irqreturn_t pca954x_irq_handler(int irq, void *dev_id)
-> >  {
-> >  	struct pca954x *data = dev_id;
-> > -	unsigned int child_irq;
-> > -	int ret, i, handled = 0;
-> > +	unsigned long pending;
-> > +	int ret, i;
-> >  
-> >  	ret = i2c_smbus_read_byte(data->client);
-> >  	if (ret < 0)
-> >  		return IRQ_NONE;
-> >  
-> > -	for (i = 0; i < data->chip->nchans; i++) {
-> > -		if (ret & BIT(PCA954X_IRQ_OFFSET + i)) {
-> > -			child_irq = irq_linear_revmap(data->irq, i);
-> > -			handle_nested_irq(child_irq);
-> > -			handled++;
-> > -		}
-> > -	}
-> > -	return handled ? IRQ_HANDLED : IRQ_NONE;
-> > +	pending = (ret >> PCA954X_IRQ_OFFSET) & (BIT(data->chip->nchans) - 1);
-> > +	for_each_set_bit(i, &pending, data->chip->nchans)
-> > +		handle_nested_irq(irq_linear_revmap(data->irq, i));
-> > +
-> > +	return IRQ_RETVAL(pending);
-> >  }
-> >  
-> >  static int pca954x_irq_set_type(struct irq_data *idata, unsigned int type)
-> > -- 
-> > 2.25.1
-> > 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> Regards,
+> Markus
