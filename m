@@ -2,93 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7525A1AABC9
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 17:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290F71AACFA
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 18:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2506426AbgDOPVX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 11:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S1729190AbgDOQIF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 12:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730523AbgDOPVT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 11:21:19 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89402C061A0C;
-        Wed, 15 Apr 2020 08:21:19 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id m21so86800pff.13;
-        Wed, 15 Apr 2020 08:21:19 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S2406894AbgDOQIC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 12:08:02 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F76C061A0C;
+        Wed, 15 Apr 2020 09:08:01 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id h11so157933plr.11;
+        Wed, 15 Apr 2020 09:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=TD9EaFwapyU2qSwmdAV+2CcChhngrjdNFxDFbshTLXA=;
-        b=nQHhm9l0ZNDWXaN7XXaFI3qlDCdhj8NSO7ZSm5fruqQmQW35do2FunBnlQqUoynJml
-         7c2e+uR7F5xBGen8y2W06zeVM+vbgiJuapzRa0i1IeesJBckwdtEsqD+gdJsKG4IZpk0
-         RhNDLBLzurg6NM2ytlqjt95twMYWiOB+9A+aocJPVbXqlOBHVj+ASQlLntCHK35sAK2w
-         TexAvRixKW3S11SuhrEwLARj4ngTjZxNZTXrlPR304t4pU9GUpmrTEUNshD8igo83tzB
-         /QouN+mwg+vZcYCxQVOYSsC5R8EhMINpUIR67WBOFf9Ne5BXgQGkUVqXDfewT3bBo1En
-         GiwQ==
+         :content-disposition:in-reply-to:user-agent;
+        bh=RY+VO0/vpBKvGZZg/yALfnK+LWYtJeI8ZBtWPOM+2hQ=;
+        b=BxkqQRrCDxEs5BK9cx0OrPpukQgYyONH0rENg7DX6KVMV7F+7ig3KXZunKj2urACPl
+         okT1I2TiCGXFRnOcJY61WZDgGwAdZ03e6qDqjUch6sszRMKF7QbD7JsT8YkySmKdtv0q
+         R44onnvZ0L5JD+p78sY0ZG1YC7PWVdwJj2ACFDXuKm8IiEv6gHCfD950bngBzY5dZGum
+         Ikr+8oKsmUi2WmTc1dp7LjnnuU1e4V+Vd9ZkDihj3AxQfGuNIMojcy6OVHkO5Ymvp8Lv
+         gHLMtp9RDTK8POy5H4P26U4V4jj1FdpZCsSGpklYC1+JiSBOq4+t4buXwr0+KqhA/XZj
+         t3zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=TD9EaFwapyU2qSwmdAV+2CcChhngrjdNFxDFbshTLXA=;
-        b=qWEPaqRU1Ugj5BzH914//vzFjtZdseC4S1M2WdJsGJTEclar0t9vGlDEJGZe7pA7Y8
-         f17Mou/hogygHfnHBd7+pN4L9BDZxBkhYPdPyb44cEiKQnL3BcuFgHLbsG3u+WYp4Pq3
-         4P9ZSN92QKeGLxBDaSkfn3ABm/7dsgvXp9k1Ed4JyhhcnwSflgSuyDaniBOWP0aqKW+F
-         /iIt5yal6phVx0ngeK7bGY3QlOuDF3GlfbKAySnL4b9bc83DrS2cgh94eqaHKAHIOwvL
-         NGdzNkSxSqT1uetMFLHi/agobvrHLMaLhlS7lAo8xKXm7GgFAf/W964pilkI9vuym3sQ
-         KVaQ==
-X-Gm-Message-State: AGi0PuZPreOx3/xJNqkgEPV/t6WelUcdxPoAhkeNqM6epofSaq77D1R5
-        bfO1yjyh3K6fXa4sLkoERfY=
-X-Google-Smtp-Source: APiQypJRhNbAHK0EFpWTqY0QbAfoOd1yshvCg1EAyFwL+3WmQGnMSjZt9J5Dr/nxaaynNOq/WSuEBg==
-X-Received: by 2002:a63:4c1:: with SMTP id 184mr8174060pge.156.1586964078973;
-        Wed, 15 Apr 2020 08:21:18 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RY+VO0/vpBKvGZZg/yALfnK+LWYtJeI8ZBtWPOM+2hQ=;
+        b=niVmjbW3gLIQXk+HLINaRT4Z7TLvebRBD55ZM3q/c4+TOz6zFlc/l/9HOEdYNvJZ0i
+         pwDxVrfbsYnZZgtNAu8XsEu9QJmapNZ7dEySNMREn3YNGlSOtlG5EjJQl0esajhsY/2S
+         IA/IAvkzOLcNLMZ27DWCIk8rCZhhe4Pw0hrTupS1fdAlEUlI2RxmwzuAGmMe6L5qrRER
+         y8tPHNpdRRShlj5nJMnW1w6U3DFXWa+jFqBxC1CgfSA6aBwzpFLDSq0svmCPYa2CJpkc
+         C2dQofKePZ/BbRmNKOnffHMilwp8FKtUz7cLf8Mss3zvwEtH+tH4M+GGhKkCfnX36xUE
+         4z7Q==
+X-Gm-Message-State: AGi0Pua44NYd+WbD+Phi6bNoz1jtfjlXGNCewfEaV1QjG7dfyIfniXSx
+        0D4MmUJvL/eRXdqAqnO7WVI=
+X-Google-Smtp-Source: APiQypJXNAoQQsO32DWsS6IBTWvebYMrF983N5CkHNR0wOi2cvMtx1u2I8RVszffWbrI/R9wRYan9Q==
+X-Received: by 2002:a17:90a:f00b:: with SMTP id bt11mr7144748pjb.71.1586966880751;
+        Wed, 15 Apr 2020 09:08:00 -0700 (PDT)
 Received: from localhost (89.208.244.140.16clouds.com. [89.208.244.140])
-        by smtp.gmail.com with ESMTPSA id a129sm14160190pfb.127.2020.04.15.08.21.17
+        by smtp.gmail.com with ESMTPSA id x63sm5912909pfx.122.2020.04.15.09.07.59
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 15 Apr 2020 08:21:18 -0700 (PDT)
-Date:   Wed, 15 Apr 2020 23:21:15 +0800
+        Wed, 15 Apr 2020 09:08:00 -0700 (PDT)
+Date:   Thu, 16 Apr 2020 00:07:57 +0800
 From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Allison Randal <allison@lohutok.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Shah Nehal-Bakulchandra <Nehal-bakulchandra.Shah@amd.com>,
-        Tang Bin <tangbin@cmss.chinamobile.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: i2c: img-scb: remove duplicate dev_err()
-Message-ID: <20200415152115.GA17519@nuc8i5>
-References: <08564c03-3bbd-5518-1a9d-a40b8ca09f48@web.de>
- <20200415025426.GB14300@nuc8i5>
- <b5db65f5-f236-9e22-98df-07629a827738@web.de>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     michal.simek@xilinx.com, wsa+renesas@sang-engineering.com,
+        pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, alain.volmat@st.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] i2c: busses: convert to
+ devm_platform_get_and_ioremap_resource
+Message-ID: <20200415160757.GC17519@nuc8i5>
+References: <20200414134827.18674-1-zhengdejin5@gmail.com>
+ <20200415102158.GH1141@ninjato>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b5db65f5-f236-9e22-98df-07629a827738@web.de>
+In-Reply-To: <20200415102158.GH1141@ninjato>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Apr 15, 2020 at 07:47:41AM +0200, Markus Elfring wrote:
-> > Thanks for your comments, and maybe we can use coccinelle tools for
-> > more source files do this change in the mentioned software area.
+On Wed, Apr 15, 2020 at 12:21:58PM +0200, Wolfram Sang wrote:
+> On Tue, Apr 14, 2020 at 09:48:27PM +0800, Dejin Zheng wrote:
+> > use devm_platform_get_and_ioremap_resource() to simplify code, which
+> > contains platform_get_resource() and devm_ioremap_resource(), it also
+> > get the resource for use by the following code.
+> > 
+> > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
 > 
-> I found 19 source files (for example in the directory “drivers/i2c”
-> of the software “Linux next-20200408”) which seem to contain similar
-> update candidates according to a known transformation pattern.
-> Would you like to take another look at corresponding change possibilities?
+> Applied to for-next, because it seems 'the new way' but...
+> 
+> > -	r_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> > -	id->membase = devm_ioremap_resource(&pdev->dev, r_mem);
+> > +	id->membase = devm_platform_get_and_ioremap_resource(pdev, 0, &r_mem);
+> 
+> ... guys, do you really think this one line reduction improves
+> readability? Oh well...
 >
-yes, I want to do it and thanks for your info.
+Wolfram, Thank you for accepting it. From my personal point of view,
+as long as the direction is correct, even small improvements are
+worth doing. Thanks again for your tolerance.
 
 BR,
 Dejin
 
-> Regards,
-> Markus
+
