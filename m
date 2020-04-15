@@ -2,85 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1871AA37E
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 15:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF85B1A9CD9
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 13:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2506064AbgDONKw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 09:10:52 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:20516 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2897063AbgDOLfj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 07:35:39 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03FBW8SN016220;
-        Wed, 15 Apr 2020 13:35:24 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=STMicroelectronics;
- bh=xwnv8U88f9gKci+4R9gluFy4x+fECpay1QPWcflQP9g=;
- b=1a6J3nynIHUs1ZBzTWuJaxYH4jNMp3BBhK17usGCKTozaL9ffKuxXU3NnHI3yV4ftL92
- mUQ3c0K60Y/1B5c5Aw+jOsV3cYnjNz2jekg253yeaXkRAquScKAT8NaCw/KJEnaJfBH8
- 7Mhaon5u4CZ1iu7zjqwVUHVNVKonEp7bsvRsWwJdOo9HV5E4ioVxswrMG4/w3VaYeWJx
- mTUQbXbcrBLEVNBSXsVzmrj2asfCnrgh21Do4WePhZYLMkhH3arPyJsulQzX3JKur0wl
- AzjJIVogGD6M6WOBUGCHzyIXhFee9d5c/8D3qvZORE8OFsTb9ZMi6paQUpZvbnB/+FxL lg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 30dn94bh6t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Apr 2020 13:35:24 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B759110002A;
-        Wed, 15 Apr 2020 13:35:23 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A9F772B0FA8;
-        Wed, 15 Apr 2020 13:35:23 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.75.127.48) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 15 Apr
- 2020 13:35:23 +0200
-Date:   Wed, 15 Apr 2020 13:35:22 +0200
-From:   Alain Volmat <alain.volmat@st.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-CC:     <pierre-yves.mordret@st.com>, <alexandre.torgue@st.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>
-Subject: Re: [PATCH] i2c: i2c-stm32f7: improve nack debug message
-Message-ID: <20200415113522.GB16949@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        pierre-yves.mordret@st.com, alexandre.torgue@st.com,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@st.com
-References: <1584642115-15378-1-git-send-email-alain.volmat@st.com>
- <20200415110101.GM1141@ninjato>
+        id S2897232AbgDOLht (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 07:37:49 -0400
+Received: from sauhun.de ([88.99.104.3]:53190 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2408902AbgDOLh2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:37:28 -0400
+Received: from localhost (p54B33507.dip0.t-ipconnect.de [84.179.53.7])
+        by pokefinder.org (Postfix) with ESMTPSA id 359CC2C1FF1;
+        Wed, 15 Apr 2020 13:37:26 +0200 (CEST)
+Date:   Wed, 15 Apr 2020 13:37:20 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v1 1/2] i2c: designware: Make master module optional
+Message-ID: <20200415113720.GA910@ninjato>
+References: <20200323100451.28808-1-andriy.shevchenko@linux.intel.com>
+ <c3d2d5ff-605a-bdb7-275b-872fdfd10ccd@linux.intel.com>
+ <20200325114529.GU1922688@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wac7ysb48OaltWcw"
 Content-Disposition: inline
-In-Reply-To: <20200415110101.GM1141@ninjato>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG5NODE2.st.com (10.75.127.14) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-15_03:2020-04-14,2020-04-15 signatures=0
+In-Reply-To: <20200325114529.GU1922688@smile.fi.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Apr 15, 2020 at 01:01:01PM +0200, Wolfram Sang wrote:
-> On Thu, Mar 19, 2020 at 07:21:55PM +0100, Alain Volmat wrote:
-> > From: Fabrice Gasnier <fabrice.gasnier@st.com>
-> > 
-> > Add information on slave addr in the nack debug message.
-> > 
-> > Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
-> > Signed-off-by: Alain Volmat <alain.volmat@st.com>
-> 
-> Applied to for-next, thanks! (I'd drop the __func__, though; doesn't
-> add information, does it?)
 
-In fact similar message is displayed in 2 places. One in case of master mode
-isr and the other one in case of slave isr. This message is adding slave
-address to the master mode isr. It only makes it more clear on first sight
-but indeed displaying the slave address obviously means this is master mode.
+--wac7ysb48OaltWcw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+
+> > Size of i2c-designware-core.ko is around 12 kB with all master, slave a=
+nd
+> > Baytrail semaphore code built in so I don't think it justifies the added
+> > config complexity. I think distributions will have anyway all of those
+> > options set.
+>=20
+> I would rather go with conditional based on I=C2=B2C generic options, lik=
+e I2C_SLAVE.
+> Do we have something similar for master?
+
+No, we don't have that.
+
+>=20
+> > Having those code in separate modules and load only when needed might m=
+ake
+> > sense as that would save a few kB of RAM.
+>=20
+> ...which makes sense for embedded systems where exactly the device repres=
+ents
+> I=C2=B2C slave.
+
+Frankly: an I2C-slave-only embedded system which runs a modern Linux and
+cannot afford those few KB on a core feature it needs? If so, maybe it
+should have an out-of-tree patch to achieve this. I don't think it is
+worth the added complexity for the upstream version.
+
+Sidenote: There is a lot more overhead in the i2c-core. I think the
+complexity to move out stuff there is even more messy.
+
+Disclaimer: you may prove me wrong, of course :)
+
+
+--wac7ysb48OaltWcw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6W8esACgkQFA3kzBSg
+KbaOUw//cjIqDtuGiRPzYHe34bdn9BV1oBc03dQLLodHqCyj3OqfawGRBcq42rii
+vpKdxCxzXcDNkcyBpr6yTj8UfSZRSEUQTDOmyw2DIqVGggHfq+C1UWQX5wp/vUW/
+rbMPYp0xRghEzOm323at2tzxpAx9KR1VgSNmw6eu62lYhwvfmutdjjI2eKsbBmaO
+lOgwZEXMz4izACEEvGyXf0MNNm0UwnYQ8Pr6SxLiau/T7rdPZvPfhOepPiZg/fHX
+Rrfed5wJien7Etvf9kx8zWclp15BEAX/CdkG2rK70Cq1TBiSiwcFFC5Wb7E35bbb
+JqZm4Pq5r50Zk+Ovh27ptDpt6K5F4b3hldt2lBhYgfsg6d85z5YX5L/O6shWPdD6
+Ngk3az9n0mAy7y9zLMqYaECBHAmwcS/gLrmAJTrF3YP21auqgu56Z7OoUGANqvTT
+/O7klRz0Q8/BN7kvQNdDcPBaYRw1K1UEIcenT2Ic2QJAiCyrzYifdwwztrogksym
+g2KV9I3C+fSQjqwhMWlzmQWhJ6lAsIvnOIJbbpEGXeUV9mJ+vZOilIVFuP0dKHX3
+jslalQciBE/cjyYQe2U3BKMbD25wKf5/I89ETOayXRz+r7vW9L+ieVJc9TEuh8tz
+N/+LCD2lHC48X4V32zsX5RBqNdaPOVS2CCpYbK0GSEADe6dfrz0=
+=X3FL
+-----END PGP SIGNATURE-----
+
+--wac7ysb48OaltWcw--
