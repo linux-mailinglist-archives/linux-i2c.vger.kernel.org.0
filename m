@@ -2,33 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1A41A9BEC
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 13:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AC31A9BED
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 13:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896818AbgDOLPW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 07:15:22 -0400
-Received: from sauhun.de ([88.99.104.3]:52888 "EHLO pokefinder.org"
+        id S2896823AbgDOLPY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 07:15:24 -0400
+Received: from sauhun.de ([88.99.104.3]:52900 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2896823AbgDOLOg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:14:36 -0400
+        id S2896825AbgDOLPP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:15:15 -0400
 Received: from localhost (p54B33507.dip0.t-ipconnect.de [84.179.53.7])
-        by pokefinder.org (Postfix) with ESMTPSA id 897E82C1FF3;
-        Wed, 15 Apr 2020 13:14:34 +0200 (CEST)
-Date:   Wed, 15 Apr 2020 13:14:34 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 440C52C1FF2;
+        Wed, 15 Apr 2020 13:15:13 +0200 (CEST)
+Date:   Wed, 15 Apr 2020 13:15:13 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
-Cc:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 2/2] i2c: designware: Calculate SCL timing parameter for
- High Speed Mode
-Message-ID: <20200415111434.GR1141@ninjato>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 0/2] i2c: designware: Calculate *CNT for Fast Mode Plus
+Message-ID: <20200415111512.GS1141@ninjato>
 References: <20200407133439.23422-1-wan.ahmad.zainie.wan.mohamad@intel.com>
- <20200407133439.23422-3-wan.ahmad.zainie.wan.mohamad@intel.com>
+ <20200407145610.GI3676135@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="A1VS04HCCjrR2aaM"
+        protocol="application/pgp-signature"; boundary="oJFDFiWc3BlD0xT/"
 Content-Disposition: inline
-In-Reply-To: <20200407133439.23422-3-wan.ahmad.zainie.wan.mohamad@intel.com>
+In-Reply-To: <20200407145610.GI3676135@smile.fi.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -36,44 +36,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---A1VS04HCCjrR2aaM
+--oJFDFiWc3BlD0xT/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Apr 07, 2020 at 09:34:39PM +0800, Wan Ahmad Zainie wrote:
-> Custom parameters for HCNT/LCNT are not available for OF based system.
-> Thus, we will use existing SCL timing parameter calculation functions
-> for High Speed Mode too.
->=20
-> The value for the parameters tSYMBOL and tLOW is taken from DesignWare
-> DW_apb_i2c Databook v2.01a, section 3.15.4.6. The calculation should
-> assume higher bus load since it gives slower timing parameter.
->=20
-> Signed-off-by: Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Applied to for-next, thanks!
 
 
---A1VS04HCCjrR2aaM
+> Wolfram, for the sake of clarification, the series has been reviewed
+> internally, that's why it has my tags already (though usually I ask
+> to Cc me and give them explicitly during external review, not everybody
+> follow this way).
+
+Thanks for the heads up! I prefer the latter way, too, but here all is
+fine.
+
+
+--oJFDFiWc3BlD0xT/
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6W7JoACgkQFA3kzBSg
-Kbad6RAAgIr2WZAmQC4wE0eg8Cliobd3/7jABVgRlNF6uRWhqpoDRhkuj6nf3AFT
-FMh1C+0pSLXF+86/Y/hmlR7zYzG1RHnQr+572FBxVctVtHVeUJd1FBPa1dgKzI79
-X3xZLmK4T5AOSYxfsGAV41mgcAbNXj4ewzP2Ja5EDt2tUnA9znnW41/J4NN2rrFz
-EDBTRpLZANwl1dMhtyHbeQiLhbD3gwrMOdiyRHpfnFhbDGF01UV7Z2UyEgUVjI/4
-cPBr4rQ2QXXe61fil6TTjPpZxl6RYZXGHQ/ilahMoqtx+7kf6yDxPq84ghpaqsLC
-+76eSNGNHuMRRshuG05LmOuVN6ySoHHonv4Iumqt7GhOZ7diG9irK5t9Wqxzna30
-bOA6LPPNtqpCf7pK6TS9PaRC4Md/B2XxHoL7KfIl1V3TO+p9jvCbQ8qqMAMxqKat
-uhHtwaPK6Vk/iQZw3BM43chJxMkdie8t2E5H2jT8QcaLRTVzr0nx7G3CfrzrhhG8
-uNzwNGFw2wbBt5pfp/eyiJDV56eGd2oS0zJaCP6V3Wsu62IA4+gcl8k3mh0CUv7U
-l6FdwVR2SPQI8Fb9Grhq6IZ3OMmvnU+yTmzKcHxRF/jzc+wfugupof5ssMe6oSn8
-+uKyE8dz9n9+tHt28fbFFch0K6ftWRng2BjSlxNgVaJTEdnLXFI=
-=Ae9F
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6W7MAACgkQFA3kzBSg
+Kban5A/8DJ83A5beMh8GwXPnFMUbzAaT9/FfUdZjnqXKVfxm+YdlyZWY5sYZ7qNA
+7rNcbMa2WKyPx2zqwiMJWMR8sPey/4RwDL20ZNyC7KlPgo+fxgRMzBtVs4dDePR1
+YGzwFAmbjqiOqxKWQA5DtxwPmsBY+hIz1vrzSvYGesSnvx88dSOxt2wsGZygSTLL
+sd90Z1yd5FX0OnWHDtQncES1mm9xMI4ZetJ7UdrdENj/7H9lvUfRv9gPuYJg1lYj
+FJNSMCdxg5eiCQgk8adOePuvAPytlD73gw3jQaIuTrFr6tRUnEq+C9SSf5BxdS0o
+I1G5dTwPoDM43Q1GG8E0Mw59WPvSYRJH8g36DBbwfmE0vYDyfSRFMB7qFKPDgetH
+U61lKOp8oT5LTUHLTQcJ05tSCC+k6pnW70y+saY7HKn+WA92g83mVVhSWDfzP2so
+85TyLaKm87th2Tz/BdvK6p8N3J/ZQVV7pWHHLKg90d9WimXPxOGhvQsKKPIU3hVN
+1k15kY9LY7xQCk5ScXYLio/NjyMQ6kLhsSr4ab4vjbB3m3hMnrtMlEX2nqZlm0oD
+OfaPW4YvhmxXoBnoKwU3I8HCOGhStXC0QGWxfwBBrD28UEBh6sHF1kTHtm/LZv3h
+fHqq+NyHKE+P4RSPtJTkOO373/fRnN2B8fhTB/euZyeo+evhdXA=
+=pSbd
 -----END PGP SIGNATURE-----
 
---A1VS04HCCjrR2aaM--
+--oJFDFiWc3BlD0xT/--
