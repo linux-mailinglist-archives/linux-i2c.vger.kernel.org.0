@@ -2,23 +2,22 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C3D1A99EB
+	by mail.lfdr.de (Postfix) with ESMTP id F01E01A99ED
 	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 12:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896155AbgDOKHf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 06:07:35 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58675 "EHLO
+        id S2896162AbgDOKHg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 06:07:36 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:33840 "EHLO
         hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2896151AbgDOKHb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 06:07:31 -0400
-Received: from [88.147.20.223] (port=52216 helo=[192.168.77.62])
+        by vger.kernel.org with ESMTP id S2896154AbgDOKHc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 06:07:32 -0400
+Received: from [88.147.20.223] (port=52218 helo=[192.168.77.62])
         by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.93)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1jOex1-009EsP-0V; Wed, 15 Apr 2020 12:07:23 +0200
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [RFC PATCH v2 5/6] i2c: of: mark a whole array of regs as
- reserved
+        id 1jOex2-009Eu1-UU; Wed, 15 Apr 2020 12:07:24 +0200
+Subject: Re: [RFC PATCH v2 6/6] i2c: core: hand over reserved devices when
+ requesting ancillary addresses
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-i2c@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org, linux-i3c@lists.infradead.org,
@@ -28,13 +27,14 @@ Cc:     linux-renesas-soc@vger.kernel.org, linux-i3c@lists.infradead.org,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Vladimir Zapolskiy <vz@mleia.com>, linux-kernel@vger.kernel.org
 References: <20200318150059.21714-1-wsa+renesas@sang-engineering.com>
- <20200318150059.21714-6-wsa+renesas@sang-engineering.com>
-Message-ID: <578266c3-1bfb-2d7a-6d95-d40b3d8cd3ab@lucaceresoli.net>
-Date:   Wed, 15 Apr 2020 12:07:20 +0200
+ <20200318150059.21714-7-wsa+renesas@sang-engineering.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <610bbd01-e245-3320-c315-7a5c945a700d@lucaceresoli.net>
+Date:   Wed, 15 Apr 2020 12:07:24 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200318150059.21714-6-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20200318150059.21714-7-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -55,151 +55,55 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi,
 
- 18/03/20 16:00, Wolfram Sang wrote:
-> Back then, 'reg' properties in I2C DT bindings only contained one
-> address and this address was assigned a device and, thus, blocked.
-> Meanwhile, chips using multiple addresses are common and the 'reg'
-> property can be an array described by 'reg-names'. This code enhances
-> I2C DT parsing, so it will reserve all addresses described in an array.
-> They will be bound to the 'dummy' driver as 'reserved' iff the first
-> address can be assigned successfully. If that is not the case, the array
-> is not further considered. If one later address of the array can not be
-> assigned, it will be reported but we don't bail out. The driver has to
-> decide if that address is critical or not.
+On 18/03/20 16:00, Wolfram Sang wrote:
+> With i2c_new_ancillary_address, we can check if the intended driver is
+> requesting a reserved address. Update the function to do these checks.
+> If the check passes, the "reserved" device will become a regular "dummy"
+> device.
 > 
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > ---
->  drivers/i2c/i2c-core-of.c | 70 +++++++++++++++++++++++++--------------
->  1 file changed, 46 insertions(+), 24 deletions(-)
+>  drivers/i2c/i2c-core-base.c | 24 ++++++++++++++++++++++--
+>  1 file changed, 22 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-> index f2d09ea0d336..67eb2cd305cf 100644
-> --- a/drivers/i2c/i2c-core-of.c
-> +++ b/drivers/i2c/i2c-core-of.c
-> @@ -16,25 +16,18 @@
->  #include <linux/i2c.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_address.h>
->  #include <linux/of_device.h>
->  #include <linux/sysfs.h>
->  
->  #include "i2c-core.h"
->  
-> -int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info)
-> +static void of_i2c_decode_board_info(struct device_node *node, u32 addr,
-> +				     bool first_addr, struct i2c_board_info *info)
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 84464e439df5..81fb320de28d 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -974,7 +974,9 @@ struct i2c_client *i2c_new_ancillary_device(struct i2c_client *client,
+>  						const char *name,
+>  						u16 default_addr)
 >  {
-> -	u32 addr;
-> -	int ret;
-> -
->  	memset(info, 0, sizeof(*info));
+> -	struct device_node *np = client->dev.of_node;
+> +	struct device_node *reserved_np, *np = client->dev.of_node;
+> +	struct device *reserved_dev, *adapter_dev = &client->adapter->dev;
+> +	struct i2c_client *reserved_client = NULL;
+>  	u32 addr = default_addr;
+>  	int i;
 >  
-> -	ret = of_property_read_u32(node, "reg", &addr);
-> -	if (ret) {
-> -		pr_err("invalid reg on %pOF\n", node);
-> -		return ret;
-> -	}
-> -
-> -	if (of_modalias_node(node, info->type, sizeof(info->type)) < 0)
-> +	if (!first_addr || of_modalias_node(node, info->type, sizeof(info->type)) < 0)
->  		strlcpy(info->type, I2C_RESERVED_DRV_NAME, sizeof(I2C_RESERVED_DRV_NAME));
+> @@ -984,7 +986,25 @@ struct i2c_client *i2c_new_ancillary_device(struct i2c_client *client,
+>  			of_property_read_u32_index(np, "reg", i, &addr);
+>  	}
 >  
->  	if (addr & I2C_TEN_BIT_ADDRESS) {
-> @@ -51,11 +44,27 @@ int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info)
->  	info->of_node = node;
->  	info->fwnode = of_fwnode_handle(node);
->  
-> -	if (of_property_read_bool(node, "host-notify"))
-> -		info->flags |= I2C_CLIENT_HOST_NOTIFY;
-> +	if (first_addr) {
-> +		if (of_property_read_bool(node, "host-notify"))
-> +			info->flags |= I2C_CLIENT_HOST_NOTIFY;
-> +
-> +		if (of_get_property(node, "wakeup-source", NULL))
-> +			info->flags |= I2C_CLIENT_WAKE;
-> +	}
-> +}
-> +
-> +int of_i2c_get_board_info(struct device_node *node, struct i2c_board_info *info)
-> +{
-> +	u32 addr;
-> +	int ret;
-> +
-> +	ret = of_property_read_u32(node, "reg", &addr);
-> +	if (ret) {
-> +		pr_err("invalid reg on %pOF\n", node);
-> +		return ret;
-> +	}
->  
-> -	if (of_get_property(node, "wakeup-source", NULL))
-> -		info->flags |= I2C_CLIENT_WAKE;
-> +	of_i2c_decode_board_info(node, addr, true, info);
->  
->  	return 0;
->  }
-> @@ -64,21 +73,34 @@ EXPORT_SYMBOL_GPL(of_i2c_get_board_info);
->  static struct i2c_client *of_i2c_register_device(struct i2c_adapter *adap,
->  						 struct device_node *node)
->  {
-> -	struct i2c_client *client;
-> +	struct i2c_client *client, *first_client = ERR_PTR(-ENOENT);
->  	struct i2c_board_info info;
-> -	int ret;
-> +	bool first_reg = true;
-> +	unsigned int i = 0;
-> +	const __be32 *prop;
-> +	u16 reg;
->  
->  	pr_debug("register %pOF\n", node);
->  
-> -	ret = of_i2c_get_board_info(node, &info);
-> -	if (ret)
-> -		return ERR_PTR(ret);
-> +	while ((prop = of_get_address(node, i++, NULL, NULL))) {
-> +		reg = of_read_number(prop, 1);
-> +		of_i2c_decode_board_info(node, reg, first_reg, &info);
-> +
-> +		client = i2c_new_client_device(adap, &info);
-> +		if (IS_ERR(client)) {
-> +			pr_err("failure registering addr 0x%02x for %pOF (%ld)\n",
-> +				reg, node, PTR_ERR(client));
-> +			if (first_reg)
-> +				return client;
-> +		}
+> -	dev_dbg(&client->adapter->dev, "Address for %s : 0x%x\n", name, addr);
+> +	dev_info(adapter_dev, "Address for %s : 0x%x\n", name, addr);
 
-I had an opportunity to runtime test this whole series on top of my TI
-DS90UB95x serdes patches and it generally works fine.
+Here if we have two identical chips on the same bus, they probably will
+both add an ancillary device with the same name. Then a message like:
 
-I noticed however a minor annoyance in the above while loop. During
-probing, these errors are produced:
+  i2c i2c-0: ds90ub954-q1: Address for rxport0: 0x40
 
-  i2c i2c-0: Failed to register i2c client reserved at 0x40 (-16)
-  i2c_of: failure registering addr 0x40 for /ocp/i2c@48070000/des_0@30 (-16)
+won't tell which ds90ub954-q1 device is using that address. I'd rather
+disambiguate using something like:
 
-This is logged as an error, so I assumed probing had failed, instead it
-succeeded. This happens because the first loop iteration (on the first
-'reg') triggers the driver's probe(), which in my case calls
-i2c_new_ancillary_device() to register address 0x40. The second loop
-iteration finds 0x40 in DT and tries to register it as "reserved", but
-it fails. By design the loop continues successfully, but the (double)
-error printed is misleading.
+  dev_info(adapter_dev, "%s: Address for %s: 0x%x\n",
+           dev_name(&client->dev), name, addr);
 
-Fixing the second error, which comes from the above loop, is easy:
+Sure, this issue did exist before this patch, but since the line is
+being promoted from dbg to info (which is OK), it's probably a good idea
+to improve the content, perhaps in a separate patch.
 
- client = i2c_new_client_device(adap, &info);
- if (IS_ERR(client)) {
--	pr_err("failure registering addr 0x%02x for %pOF (%ld)\n",
--		reg, node, PTR_ERR(client));
- 	if (first_reg)
-+		pr_err("failure registering addr 0x%02x for %pOF (%ld)\n",
-+			reg, node, PTR_ERR(client));
- 		return client;
- }
-
-The other error is produced in i2c_new_client_device() and I see no
-obvious way to put an if in front of the dev_err() except checking if
-client->name equals I2C_RESERVED_DRV_NAME.
+Except for that, I tested the patch and it's working fine.
 
 -- 
 Luca
