@@ -2,136 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8701F1A924C
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 07:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E618A1A92AC
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 07:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393245AbgDOFQY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 01:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393255AbgDOFQX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 01:16:23 -0400
-X-Greylist: delayed 62419 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Apr 2020 22:16:22 PDT
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FB4C061A0C
-        for <linux-i2c@vger.kernel.org>; Tue, 14 Apr 2020 22:16:22 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1jOaPM-0003Vy-AM; Wed, 15 Apr 2020 07:16:20 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1jOaPL-0005fX-7h; Wed, 15 Apr 2020 07:16:19 +0200
-Date:   Wed, 15 Apr 2020 07:16:19 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        Biwen Li <biwen.li@nxp.com>
-Subject: Re: [PATCH] i2c: avoid ifdeffery in I2C drivers with optional slave
- support
-Message-ID: <20200415051619.GP27288@pengutronix.de>
-References: <20191204095348.9192-1-s.hauer@pengutronix.de>
- <20200409134027.GB1136@ninjato>
- <20200410112914.67a68e32@endymion>
- <20200414115600.GM27288@pengutronix.de>
- <20200414164009.53e70067@endymion>
+        id S2437664AbgDOFsP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 01:48:15 -0400
+Received: from mout.web.de ([212.227.17.12]:40261 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2437642AbgDOFsM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 15 Apr 2020 01:48:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1586929664;
+        bh=EGRrqjDzjgYsKTv/Rw9IDdvJHm728m4ptunQNzBGAE8=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=j7x1xdtEyA2o3TgHvQVmWyxEpObdAMknQeB54BRRlzzHvA5Rb2nABjHRavZ/b38XB
+         D/YFypDvvrfw9Xsub9Dlbq5C8lOQMrry1QHVYx7RmKbailOWt5esMdQAXAO5/PFhnQ
+         7Nck0J0GOXhXk7gLRN1T78bOikpCRF22hD8xBUhs=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.3] ([78.48.133.192]) by smtp.web.de (mrweb101
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0MdLwN-1jfzSV1YJf-00IUQP; Wed, 15
+ Apr 2020 07:47:44 +0200
+Subject: Re: i2c: img-scb: remove duplicate dev_err()
+To:     Dejin Zheng <zhengdejin5@gmail.com>, linux-i2c@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Allison Randal <allison@lohutok.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        Shah Nehal-Bakulchandra <Nehal-bakulchandra.Shah@amd.com>,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <08564c03-3bbd-5518-1a9d-a40b8ca09f48@web.de>
+ <20200415025426.GB14300@nuc8i5>
+From:   Markus Elfring <Markus.Elfring@web.de>
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+Message-ID: <b5db65f5-f236-9e22-98df-07629a827738@web.de>
+Date:   Wed, 15 Apr 2020 07:47:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200414164009.53e70067@endymion>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 07:00:20 up 55 days, 12:30, 71 users,  load average: 0.35, 0.15,
- 0.11
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20200415025426.GB14300@nuc8i5>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:f1enqzOdPYZu7Wh7o48rc8ZyVmctipcbKqLF+ka6mzQIlyyf4NI
+ 5Irjsw8YZCEn7odMklF/1pv04ku4MwxYjdUvni7N7XbuWvDF7IItA/2qpQs671TY2rqk7cf
+ +sRJlu1hxXJOsV9+M9ceUDT1YQnL8jjh2fRliI52ndzI2EDhEIGkonHQKHUe1j2tU89tL4U
+ FxidQMtR45hsyElscOn0g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1yVimnkl7pA=:bezFH0tHkXHAMZJ/Jdt6La
+ H/+q4zAlHsIRRYXywCmXNaN4AneO0bEf36r4+pcCqu3DiDKSutjGdBYUGd/Q2p/cPYAT9TOeq
+ bq1gr5uco9DBiGPFVoQRS7XMsFQupTMyIpVAWD+rNriAPJfsUGE0nxb4KWIqABuSqlJir8FiW
+ E1ezAz80RLh1ohIhSHwPekb3IrzgqU+QlH/uziJEGTKjDGy1jUfN5oojeJSnc2qT8OIv7BsyT
+ fG2IG4HMLgE8GRYeDvqsUTzYXDrOeLZ11hB6Q9aqDAwjROHDr1IIZEDHh/7yOMIQPS4TXEqyt
+ uYPdOJcQtzMrACBPtCU0Ntfi0FPU7hHkz3jGi1gWpdJ6u740j/1+3OpbJuzuH8PmDT5SkzcUW
+ PaT6lpd2U3jNx2g1+scPdexytw8Tx5sF8G1AmgsI1nrRjbu+oAF75Nw1eaOrt6mh8uDLnmklH
+ wYD0bKpXl4w1P7BmLeSxBWXPsBy9mI5NABjbmfh0YWJ4dgdv7ElLxjEuM/cAdL5U538INkrf5
+ gdn4PykLGKQZhILXkuO03ZNGTYK7BdQ15M45/kU7YeODfQtHo6LUn5VWhpetehVb2H0mTYix9
+ 7s0ZtBbFAZ442NSPy3/5Z0b+/jDNmUcnbYDPnLn3lVtLsCfKlldEa0qD1chZnksX8sr5THN1U
+ KXTitQC1Qe3f/kMZnClGdtbPXlfahhLfpYSugLmxt8yp9eelOr2L77X7cVPFY/Jsl4boa5Jsi
+ sDBzU24+t35VzijSgKPWpoGLUQX+LPN0yfkHbgiJh99ZeQ79XM1GpT6+fPVlXpPYzw5VhlXeC
+ qGliV1YWTIJOf4elxDCaeFnhdEVFGArHuMYD+UtS4WMBhLS9qhyruuRlwv/cMAFYja+J6CMZC
+ ktORiZ5rw0hgW+OeUUyyu+WNzygGqXiXfghp9vET5tZwdgcMhlsmXDmYKmjoXiE951uX9hCHf
+ pOc34SakHqFFNyBjRy0+ndn7ef0STQP8BD24ftgFS3xd7A5SBGJ08v2XU0w0UG1mJNfls+jHm
+ VFXKFguyD089S/24kZ6pbwCreAOHtKH+3JamBWpI1KDHFykQYzF2My3XyFL/OxN8dQjoSvi8R
+ HJYztbfJ09ZWa1IuzvqU39I5GAUtvp+3KYL21qo1CJ1IzA1mUFtCa07Xn5pLOvxIPwIyvP0a7
+ Rx0ntBF1Wt3+Lm+jjh0Xx0aIywrBcGc4YJo/gM+uw23f6CMDmWuygBtnN2Oso3VX/EgbaWbKL
+ FAaDczdt24b38xd6L
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 04:40:09PM +0200, Jean Delvare wrote:
-> On Tue, 14 Apr 2020 13:56:00 +0200, Sascha Hauer wrote:
-> > On Fri, Apr 10, 2020 at 11:29:14AM +0200, Jean Delvare wrote:
-> > > More importantly I can't see how the ifdef'd members of struct
-> > > i2c_algorithm are the cause of the problem mentioned by Sascha. He
-> > > seems to be concerned by drivers with *optional* I2C slave support
-> > > having ifdefs. Why can't this be solved in these drivers directly? What
-> > > prevents these drivers from unconditionally selecting I2C_SLAVE if that
-> > > makes their code more simple? This moves the overhead decision to the
-> > > device driver instead of forcing it to the whole subsystem across all
-> > > architectures.  
-> > 
-> > The drivers could select I2C_SLAVE when they have I2C slave support and
-> > in fact some drivers do this already. This means that we have the
-> > overhead of unneeded I2C slave support when we need that driver in the
-> > Kernel.
-> 
-> I can't make sense of this statement, sorry. How is I2C slave support
-> "unneeded" if your kernel includes at least one kernel which needs it?
+> Thanks for your comments, and maybe we can use coccinelle tools for
+> more source files do this change in the mentioned software area.
 
-I never used I2C slave 
-> 
-> It is true that I2C slave support is included in the kernel code as
-> soon as any driver selects I2C_SLAVE, even if that driver is not
-> currently loaded. The only way around that would be to move the common
-> code for it to a separate module and all specific members to different,
-> dedicated structures. But that would in turn cause more overhead for
-> people who need slave support. The current implementation is the result
-> of a trade-off decision I made back then. It is the same design goal
-> which explains why I2C_SMBUS is a separate option: many system classes
-> do not need it and I did not want to waste memory on these. The
-> difference of I2C_SMBUS is that it was large and isolated enough to
-> warrant a separate kernel module altogether.
-> 
-> > I just thought it would be nice to have I2C slave support optional while
-> > still allowing to avoid ifdefs in the driver. Particularly this doesn't
-> > look nice:
-> > 
-> >  static const struct i2c_algorithm i2c_imx_algo = {
-> >         .master_xfer    = i2c_imx_xfer,
-> >         .functionality  = i2c_imx_func,
-> > +#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> > +       .reg_slave      = i2c_imx_reg_slave,
-> > +       .unreg_slave    = i2c_imx_unreg_slave,
-> > +#endif
-> > }
-> 
-> Probably a matter of taste, personally I see nothing wrong with it.
-> 
-> > 
-> > The implementation of these functions need ifdefs as well and compile
-> > coverage gets worse.
-> 
-> Sorry but you lost me here. How can I2C slave support be "optional" and
-> at the same time going without ifdefs?
+I found 19 source files (for example in the directory =E2=80=9Cdrivers/i2c=
+=E2=80=9D
+of the software =E2=80=9CLinux next-20200408=E2=80=9D) which seem to conta=
+in similar
+update candidates according to a known transformation pattern.
+Would you like to take another look at corresponding change possibilities?
 
-static int i2c_imx_reg_slave(struct i2c_client *client)
-{
-	if (!IS_ENABLED(CONFIG_I2C_SLAVE))
-		return -ESOMETHING;
-	...
-}
-
-The code is gone without CONFIG_I2C_SLAVE enabled, yet the compile coverage
-is there.
-
-The patch I sent was a suggestion to do it like that. If that's not
-wanted I am fine with that and happily select CONFIG_I2C_SLAVE from the
-driver entry in Kconfig, or better, suggest Biwen Li
-(https://patchwork.kernel.org/patch/11271067/) to do this.
-
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Regards,
+Markus
