@@ -2,108 +2,151 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E23711A9AEA
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 12:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB501A9B6C
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Apr 2020 12:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408816AbgDOKjT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Apr 2020 06:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408765AbgDOKis (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Apr 2020 06:38:48 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547ADC061A0F
-        for <linux-i2c@vger.kernel.org>; Wed, 15 Apr 2020 03:38:48 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id h9so18513788wrc.8
-        for <linux-i2c@vger.kernel.org>; Wed, 15 Apr 2020 03:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IrPL0bBBQDeF29Z4aLgq8ImOYXP6kd9vk4rNs7ZTqws=;
-        b=yIAMMnZu4/5XkjVkCq32hl9Pn9SikmiyUmlKUEu7u/JAwTn5UxxsMyK4Mz2TFYtBJK
-         8bK9XO32DspPZRUWcNCWbt434F5d59Z8Gp6+JI7VNiygAxfdd+dK18ew602ZlIrASmTB
-         f+O8iv9zsJpKyROuS7I6KJHsds1z/or0RLiYq85eCFBcyejyW54bjjsycwzLwCGj81jO
-         M5mgoA6CFO2R78EETs8ZwxWQ497GCVAIWtench+iCvLlMVYhQVf+KEUmYIFf/OsCqb7E
-         u+lhG72eBlNLj5HqiKBPiX6FLhcupVCkG3ru861qNkNNR30/I6gDKk8HUXt2PeCOnnOi
-         NGpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IrPL0bBBQDeF29Z4aLgq8ImOYXP6kd9vk4rNs7ZTqws=;
-        b=WGTE1dbxESPbXy8fHttd7rwruEJieuRcb8cRj3VRqwudZi5ZZ8WklEKk8isOqzC2fd
-         gpT1Vd3hgwizzhPmVn1wG3//8wlSvUiDNMi593VjXKENs3wfxMDK/29tvXGqfuUdhlJW
-         MxAIgzjgJBU+cfzuAcmUiFypfwuRWNAUzrwg3Yqg4eNFuADQv//ahkV6YoSViqOga+Wk
-         yOpJ7RWrjMAUME+pBFZDWIfSLekNxZf99Q6ytm1CESZ+mahzgxQ3PRRN0IYfTJcKns6B
-         VjZk4K6hYTs3qsIfMfjFyLfRNWDnj370a1Z0cEiGMNzOQAb3IsWHWSd/LgAJPuq0wCS3
-         MC8Q==
-X-Gm-Message-State: AGi0PuYxLHExxsxI9Y/vz41PkB5ZnI/UJAx22Ns9KBgnfLY0evWasjQN
-        NF7Uqq9h23KF2UMCqPkMCBQoog==
-X-Google-Smtp-Source: APiQypJfhW8S65Wxra9t0NaoxN8IlVd9vyp0bk8pl+XOImR8b/3RISiU1lKFKzoqVOuvy3de4k5SGA==
-X-Received: by 2002:adf:e54c:: with SMTP id z12mr17403476wrm.276.1586947126830;
-        Wed, 15 Apr 2020 03:38:46 -0700 (PDT)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id z15sm10599204wrs.47.2020.04.15.03.38.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2020 03:38:46 -0700 (PDT)
-Date:   Wed, 15 Apr 2020 11:38:44 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] video: backlight: tosa_lcd: convert to use
- i2c_new_client_device()
-Message-ID: <20200415103844.vnjccybvy5wtnrq6@holly.lan>
-References: <20200326210959.13111-1-wsa+renesas@sang-engineering.com>
- <20200326210959.13111-2-wsa+renesas@sang-engineering.com>
+        id S2896397AbgDOKvj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Apr 2020 06:51:39 -0400
+Received: from sauhun.de ([88.99.104.3]:52178 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2896415AbgDOKvJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 15 Apr 2020 06:51:09 -0400
+Received: from localhost (p54B33507.dip0.t-ipconnect.de [84.179.53.7])
+        by pokefinder.org (Postfix) with ESMTPSA id 1610D2C1FF1;
+        Wed, 15 Apr 2020 12:51:01 +0200 (CEST)
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2] i2c: regroup documentation of bindings
+Date:   Wed, 15 Apr 2020 12:51:00 +0200
+Message-Id: <20200415105100.11164-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200326210959.13111-2-wsa+renesas@sang-engineering.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Mar 26, 2020 at 10:09:59PM +0100, Wolfram Sang wrote:
-> Move away from the deprecated API and return the shiny new ERRPTR where
-> useful.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Some bindings are for the bus master, some are for the slaves.
+Regroup them and give them seperate headings to make it clear.
+Also, remove references to "generic names" which is for nodes and not
+for compatibles.
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ Documentation/devicetree/bindings/i2c/i2c.txt | 66 +++++++++++--------
+ 1 file changed, 39 insertions(+), 27 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
+index 9a53df4243c6..819436b48fae 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c.txt
++++ b/Documentation/devicetree/bindings/i2c/i2c.txt
+@@ -2,32 +2,26 @@ Generic device tree bindings for I2C busses
+ ===========================================
+ 
+ This document describes generic bindings which can be used to describe I2C
+-busses in a device tree.
++busses and their child devices in a device tree.
+ 
+-Required properties
+--------------------
++Required properties (per bus)
++-----------------------------
+ 
+ - #address-cells  - should be <1>. Read more about addresses below.
+ - #size-cells     - should be <0>.
+-- compatible      - name of I2C bus controller following generic names
+-		    recommended practice.
++- compatible      - name of I2C bus controller
+ 
+ For other required properties e.g. to describe register sets,
+ clocks, etc. check the binding documentation of the specific driver.
+ 
+ The cells properties above define that an address of children of an I2C bus
+-are described by a single value. This is usually a 7 bit address. However,
+-flags can be attached to the address. I2C_TEN_BIT_ADDRESS is used to mark a 10
+-bit address. It is needed to avoid the ambiguity between e.g. a 7 bit address
+-of 0x50 and a 10 bit address of 0x050 which, in theory, can be on the same bus.
+-Another flag is I2C_OWN_SLAVE_ADDRESS to mark addresses on which we listen to
+-be devices ourselves.
++are described by a single value.
+ 
+-Optional properties
+--------------------
++Optional properties (per bus)
++-----------------------------
+ 
+ These properties may not be supported by all drivers. However, if a driver
+-wants to support one of the below features, it should adapt the bindings below.
++wants to support one of the below features, it should adapt these bindings.
+ 
+ - clock-frequency
+ 	frequency of bus clock in Hz.
+@@ -73,31 +67,49 @@ wants to support one of the below features, it should adapt the bindings below.
+ 	i2c bus clock frequency (clock-frequency).
+ 	Specified in Hz.
+ 
+-- interrupts
+-	interrupts used by the device.
+-
+-- interrupt-names
+-	"irq", "wakeup" and "smbus_alert" names are recognized by I2C core,
+-	other names are	left to individual drivers.
+-
+-- host-notify
+-	device uses SMBus host notify protocol instead of interrupt line.
+-
+ - multi-master
+ 	states that there is another master active on this bus. The OS can use
+ 	this information to adapt power management to keep the arbitration awake
+ 	all the time, for example.
+ 
+-- wakeup-source
+-	device can be used as a wakeup source.
++Required properties (per child device)
++--------------------------------------
++
++- compatible
++	name of I2C slave device
+ 
+ - reg
+-	I2C slave addresses
++	One or many I2C slave addresses. These are usually a 7 bit addresses.
++	However, flags can be attached to an address. I2C_TEN_BIT_ADDRESS is
++	used to mark a 10 bit address. It is needed to avoid the ambiguity
++	between e.g. a 7 bit address of 0x50 and a 10 bit address of 0x050
++	which, in theory, can be on the same bus.
++	Another flag is I2C_OWN_SLAVE_ADDRESS to mark addresses on which we
++	listen to be devices ourselves.
++
++Optional properties (per child device)
++--------------------------------------
++
++These properties may not be supported by all drivers. However, if a driver
++wants to support one of the below features, it should adapt these bindings.
++
++- host-notify
++	device uses SMBus host notify protocol instead of interrupt line.
++
++- interrupts
++	interrupts used by the device.
++
++- interrupt-names
++	"irq", "wakeup" and "smbus_alert" names are recognized by I2C core,
++	other names are	left to individual drivers.
+ 
+ - reg-names
+ 	Names of map programmable addresses.
+ 	It can contain any map needing another address than default one.
+ 
++- wakeup-source
++	device can be used as a wakeup source.
++
+ Binding may contain optional "interrupts" property, describing interrupts
+ used by the device. I2C core will assign "irq" interrupt (or the very first
+ interrupt if not using interrupt names) as primary interrupt for the slave.
+-- 
+2.20.1
 
-> ---
->  drivers/video/backlight/tosa_lcd.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/video/backlight/tosa_lcd.c b/drivers/video/backlight/tosa_lcd.c
-> index e8ab583e5098..113116d3585c 100644
-> --- a/drivers/video/backlight/tosa_lcd.c
-> +++ b/drivers/video/backlight/tosa_lcd.c
-> @@ -107,7 +107,7 @@ static void tosa_lcd_tg_on(struct tosa_lcd_data *data)
->  	/* TG LCD GVSS */
->  	tosa_tg_send(spi, TG_PINICTL, 0x0);
->  
-> -	if (!data->i2c) {
-> +	if (IS_ERR_OR_NULL(data->i2c)) {
->  		/*
->  		 * after the pannel is powered up the first time,
->  		 * we can access the i2c bus so probe for the DAC
-> @@ -119,7 +119,7 @@ static void tosa_lcd_tg_on(struct tosa_lcd_data *data)
->  			.addr	= DAC_BASE,
->  			.platform_data = data->spi,
->  		};
-> -		data->i2c = i2c_new_device(adap, &info);
-> +		data->i2c = i2c_new_client_device(adap, &info);
->  	}
->  }
->  
-> -- 
-> 2.20.1
-> 
