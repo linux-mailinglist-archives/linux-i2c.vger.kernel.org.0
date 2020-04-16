@@ -2,74 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D82701AC522
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Apr 2020 16:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A421AC757
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Apr 2020 16:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408319AbgDPOMJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Apr 2020 10:12:09 -0400
-Received: from sauhun.de ([88.99.104.3]:43324 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404364AbgDPOLr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 16 Apr 2020 10:11:47 -0400
-Received: from localhost (p54B33393.dip0.t-ipconnect.de [84.179.51.147])
-        by pokefinder.org (Postfix) with ESMTPSA id C6CFC2C1F4B;
-        Thu, 16 Apr 2020 16:11:44 +0200 (CEST)
-Date:   Thu, 16 Apr 2020 16:11:44 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c:imx-lpi2c: Omit superfluous error message in
- lpi2c_imx_probe()
-Message-ID: <20200416141144.GB1142@ninjato>
-References: <20200416140529.20036-1-tangbin@cmss.chinamobile.com>
+        id S2405004AbgDPOyF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Apr 2020 10:54:05 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:54697 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2394837AbgDPOxV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Apr 2020 10:53:21 -0400
+Received: from [88.147.80.45] (port=36640 helo=[192.168.77.62])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1jP5t7-00283A-Tv; Thu, 16 Apr 2020 16:53:10 +0200
+Subject: Re: [RFC PATCH v2 2/6] i2c: allow DT nodes without 'compatible'
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-i3c@lists.infradead.org,
+        Kieran Bingham <kieran@ksquared.org.uk>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh@kernel.org>
+References: <20200318150059.21714-1-wsa+renesas@sang-engineering.com>
+ <20200318150059.21714-3-wsa+renesas@sang-engineering.com>
+ <11ca7487-ac07-f714-8573-20d1a0040212@lucaceresoli.net>
+ <20200415075911.GA1141@ninjato>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <e1791500-d7ca-f6d0-44ff-8d830de4bf58@lucaceresoli.net>
+Date:   Thu, 16 Apr 2020 16:53:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZoaI/ZTpAVc4A5k6"
-Content-Disposition: inline
-In-Reply-To: <20200416140529.20036-1-tangbin@cmss.chinamobile.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200415075911.GA1141@ninjato>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi,
 
---ZoaI/ZTpAVc4A5k6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 15/04/20 09:59, Wolfram Sang wrote:
+> 
+>> As I said in the reply to v1, I think we should reserve addresses also
+>> when there is a compatible string but no matching driver, but this is
+>> another story and can be handled separately.
+> 
+> Unless I misunderstand you, I think they do already. Note that
+> only 'i2cdetect' shows a device as busy *IFF* there is a driver bound to
+> it. The internal 'i2c_check_addr_busy' does not care about a driver
+> being bound. You can check this by trying to use
+> i2c_new_ancillary_device() with an address which is already described in
+> DT but which driver is disabled.
+> 
 
-On Thu, Apr 16, 2020 at 10:05:29PM +0800, Tang Bin wrote:
-> In the function lpi2c_imx_probe(), when get irq failed, the function
-> platform_get_irq() logs an error message, so remove redundant message
-> here.
->=20
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+Ah, yes! I was assuming the opposite but I double checked and you're
+right of course.
 
-Please make only one patch for all the drivers in the i2c subsystem.
+Sorry for the noise.
 
-
---ZoaI/ZTpAVc4A5k6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6YZ6AACgkQFA3kzBSg
-KbZ4uA//a/dPITOlzgSHI6tPELR5gpZC0xTGuSky3954hG+aV8ceV2fh0as+wGYJ
-MOR4LdDFbHHG7EUGuQvMwjGxKvY/6aeHFQj9okzvc47PQvJeMEHay1PL8qIESUBe
-7L2v1LMDIwxK+/ymaYytvFhqwTwEPmmB8n9bB+H04yn67CyXXrpRxm++EsKHZomP
-fDtmo0L4Zmp9f5OOHFrPrOepbSJdtAV3nXnqgJDr/WaUxkvcrp9LZOhPDsZL2N9S
-mPEFMP41cxemrVms2b1/FlhSMjjKr2bgFv1rj7tjHyVnUrtEsHKPYLCnIk+xr7WO
-/FPLMxogTj6g27LPza5BpeFzw9WYW8dM/E9NVMb5K3kpjtlRYBNocH2kfs6E+kBU
-H4gs0HS3tpzscRLWyCGZKgQMA3WF+axfH8BK0N0TShLw+9wCoZ0waLWzsyUVBM3G
-XpVCjNjpVhIknjePazD94UYFT9Ck+m/s/hZB+GL1AtjW7CA+q63qQ7v6O7oDoOHx
-aMBnCJZ1ldAfRovuiaMApNv5Aa2OvajULWNfikviKRJOgsGCTMyxqFqCyWZ7Nxcq
-d9idpbEGojF5kzPWApZIxGy4pHZRwYmJ3YYd28Gb5ucEWo+qNZN3xd4byFFiOgUh
-p90MnmDjz6hiK/MnmuQtQ2thKAHmuB+CiKrMUCxo5yVuIE12wjI=
-=NVdq
------END PGP SIGNATURE-----
-
---ZoaI/ZTpAVc4A5k6--
+-- 
+Luca
