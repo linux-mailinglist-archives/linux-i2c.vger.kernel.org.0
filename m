@@ -2,100 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32CB21AB8E2
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Apr 2020 08:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396391AB877
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Apr 2020 08:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437832AbgDPG7H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Apr 2020 02:59:07 -0400
-Received: from smtprelay0251.hostedemail.com ([216.40.44.251]:48270 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2436919AbgDPG7C (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Apr 2020 02:59:02 -0400
-X-Greylist: delayed 408 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Apr 2020 02:58:58 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave01.hostedemail.com (Postfix) with ESMTP id B423118019B0E;
-        Thu, 16 Apr 2020 06:52:58 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 0A616100E7B43;
-        Thu, 16 Apr 2020 06:51:59 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:2911:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:3874:4321:4425:5007:6742:6743:7903:10004:10400:10903:11232:11658:11914:12297:12346:12740:12760:12895:13069:13311:13357:13439:14096:14097:14659:14721:21080:21433:21627:21740:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: wheel34_84bb3b9f86d3c
-X-Filterd-Recvd-Size: 3344
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf07.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 16 Apr 2020 06:51:52 +0000 (UTC)
-Message-ID: <d93f90bbcc99967ed5ba458ba99d7e73de12e3b2.camel@perches.com>
-Subject: Re: [PATCH 2/2] dt-bindings: Remove cases of 'allOf' containing a
- '$ref'
-From:   Joe Perches <joe@perches.com>
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        id S2408271AbgDPGuZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Apr 2020 02:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2408163AbgDPGuY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Apr 2020 02:50:24 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B36C061A0C
+        for <linux-i2c@vger.kernel.org>; Wed, 15 Apr 2020 23:50:24 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jOyLo-0003uP-OB; Thu, 16 Apr 2020 08:50:16 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jOyLm-0002Kn-V4; Thu, 16 Apr 2020 08:50:14 +0200
+Date:   Thu, 16 Apr 2020 08:50:14 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Tang Bin <tangbin@cmss.chinamobile.com>
+Cc:     wsa@the-dreams.de, o.rempel@pengutronix.de, ardb@kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org
-Date:   Wed, 15 Apr 2020 23:49:40 -0700
-In-Reply-To: <20200416005549.9683-2-robh@kernel.org>
-References: <20200416005549.9683-1-robh@kernel.org>
-         <20200416005549.9683-2-robh@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+Subject: Re: [PATCH] i2c: drivers: Avoid unnecessary check inefm32_i2c_probe()
+Message-ID: <20200416065014.7umocf2aohz6q2nn@pengutronix.de>
+References: <20200415140640.19948-1-tangbin@cmss.chinamobile.com>
+ <20200415143133.qwbes5whbqx5jf2j@pengutronix.de>
+ <20cc01b8-2661-7b3e-3dbc-38f7e282679b@cmss.chinamobile.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20cc01b8-2661-7b3e-3dbc-38f7e282679b@cmss.chinamobile.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 2020-04-15 at 19:55 -0500, Rob Herring wrote:
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords. The json-schema library doesn't yet support this, but the
-> tooling now does a fixup for this and either way works.
+On Thu, Apr 16, 2020 at 09:30:22AM +0800, Tang Bin wrote:
+> Hi Uwe:
 > 
-> This has been a constant source of review comments, so let's change this
-> treewide so everyone copies the simpler syntax.
+> On 2020/4/15 22:31, Uwe Kleine-König wrote:
+> > Same things apply as in the previous patch. (space after punctuation,
+> > Sob of sender should be last)
+> I will notice this problem next time, thanks.
+> > > ---
+> > >   drivers/i2c/busses/i2c-efm32.c | 3 ---
+> > >   1 file changed, 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/i2c/busses/i2c-efm32.c b/drivers/i2c/busses/i2c-efm32.c
+> > > index 4de31fae7..4786ef6b2 100644
+> > > --- a/drivers/i2c/busses/i2c-efm32.c
+> > > +++ b/drivers/i2c/busses/i2c-efm32.c
+> > > @@ -312,9 +312,6 @@ static int efm32_i2c_probe(struct platform_device *pdev)
+> > >   	int ret;
+> > >   	u32 clkdiv;
+> > > -	if (!np)
+> > > -		return -EINVAL;
+> > > -
+> > I don't care much about this change. While the statement that this
+> > driver is only instantiated on dt platforms is probably right,
+> > explicitly checking for it might still prevent surprises later, serves
+> > as explicit statement for the driver reader that non-dt isn't supposed
+> > to work and given that the check is cheap I tend slightly to just keep
+> > it.
+> > 
+> In this driver, the function efm32_i2c_probe() can be triggered only if the
+> platform_device and platform_driver matches,  and the matching condition is
+> DTS. It's my opinion.
 
-This is a large change.
+I admit I didn't recheck, but I think the driver will also be matched on
+non-dt platforms that provide an "efm32-i2c" device.
 
-Was this done manually or by some script?
-If it was done manually, how likely is it there are defects
-in the conversion?
+Best regards
+Uwe
 
-
+-- 
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
