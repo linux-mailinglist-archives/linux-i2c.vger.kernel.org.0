@@ -2,105 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 600F11AD1DD
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Apr 2020 23:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDD31ADACC
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Apr 2020 12:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727974AbgDPV3h (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Apr 2020 17:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S1728915AbgDQKNu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Apr 2020 06:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726049AbgDPV3e (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Apr 2020 17:29:34 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40832C061A0C;
-        Thu, 16 Apr 2020 14:29:33 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id t4so93414plq.12;
-        Thu, 16 Apr 2020 14:29:33 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1728916AbgDQKNq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Apr 2020 06:13:46 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434ECC061A10
+        for <linux-i2c@vger.kernel.org>; Fri, 17 Apr 2020 03:13:46 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id u13so2422652wrp.3
+        for <linux-i2c@vger.kernel.org>; Fri, 17 Apr 2020 03:13:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xKJ12TLkzQ/kXKzUNh7uZY71wcHGHq0dr9HRnNeejTs=;
-        b=GBH/CeFkVshycdrumE7Cxfzsr2k8oHphKunJ5cQkq/J+BEWy0B8mN7So8xFtkmT2Sy
-         OJVsuR2YdLMqncaZ6zEycx4nFK+mVPVCNYOhjvj5TJ4RS3I/Bw/QlW04R3YfV2LvoegR
-         VqTg6xwm5Nj0dgN2MN3j+53B+5FTa1R+FgI5eGsuwX5plLN3LtvSF+4f7XCVCnlpdS2E
-         youpM0r8I65nbaeR/IJm+pYpAJo61yBeI+0D06Vq7lhAn2pENbE0q5kjHsJm1SjuuqSW
-         nTRiaYpEwP4ycb7a8oWaa9JHyDjdhAEzkl6JO6tU1pfvjzI+2K8oMGvBshxGCKJxpHxF
-         fFfA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Si8xNa2PRt0kIhccFd8IRCrcCliJZGdfrQl0M6nEdTs=;
+        b=utdWXHRDGLukUPDocwW6Cm48BY6bvFz80fFjJC3jpN5iRv2FnVhpn5i7lNKcBhS8sJ
+         xHiQQO2Jbegs0tzYojnLQ5M1vDah1L2xgfi1BzmqHjJKC0wTjgKJPL4ZiXUtHDEeWApp
+         G5pEAeVkba955wVhuY3VoZCj8teWpA60tuCqiu7FfOrsGWO49JAro14aLJNAoX+NQSD1
+         ncHthxk6aHwtjwlI2DB0JBVkqCBjdu3aXRQMKmFTfMcYQNw3MmhfDE8LHt2N8SOyCPsw
+         CAPXYAV9p4XxXipAbMvRb+N7NHpA6NGbsoM95P6IjYP1DspabfxVh/PdyVMd4UDDKbs7
+         uOig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xKJ12TLkzQ/kXKzUNh7uZY71wcHGHq0dr9HRnNeejTs=;
-        b=gdzIt9debtoisiNVf+gRSU0nAmazzGYmQGOlAqjBURy0DbcJCmWDAWvLyaA+ULAi5J
-         QnCsmCz6bNwdnlzwgi1c2ekABLpcheC9J7tlcLmodgNklx7QlxKmfrQqG7fYUICqImIv
-         rJe5bjo6szT40Idhki/9/Mpks139qGjntxzTb5LwP4VK9PZrhfQfSL4p7dZl4fMUDml8
-         pUYIAf1pdAHxce6TM7Zm5ulkMb/mIyPZ9y6M1Ua2O+rM/diNxJ44BgzZd28Od/3JIfH0
-         pcfgiCfgrDXTriekYBWgVNXM9YbbD1xnzc+PU8rjLSGhuqzqtGyCuSVg/an1SKdyMyBG
-         I+/Q==
-X-Gm-Message-State: AGi0PuZTXfN3S2Uvq2u4I1RcVjkHA6/zkIf32QKmCiSiAi3C1BdnamzV
-        miGa1zWKnULo375Kuz3unJkXJkJO4EboT5ejl6c=
-X-Google-Smtp-Source: APiQypK7aMZjGbS/drYLPjs2OxK5ulil5CIhuwgD0W6W93ut0pOvMYA8S/xXs0MgwEgcE2/MgaPagQBZIHYcv42CEL4=
-X-Received: by 2002:a17:902:aa09:: with SMTP id be9mr261775plb.18.1587072572729;
- Thu, 16 Apr 2020 14:29:32 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Si8xNa2PRt0kIhccFd8IRCrcCliJZGdfrQl0M6nEdTs=;
+        b=CVSoiy0TniwgiwmBLEAoUmHuSMPWfnXf/3SHSJmlQolg1VFjUVhOc2HXyKPUUMHgy0
+         zIbhrxdI5E7shAU4NThEoKF4qr6H6Hobwds4Mw1yj7eEdNWQuXXh0ECDo5fGj9/6rNuJ
+         2Cq+KiK5WfaOwf4eCY9WnTcwL6ZfG+J2C3auubAQL7a6W97fXAo+y8kIkjDrIGQl6N7C
+         Vc27/y6SL9+4X1zggctj0A8/qW8XPggDqgscN5fd6QoGmV9iKans1+cVOsTtEZyYRZaQ
+         eqHE+j56blof22ZEP49pQXgmccnyyqNDkORc2gLwPToqm01JYIEfxerc3r8lPgvZGv49
+         tpXA==
+X-Gm-Message-State: AGi0Pua4ibnjbbyy3D2w7egMBJb2fOYojSCcrVR73WFdGSkweuhoXTV5
+        suDDdb8XhMssvAifHJ+tLwE7F1bX2fY=
+X-Google-Smtp-Source: APiQypJJoXQEbutIxLdmsu/x/STiUGWe4/3crlmEFrGGKFCFPbSIFAprP4Y9woxirt4trOT8/ToViw==
+X-Received: by 2002:a05:6000:8f:: with SMTP id m15mr3108271wrx.19.1587118424935;
+        Fri, 17 Apr 2020 03:13:44 -0700 (PDT)
+Received: from dell ([95.149.164.124])
+        by smtp.gmail.com with ESMTPSA id o18sm4886743wrp.23.2020.04.17.03.13.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2020 03:13:44 -0700 (PDT)
+Date:   Fri, 17 Apr 2020 11:14:46 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] video: backlight: tosa_lcd: convert to use
+ i2c_new_client_device()
+Message-ID: <20200417101446.GB3737@dell>
+References: <20200326210959.13111-1-wsa+renesas@sang-engineering.com>
+ <20200326210959.13111-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-References: <20200416152345.23077-1-zhengdejin5@gmail.com> <6ca3cd57-de73-5327-5773-e08bf12c4a85@web.de>
- <7713a931e4475294de85b74aca298dde8be4242d.camel@perches.com>
-In-Reply-To: <7713a931e4475294de85b74aca298dde8be4242d.camel@perches.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 17 Apr 2020 00:29:20 +0300
-Message-ID: <CAHp75Vdd8SzrzXuxTTtkqRBWZuebhumJfv_fBPqdKwe780_ZEQ@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: busses: remove duplicate dev_err()
-To:     Joe Perches <joe@perches.com>
-Cc:     Markus Elfring <Markus.Elfring@web.de>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Thor Thayer <thor.thayer@linux.intel.com>,
-        Tang Bin <tangbin@cmss.chinamobile.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Patrick Williams <alpawi@amazon.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Barry Song <baohua@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        George Cherian <gcherian@marvell.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200326210959.13111-2-wsa+renesas@sang-engineering.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Apr 17, 2020 at 12:28 AM Joe Perches <joe@perches.com> wrote:
->
-> On Thu, 2020-04-16 at 20:22 +0200, Markus Elfring wrote:
-> > > it will print an error message by itself when platform_get_irq()
-> > > goes wrong. so don't need dev_err() in here again.
-> >
-> > I suggest to improve the commit message considerably.
->
-> I suggest you ignore Markus' suggestion.
->
-> The commit message is OK.
->
-> The subject _could_ have included "platform_get_irq" something like
->
-> Subject: [PATCH v2] i2c: busses: Remove platform_get_irq()'s duplicated dev_err()
->
-> but I believe it's not important enough to redo.
+On Thu, 26 Mar 2020, Wolfram Sang wrote:
 
-+1, I think it's good enough.
+> Move away from the deprecated API and return the shiny new ERRPTR where
+> useful.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/video/backlight/tosa_lcd.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+
+Applied, thanks.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
