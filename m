@@ -2,114 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 000A71AE9BA
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Apr 2020 06:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1D91AEA60
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Apr 2020 08:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725771AbgDREHA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 18 Apr 2020 00:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725747AbgDREHA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 18 Apr 2020 00:07:00 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA5EC061A0C;
-        Fri, 17 Apr 2020 21:06:59 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id z6so1712046plk.10;
-        Fri, 17 Apr 2020 21:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=eH90KozuksShDLEA3UFs+8T8NeL3+L+gABGBzpWbZmo=;
-        b=CGR92FnGZ4icoBWX8hfN+/b0UlO1ETKueJ2FFj79/OgReXHdyZWQRzuA7fLFZP4wjA
-         y0bFX1tU7yThL+JSN6SKAmCbjz6oNAAvfEBTa5s6hZNVf8REkcHM9C/cnctYmeKI65sH
-         J4VI1Qn8gd2JEpy91B6Y/f9gLQCn7tbKl5+axa8qw3PCl81jx2LOnjylPnO4uESXBq3y
-         HqfHKSR6FtZiOlvWbhGhfUhpvBeK24/2kcszXi60AeCxskD+jIy2z8FOsrn5/pD9Tzit
-         VHwkvQMwG035b5bOEsKb5ZtY9t8NLEpzPjWXyPWkx5u0xXGfmSqfIpUkzEHTu5WyoCwj
-         MnTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=eH90KozuksShDLEA3UFs+8T8NeL3+L+gABGBzpWbZmo=;
-        b=E0JRFrTHPXT3PyEktJ6l0j75er4T0liMIidbVCWchIxu7mVgiRRR+1ZG/2JyIHe07t
-         k2yCKWeNlHLFuSlHZYD5WipJBpvEEiIalT7H13xADofM5FCDAIvDypVJkXwVzRmaT6Pp
-         6Xjl9HCig9TiBTeds4OHj5TTJErqncjY799nGe7ahVbVSHcPohtqlrzNdotUWsjR71r+
-         I98SJUnHE1XprAbt8VxMPPHoACyt36+b7Wt0rGbxbGaOWF+iZX6Wj76kKgDX24ju79n2
-         paIkLMnkOpHoVdl7XZhZ8qfcXV9sPEpsX3zwF8ERLZro9+9Gg3p3VTpBLkByvbzy/zLa
-         mgsg==
-X-Gm-Message-State: AGi0PuYlYTC6R4xd8jt49jn7FeB8c3TaxsFiS5fOBOtSCA6iJKlo9S5L
-        pPtEwzOJ9TweqBTsdUW+3gv7dYp7
-X-Google-Smtp-Source: APiQypKSBYrQRjdu2X1NmLdY3oJtKp1sd0lQ5J4NxA8PeOi1ghfo8fO35p13uhjCnrefQji+o08Wcg==
-X-Received: by 2002:a17:90a:24ea:: with SMTP id i97mr8149595pje.189.1587182819249;
-        Fri, 17 Apr 2020 21:06:59 -0700 (PDT)
-Received: from localhost ([89.208.244.140])
-        by smtp.gmail.com with ESMTPSA id 13sm5903448pfv.95.2020.04.17.21.06.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 17 Apr 2020 21:06:58 -0700 (PDT)
-Date:   Sat, 18 Apr 2020 12:06:53 +0800
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Pierre Yves MORDRET <pierre-yves.mordret@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        Alain Volmat <alain.volmat@st.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] i2c: busses: convert to
- devm_platform_get_and_ioremap_resource
-Message-ID: <20200418040653.GA7120@nuc8i5>
-References: <20200414134827.18674-1-zhengdejin5@gmail.com>
- <20200415102158.GH1141@ninjato>
- <20200415160757.GC17519@nuc8i5>
- <CAHp75Vc+a7sQeY+W+4+-75TCMDCpnPRjUA5T8ZsBZi52PVB9dw@mail.gmail.com>
+        id S1725821AbgDRGxv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 18 Apr 2020 02:53:51 -0400
+Received: from sauhun.de ([88.99.104.3]:41048 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725796AbgDRGxv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 18 Apr 2020 02:53:51 -0400
+Received: from localhost (p5486CFBC.dip0.t-ipconnect.de [84.134.207.188])
+        by pokefinder.org (Postfix) with ESMTPSA id 8B95E2C1FB0;
+        Sat, 18 Apr 2020 08:53:48 +0200 (CEST)
+Date:   Sat, 18 Apr 2020 08:53:48 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.7
+Message-ID: <20200418065344.GA1880@kunai>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MGYHOYXEY6WxJCY8"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75Vc+a7sQeY+W+4+-75TCMDCpnPRjUA5T8ZsBZi52PVB9dw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Apr 17, 2020 at 11:46:33PM +0300, Andy Shevchenko wrote:
-> On Thu, Apr 16, 2020 at 3:19 AM Dejin Zheng <zhengdejin5@gmail.com> wrote:
-> >
-> > On Wed, Apr 15, 2020 at 12:21:58PM +0200, Wolfram Sang wrote:
-> > > On Tue, Apr 14, 2020 at 09:48:27PM +0800, Dejin Zheng wrote:
-> > > > use devm_platform_get_and_ioremap_resource() to simplify code, which
-> > > > contains platform_get_resource() and devm_ioremap_resource(), it also
-> > > > get the resource for use by the following code.
-> > > >
-> > > > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
-> > >
-> > > Applied to for-next, because it seems 'the new way' but...
-> > >
-> > > > -   r_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > > > -   id->membase = devm_ioremap_resource(&pdev->dev, r_mem);
-> > > > +   id->membase = devm_platform_get_and_ioremap_resource(pdev, 0, &r_mem);
-> > >
-> > > ... guys, do you really think this one line reduction improves
-> > > readability? Oh well...
-> > >
-> > Wolfram, Thank you for accepting it. From my personal point of view,
-> > as long as the direction is correct, even small improvements are
-> > worth doing. Thanks again for your tolerance.
-> 
-> Do you have plans to move on from janitor work to something serious?
->
-Andy, I want to do��but I don��t know where to start, Could you give me
-some suggestions? Thanks very much!
 
-BR,
-Dejin
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+--MGYHOYXEY6WxJCY8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Linus,
+
+I2C has some driver bugfixes and an old API removal this time.
+
+Please pull.
+
+Thanks,
+
+   Wolfram
+
+
+The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
+
+  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+for you to fetch changes up to 8814044fe0fa182abc9ff818d3da562de98bc9a7:
+
+  i2c: tegra: Synchronize DMA before termination (2020-04-15 18:27:31 +0200)
+
+----------------------------------------------------------------
+Dmitry Osipenko (2):
+      i2c: tegra: Better handle case where CPU0 is busy for a long time
+      i2c: tegra: Synchronize DMA before termination
+
+Hans de Goede (1):
+      i2c: designware: platdrv: Remove DPM_FLAG_SMART_SUSPEND flag on BYT and CHT
+
+Wolfram Sang (2):
+      i2c: altera: use proper variable to hold errno
+      i2c: remove i2c_new_probed_device API
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      (Rev.) i2c: designware: platdrv: Remove DPM_FLAG_SMART_SUSPEND flag on BYT and CHT
+
+Thor Thayer (1):
+      (Rev.) i2c: altera: use proper variable to hold errno
+
+ drivers/i2c/busses/i2c-altera.c             |  9 ++++----
+ drivers/i2c/busses/i2c-designware-platdrv.c | 14 +++++++----
+ drivers/i2c/busses/i2c-tegra.c              | 36 +++++++++++++++++++----------
+ drivers/i2c/i2c-core-base.c                 | 13 -----------
+ include/linux/i2c.h                         |  6 -----
+ 5 files changed, 38 insertions(+), 40 deletions(-)
+
+--MGYHOYXEY6WxJCY8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6ao/QACgkQFA3kzBSg
+KbbefQ/9GqRCRANJ01H6ICQnHIHhKV1vdhDW7WLwKxNRkjZkNmXa52R7hey5tGDM
+Uz22YAyv5wOJWRjtGggLHCM3dn0nRmw2oQz++1d69mIdANvH9FsqR3T2GRkAOT18
+fmAOeKihyYVS9dGRV1am7X2FiHvu4XOrOSbxAk0I8gl4Ka0JXSVbhMCYAuG2xdxv
+gP3ejVg9YHYeyw1gkihxLFZpDXliOWa+SyndrVbf5eAuQO3/Nz/S5p+gj+YWiaUi
+WiYcbyznoqjf1Qp7NnqiuAaSJ4qKxAjWtHaf+y3QWilulyJkWL0j1lzaehQ9OH/a
+9pwy2MpSho56B3cymzEFImBXJK7pTi5f1bucV3r9x/3PLXHSAm1CnPqPiWHQRbt4
+RSYbVk7hZPnPTzKZe9PLRZ/UvItPOrysCRJgprsU++woOW8dTr7hzMI8EAQoZqIJ
+BlRFREBdp1fLYrNSxde9jd1NVQJzzX0IANLZC2tKBoijHr9nYIfDFbU2aP7U39dj
+0cDqwypbP3iBDpBMqt+KrbXFmCrWUIl8itDF3Al3WAJ2jK6/9ri7+EqUQKt/oQV5
+AYOSGecHfJG6CwNuktKCVZ1bTnrb00h78J2Sl7+dS4fp7JCJXV3gbpIpZUjiKzZ6
+uzHq/KW/khvqPB1L0HuMSh5r8nLDUTIhm/t7N9lBPNKA2T/5IzI=
+=iJfJ
+-----END PGP SIGNATURE-----
+
+--MGYHOYXEY6WxJCY8--
