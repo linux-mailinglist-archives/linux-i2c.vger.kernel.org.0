@@ -2,110 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1D91AEA60
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Apr 2020 08:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF631AECA8
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Apr 2020 15:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725821AbgDRGxv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 18 Apr 2020 02:53:51 -0400
-Received: from sauhun.de ([88.99.104.3]:41048 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725796AbgDRGxv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 18 Apr 2020 02:53:51 -0400
-Received: from localhost (p5486CFBC.dip0.t-ipconnect.de [84.134.207.188])
-        by pokefinder.org (Postfix) with ESMTPSA id 8B95E2C1FB0;
-        Sat, 18 Apr 2020 08:53:48 +0200 (CEST)
-Date:   Sat, 18 Apr 2020 08:53:48 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for v5.7
-Message-ID: <20200418065344.GA1880@kunai>
+        id S1725879AbgDRNAP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 18 Apr 2020 09:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725804AbgDRNAP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 18 Apr 2020 09:00:15 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61321C061A0C
+        for <linux-i2c@vger.kernel.org>; Sat, 18 Apr 2020 06:00:15 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id ay1so2067591plb.0
+        for <linux-i2c@vger.kernel.org>; Sat, 18 Apr 2020 06:00:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=UW5RFeLiJCmDxmEc+XHFADLF3Ka4UZKf/GKxDSGaCcg=;
+        b=Ep57MSX6XQEYHgbUwQeX+5CBjTPN0m/y/gAN4D744xeZtBIW+fHiodH3+Wl08EdREf
+         r4MafspgKi9byzUPWsQ2TLGVmloLDM1xuHC6eyfK1mP1mG8jeHc0tcX6pE1Iaf73xhkE
+         PXPOJDQwDAUURf9dBK3EEJyoa4l1MUYboNlV2rnnI/qkvU8fC1U578hfBGOD8ZbZ54zN
+         a1z3vSSnb9aBaVnwkoz8sH/XP/8JrhPYZ7LHOwd3Od4EyjVohWPof7LHR2o4G6FBi77r
+         f04ZHnNlaJu7UN/wPaR4EayGK9nYYdtZgEnhgVTcskK8aiO89r1KH9oAiMvkhASRjMp3
+         YBcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=UW5RFeLiJCmDxmEc+XHFADLF3Ka4UZKf/GKxDSGaCcg=;
+        b=duMbyrgduI/NSTP+uRslkCsf+GpDgPZu16HtmnyrJ8VriTkqb1Yg4YbSMTfdgn/ZBv
+         VeBc5JkXFWDgLwZZPtldCOw17HgCvsFmTx81Pp4eaVXWebrn0GGur9JjhGZkuALIDRE5
+         G8sZONpYX1dslpNpnPqYf07uJef363Za07wSQcbRUlJQnPwfdpurBRPLvFMldj4319HB
+         vBWJHADmojFT23EUDv2G417uwUrcUF7vJi2i4NsCLMK39bbZmdR7kyjJ1a4AFzYpeYXR
+         aGPTnBcYe3uBmaQG78Pb29r6McSC6HvOstE9VkZhPHDO8YI5MxD3k13Ht7NWP5qB/Mot
+         FkCg==
+X-Gm-Message-State: AGi0Pua7JVS/blKHsZnFiLANAhUyKN2xEzkBpCwheEkAd85x2VDLssSR
+        CB7JgdYw3amgSkowZTKwd573Vdli/TPSuPF2y08=
+X-Google-Smtp-Source: APiQypKx4TIVu4O9OqYrrgMgZtbeT5qntH+A7Cv3ZY5ZEmJh7NuehowL9UQudJPmGsi7hgLGC8XyutXr06/uMbv09n0=
+X-Received: by 2002:a17:902:854a:: with SMTP id d10mr8109997plo.262.1587214814860;
+ Sat, 18 Apr 2020 06:00:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MGYHOYXEY6WxJCY8"
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200414134827.18674-1-zhengdejin5@gmail.com> <20200415102158.GH1141@ninjato>
+ <20200415160757.GC17519@nuc8i5> <CAHp75Vc+a7sQeY+W+4+-75TCMDCpnPRjUA5T8ZsBZi52PVB9dw@mail.gmail.com>
+ <20200418040653.GA7120@nuc8i5>
+In-Reply-To: <20200418040653.GA7120@nuc8i5>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 18 Apr 2020 16:00:03 +0300
+Message-ID: <CAHp75VcWRd8NUoYAVV1g8051XWZgrGm0vKAAzF_4WzTi40y+Ww@mail.gmail.com>
+Subject: Re: [PATCH v1] i2c: busses: convert to devm_platform_get_and_ioremap_resource
+To:     Dejin Zheng <zhengdejin5@gmail.com>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Sat, Apr 18, 2020 at 7:07 AM Dejin Zheng <zhengdejin5@gmail.com> wrote:
 
---MGYHOYXEY6WxJCY8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Leave only you and i2c ML to avoid spamming people.
 
-Linus,
+> > > Wolfram, Thank you for accepting it. From my personal point of view,
+> > > as long as the direction is correct, even small improvements are
+> > > worth doing. Thanks again for your tolerance.
+> >
+> > Do you have plans to move on from janitor work to something serious?
+> >
+> Andy, I want to do=EF=BF=BD=EF=BF=BDbut I don=EF=BF=BD=EF=BF=BDt know whe=
+re to start, Could you give me
+> some suggestions? Thanks very much!
 
-I2C has some driver bugfixes and an old API removal this time.
+I have been collecting some items on my Gist page [1], where anybody
+(depending on the skills) can find affordable tasks. Tell me if you
+need elaboration.
 
-Please pull.
+[1]: https://gist.github.com/andy-shev/a2cb1ee4767d6d2f5d20db53ecb9aabc
 
-Thanks,
-
-   Wolfram
-
-
-The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
-
-  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-
-for you to fetch changes up to 8814044fe0fa182abc9ff818d3da562de98bc9a7:
-
-  i2c: tegra: Synchronize DMA before termination (2020-04-15 18:27:31 +0200)
-
-----------------------------------------------------------------
-Dmitry Osipenko (2):
-      i2c: tegra: Better handle case where CPU0 is busy for a long time
-      i2c: tegra: Synchronize DMA before termination
-
-Hans de Goede (1):
-      i2c: designware: platdrv: Remove DPM_FLAG_SMART_SUSPEND flag on BYT and CHT
-
-Wolfram Sang (2):
-      i2c: altera: use proper variable to hold errno
-      i2c: remove i2c_new_probed_device API
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      (Rev.) i2c: designware: platdrv: Remove DPM_FLAG_SMART_SUSPEND flag on BYT and CHT
-
-Thor Thayer (1):
-      (Rev.) i2c: altera: use proper variable to hold errno
-
- drivers/i2c/busses/i2c-altera.c             |  9 ++++----
- drivers/i2c/busses/i2c-designware-platdrv.c | 14 +++++++----
- drivers/i2c/busses/i2c-tegra.c              | 36 +++++++++++++++++++----------
- drivers/i2c/i2c-core-base.c                 | 13 -----------
- include/linux/i2c.h                         |  6 -----
- 5 files changed, 38 insertions(+), 40 deletions(-)
-
---MGYHOYXEY6WxJCY8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6ao/QACgkQFA3kzBSg
-KbbefQ/9GqRCRANJ01H6ICQnHIHhKV1vdhDW7WLwKxNRkjZkNmXa52R7hey5tGDM
-Uz22YAyv5wOJWRjtGggLHCM3dn0nRmw2oQz++1d69mIdANvH9FsqR3T2GRkAOT18
-fmAOeKihyYVS9dGRV1am7X2FiHvu4XOrOSbxAk0I8gl4Ka0JXSVbhMCYAuG2xdxv
-gP3ejVg9YHYeyw1gkihxLFZpDXliOWa+SyndrVbf5eAuQO3/Nz/S5p+gj+YWiaUi
-WiYcbyznoqjf1Qp7NnqiuAaSJ4qKxAjWtHaf+y3QWilulyJkWL0j1lzaehQ9OH/a
-9pwy2MpSho56B3cymzEFImBXJK7pTi5f1bucV3r9x/3PLXHSAm1CnPqPiWHQRbt4
-RSYbVk7hZPnPTzKZe9PLRZ/UvItPOrysCRJgprsU++woOW8dTr7hzMI8EAQoZqIJ
-BlRFREBdp1fLYrNSxde9jd1NVQJzzX0IANLZC2tKBoijHr9nYIfDFbU2aP7U39dj
-0cDqwypbP3iBDpBMqt+KrbXFmCrWUIl8itDF3Al3WAJ2jK6/9ri7+EqUQKt/oQV5
-AYOSGecHfJG6CwNuktKCVZ1bTnrb00h78J2Sl7+dS4fp7JCJXV3gbpIpZUjiKzZ6
-uzHq/KW/khvqPB1L0HuMSh5r8nLDUTIhm/t7N9lBPNKA2T/5IzI=
-=iJfJ
------END PGP SIGNATURE-----
-
---MGYHOYXEY6WxJCY8--
+--=20
+With Best Regards,
+Andy Shevchenko
