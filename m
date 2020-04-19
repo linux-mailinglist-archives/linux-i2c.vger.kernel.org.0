@@ -2,109 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 873DF1AFC0D
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 Apr 2020 18:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D361AFD0E
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 Apr 2020 20:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726164AbgDSQgE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 19 Apr 2020 12:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725793AbgDSQgD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 Apr 2020 12:36:03 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF059C061A0C
-        for <linux-i2c@vger.kernel.org>; Sun, 19 Apr 2020 09:36:03 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id y25so3744187pfn.5
-        for <linux-i2c@vger.kernel.org>; Sun, 19 Apr 2020 09:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=i7GqUrKLFwo10/MfIRdFmE2O5BZFp4XagJUV0R44w8I=;
-        b=ZA/UxaupKjXFf/E93WbtKjBRuPERYlUkwBSJi4GbCyaDg+xnKnAIn9M4WUdiK60CTx
-         RwPGjK7jv2YRljCbu4ouoDRHwPRBbPSFtUnUzSpgtudSzysSP5M13ChXF5snnTU5CnUE
-         c/t3/Mmoyra90/ojaIu5NXluOUdy8wjYkkZMbqYrymOct+p3auJ43tWKH+iuvOyOs9on
-         34NJaLIbFoo7swniwSd7XAW7hhPaVPQoCBjrYwi4LRS9dwzZ44/wHuCsp5dIiLTjXXN7
-         Jmlx0ajxweNVZnLYm6heevhZL579U3ro2rvZGBDykvvVaI/COobPG6e7XuuROUOX5MIk
-         ILTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=i7GqUrKLFwo10/MfIRdFmE2O5BZFp4XagJUV0R44w8I=;
-        b=mzM1Ughy3z4mRUKnd48szknCjB/GWKxM/YILD973qffXTdP9gF0dUGmODVKYrO3sZf
-         149cUBhaADhE+c8ZflCBbnlqwa/MeTJCj4VUhEw1wDde7309H+fUZ7ktlIfWcQ+V1pue
-         pzNbFrgnp0GY9ZlhgG3UFvayQF73XKpEamQ+LpdUPo2K9oyPigbYabM9uSO/MPyJcsBj
-         E9CsSDTPyU9O0NrQDvY5q3XwX14M/PcLhOq1LkAU6ls4VIKh/LM1SBjXfEXKhv4TNf2h
-         YSQvm9mpscUNDjI8rK/vm3WUo7AkExqIFsizsDaPfyaJMmZLkas/Wgdx6dNllniAjK8F
-         HiuQ==
-X-Gm-Message-State: AGi0PuaUtqjBaF7WLiR2LcPkszeaZzLR7c5eOI4euSg7wieKrEmY9gI0
-        9ENsE3m3Cy2rZm0f9x9EFhrXGUaL
-X-Google-Smtp-Source: APiQypLxPH7kMsJY1e1rtZfSv23hsvtA3e5vQcPDhzEk0zHXOBpjysoAJgI5OO61UvFfYY8gs1Bbqg==
-X-Received: by 2002:a63:7d19:: with SMTP id y25mr12203926pgc.78.1587314163245;
-        Sun, 19 Apr 2020 09:36:03 -0700 (PDT)
-Received: from localhost (89.208.244.140.16clouds.com. [89.208.244.140])
-        by smtp.gmail.com with ESMTPSA id b7sm1601803pft.147.2020.04.19.09.36.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 19 Apr 2020 09:36:02 -0700 (PDT)
-Date:   Mon, 20 Apr 2020 00:36:00 +0800
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v1] i2c: busses: convert to
- devm_platform_get_and_ioremap_resource
-Message-ID: <20200419163600.GA19772@nuc8i5>
-References: <20200414134827.18674-1-zhengdejin5@gmail.com>
- <20200415102158.GH1141@ninjato>
- <20200415160757.GC17519@nuc8i5>
- <CAHp75Vc+a7sQeY+W+4+-75TCMDCpnPRjUA5T8ZsBZi52PVB9dw@mail.gmail.com>
- <20200418040653.GA7120@nuc8i5>
- <CAHp75VcWRd8NUoYAVV1g8051XWZgrGm0vKAAzF_4WzTi40y+Ww@mail.gmail.com>
+        id S1726693AbgDSSOk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 19 Apr 2020 14:14:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37082 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726440AbgDSSOk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 19 Apr 2020 14:14:40 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3440920771;
+        Sun, 19 Apr 2020 18:14:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587320079;
+        bh=bOt9BTn/I9BtpLW6MYPux7kH7zXf1KQ4OwttSbOUgxw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=F96kxGnwb5hbRo2uaveExMkh4pG5tmsfXC/X4f7LcIR9NVVk3+CXqwPimCRGIZsLq
+         200DZ+NlYkyxPrNFkbuYootDCzDqqWFu0hJkAVPZpKUAgkDDPBPfI6mIZvHi8k+VtM
+         aJNXnDOzYimf/GSU7Z8wIQIZEF7kJxvbDOxdjZqA=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VcWRd8NUoYAVV1g8051XWZgrGm0vKAAzF_4WzTi40y+Ww@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200416005549.9683-2-robh@kernel.org>
+References: <20200416005549.9683-1-robh@kernel.org> <20200416005549.9683-2-robh@kernel.org>
+Subject: Re: [PATCH 2/2] dt-bindings: Remove cases of 'allOf' containing a '$ref'
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Vinod Koul <vkoul@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Danie l Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 19 Apr 2020 11:14:38 -0700
+Message-ID: <158732007844.132238.3936257450130949073@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Apr 18, 2020 at 04:00:03PM +0300, Andy Shevchenko wrote:
-> On Sat, Apr 18, 2020 at 7:07 AM Dejin Zheng <zhengdejin5@gmail.com> wrote:
-> 
-> Leave only you and i2c ML to avoid spamming people.
-> 
-> > > > Wolfram, Thank you for accepting it. From my personal point of view,
-> > > > as long as the direction is correct, even small improvements are
-> > > > worth doing. Thanks again for your tolerance.
-> > >
-> > > Do you have plans to move on from janitor work to something serious?
-> > >
-> > Andy, I want to do��but I don��t know where to start, Could you give me
-> > some suggestions? Thanks very much!
-> 
-> I have been collecting some items on my Gist page [1], where anybody
-> (depending on the skills) can find affordable tasks. Tell me if you
-> need elaboration.
-> 
-> [1]: https://gist.github.com/andy-shev/a2cb1ee4767d6d2f5d20db53ecb9aabc
->
-Andy, your Gist page is really very suitable for me, I think I should be
-able to start with the following two cases:
+Quoting Rob Herring (2020-04-15 17:55:49)
+> json-schema versions draft7 and earlier have a weird behavior in that
+> any keywords combined with a '$ref' are ignored (silently). The correct
+> form was to put a '$ref' under an 'allOf'. This behavior is now changed
+> in the 2019-09 json-schema spec and '$ref' can be mixed with other
+> keywords. The json-schema library doesn't yet support this, but the
+> tooling now does a fixup for this and either way works.
+>=20
+> This has been a constant source of review comments, so let's change this
+> treewide so everyone copies the simpler syntax.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/clock/fixed-factor-clock.yaml    |   5 +-
 
-5. Run `codespell` across drivers and subsystems
-6. Fix ioremap(..., 0) [size = 0] across architectures, now some return NULL,
-   some return address, some may even have leaks
-
-If I have any related commits, I will CC with you. Thanks!
-
-BR,
-Dejin
-
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+Reviewed-by: Stephen Boyd <sboyd@kernel.org> # clock
