@@ -2,94 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C36211B0E82
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Apr 2020 16:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E1C1B0F04
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Apr 2020 16:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729157AbgDTOga (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 Apr 2020 10:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729140AbgDTOga (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Apr 2020 10:36:30 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E808C061A0C
-        for <linux-i2c@vger.kernel.org>; Mon, 20 Apr 2020 07:36:30 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id z6so4007360plk.10
-        for <linux-i2c@vger.kernel.org>; Mon, 20 Apr 2020 07:36:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HGCNmU952CXP2pdvOvFnhVNp8DP/1u6iWG8z0zqRmqU=;
-        b=kmBZa/DSevRlnFdWzIurfy4Nsa1EllA2lbGALf+9XFmwgKaXhqzYePE3nDDZBzT06Y
-         sd6pGaGjPdrsBNtKYCtITE9NFEiyCFDLBFp6dy/xuzWxAmzCH3wSkuXKYG/3ugNxVHFT
-         3DKzUA/HrkIvTAXHg4xBNRYAbSoh2cgtXsAFODShoiBCkwgEjXxM6Y+/77n2mhWacgN/
-         sL0VJt8lbp92mOMnpxQMg0DuCZkSk8z//huMGexAvRTllMi7We7XVXCj8GJYPNcPL86t
-         MRnfsNnGgBlRLjJyPNXBe66kRDOZ5A1Sehhp8YAaN2shcoyvlrnRh2BIDMeXTdl+u8eC
-         1drg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HGCNmU952CXP2pdvOvFnhVNp8DP/1u6iWG8z0zqRmqU=;
-        b=oocMeCXhycVPWO9EKRQa+P/ThP6aNMbShL9Nq9+7A0qjSxg0cjcz6Z9jM2mscvEq6E
-         lXOmWbM31gGbMtLK7KaZ4bG6m7bca/8QcEi3R/THC8n2MoSoIFZIw6jb3CgwgqadSuov
-         1ZlX58ZMsQvp/UUlnEJArNOMIOIHLNDbNicmvDpwy3Z9wSo7olbisgVnsNxkL3671YIj
-         ugBUDRyvjUJn408XMsppnqzvRBA3FBwuc4XxFBaGjjvRDcDVAdTsE0yJNQ+II80YB9iV
-         8/Uh02GToXIpKUVhUEMiriI701naP4DTil4lNrmJ5IGwqmnUKz8ompbfFrL2gfL17qxw
-         bTpA==
-X-Gm-Message-State: AGi0Pua3dyBs7na3PWz9bdS/2HUuYQfFPOYbWAyWn35Ho+tVHqLRKqlp
-        7FoA4L9/Qc6eiGH0ZZ0Xtz4=
-X-Google-Smtp-Source: APiQypKOiUhdlEwdgQVgN48u3hQq1291g1HbN0QBZqdZWlhk6F6D+6fvatsNwHy+VEOJquOo2JtBjQ==
-X-Received: by 2002:a17:902:7b96:: with SMTP id w22mr17451702pll.10.1587393390148;
-        Mon, 20 Apr 2020 07:36:30 -0700 (PDT)
-Received: from localhost (89.208.244.140.16clouds.com. [89.208.244.140])
-        by smtp.gmail.com with ESMTPSA id 198sm1247725pfa.87.2020.04.20.07.36.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 20 Apr 2020 07:36:29 -0700 (PDT)
-Date:   Mon, 20 Apr 2020 22:36:25 +0800
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        kbuild test robot <lkp@intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>, lkp@lists.01.org
-Subject: Re: [PATCH v1] i2c: busses: convert to
- devm_platform_get_and_ioremap_resource
-Message-ID: <20200420143625.GB10880@nuc8i5>
-References: <20200414134827.18674-1-zhengdejin5@gmail.com>
- <20200415102158.GH1141@ninjato>
- <20200415160757.GC17519@nuc8i5>
- <CAHp75Vc+a7sQeY+W+4+-75TCMDCpnPRjUA5T8ZsBZi52PVB9dw@mail.gmail.com>
- <20200418040653.GA7120@nuc8i5>
- <CAHp75VcWRd8NUoYAVV1g8051XWZgrGm0vKAAzF_4WzTi40y+Ww@mail.gmail.com>
- <20200419163600.GA19772@nuc8i5>
- <20200420094319.GA2094@ninjato>
- <CAHp75VeGNV-Jsyu1ev843GzBuJqwojfDcbC5H9MJokurrQLjjg@mail.gmail.com>
- <20200420095715.GB2094@ninjato>
+        id S1728425AbgDTO6V (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 Apr 2020 10:58:21 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:13354 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725944AbgDTO6V (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Apr 2020 10:58:21 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03KEvxFe029857;
+        Mon, 20 Apr 2020 16:58:07 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=vnvueWF2EAYv1eJy/Hwk/dSPJsB/WwgqTpNzfqj2Osg=;
+ b=iFVVMe31yG1knkRz19oSGJ3tW5TSm8SPWpnIbNqd4drZytF9ZjbbYxaqdSeLNGyIuep6
+ /k2MUWA5P4jn0eh8Ha1wcKWN0IzEaMvbgDJ/Bfn/tur5ws4vjrg9OXLWdb8TmIdi1ZaQ
+ ZBK36iYhFF+RYmeYsvqCBmcWMKZeAifthqhN64efcfgi+Yw15ajjMRNtOP6Gnl57bglj
+ wmcEJIhDiGRhoADi51lBoTM57N9z8xc9yfDa67MndJwgE71dqyF3QOd/HXKZsqEII/Ws
+ XBtD35C+QjSKpfOx3DTKvcVMOgCQxzAyxLlEKTzQP4PddyK0EIGfqe5L8Y8Ov1JVznwM 1A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 30fpp8k27y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Apr 2020 16:58:07 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F0E2D10002A;
+        Mon, 20 Apr 2020 16:58:06 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BEC932C1F6E;
+        Mon, 20 Apr 2020 16:58:06 +0200 (CEST)
+Received: from localhost (10.75.127.50) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 20 Apr 2020 16:58:06
+ +0200
+From:   Alain Volmat <alain.volmat@st.com>
+To:     <wsa@the-dreams.de>, <robh+dt@kernel.org>
+CC:     <mark.rutland@arm.com>, <pierre-yves.mordret@st.com>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>,
+        <alain.volmat@st.com>
+Subject: [PATCH v3 0/2] i2c: i2c-stm32f7: allow range of I2C bus frequency
+Date:   Mon, 20 Apr 2020 16:57:55 +0200
+Message-ID: <1587394677-6872-1-git-send-email-alain.volmat@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200420095715.GB2094@ninjato>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG3NODE2.st.com (10.75.127.8) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-20_05:2020-04-20,2020-04-20 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Apr 20, 2020 at 11:57:15AM +0200, Wolfram Sang wrote:
-> 
-> > > > 6. Fix ioremap(..., 0) [size = 0] across architectures, now some return NULL,
-> > > >    some return address, some may even have leaks
-> > >
-> > > This sounds more useful to me. Would be great if you have interest.
-> > 
-> > But it much more advanced :-) Complete dive into the kernel guts.
-> 
-> Well, learning by doing :) Dejin seems interested...
->
-I do my best to try, Thank you all for your encouragement and help.
+This serie introduces the possibility to set bus frequency other
+than 100KHz, 400KHz and 1MHz.
 
-BR,
-Dejin
+Changelog:
+v3: fix i2c: i2c-stm32f7: allows for any bus frequency patch
+v2: fix i2c: i2c-stm32f7: allows for any bus frequency patch
 
+Alain Volmat (2):
+  dt-bindings: i2c: i2c-stm32f7: allow clock-frequency range
+  i2c: i2c-stm32f7: allows for any bus frequency
+
+ .../devicetree/bindings/i2c/st,stm32-i2c.yaml      |   8 +-
+ drivers/i2c/busses/i2c-stm32f7.c                   | 125 +++++++++++----------
+ 2 files changed, 68 insertions(+), 65 deletions(-)
 
