@@ -2,32 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FEE1B1216
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Apr 2020 18:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FF31B1218
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Apr 2020 18:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725784AbgDTQnf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 Apr 2020 12:43:35 -0400
-Received: from sauhun.de ([88.99.104.3]:47772 "EHLO pokefinder.org"
+        id S1726023AbgDTQnv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 Apr 2020 12:43:51 -0400
+Received: from sauhun.de ([88.99.104.3]:47794 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726099AbgDTQne (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 20 Apr 2020 12:43:34 -0400
+        id S1726013AbgDTQnv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 20 Apr 2020 12:43:51 -0400
 Received: from localhost (p54B335B8.dip0.t-ipconnect.de [84.179.53.184])
-        by pokefinder.org (Postfix) with ESMTPSA id E17B52C1F4C;
-        Mon, 20 Apr 2020 18:43:32 +0200 (CEST)
-Date:   Mon, 20 Apr 2020 18:43:32 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id F06262C1F4C;
+        Mon, 20 Apr 2020 18:43:49 +0200 (CEST)
+Date:   Mon, 20 Apr 2020 18:43:49 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     =?utf-8?B?QmrDtnJuIEFyZMO2?= <bjorn.ardo@axis.com>
-Cc:     linux-i2c@vger.kernel.org,
-        =?utf-8?B?QmrDtnJuIEFyZMO2?= <bjornar@axis.com>
-Subject: Re: [PATCH] i2c: slave-eeprom: Make it possible to pre-load eeprom
- data
-Message-ID: <20200420164332.GC3721@ninjato>
-References: <1567781706-2191-1-git-send-email-bjorn.ardo@axis.com>
+To:     Bjorn Ardo <bjorn.ardo@axis.com>
+Cc:     Patrick Williams <alpawi@amazon.com>,
+        =?utf-8?B?QmrDtnJuIEFyZMO2?= <bjornar@axis.com>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: slave-eeprom: initialize empty eeprom properly
+Message-ID: <20200420164349.GD3721@ninjato>
+References: <20191001164009.21610-1-alpawi@amazon.com>
+ <150599be-9125-4ab9-e2a6-e792b41910e6@axis.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7qSK/uQB79J36Y4o"
+        protocol="application/pgp-signature"; boundary="6Nae48J/T25AfBN4"
 Content-Disposition: inline
-In-Reply-To: <1567781706-2191-1-git-send-email-bjorn.ardo@axis.com>
+In-Reply-To: <150599be-9125-4ab9-e2a6-e792b41910e6@axis.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -35,58 +37,68 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---7qSK/uQB79J36Y4o
-Content-Type: text/plain; charset=utf-8
+--6Nae48J/T25AfBN4
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 06, 2019 at 04:55:06PM +0200, Bj=C3=B6rn Ard=C3=B6 wrote:
-> If the slave eeprom has a "firmware-name" in devicetree, then
-> pre-load the data in the eeprom with this file.
+On Wed, Oct 02, 2019 at 08:20:53AM +0200, Bjorn Ardo wrote:
+> Hi,
 >=20
-> Signed-off-by: Bj=C3=B6rn Ard=C3=B6 <bjorn.ardo@axis.com>
+>=20
+> I sent in another patch earlier that added support for specifying a file =
+in
+> devicetree to initilize the eeprom from, corresponding to the case of
+> pre-flashed eeprom. Maybe these two patches should be merged so this
+> initialization is only done if no file is specified?
 
-Sorry that it got postponed so many times :(
+Yes, I agree.
 
-> +static int i2c_slave_preload_eeprom_data(struct eeprom_data *eeprom, str=
-uct i2c_client *client, unsigned int size)
+> /BA
+>=20
+> On 10/1/19 6:40 PM, Patrick Williams wrote:
+> > The i2c-slave-eeprom driver emulates at24 class eeprom devices,
+> > which come initialized with all 1s.  Do the same in the software
+> > emulation.
+> >=20
+> > Signed-off-by: Patrick Williams <alpawi@amazon.com>
+> > ---
+> >   drivers/i2c/i2c-slave-eeprom.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >=20
+> > diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eep=
+rom.c
+> > index db9763cb4dae..efee56106251 100644
+> > --- a/drivers/i2c/i2c-slave-eeprom.c
+> > +++ b/drivers/i2c/i2c-slave-eeprom.c
+> > @@ -131,6 +131,8 @@ static int i2c_slave_eeprom_probe(struct i2c_client=
+ *client, const struct i2c_de
+> >   	if (!eeprom)
+> >   		return -ENOMEM;
+> > +	memset(eeprom->buffer, 0xFF, size);
+> > +
+> >   	eeprom->idx_write_cnt =3D 0;
+> >   	eeprom->num_address_bytes =3D flag_addr16 ? 2 : 1;
+> >   	eeprom->address_mask =3D size - 1;
 
-I totally agree with merging the patch "i2c: slave-eeprom: initialize
-empty eeprom properly" [1] into this one, so we get proper memory init
-at the end of this function. It should be renamed to
-"i2c_slave_init_eeprom_data" then, probably...
-
-> +{
-> +	if (client->dev.of_node) {
-> +		const struct firmware *fw;
-> +		const char *eeprom_data;
-> +		if (!of_property_read_string(client->dev.of_node, "firmware-name", &ee=
-prom_data)) {
-
-Can you switch to device_property_read_string() and friends? I think the
-ACPI world may also be interested in this feature.
-
-All the rest looks good, thanks!
-
-
---7qSK/uQB79J36Y4o
+--6Nae48J/T25AfBN4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6d0TQACgkQFA3kzBSg
-KbZ0fg//atFigVD5tr/CBoRRZE10rhevuHNbn4bCJmMJDNpqOCIKT8QHOndXsc9U
-6vi7mQbxGGmWau8a16qgQVxdYtKlp2MH9VEtUkCZwrEkC9RzDG/r7Q03XsOTjuNj
-8nYON9uB7Jk07zhsxtm8O3Bw4EGFzeIDYk69uV/UbSHn1DLcVSNr5Ev5zIT69nWv
-VfloioQY8G8wPFvge7lXKIQ5adWu6/7/yhn6PQ3rFhaC+Wgk4Gj/Oikz0/UNSuL8
-W/1G63Iux9DZu7syHl2+6V8/hW8L+Y7xZY44r8y0epyHZBQVlGWNh8DF6wVNn7nY
-XG/X1QgddmRK9U64DVRViVWZ/g2z5wEjab+qtYbwFsqaCh+lVR2QvHIkEaAB6HSz
-MlGQFySUKjW/dt2l/3NbZpIj5U02XnOIpEMUuhJyzYHyRT/QPk0MPmYn8BjZLLqT
-47ddcRZhGidLOqiZRxTQsOvCFLSuHDp0SK7Y3uuLSeyS02ByWUAdrl0NHLTpPiym
-ZZVR73y+9LEvUr/l3s5musXUDffEIONR75DKMb0XpAUo1ObJZp5skB6jR069y9Xl
-Ukoa158vW/uyhKDCcSYZBuT3mCStKDhLCnwedEfvOysVPlWBzYwnBtc8HqRDqDYq
-ttVIVj+cK/49+uioKd81dcc+5jHA9R0PnGzCcm2wKtEtwwyYCBY=
-=DQdQ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6d0UUACgkQFA3kzBSg
+Kba+gxAAj7fIStG6KAF5VvDWWpM8Pg8kZRzkCLZ+FY8Ihrj3aJT+hTkUaU3BwfCV
+OXQCQWQP9OHDcSJJbjVq3XyG4b4pAXTuokoCQVX5OjB5b5Oi/RJhpt3U8JFKy/eh
+x17uULwKA0zUZ05z9iaKcKDy8xNOEkfAdDlJRPdWPx5LJIa0VyGLgeadU+YAtd31
+cs/+WKVTMFkA53hAKO+emVlY0yrDzpjBTiBbn9psIhKEyJ78fwEjChUq1m1tF2u5
+4Gl4KMvuK5oc0JoNzppsqybDZ67qWqjYT7E99AUPMOBjZwXZiR7BS6v0IatQjn5r
+4vdGVPQTZ6NRRAuzq7IjBrj/rVC7qRiAX/0rI6WVCDDa400xA+2zYQDXx2BrceFc
+5zTejMPuJheqJ4lESiMgc1gC3BMCpbC8T3CTUqekij4CsakPfQYdpqPXT1L2Y+Rc
+Cw5YGw6mPn6EJlsmuxzaRYSQvYpH876cTyIw0wX97Pgs9fbY5l8LPicXbgfqTzzO
+ZQt0YVBz/Z65xhjqlifguiMPvARJX0zyAQ/Gr8zRA2uhH/RIxo7Y4RjvajWjvkLQ
+jwQXiB5dkB9XX/1DLmMKVf3ADw1gtSjQunKk/cOLt2qNNatVZVivbXQsZfBJz8mZ
+nm1EeUgEFjGacGrQFjrWDpRlCtOCvRXwWS6meTU+m+mwnyVIERQ=
+=C9ai
 -----END PGP SIGNATURE-----
 
---7qSK/uQB79J36Y4o--
+--6Nae48J/T25AfBN4--
