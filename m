@@ -2,87 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6118F1B1793
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Apr 2020 22:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E841B18A4
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Apr 2020 23:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726450AbgDTUxb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 Apr 2020 16:53:31 -0400
-Received: from sauhun.de ([88.99.104.3]:50670 "EHLO pokefinder.org"
+        id S1727895AbgDTVnU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 Apr 2020 17:43:20 -0400
+Received: from ms.lwn.net ([45.79.88.28]:53958 "EHLO ms.lwn.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725774AbgDTUxb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 20 Apr 2020 16:53:31 -0400
-Received: from localhost (p54B335B8.dip0.t-ipconnect.de [84.179.53.184])
-        by pokefinder.org (Postfix) with ESMTPSA id 279052C1F4C;
-        Mon, 20 Apr 2020 22:53:29 +0200 (CEST)
-Date:   Mon, 20 Apr 2020 22:53:26 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Patrick Williams <patrick@stwcx.xyz>
-Cc:     Bjorn Ardo <bjorn.ardo@axis.com>,
-        Patrick Williams <alpawi@amazon.com>,
-        =?utf-8?B?QmrDtnJuIEFyZMO2?= <bjornar@axis.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: slave-eeprom: initialize empty eeprom properly
-Message-ID: <20200420205325.GA1693@ninjato>
-References: <20191001164009.21610-1-alpawi@amazon.com>
- <150599be-9125-4ab9-e2a6-e792b41910e6@axis.com>
- <20200420164349.GD3721@ninjato>
- <20200420203146.GC95151@heinlein.lan.stwcx.xyz>
+        id S1725989AbgDTVnT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 20 Apr 2020 17:43:19 -0400
+Received: from lwn.net (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 632E4823;
+        Mon, 20 Apr 2020 21:43:17 +0000 (UTC)
+Date:   Mon, 20 Apr 2020 15:43:16 -0600
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Yuti Amonkar <yamonkar@cadence.com>,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-rdma@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-crypto@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-afs@lists.infradead.org,
+        ecryptfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ocfs2-devel@oss.oracle.com, linux-pci@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-spi@vger.kernel.org,
+        Sandeep Maheswaram <sanm@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-usb@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Matthias Brugger <mbrugger@suse.com>, netdev@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net
+Subject: Re: [PATCH v2 00/33] Documentation fixes for Kernel 5.8
+Message-ID: <20200420154316.28e42905@lwn.net>
+In-Reply-To: <cover.1586881715.git.mchehab+huawei@kernel.org>
+References: <cover.1586881715.git.mchehab+huawei@kernel.org>
+Organization: LWN.net
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cWoXeonUoKmBZSoM"
-Content-Disposition: inline
-In-Reply-To: <20200420203146.GC95151@heinlein.lan.stwcx.xyz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, 14 Apr 2020 18:48:26 +0200
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
 
---cWoXeonUoKmBZSoM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Patches 1 to 5 contain changes to the documentation toolset:
+> 
+> - The first 3 patches help to reduce a lot the number of reported
+>   kernel-doc issues, by making the tool more smart.
+> 
+> - Patches 4 and 5 are meant to partially address the PDF
+>   build, with now requires Sphinx version 2.4 or upper.
+> 
+> The remaining patches fix broken references detected by
+> this tool:
+> 
+>         ./scripts/documentation-file-ref-check
+> 
+> and address other random errors due to tags being mis-interpreted
+> or mis-used.
+> 
+> They are independent each other, but some may depend on
+> the kernel-doc improvements.
+> 
+> PS.: Due to the large number of C/C, I opted to keep a smaller
+> set of C/C at this first e-mail (only e-mails with "L:" tag from
+> MAINTAINERS file).
 
-On Mon, Apr 20, 2020 at 03:31:46PM -0500, Patrick Williams wrote:
-> On Mon, Apr 20, 2020 at 06:43:49PM +0200, Wolfram Sang wrote:
-> > On Wed, Oct 02, 2019 at 08:20:53AM +0200, Bjorn Ardo wrote:
-> > > Hi,
-> > >=20
-> > >=20
-> > > I sent in another patch earlier that added support for specifying a f=
-ile in
-> > > devicetree to initilize the eeprom from, corresponding to the case of
-> > > pre-flashed eeprom. Maybe these two patches should be merged so this
-> > > initialization is only done if no file is specified?
-> >=20
-> > Yes, I agree.
-> >=20
->=20
-> It looks like Bjorn's referenced patches are still unmerged also?
+OK, I've applied this set, minus #17 which was applied elsewhere.
 
-Yes, it might be easiest if he merges your patch (with attribution) into
-the else branch of his fw-load patch.
+Thanks,
 
-
---cWoXeonUoKmBZSoM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6eC8EACgkQFA3kzBSg
-KbaQrA/+J/BFo8rhuV/ObewANKKTUc0Tr1RAY+npkvv8asmIoT1xriSOb8TzUPI2
-6wv5egQD9fQ8z3DjZlr3pxSISwJDT8aFyTMcEDeQ6JI4P0fFWZXBCIbtjyJqlwMe
-t0U6leFUITmVB5HjoLUWFQb59l/1/CLvWYTmiE/VmYtaMhPIzN/ze4LKHLHdLPq4
-3n0XEwtOhHTTshNNq3MuFSqpu0Hynja5IbuGPyekXdQYEOz7o9A0rcg80IZAdtvB
-kP/07D6LpR2fIUW2Zi+Uo2q3S2K8H+sqr+QKNGlUArwQnsB7qwiFDcGOgY/Jp2xi
-ZNc9homj0brUQnh2gxmqLrDyJfs8txeMQ0gW2fPjJeQdA1iJVisLc4gmXgqKnYmr
-hyRm/7ED4SrkSIuvVIU8bJ0HKIxvdn/YYv4zDTMYl6xHjCcr3qrwmjMbaB+14X+a
-eLG3b/NbGI/W+Q2rGJI3TNtT7hmoNaBGxMYe8vKJBc5WvrkL+yrBIxkK+Y573TYe
-HiZrsBtairdpU+Knz6up0+Dx7yq5N06F85UMWPuizotI8h8jkbI+AW6Rxk/9xtwH
-/WesL3yo0gD3bZRMJ17uT4wdiRZkDZL2x641jXVhX7+pYBV8mZYm+mfwdYs/UI/D
-dEyL9FCo/U6fO7xJ4vT9DrSS0TjFbcFX/m6eKWSEtQ4UipWC5YA=
-=7XYS
------END PGP SIGNATURE-----
-
---cWoXeonUoKmBZSoM--
+jon
