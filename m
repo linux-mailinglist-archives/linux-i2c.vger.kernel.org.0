@@ -2,90 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CC51B25A3
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Apr 2020 14:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCF31B25BD
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Apr 2020 14:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728763AbgDUMK4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 Apr 2020 08:10:56 -0400
-Received: from smtp2.axis.com ([195.60.68.18]:57792 "EHLO smtp2.axis.com"
+        id S1728719AbgDUMRC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 Apr 2020 08:17:02 -0400
+Received: from sauhun.de ([88.99.104.3]:60144 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728677AbgDUMK4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 21 Apr 2020 08:10:56 -0400
-X-Greylist: delayed 432 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Apr 2020 08:10:54 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; l=1056; q=dns/txt; s=axis-central1;
-  t=1587471054; x=1619007054;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=e5l7Ey7eBk6W1PjZ+8XYrNk38uNUci4BU1Rlr0SxkAU=;
-  b=PDAIgt2iNuzm1dBV1HwBpgbinmHHij+br805kbW5aQuCacjaaIuIRtki
-   9s13zOx/WcqKrP/pE7Eb+tZ1CHjtT9yy1LgrrvsYZJwfLkFtg0R2DJl0k
-   E9cfma5NV1/MsmiJkCVyZWDbDxG6sMpcSejdFW7oZSTf8Mbk3nrPo8f82
-   Nqswau/s3H1w0x+A5b/UP6MC/PYdkVP9VYeQiM5dRNC/trV5L1UbaanBt
-   13+4zczOc0JDM3lgL89sRBguhaDNW8f18T4FjJN17rFZk0WQK6FZPHfZV
-   TZjwweUo9TFS/9XZKd1i5VPMDPUanmlC7oPkajQNDdMWghZo0sm6gAg3r
-   A==;
-IronPort-SDR: slkoKAD4j0YkY2zI+xu9W07GCchlGtfS7tGbFv/xAo8lxJWdBLtassZJcREGjd8nzt58hAXoxF
- 2iLU1UWZSP7S8sbzH2A8LL4LnlIXEdcvjdKfbELCkpiWmz5WjY/uiDC2TQ5jL+FQdDKkJhX/wc
- ZZln1Lc2AMIg3UBGgLYwUphqWUibnOiwp3qUyxiLMpB5wZ6e2JEWJLcx7QR5aYOtsOuixVK+TD
- mYikWO76OVe3Oi3ysdUDaDTcjLMqhU9KmpM5CuEVpYZ/tQAOqtj97W5LpnvGc5asGhXHFpZStX
- 7x8=
-X-IronPort-AV: E=Sophos;i="5.72,410,1580770800"; 
-   d="scan'208";a="7641338"
+        id S1726018AbgDUMRC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 21 Apr 2020 08:17:02 -0400
+Received: from localhost (p54B336C5.dip0.t-ipconnect.de [84.179.54.197])
+        by pokefinder.org (Postfix) with ESMTPSA id AE2412C1FBE;
+        Tue, 21 Apr 2020 14:16:59 +0200 (CEST)
+Date:   Tue, 21 Apr 2020 14:16:59 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Bjorn Ardo <bjorn.ardo@axis.com>
+Cc:     Patrick Williams <patrick@stwcx.xyz>,
+        =?utf-8?B?QmrDtnJuIEFyZMO2?= <bjornar@axis.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 1/2] i2c: slave-eeprom: initialize empty eeprom properly
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Patrick Williams <patrick@stwcx.xyz>
-CC:     =?UTF-8?B?QmrDtnJuIEFyZMO2?= <bjornar@axis.com>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Message-ID: <20200421121659.GE1241@ninjato>
 References: <20191001164009.21610-1-alpawi@amazon.com>
  <150599be-9125-4ab9-e2a6-e792b41910e6@axis.com>
  <20200420164349.GD3721@ninjato>
  <20200420203146.GC95151@heinlein.lan.stwcx.xyz>
  <20200420205325.GA1693@ninjato>
-From:   Bjorn Ardo <bjorn.ardo@axis.com>
-Message-ID: <adb03545-88db-689c-dbf7-9f746236adb4@axis.com>
-Date:   Tue, 21 Apr 2020 14:03:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ <adb03545-88db-689c-dbf7-9f746236adb4@axis.com>
 MIME-Version: 1.0
-In-Reply-To: <20200420205325.GA1693@ninjato>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: XBOX03.axis.com (10.0.5.17) To XBOX02.axis.com (10.0.5.16)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vmttodhTwj0NAgWp"
+Content-Disposition: inline
+In-Reply-To: <adb03545-88db-689c-dbf7-9f746236adb4@axis.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 4/20/20 10:53 PM, Wolfram Sang wrote:
 
-> On Mon, Apr 20, 2020 at 03:31:46PM -0500, Patrick Williams wrote:
->> On Mon, Apr 20, 2020 at 06:43:49PM +0200, Wolfram Sang wrote:
->>> On Wed, Oct 02, 2019 at 08:20:53AM +0200, Bjorn Ardo wrote:
->>>> Hi,
->>>>
->>>>
->>>> I sent in another patch earlier that added support for specifying a file in
->>>> devicetree to initilize the eeprom from, corresponding to the case of
->>>> pre-flashed eeprom. Maybe these two patches should be merged so this
->>>> initialization is only done if no file is specified?
->>> Yes, I agree.
->>>
->> It looks like Bjorn's referenced patches are still unmerged also?
-> Yes, it might be easiest if he merges your patch (with attribution) into
-> the else branch of his fw-load patch.
->
-
-OK, so to summarize, I should update my patch to use 
-device_property_read_string() instead and also init the memory to 0XFF 
-if no file is present. And change name of the function to 
-i2c_slave_init_eeprom_data.
+--vmttodhTwj0NAgWp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
-I will look into that and let you know once I'm done.
+> > Yes, it might be easiest if he merges your patch (with attribution) into
+> > the else branch of his fw-load patch.
+> >=20
+>=20
+> OK, so to summarize, I should update my patch to use
+> device_property_read_string() instead and also init the memory to 0XFF if=
+ no
+> file is present. And change name of the function to
+
+Or something else went wrong.
+
+> i2c_slave_init_eeprom_data.
+
+Yes, that is my idea. You also need to replace checking for an of_node
+with some equivalent for device properties maybe, but that should be
+easy to find out.
+
+> I will look into that and let you know once I'm done.
+
+Thank you!
 
 
-/BA
+--vmttodhTwj0NAgWp
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6e5DcACgkQFA3kzBSg
+KbbQDBAArMsUqUxWgqSrbwcIRt/Gr1cw3ADl+WmjfVx86o4L2zXR6pxtLqd3XZlw
+ETCYwyuI3wd1o67wtJTES/XurkgGa1QjgKuLEkbPW/G5dU+A9bDdjYbiJfzFJZmb
+N45BlhIjEa4mf9d6r7387sGtApMkjQhsTWQxjn1tuzPvzvB26ntJ6q7hM+M5JldV
+1JYwin5YkcgvuFp4cECIO92jyvvupIWtJTxMaMlsHJFeicLWKPaXI/We7vC4W7Z9
+aAZmc5NNrpNiT2ffkR4sGveVT2D0KckPHPsgoEWP+1FI3QrV72NAo6gTxbuJKbcp
+dlDDIGt8f5nU/ubUG21zy0RzWraX+pzXd+/bOkh5H9jeY7Z4VjBCepbEj+ekn6eX
+4GpVNz2Eav3+N8aCRWcv8bwW9U5ww/cQoOlkjh+aI3AIlwOXzG24IC3LLXyjtTt1
+xXDNOubCHZa3RGcmfduhEue25trD/+05kxcFe5zvEC4c6JP9GaiQC2w4f6FtJmHf
+pOzGKkowDO3rV8OpBqyyWTSjELG/icW/yOGFbqe1haP0akor3eiad8aiGFfwvMkA
+CDm/h0S6NWR7XYpLTwYy1/TyjTpX+d9fqAiPOROrc4T/LzNUjfLNkvwvLjAiqXUJ
+UxWdgMA26T+ui1/dZi6XcWt+sZs5r4DUjbEWJZVXCM+NmdHTZ+o=
+=jvL2
+-----END PGP SIGNATURE-----
+
+--vmttodhTwj0NAgWp--
