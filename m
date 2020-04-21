@@ -2,85 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9401B1B3B
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Apr 2020 03:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA5C1B1E1D
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Apr 2020 07:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726067AbgDUBYE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 Apr 2020 21:24:04 -0400
-Received: from mga03.intel.com ([134.134.136.65]:26112 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725897AbgDUBYE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 20 Apr 2020 21:24:04 -0400
-IronPort-SDR: QnPUOwr8j1z9LEkLSY8XgpKFr7LulLW4S0mMd2UUf+dht/4ofPBzCW36UiCL45vsScrbkh4mSR
- L9dHxHXbr2YQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2020 18:24:04 -0700
-IronPort-SDR: IEpCEcGrhvQfm09VJgMdCD6wh5y1oneeQ0RpY3QpwGzjKvOG+6U3IX/d6N+Qg81ERgeOQGL1IN
- oUwMG0yUQF3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,408,1580803200"; 
-   d="scan'208";a="429344270"
-Received: from pl-dbox.sh.intel.com (HELO intel.com) ([10.239.159.39])
-  by orsmga005.jf.intel.com with ESMTP; 20 Apr 2020 18:24:02 -0700
-Date:   Tue, 21 Apr 2020 09:24:03 +0800
-From:   Philip Li <philip.li@intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        kbuild test robot <lkp@intel.com>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>, lkp@lists.01.org
-Subject: Re: [LKP] Re: [PATCH v1] i2c: busses: convert to
- devm_platform_get_and_ioremap_resource
-Message-ID: <20200421012403.GB32555@intel.com>
-References: <20200414134827.18674-1-zhengdejin5@gmail.com>
- <20200415102158.GH1141@ninjato>
- <20200415160757.GC17519@nuc8i5>
- <CAHp75Vc+a7sQeY+W+4+-75TCMDCpnPRjUA5T8ZsBZi52PVB9dw@mail.gmail.com>
- <20200418040653.GA7120@nuc8i5>
- <CAHp75VcWRd8NUoYAVV1g8051XWZgrGm0vKAAzF_4WzTi40y+Ww@mail.gmail.com>
- <20200419163600.GA19772@nuc8i5>
- <20200420094319.GA2094@ninjato>
- <CAHp75VeGNV-Jsyu1ev843GzBuJqwojfDcbC5H9MJokurrQLjjg@mail.gmail.com>
+        id S1726626AbgDUFTG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 Apr 2020 01:19:06 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:57482 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725881AbgDUFTF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Apr 2020 01:19:05 -0400
+X-UUID: 5917739a3a7c431fae3f17a2c9876ba8-20200421
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=TUoPDP4K3MLuRnUQDSlpxAsoPHlCYQbcdjRnjLPS0nk=;
+        b=NG56aeh22eiV5sZI8XS3GDK4zPge1ZEEfkv11V30SJe5h53x77BVbKUIykLPhyqdcrigDX8YRVyx+dsUvP3vv31d8lHsidh7Hypfl2HnnelSvCYIR68m6iYhRCz3HsihAcI7ryIah5E31XiTYfAz/UERUDja1I2avm1kYpAaxgU=;
+X-UUID: 5917739a3a7c431fae3f17a2c9876ba8-20200421
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <bibby.hsieh@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 2042194037; Tue, 21 Apr 2020 13:19:01 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 21 Apr 2020 13:19:00 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 21 Apr 2020 13:18:59 +0800
+From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        <linux-i2c@vger.kernel.org>
+CC:     <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <srv_heupstream@mediatek.com>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <devicetree@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>
+Subject: [PATCH v13 0/2] add power control in i2c
+Date:   Tue, 21 Apr 2020 13:18:56 +0800
+Message-ID: <20200421051858.11176-1-bibby.hsieh@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VeGNV-Jsyu1ev843GzBuJqwojfDcbC5H9MJokurrQLjjg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Apr 20, 2020 at 12:47:12PM +0300, Andy Shevchenko wrote:
-> On Mon, Apr 20, 2020 at 12:43 PM Wolfram Sang <wsa@the-dreams.de> wrote:
-> >
-> >
-> > > 5. Run `codespell` across drivers and subsystems
-> >
-> > I think Colin King is already working on that. I regularly get patches
-> > from him doing that.
-> >
-> 
-> I think CI should integrate it in their workflow,
-> 
-> LKP guys, what do you think?
-thanks, this looks valuable, we will investigate the tool
-to see how we can integrate it to our testing flow.
+QWx0aG91Z2ggaW4gdGhlIG1vc3QgcGxhdGZvcm1zLCB0aGUgcG93ZXIgb2YgZWVwcm9tIGFuZA0K
+aTJjIGFyZSBhbHdheSBvbiwgc29tZSBwbGF0Zm9ybXMgZGlzYWJsZSB0aGUgZWVwcm9tIGFuZA0K
+aTJjIHBvd2VyIGluIG9yZGVyIHRvIG1lZXQgbG93IHBvd2VyIHJlcXVlc3QuDQoNClRoaXMgcGF0
+Y2ggYWRkIHRoZSBwbV9ydW50aW1lIG9wcyB0byBjb250cm9sIHBvd2VyDQp0byBzdXBwb3J0IGFs
+bCBwbGF0Zm9ybXMuDQoNCkNoYW5nZXMgc2luY2UgdjEyOg0KIC0gcmViYXNlIG9udG8gdjUuNy1y
+YzENCiAtIGNoYW5nZSB0aGUgcHJvcGVydHkgZGVzY3JpcHRpb24gaW4gYmluZGluZw0KDQpDaGFu
+Z2VzIHNpbmNlIHYxMToNCiAtIHVzZSBzdXNwZW5kX2xhdGUvcmVzdW1lX2Vhcmx5IGluc3RlYWQg
+b2Ygc3VzcGVuZC9yZXN1bWUNCiAtIHJlYmFzZSBvbnRvIHY1LjYtcmMxDQoNCkNoYW5nZXMgc2lu
+Y2UgdjEwOg0KIC0gZml4dXAgc29tZSB3b3JuZyBjb2Rlcw0KDQpDaGFuZ2VzIHNpbmNlIHY5Og0K
+IC0gZml4dXAgYnVpbGQgZXJyb3INCiAtIHJlbW92ZSByZWR1bmRhbnQgY29kZQ0KDQpDaGFuZ2Vz
+IHNpbmNlIHY4Og0KIC0gZml4dXAgc29tZSB3cm9uZyBjb2RlDQogLSByZW1vdmUgcmVkdW5kYW50
+IG1lc3NhZ2UNCg0KQ2hhbmdlcyBzaW5jZSB2NzoNCiAtIGFkZCBiaW5kaW5nIGRlc2NyaWJlIHN1
+cHBseSBwcm9wZXJ0eSBpbiBpMmMgYW5kIGF0MjQuDQogLSBtb3ZlIGkyYyBidXMgc3VwcGx5IGNv
+bnRyb2wgaW4gaTJjLWNvcmUuDQogLSByZWJhc2Ugb250byB2NS41LXJjMQ0KDQogICAgICAgIFsu
+Li4gc25pcCAuLi5dDQoNCkJpYmJ5IEhzaWVoICgyKToNCiAgZHQtYmluZGluZzogaTJjOiBhZGQg
+YnVzLXN1cHBseSBwcm9wZXJ0eQ0KICBpMmM6IGNvcmU6IHN1cHBvcnQgYnVzIHJlZ3VsYXRvciBj
+b250cm9sbGluZyBpbiBhZGFwdGVyDQoNCiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
+Z3MvaTJjL2kyYy50eHQgfCAgMyArDQogZHJpdmVycy9pMmMvaTJjLWNvcmUtYmFzZS5jICAgICAg
+ICAgICAgICAgICAgIHwgODIgKysrKysrKysrKysrKysrKysrKw0KIGluY2x1ZGUvbGludXgvaTJj
+LmggICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICsNCiAzIGZpbGVzIGNoYW5nZWQsIDg3
+IGluc2VydGlvbnMoKykNCg0KLS0gDQoyLjE4LjANCg==
 
-> 
-> > > 6. Fix ioremap(..., 0) [size = 0] across architectures, now some return NULL,
-> > >    some return address, some may even have leaks
-> >
-> > This sounds more useful to me. Would be great if you have interest.
-> 
-> But it much more advanced :-) Complete dive into the kernel guts.
-> 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> _______________________________________________
-> LKP mailing list -- lkp@lists.01.org
-> To unsubscribe send an email to lkp-leave@lists.01.org
