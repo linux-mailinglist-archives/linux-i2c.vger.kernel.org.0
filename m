@@ -2,253 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FE71B204F
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Apr 2020 09:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897461B22F5
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Apr 2020 11:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbgDUHvT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 Apr 2020 03:51:19 -0400
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:12741 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbgDUHvS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Apr 2020 03:51:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1587455477; x=1618991477;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=cwPZxPqVyP/4/QIK+M3A1diwefFz+dw60qn0D8/bYp4=;
-  b=rP6HgeUwLRkJReHJcPJdWou4l2p68jbCwKjuG1vRax+HXxroaLa863sm
-   fgvLNurErIpsNmiH3BFY8IEFGIZKKo25Ivj93ha9gYlQJEwsvPLGgTfmI
-   0vQ17bjJm2ImxZCP53cdklyeNcMwBsUySjUYO2xKHAjtiPIIkRJWqWaVG
-   qDxlPXaLpM3MQUU9uVbWriPTiRpBytWn1vcsfoKz15O4KrO7QAF9NSOsd
-   4Af3q2VcZOZ4RVCtiOH/VhCfYLmJm7+NyBEhWGoQstJJ0kSYcJqC3nYrh
-   P6o/6iCcgwEvPcTFvu7NuhZcNxbCvl84oze26z8QW3+K8YcJJoF+LnyFY
-   w==;
-IronPort-SDR: nte4Wy5+hxJqvODic/FHXVtFL8zg+4I6zVhH6vy25FkLDnvUPxgQ7340e3efUVsG0VMYiwapWh
- dEPaEwz26EcbWcRhpyDUusTn9X0HuPcxnG76xhirYU7GYzf+JnpjFGLc4JeFs+LaHPM/tzC2Qt
- i9Fhfulq4IR2Uwsp0RICLxnVqXLmYGSDmPibEI13cUwAST/L1W96OEmKD5nw0zaNyRQMzn3G3f
- tulNX+jrKgya2lNtjj9pGu9Y/U5+AiWcHkyhWuj/2lHRjjaraypfgGtZuFZycBz4j7cjTa2e99
- kMc=
-X-IronPort-AV: E=Sophos;i="5.72,409,1580799600"; 
-   d="scan'208";a="9874061"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Apr 2020 00:51:16 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 21 Apr 2020 00:50:47 -0700
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
- Transport; Tue, 21 Apr 2020 00:50:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V0YCgSrnm7PQLmi44Uk8fu214+t9phiVFkxqk9/kzDKPch3h8kHd+bSwnnRUUaPnHA9bf5ygh3r4Jaua+3V4AIXvza5Gkqh17317yYajQdRO3YQ3QG0KZBhGfsVc4FkZgAekdNNq/0d0PexSKdxqGpblMIcJnnCov0sFZxV4Bxu42ZvAiDMpClGk9EeOnhRCo3Pe/FXtrA9yvO4ciVUSh/igWNaekpNwnc05Cnq2ewVBffUYMr4SZUWD/hSVsZy9i167ro8LFZkPHnW858PmRjtenItC2y5CjchqkfAaUW4AJ03ZPZwZKS2hewcTC8hkQzXGSLJgIYh+Zr7y6eeMcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cwPZxPqVyP/4/QIK+M3A1diwefFz+dw60qn0D8/bYp4=;
- b=Hm6XAp7g4Cm/2zTmB34iYUYApH6/kvYVJEAimTTB1ABYH5ou0TNjQneT9++hr3dhx7Ftvsm/0kk9tnKoEYCbwKnocpp/c+MQwzRiF5ihLOUj/Qzx8sM9u/9dww3NGnr6bf9bpRnOfVO/b4mg1iNRXCfwlwQWCWYYuF1W2wTH2BAdA7HZ+JzLPAvtnfAZqVbxhBNVG/b+PxEOR4HA9mo9M1RCTWEPhjSGIZV+IXaiwlLudFMX4GxFG3OWCJu0PN3Cg/nhmH37PQrPdhKUEY4C4fWibAikz5PyyDRX6SRc+jjvr+FN+UGaeOtGAZRI2KUOBE2NxjR14JExHGpfUtKorw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cwPZxPqVyP/4/QIK+M3A1diwefFz+dw60qn0D8/bYp4=;
- b=eLh73GHyPJ3iJIOqhuCwk2NS3iiYrpN4oJ3Wl7kQLaRFnIs17scK2Uidt2kJ32Dkm4L8orxuDNUlsMUtUz94ibQIrpK1+TC3icBpA3qHQ8TShLwPgU0o0NQtzA3+d51GiJpVxLBGTuisDRC9qjVMAVGbv2dKENc4nis3ykYvQ2g=
-Received: from CY4PR11MB1688.namprd11.prod.outlook.com (2603:10b6:903:25::23)
- by CY4PR11MB1942.namprd11.prod.outlook.com (2603:10b6:903:125::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.29; Tue, 21 Apr
- 2020 07:51:14 +0000
-Received: from CY4PR11MB1688.namprd11.prod.outlook.com
- ([fe80::c597:bb37:1406:863b]) by CY4PR11MB1688.namprd11.prod.outlook.com
- ([fe80::c597:bb37:1406:863b%7]) with mapi id 15.20.2921.030; Tue, 21 Apr 2020
- 07:51:14 +0000
-From:   <Codrin.Ciubotariu@microchip.com>
-To:     <Ludovic.Desroches@microchip.com>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <robh+dt@kernel.org>, <peda@axentia.se>, <linux@armlinux.org.uk>,
-        <wsa@the-dreams.de>
-Subject: Re: [PATCH v4 1/4] i2c: at91: Send bus clear command if SDA is down
-Thread-Topic: [PATCH v4 1/4] i2c: at91: Send bus clear command if SDA is down
-Thread-Index: AQHV6/NV5SaG2cctME26LBySNXrA26hgRdKAgCNFhQA=
-Date:   Tue, 21 Apr 2020 07:51:14 +0000
-Message-ID: <6f4fab9e-c400-69c9-f52e-3425d608853b@microchip.com>
-References: <20200225155012.22764-1-codrin.ciubotariu@microchip.com>
- <3ebaa9a6-73d5-863f-bc40-e38230ab732e@microchip.com>
-In-Reply-To: <3ebaa9a6-73d5-863f-bc40-e38230ab732e@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Codrin.Ciubotariu@microchip.com; 
-x-originating-ip: [86.121.14.3]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7bce4182-d6fa-415f-6924-08d7e5c8c46a
-x-ms-traffictypediagnostic: CY4PR11MB1942:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <CY4PR11MB19420DE6A97784E1587D6B91E7D50@CY4PR11MB1942.namprd11.prod.outlook.com>
-x-bypassexternaltag: True
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 038002787A
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1688.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(39860400002)(346002)(396003)(366004)(136003)(376002)(8676002)(478600001)(91956017)(36756003)(2616005)(71200400001)(2906002)(31696002)(8936002)(86362001)(4326008)(186003)(66476007)(5660300002)(81156014)(66556008)(110136005)(76116006)(54906003)(66946007)(6486002)(316002)(64756008)(66446008)(53546011)(31686004)(26005)(6506007)(6512007);DIR:OUT;SFP:1101;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: s3AuWcI/HJ+Rs0iUaKzHokHbkcjV7ayW1TmdB4JD3vfq32tJOxMk1Gq8ggWarfEekXRBLXo5BD34qk+2eOcPwK0Wi3KrOOZNztMJZy4MiI4/9gAgu0PQK/f65E5hUIBPAbwKmlAA00Hw9bkvvRJiX7h9FFWqEn40r1pB3CIl71sF/3GtkZvCHbyFdk6uAkqqI2ahicPzJzOS7VPhmROtfD3p2KnZ0OkNXP0a20opO9vJqMaxvNXhNxYWF1Xo4qJo2Db1MRtCU+NKyh/gN8zKpBa84sktFPvor+PrvZcRwB9Fm6mpAvygLm27sq9iUNyPjm38p1zROM8kBcwGnsdeR9ejzYnsuXLz+/EQi2EZ3btudmAmt3Xs6+5cppbenl4tRSKPnVLp+eYtLcprDuIQmW0qRDVqQTG9w3PiCfKCoZV4H6xjDCIO7Xer05ReGFhJ
-x-ms-exchange-antispam-messagedata: CII05IrQoS04ed2mO0i5kr3YyDHKu6njAnEXcPT/PTs+flUBbKcarguG+srySn+3SYxcLXBK9OQXbyPVcG0L0QeMeMo0SKmcRKB5CIBU7Y1A3Ti/pE+W7IZkIaW5w8LNKVl7t23Xhh+e7bt/LdFyMA==
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DD929AE3D7F52044A399555D292E4605@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727120AbgDUJhR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 Apr 2020 05:37:17 -0400
+Received: from sauhun.de ([88.99.104.3]:58132 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726628AbgDUJhR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 21 Apr 2020 05:37:17 -0400
+Received: from localhost (p54B336C5.dip0.t-ipconnect.de [84.179.54.197])
+        by pokefinder.org (Postfix) with ESMTPSA id E25912C1FBE;
+        Tue, 21 Apr 2020 11:37:15 +0200 (CEST)
+Date:   Tue, 21 Apr 2020 11:37:13 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Aishwarya R <aishwaryarj100@gmail.com>,
+        "Erhard F." <erhard_f@mailbox.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Richard Fontana <rfontana@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-i2c@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: powermac: Simplify reading the "reg" and
+ "i2c-address" property
+Message-ID: <20200421093712.GA1241@ninjato>
+References: <20200408100354.17782-1-aishwaryarj100@gmail.com>
+ <20200415131916.23555-1-aishwaryarj100@gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bce4182-d6fa-415f-6924-08d7e5c8c46a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Apr 2020 07:51:14.5293
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vNh6DEGeRBKP1633LbPgGkEzwb4cvKmL5dnMgcvSCzIjZeC8JuIVvWX1ZRgrPcXec+TpHhKWnrMFq1IGuaJPXwtjo+ywO82osA6nt9Ff+fk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1942
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="T4sUOijqQbZv57TR"
+Content-Disposition: inline
+In-Reply-To: <20200415131916.23555-1-aishwaryarj100@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gMzAuMDMuMjAyMCAwMDoxMywgTHVkb3ZpYyBEZXNyb2NoZXMgLSBNNDMyMTggd3JvdGU6DQo+
-IE9uIDIvMjUvMjAyMCA0OjUwIFBNLCBDb2RyaW4gQ2l1Ym90YXJpdSB3cm90ZToNCj4+IEFmdGVy
-IGEgdHJhbnNmZXIgdGltZW91dCwgc29tZSBmYXVsdHkgSTJDIHNsYXZlIGRldmljZXMgbWlnaHQg
-aG9sZCBkb3duDQo+PiB0aGUgU0RBIHBpbi4gV2UgY2FuIGdlbmVyYXRlIGEgYnVzIGNsZWFyIGNv
-bW1hbmQsIGhvcGluZyB0aGF0IHRoZSBzbGF2ZQ0KPj4gbWlnaHQgcmVsZWFzZSB0aGUgcGlucy4N
-Cj4+IElmIHRoZSBDTEVBUiBjb21tYW5kIGlzIG5vdCBzdXBwb3J0ZWQsIHdlIHdpbGwgdXNlIGdw
-aW8gcmVjb3ZlcnksIGlmDQo+PiBhdmFpbGFibGUsIHRvIHJlc2V0IHRoZSBidXMuDQo+Pg0KPj4g
-U2lnbmVkLW9mZi1ieTogQ29kcmluIENpdWJvdGFyaXUgPGNvZHJpbi5jaXVib3Rhcml1QG1pY3Jv
-Y2hpcC5jb20+DQo+IA0KPiBTb3VuZHMgZ29vZCBzbw0KPiBBY2tlZC1ieTogTHVkb3ZpYyBEZXNy
-b2NoZXMgPGx1ZG92aWMuZGVzcm9jaGVzQG1pY3JvY2hpcC5jb20+DQo+IA0KPiBXb2xmcmFtLCB5
-b3UgaGF2ZSBhY2NlcHRlZCB0aGUgdjMgb2YgdGhlIHJlY292ZXJ5IHN1cHBvcnQgYW5kIHJlcXVl
-c3RlZA0KPiB0aGVzZSBjaGFuZ2VzLiBJdCBoYXMgYmVlbiBzZW50IGFzIGEgdjQsIGJ1dCwgaW4g
-ZmFjdCwgdGhpcyBwYXRjaCBnb2VzDQo+IG9uIHRvcCBvbiB2My4gSXQgY291bGQsIHNob3VsZCwg
-aGF2ZSBiZWVuIGEgbmV3IHBhdGNoLg0KPiANCj4gUmVnYXJkcw0KPiANCj4gTHVkb3ZpYw0KDQpI
-ZWxsbywgYW55IHVwZGF0ZXMgb24gdGhpcyBwYXRjaD8gRG8geW91IHdhbnQgbWUgdG8gY2hhbmdl
-IGFueXRoaW5nPw0KDQpCZXN0IHJlZ2FyZHMsDQpDb2RyaW4NCg0KPiANCj4+IC0tLQ0KPj4NCj4+
-IENoYW5nZXMgaW4gdjQ6DQo+PiAgICAtIG1vdmVkIHRoZSBIVyBidXMgY2xlYXIgY29tbWFuZCBp
-biBhIHJlY292ZXJfYnVzKCkgZnVuY3Rpb24sIHRvIGJlIGFibGUNCj4+ICAgICAgdG8ganVzdCBj
-YWxsIGkyY19yZWNvdmVyX2J1cygpIGlmIGEgdHJhbnNmZXIgZmFpbHM7DQo+PiAgICAtIHJlY292
-ZXJ5IGdwaW9zIGFyZSBubyBsb25nZXIgdGFrZW4gaWYgSFcgYnVzIGNsZWFyIGNvbW1hbmQgaXMN
-Cj4+ICAgICAgc3VwcG9ydGVkOw0KPj4NCj4+IENoYW5nZXMgaW4gdjM6DQo+PiAgICAtIHJlbW92
-ZWQgdW5uZWNlc3NhcnkgY29uZGl0aW9uIGZyb20gaW5mbyBwcmludDsNCj4+ICAgIC0gcmVtb3Zl
-ZCB1bm5lZGVkIGRlY2xhcmF0aW9uczsNCj4+DQo+PiBDaGFuZ2VzIGluIHYyOg0KPj4gICAgLSBj
-YWxsZWQgaTJjX3JlY292ZXJfYnVzKCkgYWZ0ZXIgYW4gZXJyb3Igb2NjdXJzLCBpZiBTREEgaXMg
-ZG93bjsNCj4+ICAgIC0gcmVsZWFzZSBncGlvcyBpZiByZWNvdmVyeSBpbmZvcm1hdGlvbiBpcyBp
-bmNvbXBsZXRlOw0KPj4NCj4+ICAgIGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtYXQ5MS1jb3JlLmMg
-ICB8ICAyICsrDQo+PiAgICBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLWF0OTEtbWFzdGVyLmMgfCA0
-OSArKysrKysrKysrKysrKysrKysrKysrKystLS0tDQo+PiAgICBkcml2ZXJzL2kyYy9idXNzZXMv
-aTJjLWF0OTEuaCAgICAgICAgfCAgNyArKystDQo+PiAgICAzIGZpbGVzIGNoYW5nZWQsIDUwIGlu
-c2VydGlvbnMoKyksIDggZGVsZXRpb25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-aTJjL2J1c3Nlcy9pMmMtYXQ5MS1jb3JlLmMgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWF0OTEt
-Y29yZS5jDQo+PiBpbmRleCAzZGExYThhY2VjYjUuLmUxNGVkZDIzNjEwOCAxMDA2NDQNCj4+IC0t
-LSBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtYXQ5MS1jb3JlLmMNCj4+ICsrKyBiL2RyaXZlcnMv
-aTJjL2J1c3Nlcy9pMmMtYXQ5MS1jb3JlLmMNCj4+IEBAIC0xMzEsNiArMTMxLDcgQEAgc3RhdGlj
-IHN0cnVjdCBhdDkxX3R3aV9wZGF0YSBzYW1hNWQyX2NvbmZpZyA9IHsNCj4+ICAgIAkuaGFzX2Rp
-Z19maWx0ciA9IHRydWUsDQo+PiAgICAJLmhhc19hZHZfZGlnX2ZpbHRyID0gdHJ1ZSwNCj4+ICAg
-IAkuaGFzX2FuYV9maWx0ciA9IHRydWUsDQo+PiArCS5oYXNfY2xlYXJfY21kID0gZmFsc2UsCS8q
-IGR1ZSB0byBlcnJhdGEsIENMRUFSIGNtZCBpcyBub3Qgd29ya2luZyAqLw0KPj4gICAgfTsNCj4+
-ICAgIA0KPj4gICAgc3RhdGljIHN0cnVjdCBhdDkxX3R3aV9wZGF0YSBzYW05eDYwX2NvbmZpZyA9
-IHsNCj4+IEBAIC0xNDIsNiArMTQzLDcgQEAgc3RhdGljIHN0cnVjdCBhdDkxX3R3aV9wZGF0YSBz
-YW05eDYwX2NvbmZpZyA9IHsNCj4+ICAgIAkuaGFzX2RpZ19maWx0ciA9IHRydWUsDQo+PiAgICAJ
-Lmhhc19hZHZfZGlnX2ZpbHRyID0gdHJ1ZSwNCj4+ICAgIAkuaGFzX2FuYV9maWx0ciA9IHRydWUs
-DQo+PiArCS5oYXNfY2xlYXJfY21kID0gdHJ1ZSwNCj4+ICAgIH07DQo+PiAgICANCj4+ICAgIHN0
-YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIGF0bWVsX3R3aV9kdF9pZHNbXSA9IHsNCj4+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWF0OTEtbWFzdGVyLmMgYi9kcml2
-ZXJzL2kyYy9idXNzZXMvaTJjLWF0OTEtbWFzdGVyLmMNCj4+IGluZGV4IDBhYmE1MWE3ZGYzMi4u
-Nzc2ZTk1OTYyYWI2IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hdDkx
-LW1hc3Rlci5jDQo+PiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWF0OTEtbWFzdGVyLmMN
-Cj4+IEBAIC00ODAsNyArNDgwLDYgQEAgc3RhdGljIGludCBhdDkxX2RvX3R3aV90cmFuc2Zlcihz
-dHJ1Y3QgYXQ5MV90d2lfZGV2ICpkZXYpDQo+PiAgICAJdW5zaWduZWQgbG9uZyB0aW1lX2xlZnQ7
-DQo+PiAgICAJYm9vbCBoYXNfdW5yZV9mbGFnID0gZGV2LT5wZGF0YS0+aGFzX3VucmVfZmxhZzsN
-Cj4+ICAgIAlib29sIGhhc19hbHRfY21kID0gZGV2LT5wZGF0YS0+aGFzX2FsdF9jbWQ7DQo+PiAt
-CXN0cnVjdCBpMmNfYnVzX3JlY292ZXJ5X2luZm8gKnJpbmZvID0gJmRldi0+cmluZm87DQo+PiAg
-ICANCj4+ICAgIAkvKg0KPj4gICAgCSAqIFdBUk5JTkc6IHRoZSBUWENPTVAgYml0IGluIHRoZSBT
-dGF0dXMgUmVnaXN0ZXIgaXMgTk9UIGEgY2xlYXIgb24NCj4+IEBAIC02NDEsMTEgKzY0MCwxMiBA
-QCBzdGF0aWMgaW50IGF0OTFfZG9fdHdpX3RyYW5zZmVyKHN0cnVjdCBhdDkxX3R3aV9kZXYgKmRl
-dikNCj4+ICAgIAkJCSAgICAgICBBVDkxX1RXSV9USFJDTFIgfCBBVDkxX1RXSV9MT0NLQ0xSKTsN
-Cj4+ICAgIAl9DQo+PiAgICANCj4+IC0JaWYgKHJpbmZvLT5nZXRfc2RhICYmICEocmluZm8tPmdl
-dF9zZGEoJmRldi0+YWRhcHRlcikpKSB7DQo+PiAtCQlkZXZfZGJnKGRldi0+ZGV2LA0KPj4gLQkJ
-CSJTREEgaXMgZG93bjsgY2xlYXIgYnVzIHVzaW5nIGdwaW9cbiIpOw0KPj4gLQkJaTJjX3JlY292
-ZXJfYnVzKCZkZXYtPmFkYXB0ZXIpOw0KPj4gLQl9DQo+PiArCS8qDQo+PiArCSAqIHNvbWUgZmF1
-bHR5IEkyQyBzbGF2ZSBkZXZpY2VzIG1pZ2h0IGhvbGQgU0RBIGRvd247DQo+PiArCSAqIHdlIGNh
-biBzZW5kIGEgYnVzIGNsZWFyIGNvbW1hbmQsIGhvcGluZyB0aGF0IHRoZSBwaW5zIHdpbGwgYmUN
-Cj4+ICsJICogcmVsZWFzZWQNCj4+ICsJICovDQo+PiArCWkyY19yZWNvdmVyX2J1cygmZGV2LT5h
-ZGFwdGVyKTsNCj4+ICAgIA0KPj4gICAgCXJldHVybiByZXQ7DQo+PiAgICB9DQo+PiBAQCAtODMw
-LDcgKzgzMCw3IEBAIHN0YXRpYyB2b2lkIGF0OTFfdW5wcmVwYXJlX3R3aV9yZWNvdmVyeShzdHJ1
-Y3QgaTJjX2FkYXB0ZXIgKmFkYXApDQo+PiAgICAJcGluY3RybF9zZWxlY3Rfc3RhdGUoZGV2LT5w
-aW5jdHJsLCBkZXYtPnBpbmN0cmxfcGluc19kZWZhdWx0KTsNCj4+ICAgIH0NCj4+ICAgIA0KPj4g
-LXN0YXRpYyBpbnQgYXQ5MV9pbml0X3R3aV9yZWNvdmVyeV9pbmZvKHN0cnVjdCBwbGF0Zm9ybV9k
-ZXZpY2UgKnBkZXYsDQo+PiArc3RhdGljIGludCBhdDkxX2luaXRfdHdpX3JlY292ZXJ5X2dwaW8o
-c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldiwNCj4+ICAgIAkJCQkgICAgICAgc3RydWN0IGF0
-OTFfdHdpX2RldiAqZGV2KQ0KPj4gICAgew0KPj4gICAgCXN0cnVjdCBpMmNfYnVzX3JlY292ZXJ5
-X2luZm8gKnJpbmZvID0gJmRldi0+cmluZm87DQo+PiBAQCAtODgwLDYgKzg4MCw0MSBAQCBzdGF0
-aWMgaW50IGF0OTFfaW5pdF90d2lfcmVjb3ZlcnlfaW5mbyhzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNl
-ICpwZGV2LA0KPj4gICAgCXJldHVybiAwOw0KPj4gICAgfQ0KPj4gICAgDQo+PiArc3RhdGljIGlu
-dCBhdDkxX3R3aV9yZWNvdmVyX2J1c19jbWQoc3RydWN0IGkyY19hZGFwdGVyICphZGFwKQ0KPj4g
-K3sNCj4+ICsJc3RydWN0IGF0OTFfdHdpX2RldiAqZGV2ID0gaTJjX2dldF9hZGFwZGF0YShhZGFw
-KTsNCj4+ICsNCj4+ICsJZGV2LT50cmFuc2Zlcl9zdGF0dXMgfD0gYXQ5MV90d2lfcmVhZChkZXYs
-IEFUOTFfVFdJX1NSKTsNCj4+ICsJaWYgKCEoZGV2LT50cmFuc2Zlcl9zdGF0dXMgJiBBVDkxX1RX
-SV9TREEpKSB7DQo+PiArCQlkZXZfZGJnKGRldi0+ZGV2LCAiU0RBIGlzIGRvd247IHNlbmRpbmcg
-YnVzIGNsZWFyIGNvbW1hbmRcbiIpOw0KPj4gKwkJaWYgKGRldi0+dXNlX2FsdF9jbWQpIHsNCj4+
-ICsJCQl1bnNpZ25lZCBpbnQgYWNyOw0KPj4gKw0KPj4gKwkJCWFjciA9IGF0OTFfdHdpX3JlYWQo
-ZGV2LCBBVDkxX1RXSV9BQ1IpOw0KPj4gKwkJCWFjciAmPSB+QVQ5MV9UV0lfQUNSX0RBVEFMX01B
-U0s7DQo+PiArCQkJYXQ5MV90d2lfd3JpdGUoZGV2LCBBVDkxX1RXSV9BQ1IsIGFjcik7DQo+PiAr
-CQl9DQo+PiArCQlhdDkxX3R3aV93cml0ZShkZXYsIEFUOTFfVFdJX0NSLCBBVDkxX1RXSV9DTEVB
-Uik7DQo+PiArCX0NCj4+ICsNCj4+ICsJcmV0dXJuIDA7DQo+PiArfQ0KPj4gKw0KPj4gK3N0YXRp
-YyBpbnQgYXQ5MV9pbml0X3R3aV9yZWNvdmVyeV9pbmZvKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2Ug
-KnBkZXYsDQo+PiArCQkJCSAgICAgICBzdHJ1Y3QgYXQ5MV90d2lfZGV2ICpkZXYpDQo+PiArew0K
-Pj4gKwlzdHJ1Y3QgaTJjX2J1c19yZWNvdmVyeV9pbmZvICpyaW5mbyA9ICZkZXYtPnJpbmZvOw0K
-Pj4gKwlib29sIGhhc19jbGVhcl9jbWQgPSBkZXYtPnBkYXRhLT5oYXNfY2xlYXJfY21kOw0KPj4g
-Kw0KPj4gKwlpZiAoIWhhc19jbGVhcl9jbWQpDQo+PiArCQlyZXR1cm4gYXQ5MV9pbml0X3R3aV9y
-ZWNvdmVyeV9ncGlvKHBkZXYsIGRldik7DQo+PiArDQo+PiArCXJpbmZvLT5yZWNvdmVyX2J1cyA9
-IGF0OTFfdHdpX3JlY292ZXJfYnVzX2NtZDsNCj4+ICsJZGV2LT5hZGFwdGVyLmJ1c19yZWNvdmVy
-eV9pbmZvID0gcmluZm87DQo+PiArDQo+PiArCXJldHVybiAwOw0KPj4gK30NCj4+ICsNCj4+ICAg
-IGludCBhdDkxX3R3aV9wcm9iZV9tYXN0ZXIoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldiwN
-Cj4+ICAgIAkJCSAgdTMyIHBoeV9hZGRyLCBzdHJ1Y3QgYXQ5MV90d2lfZGV2ICpkZXYpDQo+PiAg
-ICB7DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hdDkxLmggYi9kcml2
-ZXJzL2kyYy9idXNzZXMvaTJjLWF0OTEuaA0KPj4gaW5kZXggZjU3YTZjYWI5NmI0Li43ZTdiNDk1
-NWNhN2YgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWF0OTEuaA0KPj4g
-KysrIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hdDkxLmgNCj4+IEBAIC0zNiw2ICszNiw3IEBA
-DQo+PiAgICAjZGVmaW5lCUFUOTFfVFdJX1NWRElTCQlCSVQoNSkJLyogU2xhdmUgVHJhbnNmZXIg
-RGlzYWJsZSAqLw0KPj4gICAgI2RlZmluZQlBVDkxX1RXSV9RVUlDSwkJQklUKDYpCS8qIFNNQnVz
-IHF1aWNrIGNvbW1hbmQgKi8NCj4+ICAgICNkZWZpbmUJQVQ5MV9UV0lfU1dSU1QJCUJJVCg3KQkv
-KiBTb2Z0d2FyZSBSZXNldCAqLw0KPj4gKyNkZWZpbmUJQVQ5MV9UV0lfQ0xFQVIJCUJJVCgxNSkg
-LyogQnVzIGNsZWFyIGNvbW1hbmQgKi8NCj4+ICAgICNkZWZpbmUJQVQ5MV9UV0lfQUNNRU4JCUJJ
-VCgxNikgLyogQWx0ZXJuYXRpdmUgQ29tbWFuZCBNb2RlIEVuYWJsZSAqLw0KPj4gICAgI2RlZmlu
-ZQlBVDkxX1RXSV9BQ01ESVMJCUJJVCgxNykgLyogQWx0ZXJuYXRpdmUgQ29tbWFuZCBNb2RlIERp
-c2FibGUgKi8NCj4+ICAgICNkZWZpbmUJQVQ5MV9UV0lfVEhSQ0xSCQlCSVQoMjQpIC8qIFRyYW5z
-bWl0IEhvbGRpbmcgUmVnaXN0ZXIgQ2xlYXIgKi8NCj4+IEBAIC02OSw2ICs3MCw4IEBADQo+PiAg
-ICAjZGVmaW5lCUFUOTFfVFdJX05BQ0sJCUJJVCg4KQkvKiBOb3QgQWNrbm93bGVkZ2VkICovDQo+
-PiAgICAjZGVmaW5lCUFUOTFfVFdJX0VPU0FDQwkJQklUKDExKQkvKiBFbmQgT2YgU2xhdmUgQWNj
-ZXNzICovDQo+PiAgICAjZGVmaW5lCUFUOTFfVFdJX0xPQ0sJCUJJVCgyMykgLyogVFdJIExvY2sg
-ZHVlIHRvIEZyYW1lIEVycm9ycyAqLw0KPj4gKyNkZWZpbmUJQVQ5MV9UV0lfU0NMCQlCSVQoMjQp
-IC8qIFRXSSBTQ0wgc3RhdHVzICovDQo+PiArI2RlZmluZQlBVDkxX1RXSV9TREEJCUJJVCgyNSkg
-LyogVFdJIFNEQSBzdGF0dXMgKi8NCj4+ICAgIA0KPj4gICAgI2RlZmluZQlBVDkxX1RXSV9JTlRf
-TUFTSyBcDQo+PiAgICAJKEFUOTFfVFdJX1RYQ09NUCB8IEFUOTFfVFdJX1JYUkRZIHwgQVQ5MV9U
-V0lfVFhSRFkgfCBBVDkxX1RXSV9OQUNLIFwNCj4+IEBAIC04MSw3ICs4NCw4IEBADQo+PiAgICAj
-ZGVmaW5lCUFUOTFfVFdJX1RIUgkJMHgwMDM0CS8qIFRyYW5zbWl0IEhvbGRpbmcgUmVnaXN0ZXIg
-Ki8NCj4+ICAgIA0KPj4gICAgI2RlZmluZQlBVDkxX1RXSV9BQ1IJCTB4MDA0MAkvKiBBbHRlcm5h
-dGl2ZSBDb21tYW5kIFJlZ2lzdGVyICovDQo+PiAtI2RlZmluZQlBVDkxX1RXSV9BQ1JfREFUQUwo
-bGVuKQkoKGxlbikgJiAweGZmKQ0KPj4gKyNkZWZpbmUJQVQ5MV9UV0lfQUNSX0RBVEFMX01BU0sJ
-R0VOTUFTSygxNSwgMCkNCj4+ICsjZGVmaW5lCUFUOTFfVFdJX0FDUl9EQVRBTChsZW4pCSgobGVu
-KSAmIEFUOTFfVFdJX0FDUl9EQVRBTF9NQVNLKQ0KPj4gICAgI2RlZmluZQlBVDkxX1RXSV9BQ1Jf
-RElSCUJJVCg4KQ0KPj4gICAgDQo+PiAgICAjZGVmaW5lIEFUOTFfVFdJX0ZJTFRSCQkweDAwNDQN
-Cj4+IEBAIC0xMTgsNiArMTIyLDcgQEAgc3RydWN0IGF0OTFfdHdpX3BkYXRhIHsNCj4+ICAgIAli
-b29sIGhhc19kaWdfZmlsdHI7DQo+PiAgICAJYm9vbCBoYXNfYWR2X2RpZ19maWx0cjsNCj4+ICAg
-IAlib29sIGhhc19hbmFfZmlsdHI7DQo+PiArCWJvb2wgaGFzX2NsZWFyX2NtZDsNCj4+ICAgIAlz
-dHJ1Y3QgYXRfZG1hX3NsYXZlIGRtYV9zbGF2ZTsNCj4+ICAgIH07DQo+PiAgICANCj4+DQo+IA0K
-DQo=
+
+--T4sUOijqQbZv57TR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Apr 15, 2020 at 06:49:14PM +0530, Aishwarya R wrote:
+> >> Use of_property_read_u32 to read the "reg" and "i2c-address" property
+> >> instead of using of_get_property to check the return values.
+> >>
+> >> Signed-off-by: Aishwarya R <aishwaryarj100@gmail.com>
+>=20
+> > This is quite a fragile driver. Have you tested it on HW?
+>=20
+> This change is not tested with the Hardware.
+> But of_property_read_u32 is better here than generic of_get_property.
+> This make sure that value read properly independent of system endianess.
+
+This driver is only used on PPC_BE. And it is *very* fragile. The gain
+is not enough for me to accept it without testing. Maybe Erhard (CCed)
+is interested. If not, you may find someone on the ppc lists.
+
+
+--T4sUOijqQbZv57TR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6evsQACgkQFA3kzBSg
+KbZZew/9FFFtMHlcKTYHVgIyAJEHF4gXnOacFSvV02PMg4ZwajJfEatTog1WhMhU
+aHpK1kEpP6nwsFk1HXD6+NMeZUsTojUkYk4ipKclvJBydN4O7VJKYYyWhdvcKlNG
+T6q2bRsC3qI5QGAxaSumXIqT48HKGxM420yiJDySa8JeAQSDyoL3Q5NAzH04BQBF
+JPWfJyJmhB0rP+DLkXLD2ZG/DDnBMZWWmRHxMbzognRcYkeV1RB0svQTKtKsFbLs
+vfiTx2E+VvNtt1eoIOXapPnozbkOZUjAd+59JO59UMKORCf0HL393qsAyqMgfSQz
+unuzZ8ZRL8xhFv2ptHfi+9zpGt4WVSk8r1U2lvBgM5g1ais7+acRiLWvyBW4yGdJ
+TzsYE2x5eLW2bSQtaAo17VTF/cSC927DRvk0GRutj5+yxIqmWlJg6jGDZz8rS4WF
+3S5JNkAdOYFWjsQpqOCBSEipY1YhinOlUtfw70bYUlJjUiKDN7nENuPtT5fAMEaj
+KhVoAI4pzrTPzz2I4/tBjlV3q6P8fLhVPORPxz4DNzOBGk40oSbgSWeLs6Nr2BKY
+J/uIFg5+9K9jdEnRDRWlDNx7fRgGxxozQV7tsGej+Sp/8Cn7kRg8gm4OTbwDlr8j
+LZ3cwigeiQYOe3aiCPNVkxWFDbJuhDeM4tnf/fAlbNcLNqhyOew=
+=SHDk
+-----END PGP SIGNATURE-----
+
+--T4sUOijqQbZv57TR--
