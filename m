@@ -2,80 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFB31B4762
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Apr 2020 16:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7754B1B4E37
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Apr 2020 22:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727845AbgDVOdn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Apr 2020 10:33:43 -0400
-Received: from condef-02.nifty.com ([202.248.20.67]:46379 "EHLO
-        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727843AbgDVOdn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Apr 2020 10:33:43 -0400
-X-Greylist: delayed 522 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Apr 2020 10:33:41 EDT
-Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-02.nifty.com with ESMTP id 03MEJSWg000545
-        for <linux-i2c@vger.kernel.org>; Wed, 22 Apr 2020 23:19:28 +0900
-Received: from oscar.flets-west.jp (softbank126090202047.bbtec.net [126.90.202.47]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 03MEIq6s003059;
-        Wed, 22 Apr 2020 23:18:53 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 03MEIq6s003059
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1587565133;
-        bh=05L0Y4K5hdMLe5DqDt78XEkJuAdMbS03xklsS80D7Zk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DyxCrGC9vbJk3WAzDPNWRUm5TW/6TBn/XNszLdLUySG+DlkgrEeyd2p25GpG475X5
-         Ns8AYwSr9Xo5JC94ZC/m/GNu5zne4CZl2onlRtCFyr2RiFN6hr3/hOvDgOztOxDhtt
-         03UobRstNyV6gNpiLIPx9wr7lV+aZh7JPApv/Xc9AQ/tfKV/7v7a1s50P/Gdrb9r6M
-         UrrfceNsdtesIk6C+5GBx2v6z7fJNM7gqa+k/04+yur6u7y9loB0DiGVw/48Zx6n5H
-         WNAxrcJiCrDKXSRC4cJflY3CsJ6DGDRvl4rJHHmUoSUnC05jryRdbh+v2CCHG+i1XW
-         q3voLqhQl5BHw==
-X-Nifty-SrcIP: [126.90.202.47]
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-i2c@vger.kernel.org
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: at24: add microchip,24lc[0-9]+ to the compatible pattern
-Date:   Wed, 22 Apr 2020 23:18:36 +0900
-Message-Id: <20200422141836.1964676-1-yamada.masahiro@socionext.com>
-X-Mailer: git-send-email 2.25.1
+        id S1726640AbgDVUOY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Apr 2020 16:14:24 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:41916 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726109AbgDVUOX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Apr 2020 16:14:23 -0400
+Received: by mail-oi1-f196.google.com with SMTP id 19so3036973oiy.8;
+        Wed, 22 Apr 2020 13:14:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GDTGxHp+7xM8DCTMf06kFTU5nsfpXRU+QRtWSipR1zk=;
+        b=lL7+XDmAU8lddHecExKAe+pAcwBiL85dlUTG+LCWV7xIJIdmesjDmDCNWtcfaiWHqY
+         D7mFho4QvSuE34PM2ZVT82zXc2Da4Pig1c/DANKD530LwLM0+JfjIoZsPU0k0h0DwwDL
+         q3OpKuVOe5DRT70jA9RsTJACU4g2yvlN/g5O5/Eju+LCvUxnedS+MxeAUX91+TusRVqO
+         aVKh8+Upv8dsGuseugPiOR9htNR1d3tj5WJialTs+Eacwvbyo2kqWMC1O1IavbRc4Kcy
+         ZZfvw0u5UJMFX0y2Yw8nuk1651/P0WN9vcjI8akCBJM9Pl8cb9eqge98Y5oF45WpiEdr
+         2LkQ==
+X-Gm-Message-State: AGi0PuZOuG6PIvXGBkgjtIkRlJoMWvI6zokDwVm2i6RTP2Q8cexmWEkL
+        oLMc1UgX5zz5ILibBiIQNQ==
+X-Google-Smtp-Source: APiQypLVf7Tc3FR4NF4rnCHth/7N/IyIs0LVZfRjM6m95Nh9kSxdM322X/m/3nu32NGV3DRUZ7McSw==
+X-Received: by 2002:aca:3a8a:: with SMTP id h132mr541386oia.146.1587586462879;
+        Wed, 22 Apr 2020 13:14:22 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id q15sm32082otk.78.2020.04.22.13.14.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Apr 2020 13:14:22 -0700 (PDT)
+Received: (nullmailer pid 22312 invoked by uid 1000);
+        Wed, 22 Apr 2020 20:14:21 -0000
+Date:   Wed, 22 Apr 2020 15:14:21 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-i2c@vger.kernel.org, tfiga@chromium.org,
+        drinkcat@chromium.org, srv_heupstream@mediatek.com,
+        mark.rutland@arm.com, devicetree@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v13 1/2] dt-binding: i2c: add bus-supply property
+Message-ID: <20200422201421.GA21271@bogus>
+References: <20200421051858.11176-1-bibby.hsieh@mediatek.com>
+ <20200421051858.11176-2-bibby.hsieh@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200421051858.11176-2-bibby.hsieh@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-arch/arm/boot/dts/uniphier-ref-daughter.dtsi has
+On Tue, Apr 21, 2020 at 01:18:57PM +0800, Bibby Hsieh wrote:
+> In some platforms, they disable the power-supply of SCL/SDA due
+> to power consumption reduction. This patch add bus-supply property.
+> 
+> Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c.txt | 3 +++
+>  1 file changed, 3 insertions(+)
 
-  compatible = "microchip,24lc128", "atmel,24c128";
-
-and 'make ARCH=arm dtbs_check' warns this:
-
-  eeprom@50: compatible: ['microchip,24lc128', 'atmel,24c128'] is not valid under any of the given schemas (Possible causes of the failure)
-
-Microchip 24LC128 is the device used on this board, and I see it in
-https://www.microchip.com/wwwproducts/en/24LC128
-
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
----
-
- Documentation/devicetree/bindings/eeprom/at24.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-index a15787e504f0..2cd7a04cab7c 100644
---- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-+++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-@@ -34,7 +34,7 @@ properties:
-           - minItems: 1
-             maxItems: 2
-             items:
--              - pattern: "^(atmel|catalyst|microchip|nxp|ramtron|renesas|rohm|st),(24(c|cs|mac)[0-9]+|spd)$"
-+              - pattern: "^(atmel|catalyst|microchip|nxp|ramtron|renesas|rohm|st),(24(c|cs|lc|mac)[0-9]+|spd)$"
-               - pattern: "^atmel,(24(c|cs|mac)[0-9]+|spd)$"
-           - oneOf:
-               - items:
--- 
-2.25.1
-
+Acked-by: Rob Herring <robh@kernel.org>
