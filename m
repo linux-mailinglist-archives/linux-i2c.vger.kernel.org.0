@@ -2,111 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E01FE1B731A
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Apr 2020 13:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7941B731F
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Apr 2020 13:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbgDXLak (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Apr 2020 07:30:40 -0400
-Received: from smtp2.axis.com ([195.60.68.18]:3661 "EHLO smtp2.axis.com"
+        id S1726954AbgDXLbQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Apr 2020 07:31:16 -0400
+Received: from smtp2.axis.com ([195.60.68.18]:3713 "EHLO smtp2.axis.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726698AbgDXLak (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 24 Apr 2020 07:30:40 -0400
+        id S1726952AbgDXLbP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 24 Apr 2020 07:31:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; l=1906; q=dns/txt; s=axis-central1;
-  t=1587727839; x=1619263839;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tamrexV4OWrlM7Wl4jj2JSBcp9yOh7DTXPmsR1xB0mo=;
-  b=Sonq2jpcP53RohE8nnFQ4TA8vIgj/OFxcT/0YEfm37W08r7Z8VvrCfK+
-   Z3Vk/Hc/IDsq3UmExeTNPwOa2POVQGxBKQCZZgqYzopWe5exlIlYV9UXP
-   8Ze8JSzuUwMRTqKJPg3yp9X4DhRm03orAYC2/7AmTfKXAyabIhk6Urt3F
-   I9CljPE74J5W0MxVcOE0vrAmsAsj/vxuXsxuKffOGBfOgV8Ye9zC3umR6
-   qH8KdVLP1l4Kxm/3ScbJce9JceEwEQqhIRrkhZhLIzDU9A5CR3eAzmoZb
-   71xRLVZk/TiaaQgoi3wvKoA8xHfZ/nf69NiUetIRgEmmZbmfgJiT5S+p4
-   w==;
-IronPort-SDR: QBW1UsdwJkdX+L6Q3IBWBKo85vacTqeOzOe9md8XEA23dlWnx7Hv5J2W6na8r+MnJND6yWa00K
- vpV0S2VYIyYRnuVMmQJNJmFeblA6OCoQxVY9V/DJMG780HWLJBd3dPiG1Tw2u+0AJqEfjATqOk
- /S+ymLYZgbDU8IurBqJuI4yWoA3ZfTlIOnhxkGnCu4TNDMJ6S1Klj1uh4senzbHJ7y9uum6qGT
- mNz32U0YmYJdXAtcfopsp85P9grV/G0nUo7+8I8O7jgocqN4U6QMwB30eBrKww1ZlqPI9lXxQc
- LxM=
+  d=axis.com; l=430; q=dns/txt; s=axis-central1;
+  t=1587727875; x=1619263875;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=ot5Q0giBxowWEbwxAzzYyCSY+h/D/bG3UXD5qUGdW9A=;
+  b=WVSzKh0fYVbXdf2T+iYitTwWTA03HUdSe4MxnpLMDc38vrIfG9rYalhy
+   R55VTrl+kdqaZIYGfCTq5t/y4wm6hWXHVgyAIbSO2hs3u4KIgTXgVq1eD
+   kFVPm1gyDCBMEMHFElIGFgZaUDcP1Q0OXi0DlpefUPCrWNm4TCjKm85gF
+   ThMAbUb/8OnSYlFrG2HZMr+awmYbUxIkGvU3rheknnwRTkXa+seTAsFCu
+   Oy1U9VWdrIFnbj2CGk+wpORdiC8+TCKews573yNK/CkvHEuu+sGGxLkID
+   zZCBYYurVofyzZmdi3BFt0rf2xI+476dgG5Bl5G+kPOYbKPLubBFJlgAw
+   g==;
+IronPort-SDR: ICzpKZuNol7nYjx5G80qZMBsZB2OnaOjir4QeT4xleVclot0wuGEADpo/FAA0ppw+mViyRLL+6
+ lsUjdFQWJnfGeiXVZnWNpseiH4D0XGH0enPU0Fbj//Y3HB68duvhZZ+p11uGBSbDPs9x/W2O8P
+ wYniP86nWVgdST9Xq40hm/DTSVhzLTQ6/6xiFfFJMMUEGWnfDmPO7Ds6wAfbaMU8OmaBrmTwZU
+ NYtcCw77yd/4UgEpENDriWtOyno9/OiSO8waD19QWcYkMSjy7jm1XddvmO9IXBYwJFOVZYtNSB
+ jLI=
 X-IronPort-AV: E=Sophos;i="5.73,311,1583190000"; 
-   d="scan'208";a="7791894"
-From:   =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>
-To:     <wsa@the-dreams.de>
+   d="scan'208";a="7791947"
+Subject: Re: [PATCHv2] i2c: slave-eeprom: Make it possible to pre-load eeprom
+ data
+To:     Wolfram Sang <wsa@the-dreams.de>
 CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patrick@stwcx.xyz>, <kernel@axis.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>
-Subject: [PATCHv3] i2c: slave-eeprom: Make it possible to pre-load eeprom data
-Date:   Fri, 24 Apr 2020 13:30:36 +0200
-Message-ID: <20200424113036.15109-1-bjorn.ardo@axis.com>
-X-Mailer: git-send-email 2.11.0
+        <patrick@stwcx.xyz>, <kernel@axis.com>
+References: <20200424090443.26316-1-bjorn.ardo@axis.com>
+ <20200424111337.GC1959@kunai> <5038e4c1-440b-0a56-978b-a8c9fac061cc@axis.com>
+ <20200424112705.GD1959@kunai>
+From:   Bjorn Ardo <bjorn.ardo@axis.com>
+Message-ID: <8d1cd553-4607-4092-7020-911e43e02d11@axis.com>
+Date:   Fri, 24 Apr 2020 13:31:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200424112705.GD1959@kunai>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: XBOX03.axis.com (10.0.5.17) To XBOX02.axis.com (10.0.5.16)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If the slave eeprom has a "firmware-name" in devicetree, then
-pre-load the data in the eeprom with this file. Otherwise we
-init the eeprom with 0xFF.
+You got a new patch (ignor the first one, I forgot to update the version 
+number).
 
-Signed-off-by: Björn Ardö <bjorn.ardo@axis.com>
----
- drivers/i2c/i2c-slave-eeprom.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
-
-diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
-index cb415b10642f..b425cefea92c 100644
---- a/drivers/i2c/i2c-slave-eeprom.c
-+++ b/drivers/i2c/i2c-slave-eeprom.c
-@@ -18,6 +18,7 @@
-  */
- 
- #include <linux/bitfield.h>
-+#include <linux/firmware.h>
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/module.h>
-@@ -120,6 +121,26 @@ static ssize_t i2c_slave_eeprom_bin_write(struct file *filp, struct kobject *kob
- 	return count;
- }
- 
-+static int i2c_slave_init_eeprom_data(struct eeprom_data *eeprom, struct i2c_client *client,
-+					 unsigned int size)
-+{
-+	const struct firmware *fw;
-+	const char *eeprom_data;
-+	int error = device_property_read_string(&client->dev, "firmware-name", &eeprom_data);
-+
-+	if (!error) {
-+		error = request_firmware_into_buf(&fw, eeprom_data, &client->dev,
-+						  eeprom->buffer, size);
-+		if (error)
-+			return error;
-+		release_firmware(fw);
-+	} else {
-+		/* An empty eeprom typically has all bits set to 1 */
-+		memset(eeprom->buffer, 0xFF, size);
-+	}
-+	return 0;
-+}
-+
- static int i2c_slave_eeprom_probe(struct i2c_client *client, const struct i2c_device_id *id)
- {
- 	struct eeprom_data *eeprom;
-@@ -138,6 +159,10 @@ static int i2c_slave_eeprom_probe(struct i2c_client *client, const struct i2c_de
- 	spin_lock_init(&eeprom->buffer_lock);
- 	i2c_set_clientdata(client, eeprom);
- 
-+	ret = i2c_slave_init_eeprom_data(eeprom, client, size);
-+	if (ret)
-+		return ret;
-+
- 	sysfs_bin_attr_init(&eeprom->bin);
- 	eeprom->bin.attr.name = "slave-eeprom";
- 	eeprom->bin.attr.mode = S_IRUSR | S_IWUSR;
--- 
-2.11.0
-
+On 4/24/20 1:27 PM, Wolfram Sang wrote:
+>> As I can see in drivers/base/firmware_loader/main.c in function
+>> _request_firmware, then the fw will be released internally if it returns an
+>> error value.
+> Ouch, of course!
+>
+>>> Also, do we need 'error' and 'ret'? Can't we reuse one of them?
+>> Yes, I can fix that.
+> Great, thanks!
+>
