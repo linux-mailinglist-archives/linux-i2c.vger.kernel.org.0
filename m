@@ -2,85 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA171B752C
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Apr 2020 14:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E241B770E
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Apr 2020 15:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727875AbgDXMXO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Apr 2020 08:23:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52800 "EHLO mail.kernel.org"
+        id S1726848AbgDXNgj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Apr 2020 09:36:39 -0400
+Received: from sauhun.de ([88.99.104.3]:47884 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727872AbgDXMXN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 24 Apr 2020 08:23:13 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A7394216FD;
-        Fri, 24 Apr 2020 12:23:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587730993;
-        bh=/HD9MmdeIWifWlhK6G1FDWA7NHgdjdefK5EkIy2ZJyk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CCrakp+oqgOaa6fysldmxy4KTAfwwNRzwxVezEK8FVZSc9Xv/YoxLVq2Qw2LMjXOe
-         9uSJlMGXOuztcrrQPb23/Vj/PiPjvIJ8pTbUeC8KmjH/mDpGPXAykeX74Vz7wZQ/nb
-         HVXmrivk0Z2JGw0Vm3jeJdjktmpBw41AQI0JfOOA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 31/38] i2c: tegra: Synchronize DMA before termination
-Date:   Fri, 24 Apr 2020 08:22:29 -0400
-Message-Id: <20200424122237.9831-31-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200424122237.9831-1-sashal@kernel.org>
+        id S1726489AbgDXNgj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 24 Apr 2020 09:36:39 -0400
+Received: from localhost (p5486CE62.dip0.t-ipconnect.de [84.134.206.98])
+        by pokefinder.org (Postfix) with ESMTPSA id 05ECF2C1FE8;
+        Fri, 24 Apr 2020 15:36:36 +0200 (CEST)
+Date:   Fri, 24 Apr 2020 15:36:35 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.6 28/38] i2c: remove i2c_new_probed_device API
+Message-ID: <20200424133635.GB4070@kunai>
 References: <20200424122237.9831-1-sashal@kernel.org>
+ <20200424122237.9831-28-sashal@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="XOIedfhf+7KOe/yw"
+Content-Disposition: inline
+In-Reply-To: <20200424122237.9831-28-sashal@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
 
-[ Upstream commit 8814044fe0fa182abc9ff818d3da562de98bc9a7 ]
+--XOIedfhf+7KOe/yw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-DMA transfer could be completed, but CPU (which handles DMA interrupt)
-may get too busy and can't handle the interrupt in a timely manner,
-despite of DMA IRQ being raised. In this case the DMA state needs to
-synchronized before terminating DMA transfer in order not to miss the
-DMA transfer completion.
+On Fri, Apr 24, 2020 at 08:22:26AM -0400, Sasha Levin wrote:
+> From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>=20
+> [ Upstream commit 3c1d1613be80c2e17f1ddf672df1d8a8caebfd0d ]
+>=20
+> All in-tree users have been converted to the new i2c_new_scanned_device
+> function, so remove this deprecated one.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-tegra.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+This should not be backported. It is only since this merge window that
+all in-tree users are converted!
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 0daa863fb26f2..0c6dac770fc3a 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1223,6 +1223,15 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 		time_left = tegra_i2c_wait_completion_timeout(
- 				i2c_dev, &i2c_dev->dma_complete, xfer_time);
- 
-+		/*
-+		 * Synchronize DMA first, since dmaengine_terminate_sync()
-+		 * performs synchronization after the transfer's termination
-+		 * and we want to get a completion if transfer succeeded.
-+		 */
-+		dmaengine_synchronize(i2c_dev->msg_read ?
-+				      i2c_dev->rx_dma_chan :
-+				      i2c_dev->tx_dma_chan);
-+
- 		dmaengine_terminate_sync(i2c_dev->msg_read ?
- 					 i2c_dev->rx_dma_chan :
- 					 i2c_dev->tx_dma_chan);
--- 
-2.20.1
 
+--XOIedfhf+7KOe/yw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6i62MACgkQFA3kzBSg
+KbbQNBAAtJhXZl6VUNZIu7Dk8NGhFEOvsMgmA1GVLzGWYh0Ev/ipJIN9OX2r26Yc
+9M6M1qc2FBJW9n1fTdGK+FrbO/+BCFkrMUOECIyImlSmZ1W+sNyZYhmg1ZQxo2g3
+eSobZIV8JzjDhDDV55GdwerVjq0fOmckdD/MjFVtpmcYNsL4P1J//6cVtifn6W5a
+eVhj4k9WURYjWQ8I0q6CLn4ys1BjPZ40/HOBAdZU6sG3u3Jqlvavdtoo71LNLYz9
+/KEk8fWcYRu8F9FF18PPhJg/C4T8vba2FdQz4rmKzEAdLkckwrsFtIxhFWhA1tZl
+SaR2OLNJGO9kUI+vYLOXhNC6LK+XY9SuqLF9z6oVyuICqoVH4Z4ARBi4yl5dT+rZ
+sC3pjL7NlJBOomyzt5S0rflnNFE4xDmtoQ0uxeEBLfu+4nyMpSUxdoexH4fp22xF
+G50cRTK2rfmV0iawMgnR8JmXi13QVrDX7gp8FvckorSheJ39I8g1jIjU4b8EhQyI
+yuWvxIqlp6aw8q2C7J9fIEFogHdsEOIRUvMHNPEbbeTU3v64lj5VW+wPz3la4KFP
+JMaU7QnPdoW5kkCjSMxbnosaFx9X/wXXvYMd3r2Fh3ltzmAhyoPa5h30TP2JtCCy
+2JlkanjPialjwrH4FBazHSlLImTjdCK5FFfdbBsTYDkTgXXhT8w=
+=Skfi
+-----END PGP SIGNATURE-----
+
+--XOIedfhf+7KOe/yw--
