@@ -2,55 +2,23 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEF51B7C5E
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Apr 2020 19:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 140801B7E7F
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Apr 2020 21:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726920AbgDXRHd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Apr 2020 13:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726793AbgDXRHd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Apr 2020 13:07:33 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B63C09B046;
-        Fri, 24 Apr 2020 10:07:32 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id x25so11343356wmc.0;
-        Fri, 24 Apr 2020 10:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=pNg7ONatcx0tvdnMJvHWn8buU8bELK0ZoEzKLC3RkrU=;
-        b=Z4mN1LorXe2GM36jqQm7NtzdCnaRpU0Csh+HAxCuycpzXjsiwupEy003zAW9zlNzoa
-         BSUR6yFaScZlsGXZiHvScU7mokPg6cjonkYIKU+ZIiEjk2p5/jhsHI0V2wgPYFhSnO9S
-         ORcIVXU5RUAc9mhFXNFqhyoyaayDRvufCJhY2mX1mEduR66TBnM4FPwh+GladDpJGbMo
-         7qcrn9+35jo2iACZBEnpZhDY8RJIzJRrArtYlmXjZesr0y/rs9vc9Q7rBGdq02+OYvPm
-         P3R/Ki/haSJ/igYDSTxMtaj/PPz4qsBuWi2+t1qJoibNTQfrz5LhmTHeVVGUPqMACYb6
-         s0JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pNg7ONatcx0tvdnMJvHWn8buU8bELK0ZoEzKLC3RkrU=;
-        b=KbwSrbXDuVxqN76cbv6aIKuHr/lk+tL6/BVufgrNV8Jz6XktMdLrd/EeK8TW+eLo67
-         O8UwPx9vtuz1MhKHtucQjXkioyRA95/SUwx3PK3Xsbwq629qSmM7p21GWu0CDJwcGqgP
-         PWq/YvBE1LRmaIfyMNCsqK4lrcOy/3QW6+wih11wGrg6M+IDgOaeKcKWx0jHnj3vYoxs
-         jaEmCnwr/1NPn1jUZpAJHZ15/cyOFfXCZgsUcL0eXyDbQxMUKY7NhHobOXypdW276c3W
-         jsjTPS7bKk+EE8SZsHADSaHyIXPsaJ4BxGM2FFKxqikuZwnk5D+nzagPggkK7k6HyxdA
-         XWow==
-X-Gm-Message-State: AGi0PuayJZoxCm6SlbpjG6sFY64cBtRbifDSZcBeGG2JtF37tCd4J9O4
-        7vC4CLB0/j9EvaE/C4AOMYNBzSzQ
-X-Google-Smtp-Source: APiQypLZO4MExFdKMNKjUrrFilmlGS8Q/GGA4PlaU3k8a0ak1a7T/J3DeClcdV59/IjrALJ7MYYFkA==
-X-Received: by 2002:a7b:c390:: with SMTP id s16mr10817388wmj.14.1587748049944;
-        Fri, 24 Apr 2020 10:07:29 -0700 (PDT)
-Received: from [10.230.188.26] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g69sm3827549wmg.17.2020.04.24.10.07.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Apr 2020 10:07:29 -0700 (PDT)
-Subject: Re: [PATCH v2 01/91] i2c: brcmstb: Allow to compile it on BCM2835
-To:     Wolfram Sang <wsa@the-dreams.de>, Maxime Ripard <maxime@cerno.tech>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        id S1726793AbgDXTE0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Apr 2020 15:04:26 -0400
+Received: from sauhun.de ([88.99.104.3]:50924 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726813AbgDXTEZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 24 Apr 2020 15:04:25 -0400
+Received: from localhost (p5486CE62.dip0.t-ipconnect.de [84.134.206.98])
+        by pokefinder.org (Postfix) with ESMTPSA id E69B42C2019;
+        Fri, 24 Apr 2020 21:04:23 +0200 (CEST)
+Date:   Fri, 24 Apr 2020 21:04:22 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Eric Anholt <eric@anholt.net>, dri-devel@lists.freedesktop.org,
         linux-rpi-kernel@lists.infradead.org,
         bcm-kernel-feedback-list@broadcom.com,
@@ -59,49 +27,76 @@ Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Tim Gover <tim.gover@raspberrypi.com>,
         Phil Elwell <phil@raspberrypi.com>,
         Kamal Dasu <kdasu.kdev@gmail.com>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 01/91] i2c: brcmstb: Allow to compile it on BCM2835
+Message-ID: <20200424190422.GA5220@kunai>
 References: <cover.d1e741d37e43e1ba2d2ecd93fc81d42a6df99d14.1587742492.git-series.maxime@cerno.tech>
  <c8c666eb5c82dcb73621930b3fedf5814792bf1a.1587742492.git-series.maxime@cerno.tech>
  <20200424161353.GA4487@kunai>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <bedfe073-6ff4-69ee-fe39-d5802cc3ecfd@gmail.com>
-Date:   Fri, 24 Apr 2020 10:07:25 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.7.0
+ <bedfe073-6ff4-69ee-fe39-d5802cc3ecfd@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200424161353.GA4487@kunai>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rwEMma7ioTxnRzrJ"
+Content-Disposition: inline
+In-Reply-To: <bedfe073-6ff4-69ee-fe39-d5802cc3ecfd@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
+--rwEMma7ioTxnRzrJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 4/24/2020 9:13 AM, Wolfram Sang wrote:
-> 
->>  config I2C_BRCMSTB
->>  	tristate "BRCM Settop/DSL I2C controller"
->> -	depends on ARCH_BRCMSTB || BMIPS_GENERIC || ARCH_BCM_63XX || \
->> -		   COMPILE_TEST
->> +	depends on ARCH_BCM2835 || ARCH_BRCMSTB || BMIPS_GENERIC || \
->> +		   ARCH_BCM_63XX || COMPILE_TEST
-> 
-> Isn't there something like ARCH_BROADCOM which we could use here instead
-> of adding each and every SoC?
+On Fri, Apr 24, 2020 at 10:07:25AM -0700, Florian Fainelli wrote:
+>=20
+>=20
+> On 4/24/2020 9:13 AM, Wolfram Sang wrote:
+> >=20
+> >>  config I2C_BRCMSTB
+> >>  	tristate "BRCM Settop/DSL I2C controller"
+> >> -	depends on ARCH_BRCMSTB || BMIPS_GENERIC || ARCH_BCM_63XX || \
+> >> -		   COMPILE_TEST
+> >> +	depends on ARCH_BCM2835 || ARCH_BRCMSTB || BMIPS_GENERIC || \
+> >> +		   ARCH_BCM_63XX || COMPILE_TEST
+> >=20
+> > Isn't there something like ARCH_BROADCOM which we could use here instead
+> > of adding each and every SoC?
+>=20
+> If you are worried about this list growing bigger, I do not think this
+> is going to happen beyond this changeset (famous last words).
 
-If you are worried about this list growing bigger, I do not think this
-is going to happen beyond this changeset (famous last words).
+Okay, thanks for the heads up.
 
-There is no ARCH_BROADCOM because there is typically very little
-commonality between SoC architectures within various Broadcom business
-units (left hand is not supposed to talk to the right hand) with the
-exception of a few peripherals that have been historically shared (NAND,
-SPI, XHCI, Ethernet PHYs/switches, etc. etc. This I2C controller
-historically came from the STB business unit, which given the market
-space has also engineered its own HDMI core and naturally incorporated
-the I2C core it already had into the HDMI core. Up until 2711, that HDMI
-core was not used by the 283x family at all.
--- 
-Florian
+I wonder, then, if the description after 'tristate' is still accurate?
+
+But that withstanding, I am fine with this patch:
+
+Acked-by: Wolfram Sang <wsa@the-dreams.de>
+
+Let me know if I shall take this via I2C.
+
+
+--rwEMma7ioTxnRzrJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6jODIACgkQFA3kzBSg
+KbYN+Q//SQP+Vpeh1qTzUNAUeo0heLgu/UyeswoGy/XX0fkPi1VnjHdErSP3hI5i
+qDLv1Xsz6XsjjlNPIIjMyisPgLT1blkvBicJnfNcjh+6ztSQaO1TqUscpgxxxG6f
+n4Dk+CRwVEgmbYI3B/CAxxLSV+ulKl4l6/QSHoDXEdlNcpnQVYqB9noyJh9DJenG
+MUb3zxOoJSDvuNVftZg1Pc07yexfFgRvix0JYC41z9A/bD3yrw/apd4omkuzpojG
+dqEg+xeqCCg6kC4TozKlcqi7Zq4n+pjO0M5crP9U1jllCxgo0pMDbdF7QSXnWuiC
+GVToAKqKWMZbnm4h05ZrGt7IujJExmpRIj6tr6TySvyMpGM3h3EGGjebLFhvRJ2q
+AdRodX9+cAnIQl9HP+eXFHuvp/VzPY8RPgSK3XjAogMNgIQqTTa8L4a6rfNOz83F
+yI0nf2ftcX+7ukUGmtWzL7XT9njqBNhNgTUOXMQ7ccFTe9bpxQxcukYYM/3asi14
+DrcWVHQ6VRbjHvn52lRqfw0rKMaCLGSPgsSd9wXA9OiHCexTDjP7LMdzLKW+QgJq
+1CCCwRvvct6pMvLsHnEhCdwC11ZIHnVOagtvt6p9YrOJOjBSBak3+/IpXaVQ/eSY
+F5UsPOi0nuo0ZLmBLnn/uU4/yK4ciPgZRdX/pe9iRlkSY0V5STo=
+=kdd5
+-----END PGP SIGNATURE-----
+
+--rwEMma7ioTxnRzrJ--
