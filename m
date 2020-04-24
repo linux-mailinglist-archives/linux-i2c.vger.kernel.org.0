@@ -2,81 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B02A1B72FA
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Apr 2020 13:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569501B730A
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Apr 2020 13:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726883AbgDXLWR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Apr 2020 07:22:17 -0400
-Received: from smtp1.axis.com ([195.60.68.17]:25426 "EHLO smtp1.axis.com"
+        id S1726717AbgDXL1G (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Apr 2020 07:27:06 -0400
+Received: from sauhun.de ([88.99.104.3]:46698 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726289AbgDXLWR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 24 Apr 2020 07:22:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; l=534; q=dns/txt; s=axis-central1;
-  t=1587727337; x=1619263337;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=jLbwp4z2a8ywYtIlNFO6bEPpuvqBJMQUIkngUPj6OKQ=;
-  b=PhgTcim1dlGSCJLMLVJryO28X9eb9CMFEABgTbGmT8+O12yg6Y8uFP04
-   h0H134e15+vhYPBwbzk36YjiDj/6wKRb12I5SVDNXv0ddjM7Okff/3uoX
-   UaycZykOWDsKmxREz1noMa43QNQO8XpVMBJcZQyVx5Nq6Y3PPVRza2K/5
-   tsCD7QM5/jNyglUr6a2AYVIapyEoIxeARIWphEE5bjDuqlFrUZSTd6W8N
-   Y6ZxVLELxUsFgNSGSvsubTWmhrbBhQBHcZ6hmfX4jXSeGb95DvjVZkk7C
-   nzUBJA0SGNHmz2yZ3lx0KWW33Ps4NNZVe35wXtaFy012gxzUzfh9Vaf/L
-   Q==;
-IronPort-SDR: Mczf+wSEy9tXf4x1FqTOMvRi/WpV2jaYEX5zFbFC1ZTCtx6+CsBKXBbTeqEaeW0IN++enSIaV9
- LcHDwJDfVVX4SBoh72YG+Jokyo5YpwidvKEREb6BHHUl2aRfocorIVFoDKof9lYs+5uQlpkA1D
- dISFs6e9UX6Vv0bU1r8VPxKhe9styPW5i+3DLKx2h9A3WYPd0YXsBvq1qT+LJLAeQjTEecmZN8
- 9kVwYnOqULEl7TzSgReQvTLuRiEaFbXDLObOGL6665P/JfiTzGn8TuLra70qekGpkTIhYMFDTL
- mwc=
-X-IronPort-AV: E=Sophos;i="5.73,311,1583190000"; 
-   d="scan'208";a="8007496"
+        id S1726582AbgDXL1G (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 24 Apr 2020 07:27:06 -0400
+Received: from localhost (p5486CE62.dip0.t-ipconnect.de [84.134.206.98])
+        by pokefinder.org (Postfix) with ESMTPSA id 6B1C22C1FE8;
+        Fri, 24 Apr 2020 13:27:05 +0200 (CEST)
+Date:   Fri, 24 Apr 2020 13:27:05 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Bjorn Ardo <bjorn.ardo@axis.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patrick@stwcx.xyz, kernel@axis.com
 Subject: Re: [PATCHv2] i2c: slave-eeprom: Make it possible to pre-load eeprom
  data
-To:     Wolfram Sang <wsa@the-dreams.de>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patrick@stwcx.xyz>, <kernel@axis.com>
+Message-ID: <20200424112705.GD1959@kunai>
 References: <20200424090443.26316-1-bjorn.ardo@axis.com>
  <20200424111337.GC1959@kunai>
-From:   Bjorn Ardo <bjorn.ardo@axis.com>
-Message-ID: <5038e4c1-440b-0a56-978b-a8c9fac061cc@axis.com>
-Date:   Fri, 24 Apr 2020 13:22:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ <5038e4c1-440b-0a56-978b-a8c9fac061cc@axis.com>
 MIME-Version: 1.0
-In-Reply-To: <20200424111337.GC1959@kunai>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: XBOX03.axis.com (10.0.5.17) To XBOX02.axis.com (10.0.5.16)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9UV9rz0O2dU/yYYn"
+Content-Disposition: inline
+In-Reply-To: <5038e4c1-440b-0a56-978b-a8c9fac061cc@axis.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 4/24/20 1:13 PM, Wolfram Sang wrote:
 
-> On second look, two questions:
->
->> +	if (!error) {
->> +		int ret = request_firmware_into_buf(&fw, eeprom_data, &client->dev,
->> +						    eeprom->buffer, size);
->> +		if (ret)
->> +			return ret;
-> Aren't we leaking 'fw' here?
+--9UV9rz0O2dU/yYYn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
-As I can see in drivers/base/firmware_loader/main.c in function 
-_request_firmware, then the fw will be released internally if it returns 
-an error value.
+> As I can see in drivers/base/firmware_loader/main.c in function
+> _request_firmware, then the fw will be released internally if it returns =
+an
+> error value.
+
+Ouch, of course!
+
+> > Also, do we need 'error' and 'ret'? Can't we reuse one of them?
+>=20
+> Yes, I can fix that.
+
+Great, thanks!
 
 
-> Also, do we need 'error' and 'ret'? Can't we reuse one of them?
+--9UV9rz0O2dU/yYYn
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-Yes, I can fix that.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6izQgACgkQFA3kzBSg
+KbZ2ThAAhMsZ3tQuyAqOGMN9/wJ9va85sHDKjPkaNaXrPFpI3R2IVgdHPYS/5c6Z
+y1hVZu7mL7tTXMjS9gnt0cDQhGJ2w2K6uMDo4JFx7LdaWE/wws0j81NhzVJCUcfi
+RYt+8x5cNJYPi6u7HDtNZgiX1DGa2oZRodSvkbbd0uyxNiZXc4dKuenXY8trrN2E
+YNMtXee5ChsDBZl0AhNOo+TASMUBepo7XAcPaigJiDol5nDYdSMvKu52g4ys7eZa
+aEf9iFx5o6qbVRUGiUptv/5XjuN0mpK87vB9qJNNqWMp9ACheRAG87nEtRx0qp3P
+YlY8uT7nx1cCpcqaICfDpHyWCp8+VvKWHFd+omKsQLx2fODjMO2otEPsqGEcMxwX
+OKgPwrUlwnymlRFvIfmJ5b+JQsoXCIeCGqvo82RIa/4U9Xo/019n8dFnAj2VWqwV
+fcrUERYQ4E0pGH6IIsXvZYTaPIFzhtPbIlBrt01SKIRLvZeOLzU0mnNmEfvU2iwC
+YUVnnVgkp0ReGSsjsLE+27UN7JJN/9cXt3Ofy0FaJyPcHlU8gwLh/G6+rUXIfAO1
+wUjuS0H5N3ef5NfLK67L9SO0jfrvlrxP8qIsR3VCOGD6gP57VgTQL/jLFi620OjP
+/WBsufP+JjSGdOkO4BDMOu06cKDmExA9QaaWRkLR1Nqr4ilXIWg=
+=kSjn
+-----END PGP SIGNATURE-----
 
-
-/BA
-
+--9UV9rz0O2dU/yYYn--
