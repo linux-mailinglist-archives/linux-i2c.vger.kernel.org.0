@@ -2,142 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEF81B794F
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Apr 2020 17:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73871B7998
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Apr 2020 17:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbgDXPTb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Apr 2020 11:19:31 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:12145 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726900AbgDXPTa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Apr 2020 11:19:30 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ea303760000>; Fri, 24 Apr 2020 08:19:18 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 24 Apr 2020 08:19:30 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 24 Apr 2020 08:19:30 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 24 Apr
- 2020 15:19:30 +0000
-Received: from [10.26.73.231] (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 24 Apr
- 2020 15:19:27 +0000
-Subject: Re: [PATCH v2 1/2] i2c: tegra: Better handle case where CPU0 is busy
- for a long time
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "Wolfram Sang" <wsa@the-dreams.de>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20200324191217.1829-1-digetx@gmail.com>
- <20200324191217.1829-2-digetx@gmail.com>
- <1e259e22-c300-663a-e537-18d854e0f478@nvidia.com>
- <f59ba318-8e99-c486-fa4d-1ee28a7b203d@gmail.com>
- <b01cec76-bb39-9fb5-8f6e-4023c075e6b3@gmail.com>
- <8cd085e1-f9fd-6ec0-9f7a-d5463f176a63@nvidia.com>
- <db1132ce-53a8-371c-98e0-cb7cd91d5c7d@gmail.com>
- <fa344989-4cce-0d2c-dc93-4ca546823160@nvidia.com>
- <bba0a93a-8ec4-eda6-97f3-fb2ab0b9b503@gmail.com>
- <6f07e5c8-7916-7ea2-2fe7-d05f8f011471@nvidia.com>
- <77a31b2f-f525-ba9e-f1ae-2b474465bde4@gmail.com>
- <470b4de4-e98a-1bdc-049e-6259ad603507@nvidia.com>
- <d2531fc1-b452-717d-af71-19497e14ef00@gmail.com>
- <a5198024-7273-74c4-b4f4-3a29d042bc36@nvidia.com>
- <f8fb1f7f-2497-033e-ff2c-c86c6caa9706@gmail.com>
- <fd1ca178-1ea3-851f-20a6-10bf00453ce3@nvidia.com>
- <a5734f19-254e-b6bc-e791-fa1ac63f11a4@gmail.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <79f6560e-dbb5-0ae1-49f8-cf1cd95396ec@nvidia.com>
-Date:   Fri, 24 Apr 2020 16:19:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726987AbgDXPdB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Apr 2020 11:33:01 -0400
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:37579 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726806AbgDXPdB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Apr 2020 11:33:01 -0400
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id EED00144C;
+        Fri, 24 Apr 2020 11:32:59 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute7.internal (MEProxy); Fri, 24 Apr 2020 11:33:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=E3sMeHbCAsorKLNRBwtJuvMxe4s
+        X7oNFJA6uh6/V09o=; b=I81Vv1U9rffqzG+MziHsg01V2e+Ds8NzFDwTn3/cenD
+        S2WJV5ETTu67visXHThN51YGYN/Ta/m5LgtjaFHC3VIOOQcvfz7C9IKyo2Vr/7VZ
+        1PrdFpEBaX4po9f+TTGjICYwkNcjTG+o2XMCAhFLhpz77o8gH80mSkOouShoUuDi
+        Bq9F+6AW1KlMnquUi7nwrHK//v+TzRUFdC7rVrvUwKKElNS/4UNsTn3XfbTi+M2+
+        Di/A9kkLx8IZ2anydYuLcu7o7q52pSi0g0PFBlqzaMqEbRDHkgpdyhYCvkoIhvVZ
+        AiJ0xS438mYG30IQYO6LR37jWl+kYq/fiSRucXGlxFQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=E3sMeH
+        bCAsorKLNRBwtJuvMxe4sX7oNFJA6uh6/V09o=; b=144WcH05O2wtvJjQu9Gukd
+        pOq9fUoluzmpIiET82PYcq6jqyOLVaDnqlpkepnBcuSSIro58kVF2lwL1gmv9pxy
+        +tcF1Fl3LaH1XKaSCD+Yy7BQMketUSUmwg1cq6PNfm/dp4cKqISgWGc0oLN8BnsY
+        aZ1VeN9yH5JF2TjV2k7kbqswtnO0GD3PEUH9jCiD0nFE5zM3NB10PZ2+egoGPioV
+        8FnHSbZQrqGP0Zf7A1TsqC0HnMVSzk4s0JGdO34fWcPdoAnx00uOMeo5gKdjCqPF
+        tEwwhlXe5wj6znxOEoApx+R1CjlgxjjUfmHaaW442rg7dGMu7y30Gnfq1Q5rTkCg
+        ==
+X-ME-Sender: <xms:qgajXic365sAgtb2Qaaqpb9EHZ1IVctpppO7Zm6VIjiy7qPIqWKvIQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrhedugdekiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+    hrlhcuvffnffculdefhedmnecujfgurhepfffhvffukfhfgggtuggjsehgtderredttddu
+    necuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghksehsth
+    iftgigrdighiiiqeenucfkphepudeiiedrudejiedruddvuddruddvfeenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsth
+    iftgigrdighiii
+X-ME-Proxy: <xmx:qgajXvSGHJHDkQ9PVC6ziiJCVjzPUvYFVvfQpFeHcx_HXnmNH8_OGg>
+    <xmx:qgajXuKFcsfMEW1c1eZE6azbWbNp5w6XZ_40oHJQtS5_9P89lF1kPA>
+    <xmx:qgajXsKEZhE52YGGzsRVsSDnPTRCyhkAWTfsi5NXNKmCZzf23q_vQQ>
+    <xmx:qwajXgKrr-xmtJGDHvuhc5VuevbiRR7PGv_rktmhVCv-_lrERdudcA>
+Received: from localhost (mobile-166-176-121-123.mycingular.net [166.176.121.123])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 896013280060;
+        Fri, 24 Apr 2020 11:32:58 -0400 (EDT)
+Date:   Fri, 24 Apr 2020 10:32:57 -0500
+From:   Patrick Williams <patrick@stwcx.xyz>
+To:     Bjorn Ardo <bjorn.ardo@axis.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@axis.com
+Subject: Re: [PATCHv2] i2c: slave-eeprom: Make it possible to pre-load eeprom
+ data
+Message-ID: <20200424153257.GA3163924@heinlein.lan.stwcx.xyz>
+References: <20200424090443.26316-1-bjorn.ardo@axis.com>
+ <20200424100307.GB1959@kunai>
+ <5180b657-33ff-c182-8a16-82a35a61f647@axis.com>
 MIME-Version: 1.0
-In-Reply-To: <a5734f19-254e-b6bc-e791-fa1ac63f11a4@gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1587741558; bh=6EvpFp10VeCDVx1lp61rQp1uS7/tMoIZMqDEb+agf+I=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=ah4+pULA1j3bd4sv6xF57BpM40y/gqIdTIObBUAAVJHhrv1ei9bZQHEGKduTQCOEc
-         vU1sPRZZkH2FbeBn9JodzAd7Xdx51ldXdm02fDKkNL4DZRxltcWEi9yYWlRMyncwYZ
-         kcvRlT2TQgbUDYiG1BYgDqIdhqmeJwCeFn2ElQWFpE2CH4Zr0SVXGbMxcPAVp7Zf5D
-         rFuU5pJwqkGzkH3tqYJMegxbtQmA3fTPNeOaQWViFNfeacO4DB3jxIsAE4FG+lKX/i
-         VfkXqf1CLMpvZF4oncwWkSMbyo17t93XNfQOXdmj4b5XuljMg5SV2rszA0ZjE/Kw38
-         iU3QH1yKibVdA==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mP3DRpeJDSE+ciuQ"
+Content-Disposition: inline
+In-Reply-To: <5180b657-33ff-c182-8a16-82a35a61f647@axis.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-On 24/04/2020 15:45, Dmitry Osipenko wrote:
-> 24.04.2020 10:10, Jon Hunter =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> ...
->>> Could you please clarify why pm_runtime_get_sync() can't be used by the
->>> I2C driver's in NOIRQ phase?
->>
->> Yes take a look at commit 1e2ef05bb8cf ("PM: Limit race conditions
->> between runtime PM and system sleep (v2)").
+--mP3DRpeJDSE+ciuQ
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Apr 24, 2020 at 12:06:44PM +0200, Bjorn Ardo wrote:
 >=20
-> I2C driver now uses irq-safe RPM since ede2299f7 ("i2c: tegra: Support
-> atomic transfers"), and thus, the RPM's workqueue shouldn't be a
-> problem. I guess RPM should work fine in this case, don't you think so?
-
-I was testing, and I did not see it using atomic transfers. I can
-confirm if the RPM callbacks are called or not, but I did not think so.
-However, let me confirm.
-
->>> Yes, keeping PCI regulators always-enabled should be a good immediate
->>> solution.
->>
->> I was thinking about that, and I am not sure it is. I don't think that
->> the failure to send the I2C command should break suspend.
+> On 4/24/20 12:03 PM, Wolfram Sang wrote:
+> > On Fri, Apr 24, 2020 at 11:04:43AM +0200, Bj=F6rn Ard=F6 wrote:
+> >> If the slave eeprom has a "firmware-name" in devicetree, then
+> >> pre-load the data in the eeprom with this file. Otherwise we
+> >> init the eeprom with 0xFF.
+> >>
+> >> Signed-off-by: Bj=F6rn Ard=F6 <bjorn.ardo@axis.com>
+> > I like it a lot, thanks! Maybe we could add a SoB from Patrick for his
+> > 0xff-suggestion (but keeping you as the patch author).
+> >
+> > Is this okay for everyone?
 >=20
-> It shouldn't, but looks like it should be a separate problem.
-
-Maybe but all these other problems appear to have existed for sometime
-now. We need to fix all, but for the moment we need to figure out what's
-best for v5.7.
-
->> So I confirmed that DMA is not the issue in this case. I tested this by
->> ensuring that DMA is never used. However, it is a potential problem
->> indeed.
->>
->>> Could you please try to apply this hunk and see if it makes any
->>> difference (I'll probably make it as proper patch):
->>
->> Per my tests, I don't believe that it will as disabling DMA does not
->> resolve the problem.
->>
->>> It also could be that there is more than the suspend ordering problem,
->>> but for now it is hard to tell without having a detailed log which
->>> includes I2C/DMA/RPM traces.
->>
->> I have taken a look and I don't see any issues with ordering. I2C is
->> suspended after PCI. This did not change.
 >=20
-> Do you see a "completion done after timeout" messages in the KMSG log of
-> the v5.6 kernel?
+> OK for me!
 >=20
-> Could you please try this hunk? Although, I'll be surprised if it
-> changes anything.
 
-Yes I can test.
-
-Cheers
-Jon
+Fine by me, also.
 
 --=20
-nvpublic
+Patrick Williams
+
+--mP3DRpeJDSE+ciuQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAl6jBqcACgkQqwNHzC0A
+wRkQGBAAhOJXizdAa1+dcsc7Ala89T+gaL6McSbjh9Prb51VZcO96nQN7EN1njR0
+nmzUBPLhejXf7HDjOeFqJXn/RyobhamrPxkCJWiKtH4fag+IKcoNOP2s41QblOMG
+LVFn1Hpag5AvyGrYjXcTB/4ofrzX8PFrejAhqbaL68XyNow+2LPlJQY5lGCE2Vtf
+Pbmu/HDGe2kGXIzq0pG2BNE2wHm+0rbG/BjOkDJPueDCdqV7WdKnaiOggYo85aFd
+4h73DH+s1pmdc1X23T5LMfNhsG2CuGywGwzL6Xq+NtRuR+gLRKyXTkmidCNg2bc1
+E5i7ofRZBukJWYDYz4A+0csfuVuVqso/4v3xnxJitwvG8l59Cwv4PYO2t2OP2OkM
+lpC43Vx7PQyHMAHRPNMGvlB+2lFP+dEUiADagGPSgse3F3Fz2bwkGoPflACJ3vDc
+5lVWZvWmQMEDITt3xlbYOIdayl47orbuHuAdWlOeEipGACt2AzbpSkiVkwSNWZrV
+VZG/me3pILyo+4/Nk21W98PX4uN63vbdKN0FxDzqutIEJR/4N5f/SY1D60mwlVW8
+Mw+QEcUwkwPLQ8BdgCEXup/dnc6rHJhma9yAJ/gktQ+x2XSwS+2Y9rzW6otnzLBw
+doJt464t73p7J9upoFqGpP6j2u6IpOGQMGJD2PpeXH898a0ndNs=
+=Xkmb
+-----END PGP SIGNATURE-----
+
+--mP3DRpeJDSE+ciuQ--
