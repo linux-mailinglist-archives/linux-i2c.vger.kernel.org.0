@@ -2,103 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C7F1B899C
-	for <lists+linux-i2c@lfdr.de>; Sat, 25 Apr 2020 23:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7865A1B89AA
+	for <lists+linux-i2c@lfdr.de>; Sat, 25 Apr 2020 23:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726234AbgDYVi6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 25 Apr 2020 17:38:58 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:57183 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726015AbgDYVi5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 25 Apr 2020 17:38:57 -0400
-Received: from localhost.localdomain ([37.4.249.134]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MV6G0-1jajx10av8-00S8Wh; Sat, 25 Apr 2020 23:38:49 +0200
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        id S1726284AbgDYVvW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 25 Apr 2020 17:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726015AbgDYVvW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 25 Apr 2020 17:51:22 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03A9C09B04D
+        for <linux-i2c@vger.kernel.org>; Sat, 25 Apr 2020 14:51:21 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id g12so15939289wmh.3
+        for <linux-i2c@vger.kernel.org>; Sat, 25 Apr 2020 14:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=AskPgFkIBwRqziKKPyHXk16uuLnLGE9FmAeIfGuoiyw=;
+        b=UGszXKQbPAdmLpuCZg0R1vbfRgsePhh46gn1WsNfQIH+oLLSDdmV0kkylj8C8Yj6sQ
+         dLLZVY4AIYOwFOh1Rz3i1nC1q9m3qMTbwPzP6byY8P/MpoaY3V/wDFF8A2T0+FkmuIyo
+         VAjdiOSMdgB3pZrcNBjaVIOMsIcZCfKzM45nqQK4yNJ7DCFh0BXoSb1urr8uUKh9eZ2N
+         VQjgfc21wASxMGmaY03Ig/oKkrJrPTkhnip7o1NizbOyMxDnCsx8atROpxZVD8j1z4Qh
+         QXY2uHYHzkv8C5jzeQXB+Z6gG+mv0CTVJ7RoKym+gtKz78QrPKuIy4kvs4c0U72UvXel
+         4WUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=AskPgFkIBwRqziKKPyHXk16uuLnLGE9FmAeIfGuoiyw=;
+        b=UW1wTWdR4LCHop92tq6VvCh6QKmTf8wqtd3A3is81xaiufFPw2VwwPHcxyg50dpiN6
+         4KoulfEY9cUyanSh660Jkm6q1bffH4w7KC2GT6yUkv7Cqk9aIfVaFEjMPYWWbMUbFMv9
+         BoPKCyCsKtpBfXGv68+sthutFSDPg/BCaYZ+FLBEYQ4jdXYq+6mMzuDD2Qss+VotPEAh
+         KDYCE+clZ1vkp0Px3hdfgmj2+R4sA7xUSV4fTIkfIL0eGmC9pLlxTFeX9Ri1BSS3BoPq
+         6P11U9vVxq8VaA+XD8gauzSLUTfQquHLq622ZI27yxIraBjdDmOnrBS2SSTSeb7SC4PN
+         tYYw==
+X-Gm-Message-State: AGi0PuaXnlkWEF3TDGPbWAf+2a0HjXLKgDa4+Nt3AjbPBbwQVSpcFICd
+        U7qknA/oHtkCitVpOW6ZXgA=
+X-Google-Smtp-Source: APiQypLNwEvTJnhvyxZdRTEbB+4wyhwXcIi96k1gQg68+T2YjnXYMn0SdtvSyPLwcFVta17U2zM15Q==
+X-Received: by 2002:a1c:ba09:: with SMTP id k9mr17475473wmf.176.1587851480651;
+        Sat, 25 Apr 2020 14:51:20 -0700 (PDT)
+Received: from [10.230.188.26] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id a20sm15100102wra.26.2020.04.25.14.51.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Apr 2020 14:51:19 -0700 (PDT)
+Subject: Re: [PATCH] i2c: brcmstb: Fix handling of optional interrupt
+To:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Wolfram Sang <wsa@the-dreams.de>
 Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH] i2c: brcmstb: Fix handling of optional interrupt
-Date:   Sat, 25 Apr 2020 23:38:07 +0200
-Message-Id: <1587850687-23675-1-git-send-email-stefan.wahren@i2se.com>
-X-Mailer: git-send-email 2.7.4
-X-Provags-ID: V03:K1:tn0CEj9ZIDplun3FbAeVIJcYPxrDm4mFY4qyezpfYAlSmzz6ppy
- QRILXn3atgNyThnwpLICQW1sGny7tmMFMSHDCS7cTs3lkcUMqqW7M5wr53vHS35c33a8BXL
- 4z34oywRAFPzRjdijGkKAwNpGEcfi7ZaVLv16w/2SI5pvQ0oyKJXq7spt02DsbULFcOaWv0
- Zt6rl4wjqKaibsCReH6Bw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TWnPE33LefM=:NNaqyIxuVGA9y2WHf31alT
- r500pBYTd8bO0gHSr2IPU8PnI9jd1aHoBqBD7hSW121gPHIr4h7J0Wrv2fNVhCcLSbWpUPLXY
- vXu6jMv1+x6r3/c9RxZQdbYZZWHkzt6WJ+joqjANI7bQGLDFuq8HnIXBpZz/LXFT/vqexHRGs
- G5cT9/0SIp99p2RxI6v/C+4//pyjbtQ8bsj5P4Fdfd6Npf3vjrlxCeAr6RNjy7VC9aIjfczsO
- xwK2NhKOIA7O29tx95hZUZBgalsGDeGKSW8c0/KFRP+G1b4pj+VMbSu8qlNb3xdYPVBaOlNQM
- mV7E7zpjc8CYNJT3pUyR3JbS3Dmfeu9/iSCbOVDqxwmyUGNdz6EfDiCjVNo62v+tp137nEqS4
- Vuu5WaTM/VF5Hga42yS+bpOYI+8e4C2Z2cI1OTPk3g/OH4hxhtWz/Z7Q+34GxRNFakX4u1iZY
- udeGWA5XQakRtKbgL6m3JdYky8CFj3S9ly5CFtqB7UKOu4cLJb5xAEjGPJULy13pmdo50pB0Q
- YsH+rkZ9FtBD/86kO3UGoawl9jb0Gz2L05/BEUlsVfhBesP3c/Mob8UhVGj6RtaVpGvH/AN27
- PhpQOP9LfV1ZTZ05IUB4RjYf/Y4d9YQ1FX/+JokWkMg9DR/Y97BG0twV2QJLjckYYxFu/yxX6
- mK5mD52JODP5RXfRLD1v4erV274xeXW4mxD7JTZpOjXWEviwZy7FSdnU8uCZDhMH/e7W778j7
- GRBdK8/K0kF5CnxZFN7cu5q2qOmRmxzH3lXr0bb8UDfLITyW3Iz9r7MNkj31pRVnKsuLTDMeA
- PbH6w6hPERMU8zqqg+eSuloMZ+ito/yqOOiOLOX29B7Fq3H2nFdQJaLphxlGWr7O5auFlhn
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <1587850687-23675-1-git-send-email-stefan.wahren@i2se.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <3f3d4430-3c3c-d838-bd35-d35712ed4039@gmail.com>
+Date:   Sat, 25 Apr 2020 14:51:16 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <1587850687-23675-1-git-send-email-stefan.wahren@i2se.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-If there is no interrupt defined then an error is logged due
-to the use of platform_get_irq. The driver handles not having
-the interrupt by falling back to polling, therefore make
-the appropriate call when claiming it.
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
----
- drivers/i2c/busses/i2c-brcmstb.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+On 4/25/2020 2:38 PM, Stefan Wahren wrote:
+> From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> 
+> If there is no interrupt defined then an error is logged due
+> to the use of platform_get_irq. The driver handles not having
+> the interrupt by falling back to polling, therefore make
+> the appropriate call when claiming it.
+> 
+> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-diff --git a/drivers/i2c/busses/i2c-brcmstb.c b/drivers/i2c/busses/i2c-brcmstb.c
-index 169a283..d4e0a0f 100644
---- a/drivers/i2c/busses/i2c-brcmstb.c
-+++ b/drivers/i2c/busses/i2c-brcmstb.c
-@@ -647,20 +647,22 @@ static int brcmstb_i2c_probe(struct platform_device *pdev)
- 		int_name = NULL;
- 
- 	/* Get the interrupt number */
--	dev->irq = platform_get_irq(pdev, 0);
-+	dev->irq = platform_get_irq_optional(pdev, 0);
- 
- 	/* disable the bsc interrupt line */
- 	brcmstb_i2c_enable_disable_irq(dev, INT_DISABLE);
- 
- 	/* register the ISR handler */
--	rc = devm_request_irq(&pdev->dev, dev->irq, brcmstb_i2c_isr,
--			      IRQF_SHARED,
--			      int_name ? int_name : pdev->name,
--			      dev);
--
--	if (rc) {
--		dev_dbg(dev->device, "falling back to polling mode");
--		dev->irq = -1;
-+	if (dev->irq >= 0) {
-+		rc = devm_request_irq(&pdev->dev, dev->irq, brcmstb_i2c_isr,
-+				      IRQF_SHARED,
-+				      int_name ? int_name : pdev->name,
-+				      dev);
-+
-+		if (rc) {
-+			dev_dbg(dev->device, "falling back to polling mode");
-+			dev->irq = -1;
-+		}
- 	}
- 
- 	if (of_property_read_u32(dev->device->of_node,
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.7.4
-
+Florian
