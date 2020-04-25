@@ -2,101 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 140801B7E7F
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Apr 2020 21:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24DB1B8320
+	for <lists+linux-i2c@lfdr.de>; Sat, 25 Apr 2020 03:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbgDXTE0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Apr 2020 15:04:26 -0400
-Received: from sauhun.de ([88.99.104.3]:50924 "EHLO pokefinder.org"
+        id S1726040AbgDYBvq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Apr 2020 21:51:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48488 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726813AbgDXTEZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 24 Apr 2020 15:04:25 -0400
-Received: from localhost (p5486CE62.dip0.t-ipconnect.de [84.134.206.98])
-        by pokefinder.org (Postfix) with ESMTPSA id E69B42C2019;
-        Fri, 24 Apr 2020 21:04:23 +0200 (CEST)
-Date:   Fri, 24 Apr 2020 21:04:22 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Eric Anholt <eric@anholt.net>, dri-devel@lists.freedesktop.org,
-        linux-rpi-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 01/91] i2c: brcmstb: Allow to compile it on BCM2835
-Message-ID: <20200424190422.GA5220@kunai>
-References: <cover.d1e741d37e43e1ba2d2ecd93fc81d42a6df99d14.1587742492.git-series.maxime@cerno.tech>
- <c8c666eb5c82dcb73621930b3fedf5814792bf1a.1587742492.git-series.maxime@cerno.tech>
- <20200424161353.GA4487@kunai>
- <bedfe073-6ff4-69ee-fe39-d5802cc3ecfd@gmail.com>
+        id S1726032AbgDYBvq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 24 Apr 2020 21:51:46 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B41AC2076C;
+        Sat, 25 Apr 2020 01:51:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587779506;
+        bh=XDiPEBu19bAqC9o2a/qJ/zX5lVJzn8ZyaUm40VOxPd8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VJ1P8j9oUM/CmYw3hTheEbEkJtaJgxLfOzk4p8nQlttAz8+t12X6kWtzkjmhy6gB3
+         H05sp6knR66lxyn2JfyBDCq7oHOLT5948OBSJ2zxLxZz19OEj0ObfJOUcmTQlnCLlA
+         kDU443/v7TYFoyYnbXy5moZFFnkFbWwmDlqWF1C4=
+Date:   Fri, 24 Apr 2020 21:51:44 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.6 28/38] i2c: remove i2c_new_probed_device API
+Message-ID: <20200425015144.GF13035@sasha-vm>
+References: <20200424122237.9831-1-sashal@kernel.org>
+ <20200424122237.9831-28-sashal@kernel.org>
+ <20200424133635.GB4070@kunai>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rwEMma7ioTxnRzrJ"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <bedfe073-6ff4-69ee-fe39-d5802cc3ecfd@gmail.com>
+In-Reply-To: <20200424133635.GB4070@kunai>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, Apr 24, 2020 at 03:36:35PM +0200, Wolfram Sang wrote:
+>On Fri, Apr 24, 2020 at 08:22:26AM -0400, Sasha Levin wrote:
+>> From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>>
+>> [ Upstream commit 3c1d1613be80c2e17f1ddf672df1d8a8caebfd0d ]
+>>
+>> All in-tree users have been converted to the new i2c_new_scanned_device
+>> function, so remove this deprecated one.
+>>
+>> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>> Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>This should not be backported. It is only since this merge window that
+>all in-tree users are converted!
 
---rwEMma7ioTxnRzrJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Uh, I'm not sure how this snuck through. I've droped it, sorry!
 
-On Fri, Apr 24, 2020 at 10:07:25AM -0700, Florian Fainelli wrote:
->=20
->=20
-> On 4/24/2020 9:13 AM, Wolfram Sang wrote:
-> >=20
-> >>  config I2C_BRCMSTB
-> >>  	tristate "BRCM Settop/DSL I2C controller"
-> >> -	depends on ARCH_BRCMSTB || BMIPS_GENERIC || ARCH_BCM_63XX || \
-> >> -		   COMPILE_TEST
-> >> +	depends on ARCH_BCM2835 || ARCH_BRCMSTB || BMIPS_GENERIC || \
-> >> +		   ARCH_BCM_63XX || COMPILE_TEST
-> >=20
-> > Isn't there something like ARCH_BROADCOM which we could use here instead
-> > of adding each and every SoC?
->=20
-> If you are worried about this list growing bigger, I do not think this
-> is going to happen beyond this changeset (famous last words).
-
-Okay, thanks for the heads up.
-
-I wonder, then, if the description after 'tristate' is still accurate?
-
-But that withstanding, I am fine with this patch:
-
-Acked-by: Wolfram Sang <wsa@the-dreams.de>
-
-Let me know if I shall take this via I2C.
-
-
---rwEMma7ioTxnRzrJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6jODIACgkQFA3kzBSg
-KbYN+Q//SQP+Vpeh1qTzUNAUeo0heLgu/UyeswoGy/XX0fkPi1VnjHdErSP3hI5i
-qDLv1Xsz6XsjjlNPIIjMyisPgLT1blkvBicJnfNcjh+6ztSQaO1TqUscpgxxxG6f
-n4Dk+CRwVEgmbYI3B/CAxxLSV+ulKl4l6/QSHoDXEdlNcpnQVYqB9noyJh9DJenG
-MUb3zxOoJSDvuNVftZg1Pc07yexfFgRvix0JYC41z9A/bD3yrw/apd4omkuzpojG
-dqEg+xeqCCg6kC4TozKlcqi7Zq4n+pjO0M5crP9U1jllCxgo0pMDbdF7QSXnWuiC
-GVToAKqKWMZbnm4h05ZrGt7IujJExmpRIj6tr6TySvyMpGM3h3EGGjebLFhvRJ2q
-AdRodX9+cAnIQl9HP+eXFHuvp/VzPY8RPgSK3XjAogMNgIQqTTa8L4a6rfNOz83F
-yI0nf2ftcX+7ukUGmtWzL7XT9njqBNhNgTUOXMQ7ccFTe9bpxQxcukYYM/3asi14
-DrcWVHQ6VRbjHvn52lRqfw0rKMaCLGSPgsSd9wXA9OiHCexTDjP7LMdzLKW+QgJq
-1CCCwRvvct6pMvLsHnEhCdwC11ZIHnVOagtvt6p9YrOJOjBSBak3+/IpXaVQ/eSY
-F5UsPOi0nuo0ZLmBLnn/uU4/yK4ciPgZRdX/pe9iRlkSY0V5STo=
-=kdd5
------END PGP SIGNATURE-----
-
---rwEMma7ioTxnRzrJ--
+-- 
+Thanks,
+Sasha
