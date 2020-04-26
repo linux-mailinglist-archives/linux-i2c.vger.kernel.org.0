@@ -2,40 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1281B8D95
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Apr 2020 09:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847701B8D9E
+	for <lists+linux-i2c@lfdr.de>; Sun, 26 Apr 2020 09:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726113AbgDZHod (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 26 Apr 2020 03:44:33 -0400
-Received: from sauhun.de ([88.99.104.3]:42802 "EHLO pokefinder.org"
+        id S1726117AbgDZHrK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 26 Apr 2020 03:47:10 -0400
+Received: from sauhun.de ([88.99.104.3]:42846 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726110AbgDZHoc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 26 Apr 2020 03:44:32 -0400
+        id S1726110AbgDZHrK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 26 Apr 2020 03:47:10 -0400
 Received: from localhost (p54B33954.dip0.t-ipconnect.de [84.179.57.84])
-        by pokefinder.org (Postfix) with ESMTPSA id 80B422C01E8;
-        Sun, 26 Apr 2020 09:44:30 +0200 (CEST)
-Date:   Sun, 26 Apr 2020 09:44:30 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 982322C01E8;
+        Sun, 26 Apr 2020 09:47:08 +0200 (CEST)
+Date:   Sun, 26 Apr 2020 09:47:08 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Eric Anholt <eric@anholt.net>, dri-devel@lists.freedesktop.org,
-        linux-rpi-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
+To:     Alain Volmat <alain.volmat@st.com>
+Cc:     pierre-yves.mordret@st.com, alexandre.torgue@st.com,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>, linux-i2c@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH v2 01/91] i2c: brcmstb: Allow to compile it on BCM2835
-Message-ID: <20200426074430.GB1262@kunai>
-References: <cover.d1e741d37e43e1ba2d2ecd93fc81d42a6df99d14.1587742492.git-series.maxime@cerno.tech>
- <c8c666eb5c82dcb73621930b3fedf5814792bf1a.1587742492.git-series.maxime@cerno.tech>
+        fabrice.gasnier@st.com
+Subject: Re: [PATCH v2] i2c: stm32: don't print an error on probe deferral
+Message-ID: <20200426074708.GC1262@kunai>
+References: <1587395826-17541-1-git-send-email-alain.volmat@st.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/NkBOFFp2J2Af1nK"
+        protocol="application/pgp-signature"; boundary="3siQDZowHQqNOShm"
 Content-Disposition: inline
-In-Reply-To: <c8c666eb5c82dcb73621930b3fedf5814792bf1a.1587742492.git-series.maxime@cerno.tech>
+In-Reply-To: <1587395826-17541-1-git-send-email-alain.volmat@st.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -43,44 +37,42 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---/NkBOFFp2J2Af1nK
+--3siQDZowHQqNOShm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 24, 2020 at 05:33:42PM +0200, Maxime Ripard wrote:
-> The BCM2711, supported by ARCH_BCM2835, also has a controller by the
-> brcmstb driver so let's allow it to be compiled on that platform.
+On Mon, Apr 20, 2020 at 05:17:06PM +0200, Alain Volmat wrote:
+> From: Etienne Carriere <etienne.carriere@st.com>
 >=20
-> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
-> Cc: Wolfram Sang <wsa@the-dreams.de>
-> Cc: bcm-kernel-feedback-list@broadcom.com
-> Cc: linux-i2c@vger.kernel.org
-> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> Do not print an error trace when deferring probe for some resource.
+> Fix as well the error message in case of tx dma_request_chan failure.
+>=20
+> Signed-off-by: Etienne Carriere <etienne.carriere@st.com>
+> Signed-off-by: Alain Volmat <alain.volmat@st.com>
+> Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
 
-I reconsidered, and took it right away (as simple as it is). Applied to
-for-next, thanks!
+Applied to for-next, thanks!
 
 
---/NkBOFFp2J2Af1nK
+--3siQDZowHQqNOShm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6lO94ACgkQFA3kzBSg
-KbZFhBAAs2bJNAZObDsII7NU9/pSPz0KOAuFHG4QW6TOM16OZ4b/lTSXaSkQ1HcL
-LbLMUVilemyw437H86PJ2dcPM3a/aLzXkaWm2TNYJ3E5JkxFraucv7X3+ym40aKM
-RH26F0CLpOg/MoMmJ1rtTP94l6hkesilTxRvJJbzHjJ2+oFzkN8esTPbAWjzu5Vv
-4cmgbM/soxX7SLyeelpmLC5H1Ys6k4OU3sQGfaj3WKRAMAKKLU7rfSS7Cr8SHf0Q
-QFNIAoTjWWJV8RvSozk5dLhkQUmaorBYb8Ur1ejFNMxPnmkbHfPw0ufa9Y8FTvLg
-ts4gRnvW3VcTNhQ3leJ+D6inGrEWDrsHQL4B5D4ILTwO9VQkeEuEvhD9Y/Y2YDbq
-27wH9bZP/JC7h2PeXEBKa+gHeXECD9jtkG55cqomc/y7P0qwEEktrsX3bPmSeCjD
-5HFRF43j4Wx6dSZk4CHm+wtIjIGPVEY/BvKQuXQ5lqP2/19FZcuK6xWNoOOoal+5
-VDLPRgcLYXWshddjwX7Ib1n/Ce5WI9QxxOwXQ3dvaw1scvnDVos4FX3eZx7qffod
-2nvoesD3jLeBIEH2gj2oZATWqW0kK/pAeNcp6uudL6RfwgFVrfFwelsSJC3BS3L5
-9k0AsAS55tnve9Ogh+WLlXSyDw1P+1WWh5rxO1Hiw+hO0nZz/GM=
-=6889
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6lPHwACgkQFA3kzBSg
+KbZqCg//Th0HgzDJWiYiEqK4xlVz2HKw6oqfYM+z5t09khlnmxL09D75I8FjU4sx
+DzKZe+ATTWw6MNROZyyUtDby3lvZgxxiFCiKcju4LscgmgOKwkNu+PxxbKHkUrQR
+1bvQJ8DuMlIVHe2fXPH65f/7EV0Th7AjltoLLSZDSFu34tIa+rOe6liQVJOSjgFS
+tMA11Cm9Eb4hlbKQbtTrPB7OVpVAoQT/Tg5P5nEmAa/DbTZhyNYNbmQJKq8I8HN1
+L2FO/19K0e2h/wqB15OSrjNY6gi/VMlCjCww7IIYjZTZAT1k6lohCQEAb0USRQ03
+fFvCrf5PrBBA6Df2OYwNQBe44fH/BW9xUfj7qjm1DB7DdSEkFmMoO4OQZ7AJ1f/U
+DaT0PkU8tFHvIkvTve2oR9WpizWbC9yGkuOPG6/C/ABMcOCU9du0fAexfOBkYqxN
+57+xI21/U5Km80Kz4JNK2tx6yWoegetGoE50r+nsWtqT1gHT5sA1r9auccrHbZ6P
+byyBbw8MXX7r2P9sMXkUzkN9eg2xIar3WaBOCrq5Py6cmY1z9VanJC5dOWs3Brke
++BY43Lx6e3r73zjPQPQt0siDrfffumnR8RY6OKaiCwM+R4RLt0jmDlXJd4Pk7uwH
+4Fs9CeYgaq7ZKiBhrhwACUax6hxqgxep5OZR3GJhncsUCwBAqR8=
+=TgHS
 -----END PGP SIGNATURE-----
 
---/NkBOFFp2J2Af1nK--
+--3siQDZowHQqNOShm--
