@@ -2,66 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6111B8E7F
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Apr 2020 11:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCFD1B8F74
+	for <lists+linux-i2c@lfdr.de>; Sun, 26 Apr 2020 13:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726143AbgDZJnK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 26 Apr 2020 05:43:10 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:33536 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726251AbgDZJnK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 26 Apr 2020 05:43:10 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 701EC3D6693913F477B6;
-        Sun, 26 Apr 2020 17:43:07 +0800 (CST)
-Received: from huawei.com (10.175.124.28) by DGGEMS410-HUB.china.huawei.com
- (10.3.19.210) with Microsoft SMTP Server id 14.3.487.0; Sun, 26 Apr 2020
- 17:43:01 +0800
-From:   Jason Yan <yanaijie@huawei.com>
-To:     <mpe@ellerman.id.au>, <benh@kernel.crashing.org>,
-        <paulus@samba.org>, <wsa@the-dreams.de>,
-        <linux-i2c@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Jason Yan <yanaijie@huawei.com>
-Subject: [PATCH] i2c: powermac: use true,false for bool variable
-Date:   Sun, 26 Apr 2020 17:42:28 +0800
-Message-ID: <20200426094228.23829-1-yanaijie@huawei.com>
-X-Mailer: git-send-email 2.21.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.28]
-X-CFilter-Loop: Reflected
+        id S1726132AbgDZLj5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 26 Apr 2020 07:39:57 -0400
+Received: from mfdf018.ocn.ad.jp ([153.128.50.74]:50815 "EHLO
+        mfdf018.ocn.ad.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726121AbgDZLj5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 26 Apr 2020 07:39:57 -0400
+X-Greylist: delayed 3634 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 Apr 2020 07:39:56 EDT
+Received: from mogw1037.ocn.ad.jp (mogw1037.ocn.ad.jp [153.149.231.43])
+        by mfdf018.ocn.ad.jp (Postfix) with ESMTP id C8525B80AB8
+        for <linux-i2c@vger.kernel.org>; Sun, 26 Apr 2020 19:39:21 +0900 (JST)
+Received: from mf-smf-ucb025c1 (mf-smf-ucb025c1.ocn.ad.jp [153.153.66.163])
+        by mogw1037.ocn.ad.jp (Postfix) with ESMTP id 52093D0027B;
+        Sun, 26 Apr 2020 19:39:19 +0900 (JST)
+Received: from ocn-vc-mts-103c1.ocn.ad.jp ([153.138.237.78])
+        by mf-smf-ucb025c1 with ESMTP
+        id SeaTjtJde4tSHSegxj86aH; Sun, 26 Apr 2020 19:39:19 +0900
+Received: from smtp.ocn.ne.jp ([153.149.227.166])
+        by ocn-vc-mts-103c1.ocn.ad.jp with ESMTP
+        id SegxjJw1NugkLSegxj2ods; Sun, 26 Apr 2020 19:39:19 +0900
+Received: from localhost (p2275225-ipngn10201funabasi.chiba.ocn.ne.jp [180.11.119.225])
+        by smtp.ocn.ne.jp (Postfix) with ESMTPA;
+        Sun, 26 Apr 2020 19:39:19 +0900 (JST)
+Date:   Sun, 26 Apr 2020 19:39:16 +0900 (JST)
+Message-Id: <20200426.193916.2256641485530997030.anemo@mba.ocn.ne.jp>
+To:     wsa@the-dreams.de
+Cc:     atsushi.nemoto@sord.co.jp, thor.thayer@linux.intel.com,
+        linux-i2c@vger.kernel.org, tomonori.sakita@sord.co.jp
+Subject: Re: [PATCH] i2c: altera: Fix race between xfer_msg and isr thread
+From:   Atsushi Nemoto <anemo@mba.ocn.ne.jp>
+In-Reply-To: <20200426083030.GI1262@kunai>
+References: <20200410.100640.1949609603287475131.atsushi.nemoto@sord.co.jp>
+        <20200426083030.GI1262@kunai>
+X-Mailer: Mew version 6.7 on Emacs 24.5 / Mule 6.0 (HANACHIRUSATO)
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In i2c_powermac_register_devices(), variable 'found_onyx' is bool and
-assigned '0' and 'true' in different places. Use 'false' instead of '0'.
-This fixes the following coccicheck warning:
+On Sun, 26 Apr 2020 10:30:31 +0200, Wolfram Sang <wsa@the-dreams.de> wrote:
+>> --- a/drivers/i2c/busses/i2c-altera.c
+>> +++ b/drivers/i2c/busses/i2c-altera.c
+>> @@ -70,6 +70,7 @@
+>>   * @isr_mask: cached copy of local ISR enables.
+>>   * @isr_status: cached copy of local ISR status.
+>>   * @lock: spinlock for IRQ synchronization.
+>> + * @mutex: mutex for IRQ thread.
+> 
+> I think the name 'mutex' is too unspecific. (Same goes for 'lock' above
+> which is not part of your patch, obviously.)
 
-drivers/i2c/busses/i2c-powermac.c:318:6-16: WARNING: Assignment of 0/1
-to bool variable
+Then, how about 'isr_mutex' ?  Should I resend a patch with new name?
 
-Signed-off-by: Jason Yan <yanaijie@huawei.com>
+>>   */
+>>  struct altr_i2c_dev {
+>>  	void __iomem *base;
+>> @@ -86,6 +87,7 @@ struct altr_i2c_dev {
+>>  	u32 isr_mask;
+>>  	u32 isr_status;
+>>  	spinlock_t lock;	/* IRQ synchronization */
+>> +	struct mutex mutex;
+>>  };
+> 
+> Has it been checked if we really need both, the spinlock and the mutex?
+> From a glimpse, it looks like the spinlock became obsolete now.
+
+Yes, but just dropping the spinlock will leak two code pathes unlocked:
+
+1. altr_i2c_int_enable() at end of altr_i2c_init()
+2. altr_i2c_int_enable() just after wait_for_completion_timeout()
+
+We can kill the spinlock by adding some more mutex_lock, but I think
+that is not a _fix_ but _cleanup_, so I would like to do in another
+patch.
+
 ---
- drivers/i2c/busses/i2c-powermac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-powermac.c b/drivers/i2c/busses/i2c-powermac.c
-index d565714c1f13..00a6fd42c1ae 100644
---- a/drivers/i2c/busses/i2c-powermac.c
-+++ b/drivers/i2c/busses/i2c-powermac.c
-@@ -315,7 +315,7 @@ static void i2c_powermac_register_devices(struct i2c_adapter *adap,
- {
- 	struct i2c_client *newdev;
- 	struct device_node *node;
--	bool found_onyx = 0;
-+	bool found_onyx = false;
- 
- 	/*
- 	 * In some cases we end up with the via-pmu node itself, in this
--- 
-2.21.1
-
+Atsushi Nemoto
