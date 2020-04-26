@@ -2,32 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 076731B8DD2
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Apr 2020 10:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8461B8DEB
+	for <lists+linux-i2c@lfdr.de>; Sun, 26 Apr 2020 10:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgDZIQy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 26 Apr 2020 04:16:54 -0400
-Received: from sauhun.de ([88.99.104.3]:43276 "EHLO pokefinder.org"
+        id S1726146AbgDZIae (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 26 Apr 2020 04:30:34 -0400
+Received: from sauhun.de ([88.99.104.3]:43528 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726112AbgDZIQy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 26 Apr 2020 04:16:54 -0400
+        id S1726108AbgDZIad (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 26 Apr 2020 04:30:33 -0400
 Received: from localhost (p54B33954.dip0.t-ipconnect.de [84.179.57.84])
-        by pokefinder.org (Postfix) with ESMTPSA id 84CD02C01E8;
-        Sun, 26 Apr 2020 10:16:52 +0200 (CEST)
-Date:   Sun, 26 Apr 2020 10:16:52 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 36E3B2C01E8;
+        Sun, 26 Apr 2020 10:30:31 +0200 (CEST)
+Date:   Sun, 26 Apr 2020 10:30:31 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Jason Yan <yanaijie@huawei.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: busses: remove unneeded conversion to bool
-Message-ID: <20200426081652.GH1262@kunai>
-References: <20200420042816.18989-1-yanaijie@huawei.com>
+To:     Atsushi Nemoto <atsushi.nemoto@sord.co.jp>
+Cc:     Thor Thayer <thor.thayer@linux.intel.com>,
+        linux-i2c@vger.kernel.org, tomonori.sakita@sord.co.jp
+Subject: Re: [PATCH] i2c: altera: Fix race between xfer_msg and isr thread
+Message-ID: <20200426083030.GI1262@kunai>
+References: <20200410.100640.1949609603287475131.atsushi.nemoto@sord.co.jp>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LZFKeWUZP29EKQNE"
+        protocol="application/pgp-signature"; boundary="2xeD/fx0+7k8I/QN"
 Content-Disposition: inline
-In-Reply-To: <20200420042816.18989-1-yanaijie@huawei.com>
+In-Reply-To: <20200410.100640.1949609603287475131.atsushi.nemoto@sord.co.jp>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -35,48 +34,66 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LZFKeWUZP29EKQNE
+--2xeD/fx0+7k8I/QN
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 20, 2020 at 12:28:16PM +0800, Jason Yan wrote:
-> The '>' expression itself is bool, no need to convert it to bool again.
-> This fixes the following coccicheck warning:
+On Fri, Apr 10, 2020 at 10:06:40AM +0900, Atsushi Nemoto wrote:
+> Use a mutex to protect access to idev->msg_len, idev->buf, etc. which
+> are modified by both altr_i2c_xfer_msg() and altr_i2c_isr().
 >=20
-> drivers/i2c/busses/i2c-qup.c:960:48-53: WARNING: conversion to bool not n=
-eeded here
-> drivers/i2c/busses/i2c-qup.c:962:47-52: WARNING: conversion to bool not n=
-eeded here
-> drivers/i2c/busses/i2c-qup.c:1531:29-34: WARNING: conversion to bool not =
-needed here
-> drivers/i2c/busses/i2c-qup.c:1533:29-34: WARNING: conversion to bool not =
-needed here
+> Signed-off-by: Atsushi Nemoto <atsushi.nemoto@sord.co.jp>
+> ---
+>  drivers/i2c/busses/i2c-altera.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 >=20
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> diff --git a/drivers/i2c/busses/i2c-altera.c b/drivers/i2c/busses/i2c-alt=
+era.c
+> index 20ef63820c77..3db7d77c5a1e 100644
+> --- a/drivers/i2c/busses/i2c-altera.c
+> +++ b/drivers/i2c/busses/i2c-altera.c
+> @@ -70,6 +70,7 @@
+>   * @isr_mask: cached copy of local ISR enables.
+>   * @isr_status: cached copy of local ISR status.
+>   * @lock: spinlock for IRQ synchronization.
+> + * @mutex: mutex for IRQ thread.
 
-Applied to for-next, thanks! But please fix $subject to have the driver
-name "qup" next time.
+I think the name 'mutex' is too unspecific. (Same goes for 'lock' above
+which is not part of your patch, obviously.)
+
+>   */
+>  struct altr_i2c_dev {
+>  	void __iomem *base;
+> @@ -86,6 +87,7 @@ struct altr_i2c_dev {
+>  	u32 isr_mask;
+>  	u32 isr_status;
+>  	spinlock_t lock;	/* IRQ synchronization */
+> +	struct mutex mutex;
+>  };
+
+Has it been checked if we really need both, the spinlock and the mutex?
+=46rom a glimpse, it looks like the spinlock became obsolete now.
 
 
---LZFKeWUZP29EKQNE
+--2xeD/fx0+7k8I/QN
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6lQ3AACgkQFA3kzBSg
-KbbPmQ//REatWshvQZ2+D9K9K+XGNUsZXGd1r3Vhl+QLR5zlQK1pcxW5p72VHXPj
-/f7wEZqhCawEKcY6VUbBFquHyZipMoUS7DUKsZa2r0fBLjAyY5rxGc/q/tWs4iHB
-PlBvoo0XBPLAwGr54mpiFju5PHuU6kQfhA/hPp9++anIq7WJwqxT7lJf9GM7w7Tz
-/FHZkBBFONE4yN0tD0h70JiJosrvGciJ62ymkCdqOGOO2Zt7SDmT4T0EZjPijIsk
-7IX0wevyCgqZkmxdLlFlPawh+0gbyp8larSYelNQBVw58o5hGK7JeSgIa0qyZIBq
-lZ+O5eO+0pMHONdNcjIbznJXhTMXcn28u2fegpMT3ku/YS0SenJ/QoqIK80J16/a
-3avxEVxSlOYcIXf5+OH+HtL7xfZCLwtalVu2rWwcpIikJGyD2axNz0B/c9FozQHo
-Ox80wyCkRzDVvL99fo9vBJe8/MLNezlZzlpINkmPIkjNv5ZR3cYzSs0W4ckKXTjA
-ABI4lQhQstVucG070SdxF6zJInWi+su2hLBqBT5DQ7ECt1BmoWFP7YWEBOaY9z31
-KkG6BK+DaScpka0liHt1Gy85p/lXBsKY/o5F9n8/1NsUniZ9blHqju6mNfTzLEDI
-oPHxnBR9jN/+vEq5GfgHQKnCQ0hd0jLGmpzvugbLNj0KOjf9g+U=
-=ouID
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6lRqYACgkQFA3kzBSg
+KbYrxhAAsv46elvMYMWlR52N3GOWyFj0H7kATctv08Gaib99JR535Ub0XxSS1pil
+k/fwUOir5x9G6X4wVQm6nKXlLDDZK5IBM+k4sQWofPfWCmn/JbJSZhjaQpHqdxiM
+JMvuEX7X5XxRmCVwwcgsDEQdGUbf4XD3ogp1mZKQbU9X/WyKunIUyXvzNa5gfcZw
+TBW8GmvyoANf9JvJRTUxrqg5pZvzMcV1/ktQ9xBHnWLrif1tpUR+En+cXE388Cn7
+cqAZzyT0VpstsDYBBSe3CMuZYA2zZjvIQYAPKVogTwb3ZLtJUvbHCczYPAVuldA4
+M5NJvWHmP9YCok+QN7e6FKf4fV36oD+Jj2u4gwa0wKkQtKbsDXYagswBqh6OI8Mz
+LvAXI+Cq1uuxEN6E866ULVqwjVg19rD3ac874wRLhspr+anQ4l+cPP4bILi03Kaf
+Fav3lalmHGSVr+ebUKjQrpPV8jWiWxwM9+acvmzymjabxiwcTU5sAdvI0XfeMR5h
+bVdGI3YzxJU39lYA0CRVVLksVeqiW3GKv9vRSVim6VKVfyK8wdJ8wXQAAVn1GcVm
+LiicbwypbNamJ4uPMrL8omsT7gQoK0tAZpUHgas16GOfyyUpvROatEcKqXAphasN
+wLDpr3E+T/X6TfKeL9Zz5hURZxck2sldGwGsxZp/dhRgUumIsrc=
+=bRL2
 -----END PGP SIGNATURE-----
 
---LZFKeWUZP29EKQNE--
+--2xeD/fx0+7k8I/QN--
