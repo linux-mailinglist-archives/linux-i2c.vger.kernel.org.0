@@ -2,88 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 699731B8E16
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Apr 2020 10:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6111B8E7F
+	for <lists+linux-i2c@lfdr.de>; Sun, 26 Apr 2020 11:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbgDZI5f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 26 Apr 2020 04:57:35 -0400
-Received: from sauhun.de ([88.99.104.3]:43910 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726108AbgDZI5e (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 26 Apr 2020 04:57:34 -0400
-Received: from localhost (p54B33954.dip0.t-ipconnect.de [84.179.57.84])
-        by pokefinder.org (Postfix) with ESMTPSA id B40FB2C01E8;
-        Sun, 26 Apr 2020 10:57:32 +0200 (CEST)
-Date:   Sun, 26 Apr 2020 10:57:32 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] platform/mellanox: mlxreg-hotplug: convert to use
- i2c_new_client_device()
-Message-ID: <20200426085732.GM1262@kunai>
-References: <20200326210952.12857-1-wsa+renesas@sang-engineering.com>
- <20200326210952.12857-3-wsa+renesas@sang-engineering.com>
- <CAHp75Vfw4_0ttE2F-WxdULf7hRGsQvqzCLdCNVy7RBaFdEsCGA@mail.gmail.com>
- <20200425205407.GA6774@kunai>
- <CAHp75VeRcT31WbVM6qXHFtT5aF+d6SbAVWVrH8g1_+ruNvv2sQ@mail.gmail.com>
+        id S1726143AbgDZJnK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 26 Apr 2020 05:43:10 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:33536 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726251AbgDZJnK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 26 Apr 2020 05:43:10 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 701EC3D6693913F477B6;
+        Sun, 26 Apr 2020 17:43:07 +0800 (CST)
+Received: from huawei.com (10.175.124.28) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.487.0; Sun, 26 Apr 2020
+ 17:43:01 +0800
+From:   Jason Yan <yanaijie@huawei.com>
+To:     <mpe@ellerman.id.au>, <benh@kernel.crashing.org>,
+        <paulus@samba.org>, <wsa@the-dreams.de>,
+        <linux-i2c@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Jason Yan <yanaijie@huawei.com>
+Subject: [PATCH] i2c: powermac: use true,false for bool variable
+Date:   Sun, 26 Apr 2020 17:42:28 +0800
+Message-ID: <20200426094228.23829-1-yanaijie@huawei.com>
+X-Mailer: git-send-email 2.21.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bPrm2PuLP7ysUh6c"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VeRcT31WbVM6qXHFtT5aF+d6SbAVWVrH8g1_+ruNvv2sQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.28]
+X-CFilter-Loop: Reflected
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+In i2c_powermac_register_devices(), variable 'found_onyx' is bool and
+assigned '0' and 'true' in different places. Use 'false' instead of '0'.
+This fixes the following coccicheck warning:
 
---bPrm2PuLP7ysUh6c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+drivers/i2c/busses/i2c-powermac.c:318:6-16: WARNING: Assignment of 0/1
+to bool variable
 
+Signed-off-by: Jason Yan <yanaijie@huawei.com>
+---
+ drivers/i2c/busses/i2c-powermac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > Thanks, Andy! Is there a platform-x86-tree where this can go in? Or
-> > shall I take it via the I2C tree?
->=20
-> platform/mellanox usually goes via other trees, so, feel free to carry on.
+diff --git a/drivers/i2c/busses/i2c-powermac.c b/drivers/i2c/busses/i2c-powermac.c
+index d565714c1f13..00a6fd42c1ae 100644
+--- a/drivers/i2c/busses/i2c-powermac.c
++++ b/drivers/i2c/busses/i2c-powermac.c
+@@ -315,7 +315,7 @@ static void i2c_powermac_register_devices(struct i2c_adapter *adap,
+ {
+ 	struct i2c_client *newdev;
+ 	struct device_node *node;
+-	bool found_onyx = 0;
++	bool found_onyx = false;
+ 
+ 	/*
+ 	 * In some cases we end up with the via-pmu node itself, in this
+-- 
+2.21.1
 
-Then, I will pick it.
-
-> > Same question for the similar patch
-> > for x86/platform/intel-mid?
->=20
-> TIP maintainers usually take this. If I didn't tag it, feel free to add m=
-y Rb.
-
-You tagged it. Thanks for the heads up, I will wait some more here.
-
-
---bPrm2PuLP7ysUh6c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6lTPgACgkQFA3kzBSg
-Kbb8Dg//RCWJJbV9Q6WfPGy9g9VmcsyK6+V5O/YA10m4mxzXVuPEZhB1sm2Lc40Y
-TrTYA+BZEwCgzpkK0NKNnX0OrF5hvTl8vF9iIu4bhMrrw0aRNHKGC+cb3VjtE98k
-zYOm9Q4hX+/F68101o44/A53+19nEG1Qs69VWWpsG5xHquJWTGFYQAEG3Z9Ht9sU
-vOvMvGsNFRGKOItnGaRwse/Rqhhvsj5PLdn61OhGal786Jqk84KnEPyWjp7kFdFv
-apKmaFgZ+hA32PY3RgqmvMduO4/VGz3VxgvIujbDnxm6UPNptgwBYJwaSozEAmU7
-Up7/1iKM/g4lymnmrn8h4xSRYNW9BA6swLkQCNjimER+ulQ28tNdSo9dFmA2/Il0
-/iGc8dm1lo8ufJ3hWsSZwAJzEqjnFs46jbZtS/XKF2dW81HGhro8u63eskRxCFhP
-dO65rQLEV1iTCPJunz2h+TNWcmqnADqNJTWvF+CtaoAvEvhfnKJ0kkmyHOZWF7kZ
-mc3P0RmaZlKVnltH2idjjipRdyZgxBGIn4xz4ashtbntgETtcp2iBulDWmqOpSws
-Lo+2k/QWg+yWBnrfEKEXSpOU5q+5unhacdvJLFrmk4/N4VFDVIe0OCAjSgRAkgor
-daPg8ZAWh5RES3mbACXsNaLWEh45tclp5qLQrvXNXGNohxARWFw=
-=YQ04
------END PGP SIGNATURE-----
-
---bPrm2PuLP7ysUh6c--
