@@ -2,69 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBE21B8DCD
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Apr 2020 10:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076731B8DD2
+	for <lists+linux-i2c@lfdr.de>; Sun, 26 Apr 2020 10:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbgDZIMS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 26 Apr 2020 04:12:18 -0400
-Received: from sauhun.de ([88.99.104.3]:43174 "EHLO pokefinder.org"
+        id S1726140AbgDZIQy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 26 Apr 2020 04:16:54 -0400
+Received: from sauhun.de ([88.99.104.3]:43276 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726112AbgDZIMS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 26 Apr 2020 04:12:18 -0400
+        id S1726112AbgDZIQy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 26 Apr 2020 04:16:54 -0400
 Received: from localhost (p54B33954.dip0.t-ipconnect.de [84.179.57.84])
-        by pokefinder.org (Postfix) with ESMTPSA id 304122C01E8;
-        Sun, 26 Apr 2020 10:12:16 +0200 (CEST)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RFT] i2c: brcmstb: properly check NACK condition
-Date:   Sun, 26 Apr 2020 10:12:10 +0200
-Message-Id: <20200426081211.10876-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
+        by pokefinder.org (Postfix) with ESMTPSA id 84CD02C01E8;
+        Sun, 26 Apr 2020 10:16:52 +0200 (CEST)
+Date:   Sun, 26 Apr 2020 10:16:52 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Jason Yan <yanaijie@huawei.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: busses: remove unneeded conversion to bool
+Message-ID: <20200426081652.GH1262@kunai>
+References: <20200420042816.18989-1-yanaijie@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LZFKeWUZP29EKQNE"
+Content-Disposition: inline
+In-Reply-To: <20200420042816.18989-1-yanaijie@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Wolfram Sang <wsa@the-dreams.de>
 
-cppcheck rightfully complains about:
+--LZFKeWUZP29EKQNE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-drivers/i2c/busses/i2c-brcmstb.c:319:7: warning: Condition 'CMD_RD' is always true [knownConditionTrueFalse]
-drivers/i2c/busses/i2c-brcmstb.c:319:17: warning: Condition 'CMD_WR' is always false [knownConditionTrueFalse]
- if ((CMD_RD || CMD_WR) &&
+On Mon, Apr 20, 2020 at 12:28:16PM +0800, Jason Yan wrote:
+> The '>' expression itself is bool, no need to convert it to bool again.
+> This fixes the following coccicheck warning:
+>=20
+> drivers/i2c/busses/i2c-qup.c:960:48-53: WARNING: conversion to bool not n=
+eeded here
+> drivers/i2c/busses/i2c-qup.c:962:47-52: WARNING: conversion to bool not n=
+eeded here
+> drivers/i2c/busses/i2c-qup.c:1531:29-34: WARNING: conversion to bool not =
+needed here
+> drivers/i2c/busses/i2c-qup.c:1533:29-34: WARNING: conversion to bool not =
+needed here
+>=20
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
 
-Compare the values to the 'cmd' variable.
+Applied to for-next, thanks! But please fix $subject to have the driver
+name "qup" next time.
 
-Fixes: dd1aa2524bc5 ("i2c: brcmstb: Add Broadcom settop SoC i2c controller driver")
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
----
 
-Not tested on HW.
+--LZFKeWUZP29EKQNE
+Content-Type: application/pgp-signature; name="signature.asc"
 
- drivers/i2c/busses/i2c-brcmstb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/i2c/busses/i2c-brcmstb.c b/drivers/i2c/busses/i2c-brcmstb.c
-index d4e0a0f6732a..ba766d24219e 100644
---- a/drivers/i2c/busses/i2c-brcmstb.c
-+++ b/drivers/i2c/busses/i2c-brcmstb.c
-@@ -316,7 +316,7 @@ static int brcmstb_send_i2c_cmd(struct brcmstb_i2c_dev *dev,
- 		goto cmd_out;
- 	}
- 
--	if ((CMD_RD || CMD_WR) &&
-+	if ((cmd == CMD_RD || cmd == CMD_WR) &&
- 	    bsc_readl(dev, iic_enable) & BSC_IIC_EN_NOACK_MASK) {
- 		rc = -EREMOTEIO;
- 		dev_dbg(dev->device, "controller received NOACK intr for %s\n",
--- 
-2.20.1
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6lQ3AACgkQFA3kzBSg
+KbbPmQ//REatWshvQZ2+D9K9K+XGNUsZXGd1r3Vhl+QLR5zlQK1pcxW5p72VHXPj
+/f7wEZqhCawEKcY6VUbBFquHyZipMoUS7DUKsZa2r0fBLjAyY5rxGc/q/tWs4iHB
+PlBvoo0XBPLAwGr54mpiFju5PHuU6kQfhA/hPp9++anIq7WJwqxT7lJf9GM7w7Tz
+/FHZkBBFONE4yN0tD0h70JiJosrvGciJ62ymkCdqOGOO2Zt7SDmT4T0EZjPijIsk
+7IX0wevyCgqZkmxdLlFlPawh+0gbyp8larSYelNQBVw58o5hGK7JeSgIa0qyZIBq
+lZ+O5eO+0pMHONdNcjIbznJXhTMXcn28u2fegpMT3ku/YS0SenJ/QoqIK80J16/a
+3avxEVxSlOYcIXf5+OH+HtL7xfZCLwtalVu2rWwcpIikJGyD2axNz0B/c9FozQHo
+Ox80wyCkRzDVvL99fo9vBJe8/MLNezlZzlpINkmPIkjNv5ZR3cYzSs0W4ckKXTjA
+ABI4lQhQstVucG070SdxF6zJInWi+su2hLBqBT5DQ7ECt1BmoWFP7YWEBOaY9z31
+KkG6BK+DaScpka0liHt1Gy85p/lXBsKY/o5F9n8/1NsUniZ9blHqju6mNfTzLEDI
+oPHxnBR9jN/+vEq5GfgHQKnCQ0hd0jLGmpzvugbLNj0KOjf9g+U=
+=ouID
+-----END PGP SIGNATURE-----
 
+--LZFKeWUZP29EKQNE--
