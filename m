@@ -2,86 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 236431BA81E
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Apr 2020 17:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6EC1BA9A2
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Apr 2020 18:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728119AbgD0PiG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Apr 2020 11:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S1727084AbgD0QCK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Apr 2020 12:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728040AbgD0PiG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Apr 2020 11:38:06 -0400
+        by vger.kernel.org with ESMTP id S1726539AbgD0QCJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Apr 2020 12:02:09 -0400
 Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF865C0610D5;
-        Mon, 27 Apr 2020 08:38:05 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id h4so4507725ljg.12;
-        Mon, 27 Apr 2020 08:38:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325C6C0610D5;
+        Mon, 27 Apr 2020 09:02:09 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id g4so18185901ljl.2;
+        Mon, 27 Apr 2020 09:02:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
+        h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ft/gSkENItl+I+HfgLLd4aQw7Vlgmrgc3KxVR65o03U=;
-        b=SLsLC4b/1zMBh2BvKOVneoglcU3is1An0Kgg7VP0QPtmfX2p1ekgEyRdfdD7JWQ/su
-         DAAHJDJkhJ97o5zolTl1B2nMKpTISuqyMl6mNuDoczaJ9LFBKOc0F5cptdd0MKRPGpHv
-         fI8L/vlLIqLZNckPih1QZXs35BJ4Ijjbi/RDYkgIzTd5+sGPP/yQiP6g6pfRzEAbxxDH
-         Qga+5edKQ4wCVDcU3p+OpBleURrOptvgguUdhEIrtgVta4yneOrcPK33y/D/e3rllbq/
-         VBMYOLyd+/1+s/upHRYWYkyaYhK53aOriFmUfwq0ZplW3GXuipIrL/BZIrbhdlB3o8uh
-         UGew==
+        bh=UC4nurrRf3udrQTojIPA4rnIYQOFVwae7To0mJBT8fY=;
+        b=dEfOb1A9rszXfQ+Gl8DHgEKY28a1ukFvgJsqw2TDFDTAzkvl0TzJROMBfv7KHOA9Bq
+         ECJhx+6UwixpV7KO9N17Pg/IwsuYhqs8kFba/OdMJxhs/iyJK0eTZ8qqhCF0bIRFGH47
+         WNcgHxHeWL7NBULWgtD9PSgBD1asKMr8JWRzuNt4j9HA/6SbhHbz3V1Za1IwZQOAjHFZ
+         jrNvbo1w3flFlnTq+M7bhPhZFvhGLu22HXt+p5kL6ljZTMSAC4uSYykuIF1P8oTsjy4O
+         pvn+ZL7m+WWDTL60tsn+EV8rJgM/f2nxPRuG/re4uDfqH5ybJWy8qDzXdlqz7mxmdos/
+         PBWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ft/gSkENItl+I+HfgLLd4aQw7Vlgmrgc3KxVR65o03U=;
-        b=s7+GBC5iq2tX4ZF/EkefuuJ5VlnIU/Yfs9MlDPZi7u6kq8ye8s/tUTvyhbHK41v57+
-         sS0I6sU8xGM3GANyvZNPPwB11QgknqmhtfS2QuoHMOzj/aYNNHhez8CZeRpxs8HmiC14
-         DNva9s4m6A/rf+TWwqJNBZGes+IgaE0Sga8E/PN8a+sKd8ESGdmmma4Hhql/PdmW/OGO
-         YowqIgaboPpc2tcST8PMv0JSVk/C6J6fmoUok+8IFl+DrPj6alMqnByVxXRijikKAYdz
-         IwuYb8adFW82+BNFtjvFhMvwtAbj651OQneetP5ZLuDPOaZhjRBDbM0Dun51SKVzO14P
-         OX4w==
-X-Gm-Message-State: AGi0PuZ7aF8tzRSeeXT0J/rZvOjA6i3WWtnapU37XFXQJF4WktejZ6jK
-        vGs731dJebH/nL7vU8BXxK0=
-X-Google-Smtp-Source: APiQypLtqc43dCJTpwgeg3Rb+/6I/OnS8jzCKbR/r6s0Okwr5FF95Y7P37PoQbrDQXGJUtv6K5Scyg==
-X-Received: by 2002:a2e:7613:: with SMTP id r19mr4734556ljc.29.1588001884385;
-        Mon, 27 Apr 2020 08:38:04 -0700 (PDT)
+        bh=UC4nurrRf3udrQTojIPA4rnIYQOFVwae7To0mJBT8fY=;
+        b=TFSds8NzEpa1vOFOsrsF2mLUHjQ+q7jchs623YQxV3rnGZZvH7e7Koa9a+aeJMvETu
+         p9qR2PpAPiUbTuNDxvw3qzBu+Lx8Nj0fRXvlX9KhHGvV+jGVN3LSHBRCWTRFkWkuVyxc
+         rddhcm6cZkSVHs4s9sa1Hw7SLft+P+RZsGyJaeWvSBwo3lh6s+zIs7qgy0pqs2qEcmTI
+         4nkhmLIlRe3TCdtrU4gCg4Nv9m06uVjdQoli0/+o420cK5xoMTYItKbOXSg1+SqkaNZL
+         z6lm4hwC2vJ8Auw1/KgV3XBw4Rt7KRD+l+/pjvL+Yy9mb9cHUEZCi9e/ywtUm1gnE6Dy
+         sgpw==
+X-Gm-Message-State: AGi0PubIdhjQcu3QL9qLqQyzkGtt0qrZHvuAFbZq3PIeNavuFiU/fqJD
+        wO3YQk3K0K8MBCY0nN4DOVOn3tl2
+X-Google-Smtp-Source: APiQypL5znxvymWbmggY0tfM0ZWAlsQInR3g+byT1vkk+SyFdtfKGG+UkYD5WzOhbUAxPKxtFjnRBw==
+X-Received: by 2002:a2e:8e98:: with SMTP id z24mr15083373ljk.134.1588003327236;
+        Mon, 27 Apr 2020 09:02:07 -0700 (PDT)
 Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.googlemail.com with ESMTPSA id r14sm10211056ljn.4.2020.04.27.08.38.03
+        by smtp.googlemail.com with ESMTPSA id t16sm10271884ljg.41.2020.04.27.09.02.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Apr 2020 08:38:03 -0700 (PDT)
+        Mon, 27 Apr 2020 09:02:06 -0700 (PDT)
 Subject: Re: [PATCH v2 1/2] i2c: tegra: Better handle case where CPU0 is busy
  for a long time
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
         Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>
-Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-References: <20200324191217.1829-1-digetx@gmail.com>
- <20200324191217.1829-2-digetx@gmail.com>
- <1e259e22-c300-663a-e537-18d854e0f478@nvidia.com>
- <f59ba318-8e99-c486-fa4d-1ee28a7b203d@gmail.com>
- <b01cec76-bb39-9fb5-8f6e-4023c075e6b3@gmail.com>
- <8cd085e1-f9fd-6ec0-9f7a-d5463f176a63@nvidia.com>
- <db1132ce-53a8-371c-98e0-cb7cd91d5c7d@gmail.com>
- <fa344989-4cce-0d2c-dc93-4ca546823160@nvidia.com>
- <bba0a93a-8ec4-eda6-97f3-fb2ab0b9b503@gmail.com>
- <6f07e5c8-7916-7ea2-2fe7-d05f8f011471@nvidia.com>
- <77a31b2f-f525-ba9e-f1ae-2b474465bde4@gmail.com>
- <470b4de4-e98a-1bdc-049e-6259ad603507@nvidia.com>
- <d2531fc1-b452-717d-af71-19497e14ef00@gmail.com>
- <a5198024-7273-74c4-b4f4-3a29d042bc36@nvidia.com>
- <da5985f4-44b3-336d-207d-4c0388806f95@gmail.com>
- <5fc71168-e4ac-11f6-dbf1-e80f4fae8d1a@gmail.com>
- <090241c4-e026-aea4-e1e9-a2a661b2c27e@gmail.com>
-Message-ID: <9a3d283c-d4ff-c55a-3ebf-4e08d35792ec@gmail.com>
-Date:   Mon, 27 Apr 2020 18:38:02 +0300
+        Vidya Sagar <vidyas@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <a5198024-7273-74c4-b4f4-3a29d042bc36@nvidia.com>
+ <f8fb1f7f-2497-033e-ff2c-c86c6caa9706@gmail.com>
+ <fd1ca178-1ea3-851f-20a6-10bf00453ce3@nvidia.com>
+ <a5734f19-254e-b6bc-e791-fa1ac63f11a4@gmail.com>
+ <79f6560e-dbb5-0ae1-49f8-cf1cd95396ec@nvidia.com>
+ <20200427074837.GC3451400@ulmo> <20200427084424.GA28817@kunai>
+ <820200ce-17f3-18c0-6f79-3e582f45492d@gmail.com>
+ <20200427103553.GA24446@kunai> <20200427105029.GB3464906@ulmo>
+ <20200427153244.GF3464906@ulmo>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <127a2c32-e5fb-2944-3062-361b276490c0@gmail.com>
+Date:   Mon, 27 Apr 2020 19:02:05 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <090241c4-e026-aea4-e1e9-a2a661b2c27e@gmail.com>
+In-Reply-To: <20200427153244.GF3464906@ulmo>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -90,76 +81,53 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-27.04.2020 17:45, Dmitry Osipenko пишет:
-> 27.04.2020 17:13, Dmitry Osipenko пишет:
->> 27.04.2020 15:46, Dmitry Osipenko пишет:
->>> 23.04.2020 13:56, Jon Hunter пишет:
->>>>>> So I think that part of the problem already existed prior to these
->>>>>> patches. Without your patches I see ...
+27.04.2020 18:32, Thierry Reding пишет:
+> On Mon, Apr 27, 2020 at 12:50:29PM +0200, Thierry Reding wrote:
+>> On Mon, Apr 27, 2020 at 12:35:53PM +0200, Wolfram Sang wrote:
+>>> On Mon, Apr 27, 2020 at 12:07:19PM +0300, Dmitry Osipenko wrote:
+>>>> 27.04.2020 11:44, Wolfram Sang пишет:
+>>>>>
+>>>>>> Wolfram, can you revert the following two patches for v5.7, please?
 >>>>>>
->>>>>> [   59.543528] tegra-i2c 7000d000.i2c: i2c transfer timed out
->>>>>> [   59.549036] vdd_sata,avdd_plle: failed to disable
->>>>>> [   59.553778] Failed to disable avdd-plle: -110
->>>>>> [   59.558150] tegra-pcie 3000.pcie: failed to disable regulators: -110
->>>>> Does this I2C timeout happen with my patches? Could you please post full
->>>>> logs of an older and the recent kernel versions?
->>>> I believe that it does, but I need to check.
+>>>>>> 	8814044fe0fa i2c: tegra: Synchronize DMA before termination
 >>>>
+>>>> This patch has nothing to do with your trouble, why do you want to
+>>>> revert it?
 >>>
->>> Jon, could you please confirm that you're seeing those regulator-disable
->>> errors with my patch? I don't see those errors in yours original log [1].
->>>
->>> [1]
->>> https://lore.kernel.org/lkml/1e259e22-c300-663a-e537-18d854e0f478@nvidia.com/
->>>
->>> Again, could you please post the *full* logs?
->>>
->>> If regulator's disabling was "failing" before without my patch because
->>> of the I2C interrupt being force-disabled during of NOIRQ phase, and now
->>> regulator's disabling succeeds with my patch because IRQ is manually
->>> handled after the timeout, then this could be bad. It means that
->>> regulator was actually getting disabled, but I2C driver was timing out
->>> because interrupt couldn't be handled in NOIRQ phase, which should
->>> result in a dead PCIe on a resume from suspend since regulator's core
->>> thinks that regulator is enabled (I2C said it failed to disable), while
->>> it is actually disabled.
->>>
->>> Do you have anything plugged into the PCIe slot in yours testing farm?
->>> It wouldn't surprise me if the plugged card isn't functional after
->>> resume from suspend on a stable kernels.
->>>
+>>> I'll wait some more before pushing out, so you can discuss it.
 >>
->> I actually now see that interrupt is not allowed to be enabled during
->> the NOIRQ phase:
->>
->> https://elixir.bootlin.com/linux/v5.7-rc3/source/kernel/irq/manage.c#L640
->>
->> it should be worthwhile to turn it into a WARN_ON.
->>
+>> Okay, let me run a quick test with that second patch still applied to
+>> make sure it really is harmless.
 > 
-> Oh, wait! There is already a warning there.. hmm.
+> Alright, I tested v5.7-rc3 with this patch reverted:
 > 
+> 	a900aeac2537 i2c: tegra: Better handle case where CPU0 is busy for a long time
+> 
+> and the results came back positive, so I think we can leave patch:
+> 
+> 	8814044fe0fa i2c: tegra: Synchronize DMA before termination
+> 
+> in. But then again, I see that Dmitry posted this yesterday:
+> 
+> 	https://lkml.org/lkml/2020/4/26/481
+> 
+> which seems like it would be related to this and potentially be a
+> follow-up fix for some corner cases?
 
-Aha, the disable depth for the I2C interrupt is 2 after
-suspend_device_irq(), that's why there is no warning.
+This is a follow-up to my previous message in this thread:
 
-This should catch the bug and trigger the warning:
+https://lkml.org/lkml/2020/4/23/792
 
---- >8 ---
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index 453a8a0f4804..fe25104d8b22 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -653,6 +653,8 @@ void __enable_irq(struct irq_desc *desc)
- 		break;
- 	}
- 	default:
-+		if (desc->istate & IRQS_SUSPENDED)
-+			goto err_out;
- 		desc->depth--;
- 	}
- }
---- >8 ---
+> So I'm not sure how well this whole set has been tested yet.
 
-Jon could you please give it a try? Will this change produce a warning
-for the I2C driver on a PCIe suspend for the v5.6 kernel?
+It depends on what you're meaning by the testing. We have some
+yet-out-of-tree real-world devices that are using APBDMA for Bluetooth,
+Audio, I2C (touchscreens) and etc peripherals. These devices were using
+the DMA patches before they were posted to the ML.
+
+> Maybe a better solution would be for the DMA synchronization patch to go
+> into the 5.8 queue instead to make sure we get more testing cycles.
+
+It should be fine to re-queue the patches for 5.8. I'm just a bit afraid
+that if patches are simply dropped now, then you won't get back to it
+for a year or so ;)
