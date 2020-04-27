@@ -2,64 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 543C21BA630
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Apr 2020 16:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808EE1BA641
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Apr 2020 16:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728067AbgD0OT1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Apr 2020 10:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        id S1727840AbgD0OVe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Apr 2020 10:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728070AbgD0OT1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Apr 2020 10:19:27 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD058C0610D5;
-        Mon, 27 Apr 2020 07:19:26 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id e26so19749417wmk.5;
-        Mon, 27 Apr 2020 07:19:26 -0700 (PDT)
+        with ESMTP id S1727834AbgD0OVe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Apr 2020 10:21:34 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F5CC0610D5;
+        Mon, 27 Apr 2020 07:21:33 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id k28so13970579lfe.10;
+        Mon, 27 Apr 2020 07:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=SfPuELRIWxp5jXaR1sFBkvGfN5BclUxZ+W3cAMGm9ow=;
-        b=E9TeY8dhIi+QX5Tt8DRtwCOArHPzendJuUF+E20AZFPXTpkhlupVJbX9O5Qo6qQWJW
-         2Y5kftqQWrzPktcA0MrfBw5RFjZGprATbavPE0xi61C42SKOrw4/yA0Ad7363XkLAmWU
-         pbrWM2xyex0VvN5XQonqjbrL9mGGKmqD1lSHAvfVo/QBp1aszS9lIhn8GnIVf2aui8ph
-         u4i+cChluvH9k2uaDBFnlotTx3xyU3INS098ljIQp/DsVLxvIz0HA/d1ZtqDAMsTK69L
-         vGMnRzLlmdXycw7nhBNzwovr7G1wU/EGliCjAQiJ3gjAeGpNqlhP2YC1DEDgEVKo2PU8
-         gT1g==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=os2wxZikCHk4lPPRcIN9xVfK7EnF40hJmqoZHUeqBOY=;
+        b=bWY/9b/uhSCLnSDkq28VEce1KtybvL18fneE2G2vRwvbKulIH41aQZ4ij8IXun7ndq
+         6Nc6Ik+S8lETHonsvv/b2Wkbsejp9wjup0Ibuen07M+gOg9aTVvtDOs5DAAj5cDP75eq
+         AUqZkkymzmjuHx8B7zjlR8VMptalKypZOCK/oksi+M+r73Azs5htA1cJIdIEKmjmN2e8
+         E3UzQO8VnX99fnl1/gq+wbrkLcOicbg6xmD9sfLiE5PjNcTntqhoKHKiF4glt3XheyVO
+         kZhztvFtS7MVPrW409Kom0YT79hNRk/JOQOEyUv4ETSHV8UOgULdft5S4ZRQkW0lm2Bd
+         +Kgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SfPuELRIWxp5jXaR1sFBkvGfN5BclUxZ+W3cAMGm9ow=;
-        b=S0CS63cnAZR7l9cTHunoo+orH97HYOjFELgDcuFtwS+wqKPWmdhazxvMEk0NS5L38t
-         D+TWjjRNPxR1TYqdTSNljHcylBFDQVdsyHFnne1OqwF+Zu/r+bkRJ0I1PbFHrkdQ86Bs
-         XHhflzml3shmRvEQnEE5YdoZV8dKiyaWJeXIoMz/iBUpIsmGKOlMxvOC/3zeWx547+d5
-         Re4A2g1Dd7Ytmju50RULnHR2kUOQIyveEDoVbfLyhxMFfL4Vg8t8MZjM01nxCtE0uF6b
-         vgN5OGLkUo991wBXZl+cOvY2X6wOYWcnBcKSpVPOyShYtNZ66gv0TM5vGXaSE+ZBYizz
-         zjzg==
-X-Gm-Message-State: AGi0PuZjDGckitCzaiw/upAzRmc2KqGXKt+O25Wg/65l3rfbVLaH9K+T
-        HhYAked0kC5z6OkI1haKfFE=
-X-Google-Smtp-Source: APiQypI2SvMyeV2Q5rXnJ14bTo3q4Z66XQDagd3Qhp4sIf61dariP2UlM+4tloNavM2mOhhrF0DeFQ==
-X-Received: by 2002:a1c:3b0a:: with SMTP id i10mr25763470wma.26.1587997165506;
-        Mon, 27 Apr 2020 07:19:25 -0700 (PDT)
-Received: from localhost (p2E5BEDBA.dip0.t-ipconnect.de. [46.91.237.186])
-        by smtp.gmail.com with ESMTPSA id 33sm21525843wrp.5.2020.04.27.07.19.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2020 07:19:23 -0700 (PDT)
-Date:   Mon, 27 Apr 2020 16:19:22 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=os2wxZikCHk4lPPRcIN9xVfK7EnF40hJmqoZHUeqBOY=;
+        b=tynDOgAyk3viRiQQx9c2BwsCAhFhXpfujbcRYRzDrOnLwqXlUw37UeoFwV/b55WXzX
+         CJ+zY5+mCrlnatebqgdjo5B0QomR1EB0YDHsiHoVzegJC+kyvgtjlbblhyMHCvSfVGjn
+         837B57m7NfEhxC8WI0/6DtVUAnTl9h6BaH4YAhHHPKts1ZzT4Fez1aW64hcgmROt8vZL
+         M2dMa0PW/R9Va1pXaQ0V0y27o1fOHXE2FfQmF5SOTqxdFa9lhLfZ7JoBOkrGTHSGmdRT
+         oIDAwHc4gVBxPDxhNcjsaPAGvLYA11WYi1AcVtzP1KKiRZK565tZ0cIelgaZ6yfOanNY
+         2IDQ==
+X-Gm-Message-State: AGi0PuaiSY9K3iIOhoC/w4GrmpmawW9ROLMty+4/7H2ubcksWpnf7i/Y
+        Vf4wo2xsZGk2Xa8y0GyGur1BR4df
+X-Google-Smtp-Source: APiQypL5OkoT4ADX8Bbv2QCrYArfeVp/ykSHUymJxiZOPfBpqlBKw71QcvtRp5LTZ3VI06hm7KXA4Q==
+X-Received: by 2002:a19:ae06:: with SMTP id f6mr15508793lfc.97.1587997292185;
+        Mon, 27 Apr 2020 07:21:32 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
+        by smtp.googlemail.com with ESMTPSA id m18sm11287611lfj.10.2020.04.27.07.21.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Apr 2020 07:21:31 -0700 (PDT)
+Subject: Re: [PATCH v2 1/2] i2c: tegra: Better handle case where CPU0 is busy
+ for a long time
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>
 Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         Manikanta Maddireddy <mmaddireddy@nvidia.com>,
         Vidya Sagar <vidyas@nvidia.com>, linux-i2c@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] i2c: tegra: Better handle case where CPU0 is busy
- for a long time
-Message-ID: <20200427141922.GD3464906@ulmo>
-References: <d2531fc1-b452-717d-af71-19497e14ef00@gmail.com>
+References: <77a31b2f-f525-ba9e-f1ae-2b474465bde4@gmail.com>
+ <470b4de4-e98a-1bdc-049e-6259ad603507@nvidia.com>
+ <d2531fc1-b452-717d-af71-19497e14ef00@gmail.com>
  <a5198024-7273-74c4-b4f4-3a29d042bc36@nvidia.com>
  <f8fb1f7f-2497-033e-ff2c-c86c6caa9706@gmail.com>
  <fd1ca178-1ea3-851f-20a6-10bf00453ce3@nvidia.com>
@@ -67,96 +67,101 @@ References: <d2531fc1-b452-717d-af71-19497e14ef00@gmail.com>
  <79f6560e-dbb5-0ae1-49f8-cf1cd95396ec@nvidia.com>
  <20200427074837.GC3451400@ulmo>
  <c1190858-eaea-8e94-b4d1-1cf28076c330@gmail.com>
- <20200427103851.GB24446@kunai>
- <dc2de966-81d6-6ad5-0c51-16dd28ca4165@gmail.com>
+ <20200427110033.GC3464906@ulmo>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <3a06811c-02dc-ce72-ebef-78c3fc3f4f7c@gmail.com>
+Date:   Mon, 27 Apr 2020 17:21:30 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lc9FT7cWel8HagAv"
-Content-Disposition: inline
-In-Reply-To: <dc2de966-81d6-6ad5-0c51-16dd28ca4165@gmail.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+In-Reply-To: <20200427110033.GC3464906@ulmo>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+27.04.2020 14:00, Thierry Reding пишет:
+> On Mon, Apr 27, 2020 at 12:52:10PM +0300, Dmitry Osipenko wrote:
+>> 27.04.2020 10:48, Thierry Reding пишет:
+>> ...
+>>>> Maybe but all these other problems appear to have existed for sometime
+>>>> now. We need to fix all, but for the moment we need to figure out what's
+>>>> best for v5.7.
+>>>
+>>> To me it doesn't sound like we have a good handle on what exactly is
+>>> going on here and we're mostly just poking around.
+>>>
+>>> And even if things weren't working quite properly before, it sounds to
+>>> me like this patch actually made things worse.
+>>
+>> There is a plenty of time to work on the proper fix now. To me it sounds
+>> like you're giving up on fixing the root of the problem, sorry.
+> 
+> We're at -rc3 now and I haven't seen any promising progress in the last
+> week. All the while suspend/resume is now broken on at least one board
+> and that may end up hiding any other issues that could creep in in the
+> meantime.
+> 
+> Furthermore we seem to have a preexisting issue that may very well
+> interfere with this patch, so I think the cautious thing is to revert
+> for now and then fix the original issue first. We can always come back
+> to this once everything is back to normal.
+> 
+> Also, people are now looking at backporting this to v5.6. Unless we
+> revert this from v5.7 it may get picked up for backports to other
+> kernels and then I have to notify stable kernel maintainers that they
+> shouldn't and they have to back things out again. That's going to cause
+> a lot of wasted time for a lot of people.
+> 
+> So, sorry, I disagree. I don't think we have "plenty of time".
 
---lc9FT7cWel8HagAv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There is about a month now before the 5.7 release. It's a bit too early
+to start the panic, IMO :)
 
-On Mon, Apr 27, 2020 at 04:15:21PM +0300, Dmitry Osipenko wrote:
-> 27.04.2020 13:38, Wolfram Sang =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Mon, Apr 27, 2020 at 12:52:10PM +0300, Dmitry Osipenko wrote:
-> >> 27.04.2020 10:48, Thierry Reding =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >> ...
-> >>>> Maybe but all these other problems appear to have existed for someti=
-me
-> >>>> now. We need to fix all, but for the moment we need to figure out wh=
-at's
-> >>>> best for v5.7.
-> >>>
-> >>> To me it doesn't sound like we have a good handle on what exactly is
-> >>> going on here and we're mostly just poking around.
-> >>>
-> >>> And even if things weren't working quite properly before, it sounds to
-> >>> me like this patch actually made things worse.
-> >>
-> >> There is a plenty of time to work on the proper fix now. To me it soun=
-ds
-> >> like you're giving up on fixing the root of the problem, sorry.
-> >=20
-> > From what I understood, there were (at least) two regressions reported.
-> > So, to me, it makes sense to revert the change, so for upstream users
-> > everything stays "the same". Of course, this does not mean it should
-> > stay like this forever and you guys can work on fixing the root causes.
-> > I'll happily apply them for this release when you are confident with the
-> > results.
-> >=20
->=20
-> For now it's a single regression in the PCIe driver and it's actually
-> not a regression, but a PCIe driver bug that needs to be fixed. The I2C
-> part should be okay.
->=20
-> By reverting the I2C patch, we're back to the PCIe bug being papered
-> over and I don't like this. Let's just fix the PCIe driver and the
-> problem is gone.. it needs to be fixed anyways.
+Jon already proposed a reasonable simple solution: to keep PCIe
+regulators always-ON. In a longer run we may want to have I2C atomic
+transfers supported for a late suspend phase.
 
-Yes, that bug should be fixed anyway. But that doesn't justify breaking
-suspend/resume completely, which *is* a regression.
+This should fix yours problem and it should go into stable kernels:
 
-Look, I'm not saying that we should drop this patch altogether. All I'm
-saying is that we should postpone it so that we can: a) get suspend and
-resume working again (and by doing so make sure no other suspend/resume
-regressions silently creep in, because that always seems to happen when
-you're not looking) and b) fix any preexisting issues without possibly
-scrambling the result with this perhaps unrelated fix.
+--- >8 ---
+diff --git a/drivers/pci/controller/pci-tegra.c
+b/drivers/pci/controller/pci-tegra.c
+index 3e64ba6a36a8..6ac76323ca70 100644
+--- a/drivers/pci/controller/pci-tegra.c
++++ b/drivers/pci/controller/pci-tegra.c
+@@ -1533,8 +1533,16 @@ static int tegra_pcie_get_resources(struct
+tegra_pcie *pcie)
+ 		goto phys_put;
+ 	}
 
-So, again, I think the safest road forward is to back this one out for
-now, fix whatever this other bug is and once suspend/resume is working
-properly again we can revisit this patch based on a known-good baseline.
++	err = regulator_bulk_enable(pcie->num_supplies, pcie->supplies);
++	if (err) {
++		dev_err(dev, "failed to enable regulators: %d\n", err);
++		goto irq_free;
++	}
++
+ 	return 0;
 
-Thierry
++irq_free:
++	free_irq(pcie->irq, pcie);
+ phys_put:
+ 	if (soc->program_uphy)
+ 		tegra_pcie_phys_put(pcie);
+@@ -1545,6 +1553,12 @@ static int tegra_pcie_put_resources(struct
+tegra_pcie *pcie)
+ {
+ 	const struct tegra_pcie_soc *soc = pcie->soc;
 
---lc9FT7cWel8HagAv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6m6egACgkQ3SOs138+
-s6Hmsw//Uzwdybr9wuj6AsAY89t463pL9vAk42ZwhrzZBpXcey07PyykuVPeOksH
-dlekmFYutFVttiZne1WWhfyo0q+pWa7OtsmatGZ0zj6Dqa69Jv3lwpwXTwm1dHoC
-T+NTx7/h3Gcz4qWY8sZBiikzXwePh5WkZ9n02t5j5xeOBaxPBnvNWsd/1dx3Wry6
-aFwOvwEOmCGKTLvx3h+IgGGCXU2Fw9TXWL9PM0RygZD4/ZGmzpsrcI0Kq/qhsEax
-ZIqfNYKt7Df/71HBSusjwzUf1Xc4PBHXQXY5DC0XT+lIZxlWcDkeVoH9/hsm+/mn
-Y5Z1jHdYtUXvfeVEM7Uygj4r87Qqq9oRyO09vzstZBgMnlfw7ooQUT/MaHcUpMY3
-bd66W/9pO6LsBVJ32+GpL3WavNmD7h1EwU4VoSjkHKr5bDl5PWMqDrUB3H72TjK4
-567mRx2ZdLJ5G7x76PXH7P8FT9XmbGvFHRtY2J1oV8DTTFUwnA5Z1op9A88tcKIO
-+s1kmqFObLC5PIQUx9hCzbprRN2R8p4WemoG3Goe2Cs3ZUcaTbIVUKA0K+xLoJPx
-xOcFR0cWOYzabOGW8le54lj5IrCDFtYocozhD/KzYhoW1ZuEN7w+ljR64xIcbB7D
-D3/heQd0r+WLZQxYT7sBrpK70bB7DPXXuIScoLR4fmcBUdinTDk=
-=3Tty
------END PGP SIGNATURE-----
-
---lc9FT7cWel8HagAv--
++	err = regulator_bulk_disable(pcie->num_supplies, pcie->supplies);
++	if (err) {
++		dev_err(pcie->dev, "failed to disable regulators: %d\n", err);
++		return err;
++	}
++
+ 	if (pcie->irq > 0)
+ 		free_irq(pcie->irq, pcie);
+--- >8 ---
