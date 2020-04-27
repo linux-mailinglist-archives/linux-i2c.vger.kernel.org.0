@@ -2,55 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5421BA1A7
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Apr 2020 12:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A7A1BA1AD
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Apr 2020 12:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726604AbgD0Ktq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Apr 2020 06:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
+        id S1726938AbgD0Kuf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Apr 2020 06:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726507AbgD0Ktp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Apr 2020 06:49:45 -0400
+        by vger.kernel.org with ESMTP id S1726507AbgD0Kud (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Apr 2020 06:50:33 -0400
 Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240D6C0610D5;
-        Mon, 27 Apr 2020 03:49:44 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id u127so19895569wmg.1;
-        Mon, 27 Apr 2020 03:49:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D02C0610D6;
+        Mon, 27 Apr 2020 03:50:32 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id e26so19007830wmk.5;
+        Mon, 27 Apr 2020 03:50:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=Ti6XX+QFzit0PUdlRv+q4FDbpNYXwxiJNOQSy8OVhSY=;
-        b=Lgb2ZRSnwgcgdVrTP0vx1myxJSscHtMy8iNa5k7w+aqXFSSDYKnoG1GMGPy7gPJnYq
-         2Vco6ldRfV8tB0aVDXH8VPUuyWOmkytgWKjngHAGy5bYV1TUPJD8g6JBO7RfPqsB7I7A
-         1f6XhC4XMTaUcY7Wfp+uL5qzsHnBS+kq9ub1hYYw77QzlimpQjHSXgmS4TJeeCYulZng
-         pJSS5XCXcICNMJvl0X/tThvVs9t5iq8ZeW0MQMHLMc2YpM5tdfWm8R3GO0NZBnvDj1xd
-         suqfqXZk6OfFMfRW0uRwqbsPpQSGM0dIHJoXY4x+Ijv6QOnT+6Z7zKUDX+PHEf4+CkXq
-         t9nw==
+        bh=usvoDcQmOAQfSVCHZkaVpsS5uFVX3OgVFcU37tITmDU=;
+        b=NkYnhxaEqBz0kuLI8UFoasBYsi3X5fu7TqTP6oou5tjAhgFfVQwbbxJ8cF9PzJ24Wp
+         ngevZy52PSMUwshYEIVqoG7dw/Luk6rpiyw5/CYisM6co97UINwWjyfsaey9Cz1zvrpp
+         ekGXAnNj8RpnwEREvzz260MNx0H8Lohc5BjLm18C5KQ0Yx+wakvB5EQ0pYA7rqi98j+X
+         2lFk4aUM8hB99T5SrZU7rr741vjujrTZ1eoSvj8Mv8u5Iuz+vIgDDuKBpSrt9jEaG7mL
+         xSZwY1VXTGBXLeAKNZQjm+qIs+lDZ7JQzq9MEqheJPdFh1ZTOqhAEyJnCZQNfIzJymV1
+         MUlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Ti6XX+QFzit0PUdlRv+q4FDbpNYXwxiJNOQSy8OVhSY=;
-        b=e2gABC/YM+hWXjat8Umxc4fN9SnTc0YcojtLvpmLiUN7yh/POqzwb7jm0la7qjUKz8
-         LHNMp3+T+r7TEDEf3W119eG6Xiaz9/fcVSebgHtkdWUTZvAU/SP07WJLJEhaj35BUAta
-         3Zq5L1nZgOb8GLLWXbVrk4ta9+4ljri6HRS+COTtF1Oc9DowxafAEtTmmpT3tMcg3yYf
-         Sx55f8CepwvHzi319j6IRhF77C4MvmZ5smJuYVluZcMMGDCniLNnQla674G4mSfK8/gN
-         8GZLBhcroREz7A1BSYTUPqmFcdiiDmOmUFsYIzkU1H8OpFOD6w6DoAPomoVYBNW2cwOb
-         HtpA==
-X-Gm-Message-State: AGi0PuZiqgEjHehVBcjSpLo/L0H4G6mZ5ESfWBg2Bk03tle2IvQ4hzcQ
-        hDlAwlAOA/1vgMQ3rLg4MUk=
-X-Google-Smtp-Source: APiQypJ0HGaypdEafNHZCuSEFo2ktSx7EEFsJYPQXEpGQrBf3bgMRhOYbCwSRtTRvjF/TcQt1vRQGg==
-X-Received: by 2002:a1c:43c6:: with SMTP id q189mr24141339wma.115.1587984582834;
-        Mon, 27 Apr 2020 03:49:42 -0700 (PDT)
+        bh=usvoDcQmOAQfSVCHZkaVpsS5uFVX3OgVFcU37tITmDU=;
+        b=mnsYaGCd0DOkEZ08p/dPrssES9Pmj8PcFvJ1voPzYMS4+gH8OTdIcfccrCBbx+EQoX
+         lZuIVUxD56MJX+rj1YiZzGYmsWRzUxWvOS7292UX83sAh1hTRGTfRGXqGPV8x1D8343u
+         GzvvqxQnFgHGCJ0qa6B2tB9rZPXMkcxBnwcG4bDKLkS5P6NXJnoYKDuhjkHsTue6ZWgW
+         5J2h124e4uqr/FawZyguCQWAbeR5DoGwzkM1PCIehujMY+ZcmlxUziwPya8tm2mmSGkv
+         2yf9A3Vu63pFiJVOoUeYPgOM9q/RLwfrFBrAeSB2q4jQT/QzBP1GfbyPvnOiHdIg32r+
+         K2xQ==
+X-Gm-Message-State: AGi0PuY5NgEaVG1Nb/xg3k21CpOk209fhLgzqBZDc6wqdD7P0+6FMhIN
+        iOkJ8VecW6w8kWIploT3PYA=
+X-Google-Smtp-Source: APiQypKBEJPhig0ZdzlTpmFNbyrFXFxDJfSJ0HQpzFOB2874Q6TduWtLpeS0K86eKEbwGPkjiGifVQ==
+X-Received: by 2002:a1c:2002:: with SMTP id g2mr24635013wmg.109.1587984631690;
+        Mon, 27 Apr 2020 03:50:31 -0700 (PDT)
 Received: from localhost (p2E5BEDBA.dip0.t-ipconnect.de. [46.91.237.186])
-        by smtp.gmail.com with ESMTPSA id c83sm16582066wmd.23.2020.04.27.03.49.41
+        by smtp.gmail.com with ESMTPSA id l15sm14666438wmi.48.2020.04.27.03.50.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2020 03:49:41 -0700 (PDT)
-Date:   Mon, 27 Apr 2020 12:49:40 +0200
+        Mon, 27 Apr 2020 03:50:30 -0700 (PDT)
+Date:   Mon, 27 Apr 2020 12:50:29 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
         Jon Hunter <jonathanh@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         Manikanta Maddireddy <mmaddireddy@nvidia.com>,
@@ -58,9 +58,8 @@ Cc:     Wolfram Sang <wsa@the-dreams.de>,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 1/2] i2c: tegra: Better handle case where CPU0 is busy
  for a long time
-Message-ID: <20200427104940.GA3464906@ulmo>
-References: <470b4de4-e98a-1bdc-049e-6259ad603507@nvidia.com>
- <d2531fc1-b452-717d-af71-19497e14ef00@gmail.com>
+Message-ID: <20200427105029.GB3464906@ulmo>
+References: <d2531fc1-b452-717d-af71-19497e14ef00@gmail.com>
  <a5198024-7273-74c4-b4f4-3a29d042bc36@nvidia.com>
  <f8fb1f7f-2497-033e-ff2c-c86c6caa9706@gmail.com>
  <fd1ca178-1ea3-851f-20a6-10bf00453ce3@nvidia.com>
@@ -69,11 +68,12 @@ References: <470b4de4-e98a-1bdc-049e-6259ad603507@nvidia.com>
  <20200427074837.GC3451400@ulmo>
  <20200427084424.GA28817@kunai>
  <820200ce-17f3-18c0-6f79-3e582f45492d@gmail.com>
+ <20200427103553.GA24446@kunai>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YZ5djTAD1cGYuMQK"
+        protocol="application/pgp-signature"; boundary="O5XBE6gyVG5Rl6Rj"
 Content-Disposition: inline
-In-Reply-To: <820200ce-17f3-18c0-6f79-3e582f45492d@gmail.com>
+In-Reply-To: <20200427103553.GA24446@kunai>
 User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -81,47 +81,47 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---YZ5djTAD1cGYuMQK
+--O5XBE6gyVG5Rl6Rj
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 27, 2020 at 12:07:19PM +0300, Dmitry Osipenko wrote:
-> 27.04.2020 11:44, Wolfram Sang =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+On Mon, Apr 27, 2020 at 12:35:53PM +0200, Wolfram Sang wrote:
+> On Mon, Apr 27, 2020 at 12:07:19PM +0300, Dmitry Osipenko wrote:
+> > 27.04.2020 11:44, Wolfram Sang =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > >=20
+> > >> Wolfram, can you revert the following two patches for v5.7, please?
+> > >>
+> > >> 	8814044fe0fa i2c: tegra: Synchronize DMA before termination
 > >=20
-> >> Wolfram, can you revert the following two patches for v5.7, please?
-> >>
-> >> 	8814044fe0fa i2c: tegra: Synchronize DMA before termination
+> > This patch has nothing to do with your trouble, why do you want to
+> > revert it?
 >=20
-> This patch has nothing to do with your trouble, why do you want to
-> revert it?
+> I'll wait some more before pushing out, so you can discuss it.
 
-It was part of the same series and addressing the same "busy CPU"
-scenario, so I think it makes sense to keep both in the same series. I
-guess we could try to run some tests with only this applied and see if
-that really doesn't break anything. If so, I don't have any objection
-to keeping this.
+Okay, let me run a quick test with that second patch still applied to
+make sure it really is harmless.
 
 Thierry
 
---YZ5djTAD1cGYuMQK
+--O5XBE6gyVG5Rl6Rj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6muMQACgkQ3SOs138+
-s6HF2BAAqZf92sFTs/Eyv87f5posF3vq/kOLjtXrGynwpI3AifzD9eQ6i64bHgI6
-2+Bygj2uHJCx7PAstQ8VvHjd/uRNa6b2ZACjOoVf17mcGhfUT+0LafnEHC3JqJ+z
-kFmak2jgejP0LY/RGmvrJi79/cTituLrKeFR62kwrXojfMe14kS81sZ8uZ2ki6Na
-MlyQdkSKJvkueA7cSN+J8QW+TDHrdMfGV3cn5DiR4UNs2JbwbxTawByKImMt/pCp
-0fY+q9LSo9XAjR0tx9xo5h/+XfbxgwxKGvlmiy/PrGxltKWluFbgZbK8WBP/uSVD
-j77w1WlqqlW3Xv90ysW027FE6sJi5KvtZpacuHJdM0AzgqB0148hWOd7VURngg5E
-8v/hs2RPD4wWET1O7DrIAZY3HbSXPuXuoNMnkTcVsZaDofV/R+yh4T7munkBhrnq
-/y0hnxsvmZu/MvuA6Dzy5k+aHALtJxc3IxDqJA+FbPsIisnDaIu8tZF9tpPitNdm
-KtMsYLxFfFSMA+hvTnrOSlalTk2DYXh7NuYBd0z9MkkqQHm2e/reDpr8houPxzN5
-oNYTHosfzOsmklBvZ5seMR9zjFKeAhhC37+EWi5KCbbfuq0uRJViDIRJwLSeoie+
-z0RgqB2aX6q0QKtsaubnnEolKKPl8eKyGe5v9EJd1uenzeEBAaw=
-=+wzR
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6muPUACgkQ3SOs138+
+s6HeRA//R1ZgI3RIgFRMumlzLgXjk9E0ydZrGpjmIXD2Yq1hKWN7rDxl77D5X1z+
+JemdX2sML4h6JIMiXGercu0mI5SrjO0LHh7L2AYITbdRtfHVjpK4ed96NewY9CNZ
+ruYoVRDYIehUwq6jzX6aQmASBXnnrPiztYEMYqV/2SpTVLJDsAFBFcDI4VpaBpgm
+Sy/tACPUi1JYn6zn5hu96sFqOEvG6BFRwYFVRqDFG8zNWS25YoogvgnKfbL4Yr+X
+CGTw9+1iiMZ7YShdsOj9m/iQaCk8wPI4Nl10KzyEGQlsWDSfce/hcqtG6V0QZqnV
+T0z8GdrKY/o6NqX+iHcEWCySq7aTtZQ42rYKU6zu2awHgxle0a/Y4O6uw+A0CIF8
+eL3joxZcYWUG1Ns8mthGChimL8CVyioMrz7AoLyhcRv+nN6zHnAKi2ODqBFDe7HN
+0UniHlFxJosmw5CE2KtSMzigrcDib6keHaqx7j3riafDORQchOeJh3QxmnhyaO1W
+5KnB63lCx/sph1lPjgUuULp3lYQr8yJozcgTq3by5DvmEdnTNRHBo4FVI62uO2YR
+KvURjkEhTn2OOcs+X6cRTI+mum3BlGHUGMF4vg0a8LVcYYZ1kH1lhDd9ZuhPZ9I4
+CXPot1AVOsY9w//Nm5K4az98xyGkS3UbqL6SNu4psx8tMEFh6KI=
+=dg8T
 -----END PGP SIGNATURE-----
 
---YZ5djTAD1cGYuMQK--
+--O5XBE6gyVG5Rl6Rj--
