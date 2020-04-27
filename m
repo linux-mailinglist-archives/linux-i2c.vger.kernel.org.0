@@ -2,132 +2,144 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6EC1BA9A2
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Apr 2020 18:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C811BAB5B
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Apr 2020 19:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727084AbgD0QCK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Apr 2020 12:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726539AbgD0QCJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Apr 2020 12:02:09 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325C6C0610D5;
-        Mon, 27 Apr 2020 09:02:09 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id g4so18185901ljl.2;
-        Mon, 27 Apr 2020 09:02:09 -0700 (PDT)
+        id S1726470AbgD0RdN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Apr 2020 13:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726213AbgD0RdM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Apr 2020 13:33:12 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2641C0610D5;
+        Mon, 27 Apr 2020 10:33:12 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id e6so7721347pjt.4;
+        Mon, 27 Apr 2020 10:33:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=UC4nurrRf3udrQTojIPA4rnIYQOFVwae7To0mJBT8fY=;
-        b=dEfOb1A9rszXfQ+Gl8DHgEKY28a1ukFvgJsqw2TDFDTAzkvl0TzJROMBfv7KHOA9Bq
-         ECJhx+6UwixpV7KO9N17Pg/IwsuYhqs8kFba/OdMJxhs/iyJK0eTZ8qqhCF0bIRFGH47
-         WNcgHxHeWL7NBULWgtD9PSgBD1asKMr8JWRzuNt4j9HA/6SbhHbz3V1Za1IwZQOAjHFZ
-         jrNvbo1w3flFlnTq+M7bhPhZFvhGLu22HXt+p5kL6ljZTMSAC4uSYykuIF1P8oTsjy4O
-         pvn+ZL7m+WWDTL60tsn+EV8rJgM/f2nxPRuG/re4uDfqH5ybJWy8qDzXdlqz7mxmdos/
-         PBWQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gU5i7xmKV34tR5F18itWfVo5V/gDkXmz2Qiw6wo4HPA=;
+        b=fvHmORI8FOw7Qnvkc8nYVBXsWY9A+k7s1JKSy4iw5c1skxBXGFDtcccC7ybwQcyeQE
+         EHBSUbeOMHCY5hqkQMLi3XZPTl1OUBUyf+EoSspklOMMGi8oN/AsOwEbTxO5G0q1As9L
+         nMGdi5+JyGZbp9fhH7Qc7RcDKyIvqyrj+O4LGRVhayF5I1r9BH4pFJGaoUsvyk3i3GaF
+         4NIFdbygiyXpXLRs/Kw6iE0vqEnACIG/5DPNZAsEIIhlVpNi7x2GMZdiy0mAe52+YVDc
+         a561/fl228wTi8k9iGW6QYhCd0hrOZycroUO7r4O6iz7ZtvdESTuNL0wVDIU5cSSNG/n
+         UZFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UC4nurrRf3udrQTojIPA4rnIYQOFVwae7To0mJBT8fY=;
-        b=TFSds8NzEpa1vOFOsrsF2mLUHjQ+q7jchs623YQxV3rnGZZvH7e7Koa9a+aeJMvETu
-         p9qR2PpAPiUbTuNDxvw3qzBu+Lx8Nj0fRXvlX9KhHGvV+jGVN3LSHBRCWTRFkWkuVyxc
-         rddhcm6cZkSVHs4s9sa1Hw7SLft+P+RZsGyJaeWvSBwo3lh6s+zIs7qgy0pqs2qEcmTI
-         4nkhmLIlRe3TCdtrU4gCg4Nv9m06uVjdQoli0/+o420cK5xoMTYItKbOXSg1+SqkaNZL
-         z6lm4hwC2vJ8Auw1/KgV3XBw4Rt7KRD+l+/pjvL+Yy9mb9cHUEZCi9e/ywtUm1gnE6Dy
-         sgpw==
-X-Gm-Message-State: AGi0PubIdhjQcu3QL9qLqQyzkGtt0qrZHvuAFbZq3PIeNavuFiU/fqJD
-        wO3YQk3K0K8MBCY0nN4DOVOn3tl2
-X-Google-Smtp-Source: APiQypL5znxvymWbmggY0tfM0ZWAlsQInR3g+byT1vkk+SyFdtfKGG+UkYD5WzOhbUAxPKxtFjnRBw==
-X-Received: by 2002:a2e:8e98:: with SMTP id z24mr15083373ljk.134.1588003327236;
-        Mon, 27 Apr 2020 09:02:07 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.googlemail.com with ESMTPSA id t16sm10271884ljg.41.2020.04.27.09.02.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Apr 2020 09:02:06 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] i2c: tegra: Better handle case where CPU0 is busy
- for a long time
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <a5198024-7273-74c4-b4f4-3a29d042bc36@nvidia.com>
- <f8fb1f7f-2497-033e-ff2c-c86c6caa9706@gmail.com>
- <fd1ca178-1ea3-851f-20a6-10bf00453ce3@nvidia.com>
- <a5734f19-254e-b6bc-e791-fa1ac63f11a4@gmail.com>
- <79f6560e-dbb5-0ae1-49f8-cf1cd95396ec@nvidia.com>
- <20200427074837.GC3451400@ulmo> <20200427084424.GA28817@kunai>
- <820200ce-17f3-18c0-6f79-3e582f45492d@gmail.com>
- <20200427103553.GA24446@kunai> <20200427105029.GB3464906@ulmo>
- <20200427153244.GF3464906@ulmo>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <127a2c32-e5fb-2944-3062-361b276490c0@gmail.com>
-Date:   Mon, 27 Apr 2020 19:02:05 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gU5i7xmKV34tR5F18itWfVo5V/gDkXmz2Qiw6wo4HPA=;
+        b=QoKvvscu/jN/IjBFa7ts520Dbxx72suUAK7RdUBVXh2/vNzzkHkEA09C4aJ4qT/DV6
+         n2KQ2IuhO+bY/Mgp6mV6HwMNaMSg6I3k5GzL5QKaygF9cFb/uZGIYAYIoVreWfBu4GwV
+         aKdzjR5qM9zpxRFqAcuNhvCI9GnzMTAqec9cJq6316gEhEVf4E1yCTgv5I+Qx5fDrZV6
+         fuamcu+rOSDw+6m91GU10n/uk290njJo+nbgm9XuOWplXwFCdoue3hLZhifvLnnlZB58
+         xlRKw2jCg7cxk6oB6beawRcvTeAXTN2FIpSLxeAMl7Ls9Jpw2tcoQVBChivabjQ0iHXm
+         TK+A==
+X-Gm-Message-State: AGi0Pub7WryJCIsBRKqNaSuf2irr2NPqiyIWYbCVjzW/fQjCvLnDrqf9
+        EsEw64frgtwgLeiNXU/ERxihYNa2JHiIFdZ+UM0=
+X-Google-Smtp-Source: APiQypLuzTP1I0aucyGGrv5MdEMHvOrysU+8xgEZbNToy2ArdtXmL+44edA6Rtf4T72RL+fcuOcvArSe8zmt+BW0BBo=
+X-Received: by 2002:a17:90a:224b:: with SMTP id c69mr25228026pje.8.1588008792167;
+ Mon, 27 Apr 2020 10:33:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200427153244.GF3464906@ulmo>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200426104713.216896-1-hdegoede@redhat.com> <20200426104713.216896-2-hdegoede@redhat.com>
+ <CAHp75VdOd6C36oR7HAnqrKiinVBr4YcqqJ=dv3NpR3=Xp0QQ-Q@mail.gmail.com>
+ <b5bdffb4-0af2-abb7-21f7-2f5da56d5dc6@redhat.com> <CAHp75VegakBqAzxn1e+MzF3EgB6fNya3L0eZHMh11yct6HHNKw@mail.gmail.com>
+ <66619a61-c398-5a8a-4ee0-13dbe5d2c559@redhat.com>
+In-Reply-To: <66619a61-c398-5a8a-4ee0-13dbe5d2c559@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 27 Apr 2020 20:33:05 +0300
+Message-ID: <CAHp75VcBf1OYQ=W+k1ygHnXkNbA+NuZoiSOQOq6g7SJNc2iFiA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] platform/x86: i2c-multi-instantiate: Add flag for
+ passing fwnode
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-27.04.2020 18:32, Thierry Reding пишет:
-> On Mon, Apr 27, 2020 at 12:50:29PM +0200, Thierry Reding wrote:
->> On Mon, Apr 27, 2020 at 12:35:53PM +0200, Wolfram Sang wrote:
->>> On Mon, Apr 27, 2020 at 12:07:19PM +0300, Dmitry Osipenko wrote:
->>>> 27.04.2020 11:44, Wolfram Sang пишет:
->>>>>
->>>>>> Wolfram, can you revert the following two patches for v5.7, please?
->>>>>>
->>>>>> 	8814044fe0fa i2c: tegra: Synchronize DMA before termination
->>>>
->>>> This patch has nothing to do with your trouble, why do you want to
->>>> revert it?
->>>
->>> I'll wait some more before pushing out, so you can discuss it.
->>
->> Okay, let me run a quick test with that second patch still applied to
->> make sure it really is harmless.
-> 
-> Alright, I tested v5.7-rc3 with this patch reverted:
-> 
-> 	a900aeac2537 i2c: tegra: Better handle case where CPU0 is busy for a long time
-> 
-> and the results came back positive, so I think we can leave patch:
-> 
-> 	8814044fe0fa i2c: tegra: Synchronize DMA before termination
-> 
-> in. But then again, I see that Dmitry posted this yesterday:
-> 
-> 	https://lkml.org/lkml/2020/4/26/481
-> 
-> which seems like it would be related to this and potentially be a
-> follow-up fix for some corner cases?
+On Mon, Apr 27, 2020 at 6:06 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 4/27/20 3:18 PM, Andy Shevchenko wrote:
+> > On Mon, Apr 27, 2020 at 3:51 PM Hans de Goede <hdegoede@redhat.com> wro=
+te:
+> >> On 4/26/20 7:59 PM, Andy Shevchenko wrote:
+> >>> On Sun, Apr 26, 2020 at 1:47 PM Hans de Goede <hdegoede@redhat.com> w=
+rote:
 
-This is a follow-up to my previous message in this thread:
+> >>>> In some cases the driver for the i2c_client-s which i2c-multi-instan=
+tiate
+> >>>> instantiates may need access some fields / methods from to the ACPI =
+fwnode
+> >>>> for which i2c_clients are being instantiated.
+> >>>>
+> >>>> An example of this are CPLM3218 ACPI device-s. These contain CPM0 an=
+d
+> >>>> CPM1 packages with various information (e.g. register init values) w=
+hich
+> >>>> the driver needs.
+> >>>>
+> >>>> Passing the fwnode through the i2c_board_info struct also gives the
+> >>>> i2c-core access to it, and if we do not pass an IRQ then the i2c-cor=
+e
+> >>>> will use the fwnode to get an IRQ, see i2c_acpi_get_irq().
+> >>>
+> >>> I'm wondering, can we rather do it in the same way like we do for
+> >>> GPIO/APIC case here.
+> >>> Introduce IRQ_RESOURCE_SHARED (or so) and
+> >>>
+> >>> case _SHARED:
+> >>>    irq =3D i2c_acpi_get_irq();
+> >>> ...
+> >>>
+> >>> ?
+> >>
+> >> I think you are miss-understanding the problem. The problem is not tha=
+t
+> >> we want to share the IRQ, the problem is that we want to pass the sing=
+le
+> >> IRQ in the resources to only 1 of the instantiated I2C-clients. But if=
+ we
+> >> do not pass an IRQ (we leave it at 0) and we do pass the fwnode then
+> >> i2c-core-base.c will see that there is an ACPI-node attached to the
+> >> device and will call i2c_acpi_get_irq().
+> >
+> > Do we know ahead which device should take IRQ resource and which should=
+ not?
+> > Can we use current _NONE flag for them?
+>
+> The problem is not internal to i2c-multi-instantiate.c, the problem
+> (once we pass a fwnode) is the API between i2c-multi-instantiate.c and
+> the i2c-core. For the IRQ_RESOURCE_NONE case i2c-multi-instantiate.c
+> sets board_info.irq to 0, which is the correct way to specify that
+> we do not have an IRQ, but if don't pass an IRQ then the i2c-core
+> will try to find one itself.  And once we pass the fwnode, then
+> the "try to find one itself" code will call i2c_acpi_get_irq()
+> and find the same IRQ for clients we instantiate, leading to
+> the earlier mentioned IRQ conflict.
 
-https://lkml.org/lkml/2020/4/23/792
+I'm missing something here. Why we need to pass an fwnode in the first plac=
+e?
+Seems you would like to access to methods from the driver.
+But if you simple enumerate the driver in ACPI multi-instantiate won't
+be needed.
 
-> So I'm not sure how well this whole set has been tested yet.
+As far as I understand, the actual driver consumes *both* I=C2=B2C
+resources. It's not a multi-instantiate in this case.
 
-It depends on what you're meaning by the testing. We have some
-yet-out-of-tree real-world devices that are using APBDMA for Bluetooth,
-Audio, I2C (touchscreens) and etc peripherals. These devices were using
-the DMA patches before they were posted to the ML.
 
-> Maybe a better solution would be for the DMA synchronization patch to go
-> into the 5.8 queue instead to make sure we get more testing cycles.
-
-It should be fine to re-queue the patches for 5.8. I'm just a bit afraid
-that if patches are simply dropped now, then you won't get back to it
-for a year or so ;)
+--=20
+With Best Regards,
+Andy Shevchenko
