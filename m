@@ -2,172 +2,259 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 834381BBB9E
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Apr 2020 12:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E6F1BBC5D
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Apr 2020 13:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726503AbgD1Kx0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Apr 2020 06:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726419AbgD1KxZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Apr 2020 06:53:25 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2413C03C1A9
-        for <linux-i2c@vger.kernel.org>; Tue, 28 Apr 2020 03:53:24 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id e26so2208465wmk.5
-        for <linux-i2c@vger.kernel.org>; Tue, 28 Apr 2020 03:53:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WnUV2Y9lSu/VZYad7VDUsZy+uYGvDSCzE38Mfy1eUAc=;
-        b=G3MKD2FkIV0CuQgnPvbucZ++Y0nh3mtFGdUA+zTGlPIkQORteW3tBhJ2+BcZxVhlWm
-         RZ8dyV7VVAVI8muULd0jC/4GF+yIwTH3vEGrujSqd66Nh+PlWpRWPmnI+FsIMdR0X5Oq
-         Mj5fKxHWGLvd1XQyghtdljRvgPmHGSFIrltuhBDH7bG5wDKQxX5vX90+Brpisb0wF6+B
-         XYZyPiWJPk0+nlFBg1kaAiIsWY9q2FJWtx3B97HI2GzKsvENQfYN/tx2Jgj9bRCwzgzY
-         EdQwnZLP0ksDpMCTvyCUI6OwLqkqezrCPxLVngo0cjXsBYSGJ3em+SSILOSCmVPtgoUw
-         T9Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :message-id:date:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WnUV2Y9lSu/VZYad7VDUsZy+uYGvDSCzE38Mfy1eUAc=;
-        b=j9+8tsoyeRju2atkO0B4PH1wTtc33i01GoH8HtNoDLooNZgDfA90aDf2AJTNWEojtE
-         Sx7sobG1Ui/MYb0DPhOvtQAkjg7Og8sTq9pBfwxA0hWpD1ZbzMb8lXygU2Rdicx4wgdT
-         oZyOukJ3h2J0X7R2Javm821JpozSouSnL+4ZY7fYq75kRPpJ0i1QGUKQjfTxzsbrjn4D
-         IwhWNUVF4gF6w1iVrkBNfo4sm0OObHPI4ehr5L+TYxmSwEEwY92AF/yVwNPnb3/d+08o
-         bEVIj63Pzez2FhcfluWAQs34nZSsAWjbbmMtTW1ZsdY182n2ZVb0I3MeTKk7sPWdMof8
-         780Q==
-X-Gm-Message-State: AGi0PuY8YxgEsJ+sVpT20kPfjfMq+bf4u8sCl7X+DKxb8X1+V1YZ0lPF
-        Kml/KzlBqxn6qWfP1oJgU9NnJw==
-X-Google-Smtp-Source: APiQypLxOaS7niNTyeL1J5W8BySC1F9G6Ov8DWGh5gDSku3WSjdGSNSyaqvwddXRwmewaUy4IaK4EQ==
-X-Received: by 2002:a1c:3b09:: with SMTP id i9mr3852493wma.19.1588071203556;
-        Tue, 28 Apr 2020 03:53:23 -0700 (PDT)
-Received: from [192.168.0.136] ([87.120.218.65])
-        by smtp.googlemail.com with ESMTPSA id z22sm2752862wma.20.2020.04.28.03.53.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 Apr 2020 03:53:22 -0700 (PDT)
-Subject: Re: [PATCH V4 2/9] interconnect: Set peak requirement as twice of
- average
-To:     Akash Asthana <akashast@codeaurora.org>, broonie@kernel.org
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org, evgreen@chromium.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Mike Tipton <mdtipton@codeaurora.org>,
-        Sean Sweeney <seansw@qti.qualcomm.com>
-References: <1586946198-13912-1-git-send-email-akashast@codeaurora.org>
- <1586946198-13912-3-git-send-email-akashast@codeaurora.org>
- <58b91dc1-6ce3-49b8-88c8-259be9af1dbd@linaro.org>
- <7a79688c-3b9b-c7c1-2973-fca0c4b2c78b@codeaurora.org>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- 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
- KEmKjLDvB0pePJkdTw==
-Message-ID: <94e7ad8d-2680-1e62-8072-703d6e220341@linaro.org>
-Date:   Tue, 28 Apr 2020 13:53:21 +0300
+        id S1726635AbgD1LZ2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Apr 2020 07:25:28 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:47458 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726482AbgD1LZ1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Apr 2020 07:25:27 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 03SBP8aY027889;
+        Tue, 28 Apr 2020 06:25:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1588073108;
+        bh=EiS/4MUYU8KqgsavRPxfRkmEd0Gp1d9200lIKcLyREA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=V99aRM5GnPxyZErsddaOboUqsr3LtAKmQTsOZn1FBvjKaA17VuSVbgnDP/8TakxjV
+         xdcCoLNg9VvSwC1S5HeI6KwcWoY5NO2HaSXTd6KPJpQuIlNCPU+Tgd0RzQ4MRqh09O
+         z/zRi/Udq9gd+Gngy8nRc+ut6er+HwqNOwbQJ8uA=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 03SBP8dN023718;
+        Tue, 28 Apr 2020 06:25:08 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 28
+ Apr 2020 06:25:07 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Tue, 28 Apr 2020 06:25:07 -0500
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 03SBP4XB123003;
+        Tue, 28 Apr 2020 06:25:05 -0500
+Subject: Re: [PATCH v14 2/2] i2c: core: support bus regulator controlling in
+ adapter
+To:     Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        <linux-i2c@vger.kernel.org>
+CC:     <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <srv_heupstream@mediatek.com>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <devicetree@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20200428061813.27072-1-bibby.hsieh@mediatek.com>
+ <20200428061813.27072-3-bibby.hsieh@mediatek.com>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <e3583893-f49d-0e78-6414-ed565099af63@ti.com>
+Date:   Tue, 28 Apr 2020 14:25:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <7a79688c-3b9b-c7c1-2973-fca0c4b2c78b@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200428061813.27072-3-bibby.hsieh@mediatek.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Akash,
 
-On 4/28/20 12:46, Akash Asthana wrote:
-> Hi Georgi,
+
+On 28/04/2020 09:18, Bibby Hsieh wrote:
+> Although in the most platforms, the bus power of i2c
+> are alway on, some platforms disable the i2c bus power
+> in order to meet low power request.
 > 
-> On 4/23/2020 3:01 PM, Georgi Djakov wrote:
->> Hi Akash,
->>
->> On 4/15/20 13:23, Akash Asthana wrote:
->>> Lot of ICC clients are not aware of their actual peak requirement,
->>> most commonly they tend to guess their peak requirement as
->>> (some factor) * avg_bw.
->>>
->>> Centralize random peak guess as twice of average, out into the core
->>> to maintain consistency across the clients. Client can always
->>> override this setting if they got a better idea.
->> I am still not convinced that this is a good idea. If the factor is a random
->> value, then i think that the default factor should be 1.
->>
->> According to your previous reply, it seems that from geni we are requesting
->> double peak bandwidth to compensate for other clients which are not requesting
->> bandwidth for themselves. IMO, this is a bit hacky.
->>
->> Instead of requesting double peak bandwidth, IIUC the correct thing to do here
->> is to request peak_bw = avg_bw for geni. And instead of trying to compensate for
->> other clients "stealing" bandwidth, can't we make these clients vote for their
->> own bandwidth? Or if they really can't, this should be handled elsewhere - maybe
->> in the interconnect platform driver we can reserve some amount of minimum
->> bandwidth for such cases?
+> We get and enable bulk regulator in i2c adapter device.
 > 
-> Okay, probably we can correct clients vote for their own bandwidth or reserve
-> some minimum BW from interconnect platform driver is case of any latency issue
-> observed.
-
-Yes, this sounds like the correct thing to do.
-
+> Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+> ---
+>   drivers/i2c/i2c-core-base.c | 82 +++++++++++++++++++++++++++++++++++++
+>   include/linux/i2c.h         |  2 +
+>   2 files changed, 84 insertions(+)
 > 
-> I will drop this change in next version.
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 5cc0b0ec5570..f81b42a4ed07 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -313,6 +313,7 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
+>   static int i2c_device_probe(struct device *dev)
+>   {
+>   	struct i2c_client	*client = i2c_verify_client(dev);
+> +	struct i2c_adapter	*adap = client->adapter;
+>   	struct i2c_driver	*driver;
+>   	int status;
+>   
+> @@ -378,6 +379,12 @@ static int i2c_device_probe(struct device *dev)
+>   
+>   	dev_dbg(dev, "probe\n");
+>   
+> +	status = regulator_enable(adap->bus_regulator);
+> +	if (status < 0) {
+> +		dev_err(&adap->dev, "Failed to enable power regulator\n");
+> +		goto err_clear_wakeup_irq;
+> +	}
+> +
+
+Sry, but this is confusing.
+What if there is separate regulators for I2C device and bus/adapter?
+
+I2C bus is transaction based and usually I2C bus drivers ensures that i2c bus is
+in proper state to perform transaction. While I2C devices can be enable, configured and
+function without actually interacting with I2C bus unless required (irq for example).
+
+With you change any I2C device will enable and keep bus regulator on all the time it's active
+even if there is no I2C interruptions.
+
+Following the problem description it seems
+  - i2c bus driver should get regulator and ensure it's enabled for the duration of transaction(s)
+  - i2c device should get its own regulator (or the same if shared)  ensure it's enabled for
+    the period device is active.
+
+
+>   	status = of_clk_set_defaults(dev->of_node, false);
+>   	if (status < 0)
+>   		goto err_clear_wakeup_irq;
+> @@ -414,6 +421,7 @@ static int i2c_device_probe(struct device *dev)
+>   static int i2c_device_remove(struct device *dev)
+>   {
+>   	struct i2c_client	*client = i2c_verify_client(dev);
+> +	struct i2c_adapter      *adap = client->adapter;
+>   	struct i2c_driver	*driver;
+>   	int status = 0;
+>   
+> @@ -427,6 +435,8 @@ static int i2c_device_remove(struct device *dev)
+>   	}
+>   
+>   	dev_pm_domain_detach(&client->dev, true);
+> +	if (!pm_runtime_status_suspended(&client->dev))
+> +		regulator_disable(adap->bus_regulator);
+>   
+>   	dev_pm_clear_wake_irq(&client->dev);
+>   	device_init_wakeup(&client->dev, false);
+> @@ -438,6 +448,72 @@ static int i2c_device_remove(struct device *dev)
+>   	return status;
+>   }
+>   
+> +#ifdef CONFIG_PM_SLEEP
+> +static int i2c_resume_early(struct device *dev)
+> +{
+> +	struct i2c_client *client = i2c_verify_client(dev);
+> +	struct i2c_adapter *adap = client->adapter;
+> +	int err;
+> +
+> +	if (!pm_runtime_status_suspended(&client->dev)) {
+> +		err = regulator_enable(adap->bus_regulator);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	return pm_generic_resume_early(&client->dev);
+> +}
+> +
+> +static int i2c_suspend_late(struct device *dev)
+> +{
+> +	struct i2c_client *client = i2c_verify_client(dev);
+> +	struct i2c_adapter *adap = client->adapter;
+> +	int err;
+> +
+> +	err = pm_generic_suspend_late(&client->dev);
+> +	if (err)
+> +		return err;
+> +
+> +	if (!pm_runtime_status_suspended(&client->dev))
+> +		return regulator_disable(adap->bus_regulator);
+> +
+> +	return err;
+> +}
+> +#endif
+
+Have you considered pm_runtime_force_suspend/pm_runtime_force_resume?
+
+> +
+> +#ifdef CONFIG_PM
+> +static int i2c_runtime_resume(struct device *dev)
+> +{
+> +	struct i2c_client *client = i2c_verify_client(dev);
+> +	struct i2c_adapter *adap = client->adapter;
+> +	int err;
+> +
+> +	err = regulator_enable(adap->bus_regulator);
+> +	if (err)
+> +		return err;
+> +
+> +	return pm_generic_runtime_resume(&client->dev);
+> +}
+> +
+> +static int i2c_runtime_suspend(struct device *dev)
+> +{
+> +	struct i2c_client *client = i2c_verify_client(dev);
+> +	struct i2c_adapter *adap = client->adapter;
+> +	int err;
+> +
+> +	err = pm_generic_runtime_suspend(&client->dev);
+> +	if (err)
+> +		return err;
+> +
+> +	return regulator_disable(adap->bus_regulator);
+> +}
+> +#endif
+> +
+> +static const struct dev_pm_ops i2c_device_pm = {
+> +	SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late, i2c_resume_early)
+> +	SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume, NULL)
+> +};
+> +
+>   static void i2c_device_shutdown(struct device *dev)
+>   {
+>   	struct i2c_client *client = i2c_verify_client(dev);
+> @@ -495,6 +571,7 @@ struct bus_type i2c_bus_type = {
+>   	.probe		= i2c_device_probe,
+>   	.remove		= i2c_device_remove,
+>   	.shutdown	= i2c_device_shutdown,
+> +	.pm		= &i2c_device_pm,
+>   };
+>   EXPORT_SYMBOL_GPL(i2c_bus_type);
+>   
+> @@ -1333,6 +1410,11 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
+>   	if (res)
+>   		goto out_reg;
+>   
+> +	adap->bus_regulator = devm_regulator_get(&adap->dev, "bus");
+> +	if (IS_ERR(adap->bus_regulator)) {
+> +		res = PTR_ERR(adap->bus_regulator);
+> +		goto out_reg;
+> +	}
+>   	dev_dbg(&adap->dev, "adapter [%s] registered\n", adap->name);
+>   
+>   	pm_runtime_no_callbacks(&adap->dev);
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index 456fc17ecb1c..bc83af0d38d1 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -15,6 +15,7 @@
+>   #include <linux/device.h>	/* for struct device */
+>   #include <linux/sched.h>	/* for completion */
+>   #include <linux/mutex.h>
+> +#include <linux/regulator/consumer.h>
+>   #include <linux/rtmutex.h>
+>   #include <linux/irqdomain.h>		/* for Host Notify IRQ */
+>   #include <linux/of.h>		/* for struct device_node */
+> @@ -721,6 +722,7 @@ struct i2c_adapter {
+>   	const struct i2c_adapter_quirks *quirks;
+>   
+>   	struct irq_domain *host_notify_domain;
+> +	struct regulator *bus_regulator;
+>   };
+>   #define to_i2c_adapter(d) container_of(d, struct i2c_adapter, dev)
+>   
 > 
-> Will it create any difference if  peak_bw = 0 instead of peak_bw = avg_bw? In my
-> understanding peak_bw <= avg_bw is no-ops, it won't impact the NOC speed.
 
-It will not have impact on the NOC speed, but it does not make much logical
-sense to have peak_bw = 0 or peak_bw < avg_bw. In the geni case, i think what
-we want to do is peak_bw = avg_bw.
-
-Thanks,
-Georgi
+-- 
+Best regards,
+grygorii
