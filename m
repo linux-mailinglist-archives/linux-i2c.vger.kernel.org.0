@@ -2,141 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8790F1BB665
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Apr 2020 08:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830C11BB69A
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Apr 2020 08:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726303AbgD1GSe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Apr 2020 02:18:34 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:5235 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726309AbgD1GSe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Apr 2020 02:18:34 -0400
-X-UUID: 98189c06b0334c6296e4f0e70af162da-20200428
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=i9B88KjQO7GLcaEdS1cXa6s3uODkmcCp/wkWGt2KUC4=;
-        b=uqNpU6WqRTGyV2hnawcVtNAVeUJLn2chIW17/KQ2Xvz23ww4kuXIGFNmHSp7rUNsozmrjDi3iM+a3VykxjyqQhiwHqeITrg2c0pkTQIj9yJepT1webQSMoknwMQlaQe5w4OGs+6zwlsLvuDDF60zEvSWz30+3I/0+ahO4dq3lUk=;
-X-UUID: 98189c06b0334c6296e4f0e70af162da-20200428
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <bibby.hsieh@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 661193460; Tue, 28 Apr 2020 14:18:26 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 28 Apr 2020 14:18:24 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 28 Apr 2020 14:18:23 +0800
-From:   Bibby Hsieh <bibby.hsieh@mediatek.com>
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        <linux-i2c@vger.kernel.org>
-CC:     <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <srv_heupstream@mediatek.com>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <devicetree@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>
-Subject: [PATCH v14 2/2] i2c: core: support bus regulator controlling in adapter
-Date:   Tue, 28 Apr 2020 14:18:13 +0800
-Message-ID: <20200428061813.27072-3-bibby.hsieh@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200428061813.27072-1-bibby.hsieh@mediatek.com>
-References: <20200428061813.27072-1-bibby.hsieh@mediatek.com>
+        id S1726282AbgD1GcZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Apr 2020 02:32:25 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:3318 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726042AbgD1GcZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 28 Apr 2020 02:32:25 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 1C6034743E8AD600B435;
+        Tue, 28 Apr 2020 14:32:22 +0800 (CST)
+Received: from huawei.com (10.175.124.28) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.487.0; Tue, 28 Apr 2020
+ 14:32:12 +0800
+From:   Jason Yan <yanaijie@huawei.com>
+To:     <kgene@kernel.org>, <krzk@kernel.org>, <wsa@the-dreams.de>,
+        <linus.walleij@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Jason Yan <yanaijie@huawei.com>
+Subject: [PATCH] i2c: s3c2410: make i2c_s3c_irq_nextbyte() void
+Date:   Tue, 28 Apr 2020 14:31:38 +0800
+Message-ID: <20200428063138.26463-1-yanaijie@huawei.com>
+X-Mailer: git-send-email 2.21.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.28]
+X-CFilter-Loop: Reflected
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-QWx0aG91Z2ggaW4gdGhlIG1vc3QgcGxhdGZvcm1zLCB0aGUgYnVzIHBvd2VyIG9mIGkyYw0KYXJl
-IGFsd2F5IG9uLCBzb21lIHBsYXRmb3JtcyBkaXNhYmxlIHRoZSBpMmMgYnVzIHBvd2VyDQppbiBv
-cmRlciB0byBtZWV0IGxvdyBwb3dlciByZXF1ZXN0Lg0KDQpXZSBnZXQgYW5kIGVuYWJsZSBidWxr
-IHJlZ3VsYXRvciBpbiBpMmMgYWRhcHRlciBkZXZpY2UuDQoNClNpZ25lZC1vZmYtYnk6IEJpYmJ5
-IEhzaWVoIDxiaWJieS5oc2llaEBtZWRpYXRlay5jb20+DQotLS0NCiBkcml2ZXJzL2kyYy9pMmMt
-Y29yZS1iYXNlLmMgfCA4MiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQog
-aW5jbHVkZS9saW51eC9pMmMuaCAgICAgICAgIHwgIDIgKw0KIDIgZmlsZXMgY2hhbmdlZCwgODQg
-aW5zZXJ0aW9ucygrKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9pMmMvaTJjLWNvcmUtYmFzZS5j
-IGIvZHJpdmVycy9pMmMvaTJjLWNvcmUtYmFzZS5jDQppbmRleCA1Y2MwYjBlYzU1NzAuLmY4MWI0
-MmE0ZWQwNyAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2UuYw0KKysrIGIv
-ZHJpdmVycy9pMmMvaTJjLWNvcmUtYmFzZS5jDQpAQCAtMzEzLDYgKzMxMyw3IEBAIHN0YXRpYyBp
-bnQgaTJjX3NtYnVzX2hvc3Rfbm90aWZ5X3RvX2lycShjb25zdCBzdHJ1Y3QgaTJjX2NsaWVudCAq
-Y2xpZW50KQ0KIHN0YXRpYyBpbnQgaTJjX2RldmljZV9wcm9iZShzdHJ1Y3QgZGV2aWNlICpkZXYp
-DQogew0KIAlzdHJ1Y3QgaTJjX2NsaWVudAkqY2xpZW50ID0gaTJjX3ZlcmlmeV9jbGllbnQoZGV2
-KTsNCisJc3RydWN0IGkyY19hZGFwdGVyCSphZGFwID0gY2xpZW50LT5hZGFwdGVyOw0KIAlzdHJ1
-Y3QgaTJjX2RyaXZlcgkqZHJpdmVyOw0KIAlpbnQgc3RhdHVzOw0KIA0KQEAgLTM3OCw2ICszNzks
-MTIgQEAgc3RhdGljIGludCBpMmNfZGV2aWNlX3Byb2JlKHN0cnVjdCBkZXZpY2UgKmRldikNCiAN
-CiAJZGV2X2RiZyhkZXYsICJwcm9iZVxuIik7DQogDQorCXN0YXR1cyA9IHJlZ3VsYXRvcl9lbmFi
-bGUoYWRhcC0+YnVzX3JlZ3VsYXRvcik7DQorCWlmIChzdGF0dXMgPCAwKSB7DQorCQlkZXZfZXJy
-KCZhZGFwLT5kZXYsICJGYWlsZWQgdG8gZW5hYmxlIHBvd2VyIHJlZ3VsYXRvclxuIik7DQorCQln
-b3RvIGVycl9jbGVhcl93YWtldXBfaXJxOw0KKwl9DQorDQogCXN0YXR1cyA9IG9mX2Nsa19zZXRf
-ZGVmYXVsdHMoZGV2LT5vZl9ub2RlLCBmYWxzZSk7DQogCWlmIChzdGF0dXMgPCAwKQ0KIAkJZ290
-byBlcnJfY2xlYXJfd2FrZXVwX2lycTsNCkBAIC00MTQsNiArNDIxLDcgQEAgc3RhdGljIGludCBp
-MmNfZGV2aWNlX3Byb2JlKHN0cnVjdCBkZXZpY2UgKmRldikNCiBzdGF0aWMgaW50IGkyY19kZXZp
-Y2VfcmVtb3ZlKHN0cnVjdCBkZXZpY2UgKmRldikNCiB7DQogCXN0cnVjdCBpMmNfY2xpZW50CSpj
-bGllbnQgPSBpMmNfdmVyaWZ5X2NsaWVudChkZXYpOw0KKwlzdHJ1Y3QgaTJjX2FkYXB0ZXIgICAg
-ICAqYWRhcCA9IGNsaWVudC0+YWRhcHRlcjsNCiAJc3RydWN0IGkyY19kcml2ZXIJKmRyaXZlcjsN
-CiAJaW50IHN0YXR1cyA9IDA7DQogDQpAQCAtNDI3LDYgKzQzNSw4IEBAIHN0YXRpYyBpbnQgaTJj
-X2RldmljZV9yZW1vdmUoc3RydWN0IGRldmljZSAqZGV2KQ0KIAl9DQogDQogCWRldl9wbV9kb21h
-aW5fZGV0YWNoKCZjbGllbnQtPmRldiwgdHJ1ZSk7DQorCWlmICghcG1fcnVudGltZV9zdGF0dXNf
-c3VzcGVuZGVkKCZjbGllbnQtPmRldikpDQorCQlyZWd1bGF0b3JfZGlzYWJsZShhZGFwLT5idXNf
-cmVndWxhdG9yKTsNCiANCiAJZGV2X3BtX2NsZWFyX3dha2VfaXJxKCZjbGllbnQtPmRldik7DQog
-CWRldmljZV9pbml0X3dha2V1cCgmY2xpZW50LT5kZXYsIGZhbHNlKTsNCkBAIC00MzgsNiArNDQ4
-LDcyIEBAIHN0YXRpYyBpbnQgaTJjX2RldmljZV9yZW1vdmUoc3RydWN0IGRldmljZSAqZGV2KQ0K
-IAlyZXR1cm4gc3RhdHVzOw0KIH0NCiANCisjaWZkZWYgQ09ORklHX1BNX1NMRUVQDQorc3RhdGlj
-IGludCBpMmNfcmVzdW1lX2Vhcmx5KHN0cnVjdCBkZXZpY2UgKmRldikNCit7DQorCXN0cnVjdCBp
-MmNfY2xpZW50ICpjbGllbnQgPSBpMmNfdmVyaWZ5X2NsaWVudChkZXYpOw0KKwlzdHJ1Y3QgaTJj
-X2FkYXB0ZXIgKmFkYXAgPSBjbGllbnQtPmFkYXB0ZXI7DQorCWludCBlcnI7DQorDQorCWlmICgh
-cG1fcnVudGltZV9zdGF0dXNfc3VzcGVuZGVkKCZjbGllbnQtPmRldikpIHsNCisJCWVyciA9IHJl
-Z3VsYXRvcl9lbmFibGUoYWRhcC0+YnVzX3JlZ3VsYXRvcik7DQorCQlpZiAoZXJyKQ0KKwkJCXJl
-dHVybiBlcnI7DQorCX0NCisNCisJcmV0dXJuIHBtX2dlbmVyaWNfcmVzdW1lX2Vhcmx5KCZjbGll
-bnQtPmRldik7DQorfQ0KKw0KK3N0YXRpYyBpbnQgaTJjX3N1c3BlbmRfbGF0ZShzdHJ1Y3QgZGV2
-aWNlICpkZXYpDQorew0KKwlzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50ID0gaTJjX3ZlcmlmeV9j
-bGllbnQoZGV2KTsNCisJc3RydWN0IGkyY19hZGFwdGVyICphZGFwID0gY2xpZW50LT5hZGFwdGVy
-Ow0KKwlpbnQgZXJyOw0KKw0KKwllcnIgPSBwbV9nZW5lcmljX3N1c3BlbmRfbGF0ZSgmY2xpZW50
-LT5kZXYpOw0KKwlpZiAoZXJyKQ0KKwkJcmV0dXJuIGVycjsNCisNCisJaWYgKCFwbV9ydW50aW1l
-X3N0YXR1c19zdXNwZW5kZWQoJmNsaWVudC0+ZGV2KSkNCisJCXJldHVybiByZWd1bGF0b3JfZGlz
-YWJsZShhZGFwLT5idXNfcmVndWxhdG9yKTsNCisNCisJcmV0dXJuIGVycjsNCit9DQorI2VuZGlm
-DQorDQorI2lmZGVmIENPTkZJR19QTQ0KK3N0YXRpYyBpbnQgaTJjX3J1bnRpbWVfcmVzdW1lKHN0
-cnVjdCBkZXZpY2UgKmRldikNCit7DQorCXN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQgPSBpMmNf
-dmVyaWZ5X2NsaWVudChkZXYpOw0KKwlzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXAgPSBjbGllbnQt
-PmFkYXB0ZXI7DQorCWludCBlcnI7DQorDQorCWVyciA9IHJlZ3VsYXRvcl9lbmFibGUoYWRhcC0+
-YnVzX3JlZ3VsYXRvcik7DQorCWlmIChlcnIpDQorCQlyZXR1cm4gZXJyOw0KKw0KKwlyZXR1cm4g
-cG1fZ2VuZXJpY19ydW50aW1lX3Jlc3VtZSgmY2xpZW50LT5kZXYpOw0KK30NCisNCitzdGF0aWMg
-aW50IGkyY19ydW50aW1lX3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQ0KK3sNCisJc3RydWN0
-IGkyY19jbGllbnQgKmNsaWVudCA9IGkyY192ZXJpZnlfY2xpZW50KGRldik7DQorCXN0cnVjdCBp
-MmNfYWRhcHRlciAqYWRhcCA9IGNsaWVudC0+YWRhcHRlcjsNCisJaW50IGVycjsNCisNCisJZXJy
-ID0gcG1fZ2VuZXJpY19ydW50aW1lX3N1c3BlbmQoJmNsaWVudC0+ZGV2KTsNCisJaWYgKGVycikN
-CisJCXJldHVybiBlcnI7DQorDQorCXJldHVybiByZWd1bGF0b3JfZGlzYWJsZShhZGFwLT5idXNf
-cmVndWxhdG9yKTsNCit9DQorI2VuZGlmDQorDQorc3RhdGljIGNvbnN0IHN0cnVjdCBkZXZfcG1f
-b3BzIGkyY19kZXZpY2VfcG0gPSB7DQorCVNFVF9MQVRFX1NZU1RFTV9TTEVFUF9QTV9PUFMoaTJj
-X3N1c3BlbmRfbGF0ZSwgaTJjX3Jlc3VtZV9lYXJseSkNCisJU0VUX1JVTlRJTUVfUE1fT1BTKGky
-Y19ydW50aW1lX3N1c3BlbmQsIGkyY19ydW50aW1lX3Jlc3VtZSwgTlVMTCkNCit9Ow0KKw0KIHN0
-YXRpYyB2b2lkIGkyY19kZXZpY2Vfc2h1dGRvd24oc3RydWN0IGRldmljZSAqZGV2KQ0KIHsNCiAJ
-c3RydWN0IGkyY19jbGllbnQgKmNsaWVudCA9IGkyY192ZXJpZnlfY2xpZW50KGRldik7DQpAQCAt
-NDk1LDYgKzU3MSw3IEBAIHN0cnVjdCBidXNfdHlwZSBpMmNfYnVzX3R5cGUgPSB7DQogCS5wcm9i
-ZQkJPSBpMmNfZGV2aWNlX3Byb2JlLA0KIAkucmVtb3ZlCQk9IGkyY19kZXZpY2VfcmVtb3ZlLA0K
-IAkuc2h1dGRvd24JPSBpMmNfZGV2aWNlX3NodXRkb3duLA0KKwkucG0JCT0gJmkyY19kZXZpY2Vf
-cG0sDQogfTsNCiBFWFBPUlRfU1lNQk9MX0dQTChpMmNfYnVzX3R5cGUpOw0KIA0KQEAgLTEzMzMs
-NiArMTQxMCwxMSBAQCBzdGF0aWMgaW50IGkyY19yZWdpc3Rlcl9hZGFwdGVyKHN0cnVjdCBpMmNf
-YWRhcHRlciAqYWRhcCkNCiAJaWYgKHJlcykNCiAJCWdvdG8gb3V0X3JlZzsNCiANCisJYWRhcC0+
-YnVzX3JlZ3VsYXRvciA9IGRldm1fcmVndWxhdG9yX2dldCgmYWRhcC0+ZGV2LCAiYnVzIik7DQor
-CWlmIChJU19FUlIoYWRhcC0+YnVzX3JlZ3VsYXRvcikpIHsNCisJCXJlcyA9IFBUUl9FUlIoYWRh
-cC0+YnVzX3JlZ3VsYXRvcik7DQorCQlnb3RvIG91dF9yZWc7DQorCX0NCiAJZGV2X2RiZygmYWRh
-cC0+ZGV2LCAiYWRhcHRlciBbJXNdIHJlZ2lzdGVyZWRcbiIsIGFkYXAtPm5hbWUpOw0KIA0KIAlw
-bV9ydW50aW1lX25vX2NhbGxiYWNrcygmYWRhcC0+ZGV2KTsNCmRpZmYgLS1naXQgYS9pbmNsdWRl
-L2xpbnV4L2kyYy5oIGIvaW5jbHVkZS9saW51eC9pMmMuaA0KaW5kZXggNDU2ZmMxN2VjYjFjLi5i
-YzgzYWYwZDM4ZDEgMTAwNjQ0DQotLS0gYS9pbmNsdWRlL2xpbnV4L2kyYy5oDQorKysgYi9pbmNs
-dWRlL2xpbnV4L2kyYy5oDQpAQCAtMTUsNiArMTUsNyBAQA0KICNpbmNsdWRlIDxsaW51eC9kZXZp
-Y2UuaD4JLyogZm9yIHN0cnVjdCBkZXZpY2UgKi8NCiAjaW5jbHVkZSA8bGludXgvc2NoZWQuaD4J
-LyogZm9yIGNvbXBsZXRpb24gKi8NCiAjaW5jbHVkZSA8bGludXgvbXV0ZXguaD4NCisjaW5jbHVk
-ZSA8bGludXgvcmVndWxhdG9yL2NvbnN1bWVyLmg+DQogI2luY2x1ZGUgPGxpbnV4L3J0bXV0ZXgu
-aD4NCiAjaW5jbHVkZSA8bGludXgvaXJxZG9tYWluLmg+CQkvKiBmb3IgSG9zdCBOb3RpZnkgSVJR
-ICovDQogI2luY2x1ZGUgPGxpbnV4L29mLmg+CQkvKiBmb3Igc3RydWN0IGRldmljZV9ub2RlICov
-DQpAQCAtNzIxLDYgKzcyMiw3IEBAIHN0cnVjdCBpMmNfYWRhcHRlciB7DQogCWNvbnN0IHN0cnVj
-dCBpMmNfYWRhcHRlcl9xdWlya3MgKnF1aXJrczsNCiANCiAJc3RydWN0IGlycV9kb21haW4gKmhv
-c3Rfbm90aWZ5X2RvbWFpbjsNCisJc3RydWN0IHJlZ3VsYXRvciAqYnVzX3JlZ3VsYXRvcjsNCiB9
-Ow0KICNkZWZpbmUgdG9faTJjX2FkYXB0ZXIoZCkgY29udGFpbmVyX29mKGQsIHN0cnVjdCBpMmNf
-YWRhcHRlciwgZGV2KQ0KIA0KLS0gDQoyLjE4LjANCg==
+Fix the following coccicheck warning:
+
+drivers/i2c/busses/i2c-s3c2410.c:391:5-8: Unneeded variable: "ret".
+Return "0" on line 552
+
+Signed-off-by: Jason Yan <yanaijie@huawei.com>
+---
+ drivers/i2c/busses/i2c-s3c2410.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-s3c2410.c b/drivers/i2c/busses/i2c-s3c2410.c
+index 5a5638e1daa1..22315d8f616f 100644
+--- a/drivers/i2c/busses/i2c-s3c2410.c
++++ b/drivers/i2c/busses/i2c-s3c2410.c
+@@ -136,7 +136,7 @@ static const struct platform_device_id s3c24xx_driver_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(platform, s3c24xx_driver_ids);
+ 
+-static int i2c_s3c_irq_nextbyte(struct s3c24xx_i2c *i2c, unsigned long iicstat);
++static void i2c_s3c_irq_nextbyte(struct s3c24xx_i2c *i2c, unsigned long iicstat);
+ 
+ #ifdef CONFIG_OF
+ static const struct of_device_id s3c24xx_i2c_match[] = {
+@@ -384,11 +384,10 @@ static inline int is_msgend(struct s3c24xx_i2c *i2c)
+ /*
+  * process an interrupt and work out what to do
+  */
+-static int i2c_s3c_irq_nextbyte(struct s3c24xx_i2c *i2c, unsigned long iicstat)
++static void i2c_s3c_irq_nextbyte(struct s3c24xx_i2c *i2c, unsigned long iicstat)
+ {
+ 	unsigned long tmp;
+ 	unsigned char byte;
+-	int ret = 0;
+ 
+ 	switch (i2c->state) {
+ 
+@@ -549,7 +548,7 @@ static int i2c_s3c_irq_nextbyte(struct s3c24xx_i2c *i2c, unsigned long iicstat)
+ 	tmp &= ~S3C2410_IICCON_IRQPEND;
+ 	writel(tmp, i2c->regs + S3C2410_IICCON);
+  out:
+-	return ret;
++	return;
+ }
+ 
+ /*
+-- 
+2.21.1
 
