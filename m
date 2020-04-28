@@ -2,83 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B431BCF76
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Apr 2020 00:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403351BCFBD
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Apr 2020 00:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbgD1WJG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Apr 2020 18:09:06 -0400
-Received: from sauhun.de ([88.99.104.3]:47642 "EHLO pokefinder.org"
+        id S1726274AbgD1WSd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Apr 2020 18:18:33 -0400
+Received: from sauhun.de ([88.99.104.3]:47732 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726286AbgD1WJG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 28 Apr 2020 18:09:06 -0400
+        id S1725934AbgD1WSd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 28 Apr 2020 18:18:33 -0400
 Received: from localhost (p5486CA03.dip0.t-ipconnect.de [84.134.202.3])
-        by pokefinder.org (Postfix) with ESMTPSA id 52F2A2C0710;
-        Wed, 29 Apr 2020 00:09:04 +0200 (CEST)
-Date:   Wed, 29 Apr 2020 00:09:04 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 908812C0710;
+        Wed, 29 Apr 2020 00:18:31 +0200 (CEST)
+Date:   Wed, 29 Apr 2020 00:18:31 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFT] i2c: brcmstb: properly check NACK condition
-Message-ID: <20200428220904.GB7698@kunai>
-References: <20200426081211.10876-1-wsa+renesas@sang-engineering.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v2 5/5] i2c: designware: Allow slave mode for PCI
+ enumerated devices
+Message-ID: <20200428221831.GC7698@kunai>
+References: <20200425134448.28514-1-andriy.shevchenko@linux.intel.com>
+ <20200425134448.28514-5-andriy.shevchenko@linux.intel.com>
+ <9f6213e9-e14c-a4b2-eb10-d5463dbe2c19@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hHWLQfXTYDoKhP50"
+        protocol="application/pgp-signature"; boundary="ZmUaFz6apKcXQszQ"
 Content-Disposition: inline
-In-Reply-To: <20200426081211.10876-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <9f6213e9-e14c-a4b2-eb10-d5463dbe2c19@linux.intel.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---hHWLQfXTYDoKhP50
+--ZmUaFz6apKcXQszQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Apr 26, 2020 at 10:12:10AM +0200, Wolfram Sang wrote:
-> From: Wolfram Sang <wsa@the-dreams.de>
+On Mon, Apr 27, 2020 at 05:05:35PM +0300, Jarkko Nikula wrote:
+> On 4/25/20 4:44 PM, Andy Shevchenko wrote:
+> > Allow slave mode for PCI enumerated devices by calling a common i2c_dw_=
+probe()
+> > instead of i2c_dw_probe_master().
+> >=20
+> > While dropping dependency to platform driver in slave module, move its
+> > configuration section above, closer to core.
+> >=20
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> > v2: new patch
+> >   drivers/i2c/busses/Kconfig                 | 21 ++++++++++-----------
+> >   drivers/i2c/busses/i2c-designware-pcidrv.c |  4 ++--
+> >   2 files changed, 12 insertions(+), 13 deletions(-)
+> >=20
+> To all 5 patches
 >=20
-> cppcheck rightfully complains about:
->=20
-> drivers/i2c/busses/i2c-brcmstb.c:319:7: warning: Condition 'CMD_RD' is al=
-ways true [knownConditionTrueFalse]
-> drivers/i2c/busses/i2c-brcmstb.c:319:17: warning: Condition 'CMD_WR' is a=
-lways false [knownConditionTrueFalse]
->  if ((CMD_RD || CMD_WR) &&
->=20
-> Compare the values to the 'cmd' variable.
->=20
-> Fixes: dd1aa2524bc5 ("i2c: brcmstb: Add Broadcom settop SoC i2c controlle=
-r driver")
-> Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-Applied to for-current, thanks!
+And all applied to for-next, thanks!
 
 
---hHWLQfXTYDoKhP50
+--ZmUaFz6apKcXQszQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6oqX8ACgkQFA3kzBSg
-KbYq7Q/7Br16/++9ebjOhm70GQ8PM9ZFe3yeQh+WXJPb+pwCvOvnwRnFg+dn6Kg3
-RPpLJF1PDwS+HJsLrKZGqRyLhtuWY2N2WTbN04SoQaxC71+T7Nv/R63U0m9FpaKM
-U0PmwmOZ2KL8+1/HmzhlCdD8tnbI8udU3FbPEjdgo4DM7fWy2kAy8Ar1AlLfECJr
-sIBSpKw5+0pYAJA1MaFMHMbXZpl01qPEsEpMVgbalXifBxZs/+nZJmRSGQny8Euv
-IxcdCovHhLGfSewgOGB/jQRZo4GzcyZr+2jnyA3wsiDvCip+z/RUzgpPHPjvVJ8i
-qo65Ep++nU2yTgxS+QCb+iPsEYm0B+cD7xnd+Up/XPi6OZseCKjwLBSbruR7v5JF
-m38GSUvBQxapp6FBL2L8E5K8X3jLDAeSdwQ6vH86fardMbh1plXXiR9SRhVLJXpw
-FKo7QWMHEnTTqZ8xmGv2KFcTR8ZCFgDFAMx8nZ2UBCEbT4GSD8AD1spd4wWpJCob
-rLbXuvKbmniIrYYoHDFfTL7NhP5y1akeka/h97KF7n9NwSV81KsnmXysOoT3EPBn
-R49VS65VjGdieBHrJI9BBfU0hLtcKDYsI0KUA/cyINqz403XSThLtGA5RJM3fHPJ
-3mCvMgj+wiLa8kS8p4VUCAzi6Zj1a5VvQEDgV7QpgUgOUBf5Kis=
-=GdAJ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6oq7cACgkQFA3kzBSg
+KbZJKA/9FwYdwyqDpMWQ7gh7nT46LV8wwf6+0tV2kjGaB2KzeRg5dtnJBIzVM7V6
+O1VFav5K9Qnzm68X61a3c5lq4JXLuFSIbnfEVFI7KvRhUTMnvn/f+dNAFmSCuri9
+Wbs/chg7pR1D0DijU0Tv97O3k+siALkRXepJ95fjFnHg/J1XPffg68mwgcSAzf7U
+UvD+lW6obl0/vq6D4d1SYAIwMsyu5017r5Uo5BGBhflOj9hUBFaXFgv0T9q5I3KI
+5rPVNpBi2xH9+P7hTnxUbb+v63n+NEM2GNOUtxnyRNgMnM2j+0kcJKiGjBNE6Lj9
+fFDf7hVc3Z5VE2LoFmwdA8SdLNOucq4C1wO40DU6r82VveFtJD8w9vYOsENS/5/L
+YZJBaC6nPZYhaNlitdJuHH6YwX6DYwUbfhmmyUlOVq09+rh7Q0fp6dGnSDQbTcjy
+/HtuEmUSud57kHhlTJY3MKtUBZa98pQbjqfzbpQNS6j7pS3zSiRcd2mX3JpXEhaW
+9hBFcjp0TKIoJfSnNqXZwZl+S1Z8npsdCYMqf5l9pVyvOIqL9OcHYXD2UKKSlxhc
+SOR62YRRWaCq/Pbs+rhKlEDMWaQfqwGKhHHta/tQSd6Bj/HdFp23oUJ7WMGeS5Nt
+d3e+PmAE5h4z4iTZUNWoWRay7zwlEhQowmRW/HNU/deLxYloLs0=
+=wqUK
 -----END PGP SIGNATURE-----
 
---hHWLQfXTYDoKhP50--
+--ZmUaFz6apKcXQszQ--
