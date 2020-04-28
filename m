@@ -2,269 +2,172 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FDF1BBB21
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Apr 2020 12:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834381BBB9E
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Apr 2020 12:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727111AbgD1KWD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Apr 2020 06:22:03 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:54531 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727771AbgD1KWC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Apr 2020 06:22:02 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1588069322; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=EMcwWVpuTkQ0cpuqYpXFbzPZiEdvxpXwtQZJuGAwl6o=; b=jvnMpYc0CWdcporg9etlOx3/FZ6Fmccblpip1CfAv2uTktaA/4KsAqIRiL+SEzGvYsOXtSJH
- HzlEfyqgPC49ta5897TnztMN/j8ZU7lFJkaa8cS8bR3dw6BLPhJLpxenBoe2q5OboEOPnwf2
- zsGVajz3NFAua/AMrLvvYVdCnpY=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5ea803c9.7fbb858dddc0-smtp-out-n04;
- Tue, 28 Apr 2020 10:22:01 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 519CBC432C2; Tue, 28 Apr 2020 10:22:01 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.43.98] (unknown [157.48.58.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 34FE7C433CB;
-        Tue, 28 Apr 2020 10:21:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 34FE7C433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V4 4/9] soc: qcom-geni-se: Add interconnect support to fix
- earlycon crash
-To:     Matthias Kaehlcke <mka@chromium.org>
+        id S1726503AbgD1Kx0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Apr 2020 06:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726419AbgD1KxZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Apr 2020 06:53:25 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2413C03C1A9
+        for <linux-i2c@vger.kernel.org>; Tue, 28 Apr 2020 03:53:24 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id e26so2208465wmk.5
+        for <linux-i2c@vger.kernel.org>; Tue, 28 Apr 2020 03:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WnUV2Y9lSu/VZYad7VDUsZy+uYGvDSCzE38Mfy1eUAc=;
+        b=G3MKD2FkIV0CuQgnPvbucZ++Y0nh3mtFGdUA+zTGlPIkQORteW3tBhJ2+BcZxVhlWm
+         RZ8dyV7VVAVI8muULd0jC/4GF+yIwTH3vEGrujSqd66Nh+PlWpRWPmnI+FsIMdR0X5Oq
+         Mj5fKxHWGLvd1XQyghtdljRvgPmHGSFIrltuhBDH7bG5wDKQxX5vX90+Brpisb0wF6+B
+         XYZyPiWJPk0+nlFBg1kaAiIsWY9q2FJWtx3B97HI2GzKsvENQfYN/tx2Jgj9bRCwzgzY
+         EdQwnZLP0ksDpMCTvyCUI6OwLqkqezrCPxLVngo0cjXsBYSGJ3em+SSILOSCmVPtgoUw
+         T9Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WnUV2Y9lSu/VZYad7VDUsZy+uYGvDSCzE38Mfy1eUAc=;
+        b=j9+8tsoyeRju2atkO0B4PH1wTtc33i01GoH8HtNoDLooNZgDfA90aDf2AJTNWEojtE
+         Sx7sobG1Ui/MYb0DPhOvtQAkjg7Og8sTq9pBfwxA0hWpD1ZbzMb8lXygU2Rdicx4wgdT
+         oZyOukJ3h2J0X7R2Javm821JpozSouSnL+4ZY7fYq75kRPpJ0i1QGUKQjfTxzsbrjn4D
+         IwhWNUVF4gF6w1iVrkBNfo4sm0OObHPI4ehr5L+TYxmSwEEwY92AF/yVwNPnb3/d+08o
+         bEVIj63Pzez2FhcfluWAQs34nZSsAWjbbmMtTW1ZsdY182n2ZVb0I3MeTKk7sPWdMof8
+         780Q==
+X-Gm-Message-State: AGi0PuY8YxgEsJ+sVpT20kPfjfMq+bf4u8sCl7X+DKxb8X1+V1YZ0lPF
+        Kml/KzlBqxn6qWfP1oJgU9NnJw==
+X-Google-Smtp-Source: APiQypLxOaS7niNTyeL1J5W8BySC1F9G6Ov8DWGh5gDSku3WSjdGSNSyaqvwddXRwmewaUy4IaK4EQ==
+X-Received: by 2002:a1c:3b09:: with SMTP id i9mr3852493wma.19.1588071203556;
+        Tue, 28 Apr 2020 03:53:23 -0700 (PDT)
+Received: from [192.168.0.136] ([87.120.218.65])
+        by smtp.googlemail.com with ESMTPSA id z22sm2752862wma.20.2020.04.28.03.53.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 Apr 2020 03:53:22 -0700 (PDT)
+Subject: Re: [PATCH V4 2/9] interconnect: Set peak requirement as twice of
+ average
+To:     Akash Asthana <akashast@codeaurora.org>, broonie@kernel.org
 Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, georgi.djakov@linaro.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de,
+        mark.rutland@arm.com, robh+dt@kernel.org,
         linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, swboyd@chromium.org,
         mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        evgreen@chromium.org
+        linux-serial@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org, evgreen@chromium.org,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Mike Tipton <mdtipton@codeaurora.org>,
+        Sean Sweeney <seansw@qti.qualcomm.com>
 References: <1586946198-13912-1-git-send-email-akashast@codeaurora.org>
- <1586946198-13912-5-git-send-email-akashast@codeaurora.org>
- <20200416003112.GA199755@google.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <146cf8db-3c09-39a6-2886-bec0db289948@codeaurora.org>
-Date:   Tue, 28 Apr 2020 15:51:44 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ <1586946198-13912-3-git-send-email-akashast@codeaurora.org>
+ <58b91dc1-6ce3-49b8-88c8-259be9af1dbd@linaro.org>
+ <7a79688c-3b9b-c7c1-2973-fca0c4b2c78b@codeaurora.org>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+ KEmKjLDvB0pePJkdTw==
+Message-ID: <94e7ad8d-2680-1e62-8072-703d6e220341@linaro.org>
+Date:   Tue, 28 Apr 2020 13:53:21 +0300
 MIME-Version: 1.0
-In-Reply-To: <20200416003112.GA199755@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <7a79688c-3b9b-c7c1-2973-fca0c4b2c78b@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Matthias,
+Hi Akash,
 
-On 4/16/2020 6:01 AM, Matthias Kaehlcke wrote:
-> Hi Akash,
->
-> On Wed, Apr 15, 2020 at 03:53:13PM +0530, Akash Asthana wrote:
->> QUP core clock is shared among all the SE drivers present on particular
->> QUP wrapper, the system will reset(unclocked access) if earlycon used after
->> QUP core clock is put to 0 from other SE drivers before real console comes
->> up.
+On 4/28/20 12:46, Akash Asthana wrote:
+> Hi Georgi,
+> 
+> On 4/23/2020 3:01 PM, Georgi Djakov wrote:
+>> Hi Akash,
 >>
->> As earlycon can't vote for it's QUP core need, to fix this add ICC
->> support to common/QUP wrapper driver and put vote for QUP core from
->> probe on behalf of earlycon and remove vote during earlycon exit call.
+>> On 4/15/20 13:23, Akash Asthana wrote:
+>>> Lot of ICC clients are not aware of their actual peak requirement,
+>>> most commonly they tend to guess their peak requirement as
+>>> (some factor) * avg_bw.
+>>>
+>>> Centralize random peak guess as twice of average, out into the core
+>>> to maintain consistency across the clients. Client can always
+>>> override this setting if they got a better idea.
+>> I am still not convinced that this is a good idea. If the factor is a random
+>> value, then i think that the default factor should be 1.
 >>
->> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
->> Reported-by: Matthias Kaehlcke <mka@chromium.org>
->> ---
->> Change in V3:
->>   - Add geni_remove_earlycon_icc_vote API that will be used by earlycon
->>     exit function to remove ICC vote for earlyconsole.
->>   - Remove suspend/resume hook for geni-se driver as we are no longer
->>     removing earlyconsole ICC vote from system suspend, we are removing
->>     from earlycon exit.
+>> According to your previous reply, it seems that from geni we are requesting
+>> double peak bandwidth to compensate for other clients which are not requesting
+>> bandwidth for themselves. IMO, this is a bit hacky.
 >>
->> Change in V4:
->>   - As per Matthias comment make 'earlycon_wrapper' as static structure.
->>
->>   drivers/soc/qcom/qcom-geni-se.c       | 50 +++++++++++++++++++++++++++++++++++
->>   drivers/tty/serial/qcom_geni_serial.c |  7 +++++
->>   include/linux/qcom-geni-se.h          |  2 ++
->>   3 files changed, 59 insertions(+)
->>
->> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
->> index 1527bc4..727ad2e 100644
->> --- a/drivers/soc/qcom/qcom-geni-se.c
->> +++ b/drivers/soc/qcom/qcom-geni-se.c
->> @@ -90,8 +90,11 @@ struct geni_wrapper {
->>   	struct device *dev;
->>   	void __iomem *base;
->>   	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
->> +	struct geni_icc_path to_core;
->>   };
->>   
->> +static struct geni_wrapper *earlycon_wrapper;
->> +
->>   #define QUP_HW_VER_REG			0x4
->>   
->>   /* Common SE registers */
->> @@ -781,6 +784,26 @@ int geni_icc_vote_off(struct geni_se *se)
->>   }
->>   EXPORT_SYMBOL(geni_icc_vote_off);
->>   
->> +void geni_remove_earlycon_icc_vote(void)
->> +{
->> +	struct geni_wrapper *wrapper = earlycon_wrapper;
->> +	struct device_node *parent = of_get_next_parent(wrapper->dev->of_node);
->> +	struct device_node *child;
->> +
->> +	for_each_child_of_node(parent, child) {
->> +		if (of_device_is_compatible(child, "qcom,geni-se-qup")) {
->> +			wrapper = platform_get_drvdata(of_find_device_by_node(
->> +					child));
->> +			icc_put(wrapper->to_core.path);
->> +			wrapper->to_core.path = NULL;
->> +		}
->> +	}
->> +	of_node_put(parent);
->> +
->> +	earlycon_wrapper = NULL;
->> +}
->> +EXPORT_SYMBOL(geni_remove_earlycon_icc_vote);
->> +
->>   static int geni_se_probe(struct platform_device *pdev)
->>   {
->>   	struct device *dev = &pdev->dev;
->> @@ -808,6 +831,33 @@ static int geni_se_probe(struct platform_device *pdev)
->>   		}
->>   	}
->>   
->> +#ifdef CONFIG_SERIAL_EARLYCON
->> +	wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
->> +	if (IS_ERR(wrapper->to_core.path))
->> +		return PTR_ERR(wrapper->to_core.path);
->> +	/*
->> +	 * Put minmal BW request on core clocks on behalf of early console.
->> +	 * The vote will be removed earlycon exit function.
->> +	 *
->> +	 * Note: We are putting vote on each QUP wrapper instead only to which
->> +	 * earlycon is connected because QUP core clock of different wrapper
->> +	 * share same voltage domain. If core1 is put to 0, then core2 will
->> +	 * also run at 0, if not voted. Default ICC vote will be removed ASA
->> +	 * we touch any of the core clock.
->> +	 * core1 = core2 = max(core1, core2)
->> +	 */
->> +	ret = icc_set_bw(wrapper->to_core.path, GENI_DEFAULT_BW, 0);
->> +	if (ret) {
->> +		dev_err(&pdev->dev, "%s: ICC BW voting failed for core\n",
->> +			__func__);
->> +		return ret;
->> +	}
->> +
->> +	if (of_get_compatible_child(pdev->dev.of_node, "qcom,geni-debug-uart"))
->> +		earlycon_wrapper = wrapper;
->> +	of_node_put(pdev->dev.of_node);
->> +#endif
->> +
->>   	dev_set_drvdata(dev, wrapper);
->>   	dev_dbg(dev, "GENI SE Driver probed\n");
->>   	return devm_of_platform_populate(dev);
->> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
->> index 6119090..8c5d97c 100644
->> --- a/drivers/tty/serial/qcom_geni_serial.c
->> +++ b/drivers/tty/serial/qcom_geni_serial.c
->> @@ -1090,6 +1090,12 @@ static void qcom_geni_serial_earlycon_write(struct console *con,
->>   	__qcom_geni_serial_console_write(&dev->port, s, n);
->>   }
->>   
->> +static int qcom_geni_serial_earlycon_exit(struct console *con)
->> +{
->> +	geni_remove_earlycon_icc_vote();
->> +	return 0;
->> +}
->> +
->>   static int __init qcom_geni_serial_earlycon_setup(struct earlycon_device *dev,
->>   								const char *opt)
->>   {
->> @@ -1135,6 +1141,7 @@ static int __init qcom_geni_serial_earlycon_setup(struct earlycon_device *dev,
->>   	writel(stop_bit_len, uport->membase + SE_UART_TX_STOP_BIT_LEN);
->>   
->>   	dev->con->write = qcom_geni_serial_earlycon_write;
->> +	dev->con->exit = qcom_geni_serial_earlycon_exit;
-> The idea of using the exit handler of the early console to remove the
-> votes seemed appealing at first, however it has a drawback: the bandwidth
-> requests in geni_se_probe() are always made when CONFIG_SERIAL_EARLYCON=y,
-> also when the system doesn't actually use an early console. On such a
-> system the votes would never be removed.
->
-> A possible alternative could seem to remove the vote at the end of
-> qcom_geni_serial_probe() of the 'normal' console, but it has a similar
-> problem: the system could not even have a normal console. One could
-> possibly argue that CONFIG_SERIAL_QCOM_GENI_CONSOLE shouldn't be set
-> on such a system, however it could be enabled to have a console for
-> development, and in production the same kernel config is used, but
-> with the console disabled through the device tree.
->
-> I don't really have a good idea at this point, maybe we just need
-> something as ugly as a delayed work to remove the votes. Other
-> suggestions are welcome :)
+>> Instead of requesting double peak bandwidth, IIUC the correct thing to do here
+>> is to request peak_bw = avg_bw for geni. And instead of trying to compensate for
+>> other clients "stealing" bandwidth, can't we make these clients vote for their
+>> own bandwidth? Or if they really can't, this should be handled elsewhere - maybe
+>> in the interconnect platform driver we can reserve some amount of minimum
+>> bandwidth for such cases?
+> 
+> Okay, probably we can correct clients vote for their own bandwidth or reserve
+> some minimum BW from interconnect platform driver is case of any latency issue
+> observed.
 
-I think we can do something like below. Before voting we are checking 
-whether earlyconsole ("qcom_geni") exits or not.  The name is fixed from 
-earlycon declaration file@drivers/tty/serial/qcom_geni_serial.c
+Yes, this sounds like the correct thing to do.
 
-OF_EARLYCON_DECLARE(qcom_geni, "qcom,geni-debug-uart",
-                                 qcom_geni_serial_earlycon_setup);
+> 
+> I will drop this change in next version.
+> 
+> Will it create any difference if  peak_bw = 0 instead of peak_bw = avg_bw? In my
+> understanding peak_bw <= avg_bw is no-ops, it won't impact the NOC speed.
 
-====================================================================================
+It will not have impact on the NOC speed, but it does not make much logical
+sense to have peak_bw = 0 or peak_bw < avg_bw. In the geni case, i think what
+we want to do is peak_bw = avg_bw.
 
-@@ -809,6 +809,8 @@ static int geni_se_probe(struct platform_device *pdev)
-         struct device *dev = &pdev->dev;
-         struct resource *res;
-         struct geni_wrapper *wrapper;
-+       struct console *bcon = NULL;
-+       int earlycon_present = 0;
-         int ret;
-
-         wrapper = devm_kzalloc(dev, sizeof(*wrapper), GFP_KERNEL);
-@@ -832,6 +834,15 @@ static int geni_se_probe(struct platform_device *pdev)
-         }
-
-  #ifdef CONFIG_SERIAL_EARLYCON
-+       if (console_drivers)
-+               for_each_console(bcon)
-+                       if (!strcmp(bcon->name, "qcom_geni")) {
-+                               earlycon_present = 1;
-+                               break;
-+                       }
-+       if(!earlycon_present)
-+               goto exit;
-+
-         wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
-         if (IS_ERR(wrapper->to_core.path))
-                 return PTR_ERR(wrapper->to_core.path);
-@@ -858,6 +869,7 @@ static int geni_se_probe(struct platform_device *pdev)
-         of_node_put(pdev->dev.of_node);
-  #endif
-
-+exit:
-         dev_set_drvdata(dev, wrapper);
-         dev_dbg(dev, "GENI SE Driver probed\n");
-         return devm_of_platform_populate(dev);
-
-======================================================================================
-
-Regards,
-
-Akash
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+Thanks,
+Georgi
