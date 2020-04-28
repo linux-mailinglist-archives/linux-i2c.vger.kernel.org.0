@@ -2,93 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC78D1BC530
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Apr 2020 18:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B53B1BCF69
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Apr 2020 00:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728158AbgD1QaQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Apr 2020 12:30:16 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:1272 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728103AbgD1QaQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Apr 2020 12:30:16 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03SGSJs9028011;
-        Tue, 28 Apr 2020 18:30:03 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=NGkABTisrRFiR0U388ihye531O2dm6SDun433lkNoMA=;
- b=RkCcn1JCuaitkxrH921aZVHoXEJ9ZfE3vWn0dSduBNt56e6FiXSpymRcVgwq5wgWxdAP
- 3yaF2ZciHRHwbsYkHaJbXc41GQbtN/h/yIDl2951ZXz9z1HNKA5LWcZe56OiQxap9NnB
- Grq1+mV1tC76LL3K89lYZEGq1qla4YVIxDgovh/BJ/+HsiUPbRHOEQC+8AsDlVJYXBO7
- MtMUin0osCda6vVrjZiSdHghI5dGIVVcs7LyCZ8WWISEdyjNpUSmVTWVVSrAlMBPl8WX
- CVbGyARjcpIcBzP6ZoXJR6l68nM0FUbp6qZqWjn+AB/aUYEjuTTuUgnWQCYlFLDikGmD QA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 30mhq61361-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Apr 2020 18:30:03 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C1C5D10002A;
-        Tue, 28 Apr 2020 18:30:02 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A74702B22EB;
-        Tue, 28 Apr 2020 18:30:02 +0200 (CEST)
-Received: from lmecxl0912.tpe.st.com (10.75.127.49) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 28 Apr
- 2020 18:29:57 +0200
-Subject: Re: [PATCH 0/5] i2c: i2c-stm32f7: enhance FastModePlus support
-To:     Alain Volmat <alain.volmat@st.com>, <wsa@the-dreams.de>,
-        <robh+dt@kernel.org>
-CC:     <mark.rutland@arm.com>, <pierre-yves.mordret@st.com>,
-        <mcoquelin.stm32@gmail.com>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>
-References: <1579795970-22319-1-git-send-email-alain.volmat@st.com>
-From:   Alexandre Torgue <alexandre.torgue@st.com>
-Message-ID: <baec4a71-3616-5c55-a528-6c79e49b8255@st.com>
-Date:   Tue, 28 Apr 2020 18:29:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726272AbgD1WGT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Apr 2020 18:06:19 -0400
+Received: from sauhun.de ([88.99.104.3]:47588 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726256AbgD1WGT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 28 Apr 2020 18:06:19 -0400
+Received: from localhost (p5486CA03.dip0.t-ipconnect.de [84.134.202.3])
+        by pokefinder.org (Postfix) with ESMTPSA id 3DC962C0710;
+        Wed, 29 Apr 2020 00:06:17 +0200 (CEST)
+Date:   Wed, 29 Apr 2020 00:06:16 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 00/12] i2c-pxa cleanups
+Message-ID: <20200428220616.GA7698@kunai>
+References: <20200427184658.GM25745@shell.armlinux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <1579795970-22319-1-git-send-email-alain.volmat@st.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG7NODE2.st.com (10.75.127.20) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-28_11:2020-04-28,2020-04-28 signatures=0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MGYHOYXEY6WxJCY8"
+Content-Disposition: inline
+In-Reply-To: <20200427184658.GM25745@shell.armlinux.org.uk>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Alain
 
-On 1/23/20 5:12 PM, Alain Volmat wrote:
-> This serie enhance Fast Mode Plus support in the i2c-stm32f7 driver
-> (support suspend/resume) and add the support for the stm32mp15 SoC
-> that has new syscfg bits.
-> 
-> Alain Volmat (5):
->    i2c: i2c-stm32f7: disable/restore Fast Mode Plus bits in low power
->      modes
->    dt-bindings: i2c: i2c-stm32f7: add st,stm32mp15-i2c compatible
->    i2c: i2c-stm32f7: add a new st,stm32mp15-i2c compatible
->    ARM: dts: stm32: use st,stm32mp15-i2c compatible for stm32mp151
->    ARM: dts: stm32: add Fast Mode Plus info in I2C nodes of stm32mp151
-> 
->   .../devicetree/bindings/i2c/st,stm32-i2c.yaml      |  6 +-
->   arch/arm/boot/dts/stm32mp151.dtsi                  | 18 ++++--
->   drivers/i2c/busses/i2c-stm32f7.c                   | 75 +++++++++++++++++++---
->   3 files changed, 83 insertions(+), 16 deletions(-)
-> 
+--MGYHOYXEY6WxJCY8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-patches [4][5] (DT) applied on stm32-next.
+On Mon, Apr 27, 2020 at 07:46:58PM +0100, Russell King - ARM Linux admin wr=
+ote:
+> Hi,
+>=20
+> This series cleans up the i2c-pxa code via the following changes:
+>=20
+> 1. replace i2c_pxa_addr_byte() with the functional equivalent
+>    i2c_8bit_addr_from_msg().
+>=20
+> 2. removing unnecessary headers, and rearranging those that remain
+>    in alphabetical order.
+>=20
+> 3. rearranging functions in the file to flow better; particularly
+>    placing the PIO specific functions next to the PIO algorithm
+>    structure, so all the PIO mode related code is together.  This
+>    eliminates the forward declaration of i2c_pxa_handler().
+>=20
+> 4. group the register bitfield definitions, which were split over two
+>    separate locations in the file, into a single location, and add
+>    some definitions for the IBMR register.
+>=20
+> 5. always set the 'fm' and 'hs' members for each hardware type; the
+>    storage for these members is always allocated, we don't need to
+>    bloat the code (neither runtime, nor in the source) for this.
+>=20
+> 6. move definitions private to i2c-pxa out of the platform data
+>    header; platforms have no business knowing these details.
+>=20
+> 7. group all driver-based IDs match (platform and OF) to one common
+>    location rather than at either end of the file.
+>=20
+> 8. fix i2c_pxa_scream_blue_murder()'s log output to be printed on a
+>    single line as it was intended, rather than being printed one
+>    entry per line - which makes it difficult to read particularly
+>    when it has been enabled and you're getting lots of them.  Also
+>    fix decode_bits() output in the same way.
+>=20
+> 9. fix i2c_pxa_wait_bus_not_busy() boundary condition, so that a
+>    coincidental success and timeout results in the function being
+>    successful rather than failing. (This has never been seen in
+>    practice, but was spotted while reviewing the code.)
+>=20
+> All in all, these changes should have (and have had so far) no
+> observable impact on the driver; therefore, I do not see any reason
+> to backport any of these changes to stable trees.
+>=20
+> This series has been rebased on the linux-i2c for-next branch.
+
+Applied all to for-next, thanks!
 
 
-Thanks.
-Alex
+--MGYHOYXEY6WxJCY8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6oqNQACgkQFA3kzBSg
+KbaqVBAApxwcS04cVAkhn4dwzU+4l2rD/iqvsCR1byyGmXOkvflbvRLjAgsJKFaO
+jxXrIsp/9Jt7TOdl2LKgKeKY/+C6tUrYL3cafWxXUgXyx1787AYp7y/EbxdylHHb
+f/faryeemNLoYlHyy6xbcZaf8IZ/i9ISccEPA1+u7eRJEnMEZt8hw1IxWQYJ/r6H
+IvECViV2ZnP6GFYkgurs55IhpZ71AwYuS/DcdH+o+VXDnwaT4joXqESq92A9IOlY
+FVd/pt2xjjQHSfsMmzumUsu5BeNUWlpl7itJHDzlFywrZgPuOwPbQoqczpmN6Gat
+ZzzyjYzWcMlNndWI93KfO3iJ2m2hIdkd2RDnUFB965cmdg1+ilTTmrIMcBMBBz96
+lsdDpbc/Xw0+QfJoqw8GJbLGgSvgA3qGsIbh+7k36BMZUsvWNMNctG2J9/JKlxrd
+zi2OSmyq915XGadFQQQbhf3nZ/MTKrvs9T+PFLwjiCNay3uxzcdTM059E+Dnnl1T
+dCLkcSYkwvUAUv3ELYTuQ0xVXbvs/gyXrf9Ir0Ui+P+6myJalVyRnqhY4H5ky/MI
+lrOCfFMEcKVCrv4tbkTcUhYPM5/dhu31V2Deo2yQrMiKSClLUAEt33QymgaDqPP+
+tWBqpDJn5K7wRF1opx7iRWGnpUAeReex6VJmfUX32/iGkdANzRs=
+=8mGv
+-----END PGP SIGNATURE-----
+
+--MGYHOYXEY6WxJCY8--
