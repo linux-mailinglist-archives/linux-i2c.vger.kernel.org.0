@@ -2,108 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E341BE073
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Apr 2020 16:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210BF1BE17F
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Apr 2020 16:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgD2OPi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Apr 2020 10:15:38 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:39320 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726516AbgD2OPh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Apr 2020 10:15:37 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03TECkSd012368;
-        Wed, 29 Apr 2020 16:15:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=STMicroelectronics;
- bh=KqESSlTcD9ep4XnUlD+lwpTAnY9V9M5Pb1fKaGdwF+E=;
- b=q2fqv5Tvp2oHUASZ/Ov0TGv3/QmZn2wqRg4Nr+OyQeOvnaLUYzQw+FTZK44HRr/DZpg5
- 99oc1sn5jnjkI/k+9t+k5A8HthlcWvDqhRxn3LtNLslE2OJOQIo+y9Odaa9+vyhoaGFX
- B9GtlssCs3Zrj50GOv158zmXPi9oXIzZpSzPWn11lV9dQBMyRKnpzG2WoZwRDh8b9n26
- TpT2JdBjZZQquwAN/L3IXEP/GqJ77PnRU9v0sEGg4C7I5qxL8ei/Cv9W6nX9JxQ3cXCr
- NDBQzNOw7Hfr7iKEa2kFep09P3b19u6diZXjtQyIacMsrLSrIZxSNR7kc7H+ycWlKS93 Jg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 30n4j62ys2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Apr 2020 16:15:15 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D954D10002A;
-        Wed, 29 Apr 2020 16:15:14 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C4C522A4D69;
-        Wed, 29 Apr 2020 16:15:14 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.75.127.51) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 29 Apr
- 2020 16:15:14 +0200
-Date:   Wed, 29 Apr 2020 16:15:13 +0200
-From:   Alain Volmat <alain.volmat@st.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-CC:     Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <kernel-janitors@vger.kernel.org>, <wsa@the-dreams.de>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] i2c: stm32f7: prevent array underflow in
- stm32f7_get_lower_rate()
-Message-ID: <20200429141513.GB31498@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: Dan Carpenter <dan.carpenter@oracle.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        kernel-janitors@vger.kernel.org, wsa@the-dreams.de,
-        linux-arm-kernel@lists.infradead.org
-References: <20200429132323.GB815283@mwanda>
+        id S1726887AbgD2Oqv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Apr 2020 10:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726456AbgD2Oqu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Apr 2020 10:46:50 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1F5C03C1AD;
+        Wed, 29 Apr 2020 07:46:50 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id w14so1475316lfk.3;
+        Wed, 29 Apr 2020 07:46:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6Iqx43ooxgoOivq+n0TDZ4CBXmi8xKAeuxrrrbvkGzA=;
+        b=Haw4PU8yu6NVYE7MFuT40CZ3zAtmD0g1aiMZvzucctoEE/7fVReA0DnGM0evnNxklX
+         VrPaV3Rel3X5PwawyZrwOI2ZADt9RRF1gmZosRewqRm61ySFMJ3H2LMcudOPmUMg1Cfl
+         4PfQZD1qvzEB8EyDDEXyky19RxawxmRXsjHXPLQ/82CT8nWQwzYSNc17PnjJYFNsOEBk
+         CyC4NbnO1oj0ozCPd3Gw7mIOeOVsm5vbFapHZrwgO5CbuoR9b8oTGeUROT1Bcjt0kCM1
+         WVh1icy15qq64apDWa27qcmPzVgopwE+xF7KD4/BwFL+hmjugFOVUDoprHTYKGHt0dzt
+         x6DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6Iqx43ooxgoOivq+n0TDZ4CBXmi8xKAeuxrrrbvkGzA=;
+        b=qYubLza8qUGMh65bEBZY0te9Hr0UmqRfqyHHq1KbdFgKfDZ1fJKjLXsdr9suVPXXHX
+         OSRR3Imt5S0u1ZbBj2Jr+/gzEVk10rOzpjYcjCe7MrBUQHX4SkojDjuyzLI/sy1B4Ke5
+         KutbCItietMcdJ3ZoHc6StPZROuiLD4ftKzsKeiQLuCf5PFARYewKtWMRTVqoDWaw4kM
+         9fCLgwNPq15F3nCbs1sHA3khIrg/Uhz+l0/esxMbxFIj6tdOOiAWsaOMcRkaTV2Uf5N3
+         dF4asR3gQmo5jdD2IvUetDbBgGyPu5AL7ByME3yECgcLZIn+QWedAisuct7Sk/+YsZXd
+         NkVw==
+X-Gm-Message-State: AGi0PuZFBrf/j0C3+i16ogGQuHh3m6TX0KiKGjLSbBAPVK4W7wCnV9a0
+        jUUMcrN3QMp19jieKE1x3tqj6C4Z
+X-Google-Smtp-Source: APiQypIXFKXW0+23X9m4XvsDEPOtHxVzRdJkkgu45IxeYCDiHfwes9airQTCiDzijLwznTWJQcOT5A==
+X-Received: by 2002:a19:2389:: with SMTP id j131mr5921216lfj.116.1588171608227;
+        Wed, 29 Apr 2020 07:46:48 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
+        by smtp.googlemail.com with ESMTPSA id f2sm2428460lja.30.2020.04.29.07.46.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Apr 2020 07:46:47 -0700 (PDT)
+Subject: Re: [PATCH v2 1/2] i2c: tegra: Better handle case where CPU0 is busy
+ for a long time
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <fd1ca178-1ea3-851f-20a6-10bf00453ce3@nvidia.com>
+ <a5734f19-254e-b6bc-e791-fa1ac63f11a4@gmail.com>
+ <79f6560e-dbb5-0ae1-49f8-cf1cd95396ec@nvidia.com>
+ <20200427074837.GC3451400@ulmo>
+ <c1190858-eaea-8e94-b4d1-1cf28076c330@gmail.com>
+ <20200427110033.GC3464906@ulmo>
+ <3a06811c-02dc-ce72-ebef-78c3fc3f4f7c@gmail.com>
+ <20200427151234.GE3464906@ulmo>
+ <1ab276cf-c2b0-e085-49d8-b8ce3dba8fbe@gmail.com>
+ <20200429081448.GA2345465@ulmo> <20200429085502.GB2345465@ulmo>
+ <9e36c4ec-ca02-bd15-d765-15635f09db4b@gmail.com>
+ <7442f4cd-6406-41f6-5c9b-932bff8ad5b2@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <5863e364-480e-7839-c42b-73a7f6990a30@gmail.com>
+Date:   Wed, 29 Apr 2020 17:46:46 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200429132323.GB815283@mwanda>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-29_07:2020-04-29,2020-04-29 signatures=0
+In-Reply-To: <7442f4cd-6406-41f6-5c9b-932bff8ad5b2@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Dan,
-
-indeed, thanks a lot.
-
-Reviewed-by: Alain Volmat <alain.volmat@st.com>
-
-Alain
-
-On Wed, Apr 29, 2020 at 04:23:23PM +0300, Dan Carpenter wrote:
-> We want to break with "i" set to zero whether we find the rate we want
-> or not.  In the current code, if we don't find the rate we want then it
-> exits the loop with "i" set to -1 and results in an array underflow.
+29.04.2020 16:57, Jon Hunter пишет:
 > 
-> Fixes: 09cc9a3bce91 ("i2c: stm32f7: allows for any bus frequency")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->  drivers/i2c/busses/i2c-stm32f7.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On 29/04/2020 13:35, Dmitry Osipenko wrote:
+>> 29.04.2020 11:55, Thierry Reding пишет:
+>> ...
+>>>>> It's not "papering over an issue". The bug can't be fixed properly
+>>>>> without introducing I2C atomic transfers support for a late suspend
+>>>>> phase, I don't see any other solutions for now. Stable kernels do not
+>>>>> support atomic transfers at all, that proper solution won't be backportable.
+>>>>
+>>>> Hm... on a hunch I tried something and, lo and behold, it worked. I can
+>>>> get Cardhu to properly suspend/resume on top of v5.7-rc3 with the
+>>>> following sequence:
+>>>>
+>>>> 	revert 9f42de8d4ec2 i2c: tegra: Fix suspending in active runtime PM state
+>>>> 	apply http://patchwork.ozlabs.org/project/linux-tegra/patch/20191213134417.222720-1-thierry.reding@gmail.com/
+>>>>
+>>>> I also ran that through our test farm and I don't see any other issues.
+>>>> At the time I was already skeptical about pm_runtime_force_suspend() and
+>>>> pm_runtime_force_resume() and while I'm not fully certain why exactly it
+>>>> doesn't work, the above on top of v5.7-rc3 seems like a good option.
+>>>>
+>>>> I'll try to do some digging if I can find out why exactly force suspend
+>>>> and resume doesn't work.
+>>>
+>>> Ah... so it looks like pm_runtime_force_resume() never actually does
+>>> anything in this case and then disable_depth remains at 1 and the first
+>>> tegra_i2c_xfer() will then fail to runtime resume the controller.
+>>
+>> That's the exactly expected behaviour of the RPM force suspend/resume.
+>> The only unexpected part for me is that the tegra_i2c_xfer() runtime
+>> resume then fails in the NOIRQ phase.
 > 
-> diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-> index 9c9e10ea91991..bff3479fe122a 100644
-> --- a/drivers/i2c/busses/i2c-stm32f7.c
-> +++ b/drivers/i2c/busses/i2c-stm32f7.c
-> @@ -607,7 +607,7 @@ static u32 stm32f7_get_lower_rate(u32 rate)
->  {
->  	int i = ARRAY_SIZE(stm32f7_i2c_specs);
->  
-> -	while (i--)
-> +	while (--i)
->  		if (stm32f7_i2c_specs[i].rate < rate)
->  			break;
->  
-> -- 
-> 2.26.2
-> 
+> From reading the changelog for commit 1e2ef05bb8cf ("PM: Limit race
+> conditions between runtime PM and system sleep (v2))", this is the
+> expected behaviour for runtime resume in the noirq phase.
+
+I'm curious whether there is a way to tell RPM that it's okay to do it
+for a particular device, like I2C that uses IRQ-safe RPM + doesn't have
+parent devices that need to be resumed.
