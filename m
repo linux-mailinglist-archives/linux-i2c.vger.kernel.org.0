@@ -2,115 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B37C1BDC64
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Apr 2020 14:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E4D1BDC7D
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Apr 2020 14:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726812AbgD2Mfa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Apr 2020 08:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726426AbgD2Mfa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Apr 2020 08:35:30 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63E1C03C1AD;
-        Wed, 29 Apr 2020 05:35:29 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id f11so2445742ljp.1;
-        Wed, 29 Apr 2020 05:35:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NUoe38klOCQtxasI+t9o8qMGW2IzeduoGzN0/atKrts=;
-        b=MRiAm3TFoo3RKDwRuwyjSpfg0hBAboJFu4Rg82H4SpneSimPkxNpnFDp4x0JH/adU3
-         ULl1pjCoQXNHiox1BNXexlIyVXL10N9pJKSBmqe1TnKZCce24DbwlAmyL63O5x+949Bl
-         m4EH3xn7pki+DkNj6lpzgURhqw1xD77/1wDLPOm/PiY3qHHd88hRM+fy4T1k8o6polkT
-         tX+zpbdFCxHrJ33BGkYSHqqgojH8XgOwwKrbZ1053jD1oVgNMwjDJyi/9kMuVoLAotMw
-         80BOgbaBS8y39odMfidpUpClcBcAIPS+XTgGI1MdidQcto0jv6GVyJRpTbc2HtQWv4xO
-         x1Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NUoe38klOCQtxasI+t9o8qMGW2IzeduoGzN0/atKrts=;
-        b=NOWcLswioiGn7BY9QmlLKNCqadibVyQjO61ttkd00WGsqnedWjBdaf/R8j0hfEN6AU
-         gRGET9qtF66GCMduZ5JYiwhM8x26oErg7QFnQ1MppHbCCSVUjtg4PodqPMzxhJF84otK
-         rlBficTje2pBP+jTX4BLCSk8jYP3+4ouIXpv5qP9kVkY93get0mBueBniurO5GGibvXD
-         qm5p+LXLdt5/U0QfSJWR5SrZ21Ga4d6woNwQuPteV9b6oVhhx6ec1Fti32sCtx1M+Jaj
-         Rb8RtYd+yAomSqVAhi8eUG4NllQL2jgJwPdib5R1MNs3C/am4V35vXZ36DX3r7E2txWs
-         ZlFA==
-X-Gm-Message-State: AGi0Pua8oVpHy0mfJ/WRLr74opjGzkPh/9fPpqxqBHTEwaKrCeDdgkMx
-        4KFkvz8ijEGgmDzjcHm1kbg8MEmN
-X-Google-Smtp-Source: APiQypI6czpfoNYYXqi1LKDgN8gs6cesq80NGh3Mlp6b3MgVjn1J8FfLxftkDbxG90dgaZk8ibUFYw==
-X-Received: by 2002:a2e:700b:: with SMTP id l11mr17063691ljc.255.1588163727943;
-        Wed, 29 Apr 2020 05:35:27 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.googlemail.com with ESMTPSA id k18sm3007442lfg.81.2020.04.29.05.35.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Apr 2020 05:35:27 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] i2c: tegra: Better handle case where CPU0 is busy
- for a long time
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <fd1ca178-1ea3-851f-20a6-10bf00453ce3@nvidia.com>
- <a5734f19-254e-b6bc-e791-fa1ac63f11a4@gmail.com>
- <79f6560e-dbb5-0ae1-49f8-cf1cd95396ec@nvidia.com>
- <20200427074837.GC3451400@ulmo>
- <c1190858-eaea-8e94-b4d1-1cf28076c330@gmail.com>
- <20200427110033.GC3464906@ulmo>
- <3a06811c-02dc-ce72-ebef-78c3fc3f4f7c@gmail.com>
- <20200427151234.GE3464906@ulmo>
- <1ab276cf-c2b0-e085-49d8-b8ce3dba8fbe@gmail.com>
- <20200429081448.GA2345465@ulmo> <20200429085502.GB2345465@ulmo>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <9e36c4ec-ca02-bd15-d765-15635f09db4b@gmail.com>
-Date:   Wed, 29 Apr 2020 15:35:26 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726760AbgD2MlB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Apr 2020 08:41:01 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:3382 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726516AbgD2MlA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 29 Apr 2020 08:41:00 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id F2D9E481BCF15DD98D02;
+        Wed, 29 Apr 2020 20:40:52 +0800 (CST)
+Received: from DESKTOP-C3MD9UG.china.huawei.com (10.166.215.55) by
+ DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
+ 14.3.487.0; Wed, 29 Apr 2020 20:40:43 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH 1/1] i2c: sh_mobile: eliminate a misreported warning
+Date:   Wed, 29 Apr 2020 20:40:17 +0800
+Message-ID: <20200429124017.397-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-In-Reply-To: <20200429085502.GB2345465@ulmo>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.166.215.55]
+X-CFilter-Loop: Reflected
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-29.04.2020 11:55, Thierry Reding пишет:
-...
->>> It's not "papering over an issue". The bug can't be fixed properly
->>> without introducing I2C atomic transfers support for a late suspend
->>> phase, I don't see any other solutions for now. Stable kernels do not
->>> support atomic transfers at all, that proper solution won't be backportable.
->>
->> Hm... on a hunch I tried something and, lo and behold, it worked. I can
->> get Cardhu to properly suspend/resume on top of v5.7-rc3 with the
->> following sequence:
->>
->> 	revert 9f42de8d4ec2 i2c: tegra: Fix suspending in active runtime PM state
->> 	apply http://patchwork.ozlabs.org/project/linux-tegra/patch/20191213134417.222720-1-thierry.reding@gmail.com/
->>
->> I also ran that through our test farm and I don't see any other issues.
->> At the time I was already skeptical about pm_runtime_force_suspend() and
->> pm_runtime_force_resume() and while I'm not fully certain why exactly it
->> doesn't work, the above on top of v5.7-rc3 seems like a good option.
->>
->> I'll try to do some digging if I can find out why exactly force suspend
->> and resume doesn't work.
-> 
-> Ah... so it looks like pm_runtime_force_resume() never actually does
-> anything in this case and then disable_depth remains at 1 and the first
-> tegra_i2c_xfer() will then fail to runtime resume the controller.
+The warning is caused by the branches "if (pd->pos == -1)" and
+"if (pd->pos == 0)", because they appear after "real_pos = pd->pos - 2",
+so the compiler doesn't known the value of real_pos is negative through
+these two branches.
 
-That's the exactly expected behaviour of the RPM force suspend/resume.
-The only unexpected part for me is that the tegra_i2c_xfer() runtime
-resume then fails in the NOIRQ phase.
+To avoid this warning, eliminate the middleman "data".
 
-Anyways, again, today it's wrong to use I2C in the NOIRQ phase becasue
-I2C interrupt is disabled. It's the PCIe driver that should be fixed.
+drivers/i2c/busses/i2c-sh_mobile.c: In function ‘sh_mobile_i2c_isr’:
+drivers/i2c/busses/i2c-sh_mobile.c:396:26: warning: ‘data’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+   pd->msg->buf[real_pos] = data;
+                          ^
+drivers/i2c/busses/i2c-sh_mobile.c:369:16: note: ‘data’ was declared here
+  unsigned char data;
+
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ drivers/i2c/busses/i2c-sh_mobile.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-sh_mobile.c b/drivers/i2c/busses/i2c-sh_mobile.c
+index d83ca4028fa0..2cca1b21e26e 100644
+--- a/drivers/i2c/busses/i2c-sh_mobile.c
++++ b/drivers/i2c/busses/i2c-sh_mobile.c
+@@ -366,7 +366,6 @@ static int sh_mobile_i2c_isr_tx(struct sh_mobile_i2c_data *pd)
+ 
+ static int sh_mobile_i2c_isr_rx(struct sh_mobile_i2c_data *pd)
+ {
+-	unsigned char data;
+ 	int real_pos;
+ 
+ 	/* switch from TX (address) to RX (data) adds two interrupts */
+@@ -387,13 +386,11 @@ static int sh_mobile_i2c_isr_rx(struct sh_mobile_i2c_data *pd)
+ 		if (real_pos < 0)
+ 			i2c_op(pd, OP_RX_STOP);
+ 		else
+-			data = i2c_op(pd, OP_RX_STOP_DATA);
++			pd->msg->buf[real_pos] = i2c_op(pd, OP_RX_STOP_DATA);
+ 	} else if (real_pos >= 0) {
+-		data = i2c_op(pd, OP_RX);
++		pd->msg->buf[real_pos] = i2c_op(pd, OP_RX);
+ 	}
+ 
+-	if (real_pos >= 0)
+-		pd->msg->buf[real_pos] = data;
+  done:
+ 	pd->pos++;
+ 	return pd->pos == (pd->msg->len + 2);
+-- 
+2.26.0.106.g9fadedd
+
+
