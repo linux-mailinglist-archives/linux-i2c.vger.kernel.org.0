@@ -2,88 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E4D1BDC7D
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Apr 2020 14:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A879A1BDD7B
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Apr 2020 15:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgD2MlB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Apr 2020 08:41:01 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:3382 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726516AbgD2MlA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 29 Apr 2020 08:41:00 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id F2D9E481BCF15DD98D02;
-        Wed, 29 Apr 2020 20:40:52 +0800 (CST)
-Received: from DESKTOP-C3MD9UG.china.huawei.com (10.166.215.55) by
- DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
- 14.3.487.0; Wed, 29 Apr 2020 20:40:43 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 1/1] i2c: sh_mobile: eliminate a misreported warning
-Date:   Wed, 29 Apr 2020 20:40:17 +0800
-Message-ID: <20200429124017.397-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        id S1726558AbgD2NXl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Apr 2020 09:23:41 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:44054 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726654AbgD2NXk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Apr 2020 09:23:40 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03TDNJ3g138357;
+        Wed, 29 Apr 2020 13:23:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=tNRNdLBshIc6ibNJ1XgsnMCjX7602JFV2oQLAaX80FU=;
+ b=UCjcj1f4tVDHwIl2/HZuQdGfQJkzSr0qjcFu84YMu/B7cs7lGDh251m/8naRxdrb8Rnu
+ 0ZUNVzSPPodkfpUKY8Atzw6QCH6IhNRF8VbZJBkG4BUxk2NVuuiXtWCf4/MeVy9T3jSi
+ GzV+Q3p9wXYLsbb0PDJPFgV+6fyawMIfikQWN7UFkf4WOA3hFnsMh96XVePJ1Qe81n0x
+ pK9Ox4xg62dzLazilzNZxemRJNg6Fg2cEeFuhm/lfuPDeG5lV3Dwrlu/LNJyLJYNjQcY
+ fJmVlFii2x8YQlZED4piGSMFI+tY+Ola6MPYviu0Oz6PM6wNLi19gfjinRvj/4At3l9/ 9w== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 30p2p0b3ht-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Apr 2020 13:23:33 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03TDN4Ej026942;
+        Wed, 29 Apr 2020 13:23:32 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 30my0gwqja-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Apr 2020 13:23:32 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 03TDNUAU031565;
+        Wed, 29 Apr 2020 13:23:31 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 29 Apr 2020 06:23:30 -0700
+Date:   Wed, 29 Apr 2020 16:23:23 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+        Alain Volmat <alain.volmat@st.com>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] i2c: stm32f7: prevent array underflow in
+ stm32f7_get_lower_rate()
+Message-ID: <20200429132323.GB815283@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.166.215.55]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9605 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0
+ suspectscore=0 adultscore=0 mlxlogscore=787 bulkscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004290113
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9605 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 clxscore=1011
+ bulkscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0
+ mlxscore=0 suspectscore=0 mlxlogscore=836 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004290113
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The warning is caused by the branches "if (pd->pos == -1)" and
-"if (pd->pos == 0)", because they appear after "real_pos = pd->pos - 2",
-so the compiler doesn't known the value of real_pos is negative through
-these two branches.
+We want to break with "i" set to zero whether we find the rate we want
+or not.  In the current code, if we don't find the rate we want then it
+exits the loop with "i" set to -1 and results in an array underflow.
 
-To avoid this warning, eliminate the middleman "data".
-
-drivers/i2c/busses/i2c-sh_mobile.c: In function ‘sh_mobile_i2c_isr’:
-drivers/i2c/busses/i2c-sh_mobile.c:396:26: warning: ‘data’ may be used uninitialized in this function [-Wmaybe-uninitialized]
-   pd->msg->buf[real_pos] = data;
-                          ^
-drivers/i2c/busses/i2c-sh_mobile.c:369:16: note: ‘data’ was declared here
-  unsigned char data;
-
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Fixes: 09cc9a3bce91 ("i2c: stm32f7: allows for any bus frequency")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 ---
- drivers/i2c/busses/i2c-sh_mobile.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-stm32f7.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-sh_mobile.c b/drivers/i2c/busses/i2c-sh_mobile.c
-index d83ca4028fa0..2cca1b21e26e 100644
---- a/drivers/i2c/busses/i2c-sh_mobile.c
-+++ b/drivers/i2c/busses/i2c-sh_mobile.c
-@@ -366,7 +366,6 @@ static int sh_mobile_i2c_isr_tx(struct sh_mobile_i2c_data *pd)
- 
- static int sh_mobile_i2c_isr_rx(struct sh_mobile_i2c_data *pd)
+diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+index 9c9e10ea91991..bff3479fe122a 100644
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -607,7 +607,7 @@ static u32 stm32f7_get_lower_rate(u32 rate)
  {
--	unsigned char data;
- 	int real_pos;
+ 	int i = ARRAY_SIZE(stm32f7_i2c_specs);
  
- 	/* switch from TX (address) to RX (data) adds two interrupts */
-@@ -387,13 +386,11 @@ static int sh_mobile_i2c_isr_rx(struct sh_mobile_i2c_data *pd)
- 		if (real_pos < 0)
- 			i2c_op(pd, OP_RX_STOP);
- 		else
--			data = i2c_op(pd, OP_RX_STOP_DATA);
-+			pd->msg->buf[real_pos] = i2c_op(pd, OP_RX_STOP_DATA);
- 	} else if (real_pos >= 0) {
--		data = i2c_op(pd, OP_RX);
-+		pd->msg->buf[real_pos] = i2c_op(pd, OP_RX);
- 	}
+-	while (i--)
++	while (--i)
+ 		if (stm32f7_i2c_specs[i].rate < rate)
+ 			break;
  
--	if (real_pos >= 0)
--		pd->msg->buf[real_pos] = data;
-  done:
- 	pd->pos++;
- 	return pd->pos == (pd->msg->len + 2);
 -- 
-2.26.0.106.g9fadedd
-
+2.26.2
 
