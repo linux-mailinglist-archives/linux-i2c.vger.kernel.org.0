@@ -2,68 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E5E1BF604
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Apr 2020 13:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596391BFCAB
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Apr 2020 16:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726837AbgD3LB1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 Apr 2020 07:01:27 -0400
-Received: from kernel.crashing.org ([76.164.61.194]:50516 "EHLO
-        kernel.crashing.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726413AbgD3LB1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Apr 2020 07:01:27 -0400
-X-Greylist: delayed 452 seconds by postgrey-1.27 at vger.kernel.org; Thu, 30 Apr 2020 07:01:15 EDT
-Received: from localhost (gate.crashing.org [63.228.1.57])
-        (authenticated bits=0)
-        by kernel.crashing.org (8.14.7/8.14.7) with ESMTP id 03UAtojD025184
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 30 Apr 2020 05:55:54 -0500
-Message-ID: <232b9fac588beb4d024ab496b118c51af2b0ecba.camel@kernel.crashing.org>
-Subject: Re: [PATCH v0 linux master] i2c/busses: Avoid i2c interrupt status
- clear race condition.
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Thu, 30 Apr 2020 20:55:48 +1000
-In-Reply-To: <20200429090355.GA2891@kunai>
-References: <20200429033737.2781-1-ryan_chen@aspeedtech.com>
-         <20200429075357.GA1957@kunai>
-         <56add9c6e6b5410986325a1360466e4b@TWMBX02.aspeed.com>
-         <20200429090355.GA2891@kunai>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1728766AbgD3OHS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 Apr 2020 10:07:18 -0400
+Received: from sauhun.de ([88.99.104.3]:40242 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729401AbgD3OHR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 30 Apr 2020 10:07:17 -0400
+Received: from localhost (p5486CDDB.dip0.t-ipconnect.de [84.134.205.219])
+        by pokefinder.org (Postfix) with ESMTPSA id 089F62C08FC;
+        Thu, 30 Apr 2020 16:07:14 +0200 (CEST)
+Date:   Thu, 30 Apr 2020 16:07:12 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+        Alain Volmat <alain.volmat@st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] i2c: stm32f7: prevent array underflow in
+ stm32f7_get_lower_rate()
+Message-ID: <20200430140712.GA3355@ninjato>
+References: <20200429132323.GB815283@mwanda>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oyUTqETQ0mS9luUI"
+Content-Disposition: inline
+In-Reply-To: <20200429132323.GB815283@mwanda>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 2020-04-29 at 11:03 +0200, Wolfram Sang wrote:
-> > And is there maybe a Fixes: tag for it?
-> > [Ryan Chen] Yes it is a fix patch.
-> 
-> I meant this (from submitting-patches.rst):
 
-It fixes the original implementation of the driver basically. It's just
-a classic posted-write fix. The write to clear the pending interrupt is
-asynchronous, so you can get spurrious ones if you return from the
-handler before it has percolated to the HW.
+--oyUTqETQ0mS9luUI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I assume it's just more visible on the 2600 because of the cores are
-significantly faster but the IO bus is still as dumb.
+On Wed, Apr 29, 2020 at 04:23:23PM +0300, Dan Carpenter wrote:
+> We want to break with "i" set to zero whether we find the rate we want
+> or not.  In the current code, if we don't find the rate we want then it
+> exits the loop with "i" set to -1 and results in an array underflow.
+>=20
+> Fixes: 09cc9a3bce91 ("i2c: stm32f7: allows for any bus frequency")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Ryan: You could always add a Fixed-by: tag that specifies the commit
-that added the initial driver...
+Applied to for-next, thanks!
 
-Cheers,
-Ben.
 
+--oyUTqETQ0mS9luUI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6q24wACgkQFA3kzBSg
+KbY5gA/6AzWyIXBatskD8xK+ZAovWjUjVQp5YTU97M1XZE2JP583MJkhqUjhd9Yg
+o/qYLs0VwUfk+Beir3RwwWmO6Kk0LoSs1ppxFcc0FKM69w7hQyU73T5sTWZTrEvH
+7m2wuhrTfLOHEIMCIrOzET+WXJF53PAJmyBpBtcO1kVLRT2lW7KILYc3pgRlgoI3
+WhOvgt8VhHmII4+qE7lZ/UhYdtwrIu0I9lcAPcfBndqCUKWLL8kKX1H5/AqSE2De
++R6Pce6v478wDnJ7FrSlgerJ+Kv/54NipuYzRyEm3tgEXJm5uQApMXulxi7Bhese
+E0ebjkvsLdfA842MS/+fIdxRSoyyZGgqS7zq6pOhubjsxdOo5evRDI3NdTcQhznZ
+XHvPUs9Cu0PBuyCanUPsfI7yxe/zLHY8wWCiLoZcSepLwp7ApU7aJSXqRTE/oCBZ
+1iorrv/gfPxLUA+KwhpeYE4pL+lX1p6l6zsSA1GItZzJrWUF9bnwXAHaw9eeJMIQ
+Srtbra0sUqqrVq3OkQvwC8erJ2GXbxe/NCVuU4OFAOtwq7zousxfVmI6l6N/+Ido
+Vs1wgDnBqvE57pl+LswFfVC25PR5MQ5C3Rxv6Lqi2N7o1lXFIAoXuON1tw/ymzB1
+Z3VZEApncCTQ4Mt5pXopoWGP8O8FAKAgzudUrjLsJfMUVVF+U6Y=
+=XwWa
+-----END PGP SIGNATURE-----
+
+--oyUTqETQ0mS9luUI--
