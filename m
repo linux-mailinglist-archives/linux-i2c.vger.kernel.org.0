@@ -2,117 +2,120 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C5F1C2157
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 May 2020 01:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CAB1C2528
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 May 2020 14:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726926AbgEAXo5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 1 May 2020 19:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726862AbgEAXo4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 May 2020 19:44:56 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3ADC08E934
-        for <linux-i2c@vger.kernel.org>; Fri,  1 May 2020 16:44:55 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id w14so5079195lfk.3
-        for <linux-i2c@vger.kernel.org>; Fri, 01 May 2020 16:44:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=jM94nNBrNF36elR9SpxnlLBXmyEcl3UvUFgw939tv+U=;
-        b=UqH8ThJ3xzqUpmwm//Yr7lwWMFKm/ZFNyucgLmFxmqJcLLJfsCxQRMJFaIROYDTET7
-         VybNUue8tOffcdzS/SVnUm/tnSIgNl0pr62AVXpCpNP3H6eg2nZ+anx+R0Eg6qrq8ZwZ
-         9Jr4D9Y64fshMRU0pnBDhD5+eHex8DoINUI4fAqFKyEN1IFkyZtKpOIoGOoaxMOncM4r
-         VFrCL0Cf/YZsgsgll5sjQ+4dyaa+zuM0e123imrspN3Vz+fr0WC5sBHlW093fTpoSudR
-         w06K5P3b/4y3bS/zA30xo3ebpi4R5Qt2Dl6nj7ZrsEuzj0SQDXIevHnwFkZuSUeEgIZ2
-         U4LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=jM94nNBrNF36elR9SpxnlLBXmyEcl3UvUFgw939tv+U=;
-        b=dTrkPuVALSJ++Li+CEZ+e32++vtnEzg5odhkgm8MCPYk5M4vTRJcIROvIaRy6HybkR
-         v0OcpQPaTXI4Wtselk8pxgW25pqFpPFLJkDb03M1bycW4G7kmaGSbf9MmLLL+Dy80QjS
-         lBdLEJEo8dgte274jkBBLeO64riYg+epxtVdASzVM7o1uVelg4wnwgHawBbmyl3iMtpO
-         VaJ/nbSqYG7wL1YBzeMH/ZupAkkNIyRapM0NGaNtXq6F9GtNm/bLFQ4xLgxliQazUyui
-         jmuj2UQSIRiKCvzKsZmyqgCegjrN5msPaCf18N35CSfdAKT/WBa3neGU3vNHV86GL13Q
-         10vQ==
-X-Gm-Message-State: AGi0PubnDrKWSEB0JeZIjFAmUZPfU0VEscheYEx/2+x0nCZQaLI/SsGj
-        tipgm5Ou7fBxnkz0HNS2cA4z1RKva/5KGC/6TGA=
-X-Google-Smtp-Source: APiQypLVlQD3woGbsLlInCpA3eW9cNYjQ0KqGdk2Tt/E2jpAgB8rQBFfnIGRonY8ZpWv7EaUM+ajsJyn4yNoKpyqdIg=
-X-Received: by 2002:a19:7004:: with SMTP id h4mr4124599lfc.166.1588376694034;
- Fri, 01 May 2020 16:44:54 -0700 (PDT)
+        id S1727072AbgEBMSx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 2 May 2020 08:18:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52664 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726896AbgEBMSx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 2 May 2020 08:18:53 -0400
+Received: from localhost (p5486C608.dip0.t-ipconnect.de [84.134.198.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3EE2C2064C;
+        Sat,  2 May 2020 12:18:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588421932;
+        bh=iIMxmKSfhwt9Y6WBsiFbb6OU8iD5jqB42Z04kdSzJG0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Jf5QJEKFAF9qRkTYpsdkEocVaUAt1PasLUrUUArEVzlSONdl31rDeP5hrDwOFJNA/
+         /xns3DCnNoOBuM2otzCp8X4r6BBCQoKAdOEktzEVbdDHEDIlgRcxKdQeC+OWfeqNM2
+         Ix4zcoC+7JiBN4P/23YxeUg3m1f09VwyRzQcHzhc=
+From:   Wolfram Sang <wsa@kernel.org>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: use my kernel.org address from now on
+Date:   Sat,  2 May 2020 14:18:35 +0200
+Message-Id: <20200502121840.9544-1-wsa@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Received: by 2002:a19:f50b:0:0:0:0:0 with HTTP; Fri, 1 May 2020 16:44:53 -0700 (PDT)
-Reply-To: robertmrwilson@gmail.com
-From:   "Mr. Wilson Robert" <tntcourierse0r@gmail.com>
-Date:   Sat, 2 May 2020 00:44:53 +0100
-Message-ID: <CAE4JwL85N8BOy2xfyOnNcHuMW4u8PncwxidG=ympAPjyXUxRhQ@mail.gmail.com>
-Subject: Dear Owner,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Mr. Wilson Robert
- Director Inspection Unit
- Hartsfield=E2=80=93Jackson International
- Airport, Atlanta Georgia United-States
- Regional Division Shipment
- Officer, Atlanta Georgia.
+The old email is still active, but for easier handling, I am going to
+use my kernel.org address from now on. Also, add a mailmap for the now
+defunct Pengutronix address.
 
- Dear Owner,
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+---
+ .mailmap                    | 2 ++
+ MAINTAINERS                 | 2 +-
+ drivers/i2c/i2c-core-base.c | 2 +-
+ drivers/i2c/i2c-core-of.c   | 2 +-
+ include/linux/i2c.h         | 2 +-
+ 5 files changed, 6 insertions(+), 4 deletions(-)
 
-I am Mr. Wilson Robert, Head Officer-in-Charge, and Administrative
-Service Inspection Unit United Nations Inspection Agency in
-Hartsfield=E2=80=93Jackson International Airport Atlanta, Georgia. During o=
-ur
-investigation, I discovered an abandoned shipment through a Diplomat
-from United Kingdom which was transferred from JF Kennedy Airport to
-our facility here in Atlanta, and when scanned it revealed an
-undisclosed sum of money in 2 Metal Trunk Boxes weighing approximately
-130kg each.
+diff --git a/.mailmap b/.mailmap
+index db3754a41018..4f906b4e9785 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -288,6 +288,8 @@ Vladimir Davydov <vdavydov.dev@gmail.com> <vdavydov@virtuozzo.com>
+ Vladimir Davydov <vdavydov.dev@gmail.com> <vdavydov@parallels.com>
+ Takashi YOSHII <takashi.yoshii.zj@renesas.com>
+ Will Deacon <will@kernel.org> <will.deacon@arm.com>
++Wolfram Sang <wsa@kernel.org> <wsa@the-dreams.de>
++Wolfram Sang <wsa@kernel.org> <w.sang@pengutronix.de>
+ Yakir Yang <kuankuan.y@gmail.com> <ykk@rock-chips.com>
+ Yusuke Goda <goda.yusuke@renesas.com>
+ Gustavo Padovan <gustavo@las.ic.unicamp.br>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 26f281d9f32a..46049787d27e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7949,7 +7949,7 @@ F:	Documentation/i2c/busses/i2c-parport.rst
+ F:	drivers/i2c/busses/i2c-parport.c
+ 
+ I2C SUBSYSTEM
+-M:	Wolfram Sang <wsa@the-dreams.de>
++M:	Wolfram Sang <wsa@kernel.org>
+ L:	linux-i2c@vger.kernel.org
+ S:	Maintained
+ W:	https://i2c.wiki.kernel.org/
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index a66912782064..ee013313b727 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -7,7 +7,7 @@
+  *   Mux support by Rodolfo Giometti <giometti@enneenne.com> and
+  *   Michael Lawnick <michael.lawnick.ext@nsn.com>
+  *
+- * Copyright (C) 2013-2017 Wolfram Sang <wsa@the-dreams.de>
++ * Copyright (C) 2013-2017 Wolfram Sang <wsa@kernel.org>
+  */
+ 
+ #define pr_fmt(fmt) "i2c-core: " fmt
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index 6787c1f71483..3ed74aa4b44b 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -5,7 +5,7 @@
+  * Copyright (C) 2008 Jochen Friedrich <jochen@scram.de>
+  * based on a previous patch from Jon Smirl <jonsmirl@gmail.com>
+  *
+- * Copyright (C) 2013, 2018 Wolfram Sang <wsa@the-dreams.de>
++ * Copyright (C) 2013, 2018 Wolfram Sang <wsa@kernel.org>
+  */
+ 
+ #include <dt-bindings/i2c/i2c.h>
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 45d36ba4826b..49d29054e657 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -2,7 +2,7 @@
+ /*
+  * i2c.h - definitions for the Linux i2c bus interface
+  * Copyright (C) 1995-2000 Simon G. Vogl
+- * Copyright (C) 2013-2019 Wolfram Sang <wsa@the-dreams.de>
++ * Copyright (C) 2013-2019 Wolfram Sang <wsa@kernel.org>
+  *
+  * With some changes from Kyösti Mälkki <kmalkki@cc.hut.fi> and
+  * Frodo Looijaard <frodol@dds.nl>
+-- 
+2.20.1
 
- The consignment was abandoned because the Content was not properly
-declared by the consignee as money rather it was declared as personal
-effect/classified document to either avoid diversion by the Shipping
-Agent or confiscation by the relevant authorities. The diplomat's
-inability to pay for Non Inspection fees among other things are the
-reason why the consignment is delayed and abandoned.
-
- By my assessment, each of the boxes contains about $8.5M or more.They
-are still left in the airport storage facility till today. The
-Consignments like I said are two metal trunk boxes weighing about 65kg
-each (Internal dimension: W61 x H156 x D73 (cm) effective capacity:
-680 L) Approximately. The details of the consignment including your
-name and email on the official document from United Nations' office in
-London where the shipment was tagged as personal effects/classified
-document is still available with us. As it stands now, you have to
-reconfirm your full name, Phone Number, full address so I can
-cross-check and see if it corresponds with the one on the official
-documents. It is now left to you to decide if you still need the
-consignment or allow us repatriate it back to UK (place of origin) as
-we were instructed.  (REPLY TO THIS EMAIL:robertmrwilson@gmail.com)
-
- As I did say again, the shipper abandoned it and ran away most
-importantly because he gave a false declaration, he could not pay for
-the yellow tag, he could not secure a valid non inspection
-document(s), etc. I am ready to assist you in any way I can for you to
-get back this packages provided you will also give me something out of
-it (financial gratification). You can either come in person, or you
-engage the services of a secure shipping/delivery Company/agent that
-will provide the necessary security that is required to deliver  the
-package to your doorstep or the destination of your choice. I need the
- entire guarantee that I can get from you before I can get involved in
- this project.
-
- Please reply this email strictly at  .
-
- Best Regards,
- Mr. Wilson Robert
- Head Officer-in-Charge
- Administrative Service Inspection Unit
