@@ -2,89 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAAE1C2CB6
-	for <lists+linux-i2c@lfdr.de>; Sun,  3 May 2020 15:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5D21C2CB8
+	for <lists+linux-i2c@lfdr.de>; Sun,  3 May 2020 15:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728548AbgECNXs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 3 May 2020 09:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728378AbgECNXs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 3 May 2020 09:23:48 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48441C061A0C;
-        Sun,  3 May 2020 06:23:48 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id x6so1001483plv.8;
-        Sun, 03 May 2020 06:23:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=iSFC45SzZleqEQtMOgbxTxHu0cI+C5iln/qZ/stfWz4=;
-        b=WHL2LquvLUyxTY2HKw9fsSSn1uydDuqSKOXsaPRB9ZxLDOqh6rqD5DaqH/hqUf5ErZ
-         4012cwKJ+MxJ5dwjf3yG3d2SeR6Z3dDcE6Np91DYd4BNlfMbjKOT9W4FdFQ9ZffJMMm9
-         YhxZb14BKzhaFNKisJ667CesfepmRMjgvq6ET6LOLjgFtlzheRU2vTpFcSgobm4Sfj4k
-         8AhH5Z83ndxesADhXzOAwu/BRa8B5ahWGi4Ujjukkk1Xitvc1nHTrh+UDjKFeAA3qXJG
-         U/UbXT9zxYsBd0WCqyAepDbL8hxTpq0ebkyYSEPYaar4IMmGxC9IlEAiFMIH4eBqeEN+
-         iGbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=iSFC45SzZleqEQtMOgbxTxHu0cI+C5iln/qZ/stfWz4=;
-        b=sj3ZfKIHq9Uz2AuIOcnCyK+0d7r3toz1rl0PNdFzCmQHL9qcFfapu7O4tOEyxfA+ir
-         2X9JXoVSs2a3F5qf9TrIcqLHWKSdzEG/mIczH+b9UZ1+M71hAKtpgkJUn1S8UflOq9oz
-         a+uVSEYvLFWa2DejX2UHjYvyPi1O32aWuGyF6opFW4YAPc6ZcqnaC0E27B2VgdSkhvNP
-         J1pRVlKbG7HDXhds3jjaWVWIxMe8SK+cS/kSwVnA+XtBnHShjfxGX65SwWQ8cDGpYTPI
-         Tat4iuqAbHyoTmggba1yqSLqd5poWcQ8In3a1vGt+gPlkkbjG9U5ZxcqUq5UHi0vSWNM
-         mcxA==
-X-Gm-Message-State: AGi0PuZ2GKx5AqNHJJxd63pGgOpcsy9HmT7bToiSMCi7FRwF40kzVu67
-        cA+fdzHUrgHzahwkvCOPzC8=
-X-Google-Smtp-Source: APiQypIdD7jNt/0XcbilzJsf4d9CM/WtqlgE+2p/WU2k73PcXfw//99bcFIIMghDWFRMiBPA4bS9Hg==
-X-Received: by 2002:a17:902:9042:: with SMTP id w2mr13647438plz.127.1588512227752;
-        Sun, 03 May 2020 06:23:47 -0700 (PDT)
-Received: from localhost.localdomain ([2409:4072:8b:8746:38:47a5:7bcb:f964])
-        by smtp.gmail.com with ESMTPSA id l1sm5895875pgn.66.2020.05.03.06.23.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 May 2020 06:23:46 -0700 (PDT)
-From:   Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>, linux-i2c@vger.kernel.org,
+        id S1728467AbgECN3N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 3 May 2020 09:29:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46060 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728378AbgECN3N (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 3 May 2020 09:29:13 -0400
+Received: from localhost (p54B33FBF.dip0.t-ipconnect.de [84.179.63.191])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B538020752;
+        Sun,  3 May 2020 13:29:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588512552;
+        bh=4JWSkq2cpw2BiP+K3FyaxSJGQXjScmAftWrqg7rnk0U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ncI0ibVX7g2+5ycsBniA1qkCTQNyqh8iKYA5g9e/xNfr4HnaUpBD099vKdhn7pGME
+         6IdSJSIQegG79efK+SFITq4Defjn+ABBATGj37/P8H7mxcUIfUtydEI4OxLXP31CRP
+         uCvDzwn2TkjePdkmMFF9UPEogPrdtgZj9te6QmPE=
+Date:   Sun, 3 May 2020 15:29:06 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     aishwaryarj100@gmail.com
-Subject: [PATCH] i2c: cht-wc: Remove superfluous error message in cht_wc_i2c_adap_i2c_probe()
-Date:   Sun,  3 May 2020 18:53:38 +0530
-Message-Id: <20200503132339.17718-1-aishwaryarj100@gmail.com>
-X-Mailer: git-send-email 2.17.1
+Subject: Re: [PATCH] i2c: uniphier: Remove superfluous error message in
+ uniphier_i2c_probe()
+Message-ID: <20200503132906.GA32207@ninjato>
+References: <20200503120847.13528-1-aishwaryarj100@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zhXaljGHf11kAtnf"
+Content-Disposition: inline
+In-Reply-To: <20200503120847.13528-1-aishwaryarj100@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The function platform_get_irq can log an error by itself.
-This omit a redundant message for exception handling in the
-calling function.
 
-Suggested by Coccinelle.
+--zhXaljGHf11kAtnf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
----
- drivers/i2c/busses/i2c-cht-wc.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Sun, May 03, 2020 at 05:38:47PM +0530, Aishwarya Ramakrishnan wrote:
+> The function platform_get_irq can log an error by itself.
+> This omit a redundant message for exception handling in the
+> calling function.
+>=20
+> Suggested by Coccinelle.
+>=20
+> Signed-off-by: Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
 
-diff --git a/drivers/i2c/busses/i2c-cht-wc.c b/drivers/i2c/busses/i2c-cht-wc.c
-index 35e55feda763..343ae5754e6e 100644
---- a/drivers/i2c/busses/i2c-cht-wc.c
-+++ b/drivers/i2c/busses/i2c-cht-wc.c
-@@ -314,10 +314,8 @@ static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
- 	int ret, reg, irq;
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0) {
--		dev_err(&pdev->dev, "Error missing irq resource\n");
-+	if (irq < 0)
- 		return -EINVAL;
--	}
- 
- 	adap = devm_kzalloc(&pdev->dev, sizeof(*adap), GFP_KERNEL);
- 	if (!adap)
--- 
-2.17.1
+Please send only one patch for the whole I2C subsystem.
 
+
+--zhXaljGHf11kAtnf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6uxx4ACgkQFA3kzBSg
+KbZdtA//Y6lCK360CUvB9MxuvS/hhnxeaVtnqwL+5QEFQjabnOTw1EFXji4ihhAX
+IBvWE6pLYag6SHHC3GN224jR6b5AS+8wLBGmy052fFCn5/DrphXupF7+wCgjZZVG
+q5/i1XUlJeqwxLBGfQ8JuyBkfQhmSp1K0xUpcPZfT7eso/mE0L3ZJ3TskesoubWi
+VKpelcUTuCJ3QgP9llXlwhMnbn4GQARDzThv4mdogCbfkh8t+YKUVMy9t9vo/BZ0
+X7xRjBlFq7slq4Ua+Y/QWeTmyo7sj6IgG4KB23fUvouGqYzPXJnD/pAl/IOf8Q8b
+/YLQSKD3lEs1V0zn/WaI1q+H+bd5qwJSk0wOVeL3UoCPJACVtWzJhTM8PJrm5i1+
+Gt6YFZ9KFdRDB8rCR6J0bcuGYw85QZ+egAnrRz/0jy1dbx3NcYSlrEpgt9+jC5uN
+reJTbrCKoG1EeWGqY6klbE67C8Fg+4uHLf4ipAMc/74BV3+YD4fXu/hYjERdjhWp
+jADtF4tpkFw8mKQdv+r8auhVR8Gu2mcR6MFkZDbwStXpTAlvKZkfPUU6Ue/n//De
+aASsTid88R9o5INCqIHNyisKSOwdlJlnX/WU5wTXYbvAeIoGa/Ay4ZETy2eBcFMM
+9Fi81whNJNI6g9w1hgcT0MquELnDHiY3tiizj1yHeOn7o5MYQkA=
+=gWoi
+-----END PGP SIGNATURE-----
+
+--zhXaljGHf11kAtnf--
