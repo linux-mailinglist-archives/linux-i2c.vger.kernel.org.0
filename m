@@ -2,68 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C23F1C2FD9
-	for <lists+linux-i2c@lfdr.de>; Sun,  3 May 2020 23:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C4D1C307B
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 May 2020 02:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729143AbgECVyc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 3 May 2020 17:54:32 -0400
-Received: from mout.gmx.net ([212.227.17.20]:41729 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729117AbgECVya (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 3 May 2020 17:54:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1588542869;
-        bh=OAlbvgtytXYz+CcyLbjAzIjeJ7FkyZJ2h99cuYoW4oA=;
-        h=X-UI-Sender-Class:From:To:Subject:Date;
-        b=NntIMDKxNiUnzJdsCRhxKx7lfDeLebT0+Epajl13xPsxQxu8V5m19THjtVJIdfa6H
-         Pmxnbq2ZcvIEpNenwSE7tyIZIfSDi+eSp2uFX6+gfDhvwR79xQD6+cZt1dP3RNOpQa
-         3472SVezPMblAaLmR7x5e/XejY0aGGPpPzVDU5Uw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [188.195.14.98] ([188.195.14.98]) by web-mail.gmx.net
- (3c-app-gmx-bap09.server.lan [172.19.172.79]) (via HTTP); Sun, 3 May 2020
- 23:54:29 +0200
+        id S1726549AbgEDA1l (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 3 May 2020 20:27:41 -0400
+Received: from condef-09.nifty.com ([202.248.20.74]:51969 "EHLO
+        condef-09.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726420AbgEDA1k (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 3 May 2020 20:27:40 -0400
+X-Greylist: delayed 460 seconds by postgrey-1.27 at vger.kernel.org; Sun, 03 May 2020 20:27:39 EDT
+Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-09.nifty.com with ESMTP id 0440G9b4006708
+        for <linux-i2c@vger.kernel.org>; Mon, 4 May 2020 09:16:09 +0900
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 0440FoVN019532;
+        Mon, 4 May 2020 09:15:51 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 0440FoVN019532
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1588551351;
+        bh=lq9Uzj7pb5PQFw+VXMD0iM6sIqPMlYMT850vnF71eIo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HsBDug0cOUu+9rxknFugrSdSxYyIwJWW+s7GijIMgAsUFtnpSIoyJrCDiye8j/kPj
+         scqMRUqeJSqFN68aD2vEzf6d6n1Ue6VPpBQaWbCxXrXc4JAICS1nlR4h0brVGviO3Q
+         Um+tGVfkYN2958pvKXwzR8tfx0Ym7BsZebBqyuGvoFFH62xgqv30hVb/KC8qlaRXn/
+         7Sjf0dNVy8Ov6IVcN+Rf3In46YOinVAtXp3APTbL98oo8HNkv5oeYhjbVZ/bBpgcP8
+         v9dbfRvLJB8cy/+S/72yjVB/d678m9ebiBlYDXkKYh4TAshvcuSxQCLS4P9a9zIn9M
+         M9v+0sXHqm50w==
+X-Nifty-SrcIP: [209.85.217.45]
+Received: by mail-vs1-f45.google.com with SMTP id g2so10088114vsb.4;
+        Sun, 03 May 2020 17:15:51 -0700 (PDT)
+X-Gm-Message-State: AGi0PuYRev+NcrVBUzrKem0r7PRPZGwmGE+3H+7TtOEFMG7iKmZczw3n
+        N9KAQ0aMg7Ihy+WVoalShjaQc8Z2oM//xBmnQCc=
+X-Google-Smtp-Source: APiQypJF8ynSDKYMiOHyG945XHqTJ6m0pJp8ZtLPkrwqgVAa+C06wpn4TeCNBGXLAEEkRYNonO/ieONdJXKxdJY3GoI=
+X-Received: by 2002:a67:e94d:: with SMTP id p13mr9916129vso.215.1588551349876;
+ Sun, 03 May 2020 17:15:49 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <trinity-75a89c3f-a865-466a-83a5-0f1c33e78d67-1588542869035@3c-app-gmx-bap09>
-From:   "Andreas Sachs" <andilist@gmx.de>
-To:     linux-i2c@vger.kernel.org
-Subject: i2c with python: read block without cmd
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 3 May 2020 23:54:29 +0200
-Importance: normal
-Sensitivity: Normal
-Content-Transfer-Encoding: quoted-printable
-X-Priority: 3
-X-Provags-ID: V03:K1:12PPOR3BU6+Udqo8xSOITBU/zc8nap7xccS+8ByhjcyQJS64eNq9DurzQB1cYo4BGmpbI
- 2HYqq4D2WFISHNTbqzlq4cULVyN4zf4+0ey41H9bF4Zt+wCnbIkU+NGzUH2bKNv/UHgt270KGaHK
- CZkvv3Mm8lRRELHrZb47ftMD4fwmKhFTZeCES0OfAF5EHdJOpjCHAb01s5R2IT8X73DsRMDmAQLG
- dUkbWvbc5FE/Dzqs/wHedO9eE0d2acCewMT8cchy93WAFRrdwA6ve/uaENUo6MozM3wuimiL309b
- QI=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:AWDKbmNDKGU=:7CKcBaPmgM0uwg0hknSE5b
- 3kSBIE6nI4AK+xeFAj2aBze2e+p0kNZ7wW4vfpDGD2tVYSD8y9YwwhU2dZECCq7FqcF3DIchS
- MsiwwxIR7qb9Kw3ZQsAAwEvIevq6L/gpDeXTFkx/yAcF04el7yqil13Z/wEHgIwqL3NvU1DOV
- Z2XDhR9Ml7hLI6AYZVLgiYz/F/SFiAPHG8l777lq8m9ULSVjaAiLocN95Ikxd+7PJE0LqBc62
- P/1+uVi0o1Y5c2sQ4WKuT3pJAkPqWPUJoHC7rb/cV+Cb8+o1uLqDxzxt8IqpA85qA9VS7BpjX
- lM9zLLf+8401hrfcwav8vbj13ZWaQlA0pz8qI5Nzfp0UfJL9nL9ePJJeJZ56EVOitTCuwdqda
- AaMovCwWFADxIYp5ndv6brd9HrorrQguCVnYhG2y17eDieJB5BDwnDUejm0yLMuUsrhpdH9RN
- VXGL0qJF9VozONFYjYTkt8bqDDj/qgbpmMPPM3ypP+GHxYiMRKhhcVXYtJ1F67SHUuIo+Y5iB
- HXsGBrVtMScEwdIJaciXDmzjJqYDQmHM2TlBvc2yD8KeWN0r1NgDYyEx8xlWz6SQHQbjOlwwf
- lnCwAmjiS7Or0AxqyJZZz/l3R1+OpY1pHVgqYcjMn2aHZgr7sveaxwx5cJF6tZnHej3o2HOuh
- 1u1rKHssR0NSZ/x1oKj3KzzZbI70SsSrL9R9m7sMT+lrUe8/mSX9JAKN4JUsb4+HEjh0=
+References: <20200503120847.13528-1-aishwaryarj100@gmail.com> <20200503132906.GA32207@ninjato>
+In-Reply-To: <20200503132906.GA32207@ninjato>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 4 May 2020 09:15:14 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASXgD7Y2SToycCLYX2zVN-L5uWRoCzQ3N7MjoT+j0KfkQ@mail.gmail.com>
+Message-ID: <CAK7LNASXgD7Y2SToycCLYX2zVN-L5uWRoCzQ3N7MjoT+j0KfkQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: uniphier: Remove superfluous error message in uniphier_i2c_probe()
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>,
+        linux-i2c@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello,
-i want to read several bytes from an i2c device without specifing a cmd=2E
-I found a fork of i2c-tools Version 3 that makes that possible: https://gi=
-thub=2Ecom/MLAB-project/i2c-tools=2E There are two new functions: write_i2c=
-_block and read_i2c_block
-=C2=A0=C2=A0 =C2=A0
-I downloaded Version 4, added the code of the fork to Version 4 and built =
-it=2E As far as I've tested it, it is working=2E
+On Sun, May 3, 2020 at 10:29 PM Wolfram Sang <wsa@kernel.org> wrote:
+>
+> On Sun, May 03, 2020 at 05:38:47PM +0530, Aishwarya Ramakrishnan wrote:
+> > The function platform_get_irq can log an error by itself.
+> > This omit a redundant message for exception handling in the
+> > calling function.
+> >
+> > Suggested by Coccinelle.
+> >
+> > Signed-off-by: Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
+>
+> Please send only one patch for the whole I2C subsystem.
+>
 
-Is this also possible with the official version without patching it?=C2=A0
-Thanks
-Andreas
+Yeah, and then please add my ack to v2.
+
+Acked-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+
+
+-- 
+Best Regards
+Masahiro Yamada
