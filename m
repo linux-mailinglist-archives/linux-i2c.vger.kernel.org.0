@@ -2,87 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D6C1C5A14
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 May 2020 16:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9169E1C5ABF
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 May 2020 17:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729264AbgEEOwl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 May 2020 10:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729247AbgEEOwl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 May 2020 10:52:41 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E51C061A0F;
-        Tue,  5 May 2020 07:52:41 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id ms17so1202637pjb.0;
-        Tue, 05 May 2020 07:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=qeWqebBHbrz9NQE1LcRIuA9aTCykR2qMhUZdHa+RvL0=;
-        b=fjUIqMr+zGxzzUUBgAEuYYK9aZncUkkyFdarjhMrNGCgOunWKLZeSIhCtRXw99thdD
-         oiyjjFE+DRHnFQhUkWg+iK3KFLZDVF5n9ZpdOpIjwy6mpoSU130fSMdRgIe0f3R35UWX
-         f4CAADXAst1CY/ucuPMN2nfq0ldp/bIGdCfsVI6TCNfVuB0PmMLQp/KgDeHvuYoPBYKW
-         EwX94ySVNV/XPu4GCgbuhp/qpxni/sIaBWn1x765W6uubdhKpVSIGVtWVWzphKgXeQli
-         E36Vi/5qUqFHu4xnRTENDoPNpeHC71anz7MYoQ4EpPWz9UvX59IacPvIWcrUnB0n+YR+
-         Pk6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=qeWqebBHbrz9NQE1LcRIuA9aTCykR2qMhUZdHa+RvL0=;
-        b=B7fNtFAHTVOZlJhjXG45SG3vxFopZ/w3Mj3fscrCW0jO0ayD83Z/+HLeaQ9pOk8ou4
-         fVnDlB1SDEUCLfKJ+wN/SkIDwaUzDo0Zf6uf1DDvimvnUqP5AfzaFxaExGOzbyc/yHfh
-         +3FycyaFNBfBXX2pJf8hS1EPWKg4yekQF2/rcoDWR4vwRqnAoaS7J2q1CFAvAbYDswy5
-         qvOJJ8ll/8VqanpeGD+QcOjGcEdOiRlJONbjufpxzFLVBmrFeWcQ1kKNSDK/+5s76XZC
-         yMNBywgdB0lApKdzV9YIHMjGVtUBYDLENgJ4RuR83t4JItflCA91HIUUOk8AfDPsynKJ
-         XD+A==
-X-Gm-Message-State: AGi0PubZPGsQCSRzq5ktaKMyyLNgtubMUqUufgRqOCE7lg8e6xXXmvkp
-        lQF2I/K8OgTK3Dh7QTwfzD7d956G+XU=
-X-Google-Smtp-Source: APiQypL1DKywSBZ86WXFhTqtJMGcw+qG8kDnXiyGO0lp/kyvsgEzWRpSdWtSWECCJVtxUqz6kdAPPg==
-X-Received: by 2002:a17:90a:ad02:: with SMTP id r2mr3597818pjq.63.1588690360880;
-        Tue, 05 May 2020 07:52:40 -0700 (PDT)
-Received: from localhost.localdomain ([2409:4072:60b:fcd9:7c28:bcca:10e4:5523])
-        by smtp.gmail.com with ESMTPSA id d2sm2249630pfc.7.2020.05.05.07.52.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2020 07:52:40 -0700 (PDT)
-From:   Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
-To:     Ajay Gupta <ajayg@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     aishwaryarj100@gmail.com
-Subject: [PATCH] i2c: nvidia-gpu: Use PTR_ERR_OR_ZERO() to simplify code
-Date:   Tue,  5 May 2020 20:22:30 +0530
-Message-Id: <20200505145230.17251-1-aishwaryarj100@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1729530AbgEEPM6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 May 2020 11:12:58 -0400
+Received: from sauhun.de ([88.99.104.3]:34206 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729332AbgEEPM6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 5 May 2020 11:12:58 -0400
+Received: from localhost (p54B335A1.dip0.t-ipconnect.de [84.179.53.161])
+        by pokefinder.org (Postfix) with ESMTPSA id 7F2872C0892;
+        Tue,  5 May 2020 17:12:56 +0200 (CEST)
+Date:   Tue, 5 May 2020 17:12:56 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Cc:     linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, kamel.bouhara@bootlin.com,
+        linux@armlinux.org.uk, linus.walleij@linaro.org, alan@softiron.com
+Subject: Re: [RFC PATCH] i2c: at91: Fix pinmux after devm_gpiod_get() for bus
+ recovery
+Message-ID: <20200505151256.GF2468@ninjato>
+References: <20200415070643.23663-1-codrin.ciubotariu@microchip.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="twz1s1Hj1O0rHoT0"
+Content-Disposition: inline
+In-Reply-To: <20200415070643.23663-1-codrin.ciubotariu@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PTR_ERR_OR_ZERO contains if(IS_ERR(...)) + PTR_ERR.
 
-Generated by: scripts/coccinelle/api/ptr_ret.cocci
+--twz1s1Hj1O0rHoT0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
----
- drivers/i2c/busses/i2c-nvidia-gpu.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+On Wed, Apr 15, 2020 at 10:06:43AM +0300, Codrin Ciubotariu wrote:
+> devm_gpiod_get() usually calls gpio_request_enable() for non-strict pinmux
+> drivers. These puts the pins in GPIO mode, whithout notifying the pinctrl
+> driver. At this point, the I2C bus no longer owns the pins. To mux the
+> pins back to the I2C bus, we use the pinctrl driver to change the state
+> of the pins to GPIO, before using devm_gpiod_get(). After the pins are
+> received as GPIOs, we switch theer pinctrl state back to the default
+> one,
+>=20
+> Fixes: d3d3fdcc4c90 ("i2c: at91: implement i2c bus recovery")
+> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-index f5d25ce00f03..f480105000b8 100644
---- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-+++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-@@ -277,10 +277,7 @@ static int gpu_populate_client(struct gpu_i2c_dev *i2cd, int irq)
- 	i2cd->gpu_ccgx_ucsi->irq = irq;
- 	i2cd->gpu_ccgx_ucsi->properties = ccgx_props;
- 	i2cd->ccgx_client = i2c_new_client_device(&i2cd->adapter, i2cd->gpu_ccgx_ucsi);
--	if (IS_ERR(i2cd->ccgx_client))
--		return PTR_ERR(i2cd->ccgx_client);
--
--	return 0;
-+	return PTR_ERR_OR_ZERO(i2cd->ccgx_client);
- }
- 
- static int gpu_i2c_probe(struct pci_dev *pdev, const struct pci_device_id *id)
--- 
-2.17.1
+Applied to for-current, thanks!
 
+This will do for 5.7. For 5.8 or 5.9, I can imagine to take the two
+pinctrl_state pointers into bus_recovery_info and handle all this in the
+core. I will try this later this week if noone is super-eager to try it
+out before.
+
+
+--twz1s1Hj1O0rHoT0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6xgnQACgkQFA3kzBSg
+KbbY+xAArfL/iEHhieAsZoajJ8HCWqBjKMu523a4uPpmSCk4jP9UIqOQqtUac4tK
+wUCJg3LXJvbT8pfvfxAcSTHYjgVIvh0br6N44vO5zWz6uTlyEH0LXrg8NP9qrECb
+B5HHfsFxVWhTMuFTgcqRHel1qHzhd3rWCebhfdiFrBcHpM6xmeB9VlYyXoq4/qx5
+p3/5LwgKJW4xo4AT2J3PCfX5h/zVdIzeWW9qPX+xyUtCJ0MpCxsVxStpUXwudIH2
+rJahIU7t0NL0MtKLa4Waf8PjQULKShZc1vrQ/QQhi50kLicGkPwQSJnkFe+lLnjS
+aMGEKiJajucG8tz1nqsg8A2CsXpUC70f7bwQP7kGlUVPqEPp13soeor9qoKIClfX
+LleANdq18XOlIIRKGtcLKvg/abHXk1/OQ9efNx8Aa4G30im3rozCwbR+Fpn+mLZC
+oANKeX7VJ+DmuYqiWaD23Iz/j3M2skgBmUeuzAMYvA+OX6lERmWWnBqEMAqb0si2
+nngZTQcBg1s8HEbeDMkH7N9zu47bEdXAARoFE9ys16uZK3A7RRNnv46NSjZAph1b
+uepFxAB8QGm9a+sLjLY4Ym/G6vBAv9CRh5FCLDxZ1ODzYZfEiPtt3umtz7DFfGKp
+/9wolNpCGqYXQHYwgmakJq5f9MEASvhl4GNag81Qi1AHgRJeDqs=
+=kQ/H
+-----END PGP SIGNATURE-----
+
+--twz1s1Hj1O0rHoT0--
