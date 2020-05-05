@@ -2,39 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 003031C5988
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 May 2020 16:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 926451C59CC
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 May 2020 16:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729201AbgEEO3y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 May 2020 10:29:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60954 "EHLO mail.kernel.org"
+        id S1729812AbgEEOhm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 May 2020 10:37:42 -0400
+Received: from sauhun.de ([88.99.104.3]:33898 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728749AbgEEO3y (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 5 May 2020 10:29:54 -0400
+        id S1729259AbgEEOhm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 5 May 2020 10:37:42 -0400
 Received: from localhost (p54B335A1.dip0.t-ipconnect.de [84.179.53.161])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 44542206A5;
-        Tue,  5 May 2020 14:29:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588688993;
-        bh=hHch9Qk35tfnWGRiDodyVa26GalnDkMLxb2qrD7VAds=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dsrlqP5MZG8yng1YWvokyQGcmpsxZict3xCGoZOhhXmXVHz657gUCbNFigQ61SVZD
-         V3DV8X66RhVroB998uohF09LwQW04WVh/4sLprPsI9JyDQo9VjbmM56VnoHMNZXFpM
-         fycLPTvQvg+nVdOnWNopz/KqBZHDVfMl8+Z/1aP8=
-Date:   Tue, 5 May 2020 16:29:50 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: use my kernel.org address from now on
-Message-ID: <20200505142950.GD2468@ninjato>
-References: <20200502121840.9544-1-wsa@kernel.org>
+        by pokefinder.org (Postfix) with ESMTPSA id 1C0DE2C0892;
+        Tue,  5 May 2020 16:37:40 +0200 (CEST)
+Date:   Tue, 5 May 2020 16:37:39 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org, peda@axentia.se,
+        linux@armlinux.org.uk
+Subject: Re: [PATCH v4 1/4] i2c: at91: Send bus clear command if SDA is down
+Message-ID: <20200505143739.GE2468@ninjato>
+References: <20200225155012.22764-1-codrin.ciubotariu@microchip.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6Nae48J/T25AfBN4"
+        protocol="application/pgp-signature"; boundary="J4XPiPrVK1ev6Sgr"
 Content-Disposition: inline
-In-Reply-To: <20200502121840.9544-1-wsa@kernel.org>
+In-Reply-To: <20200225155012.22764-1-codrin.ciubotariu@microchip.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -42,39 +37,41 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---6Nae48J/T25AfBN4
+--J4XPiPrVK1ev6Sgr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 02, 2020 at 02:18:35PM +0200, Wolfram Sang wrote:
-> The old email is still active, but for easier handling, I am going to
-> use my kernel.org address from now on. Also, add a mailmap for the now
-> defunct Pengutronix address.
+On Tue, Feb 25, 2020 at 05:50:09PM +0200, Codrin Ciubotariu wrote:
+> After a transfer timeout, some faulty I2C slave devices might hold down
+> the SDA pin. We can generate a bus clear command, hoping that the slave
+> might release the pins.
+> If the CLEAR command is not supported, we will use gpio recovery, if
+> available, to reset the bus.
 >=20
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-Applied to for-current, thanks!
+Applied to for-next, thanks!
 
 
---6Nae48J/T25AfBN4
+--J4XPiPrVK1ev6Sgr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6xeF4ACgkQFA3kzBSg
-KbYtaQ/+N0tB4bS/c5jtXMkgrmSCPLhNa6mvoSw9WlLnEfbxPyF4Cc9qq5rub8YC
-IO7rOSIHdjriuLRQnbbEE+B6LECuHHwQd1WtCSgqvDUDPmVd3DobWGjHNps7fHvr
-9NGH+pQ7yQKVzxLJ2W36tL058xvBEccmsZMVpawaZP5ZyKgSlZ4XxzyNL64BguVS
-aqIiFPFx7svD1r9KtZ/AyQ44aA5cjV6rOmqHYF+rFPMsWn4NUWXg4tMlCDhUG2dv
-+OaF9qVq6aPNkoZN5IvrAkUUBu4yT3bJViRzx5s69SOiI+8ekJAO+3rh6vuqC8XD
-OHrMOQQHlQNv9UfcJiiqc1u/Fe2LA59iCl4JQIbkjiCu6R6MkyLlsrNrksmicNdF
-JmAtqNyL+ube9+QdJvcUejW1YPhMS4cErF+wwa7LndUq7Emx9fgd9U/NjSFA5hqX
-aDWkBUzcwp36pk4SVBimMkR65U6dpT0J2zXzrxSKLwfyTTmQzEpPde4JgaNQIOUX
-a3HgU/8WSrUt5WUI3qaNHzOdzrbLX8SVdd5L3wSFrxNze76Eb9ZlFU4lMYo835R3
-51pZoKo7Dd6AwKGmoNyfbxCs3C7xtUnwQbHMDaSv7XMoC8cvWS+9Z8vAEk/cLpxV
-7aMdIx4hH0buoEDSwojdZ9bMUnD9PpjSJXnNthcclURPGy2TsuE=
-=VlMG
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6xejMACgkQFA3kzBSg
+Kba7ng//aczcnwIHXEHGSAGdX7AjPZp/niO98R7pHZFfdm2mzqMTZ033SOgF6hSt
+dCiYvgUUkCfo5gnOaIgJgBX/l/H6JY8MsScJi/zZQKZJgj4RR1b0xJgtcxjIMbb0
+C/WHo29TSP7tutQph38nJa9S1T9hx9AulHgb0Xrmb2s7Qo3iLyame1VxP1pmWreO
+U7KID0sB34vmdXKI9aC9T8Uh9eA2xwkceqZedr3+Cp68S0ljLhYnir1p3jnXEb0P
+49+yIOBRDdTc5OImkGheeySqoIZ/pHl/6HtKkNXFpx9mrt/chhAWoDKMAb35tDtD
+ZrC/8lTTc19r6WxqrSg1LeI9SwXAlYCY8SHNNsx5vUZxKmOQWoTAdZbOz4v/+NRe
+LBlgO6BTKre2//N2qzgQm5ZeEqsDYeCLat5EK6l+EJQ0v4SyKHsC8UM2jyq0UY6g
+Uiu9ursq22CUDwuUOSDjeJEQ5BFJOjF3dgJCKq+L7FzdunQGVr5usvf6MtiX+Y7h
+bDP913w76vEvPvj7QhSwXK6qazZ3v3Q9Mz74cMmFXOczxe9GHgSouqBrbxYgjU3k
+kV4hEaDLfHUrsE4FwFkt/Suq4Cn9UHBpG4ZgTbnKIjIxNrYb6oQqT915kA1GjTRf
++KW8m5gpTU6zdVRHgHX9FYSBzYvG+BsYk+W2c88teSd1HBpzn8A=
+=vY/v
 -----END PGP SIGNATURE-----
 
---6Nae48J/T25AfBN4--
+--J4XPiPrVK1ev6Sgr--
