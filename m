@@ -2,76 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 926451C59CC
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 May 2020 16:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D6C1C5A14
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 May 2020 16:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729812AbgEEOhm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 May 2020 10:37:42 -0400
-Received: from sauhun.de ([88.99.104.3]:33898 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729259AbgEEOhm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 5 May 2020 10:37:42 -0400
-Received: from localhost (p54B335A1.dip0.t-ipconnect.de [84.179.53.161])
-        by pokefinder.org (Postfix) with ESMTPSA id 1C0DE2C0892;
-        Tue,  5 May 2020 16:37:40 +0200 (CEST)
-Date:   Tue, 5 May 2020 16:37:39 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org, peda@axentia.se,
-        linux@armlinux.org.uk
-Subject: Re: [PATCH v4 1/4] i2c: at91: Send bus clear command if SDA is down
-Message-ID: <20200505143739.GE2468@ninjato>
-References: <20200225155012.22764-1-codrin.ciubotariu@microchip.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="J4XPiPrVK1ev6Sgr"
-Content-Disposition: inline
-In-Reply-To: <20200225155012.22764-1-codrin.ciubotariu@microchip.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1729264AbgEEOwl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 May 2020 10:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729247AbgEEOwl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 May 2020 10:52:41 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E51C061A0F;
+        Tue,  5 May 2020 07:52:41 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id ms17so1202637pjb.0;
+        Tue, 05 May 2020 07:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=qeWqebBHbrz9NQE1LcRIuA9aTCykR2qMhUZdHa+RvL0=;
+        b=fjUIqMr+zGxzzUUBgAEuYYK9aZncUkkyFdarjhMrNGCgOunWKLZeSIhCtRXw99thdD
+         oiyjjFE+DRHnFQhUkWg+iK3KFLZDVF5n9ZpdOpIjwy6mpoSU130fSMdRgIe0f3R35UWX
+         f4CAADXAst1CY/ucuPMN2nfq0ldp/bIGdCfsVI6TCNfVuB0PmMLQp/KgDeHvuYoPBYKW
+         EwX94ySVNV/XPu4GCgbuhp/qpxni/sIaBWn1x765W6uubdhKpVSIGVtWVWzphKgXeQli
+         E36Vi/5qUqFHu4xnRTENDoPNpeHC71anz7MYoQ4EpPWz9UvX59IacPvIWcrUnB0n+YR+
+         Pk6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=qeWqebBHbrz9NQE1LcRIuA9aTCykR2qMhUZdHa+RvL0=;
+        b=B7fNtFAHTVOZlJhjXG45SG3vxFopZ/w3Mj3fscrCW0jO0ayD83Z/+HLeaQ9pOk8ou4
+         fVnDlB1SDEUCLfKJ+wN/SkIDwaUzDo0Zf6uf1DDvimvnUqP5AfzaFxaExGOzbyc/yHfh
+         +3FycyaFNBfBXX2pJf8hS1EPWKg4yekQF2/rcoDWR4vwRqnAoaS7J2q1CFAvAbYDswy5
+         qvOJJ8ll/8VqanpeGD+QcOjGcEdOiRlJONbjufpxzFLVBmrFeWcQ1kKNSDK/+5s76XZC
+         yMNBywgdB0lApKdzV9YIHMjGVtUBYDLENgJ4RuR83t4JItflCA91HIUUOk8AfDPsynKJ
+         XD+A==
+X-Gm-Message-State: AGi0PubZPGsQCSRzq5ktaKMyyLNgtubMUqUufgRqOCE7lg8e6xXXmvkp
+        lQF2I/K8OgTK3Dh7QTwfzD7d956G+XU=
+X-Google-Smtp-Source: APiQypL1DKywSBZ86WXFhTqtJMGcw+qG8kDnXiyGO0lp/kyvsgEzWRpSdWtSWECCJVtxUqz6kdAPPg==
+X-Received: by 2002:a17:90a:ad02:: with SMTP id r2mr3597818pjq.63.1588690360880;
+        Tue, 05 May 2020 07:52:40 -0700 (PDT)
+Received: from localhost.localdomain ([2409:4072:60b:fcd9:7c28:bcca:10e4:5523])
+        by smtp.gmail.com with ESMTPSA id d2sm2249630pfc.7.2020.05.05.07.52.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 May 2020 07:52:40 -0700 (PDT)
+From:   Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
+To:     Ajay Gupta <ajayg@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     aishwaryarj100@gmail.com
+Subject: [PATCH] i2c: nvidia-gpu: Use PTR_ERR_OR_ZERO() to simplify code
+Date:   Tue,  5 May 2020 20:22:30 +0530
+Message-Id: <20200505145230.17251-1-aishwaryarj100@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+PTR_ERR_OR_ZERO contains if(IS_ERR(...)) + PTR_ERR.
 
---J4XPiPrVK1ev6Sgr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Generated by: scripts/coccinelle/api/ptr_ret.cocci
 
-On Tue, Feb 25, 2020 at 05:50:09PM +0200, Codrin Ciubotariu wrote:
-> After a transfer timeout, some faulty I2C slave devices might hold down
-> the SDA pin. We can generate a bus clear command, hoping that the slave
-> might release the pins.
-> If the CLEAR command is not supported, we will use gpio recovery, if
-> available, to reset the bus.
->=20
-> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Signed-off-by: Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
+---
+ drivers/i2c/busses/i2c-nvidia-gpu.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Applied to for-next, thanks!
+diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
+index f5d25ce00f03..f480105000b8 100644
+--- a/drivers/i2c/busses/i2c-nvidia-gpu.c
++++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
+@@ -277,10 +277,7 @@ static int gpu_populate_client(struct gpu_i2c_dev *i2cd, int irq)
+ 	i2cd->gpu_ccgx_ucsi->irq = irq;
+ 	i2cd->gpu_ccgx_ucsi->properties = ccgx_props;
+ 	i2cd->ccgx_client = i2c_new_client_device(&i2cd->adapter, i2cd->gpu_ccgx_ucsi);
+-	if (IS_ERR(i2cd->ccgx_client))
+-		return PTR_ERR(i2cd->ccgx_client);
+-
+-	return 0;
++	return PTR_ERR_OR_ZERO(i2cd->ccgx_client);
+ }
+ 
+ static int gpu_i2c_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+-- 
+2.17.1
 
-
---J4XPiPrVK1ev6Sgr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6xejMACgkQFA3kzBSg
-Kba7ng//aczcnwIHXEHGSAGdX7AjPZp/niO98R7pHZFfdm2mzqMTZ033SOgF6hSt
-dCiYvgUUkCfo5gnOaIgJgBX/l/H6JY8MsScJi/zZQKZJgj4RR1b0xJgtcxjIMbb0
-C/WHo29TSP7tutQph38nJa9S1T9hx9AulHgb0Xrmb2s7Qo3iLyame1VxP1pmWreO
-U7KID0sB34vmdXKI9aC9T8Uh9eA2xwkceqZedr3+Cp68S0ljLhYnir1p3jnXEb0P
-49+yIOBRDdTc5OImkGheeySqoIZ/pHl/6HtKkNXFpx9mrt/chhAWoDKMAb35tDtD
-ZrC/8lTTc19r6WxqrSg1LeI9SwXAlYCY8SHNNsx5vUZxKmOQWoTAdZbOz4v/+NRe
-LBlgO6BTKre2//N2qzgQm5ZeEqsDYeCLat5EK6l+EJQ0v4SyKHsC8UM2jyq0UY6g
-Uiu9ursq22CUDwuUOSDjeJEQ5BFJOjF3dgJCKq+L7FzdunQGVr5usvf6MtiX+Y7h
-bDP913w76vEvPvj7QhSwXK6qazZ3v3Q9Mz74cMmFXOczxe9GHgSouqBrbxYgjU3k
-kV4hEaDLfHUrsE4FwFkt/Suq4Cn9UHBpG4ZgTbnKIjIxNrYb6oQqT915kA1GjTRf
-+KW8m5gpTU6zdVRHgHX9FYSBzYvG+BsYk+W2c88teSd1HBpzn8A=
-=vY/v
------END PGP SIGNATURE-----
-
---J4XPiPrVK1ev6Sgr--
