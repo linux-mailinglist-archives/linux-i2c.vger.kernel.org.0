@@ -2,52 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF5D1C5852
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 May 2020 16:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 462A31C5980
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 May 2020 16:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729219AbgEEONU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 May 2020 10:13:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33604 "EHLO mail.kernel.org"
+        id S1729345AbgEEO2X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 May 2020 10:28:23 -0400
+Received: from sauhun.de ([88.99.104.3]:33798 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729292AbgEEONU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 5 May 2020 10:13:20 -0400
+        id S1729308AbgEEO2W (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 5 May 2020 10:28:22 -0400
 Received: from localhost (p54B335A1.dip0.t-ipconnect.de [84.179.53.161])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5D8D420735;
-        Tue,  5 May 2020 14:13:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588688000;
-        bh=R+70PJ9vucGn241Y2Cqa7rgwicdjK9Vs/+6SMmkQ9rA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FLcOyPVXax4walL2ONgDDGm3H9TAh64RPOsmQNypepd9HqsoSBONz+ZzlsIDQ5vD5
-         YHgBECF+mKdfrretnacbW9YNrIHo84HsBZXGZITataDIOYcqrhrgueLdEdcIRKvjT6
-         Bgo9XVwRjgwp7Tv78kNCktWKQfVJYUTzZCZbKjmw=
-Date:   Tue, 5 May 2020 16:13:16 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
-Cc:     Thor Thayer <thor.thayer@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] i2c: drivers: Remove superfluous error message
-Message-ID: <20200505141316.GB2468@ninjato>
-References: <20200503120847.13528-1-aishwaryarj100@gmail.com>
- <20200504114408.9128-1-aishwaryarj100@gmail.com>
+        by pokefinder.org (Postfix) with ESMTPSA id 911B52C0892;
+        Tue,  5 May 2020 16:28:20 +0200 (CEST)
+Date:   Tue, 5 May 2020 16:28:17 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Alain Volmat <alain.volmat@st.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
+        pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@st.com
+Subject: Re: [PATCH] i2c: fix missing pm_runtime_put_sync in i2c_device_probe
+Message-ID: <20200505142817.GC2468@ninjato>
+References: <1588261401-11914-1-git-send-email-alain.volmat@st.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jq0ap7NbKX2Kqbes"
+        protocol="application/pgp-signature"; boundary="7qSK/uQB79J36Y4o"
 Content-Disposition: inline
-In-Reply-To: <20200504114408.9128-1-aishwaryarj100@gmail.com>
+In-Reply-To: <1588261401-11914-1-git-send-email-alain.volmat@st.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -55,42 +39,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---jq0ap7NbKX2Kqbes
+--7qSK/uQB79J36Y4o
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 04, 2020 at 05:14:06PM +0530, Aishwarya Ramakrishnan wrote:
-> The function platform_get_irq can log an error by itself.
-> This omit a redundant message for exception handling in the
-> calling function.
+On Thu, Apr 30, 2020 at 05:43:21PM +0200, Alain Volmat wrote:
+> In case of the I2C client exposes the flag I2C_CLIENT_HOST_NOTIFY,
+> pm_runtime_get_sync is called in order to always keep active the
+> adapter. However later on, pm_runtime_put_sync is never called
+> within the function in case of an error. This commit add this
+> error handling.
 >=20
-> Suggested by Coccinelle.
->=20
-> Signed-off-by: Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
+> Fixes: 72bfcee11cf8 ("i2c: Prevent runtime suspend of adapter when Host N=
+otify is required")
+> Signed-off-by: Alain Volmat <alain.volmat@st.com>
 
-Sorry, I forgot that these are already fixed with
-e42688ed5cf5936fb55c78cc365dbe0944af7c63 in i2c/for-next.
+Applied to for-current, thanks!
 
 
---jq0ap7NbKX2Kqbes
+--7qSK/uQB79J36Y4o
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6xdHgACgkQFA3kzBSg
-KbbwRA/+LGyt1I9I1ywJp0ulKpglf4waJU/2Fay5kC0dKFkixtjarMsChvsIcpJJ
-eJlTxUY6krLo7eUh223GmX5Y313bXl5uFIvEC4HCEbcxSVLOL81jvdVkDZcVG9u3
-CMBCXMCchPdGZnbPL7Yzvpshuj87+UtHNnS/a293LwO3exDR5eVZEGi/aICrRum/
-uf273Fx8g0pzh5h7J5erA4dgbrxP20PNt4BYUlfe9sdWft7yW1OS/kd3gaGxBnQp
-LCTk0q9f85vYTzrUX1bk2jvpls0n1kAnD5F1+73kvFq+DsnZD0t1C3FDv/GpRcc3
-TuC+rl4mcAVIoOtErmfT38xRW4PIAu0qzWJDNbnZrd12fZKH/kw20L7Yq5nmIjvi
-mXSpg+JKua+e69VuEsxSTuoDxxEVyWTo/yKc1rbDJNWKwngiR8bldUZDQDtOoSqA
-aWskPYf2kqarsWXYGeaXB8n4CXjD6fyufGjr+SsOD7tcd9ULOOzhfN6GUENw1t9L
-tI03I7owU1+hShjx/pBDpFlqzJQExHLFjMgoMD9aB5XxA7nY82ny4bcpjdy34qqW
-GF88XiojrHftpqtvEfq/qc22l89lvm9Yts8sNg0Axc+jp2/jiKLgY2rgfnZJ+e0r
-MdN0pEl1GRcD3e4WK+16qHy0BViPHmBqCreipeNddURCEXYezmo=
-=Q1Hw
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6xeAAACgkQFA3kzBSg
+KbYhiA//T+l0PEzPiaE6M7x6gAJ8psbfRCvstiVnIPTm05RkWxc6F5hPg/P3gCbJ
+23pSTbYP2xAhWve343T6dn/OsD/oRphhcu1av5v0yMee5k4QQ7I3MbAvxZM99bfG
+mfzQoZngIvCKgEA4PMl7Bq9JPIV0dS+6CpAl7OWOBjJGt6H6uJ+07MQNmyyGoz5e
+S3esTcF/60pQzcl5/VHA6/OyXExbqOOq92zcnd5IMXoqWC6xtIJjVoCHje0gJTpI
+bO87BHiDe5iK8tSzhLqUU/QRAvGBPgTNa4vjew9OhZgvoFsBI8GA9gAcJqYYoh3j
+t0XXWIq5sUjcWNZSlalb2/WLOdDHvEbvGMzc1jphUjdklw9ZYbY7fqA/6QIUvz6+
+NqF/j0wrBsj+dxyfxj5f82Q0672glf0Zqzt4n/QuPJ4QLf3qPVW3u96CRl0HPV1C
+/AwGTLPZUIbAmYiHaODfMlZ/v83HybqVZoRzhBS0xK/T7o4uUriVWag7tLOHmMni
+eswp+a+MsxyL+WrrC+Ug9PslANq0/VM83k0edA6MfwkHGM/DMFiDP0/ZAFGnKkjn
+zb6Wx0utBOgT7EaxNYwqFWlPHNK3X0l1cIKr4uO3t5hzIjjrF5tYoAzfTyV2uvQJ
+uT6/TtJbeWnxuW1lLmepPYYse4XDeWrHj8q/DnBVBsFJW+wnfAg=
+=e2w7
 -----END PGP SIGNATURE-----
 
---jq0ap7NbKX2Kqbes--
+--7qSK/uQB79J36Y4o--
