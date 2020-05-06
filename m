@@ -2,116 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFA21C5DD1
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 May 2020 18:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0173A1C664E
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 May 2020 05:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729720AbgEEQrr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 May 2020 12:47:47 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:50541 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729119AbgEEQrr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 5 May 2020 12:47:47 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 49GlyR4vq7z8r;
-        Tue,  5 May 2020 18:47:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1588697264; bh=oCn7NSg9d6nqzdxyBMya4kTgYYy3wc8KZHz57zKjUA0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=feHImZwBebwT2JOXshwt48eFj/hpxPen9F55a1uXUEhjDPJsuik91Ihynvqttb1rw
-         5C6nfQXKqwr+OA1lB0W5iy5E/DqU3f0WLOWMon1ddrCQv4n/ErLooNEZfDm+SXKbV3
-         eEm1YBd6Et5iPrkC97jaNREkjyp2DPhQ6Yj+GWLH3oUIwGXhsRaTO+efrFsZOkJoGT
-         0B+bYSpUgwoOije7iWCpR7kEC3Vacy1/Y/8xJ70lhOj7gzGgddTwAJ2qJIvlm6SLEm
-         ZIsrglxgKtXkdjGdNkwX+TusH7j8MHpkcRRF9Vm5zoiytN26hKti8Hy/P6MqU3t1nL
-         4uPkrzXUA/BJQ==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Tue, 5 May 2020 18:47:39 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Stefan Lengfeld <contact@stefanchrist.eu>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: at91: support atomic write xfer
-Message-ID: <20200505164739.GA5476@qmqm.qmqm.pl>
-References: <55613934b7d14ae4122b648c20351b63b03a1385.1584851536.git.mirq-linux@rere.qmqm.pl>
- <20200322143004.GB1091@ninjato>
- <20200322163013.GA25488@qmqm.qmqm.pl>
- <20200505155228.GG2468@ninjato>
+        id S1726649AbgEFD2s (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 May 2020 23:28:48 -0400
+Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:29686 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726495AbgEFD2s (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 May 2020 23:28:48 -0400
+Received: from localhost.localdomain ([93.23.13.221])
+        by mwinf5d40 with ME
+        id bFUd2200E4m9Yy503FUdZx; Wed, 06 May 2020 05:28:45 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 06 May 2020 05:28:45 +0200
+X-ME-IP: 93.23.13.221
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     gxt@pku.edu.cn, arnd@arndb.de
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] i2c: puv3: Fix an error handling path in 'puv3_i2c_probe()'
+Date:   Wed,  6 May 2020 05:28:24 +0200
+Message-Id: <20200506032824.191633-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200505155228.GG2468@ninjato>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, May 05, 2020 at 05:52:28PM +0200, Wolfram Sang wrote:
-> Hi,
-> 
-> > I don't expect this to be used for much more than a simple write to PMIC
-> > to kill the power. So this patch is tailor made for exactly this purpose.
-> 
-> Frankly, I don't like it much. The atomic callbacks are supposed to be
-> drop-in replacements of the non-atomic contexts. There may be a need to
-> read a PMIC register before writing something. I considered checking in
-> the core if we can fall back to non-atomic calls if the the atomic ones
-> return -EOPNOTSUPP, though,  but I still don't like the idea. I expect
-> that people send me minimal versions then which are extended over time
-> by very personal use cases. Having a proper implementation
-> once-and-for-all (despite bugfixes) sounds much more maintainable to me.
+There is a spurious 'put_device()' in the remove function.
+A reference to 'pdev->dev' is taken in the probe function without a
+corresponding 'get_device()' to increment the refcounted reference.
 
-Is it really possible to fall back to non-atomic calls? If that would be
-possible, then I would actually want to use it in this case instead of
-writing another implementation.
+Add the missing 'get_device()' and update the error handling path
+accordingly.
 
-I must say, that I'm reluctant in investing a lot of time in doing
-full-blown implementation for a feature that has only a very limited
-use. I do understand your point about a proper implementation being
-better than a special-cased-only one, but I really don't have a use
-for the extension. The few PMICs I worked with just need a single
-write to power off.
+Fixes: d10e4a660d11 ("unicore32 machine related files: add i2c bus drivers for pkunity-v3 soc")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+This patch is provided as-is. It is not even compile tested because I don't
+use cross-compiler.
 
-> > Though, if you would go for full support of atomic transfers, then
-> > I would suggest to hack the non-atomic path to be usable in atomic mode
-> > instead (some I2C drivers do just that, eg. i2c-tegra).
-> 
-> Yes, that is what I am aiming for.
-> 
-> > BTW, I found this comment in i2c-core.h:
-> > 
-> >  * We only allow atomic transfers for very late communication, e.g. to send
-> >  * the powerdown command to a PMIC. Atomic transfers are a corner case and not
-> >  * for generic use! 
-> > 
-> > I think this covers the idea.
-> 
-> Well, since I implemented the atomic_xfer mechanism, I think I am the
-> primary authority of what "covers the idea", so I will fix the comment
-> above :) Note, there is also this comment in the way more user-visible
-> include/linux/i2c.h:
-> 
->  509  * @master_xfer_atomic: same as @master_xfer. Yet, only using atomic context
->  510  *   so e.g. PMICs can be accessed very late before shutdown. Optional.
+It is purely speculative and based on what looks like an unbalanced
+'put_device()' in the remove function.
+---
+ drivers/i2c/busses/i2c-puv3.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-So, we don't have to wonder what the author had in mind. Lets expand
-the idea then. :-) 
+diff --git a/drivers/i2c/busses/i2c-puv3.c b/drivers/i2c/busses/i2c-puv3.c
+index 5cec5a36807d..62a4b860d3c0 100644
+--- a/drivers/i2c/busses/i2c-puv3.c
++++ b/drivers/i2c/busses/i2c-puv3.c
+@@ -203,18 +203,20 @@ static int puv3_i2c_probe(struct platform_device *pdev)
+ 			mem->start);
+ 	adapter->algo = &puv3_i2c_algorithm;
+ 	adapter->class = I2C_CLASS_HWMON;
+-	adapter->dev.parent = &pdev->dev;
++	adapter->dev.parent = get_device(&pdev->dev);
+ 
+ 	platform_set_drvdata(pdev, adapter);
+ 
+ 	adapter->nr = pdev->id;
+ 	rc = i2c_add_numbered_adapter(adapter);
+ 	if (rc)
+-		goto fail_add_adapter;
++		goto fail_put_device;
+ 
+ 	dev_info(&pdev->dev, "PKUnity v3 i2c bus adapter.\n");
+ 	return 0;
+ 
++fail_put_device:
++	put_device(&pdev->dev);
+ fail_add_adapter:
+ 	kfree(adapter);
+ fail_nomem:
+-- 
+2.25.1
 
-Shutdown is kind of special atomic context in that it is ok to do long
-waits (as I2C requires) because nothing else is there to do. This is
-very unlike normal atomic context. Do you plan to have it work in other
-contexts? What are the idea and use cases for atomic-context transfers?
-
-I guess we might want it for suspend/resume, but I think there is an
-early stage (with all non-atomic stuff working) and NOIRQ stage (when
-most everything is already shutdown). When a PMIC needs a read, I would
-actually do it ("prepare" the PMIC) in the early stage if possible.
-
-Best Regards,
-Micha³ Miros³aw
