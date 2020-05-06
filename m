@@ -2,59 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB33D1C7A57
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 May 2020 21:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE3D1C7A59
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 May 2020 21:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729220AbgEFTeK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 May 2020 15:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
+        id S1729230AbgEFTeM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 May 2020 15:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729209AbgEFTeJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 May 2020 15:34:09 -0400
+        with ESMTP id S1729209AbgEFTeL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 May 2020 15:34:11 -0400
 Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75985C061A0F;
-        Wed,  6 May 2020 12:34:09 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id e16so3573290wra.7;
-        Wed, 06 May 2020 12:34:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75208C061A0F;
+        Wed,  6 May 2020 12:34:11 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id x17so3576705wrt.5;
+        Wed, 06 May 2020 12:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3/vHHfXaPkc2BVemCUzY7Jz2Az00+vaAtxpSsXyV1G0=;
-        b=g/FQLcyNVN5aT1SKsfGFiX+UVYAzZUluVs5BRfBQXEqvXPfMsoduxKl2q8KSZyAYSN
-         gPJvY/daHdcOnrcWC6K/pUAtQhNoSYrQunUunddXmKWYvx0R1S3EIeLLNdgUzHMLKMue
-         4BhRlEEVmPuTHlwH0eXfBOFFfwDNVZtllgFxH7/vamZoSmT1aYoitCpMfOt9jnh7sUVd
-         s2vduz3kBR1jOEeeY7j7Ce2rJ4xtYykxEjOm3sE/teSzRKZ9bwxF2k4dpwQJGkucTYvA
-         mMXf/ekrEk4rcfs46J/0BogMxMyzBKTOf/pqMElneJSr0v34dtC9yBagllzDbNuYetal
-         jW+w==
+        bh=gKSK5cphthcQfPGBMuVAtKcUXjQYJxmUcTC36Mj7c+A=;
+        b=j+Z8aeiLn5Tj4xFrQzED6Tqk5naldEAHrXFey5y9bCpm6RtX1pf1g3hO2Ki4PRhC8Z
+         fL1NOXWCRb78w6Egy/TpcjrWT9cULn8fBviG9BJdHzV31tPvHLnop84UJwJRRMrf8vM6
+         TL+2czLk9RscKJJVjJ6QQxsUvm81E0xn5tcislhY8Kee/kXFaUYURiZkorTdTAIvfKzJ
+         BO9uUiyWXAiyNF26gHGLqXePQkL5SqUqYwXUBIe98V9pc3GANbUcR1fRv2ax6F4wAIBh
+         XzagDKGc4bBJwvqFt9x6xox+4MHy5ljsRTwsrxOadHwcfFsSde8adePrNzOqIp+JwyUt
+         dfyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3/vHHfXaPkc2BVemCUzY7Jz2Az00+vaAtxpSsXyV1G0=;
-        b=pP7H2Yoas1XFVPINZEEJa+fNpOkHWCIUTV4pYBL+mgELbYS0xpLCtDR7CFUlfh8L2Z
-         vVKmtza9oEQjVkVhKviTyC7iCEdBuCIlOaQIG6dlHnI8RFqeKYERc6gkUIuOgRFiEO7/
-         PEfarGa2rP3Ba2B5RD9aRy6MXcf80/vQYsK6PggQm+/VV8jWGLezGbgIh61U7vF4gbZQ
-         fAFfuOreOthZAClDvzw6lCtdFjP3Bp/nLvLpHaEZhpZQQ6It59nXsfPAr7ZQiFPpLeGn
-         HB2ln+BWa7efuxZ4yvNw60S/7TdG6FU9jrp3yqb75yhaxSx8TGZJFWsThCQJa/QdKO8j
-         GBdw==
-X-Gm-Message-State: AGi0PuZkpuOgWr3Fd8KeuasYKDOKO6f3PezBIQTDhQo4sUG+ybLyK1IF
-        Z6LqjSZ03Qc7uhDuH3Fal/yfUXQkU2o=
-X-Google-Smtp-Source: APiQypKOqLaPHR2GXr38hzeADI8lY4uWafphydd2x0K9hIW5mO+Z/kTlD16xMidFIH9HhnltDFTBhQ==
-X-Received: by 2002:a05:6000:146:: with SMTP id r6mr11864833wrx.9.1588793648128;
-        Wed, 06 May 2020 12:34:08 -0700 (PDT)
+        bh=gKSK5cphthcQfPGBMuVAtKcUXjQYJxmUcTC36Mj7c+A=;
+        b=DPXvbzFiAu5Z5upuhUh9rHTgj1SnRakP/wj4pJm5HQtLOeol6aKcQObOJMs44R/jm7
+         XNLFX4X7RCS7YiPFf6JB0dck++fqGIHYD2JHBhrMZFqiBxsj9GoT1sqIMGPL19mEKOtx
+         178gsaq5umzx/z6AUD4oqw7wtC7J4WmeGaBZIHyVWEUwObsEQwQ9xh5LELDDGJ22Lm7/
+         yyPtghDGwOYg0HRRkbQ3XQIvo1+vvPIeuVARZb6+L6f5ZbTFIF3m2rdDCQDy8v1xwSvW
+         y9MyvnhwKPO4hyONZF426V88EVmUvznMJ+qaH9RMX/XGZBuFh5v9IR0+SfxokmG+eNgg
+         wQXQ==
+X-Gm-Message-State: AGi0Pub+s47MuYVNqiqNHqzK6pB6rqLibHgSpHaId7UdhG0OlJoplDW0
+        R32YwGjyDJ/V9DpTVGiHI9cu6cwvsjI=
+X-Google-Smtp-Source: APiQypIj0u7pCrgVdvCzcLZZCG5zloRgcgm8Oa/fcqInowS/zFN5aVMCIlfyzakBNobeoABWsmiiAA==
+X-Received: by 2002:a5d:4248:: with SMTP id s8mr11007401wrr.216.1588793650140;
+        Wed, 06 May 2020 12:34:10 -0700 (PDT)
 Received: from localhost (p2E5BE57B.dip0.t-ipconnect.de. [46.91.229.123])
-        by smtp.gmail.com with ESMTPSA id x7sm3885312wmi.17.2020.05.06.12.34.06
+        by smtp.gmail.com with ESMTPSA id p8sm4151343wre.11.2020.05.06.12.34.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2020 12:34:07 -0700 (PDT)
+        Wed, 06 May 2020 12:34:09 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Wolfram Sang <wsa@the-dreams.de>
 Cc:     Dmitry Osipenko <digetx@gmail.com>,
         Jon Hunter <jonathanh@nvidia.com>, linux-i2c@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH 2/5] i2c: tegra: Restore pinmux on system resume
-Date:   Wed,  6 May 2020 21:33:55 +0200
-Message-Id: <20200506193358.2807244-3-thierry.reding@gmail.com>
+Subject: [PATCH 3/5] i2c: tegra: Keep IRQs enabled during suspend/resume
+Date:   Wed,  6 May 2020 21:33:56 +0200
+Message-Id: <20200506193358.2807244-4-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200506193358.2807244-1-thierry.reding@gmail.com>
 References: <20200506193358.2807244-1-thierry.reding@gmail.com>
@@ -67,65 +67,38 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Thierry Reding <treding@nvidia.com>
 
-Depending on the board design, the I2C controllers found on Tegra SoCs
-may require pinmuxing in order to function. This is done as part of the
-driver's runtime suspend/resume operations. However, the PM core does
-not allow devices to go into runtime suspend during system sleep to
-avoid potential races with the suspend/resume of their parents.
+One of the I2C controllers on Tegra SoCs is typically connected to a
+system PMIC, which provides controls for critical power supplies for
+most platforms.
 
-As a result of this, when Tegra SoCs resume from system suspend, their
-I2C controllers may have lost the pinmux state in hardware, whereas the
-pinctrl subsystem is not aware of this. To fix this, make sure that if
-the I2C controller is not runtime suspended, the runtime suspend code is
-still executed in order to disable the module clock (which we don't need
-to be enabled during sleep) and set the pinmux to the idle state.
+Some drivers, such as PCI, need to disable these regulators during a
+very late stage during suspend and resume them at a very early stage
+during resume.
 
-Conversely, make sure that the I2C controller is properly resumed when
-waking up from sleep so that pinmux settings are properly restored.
+To support these use-cases, keep interrupts disabled during suspend/
+resume.
 
-This fixes a bug seen with DDC transactions to an HDMI monitor timing
-out when resuming from system suspend.
-
+Suggested-by: Dmitry Osipenko <digetx@gmail.com>
 Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 7c88611c732c..db142d897604 100644
+index db142d897604..8d2a212db733 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1769,10 +1769,14 @@ static int tegra_i2c_remove(struct platform_device *pdev)
- static int __maybe_unused tegra_i2c_suspend(struct device *dev)
- {
- 	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
-+	int err = 0;
+@@ -1694,8 +1694,8 @@ static int tegra_i2c_probe(struct platform_device *pdev)
  
- 	i2c_mark_adapter_suspended(&i2c_dev->adapter);
+ 	irq_set_status_flags(i2c_dev->irq, IRQ_NOAUTOEN);
  
--	return 0;
-+	if (!pm_runtime_status_suspended(dev))
-+		err = tegra_i2c_runtime_suspend(dev);
-+
-+	return err;
- }
- 
- static int __maybe_unused tegra_i2c_resume(struct device *dev)
-@@ -1788,9 +1792,11 @@ static int __maybe_unused tegra_i2c_resume(struct device *dev)
- 	if (err)
- 		return err;
- 
--	err = tegra_i2c_runtime_suspend(dev);
--	if (err)
--		return err;
-+	if (pm_runtime_status_suspended(dev)) {
-+		err = tegra_i2c_runtime_suspend(dev);
-+		if (err)
-+			return err;
-+	}
- 
- 	i2c_mark_adapter_resumed(&i2c_dev->adapter);
- 
+-	ret = devm_request_irq(&pdev->dev, i2c_dev->irq,
+-			       tegra_i2c_isr, 0, dev_name(&pdev->dev), i2c_dev);
++	ret = devm_request_irq(&pdev->dev, i2c_dev->irq, tegra_i2c_isr,
++			       IRQF_NO_SUSPEND, dev_name(&pdev->dev), i2c_dev);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to request irq %i\n", i2c_dev->irq);
+ 		goto release_dma;
 -- 
 2.24.1
 
