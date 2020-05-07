@@ -2,79 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7514D1C8D00
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 May 2020 15:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01D71C9008
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 May 2020 16:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726350AbgEGNvp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 7 May 2020 09:51:45 -0400
-Received: from mga14.intel.com ([192.55.52.115]:8846 "EHLO mga14.intel.com"
+        id S1727944AbgEGO2E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 7 May 2020 10:28:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54194 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726367AbgEGNvp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 7 May 2020 09:51:45 -0400
-IronPort-SDR: UFvx2kn7AItt/86FBbx+X/0tKRPLMfIGVl2590ptNLMApaNNdSr0lNSq0iK1lTXk7TLm4q3TFi
- X94CIwubdj3w==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 06:51:44 -0700
-IronPort-SDR: lknXsqJVH5VK0JWRcE4z/XJBLM8mSB8bkNI6WOC69U9maQbiF/4O37ipN3GGMG7ao5EX+h0P8G
- 4SRXQFgBUJrg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,363,1583222400"; 
-   d="scan'208";a="278604305"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 07 May 2020 06:51:43 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3456A234; Thu,  7 May 2020 16:51:42 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 4/4] i2c: designware: Read counters from ACPI for PCI driver
-Date:   Thu,  7 May 2020 16:51:40 +0300
-Message-Id: <20200507135140.14635-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200507135140.14635-1-andriy.shevchenko@linux.intel.com>
-References: <20200507135140.14635-1-andriy.shevchenko@linux.intel.com>
+        id S1727933AbgEGO2D (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 7 May 2020 10:28:03 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0DAAD2084D;
+        Thu,  7 May 2020 14:28:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588861683;
+        bh=JpMqNa6KjjZACMc14JpRz2Qlsk+u9kAyVz8DlBvFEG0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=B//tsRXIep6Gf8/h90s+PRqDFmRSBnsVLvHOXzzIJ6LNnzxPAH+dCX4bAMif71Z1Y
+         fhEs6zcG0t3TyW0Dk4T3R5F6t6BGPAISnT7pW1RGYRsGnxqSNcHqeAa5i8H/LV3NzO
+         skYpq4VxIzqkf3fWF3RuiYeHK6u5iajtjwF+lVTY=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.6 29/50] i2c: iproc: generate stop event for slave writes
+Date:   Thu,  7 May 2020 10:27:05 -0400
+Message-Id: <20200507142726.25751-29-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200507142726.25751-1-sashal@kernel.org>
+References: <20200507142726.25751-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PCI devices may have been backed with ACPI handle which supplies
-an additional information to the drivers, such as counters.
+From: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 
-Call for ACPI configuration from PCI driver in order to utilize counters
-provided by ACPI.
+[ Upstream commit 068143a8195fb0fdeea1f3ca430b3db0f6d04a53 ]
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+When slave status is I2C_SLAVE_RX_END, generate I2C_SLAVE_STOP
+event to i2c_client.
+
+Fixes: c245d94ed106 ("i2c: iproc: Add multi byte read-write support for slave mode")
+Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-designware-pcidrv.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/i2c/busses/i2c-bcm-iproc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index c762e5a11e44e..96191925f71ec 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -251,6 +251,15 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
+index 30efb7913b2e1..b58224b7ba791 100644
+--- a/drivers/i2c/busses/i2c-bcm-iproc.c
++++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+@@ -360,6 +360,9 @@ static bool bcm_iproc_i2c_slave_isr(struct bcm_iproc_i2c_dev *iproc_i2c,
+ 			value = (u8)((val >> S_RX_DATA_SHIFT) & S_RX_DATA_MASK);
+ 			i2c_slave_event(iproc_i2c->slave,
+ 					I2C_SLAVE_WRITE_RECEIVED, &value);
++			if (rx_status == I2C_SLAVE_RX_END)
++				i2c_slave_event(iproc_i2c->slave,
++						I2C_SLAVE_STOP, &value);
  		}
- 	}
- 
-+	if (has_acpi_companion(&pdev->dev))
-+		i2c_dw_acpi_configure(&pdev->dev);
-+
-+	r = i2c_dw_validate_speed(dev);
-+	if (r) {
-+		pci_free_irq_vectors(pdev);
-+		return r;
-+	}
-+
- 	i2c_dw_configure(dev);
- 
- 	if (controller->scl_sda_cfg) {
+ 	} else if (status & BIT(IS_S_TX_UNDERRUN_SHIFT)) {
+ 		/* Master read other than start */
 -- 
-2.26.2
+2.20.1
 
