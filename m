@@ -2,146 +2,466 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4318C1CD3E0
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 May 2020 10:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157EC1CD4AC
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 May 2020 11:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728471AbgEKI2X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 May 2020 04:28:23 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:62830 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728344AbgEKI2X (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 May 2020 04:28:23 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04B8S0Bg010988;
-        Mon, 11 May 2020 10:28:12 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=ARKtW82Ju4foRRG5jzp6GKL8UxrRXVO/KxZ4yej17EA=;
- b=YFyWS89NgLXHX4OBgXe4bdHZ0ZrWu3Se8fTc63Y7Y7DZ1QCCq3Hd6g+I9JYmYYTEmEcY
- oMDyhNRAzcGcsj4jrNNcl5qEQy/W4P0iBT84tCCw894FoqHhLIHhDIRgoeCOLz/jMwOa
- xdIXW8pRnV/jgNccj3k6tzeSOlvLjCCn3FDmVpcu6DYota4vSFCdOHMfZVviRLnYONC9
- uXwtKcj+BW8RSD/0e733l81RcgUU1B4R8EuolGkDqpLbsJZ8yjTXzHcWfGaaoQ0LW2hC
- mn/9z3mAQ86o5V+xQgSZmyAFm/nNwJXG6aJ7ygfyA3RrRhk7tZNSYmxOcAwFJAC9DWsU jQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 30wj01sa7x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 May 2020 10:28:11 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6D58A10002A;
-        Mon, 11 May 2020 10:28:06 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag5node2.st.com [10.75.127.14])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5B1482B27B5;
-        Mon, 11 May 2020 10:28:06 +0200 (CEST)
-Received: from [10.131.226.156] (10.75.127.47) by SFHDAG5NODE2.st.com
- (10.75.127.14) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 11 May
- 2020 10:28:04 +0200
-Subject: Re: [PATCH 2/4] i2c: addition of client reg/unreg callbacks
-To:     Alain Volmat <alain.volmat@st.com>, <wsa@kernel.org>,
-        <robh+dt@kernel.org>
-CC:     <mark.rutland@arm.com>, <mcoquelin.stm32@gmail.com>,
-        <alexandre.torgue@st.com>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>
-References: <1588657871-14747-1-git-send-email-alain.volmat@st.com>
- <1588657871-14747-3-git-send-email-alain.volmat@st.com>
-From:   Pierre Yves MORDRET <pierre-yves.mordret@st.com>
-Message-ID: <a68f47ca-47e1-a293-f4ad-a5104c9ee620@st.com>
-Date:   Mon, 11 May 2020 10:28:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727873AbgEKJSA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 May 2020 05:18:00 -0400
+Received: from mga18.intel.com ([134.134.136.126]:36140 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725790AbgEKJSA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 May 2020 05:18:00 -0400
+IronPort-SDR: mH1otYWj+TqbD10lTeljKcHQVOf9BQKBhVW5c3ORRjCMdc5XWsrig/EZReMcJcw7Kjb8/e0RaQ
+ 9s4lT2W8XboA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2020 02:18:00 -0700
+IronPort-SDR: lFcPFw0rjOLmc9U7pwB597vGZb9TyE+DyfcOYrSLjdyW3DrOAjqXVA1nhcz0l2tCU20FKhtXbg
+ 2q/hCGWKojsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,379,1583222400"; 
+   d="scan'208";a="306126183"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by FMSMGA003.fm.intel.com with ESMTP; 11 May 2020 02:17:56 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jY4ZT-005vIK-61; Mon, 11 May 2020 12:17:59 +0300
+Date:   Mon, 11 May 2020 12:17:59 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tali Perry <tali.perry1@gmail.com>
+Cc:     ofery@google.com, brendanhiggins@google.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, kfting@nuvoton.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, wsa@the-dreams.de,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 2/3] i2c: npcm7xx: Add Nuvoton NPCM I2C controller
+ driver
+Message-ID: <20200511091759.GE185537@smile.fi.intel.com>
+References: <20200510102330.66715-1-tali.perry1@gmail.com>
+ <20200510102330.66715-3-tali.perry1@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1588657871-14747-3-git-send-email-alain.volmat@st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG7NODE1.st.com (10.75.127.19) To SFHDAG5NODE2.st.com
- (10.75.127.14)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-11_03:2020-05-11,2020-05-11 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200510102330.66715-3-tali.perry1@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi all,
+On Sun, May 10, 2020 at 01:23:29PM +0300, Tali Perry wrote:
+> Add Nuvoton NPCM BMC I2C controller driver.
 
-Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
+Some cosmetic changes needs to be done.
 
-Thanks
+...
 
-On 5/5/20 7:51 AM, Alain Volmat wrote:
-> Addition of two callbacks reg_client and unreg_client that can be
-> implemented by adapter drivers in order to take action whenever a
-> client is being registered to it.
-> 
-> Signed-off-by: Alain Volmat <alain.volmat@st.com>
-> ---
->  drivers/i2c/i2c-core-base.c | 11 +++++++++++
->  include/linux/i2c.h         |  6 ++++++
->  2 files changed, 17 insertions(+)
-> 
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 2e4560671183..4c84c6264314 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -319,6 +319,12 @@ static int i2c_device_probe(struct device *dev)
->  	if (!client)
->  		return 0;
->  
-> +	if (client->adapter->algo->reg_client) {
-> +		status = client->adapter->algo->reg_client(client);
-> +		if (status)
-> +			return status;
+> +/*
+> + * Nuvoton NPCM7xx I2C Controller driver
+> + *
+> + * Copyright (C) 2020 Nuvoton Technologies tali.perry@nuvoton.com
+> + */
+
+So, entire file has C99 comment style, but this and few other places.
+Any reason of inconsistency?
+
+...
+
+> +#if IS_ENABLED(CONFIG_DEBUG_FS)
+
+Why?
+
+> +#include <linux/debugfs.h>
+> +#endif
+
+...
+
+> +//#define _I2C_DEBUG_
+
+Leftover, remove.
+
+...
+
+> +// Common regs
+> +#define NPCM_I2CSDA                       0x00
+> +#define NPCM_I2CST                        0x02
+> +#define NPCM_I2CCST                       0x04
+
+> +#define NPCM_I2CCTL1	                  0x06
+
+Indentation issue. And it's better to use TABs over spaces here and
+in the similar places above and below.
+
+> +#define NPCM_I2CADDR1                     0x08
+> +#define NPCM_I2CCTL2                      0x0A
+> +#define NPCM_I2CADDR2                     0x0C
+> +#define NPCM_I2CCTL3                      0x0E
+> +#define NPCM_I2CCST2                      0x18
+> +#define NPCM_I2CCST3                      0x19
+
+...
+
+> +// supported clk settings. values in KHz.
+> +#define I2C_FREQ_MIN                      10
+> +#define I2C_FREQ_MAX                      1000
+
+_KHZ to both.
+
+...
+
+> +#define I2C_NUM_OF_ADDR 10
+
+Is it 10-bit address support or what?
+
+...
+
+> +#if IS_ENABLED(CONFIG_DEBUG_FS)
+> +static struct dentry *npcm_i2c_debugfs_dir;   /* i2c debugfs directory */
+> +static const char *ber_cnt_name      = "ber_count";
+> +static const char *rec_succ_cnt_name = "rec_succ_count";
+> +static const char *rec_fail_cnt_name = "rec_fail_count";
+> +static const char *nack_cnt_name     = "nack_count";
+> +static const char *timeout_cnt_name  = "timeout_count";
+> +#endif
+
+Why are these global?
+
+...
+
+> +static void npcm_i2c_write_to_fifo_master(struct npcm_i2c *bus,
+> +					  u16 max_bytes_to_send)
+> +{
+> +	// Fill the FIFO, while the FIFO is not full and there are more bytes to
+> +	// write
+
+> +	while ((max_bytes_to_send--) &&
+
+Inner parentheses are redundant.
+
+> +	       (I2C_HW_FIFO_SIZE - npcm_i2c_fifo_usage(bus))) {
+> +		if (bus->wr_ind < bus->wr_size)
+> +			npcm_i2c_wr_byte(bus, bus->wr_buf[bus->wr_ind++]);
+> +		else
+> +			npcm_i2c_wr_byte(bus, 0xFF);
+> +	}
+> +}
+
+...
+
+> +		// Clear stall only after setting STOP
+> +		iowrite8(NPCM_I2CST_STASTR, bus->reg + NPCM_I2CST);
+> +
+> +		ret =  IRQ_HANDLED;
+
+Indentation issue.
+
+...
+
+> +				if (bus->wr_size)
+> +					npcm_i2c_set_fifo(bus, -1,
+> +							  bus->wr_size);
+> +				else
+> +					npcm_i2c_set_fifo(bus, bus->rd_size,
+> +							  -1);
+
+These two looks much better on one line.
+
+...
+
+> +				if (npcm_i2c_is_quick(bus) || bus->wr_size)
+> +					npcm_i2c_wr_byte(bus, bus->dest_addr);
+> +				else
+> +					npcm_i2c_wr_byte(bus, bus->dest_addr |
+> +							      0x01);
+
+0x01 has its definition, hasn't it?
+
+...
+
+> +	// Repeat the following sequence until SDA is released
+> +	do {
+> +		// Issue a single SCL toggle
+> +		iowrite8(NPCM_I2CCST_TGSCL, bus->reg + NPCM_I2CCST);
+> +		udelay(20);
+> +		// If SDA line is inactive (high), stop
+> +		if (npcm_i2c_get_SDA(_adap)) {
+> +			done = true;
+> +			status = 0;
+> +		}
+> +	} while (!done && iter--);
+
+readx_poll_timeout() ?
+
+...
+
+> +#if IS_ENABLED(CONFIG_DEBUG_FS)
+> +	if (!status) {
+
+Why not positive condition?
+
+	if (status) {
+		...
+	} else {
+		...
+	}
+
+> +	} else {
+
+> +	}
+> +#endif
+
+...
+
+> +static int npcm_i2c_init_clk(struct npcm_i2c *bus, u32 bus_freq)
+> +{
+> +	u32  k1 = 0;
+> +	u32  k2 = 0;
+> +	u8   dbnct = 0;
+> +	u32  sclfrq = 0;
+> +	u8   hldt = 7;
+> +	bool fast_mode = false;
+
+> +	u32  src_clk_freq; // in KHz
+
+src_clk_khz ?
+
+> +
+> +	src_clk_freq = bus->apb_clk / 1000;
+> +	bus->bus_freq = bus_freq;
+> +
+> +	// 100KHz and below:
+
+> +	if (bus_freq <= (I2C_MAX_STANDARD_MODE_FREQ / 1000)) {
+
+Instead of all these / 1000 can't you use bus frequency in Hz and do division
+when it's really needed?
+
+> +		sclfrq = src_clk_freq / (bus_freq * 4);
+> +
+> +		if (sclfrq < SCLFRQ_MIN || sclfrq > SCLFRQ_MAX)
+> +			return -EDOM;
+> +
+> +		if (src_clk_freq >= 40000)
+> +			hldt = 17;
+> +		else if (src_clk_freq >= 12500)
+> +			hldt = 15;
+> +		else
+> +			hldt = 7;
 > +	}
 > +
->  	driver = to_i2c_driver(dev->driver);
->  
->  	client->irq = client->init_irq;
-> @@ -417,6 +423,8 @@ static int i2c_device_probe(struct device *dev)
->  put_sync_adapter:
->  	if (client->flags & I2C_CLIENT_HOST_NOTIFY)
->  		pm_runtime_put_sync(&client->adapter->dev);
-> +	if (client->adapter->algo->reg_client)
-> +		client->adapter->algo->unreg_client(client);
->  
->  	return status;
->  }
-> @@ -445,6 +453,9 @@ static int i2c_device_remove(struct device *dev)
->  	if (client->flags & I2C_CLIENT_HOST_NOTIFY)
->  		pm_runtime_put(&client->adapter->dev);
->  
-> +	if (client->adapter->algo->unreg_client)
-> +		client->adapter->algo->unreg_client(client);
+> +	// 400KHz:
+> +	else if (bus_freq <= (I2C_MAX_FAST_MODE_FREQ / 1000)) {
+> +		sclfrq = 0;
+> +		fast_mode = true;
 > +
->  	return status;
->  }
->  
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index 45d36ba4826b..61b838caf454 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -509,6 +509,8 @@ i2c_register_board_info(int busnum, struct i2c_board_info const *info,
->   *   so e.g. PMICs can be accessed very late before shutdown. Optional.
->   * @functionality: Return the flags that this algorithm/adapter pair supports
->   *   from the ``I2C_FUNC_*`` flags.
-> + * @reg_client: Callback informing that a new client is being registered
-> + * @unreg_client: Callback informing that a client is being removed
->   * @reg_slave: Register given client to I2C slave mode of this adapter
->   * @unreg_slave: Unregister given client from I2C slave mode of this adapter
->   *
-> @@ -545,6 +547,10 @@ struct i2c_algorithm {
->  	/* To determine what the adapter supports */
->  	u32 (*functionality)(struct i2c_adapter *adap);
->  
-> +	/* To inform the adapter of the probe/remove of a client */
-> +	int (*reg_client)(struct i2c_client *client);
-> +	void (*unreg_client)(struct i2c_client *client);
+> +		if (src_clk_freq < 7500)
+> +			// 400KHZ cannot be supported for core clock < 7.5 MHZ
+> +			return -EDOM;
 > +
->  #if IS_ENABLED(CONFIG_I2C_SLAVE)
->  	int (*reg_slave)(struct i2c_client *client);
->  	int (*unreg_slave)(struct i2c_client *client);
-> 
+> +		else if (src_clk_freq >= 50000) {
+> +			k1 = 80;
+> +			k2 = 48;
+> +			hldt = 12;
+> +			dbnct = 7;
+> +		}
+> +
+> +		// Master or Slave with frequency > 25 MHZ
+> +		else if (src_clk_freq > 25000) {
+
+> +			hldt = (DIV_ROUND_UP(src_clk_freq * 300,
+> +							 1000000) + 7) & 0xFF;
+
+How ' & 0xFF' is not no-op here and in the similar cases?
+
+> +
+> +			k1 = DIV_ROUND_UP(src_clk_freq * 1600,
+> +						   1000000);
+> +			k2 = DIV_ROUND_UP(src_clk_freq * 900,
+> +						   1000000);
+
+Perhaps,
+
+#define clk_coef(freq, mul)	DIV_ROUND_UP((freq) * (mul), 1000000)
+
+?
+
+> +			k1 = round_up(k1, 2);
+> +			k2 = round_up(k2 + 1, 2);
+> +			if (k1 < SCLFRQ_MIN || k1 > SCLFRQ_MAX ||
+> +			    k2 < SCLFRQ_MIN || k2 > SCLFRQ_MAX)
+> +				return -EDOM;
+> +		}
+> +	}
+> +
+> +	else if (bus_freq <= (I2C_MAX_FAST_MODE_PLUS_FREQ / 1000)) {
+> +		sclfrq = 0;
+> +		fast_mode = true;
+> +
+> +		if (src_clk_freq < 24000)
+> +		// 1MHZ cannot be supported for master core clock < 15 MHZ
+> +		// or slave core clock < 24 MHZ
+> +			return -EDOM;
+> +
+> +		k1 = round_up((DIV_ROUND_UP(src_clk_freq * 620,
+> +						     1000000)), 2);
+> +		k2 = round_up((DIV_ROUND_UP(src_clk_freq * 380,
+> +						     1000000) + 1), 2);
+> +		if (k1 < SCLFRQ_MIN || k1 > SCLFRQ_MAX ||
+> +		    k2 < SCLFRQ_MIN || k2 > SCLFRQ_MAX)
+> +			return -EDOM;
+> +
+> +		// Core clk > 40 MHZ
+> +		if (src_clk_freq > 40000) {
+> +			// Set HLDT:
+> +			// SDA hold time:  (HLDT-7) * T(CLK) >= 120
+> +			// HLDT = 120/T(CLK) + 7 = 120 * FREQ(CLK) + 7
+> +			hldt = (DIV_ROUND_UP(src_clk_freq * 120,
+> +							 1000000) + 7) & 0xFF;
+> +		} else {
+> +			hldt = 7;
+> +			dbnct = 2;
+> +		}
+> +	}
+> +
+> +	// Frequency larger than 1 MHZ is not supported
+> +	else
+> +		return false;
+
+> +	return true;
+> +}
+
+...
+
+> +	ret = device_property_read_u32(&pdev->dev, "bus-frequency", &clk_freq);
+> +	if (ret < 0) {
+> +		dev_info(&pdev->dev, "Could not read bus-frequency property\n");
+
+> +		clk_freq = 100000;
+
+We have define for this, don't we?
+
+> +	}
+
+Wolfram, we discussed this simplified timings property parser,
+any news about it?
+
+...
+
+> +static irqreturn_t npcm_i2c_bus_irq(int irq, void *dev_id)
+> +{
+> +	irqreturn_t ret;
+> +	struct npcm_i2c *bus = dev_id;
+> +
+> +	bus->int_cnt++;
+> +
+> +	if (npcm_i2c_is_master(bus))
+> +		bus->master_or_slave = I2C_MASTER;
+> +
+> +	if (bus->master_or_slave == I2C_MASTER)	{
+> +		bus->int_time_stamp = jiffies;
+> +		ret = npcm_i2c_int_master_handler(bus);
+
+> +		if (ret == IRQ_HANDLED)
+> +			return ret;
+
+What's the point?
+
+> +	}
+> +	return IRQ_HANDLED;
+> +}
+
+...
+
+> +	bus->dest_addr = (slave_addr << 1) & 0xFE;
+
+How ' & 0xFE' part is not a no-op?
+
+...
+
+> +	time_left = jiffies +
+> +		    msecs_to_jiffies(DEFAULT_STALL_COUNT) + 1;
+
+It's perfectly one line. Fix here and in any other place with similar issue.
+
+...
+
+> +static int i2c_init_debugfs(struct platform_device *pdev, struct npcm_i2c *bus)
+
+Should be void.
+
+...
+
+> +	bus->irq = platform_get_irq(pdev, 0);
+> +	if (bus->irq < 0) {
+
+> +		dev_err(&pdev->dev, "failed to get IRQ number\n");
+
+Duplicate message.
+
+> +		return bus->irq;
+> +	}
+
+...
+
+> +#if IS_ENABLED(CONFIG_DEBUG_FS)
+
+Why? Okay, why here instead of making a stub?
+
+> +	ret = i2c_init_debugfs(pdev, bus);
+
+> +	if (ret < 0)
+> +		return ret;
+
+Wrong. Should not fail the probe.
+
+> +#endif
+
+...
+
+> +#if IS_ENABLED(CONFIG_DEBUG_FS)
+
+Why? Just make it always present in the structure.
+
+> +	if (!!bus->debugfs) {
+
+!! ???
+
+> +		debugfs_remove_recursive(bus->debugfs);
+> +		bus->debugfs = NULL;
+> +	}
+> +#endif
+
+...
+
+> +	npcm_i2c_debugfs_dir = debugfs_create_dir("i2c", NULL);
+
+> +	if (IS_ERR_OR_NULL(npcm_i2c_debugfs_dir)) {
+> +		pr_warn("i2c init of debugfs failed\n");
+> +		npcm_i2c_debugfs_dir = NULL;
+> +		return -ENOMEM;
+> +	}
+
+Shouldn't prevent driver to work.
+
+...
+
+> +	if (!!npcm_i2c_debugfs_dir) {
+
+!! ???
+
+> +		debugfs_remove_recursive(npcm_i2c_debugfs_dir);
+
+> +		npcm_i2c_debugfs_dir = NULL;
+
+What's the point?
+
+> +	}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
