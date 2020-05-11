@@ -2,33 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDE51CE465
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 May 2020 21:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FD81CE468
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 May 2020 21:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731422AbgEKT0W (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 May 2020 15:26:22 -0400
-Received: from sauhun.de ([88.99.104.3]:50040 "EHLO pokefinder.org"
+        id S1731376AbgEKT2O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 May 2020 15:28:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46070 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731334AbgEKT0V (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 11 May 2020 15:26:21 -0400
+        id S1731041AbgEKT2O (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 May 2020 15:28:14 -0400
 Received: from localhost (p54B33735.dip0.t-ipconnect.de [84.179.55.53])
-        by pokefinder.org (Postfix) with ESMTPSA id 9CD632C1F6D;
-        Mon, 11 May 2020 21:26:19 +0200 (CEST)
-Date:   Mon, 11 May 2020 21:26:16 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] i2c: mux: pca954x: Refactor pca954x_irq_handler()
-Message-ID: <20200511192616.GA8724@ninjato>
-References: <20200425115152.29475-1-andriy.shevchenko@linux.intel.com>
- <20200506124242.GH185537@smile.fi.intel.com>
- <5f4f3714-e37c-d2ec-51eb-8cc3c9dd57de@axentia.se>
- <20200506160609.GN185537@smile.fi.intel.com>
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 72E8720736;
+        Mon, 11 May 2020 19:28:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589225294;
+        bh=FMwzC3cALZ1gMh74zM2EdN04monzRvOqcDXsP/XMYfM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UrKMbmSv5YAwrVOtA8tfs2ILIeXJZz/MQMTYqXgwWoH7UYeSZseBS/qE7WrwVB40G
+         GMzJwTAqgg4xYqQvlMNQBCkdgCd9SbBoLkgB5BAi/27uJlQt13m+0pDAZarmyAyNZX
+         bQbr9ASBhxN41RwGwwY42o/5gwQhFjthIb/NOh2g=
+Date:   Mon, 11 May 2020 21:28:10 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     kernel@pengutronix.de, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: algo-pca: update contact email
+Message-ID: <20200511192810.GB8724@ninjato>
+References: <20200502142650.19089-1-wsa@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="45Z9DzgjV8m4Oswq"
+        protocol="application/pgp-signature"; boundary="uZ3hkaAS1mZxFaxD"
 Content-Disposition: inline
-In-Reply-To: <20200506160609.GN185537@smile.fi.intel.com>
+In-Reply-To: <20200502142650.19089-1-wsa@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -36,45 +42,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---45Z9DzgjV8m4Oswq
+--uZ3hkaAS1mZxFaxD
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > Reviewed-by: Peter Rosin <peda@axentia.se>
+On Sat, May 02, 2020 at 04:26:49PM +0200, Wolfram Sang wrote:
+> The 'pengutronix' address is defunct for years. Use the proper contact
+> address.
 >=20
-> Thank you, Peter!
->=20
-> I hope this applies to the entire series?
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
 
-I interpreted it this way; anyhow, for me it would be easiest if every
-patch gets tagged individually because then 'patchwork' picks them all
-up correctly. So, if it is not too much work...
-
-For this series:
-
-Applied to for-next, thanks!
+Applied to for-current, thanks!
 
 
---45Z9DzgjV8m4Oswq
+--uZ3hkaAS1mZxFaxD
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl65ptQACgkQFA3kzBSg
-Kba7cQ/9E/PB7KzLBFhJbJuspm+YT6IyQLW2FBDCFemhpkH2LTAziIvxdp6GX7wa
-+n/jAv/CILCDs8xmpEMsvbwisCFYdwTg8zeDgoAlXQbtnc6Kc9MROewpK4tFaA0Q
-HnE8e2icgq5jdXvvvoxPNjGm7XktlwpZfcAbxKVjB6NnOGLhe8Xqt2L/DYeZFcwC
-RLKh154RERxUugD4fm5rcNeesCRk/8UxRGXbEPp0cs1/igbTvS+3u4itSz9BOsnr
-KCXbGbTrnDHH9AkV8uQjyJYokYvUqDMmiAnXlefKN7yE8DFWeE1NoVswVKTQDqGn
-wqBl2XcbKLZ4cnwC2S7F9Xpt6bBIWhY8TyXqXBaHSVXbp85xFmjom76zeOMrraaj
-II3KYM/5RhxUEgvcWo9eMk8o5gBNSNj/kNuH/yCi0pxnI6SEjUw/X8S49EDUCnea
-E/vNACUIGBeaURXis5X/pK9JU0Xr15LFOIGbw0NZSzaZfrAWzKgEfOnU3MrDa2F0
-+CZ/Fx5uFd9qMLCjrltwXSnVDchqJEezZcoLCaO04DGOcdSF7tpazs4KJ0a/3+KI
-044O7Tdgt2bodebLt4qinGORmckSMpM4W0iv5c/A/eDQZGmIKuydDlacFuEnt70L
-wxlmYpbLr6YxY9CwaEalut72Zj4uKO1ju0XitszjdrWNDzDDuBU=
-=KgG2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl65p0oACgkQFA3kzBSg
+KbYuJQ//ZJOhNkugBIt2mTUQ5fqsVlAk5C17ICHev/VWCnnHBBt8ikztnUS9oRRF
+/zcYWLpuPsehIthFFEfVNRUIGyq6yKrLAFBd3Njw4U1WKf6okjLl5jyEiVwNsh7d
+6Gh95AQiXg5rKxbrzBT83qzP1BQszxevsvCUGkcTE+wwHphA1ghnNb/3P/acV94G
+4o7g/FreFNXzOldohVlMTKjNjCc/35PSAUvBIol6kZQnE5EoGPEoMtgBD7LaDRHv
+5HUgEv/EMv9tobc/+RSCCHZ470ociwg/NX+ay+GyBAvXC3aoSwvIzvHB1E1daRyG
+yy7RetqWN2AU+t3DB5pdM4R5iXuuL9jgfYQJ0iX1Y1Rj8q0RnuMG/ziZPx3IP+YW
+J4jw6Wv16q0yORj1N+/2PA7WEgr8G6F5mf5BQBld0wQewuXl9Y4ROOQueGDdodJe
+xzn2j5VXba3sLgBY3/oWNDb/4nFPgZwm1tgcLS+tBaH9xbUImcPUJN5AwfDe8Xwn
+ImI2aZnRjQ5E3YjgSTTofCvHUICQDfBhJWO9NG7XWnLGf9HJ6QMGnudfBcZ2O2+u
+b77q69D8Btg1Byx9aiwPJ0GGEdyw2+BQm6cNdUm4vFxkDgofPB2TNtfs9+oMJfr9
+anzWj7HJ93Whqr64jo3YwzUTElPIm7KSMZ6aRywCSYfy7Br65lU=
+=tZcz
 -----END PGP SIGNATURE-----
 
---45Z9DzgjV8m4Oswq--
+--uZ3hkaAS1mZxFaxD--
