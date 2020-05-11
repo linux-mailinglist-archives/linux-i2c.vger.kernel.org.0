@@ -2,75 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 360CC1CE82E
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 May 2020 00:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1311CE834
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 May 2020 00:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726067AbgEKWes (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 May 2020 18:34:48 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:34622 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgEKWes (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 May 2020 18:34:48 -0400
-Received: by mail-ot1-f66.google.com with SMTP id 72so8988250otu.1;
-        Mon, 11 May 2020 15:34:47 -0700 (PDT)
+        id S1725836AbgEKWh7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 May 2020 18:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725828AbgEKWh5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 May 2020 18:37:57 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877B8C061A0C
+        for <linux-i2c@vger.kernel.org>; Mon, 11 May 2020 15:37:55 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id f15so4528408plr.3
+        for <linux-i2c@vger.kernel.org>; Mon, 11 May 2020 15:37:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x7XWnhuv6bB5++eXCPLD4AyAk/i6oZ+YWOu/1t2B1wE=;
+        b=M0crUOJyOxNj2pD6eqMOnmLoO4knAmORM3NSudilFoFB5IkqFFKMHWOphiB8VzOMF6
+         XE7AH7T7FvhNr92u6HZdCKuP1bYupqVurN80gLEm6vZ9oV3BPgVHmMcAipSIUGawcVsZ
+         eIncwh/3VxSOTivadOCwvhSxw7iOvIy4FkW08=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eEYJO787L4hFdfVmppGJoURsIfu4v30oXYj733amcm8=;
-        b=JcEGgm8HYb/M1fWJB7i9Q4Bg3+k6SAsMZjtDQqLHD9KWjvKt3o5jISrOtwbfRwV5WC
-         1TLlMaGq/3s9ub54txzZWt5Pa0ALRn7w0TtcKRHL4hHTAQP7cU+OsYmPgVwNY8tUrO58
-         Y+ZCiiV/rNw3X7cM9j0ZxEtfxfePzsGF8gMF9VwxpOLmLH+NChdW3RVpDhP5vsUIaz4l
-         HoTBSIBPKorjCjXSp2do0hPKawKD8P7tq0V+oCqbpKKQBoQJFx0lO/hGaRkXHVIYeHD6
-         3S2KovU7FVKSnNALN+mR/5IQO4dafoapDf87oEUEUZRyA/vU9lyJ0VVjyrE/ZwushA3S
-         np1A==
-X-Gm-Message-State: AGi0PuZRYm3ZNDYEKiwmry6WhOCJUl6YQlryULornBgA3K1PIjCYRNVm
-        ZLM0wuZpIgKr9xLdPOFSJg==
-X-Google-Smtp-Source: APiQypLtT/X05M8l7zBdEA0gsanAJHzjfh1Fbw4ZKIwZebB4QlF353Lej8+d2MpNzUXHB7tUhCMpfA==
-X-Received: by 2002:a9d:6ad0:: with SMTP id m16mr13613165otq.122.1589236487268;
-        Mon, 11 May 2020 15:34:47 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id n23sm1231572ota.37.2020.05.11.15.34.46
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x7XWnhuv6bB5++eXCPLD4AyAk/i6oZ+YWOu/1t2B1wE=;
+        b=keJ//fQqUbEcJx9+bD1q1tTTVKjzcFAYKi7XPgR2NdB/lgxz9A8WwcUnV+eGwiH7S4
+         5DtvhR8tEJDItWa37NSQQiluXjfO2T+pssdKq2rwzzucloJfw1G8gdTYXNCyi7q7Ms5B
+         S0t5zaZeoEvMVYrYK+wFqJYPdYIvU/v5Smwho7yI+t9k0ku7TRuE+0tQV+jRQOCnJCh2
+         sRPUP59C8w70BvFFWtRhggXCnyhfWf9nzwzwqfpyytleFVEXl9MC5O/YlWjfYIhLSkjH
+         rewIYCvVUGmerdQG4qjCdBCO3iGiP7a65i4qRjLVWUQP1qDLCjEw0sl8oRgdPho0covY
+         1V1A==
+X-Gm-Message-State: AGi0PuYK4nBpT/NK6Q8a1PbowdntQOSCQkb8/RFJABZCTd2n7Hxpyflo
+        ohYOjn35gRZUmz/5h4slMnFz
+X-Google-Smtp-Source: APiQypJVE45601UTkg87xjBXf8sy1JrHaBHybIyxIKjfMaF9SMeWf9TSiwObdHSIDRBuVNhClyMw8A==
+X-Received: by 2002:a17:90a:32ea:: with SMTP id l97mr25198759pjb.50.1589236674837;
+        Mon, 11 May 2020 15:37:54 -0700 (PDT)
+Received: from idle.mtv.corp.google.com ([2620:15c:202:1:fe92:d5a8:f1c5:e510])
+        by smtp.gmail.com with ESMTPSA id x19sm10790040pjq.54.2020.05.11.15.37.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 15:34:46 -0700 (PDT)
-Received: (nullmailer pid 7417 invoked by uid 1000);
-        Mon, 11 May 2020 22:34:45 -0000
-Date:   Mon, 11 May 2020 17:34:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org, od@zcrc.me,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-serial@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 2/8] dt-bindings: intc: Convert ingenic,intc.txt to YAML
-Message-ID: <20200511223445.GA7357@bogus>
-References: <20200426185856.38826-1-paul@crapouillou.net>
- <20200426185856.38826-2-paul@crapouillou.net>
+        Mon, 11 May 2020 15:37:54 -0700 (PDT)
+From:   Matthew Blecker <matthewb@chromium.org>
+X-Google-Original-From: Matthew Blecker <matthewb@google.com>
+To:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
+Cc:     Matthew Blecker <matthewb@chromium.org>
+Subject: [PATCH v2 0/1] i2c: Add i2c-pseudo driver for userspace I2C adapters.
+Date:   Mon, 11 May 2020 15:37:36 -0700
+Message-Id: <20200511223737.46122-1-matthewb@google.com>
+X-Mailer: git-send-email 2.26.2.645.ge9eca65c58-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200426185856.38826-2-paul@crapouillou.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, 26 Apr 2020 20:58:50 +0200, Paul Cercueil wrote:
-> Convert the ingenic,intc.txt doc file to ingenic,intc.yaml.
-> 
-> Some compatible strings now require a fallback, as the controller
-> generally works the same across the SoCs families.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  .../interrupt-controller/ingenic,intc.txt     | 28 ---------
->  .../interrupt-controller/ingenic,intc.yaml    | 63 +++++++++++++++++++
->  2 files changed, 63 insertions(+), 28 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/ingenic,intc.txt
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/ingenic,intc.yaml
-> 
+From: Matthew Blecker <matthewb@chromium.org>
 
-Applied, thanks!
+This patch adds i2c-pseudo, a module that provides I2C adapters backed by
+userspace programs. This allows for userspace implementations of
+functionality such as tunneling I2C through another communication channel,
+or mocking of real I2C devices whose behavior cannot be modeled with
+i2c-stub.
+
+Module naming: A pseudo I2C adapter is analogous to a pseudo terminal.
+
+In the Chromium OS ecosystem we are using this for a userspace I2C adapter
+built on top of an existing userspace I2C-over-USB implementation used with
+embedded debug devices that act as I2C master to a device under test (DUT).
+This arrangement is used for interacting with I2C slaves on the DUT,
+particularly for transferring firmware to an embedded controller IC which
+receives programming via I2C.
+
+That I2C pseudo controller implementation is here:
+https://chromium.googlesource.com/chromiumos/third_party/hdctools/+/refs/heads/master/servo/interface/i2c_pseudo.py
+
+---
+
+Changelog v2:
+- Fix ARCH=um compilation error from non-const strlen("literal").
+
+Matthew Blecker (1):
+  i2c: Add new i2c-pseudo driver for userspace I2C adapters.
+
+ .../i2c/pseudo-controller-interface.rst       |  305 ++
+ drivers/i2c/Kconfig                           |   17 +-
+ drivers/i2c/Makefile                          |    1 +
+ drivers/i2c/i2c-pseudo.c                      | 3200 +++++++++++++++++
+ 4 files changed, 3522 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/i2c/pseudo-controller-interface.rst
+ create mode 100644 drivers/i2c/i2c-pseudo.c
