@@ -2,107 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 919711CFBAC
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 May 2020 19:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48F51CFD2D
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 May 2020 20:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727104AbgELRKw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 12 May 2020 13:10:52 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38922 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725938AbgELRKv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 May 2020 13:10:51 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 2BE132A2240
-Received: by earth.universe (Postfix, from userid 1000)
-        id C90F63C08C6; Tue, 12 May 2020 19:10:47 +0200 (CEST)
-Date:   Tue, 12 May 2020 19:10:47 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+        id S1726324AbgELSZW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 12 May 2020 14:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730707AbgELSZW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 May 2020 14:25:22 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5B1C061A0C;
+        Tue, 12 May 2020 11:25:21 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id e20so11296767otk.12;
+        Tue, 12 May 2020 11:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=aRj33LryoK4NVw/cU+uGnOCPpYy9kXB0xL4YJW/+HOI=;
+        b=G89N+DIXJ0m8qnqW8fmov8F5+bXtV1Cxf3LAykuIZVScjQ+ZARwSFNXr1hE8b20B5H
+         AzgCmsGKthY/9dRUpNbGMGbR4nEQxicCWCn/BPWTIVy4lzRDKtaTh6kxX7Vq69iBx06/
+         48U4bAgbVjPV2W8ZQYIIQ1ASuQnDcYicgMiWoZx5ck+5+/UPIBiC14HRAqSRd3MjDHXC
+         jWcokOmXIZjfUDZKipLw6/PEzgBbfqm+3rogBOtLh6wbiyA1eaSK+d1KBodWPyGpFKOL
+         B8RVorM2p8Y2ZQViO8qGwLq0kE9yeCS6h9APel8sVVBOrEu76WF359gmbx3/Bj7Kuu+s
+         DqTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition:in-reply-to
+         :user-agent;
+        bh=aRj33LryoK4NVw/cU+uGnOCPpYy9kXB0xL4YJW/+HOI=;
+        b=DxI6ENAvakjU28X6j5jhizjJLqmtSNqrNOYMq/CpR5Ere3SOEBznwhkVawEBh1s/Ni
+         pFZQ919FZUnfaCW+hZQaIPHCP0Ne1dRw1pTjilxcf9GYT/Mbwdm/vX8XGK5Zf49RYxxf
+         mIXP+KXGcMwiDgB95Gdkw2MYGcUHwalm9yhXzj9cfAvrnC0K7a7Wq7sGJcjYkQR3xtFc
+         +6gwPcDnyzrsB0K6YVCxeJi5gPo2zuwF9WjDs5n5IBK2y8a2az6LHkco4+ZxgH0Ev2R3
+         jZxonvy0/fuNom7FFu2TeOBDB+RmbvCHBgaTI6WChg9euzWjkJY579JnB4EhF0AaesP1
+         4qqw==
+X-Gm-Message-State: AGi0PuaFciBgLq6E4QlkVtgjH8qjnhqj/8DJnB6WyNF+lxe2FJ7lMZ7t
+        Y8+MDbWK/o/JODg/VlLKNw==
+X-Google-Smtp-Source: APiQypKlJtOmmYqWrL9bW0Hq5Re0MJllNIsFRR4wcUyNq4XGwzZZ4LNXSVxzNiHnXVoifuMpWPvyEA==
+X-Received: by 2002:a05:6830:1da1:: with SMTP id z1mr17695608oti.58.1589307920726;
+        Tue, 12 May 2020 11:25:20 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id m27sm345076oom.22.2020.05.12.11.25.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2020 11:25:20 -0700 (PDT)
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:8b39:c3f3:f502:5c4e])
+        by serve.minyard.net (Postfix) with ESMTPSA id E06EC180042;
+        Tue, 12 May 2020 18:25:18 +0000 (UTC)
+Date:   Tue, 12 May 2020 13:25:17 -0500
+From:   Corey Minyard <minyard@acm.org>
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
+Cc:     linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        openipmi-developer@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] power: supply: bq24190_charger: convert to use
- i2c_new_client_device()
-Message-ID: <20200512171047.gyk6zze46ow6i3yy@earth.universe>
-References: <20200326210954.12931-1-wsa+renesas@sang-engineering.com>
- <20200326210954.12931-2-wsa+renesas@sang-engineering.com>
- <20200512162723.GI13516@ninjato>
+Subject: Re: [PATCH 1/1] char: ipmi: convert to use i2c_new_client_device()
+Message-ID: <20200512182517.GP9902@minyard.net>
+Reply-To: minyard@acm.org
+References: <20200326210958.13051-1-wsa+renesas@sang-engineering.com>
+ <20200326210958.13051-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tefe22k3doyhs66g"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200512162723.GI13516@ninjato>
+In-Reply-To: <20200326210958.13051-2-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, Mar 26, 2020 at 10:09:58PM +0100, Wolfram Sang wrote:
+> Move away from the deprecated API.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
---tefe22k3doyhs66g
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ok by me.
 
-Hi Wolfram,
+Acked-by: Corey Minyard <cminyard@mvista.com>
 
-On Tue, May 12, 2020 at 06:27:23PM +0200, Wolfram Sang wrote:
-> On Thu, Mar 26, 2020 at 10:09:54PM +0100, Wolfram Sang wrote:
-> > Move away from the deprecated API in this comment.
-> >=20
-> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->=20
-> Can we have this now so I can remove the old API in the next merge
-> window?
+Do you want me to take this, or is this part of something else?  I can
+submit it if you like.
 
-Thanks for the ping. The patch is now queued into power-supply's
-for-next branch.
+-corey
 
--- Sebastian
-
-> > ---
-> >  drivers/power/supply/bq24190_charger.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/sup=
-ply/bq24190_charger.c
-> > index 453d6332d43a..4540e913057f 100644
-> > --- a/drivers/power/supply/bq24190_charger.c
-> > +++ b/drivers/power/supply/bq24190_charger.c
-> > @@ -673,7 +673,7 @@ static int bq24190_register_reset(struct bq24190_de=
-v_info *bdi)
-> >  	 *   { .type =3D "bq24190", .addr =3D 0x6b, .properties =3D pe, .irq =
-=3D irq };
-> >  	 * struct i2c_adapter ad =3D { ... };
-> >  	 * i2c_add_adapter(&ad);
-> > -	 * i2c_new_device(&ad, &bi);
-> > +	 * i2c_new_client_device(&ad, &bi);
-> >  	 */
-> >  	if (device_property_read_bool(bdi->dev, "disable-reset"))
-> >  		return 0;
-> > --=20
-> > 2.20.1
-> >=20
-
-
-
---tefe22k3doyhs66g
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl662JEACgkQ2O7X88g7
-+pq+2A//VuwHDZl3QCyXTOsEqiULP9UPbP2WhUE2b/J8/JRSx8/UeDtan1n8CG7u
-JOGrFqxU3W+i7iy5xbY83FOtocw/4yocAAe50I9lJDqxwgns7nnfyMRGT28OHxEY
-haAhxTBn6yxL/Ve2mhoW3oJAiR5b/FZ1BGczxkBj0iyzQfgwhrqgbrapAVUNFvP9
-/Rc2WUkCQWEg/6Gr20vI7WQLtCnMINMN8VhU0W2d7YWLnSPC9OucWMiDSdocGLU8
-zrb9FhrkaAfqqCJgn/Ze/REdal874SIFi1hy7lepSoOw1irnOCQpczIsvLerjr3V
-Djpg2DHERhQsAKQAbPIugKbTUo98xylu6uxbCZCOTLCtfrMJb0mrwjA4b/C5gvlD
-EahQcOLLalQJx7gKdmgVdFWfebopbVENF8rcyMGt1BVE4ws7SczEAHKow5g0L06H
-aqVW6rgEF+fHfgaGpD6A2TIhv3EeFry1T9gcxaWZqX3M8aSqW7c1BV/y22/4tycK
-gqml5/HCfLAD9y2KpcED5y3mHZuTPKOh5U9h07cy99atMVK35NhFGadEkauNgoUH
-q09d8KoaqvWkofJf3o0I75OPetkHCpMx4zD1kYsS8gBhBWeSdaHv1/xyttW5jb6+
-+h1HxszputoLIM5HpC5kiNgjWg40WNhRGQpEo/26lMbOtLJ+830=
-=57sD
------END PGP SIGNATURE-----
-
---tefe22k3doyhs66g--
+> ---
+>  drivers/char/ipmi/ipmi_ssif.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+> index 8ac390c2b514..2791b799e33d 100644
+> --- a/drivers/char/ipmi/ipmi_ssif.c
+> +++ b/drivers/char/ipmi/ipmi_ssif.c
+> @@ -1945,8 +1945,8 @@ static int ssif_adapter_handler(struct device *adev, void *opaque)
+>  	if (adev->type != &i2c_adapter_type)
+>  		return 0;
+>  
+> -	addr_info->added_client = i2c_new_device(to_i2c_adapter(adev),
+> -						 &addr_info->binfo);
+> +	addr_info->added_client = i2c_new_client_device(to_i2c_adapter(adev),
+> +							&addr_info->binfo);
+>  
+>  	if (!addr_info->adapter_name)
+>  		return 1; /* Only try the first I2C adapter by default. */
+> -- 
+> 2.20.1
+> 
