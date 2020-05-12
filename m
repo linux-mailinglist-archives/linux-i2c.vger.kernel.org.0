@@ -2,117 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08ADE1CF8AE
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 May 2020 17:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C451CFA53
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 May 2020 18:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727099AbgELPMf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 12 May 2020 11:12:35 -0400
-Received: from mga02.intel.com ([134.134.136.20]:28510 "EHLO mga02.intel.com"
+        id S1728309AbgELQOo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 12 May 2020 12:14:44 -0400
+Received: from mga12.intel.com ([192.55.52.136]:11707 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725888AbgELPMf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 12 May 2020 11:12:35 -0400
-IronPort-SDR: oBEA6SQyPGOJkKxBFVFpPhfe+RueLuBITEQTRsWJrOTr5iYmrw1CpnWPQUDQiPrpUtEgOQTzNi
- 7be2BrnkIGKg==
+        id S1728164AbgELQOn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 12 May 2020 12:14:43 -0400
+IronPort-SDR: 2NaG36gMiDKhfuaVmfM4lv+75+9LA1XI2D0lWK2qe4JUzn7YKdovgFLrjBQCOj5w5RjJ7QBHuq
+ +UBr8AyRWz8g==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 08:12:34 -0700
-IronPort-SDR: kMDwoyRIr+l613aR39meVcK61mm1wbKPgpPjE59U42ZIYHKrVPRUQNPlWJdMqDGeE/tJU6oBFQ
- trd76HO6pqnQ==
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 09:14:42 -0700
+IronPort-SDR: /lBrwxSb+rFwF/p/A3dLkJzeigwBW8/JL6Dnzqi0mKZgay3IHQ7hNxVsXlRhpKgZeaK3O7DW8o
+ Qx/k4L7+AUkQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,384,1583222400"; 
-   d="scan'208";a="463581255"
-Received: from mylly.fi.intel.com (HELO [10.237.72.51]) ([10.237.72.51])
-  by fmsmga005.fm.intel.com with ESMTP; 12 May 2020 08:12:32 -0700
-Subject: Re: [PATCH v1 1/4] i2c: designware: Split out i2c_dw_validate_speed()
- helper
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
-References: <20200507135140.14635-1-andriy.shevchenko@linux.intel.com>
- <228e9c62-60b9-e5b8-ea5e-e012df83479b@linux.intel.com>
- <20200511134238.GI185537@smile.fi.intel.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <c13ddaf2-5aef-e3fc-20ac-b1e0a9182fb0@linux.intel.com>
-Date:   Tue, 12 May 2020 18:12:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+   d="scan'208";a="250945371"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga007.jf.intel.com with ESMTP; 12 May 2020 09:14:40 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jYXYJ-006FvB-78; Tue, 12 May 2020 19:14:43 +0300
+Date:   Tue, 12 May 2020 19:14:43 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v2 5/5] i2c: designware: Allow slave mode for PCI
+ enumerated devices
+Message-ID: <20200512161443.GA1491106@smile.fi.intel.com>
+References: <20200425134448.28514-1-andriy.shevchenko@linux.intel.com>
+ <20200425134448.28514-5-andriy.shevchenko@linux.intel.com>
+ <9f6213e9-e14c-a4b2-eb10-d5463dbe2c19@linux.intel.com>
+ <20200428221831.GC7698@kunai>
 MIME-Version: 1.0
-In-Reply-To: <20200511134238.GI185537@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200428221831.GC7698@kunai>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 5/11/20 4:42 PM, Andy Shevchenko wrote:
-> On Mon, May 11, 2020 at 04:11:57PM +0300, Jarkko Nikula wrote:
->> On 5/7/20 4:51 PM, Andy Shevchenko wrote:
->>> In order to export array supported speed for wider use,
->>> split out them along with i2c_dw_validate_speed() helper.
->>>
->>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>> ---
->>>    drivers/i2c/busses/i2c-designware-core.h    | 31 +++++++++++++++++++++
->>>    drivers/i2c/busses/i2c-designware-platdrv.c | 29 ++++---------------
->>>    2 files changed, 36 insertions(+), 24 deletions(-)
->>>
->>> diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
->>> index 1674caf277451..626959573f894 100644
->>> --- a/drivers/i2c/busses/i2c-designware-core.h
->>> +++ b/drivers/i2c/busses/i2c-designware-core.h
->>> @@ -9,6 +9,7 @@
->>>     * Copyright (C) 2009 Provigent Ltd.
->>>     */
->>> +#include <linux/errno.h>
->>>    #include <linux/i2c.h>
->>>    #define DW_IC_DEFAULT_FUNCTIONALITY (I2C_FUNC_I2C |			\
->>> @@ -351,3 +352,33 @@ extern int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev);
->>>    #else
->>>    static inline int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev) { return 0; }
->>>    #endif
->>> +
->>> +static const u32 i2c_dw_supported_speeds[] = {
->>> +	I2C_MAX_HIGH_SPEED_MODE_FREQ,
->>> +	I2C_MAX_FAST_MODE_PLUS_FREQ,
->>> +	I2C_MAX_FAST_MODE_FREQ,
->>> +	I2C_MAX_STANDARD_MODE_FREQ,
->>> +};
->>> +
->>> +static inline int i2c_dw_validate_speed(struct dw_i2c_dev *dev)
->>> +{
->>> +	struct i2c_timings *t = &dev->timings;
->>> +	unsigned int i;
->>> +
->>> +	/*
->>> +	 * Only standard mode at 100kHz, fast mode at 400kHz,
->>> +	 * fast mode plus at 1MHz and high speed mode at 3.4MHz are supported.
->>> +	 */
->>> +	for (i = 0; i < ARRAY_SIZE(i2c_dw_supported_speeds); i++) {
->>> +		if (t->bus_freq_hz == i2c_dw_supported_speeds[i])
->>> +			break;
->>> +	}
->>> +	if (i == ARRAY_SIZE(i2c_dw_supported_speeds)) {
->>> +		dev_err(dev->dev,
->>> +			"%d Hz is unsupported, only 100kHz, 400kHz, 1MHz and 3.4MHz are supported\n",
->>> +			t->bus_freq_hz);
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->>
->> This header is included by every i2c-designware-*.c file and this inline
->> function is not tiny. Would it be better to have this in
->> i2c-designware-common.c instead?
+On Wed, Apr 29, 2020 at 12:18:31AM +0200, Wolfram Sang wrote:
+> On Mon, Apr 27, 2020 at 05:05:35PM +0300, Jarkko Nikula wrote:
+> > On 4/25/20 4:44 PM, Andy Shevchenko wrote:
+> > > Allow slave mode for PCI enumerated devices by calling a common i2c_dw_probe()
+> > > instead of i2c_dw_probe_master().
+> > > 
+> > > While dropping dependency to platform driver in slave module, move its
+> > > configuration section above, closer to core.
+> > > 
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > ---
+> > > v2: new patch
+> > >   drivers/i2c/busses/Kconfig                 | 21 ++++++++++-----------
+> > >   drivers/i2c/busses/i2c-designware-pcidrv.c |  4 ++--
+> > >   2 files changed, 12 insertions(+), 13 deletions(-)
+> > > 
+> > To all 5 patches
+> > 
+> > Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 > 
-> Yes, but then we will need to export i2c_dw_supported_speeds as well as its
-> array size.
-> 
-Would that not be needed if you move ACPI parts also into 
-i2c-designware-common.c?
+> And all applied to for-next, thanks!
+
+Wolfram, I do not see them in your tree.
+Neither Linux next has them. Something should I do?
 
 -- 
-Jarkko
+With Best Regards,
+Andy Shevchenko
+
+
