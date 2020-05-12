@@ -2,116 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1C51CFFB3
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 May 2020 22:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4171D007F
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 May 2020 23:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725987AbgELUpb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 12 May 2020 16:45:31 -0400
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:39301 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726324AbgELUpb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 May 2020 16:45:31 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id D7753918;
-        Tue, 12 May 2020 16:45:29 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Tue, 12 May 2020 16:45:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=rwySqcNWW214fMmD+gPzxtUUUzq
-        ZWRFkdLuVb/x80ow=; b=u9NtAq6IcVdG1GhdUCPqYaHRhSKfclU6guc9iMo3Xig
-        aQ0AoUXR8Ffc/HSjjFFda2RvO0B9axbyTBG9Y2mOFSCpwSWHyqIpcYDYHM/eFpL8
-        wPgj7hBm4au7ekEWScafo8xQDaqIyTij6wV00nCV/lNrmRCXwjijuhMEkiSARbFa
-        GCupP0y8igyYSUqgXAMrquU9EfgcFy4M6hxLj2fgf3eFBjGe6aqciRdx0TqfkJDY
-        Gk6xBdAxjvOftuC5ORiZs5DWMVN/srWsb7ruoF65L4My/RGxX2nwHpIK1w1DTVEA
-        aP6a65QvMe1Lb96kkagGupoUUeTHUJIdqrNEMTxZRCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=rwySqc
-        NWW214fMmD+gPzxtUUUzqZWRFkdLuVb/x80ow=; b=gDFQoTyzY9Udfvh1Bfv9lN
-        QhRkd1VF3ezh8FDnLSp7ObJN3Ipee/N79HzU7Mlhdfkm8vbucm5ETZ+GtfeaYday
-        4+QmQZrukYbPgawljgs+j9SogXyuIZ5RtbEuNh+ENmC19GdyRA2Z5w7VWt/cZ0hB
-        mTxYndagf5vAoQfuOB8iEZNay8nJxSutcWrl39JTfbxKXN9N64yi0X/j8EzM8Fhv
-        GGSMRuC84LJdVNuqXUkZFqNRJ7bg4TMVYJyAdo0lFRkAX9rsNVfAgcwdP+q14f7H
-        OHyqyQRL8ZcsP39ClHCMxlfa5erpIUk8ah1d4xQSWGjH7PufhLS6/mv1p++7qfmA
-        ==
-X-ME-Sender: <xms:6Aq7XgKZb8S-rmaINdmMCVKUAx8_PZDAoMXtqFkl86gURjkjt1dt_w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrledvgddugeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpeffhf
-    fvuffkfhggtggujgesghdtreertddtvdenucfhrhhomheprfgrthhrihgtkhcuhghilhhl
-    ihgrmhhsuceophgrthhrihgtkhesshhtfigtgidrgiihiieqnecuggftrfgrthhtvghrnh
-    epgeehheefffegkeevhedthffgudfhgeefgfdthefhkedtleffveekgfeuffehtdeinecu
-    kfhppeduieeirddujeeirdduvddtrddutdeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
-X-ME-Proxy: <xmx:6Aq7XgIOyvha1yS8OmGL0X-W_zElq0EJQxmrx998kc2Y8KuGVmahgw>
-    <xmx:6Aq7Xgsb1hMnvE3PL2As5yNfrw0cpkAHr3O3bLiHV7q19FUruAgqkQ>
-    <xmx:6Aq7XtbRfIt8jVPhdesH4TDacSaWzW44SqP_9t2cKgev-7aPsp8fng>
-    <xmx:6Qq7Xh0_zUR_T72_E_eT5QU4_MUM9Vx2loxXa_CeHlUDvQhdYg6vFA>
-Received: from localhost (mobile-166-176-120-106.mycingular.net [166.176.120.106])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 8961A30662A2;
-        Tue, 12 May 2020 16:45:28 -0400 (EDT)
-Date:   Tue, 12 May 2020 15:45:27 -0500
-From:   Patrick Williams <patrick@stwcx.xyz>
+        id S1729646AbgELVO3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 12 May 2020 17:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725938AbgELVO3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 May 2020 17:14:29 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA61C061A0C;
+        Tue, 12 May 2020 14:14:29 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id v128so2724751oia.7;
+        Tue, 12 May 2020 14:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mX8ky5JN8pgBa+YKDvrjatRwVe22JYdHF5VmHIVTBlE=;
+        b=iV2RPOe2FrnU+h8+Up/ExtrRpnFvfhk+w+IzXzJ1UdFrcVHhC8Q2KU+oNoZrgCVVVj
+         UfWmpR8Xrv6YcwnZD7Q/sg/X8UlJpMIXb4/5VzUTAvEDFkYqpOT1/7IALm93B646bOGP
+         RQf8yWvZRpLlmbdgE3IgHH1sGeGCbD0y3zslRYAujjoQtxn36UV5NCsTnuQIJzBiN+VL
+         ILuab/8Rs5aitKxV6no/fefi31Y4PLJPcDQxnWtGw2NYAKnq/7HgawJVyuFY+NFaMxUN
+         pYlfguUMgdRyGrFSjS+3VGExqgpGKsu89IK8ReVUAaE2X5L5B3RneXsIckDYZ5C0d4n8
+         kxeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition:in-reply-to
+         :user-agent;
+        bh=mX8ky5JN8pgBa+YKDvrjatRwVe22JYdHF5VmHIVTBlE=;
+        b=Pvcg0aLazuX5z23YN0PVn6rrnCB6Zolr5L5NW4Lnh70NYyVX6NJaaQMCBDT9biJPG3
+         a2pvodkeXKEg05lt9UgwTeuFx+F/LB6H74N5UlHaeL7j9XJcqSsy+F/CHpRbcG/Moa2K
+         NGMY3BABmwAl/Wd70jKicsjAdUwnsyc+Llnd95UgjmZggKbwSVxiM8QW1/YnfdhtIGaA
+         YcBSzl8ZqqQko78Gtg6rgQZkx36C1ISKMSiBzVCEyodzFezIaYNjZ0qBp0kQoSdS1ZwS
+         5mOl4puBgsb2ESrPH5iPHciWZDVjGK3acVpqF4yoCmM307Vk+RVe4g8z5IS/XPTO3HIp
+         nqdw==
+X-Gm-Message-State: AGi0PuY+mvCuT/nSTj06dc/XWPlzmj0EehJim7fhHrL5yV6gFBw2Ibvp
+        nxhH1w50OFvfYu2bQybcGw==
+X-Google-Smtp-Source: APiQypJN7RiCdIUjHWyYpUVmDqReWQY+dqrjR9QQhXITyIFORnps2wrSQiLn3qpmQpwZwzhff2vhDg==
+X-Received: by 2002:aca:4ac3:: with SMTP id x186mr16258452oia.81.1589318068467;
+        Tue, 12 May 2020 14:14:28 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id d19sm2168689ooa.48.2020.05.12.14.14.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2020 14:14:27 -0700 (PDT)
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:8b39:c3f3:f502:5c4e])
+        by serve.minyard.net (Postfix) with ESMTPSA id 7C54C180051;
+        Tue, 12 May 2020 21:14:26 +0000 (UTC)
+Date:   Tue, 12 May 2020 16:14:25 -0500
+From:   Corey Minyard <minyard@acm.org>
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] i2c: slave-eeprom: add support for 24c512 EEPROMs
-Message-ID: <20200512204527.GH10214@heinlein>
-References: <20200512142046.26454-1-wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] char: ipmi: convert to use i2c_new_client_device()
+Message-ID: <20200512211425.GQ9902@minyard.net>
+Reply-To: minyard@acm.org
+References: <20200326210958.13051-1-wsa+renesas@sang-engineering.com>
+ <20200326210958.13051-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uJrvpPjGB3z5kYrA"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200512142046.26454-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20200326210958.13051-2-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, Mar 26, 2020 at 10:09:58PM +0100, Wolfram Sang wrote:
+> Move away from the deprecated API.
 
---uJrvpPjGB3z5kYrA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Well, I should have looked a little closer first... comment inline
 
-On Tue, May 12, 2020 at 04:20:46PM +0200, Wolfram Sang wrote:
-> I don't plan to support every EEPROM type, but the 24c512 ones need a
-> tiny code update, so let's have that upstream.
->=20
-> Reported-by: Patrick Williams <patrick@stwcx.xyz>
+> 
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > ---
->=20
-> Tested on a Renesas Lager board (R-Car H2).
->=20
->  drivers/i2c/i2c-slave-eeprom.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->=20
+>  drivers/char/ipmi/ipmi_ssif.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+> index 8ac390c2b514..2791b799e33d 100644
+> --- a/drivers/char/ipmi/ipmi_ssif.c
+> +++ b/drivers/char/ipmi/ipmi_ssif.c
+> @@ -1945,8 +1945,8 @@ static int ssif_adapter_handler(struct device *adev, void *opaque)
+>  	if (adev->type != &i2c_adapter_type)
+>  		return 0;
+>  
+> -	addr_info->added_client = i2c_new_device(to_i2c_adapter(adev),
+> -						 &addr_info->binfo);
+> +	addr_info->added_client = i2c_new_client_device(to_i2c_adapter(adev),
+> +							&addr_info->binfo);
 
-Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
+i2c_new_client_device returns an ERR_PTR, not NULL on error.  So this
+needs some more work.  I'll send something out soon.
 
---=20
-Patrick Williams
+-corey
 
---uJrvpPjGB3z5kYrA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAl67CuUACgkQqwNHzC0A
-wRniOg//Zy8gjrBZLzidTDldIl8VJcWXd0+j2vTOzL3rn1oermQbnVK1J1HenKgy
-ElR/I0wbMAEaTbBdhjeNkJoOr4w5WgtpC+oVf+YtDcfyBj7V+9pTDsLroeAlUVaG
-ovqsE6k4HjozEPit2b1Nv/umcn+eW06yS3YUQBbrmXoNLPYmMvjPOb6IbC9W+5qO
-MPAOwLLK4s8iVLcqTnX8l/vyk+MaJij3ydl1KRPepbU2LWdg7332SYPBCU0IF9GB
-uIscrnG3AM9Gd445Kt2hCYyhegsWSE60BvGojrGX5OARupZK9CUXbtStWXL/uA4s
-TnrrmdYMMMan0WNEpQx7FSJvnU+MW67U12bS0l+Ts/VfIJ/UgkfmmMmOK/IHBS87
-ii++obnoT2sVzuR69//Q+pMyLyI/D3mrrMG9MrCapNnuOwlNYP+ykbhAyHIcsKG/
-lSRabl7PZUap0rNYSeFfH2BQw8yiopDvuPt/4tr+5/U8Zwmzu4R0w8Nuo3ThtNhD
-YY5rmjVi7fLiBppxirWdK25wGr/aNyHL2MpoFwUzxVOTBm43fZiiq/wh638F10Ci
-6FVQpEWapDeRtUv63d29Dd5Ax3AgYxFL5P/t4bwcvNTCb3QVYdQT9lAQg+B3da1r
-eVRFFKSJ5neRDzMHkY2J/SQw2fOFuWHc3K6y646PQCbYIWa1fBE=
-=T4F3
------END PGP SIGNATURE-----
-
---uJrvpPjGB3z5kYrA--
+>  
+>  	if (!addr_info->adapter_name)
+>  		return 1; /* Only try the first I2C adapter by default. */
+> -- 
+> 2.20.1
+> 
