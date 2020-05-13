@@ -2,110 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4265C1D0C53
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 May 2020 11:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739581D0FF1
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 May 2020 12:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728188AbgEMJd3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 May 2020 05:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726922AbgEMJd3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 May 2020 05:33:29 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:3201:214:fdff:fe10:1be6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01EBEC061A0C;
-        Wed, 13 May 2020 02:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=pAMSSTYNXNQC8UANMcnt7gQ29pn9OURWqic2mz9/ThI=; b=MTpofKCaFbw5JOOumgbrC6eO0+
-        zn6JGwG8zZqRKGcaebXU4J5NgeHrc1XqsWY0pXO0GCcgLQGOQss8M0AbdEOfuQ0tAMGyBfZTYYmJc
-        Tg+JqDN3USmdLfUqkV7BTbZkDLusO3AaLwHt0nS28XQKQ8Dzfb/8MEeHFZkZ0hUynvGaUZqGA9o+r
-        OExPa6XL7Ff27YCt1WM/v5YdFevuwmMCpFEb01Qt+ZskCnJj8Sen2tPOlwKTjDY3A4Ok4GTfk0UZN
-        xFBawVttu3l0knpKerlJIyNPQvtTyfdj9ynaGFhWuFqDnSAk3XSEPMhpjKhcjKo/5+l/VNHYAjEMN
-        1h7FTACw==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([2001:4d48:ad52:3201:222:68ff:fe15:37dd]:37520 helo=rmk-PC.armlinux.org.uk)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1jYnlO-00042C-BM; Wed, 13 May 2020 10:33:18 +0100
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1jYnlN-0002O5-CM; Wed, 13 May 2020 10:33:17 +0100
-From:   Russell King <rmk+kernel@armlinux.org.uk>
-To:     linux-i2c@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Jason Cooper <jason@lakedaemon.net>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>
-Subject: [PATCH] arm64: dts: add uDPU i2c bus recovery
+        id S1729595AbgEMKhe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 May 2020 06:37:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54940 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728258AbgEMKhd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 13 May 2020 06:37:33 -0400
+Received: from localhost (p5486CF35.dip0.t-ipconnect.de [84.134.207.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EDECD206CC;
+        Wed, 13 May 2020 10:37:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589366253;
+        bh=yTQI1s/7UsuNZr7cGYVTsLaccMYW+fDXEPGdcVYJLDY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CdkUv8AuxyDR3KUXDRzwlb10EVHTHlqukgXAgR4IxdMQGSjJ6FVJpkzzeBEJex1rI
+         0mhEtfxmV7UpsyOfGYJdJrTe1dgqxW6DSGEntD9Kljt54DOauMOOY2UDArhSwBuow5
+         Ta7/8fK/uKhP1XfRtLOTpckvMdJ6HEZwI8Cx+PVE=
+Date:   Wed, 13 May 2020 12:37:27 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: mux: Replace zero-length array with flexible-array
+Message-ID: <20200513103727.GD1043@ninjato>
+References: <20200507185329.GA14436@embeddedor>
+ <20200512104319.GH1393@ninjato>
+ <20200512231200.GL4897@embeddedor>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4zI0WCX1RcnW9Hbu"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1jYnlN-0002O5-CM@rmk-PC.armlinux.org.uk>
-Date:   Wed, 13 May 2020 10:33:17 +0100
+In-Reply-To: <20200512231200.GL4897@embeddedor>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add support for bus recovery for the Armada 3720 based uDPU.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
----
- .../boot/dts/marvell/armada-3720-uDPU.dts     | 22 +++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+--4zI0WCX1RcnW9Hbu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-index 7eb6c1796cef..95d46e8d081c 100644
---- a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-+++ b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-@@ -117,18 +117,36 @@
- 	};
- };
- 
-+&pinctrl_nb {
-+	i2c1_recovery_pins: i2c1-recovery-pins {
-+		groups = "i2c1";
-+		function = "gpio";
-+	};
-+
-+	i2c2_recovery_pins: i2c2-recovery-pins {
-+		groups = "i2c2";
-+		function = "gpio";
-+	};
-+};
-+
- &i2c0 {
- 	status = "okay";
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "recovery";
- 	pinctrl-0 = <&i2c1_pins>;
-+	pinctrl-1 = <&i2c1_recovery_pins>;
- 	/delete-property/mrvl,i2c-fast-mode;
-+	scl-gpios = <&gpionb 0 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpionb 1 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- };
- 
- &i2c1 {
- 	status = "okay";
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "recovery";
- 	pinctrl-0 = <&i2c2_pins>;
-+	pinctrl-1 = <&i2c2_recovery_pins>;
- 	/delete-property/mrvl,i2c-fast-mode;
-+	scl-gpios = <&gpionb 2 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpionb 3 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 
- 	lm75@48 {
- 		status = "okay";
--- 
-2.20.1
 
+> If that's not much work for you, then it'd be great if you include
+> it for 5.7. :)
+
+No problem, done now!
+
+
+--4zI0WCX1RcnW9Hbu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl67zeMACgkQFA3kzBSg
+KbbZPxAAo7+q+eAL0LB/GsTlrsRoNvpQv/uQqXBHjbD6gIipPwUZ2/q3t5LqWA8e
+9smQqoIrkDV6G0VhtIW7CtKicraK8SrEQTBDZYA8EjxZtF9QTCPG4H/geF34pHAV
+9FwJUtkarSK43COXaS+PaBdC7f5onizRMl7UeWtRbZrQre11fRaXLKwrQPqeG3/7
+6R5Uo9XnheDaueroUYp+V2pI8BWGWIsTDSW+RgKvZL5RTaYycaVlwf0IVl2lhH8L
+W6nXoxOstBohtNBPCGJTlArkpqqQN9oBg037FBFMl1CcB9+swuqeFtUI0k+O6I6n
+sl+Iq1nFKpji2CboJVxCDcgFQSAynkRCoRVTueQxhWtCrnEqi6xbDfJTM/KA/Awr
+c4hKfCF3WVhaUXyR6pjjuknX2m0yzxgE4SN/tURHlbGne99IdO1HdSovk04dFuUb
+wSfX49y1kW6gLPxrDqox354qHHqEhk6Y1gkEBKlGIlw0ebKUq0i7brTofUmlOZI/
+VUr9LBQZy5SgnvpFVvqNuUpQxF76RA7pKqlKoGacLSLsnwohvdyGqQXatzD/5fkO
+PJXG6tXeXnuQV/If1e4dVtkp6+oZ2KntTn+XLyZB1EvFoWA6OAptHc8HKaAORL5X
+wf6vLHZYw+nmtEz/Ioid4XKEvDm/cP8a0nhsgqhFnTNGx/EaqdU=
+=vl3U
+-----END PGP SIGNATURE-----
+
+--4zI0WCX1RcnW9Hbu--
