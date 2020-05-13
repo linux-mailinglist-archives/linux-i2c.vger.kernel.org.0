@@ -2,42 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B091D15BC
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 May 2020 15:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDC21D17D4
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 May 2020 16:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387937AbgEMNhf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 May 2020 09:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726388AbgEMNhf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 May 2020 09:37:35 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:3201:214:fdff:fe10:1be6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFE5C061A0C;
-        Wed, 13 May 2020 06:37:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=CT8QafuNU7nLW58gRG75IH2d/SNOoLj5Pkh6RsDK2u0=; b=DB1u96VASarFExlYVvTN2K4FF
-        YcWgO4N/Pv/7rjUwfqYgwZzwFq83aUexyQlS0nCAYIIXLmIB+NxaVmv4qU+wi8Gg9CjGaX/JyUX5f
-        KfEkgGylGwbYY1gc5y+4a3myt/YWd09VH4dnEhbYWl3ZT3wAo9hJCw51Q2bm/7feFrrai2HMkHBSV
-        +rhzet+/uD9KCl+EkC/RpgUKU27k9nbKLwfvMorD16UTwETE/H3U/9TiQTJjqZsPm2BYynJ5ALsfz
-        smTKoZptXIo9MJ7w/bvIachtZYcbNozvC47ygP4FLFac2zgGFgVCjdEgoiydosTgWsg4SosQaQv7o
-        K2jOKiUZg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:59948)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1jYrZe-0004jS-7F; Wed, 13 May 2020 14:37:26 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1jYrZb-0007oW-Ux; Wed, 13 May 2020 14:37:23 +0100
-Date:   Wed, 13 May 2020 14:37:23 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+        id S2388857AbgEMOm5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 May 2020 10:42:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40496 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388777AbgEMOm5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 13 May 2020 10:42:57 -0400
+Received: from localhost (p5486CF35.dip0.t-ipconnect.de [84.134.207.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D094A207D5;
+        Wed, 13 May 2020 14:42:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589380977;
+        bh=zHZKVOQrw4iw1BYZotmmbCpHSm3rHNSI8b2j1BlvFYA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mvXJRT2oJSavng4jGGwzEFhHegydiclz8aPDt0QP1O1szj+96SM3Yk7nkkc8UZfYj
+         XXLax2E1kLirXPhiZwHSP8AQ1KkAhN0sygzJqxmioG4IGUY7q2t/sKRd37eAtrRVcW
+         HrdeG5laMpYZK9LOfM+nI0xX5K/T0d8jO+TIj6wE=
+Date:   Wed, 13 May 2020 16:42:54 +0200
+From:   Wolfram Sang <wsa@kernel.org>
 To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         Gregory Clement <gregory.clement@bootlin.com>,
         Jason Cooper <jason@lakedaemon.net>,
         linux-arm-kernel@lists.infradead.org,
@@ -45,11 +35,12 @@ Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         Vladimir Vid <vladimir.vid@sartura.hr>
 Subject: Re: [PATCH] i2c: pxa: implement generic i2c bus recovery
-Message-ID: <20200513133722.GJ1551@shell.armlinux.org.uk>
+Message-ID: <20200513144254.GA7446@ninjato>
 References: <E1jYnlI-0002Nw-83@rmk-PC.armlinux.org.uk>
  <20200513131843.GB499265@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FCuugMFkClbJLl1L"
 Content-Disposition: inline
 In-Reply-To: <20200513131843.GB499265@lunn.ch>
 User-Agent: Mutt/1.10.1 (2018-07-13)
@@ -58,21 +49,43 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+
+--FCuugMFkClbJLl1L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
 On Wed, May 13, 2020 at 03:18:43PM +0200, Andrew Lunn wrote:
 > On Wed, May 13, 2020 at 10:33:12AM +0100, Russell King wrote:
 > > Implement generic GPIO-based I2C bus recovery for the PXA I2C driver.
-> 
+>=20
 > Hi Russell
-> 
+>=20
 > I assume this is going to be merged via i2c? So Wolfram Sang?  He is
 > not on To: or Cc:
 
-Yes, just as my other patches I've posted to the linux-i2c list that
-Wolfram has picked up.  I think he works from patchwork.
+But I read the i2c list :) I know some maintainers request CC, but I am
+fine as long as it is on the list.
 
-I assume Wolfram doesn't want to be Cc'd, as per the current setup in
-MAINTAINERS.  If that's not the case, MAINTAINERS needs to be fixed.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 10.2Mbps down 587kbps up
+--FCuugMFkClbJLl1L
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl68B2oACgkQFA3kzBSg
+KbYAhg/+KOJpSs2n9SV0i9OsvjhuoQNKYIuQKFbNAyoFkDrIOxv473cx4JA89DeF
+FdwdSA5p0K3hqzXyb2Mp+NFTHW6BdHrkEROUbJnR5GkAdWW/lT7qjfrfRDaMvO71
+BGMn7mRwVb1eU0bzIsxZjMEQ7rDxREMn9FLmwfvlvE9CJ3tZkp0PU5vYQ7oR6481
++Syn6EusLFjH4Jb3HJdNI+6HVSe9wPSCul8E8vWgj9n9dXr78WMtAnKzpm+x1RZy
+gfaNVDQtMtWCX3wcdQCGegBumZ9H2CUJ56CIERdn3p4BmCUJX1sm5M+ZprhfLdeI
+9JHZIYi5rxLnbe737mntlHQ/BcJgkTRQgldPre9IE91a98QV/UL5v+4YXSGTa9TK
++BDs0oQFin7ZrOkq5330SsdPzs5CVDoYsjD2VYmy8k7DTLU2ArYmkusBTiRKwBnB
+SKFas7O+LVNEQyX+qJ+rmf2nqZGDBXKui02t7BQm+UoGq59Qw2PSVh9C2jinaRh3
+1auy5B1LN2pUXpiQnliwllO63bE+yVBBey3vPx/AkXh+Fu+a25h+N7F2lItIeWMo
+94/PHne8JInu29fkK/lKYDo71T8XpDIVEEqLG9iNAbTzInbXMB3CCDvoqj3IjhFa
+Uki43KWsNZ0RkqhCWGG0XZf1r6rhtbyXJIET6VwIXDeFYE1fjJU=
+=SnWv
+-----END PGP SIGNATURE-----
+
+--FCuugMFkClbJLl1L--
