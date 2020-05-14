@@ -2,131 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDDF1D253B
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 May 2020 04:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F881D27D7
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 May 2020 08:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725931AbgENCzW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 May 2020 22:55:22 -0400
-Received: from mga05.intel.com ([192.55.52.43]:10928 "EHLO mga05.intel.com"
+        id S1725886AbgENG3y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 14 May 2020 02:29:54 -0400
+Received: from sauhun.de ([88.99.104.3]:48474 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725874AbgENCzV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 13 May 2020 22:55:21 -0400
-IronPort-SDR: NQNrmx0sDv8RVwlpT6dkFjC26Wf1Vuj6TDIZ/qHTgeCIHOio3Uyk+1+P0dby2evyhz77MeziBR
- nsJaUVETgm2g==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 19:55:21 -0700
-IronPort-SDR: q3DOtKyhK/3ul4Sn1MDFeKh26DphVj8CZdRPQnOHTo/wGjl/wp9QSTQFv3mnsxW+A0u8N5aNhS
- iVCMI2FE2B3w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,390,1583222400"; 
-   d="scan'208";a="464166948"
-Received: from tthayer-hp-z620.an.intel.com (HELO [10.122.105.146]) ([10.122.105.146])
-  by fmsmga005.fm.intel.com with ESMTP; 13 May 2020 19:55:21 -0700
-Reply-To: thor.thayer@linux.intel.com
-Subject: Re: [PATCH 2/2] i2c: altera: cleanup spinlock
-To:     Atsushi Nemoto <atsushi.nemoto@sord.co.jp>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
-Cc:     tomonori.sakita@sord.co.jp
-References: <20200508.221436.2027916415032712449.atsushi.nemoto@sord.co.jp>
-From:   Thor Thayer <thor.thayer@linux.intel.com>
-Message-ID: <fe7813ed-22fa-e5d6-a22c-c93e0e0d1791@linux.intel.com>
-Date:   Wed, 13 May 2020 21:55:36 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1725876AbgENG3y (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 14 May 2020 02:29:54 -0400
+Received: from localhost (p5486CC88.dip0.t-ipconnect.de [84.134.204.136])
+        by pokefinder.org (Postfix) with ESMTPSA id EC9C92C01E6;
+        Thu, 14 May 2020 08:29:51 +0200 (CEST)
+Date:   Thu, 14 May 2020 08:29:51 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Qii Wang <qii.wang@mediatek.com>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com
+Subject: Re: [PATCH] i2c: mediatek: Add i2c ac-timing adjust support
+Message-ID: <20200514062951.GA1145@kunai>
+References: <1585223676-30809-1-git-send-email-qii.wang@mediatek.com>
+ <20200512133852.GE13516@ninjato>
+ <1589418905.25512.10.camel@mhfsdcap03>
 MIME-Version: 1.0
-In-Reply-To: <20200508.221436.2027916415032712449.atsushi.nemoto@sord.co.jp>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="azLHFNyN32YCQGCU"
+Content-Disposition: inline
+In-Reply-To: <1589418905.25512.10.camel@mhfsdcap03>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 5/8/20 8:14 AM, Atsushi Nemoto wrote:
-> Protect altr_i2c_int_enable() by the mutex and remove unneeded spinlock.
-> 
-> Signed-off-by: Atsushi Nemoto <atsushi.nemoto@sord.co.jp>
-> ---
->   drivers/i2c/busses/i2c-altera.c | 12 ++++--------
->   1 file changed, 4 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-altera.c b/drivers/i2c/busses/i2c-altera.c
-> index 16ddc26..997434f 100644
-> --- a/drivers/i2c/busses/i2c-altera.c
-> +++ b/drivers/i2c/busses/i2c-altera.c
-> @@ -69,7 +69,6 @@
->    * @fifo_size: size of the FIFO passed in.
->    * @isr_mask: cached copy of local ISR enables.
->    * @isr_status: cached copy of local ISR status.
-> - * @lock: spinlock for IRQ synchronization.
->    * @isr_mutex: mutex for IRQ thread.
->    */
->   struct altr_i2c_dev {
-> @@ -86,18 +85,14 @@ struct altr_i2c_dev {
->   	u32 fifo_size;
->   	u32 isr_mask;
->   	u32 isr_status;
-> -	spinlock_t lock;	/* IRQ synchronization */
->   	struct mutex isr_mutex;
->   };
->   
->   static void
->   altr_i2c_int_enable(struct altr_i2c_dev *idev, u32 mask, bool enable)
->   {
-> -	unsigned long flags;
->   	u32 int_en;
->   
-> -	spin_lock_irqsave(&idev->lock, flags);
-> -
->   	int_en = readl(idev->base + ALTR_I2C_ISER);
->   	if (enable)
->   		idev->isr_mask = int_en | mask;
-> @@ -105,8 +100,6 @@ altr_i2c_int_enable(struct altr_i2c_dev *idev, u32 mask, bool enable)
->   		idev->isr_mask = int_en & ~mask;
->   
->   	writel(idev->isr_mask, idev->base + ALTR_I2C_ISER);
-> -
-> -	spin_unlock_irqrestore(&idev->lock, flags);
->   }
->   
->   static void altr_i2c_int_clear(struct altr_i2c_dev *idev, u32 mask)
-> @@ -346,6 +339,7 @@ static int altr_i2c_xfer_msg(struct altr_i2c_dev *idev, struct i2c_msg *msg)
->   
->   	time_left = wait_for_completion_timeout(&idev->msg_complete,
->   						ALTR_I2C_XFER_TIMEOUT);
-> +	mutex_lock(&idev->isr_mutex);
->   	altr_i2c_int_enable(idev, imask, false);
->   
->   	value = readl(idev->base + ALTR_I2C_STATUS) & ALTR_I2C_STAT_CORE;
-> @@ -358,6 +352,7 @@ static int altr_i2c_xfer_msg(struct altr_i2c_dev *idev, struct i2c_msg *msg)
->   	}
->   
->   	altr_i2c_core_disable(idev);
-> +	mutex_unlock(&idev->isr_mutex);
->   
->   	return idev->msg_err;
->   }
-> @@ -415,7 +410,6 @@ static int altr_i2c_probe(struct platform_device *pdev)
->   
->   	idev->dev = &pdev->dev;
->   	init_completion(&idev->msg_complete);
-> -	spin_lock_init(&idev->lock);
->   	mutex_init(&idev->isr_mutex);
->   
->   	ret = device_property_read_u32(idev->dev, "fifo-size",
-> @@ -453,7 +447,9 @@ static int altr_i2c_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> +	mutex_lock(&idev->isr_mutex);
->   	altr_i2c_init(idev);
-> +	mutex_unlock(&idev->isr_mutex);
->   
->   	i2c_set_adapdata(&idev->adapter, idev);
->   	strlcpy(idev->adapter.name, pdev->name, sizeof(idev->adapter.name));
-> 
 
-Reviewed-by: Thor Thayer <thor.thayer@linux.intel.com>
+--azLHFNyN32YCQGCU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+
+> > Last question: You seem to be the one doing major updates to this
+> > driver. Thanks for that! Are you maybe interested in becoming the
+> > maintainer for this driver? I think there won't be much patches to
+> > review and reports to handle but it will speed up processing for me.
+>=20
+> Yes, It is my honor to be the maintainer for this driver.
+
+Awesome! :) Can you prepare a patch for MAINTAINERS or shall I?
+
+
+--azLHFNyN32YCQGCU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl685VsACgkQFA3kzBSg
+KbbA8w/+Iih/AnYzyX4NP+kuKMiaDnC4Lof2gegnqKBPDlccUf5qMFAxlvdj5VLg
+7fpHoLnxDUaE2VSLT94/l7djAnAiUrDK42F1rXHXfJKmfb4k9dMWI7n+yF29/95a
+87gV3x2goe1XucCmobocv2RFwJw7b4rkDkvCb5mN6bvyDBUUS4Q3mW0MGxISVdTE
+Z48dW7oyv54Y7kJoEVv3NRcrOfO/2zlrsi1zxamoU8+E5NidGwqySY21PZpq/FZm
+4un1Dt98r7nrsm+l75SAahK5AJ/6qYakeJOtwD2NyzOF6dmwOgKLDpMI82Fl5e3p
+vO37ZWYXoOeX9u7HFzEmz6CiLQ7Fomg5S6P7pWOV4JWNGbgMvkfnhzhyhZQN/y3z
++n6BX//CKk/Vo2DV7yHc/fO5ueXSP0FpAd4MErTgwUvkbeWj4kM09Q5rug3nwXcb
+6+panhqePUGmOpqdT8JvqL+bFc3NpK7eDTmbAW3r6vp06/rttRBNnyKV5R4QMTfq
+9qB1gtrcqHz1YJLI+UKW/QXIu04mGdW20TwlnQe06pV8l9/6JoPMMhgz5OnRAMd9
+z/j+zHrrH2JMV/2gO+DW7T2Eweo2ZHEJjT1OfJT5pmxfrNVpFmkMsiwFbirC0mDH
+l5EQ+idPkrsxFbHMsV/FRdladtoW5CHlB8ujb8StzFIkszZOKUI=
+=ZyXd
+-----END PGP SIGNATURE-----
+
+--azLHFNyN32YCQGCU--
