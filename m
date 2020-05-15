@@ -2,43 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BF31D49BE
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 May 2020 11:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 544371D49D1
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 May 2020 11:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727999AbgEOJgq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 15 May 2020 05:36:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41104 "EHLO mail.kernel.org"
+        id S1728126AbgEOJkO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 15 May 2020 05:40:14 -0400
+Received: from sauhun.de ([88.99.104.3]:33876 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727785AbgEOJgq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 15 May 2020 05:36:46 -0400
+        id S1727116AbgEOJkN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 15 May 2020 05:40:13 -0400
 Received: from localhost (p5486CC07.dip0.t-ipconnect.de [84.134.204.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A45B0206B6;
-        Fri, 15 May 2020 09:36:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589535406;
-        bh=EWbnJSdrb2JGQCuwuvhoGws7QKlUIWurGSa53yiFjF4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tLOl47rkQPTpRDSxAb2MOQFo7uUW/DBsLcviI0dAajmsIBIiACF1p221Mupl5qxsJ
-         vQcsT/dOe6ye2t3u8QhqnYw9wgYeCZN4KUhnF4sgVv519o/TGNhhV1ai4NGAELxtlj
-         Uu3/AbAMYpcyq8s6DlaARflYH7LtqUNgW9ZgEoPI=
-Date:   Fri, 15 May 2020 11:36:43 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: eeprom: at24: Fix list of page sizes for
- writing
-Message-ID: <20200515093643.GE2077@ninjato>
-References: <20200512122450.20205-1-geert+renesas@glider.be>
- <20200515092755.GC2077@ninjato>
+        by pokefinder.org (Postfix) with ESMTPSA id C49A12C1F6B;
+        Fri, 15 May 2020 11:40:11 +0200 (CEST)
+Date:   Fri, 15 May 2020 11:40:11 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Qii Wang <qii.wang@mediatek.com>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        leilk.liu@mediatek.com
+Subject: Re: [PATCH v2 1/2] MAINTAINERS: add maintainer for mediatek i2c
+ controller driver
+Message-ID: <20200515094011.GF2077@ninjato>
+References: <1589461844-15614-1-git-send-email-qii.wang@mediatek.com>
+ <1589461844-15614-2-git-send-email-qii.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DqhR8hV3EnoxUkKN"
+        protocol="application/pgp-signature"; boundary="ni93GHxFvA+th69W"
 Content-Disposition: inline
-In-Reply-To: <20200515092755.GC2077@ninjato>
+In-Reply-To: <1589461844-15614-2-git-send-email-qii.wang@mediatek.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -46,45 +38,37 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---DqhR8hV3EnoxUkKN
+--ni93GHxFvA+th69W
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 15, 2020 at 11:27:55AM +0200, Wolfram Sang wrote:
-> On Tue, May 12, 2020 at 02:24:47PM +0200, Geert Uytterhoeven wrote:
-> > "258" is an odd power-of-two ;-)
-> > Obviously this is a typo, and the intended value is "256".
-> >=20
-> > Fixes: 7f3bf4203774013b ("dt-bindings: at24: convert the binding docume=
-nt to yaml")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Thu, May 14, 2020 at 09:09:04PM +0800, Qii Wang wrote:
+> Add Qii Wang as maintainer for mediatek i2c controller driver.
 >=20
-> Since I have a PR for Linus pending anyhow, I step ahead and apply it to
-> my tree. Hope this is fine for everyone. Applied to for-current, thanks!
+> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
 
-Brown paper bag, please. This is in -next only, so I rather leave it for
-Rob because of the dependencies.
+Applied to for-current, thanks for stepping up!
 
 
---DqhR8hV3EnoxUkKN
+--ni93GHxFvA+th69W
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6+YqsACgkQFA3kzBSg
-KbaKNQ/+P6/fFkr0EC7kjwQx/Un37Vf0MS4LoxSQJyos1Il46+b1drcC2Pw2JTuj
-ysDdguvHZm492n17lSX7Qs7LpcbiHRWuOcEdwwNmhnmdY5GnGDCOoQej9eA0JxQ7
-++Fjbmc8kpAjVzA6WmjEPf6+ee6el+sp3U5C/3txHEMvF6XxPLe1Arv8yrVV6SI6
-mQ0RQnFuVjtdvh3kWlrYMnZhUPPRtM4q2x5u2OIjS0uCGULDSMSEkWZR6yPorj2k
-7XIWXq/r8H5LwRHtjFc4CateejuoihqyPwO+PANUTJr2jwfkBR3FNEg7RJlFWjhj
-Ro86qU0d5muF4o4dMeghB/HwqWKE5wdGWbi2ubjImy7rUHJwEPeQ2tYgqjiDxBtR
-SlaCXNuZ2faTvXLH9wx4jipFmRkA099vA2bWwKrt1+4+br3bEo6rVnJ+ja1/mOsn
-L/DRtPRfwO5V0vDXoL1f9BB50BsXpj75rX5pWyAxs1uy9yU/KVQ4crcjI0if79Xz
-VtjyvsLr0qwy9/z0s3uRgAziOdQLdpq0NUrciSFy1CMajDkInbiPExqvSaZKR3if
-26JTu+z6K+Rc6tejG1SYcD2y542+nsLN4fHoZQWjuwbw5EHzS5KlH1rrnRWCS7eV
-RbtcqRZ8lxNxewDEQhPEhUHKPs7eFuWp3onSNgSb+iJ44Wg2Gzo=
-=HPEd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6+Y3sACgkQFA3kzBSg
+KbZugg//TK0hfveJTlzciqv+okPXLT19EfLiDbZcb1Vd4QOqHwyzVuswobDqKlb5
+FYUJwJ4mGytlwxPqa39dZKzCtwQlE/xPjISB+oPyiuESDrnlU/xXNIH6+prfbG7X
+dbJkgNqpAg6hsaWlDh6QzZa+rr+TsBbmF3pm3q6SPZpXXUvp79YPgSE4k2RJJ5Ev
+mF2QFCP88zK/0MsP1+/Dq0G51TE4Qzku8D35ysOB0ENIvtlCQp5RfeSX4OnhXzuP
+Ne5dztd9S6HxoPKKyB0XNtSu1t0nf0Omsd+zagDLTVFJORe3D7MDxCLrAARWdPvA
+c04rpnRuTewEihDJtyNJg3DovgqqGrN4sA4GINzIKkb9wV0L7mH1/4TU30OyhCRS
+ZMce3FcP5gCg70L5E7pNy05EX3xMY8IltUok2AvWEpae6PnuauaxKLJjfgcxLtwz
+xrNlNbZEsbvzAwdmGLZ6+PJMfa5tgEs1Wf0yfqgBrVPModxblx4Z+OrY/xt8rZz1
+8zfQPQYIEeHArP07FIx7TzcdPCG8afJls2o9N6mzo84pJ8kLBOR/6yWGEUb1AuPV
+A+gpFzP+XkrKf648i2YRE8EDVWnJkh42aiyZSBJZgsjYvej65W6nsLkpW5su2KUP
++f0Bf0k+9a6FF9ph+L8s1IRfrFoSzTT5X/Iay5Utatv/zF2ETP8=
+=Bb7H
 -----END PGP SIGNATURE-----
 
---DqhR8hV3EnoxUkKN--
+--ni93GHxFvA+th69W--
