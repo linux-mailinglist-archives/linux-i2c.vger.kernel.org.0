@@ -2,43 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C759D1D4978
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 May 2020 11:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F3C1D4982
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 May 2020 11:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727803AbgEOJ0f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 15 May 2020 05:26:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59766 "EHLO mail.kernel.org"
+        id S1727918AbgEOJ16 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 15 May 2020 05:27:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33062 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727116AbgEOJ0f (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 15 May 2020 05:26:35 -0400
+        id S1727869AbgEOJ16 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 15 May 2020 05:27:58 -0400
 Received: from localhost (p5486CC07.dip0.t-ipconnect.de [84.134.204.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 53824206F1;
-        Fri, 15 May 2020 09:26:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 90C1D206F1;
+        Fri, 15 May 2020 09:27:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589534795;
-        bh=JONR1pyDiZUuVzDV4dMV5uAVGjvbIMtv5fbdNtZJQJI=;
+        s=default; t=1589534878;
+        bh=cBYlCaqVOLK7rjga9zz23aZJFmIUMwBA4AndNb9TP+A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KXai6YkiZMm63/30RRwO6O6lX2sos3XjZi1OeX33TJi8uY9uz5zoDHc9rxPrUpVh1
-         UUd5IXcrHntKLeLmcELp+ER0FaptSqknwrifF6K/jdQHdh0/lVozMcaY5MVRF7XfVd
-         pNcJBZzF1n1Qtu2AdbgBEnPjlP345J+ZOoopxIG8=
-Date:   Fri, 15 May 2020 11:26:31 +0200
+        b=qTcQkoKVYq9u89DpLfBLuI6aTNhRfRXkmyEuEoolBUk2Dirq40P24fs9q7G+Pxw4n
+         XVFUnFoUzpf/j/1kr20mEZqxKXBwSv1iWGRNlmseMRxr5CJ3t9RSW8r+Go8w0zI+JL
+         LUchBeB7nCCsld7f1x3860mXCn8yNsRldQxopU6s=
+Date:   Fri, 15 May 2020 11:27:55 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, ludovic.desroches@microchip.com,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linus.walleij@linaro.org
-Subject: Re: [PATCH] i2c: at91: Restore pinctrl state if can't get scl/sda
- gpios
-Message-ID: <20200515092631.GB2077@ninjato>
-References: <20200513111322.111114-1-codrin.ciubotariu@microchip.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: eeprom: at24: Fix list of page sizes for
+ writing
+Message-ID: <20200515092755.GC2077@ninjato>
+References: <20200512122450.20205-1-geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dc+cDN39EJAMEtIO"
+        protocol="application/pgp-signature"; boundary="1ccMZA6j1vT5UqiK"
 Content-Disposition: inline
-In-Reply-To: <20200513111322.111114-1-codrin.ciubotariu@microchip.com>
+In-Reply-To: <20200512122450.20205-1-geert+renesas@glider.be>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -46,42 +45,41 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---dc+cDN39EJAMEtIO
+--1ccMZA6j1vT5UqiK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 13, 2020 at 02:13:22PM +0300, Codrin Ciubotariu wrote:
-> If there is a strict pinmux or if simply the scl/sda gpios are missing,
-> the pins will remain in gpio mode, compromizing the I2C bus.
-> Change to the default state of the pins before returning the error.
+On Tue, May 12, 2020 at 02:24:47PM +0200, Geert Uytterhoeven wrote:
+> "258" is an odd power-of-two ;-)
+> Obviously this is a typo, and the intended value is "256".
 >=20
-> Fixes: a53acc7ebf27 ("i2c: at91: Fix pinmux after devm_gpiod_get() for bu=
-s recovery")
-> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> Fixes: 7f3bf4203774013b ("dt-bindings: at24: convert the binding document=
+ to yaml")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I squashed it into the other patch and applied it to for-current,
-thanks!
+Since I have a PR for Linus pending anyhow, I step ahead and apply it to
+my tree. Hope this is fine for everyone. Applied to for-current, thanks!
 
 
---dc+cDN39EJAMEtIO
+--1ccMZA6j1vT5UqiK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6+YEcACgkQFA3kzBSg
-KbZIIw//RKnTmZzSi3ZieTQnZ64Pv7lEIn6QAM9FBzNk0Pzk8s5maVdQCzWq4/Ho
-CPO1Dk/R1qWQxikxvyKx9sfqVOIXVVLiNs9lYFmMkdQPoALrVvbQicwimZFyUjNO
-8zE1/LXvhLLU4UeP0oM+3OsD4v+5AvQ6igq84Etx2hfHO65w463NpP+tv6ut6q8R
-Zc8UVpJTRf9NGYtk8h3AvThMT+R0KNaEOe445HNLVi8bUg+3cPpDExOrdMJcwqRl
-QykdNi18hi05ATx+PqWDzSQIbUnLGVeEYQ/U3X14AJkfI+mJ0lFtWzK2RkOgUSbg
-+m6JCs1/knFQOXE5hIc/S8RDX8Ags8uw1ztmcEvSQ4x8gSDtznWFHWkGo2g/2XeM
-ZkttSMuwfHGebvQwSSmHEJdfi4h5IHax0qgf6IjLYaygA0n9Am7FBij6SKVTecxB
-tgYroBOIX0FoJRvMxpF7TtIQQaK/IEPhotPt21ayT/worPk7Fj4pbBFBSBX9sPIg
-Ydf/8JvTivFgPv6vcT+KV6DxJ5KmWdyuGd3mzh8JnlvEvl5sL6powbU2z8/yPpaK
-2vBF2d1bdFy7kStu5McgvKROKCN+FVZBXOnNXOiHTYURQgpck1VqXuscl5xUkbci
-nzyNwMVQ48o5ptBOMmHMUSC1MTg5Mxyq+7B3x0ZipY2SmPXdk68=
-=Doda
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6+YJsACgkQFA3kzBSg
+KbaZMw/+NKXHpNfewE9b06Ded1PJF/YxaFIl7FQNhIkC+doQO6fJL80XCwHlNF6M
+MLYTiAX05VJ/7ezfixG/FfXMr7u1J5oUxS9OlUs7wmavTMKFEQcC/vgvEG0pvv/R
+V79ExrkiOOrJv7aeeXX/1UNsuP2ShIbIct5faQ0IvMyovXLPFtOtLcHLmZNn1uaa
+yu3r+rNkz7tLuBFMG6qmhNvwnhCFAD4EFIvMhfrg3up8lJwsMQO0CxZOc+8W0T7t
+R/lWqXI2ikAoxXIK75fU2/DwDtgEzQdgjKhoUcumks8zDTMxKw7XCFx1wujYhUg6
+YAtZHUr91hKZ+USCxVudEBLyyTxxD3H8GIkTaAXi9Vv99zAJ4GSGlwrAfycD/Ib6
+U9Xee00d/i919f4oJqb0GH93w+jaB8CO30220PpD27kixUpP0bHgFzEXY9F2vnJ5
+AlHRL+VnOlp5rrEcZs/oBXd2CKKG2paJuvDJ9BrgThMSEgGPd5rIDpl41j3x6Fyv
+U2I+ZRpSML5Ir/uQ/gcyWXun8dlxZKWrx3v+P3rIzMvOZaMnC1zvuk4ShRShf4l/
++XcIYft3YUeDxZwMF3DAP7g32IgY2qvyCzVjkJa7obsatWdA7CBf7eFhwIsFrts2
+qOOV93LsAbM99pE5B/tVQ/fgiI57/nvRPLJ9YnQX0MME5KzXrbE=
+=gs0y
 -----END PGP SIGNATURE-----
 
---dc+cDN39EJAMEtIO--
+--1ccMZA6j1vT5UqiK--
