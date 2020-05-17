@@ -2,116 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F131D5F76
-	for <lists+linux-i2c@lfdr.de>; Sat, 16 May 2020 09:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA2B1D68C1
+	for <lists+linux-i2c@lfdr.de>; Sun, 17 May 2020 18:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbgEPHph (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 16 May 2020 03:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725934AbgEPHpg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 16 May 2020 03:45:36 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2818BC061A0C;
-        Sat, 16 May 2020 00:45:36 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id h26so3733828lfg.6;
-        Sat, 16 May 2020 00:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=r051ZtscWAFEcwFXTElJPWWhBN0jv0av84Oriy8NXF0=;
-        b=Nde/IQ8ZgdfP/+ZFaM0t2CjZda+NjRrxe5VOxJiNELtJsZWil+xblmGvW6qMEOuxVE
-         qRa73T5Az4SOIDXVqf4E60V54gUkkkb+wDYmw+2AH5yJG8sBbw38DVkM+1hzJtcEt7HO
-         Huenawq1IqvH/zwGTmOaEiTsbWpVGENgHK+mAcOMlzTFKdUR4Q9VkvNMsOaZJ4WX51X5
-         iXUm0iMIH7JqkGFUaGjcS3C97pL0rUmHaRzVEx5u4boVkAxjf8277cDH39TNIn1ROeiq
-         3Z0mJx39xX77+5GyXN4SD/3DkThyZWKofljwmCYWKC73cJCtQziH/RxHqMBfj5slRLM6
-         1feQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=r051ZtscWAFEcwFXTElJPWWhBN0jv0av84Oriy8NXF0=;
-        b=cTCX08+PwzFbDaPArShIkne7qMs7EjBJped4+Rae/nlkVOtCXJSVQel1+CKTVVM0Wn
-         o6NRepE958vUnriD4KfpWS78hmVK2ExCzd55mn+qlwNuuXeZ2qD+WP3DVu+G8xjerLw5
-         W53FpSAbABRpZmdHGMgLljc7zSSbNgs+DIn1vfIMcg5dhBs58+YpoR+7lKjbDGCHzu9t
-         f+u8IWviOnT48mzsgIfGyHWgLPn8v1Frez9OI9XebM4PVmQqV/ZKlgTw6mSsH2EvzTHZ
-         I/J14sVbsnruX97hxnkYxZimsb9M/+XYprEC9BHAwGt3PwDPJc/a1sXtQhMVcj74ot0A
-         789w==
-X-Gm-Message-State: AOAM530kMg7Cuyr1QXEJyGYozZHvTgLRoHwiV/FkoPLCV0hOpPpzuJ9+
-        VJzOXE10Q1dYgSFCYjPCBfXGf1hs
-X-Google-Smtp-Source: ABdhPJyDGBd+HPYbjsQt4MvgrhGWyRCVR4XGU9lU52TvZe43hp00hLEnDwgo/PTWo9QueyZJWRRaOw==
-X-Received: by 2002:a19:e86:: with SMTP id 128mr4864067lfo.34.1589615134285;
-        Sat, 16 May 2020 00:45:34 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.googlemail.com with ESMTPSA id 5sm2651357lfy.60.2020.05.16.00.45.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 May 2020 00:45:33 -0700 (PDT)
-Subject: Re: [GIT PULL] i2c: tegra: Changes for v5.8-rc1
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20200515143924.1579055-1-thierry.reding@gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <314a292e-bcd9-bb30-4067-71dc7cc399d6@gmail.com>
-Date:   Sat, 16 May 2020 10:45:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1728041AbgEQQKa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 17 May 2020 12:10:30 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:50663 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727979AbgEQQKa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 May 2020 12:10:30 -0400
+X-Originating-IP: 91.175.115.186
+Received: from localhost (91-175-115-186.subs.proxad.net [91.175.115.186])
+        (Authenticated sender: gregory.clement@bootlin.com)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id CAC9440005;
+        Sun, 17 May 2020 16:10:27 +0000 (UTC)
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-i2c@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        Jason Cooper <jason@lakedaemon.net>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Vladimir Vid <vladimir.vid@sartura.hr>
+Subject: Re: [PATCH 2/2] arm64: dts: add uDPU i2c bus recovery
+In-Reply-To: <E1jWGXd-0000Z7-1n@rmk-PC.armlinux.org.uk>
+References: <20200506094001.GP1551@shell.armlinux.org.uk> <E1jWGXd-0000Z7-1n@rmk-PC.armlinux.org.uk>
+Date:   Sun, 17 May 2020 18:10:27 +0200
+Message-ID: <87eerih79o.fsf@FE-laptop>
 MIME-Version: 1.0
-In-Reply-To: <20200515143924.1579055-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-15.05.2020 17:39, Thierry Reding пишет:
-> Hi,
-> 
-> The following changes since commit 0e698dfa282211e414076f9dc7e83c1c288314fd:
-> 
->   Linux 5.7-rc4 (2020-05-03 14:56:04 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/for-5.8-i2c
-> 
-> for you to fetch changes up to c73178b93754edd8449dccd3faf05baafd4d3f0e:
-> 
->   i2c: tegra: Add support for the VI I2C on Tegra210 (2020-05-12 22:47:52 +0200)
-> 
-> Thanks,
-> Thierry
-> 
-> ----------------------------------------------------------------
-> i2c: tegra: Changes for v5.8-rc1
-> 
-> This includes a few improvements to make the Tegra I2C controller behave
-> properly on suspend/resume, does a bit of cleanup and adds support for
-> the VI-variant of the I2C controller that is used primarily for video
-> capture purposes.
-> 
-> ----------------------------------------------------------------
-> Dmitry Osipenko (2):
->       i2c: tegra: Better handle case where CPU0 is busy for a long time
->       i2c: tegra: Synchronize DMA before termination
-> 
-> Thierry Reding (5):
->       Revert "i2c: tegra: Fix suspending in active runtime PM state"
+Hi Russell,
 
->       i2c: tegra: Restore pinmux on system resume
+> Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
 
-In general this series is good to me, although I have some concerns
-about this patch. Could you please answer the review comments?
+Applied on mvebu/dt64
 
->       i2c: tegra: Keep IRQs enabled during suspend/resume
->       i2c: tegra: Use FIELD_PREP/FIELD_GET macros
->       i2c: tegra: Add support for the VI I2C on Tegra210
-> 
->  drivers/i2c/busses/i2c-tegra.c | 248 +++++++++++++++++++++++++++++------------
->  1 file changed, 179 insertions(+), 69 deletions(-)
-> 
+Thanks,
 
+Gregory
+
+
+> ---
+>  .../boot/dts/marvell/armada-3720-uDPU.dts     | 22 +++++++++++++++++--
+>  1 file changed, 20 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
+> index 7eb6c1796cef..95d46e8d081c 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
+> +++ b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
+> @@ -117,18 +117,36 @@
+>  	};
+>  };
+>  
+> +&pinctrl_nb {
+> +	i2c1_recovery_pins: i2c1-recovery-pins {
+> +		groups = "i2c1";
+> +		function = "gpio";
+> +	};
+> +
+> +	i2c2_recovery_pins: i2c2-recovery-pins {
+> +		groups = "i2c2";
+> +		function = "gpio";
+> +	};
+> +};
+> +
+>  &i2c0 {
+>  	status = "okay";
+> -	pinctrl-names = "default";
+> +	pinctrl-names = "default", "recovery";
+>  	pinctrl-0 = <&i2c1_pins>;
+> +	pinctrl-1 = <&i2c1_recovery_pins>;
+>  	/delete-property/mrvl,i2c-fast-mode;
+> +	scl-gpios = <&gpionb 0 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpionb 1 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>  };
+>  
+>  &i2c1 {
+>  	status = "okay";
+> -	pinctrl-names = "default";
+> +	pinctrl-names = "default", "recovery";
+>  	pinctrl-0 = <&i2c2_pins>;
+> +	pinctrl-1 = <&i2c2_recovery_pins>;
+>  	/delete-property/mrvl,i2c-fast-mode;
+> +	scl-gpios = <&gpionb 2 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpionb 3 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>  
+>  	lm75@48 {
+>  		status = "okay";
+> -- 
+> 2.20.1
+>
+
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
