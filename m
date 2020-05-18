@@ -2,55 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F64F1D7748
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 13:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC5E1D7634
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 13:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727991AbgERLfi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 May 2020 07:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726739AbgERLfi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 07:35:38 -0400
-X-Greylist: delayed 1915 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 May 2020 04:35:37 PDT
-Received: from vps.dvp24.com (unknown [IPv6:2a02:348:36:5b8c::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BA1C05BD09;
-        Mon, 18 May 2020 04:35:37 -0700 (PDT)
-Received: from localhost ([127.0.0.1] helo=dvp24.com)
-        by vps.dvp24.com with esmtpa (Exim 4.77)
-        (envelope-from <abhay@dvp24.com>)
-        id 1jadYZ-0006rf-Up; Mon, 18 May 2020 13:03:39 +0200
+        id S1726499AbgERLKm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 May 2020 07:10:42 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:41828 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbgERLKm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 07:10:42 -0400
+Received: by mail-ot1-f66.google.com with SMTP id 63so7664238oto.8;
+        Mon, 18 May 2020 04:10:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hfu5FZwyRMz2cBI6uHSbWSrYNlQoEMc2a4ByBzUOoxc=;
+        b=PvGR3H6188VUwbVuqz+U1tSZlDPR4aNMbSZ06UVNUI8IQTFKkxHnw8o4Pi/LYazKFH
+         bOAeBjkjJCACmEL2DELOj/ES5BA1AqrhIkfbMeOLfXGX3S+M/Fpy2kpOZbO8yImHWgE+
+         P8g9gg/UjbCmSIcSecwOmOiUqmEIsb1l3gbCmN0UmbJ6qR9HD/wQfE2rRHxjRYyd3J37
+         gCt7n7ZiL7lkLP2c7pKCvHVYFONib1YE4hCBdv0PnMDS9YgYg5LUzSJpTZvQc5pb/ESm
+         Rbw/8ZySz09GZAL86Ix0hFA46BTFVkCXe43vyeL0tLTfFedvib8aCi3o5rDTd0mS8+ym
+         H/Kw==
+X-Gm-Message-State: AOAM531Rg/GhtPvNQfT7Vqtg4iOX0CIEfl0hJmroFBPaWv72nzpfyDoO
+        F7JwwNLIWz6uwoV7xorqFKPlGteUeZTJpgrbgi0=
+X-Google-Smtp-Source: ABdhPJzLb9Yd2vPjmp9vAX26Li3ikoW7YmjqcRstw9qLIGMukOAchEat+0yJWN8MFTwBUc3KOSYqxGh1YLmdx/kPZS0=
+X-Received: by 2002:a05:6830:18d9:: with SMTP id v25mr7863547ote.107.1589800240402;
+ Mon, 18 May 2020 04:10:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Mon, 18 May 2020 12:03:39 +0100
-From:   pedro hills <abhay@dvp24.com>
-To:     undisclosed-recipients:;
-Subject: (DONATION) $2 Million Has Been Donated
-Reply-To: <pedrohills@outlook.es>
-Mail-Reply-To: <pedrohills@outlook.es>
-Message-ID: <f63d46632b20d7492a1d2e423510606e@dvp24.com>
-X-Sender: abhay@dvp24.com
-User-Agent: Roundcube Webmail/0.7.1
+References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1589555337-5498-5-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1589555337-5498-5-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 18 May 2020 13:10:23 +0200
+Message-ID: <CAMuHMdX_Uo+wMtbpj9o6qM_7j5knOP+qwnRuoWgxJUWWBS074g@mail.gmail.com>
+Subject: Re: [PATCH 04/17] dt-bindings: mmc: renesas,sdhi: Document r8a7742 support
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, May 15, 2020 at 5:09 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Document SDHI controller for RZ/G1H (R8A7742) SoC, which is compatible
+> with R-Car Gen2 SoC family.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-$2 Million Has Been Donated To You,By PEDRO this is Real For More Info
-  Contact PEDRO immediately for your clame This Email:
-  pedrohills@outlook.es
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-  Contact phone number +34632232897
-  Send Your Response To: pedrohills@outlook.es
-
-  2 Millionen US-Dollar wurden an Sie gespendet. Von PEDRO ist dies für
-weitere Informationen real
-  Wenden Sie sich umgehend an PEDRO. Diese E-Mail:
-  pedrohills@outlook.es
-
-  Kontakttelefonnummer +34632232897
-  Senden Sie Ihre Antwort an: pedrohills@outlook.es
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
