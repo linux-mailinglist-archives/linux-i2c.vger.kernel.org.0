@@ -2,115 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F031D7D35
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 17:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61EE51D7D6E
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 17:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728300AbgERPpy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 May 2020 11:45:54 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:41615 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727005AbgERPpy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 11:45:54 -0400
-Received: by mail-oi1-f195.google.com with SMTP id 19so9359277oiy.8;
-        Mon, 18 May 2020 08:45:52 -0700 (PDT)
+        id S1728418AbgERPxP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 May 2020 11:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728301AbgERPxN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 11:53:13 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBEFC061A0C;
+        Mon, 18 May 2020 08:53:12 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id u35so5020032pgk.6;
+        Mon, 18 May 2020 08:53:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KJY8NnDlJmnEJnvN0I1ofVJTW1IHAAedWbNgmMlbT50=;
+        b=kyOCdvzYM0sExz3KLzDKD53zGh11TDLN8y38TzCtRMnfOjQdaNxIlRXlCDtcEuxe9h
+         jSXjnMcuy5IFYAHAt/zfXoE1nOSRmzeo06p0A/8drDuk1+rorv3N8ZR5oXittr4BHGwN
+         4IyPkMB5T/je0rNmjBoMJK5cR1EP6hTqF7qmAoGfExhYQD1ffBRtSdac1m2x2RBbJ06o
+         8vtCBi0s9mDCZmFDeHzhrhUC2Ny/5lLcB6iJhhUOarODgyz8Tj9SekQZ26aQzyG9dA5v
+         XruYIWSsDLuzEQwvZ1SHNP/jhf4JfV0c+FWUwbjpMOaRTBaGJoWowjrgW8degUOkxEfk
+         j3sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/f/rHROcvUhCw63I5sVVKyGk9toPKIj6soJfQz2EyMk=;
-        b=qLeGB4aOl/w5JiRu8iF/OJTmVYQEoafdZUarQZDWXzAC0yq26tJtbUclmzHMpF5CLN
-         s4ii1ZweH8SwgT5fzQWSzcO11IYhLuPFk8kj6EUxdGVVzsYVvwH8X7CxjtA6Op36SUgm
-         RK2Uxi6fImrCYS+e23jnhkAEWL+TTDD5w1uvO0FuxitaqszyvZUelHifa26i1gyTz6Fc
-         AF95uVFYYY7uoIi22QuMZxWRfQn1CWqVVvfrRWW6MYh9T+o5fz19yfaPy7hoFu1QoG9F
-         E3NKPBr7e6oq/5Mr6wymi33+Jp0vtfA263Rag5YGl24sYLt5iqsdNrz+2OGdhIw9uPce
-         cZ9g==
-X-Gm-Message-State: AOAM531QikCru4ApAVm0boY8/2y+33noCex7rbsYb4RqJf4uaC2prQET
-        /puod+lhyUKC+M8xb7r261HYweorV2wv65kQbtk=
-X-Google-Smtp-Source: ABdhPJwSk1XfmEg5VHimLrZlcq2vUCKSvy8da0C+Vb1NpLhDq1xPj9z+Pbn4JqCRj9XUaY6QJTN5Vm86GhCvioFXK6Y=
-X-Received: by 2002:a05:6808:1:: with SMTP id u1mr18216oic.54.1589816752210;
- Mon, 18 May 2020 08:45:52 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KJY8NnDlJmnEJnvN0I1ofVJTW1IHAAedWbNgmMlbT50=;
+        b=bOplxPk+ldHdLO9DpMU599HmwgQEmr8X41xI0kPJQpH6XRJSPZ88pien232VmpL4iv
+         RXQW6gjhVVnPUWUj3lrrvoforLxHZw/IuXhe8guA/udaynx9gQnphObCQzNSqKgI9nfV
+         rTVKHxr3EM+Qi1V4ayr5NHuO3PWQi1r+kFMVEyK+F7aHMHYsOgdQb3w0AsMAKSfKuI+w
+         HhbTLO7PZ0Q8PnJIrUuHYlLigmY2ol9pTJ+V07nkseGY+FpBE0k1nsD78ghWaOWklJJR
+         Mu7XTLToML/+0W3U20Idc3AowGcJozTQBBmzrFMXRM/bYIbs0o40j/vPGYaNhbpNu8ni
+         VEqA==
+X-Gm-Message-State: AOAM5330Gt4+DI4i9mofIlfWZQ55cRHS92oifj5SSzeEMPVlZRboua8h
+        vc4ROcCWAhulYWrHuqMjAwY=
+X-Google-Smtp-Source: ABdhPJw8rcdsHH87QBEhPxH9GrgGkJQCOcyPiniXkCkGwJQogX8EIpYkX46R0Tyh/hF3hCfK1vKk6g==
+X-Received: by 2002:a63:ed50:: with SMTP id m16mr16359077pgk.271.1589817192513;
+        Mon, 18 May 2020 08:53:12 -0700 (PDT)
+Received: from localhost ([176.122.159.242])
+        by smtp.gmail.com with ESMTPSA id x23sm7927369pgf.32.2020.05.18.08.53.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 18 May 2020 08:53:11 -0700 (PDT)
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        michal.simek@xilinx.com, baruch@tkos.co.il,
+        wsa+renesas@sang-engineering.com, paul@crapouillou.net,
+        khilman@baylibre.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, vz@mleia.com,
+        slemieux.tyco@gmail.com, heiko@sntech.de, baohua@kernel.org,
+        linus.walleij@linaro.org, ardb@kernel.org,
+        radu_nicolae.pirea@upb.ro, zhouyanjie@wanyeetech.com,
+        linux-i2c@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
+Subject: [PATCH v1 0/2] drivers: provide devm_platform_request_irq()
+Date:   Mon, 18 May 2020 23:53:02 +0800
+Message-Id: <20200518155304.28639-1-zhengdejin5@gmail.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1589555337-5498-18-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdVV+2HsgmBytCOFg4pri4XinT_SPWT_Ac6n7FMZN3dR3w@mail.gmail.com>
- <CA+V-a8tmG1LKYqbc7feGZQO2Tj5RCpNUHi9e19vPr+bED0KOyQ@mail.gmail.com>
- <9ab946d2-1076-ed92-0a48-9a95d798d291@cogentembedded.com> <CA+V-a8uuP9d6dNeRpn3O0_aOc15CqWoh0bbAfYze1_hn0dCh8g@mail.gmail.com>
-In-Reply-To: <CA+V-a8uuP9d6dNeRpn3O0_aOc15CqWoh0bbAfYze1_hn0dCh8g@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 18 May 2020 17:45:40 +0200
-Message-ID: <CAMuHMdVkf8vGL-769PvfTkMV=yuqW_V8gjo_ZfwEHVkdDWGTyw@mail.gmail.com>
-Subject: Re: [PATCH 17/17] ARM: dts: r8a7742: Add RWDT node
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 18, 2020 at 3:23 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Mon, May 18, 2020 at 2:17 PM Sergei Shtylyov
-> <sergei.shtylyov@cogentembedded.com> wrote:
-> > On 18.05.2020 15:27, Lad, Prabhakar wrote:
-> > >>> Add a device node for the Watchdog Timer (RWDT) controller on the Renesas
-> > >>> RZ/G1H (r8a7742) SoC.
-> > >>>
-> > >>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >>> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> > >>
-> > >> Thanks for your patch!
-> > >>
-> > >>> --- a/arch/arm/boot/dts/r8a7742.dtsi
-> > >>> +++ b/arch/arm/boot/dts/r8a7742.dtsi
-> > >>> @@ -201,6 +201,16 @@
-> > >>>                  #size-cells = <2>;
-> > >>>                  ranges;
-> > >>>
-> > >>> +               rwdt: watchdog@e6020000 {
-> > >>> +                       compatible = "renesas,r8a7742-wdt",
-> > >>> +                                    "renesas,rcar-gen2-wdt";
-> > >>> +                       reg = <0 0xe6020000 0 0x0c>;
-> > >>> +                       clocks = <&cpg CPG_MOD 402>;
-> > >>> +                       power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-> > >>> +                       resets = <&cpg 402>;
-> > >>> +                       status = "disabled";
-> > >>
-> > >> Missing "interrupts" property.
-> > >>
-> > > "interrupts" property isn't used by rwdt driver  and can be dropped
-> > > from bindings file.
-> >
-> >     DT describes the hardware, not its driver's abilities.
+It will call devm_request_irq() after platform_get_irq() function
+in many drivers, sometimes, it is not right of the error handling
+for these two functions in some drivers. so provide this function
+to simplify the driver.
 
-Thanks for chiming in, Sergei!
+the first patch will provide devm_platform_request_irq(), and the
+other patch will convert to devm_platform_request_irq() in some
+i2c bus dirver.
 
-> Agreed will add, I had followed it on similar lines of r8a7743/44.
+Dejin Zheng (2):
+  drivers: provide devm_platform_request_irq()
+  i2c: busses: convert to devm_platform_request_irq()
 
-Yeah. I know it's missing for a few other SoCs, too.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+ drivers/base/platform.c            | 33 ++++++++++++++++++++++++++++++
+ drivers/i2c/busses/i2c-bcm-kona.c  | 16 +++------------
+ drivers/i2c/busses/i2c-cadence.c   | 10 +++------
+ drivers/i2c/busses/i2c-digicolor.c | 10 +++------
+ drivers/i2c/busses/i2c-emev2.c     |  5 ++---
+ drivers/i2c/busses/i2c-jz4780.c    |  5 ++---
+ drivers/i2c/busses/i2c-meson.c     | 13 ++++--------
+ drivers/i2c/busses/i2c-mxs.c       |  9 +++-----
+ drivers/i2c/busses/i2c-pnx.c       |  9 ++------
+ drivers/i2c/busses/i2c-rcar.c      |  9 +++-----
+ drivers/i2c/busses/i2c-rk3x.c      | 14 +++----------
+ drivers/i2c/busses/i2c-sirf.c      | 10 ++-------
+ drivers/i2c/busses/i2c-stu300.c    |  4 ++--
+ drivers/i2c/busses/i2c-synquacer.c | 12 +++--------
+ include/linux/platform_device.h    |  4 ++++
+ 15 files changed, 72 insertions(+), 91 deletions(-)
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.25.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
