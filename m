@@ -2,245 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0857D1D758B
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 12:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8588A1D75A3
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 12:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726283AbgERKsz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 May 2020 06:48:55 -0400
-Received: from www.zeus03.de ([194.117.254.33]:38816 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726270AbgERKsz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 18 May 2020 06:48:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=se2KzvZEGwK7ZejY8a1rYt7R+rHK
-        CibdrXAU1LY5p3k=; b=Q7bSJwD/fF1y0CTRKugGWszC6kjjp1uxJSby/tOJtSKg
-        Kdgl7YdGHz5avZVowNpXEXnayWEsXWpkt9TbSA6o9kixrmNfYaIX1r+YlN//LGv2
-        xf3YTh0Gv9CH2LfSBX7qne47p+cH83KdnCFXsia4duG4Or58CWsOdWBUPVEJAtg=
-Received: (qmail 980286 invoked from network); 18 May 2020 12:48:51 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 May 2020 12:48:51 +0200
-X-UD-Smtp-Session: l3s3148p1@qFuY6OmlAKIgAwDPXwfCAIWBZdj99x2z
-Date:   Mon, 18 May 2020 12:48:51 +0200
-From:   Wolfram Sang <wsa-dev@sang-engineering.com>
-To:     kbuild test robot <lkp@intel.com>, Qii Wang <qii.wang@mediatek.com>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [wsa:i2c/for-next] BUILD REGRESSION
- 41895bfee70e7b8a5af7deae458fbf02c1fe782a
-Message-ID: <20200518104851.GE3268@ninjato>
-References: <5ebf3670.uIi3PwYqAckNzmnl%lkp@intel.com>
+        id S1726302AbgERKxu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 May 2020 06:53:50 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:4604 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726279AbgERKxt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 06:53:49 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04IAqpKn026437;
+        Mon, 18 May 2020 12:53:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=STMicroelectronics;
+ bh=hYr/Z/iJo/s19A9RchK0rY3q7SlsXVvKYRI52EdpnXw=;
+ b=NCJGs8JUFONHamPapy20sfh1fVkO6XQyHiQSd4/xROmPage7ADLZqklwszMqpqsVgwxA
+ lMqc4bG5glGFxTXrs1Iir6on5eImHx+BjlfkdAo1fBRN9CiiiURGpiHRgNeAoGI23/2z
+ r48D7xnVP9cQPfjtXi+e132cpzaM3YlI4nxDjTOmqp54tvlcjhIutScTFDq+hGRco6kT
+ eK/8hqBMdmUSqVmg5+ZyRAvqO1jR2WB/wkcfL6y54LAkGAGLipPUMcsR2+UE99FAGL6N
+ PE8SJaqn+1OU3VoUlxzX/G1s72TlsPhNh7D3FT1XHGQt9tQq7YL+Zke3zDzz4WLA4zIs gg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3125a93cjj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 May 2020 12:53:32 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2AF8410002A;
+        Mon, 18 May 2020 12:53:32 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 150562AEF19;
+        Mon, 18 May 2020 12:53:32 +0200 (CEST)
+Received: from gnbcxd0016.gnb.st.com (10.75.127.50) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 18 May
+ 2020 12:53:31 +0200
+Date:   Mon, 18 May 2020 12:53:26 +0200
+From:   Alain Volmat <alain.volmat@st.com>
+To:     Rob Herring <robh@kernel.org>, "wsa@kernel.org" <wsa@kernel.org>
+CC:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        Pierre Yves MORDRET <pierre-yves.mordret@st.com>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Fabrice GASNIER <fabrice.gasnier@st.com>
+Subject: Re: [PATCH 3/4] dt-bindings: i2c-stm32: add SMBus Alert bindings
+Message-ID: <20200518105326.GA3267@gnbcxd0016.gnb.st.com>
+Mail-Followup-To: Rob Herring <robh@kernel.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        Pierre Yves MORDRET <pierre-yves.mordret@st.com>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Fabrice GASNIER <fabrice.gasnier@st.com>
+References: <1588657871-14747-1-git-send-email-alain.volmat@st.com>
+ <1588657871-14747-4-git-send-email-alain.volmat@st.com>
+ <20200513021932.GA9172@bogus>
+ <20200513054231.GA16558@gnbcxd0016.gnb.st.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SWTRyWv/ijrBap1m"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <5ebf3670.uIi3PwYqAckNzmnl%lkp@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200513054231.GA16558@gnbcxd0016.gnb.st.com>
+X-Disclaimer: ce message est personnel / this message is private
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG6NODE1.st.com (10.75.127.16) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-18_04:2020-05-15,2020-05-18 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Gentle Reminder, as I wrote in my previous responce, smbus_alert interrupt
+refers to an host and not a client. And since we do not have a dedicated
+irq for smbus_alert, I propose to add this st, binding to enable the
+smbus_alert mechanism.
 
---SWTRyWv/ijrBap1m
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Adding patch author to CC.
-
-Hi Qii Wang,
-
-can you send an incremental patch to replace the 64-bit division with
-either do_div() or some apropriate div64_* function?
-
-While there, it might also be good to double check if the divisor is
-always non-zero to prevent "division by zero" OOPSes, if you haven't
-done this already.
-
-Thanks,
-
-   Wolfram
-
-
-On Sat, May 16, 2020 at 08:40:16AM +0800, kbuild test robot wrote:
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.gi=
-t  i2c/for-next
-> branch HEAD: 41895bfee70e7b8a5af7deae458fbf02c1fe782a  Merge branch 'i2c/=
-for-current-fixed' into i2c/for-next
->=20
-> Error/Warning in current branch:
->=20
-> arm-linux-gnueabi-ld: i2c-mt65xx.c:(.text+0xa34): undefined reference to =
-`__aeabi_ldivmod'
-> i2c-mt65xx.c:(.text+0x3e5): undefined reference to `__divdi3'
-> i2c-mt65xx.c:(.text+0x532): undefined reference to `__divdi3'
-> i2c-mt65xx.c:(.text+0x5d2): undefined reference to `__divdi3'
-> i2c-mt65xx.c:(.text+0x9ac): undefined reference to `__aeabi_ldivmod'
-> i2c-mt65xx.c:(.text.mtk_i2c_calculate_speed+0x2d4): undefined reference t=
-o `__divdi3'
-> ld: i2c-mt65xx.c:(.text+0x60f): undefined reference to `__divdi3'
-> m68k-linux-ld: i2c-mt65xx.c:(.text+0x57e): undefined reference to `__divd=
-i3'
-> mips-linux-ld: i2c-mt65xx.c:(.text.mtk_i2c_calculate_speed+0x368): undefi=
-ned reference to `__divdi3'
->=20
-> Error/Warning ids grouped by kconfigs:
->=20
-> recent_errors
-> |-- arm-allyesconfig
-> |   |-- arm-linux-gnueabi-ld:i2c-mt65xx.c:(.text):undefined-reference-to-=
-__aeabi_ldivmod
-> |   `-- i2c-mt65xx.c:(.text):undefined-reference-to-__aeabi_ldivmod
-> |-- h8300-allyesconfig
-> |   `-- i2c-mt65xx.c:(.text):undefined-reference-to-__divdi3
-> |-- i386-allyesconfig
-> |   |-- i2c-mt65xx.c:(.text):undefined-reference-to-__divdi3
-> |   `-- ld:i2c-mt65xx.c:(.text):undefined-reference-to-__divdi3
-> |-- m68k-allyesconfig
-> |   |-- i2c-mt65xx.c:(.text):undefined-reference-to-__divdi3
-> |   `-- m68k-linux-ld:i2c-mt65xx.c:(.text):undefined-reference-to-__divdi3
-> `-- mips-allyesconfig
->     |-- i2c-mt65xx.c:(.text.mtk_i2c_calculate_speed):undefined-reference-=
-to-__divdi3
->     `-- mips-linux-ld:i2c-mt65xx.c:(.text.mtk_i2c_calculate_speed):undefi=
-ned-reference-to-__divdi3
->=20
-> elapsed time: 482m
->=20
-> configs tested: 109
-> configs skipped: 3
->=20
-> arm                                 defconfig
-> arm                              allyesconfig
-> arm                              allmodconfig
-> arm                               allnoconfig
-> arm64                            allyesconfig
-> arm64                               defconfig
-> arm64                            allmodconfig
-> arm64                             allnoconfig
-> sparc                            allyesconfig
-> m68k                             allyesconfig
-> mips                             allyesconfig
-> arm                         at91_dt_defconfig
-> arm                           sama5_defconfig
-> arm                        realview_defconfig
-> arm                       spear13xx_defconfig
-> powerpc                     pq2fads_defconfig
-> c6x                        evmc6678_defconfig
-> parisc                              defconfig
-> arm                            u300_defconfig
-> powerpc                         ps3_defconfig
-> arm                         bcm2835_defconfig
-> arm                           spitz_defconfig
-> arm                           tegra_defconfig
-> i386                             allyesconfig
-> i386                                defconfig
-> i386                              debian-10.3
-> i386                              allnoconfig
-> ia64                             allmodconfig
-> ia64                                defconfig
-> ia64                              allnoconfig
-> ia64                             allyesconfig
-> m68k                             allmodconfig
-> m68k                              allnoconfig
-> m68k                           sun3_defconfig
-> m68k                                defconfig
-> nios2                               defconfig
-> nios2                            allyesconfig
-> openrisc                            defconfig
-> c6x                              allyesconfig
-> c6x                               allnoconfig
-> openrisc                         allyesconfig
-> nds32                               defconfig
-> nds32                             allnoconfig
-> csky                             allyesconfig
-> csky                                defconfig
-> alpha                               defconfig
-> alpha                            allyesconfig
-> xtensa                           allyesconfig
-> h8300                            allyesconfig
-> h8300                            allmodconfig
-> xtensa                              defconfig
-> arc                                 defconfig
-> arc                              allyesconfig
-> sh                               allmodconfig
-> sh                                allnoconfig
-> microblaze                        allnoconfig
-> mips                              allnoconfig
-> mips                             allmodconfig
-> parisc                            allnoconfig
-> parisc                           allyesconfig
-> parisc                           allmodconfig
-> powerpc                             defconfig
-> powerpc                          allyesconfig
-> powerpc                          rhel-kconfig
-> powerpc                          allmodconfig
-> powerpc                           allnoconfig
-> i386                 randconfig-a006-20200515
-> i386                 randconfig-a005-20200515
-> i386                 randconfig-a003-20200515
-> i386                 randconfig-a001-20200515
-> i386                 randconfig-a004-20200515
-> i386                 randconfig-a002-20200515
-> i386                 randconfig-a012-20200515
-> i386                 randconfig-a016-20200515
-> i386                 randconfig-a014-20200515
-> i386                 randconfig-a011-20200515
-> i386                 randconfig-a013-20200515
-> i386                 randconfig-a015-20200515
-> x86_64               randconfig-a005-20200515
-> x86_64               randconfig-a003-20200515
-> x86_64               randconfig-a006-20200515
-> x86_64               randconfig-a004-20200515
-> x86_64               randconfig-a001-20200515
-> x86_64               randconfig-a002-20200515
-> riscv                            allyesconfig
-> riscv                             allnoconfig
-> riscv                               defconfig
-> riscv                            allmodconfig
-> s390                             allyesconfig
-> s390                              allnoconfig
-> s390                             allmodconfig
-> s390                                defconfig
-> x86_64                              defconfig
-> sparc                               defconfig
-> sparc64                             defconfig
-> sparc64                           allnoconfig
-> sparc64                          allyesconfig
-> sparc64                          allmodconfig
-> um                               allmodconfig
-> um                                allnoconfig
-> um                               allyesconfig
-> um                                  defconfig
-> x86_64                                   rhel
-> x86_64                               rhel-7.6
-> x86_64                    rhel-7.6-kselftests
-> x86_64                         rhel-7.2-clear
-> x86_64                                    lkp
-> x86_64                              fedora-25
-> x86_64                                  kexec
->=20
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-
---SWTRyWv/ijrBap1m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7CaA8ACgkQFA3kzBSg
-KbaPDBAAm2D08g/2pc9wBaSEDkp6oxDtjHroBwwWeJdXmrBbWohvXVNd9NFTEzCK
-jsFkNq9dBox9GXueZhY7ehzvfVpbWWh8f24wsyqcd4e/gLLSe0/cVlV9YwVVAhVx
-uSX6Eg6YKyUi21XEfpsdkHuCcESdCaszt7FLYprLPIdv+Jzg1HZG/LeQqcyucllF
-qas0kgXxPfvhjJ4fr4NJnF77VPDitgtHCd7CnC9SURgDV+TiW5jArqM6tJt/m1YM
-+MosnSXGRLmeiEBG636fgGYKHkIyATbeXxKzaGg69l7U1rKs1PLGkEfues7NgfSs
-skeQWlLbStHeUKT0bsZN5+diJMYMIFSpyMYV8O7Bg++hErGknPtukJgiqLgi5Puq
-QuE4zadCZi5HNT3ZpEcd2wRbDGe4qqlV0g3xBHiTKAGW5fcqUaZYg/iFSWkwADd4
-/d4JrvF65JG6uvfog9nXm9Aw+LBgEjyEES99thFtGPHiytz3GDiOjOTWXyCNCT1m
-R8uWi5kYv/1SwownmttfmgvZYxqY0kLAk+RoMMbmdANDyF+B+G6I0dOEuLN8OZAw
-+TzcXUBLooagi02nPye+JB4nImVWI2A9bx7xNw9LaAxNWUHPpeAwLuj0rycubUpe
-OQOqu4KYCXQJQtfwgKEaidFeFTG3WKgt1ouoIqNc1vSz50wENHc=
-=Hjsi
------END PGP SIGNATURE-----
-
---SWTRyWv/ijrBap1m--
+On Wed, May 13, 2020 at 07:42:31AM +0200, Alain Volmat wrote:
+> Hello Rob,
+> 
+> On Wed, May 13, 2020 at 02:19:32AM +0000, Rob Herring wrote:
+> > On Tue, May 05, 2020 at 07:51:10AM +0200, Alain Volmat wrote:
+> > > Add a new binding of the i2c-stm32f7 driver to enable the handling
+> > > of the SMBUS-Alert
+> > > 
+> > > Signed-off-by: Alain Volmat <alain.volmat@st.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+> > > index b50a2f420b36..04c0882c3661 100644
+> > > --- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+> > > +++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+> > > @@ -36,6 +36,10 @@ allOf:
+> > >                  minItems: 3
+> > >                  maxItems: 3
+> > >  
+> > > +        st,smbus-alert:
+> > > +          description: Enable the SMBus Alert feature
+> > > +          $ref: /schemas/types.yaml#/definitions/flag
+> > > +
+> > 
+> > We already have smbus_alert interrupt. Can't you just check for this in 
+> > the slave nodes and enable if found?
+> 
+> My understanding reading the code (smbalert_probe within i2c-smbus.c, of_i2c_setup_smbus_alert called when
+> registering an adapter within i2c-core-smbus.c) is that smbus_alert refers to an interrupt on the
+> adapter side. That is an interrupt that would be triggered when the adapter is receiving an smbus_alert
+> message.
+> In our case (stm32f7), we do not have specific interrupt for that purpose. The interrupt triggered when
+> an SMBUS Alert is received (by the adapter) is the same interrupt as for other reasons and we check
+> within the irq handler within stm32f7 the reason before calling i2c_handle_smbus_alert if the status
+> register indicated an SMBUS Alert.
+> So my understanding is that we cannot rely on the mechanism of naming an interrupt smbus_alert.
+> Did I misunderstood something ?
+> 
+> > 
+> > >    - if:
+> > >        properties:
+> > >          compatible:
+> > > -- 
+> > > 2.17.1
+> > > 
