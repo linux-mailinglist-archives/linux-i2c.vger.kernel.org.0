@@ -2,136 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE391D7891
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 14:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE281D7906
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 14:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbgERM2E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 May 2020 08:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726448AbgERM2E (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 08:28:04 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF748C061A0C;
-        Mon, 18 May 2020 05:28:03 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id 19so8779290oiy.8;
-        Mon, 18 May 2020 05:28:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=knD02Z+9tC//YVd/yYg62jSva7tZ6kZO0J1cHOboZm0=;
-        b=tyJZJSdScYatoaiD3+nk8CaRyh/JcfmnCgYlKTcucGjbqGbNfJuy/pfaeFbWIiPvAE
-         Sn8UvhLxfP7wDSCX5CFCI/uWIPmOMWwv5D2RLwMwD2Emng16expUeCaEKjbsgCWOgjAz
-         RZx3PDskmOhc2BvEfg3adwjssmO0Bju9slSd+an6tw851Oh0t4/EEvxoMLWvE1ymqY29
-         GBYHNvJ1XhiTPz8BwcBUPjr1/BNQl6fgddkDDeSd/EMbIeDscKxA0WmyBMO6mbluT+YD
-         nowhn8OeLyNEVShUCCuaDVn/IFhpufgHp6oDyPXDtcaqdU+nkLga/mtxwLHyvR+v0AIB
-         U0FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=knD02Z+9tC//YVd/yYg62jSva7tZ6kZO0J1cHOboZm0=;
-        b=RMmeitidF0VFigiYzwAVTww5NeCztTBeux3D067yWghIRHIl0rC7zaGPogmzr+DfSd
-         95KRDndpwHgteZb02iYatrp8lJ83OxRmuZm16rX6XVOSufP5pAsCfLvyMBKX1MXWf+qs
-         zfI5zknvbiJmt1Fe/N3NCN0nZFiepKMrfsQwjYkuT3V6hprMbaeqBe5bfOT4n6a8hXxt
-         Z7suuKEgDAdpX0wPyjPHYBrqjpXCa4ujQylZQGWn/6mrNrQjixBidimQmbhwzcVkWazO
-         b/ljSz9Wpmo41P0TfIE+iLSTLeuR28+kVNJXvXLbPCWQ8DTKgOvAU6mH6edwgxk/plMA
-         J52w==
-X-Gm-Message-State: AOAM533iGzbZdwAavS2lIPIOk3FheZWNQUYxzEVSN0FCb04Q+MTEB1SF
-        WH8mJEW1AuiQ90HTrbaQHi8h5hJfPWl2YKKlNyE=
-X-Google-Smtp-Source: ABdhPJzZ2lS0ejqPsWuIGn043vBk+9V7Kj1deZdI5q/OaKt45cHvC56EYzI/9nBuanFZEV1fpAhD/jFUNkKMy5Tat5g=
-X-Received: by 2002:a05:6808:106:: with SMTP id b6mr4197157oie.142.1589804882884;
- Mon, 18 May 2020 05:28:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1589555337-5498-18-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdVV+2HsgmBytCOFg4pri4XinT_SPWT_Ac6n7FMZN3dR3w@mail.gmail.com>
-In-Reply-To: <CAMuHMdVV+2HsgmBytCOFg4pri4XinT_SPWT_Ac6n7FMZN3dR3w@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 18 May 2020 13:27:36 +0100
-Message-ID: <CA+V-a8tmG1LKYqbc7feGZQO2Tj5RCpNUHi9e19vPr+bED0KOyQ@mail.gmail.com>
-Subject: Re: [PATCH 17/17] ARM: dts: r8a7742: Add RWDT node
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        id S1726775AbgERMxL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 May 2020 08:53:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43928 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726709AbgERMxK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 18 May 2020 08:53:10 -0400
+Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 97F6C20787;
+        Mon, 18 May 2020 12:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589806390;
+        bh=8GLIs34nZZnF9Zwpy48l6Q69nZOjRQeAvh4rHYxlgEM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SdChjss5sexPx09tjw2Ucwq/BKruq/QAThbm5a3AbjDUGWJ+GIXGBi3LHat7YHQXm
+         wl22kJdJgRjqf+OLTKE0b2p0CF0wk0Pq2ndhTmlaVcx3VWrgE1cGb1NW26wWtQoCIS
+         W8lWRIAHy4+V5ujNKzBS0WPyy1ZTtun+inb9msAI=
+Date:   Mon, 18 May 2020 14:53:02 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Lee Jones <lee.jones@linaro.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jean Delvare <jdelvare@suse.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Max Staudt <max@enpas.org>, Stefan Roese <sr@denx.de>,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] mfd: ensure that AXP20X_I2C will have the right
+ deps on X86
+Message-ID: <20200518145302.56642b22@coco.lan>
+In-Reply-To: <aa23c170-f4e8-e1f0-5c7f-35e51ec84533@redhat.com>
+References: <cover.1589801950.git.mchehab+huawei@kernel.org>
+        <cfbb80f220bba5051640d92fc00825bdaa2ec877.1589801950.git.mchehab+huawei@kernel.org>
+        <aa23c170-f4e8-e1f0-5c7f-35e51ec84533@redhat.com>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Geert,
+Em Mon, 18 May 2020 14:17:06 +0200
+Hans de Goede <hdegoede@redhat.com> escreveu:
 
-Thank you for the review.
+> Hi,
+> 
+> On 5/18/20 1:42 PM, Mauro Carvalho Chehab wrote:
+> > The axp20x I2C driver can be used on X86, but also on ARM
+> > platforms.
+> > 
+> > Yet, for X86, it has to be builtin and need ACPI OpRegion
+> > support enabled.
+> > 
+> > So, the dependency chain is diferent for X86 and for other
+> > archs.
+> > 
+> > Change the dependency chain to take this into consideration,
+> > ensuring that everything will be set as it should.
+> > 
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>  
+> 
+> Hmm, last time we tried something like this (it was tried before,
+> but in a bit different way) we ran into all kind of dependency /
+> select cycles / issues.
 
-On Mon, May 18, 2020 at 12:47 PM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Fri, May 15, 2020 at 5:10 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > Add a device node for the Watchdog Timer (RWDT) controller on the Renesas
-> > RZ/G1H (r8a7742) SoC.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
->
-> Thanks for your patch!
->
-> > --- a/arch/arm/boot/dts/r8a7742.dtsi
-> > +++ b/arch/arm/boot/dts/r8a7742.dtsi
-> > @@ -201,6 +201,16 @@
-> >                 #size-cells = <2>;
-> >                 ranges;
-> >
-> > +               rwdt: watchdog@e6020000 {
-> > +                       compatible = "renesas,r8a7742-wdt",
-> > +                                    "renesas,rcar-gen2-wdt";
-> > +                       reg = <0 0xe6020000 0 0x0c>;
-> > +                       clocks = <&cpg CPG_MOD 402>;
-> > +                       power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-> > +                       resets = <&cpg 402>;
-> > +                       status = "disabled";
->
-> Missing "interrupts" property.
->
-"interrupts" property isn't used by rwdt driver  and can be dropped
-from bindings file.
+Yeah, changes like that could cause troubles, specially where
+select is used. With the approach I took, there's just one
+new select for "IOSF_MBI".
 
-Cheers,
---Prabhakar
+I double-checked that, on most places, this feature is selected.
+After this patch, there will be only three "depends on IOSF_MBI",
+that could likely be also converted to "select":
 
-> > +               };
-> > +
-> >                 gpio0: gpio@e6050000 {
-> >                         compatible = "renesas,gpio-r8a7742",
-> >                                      "renesas,rcar-gen2-gpio";
->
-> The rest looks fine, so with the above fixed:
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index 0ad7ad8cf8e1..d99ad532e17a 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -740,7 +740,8 @@ config THINKPAD_ACPI_HOTKEY_POLL
+ 
+ config INTEL_ATOMISP2_PM
+ 	tristate "Intel AtomISP2 dummy / power-management driver"
+-	depends on PCI && IOSF_MBI && PM
++	depends on PCI && PM
++	select IOSF_MBI
+ 	help
+ 	  Power-management driver for Intel's Image Signal Processor found on
+ 	  Bay Trail and Cherry Trail devices. This dummy driver's sole purpose
+@@ -1185,7 +1186,8 @@ config TOUCHSCREEN_DMI
+ 
+ config INTEL_IMR
+ 	bool "Intel Isolated Memory Region support"
+-	depends on X86_INTEL_QUARK && IOSF_MBI
++	depends on X86_INTEL_QUARK
++	select IOSF_MBI
+ 	---help---
+ 	  This option provides a means to manipulate Isolated Memory Regions.
+ 	  IMRs are a set of registers that define read and write access masks
+diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
+index dc1c1381d7fa..f4a3f110c720 100644
+--- a/drivers/powercap/Kconfig
++++ b/drivers/powercap/Kconfig
+@@ -21,7 +21,8 @@ config INTEL_RAPL_CORE
+ 
+ config INTEL_RAPL
+ 	tristate "Intel RAPL Support via MSR Interface"
+-	depends on X86 && IOSF_MBI
++	depends on X86
++	select IOSF_MBI
+ 	select INTEL_RAPL_CORE
+ 	---help---
+ 	  This enables support for the Intel Running Average Power Limit (RAPL)
+
+The one for INTEL_IMR could even be dropped, as config 
+X86_INTEL_QUARK already selects it too.
+
+> With that said I'm fine with giving this another try, maybe let
+> the test builders / rand config builds play with it for a while
+> and see what happens?
+
+Yeah, it makes sense to me.
+
+Thanks,
+Mauro
