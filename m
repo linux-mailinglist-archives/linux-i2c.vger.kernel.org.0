@@ -2,147 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BEB1D7D27
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 17:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F031D7D35
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 17:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728361AbgERPoa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 May 2020 11:44:30 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:39513 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726958AbgERPoa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 11:44:30 -0400
-Received: by mail-oi1-f196.google.com with SMTP id s198so9367495oie.6;
-        Mon, 18 May 2020 08:44:29 -0700 (PDT)
+        id S1728300AbgERPpy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 May 2020 11:45:54 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:41615 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727005AbgERPpy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 11:45:54 -0400
+Received: by mail-oi1-f195.google.com with SMTP id 19so9359277oiy.8;
+        Mon, 18 May 2020 08:45:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Zmc+aX1vQ2DoVqQHld2NGpTEXaFRkMWY7XPbs/Yym5g=;
-        b=k8JHEjCN926wYbYmGJBOnt5MIDc9azyFNX3iZN0+VVx0DxTBEEtX5rBD/4V7UQ52aU
-         IHqWIaFymlQbMlZ4/ZykBXhmOuLG4RWIj3m21QJUP2bj5j1+hP3cnFaUsdtaCpGnAD3E
-         LMftWZlsZ5arNewlWiRY79qgiH0lo+5yLaaC935pCbXHQMSd942TEmRpL6sJSyLSwukZ
-         AULAOQZkga15xxK3pVTgvRsz42q3S01kVCw4+VDj/esHCjc1PEbk6REK7jRmFPbPQV0E
-         5ubFc1J+k7yXp6hJL7yJ7+gd4lvsXDyT9hiVKZpT55TabE166OWrQcZUs9/3EIThvH42
-         +j+g==
-X-Gm-Message-State: AOAM530FAu3ViYn2P9zII8NKWxKG0hXefNlpSl4/V7fL/JsFepsPbDge
-        XjxNSrumqRekuR1nSh8LGnWsrGoNGvrE8+bMw0GdR4ho
-X-Google-Smtp-Source: ABdhPJy2nzNFTl+3u/yZOZKPJD6snXgr3/xAOGW+7fC9tpBtXaFCbD/tlFqxKMUwcf8LG/1SZLomAT8oopgBVFdHLgs=
-X-Received: by 2002:aca:895:: with SMTP id 143mr10832413oii.153.1589816669165;
- Mon, 18 May 2020 08:44:29 -0700 (PDT)
+        bh=/f/rHROcvUhCw63I5sVVKyGk9toPKIj6soJfQz2EyMk=;
+        b=qLeGB4aOl/w5JiRu8iF/OJTmVYQEoafdZUarQZDWXzAC0yq26tJtbUclmzHMpF5CLN
+         s4ii1ZweH8SwgT5fzQWSzcO11IYhLuPFk8kj6EUxdGVVzsYVvwH8X7CxjtA6Op36SUgm
+         RK2Uxi6fImrCYS+e23jnhkAEWL+TTDD5w1uvO0FuxitaqszyvZUelHifa26i1gyTz6Fc
+         AF95uVFYYY7uoIi22QuMZxWRfQn1CWqVVvfrRWW6MYh9T+o5fz19yfaPy7hoFu1QoG9F
+         E3NKPBr7e6oq/5Mr6wymi33+Jp0vtfA263Rag5YGl24sYLt5iqsdNrz+2OGdhIw9uPce
+         cZ9g==
+X-Gm-Message-State: AOAM531QikCru4ApAVm0boY8/2y+33noCex7rbsYb4RqJf4uaC2prQET
+        /puod+lhyUKC+M8xb7r261HYweorV2wv65kQbtk=
+X-Google-Smtp-Source: ABdhPJwSk1XfmEg5VHimLrZlcq2vUCKSvy8da0C+Vb1NpLhDq1xPj9z+Pbn4JqCRj9XUaY6QJTN5Vm86GhCvioFXK6Y=
+X-Received: by 2002:a05:6808:1:: with SMTP id u1mr18216oic.54.1589816752210;
+ Mon, 18 May 2020 08:45:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <1589461844-15614-1-git-send-email-qii.wang@mediatek.com> <1589461844-15614-3-git-send-email-qii.wang@mediatek.com>
-In-Reply-To: <1589461844-15614-3-git-send-email-qii.wang@mediatek.com>
+References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1589555337-5498-18-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdVV+2HsgmBytCOFg4pri4XinT_SPWT_Ac6n7FMZN3dR3w@mail.gmail.com>
+ <CA+V-a8tmG1LKYqbc7feGZQO2Tj5RCpNUHi9e19vPr+bED0KOyQ@mail.gmail.com>
+ <9ab946d2-1076-ed92-0a48-9a95d798d291@cogentembedded.com> <CA+V-a8uuP9d6dNeRpn3O0_aOc15CqWoh0bbAfYze1_hn0dCh8g@mail.gmail.com>
+In-Reply-To: <CA+V-a8uuP9d6dNeRpn3O0_aOc15CqWoh0bbAfYze1_hn0dCh8g@mail.gmail.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 18 May 2020 17:44:17 +0200
-Message-ID: <CAMuHMdXjLakWDDEy=02prC7XjAs_xBnt2mArPFNwyHgUoWw6-g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] i2c: mediatek: Add i2c ac-timing adjust support
-To:     Qii Wang <qii.wang@mediatek.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
+Date:   Mon, 18 May 2020 17:45:40 +0200
+Message-ID: <CAMuHMdVkf8vGL-769PvfTkMV=yuqW_V8gjo_ZfwEHVkdDWGTyw@mail.gmail.com>
+Subject: Re: [PATCH 17/17] ARM: dts: r8a7742: Add RWDT node
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, srv_heupstream@mediatek.com,
-        leilk.liu@mediatek.com,
+        <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
         Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, May 14, 2020 at 3:13 PM Qii Wang <qii.wang@mediatek.com> wrote:
-> This patch adds a algorithm to calculate some ac-timing parameters
-> which can fully meet I2C Spec.
->
-> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
-> ---
->  drivers/i2c/busses/i2c-mt65xx.c | 328 +++++++++++++++++++++++++++++++++-------
->  1 file changed, 277 insertions(+), 51 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-> index 0ca6c38a..7020618 100644
-> --- a/drivers/i2c/busses/i2c-mt65xx.c
-> +++ b/drivers/i2c/busses/i2c-mt65xx.c
+On Mon, May 18, 2020 at 3:23 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Mon, May 18, 2020 at 2:17 PM Sergei Shtylyov
+> <sergei.shtylyov@cogentembedded.com> wrote:
+> > On 18.05.2020 15:27, Lad, Prabhakar wrote:
+> > >>> Add a device node for the Watchdog Timer (RWDT) controller on the Renesas
+> > >>> RZ/G1H (r8a7742) SoC.
+> > >>>
+> > >>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >>> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> > >>
+> > >> Thanks for your patch!
+> > >>
+> > >>> --- a/arch/arm/boot/dts/r8a7742.dtsi
+> > >>> +++ b/arch/arm/boot/dts/r8a7742.dtsi
+> > >>> @@ -201,6 +201,16 @@
+> > >>>                  #size-cells = <2>;
+> > >>>                  ranges;
+> > >>>
+> > >>> +               rwdt: watchdog@e6020000 {
+> > >>> +                       compatible = "renesas,r8a7742-wdt",
+> > >>> +                                    "renesas,rcar-gen2-wdt";
+> > >>> +                       reg = <0 0xe6020000 0 0x0c>;
+> > >>> +                       clocks = <&cpg CPG_MOD 402>;
+> > >>> +                       power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
+> > >>> +                       resets = <&cpg 402>;
+> > >>> +                       status = "disabled";
+> > >>
+> > >> Missing "interrupts" property.
+> > >>
+> > > "interrupts" property isn't used by rwdt driver  and can be dropped
+> > > from bindings file.
+> >
+> >     DT describes the hardware, not its driver's abilities.
 
-> +/*
-> + * Check and Calculate i2c ac-timing
-> + *
-> + * Hardware design:
-> + * sample_ns = (1000000000 * (sample_cnt + 1)) / clk_src
-> + * xxx_cnt_div =  spec->min_xxx_ns / sample_ns
-> + *
-> + * Sample_ns is rounded down for xxx_cnt_div would be greater
-> + * than the smallest spec.
-> + * The sda_timing is chosen as the middle value between
-> + * the largest and smallest.
-> + */
-> +static int mtk_i2c_check_ac_timing(struct mtk_i2c *i2c,
-> +                                  unsigned int clk_src,
-> +                                  unsigned int check_speed,
-> +                                  unsigned int step_cnt,
-> +                                  unsigned int sample_cnt)
-> +{
-> +       const struct i2c_spec_values *spec;
-> +       unsigned int su_sta_cnt, low_cnt, high_cnt, max_step_cnt;
-> +       unsigned int sda_max, sda_min, clk_ns, max_sta_cnt = 0x3f;
-> +       long long sample_ns = (1000000000 * (sample_cnt + 1)) / clk_src;
+Thanks for chiming in, Sergei!
 
-So sample_ns is a 64-bit value. Is that really needed?
+> Agreed will add, I had followed it on similar lines of r8a7743/44.
 
-> +       if (!i2c->dev_comp->timing_adjust)
-> +               return 0;
-> +
-> +       if (i2c->dev_comp->ltiming_adjust)
-> +               max_sta_cnt = 0x100;
-> +
-> +       spec = mtk_i2c_get_spec(check_speed);
-> +
-> +       if (i2c->dev_comp->ltiming_adjust)
-> +               clk_ns = 1000000000 / clk_src;
-> +       else
-> +               clk_ns = sample_ns / 2;
-> +
-> +       su_sta_cnt = DIV_ROUND_UP(spec->min_su_sta_ns, clk_ns);
-> +       if (su_sta_cnt > max_sta_cnt)
-> +               return -1;
-> +
-> +       low_cnt = DIV_ROUND_UP(spec->min_low_ns, sample_ns);
-
-So this is a 32-bit by 64-bit division (indeed, not 64-by-32!)
-
-noreply@ellerman.id.au reports:
-
-    ERROR: modpost: "__udivdi3" [drivers/i2c/busses/i2c-mt65xx.ko] undefined!
-    ERROR: modpost: "__divdi3" [drivers/i2c/busses/i2c-mt65xx.ko] undefined!
-
-for 32-bit builds.
-
-> +       max_step_cnt = mtk_i2c_max_step_cnt(check_speed);
-> +       if ((2 * step_cnt) > low_cnt && low_cnt < max_step_cnt) {
-> +               if (low_cnt > step_cnt) {
-> +                       high_cnt = 2 * step_cnt - low_cnt;
-> +               } else {
-> +                       high_cnt = step_cnt;
-> +                       low_cnt = step_cnt;
-> +               }
-> +       } else {
-> +               return -2;
-> +       }
-> +
-> +       sda_max = spec->max_hd_dat_ns / sample_ns;
-> +       if (sda_max > low_cnt)
-> +               sda_max = 0;
-> +
-> +       sda_min = DIV_ROUND_UP(spec->min_su_dat_ns, sample_ns);
-
-One more.
+Yeah. I know it's missing for a few other SoCs, too.
 
 Gr{oetje,eeting}s,
 
                         Geert
 
---
+-- 
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
 In personal conversations with technical people, I call myself a hacker. But
