@@ -2,45 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4321D769B
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 13:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B261D76DA
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 13:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727020AbgERLRr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 May 2020 07:17:47 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:38957 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726590AbgERLRq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 07:17:46 -0400
-Received: by mail-oi1-f195.google.com with SMTP id s198so8646090oie.6;
-        Mon, 18 May 2020 04:17:45 -0700 (PDT)
+        id S1727832AbgERLYa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 May 2020 07:24:30 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:40584 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726739AbgERLYa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 07:24:30 -0400
+Received: by mail-ot1-f65.google.com with SMTP id d26so7695593otc.7;
+        Mon, 18 May 2020 04:24:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FlikUOjwjSX1sgRQ/d0WkDaMSp6bbBLhvNXBNQlS9ko=;
-        b=Kkzuk+mblapggvGo9/oLIQTMoR1YnbcRdzcY9NaWLUMUvE0UWG18CmDxR2M1gwVBES
-         0yQMRhMsbYGpzVBsZSbiRFBWQop1zErH3vXi8T+t3l57HSfmEHJgHd+KPDR0roY9Qk4f
-         Ni5mSmmIpTdXMPaAJKynTtmUOY61KN1CM3LwD5n1aVvfO1INVH2LVWwUwFECQ9oh7e3+
-         bzlvU7FSkWy9khbCyO4/zkDTu+vOyxOsi6qFdCxbB8D8Wh68Djt4M4XdxJuEaFCaT3rh
-         DNSZy57PVvPeBGl9Cflb9xYtuhvTGkebRHsJ7k1AF5ngDGARrNl6bx2qHy6P2wEpIFVy
-         s07A==
-X-Gm-Message-State: AOAM532F0Yn7sPvkt6m7yOqJ3IxG8zWcj/H/jNMdVXn6k0IMA2pB5jaE
-        dRHcmIMjfGSNNngghXyEGkjRiSBCHngS+bCWLiY=
-X-Google-Smtp-Source: ABdhPJyBPeqZLhSdXUNxn0ug1jJYFyUadv08J27iVRyncXiWWHppDp6a0+pBuGv1SyT6/B8ep1yEV6DOcec8M9SLps0=
-X-Received: by 2002:aca:cd93:: with SMTP id d141mr10020873oig.148.1589800665492;
- Mon, 18 May 2020 04:17:45 -0700 (PDT)
+        bh=S+/xJo9DYFV5x/KGWI9bYykM6mq0Xnr1uVyyiFMOM94=;
+        b=Y1TXobsoU2Lmp4U/8L5YGzh0WkqFwCw/MDZ87ObhHLJTWmtMOimQskBr1/pbdWjP75
+         MJzrlD6TnptUtEaImuH9sNuPt4YyZY3kI/HTJ2Up2RSXirs4GYPSz0Fge7nicdEz/GXA
+         QFVOLgiLVF0FCpbcs/Es3B5UpiA2WBiJE6tQOqg0k9esI9Xo0rtm0BDS8NTQRvTC52rI
+         T2MUGuFN/USBlEWEvvu8A7v1EurJ9jMydykR8leyxtxK7z6sN0sRdwm799HfTLh1wBbA
+         R09IycWVjec5eWiT1qKk9BmSI0iz5xpu/HVR2h+lOnPH5CgksqfwPiBu4DvmfixZXtoV
+         hKKQ==
+X-Gm-Message-State: AOAM5312P1nLMyt2BTLykHafZ924Fj7G0tJKVbPDOAEitDbdmca0qxiM
+        EkRPKMopYj89LiZqofOeAGvu6VLLt0g0JqaA9SA=
+X-Google-Smtp-Source: ABdhPJwNoxButZwgH4SDPteHjBuwwMLD1bqxVYkjDcQmRozmQtDNJ0fFE+TRSmeEzroqrNyEaK173xc8SAa+z83VsXs=
+X-Received: by 2002:a05:6830:18d9:: with SMTP id v25mr7897454ote.107.1589801068351;
+ Mon, 18 May 2020 04:24:28 -0700 (PDT)
 MIME-Version: 1.0
 References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1589555337-5498-17-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1589555337-5498-17-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1589555337-5498-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com> <20200515171754.GF19423@ninjato>
+In-Reply-To: <20200515171754.GF19423@ninjato>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 18 May 2020 13:17:34 +0200
-Message-ID: <CAMuHMdWaQhwarFLC48JSHjuyszJdQC1xkHB5RiovdDQq5TfwnA@mail.gmail.com>
-Subject: Re: [PATCH 16/17] dt-bindings: watchdog: renesas,wdt: Document
- r8a7742 support
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+Date:   Mon, 18 May 2020 13:24:15 +0200
+Message-ID: <CAMuHMdXgRgP8acDzn-p31wmomEbzFXJ2i2vOW1ppuHP-K6-UpQ@mail.gmail.com>
+Subject: Re: [PATCH 05/17] mmc: renesas_sdhi_sys_dmac: Add support for r8a7742 SoC
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -61,15 +60,37 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, May 15, 2020 at 5:10 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> RZ/G1H (R8A7742) watchdog implementation is compatible with R-Car Gen2,
-> therefore add relevant documentation.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+Hi Wolfram, Prabhakar,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Fri, May 15, 2020 at 7:17 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> On Fri, May 15, 2020 at 04:08:45PM +0100, Lad Prabhakar wrote:
+> > Add support for r8a7742 SoC. Renesas RZ/G1H (R8A7742) SDHI is identical to
+> > the R-Car Gen2 family.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+>
+> I think we can skip this because of the generic fallback? The other
+
+Agreed.
+
+> entries come from a time when we had a different policy IIRC.
+
+Indeed.  Commit c16a854e4463078a ("mmc: renesas_sdhi: Add r8a7743/5
+support") predated commit d6dc425ae595e140 ("mmc: renesas_sdhi:
+implement R-Car Gen[123] fallback compatibility strings").
+
+> > --- a/drivers/mmc/host/renesas_sdhi_sys_dmac.c
+> > +++ b/drivers/mmc/host/renesas_sdhi_sys_dmac.c
+> > @@ -75,6 +75,7 @@ static const struct of_device_id renesas_sdhi_sys_dmac_of_match[] = {
+> >       { .compatible = "renesas,sdhi-r7s72100", .data = &of_rz_compatible, },
+> >       { .compatible = "renesas,sdhi-r8a7778", .data = &of_rcar_gen1_compatible, },
+> >       { .compatible = "renesas,sdhi-r8a7779", .data = &of_rcar_gen1_compatible, },
+> > +     { .compatible = "renesas,sdhi-r8a7742", .data = &of_rcar_gen2_compatible, },
+> >       { .compatible = "renesas,sdhi-r8a7743", .data = &of_rcar_gen2_compatible, },
+> >       { .compatible = "renesas,sdhi-r8a7745", .data = &of_rcar_gen2_compatible, },
+> >       { .compatible = "renesas,sdhi-r8a7790", .data = &of_rcar_gen2_compatible, },
 
 Gr{oetje,eeting}s,
 
