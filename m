@@ -2,114 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 189751D74C7
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 12:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8BD01D894F
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 May 2020 22:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726283AbgERKKY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 May 2020 06:10:24 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:42086 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726040AbgERKKY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 06:10:24 -0400
-Received: by mail-oi1-f194.google.com with SMTP id l6so2622638oic.9;
-        Mon, 18 May 2020 03:10:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OUWwAW1tiZj2X0S32FYVRQZMXC7D2eYX5NkiVFQhWuM=;
-        b=jHTzn0kZ2WgWP9ll68PeWpOYW0SEYTSqGrXDFO8PGseYmiIfoWTSpXlLyYJy29CYQW
-         dNTCM+K5gIbTai1adyeqFkkIUyK6mzuwE+jH/ePsJML9KoSW0vxr+fIC++q68ovb4/00
-         8kqWB5arem5HInZB92P9a92Qj0JRRNkbgmXDRodzeQiHzCdAADtw63Z+ok2mBV6RQkM8
-         e8VieaBLvO150B/p2z0MWWNTGRBBekAxuY3bPm5TshYCw5Hw16GpgDLgXcQ6uXINA4JQ
-         u2ou/Ffsot0kaRARMOuGS6vqLAMx4yh2PpNrmTW4MAqIjRKoCH9FCFQH9+uo//o1vmaL
-         c0mg==
-X-Gm-Message-State: AOAM532JzgILyyQvEpVz1AHJaQQhr5gOPcJ7DhZc82wPHXEqNs3k1lPq
-        839j7oyD3Uk8nSgXatxWR08i2UanzBUJBKeOfwQ=
-X-Google-Smtp-Source: ABdhPJyBWPgZF8Nef5VFnPwIMZCFFtRvCnBOgZddEawH+Whlxj+gaH+OLdK5CmIFCwYF6ugC0lIB1QUdlxdAkaabczY=
-X-Received: by 2002:aca:cd93:: with SMTP id d141mr9870659oig.148.1589796621997;
- Mon, 18 May 2020 03:10:21 -0700 (PDT)
+        id S1726505AbgERUfR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 May 2020 16:35:17 -0400
+Received: from h49.servidorhh.com ([185.169.98.79]:57712 "EHLO
+        h49.servidorhh.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726367AbgERUfQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 May 2020 16:35:16 -0400
+X-Greylist: delayed 36696 seconds by postgrey-1.27 at vger.kernel.org; Mon, 18 May 2020 16:35:15 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cufa.org.br
+        ; s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=ZC/WullVcxxGDKvH6lXmgv6ZNlo9cHPd1cjpB7sXAWI=; b=AmtDtaypqgYtQBEtF1j6HkgpIR
+        haqK7Io8DG7FwmK2Feezc1kps7sHDds2gneviRWeIZ5ROFEL0tyLocW5CF47NRORsIw5k7ikfdS7J
+        vTD0ioAcCe0TARv562m/qkt7b6dCrOUo1E5TQpiVR+Pw9FgHuxuuAje9f0JoDtBlZsCp9ZHUER1Z+
+        7M/Zjmhbw7LbUR87h/lRnT49t+a0sjuoHmZdxtvnMIPCHNuWthjlLInr3FHiEsOrZHRTp7QGitaWK
+        6Mw5/ktIgzTUKYdKum7ex/nFH6t1Sf/h8IwYxSgUyBY8JufslgcP4+Zwux1T+GTPdrPaxrUZroC3f
+        K2YxYmvQ==;
+Received: from [189.112.49.173] (port=48527 helo=mail.cufa.org.br)
+        by h49.servidorhh.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <mariananery@cufa.org.br>)
+        id 1jacvp-0002xE-Dz
+        for linux-i2c@vger.kernel.org; Mon, 18 May 2020 07:23:38 -0300
+To:     "linux i2c" <linux-i2c@vger.kernel.org>
+From:   nik_bin_nek_alwi <mariananery@cufa.org.br>
+Subject: =?UTF-8?Q?=5BAchtung!=5D_Ich_war_mit_meinen_?= =?UTF-8?Q?Gedanken_heute_bei_dir._Alles_gut_?= =?UTF-8?Q?bei_dir=3F?=
+Message-ID: <eae79b40-02a2-4397-b93f-5ba714c4dd9c@cufa.org.br>
+Date:   Mon, 18 May 2020 01:16:32 -0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1589555337-5498-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200515171031.GB19423@ninjato> <CA+V-a8t6rPs4s8uMCpBQEAUvwsVn7Cte-vX3z2atWRhy_RFLQw@mail.gmail.com>
- <20200518092601.GA3268@ninjato>
-In-Reply-To: <20200518092601.GA3268@ninjato>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 18 May 2020 12:10:05 +0200
-Message-ID: <CAMuHMdVWe1EEAtP64VW+0zXNingM1LiENv_Rfz5qTQ+C0dtGSw@mail.gmail.com>
-Subject: Re: [PATCH 03/17] ARM: dts: r8a7742: Add I2C and IIC support
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - h49.servidorhh.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - cufa.org.br
+X-Get-Message-Sender-Via: h49.servidorhh.com: authenticated_id: mariananery@cufa.org.br
+X-Authenticated-Sender: h49.servidorhh.com: mariananery@cufa.org.br
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+https://deonebibeg1895.blogspot.jp/
 
-On Mon, May 18, 2020 at 11:26 AM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> > > However, both versions (with and without automatic transmission) are
-> > > described with the same "renesas,iic-r8a7742" compatible. Is it possible
-> > > to detect the reduced variant at runtime somehow?
-> > >
-> > I couldn't find anything the manual that would be useful to detect at runtime.
 
-Hence if we really need that (see below), we need a quirk based on compatible
-value + base address.
 
-> > > My concern is that the peculiarity of this SoC might be forgotten if we
-> > > describe it like this and ever add "automatic transmissions" somewhen.
-> > >
-> > Agreed.
->
-> Well, I guess reading from a register which is supposed to not be there
-> on the modified IP core is too hackish.
-
-According to the Hardware User's Manual Rev. 1.00, the registers do exist
-on all RZ/G1, except for RZ/G1E (see below).
-
-   "(automatic transmission can be used as a hardware function, but this is
-    not meaningful for actual use cases)."
-
-(whatever that comment may mean?)
-
-> Leaves us with a seperate compatible entry for it?
-
-On R-Car E3 and RZ/G2E, which have a single IIC instance, we
-handled that by:
-
-        The r8a77990 (R-Car E3) and r8a774c0 (RZ/G2E)
-        controllers are not considered compatible with
-        "renesas,rcar-gen3-iic" or "renesas,rmobile-iic"
-        due to the absence of automatic transmission registers.
-
-On R-Car E2 and RZ/G1E, we forgot, and used both SoC-specific and
-family-specific compatible values.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Alles Gute
+nik_bin_nek_alwi@yahoo.com
