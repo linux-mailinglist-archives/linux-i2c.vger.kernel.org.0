@@ -2,32 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F02A11D9033
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 May 2020 08:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41CE1D9048
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 May 2020 08:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbgESGkj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 May 2020 02:40:39 -0400
-Received: from sauhun.de ([88.99.104.3]:50524 "EHLO pokefinder.org"
+        id S1727041AbgESGrX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 May 2020 02:47:23 -0400
+Received: from www.zeus03.de ([194.117.254.33]:54894 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726841AbgESGki (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 19 May 2020 02:40:38 -0400
-Received: from localhost (p5486ceca.dip0.t-ipconnect.de [84.134.206.202])
-        by pokefinder.org (Postfix) with ESMTPSA id C09252C1FA8;
-        Tue, 19 May 2020 08:40:36 +0200 (CEST)
-Date:   Tue, 19 May 2020 08:40:36 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PULL REQUEST] i2c for v5.8
-Message-ID: <20200519064036.GA1094@ninjato>
-References: <20200519063609.GA2141@ninjato>
+        id S1726893AbgESGrW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 19 May 2020 02:47:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=AtVPyH5oNfMe3VrfRPB9qsIzp04J
+        Du3wrHBnH6/dpYA=; b=YMZBJbtu5kjlq96TlqWEwbydeDTSro/e/fYmQKVZ5VQj
+        A72ZvYG1m+iolIphgoEEe+X5Y5Fy/eCyQYYI1w7hUVRqNNpCsT+Q6414ZidHgwIl
+        CU7gGLbIlc9PEvc7HdZd3SVZSwy8wqat0z5acyc3UVlOPxbNuchdSEIrdE9/hIw=
+Received: (qmail 141895 invoked from network); 19 May 2020 08:47:21 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 May 2020 08:47:21 +0200
+X-UD-Smtp-Session: l3s3148p1@08e3pvql8OEgAwDPXxCmAFNwG0mTH/5q
+Date:   Tue, 19 May 2020 08:47:20 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Subject: Re: [PATCH] i2c: reword explanation about atomic transfers
+Message-ID: <20200519064720.GB1094@ninjato>
+References: <20200505160101.12399-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="J/dobhs11T7y2rNN"
+        protocol="application/pgp-signature"; boundary="eAbsdosE1cNLO4uF"
 Content-Disposition: inline
-In-Reply-To: <20200519063609.GA2141@ninjato>
+In-Reply-To: <20200505160101.12399-1-wsa+renesas@sang-engineering.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -35,98 +40,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---J/dobhs11T7y2rNN
-Content-Type: text/plain; charset=us-ascii
+--eAbsdosE1cNLO4uF
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 19, 2020 at 08:36:13AM +0200, Wolfram Sang wrote:
-> Linus,
+On Tue, May 05, 2020 at 06:01:01PM +0200, Wolfram Sang wrote:
+> Atomic transfers are not only about sending messages like the original
+> wording suggested. Speak of 'accessing' now like in i2c.h.
 >=20
-> here is the pull request which I missed last week. It contains a set of
-> driver and core fixes as well as MAINTAINER updates.
+> Reported-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Sorry, kernel version in $subject should have been v5.7!
-
->=20
-> Please pull.
->=20
-> Thanks,
->=20
->    Wolfram
->=20
->=20
-> The following changes since commit 0e698dfa282211e414076f9dc7e83c1c288314=
-fd:
->=20
->   Linux 5.7-rc4 (2020-05-03 14:56:04 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-cur=
-rent-fixed
->=20
-> for you to fetch changes up to efa7fb4c6c8e4171fd29a5935a9dc7a28e363278:
->=20
->   MAINTAINERS: add maintainer for mediatek i2c controller driver (2020-05=
--15 11:40:54 +0200)
->=20
-> ----------------------------------------------------------------
-> Alain Volmat (1):
->       i2c: fix missing pm_runtime_put_sync in i2c_device_probe
->=20
-> Atsushi Nemoto (1):
->       i2c: altera: Fix race between xfer_msg and isr thread
->=20
-> Christophe JAILLET (1):
->       i2c: mux: demux-pinctrl: Fix an error handling path in 'i2c_demux_p=
-inctrl_probe()'
->=20
-> Codrin Ciubotariu (1):
->       i2c: at91: Fix pinmux after devm_gpiod_get() for bus recovery
->=20
-> Gustavo A. R. Silva (1):
->       i2c: mux: Replace zero-length array with flexible-array
->=20
-> Qii Wang (1):
->       MAINTAINERS: add maintainer for mediatek i2c controller driver
->=20
-> Wolfram Sang (2):
->       i2c: use my kernel.org address from now on
->       i2c: algo-pca: update contact email
->=20
->  .mailmap                              |  2 ++
->  MAINTAINERS                           |  9 ++++++++-
->  drivers/i2c/algos/i2c-algo-pca.c      |  2 +-
->  drivers/i2c/busses/i2c-altera.c       | 10 +++++++++-
->  drivers/i2c/busses/i2c-at91-master.c  | 20 +++++++++++++++++---
->  drivers/i2c/i2c-core-base.c           | 24 +++++++++++++++++-------
->  drivers/i2c/i2c-core-of.c             |  2 +-
->  drivers/i2c/muxes/i2c-demux-pinctrl.c |  1 +
->  include/linux/i2c-mux.h               |  2 +-
->  include/linux/i2c.h                   |  2 +-
->  10 files changed, 58 insertions(+), 16 deletions(-)
+Applied to for-next, thanks!
 
 
-
---J/dobhs11T7y2rNN
+--eAbsdosE1cNLO4uF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7Df2MACgkQFA3kzBSg
-Kbargg/+ODFcw24lJoiRjjCzZSTeFGfWpxr8lCBLwWNM/M+X8mUYNXV9Udd1AbjD
-L70RCG9zsFkLsWqdMjYy8RHp+T0FmEllC0j0eqeheuDxCIo3meuaE0Axdv1psfK4
-j7ZcLhq+leJE5VCpGb61wzyfXGq3gc7hZ6Q9q6u45CIA4g2NktEO7SjzT00gYutp
-iVE2lB61YoQTxjhcAjzF60gh9rJyPF0rse6E359I0A2pDuQzwHurEOSalObxrVDg
-4EnIHVJ9Q7jZo4rqPIhOsBXXqr2ZNcULdudYWYxGkXzDZODq1+BF8yaJwT41rds2
-ow4xFUG1UI1LgTGRRdp1CWBUkm1yxPseN1xZ2yTWI+qWUWUNy/ebynM7KFY2GoHJ
-Qh2XCtZLc4jqjJ2r6e6vl42HmsjQqb44ayAw0RuXV2z7wIMTUVypZWpB1o6p8D67
-ae/7vQ37SuNeJS46bRsa6O66C9xvW6708xuPTVKNtdqPu2TETuycxeb7Z6wuKnpK
-4PMf3xl0/FvoU9SQ7jTOg8Bsbk9juIJWStFurYGdocjYZ4l3Os7zJnHfTip88nWV
-qcsIfAN5BcMUS25osZgwfLuf8FZHVudm4flOn+gnHjAiYTBbVO/BG6wZybjz8FjA
-Gvi52IgMdVVicFYvvJz3PLwm7cZgZyV9HIlDGeTvjgEI9EY4sAM=
-=sFEm
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7DgPgACgkQFA3kzBSg
+KbaKsw//f0uxfa1Z3GS3HCyoaAXSgd2F2VwlWZkOXItXkSmAoZJl17YdgRWZSlOw
+F6AUWOYJiaXryQYKC8rqg5N4gWO6Pc39TcigulgWAs6Aap8O+rNwBZxyyCIBTb8v
+sRZ6EvR5bxPMRICIWfJn1uysL20kV9aMugSPobUt00smQ6xOF2IL6CoFHmX+APud
+eC/J6XjMFOxwDPXNj1bI4Yo+QjDsUUwg0WF/cB/2DHkjGYmL6WgSrhJYbvNilZvv
+8HWg5LjNq1lkOIkjdvyzWgQkbeQJ/VnA/LlBcKYgxaOfaVxqEH3mmHV228uV8sNp
+GyEJmocCPPCpuDTByk77d5vZXrGiprqzuqmbfc0Cb+gAHXTCctSjbK6bvJcTC9bV
+XWn3u85IlanTYhYT+8gjJEMuvSS8tj78TW2v3S3SMw7A/Z6PCBPynZkRjxxiqGv0
+Oce92BTL5XIJTvB2ybEvo6KE7rpUsmUDwyDh382InTtSN2kgIGOJSZ22sZ/LN6i1
+n+fdI8bIGBcMo3RDpvoQPltz6CjpZxOKycDc0fPWuJhsj5HuHe0wBpoOP5GjSkDG
+HOV6/CHq4OzJm+cFpb2l3Rs5g4HRaw6aPPeXt1fSmU75yfuqSKsdQ+G3esgVBnr0
+bXN+zh+zDR9EU+uSnbleYS9uf5pD6cgWa8xQj5XAwy48z386Wts=
+=NNP5
 -----END PGP SIGNATURE-----
 
---J/dobhs11T7y2rNN--
+--eAbsdosE1cNLO4uF--
