@@ -2,37 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A41CE1D9048
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 May 2020 08:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928481D905F
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 May 2020 08:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbgESGrX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 May 2020 02:47:23 -0400
-Received: from www.zeus03.de ([194.117.254.33]:54894 "EHLO mail.zeus03.de"
+        id S1728289AbgESGxZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 May 2020 02:53:25 -0400
+Received: from sauhun.de ([88.99.104.3]:50670 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726893AbgESGrW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 19 May 2020 02:47:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=AtVPyH5oNfMe3VrfRPB9qsIzp04J
-        Du3wrHBnH6/dpYA=; b=YMZBJbtu5kjlq96TlqWEwbydeDTSro/e/fYmQKVZ5VQj
-        A72ZvYG1m+iolIphgoEEe+X5Y5Fy/eCyQYYI1w7hUVRqNNpCsT+Q6414ZidHgwIl
-        CU7gGLbIlc9PEvc7HdZd3SVZSwy8wqat0z5acyc3UVlOPxbNuchdSEIrdE9/hIw=
-Received: (qmail 141895 invoked from network); 19 May 2020 08:47:21 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 May 2020 08:47:21 +0200
-X-UD-Smtp-Session: l3s3148p1@08e3pvql8OEgAwDPXxCmAFNwG0mTH/5q
-Date:   Tue, 19 May 2020 08:47:20 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Subject: Re: [PATCH] i2c: reword explanation about atomic transfers
-Message-ID: <20200519064720.GB1094@ninjato>
-References: <20200505160101.12399-1-wsa+renesas@sang-engineering.com>
+        id S1726841AbgESGxZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 19 May 2020 02:53:25 -0400
+Received: from localhost (p5486ceca.dip0.t-ipconnect.de [84.134.206.202])
+        by pokefinder.org (Postfix) with ESMTPSA id 884E52C1FA8;
+        Tue, 19 May 2020 08:53:23 +0200 (CEST)
+Date:   Tue, 19 May 2020 08:53:23 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-i2c@vger.kernel.org, tfiga@chromium.org,
+        drinkcat@chromium.org, srv_heupstream@mediatek.com,
+        robh+dt@kernel.org, mark.rutland@arm.com,
+        devicetree@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v14 1/2] dt-binding: i2c: add bus-supply property
+Message-ID: <20200519065323.GC1094@ninjato>
+References: <20200428061813.27072-1-bibby.hsieh@mediatek.com>
+ <20200428061813.27072-2-bibby.hsieh@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eAbsdosE1cNLO4uF"
+        protocol="application/pgp-signature"; boundary="WfZ7S8PLGjBY9Voh"
 Content-Disposition: inline
-In-Reply-To: <20200505160101.12399-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20200428061813.27072-2-bibby.hsieh@mediatek.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -40,39 +39,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---eAbsdosE1cNLO4uF
-Content-Type: text/plain; charset=utf-8
+--WfZ7S8PLGjBY9Voh
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 05, 2020 at 06:01:01PM +0200, Wolfram Sang wrote:
-> Atomic transfers are not only about sending messages like the original
-> wording suggested. Speak of 'accessing' now like in i2c.h.
+On Tue, Apr 28, 2020 at 02:18:12PM +0800, Bibby Hsieh wrote:
+> In some platforms, they disable the power-supply of i2c due
+> to power consumption reduction. This patch add bus-supply property.
 >=20
-> Reported-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
 
-Applied to for-next, thanks!
+Applied to for-next, thanks! +1 for the comments Rob made, please add
+given tags if you didn't make further changes.
 
 
---eAbsdosE1cNLO4uF
+--WfZ7S8PLGjBY9Voh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7DgPgACgkQFA3kzBSg
-KbaKsw//f0uxfa1Z3GS3HCyoaAXSgd2F2VwlWZkOXItXkSmAoZJl17YdgRWZSlOw
-F6AUWOYJiaXryQYKC8rqg5N4gWO6Pc39TcigulgWAs6Aap8O+rNwBZxyyCIBTb8v
-sRZ6EvR5bxPMRICIWfJn1uysL20kV9aMugSPobUt00smQ6xOF2IL6CoFHmX+APud
-eC/J6XjMFOxwDPXNj1bI4Yo+QjDsUUwg0WF/cB/2DHkjGYmL6WgSrhJYbvNilZvv
-8HWg5LjNq1lkOIkjdvyzWgQkbeQJ/VnA/LlBcKYgxaOfaVxqEH3mmHV228uV8sNp
-GyEJmocCPPCpuDTByk77d5vZXrGiprqzuqmbfc0Cb+gAHXTCctSjbK6bvJcTC9bV
-XWn3u85IlanTYhYT+8gjJEMuvSS8tj78TW2v3S3SMw7A/Z6PCBPynZkRjxxiqGv0
-Oce92BTL5XIJTvB2ybEvo6KE7rpUsmUDwyDh382InTtSN2kgIGOJSZ22sZ/LN6i1
-n+fdI8bIGBcMo3RDpvoQPltz6CjpZxOKycDc0fPWuJhsj5HuHe0wBpoOP5GjSkDG
-HOV6/CHq4OzJm+cFpb2l3Rs5g4HRaw6aPPeXt1fSmU75yfuqSKsdQ+G3esgVBnr0
-bXN+zh+zDR9EU+uSnbleYS9uf5pD6cgWa8xQj5XAwy48z386Wts=
-=NNP5
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7DgmMACgkQFA3kzBSg
+KbZVjQ/+JwxxOo7eBYPA/lGjh0/+tWpcHvV7u5wD2g7a5jpzB2C4AtOrsNbxZPBg
+R+0VDcMjALqnU9vr5Og8BRVYD55KIUnlzQ5x4lf8BHOOmziUciJKO/yaW5QQbSqS
+wQYeld894w63v4OOjKOaAMFMXuRw9D3/rDOL/Ep/3h0MlIffjowfWFZ/sv9d4SdI
+CL9q0RfrRvQeFGOLRGw8dQGG4V8mtoQQf0o+QF2iJ6wzzFALqomquJZSgRKPEmkC
+Lb1NGXVqGP+cFs3jUzbKBSxVNRjkD+9teck8OQgemMoDj7yiwLTcPx6qsR1x26wS
+9XHybBlm7+G9JZatf8rinzKqTg92wrS+6rXvcv/ypQx6xIB1QylX7Q7G+JFxpPdg
+QSzY/I/L6QyOYn1EIAakqpJZTZX5373uprAAEk54APWPvgkEqGN2OtvHEec/oOab
+ABZEwa20WOqYTEPVwiVusbIQ1X6kGSN101vE58YRqj1kwjN6Dnf4wi35dWMO/Q3B
+3JTdaxos1ZbpCNDcjPwOecI56E4G677wqzUC0Ji9H0/V/K3Iy3qzkB+l7aA5K3Hr
+75o9KDXgohY2+VDFcM5FfHpW+pywQ7UoDRryq5KJRMij6GYR3CA/eXeQuqs3zblm
+I1B/WUAuAn83r0O0kqrAD5wdUHAjkYHeZdAuiIQRmTfeyDy/V3I=
+=Gi5z
 -----END PGP SIGNATURE-----
 
---eAbsdosE1cNLO4uF--
+--WfZ7S8PLGjBY9Voh--
