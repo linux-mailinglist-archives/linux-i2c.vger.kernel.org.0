@@ -2,19 +2,19 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0908A1D9264
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 May 2020 10:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7453C1D926A
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 May 2020 10:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgESIsD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 May 2020 04:48:03 -0400
-Received: from sauhun.de ([88.99.104.3]:51884 "EHLO pokefinder.org"
+        id S1726735AbgESIsf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 May 2020 04:48:35 -0400
+Received: from sauhun.de ([88.99.104.3]:51902 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726388AbgESIsC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 19 May 2020 04:48:02 -0400
+        id S1726466AbgESIsf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 19 May 2020 04:48:35 -0400
 Received: from localhost (p5486ceca.dip0.t-ipconnect.de [84.134.206.202])
-        by pokefinder.org (Postfix) with ESMTPSA id 19DC12C1FA8;
-        Tue, 19 May 2020 10:48:01 +0200 (CEST)
-Date:   Tue, 19 May 2020 10:48:00 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 9FC2E2C1FA8;
+        Tue, 19 May 2020 10:48:33 +0200 (CEST)
+Date:   Tue, 19 May 2020 10:48:33 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
 Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
@@ -23,15 +23,16 @@ Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         robh+dt@kernel.org, mark.rutland@arm.com,
         devicetree@vger.kernel.org,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v15 1/2] dt-binding: i2c: add bus-supply property
-Message-ID: <20200519084800.GG1094@ninjato>
+Subject: Re: [PATCH v15 2/2] i2c: core: support bus regulator controlling in
+ adapter
+Message-ID: <20200519084833.GH1094@ninjato>
 References: <20200519072729.7268-1-bibby.hsieh@mediatek.com>
- <20200519072729.7268-2-bibby.hsieh@mediatek.com>
+ <20200519072729.7268-3-bibby.hsieh@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oOB74oR0WcNeq9Zb"
+        protocol="application/pgp-signature"; boundary="qM81t570OJUP5TU/"
 Content-Disposition: inline
-In-Reply-To: <20200519072729.7268-2-bibby.hsieh@mediatek.com>
+In-Reply-To: <20200519072729.7268-3-bibby.hsieh@mediatek.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -39,39 +40,41 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---oOB74oR0WcNeq9Zb
+--qM81t570OJUP5TU/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 19, 2020 at 03:27:28PM +0800, Bibby Hsieh wrote:
-> In some platforms, they disable the power-supply of i2c due
-> to power consumption reduction. This patch add bus-supply property.
+On Tue, May 19, 2020 at 03:27:29PM +0800, Bibby Hsieh wrote:
+> Although in the most platforms, the bus power of i2c
+> are alway on, some platforms disable the i2c bus power
+> in order to meet low power request.
+>=20
+> We get and enable bulk regulator in i2c adapter device.
 >=20
 > Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
-> Acked-by: Rob Herring <robh@kernel.org>
 
-Applied to for-next, thanks!
+Applied to for-next, thanks! I added Tomasz Rev-by: for you.
 
 
---oOB74oR0WcNeq9Zb
+--qM81t570OJUP5TU/
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7DnUAACgkQFA3kzBSg
-Kbaa0Q//bf23b/Q6JUEHDe+pvwCyO6kVwRO7StcA2cY7O5oSCsAOQFHlHu7oxKQi
-qeJApZGdQXFv1QvkIdPJWhpumu4QmCucljDFkf1Pzzlz0E4BmJw5VOQ5RBO/hHJE
-UnHugK8aEyzkuhuNUWrynDD+fCSOBMJfHV1KqdUbiHDfkYgc4LpwVOyWYR0Yh2af
-3cFkyIHaA80RF3NoKU0A0knGkV95mHz1TD9YI4cApHGVwiRYImNKGK8TE9NqBJmA
-/xa9/dK/rzGCGfMuw5QlnE5Tii7haOeYyiUxvW2/NxQeaDVZex9YltRvLQ7C95O4
-e6vOfYWSPKEHIEKxLhz2bzR76/5qTJpaYt1PLNZdx9V1dbkis0pYapeiT6wwHETV
-tjkxGSLFFgRx0TiwrkhgyQwbRVKQXyy3I3ayhg70lZOKhg274XqJ9u6dWhTNnojt
-LMYVdl8pGIg3avn8LG/tt4aMDldWcVsC31GnyJ3uqCU7AYU43w7wt6cGZ36gMWB2
-9ClOn+SV6oN7+ndGedQYpF8HohQfbaTJG5a/kQawx0nxDABWAJZILVu56tNSFigE
-ECq1GiFY8pRvBPIRzLXyQhXZaTOdbM2gCTsRIvlaPP7fG349HfAjti67GVbbuuOW
-7Mi4qH2dBf2hAqwSPoAQOW9C5wS0RVbDRP1f1hA00ZONfjOSOBU=
-=+7m6
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7DnWEACgkQFA3kzBSg
+KbbJLg/7BXXjQ4Az/ycfYqTBAbDDrlnurYpy3y24TWlspIcLC0ocY6GkUl1KV1es
+m/EcxbmqbE0piB3BCgjazedtDgn0YctP7/fdm3WhE7AXYIih/6oOdii5TegzcPK4
+YY6f+5tRprR2MJVZzdRzXHYul6AomR8uxrNmXX/pm3vMzHLbziE0NbR6AtiRBkPt
+DoEFBvlmaSrLSGmdVXdky7GwZZK7wPIkGxKOgj6jtITBaBHpxbynVKr87aj84tCy
+LddMyvpYO8hXN5+RSjH2tttp7BXF4oMzMKCyTyDF61K18Yde4d1hQvNLeySAZ6Bo
++M3yD68rj2ry34hIJdzvYOKoS7tNwJenEBpyqDGd8DNQpfqtSHuWEBoOU7zuBkQn
+uV+V4UWT/TjPXuonoFRrmkoZ0kx6pkV4XXKGbFhwrUQ5nXIr3EcrGYxlVSPUE2jo
+iBtjmXjzCurOMBJjGPWMY7ZEFb9snK8fm8cK8O+YqpMuDZWX5Y1+CLF7s1ALpeIj
+MOtUNu9gr+Mk8bzQ6BFaw9lje26DS1BdMTU7zAQrVY+NtdxvKP0T+H0ES4ZJYOCa
+WSRXHZ4PDPIWXwEYVivc74JWSomtb197pt1r30FBrOHQtEzQYlrKk+PNFrb0mLTo
+03K3x/Inm0fDF0NknfFLUV3ptL1QonprijhyTHl3956bmq72tcM=
+=BaV+
 -----END PGP SIGNATURE-----
 
---oOB74oR0WcNeq9Zb--
+--qM81t570OJUP5TU/--
