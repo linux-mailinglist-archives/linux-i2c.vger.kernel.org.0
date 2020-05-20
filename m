@@ -2,48 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 750131DB51D
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 15:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A509E1DB54E
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 15:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726747AbgETNec (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 May 2020 09:34:32 -0400
-Received: from www.zeus03.de ([194.117.254.33]:59218 "EHLO mail.zeus03.de"
+        id S1726916AbgETNkY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 May 2020 09:40:24 -0400
+Received: from sauhun.de ([88.99.104.3]:37844 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726576AbgETNec (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 20 May 2020 09:34:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=udmxY3eElyisrOqhNbRKohBCfXPS
-        2K3Axj2gciVQ+Ew=; b=PHWMs9Yk2Na88RyxULIH1iLcLVgRlqO5As6BQZEgRz+M
-        q8Ag46CeHXO9j2718wl7ABf5CpSCjk5Rjybl+afalhMMPTAwB67xYmO65s1lrpDj
-        MbM0QG/kw77XPDjz2gDI9gUDuWcxL2TMMV/JeMgAZ+cUn5GvNU3567wB7bCzdsE=
-Received: (qmail 673327 invoked from network); 20 May 2020 15:34:30 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 May 2020 15:34:30 +0200
-X-UD-Smtp-Session: l3s3148p1@7JqndBSmOt4gAwDPXwjBAFv42Jy9rssU
-Date:   Wed, 20 May 2020 15:34:29 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Lee Jones <lee.jones@linaro.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Max Staudt <max@enpas.org>, Stefan Roese <sr@denx.de>,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] mfd: ensure that AXP20X_I2C will have the right
- deps on X86
-Message-ID: <20200520133429.GC5759@ninjato>
-References: <cover.1589801950.git.mchehab+huawei@kernel.org>
- <cfbb80f220bba5051640d92fc00825bdaa2ec877.1589801950.git.mchehab+huawei@kernel.org>
- <aa23c170-f4e8-e1f0-5c7f-35e51ec84533@redhat.com>
- <20200518145302.56642b22@coco.lan>
+        id S1726525AbgETNkV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 20 May 2020 09:40:21 -0400
+Received: from localhost (p5486cd24.dip0.t-ipconnect.de [84.134.205.36])
+        by pokefinder.org (Postfix) with ESMTPSA id 22DCE2C1FD1;
+        Wed, 20 May 2020 15:40:20 +0200 (CEST)
+Date:   Wed, 20 May 2020 15:40:19 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [GIT PULL] i2c: tegra: Changes for v5.8-rc1
+Message-ID: <20200520134019.GD5759@ninjato>
+References: <20200515143924.1579055-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xo44VMWPx7vlQ2+2"
+        protocol="application/pgp-signature"; boundary="wLAMOaPNJ0fu1fTG"
 Content-Disposition: inline
-In-Reply-To: <20200518145302.56642b22@coco.lan>
+In-Reply-To: <20200515143924.1579055-1-thierry.reding@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -51,40 +33,57 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---xo44VMWPx7vlQ2+2
+--wLAMOaPNJ0fu1fTG
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > With that said I'm fine with giving this another try, maybe let
-> > the test builders / rand config builds play with it for a while
-> > and see what happens?
+On Fri, May 15, 2020 at 04:39:24PM +0200, Thierry Reding wrote:
+> Hi,
 >=20
-> Yeah, it makes sense to me.
+> The following changes since commit 0e698dfa282211e414076f9dc7e83c1c288314=
+fd:
+>=20
+>   Linux 5.7-rc4 (2020-05-03 14:56:04 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/for-=
+5.8-i2c
+>=20
+> for you to fetch changes up to c73178b93754edd8449dccd3faf05baafd4d3f0e:
+>=20
+>   i2c: tegra: Add support for the VI I2C on Tegra210 (2020-05-12 22:47:52=
+ +0200)
+>=20
+> Thanks,
+> Thierry
+>=20
 
-I'd like to see an ACK from the designware maintainers before sending
-this upstream. Testing is all fine, of course.
+Thanks! I pulled it into my for-next branch to get some more testing of
+all this. I can merge updated branches if that should be needed, of
+course. I see there are still some on-going questions running but no
+real show stopper AFAICS.
 
 
---xo44VMWPx7vlQ2+2
+--wLAMOaPNJ0fu1fTG
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7FMeQACgkQFA3kzBSg
-KbbHeg/+KhGr/M5GB/4C/j1LiglUMLhY5MY/aTO0UFUQYG2dHkBRmpN1iFHkUa3v
-QzWcU9uZ1q/Ew84IXLiX+myrbCwX7ugbrQZhR1XnVXmB2SonkJvXeOqdNoLkDFT7
-rSU6I3Uu7QnCXQDH986GgH1DGYQehdHArPje833DzUaY1okLE3R8pXYRZvs9eVVq
-Hf2eKFTNczDYGhXqfTrTW6n9cnvmooIfAMTCj6p9fpbcous61ZUuMgHiPUBMkuoL
-v7G7+oYpD+R7l2oNIOE/ZTdCp6aJENmEi/seoeNoDAqMDVwYg7XZJUzc3FvJ4pJd
-Se1H3cIc08Ytqr3Aa1l7kxSZ1iBvf1hf/xIyGO4dTiNJAUxR3QV4oTe2QClqhP38
-DLiNZ74/98Aq13XwdOssk9OQXlTMfS4Bd7v4JJcXqJiLtLINbrM6tmfFWkYmGTFJ
-Rku2P+pvO4bNf/1Szh5rWWPCHRzBc5Ux8hbevO11aHUvf2453U5OsmmVomJK6rn4
-fd32JKN8PGOdkZOnPYtHeLdzQcBXouXNk0fxVajFD5hNneuey6dtgU4g4wxh0F33
-8ONTBKMFbMhY8AVevHWcMGgwWhdqs+aIZoNldjbFLtrSB1dHe1Fkwuy5OqjvAp9a
-Lr5Qu7G37ES7GGCb5uiy+XPV4cv7kGpdzhTtz09J18vWi1ogTLw=
-=LZ2J
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7FM0MACgkQFA3kzBSg
+KbbKhw/+McTqb5AJW+ELMZ2xetjclfwgsGpmm+xLQoKIlu+nfGiGsijLQnl554s2
+MKZo7xmtSbMAgYBP6zFeAPRxtZf2jOi9aNrPH0QSa/2pKEiFfbmjYoUBI9fAQN0u
+ur8t/Bswn8j2NyV1/ugaRfTuGk2anrtF2jnjGIXhSPZ/aRyo99s2UYh93aM39HfN
+r8bIY3ziLyrBuQAIPvYcYCa0LQLnKhHVYsUeJ30NsKhxQTWdct3MqmVJgwarBf2L
+cKHnDU0T8LNGlOXROpviwyZPP1805PicwsT/YuZvAB/tQkMT2ZB8+IZozdQFj4cq
+4sGn6Uolt93jEJru0JDTbCz/Y6G1PLl9WaRNdpngyfRMkNZzap3eMv6rkjOixr+o
+BOjuvD49h3bvfJlyIRCuNNyjtTvIpDKZeQdfBCfUk/XFd5YyCInGSbgslFg+75lk
+Fij+cROTqB7/DgYuR2a0zR4zDi28rJPMtrTjNHulyKScsruPsI5kXT1sitwJ+ZID
+0NxSbGOn0qJN9uvzU4nhzQTNO3jIVtqb8H+PFaMve1pAZciVpD9qC1LlmtGkqKHR
+AEsPjVgKZ8xTRt/+wB2SYZxV/OsKUnk8K1pKL/298S0UL5UweImY11QaltOCjrbu
+Li5zlmZX1eaSyZOzfM4swOUoKEPDPyApmV6Hiuhln8hWbwP5wsg=
+=fPzw
 -----END PGP SIGNATURE-----
 
---xo44VMWPx7vlQ2+2--
+--wLAMOaPNJ0fu1fTG--
