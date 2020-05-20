@@ -2,258 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 580F51DB014
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 12:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017B31DB041
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 12:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726748AbgETKYy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 May 2020 06:24:54 -0400
-Received: from mga12.intel.com ([192.55.52.136]:3048 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726224AbgETKYy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 20 May 2020 06:24:54 -0400
-IronPort-SDR: 1jc4ByAPkSWJ0uDGtwtfLJ2D+xpUfdyFxAtjyIIrvqQ25RBxghZjJsaggaPuXsmqhvRN4sHpN+
- O74FsrGVzodw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2020 03:24:53 -0700
-IronPort-SDR: Nhksymg73kKZB1ULTIzriSwEHijsFG3lboDHBnmMS2BN0DW2yzcwXvhIDWAJqgHL4zldive+jM
- 9zD0x8K4JzHg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,413,1583222400"; 
-   d="scan'208";a="264633133"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga003.jf.intel.com with ESMTP; 20 May 2020 03:24:49 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jbLu8-007omv-GV; Wed, 20 May 2020 13:24:52 +0300
-Date:   Wed, 20 May 2020 13:24:52 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tali Perry <tali.perry1@gmail.com>
-Cc:     ofery@google.com, brendanhiggins@google.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, kfting@nuvoton.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, wsa@the-dreams.de,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 2/3] i2c: npcm7xx: Add Nuvoton NPCM I2C controller
- driver
-Message-ID: <20200520102452.GP1634618@smile.fi.intel.com>
-References: <20200520095113.185414-1-tali.perry1@gmail.com>
- <20200520095113.185414-3-tali.perry1@gmail.com>
+        id S1726436AbgETKde (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 May 2020 06:33:34 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:42511 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726224AbgETKde (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 20 May 2020 06:33:34 -0400
+X-UUID: 3de7439d6daf48d7a894be21cd30af4d-20200520
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=HfMRe5GvWTMoSjJho2QVFn7+uU1oZw2rKqKzYM8kbw8=;
+        b=CsYMkHaV/YWUmJ+CGZVffs2aeo35GtyfEDEt0YrxwqU7ePpMqx1rWkKVeZeJogPzMiaLV6OdmQ1p2xKVkMBCsLV+XdY182O+1ovxF5YPemseaj5gAB0o9iHCDb/wytWMr6iicwLEMjNhfdiYgWaQSWJJ+Xu6VxQKTt0m3c0pjvc=;
+X-UUID: 3de7439d6daf48d7a894be21cd30af4d-20200520
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1810491927; Wed, 20 May 2020 18:33:30 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 20 May 2020 18:33:27 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 20 May 2020 18:33:27 +0800
+From:   <qii.wang@mediatek.com>
+To:     <wsa@the-dreams.de>
+CC:     <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>
+Subject: [next] i2c: mediatek: Use div_u64 for 64-bit division to fix 32-bit kernels
+Date:   Wed, 20 May 2020 18:31:53 +0800
+Message-ID: <1589970713-19944-1-git-send-email-qii.wang@mediatek.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200520095113.185414-3-tali.perry1@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, May 20, 2020 at 12:51:12PM +0300, Tali Perry wrote:
-> Add Nuvoton NPCM BMC I2C controller driver.
-
-...
-
-> +#ifdef CONFIG_DEBUG_FS
-
-Why?!
-
-> +#include <linux/debugfs.h>
-> +#endif
-
-
-...
-
-> +/* Status of one I2C module */
-> +struct npcm_i2c {
-> +	struct i2c_adapter adap;
-
-> +	struct device *dev;
-
-Isn't it adap.dev->parent?
-
-> +};
-
-...
-
-> +static void npcm_i2c_master_abort(struct npcm_i2c *bus)
-> +{
-> +	/* Only current master is allowed to issue a stop condition */
-
-> +	if (npcm_i2c_is_master(bus)) {
-
-	if (!npcm_i2c_is_master(bus))
-		return;
-
-?
-
-> +		npcm_i2c_eob_int(bus, true);
-> +		npcm_i2c_master_stop(bus);
-> +		npcm_i2c_clear_master_status(bus);
-> +	}
-> +}
-
-...
-
-> +/* SDA status is set - TX or RX, master */
-> +static void npcm_i2c_irq_handle_sda(struct npcm_i2c *bus, u8 i2cst)
-> +{
-> +	u8 fif_cts;
-
-> +	if (bus->state == I2C_IDLE) {
-> +		if (npcm_i2c_is_master(bus)) {
-
-	if (a) {
-		if (b) {
-			...
-		}
-	}
-
-==
-
-	if (a && b) {
-		...
-	}
-
-Check whole code for such pattern.
-
-> +		}
-> +
-> +	/* SDA interrupt, after start\restart */
-> +	} else {
-> +		if (NPCM_I2CST_XMIT & i2cst) {
-> +			bus->operation = I2C_WRITE_OPER;
-> +			npcm_i2c_irq_master_handler_write(bus);
-> +		} else {
-> +			bus->operation = I2C_READ_OPER;
-> +			npcm_i2c_irq_master_handler_read(bus);
-> +		}
-> +	}
-> +}
-
-...
-
-
-> +	}
-> +
-
-+ /* 1MHz */ ?
-
-> +	else if (bus_freq_hz <= I2C_MAX_FAST_MODE_PLUS_FREQ) {
-
-> +	}
-> +
-> +	/* Frequency larger than 1 MHZ is not supported */
-> +	else
-> +		return -EINVAL;
-
-...
-
-> +	// master and slave modes share a single irq.
-
-It's again being inconsistent with comment style. Choose one and fix all
-comments accordingly (SPDX is another story, though)
-
-...
-
-> +static int i2c_debugfs_get(void *data, u64 *val)
-> +{
-> +	*val = *(u64 *)(data);
-> +	return 0;
-> +}
-> +DEFINE_DEBUGFS_ATTRIBUTE(i2c_debugfs_ops, i2c_debugfs_get, NULL, "0x%02llx\n");
-
-Why not to use debugfs_create_u64(), or how is it called?
-
-> +static void i2c_init_debugfs(struct platform_device *pdev, struct npcm_i2c *bus)
-> +{
-> +	if (!npcm_i2c_debugfs_dir)
-> +		return;
-> +
-
-> +	if (!pdev || !bus)
-> +		return;
-
-How is it possible?
-
-> +	bus->debugfs = debugfs_create_dir(dev_name(&pdev->dev),
-> +					  npcm_i2c_debugfs_dir);
-> +	if (IS_ERR_OR_NULL(bus->debugfs)) {
-> +		bus->debugfs = NULL;
-> +		return;
-> +	}
-
-	struct dentry *d;
-
-	d = create(...);
-	if (IS_ERR_OR_NULL(d))
-		return;
-
-	bus->... = d;
-
-> +
-> +	debugfs_create_file("ber_count", 0444, bus->debugfs,
-> +			    &bus->ber_count,
-> +			    &i2c_debugfs_ops);
-> +
-> +	debugfs_create_file("rec_succ_count", 0444, bus->debugfs,
-> +			    &bus->rec_succ_count,
-> +			    &i2c_debugfs_ops);
-> +
-> +	debugfs_create_file("rec_fail_count", 0444, bus->debugfs,
-> +			    &bus->rec_fail_count,
-> +			    &i2c_debugfs_ops);
-> +
-> +	debugfs_create_file("nack_count", 0444, bus->debugfs,
-> +			    &bus->nack_count,
-> +			    &i2c_debugfs_ops);
-> +
-> +	debugfs_create_file("timeout_count", 0444, bus->debugfs,
-> +			    &bus->timeout_count,
-> +			    &i2c_debugfs_ops);
-> +}
-
-...
-
-> +#ifdef CONFIG_DEBUG_FS
-
-Why?!
-
-> +	i2c_init_debugfs(pdev, bus);
-> +#endif
-
-...
-
-> +#ifdef CONFIG_DEBUG_FS
-
-Ditto.
-
-> +	debugfs_remove_recursive(bus->debugfs);
-> +#endif
-
-> +static int __init npcm_i2c_init(void)
-> +{
-
-> +	npcm_i2c_debugfs_dir = debugfs_create_dir("i2c", NULL);
-
-You didn't compile this with !CONFIG_DEBUG_FS?
-
-> +	if (IS_ERR_OR_NULL(npcm_i2c_debugfs_dir)) {
-> +		pr_warn("i2c init of debugfs failed\n");
-> +		npcm_i2c_debugfs_dir = NULL;
-> +	}
-
-See above for the better pattern. Why do you need noisy warning? What does it
-say to user? Can they use device or not?
-
-> +	return 0;
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+RnJvbTogUWlpIFdhbmcgPHFpaS53YW5nQG1lZGlhdGVrLmNvbT4NCg0KVXNlIGRpdl91NjQgZm9y
+IDY0LWJpdCBkaXZpc2lvbiwgYW5kIGNoYW5nZSBzYW1wbGVfbnMgdHlwZSB0bw0KdW5zaWduZWQg
+aW50LiBPdGhlcndpc2UsIHRoZSBtb2R1bGUgd2lsbCByZWZlcmVuY2UgX191ZGl2ZGkzDQp1bmRl
+ciAzMi1iaXQga2VybmVscywgd2hpY2ggaXMgbm90IGFsbG93ZWQgaW4ga2VybmVsIHNwYWNlLg0K
+DQpTaWduZWQtb2ZmLWJ5OiBRaWkgV2FuZyA8cWlpLndhbmdAbWVkaWF0ZWsuY29tPg0KLS0tDQog
+ZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYyB8IDMgKystDQogMSBmaWxlIGNoYW5nZWQs
+IDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9p
+MmMvYnVzc2VzL2kyYy1tdDY1eHguYyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXQ2NXh4LmMN
+CmluZGV4IDcwMjA2MTguLmRlZWY2OWUgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMv
+aTJjLW10NjV4eC5jDQorKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jDQpAQCAt
+NTUxLDcgKzU1MSw4IEBAIHN0YXRpYyBpbnQgbXRrX2kyY19jaGVja19hY190aW1pbmcoc3RydWN0
+IG10a19pMmMgKmkyYywNCiAJY29uc3Qgc3RydWN0IGkyY19zcGVjX3ZhbHVlcyAqc3BlYzsNCiAJ
+dW5zaWduZWQgaW50IHN1X3N0YV9jbnQsIGxvd19jbnQsIGhpZ2hfY250LCBtYXhfc3RlcF9jbnQ7
+DQogCXVuc2lnbmVkIGludCBzZGFfbWF4LCBzZGFfbWluLCBjbGtfbnMsIG1heF9zdGFfY250ID0g
+MHgzZjsNCi0JbG9uZyBsb25nIHNhbXBsZV9ucyA9ICgxMDAwMDAwMDAwICogKHNhbXBsZV9jbnQg
+KyAxKSkgLyBjbGtfc3JjOw0KKwl1bnNpZ25lZCBpbnQgc2FtcGxlX25zID0gZGl2X3U2NCgxMDAw
+MDAwMDAwVUxMICogKHNhbXBsZV9jbnQgKyAxKSwNCisJCQkJCSBjbGtfc3JjKTsNCiANCiAJaWYg
+KCFpMmMtPmRldl9jb21wLT50aW1pbmdfYWRqdXN0KQ0KIAkJcmV0dXJuIDA7DQotLSANCjEuOS4x
+DQo=
 
