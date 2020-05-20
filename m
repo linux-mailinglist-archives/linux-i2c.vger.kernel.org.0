@@ -2,61 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C8B1DB5BC
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 15:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1EE1DB762
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 16:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726789AbgETNzm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 May 2020 09:55:42 -0400
-Received: from mga14.intel.com ([192.55.52.115]:21470 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726452AbgETNzl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 20 May 2020 09:55:41 -0400
-IronPort-SDR: wAuArhf6c/FQIcUE2QF9M06hE5W8XnpL78IM9gyCW9dlUi3BHhQdp0sC0g+cPBcc9bwZFjHXPh
- 6Two8GmuZeNQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2020 06:55:41 -0700
-IronPort-SDR: YjiR1VlDuQZb0WK3isDxPndTZw/SwouYUlN340tMnZr5BO3RyVzsW5sIuKV+1KGjPZXwQDZwcz
- f+czMe7x8d7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,414,1583222400"; 
-   d="scan'208";a="289357972"
-Received: from mylly.fi.intel.com (HELO [10.237.72.161]) ([10.237.72.161])
-  by fmsmga004.fm.intel.com with ESMTP; 20 May 2020 06:55:40 -0700
-Subject: Re: [PATCH v2 1/7] i2c: designware: Get rid of PCI driver specifics
- in common code
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
-References: <20200519125043.6069-1-andriy.shevchenko@linux.intel.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <46e45caf-7ce4-d3b2-cea6-747424b44a4a@linux.intel.com>
-Date:   Wed, 20 May 2020 16:55:39 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726650AbgETOsc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 May 2020 10:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726545AbgETOsc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 20 May 2020 10:48:32 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFBAC061A0E;
+        Wed, 20 May 2020 07:48:32 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id q16so1429598plr.2;
+        Wed, 20 May 2020 07:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lILLSAOB1y19akaMHIpOGPK9fXIEbJzoC/lpcYeaVf8=;
+        b=XLqwQw7bCB2GlIFz+o3OmVInodBHHqpSzBYJ/AhTRCe4OjC/8VsZeZW5tDYTaqNJyh
+         ziEO++yCJAE0vlDuvnkogopkdm+HYwxEqPymmilSp2NBl9haC+Kxv16Kp0z0oucRNV8a
+         TidqwBaEg6rcQ8ygcA3v58FyRCVt9Fp/Y1LN5zbh8eU4wdLemWnZWeo5ulnovDKJQarF
+         qyEreSStck2jZO27rU8l5ctqq/ZVjxxSqVesBBxw25Ag9EJWWVAs93lk2HyENuEcGOK8
+         yuD7zOxRSmOSTnku2o4IYGhKmyZMa7u7KuNx5YrPMEz1VUGR3CZ5MJKUdFyksvSu+knc
+         wpqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lILLSAOB1y19akaMHIpOGPK9fXIEbJzoC/lpcYeaVf8=;
+        b=BkpbS7uv59ZAFqmtbXpqCbgGYhPOyAGKX4IP1sef78XxhJV7ipdw7ERohVlQcpLULM
+         PPkODg33FOTSdjsyfUHv1uqPtLrzrJNeQ8M5pyXAM9HtSFXB0Pi5XEWm6I5veLS+RRj4
+         ZD98HsXJ+x9DbR6WZkKe85v/Qo4CTJi0ceCXCjUXaiwbPoCMSeFzFM/sb4U14xDJOGEm
+         yBpfsMglq/AB/fFu1Z338g7B2Ib32MRSNACT64JfrsgvJr8mcptoePSDCmBxrOqRIpxX
+         CjOC5bq9O7G25lBVPo90ZmknSlr7buUtnR3z+DmBLePRSzyKe4rJcvrerA/V45wquxnQ
+         DVnQ==
+X-Gm-Message-State: AOAM531ZNcCRx9qgoigc7IxIw3kamnWxEhQvLVpz7reFnUxOdlHPI6IF
+        4PupRlIh0PRZ72ozU/zKSPJGQK5Y
+X-Google-Smtp-Source: ABdhPJxCiQEijVU+ota3PR2AsSkgAeu2q+slT77B/2yYS3k++/tRZW+5i9vNCnVrH33V2GhFEHxSqg==
+X-Received: by 2002:a17:90b:3651:: with SMTP id nh17mr6036790pjb.228.1589986111737;
+        Wed, 20 May 2020 07:48:31 -0700 (PDT)
+Received: from localhost ([104.160.44.15])
+        by smtp.gmail.com with ESMTPSA id g9sm2074323pgj.89.2020.05.20.07.48.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 20 May 2020 07:48:31 -0700 (PDT)
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     michal.simek@xilinx.com, wsa@the-dreams.de, harinik@xilinx.com,
+        soren.brinkmann@xilinx.com, linux-i2c@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
+Subject: [PATCH v2] i2c: cadence: Add an error handling for platform_get_irq()
+Date:   Wed, 20 May 2020 22:48:21 +0800
+Message-Id: <20200520144821.8069-1-zhengdejin5@gmail.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-In-Reply-To: <20200519125043.6069-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 5/19/20 3:50 PM, Andy Shevchenko wrote:
-> Do not spread PCI specifics over common code. It seems to be a layering
-> violation which can be easily avoided. Refactor PCI driver and drop
-> PCI specifics from common code.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: new patch
->   drivers/i2c/busses/i2c-designware-core.h   |  1 -
->   drivers/i2c/busses/i2c-designware-pcidrv.c | 24 +++++++++++++---------
->   2 files changed, 14 insertions(+), 11 deletions(-)
-> 
-For all patches 1-7/7:
+The driver initialization should be end immediately after found
+the platform_get_irq() function return an error.
 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Fixes: df8eb5691c48d3b0 ("i2c: Add driver for Cadence I2C controller")
+Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+---
+v1 -> v2:
+	- add Fixes tag.
+
+ drivers/i2c/busses/i2c-cadence.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 89d58f7d2a25..0e8debe32cea 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -912,6 +912,8 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 		return PTR_ERR(id->membase);
+ 
+ 	id->irq = platform_get_irq(pdev, 0);
++	if (id->irq < 0)
++		return id->irq;
+ 
+ 	id->adap.owner = THIS_MODULE;
+ 	id->adap.dev.of_node = pdev->dev.of_node;
+-- 
+2.25.0
+
