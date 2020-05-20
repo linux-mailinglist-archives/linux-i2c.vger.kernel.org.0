@@ -2,56 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B9D1DB1EA
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 13:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3878D1DB23C
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 13:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726435AbgETLiS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 May 2020 07:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgETLiR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 20 May 2020 07:38:17 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CE0C061A0E;
-        Wed, 20 May 2020 04:38:16 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id y17so531431ilg.0;
-        Wed, 20 May 2020 04:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c5gCsCCg2ZktsI6WZTvCyt/N51Rkad6rw/S1dWQ5wyk=;
-        b=FDYEU8Kf25iQOG7H8v613iXDN7QVeKL+0wv2HcOeF3sRFNk3N1B5Cj24Fdas4AojmV
-         83ap1eulAyUn1LZ5nsiDzO+e3qjZQ72rCeWIvmDI8e5NrJ3A2s04Hn0hMfPzG09/LjfE
-         gczizyQkl0jM38snWj1UiWDG8IJXx9A2WNViJ/tBAAhg7tjx/0FpNTEctqnmSk6zURU6
-         lwIcIdDyV7ZfwERvH29YUZeFXb+ypnDYTR/m27s3oA27eDWbIVi6ClpiQ5sCMDwDERnq
-         QfoXC+QUT+qIwn70lhjesnxV5QsDVWCLDIFh2jw5OirunO2h65o6ZOLB53sqQKhDKGQJ
-         reVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c5gCsCCg2ZktsI6WZTvCyt/N51Rkad6rw/S1dWQ5wyk=;
-        b=oIjCT0xr9tkZydAhR+x/ioOgig/3rq3fm5QTNdJGyknY4DjkXCnIQGSWUNCSuYwPUU
-         KZt98LlH9tbD/eDco2TwDjMX/5iKIj9IYsirubmjJEhK7VCtyfuV2f4hBjGXxjPNXSKN
-         vSilUlpDXYtjVDykvK7mZU/M/U3/zrxTUvF4LGnI8+Au3vx6ykuaAMG7bxFCY3L7h9cg
-         q+Mm8dnlMUBlHUPTQ2wptUpBZvBXmFXB9z1ZJh3KZQ0EkcZOQCgeKgv1u9IJaYbncQAt
-         ZcIk7/dVLVl+fmXMezrrMKyBAm/bub+tgm4PnaH7Zaa/eR8/5ke4MXLqtxlz5qpdb9TF
-         pgmg==
-X-Gm-Message-State: AOAM531Q9VkwIsxR5XslQ3Ekga6sK3u8YSijFIztzPMelKr95yo1QkbO
-        AH7bDs55kcurITeEZyoYCH81ihEmqJJ1TMo7FA==
-X-Google-Smtp-Source: ABdhPJzKJP/cGNNac1kUPgTwPlLIWOHe6TrixFNrwaMIGkK58srY1G5ZeYUEIcAgtqSbV0sC4psNaRowIFiZqCXO4ME=
-X-Received: by 2002:a92:8c8a:: with SMTP id s10mr3283841ill.220.1589974696422;
- Wed, 20 May 2020 04:38:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200520095113.185414-1-tali.perry1@gmail.com>
- <20200520095113.185414-3-tali.perry1@gmail.com> <20200520102452.GP1634618@smile.fi.intel.com>
-In-Reply-To: <20200520102452.GP1634618@smile.fi.intel.com>
-From:   Avi Fishman <avifishman70@gmail.com>
-Date:   Wed, 20 May 2020 14:37:13 +0300
-Message-ID: <CAKKbWA5L_n7iC6-d22Am62SOoDBwNWO87+sXtRbwxwuVdjmRYA@mail.gmail.com>
-Subject: Re: [PATCH v11 2/3] i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S1726443AbgETLt2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 May 2020 07:49:28 -0400
+Received: from mga06.intel.com ([134.134.136.31]:34265 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726224AbgETLt2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 20 May 2020 07:49:28 -0400
+IronPort-SDR: luJ9WmqpTkppN5ANoXkKYFNr6zVaLQf4/WRuOkByLeWokAi01j5vhmVeqMd+cbIOMoG2bUJOB5
+ IUMiyNIW4IUQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2020 04:49:27 -0700
+IronPort-SDR: a/+Fpg54o+8PTDC2WA+m5PdUJa0V8mJpZ3R5KEtl27Vp1YaBQPYo9Gd+f4hN621W9nP6OxLRAh
+ AaEUA68Jxk4w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,413,1583222400"; 
+   d="scan'208";a="253582839"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga007.jf.intel.com with ESMTP; 20 May 2020 04:49:23 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jbNDx-007pYn-Jd; Wed, 20 May 2020 14:49:25 +0300
+Date:   Wed, 20 May 2020 14:49:25 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Avi Fishman <avifishman70@gmail.com>
 Cc:     Tali Perry <tali.perry1@gmail.com>, ofery@google.com,
         Brendan Higgins <brendanhiggins@google.com>,
         Tomer Maimon <tmaimon77@gmail.com>, kfting@nuvoton.com,
@@ -64,32 +42,55 @@ Cc:     Tali Perry <tali.perry1@gmail.com>, ofery@google.com,
         OpenBMC Maillist <openbmc@lists.ozlabs.org>,
         devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v11 2/3] i2c: npcm7xx: Add Nuvoton NPCM I2C controller
+ driver
+Message-ID: <20200520114925.GQ1634618@smile.fi.intel.com>
+References: <20200520095113.185414-1-tali.perry1@gmail.com>
+ <20200520095113.185414-3-tali.perry1@gmail.com>
+ <20200520102452.GP1634618@smile.fi.intel.com>
+ <CAKKbWA5L_n7iC6-d22Am62SOoDBwNWO87+sXtRbwxwuVdjmRYA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKKbWA5L_n7iC6-d22Am62SOoDBwNWO87+sXtRbwxwuVdjmRYA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Thanks Andy,
-Question below:
+On Wed, May 20, 2020 at 02:37:13PM +0300, Avi Fishman wrote:
+> On Wed, May 20, 2020 at 1:24 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Wed, May 20, 2020 at 12:51:12PM +0300, Tali Perry wrote:
+> > > Add Nuvoton NPCM BMC I2C controller driver.
+> >
+> > ...
+> >
+> > > +#ifdef CONFIG_DEBUG_FS
+> >
+> > Why?!
+> 
+> It is made to save code size if CONFIG_DEBUG_FS is not defined?
 
-On Wed, May 20, 2020 at 1:24 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, May 20, 2020 at 12:51:12PM +0300, Tali Perry wrote:
-> > Add Nuvoton NPCM BMC I2C controller driver.
->
-> ...
->
-> > +#ifdef CONFIG_DEBUG_FS
->
-> Why?!
+Nope (in cases I have commented on). Try again.
 
-It is made to save code size if CONFIG_DEBUG_FS is not defined?
-We see a lot of kernel code that is doing it.
-So could you elaborate what is the problem?
+> We see a lot of kernel code that is doing it.
 
->
-> > +#include <linux/debugfs.h>
-> > +#endif
->
+Cargo cult, okay. So, somebody should try to understand what they are doing.
+
+> So could you elaborate what is the problem?
+
+Problem 1: ugly code.
+Problem 2: some of the code is not guarded (seems never been tested with disabled debugfs).
+Problem 3: it's not needed.
+
+> > > +#include <linux/debugfs.h>
+> > > +#endif
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
