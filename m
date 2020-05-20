@@ -2,82 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 513DD1DB40B
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 14:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D02F1DB4DA
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 15:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726789AbgETMqV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 May 2020 08:46:21 -0400
-Received: from mga14.intel.com ([192.55.52.115]:15615 "EHLO mga14.intel.com"
+        id S1726452AbgETNXW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 May 2020 09:23:22 -0400
+Received: from sauhun.de ([88.99.104.3]:37680 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726435AbgETMqU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 20 May 2020 08:46:20 -0400
-IronPort-SDR: Eu2VlE2GRbcpXYVXmEuRhA+bOmmeTMOpzOtSTH6faSKoXPkPQuPEtLABpnhZHzIusBO1BxXltE
- Kh7+Zj1g2+Lg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2020 05:46:16 -0700
-IronPort-SDR: V6E/Ng3sk5KplKOJ4ojalPDdqw5sr7/ivO8RmkZKGAyG8bBoS9rBKNudLOOSWl9jP9CFatvZ/G
- 33VvxL6a2tcQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,414,1583222400"; 
-   d="scan'208";a="289337876"
-Received: from mylly.fi.intel.com (HELO [10.237.72.161]) ([10.237.72.161])
-  by fmsmga004.fm.intel.com with ESMTP; 20 May 2020 05:46:12 -0700
-Subject: Re: [PATCH v2 08/12] i2c: designware: Introduce platform drivers glue
- layer interface
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
- <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
- <20200510095019.20981-9-Sergey.Semin@baikalelectronics.ru>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <4950bb1e-302f-947e-1924-452a8169b504@linux.intel.com>
-Date:   Wed, 20 May 2020 15:46:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726436AbgETNXW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 20 May 2020 09:23:22 -0400
+Received: from localhost (p5486cd24.dip0.t-ipconnect.de [84.134.205.36])
+        by pokefinder.org (Postfix) with ESMTPSA id 04D202C1FD1;
+        Wed, 20 May 2020 15:23:19 +0200 (CEST)
+Date:   Wed, 20 May 2020 15:23:19 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Atsushi Nemoto <atsushi.nemoto@sord.co.jp>
+Cc:     Thor Thayer <thor.thayer@linux.intel.com>,
+        linux-i2c@vger.kernel.org, tomonori.sakita@sord.co.jp
+Subject: Re: [PATCH 2/2] i2c: altera: cleanup spinlock
+Message-ID: <20200520132319.GA5759@ninjato>
+References: <20200508.221436.2027916415032712449.atsushi.nemoto@sord.co.jp>
 MIME-Version: 1.0
-In-Reply-To: <20200510095019.20981-9-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jI8keyz6grp/JLjh"
+Content-Disposition: inline
+In-Reply-To: <20200508.221436.2027916415032712449.atsushi.nemoto@sord.co.jp>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi
 
-On 5/10/20 12:50 PM, Serge Semin wrote:
-> Seeing the DW I2C platform driver is getting overcomplicated with a lot of
-> vendor-specific configs let's introduce a glue-layer interface so new
-> platforms which equipped with Synopsys Designware APB I2C IP-core would
-> be able to handle their peculiarities in the dedicated objects.
-> 
-Comment to this patch and patches 9/12 and 12/12:
+--jI8keyz6grp/JLjh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Currently i2c-designware-platdrv.c is about 500 lines of code so I don't 
-think it's too overcomplicated. But I feel we have already too many 
-Kconfig options and source modules for i2c-designware and obviously 
-would like to push back a little from adding more.
+On Fri, May 08, 2020 at 10:14:36PM +0900, Atsushi Nemoto wrote:
+> Protect altr_i2c_int_enable() by the mutex and remove unneeded spinlock.
+>=20
+> Signed-off-by: Atsushi Nemoto <atsushi.nemoto@sord.co.jp>
 
-I don't think i2c-designware-platdrv.c becomes yet too complicated if 
-Baikal related code is added there, perhaps under #ifdef CONFIG_OF like 
-MSCC Ocelot code is currently.
+Applied to for-next, thanks!
 
--- 
-Jarkko
+
+--jI8keyz6grp/JLjh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7FL0MACgkQFA3kzBSg
+KbZIoQ/+LRORdUJ0Xxf+Qz1f1b+31GQyQozL4eip493LCrMTIYyGP4zPmUYZXPD6
+2gVxMlDdfOyZB4DXgMFb4uAoFY4ozNmuo03n8UHUFGslY/kx32u0Oy4DyK9zLzCt
+9Klf2n/ylgbMkVcr7ZFMQFuYsOnuyzDNZnKu1gFCKXhVI/4Iu9sBIz+rpNoRGIsH
+9YUVPPOkvy/pD2zbiGPnKPEojSRcDmMaQl2kyLWy0VCmbcVmwJ+8+nWbwl6v+FfS
+8XFHi0kwv/X2CfM9FX5rZGkgdkp6W5WStpAfSxN7QKExu7tTLYR8O6jRLy3FWh9t
+WNgqAcpUjJl18pCtdxOTgLPGnbsvT/e6SgA0qttLgKvEeyOh4wK6qanimxNkd6XZ
+2bF8fuF64iFHXcTAyLLtzjNf0PGRUOZvX6IFsdkOoK2CqITuZdOwx8ZSMGUwGzxx
+SOwqwKAUwLu6PYi1ssAM98kOvJcMQwuPVgrJMKwnEH/uJfNiNQBJCroUZu2bJ2nm
+lsXpgBI6U8eqqNgre0JZ4963nOhsaCPUeODvZdpWFAK4dF8MRM09S1LxFzQOAw+/
++WqEmX8ZaLOwYTD+yV5NS2TSniZ7FIu8XhPfhAXQrcOFlXdQTuAy6wm+eZa3g79R
+uqPqyRmSbXGT6dqed9eNINyQ8fOfaib8VxOx0B8u7AltlfcIEvw=
+=3Lau
+-----END PGP SIGNATURE-----
+
+--jI8keyz6grp/JLjh--
