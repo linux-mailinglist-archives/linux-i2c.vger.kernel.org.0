@@ -2,88 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A509E1DB54E
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 15:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12791DB5EE
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 May 2020 16:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726916AbgETNkY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 May 2020 09:40:24 -0400
-Received: from sauhun.de ([88.99.104.3]:37844 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726525AbgETNkV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 20 May 2020 09:40:21 -0400
-Received: from localhost (p5486cd24.dip0.t-ipconnect.de [84.134.205.36])
-        by pokefinder.org (Postfix) with ESMTPSA id 22DCE2C1FD1;
-        Wed, 20 May 2020 15:40:20 +0200 (CEST)
-Date:   Wed, 20 May 2020 15:40:19 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [GIT PULL] i2c: tegra: Changes for v5.8-rc1
-Message-ID: <20200520134019.GD5759@ninjato>
-References: <20200515143924.1579055-1-thierry.reding@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wLAMOaPNJ0fu1fTG"
-Content-Disposition: inline
-In-Reply-To: <20200515143924.1579055-1-thierry.reding@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726443AbgETOHt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 May 2020 10:07:49 -0400
+Received: from aliyun-cloud.icoremail.net ([47.90.88.95]:37542 "HELO
+        aliyun-sdnproxy-1.icoremail.net" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with SMTP id S1726436AbgETOHs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 20 May 2020 10:07:48 -0400
+X-Greylist: delayed 727 seconds by postgrey-1.27 at vger.kernel.org; Wed, 20 May 2020 10:07:46 EDT
+Received: from localhost.localdomain (unknown [222.205.77.158])
+        by mail-app4 (Coremail) with SMTP id cS_KCgBnvwmyNMVeCDDbAQ--.31176S4;
+        Wed, 20 May 2020 21:46:30 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: imx-lpi2c: fix runtime pm imbalance on error
+Date:   Wed, 20 May 2020 21:46:25 +0800
+Message-Id: <20200520134625.22045-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgBnvwmyNMVeCDDbAQ--.31176S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrKrWrZF15CFyUGr4xXF1UKFg_yoWftFc_WF
+        1kWwn7Grs8Ka95Xr1UJFy3XryF9rW5u3W8uw10y3ySk34UZ347WFWUZ3sxArsrWr4jvrnY
+        gw4DKFyxAr9rCjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbTxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_
+        JrylYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxE
+        wVAFwVW5GwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fKr1UJr1l4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0
+        rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
+        4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUb_gA7UUUUU==
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+pm_runtime_get_sync() increments the runtime PM usage counter even
+the call returns an error code. Thus a pairing decrement is needed
+on the error handling path to keep the counter balanced.
 
---wLAMOaPNJ0fu1fTG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+---
+ drivers/i2c/busses/i2c-imx-lpi2c.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-On Fri, May 15, 2020 at 04:39:24PM +0200, Thierry Reding wrote:
-> Hi,
->=20
-> The following changes since commit 0e698dfa282211e414076f9dc7e83c1c288314=
-fd:
->=20
->   Linux 5.7-rc4 (2020-05-03 14:56:04 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/for-=
-5.8-i2c
->=20
-> for you to fetch changes up to c73178b93754edd8449dccd3faf05baafd4d3f0e:
->=20
->   i2c: tegra: Add support for the VI I2C on Tegra210 (2020-05-12 22:47:52=
- +0200)
->=20
-> Thanks,
-> Thierry
->=20
+diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+index 94743ba581fe..89908c24c8b3 100644
+--- a/drivers/i2c/busses/i2c-imx-lpi2c.c
++++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+@@ -260,8 +260,10 @@ static int lpi2c_imx_master_enable(struct lpi2c_imx_struct *lpi2c_imx)
+ 	int ret;
+ 
+ 	ret = pm_runtime_get_sync(lpi2c_imx->adapter.dev.parent);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put_autosuspend(lpi2c_imx->adapter.dev.parent);
+ 		return ret;
++	}
+ 
+ 	temp = MCR_RST;
+ 	writel(temp, lpi2c_imx->base + LPI2C_MCR);
+-- 
+2.17.1
 
-Thanks! I pulled it into my for-next branch to get some more testing of
-all this. I can merge updated branches if that should be needed, of
-course. I see there are still some on-going questions running but no
-real show stopper AFAICS.
-
-
---wLAMOaPNJ0fu1fTG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7FM0MACgkQFA3kzBSg
-KbbKhw/+McTqb5AJW+ELMZ2xetjclfwgsGpmm+xLQoKIlu+nfGiGsijLQnl554s2
-MKZo7xmtSbMAgYBP6zFeAPRxtZf2jOi9aNrPH0QSa/2pKEiFfbmjYoUBI9fAQN0u
-ur8t/Bswn8j2NyV1/ugaRfTuGk2anrtF2jnjGIXhSPZ/aRyo99s2UYh93aM39HfN
-r8bIY3ziLyrBuQAIPvYcYCa0LQLnKhHVYsUeJ30NsKhxQTWdct3MqmVJgwarBf2L
-cKHnDU0T8LNGlOXROpviwyZPP1805PicwsT/YuZvAB/tQkMT2ZB8+IZozdQFj4cq
-4sGn6Uolt93jEJru0JDTbCz/Y6G1PLl9WaRNdpngyfRMkNZzap3eMv6rkjOixr+o
-BOjuvD49h3bvfJlyIRCuNNyjtTvIpDKZeQdfBCfUk/XFd5YyCInGSbgslFg+75lk
-Fij+cROTqB7/DgYuR2a0zR4zDi28rJPMtrTjNHulyKScsruPsI5kXT1sitwJ+ZID
-0NxSbGOn0qJN9uvzU4nhzQTNO3jIVtqb8H+PFaMve1pAZciVpD9qC1LlmtGkqKHR
-AEsPjVgKZ8xTRt/+wB2SYZxV/OsKUnk8K1pKL/298S0UL5UweImY11QaltOCjrbu
-Li5zlmZX1eaSyZOzfM4swOUoKEPDPyApmV6Hiuhln8hWbwP5wsg=
-=fPzw
------END PGP SIGNATURE-----
-
---wLAMOaPNJ0fu1fTG--
