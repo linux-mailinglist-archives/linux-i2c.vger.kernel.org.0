@@ -2,92 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A201DD7C2
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 May 2020 21:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B2B1DD881
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 May 2020 22:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730188AbgEUT6S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 May 2020 15:58:18 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:43218 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728635AbgEUT6R (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 May 2020 15:58:17 -0400
-Received: by mail-io1-f65.google.com with SMTP id h10so8897299iob.10;
-        Thu, 21 May 2020 12:58:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qnmu+TvlIm7jMheLKRmKbVdT8yJM4Ib4roFx6Ri+kOU=;
-        b=mRIn0IXp4UQ5mUdWiAgKTRK+vo4TNqukoES/kIS9oYpIoIpljJXQUVArT+93kcED5P
-         Za0LsLDSasbo+Jn9ZhaU6mtD1qcMhqAQkUOPg1UVPORj/wSH5JcxheupXq6ZbbdWfEG1
-         YO+hpVuU1v6/LbDbn7IDaRkHwfyeGuqp0301OsrU1UZf9jykt4nvSTgCKPqH+5qPwGBc
-         3wiG2YLOlp+VIItIUPuDTuy/mp06XRUrKBzy0lmaxsBqj6JagwpnwS6KxIxIehmAh0Du
-         AJwmxcrJ3gfBq7u17Mhavr6aYCz6tV3rYz5Dhbub5uU/tG4AsoJ4/Fg2zJ7QaQ4xhemB
-         Qt8Q==
-X-Gm-Message-State: AOAM531W26B7z5uWCNNdmJegUQaLS8A5sE38m1nveGrBg45reoqe2seg
-        HyuPA5ChR7rRnq8islzQAg==
-X-Google-Smtp-Source: ABdhPJwMao229/7LqfcaVPM7jNkfJvReoW9ujB9zAGukbIvbaGMmkriGLneoVhuPZEJr8LMRcnrSRw==
-X-Received: by 2002:a02:c8c7:: with SMTP id q7mr5370610jao.111.1590091096617;
-        Thu, 21 May 2020 12:58:16 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id m89sm3517861ill.40.2020.05.21.12.58.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2020 12:58:16 -0700 (PDT)
-Received: (nullmailer pid 2797115 invoked by uid 1000);
-        Thu, 21 May 2020 19:58:14 -0000
-Date:   Thu, 21 May 2020 13:58:14 -0600
-From:   robh@kernel.org
-To:     Tali Perry <tali.perry1@gmail.com>
-Cc:     avifishman70@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, yuenn@google.com,
-        wsa@the-dreams.de, andriy.shevchenko@linux.intel.com,
-        devicetree@vger.kernel.org, kfting@nuvoton.com, venture@google.com,
-        brendanhiggins@google.com, ofery@google.com,
-        benjaminfair@google.com, openbmc@lists.ozlabs.org,
-        tmaimon77@gmail.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 1/3] dt-bindings: i2c: npcm7xx: add NPCM I2C
- controller
-Message-ID: <20200521195814.GA2796824@bogus>
+        id S1730016AbgEUUiB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 May 2020 16:38:01 -0400
+Received: from sauhun.de ([88.99.104.3]:53672 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729550AbgEUUiB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 21 May 2020 16:38:01 -0400
+Received: from localhost (p5486ce13.dip0.t-ipconnect.de [84.134.206.19])
+        by pokefinder.org (Postfix) with ESMTPSA id 7F7B02C1FCF;
+        Thu, 21 May 2020 22:37:58 +0200 (CEST)
+Date:   Thu, 21 May 2020 22:37:58 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Tali Perry <tali.perry1@gmail.com>,
+        Ofer Yehielli <ofery@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        avifishman70@gmail.com, Tomer Maimon <tmaimon77@gmail.com>,
+        kfting@nuvoton.com, Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v12 2/3] i2c: npcm7xx: Add Nuvoton NPCM I2C controller
+ driver
+Message-ID: <20200521203758.GA20150@ninjato>
 References: <20200521110910.45518-1-tali.perry1@gmail.com>
- <20200521110910.45518-2-tali.perry1@gmail.com>
+ <20200521110910.45518-3-tali.perry1@gmail.com>
+ <20200521142340.GM1634618@smile.fi.intel.com>
+ <20200521143100.GA16812@ninjato>
+ <CAHb3i=vcVLWHjdiJoNZQrwJCqzszpOL7e9SAjqObsZCRH4ifwg@mail.gmail.com>
+ <20200521145347.GO1634618@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mYCpIKhGyMATD0i+"
 Content-Disposition: inline
-In-Reply-To: <20200521110910.45518-2-tali.perry1@gmail.com>
+In-Reply-To: <20200521145347.GO1634618@smile.fi.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 21 May 2020 14:09:08 +0300, Tali Perry wrote:
-> Added device tree binding documentation for Nuvoton BMC
-> NPCM I2C controller.
-> 
-> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-> ---
->  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 62 +++++++++++++++++++
->  1 file changed, 62 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-> 
+
+--mYCpIKhGyMATD0i+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
-My bot found errors running 'make dt_binding_check' on your patch:
+> > > I wondered also about DEBUG_FS entries. I can see their value when
+> > > developing the driver. But since this is done now, do they really hel=
+p a
+> > > user to debug a difficult case? I am not sure, and then I wonder if we
+> > > should have that code in upstream. I am open for discussion, though.
+> >=20
+> > The user wanted to have health monitor implemented on top of the driver.
+> > The user has 16 channels connected the multiple devices. All are operat=
+ed
+> > using various daemons in the system. Sometimes the slave devices are po=
+wer down.
+> > Therefor the user wanted to track the health status of the devices.
+>=20
+> Ah, then there are these options I have in mind (Wolfram, FYI as well!):
+> 1) push with debugfs as a temporary solution and convert to devlink healt=
+h protocol [1];
+> 2) drop it and develop devlink_health solution;
+> 3) push debugfs and wait if I=C2=B2C will gain devlink health support
 
-Error: Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.example.dts:22.28-29 syntax error
-FATAL ERROR: Unable to parse input tree
-scripts/Makefile.lib:312: recipe for target 'Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.example.dt.yaml' failed
-make[1]: *** [Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-Makefile:1300: recipe for target 'dt_binding_check' failed
-make: *** [dt_binding_check] Error 2
+No need for 2). We can push it now and convert it later. That being
+said, I wonder if [1] is suitable for this driver? Things like NACKs and
+timeouts happen regularly on an I2C bus and are not a state of bad
+health.
 
-See https://patchwork.ozlabs.org/patch/1295115
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
+--mYCpIKhGyMATD0i+
+Content-Type: application/pgp-signature; name="signature.asc"
 
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+-----BEGIN PGP SIGNATURE-----
 
-Please check and re-submit.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7G5qEACgkQFA3kzBSg
+KbYDmQ/+OTWXWz2QGQFX0uxtaXhfs432/2BO3z/AA7ZJn7t6OCSyyvDL9L26maBs
+Hu/S78wYqdLY6l58jtz8iUHsMwqL+zcQSTjOlo8mqj99T10GpZiwzJlSVB7AxT28
+jmlxqN+z9fNUDQDujV+Y8UVvi7+UZ8Y37nYewtOz3AMskTx90HflDt4OHUBQsG7p
+1bj1wtPmUfOy8su9FZrPN6SdhzO24XXaqVJgNg2FWqiuNoZ6Kdo8ekQAc3bjvNiO
+PbEjpRw9QFE8pY9bWyHHJ7pFfpUvwe1bCXAA+Dj19LY2R+29lOxwaRZ3teTWxhG1
+ArYFtxWrvCwYezyEKZEPozzfOYwd9LZE28c30aDC/8gfeAP1Gz8C9jySYRid6/Zp
+RglnDBJKcR3V71fjLTLIXIkPd7kMbxK9A9MQkwlPeLbqlkiLbZflr9ceusirhxmU
+IP98Ma6w8fob0ntpPGBD0j42rCebhN1d6PG2HHnvbQqj7hpjCUvVNAerGY38enaJ
++kNWO8/Y+Hwry7VLp/l5cQ23BeVJpeh8nGME+t6rJhWIP69oP6GEQNGWdzYCElD5
+X3l4OOSdFAw1ZFjfj0K8wtMEHno/wDglPsrGxjReFI5YCQyKSKi3NtqONSEPiVrn
+40cpX2SNefM4PjPQwRSVKuYNlAvmzo9cQKpkgg2YluT2V+JFJVo=
+=jcCF
+-----END PGP SIGNATURE-----
 
+--mYCpIKhGyMATD0i+--
