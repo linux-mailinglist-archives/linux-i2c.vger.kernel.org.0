@@ -2,78 +2,133 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7091DC757
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 May 2020 09:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76241DC881
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 May 2020 10:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727900AbgEUHJD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 May 2020 03:09:03 -0400
-Received: from spam.zju.edu.cn ([61.164.42.155]:39276 "EHLO zju.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727003AbgEUHJD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 21 May 2020 03:09:03 -0400
-Received: from localhost.localdomain (unknown [222.205.77.158])
-        by mail-app3 (Coremail) with SMTP id cC_KCgB3P7UAKcZe4sHmAA--.4260S4;
-        Thu, 21 May 2020 15:08:52 +0800 (CST)
-From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
-To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
-Cc:     Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: stm32f7: Fix runtime PM imbalance in stm32f7_i2c_unreg_slave
-Date:   Thu, 21 May 2020 15:08:47 +0800
-Message-Id: <20200521070847.13957-1-dinghao.liu@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgB3P7UAKcZe4sHmAA--.4260S4
-X-Coremail-Antispam: 1UD129KBjvdXoWrKrWrZF15CFyUGr4xXF1UKFg_yoWfArc_Gr
-        1ku3ZrCw1vgFZ5J34UGF98ZryS9r98W348Zw40yFySk34Fvw1DGrWUZr93Cr47XrsrKr12
-        k3WDWF1fArsrCjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26rxl6s0DM28EF7xvwVC2z280
-        aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07
-        x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17
-        McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
-        1lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8CwCF04k20xvY0x0EwIxGrwCF
-        04k20xvE74AGY7Cv6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_
-        Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        U67KsUUUUU=
-X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgEHBlZdtOPItAACsg
+        id S1728598AbgEUI3w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 May 2020 04:29:52 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:35990 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728538AbgEUI3w (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 May 2020 04:29:52 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1590049791; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=aDTruvvA2yePzBgcjAz1JobS/TI/kW3lC4X5OmuJpOA=; b=qEcPSybrjz1qXioLiQmqBOyqBcPjzYHxgw3QByMXJz9mTkWKphSK97XsRR0aEzvqQC7L3N37
+ Ltzeot3v3j6CsU9pFvVa/QqdOuRA4nRnQansXLBO0+lYApDnj0Y4rrbWhwsWxYvFnQMpAF2T
+ dWD1iOPmhhJF/tZea2RDNQ8e/Is=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5ec63bfe.7ff0d5c669d0-smtp-out-n02;
+ Thu, 21 May 2020 08:29:50 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id A7F3AC433C9; Thu, 21 May 2020 08:29:50 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from akashast-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 46A6CC433C6;
+        Thu, 21 May 2020 08:29:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 46A6CC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+From:   Akash Asthana <akashast@codeaurora.org>
+To:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org, msavaliy@codeaurora.org,
+        evgreen@chromium.org, Akash Asthana <akashast@codeaurora.org>
+Subject: [PATCH V6 0/7] [PATCH V5 0/7] Add interconnect support to QSPI and QUP drivers
+Date:   Thu, 21 May 2020 13:59:17 +0530
+Message-Id: <1590049764-20912-1-git-send-email-akashast@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-pm_runtime_get_sync() increments the runtime PM usage counter even
-the call returns an error code. Thus a pairing decrement is needed
-on the error handling path to keep the counter balanced.
+V5 depend on below patches.
+ - https://lore.kernel.org/patchwork/patch/1237642/ [Add helpers
+   for enabling/disabling a path]
+ - https://patchwork.kernel.org/patch/11491027/ [Add devm_of_icc_get()
+   as exported API for users ]
 
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
----
- drivers/i2c/busses/i2c-stm32f7.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+dt-binding patch for QUP drivers.
+ - https://patchwork.kernel.org/patch/11534149/ [Convert QUP bindings
+        to YAML and add ICC, pin swap doc]
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 330ffed011e0..6f5f0fa68385 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1837,8 +1837,10 @@ static int stm32f7_i2c_unreg_slave(struct i2c_client *slave)
- 	WARN_ON(!i2c_dev->slave[id]);
- 
- 	ret = pm_runtime_get_sync(i2c_dev->dev);
--	if (ret < 0)
-+	if (ret < 0) {
-+		pm_runtime_put_autosuspend(i2c_dev->dev);
- 		return ret;
-+	}
- 
- 	if (id == 0) {
- 		mask = STM32F7_I2C_OAR1_OA1EN;
+High level design:
+ - QUP wrapper/common driver.
+   Vote for QUP core on behalf of earlycon from probe.
+   Remove BW vote during earlycon exit call
+
+ - SERIAL driver.
+   Vote only for CPU/CORE path because driver is in FIFO mode only
+   Vote/unvote from qcom_geni_serial_pm func.
+   Bump up the CPU vote from set_termios call based on real time need
+
+ - I2C driver.
+   Vote for CORE/CPU/DDR path
+   Vote/unvote from runtime resume/suspend callback
+   As bus speed for I2C is fixed from probe itself no need for bump up.
+
+ - SPI QUP driver.
+   Vote only for CPU/CORE path because driver is in FIFO mode only
+   Vote/unvote from runtime resume/suspend callback
+   Bump up CPU vote based on real time need per transfer.
+
+ - QSPI driver.
+   Vote only for CPU path
+   Vote/unvote from runtime resume/suspend callback
+   Bump up CPU vote based on real time need per transfer.
+
+Changes in V2:
+ - Add devm_of_icc_get() API interconnect core.
+ - Add ICC support to common driver to fix earlyconsole crash.
+
+Changes in V3:
+ - Define common ICC APIs in geni-se driver and use it across geni based
+   I2C,SPI and UART driver.
+
+Changes in V4:
+ - Add a patch to ICC core to scale peak requirement
+   as twice of average if it is not mentioned explicilty.
+
+Changes in V5:
+ - As per Georgi's suggestion removed patch from ICC core for assuming
+   peak_bw as twice of average when it's not mentioned, instead assume it
+   equall to avg_bw and keep this assumption in ICC client itself.
+ - As per Matthias suggestion use enum for GENI QUP ICC paths.
+
+Changes in V6:
+ - No Major change
+
+Akash Asthana (7):
+  soc: qcom: geni: Support for ICC voting
+  soc: qcom-geni-se: Add interconnect support to fix earlycon crash
+  i2c: i2c-qcom-geni: Add interconnect support
+  spi: spi-geni-qcom: Add interconnect support
+  tty: serial: qcom_geni_serial: Add interconnect support
+  spi: spi-qcom-qspi: Add interconnect support
+  arm64: dts: sc7180: Add interconnect for QUP and QSPI
+
+ arch/arm64/boot/dts/qcom/sc7180.dtsi  | 127 +++++++++++++++++++++++++++
+ drivers/i2c/busses/i2c-qcom-geni.c    |  29 +++++-
+ drivers/soc/qcom/qcom-geni-se.c       | 160 ++++++++++++++++++++++++++++++++++
+ drivers/spi/spi-geni-qcom.c           |  31 ++++++-
+ drivers/spi/spi-qcom-qspi.c           |  59 ++++++++++++-
+ drivers/tty/serial/qcom_geni_serial.c |  38 +++++++-
+ include/linux/qcom-geni-se.h          |  44 ++++++++++
+ 7 files changed, 482 insertions(+), 6 deletions(-)
+
 -- 
-2.17.1
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
