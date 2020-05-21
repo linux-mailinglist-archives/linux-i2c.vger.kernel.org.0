@@ -2,212 +2,170 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3741DD296
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 May 2020 18:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4B81DD2AD
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 May 2020 18:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728463AbgEUQAO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 May 2020 12:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
+        id S1729692AbgEUQDC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 May 2020 12:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726808AbgEUQAO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 May 2020 12:00:14 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21438C061A0F
-        for <linux-i2c@vger.kernel.org>; Thu, 21 May 2020 09:00:14 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id n11so3357461pgl.9
-        for <linux-i2c@vger.kernel.org>; Thu, 21 May 2020 09:00:14 -0700 (PDT)
+        with ESMTP id S1727973AbgEUQDC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 May 2020 12:03:02 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEB2C061A0E;
+        Thu, 21 May 2020 09:03:01 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id x27so4742175lfg.9;
+        Thu, 21 May 2020 09:03:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jHirFrfUhrscDiyY19yFy1eojdIlJFYNDT0L5VP6NdE=;
-        b=iyB4ngXROy5qTSwcL5Cvl5LAnn2U16sn3BZvQyGAClC2S6/xy2nQLtKiG2/8kwRklF
-         WNVdSOimsudJuNLU7K5eiIGS5eRF8urxcHf9Ijf9Y2FlUwywDIWA9biynBY3D08eqBC4
-         kFPQ845JNwI3HI41jDcvAJEOoi1G3+mRda/sQ=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=AecFw995CGTDfnePAAOzk4LDHP1RvUGJS5STI29B3ks=;
+        b=qA78Is6dG4HSJwfBk5tz9QkYGepUu6p33PJrkqAiFW402bQWY9x2hwUyzdEI46nsxd
+         mMn63fvDnYUEFb+B7Q/t5kXqg8RLfW+1P3qrAr5VXJzPY2LHyi/ARWMKQ0THz4P8v4Dp
+         LInkYsDBa8aM32/QPW0u/fEXwTLtXz4BuERhOztUPHOdnK/R+RtYsKIkr/RKHjOSDuvg
+         8wfPemWlLha50jnkTXwzB5PLHtHtFdJ5yg3n7oituX0yX8LDcuDi9sMSwDS2sx6amLIa
+         dPYWeQv2F7JMUQ+fyhBdOYowxs5Zo7wh+0fXYM6BYtHjCcr3f5lZdgDIlOxSHUNp6+YM
+         gVhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jHirFrfUhrscDiyY19yFy1eojdIlJFYNDT0L5VP6NdE=;
-        b=fnLJFegDHsNNQmtMyP3iF70NI2rhkK/W80J83tWQ04de0Mtn9K7cbgAUrNN8LXjPBI
-         Dk9Sw5Fb81tGOHW0O2RYr/58TEgdmMFNzYMUgfb4+fOJOvZn29rNjAf0lsP6UBeW5ciz
-         vSG/7E0mw7zsa/WkmC5nVU9tcf1kUWjh8PM50uxKPFeQAeWJI3McqFJhQshQHy6+oASl
-         NKD6lArCqSCozMOjmz3KPL0r7MxQpOmDcM84AIEVyy3s1GrCaGC1ArRL1itLJJf5osO/
-         yFk77lT80Nb4fGUu0cbpYXg2WTsTfcEYqLwbe54ntWRZmPVUwN9BGeoKfpeJPridX/fY
-         lRYg==
-X-Gm-Message-State: AOAM530sDkxm8x2lHo4Ac6c7bWGWN4jd+PEPqqDnmCX1ycsyBNMO59MM
-        ZDRTc7Www45GO02WIrsgic+3jA==
-X-Google-Smtp-Source: ABdhPJyeSnrDAQNZVdUzm0V1yaYpL16GQlLMa/0trXnLiqwcmnp6adE8lFYQRNmL1AUSQvEq0E9O+Q==
-X-Received: by 2002:a62:b402:: with SMTP id h2mr10334883pfn.221.1590076813529;
-        Thu, 21 May 2020 09:00:13 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id w12sm3948439pjn.21.2020.05.21.09.00.11
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=AecFw995CGTDfnePAAOzk4LDHP1RvUGJS5STI29B3ks=;
+        b=eN2vEyRXEiASzggjwqQqBJUNm//NwV4h2icgpnU9SfVf0NkSc7LBJPRREKMMac/RwT
+         YuAzV3f8Qu9o7fOrmpMiyI7v1F9yElgYna79W+r9RvhSK4IZPZx2ZXA9JImDVdeOBkQb
+         THE5zAlWCQB4GUjcsYDqoMnXF6D9lkSeser26xKQXXrWu9a5VFRnIojrz4fe+y68fXxE
+         Qyhd28staEXUwUeQaqhLY92KFcdK8OtaZ1NDUtPsmjvcnZZ1x8D4Xru3sPd8XY19UR+m
+         yQS19GV6iVnl0lrlbnPZg5JnR4BDBUgvuFF+U6fMuvDBizP9whX7C3wXYh3m0XuwUzS0
+         kyHw==
+X-Gm-Message-State: AOAM5333t8ZaOo04p52qhRA6nWvwrQzDL2DI8Lws8oMO3Rq7K4TBZjW9
+        A/XYl8Zk2LWpP2i0ZAaliWh3AMQU
+X-Google-Smtp-Source: ABdhPJzVi+o/luJHVJoxUcOad9z0OcbBiBLzK+HjZOlFeefiXJBPLYE70Pg04DoJLojSldJxH7FNjg==
+X-Received: by 2002:ac2:4a8d:: with SMTP id l13mr5366051lfp.213.1590076978764;
+        Thu, 21 May 2020 09:02:58 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
+        by smtp.googlemail.com with ESMTPSA id 6sm941059ljq.115.2020.05.21.09.02.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 May 2020 09:00:12 -0700 (PDT)
-Date:   Thu, 21 May 2020 09:00:10 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        msavaliy@codeaurora.org, evgreen@chromium.org
-Subject: Re: [PATCH V6 2/7] soc: qcom-geni-se: Add interconnect support to
- fix earlycon crash
-Message-ID: <20200521160010.GB4525@google.com>
-References: <1590049764-20912-1-git-send-email-akashast@codeaurora.org>
- <1590049764-20912-3-git-send-email-akashast@codeaurora.org>
+        Thu, 21 May 2020 09:02:56 -0700 (PDT)
+Subject: Re: [GIT PULL] i2c: tegra: Changes for v5.8-rc1
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20200515143924.1579055-1-thierry.reding@gmail.com>
+ <314a292e-bcd9-bb30-4067-71dc7cc399d6@gmail.com>
+ <20200519160835.GC2113674@ulmo>
+ <6b081a10-b150-b07f-2852-743e41ed053c@gmail.com>
+ <20200520105100.GA2141681@ulmo>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <5653baa1-b7ae-19ab-5299-ecf227be98c2@gmail.com>
+Date:   Thu, 21 May 2020 19:02:54 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <20200520105100.GA2141681@ulmo>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1590049764-20912-3-git-send-email-akashast@codeaurora.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Akash,
+20.05.2020 13:51, Thierry Reding пишет:
+> On Wed, May 20, 2020 at 05:19:27AM +0300, Dmitry Osipenko wrote:
+>> 19.05.2020 19:08, Thierry Reding пишет:
+>>> On Sat, May 16, 2020 at 10:45:32AM +0300, Dmitry Osipenko wrote:
+>>>> 15.05.2020 17:39, Thierry Reding пишет:
+>>>>> Hi,
+>>>>>
+>>>>> The following changes since commit 0e698dfa282211e414076f9dc7e83c1c288314fd:
+>>>>>
+>>>>>   Linux 5.7-rc4 (2020-05-03 14:56:04 -0700)
+>>>>>
+>>>>> are available in the Git repository at:
+>>>>>
+>>>>>   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/for-5.8-i2c
+>>>>>
+>>>>> for you to fetch changes up to c73178b93754edd8449dccd3faf05baafd4d3f0e:
+>>>>>
+>>>>>   i2c: tegra: Add support for the VI I2C on Tegra210 (2020-05-12 22:47:52 +0200)
+>>>>>
+>>>>> Thanks,
+>>>>> Thierry
+>>>>>
+>>>>> ----------------------------------------------------------------
+>>>>> i2c: tegra: Changes for v5.8-rc1
+>>>>>
+>>>>> This includes a few improvements to make the Tegra I2C controller behave
+>>>>> properly on suspend/resume, does a bit of cleanup and adds support for
+>>>>> the VI-variant of the I2C controller that is used primarily for video
+>>>>> capture purposes.
+>>>>>
+>>>>> ----------------------------------------------------------------
+>>>>> Dmitry Osipenko (2):
+>>>>>       i2c: tegra: Better handle case where CPU0 is busy for a long time
+>>>>>       i2c: tegra: Synchronize DMA before termination
+>>>>>
+>>>>> Thierry Reding (5):
+>>>>>       Revert "i2c: tegra: Fix suspending in active runtime PM state"
+>>>>
+>>>>>       i2c: tegra: Restore pinmux on system resume
+>>>>
+>>>> In general this series is good to me, although I have some concerns
+>>>> about this patch. Could you please answer the review comments?
+>>>
+>>> Sorry, those had been burried under too much email. I've answered your
+>>> questions now.
+>>
+>> Hello Thierry,
+>>
+>> Thank you for the answers, I'd also want to see the answer to the
+>> question about how RPM works, i.e. why I2C is RPM-resumed during
+>> system's suspend in some cases and not the others.
+> 
+> I don't think I've seen a question regarding that, so let me answer
+> here: the way I understand how this works is that for each device the PM
+> core will grab a runtime PM reference during the suspend/resume
+> transition, which is done as a way of preventing any of the resumed
+> devices from unexpectedly going to runtime suspend.
+> 
+> This code is in drivers/base/power/main.c, device_prepare(). Note that
+> this will only increment the runtime PM usage counter (and therefore
+> block the device from entering runtime suspend) but it won't resume the
+> device if it is already suspended.
 
-On Thu, May 21, 2020 at 01:59:19PM +0530, Akash Asthana wrote:
-> QUP core clock is shared among all the SE drivers present on particular
-> QUP wrapper, the system will reset(unclocked access) if earlycon used after
-> QUP core clock is put to 0 from other SE drivers before real console comes
-> up.
-> 
-> As earlycon can't vote for it's QUP core need, to fix this add ICC
-> support to common/QUP wrapper driver and put vote for QUP core from
-> probe on behalf of earlycon and remove vote during earlycon exit call.
-> 
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> Reported-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> Change in V3:
->  - Add geni_remove_earlycon_icc_vote API that will be used by earlycon
->    exit function to remove ICC vote for earlyconsole.
->  - Remove suspend/resume hook for geni-se driver as we are no longer
->    removing earlyconsole ICC vote from system suspend, we are removing
->    from earlycon exit.
-> 
-> Change in V4:
->  - As per Matthias comment make 'earlycon_wrapper' as static structure.
-> 
-> Changes in V5:
->  - Vote for core path only after checking whether "qcom_geni" earlycon is
->    actually present or not by traversing over structure "console_drivers".
-> 
-> Changes in V6:
->  - As per Matthias's comment removed NULL check for console_drivers global
->    struct, added NULL check for earlycon_wrapper in _remove_earlycon_icc_vote
->    API
->  - Addressed nitpicks from Andy.
-> 
->  drivers/soc/qcom/qcom-geni-se.c       | 68 +++++++++++++++++++++++++++++++++++
->  drivers/tty/serial/qcom_geni_serial.c |  7 ++++
->  include/linux/qcom-geni-se.h          |  2 ++
->  3 files changed, 77 insertions(+)
-> 
-> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> index 0b2526d..ac16bb1 100644
-> --- a/drivers/soc/qcom/qcom-geni-se.c
-> +++ b/drivers/soc/qcom/qcom-geni-se.c
-> @@ -3,6 +3,7 @@
->  
->  #include <linux/acpi.h>
->  #include <linux/clk.h>
-> +#include <linux/console.h>
->  #include <linux/slab.h>
->  #include <linux/dma-mapping.h>
->  #include <linux/io.h>
-> @@ -90,11 +91,14 @@ struct geni_wrapper {
->  	struct device *dev;
->  	void __iomem *base;
->  	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
-> +	struct geni_icc_path to_core;
->  };
->  
->  static const char * const icc_path_names[] = {"qup-core", "qup-config",
->  						"qup-memory"};
->  
-> +static struct geni_wrapper *earlycon_wrapper;
-> +
->  #define QUP_HW_VER_REG			0x4
->  
->  /* Common SE registers */
-> @@ -812,11 +816,38 @@ int geni_icc_disable(struct geni_se *se)
->  }
->  EXPORT_SYMBOL(geni_icc_disable);
->  
-> +void geni_remove_earlycon_icc_vote(void)
-> +{
-> +	struct geni_wrapper *wrapper;
-> +	struct device_node *parent;
-> +	struct device_node *child;
-> +
-> +	if (!earlycon_wrapper)
-> +		return;
-> +
-> +	wrapper = earlycon_wrapper;
-> +	parent = of_get_next_parent(wrapper->dev->of_node);
-> +	for_each_child_of_node(parent, child) {
-> +		if (!of_device_is_compatible(child, "qcom,geni-se-qup"))
-> +			continue;
-> +		wrapper = platform_get_drvdata(of_find_device_by_node(child));
-> +		icc_put(wrapper->to_core.path);
-> +		wrapper->to_core.path = NULL;
-> +
-> +	}
-> +	of_node_put(parent);
-> +
-> +	earlycon_wrapper = NULL;
-> +}
-> +EXPORT_SYMBOL(geni_remove_earlycon_icc_vote);
-> +
->  static int geni_se_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct resource *res;
->  	struct geni_wrapper *wrapper;
-> +	struct console __maybe_unused *bcon;
-> +	bool __maybe_unused has_earlycon = false;
->  	int ret;
->  
->  	wrapper = devm_kzalloc(dev, sizeof(*wrapper), GFP_KERNEL);
-> @@ -839,6 +870,43 @@ static int geni_se_probe(struct platform_device *pdev)
->  		}
->  	}
->  
-> +#ifdef CONFIG_SERIAL_EARLYCON
-> +	for_each_console(bcon) {
-> +		if (!strcmp(bcon->name, "qcom_geni")) {
-> +			has_earlycon = true;
-> +			break;
-> +		}
-> +	}
-> +	if (!has_earlycon)
-> +		goto exit;
-> +
-> +	wrapper->to_core.path = devm_of_icc_get(dev, "qup-core");
-> +	if (IS_ERR(wrapper->to_core.path))
-> +		return PTR_ERR(wrapper->to_core.path);
-> +	/*
-> +	 * Put minmal BW request on core clocks on behalf of early console.
-> +	 * The vote will be removed earlycon exit function.
-> +	 *
-> +	 * Note: We are putting vote on each QUP wrapper instead only to which
-> +	 * earlycon is connected because QUP core clock of different wrapper
-> +	 * share same voltage domain. If core1 is put to 0, then core2 will
-> +	 * also run at 0, if not voted. Default ICC vote will be removed ASA
-> +	 * we touch any of the core clock.
-> +	 * core1 = core2 = max(core1, core2)
-> +	 */
-> +	ret = icc_set_bw(wrapper->to_core.path, GENI_DEFAULT_BW,
-> +				GENI_DEFAULT_BW);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "%s: ICC BW voting failed for core :%d\n",
+Does it mean that device won't be RPM-suspended if RPM-resume is invoked
+during of system's suspend?
 
-nit: " ... core: %d\n".
+I tried to dig through the code, commit messages, kernel docs, etc and
+came to a conclusion that it's hacks made on top of other hacks in order
+to accommodate needs of the PCI subsystem. This behaviour isn't
+documented, which makes RPM a bit awkward to use.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> So far any devices that are already runtime suspended, there isn't
+> really anything we have to do during suspend. For those who are not yet
+> suspended, we need to force them into suspend so that their clocks are
+> disabled and the pinmux state set properly (to "idle").
+> 
+> On resume we first need to runtime resume the device undconditionally so
+> that context can be restored. Runtime resume will take care of enabling
+> the clock and setting the pinmux state to "default". Then we restore the
+> context and if the device had been runtime suspended, we manually call
+> the runtime suspend callback again so that the state matches what the PM
+> core thinks it is. However, if the device had not been runtime suspended
+> during system suspend, then we must not manually put it back into
+> suspend because it would no longer match the PM core's state.
+> 
+> Does that answer your question?
+
+Yes, this partially answers my question, thank you. Still I don't have a
+full picture.
+
+I also don't like the fact that RPM behavior during of system's suspend
+isn't symmetrical to system's resume, yet not sure if it is really
+intended. I.e. that RPM allows to resume during of late suspend, but not
+on early resume.
+
+Anyways, I haven't noticed any problems using this series, so should be
+good.
