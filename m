@@ -2,34 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A2C1DEB77
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 May 2020 17:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BE41DEB7C
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 May 2020 17:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730096AbgEVPHl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 May 2020 11:07:41 -0400
-Received: from sauhun.de ([88.99.104.3]:33376 "EHLO pokefinder.org"
+        id S1730124AbgEVPJP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 May 2020 11:09:15 -0400
+Received: from sauhun.de ([88.99.104.3]:33418 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729931AbgEVPHl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 22 May 2020 11:07:41 -0400
+        id S1729931AbgEVPJO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 22 May 2020 11:09:14 -0400
 Received: from localhost (p5486cea4.dip0.t-ipconnect.de [84.134.206.164])
-        by pokefinder.org (Postfix) with ESMTPSA id 5B27A2C2071;
-        Fri, 22 May 2020 17:07:39 +0200 (CEST)
-Date:   Fri, 22 May 2020 17:07:39 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 356FF2C2072;
+        Fri, 22 May 2020 17:09:13 +0200 (CEST)
+Date:   Fri, 22 May 2020 17:09:12 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Tang Bin <tangbin@cmss.chinamobile.com>
 Cc:     o.rempel@pengutronix.de, u.kleine-koenig@pengutronix.de,
         ardb@kernel.org, linux-i2c@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Shengju Zhang <zhangshengju@cmss.chinamobile.com>
-Subject: Re: [PATCH] i2c: drivers: Avoid unnecessary check in
+Subject: Re: [PATCH] i2c: drivers: Omit superfluous error message in
  efm32_i2c_probe()
-Message-ID: <20200522150738.GH5670@ninjato>
-References: <20200415140640.19948-1-tangbin@cmss.chinamobile.com>
+Message-ID: <20200522150912.GI5670@ninjato>
+References: <20200415135734.14660-1-tangbin@cmss.chinamobile.com>
+ <20200522150418.GG5670@ninjato>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pfTAc8Cvt8L6I27a"
+        protocol="application/pgp-signature"; boundary="U3s59FfKcByyGl+j"
 Content-Disposition: inline
-In-Reply-To: <20200415140640.19948-1-tangbin@cmss.chinamobile.com>
+In-Reply-To: <20200522150418.GG5670@ninjato>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -37,42 +38,47 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---pfTAc8Cvt8L6I27a
+--U3s59FfKcByyGl+j
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 15, 2020 at 10:06:40PM +0800, Tang Bin wrote:
-> The function efm32_i2c_probe() is only called with an
-> openfirmware platform device.Therefore there is no need
-> to check that it has an openfirmware node.
+On Fri, May 22, 2020 at 05:04:18PM +0200, Wolfram Sang wrote:
+> On Wed, Apr 15, 2020 at 09:57:34PM +0800, Tang Bin wrote:
+> > In the function efm32_i2c_probe(),when get irq failed,the function
+> > platform_get_irq() logs an error message,so remove redundant message
+> > here.
+> >=20
+> > Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+> > Signed-off-by: Shengju Zhang <zhangshengju@cmss.chinamobile.com>
 >=20
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-> Signed-off-by: Shengju Zhang <zhangshengju@cmss.chinamobile.com>
+> Applied to for-next, thanks! Please fix the issues Uwe mentioned next
+> time.
 
-Applied to for-next, thanks! I agree the driver will need additions for
-non-DT platforms anyhow, so greeting with an OOPS is kinda suitable, too
-;)
+And try to match the subject line for the subsystem, i.e. for I2C:
+
+"i2c: <drivername>: <topic>"
 
 
---pfTAc8Cvt8L6I27a
+
+--U3s59FfKcByyGl+j
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7H6roACgkQFA3kzBSg
-KbYkIw/7BqnJb/EWR5Blh3d4vpx3rtS8kwGxEIY4UbtTq1uWotMuzrDKdwyDMIXV
-i6nooV/NJ0Eib6pVtQQLz6VVquUA1s0SVHR6vwN2CTZIZIHtntwHUflDkE7ViR1M
-o7eGs9UUmEUvedljeQFcl+t5Qbx54i5kHSqP6x1KoHJJCQzmz8f6dAfSVR82B859
-byP1J7Nb8TzilTSKdfl3eV0jXomazoHUvxYUvIeM8t9Lm8GL6k/6NMIWKXfGQiff
-55kuYKhRaFfX+A5ZigPA4gmvP4hdGAomLr0aQePMwlQljWUoJVvyLF5olRONAhB9
-TkMUsC6xLbOh10hfknqsdJD1krFHvX+AM8EpsZ6E0dnsGxq4Ns2JTSod5rs8S0Qq
-dGf4pb62qWAy7xY/Gc6wrxwG+mdniZMXxCtw9arDdgRTebm3+bBVSNB7V4LrC88w
-hLsjWC/X3KGvXWOiNx3hVLn/+sXzZum2vk/M0UMW3mItW9yozI0z+BxT8Rcqd/7+
-iHcxarj8nHn2TYnqoN6lRe1mliqkPA3OmTUvgRQF99W+0xFhD9h7sVEr+Ri3gJfw
-+arI0O1tKeTidUDXLazDPM94NQR4wLaBmee/Q8kUKCoIbYeYpSU3AKQlZHJkrSpQ
-FKFgszHQaQS2aCh27SDp0/cvSlrQwokVi5S2ri5lZc4XLylgltw=
-=JDIx
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7H6xgACgkQFA3kzBSg
+KbbqGQ/+KB+H2gA8bZHYDnkY6baFlP30t3IjDi5MZ1h92dmiMkEP85LNhMtjkln1
+CIoRFWQZhpBh3cri2EVA++O7efFqakLSPhfQdlKuWkwE9aLEkAR1d6sbxGOeR875
+GjgFVDR4oqKNkDYRSCSl6ZQM+V7XJ5nerFxuWgdHqr6R4jmQaOH/xQhSiKvtunQz
+wm5dJcm5BbK4IQJKpApHEDBvCeVUJ0BMqYJbiVIdioEHXObjMyh8vZTAEbH+lo+b
+qXzirZiB/fAqHgzkFXxVp01JGfF+v/zGFgmja35pPtc3XTcf3NCzREE1cn2s1lOm
+ww5yU8TJcGnXuVsGDG4DgHOPrkNY30WYiMriYCRGKUqjTpH2SmlKJ0+rZ9tjdJeb
+QQ4BX1wEu8kjHXpeqGzZS09nNWqyeEvhExUeOoguqUvfj8mT5SdAdO/eGQOHmHGR
+D7hg5whcmmibAZH6aAc3SE8s/1NCjW63bj4aLB9uCI3yvS7dJAhtAE2zw5ZLfGK6
+WHG9kNeFHWmhezSfnIkKiUEF+twl4waatI0MhLa+HSTHsXjf85rDLY0VUqPGk94Y
+U8LgIbMEeEhFsPWuaazPXXfNSz4fSLZ9TZ96djloAdRDqn/phKXqFYBxxUpX66Lz
+xL/JxiU/HUp9EkCTXh1ytpvi32pTsSKvOLiEbzhzWr6Nbx9ta1o=
+=ivLg
 -----END PGP SIGNATURE-----
 
---pfTAc8Cvt8L6I27a--
+--U3s59FfKcByyGl+j--
