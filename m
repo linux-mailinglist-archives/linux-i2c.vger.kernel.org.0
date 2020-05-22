@@ -2,107 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B5F1DEBA5
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 May 2020 17:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9935F1DEBC4
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 May 2020 17:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729929AbgEVPRP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 May 2020 11:17:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41142 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730243AbgEVPRO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 22 May 2020 11:17:14 -0400
-Received: from localhost (p5486cea4.dip0.t-ipconnect.de [84.134.206.164])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A91DB205CB;
-        Fri, 22 May 2020 15:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590160633;
-        bh=OSAiuH/ltMwuwK+9Fk2bcyYZOPSo8Z3O972mx+bTBjc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HM1hY9e/VlAz9831LjvNbqYC+AlRn+FQUXfSY0nCMnOaAupxW/6xQRDHUmYfarHDu
-         MNF1i3y/bKPsQ4CuUXldhVrAkogXnRW5pBfL6mZdc5bij0j72E+mR0UnAyFixiTKQ2
-         wj0RakOAUWmrSQ79dEkWvmfuGpeB1EMN3jrSIEqc=
-Date:   Fri, 22 May 2020 17:17:10 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
-Cc:     Ajay Gupta <ajayg@nvidia.com>, linux-i2c@vger.kernel.org,
+        id S1730055AbgEVP04 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 May 2020 11:26:56 -0400
+Received: from mail-eopbgr760059.outbound.protection.outlook.com ([40.107.76.59]:61262
+        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729929AbgEVP0z (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 22 May 2020 11:26:55 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NGSm/1i5r7yHTLtnVl7umnYRipEl1qI5GGVb+doPC/x+14XKK9zm8JHWDwqKlli0+V7sYyG2y1CA/jUEtQ4DPvfEmfgrBp6KCE+LnDiQuRhsOWPAeKGs3ScZyECV9WMD0cl/zz3lJCOO+QZGAB6e5FeK8YvbulbHy1RJB6MXJqUF5lLBkOoArYv3kqRv7qOGDv7FEpEibXW8TXcl/WVGo2tBx9d+tdmw/42iaBBj2F9K0Ba0rWyjfOw4coiRjqeRkzmcMD3JVroaXIjYgz1NqH6GJL/tkAuVnpeKoHCO3Y6GklSZTnI5y2kcD9Exy0dWhXN9NTWwbIuhTh/9EGbPWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hY/YVVI+cvmvAy2NzIrGqCGLuJFLj56binIFiW/GK74=;
+ b=Eg3MbjHavTVK+IH0PT/8LJ161hLx39vOz63zKL4yVq3hoOmnpoIZBs3IndZGG1udBJvKKTBvVu8rDSIkTwm3FGk7hfybRcgBjaCeV+SDps6bL14U2PTcPKVadLFmWsQeVL7QwgaqckhAAbc7AvnHS7DIU+roWVbyXHRrHfqiKB3O8omNpVky0HocLOzjk4vlQqRsHr1lqBa5qshla9DUKNKed0rH/jpyvmNEP03rEcQhFT2ZvtQIAZhSTX970oQpOAOLLzatfrfp7VLkIGgaG0Px3101kWNOkKYfsTwgVgvRyLhjx3FCX4Ar0AebK56wCCYk5/Yzfn6rycY6j4nRJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=the-dreams.de smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hY/YVVI+cvmvAy2NzIrGqCGLuJFLj56binIFiW/GK74=;
+ b=RWcaDjP7ytgkLr8k3eNylu7076lkcQHwP+Al54qdcJKMaL5scABvoggXnFODYCbks2gJC8TNALTOFVTI6c2BNBxB1OFfmF9SM5LSxzdce8lzbH93gISTU1ml3oy1xk3IfaqjSCKAHSyET5rfcodvLHcHRFr8DVMAVXSonxEcmLk=
+Received: from BL0PR02CA0120.namprd02.prod.outlook.com (2603:10b6:208:35::25)
+ by DM6PR02MB6731.namprd02.prod.outlook.com (2603:10b6:5:222::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.23; Fri, 22 May
+ 2020 15:26:53 +0000
+Received: from BL2NAM02FT041.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:35:cafe::3c) by BL0PR02CA0120.outlook.office365.com
+ (2603:10b6:208:35::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.23 via Frontend
+ Transport; Fri, 22 May 2020 15:26:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; the-dreams.de; dkim=none (message not signed)
+ header.d=none;the-dreams.de; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ BL2NAM02FT041.mail.protection.outlook.com (10.152.77.122) with Microsoft SMTP
+ Server id 15.20.3021.23 via Frontend Transport; Fri, 22 May 2020 15:26:52
+ +0000
+Received: from [149.199.38.66] (port=59868 helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1jc9Z0-0000sR-LN; Fri, 22 May 2020 08:26:22 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1jc9ZU-0005l3-Cd; Fri, 22 May 2020 08:26:52 -0700
+Received: from xsj-pvapsmtp01 (mailman.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 04MFQgSS010609;
+        Fri, 22 May 2020 08:26:42 -0700
+Received: from [172.30.17.109]
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <michals@xilinx.com>)
+        id 1jc9ZK-0005Wv-G4; Fri, 22 May 2020 08:26:42 -0700
+Subject: Re: [PATCH v2] i2c: cadence: Add an error handling for
+ platform_get_irq()
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     Dejin Zheng <zhengdejin5@gmail.com>, harinik@xilinx.com,
+        soren.brinkmann@xilinx.com, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: nvidia-gpu: Use PTR_ERR_OR_ZERO() to simplify code
-Message-ID: <20200522151710.GL5670@ninjato>
-References: <20200505145230.17251-1-aishwaryarj100@gmail.com>
+References: <20200520144821.8069-1-zhengdejin5@gmail.com>
+ <2d99f043-f854-8975-86ee-2f0ba1382275@xilinx.com>
+ <20200522151459.GK5670@ninjato>
+From:   Michal Simek <michal.simek@xilinx.com>
+Message-ID: <7763d79e-3a44-2dbe-a4d3-45d40a3a1e02@xilinx.com>
+Date:   Fri, 22 May 2020 17:26:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qo7zVO9a9OQ5oQtr"
-Content-Disposition: inline
-In-Reply-To: <20200505145230.17251-1-aishwaryarj100@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200522151459.GK5670@ninjato>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(346002)(136003)(39860400002)(396003)(376002)(46966005)(47076004)(4326008)(8676002)(316002)(110136005)(36756003)(9786002)(82740400003)(478600001)(81166007)(8936002)(70206006)(70586007)(82310400002)(186003)(31686004)(5660300002)(2616005)(426003)(31696002)(356005)(4744005)(2906002)(336012)(44832011)(26005)(43740500002);DIR:OUT;SFP:1101;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7ac8933c-37bb-4a77-030a-08d7fe648ded
+X-MS-TrafficTypeDiagnostic: DM6PR02MB6731:
+X-Microsoft-Antispam-PRVS: <DM6PR02MB673156169B3426B51AC27FFDC6B40@DM6PR02MB6731.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Forefront-PRVS: 04111BAC64
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +E0WtiPIhtvVXpxdDAAhYYflHvSQTqclXp0dqer4ZbRBr05wVjYnaSzIy5YqxMjUvCgk/i+lliTavJx+1JMsjJwnEwSV9pfuuEnaeLdWlc6TpRMFBmkrCLywCAcs0mvKM27dmwxqDcKckuLXLZXn3u8kAUpacuu/QyXn4qpen4bFuV0VlPbtE7wjM69Sc3E7Iz2RIy4BFs3OF406Z6DKT38SBxOl2QJX39Na6Q1P9DTYokbES0lMixiSncbqUsquAIMmYQD8vfqNbWkE9tMjWO/9GKFqWjzF2FH7DQ70GoD0pnjO5gHAZqIljtlrk/I8dUNqDsSnj+KQUAKkF7csEi2wiCEpn8a2t813Ed80pw2fVV+oP06LEGZIvkpnvRwY4BttZ1VDb/VIwn+gc93UimYWujmRe3ORIyajPWYSqCVwrTxFYNFkz+ioxJzI7h/P
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2020 15:26:52.7459
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ac8933c-37bb-4a77-030a-08d7fe648ded
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6731
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 22. 05. 20 17:14, Wolfram Sang wrote:
+> 
+>> The change is valid but the question is if make sense to do it in this
+>> way. Some drivers are using devm_request_irq to do do job.
+>>
+>> For example:
+>>  	id->irq = platform_get_irq(pdev, 0);
+>>         ret = devm_request_irq(&pdev->dev, id->irq, cdns_i2c_isr, 0,
+>>                                   DRIVER_NAME, id);
+>>         if (ret)
+>> 		return ret;
+> 
+> I like this version better. Maybe we should simply move the
+> platform_get_irq() line to the devm_request_irq() call?
 
---qo7zVO9a9OQ5oQtr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You know about
+devm_platform_get_and_ioremap_resource()
+usage.
+ Maybe that's the way to go. Because as of today there is no way to pass
+position of irq resource.
 
-On Tue, May 05, 2020 at 08:22:30PM +0530, Aishwarya Ramakrishnan wrote:
-> PTR_ERR_OR_ZERO contains if(IS_ERR(...)) + PTR_ERR.
->=20
-> Generated by: scripts/coccinelle/api/ptr_ret.cocci
->=20
-> Signed-off-by: Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
+But I expect it will come in near future.
 
-Waiting for the Rev-by from Ajay (driver maintainer).
+Thanks,
+Michal
 
-> ---
->  drivers/i2c/busses/i2c-nvidia-gpu.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c=
--nvidia-gpu.c
-> index f5d25ce00f03..f480105000b8 100644
-> --- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-> +++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> @@ -277,10 +277,7 @@ static int gpu_populate_client(struct gpu_i2c_dev *i=
-2cd, int irq)
->  	i2cd->gpu_ccgx_ucsi->irq =3D irq;
->  	i2cd->gpu_ccgx_ucsi->properties =3D ccgx_props;
->  	i2cd->ccgx_client =3D i2c_new_client_device(&i2cd->adapter, i2cd->gpu_c=
-cgx_ucsi);
-> -	if (IS_ERR(i2cd->ccgx_client))
-> -		return PTR_ERR(i2cd->ccgx_client);
-> -
-> -	return 0;
-> +	return PTR_ERR_OR_ZERO(i2cd->ccgx_client);
->  }
-> =20
->  static int gpu_i2c_probe(struct pci_dev *pdev, const struct pci_device_i=
-d *id)
-> --=20
-> 2.17.1
->=20
-
---qo7zVO9a9OQ5oQtr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7H7PYACgkQFA3kzBSg
-Kbb02xAAqw5yE3PD2uDXw4UCsq8wYIx0jsn98zARm06rV+I+G0x2PkgvL04ylS+h
-IS+iee7cOD4O+RQ2UphiFHEufuZlSclyWS82EQ4tceauFAIthIKOxOSm6HcBfzhC
-oKK6mQAk92ZMobR1ejAZk+wCHqk6PVcSCiAZbQEHU1OQwwXwqXHDyCn01BtOvymJ
-EX6ZP+m26jBLM3hl/SyuILz8pScwWYY2RgTchmQZuKgod8OJoO1lfn+/dGP+pms3
-CX2u79xSF2a4W5Tw/HeRf1p7VcVI+5qbMvKUZYmjkg0Im3ybq3IhdpHrhSZrmrAt
-2g+dc72F5lqMHtYzxPif3jcHo1udVFHFPuYOpOJbd8LCHGHq3k79RxisYEjO51yx
-/8zNwZYDPvrY2e/zfj9nrPqmrbpkNVWWRfMCUBaGSYuPJxwph9/KI8nYYrQI3VtO
-VhXCcWN1n4ibOLOKYdQZMBjGGq+vvIZrgxNeMbBUA8Ua1jAmCCsFBBwlXsvPlGNK
-KoNh3ZeD/v47VIh/h12O9tRqT74VbdaltxngfRst2Yirw4+X/zXaYJJYtDREfU/S
-b7wRQtwTp7kyOww1GN9vk9Rrj8n311Nb2vTmX1vgr6Fje6SNr2OIILCRoOWP4gUx
-yg2yELWnuTpR5fJmlU8nzwPuzDosUJDLMMknTe4bGuqw4Df9mfA=
-=uAFd
------END PGP SIGNATURE-----
-
---qo7zVO9a9OQ5oQtr--
