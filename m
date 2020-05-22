@@ -2,204 +2,227 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C196E1DDBC7
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 May 2020 02:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C3D1DE400
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 May 2020 12:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730725AbgEVAJs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 May 2020 20:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730224AbgEVAJs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 May 2020 20:09:48 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00063C05BD43
-        for <linux-i2c@vger.kernel.org>; Thu, 21 May 2020 17:09:47 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id s19so7978080edt.12
-        for <linux-i2c@vger.kernel.org>; Thu, 21 May 2020 17:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ShTiWXhFQZjS5cdCw5c5iEVmkBUXovNZWLuS1Cv7888=;
-        b=ofqnPgic0A6d3snWFaSYqXR6bXBywTUnsOr918T7Vjsau2FfwafBcg2+BvbwupHpnK
-         i8zIqwaU68LuAEvmeeb6p5FBg+YCsKTCxnBQxlTsuV7mdVv0zuDiCF+VHked8F7bTUZK
-         5GiXwg8aW3OJ9v1FQ6LHwhFjFyYNnq6FLKf+o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ShTiWXhFQZjS5cdCw5c5iEVmkBUXovNZWLuS1Cv7888=;
-        b=lS1m5tHSOjLWmOFUjsaiCO2zKvcLl4jQ4Z2miKMBJnX69ibK5CYBt0nhoTKtnrsWjp
-         3qq/SFH/BimWq8WInDnHGfAX09QD2mRUasbCJ01PizSPBICc3f5awaGzX1KdZ6qlSI/x
-         LZbdARjBe+oIosZ/MjnVkYZceDsG1Kw+xErgfZC/COMqH/7H4PQnL1Jzxbl+cBt/M4y+
-         D97RWd0Lle/GdZS+j22lDi3xTvpQ9y+q5k6nUGSs1sUXSQ+JuD8OXVyKlTrpzA+2WQ4i
-         8RASiZS6PNcZpkVBD1a0+B/3PPLQI5LtYLvCciiL3ZdGk64bj2hHZ+S0fpjg+aRnM032
-         jFqA==
-X-Gm-Message-State: AOAM5303i6MsEM0cq22oDoT6XBtBEdwwJY/hiqtbl19aDawSrFHU/IoW
-        oMICZD1Zy3tWK8j5QsvhKCWiTtU5ZmmwwQ==
-X-Google-Smtp-Source: ABdhPJypgBq5u+tnUktNNHL0sAHii1OjLPik20xDccpduvloNJxeQ3/BPT9GIyC41IYQ9bxzrOOLoA==
-X-Received: by 2002:a05:6402:cb1:: with SMTP id cn17mr1029459edb.382.1590106184759;
-        Thu, 21 May 2020 17:09:44 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id m27sm6053101eja.83.2020.05.21.17.09.43
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 May 2020 17:09:44 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id g12so7232415wrw.1
-        for <linux-i2c@vger.kernel.org>; Thu, 21 May 2020 17:09:43 -0700 (PDT)
-X-Received: by 2002:a5d:66c5:: with SMTP id k5mr867242wrw.17.1590106183205;
- Thu, 21 May 2020 17:09:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <5ec71528.qSD3ljogzEHcLRXO%lkp@intel.com>
-In-Reply-To: <5ec71528.qSD3ljogzEHcLRXO%lkp@intel.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 22 May 2020 02:09:29 +0200
-X-Gmail-Original-Message-ID: <CAAFQd5C20_iOMaXOF+4MoUAVyzVR4VfD1iiPhFaHkCv16srebg@mail.gmail.com>
-Message-ID: <CAAFQd5C20_iOMaXOF+4MoUAVyzVR4VfD1iiPhFaHkCv16srebg@mail.gmail.com>
-Subject: Re: 6fe12cdbcf ("i2c: core: support bus regulator controlling in
- .."): BUG: sleeping function called from invalid context at kernel/locking/mutex.c:935
-To:     kernel test robot <lkp@intel.com>
-Cc:     Bibby Hsieh <bibby.hsieh@mediatek.com>, LKP <lkp@lists.01.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        philip.li@intel.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1730002AbgEVKPa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 May 2020 06:15:30 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:60924 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729997AbgEVKP1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 May 2020 06:15:27 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200522101525euoutp017b008676ce83d40b64ffef758c5a76eb~RUjOb8gDD2756727567euoutp01Q
+        for <linux-i2c@vger.kernel.org>; Fri, 22 May 2020 10:15:25 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200522101525euoutp017b008676ce83d40b64ffef758c5a76eb~RUjOb8gDD2756727567euoutp01Q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1590142525;
+        bh=3HYxB7x/RUYeYsXTIciTAB5xWK8LkdywlB5eocgLdQ0=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=IekGMGPOzNhxP44nfZreaPriyNBk7hAoPdvbmvNiXz/ln33P04aQdABFviLn9mFCY
+         B4oRMo0mEvEi+dU7Fk1aEsE05saDekiAouBBkglyiASqGrWEAkmNiQXWWO51ZR7etb
+         jaCZluQmzgNXOpkA6YCdTUrejKKdsOzAooVFfMHM=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200522101524eucas1p29f7a3412e8b0e5dac432cff706978a68~RUjOG-Jrb0131201312eucas1p2v;
+        Fri, 22 May 2020 10:15:24 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 82.7F.60679.C36A7CE5; Fri, 22
+        May 2020 11:15:24 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7~RUjNtIl9n1170811708eucas1p1o;
+        Fri, 22 May 2020 10:15:24 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200522101524eusmtrp1e6df08f904aec341f6609ab7cbf267f0~RUjNscnWn2581025810eusmtrp1m;
+        Fri, 22 May 2020 10:15:24 +0000 (GMT)
+X-AuditID: cbfec7f4-0e5ff7000001ed07-eb-5ec7a63c203f
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id C1.9B.07950.C36A7CE5; Fri, 22
+        May 2020 11:15:24 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200522101523eusmtip1cdfc4bd183275555e857da2166e0bd3b~RUjNMSTAp2127421274eusmtip19;
+        Fri, 22 May 2020 10:15:23 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-pm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        srv_heupstream@mediatek.com,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH] i2c: core: fix NULL pointer dereference in suspend/resume
+ callbacks
+Date:   Fri, 22 May 2020 12:13:27 +0200
+Message-Id: <20200522101327.13456-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpnleLIzCtJLcpLzFFi42LZduznOV2bZcfjDG6dV7HYOGM9q8WXuadY
+        LGZumMFi0fH3C6PF5V1z2Cw+9x5htJhxfh+Txdojd9ktpt8Vsvjc+o/NYuWJWcwO3B7vb7Sy
+        e8xuuMji0XJyP4tH35ZVjB4nTz1h8fi8SS6ALYrLJiU1J7MstUjfLoEr48rJ66wFT5Qq1k+6
+        wtLAuFW2i5GDQ0LAROL2NK4uRi4OIYEVjBLn+w8zQzhfGCVuNM9hhXA+M0q8X3+HpYuRE6xj
+        291GJhBbSGA5o8TfIw5wHfPvfgIrYhMwlOh628UGYosIhEt8uXGbDaSIWeAUk8S1/72MIAlh
+        gTCJV78fsILYLAKqEp9+PQebyitgK/Hl3h1miG3yEqs3HAC7SULgN5vE1ocXoBIuEkeWr4ay
+        hSVeHd/CDmHLSJye3MMC0dDMKPHw3Fp2CKeHUeJy0wxGiCpriTvnfrGBgoBZQFNi/S59iLCj
+        xKa/V5ghIcMnceOtIEiYGcictG06VJhXoqNNCKJaTWLW8XVwaw9euAR1jofE2xUnGSEhFCtx
+        6fkX5gmMcrMQdi1gZFzFKJ5aWpybnlpslJdarlecmFtcmpeul5yfu4kRmDxO/zv+ZQfjrj9J
+        hxgFOBiVeHgfJB+LE2JNLCuuzD3EKMHBrCTCu5D/aJwQb0piZVVqUX58UWlOavEhRmkOFiVx
+        XuNFL2OFBNITS1KzU1MLUotgskwcnFINjCZsCueNLx1Zel+yOfUZx7yYNK3DMxNv5Zi/bnP7
+        MZn95g0e7qr+A3GJ7x2Ent4zC/iUsujJFk7j/t9Tgy7eaKp9oBqovlE9Xb5BdVbX4UxHfrtq
+        QZlfe5Pdp7ca8q14W3h1c3395eaJHZGmOQffVckLGv/29UyQtffLfOpnUyWvJ7xFRPe+Ektx
+        RqKhFnNRcSIAc7kAlhoDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHLMWRmVeSWpSXmKPExsVy+t/xu7o2y47HGdw6ym2xccZ6Vosvc0+x
+        WMzcMIPFouPvF0aLy7vmsFl87j3CaDHj/D4mi7VH7rJbTL8rZPG59R+bxcoTs5gduD3e32hl
+        95jdcJHFo+XkfhaPvi2rGD1OnnrC4vF5k1wAW5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJ
+        pZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexpWT11kLnihVrJ90haWBcatsFyMnh4SAicS2u41M
+        XYxcHEICSxklXn7rZ4RIyEicnNbACmELS/y51sUGUfSJUeLGhU5mkASbgKFE11uQBCeHiECk
+        xOu9K8GKmAUuMEkcePwSrEhYIETiy8uL7CA2i4CqxKdfz5lAbF4BW4kv9+4wQ2yQl1i94QDz
+        BEaeBYwMqxhFUkuLc9Nzi430ihNzi0vz0vWS83M3MQLDdtuxn1t2MHa9Cz7EKMDBqMTD+yD5
+        WJwQa2JZcWXuIUYJDmYlEd6F/EfjhHhTEiurUovy44tKc1KLDzGaAi2fyCwlmpwPjKm8knhD
+        U0NzC0tDc2NzYzMLJXHeDoGDMUIC6YklqdmpqQWpRTB9TBycUg2MPRPX/litvKYn8V5u8NSJ
+        1aGexuaKDixSaxMXWhocquR0uewg/eUQe2zjk6uXnlzdN2Ebh/M8Ed7M07trPjA/ZU0J+/Iv
+        f1/98j0imSvX30i8wcwZnchj0apSryf1qqb8gysji6/2Np64O51tVZOkfQUNma/M91/Eeey3
+        QpDP8vdquc0W9xOUWIozEg21mIuKEwFeZN0KcQIAAA==
+X-CMS-MailID: 20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7
+References: <CGME20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7@eucas1p1.samsung.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, May 22, 2020 at 1:57 AM kernel test robot <lkp@intel.com> wrote:
->
-> Greetings,
->
-> 0day kernel testing robot got the below dmesg and the first bad commit is
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
->
-> commit 6fe12cdbcfe35ad4726a619a9546822d34fc934c
-> Author:     Bibby Hsieh <bibby.hsieh@mediatek.com>
-> AuthorDate: Tue May 19 15:27:29 2020 +0800
-> Commit:     Wolfram Sang <wsa@kernel.org>
-> CommitDate: Wed May 20 15:25:55 2020 +0200
->
->     i2c: core: support bus regulator controlling in adapter
->
->     Although in the most platforms, the bus power of i2c
->     are alway on, some platforms disable the i2c bus power
->     in order to meet low power request.
->
->     We get and enable bulk regulator in i2c adapter device.
->
->     Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
->     Reviewed-by: Tomasz Figa <tfiga@chromium.org>
->     Signed-off-by: Wolfram Sang <wsa@kernel.org>
->
-> 6aab46bc52  dt-binding: i2c: add bus-supply property
-> 6fe12cdbcf  i2c: core: support bus regulator controlling in adapter
-> +-----------------------------------------------------------------------------+------------+------------+
-> |                                                                             | 6aab46bc52 | 6fe12cdbcf |
-> +-----------------------------------------------------------------------------+------------+------------+
-> | boot_successes                                                              | 33         | 0          |
-> | boot_failures                                                               | 2          | 16         |
-> | WARNING:at_lib/kobject_uevent.c:#add_uevent_var                             | 1          |            |
-> | EIP:add_uevent_var                                                          | 1          |            |
-> | BUG:kernel_hang_in_boot_stage                                               | 1          |            |
-> | BUG:sleeping_function_called_from_invalid_context_at_kernel/locking/mutex.c | 0          | 16         |
-> +-----------------------------------------------------------------------------+------------+------------+
->
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> [  105.730065] ### dt-test ### EXPECT / : OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/i2c-test-bus/test-unittest13/status
-> [  105.730071] ### dt-test ### EXPECT \ : i2c i2c-1: Added multiplexed i2c bus 3
-> [  105.747587] i2c i2c-3: supply bus not found, using dummy regulator
-> [  105.754529] i2c i2c-1: Added multiplexed i2c bus 3
-> [  105.756092] ### dt-test ### EXPECT / : i2c i2c-1: Added multiplexed i2c bus 3
-> [  105.773831] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:935
-> [  105.777468] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 189, name: kworker/0:2
-> [  105.778995] 2 locks held by kworker/0:2/189:
-> [  105.779775]  #0: f48249a4 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x3ac/0x1050
-> [  105.781743]  #1: f4145f34 ((work_completion)(&sdp->work)){+.+.}-{0:0}, at: process_one_work+0x3ac/0x1050
-> [  105.783485] Preemption disabled at:
-> [  105.783509] [<cdbb653d>] srcu_invoke_callbacks+0x14d/0x280
-> [  105.785397] CPU: 0 PID: 189 Comm: kworker/0:2 Not tainted 5.7.0-rc1-00058-g6fe12cdbcfe35 #1
-> [  105.786961] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-> [  105.788608] Workqueue: rcu_gp srcu_invoke_callbacks
-> [  105.789777] Call Trace:
-> [  105.790308]  dump_stack+0x32/0x4a
-> [  105.790914]  ___might_sleep+0x3dc/0x4b0
-> [  105.791659]  ? srcu_invoke_callbacks+0x14d/0x280
-> [  105.792574]  ? srcu_invoke_callbacks+0x14d/0x280
-> [  105.793677]  ? srcu_invoke_callbacks+0x14d/0x280
-> [  105.794480]  __might_sleep+0x10e/0x210
-> [  105.795186]  __mutex_lock+0x34/0x12f0
-> [  105.795838]  ? mark_held_locks+0xb3/0x100
-> [  105.796561]  ? _raw_spin_unlock_irqrestore+0x13b/0x190
-> [  105.797694]  ? _raw_spin_unlock_irqrestore+0x13b/0x190
-> [  105.798653]  ? lockdep_hardirqs_on+0x1bb/0x420
-> [  105.799462]  mutex_lock_nested+0x41/0x60
-> [  105.800155]  ? regulator_put+0x25/0x70
-> [  105.800839]  regulator_put+0x25/0x70
-> [  105.801641]  devm_regulator_release+0x1d/0x30
-> [  105.802415]  release_nodes+0x326/0x500
-> [  105.803126]  devres_release_all+0xb9/0x130
-> [  105.803873]  device_release+0x25/0x1b0
+Commit 6fe12cdbcfe3 ("i2c: core: support bus regulator controlling in
+adapter") added generic suspend and resume functions for i2c devices.
+Those functions unconditionally access an i2c_client structure assigned
+to the given i2c device. However, there exist i2c devices in the system
+without a valid i2c_client. Add the needed check before accessing the
+i2c_client.
 
-This is entirely my guess for now, but isn't it suspicious that
-device_release() has been called with interrupts disabled?
+This fixes the following issue observed on Samsung Exynos4412-based
+Odroid U3 board:
 
-Is it possible that something else introduced a bug that causes
-device_release() to be called in an atomic context and it only
-triggered with this patch, because the affected struct device now has
-a mutex lock in the release path?
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 00000018
+pgd = 2aed198a
+[00000018] *pgd=00000000
+Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+Modules linked in:
+CPU: 1 PID: 1295 Comm: rtcwake Not tainted 5.7.0-rc6-02700-g4773d1324da6 #739
+Hardware name: Samsung Exynos (Flattened Device Tree)
+PC is at i2c_suspend_late+0x20/0x48
+LR is at dpm_run_callback+0xb4/0x3fc
+pc : [<c07b404c>]    lr : [<c064b7cc>]    psr: 20000053
+...
+Process rtcwake (pid: 1295, stack limit = 0x7f1885cf)
+Stack: (0xec8f3d70 to 0xec8f4000)
+...
+[<c07b404c>] (i2c_suspend_late) from [<c064b7cc>] (dpm_run_callback+0xb4/0x3fc)
+[<c064b7cc>] (dpm_run_callback) from [<c064ce04>] (__device_suspend_late+0xcc/0x16c)
+[<c064ce04>] (__device_suspend_late) from [<c064f0b0>] (dpm_suspend_late+0x10c/0x568)
+[<c064f0b0>] (dpm_suspend_late) from [<c01996f0>] (suspend_devices_and_enter+0x31c/0xc70)
+[<c01996f0>] (suspend_devices_and_enter) from [<c019a43c>] (pm_suspend+0x3f8/0x480)
+[<c019a43c>] (pm_suspend) from [<c0198174>] (state_store+0x6c/0xc8)
+[<c0198174>] (state_store) from [<c035cf4c>] (kernfs_fop_write+0x10c/0x228)
+[<c035cf4c>] (kernfs_fop_write) from [<c02b94a4>] (__vfs_write+0x30/0x1d0)
+[<c02b94a4>] (__vfs_write) from [<c02bc444>] (vfs_write+0xa4/0x170)
+[<c02bc444>] (vfs_write) from [<c02bc690>] (ksys_write+0x60/0xd8)
+[<c02bc690>] (ksys_write) from [<c0100060>] (ret_fast_syscall+0x0/0x28)
+Exception stack(0xec8f3fa8 to 0xec8f3ff0)
+...
+---[ end trace a43afef431782f37 ]---
 
-> [  105.804548]  ? srcu_invoke_callbacks+0xfa/0x280
-> [  105.805591]  kobject_put+0x33e/0x800
-> [  105.806244]  ? refcount_dec_not_one+0x107/0x2f0
-> [  105.807050]  ? srcu_invoke_callbacks+0x14d/0x280
-> [  105.807918]  __device_link_free_srcu+0x79/0xe0
-> [  105.808685]  srcu_invoke_callbacks+0x160/0x280
-> [  105.809729]  process_one_work+0x594/0x1050
-> [  105.810535]  ? process_one_work+0x3ac/0x1050
-> [  105.811314]  ? _raw_spin_lock_irq+0x56/0xe0
-> [  105.812113]  worker_thread+0x4a3/0xc00
-> [  105.812823]  kthread+0x31f/0x3b0
-> [  105.813537]  ? rescuer_thread+0x720/0x720
-> [  105.814227]  ? kthread_bind+0x30/0x30
-> [  105.814920]  ret_from_fork+0x19/0x24
-> [  105.866663] ### dt-test ### EXPECT \ : GPIO line <<int>> (line-B-input) hogged as input
-> [  105.868134] ### dt-test ### EXPECT \ : GPIO line <<int>> (line-A-input) hogged as input
-> [  105.870372] GPIO line 509 (line-B-input) hogged as input
-> [  105.872524] GPIO line 503 (line-A-input) hogged as input
-> [  105.874446] ### dt-test ### EXPECT / : GPIO line <<int>> (line-A-input) hogged as input
->
->                                                           # HH:MM RESULT GOOD BAD GOOD_BUT_DIRTY DIRTY_NOT_BAD
-> git bisect start d0edf98c01ebe0790295cf888a2976d2d04377b1 b9bbe6ed63b2b9f2c9ee5cbd0f2c946a2723f4ce --
-> git bisect  bad 4fde3f7c56e653e1d62102a4a77534f4bfec9689  # 07:04  B      0    17   33   0  Merge 'linux-review/Anson-Huang/ARM-dts-imx-Make-tempmon-node-as-child-of-anatop-node/20200520-230948' into devel-hourly-2020052107
-> git bisect  bad e8344c6f4e6b7a7318fa46dd6fd5418f3e36d010  # 07:04  B      0    17   33   0  Merge 'linux-review/Gabriel-Krisman-Bertazi/iscsi-Fix-deadlock-on-recovery-path-during-GFP_IO-reclaim/20200520-220836' into devel-hourly-2020052107
-> git bisect good 6332b5a106b02909b3ac673832d1e36a901d81fa  # 07:04  G     11     0    0   0  Merge 'stericsson/ux500-dts' into devel-hourly-2020052107
-> git bisect  bad 05c599fa08c02ea883075d05cc544f5e133dad15  # 07:04  B      0    11   27   0  Merge 'ras/edac-misc' into devel-hourly-2020052107
-> git bisect good 25ef63dabd6b9567bd3d7870c5e8595b6b87c678  # 07:05  G     11     0    0   0  Merge 'linux-review/Maulik-Shah/arm64-dts-qcom-sc7180-Correct-the-pdc-interrupt-ranges/20200518-202257' into devel-hourly-2020052107
-> git bisect good 0db2ae8dfea89b3541eb5ffb6e0aed13d921b277  # 07:05  G     11     0    0   0  Merge 'linux-review/Geert-Uytterhoeven/ARM-dts-r9a06g032-Correct-GIC-compatible-value-order/20200519-204708' into devel-hourly-2020052107
-> git bisect good aeee233deb1c06fcf7630402c1f15208aa3d723a  # 07:05  G     11     0    0   0  Merge 'linux-review/Lubomir-Rintel/media-marvell-ccic-Add-support-for-runtime-PM/20200521-053250' into devel-hourly-2020052107
-> git bisect  bad 6872daa8abed0e8bd8447d56cfca80c4d29d6243  # 07:05  B      0    10   27   1  Merge 'linux-review/Dinghao-Liu/i2c-imx-lpi2c-fix-runtime-pm-imbalance-on-error/20200521-033738' into devel-hourly-2020052107
-> git bisect good f23da43a58d09dc6ea58837a45374e15de36537e  # 07:05  G     10     0    0   1  Merge branch 'i2c/for-current' into i2c/for-next
-> git bisect good fadb47fca1f132c123395bca26c69007e816988f  # 07:05  G     11     0    0   0  Merge branch 'i2c/for-5.8' into i2c/for-next
-> git bisect  bad 4f118a7e4686062bd4df4a37e24c22cd71495b5f  # 07:05  B      0    11   27   0  Merge tag 'for-5.8-i2c' of git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into i2c/for-5.8
-> git bisect good c73178b93754edd8449dccd3faf05baafd4d3f0e  # 07:05  G     11     0    0   0  i2c: tegra: Add support for the VI I2C on Tegra210
-> git bisect good 6aab46bc52a8f579879d491c9d8062e03caa5c61  # 07:05  G     30     0    0   3  dt-binding: i2c: add bus-supply property
-> git bisect  bad f89c326dcaa0cb8c3af7764e75eeed4e3f3c879a  # 07:05  B      0    15   31   0  Merge branch 'i2c/for-current-fixed' into i2c/for-5.8
-> git bisect  bad 6fe12cdbcfe35ad4726a619a9546822d34fc934c  # 07:05  B      0    15   45   0  i2c: core: support bus regulator controlling in adapter
-> # first bad commit: [6fe12cdbcfe35ad4726a619a9546822d34fc934c] i2c: core: support bus regulator controlling in adapter
-> git bisect good 6aab46bc52a8f579879d491c9d8062e03caa5c61  # 07:06  G     30     0    0   3  dt-binding: i2c: add bus-supply property
-> # extra tests with debug options
-> git bisect  bad 6fe12cdbcfe35ad4726a619a9546822d34fc934c  # 07:06  B      0    14   30   0  i2c: core: support bus regulator controlling in adapter
-> # extra tests on revert first bad commit
-> git bisect good 3788bb973ab542fcf623106a1cef5d8b1e237f7c  # 07:56  G     10     0    0   0  Revert "i2c: core: support bus regulator controlling in adapter"
-> # good: [3788bb973ab542fcf623106a1cef5d8b1e237f7c] Revert "i2c: core: support bus regulator controlling in adapter"
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/lkp@lists.01.org
+Fixes: 6fe12cdbcfe3 ("i2c: core: support bus regulator controlling in adapter")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+This fixes suspend/resume issue observed on various board with linux-next
+from 20200521.
+---
+ drivers/i2c/i2c-core-base.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 5be24bf8a194..b531f5ad06b2 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -454,11 +454,13 @@ static int i2c_device_remove(struct device *dev)
+ static int i2c_resume_early(struct device *dev)
+ {
+ 	struct i2c_client *client = i2c_verify_client(dev);
+-	struct i2c_adapter *adap = client->adapter;
+ 	int err;
+ 
++	if (!client)
++		return 0;
++
+ 	if (!pm_runtime_status_suspended(&client->dev)) {
+-		err = regulator_enable(adap->bus_regulator);
++		err = regulator_enable(client->adapter->bus_regulator);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -469,15 +471,17 @@ static int i2c_resume_early(struct device *dev)
+ static int i2c_suspend_late(struct device *dev)
+ {
+ 	struct i2c_client *client = i2c_verify_client(dev);
+-	struct i2c_adapter *adap = client->adapter;
+ 	int err;
+ 
++	if (!client)
++		return 0;
++
+ 	err = pm_generic_suspend_late(&client->dev);
+ 	if (err)
+ 		return err;
+ 
+ 	if (!pm_runtime_status_suspended(&client->dev))
+-		return regulator_disable(adap->bus_regulator);
++		return regulator_disable(client->adapter->bus_regulator);
+ 
+ 	return 0;
+ }
+@@ -487,10 +491,12 @@ static int i2c_suspend_late(struct device *dev)
+ static int i2c_runtime_resume(struct device *dev)
+ {
+ 	struct i2c_client *client = i2c_verify_client(dev);
+-	struct i2c_adapter *adap = client->adapter;
+ 	int err;
+ 
+-	err = regulator_enable(adap->bus_regulator);
++	if (!client)
++		return 0;
++
++	err = regulator_enable(client->adapter->bus_regulator);
+ 	if (err)
+ 		return err;
+ 
+@@ -500,14 +506,16 @@ static int i2c_runtime_resume(struct device *dev)
+ static int i2c_runtime_suspend(struct device *dev)
+ {
+ 	struct i2c_client *client = i2c_verify_client(dev);
+-	struct i2c_adapter *adap = client->adapter;
+ 	int err;
+ 
++	if (!client)
++		return 0;
++
+ 	err = pm_generic_runtime_suspend(&client->dev);
+ 	if (err)
+ 		return err;
+ 
+-	return regulator_disable(adap->bus_regulator);
++	return regulator_disable(client->adapter->bus_regulator);
+ }
+ #endif
+ 
+-- 
+2.17.1
+
