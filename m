@@ -2,35 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BE41DEB7C
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 May 2020 17:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2901DEB9A
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 May 2020 17:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730124AbgEVPJP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 May 2020 11:09:15 -0400
-Received: from sauhun.de ([88.99.104.3]:33418 "EHLO pokefinder.org"
+        id S1730028AbgEVPPB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 May 2020 11:15:01 -0400
+Received: from sauhun.de ([88.99.104.3]:33480 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729931AbgEVPJO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 22 May 2020 11:09:14 -0400
+        id S1729929AbgEVPPB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 22 May 2020 11:15:01 -0400
 Received: from localhost (p5486cea4.dip0.t-ipconnect.de [84.134.206.164])
-        by pokefinder.org (Postfix) with ESMTPSA id 356FF2C2072;
-        Fri, 22 May 2020 17:09:13 +0200 (CEST)
-Date:   Fri, 22 May 2020 17:09:12 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 07C832C203F;
+        Fri, 22 May 2020 17:14:59 +0200 (CEST)
+Date:   Fri, 22 May 2020 17:14:59 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     o.rempel@pengutronix.de, u.kleine-koenig@pengutronix.de,
-        ardb@kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Shengju Zhang <zhangshengju@cmss.chinamobile.com>
-Subject: Re: [PATCH] i2c: drivers: Omit superfluous error message in
- efm32_i2c_probe()
-Message-ID: <20200522150912.GI5670@ninjato>
-References: <20200415135734.14660-1-tangbin@cmss.chinamobile.com>
- <20200522150418.GG5670@ninjato>
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     Dejin Zheng <zhengdejin5@gmail.com>, harinik@xilinx.com,
+        soren.brinkmann@xilinx.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: cadence: Add an error handling for
+ platform_get_irq()
+Message-ID: <20200522151459.GK5670@ninjato>
+References: <20200520144821.8069-1-zhengdejin5@gmail.com>
+ <2d99f043-f854-8975-86ee-2f0ba1382275@xilinx.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="U3s59FfKcByyGl+j"
+        protocol="application/pgp-signature"; boundary="enGqbSaueFq5omEL"
 Content-Disposition: inline
-In-Reply-To: <20200522150418.GG5670@ninjato>
+In-Reply-To: <2d99f043-f854-8975-86ee-2f0ba1382275@xilinx.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -38,47 +37,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---U3s59FfKcByyGl+j
+--enGqbSaueFq5omEL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 22, 2020 at 05:04:18PM +0200, Wolfram Sang wrote:
-> On Wed, Apr 15, 2020 at 09:57:34PM +0800, Tang Bin wrote:
-> > In the function efm32_i2c_probe(),when get irq failed,the function
-> > platform_get_irq() logs an error message,so remove redundant message
-> > here.
-> >=20
-> > Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-> > Signed-off-by: Shengju Zhang <zhangshengju@cmss.chinamobile.com>
+
+> The change is valid but the question is if make sense to do it in this
+> way. Some drivers are using devm_request_irq to do do job.
 >=20
-> Applied to for-next, thanks! Please fix the issues Uwe mentioned next
-> time.
+> For example:
+>  	id->irq =3D platform_get_irq(pdev, 0);
+>         ret =3D devm_request_irq(&pdev->dev, id->irq, cdns_i2c_isr, 0,
+>                                   DRIVER_NAME, id);
+>         if (ret)
+> 		return ret;
 
-And try to match the subject line for the subsystem, i.e. for I2C:
-
-"i2c: <drivername>: <topic>"
-
+I like this version better. Maybe we should simply move the
+platform_get_irq() line to the devm_request_irq() call?
 
 
---U3s59FfKcByyGl+j
+--enGqbSaueFq5omEL
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7H6xgACgkQFA3kzBSg
-KbbqGQ/+KB+H2gA8bZHYDnkY6baFlP30t3IjDi5MZ1h92dmiMkEP85LNhMtjkln1
-CIoRFWQZhpBh3cri2EVA++O7efFqakLSPhfQdlKuWkwE9aLEkAR1d6sbxGOeR875
-GjgFVDR4oqKNkDYRSCSl6ZQM+V7XJ5nerFxuWgdHqr6R4jmQaOH/xQhSiKvtunQz
-wm5dJcm5BbK4IQJKpApHEDBvCeVUJ0BMqYJbiVIdioEHXObjMyh8vZTAEbH+lo+b
-qXzirZiB/fAqHgzkFXxVp01JGfF+v/zGFgmja35pPtc3XTcf3NCzREE1cn2s1lOm
-ww5yU8TJcGnXuVsGDG4DgHOPrkNY30WYiMriYCRGKUqjTpH2SmlKJ0+rZ9tjdJeb
-QQ4BX1wEu8kjHXpeqGzZS09nNWqyeEvhExUeOoguqUvfj8mT5SdAdO/eGQOHmHGR
-D7hg5whcmmibAZH6aAc3SE8s/1NCjW63bj4aLB9uCI3yvS7dJAhtAE2zw5ZLfGK6
-WHG9kNeFHWmhezSfnIkKiUEF+twl4waatI0MhLa+HSTHsXjf85rDLY0VUqPGk94Y
-U8LgIbMEeEhFsPWuaazPXXfNSz4fSLZ9TZ96djloAdRDqn/phKXqFYBxxUpX66Lz
-xL/JxiU/HUp9EkCTXh1ytpvi32pTsSKvOLiEbzhzWr6Nbx9ta1o=
-=ivLg
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7H7HMACgkQFA3kzBSg
+KbaDqQ/+MJaolNtFf7X/HY6b5lJiDPGSgYCu7wD6dyNgsOAoYlegP1AltdpDMnfe
+kddLIUFFR/7RCL4vACb0MMHNAF4ZnAAdZOC1s62tn8nQNtFMUmlQNui2OjseFfRZ
+v+VZxfLSXZ7C5ZE/bLFfZyXR+pDxArnEkl4MqePIxxeeg9/qugtsnuDcOqnGpKpK
+7/dsH/eOMBBaa1djikYshttr5FugFd6ZspAhS0GUHC9hCVAP1AxX84o99/Km5GBw
+nAjx80fGy/guTGPTwIna1VMAkniloJFeOM0kSrmDvTudn9pQgkxszAkeQOdLrwkq
+kPvGWgCFy67+51aIoPZc/XsMq+b1prY/cU60uDevHLWTTWp/E9kgR+7wALY0lZAf
+AjK2SWNrkBzjGNWLmGnt6p9XkbA6/q5UnN/9TMV2FPJP/MplfngVF/+jADinJhZ4
++xIJX9WpDlpCx3KX826PCs4eRbSi5ww40AXQ/KwV/+kl+Lsl39phD9hscXJj8qgb
+muTlqXjhMkV4eS7N4stKzLaeQel3cLlJ0LDUyQqA6pN6bE9ywEuaixEq0v0jNqrl
+VVn/rmv0lUSBzGAH/HB7KFeSGlglYCDOuCu5BJ0oFejjfGnO+8QjwXWG+3A8cLA4
+BpGkxMpV4/RIB9cgHyxpEyqsUq1KcmQ6zQ6A6YzGUvjwrJd7x9s=
+=AI5V
 -----END PGP SIGNATURE-----
 
---U3s59FfKcByyGl+j--
+--enGqbSaueFq5omEL--
