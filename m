@@ -2,112 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBF91DF16B
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 May 2020 23:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989801DF222
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 May 2020 00:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731041AbgEVVq2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 May 2020 17:46:28 -0400
-Received: from mout.gmx.net ([212.227.15.15]:45573 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731036AbgEVVq2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 22 May 2020 17:46:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1590183983;
-        bh=0cAvgvTzadxNHdo+0ax5F3HOYfmkZV6eBKXEHJdz5to=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Dn7/hw11+duCRug99FO2L6eEWjPMLUYMIUfENznRtaVlIU8tplGWywpaFTsmLJ9Lz
-         5zr3VxDIncdwL0xXYXJLGmZYd3j1Xo9ByFCn8pvL0PES+ERyRW2PmMiKjUVOH0Zqtw
-         QTJtoX4VNjf+Ai5yXRYL9LkflsmbFr1shKmaQ5LE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [172.16.252.102] ([78.48.61.116]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJmGZ-1jIeJC2i6r-00K7x2; Fri, 22
- May 2020 23:46:23 +0200
-Subject: Re: [PATCH v7 3/3] arm64: dts: msm8916: Add CCI node
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, robert.foss@linaro.org,
-        vkoul@kernel.org, wsa@the-dreams.de
-References: <1586248382-9058-3-git-send-email-loic.poulain@linaro.org>
- <f127d7f3-d69e-1137-4366-5fa77abc5c3d@gmx.net> <20200522165758.GH11847@yoga>
-From:   Carl-Daniel Hailfinger <c-d.hailfinger.devel.2006@gmx.net>
-Message-ID: <763d1526-7949-1f7f-db0c-1558b91a8f24@gmx.net>
-Date:   Fri, 22 May 2020 23:46:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1731397AbgEVWmV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 May 2020 18:42:21 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:37358 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731391AbgEVWmV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 May 2020 18:42:21 -0400
+Received: by mail-il1-f196.google.com with SMTP id r2so1159167ila.4;
+        Fri, 22 May 2020 15:42:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JuCuXLGKu/Cpaze8rVHktM6qeXHp4VtIRO2ypPo4gW0=;
+        b=MwBXZT4VluQgaBM4YTyhs1WPQLrUoC0Y5JISmCV1P/8Yc7s/kN2vZIjJWYQCmqItZa
+         2ievMRPCbuB8UqZb5Si2tFgAMVYoTMriR4D5LAHccy9oafDf9edjYvAVn1kwzqImP3z2
+         d7W0OPTF8csEa6Fbe8IidaTJnAz5PXohNKAXlXQPfUY2wOCBg7g55WUR+5OvxPg9cfOG
+         JaAMmrDYPyS+yLZOZh0Iam9f5KhaLwP07tyCcxEim+IO8N1rvL5QTufGQGdzu2FkUoq/
+         bkjSBuHLKagc1B4zlMeMFo+ABOLS8Eibx8D46q36bGVH2uVWE8ohr3nGxAbDm6sWEAK3
+         RKug==
+X-Gm-Message-State: AOAM5320Yz6j7q1EJZqf7F+BKCYC3flVmv8QRkzZdxnlbYYZGrqAGKAo
+        LftA9f59EWdyjCFz+EOvnodInfc=
+X-Google-Smtp-Source: ABdhPJzavXPf6QraDSSP+C8Cf0zAAigF73AyOksGDL0HvQxYO0MhIQUfBalrWcaf30LuSiDr4uw5bQ==
+X-Received: by 2002:a05:6e02:130e:: with SMTP id g14mr15735257ilr.38.1590187339802;
+        Fri, 22 May 2020 15:42:19 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id e26sm4195065ioe.39.2020.05.22.15.42.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 May 2020 15:42:19 -0700 (PDT)
+Received: (nullmailer pid 848403 invoked by uid 1000);
+        Fri, 22 May 2020 22:42:17 -0000
+Date:   Fri, 22 May 2020 16:42:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Tali Perry <tali.perry1@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kfting@nuvoton.com, benjaminfair@google.com,
+        avifishman70@gmail.com, yuenn@google.com,
+        andriy.shevchenko@linux.intel.com, openbmc@lists.ozlabs.org,
+        tmaimon77@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, wsa@the-dreams.de,
+        brendanhiggins@google.com, robh+dt@kernel.org, venture@google.com,
+        ofery@google.com
+Subject: Re: [PATCH v13 1/3] dt-bindings: i2c: npcm7xx: add NPCM I2C
+ controller
+Message-ID: <20200522224217.GA847856@bogus>
+References: <20200522113312.181413-1-tali.perry1@gmail.com>
+ <20200522113312.181413-2-tali.perry1@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200522165758.GH11847@yoga>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:cOBLooysdq4tC/MePe1bx7EnIFJbepvYMneiS4UAb0IqbCARZO0
- yDJbU9HvRcMyvl9yPagYqjb/sJsJpWP4j/Sp6tz6/HQlxzbtO0Oh14SVllKYxk/K82+nQx7
- jCXNkuV2l+yqQd6+rkSeqOxu4OsNey9paaRC7iiYwjh2v9KEmcah5dluUNBAGP2bJzAliBU
- MsvSTyZzhM9QqiCcKz2/Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DSdKpXIu7t0=:gbPME5TsY058lgEVAKGw6i
- EfRl1RYAl56hpDey/WjAWtbQAhTusctTjSPIl7M0+mS0fmJdqX1LRQVQ8VkN60SOdRRGOfvWL
- uh2EXutu7rsiTRSh7M9W4FgXO8FrkHuN3ZvjX6EZucBI53cuQJjYWny7JQAf1homCQtdO3BVu
- dPwrXZsZ5zI56IQ2m12fnq3JGGsNxNcNoD8PJl3veF6XBPwKXI7Jn3UZycpf0wtlzLDBIspZ2
- u/BWuaTs9OHfQe9BIgZG6ldabGRkJuJSFplhLv4auC1C6YSpefn37eHSqE8vJq12TfjHrsf2g
- GlicdJ7erO4WRr0USk4Y3I+BCVmbNJ0NgBO6b6uWjs/aTzV/aAa5VL0LzDzp+5A8YK3BGsmX3
- ZTq6cgqGMLLUtRkGYhkmaWM9VvduC/VN5lpQ9zH0Vh52R+vM25UaCB8z1wSUzD3cM1d3eqjaF
- wiIQRJqXaJpZUjixhxrStRsf0o6JCJBbJ+YR6NT5RXPOv6F8X6VVk3Ek96u8tUE3hU0XDw0UD
- 89zleqRlfeywlV79CVJIEwJ64CotCgxZd0eeWbZmVYocDD7mw/rGxdIzQa19HXLFwpdgkaBEb
- 6a293wwehCCOkccpVlVK721WA/k7P5ZbxOgRZBUXQmsZDm0H6gwaNU1uOzCXNiHxeypEFfWRm
- cUWmDTur0AlBIYMKg43LFm1iSrdWxljS4Gs/wBHTS2viL9PRV+egX5pbeQ5nJJ0U9Azcec/9f
- NS2ELvHvsdVdP4DCyMaaKUoeOReyDCbcF+CEJHx8Z6WoUzC2ZYuB2WbRFr5YXCbCZ+MCEDaAS
- S5Rrb5muIM75QkL4vPNSTnZcC5g6H2+W1tng8LVSALG7vhefb1YiBJTX75NGrD46tmSkfhITO
- P/zXMnB+NeC9r1xbHPG/60Ba0CmF3UQqn4HDqqS1lenuPghsnYigbkbfNEhVmI3kS4836z7yq
- HtBp1tJveXBkxRbUffQ7kAZOZhXpPeWRxSgtzbpeAO/9OCsaB+t+Np9/3TKxHYmSTpVM4uTSG
- 97QpFCTh/+EfW39xwyKZpCu5r96bfGSU/VHUnSTWIlt/6m9GMNkY8GJwb7s1qOudr18y+3Uu8
- uMLfiz0ap7w0vLlmTizWroP0yFp/6i1cJmmO8tmB09hQywIsef1PpeU8oht+2aB4h66y9TblT
- oTNmByFJz2H1Bz3pYohdmDk6MSmqiACV8MQdxWDZuFplAk1GUSdfRS8x8qsxG2pAEmDnbXI85
- UxzblXo4FI8tYtkF/fI/z7yBYSPYREaxUgrZFAA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200522113312.181413-2-tali.perry1@gmail.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 22.05.20 18:57, Bjorn Andersson wrote:
-> On Fri 22 May 09:10 PDT 2020, Carl-Daniel Hailfinger wrote:
->
->> Hi Loic,
->>
->> it seems that this patch was not picked up in any tree. Do you think
->> sending it to linux-devicetree would help?
->>
-> Afaict it's part of [1] and as such is part of the qcom pull request for
-> v5.8-rc1.
->
-> Please let me know if I'm mistaken and I'll pick it up.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/log/?h=arm64-for-5.8
+On Fri, 22 May 2020 14:33:10 +0300, Tali Perry wrote:
+> Added device tree binding documentation for Nuvoton BMC
+> NPCM I2C controller.
+> 
+> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> ---
+>  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
+> 
 
-Indeed, you're right. My apologies.
 
-Regards,
-Carl-Daniel
+My bot found errors running 'make dt_binding_check' on your patch:
 
->
-> Regards,
-> Bjorn
->
->> Regards,
->> Carl-Daniel
->>
->>> The msm8916 CCI controller provides one CCI/I2C bus.
->>>
->>> Signed-off-by: Loic Poulain <loic.poulain@xxxxxxxxxx>
->>> Reviewed-by: Robert Foss <robert.foss@xxxxxxxxxx>
->>> Reviewed-by: Bjorn Andersson <bjorn.andersson@xxxxxxxxxx>
->>> ---
->>>  v2: add this patch in the series
->>>  v3: add only cci node for now
->>>  v4: no change
->>>  v5: add cci label
->>>  v6: no change
->>>  v7: no change
->>>
->>>  arch/arm64/boot/dts/qcom/msm8916.dtsi | 27 +++++++++++++++++++++++++++
->>>  1 file changed, 27 insertions(+)
+Error: Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.example.dts:22.28-29 syntax error
+FATAL ERROR: Unable to parse input tree
+scripts/Makefile.lib:312: recipe for target 'Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.example.dt.yaml' failed
+make[1]: *** [Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+Makefile:1300: recipe for target 'dt_binding_check' failed
+make: *** [dt_binding_check] Error 2
+
+See https://patchwork.ozlabs.org/patch/1296162
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
 
