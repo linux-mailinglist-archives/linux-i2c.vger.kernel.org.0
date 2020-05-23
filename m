@@ -2,110 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFE31DF6C7
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 May 2020 13:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3983A1DF7AE
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 May 2020 15:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387712AbgEWLBp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 23 May 2020 07:01:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725908AbgEWLBo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 23 May 2020 07:01:44 -0400
-Received: from localhost (p5486c962.dip0.t-ipconnect.de [84.134.201.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5AA4D2070A;
-        Sat, 23 May 2020 11:01:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590231704;
-        bh=xemUji08Zmu27LB6PcMCt2apr23hpQFKF9p4eBeTcUs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PvxGdi8JW2GIxv1ABsPvTRT7aPsZr1ZUbmMFkyEtmN8PfosXq6gmoO2sa8qFQe7o0
-         39mzeGKp7wFGafKBDr+GrIOaPyYxL8PmCLhogdPcUpNa80rM57xQ+ty8+rxMhqoZkY
-         NIAS5Rk4rTZVL7njuQMdcRMuKJwlz3v1bcDz8QxE=
-Date:   Sat, 23 May 2020 13:01:40 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Alain Volmat <alain.volmat@st.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
-        pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@st.com
-Subject: Re: [PATCH 4/4] i2c: stm32f7: Add SMBus-specific protocols support
-Message-ID: <20200523110140.GD3459@ninjato>
-References: <1588657871-14747-1-git-send-email-alain.volmat@st.com>
- <1588657871-14747-5-git-send-email-alain.volmat@st.com>
+        id S2387763AbgEWNgc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 23 May 2020 09:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387529AbgEWNgb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 23 May 2020 09:36:31 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F157C061A0E;
+        Sat, 23 May 2020 06:36:31 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id a5so6213265pjh.2;
+        Sat, 23 May 2020 06:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Ii2tfPDbICPIbAX80VgxFGRLNNHttHydSq8bO/SDJ2E=;
+        b=RN8BwmiM+CA/4AX37RLN5GteJNCnpNgrL01C+K8PE69yAMuNAhvz+WsGDngrBMWf7n
+         a0KUe3ZYNmOM4phj2wNcNgINr14+O/YFXeVIzRg0Yk1zNYgLNCC5IpbAdkqC5Wwi/1a6
+         Xkc5HB00AaUAKd8PNiO3lcusJooyE21wsHGxGyi8moE+95LV7F4iydfyyfsaNxPQDIT1
+         5EzSlOVyWEq+OszTWVHETj0DEjUvKIzu41z3B84gZWnY23bXnQXJJnQ591YN4OtW+tkL
+         VT/w4cW0tzIRrxlxDTNoWo4AYG8yWrJANJCseXV0BUV+35JafLx05yl5fYq+iUGg0Dg2
+         bIqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Ii2tfPDbICPIbAX80VgxFGRLNNHttHydSq8bO/SDJ2E=;
+        b=uY11WUmOPsZ1ZTFtwMY6vmGLZgYSFA8H+boQ2KmGurkxSDelICABN833d8rNOQQA68
+         HQ6sjghjm4+YZ9XjtXOsMV2QNuFrvOYgveuAbtfha4Kzm8tRyNp/XDrGK0fUTnIJdbuj
+         yiSaX2J4hGEqeiGuIKEjA3LxWQMNMZFH27zhZWAdzKDnn9Yh+51zDKRDQv09w9+bxefL
+         uniYb4G1GJfI9i1l1oDTW3a7ZGQhLYY9ZEz1xPjuOJFW49zBBizs3XrZAWSYVWz1IDzp
+         wNR3ZSue8q7GLRPkV+bl9J5jKRBK+DcVkYkX5O2t05vYUjRrAeEUFj3lTqkwAazXjdDD
+         ltCA==
+X-Gm-Message-State: AOAM532RNARucmQVxKeP8BypZCOsb3y6Cup2rUBTgkJHm1Zi0HpuHF8F
+        KQmRle1QpGkDrsnXWjXFAnBDxqmB
+X-Google-Smtp-Source: ABdhPJy8p7lJlKxI4aRRHJ86l83k3hGC2L5VR6CX/tbZiOOHrNeqEKtEyPIFn8F6d9rhiyuLDLGPnQ==
+X-Received: by 2002:a17:902:9882:: with SMTP id s2mr19415096plp.184.1590240990972;
+        Sat, 23 May 2020 06:36:30 -0700 (PDT)
+Received: from localhost (176.122.159.134.16clouds.com. [176.122.159.134])
+        by smtp.gmail.com with ESMTPSA id gd1sm9112654pjb.14.2020.05.23.06.36.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 23 May 2020 06:36:30 -0700 (PDT)
+Date:   Sat, 23 May 2020 21:36:26 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Michal Simek <michal.simek@xilinx.com>, harinik@xilinx.com,
+        soren.brinkmann@xilinx.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: cadence: Add an error handling for
+ platform_get_irq()
+Message-ID: <20200523133626.GA27369@nuc8i5>
+References: <20200520144821.8069-1-zhengdejin5@gmail.com>
+ <2d99f043-f854-8975-86ee-2f0ba1382275@xilinx.com>
+ <20200522151459.GK5670@ninjato>
+ <7763d79e-3a44-2dbe-a4d3-45d40a3a1e02@xilinx.com>
+ <20200522201956.GB21376@ninjato>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u65IjBhB3TIa72Vp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1588657871-14747-5-git-send-email-alain.volmat@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200522201956.GB21376@ninjato>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, May 22, 2020 at 10:19:56PM +0200, Wolfram Sang wrote:
+> 
+> > You know about
+> > devm_platform_get_and_ioremap_resource()
+> > usage.
+> >  Maybe that's the way to go. Because as of today there is no way to pass
+> > position of irq resource.
+> > 
+> > But I expect it will come in near future.
+> 
+> Has been tried, has been nacked:
+> 
+> http://patchwork.ozlabs.org/project/linux-i2c/patch/20200518155304.28639-3-zhengdejin5@gmail.com/
+> 
+Wolfram and Michal, Thanks very much for your comments, I will resend
+devm_platform_request_irq() again. 
 
---u65IjBhB3TIa72Vp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-
-> +static int stm32f7_i2c_reg_client(struct i2c_client *client)
-> +{
-> +	struct stm32f7_i2c_dev *i2c_dev = i2c_get_adapdata(client->adapter);
-> +	int ret;
-> +
-> +	if (client->flags & I2C_CLIENT_HOST_NOTIFY) {
-> +		/* Only enable on the first device registration */
-> +		if (atomic_inc_return(&i2c_dev->host_notify_cnt) == 1) {
-> +			ret = stm32f7_i2c_enable_smbus_host(i2c_dev);
-> +			if (ret) {
-> +				dev_err(i2c_dev->dev,
-> +					"failed to enable SMBus host notify (%d)\n",
-> +					ret);
-> +				return ret;
-> +			}
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-
-So, as mentioned in the other review, I'd like to evaluate other
-possibilities for the above:
-
-- One option is to enable it globally in probe(). Then you lose the
-  possibility to have a device at address 0x08.
-- Enable it in probe() only if there is a generic binding "host-notify".
-- Let the core scan for a device with HOST_NOTIFY when registering an
-  adapter and then call back into the driver somehow?
-
-Other ideas?
+BR,
+Dejin
 
 
---u65IjBhB3TIa72Vp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7JApQACgkQFA3kzBSg
-KbZPBg//Yu/cFAZDkasWicaLj/8KEo4knB3mYgq+/AGe8Sib9oPeQYo5UCBjjXhv
-svRUyxcoHxwRvRo5iG/0hl3SzrAZz1xoz46znwdyGfUm5pX1cDe4o4wYUnuQsuJL
-Kfg4+nQ/qLW75cOj1V1z9Tf7QGCWEhxkedMt+Up7xpDS06ZcwIb+Q4TE+Ziu/LYc
-MoDLi4rbjWVSZKWRKpBvAAXyVLZUoFDJuHGr39IafE9Y3JdixRglrjwDE6T4feQS
-V68mGqcWG1LBPtsyonN6PvPJq3bp9ZxhvhUioLUZCcoxmdSyT6qDewcOHczkwlnr
-ZZ4tX9QZjPLwEe6VaTeJqWWvOkrWPlsDOnUDiZq8WPowITVL7eRNvkBpkRpCRkdH
-hDNnOYtOgjVnGwkgM/S8aUEla8/LBTCWoFiGJ38yL7aNxXbEpE+uVQLsG1d2ci52
-xfZZA0hm0GDxYKnigr11x3mIA8VdZLtQeaTw3EUZAsUWfKV/pfYRElsDZ/dul984
-cSioEGynR6ndQJ+fEAaiRR2KWUaOUEaLCOco6aODIy/stIJnfSEQDk+cTsfBQV8v
-Ptp5MEwkOItxXftIwDLexRaob7cbre+jNa/Nsvl1EcJpqq2pN1dCXM40JVdqA5a7
-J//X8FOfUW0pALR5BSvRFtV9QaqJ/MDXbeww81CCLO8Zo+uv6g4=
-=5Hj7
------END PGP SIGNATURE-----
-
---u65IjBhB3TIa72Vp--
