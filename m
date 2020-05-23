@@ -2,131 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B5B1DF801
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 May 2020 17:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 616AC1DF823
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 May 2020 18:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731279AbgEWP0P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 23 May 2020 11:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728296AbgEWP0P (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 23 May 2020 11:26:15 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D887C05BD43;
-        Sat, 23 May 2020 08:26:15 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id k22so5604062pls.10;
-        Sat, 23 May 2020 08:26:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=KgjVm8tWrHa37c7kZd2xI4RfUCePad/gFc7yFWmFOeo=;
-        b=qRp2WrRI7lTHyjyrKoOw0vtjWIS1Wpqixj4kqYTU9NPDPyM4XfU9gTPZLx8m18/5Y/
-         ezstjLMPlWpW2zBH4o876C/MwC9gv6f4l+SXLNeyB/HBA9mRuQdj+QclUZZZZm6251YN
-         muvkiu4W8PVtlPky9I8CHobq1pN6/OKdExAPCQqIZoADSrxIm6tw1J4EKhEJTZ1IL2Gs
-         cUYOLRjqW7dzWkEDOiJeugBp/R0rcfYIUYvVglV5sDAenr+O3MPW/Ma5AMYGujPjppza
-         whndtOg/uxf3ZXBU2CiyCUSGvXny/aMgPt0+MpbWlYPcW5TZc6rl7ZoVonAUcuSUOfnl
-         ZXdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=KgjVm8tWrHa37c7kZd2xI4RfUCePad/gFc7yFWmFOeo=;
-        b=HyZfMPs7KN3jH33ROcosKBwJdvjPLvq/vVVydBPd9zk2ju+4F06uKd1+iIjrSoJDH6
-         LJAF0iifjTjtmEjx1nei1RNlA2Nk4TWZzfjfmpHpXmlGDVIxAeRX6wJWthMWKWkdqZ5e
-         Yy4LqG1V7q+molQBmlTKqL4QcKSnDU4LSXIYvRymWEJSJl5IYuE9wFXcot7FeWUVf7Ad
-         92IgVONv7ue8gUPZEGE1ohX/msf0SvgLoll0BdLspQFEEGL5L4QMIVnC12+y92PVRNx6
-         7kQf/jhC9GySFvzWaAMXmQayP0JCJYlhbHKHKAoVftE4cY31Iixq7qNPgwQoa59bWe9y
-         vEiw==
-X-Gm-Message-State: AOAM53392W4MNIseP8BvjdmA6KzKtp9SQ6IyOIpmvX3CZMR3cWTDzcpQ
-        jrSWRjg6CkxYZiEO59INFNU=
-X-Google-Smtp-Source: ABdhPJyuV1SWeEQ47sCuTBHZRBDuiROJLFo3l4hPkxjqjiWEGXQ/b+oFdKfDHSK4oG6HK2anU11qQQ==
-X-Received: by 2002:a17:902:d218:: with SMTP id t24mr6083900ply.292.1590247574769;
-        Sat, 23 May 2020 08:26:14 -0700 (PDT)
-Received: from localhost (176.122.159.134.16clouds.com. [176.122.159.134])
-        by smtp.gmail.com with ESMTPSA id cx11sm9485604pjb.36.2020.05.23.08.26.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 23 May 2020 08:26:14 -0700 (PDT)
-Date:   Sat, 23 May 2020 23:26:10 +0800
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Michal Simek <michal.simek@xilinx.com>
-Cc:     wsa@the-dreams.de, harinik@xilinx.com, soren.brinkmann@xilinx.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: cadence: Add an error handling for
- platform_get_irq()
-Message-ID: <20200523152610.GA16405@nuc8i5>
-References: <20200520144821.8069-1-zhengdejin5@gmail.com>
- <2d99f043-f854-8975-86ee-2f0ba1382275@xilinx.com>
+        id S1727819AbgEWQId (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 23 May 2020 12:08:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58824 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726338AbgEWQIc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 23 May 2020 12:08:32 -0400
+Received: from localhost (p5486c962.dip0.t-ipconnect.de [84.134.201.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6EF8A20870;
+        Sat, 23 May 2020 16:08:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590250112;
+        bh=ANHPjU7YN/d/8ujGajrmQwutVoIT1We/3B7WnuT/w74=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lvDJUBXqMRSjg8n2HIjPf7dQWubz99csitAPR5usWrqrKPAIL1Catc8rHP5UFPDbs
+         A9EFEZ1fzWf5Dhv0gfz7Sz8Aea87VlvMU6BHyipRlb9qgVG9HbWFQTxUigXOyjxG0r
+         CYON1jAzGYON31ZSDBAcBNdf3UAwWarbAQlp1El0=
+Date:   Sat, 23 May 2020 18:08:29 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Dejin Zheng <zhengdejin5@gmail.com>
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        michal.simek@xilinx.com, baruch@tkos.co.il, paul@crapouillou.net,
+        khilman@baylibre.com, shawnguo@kernel.org, festevam@gmail.com,
+        vz@mleia.com, heiko@sntech.de, linus.walleij@linaro.org,
+        baohua@kernel.org, ardb@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] drivers: provide devm_platform_request_irq()
+Message-ID: <20200523160828.GE3459@ninjato>
+References: <20200523145157.16257-1-zhengdejin5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dFWYt1i2NyOo1oI9"
 Content-Disposition: inline
-In-Reply-To: <2d99f043-f854-8975-86ee-2f0ba1382275@xilinx.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200523145157.16257-1-zhengdejin5@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, May 22, 2020 at 01:24:57PM +0200, Michal Simek wrote:
-> On 20. 05. 20 16:48, Dejin Zheng wrote:
-> > The driver initialization should be end immediately after found
-> > the platform_get_irq() function return an error.
-> > 
-> > Fixes: df8eb5691c48d3b0 ("i2c: Add driver for Cadence I2C controller")
-> 
-> I wouldn't really consider this as bug. Driver is likely not failing
-> when irq is not defined. It should just fail later on when
-> devm_request_irq is called.
-> Or is there any other issue with it?
-> 
-> > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
-> > ---
-> > v1 -> v2:
-> > 	- add Fixes tag.
-> > 
-> >  drivers/i2c/busses/i2c-cadence.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-> > index 89d58f7d2a25..0e8debe32cea 100644
-> > --- a/drivers/i2c/busses/i2c-cadence.c
-> > +++ b/drivers/i2c/busses/i2c-cadence.c
-> > @@ -912,6 +912,8 @@ static int cdns_i2c_probe(struct platform_device *pdev)
-> >  		return PTR_ERR(id->membase);
-> >  
-> >  	id->irq = platform_get_irq(pdev, 0);
-> > +	if (id->irq < 0)
-> > +		return id->irq;
-> >  
-> >  	id->adap.owner = THIS_MODULE;
-> >  	id->adap.dev.of_node = pdev->dev.of_node;
-> > 
-> 
-> The change is valid but the question is if make sense to do it in this
-> way. Some drivers are using devm_request_irq to do do job.
-> 
-> For example:
->  	id->irq = platform_get_irq(pdev, 0);
->         ret = devm_request_irq(&pdev->dev, id->irq, cdns_i2c_isr, 0,
->                                   DRIVER_NAME, id);
->         if (ret)
-> 		return ret;
-> 
-> But I am also fine with solution above where you fail in quickest way.
-> 
-> Without that Fixed tag
-> Acked-by: Michal Simek <michal.simek@xilinx.com>
->
 
-Michal, Thanks very much for review my patch, As you said, maybe the
-better way is provide a function like the devm_platform_get_and_ioremap_resource().
-So I resend a patch of I gave up before, It's here now:
-https://patchwork.ozlabs.org/project/linux-i2c/patch/20200523145157.16257-3-zhengdejin5@gmail.com/
+--dFWYt1i2NyOo1oI9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Abandon this patch and Thanks again!
+On Sat, May 23, 2020 at 10:51:55PM +0800, Dejin Zheng wrote:
+> It will call devm_request_irq() after platform_get_irq() function
+> in many drivers, sometimes, it is not right for the error handling
+> of these two functions in some drivers. so provide this function
+> to simplify the driver.
+>=20
+> the first patch will provide devm_platform_request_irq(), and the
+> other patch will convert to devm_platform_request_irq() in some
+> i2c bus dirver.
+>=20
+> v1 -> v2:
+> 	- I give up this series of patches in v1 version. I resend this
+> 	  patches v2 by that discussion:
+> 	  https://patchwork.ozlabs.org/project/linux-i2c/patch/20200520144821.80=
+69-1-zhengdejin5@gmail.com/
+> 	  The patch content has not changed.
 
-BR,
-Dejin
+I don't understand. v1 has been nacked because of technical reasons. How
+did the discussion above change the situation? Am I missing something?
 
-> Thanks,
-> Michal
+>=20
+> Dejin Zheng (2):
+>   drivers: provide devm_platform_request_irq()
+>   i2c: busses: convert to devm_platform_request_irq()
+>=20
+>  drivers/base/platform.c            | 33 ++++++++++++++++++++++++++++++
+>  drivers/i2c/busses/i2c-bcm-kona.c  | 16 +++------------
+>  drivers/i2c/busses/i2c-cadence.c   | 10 +++------
+>  drivers/i2c/busses/i2c-digicolor.c | 10 +++------
+>  drivers/i2c/busses/i2c-emev2.c     |  5 ++---
+>  drivers/i2c/busses/i2c-jz4780.c    |  5 ++---
+>  drivers/i2c/busses/i2c-meson.c     | 13 ++++--------
+>  drivers/i2c/busses/i2c-mxs.c       |  9 +++-----
+>  drivers/i2c/busses/i2c-pnx.c       |  9 ++------
+>  drivers/i2c/busses/i2c-rcar.c      |  9 +++-----
+>  drivers/i2c/busses/i2c-rk3x.c      | 14 +++----------
+>  drivers/i2c/busses/i2c-sirf.c      | 10 ++-------
+>  drivers/i2c/busses/i2c-stu300.c    |  4 ++--
+>  drivers/i2c/busses/i2c-synquacer.c | 12 +++--------
+>  include/linux/platform_device.h    |  4 ++++
+>  15 files changed, 72 insertions(+), 91 deletions(-)
+>=20
+> --=20
+> 2.25.0
+>=20
+
+--dFWYt1i2NyOo1oI9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7JSnkACgkQFA3kzBSg
+KbYnHQ/+LTBnD8nOpIlX/IIOqP5LwGj03wn1jJ4soy0RxRLuFFE2Ld6lFQiWAWiA
+5phUgUVfaUIB2GV6rFPsRg3bokfCcHN/e95QokhQ7nuVK6yNrmgIfM7mUYYF59j9
+YCHzfizwwSAprzfcTzTAXiZGksVTk0N6Rlo26/3fublht5+6l4gISxQccGwZiIh+
+xYGuz55m5x18BALCd+q1eNbvDV1NIgqUZv8GAp+vIkBtvo3uefPH/Q5CruZw9Wo4
+xuc8PDrJF+TKosZYVzxKYZZNRqUvopidyitz8H5MXBX/397ZWZB+PIXQFv4OQjH8
+l8KMxqF04wMCz1GqB52KRsPCrIKRWT4J0d0vAdW+5tDbWOrFx5GCwuth7BRvRC9x
+RNfkbdhhc2bTDYB3ROuXkGAmD/sKmvAghZmd84dIishy+QTv64nqINPAeXXI5f0+
+ESlEpyEDdVZUqmS2xDZoCi80N7qp71iH8P2brcW6TuZCyd8nuFEICRzFljAo+PAR
+BH7a+R6e422m2zBKaNsHkWE3GIv45wQJQQO5Ds1zznz3oB2Ha5NcnRno960LmgFE
+l3TQn81Aevo2lEOuhNKv7CkOPp2620RjlxwR/B5PLKa87QcxcbRIHvljNj//fOiz
+eRoem1rxwEYL9/6xyHNqCvTyBfc5L3qkfSMRn2Lezsn3Oevm534=
+=WzE8
+-----END PGP SIGNATURE-----
+
+--dFWYt1i2NyOo1oI9--
