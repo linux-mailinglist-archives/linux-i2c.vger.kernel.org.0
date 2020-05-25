@@ -2,92 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C8741E0D83
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 May 2020 13:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7A51E0E01
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 May 2020 14:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390145AbgEYLnD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 May 2020 07:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390260AbgEYLnC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 May 2020 07:43:02 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE55AC061A0E
-        for <linux-i2c@vger.kernel.org>; Mon, 25 May 2020 04:43:01 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id w10so20479272ljo.0
-        for <linux-i2c@vger.kernel.org>; Mon, 25 May 2020 04:43:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t2vxVYv4xVR6U/qYBOPL/Sh6OEV4BvbiXrni8lSYOZU=;
-        b=rnyO7kdv8TBjKSCx7gstNM2O47jYUphMQvaC4a0iPu7TBrsyJI3OBVC3dAk8EsVhBN
-         jbLU4ohd+DYSB/La1ltq16AHcJz8V4gqI4W44GnxcdsjnO0SqcBjGC+sqdeCAuGCHPXJ
-         uI8WVbld2wpCLQ88NiIRvGbzPXk7tC6V0FwTR3diasJgXE3Jm49AG37cTFX1Nf6FuvuR
-         4zo/fOAAGODQ7XJbzJC4syUoHdM3V4zQeACVIhBoV19SVkYA8q+nmsk/EuFOK6XEso3L
-         z+mw6zMHbuf2gaYUF7dKI1KoyMtFXH/kDONlwmIWX0rYefYg5AiW3JccW4H28PtO0OxH
-         Vh7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t2vxVYv4xVR6U/qYBOPL/Sh6OEV4BvbiXrni8lSYOZU=;
-        b=Vnq4AKGsWb8qenxhi5x8HWBD5wCWyvlqycm6ZsLacVpwKFHER6oGww+jH3l28ybKkl
-         j4awS9tBrG5R3bwqoPg6InXMYKC67AbZ5xQDQsRrk4kGtQ6mQ/mZUbMbYxx+OytSxmLO
-         DRddn+BLJkAGiRBseIGcq+yZXrfJdFL7b+eQkgUwITNGAw9h+9oHnLdbrkYLV77ZKroz
-         UaF1rCPYNTT+3Ewd22dYz8J4vl+mPWRvhZYvkqtb42MBDNkzf3neeOIj1Ki6cwnJv6lG
-         H226RZpCsFnH8WCmB+o+CpIonegFraFcWLZVMqHbLnNCuOh+CBLwmee9jvqih5Z/SSV+
-         ApJw==
-X-Gm-Message-State: AOAM5300JRz/mwlJzmDVkdk8bhBRnE2Zvjq5xSGJBOPUtoR9NFj6hrFm
-        qxUJ7sRdMpHoJMB2JjxU30wlgjluCwyyjaQ9JJpEHg==
-X-Google-Smtp-Source: ABdhPJxNx140asgaRv1GueBI/yRu7vpeWmLICpZwaTeVTw9FxTQuEBl8mS1SSnzvGBwKJd/qZDE7HpkvM/4jtg2DzVk=
-X-Received: by 2002:a2e:711c:: with SMTP id m28mr13376284ljc.104.1590406980230;
- Mon, 25 May 2020 04:43:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200523145157.16257-1-zhengdejin5@gmail.com> <20200523145157.16257-3-zhengdejin5@gmail.com>
-In-Reply-To: <20200523145157.16257-3-zhengdejin5@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 25 May 2020 13:42:49 +0200
-Message-ID: <CACRpkdaPRtN3aXA_TB0dCJr2Lb29-kDwcDPTNWePQHJj5rLutA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] i2c: busses: convert to devm_platform_request_irq()
-To:     Dejin Zheng <zhengdejin5@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Barry Song <baohua@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
+        id S2390363AbgEYMAb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 May 2020 08:00:31 -0400
+Received: from sauhun.de ([88.99.104.3]:35388 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390270AbgEYMAb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 25 May 2020 08:00:31 -0400
+Received: from localhost (p54b3318b.dip0.t-ipconnect.de [84.179.49.139])
+        by pokefinder.org (Postfix) with ESMTPSA id 8CDE92C1FD5;
+        Mon, 25 May 2020 14:00:28 +0200 (CEST)
+Date:   Mon, 25 May 2020 14:00:15 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         linux-i2c <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>
-Content-Type: text/plain; charset="UTF-8"
+        Nicolas Boichat <drinkcat@chromium.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v15 2/2] i2c: core: support bus regulator controlling in
+ adapter
+Message-ID: <20200525120015.GB1149@ninjato>
+References: <20200519072729.7268-1-bibby.hsieh@mediatek.com>
+ <20200519072729.7268-3-bibby.hsieh@mediatek.com>
+ <20200519084833.GH1094@ninjato>
+ <20200522150037.GF5670@ninjato>
+ <CAAFQd5CdmcYpSLsgOPJqo+=kOYundF5NZua4QpdOTTWYSYAopQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GID0FwUMdk1T2AWN"
+Content-Disposition: inline
+In-Reply-To: <CAAFQd5CdmcYpSLsgOPJqo+=kOYundF5NZua4QpdOTTWYSYAopQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, May 23, 2020 at 4:52 PM Dejin Zheng <zhengdejin5@gmail.com> wrote:
 
-> Use devm_platform_request_irq() to simplify code, and it contains
-> platform_get_irq() and devm_request_irq().
->
-> I resend this patch by that discussion.
-> https://patchwork.ozlabs.org/project/linux-i2c/patch/20200520144821.8069-1-zhengdejin5@gmail.com/
->
-> Cc: Michal Simek <michal.simek@xilinx.com>
-> Cc: Wolfram Sang <wsa@the-dreams.de>
-> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+--GID0FwUMdk1T2AWN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Yours,
-Linus Walleij
+> > Reverted because of regression reports in linux-next. I am all open for
+> > the change in general, but it looks to me that we should wait another
+> > cycle.
+> >
+>=20
+> Thanks Wolfram and sorry for the trouble.
+
+No worries. Glad you guys are working on it.
+
+
+--GID0FwUMdk1T2AWN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7Ls0sACgkQFA3kzBSg
+KbYw/RAAnN5EsOpnmC3+OqShVWwua8wemkNAG6xUCRzfA+Z4FFhF26NxVRDUiste
+8tHUjRuVsj9aWjp8ik81EnWGwgdpQ3UeuO/OWqvp0vWfOO3QIseXAaqxfb1heJT6
+3m3kpquvgo5pplmQv++f75zfbZQs4cre3TxvYfAKQx6P2cSYGccOZFc0/sQsYRmZ
+pD0d7w4An9MnYVxmjkgIcqdUN1DeLKWKR4BvKR2yiW4fleXfTNNxfcwDO2jBMIDF
+mpETmazfGbGGHBLFw6Xb5b15m0xhOdshOfaXJbfwKXNiL3OkUSyqjeAfKOTv4ssF
+Y1Prbem4dfbR5sQ0FQFtvHNfwSf2BNqlLPxcIttT3zuio4+/Sm34SDb6JUq73zcW
+Ka6L3HJvOudwA5MH5UFvQH+Nxatr4PXsd0J2d/tIrxLx462yYINhHffBIlvZoKXY
+UyCFE5GSfo0OXtRv4NCTCSD1wtLYruRk1ladOR3PROotOzxnAixzW6bikSpmnofw
+sgzLrKhsjgyHPKBalD39EzUZGjKHgcgMzlx8HGkUbArgENUdMBblY+8AH4tiAzEO
+s8eyEb85sppbjIukh4rAEzzs3KxuvAlzx56+XSrKtCGiNqlw8SEoddE4f/1tNAbA
+pd7VTdGTD6ItZIvgbEle8OC1E2xk0xA0/A0EXuV3s6VeRzjUmTo=
+=N1Bw
+-----END PGP SIGNATURE-----
+
+--GID0FwUMdk1T2AWN--
