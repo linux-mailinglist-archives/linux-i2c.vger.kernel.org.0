@@ -2,298 +2,183 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEA51E0C92
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 May 2020 13:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9011E0D5E
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 May 2020 13:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390059AbgEYLLc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 May 2020 07:11:32 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:37945 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390008AbgEYLLb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 May 2020 07:11:31 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4B7A8581BAB;
-        Mon, 25 May 2020 07:11:29 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 25 May 2020 07:11:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=Vv5kPIeR1V41zyCFFWA96cdAdfO
-        JDTIptD0S3wWysEY=; b=jYyDpNmnaJ4gmFJBVOmHHv4PkJx57H+fRj9eZYrH8WA
-        joEDcN5bj58Sy3WfKppIHGspShDuBInzBffkwcEuiKxUuFS4ua0xFfcVZzTiMJ+1
-        +AbkcLGvkitjnXR5DnFTVNh5DjeFDqeVgOEbVdyActqfJDGWYvG4KH+/yPNAxPQx
-        //gS/8lUJS/M3mqLe0gwjBRFzmu56COMJgu6eJH5/atFzGL8k4Lj+wr+RNBl2+54
-        MfuD97VZ6SlC577CpdtDZK2Ay+Vzn39mTnJ6QGO+rLpcv1vw1LXXN8YAZCtFnf4y
-        aNQTs0cKfTl1YiPUnacjdELZXo4Gv233+GLo+pVbnUQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=Vv5kPI
-        eR1V41zyCFFWA96cdAdfOJDTIptD0S3wWysEY=; b=PsbXnFUEDRHeV3TxEQE1Fv
-        Y+Rjn0Ws6cpeJ0UQ0QOjknNu14+QSgUNC75tv4NJfaLkmdTkBBJxiFRAa6/fN/0F
-        TpOrYKoWWwbJQZFtyb61A5wvHyIj+T3jUdJOKFP92PkutNTrOrLg6K3NOfM+h169
-        oRhBr/jbIBV+FuKZ1Zrmc3II00fW3jkW4XWYmWuOymYlFzXwmOtJhCiN87O0+pXz
-        S+g3k0nMXgcU3Hz6P8qZqtfsLbBqmc9IaMTjtOzK3M7gGTUqnl5gPVLaiAT64noD
-        qXWDe4D0G3oDepRcrx02QaJISrF72InOLHi6GjZY9k2MmsvTH4IyQpK+YbQDFeVw
-        ==
-X-ME-Sender: <xms:4KfLXoe6yR7FnW2BinTRYHzFr_n7zCeixKalBAcwjEpx04YSTWTQmQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedruddvtddgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepudelfeevuddutdetjeeggeefvdetveeftdejteevieffudefgeejleegteek
-    geevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepledtrdekledrieekrd
-    ejieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehm
-    rgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:4KfLXqPR46fSQNEExeM_jSlrzIzhMTCm9trBpyl6F43fz3MFBROGYw>
-    <xmx:4KfLXpgM_b0izEfJB0wVlMZsTPvSr25cK6Lm_ocku-MD8kHmrYW5Wg>
-    <xmx:4KfLXt9YEu_JUVhcginKdWlaP05h9relSKQWutX5gPQzmn3qOu2-6g>
-    <xmx:4afLXiBL6COlcaL_VumRaAPUsr8Jq6LLr7aUCpMl4o3h3fEoOK5Psg>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 25679328005E;
-        Mon, 25 May 2020 07:11:28 -0400 (EDT)
-Date:   Mon, 25 May 2020 13:11:26 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Jian-Hong Pan <jian-hong@endlessm.com>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Eric Anholt <eric@anholt.net>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Linux Upstreaming Team <linux@endlessm.com>
-Subject: Re: [PATCH v2 00/91] drm/vc4: Support BCM2711 Display Pipelin
-Message-ID: <20200525111126.gqjdzbw5wtbmtiwg@gilmour.lan>
-References: <cover.d1e741d37e43e1ba2d2ecd93fc81d42a6df99d14.1587742492.git-series.maxime@cerno.tech>
- <20200427072342.5499-1-jian-hong@endlessm.com>
- <20200428162152.ztsqp7nxqbwqrm6r@gilmour.lan>
- <CAPpJ_efvtVzb_hvoVOeaePh7UdE13wOiiGaDBH38cToB-yhkUg@mail.gmail.com>
- <20200507172158.cybtakpo6cxv6wcs@gilmour.lan>
- <CAPpJ_efxenmSXt2OXkhkQ1jDJ59tyWBDUvmpyOB-bfPMDENQZg@mail.gmail.com>
- <CAPpJ_ed9TMJjN8xS1_3saf5obQhULJSLNgQSAFxgiWM2QX9A7Q@mail.gmail.com>
+        id S2388753AbgEYLeU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 May 2020 07:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388691AbgEYLeT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 May 2020 07:34:19 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8359BC061A0E
+        for <linux-i2c@vger.kernel.org>; Mon, 25 May 2020 04:34:19 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id se13so20120304ejb.9
+        for <linux-i2c@vger.kernel.org>; Mon, 25 May 2020 04:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jcstEHUTZ/N80WBqA3Bn95izpDLoPr9B+Ndu3/xL8P0=;
+        b=Ga7PR3x1cyP9C7dZNKUuPfUY1KrJGuvA8WHisZeod8m2dL5dANd2QFNnF2qILBAMUp
+         FB+Zy0GgV1A+toxiq9lvJDUYPEQESHNeW8AxsWv+fQmZk+u4M1F5udBRgqHDYEeqTElX
+         pPYFoUGIRFqdwOIQimoJCay8uzdD6zsR1A1uI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jcstEHUTZ/N80WBqA3Bn95izpDLoPr9B+Ndu3/xL8P0=;
+        b=MKZLde8zZxx81RGygXY2lcZOibA6yidAqQWlXNHIlBEceWqAVEuYVRtl1Wb5C5GO7T
+         AP25M8hv9gQMvVzUPd2BFhZNULupOeOjZW6YuujJH1CzF3m4Sltu4X0JpxZa1w1ebZEu
+         ZJGM5h6O5p7jXu4LD/enHc9WPy9fyK7MWIfK/WHZ4ws1WyedozSolO7Yko52erTtXr66
+         XlLBUhcpGif1rLlo2QFnhjjL3GJn28E18V5Re6BlRaXUT6dcexVeQqBUagr960V523qW
+         wdo69H7KUsYqjP4vZfaomnLr7S5zFDxTv7D3N/1fLqHkRz2+tyo5LrPNKAUxZtgFCmMP
+         t0Eg==
+X-Gm-Message-State: AOAM533TRiHvdBZ4auUlbWvnW0Voiz9LYNXlcrQtNE0QrWG6CIdsHGYS
+        rSNtIM8OwRuv8ZxCieU37Wr8N1mZTTU=
+X-Google-Smtp-Source: ABdhPJwsirlocK1JUQNHg43TvTZ9U5J2y2F6RR1oH4NwhzzJb18DFdiXjSQCuBlQOXZXP/8sGXMkxw==
+X-Received: by 2002:a17:906:d86:: with SMTP id m6mr19336994eji.434.1590406457926;
+        Mon, 25 May 2020 04:34:17 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id ay6sm15412024edb.29.2020.05.25.04.34.17
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 May 2020 04:34:17 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id j16so4338646wrb.7
+        for <linux-i2c@vger.kernel.org>; Mon, 25 May 2020 04:34:17 -0700 (PDT)
+X-Received: by 2002:adf:92a5:: with SMTP id 34mr15142405wrn.415.1590406456567;
+ Mon, 25 May 2020 04:34:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lbzsv3qh3xvnnzn4"
-Content-Disposition: inline
-In-Reply-To: <CAPpJ_ed9TMJjN8xS1_3saf5obQhULJSLNgQSAFxgiWM2QX9A7Q@mail.gmail.com>
+References: <20200519072729.7268-1-bibby.hsieh@mediatek.com>
+ <20200519072729.7268-3-bibby.hsieh@mediatek.com> <952995ec-0865-d8ff-e285-522705fa9709@ti.com>
+In-Reply-To: <952995ec-0865-d8ff-e285-522705fa9709@ti.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Mon, 25 May 2020 13:34:04 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5Bx=zgsUAg7fA2jfsV_yFyPmnotTWEBEr2V3Nn5HO8qQQ@mail.gmail.com>
+Message-ID: <CAAFQd5Bx=zgsUAg7fA2jfsV_yFyPmnotTWEBEr2V3Nn5HO8qQQ@mail.gmail.com>
+Subject: Re: [PATCH v15 2/2] i2c: core: support bus regulator controlling in adapter
+To:     Grygorii Strashko <grygorii.strashko@ti.com>
+Cc:     Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Grygorii,
 
---lbzsv3qh3xvnnzn4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Mon, May 11, 2020 at 11:12:05AM +0800, Jian-Hong Pan wrote:
-> Jian-Hong Pan <jian-hong@endlessm.com> =E6=96=BC 2020=E5=B9=B45=E6=9C=888=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=882:20=E5=AF=AB=E9=81=93=EF=BC=
-=9A
+On Fri, May 22, 2020 at 7:59 PM Grygorii Strashko
+<grygorii.strashko@ti.com> wrote:
+>
+>
+>
+> On 19/05/2020 10:27, Bibby Hsieh wrote:
+> > Although in the most platforms, the bus power of i2c
+> > are alway on, some platforms disable the i2c bus power
+> > in order to meet low power request.
 > >
-> > Maxime Ripard <maxime@cerno.tech> =E6=96=BC 2020=E5=B9=B45=E6=9C=888=E6=
-=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=881:22=E5=AF=AB=E9=81=93=EF=BC=9A
-> > >
-> > > On Mon, May 04, 2020 at 02:35:08PM +0800, Jian-Hong Pan wrote:
-> > > > Maxime Ripard <maxime@cerno.tech> =E6=96=BC 2020=E5=B9=B44=E6=9C=88=
-29=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=8812:21=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > On Mon, Apr 27, 2020 at 03:23:42PM +0800, Jian-Hong Pan wrote:
-> > > > > > Hi Maxime,
-> > > > > >
-> > > > > > Thanks for your V2 patch series!  I'm testing it.
-> > > > > >
-> > > > > > This patch series is applied upon mainline kernel 5.7-rc2 clean=
-ly and built.
-> > > > > > System can boot into console text mode, but no graphic UI.
-> > > > > >
-> > > > > > Get the error in vc5_hdmi_phy_init(), and full dmesg is at [1]:
-> > > > > >
-> > > > > > [    5.587543] vc4_hdmi fef00700.hdmi: Unknown register ID 46
-> > > > > > [    5.587700] debugfs: Directory 'fef00700.hdmi' with parent '=
-vc4-hdmi' already present!
-> > > > > > [    5.588070] vc4_hdmi fef00700.hdmi: vc4-hdmi-hifi <-> fef007=
-00.hdmi mapping ok
-> > > > > > [    5.588076] vc4_hdmi fef00700.hdmi: ASoC: no DMI vendor name!
-> > > > > > [    5.588263] vc4-drm gpu: bound fef00700.hdmi (ops vc4_hdmi_o=
-ps)
-> > > > > > [    5.588299] vc4_hdmi fef05700.hdmi: Unknown register ID 46
-> > > > > > [    5.588373] debugfs: Directory 'vc4-hdmi' with parent 'asoc'=
- already present!
-> > > > > > [    5.588673] vc4_hdmi fef05700.hdmi: vc4-hdmi-hifi <-> fef057=
-00.hdmi mapping ok
-> > > > > > [    5.588677] vc4_hdmi fef05700.hdmi: ASoC: no DMI vendor name!
-> > > > > > [    5.588809] vc4-drm gpu: bound fef05700.hdmi (ops vc4_hdmi_o=
-ps)
-> > > > > > [    5.588854] vc4-drm gpu: bound fe806000.vec (ops vc4_vec_ops)
-> > > > > > [    5.588897] vc4-drm gpu: bound fe004000.txp (ops vc4_txp_ops)
-> > > > > > [    5.588934] vc4-drm gpu: bound fe400000.hvs (ops vc4_hvs_ops)
-> > > > > > [    5.588990] vc4-drm gpu: bound fe206000.pixelvalve (ops vc4_=
-crtc_ops)
-> > > > > > [    5.589030] vc4-drm gpu: bound fe207000.pixelvalve (ops vc4_=
-crtc_ops)
-> > > > > > [    5.589074] vc4-drm gpu: bound fe20a000.pixelvalve (ops vc4_=
-crtc_ops)
-> > > > > > [    5.589106] vc4-drm gpu: bound fe216000.pixelvalve (ops vc4_=
-crtc_ops)
-> > > > > > [    5.589145] vc4-drm gpu: bound fec12000.pixelvalve (ops vc4_=
-crtc_ops)
-> > > > > > [    5.589294] checking generic (3e513000 6d8c00) vs hw (0 ffff=
-ffffffffffff)
-> > > > > > [    5.589297] fb0: switching to vc4drmfb from simple
-> > > > > > [    5.589433] Console: switching to colour dummy device 80x25
-> > > > > > [    5.589481] [drm] Supports vblank timestamp caching Rev 2 (2=
-1.10.2013).
-> > > > > > [    5.589816] [drm] Initialized vc4 0.0.0 20140616 for gpu on =
-minor 0
-> > > > > > [    5.601079] ------------[ cut here ]------------
-> > > > > > [    5.601095] WARNING: CPU: 2 PID: 127 at drivers/gpu/drm/vc4/=
-vc4_hdmi_phy.c:413 vc5_hdmi_phy_init+0x7ac/0x2078
-> > > > > > [    5.601097] Modules linked in:
-> > > > > > [    5.601103] CPU: 2 PID: 127 Comm: kworker/2:1 Not tainted 5.=
-7.0-rc2-00091-ga181df59a930 #7
-> > > > > > [    5.601105] Hardware name: Raspberry Pi 4 Model B (DT)
-> > > > > > [    5.601112] Workqueue: events deferred_probe_work_func
-> > > > > > [    5.601116] pstate: 20000005 (nzCv daif -PAN -UAO)
-> > > > > > [    5.601119] pc : vc5_hdmi_phy_init+0x7ac/0x2078
-> > > > > > [    5.601123] lr : vc4_hdmi_encoder_enable+0x1b8/0x1ac0
-> > > > > > [    5.601124] sp : ffff80001217b410
-> > > > > > [    5.601126] x29: ffff80001217b410 x28: ffff0000ec6370f0
-> > > > > > [    5.601129] x27: ffff0000f650d400 x26: 000000008a500000
-> > > > > > [    5.601132] x25: ffff8000113b4ac0 x24: 0000000000002060
-> > > > > > [    5.601135] x23: 000000000a500000 x22: 0000000000000300
-> > > > > > [    5.601137] x21: 0000000008d9ee20 x20: ffff0000ec535080
-> > > > > > [    5.601140] x19: 000000010989e7c0 x18: 0000000000000000
-> > > > > > [    5.601142] x17: 0000000000000001 x16: 0000000000005207
-> > > > > > [    5.601145] x15: 00004932ad293c92 x14: 0000000000000137
-> > > > > > [    5.601147] x13: ffff800010015000 x12: 0000000000000001
-> > > > > > [    5.601150] x11: 0000000000000001 x10: 0000000000000000
-> > > > > > [    5.601152] x9 : 0000000000000000 x8 : ffff800010015038
-> > > > > > [    5.601154] x7 : 0000000000000001 x6 : ffff80001217b368
-> > > > > > [    5.601157] x5 : 0000000000000000 x4 : 000000000000004c
-> > > > > > [    5.601159] x3 : 0000000000000000 x2 : ffff8000113b4ac0
-> > > > > > [    5.601162] x1 : ffff8000120c5f44 x0 : 00000000dc8984ff
-> > > > > > [    5.601164] Call trace:
-> > > > > > [    5.601169]  vc5_hdmi_phy_init+0x7ac/0x2078
-> > > > > > [    5.601172]  vc4_hdmi_encoder_enable+0x1b8/0x1ac0
-> > > > > > [    5.601176]  drm_atomic_helper_commit_modeset_enables+0x224/=
-0x248
-> > > > > > [    5.601179]  vc4_atomic_complete_commit+0x400/0x558
-> > > > > > [    5.601182]  vc4_atomic_commit+0x1e0/0x200
-> > > > > > [    5.601185]  drm_atomic_commit+0x4c/0x60
-> > > > > > [    5.601190]  drm_client_modeset_commit_atomic.isra.0+0x17c/0=
-x238
-> > > > > > [    5.601192]  drm_client_modeset_commit_locked+0x5c/0x198
-> > > > > > [    5.601195]  drm_client_modeset_commit+0x30/0x58
-> > > > > > [    5.601201]  drm_fb_helper_restore_fbdev_mode_unlocked+0x78/=
-0xe0
-> > > > > > [    5.601204]  drm_fb_helper_set_par+0x30/0x68
-> > > > > > [    5.601208]  fbcon_init+0x3d4/0x598
-> > > > > > [    5.601212]  visual_init+0xb0/0x108
-> > > > > > [    5.601214]  do_bind_con_driver+0x1d0/0x3a8
-> > > > > > [    5.601217]  do_take_over_console+0x144/0x208
-> > > > > > [    5.601219]  do_fbcon_takeover+0x68/0xd8
-> > > > > > [    5.601222]  fbcon_fb_registered+0x100/0x118
-> > > > > > [    5.601226]  register_framebuffer+0x1f4/0x338
-> > > > > > [    5.601229]  __drm_fb_helper_initial_config_and_unlock+0x2f8=
-/0x4a0
-> > > > > > [    5.601232]  drm_fbdev_client_hotplug+0xd4/0x1b0
-> > > > > > [    5.601235]  drm_fbdev_generic_setup+0xb0/0x130
-> > > > > > [    5.601238]  vc4_drm_bind+0x184/0x1a0
-> > > > > > [    5.601241]  try_to_bring_up_master+0x168/0x1c8
-> > > > > > [    5.601244]  __component_add+0xa4/0x170
-> > > > > > [    5.601246]  component_add+0x14/0x20
-> > > > > > [    5.601248]  vc4_vec_dev_probe+0x20/0x30
-> > > > > > [    5.601252]  platform_drv_probe+0x54/0xa8
-> > > > > > [    5.601254]  really_probe+0xd8/0x320
-> > > > > > [    5.601256]  driver_probe_device+0x58/0xf0
-> > > > > > [    5.601258]  __device_attach_driver+0x84/0xc8
-> > > > > > [    5.601263]  bus_for_each_drv+0x78/0xc8
-> > > > > > [    5.601265]  __device_attach+0xe4/0x140
-> > > > > > [    5.601267]  device_initial_probe+0x14/0x20
-> > > > > > [    5.601269]  bus_probe_device+0x9c/0xa8
-> > > > > > [    5.601271]  deferred_probe_work_func+0x74/0xb0
-> > > > > > [    5.601276]  process_one_work+0x1bc/0x338
-> > > > > > [    5.601279]  worker_thread+0x1f8/0x428
-> > > > > > [    5.601282]  kthread+0x138/0x158
-> > > > > > [    5.601286]  ret_from_fork+0x10/0x1c
-> > > > > > [    5.601288] ---[ end trace cfba0996218c3f3d ]---
-> > > > >
-> > > > > Thanks for testing!
-> > > > >
-> > > > > Do you have a bit more details regarding your setup? Was it conne=
-cted to an
-> > > > > external display?
-> > > >
-> > > > Yes, the HDMI cable is connected to HDMI0 port on RPi 4.
-> > > >
-> > > > > If so, do you know the resolution it was trying to setup?
-> > > >
-> > > > According to the log, I think it is 1920x1080:
-> > > > Apr 27 15:37:25 endless gdm-Xorg-:0[1960]: (II) modeset(0): Output
-> > > > HDMI-1 connected
-> > > > Apr 27 15:37:25 endless gdm-Xorg-:0[1960]: (II) modeset(0): Output
-> > > > HDMI-2 disconnected
-> > > > Apr 27 15:37:25 endless gdm-Xorg-:0[1960]: (II) modeset(0): Output
-> > > > Composite-1 disconnected
-> > > > Apr 27 15:37:25 endless gdm-Xorg-:0[1960]: (II) modeset(0): Using
-> > > > exact sizes for initial modes
-> > > > Apr 27 15:37:25 endless gdm-Xorg-:0[1960]: (II) modeset(0): Output
-> > > > HDMI-1 using initial mode 1920x1080 +0+0
-> > > >
-> > > > https://gist.github.com/starnight/45e1468bfa0426a54d2fb4a9269cfb94
-> > >
-> > > It looks to be fairly standard then, and I'm testing on the same reso=
-lution so
-> > > it should be alright.
-> > >
-> > > Given from your log, it looks like you're running as arm64 though, wh=
-ile I stuck
-> > > with arm32, so it could be the explanation.
+> > We get and enable bulk regulator in i2c adapter device.
 > >
-> > Yes, I build it as arm64.
+> > Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+> > ---
+> >   drivers/i2c/i2c-core-base.c | 84 +++++++++++++++++++++++++++++++++++++
+> >   include/linux/i2c.h         |  2 +
+> >   2 files changed, 86 insertions(+)
 > >
-> > > Can you share your config.txt and .config so that I can try to reprod=
-uce it
-> > > here?
+> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> > index 5cc0b0ec5570..e1cc8d46bc51 100644
+> > --- a/drivers/i2c/i2c-core-base.c
+> > +++ b/drivers/i2c/i2c-core-base.c
+> > @@ -313,12 +313,14 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
+> >   static int i2c_device_probe(struct device *dev)
+> >   {
+> >       struct i2c_client       *client = i2c_verify_client(dev);
+> > +     struct i2c_adapter      *adap;
+> >       struct i2c_driver       *driver;
+> >       int status;
 > >
-> > Here is the config
-> > https://gist.github.com/starnight/320b757441b6769c36160704b401c98b
->=20
-> Here is the only one line in config.txt:
-> enable_uart=3D1
->=20
-> Actually, we make the Raspberry Pi's firmware bring up U-Boot, then
-> U-Boot boots kernel.
+> >       if (!client)
+> >               return 0;
+> >
+> > +     adap = client->adapter;
+> >       driver = to_i2c_driver(dev->driver);
+> >
+> >       client->irq = client->init_irq;
+> > @@ -378,6 +380,12 @@ static int i2c_device_probe(struct device *dev)
+> >
+> >       dev_dbg(dev, "probe\n");
+> >
+> > +     status = regulator_enable(adap->bus_regulator);
+> > +     if (status < 0) {
+> > +             dev_err(&adap->dev, "Failed to enable power regulator\n");
+> > +             goto err_clear_wakeup_irq;
+> > +     }
+> > +
+> >       status = of_clk_set_defaults(dev->of_node, false);
+> >       if (status < 0)
+> >               goto err_clear_wakeup_irq;
+> > @@ -414,12 +422,14 @@ static int i2c_device_probe(struct device *dev)
+> >   static int i2c_device_remove(struct device *dev)
+> >   {
+> >       struct i2c_client       *client = i2c_verify_client(dev);
+> > +     struct i2c_adapter      *adap;
+> >       struct i2c_driver       *driver;
+> >       int status = 0;
+> >
+> >       if (!client || !dev->driver)
+> >               return 0;
+> >
+> > +     adap = client->adapter;
+> >       driver = to_i2c_driver(dev->driver);
+> >       if (driver->remove) {
+> >               dev_dbg(dev, "remove\n");
+> > @@ -427,6 +437,8 @@ static int i2c_device_remove(struct device *dev)
+> >       }
+> >
+> >       dev_pm_domain_detach(&client->dev, true);
+> > +     if (!pm_runtime_status_suspended(&client->dev))
+> > +             regulator_disable(adap->bus_regulator);
+>
+> Not sure this check is correct.
+>
+> i2c_device_probe()
+>   - regulator_enable - 1
+>
+> pm_runtime_get()
+>   - regulator_enable - 2
+>
 
-I gave it a try today, and it seems that you also need arm_64bit=3D1 in the
-config.txt, but then the communication with the firmware doesn't work anymo=
-re
-and the kernel just falls apart.
+I believe regulator_enable() wouldn't be called again, because the
+device was already active in probe. However, I've been having
+difficulties keeping track of runtime PM semantics under various
+circumstances (e.g. ACPI vs DT), so can't tell for sure anymore.
 
-I'll give it a try with U-boot
-
-Maxime
-
---lbzsv3qh3xvnnzn4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXsun3gAKCRDj7w1vZxhR
-xXSYAQCnt0YRJPKOPG+skBrHIlypm4uggWYIaEMD/VnyA+tWpwD9EpXr8GswZ8ix
-B6U0tgFqEe/49kOvO4EzyKOUMGHmKww=
-=E/ln
------END PGP SIGNATURE-----
-
---lbzsv3qh3xvnnzn4--
+> i2c_device_remove()
+>   - pm_runtime_status_suspended() flase
+>     - regulator_disable() - 1 --> still active?
+>
+> Sorry, I probably missing smth.
+>
+> >
+> >       dev_pm_clear_wake_irq(&client->dev);
+> >       device_init_wakeup(&client->dev, false);
+> > @@ -438,6 +450,72 @@ static int i2c_device_remove(struct device *dev)
+> >       return status;
+> >   }
+> >
+>
+> [...]
+>
+> --
+> Best regards,
+> grygorii
