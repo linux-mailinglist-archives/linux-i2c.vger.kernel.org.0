@@ -2,59 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1C41E0EF3
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 May 2020 15:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1971E0F39
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 May 2020 15:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390654AbgEYNBh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 May 2020 09:01:37 -0400
-Received: from mga06.intel.com ([134.134.136.31]:61383 "EHLO mga06.intel.com"
+        id S2390654AbgEYNQM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 May 2020 09:16:12 -0400
+Received: from mga18.intel.com ([134.134.136.126]:64597 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388738AbgEYNBg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 25 May 2020 09:01:36 -0400
-IronPort-SDR: +WEbcvz6KbTVDxe417hrDmGNEuVVJsTIe/Zgm9KGnCfvKKSCaGse0b7cKyxaNltAOQwLcKKDeu
- dAxYlOUIJUqg==
+        id S2388757AbgEYNQL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 25 May 2020 09:16:11 -0400
+IronPort-SDR: gFHRJKf/fzgIkRWbiRwQ2XSMYXB/UwWQlvks7Qjuvw81DiGAx6fXNJa7e+QLXifs6GBibN5hzl
+ Fzb8HExQv0hw==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2020 06:01:34 -0700
-IronPort-SDR: Rli/mR6WDMx9Hx5ViPLLh25L60zuFtnubw00/s5RY3kRaHybaQtEQWu371E/UlTfgFLB1vz92w
- vQPs1Bp8bFyA==
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2020 06:16:11 -0700
+IronPort-SDR: 29F1ZN30wZD0n3NYF9s7La+3jVNm76brsOCh1moocqg5VGKKI5v9XVZenm7WyJTxli7pWH8e+R
+ a2bJsIDr/DYg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,433,1583222400"; 
-   d="scan'208";a="266141381"
+   d="scan'208";a="266147156"
 Received: from mylly.fi.intel.com (HELO [10.237.72.67]) ([10.237.72.67])
-  by orsmga003.jf.intel.com with ESMTP; 25 May 2020 06:01:27 -0700
-Subject: Re: [PATCH v2 07/12] i2c: designware: Move Baytrail sem config to the
- platform if-clause
+  by orsmga003.jf.intel.com with ESMTP; 25 May 2020 06:16:06 -0700
+Subject: Re: [PATCH v2 08/12] i2c: designware: Introduce platform drivers glue
+ layer interface
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
         Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Max Staudt <max@enpas.org>, Stefan Roese <sr@denx.de>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+        Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
 References: <20200306132001.1B875803087C@mail.baikalelectronics.ru>
  <20200510095019.20981-1-Sergey.Semin@baikalelectronics.ru>
- <20200510095019.20981-8-Sergey.Semin@baikalelectronics.ru>
- <da6d8b18-b808-fd86-bbd2-13e7a90b2a5e@linux.intel.com>
- <20200521022215.ubvhuop47aflqkkb@mobilestation>
+ <20200510095019.20981-9-Sergey.Semin@baikalelectronics.ru>
+ <4950bb1e-302f-947e-1924-452a8169b504@linux.intel.com>
+ <20200521023735.mja62ujmxebgwyef@mobilestation>
 From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <f01b3082-082c-8ce9-d0f7-f9ff952a37bf@linux.intel.com>
-Date:   Mon, 25 May 2020 16:01:26 +0300
+Message-ID: <80cf1d67-5de1-f3f1-27a0-b88cc105b228@linux.intel.com>
+Date:   Mon, 25 May 2020 16:16:05 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200521022215.ubvhuop47aflqkkb@mobilestation>
+In-Reply-To: <20200521023735.mja62ujmxebgwyef@mobilestation>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -63,75 +62,45 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 5/21/20 5:22 AM, Serge Semin wrote:
-> On Wed, May 20, 2020 at 03:16:14PM +0300, Jarkko Nikula wrote:
->> On 5/10/20 12:50 PM, Serge Semin wrote:
->>> Currently Intel Baytrail I2C semaphore is a feature of the DW APB I2C
->>> platform driver. It's a bit confusing to see it's config in the menu at
->>> some separated place with no reference to the platform code. Lets move the
->>> config definition under the if-I2C_DESIGNWARE_PLATFORM clause. By doing so
->>> the config menu will display the feature right below the DW I2C platform
->>> driver item and will indent it to the right so signifying its belonging.
->>>
->>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
->>> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
->>> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->>> Cc: Paul Burton <paulburton@kernel.org>
->>> Cc: Ralf Baechle <ralf@linux-mips.org>
->>> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
->>> Cc: Wolfram Sang <wsa@the-dreams.de>
->>> Cc: Rob Herring <robh+dt@kernel.org>
->>> Cc: Frank Rowand <frowand.list@gmail.com>
->>> Cc: linux-mips@vger.kernel.org
->>> Cc: devicetree@vger.kernel.org
->>> ---
->>>    drivers/i2c/busses/Kconfig | 30 +++++++++++++++++-------------
->>>    1 file changed, 17 insertions(+), 13 deletions(-)
->>>
->>> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
->>> index 368aa64e9266..ed6927c4c540 100644
->>> --- a/drivers/i2c/busses/Kconfig
->>> +++ b/drivers/i2c/busses/Kconfig
->>> @@ -530,8 +530,8 @@ config I2C_DESIGNWARE_CORE
->>>    config I2C_DESIGNWARE_PLATFORM
->>>    	tristate "Synopsys DesignWare Platform"
->>> -	select I2C_DESIGNWARE_CORE
->>>    	depends on (ACPI && COMMON_CLK) || !ACPI
->>> +	select I2C_DESIGNWARE_CORE
->>>    	help
->>>    	  If you say yes to this option, support will be included for the
->>>    	  Synopsys DesignWare I2C adapter.
->>> @@ -539,6 +539,22 @@ config I2C_DESIGNWARE_PLATFORM
->>>    	  This driver can also be built as a module.  If so, the module
->>>    	  will be called i2c-designware-platform.
->>> +if I2C_DESIGNWARE_PLATFORM
->>> +
->>> +config I2C_DESIGNWARE_BAYTRAIL
->>> +	bool "Intel Baytrail I2C semaphore support"
->>> +	depends on ACPI
->>> +	depends on (I2C_DESIGNWARE_PLATFORM=m && IOSF_MBI) || \
->>> +		   (I2C_DESIGNWARE_PLATFORM=y && IOSF_MBI=y)
->>> +	help
->>> +	  This driver enables managed host access to the PMIC I2C bus on select
->>> +	  Intel BayTrail platforms using the X-Powers AXP288 PMIC. It allows
->>> +	  the host to request uninterrupted access to the PMIC's I2C bus from
->>> +	  the platform firmware controlling it. You should say Y if running on
->>> +	  a BayTrail system using the AXP288.
->>> +
->>> +endif # I2C_DESIGNWARE_PLATFORM
->>> +
+Hi
+
+On 5/21/20 5:37 AM, Serge Semin wrote:
+> On Wed, May 20, 2020 at 03:46:11PM +0300, Jarkko Nikula wrote:
+>> Hi
 >>
->> Is the added "if I2C_DESIGNWARE_PLATFORM" needed here? Should the "depends
->> on" be enough?
+>> On 5/10/20 12:50 PM, Serge Semin wrote:
+>>> Seeing the DW I2C platform driver is getting overcomplicated with a lot of
+>>> vendor-specific configs let's introduce a glue-layer interface so new
+>>> platforms which equipped with Synopsys Designware APB I2C IP-core would
+>>> be able to handle their peculiarities in the dedicated objects.
+>>>
+>> Comment to this patch and patches 9/12 and 12/12:
+>>
+>> Currently i2c-designware-platdrv.c is about 500 lines of code so I don't
+>> think it's too overcomplicated. But I feel we have already too many Kconfig
+>> options and source modules for i2c-designware and obviously would like to
+>> push back a little from adding more.
+>>
+>> I don't think i2c-designware-platdrv.c becomes yet too complicated if Baikal
+>> related code is added there, perhaps under #ifdef CONFIG_OF like MSCC Ocelot
+>> code is currently.
 > 
-> The idea was to add if-endif clause here for features possibly added sometime
-> in future. But using normal "depends on I2C_DESIGNWARE_PLATFORM" shall make
-> the config depicted as an indented sub-config as well. Would you like me to
-> remove the if-clause and use the depends on operator instead?
+> Well, it's up to you to decide, what solution is more suitable for you to
+> maintain. My idea of detaching the MSCC and Baikal-T1 code to the dedicated
+> source files was to eventually move the whole i2c-designware-* set of files
+> into a dedicated directory drivers/i2c/buses/dw as it's done for some others
+> Synopsys DesignWare controllers: drivers/pci/controller/dwc/, drivers/usb/dwc2,
+> drivers/usb/dwc3, drivers/net/ethernet/synopsys/ . If you think, that it's too
+> early for Dw I2C code to live in a dedicated directory, fine with me. I can
+> merge the MSCC and Baikal-T1 code back into the i2c-designware-platdrv.c .
+> So what's your final word in this matter?
 > 
-Yes, please remove it from this patch. Keeps this patch simpler and if 
-some future feature needs it then that patch(set) is the right place to 
-add it.
+I think sub directory decision under each subsystem is more subsystem 
+rather than vendor/driver specific. Good point anyway.
+
+For this patchset I'd like more if changes are done to 
+i2c-designware-platdrv.c since it's not too complicated yet :-)
+
+If it starts to look too messy in the future then it's time split I think.
 
 Jarkko
