@@ -2,133 +2,195 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B9E1E2928
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 May 2020 19:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E551C1E2993
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 May 2020 20:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389467AbgEZRgS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 26 May 2020 13:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389452AbgEZRgR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 May 2020 13:36:17 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A296CC03E96D
-        for <linux-i2c@vger.kernel.org>; Tue, 26 May 2020 10:36:16 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id cx22so88919pjb.1
-        for <linux-i2c@vger.kernel.org>; Tue, 26 May 2020 10:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Bl//2pYHj3csa8N7S/mTuxuIBaa/b+phWcHwiPQzkOw=;
-        b=BkNpRVV/r0N3GqR1VZDQH7oKI+aSLYpW+DUKMWD8EO9crlNX+d6/gzNWbQUMRCUbrv
-         SvhMa7XoTvfvnOIdJqBGdbQSnBg0Vb2yOi4erDEQqgCj3ifVWq6VHG5GY/0MN1h8Fj7j
-         M3qZRyHRctXoZITEL6GOVvZs5fmtLKWtZikc4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Bl//2pYHj3csa8N7S/mTuxuIBaa/b+phWcHwiPQzkOw=;
-        b=c3TbRCOWvLN4chzSYf76aVp9kKzZEZCvIr7a0jxUFdbq4Qn8DMblfQMpocFI+dfffl
-         LoIrydy40TLZED4eGXajBgTBoy7afShjINLjen+k9XFaS0/2/G4cSw4JwtlhvLV/XNhQ
-         t1u69CFWlqfvxEjI0M6eAb0Xbdf0fXTbcGE0xWyI8ytkprm8I5Y4VphO/3MDD3cuphIh
-         tdeZfvCilOkpHI+bEalZjOu/JBaSI1nBUd92+DspnVPZrP9quVU46PgPt+By7QAQpViF
-         wII8kdNxI63vMdBP2AFQR5NrC3RPmUogrPRUZhVCAz4DAPuL1jyss8NNvjaUhJeeXvYA
-         b0Vw==
-X-Gm-Message-State: AOAM530/7Zvs7ispI8e3idLfyf2OUUNgummsr54b4m6sJYr19Ls4uzpK
-        9p6/6RHdHc2t/+89n/9UySXE7A==
-X-Google-Smtp-Source: ABdhPJyzUgvTne5XzQDrFY8l1KASpKHwXP04J+NhScYWwbDrv+H8LoktzSM90MIjDWKJ7/+vEh9tmg==
-X-Received: by 2002:a17:90a:c78f:: with SMTP id gn15mr335118pjb.103.1590514576158;
-        Tue, 26 May 2020 10:36:16 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id u45sm112166pjb.7.2020.05.26.10.36.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2020 10:36:15 -0700 (PDT)
-Date:   Tue, 26 May 2020 10:36:13 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        msavaliy@codeaurora.org, evgreen@chromium.org
-Subject: Re: [PATCH V7 6/7] spi: spi-qcom-qspi: Add interconnect support
-Message-ID: <20200526173613.GF4525@google.com>
-References: <1590497690-29035-1-git-send-email-akashast@codeaurora.org>
- <1590497690-29035-7-git-send-email-akashast@codeaurora.org>
+        id S1729014AbgEZSDo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 26 May 2020 14:03:44 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:40288 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728151AbgEZSDo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 May 2020 14:03:44 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04QI3R99037944;
+        Tue, 26 May 2020 13:03:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1590516207;
+        bh=tWqL+sUPJTZ2h8BHQyEb5vjm1K8M7Eltv+SurxkGaOI=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=SScriLeCaWmFID1v89DUtFyhpICeE/polFmzw+1U6dkT4UqSQfpxI4h74jMkXQqQi
+         VfpPqsD77EG17+kZq3lAUWgfUpzXSjXF/5G4y/9zNp8qDEhX4Mv5eKh4/1HYNf1Edn
+         QChXE1YZr3FDPIEJK9FzKdZQAnHHyxF9G4977mh4=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04QI3RoX042692
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 26 May 2020 13:03:27 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 26
+ May 2020 13:03:27 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Tue, 26 May 2020 13:03:26 -0500
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04QI3NY3016763;
+        Tue, 26 May 2020 13:03:24 -0500
+Subject: Re: [PATCH v15 2/2] i2c: core: support bus regulator controlling in
+ adapter
+To:     Tomasz Figa <tfiga@chromium.org>
+CC:     Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20200519072729.7268-1-bibby.hsieh@mediatek.com>
+ <20200519072729.7268-3-bibby.hsieh@mediatek.com>
+ <952995ec-0865-d8ff-e285-522705fa9709@ti.com>
+ <CAAFQd5Bx=zgsUAg7fA2jfsV_yFyPmnotTWEBEr2V3Nn5HO8qQQ@mail.gmail.com>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <543950fa-83c0-9d3d-e64a-068be2368717@ti.com>
+Date:   Tue, 26 May 2020 21:03:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1590497690-29035-7-git-send-email-akashast@codeaurora.org>
+In-Reply-To: <CAAFQd5Bx=zgsUAg7fA2jfsV_yFyPmnotTWEBEr2V3Nn5HO8qQQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, May 26, 2020 at 06:24:49PM +0530, Akash Asthana wrote:
-> Get the interconnect paths for QSPI device and vote according to the
-> current bus speed of the driver.
-> 
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> ---
-> Changes in V2:
->  - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
->    path handle
->  - As per Matthias comment, added error handling for icc_set_bw call
-> 
-> Changes in V3:
->  - No Change.
-> 
-> Changes in V4:
->  - As per Mark's comment move peak_bw guess as twice of avg_bw if
->    nothing mentioned explicitly to ICC core.
-> 
-> Changes in V5:
->  - Add icc_enable/disable to power on/off call.
->  - Save some non-zero avg/peak value to ICC core by calling geni_icc_set_bw
->    from probe so that when resume/icc_enable is called NOC are running at
->    some non-zero value.
-> 
-> Changes in V6:
->  - As per Matthias's comment made print statement consistent across driver
-> 
-> Changes in V7:
->  - As per Matthias's comment removed usage of peak_bw variable because we don't
->    have explicit peak requirement, we were voting peak = avg and this can be
->    tracked using single variable for avg bw.
->  - As per Matthias's comment improved print log.
-> 
->  drivers/spi/spi-qcom-qspi.c | 57 ++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 56 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-> index 3c4f83b..092ac27 100644
-> --- a/drivers/spi/spi-qcom-qspi.c
-> +++ b/drivers/spi/spi-qcom-qspi.c
-> @@ -2,6 +2,7 @@
->  // Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
->  
->  #include <linux/clk.h>
-> +#include <linux/interconnect.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
-> @@ -139,7 +140,9 @@ struct qcom_qspi {
->  	struct device *dev;
->  	struct clk_bulk_data *clks;
->  	struct qspi_xfer xfer;
-> -	/* Lock to protect xfer and IRQ accessed registers */
-> +	struct icc_path *icc_path_cpu_to_qspi;
-> +	unsigned int avg_bw_cpu;
 
-I should have noticed this earlier, but the field isn't needed now that
-we have icc_enable/disable(). The bandwidth is set in
-qcom_qspi_transfer_one() and that's it.
 
-From my side it would be fine to remove the field in a follow up patch,
-to avoid respinning the series yet another time just for this.
+On 25/05/2020 14:34, Tomasz Figa wrote:
+> Hi Grygorii,
+> 
+> On Fri, May 22, 2020 at 7:59 PM Grygorii Strashko
+> <grygorii.strashko@ti.com> wrote:
+>>
+>>
+>>
+>> On 19/05/2020 10:27, Bibby Hsieh wrote:
+>>> Although in the most platforms, the bus power of i2c
+>>> are alway on, some platforms disable the i2c bus power
+>>> in order to meet low power request.
+>>>
+>>> We get and enable bulk regulator in i2c adapter device.
+>>>
+>>> Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+>>> ---
+>>>    drivers/i2c/i2c-core-base.c | 84 +++++++++++++++++++++++++++++++++++++
+>>>    include/linux/i2c.h         |  2 +
+>>>    2 files changed, 86 insertions(+)
+>>>
+>>> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+>>> index 5cc0b0ec5570..e1cc8d46bc51 100644
+>>> --- a/drivers/i2c/i2c-core-base.c
+>>> +++ b/drivers/i2c/i2c-core-base.c
+>>> @@ -313,12 +313,14 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
+>>>    static int i2c_device_probe(struct device *dev)
+>>>    {
+>>>        struct i2c_client       *client = i2c_verify_client(dev);
+>>> +     struct i2c_adapter      *adap;
+>>>        struct i2c_driver       *driver;
+>>>        int status;
+>>>
+>>>        if (!client)
+>>>                return 0;
+>>>
+>>> +     adap = client->adapter;
+>>>        driver = to_i2c_driver(dev->driver);
+>>>
+>>>        client->irq = client->init_irq;
+>>> @@ -378,6 +380,12 @@ static int i2c_device_probe(struct device *dev)
+>>>
+>>>        dev_dbg(dev, "probe\n");
+>>>
+>>> +     status = regulator_enable(adap->bus_regulator);
+>>> +     if (status < 0) {
+>>> +             dev_err(&adap->dev, "Failed to enable power regulator\n");
+>>> +             goto err_clear_wakeup_irq;
+>>> +     }
+>>> +
+>>>        status = of_clk_set_defaults(dev->of_node, false);
+>>>        if (status < 0)
+>>>                goto err_clear_wakeup_irq;
+>>> @@ -414,12 +422,14 @@ static int i2c_device_probe(struct device *dev)
+>>>    static int i2c_device_remove(struct device *dev)
+>>>    {
+>>>        struct i2c_client       *client = i2c_verify_client(dev);
+>>> +     struct i2c_adapter      *adap;
+>>>        struct i2c_driver       *driver;
+>>>        int status = 0;
+>>>
+>>>        if (!client || !dev->driver)
+>>>                return 0;
+>>>
+>>> +     adap = client->adapter;
+>>>        driver = to_i2c_driver(dev->driver);
+>>>        if (driver->remove) {
+>>>                dev_dbg(dev, "remove\n");
+>>> @@ -427,6 +437,8 @@ static int i2c_device_remove(struct device *dev)
+>>>        }
+>>>
+>>>        dev_pm_domain_detach(&client->dev, true);
+>>> +     if (!pm_runtime_status_suspended(&client->dev))
+>>> +             regulator_disable(adap->bus_regulator);
+>>
+>> Not sure this check is correct.
+>>
+>> i2c_device_probe()
+>>    - regulator_enable - 1
+>>
+>> pm_runtime_get()
+>>    - regulator_enable - 2
+>>
+> 
+> I believe regulator_enable() wouldn't be called again, because the
+> device was already active in probe. However, I've been having
+> difficulties keeping track of runtime PM semantics under various
+> circumstances (e.g. ACPI vs DT), so can't tell for sure anymore.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+True.
+
+I've found pretty useful:
+  - CONFIG_PM_ADVANCED_DEBUG
+  - bind/unbind
+for such testing.
+
+for regulators - num_users can be checked.
+
+
+> 
+>> i2c_device_remove()
+>>    - pm_runtime_status_suspended() flase
+>>      - regulator_disable() - 1 --> still active?
+>>
+>> Sorry, I probably missing smth.
+>>
+>>>
+>>>        dev_pm_clear_wake_irq(&client->dev);
+>>>        device_init_wakeup(&client->dev, false);
+>>> @@ -438,6 +450,72 @@ static int i2c_device_remove(struct device *dev)
+>>>        return status;
+>>>    }
+>>>
+>>
+>> [...]
+>>
+>> --
+>> Best regards,
+>> grygorii
+
+-- 
+Best regards,
+grygorii
