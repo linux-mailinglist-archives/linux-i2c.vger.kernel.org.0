@@ -2,183 +2,162 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B67761E2682
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 May 2020 18:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8DD1E2806
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 May 2020 19:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387707AbgEZQIb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 26 May 2020 12:08:31 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:6577 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387400AbgEZQIb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 May 2020 12:08:31 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ecd3ef20000>; Tue, 26 May 2020 09:08:18 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 26 May 2020 09:08:30 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 26 May 2020 09:08:30 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 26 May
- 2020 16:08:30 +0000
-Received: from NAM04-CO1-obe.outbound.protection.outlook.com (104.47.45.52) by
- HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Tue, 26 May 2020 16:08:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EqxLhbzucRKXMye+Xjk9IKJZ5NABt25vZZoHd0JSVQUh575qVkYvO5YINkkc2WEEn1Bj6VcdU6zbGPA1yJ4gpvKWMlbWS1x5wbsfP8xGA4DkrYlJCgD40DXc+3BoPwEAFbIscTbaW+gbI7FRXmKVuDUqkHSnNw7hwLiW8SeKWOs7iEquhUsQQwvntYDtyvoPpVO1ySj0Y+RxCyDCbyn/jou+b+lKxqHLIhJxjEndnKZg8zU9WmmhwmzZWN4wxIfdOnUzTWbAzN+b85tJ84SYx1qTIk3h1jfUTA4/+ePBjc47DTeas2VNpVavzpxh7KMNp0y2trmx/FP1y1vQ6zOf1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CRc56iSknUJCgLV6tyweNkJn/J+dEUnkDgcTA0rS3Yw=;
- b=TNtU8H1UVdE4iPFDJXZS3PwWoWP2w+wUSzotLfLGixjp3AOslgZOQQeWJEZJaNtqRz7+UbGi7D9MiQ16ZUunwUGTwzria/Fm6+c+SRgv2Ggm9/83YO3WXBvaNWCHGLiqaTImktdz/0izZajWE0WoM/uFbPEMdDsKBM8yetuSiKZ1n/6YYcH10YjibhUqA7t3TDxBcE4QKNJnzAmv6LbflVz6J+LHOtAYF2WKd6Np9t+mZBuvW2BXnjNnUSx0lUIEESQT1cD05suDP6lsCFRl6Zz6iJ4JMyrqWzKbT4aB3ELDvnFwdNWry32JW3NTvshdTuNLWYwECmpiB3B3ANXDcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from BY5PR12MB3953.namprd12.prod.outlook.com (2603:10b6:a03:194::22)
- by BY5PR12MB3731.namprd12.prod.outlook.com (2603:10b6:a03:1a7::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.27; Tue, 26 May
- 2020 16:08:29 +0000
-Received: from BY5PR12MB3953.namprd12.prod.outlook.com
- ([fe80::7c47:7b71:7bfc:2a2b]) by BY5PR12MB3953.namprd12.prod.outlook.com
- ([fe80::7c47:7b71:7bfc:2a2b%7]) with mapi id 15.20.3045.016; Tue, 26 May 2020
- 16:08:29 +0000
-From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] i2c: nvidia-gpu: Use PTR_ERR_OR_ZERO() to simplify code
-Thread-Topic: [PATCH] i2c: nvidia-gpu: Use PTR_ERR_OR_ZERO() to simplify code
-Thread-Index: AQHWMEwY9XKS07n+H02N8bwRR/2jVKi6jzHw
-Date:   Tue, 26 May 2020 16:08:29 +0000
-Message-ID: <BY5PR12MB39537E5ADD522B282776D67FDCB00@BY5PR12MB3953.namprd12.prod.outlook.com>
-References: <20200505145230.17251-1-aishwaryarj100@gmail.com>
- <20200522151710.GL5670@ninjato>
-In-Reply-To: <20200522151710.GL5670@ninjato>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2020-05-26T16:08:28.2368703Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=5c850adb-75fb-4fc7-be3a-1bd865bc716f;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nvidia.com;
-x-originating-ip: [216.228.112.22]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 83b1117f-a36f-4587-416b-08d8018f07d6
-x-ms-traffictypediagnostic: BY5PR12MB3731:
-x-microsoft-antispam-prvs: <BY5PR12MB37313296871A7EBD1787E1F2DCB00@BY5PR12MB3731.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 041517DFAB
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: m+jd/8pDWnrKtg3ZZu2nwoS3B/fCg4iDHIqmlW1+7mqpH6aXqG3L3MXyMH5a7KNLCIuTW/UJDP87UtoxcwtIPzeXZapU7oTQ26hDspayzqoxi7hqyakvd5ladBNUZax15gYr9hRKa0z3JspzQUtFmOMIsEcethPSqf8nBEC/7fJ0Sv4I7clLF1Or7MKxXKbkaiLRAMarMSgoN0qvfHHwT7wtoMA9vlXqE2jw15Alj7aZmGFFxVAxHoEvPbPft22ZDXL7tEcKWdj38kq7NpdpI/FIzBVuzIPP7NG5WRDTmct445vkqrWhMrQE4afDN43D5y4iCfmxV22b5a+zB/a7Bw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3953.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(346002)(39860400002)(396003)(136003)(376002)(366004)(9686003)(55016002)(26005)(66946007)(76116006)(8676002)(186003)(7696005)(5660300002)(71200400001)(33656002)(316002)(110136005)(66476007)(52536014)(478600001)(2906002)(8936002)(86362001)(54906003)(53546011)(66556008)(66446008)(6506007)(4326008)(64756008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: eRVjbgLFdLyf+xc8K2wS8QMyI+Cv0Sx7BFj8uaLM2Se1Ix6PYAc+h7JY6IjT10fQN7esVXR+GZjEn+NRVvoB763Fox33zuxTTDEpRCKLTyszu3LQK+S5XwCcteLtVRxRfHfWdZ1QjYaCcZeLB4n5so9qvPRuUR6Gys4SsRxl6Sbis7L4ShUDNh9xbePDK65G0iCY8SWC7zWYc0WwRl/iD16U2vzwf6qdXeOPwq5gVZ8oPBDGLeKVu21RPq8Vvn7RpYs/AdhhMWHZhK7rnmL1AarLWR7oLwyUEE2T75Hg8TBkPPBjVGXXI50hWcnxTvZfJhyevRtCKFy9wOMHkqSX8u3zweBVbTCuIgFcVjzvHJkJJbykqax2v0SBB7QVVDpn6UcLT3zggw2zqpBEUdmgfFfYYHIMFY43FVIiv6RrMa6ZD/ebdPnc/5yLMFgKPMFSIxUAcLfVVR+Vuo21cUGLhRF+1FQNmKTnRlsitqbnh24FC+Z83+3ZPBYcvRelYVfi
-x-ms-exchange-transport-forked: True
+        id S2388653AbgEZRLw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 26 May 2020 13:11:52 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:34082 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388373AbgEZRLw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 May 2020 13:11:52 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04QHBR7T023360;
+        Tue, 26 May 2020 12:11:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1590513087;
+        bh=m1vv9Pt36V9OFzJt77mhU06beHylBKTlUWKMo6h7jvg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=q7K9p7gtH4FKOXPZGY6fDMEer7TioRTs/2kO+uxhU7jAxWIa8u+JQh6ILXrq9iuIc
+         TACd+26db6yeTkV4tLNqWdmyvkwLzTZiaCTldnYyJvqlfywETm5R6eKUkanHnFyH1q
+         2QjN6HOiyHtUWorfhtQhyOhIJ/wD7so0WdYoTGVk=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04QHBRJ4073922
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 26 May 2020 12:11:27 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 26
+ May 2020 12:11:27 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Tue, 26 May 2020 12:11:27 -0500
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04QHBMh2021939;
+        Tue, 26 May 2020 12:11:23 -0500
+Subject: Re: [PATCH v2 1/2] drivers: provide devm_platform_request_irq()
+To:     Dejin Zheng <zhengdejin5@gmail.com>, <gregkh@linuxfoundation.org>,
+        <rafael@kernel.org>, <f.fainelli@gmail.com>, <rjui@broadcom.com>,
+        <sbranden@broadcom.com>, <michal.simek@xilinx.com>,
+        <baruch@tkos.co.il>, <paul@crapouillou.net>,
+        <khilman@baylibre.com>, <shawnguo@kernel.org>,
+        <festevam@gmail.com>, <vz@mleia.com>, <heiko@sntech.de>,
+        <linus.walleij@linaro.org>, <baohua@kernel.org>, <ardb@kernel.org>,
+        <linux-i2c@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, Wolfram Sang <wsa@the-dreams.de>
+References: <20200523145157.16257-1-zhengdejin5@gmail.com>
+ <20200523145157.16257-2-zhengdejin5@gmail.com>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <c280f421-fadf-41ab-3227-6377906f2a1c@ti.com>
+Date:   Tue, 26 May 2020 20:11:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83b1117f-a36f-4587-416b-08d8018f07d6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 May 2020 16:08:29.5328
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /+qAWaIFCETTfy++ygm2gkrz3k14oR61Zjzb1CwfbMDBz314cO6oHb/L5E5gj7QCZwG8ZAk+C5bOuN+8u57XHA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3731
-X-OriginatorOrg: Nvidia.com
+In-Reply-To: <20200523145157.16257-2-zhengdejin5@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1590509298; bh=CRc56iSknUJCgLV6tyweNkJn/J+dEUnkDgcTA0rS3Yw=;
-        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
-         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
-         Thread-Index:Date:Message-ID:References:In-Reply-To:
-         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
-         authentication-results:x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-ms-traffictypediagnostic:
-         x-microsoft-antispam-prvs:x-ms-oob-tlc-oobclassifiers:
-         x-forefront-prvs:x-ms-exchange-senderadcheck:x-microsoft-antispam:
-         x-microsoft-antispam-message-info:x-forefront-antispam-report:
-         x-ms-exchange-antispam-messagedata:x-ms-exchange-transport-forked:
-         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=i4MJIL71u4QiH79SoR7bl1XNNM1GxcqGmfvMUyxNcjrbBi7v7QGb3RArsTtcqU8lB
-         cQjCoGuUp7xGe0ECjMmmHJGq+V9A3UPNSREkT596jBx699sdgjRvvMUy5ioFSzCE/T
-         hUvfPIqSXPYcJZvaUsH8keF+j17nqWO2FnKPkgeC9CG1ZyCU7AVgKXdw4+bgaxF1RC
-         T4TN9fWzpLZaRomvVHBUnYNQus52eis7PNCzb67DgMrg2d6weQkLHLraRLSSKpse06
-         zhySyqxVX5wj7skHX3DH7CLqfTR/R/cPx9oJ8/cJG77tWBsIScbda75XeKqjfnWSpQ
-         vNfMadHXd9dAQ==
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
 
-> -----Original Message-----
-> From: linux-i2c-owner@vger.kernel.org <linux-i2c-owner@vger.kernel.org> O=
-n
-> Behalf Of Wolfram Sang
-> Sent: Friday, May 22, 2020 8:17 AM
-> To: Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
-> Cc: Ajay Gupta <ajayg@nvidia.com>; linux-i2c@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Subject: Re: [PATCH] i2c: nvidia-gpu: Use PTR_ERR_OR_ZERO() to simplify
-> code
->=20
-> On Tue, May 05, 2020 at 08:22:30PM +0530, Aishwarya Ramakrishnan wrote:
-> > PTR_ERR_OR_ZERO contains if(IS_ERR(...)) + PTR_ERR.
-> >
-> > Generated by: scripts/coccinelle/api/ptr_ret.cocci
-> >
-> > Signed-off-by: Aishwarya Ramakrishnan <aishwaryarj100@gmail.com>
->=20
-> Waiting for the Rev-by from Ajay (driver maintainer).
-Reviewed-by: Ajay Gupta <ajayg@nvidia.com>
 
-Thanks
-Ajay
->nvpublic
->=20
-> > ---
-> >  drivers/i2c/busses/i2c-nvidia-gpu.c | 5 +----
-> >  1 file changed, 1 insertion(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i=
-2c-
-> nvidia-gpu.c
-> > index f5d25ce00f03..f480105000b8 100644
-> > --- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-> > +++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> > @@ -277,10 +277,7 @@ static int gpu_populate_client(struct gpu_i2c_dev
-> *i2cd, int irq)
-> >  	i2cd->gpu_ccgx_ucsi->irq =3D irq;
-> >  	i2cd->gpu_ccgx_ucsi->properties =3D ccgx_props;
-> >  	i2cd->ccgx_client =3D i2c_new_client_device(&i2cd->adapter, i2cd-
-> >gpu_ccgx_ucsi);
-> > -	if (IS_ERR(i2cd->ccgx_client))
-> > -		return PTR_ERR(i2cd->ccgx_client);
-> > -
-> > -	return 0;
-> > +	return PTR_ERR_OR_ZERO(i2cd->ccgx_client);
-> >  }
-> >
-> >  static int gpu_i2c_probe(struct pci_dev *pdev, const struct pci_device=
-_id
-> *id)
-> > --
-> > 2.17.1
-> >
+On 23/05/2020 17:51, Dejin Zheng wrote:
+> It will call devm_request_irq() after platform_get_irq() function
+> in many drivers, sometimes, it is not right for the error handling
+> of these two functions in some drivers. so provide this function
+> to simplify the driver.
+> 
+> Cc: Michal Simek <michal.simek@xilinx.com>
+> Cc: Wolfram Sang <wsa@the-dreams.de>
+> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> ---
+> v1 -> v2:
+> 	- The patch content has not changed. just resend it by this discussion:
+> 	  https://patchwork.ozlabs.org/project/linux-i2c/patch/20200520144821.8069-1-zhengdejin5@gmail.com/
+> 
+>   drivers/base/platform.c         | 33 +++++++++++++++++++++++++++++++++
+>   include/linux/platform_device.h |  4 ++++
+>   2 files changed, 37 insertions(+)
+> 
+> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+> index c0d0a5490ac6..1d2fd1ea3bc5 100644
+> --- a/drivers/base/platform.c
+> +++ b/drivers/base/platform.c
+> @@ -275,6 +275,39 @@ int platform_irq_count(struct platform_device *dev)
+>   }
+>   EXPORT_SYMBOL_GPL(platform_irq_count);
+>   
+> +/**
+> + * devm_platform_request_irq - get an irq and allocate an interrupt
+> + *				line for a managed device
+> + * @pdev: platform device
+> + * @num: IRQ number index
+> + * @irq: get an IRQ for a device if irq != NULL
+> + * @handler: function to be called when the IRQ occurs
+> + * @irqflags: interrupt type flags
+> + * @devname: an ascii name for the claiming device, dev_name(dev) if NULL
+> + * @dev_id: a cookie passed back to the handler function
+> + *
+> + * Return: zero on success, negative error number on failure.
+> + */
+> +int devm_platform_request_irq(struct platform_device *pdev, unsigned int num,
+> +		unsigned int *irq, irq_handler_t handler,
+> +		unsigned long irqflags, const char *devname, void *dev_id)
+> +{
+> +	int tmp_irq, ret;
+> +
+> +	tmp_irq = platform_get_irq(pdev, num);
+> +	if (tmp_irq < 0)
+> +		return tmp_irq;
+> +
+> +	ret = devm_request_irq(&pdev->dev, tmp_irq, handler, irqflags,
+> +				devname, dev_id);
+> +	if (ret < 0)
+> +		dev_err(&pdev->dev, "can't request IRQ\n");
+> +	else if (irq != NULL)
+> +		*irq = tmp_irq;
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_platform_request_irq);
+> +
+>   /**
+>    * platform_get_resource_byname - get a resource for a device by name
+>    * @dev: platform device
+> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
+> index 77a2aada106d..d94652deea5c 100644
+> --- a/include/linux/platform_device.h
+> +++ b/include/linux/platform_device.h
+> @@ -11,6 +11,7 @@
+>   #define _PLATFORM_DEVICE_H_
+>   
+>   #include <linux/device.h>
+> +#include <linux/interrupt.h>
+>   
+>   #define PLATFORM_DEVID_NONE	(-1)
+>   #define PLATFORM_DEVID_AUTO	(-2)
+> @@ -70,6 +71,9 @@ devm_platform_ioremap_resource_byname(struct platform_device *pdev,
+>   extern int platform_get_irq(struct platform_device *, unsigned int);
+>   extern int platform_get_irq_optional(struct platform_device *, unsigned int);
+>   extern int platform_irq_count(struct platform_device *);
+> +extern int devm_platform_request_irq(struct platform_device *pdev,
+> +		unsigned int num, unsigned int *irq, irq_handler_t handler,
+> +		unsigned long irqflags, const char *devname, void *dev_id);
+
+
+it has to be documented in devres.rst
+
+>   extern struct resource *platform_get_resource_byname(struct platform_device *,
+>   						     unsigned int,
+>   						     const char *);
+> 
+
+
+
+-- 
+Best regards,
+grygorii
