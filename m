@@ -2,132 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DFB1E4584
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 16:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68FA1E45B4
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 16:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388722AbgE0OP7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 May 2020 10:15:59 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:36084 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387722AbgE0OP7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 May 2020 10:15:59 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id BFA048030835;
-        Wed, 27 May 2020 14:15:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id c7gPw8_tpttc; Wed, 27 May 2020 17:15:56 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     <devicetree-compiler@vger.kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] check: Add 10bit/slave i2c reg flags support
-Date:   Wed, 27 May 2020 17:15:17 +0300
-Message-ID: <20200527141517.22677-1-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200527122525.6929-1-Sergey.Semin@baikalelectronics.ru>
-References: 
+        id S2389145AbgE0OWA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 May 2020 10:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389103AbgE0OWA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 May 2020 10:22:00 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACB3C08C5C2;
+        Wed, 27 May 2020 07:22:00 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id u5so11832905pgn.5;
+        Wed, 27 May 2020 07:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CJWWlFowHHNM256k17yETc+XHlbxbBX4AAuZRvOBnEA=;
+        b=H/mH86Zc+uqXPHsur/+idcfytxqQuoLsEYM/GP0wDJaNuH0KuMM/hmfRnLtE6eWILQ
+         IdNBX/+t/EN+cKNLe9p2ngYcFcNzJQf45k6sQRYlE+HVUUe2vqS+j9VvjTFTaMGaNLXD
+         DbmN49q6cujvyx5MAACH6Oost4PvqRfkPMCw8oxggWFKxFcxwTq6gpJTEfDdGZwryDS7
+         N1gESVq7py8B9b1nZT+ggOaVJKAZypEyYGduUmc3ecR5BmZWtRTbGelW7dGcliKq6zQF
+         pS74cKtx2WqJKqjR7aZhqsDCn9ntBx56I9VgPAdu9W0kTadoSYLLnn4mF8NTowC2u4DY
+         hIgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CJWWlFowHHNM256k17yETc+XHlbxbBX4AAuZRvOBnEA=;
+        b=CamilqAwvVpR/6dV7badrIIMeWpufzxUFzOYWF8BKhCtlIwGzmYKq+8HoVNvkYvLxt
+         JgEu4sVi+ppIQzEcUWkx4Tmo85jT7Bllslicmeoi5qZ7dCFyJxq9S+SSoZkaPgKyRAxv
+         9zgytfR7ClxQNGrTpx057wKlhlVJNDhIms5eejUbrQrF6lbSIovphwknltYsbBJc4KPw
+         Scy42KILuz4ut6TIEWchTLOKgSb55ZiyNFWNkcrYGUpJSoOZCUVdRp9rNm1LEN/e6n1/
+         26kPXqx1Xba9ixxvF3tSaE9JAfVMnj3prmpwkdiyfa7H/eEMh2LYsYlXrzdpPF9XPISM
+         l+AQ==
+X-Gm-Message-State: AOAM5315exFFy2eZKR/h1Q99WyDA7HnsIE6iUlQNYUCGngXXDQ4tsY/9
+        jf1q/PJJLcRgiejmQyA2+Wk=
+X-Google-Smtp-Source: ABdhPJz+x5u0WY6FQMlMKbfoixKcK/iAmz/7r51nMPJKL9jhfw9HM0ZDj76SUy33XYN0RBLzXKNOhg==
+X-Received: by 2002:a62:b40b:: with SMTP id h11mr4042841pfn.183.1590589319773;
+        Wed, 27 May 2020 07:21:59 -0700 (PDT)
+Received: from localhost ([144.34.194.82])
+        by smtp.gmail.com with ESMTPSA id c2sm3045711pjg.51.2020.05.27.07.21.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 27 May 2020 07:21:59 -0700 (PDT)
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     corbet@lwn.net, gregkh@linuxfoundation.org, f.fainelli@gmail.com,
+        michal.simek@xilinx.com, wsa+renesas@sang-engineering.com,
+        paul@crapouillou.net, shawnguo@kernel.org,
+        linus.walleij@linaro.org, linux-doc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Dejin Zheng <zhengdejin5@gmail.com>
+Subject: [PATCH v3 0/2] drivers: provide devm_platform_request_irq()
+Date:   Wed, 27 May 2020 22:21:44 +0800
+Message-Id: <20200527142146.8940-1-zhengdejin5@gmail.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Recently the I2C-controllers slave interface support was added to the
-kernel I2C subsystem. In this case Linux can be used as, for example,
-a I2C EEPROM machine. See [1] for details. Other than instantiating
-the EEPROM-slave device from user-space there is a way to declare the
-device in dts. In this case firstly the I2C bus controller must support
-the slave interface. Secondly I2C-slave sub-node of that controller
-must have "reg"-property with flag I2C_OWN_SLAVE_ADDRESS set (flag is
-declared in [2]). That flag is declared as (1 << 30), which when set
-makes dtc unhappy about too big address set for a I2C-slave:
+It will call devm_request_irq() after platform_get_irq() function
+in many drivers, sometimes, it is not right for the error handling
+of these two functions in some drivers. so provide this function
+to simplify the driver.
 
-Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64: I2C bus unit address format error, expected "40000064"
-Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64:reg: I2C address must be less than 10-bits, got "0x40000064"
+the first patch will provide devm_platform_request_irq(), and the
+other patch will convert to devm_platform_request_irq() in some
+i2c bus dirver.
 
-Similar problem would have happened if we had set the 10-bit address
-flag I2C_TEN_BIT_ADDRESS in the "reg"-property.
+v2 -> v3:
+	- add devm_platform_request_irq() to devres.rst by Grygorii's
+	  suggestion.
+	- And also Thanks Michal, Wolfram and Linus's review and
+	  comments.
+v1 -> v2:
+	- I give up this series of patches in v1 version. I resend this
+	  patches v2 by that discussion:
+	  https://patchwork.ozlabs.org/project/linux-i2c/patch/20200520144821.8069-1-zhengdejin5@gmail.com/
+	  The patch content has not changed.
 
-In order to fix the problem we suggest to alter the I2C-bus reg-check
-algorithm, so one would be aware of the upper bits set. Normally if no
-flag specified, the 7-bit address is expected in the "reg"-property.
-If I2C_TEN_BIT_ADDRESS is set, then the 10-bit address check will be
-performed. The I2C_OWN_SLAVE_ADDRESS flag will be just ignored.
+Dejin Zheng (2):
+  drivers: provide devm_platform_request_irq()
+  i2c: busses: convert to devm_platform_request_irq()
 
-[1] kernel/Documentation/i2c/slave-interface.rst
-[2] kernel/include/dt-bindings/i2c/i2c.h
+ .../driver-api/driver-model/devres.rst        |  1 +
+ drivers/base/platform.c                       | 33 +++++++++++++++++++
+ drivers/i2c/busses/i2c-bcm-kona.c             | 16 ++-------
+ drivers/i2c/busses/i2c-cadence.c              | 10 ++----
+ drivers/i2c/busses/i2c-digicolor.c            | 10 ++----
+ drivers/i2c/busses/i2c-emev2.c                |  5 ++-
+ drivers/i2c/busses/i2c-jz4780.c               |  5 ++-
+ drivers/i2c/busses/i2c-meson.c                | 13 +++-----
+ drivers/i2c/busses/i2c-mxs.c                  |  9 ++---
+ drivers/i2c/busses/i2c-pnx.c                  |  9 ++---
+ drivers/i2c/busses/i2c-rcar.c                 |  9 ++---
+ drivers/i2c/busses/i2c-rk3x.c                 | 14 ++------
+ drivers/i2c/busses/i2c-sirf.c                 | 10 ++----
+ drivers/i2c/busses/i2c-stu300.c               |  4 +--
+ drivers/i2c/busses/i2c-synquacer.c            | 12 ++-----
+ include/linux/platform_device.h               |  4 +++
+ 16 files changed, 73 insertions(+), 91 deletions(-)
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Wolfram Sang <wsa@the-dreams.de>
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: devicetree-compiler@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-
----
-
-Changelog v2:
-- Use unsigned numeric literal in the left-shit operation to avoid UB.
----
- checks.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/checks.c b/checks.c
-index 4b3c486f1399..7091d1bc38d2 100644
---- a/checks.c
-+++ b/checks.c
-@@ -1028,6 +1028,7 @@ static void check_i2c_bus_reg(struct check *c, struct dt_info *dti, struct node
- 	const char *unitname = get_unitname(node);
- 	char unit_addr[17];
- 	uint32_t reg = 0;
-+	uint32_t addr;
- 	int len;
- 	cell_t *cells = NULL;
- 
-@@ -1044,17 +1045,21 @@ static void check_i2c_bus_reg(struct check *c, struct dt_info *dti, struct node
- 	}
- 
- 	reg = fdt32_to_cpu(*cells);
--	snprintf(unit_addr, sizeof(unit_addr), "%x", reg);
-+	addr = reg & 0x3FFFFFFFU;
-+	snprintf(unit_addr, sizeof(unit_addr), "%x", addr);
- 	if (!streq(unitname, unit_addr))
- 		FAIL(c, dti, node, "I2C bus unit address format error, expected \"%s\"",
- 		     unit_addr);
- 
- 	for (len = prop->val.len; len > 0; len -= 4) {
- 		reg = fdt32_to_cpu(*(cells++));
--		if (reg > 0x3ff)
-+		addr = reg & 0x3FFFFFFFU;
-+		if ((reg & (1U << 31)) && addr > 0x3ff)
- 			FAIL_PROP(c, dti, node, prop, "I2C address must be less than 10-bits, got \"0x%x\"",
--				  reg);
--
-+				  addr);
-+		else if (!(reg & (1U << 31)) && addr > 0x7f)
-+			FAIL_PROP(c, dti, node, prop, "I2C address must be less than 7-bits, got \"0x%x\"",
-+				  addr);
- 	}
- }
- WARNING(i2c_bus_reg, check_i2c_bus_reg, NULL, &reg_format, &i2c_bus_bridge);
 -- 
-2.26.2
+2.25.0
 
