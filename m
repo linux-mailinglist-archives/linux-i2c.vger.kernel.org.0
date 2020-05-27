@@ -2,101 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BEA1E3DD6
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 11:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 584661E3E01
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 11:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728859AbgE0JqJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 May 2020 05:46:09 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:33958 "EHLO
+        id S1729434AbgE0Juk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 May 2020 05:50:40 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:34018 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725939AbgE0JqJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 May 2020 05:46:09 -0400
+        with ESMTP id S1729391AbgE0Juj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 May 2020 05:50:39 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 5C0618030879;
-        Wed, 27 May 2020 09:46:06 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id BDCD5803080A;
+        Wed, 27 May 2020 09:50:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id j8jW8Ahn9y-z; Wed, 27 May 2020 12:46:05 +0300 (MSK)
-Date:   Wed, 27 May 2020 12:46:04 +0300
+        with ESMTP id k5YrOO-wnkEP; Wed, 27 May 2020 12:50:35 +0300 (MSK)
+Date:   Wed, 27 May 2020 12:50:34 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Wolfram Sang <wsa@the-dreams.de>,
-        Frank Rowand <frowand.list@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        <linux-mips@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 01/12] scripts/dtc: check: Add 10bit/slave i2c reg
- flags support
-Message-ID: <20200527094604.qpyqjqlnz7fpcq3m@mobilestation>
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 11/12] i2c: designware: Move reg-space remapping into
+ a dedicated function
+Message-ID: <20200527095034.xd52qv45nzcnkbnz@mobilestation>
 References: <20200526215528.16417-1-Sergey.Semin@baikalelectronics.ru>
- <20200526215528.16417-2-Sergey.Semin@baikalelectronics.ru>
- <20200527011704.GA808104@bogus>
+ <20200526215528.16417-12-Sergey.Semin@baikalelectronics.ru>
+ <CAHp75Veygd2y8Tp28p+ZX8Hm_u975QdqatKbsNOG9tNz6HOCAg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200527011704.GA808104@bogus>
+In-Reply-To: <CAHp75Veygd2y8Tp28p+ZX8Hm_u975QdqatKbsNOG9tNz6HOCAg@mail.gmail.com>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, May 26, 2020 at 07:17:04PM -0600, Rob Herring wrote:
-> On Wed, May 27, 2020 at 12:55:17AM +0300, Serge Semin wrote:
-> > Recently the I2C-controllers slave interface support was added to the
-> > kernel I2C subsystem. In this case Linux can be used as, for example,
-> > a I2C EEPROM machine. See [1] for details. Other than instantiating
-> > the EEPROM-slave device from user-space there is a way to declare the
-> > device in dts. In this case firstly the I2C bus controller must support
-> > the slave interface. Secondly I2C-slave sub-node of that controller
-> > must have "reg"-property with flag I2C_OWN_SLAVE_ADDRESS set (flag is
-> > declared in [2]). That flag is declared as (1 << 30), which when set
-> > makes dtc unhappy about too big address set for a I2C-slave:
-> > 
-> > Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64: I2C bus unit address format error, expected "40000064"
-> > Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64:reg: I2C address must be less than 10-bits, got "0x40000064"
-> > 
-> > Similar problem would have happened if we had set the 10-bit address
-> > flag I2C_TEN_BIT_ADDRESS in the "reg"-property.
-> > 
-> > In order to fix the problem we suggest to alter the I2C-bus reg-check
-> > algorithm, so one would be aware of the upper bits set. Normally if no
-> > flag specified, the 7-bit address is expected in the "reg"-property.
-> > If I2C_TEN_BIT_ADDRESS is set, then the 10-bit address check will be
-> > performed. The I2C_OWN_SLAVE_ADDRESS flag will be just ignored.
-> > 
-> > [1] Documentation/i2c/slave-interface.rst
-> > [2] include/dt-bindings/i2c/i2c.h
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: linux-i2c@vger.kernel.org
-> > ---
-> >  scripts/dtc/checks.c | 13 +++++++++----
-> >  1 file changed, 9 insertions(+), 4 deletions(-)
+On Wed, May 27, 2020 at 12:26:09PM +0300, Andy Shevchenko wrote:
+> On Wed, May 27, 2020 at 4:03 AM Serge Semin
+> <Sergey.Semin@baikalelectronics.ru> wrote:
+> >
+> > This is a preparation patch before adding a quirk with custom registers
+> > map creation required for the Baikal-T1 System I2C support. Since we've
+> > touched this code anyway let's replace
+> > platform_get_resource()-devm_ioremap_resource() tuple with ready-to-use
+> > helper devm_platform_get_and_ioremap_resource().
 > 
+> ...
+> 
+> > +static int dw_i2c_plat_request_regs(struct dw_i2c_dev *dev)
+> > +{
+> > +       struct platform_device *pdev = to_platform_device(dev->dev);
+> 
+> > +       int ret = 0;
+> 
+> Redundant.
+> 
+> > +       dev->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+> 
+> What's the point of this API if you don't use resource parameter?
+> 
+> > +       if (IS_ERR(dev->base))
+> > +               ret = PTR_ERR(dev->base);
+> > +
+> > +       return ret;
+> 
+> return PTR_ERR_OR_ZERO(dev->base);
+> 
+> > +}
+> 
+> > -       mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> > -       dev->base = devm_ioremap_resource(&pdev->dev, mem);
+> > -       if (IS_ERR(dev->base))
+> > -               return PTR_ERR(dev->base);
+> 
+> Wolfram, did my last series make your tree? I think there was a patch
+> that touched this part...
 
-> I've lost track of who all I've said this to already for this issue, but 
-> patches to dtc should be against upstream and a version of this has been 
-> sent there already. But it seems they've lost interest in addressing the 
-> review comments. So feel free to send another one. The same comment 
-> applies here.
+Right. It is there. I'll rebase the series on top of the i2c/for-next branch.
 
-Agreed. Rob, could you also take a look at the patch
-[PATCH v3 03/12] dt-bindings: i2c: Discard i2c-slave flag from the DW I2C example
-from this series? You must have missed that. I've created that patch in
-accordance with your suggestion from v2:
-https://lore.kernel.org/linux-i2c/20200511160924.GA9628@bogus/
-
--Sergey
+-Serge
 
 > 
-> Rob
+> -- 
+> With Best Regards,
+> Andy Shevchenko
