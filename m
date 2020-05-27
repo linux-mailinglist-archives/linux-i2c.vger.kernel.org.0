@@ -2,136 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A1A1E44DD
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 15:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C961E450A
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 16:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389079AbgE0N6E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 May 2020 09:58:04 -0400
-Received: from mga07.intel.com ([134.134.136.100]:26294 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389073AbgE0N6D (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 27 May 2020 09:58:03 -0400
-IronPort-SDR: gIrL3P7GEFE96iy3vhq8XA+4CR7mFj2vVmApGDpe4SIh/JlQ43q/oJImQbtPMpguhQP4t7mddr
- kejcU+1CE0tg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 06:58:02 -0700
-IronPort-SDR: AHI0U6LHvGJCpd2TX1iZgKjsYxbJp3IWGbpDXjgNPljDufXMuXsTpbd+wbrwWrc2oZcW/PeYSE
- vj+ye+/bgxHw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,441,1583222400"; 
-   d="scan'208";a="442529663"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga005.jf.intel.com with ESMTP; 27 May 2020 06:57:59 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jdwZF-009Eqw-S8; Wed, 27 May 2020 16:58:01 +0300
-Date:   Wed, 27 May 2020 16:58:01 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
+        id S1730065AbgE0OAd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 May 2020 10:00:33 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:35962 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730223AbgE0OAc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 May 2020 10:00:32 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 545F18030834;
+        Wed, 27 May 2020 14:00:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id LZtLme4p0vqb; Wed, 27 May 2020 17:00:27 +0300 (MSK)
+Date:   Wed, 27 May 2020 17:00:27 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        <devicetree-compiler@vger.kernel.org>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 10/11] i2c: designware: Move reg-space remapping into
- a dedicated function
-Message-ID: <20200527135801.GB1634618@smile.fi.intel.com>
-References: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
- <20200527120111.5781-11-Sergey.Semin@baikalelectronics.ru>
+        Wolfram Sang <wsa@the-dreams.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] check: Add 10bit/slave i2c reg flags support
+Message-ID: <20200527140027.elc4vkbrzjrq4gqh@mobilestation>
+References: <20200527122525.6929-1-Sergey.Semin@baikalelectronics.ru>
+ <20200527133656.GV1634618@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200527120111.5781-11-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200527133656.GV1634618@smile.fi.intel.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, May 27, 2020 at 03:01:10PM +0300, Serge Semin wrote:
-> This is a preparation patch before adding a quirk with custom registers
-> map creation required for the Baikal-T1 System I2C support.
-
-Looks good. Though one nit below.
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
+On Wed, May 27, 2020 at 04:36:56PM +0300, Andy Shevchenko wrote:
+> On Wed, May 27, 2020 at 03:25:25PM +0300, Serge Semin wrote:
+> > Recently the I2C-controllers slave interface support was added to the
+> > kernel I2C subsystem. In this case Linux can be used as, for example,
+> > a I2C EEPROM machine. See [1] for details. Other than instantiating
+> > the EEPROM-slave device from user-space there is a way to declare the
+> > device in dts. In this case firstly the I2C bus controller must support
+> > the slave interface. Secondly I2C-slave sub-node of that controller
+> > must have "reg"-property with flag I2C_OWN_SLAVE_ADDRESS set (flag is
+> > declared in [2]). That flag is declared as (1 << 30), which when set
+> > makes dtc unhappy about too big address set for a I2C-slave:
+> > 
+> > Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64: I2C bus unit address format error, expected "40000064"
+> > Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64:reg: I2C address must be less than 10-bits, got "0x40000064"
+> > 
+> > Similar problem would have happened if we had set the 10-bit address
+> > flag I2C_TEN_BIT_ADDRESS in the "reg"-property.
+> > 
+> > In order to fix the problem we suggest to alter the I2C-bus reg-check
+> > algorithm, so one would be aware of the upper bits set. Normally if no
+> > flag specified, the 7-bit address is expected in the "reg"-property.
+> > If I2C_TEN_BIT_ADDRESS is set, then the 10-bit address check will be
+> > performed. The I2C_OWN_SLAVE_ADDRESS flag will be just ignored.
+> > 
+> > [1] kernel/Documentation/i2c/slave-interface.rst
+> > [2] kernel/include/dt-bindings/i2c/i2c.h
 > 
-> ---
+> ...
 > 
-> Changelog v3:
-> - This is a new patch, which has been created due to declining the
->   glue-layer approach.
+
+> > +		addr = reg & 0x3FFFFFFFU;
+> > +		if ((reg & (1 << 31)) && addr > 0x3ff)
+> >  			FAIL_PROP(c, dti, node, prop, "I2C address must be less than 10-bits, got \"0x%x\"",
+> > -				  reg);
+> > -
+> > +				  addr);
+> > +		else if (!(reg & (1 << 31)) && addr > 0x7f)
+> > +			FAIL_PROP(c, dti, node, prop, "I2C address must be less than 7-bits, got \"0x%x\"",
+> > +				  addr);
 > 
-> Changelog v4:
-> - Use PTR_ERR_OR_ZERO() helper in the bt1_i2c_request_regs() method.
-> - Discard devm_platform_get_and_ioremap_resource() utilization.
-> ---
->  drivers/i2c/busses/i2c-designware-platdrv.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
+> 1 << 31 is UB.
+
+Good point. Thanks.
+
+-Sergey
+
 > 
-> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-> index ad292de2d260..061c8d506c7c 100644
-> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-> @@ -108,6 +108,15 @@ static void dw_i2c_plat_pm_cleanup(struct dw_i2c_dev *dev)
->  		pm_runtime_put_noidle(dev->dev);
->  }
->  
-> +static int dw_i2c_plat_request_regs(struct dw_i2c_dev *dev)
-> +{
-> +	struct platform_device *pdev = to_platform_device(dev->dev);
-> +
-> +	dev->base = devm_platform_ioremap_resource(pdev, 0);
-> +
-> +	return PTR_ERR_OR_ZERO(dev->base);
-> +}
-> +
->  static int dw_i2c_plat_probe(struct platform_device *pdev)
->  {
->  	struct dw_i2c_platform_data *pdata = dev_get_platdata(&pdev->dev);
-> @@ -125,15 +134,14 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
-
->  	dev->flags |= (uintptr_t)device_get_match_data(&pdev->dev);
-
-It's related to previous patch, but I just realized that '|' is not needed
-here. Care to amend in the previous patch?
-
-> -
-> -	dev->base = devm_platform_ioremap_resource(pdev, 0);
-> -	if (IS_ERR(dev->base))
-> -		return PTR_ERR(dev->base);
-> -
->  	dev->dev = &pdev->dev;
->  	dev->irq = irq;
->  	platform_set_drvdata(pdev, dev);
->  
-> +	ret = dw_i2c_plat_request_regs(dev);
-> +	if (ret)
-> +		return ret;
-> +
->  	dev->rst = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
->  	if (IS_ERR(dev->rst))
->  		return PTR_ERR(dev->rst);
 > -- 
-> 2.26.2
+> With Best Regards,
+> Andy Shevchenko
 > 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> 
