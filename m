@@ -2,39 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DB71E3E84
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 12:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECABC1E3E8E
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 12:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728288AbgE0KEN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 May 2020 06:04:13 -0400
-Received: from sauhun.de ([88.99.104.3]:54822 "EHLO pokefinder.org"
+        id S1727879AbgE0KGq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 May 2020 06:06:46 -0400
+Received: from www.zeus03.de ([194.117.254.33]:53722 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726603AbgE0KEN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 27 May 2020 06:04:13 -0400
-Received: from localhost (p54b33011.dip0.t-ipconnect.de [84.179.48.17])
-        by pokefinder.org (Postfix) with ESMTPSA id D00ED2C2037;
-        Wed, 27 May 2020 12:04:09 +0200 (CEST)
-Date:   Wed, 27 May 2020 12:04:03 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Akash Asthana <akashast@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org, msavaliy@codeaurora.org,
-        evgreen@chromium.org
-Subject: Re: [PATCH V7 3/7] i2c: i2c-qcom-geni: Add interconnect support
-Message-ID: <20200527100403.GA1161@ninjato>
-References: <1590497690-29035-1-git-send-email-akashast@codeaurora.org>
- <1590497690-29035-4-git-send-email-akashast@codeaurora.org>
+        id S1725294AbgE0KGq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 27 May 2020 06:06:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=R/DX/aAAi2nkb3qT/jWfTO38q39i
+        0ee+v8RRNu0fuak=; b=yar31p/2iAo1DarEeSINS8ftdHQfSTbR+nULCN3lb9eX
+        nGi8ubeKkm0oKEPY5+18gwj0/amjiNJ5QNZAXFDPQaWYcA3bNwPt5z6aFeMqjzvC
+        j5AiIttrdd7224GcHan9nPdTZ4bXF5yYDpCFzdeiDgm7jqtoikYY436KEYFf5U0=
+Received: (qmail 3108777 invoked from network); 27 May 2020 12:06:44 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 May 2020 12:06:44 +0200
+X-UD-Smtp-Session: l3s3148p1@PhCDXp6maoggAwDPXwcUAGXYC40/aiEi
+Date:   Wed, 27 May 2020 12:06:43 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: save a variable in i2c_detect()
+Message-ID: <20200527100643.GB1161@ninjato>
+References: <20200519114809.15304-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+HP7ph2BbKc20aGI"
+        protocol="application/pgp-signature"; boundary="0ntfKIWw70PvrIHh"
 Content-Disposition: inline
-In-Reply-To: <1590497690-29035-4-git-send-email-akashast@codeaurora.org>
+In-Reply-To: <20200519114809.15304-1-wsa+renesas@sang-engineering.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -42,39 +38,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---+HP7ph2BbKc20aGI
+--0ntfKIWw70PvrIHh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 26, 2020 at 06:24:46PM +0530, Akash Asthana wrote:
-> Get the interconnect paths for I2C based Serial Engine device
-> and vote according to the bus speed of the driver.
+On Tue, May 19, 2020 at 01:48:09PM +0200, Wolfram Sang wrote:
+> No need to populate a variable if it is used only in debug output which
+> may get compiled away anyhow.
 >=20
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+Applied to for-next, thanks!
 
 
---+HP7ph2BbKc20aGI
+--0ntfKIWw70PvrIHh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7OOxAACgkQFA3kzBSg
-KbZevQ/+NcEUgwnmhUa8aEnp2UoVMX6Wlv05FuCrQxi0nZIjygKPEPZk37yJnfyV
-PoMmuHleWfVuj38hY6Uk4MTpqgXGk73gNVBQdl0rMCnVX3lfBZTkITpg/afYnO2w
-/xDD20Au2+yGZlax34Q0Ux1GMGmz5AgZTnz2BwM7T7BmnpEPRUNaibtUApL6gR4f
-2IT7IDmDcuQrt7yl5zjN4PJOQlzYX8k/ltAclkeySaJgs6Txo5qYHY/RK0VxTg/5
-VKyjrdpf6YC5/RoUJqEQaNxBFBSstgzqdTmqhjBkgR1cl0h42bywtcRYgH+2sFPs
-xAldHIfYLHIjJGYE67YLUAhUBpeZ9Q5oIvRd/e7d18OeKoKNOUES2GZIB5SUE3hZ
-p97DyqZPeDns/xwecSDimx6y7QlW82IFYgqprVV8DAE3psOhzjAm2qbe5POKIS70
-jb5sa4LX741rzItM9tW6krBVN3YZk76P5nOYfAb1dX55RwzfKR0nTIUNt/QzwMhh
-6ta1ZxHItJYB2BBNkOxle4KjIKlA2ic2lUBmBzoImL3UdZ7TYk9ggzvtIEN2DUyP
-YAzz9pwwIV7O52gv/WVqM/Lz69qS+Mflog/pGKVi0QrLg2swLvPHohRc4Li+mjWv
-YXd/cuH/u1lIbyEr0/8Al+HCHt8lsTKtUqGk4WZlOkbUxl43jqw=
-=POQo
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7OO7MACgkQFA3kzBSg
+KbbaTA//Y0gzQj5dzugZV6rgNTxgfojE0jgv2lg6TJASiFKnLpMif3gaE/E0UCwL
+jaM8L2KTt3UlkT9WY3tIgUdpv+3kx39AQ2l4Red51rBhrOKLm7l+h6FgF4nnzeyx
+Z6vzkpwxWB7mMt9DyHNiwQZok+SF9VVSbH4HgdgQwIfwSWNH8Z1nYMk2P9k6I2CW
+2cMEIO7o3f6tmj4/2duloeD7fsvB38sdNW5poediUFp6L8Mc8Fu89PPWOBeZzC+7
+cRCkjFcT9JvnK6pNBEtmQ9woNX+Xx8uh00ZhdK9Mcfj99uYeBt6sSncRww20JiEH
+xWMvT+fhVn9gZAjXNyIXIqH2jQkTlVr6c0BYI31FFas84x1JTqH9z7JsNdpfE8Z8
+UYz0gCkZhx3plZAUrC9wgNHigKpzm0SmZz8aWk6Wr6NsPdf15N9eaqpHNZJDt7yU
+Id5V4JAqGZyXfwgb1xR1VT8GLgNN7AvUIrmMhRgzT651y1e7M5yr1vbHp9PzezNF
+RrT/QNQRuhBceDT0aG4FeSHgf/0Iqzg8TXhHXFxDMpQdHGXkkYGW1rRk9+/K0LKo
+/gD8KvzyJqBbgIc9E7HOkO96bQuypA8vXU8B48Eze6OWfytyezsmiHM6I9zl0pVm
+Huc8zwYCZ2mgWqVnZiAdnXuN/Z0psWqauB8q8ORyzvoyNXL4Qtg=
+=Ywo6
 -----END PGP SIGNATURE-----
 
---+HP7ph2BbKc20aGI--
+--0ntfKIWw70PvrIHh--
