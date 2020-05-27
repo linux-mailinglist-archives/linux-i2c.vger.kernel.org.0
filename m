@@ -2,20 +2,20 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E351E4EE0
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 22:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEFE1E4EE8
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 22:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387589AbgE0UKF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S2387539AbgE0UKF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Wed, 27 May 2020 16:10:05 -0400
-Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:49760 "EHLO
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:49761 "EHLO
         herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2387486AbgE0UKF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 May 2020 16:10:05 -0400
+        with ESMTP id S2387537AbgE0UKE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 May 2020 16:10:04 -0400
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 04RK91F9011491;
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 04RK91HZ011493;
         Wed, 27 May 2020 23:09:01 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 20088)
-        id B3F42639C0; Wed, 27 May 2020 23:09:01 +0300 (IDT)
+        id C2D1D639C1; Wed, 27 May 2020 23:09:01 +0300 (IDT)
 From:   Tali Perry <tali.perry1@gmail.com>
 To:     ofery@google.com, brendanhiggins@google.com,
         avifishman70@gmail.com, tmaimon77@gmail.com, kfting@nuvoton.com,
@@ -24,12 +24,13 @@ To:     ofery@google.com, brendanhiggins@google.com,
         andriy.shevchenko@linux.intel.com
 Cc:     linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
         openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tali Perry <tali.perry1@gmail.com>,
-        kbuild test robot <lkp@intel.com>
-Subject: [PATCH v14 0/3] i2c: npcm7xx: add NPCM i2c controller driver
-Date:   Wed, 27 May 2020 23:08:17 +0300
-Message-Id: <20200527200820.47359-1-tali.perry1@gmail.com>
+        linux-kernel@vger.kernel.org, Tali Perry <tali.perry1@gmail.com>
+Subject: [PATCH v14 1/3] dt-bindings: i2c: npcm7xx: add NPCM I2C controller
+Date:   Wed, 27 May 2020 23:08:18 +0300
+Message-Id: <20200527200820.47359-2-tali.perry1@gmail.com>
 X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20200527200820.47359-1-tali.perry1@gmail.com>
+References: <20200527200820.47359-1-tali.perry1@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
@@ -37,107 +38,83 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This patch set adds i2c controller support 
-for the Nuvoton NPCM Baseboard Management Controller (BMC).
-
-NPCM7xx includes 16 I2C controllers. This driver operates the controller.
-This module also includes a slave mode.
-
----
-v14 -> v13:
-	- Fix yaml example: add missing include.
-	- Replace all udelay to usleep_range, except one which is called from
-	  irq.
-	- Fix compilation error (module_platfrom_init conflict).
-	- debugfs counters always updated. Counting till max value,
-	  then stop counting.
-	- Rename bus-frequency to clock-frequency.
-	- Remove unused variables.
-v13 -> v12:
-	- Fix yaml example. Issue found by an updated dt_binding_check.
-	- remove double spacing. indentation issues.
-	- remove ifdef DEBUG_FS around __init and __exit.
-	- debugfs and counters are always present in bus struct.
-	- Fix npcm_i2c_write_fifo_slave flow.
-	- Remove version number.
-v12 -> v11:
-	- Fix according to maintainer comments.
-	- debugfs simplified (usedebugfs_create_u64).
-	- slave read fifo split from master read fifo.
-v11 -> v10:
-	- Fix according to maintainer comments.
-	- Init clk simplified.
-	- Comments in c99
-	- Split master irq function.
-	- debugfs not mandatory.
-	- yaml file fix.
-
-v10 -> v9:
-	- Fix according to maintainer comments.
-	- binding file changed to yaml format.
-	- Shorten recovery flow.
-	- Add support for health monitoring counters.
-
-v9 -> v8:
-	- Fix according to maintainer comments.
-	- Split lines of iowrite..(ioread..) to separate lines.
-	- Use readx_poll_timeout_atomic
-	- resolve various style issues.
-	 
-v8 -> v7:
-	- Split to two commits, one for master, one for slave.
-	- Rename smb to i2c.
-	- Remove global vars.
-
-v7 -> v6:
-	- Rebased on Linux 5.4-rc8  (was Linux 5.4-rc7).
-	- Fix issue found by kbuild test robot (redundant include).
-	- Note: left a warning related to fall through. This fall through is
-	  intentional.
-	
-v6 -> v5:
-	- Update documentation
-
-v5 -> v4:
-	- support recovery
-	- master-slave switch support needed for IPMB
-
-v4 -> v3:
-	- typo on cover letter.
-
-v3 -> v2:
-	- fix dt binding: compatible name: omit "bus"
-
-v2 -> v1:
-	- run check patch in strict mode.
-	- use linux crc.
-	- define regs in constant offset without base.
-	- remove debug prints.
-	- no declarations for local functions.
-	
-v1: initial version
+Added device tree binding documentation for Nuvoton BMC
+NPCM I2C controller.
 
 Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reported-by: kbuild test robot <lkp@intel.com>
-
 ---
-Tali Perry (3):
-  dt-bindings: i2c: npcm7xx: add NPCM I2C controller documentation
-  i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver
-  i2c: npcm7xx: Add support for slave mode for Nuvoton NPCM BMC I2C
-    controller driver.
-
- .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     |   62 +
- drivers/i2c/busses/Kconfig                    |    9 +
- drivers/i2c/busses/Makefile                   |    1 +
- drivers/i2c/busses/i2c-npcm7xx.c              | 2342 +++++++++++++++++
- 4 files changed, 2414 insertions(+)
+ .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
- create mode 100644 drivers/i2c/busses/i2c-npcm7xx.c
 
-
-base-commit: b9bbe6ed63b2b9f2c9ee5cbd0f2c946a2723f4ce
+diff --git a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
+new file mode 100644
+index 000000000000..e3ef2d36f372
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/nuvoton,npcm7xx-i2c.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: nuvoton NPCM7XX I2C Controller Device Tree Bindings
++
++description: |
++  The NPCM750x includes sixteen I2C bus controllers. All Controllers support
++  both master and slave mode. Each controller can switch between master and slave
++  at run time (i.e. IPMB mode). Each controller has two 16 byte HW FIFO for TX and
++  RX.
++
++maintainers:
++  - Tali Perry <tali.perry1@gmail.com>
++
++properties:
++  compatible:
++    const: nuvoton,npcm7xx-i2c
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++    description: Reference clock for the I2C bus
++
++  clock-frequency:
++    description: Desired I2C bus clock frequency in Hz. If not specified,
++                 the default 100 kHz frequency will be used.
++                 possible values are 100000, 400000 and 1000000.
++    default: 100000
++    enum: [100000, 400000, 1000000]
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/nuvoton,npcm7xx-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    i2c0: i2c@80000 {
++        reg = <0x80000 0x1000>;
++        clocks = <&clk NPCM7XX_CLK_APB2>;
++        clock-frequency = <100000>;
++        interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
++        compatible = "nuvoton,npcm750-i2c";
++    };
++
++...
 -- 
 2.22.0
 
