@@ -2,32 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7F31E482C
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 17:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CB61E4892
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 17:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728640AbgE0Psz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 May 2020 11:48:55 -0400
-Received: from mga11.intel.com ([192.55.52.93]:61105 "EHLO mga11.intel.com"
+        id S2390364AbgE0PxY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 May 2020 11:53:24 -0400
+Received: from mga02.intel.com ([134.134.136.20]:18233 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727772AbgE0Psz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 27 May 2020 11:48:55 -0400
-IronPort-SDR: XjWgDcJbBdd84zEbqVX5GtDKCi+419nPwSJi0kjlDMiWkR8XEtX53QCZyJH2HKm3eT3WEZmKzl
- TnGAyzZUagnw==
+        id S1730681AbgE0Pwk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 27 May 2020 11:52:40 -0400
+IronPort-SDR: 2PmsTAisMn82Rly0A7ZkBfdS8Qmx0dzj7UdC7KTSbbRIQeQZvZvmZkAbhh1/XaFK1Cjd4gNrZN
+ B1ptQ9kMo98w==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 08:48:54 -0700
-IronPort-SDR: yMq0JANO0NTOgaujZjyd6x0sLdGSGLW5UxxZzucb/ttmr+YPkiZ5py6rIygbmfEyXZvihvz5KR
- j2aIU/dAa9uQ==
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 08:52:39 -0700
+IronPort-SDR: 6YhWIySeoBxP4RHsRtDP4kdHvHlwrWX91anzrnOVHK/y5q7DzF2CnJFga66qMCQf60brEM38t5
+ 0uDaifa1ajXw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,441,1583222400"; 
-   d="scan'208";a="414248082"
+   d="scan'208";a="442571050"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga004.jf.intel.com with ESMTP; 27 May 2020 08:48:51 -0700
+  by orsmga005.jf.intel.com with ESMTP; 27 May 2020 08:52:36 -0700
 Received: from andy by smile with local (Exim 4.93)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jdyIY-009FpD-KG; Wed, 27 May 2020 18:48:54 +0300
-Date:   Wed, 27 May 2020 18:48:54 +0300
+        id 1jdyMB-009Fql-2r; Wed, 27 May 2020 18:52:39 +0300
+Date:   Wed, 27 May 2020 18:52:39 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
@@ -39,49 +39,41 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
         devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 07/11] i2c: designware: Discard Cherry Trail model flag
-Message-ID: <20200527154854.GH1634618@smile.fi.intel.com>
+Subject: Re: [PATCH v4 11/11] i2c: designware: Add Baikal-T1 System I2C
+ support
+Message-ID: <20200527155239.GI1634618@smile.fi.intel.com>
 References: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
- <20200527120111.5781-8-Sergey.Semin@baikalelectronics.ru>
- <20200527134339.GY1634618@smile.fi.intel.com>
- <20200527142902.2xpteguuotsl3z7y@mobilestation>
+ <20200527120111.5781-12-Sergey.Semin@baikalelectronics.ru>
+ <20200527140303.GC1634618@smile.fi.intel.com>
+ <20200527150431.z25aibkn6edplneh@mobilestation>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200527142902.2xpteguuotsl3z7y@mobilestation>
+In-Reply-To: <20200527150431.z25aibkn6edplneh@mobilestation>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, May 27, 2020 at 05:29:02PM +0300, Serge Semin wrote:
-> On Wed, May 27, 2020 at 04:43:39PM +0300, Andy Shevchenko wrote:
-> > On Wed, May 27, 2020 at 03:01:07PM +0300, Serge Semin wrote:
-> > > A PM workaround activated by the flag MODEL_CHERRYTRAIL has been removed
-> > > since commit 9cbeeca05049 ("i2c: designware: Remove Cherry Trail PMIC I2C
-> > > bus pm_disabled workaround"), but the flag most likely by mistake has been
-> > > left in the Dw I2C drivers. Let's remove it.
-> > 
-> > ...
-> > 
-> > > -#define MODEL_MSCC_OCELOT	0x00000200
-> > > +#define MODEL_MSCC_OCELOT	0x00000100
-> > 
-> > But why?
-> > 
-> > Does 0x200 work or not? I didn't see this in commit message.
-> 
-> I removed the MODEL_CHERRYTRAIL flag and redefined the only left
-> MODEL_MSCC_OCELOT flag to set the very first bit allocated for the model
-> flags. Isn't that obvious?
+On Wed, May 27, 2020 at 06:04:31PM +0300, Serge Semin wrote:
+> On Wed, May 27, 2020 at 05:03:03PM +0300, Andy Shevchenko wrote:
+> > On Wed, May 27, 2020 at 03:01:11PM +0300, Serge Semin wrote:
 
-Yes, but how it's related to the MSCC_OCELOT?
+...
 
-Can't you simple put your define later to that number if absence of 0x100
-provokes an exception when reading this code.
+> > > +static struct regmap_config bt1_i2c_cfg = {
+> > > +	.reg_bits = 32,
+> > > +	.val_bits = 32,
+> > > +	.reg_stride = 4,
+> > > +	.fast_io = true,
+> > > +	.reg_read = bt1_i2c_read,
+> > > +	.reg_write = bt1_i2c_write,
+> > > +	.max_register = DW_IC_COMP_TYPE
 
-Again, unneeded churn.
+And perhaps add a comma?
+
+> > > +};
 
 -- 
 With Best Regards,
