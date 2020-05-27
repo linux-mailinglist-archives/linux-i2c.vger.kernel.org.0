@@ -2,22 +2,22 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1591E4151
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 14:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3871E418A
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 14:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728482AbgE0MH3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 May 2020 08:07:29 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:34894 "EHLO
+        id S2387486AbgE0MI3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 May 2020 08:08:29 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:34924 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728402AbgE0MH2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 May 2020 08:07:28 -0400
+        with ESMTP id S1728440AbgE0MH3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 May 2020 08:07:29 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 93FFB8030837;
-        Wed, 27 May 2020 12:07:24 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 372748030835;
+        Wed, 27 May 2020 12:07:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id cJHk2x_EkrsV; Wed, 27 May 2020 15:07:24 +0300 (MSK)
+        with ESMTP id MeOxT80o2dj2; Wed, 27 May 2020 15:07:24 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Wolfram Sang <wsa@the-dreams.de>,
@@ -30,9 +30,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         <linux-mips@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 02/11] dt-bindings: i2c: Discard i2c-slave flag from the DW I2C example
-Date:   Wed, 27 May 2020 15:01:02 +0300
-Message-ID: <20200527120111.5781-3-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v4 03/11] dt-bindings: i2c: dw: Add Baikal-T1 SoC I2C controller
+Date:   Wed, 27 May 2020 15:01:03 +0300
+Message-ID: <20200527120111.5781-4-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -44,14 +44,9 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-dtc currently doesn't support I2C_OWN_SLAVE_ADDRESS flag set in the
-i2c "reg" property. If it is the compiler will print a warning:
-
-Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64: I2C bus unit address format error, expected "40000064"
-Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64:reg: I2C address must be less than 10-bits, got "0x40000064"
-
-In order to silence dtc up let's discard the flag from the DW I2C DT
-binding example for now. Just revert this commit when dtc is fixed.
+Add the "baikal,bt1-sys-i2c" compatible string to the DW I2C binding. Even
+though the corresponding node is supposed to be a child of the Baikal-T1
+System Controller, its reg property is left required for compatibility.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
@@ -62,27 +57,31 @@ Cc: linux-mips@vger.kernel.org
 
 ---
 
+Changelog v2:
+- Make the reg property being optional if it's Baikal-T1 System I2C DT
+  node.
+
 Changelog v3:
-- This is a new patch created as a result of the Rob request to remove
-  the EEPROM-slave bit setting in the DT binndings example until the dtc
-  is fixed.
+- Get back the reg property being mandatory even if it's Baikal-T1 System
+  I2C DT node. Rob says it has to be in the DT node if there is a
+  dedicated registers range in the System Controller registers space.
 ---
- Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-index 4bd430b2b41d..101d78e8f19d 100644
+index 101d78e8f19d..8c9b3db1b1b8 100644
 --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
 +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-@@ -137,7 +137,7 @@ examples:
+@@ -31,6 +31,8 @@ properties:
+         items:
+           - const: mscc,ocelot-i2c
+           - const: snps,designware-i2c
++      - description: Baikal-T1 SoC System I2C controller
++        const: baikal,bt1-sys-i2c
  
-       eeprom@64 {
-         compatible = "linux,slave-24c02";
--        reg = <0x40000064>;
-+        reg = <0x64>;
-       };
-     };
-   - |
+   reg:
+     minItems: 1
 -- 
 2.26.2
 
