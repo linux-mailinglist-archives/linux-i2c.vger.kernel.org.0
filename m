@@ -2,112 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF64E1E4471
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 15:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85031E44B9
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 15:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388865AbgE0Nva (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 May 2020 09:51:30 -0400
-Received: from mga04.intel.com ([192.55.52.120]:49507 "EHLO mga04.intel.com"
+        id S2388994AbgE0Nzd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 May 2020 09:55:33 -0400
+Received: from msa14.plala.or.jp ([60.36.166.14]:44952 "EHLO msa14.plala.or.jp"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388516AbgE0Nv2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 27 May 2020 09:51:28 -0400
-IronPort-SDR: IKo8haopAWSBl9I1yCtpdlb8BI4qZQbMyoNgczX8WMpN+XeuvlHCdyTvw/TZmRFzfeUmzyOC6Y
- uO76M7f0yFoA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 06:51:28 -0700
-IronPort-SDR: NNzNVuxnsYgjq0//FrIlgA2Ubaekv0qkfg27wRfeu27gjGG5QHBtb0zZbvLGFggWcMukhQXXLU
- sgaB3Jr9XmgQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,441,1583222400"; 
-   d="scan'208";a="266840260"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga003.jf.intel.com with ESMTP; 27 May 2020 06:51:25 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jdwSt-009Eo4-V3; Wed, 27 May 2020 16:51:27 +0300
-Date:   Wed, 27 May 2020 16:51:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 09/11] i2c: designware: Retrieve quirk flags as early
- as possible
-Message-ID: <20200527135127.GA1634618@smile.fi.intel.com>
-References: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
- <20200527120111.5781-10-Sergey.Semin@baikalelectronics.ru>
+        id S2388897AbgE0Nzc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 27 May 2020 09:55:32 -0400
+X-Greylist: delayed 2705 seconds by postgrey-1.27 at vger.kernel.org; Wed, 27 May 2020 09:55:32 EDT
+Received: from mwebp13 ([172.23.13.133]) by msa14.plala.or.jp with ESMTP
+          id <20200527135531.WGVA3566.msa14.plala.or.jp@mwebp13>;
+          Wed, 27 May 2020 22:55:31 +0900
+Date:   Wed, 27 May 2020 22:55:31 +0900
+From:   "Mrs.Judith Rice" <hamurafujimi@tmail.plala.or.jp>
+Reply-To: jonesevansje@gmail.com
+Message-ID: <20200527225531.YQK7M.1012.root@mwebp13>
+Subject: Spende
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200527120111.5781-10-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=iso-2022-jp
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+Sensitivity: Normal
+X-VirusScan: Outbound; mvir-ac14; Wed, 27 May 2020 22:55:31 +0900
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, May 27, 2020 at 03:01:09PM +0300, Serge Semin wrote:
-> Some platforms might need to activate the driver quirks at a very early
-> probe stage. For instance, Baikal-T1 System I2C doesn't need to map the
-> registers space as ones belong to the system controller. Instead it will
-> request the syscon regmap from the parental DT node. In order to be able
-> to do so let's retrieve the model flags right after the DW I2C private
-> data is created.
+Attn:
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Es tut uns leid, dass wir Sie aufgrund eines Mismanagent of Beneficaries-Fonds von unseren ernannten Zonal Managern versp&#228;tet kontaktiert haben. Bitte beachten Sie, dass Sie qualifiziert sind, die Zahlung von 900.000,00 USD an der ATM-Karte mit neunhunderttausend Dollar zu erhalten.
 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> 
-> ---
-> 
-> Changelog v3:
-> - This is a new patch, which has been created due to declining the
->   glue-layer approach.
-> ---
->  drivers/i2c/busses/i2c-designware-platdrv.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-> index ca057aa9eac4..ad292de2d260 100644
-> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-> @@ -124,6 +124,8 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
->  	if (!dev)
->  		return -ENOMEM;
->  
-> +	dev->flags |= (uintptr_t)device_get_match_data(&pdev->dev);
-> +
->  	dev->base = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(dev->base))
->  		return PTR_ERR(dev->base);
-> @@ -146,8 +148,6 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
->  
->  	i2c_dw_acpi_adjust_bus_speed(&pdev->dev);
->  
-> -	dev->flags |= (uintptr_t)device_get_match_data(&pdev->dev);
-> -
->  	if (pdev->dev.of_node)
->  		dw_i2c_of_configure(pdev);
->  
-> -- 
-> 2.26.2
-> 
+Als Entsch&#228;digung von WORLD BANK / IWF (Internationaler W&#228;hrungsfonds) f&#252;r die automatisch &#252;ber einen E-Mail-Wahlautomaten gezogenen, die in der Vergangenheit noch nicht abgeschlossene Transaktionen hatten.
 
--- 
-With Best Regards,
-Andy Shevchenko
+F&#252;r weitere Informationen kontaktieren Sie bitte Rev.EVANS JONES ( jonesevansje@gmail.com )
 
+Bitte senden Sie ihm Ihre pers&#246;nlichen Daten wie:
 
+Vollst&#228;ndiger Name:
+Wohnanschrift:
+Telefonnummer:
+Herkunftsland:
+
+Gr&#252;&#223;e,
+Mrs. Judith Rice
+
+Spende
