@@ -2,99 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E681E3FBB
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 13:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD85E1E3FD2
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 May 2020 13:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388207AbgE0LUG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 May 2020 07:20:06 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:34554 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388146AbgE0LUF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 May 2020 07:20:05 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 90624803080A;
-        Wed, 27 May 2020 11:20:02 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9Bltaobyr5kB; Wed, 27 May 2020 14:20:01 +0300 (MSK)
-Date:   Wed, 27 May 2020 14:20:01 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        <linux-mips@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 01/12] scripts/dtc: check: Add 10bit/slave i2c reg
- flags support
-Message-ID: <20200527112001.pxnzd4ofxsps7x57@mobilestation>
-References: <20200526215528.16417-1-Sergey.Semin@baikalelectronics.ru>
- <20200526215528.16417-2-Sergey.Semin@baikalelectronics.ru>
- <20200527011704.GA808104@bogus>
+        id S2388329AbgE0LXJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 May 2020 07:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388143AbgE0LXI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 May 2020 07:23:08 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385E0C061A0F;
+        Wed, 27 May 2020 04:23:08 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id x22so18878938otq.4;
+        Wed, 27 May 2020 04:23:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Fp0svMZCl7416GUNw4GqWtjLX0o7vCvEcznT00dMb8A=;
+        b=ihOkLe3NKVS7aTB07R2E2Qb7QqfoeyQfissj2+aNNq76WhAxLMb1jn++IJg0TeYVwN
+         gGhfYq9DyZbbOCNfIZlb80PNVr9RwJfsJUiKiQE/kF84HjZkM13HiT8ZvI5P15RboXX2
+         xCMNJYszyXrtIsgNlhQo4ZJ/QtpvbW+6o0VlZHY1CaOYH9+Ofpj6y72R0q4cRcdIzA7B
+         3exfjhEvVihaXfBKWVj9Lx681NdmYAVw2dRS3kz1IGwAiFuHD2hWkbkXE0NRaYitiG/x
+         9yjiRt2gIXW2XQPiymeQIAmBwfiOuck8/eOUScEjcvaCejAYC1a7rPCYIdmDk8m9MynK
+         6+9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fp0svMZCl7416GUNw4GqWtjLX0o7vCvEcznT00dMb8A=;
+        b=OURr7ZszvVSJO272IshNCUq2jjpBeZgBvfim5iELOac5LT15gLJjkSaBvibvlnbE/V
+         WZWYAGznQwRbEBGZzwlDyHRgbGtQ1ZsbUOX28MlT7Cc3g6V3WrlwpTgRdDhRNpFI4tcw
+         FuGAH9TKQ3AjQwBS0m9w6abMqwQ8fuJkpAqVSQ8lm2RxGYy+J47ibBJoApvqT7ITFdYl
+         pBYAqEGLcLvji/fxW6Rdi+o9TLUF3r5zeZgFabZoDednar+IsIq1BK22RjJRba6KQcfm
+         9F/lw3InI9p8BIZzM132liLmtgiR7qFKhUbuBq2G912ZRrsfIybmK6CPZMd2061VIB1M
+         jJaQ==
+X-Gm-Message-State: AOAM531hPpHB54kC7T7cI7mADJYS6s+Uf8lQxtOyeSqq+jmElrC0LT3e
+        jGBTGUaRbmYz+1sGF1lPztVtIqLXAg8v5uqa3b0=
+X-Google-Smtp-Source: ABdhPJwRs0irm8ujT4wRDJ1yNMXOLkQGDLfhS4wYsUks2EzBi7aBEZfzFaiACJYFXZ647Iot246VfuxQuYwM1M8Tfxw=
+X-Received: by 2002:a9d:d83:: with SMTP id 3mr4102738ots.365.1590578587535;
+ Wed, 27 May 2020 04:23:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200527011704.GA808104@bogus>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1589555337-5498-17-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com> <20200527013136.GA838011@bogus>
+In-Reply-To: <20200527013136.GA838011@bogus>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 27 May 2020 12:22:41 +0100
+Message-ID: <CA+V-a8t6mXkTUac69V=T8_27r_sdN+=MktDTM1mmtbXRn8SSQQ@mail.gmail.com>
+Subject: Re: [PATCH 16/17] dt-bindings: watchdog: renesas,wdt: Document
+ r8a7742 support
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jens Axboe <axboe@kernel.dk>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, May 26, 2020 at 07:17:04PM -0600, Rob Herring wrote:
-> On Wed, May 27, 2020 at 12:55:17AM +0300, Serge Semin wrote:
-> > Recently the I2C-controllers slave interface support was added to the
-> > kernel I2C subsystem. In this case Linux can be used as, for example,
-> > a I2C EEPROM machine. See [1] for details. Other than instantiating
-> > the EEPROM-slave device from user-space there is a way to declare the
-> > device in dts. In this case firstly the I2C bus controller must support
-> > the slave interface. Secondly I2C-slave sub-node of that controller
-> > must have "reg"-property with flag I2C_OWN_SLAVE_ADDRESS set (flag is
-> > declared in [2]). That flag is declared as (1 << 30), which when set
-> > makes dtc unhappy about too big address set for a I2C-slave:
-> > 
-> > Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64: I2C bus unit address format error, expected "40000064"
-> > Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64:reg: I2C address must be less than 10-bits, got "0x40000064"
-> > 
-> > Similar problem would have happened if we had set the 10-bit address
-> > flag I2C_TEN_BIT_ADDRESS in the "reg"-property.
-> > 
-> > In order to fix the problem we suggest to alter the I2C-bus reg-check
-> > algorithm, so one would be aware of the upper bits set. Normally if no
-> > flag specified, the 7-bit address is expected in the "reg"-property.
-> > If I2C_TEN_BIT_ADDRESS is set, then the 10-bit address check will be
-> > performed. The I2C_OWN_SLAVE_ADDRESS flag will be just ignored.
-> > 
-> > [1] Documentation/i2c/slave-interface.rst
-> > [2] include/dt-bindings/i2c/i2c.h
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: linux-i2c@vger.kernel.org
+Hi Rob,
+
+On Wed, May 27, 2020 at 2:31 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Fri, May 15, 2020 at 04:08:56PM +0100, Lad Prabhakar wrote:
+> > RZ/G1H (R8A7742) watchdog implementation is compatible with R-Car Gen2,
+> > therefore add relevant documentation.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
 > > ---
-> >  scripts/dtc/checks.c | 13 +++++++++----
-> >  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> I've lost track of who all I've said this to already for this issue, but 
-> patches to dtc should be against upstream and a version of this has been 
-> sent there already. But it seems they've lost interest in addressing the 
-> review comments. So feel free to send another one. The same comment 
-> applies here.
+> >  Documentation/devicetree/bindings/watchdog/renesas,wdt.txt | 1 +
+> >  1 file changed, 1 insertion(+)
+>
+> Meanwhile in the DT tree, converting this schema landed. Can you prepare
+> a version based on the schema.
+>
+This was kindly taken care by Stephen during merge in linux-next [1].
 
-There is another patch in this series:
-[PATCH v3 04/12] dt-bindings: i2c: dw: Add Baikal-T1 SoC I2C controller
-which is also waiting for your review. I've updated it as you requested.
-Could you take a look at that too?
+[1] https://lkml.org/lkml/2020/5/26/32
 
--Sergey
+Cheers,
+--Prabhakar
 
-> 
 > Rob
