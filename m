@@ -2,77 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A631E6395
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 May 2020 16:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8295B1E6702
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 May 2020 18:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390962AbgE1OTC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 May 2020 10:19:02 -0400
-Received: from mga07.intel.com ([134.134.136.100]:64022 "EHLO mga07.intel.com"
+        id S2404801AbgE1QDA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 May 2020 12:03:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47596 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390880AbgE1OTC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 28 May 2020 10:19:02 -0400
-IronPort-SDR: F1YHOZxgWvisaKeYo5wHIBZ374lphDxlEIcNt59IjLcQt9W2ZGil7ghF/McbwN/biuzrlmyr6W
- N16Qc21O3QbA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2020 07:19:01 -0700
-IronPort-SDR: Msf4DbFpLFycq+neVAka0xHfjZGWVNji1fJ2hAdesFwsSSWEgS/9kaV5V+D6+AQDVbFNQpKkcm
- MQ/DyYaAkK5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,444,1583222400"; 
-   d="scan'208";a="442964121"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 28 May 2020 07:18:59 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D2A10230; Thu, 28 May 2020 17:18:58 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        linux-acpi@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] i2c: acpi: Drop double check for ACPI companion device
-Date:   Thu, 28 May 2020 17:18:58 +0300
-Message-Id: <20200528141858.82648-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.26.2
+        id S2404631AbgE1QC5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 28 May 2020 12:02:57 -0400
+Received: from localhost (p5486c949.dip0.t-ipconnect.de [84.134.201.73])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 12F872071A;
+        Thu, 28 May 2020 16:02:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590681776;
+        bh=EQZAsITFjSTR/q09X/8lN3XhCtq6tnw+2iECXybITcc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cWWZvUeJb6htSFeqHlZSCbfW0IfMKb6k5zowU44QhtYkc9XkdhbdUF1M4kLgaW1nH
+         s4SsVwkVaRvoSuJGQFpjDMyOcDAd7nUGpb7keHjLKE/EJO4ydoElBHAhwnghzoLkWz
+         Q3Jv3rg/4SoNSsB4slytXldS+pMaEh3PfAmq8UJo=
+Date:   Thu, 28 May 2020 18:02:50 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v1] i2c: acpi: Drop double check for ACPI companion device
+Message-ID: <20200528160250.GA2875@ninjato>
+References: <20200528141858.82648-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6TrnltStXW4iwmi0"
+Content-Disposition: inline
+In-Reply-To: <20200528141858.82648-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-acpi_dev_get_resources() does perform the NULL pointer check against
-ACPI companion device which is given as function parameter. Thus,
-there is no need to duplicate this check in the caller.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/i2c/i2c-core-acpi.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+--6TrnltStXW4iwmi0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index c8f42f2037cb..2ade99b105b9 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -468,16 +468,12 @@ struct notifier_block i2c_acpi_notifier = {
- struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
- 				       struct i2c_board_info *info)
- {
-+	struct acpi_device *adev = ACPI_COMPANION(dev);
- 	struct i2c_acpi_lookup lookup;
- 	struct i2c_adapter *adapter;
--	struct acpi_device *adev;
- 	LIST_HEAD(resource_list);
- 	int ret;
- 
--	adev = ACPI_COMPANION(dev);
--	if (!adev)
--		return ERR_PTR(-EINVAL);
--
- 	memset(&lookup, 0, sizeof(lookup));
- 	lookup.info = info;
- 	lookup.device_handle = acpi_device_handle(adev);
--- 
-2.26.2
+On Thu, May 28, 2020 at 05:18:58PM +0300, Andy Shevchenko wrote:
+> acpi_dev_get_resources() does perform the NULL pointer check against
+> ACPI companion device which is given as function parameter. Thus,
+> there is no need to duplicate this check in the caller.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
+Applied to for-next, thanks!
+
+
+--6TrnltStXW4iwmi0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7P4KYACgkQFA3kzBSg
+KbaUjRAAkH5mW+ULUxU3+We5mKm5Y6z3qpQkoMgz57aORgW4xnWpKoAOsrJvDVQk
+cxh4/y9i3FqByU16AkYPCpcCMNnGXkv240uRw0C6kqVQ7ZJzRGVF56cfVjEjbYSi
+htr/Bm0JEY0Tpccb+yaNwIrsdIerq8Eywz4dJEk4qirpwtLScKKrd6oCTsa/Th4Y
+nksfONEJXfbo4IQwGtHtd3pBCuuLWxnSUla2z/Lf7HP/7T9MYGmqBixZ9RTJwBBR
+6lKOqlbAgT4QpfuZxacaJIiPo/Mg+9CYOpACpbrtweYkVSIIU6AMD5v1PGj1h4GL
+/pwt7LSE1WRf1PK8FH6wtfdhKUpYVsRLybgJcEKVRPixVmc/3jAx94CN2qRNNgy+
+bzz1lh3oKyrmULU8tECw5oetzk+g9YXG+I/rGmCJ5y8byfanLH0bRP5bK4JX3vn3
+rchljZQ5JOKvIHWYzKwo24GjVXPR/aaU1HjZtmWyN7FN2mgrqwhbWoEm0QekVqF2
+quZhi7D78yYFVvs0JrguMXAC0sTbnyfy5m7H8uVzxu8I2LV6CZCejzbLD6iXAIor
+FCaommTHtCx0c2Ff+n4rGEOuueQoSQnUqTz2bwx0QPsfMf5Hhz4aBn6VXw2+Yla9
+i07/kDgpELI71aXEVkg5y7S46yxzQSCt1aeYJWgpIO1YtRKPyJA=
+=WR8p
+-----END PGP SIGNATURE-----
+
+--6TrnltStXW4iwmi0--
