@@ -2,37 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6341E5C21
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 May 2020 11:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83551E5C1C
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 May 2020 11:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387414AbgE1JeS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 May 2020 05:34:18 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:40576 "EHLO
+        id S2387555AbgE1JeJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 May 2020 05:34:09 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40578 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387410AbgE1Jdf (ORCPT
+        with ESMTP id S2387414AbgE1Jdf (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 May 2020 05:33:35 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id F214680307FF;
-        Thu, 28 May 2020 09:33:31 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id C30958030776;
+        Thu, 28 May 2020 09:33:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id u0acitCZOxcY; Thu, 28 May 2020 12:33:31 +0300 (MSK)
+        with ESMTP id 7sMrcUKHbCUU; Thu, 28 May 2020 12:33:32 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>
+        Wolfram Sang <wsa@the-dreams.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 06/11] i2c: designware: Add Baytrail sem config DW I2C platform dependency
-Date:   Thu, 28 May 2020 12:33:16 +0300
-Message-ID: <20200528093322.23553-7-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v6 07/11] i2c: designware: Discard Cherry Trail model flag
+Date:   Thu, 28 May 2020 12:33:17 +0300
+Message-ID: <20200528093322.23553-8-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200528093322.23553-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200528093322.23553-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -44,19 +44,17 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Currently Intel Baytrail I2C semaphore is a feature of the DW APB I2C
-platform driver. It's a bit confusing to see it's config in the menu at
-some separated place with no reference to the platform code. Let's move the
-config definition to be below the I2C_DESIGNWARE_PLATFORM config and mark
-it with "depends on I2C_DESIGNWARE_PLATFORM" statement. By doing so the
-config menu will display the feature right below the DW I2C platform
-driver item and will indent it to the right so signifying its belonging.
+A PM workaround activated by the flag MODEL_CHERRYTRAIL has been removed
+since commit 9cbeeca05049 ("i2c: designware: Remove Cherry Trail PMIC I2C
+bus pm_disabled workaround"), but the flag most likely by mistake has been
+left in the Dw I2C drivers. Let's remove it. Since MODEL_MSCC_OCELOT is
+the only model-flag left, redefine it to be 0x100 so setting a very first
+bit in the MODEL_MASK bits range.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: linux-mips@vger.kernel.org
 Cc: devicetree@vger.kernel.org
@@ -64,56 +62,54 @@ Cc: devicetree@vger.kernel.org
 ---
 
 Changelog v3:
-- Replace if-endif clause around the I2C_DESIGNWARE_BAYTRAIL config
-  with "depends on" operator.
+- Since MSCC and Baikal-T1 will be a part of the platform driver code, we
+  have to preserve the MODEL_MASK macro to use it to filter the model
+  flags during the IP-specific quirks activation.
 ---
- drivers/i2c/busses/Kconfig | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+ drivers/i2c/busses/i2c-designware-core.h    | 3 +--
+ drivers/i2c/busses/i2c-designware-pcidrv.c  | 1 -
+ drivers/i2c/busses/i2c-designware-platdrv.c | 2 +-
+ 3 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 7f92f6a96042..7cd279c36898 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -549,20 +549,10 @@ config I2C_DESIGNWARE_PLATFORM
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-designware-platform.
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 150de5e5c31b..b9ef9b0deef0 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -289,8 +289,7 @@ struct dw_i2c_dev {
+ #define ACCESS_INTR_MASK	0x00000004
+ #define ACCESS_NO_IRQ_SUSPEND	0x00000008
  
--config I2C_DESIGNWARE_PCI
--	tristate "Synopsys DesignWare PCI"
--	depends on PCI
--	select I2C_DESIGNWARE_CORE
--	help
--	  If you say yes to this option, support will be included for the
--	  Synopsys DesignWare I2C adapter. Only master mode is supported.
--
--	  This driver can also be built as a module.  If so, the module
--	  will be called i2c-designware-pci.
--
- config I2C_DESIGNWARE_BAYTRAIL
- 	bool "Intel Baytrail I2C semaphore support"
- 	depends on ACPI
-+	depends on I2C_DESIGNWARE_PLATFORM
- 	depends on (I2C_DESIGNWARE_PLATFORM=m && IOSF_MBI) || \
- 		   (I2C_DESIGNWARE_PLATFORM=y && IOSF_MBI=y)
- 	help
-@@ -572,6 +562,17 @@ config I2C_DESIGNWARE_BAYTRAIL
- 	  the platform firmware controlling it. You should say Y if running on
- 	  a BayTrail system using the AXP288.
+-#define MODEL_CHERRYTRAIL	0x00000100
+-#define MODEL_MSCC_OCELOT	0x00000200
++#define MODEL_MSCC_OCELOT	0x00000100
+ #define MODEL_MASK		0x00000f00
  
-+config I2C_DESIGNWARE_PCI
-+	tristate "Synopsys DesignWare PCI"
-+	depends on PCI
-+	select I2C_DESIGNWARE_CORE
-+	help
-+	  If you say yes to this option, support will be included for the
-+	  Synopsys DesignWare I2C adapter. Only master mode is supported.
-+
-+	  This driver can also be built as a module.  If so, the module
-+	  will be called i2c-designware-pci.
-+
- config I2C_DIGICOLOR
- 	tristate "Conexant Digicolor I2C driver"
- 	depends on ARCH_DIGICOLOR || COMPILE_TEST
+ u32 dw_readl(struct dw_i2c_dev *dev, int offset);
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index 11a5e4751eab..947c096f86e3 100644
+--- a/drivers/i2c/busses/i2c-designware-pcidrv.c
++++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+@@ -149,7 +149,6 @@ static struct dw_pci_controller dw_pci_controllers[] = {
+ 	},
+ 	[cherrytrail] = {
+ 		.bus_num = -1,
+-		.flags = MODEL_CHERRYTRAIL,
+ 		.scl_sda_cfg = &byt_config,
+ 	},
+ 	[elkhartlake] = {
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index f6d2c96e35ce..ca057aa9eac4 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -44,7 +44,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
+ 	{ "INT3432", 0 },
+ 	{ "INT3433", 0 },
+ 	{ "80860F41", ACCESS_NO_IRQ_SUSPEND },
+-	{ "808622C1", ACCESS_NO_IRQ_SUSPEND | MODEL_CHERRYTRAIL },
++	{ "808622C1", ACCESS_NO_IRQ_SUSPEND },
+ 	{ "AMD0010", ACCESS_INTR_MASK },
+ 	{ "AMDI0010", ACCESS_INTR_MASK },
+ 	{ "AMDI0510", 0 },
 -- 
 2.26.2
 
