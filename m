@@ -2,132 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4E21E58A1
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 May 2020 09:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BB31E5B01
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 May 2020 10:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725928AbgE1HbA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 May 2020 03:31:00 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:59857 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725747AbgE1HbA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 May 2020 03:31:00 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B1C135801E3;
-        Thu, 28 May 2020 03:30:58 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 28 May 2020 03:30:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=DzfmDTRER5Rc6vqd8K3tdl/h7IL
-        LPrzRW6G6nM/VnN8=; b=Uo/3TSRDGuNYFTVIWjo5nW8GLeNnjf4YCBm0RvH8OIa
-        d9NQOKxlUg1FESR6IAXM5mj3dCtfSgJ52b9QgX4BbQXpaWRZ0V2mj5pbElDNg9xY
-        WoBkTMIQyU/2uLCVme027EGhgYmAZ/kBGpvEUjaTK8tB8zh7qLFjUq2y9M7CQlM5
-        MD+a0zkII7ReHXvr3Myih7oiMCzLIr6qJSbkdU96GdrU2l4xHKx0zu9/9B+e9Nh/
-        lH2L+GyXcRjyXo0v1AxKmSNI6EF6GfjfH7d6FDHnMymDy0hH5jhxxXgSNGIWnmZI
-        Dq68N3mnkUh8ZEoFVa0f+C8rDUU8HPjXpGGWgHElAbg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=DzfmDT
-        RER5Rc6vqd8K3tdl/h7ILLPrzRW6G6nM/VnN8=; b=KJHyh6XqKlTQ4MP0B3XhzN
-        YCyIFUWT+oDBebBgN3cMKQVzEx6whQoljUpQimvyyMAUdxHNajzjv1Eb6YfSvxem
-        Kz+iXJhMpOpKhzTHpkOkRjMEVzADfZLY+cFKzpJbQxpOcmDfZlIKouu8MTaOnwDa
-        b4zKDMS9u1OPxxiV65/Et3WpQ+XDk9rQbMJuPZVmi9Ge6EXdzLxWcD5C6D85TWyh
-        i65iIRKZS8OVmdVXgZEv0KZwdYv6exg7SwCRISRFiD/SiqzrDgGwpm4kLxFEKEil
-        Q8izo1OUn4kMo6xOquuuYDXVcBbgRiqAbztXNUGaU+tzRVfiGRRSTDWokeT4Qz1w
-        ==
-X-ME-Sender: <xms:sWjPXoONJgJEwoEq_FYCUe_RM3crKMcoo7E-FPok9IxHzYT67Q46Rw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedruddvhedguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeevveefffduveeitdegtefhhfetueffteefffdvheevvdehteethedvleff
-    gfejvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeeltddrkeelrdeike
-    drjeeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhep
-    mhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:sWjPXu8OSORrgT7dwCMcLRO_66K0n8kL-N8hkR8uECjCsK3NZ3NpZw>
-    <xmx:sWjPXvRtze0HzvnWIkUsiiK-OMC0eioiyU_5C_9VzsvjpWy-KMqdVQ>
-    <xmx:sWjPXgt1FAvnCaJsnGRpBcolBHLPyMjUSIl2wixGr4MHY17_SwWhmg>
-    <xmx:smjPXo7uLD9f6nuRyVwYhByDit7NnBfwK4Rpk_3NZeXwPXg38J9vyQ>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 32F0B30614FA;
-        Thu, 28 May 2020 03:30:57 -0400 (EDT)
-Date:   Thu, 28 May 2020 09:30:55 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Daniel Drake <drake@endlessm.com>
-Cc:     Jian-Hong Pan <jian-hong@endlessm.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Eric Anholt <eric@anholt.net>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Linux Upstreaming Team <linux@endlessm.com>
-Subject: Re: [PATCH v2 00/91] drm/vc4: Support BCM2711 Display Pipelin
-Message-ID: <20200528073055.znutrhkryzu3grrl@gilmour.lan>
-References: <20200427072342.5499-1-jian-hong@endlessm.com>
- <20200428162152.ztsqp7nxqbwqrm6r@gilmour.lan>
- <CAPpJ_efvtVzb_hvoVOeaePh7UdE13wOiiGaDBH38cToB-yhkUg@mail.gmail.com>
- <20200507172158.cybtakpo6cxv6wcs@gilmour.lan>
- <CAPpJ_efxenmSXt2OXkhkQ1jDJ59tyWBDUvmpyOB-bfPMDENQZg@mail.gmail.com>
- <CAPpJ_ed9TMJjN8xS1_3saf5obQhULJSLNgQSAFxgiWM2QX9A7Q@mail.gmail.com>
- <20200526102018.kznh6aglpkqlp6en@gilmour.lan>
- <CAD8Lp467DiYWLwH6T1Jeq-uyN4VEuef-gGWw0_bBTtmSPr00Ag@mail.gmail.com>
- <20200527091335.7wc3uy67lbz7j4di@gilmour.lan>
- <CAD8Lp45ucK-yZ5G_DrUVA7rnxo58UF1LPUy65w2PCOcSxKx_Sg@mail.gmail.com>
+        id S1727862AbgE1Ij2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 May 2020 04:39:28 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40208 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726955AbgE1Ij2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 May 2020 04:39:28 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 6C2CF80307C0;
+        Thu, 28 May 2020 08:39:25 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ionmEv71tfBL; Thu, 28 May 2020 11:39:24 +0300 (MSK)
+Date:   Thu, 28 May 2020 11:39:23 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        <linux-mips@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 02/11] dt-bindings: i2c: Discard i2c-slave flag from
+ the DW I2C example
+Message-ID: <20200528083923.yjlm5ur7cslgxdau@mobilestation>
+References: <20200527120111.5781-1-Sergey.Semin@baikalelectronics.ru>
+ <20200527120111.5781-3-Sergey.Semin@baikalelectronics.ru>
+ <20200527171204.GA2348490@bogus>
+ <20200527171841.am2iaynff243xoep@mobilestation>
+ <20200527175624.GT1634618@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3roh2l2ctvp5d3wy"
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <CAD8Lp45ucK-yZ5G_DrUVA7rnxo58UF1LPUy65w2PCOcSxKx_Sg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200527175624.GT1634618@smile.fi.intel.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, May 27, 2020 at 08:56:24PM +0300, Andy Shevchenko wrote:
+> On Wed, May 27, 2020 at 08:18:41PM +0300, Serge Semin wrote:
+> > On Wed, May 27, 2020 at 11:12:04AM -0600, Rob Herring wrote:
+> > > On Wed, May 27, 2020 at 03:01:02PM +0300, Serge Semin wrote:
+> > > > dtc currently doesn't support I2C_OWN_SLAVE_ADDRESS flag set in the
+> > > > i2c "reg" property. If it is the compiler will print a warning:
+> > > > 
+> > > > Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64: I2C bus unit address format error, expected "40000064"
+> > > > Warning (i2c_bus_reg): /example-2/i2c@1120000/eeprom@64:reg: I2C address must be less than 10-bits, got "0x40000064"
+> > > > 
+> > > > In order to silence dtc up let's discard the flag from the DW I2C DT
+> > > > binding example for now. Just revert this commit when dtc is fixed.
+> 
+> > > >        eeprom@64 {
+> > > >          compatible = "linux,slave-24c02";
+> > > > -        reg = <0x40000064>;
+> > > > +        reg = <0x64>;
+> > > 
+> > > But the compatible is a slave, so you need an example with a different 
+> > > device.
+> > 
+> 
+> > Ok. I'll replace the sub-node with just "atmel,24c02" compatible string then.
+> 
+> But how it will be different to the another slave connected to the master?
+> 
+> This example is specifically to show that DesingWare I²C controller may be
+> switched to slave mode.
 
---3roh2l2ctvp5d3wy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Well, dtc doesn't support it and prints warning that the address is invalid.
+Though I do understand you concern and is mostly agree with it. Let's do this in
+the next way. I'll resend the series with eeprom@64 sub-node replaced with just
+a normal eeprom-device. The message log will have an info why this has been
+done. In the non-mergeable section of the patch I'll suggest to Rob reconsider
+the patch acking, since we can leave the slave-marked sub-node and just live
+with the dtc warning until it's fixed in there.
 
-Hi Daniel,
+-Sergey
 
-On Wed, May 27, 2020 at 05:15:12PM +0800, Daniel Drake wrote:
-> On Wed, May 27, 2020 at 5:13 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> > I'm about to send a v3 today or tomorrow, I can Cc you (and Jian-Hong) =
-if you
-> > want.
->=20
-> That would be great, although given the potentially inconsistent
-> results we've been seeing so far it would be great if you could
-> additionally push a git branch somewhere.
-> That way we can have higher confidence that we are applying exactly
-> the same patches to the same base etc.
-
-So I sent a new iteration yesterday, and of course forgot to cc you... Sorr=
-y for
-that.
-
-I've pushed my current branch here:
-https://git.kernel.org/pub/scm/linux/kernel/git/mripard/linux.git/log/?h=3D=
-rpi4-kms
-
-Maxime
-
---3roh2l2ctvp5d3wy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXs9orwAKCRDj7w1vZxhR
-xWNfAQCCSr9BEd1oYBuyc+wf4o1Fm9s0OrK6oNnc5glpsNR6QAEAmnvx5c11Eczw
-/TJeEz41Q44p4bi3Fmipemloq5mY/g4=
-=elb0
------END PGP SIGNATURE-----
-
---3roh2l2ctvp5d3wy--
+> 
+> > > >        };
+> > > >      };
+> > > >    - |
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
