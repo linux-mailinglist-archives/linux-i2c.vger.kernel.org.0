@@ -2,91 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA1D1E8799
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 May 2020 21:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55161E8ACA
+	for <lists+linux-i2c@lfdr.de>; Sat, 30 May 2020 00:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727888AbgE2TSb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 29 May 2020 15:18:31 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:41870 "EHLO
+        id S1728707AbgE2WCf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 29 May 2020 18:02:35 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:41264 "EHLO
         mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726549AbgE2TSa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 May 2020 15:18:30 -0400
-Received: by mail-il1-f195.google.com with SMTP id d1so3562958ila.8;
-        Fri, 29 May 2020 12:18:28 -0700 (PDT)
+        with ESMTP id S1728608AbgE2WCd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 May 2020 18:02:33 -0400
+Received: by mail-il1-f195.google.com with SMTP id d1so3965141ila.8;
+        Fri, 29 May 2020 15:02:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=m/Z4OI9dLCb3KAwh60U7fELRYiT6lEiNOqbsOqlIwBI=;
-        b=qNDr7zrBtV2fUj02xAfQFgXu41s8eSz1s6JOz0vnelzIcKmO+UzDfrAi7efeXK/Lqb
-         jRBi3aecGT6XcXAdDpH4F6/9dfLI1OPBQnQb7gl2UMt9rOBSikQC8hWBlsbN1NRRvZr9
-         H/v885Y0em6Tf9nHmoSbiGFFEDOrSSkmnHOyvuUjiaDXBByWprkEBiYkNv2cg3LPV9+i
-         f74NAJayHEZxvX3BI3X7/FUwYIJq02pIX6CJMaIz09V3wA55b0SOtEvIAAngORlQPxtz
-         MENm9b1nU20/YpEs62LZOTSU04yzVsgAsRTTHI52t4O24N5663IFtnoCY5LCgGOklLyL
-         DEAA==
-X-Gm-Message-State: AOAM532HisFHmWIwi2V4hASOmU9/SPP39+R1vPgjNApJg4TRHag1KtUj
-        lmIoWbKjEW1OKlw1QJ1Erw==
-X-Google-Smtp-Source: ABdhPJzKk3/Vh+gDQnqnHaCv1ti5kC4l//4mgj7L1KZZv077UM+eAYTtuf8pSvTkky0he5Vzemoj4g==
-X-Received: by 2002:a92:ba05:: with SMTP id o5mr9236887ili.263.1590779907940;
-        Fri, 29 May 2020 12:18:27 -0700 (PDT)
+        bh=ey+euqvOmqUImoTBB2c0M0l++8FF2H9dMAuHLAI3Tqc=;
+        b=AMDqbMQDmzx81TuMDddBm+6bVzwr4xB2g13DTqQ+QGSg+YXL5SJgOtx9HTCcwY77Xs
+         Bg6GnUfbvwBK6UJdRArImkndV2iVhoxxGstL9+X4ZxGrO/yNW6KnZhAmj9Mvypx1zH0X
+         oBL7IBPST2jVmUOcday2FZKNirVUWdTWWMX4Be0+Q35ka4GoBwsg1tR1F7pRpq8Fzf90
+         5aRJfAMkaOO4aKRKiJx44v/0KFVfWEpRyeUTapukaJV8tyDu3iqh71Mv0FXuBiWM0G8U
+         kc5ubGRSlOIt2Us4O4LgtoX0MQabtBHPMD0x9FyLby37I7l94mTiMqldwcy9xqSneR8t
+         iC7g==
+X-Gm-Message-State: AOAM533cC+/jzilGhhgQZyx/LEcZXomeCs8Istw8Bo/O+ci2AHQNJsFj
+        6oqvLjKDOxFkxiuiNr7yrw==
+X-Google-Smtp-Source: ABdhPJzNWmmXUGBwhds+2xenwoMMy1OTA6A0d/d1mqOwtAUoqyJfHTffiePOi46UYGDeJSKGzIC8Ew==
+X-Received: by 2002:a05:6e02:11b2:: with SMTP id 18mr9916280ilj.229.1590789751505;
+        Fri, 29 May 2020 15:02:31 -0700 (PDT)
 Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id r10sm3330798ile.36.2020.05.29.12.18.26
+        by smtp.gmail.com with ESMTPSA id p75sm5426367ilb.23.2020.05.29.15.02.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 12:18:27 -0700 (PDT)
-Received: (nullmailer pid 2785521 invoked by uid 1000);
-        Fri, 29 May 2020 19:18:26 -0000
-Date:   Fri, 29 May 2020 13:18:26 -0600
+        Fri, 29 May 2020 15:02:29 -0700 (PDT)
+Received: (nullmailer pid 3063727 invoked by uid 1000);
+        Fri, 29 May 2020 22:02:28 -0000
+Date:   Fri, 29 May 2020 16:02:28 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v6 03/11] dt-bindings: i2c: dw: Add Baikal-T1 SoC I2C
- controller
-Message-ID: <20200529191826.GA2785443@bogus>
-References: <20200528093322.23553-1-Sergey.Semin@baikalelectronics.ru>
- <20200528093322.23553-4-Sergey.Semin@baikalelectronics.ru>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Laine Jaakko EXT <ext-jaakko.laine@vaisala.com>
+Subject: Re: [PATCH] i2c: add 'single-master' property to generic bindings
+Message-ID: <20200529220228.GA3052199@bogus>
+References: <20200527113039.5380-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200528093322.23553-4-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200527113039.5380-1-wsa+renesas@sang-engineering.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 28 May 2020 12:33:13 +0300, Serge Semin wrote:
-> Add the "baikal,bt1-sys-i2c" compatible string to the DW I2C binding. Even
-> though the corresponding node is supposed to be a child of the Baikal-T1
-> System Controller, its reg property is left required for compatibility.
+On Wed, May 27, 2020 at 01:30:39PM +0200, Wolfram Sang wrote:
+> It is useful to know if we are the only master on a given bus. Because
+> this is a HW description of the bus, add it to the generic bindings.
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Cc: linux-mips@vger.kernel.org
-> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Cc: Laine Jaakko EXT <ext-jaakko.laine@vaisala.com>
 > ---
 > 
-> Changelog v2:
-> - Make the reg property being optional if it's Baikal-T1 System I2C DT
->   node.
+> We added 'multi-master' back then because most busses are single-master
+> and 'multi-master' was the exception. In hindsight, however, this was a
+> bad choice because 'multi-master' should be the default, i.e. if you
+> know nothing, you should assume there could be another master.
 > 
-> Changelog v3:
-> - Get back the reg property being mandatory even if it's Baikal-T1 System
->   I2C DT node. Rob says it has to be in the DT node if there is a
->   dedicated registers range in the System Controller registers space.
-> ---
->  Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+> So, we can't deduce that a missing 'multi-master' property automatically
+> means 'single-master'. That's why we need this new property.
 > 
+> I am a bit tempted to mark 'multi-master' as deprecated because the
+> default should be multi-master. However, it might also be a bit more
+> descriptive to let "no property" still mean "we don't know". I'd be
+> thankful for more opinions here.
+
+Could you just have different timeouts for clearing stalled bus. You 
+know quickly if 'single-master' is set, but have to wait longer if not?
+
+Note that we need to add a bunch of these properties to dt-schema 
+i2c-controller.yaml. I hadn't done that because I want to dual license 
+in the process, but lots of folks have touched i2c.txt IIRC.
 
 Reviewed-by: Rob Herring <robh@kernel.org>
+
+> Thanks and happy hacking,
+> 
+>    Wolfram
+> 
+>  Documentation/devicetree/bindings/i2c/i2c.txt | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
+> index 819436b48fae..438ae123107e 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
+> @@ -70,7 +70,12 @@ wants to support one of the below features, it should adapt these bindings.
+>  - multi-master
+>  	states that there is another master active on this bus. The OS can use
+>  	this information to adapt power management to keep the arbitration awake
+> -	all the time, for example.
+> +	all the time, for example. Can not be combined with 'single-master'.
+> +
+> +- single-master
+> +	states that there is no other master active on this bus. The OS can use
+> +	this information to detect a stalled bus more reliably, for example.
+> +	Can not be combined with 'multi-master'.
+>  
+>  Required properties (per child device)
+>  --------------------------------------
+> -- 
+> 2.20.1
+> 
