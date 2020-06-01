@@ -2,143 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F041E9E19
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jun 2020 08:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2987D1E9E63
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jun 2020 08:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728031AbgFAGYh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Jun 2020 02:24:37 -0400
-Received: from mail-eopbgr60070.outbound.protection.outlook.com ([40.107.6.70]:65248
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725972AbgFAGYg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 1 Jun 2020 02:24:36 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XikagcgwH05wTojBLudYHNSZDv+KeEltQQQnL3PP/CXoJWzK7gchORCodhAPGqpuzGVTfhIfca7K/UGmXbsjDmN/fdo1uUX0jff7BRfgNoIMDT8OsDVNVlW3U+Rfcf5I6V1XwSxa3NIP0viRipohRSzTw08Kfj156Y8+5AzFQTAgAQCN97jfXm93hbMCH+1nlvX24s5lAQhmVoPXQ9dek4vGApSjy+PCnSEuqeO2oC6szANBF+GMrOwOGisInDfBffG8sQhPj5iNiOoGkFanT/Qr4XULZgMDizcODvw9jbTeajwbLm3NEgRkRze57xa316UVv8M+/ftjH7yKlbuIkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JiBDgNxOeIv10L0yafCEvbC8pgC1WDZ7ImqpGKRSPew=;
- b=av5pexjiP5Avnt6na0tiH1auJ+oYZ2yow/JTFGoobnBTw53SFi/yncQsM3odxEZXnpUlFJ9Qxlv0bNz1uNLQwDU75BjtRvxKN/4LArdgSskr87H2cBGCAAJbsQYdVtzmhBEPZ4WVVRmdpb6VfZhihyhEng6h+Tt+EGwiJAO0dAQZOxuN6wPgEbqaTwv73Vg2nUBcpHA+yz5yBMq+/wuVbe4Rr7smII9jTYaqkO21MpBIuHtNLy5ORqorGvT9P8e7sSlEuyAHdFj0jramOwy8AQaKEwhz7PIJe5C2BnUu0VF2ikzxGzxkC60u3OlkFxzjo68busCODRVG3kk6S51ZJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JiBDgNxOeIv10L0yafCEvbC8pgC1WDZ7ImqpGKRSPew=;
- b=sePMwbNcy3BsVgiyyscHrxzywIjdyDZ0bI/MHCpH0lArQB1D/+mVS3Uslq8IX4IVmjQPdu6flZuxx9WzT3ukFr3o2rUU9m8ELX0MosAKVrJs/ocS0oubO3UbdMlpFsgqhjjH63yXEXdCsDk99umiBWwERGf4WSqG2cjysrhCbCE=
-Received: from AM6PR0402MB3607.eurprd04.prod.outlook.com
- (2603:10a6:209:12::18) by AM6PR0402MB3413.eurprd04.prod.outlook.com
- (2603:10a6:209:11::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.25; Mon, 1 Jun
- 2020 06:24:32 +0000
-Received: from AM6PR0402MB3607.eurprd04.prod.outlook.com
- ([fe80::35f8:f020:9b47:9aa1]) by AM6PR0402MB3607.eurprd04.prod.outlook.com
- ([fe80::35f8:f020:9b47:9aa1%7]) with mapi id 15.20.3045.024; Mon, 1 Jun 2020
- 06:24:32 +0000
-From:   Andy Duan <fugang.duan@nxp.com>
-To:     Dinghao Liu <dinghao.liu@zju.edu.cn>, "kjlu@umn.edu" <kjlu@umn.edu>
-CC:     Markus Elfring <Markus.Elfring@web.de>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        id S1726146AbgFAGmi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Jun 2020 02:42:38 -0400
+Received: from mout.web.de ([212.227.15.14]:42153 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726107AbgFAGmh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 1 Jun 2020 02:42:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1590993732;
+        bh=tKOtouNpgU/IF7WGTYjqhR34wOq1MycJ9MCg4fP3yVs=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=MxFsclfTklOvaRoBK4ZpfmjEsH4rKjNWoWg9GXNkRlGJniKXyx9X1r5W1f592aFb9
+         hXKDwa7QpW0zAc/MDNzaWyi8uWwpw8gHwXuz0LuhEySP+STXPfg5xeRPvFj857fAoF
+         6eBsxXuPulNtk4bP2TEV+SJlGYyGNtztaQM2JWfQ=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.2] ([78.49.133.32]) by smtp.web.de (mrweb004
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 0MK6mD-1jepCY3k1d-001O9T; Mon, 01
+ Jun 2020 08:42:12 +0200
+Subject: Re: [PATCH v3] i2c: imx-lpi2c: Fix runtime PM imbalance in
+ lpi2c_imx_master_enable()
+To:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Fugang Duan <fugang.duan@nxp.com>, kernel@pengutronix.de,
+        linux-imx@nxp.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>, Kangjie Lu <kjlu@umn.edu>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>, Wolfram Sang <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] [PATCH] [v3] i2c: imx-lpi2c: Fix runtime PM imbalance on
- error
-Thread-Topic: [EXT] [PATCH] [v3] i2c: imx-lpi2c: Fix runtime PM imbalance on
- error
-Thread-Index: AQHWN9w+YzYh2GSNZkyuyJOi3EJqXqjDSjyA
-Date:   Mon, 1 Jun 2020 06:24:32 +0000
-Message-ID: <AM6PR0402MB3607C88AD2E6087000D62F29FF8A0@AM6PR0402MB3607.eurprd04.prod.outlook.com>
+        Shawn Guo <shawnguo@kernel.org>, Wolfram Sang <wsa@kernel.org>
 References: <20200601061640.27632-1-dinghao.liu@zju.edu.cn>
-In-Reply-To: <20200601061640.27632-1-dinghao.liu@zju.edu.cn>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: zju.edu.cn; dkim=none (message not signed)
- header.d=none;zju.edu.cn; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [101.224.80.86]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 40251208-4a11-49ed-3e8e-08d805f472c1
-x-ms-traffictypediagnostic: AM6PR0402MB3413:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR0402MB3413EC308803AA6960F7A2AEFF8A0@AM6PR0402MB3413.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:161;
-x-forefront-prvs: 0421BF7135
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: f469cGHwdOXEPVQPxPicHIslOqswNSd2XiTIUMxPtw1AmTz5dhvwTsEofJV3zhxsqd1ZhdOG3QqO8Pusjon1DcT3enjZrzZm4stDbG3tsc40dh74GbeuycVq8B7ihE2dXK2+QsCR9bwBw3uQs92MxxKz+k/ZtNMJAUbewchkUWzJn7+xYeis3g84Tjwd1UVStFvAocXO2sLNFCrXDH1VAFEm7sErD1NT70Eb3WaMQYcA7iBSzIDpTGMf/fRaglGwOWrCXBxdF/n0yHl+Vvc6o6otSBeKrWvn6y2JuQquYOrLG/HvtN+HRzl+aOmLVmyU
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR0402MB3607.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(376002)(346002)(136003)(39860400002)(396003)(9686003)(55016002)(4326008)(478600001)(33656002)(52536014)(5660300002)(7416002)(64756008)(66946007)(26005)(66476007)(76116006)(86362001)(66446008)(66556008)(6506007)(71200400001)(110136005)(54906003)(8676002)(2906002)(83380400001)(8936002)(186003)(7696005)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: yWGRiJljadya7K1UYnELmWSreN2xn8QG3qOp1CUV1ogZIbvVnxFBwRSDWu+2+KTqAlb4sVsy5s8hzyzO/SvGVUpJAjX1CrA6D9oyE571FbkwwKeuWR1/6Cu3495BB8JdlEBOILrjNsJxXFQzcsYxZcbE1Z1Ho3ymLtTsGHwfngoSYF8rUd2e+k3Zx4UpVXKm3yXgJ2kTmhp+7riGQrsnlo8jxFzeZkjXC45uQXIkionpvjACs58aB2nUDgq/t7Ctqhgx0YNbTsuy8EMWcgmA6Ir+8tDfcCpFj/6SDl/4dnNB+dZZ4pGoa/QCBPuRy2cWhdkEoV8F3C4ft6Br0nyXs/euKmX9ay8nfAatvDsF2rIElgpImYSVG4lR7KGhxWCbS3fPx0AfVqCRFFa7aDtK6UJnSbJRAKwKaLQxtu2rInkKWNworOEYeICKbCAWMKmgl6M5oJywxK/Nn8T+m5vMNK6va5QhYkD5hZ5ZrYubiho=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+From:   Markus Elfring <Markus.Elfring@web.de>
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+Message-ID: <77448b13-9233-20a8-5e68-a8830314c27d@web.de>
+Date:   Mon, 1 Jun 2020 08:42:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40251208-4a11-49ed-3e8e-08d805f472c1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2020 06:24:32.7343
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ibtKse3DNFcFPveEBqV+P4xMX1+X9Wc9eUy8fL6shYq+wyAfuW0XymycQTjhEgoh7wAxaGvRzw+Fu9C+OR6odA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3413
+In-Reply-To: <20200601061640.27632-1-dinghao.liu@zju.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ZkPZbkfzFinZrQLxVG6GTQz9drdW40WO6R+HEO+80m3z360YPLt
+ lC2xGNp4QKSxUPFTqy+nMLUriY2fC4sBSmeJy2ucbJOe6exqWQ/2VJsgae/WKh6rkIibzJs
+ bmLh3fZcvL6GdSgH6PkfdQlUl115g9YSGPYTVhiCuHHmQuPSQfJQV7xzWP/8y0ubf+LRUNV
+ E2pyvcTsWtCfBazMOWWpQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1rs281+F7ss=:HXxDFXERtaQu8mjySKm7So
+ kNWGCJ9MoMLW/c2yQ9Ydm3XnCHV2tKbS23GI0TLLww8v8mY+1A1Q7FpBKkfLEQa7x6J3dzW9K
+ pbNoKXJ1IKGEAmLT1CeaK9bnmko3JSLXQR2aYaZQ9FyPejtPZE79Z9/SDrAHlmteuAVymmPL6
+ KC3vrygE3AwU6RZZYY6TFMHNCwmZzk+8cC2Y921AgrlIvHctZtX810ZhwS7xIWHZvQ9K0TKaM
+ wAPkgA6SGMwWXu/WgVhhEsOUgfuKHS4Sdb6GLLXqk8PLruf5tTfhx6a1Rg9qls7r4ep2E71aM
+ fhPC/ppKH4Ttv1ndehO9FGAW9uvDadrgELgl8X21BdOCyw1Yry+tQtxt97wYm7JGnAemzv5ux
+ luEYmJVrP50TgAembUF3NRrWQLcn/L72ELc4FsUuudOC/PTFzIpSPbgBnWXfjgXMNpG0fMyDO
+ R8l2hhWD31v36MXjuo0PS3XNa4vswgDn7gTPS2xsTqZ7V7/jcu228EOAvLjyeZJpcThETmk7n
+ lDnOuzWFGquUgintiLkvJ7neKbDDRF/tDyZmLdXHu7cvogKByQMGQelgDffowsTRawELfkwKC
+ CZL1ohvxUqT9GcngO0AtSTvXx1FNi4o39XB8ocSWPIoGTAYtO4HoznGXeN5mdy/ZUspQX7yrY
+ mdgdD8HBiTQKlXxDhJXLB6d7PuKid0O9fPjZBTQPtZCnDkqIpgqWOzrCW0/WCgh7JTBFKOEQu
+ /GUt5gxQPVE0PTrmYTahPvRIJQCycBSkxhR3VTF/IooRnl3La2+9kpXKrJdi6zvdgjNlIy246
+ MdEe0Qg9+vxI79kYFXL6v/KIxxonl6vTKhZa0tQ4GR1NurH/DFutZjdMoSB6YPvLOhallPmLV
+ DThl757gX2+54X2JZEa5kdqv3FE/f4iuQ+prl75qPBNMqD/jUmVwteYelklD80WGir8WH1O0o
+ cxB17R2gT/EfZahPpCcxHrpdo5nTbY4IRCZZkkQ/i/CJah1nQNCpRbZArHxVdCDfxt8BwItab
+ WzaFFN6CtcTaOzViQSAiE+Tc5806xu1LlG7BulgDmu5ogm74TbcQ1dyoLL980m/IbV8un575B
+ KuoiIdPQq+Y5ovm0kU0ccNOJIlimy9Dr38oH4GsyHY9CIFWElHVAC0SshUPUHYF6jnH43d9rF
+ 2c7BkMROt404+HWQ+zaodEtXvAnP7ALIWhksIND8tLy0EcgbZ6/KkII6/C2B8jh9Bo6Z0x1/d
+ Shgp55VP8CBBwGeKU
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Dinghao Liu <dinghao.liu@zju.edu.cn> Sent: Monday, June 1, 2020 2:17 =
-PM
-> pm_runtime_get_sync() increments the runtime PM usage counter even the
-> call returns an error code. Thus a corresponding decrement is needed on t=
-he
-> error handling path to keep the counter balanced.
->=20
+> pm_runtime_get_sync() increments the runtime PM usage counter even
+> the call returns an error code. Thus a corresponding decrement is
+> needed on the error handling path to keep the counter balanced.
+>
 > Fix this by adding the missed function call.
->=20
-> Fixes: 13d6eb20fc79a ("i2c: imx-lpi2c: add runtime pm support")
-> Co-developed-by: Markus Elfring <Markus.Elfring@web.de>
-> Signed-off-by: Markus Elfring <Markus.Elfring@web.de>
-> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-Reviewed-by: Fugang Duan <fugang.duan@nxp.com>
-> ---
->=20
-> Changelog:
->=20
-> v2: - Use pm_runtime_put_noidle() instead of
->       pm_runtime_put_autosuspend().
->=20
-> v3: - Refine commit message.
-> ---
->  drivers/i2c/busses/i2c-imx-lpi2c.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> index 94743ba581fe..bdee02dff284 100644
-> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> @@ -260,8 +260,10 @@ static int lpi2c_imx_master_enable(struct
-> lpi2c_imx_struct *lpi2c_imx)
->         int ret;
->=20
->         ret =3D pm_runtime_get_sync(lpi2c_imx->adapter.dev.parent);
-> -       if (ret < 0)
-> +       if (ret < 0) {
-> +               pm_runtime_put_noidle(lpi2c_imx->adapter.dev.parent);
->                 return ret;
-> +       }
->=20
->         temp =3D MCR_RST;
->         writel(temp, lpi2c_imx->base + LPI2C_MCR);
-> --
-> 2.17.1
+How do you think about a wording variant like the following?
 
+   Change description:
+   The PM runtime usage counter is incremented even if a call of
+   the function =E2=80=9Cpm_runtime_get_sync=E2=80=9D failed. Thus decreme=
+nt it also
+   in an error case so that the reference counting is kept consistent.
+
+
+Regards,
+Markus
