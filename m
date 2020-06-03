@@ -2,89 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 845B51ED751
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jun 2020 22:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4C51ED77F
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jun 2020 22:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725992AbgFCUZ6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 3 Jun 2020 16:25:58 -0400
-Received: from sauhun.de ([88.99.104.3]:50126 "EHLO pokefinder.org"
+        id S1725985AbgFCUi0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 3 Jun 2020 16:38:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36860 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725961AbgFCUZ6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 3 Jun 2020 16:25:58 -0400
+        id S1725821AbgFCUi0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 3 Jun 2020 16:38:26 -0400
 Received: from localhost (p5486cfa5.dip0.t-ipconnect.de [84.134.207.165])
-        by pokefinder.org (Postfix) with ESMTPSA id 116E32C1FE2;
-        Wed,  3 Jun 2020 22:25:55 +0200 (CEST)
-Date:   Wed, 3 Jun 2020 22:25:53 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Tali Perry <tali.perry1@gmail.com>
-Cc:     ofery@google.com, brendanhiggins@google.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, kfting@nuvoton.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, andriy.shevchenko@linux.intel.com,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kbuild test robot <lkp@intel.com>
-Subject: Re: [PATCH v14 0/3] i2c: npcm7xx: add NPCM i2c controller driver
-Message-ID: <20200603202553.GB7684@kunai>
-References: <20200527200820.47359-1-tali.perry1@gmail.com>
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 899522074B;
+        Wed,  3 Jun 2020 20:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591216706;
+        bh=ynTIpUVLHd3Fetf06EYiB+OyQhltY0fHhPnuDW+nP7k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f2FZRU2mcJEtxwIplnFuwE3HGvAocU4WnMmA5NCU1VX5Bv6um+1TjlU20JYnqXiSe
+         mH3Hpqtkd7uIwH2i/30LatW1GAI+PN+jjob5oCjiMhLYCoB+PjDinJlIgyvXARNrjd
+         XxhLMODN+7sFHY3YwQOkSci2ztumvgm1J2RpRMjk=
+Date:   Wed, 3 Jun 2020 22:38:18 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: pxa: don't error out if there's no pinctrl
+Message-ID: <20200603203818.GA1347@ninjato>
+References: <20200602193823.267048-1-lkundrak@v3.sk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DBIVS5p969aUjpLe"
+        protocol="application/pgp-signature"; boundary="C7zPtVaVf+AK4Oqc"
 Content-Disposition: inline
-In-Reply-To: <20200527200820.47359-1-tali.perry1@gmail.com>
+In-Reply-To: <20200602193823.267048-1-lkundrak@v3.sk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---DBIVS5p969aUjpLe
+--C7zPtVaVf+AK4Oqc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 27, 2020 at 11:08:17PM +0300, Tali Perry wrote:
-> This patch set adds i2c controller support=20
-> for the Nuvoton NPCM Baseboard Management Controller (BMC).
+On Tue, Jun 02, 2020 at 09:38:23PM +0200, Lubomir Rintel wrote:
+> The bus recovery patch regresses on OLPC XO-1.75 that has no pinctrl in
+> its DT.
 >=20
-> NPCM7xx includes 16 I2C controllers. This driver operates the controller.
-> This module also includes a slave mode.
->=20
-> ---
-> v14 -> v13:
-> 	- Fix yaml example: add missing include.
-> 	- Replace all udelay to usleep_range, except one which is called from
-> 	  irq.
-> 	- Fix compilation error (module_platfrom_init conflict).
-> 	- debugfs counters always updated. Counting till max value,
-> 	  then stop counting.
-> 	- Rename bus-frequency to clock-frequency.
-> 	- Remove unused variables.
+> Fixes: 7c9ec2c52518 ("i2c: pxa: implement generic i2c bus recovery")'
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 
-I don't have time for a deeper review, but from what I can tell this
-driver is good to go and we can fix things incrementally from now on.
-
-Applied to for-next (will go into 5.8), thanks!
+Applied to for-next, thanks!
 
 
---DBIVS5p969aUjpLe
+--C7zPtVaVf+AK4Oqc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7YB1EACgkQFA3kzBSg
-KbZmVw//dD5ttj+RhzDcyUcRJ9NMb6dXctKo/EQYXzZfQlKOJqL36iVqKjy8rmFM
-S2F42QY95jaNRdUHEGaFzDazxEUhy7J+07z0XPHk1CrGUDBVVtRf28dsEAXS7UTm
-o8pq67KgL+rr4PcKVd92OnBF0Sdi5d6HlVYah9W7dlnR/crg95cd9JUdwn1THmFw
-/PEmw4XRnYk/+GC4D+hai+W/E86RPpMzCU9YbOCfgnTWC+L7b9W4hS3j9+xtv62V
-HD2GagLUGpBiKENxUSS0NJ7agC31Eea7gi9Gn5P8OfxYr4VtPSagnchKwCoohFbU
-EySi0qXRd5+hWMOjg2DcGqC8mo/FC2ZDSKlLYWiicTgyZjP4vkRpMHqqtwS9u+23
-EFQv0Gy+QjePWEJdjYHP+TxuKw0+2OqMfSr/mkB49sgcKe1Fd7EFlCJbnDmIoZc1
-loO0x9MGK9bl/hlVWUpTorkAJGJygdstxTVk9jFJAEFvUXz6ZNk7HKdb0yOqvZcu
-hRqp1nOCL3fSUjtNPfE3ovaEQBiJO/FcGPf4bSgKycnfeFEbnJy+lYhCvsTV6x6A
-fUy85pKXZad4b51OFi9Hgo+a59ocTopYQRPvAiTcD+e9x2WagmMJCdNjTFsKCUy0
-kprWATccn3TZJ3pSZpqlPX9FvP8u3mZOywM4WXtpX8xvT6qXqys=
-=fEJK
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7YCjYACgkQFA3kzBSg
+KbYs1RAAqXFrAks4gE6JldEwD2WqZJrHqz7WDRY6scbc3FrEUZy1Kn1yA/KaJyuR
+HKVJISXP/UHGnQTL3QRrc0hMUCeSYcAgBh9HCqEPomlWKF1e0I5zRovpKd36dMxY
+aWM4C+VF+KV622MOSIFGQlHYRua+Bld8bi0BP/+DRvfA82ArAjVRB4gez1x55hQZ
+I4gSdxn1jPw9azHt7g5kJmKRaPFjPfuzXCVo76BpWevcGu14lvh04CSl+OzFhqQB
+xIF8ma2jv7RfKDGWQD1TMVreVDtLitCVDYvnUD6RVQ3ZDE95Ji7XAhalGSN445xY
+bknJkglyKhgSH8DuD87alkstj36UqPV3n8r6W2ETB+7bqC8d60zuoZp2dL6lgf3J
+4NuTJpU13XunMhx4oU1VR2CUK5HG5vxm9fw5yj82rs9FzsHqAF0bHPMS5x9bcA+I
+YQjI8XXpoe/ZCcu05hQe350khVyDrpQfB+/iRR82/srp/8CwpMPPFmQ6SNmZk70D
+rLRMzKE43wkMjAVftINuIxnW+09bGmnWSjHhpRaMbHwj5V6Cj3ADrlmRtZWcxrHB
+af2uPpvVHkG6/ntWk4Qls8CGKMqNEEWfZRFg2+uCUDKTRHUMlvCKe10/qsSXg7Yl
+RvA+OPx47hjNrTXnvKw6zeIMvu6n00DY6JcQqOpsCMlnYT6nABc=
+=KqSX
 -----END PGP SIGNATURE-----
 
---DBIVS5p969aUjpLe--
+--C7zPtVaVf+AK4Oqc--
