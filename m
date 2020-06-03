@@ -2,74 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 867351ED197
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jun 2020 15:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492B41ED692
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jun 2020 21:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725884AbgFCN6T (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 3 Jun 2020 09:58:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33490 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725833AbgFCN6S (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 3 Jun 2020 09:58:18 -0400
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 009D2206C3;
-        Wed,  3 Jun 2020 13:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591192698;
-        bh=tu0umueWXJQyn5GQ9x7J6/ozi3B9DZXrKnvEP3mbPZ8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=O70gpSkZOoGft8T1bS5TY9Jbdz76Kf5Mt6SGt9S8EnqWUsflObTwxpJ/hK4sb6MRn
-         hlTp7NepxexRQ8Al63nPu5yOpBgB9aXjcQNZ8RrOhQwWmKs9SrOjq+1Y28+eG2rYY3
-         gafQnzfISLUAT105yMle0QJHlXLafxE0TPuLycG4=
-Received: by mail-oo1-f48.google.com with SMTP id i9so517696ool.5;
-        Wed, 03 Jun 2020 06:58:17 -0700 (PDT)
-X-Gm-Message-State: AOAM533vlKmh1JX3/WGHtYmNVfxxgaXu8+C78i+bznHqMX2IV6cKqmmq
-        8gcBrzQCR8iurH6Unq+v+cm/iuUxN7sDOnPecw==
-X-Google-Smtp-Source: ABdhPJywJXOvUF7s+LNGI1f+bDTEKre/euKaSqdcytI1e+8skWqTrY7hVKw25RlHog2tMeKNuFsdPBRqXns2qKFWnCE=
-X-Received: by 2002:a4a:dc83:: with SMTP id g3mr88066oou.50.1591192697357;
- Wed, 03 Jun 2020 06:58:17 -0700 (PDT)
+        id S1725959AbgFCTOd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 3 Jun 2020 15:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725939AbgFCTOc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 Jun 2020 15:14:32 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FFFC08C5C0
+        for <linux-i2c@vger.kernel.org>; Wed,  3 Jun 2020 12:14:32 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id v19so2984031wmj.0
+        for <linux-i2c@vger.kernel.org>; Wed, 03 Jun 2020 12:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:reply-to:mime-version
+         :content-disposition:user-agent;
+        bh=IgITx0iqh2VPVGxMHenemKe7oWEIZTBorCdvcnIeHXk=;
+        b=PU+82AvnaBuSu06xnGYStqq58JL/LbcjGFDvz1KAKB8eqYGJhtXARGUfsdz+54mdJr
+         JipYZEu+qCJ4StpMktun8BYTDhOz3GC3q2tF38L8lmD/5W2ip/GMw3E/HQJ4rgfWw926
+         2YFlF6z51RURm5xvMNnGy2ef1M48z2bzPW8PdKBH8Sdmd0YwZ3YIfjHtQ/akruMGT1Q3
+         ZbElFMDX/nXGyXr/0lV7vslftOa1L1HKqvSMd3XSXbzd5iOX6mrOvhhvo7DIEnaEz3CS
+         Kn+lbeb39+6hzm0lig98uzJ7Bm1bFXRWJBE8Uk5AiZe5+2riRFaRpT3bwVil8A8Be5Za
+         IAOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :mime-version:content-disposition:user-agent;
+        bh=IgITx0iqh2VPVGxMHenemKe7oWEIZTBorCdvcnIeHXk=;
+        b=HrISCCeVo/CZ3KFDZj3q3lvx4Jurl3CroBTbXus7GkmcFnZqEGvn4orq9fg9/iYXnH
+         f3IMdnvm0FUYuxtOhU6IMb/Xk1p6huVY12GVFavheBCu1JjOYpNN94ipQYHjJB0Pf9/U
+         psK8gudRMg1etF4CVlpb4Vy7UYypUmgJ0o72yRh0c+AUEF3Yq2tLwB3j/nFwp1BgDOTt
+         GoWLunA0NN2Zoov7ClxtPdZIioWYb3Mpx7LWUvgzg751QUn7RXI97cD0wbL+KIJz0HJ/
+         rbYkuN6fqmg8/kjwK7ioCGOrExqUNN/fuZB51TPmVnJ4kPCxtFLlkBjuZRQ10R3VmrMT
+         4/KA==
+X-Gm-Message-State: AOAM530OiRGyWvRwqXILpvgyPUFOu00PJLtsnXuS9o8y5vsm2P9AWFEm
+        0yjDlhGCmctDiWbBd6sjpuyyFHFuD3d8OQ==
+X-Google-Smtp-Source: ABdhPJyt2NMM+SIlIyc3Q6svBK/ryuJlzuMYLqO8nfu2pm0FjDM0QvfvR2McBQfd1s2oAk+r4Jw3Rg==
+X-Received: by 2002:a7b:cb99:: with SMTP id m25mr601677wmi.0.1591211671441;
+        Wed, 03 Jun 2020 12:14:31 -0700 (PDT)
+Received: from workpc ([5.148.47.5])
+        by smtp.gmail.com with ESMTPSA id k14sm4513792wrq.97.2020.06.03.12.14.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 03 Jun 2020 12:14:31 -0700 (PDT)
+Date:   Wed, 3 Jun 2020 20:14:28 +0100
+From:   Quentin Strydom <qstrydom0@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org
+Cc:     Quentin Strydom <qstrydom0@gmail.com>
+Subject: [PATCH RESEND] i2c: mux: pca9541: Change bus control commands and
+ release control of bus
+Message-ID: <20200603191426.GA20270@workpc>
+Reply-To: 2e2c3b98-20a6-2671-ad74-a0f171073bd0@axentia.se
 MIME-Version: 1.0
-References: <20200527113039.5380-1-wsa+renesas@sang-engineering.com>
- <20200529220228.GA3052199@bogus> <20200529230252.GA4798@kunai>
-In-Reply-To: <20200529230252.GA4798@kunai>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 3 Jun 2020 07:58:06 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+xOMnBQvUqG57StvE=tY1RiseAJmKsN=1LpPY43Ai1Xg@mail.gmail.com>
-Message-ID: <CAL_Jsq+xOMnBQvUqG57StvE=tY1RiseAJmKsN=1LpPY43Ai1Xg@mail.gmail.com>
-Subject: Re: [PATCH] i2c: add 'single-master' property to generic bindings
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>, devicetree@vger.kernel.org,
-        Laine Jaakko EXT <ext-jaakko.laine@vaisala.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, May 29, 2020 at 5:03 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> Hi Rob,
->
-> thanks for the review!
->
-> > Could you just have different timeouts for clearing stalled bus. You
-> > know quickly if 'single-master' is set, but have to wait longer if not?
->
-> Timeouts are a difficult topic with I2C; there is no timeout defined.
-> However, if you want to start communictaing and don't have a 'bus idle'
-> condition, then the new property makes a difference. With
-> "single-master", we know the bus is stalled. With "multi-master" it
-> could be another master communicating.
->
-> > Note that we need to add a bunch of these properties to dt-schema
-> > i2c-controller.yaml. I hadn't done that because I want to dual license
-> > in the process, but lots of folks have touched i2c.txt IIRC.
->
-> What is your motivation for dual licensing?
+Change current bus commands to match the pca9541a datasheet
+(see table 12 on page 14 of
+https://www.nxp.com/docs/en/data-sheet/PCA9541A.pdf).
 
-Non-GPL OS's use DT.
+Also add change so that previous master releases control of bus.
 
-Rob
+Signed-off-by: Quentin Strydom <qstrydom0@gmail.com>
+---
+ drivers/i2c/muxes/i2c-mux-pca9541.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/muxes/i2c-mux-pca9541.c b/drivers/i2c/muxes/i2c-mux-pca9541.c
+index 50e1fb4aedf5..eb2552fbd0d0 100644
+--- a/drivers/i2c/muxes/i2c-mux-pca9541.c
++++ b/drivers/i2c/muxes/i2c-mux-pca9541.c
+@@ -134,7 +134,8 @@ static void pca9541_release_bus(struct i2c_client *client)
+ 	reg = pca9541_reg_read(client, PCA9541_CONTROL);
+ 	if (reg >= 0 && !busoff(reg) && mybus(reg))
+ 		pca9541_reg_write(client, PCA9541_CONTROL,
+-				  (reg & PCA9541_CTL_NBUSON) >> 1);
++				 (reg & (PCA9541_CTL_BUSON | PCA9541_CTL_MYBUS))
++				 ^ (PCA9541_CTL_BUSON | PCA9541_CTL_MYBUS));
+ }
+ 
+ /*
+@@ -163,7 +164,7 @@ static void pca9541_release_bus(struct i2c_client *client)
+ 
+ /* Control commands per PCA9541 datasheet */
+ static const u8 pca9541_control[16] = {
+-	4, 0, 1, 5, 4, 4, 5, 5, 0, 0, 1, 1, 0, 4, 5, 1
++	4, 4, 5, 5, 4, 4, 5, 5, 0, 0, 1, 1, 0, 0, 1, 1
+ };
+ 
+ /*
+-- 
+2.17.1
+
