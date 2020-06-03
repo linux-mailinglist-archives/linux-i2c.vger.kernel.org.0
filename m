@@ -2,82 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B8F1ECE63
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jun 2020 13:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7261ED131
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jun 2020 15:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbgFCLab (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 3 Jun 2020 07:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
+        id S1726066AbgFCNsv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 3 Jun 2020 09:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725981AbgFCLab (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 Jun 2020 07:30:31 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD44C08C5C0
-        for <linux-i2c@vger.kernel.org>; Wed,  3 Jun 2020 04:30:30 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id j32so1636597qte.10
-        for <linux-i2c@vger.kernel.org>; Wed, 03 Jun 2020 04:30:30 -0700 (PDT)
+        with ESMTP id S1725992AbgFCNsu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 Jun 2020 09:48:50 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E6AC0A88B4
+        for <linux-i2c@vger.kernel.org>; Wed,  3 Jun 2020 06:48:49 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id j12so1372382lfh.0
+        for <linux-i2c@vger.kernel.org>; Wed, 03 Jun 2020 06:48:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=eq5jp6Lmy/rnch/Y/On5Zd3r1PTq5eCYSA5B52l81tw=;
-        b=UewPA1xFq1DAVHeQYn5v3XiGj+VfqMQ2JgDhznIyKJXavzOtoljK19q0CFccBXab5a
-         cgcTfedgJ+XNu23TCC4uZqesyrciIuEodZLjFWXnMRvx6dCaxf/X313GgD+HnyW2wGN8
-         gdz1qe+34pJtgFsArCgsyLUV/1rrWRsVxTdl0ydnAEf59JQlf3wTOfnSEidvN6JsXB58
-         Lgqa5m+xPGI0ljw5y532dPi7zpe0OCQw5Fgn54F3RTdPNX9VCOOZhyR7bPQVv+awnSa5
-         euVaVoCkSgDNRy7FLg0m88DMeubpkXPv0ZsW/fQwx0Xz6rBagZGMo2A/iDxQcU0i9rqe
-         2ktA==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=LImzFWfFZ5MGhzJT1qzCsgEXVo7xW37sUIdrDLCKiXHQE0/Tq0rYX6Af/ld5dvlhmE
+         opFt8B8vUrhAfyxGIRs7eIQZmnu+cHCt7Dz4gEu/fnBWHDlMa8iVHDbM7XgqJUtNcgor
+         I4Oj1yGJ3ygOniFn6Dr+FHDS5BV48N/ldz+eBwWbR5/ADnYCL6KuztRZu9mrKJOxMODU
+         fmVICwwGmTYXXsgICTxE6unupuMdGq6+YZvkWKysZVLYK3Wwxrg7U2ecMo3WGycHWcU1
+         w35jxyjuynpm30G3kj/I18A4vO2Y2WN0kfTajUkGc1Xe9t84eQuWhnB4AGlAS8dbrawc
+         iC3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=eq5jp6Lmy/rnch/Y/On5Zd3r1PTq5eCYSA5B52l81tw=;
-        b=rwFMyQrdbrWWrnZ2RZIHgnXQO6g27CnCvxd+Xu4q8tWCvFk/H7QoBpkR7u+zG/ugSS
-         /Qd9sGHbR/7f8PNKuBSnCtxYo9qzXqIpy/U6OpxT34mmohwV5OZZkPsBSUYxRhnBTVq9
-         +y6VSzaWtFKJSozv0PrXGd3WiaeR5ggBUXWwCIrs+Kj0cen0zeqaYjA/c2DbRF6X+eG6
-         LR1NcdB1Uq1Nq1DlknOan/4U/8mfhXXCBTmSjKRV8T2crNkJattkHKT/a6L+36WLalYC
-         miK9+DPnrKhGScfuqoHIVy77TUCP8jd6iiMI13jeESHfd+CZrxnM/enhrATVpFFvNCTe
-         mbUQ==
-X-Gm-Message-State: AOAM5322JLuKD9b5jyTED2H2FzHzo+dBhE5KaVstjoDs242JxoM+30j1
-        ZlLYbqVts2XOoyNOYCZnh7VB3LLsnFzUa58w1to=
-X-Google-Smtp-Source: ABdhPJws9NQavFWz912YQ/1TTHrBscdGd5QX2itiQ/NPsb0Gi4unKsz8N4a1n9JEjNwFEUNoLibuTR4ByqIhwAGHHt4=
-X-Received: by 2002:ac8:4892:: with SMTP id i18mr12887120qtq.344.1591183829345;
- Wed, 03 Jun 2020 04:30:29 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=b3HhX1ASAK2H4778PpJxd2s0x5zKHCbikqU8JY5PXPsV+WIHnD5t0Td7RKtl7Yz6o4
+         HWrEovgMGvuJhmy7mu+yrtIipMAnOMPtbx0o1Wi43fgGtXc6h5mYvcpKrCPT0AY+Akkt
+         IDhHpTsx3X0ZHYwDzlxDSgEP5cEQpkpRZEaC4f2ftVYr3/sAtyVLQBz8oO2PiE75nS6W
+         QUqToqvVGnKdbPKdSRim2DzqbhQ6Rx2OUtf9xVabfw3VmjtneR9QRjxw/ViXtuauU3Rg
+         NFobQdgbOZWVeBykQ6q1MsyKA9R0419K0tqyG+RA3GS2IwHUoRmUP8Fd0OhHvUzs4tDK
+         d/OA==
+X-Gm-Message-State: AOAM532fnTi/N8+UDZGjwY94ebkyg8e6v+pmMpnGRHdhk7sglcf7N1mn
+        TY1jIAQ4ElLqy3zfm2nc4w+nrdA7CkdFsIDFoW0=
+X-Google-Smtp-Source: ABdhPJzc66PsPJ7uf2JiXrqj7zfh07Ra5BpBms0TPKeexmxkWkfXYY+ch/Os+E85wJbdOE6Lm+0ANdybV/7KRG4HAcU=
+X-Received: by 2002:a05:6512:308e:: with SMTP id z14mr2566308lfd.29.1591192127287;
+ Wed, 03 Jun 2020 06:48:47 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:aed:31c4:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 04:30:28 -0700 (PDT)
-Reply-To: ah7692471@gmail.com
-From:   Mr Adoul Hassan <maho.usman1@gmail.com>
-Date:   Wed, 3 Jun 2020 04:30:28 -0700
-Message-ID: <CAJ3MPXhhqGgYuuN3vZ3-8AOUxkM3dpagxTXawCv9_XLR7BO=2Q@mail.gmail.com>
-Subject: I want to seek your assistance
+Reply-To: susanjones.wife@gmail.com
+Received: by 2002:a19:a405:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 06:48:46 -0700 (PDT)
+From:   "Mrs.Susan Jones" <joneswife.susan@gmail.com>
+Date:   Wed, 3 Jun 2020 14:48:46 +0100
+X-Google-Sender-Auth: aH2vam-ZraP3yG1gz3ryctMgTE4
+Message-ID: <CALBhdBfusXWup1N4iFuTS3D1AZxWbZbTDS_qa-wA3FkbkE7MrQ@mail.gmail.com>
+Subject: HELLO: I AM MRS SUSAN JONES
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---=20
-Dear Friend,
-I am Mr Abdoul Hassan. I am working with one of the prime banks in
-Burkina Faso. I have a business proposal which concerns the transfer
-of.of Twenty Two Million and Five Hundred Thousand united state
-dollars ($22.500 000mUSD).into a foreign account. Everything about
-this transaction shall be legally done without any problem. If you are
-interested to help me, I will give you more details as soon as I
-receive your positive response.If you are willing to work with me,
-send me immediately the information listed below.
+-- 
+OUR GOLDEN OPPORTUNITY
 
-Your   Name=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your   Nationality=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your  Age=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=
-=80=A6
-Your  Occupation=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your Mobile Telephone Line=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your Address=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=
-=E2=80=A6=E2=80=A6=E2=80=A6
-Thanks
-Best regards,
-Mr Abdoul Hassan
-ah7692471@gmail.com
+Hello Dear Friend,
+
+Complement of the day, i hope you are doing great today. However, I am
+Mrs.Susan Jones, an auditor with one of the new generation banks here
+in Burkina Faso.
+
+I am writing you this letter based on the latest development at my
+Department. i discovered some abandoned huge amount of money, Ten
+Million, Five hundred thousand  United States Dollars.($10.500.000).
+Now I am only contacting you as a foreigner because this money cannot
+be approved to a local bank account here, but can only be approved to
+any foreign account and foreign beneficiary because the money is in US
+dollars
+
+This will be  a legitimate transaction once you accept to build trust
+with me and follow simple instruction doing the transfer process,
+until the total sum transfer out of the bank here to your own bank
+account any where in the world, and I agreed to share the total money
+50/50 with you once you successful confirmed it in your bank account.
+But any expenses doing the transfer process will be deduct from the
+amount before sharing, If you are interested to work with me and
+provide a good receiving bank account, get back to me as soon as
+possible with the following details below.
+
+Your full name
+Your Profession
+Your direct mobile phone number
+Your Scanned International passport or any of your identity
+
+NOTE: PLEASE IT YOU ARE NOT INTERESTED DON'T BORDER TO RESPOND BACK TO
+AVOID TIME WASTED.
+
+As soon as I receive these data's, I will forward to you the
+application form which you will send to the bank for the claim and
+transfer of the fund into your bank account as the  new beneficial.
+
+I am waiting to hear from you soon
+
+Yours
+Mrs.Susan Jones
