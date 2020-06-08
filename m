@@ -2,119 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8571F2360
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jun 2020 01:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1A81F279B
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jun 2020 01:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729696AbgFHXOE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Jun 2020 19:14:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34082 "EHLO mail.kernel.org"
+        id S2387978AbgFHXrV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Jun 2020 19:47:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53726 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729680AbgFHXOD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:14:03 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        id S2387930AbgFHXrP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:47:15 -0400
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4B05120C09;
-        Mon,  8 Jun 2020 23:14:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CE15420842;
+        Mon,  8 Jun 2020 23:47:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658043;
-        bh=ZEhSSl1cG6zZR1BIQ9zMUFW/bSq6ytLJgq3m5lTArCg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VsMnxDwHbg0Q6sGPApPqbn0V8f2+J/2V60M6J/JSmLRkZopuEnSL5k4MOntei1WHF
-         OM1h1L8UpzXyFmu79bd2AK6Y7ZdbK/FwjBRI/OJTAQeVyAYNi46KzTjuXVbnxPZeRU
-         tzacullZEYwZk7KZjKlasS14Mp5B2/v8sA+YzvOk=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alain Volmat <alain.volmat@st.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 092/606] i2c: fix missing pm_runtime_put_sync in i2c_device_probe
-Date:   Mon,  8 Jun 2020 19:03:37 -0400
-Message-Id: <20200608231211.3363633-92-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
-References: <20200608231211.3363633-1-sashal@kernel.org>
+        s=default; t=1591660034;
+        bh=JfeR1OvUTiZ0lO8gFO9nXXNApbqP7Edk3LbRreh8u6o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ywVQtU9EpMa3kP7TzlTaYd3MC12ox9PdByU6JDD/+1ap9wTefo28zwbDbtquuTTXs
+         q4SPNj+fsG+okq4AuKRockpnZdiBNJVW/msRnFgduqIe/mcn6dRp+arC+1RK8sGZ2j
+         E8yZNl7fH+hOZqypdm+lPKFtCbiHHwk4e9Hqv1bw=
+Received: by mail-oo1-f52.google.com with SMTP id 7so3818488oof.8;
+        Mon, 08 Jun 2020 16:47:14 -0700 (PDT)
+X-Gm-Message-State: AOAM5313IxO3b+ngWsMl/aLyQSIZnHRLKeHaf9QodYpbmaeNnmAwenuE
+        kj6SZgiGXeLD4dwgSmnYnoLu2PmH0tC5LWQn5g==
+X-Google-Smtp-Source: ABdhPJz3gIjlkhZ2RmMRXkIMPB6UylOzQLyhAs6ndsfed5PFu+br/5Z+8Z79xY7reJQ2jrwzMbD3741AqHxlS9Wo3LE=
+X-Received: by 2002:a4a:345b:: with SMTP id n27mr19140154oof.25.1591660034065;
+ Mon, 08 Jun 2020 16:47:14 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20200527153046.6172-1-Sergey.Semin@baikalelectronics.ru>
+ <20200527153046.6172-3-Sergey.Semin@baikalelectronics.ru> <20200527153351.rmzguymz7lm6gvsx@mobilestation>
+ <20200529181338.GA2676189@bogus> <20200529182256.3bp4uvvrvz3ddlrq@mobilestation>
+ <20200529184201.GX1634618@smile.fi.intel.com> <20200529184534.wyyv5i7hcto5y3d3@mobilestation>
+ <20200529185824.o2vcpxe4f63aw465@mobilestation>
+In-Reply-To: <20200529185824.o2vcpxe4f63aw465@mobilestation>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 8 Jun 2020 17:46:59 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKZjYF2Jrvcd8BAHsMfm5-S1J11NVoc6o2q5zE5ekmRTw@mail.gmail.com>
+Message-ID: <CAL_JsqKZjYF2Jrvcd8BAHsMfm5-S1J11NVoc6o2q5zE5ekmRTw@mail.gmail.com>
+Subject: Re: [PATCH v5 02/11] dt-bindings: i2c: Discard i2c-slave flag from
+ the DW I2C example
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Alain Volmat <alain.volmat@st.com>
+On Fri, May 29, 2020 at 12:58 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+>
+> On Fri, May 29, 2020 at 09:45:37PM +0300, Serge Semin wrote:
+> > On Fri, May 29, 2020 at 09:42:01PM +0300, Andy Shevchenko wrote:
+> > > On Fri, May 29, 2020 at 09:22:56PM +0300, Serge Semin wrote:
+> > > > On Fri, May 29, 2020 at 12:13:38PM -0600, Rob Herring wrote:
+> > > > > On Wed, May 27, 2020 at 06:33:51PM +0300, Serge Semin wrote:
+> > >
+> > > > > you're sending
+> > > > > new versions too fast. Give people time to review.
+> > > >
+> > > > Yeah, you did. Sorry for sending the new versions very fast. Normally I prefer
+> > > > to keep up with comments so to past a particular maintainer review as fast as
+> > > > possible without long delays. In my experience the longer you wait, the lesser
+> > > > maintainers remember about your patchset, the harder for one to continue the
+> > > > next versions review.
+> > >
+> >
+>
+> > > Documentation/process/submitting-patches.rst:
+> > >
+> > > "Wait for a minimum of one week before resubmitting or pinging reviewers -
+> > > possibly longer during busy times like merge windows."
+> >
+> > Good to know what I already know.) How much do you personally wait before
+> > resubmitting? In my experience reviewing your DW APB GPIO patches, no longer
+> > than a few hours.
+>
+> Moreover the statement you cited is about the patches, which doesn't get any
+> attention from the maintainers/reviewers for quite some time. In this case I
+> normally resubmit the patches no sooner than a week. I was talking about the
+> situation when you get the review comments, which need to be addressed.
 
-[ Upstream commit 3c3dd56f760da056e821ac177e3ad0de4209a435 ]
+There's not going to be any rule that always works. It takes
+judgement. I'd say the greater the rework from review comments, the
+sooner you can resend. But then if it's multiple
+subsystems/maintainers, you need to give all of them time.
 
-In case of the I2C client exposes the flag I2C_CLIENT_HOST_NOTIFY,
-pm_runtime_get_sync is called in order to always keep active the
-adapter. However later on, pm_runtime_put_sync is never called
-within the function in case of an error. This commit add this
-error handling.
+I go in date order mostly. You send a new version, then you go to the
+back of the queue. So if you want it reviewed the soonest, send it 2
+weeks ago. ;) There's also the strategy of reviewing other patches in
+front of yours. Sometimes I go by version numbers, but send version 50
+and I might be suspicious. And that's rewarding folks who are sloppy
+or keep sending broken stuff. The real solution is I just need more
+help reviewing things.
 
-Fixes: 72bfcee11cf8 ("i2c: Prevent runtime suspend of adapter when Host Notify is required")
-Signed-off-by: Alain Volmat <alain.volmat@st.com>
-Reviewed-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/i2c-core-base.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index cefad0881942..fd3199782b6e 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -338,8 +338,10 @@ static int i2c_device_probe(struct device *dev)
- 		} else if (ACPI_COMPANION(dev)) {
- 			irq = i2c_acpi_get_irq(client);
- 		}
--		if (irq == -EPROBE_DEFER)
--			return irq;
-+		if (irq == -EPROBE_DEFER) {
-+			status = irq;
-+			goto put_sync_adapter;
-+		}
- 
- 		if (irq < 0)
- 			irq = 0;
-@@ -353,15 +355,19 @@ static int i2c_device_probe(struct device *dev)
- 	 */
- 	if (!driver->id_table &&
- 	    !i2c_acpi_match_device(dev->driver->acpi_match_table, client) &&
--	    !i2c_of_match_device(dev->driver->of_match_table, client))
--		return -ENODEV;
-+	    !i2c_of_match_device(dev->driver->of_match_table, client)) {
-+		status = -ENODEV;
-+		goto put_sync_adapter;
-+	}
- 
- 	if (client->flags & I2C_CLIENT_WAKE) {
- 		int wakeirq;
- 
- 		wakeirq = of_irq_get_byname(dev->of_node, "wakeup");
--		if (wakeirq == -EPROBE_DEFER)
--			return wakeirq;
-+		if (wakeirq == -EPROBE_DEFER) {
-+			status = wakeirq;
-+			goto put_sync_adapter;
-+		}
- 
- 		device_init_wakeup(&client->dev, true);
- 
-@@ -408,6 +414,10 @@ static int i2c_device_probe(struct device *dev)
- err_clear_wakeup_irq:
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
-+put_sync_adapter:
-+	if (client->flags & I2C_CLIENT_HOST_NOTIFY)
-+		pm_runtime_put_sync(&client->adapter->dev);
-+
- 	return status;
- }
- 
--- 
-2.25.1
-
+Rob
