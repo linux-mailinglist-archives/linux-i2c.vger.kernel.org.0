@@ -2,147 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0901F33A9
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jun 2020 07:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655001F33BB
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jun 2020 07:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727804AbgFIFz2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Jun 2020 01:55:28 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:36711 "EHLO m43-7.mailgun.net"
+        id S1727905AbgFIF5N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Jun 2020 01:57:13 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:59600 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727118AbgFIFz1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 9 Jun 2020 01:55:27 -0400
+        id S1727870AbgFIF5K (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 9 Jun 2020 01:57:10 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1591682126; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=lHjRLmr48blxmZp5pC92pn0zhADcIvEhpmaowHJ/1Qo=; b=ZIto3/qksJUFfw4bjgHWXhTFObSUfdSYwER1ot8cvEBXjnkMlUo42oaYPQWDfYrA6zZstISz
- B4vtAKUsHsYS8BdN7TNMwDVX9ahABlXgrv3VfYF8sH2vu1f0hOt9DIx/v8UTcpoTGwWEjW5Z
- 3eKWdBA+rWC+xadTahabZhfz7Pg=
+ s=smtp; t=1591682229; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=lp0LJ7cPksQDX7FDaw+r5+e9qcjpurTlFjYer6a4yeM=; b=WnDxLj3K0KjgMzIZbNWSbVGCitUw/SoYlQbUenbmJ0XPsTXM9CpLOR/tGg0/q6zdgNSGQEL7
+ T6rmUpRj1cb0lGfo84d/Ctp5JqiVGZ5AAyrwHMo7gson7L9ca3PYr+pYJf2zBs+BA9KbCxxZ
+ /TBSbRTM8S1L4QU2ledb/8KsSjs=
 X-Mailgun-Sending-Ip: 69.72.43.7
 X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n12.prod.us-east-1.postgun.com with SMTP id
- 5edf24378cb42f3a2cdfd521 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 09 Jun 2020 05:55:03
+ smtp-out-n08.prod.us-west-2.postgun.com with SMTP id
+ 5edf24a65c89e47d73b94cbc (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 09 Jun 2020 05:56:54
  GMT
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 76DDFC43387; Tue,  9 Jun 2020 05:55:02 +0000 (UTC)
+        id 25F0CC43395; Tue,  9 Jun 2020 05:56:54 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.43.98] (unknown [157.44.16.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from akashast-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 64FA7C433CA;
-        Tue,  9 Jun 2020 05:54:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 64FA7C433CA
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id BABB6C433CB;
+        Tue,  9 Jun 2020 05:56:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org BABB6C433CB
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V7 6/7] spi: spi-qcom-qspi: Add interconnect support
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+From:   Akash Asthana <akashast@codeaurora.org>
+To:     gregkh@linuxfoundation.org, agross@kernel.org,
         bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, swboyd@chromium.org,
         mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, dianders@chromium.org,
-        msavaliy@codeaurora.org, evgreen@chromium.org
-References: <1590497690-29035-1-git-send-email-akashast@codeaurora.org>
- <1590497690-29035-7-git-send-email-akashast@codeaurora.org>
- <20200526173613.GF4525@google.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <6905b55b-772d-e027-0675-e1467445f40b@codeaurora.org>
-Date:   Tue, 9 Jun 2020 11:24:46 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.1
-MIME-Version: 1.0
-In-Reply-To: <20200526173613.GF4525@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        linux-serial@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org, evgreen@chromium.org,
+        msavaliy@codeaurora.org, Akash Asthana <akashast@codeaurora.org>
+Subject: [PATCH V7 RESEND 0/7] Add interconnect support to QSPI and QUP drivers 
+Date:   Tue,  9 Jun 2020 11:26:27 +0530
+Message-Id: <1591682194-32388-1-git-send-email-akashast@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Matthias,
+This patch series is based on tag "next-20200608" of linux-next tree.
 
-On 5/26/2020 11:06 PM, Matthias Kaehlcke wrote:
-> On Tue, May 26, 2020 at 06:24:49PM +0530, Akash Asthana wrote:
->> Get the interconnect paths for QSPI device and vote according to the
->> current bus speed of the driver.
->>
->> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
->> ---
->> Changes in V2:
->>   - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
->>     path handle
->>   - As per Matthias comment, added error handling for icc_set_bw call
->>
->> Changes in V3:
->>   - No Change.
->>
->> Changes in V4:
->>   - As per Mark's comment move peak_bw guess as twice of avg_bw if
->>     nothing mentioned explicitly to ICC core.
->>
->> Changes in V5:
->>   - Add icc_enable/disable to power on/off call.
->>   - Save some non-zero avg/peak value to ICC core by calling geni_icc_set_bw
->>     from probe so that when resume/icc_enable is called NOC are running at
->>     some non-zero value.
->>
->> Changes in V6:
->>   - As per Matthias's comment made print statement consistent across driver
->>
->> Changes in V7:
->>   - As per Matthias's comment removed usage of peak_bw variable because we don't
->>     have explicit peak requirement, we were voting peak = avg and this can be
->>     tracked using single variable for avg bw.
->>   - As per Matthias's comment improved print log.
->>
->>   drivers/spi/spi-qcom-qspi.c | 57 ++++++++++++++++++++++++++++++++++++++++++++-
->>   1 file changed, 56 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
->> index 3c4f83b..092ac27 100644
->> --- a/drivers/spi/spi-qcom-qspi.c
->> +++ b/drivers/spi/spi-qcom-qspi.c
->> @@ -2,6 +2,7 @@
->>   // Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
->>   
->>   #include <linux/clk.h>
->> +#include <linux/interconnect.h>
->>   #include <linux/interrupt.h>
->>   #include <linux/io.h>
->>   #include <linux/module.h>
->> @@ -139,7 +140,9 @@ struct qcom_qspi {
->>   	struct device *dev;
->>   	struct clk_bulk_data *clks;
->>   	struct qspi_xfer xfer;
->> -	/* Lock to protect xfer and IRQ accessed registers */
->> +	struct icc_path *icc_path_cpu_to_qspi;
->> +	unsigned int avg_bw_cpu;
-> I should have noticed this earlier, but the field isn't needed now that
-> we have icc_enable/disable(). The bandwidth is set in
-> qcom_qspi_transfer_one() and that's it.
->
->  From my side it would be fine to remove the field in a follow up patch,
-> to avoid respinning the series yet another time just for this.
->
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Resending V7 patch with minor change in patch 6/7 (QSPI).
 
-I will resend patch V7 with the suggested change.
+dt-binding patch for QUP drivers.
+ - https://patchwork.kernel.org/patch/11534149/ [Convert QUP bindings
+        to YAML and add ICC, pin swap doc]
 
-Thankyou for reviewing
+High level design:
+ - QUP wrapper/common driver.
+   Vote for QUP core on behalf of earlycon from probe.
+   Remove BW vote during earlycon exit call
 
-Regards,
+ - SERIAL driver.
+   Vote only for CPU/CORE path because driver is in FIFO mode only
+   Vote/unvote from qcom_geni_serial_pm func.
+   Bump up the CPU vote from set_termios call based on real time need
 
-Akash
+ - I2C driver.
+   Vote for CORE/CPU/DDR path
+   Vote/unvote from runtime resume/suspend callback
+   As bus speed for I2C is fixed from probe itself no need for bump up.
+
+ - SPI QUP driver.
+   Vote only for CPU/CORE path because driver is in FIFO mode only
+   Vote/unvote from runtime resume/suspend callback
+   Bump up CPU vote based on real time need per transfer.
+
+ - QSPI driver.
+   Vote only for CPU path
+   Vote/unvote from runtime resume/suspend callback
+   Bump up CPU vote based on real time need per transfer.
+
+Changes in V2:
+ - Add devm_of_icc_get() API interconnect core.
+ - Add ICC support to common driver to fix earlyconsole crash.
+
+Changes in V3:
+ - Define common ICC APIs in geni-se driver and use it across geni based
+   I2C,SPI and UART driver.
+
+Changes in V4:
+ - Add a patch to ICC core to scale peak requirement
+   as twice of average if it is not mentioned explicilty.
+
+Changes in V5:
+ - As per Georgi's suggestion removed patch from ICC core for assuming
+   peak_bw as twice of average when it's not mentioned, instead assume it
+   equall to avg_bw and keep this assumption in ICC client itself.
+ - As per Matthias suggestion use enum for GENI QUP ICC paths.
+
+Changes in V6:
+ - No Major change
+
+Changes in V7:
+ - As per Matthias's comment removed usage of peak_bw variable because we don't
+   have explicit peak requirement, we were voting peak = avg and this can be
+   tracked using single variable for avg bw.
+ - As per Matthias's comment improved print log.
+
+Akash Asthana (7):
+  soc: qcom: geni: Support for ICC voting
+  soc: qcom-geni-se: Add interconnect support to fix earlycon crash
+  i2c: i2c-qcom-geni: Add interconnect support
+  spi: spi-geni-qcom: Add interconnect support
+  tty: serial: qcom_geni_serial: Add interconnect support
+  spi: spi-qcom-qspi: Add interconnect support
+  arm64: dts: sc7180: Add interconnect for QUP and QSPI
+
+ arch/arm64/boot/dts/qcom/sc7180.dtsi  | 127 ++++++++++++++++++++++++++++
+ drivers/i2c/busses/i2c-qcom-geni.c    |  26 +++++-
+ drivers/soc/qcom/qcom-geni-se.c       | 150 ++++++++++++++++++++++++++++++++++
+ drivers/spi/spi-geni-qcom.c           |  29 ++++++-
+ drivers/spi/spi-qcom-qspi.c           |  56 ++++++++++++-
+ drivers/tty/serial/qcom_geni_serial.c |  38 ++++++++-
+ include/linux/qcom-geni-se.h          |  40 +++++++++
+ 7 files changed, 460 insertions(+), 6 deletions(-)
 
 -- 
 The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
