@@ -2,92 +2,172 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DB31F3CD3
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jun 2020 15:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F441F3F8F
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jun 2020 17:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729790AbgFINlP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Jun 2020 09:41:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57504 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728480AbgFINlP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 9 Jun 2020 09:41:15 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 13DE420760;
-        Tue,  9 Jun 2020 13:41:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591710074;
-        bh=LLqWJbXt6QtzWVgvOd2712wAhSrRI95wAZyysVj9bK4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o0ERjX/mDx7TVjKhU7cpUaCWtG5ShegLg/BnxvPntVhuW0ElPicFk1+9q7ch6b5R3
-         dehBiBs10JOSIRtVaUKyFlLqhmZhVhLyq1p9RMlF2JiXSAdwpn/CcnJSvh1twlm8QA
-         xytLUX9t6pq+8Ko8rsT4Y3P87TVIAGf/OarQOayA=
-Date:   Tue, 9 Jun 2020 14:41:12 +0100
-From:   Mark Brown <broonie@kernel.org>
+        id S1730890AbgFIPiI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Jun 2020 11:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728381AbgFIPiF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Jun 2020 11:38:05 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE28C05BD1E
+        for <linux-i2c@vger.kernel.org>; Tue,  9 Jun 2020 08:38:05 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id d6so1571206pjs.3
+        for <linux-i2c@vger.kernel.org>; Tue, 09 Jun 2020 08:38:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zNXPTuPYITPlXUf9e7kBdBv6V29pBmsp1U+7kcfXIt0=;
+        b=KP3OHZBJkKR3Lj6uCMOBqyToXZJQKsuReIBf8UJe/AqNMp7qafeDSi5CBzpGfzbAuH
+         +XLPg+AkiDaSsSMQDhSD/m1nySLMmUDcScF+LdeMcknzD5SFbN4tf7DSgGFZw1/NwKuV
+         4jKKzu0BsDeptbc5+jmKEGCb59pJrM6wLEh1A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zNXPTuPYITPlXUf9e7kBdBv6V29pBmsp1U+7kcfXIt0=;
+        b=bPJPvv33BZUx2sM3jiE+ISMzYO8Sc2nv3cPuk0EauE1qi9tkLD5Hyh84vID+zc6TKr
+         rYehBPV6RIYApbSchKo+IOyAqNxlb8hlDiv45RcXmqCkVT67n7H3RQsjxXRne+mKmLzj
+         Q8NxbIoDaAImEAG2KPlkogmSI2oxCjwqIEJuWRAUEVwmTqT6sdCXniP6p+voNRSop866
+         N0p39pZtfaXOLMWXS9AvLy2Y4aH/yH1B8hMGiBR5vTAUrbodIcHczxB725J22COSgjVB
+         hG/NH2qRsdEjbpk0M9m7oZISN2QjNIhX7d+Lrr4JgZy3LRBN4KABQA40TEST4oJgRpvY
+         8v0Q==
+X-Gm-Message-State: AOAM532uAl1PG5ASecOG8cXfPdHVmIRKZa9FDHdsYNBCXpCiuojjhXOK
+        Cm7GmYw7PMQbiFPFQ9TptlepWg==
+X-Google-Smtp-Source: ABdhPJyLZg1krDhLm4HG19/WnYesweBfZBwBFVjHitwsKq7GU5d3/yfPS2CEYvHEXWAL2zbkqjxZEA==
+X-Received: by 2002:a17:902:aa48:: with SMTP id c8mr3979439plr.128.1591717084665;
+        Tue, 09 Jun 2020 08:38:04 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id q6sm10170213pff.163.2020.06.09.08.38.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2020 08:38:03 -0700 (PDT)
+Date:   Tue, 9 Jun 2020 08:38:02 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Akash Asthana <akashast@codeaurora.org>
 Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de, broonie@kernel.org,
         mark.rutland@arm.com, robh+dt@kernel.org,
         linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, swboyd@chromium.org,
         mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org, evgreen@chromium.org,
-        msavaliy@codeaurora.org
-Subject: Re: [PATCH V7 RESEND 4/7] spi: spi-geni-qcom: Add interconnect
- support
-Message-ID: <20200609134112.GI4583@sirena.org.uk>
+        linux-serial@vger.kernel.org, dianders@chromium.org,
+        evgreen@chromium.org, msavaliy@codeaurora.org
+Subject: Re: [PATCH V7 RESEND 0/7] Add interconnect support to QSPI and QUP
+ drivers
+Message-ID: <20200609153802.GS4525@google.com>
 References: <1591682194-32388-1-git-send-email-akashast@codeaurora.org>
- <1591682194-32388-5-git-send-email-akashast@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qVyHzDF4yf4A8jkR"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1591682194-32388-5-git-send-email-akashast@codeaurora.org>
-X-Cookie: Be careful!  Is it classified?
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1591682194-32388-1-git-send-email-akashast@codeaurora.org>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Akash,
 
---qVyHzDF4yf4A8jkR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jun 09, 2020 at 11:26:27AM +0530, Akash Asthana wrote:
+> This patch series is based on tag "next-20200608" of linux-next tree.
 
-On Tue, Jun 09, 2020 at 11:26:31AM +0530, Akash Asthana wrote:
-> Get the interconnect paths for SPI based Serial Engine device
-> and vote according to the current bus speed of the driver.
->=20
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
+Great, I was concerned there would be conflicts without a rebase.
 
-I've repeatedly acked this patch but my ack never seems to get carried
-forward :(
+> Resending V7 patch with minor change in patch 6/7 (QSPI).
 
-> +	/* Set the bus quota to a reasonable value for register access */
-> +	mas->se.icc_paths[GENI_TO_CORE].avg_bw =3D Bps_to_icc(CORE_2X_50_MHZ);
-> +	mas->se.icc_paths[CPU_TO_GENI].avg_bw =3D GENI_DEFAULT_BW;
+It's not a pure resend, since it has changes in "spi:
+spi-qcom-qspi: Add interconnect support":
 
-Why are these asymmetric?
+  Changes in Resend V7:
+   - As per Matthias comment removed "unsigned int avg_bw_cpu" from
+      struct qcom_qspi as we are using that variable only once.
 
---qVyHzDF4yf4A8jkR
-Content-Type: application/pgp-signature; name="signature.asc"
+Please increase the version number whenever you make changes or rebase.
 
------BEGIN PGP SIGNATURE-----
+Maintainers tend to be busy, before doing actual resends folks often
+send a ping/inquiry on the original patch/series, and only resend it when
+they didn't receive a response after some time.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7fkXcACgkQJNaLcl1U
-h9AvBQf/dcXzKa7k8e4LYRPmPnHQosxG01GttTB72c7Y1FpruIDtZ9/AQ1bKF824
-68ww6ms6E7s6Yjbv5MCZRorMSzgtX5c6HzltyLfPfNLKUfnji6xOlutircZXZFJc
-nRL6s/fhsxuYBHRgj/ridrEzhgmj0x9jx/z1EDUAWSOvvy+ekC2hjJsX86w09S1v
-CH0UKzWi8VcdZIAkuTXdwBUvohiMFz+1VcJo2qn8WCIB53JeZvwCyiwmwJTlSEf7
-5eq0UhK44xQm4rCZN6HtddJ6HmJAgUNJDwKu6zmDtHFYHEiMRJiElQU2qhJWQlbf
-ZdNrJ0S70lYcOAQaIVfRMTaABp872w==
-=qbNa
------END PGP SIGNATURE-----
+Thanks
 
---qVyHzDF4yf4A8jkR--
+Matthias
+
+> dt-binding patch for QUP drivers.
+>  - https://patchwork.kernel.org/patch/11534149/ [Convert QUP bindings
+>         to YAML and add ICC, pin swap doc]
+> 
+> High level design:
+>  - QUP wrapper/common driver.
+>    Vote for QUP core on behalf of earlycon from probe.
+>    Remove BW vote during earlycon exit call
+> 
+>  - SERIAL driver.
+>    Vote only for CPU/CORE path because driver is in FIFO mode only
+>    Vote/unvote from qcom_geni_serial_pm func.
+>    Bump up the CPU vote from set_termios call based on real time need
+> 
+>  - I2C driver.
+>    Vote for CORE/CPU/DDR path
+>    Vote/unvote from runtime resume/suspend callback
+>    As bus speed for I2C is fixed from probe itself no need for bump up.
+> 
+>  - SPI QUP driver.
+>    Vote only for CPU/CORE path because driver is in FIFO mode only
+>    Vote/unvote from runtime resume/suspend callback
+>    Bump up CPU vote based on real time need per transfer.
+> 
+>  - QSPI driver.
+>    Vote only for CPU path
+>    Vote/unvote from runtime resume/suspend callback
+>    Bump up CPU vote based on real time need per transfer.
+> 
+> Changes in V2:
+>  - Add devm_of_icc_get() API interconnect core.
+>  - Add ICC support to common driver to fix earlyconsole crash.
+> 
+> Changes in V3:
+>  - Define common ICC APIs in geni-se driver and use it across geni based
+>    I2C,SPI and UART driver.
+> 
+> Changes in V4:
+>  - Add a patch to ICC core to scale peak requirement
+>    as twice of average if it is not mentioned explicilty.
+> 
+> Changes in V5:
+>  - As per Georgi's suggestion removed patch from ICC core for assuming
+>    peak_bw as twice of average when it's not mentioned, instead assume it
+>    equall to avg_bw and keep this assumption in ICC client itself.
+>  - As per Matthias suggestion use enum for GENI QUP ICC paths.
+> 
+> Changes in V6:
+>  - No Major change
+> 
+> Changes in V7:
+>  - As per Matthias's comment removed usage of peak_bw variable because we don't
+>    have explicit peak requirement, we were voting peak = avg and this can be
+>    tracked using single variable for avg bw.
+>  - As per Matthias's comment improved print log.
+> 
+> Akash Asthana (7):
+>   soc: qcom: geni: Support for ICC voting
+>   soc: qcom-geni-se: Add interconnect support to fix earlycon crash
+>   i2c: i2c-qcom-geni: Add interconnect support
+>   spi: spi-geni-qcom: Add interconnect support
+>   tty: serial: qcom_geni_serial: Add interconnect support
+>   spi: spi-qcom-qspi: Add interconnect support
+>   arm64: dts: sc7180: Add interconnect for QUP and QSPI
+> 
+>  arch/arm64/boot/dts/qcom/sc7180.dtsi  | 127 ++++++++++++++++++++++++++++
+>  drivers/i2c/busses/i2c-qcom-geni.c    |  26 +++++-
+>  drivers/soc/qcom/qcom-geni-se.c       | 150 ++++++++++++++++++++++++++++++++++
+>  drivers/spi/spi-geni-qcom.c           |  29 ++++++-
+>  drivers/spi/spi-qcom-qspi.c           |  56 ++++++++++++-
+>  drivers/tty/serial/qcom_geni_serial.c |  38 ++++++++-
+>  include/linux/qcom-geni-se.h          |  40 +++++++++
+>  7 files changed, 460 insertions(+), 6 deletions(-)
+> 
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+> 
