@@ -2,140 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6681F3C59
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jun 2020 15:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DB31F3CD3
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jun 2020 15:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729613AbgFIN1F (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Jun 2020 09:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729584AbgFIN1C (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Jun 2020 09:27:02 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EB6C03E97C;
-        Tue,  9 Jun 2020 06:27:02 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id x22so10075016pfn.3;
-        Tue, 09 Jun 2020 06:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=kSIhf0lGTJhWcv+DccCkvFsMqMLpno9qIeBkBoJLMSQ=;
-        b=miEUbzjcd4ryUuKvQRtvf6dPM1igWZ99p8Q6FEwRjbx4OnKVBKqoYcgFbYQa5F0CiQ
-         rad6clrM7rHVgJjWaSGo+06n0jk3qugJoFhZ4uC0qWxdyIT7OsuLI2/YDruuF8Z4O1tE
-         3XN5SBV4IyX/VaBuWAY0GE0AqxS6UYPKNE6P36cTd2+X9MqvjpDifrfLKMc7i/xQMqjI
-         0Jpz/z0K3veRZWdMO4osYMwcAjH9FlU16JqTA5cQjsc0gOOqUvfPxAU2tZRhWde0L8Zi
-         TU7lbJxux9j2OvqpbG0zJUIieSCW7zCWuGtwSDwgsR2FLhku1pZlyh+CPVWh2iayMnyj
-         JFHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=kSIhf0lGTJhWcv+DccCkvFsMqMLpno9qIeBkBoJLMSQ=;
-        b=QlHxvw72+rQXqChrF6J1Rkbftgb0XvH1WCWi/a2IvjEPKBD0wB2OUCWRSbz8la4BqW
-         49HiiS0rJrUyluBXxePnpz2/xUu+5Jp1STYzjg6+nXSpq1U98XwRHwtdLvqb9yQgnyCC
-         DC6L7rcdcVEgJv8qaMN2Arf8KVV1J/kdWNRXwNdcePVEioc6qh92rCenu4whBKG91GpD
-         hw8PF5Ovzdjxlx0dv4ntOe69d2Ql16iIVF5nAr7DihdOwHisL88f27sf2XDPmD449/FQ
-         eyT3cLrgCXqBx33z4ygW5WbR3m/Q6I6umfu3ofrbmk8tP1vs4WfI2fFZNOQB/ZIWoh0g
-         OA/g==
-X-Gm-Message-State: AOAM531wwOMYVSKgmRI6axUdpHB1j79F7UutAqjmDSIT1sZ1v8SFx4SK
-        PfKPSFcvhhIabD+AaJKd670=
-X-Google-Smtp-Source: ABdhPJygotx9ln59z0STkYKtMU1xO9pxH7iXYS1GxlB8u1JiD2/tkQhL5M40gjWnv1oxbN80JE9mRA==
-X-Received: by 2002:a63:a36e:: with SMTP id v46mr23872632pgn.378.1591709222448;
-        Tue, 09 Jun 2020 06:27:02 -0700 (PDT)
-Received: from fmin-OptiPlex-7060.nreal.work ([103.206.191.42])
-        by smtp.gmail.com with ESMTPSA id b5sm2624348pjz.34.2020.06.09.06.26.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Jun 2020 06:27:02 -0700 (PDT)
-From:   dillon.minfei@gmail.com
-To:     robh+dt@kernel.org, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, p.zabel@pengutronix.de,
-        pierre-yves.mordret@st.com, philippe.schenker@toradex.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        dillon min <dillon.minfei@gmail.com>
-Subject: [PATCH v4 4/4] i2c: stm32f4: Fix stmpe811 get xyz data timeout issue
-Date:   Tue,  9 Jun 2020 21:26:43 +0800
-Message-Id: <1591709203-12106-5-git-send-email-dillon.minfei@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1591709203-12106-1-git-send-email-dillon.minfei@gmail.com>
-References: <1591709203-12106-1-git-send-email-dillon.minfei@gmail.com>
+        id S1729790AbgFINlP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Jun 2020 09:41:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57504 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728480AbgFINlP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 9 Jun 2020 09:41:15 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 13DE420760;
+        Tue,  9 Jun 2020 13:41:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591710074;
+        bh=LLqWJbXt6QtzWVgvOd2712wAhSrRI95wAZyysVj9bK4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o0ERjX/mDx7TVjKhU7cpUaCWtG5ShegLg/BnxvPntVhuW0ElPicFk1+9q7ch6b5R3
+         dehBiBs10JOSIRtVaUKyFlLqhmZhVhLyq1p9RMlF2JiXSAdwpn/CcnJSvh1twlm8QA
+         xytLUX9t6pq+8Ko8rsT4Y3P87TVIAGf/OarQOayA=
+Date:   Tue, 9 Jun 2020 14:41:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org, evgreen@chromium.org,
+        msavaliy@codeaurora.org
+Subject: Re: [PATCH V7 RESEND 4/7] spi: spi-geni-qcom: Add interconnect
+ support
+Message-ID: <20200609134112.GI4583@sirena.org.uk>
+References: <1591682194-32388-1-git-send-email-akashast@codeaurora.org>
+ <1591682194-32388-5-git-send-email-akashast@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qVyHzDF4yf4A8jkR"
+Content-Disposition: inline
+In-Reply-To: <1591682194-32388-5-git-send-email-akashast@codeaurora.org>
+X-Cookie: Be careful!  Is it classified?
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: dillon min <dillon.minfei@gmail.com>
 
-as stm32f429's internal flash is 2Mbytes and compiled kernel
-image bigger than 2Mbytes, so we have to load kernel image
-to sdram on stm32f429-disco board which has 8Mbytes sdram space.
+--qVyHzDF4yf4A8jkR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-based on above context, as you knows kernel running on external
-sdram is more slower than internal flash. besides, we need read 4
-bytes to get touch screen xyz(x, y, pressure) coordinate data in
-stmpe811 interrupt.
+On Tue, Jun 09, 2020 at 11:26:31AM +0530, Akash Asthana wrote:
+> Get the interconnect paths for SPI based Serial Engine device
+> and vote according to the current bus speed of the driver.
+>=20
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
 
-so, in stm32f4_i2c_handle_rx_done, as i2c read slower than running
-in xip mode, have to adjust 'STOP/START bit set position' from last
-two bytes to last one bytes. else, will get i2c timeout in reading
-touch screen coordinate.
+I've repeatedly acked this patch but my ack never seems to get carried
+forward :(
 
-to not take side effect, introduce IIC_LAST_BYTE_POS to support xip
-kernel or has mmu platform.
+> +	/* Set the bus quota to a reasonable value for register access */
+> +	mas->se.icc_paths[GENI_TO_CORE].avg_bw =3D Bps_to_icc(CORE_2X_50_MHZ);
+> +	mas->se.icc_paths[CPU_TO_GENI].avg_bw =3D GENI_DEFAULT_BW;
 
-Signed-off-by: dillon min <dillon.minfei@gmail.com>
----
+Why are these asymmetric?
 
-V4: indroduce 'IIC_LAST_BYTE_POS' to compatible with xipkernel boot
+--qVyHzDF4yf4A8jkR
+Content-Type: application/pgp-signature; name="signature.asc"
 
- drivers/i2c/busses/i2c-stm32f4.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/i2c/busses/i2c-stm32f4.c b/drivers/i2c/busses/i2c-stm32f4.c
-index d6a69dfcac3f..97cf42ae7fa0 100644
---- a/drivers/i2c/busses/i2c-stm32f4.c
-+++ b/drivers/i2c/busses/i2c-stm32f4.c
-@@ -93,6 +93,12 @@
- #define STM32F4_I2C_MAX_FREQ		46U
- #define HZ_TO_MHZ			1000000
- 
-+#if !defined(CONFIG_MMU) && !defined(CONFIG_XIP_KERNEL)
-+#define IIC_LAST_BYTE_POS 1
-+#else
-+#define IIC_LAST_BYTE_POS 2
-+#endif
-+
- /**
-  * struct stm32f4_i2c_msg - client specific data
-  * @addr: 8-bit slave addr, including r/w bit
-@@ -439,7 +445,7 @@ static void stm32f4_i2c_handle_rx_done(struct stm32f4_i2c_dev *i2c_dev)
- 	int i;
- 
- 	switch (msg->count) {
--	case 2:
-+	case IIC_LAST_BYTE_POS:
- 		/*
- 		 * In order to correctly send the Stop or Repeated Start
- 		 * condition on the I2C bus, the STOP/START bit has to be set
-@@ -454,7 +460,7 @@ static void stm32f4_i2c_handle_rx_done(struct stm32f4_i2c_dev *i2c_dev)
- 		else
- 			stm32f4_i2c_set_bits(reg, STM32F4_I2C_CR1_START);
- 
--		for (i = 2; i > 0; i--)
-+		for (i = IIC_LAST_BYTE_POS; i > 0; i--)
- 			stm32f4_i2c_read_msg(i2c_dev);
- 
- 		reg = i2c_dev->base + STM32F4_I2C_CR2;
-@@ -463,7 +469,7 @@ static void stm32f4_i2c_handle_rx_done(struct stm32f4_i2c_dev *i2c_dev)
- 
- 		complete(&i2c_dev->complete);
- 		break;
--	case 3:
-+	case (IIC_LAST_BYTE_POS+1):
- 		/*
- 		 * In order to correctly generate the NACK pulse after the last
- 		 * received data byte, we have to enable NACK before reading N-2
--- 
-2.7.4
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7fkXcACgkQJNaLcl1U
+h9AvBQf/dcXzKa7k8e4LYRPmPnHQosxG01GttTB72c7Y1FpruIDtZ9/AQ1bKF824
+68ww6ms6E7s6Yjbv5MCZRorMSzgtX5c6HzltyLfPfNLKUfnji6xOlutircZXZFJc
+nRL6s/fhsxuYBHRgj/ridrEzhgmj0x9jx/z1EDUAWSOvvy+ekC2hjJsX86w09S1v
+CH0UKzWi8VcdZIAkuTXdwBUvohiMFz+1VcJo2qn8WCIB53JeZvwCyiwmwJTlSEf7
+5eq0UhK44xQm4rCZN6HtddJ6HmJAgUNJDwKu6zmDtHFYHEiMRJiElQU2qhJWQlbf
+ZdNrJ0S70lYcOAQaIVfRMTaABp872w==
+=qbNa
+-----END PGP SIGNATURE-----
 
+--qVyHzDF4yf4A8jkR--
