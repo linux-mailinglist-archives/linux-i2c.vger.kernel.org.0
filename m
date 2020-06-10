@@ -2,134 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C85FE1F5617
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jun 2020 15:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D72C91F563E
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jun 2020 15:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729427AbgFJNqy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 10 Jun 2020 09:46:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40986 "EHLO mail.kernel.org"
+        id S1729565AbgFJNxi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 Jun 2020 09:53:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45484 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726157AbgFJNqy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 10 Jun 2020 09:46:54 -0400
-Received: from PC-kkoz.proceq.com (unknown [213.160.61.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1726520AbgFJNxi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 10 Jun 2020 09:53:38 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1614D20734;
-        Wed, 10 Jun 2020 13:46:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 31183206F4;
+        Wed, 10 Jun 2020 13:53:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591796813;
-        bh=ySu/M96+t17yNUSK2ZVv+Yrxj6RgjYRwsF77Zozd3Gk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kabpzzP8emaF3CzGqvm/lJhyhiuL9v+rC3MsEerpO13T6RFyuFGsSEwLJ9FQEz5gg
-         Ulssu7K/SrZYKjRbtG4RTC+nGA/0e5Lok3oKGxFNxy06PgTINst0leAuG+Ektxb9SS
-         oIBT3AQvCY2EP198+Xx4X+Z5cdaHLFJjbFUJ42yI=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Gao Pan <b54642@freescale.com>,
-        Fugang Duan <B38611@freescale.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] i2c: imx: Fix external abort on early interrupt
-Date:   Wed, 10 Jun 2020 15:46:42 +0200
-Message-Id: <1591796802-23504-1-git-send-email-krzk@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        s=default; t=1591797217;
+        bh=s1vPJ4Oq4k32bys2o6uXySw3TErrUiu1W9fi1VFwHmc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qreQMkrwj+CumutUh7nwPxQ3ljG79JcA1ghbj5W2wDJ145RY55Wlaip8KId3A9cr6
+         cHL9NI66U3QiEbpuD46atfCRf9LV7e7bugfnfNuUXSbPzPdRkMZ4BOY2Zwgdx6hmXx
+         JrB0bpYW08T283+OkQGmaobvjgrpvxlaeL6sAnsU=
+Date:   Wed, 10 Jun 2020 14:53:35 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org, evgreen@chromium.org,
+        msavaliy@codeaurora.org
+Subject: Re: [PATCH V7 RESEND 4/7] spi: spi-geni-qcom: Add interconnect
+ support
+Message-ID: <20200610135335.GG5005@sirena.org.uk>
+References: <1591682194-32388-1-git-send-email-akashast@codeaurora.org>
+ <1591682194-32388-5-git-send-email-akashast@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DWg365Y4B18r8evw"
+Content-Disposition: inline
+In-Reply-To: <1591682194-32388-5-git-send-email-akashast@codeaurora.org>
+X-Cookie: fortune: No such file or directory
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If interrupt comes early (could be triggered with CONFIG_DEBUG_SHIRQ),
-the i2c_imx_isr() will access registers before the I2C hardware is
-initialized.  This leads to external abort on non-linefetch on Toradex
-Colibri VF50 module (with Vybrid VF5xx):
 
-    Unhandled fault: external abort on non-linefetch (0x1008) at 0x8882d003
-    Internal error: : 1008 [#1] ARM
-    Modules linked in:
-    CPU: 0 PID: 1 Comm: swapper Not tainted 5.7.0 #607
-    Hardware name: Freescale Vybrid VF5xx/VF6xx (Device Tree)
-      (i2c_imx_isr) from [<8017009c>] (free_irq+0x25c/0x3b0)
-      (free_irq) from [<805844ec>] (release_nodes+0x178/0x284)
-      (release_nodes) from [<80580030>] (really_probe+0x10c/0x348)
-      (really_probe) from [<80580380>] (driver_probe_device+0x60/0x170)
-      (driver_probe_device) from [<80580630>] (device_driver_attach+0x58/0x60)
-      (device_driver_attach) from [<805806bc>] (__driver_attach+0x84/0xc0)
-      (__driver_attach) from [<8057e228>] (bus_for_each_dev+0x68/0xb4)
-      (bus_for_each_dev) from [<8057f3ec>] (bus_add_driver+0x144/0x1ec)
-      (bus_add_driver) from [<80581320>] (driver_register+0x78/0x110)
-      (driver_register) from [<8010213c>] (do_one_initcall+0xa8/0x2f4)
-      (do_one_initcall) from [<80c0100c>] (kernel_init_freeable+0x178/0x1dc)
-      (kernel_init_freeable) from [<80807048>] (kernel_init+0x8/0x110)
-      (kernel_init) from [<80100114>] (ret_from_fork+0x14/0x20)
+--DWg365Y4B18r8evw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Additionally, the i2c_imx_isr() could wake up the wait queue
-(imx_i2c_struct->queue) before its initialization happens.
+On Tue, Jun 09, 2020 at 11:26:31AM +0530, Akash Asthana wrote:
+> Get the interconnect paths for SPI based Serial Engine device
+> and vote according to the current bus speed of the driver.
 
-Fixes: 1c4b6c3bcf30 ("i2c: imx: implement bus recovery")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/i2c/busses/i2c-imx.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+Acked-by: Mark Brown <broonie@kernel.org>
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index 0ab5381aa012..e28a39f4840f 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1171,14 +1171,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	/* Request IRQ */
--	ret = devm_request_irq(&pdev->dev, irq, i2c_imx_isr, IRQF_SHARED,
--				pdev->name, i2c_imx);
--	if (ret) {
--		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
--		goto clk_disable;
--	}
--
- 	/* Init queue */
- 	init_waitqueue_head(&i2c_imx->queue);
- 
-@@ -1223,6 +1215,14 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto clk_notifier_unregister;
- 
-+	/* Request IRQ */
-+	ret = devm_request_irq(&pdev->dev, irq, i2c_imx_isr, IRQF_SHARED,
-+				pdev->name, i2c_imx);
-+	if (ret) {
-+		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
-+		goto i2c_del_adapter;
-+	}
-+
- 	pm_runtime_mark_last_busy(&pdev->dev);
- 	pm_runtime_put_autosuspend(&pdev->dev);
- 
-@@ -1237,6 +1237,8 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 
- 	return 0;   /* Return OK */
- 
-+i2c_del_adapter:
-+	i2c_del_adapter(&i2c_imx->adapter);
- clk_notifier_unregister:
- 	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
- rpm_disable:
-@@ -1244,8 +1246,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 	pm_runtime_set_suspended(&pdev->dev);
- 	pm_runtime_dont_use_autosuspend(&pdev->dev);
--
--clk_disable:
- 	clk_disable_unprepare(i2c_imx->clk);
- 	return ret;
- }
--- 
-2.7.4
+--DWg365Y4B18r8evw
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7g5d4ACgkQJNaLcl1U
+h9BKIQf/Q3VWEhsUfEymHtm5vEhv+ze1U2uQE7g2uwUQ9YZY8QFHJCWB9ASndc5g
+QgChce69MVl8+qsbwJ+hkrWRwtOKe00vqt+lqkAYGWTaKscEAIN+/kcTBAc6sDjx
+AnvBT9QeybB3i4xBtemJoPyPKLC3H1Ez2wZuez5FrqYcdThqiHIuewkCxAUgjg2a
+ovBeeDZ8GrBKfU0c/2HzilwrkovLlc0nuDwWn0xQhKdn9AynKB6UT/JJEhXbi0q6
+EpDqZNEHbv/itTQI0lyAQbcy3QelIcbfwj7rX3rHZN1hDbQ29lFSGSIg0nNQE1iX
+wq9EC6v/TcmPGMnddSvy091y7FAW7g==
+=bZPH
+-----END PGP SIGNATURE-----
+
+--DWg365Y4B18r8evw--
