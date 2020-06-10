@@ -2,73 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3D51F57E1
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jun 2020 17:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E8C1F5987
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jun 2020 18:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730221AbgFJPcO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 10 Jun 2020 11:32:14 -0400
-Received: from sauhun.de ([88.99.104.3]:39340 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726988AbgFJPcO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 10 Jun 2020 11:32:14 -0400
-Received: from localhost (p54b33234.dip0.t-ipconnect.de [84.179.50.52])
-        by pokefinder.org (Postfix) with ESMTPSA id 4ACBE2C1F6D;
-        Wed, 10 Jun 2020 17:32:12 +0200 (CEST)
-Date:   Wed, 10 Jun 2020 17:32:09 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Tali Perry <tali.perry1@gmail.com>
-Cc:     mchehab+huawei@kernel.org, davem@davemloft.net, robh@kernel.org,
-        gregkh@linuxfoundation.org, avifishman70@gmail.com,
-        tmaimon77@gmail.com, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v2] MAINTAINERS: npcm7xx: Add maintainer for Nuvoton NPCM
- BMC
-Message-ID: <20200610153209.GA2043@ninjato>
-References: <20200610072451.76495-1-tali.perry1@gmail.com>
+        id S1727064AbgFJQ6b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 Jun 2020 12:58:31 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:16700 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726560AbgFJQ6a (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Jun 2020 12:58:30 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ee110da0000>; Wed, 10 Jun 2020 09:56:58 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 10 Jun 2020 09:58:30 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 10 Jun 2020 09:58:30 -0700
+Received: from [10.2.167.70] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 10 Jun
+ 2020 16:58:29 +0000
+Subject: Re: [RFC PATCH v1 05/18] i2c: tegra: Fix runtime resume to re-init VI
+ I2C
+To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
+        <helen.koike@collabora.com>
+CC:     <sboyd@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+References: <1591768960-31648-1-git-send-email-skomatineni@nvidia.com>
+ <1591768960-31648-6-git-send-email-skomatineni@nvidia.com>
+ <fcced8cd-d80d-b09c-b657-cb413ec418f9@gmail.com>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <dc310c94-ae8d-fcf5-be9f-6236f3615dd7@nvidia.com>
+Date:   Wed, 10 Jun 2020 09:58:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="J/dobhs11T7y2rNN"
-Content-Disposition: inline
-In-Reply-To: <20200610072451.76495-1-tali.perry1@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <fcced8cd-d80d-b09c-b657-cb413ec418f9@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1591808218; bh=lCn+LcemkNEZVacRc5PI7q1npMKqaFgl+fw6okE0H6U=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=cAdMeWgVEE6NrJQx9xaYzarZGK4cJyQAiZ7rz/T68LylkHXoKF9ZkCO4cE5J4WPJq
+         XqyqOJnzN1EnJnKmXed80z3kWtKMNbInpHBZGDfr9wq/qVSj3g4VPx7mAlyVAVemL/
+         zDYp5EYDTApVFC/EHXQguOlm2P4nJ7ZiddjaFp4a0vF1w7zNA4TSeF4+TAPOAZLwzh
+         lA9sA7jYugjKYvC5LyAxx05fy0Gp6vu7vzB1tHc5APoXMprBjBnw7y5WjWASSktptq
+         sNrLyHrgvxTy7RJViwMupBAjSxEP71nlEkEiWg/FEiHkPyf3KyWzOMDvMsjO7ZatDa
+         QI7UY/E4NDRpg==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---J/dobhs11T7y2rNN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jun 10, 2020 at 10:24:51AM +0300, Tali Perry wrote:
-> Add maintainer for Nuvoton NPCM BMC
-> I2C controller driver.
->=20
-> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-
-Applied to for-next, thank you very much!
-
-
---J/dobhs11T7y2rNN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7g/PUACgkQFA3kzBSg
-KbZrSxAAoH79OBpxkgSNGxBPKeUyWL8jCZGtIS4LdOi4/3pEkAWOOGmGQU63XeK4
-wHC/q+tquqfB4pj3qT/5zdYtEVLJ7diaCCtrs8/yMSazVbPh2VJg66kZfXPCKcCy
-rjHIb+9G9tpBIMEqtKbtXZPB2t1zzzZqhqQdbL5XEbqD3fEHXu1oANsi0VT8Dlgh
-GgtukyiLyPpIiXarpl+2QmC3z8b/Ah6c2uPq/jmy5OaZElLpMBb1AslMCNYOlHgC
-5TPcZCwMVK8zHUe5fOBSrpS3qajIe/rLG9R6ryd8dcIdWkgtBi3h5CllEvgU/2mM
-Hsnj2qw5FSTFVeDYIJLr9AFVWBXShPjHfyMArJZHFjK5j+T+sOy1y387LcRq7t44
-Fi5zsnvdFm/HpwhUeq3hHCUOgdLkW993t88rAIY+riqhnfMsspXikAjYHsCFuR1m
-UR/+p3ORWB4cHNks5l0FZINd0ZAlWoZ3GT45L4EHoGs6SjOF4a5ISC/ebNG1cUb7
-muBSndJAoy4ZtrzvY9ywEtAnEnia9iix7rd98gmBlet4zHP7/0gATyTQEfRprmzZ
-HunmxNEUwiEh1AELs1yQg1zKKzsQQqzrYZcajz4fLnh0SePD9Co9pYK/a8VJUl3J
-H3qx/GY+OHxUIiSTozavBqxhTsob+E0gzGfMYjWqwHfrei97j4I=
-=ymYi
------END PGP SIGNATURE-----
-
---J/dobhs11T7y2rNN--
+On 6/10/20 6:14 AM, Dmitry Osipenko wrote:
+> 10.06.2020 09:02, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>> VI I2C is on host1x bus and is part of VE power domain.
+>>
+>> During suspend/resume VE power domain goes through power off/on.
+>>
+>> So, controller reset followed by i2c re-initialization is required
+>> after the domain power up.
+>>
+>> This patch fixes it.
+>>
+>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+>> ---
+>>   drivers/i2c/busses/i2c-tegra.c | 16 ++++++++++++++++
+>>   1 file changed, 16 insertions(+)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-teg=
+ra.c
+>> index dba38a5..650240d 100644
+>> --- a/drivers/i2c/busses/i2c-tegra.c
+>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>> @@ -293,6 +293,8 @@ struct tegra_i2c_dev {
+>>   	bool is_curr_atomic_xfer;
+>>   };
+>>  =20
+>> +static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev, bool clk_reini=
+t);
+>> +
+>>   static void dvc_writel(struct tegra_i2c_dev *i2c_dev, u32 val,
+>>   		       unsigned long reg)
+>>   {
+>> @@ -679,8 +681,22 @@ static int __maybe_unused tegra_i2c_runtime_resume(=
+struct device *dev)
+>>   		goto disable_slow_clk;
+>>   	}
+>>  =20
+>> +	/*
+>> +	 * VI I2C device is attached to VE power domain which goes through
+>> +	 * power ON/OFF during PM runtime resume/suspend. So, controller
+>> +	 * should go through reset and need to re-initialize after power
+>> +	 * domain ON.
+>> +	 */
+>> +	if (i2c_dev->is_vi) {
+>> +		ret =3D tegra_i2c_init(i2c_dev, true);
+>> +		if (ret)
+>> +			goto disable_div_clk;
+>> +	}
+>> +
+>>   	return 0;
+>>  =20
+>> +disable_div_clk:
+>> +	clk_disable(i2c_dev->div_clk);
+>>   disable_slow_clk:
+>>   	if (i2c_dev->slow_clk)
+>>   		clk_disable(i2c_dev->slow_clk);
+>>
+> The clk_disable() can cope with a NULL argument. Won't it be cleaner to
+> remove the conditions?
+will remove in v2
