@@ -2,237 +2,311 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C0C1F5C0D
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jun 2020 21:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CB71F5D93
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jun 2020 23:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730018AbgFJTj1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 10 Jun 2020 15:39:27 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.21]:17495 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728122AbgFJTj0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Jun 2020 15:39:26 -0400
-X-Greylist: delayed 364 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Jun 2020 15:39:24 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1591817963;
-        s=strato-dkim-0002; d=fpond.eu;
-        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=T35EhsbNR/Bg/PdpwAh28JlDXIcsX6YrPiYnzxPmwk4=;
-        b=XIqw7YI7pmfzVcpHXKqxiOwE8sBrIDi3h6i5a27LCkMTA0BVRZPgvgYk7opMfq8/n7
-        gkZ6lRx7AJ1i5v+sMs3JoPEcjXw46zJEiqT02NkcgJNIJxuzMok4CY0u/63WVtgvCuz+
-        jIQADawfmMH3HMkAErwnUHHcUM2sWxw77k1juHY0qSYLPCE/SVmrHP1KsZsSMYemllqQ
-        aFIHw25f2BeDVi94FSy20TbWREMz8adQeSVw5ksSHx9ZNmOuQs0hthU9wnix/sO3zMcQ
-        I7JxWGDFl0h9D5az1qFaHvqmFBEQxz+Jm4YH7pTch4vj8op4yh5F+mXNBQ/edP9lSAqj
-        otfw==
-X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73dmm4I5W0/AvA67Ot4fvR8GBad1QwaqQ="
-X-RZG-CLASS-ID: mo00
-Received: from groucho.site
-        by smtp.strato.de (RZmta 46.9.1 DYNA|AUTH)
-        with ESMTPSA id Q084d6w5AJXIULo
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Wed, 10 Jun 2020 21:33:18 +0200 (CEST)
-From:   Ulrich Hecht <uli+renesas@fpond.eu>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     wsa@the-dreams.de, linux-i2c@vger.kernel.org,
-        Ulrich Hecht <uli+renesas@fpond.eu>
-Subject: [PATCH] i2c: sh_mobile: implement atomic transfers
-Date:   Wed, 10 Jun 2020 21:33:11 +0200
-Message-Id: <1591817591-852-1-git-send-email-uli+renesas@fpond.eu>
-X-Mailer: git-send-email 2.7.4
+        id S1726147AbgFJVLw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 Jun 2020 17:11:52 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:13680 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726119AbgFJVLw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Jun 2020 17:11:52 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ee14c6a0001>; Wed, 10 Jun 2020 14:11:06 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 10 Jun 2020 14:11:51 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 10 Jun 2020 14:11:51 -0700
+Received: from [10.2.167.70] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 10 Jun
+ 2020 21:11:51 +0000
+Subject: Re: [RFC PATCH v1 10/18] dt-bindings: tegra: Document VI and CSI port
+ nodes
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <frankc@nvidia.com>, <hverkuil@xs4all.nl>, <robh+dt@kernel.org>,
+        <helen.koike@collabora.com>, <digetx@gmail.com>,
+        <sboyd@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+References: <1591768960-31648-1-git-send-email-skomatineni@nvidia.com>
+ <1591768960-31648-11-git-send-email-skomatineni@nvidia.com>
+ <20200610112303.GB805@valkosipuli.retiisi.org.uk>
+ <075d9d2e-eaa8-1895-8759-64c682fee1c4@nvidia.com>
+Message-ID: <d0c7a45a-2d84-7f6c-b1dd-496098f91c49@nvidia.com>
+Date:   Wed, 10 Jun 2020 14:11:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <075d9d2e-eaa8-1895-8759-64c682fee1c4@nvidia.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1591823466; bh=vH/jgds5BYy9bydBB1nepGXp1g7humjmHg9RLWhprus=;
+        h=X-PGP-Universal:Subject:From:To:CC:References:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=pmH/DhOKmrrcBVI/KQKqnT9QkOSBstwEzJBuxf6JCD7G7AtkmBpJcExVLC5PEZmdn
+         pHP2tke8qC4ZOPfmH9XpvAO+hGBKPmyxWqXzE1vBEQDsu+Nbdxjd8+pgFB/xgl8CrZ
+         Napc26gyyIXZEvMMeXLyaiOCtkDdZELD7xJWTQwhtv/kCp0ZhOcjEDBjTJWGkBLWAa
+         FVjWGLplVxus8/mRuhs9Dn0/0QmiKitHtuXYgs3peyj1dXlsTITD09QergXHKLZbj9
+         0vDHIQkIHRr1lt3BhZW5VofeAuLrpSnRvpBLTKnhbJfyFUwIObPFfcFGbV9eA+MWLI
+         0m6vlcn6X2mzw==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Implements atomic transfers to fix reboot/shutdown on r8a7790 Lager and
-similar boards.
 
-Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
----
- drivers/i2c/busses/i2c-sh_mobile.c | 100 +++++++++++++++++++++++++++----------
- 1 file changed, 74 insertions(+), 26 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-sh_mobile.c b/drivers/i2c/busses/i2c-sh_mobile.c
-index d83ca40..e8436f4 100644
---- a/drivers/i2c/busses/i2c-sh_mobile.c
-+++ b/drivers/i2c/busses/i2c-sh_mobile.c
-@@ -129,6 +129,7 @@ struct sh_mobile_i2c_data {
- 	int sr;
- 	bool send_stop;
- 	bool stop_after_dma;
-+	bool atomic_xfer;
- 
- 	struct resource *res;
- 	struct dma_chan *dma_tx;
-@@ -330,13 +331,15 @@ static unsigned char i2c_op(struct sh_mobile_i2c_data *pd, enum sh_mobile_i2c_op
- 		ret = iic_rd(pd, ICDR);
- 		break;
- 	case OP_RX_STOP: /* enable DTE interrupt, issue stop */
--		iic_wr(pd, ICIC,
--		       ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE);
-+		if (!pd->atomic_xfer)
-+			iic_wr(pd, ICIC,
-+			       ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE);
- 		iic_wr(pd, ICCR, ICCR_ICE | ICCR_RACK);
- 		break;
- 	case OP_RX_STOP_DATA: /* enable DTE interrupt, read data, issue stop */
--		iic_wr(pd, ICIC,
--		       ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE);
-+		if (!pd->atomic_xfer)
-+			iic_wr(pd, ICIC,
-+			       ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE);
- 		ret = iic_rd(pd, ICDR);
- 		iic_wr(pd, ICCR, ICCR_ICE | ICCR_RACK);
- 		break;
-@@ -366,7 +369,7 @@ static int sh_mobile_i2c_isr_tx(struct sh_mobile_i2c_data *pd)
- 
- static int sh_mobile_i2c_isr_rx(struct sh_mobile_i2c_data *pd)
- {
--	unsigned char data;
-+	unsigned char data = 0;
- 	int real_pos;
- 
- 	/* switch from TX (address) to RX (data) adds two interrupts */
-@@ -432,7 +435,8 @@ static irqreturn_t sh_mobile_i2c_isr(int irq, void *dev_id)
- 
- 	if (wakeup) {
- 		pd->sr |= SW_DONE;
--		wake_up(&pd->wait);
-+		if (!pd->atomic_xfer)
-+			wake_up(&pd->wait);
- 	}
- 
- 	/* defeat write posting to avoid spurious WAIT interrupts */
-@@ -584,12 +588,14 @@ static void start_ch(struct sh_mobile_i2c_data *pd, struct i2c_msg *usr_msg,
- 	pd->pos = -1;
- 	pd->sr = 0;
- 
--	pd->dma_buf = i2c_get_dma_safe_msg_buf(pd->msg, 8);
--	if (pd->dma_buf)
--		sh_mobile_i2c_xfer_dma(pd);
--
--	/* Enable all interrupts to begin with */
--	iic_wr(pd, ICIC, ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE);
-+	if (!pd->atomic_xfer) {
-+		pd->dma_buf = i2c_get_dma_safe_msg_buf(pd->msg, 8);
-+		if (pd->dma_buf)
-+			sh_mobile_i2c_xfer_dma(pd);
-+		/* Enable all interrupts to begin with */
-+		iic_wr(pd, ICIC,
-+		       ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE);
-+	}
- }
- 
- static int poll_dte(struct sh_mobile_i2c_data *pd)
-@@ -640,18 +646,16 @@ static int poll_busy(struct sh_mobile_i2c_data *pd)
- 	return i ? 0 : -ETIMEDOUT;
- }
- 
--static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
--			      struct i2c_msg *msgs,
--			      int num)
-+static int xfer(struct sh_mobile_i2c_data *pd, struct i2c_msg *msgs, int num)
- {
--	struct sh_mobile_i2c_data *pd = i2c_get_adapdata(adapter);
- 	struct i2c_msg	*msg;
- 	int err = 0;
- 	int i;
- 	long timeout;
- 
- 	/* Wake up device and enable clock */
--	pm_runtime_get_sync(pd->dev);
-+	if (!pd->atomic_xfer)
-+		pm_runtime_get_sync(pd->dev);
- 
- 	/* Process all messages */
- 	for (i = 0; i < num; i++) {
-@@ -665,13 +669,35 @@ static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
- 		if (do_start)
- 			i2c_op(pd, OP_START);
- 
--		/* The interrupt handler takes care of the rest... */
--		timeout = wait_event_timeout(pd->wait,
--				       pd->sr & (ICSR_TACK | SW_DONE),
--				       adapter->timeout);
-+		if (pd->atomic_xfer) {
-+			unsigned long j = jiffies + pd->adap.timeout;
-+
-+			timeout = 1;
-+			while (!time_after(jiffies, j) &&
-+			       !(pd->sr & (ICSR_TACK | SW_DONE))) {
-+				unsigned char sr = iic_rd(pd, ICSR);
-+
-+				if (sr & (ICSR_AL   | ICSR_TACK |
-+					  ICSR_WAIT | ICSR_DTE)) {
-+					sh_mobile_i2c_isr(0, pd);
-+					udelay(150);
-+				} else
-+					cpu_relax();
-+			}
-+
-+			if (time_after(jiffies, j))
-+				timeout = 0;
-+		} else {
-+			/* The interrupt handler takes care of the rest... */
-+			timeout = wait_event_timeout(pd->wait,
-+					pd->sr & (ICSR_TACK | SW_DONE),
-+					pd->adap.timeout);
- 
--		/* 'stop_after_dma' tells if DMA transfer was complete */
--		i2c_put_dma_safe_msg_buf(pd->dma_buf, pd->msg, pd->stop_after_dma);
-+			/* 'stop_after_dma' tells if DMA xfer was complete */
-+			i2c_put_dma_safe_msg_buf(pd->dma_buf, pd->msg,
-+						 pd->stop_after_dma);
-+
-+		}
- 
- 		if (!timeout) {
- 			dev_err(pd->dev, "Transfer request timed out\n");
-@@ -694,19 +720,41 @@ static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
- 	iic_wr(pd, ICCR, ICCR_SCP);
- 
- 	/* Disable clock and mark device as idle */
--	pm_runtime_put_sync(pd->dev);
-+	if (!pd->atomic_xfer)
-+		pm_runtime_put_sync(pd->dev);
- 
- 	return err ?: num;
- }
- 
-+static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
-+			      struct i2c_msg *msgs,
-+			      int num)
-+{
-+	struct sh_mobile_i2c_data *pd = i2c_get_adapdata(adapter);
-+
-+	pd->atomic_xfer = false;
-+	return xfer(pd, msgs, num);
-+}
-+
-+static int sh_mobile_i2c_xfer_atomic(struct i2c_adapter *adapter,
-+				     struct i2c_msg *msgs,
-+				     int num)
-+{
-+	struct sh_mobile_i2c_data *pd = i2c_get_adapdata(adapter);
-+
-+	pd->atomic_xfer = true;
-+	return xfer(pd, msgs, num);
-+}
-+
- static u32 sh_mobile_i2c_func(struct i2c_adapter *adapter)
- {
- 	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL | I2C_FUNC_PROTOCOL_MANGLING;
- }
- 
- static const struct i2c_algorithm sh_mobile_i2c_algorithm = {
--	.functionality	= sh_mobile_i2c_func,
--	.master_xfer	= sh_mobile_i2c_xfer,
-+	.functionality		= sh_mobile_i2c_func,
-+	.master_xfer		= sh_mobile_i2c_xfer,
-+	.master_xfer_atomic	= sh_mobile_i2c_xfer_atomic,
- };
- 
- static const struct i2c_adapter_quirks sh_mobile_i2c_quirks = {
--- 
-2.7.4
-
+On 6/10/20 8:15 AM, Sowjanya Komatineni wrote:
+>
+> On 6/10/20 4:23 AM, Sakari Ailus wrote:
+>> Hi Sowjanya,
+>>
+>> Thanks for the patchset.
+>>
+>> On Tue, Jun 09, 2020 at 11:02:32PM -0700, Sowjanya Komatineni wrote:
+>>> This patch documents Tegra VI and CSI port and endpoint nodes along
+>>> with the other required properties.
+>>>
+>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+>>> ---
+>>> =C2=A0 .../display/tegra/nvidia,tegra20-host1x.txt=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 | 87=20
+>>> ++++++++++++++++++++++
+>>> =C2=A0 1 file changed, 87 insertions(+)
+>>>
+>>> diff --git=20
+>>> a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x=
+.txt=20
+>>> b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x=
+.txt=20
+>>>
+>>> index 4731921..f70a838 100644
+>>> ---=20
+>>> a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x=
+.txt
+>>> +++=20
+>>> b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x=
+.txt
+>>> @@ -65,6 +65,48 @@ of the following host1x client modules:
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - power-domains: Must includ=
+e sor powergate node as csicil=20
+>>> is in
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SOR partition.
+>>> =C2=A0 +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Optional properties for csi node=
+:
+>> What hardware does the csi node represent? A CSI-2 receiver? Something
+>> else?
+>>
+>> If you have two connections, you need two ports. The example isn't quite
+>> clear on this; it would appear to represent a single physical interface.
+>
+> CS-2 receiver with 2 connections. one for sink with sensor to csi and=20
+> other as source with csi to Tegra vi.
+>
+> Was using separate port for sink and source and then I misunderstood=20
+> device graph document and changed to have multiple endpoints in same=20
+> port.
+>
+> Will update this in v2 to have separate port for each sink and source=20
+> endpoint in csi in dt and also in driver implementation.
+>
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - channel nodes: Max upto 6 channels/st=
+reams are supported=20
+>>> with each CSI
+>>> +=C2=A0=C2=A0=C2=A0 brick can as either x4 or x2 based on hw connectivi=
+ty to sensor.
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0 Required properties:
+>>> +=C2=A0=C2=A0=C2=A0 - reg: channel/stream index
+>>> +=C2=A0=C2=A0=C2=A0 - nvidia,mipi-calibrate: Should contain a phandle a=
+nd a specifier
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 specifying which pads are used by this =
+CSI port and need to be
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 calibrated. See also ../display/tegra/n=
+vidia,tegra114-mipi.txt.
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0 - port: CSI port node and its endpoint nodes as per=
+ device graph
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bindings define=
+d in=20
+>>> Documentation/devicetree/bindings/graph.txt.
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Required properties:
+>> You have both properties and nodes here. Same for the above (port is a
+>> node).
+> Will update document to separate out port node from properties
+>>
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - reg: csi port index based on hw csi l=
+anes connectivity to the
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sensor.
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - bus-width: number of lanes used by th=
+is port. Supported lanes
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 are 1/2/4.
+>> bus-width belongs to the endpoint. Note that this is for parallel busses
+>> only. If you need the number of lanes, the property is called=20
+>> data-lanes.
+> Will update in v2 for having separate ports for sink and source=20
+> endpoints will move bus-width to endpoint.
+Thanks Sakari. Will switch to use data-lanes property in csi ports end=20
+points in v2.
+>>
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - endpoint@0: sink node
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Required properties:
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - reg: endpoint id. This is=
+ used to retrieve pad for creating
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media link
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - remote-endpoint: phandle =
+to sensor endpoint
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - endpoint@1: source node
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - reg: endpoint id. This is=
+ used to retrieve pad for creating
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media link
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - remote-endpoint: phandle =
+to vi port endpoint
+>>> +
+>>> +=C2=A0 Optional properties for vi node:
+>>> +=C2=A0 - ports: Video port nodes and endpoint nodes as per device grap=
+h=20
+>>> bindings
+>>> +=C2=A0=C2=A0=C2=A0 defined in Documentation/devicetree/bindings/graph.=
+txt
+>>> +=C2=A0=C2=A0=C2=A0 Max 6 ports are supported and each port should have=
+ one=20
+>>> endpoint node.
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0 Required properties:
+>>> +=C2=A0=C2=A0=C2=A0 - port: VI port node and its sink endpoint node
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Required properties:
+>>> +=C2=A0=C2=A0=C2=A0 - reg: should match port index
+>>> +=C2=A0=C2=A0=C2=A0 - endpoint@0: sink node
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Required properties:
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - reg: endpoint id must be 0
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - remote-endpoint: phandle to CSI endpo=
+int node.
+>>> +
+>>> =C2=A0 - epp: encoder pre-processor
+>>> =C2=A0 =C2=A0=C2=A0=C2=A0 Required properties:
+>>> @@ -340,6 +382,22 @@ Example:
+>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 ranges =3D <0x0 0x0 0x54080000 0x2000>;
+>>> =C2=A0 +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 ports {
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <1>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <0>;
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 port@0 {
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <1>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <0>;
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 imx219_vi_in0: endpoint@0 {
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =
+=3D <0>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 remot=
+e-endpoint =3D <&imx219_csi_out0>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 };
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+>>> +
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 csi@838 {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "nvidia,tegra210-csi";
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x838 0x1300>;
+>>> @@ -362,6 +420,35 @@ Example:
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 <&tegra_car=
+ TEGRA210_CLK_CSI_TPG>;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clock-names =3D "csi", "cilab", "cilcd", =
+"cile",=20
+>>> "csi_tpg";
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 power-domains =3D <&pd_sor>;
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <1>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <0>;
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 channel@0 {
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 nvidia,mipi-calibrate =3D <&m=
+ipi 0x001>;
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <1>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <0>;
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 port@0 {
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =
+=3D <0>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bus-w=
+idth =3D <2>;
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #addr=
+ess-cells =3D <1>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size=
+-cells =3D <0>;
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 imx21=
+9_csi_in0: endpoint@0 {
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 reg =3D <0>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 remote-endpoint =3D <&imx219_out0>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 imx21=
+9_csi_out0: endpoint@1 {
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 reg =3D <1>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 remote-endpoint =3D <&imx219_vi_in0>;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 };
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 };
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
