@@ -2,92 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5CE1F4931
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jun 2020 00:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655701F4DCA
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jun 2020 08:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728147AbgFIWBP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Jun 2020 18:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726992AbgFIWBO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Jun 2020 18:01:14 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F228C05BD1E;
-        Tue,  9 Jun 2020 15:01:13 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id h185so170718pfg.2;
-        Tue, 09 Jun 2020 15:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MRXZKngqhLb+ar4aO9Lsmg4caWqUFoMOzojN3p3S434=;
-        b=gc+jIrTQiLDyd2W9Lb98OOfoARYG5umI69HXDYVWWt1Cpw+gdNZGG/2D7DgU2ja7sQ
-         yMxGxEMiojoTc5V7TPAu2+OoP3kX99L4ORobn8zcgI1Bw20NDwLuHrKogWsgjJyccha5
-         39sSMtWfiFX4ipSRj7o0FeIKza4ArnEOxQ0kF03JOj7iymPLyptfV/J7oBzrkA0lnz4Z
-         B6EYz717JNdNwF3yieCICMKVPLspgN1QfQ7F0UuOMW++lROHoCHBYpIM9Kfq35YmWRa2
-         fkCl5q4PPq4R9HLGRZ1nZ1FNvEwbyBNF21HmIGRgYA8PpsJz0+0nR+us74skl3kEs8OK
-         KtuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MRXZKngqhLb+ar4aO9Lsmg4caWqUFoMOzojN3p3S434=;
-        b=aLIXb4BKcXOFCnumjXLWrKgwa7csJqG+jo05+bvauyazOQmi0tJZVSR96FjFAvoVJh
-         3LLD+i4vH53+ty2MQW08A8m/axV6r/VJnRRszxQleyIKYUoCqzjHnBvMBvy9B4Eeo0iM
-         fv9QINVc7XzT6iAWgIFQ0WDt3f9Z5rnysAvzFfRpbKQRshH8rRPm4W934LTRROVNwIle
-         uAhu1cuIZ2FVDORztHXgI4/hPgQxNmkBCBERKTOij/PUjghEON9CrDSZas4qvkAz0vpu
-         K1AOGwEn1V3FALYv9rLDM+ybkgHtl1ZKb1Hm2ECMWynME1NrBCrgDxwJCKLB6znOB51f
-         xE5Q==
-X-Gm-Message-State: AOAM531ooUcWNZL3NIj+TpTuTpyMVLKbKwSzDJNi/egJhA4DOHPXr7/1
-        P+GDEBGoYX4ayYgyZPVQRZe970QCc3XU5S8c4Ls=
-X-Google-Smtp-Source: ABdhPJwAcywTeq5QYPmU1nL+2RNn3CEo1ceXk+l+ZyG4B1GFi8+1suYBPRU8EFXECKAdXGpd+6CzZGz8eo0rnbZ4Iqw=
-X-Received: by 2002:a63:ff52:: with SMTP id s18mr62377pgk.203.1591740072651;
- Tue, 09 Jun 2020 15:01:12 -0700 (PDT)
+        id S1726095AbgFJGCp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 Jun 2020 02:02:45 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:10474 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726076AbgFJGCo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Jun 2020 02:02:44 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ee077760000>; Tue, 09 Jun 2020 23:02:30 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 09 Jun 2020 23:02:44 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 09 Jun 2020 23:02:44 -0700
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 10 Jun
+ 2020 06:02:43 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 10 Jun 2020 06:02:43 +0000
+Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.167.70]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5ee077830000>; Tue, 09 Jun 2020 23:02:43 -0700
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
+        <helen.koike@collabora.com>
+CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+Subject: [RFC PATCH v1 00/18] Support for Tegra video capture from external sensor
+Date:   Tue, 9 Jun 2020 23:02:22 -0700
+Message-ID: <1591768960-31648-1-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <20200609201555.11401-1-eajames@linux.ibm.com>
-In-Reply-To: <20200609201555.11401-1-eajames@linux.ibm.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 10 Jun 2020 01:00:55 +0300
-Message-ID: <CAHp75Vd32ivnOgenr1q9gd5kJRAQseAhZoiRb80Xv5O7qeBaJw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] i2c: fsi: Fixes for systems with more ports
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        wsa@kernel.org, Joel Stanley <joel@jms.id.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1591768950; bh=FXhZfk63iIGnhOl7ObWf5a0rZNtaUwqXcQ95FoPZsQU=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=o/oLmO/k+w1qnam9L4g1yDi4XMZro4JQyplhYPpSNViUombSnHD9yM+9ivDykplVT
+         C6Om7NGufPOo4rRsGAPVr/0bMdjp/TGaKUuS91KDGWaOTCShHR5YT1mlSJ/YdT4ef2
+         Os6Od+BXGQC+yQ8bkfBqaeVLHivEGwH8Jw7srs+MdrVAoBOmpJl5dUNCKEtN/DZvVn
+         yjEhJYzLoljehxwCl1BkyrXA75z4LuLk3oyl/4HtN70DEv0itsFWa/UfGGaZrm4Fpp
+         4+LOd/qbwfW6wIrH/Ji5ge9ch45AdmrGQ41WBMBQEoouAt5oBiRmWAuK+TSgX/jmiL
+         mXoDBU3LSuzTA==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 9, 2020 at 11:15 PM Eddie James <eajames@linux.ibm.com> wrote:
->
-> This series fixes a register definition for the FSI-attached I2C master to
-> allow all the available ports. In addition, the code to add an adapter for
-> each port is modified to require a device-tree entry for the bus. This is so
-> that systems with lots of busses that have no devices on them don't add lots
-> of unecessary devices.
->
+This series adds support for video capture from external camera sensor to
+Tegra video driver.
 
-FWIW,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Jetson TX1 has camera expansion connector and supports custom camera module
+designed as per TX1 design specification.
 
-> Changes since v1:
->  - Remove the check for null device node since that is checked in
->    of_device_is_available
->
-> Eddie James (2):
->   i2c: fsi: Fix the port number field in status register
->   i2c: fsi: Prevent adding adapters for ports without dts nodes
->
->  drivers/i2c/busses/i2c-fsi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> --
-> 2.24.0
->
+This series also enables camera capture support for Jetson Nano which has
+Raspberry PI camera header.
 
+This series is tested with IMX219 camera sensor.
+
+This series include,
+
+VI I2C related fixes
+- Camera sensor programming happens through VI I2C which is on host1x bus.
+- These patches includes device tree and I2C driver fixes for VI I2C.
+
+Tegra video driver updates
+- TPG Vs Non-TPG based on Kconfig
+- Support for external sensor video capture based on device graph from DT.
+- Support for selection ioctl operations
+- Tegra MIPI CSI pads calibration
+- CSI T-CLK and T-HS settle time computation based on clock rates.
+
+Host1x driver updates
+- Adds API to allow creating mipi device for specific device node.
+- Splits MIPI pads calibrate start and waiting for calibration to be done.
+
+Device tree updates
+- Adds camera connector 2V8, 1V8, 1V2 regulator supplies to Jetson TX1 DT.
+- Enabled VI and CSI support in Jetson Nano DT.
+
+
+
+Sowjanya Komatineni (18):
+  dt-bindings: i2c: tegra: Document Tegra210 VI I2C clocks and
+    power-domains
+  arm64: tegra: Add missing clocks and power-domains to Tegra210 VI I2C
+  i2c: tegra: Don't mark VI I2C as IRQ safe runtime PM
+  i2c: tegra: Fix the error path in tegra_i2c_runtime_resume
+  i2c: tegra: Fix runtime resume to re-init VI I2C
+  i2c: tegra: Avoid tegra_i2c_init_dma() for Tegra210 vi i2c
+  media: tegra-video: Fix channel format alignment
+  media: tegra-video: Enable TPG based on kernel config
+  media: tegra-video: Update format lookup to offset based
+  dt-bindings: tegra: Document VI and CSI port nodes
+  media: tegra-video: Add support for external sensor capture
+  media: tegra-video: Add support for selection ioctl ops
+  gpu: host1x: mipi: Add of_tegra_mipi_request() API
+  gpu: host1x: mipi: Split tegra_mipi_calibrate and tegra_mipi_wait
+  media: tegra-video: Add CSI MIPI pads calibration
+  media: tegra-video: Compute settle times based on the clock rate
+  arm64: tegra: jetson-tx1: Add camera supplies
+  arm64: tegra: Enable Tegra VI CSI support for Jetson Nano
+
+ .../display/tegra/nvidia,tegra20-host1x.txt        |  87 +++
+ .../devicetree/bindings/i2c/nvidia,tegra20-i2c.txt |  19 +-
+ arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi     |  41 ++
+ arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts |  10 +
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   6 +
+ drivers/gpu/drm/tegra/dsi.c                        |   7 +-
+ drivers/gpu/host1x/mipi.c                          |  33 +-
+ drivers/i2c/busses/i2c-tegra.c                     |  41 +-
+ drivers/staging/media/tegra-video/Kconfig          |   7 +
+ drivers/staging/media/tegra-video/csi.c            | 245 ++++++-
+ drivers/staging/media/tegra-video/csi.h            |   9 +
+ drivers/staging/media/tegra-video/tegra210.c       |  25 +-
+ drivers/staging/media/tegra-video/vi.c             | 770 +++++++++++++++++++--
+ drivers/staging/media/tegra-video/vi.h             |  23 +-
+ drivers/staging/media/tegra-video/video.c          |  23 +-
+ include/linux/host1x.h                             |   3 +
+ 16 files changed, 1253 insertions(+), 96 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.7.4
+
