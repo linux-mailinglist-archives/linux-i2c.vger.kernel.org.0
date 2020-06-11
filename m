@@ -2,81 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A691F659E
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jun 2020 12:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FA11F65B7
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jun 2020 12:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbgFKKYf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 11 Jun 2020 06:24:35 -0400
-Received: from mga18.intel.com ([134.134.136.126]:47372 "EHLO mga18.intel.com"
+        id S1726928AbgFKKdN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 11 Jun 2020 06:33:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34692 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727109AbgFKKYQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 11 Jun 2020 06:24:16 -0400
-IronPort-SDR: eATJIVbIFPtHnPKoZ78eEdHfPQRUm4ado4ti3nsOquuivgU+MC5ftY3CnYYisdmhqsItb6LHa2
- i46gzBO6dlBw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2020 03:24:15 -0700
-IronPort-SDR: UEqAa5lR/dyBqxSH246g0J/oYmdn0+8tN/odmaaWGsUVnFeaxWZcloqEL6rhRkdZhqt6bmiIBo
- otevF4U7LfYg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,499,1583222400"; 
-   d="scan'208";a="473655215"
-Received: from mylly.fi.intel.com (HELO [10.237.72.69]) ([10.237.72.69])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Jun 2020 03:24:14 -0700
-Subject: Re: [PATCH] i2c: Drop stray comma in MODULE_AUTHOR statements
-To:     Jean Delvare <jdelvare@suse.de>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-Cc:     Kukjin Kim <kgene@kernel.org>,
+        id S1726943AbgFKKdM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 11 Jun 2020 06:33:12 -0400
+Received: from localhost (p54b33245.dip0.t-ipconnect.de [84.179.50.69])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D933F20760;
+        Thu, 11 Jun 2020 10:33:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591871592;
+        bh=6ciKth2+v9htSh3Y0hbvsRR8Fh9bbzfJcuAe8GB+lwg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F+kV68T1kQ3xIQNYutnIOiMYhnyCN0wfgHBdUuSm0/uZFKSZeQXjGPZL1f2vKymbB
+         3rUhQQKw3l3JFyq8N3rtOGCiGekZGWyfVxZdcZpx68y9NIASPDW0lfZcuM+4RpSHrZ
+         thycZT5B9oSuBNmD0C5EDvFYrm+K2bOHAqZnLhEc=
+Date:   Thu, 11 Jun 2020 12:33:09 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: Re: [PATCH] i2c: Drop stray comma in MODULE_AUTHOR statements
+Message-ID: <20200611103309.GC1132@ninjato>
 References: <20200611120347.4514e126@endymion>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <8d031eba-b152-98fa-49ff-ad912153b30a@linux.intel.com>
-Date:   Thu, 11 Jun 2020 13:24:13 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="L6iaP+gRLNZHKoI4"
+Content-Disposition: inline
 In-Reply-To: <20200611120347.4514e126@endymion>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 6/11/20 1:03 PM, Jean Delvare wrote:
+
+--L6iaP+gRLNZHKoI4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jun 11, 2020 at 12:03:47PM +0200, Jean Delvare wrote:
 > It is not the common usage to have a comma between the name and the
 > email address, so remove it.
-> 
+>=20
 > Signed-off-by: Jean Delvare <jdelvare@suse.de>
 > Cc: Kukjin Kim <kgene@kernel.org>
 > Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->   drivers/i2c/busses/i2c-exynos5.c |    4 ++--
->   drivers/i2c/busses/i2c-s3c2410.c |    2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> --- linux-5.7.orig/drivers/i2c/busses/i2c-exynos5.c	2020-06-01 01:49:15.000000000 +0200
-> +++ linux-5.7/drivers/i2c/busses/i2c-exynos5.c	2020-06-11 11:58:27.645731676 +0200
-> @@ -879,6 +879,6 @@ static struct platform_driver exynos5_i2
->   module_platform_driver(exynos5_i2c_driver);
->   
->   MODULE_DESCRIPTION("Exynos5 HS-I2C Bus driver");
-> -MODULE_AUTHOR("Naveen Krishna Chatradhi, <ch.naveen@samsung.com>");
-> -MODULE_AUTHOR("Taekgyun Ko, <taeggyun.ko@samsung.com>");
-> +MODULE_AUTHOR("Naveen Krishna Chatradhi <ch.naveen@samsung.com>");
-> +MODULE_AUTHOR("Taekgyun Ko <taeggyun.ko@samsung.com>");
->   MODULE_LICENSE("GPL v2");
-> --- linux-5.7.orig/drivers/i2c/busses/i2c-s3c2410.c	2020-06-01 01:49:15.000000000 +0200
-> +++ linux-5.7/drivers/i2c/busses/i2c-s3c2410.c	2020-06-11 11:58:34.216801885 +0200
-> @@ -1267,5 +1267,5 @@ static void __exit i2c_adap_s3c_exit(voi
->   module_exit(i2c_adap_s3c_exit);
->   
->   MODULE_DESCRIPTION("S3C24XX I2C Bus driver");
-> -MODULE_AUTHOR("Ben Dooks, <ben@simtec.co.uk>");
-> +MODULE_AUTHOR("Ben Dooks <ben@simtec.co.uk>");
->   MODULE_LICENSE("GPL");
-> 
-Reviewed-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+
+Applied to for-5.8, thanks!
+
+
+--L6iaP+gRLNZHKoI4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7iCGUACgkQFA3kzBSg
+KbZtCQ//YFGzfhtv+M/+jxgLhCsXwMlo/ugd8d2NdnhSuzvKHRoyifDRDnYSDEmA
+1QxCTUbd3pNpi9RH9ww1obB1ijrb5zSSNnfIC+t5tdSqv+A18eCv6XExgFYB19Y4
+SMiXNuBTaemPwritwLdkt+OX+kTjLt7ipoBvCaYgIsLrnmEd3nV7+bz43zpA1AuG
+rvFz55Mmz8zdSJYaPsX7hk/lTP+FKuArDGpsNbmVReISL7N8bj1+JSS1H1tSs+bG
++Xd5X5QeWjYb9oD0PfEaKItFq2QuuLJ2gD7Zm+2deaIcafBVJxKexSvN35iSyAua
+TaiVXosiSQqwrLebJruhduFZwNe55aF40umJ4vJQymgYsm+HxavCJZAqU4xXAzm0
+QO1qWvno0IksbNIM/ToHbVylAg5JqhdVXvnbXcuHUYa/V5m6tzHApJP+U8956fme
+aaAfHQZEwrHm8Quo7KsPtGmI39dC/zSCoslB1dg6VDmflhwDWBfaK8dcfyiqJ+cW
+kdRogiSzRLjHLCTJBq8NY7yJxUWfM15C19A810doi3ZoRm3mlu1P5RsFhuBXEh3G
+v2ASPxTR9ZncS/6dppTbptYgNaYBYgkE63AlW+gnYx14hcy2vl/0T/gYGXRyvVMS
+MA5BsIOEH2J8UNv+R07Kcziv3LH3rjw8C0EhQtLNMS3Lv+lL7b0=
+=7ZkA
+-----END PGP SIGNATURE-----
+
+--L6iaP+gRLNZHKoI4--
