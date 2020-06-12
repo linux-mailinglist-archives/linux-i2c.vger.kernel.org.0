@@ -2,105 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B85721F7885
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jun 2020 15:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FFD1F7E66
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jun 2020 23:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726347AbgFLNJV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 12 Jun 2020 09:09:21 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:37066 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726112AbgFLNJU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Jun 2020 09:09:20 -0400
-Received: by mail-ed1-f68.google.com with SMTP id k8so6390441edq.4;
-        Fri, 12 Jun 2020 06:09:19 -0700 (PDT)
+        id S1726308AbgFLV1H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 12 Jun 2020 17:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbgFLV1H (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Jun 2020 17:27:07 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4935C03E96F;
+        Fri, 12 Jun 2020 14:27:05 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id w9so8264503qtv.3;
+        Fri, 12 Jun 2020 14:27:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/FNlqd4vn3jX2Jmt/9TRki01CcbjDa14Kvi+mmqzptw=;
+        b=nj+J/VvwqCfTau72ioAUq5oKCN8g/qV2edpgsv0WnT8SfdZZjxrZTwItqS70PsWwdD
+         a+DndK94Nv/Q2gKHO36aCfthMvlOfhDuzJwOqeFlwRMq1KaepTKUb3ekksGHu8R4JJaQ
+         8yG9PsQjVXRtvmbyYKoxjHEAzr57B+xliKfzoIJp0MR4lHx71tMOrifp0PQhCDn67JUU
+         HfYInEI4L/4MRLE6EF+t//e+99m3vgl94UAgMm358K7qP9mGh7SAA/gasjVePvINUlIc
+         jYzVvZsHhy+KlQwjv/uvc88/DMPtB3to2fMey6wBlC1HCy7I2BWlbt1t8Dm60fzYev/X
+         R1mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=W6pdgl2PLO28Quo1DrifG6f4mzYJJhuViqwZMRjapYc=;
-        b=AP3Hcy8L+zzUSNaWB3Q1J7i8Hf0rMALuw1egau3JlyZSY67JK//9wf8mZLWOTyO40a
-         ESk+bYdsj33dfbOFtvJ3E9jciv7HGHN46s4F9LKi2mzrancbV/KN9gXfyMnHXSTH4M9r
-         0+fW65qkJ0kIIpdiEl3934dBJAksoeSdHWrCtswCIVidAho+gYm/9H7LoEc5RmkvgQOt
-         +lFTcisnQg/Y8csWKHFjgMSA+7tMwT94IlUxPsqlyxbxf+gEKgl+lXSnW+rxCLPxVdVl
-         4uhJyhYqBor/B7rS0J/d5/B8kppDz7hFb/KDW7+hFhiQgaRXHF7nOZSq0+h/InROPznp
-         D7qA==
-X-Gm-Message-State: AOAM532cQjN0UyNFKAvTR+GagL/H3EqC4gVB+u58TcKaxvUiG+VVDib4
-        HFqz3sUQLC2O/kQQ9Psxu9Y=
-X-Google-Smtp-Source: ABdhPJw2FHzo7NNJNvXCM5/NTxYsQrs4+yzO9DeAX0Qa3/zidsZXMTnnAP95p3AzhjAz2Ichf6M24g==
-X-Received: by 2002:a50:f145:: with SMTP id z5mr12174687edl.78.1591967358525;
-        Fri, 12 Jun 2020 06:09:18 -0700 (PDT)
-Received: from pi3 ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id p13sm3114724edx.69.2020.06.12.06.09.17
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/FNlqd4vn3jX2Jmt/9TRki01CcbjDa14Kvi+mmqzptw=;
+        b=CyHsUVbzooAeYF2HNTVtHQ5dUHowXHbIGKv9H0BHICczAqkm/c9HPQFNe1m6oxYmbk
+         BjmqL/bjQr8svO1TaVNq2VMA7gFP1kzNryO2HXE1aYDOGucgo9bQEwwXhfswHEkhRwhH
+         0BAYcU6EwJKCRi3pjZfHCpsX7YUiPiuEau52iSM4GEBicTRi/Yno9SPYGKrAerXlukZA
+         6gYgJzhoEloAfEeDcr3OqmezII6eGIBEtNi939Woode5DZHNtK5oQE/tkAJOcMYHK4Kq
+         1iCRXFiFKxdlWmY9THfwd6aq/Uyz7a0BeqWLmPeSNwKOPwyhUKIuqV+Go8PD/192Jb9R
+         R62w==
+X-Gm-Message-State: AOAM533XLyrZ8o+VQUAh7mWPCBAHAktR72A+w59mQHyNvFZprgMZFJTO
+        TzC1xDnDgLaaNF+bp70Hhw==
+X-Google-Smtp-Source: ABdhPJz8TotqDhM9hw4Dp+f1CREb1prIfiQgFl+jpkq+iCMCGtdgqNOgjFQPhkBhkd1zHV//PcGaWA==
+X-Received: by 2002:ac8:1285:: with SMTP id y5mr5208330qti.245.1591997224732;
+        Fri, 12 Jun 2020 14:27:04 -0700 (PDT)
+Received: from localhost.localdomain ([142.118.26.59])
+        by smtp.googlemail.com with ESMTPSA id m82sm5340591qke.3.2020.06.12.14.27.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2020 06:09:17 -0700 (PDT)
-Date:   Fri, 12 Jun 2020 15:09:15 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: imx: Fix external abort on early interrupt
-Message-ID: <20200612130915.GA26279@pi3>
-References: <1591796802-23504-1-git-send-email-krzk@kernel.org>
- <20200612090517.GA3030@ninjato>
- <20200612092941.GA25990@pi3>
- <20200612095604.GA17763@ninjato>
- <20200612102113.GA26056@pi3>
- <20200612103149.2onoflu5qgwaooli@pengutronix.de>
- <20200612103949.GB26056@pi3>
- <20200612115116.GA18557@ninjato>
- <859e8211-2c56-8dd5-d6fb-33e4358e4128@pengutronix.de>
- <20200612130003.GB18557@ninjato>
+        Fri, 12 Jun 2020 14:27:04 -0700 (PDT)
+From:   Keyur Patel <iamkeyur96@gmail.com>
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Keyur Patel <iamkeyur96@gmail.com>
+Subject: [PATCH] i2c: smbus: Fix spelling mistake in the comments
+Date:   Fri, 12 Jun 2020 17:26:35 -0400
+Message-Id: <20200612212635.177380-1-iamkeyur96@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200612130003.GB18557@ninjato>
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jun 12, 2020 at 03:00:03PM +0200, Wolfram Sang wrote:
-> On Fri, Jun 12, 2020 at 02:18:06PM +0200, Marc Kleine-Budde wrote:
-> > On 6/12/20 1:51 PM, Wolfram Sang wrote:
-> > > 
-> > >> This basically kills the concept of devm for interrupts. Some other
-> > > 
-> > > It only works when you can ensure you have all interrupts disabled (and
-> > > none pending) in remove() or the error paths of probe() etc.
-> > 
-> > But when requesting the interrupt as shared the interrupt handler can get called
-> > any time, even if you have disabled the IRQ source in your IP core....The shared
-> > IRQ debug code tests this.
-> 
-> Yes, so you'd need something like
-> 
-> 	if (clks_are_off)
-> 		return IRQ_NONE;
+Fix spelling mistake in the comments with help of `codespell`.
+seperate ==> separate
 
-Maybe then:
-	if (pm_runtime_enabled())?
+Signed-off-by: Keyur Patel <iamkeyur96@gmail.com>
+---
+ drivers/i2c/i2c-core-smbus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The device structure should be valid at this point so the call should
-work.
-
-
-> 
-> or skip devm_ for interrupts and handle it manually. (IIRC the input
-> subsystem really frowns upon devm + irqs for such reasons)
-> 
-> D'accord?
-
-I guess dream of managing every resource automatically is an utopia :)
-
-Best regards,
-Krzysztof
-
+diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
+index b34d2ff06931..56bb840142e3 100644
+--- a/drivers/i2c/i2c-core-smbus.c
++++ b/drivers/i2c/i2c-core-smbus.c
+@@ -4,7 +4,7 @@
+  *
+  * This file contains the SMBus functions which are always included in the I2C
+  * core because they can be emulated via I2C. SMBus specific extensions
+- * (e.g. smbalert) are handled in a seperate i2c-smbus module.
++ * (e.g. smbalert) are handled in a separate i2c-smbus module.
+  *
+  * All SMBus-related things are written by Frodo Looijaard <frodol@dds.nl>
+  * SMBus 2.0 support by Mark Studebaker <mdsxyz123@yahoo.com> and
+-- 
+2.26.2
 
