@@ -2,136 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 879531F83D0
-	for <lists+linux-i2c@lfdr.de>; Sat, 13 Jun 2020 17:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD7B1F84F3
+	for <lists+linux-i2c@lfdr.de>; Sat, 13 Jun 2020 21:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726452AbgFMPIM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 13 Jun 2020 11:08:12 -0400
-Received: from mail-out.m-online.net ([212.18.0.10]:47149 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726453AbgFMPIH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 13 Jun 2020 11:08:07 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 49kgvV0nY5z1rVw0;
-        Sat, 13 Jun 2020 17:08:06 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 49kgvV0MNFz1qql0;
-        Sat, 13 Jun 2020 17:08:06 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id CJTjf4_f7NZi; Sat, 13 Jun 2020 17:08:04 +0200 (CEST)
-X-Auth-Info: cIFdFg255UAzKnWC7fD+zxsVmupHZOyKYVOC5m0BH08=
-Received: from desktop.lan (ip-86-49-35-8.net.upcbroadband.cz [86.49.35.8])
+        id S1726533AbgFMTdi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 13 Jun 2020 15:33:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51894 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726304AbgFMTdi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 13 Jun 2020 15:33:38 -0400
+Received: from localhost (p5486c936.dip0.t-ipconnect.de [84.134.201.54])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Sat, 13 Jun 2020 17:08:04 +0200 (CEST)
-From:   Marek Vasut <marex@denx.de>
-To:     linux-i2c@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH 5/5] i2c: xiic: Only ever transfer single message
-Date:   Sat, 13 Jun 2020 17:07:51 +0200
-Message-Id: <20200613150751.114595-5-marex@denx.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200613150751.114595-1-marex@denx.de>
+        by mail.kernel.org (Postfix) with ESMTPSA id C51CD2074D;
+        Sat, 13 Jun 2020 19:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592076817;
+        bh=sxfke0HVIrZ0Ee3QK78MJ2nbLuoAzvTstF2b/37FDg0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VVCBr7wxEtTNNSHKGtmi/LMJ171KCprJJf2qu54CGTZoL84mlUtDs/MeLURExAnDw
+         lGRU17f5R3hgsceWK3QOJiEp5WYQTT3x955bV6OLtX/XKYvZjuV+UohsKdGtVsXlPH
+         j08KqMCFV6J6SJof4LALF/tn+klb3HnZ9J1TX2+A=
+Date:   Sat, 13 Jun 2020 21:33:33 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Marek Vasut <marex@denx.de>
+Cc:     linux-i2c@vger.kernel.org, Michal Simek <michal.simek@xilinx.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: Re: [PATCH 5/5] i2c: xiic: Only ever transfer single message
+Message-ID: <20200613193333.GA6289@kunai>
 References: <20200613150751.114595-1-marex@denx.de>
+ <20200613150751.114595-5-marex@denx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lrZ03NoBR/3+SXJZ"
+Content-Disposition: inline
+In-Reply-To: <20200613150751.114595-5-marex@denx.de>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Transferring multiple messages via XIIC suffers from strange interaction
-between the interrupt status/enable register flags. These flags are being
-reused in the hardware to indicate different things for read and write
-transfer, and doing multiple transactions becomes horribly complex. Just
-send a single transaction and reload the controller with another message
-once the transaction is done in the interrupt handler thread.
 
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Michal Simek <michal.simek@xilinx.com>
-Cc: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Cc: Wolfram Sang <wsa@kernel.org>
----
- drivers/i2c/busses/i2c-xiic.c | 43 ++++++++---------------------------
- 1 file changed, 10 insertions(+), 33 deletions(-)
+--lrZ03NoBR/3+SXJZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index e4c3427b2f3f5..fad0b84a273d1 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -595,8 +595,6 @@ static void xiic_start_send(struct xiic_i2c *i2c)
- {
- 	struct i2c_msg *msg = i2c->tx_msg;
- 
--	xiic_irq_clr(i2c, XIIC_INTR_TX_ERROR_MASK);
--
- 	dev_dbg(i2c->adap.dev.parent, "%s entry, msg: %p, len: %d",
- 		__func__, msg, msg->len);
- 	dev_dbg(i2c->adap.dev.parent, "%s entry, ISR: 0x%x, CR: 0x%x\n",
-@@ -614,11 +612,13 @@ static void xiic_start_send(struct xiic_i2c *i2c)
- 		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET, data);
- 	}
- 
--	xiic_fill_tx_fifo(i2c);
--
- 	/* Clear any pending Tx empty, Tx Error and then enable them. */
- 	xiic_irq_clr_en(i2c, XIIC_INTR_TX_EMPTY_MASK | XIIC_INTR_TX_ERROR_MASK |
--		XIIC_INTR_BNB_MASK);
-+		XIIC_INTR_BNB_MASK |
-+		((i2c->nmsgs > 1 || xiic_tx_space(i2c)) ?
-+			XIIC_INTR_TX_HALF_MASK : 0));
-+
-+	xiic_fill_tx_fifo(i2c);
- }
- 
- static void __xiic_start_xfer(struct xiic_i2c *i2c)
-@@ -634,35 +634,12 @@ static void __xiic_start_xfer(struct xiic_i2c *i2c)
- 	i2c->rx_pos = 0;
- 	i2c->tx_pos = 0;
- 	i2c->state = STATE_START;
--	while ((fifo_space >= 2) && (first || (i2c->nmsgs > 1))) {
--		if (!first) {
--			i2c->nmsgs--;
--			i2c->tx_msg++;
--			i2c->tx_pos = 0;
--		} else
--			first = 0;
--
--		if (i2c->tx_msg->flags & I2C_M_RD) {
--			/* we dont date putting several reads in the FIFO */
--			xiic_start_recv(i2c);
--			return;
--		} else {
--			xiic_start_send(i2c);
--			if (xiic_tx_space(i2c) != 0) {
--				/* the message could not be completely sent */
--				break;
--			}
--		}
--
--		fifo_space = xiic_tx_fifo_space(i2c);
-+	if (i2c->tx_msg->flags & I2C_M_RD) {
-+		/* we dont date putting several reads in the FIFO */
-+		xiic_start_recv(i2c);
-+	} else {
-+		xiic_start_send(i2c);
- 	}
--
--	/* there are more messages or the current one could not be completely
--	 * put into the FIFO, also enable the half empty interrupt
--	 */
--	if (i2c->nmsgs > 1 || xiic_tx_space(i2c))
--		xiic_irq_clr_en(i2c, XIIC_INTR_TX_HALF_MASK);
--
- }
- 
- static int xiic_start_xfer(struct xiic_i2c *i2c, struct i2c_msg *msgs, int num)
--- 
-2.26.2
+Hi Marek,
 
+On Sat, Jun 13, 2020 at 05:07:51PM +0200, Marek Vasut wrote:
+> Transferring multiple messages via XIIC suffers from strange interaction
+> between the interrupt status/enable register flags. These flags are being
+> reused in the hardware to indicate different things for read and write
+> transfer, and doing multiple transactions becomes horribly complex. Just
+> send a single transaction and reload the controller with another message
+> once the transaction is done in the interrupt handler thread.
+
+Do we still get a repeated start between messages of a transfer? Or will
+it be a STOP/START combination?
+
+Happy hacking,
+
+   Wolfram
+
+
+--lrZ03NoBR/3+SXJZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7lKgoACgkQFA3kzBSg
+KbYUeg/4rqQELHp535SCLVG48KLJSBdCC1S4/H04G3fFWdZ83d3BPjiHNVfOdjtt
+COQfuJ7wg7GwRVzz/8Q/PBbjDJJYJPvBbixK04LlRSWhBGr3mt9wMZ7f016rOiHj
+1/Y5jeGhOShrnt4CZn5CjqlDTlQIXryFKfT8nKx5c2cQtlW4Kh0tdB2BkGZCKyM9
+o2YZXBarsdodWZUCbCLto5cB5DbreoGvI2GDxaMhFZnh7iBKBznxS+OJHznpRDvH
+9iNQhbBs0V5nThIBdiLQ6zcHlHGjKTZhBmU47TWiwGhsguBi8hG3Y+8oUsDuJNFK
+MNS05dqqzl13x48j531gDyrPwMWnYUMThLsmjQG/6JMb4mIMR+No0tt2HY4OlSA/
+2I9PiFHTDCtllHXLaOPCI9arfquPNhJ65Z66TIogq2ippLsHhDHiMBFWn+A+7+gH
+8mC8XqsaBNIViqudgmShJZ971VNTyNDLlWvvnu/vXVSUQL1rVnXAv4f5sA5aikL1
+0+p8rZvU2uwW52LHYkIqY/Ikq6p4+yex60G4Vbl8rhjIZL/7/QeLpDh0jnJLx6g0
+9ZWG0ya8PZ0Z84oXuLGXSlLQAk5Se4Qf4ZZ1+joHqlajumiaz8+DJXAxmG+te7NR
+ZfmVko54VA6YxsY2vCcp2ji2nyknOCERtSGvaorkaNQbDxx4mg==
+=JFmd
+-----END PGP SIGNATURE-----
+
+--lrZ03NoBR/3+SXJZ--
