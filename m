@@ -2,164 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F2F1F881F
-	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jun 2020 11:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9111F8824
+	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jun 2020 11:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726099AbgFNJbn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 14 Jun 2020 05:31:43 -0400
-Received: from sauhun.de ([88.99.104.3]:53300 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725265AbgFNJbn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 14 Jun 2020 05:31:43 -0400
-Received: from localhost (p5486c990.dip0.t-ipconnect.de [84.134.201.144])
-        by pokefinder.org (Postfix) with ESMTPSA id C8C0F2C05DF;
-        Sun, 14 Jun 2020 11:31:32 +0200 (CEST)
-Date:   Sun, 14 Jun 2020 11:31:31 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: sh_mobile: implement atomic transfers
-Message-ID: <20200614093131.GD2878@kunai>
-References: <1591817591-852-1-git-send-email-uli+renesas@fpond.eu>
+        id S1726014AbgFNJfD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 14 Jun 2020 05:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725265AbgFNJfD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Jun 2020 05:35:03 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA327C03E969;
+        Sun, 14 Jun 2020 02:35:02 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id u5so6284116pgn.5;
+        Sun, 14 Jun 2020 02:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VKQ+8f2oANWDrsRPwgbeAooMgImIhjiWyL6tb/ZNJwg=;
+        b=FRY0wXHryPnrpx+weUkFAhSaO2go/TxgvLOd90q7fyn2iSXm+6EI8exo+UPKuPgmHX
+         3LCZmXLghaqoG9wJS4Zp8XJVdfG34vYv9bKnHpqfEPD72GyhpKIq+Kq9WMGQegA9zBaj
+         IRRUFfwfMp1h/XBJKLP8EpZ6Wn1xG0kCrnkjXdoPgn3SCZmjRGGbksU8fnDMFwL9C/1j
+         DyIB3QblMCsuacZQ8Bw5JjsVw9TmFQIaz4YsvXAZYdzyaUCb2tL+b42EjKmHAItOv/T2
+         4eCjX1FnhTdtcGy7lNNe5VuELBk0qkNyrW17Mv/wZ5/kLp+78gg4PCfoEvUVYWurJKco
+         yfUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VKQ+8f2oANWDrsRPwgbeAooMgImIhjiWyL6tb/ZNJwg=;
+        b=cX3BJnIUNwCQHMBvJ7PIzCgDm8j4k9aHupuYUomDYEgDuzK8Dztm4/vTC+7Rh9DD+x
+         DYwVvJWh5haIP6soLwDLCsUjcgbHJroTPZLAYTRoyuRqaVgUqJZFOiiFnLBQaZJWrRCu
+         bSXczDqeEd9Jdgz6oWBLCYbMf9Hv6YBjCjSrKLbJWN4Z1xaWCTmsts9nJVY5gMm6FmRi
+         i4y/o6Ygyrii9b67aIKBA7A/dRXXXVaBu35mQP0agamlMhisO9FHXW8L2gjMUHodAHkQ
+         aLly7RNdBoNt6F30x138AAvA/hgcdIWEmZultujCJH7ywlGLZbTyUdum9a3xAsMcDfhR
+         dBvQ==
+X-Gm-Message-State: AOAM533Ka5BKyhFZJ7gQ2KA3c/dClIHUkNwn000MsqgXWQ+zPXHEqVYP
+        gSEBbbCnuQXh4/po6TNyrbX1jretLuvXrX4KUvw=
+X-Google-Smtp-Source: ABdhPJwxE9Cfu4p9MCcwtwkYi/z9aS3PU4hXscagiSNnvzkgEESfhi6hxoh0mnOm0UOM2oHd9cLvduL11vw2H4f0bow=
+X-Received: by 2002:a62:5284:: with SMTP id g126mr12615581pfb.36.1592127302057;
+ Sun, 14 Jun 2020 02:35:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="C1iGAkRnbeBonpVg"
-Content-Disposition: inline
-In-Reply-To: <1591817591-852-1-git-send-email-uli+renesas@fpond.eu>
+References: <20200614090751.GA2878@kunai>
+In-Reply-To: <20200614090751.GA2878@kunai>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 14 Jun 2020 12:34:45 +0300
+Message-ID: <CAHp75Vc2RV1daOHMM1zAT2P_YpFzYq=_NVXnagq7qBCS9En04g@mail.gmail.com>
+Subject: Re: RFC: a failing pm_runtime_get increases the refcnt?
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Sun, Jun 14, 2020 at 12:10 PM Wolfram Sang <wsa@kernel.org> wrote:
+> both in the I2C subsystem and also for Renesas drivers I maintain, I am
+> starting to get boilerplate patches doing some pm_runtime_put_* variant
+> because a failing pm_runtime_get is supposed to increase the ref
+> counters? Really? This feels wrong and unintuitive to me.
 
---C1iGAkRnbeBonpVg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yeah, that is a well known issue with PM (I even have for a long time
+a coccinelle script, when I realized myself that there are a lot of
+cases like this, but someone else discovered this recently, like
+opening a can of worms).
 
-On Wed, Jun 10, 2020 at 09:33:11PM +0200, Ulrich Hecht wrote:
-> Implements atomic transfers to fix reboot/shutdown on r8a7790 Lager and
-> similar boards.
->=20
-> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
+> I expect there
+> has been a discussion around it but I couldn't find it.
 
-Thanks, Uli! Works fine here. Really nice to finally being able to
-reboot now without WARNings.
+Rafael explained (again) recently this. I can't find it quickly, unfortunately.
 
-Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> I wonder why we
+> don't fix the code where the incremented refcount is expected for some
+> reason.
 
-Some review comments:
+The main idea behind API that a lot of drivers do *not* check error
+codes from runtime PM, so, we need to keep balance in case of
 
+pm_runtime_get(...);
+...
+pm_runtime_put(...);
 
-> @@ -366,7 +369,7 @@ static int sh_mobile_i2c_isr_tx(struct sh_mobile_i2c_=
-data *pd)
-> =20
->  static int sh_mobile_i2c_isr_rx(struct sh_mobile_i2c_data *pd)
->  {
-> -	unsigned char data;
-> +	unsigned char data =3D 0;
+> Can I have some pointers please?
 
-Please rebase against i2c/for-next. 'data' is gone since recently.
-
-> -static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
-> -			      struct i2c_msg *msgs,
-> -			      int num)
-> +static int xfer(struct sh_mobile_i2c_data *pd, struct i2c_msg *msgs, int=
- num)
-
-'xfer' is too generic IMO. '__sh_mobile_i2c_xfer' maybe?
-
-> -	pm_runtime_get_sync(pd->dev);
-> +	if (!pd->atomic_xfer)
-> +		pm_runtime_get_sync(pd->dev);
-
-This was a small surprise to me. I assume RPM is disabled that late?
-But can we be sure the clock is on, then?
-
-> +		if (pd->atomic_xfer) {
-> +			unsigned long j =3D jiffies + pd->adap.timeout;
-> +
-> +			timeout =3D 1;
-> +			while (!time_after(jiffies, j) &&
-
-To avoid the negation, maybe 'time_before_eq(...)'?
-
-> +			       !(pd->sr & (ICSR_TACK | SW_DONE))) {
-> +				unsigned char sr =3D iic_rd(pd, ICSR);
-> +
-> +				if (sr & (ICSR_AL   | ICSR_TACK |
-> +					  ICSR_WAIT | ICSR_DTE)) {
-> +					sh_mobile_i2c_isr(0, pd);
-> +					udelay(150);
-> +				} else
-> +					cpu_relax();
-
-Braces for else block.
-
-> +			}
-> +
-> +			if (time_after(jiffies, j))
-> +				timeout =3D 0;
-
-Uhh, 'timeout' should have been named 'time_left' back then. Then, this
-all would be more readable and we could do here:
-
-	time_left =3D time_before_eq(...);
-
-and avoid both 'timeout' assignments above.
-
-> +static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
-> +			      struct i2c_msg *msgs,
-> +			      int num)
-> +{
-> +	struct sh_mobile_i2c_data *pd =3D i2c_get_adapdata(adapter);
-> +
-> +	pd->atomic_xfer =3D false;
-
-
-Maybe move this above to the xfer function ...
-
-> +	return xfer(pd, msgs, num);
-
-
-=2E.. and have here only:
-
-	return __sh_mobile_i2c_xfer(adapter, msgs, num, false);
-
-But yeah, this is bike-shedding. I don't mind much.
-
->  static const struct i2c_algorithm sh_mobile_i2c_algorithm =3D {
-> -	.functionality	=3D sh_mobile_i2c_func,
-> -	.master_xfer	=3D sh_mobile_i2c_xfer,
-> +	.functionality		=3D sh_mobile_i2c_func,
-> +	.master_xfer		=3D sh_mobile_i2c_xfer,
-> +	.master_xfer_atomic	=3D sh_mobile_i2c_xfer_atomic,
-
-Just convert to a single space before the '=3D'.
-
-All the best,
-
-   Wolfram
-
-
---C1iGAkRnbeBonpVg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7l7nMACgkQFA3kzBSg
-KbY+IA//URtUK50ZFWfVncEynBlLxygtPLvoDTCc5SHEtQc8fV3p1dib3Yj2sbaI
-jVJc+8+n8T52j4jT9cmTT/bpAcGThpofQ5NwA2QDY4NPBJ31VFRINqIbxX+hKN3V
-s3fSttAQCvW7LgkA5ru2ZgW2MrUXzQgeTfzqQLFV/ffc+mOyaWkR9B1qhHFN1S+d
-GORH4p1SPZBZeT3xru7KitXC2SJwm1XqTAhmLcQmc2hizwtncjxwX2rD5DpPUG0m
-FpCMvwKok2eDitpb/KrEiJdeuBI7hydOapjL6KM+H80aP4UiJXYxmzhFTmemJi9a
-EFkjMfYX1uwWV6EPZrhzR7uUMTav7hmuw7TUO6pWlbY7R/EZxA3ZGRVRxQDc723I
-7VqFm4QImB0r24MAQXoDWQ2U/QGJOrpc8IroG9b4FLjxZEMAcAX3maSMRLaFVzTu
-6r+bgupq78a8uxujsxb0GDNcJXAB6tmzHY7NzjAuFxpoMU9Xni1X1PjQazzb2aNI
-dLdfnAfgyMNxrPfeq3WMne5T74YZ7iu2tEc3+LP23Jd9SfojoluG7LYIhWmoS2Au
-ukzWfvrHyVkUrGHcgBo2VznE8G6SENcQ8saRCgGVXw+Wcpx8Yj4F2OsUd3OElnlQ
-9DQBc0QNiaD3vh96h8qSity9C8T6/VBSNXf6IREI9P3QXDGKpxM=
-=u5Qi
------END PGP SIGNATURE-----
-
---C1iGAkRnbeBonpVg--
+-- 
+With Best Regards,
+Andy Shevchenko
