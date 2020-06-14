@@ -2,83 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9611F8A6B
-	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jun 2020 21:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20171F8AC7
+	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jun 2020 23:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726766AbgFNTp2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 14 Jun 2020 15:45:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44000 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726648AbgFNTp2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 14 Jun 2020 15:45:28 -0400
-Received: from localhost (p5486c990.dip0.t-ipconnect.de [84.134.201.144])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 42C48206D7;
-        Sun, 14 Jun 2020 19:45:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592163927;
-        bh=UexIJE1+BmMAW/xu2aV7gUtjucQdSnzoJ3+eYVvNeAE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zlJvdYZ1wnExQsLhG3teV++fgTn+Dy1YeyJiBu0GrKBaq6/eZbwuUDu5irsMU1BEf
-         sFN2Wu3K7627UqR+cLX8pxEipTVzWwv0BCLLsr3KaxdruqRC4zm3efBGgtrqWpL2JM
-         +zXJyFItD5+9YbGOko2sNvGi7WreBA9X/9HUA2aM=
-Date:   Sun, 14 Jun 2020 21:45:25 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Daniel =?utf-8?Q?Sch=C3=A4fer?= <daniel@danielschaefer.me>
-Cc:     linux-i2c@vger.kernel.org, git@danielschaefer.me
-Subject: Re: [PATCH 1/1] Documentation/i2c: SMBus start signal is S not A
-Message-ID: <20200614194525.GA7423@kunai>
-References: <20200614182355.19742-1-git@danielschaefer.me>
- <8972d446-2c69-787d-f98d-2d565a44c014@danielschaefer.me>
+        id S1727795AbgFNVDD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 14 Jun 2020 17:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726938AbgFNVDC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Jun 2020 17:03:02 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63BCC03E97C;
+        Sun, 14 Jun 2020 14:03:01 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id l63so4460904pge.12;
+        Sun, 14 Jun 2020 14:03:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H3wVtJJ7vMdb2trVl2O9u43RZh1efk34Dlrp+s0Wcp8=;
+        b=pcAF8NTgqMEW4hWl5VT23BL951NmM7jIXoQ9mllwHaCmNrRv1xA2HL+1TC/ActMcah
+         6AxqDAgf4GjfBiIez5vXWivLbxFgsr4SwmxDOGLDb4F2N46be5zo+NOCvEAyuDZgZ7SS
+         Hf4SEb8SelQ+V/0zv2yRJkMe0Nsin6tkuch/PuzoTAWdJsWiVRNKwjgFvc7fe5geGd3H
+         V9wts2y40pMYqX6s/DznN3lQmieYYobl/KYtmKqwhjgncUktjrpxFoDZwnQuLK8ShDDK
+         yxU43n3iI+aO/rnqr7I+VShZCc0qCzV+xg+QINKZJGt8HmO4BGS7P7+l2JMIT3zcgejf
+         Ij1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=H3wVtJJ7vMdb2trVl2O9u43RZh1efk34Dlrp+s0Wcp8=;
+        b=hOSmreElz2aqDrxkjhRe96fJPChiAZ6TBrGw3UmK2sc7Wd9O21BonKRiP9ab0PPecN
+         5sTmGco7RTP67ZdzZEGq9AErR2NXhu7fhooJeOuyUVUkn6nHbKh0B/GsJ+jDJc5o79kA
+         OaunNDu9aUij6lud7zrMockujVwYdfZCRI1vPhYCt9iaM7woz1+Yp2v37/w+qYyFVuXj
+         YUSfQXTLYDx+0x0oe8AsgQhaOjCtkyB7zZ1wMvtRN0FZmXOCAf73DR1+egG9f3DIFvps
+         nttyxSldoE0SZ5vR35bS0o1OM0SygfA3iA+/kZpThBvkWZbjpLqdO2b4bHPEoq/W2zdG
+         jsdg==
+X-Gm-Message-State: AOAM530EdtVgT+f2YGf4INQjVQ7c6umnlmtz07GRPrU4wCy33Q+pthY/
+        cdqv8DCbinNY81uwOOfDMfA=
+X-Google-Smtp-Source: ABdhPJzGoUvFKMBovUE+ulnDCp+nm2+fVT5EV5+pJ6+dcGnYQLkQ/M1GnVdj1QH30zUKycheKI+nZg==
+X-Received: by 2002:a62:aa07:: with SMTP id e7mr19606934pff.87.1592168580031;
+        Sun, 14 Jun 2020 14:03:00 -0700 (PDT)
+Received: from sultan-box.localdomain ([89.45.90.111])
+        by smtp.gmail.com with ESMTPSA id d184sm1827746pfd.85.2020.06.14.14.02.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Jun 2020 14:02:58 -0700 (PDT)
+From:   Sultan Alsawaf <sultan@kerneltoast.com>
+X-Google-Original-From: Sultan Alsawaf
+To:     Aaron Ma <aaron.ma@canonical.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        HungNien Chen <hn.chen@weidahitech.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Pavel Balan <admin@kryma.net>, Tin Huynh <tnhuynh@apm.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        You-Sheng Yang <vicamo.yang@canonical.com>
+Cc:     Sultan Alsawaf <sultan@kerneltoast.com>
+Subject: [PATCH 0/2] i2c-hid: Save power by reducing i2c xfers with block reads
+Date:   Sun, 14 Jun 2020 14:02:53 -0700
+Message-Id: <20200614210255.4641-1-sultan@kerneltoast.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+HP7ph2BbKc20aGI"
-Content-Disposition: inline
-In-Reply-To: <8972d446-2c69-787d-f98d-2d565a44c014@danielschaefer.me>
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Sultan Alsawaf <sultan@kerneltoast.com>
 
---+HP7ph2BbKc20aGI
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Sun, Jun 14, 2020 at 08:57:30PM +0200, Daniel Sch=C3=A4fer wrote:
-> On 6/14/20 8:23 PM, git@danielschaefer.me wrote:
-> > From: Daniel Schaefer <git@danielschaefer.me>
-> >=20
-> > Just like all other I2C/SMBus commands, the start signal for the SMBus
-> > Quick Command is S, not P.
->=20
-> Oops, should be 'not A' here, like in the commit title. Will you fix
-> that up while applying please, or should I send a new patch?
+I noticed on my Dell Precision 15 5540 with an i9-9880H that simply putting my
+finger on the touchpad would increase my system's power consumption by 4W, which
+is quite considerable. Resting my finger on the touchpad would generate roughly
+4000 i2c irqs per second, or roughly 20 i2c irqs per touchpad irq.
 
-I will fix it. And congrats for catching this typo which exists longer
-than the git history!
+Upon closer inspection, I noticed that the i2c-hid driver would always transfer
+the maximum report size over i2c (which is 60 bytes for my touchpad), but all of
+my touchpad's normal touch events are only 32 bytes long according to the length
+byte contained in the buffer sequence.
 
+Therefore, I was able to save about 2W of power by passing the I2C_M_RECV_LEN
+flag in i2c-hid, which says to look for the payload length in the first byte of
+the transfer buffer and adjust the i2c transaction accordingly. The only problem
+though is that my i2c controller's driver allows bytes other than the first one
+to be used to retrieve the payload length, which is incorrect according to the
+SMBus spec, and would break my i2c-hid change since not *all* of the reports
+from my touchpad are conforming SMBus block reads.
 
---+HP7ph2BbKc20aGI
-Content-Type: application/pgp-signature; name="signature.asc"
+This patchset fixes the I2C_M_RECV_LEN behavior in the designware i2c driver and
+modifies i2c-hid to use I2C_M_RECV_LEN to save quite a bit of power. Even if the
+peripheral controlled by i2c-hid doesn't support block reads, the i2c controller
+drivers should cope with this and proceed with the i2c transfer using the
+original requested length.
 
------BEGIN PGP SIGNATURE-----
+Sultan
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7mflEACgkQFA3kzBSg
-KbYfMA/+KeUiJfbl2tAcAZwfhYQFA4t/8mWnfCt3nQ4t4uXfhwNVbYwmX98OgBr5
-DvGVeBk62444gfl3NSuVQl2Am4xSyozqPNK0/ogreVoOpe3szet601yW+Z0R+gqW
-cF6gHqsy8ijheE9qwrRGUowev6Y/nhPctzO+1q3ruEJa2hheE/ZgUc0HB6Gl6ezA
-OSZNSEW/U77Z2GKnQ0TMBQatdu4P+TvSVJoMPT01qWqYJckloaielz/ANXsi/o5e
-8Sg49Io+2zXDmi1HzxXmLtSDW9NebM2lep2I5UaZomwIN7yP1YT/gHk3IVcOBPvv
-nuB1iBB6y3yZCQVl1hE07XmuVnf3qLmU6MNjcJJSh9GF/Qa/i4c89or5skqoOrKW
-vRj7JrR07lCgIJpCMq8dil5BQpI7est/urJMMKQksGiV+cGKE9JChq6Ejb8pFHE3
-+rni2yS163qQsLujJi3A3X+L8N6/pbNn3KDuJyG0DQKYaw1mxe0w3q/Jtz0Drl/N
-vhDPwOE6NrIZruJRfg1w9+3EQ8SOCXIOReRsTw2HPhJerMnbtBD+YfaK+XdMqhh9
-N+zaZ/W11fUB3AjCilW7xy/S/YA+0X9OIWY2DKrXdVtCHTRrBjPBzIDWaotGXcME
-95sWFcA3HuCwegwnvSYWy8y+btWC3yNW8AXx3XDMCx2hT/rv5Tg=
-=wnd0
------END PGP SIGNATURE-----
+Sultan Alsawaf (2):
+  i2c: designware: Only check the first byte for SMBus block read length
+  HID: i2c-hid: Use block reads when possible to save power
 
---+HP7ph2BbKc20aGI--
+ drivers/hid/i2c-hid/i2c-hid-core.c         |  3 ++-
+ drivers/i2c/busses/i2c-designware-master.c | 10 +++++-----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+-- 
+2.27.0
+
