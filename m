@@ -2,85 +2,164 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C8A1F87F9
-	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jun 2020 11:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F2F1F881F
+	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jun 2020 11:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726099AbgFNJMG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 14 Jun 2020 05:12:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42454 "EHLO mail.kernel.org"
+        id S1726099AbgFNJbn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 14 Jun 2020 05:31:43 -0400
+Received: from sauhun.de ([88.99.104.3]:53300 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726014AbgFNJMG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 14 Jun 2020 05:12:06 -0400
+        id S1725265AbgFNJbn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 14 Jun 2020 05:31:43 -0400
 Received: from localhost (p5486c990.dip0.t-ipconnect.de [84.134.201.144])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 20578206B7;
-        Sun, 14 Jun 2020 09:12:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592125925;
-        bh=zcRl5dzioE4oiJSEfWn1q1ANQ0yluGl7UnG8UepPK3M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dnH6BCMCsUSd/1yD1/tbpoUBB2a9th87D7C1PQCnXFF/MU/DRwhAiUyYa3WJtYM+P
-         +Wt/LJUp2S3R9qIVUF7HzdT6xl4Q+8SpIoPJqJ7t4VzX5hEEO5BLOr+3PNknK2h5KA
-         bej8V5iTQqiwMl1LzXLhh8ezDj58ZNu5rpkQ8mHY=
-Date:   Sun, 14 Jun 2020 11:12:03 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Dinghao Liu <dinghao.liu@zju.edu.cn>
-Cc:     kjlu@umn.edu, Markus Elfring <Markus.Elfring@web.de>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Fugang Duan <fugang.duan@nxp.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v3] i2c: imx-lpi2c: Fix runtime PM imbalance on error
-Message-ID: <20200614091203.GC2878@kunai>
-References: <20200601061640.27632-1-dinghao.liu@zju.edu.cn>
+        by pokefinder.org (Postfix) with ESMTPSA id C8C0F2C05DF;
+        Sun, 14 Jun 2020 11:31:32 +0200 (CEST)
+Date:   Sun, 14 Jun 2020 11:31:31 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Ulrich Hecht <uli+renesas@fpond.eu>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: sh_mobile: implement atomic transfers
+Message-ID: <20200614093131.GD2878@kunai>
+References: <1591817591-852-1-git-send-email-uli+renesas@fpond.eu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DSayHWYpDlRfCAAQ"
+        protocol="application/pgp-signature"; boundary="C1iGAkRnbeBonpVg"
 Content-Disposition: inline
-In-Reply-To: <20200601061640.27632-1-dinghao.liu@zju.edu.cn>
+In-Reply-To: <1591817591-852-1-git-send-email-uli+renesas@fpond.eu>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---DSayHWYpDlRfCAAQ
+--C1iGAkRnbeBonpVg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 01, 2020 at 02:16:40PM +0800, Dinghao Liu wrote:
-> pm_runtime_get_sync() increments the runtime PM usage counter even
-> the call returns an error code. Thus a corresponding decrement is
-> needed on the error handling path to keep the counter balanced.
+On Wed, Jun 10, 2020 at 09:33:11PM +0200, Ulrich Hecht wrote:
+> Implements atomic transfers to fix reboot/shutdown on r8a7790 Lager and
+> similar boards.
+>=20
+> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
 
-Can you point me to a discussion where it was decided that this is a
-proper fix? I'd think we rather should fix pm_runtime_get_sync() but
-maybe there are technical reasons against it.
+Thanks, Uli! Works fine here. Really nice to finally being able to
+reboot now without WARNings.
+
+Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Some review comments:
 
 
---DSayHWYpDlRfCAAQ
+> @@ -366,7 +369,7 @@ static int sh_mobile_i2c_isr_tx(struct sh_mobile_i2c_=
+data *pd)
+> =20
+>  static int sh_mobile_i2c_isr_rx(struct sh_mobile_i2c_data *pd)
+>  {
+> -	unsigned char data;
+> +	unsigned char data =3D 0;
+
+Please rebase against i2c/for-next. 'data' is gone since recently.
+
+> -static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
+> -			      struct i2c_msg *msgs,
+> -			      int num)
+> +static int xfer(struct sh_mobile_i2c_data *pd, struct i2c_msg *msgs, int=
+ num)
+
+'xfer' is too generic IMO. '__sh_mobile_i2c_xfer' maybe?
+
+> -	pm_runtime_get_sync(pd->dev);
+> +	if (!pd->atomic_xfer)
+> +		pm_runtime_get_sync(pd->dev);
+
+This was a small surprise to me. I assume RPM is disabled that late?
+But can we be sure the clock is on, then?
+
+> +		if (pd->atomic_xfer) {
+> +			unsigned long j =3D jiffies + pd->adap.timeout;
+> +
+> +			timeout =3D 1;
+> +			while (!time_after(jiffies, j) &&
+
+To avoid the negation, maybe 'time_before_eq(...)'?
+
+> +			       !(pd->sr & (ICSR_TACK | SW_DONE))) {
+> +				unsigned char sr =3D iic_rd(pd, ICSR);
+> +
+> +				if (sr & (ICSR_AL   | ICSR_TACK |
+> +					  ICSR_WAIT | ICSR_DTE)) {
+> +					sh_mobile_i2c_isr(0, pd);
+> +					udelay(150);
+> +				} else
+> +					cpu_relax();
+
+Braces for else block.
+
+> +			}
+> +
+> +			if (time_after(jiffies, j))
+> +				timeout =3D 0;
+
+Uhh, 'timeout' should have been named 'time_left' back then. Then, this
+all would be more readable and we could do here:
+
+	time_left =3D time_before_eq(...);
+
+and avoid both 'timeout' assignments above.
+
+> +static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
+> +			      struct i2c_msg *msgs,
+> +			      int num)
+> +{
+> +	struct sh_mobile_i2c_data *pd =3D i2c_get_adapdata(adapter);
+> +
+> +	pd->atomic_xfer =3D false;
+
+
+Maybe move this above to the xfer function ...
+
+> +	return xfer(pd, msgs, num);
+
+
+=2E.. and have here only:
+
+	return __sh_mobile_i2c_xfer(adapter, msgs, num, false);
+
+But yeah, this is bike-shedding. I don't mind much.
+
+>  static const struct i2c_algorithm sh_mobile_i2c_algorithm =3D {
+> -	.functionality	=3D sh_mobile_i2c_func,
+> -	.master_xfer	=3D sh_mobile_i2c_xfer,
+> +	.functionality		=3D sh_mobile_i2c_func,
+> +	.master_xfer		=3D sh_mobile_i2c_xfer,
+> +	.master_xfer_atomic	=3D sh_mobile_i2c_xfer_atomic,
+
+Just convert to a single space before the '=3D'.
+
+All the best,
+
+   Wolfram
+
+
+--C1iGAkRnbeBonpVg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7l6eMACgkQFA3kzBSg
-KbbomhAAsSDK9VozV4hQIjYDiVrG3P1dSoA0Nv0svNzvGBF3XDOvmYGFLM0oPPRA
-y/AhGqxktdvOK1iCa3xvdgN9WW8VvVf/wPE3anOmQ6YF8t+K8YIWxpEq7S5UE7kX
-qdKTwK6n5U6SCMPYRklp63lfCwxHxYOPz5LiF8Fahlm02xm5JTAR/DIZu97mFnMo
-vjKgDY6c1VfSKDSAhOJJEMwcdbpeSotsAUBUPSj0qyFymLng3Mip0iiI30ubfQxh
-DKimD5eJM7UXe3iuYw5mC6gXQX/ViWhpsAbP1otylqcMXEpebcPMdWGa7rr3R5yX
-TWNdBsFH0P3KUvr7ULY/XPzvOMfbijZoGCkqxa8ExihJZiK2PiLhDaxETR7LxrXy
-28eu3mH9KK45rraUO3I4fVosyqASJ1NbSCC5qg3ldu/pXnoS8jGZcpwgZwv0Udme
-nwrjevSPmJ487gPkYaFlkJRm8kaJM0DOlWFgWdYnrDClG8hw/u1eJUnsEwe24A90
-MmmiaUEwR0gMmAUIodwiTsqK9Y+8WYh6BuOEyw/8Cajq2iEYnYgDGm5I91y8hBvh
-9t5I8CTQNM3EGGGjMm85fuZAddTk/O/AmA3kCMPbAoxX3bhjm71imaF8Q02xaxml
-lVvEfC46bUpQKIXNK0ULE+i3aoJtk5eM8y6Lw6CzOrAd8tcViY4=
-=PEkp
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7l7nMACgkQFA3kzBSg
+KbY+IA//URtUK50ZFWfVncEynBlLxygtPLvoDTCc5SHEtQc8fV3p1dib3Yj2sbaI
+jVJc+8+n8T52j4jT9cmTT/bpAcGThpofQ5NwA2QDY4NPBJ31VFRINqIbxX+hKN3V
+s3fSttAQCvW7LgkA5ru2ZgW2MrUXzQgeTfzqQLFV/ffc+mOyaWkR9B1qhHFN1S+d
+GORH4p1SPZBZeT3xru7KitXC2SJwm1XqTAhmLcQmc2hizwtncjxwX2rD5DpPUG0m
+FpCMvwKok2eDitpb/KrEiJdeuBI7hydOapjL6KM+H80aP4UiJXYxmzhFTmemJi9a
+EFkjMfYX1uwWV6EPZrhzR7uUMTav7hmuw7TUO6pWlbY7R/EZxA3ZGRVRxQDc723I
+7VqFm4QImB0r24MAQXoDWQ2U/QGJOrpc8IroG9b4FLjxZEMAcAX3maSMRLaFVzTu
+6r+bgupq78a8uxujsxb0GDNcJXAB6tmzHY7NzjAuFxpoMU9Xni1X1PjQazzb2aNI
+dLdfnAfgyMNxrPfeq3WMne5T74YZ7iu2tEc3+LP23Jd9SfojoluG7LYIhWmoS2Au
+ukzWfvrHyVkUrGHcgBo2VznE8G6SENcQ8saRCgGVXw+Wcpx8Yj4F2OsUd3OElnlQ
+9DQBc0QNiaD3vh96h8qSity9C8T6/VBSNXf6IREI9P3QXDGKpxM=
+=u5Qi
 -----END PGP SIGNATURE-----
 
---DSayHWYpDlRfCAAQ--
+--C1iGAkRnbeBonpVg--
