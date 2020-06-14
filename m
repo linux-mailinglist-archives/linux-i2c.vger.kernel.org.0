@@ -2,163 +2,120 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0BD1F8862
-	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jun 2020 12:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7896C1F8870
+	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jun 2020 12:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727018AbgFNK30 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 14 Jun 2020 06:29:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59194 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725265AbgFNK3Y (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 14 Jun 2020 06:29:24 -0400
-Received: from PC-kkoz.proceq.com (unknown [213.160.61.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B020D20775;
-        Sun, 14 Jun 2020 10:29:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592130564;
-        bh=VbPnrh2dzWmMu5AE0V4vF5f2FTzseq8nQUHehOUFwYo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ds0Zyl5uWepxD2oLJwyPWlfZwstz7tadBfOX10qtRemlwtfs8s7iK9wzRnGbCQ45H
-         cCTECw+8379UGcqi5gUW6PWqPEq8/Orwly3BYSWmHiTqxsM8c8ZU+Q34JYQGPnbjBF
-         3wzwL4qTKFfG9FQDWYMm0/XOhGs//bX/eeocvO6s=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH v2 2/2] i2c: imx: Fix external abort on interrupt in exit paths
-Date:   Sun, 14 Jun 2020 12:29:04 +0200
-Message-Id: <1592130544-19759-2-git-send-email-krzk@kernel.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1592130544-19759-1-git-send-email-krzk@kernel.org>
-References: <1592130544-19759-1-git-send-email-krzk@kernel.org>
+        id S1726630AbgFNKoy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 14 Jun 2020 06:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbgFNKox (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Jun 2020 06:44:53 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFDFC05BD43;
+        Sun, 14 Jun 2020 03:44:53 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id g12so5597125pll.10;
+        Sun, 14 Jun 2020 03:44:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wUcOt819f+ivq40xZB6TcXygEQX1UsKoHGTk/MjKzJU=;
+        b=ePjBDxUn9MITBDP0cVwxArkF7+p30KQt5PvIfsDC3J0xIiaDpKlDvGoGB1Ft5lRS+v
+         bbkXm3tDwD3EumIViK+w0W7ZJn3EayMJYL7Cq0fWjQ2pfl60+aP4S6YRPurlFfnbxY1n
+         5b/CUzlG2WYHjBJTGthjpHL1bYz0zfTloltz8sBV6pTGCGYcgzl6dReqNzA+z4iXJBff
+         fbHwtYjAKfYLiBxxE+SgoVdNTkiKZwVyMCPC8OnLf+uoCt999cpbpqVanC/vF1QNgaiE
+         kJXznFfMNyGs/p+C54ZCeX7xkhVFywdgQTfVp4Ufc+dI1LfYikzWoP2dguNmPe/N0Z9+
+         T25A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wUcOt819f+ivq40xZB6TcXygEQX1UsKoHGTk/MjKzJU=;
+        b=Q0jOUrKzuhJRIwuKc6phtpczziDxpq0ZWL7Hc1VfP6DSGBLNIyoEK/RXXu808SUk45
+         Yol5D8vf4hR7unaGYkij7zuJ98LpKVDGt1h3s5ELP99wewuPy/3k45BWxNHFVxlhYAjg
+         762s4oBTpcFaQSiuBsdGt7M3mAR+OODqZR5Z7iaeXzO1TKvnz84iONEQO8RL4sps/eTX
+         hponN2WEfnPXNpqLMSOpzo6fNOi5Fx6rB+wNpr4EruzW9eSy9ZB7uzj7DfoXqGiwe2nC
+         byIThLCwlD6deY7EVeK5Ozx+wS+aZApSIGikpmbaFgeKt9Ofr+kNiod2Ah1xHvJrXU/E
+         GHBg==
+X-Gm-Message-State: AOAM531iwcACUsdP+DeyZV0xKLy/rvtBlz5GIAHb14WcDPwLhJS9uq23
+        rjKQYVnBcv2yej1v1b+bLksa1243Y6YYuhuI/5s=
+X-Google-Smtp-Source: ABdhPJyEneOgBpKPU02VqOu7ehOjUCszRfNogXdrDsoroRhDEDHiX2u0BSC4LlPgZS77fv2NEI7b29aR2Fh4/J2e5Wc=
+X-Received: by 2002:a17:90a:b30d:: with SMTP id d13mr6965711pjr.181.1592131492548;
+ Sun, 14 Jun 2020 03:44:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200614090751.GA2878@kunai> <CAHp75Vc2RV1daOHMM1zAT2P_YpFzYq=_NVXnagq7qBCS9En04g@mail.gmail.com>
+ <CAHp75VdtJN4KbsWgP3G40P4giPGgPE6gdr0CDqOXQjp2wK+i+g@mail.gmail.com>
+ <CAMuHMdUadYRNYdJ9JUX90Z1jvtHZmSS4gM+JKft4x-BK2Ry4zQ@mail.gmail.com> <CAMuHMdVJToSg_a3wQCV3ALyX5bHKsYRjyT1KrCtSgqxDgaFo2g@mail.gmail.com>
+In-Reply-To: <CAMuHMdVJToSg_a3wQCV3ALyX5bHKsYRjyT1KrCtSgqxDgaFo2g@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 14 Jun 2020 13:44:35 +0300
+Message-ID: <CAHp75Vc5DTnERihke4radxjHmRXzpTJGvD+-G1YnRBBnzDALkg@mail.gmail.com>
+Subject: Re: RFC: a failing pm_runtime_get increases the refcnt?
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If interrupt comes late, during probe error path or device remove (could
-be triggered with CONFIG_DEBUG_SHIRQ), the interrupt handler
-i2c_imx_isr() will access registers with the clock being disabled.  This
-leads to external abort on non-linefetch on Toradex Colibri VF50 module
-(with Vybrid VF5xx):
+On Sun, Jun 14, 2020 at 1:05 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Sun, Jun 14, 2020 at 12:00 PM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> > On Sun, Jun 14, 2020 at 11:43 AM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Sun, Jun 14, 2020 at 12:34 PM Andy Shevchenko
+> > > <andy.shevchenko@gmail.com> wrote:
+> > > >
+> > > > On Sun, Jun 14, 2020 at 12:10 PM Wolfram Sang <wsa@kernel.org> wrote:
+> > > > > both in the I2C subsystem and also for Renesas drivers I maintain, I am
+> > > > > starting to get boilerplate patches doing some pm_runtime_put_* variant
+> > > > > because a failing pm_runtime_get is supposed to increase the ref
+> > > > > counters? Really? This feels wrong and unintuitive to me.
+> > > >
+> > > > Yeah, that is a well known issue with PM (I even have for a long time
+> > > > a coccinelle script, when I realized myself that there are a lot of
+> > > > cases like this, but someone else discovered this recently, like
+> > > > opening a can of worms).
+> > > >
+> > > > > I expect there
+> > > > > has been a discussion around it but I couldn't find it.
+> > > >
+> > > > Rafael explained (again) recently this. I can't find it quickly, unfortunately.
+> > >
+> > > I _think_ this discussion, but may be it's simple another tentacle of
+> > > the same octopus.
+> > > https://patchwork.ozlabs.org/project/linux-tegra/patch/20200520095148.10995-1-dinghao.liu@zju.edu.cn/
+> >
+> > Thanks, hadn't read that one! (so I was still at -1 from
+> > http://sweng.the-davies.net/Home/rustys-api-design-manifesto ;-)
+> >
+> > So "pm_runtime_put_noidle()" is the (definitive?) one to pair with a
+> > pm_runtime_get_sync() failure?
+>
+> My biggest worry here is all those copycats jumping on the bandwagon,
+> and sending untested[*] patches that end up calling the wrong function.
+>
+> [*] Several of them turned out to introduce trivial compile warnings, so
+>     I now consider all patches authored by the same person as untested.
 
-Unhandled fault: external abort on non-linefetch (0x1008) at 0x8882d003
-Internal error: : 1008 [#1] ARM
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper Not tainted 5.7.0 #607
-Hardware name: Freescale Vybrid VF5xx/VF6xx (Device Tree)
-  (i2c_imx_isr) from [<8017009c>] (free_irq+0x25c/0x3b0)
-  (free_irq) from [<805844ec>] (release_nodes+0x178/0x284)
-  (release_nodes) from [<80580030>] (really_probe+0x10c/0x348)
-  (really_probe) from [<80580380>] (driver_probe_device+0x60/0x170)
-  (driver_probe_device) from [<80580630>] (device_driver_attach+0x58/0x60)
-  (device_driver_attach) from [<805806bc>] (__driver_attach+0x84/0xc0)
-  (__driver_attach) from [<8057e228>] (bus_for_each_dev+0x68/0xb4)
-  (bus_for_each_dev) from [<8057f3ec>] (bus_add_driver+0x144/0x1ec)
-  (bus_add_driver) from [<80581320>] (driver_register+0x78/0x110)
-  (driver_register) from [<8010213c>] (do_one_initcall+0xa8/0x2f4)
-  (do_one_initcall) from [<80c0100c>] (kernel_init_freeable+0x178/0x1dc)
-  (kernel_init_freeable) from [<80807048>] (kernel_init+0x8/0x110)
-  (kernel_init) from [<80100114>] (ret_from_fork+0x14/0x20)
+That's always a problem with janitors like patches...
+Once I tried to ask them to provide a testing material, but...
+ - some maintainers just accept them without asking questions
+ - some maintainers even defend them that they are doing a good job
+(and LWN top contributor statistics also motivate some of janitors,
+though I consider it not the best metrics)
+ - practically almost no contributor answered to my queries, so, I
+consider all of them are untested independent to the name (if name
+appears in more than dozen patches, esp. in different subsystems)
+ - and yes, it's a trade-off, some of the patches indeed useful.
 
-Additionally, the i2c_imx_isr() could wake up the wait queue
-(imx_i2c_struct->queue) before its initialization happens.
 
-The resource-managed framework should not be used for interrupt handling,
-because the resource will be released too late - after disabling clocks.
-The interrupt handler is not prepared for such case.
-
-Fixes: 1c4b6c3bcf30 ("i2c: imx: implement bus recovery")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-
----
-
-Changes since v1:
-1. Remove the devm- and use regular methods.
----
- drivers/i2c/busses/i2c-imx.c | 25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index 6e45958565d1..8a0d49419326 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1171,14 +1171,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	/* Request IRQ */
--	ret = devm_request_irq(&pdev->dev, irq, i2c_imx_isr, IRQF_SHARED,
--				pdev->name, i2c_imx);
--	if (ret) {
--		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
--		goto clk_disable;
--	}
--
- 	/* Init queue */
- 	init_waitqueue_head(&i2c_imx->queue);
- 
-@@ -1197,6 +1189,14 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto rpm_disable;
- 
-+	/* Request IRQ */
-+	ret = request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
-+				   pdev->name, i2c_imx);
-+	if (ret) {
-+		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
-+		goto rpm_put;
-+	}
-+
- 	/* Set up clock divider */
- 	i2c_imx->bitrate = I2C_MAX_STANDARD_MODE_FREQ;
- 	ret = of_property_read_u32(pdev->dev.of_node,
-@@ -1239,13 +1239,13 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 
- clk_notifier_unregister:
- 	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
-+	free_irq(irq, i2c_imx);
-+rpm_put:
- 	pm_runtime_put_noidle(&pdev->dev);
- rpm_disable:
- 	pm_runtime_disable(&pdev->dev);
- 	pm_runtime_set_suspended(&pdev->dev);
- 	pm_runtime_dont_use_autosuspend(&pdev->dev);
--
--clk_disable:
- 	clk_disable_unprepare(i2c_imx->clk);
- 	return ret;
- }
-@@ -1253,7 +1253,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
- static int i2c_imx_remove(struct platform_device *pdev)
- {
- 	struct imx_i2c_struct *i2c_imx = platform_get_drvdata(pdev);
--	int ret;
-+	int irq, ret;
- 
- 	ret = pm_runtime_get_sync(&pdev->dev);
- 	if (ret < 0)
-@@ -1273,6 +1273,9 @@ static int i2c_imx_remove(struct platform_device *pdev)
- 	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
- 
- 	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq >= 0)
-+		free_irq(irq, i2c_imx);
- 	clk_disable_unprepare(i2c_imx->clk);
- 
- 	pm_runtime_put_noidle(&pdev->dev);
 -- 
-2.7.4
-
+With Best Regards,
+Andy Shevchenko
