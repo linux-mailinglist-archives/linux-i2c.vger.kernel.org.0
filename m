@@ -2,99 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B871F8855
-	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jun 2020 12:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21CC1F8860
+	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jun 2020 12:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726755AbgFNKFB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 14 Jun 2020 06:05:01 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:39525 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725265AbgFNKFB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Jun 2020 06:05:01 -0400
-Received: by mail-ot1-f67.google.com with SMTP id g5so10826515otg.6;
-        Sun, 14 Jun 2020 03:05:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ectOhExww/8c3ivMz3pON3O/nzr9APMG9dSXhsot2VE=;
-        b=bWYi+FGvNJZDX82AU6L/qLS3NgXl8D/jUk2mDLre/vwJPis0c4BwvqvuRhxbNqUX9t
-         DDolpCvch07kJ88ghEnsucnh78ArsEzrMGDGkkX9ai2QBdpWTNb88KrBRhwOMyjF450x
-         pQMKx1gcG3r1QjVTRk9pC6y3ruVRZeCnNdGupn0X/zbVrrT6OxtOEpJORdeo0Ercl6cw
-         9uATufMEf8eL6b5wGQvhOgNc9L8MMhpPmtQKujKTxqmO345u8v+CxQ0ctu8uom9tw0ts
-         3StjukAKQ7h4JvLvREjENeu1SMfcXK5Uexp+KD85+05jcrlyOtTg9LDsf11H4BS7q8nq
-         qC2Q==
-X-Gm-Message-State: AOAM530eSWq/6Cyw8pDdUlP33qXbxfTmPI8SK7/lE98W50QHP5TMeut1
-        Z2GQTjAUQ6pw/48qHwSBt4JhF+IzgXrQQRzzDqW14A==
-X-Google-Smtp-Source: ABdhPJxlnTLf+SDr2P6TSmSA3lnp6RmQZ/prmdpmxMkwlkZrO9ZSOchU0iJom+re8f6tI4RjdajCMx/q2p9Fv5S1hqw=
-X-Received: by 2002:a05:6830:141a:: with SMTP id v26mr17568846otp.250.1592129100501;
- Sun, 14 Jun 2020 03:05:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200614090751.GA2878@kunai> <CAHp75Vc2RV1daOHMM1zAT2P_YpFzYq=_NVXnagq7qBCS9En04g@mail.gmail.com>
- <CAHp75VdtJN4KbsWgP3G40P4giPGgPE6gdr0CDqOXQjp2wK+i+g@mail.gmail.com> <CAMuHMdUadYRNYdJ9JUX90Z1jvtHZmSS4gM+JKft4x-BK2Ry4zQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdUadYRNYdJ9JUX90Z1jvtHZmSS4gM+JKft4x-BK2Ry4zQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 14 Jun 2020 12:04:49 +0200
-Message-ID: <CAMuHMdVJToSg_a3wQCV3ALyX5bHKsYRjyT1KrCtSgqxDgaFo2g@mail.gmail.com>
-Subject: Re: RFC: a failing pm_runtime_get increases the refcnt?
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726786AbgFNK3X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 14 Jun 2020 06:29:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59168 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725265AbgFNK3W (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 14 Jun 2020 06:29:22 -0400
+Received: from PC-kkoz.proceq.com (unknown [213.160.61.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F03EC204EA;
+        Sun, 14 Jun 2020 10:29:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592130561;
+        bh=6cFZsG1Cg06Z0SqhU1Lqbfsgs6dC88nSSS50fU5oMng=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ckNqKqXB5xIVStBcC6h3zibB/rXKBPHPgoclByL12a7tePbDcGjcXkUNM16yDNI+/
+         82in1GhOFLIfvJmVlG3tsP7RsI3UsybodNNatpgdEPEa7WqF+TBhs5wkE4bjkhZu4v
+         O7mZGAV43rqRolEyPo3+cYr+tnIZX0MIgeMq+iE0=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH v2 1/2] i2c: imx: Fix PM runtime inbalance in probe error path
+Date:   Sun, 14 Jun 2020 12:29:03 +0200
+Message-Id: <1592130544-19759-1-git-send-email-krzk@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Jun 14, 2020 at 12:00 PM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
-> On Sun, Jun 14, 2020 at 11:43 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Sun, Jun 14, 2020 at 12:34 PM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > >
-> > > On Sun, Jun 14, 2020 at 12:10 PM Wolfram Sang <wsa@kernel.org> wrote:
-> > > > both in the I2C subsystem and also for Renesas drivers I maintain, I am
-> > > > starting to get boilerplate patches doing some pm_runtime_put_* variant
-> > > > because a failing pm_runtime_get is supposed to increase the ref
-> > > > counters? Really? This feels wrong and unintuitive to me.
-> > >
-> > > Yeah, that is a well known issue with PM (I even have for a long time
-> > > a coccinelle script, when I realized myself that there are a lot of
-> > > cases like this, but someone else discovered this recently, like
-> > > opening a can of worms).
-> > >
-> > > > I expect there
-> > > > has been a discussion around it but I couldn't find it.
-> > >
-> > > Rafael explained (again) recently this. I can't find it quickly, unfortunately.
-> >
-> > I _think_ this discussion, but may be it's simple another tentacle of
-> > the same octopus.
-> > https://patchwork.ozlabs.org/project/linux-tegra/patch/20200520095148.10995-1-dinghao.liu@zju.edu.cn/
->
-> Thanks, hadn't read that one! (so I was still at -1 from
-> http://sweng.the-davies.net/Home/rustys-api-design-manifesto ;-)
->
-> So "pm_runtime_put_noidle()" is the (definitive?) one to pair with a
-> pm_runtime_get_sync() failure?
+When pm_runtime_get_sync() fails in probe(), the error path should not
+call pm_runtime_put_noidle().  This would lead to inbalance in
+usage_count.
 
-My biggest worry here is all those copycats jumping on the bandwagon,
-and sending untested[*] patches that end up calling the wrong function.
+Fixes: 588eb93ea49f ("i2c: imx: add runtime pm support to improve the performance")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-[*] Several of them turned out to introduce trivial compile warnings, so
-    I now consider all patches authored by the same person as untested.
+---
 
-Gr{oetje,eeting}s,
+Changes since v1:
+1. New patch
+---
+ drivers/i2c/busses/i2c-imx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-                        Geert
-
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index 0ab5381aa012..6e45958565d1 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -1239,8 +1239,8 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 
+ clk_notifier_unregister:
+ 	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
+-rpm_disable:
+ 	pm_runtime_put_noidle(&pdev->dev);
++rpm_disable:
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_set_suspended(&pdev->dev);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.7.4
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
