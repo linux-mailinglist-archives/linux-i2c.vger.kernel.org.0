@@ -2,71 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7841F9779
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jun 2020 14:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29761F97E6
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jun 2020 15:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730087AbgFOM7L (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Jun 2020 08:59:11 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:38743 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730071AbgFOM7L (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Jun 2020 08:59:11 -0400
-Received: by mail-ot1-f67.google.com with SMTP id n70so13014027ota.5;
-        Mon, 15 Jun 2020 05:59:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gDcy+5QlBNnC9u5VTfQ8VAY3iKZcZhRb0ooVuUjZG4E=;
-        b=asFQ1LvibZvpCU4/V7FS8auZdxex2cvUOpsADZhmxsdL+Z2iqjB0Zk2S5nuvoikh7r
-         bMTR4ShYmnh22vG6kYhUB3mbbHrlv/PbH6/UXtw49MQtij8YGKDiQQdnN2g94Vcj1HsJ
-         5XPDxUK6W3t45SqZSVtBbU6TEUZOIuS6b/AtUdFdYNNS7BQkTG09D0An8pbYYVJ6ziq0
-         nY0lHYS9bVfo15vLSj+UVWm5Hqu0xHed4ifIhO7NaxFQB+/g9ng99Y0srayM7CdrmWEV
-         OlyVSbkpME7A0P55X2FeA+6qj6gET3f9jnp2Ju1yygyKOw0zNICUxfSbgZO+ud21KH6V
-         MzSQ==
-X-Gm-Message-State: AOAM531NStePUQVzWIap+dQiAMWOaVdCKtaThIIjBF4WFfYuXzBWXQTP
-        Uya1QRPYfpFI1gZoXkNFk1OOMPxuOsTtlUEHW/k=
-X-Google-Smtp-Source: ABdhPJxvA0iJjsv9/vsBEemQECwV2j6e3hNjeqPgPbsWOiYatVIpLZsgj1lFg4TuV5PAi5cgu5QTT5g0HfZwK3Rre58=
-X-Received: by 2002:a05:6830:141a:: with SMTP id v26mr21413119otp.250.1592225950782;
- Mon, 15 Jun 2020 05:59:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <1591817591-852-1-git-send-email-uli+renesas@fpond.eu>
- <20200614093131.GD2878@kunai> <CAMuHMdWA82HpLAjYBK0fHm=wTM3LGjKn_c9KRH1EZTi8UznrBw@mail.gmail.com>
- <20200615124834.GB4423@kunai>
-In-Reply-To: <20200615124834.GB4423@kunai>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 15 Jun 2020 14:58:59 +0200
-Message-ID: <CAMuHMdWbZ8Bs84naNtoPk6N3itXABwwE2KGVG3k4dbw_5+Qm7A@mail.gmail.com>
-Subject: Re: [PATCH] i2c: sh_mobile: implement atomic transfers
-To:     Wolfram Sang <wsa@the-dreams.de>
+        id S1730071AbgFONIT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Jun 2020 09:08:19 -0400
+Received: from sauhun.de ([88.99.104.3]:37898 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729875AbgFONIT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 15 Jun 2020 09:08:19 -0400
+Received: from localhost (p54b333b6.dip0.t-ipconnect.de [84.179.51.182])
+        by pokefinder.org (Postfix) with ESMTPSA id C91C82C1F6B;
+        Mon, 15 Jun 2020 15:08:17 +0200 (CEST)
+Date:   Mon, 15 Jun 2020 15:08:17 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Linux I2C <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] i2c: sh_mobile: implement atomic transfers
+Message-ID: <20200615130817.GD4423@kunai>
+References: <1591817591-852-1-git-send-email-uli+renesas@fpond.eu>
+ <CAMuHMdW=WfGNtKo6y1RFPydFeQ-UqFq4ixOTqQzuW7x3oGmHjA@mail.gmail.com>
+ <20200615125015.GC4423@kunai>
+ <CAMuHMdVjJTjuswQYkTfWs1oxA676rEQW5TRy35XFecGpeLrrCA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="76DTJ5CE0DCVQemd"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVjJTjuswQYkTfWs1oxA676rEQW5TRy35XFecGpeLrrCA@mail.gmail.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
 
-On Mon, Jun 15, 2020 at 2:48 PM Wolfram Sang <wsa@the-dreams.de> wrote:
-> > Uli: can you check if atomic transfers work with the touchscreen or
-> > codec on Armadillo-800-EVA?
->
-> Atmoic transfers are used for very late communication (e.g. PMIC).
-> Touchscreens and codecs should be already down, then.
+--76DTJ5CE0DCVQemd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-So how to test atomic transfers are working if the I2C controller is part of
-a real power domain? Add a fake PMIC?
 
-Gr{oetje,eeting}s,
+> I meant the one with the "data" var.
 
-                        Geert
+Ah, okay. That makes sense.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--76DTJ5CE0DCVQemd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7ncsEACgkQFA3kzBSg
+KbYcuRAArq0Bh5xSH2MWpohzM3frrWZ7RnlpjuK6C9Pdqg6XCaeVDCUeZpU/OaGo
+80KMBYm01yQcYImYpDO1Y0ULebxNGQ+Dpg0Fmre5uP+yJRkwZPIJzvTzXnjnO0Ei
+I5iBnyEDRcOYHjHlsT81M+Et6VgrEgw5A4o35UW/3o9+AgIUalsO1gS2BN3FMpxC
+p7PHyFbd3YC0Vw5Zh+n95e7BxnFiAKl7Gx5+wd7sPMU8i/kPQqLlVM2zDgixFCh9
+4f9wxOxRZ3h4v6XJnWea58BL2SiPn7ChhphoJqS1NCWUpKGmCAVHVl+iP6TtsjHn
+xQx8+SHpjHnr/WQGiKGBQaMR1Rk3+Cgh7l/OweYzrpWiMwmzpgsAZPljYp5uoEFI
+aonKOqV9329Tw9YqRp6UvJrPmkHh4+wDSgxDZoZJUa/aDqQ4xnuW0QF8jgJjLtAL
+7/1OPGzbj85efpvOO+U2NTKNZSf30OQdXLSflMS376OkWjf3s3JmcPicwamjcU+v
+MDDBTX6mik7yCFYxiQryej3c5dS13lzX9iPZV1VoUjeJCGVwCdD4/d0jlm4bpc5u
+roiV/Pc+Nse/PBp4TVDWWeYrU9wrtZ2+JTr3FKFM+jreATSV7JUxgdammiDEauIr
+vCkhzh0Yr/5+guQcY30l7FfK+VkvFA7HMju6Wgp86Dot7zYNAkw=
+=RsIN
+-----END PGP SIGNATURE-----
+
+--76DTJ5CE0DCVQemd--
