@@ -2,68 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE501F96F3
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jun 2020 14:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEB11F9702
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jun 2020 14:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728326AbgFOMqg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Jun 2020 08:46:36 -0400
-Received: from sauhun.de ([88.99.104.3]:37664 "EHLO pokefinder.org"
+        id S1728285AbgFOMsj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Jun 2020 08:48:39 -0400
+Received: from sauhun.de ([88.99.104.3]:37704 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728285AbgFOMqg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 15 Jun 2020 08:46:36 -0400
+        id S1729845AbgFOMsj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 15 Jun 2020 08:48:39 -0400
 Received: from localhost (p54b333b6.dip0.t-ipconnect.de [84.179.51.182])
-        by pokefinder.org (Postfix) with ESMTPSA id 787C62C204E;
-        Mon, 15 Jun 2020 14:46:32 +0200 (CEST)
-Date:   Mon, 15 Jun 2020 14:46:28 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 7D2542C204E;
+        Mon, 15 Jun 2020 14:48:37 +0200 (CEST)
+Date:   Mon, 15 Jun 2020 14:48:34 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     "qiangming.xia" <qiangming.xia@mediatek.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com
-Subject: Re: [PATCH] i2c: mediatek: Add i2c support for continuous mode
-Message-ID: <20200615124628.GA4423@kunai>
-References: <20200508071809.10187-1-qiangming.xia@mediatek.com>
- <1592217629.22302.4.camel@mbjsdccf07>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: sh_mobile: implement atomic transfers
+Message-ID: <20200615124834.GB4423@kunai>
+References: <1591817591-852-1-git-send-email-uli+renesas@fpond.eu>
+ <20200614093131.GD2878@kunai>
+ <CAMuHMdWA82HpLAjYBK0fHm=wTM3LGjKn_c9KRH1EZTi8UznrBw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u3/rZRmxL6MmkK24"
+        protocol="application/pgp-signature"; boundary="kXdP64Ggrk/fb43R"
 Content-Disposition: inline
-In-Reply-To: <1592217629.22302.4.camel@mbjsdccf07>
+In-Reply-To: <CAMuHMdWA82HpLAjYBK0fHm=wTM3LGjKn_c9KRH1EZTi8UznrBw@mail.gmail.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---u3/rZRmxL6MmkK24
+--kXdP64Ggrk/fb43R
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Jun 15, 2020 at 06:40:29PM +0800, qiangming.xia wrote:
-> Hi, Wolfram
-> 	Do you have time to take a look at this? Thanks.
 
-Please resend and CC Qii Wang who is now the maintainer of this driver.
+> Uli: can you check if atomic transfers work with the touchscreen or
+> codec on Armadillo-800-EVA?
+
+Atmoic transfers are used for very late communication (e.g. PMIC).
+Touchscreens and codecs should be already down, then.
 
 
---u3/rZRmxL6MmkK24
+--kXdP64Ggrk/fb43R
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7nbaAACgkQFA3kzBSg
-KbYpPA/+Pw8TxeQKArxUAcaWTX/EPixqO5I46dmHVtb8dLEURvVjQSN7sZ2WuELD
-8LoBIuzYwvGXEFQvZzIgVy4iPB+91icdaz9TpugxSPQD9EOLfIabqUxJXKZz8H+D
-y/gw0Zng3NVWO0L0b4qscEBaeEa+uoTtSh5xuxZ2rTqYErBTUnrPbvioaFrUV7/2
-uCynxVcXd5u7VRyFGZAkzNyOn/kaWOBY5IRU1dxTIUajrvHH2B4qOPzTpEvjatnG
-8968n1FRfIXucBtn1nK3uhbiCA1DAjNb1bvuhDm2gy7sBkDWk0Viz0+1REn5KaCJ
-xvoW1UQONvRvR3AYGM2ws9ywhcKlfU/mdFlXbDPDYl2rqgQ11vTE+zIAGztFtw5l
-kOPbDyV+svGqYPaRwzu7pPNQ6q/XZkFMdYhc8kW7Pwk/gcfxbE9af2fvSPik0RcO
-75++PPLviGvmyO8H+rgeZiGbILKBwMjgdLZL2rbGZ+X24oyP7MskhikWbgoe+KiO
-BznRPjs6ZU6Kx7WJp/V/IakiW2YxzRhZD282VHmlTiLGFGLTgTPz67t9SX7iVkSk
-iysMA5DaY4t86G0IJVnAqzLCNiWTb+7iSbfywEF4PtebRvsvg1KkrkLNDSuyJ5sM
-0PLQWDl+ORX3Fk7+3CZ917VMR7jbe2XdJ7Ja9rQ0uhhr6npJkuw=
-=AqiD
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7nbiIACgkQFA3kzBSg
+KbYQOBAAmjhxU61zMae1DNVnWB3DuT7Zx+VIsJvm4hwWPC7+0wsJ+Zx2tUaXB0Tv
+vTCrbysxfM0c/H86cDGErSqM4Yyv283PV/8lVjqNmqexLlnQtJtq/RdAS4edSn0R
+z7oTtz8pPAMiKJUJqz5aahxEKf+Hn44pcP5XFCPBjwPeshNYwsuQXKOBoy7EYba3
+invK4pxIYPBzrNrE6Qze039/xlrN1C/ratIBEj7MMqYPtzlRQiaQ1v9Oy/Pvn99I
+CnKcprmBGQTbuVeNAvAJmP2fgfEu1fIiXxjgpdJNnFgaxxqVJxOG60hJ9T+taCfR
+w/klJgh9S3w58g6RMyL0cMXJ0jwzSoHfZkJX5ONbTm55KHpRBiPFUPxUmd2ZRndG
+IKDnDEY4StN9L6MGqDjOBpX4KzbhOHv52vajBqRhselo8V81xK/5TmoM9WVzzcSm
+v7aUIbGfiCgOHtiy0Q44kbWd7LZrl9x9XUaZRZH7oxPoTouYHi7PffPFnju55qL1
+zrcqzIWGt/YqJr5knb/AFE2PjxjSbQ56AR89zLyM9VfE1XYOM9+tTvy8GpWGmKG9
+HrU681Xz3pgAdEcT9Cw67UJxZaCtvP1XhE+7Yi3ndNe/GIbbp5XuPQ8/yyOrEj+V
+ifEcmf3Rl+XyTk9xuJgQg9hBO8TrwJ4VPNZdI4qcy07LSaWgtIE=
+=krKW
 -----END PGP SIGNATURE-----
 
---u3/rZRmxL6MmkK24--
+--kXdP64Ggrk/fb43R--
