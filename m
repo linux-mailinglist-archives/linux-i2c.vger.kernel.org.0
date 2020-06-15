@@ -2,115 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4991F944F
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jun 2020 12:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3CC1F95E5
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jun 2020 14:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728369AbgFOKH1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Jun 2020 06:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726111AbgFOKH0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Jun 2020 06:07:26 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E049DC061A0E;
-        Mon, 15 Jun 2020 03:07:26 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id g3so14663084ilq.10;
-        Mon, 15 Jun 2020 03:07:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hg8K4xTSSuNaBtkl8lh9GNzZaKJC219hVqXlhKOASyc=;
-        b=tgUlV/Hv+7gZqovKdUdduJ5DosmZ6W3ZgvLcam1sO+NfBlQkeL/R6Ll1hPEE2lvKe1
-         Q9Q8r9+UwTYuIzIICqSKXIRi1m83v3jpiLa9EK6FSl2CzvfLDwdp/D/QlP1lrzqnUk5M
-         K1M4ONzrcHZlTTZLMf4fM0XKl5fPHTxUOnuCB80lW/7POoQNRMcbiea5BnbvaGlGg+i9
-         U9qeD0ozbnZcyiYa8rnMcJe6oNU0+1g0YzAWmgMjm3AQANEKH7o2We9t5YAKaSDrTMgT
-         LKHBnER4Pqe4WQyyrf5LmbFUyrfoeNO6VQ422e0u9I6Uwl4PX1SjzVwCj0dIrZoL57q1
-         ApHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hg8K4xTSSuNaBtkl8lh9GNzZaKJC219hVqXlhKOASyc=;
-        b=Rn1gzVY70AvlX1zU2J5hIaj4nf20pfmrDsxFW/km8w2wccjUZwVAUDrOMcV9guApsq
-         BUPVRfWt0DH4ar00ufHvZiC4bDH41ir4p2BacrSHSXVDvVtkJd9NF7or2yej0ZNilKrp
-         7Qi5e0Tb7vryHBqn0CGb56br/GKBxQga6B1ehvK42+vEscsGxclTSxhY/Dlm5Mkxl4RG
-         Hit5nad2bO0DOBNHr/bfiSjAAa6O9XGXHbxU3YYET+hoIONmuPUPNF0Ch1rh8BQ59pEw
-         WSfzja72RC6YMGowg2b7+6dpQCWH7KIiJErZbwrASTiTqsNlMZPtcQjAaNzj9laugqpn
-         XGzQ==
-X-Gm-Message-State: AOAM530wT2xNcsovcK/XfpecbHaG/02U8oaU+OD0bt7YE+dQusZxAZPr
-        QmDD8dzudo6ldcuYL+1evfNFdQOzPVqe7Mq1Jkc=
-X-Google-Smtp-Source: ABdhPJwTRoOir1kIpAowgJbUvDY6mcvoOvZBCRgHGJW796+SC2pR32+7lvI/4r+L3ywnisFym7QRUoEMdKMTueb6e/w=
-X-Received: by 2002:a92:b69b:: with SMTP id m27mr25709568ill.271.1592215646234;
- Mon, 15 Jun 2020 03:07:26 -0700 (PDT)
+        id S1729763AbgFOMBu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Jun 2020 08:01:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60946 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729734AbgFOMBt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 15 Jun 2020 08:01:49 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 741A320714;
+        Mon, 15 Jun 2020 12:01:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592222509;
+        bh=CM24pedTnetKRTjlq0H+6fc2bSL16QovoA2odE5GIvY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f4AIuqKc7TIwjfvhv2rmefsUZLRNT8PWkKDYmZzB2Y2K0R+Bim8k0XxWMyEWFRZyx
+         VDtL/EyqDSXpCpLHMs+CRe9zfpzov4HjNszopTxDyVAgdHctUOXZf5VWZX4Arhs8ry
+         Hbaf2QazFrz0l50kvfyfqiWJc0/uBGadeW4ift+Y=
+Date:   Mon, 15 Jun 2020 13:01:46 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org, evgreen@chromium.org,
+        msavaliy@codeaurora.org
+Subject: Re: [PATCH V7 RESEND 6/7] spi: spi-qcom-qspi: Add interconnect
+ support
+Message-ID: <20200615120146.GK4447@sirena.org.uk>
+References: <1591682194-32388-1-git-send-email-akashast@codeaurora.org>
+ <1591682194-32388-7-git-send-email-akashast@codeaurora.org>
+ <2e299942-2a51-f023-ea6a-fa7822912d9e@codeaurora.org>
 MIME-Version: 1.0
-References: <1591709203-12106-1-git-send-email-dillon.minfei@gmail.com> <618d3fea-aa9f-dbf6-04a1-e9db621a6cd5@st.com>
-In-Reply-To: <618d3fea-aa9f-dbf6-04a1-e9db621a6cd5@st.com>
-From:   dillon min <dillon.minfei@gmail.com>
-Date:   Mon, 15 Jun 2020 18:06:50 +0800
-Message-ID: <CAL9mu0JsCOrnt=ROr-0_GByKeb6yeq5YwygzS+S9i=SMjgL6kQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Enable stmpe811 touch screen on stm32f429-disco board
-To:     Alexandre Torgue <alexandre.torgue@st.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        p.zabel@pengutronix.de, pierre-yves.mordret@st.com,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-i2c@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fUvfsPTz/SzOZDdw"
+Content-Disposition: inline
+In-Reply-To: <2e299942-2a51-f023-ea6a-fa7822912d9e@codeaurora.org>
+X-Cookie: Offer may end without notice.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 5:08 PM Alexandre Torgue
-<alexandre.torgue@st.com> wrote:
->
-> Hi Dillon
->
-> On 6/9/20 3:26 PM, dillon.minfei@gmail.com wrote:
-> > From: dillon min <dillon.minfei@gmail.com>
-> >
-> > This patchset is intend to enable stmpe811 touch screen on stm32f429-disco
-> > board with three dts and one i2c driver changes.
-> >
-> > has been validated by ts_print tool
-> >
-> > Changes log:
-> > V4: indroduce 'IIC_LAST_BYTE_POS' to compatible with xipkernel boot
-> >
-> > V3: just add change log in [PATCH V3 3/4] below ---
-> >
-> > V2: remove id, blocks, irq-trigger from stmpe811 dts
-> >
-> > V1:
-> > ARM: dts: stm32: add I2C3 support on STM32F429 SoC
-> > ARM: dts: stm32: Add pin map for I2C3 controller on stm32f4
-> > ARM: dts: stm32: enable stmpe811 on stm32429-disco board
-> > i2c: stm32f4: Fix stmpe811 get xyz data timeout issue
-> >
-> > dillon min (4):
-> >    ARM: dts: stm32: add I2C3 support on STM32F429 SoC
-> >    ARM: dts: stm32: Add pin map for I2C3 controller on stm32f4
-> >    ARM: dts: stm32: enable stmpe811 on stm32429-disco board
-> >    i2c: stm32f4: Fix stmpe811 get xyz data timeout issue
-> >
-> >   arch/arm/boot/dts/stm32f4-pinctrl.dtsi | 12 +++++++++
-> >   arch/arm/boot/dts/stm32f429-disco.dts  | 47 ++++++++++++++++++++++++++++++++++
-> >   arch/arm/boot/dts/stm32f429.dtsi       | 12 +++++++++
-> >   drivers/i2c/busses/i2c-stm32f4.c       | 12 ++++++---
-> >   4 files changed, 80 insertions(+), 3 deletions(-)
-> >
->
-> DT patches applied on stm32-next. I changed node ordering in patch 3.
-Okay, thanks.
 
-Regards,
-Dillon,
->
-> Thanks
-> Alex
+--fUvfsPTz/SzOZDdw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Jun 15, 2020 at 12:57:12PM +0530, Akash Asthana wrote:
+> Hi Mark,
+>=20
+> Would you be able to review/ack this QSPI patch, you have already acked "=
+QUP
+> SPI" patch from the series "[Patch V7 RESEND 4/7]"
+>=20
+> Putting a gentle reminder in-case this patch is missed.
+
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so=20
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
+
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
+
+--fUvfsPTz/SzOZDdw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7nYyoACgkQJNaLcl1U
+h9DyOAf/buJgSYiAf2Fl+YYl1CDe6yV/KLmnww9YUYvfvzsGAJLXJZVQthCKq7zr
+j7m+iDZpujyNeT1zSI1hZqy7sXVaPc3zdMOP+LFa0xVHxICQh4oF0qsHbn402vI+
+S7xT0XB1vK526+pHgLJ9FS18jP7z3T2C97M/1E5IvIjpvv4HipVwAsXUuroPZy04
+2ePbyIT5rye/tCgBmh8QoZbrtOEM+NBz5zkphREYpUA0Yhb7bWjtbswguwBR+IpQ
+OW5+r2OlQ7FHxKWSChKMXAuD3zIdagwe6tkXKFr0ZqzZJpzClcNyU9GMA3PDfIYx
+cMoFw4AZrl5MTycVwk4DnifcFo+giQ==
+=sGlf
+-----END PGP SIGNATURE-----
+
+--fUvfsPTz/SzOZDdw--
