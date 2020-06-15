@@ -2,117 +2,130 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED0A1F8ACD
-	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jun 2020 23:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFD91F8C51
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jun 2020 04:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727917AbgFNVDI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 14 Jun 2020 17:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726938AbgFNVDG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Jun 2020 17:03:06 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D72CC03E97C;
-        Sun, 14 Jun 2020 14:03:05 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id w20so6710717pga.6;
-        Sun, 14 Jun 2020 14:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LuKrGdsyJt363mkqnjfvHbulwnJ9TO1k3D/bFALSM6Q=;
-        b=M1v4894OoBgKF8izTIkH6jmFVP524510jNiBjJGnDTw/E0a1oBDAeC1R0j+05TPxad
-         CEGL557RLDnJuq/ExdD6BS1EOQZclyk74RTiDlDP77AlYuvQlbt3PZXgV8fhtXmu2hOL
-         JPbBP9sDP55x5+07FGVJHPV1l/c4QYOhEFYi4dy+oQWyYO0J9oL8qe6GT5EjK+upQ+sy
-         sAIMoSBxU5hoPudZ4wTMhTiD7w40r05FB2pfqqPXRMnEdKA0L50iUFetPr6ZM2qgWDjF
-         HnhtV2NqK3z6H8viGcZWTOYmFOBN0CxAgB7nSq61BbvBwgtVkPcCf4iOBp1PJh64XWxb
-         Gs7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=LuKrGdsyJt363mkqnjfvHbulwnJ9TO1k3D/bFALSM6Q=;
-        b=fefG5bB6TXXd5NQRpykQPRUNxZyzJXB+RiczElFE1hsu29q7v8Qo2ktVmFlPdSfxSI
-         iHmNP3Y+Rc8DwNahwpvQlk0l8nCYyu8uSvodEmU3gsGh8wk86oAO0aUFS/U6T9pgA8zd
-         WGqfXnjalTrHq1p76fpRQCnayjgIHLAaJd9lqZ6TDhoh+2FuBNHry3nH4BuU6GxUr0hs
-         Y/gJf5MZjj0rww3MCm5u51R0UXAOiUwf1l6ZZlOkeGwty5Qdmp4jyrvWOh5Mxnpy/gHJ
-         wSap1b7b7nCKz43g8WDil/lIhcAl8c/aC4iAapAv38O0vkOBWClm6R/uhVhw861lDtMC
-         EejQ==
-X-Gm-Message-State: AOAM531qyLpicWTCLpk+h5VMCPlqpIJxwgMbQCHWVOgle//+FtP6W71K
-        lk1JJGvi6GZhtXaiiZSAQho=
-X-Google-Smtp-Source: ABdhPJwXDOBq8wOZFlPoba1fs6Y0oquuokAQpP5cQY0aeDvPQ3lMxVJGG2HLpazYAGspfRPXVGz15Q==
-X-Received: by 2002:a63:6bc5:: with SMTP id g188mr14069494pgc.395.1592168585045;
-        Sun, 14 Jun 2020 14:03:05 -0700 (PDT)
-Received: from sultan-box.localdomain ([89.45.90.111])
-        by smtp.gmail.com with ESMTPSA id d184sm1827746pfd.85.2020.06.14.14.03.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jun 2020 14:03:04 -0700 (PDT)
-From:   Sultan Alsawaf <sultan@kerneltoast.com>
-X-Google-Original-From: Sultan Alsawaf
-To:     Aaron Ma <aaron.ma@canonical.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        HungNien Chen <hn.chen@weidahitech.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Pavel Balan <admin@kryma.net>, Tin Huynh <tnhuynh@apm.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        You-Sheng Yang <vicamo.yang@canonical.com>
-Cc:     Sultan Alsawaf <sultan@kerneltoast.com>
-Subject: [PATCH 2/2] HID: i2c-hid: Use block reads when possible to save power
-Date:   Sun, 14 Jun 2020 14:02:55 -0700
-Message-Id: <20200614210255.4641-3-sultan@kerneltoast.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200614210255.4641-1-sultan@kerneltoast.com>
-References: <20200614210255.4641-1-sultan@kerneltoast.com>
+        id S1728031AbgFOCsi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 14 Jun 2020 22:48:38 -0400
+Received: from mail-eopbgr40054.outbound.protection.outlook.com ([40.107.4.54]:62528
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728028AbgFOCsh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 14 Jun 2020 22:48:37 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FWvN1hbnICaMKMI22LfJl02T4Ei10K+zxHBdO1MupNNCaRgZsm61/TUT+CIYT0JnkWZgpHcoOl9BBFvwAQqmtIlNQnZ5vkjrqy6bUQyFXlHFDfFUZbBwNRBn/j4WBYpKWaN8LgViGruBmleN7vroYHh5tlG0oBmZVV43v1mwjxyOblJm2QIZQpN6sd4N1/gpMpXPIEkbvp5+xPegV7zpdYbU47AaaXeHcWA1G3uhdQbxfAJ/Ar7P5z8cejZE+JNV3qqDs0w9UKNwyteTgw7H8ONlD/4Rj+GJjI0WiK0zUOKijwl3vqcRR8jJK6DmrQ2+H3rHLHIa1uzmfsm2dtOnPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FjWBxzCzef2PLnNvF36EMNRusNQqfMQqbXp6ZOmzrkA=;
+ b=MIWerlq0AjX2xiFRr0JiJsUPq71XHnEHtmxGwoZtrO1vqB/9FXsbMXBc+h4E85CWUoQVRdVh8pb62jT1MB5tsGsWlV/AX70+UvxNIL/fiqUmoETn0D3WbiVrQdrhU2/iFHzjzfYzmt7xv45upZbib/x8sxHGS5LxPSOgHd3vhxt3V/SyJk2Te6iZyDHz26Q0b7YdsplmB+4EW39YfZSwRVY0qDKkLqHQ31MPh8ze3ZOm0z5bLhv4PlKQiEdQdnqgUcr9qZJgiaEafnj+YiYFm5JX0KOgvbPE43Akmj3mhdVzzwYRfSvugGWEAJsBxFcuglp1pfBn5YPtf5qOog3CIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FjWBxzCzef2PLnNvF36EMNRusNQqfMQqbXp6ZOmzrkA=;
+ b=kdU21r5xaMoTRKfBckiIYTvNhIWgUTWQdOvRqDVcTglFK8Ut3rkMmSIE00TxUKXQZxT67wZDLMRAvC33IordBKdWmw7M8cLKdZtsxGv0Qmh1NxOggaZ9CX90VetHaGm8T9tGMcG2hRXslipo6nEomFK3dko9722Gy5Ft0dZuCK0=
+Received: from AM6PR0402MB3607.eurprd04.prod.outlook.com
+ (2603:10a6:209:12::18) by AM6PR0402MB3846.eurprd04.prod.outlook.com
+ (2603:10a6:209:18::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3088.20; Mon, 15 Jun
+ 2020 02:48:34 +0000
+Received: from AM6PR0402MB3607.eurprd04.prod.outlook.com
+ ([fe80::35f8:f020:9b47:9aa1]) by AM6PR0402MB3607.eurprd04.prod.outlook.com
+ ([fe80::35f8:f020:9b47:9aa1%7]) with mapi id 15.20.3088.028; Mon, 15 Jun 2020
+ 02:48:34 +0000
+From:   Andy Duan <fugang.duan@nxp.com>
+To:     "wu000273@umn.edu" <wu000273@umn.edu>,
+        "kjlu@umn.edu" <kjlu@umn.edu>
+CC:     Aisheng Dong <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>, Wolfram Sang <wsa@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [EXT] [PATCH] i2c: busses: Fix a reference count leak.
+Thread-Topic: [EXT] [PATCH] i2c: busses: Fix a reference count leak.
+Thread-Index: AQHWQc+52GnSsJfEJEa/K47t5grMhqjY+ylA
+Date:   Mon, 15 Jun 2020 02:48:33 +0000
+Message-ID: <AM6PR0402MB36071B3C8859FA8F694FB706FF9C0@AM6PR0402MB3607.eurprd04.prod.outlook.com>
+References: <20200613221213.6679-1-wu000273@umn.edu>
+In-Reply-To: <20200613221213.6679-1-wu000273@umn.edu>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: umn.edu; dkim=none (message not signed)
+ header.d=none;umn.edu; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 561f26df-7afd-45c3-9d54-08d810d6987d
+x-ms-traffictypediagnostic: AM6PR0402MB3846:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM6PR0402MB3846B9BCFD8899CCA4AEC616FF9C0@AM6PR0402MB3846.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:298;
+x-forefront-prvs: 04359FAD81
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 03PgDYci00kBYI2Q7oy7a1QzqIsQ2ZTZlsfPj1YiqEXcpzMtVIOhj+zOaZREVrCQnhPnb58dO9RGVua5LvzSmRv/588BgmFqP8HVfcCDdII4mBq9Eu6zaAwLgrL2bpGboGbMRf9gi3Sph4RBqAbEwy+jbC+BiqPGhCzCcmoWtkDIACI35NDIEGBfbMm0ejuOKpl+/MpBmj5TSu/6JAPYdCFwGoQnyKYj6RLk4Sah5ZS55LRomdgcLABfvzhMasY1/9p49V+/V2y9o1HgGvjnB+cou2x+Rk3E2144nynYPjyBiVGAeQZU2GKaBMWCrj1z
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR0402MB3607.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(7696005)(52536014)(55016002)(9686003)(6506007)(83380400001)(86362001)(7416002)(26005)(8676002)(5660300002)(76116006)(8936002)(66446008)(66556008)(66476007)(186003)(66946007)(64756008)(316002)(4326008)(2906002)(33656002)(54906003)(71200400001)(110136005)(478600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: w3ikn4oVBT1M7HPfC+dfcFenhQrPG4vjmf9O3neHExDBJ/JtwvBJiedIfE/VNH6kywZ51GLSu5y/OiEB+DShek7YJcbUGBVAosZGyUlAIdy+IP7ivwmBt6zyobideuwVbapAWmL6wNG5TZjQLQdskCgCxVkp+5OcuDLxXaA3rdNsTLsDY6aSDE/zQ5XdudRn3uafTatcWPihMpSUTylFuG97fxZP5U33cWexIwwfcvBuOt8R86hjIkNuRmufwHYvTATmc0U5/+fYHQmQUasNGqSQyBi7vnQRRokZaUfRvk3MjjxASR9NBXbNImC79aigUmNZe6/UzZo36O+BQ1DTF5rIh0TC4wy3WCa57UpnCGwCR+Nr2fQCOwDuzFJfvGTNaVLrGogmY9QVQmIFQmVJAw/Nmt+vQSLZzIWdFwvlIpphKJFNRnSUWKMDU6MC6z/1zUq+Xv+Z/5eT/lkOtk9rNqdzBxrxeGfPbChxfv6ymPU=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 561f26df-7afd-45c3-9d54-08d810d6987d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2020 02:48:33.8952
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wqaiwy8eAv8iAF8nnBxe33N1oJU5g3S6sKeC0JXp6gecklI62loIXEgjubklECL9oZbOLMcaostoISmvE0NcEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3846
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Sultan Alsawaf <sultan@kerneltoast.com>
+From: wu000273@umn.edu <wu000273@umn.edu> Sent: Sunday, June 14, 2020 6:12 =
+AM
+> From: Qiushi Wu <wu000273@umn.edu>
+>=20
+> pm_runtime_get_sync() increments the runtime PM usage counter even
+> when it returns an error code. Thus call pm_runtime_put_noidle() if
+> pm_runtime_get_sync() fails.
+>=20
+> Fixes: 13d6eb20fc79 ("i2c: imx-lpi2c: add runtime pm support")
+> Signed-off-by: Qiushi Wu <wu000273@umn.edu>
 
-We have no way of knowing how large an incoming payload is going to be,
-so the only strategy available up until now has been to always retrieve
-the maximum possible report length over i2c, which can be quite
-inefficient. For devices that send reports in block read format, the i2c
-controller driver can read the payload length on the fly and terminate
-the i2c transaction early, resulting in considerable power savings.
-
-On a Dell Precision 15 5540 with an i9-9880H, resting my finger on the
-touchpad causes psys power readings to go up by about 4W and hover there
-until I remove my finger. With this patch, my psys readings go from 4.7W
-down to 3.1W, yielding about 1.6W in savings. This is because my
-touchpad's max report length is 60 bytes, but all of the regular reports
-it sends for touch events are only 32 bytes, so the i2c transfer is
-roughly halved for the common case.
-
-Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
----
- drivers/hid/i2c-hid/i2c-hid-core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
-index 294c84e136d7..4b507de48d70 100644
---- a/drivers/hid/i2c-hid/i2c-hid-core.c
-+++ b/drivers/hid/i2c-hid/i2c-hid-core.c
-@@ -476,7 +476,8 @@ static void i2c_hid_get_input(struct i2c_hid *ihid)
- 	if (size > ihid->bufsize)
- 		size = ihid->bufsize;
- 
--	ret = i2c_master_recv(ihid->client, ihid->inbuf, size);
-+	ret = i2c_transfer_buffer_flags(ihid->client, ihid->inbuf, size,
-+					I2C_M_RD | I2C_M_RECV_LEN);
- 	if (ret != size) {
- 		if (ret < 0)
- 			return;
--- 
-2.27.0
+Again, which case can trigger the issue ?
+> ---
+>  drivers/i2c/busses/i2c-imx-lpi2c.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> index 9db6ccded5e9..85b9c1fc7681 100644
+> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> @@ -260,8 +260,10 @@ static int lpi2c_imx_master_enable(struct
+> lpi2c_imx_struct *lpi2c_imx)
+>         int ret;
+>=20
+>         ret =3D pm_runtime_get_sync(lpi2c_imx->adapter.dev.parent);
+> -       if (ret < 0)
+> +       if (ret < 0) {
+> +               pm_runtime_put_noidle(lpi2c_imx->adapter.dev.parent);
+>                 return ret;
+> +       }
+>=20
+>         temp =3D MCR_RST;
+>         writel(temp, lpi2c_imx->base + LPI2C_MCR);
+> --
+> 2.17.1
 
