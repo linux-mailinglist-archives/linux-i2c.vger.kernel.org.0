@@ -2,110 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDE81F9C9C
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jun 2020 18:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9181F9CA8
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jun 2020 18:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729949AbgFOQHz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Jun 2020 12:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729772AbgFOQHz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Jun 2020 12:07:55 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07ADAC061A0E;
-        Mon, 15 Jun 2020 09:07:55 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id s10so7803438pgm.0;
-        Mon, 15 Jun 2020 09:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vbAqJspBEy3qPmYLBAGhLz99Oyo1IaGAYVCtozwHP14=;
-        b=K3tMyfHDMU23lAAyeTy3R5+F+8tyV4F19bGC4jPgVkfFDReb++iNlqxZ4oV5dGt0II
-         FxvF5FxulOHAwY5RTyXjpLUS9imSH/JqLleM9vPsu4aJgd8D+oDXgMTSyOW5IdRpPfa9
-         d/PhvNOuS5DKM3chalq7BOKTVq/cwnseug70HAXC3DFOI3I+47mDmDfu0AOHHuvcjRFf
-         kg2EASmKr9fivAHe4QHbQODrHpiStZ088UaaFW7zSYJC98U5qyLGyPXAGRgiFrcD8Dxl
-         S2gqi7R0oliDmRVgRBeBYl2aQ73WaAdwaTbw1xyU9xAmj5UA/1cZWgdMPq3IFXuxmLw1
-         PJxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vbAqJspBEy3qPmYLBAGhLz99Oyo1IaGAYVCtozwHP14=;
-        b=fjYOf9wsnqNIBtkUxgJRpwyd4JkpVPqGytPjoj4UKkYGSpAr2B7/s9bMSjgkiBeZHJ
-         wQZ4cW4PJWgVYI+/2UMk7J0r4QIfIGzHtX5ySfX3+ryHfIm8pirCicz7qalpG/EKnuNQ
-         vu1ifMZYxrY80W94nxeKI7jjpZluP4EUbrm/xnkPq/21R/J8vj4vSzzihLHomQNpN1gW
-         QX3GZyweWhIM88/iZIDJ2ttDd1bu2rkEnU+6Ia4afOkhJoMUZQ9UBKxb2jULp+nq3T1M
-         oBntoe73J+ZQ5avA134CMZ7XgGlVw9FrFMozqHymNadTiyyu7Ts7eG7X9R28/8/NG/Fo
-         7QGA==
-X-Gm-Message-State: AOAM532PUsM2zx8eDHFikkm205bT0r+vaxlSC5UJmFhi1PxxD2t0S8c0
-        6ueOzHqMTv5l3CpBmZn5wCXJPtxNUEYI+477MCc=
-X-Google-Smtp-Source: ABdhPJxMa0K1+iV8tITENmtN1Fz5raSyajtdv9SEYFFAqnuM9mo09FrJFM8EqxRJU7zBb83nCsGxfk4xNnPoNPWu+lM=
-X-Received: by 2002:a63:305:: with SMTP id 5mr21153696pgd.74.1592237274446;
- Mon, 15 Jun 2020 09:07:54 -0700 (PDT)
+        id S1730823AbgFOQKG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Jun 2020 12:10:06 -0400
+Received: from mga18.intel.com ([134.134.136.126]:10251 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730426AbgFOQKF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 15 Jun 2020 12:10:05 -0400
+IronPort-SDR: 0XO9SOSxtRmO/Jh/QJt/wwedf2LWsNxJCjKRVQWEIr89n7SAgs4EgPMbFprFkJQCa/8Eyy1Ton
+ U6mh0Wo1xfJQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2020 09:10:05 -0700
+IronPort-SDR: PDvHwgkhgTxxdnLdULzYFZgJMoUFbv2+uaz1OfaVVwMkIwXJl5iyCqT8HL8N0Q2EWgdasd9K+s
+ sqMEPtcT4PSg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,515,1583222400"; 
+   d="scan'208";a="316947606"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Jun 2020 09:10:03 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 8412B217; Mon, 15 Jun 2020 19:10:02 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] i2c: ismt: Add support for Intel Emmitsburg PCH
+Date:   Mon, 15 Jun 2020 19:10:01 +0300
+Message-Id: <20200615161001.12817-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.27.0.rc2
 MIME-Version: 1.0
-References: <20200614210255.4641-1-sultan@kerneltoast.com> <20200614210255.4641-2-sultan@kerneltoast.com>
- <20200615094019.GP2428291@smile.fi.intel.com> <20200615160320.GA1949@sultan-book.localdomain>
-In-Reply-To: <20200615160320.GA1949@sultan-book.localdomain>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 15 Jun 2020 19:07:42 +0300
-Message-ID: <CAHp75Ve1TgRrKF0_d-7dY6EZU36QszwQ1ezwE03RERKywCxGYg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] i2c: designware: Only check the first byte for SMBus
- block read length
-To:     Sultan Alsawaf <sultan@kerneltoast.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Aaron Ma <aaron.ma@canonical.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        HungNien Chen <hn.chen@weidahitech.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Pavel Balan <admin@kryma.net>, Tin Huynh <tnhuynh@apm.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        You-Sheng Yang <vicamo.yang@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 7:06 PM Sultan Alsawaf <sultan@kerneltoast.com> wrote:
-> On Mon, Jun 15, 2020 at 12:40:19PM +0300, Andy Shevchenko wrote:
-> > On Sun, Jun 14, 2020 at 02:02:54PM -0700, Sultan Alsawaf wrote:
-> > > From: Sultan Alsawaf <sultan@kerneltoast.com>
-> > >
-> > > SMBus block reads can be broken because the read function will just skip
-> > > over bytes it doesn't like until reaching a byte that conforms to the
-> > > length restrictions for block reads. This is problematic when it isn't
-> > > known if the incoming payload is indeed a conforming block read.
-> > >
-> > > According to the SMBus specification, block reads will only send the
-> > > payload length in the first byte, so we can fix this by only considering
-> > > the first byte in a sequence for block read length purposes.
-> >
-> > I'm wondering if this overlaps with [1]. AFAIU that one is also makes sure that
-> > the length is not a garbage.
-> >
-> > [1]: https://lore.kernel.org/linux-i2c/20200613104109.2989-1-mans@mansr.com/T/#u
->
-> No overlap.
+Add PCI ID for the Intel Emmitsburg PCH iSMT SMBus controller.
 
-Thanks for clarifying.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-ismt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> That looks like a similar bug for a different driver. In my case,
-> the adapter provides native SMBus support, so emulation is never used. This is
-> clear to see by looking at i2c_transfer_buffer_flags(), which only uses the
-> master_xfer functions provided by the adapter; it doesn't call the emulation
-> path at all.
-
-But do we get an advantage if this can be done in the i2c core instead
-(once for all)?
-
+diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
+index 2f95e25a10f7..cdba77f9ecb1 100644
+--- a/drivers/i2c/busses/i2c-ismt.c
++++ b/drivers/i2c/busses/i2c-ismt.c
+@@ -77,6 +77,7 @@
+ #define PCI_DEVICE_ID_INTEL_S1200_SMT1	0x0c5a
+ #define PCI_DEVICE_ID_INTEL_CDF_SMT	0x18ac
+ #define PCI_DEVICE_ID_INTEL_DNV_SMT	0x19ac
++#define PCI_DEVICE_ID_INTEL_EBG_SMT	0x1bff
+ #define PCI_DEVICE_ID_INTEL_AVOTON_SMT	0x1f15
+ 
+ #define ISMT_DESC_ENTRIES	2	/* number of descriptor entries */
+@@ -184,6 +185,7 @@ static const struct pci_device_id ismt_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_S1200_SMT1) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CDF_SMT) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_DNV_SMT) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_EBG_SMT) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_AVOTON_SMT) },
+ 	{ 0, }
+ };
 -- 
-With Best Regards,
-Andy Shevchenko
+2.27.0.rc2
+
