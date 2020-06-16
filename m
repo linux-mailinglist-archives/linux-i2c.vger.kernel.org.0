@@ -2,148 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3CE1FB264
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jun 2020 15:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804A41FB3A9
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jun 2020 16:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728780AbgFPNns (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 Jun 2020 09:43:48 -0400
-Received: from mga18.intel.com ([134.134.136.126]:54320 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728716AbgFPNns (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 16 Jun 2020 09:43:48 -0400
-IronPort-SDR: QiLXGhGVt0/RGIYugZaAWCbKPZ+IEaNTzeWSNz3Y/qFS56rC8VvArCkeBnXJaw//d2d5Tq3W+2
- Nmhu8Bw/eyMQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 06:43:47 -0700
-IronPort-SDR: UlN3qSw3HadyyxqoA8Wd+oVzrQhLxVNmSJP4GMrvRbJvjjWleLYzzTToY6pJe1OiSjO42XOMyw
- 6n5M/v4yGSXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,518,1583222400"; 
-   d="scan'208";a="298905989"
-Received: from mylly.fi.intel.com (HELO [10.237.72.87]) ([10.237.72.87])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Jun 2020 06:43:43 -0700
-Subject: Re: [PATCH 2/2] HID: i2c-hid: Use block reads when possible to save
- power
-To:     Sultan Alsawaf <sultan@kerneltoast.com>,
-        Aaron Ma <aaron.ma@canonical.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        HungNien Chen <hn.chen@weidahitech.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Pavel Balan <admin@kryma.net>, Tin Huynh <tnhuynh@apm.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        You-Sheng Yang <vicamo.yang@canonical.com>
-References: <20200614210255.4641-1-sultan@kerneltoast.com>
- <20200614210255.4641-3-sultan@kerneltoast.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <c4373272-e656-773c-dfd2-0efc4c53c92d@linux.intel.com>
-Date:   Tue, 16 Jun 2020 16:43:43 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1729524AbgFPOJn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 Jun 2020 10:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729050AbgFPOJk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Jun 2020 10:09:40 -0400
+Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5707BC061573;
+        Tue, 16 Jun 2020 07:09:40 -0700 (PDT)
+Received: by mail-vk1-xa41.google.com with SMTP id p187so4840445vkf.0;
+        Tue, 16 Jun 2020 07:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=kvkbSZZ2ghPvtr7g+4DwKKTOPHzQ+JkuiYjOoBKXQ1E=;
+        b=MJHlkngFT133npieWpyoGh0urU3iWbGas7CJZrtMJerpGuJtXJBloYvzE44huOfDvE
+         a+B2I1EBIwegx2wV251qk0dxjJ99+TVLMAqauve8tcZ/Czgrah7MQQ9zWAcV9Tfi1xha
+         368bEbvhG4rwhmCGX8rOyR5bixzGVSwmAMPwD6QW2bTSIQh9lUvIM33As4HJz19uN1Br
+         HJp2wwAzWFPjN5Re7TByc9JQSxrZvwsUW3K2FdN4eakM9unoII1EBeAVH+SxY6FAnGxd
+         GwnXUnN4QQOVPAAy+h7We3R1u3lxfmC3vixsKANC95sKfUVVE+mFs+DQdYIE/Cezz8YZ
+         W4Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=kvkbSZZ2ghPvtr7g+4DwKKTOPHzQ+JkuiYjOoBKXQ1E=;
+        b=teF1W9dg+PfqGbk34fqDmfqhGa2We0QBrjBA0Wt2YuE+6ZoRLr2qtXxQK++RN12DFV
+         1MkV7ZKkHtlHC5m+1ZW4O8CV4CsJB8b8gEP2ZUuVCNCeFS1Y2BiL+f8ex6DnM0fgOy2T
+         qfDx0Ah1dbFEfHCyH9n2BPz4dnRjhl/Da53eqFLe2rB/FYmv3oUF7pbe4704WMvQawgB
+         Ozl9BVkEwJQWNUJaqfTPbGM/NI1Qeb7r5jmwl6A2XhOmYQYp4IS7gLh6BBDN+mKk6Hyv
+         O/2Gb8O1eu8vMfs5LV/84zDNCvTKvPKjytME/sAIWT09N54KUfZa9btD81eAHE281hlu
+         OHGg==
+X-Gm-Message-State: AOAM532qgNBH/iyy4DKw9tnbgja9vkzjRyq64FKr48tie17uiyyvVYyt
+        CtLfCWGOTEfZpYBUIYvRYDQuafvwBvD5Vm+9RJViEw==
+X-Google-Smtp-Source: ABdhPJze8O6g9fE6ltSX85adg2jK4puYbKO8MUJwujXYHUy4P5RhKum5p0M5dGxwTqPtL4ATGFihpSZvv1m1jjx+STY=
+X-Received: by 2002:a1f:9094:: with SMTP id s142mr1776422vkd.6.1592316579576;
+ Tue, 16 Jun 2020 07:09:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200614210255.4641-3-sultan@kerneltoast.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200615075816.2848-1-wsa+renesas@sang-engineering.com> <20200616121244.GN20149@phenom.ffwll.local>
+In-Reply-To: <20200616121244.GN20149@phenom.ffwll.local>
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+Date:   Tue, 16 Jun 2020 15:05:58 +0100
+Message-ID: <CACvgo52PaW97cxMeGhbpD4FUVy5BRAunaCxX3106OOAZm6x67A@mail.gmail.com>
+Subject: Re: [PATCH 0/6] remove deprecated i2c_new_device API
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org,
+        linux-fbdev <linux-fbdev@vger.kernel.org>, x86@kernel.org,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 6/15/20 12:02 AM, Sultan Alsawaf wrote:
-> From: Sultan Alsawaf <sultan@kerneltoast.com>
-> 
-> We have no way of knowing how large an incoming payload is going to be,
-> so the only strategy available up until now has been to always retrieve
-> the maximum possible report length over i2c, which can be quite
-> inefficient. For devices that send reports in block read format, the i2c
-> controller driver can read the payload length on the fly and terminate
-> the i2c transaction early, resulting in considerable power savings.
-> 
-> On a Dell Precision 15 5540 with an i9-9880H, resting my finger on the
-> touchpad causes psys power readings to go up by about 4W and hover there
-> until I remove my finger. With this patch, my psys readings go from 4.7W
-> down to 3.1W, yielding about 1.6W in savings. This is because my
-> touchpad's max report length is 60 bytes, but all of the regular reports
-> it sends for touch events are only 32 bytes, so the i2c transfer is
-> roughly halved for the common case.
-> 
-> Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
-> ---
->   drivers/hid/i2c-hid/i2c-hid-core.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
-> index 294c84e136d7..4b507de48d70 100644
-> --- a/drivers/hid/i2c-hid/i2c-hid-core.c
-> +++ b/drivers/hid/i2c-hid/i2c-hid-core.c
-> @@ -476,7 +476,8 @@ static void i2c_hid_get_input(struct i2c_hid *ihid)
->   	if (size > ihid->bufsize)
->   		size = ihid->bufsize;
->   
-> -	ret = i2c_master_recv(ihid->client, ihid->inbuf, size);
-> +	ret = i2c_transfer_buffer_flags(ihid->client, ihid->inbuf, size,
-> +					I2C_M_RD | I2C_M_RECV_LEN);
+Hi all,
 
-This causes i2c-hid compatible touchscreen to stop working for me.
+On Tue, 16 Jun 2020 at 13:12, Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Mon, Jun 15, 2020 at 09:58:09AM +0200, Wolfram Sang wrote:
+> > I want to remove the above API this cycle, and just a few patches have
+> > not made it into 5.8-rc1. They have been reviewed and most had been
+> > promised to get into linux-next, but well, things happen. So, I hope it
+> > is okay for everyone to collect them like this and push them via I2C for
+> > 5.8-rc2.
+>
+> for the drm side of things:
+>
+> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> >
+> > One minor exception is the media documentation patch which I simply have
+> > missed so far, but it is trivial.
+> >
+> > And then, finally, there is the removal of the old API as the final
+> > patch. Phew, that's been a long ride.
+> >
+> > I am open for comments, of course.
+> >
+> > Happy hacking,
+> >
+> >    Wolfram
+> >
+> >
+> > Wolfram Sang (6):
+> >   drm: encoder_slave: fix refcouting error for modules
+> >   drm: encoder_slave: use new I2C API
 
-Ok (with patch 1/2)
+The first two are in drm-misc-next and are to be expected with the 5.9
+merge window. As long as that doesn't cause major nuisance proceed as
+you prefer.
 
-[    9.346134] i2c_hid i2c-ELAN221D:00: Fetching the HID descriptor
-[    9.346141] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: cmd=01 00
-[    9.362082] i2c_hid i2c-ELAN221D:00: HID Descriptor: 1e 00 00 01 31 
-02 02 00 03 00 43 00 04 00 ff 00 05 00 06 00 f3 04 1d 22 10 56 00 00 00 00
-[    9.385897] i2c_hid i2c-ELAN221D:00: entering i2c_hid_parse
-[    9.386547] i2c_hid i2c-ELAN221D:00: i2c_hid_hwreset
-[    9.386598] i2c_hid i2c-ELAN221D:00: i2c_hid_set_power
-[    9.386616] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: cmd=05 00 00 08
-[    9.391595] i2c_hid i2c-ELAN221D:00: resetting...
-[    9.408864] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: cmd=05 00 00 01
-[    9.410162] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: waiting...
-[    9.418223] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: finished.
-[    9.418231] i2c_hid i2c-ELAN221D:00: i2c_hid_set_power
-[    9.418236] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: cmd=05 00 00 08
-[    9.418531] i2c_hid i2c-ELAN221D:00: asking HID report descriptor
-[    9.418537] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: cmd=02 00
-[    9.440093] i2c_hid i2c-ELAN221D:00: Report Descriptor: 05 0d 09 04 
-a1 01 85 01 09 22 a1 02 09 42 15 00 25 01 75 01 95 01 81 02 75 01 81 03 
-75 06 09 51 25 3f 81 02 26 ff 00 75 08 09 48 81 02 09 49 81 02 95 01 05 
-01 a4 26 c0 0c 75 10 55 0f 65 11 09
-
-Not ok (with patches 1-2/2)
-
-[    9.428690] i2c_hid i2c-ELAN221D:00: Fetching the HID descriptor
-[    9.428698] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: cmd=01 00
-[    9.430017] i2c_hid i2c-ELAN221D:00: HID Descriptor: 1e 00 00 01 31 
-02 02 00 03 00 43 00 04 00 ff 00 05 00 06 00 f3 04 1d 22 10 56 00 00 00 00
-[    9.430836] i2c_hid i2c-ELAN221D:00: entering i2c_hid_parse
-[    9.431205] i2c_hid i2c-ELAN221D:00: i2c_hid_hwreset
-[    9.431294] i2c_hid i2c-ELAN221D:00: i2c_hid_set_power
-[    9.431314] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: cmd=05 00 00 08
-[    9.435937] i2c_hid i2c-ELAN221D:00: resetting...
-[    9.435944] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: cmd=05 00 00 01
-[    9.436150] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: waiting...
-[   10.461304] i2c_designware i2c_designware.3: controller timed out
-[   10.498312] i2c_designware i2c_designware.3: timeout in disabling adapter
-[   14.525115] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: finished.
-[   14.525130] i2c_hid i2c-ELAN221D:00: failed to reset device.
-[   14.532507] i2c_hid i2c-ELAN221D:00: i2c_hid_set_power
-[   14.532520] i2c_hid i2c-ELAN221D:00: __i2c_hid_command: cmd=05 00 01 08
-[   14.553027] i2c_designware i2c_designware.3: timeout waiting for bus 
-ready
-...
-
-I don't know what causes the breakage but according to HID Over I2C 
-Protocol Specification the descriptor length is 16 bits. Maybe the code 
-misses the last byte and/or the data is off by one byte by taking the 
-2nd length byte as 1st data byte?
-
--- 
-Jarkko
+-Emil
