@@ -2,99 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 804A41FB3A9
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jun 2020 16:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 913511FB718
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jun 2020 17:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729524AbgFPOJn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 Jun 2020 10:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        id S1731844AbgFPPnp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 Jun 2020 11:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729050AbgFPOJk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Jun 2020 10:09:40 -0400
-Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5707BC061573;
-        Tue, 16 Jun 2020 07:09:40 -0700 (PDT)
-Received: by mail-vk1-xa41.google.com with SMTP id p187so4840445vkf.0;
-        Tue, 16 Jun 2020 07:09:40 -0700 (PDT)
+        with ESMTP id S1731840AbgFPPnp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Jun 2020 11:43:45 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA55DC061573;
+        Tue, 16 Jun 2020 08:43:44 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id a127so9675096pfa.12;
+        Tue, 16 Jun 2020 08:43:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=kvkbSZZ2ghPvtr7g+4DwKKTOPHzQ+JkuiYjOoBKXQ1E=;
-        b=MJHlkngFT133npieWpyoGh0urU3iWbGas7CJZrtMJerpGuJtXJBloYvzE44huOfDvE
-         a+B2I1EBIwegx2wV251qk0dxjJ99+TVLMAqauve8tcZ/Czgrah7MQQ9zWAcV9Tfi1xha
-         368bEbvhG4rwhmCGX8rOyR5bixzGVSwmAMPwD6QW2bTSIQh9lUvIM33As4HJz19uN1Br
-         HJp2wwAzWFPjN5Re7TByc9JQSxrZvwsUW3K2FdN4eakM9unoII1EBeAVH+SxY6FAnGxd
-         GwnXUnN4QQOVPAAy+h7We3R1u3lxfmC3vixsKANC95sKfUVVE+mFs+DQdYIE/Cezz8YZ
-         W4Ig==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=w/Ciov9t0cTutzO4p633r2W+NbASpriMULdDl2xvMIs=;
+        b=ETBPxV/lHGvYByFysF/yMcA65AniTR6zZ9T49f5VlQX+ut3BMhgHsDD3Thg75xLWO/
+         ghmsqvPijrBOnLbVTeJTqE5URxBseYBquqfwJ3YtwsPpLA7037fNK7CvF9EPYew4dSwZ
+         PH2s8pDzIMkrmEj1GCF/v3P6EZUpYEcEbEaPh1Qqg5iKDK+nv4zuS5Hlmj4JAEQ7zFFD
+         FwK/1WVrh9TeGJn/d44S3QAklh9xdDf6wcQJ6ngVWdiACQJBTtzsOcpeMIDXSg0+ZTw5
+         n+qJTSTQohvZj0L2hd7/ftJLoZR7B3bSYU7SfcQkHis1uJsVrS9W1Detdr6RbQFJF+y5
+         PiyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=kvkbSZZ2ghPvtr7g+4DwKKTOPHzQ+JkuiYjOoBKXQ1E=;
-        b=teF1W9dg+PfqGbk34fqDmfqhGa2We0QBrjBA0Wt2YuE+6ZoRLr2qtXxQK++RN12DFV
-         1MkV7ZKkHtlHC5m+1ZW4O8CV4CsJB8b8gEP2ZUuVCNCeFS1Y2BiL+f8ex6DnM0fgOy2T
-         qfDx0Ah1dbFEfHCyH9n2BPz4dnRjhl/Da53eqFLe2rB/FYmv3oUF7pbe4704WMvQawgB
-         Ozl9BVkEwJQWNUJaqfTPbGM/NI1Qeb7r5jmwl6A2XhOmYQYp4IS7gLh6BBDN+mKk6Hyv
-         O/2Gb8O1eu8vMfs5LV/84zDNCvTKvPKjytME/sAIWT09N54KUfZa9btD81eAHE281hlu
-         OHGg==
-X-Gm-Message-State: AOAM532qgNBH/iyy4DKw9tnbgja9vkzjRyq64FKr48tie17uiyyvVYyt
-        CtLfCWGOTEfZpYBUIYvRYDQuafvwBvD5Vm+9RJViEw==
-X-Google-Smtp-Source: ABdhPJze8O6g9fE6ltSX85adg2jK4puYbKO8MUJwujXYHUy4P5RhKum5p0M5dGxwTqPtL4ATGFihpSZvv1m1jjx+STY=
-X-Received: by 2002:a1f:9094:: with SMTP id s142mr1776422vkd.6.1592316579576;
- Tue, 16 Jun 2020 07:09:39 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=w/Ciov9t0cTutzO4p633r2W+NbASpriMULdDl2xvMIs=;
+        b=TT3PZ+CMkbUNhP7Pz2Hb43XeSaQbYMuKyVO92t86kxYagtqrp11OsIWYnqKszdAUtb
+         0TR7coLLzyxZdv1o4Cicixf/J+vBxKb0kfMZt2zSRtpe9XKk+TqRPBPrQUPL14ThZ8m/
+         6pJUfXpP4+y/jUblQe35E1coTNsaTRxgrr6ZXqlQSnjP/1Q6pwoFpq/jwd9gB6iaS/HM
+         BZMeXmPH9Y/gFeZaWgBlr71CRO5E/EM9+e1QnfdxtDhx0g6BjTaTWS8EelRw5Z/gJmiC
+         QnAreucsJw4pnSwyfB0zpYLOTo+RmCPbbTxvHZlMFq8gHJkP9tBUVI4eKqctqscxOrge
+         XRxA==
+X-Gm-Message-State: AOAM5315x+SIuE+o/Puq+bztuyJ24ykPg4ks2iySEwQ0NPMf+MMsZg9G
+        lvux9HdkorUm3F51NvimtRmvcy/Q
+X-Google-Smtp-Source: ABdhPJxv0IaKwMnUpXyDzneEw/MpLUyX/yRRHSZQW5/Fq5lXhvaDPw8QVhhoEQjI8jabz0B6vg+7NA==
+X-Received: by 2002:a63:3c16:: with SMTP id j22mr2611605pga.335.1592322224256;
+        Tue, 16 Jun 2020 08:43:44 -0700 (PDT)
+Received: from sultan-box.localdomain ([89.45.90.111])
+        by smtp.gmail.com with ESMTPSA id c194sm17199948pfc.212.2020.06.16.08.43.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2020 08:43:43 -0700 (PDT)
+From:   Sultan Alsawaf <sultan@kerneltoast.com>
+X-Google-Original-From: Sultan Alsawaf
+To:     jarkko.nikula@linux.intel.com
+Cc:     aaron.ma@canonical.com, admin@kryma.net,
+        andriy.shevchenko@linux.intel.com, benjamin.tissoires@redhat.com,
+        hdegoede@redhat.com, hn.chen@weidahitech.com, jikos@kernel.org,
+        kai.heng.feng@canonical.com, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mika.westerberg@linux.intel.com, sultan@kerneltoast.com,
+        vicamo.yang@canonical.com, wsa@kernel.org
+Subject: [PATCH v2] i2c: designware: Only check the first byte for SMBus block read length
+Date:   Tue, 16 Jun 2020 08:43:28 -0700
+Message-Id: <20200616154328.2866-1-sultan@kerneltoast.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <9782f44e-4e01-4e5d-cc50-ab9e2219085c@linux.intel.com>
+References: <9782f44e-4e01-4e5d-cc50-ab9e2219085c@linux.intel.com>
 MIME-Version: 1.0
-References: <20200615075816.2848-1-wsa+renesas@sang-engineering.com> <20200616121244.GN20149@phenom.ffwll.local>
-In-Reply-To: <20200616121244.GN20149@phenom.ffwll.local>
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-Date:   Tue, 16 Jun 2020 15:05:58 +0100
-Message-ID: <CACvgo52PaW97cxMeGhbpD4FUVy5BRAunaCxX3106OOAZm6x67A@mail.gmail.com>
-Subject: Re: [PATCH 0/6] remove deprecated i2c_new_device API
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org,
-        linux-fbdev <linux-fbdev@vger.kernel.org>, x86@kernel.org,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi all,
+From: Sultan Alsawaf <sultan@kerneltoast.com>
 
-On Tue, 16 Jun 2020 at 13:12, Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Mon, Jun 15, 2020 at 09:58:09AM +0200, Wolfram Sang wrote:
-> > I want to remove the above API this cycle, and just a few patches have
-> > not made it into 5.8-rc1. They have been reviewed and most had been
-> > promised to get into linux-next, but well, things happen. So, I hope it
-> > is okay for everyone to collect them like this and push them via I2C for
-> > 5.8-rc2.
->
-> for the drm side of things:
->
-> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> >
-> > One minor exception is the media documentation patch which I simply have
-> > missed so far, but it is trivial.
-> >
-> > And then, finally, there is the removal of the old API as the final
-> > patch. Phew, that's been a long ride.
-> >
-> > I am open for comments, of course.
-> >
-> > Happy hacking,
-> >
-> >    Wolfram
-> >
-> >
-> > Wolfram Sang (6):
-> >   drm: encoder_slave: fix refcouting error for modules
-> >   drm: encoder_slave: use new I2C API
+SMBus block reads can be broken because the read function will just skip
+over bytes it doesn't like until reaching a byte that conforms to the
+length restrictions for block reads. This is problematic when it isn't
+known if the incoming payload is indeed a conforming block read.
 
-The first two are in drm-misc-next and are to be expected with the 5.9
-merge window. As long as that doesn't cause major nuisance proceed as
-you prefer.
+According to the SMBus specification, block reads will only send the
+payload length in the first byte, so we can fix this by only considering
+the first byte in a sequence for block read length purposes.
 
--Emil
+Fixes: c3ae106050b9 ("i2c: designware: Implement support for SMBus block read and write")
+Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
+---
+ drivers/i2c/busses/i2c-designware-master.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index d6425ad6e6a3..d22271438869 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -391,14 +391,10 @@ i2c_dw_recv_len(struct dw_i2c_dev *dev, u8 len)
+ 	struct i2c_msg *msgs = dev->msgs;
+ 	u32 flags = msgs[dev->msg_read_idx].flags;
+ 
+-	/*
+-	 * Adjust the buffer length and mask the flag
+-	 * after receiving the first byte.
+-	 */
++	/* Adjust the buffer length */
+ 	len += (flags & I2C_CLIENT_PEC) ? 2 : 1;
+ 	dev->tx_buf_len = len - min_t(u8, len, dev->rx_outstanding);
+ 	msgs[dev->msg_read_idx].len = len;
+-	msgs[dev->msg_read_idx].flags &= ~I2C_M_RECV_LEN;
+ 
+ 	return len;
+ }
+@@ -430,10 +426,12 @@ i2c_dw_read(struct dw_i2c_dev *dev)
+ 			u32 flags = msgs[dev->msg_read_idx].flags;
+ 
+ 			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
+-			/* Ensure length byte is a valid value */
+-			if (flags & I2C_M_RECV_LEN &&
+-			    tmp <= I2C_SMBUS_BLOCK_MAX && tmp > 0) {
+-				len = i2c_dw_recv_len(dev, tmp);
++			if (flags & I2C_M_RECV_LEN) {
++				/* Ensure length byte is a valid value */
++				if (tmp <= I2C_SMBUS_BLOCK_MAX && tmp > 0)
++					len = i2c_dw_recv_len(dev, tmp);
++				/* Mask the flag after receiving the first byte */
++				msgs[dev->msg_read_idx].flags &= ~I2C_M_RECV_LEN;
+ 			}
+ 			*buf++ = tmp;
+ 			dev->rx_outstanding--;
+-- 
+2.27.0
+
