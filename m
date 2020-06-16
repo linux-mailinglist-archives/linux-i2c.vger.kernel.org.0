@@ -2,225 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7461FA763
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jun 2020 06:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 744C11FAFF1
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jun 2020 14:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727027AbgFPECE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 Jun 2020 00:02:04 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:44300 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726466AbgFPECD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 16 Jun 2020 00:02:03 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 04E831A0579;
-        Tue, 16 Jun 2020 06:02:01 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id D43861A053F;
-        Tue, 16 Jun 2020 06:01:55 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 8A072402E8;
-        Tue, 16 Jun 2020 12:01:49 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     linux@rempel-privat.de, kernel@pengutronix.de, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        wolfram@the-dreams.de, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH V3 2/2] dt-bindings: i2c: Convert imx i2c to json-schema
-Date:   Tue, 16 Jun 2020 11:50:54 +0800
-Message-Id: <1592279454-32551-2-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1592279454-32551-1-git-send-email-Anson.Huang@nxp.com>
-References: <1592279454-32551-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1728144AbgFPMMu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 Jun 2020 08:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726452AbgFPMMt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Jun 2020 08:12:49 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399D3C08C5C5
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Jun 2020 05:12:48 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id b6so1372320wrs.11
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Jun 2020 05:12:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q6OsjkJk4pboo5l2xvILBNUm3B6366KdViVmWJQJc1w=;
+        b=kdsn5tjdB6ktRJ9mmWCnOQ9CfEMUqcxAszDkUfimcaluXzI0gXdq+3lGnL2wowHLuJ
+         XVwwdLvjpzcwXu8CBc8dnkftrxJ1N7+/Y46OkIHUxelWqtxbn8YE5rj6g16lNDhVb/7G
+         XCprtIPsYY1SGOmOrKUjp11REFjEEO+9rO8Qg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=Q6OsjkJk4pboo5l2xvILBNUm3B6366KdViVmWJQJc1w=;
+        b=HXVenwTK/btlJbrTZst+oNFTYHmInd/VCK8hmtKjdZbJpWtYFxCBGCIus7PfscZw/8
+         l8xUJBRu1YtiirX4Hz4LanFXWPF5HiJ40vfdAxs7CJRtO6vyhchSu2ECi7Vqo1fyORR+
+         ZMvM84P5Hub5ojriBWS04SpKKEaPChgubnq2yWMsChUuOU1tnm3BBYMssGy1xwuZWxvM
+         pwHErFXSrCOhciazg58rSRJSKN8epfSStEIbuZOFom6mdaKNrfmjqi1hN43MltdPx4i0
+         +a7udWYeTaE/WZ5R5kl4rRaWsHHT0C9SJwY0wSRUjR5fCH5XFpV5l8pvwH2Jgu9RlFT2
+         V9iQ==
+X-Gm-Message-State: AOAM53286Jou/VX2xEfTH/2SXQ7FX8q50CcUMt36e/xZu46DWmC+urfF
+        5pEusA+z5CBrIfkK4dqc2AJrWw==
+X-Google-Smtp-Source: ABdhPJwE/rveo96P37ip4JED1ZrNUfLnxqMG17ohOhxH9h34F9ic/IEpoM6pzw55iAcxdQcPOHNGsQ==
+X-Received: by 2002:adf:a396:: with SMTP id l22mr2758118wrb.24.1592309566724;
+        Tue, 16 Jun 2020 05:12:46 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id q11sm29162628wrv.67.2020.06.16.05.12.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2020 05:12:46 -0700 (PDT)
+Date:   Tue, 16 Jun 2020 14:12:44 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH 0/6] remove deprecated i2c_new_device API
+Message-ID: <20200616121244.GN20149@phenom.ffwll.local>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org, linux-media@vger.kernel.org
+References: <20200615075816.2848-1-wsa+renesas@sang-engineering.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200615075816.2848-1-wsa+renesas@sang-engineering.com>
+X-Operating-System: Linux phenom 5.6.0-1-amd64 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Convert the i.MX I2C binding to DT schema format using json-schema,
-some improvements applied, such as update example based on latest DT
-file, add more compatible for existing SoCs, and remove unnecessary
-common property "pinctrl".
+On Mon, Jun 15, 2020 at 09:58:09AM +0200, Wolfram Sang wrote:
+> I want to remove the above API this cycle, and just a few patches have
+> not made it into 5.8-rc1. They have been reviewed and most had been
+> promised to get into linux-next, but well, things happen. So, I hope it
+> is okay for everyone to collect them like this and push them via I2C for
+> 5.8-rc2.
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
-Changes since V2:
-	- remove 'clock-frequency' property's type and use enum for it, ONLY support 100KHz/400KHz.
-	- remove *-gpios's typs/description, since it is already defined in i2c-gpio.yaml.
-	- fix space issue in example.
----
- Documentation/devicetree/bindings/i2c/i2c-imx.txt  |  49 ----------
- Documentation/devicetree/bindings/i2c/i2c-imx.yaml | 103 +++++++++++++++++++++
- 2 files changed, 103 insertions(+), 49 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-imx.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/i2c-imx.yaml
+for the drm side of things:
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx.txt b/Documentation/devicetree/bindings/i2c/i2c-imx.txt
-deleted file mode 100644
-index b967544..0000000
---- a/Documentation/devicetree/bindings/i2c/i2c-imx.txt
-+++ /dev/null
-@@ -1,49 +0,0 @@
--* Freescale Inter IC (I2C) and High Speed Inter IC (HS-I2C) for i.MX
--
--Required properties:
--- compatible :
--  - "fsl,imx1-i2c" for I2C compatible with the one integrated on i.MX1 SoC
--  - "fsl,imx21-i2c" for I2C compatible with the one integrated on i.MX21 SoC
--  - "fsl,vf610-i2c" for I2C compatible with the one integrated on Vybrid vf610 SoC
--- reg : Should contain I2C/HS-I2C registers location and length
--- interrupts : Should contain I2C/HS-I2C interrupt
--- clocks : Should contain the I2C/HS-I2C clock specifier
--
--Optional properties:
--- clock-frequency : Constains desired I2C/HS-I2C bus clock frequency in Hz.
--  The absence of the property indicates the default frequency 100 kHz.
--- dmas: A list of two dma specifiers, one for each entry in dma-names.
--- dma-names: should contain "tx" and "rx".
--- scl-gpios: specify the gpio related to SCL pin
--- sda-gpios: specify the gpio related to SDA pin
--- pinctrl: add extra pinctrl to configure i2c pins to gpio function for i2c
--  bus recovery, call it "gpio" state
--
--Examples:
--
--i2c@83fc4000 { /* I2C2 on i.MX51 */
--	compatible = "fsl,imx51-i2c", "fsl,imx21-i2c";
--	reg = <0x83fc4000 0x4000>;
--	interrupts = <63>;
--};
--
--i2c@70038000 { /* HS-I2C on i.MX51 */
--	compatible = "fsl,imx51-i2c", "fsl,imx21-i2c";
--	reg = <0x70038000 0x4000>;
--	interrupts = <64>;
--	clock-frequency = <400000>;
--};
--
--i2c0: i2c@40066000 { /* i2c0 on vf610 */
--	compatible = "fsl,vf610-i2c";
--	reg = <0x40066000 0x1000>;
--	interrupts =<0 71 0x04>;
--	dmas = <&edma0 0 50>,
--		<&edma0 0 51>;
--	dma-names = "rx","tx";
--	pinctrl-names = "default", "gpio";
--	pinctrl-0 = <&pinctrl_i2c1>;
--	pinctrl-1 = <&pinctrl_i2c1_gpio>;
--	scl-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH>;
--	sda-gpios = <&gpio5 27 GPIO_ACTIVE_HIGH>;
--};
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx.yaml b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-new file mode 100644
-index 0000000..869f2ae
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-@@ -0,0 +1,103 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/i2c-imx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Freescale Inter IC (I2C) and High Speed Inter IC (HS-I2C) for i.MX
-+
-+maintainers:
-+  - Wolfram Sang <wolfram@the-dreams.de>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: fsl,imx1-i2c
-+      - const: fsl,imx21-i2c
-+      - const: fsl,vf610-i2c
-+      - items:
-+          - const: fsl,imx35-i2c
-+          - const: fsl,imx1-i2c
-+      - items:
-+          - enum:
-+            - fsl,imx25-i2c
-+            - fsl,imx27-i2c
-+            - fsl,imx31-i2c
-+            - fsl,imx50-i2c
-+            - fsl,imx51-i2c
-+            - fsl,imx53-i2c
-+            - fsl,imx6q-i2c
-+            - fsl,imx6sl-i2c
-+            - fsl,imx6sx-i2c
-+            - fsl,imx6sll-i2c
-+            - fsl,imx6ul-i2c
-+            - fsl,imx7s-i2c
-+            - fsl,imx8mq-i2c
-+            - fsl,imx8mm-i2c
-+            - fsl,imx8mn-i2c
-+            - fsl,imx8mp-i2c
-+          - const: fsl,imx21-i2c
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: ipg
-+
-+  clock-frequency:
-+    enum: [ 100000, 400000 ]
-+
-+  dmas:
-+    items:
-+      - description: DMA controller phandle and request line for RX
-+      - description: DMA controller phandle and request line for TX
-+
-+  dma-names:
-+    items:
-+      - const: rx
-+      - const: tx
-+
-+  sda-gpios:
-+    maxItems: 1
-+
-+  scl-gpios:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/imx5-clock.h>
-+    #include <dt-bindings/clock/vf610-clock.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    i2c@83fc4000 {
-+        compatible = "fsl,imx51-i2c", "fsl,imx21-i2c";
-+        reg = <0x83fc4000 0x4000>;
-+        interrupts = <63>;
-+        clocks = <&clks IMX5_CLK_I2C2_GATE>;
-+    };
-+
-+    i2c@40066000 {
-+        compatible = "fsl,vf610-i2c";
-+        reg = <0x40066000 0x1000>;
-+        interrupts = <71 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&clks VF610_CLK_I2C0>;
-+        clock-names = "ipg";
-+        dmas = <&edma0 0 50>,
-+               <&edma0 0 51>;
-+        dma-names = "rx", "tx";
-+    };
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> 
+> One minor exception is the media documentation patch which I simply have
+> missed so far, but it is trivial.
+> 
+> And then, finally, there is the removal of the old API as the final
+> patch. Phew, that's been a long ride.
+> 
+> I am open for comments, of course.
+> 
+> Happy hacking,
+> 
+>    Wolfram
+> 
+> 
+> Wolfram Sang (6):
+>   drm: encoder_slave: fix refcouting error for modules
+>   drm: encoder_slave: use new I2C API
+>   x86/platform/intel-mid: convert to use i2c_new_client_device()
+>   video: backlight: tosa_lcd: convert to use i2c_new_client_device()
+>   Documentation: media: convert to use i2c_new_client_device()
+>   i2c: remove deprecated i2c_new_device API
+> 
+>  .../driver-api/media/v4l2-subdev.rst          |  2 +-
+>  .../userspace-api/media/conf_nitpick.py       |  2 +-
+>  arch/x86/platform/intel-mid/sfi.c             |  4 +--
+>  drivers/gpu/drm/drm_encoder_slave.c           | 15 ++++-------
+>  drivers/i2c/i2c-core-base.c                   | 25 -------------------
+>  drivers/video/backlight/tosa_lcd.c            |  4 +--
+>  include/linux/i2c.h                           |  8 +++---
+>  7 files changed, 14 insertions(+), 46 deletions(-)
+> 
+> -- 
+> 2.27.0
+> 
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+
 -- 
-2.7.4
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
