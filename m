@@ -2,88 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDDC1FCF8C
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Jun 2020 16:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78481FD885
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jun 2020 00:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726341AbgFQOag convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 17 Jun 2020 10:30:36 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:29986 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726326AbgFQOag (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 Jun 2020 10:30:36 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-144-tRDTNmFJP0-XS1WZyvnh3A-1; Wed, 17 Jun 2020 15:30:32 +0100
-X-MC-Unique: tRDTNmFJP0-XS1WZyvnh3A-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Wed, 17 Jun 2020 15:30:31 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 17 Jun 2020 15:30:31 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Wolfram Sang' <wsa@kernel.org>,
-        "wu000273@umn.edu" <wu000273@umn.edu>
-CC:     "kjlu@umn.edu" <kjlu@umn.edu>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh@kernel.org>,
-        Shubhrajyoti Datta <shubhraj@xilinx.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] i2c: xiic: Fix reference count leaks.
-Thread-Topic: [PATCH] i2c: xiic: Fix reference count leaks.
-Thread-Index: AQHWQiuTE76LjToEc02VHcgO+GXIWKjc4oTg
-Date:   Wed, 17 Jun 2020 14:30:31 +0000
-Message-ID: <8aa8ee3d005f4a7e9a4dfa6654cc2732@AcuMS.aculab.com>
-References: <20200613215923.2611-1-wu000273@umn.edu>
- <20200614090950.GB2878@kunai>
-In-Reply-To: <20200614090950.GB2878@kunai>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1727106AbgFQWOS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 17 Jun 2020 18:14:18 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:46042 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726840AbgFQWOQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 Jun 2020 18:14:16 -0400
+Received: by mail-io1-f68.google.com with SMTP id y5so4738827iob.12;
+        Wed, 17 Jun 2020 15:14:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DRXryslTGLkMJqQMxB14CHKUq6hyTDjdoN304utJi9Y=;
+        b=A86biCGZ7pKnsRQEEStEZdz59LmUrWX+8fti3y48EXk5NieYJgoOZwPz0+aUeZ3CI5
+         KD6NpsHz1v8LyLsGZ1N5YGJAHhiJzbUO6cnnoBHYSNOSQpNVuQCXfkzaQQjBeH5UTImY
+         p2rN+lJywhel8QhIpBNXmz0Hc37bJNPFHiLM5j4n8YrmGbir27yusQzTlnj04LLvUoXN
+         LJXcPSiYiMqct+CI0ogCwfNs709/T2Ehe7K1L9YldBL2emq9sIot8EJ8RObPlRdR7WL9
+         DZNwDlIJVnU27XPghZovC5UVMpEVyGX/bRvTHOHKdC5lIiCl7UI6Mycu9kjhcTeDtmuX
+         Nlpg==
+X-Gm-Message-State: AOAM532zcyyOqjEJ/MP0hZQ91tKgA8sb3rImTeDNXXpgEAfFScO+XMrR
+        2yegpUmVNZb0ha4PqTD65g==
+X-Google-Smtp-Source: ABdhPJz7QUutK4RE5S/N61ajEcfcIYnRVvw0B0Br3nuAULonfWSMZqjN0BZ4yZD6EFLd0+qnRQpNQQ==
+X-Received: by 2002:a05:6638:35d:: with SMTP id x29mr1434644jap.71.1592432054953;
+        Wed, 17 Jun 2020 15:14:14 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id f1sm494482ilh.17.2020.06.17.15.14.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 15:14:14 -0700 (PDT)
+Received: (nullmailer pid 2927550 invoked by uid 1000);
+        Wed, 17 Jun 2020 22:14:11 -0000
+Date:   Wed, 17 Jun 2020 16:14:11 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
+        hverkuil@xs4all.nl, sakari.ailus@iki.fi, helen.koike@collabora.com,
+        digetx@gmail.com, sboyd@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [RFC PATCH v1 10/18] dt-bindings: tegra: Document VI and CSI
+ port nodes
+Message-ID: <20200617221411.GB2923473@bogus>
+References: <1591768960-31648-1-git-send-email-skomatineni@nvidia.com>
+ <1591768960-31648-11-git-send-email-skomatineni@nvidia.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1591768960-31648-11-git-send-email-skomatineni@nvidia.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Wolfram Sang
-> Sent: 14 June 2020 10:10
+On Tue, Jun 09, 2020 at 11:02:32PM -0700, Sowjanya Komatineni wrote:
+> This patch documents Tegra VI and CSI port and endpoint nodes along
+> with the other required properties.
 > 
-> On Sat, Jun 13, 2020 at 04:59:23PM -0500, wu000273@umn.edu wrote:
-> > From: Qiushi Wu <wu000273@umn.edu>
-> >
-> > pm_runtime_get_sync() increments the runtime PM usage counter even
-> > when it returns an error code. Thus call pm_runtime_put_noidle()
-> > if pm_runtime_get_sync() fails.
-> 
-> Can you point me to a discussion where it was decided that this is a
-> proper fix? I'd think we rather should fix pm_runtime_get_sync() but
-> maybe there are technical reasons against it.
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> ---
+>  .../display/tegra/nvidia,tegra20-host1x.txt        | 87 ++++++++++++++++++++++
+>  1 file changed, 87 insertions(+)
 
-Or, if there is one place that actually needs the reference split the
-code so that unusual case keeps the reference.
+This is getting converted to schema by Thierry.
 
-In one of the patches I also spotted:
-	ret = pm_runtime_get_sync();
-	if (ret < 0 && ret != _EAGAIN)
-		...
-
-(I think it was EAGAIN.)
-I can't help feeling that is just wrong somewhere.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Rob
