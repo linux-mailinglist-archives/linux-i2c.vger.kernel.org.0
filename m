@@ -2,78 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B0E1FCD6F
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Jun 2020 14:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDDC1FCF8C
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Jun 2020 16:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbgFQMbe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 17 Jun 2020 08:31:34 -0400
-Received: from mail-out.m-online.net ([212.18.0.10]:42929 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbgFQMbe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 Jun 2020 08:31:34 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 49n4F0027Lz1ryp6;
-        Wed, 17 Jun 2020 14:31:31 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 49n4Dz6bV8z1r56W;
-        Wed, 17 Jun 2020 14:31:31 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id 5uG9kBo8NYjS; Wed, 17 Jun 2020 14:31:30 +0200 (CEST)
-X-Auth-Info: s1SH41uo981LRmNP0EY/p2rwD0XzuvvybLVAN8boBEo=
-Received: from [IPv6:::1] (unknown [195.140.253.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Wed, 17 Jun 2020 14:31:30 +0200 (CEST)
-Subject: Re: [PATCH 2/5] i2c: xiic: Drop broken interrupt handler
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        id S1726341AbgFQOag convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 17 Jun 2020 10:30:36 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:29986 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726326AbgFQOag (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 Jun 2020 10:30:36 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-144-tRDTNmFJP0-XS1WZyvnh3A-1; Wed, 17 Jun 2020 15:30:32 +0100
+X-MC-Unique: tRDTNmFJP0-XS1WZyvnh3A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Wed, 17 Jun 2020 15:30:31 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Wed, 17 Jun 2020 15:30:31 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Wolfram Sang' <wsa@kernel.org>,
+        "wu000273@umn.edu" <wu000273@umn.edu>
+CC:     "kjlu@umn.edu" <kjlu@umn.edu>,
         Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Wolfram Sang <wsa@kernel.org>
-References: <20200613150751.114595-1-marex@denx.de>
- <20200613150751.114595-2-marex@denx.de>
- <CAKfKVtFZnDv13CWJcSSP1tKmsG5P_Kn+RWQyFwdYh2dT6tfg_g@mail.gmail.com>
-From:   Marek Vasut <marex@denx.de>
-Message-ID: <c03c23d1-1caf-ad32-b69b-7576521aaa1d@denx.de>
-Date:   Wed, 17 Jun 2020 14:31:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
-MIME-Version: 1.0
-In-Reply-To: <CAKfKVtFZnDv13CWJcSSP1tKmsG5P_Kn+RWQyFwdYh2dT6tfg_g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+        Rob Herring <robh@kernel.org>,
+        Shubhrajyoti Datta <shubhraj@xilinx.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] i2c: xiic: Fix reference count leaks.
+Thread-Topic: [PATCH] i2c: xiic: Fix reference count leaks.
+Thread-Index: AQHWQiuTE76LjToEc02VHcgO+GXIWKjc4oTg
+Date:   Wed, 17 Jun 2020 14:30:31 +0000
+Message-ID: <8aa8ee3d005f4a7e9a4dfa6654cc2732@AcuMS.aculab.com>
+References: <20200613215923.2611-1-wu000273@umn.edu>
+ <20200614090950.GB2878@kunai>
+In-Reply-To: <20200614090950.GB2878@kunai>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 6/17/20 2:25 PM, Shubhrajyoti Datta wrote:
-> Hi Marek,
+From: Wolfram Sang
+> Sent: 14 June 2020 10:10
+> 
+> On Sat, Jun 13, 2020 at 04:59:23PM -0500, wu000273@umn.edu wrote:
+> > From: Qiushi Wu <wu000273@umn.edu>
+> >
+> > pm_runtime_get_sync() increments the runtime PM usage counter even
+> > when it returns an error code. Thus call pm_runtime_put_noidle()
+> > if pm_runtime_get_sync() fails.
+> 
+> Can you point me to a discussion where it was decided that this is a
+> proper fix? I'd think we rather should fix pm_runtime_get_sync() but
+> maybe there are technical reasons against it.
 
-Hi,
+Or, if there is one place that actually needs the reference split the
+code so that unusual case keeps the reference.
 
-> On Sat, Jun 13, 2020 at 8:39 PM Marek Vasut <marex@denx.de> wrote:
->>
->> The interrupt handler is missing locking when reading out registers
->> and is racing with other threads which might access the driver. Drop
->> it altogether, so that the threaded interrupt is always executed, as
->> that one is already serialized by the driver mutex. This also allows
->> dropping local_irq_save()/local_irq_restore() in xiic_start_recv().
->>
-> The idea of the local_irq_save / restore was to make it atomic in case
-> there are a lot
-> of non i2c interrupts.
+In one of the patches I also spotted:
+	ret = pm_runtime_get_sync();
+	if (ret < 0 && ret != _EAGAIN)
+		...
 
-Make what atomic ? Two consecutive register writes cannot be atomic
-unless there is some hardware way to do that. The XIIC has no such way.
+(I think it was EAGAIN.)
+I can't help feeling that is just wrong somewhere.
 
-> so it should still be needed right?
+	David
 
-No, if there is a mutex around both the threaded interrupt handler and
-this function, the register accesses will not be interleaved between the
-two functions. I think that is what this local_irq_*() was trying to
-prevent, right ?
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
