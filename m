@@ -2,125 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD171FC567
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Jun 2020 06:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90911FCC0F
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Jun 2020 13:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725894AbgFQEwW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 17 Jun 2020 00:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725769AbgFQEwV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 Jun 2020 00:52:21 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B78C061573;
-        Tue, 16 Jun 2020 21:52:21 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id a9so1201668ljn.6;
-        Tue, 16 Jun 2020 21:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+Osoj5ygLvNMxDa6TIcT1b6EKKm4cXZgXB/12o2ZCl0=;
-        b=lW2Iyg1ShW2LI+AsuHbi/kCBkrS+XBtLwwWUuqAI6nlrAv8PoSRdNmOXyQqwBhmZWM
-         4rKS0Uo7qEE9mnQVoB8iAom+H4xiqC25FdOQoYrphowG0/38/x7gBNDCDIOYf20KxT0E
-         AaBEqDBk4Ik7L2aTyF0CIEcNGfonBSNkMV4etQ/bK4IZil0qhEAWZ8TPMXw/sg6PD6vq
-         ac62iA6Ula3LnuWCunyZZv7sajXgGWDDp6uN6FnmePIWCNiYqMIzzuuALJ0AryDRkMVD
-         B8jo9zdr13nLnaVN0I3y8PIah9hyuUe/T+8JpdnW1jVA/mzCb07ch3zfz/zZ/fA6LgYb
-         3Ljw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+Osoj5ygLvNMxDa6TIcT1b6EKKm4cXZgXB/12o2ZCl0=;
-        b=FjaVit+kQ7UDB1x65WH7jGdYI1kluYA7eKd5MTIL/RXudLRN8CIrfz5axYxPKp09JW
-         2wnwfp7pIltM+dywXXMJRoDPxNoMPJh0gIyVS1BxCPXZgaaQi1TMKDCDJNWv7dluHf6o
-         5fL84nVRl/LRGKHnFtwePu5PSm7kEpFzlsGHIdich667gNwZR+IWBvSqUoPsJwL3oS5O
-         JNMb8n2N/YoDAYEt5Ny2CXB9XdmDIVF4qyZfQWG1Cx9wymFUoofGkVpnoTS6jRfQMuke
-         iBbTYqugoRnDGRc5uHz5BYrTFOn4iDF08hjqWjBbCs9QKh+cD/LVwMUX2mNkilYefydB
-         E1NA==
-X-Gm-Message-State: AOAM530Rs+yXb/RQ1XRYP0144QtEGPbq+/OT3Q2b2GbZYkqCOYP9nzOP
-        H0FbAbCQ6SPZzWuR3jMGypf9RMwJ
-X-Google-Smtp-Source: ABdhPJwf+Zpknbb8mRkR5GoEZZJ/z3KJOBdQT7rCwopnn394cbc1Qr8XMmuJmoQXw7uHYjLcBxrHpQ==
-X-Received: by 2002:a05:651c:338:: with SMTP id b24mr2838896ljp.87.1592369539402;
-        Tue, 16 Jun 2020 21:52:19 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
-        by smtp.googlemail.com with ESMTPSA id f2sm2021812lfc.11.2020.06.16.21.52.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2020 21:52:18 -0700 (PDT)
-Subject: Re: [RFC PATCH v2 04/18] i2c: tegra: Fix the error path in
- tegra_i2c_runtime_resume
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
-        hverkuil@xs4all.nl, sakari.ailus@iki.fi, robh+dt@kernel.org,
-        helen.koike@collabora.com
-Cc:     sboyd@kernel.org, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
- <1592358094-23459-5-git-send-email-skomatineni@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <f7997a48-eaec-839e-e0cd-cde718bd2e72@gmail.com>
-Date:   Wed, 17 Jun 2020 07:52:17 +0300
+        id S1726892AbgFQLRP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 17 Jun 2020 07:17:15 -0400
+Received: from mga03.intel.com ([134.134.136.65]:3305 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726271AbgFQLRN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 17 Jun 2020 07:17:13 -0400
+IronPort-SDR: 2cQ//fR0bK5LvEwzu1Raw+g02ODw0vSpQmj9Q3fmUMy8R2Zd/gmZ4Ip9wUN64OlkX6ELATDn0t
+ +3PvdgAnmD5g==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 04:17:12 -0700
+IronPort-SDR: ZwzoQh8XRnqvgl1o/juzdSHL1P1Do1ViuL+y4pfrxO0BdJvUCb9Td4XuqI2Hiz3Tx4kbSczD3a
+ d2OxDRAazCdg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,522,1583222400"; 
+   d="scan'208";a="261710413"
+Received: from mylly.fi.intel.com (HELO [10.237.72.153]) ([10.237.72.153])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Jun 2020 04:17:08 -0700
+Subject: Re: [PATCH v2] i2c: designware: Only check the first byte for SMBus
+ block read length
+To:     Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     aaron.ma@canonical.com, admin@kryma.net,
+        andriy.shevchenko@linux.intel.com, benjamin.tissoires@redhat.com,
+        hdegoede@redhat.com, hn.chen@weidahitech.com, jikos@kernel.org,
+        kai.heng.feng@canonical.com, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mika.westerberg@linux.intel.com, vicamo.yang@canonical.com,
+        wsa@kernel.org
+References: <9782f44e-4e01-4e5d-cc50-ab9e2219085c@linux.intel.com>
+ <20200616154328.2866-1-sultan@kerneltoast.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <791f22ae-e11a-047f-0a29-a9e27782b0fa@linux.intel.com>
+Date:   Wed, 17 Jun 2020 14:08:26 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <1592358094-23459-5-git-send-email-skomatineni@nvidia.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200616154328.2866-1-sultan@kerneltoast.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-17.06.2020 04:41, Sowjanya Komatineni пишет:
-> tegra_i2c_runtime_resume does not disable prior enabled clocks
-> properly.
+On 6/16/20 6:43 PM, Sultan Alsawaf wrote:
+> From: Sultan Alsawaf <sultan@kerneltoast.com>
 > 
-> This patch fixes it.
+> SMBus block reads can be broken because the read function will just skip
+> over bytes it doesn't like until reaching a byte that conforms to the
+> length restrictions for block reads. This is problematic when it isn't
+> known if the incoming payload is indeed a conforming block read.
 > 
-> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> According to the SMBus specification, block reads will only send the
+> payload length in the first byte, so we can fix this by only considering
+> the first byte in a sequence for block read length purposes.
+> 
+> Fixes: c3ae106050b9 ("i2c: designware: Implement support for SMBus block read and write")
+> Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
 > ---
->  drivers/i2c/busses/i2c-tegra.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
+>   drivers/i2c/busses/i2c-designware-master.c | 16 +++++++---------
+>   1 file changed, 7 insertions(+), 9 deletions(-)
 > 
-> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-> index 3be1018..1b459ca 100644
-> --- a/drivers/i2c/busses/i2c-tegra.c
-> +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -668,7 +668,7 @@ static int __maybe_unused tegra_i2c_runtime_resume(struct device *dev)
->  		ret = clk_enable(i2c_dev->slow_clk);
->  		if (ret < 0) {
->  			dev_err(dev, "failed to enable slow clock: %d\n", ret);
-> -			return ret;
-> +			goto disable_fast_clk;
->  		}
->  	}
->  
-> @@ -676,11 +676,16 @@ static int __maybe_unused tegra_i2c_runtime_resume(struct device *dev)
->  	if (ret < 0) {
->  		dev_err(i2c_dev->dev,
->  			"Enabling div clk failed, err %d\n", ret);
-> -		clk_disable(i2c_dev->fast_clk);
-> -		return ret;
-> +		goto disable_slow_clk;
->  	}
->  
->  	return 0;
-> +
-> +disable_slow_clk:
-> +	clk_disable(i2c_dev->slow_clk);
-> +disable_fast_clk:
-> +	clk_disable(i2c_dev->fast_clk);
-> +	return ret;
->  }
->  
->  static int __maybe_unused tegra_i2c_runtime_suspend(struct device *dev)
-> 
-
-This looks good to me. Could you please add an additional patch to
-remove all the other conditions of the clk enable/disable? The current
-code was already inconsistent because in most cases there are
-conditions, but not in all cases.
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
