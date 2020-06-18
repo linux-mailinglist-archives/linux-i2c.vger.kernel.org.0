@@ -2,35 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 823541FE8DB
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jun 2020 04:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338831FE60D
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jun 2020 04:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727978AbgFRBI4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 17 Jun 2020 21:08:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34928 "EHLO mail.kernel.org"
+        id S1732648AbgFRCak (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 17 Jun 2020 22:30:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46072 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727968AbgFRBIz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:08:55 -0400
+        id S1728640AbgFRBPp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:15:45 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3A29021D7E;
-        Thu, 18 Jun 2020 01:08:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6E69721D7D;
+        Thu, 18 Jun 2020 01:15:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442534;
-        bh=rs5tw5dIQlpsvjlC1Io34WSHTvkyHWjgZTfHxcbFBhc=;
+        s=default; t=1592442945;
+        bh=yAGnv5NF9mvvxUNTEYI6rE58f1spSCkxNZHtPu3k9a0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ivBDjBDbqy+4HGP/VbhO1Q95cGYsdVft8QnLO5zXVVvcLX8JnXQ3p29FwdP1o/Dcj
-         KSuIdwYwFuJG7VD2OyOyj4aw93V3Vz2Nx4uN5sdxSryzbLiL1w/NUcZHbWlnDMv4te
-         KOocuDFeUtpW1zqW0c6PO/8612N0dAyZIFIVXdSg=
+        b=Cu0zPtxq+H+gtMjvoCdlrlqjMBXHAKl9DrAoFXKYrGf4GxThLxMCkBkHbwAildDEm
+         dzkoYRvb5H2uEGTjBpCvzvr0+btAQeSkgE4b99wqO1btWVok9kwXCXi7PxXtLFf+kf
+         pU9hJkZsNI4KAmG0K5HP1zJT/thpwTP95fJJ9PuE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
+Cc:     Max Staudt <max@enpas.org>, kernel test robot <lkp@intel.com>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 037/388] i2c: pxa: clear all master action bits in i2c_pxa_stop_message()
-Date:   Wed, 17 Jun 2020 21:02:14 -0400
-Message-Id: <20200618010805.600873-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 355/388] i2c: icy: Fix build with CONFIG_AMIGA_PCMCIA=n
+Date:   Wed, 17 Jun 2020 21:07:32 -0400
+Message-Id: <20200618010805.600873-355-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
 References: <20200618010805.600873-1-sashal@kernel.org>
@@ -43,42 +43,36 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Russell King <rmk+kernel@armlinux.org.uk>
+From: Max Staudt <max@enpas.org>
 
-[ Upstream commit e81c979f4e071d516aa27cf5a0c3939da00dc1ca ]
+[ Upstream commit cdb555397f438592bab00599037c347b700cf397 ]
 
-If we timeout during a message transfer, the control register may
-contain bits that cause an action to be set. Read-modify-writing the
-register leaving these bits set may trigger the hardware to attempt
-one of these actions unintentionally.
+This has been found by the Kernel Test Robot:
+http://lkml.iu.edu/hypermail/linux/kernel/2006.0/06862.html
 
-Always clear these bits when cleaning up after a message or after
-a timeout.
+With CONFIG_AMIGA_PCMCIA=n, io_mm.h does not pull in amigahw.h and
+ZTWO_VADDR is undefined. Add forgotten include to i2c-icy.c
 
-Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+Fixes: 4768e90ecaec ("i2c: Add i2c-icy for I2C on m68k/Amiga")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Max Staudt <max@enpas.org>
 Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-pxa.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-icy.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/busses/i2c-pxa.c b/drivers/i2c/busses/i2c-pxa.c
-index 466e4f681d7a..30a6e07212a4 100644
---- a/drivers/i2c/busses/i2c-pxa.c
-+++ b/drivers/i2c/busses/i2c-pxa.c
-@@ -747,11 +747,9 @@ static inline void i2c_pxa_stop_message(struct pxa_i2c *i2c)
- {
- 	u32 icr;
+diff --git a/drivers/i2c/busses/i2c-icy.c b/drivers/i2c/busses/i2c-icy.c
+index 271470f4d8a9..66c9923fc766 100644
+--- a/drivers/i2c/busses/i2c-icy.c
++++ b/drivers/i2c/busses/i2c-icy.c
+@@ -43,6 +43,7 @@
+ #include <linux/i2c.h>
+ #include <linux/i2c-algo-pcf.h>
  
--	/*
--	 * Clear the STOP and ACK flags
--	 */
-+	/* Clear the START, STOP, ACK, TB and MA flags */
- 	icr = readl(_ICR(i2c));
--	icr &= ~(ICR_STOP | ICR_ACKNAK);
-+	icr &= ~(ICR_START | ICR_STOP | ICR_ACKNAK | ICR_TB | ICR_MA);
- 	writel(icr, _ICR(i2c));
- }
++#include <asm/amigahw.h>
+ #include <asm/amigaints.h>
+ #include <linux/zorro.h>
  
 -- 
 2.25.1
