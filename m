@@ -2,78 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 338831FE60D
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jun 2020 04:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6960F1FEE00
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jun 2020 10:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732648AbgFRCak (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 17 Jun 2020 22:30:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46072 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728640AbgFRBPp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:15:45 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6E69721D7D;
-        Thu, 18 Jun 2020 01:15:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442945;
-        bh=yAGnv5NF9mvvxUNTEYI6rE58f1spSCkxNZHtPu3k9a0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cu0zPtxq+H+gtMjvoCdlrlqjMBXHAKl9DrAoFXKYrGf4GxThLxMCkBkHbwAildDEm
-         dzkoYRvb5H2uEGTjBpCvzvr0+btAQeSkgE4b99wqO1btWVok9kwXCXi7PxXtLFf+kf
-         pU9hJkZsNI4KAmG0K5HP1zJT/thpwTP95fJJ9PuE=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Max Staudt <max@enpas.org>, kernel test robot <lkp@intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 355/388] i2c: icy: Fix build with CONFIG_AMIGA_PCMCIA=n
-Date:   Wed, 17 Jun 2020 21:07:32 -0400
-Message-Id: <20200618010805.600873-355-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
-References: <20200618010805.600873-1-sashal@kernel.org>
+        id S1728585AbgFRInb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 Jun 2020 04:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728706AbgFRIn2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Jun 2020 04:43:28 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F946C06174E
+        for <linux-i2c@vger.kernel.org>; Thu, 18 Jun 2020 01:43:26 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id r7so5154895wro.1
+        for <linux-i2c@vger.kernel.org>; Thu, 18 Jun 2020 01:43:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=brvq047GWmZAo17C69Xj/1QyaxG1QhV4W0ODi9tBfK0=;
+        b=um1VtIz1ojnFmyHyfDbAw2jjevGBCC8F6ig4HMD39gp1CU8SuAqgkEg2NNJrCMIlYg
+         bTAKUY8zbGgzauDwHSuE8FMLJXz9oHLaky+S7ULuR8DSp7FoHTWLzDQPK5n8NZIbN4HD
+         U8JaZFLsXXpirT5E6C+ILXnjHBr9vo2TrmvSuEMBXLRQAxUWwhbk4oqfcLy1zYEFtmNm
+         sCyz2jbHn0MVC4fgCQVF2/opm4xl0QIW4ZNfAaHTMk3abaiS0AMtJBqyMu6O8SCZonvR
+         LBC2yHgo9CMo2FitN56vSOJN12whYQmlZkS5w29LFRQdvc4D5SoIAou4DHoUI8kRUArn
+         FTww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=brvq047GWmZAo17C69Xj/1QyaxG1QhV4W0ODi9tBfK0=;
+        b=tzQ7eZKakBBHMEIfgNS9RZSWh87hoaLNMjBo53x3R/roTolr+cz2mCneeQmXQzuik3
+         nbEWbvMCV00zlXGabm/gavAOuKddkxsUACOad05zwgqrnd1WXDj+0nX/8+MH3qOZnBMe
+         cTs+Sq4u1qjUIiJuh4eenpa+6wJFDz3Zt1pL1YZ8TyPgg0lzPUysVFNnFXnwkHlWcvMk
+         6JAocktKdFhxsIk8xdaTsKebLEZmNz7Mu2QBXvFQ9tG8IUfdZWhTuZDTkiFD2i3bpocd
+         gagVyPZ+JV3VBxS4lHWLyw17004z0sTiCZkBGyfOuw5Eocr4SsEKHLjtpLqEAfbC0FV7
+         kH4g==
+X-Gm-Message-State: AOAM532mMlb4mCh9zGZjeKIsGuUBN1sdrpyQaF8ZyNc930nnDrEKFSQK
+        8XjZZ4KIZNPa6eDtnX6IbY0MLQ==
+X-Google-Smtp-Source: ABdhPJzmV6kItaKJaH4rcxOjvDp5gt/F5ZQIJ2li/nrZlhjEurHChGdTsVGmEdRqHfl2f10IQgFFOQ==
+X-Received: by 2002:a5d:5084:: with SMTP id a4mr3499044wrt.416.1592469805280;
+        Thu, 18 Jun 2020 01:43:25 -0700 (PDT)
+Received: from dell ([95.149.164.118])
+        by smtp.gmail.com with ESMTPSA id e12sm2656213wro.52.2020.06.18.01.43.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2020 01:43:24 -0700 (PDT)
+Date:   Thu, 18 Jun 2020 09:43:23 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] video: backlight: tosa_lcd: convert to use
+ i2c_new_client_device()
+Message-ID: <20200618084323.GB954398@dell>
+References: <20200615075816.2848-1-wsa+renesas@sang-engineering.com>
+ <20200615075816.2848-5-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200615075816.2848-5-wsa+renesas@sang-engineering.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Max Staudt <max@enpas.org>
+On Mon, 15 Jun 2020, Wolfram Sang wrote:
 
-[ Upstream commit cdb555397f438592bab00599037c347b700cf397 ]
+> Move away from the deprecated API and return the shiny new ERRPTR where
+> useful.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+> ---
+> 
+> I'd like to push it via I2C for 5.8-rc2.
 
-This has been found by the Kernel Test Robot:
-http://lkml.iu.edu/hypermail/linux/kernel/2006.0/06862.html
+Go for it:
 
-With CONFIG_AMIGA_PCMCIA=n, io_mm.h does not pull in amigahw.h and
-ZTWO_VADDR is undefined. Add forgotten include to i2c-icy.c
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
-Fixes: 4768e90ecaec ("i2c: Add i2c-icy for I2C on m68k/Amiga")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Max Staudt <max@enpas.org>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-icy.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/i2c/busses/i2c-icy.c b/drivers/i2c/busses/i2c-icy.c
-index 271470f4d8a9..66c9923fc766 100644
---- a/drivers/i2c/busses/i2c-icy.c
-+++ b/drivers/i2c/busses/i2c-icy.c
-@@ -43,6 +43,7 @@
- #include <linux/i2c.h>
- #include <linux/i2c-algo-pcf.h>
- 
-+#include <asm/amigahw.h>
- #include <asm/amigaints.h>
- #include <linux/zorro.h>
- 
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
