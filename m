@@ -2,76 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE934200992
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jun 2020 15:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96DD20099A
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jun 2020 15:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725806AbgFSNK3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 Jun 2020 09:10:29 -0400
-Received: from sauhun.de ([88.99.104.3]:57106 "EHLO pokefinder.org"
+        id S1731831AbgFSNLb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Jun 2020 09:11:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41084 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725974AbgFSNK3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 19 Jun 2020 09:10:29 -0400
+        id S1731398AbgFSNLa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 19 Jun 2020 09:11:30 -0400
 Received: from localhost (router.4pisysteme.de [80.79.225.122])
-        by pokefinder.org (Postfix) with ESMTPSA id 94BD22C205E;
-        Fri, 19 Jun 2020 15:10:26 +0200 (CEST)
-Date:   Fri, 19 Jun 2020 15:10:26 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Loic Poulain <loic.poulain@linaro.org>
-Cc:     linux-i2c@vger.kernel.org, robert.foss@linaro.org
-Subject: Re: [PATCH v2] MAINTAINERS: Add robert and myself as qcom i2c cci
- maintainers
-Message-ID: <20200619131026.GA20493@kunai>
-References: <1592561864-6406-1-git-send-email-loic.poulain@linaro.org>
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4873F208C7;
+        Fri, 19 Jun 2020 13:11:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592572289;
+        bh=uYA3rCg5+KAk7BcZzv3tlB7O/8qXjcCy1uR9kVvVMsI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gALEAaxJNuOd1l8j1GvK6rpud+0edq4owOPrtXQhZ8ec7W+djOiI0RJid4I3VVmfd
+         km+NDBTPqOJRhAYWfqnCuHvLMtDV+0onnzKa3iQAfe47pEamAkuLj3dxhLVYrb7mH+
+         gDsWuzTwf50uPkSvPh68wzzT0WBh6O/Se9Zdp6ko=
+Date:   Fri, 19 Jun 2020 15:11:27 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Keyur Patel <iamkeyur96@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: smbus: Fix spelling mistake in the comments
+Message-ID: <20200619131127.GB20493@kunai>
+References: <20200612212635.177380-1-iamkeyur96@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u3/rZRmxL6MmkK24"
+        protocol="application/pgp-signature"; boundary="kXdP64Ggrk/fb43R"
 Content-Disposition: inline
-In-Reply-To: <1592561864-6406-1-git-send-email-loic.poulain@linaro.org>
+In-Reply-To: <20200612212635.177380-1-iamkeyur96@gmail.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---u3/rZRmxL6MmkK24
+--kXdP64Ggrk/fb43R
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 19, 2020 at 12:17:44PM +0200, Loic Poulain wrote:
-> Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
-
-Was there a difference between V1 and V2?
-
-Fixed this checkpatch warning:
-
-WARNING: Misordered MAINTAINERS entry - list file patterns in alphabetic order
-#22: FILE: MAINTAINERS:14033:
-+F:	drivers/i2c/busses/i2c-qcom-cci.c
-+F:	Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
-
-But mainly: thanks for stepping up!
+On Fri, Jun 12, 2020 at 05:26:35PM -0400, Keyur Patel wrote:
+> Fix spelling mistake in the comments with help of `codespell`.
+> seperate =3D=3D> separate
+>=20
+> Signed-off-by: Keyur Patel <iamkeyur96@gmail.com>
 
 Applied to for-current, thanks!
 
 
---u3/rZRmxL6MmkK24
+--kXdP64Ggrk/fb43R
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7suT4ACgkQFA3kzBSg
-KbY4aw/+KqtTvB+Rf8v7GjuB4TvsVBdD14QFXLD4dKN138iTvLeFvHcB/rD7enmv
-GBMgCRbR1a7u9qrY0RFzNz5RxJuvnW3mLuxGkEheEVoBU2w/ajt2bctdGHF1oHsb
-kVMo+tQT7uuj+/UnkZS5b9trB63b7YJsP4uMqQbNIx1ZabV+EZykOlJvh3xqjMN6
-uss3bJYPFus4Y08spY9MGhyDEE/wO/e9AkDuOg6hwsRH4tHNExiPkxj/Z44wiChR
-xNDChqIJ+kvmWBVXKwFwRRTMaWdIFpC4I5RI761kDw6hGpBUOg0C5gx7XXy+uWXr
-yFvJXkKCwSmUxK1WTassC2N3tPKOAEI9FTTmpRZUt2FMGMBRvx5V6Oc2Ce0arNj5
-hgS9wOQqZa4gPemDIo+RgY9ffCbRmndzl8MJfrmeq2I/Gg8ESDJURUoJ2QX1Cno9
-CpccDh3KqGH0i5Koayz5eebm4XrLQ2JrpnwcZ/jPxPBPIGt/jj9bm8sha21dv9Iv
-6cyh9VoOXLNs+kxYKgszdjOyu1Lk5xeIaZXvV5nCdKPAZbFQtUT3esNjRDze33nc
-Mo6Su7mL+Q2ABo5YNhe16UX8jWw8LWE5fpVMnj20JaU93owfPUF07TQ5ULj8xAdg
-KizumEgFM8KqF4fRQDqiSRvcCHz99+v7dDPfR2Bj0NqHBEEJCCA=
-=ccnZ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7suX8ACgkQFA3kzBSg
+KbZMow//QrAUyYtZt966AADiXMlz1BwIUmutWwUkHzeo6Pg95/JFswwdGSJs3trl
+4KHsBPam0AYHWb94Lj4RTMtgVPAWBt4G7cg7L24+lE7H0rgPPt+JUZqPsOR+6/mn
+IYDxgKEeNcfZb0Lp1ewWIubBgiXiCpCfXi78HNpvQ9Fm8DO1lmIfHnT7aTfXpCQu
+t99HMSzv6lZthOdQDBVgudDWqPZhQd7YwrCVumznXqLyHZxmR77lp1VJwMqIzi98
+tkNWmSju0dyI4jMNEpLYJipggGpjCa+rOt1BcnWlcQb2Y2KBqy8OSvzBFjPYCvFS
+5qGBsyEY5a0FSmb/+iGC0mpnZ/ywBxYaJoZPf2m8ZmRk0bK6JHPD03sLlnt+l4/g
+MkvtAM3L6zQ5DLNGNHBlEDGtvwUsB7RiDzW0SlDTiaKs3gb7uAEsnKVep0ADSIoD
+V2WkM4ZlbLPwSShH64yDgUDbUcXKJHLJ/r+39HkLPG4TvAUFSSKV9agOoDHRZ21G
+zSfWlS7jmDg6UPBzmKnNTy+S/UcyoaNGblIPlnMhsI1/shZGFIcDje5G9wg1yBjo
++4ZpOXgNRHlghOPsf4x4PmUUqEeOACHG08/nyYir6g03+XF/M5K8TvqWIYHDk/5l
+F4zwIo+0fHpVmzpVuql1W4D4tRY4hQL8Tx+cz1sapaopdF6gCvA=
+=LjOq
 -----END PGP SIGNATURE-----
 
---u3/rZRmxL6MmkK24--
+--kXdP64Ggrk/fb43R--
