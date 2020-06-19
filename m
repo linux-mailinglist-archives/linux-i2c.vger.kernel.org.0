@@ -2,209 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C98181FF963
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jun 2020 18:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2615C20029F
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jun 2020 09:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728449AbgFRQjh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Jun 2020 12:39:37 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:33093 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727114AbgFRQjh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Jun 2020 12:39:37 -0400
-Received: by mail-oi1-f195.google.com with SMTP id i74so5670786oib.0;
-        Thu, 18 Jun 2020 09:39:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2S2OZsPCKAM4csibK9QSj1TPoAyTBhXpQ95zpmfcEi0=;
-        b=OalT2aZmo0/bxDSmypDtmVwKJ2mjG378o0fpshr5j0a8pYln2ll/oPDZb3Wwrgkpds
-         x7FbRZbXpH55TiXYaD0sRRLsjwMs4SwFOatqMibd09O3Q5X4z9IZ5o4SvjDccJHv4ORs
-         QlEnwq6S0eJQb1WVL7To8N52xMh5+kG4zk6ejO3G8zwHY0lSFjOLyDuxiw27adOh1PYw
-         F7advU/W2dL8c8jHSJObcMK/CFRe+M/xpG9RL8zsz8FsnOP+LaPPjem6J3wv5NSkeBri
-         e75XMhii7aSrydXe2g6L6rMCZdEPhNVcdt+FpIUMKNCN6WyphrvMPMtrGIyPlkgzzrQL
-         NrkQ==
-X-Gm-Message-State: AOAM532pXpcD2OIj6lkfMEwcl6w5It+2CsgHwYf5Zkem3UcLGZ1Yiz4a
-        1149EBOE0MmcsMaCBpiFg48GiLPgLLVyUdNGo/W9cpl4
-X-Google-Smtp-Source: ABdhPJyrx3TL7d2g8wmfUN5NWtmPOZ2+pa1l0G3G0sM+8K7G9UStCQmNxxi/WBQcsWwJ+WxSYd6q3FmkJjmnmxxEfOc=
-X-Received: by 2002:aca:1a19:: with SMTP id a25mr3732279oia.54.1592498374464;
- Thu, 18 Jun 2020 09:39:34 -0700 (PDT)
+        id S1730342AbgFSHVY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Jun 2020 03:21:24 -0400
+Received: from www.zeus03.de ([194.117.254.33]:34386 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730104AbgFSHVY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 19 Jun 2020 03:21:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=Tx1HKfhcOXw7ejBWKidFnCtFoaUu
+        r9y0RAg5uUGEalE=; b=OrBsnhQJjJUlLKpVyJLvgJDRgFo6cVeSKwNw5whAk1AS
+        duWZ4NZ9Ch+3QWEsGdZREuHzzRqPWAfkp64Av2jnS/dA2KVd6SzqUUm7NBVOyIVj
+        GkNDuReFg/5jGv2PZfkYPbR8qhANBWxMzw9SkNK6sXj38epcHqUXGxog472xQc8=
+Received: (qmail 2435058 invoked from network); 19 Jun 2020 09:21:20 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Jun 2020 09:21:20 +0200
+X-UD-Smtp-Session: l3s3148p1@FpZVvWqoYMdQT+F6
+Date:   Fri, 19 Jun 2020 09:21:19 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 0/6] remove deprecated i2c_new_device API
+Message-ID: <20200619072119.GB1705@kunai>
+References: <20200615075816.2848-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-References: <20200618150532.2923-1-uli+renesas@fpond.eu>
-In-Reply-To: <20200618150532.2923-1-uli+renesas@fpond.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 18 Jun 2020 18:39:23 +0200
-Message-ID: <CAMuHMdUE4v+8Dz+eowX5RNJuRGmXcFuYQCe7JQxrFXEQV3xKJA@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: sh_mobile: implement atomic transfers
-To:     Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LpQ9ahxlCli8rRTG"
+Content-Disposition: inline
+In-Reply-To: <20200615075816.2848-1-wsa+renesas@sang-engineering.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Uli,
 
-On Thu, Jun 18, 2020 at 5:05 PM Ulrich Hecht <uli+renesas@fpond.eu> wrote:
-> Implements atomic transfers to fix reboot/shutdown on r8a7790 Lager and
-> similar boards.
->
-> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
-> Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+--LpQ9ahxlCli8rRTG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your patch!
+On Mon, Jun 15, 2020 at 09:58:09AM +0200, Wolfram Sang wrote:
+> I want to remove the above API this cycle, and just a few patches have
+> not made it into 5.8-rc1. They have been reviewed and most had been
+> promised to get into linux-next, but well, things happen. So, I hope it
+> is okay for everyone to collect them like this and push them via I2C for
+> 5.8-rc2.
+>=20
+> One minor exception is the media documentation patch which I simply have
+> missed so far, but it is trivial.
+>=20
+> And then, finally, there is the removal of the old API as the final
+> patch. Phew, that's been a long ride.
+>=20
+> I am open for comments, of course.
 
-> --- a/drivers/i2c/busses/i2c-sh_mobile.c
-> +++ b/drivers/i2c/busses/i2c-sh_mobile.c
+Applied to for-current, thanks!
 
-> @@ -581,12 +585,14 @@ static void start_ch(struct sh_mobile_i2c_data *pd, struct i2c_msg *usr_msg,
->         pd->pos = -1;
->         pd->sr = 0;
->
 
-    if (pd->atomic_xfer)
-            return;
+--LpQ9ahxlCli8rRTG
+Content-Type: application/pgp-signature; name="signature.asc"
 
-and be done with it?
+-----BEGIN PGP SIGNATURE-----
 
-> -       pd->dma_buf = i2c_get_dma_safe_msg_buf(pd->msg, 8);
-> -       if (pd->dma_buf)
-> -               sh_mobile_i2c_xfer_dma(pd);
-> -
-> -       /* Enable all interrupts to begin with */
-> -       iic_wr(pd, ICIC, ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE);
-> +       if (!pd->atomic_xfer) {
-> +               pd->dma_buf = i2c_get_dma_safe_msg_buf(pd->msg, 8);
-> +               if (pd->dma_buf)
-> +                       sh_mobile_i2c_xfer_dma(pd);
-> +               /* Enable all interrupts to begin with */
-> +               iic_wr(pd, ICIC,
-> +                      ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE);
-> +       }
->  }
->
->  static int poll_dte(struct sh_mobile_i2c_data *pd)
-> @@ -637,15 +643,13 @@ static int poll_busy(struct sh_mobile_i2c_data *pd)
->         return i ? 0 : -ETIMEDOUT;
->  }
->
-> -static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
-> -                             struct i2c_msg *msgs,
-> -                             int num)
-> +static int sh_mobile_xfer(struct sh_mobile_i2c_data *pd,
-> +                        struct i2c_msg *msgs, int num)
->  {
-> -       struct sh_mobile_i2c_data *pd = i2c_get_adapdata(adapter);
->         struct i2c_msg  *msg;
->         int err = 0;
->         int i;
-> -       long timeout;
-> +       long time_left;
->
->         /* Wake up device and enable clock */
->         pm_runtime_get_sync(pd->dev);
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7sZ2sACgkQFA3kzBSg
+KbZVtBAAjxj8/yCiqHPP8gPXOpd8hStQqYaqlvw6NW5ddjUNy8nDaA/ztSbvpdDv
+RKtamlqk9b6JKoOgP0Fxe6xQfysX5qdg9DOKGlAS+atbNTQNydlCovfYbUARyJtz
+RoiP0jzxCquuoLcSWAtGWzBhG350v33bysM+zVe4yakWp2ILF8Y1y5l+7/tgXFZB
+HbVGxYihsGm76WPlXRRACWrKB1HsieEPVUXDCzG9BLMicuy1Ly7en7UdhkiJnzpz
++Pk1OVCXpDHoKewKv2uK8sbf+TSy9hdesPCO40TZC1Oe1hB2fJGPOV3XsR0CZ7iS
+mC7vRPd3rNw62m4zMDxIX0Le5QlCQCpwiW8uSNj7IuadxM5p34b2J6cqTeQBEz5K
+y33mJTVybc2yClSvrFDnXNj1Zagz1M4vMVpDLGTBX45rzxmShlzl2inG9hVZblw8
+EMSYAefZUHfgc7HptbdTQsTQkjlS1Q5wg9lHXWXGdtFE/oEhOV/DGQOLQwlBH6jD
+shVnrzLQcr7mUgJCq2+x8dTs73TnupyVCcRIDh2iTXPmd6UGByIAUN5yTC5GkUIf
+wmtRQyJfYHNEvtdFC+jehCarVj0zO0JmzDX434FUDJMFvXa9a2vqJLORds5ASJl7
+3K+Xupy+eSX6trVDd7StjIQYraYbn2rFko60famD5ePLbfpGuDE=
+=kh1x
+-----END PGP SIGNATURE-----
 
-pm_runtime_get_sync() is a wrapper around __pm_runtime_resume(), which
-does:
-
-        might_sleep_if(!(rpmflags & RPM_ASYNC) && !dev->power.irq_safe &&
-                        dev->power.runtime_status != RPM_ACTIVE);
-
-So if the device is not active (it is not), the might_sleep() is
-triggered, and I expect a BUG splat.
-However, with CONFIG_DEBUG_ATOMIC_SLEEP disabled (I disabled it on
-koelsch, as it increases kernel size beyond the bootloader limit),
-might_sleep() is a no-op, so nothing happens.
-After enabling it (and disabling drm and media), still nothing...
-
-It turns out ___might_sleep() does:
-
-    if ((preempt_count_equals(preempt_offset) && !irqs_disabled() &&
-         !is_idle_task(current) && !current->non_block_count) ||
-        system_state == SYSTEM_BOOTING || system_state > SYSTEM_RUNNING ||
-        oops_in_progress)
-            return;
-
-and as per:
-
-    static inline bool i2c_in_atomic_xfer_mode(void)
-    {
-            return system_state > SYSTEM_RUNNING && irqs_disabled();
-    }
-
-system_state > SYSTEM_RUNNING, and ___might_sleep() just ignores any
-issues. Oops...
-After removing that check, it starts complaining:
-
-    BUG: sleeping function called from invalid context at
-kernel/locking/mutex.c:281
-    in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 1, name:
-systemd-shutdow
-
-In general, pm_runtime_get_sync() is not safe to call from atomic
-context.
-For Renesas SoCs, I think both the power and clock domains are safe, as
-the respective drivers don't sleep.  The PM core might, though.
-
-> @@ -662,15 +666,35 @@ static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
->                 if (do_start)
->                         i2c_op(pd, OP_START);
->
-> -               /* The interrupt handler takes care of the rest... */
-> -               timeout = wait_event_timeout(pd->wait,
-> -                                      pd->sr & (ICSR_TACK | SW_DONE),
-> -                                      adapter->timeout);
-> +               if (pd->atomic_xfer) {
-> +                       unsigned long j = jiffies + pd->adap.timeout;
-> +
-> +                       time_left = time_before_eq(jiffies, j);
-> +                       while (time_left &&
-
-Who's updating time_left?
-
-> +                              !(pd->sr & (ICSR_TACK | SW_DONE))) {
-> +                               unsigned char sr = iic_rd(pd, ICSR);
-> +
-> +                               if (sr & (ICSR_AL   | ICSR_TACK |
-> +                                         ICSR_WAIT | ICSR_DTE)) {
-> +                                       sh_mobile_i2c_isr(0, pd);
-> +                                       udelay(150);
-> +                               } else {
-> +                                       cpu_relax();
-> +                               }
-> +                       }
-> +               } else {
-> +                       /* The interrupt handler takes care of the rest... */
-> +                       time_left = wait_event_timeout(pd->wait,
-> +                                       pd->sr & (ICSR_TACK | SW_DONE),
-> +                                       pd->adap.timeout);
-> +
-> +                       /* 'stop_after_dma' tells if DMA xfer was complete */
-> +                       i2c_put_dma_safe_msg_buf(pd->dma_buf, pd->msg,
-> +                                                pd->stop_after_dma);
->
-> -               /* 'stop_after_dma' tells if DMA transfer was complete */
-> -               i2c_put_dma_safe_msg_buf(pd->dma_buf, pd->msg, pd->stop_after_dma);
-> +               }
->
-> -               if (!timeout) {
-> +               if (!time_left) {
->                         dev_err(pd->dev, "Transfer request timed out\n");
->                         if (pd->dma_direction != DMA_NONE)
->                                 sh_mobile_i2c_cleanup_dma(pd);
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--LpQ9ahxlCli8rRTG--
