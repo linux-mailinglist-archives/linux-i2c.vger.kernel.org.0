@@ -2,65 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A3A202364
-	for <lists+linux-i2c@lfdr.de>; Sat, 20 Jun 2020 13:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFF5202590
+	for <lists+linux-i2c@lfdr.de>; Sat, 20 Jun 2020 19:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728051AbgFTLo2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 20 Jun 2020 07:44:28 -0400
-Received: from rdslmr.btconnect.com ([62.239.164.79]:50937 "EHLO
-        mail.btconnect.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728046AbgFTLo1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 20 Jun 2020 07:44:27 -0400
-X-Greylist: delayed 449 seconds by postgrey-1.27 at vger.kernel.org; Sat, 20 Jun 2020 07:44:14 EDT
-Received: from mail.btconnect.com (rd11780omr11.iuser.iroot.adidom.com [10.187.89.172])
-        by rd11780slr11.dci.bt.com (MOS 4.4.8-GA)
-        with ESMTP id ARU41794;
-        Sat, 20 Jun 2020 12:36:02 +0100
-Received: (from localhost [127.0.0.1])
-        by rd11780omr11.dci.bt.com (MOS 4.4.8-GA)
-        id OQZ44616;
-        Sat, 20 Jun 2020 12:36:02 +0100 (BST)
-Received: from 156.96.58.242 (EHLO User) ([156.96.58.242])
-        by rd11780omr11.dci.bt.com
-        with ESMTP id OQZ44291 (AUTH IAN.ACFGROUP);
-        Sat, 20 Jun 2020 12:35:59 +0100 (BST)
-Reply-To: <mariaforlife2@gmail.com>
-From:   "Mrs Maria Talley" <IAN.ACFGROUP@btconnect.com>
-Subject: May the Peace of the Lord be with you
-Date:   Sat, 20 Jun 2020 07:35:56 -0400
+        id S1727808AbgFTRQa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 20 Jun 2020 13:16:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46150 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726838AbgFTRQa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 20 Jun 2020 13:16:30 -0400
+Received: from localhost (router.4pisysteme.de [80.79.225.122])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF04222B2B;
+        Sat, 20 Jun 2020 17:16:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592673389;
+        bh=zbplmaCf3az+f6f2Jeh+YVePiNjF3AjtIdUa5LQ1o9Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BSkLiv8IKNwx4NWopyCN0hYF0VFJhyRHUMaOP5TpJRquYNvPyUVpzUMfyv4fIlUgj
+         7ROjWQzY9edJujwXbkl7hH6KRf5uqqxqoYLVYxM7e22XZHqgT5tkF5aHKH0g7tkmLW
+         FH8+ijHHtzwplN/agdOSjUGQC369GROP70HZNsaI=
+Date:   Sat, 20 Jun 2020 19:16:24 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for 5.8
+Message-ID: <20200620171624.GA9805@kunai>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <202006201135.OQZ44291@rd11780omr11.dci.bt.com>
-X-Mirapoint-IP-Reputation: reputation=Bad-1,
-        source=Queried,
-        refid=tid=0001.0A782F92.5EEDF402.0007,
-        actions=TAG
-X-Junkmail: UCE(50)
-X-Junkmail-Status: score=50/50, host=rd11780omr11.dci.bt.com
-X-Junkmail-Signature-Raw: score=bulk(0),
-        refid=str=0001.0A782F23.5EEDF289.001F,ss=3,sh,re=0.000,recu=0.000,reip=0.000,cl=3,cld=1,fgs=0,
-        ip=156.96.58.242,
-        so=2016-11-06 16:00:04,
-        dmn=2013-03-21 17:37:32,
-        mode=multiengine
-X-Junkmail-IWF: false
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y0ulUmNC+osPPQO6"
+Content-Disposition: inline
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-May the Peace of the Lord be with you!
 
-Please this is an urgent solicitation for assistance, I'm Mrs Maria Talley from United States of America, but I lived in London for many years. I am 54 years old. I was diagnosed of cancer for about 2 years ago. This letter comes from a devastated, sorrowful and emotional laden soul that needs compassion from a kind and conscience driven person. I need someone who has a sincere compassionate heart of international humanitarian charity. There is some properties left by my late husband, which I sold, because the doctor had diagnosed me that I am in my last days, that I can not live anymore longer, so I have to sale all those properties that was left by my late husband.
+--y0ulUmNC+osPPQO6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I have deposited the sum of $9.5 Million in a Bank in United States of America, which I sold from my properties and deposited it in New York City Bank in America. I want you to help me use this funds to help the less privilege, the motherless baby homes and hospitals in your country before I die. I want you to take 40 percent of the total money for your personal use, while 60% of the money will go to charity. I will appreciate your utmost confidentiality and trust in this matter to accomplish my heart desire, as I don't want anything that will jeopardize my last wish. If you are a good and honest person write back to me for more.
+Linus,
 
-Thanks and God bless you,
-Mrs Maria Talley
+I2C has for rc2:
+
+- a small collection of remaining API conversion patches (all acked)
+  which allow to finally remove the deprecated API
+- some documentation fixes and a MAINTAINERS addition
+
+Please pull.
+
+Thanks,
+
+   Wolfram
+
+
+The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
+
+  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+for you to fetch changes up to 28f9f8fb4f405ade488058f817b6cbd108e45e4e:
+
+  MAINTAINERS: Add robert and myself as qcom i2c cci maintainers (2020-06-19 15:07:00 +0200)
+
+----------------------------------------------------------------
+Daniel Schaefer (1):
+      Documentation/i2c: SMBus start signal is S not A
+
+Keyur Patel (1):
+      i2c: smbus: Fix spelling mistake in the comments
+
+Loic Poulain (1):
+      MAINTAINERS: Add robert and myself as qcom i2c cci maintainers
+
+Wolfram Sang (6):
+      drm: encoder_slave: fix refcouting error for modules
+      drm: encoder_slave: use new I2C API
+      x86/platform/intel-mid: convert to use i2c_new_client_device()
+      video: backlight: tosa_lcd: convert to use i2c_new_client_device()
+      Documentation: media: convert to use i2c_new_client_device()
+      i2c: remove deprecated i2c_new_device API
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      (Rev.) x86/platform/intel-mid: convert to use i2c_new_client_device()
+
+Daniel Thompson (1):
+      (Rev.) video: backlight: tosa_lcd: convert to use i2c_new_client_device()
+
+Emil Velikov (2):
+      (Rev.) drm: encoder_slave: use new I2C API
+      (Rev.) drm: encoder_slave: fix refcouting error for modules
+
+Mauro Carvalho Chehab (1):
+      (Rev.) Documentation: media: convert to use i2c_new_client_device()
+
+ Documentation/driver-api/media/v4l2-subdev.rst    |  2 +-
+ Documentation/i2c/smbus-protocol.rst              |  2 +-
+ Documentation/userspace-api/media/conf_nitpick.py |  2 +-
+ MAINTAINERS                                       |  9 ++++++++
+ arch/x86/platform/intel-mid/sfi.c                 |  4 ++--
+ drivers/gpu/drm/drm_encoder_slave.c               | 15 +++++---------
+ drivers/i2c/i2c-core-base.c                       | 25 -----------------------
+ drivers/i2c/i2c-core-smbus.c                      |  2 +-
+ drivers/video/backlight/tosa_lcd.c                |  4 ++--
+ include/linux/i2c.h                               |  8 +++-----
+ 10 files changed, 25 insertions(+), 48 deletions(-)
+
+--y0ulUmNC+osPPQO6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7uRGQACgkQFA3kzBSg
+Kba/sw/+KICcKVcOKJauUJqE1f8yccdPhyTOyEeVWDqq+bhOMrNcn51B45flcDNm
+jBkGe+SHGYxIExBAZq4kT5EEfkAaxEoUCxdyHLhu1F6oOudfP2o3c01q115rCqWy
+TiienA6mO4f/MdP4i+RPNZKLUpQJieoJ6hxfZtxT5RiiqVJcdGp0QAfbVhw97RFJ
+6UlVHrQzEMm+W4UXIaUpiiC0TBf7ih0mH7UeGvCMAG0mwHB8XV+W9SeJ3k6ke+kh
+yD5BALbTSsi0st3kHzrrhvk/Wr2uAlHQsyetWz32EUUNNqu8nxpAnPHyvHbisj7G
+QaI3v/rGSwKqw24XUDwVg0GEHyqIoMEZInDZSMOI16jZndFRS9n2Po6dpbNPSPey
+VoJ7olh2jMMx5B+4benEzN2YHd7vcHz3utaeIJgcOkDE2qSVVQjGwr0vZotdkf1x
+81qM4LubmOu/2O/QezpS9lviH5r2g+K4Fl9pZV7PHv3eleiYdNnrkCH6RSz9jjk6
+ooB4aji7CldwGFJ9cfsKgapCGjMu5loWg7n8OjnXLXuHnsIPu1ZsAe97ZSeB6V4A
+hF/eq/CWESVTgrWg5veySZMYUW//ZzLXiCJpwowGAGzK0H4aK1rwZhjMLz5gXpAM
+ESnI0KStQpKfdU60YwVHoBBz1ozdDKfj9OzwHyoGhuoR2xR6ebQ=
+=pbA3
+-----END PGP SIGNATURE-----
+
+--y0ulUmNC+osPPQO6--
