@@ -2,71 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB86202269
-	for <lists+linux-i2c@lfdr.de>; Sat, 20 Jun 2020 09:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A3A202364
+	for <lists+linux-i2c@lfdr.de>; Sat, 20 Jun 2020 13:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727070AbgFTHqA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 20 Jun 2020 03:46:00 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:24322 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725835AbgFTHqA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 20 Jun 2020 03:46:00 -0400
-X-UUID: 19be2c4aac3e441d903f9b1fd88945be-20200620
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=W396ifFNhTXMU6Ao6v2NVBlA5nufvq++IW1xtDsWqvQ=;
-        b=NcR1VWYdt4U4MAXZYbeRRoWiLb4MntYhpBpLtk4Yg6n6wzwMy2mwK0Au/1dKZ3E8FwpTipD4NKbGJLFP9msIeQK8ensWbybephjRq3XUhlrT6EEQXrwfRFx41nrjBSqPl0MyXaTjRXcpBuZGujVzH3sm+cGsEFN1PPvtAQ6MB4Y=;
-X-UUID: 19be2c4aac3e441d903f9b1fd88945be-20200620
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <yingjoe.chen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1283702885; Sat, 20 Jun 2020 15:45:55 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 20 Jun 2020 15:45:53 +0800
-Received: from [172.21.77.4] (172.21.77.4) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 20 Jun 2020 15:45:52 +0800
-Message-ID: <1592639154.5529.3.camel@mtksdaap41>
-Subject: Re: [PATCH v2 2/2] i2c: mediatek: Add i2c ac-timing adjust support
-From:   Yingjoe Chen <yingjoe.chen@mediatek.com>
-To:     Qii Wang <qii.wang@mediatek.com>
-CC:     <wsa@the-dreams.de>, <devicetree@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Sat, 20 Jun 2020 15:45:54 +0800
-In-Reply-To: <1589461844-15614-3-git-send-email-qii.wang@mediatek.com>
-References: <1589461844-15614-1-git-send-email-qii.wang@mediatek.com>
-         <1589461844-15614-3-git-send-email-qii.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1728051AbgFTLo2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 20 Jun 2020 07:44:28 -0400
+Received: from rdslmr.btconnect.com ([62.239.164.79]:50937 "EHLO
+        mail.btconnect.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728046AbgFTLo1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 20 Jun 2020 07:44:27 -0400
+X-Greylist: delayed 449 seconds by postgrey-1.27 at vger.kernel.org; Sat, 20 Jun 2020 07:44:14 EDT
+Received: from mail.btconnect.com (rd11780omr11.iuser.iroot.adidom.com [10.187.89.172])
+        by rd11780slr11.dci.bt.com (MOS 4.4.8-GA)
+        with ESMTP id ARU41794;
+        Sat, 20 Jun 2020 12:36:02 +0100
+Received: (from localhost [127.0.0.1])
+        by rd11780omr11.dci.bt.com (MOS 4.4.8-GA)
+        id OQZ44616;
+        Sat, 20 Jun 2020 12:36:02 +0100 (BST)
+Received: from 156.96.58.242 (EHLO User) ([156.96.58.242])
+        by rd11780omr11.dci.bt.com
+        with ESMTP id OQZ44291 (AUTH IAN.ACFGROUP);
+        Sat, 20 Jun 2020 12:35:59 +0100 (BST)
+Reply-To: <mariaforlife2@gmail.com>
+From:   "Mrs Maria Talley" <IAN.ACFGROUP@btconnect.com>
+Subject: May the Peace of the Lord be with you
+Date:   Sat, 20 Jun 2020 07:35:56 -0400
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <202006201135.OQZ44291@rd11780omr11.dci.bt.com>
+X-Mirapoint-IP-Reputation: reputation=Bad-1,
+        source=Queried,
+        refid=tid=0001.0A782F92.5EEDF402.0007,
+        actions=TAG
+X-Junkmail: UCE(50)
+X-Junkmail-Status: score=50/50, host=rd11780omr11.dci.bt.com
+X-Junkmail-Signature-Raw: score=bulk(0),
+        refid=str=0001.0A782F23.5EEDF289.001F,ss=3,sh,re=0.000,recu=0.000,reip=0.000,cl=3,cld=1,fgs=0,
+        ip=156.96.58.242,
+        so=2016-11-06 16:00:04,
+        dmn=2013-03-21 17:37:32,
+        mode=multiengine
+X-Junkmail-IWF: false
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQpTb3JyeSBmb3IgbGF0ZSByZXZpZXcuDQoNCg0KT24gVGh1LCAyMDIwLTA1LTE0IGF0IDIxOjA5
-ICswODAwLCBRaWkgV2FuZyB3cm90ZToNCj4gVGhpcyBwYXRjaCBhZGRzIGEgYWxnb3JpdGhtIHRv
-IGNhbGN1bGF0ZSBzb21lIGFjLXRpbWluZyBwYXJhbWV0ZXJzDQo+IHdoaWNoIGNhbiBmdWxseSBt
-ZWV0IEkyQyBTcGVjLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogUWlpIFdhbmcgPHFpaS53YW5nQG1l
-ZGlhdGVrLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jIHwg
-MzI4ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0NCj4gIDEgZmlsZSBj
-aGFuZ2VkLCAyNzcgaW5zZXJ0aW9ucygrKSwgNTEgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYyBiL2RyaXZlcnMvaTJjL2J1c3Nl
-cy9pMmMtbXQ2NXh4LmMNCj4gaW5kZXggMGNhNmMzOGEuLjcwMjA2MTggMTAwNjQ0DQo+IC0tLSBh
-L2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXQ2NXh4LmMNCj4gKysrIGIvZHJpdmVycy9pMmMvYnVz
-c2VzL2kyYy1tdDY1eHguYw0KDQo8Li4uPg0KDQo+IEBAIC05NDgsOSArMTE3Nyw2IEBAIHN0YXRp
-YyBpbnQgbXRrX2kyY19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgCWlm
-IChyZXQpDQo+ICAJCXJldHVybiAtRUlOVkFMOw0KPiAgDQo+IC0JaWYgKGkyYy0+ZGV2X2NvbXAt
-PnRpbWluZ19hZGp1c3QpDQo+IC0JCWkyYy0+Y2xrX3NyY19kaXYgKj0gSTJDX0RFRkFVTFRfQ0xL
-X0RJVjsNCj4gLQ0KDQpBZnRlciB0aGlzIHBhdGNoLCB0aGUgJ2Nsb2NrLWRpdicgcHJvcGVydHkg
-aW4gZGV2aWNlIHRyZWUgaXMgbm8gbG9uZ2VyDQp1c2VkIGZvciBwbGF0Zm9ybSB3aXRoIHRpbWlu
-Z19hZGp1c3QgYWJpbGl0eS4NClBsZWFzZSBjaGFuZ2UgdGhlIGJpbmRpbmcsIHNvIHdlIGRvbid0
-IG5lZWQgdG8gcHJvdmlkZSAnY2xvY2stZGl2JyBmb3INCnRoZXNlIHBsYXRmb3JtLg0KDQpKb2Uu
-Qw0KDQo+ICAJaWYgKGkyYy0+aGF2ZV9wbWljICYmICFpMmMtPmRldl9jb21wLT5wbWljX2kyYykN
-Cj4gIAkJcmV0dXJuIC1FSU5WQUw7DQo+ICANCg0K
+May the Peace of the Lord be with you!
 
+Please this is an urgent solicitation for assistance, I'm Mrs Maria Talley from United States of America, but I lived in London for many years. I am 54 years old. I was diagnosed of cancer for about 2 years ago. This letter comes from a devastated, sorrowful and emotional laden soul that needs compassion from a kind and conscience driven person. I need someone who has a sincere compassionate heart of international humanitarian charity. There is some properties left by my late husband, which I sold, because the doctor had diagnosed me that I am in my last days, that I can not live anymore longer, so I have to sale all those properties that was left by my late husband.
+
+I have deposited the sum of $9.5 Million in a Bank in United States of America, which I sold from my properties and deposited it in New York City Bank in America. I want you to help me use this funds to help the less privilege, the motherless baby homes and hospitals in your country before I die. I want you to take 40 percent of the total money for your personal use, while 60% of the money will go to charity. I will appreciate your utmost confidentiality and trust in this matter to accomplish my heart desire, as I don't want anything that will jeopardize my last wish. If you are a good and honest person write back to me for more.
+
+Thanks and God bless you,
+Mrs Maria Talley
