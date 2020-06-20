@@ -2,177 +2,136 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECFCE200B49
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jun 2020 16:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B618201F92
+	for <lists+linux-i2c@lfdr.de>; Sat, 20 Jun 2020 03:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726516AbgFSOWA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 Jun 2020 10:22:00 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:61286 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725974AbgFSOV7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Jun 2020 10:21:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1592576518; x=1624112518;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PKnFoxqQrAiroEcrPnCd5Y5Np27cClJYN9tqUhIZ/Xg=;
-  b=g6pABK2bTmeUGYQioMYvtnpOcijPerN1f9fQS0CZ0AWHb9V8iw2W64Rl
-   1kStikK+l9a9Xpc8c/MI3sm1BDafqYOiwMlmkIN1Wqr0x8JeUkriXoSLD
-   NrIwVHCoYBWG4fZ7Q2a+DMZFzTO3/FTKnFJ85LkfEOQCRNeGtvjTYmWXh
-   KatlAU7H7dKWjDL4xt579gTGWQkPCF8qW0zOSfj+recB1Z2CmppsZ+9Ve
-   Ps5hn1bYqBY361cT4+AaRXVgFaSfoq8LE+XHNB00ivRbswMG8PVEDwhNM
-   loYdEYsXufcLKy9D3DPGmpxhPhCcGlTCU4IZGOLXcTpwI5bjDFYE03vWU
-   w==;
-IronPort-SDR: llHCWxN4hggFAoPTbkYOKYaHtktya/T9B2Ag/hDD9VvHmE45igm4SL5Wkay8pEygalATBbfRia
- cf9ZVVjlfNqm6T9xsjEM6csv7gMMK3cLgdWRHvNYw2n1b4t9yJYUZbPywym4Kj5KaiO0E9R2Sz
- FI40TCihRLFDN/PABW8XPZl+VFigcLrEq7H/mg7aG/obRlcV8Uly+sucLK/hw/r7sv23kyD3NL
- pJXrrO4tvsORWA9PBkLW+VHxXwnL6VqasUQF90ysINxOvLi0f50qsEkDy3cLUN9FzHvO5WdVmW
- iMg=
-X-IronPort-AV: E=Sophos;i="5.75,255,1589266800"; 
-   d="scan'208";a="79101137"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jun 2020 07:21:58 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 19 Jun 2020 07:21:49 -0700
-Received: from rob-ult-m19940.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Fri, 19 Jun 2020 07:21:24 -0700
-From:   Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-To:     <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        id S1731558AbgFTB4B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Jun 2020 21:56:01 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:37806 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731502AbgFTB4A (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Jun 2020 21:56:00 -0400
+X-UUID: 2bc787466c3b412ba3838d3a1bf1cd50-20200620
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=kAIt0Z+/hTe3smQtreW0Qb1ua6eXXNRNjDK8SIGfWDM=;
+        b=VGckMN+jdN3CeRRluUgomATFn0SnbT252Jn9hLGaJFtPBMM4mwWdoQEX6JaHHXcvasXeL0YE+lbgskQtE5eUb+PfAJJlP0wHTikRSjoPk7oQhlUD6+VTN63l753i7hgdLwAI5RksuFezaoNh8JB2wE6d1sj9GOn/JRxlO799bzw=;
+X-UUID: 2bc787466c3b412ba3838d3a1bf1cd50-20200620
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 302378567; Sat, 20 Jun 2020 09:55:45 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 20 Jun
+ 2020 09:55:40 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 20 Jun 2020 09:55:43 +0800
+Message-ID: <1592617990.25512.76.camel@mhfsdcap03>
+Subject: Re: [PATCH] i2c: mediatek: Add to support continuous mode
+From:   Qii Wang <qii.wang@mediatek.com>
+To:     Qiangming Xia <qiangming.xia@mediatek.com>
+CC:     <wsa@the-dreams.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <wsa@kernel.org>, <robh+dt@kernel.org>,
-        <ludovic.desroches@microchip.com>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <linux@armlinux.org.uk>,
-        <kamel.bouhara@bootlin.com>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Subject: [RFC PATCH 4/4] i2c: at91: Move to generic GPIO bus recovery
-Date:   Fri, 19 Jun 2020 17:19:04 +0300
-Message-ID: <20200619141904.910889-5-codrin.ciubotariu@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200619141904.910889-1-codrin.ciubotariu@microchip.com>
-References: <20200619141904.910889-1-codrin.ciubotariu@microchip.com>
+        <linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>
+Date:   Sat, 20 Jun 2020 09:53:10 +0800
+In-Reply-To: <20200619080643.25269-1-qiangming.xia@mediatek.com>
+References: <20200619080643.25269-1-qiangming.xia@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+X-TM-SNTS-SMTP: 4B7D04965D99C8E8AF5B5E03961F4F8A7670FB6F82AA58D6E2B40474FE35321E2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Make the Microchip at91 driver the first to use the generic GPIO bus
-recovery support from the I2C core and discard the driver implementation.
-
-Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
----
- drivers/i2c/busses/i2c-at91-master.c | 69 ++--------------------------
- drivers/i2c/busses/i2c-at91.h        |  3 --
- 2 files changed, 3 insertions(+), 69 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-index 363d540a8345..66864f9cf7ac 100644
---- a/drivers/i2c/busses/i2c-at91-master.c
-+++ b/drivers/i2c/busses/i2c-at91-master.c
-@@ -816,79 +816,16 @@ static int at91_twi_configure_dma(struct at91_twi_dev *dev, u32 phy_addr)
- 	return ret;
- }
- 
--static void at91_prepare_twi_recovery(struct i2c_adapter *adap)
--{
--	struct at91_twi_dev *dev = i2c_get_adapdata(adap);
--
--	pinctrl_select_state(dev->pinctrl, dev->pinctrl_pins_gpio);
--}
--
--static void at91_unprepare_twi_recovery(struct i2c_adapter *adap)
--{
--	struct at91_twi_dev *dev = i2c_get_adapdata(adap);
--
--	pinctrl_select_state(dev->pinctrl, dev->pinctrl_pins_default);
--}
--
- static int at91_init_twi_recovery_gpio(struct platform_device *pdev,
- 				       struct at91_twi_dev *dev)
- {
- 	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
- 
--	dev->pinctrl = devm_pinctrl_get(&pdev->dev);
--	if (!dev->pinctrl || IS_ERR(dev->pinctrl)) {
-+	rinfo->pinctrl = devm_pinctrl_get(&pdev->dev);
-+	if (!rinfo->pinctrl || IS_ERR(rinfo->pinctrl)) {
- 		dev_info(dev->dev, "can't get pinctrl, bus recovery not supported\n");
--		return PTR_ERR(dev->pinctrl);
-+		return PTR_ERR(rinfo->pinctrl);
- 	}
--
--	dev->pinctrl_pins_default = pinctrl_lookup_state(dev->pinctrl,
--							 PINCTRL_STATE_DEFAULT);
--	dev->pinctrl_pins_gpio = pinctrl_lookup_state(dev->pinctrl,
--						      "gpio");
--	if (IS_ERR(dev->pinctrl_pins_default) ||
--	    IS_ERR(dev->pinctrl_pins_gpio)) {
--		dev_info(&pdev->dev, "pinctrl states incomplete for recovery\n");
--		return -EINVAL;
--	}
--
--	/*
--	 * pins will be taken as GPIO, so we might as well inform pinctrl about
--	 * this and move the state to GPIO
--	 */
--	pinctrl_select_state(dev->pinctrl, dev->pinctrl_pins_gpio);
--
--	rinfo->sda_gpiod = devm_gpiod_get(&pdev->dev, "sda", GPIOD_IN);
--	if (PTR_ERR(rinfo->sda_gpiod) == -EPROBE_DEFER)
--		return -EPROBE_DEFER;
--
--	rinfo->scl_gpiod = devm_gpiod_get(&pdev->dev, "scl",
--					  GPIOD_OUT_HIGH_OPEN_DRAIN);
--	if (PTR_ERR(rinfo->scl_gpiod) == -EPROBE_DEFER)
--		return -EPROBE_DEFER;
--
--	if (IS_ERR(rinfo->sda_gpiod) ||
--	    IS_ERR(rinfo->scl_gpiod)) {
--		dev_info(&pdev->dev, "recovery information incomplete\n");
--		if (!IS_ERR(rinfo->sda_gpiod)) {
--			gpiod_put(rinfo->sda_gpiod);
--			rinfo->sda_gpiod = NULL;
--		}
--		if (!IS_ERR(rinfo->scl_gpiod)) {
--			gpiod_put(rinfo->scl_gpiod);
--			rinfo->scl_gpiod = NULL;
--		}
--		pinctrl_select_state(dev->pinctrl, dev->pinctrl_pins_default);
--		return -EINVAL;
--	}
--
--	/* change the state of the pins back to their default state */
--	pinctrl_select_state(dev->pinctrl, dev->pinctrl_pins_default);
--
--	dev_info(&pdev->dev, "using scl, sda for recovery\n");
--
--	rinfo->prepare_recovery = at91_prepare_twi_recovery;
--	rinfo->unprepare_recovery = at91_unprepare_twi_recovery;
--	rinfo->recover_bus = i2c_generic_scl_recovery;
- 	dev->adapter.bus_recovery_info = rinfo;
- 
- 	return 0;
-diff --git a/drivers/i2c/busses/i2c-at91.h b/drivers/i2c/busses/i2c-at91.h
-index 7e7b4955ca7f..eae673ae786c 100644
---- a/drivers/i2c/busses/i2c-at91.h
-+++ b/drivers/i2c/busses/i2c-at91.h
-@@ -157,9 +157,6 @@ struct at91_twi_dev {
- 	struct at91_twi_dma dma;
- 	bool slave_detected;
- 	struct i2c_bus_recovery_info rinfo;
--	struct pinctrl *pinctrl;
--	struct pinctrl_state *pinctrl_pins_default;
--	struct pinctrl_state *pinctrl_pins_gpio;
- #ifdef CONFIG_I2C_AT91_SLAVE_EXPERIMENTAL
- 	unsigned smr;
- 	struct i2c_client *slave;
--- 
-2.25.1
+T24gRnJpLCAyMDIwLTA2LTE5IGF0IDE2OjA2ICswODAwLCBRaWFuZ21pbmcgWGlhIHdyb3RlOg0K
+PiBGcm9tOiAicWlhbmdtaW5nLnhpYSIgPHFpYW5nbWluZy54aWFAbWVkaWF0ZWsuY29tPg0KPiAN
+Cj4gICAgIE1lZGlhdGVrIGkyYyBjb250cm9sbGVyIHN1cHBvcnQgZm9yIGNvbnRpbnVvdXMgbW9k
+ZSwNCj4gaXQgYWxsb3cgdG8gdHJhbnNmZXIgb25jZSBtdWx0aXBsZSB3cml0aW5nIG1lc3NhZ2Vz
+IG9mIGVxdWFsIGxlbmd0aC4NCj4gICAgIEZvciBleGFtcGxlLCBhIHNsYXZlIG5lZWQgd3JpdGUg
+YSBzZXJpYWwgb2Ygbm9uLWNvbnRpbnVvdXMNCj4gb2Zmc2V0IHJhbmdlIGluIGNoaXAsZS5nLiB3
+cml0aW5nIG9mZnNldCAwLG9mZnNldCAyIGFuZCBvZmZzZXQgNC4NCj4gTm9ybWFsbHksIGl0IG5l
+ZWQgdGhyZWUgdGltZXMgaTJjIHdyaXRlIG9wZXJhdGlvbi4gSG93ZXZlcixpdCBjYW4NCj4gdXNl
+IG9uY2UgdHJhbnNmZXIgdG8gZmluaXNoIGl0IGJ5IHVzaW5nIGNvbnRpbnVvdXMgbW9kZS4NCj4g
+DQo+IENoYW5nZS1JZDogSWYwNjk5MWUzZmQzMjg2N2JkZWFhY2YxNWJiMjQ4NjRkNWM1OTA0ZDAN
+Cj4gU2lnbmVkLW9mZi1ieTogUWlhbmdtaW5nIFhpYSA8cWlhbmdtaW5nLnhpYUBtZWRpYXRlay5j
+b20+DQo+IC0tLQ0KPiAgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYyB8IDY3ICsrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDY3IGluc2Vy
+dGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4
+eC5jIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYw0KPiBpbmRleCBkZWVmNjllNTY5
+MDYuLjc2ZWM2NWQ4NjlmNiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1t
+dDY1eHguYw0KPiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jDQo+IEBAIC05
+Nyw2ICs5Nyw3IEBAIGVudW0gbXRrX3RyYW5zX29wIHsNCj4gIAlJMkNfTUFTVEVSX1dSID0gMSwN
+Cj4gIAlJMkNfTUFTVEVSX1JELA0KPiAgCUkyQ19NQVNURVJfV1JSRCwNCj4gKwlJMkNfTUFTVEVS
+X0NPTlRJTlVPVVNfV1IsDQo+ICB9Ow0KPiAgDQo+ICBlbnVtIEkyQ19SRUdTX09GRlNFVCB7DQo+
+IEBAIC04NDYsNiArODQ3LDkgQEAgc3RhdGljIGludCBtdGtfaTJjX2RvX3RyYW5zZmVyKHN0cnVj
+dCBtdGtfaTJjICppMmMsIHN0cnVjdCBpMmNfbXNnICptc2dzLA0KPiAgCQkJCQkgICAgT0ZGU0VU
+X1RSQU5TRkVSX0xFTik7DQo+ICAJCX0NCj4gIAkJbXRrX2kyY193cml0ZXcoaTJjLCBJMkNfV1JS
+RF9UUkFOQUNfVkFMVUUsIE9GRlNFVF9UUkFOU0FDX0xFTik7DQo+ICsJfSBlbHNlIGlmIChpMmMt
+Pm9wID09IEkyQ19NQVNURVJfQ09OVElOVU9VU19XUikgew0KPiArCQltdGtfaTJjX3dyaXRldyhp
+MmMsIG1zZ3MtPmxlbiAvIG51bSwgT0ZGU0VUX1RSQU5TRkVSX0xFTik7DQo+ICsJCW10a19pMmNf
+d3JpdGV3KGkyYywgbnVtLCBPRkZTRVRfVFJBTlNBQ19MRU4pOw0KPiAgCX0gZWxzZSB7DQo+ICAJ
+CW10a19pMmNfd3JpdGV3KGkyYywgbXNncy0+bGVuLCBPRkZTRVRfVFJBTlNGRVJfTEVOKTsNCj4g
+IAkJbXRrX2kyY193cml0ZXcoaTJjLCBudW0sIE9GRlNFVF9UUkFOU0FDX0xFTik7DQo+IEBAIC04
+OTYsNiArOTAwLDIzIEBAIHN0YXRpYyBpbnQgbXRrX2kyY19kb190cmFuc2ZlcihzdHJ1Y3QgbXRr
+X2kyYyAqaTJjLCBzdHJ1Y3QgaTJjX21zZyAqbXNncywNCj4gIAkJCXdyaXRlbChyZWdfNGdfbW9k
+ZSwgaTJjLT5wZG1hYmFzZSArIE9GRlNFVF9UWF80R19NT0RFKTsNCj4gIAkJfQ0KPiAgDQo+ICsJ
+CXdyaXRlbCgodTMyKXdwYWRkciwgaTJjLT5wZG1hYmFzZSArIE9GRlNFVF9UWF9NRU1fQUREUik7
+DQo+ICsJCXdyaXRlbChtc2dzLT5sZW4sIGkyYy0+cGRtYWJhc2UgKyBPRkZTRVRfVFhfTEVOKTsN
+Cj4gKwl9IGVsc2UgaWYgKGkyYy0+b3AgPT0gSTJDX01BU1RFUl9DT05USU5VT1VTX1dSKSB7DQo+
+ICsJCXdyaXRlbChJMkNfRE1BX0lOVF9GTEFHX05PTkUsIGkyYy0+cGRtYWJhc2UgKyBPRkZTRVRf
+SU5UX0ZMQUcpOw0KPiArCQl3cml0ZWwoSTJDX0RNQV9DT05fVFgsIGkyYy0+cGRtYWJhc2UgKyBP
+RkZTRVRfQ09OKTsNCj4gKwkJd3BhZGRyID0gZG1hX21hcF9zaW5nbGUoaTJjLT5kZXYsIG1zZ3Mt
+PmJ1ZiwNCj4gKwkJCQkJbXNncy0+bGVuLCBETUFfVE9fREVWSUNFKTsNCj4gKwkJaWYgKGRtYV9t
+YXBwaW5nX2Vycm9yKGkyYy0+ZGV2LCB3cGFkZHIpKSB7DQo+ICsJCQlrZnJlZShtc2dzLT5idWYp
+Ow0KPiArCQkJcmV0dXJuIC1FTk9NRU07DQo+ICsJCX0NCj4gKw0KPiArCQlpZiAoaTJjLT5kZXZf
+Y29tcC0+c3VwcG9ydF8zM2JpdHMpIHsNCj4gKwkJCXJlZ180Z19tb2RlID0gbXRrX2kyY19zZXRf
+NGdfbW9kZSh3cGFkZHIpOw0KPiArCQkJd3JpdGVsKHJlZ180Z19tb2RlLCBpMmMtPnBkbWFiYXNl
+ICsgT0ZGU0VUX1RYXzRHX01PREUpOw0KPiArCQl9DQo+ICsNCj4gIAkJd3JpdGVsKCh1MzIpd3Bh
+ZGRyLCBpMmMtPnBkbWFiYXNlICsgT0ZGU0VUX1RYX01FTV9BRERSKTsNCj4gIAkJd3JpdGVsKG1z
+Z3MtPmxlbiwgaTJjLT5wZG1hYmFzZSArIE9GRlNFVF9UWF9MRU4pOw0KPiAgCX0gZWxzZSB7DQo+
+IEBAIC05NzksNiArMTAwMCwxMSBAQCBzdGF0aWMgaW50IG10a19pMmNfZG9fdHJhbnNmZXIoc3Ry
+dWN0IG10a19pMmMgKmkyYywgc3RydWN0IGkyY19tc2cgKm1zZ3MsDQo+ICAJCQkJIG1zZ3MtPmxl
+biwgRE1BX0ZST01fREVWSUNFKTsNCj4gIA0KPiAgCQlpMmNfcHV0X2RtYV9zYWZlX21zZ19idWYo
+ZG1hX3JkX2J1ZiwgbXNncywgdHJ1ZSk7DQo+ICsJfSBlbHNlIGlmIChpMmMtPm9wID09IEkyQ19N
+QVNURVJfQ09OVElOVU9VU19XUikgew0KPiArCQlkbWFfdW5tYXBfc2luZ2xlKGkyYy0+ZGV2LCB3
+cGFkZHIsDQo+ICsJCQkJIG1zZ3MtPmxlbiwgRE1BX1RPX0RFVklDRSk7DQo+ICsNCj4gKwkJa2Zy
+ZWUobXNncy0+YnVmKTsNCj4gIAl9IGVsc2Ugew0KPiAgCQlkbWFfdW5tYXBfc2luZ2xlKGkyYy0+
+ZGV2LCB3cGFkZHIsIG1zZ3MtPmxlbiwNCj4gIAkJCQkgRE1BX1RPX0RFVklDRSk7DQo+IEBAIC0x
+MDA5LDYgKzEwMzUsOSBAQCBzdGF0aWMgaW50IG10a19pMmNfdHJhbnNmZXIoc3RydWN0IGkyY19h
+ZGFwdGVyICphZGFwLA0KPiAgew0KPiAgCWludCByZXQ7DQo+ICAJaW50IGxlZnRfbnVtID0gbnVt
+Ow0KPiArCWludCBpLCBqOw0KPiArCXU4ICpkbWFfbXVsdGlfd3JfYnVmOw0KPiArCXN0cnVjdCBp
+MmNfbXNnIG11bHRpX21zZ1sxXTsNCj4gIAlzdHJ1Y3QgbXRrX2kyYyAqaTJjID0gaTJjX2dldF9h
+ZGFwZGF0YShhZGFwKTsNCj4gIA0KPiAgCXJldCA9IG10a19pMmNfY2xvY2tfZW5hYmxlKGkyYyk7
+DQo+IEBAIC0xMDI1LDYgKzEwNTQsNDQgQEAgc3RhdGljIGludCBtdGtfaTJjX3RyYW5zZmVyKHN0
+cnVjdCBpMmNfYWRhcHRlciAqYWRhcCwNCj4gIAkJfQ0KPiAgCX0NCj4gIA0KPiArCWlmIChudW0g
+PiAxKSB7DQo+ICsJCWZvciAoaSA9IDA7IGkgPCBudW0gLSAxOyBpKyspIHsNCj4gKwkJCWlmICgh
+KG1zZ3NbaV0uZmxhZ3MgJiBJMkNfTV9SRCkgJiYgIShtc2dzW2krMV0uZmxhZ3MgJg0KPiArCQkJ
+CUkyQ19NX1JEKSAmJiAobXNnc1tpXS5hZGRyID09IG1zZ3NbaSsxXS5hZGRyKQ0KPiArCQkJCQkm
+JiAobXNnc1tpXS5sZW4gPT0gbXNnc1tpKzFdLmxlbikpIHsNCg0KaWYgdGhlc2UgY29uZGl0aW9u
+cyBhcmUgbm90IG1ldCwgQ2FuIHRoZXNlIHRyYW5zZmVycyB3b3JrPw0KIA0KPiArCQkJCWNvbnRp
+bnVlOw0KPiArCQkJfSBlbHNlDQo+ICsJCQkJYnJlYWs7DQo+ICsJCX0NCj4gKwkJaWYgKGkgPj0g
+bnVtIC0gMSkgew0KPiArCQkJaTJjLT5vcCA9IEkyQ19NQVNURVJfQ09OVElOVU9VU19XUjsNCj4g
+KwkJCWogPSAwOw0KPiArCQkJZG1hX211bHRpX3dyX2J1ZiA9IGt6YWxsb2MobXNncy0+bGVuICog
+bnVtLCBHRlBfS0VSTkVMKTsNCj4gKwkJCWlmICghZG1hX211bHRpX3dyX2J1Zikgew0KPiArCQkJ
+CXJldCA9ICAtRU5PTUVNOw0KPiArCQkJCWdvdG8gZXJyX2V4aXQ7DQo+ICsJCQl9DQo+ICsJCQlt
+dWx0aV9tc2ctPmFkZHIgID0gbXNncy0+YWRkcjsNCj4gKwkJCW11bHRpX21zZy0+bGVuICAgPSBt
+c2dzLT5sZW4gKiBudW07DQo+ICsJCQltdWx0aV9tc2ctPmJ1ZiAgID0gZG1hX211bHRpX3dyX2J1
+ZjsNCj4gKwkJCW11bHRpX21zZy0+ZmxhZ3MgID0gMDsNCj4gKwkJCXdoaWxlIChqIDwgbnVtKSB7
+DQo+ICsJCQkJbWVtY3B5KGRtYV9tdWx0aV93cl9idWYgKyBtc2dzLT5sZW4gKiBqLA0KPiArCQkJ
+CQkJCW1zZ3MtPmJ1ZiwgbXNncy0+bGVuKTsNCj4gKwkJCQlqKys7DQo+ICsJCQkJbXNncysrOw0K
+PiArCQkJCX0NCj4gKw0KPiArCQkJaTJjLT5pZ25vcmVfcmVzdGFydF9pcnEgPSBmYWxzZTsNCj4g
+KwkJCXJldCA9IG10a19pMmNfZG9fdHJhbnNmZXIoaTJjLCBtdWx0aV9tc2csIG51bSwgMCk7DQo+
+ICsJCQlpZiAocmV0IDwgMCkNCj4gKwkJCQlnb3RvIGVycl9leGl0Ow0KPiArCQkJcmV0ID0gbnVt
+Ow0KPiArCQkJCWdvdG8gZXJyX2V4aXQ7DQo+ICsNCj4gKwkJfQ0KPiArCX0NCj4gKw0KPiAgCWlm
+IChpMmMtPmF1dG9fcmVzdGFydCAmJiBudW0gPj0gMiAmJiBpMmMtPnNwZWVkX2h6ID4gSTJDX01B
+WF9GQVNUX01PREVfRlJFUSkNCj4gIAkJLyogaWdub3JlIHRoZSBmaXJzdCByZXN0YXJ0IGlycSBh
+ZnRlciB0aGUgbWFzdGVyIGNvZGUsDQo+ICAJCSAqIG90aGVyd2lzZSB0aGUgZmlyc3QgdHJhbnNm
+ZXIgd2lsbCBiZSBkaXNjYXJkZWQuDQoNCg==
 
