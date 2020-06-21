@@ -2,80 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94AD32026EE
-	for <lists+linux-i2c@lfdr.de>; Sat, 20 Jun 2020 23:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E72D2027F9
+	for <lists+linux-i2c@lfdr.de>; Sun, 21 Jun 2020 04:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729030AbgFTVkc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 20 Jun 2020 17:40:32 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38897 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729036AbgFTVk1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 20 Jun 2020 17:40:27 -0400
-Received: by mail-lj1-f196.google.com with SMTP id 9so15290462ljv.5
-        for <linux-i2c@vger.kernel.org>; Sat, 20 Jun 2020 14:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qDGZJrN+zxg9kIEWpfiOHaUMYjaY018dhr2ry8AoDSo=;
-        b=CzdGRb37kVsYau41jwtDVNhfyYBgY3d0+7sNN0OqWFwk0qEouWLrm4IA+xwhjI1UQt
-         QGiP+tYVl4+4RNuPXkMCSXXvX+Zp3DCziRbHJrxIOY18WRXSmZRnMQ6j93S/oYkoF4US
-         c0Qsv1YND4xPcwn5Kb8kcQd8rZYZir9ce6KCsivlD069ARvPvTBajld3H9xjfI1FCllX
-         3ZXAgdc/3xu2k/pKzKhzR6NT6Rd/oPi4UlH+aacp/fM2yx7nWO5+wvdHGY5cRyRmNa8I
-         /yZkt+FBE7pWfHh2aBeORIAx0yu0x3x3cN5ULDhChdnMWRATlQk8xOPvG1v6bjD9WlLB
-         tmrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qDGZJrN+zxg9kIEWpfiOHaUMYjaY018dhr2ry8AoDSo=;
-        b=ryoUiiibEj9XyRqByxTGOw+HZjpakzSS9jqzfXI/NJWbw1/b66qhjwuKhMW0B/O2K1
-         F49jJiXSGioP1aSp/1H23lGx3iVX2H4OxtTQlFYsFsVB6VXCHIAyVh5Zk7YvISahb5cC
-         ggpHJYrm0MAbXNc12bXW0E44Ug+obUZYOb6pJsDaPp0kWeteaCRVRl/LnN5Nwoado/Dm
-         ArO3Cd4DwmzClZeDjr35zCf/XwIsrbqEnYYV6BDxdC85H1Sm0cP1CZPf3qMSwlId7zya
-         rmQWHutmT34WpmqAQUxanezxLpet5bO7guN+RO4GqbKHwFd8CORpho1CuB/YidzKnRje
-         isww==
-X-Gm-Message-State: AOAM533uKFjrNnYhmpMwi2k9RIU3YZD1GqaLfNcTaoZg2n8nxji+AtAG
-        7BNDEpjSKfLaPbpHlHkhLX+mRPBp3hzX0R6VZw8LeA==
-X-Google-Smtp-Source: ABdhPJxAa1VzCVlzrh0h7Fjw2j+ZkUnwO3O+sZYxyg7hx+dcgKgbw8afJXNyQtB4JkQJJZ827jwqG3BbejMYNSUh+Ac=
-X-Received: by 2002:a2e:7303:: with SMTP id o3mr5249034ljc.100.1592689165295;
- Sat, 20 Jun 2020 14:39:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200616223353.993567-1-lkundrak@v3.sk> <20200616223353.993567-2-lkundrak@v3.sk>
-In-Reply-To: <20200616223353.993567-2-lkundrak@v3.sk>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 20 Jun 2020 23:39:14 +0200
-Message-ID: <CACRpkdZ4_cRPMyA6=-qqWX-GpJ0DQXdj=EbFEkoFqi8w6AahXg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] dt-bindings: gpio: Convert mrvl-gpio to json-schema
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>, linux-rtc@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729117AbgFUCaZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 20 Jun 2020 22:30:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43772 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728992AbgFUCaZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 20 Jun 2020 22:30:25 -0400
+Subject: Re: [PULL REQUEST] i2c for 5.8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592706625;
+        bh=ps+Ob9O00oNteyh03C6SjL6ioYYkY47O5d74B5uMYhM=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=djakDrIzjq+HtXOp6rWAkzFhvB8VvYFArxtvf0fZsTz5N++sO3K2HUWeEiIeVIckJ
+         R593nAk7WOeUPnMKhL+c8D1A8ajokRtS5SAY2HSOBdW9zrYs65GYHy1xP0wqG/V3h5
+         Th1BsrfSgwOVV7yjCUrRDR7SQbf8tTsxwIdsoRDM=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200620171624.GA9805@kunai>
+References: <20200620171624.GA9805@kunai>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200620171624.GA9805@kunai>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+X-PR-Tracked-Commit-Id: 28f9f8fb4f405ade488058f817b6cbd108e45e4e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a5c6a1f0fe1d182489864b708fa472d0333b39d4
+Message-Id: <159270662525.3975.1993250401444445604.pr-tracker-bot@kernel.org>
+Date:   Sun, 21 Jun 2020 02:30:25 +0000
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 12:33 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
+The pull request you sent on Sat, 20 Jun 2020 19:16:24 +0200:
 
-> This converts the mrvl-gpio binding to DT schema format using json-schema.
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
 
-This looks about right to me:
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a5c6a1f0fe1d182489864b708fa472d0333b39d4
 
-I expect Rob will apply it when he's happy with it, else poke me once
-he ACKs it.
+Thank you!
 
-Yours,
-Linus Walleij
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
