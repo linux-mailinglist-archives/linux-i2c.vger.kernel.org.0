@@ -2,82 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCA5202D95
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jun 2020 00:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8D4202E38
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jun 2020 04:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730915AbgFUW5T (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 21 Jun 2020 18:57:19 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:59272 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730914AbgFUW5T (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 21 Jun 2020 18:57:19 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 27EE88066C;
-        Mon, 22 Jun 2020 10:57:10 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1592780230;
-        bh=YCsbe4EpQ2HQPtwpZQRB0Vn4aud+zoi8XPglVswF6LQ=;
-        h=From:To:Cc:Subject:Date;
-        b=W2N41+5Wfe0dFv15oUj3+vt7pc1SPbXC2zK50GFEnMjTR/3ge0zFX1uVO0b1FK2wq
-         ayozR9dUZogcGhAdkvKSs3H8GpYx9OajdRiwmDg8a21ZlksA845tuKoJ+asJFYBFcu
-         yW5CoQSNzcw9uPdtsJBcdO1ltC3d5LH3YXmOjRHWW36N8+P+26mVP4678EPgR/i8mZ
-         jXOB+6CfmCXQyk7JIP5WjhPKYrn+EUGKo3ssCSU1SR88lfKQWpwSI8n8DWe+gXlAUz
-         xOo5CUPunQkF92ZQx+CUFM83pWEaPWLJssUwPQOc0j+lnB7a66SVxLUH6vVJC6x5GG
-         zZumFcCuksH9w==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5eefe5c40000>; Mon, 22 Jun 2020 10:57:08 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by smtp (Postfix) with ESMTP id DE9F513EEA8;
-        Mon, 22 Jun 2020 10:57:08 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id E23ED28005D; Mon, 22 Jun 2020 10:57:09 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     wsa@kernel.org, andriy.shevchenko@linux.intel.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH] i2c: algo-pca: Add 0x78 as SCL stuck low status
-Date:   Mon, 22 Jun 2020 10:57:05 +1200
-Message-Id: <20200621225705.21666-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+        id S1731025AbgFVCGA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 21 Jun 2020 22:06:00 -0400
+Received: from mail.zju.edu.cn ([61.164.42.155]:9664 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731026AbgFVCF7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 21 Jun 2020 22:05:59 -0400
+Received: from localhost.localdomain (unknown [210.32.144.65])
+        by mail-app3 (Coremail) with SMTP id cC_KCgDnEnjhEfBeyJcJAQ--.40864S4;
+        Mon, 22 Jun 2020 10:05:25 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Dejin Zheng <zhengdejin5@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: sprd: Fix runtime PM imbalance on error
+Date:   Mon, 22 Jun 2020 10:05:18 +0800
+Message-Id: <20200622020520.5334-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgDnEnjhEfBeyJcJAQ--.40864S4
+X-Coremail-Antispam: 1UD129KBjvJXoWrKrWrZF17ur48GF48JF1xGrg_yoW8JrWrpr
+        W0gF90kFW7XrZagF4DArsxXFy5W3yft3y5JFWjk3WfZFs8X3Wktr45JF1FqF48JrWkJF4f
+        Jw4qya9xCFy0yF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK
+        67AK6r4UMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
+        6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbpwZ7UUUUU==
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgcQBlZdtOvMDgAIsN
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The PCA9665 datasheet says that I2CSTA =3D 78h indicates that SCL is stuc=
-k
-low, this differs to the PCA9564 which uses 90h for this indication.
-Treat either 0x78 or 0x90 as an indication that the SCL line is stuck.
+pm_runtime_get_sync() increments the runtime PM usage counter even
+the call returns an error code. Thus a corresponding decrement is
+needed on the error handling path to keep the counter balanced.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Fix this by adding the missed function call.
+
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
 ---
-Based on looking through the PCA9564 and PCA9665 datasheets this should b=
-e
-safe. The PCA9564 should not return 0x78 for any valid state and the PCA9=
-665
-should not return 0x90.
+ drivers/i2c/busses/i2c-sprd.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
- drivers/i2c/algos/i2c-algo-pca.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/i2c/algos/i2c-algo-pca.c b/drivers/i2c/algos/i2c-alg=
-o-pca.c
-index 7f10312d1b88..e3017329cea8 100644
---- a/drivers/i2c/algos/i2c-algo-pca.c
-+++ b/drivers/i2c/algos/i2c-algo-pca.c
-@@ -314,6 +314,7 @@ static int pca_xfer(struct i2c_adapter *i2c_adap,
- 			DEB2("BUS ERROR - SDA Stuck low\n");
- 			pca_reset(adap);
- 			goto out;
-+		case 0x78: /* Bus error - SCL stuck low */
- 		case 0x90: /* Bus error - SCL stuck low */
- 			DEB2("BUS ERROR - SCL Stuck low\n");
- 			pca_reset(adap);
---=20
-2.27.0
+diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.c
+index 19cda6742423..675f72a3fd60 100644
+--- a/drivers/i2c/busses/i2c-sprd.c
++++ b/drivers/i2c/busses/i2c-sprd.c
+@@ -285,8 +285,10 @@ static int sprd_i2c_master_xfer(struct i2c_adapter *i2c_adap,
+ 	int im, ret;
+ 
+ 	ret = pm_runtime_get_sync(i2c_dev->dev);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put_noidle(i2c_dev->dev);
+ 		return ret;
++	}
+ 
+ 	for (im = 0; im < num - 1; im++) {
+ 		ret = sprd_i2c_handle_msg(i2c_adap, &msgs[im], 0);
+@@ -571,8 +573,10 @@ static int sprd_i2c_remove(struct platform_device *pdev)
+ 	int ret;
+ 
+ 	ret = pm_runtime_get_sync(i2c_dev->dev);
+-	if (ret < 0)
++	if (ret < 0) {
++		pm_runtime_put_noidle(i2c_dev->dev);
+ 		return ret;
++	}
+ 
+ 	i2c_del_adapter(&i2c_dev->adap);
+ 	clk_disable_unprepare(i2c_dev->clk);
+-- 
+2.17.1
 
