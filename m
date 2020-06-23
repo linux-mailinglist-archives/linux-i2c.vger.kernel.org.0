@@ -2,97 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5C8204AF6
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jun 2020 09:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15BA204BC8
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jun 2020 09:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730846AbgFWHZP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Jun 2020 03:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730830AbgFWHZP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Jun 2020 03:25:15 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED73C061573;
-        Tue, 23 Jun 2020 00:25:14 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id t6so1643595pgq.1;
-        Tue, 23 Jun 2020 00:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xt/VVu1bm6xh/GckfKGMv2YCPJI7Ah04aj5E/xaHxVM=;
-        b=qYlMCPTlddqSo7pbSAWRTyH1yy4Dx9C7V2W+KzSxPB57u/HhkcvMp/MdGALZUzq4xj
-         /gfzbYzCWbgRQAbx7qGbECpX9It+PkQjA/OWgry6ImyvYky3GDU7KOJyDKP54IchNiam
-         fjn8d5zMFyF36cGssXV0qm3NuWSbcO2RI2TxZhdqpH42wmGuVbfGsY6EqsvZZckZGKGO
-         EYccfnhu43tX1o/kYNNGSEI+gHDqfBWYTREe4Ca+4YT21SVMVBOwF0YxHVH0b8OFt/LQ
-         DWRNbnETQw+W0d/C+lI+bhhd23EnGxYbUhQlGTuoLa9wCn8fQoWV9r0SvwZyFD+blYgF
-         MDAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xt/VVu1bm6xh/GckfKGMv2YCPJI7Ah04aj5E/xaHxVM=;
-        b=etDlWVCPzm5ji2nRE6xwp3e1Z2qI4seU6QYV0E73+i0PxhjAGvb2OVDx9XD86fAipI
-         CgdZmZkwvpdL3AecbBqmMUwDuLgxH4VAlXTds/lvY8ZHGnWnVi4dOgJS+Ut7zn5F8z0D
-         gjIa8UYye/R8fEbXS6gYOk1YntKmpT6NldzvK60uY/qObo3jKeoWjXF6Jo/P1CvW2bzA
-         N4NeQTrY/qqOEX9jd2ih4IbekYj31pX89RUxNrb17yjDv+c0OiVyVgOCjAQ/4uXvomrC
-         cYHCpv0lZqoUsYyOKRefugAnOnN6vtc2gbZKGfr6Q1HjElZEHtCwRYKV47TEMIpcJibH
-         A2yA==
-X-Gm-Message-State: AOAM533W5TQknBUqhfNeaUY7lrIfRkvk31YMpBMZdTr9l0n/nCxdEiQF
-        /LA1Vr19UV2k20h3DG1G81ZId7ZfrnqBUZ1PRYW/Dsos
-X-Google-Smtp-Source: ABdhPJxf2Y0rS20pXyphZu92O09Fz/nvBGNSVSJ5Tr1gBa3eC82kmsw2SDdOQf2SfKFxxzhr5Q8XTgyOPzBagpc2PPY=
-X-Received: by 2002:a62:5284:: with SMTP id g126mr24365325pfb.36.1592897113551;
- Tue, 23 Jun 2020 00:25:13 -0700 (PDT)
+        id S1731511AbgFWH7o (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Jun 2020 03:59:44 -0400
+Received: from mga18.intel.com ([134.134.136.126]:33474 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731396AbgFWH7o (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 23 Jun 2020 03:59:44 -0400
+IronPort-SDR: 7KicQLmqbqzfu2rINqef6mK6b7tIcYXOleC/yxcb7mkEuN0boBxDI472dPFLW9ZotBCvDlEg6S
+ iy/VvVgKdHtg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="131405963"
+X-IronPort-AV: E=Sophos;i="5.75,270,1589266800"; 
+   d="scan'208";a="131405963"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 00:59:43 -0700
+IronPort-SDR: guciHM9+Q5fHNPBrFOCzI9Awwyfb/rwf9UJW1Y8dwKtdJ0C67EG4C68f3Hql8c6ElPsV+5Dnlp
+ fHrh352pdYkw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,270,1589266800"; 
+   d="scan'208";a="353730797"
+Received: from mylly.fi.intel.com (HELO [10.237.72.87]) ([10.237.72.87])
+  by orsmga001.jf.intel.com with ESMTP; 23 Jun 2020 00:59:41 -0700
+Subject: Re: [PATCH] i2c: designware: Fix functionality in !CONFIG_ACPI case
+To:     John Stultz <john.stultz@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+References: <20200623025144.34246-1-john.stultz@linaro.org>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <d6c317ee-4f97-9c57-6b04-1eabd814b6ce@linux.intel.com>
+Date:   Tue, 23 Jun 2020 10:59:40 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-References: <20200613113328.GA5400@kunai> <CANcMJZDT0oc8m1jjthVANGz6iZ+J4gv5YOqnXMLWbHtZgeQ_eA@mail.gmail.com>
-In-Reply-To: <CANcMJZDT0oc8m1jjthVANGz6iZ+J4gv5YOqnXMLWbHtZgeQ_eA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 23 Jun 2020 10:25:00 +0300
-Message-ID: <CAHp75Vfa_X-KR_v0bHG+mgy1q2i-_e_3Q2Akq12juviqR91PAw@mail.gmail.com>
-Subject: Re: [PULL REQUEST] i2c for 5.8
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        YongQin Liu <yongqin.liu@linaro.org>,
-        Tom Gall <tom.gall@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200623025144.34246-1-john.stultz@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 5:05 AM John Stultz <john.stultz@linaro.org> wrote:
-> On Sat, Jun 13, 2020 at 4:36 AM Wolfram Sang <wsa@kernel.org> wrote:
+Hi
 
-...
+On 6/23/20 5:51 AM, John Stultz wrote:
+> On the HiKey board, where CONFIG_ACPI is not set, we started
+> to see a graphics regression where the adv7511 HDMI bridge driver
+> wasn't probing. This was due to the i2c bus failing to start up.
+> 
+> I bisected the problem down to commit f9288fcc5c615 ("i2c:
+> designware: Move ACPI parts into common module") and after
+> looking at it a bit, I realized that change moved some
+> initialization into i2c_dw_acpi_adjust_bus_speed(). However,
+> i2c_dw_acpi_adjust_bus_speed() is only functional if CONFIG_ACPI
+> is set.
+> 
+> This patch pulls i2c_dw_acpi_adjust_bus_speed() out of the
+> ifdef CONFIG_ACPI conditional, and gets the board working again.
+> 
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Cc: Wolfram Sang <wsa@kernel.org>
+> Cc: linux-i2c@vger.kernel.org
+> Fixes: f9288fcc5c615 ("i2c: designware: Move ACPI parts into common module")
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> ---
+>   drivers/i2c/busses/i2c-designware-common.c | 4 ++--
+>   drivers/i2c/busses/i2c-designware-core.h   | 3 +--
+>   2 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+> index e3a8640db7da..33de185e15f2 100644
+> --- a/drivers/i2c/busses/i2c-designware-common.c
+> +++ b/drivers/i2c/busses/i2c-designware-common.c
+> @@ -286,6 +286,8 @@ int i2c_dw_acpi_configure(struct device *device)
+>   }
+>   EXPORT_SYMBOL_GPL(i2c_dw_acpi_configure);
+>   
+> +#endif	/* CONFIG_ACPI */
+> +
 
-> > Andy Shevchenko (17):
-> ...
-> >       i2c: designware: Move ACPI parts into common module
->
-> Just as a heads up. I'm seeing a regression from this merge that I
-> bisected down to the patch above (f9288fcc5c615), with the HiKey
-> board. It seems the adv7511 (HDMI bridge) driver isn't probing, which
-> causes graphics to fail.
->
-> I've just bisected it down and haven't managed to do much debugging,
-> but I wanted to raise a flag on this. Let me know if there is anything
-> you'd like me to try right off.
+I think the regression is in these lines below that were moved from 
+probe to i2c_dw_acpi_adjust_bus_speed() and cause that neither 
+"cloock-frequency" device property or I2C_MAX_FAST_MODE_FREQ affect the 
+bus speed when CONFIG_ACPI is not set.
 
-Thank you for the report!
++       /*
++        * Find bus speed from the "clock-frequency" device property, ACPI
++        * or by using fast mode if neither is set.
++        */
++       if (acpi_speed && t->bus_freq_hz)
++               t->bus_freq_hz = min(t->bus_freq_hz, acpi_speed);
++       else if (acpi_speed || t->bus_freq_hz)
++               t->bus_freq_hz = max(t->bus_freq_hz, acpi_speed);
++       else
++               t->bus_freq_hz = I2C_MAX_FAST_MODE_FREQ;
 
-The above change was purely clean up  / refactoring to get PCI
-enumerated devices used to ACPI additional data. I bet your patch is
-correct, but I will look closer and see what is the real root cause of
-such behaviour. I'll comment on your patch separately.
-
+Andy: what you think should the i2c_dw_acpi_adjust_bus_speed() fixed to 
+return adjusted speed or zero if not found (also for !CONFIG_ACPI) and 
+move above lines back to probe? It looks more clear to me that way and 
+should fix the regression I think.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Jarkko
