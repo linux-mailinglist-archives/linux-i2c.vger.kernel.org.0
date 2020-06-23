@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8E5204F56
+	by mail.lfdr.de (Postfix) with ESMTP id 60D50204F55
 	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jun 2020 12:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732354AbgFWKj5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Jun 2020 06:39:57 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:21662 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732327AbgFWKj5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 23 Jun 2020 06:39:57 -0400
+        id S1732323AbgFWKkM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Jun 2020 06:40:12 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:11113 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732341AbgFWKkC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Jun 2020 06:40:02 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1592908796; h=References: In-Reply-To: Message-Id: Date:
+ s=smtp; t=1592908800; h=References: In-Reply-To: Message-Id: Date:
  Subject: Cc: To: From: Sender;
- bh=TVYGyBJE4vpc5NK3lMz14YSO5peyGEtYSdEQIK0D1R0=; b=k06P6b94N0zW44SrcGCR4Wz5IdmvSSBwi/hVY4wor190wo5ozx7VRTCAmikX2HFUiGF3H3Qd
- 9Rp9WzKpEC54xa+dKCxkVNtBmR9hlHClmNCUt0bsuyt9XZPSMv+pfplmOEEy9u3Z42GjeWAD
- UQNVRPTE44tj4pgcxBMad5W6DuM=
-X-Mailgun-Sending-Ip: 69.72.43.7
+ bh=5WFzB6GD/oML5LfTkg7aBaRO3tq1egTpCbAmeSuTlJ4=; b=Z0R8HjT1zrDMewyG60SF6DOM5uZyyveSxMsDbYzkwYwfO8qTKXuy+e9aqUt6ok8pkJUeW9oT
+ Exabwtjr+iEsnsfZzO4lbsY5D5vUYomaXtTixhnR8xENIQ6rlF1cdvs4li4x6NaTq3dFxaB3
+ MRIwZnJFflI3Dga1jzhv0IZL36A=
+X-Mailgun-Sending-Ip: 104.130.122.29
 X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 5ef1dbe8c76a4e7a2a2f66a7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 23 Jun 2020 10:39:36
+ smtp-out-n14.prod.us-east-1.postgun.com with SMTP id
+ 5ef1dbee567385e8e70bb8b6 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 23 Jun 2020 10:39:42
  GMT
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 5C5AAC43395; Tue, 23 Jun 2020 10:39:35 +0000 (UTC)
+        id A39FBC433B2; Tue, 23 Jun 2020 10:39:41 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from akashast-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 026A1C433C8;
-        Tue, 23 Jun 2020 10:39:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 026A1C433C8
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 738FCC433A0;
+        Tue, 23 Jun 2020 10:39:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 738FCC433A0
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
 From:   Akash Asthana <akashast@codeaurora.org>
@@ -51,9 +51,9 @@ Cc:     linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
         dianders@chromium.org, evgreen@codeaurora.org,
         linux-kernel@vger.kernel.org,
         Akash Asthana <akashast@codeaurora.org>
-Subject: [PATCH V8 4/8] tty: serial: qcom_geni_serial: Add interconnect support
-Date:   Tue, 23 Jun 2020 16:08:53 +0530
-Message-Id: <1592908737-7068-5-git-send-email-akashast@codeaurora.org>
+Subject: [PATCH V8 5/8] spi: spi-geni-qcom: Combine the clock setting code
+Date:   Tue, 23 Jun 2020 16:08:54 +0530
+Message-Id: <1592908737-7068-6-git-send-email-akashast@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1592908737-7068-1-git-send-email-akashast@codeaurora.org>
 References: <1592908737-7068-1-git-send-email-akashast@codeaurora.org>
@@ -62,117 +62,142 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Get the interconnect paths for Uart based Serial Engine device
-and vote according to the baud rate requirement of the driver.
+From: Douglas Anderson <dianders@chromium.org>
 
+There is code for adjusting the clock both in setup_fifo_params()
+(called from prepare_message()) and in setup_fifo_xfer() (called from
+transfer_one()).  The code is the same.  Abstract it out to a shared
+function.
+
+This is a no-op cleanup patch.  The only change is to the error string
+if we fail to set the clock.  Since the two paths has marginally
+different error messages I picked the clean one.
+
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
 Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-Changes in V2:
- - As per Bjorn's comment, removed se == NULL check from geni_serial_icc_get
- - As per Bjorn's comment, removed code to set se->icc_path* to NULL in failure
- - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
-   path handle
- - As per Matthias comment, added error handling for icc_set_bw call
+This patch is introduced in V8 of the series.
 
-Changes in V3:
- - As per Matthias comment, use common library APIs defined in geni-se
-   driver for ICC functionality.
+ drivers/spi/spi-geni-qcom.c | 70 ++++++++++++++++++++++-----------------------
+ 1 file changed, 35 insertions(+), 35 deletions(-)
 
-Changes in V4:
- - As per Mark's comment move peak_bw guess as twice of avg_bw if
-   nothing mentioned explicitly to ICC core.
- - As per Matthias's comment select core clock BW based on baud rate.
-   If it's less than 115200 go for GENI_DEFAULT_BW else CORE_2X_50_MHZ
-
-Changes in V5:
- - Add icc_enable/disable to power on/off call.
- - Save some non-zero avg/peak value to ICC core by calling geni_icc_set_bw
-   from probe so that when resume/icc_enable is called NOC are running at
-   some non-zero value. No need to call icc_disable after BW vote because
-   console devices are expected to be in active state from the probe itself
-   and qcom_geni_serial_pm(STATE_OFF) will be called for non-console ones.
-
-Changes in V6:
- - No change
-
-Changes in V7:
- - As per Matthias's comment removed usage of peak_bw variable because we don't
-   have explicit peak requirement, we were voting peak = avg and this can be
-   tracked using single variable for avg bw.
-
-Changes in V8:
- - No change.
-
- drivers/tty/serial/qcom_geni_serial.c | 31 ++++++++++++++++++++++++++++---
- 1 file changed, 28 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index a4468db..f701c7e 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -945,6 +945,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
- 	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
- 	unsigned long clk_rate;
- 	u32 ver, sampling_rate;
-+	unsigned int avg_bw_core;
- 
- 	qcom_geni_serial_stop_rx(uport);
- 	/* baud rate */
-@@ -966,6 +967,16 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
- 	ser_clk_cfg = SER_CLK_EN;
- 	ser_clk_cfg |= clk_div << CLK_DIV_SHFT;
- 
-+	/*
-+	 * Bump up BW vote on CPU and CORE path as driver supports FIFO mode
-+	 * only.
-+	 */
-+	avg_bw_core = (baud > 115200) ? Bps_to_icc(CORE_2X_50_MHZ)
-+						: GENI_DEFAULT_BW;
-+	port->se.icc_paths[GENI_TO_CORE].avg_bw = avg_bw_core;
-+	port->se.icc_paths[CPU_TO_GENI].avg_bw = Bps_to_icc(baud);
-+	geni_icc_set_bw(&port->se);
-+
- 	/* parity */
- 	tx_trans_cfg = readl(uport->membase + SE_UART_TX_TRANS_CFG);
- 	tx_parity_cfg = readl(uport->membase + SE_UART_TX_PARITY_CFG);
-@@ -1235,11 +1246,14 @@ static void qcom_geni_serial_pm(struct uart_port *uport,
- 	if (old_state == UART_PM_STATE_UNDEFINED)
- 		old_state = UART_PM_STATE_OFF;
- 
--	if (new_state == UART_PM_STATE_ON && old_state == UART_PM_STATE_OFF)
-+	if (new_state == UART_PM_STATE_ON && old_state == UART_PM_STATE_OFF) {
-+		geni_icc_enable(&port->se);
- 		geni_se_resources_on(&port->se);
--	else if (new_state == UART_PM_STATE_OFF &&
--			old_state == UART_PM_STATE_ON)
-+	} else if (new_state == UART_PM_STATE_OFF &&
-+			old_state == UART_PM_STATE_ON) {
- 		geni_se_resources_off(&port->se);
-+		geni_icc_disable(&port->se);
-+	}
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 0c534d1..f186906 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -192,14 +192,42 @@ static void spi_setup_word_len(struct spi_geni_master *mas, u16 mode,
+ 	writel(word_len, se->base + SE_SPI_WORD_LEN);
  }
  
- static const struct uart_ops qcom_geni_console_pops = {
-@@ -1337,6 +1351,17 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 			return -ENOMEM;
++static int geni_spi_set_clock(struct spi_geni_master *mas, unsigned long clk_hz)
++{
++	u32 clk_sel, m_clk_cfg, idx, div;
++	struct geni_se *se = &mas->se;
++	int ret;
++
++	ret = get_spi_clk_cfg(clk_hz, mas, &idx, &div);
++	if (ret) {
++		dev_err(mas->dev, "Err setting clk to %lu: %d\n", clk_hz, ret);
++		return ret;
++	}
++
++	/*
++	 * SPI core clock gets configured with the requested frequency
++	 * or the frequency closer to the requested frequency.
++	 * For that reason requested frequency is stored in the
++	 * cur_speed_hz and referred in the consecutive transfer instead
++	 * of calling clk_get_rate() API.
++	 */
++	mas->cur_speed_hz = clk_hz;
++
++	clk_sel = idx & CLK_SEL_MSK;
++	m_clk_cfg = (div << CLK_DIV_SHFT) | SER_CLK_EN;
++	writel(clk_sel, se->base + SE_GENI_CLK_SEL);
++	writel(m_clk_cfg, se->base + GENI_SER_M_CLK_CFG);
++
++	return 0;
++}
++
+ static int setup_fifo_params(struct spi_device *spi_slv,
+ 					struct spi_master *spi)
+ {
+ 	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+ 	struct geni_se *se = &mas->se;
+ 	u32 loopback_cfg, cpol, cpha, demux_output_inv;
+-	u32 demux_sel, clk_sel, m_clk_cfg, idx, div;
+-	int ret;
++	u32 demux_sel;
+ 
+ 	loopback_cfg = readl(se->base + SE_SPI_LOOPBACK);
+ 	cpol = readl(se->base + SE_SPI_CPOL);
+@@ -222,27 +250,16 @@ static int setup_fifo_params(struct spi_device *spi_slv,
+ 		demux_output_inv = BIT(spi_slv->chip_select);
+ 
+ 	demux_sel = spi_slv->chip_select;
+-	mas->cur_speed_hz = spi_slv->max_speed_hz;
+ 	mas->cur_bits_per_word = spi_slv->bits_per_word;
+ 
+-	ret = get_spi_clk_cfg(mas->cur_speed_hz, mas, &idx, &div);
+-	if (ret) {
+-		dev_err(mas->dev, "Err setting clks ret(%d) for %ld\n",
+-							ret, mas->cur_speed_hz);
+-		return ret;
+-	}
+-
+-	clk_sel = idx & CLK_SEL_MSK;
+-	m_clk_cfg = (div << CLK_DIV_SHFT) | SER_CLK_EN;
+ 	spi_setup_word_len(mas, spi_slv->mode, spi_slv->bits_per_word);
+ 	writel(loopback_cfg, se->base + SE_SPI_LOOPBACK);
+ 	writel(demux_sel, se->base + SE_SPI_DEMUX_SEL);
+ 	writel(cpha, se->base + SE_SPI_CPHA);
+ 	writel(cpol, se->base + SE_SPI_CPOL);
+ 	writel(demux_output_inv, se->base + SE_SPI_DEMUX_OUTPUT_INV);
+-	writel(clk_sel, se->base + SE_GENI_CLK_SEL);
+-	writel(m_clk_cfg, se->base + GENI_SER_M_CLK_CFG);
+-	return 0;
++
++	return geni_spi_set_clock(mas, spi_slv->max_speed_hz);
+ }
+ 
+ static int spi_geni_prepare_message(struct spi_master *spi,
+@@ -304,6 +321,7 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+ 	u32 m_cmd = 0;
+ 	u32 spi_tx_cfg, len;
+ 	struct geni_se *se = &mas->se;
++	int ret;
+ 
+ 	/*
+ 	 * Ensure that our interrupt handler isn't still running from some
+@@ -328,27 +346,9 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+ 
+ 	/* Speed and bits per word can be overridden per transfer */
+ 	if (xfer->speed_hz != mas->cur_speed_hz) {
+-		int ret;
+-		u32 clk_sel, m_clk_cfg;
+-		unsigned int idx, div;
+-
+-		ret = get_spi_clk_cfg(xfer->speed_hz, mas, &idx, &div);
+-		if (ret) {
+-			dev_err(mas->dev, "Err setting clks:%d\n", ret);
++		ret = geni_spi_set_clock(mas, xfer->speed_hz);
++		if (ret)
+ 			return;
+-		}
+-		/*
+-		 * SPI core clock gets configured with the requested frequency
+-		 * or the frequency closer to the requested frequency.
+-		 * For that reason requested frequency is stored in the
+-		 * cur_speed_hz and referred in the consecutive transfer instead
+-		 * of calling clk_get_rate() API.
+-		 */
+-		mas->cur_speed_hz = xfer->speed_hz;
+-		clk_sel = idx & CLK_SEL_MSK;
+-		m_clk_cfg = (div << CLK_DIV_SHFT) | SER_CLK_EN;
+-		writel(clk_sel, se->base + SE_GENI_CLK_SEL);
+-		writel(m_clk_cfg, se->base + GENI_SER_M_CLK_CFG);
  	}
  
-+	ret = geni_icc_get(&port->se, NULL);
-+	if (ret)
-+		return ret;
-+	port->se.icc_paths[GENI_TO_CORE].avg_bw = GENI_DEFAULT_BW;
-+	port->se.icc_paths[CPU_TO_GENI].avg_bw = GENI_DEFAULT_BW;
-+
-+	/* Set BW for register access */
-+	ret = geni_icc_set_bw(&port->se);
-+	if (ret)
-+		return ret;
-+
- 	port->name = devm_kasprintf(uport->dev, GFP_KERNEL,
- 			"qcom_geni_serial_%s%d",
- 			uart_console(uport) ? "console" : "uart", uport->line);
+ 	mas->tx_rem_bytes = 0;
 -- 
 The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
 
