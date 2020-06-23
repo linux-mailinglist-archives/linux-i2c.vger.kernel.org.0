@@ -2,73 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7ED204DA4
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jun 2020 11:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC8A204DFE
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jun 2020 11:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731904AbgFWJPl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Jun 2020 05:15:41 -0400
-Received: from mga14.intel.com ([192.55.52.115]:20380 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731887AbgFWJPl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 23 Jun 2020 05:15:41 -0400
-IronPort-SDR: 71IiMv+GSg0EE1yIk1CAmPFi/wsiVuMPtzh0csKYoOso3U5V4HsI4Mjsz7dzgj/13p5CyzQree
- cROoHds8zHxg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="143079450"
-X-IronPort-AV: E=Sophos;i="5.75,270,1589266800"; 
-   d="scan'208";a="143079450"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 02:15:40 -0700
-IronPort-SDR: 9ecuZ+G7GrAEeTW18nK3raseLUJZmWl/ZxbFLzykfBg11Ek8nsS/Ur4be8Pw74R56/q8BilU+Z
- E5im+7C7MZLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,270,1589266800"; 
-   d="scan'208";a="310401281"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 23 Jun 2020 02:15:39 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jnf1p-00FKmg-3z; Tue, 23 Jun 2020 12:15:41 +0300
-Date:   Tue, 23 Jun 2020 12:15:41 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: Re: [PATCH] i2c: designware: Fix bus speed in !CONFIG_ACPI case
-Message-ID: <20200623091541.GR2428291@smile.fi.intel.com>
-References: <20200623083113.241137-1-jarkko.nikula@linux.intel.com>
- <20200623084635.GP2428291@smile.fi.intel.com>
+        id S1731945AbgFWJc3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Jun 2020 05:32:29 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:26186 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731921AbgFWJc1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Jun 2020 05:32:27 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05N9NoaL028773;
+        Tue, 23 Jun 2020 11:31:14 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=Weg0RcL/DVf4Oy73jsoOhA5zRr02V3dL56h1oGO0waY=;
+ b=h3ztPvbNJRqBmRFmjJqzjCtiE/9dI0oL6hVSPD6oB4RtwFuhkGto2DZU1wL9/yxNOtwr
+ uqNsmRbkq6+d5EyOClF0kV0RtRVcIaxWZwJyv3gyJe2MhGmy6Q0gsm9gyoLbuEXjYAst
+ /k2czctZimUvv5IUzXxeXhDum0ydDfvzK0lN6ddLZr4lgbbILzvzjWU8Q4msz7e+QsiI
+ nYyzxQjYyDTwTNgi0/PQUyo0J26PKh1q8VQWX5scoVHrvPDk16SamnHL7XensjbaXKAb
+ 934YNq4bZrhCTBtYzPEci0FT/vsamf5o24GazsRj5NLkxTEpDpEQ7E43OqnnicPnUUCo +w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 31s87vecn2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Jun 2020 11:31:14 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7A46210002A;
+        Tue, 23 Jun 2020 11:31:13 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 699602B64A7;
+        Tue, 23 Jun 2020 11:31:13 +0200 (CEST)
+Received: from localhost (10.75.127.48) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 23 Jun 2020 11:31:12
+ +0200
+From:   Alain Volmat <alain.volmat@st.com>
+To:     <wsa@kernel.org>, <robh+dt@kernel.org>
+CC:     <mark.rutland@arm.com>, <pierre-yves.mordret@st.com>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>,
+        <alain.volmat@st.com>
+Subject: [PATCH] ARM: dts: stm32: configure i2c5 support on stm32mp15xx-dkx
+Date:   Tue, 23 Jun 2020 11:31:12 +0200
+Message-ID: <1592904672-12781-1-git-send-email-alain.volmat@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200623084635.GP2428291@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG6NODE1.st.com (10.75.127.16) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-23_05:2020-06-22,2020-06-23 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 11:46:35AM +0300, Andy Shevchenko wrote:
-> On Tue, Jun 23, 2020 at 11:31:13AM +0300, Jarkko Nikula wrote:
-> > John Stultz reported that commit f9288fcc5c615 ("i2c: designware: Move
-> > ACPI parts into common module") caused a regression on the HiKey board
-> > where adv7511 HDMI bridge driver wasn't probing anymore due the I2C bus
-> > failed to start.
-> > 
-> > It seems the change caused the bus speed being zero when CONFIG_ACPI
-> > not set and neither speed based on "clock-frequency" device property or
-> > default fast mode is set.
-> > 
-> > Fix this by moving bus speed setting back to dw_i2c_plat_probe() and let
-> > the i2c_dw_acpi_adjust_bus_speed() adjust only speed from ACPI.
-> 
-> I have slightly different idea, I'll send a patch soon after testing.
+From: Fabrice Gasnier <fabrice.gasnier@st.com>
 
-Just sent a patch. Please, review.
+Configure I2C5 on stm32mp15 DK boards. It's available and can be used on:
+- Arduino connector
+- GPIO expansion connector
+Keep it disabled by default, so the pins are kept in their initial state to
+lower power consumption. This way they can also be used as GPIO.
 
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+Signed-off-by: Alain Volmat <alain.volmat@st.com>
+---
+ arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+index fcf50131e5fe..e69aba9830b3 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+@@ -361,6 +361,19 @@
+ 	};
+ };
+ 
++&i2c5 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&i2c5_pins_a>;
++	pinctrl-1 = <&i2c5_sleep_pins_a>;
++	i2c-scl-rising-time-ns = <185>;
++	i2c-scl-falling-time-ns = <20>;
++	clock-frequency = <400000>;
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++	status = "disabled";
++};
++
+ &i2s2 {
+ 	clocks = <&rcc SPI2>, <&rcc SPI2_K>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
+ 	clock-names = "pclk", "i2sclk", "x8k", "x11k";
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 
