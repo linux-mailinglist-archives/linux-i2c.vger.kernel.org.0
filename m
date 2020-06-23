@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7A8204FA7
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jun 2020 12:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D03204FAF
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jun 2020 12:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732247AbgFWK4W (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Jun 2020 06:56:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42632 "EHLO mail.kernel.org"
+        id S1732258AbgFWK52 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Jun 2020 06:57:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42962 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732205AbgFWK4V (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 23 Jun 2020 06:56:21 -0400
+        id S1732205AbgFWK52 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 23 Jun 2020 06:57:28 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 81C3920738;
-        Tue, 23 Jun 2020 10:56:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7B8BE20738;
+        Tue, 23 Jun 2020 10:57:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592909781;
-        bh=GcdPSTmUcdlbjUfE2Yq4Ao5q+WO+t3w2mG4xYnD4PRg=;
+        s=default; t=1592909848;
+        bh=iRkw0xFnoVAw8okWWLZWHBDHmZ4IX8+3KhsF9mtAHMU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xrLsXbjnLLak6sPIRkEdh3NPbEtXbhTVMJRlRcBWJjteeNgxv7l5thVYSTBTolaXf
-         mgIuqRb9QPC3FjxhZrwCaXVTCREVzvp5tQz2L1ZbzR3Jbp2bC3nu9o8jNIQrrKSWMN
-         gMuAIu9OxvxvgH6si1jVCJVnFQGGYxIQghXUK/QI=
-Date:   Tue, 23 Jun 2020 11:56:18 +0100
+        b=pnhohF/zFVVxbHXdDWMaU8xlCbJqiIE8u/vTBUMyvTLCWyldXnfHqY83UyAq6pIGB
+         98SpmHhnfXchISOVnBM7yKrmP8zysgz1VcMgf9kknDqnMJOXF0vy0vnyPRjWcTM/q8
+         Z7pIuWF1GaAEthRn65m2K3FtUNFk8GpvTg3w2kME=
+Date:   Tue, 23 Jun 2020 11:57:25 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Akash Asthana <akashast@codeaurora.org>
 Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
@@ -34,15 +34,15 @@ Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
         linux-serial@vger.kernel.org, mka@chromium.org,
         dianders@chromium.org, evgreen@codeaurora.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 5/8] spi: spi-geni-qcom: Combine the clock setting code
-Message-ID: <20200623105618.GB5582@sirena.org.uk>
+Subject: Re: [PATCH V8 6/8] spi: spi-geni-qcom: Add interconnect support
+Message-ID: <20200623105725.GC5582@sirena.org.uk>
 References: <1592908737-7068-1-git-send-email-akashast@codeaurora.org>
- <1592908737-7068-6-git-send-email-akashast@codeaurora.org>
+ <1592908737-7068-7-git-send-email-akashast@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4bRzO86E/ozDv8r1"
+        protocol="application/pgp-signature"; boundary="Qbvjkv9qwOGw/5Fx"
 Content-Disposition: inline
-In-Reply-To: <1592908737-7068-6-git-send-email-akashast@codeaurora.org>
+In-Reply-To: <1592908737-7068-7-git-send-email-akashast@codeaurora.org>
 X-Cookie: No motorized vehicles allowed.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
@@ -51,34 +51,29 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---4bRzO86E/ozDv8r1
+--Qbvjkv9qwOGw/5Fx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 23, 2020 at 04:08:54PM +0530, Akash Asthana wrote:
-> From: Douglas Anderson <dianders@chromium.org>
->=20
-> There is code for adjusting the clock both in setup_fifo_params()
-> (called from prepare_message()) and in setup_fifo_xfer() (called from
-> transfer_one()).  The code is the same.  Abstract it out to a shared
-> function.
+On Tue, Jun 23, 2020 at 04:08:55PM +0530, Akash Asthana wrote:
+> Get the interconnect paths for SPI based Serial Engine device
+> and vote according to the current bus speed of the driver.
 
 Acked-by: Mark Brown <broonie@kernel.org>
 
---4bRzO86E/ozDv8r1
+--Qbvjkv9qwOGw/5Fx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7x39EACgkQJNaLcl1U
-h9AHegf9GdXSnZ+4rXpEBgq/XNwTZFM8JsHNOn3DtEe+NzYdU5bX+U8TOu6QfI9E
-gaa4dw8m0NgBrMbnh2lrij4efQFe6DfVlNqP6fUJ8eEtIN7g4hMoDWLyxms3v4Ra
-hILk8cOv1Vu3FURcHfrsEDyhMzHCVS6hI1Gr/ENgI5gqfvobLoOIKx88xJZI5Ixi
-TXqbrYXH0TB+/4KOFxEB33+OWX01M2+Qc9vvoP9E5Phu0LOczxwWE/CjEHokTpbH
-Q3ctSTqc5/O/ZlT5dn6EE4VJG0WeKv9VrJQ0fTxye4tJzZEK0sNYzsfWdWWdn19V
-PC1qSpXSenBMCj/dmSxo0Jcp8lR7XA==
-=boUF
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7x4BUACgkQJNaLcl1U
+h9DnSAf+IN0s+n8VEWl4lI3UNLYubAUrS3o4rQIpDmGYGgeLf6Hsn18VzYTp4TPI
+YQfdE7lKKSzxsIOnUreMtYhlZyEEdB7cvIaKOZNVq81EPuUOWlHefuClCFFm/hX7
+Hoqj66HDjO0g1/ILDpE8vgZNt80ETU3z6A1L1m6U8SV15sq30cVYOM8l51gVyD87
+iMQw8GXKKywdPZADOWQTYuYBFJaslSDn6RT7CE/yVhGksdE6jyh+VIVcQbov30bN
+0Wydkr842OmzT7HLQXwaz2A0HWxe1bZwh9zP2kfgMz+CIfIHlLh1CpIlEiQo90dT
+J88TfoT/YJyM9FjGdiVs1v+GLaauQg==
+=Gs1S
 -----END PGP SIGNATURE-----
 
---4bRzO86E/ozDv8r1--
+--Qbvjkv9qwOGw/5Fx--
