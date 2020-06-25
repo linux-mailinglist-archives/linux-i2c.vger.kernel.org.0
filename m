@@ -2,126 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 763E7209A3E
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Jun 2020 09:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BFF209AA8
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Jun 2020 09:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390107AbgFYHGn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Jun 2020 03:06:43 -0400
-Received: from sauhun.de ([88.99.104.3]:42254 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390096AbgFYHGn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 25 Jun 2020 03:06:43 -0400
-Received: from localhost (p54b332a0.dip0.t-ipconnect.de [84.179.50.160])
-        by pokefinder.org (Postfix) with ESMTPSA id 08C792C207C;
-        Thu, 25 Jun 2020 09:06:41 +0200 (CEST)
-Date:   Thu, 25 Jun 2020 09:06:37 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2] i2c: sh_mobile: implement atomic transfers
-Message-ID: <20200625070636.GB970@ninjato>
-References: <20200618150532.2923-1-uli+renesas@fpond.eu>
- <CAMuHMdUE4v+8Dz+eowX5RNJuRGmXcFuYQCe7JQxrFXEQV3xKJA@mail.gmail.com>
+        id S2390295AbgFYHkG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Jun 2020 03:40:06 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:16490 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2390126AbgFYHkE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Jun 2020 03:40:04 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05P7RNI6002372;
+        Thu, 25 Jun 2020 09:39:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=bHP02EBAOn+1XnI2EebWLmYBWJN6Wh587rzZXl9nQ8U=;
+ b=tAnuXlL/Gzq4t7/ql/hJeEeUcZaqRnsyneb3xOB54hX60IJgqLVXbB2H1qj1TTDRLCtR
+ hYdu0/cMLV9/SXZnKnvAoaDJLSjff1RJD1XyEq76cWYuP9yJV14HqZZWtmmZyPVdTKK4
+ XtkOvU4Nj/HaPZBHbteN9U1MXagpgaBXZ2cdedxGI5mFbcw8U8UH9pHgyerYr09Aun0C
+ vIH14NxV2oUv+Rbed+bT8Cb22/3W+B5HHB6mbv7ZrJmP5KSIfJA+S89pNDRCTSEkMblp
+ gbhBl84qqcsQbD4bn58bAPt0IhG0Yx6v2qaCTPLLqVAayNnwItItsOWQGtk8Gd3XMqm6 cA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 31uuucgkpd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Jun 2020 09:39:54 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 82BEF10002A;
+        Thu, 25 Jun 2020 09:39:50 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 525CE2A82E2;
+        Thu, 25 Jun 2020 09:39:50 +0200 (CEST)
+Received: from localhost (10.75.127.50) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 25 Jun 2020 09:39:49
+ +0200
+From:   Alain Volmat <alain.volmat@st.com>
+To:     <wsa@kernel.org>, <robh+dt@kernel.org>
+CC:     <mark.rutland@arm.com>, <pierre-yves.mordret@st.com>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>,
+        <alain.volmat@st.com>
+Subject: [PATCH v2 0/4] stm32-f7: Addition of SMBus Alert / Host-notify features
+Date:   Thu, 25 Jun 2020 09:39:25 +0200
+Message-ID: <1593070769-9106-1-git-send-email-alain.volmat@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mxv5cy4qt+RJ9ypb"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUE4v+8Dz+eowX5RNJuRGmXcFuYQCe7JQxrFXEQV3xKJA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG6NODE1.st.com (10.75.127.16) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-25_03:2020-06-25,2020-06-25 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+This serie adds SMBus Alert and SMBus Host-Notify features for the i2c-stm32f7.
 
---mxv5cy4qt+RJ9ypb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This serie v2 rework comments from the 1st serie and replace the very generic
+reg_client / unreg_client callback with HOST_NOTIFY only reg_hnotify_cli
+and unreg_hnotify_cli callbacks.
 
-Hi Geert,
+Alain Volmat (4):
+  i2c: smbus: add core function handling SMBus host-notify
+  i2c: addition of client hnotify reg/unreg callbacks
+  dt-bindings: i2c-stm32: add SMBus Alert bindings
+  i2c: stm32f7: Add SMBus-specific protocols support
 
-thanks for the review!
+ .../devicetree/bindings/i2c/st,stm32-i2c.yaml      |   4 +
+ drivers/i2c/busses/Kconfig                         |   1 +
+ drivers/i2c/busses/i2c-stm32f7.c                   | 194 +++++++++++++++++++--
+ drivers/i2c/i2c-core-base.c                        |  18 +-
+ drivers/i2c/i2c-core-smbus.c                       | 110 ++++++++++++
+ include/linux/i2c-smbus.h                          |   2 +
+ include/linux/i2c.h                                |   8 +
+ 7 files changed, 325 insertions(+), 12 deletions(-)
 
-> > @@ -581,12 +585,14 @@ static void start_ch(struct sh_mobile_i2c_data *p=
-d, struct i2c_msg *usr_msg,
-> >         pd->pos =3D -1;
-> >         pd->sr =3D 0;
-> >
->=20
->     if (pd->atomic_xfer)
->             return;
->=20
-> and be done with it?
-
-I like Uli's version a tad better in case we ever add something for both
-cases after the following if-block. But I don't care much, we could
-change it later.
-
-> > -       pd->dma_buf =3D i2c_get_dma_safe_msg_buf(pd->msg, 8);
-> > -       if (pd->dma_buf)
-> > -               sh_mobile_i2c_xfer_dma(pd);
-> > -
-> > -       /* Enable all interrupts to begin with */
-> > -       iic_wr(pd, ICIC, ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE=
-);
-> > +       if (!pd->atomic_xfer) {
-> > +               pd->dma_buf =3D i2c_get_dma_safe_msg_buf(pd->msg, 8);
-> > +               if (pd->dma_buf)
-> > +                       sh_mobile_i2c_xfer_dma(pd);
-> > +               /* Enable all interrupts to begin with */
-> > +               iic_wr(pd, ICIC,
-> > +                      ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE);
-> > +       }
-
-=2E..
-
-> After removing that check, it starts complaining:
->=20
->     BUG: sleeping function called from invalid context at
-> kernel/locking/mutex.c:281
->     in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 1, name:
-> systemd-shutdow
->=20
-> In general, pm_runtime_get_sync() is not safe to call from atomic
-> context.
-> For Renesas SoCs, I think both the power and clock domains are safe, as
-> the respective drivers don't sleep.  The PM core might, though.
-
-Still, that sounds to me like we should protect these calls as in V1?
-
-> > +                       time_left =3D time_before_eq(jiffies, j);
-> > +                       while (time_left &&
->=20
-> Who's updating time_left?
-
-Good question :)
-
-Kind regards,
-
-   Wolfram
-
-
---mxv5cy4qt+RJ9ypb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl70TPwACgkQFA3kzBSg
-Kbb80w//ZxFdMxDD0p0GACwqvy1Xd3buYp3cKGFFk6K0pJWbtZZtLkhgGsn9GgKf
-D4s29pS1nleSD/zkNqhaPYowh11wF0FlE5qCMp+FawqK+9ShfiiI884kocdsHc8d
-0g1V+mUVIN3J8SZfUQFDqgOxIMRxFeQqhhbeHLF/cB0NX5PJvQwEthRapJABj9dQ
-UGIZbj5/DMwX0SjPPXWFOPyq5Sc2bEgU9qSIwghn3PDey56irAZ4vEqnKS2mKgi3
-p3X5Inukuqi1Moll2W+6AFYxtvMu86ueTemg5D+5HwvRfLDlXZl7kK9hjLoP6cwK
-ItGmRBwG84BOjzg58bRhxYoyRZUT870sra06SLzVk+/xFc/q5lrahEtsZEzCHnIl
-l02ioOf0j31kTjhhfLMkayvjxdB5Z0qsVD321NKwX4z1czjtlsyomvWfTFIHeZqS
-7ZLnJdNCXyBcK/CNXjuDEFytO+HWJf9StW5zzRwaV+Z6t4G5CL7eg263ZEdvFMbH
-KwsEoGIpLp427BLUwqFUgpykFJZq62Ma+yVoNx2RLIaKc1RJ3t3QTU/TMv9rLFHP
-T5ni5dq3MAci5bbWfoYDJeFmfIklKziOr+/OwuoXrBYR6MoMfEaSscq+SyVYws0o
-f3qkF75bztgLidgGuwn73icnbJylXKgT/Z2w06qOtQ4q4zf+cOQ=
-=pqD/
------END PGP SIGNATURE-----
-
---mxv5cy4qt+RJ9ypb--
