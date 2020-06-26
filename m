@@ -2,81 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FA720A839
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jun 2020 00:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7686120AE5A
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jun 2020 10:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404242AbgFYW0W (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Jun 2020 18:26:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55618 "EHLO mail.kernel.org"
+        id S1726003AbgFZIWO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 Jun 2020 04:22:14 -0400
+Received: from sauhun.de ([88.99.104.3]:37642 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403905AbgFYW0W (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 25 Jun 2020 18:26:22 -0400
-Received: from localhost (p54b332a0.dip0.t-ipconnect.de [84.179.50.160])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7706620767;
-        Thu, 25 Jun 2020 22:26:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593123981;
-        bh=S1U8fm3RinMOZnK4GNXNOMX0hyikWzh9B/PbOPUG65M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AUyYaEdVBfVEMd9N9yuKAnXmb/69ZDgtwbqs47UiYNruPIjxgXKilN98rIL1gOIJj
-         QEbufrTI5XUDT7gn3LeuAIfnbSffFNL5R1e/Nmq943u4vXcRStGxRoa2CdaB1Ja4wh
-         EVCW7tYRszGlvoHTiOpwpbpDWtCyzvAxCrKdVUqk=
-Date:   Fri, 26 Jun 2020 00:26:04 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andy.shevchenko@gmail.com, joel@jms.id.au
-Subject: Re: [PATCH v2 1/2] i2c: fsi: Fix the port number field in status
- register
-Message-ID: <20200625222604.GA17905@kunai>
-References: <20200609201555.11401-1-eajames@linux.ibm.com>
- <20200609201555.11401-2-eajames@linux.ibm.com>
+        id S1725912AbgFZIWO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 26 Jun 2020 04:22:14 -0400
+Received: from localhost (p54b33841.dip0.t-ipconnect.de [84.179.56.65])
+        by pokefinder.org (Postfix) with ESMTPSA id 538F22C0307;
+        Fri, 26 Jun 2020 10:22:11 +0200 (CEST)
+Date:   Fri, 26 Jun 2020 10:22:08 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Mans Rullgard <mans@mansr.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: core: check returned size of emulated smbus block
+ read
+Message-ID: <20200626082208.GA4559@kunai>
+References: <20200613104109.2989-1-mans@mansr.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qMm9M+Fa2AknHoGS"
+        protocol="application/pgp-signature"; boundary="ReaqsoxgOBHFXBhH"
 Content-Disposition: inline
-In-Reply-To: <20200609201555.11401-2-eajames@linux.ibm.com>
+In-Reply-To: <20200613104109.2989-1-mans@mansr.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---qMm9M+Fa2AknHoGS
+--ReaqsoxgOBHFXBhH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 09, 2020 at 03:15:54PM -0500, Eddie James wrote:
-> The port number field in the status register was not correct, so fix it.
->=20
-> Fixes: d6ffb6300116 ("i2c: Add FSI-attached I2C master algorithm")
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
+On Sat, Jun 13, 2020 at 11:41:09AM +0100, Mans Rullgard wrote:
+> If the i2c bus driver ignores the I2C_M_RECV_LEN flag (as some of
+> them do), it is possible for an I2C_SMBUS_BLOCK_DATA read issued
+
+Out of interest, which driver did you use?
+
+> on some random device to return an arbitrary value in the first
+> byte (and nothing else).  When this happens, i2c_smbus_xfer_emulated()
+> will happily write past the end of the supplied data buffer, thus
+> causing Bad Things to happen.  To prevent this, check the size
+> before copying the data block and return an error if it is too large.
+
+Good catch, we were relying on the drivers too much here. I think the
+same fix is needed for the non-emulated case as well. Will have a look.
+
+> +			if (msg[1].buf[0] > I2C_SMBUS_BLOCK_MAX) {
+> +				dev_err(&adapter->dev,
+> +					"Invalid block size returned: %d\n",
+> +					msg[1].buf[0]);
+> +				status = -EINVAL;
+
+I changed this to -EPROTO as described in
+Documentation/i2c/fault-codes.rst.
 
 Applied to for-current, thanks!
 
 
---qMm9M+Fa2AknHoGS
+--ReaqsoxgOBHFXBhH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl71JHYACgkQFA3kzBSg
-KbZ78xAAsHf3FMK1Z6NjNDk7Cv6KLeu+HJLgR8G6J0GBLpY5XAkRo61ROEerVfrf
-W+2+8xEVI/ODV9HeBaDQD3FNop5ui5PsdFt81yNrfTAylFSg1oWsSN/h67po6e42
-070v/t1DRAR6gYrged1F+nd0eIQy4b+SP1kOlWPRkCb5tZli2WwlzXAq/k74jemY
-5rBSamNVOltjj/9h4ZJrzO9a3mwc5kAyGDl2ZE/OELpxh1i/AHqMs1xQcccnxnhc
-5QJ6El5AkgX1tKI8UtujDprYV4YeqwuAOx//OICcRc/NyqGr5pXNz1g+qxF7pQrE
-uo6WYdyDtr40NNsHtyc6nk3xLK4pjYEdob6uu/BrMxHbKDG4mXJU8TkutNY0L7xN
-x+kTOEXCy4Qa8fnwBljylRGEinMe9vAuhpkC+5cwIggcaWIJakwZ8XyBNiFaSqcI
-+LnuC3oaVlQCHdM1t2XP2P/tbs7RCERxoP0Tm5K5AIMW1tisMtKntQBSlIosrX4T
-3zIwvIqO8N2vzwoFdOtdpDUlg+727xWP9A4g/4dJYHfl6QVYsaC8I3BRDzPTRAt1
-eWRKqZpqtefKWdcfoDaJmQaF/pYAR+7QCCVuk0Hn3NYebDOI+LUI/vMnxY9fnAF4
-9H6kKyyOMMS7geKGY+IiCv5pp9la0RYuEY2nUNk/zj1w6CggSgQ=
-=EG/2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl71sCwACgkQFA3kzBSg
+KbYGPw//ZrBp9jkyvtk0WmZ2Rkpaf69KHl9lgNoCFfsRVlHAMAOygAgedV6ih0an
+13bFDvRfjEIq2ZnWJT/M+PhraNOOUyNgujMbpeiyAMR9aff2W17QECuDFsyluQ9C
+SMQFtqpuLey+t0rVxO9gpNvGUhz5C5aZvPCQfGAsxVKve+2EwqlQep1S6JknN6HW
+4SBPeK+y2SdCIR00bwojpkFn7JHw2pwCsraz2lxX8EwQlJVcUxQ10tA0QEKu1zla
+DDsyfNlsg1YmntX315IJ4fnHU9MtROS7qv67sqo5A4+bPtWAQqkeIg+c00yyJRH/
+fyL0A8k/Cc2U9GtuXAGtZV9pCNzCe2wn8cw0gnEQ9HSQuAiKTV9fr5Nx/9NkFMev
+xvrz/4ay7TxSTcrrYtHADXrjDGKHGEJ0a8sXONAenCTJgmC4dy9wjHn5UNcap+nJ
+fMG+u5krSwcsCj/1cTbPcRV7F0MDZ5bkxleIhDAWh1dzpnr3/BKoCZrSiKV0Ln4N
+Dvy0+Q16ewbFwby0+p0Mrxsk10Rre+qcgKqZD5b3DPZbE6MZpC4XKZrOEUgilJaI
+Q3TBqXNNYHZ+oSaDKwQj3wO9SELbZdymZknEpS7vORgvMyIz4sBVhxIsQCtX944F
+eXYvJGjWFTQL700XPh0DsW+1R6G0ChavBzv8azB7OTNgrf18+Oc=
+=Tpvw
 -----END PGP SIGNATURE-----
 
---qMm9M+Fa2AknHoGS--
+--ReaqsoxgOBHFXBhH--
