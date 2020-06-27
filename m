@@ -2,116 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B3F20C376
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Jun 2020 20:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C9C20C495
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jun 2020 00:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726438AbgF0SVF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 27 Jun 2020 14:21:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33480 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725932AbgF0SVF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 27 Jun 2020 14:21:05 -0400
-Received: from localhost (p5486ce85.dip0.t-ipconnect.de [84.134.206.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C444A20760;
-        Sat, 27 Jun 2020 18:21:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593282064;
-        bh=pzK053JxESKmHL36eDUmCVc40aMZUxcYIzQWVFw3hL0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Z+2cNzgoYeYltgKHqnZYVO2mbnVBY7KuDMyQ6tS0LOYPHgS2WpSe2Aq9cuwa7iulH
-         l2KP/zjGzJQSg0GXK2sTLjxDz2h6VAkQZmJNuk0LC/U21s478xKYpl1oXoa1KihjOO
-         wmv9optcdK2M8eMDNJ8O4h7zr5I3c7teDDvyYrQU=
-Date:   Sat, 27 Jun 2020 20:20:57 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for 5.8
-Message-ID: <20200627182057.GA4356@kunai>
+        id S1726678AbgF0WFb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 27 Jun 2020 18:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726316AbgF0WFa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 27 Jun 2020 18:05:30 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434BBC061794
+        for <linux-i2c@vger.kernel.org>; Sat, 27 Jun 2020 15:05:30 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id w3so61216wmi.4
+        for <linux-i2c@vger.kernel.org>; Sat, 27 Jun 2020 15:05:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
+        b=f9F4OeCeRmjyCn/l5zWRCnvqn8abBSCJ0Y8qujQ0kmxWn834D2fXcj9rvsWpCDPIuS
+         J4EoerIfxQNxbL3GXEU7ldfNRYPjw9+UDx+oUErzer3ipQGx1bMVBJ4GKw5qxwtLFKgm
+         GIGKX0Yf3u59BQOeDfpIf5jZ+3vnA0ZzLii/fzh6lT1DnoxV12hExchyOgRH8ZWUzh6h
+         YfJSqrAXwDwYWOkanSpTn/205IELx8NOzYqaPLRhLaj+p8d8Tqco8ZlQgP7W4AOriRZo
+         /C1JWu9y1DjEpYGijceZGziK7m0b44a1VzD/YaM40U0hZVpq1t42ddRbOo9XgyjTsiIU
+         X8hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
+        b=QJsBeQ/2gPpIMrJZMxoY/JhP0ez31pPodxlhxKIeL2VJGZ65s71MfckVpLUcV5B6Bd
+         m7FxtLcqWeOQH5rRex+9cnjlw6ep3pefRzlsSGxCpYkhh6U/PdUcCrgMuf01SNjuu+K8
+         k3i/H97IqhHYDyW61jmEOw6qtddo4eAkJlYQ0QBTZhzndkS6WJuly1BzwRmuOuQQii/m
+         4/ftwd127qw7qW3e3H9rnxFep/1zckH2wSNwQTZ2uMTC2d6yhhmjAkF0SIBKZrH/t57F
+         Ww+FnP3YrEcxCuN3vOqtjUiQnldIZ7fcMIjLIA62yhro36+7aIv9q3ktsc7R62HFPi1A
+         SSag==
+X-Gm-Message-State: AOAM531NMGPbsPjmawH0y1wGLbhOKz9ZqIIPJGy3MgtPetkt5t0dJFri
+        NQgO8Vtb9Dun+6Eglgxrg5pqpRLKXm8HyS9l4qzJ0LJbhm8=
+X-Google-Smtp-Source: ABdhPJzB2PS1uLzfXnv9RJ9+8ywF0BTYmMReQpmFB2cwHUGJdFU/VqT1TPNRIciUkUVNxK28Z0jWU0doicUzCH8V5Ek=
+X-Received: by 2002:a7b:c043:: with SMTP id u3mr10377547wmc.185.1593295180142;
+ Sat, 27 Jun 2020 14:59:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bg08WKrSYDhXBjb5"
-Content-Disposition: inline
+Received: by 2002:adf:f187:0:0:0:0:0 with HTTP; Sat, 27 Jun 2020 14:59:39
+ -0700 (PDT)
+Reply-To: un.org@i.ua
+From:   helen <upspostexpress@gmail.com>
+Date:   Sat, 27 Jun 2020 22:59:39 +0100
+Message-ID: <CA+HWcLeFxWA2HFg2eTDi9xRk8OKWn7oojHXSEX-EzsM7GcSGnA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+MONEY-GRAM TRANSFERRED PAYMENT INFO:
 
---bg08WKrSYDhXBjb5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Linus,
-
-This I2C pull request contains a 5.8 regression fix for the Designware
-driver, a register bitfield fix for the fsi driver, and a missing sanity
-check for the I2C core.
-
-Please pull.
-
-Thanks,
-
-   Wolfram
+Below is the sender=E2=80=99s information
 
 
-The following changes since commit 48778464bb7d346b47157d21ffde2af6b2d39110:
 
-  Linux 5.8-rc2 (2020-06-21 15:45:29 -0700)
+1. MG. REFERENCE NO#: 36360857
 
-are available in the Git repository at:
+2. SENDER'S NAME: Johnson Williams
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-
-for you to fetch changes up to 40e05200593af06633f64ab0effff052eee6f076:
-
-  i2c: core: check returned size of emulated smbus block read (2020-06-26 10:18:35 +0200)
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      i2c: designware: Adjust bus speed independently of ACPI
-
-Eddie James (1):
-      i2c: fsi: Fix the port number field in status register
-
-Mans Rullgard (1):
-      i2c: core: check returned size of emulated smbus block read
+3. AMOUNT TO PICKUP: US$10,000
 
 
-with much appreciated quality assurance from
-----------------------------------------------------------------
-John Stultz (1):
-      (Test) i2c: designware: Adjust bus speed independently of ACPI
 
- drivers/i2c/busses/i2c-designware-common.c  | 25 +++++++++++++++++--------
- drivers/i2c/busses/i2c-designware-core.h    |  3 +--
- drivers/i2c/busses/i2c-designware-pcidrv.c  |  2 +-
- drivers/i2c/busses/i2c-designware-platdrv.c |  2 +-
- drivers/i2c/busses/i2c-fsi.c                |  2 +-
- drivers/i2c/i2c-core-smbus.c                |  7 +++++++
- 6 files changed, 28 insertions(+), 13 deletions(-)
+Go to any Money Gram office near you and pick up the payment Track the
 
---bg08WKrSYDhXBjb5
-Content-Type: application/pgp-signature; name="signature.asc"
+Reference Number by visiting and click the link below
 
------BEGIN PGP SIGNATURE-----
+(https://secure.moneygram.com/embed/track) and enter the Reference
 
-iQIxBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl73jgUACgkQFA3kzBSg
-Kbbg+g/w9a/+R1JHOq92KMkqn7Y7QjCpAOTKk7t5XvENzmMZFRyr01gDTI6cR/XW
-ViV9/C4hygmDNpCiIFrguQKdDt7GVKARpKOWme/E3jl4LzlWIWEFHI6Bo1E+I8T+
-cwHqLKHpXxHlig2GNydPtvTz7lO0tjDIdYwgoY/u/OEbLjCzgsxlLns5vS8gNBow
-PokI93z83h0BQR6nBpuaa+y3JCF3BO5flKYVVB1dDroQWguvnLGGEgS7skKiQ0uI
-Dzn8bcTwAYv5sV0c8JrfTH25/ayN92Mow6BBPDTld2gLpTOQ13ZXXPP5X/8WEZv5
-xydQxOwELHURgmMqatPOf/Vf3BEtS6t1C/mhFAWBwtu7ZDNtf21fWCwhdBK8poS9
-tVfLd0lJZi0hQzaYZc7PhtYAm7f8h90I6Z5d5vfjTvNn6h1YPXieZxCnylGAfGHw
-AmgbjtwF6NOhoe+BId9fh5kCrEFsABq0Ngrb0TLlHbFI0rsub5dxxTSFoH4EG0vy
-EFSkWSOr3cqcwHrs1XP2n4w5+jDRoEwF8XtpqaPOEAnc8/cksZ9ETLpLWbpFpxVz
-HzXUuD/yFBGUlkaL/UyFhGA13ooyH2OZpJ7ULkoN+TNu1gqlukEQmxmrnWj3QlMd
-qVCpa9oh6bkday24iI5JrXTohEPWC3Bv9zmZdM71SKqiAMsH
-=pdhS
------END PGP SIGNATURE-----
+Number: 36360857 and the Last Name: Williams, you will find the payment
 
---bg08WKrSYDhXBjb5--
+available for pickup instantly.
+
+Yours Sincerely,
+
+Mrs. Helen Marvis
+United Nations Liaison Office
+Directorate for International Payments
