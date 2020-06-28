@@ -2,105 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F213920CAE8
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jun 2020 00:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7185C20CB19
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jun 2020 01:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726138AbgF1WNs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 28 Jun 2020 18:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726104AbgF1WNs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Jun 2020 18:13:48 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF2FC03E97A
-        for <linux-i2c@vger.kernel.org>; Sun, 28 Jun 2020 15:13:47 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id c21so8022350lfb.3
-        for <linux-i2c@vger.kernel.org>; Sun, 28 Jun 2020 15:13:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=WVDsBRnmgWwG46gyu4kL4AnvdSuNwUVCzYBxBLwFX1g=;
-        b=jegYSM+NkErXhefhR9Yh5qRBeXXf3j2/q+2z4RhPcqZ2dTVsn9kIAiUzeRoJHjKCUD
-         7L8fw7plCGdAChoNOVQTBJg467IF2/GYFBAKAnHHE4LmpAcIVwARZXvggkQDX0vXzT0p
-         nuNN/qX6/DZ1Rsq74bYHLO/imhxDo1HX5wiUuvupi6p8x1rVTFh+BBU5jpziloCz1GrT
-         6u8s/HCmXW0vkhUMTvBKXdsKlL4W0LOnYXGBiTyYBEzU0xCQv5fpIiwOcIWjgT1Jq7qT
-         01qpKE7tLuG9WHzzshVdyLxM08cJNsyRMhCebTDT1P95FnvdqqZohcaniJEH+bvi79U9
-         +6vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WVDsBRnmgWwG46gyu4kL4AnvdSuNwUVCzYBxBLwFX1g=;
-        b=tid7nZKQKqGa0MBDf9KQsUIXH9CbXpid+mYdzs9n7RuveLKCUDLgTqBvceHNat4Jji
-         3f/s1TRkwAoGchftRpzXqop1C7aqAt5xmte6ePQekl9TNM/1ZM+TX7GGurkHPyqOo9Ew
-         d2GQbhT8dJ25VdRJqx+3GWSjWqtSwd8/JcCXyhSO10cAdTQmvUVpJ7VLQ1DyFwSp2v4t
-         flsOMHW6dt1nJ9rFMiACnH/6ODVQ+SYWvy0VAI49gD6kSCnfwZN8J/AV+tnNu5PCwxUZ
-         ZNRk0r7F44UjIsm81f/kE605L+bE2DBdMWryP6kFEsVjWHUwog7QNR7kEtahvqtIrv90
-         u3IA==
-X-Gm-Message-State: AOAM533qXvYUos97WTShMGpujULpnJbjbpfea8MxqfqTGo6sD0ArXmpA
-        3s8l7lsXWRVvfuIOonezDCbkPIE4h44=
-X-Google-Smtp-Source: ABdhPJyQkk/nBvXm00jEcyiIpmUohqKf9o6YR0RSspbyhco+4C+zA6RB/wZJJdOQOIuBTM9QRv8yEQ==
-X-Received: by 2002:a19:6a02:: with SMTP id u2mr7713937lfu.9.1593382426361;
-        Sun, 28 Jun 2020 15:13:46 -0700 (PDT)
-Received: from localhost (h-209-203.A463.priv.bahnhof.se. [155.4.209.203])
-        by smtp.gmail.com with ESMTPSA id i9sm1224033ljj.132.2020.06.28.15.13.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jun 2020 15:13:45 -0700 (PDT)
-Date:   Mon, 29 Jun 2020 00:13:45 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] i2c: add Kconfig help text for slave mode
-Message-ID: <20200628221345.GR1105424@oden.dyn.berto.se>
-References: <20200628185522.5902-1-wsa+renesas@sang-engineering.com>
+        id S1726546AbgF1Xmi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 28 Jun 2020 19:42:38 -0400
+Received: from mail-out.m-online.net ([212.18.0.9]:57484 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726205AbgF1Xmi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Jun 2020 19:42:38 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 49w6cC54ySz1qsZt;
+        Mon, 29 Jun 2020 01:42:35 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 49w6cC3vCmz1qw6s;
+        Mon, 29 Jun 2020 01:42:35 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id yADMSww06-BB; Mon, 29 Jun 2020 01:42:34 +0200 (CEST)
+X-Auth-Info: wZC4d6+NCKK7l4ijJtb7Ey0IEBRY2CK8Ola9ReYXHLs=
+Received: from [IPv6:::1] (unknown [195.140.253.167])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Mon, 29 Jun 2020 01:42:34 +0200 (CEST)
+Subject: Re: [PATCH 1/5] i2c: xiic: Fix broken locking on tx_msg
+To:     Raviteja Narayanam <rna@xilinx.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Cc:     Michal Simek <michals@xilinx.com>,
+        Shubhrajyoti Datta <shubhraj@xilinx.com>,
+        Wolfram Sang <wsa@kernel.org>
+References: <20200613150751.114595-1-marex@denx.de>
+ <MWHPR0201MB348439A109964704D30EF0B4CA930@MWHPR0201MB3484.namprd02.prod.outlook.com>
+From:   Marek Vasut <marex@denx.de>
+Message-ID: <fee2d0a5-138d-fc31-ed46-348706bc0491@denx.de>
+Date:   Mon, 29 Jun 2020 01:18:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200628185522.5902-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <MWHPR0201MB348439A109964704D30EF0B4CA930@MWHPR0201MB3484.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+On 6/26/20 2:11 PM, Raviteja Narayanam wrote:
 
-Thanks for your patch.
+Hi,
 
-On 2020-06-28 20:55:22 +0200, Wolfram Sang wrote:
-> I can't recall why there was none, but we surely want to have it.
+[...]
+
+>> @@ -699,14 +708,7 @@ static int xiic_xfer(struct i2c_adapter *adap, struct
+>> i2c_msg *msgs, int num)
+>>  	if (err < 0)
+>>  		return err;
+>>
+>> -	err = xiic_busy(i2c);
+>> -	if (err)
+>> -		goto out;
+>> -
+>> -	i2c->tx_msg = msgs;
+>> -	i2c->nmsgs = num;
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
-> ---
->  drivers/i2c/Kconfig | 5 +++++
->  1 file changed, 5 insertions(+)
+> On an SMP system with multiple i2c-transfer command scripts running, the above critical section is expected to cause serious trouble overwriting the previous msg pointers.
+> But that's not happening as the i2c-core is having a lock at adapter level inside i2c-core-base.c (rt_mutex_lock_nested).
+> So, the race condition between different threads is not possible. They are all serialized by the locking in i2c-core.
 > 
-> diff --git a/drivers/i2c/Kconfig b/drivers/i2c/Kconfig
-> index dbcbb8a6024e..e2d6063bdb4d 100644
-> --- a/drivers/i2c/Kconfig
-> +++ b/drivers/i2c/Kconfig
-> @@ -114,6 +114,11 @@ config I2C_STUB
->  config I2C_SLAVE
->  	bool "I2C slave support"
->  
-> +	help
-> +	  This enables Linux to act as an I2C slave device. Note that your I2C
-> +	  bus master driver also needs to support this functionality. Please
-> +	  read Documentation/i2c/slave-interface.rst for further details.
-> +
->  if I2C_SLAVE
->  
->  config I2C_SLAVE_EEPROM
-> -- 
-> 2.20.1
-> 
+> Although no issues are seen in the tests, the contention within the driver is still possible (isr vs xiic_xfer), if there is a spurious interrupt. And this patch is needed in that case.
+The contention happens between the threaded interrupt handler
+xiic_process() and this xiic_xfer() function. While you can not have
+xiic_xfer() running on two CPU cores at the same time, you can have
+xiic_xfer() running on one CPU core and xiic_process() on another CPU
+core, and that will lead to problems.
 
--- 
-Regards,
-Niklas Söderlund
+[...]
