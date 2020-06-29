@@ -2,76 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F28E920DF80
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jun 2020 23:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406A220DFD8
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jun 2020 23:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388036AbgF2Uh0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Jun 2020 16:37:26 -0400
-Received: from www.zeus03.de ([194.117.254.33]:52280 "EHLO mail.zeus03.de"
+        id S1733035AbgF2UkO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Jun 2020 16:40:14 -0400
+Received: from www.zeus03.de ([194.117.254.33]:52750 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729572AbgF2UhZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 29 Jun 2020 16:37:25 -0400
+        id S1731720AbgF2UkH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 29 Jun 2020 16:40:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=EWfaYWeirl3pnTKs+71ODmecYj9O
-        pi4u86/kiiI96/A=; b=Dr2u6Rl715BATmfuQ0VGT7UIJBTNpTSsnxv9i1f8WK6p
-        JtozOtBTIZg3rYcbNg1Mnyf9nwPRKyS2iGDkF3aN5qawqxseIOctiRKd2vc2g0bA
-        3aVmdIjQfMaXXwmchtUxBzl7/HuX0LB+ZSTegamwq3/40O9SyvqRHw15IvN2nQg=
-Received: (qmail 2019385 invoked from network); 29 Jun 2020 13:37:23 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Jun 2020 13:37:23 +0200
-X-UD-Smtp-Session: l3s3148p1@gXtzezepHLAgAwDPXwOPAD5GWjq5uCZs
-Date:   Mon, 29 Jun 2020 13:37:22 +0200
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=FpyLO74xYjwKVoBrUpqtoejScYA
+        bwTvzYbQXG0AzIBU=; b=nQ1EUsahMFmEkwYyu5L8gzzK0xSmXQHQpDVLCkDqXoO
+        v4t/EgmTCxUIckP1tzbNOvdWoLmZznuQMu95FjgmVhplDTnP3JFypGn0hzCODzfR
+        c9INa5KqnlKywhP4lfOt2gtgpaYnsQxoCeoKdnuOdv65OwtYHSU3mCqB2zUpeh/M
+        =
+Received: (qmail 2142400 invoked from network); 29 Jun 2020 20:53:24 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Jun 2020 20:53:24 +0200
+X-UD-Smtp-Session: l3s3148p1@sQ7Okj2pYLQgAwDPXwOPAD5GWjq5uCZs
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH] i2c: add Kconfig help text for slave mode
-Message-ID: <20200629113722.GB1932@ninjato>
-References: <20200628185522.5902-1-wsa+renesas@sang-engineering.com>
- <CAMuHMdXFgR__hnUO-o+2ukxOYc_6U63wjP1PJyip3KGg277gDA@mail.gmail.com>
- <20200629112119.GA1932@ninjato>
- <CAMuHMdXaXxDJ_bgR=wLnyCjmfH0kC-SuVBPRZv96qzKbvbWsHQ@mail.gmail.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Alain Volmat <alain.volmat@st.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH RFC 0/1] i2c: add slave testunit driver
+Date:   Mon, 29 Jun 2020 20:53:17 +0200
+Message-Id: <20200629185318.23381-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s/l3CgOIzMHHjg/5"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXaXxDJ_bgR=wLnyCjmfH0kC-SuVBPRZv96qzKbvbWsHQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Motivated by a series by Alain Volmat which implements SMBus Host Notify
+support as a slave backend[1], I wondered how I could actually test it.
+Then, I picked up my old idea of a "custom remote device" and
+implemented it as another slave backend. This is the first draft and it
+works quite well on my Renesas Lager board where I connected two I2C
+busses where both I2C controllers are master and slave. One slave is the
+testunit, one slave is the HostNotify listener.
 
---s/l3CgOIzMHHjg/5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+While I really like Alain's approach, there is still some more testing
+needed. So, I already release my testing environment, maybe other people
+are interested, too. This patch depends on a documentation update. Also,
+for Renesas R-Car SoCs, some fixes are needed. I suggest you simply pull
+this branch here:
 
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/i2c/slave-testunit
 
-> Lore does not forgive, and does not forget ;-)
-> https://lore.kernel.org/r/20190802133656.GA23542@kunai
+As mentioned elsewhere, support for SMBus Alert and I2C_M_RECV_LEN are
+already planned. But I guess you can do much more.
 
-Ah, right. That reasoning still makes sense to me.
+Ideas and comments welcome!
 
+Happy hacking,
 
---s/l3CgOIzMHHjg/5
-Content-Type: application/pgp-signature; name="signature.asc"
+   Wolfram
 
------BEGIN PGP SIGNATURE-----
+[1] http://patchwork.ozlabs.org/project/linux-i2c/list/?series=185718&state=*
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl750nIACgkQFA3kzBSg
-KbYkNQ/9FSJImu7iLyknpLOqTblrD7HjKzv3ouD/7mNiL/wf1adG9p6HQ3Ee+92u
-Kanijo9sS24UAyAmE82s+aVrLus4LISvw3RNEmP7PR+OjSlpT7VdHo+Ax1MoZM7F
-KPrvlMhnxIEDLF1w/p8RoT08lsKkQu0W8z043lzxSzDSuEoxGfMECzTMrA3aRP1j
-TojQzznIBbYXJrhOyPajiWnN+ZtTaQS/tAYBmnFzoFsbyRilr/G0Og+AiyWPdVzG
-WR6AliDqunoQL1BUZ2BIZgfMFoKrxmFfX0mPBocC27VmX4qU6eyNg29ocn06K4bc
-Py7Qf7F+tg+2h+QXsFsKWGogu0UmhNoTazEcU078EjRN++RiToiEoh82Kxz5erF3
-xDTvR+ryQpp8T1c7pxrKgaDdy73/XjXXpReoHsci2Rr6oLcFjWE1czYfjiLOpcrB
-oBLGqr3Lw6jdYUOohDIoIbFzKnEcNUHHAN9qeFcbkDbBy1dt8IeCjjWkChQLzIcC
-voDvwI62kNuqoGqOsBZSQjwp71BV9cvQh1k0yH8NTThXmV/NGkfdjZsWGbDjvEeZ
-x5viW6+eEezpX36bbkGRXXvqNXEdMF8p72v9zXo5H5AOgm2udxRHUGhWfpV3+YUY
-XfYvJwxkdTenFZW1SAuwxtUek3nO27liopJnxbU8XVEFJsUpr5o=
-=/yBl
------END PGP SIGNATURE-----
+Wolfram Sang (1):
+  i2c: add slave testunit driver
 
---s/l3CgOIzMHHjg/5--
+ Documentation/i2c/slave-testunit-backend.rst |  48 ++++++
+ drivers/i2c/Kconfig                          |   8 +
+ drivers/i2c/Makefile                         |   1 +
+ drivers/i2c/i2c-slave-testunit.c             | 146 +++++++++++++++++++
+ 4 files changed, 203 insertions(+)
+ create mode 100644 Documentation/i2c/slave-testunit-backend.rst
+ create mode 100644 drivers/i2c/i2c-slave-testunit.c
+
+-- 
+2.20.1
+
