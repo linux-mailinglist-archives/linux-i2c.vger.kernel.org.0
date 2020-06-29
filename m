@@ -2,90 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8211820CB1A
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jun 2020 01:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441C120CB9C
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jun 2020 04:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726612AbgF1Xml (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 28 Jun 2020 19:42:41 -0400
-Received: from mail-out.m-online.net ([212.18.0.10]:49578 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726205AbgF1Xmk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Jun 2020 19:42:40 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 49w6cH0bXLz1rxwk;
-        Mon, 29 Jun 2020 01:42:39 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 49w6cH00RHz1qw6s;
-        Mon, 29 Jun 2020 01:42:38 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id QiyCk-68Ueeh; Mon, 29 Jun 2020 01:42:37 +0200 (CEST)
-X-Auth-Info: DF3ryrF3GXdMlyIxbVKV4D81eBV3SOHNhvEskISZt4c=
-Received: from [IPv6:::1] (unknown [195.140.253.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Mon, 29 Jun 2020 01:42:37 +0200 (CEST)
-From:   Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH 4/5] i2c: xiic: Switch from waitqueue to completion
-To:     Raviteja Narayanam <rna@xilinx.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Cc:     Michal Simek <michals@xilinx.com>,
-        Shubhrajyoti Datta <shubhraj@xilinx.com>,
-        Wolfram Sang <wsa@kernel.org>
-References: <20200613150751.114595-1-marex@denx.de>
- <20200613150751.114595-4-marex@denx.de>
- <MWHPR0201MB3484AB3D1AB03068D56B18E9CA930@MWHPR0201MB3484.namprd02.prod.outlook.com>
-Message-ID: <a2da37c2-f2b1-d961-81be-4c320f0ddb9a@denx.de>
-Date:   Mon, 29 Jun 2020 01:41:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1726490AbgF2CAg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 28 Jun 2020 22:00:36 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:22033 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726395AbgF2CAf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Jun 2020 22:00:35 -0400
+X-UUID: d4dad5e9f2de48a7b2effb1e3118ad79-20200629
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=4lFMxuhJ25naDr/+y71J6EdZIeUqF8IshiKTFLqt/kg=;
+        b=ee9t3F11yR6wmVzfKNgLjYBuVH3SHqVpPM23ra21biUVzpNs3XC0xuqdYq37SPMLS84+IF0Ank/3XrMyFFQKj7535J5eATL8tnBkNId7+85wQio3V8U4BjPctq9IE8qeSshLnzA0i2p8JEPh9F4yjVhVEDgzgvYY02gEoOX0jcc=;
+X-UUID: d4dad5e9f2de48a7b2effb1e3118ad79-20200629
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1803340885; Mon, 29 Jun 2020 10:00:28 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 29 Jun
+ 2020 10:00:26 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 29 Jun 2020 10:00:26 +0800
+Message-ID: <1593396009.15820.6.camel@mhfsdcap03>
+Subject: Re: [PATCH] i2c: mediatek: Add to support continuous mode
+From:   Qii Wang <qii.wang@mediatek.com>
+To:     Qiangming Xia <qiangming.xia@mediatek.com>
+CC:     <wsa@the-dreams.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>
+Date:   Mon, 29 Jun 2020 10:00:09 +0800
+In-Reply-To: <20200619080643.25269-1-qiangming.xia@mediatek.com>
+References: <20200619080643.25269-1-qiangming.xia@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <MWHPR0201MB3484AB3D1AB03068D56B18E9CA930@MWHPR0201MB3484.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: C31847E92F6DEFDA176D4CA2DAB465987940A895748A3FC01C0609B5BC4887B02000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 6/26/20 2:13 PM, Raviteja Narayanam wrote:
+SGkgUWlhbmdtaW5nOg0KCURvIHlvdSBoYXZlIHRoZSBzcGVjaWZpYyB0aW1pbmcgY29zdCBkYXRh
+IGFib3V0IHRoZSAiY29udGludW91cyBtb2RlIj8NCklzIGl0IGJldHRlciB0aGFuIHRoZSBkZWZh
+dWx0IG11bHRpLXdyaXRlIG1vZGUob25lIG1lc3NhZ2UgYnkgb25lDQptZXNzYWdlKSA/SSBuZWVk
+IHRvIGtub3cgaWYgdGhpcyBwYXRjaCBpcyB2ZXJ5IG5lY2Vzc2FyeS4NCg0KT24gRnJpLCAyMDIw
+LTA2LTE5IGF0IDE2OjA2ICswODAwLCBRaWFuZ21pbmcgWGlhIHdyb3RlOg0KPiBGcm9tOiAicWlh
+bmdtaW5nLnhpYSIgPHFpYW5nbWluZy54aWFAbWVkaWF0ZWsuY29tPg0KPiANCj4gICAgIE1lZGlh
+dGVrIGkyYyBjb250cm9sbGVyIHN1cHBvcnQgZm9yIGNvbnRpbnVvdXMgbW9kZSwNCj4gaXQgYWxs
+b3cgdG8gdHJhbnNmZXIgb25jZSBtdWx0aXBsZSB3cml0aW5nIG1lc3NhZ2VzIG9mIGVxdWFsIGxl
+bmd0aC4NCj4gICAgIEZvciBleGFtcGxlLCBhIHNsYXZlIG5lZWQgd3JpdGUgYSBzZXJpYWwgb2Yg
+bm9uLWNvbnRpbnVvdXMNCj4gb2Zmc2V0IHJhbmdlIGluIGNoaXAsZS5nLiB3cml0aW5nIG9mZnNl
+dCAwLG9mZnNldCAyIGFuZCBvZmZzZXQgNC4NCj4gTm9ybWFsbHksIGl0IG5lZWQgdGhyZWUgdGlt
+ZXMgaTJjIHdyaXRlIG9wZXJhdGlvbi4gSG93ZXZlcixpdCBjYW4NCj4gdXNlIG9uY2UgdHJhbnNm
+ZXIgdG8gZmluaXNoIGl0IGJ5IHVzaW5nIGNvbnRpbnVvdXMgbW9kZS4NCj4gDQo+IENoYW5nZS1J
+ZDogSWYwNjk5MWUzZmQzMjg2N2JkZWFhY2YxNWJiMjQ4NjRkNWM1OTA0ZDANCj4gU2lnbmVkLW9m
+Zi1ieTogUWlhbmdtaW5nIFhpYSA8cWlhbmdtaW5nLnhpYUBtZWRpYXRlay5jb20+DQo+IC0tLQ0K
+PiAgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYyB8IDY3ICsrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDY3IGluc2VydGlvbnMoKykNCj4g
+DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jIGIvZHJpdmVy
+cy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYw0KPiBpbmRleCBkZWVmNjllNTY5MDYuLjc2ZWM2NWQ4
+NjlmNiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYw0KPiAr
+KysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jDQo+IEBAIC05Nyw2ICs5Nyw3IEBA
+IGVudW0gbXRrX3RyYW5zX29wIHsNCj4gIAlJMkNfTUFTVEVSX1dSID0gMSwNCj4gIAlJMkNfTUFT
+VEVSX1JELA0KPiAgCUkyQ19NQVNURVJfV1JSRCwNCj4gKwlJMkNfTUFTVEVSX0NPTlRJTlVPVVNf
+V1IsDQo+ICB9Ow0KPiAgDQo+ICBlbnVtIEkyQ19SRUdTX09GRlNFVCB7DQo+IEBAIC04NDYsNiAr
+ODQ3LDkgQEAgc3RhdGljIGludCBtdGtfaTJjX2RvX3RyYW5zZmVyKHN0cnVjdCBtdGtfaTJjICpp
+MmMsIHN0cnVjdCBpMmNfbXNnICptc2dzLA0KPiAgCQkJCQkgICAgT0ZGU0VUX1RSQU5TRkVSX0xF
+Tik7DQo+ICAJCX0NCj4gIAkJbXRrX2kyY193cml0ZXcoaTJjLCBJMkNfV1JSRF9UUkFOQUNfVkFM
+VUUsIE9GRlNFVF9UUkFOU0FDX0xFTik7DQo+ICsJfSBlbHNlIGlmIChpMmMtPm9wID09IEkyQ19N
+QVNURVJfQ09OVElOVU9VU19XUikgew0KPiArCQltdGtfaTJjX3dyaXRldyhpMmMsIG1zZ3MtPmxl
+biAvIG51bSwgT0ZGU0VUX1RSQU5TRkVSX0xFTik7DQo+ICsJCW10a19pMmNfd3JpdGV3KGkyYywg
+bnVtLCBPRkZTRVRfVFJBTlNBQ19MRU4pOw0KPiAgCX0gZWxzZSB7DQo+ICAJCW10a19pMmNfd3Jp
+dGV3KGkyYywgbXNncy0+bGVuLCBPRkZTRVRfVFJBTlNGRVJfTEVOKTsNCj4gIAkJbXRrX2kyY193
+cml0ZXcoaTJjLCBudW0sIE9GRlNFVF9UUkFOU0FDX0xFTik7DQo+IEBAIC04OTYsNiArOTAwLDIz
+IEBAIHN0YXRpYyBpbnQgbXRrX2kyY19kb190cmFuc2ZlcihzdHJ1Y3QgbXRrX2kyYyAqaTJjLCBz
+dHJ1Y3QgaTJjX21zZyAqbXNncywNCj4gIAkJCXdyaXRlbChyZWdfNGdfbW9kZSwgaTJjLT5wZG1h
+YmFzZSArIE9GRlNFVF9UWF80R19NT0RFKTsNCj4gIAkJfQ0KPiAgDQo+ICsJCXdyaXRlbCgodTMy
+KXdwYWRkciwgaTJjLT5wZG1hYmFzZSArIE9GRlNFVF9UWF9NRU1fQUREUik7DQo+ICsJCXdyaXRl
+bChtc2dzLT5sZW4sIGkyYy0+cGRtYWJhc2UgKyBPRkZTRVRfVFhfTEVOKTsNCj4gKwl9IGVsc2Ug
+aWYgKGkyYy0+b3AgPT0gSTJDX01BU1RFUl9DT05USU5VT1VTX1dSKSB7DQo+ICsJCXdyaXRlbChJ
+MkNfRE1BX0lOVF9GTEFHX05PTkUsIGkyYy0+cGRtYWJhc2UgKyBPRkZTRVRfSU5UX0ZMQUcpOw0K
+PiArCQl3cml0ZWwoSTJDX0RNQV9DT05fVFgsIGkyYy0+cGRtYWJhc2UgKyBPRkZTRVRfQ09OKTsN
+Cj4gKwkJd3BhZGRyID0gZG1hX21hcF9zaW5nbGUoaTJjLT5kZXYsIG1zZ3MtPmJ1ZiwNCj4gKwkJ
+CQkJbXNncy0+bGVuLCBETUFfVE9fREVWSUNFKTsNCj4gKwkJaWYgKGRtYV9tYXBwaW5nX2Vycm9y
+KGkyYy0+ZGV2LCB3cGFkZHIpKSB7DQo+ICsJCQlrZnJlZShtc2dzLT5idWYpOw0KPiArCQkJcmV0
+dXJuIC1FTk9NRU07DQo+ICsJCX0NCj4gKw0KPiArCQlpZiAoaTJjLT5kZXZfY29tcC0+c3VwcG9y
+dF8zM2JpdHMpIHsNCj4gKwkJCXJlZ180Z19tb2RlID0gbXRrX2kyY19zZXRfNGdfbW9kZSh3cGFk
+ZHIpOw0KPiArCQkJd3JpdGVsKHJlZ180Z19tb2RlLCBpMmMtPnBkbWFiYXNlICsgT0ZGU0VUX1RY
+XzRHX01PREUpOw0KPiArCQl9DQo+ICsNCj4gIAkJd3JpdGVsKCh1MzIpd3BhZGRyLCBpMmMtPnBk
+bWFiYXNlICsgT0ZGU0VUX1RYX01FTV9BRERSKTsNCj4gIAkJd3JpdGVsKG1zZ3MtPmxlbiwgaTJj
+LT5wZG1hYmFzZSArIE9GRlNFVF9UWF9MRU4pOw0KPiAgCX0gZWxzZSB7DQo+IEBAIC05NzksNiAr
+MTAwMCwxMSBAQCBzdGF0aWMgaW50IG10a19pMmNfZG9fdHJhbnNmZXIoc3RydWN0IG10a19pMmMg
+KmkyYywgc3RydWN0IGkyY19tc2cgKm1zZ3MsDQo+ICAJCQkJIG1zZ3MtPmxlbiwgRE1BX0ZST01f
+REVWSUNFKTsNCj4gIA0KPiAgCQlpMmNfcHV0X2RtYV9zYWZlX21zZ19idWYoZG1hX3JkX2J1Ziwg
+bXNncywgdHJ1ZSk7DQo+ICsJfSBlbHNlIGlmIChpMmMtPm9wID09IEkyQ19NQVNURVJfQ09OVElO
+VU9VU19XUikgew0KPiArCQlkbWFfdW5tYXBfc2luZ2xlKGkyYy0+ZGV2LCB3cGFkZHIsDQo+ICsJ
+CQkJIG1zZ3MtPmxlbiwgRE1BX1RPX0RFVklDRSk7DQo+ICsNCj4gKwkJa2ZyZWUobXNncy0+YnVm
+KTsNCj4gIAl9IGVsc2Ugew0KPiAgCQlkbWFfdW5tYXBfc2luZ2xlKGkyYy0+ZGV2LCB3cGFkZHIs
+IG1zZ3MtPmxlbiwNCj4gIAkJCQkgRE1BX1RPX0RFVklDRSk7DQo+IEBAIC0xMDA5LDYgKzEwMzUs
+OSBAQCBzdGF0aWMgaW50IG10a19pMmNfdHJhbnNmZXIoc3RydWN0IGkyY19hZGFwdGVyICphZGFw
+LA0KPiAgew0KPiAgCWludCByZXQ7DQo+ICAJaW50IGxlZnRfbnVtID0gbnVtOw0KPiArCWludCBp
+LCBqOw0KPiArCXU4ICpkbWFfbXVsdGlfd3JfYnVmOw0KPiArCXN0cnVjdCBpMmNfbXNnIG11bHRp
+X21zZ1sxXTsNCj4gIAlzdHJ1Y3QgbXRrX2kyYyAqaTJjID0gaTJjX2dldF9hZGFwZGF0YShhZGFw
+KTsNCj4gIA0KPiAgCXJldCA9IG10a19pMmNfY2xvY2tfZW5hYmxlKGkyYyk7DQo+IEBAIC0xMDI1
+LDYgKzEwNTQsNDQgQEAgc3RhdGljIGludCBtdGtfaTJjX3RyYW5zZmVyKHN0cnVjdCBpMmNfYWRh
+cHRlciAqYWRhcCwNCj4gIAkJfQ0KPiAgCX0NCj4gIA0KPiArCWlmIChudW0gPiAxKSB7DQo+ICsJ
+CWZvciAoaSA9IDA7IGkgPCBudW0gLSAxOyBpKyspIHsNCj4gKwkJCWlmICghKG1zZ3NbaV0uZmxh
+Z3MgJiBJMkNfTV9SRCkgJiYgIShtc2dzW2krMV0uZmxhZ3MgJg0KPiArCQkJCUkyQ19NX1JEKSAm
+JiAobXNnc1tpXS5hZGRyID09IG1zZ3NbaSsxXS5hZGRyKQ0KPiArCQkJCQkmJiAobXNnc1tpXS5s
+ZW4gPT0gbXNnc1tpKzFdLmxlbikpIHsNCj4gKwkJCQljb250aW51ZTsNCj4gKwkJCX0gZWxzZQ0K
+PiArCQkJCWJyZWFrOw0KPiArCQl9DQo+ICsJCWlmIChpID49IG51bSAtIDEpIHsNCj4gKwkJCWky
+Yy0+b3AgPSBJMkNfTUFTVEVSX0NPTlRJTlVPVVNfV1I7DQo+ICsJCQlqID0gMDsNCj4gKwkJCWRt
+YV9tdWx0aV93cl9idWYgPSBremFsbG9jKG1zZ3MtPmxlbiAqIG51bSwgR0ZQX0tFUk5FTCk7DQo+
+ICsJCQlpZiAoIWRtYV9tdWx0aV93cl9idWYpIHsNCj4gKwkJCQlyZXQgPSAgLUVOT01FTTsNCj4g
+KwkJCQlnb3RvIGVycl9leGl0Ow0KPiArCQkJfQ0KPiArCQkJbXVsdGlfbXNnLT5hZGRyICA9IG1z
+Z3MtPmFkZHI7DQo+ICsJCQltdWx0aV9tc2ctPmxlbiAgID0gbXNncy0+bGVuICogbnVtOw0KPiAr
+CQkJbXVsdGlfbXNnLT5idWYgICA9IGRtYV9tdWx0aV93cl9idWY7DQo+ICsJCQltdWx0aV9tc2ct
+PmZsYWdzICA9IDA7DQo+ICsJCQl3aGlsZSAoaiA8IG51bSkgew0KPiArCQkJCW1lbWNweShkbWFf
+bXVsdGlfd3JfYnVmICsgbXNncy0+bGVuICogaiwNCj4gKwkJCQkJCQltc2dzLT5idWYsIG1zZ3Mt
+Pmxlbik7DQo+ICsJCQkJaisrOw0KPiArCQkJCW1zZ3MrKzsNCj4gKwkJCQl9DQo+ICsNCj4gKwkJ
+CWkyYy0+aWdub3JlX3Jlc3RhcnRfaXJxID0gZmFsc2U7DQo+ICsJCQlyZXQgPSBtdGtfaTJjX2Rv
+X3RyYW5zZmVyKGkyYywgbXVsdGlfbXNnLCBudW0sIDApOw0KPiArCQkJaWYgKHJldCA8IDApDQo+
+ICsJCQkJZ290byBlcnJfZXhpdDsNCj4gKwkJCXJldCA9IG51bTsNCj4gKwkJCQlnb3RvIGVycl9l
+eGl0Ow0KPiArDQo+ICsJCX0NCj4gKwl9DQo+ICsNCj4gIAlpZiAoaTJjLT5hdXRvX3Jlc3RhcnQg
+JiYgbnVtID49IDIgJiYgaTJjLT5zcGVlZF9oeiA+IEkyQ19NQVhfRkFTVF9NT0RFX0ZSRVEpDQo+
+ICAJCS8qIGlnbm9yZSB0aGUgZmlyc3QgcmVzdGFydCBpcnEgYWZ0ZXIgdGhlIG1hc3RlciBjb2Rl
+LA0KPiAgCQkgKiBvdGhlcndpc2UgdGhlIGZpcnN0IHRyYW5zZmVyIHdpbGwgYmUgZGlzY2FyZGVk
+Lg0KDQo=
 
-Hi,
-
-[...]
-
->> @@ -703,23 +704,24 @@ static int xiic_xfer(struct i2c_adapter *adap, struct
->> i2c_msg *msgs, int num)
->>  	err = xiic_start_xfer(i2c, msgs, num);
->>  	if (err < 0) {
->>  		dev_err(adap->dev.parent, "Error xiic_start_xfer\n");
->> -		goto out;
->> +		return err;
->>  	}
->>
->> -	if (wait_event_timeout(i2c->wait, (i2c->state == STATE_ERROR) ||
->> -		(i2c->state == STATE_DONE), HZ)) {
->> -		mutex_lock(&i2c->lock);
->> -		err = (i2c->state == STATE_DONE) ? num : -EIO;
->> -		goto out;
->> -	} else {
->> -		mutex_lock(&i2c->lock);
->> +	err = wait_for_completion_interruptible_timeout(&i2c->completion,
->> +							XIIC_I2C_TIMEOUT);
-> 
-> This is causing random lock up of bus. Since it is "interruptible" API,  once we enter Ctrl+C, 
-> It is coming out of wait state, the message pointers are made NULL and the ongoing transaction is not completed. 
-> Can use " wait_for_completion_timeout" API in place of this.
-> 
->> +	mutex_lock(&i2c->lock);
-
-So in case this is interrupted, we would have to somehow reset the
-controller ? What sort of lockups do you see exactly ? Can you share
-some sort of test case, so I can replicate it ?
-
-Thanks
-
-[...]
