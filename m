@@ -2,36 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B104120FCEC
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Jun 2020 21:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 692C120FCFB
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Jun 2020 21:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728379AbgF3Tpc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Jun 2020 15:45:32 -0400
-Received: from sauhun.de ([88.99.104.3]:55622 "EHLO pokefinder.org"
+        id S1728570AbgF3TtC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Jun 2020 15:49:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40208 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726072AbgF3Tpc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 30 Jun 2020 15:45:32 -0400
+        id S1728560AbgF3TtC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 30 Jun 2020 15:49:02 -0400
 Received: from localhost (p54b336a9.dip0.t-ipconnect.de [84.179.54.169])
-        by pokefinder.org (Postfix) with ESMTPSA id C3ADA2C2066;
-        Tue, 30 Jun 2020 21:45:29 +0200 (CEST)
-Date:   Tue, 30 Jun 2020 21:45:28 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 79D6120772;
+        Tue, 30 Jun 2020 19:49:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593546541;
+        bh=IWxlISulah6RhOy6J2vA8oMb7rvC2fwPEgBQsTsQizI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q5XFm/l9zfm54VE+Z58NhezTyC1ubjIl/uMEXXqS1qb3eBA3LvtgfwX7BBVWCKfkG
+         ynklWkwfiHHvG1HcSyGnCEKWWzTVfqj8tfS1OnSZfP/O00HzZYbBNNQTKirWYthLPu
+         VtZJLxyG3QdzZ1vaPFBMx6D4zPkwdJkib3K4IcVs=
+Date:   Tue, 30 Jun 2020 21:48:58 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2] i2c: sh_mobile: implement atomic transfers
-Message-ID: <20200630194528.GB999@ninjato>
-References: <20200618150532.2923-1-uli+renesas@fpond.eu>
- <CAMuHMdUE4v+8Dz+eowX5RNJuRGmXcFuYQCe7JQxrFXEQV3xKJA@mail.gmail.com>
- <20200625070636.GB970@ninjato>
- <CAMuHMdWM3VUNUY-r_4cJw8FNFHcfpjY=s=sj2CiC67FRmNkALA@mail.gmail.com>
- <20200625151658.GB1041@ninjato>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>
+Subject: Re: RFC: a failing pm_runtime_get increases the refcnt?
+Message-ID: <20200630194858.GC999@ninjato>
+References: <20200614090751.GA2878@kunai>
+ <CAHp75Vc2RV1daOHMM1zAT2P_YpFzYq=_NVXnagq7qBCS9En04g@mail.gmail.com>
+ <CAHp75VdtJN4KbsWgP3G40P4giPGgPE6gdr0CDqOXQjp2wK+i+g@mail.gmail.com>
+ <CAMuHMdUadYRNYdJ9JUX90Z1jvtHZmSS4gM+JKft4x-BK2Ry4zQ@mail.gmail.com>
+ <CAJZ5v0i87NGcy9+kxubScdPDyByr8ypQWcGgBFn+V-wDd69BHQ@mail.gmail.com>
+ <20200614140717.heceqlwq75w5if5s@katana>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="V0207lvV8h4k8FAm"
+        protocol="application/pgp-signature"; boundary="t0UkRYy7tHLRMCai"
 Content-Disposition: inline
-In-Reply-To: <20200625151658.GB1041@ninjato>
+In-Reply-To: <20200614140717.heceqlwq75w5if5s@katana>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -39,71 +52,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---V0207lvV8h4k8FAm
+--t0UkRYy7tHLRMCai
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jun 25, 2020 at 05:16:58PM +0200, Wolfram Sang wrote:
-> Hi Geert,
->=20
-> I spend some more thoughts on this.
->=20
-> > > > In general, pm_runtime_get_sync() is not safe to call from atomic
-> > > > context.
-> > > > For Renesas SoCs, I think both the power and clock domains are safe=
-, as
-> > > > the respective drivers don't sleep.  The PM core might, though.
-> > >
-> > > Still, that sounds to me like we should protect these calls as in V1?
->=20
-> I still think we should guard these calls just because it is not safe to
-> call them from atomic contexts.
->=20
-> > And talk to the i2c controller while it is disabled?
->=20
-> Is there maybe some "always-on" property which we could add to the
-> respective IIC clock?
-
-Ping to this question...
-
->=20
-> > That does seem to work on R-Car Gen2 (similar to SMP bringup accessing
-> > registers of a disabled WDT?), though.
->=20
-> Yes. Uli's patch will not cause a regression because we are already
-> calling i2c_transfer very late. And we do call the runtime_pm functions
-> currently. So, it will improve the situation there.
->=20
-> > Needs testing on R-Mobile A1....
->=20
-> That's armadillo, right? I don't have that, sadly.
->=20
-> Thanks,
->=20
->    Wolfram
->=20
 
 
+> However, that probably means that for most patches I am getting, the
+> better fix would be to remove the error checking? (I assume most people
+> put the error check in there to be on the "safe side" without having a
+> real argument to really do it.)
 
---V0207lvV8h4k8FAm
+Kindly asking for more input here: A better answer to all these patches
+is to ask if the error checking could not be removed instead?
+
+
+--t0UkRYy7tHLRMCai
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl77llgACgkQFA3kzBSg
-KbaxzBAArrt8SbV9ATqgzXjOKZNWpNTsHMNQdXQtE2Wu88NcDZUsb4oUMpTCWcam
-7ObyR30xttvvFwVOJtHsNs45qN0qpVjXleP2P3jLZDwjXx283w3dvYeBLRJCMg0B
-YkaUu4Om0RZsnmmlhlqhd4iBQtVW8ZYqH6kIJbne0XW+g2i2lzbB8ozFkyV8GoDi
-dRDSVJr7S/mI98Kiu1ST6WyRfkyBcpSlO5dTmCA53nZ8xSDWdrvddCipvVzEbcsW
-YWbGxI3Xeg07AkWOETkhCKbliTeEotn2fNtehiWfwguID9xg7BtJq8OE2GAW9f2U
-r/hPGMS8AYsK8IxO/pM5UMGF7s17ie/QRftaasB5SI9mPB11+FvHW2mnPHpuOjvA
-vbZQzwsuEB0OcvmAwFEwZy+AbcPhPRVUgJfKuxZaRR+R+n/i4uDVY43FkGKQhpsr
-NfcZlGv54NrFdalldFTnb9PgANP/gAdWBVwVhhuelqyKi1YkQrq0Rv/M8oZJUTYI
-mBd1YNH7cNGjrVvnUKJzIEgiAsjFSoWVg5e4zvFbJ02wWqC7uwZDxPfUAMXaDSpT
-ApohbDFMnDK8b8nj1ZIpxxThs3B2u9FgRJnbyblJsMfYm0COW2/v4nN1rSE2SXhD
-merrSRqnq0umA+RBpaDaLBdSQSZSJDyjS3+YdjiUQp792/D1iyQ=
-=BmBg
+iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl77lyoACgkQFA3kzBSg
+KbbYBQ/4kl7hil6kXJQiXTJJG7bJbwvLI47wU99AL7CPa0o48iaHvxp1BOQXRabH
+uCLCDQeV/YzlFkyj/xtDmlEe0O443L/kID51YCXnNAn0dkIrXSOG3fdqfL4UsHIq
+B/3Zedoss/BeYjpGm7h0Nyp68OtdMbSn8Z1z7HyRSgaKjVRLiaLfS17GExnwLrHw
+chdFpTGxqb8XfxHHWc+T67XJwKx0EbflyDQSlM9PoZDr2RMFGp7z7q5XkkJXY4Ca
+8DCLSABYm9NcbguH8Lrim7o8YTqAgOVNOGYZ/Mhi0MPgofQ67nE9StC/anKAplub
+8heBmgPbZbCOaTa7uCzyXlAiQfZ2T1rdcdyJqlTDrLv8OOaSul+kIa2l8COrkROW
+qxARuW5FpHpndWXm/VfjdZTKxeTYm6QAgr26BFgkxkYfGO/9NJv+Chp1OMRchNx+
+w2iBRCa5RzDZK7D+8Y0mq4mEeo+YwZOngvJIY4t90+1yIClj5zIPLTAyPk7VeAb9
+51v0h5YZ4WmLwoK2NZBu9y14AJJ75j2D/lfNBekFfCa8FdckgHCRSAhB+HN/OdAH
+CN4uEmq3m2xyx+OjgqBkLwPVzaBFplACLnfgW4YucD3orFOvbPl/GjQz36NzrHiQ
+KOdmguoTnktGqe3FLMSBpIFqgGY3/D+iHo8ZYNGsBM7R7wP9qQ==
+=1R6k
 -----END PGP SIGNATURE-----
 
---V0207lvV8h4k8FAm--
+--t0UkRYy7tHLRMCai--
