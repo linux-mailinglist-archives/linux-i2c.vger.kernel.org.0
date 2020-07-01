@@ -2,66 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD5D21155C
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Jul 2020 23:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD6521160A
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jul 2020 00:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbgGAVsi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Jul 2020 17:48:38 -0400
-Received: from www.zeus03.de ([194.117.254.33]:57712 "EHLO mail.zeus03.de"
+        id S1727889AbgGAW3k (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Jul 2020 18:29:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52906 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727853AbgGAVsi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 1 Jul 2020 17:48:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=lV4rVEU06zzJo6BqacCA+LQtCQz
-        l4u3O5dvm7O9wVH8=; b=hVYr7emwsPHwtsEy8tCKkz2k5OsarQwkvNrtArv2KCw
-        ZgrXs/ETDWqIqefzbzUolHrFr3yAdPe625VcAOoZt6bx/7RHNsMXsdKgZ1aDTLUx
-        T/1x5nxKN8Dm75vmvEsaxTuZILlDWpgiOW8AjH0xq6d7yc9kVYMKGUnfoNK0BV0o
-        =
-Received: (qmail 678364 invoked from network); 1 Jul 2020 23:48:35 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Jul 2020 23:48:35 +0200
-X-UD-Smtp-Session: l3s3148p1@/XICQWipVt8gAwDPXwRGAHjapuWXvfu/
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Alain Volmat <alain.volmat@st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH] i2c: add binding to mark a bus as SMBus
-Date:   Wed,  1 Jul 2020 23:48:30 +0200
-Message-Id: <20200701214830.3174-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.27.0
+        id S1725771AbgGAW3h (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 1 Jul 2020 18:29:37 -0400
+Received: from localhost (p54b334c2.dip0.t-ipconnect.de [84.179.52.194])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CFB9820780;
+        Wed,  1 Jul 2020 22:29:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593642576;
+        bh=KZ2oyRFyPGujITJfUc6nzDtoVuwWqXJ+rT2W7EPBeJE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jtNBtd3O1ER/wl3tYdOUCirx8lwRwJg2zKP8iBCqTkKP0WAOdXnVne/U0+uvHLj08
+         GaeDnO6n8smL9n5UB0IbuoRsWnFzQ6c0GYMUEO+tOGWqgr0C4MPKZNlWO0hI97PdQN
+         9V8QV/U+p81MfxGhVTYnu3eGhbezmO1aZEUkBXYI=
+Date:   Thu, 2 Jul 2020 00:29:34 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] i2c: algo-pca: Add 0x78 as SCL stuck low status
+Message-ID: <20200701222934.GB3147@kunai>
+References: <20200621225705.21666-1-chris.packham@alliedtelesis.co.nz>
+ <20200623193413.GB1203@ninjato>
+ <c5bd59ec-aa1f-dd8e-fdbf-5cc2aad0b5a7@alliedtelesis.co.nz>
+ <62bb6093-5f8b-8b81-805b-41624cfd83b5@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LpQ9ahxlCli8rRTG"
+Content-Disposition: inline
+In-Reply-To: <62bb6093-5f8b-8b81-805b-41624cfd83b5@alliedtelesis.co.nz>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SMBus is largely compatible with I2C but there are some specifics. In
-case we need them on a bus, we can now use this new binding.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- Documentation/devicetree/bindings/i2c/i2c.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+--LpQ9ahxlCli8rRTG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-index 438ae123107e..d1f8cf3bd236 100644
---- a/Documentation/devicetree/bindings/i2c/i2c.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c.txt
-@@ -77,6 +77,11 @@ wants to support one of the below features, it should adapt these bindings.
- 	this information to detect a stalled bus more reliably, for example.
- 	Can not be combined with 'multi-master'.
- 
-+- smbus
-+	states that additional SMBus restrictions and features apply to this bus.
-+	Examples of features are SMBusHostNotify and SMBusAlert. Examples of
-+	restrictions are more reserved addresses and timeout definitions.
-+
- Required properties (per child device)
- --------------------------------------
- 
--- 
-2.27.0
 
+> Any conclusion on this? I'm still suggesting that just treating 0x78
+> and 0x90 as SCL stuck for either chip is the cleanest solution. I
+> think I could do something with a fall-through that repeats the check
+> with an if which wouldn't be too ugly.
+
+I tried as well and also came up with code which was not very readable
+while trying to be clever.
+
+So, I agree. Let's keep things simple and take your original approach.
+Can you resend the patch and update the comments to reflect which code
+is for which version? And include the other paragraph in your commit
+message?
+
+Thanks!
+
+
+--LpQ9ahxlCli8rRTG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl79Dk4ACgkQFA3kzBSg
+KbaPKQ/9EsYYcCCv2oiBwU9Yj15v3XfOEeZ4In5tRu3Y9BgOTmuU0cwTqV5V2ZiJ
+B4GroT7gNKSQUPzRAjImsDxwjezWfH0jaoeFC2dl4BFAgVY/hfhZlMsEaJ0xEdwL
+31ijzNVbeOoJ3x49BE2eAGqgjy5S3C6Xj2lD1oQQxoKp+ACrpZnL9RpisP2pCSlJ
+Bbc8DDjkW6XM+oZ+yr6roO8/0z4K3mjieqEHXUHZF8nYYOoKKu5SfW9TsNH6hRWY
+Z45NF7D0CoYh0dEHqRLRjjiU5tO4CV+lEl1svpEo7F0J7fyKLVFaM3vzeQU4iEkW
+jh0nflL7NimEyQDYCzUyAz9EB7k24mOAfNRTbIQpPp+oD5ZORKGsKAm/yVDXi2hL
+IzgH9wG8HUJHfEEWzh2c9GuALBFVdyp6K9QkyvH+vz5DY4cyQhRYlW+3KYuq1LVW
+2WVRLcYN3F3w4xvvWokinqxf/g+Iq2Ap6hH7B0Lmj/Z+6JC5hqTxg0Yo8Srfplqb
+lxYQN4L9FV6o6eVfop4pzgmCLVYd75QTVMULXQAiCsEOwN+FEp6pcN1AzF6/Sw/I
+CMC27qpxS0yjbCRuczCWkyEDyG/wCMdAEshU/spCe77XMLrSq+Tvabgk0hN0rDjO
+D2l+oJDroeLAxvdl9RO6YGoo+mS+cgcA6oxUf+fcwF0jF5cwp6I=
+=fRnc
+-----END PGP SIGNATURE-----
+
+--LpQ9ahxlCli8rRTG--
