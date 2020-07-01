@@ -2,104 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B5E210E27
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Jul 2020 16:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBCA210E3A
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Jul 2020 17:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731039AbgGAO5T (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Jul 2020 10:57:19 -0400
-Received: from www.zeus03.de ([194.117.254.33]:43140 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727014AbgGAO5T (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 1 Jul 2020 10:57:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=ixsaqyBVatpjFGlKvxteR7MZYNGi
-        CdYi3qR8OOCYrOw=; b=PAbP2lGQCaYaVequRWufII7gAi3d8c61yHxifXAN5YRm
-        hr/9w06qZzetaUzVHDwK4cPQz7LBigqRbIAU3jgJeIM2X7C4Lr6AcYKFxKCTgKdV
-        p2pmooTxdX6Sp22srl+xUpXpA+U+AhB0LS9XX5H/KhHUPaZw3G9v6kY0ilZ38vo=
-Received: (qmail 587987 invoked from network); 1 Jul 2020 16:57:17 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Jul 2020 16:57:17 +0200
-X-UD-Smtp-Session: l3s3148p1@uLAVgmKpAuAgAwDPXwRGAHjapuWXvfu/
-Date:   Wed, 1 Jul 2020 16:57:14 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Alain Volmat <alain.volmat@st.com>
-Subject: Re: [RFC PATCH] WIP: i2c: rcar: add HostNotify support
-Message-ID: <20200701145714.GA2808@kunai>
-References: <20200701080904.11022-1-wsa+renesas@sang-engineering.com>
- <20200701092731.GD2261@ninjato>
- <20200701121633.GI2261@ninjato>
- <20200701123207.GC3457@gnbcxd0016.gnb.st.com>
- <20200701132145.GJ2261@ninjato>
- <20200701143738.GF3457@gnbcxd0016.gnb.st.com>
+        id S1731649AbgGAPAP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Jul 2020 11:00:15 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:45286 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726854AbgGAPAO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Jul 2020 11:00:14 -0400
+Received: by mail-pl1-f193.google.com with SMTP id g17so10008891plq.12;
+        Wed, 01 Jul 2020 08:00:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RN9Uob7cuR1gH1ZG/1wnY76yopcBcsRZ3UN3Pc2rBNE=;
+        b=eW5+aDbCTkpwHvG+yH7bWwtslzPQKw8o4khzZ9Jfloc72VSyCmk6aZyOPULRadI/0x
+         cEGcQhooMp+d2nDjzH2qjWr4goaiuqgUEi8cqunOvSKY3z/qZ3JQ81vwk0OAzNnSgqFz
+         jtfSsfU4ASdns3E3maqT5GMRHcKEULxE/4+hyV67PQx/JJ5154JmdKSM07yTKhAIgruw
+         l3OXCMXMQFGU2CL29zK4hDxZLsTaXZTxdTJzrC+/1EkVdZa2W2MxvXYa2RQUrUa0D94g
+         1aw+ko8sg1ybdtpcKcY1YwU+MIKIyD/PdhftsGw0ZNrTSfgRpErzfauVoZm4/D49svGv
+         Ngcg==
+X-Gm-Message-State: AOAM531/J3Jhu7+ibR9ITuLloZUEhrvRBbUq6sCci7dG9oq08nYs7iyA
+        tMzwW4TC3M50FskonXO93cY=
+X-Google-Smtp-Source: ABdhPJx6w2QyJcI4wbGNxQyPRuHfBXQ+DGZhqI0gNiEnDPbGveZWRnTA6sbUb1YjwyTIh2MDQe34pQ==
+X-Received: by 2002:a17:902:eb49:: with SMTP id i9mr21335692pli.231.1593615613150;
+        Wed, 01 Jul 2020 08:00:13 -0700 (PDT)
+Received: from sultan-book.localdomain ([89.46.114.241])
+        by smtp.gmail.com with ESMTPSA id c2sm5940117pgk.77.2020.07.01.08.00.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2020 08:00:12 -0700 (PDT)
+Date:   Wed, 1 Jul 2020 08:00:07 -0700
+From:   Sultan Alsawaf <sultan@kerneltoast.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     aaron.ma@canonical.com, admin@kryma.net,
+        andriy.shevchenko@linux.intel.com, benjamin.tissoires@redhat.com,
+        hdegoede@redhat.com, hn.chen@weidahitech.com, jikos@kernel.org,
+        kai.heng.feng@canonical.com, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mika.westerberg@linux.intel.com, vicamo.yang@canonical.com,
+        wsa@kernel.org
+Subject: Re: [PATCH v2] HID: i2c-hid: Use block reads when possible to save
+ power
+Message-ID: <20200701150007.GA2141@sultan-book.localdomain>
+References: <c4373272-e656-773c-dfd2-0efc4c53c92d@linux.intel.com>
+ <20200616154951.3050-1-sultan@kerneltoast.com>
+ <37ceaf7a-3421-e305-4355-a6b40ae54843@linux.intel.com>
+ <20200629174328.GB1646@sultan-box.localdomain>
+ <ef949533-c614-7afb-f206-5c54d827deac@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Qxx1br4bt0+wmkIi"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200701143738.GF3457@gnbcxd0016.gnb.st.com>
+In-Reply-To: <ef949533-c614-7afb-f206-5c54d827deac@linux.intel.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, Jul 01, 2020 at 11:04:01AM +0300, Jarkko Nikula wrote:
+> On 6/29/20 8:43 PM, Sultan Alsawaf wrote:
+> > Hmm, for some reason in 5.8 I get the same problem, but 5.7 is fine. Could you
+> > try this on 5.7 and see if it works?
+> > 
+> > In the meantime I'll bisect 5.8 to see why it's causing problems for me...
+> > 
+> I see the same issue on top of v5.7:
 
---Qxx1br4bt0+wmkIi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Try reverting my "i2c: designware: Only check the first byte for SMBus block
+read length" patch and apply the following change instead:
 
-
-> Hum ... sorry ... I'm having some doubt about such a generic 'smbus' nami=
-ng.
-> I mean, stating 'smbus' within the controller node kind of says
-> "I am working in SMBus mode", and not only "I am supporting Host-Notify &=
- Alert".
-> In such case, NOT having 'smbus' would mean that the driver do not support
-> SMBUS and SMBus xfer and all smbus related stuff would get disabled ...
-> We for sure do not want to have everybody add a smbus property in their DT
-> if they support SMBus xfer for example.
->=20
-> This is probably too wide, don't you think ?
-
-It would be, yet I don't think this is case.
-
-The "smbus" property means that _additional_ SMBus restrictions apply to
-that bus. Like additional timeout values, reserved addresses etc...
-
-It does not mean that we can't use SMBus style communication on an I2C
-bus. We can because we can easily emulate it. This is not an additional
-restriction.
-
-So it rather means "SMBus restrictions apply here". No such properties
-means no such restrictions. But then you can't have HostNotify and Alert
-because the addresses are not reserved.
-
-We can update the binding to "smbus-restrictions" perhaps, although it
-doesn't really sound nice to me. Maybe Rob also has an idea.
-
-I'll send a patch later and then we will see what he says.
-
-D'accord?
-
-
---Qxx1br4bt0+wmkIi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl78pEcACgkQFA3kzBSg
-KbaP8w/+IkbpGpmiBMjJPMoV428Q8QibtzE0DmO00+hg6JDKiOH66/h1Ajramcgj
-mSB4zbu3RuQaAhudtrZo+IeQNHKATGNB5C77pFwu6dXRx+0hceiG4lV9rUzwg1PD
-g3QWqOk7+KONqLI6AkK6igxUaaQa2aeM6LaFmPFy90Ia8oMoVN8UI+l/0GWqGsqy
-tIYe5kxPo/PMIXknC5nGOAq9yulU3e2w9/cUSNgcJvKMnNClJ1JE67hEQZQ/DIKR
-fVCX9I8gkp6K3d/2d8kQIoalJtM8Ou9TRbBAM2DLexnkIX2T5nMIwQR//v0c5iuX
-NH0tjyE+IQmagmakRJjqUQeAW0vFbEXGHpUO2cGv7WS0UwxfYfYLadZX8Nq2uoXM
-7z7oG/9aJ+bn2bDBk+I3WuBRndxkTnvu2tfByRMPobp/eVT5rjELKwGlPN2pFnx9
-KtH2SeuLZzC424XUUiiCSEOXDffQRsB3LkGjFCRDGZXy2xy6QBCh/e/EzlbjXWln
-Cof79HHjF5tZAMfu16NDixd9b24ZKwTlnObB2vjgtErRPan3YiL9QTUCayo0rwPO
-otieSBc7aefSo84Uvmv+fv/MNKgYK+HSB4LCXVObJq5lVgGNRCUoeIuhikbyQXTN
-io+bx7DOKaKjHrN1s1ZXrFrBtOPZMUJq7tv0+bNd3Vdnr1roiqo=
-=twv3
------END PGP SIGNATURE-----
-
---Qxx1br4bt0+wmkIi--
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -394,10 +394,12 @@ i2c_dw_read(struct dw_i2c_dev *dev)
+ 			u32 flags = msgs[dev->msg_read_idx].flags;
+ 
+ 			*buf = dw_readl(dev, DW_IC_DATA_CMD);
+-			/* Ensure length byte is a valid value */
+-			if (flags & I2C_M_RECV_LEN &&
+-				*buf <= I2C_SMBUS_BLOCK_MAX && *buf > 0) {
+-				len = i2c_dw_recv_len(dev, *buf);
++			if (flags & I2C_M_RECV_LEN) {
++				/* Ensure length byte is a valid value */
++				if (*buf <= I2C_SMBUS_BLOCK_MAX && *buf > 0)
++					len = i2c_dw_recv_len(dev, *buf);
++				else
++					len = i2c_dw_recv_len(dev, len);
+ 			}
+ 			buf++;
+ 			dev->rx_outstanding--;
