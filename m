@@ -2,108 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 014F6210DDC
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Jul 2020 16:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B5E210E27
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Jul 2020 16:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731431AbgGAOho (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Jul 2020 10:37:44 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:15358 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730264AbgGAOho (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Jul 2020 10:37:44 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 061EY0Zq007519;
-        Wed, 1 Jul 2020 16:37:40 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=STMicroelectronics;
- bh=nqTwUSGOOkfcdg53xwgRfiAKleLNUlDtBuTLOSVoR+g=;
- b=S2U/oXLRa2DTJ2elHQQwScNIzjUCdKD6DpdSOx8sB905hkr0Btwc3xk6Lm6weZugUXF+
- n31zU3fTwW59Gyz7J5+ft41MBoQ2I3zjQ4KHosUyzegHoaMexUToJzugHaGWU2fvn8Mg
- 7tlGt1EHAN8UsFhUfNejUVGbON7fUms/Vcu/g9GTFu2BAuxkyTBWq9Co2kOhC871aeQM
- MJBecR0ezA4z68oZWmhCGRJLQhDnHTr3ra6t4xBsr3KL3FowfDb8GAZBz3F9wqYJ5rj9
- DPD4J5AXld34Ziu/2cKZA8Bjf8/EQvEQX+F98cf5PwxM9AjX4JjQgvFxG2dlVmpaUBvL bA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 31wuk1jq2n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jul 2020 16:37:40 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 01A4410002A;
-        Wed,  1 Jul 2020 16:37:40 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EB7B52BC7C0;
-        Wed,  1 Jul 2020 16:37:39 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.75.127.45) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 1 Jul
- 2020 16:37:39 +0200
-Date:   Wed, 1 Jul 2020 16:37:38 +0200
-From:   Alain Volmat <alain.volmat@st.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>
+        id S1731039AbgGAO5T (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Jul 2020 10:57:19 -0400
+Received: from www.zeus03.de ([194.117.254.33]:43140 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727014AbgGAO5T (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 1 Jul 2020 10:57:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=ixsaqyBVatpjFGlKvxteR7MZYNGi
+        CdYi3qR8OOCYrOw=; b=PAbP2lGQCaYaVequRWufII7gAi3d8c61yHxifXAN5YRm
+        hr/9w06qZzetaUzVHDwK4cPQz7LBigqRbIAU3jgJeIM2X7C4Lr6AcYKFxKCTgKdV
+        p2pmooTxdX6Sp22srl+xUpXpA+U+AhB0LS9XX5H/KhHUPaZw3G9v6kY0ilZ38vo=
+Received: (qmail 587987 invoked from network); 1 Jul 2020 16:57:17 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Jul 2020 16:57:17 +0200
+X-UD-Smtp-Session: l3s3148p1@uLAVgmKpAuAgAwDPXwRGAHjapuWXvfu/
+Date:   Wed, 1 Jul 2020 16:57:14 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Alain Volmat <alain.volmat@st.com>
 Subject: Re: [RFC PATCH] WIP: i2c: rcar: add HostNotify support
-Message-ID: <20200701143738.GF3457@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Message-ID: <20200701145714.GA2808@kunai>
 References: <20200701080904.11022-1-wsa+renesas@sang-engineering.com>
  <20200701092731.GD2261@ninjato>
  <20200701121633.GI2261@ninjato>
  <20200701123207.GC3457@gnbcxd0016.gnb.st.com>
  <20200701132145.GJ2261@ninjato>
+ <20200701143738.GF3457@gnbcxd0016.gnb.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Qxx1br4bt0+wmkIi"
 Content-Disposition: inline
-In-Reply-To: <20200701132145.GJ2261@ninjato>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-01_08:2020-07-01,2020-07-01 signatures=0
+In-Reply-To: <20200701143738.GF3457@gnbcxd0016.gnb.st.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jul 01, 2020 at 03:21:45PM +0200, Wolfram Sang wrote:
-> 
-> > > I got another idea. What about a boolean binding "smbus"?
-> ...
-> > 
-> > I much prefer this solution than the usage of the smbus_alert irq value
-> > (in case of the i2c-stm32f7). In that case, I'd only set smbus boolean
-> > to enable both SMBus Host-Notify & SMBus Alert.
-> 
-> Correct.
-> 
-> > In case of a device having a dedicated irq for SMBus Alert, smbus_alert
-> > irq binding would still be needed.
-> 
-> Yes, that was my idea. Let's use "smbus".
 
-Hum ... sorry ... I'm having some doubt about such a generic 'smbus' naming.
-I mean, stating 'smbus' within the controller node kind of says
-"I am working in SMBus mode", and not only "I am supporting Host-Notify & Alert".
-In such case, NOT having 'smbus' would mean that the driver do not support
-SMBUS and SMBus xfer and all smbus related stuff would get disabled ...
-We for sure do not want to have everybody add a smbus property in their DT
-if they support SMBus xfer for example.
-
-This is probably too wide, don't you think ?
-
-> 
-> > Just my 2 cents about another aspect regarding SMBus Alert, since alert
-> > is coming from another pin and not the usual SCL / SCK, when SMBus Alert
-> > has to be used, there is a very good chance to have a pinctrl entry which
-> > is different from not using SMBus Alert.
-> > Indeed, even if we need SMBus, but don't need SMBus Alert, the SMBus Alert
-> > input pin might be used for something else.
-> > But this of course doesn't prevent to use the smbus boolean binding.
-> 
-> I am not sure if I fully get this point. Either we have a dedicated line
-> (your case) or we need to use a GPIO as an interrupt line (my case). So,
-> either this is configured correctly in DT and added as a "smbus_alert"
-> irq. Or this irq is missing and then the driver will ignore SMBusAlert
-> and the GPIO can be freely used/muxed. Or?
-> 
+--Qxx1br4bt0+wmkIi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
+> Hum ... sorry ... I'm having some doubt about such a generic 'smbus' nami=
+ng.
+> I mean, stating 'smbus' within the controller node kind of says
+> "I am working in SMBus mode", and not only "I am supporting Host-Notify &=
+ Alert".
+> In such case, NOT having 'smbus' would mean that the driver do not support
+> SMBUS and SMBus xfer and all smbus related stuff would get disabled ...
+> We for sure do not want to have everybody add a smbus property in their DT
+> if they support SMBus xfer for example.
+>=20
+> This is probably too wide, don't you think ?
+
+It would be, yet I don't think this is case.
+
+The "smbus" property means that _additional_ SMBus restrictions apply to
+that bus. Like additional timeout values, reserved addresses etc...
+
+It does not mean that we can't use SMBus style communication on an I2C
+bus. We can because we can easily emulate it. This is not an additional
+restriction.
+
+So it rather means "SMBus restrictions apply here". No such properties
+means no such restrictions. But then you can't have HostNotify and Alert
+because the addresses are not reserved.
+
+We can update the binding to "smbus-restrictions" perhaps, although it
+doesn't really sound nice to me. Maybe Rob also has an idea.
+
+I'll send a patch later and then we will see what he says.
+
+D'accord?
+
+
+--Qxx1br4bt0+wmkIi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl78pEcACgkQFA3kzBSg
+KbaP8w/+IkbpGpmiBMjJPMoV428Q8QibtzE0DmO00+hg6JDKiOH66/h1Ajramcgj
+mSB4zbu3RuQaAhudtrZo+IeQNHKATGNB5C77pFwu6dXRx+0hceiG4lV9rUzwg1PD
+g3QWqOk7+KONqLI6AkK6igxUaaQa2aeM6LaFmPFy90Ia8oMoVN8UI+l/0GWqGsqy
+tIYe5kxPo/PMIXknC5nGOAq9yulU3e2w9/cUSNgcJvKMnNClJ1JE67hEQZQ/DIKR
+fVCX9I8gkp6K3d/2d8kQIoalJtM8Ou9TRbBAM2DLexnkIX2T5nMIwQR//v0c5iuX
+NH0tjyE+IQmagmakRJjqUQeAW0vFbEXGHpUO2cGv7WS0UwxfYfYLadZX8Nq2uoXM
+7z7oG/9aJ+bn2bDBk+I3WuBRndxkTnvu2tfByRMPobp/eVT5rjELKwGlPN2pFnx9
+KtH2SeuLZzC424XUUiiCSEOXDffQRsB3LkGjFCRDGZXy2xy6QBCh/e/EzlbjXWln
+Cof79HHjF5tZAMfu16NDixd9b24ZKwTlnObB2vjgtErRPan3YiL9QTUCayo0rwPO
+otieSBc7aefSo84Uvmv+fv/MNKgYK+HSB4LCXVObJq5lVgGNRCUoeIuhikbyQXTN
+io+bx7DOKaKjHrN1s1ZXrFrBtOPZMUJq7tv0+bNd3Vdnr1roiqo=
+=twv3
+-----END PGP SIGNATURE-----
+
+--Qxx1br4bt0+wmkIi--
