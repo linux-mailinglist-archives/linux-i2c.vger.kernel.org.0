@@ -2,106 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD352106CB
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Jul 2020 10:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAE62107EB
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Jul 2020 11:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728994AbgGAI5Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Jul 2020 04:57:25 -0400
-Received: from www.zeus03.de ([194.117.254.33]:38622 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728932AbgGAI5Y (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 1 Jul 2020 04:57:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Dqx96H9utXLfS6nvYduGLuFxcqla
-        OU+DgKthl+SO1jo=; b=DcYmnTQcPSsI4KrnFUI2xukNRpk4iVVwOSnccCf2WMSl
-        yLJMF49OgIwqZk1WjH5eBOtLn50KG2dPbkABxNz+9fXdOnqlal/+xnm6Uesoqljh
-        Yw3gL+YimTYOEuD9qXSgQxhVTO7Ikz94a70AXZfYvkbanXPYF3rljwox+As+bD8=
-Received: (qmail 477301 invoked from network); 1 Jul 2020 10:57:22 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Jul 2020 10:57:22 +0200
-X-UD-Smtp-Session: l3s3148p1@TODpel2petkgAwDPXwRGALjtBlSZf+V/
-Date:   Wed, 1 Jul 2020 10:57:22 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH RFC 0/1] i2c: add slave testunit driver
-Message-ID: <20200701085722.GB2261@ninjato>
-References: <20200629185318.23381-1-wsa+renesas@sang-engineering.com>
- <20200701083024.GA3457@gnbcxd0016.gnb.st.com>
+        id S1728790AbgGAJVx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Jul 2020 05:21:53 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:24032 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728776AbgGAJVw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Jul 2020 05:21:52 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0619BDjP023035;
+        Wed, 1 Jul 2020 11:21:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=STMicroelectronics;
+ bh=+Zy5DDQ6neW7WZl6/peSwMUygFppp3WoiU0yXaaJpbA=;
+ b=GCEP0SIzeIG1mHgGTwtgiKR9RWx7wQzNjnzmWb9N7YEIbzIw5Q7FVwQtUJndnvYtKKsK
+ 7bHgKXs4nmIGb/wsxvpjrxDHyW7jfiK7aQXgd6NJif9U9Pm1J3TiT5Y5BrGjUSdpIwNx
+ 2tXk6yWHBJIrZZUkwc1vvXfC6YCosXncgjSgNSIV4hvog4nJo1htXMemdd9cXuSReFgs
+ 0Vlyubs6+BsZSmdSKtTlW6W5bCmhcYNCRegO25bu8YOVels9Tv3OnL7WRPeeBBfpZsmz
+ tBvr6HsCrloHEM4kKC/dckQwWQGEub+6lHq21+BsrzSjU7L2ttKq7zALpXg8pdL44Qvi 8A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 31wu89s8fg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Jul 2020 11:21:42 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7396410002A;
+        Wed,  1 Jul 2020 11:21:40 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 39AFD2AA395;
+        Wed,  1 Jul 2020 11:21:40 +0200 (CEST)
+Received: from gnbcxd0016.gnb.st.com (10.75.127.47) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 1 Jul
+ 2020 11:21:39 +0200
+Date:   Wed, 1 Jul 2020 11:21:38 +0200
+From:   Alain Volmat <alain.volmat@st.com>
+To:     Wolfram Sang <wsa@kernel.org>
+CC:     <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <pierre-yves.mordret@st.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@st.com>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>
+Subject: Re: [PATCH v2 0/4] stm32-f7: Addition of SMBus Alert / Host-notify
+ features
+Message-ID: <20200701092138.GB3457@gnbcxd0016.gnb.st.com>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, robh+dt@kernel.org,
+        mark.rutland@arm.com, pierre-yves.mordret@st.com,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@st.com
+References: <1593070769-9106-1-git-send-email-alain.volmat@st.com>
+ <20200630160500.GA2394@kunai>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NDin8bjvE/0mNLFQ"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200701083024.GA3457@gnbcxd0016.gnb.st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200630160500.GA2394@kunai>
+X-Disclaimer: ce message est personnel / this message is private
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-01_04:2020-07-01,2020-07-01 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Jun 30, 2020 at 06:05:00PM +0200, Wolfram Sang wrote:
+> On Thu, Jun 25, 2020 at 09:39:25AM +0200, Alain Volmat wrote:
+> > This serie adds SMBus Alert and SMBus Host-Notify features for the i2c-stm32f7.
+> 
+> If it is not too much work for you, I think it makes sense to split the
+> series into two, i.e. HostNotify and SMBusAlert parts.
+> 
 
---NDin8bjvE/0mNLFQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-
-> Very good idea to use a slave to send the Host-Notify command to the host
-> for testing. Later on, for SMBus-Alert, a GPIO can be used to loop it back
-> to the tested master to verify that SMBus-Alert is working fine.
-
-Glad you like it! Yes, SMBusAlert is the next addition planned.
-
-> What you implemented is the "remote" side which I understood is meant to
-> replace a "real" device for those features which are not that common.
-
-Correct.
-
-> Shouldn't we also have the "master" side loopback test driver as well to
-> work with this test slave driver ?
-
-Yes, ultimately we want that. But for this first draft, I simply
-triggered with 'i2cset' and checked debug prints plus debugfs for
-desired outcome.
-
-> For example for the Host-Notify that master side loopback test driver would
-> perform the request_irq allowing it to be called back when the slave test
-> driver sends the host-notify command.
-> In case of SMBus-Alert, that would be implementing the .alert function that
-> would be called when the SMBus-Alert is received ..
-
-Exactly. I am simply focussed on the remote side for now because I am
-curious if it works at all. And what other parts need fixing, e.g. the
-I2C core patch I sent a few minutes ago.
-
-> With that the whole loop can be automatically tested. This kind of stuff
-> can of course be enhanced to a LOT of cases .... basically something similar
-> to spi-loopback driver for example except that in case of i2c it needs 2
-> I2C controllers instead of one for the SPI.
-
-This is my ultimate goal, too: scriptable tests for I2C mastes. Basic
-functionality can be tested with a simple device, say an EEPROM. But the
-rare stuff needs something like this testunit.
-
-
---NDin8bjvE/0mNLFQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl78T/IACgkQFA3kzBSg
-KbaT5g//ZB0SSc3btTcLjsXpSwCC7yRHKF5sqPcRUHWyRwALfDVxfs9RNgS4GFz/
-wDIruwdw7nEY+hifcrX0AmS8wbu/ik1x6R602AVeBI8gZKJFGULRaKXqzkbkcIsg
-raq0rrMZJr48XcMD6P1c+w1Fzluk8jg5j4gJeQOCferoYJhjPFdbfV12LxHIcaqj
-gPWvE/hnWKJRXioG9TGbNkJnFG3bcCZPNaSjLOwlc7RYXWupXeZaC1uI7jU6TcWh
-pQ88kZr9tJ8ihJ6zbH329RE6QgQPv+MLbyiS3wFUjN8xOnoi3t2Tcw4zZxhbCjDx
-1V/rjDZmykWQy02ZtlrnrpH8KhKHl1V3Lxgryn9PGw4SMiIl+J+zCpQhpne+siwG
-pgoTEhf0SLmXxxYKKD39l04DP3Rea2qiTGxDNJfpkZleW3bnHWKuWGiQ+dQtz5pC
-zIgmZzGc1JR72bcrwNAQdnA2LJ8fTGlyHTUAQUnlyG1sBiA2cgXRxaDDokUuJ0dv
-3MRO0AF1+nYQMFYYLZFLCUyd6IdbMJGmuNelGHgVoHHElfq9EaUhCZj4CnoTFhBg
-O6NkLhne0ezoaXfqF8rNKSjbVLUttWhTa6nQIUxb+p54CPP5ubTl9cOJArZBRjLf
-iPPnxEwhgPph2NEOm2Jg/FblPO3xh447UPvZzX+u+k4fCMcoy6w=
-=pk52
------END PGP SIGNATURE-----
-
---NDin8bjvE/0mNLFQ--
+I've just prepared the 1st new serie with only the HostNotify bits in it.
+(basically, the core part, the dt-bindings with the enable-host-notify, and
+the usage within i2c-stm32f7).
+You mentioned in the other thread that you still have some more review comment
+I believe. Is that right ? If that is so, I'll wait for those comment and
+then push that new serie for review.
