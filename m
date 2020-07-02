@@ -2,47 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B990721209F
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jul 2020 12:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CEF2120CD
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jul 2020 12:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727819AbgGBKKd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Jul 2020 06:10:33 -0400
-Received: from mail-ej1-f67.google.com ([209.85.218.67]:42377 "EHLO
-        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727057AbgGBKKd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Jul 2020 06:10:33 -0400
-Received: by mail-ej1-f67.google.com with SMTP id f12so2413965eja.9;
-        Thu, 02 Jul 2020 03:10:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7d50t2/RpZ/PiovsO4JjL17UaNTTmolWjPQh23qo5pE=;
-        b=oMey2+O5+1bdfJKXMUEZO8Y5ACk/bTTp18+8b+47sPQmpryJ79WP6w1LwLbc3q24FD
-         dUI0Cgb2xXbK0j7zH18v7fljAFV3QL5lTDyR3DhICz2+V/AyTqJGEkf/ykvKVWvBraJ4
-         ht7D3AqmsaTSESMc42yFCue0NmoDNZrAwZPfhrANq2Yjgm1AGqm6OK02EBJRvVncxcdT
-         fwmoBAe1FLxbKjIu9VlUv1UVMWKURc77vmfg9eshXK9Gdkto5uqP7XH/RZ9b+8QNHEtk
-         QrL4rr35LF+1IsdHrK72GCTUS55nRHJjc+aQyjSwbx5vuwBd3p+AeCw8O2y1UBWe68N8
-         OczQ==
-X-Gm-Message-State: AOAM5301sDY7+t9nGtiTMxi+7l4DyhFeNt4YuFx1miEacE/NooE4cy3v
-        yveJ0YWWxp8g+lo3Rrab3i4=
-X-Google-Smtp-Source: ABdhPJxI/V8uEi3oMTLgVbbtsoAsRym2GpSEjCa8GEntdArvfCRjcWgCA9SFGnytSDnB0RlEftu4Wg==
-X-Received: by 2002:a17:906:7cc4:: with SMTP id h4mr10504032ejp.339.1593684631010;
-        Thu, 02 Jul 2020 03:10:31 -0700 (PDT)
-Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id w18sm8988609edv.11.2020.07.02.03.10.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2020 03:10:30 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     Ricardo Ribalda <ribalda@kernel.org>
-Subject: [PATCH v4] i2c: designware: platdrv: Set class based on DMI
-Date:   Thu,  2 Jul 2020 12:10:28 +0200
-Message-Id: <20200702101028.2088666-1-ribalda@kernel.org>
+        id S1728397AbgGBKPc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Jul 2020 06:15:32 -0400
+Received: from mga03.intel.com ([134.134.136.65]:46709 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728320AbgGBKPb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 2 Jul 2020 06:15:31 -0400
+IronPort-SDR: Vt4fiRzgdiT+Bt9YVRQNneeHnE0rwKntkF2V+7vvOS0IKHXv6n3maR9hW8k9y8RwfMGY8qXUev
+ IjevuR6Jaojg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9669"; a="146852878"
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="146852878"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 03:15:31 -0700
+IronPort-SDR: c/JlylX6G65ta5/B92MKTAoGfsqsDf0Sc/Fhr/3a+iJr4kFnw80el5CDigStxn1+vgDwPjmNuk
+ WQy1ceVZ76jw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="304199499"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Jul 2020 03:15:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 240BE17D; Thu,  2 Jul 2020 13:15:28 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] i2c: eg20t: Load module automatically if ID matches
+Date:   Thu,  2 Jul 2020 13:15:27 +0300
+Message-Id: <20200702101527.10285-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,71 +43,27 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Current AMD's zen-based APUs use this core for some of its i2c-buses.
+The driver can't be loaded automatically because it misses
+module alias to be provided. Add corresponding MODULE_DEVICE_TABLE()
+call to the driver.
 
-With this patch we re-enable autodetection of hwmon-alike devices, so
-lm-sensors will be able to work automatically.
-
-It does not affect the boot-time of embedded devices, as the class is
-set based on the DMI information.
-
-DMI is probed only on Qtechnology QT5222 Industrial Camera Platform
-
-DocLink: https://qtec.com/camera-technology-camera-platforms/
-Fixes: 3eddad96c439 ("i2c: designware: reverts "i2c: designware: Add support for AMD I2C controller"")
-Signed-off-by: Ricardo Ribalda <ribalda@kernel.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-v2: Comments by Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  - dmi -> DMI
-  - Doclink
-  - CodeStyle
-  (I do not know what you meant by redundant in the dmi match list ...)
+ drivers/i2c/busses/i2c-eg20t.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-
- drivers/i2c/busses/i2c-designware-platdrv.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index c2efaaaac252..630e28ef2412 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -12,6 +12,7 @@
- #include <linux/clk-provider.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/dmi.h>
- #include <linux/err.h>
- #include <linux/errno.h>
- #include <linux/i2c.h>
-@@ -191,6 +192,18 @@ static int dw_i2c_plat_request_regs(struct dw_i2c_dev *dev)
- 	return ret;
- }
+diff --git a/drivers/i2c/busses/i2c-eg20t.c b/drivers/i2c/busses/i2c-eg20t.c
+index bb810dee8fb5..73f139690e4e 100644
+--- a/drivers/i2c/busses/i2c-eg20t.c
++++ b/drivers/i2c/busses/i2c-eg20t.c
+@@ -180,6 +180,7 @@ static const struct pci_device_id pch_pcidev_id[] = {
+ 	{ PCI_VDEVICE(ROHM, PCI_DEVICE_ID_ML7831_I2C), 1, },
+ 	{0,}
+ };
++MODULE_DEVICE_TABLE(pci, pch_pcidev_id);
  
-+static const struct dmi_system_id dw_i2c_hwmon_class_dmi[] = {
-+	{
-+		.ident = "Qtechnology QT5222",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Qtechnology"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "QT5222"),
-+		},
-+	},
-+
-+	{ } /* terminate list */
-+};
-+
- static int dw_i2c_plat_probe(struct platform_device *pdev)
- {
- 	struct dw_i2c_platform_data *pdata = dev_get_platdata(&pdev->dev);
-@@ -267,7 +280,8 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ static irqreturn_t pch_i2c_handler(int irq, void *pData);
  
- 	adap = &dev->adapter;
- 	adap->owner = THIS_MODULE;
--	adap->class = I2C_CLASS_DEPRECATED;
-+	adap->class = dmi_check_system(dw_i2c_hwmon_class_dmi) ?
-+					I2C_CLASS_HWMON : I2C_CLASS_DEPRECATED;
- 	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
- 	adap->dev.of_node = pdev->dev.of_node;
- 	adap->nr = -1;
 -- 
 2.27.0
 
