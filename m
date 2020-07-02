@@ -2,119 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F33CD212023
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jul 2020 11:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DF321204B
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jul 2020 11:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726555AbgGBJii (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Jul 2020 05:38:38 -0400
-Received: from mail-ej1-f66.google.com ([209.85.218.66]:35086 "EHLO
-        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726475AbgGBJii (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Jul 2020 05:38:38 -0400
-Received: by mail-ej1-f66.google.com with SMTP id rk21so28533318ejb.2;
-        Thu, 02 Jul 2020 02:38:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PshYPWi7fvTQHrWfUZQEN624Xq+S5W73EgfXf3KFYes=;
-        b=NaQHhUrxO9pz1UVhLoP87ySykgLihsttvuiBlu+Ie0qbRPY7opFkGi9UrMVZxLUSxl
-         BLnRDu4i9P0mVIngS8gO4hNFld+Uz+GdFviz0y1ukFaNWmUgxNeBQmeUlERmq1+ndxwx
-         zVWJeOtpi6veki2mZAVf6gMAoYWeDZ45J1NGb6LFztrpmr094jgLE3kDYVunD3wlBKbr
-         p36IurybV5T0I42q6TpULk1P2i0l+lNpAhVmc8iMNeNw/D6OWRyhfz3GmFUHD/q4Z0gH
-         ad3szld7fo8dZUQV1j9CqA6uEvZ5NMNiWCLWtlcLJVn8nIIoeW/ereq4MqBOgCFsdHeq
-         NdbA==
-X-Gm-Message-State: AOAM5307PgQHsNuA8HcxN0H5IIyYtmY0Gc1+w4Bm3P5uCbPfDmnLz4+e
-        bfHqLbJ7RnjuuCqGwV/qjhsnKEDpJcE=
-X-Google-Smtp-Source: ABdhPJwmnk10YRxLgMfD/lCDgqC3eUs/X3gFQZl3/SzMyaDU07mbbNuc/es3NjRCaglqFP94/8erzQ==
-X-Received: by 2002:a17:906:9387:: with SMTP id l7mr25768386ejx.274.1593682716186;
-        Thu, 02 Jul 2020 02:38:36 -0700 (PDT)
-Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id g8sm9215406edk.13.2020.07.02.02.38.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2020 02:38:34 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        id S1727057AbgGBJsJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Jul 2020 05:48:09 -0400
+Received: from mga17.intel.com ([192.55.52.151]:25208 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726555AbgGBJsJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 2 Jul 2020 05:48:09 -0400
+IronPort-SDR: NGBI4Fq2mlW8pYu/gBtQwUHP34eXyVplRtl5HUJtxCpGCXLnJ/MuBbRiIRmzdpMA4p/9/RNQ+g
+ /sbkW+43EJiw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9669"; a="126935773"
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="126935773"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 02:48:08 -0700
+IronPort-SDR: MfId8Xsu+pXlIBLT1E+9fv/iiNoFYtd++gWymsw2yHsvG9sWxYALZwFkKAD2yM4c+SnyCT72lE
+ YVtF4tDtg/8Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="265657264"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Jul 2020 02:48:07 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jqvpA-00HBHk-Oy; Thu, 02 Jul 2020 12:48:08 +0300
+Date:   Thu, 2 Jul 2020 12:48:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ricardo Ribalda <ribalda@kernel.org>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Wolfram Sang <wsa@kernel.org>
-Cc:     Ricardo Ribalda <ribalda@kernel.org>
-Subject: [PATCH v3] i2c: designware: platdrv: Set class based on dmi
-Date:   Thu,  2 Jul 2020 11:38:32 +0200
-Message-Id: <20200702093832.2077252-1-ribalda@kernel.org>
-X-Mailer: git-send-email 2.27.0
+Subject: Re: [PATCH v3] i2c: designware: platdrv: Set class based on dmi
+Message-ID: <20200702094808.GP3703480@smile.fi.intel.com>
+References: <20200702093832.2077252-1-ribalda@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200702093832.2077252-1-ribalda@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Current AMD's zen-based APUs use this core for some of its i2c-buses.
+On Thu, Jul 02, 2020 at 11:38:32AM +0200, Ricardo Ribalda wrote:
+> Current AMD's zen-based APUs use this core for some of its i2c-buses.
+> 
+> With this patch we re-enable autodetection of hwmon-alike devices, so
+> lm-sensors will be able to work automatically.
+> 
+> It does not affect the boot-time of embedded devices, as the class is
+> set based on the dmi information.
 
-With this patch we re-enable autodetection of hwmon-alike devices, so
-lm-sensors will be able to work automatically.
+dmi -> DMI
 
-It does not affect the boot-time of embedded devices, as the class is
-set based on the dmi information.
+> Dmi is probed only on Qtechnology QT5222 Industrial Camera Platform
 
-Dmi is probed only on Qtechnology QT5222 Industrial Camera Platform
-https://qtec.com/camera-technology-camera-platforms/
+Dmi -> DMI
 
-Fixes: 3eddad96c439 ("i2c: designware: reverts "i2c: designware: Add support for AMD I2C controller"")
-Signed-off-by: Ricardo Ribalda <ribalda@kernel.org>
----
+> https://qtec.com/camera-technology-camera-platforms/
 
-v3: Comment by Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  - Add Fixes tag
-  - Do not user strstr for dmidecode
-  Comment by Jarkko Nikula <jarkko.nikula@linux.intel.com>
-  - Use dmi_check_system()
- drivers/i2c/busses/i2c-designware-platdrv.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+Use DocLink: tag.
 
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index c2efaaaac252..a9f2d416b7d1 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -12,6 +12,7 @@
- #include <linux/clk-provider.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/dmi.h>
- #include <linux/err.h>
- #include <linux/errno.h>
- #include <linux/i2c.h>
-@@ -191,6 +192,18 @@ static int dw_i2c_plat_request_regs(struct dw_i2c_dev *dev)
- 	return ret;
- }
- 
-+static const struct dmi_system_id allow_probe[] = {
-+	{
-+		.ident = "Qtechnology QT5222",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Qtechnology"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "QT5222")
-+		}
-+	},
-+
-+	{ }
-+};
-+
- static int dw_i2c_plat_probe(struct platform_device *pdev)
- {
- 	struct dw_i2c_platform_data *pdata = dev_get_platdata(&pdev->dev);
-@@ -267,7 +280,8 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
- 
- 	adap = &dev->adapter;
- 	adap->owner = THIS_MODULE;
--	adap->class = I2C_CLASS_DEPRECATED;
-+	adap->class = dmi_check_system(allow_probe) ?
-+					I2C_CLASS_HWMON : I2C_CLASS_DEPRECATED;
- 	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
- 	adap->dev.of_node = pdev->dev.of_node;
- 	adap->nr = -1;
+...
+
+> +static const struct dmi_system_id allow_probe[] = {
+
+allow_probe -> dw_i2c_hwmon_class_dmi
+
+> +	{
+> +		.ident = "Qtechnology QT5222",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Qtechnology"),
+
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "QT5222")
+
+Comma is missed.
+
+> +		}
+> +	},
+
+> +
+
+Redundant.
+
+> +	{ }
+> +};
+
 -- 
-2.27.0
+With Best Regards,
+Andy Shevchenko
+
 
