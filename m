@@ -2,94 +2,120 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB1621208D
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jul 2020 12:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B990721209F
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jul 2020 12:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726089AbgGBKEc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Jul 2020 06:04:32 -0400
-Received: from mga04.intel.com ([192.55.52.120]:60799 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725287AbgGBKEb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 2 Jul 2020 06:04:31 -0400
-IronPort-SDR: ThQrZNedRbhh8idl3yAPD77IRoo5tlh++WHks08hpZDQ3M4PylDYTwrQDxAWLTmx/S//Is2d7g
- aH/3+hLz2KYw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9669"; a="144369343"
-X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
-   d="scan'208";a="144369343"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 03:04:30 -0700
-IronPort-SDR: eV5vhCrF/V/avimrcklFEMXLzkWgEjeF2mAInxhkm4eizzd8n0KALSBTv4pAUztNCCrUhlAs/8
- aVjNORiPEevQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
-   d="scan'208";a="322050416"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga007.jf.intel.com with ESMTP; 02 Jul 2020 03:04:28 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jqw50-00HBPd-1y; Thu, 02 Jul 2020 13:04:30 +0300
-Date:   Thu, 2 Jul 2020 13:04:30 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     wsa@kernel.org,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: algo-pca: Add 0x78 as SCL stuck low status
-Message-ID: <20200702100430.GR3703480@smile.fi.intel.com>
-References: <20200701223912.30864-1-chris.packham@alliedtelesis.co.nz>
+        id S1727819AbgGBKKd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Jul 2020 06:10:33 -0400
+Received: from mail-ej1-f67.google.com ([209.85.218.67]:42377 "EHLO
+        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727057AbgGBKKd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Jul 2020 06:10:33 -0400
+Received: by mail-ej1-f67.google.com with SMTP id f12so2413965eja.9;
+        Thu, 02 Jul 2020 03:10:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7d50t2/RpZ/PiovsO4JjL17UaNTTmolWjPQh23qo5pE=;
+        b=oMey2+O5+1bdfJKXMUEZO8Y5ACk/bTTp18+8b+47sPQmpryJ79WP6w1LwLbc3q24FD
+         dUI0Cgb2xXbK0j7zH18v7fljAFV3QL5lTDyR3DhICz2+V/AyTqJGEkf/ykvKVWvBraJ4
+         ht7D3AqmsaTSESMc42yFCue0NmoDNZrAwZPfhrANq2Yjgm1AGqm6OK02EBJRvVncxcdT
+         fwmoBAe1FLxbKjIu9VlUv1UVMWKURc77vmfg9eshXK9Gdkto5uqP7XH/RZ9b+8QNHEtk
+         QrL4rr35LF+1IsdHrK72GCTUS55nRHJjc+aQyjSwbx5vuwBd3p+AeCw8O2y1UBWe68N8
+         OczQ==
+X-Gm-Message-State: AOAM5301sDY7+t9nGtiTMxi+7l4DyhFeNt4YuFx1miEacE/NooE4cy3v
+        yveJ0YWWxp8g+lo3Rrab3i4=
+X-Google-Smtp-Source: ABdhPJxI/V8uEi3oMTLgVbbtsoAsRym2GpSEjCa8GEntdArvfCRjcWgCA9SFGnytSDnB0RlEftu4Wg==
+X-Received: by 2002:a17:906:7cc4:: with SMTP id h4mr10504032ejp.339.1593684631010;
+        Thu, 02 Jul 2020 03:10:31 -0700 (PDT)
+Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
+        by smtp.gmail.com with ESMTPSA id w18sm8988609edv.11.2020.07.02.03.10.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2020 03:10:30 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@kernel.org>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     Ricardo Ribalda <ribalda@kernel.org>
+Subject: [PATCH v4] i2c: designware: platdrv: Set class based on DMI
+Date:   Thu,  2 Jul 2020 12:10:28 +0200
+Message-Id: <20200702101028.2088666-1-ribalda@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200701223912.30864-1-chris.packham@alliedtelesis.co.nz>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jul 02, 2020 at 10:39:11AM +1200, Chris Packham wrote:
-> The PCA9665 datasheet says that I2CSTA = 78h indicates that SCL is stuck
-> low, this differs to the PCA9564 which uses 90h for this indication.
-> Treat either 0x78 or 0x90 as an indication that the SCL line is stuck.
-> 
-> Based on looking through the PCA9564 and PCA9665 datasheets this should
-> be safe for both chips. The PCA9564 should not return 0x78 for any valid
-> state and the PCA9665 should not return 0x90.
+Current AMD's zen-based APUs use this core for some of its i2c-buses.
 
-For me as well looks better this way.
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+With this patch we re-enable autodetection of hwmon-alike devices, so
+lm-sensors will be able to work automatically.
 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> Changes in v2:
-> - Note which status corresponds to which chip
-> - Move patch commentary to commit message
-> 
->  drivers/i2c/algos/i2c-algo-pca.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/algos/i2c-algo-pca.c b/drivers/i2c/algos/i2c-algo-pca.c
-> index 7f10312d1b88..388978775be0 100644
-> --- a/drivers/i2c/algos/i2c-algo-pca.c
-> +++ b/drivers/i2c/algos/i2c-algo-pca.c
-> @@ -314,7 +314,8 @@ static int pca_xfer(struct i2c_adapter *i2c_adap,
->  			DEB2("BUS ERROR - SDA Stuck low\n");
->  			pca_reset(adap);
->  			goto out;
-> -		case 0x90: /* Bus error - SCL stuck low */
-> +		case 0x78: /* Bus error - SCL stuck low (PCA9665) */
-> +		case 0x90: /* Bus error - SCL stuck low (PCA9564) */
->  			DEB2("BUS ERROR - SCL Stuck low\n");
->  			pca_reset(adap);
->  			goto out;
-> -- 
-> 2.27.0
-> 
+It does not affect the boot-time of embedded devices, as the class is
+set based on the DMI information.
 
+DMI is probed only on Qtechnology QT5222 Industrial Camera Platform
+
+DocLink: https://qtec.com/camera-technology-camera-platforms/
+Fixes: 3eddad96c439 ("i2c: designware: reverts "i2c: designware: Add support for AMD I2C controller"")
+Signed-off-by: Ricardo Ribalda <ribalda@kernel.org>
+---
+v2: Comments by Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  - dmi -> DMI
+  - Doclink
+  - CodeStyle
+  (I do not know what you meant by redundant in the dmi match list ...)
+
+
+ drivers/i2c/busses/i2c-designware-platdrv.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index c2efaaaac252..630e28ef2412 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -12,6 +12,7 @@
+ #include <linux/clk-provider.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
++#include <linux/dmi.h>
+ #include <linux/err.h>
+ #include <linux/errno.h>
+ #include <linux/i2c.h>
+@@ -191,6 +192,18 @@ static int dw_i2c_plat_request_regs(struct dw_i2c_dev *dev)
+ 	return ret;
+ }
+ 
++static const struct dmi_system_id dw_i2c_hwmon_class_dmi[] = {
++	{
++		.ident = "Qtechnology QT5222",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Qtechnology"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "QT5222"),
++		},
++	},
++
++	{ } /* terminate list */
++};
++
+ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ {
+ 	struct dw_i2c_platform_data *pdata = dev_get_platdata(&pdev->dev);
+@@ -267,7 +280,8 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ 
+ 	adap = &dev->adapter;
+ 	adap->owner = THIS_MODULE;
+-	adap->class = I2C_CLASS_DEPRECATED;
++	adap->class = dmi_check_system(dw_i2c_hwmon_class_dmi) ?
++					I2C_CLASS_HWMON : I2C_CLASS_DEPRECATED;
+ 	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
+ 	adap->dev.of_node = pdev->dev.of_node;
+ 	adap->nr = -1;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.27.0
 
