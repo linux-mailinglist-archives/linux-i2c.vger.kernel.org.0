@@ -2,314 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5077C2126CE
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jul 2020 16:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063D2212AF6
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jul 2020 19:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730213AbgGBOr6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Jul 2020 10:47:58 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:55962 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730194AbgGBOrw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Jul 2020 10:47:52 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 062Egvmq002247;
-        Thu, 2 Jul 2020 16:47:40 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=QOZrevicgTsr/4RT9oV0FNeuOYMm4YTdwn6NXOPlLAc=;
- b=AT5qzDGrthrxlnFoA963a397rEI9HKN+LGPJtkPUFLlV4FxDqLoYB/pxa5xeynmuA5XF
- HgUihyXhvwlARe2ZbISqGv591TqYlw9z5w/nqtqBdohr8x+8LIPPFfm6N9h5S0DzDNXW
- wtTMh+Pkukke9vCs4jnXsrdTN3bl1pYANg8/lyPtawGhEeFKYpCulXG0GpdA/ygGMkOi
- uef8vzqr1nRcWn3wpgd6CIgCqzb95+0sD/R96nx9i9qa7mE7refVJ1NPcFe6gux1b6Oh
- zj9fupQ5TUJeF0gE/1/pPOdVBOAZtVXBSAAAQDGCtvl8d4JAXYFfb2EkyziYxnbikoiS RQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 31ww0ggu90-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Jul 2020 16:47:40 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1CB2C100039;
-        Thu,  2 Jul 2020 16:47:40 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0BBE02BC7BC;
-        Thu,  2 Jul 2020 16:47:40 +0200 (CEST)
-Received: from localhost (10.75.127.49) by SFHDAG3NODE2.st.com (10.75.127.8)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 2 Jul 2020 16:47:39
- +0200
-From:   Alain Volmat <alain.volmat@st.com>
-To:     <wsa@kernel.org>, <pierre-yves.mordret@st.com>
-CC:     <alexandre.torgue@st.com>, <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>,
-        <alain.volmat@st.com>
-Subject: [PATCH 2/2] i2c: stm32f7: Add SMBus Host-Notify protocol support
-Date:   Thu, 2 Jul 2020 16:47:05 +0200
-Message-ID: <1593701225-13451-3-git-send-email-alain.volmat@st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1593701225-13451-1-git-send-email-alain.volmat@st.com>
-References: <1593701225-13451-1-git-send-email-alain.volmat@st.com>
+        id S1727920AbgGBRMQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Jul 2020 13:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727915AbgGBRMP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Jul 2020 13:12:15 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608BDC08C5C1
+        for <linux-i2c@vger.kernel.org>; Thu,  2 Jul 2020 10:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=hur0N5VpFMmM468rLQSCnKTmOlrtSai0qkItfn7CRWk=; b=Kfthxle0FEk7pd724y1qHveQfR
+        sdJpKjuapDo5PSA172fvIzxsRAt6Bd+2KaFFmiXG6rHn08cuGyizbIwpkf7d5cTdH8ABqZc7v9X0x
+        hoOAfY5S0065hvgTmsMliIzNzxXxU6pkpS7r6kV52x1VUVsfVn0OgvuSDoujxyr2MaSHklloY7uFh
+        Yo/WA4vsUvPGK/lDlzyeCoRoMo3vkSG1ghbxB84yFE07X2x0zovViBCPF02WCqXWmgZ3mMpfZ6zSa
+        +ZgsBHb8E8K8O9ANHdWU0VRAiHnfHOCNxQ3/V63Vd+DrDbi7y80hYVwA3isHDASZIbm0ay6lrliHG
+        9VTtNWhA==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jr2kt-00086U-SZ; Thu, 02 Jul 2020 17:12:12 +0000
+To:     Linux MM <linux-mm@kvack.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: Documentation (mm & i2c) questions (doubled words)
+Message-ID: <187c35da-041e-dcf3-d14e-7046f57d0606@infradead.org>
+Date:   Thu, 2 Jul 2020 10:12:06 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG3NODE2.st.com (10.75.127.8) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-02_09:2020-07-02,2020-07-02 signatures=0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Rely on the core functions to implement the host-notify
-protocol via the a I2C slave device.
 
-Signed-off-by: Alain Volmat <alain.volmat@st.com>
----
- drivers/i2c/busses/Kconfig       |   1 +
- drivers/i2c/busses/i2c-stm32f7.c | 110 +++++++++++++++++++++++++++++++++------
- 2 files changed, 96 insertions(+), 15 deletions(-)
+for MM:
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 735bf31a3fdf..ae8671727a4c 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1036,6 +1036,7 @@ config I2C_STM32F7
- 	tristate "STMicroelectronics STM32F7 I2C support"
- 	depends on ARCH_STM32 || COMPILE_TEST
- 	select I2C_SLAVE
-+	select I2C_SMBUS
- 	help
- 	  Enable this option to add support for STM32 I2C controller embedded
- 	  in STM32F7 SoCs.
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index bff3479fe122..09d07376e70a 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -18,6 +18,7 @@
- #include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/i2c.h>
-+#include <linux/i2c-smbus.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
-@@ -50,6 +51,7 @@
- 
- /* STM32F7 I2C control 1 */
- #define STM32F7_I2C_CR1_PECEN			BIT(23)
-+#define STM32F7_I2C_CR1_SMBHEN			BIT(20)
- #define STM32F7_I2C_CR1_WUPEN			BIT(18)
- #define STM32F7_I2C_CR1_SBC			BIT(16)
- #define STM32F7_I2C_CR1_RXDMAEN			BIT(15)
-@@ -150,7 +152,7 @@
- 
- #define STM32F7_I2C_MAX_LEN			0xff
- #define STM32F7_I2C_DMA_LEN_MIN			0x16
--#define STM32F7_I2C_MAX_SLAVE			0x2
-+#define STM32F7_I2C_MAX_SLAVE			0x3
- 
- #define STM32F7_I2C_DNF_DEFAULT			0
- #define STM32F7_I2C_DNF_MAX			16
-@@ -301,6 +303,8 @@ struct stm32f7_i2c_msg {
-  * @fmp_creg: register address for clearing Fast Mode Plus bits
-  * @fmp_mask: mask for Fast Mode Plus bits in set register
-  * @wakeup_src: boolean to know if the device is a wakeup source
-+ * @smbus_mode: states that the controller is configured in SMBus mode
-+ * @host_notify_client: SMBus host-notify client
-  */
- struct stm32f7_i2c_dev {
- 	struct i2c_adapter adap;
-@@ -327,6 +331,8 @@ struct stm32f7_i2c_dev {
- 	u32 fmp_creg;
- 	u32 fmp_mask;
- 	bool wakeup_src;
-+	bool smbus_mode;
-+	struct i2c_client *host_notify_client;
- };
- 
- /*
-@@ -1321,10 +1327,18 @@ static int stm32f7_i2c_get_free_slave_id(struct stm32f7_i2c_dev *i2c_dev,
- 	int i;
- 
- 	/*
--	 * slave[0] supports 7-bit and 10-bit slave address
--	 * slave[1] supports 7-bit slave address only
-+	 * slave[0] support only SMBus Host address (0x8)
-+	 * slave[1] supports 7-bit and 10-bit slave address
-+	 * slave[2] supports 7-bit slave address only
- 	 */
--	for (i = STM32F7_I2C_MAX_SLAVE - 1; i >= 0; i--) {
-+	if (i2c_dev->host_notify_client && (slave->addr == 0x08)) {
-+		if (i2c_dev->slave[0])
-+			goto fail;
-+		*id = 0;
-+		return 0;
-+	}
-+
-+	for (i = STM32F7_I2C_MAX_SLAVE - 1; i > 0; i--) {
- 		if (i == 1 && (slave->flags & I2C_CLIENT_TEN))
- 			continue;
- 		if (!i2c_dev->slave[i]) {
-@@ -1333,6 +1347,7 @@ static int stm32f7_i2c_get_free_slave_id(struct stm32f7_i2c_dev *i2c_dev,
- 		}
- 	}
- 
-+fail:
- 	dev_err(dev, "Slave 0x%x could not be registered\n", slave->addr);
- 
- 	return -EINVAL;
-@@ -1776,7 +1791,13 @@ static int stm32f7_i2c_reg_slave(struct i2c_client *slave)
- 	if (!stm32f7_i2c_is_slave_registered(i2c_dev))
- 		stm32f7_i2c_enable_wakeup(i2c_dev, true);
- 
--	if (id == 0) {
-+	switch (id) {
-+	case 0:
-+		/* Slave SMBus Host */
-+		i2c_dev->slave[id] = slave;
-+		break;
-+
-+	case 1:
- 		/* Configure Own Address 1 */
- 		oar1 = readl_relaxed(i2c_dev->base + STM32F7_I2C_OAR1);
- 		oar1 &= ~STM32F7_I2C_OAR1_MASK;
-@@ -1789,7 +1810,9 @@ static int stm32f7_i2c_reg_slave(struct i2c_client *slave)
- 		oar1 |= STM32F7_I2C_OAR1_OA1EN;
- 		i2c_dev->slave[id] = slave;
- 		writel_relaxed(oar1, i2c_dev->base + STM32F7_I2C_OAR1);
--	} else if (id == 1) {
-+		break;
-+
-+	case 2:
- 		/* Configure Own Address 2 */
- 		oar2 = readl_relaxed(i2c_dev->base + STM32F7_I2C_OAR2);
- 		oar2 &= ~STM32F7_I2C_OAR2_MASK;
-@@ -1802,7 +1825,10 @@ static int stm32f7_i2c_reg_slave(struct i2c_client *slave)
- 		oar2 |= STM32F7_I2C_OAR2_OA2EN;
- 		i2c_dev->slave[id] = slave;
- 		writel_relaxed(oar2, i2c_dev->base + STM32F7_I2C_OAR2);
--	} else {
-+		break;
-+
-+	default:
-+		dev_err(dev, "I2C slave id not supported\n");
- 		ret = -ENODEV;
- 		goto pm_free;
- 	}
-@@ -1843,10 +1869,10 @@ static int stm32f7_i2c_unreg_slave(struct i2c_client *slave)
- 	if (ret < 0)
- 		return ret;
- 
--	if (id == 0) {
-+	if (id == 1) {
- 		mask = STM32F7_I2C_OAR1_OA1EN;
- 		stm32f7_i2c_clr_bits(base + STM32F7_I2C_OAR1, mask);
--	} else {
-+	} else if (id == 2) {
- 		mask = STM32F7_I2C_OAR2_OA2EN;
- 		stm32f7_i2c_clr_bits(base + STM32F7_I2C_OAR2, mask);
- 	}
-@@ -1911,14 +1937,51 @@ static int stm32f7_i2c_setup_fm_plus_bits(struct platform_device *pdev,
- 					  &i2c_dev->fmp_mask);
- }
- 
-+static int stm32f7_i2c_enable_smbus_host(struct stm32f7_i2c_dev *i2c_dev)
-+{
-+	struct i2c_adapter *adap = &i2c_dev->adap;
-+	void __iomem *base = i2c_dev->base;
-+	struct i2c_client *client;
-+
-+	client = i2c_new_slave_host_notify_device(adap);
-+	if (IS_ERR(client))
-+		return PTR_ERR(client);
-+
-+	i2c_dev->host_notify_client = client;
-+
-+	/* Enable SMBus Host address */
-+	stm32f7_i2c_set_bits(base + STM32F7_I2C_CR1, STM32F7_I2C_CR1_SMBHEN);
-+
-+	return 0;
-+}
-+
-+static void stm32f7_i2c_disable_smbus_host(struct stm32f7_i2c_dev *i2c_dev)
-+{
-+	void __iomem *base = i2c_dev->base;
-+
-+	if (i2c_dev->host_notify_client) {
-+		/* Disable SMBus Host address */
-+		stm32f7_i2c_clr_bits(base + STM32F7_I2C_CR1,
-+				     STM32F7_I2C_CR1_SMBHEN);
-+		i2c_free_slave_host_notify_device(i2c_dev->host_notify_client);
-+	}
-+}
-+
- static u32 stm32f7_i2c_func(struct i2c_adapter *adap)
- {
--	return I2C_FUNC_I2C | I2C_FUNC_10BIT_ADDR | I2C_FUNC_SLAVE |
--		I2C_FUNC_SMBUS_QUICK | I2C_FUNC_SMBUS_BYTE |
--		I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA |
--		I2C_FUNC_SMBUS_BLOCK_DATA | I2C_FUNC_SMBUS_BLOCK_PROC_CALL |
--		I2C_FUNC_SMBUS_PROC_CALL | I2C_FUNC_SMBUS_PEC |
--		I2C_FUNC_SMBUS_I2C_BLOCK;
-+	struct stm32f7_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
-+
-+	u32 func = I2C_FUNC_I2C | I2C_FUNC_10BIT_ADDR | I2C_FUNC_SLAVE |
-+		   I2C_FUNC_SMBUS_QUICK | I2C_FUNC_SMBUS_BYTE |
-+		   I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA |
-+		   I2C_FUNC_SMBUS_BLOCK_DATA | I2C_FUNC_SMBUS_BLOCK_PROC_CALL |
-+		   I2C_FUNC_SMBUS_PROC_CALL | I2C_FUNC_SMBUS_PEC |
-+		   I2C_FUNC_SMBUS_I2C_BLOCK;
-+
-+	if (i2c_dev->smbus_mode)
-+		func |= I2C_FUNC_SMBUS_HOST_NOTIFY;
-+
-+	return func;
- }
- 
- static const struct i2c_algorithm stm32f7_i2c_algo = {
-@@ -2084,10 +2147,22 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
- 
- 	stm32f7_i2c_hw_config(i2c_dev);
- 
-+	i2c_dev->smbus_mode = of_property_read_bool(pdev->dev.of_node, "smbus");
-+
- 	ret = i2c_add_adapter(adap);
- 	if (ret)
- 		goto pm_disable;
- 
-+	if (i2c_dev->smbus_mode) {
-+		ret = stm32f7_i2c_enable_smbus_host(i2c_dev);
-+		if (ret) {
-+			dev_err(i2c_dev->dev,
-+				"failed to enable SMBus Host-Notify protocol (%d)\n",
-+				ret);
-+			goto i2c_adapter_remove;
-+		}
-+	}
-+
- 	dev_info(i2c_dev->dev, "STM32F7 I2C-%d bus adapter\n", adap->nr);
- 
- 	pm_runtime_mark_last_busy(i2c_dev->dev);
-@@ -2095,6 +2170,9 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
-+i2c_adapter_remove:
-+	i2c_del_adapter(adap);
-+
- pm_disable:
- 	pm_runtime_put_noidle(i2c_dev->dev);
- 	pm_runtime_disable(i2c_dev->dev);
-@@ -2126,6 +2204,8 @@ static int stm32f7_i2c_remove(struct platform_device *pdev)
- {
- 	struct stm32f7_i2c_dev *i2c_dev = platform_get_drvdata(pdev);
- 
-+	stm32f7_i2c_disable_smbus_host(i2c_dev);
-+
- 	i2c_del_adapter(&i2c_dev->adap);
- 	pm_runtime_get_sync(i2c_dev->dev);
- 
+in Documentation/admin-guide/mm/numaperf.rst:
+line 132-133:
+
+  If that directory is not present, the system either does not not provide
+  a memory-side cache, or that information is not accessible to the kernel.
+
+Is the double negative done on purpose or is it a typo/mistake?
+
+
+for I2C:
+
+in Documentation/i2c/upgrading-clients.rst:
+line 10-11:
+
+  This guide outlines how to alter existing Linux 2.6 client drivers from
+  the old to the new new binding methods.
+                 ^^^^^^^
+
+Is this like "really new" or newer than new?  or just a simple mistake?
+
+
+thanks.
+
 -- 
-2.7.4
+~Randy
 
