@@ -2,93 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 812DE213942
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jul 2020 13:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E775213966
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jul 2020 13:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726376AbgGCLVf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Jul 2020 07:21:35 -0400
-Received: from mga01.intel.com ([192.55.52.88]:35605 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726374AbgGCLVf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 3 Jul 2020 07:21:35 -0400
-IronPort-SDR: M5v14p1woQHQFp+SHNmdrIfn2aX5Kt/PtWm7NlD1gO6pcK55Bq6bCoAB/zCf1cm/UzKqIp1bD2
- nniqYCCKOQGQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="165197804"
-X-IronPort-AV: E=Sophos;i="5.75,308,1589266800"; 
-   d="scan'208";a="165197804"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2020 04:21:35 -0700
-IronPort-SDR: zZJdcdf/ZIZzX2VlNvLNUGgbUu8fpS3tce0x2rXTEoH9EyKSu5f9Pu3sUKrCCXuS3gpSgbvEkN
- TTdW1NmEOEQw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,308,1589266800"; 
-   d="scan'208";a="296186000"
-Received: from mylly.fi.intel.com (HELO [10.237.72.153]) ([10.237.72.153])
-  by orsmga002.jf.intel.com with ESMTP; 03 Jul 2020 04:21:31 -0700
-Subject: Re: [PATCH v2] HID: i2c-hid: Use block reads when possible to save
- power
-To:     Sultan Alsawaf <sultan@kerneltoast.com>
-Cc:     aaron.ma@canonical.com, admin@kryma.net,
-        andriy.shevchenko@linux.intel.com, benjamin.tissoires@redhat.com,
-        hdegoede@redhat.com, hn.chen@weidahitech.com, jikos@kernel.org,
-        kai.heng.feng@canonical.com, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mika.westerberg@linux.intel.com, vicamo.yang@canonical.com,
-        wsa@kernel.org
-References: <c4373272-e656-773c-dfd2-0efc4c53c92d@linux.intel.com>
- <20200616154951.3050-1-sultan@kerneltoast.com>
- <37ceaf7a-3421-e305-4355-a6b40ae54843@linux.intel.com>
- <20200629174328.GB1646@sultan-box.localdomain>
- <ef949533-c614-7afb-f206-5c54d827deac@linux.intel.com>
- <20200701150007.GA2141@sultan-book.localdomain>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <b3b751fc-668d-91e2-220b-0d7edd231e01@linux.intel.com>
-Date:   Fri, 3 Jul 2020 14:18:18 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1726287AbgGCLgj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Jul 2020 07:36:39 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:33145 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726183AbgGCLgi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Jul 2020 07:36:38 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 063BZ4LD018169;
+        Fri, 3 Jul 2020 13:36:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=KtTObkeOynAmSwV1CyKhfRhK9yNMSaVV5hsuMECA9uU=;
+ b=LZgBpv4QmrhNoSpLNz7TfyWa+GWJBrIfZ0NKSyLS91We97IH+wAgfGhPJ2t4S+pYZauZ
+ maXBEylWB5fgD6pnJoK+KQo/LEMgQ36FrV+qe58mOdnfUrOwSD+ysjJ3gwhsss/HPsQk
+ jgDxYqieSW0msQDqHJU//OtPkvMfmCvnCzSY6aNYF4hdQHjCcPzq0YiV61MRwRCWn70a
+ Oh7Jff0hPcq3DmJp9CePbE8UbtMspR+Wei3LJEz5JFbnD5G8MH6BqHpU70Bs4IxQilDx
+ 85Mc29D3p2o37XXYV9WqRlh/0QEgxtbLUV+Yd0YqbL/qd6FhSL/pKcy+R1zp3tpvH8n+ Aw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 31wuvwp84n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jul 2020 13:36:27 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B3B6310002A;
+        Fri,  3 Jul 2020 13:36:26 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A19C32C750E;
+        Fri,  3 Jul 2020 13:36:26 +0200 (CEST)
+Received: from localhost (10.75.127.44) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 3 Jul 2020 13:36:26
+ +0200
+From:   Alain Volmat <alain.volmat@st.com>
+To:     <wsa@kernel.org>, <pierre-yves.mordret@st.com>
+CC:     <alexandre.torgue@st.com>, <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>,
+        <alain.volmat@st.com>
+Subject: [PATCH v2 0/2] i2c: stm32: add host-notify support via i2c slave
+Date:   Fri, 3 Jul 2020 13:36:06 +0200
+Message-ID: <1593776168-17867-1-git-send-email-alain.volmat@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <20200701150007.GA2141@sultan-book.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG5NODE1.st.com (10.75.127.13) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-03_06:2020-07-02,2020-07-03 signatures=0
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi
+This serie replaces the previous 'stm32-f7: Addition of SMBus Alert /
+Host-notify features' serie to only focus on the SMBus Host-Notify feature.
+It should be applied with "[PATCH] i2c: add binding to mark a bus as SMBus"
+from Wolfram which defines the newly introduced "smbus" binding.
 
-On 7/1/20 6:00 PM, Sultan Alsawaf wrote:
-> On Wed, Jul 01, 2020 at 11:04:01AM +0300, Jarkko Nikula wrote:
->> On 6/29/20 8:43 PM, Sultan Alsawaf wrote:
->>> Hmm, for some reason in 5.8 I get the same problem, but 5.7 is fine. Could you
->>> try this on 5.7 and see if it works?
->>>
->>> In the meantime I'll bisect 5.8 to see why it's causing problems for me...
->>>
->> I see the same issue on top of v5.7:
-> 
-> Try reverting my "i2c: designware: Only check the first byte for SMBus block
-> read length" patch and apply the following change instead:
-> 
-This combination (the diff and this HID patch) works on top of v5.7.
+Alain Volmat (2):
+  i2c: smbus: add core function handling SMBus host-notify
+  i2c: stm32f7: Add SMBus Host-Notify protocol support
 
-I tried also these other combinations:
+ drivers/i2c/busses/Kconfig       |   1 +
+ drivers/i2c/busses/i2c-stm32f7.c | 110 +++++++++++++++++++++++++++++++------
+ drivers/i2c/i2c-core-smbus.c     | 114 +++++++++++++++++++++++++++++++++++++++
+ include/linux/i2c-smbus.h        |  12 +++++
+ 4 files changed, 222 insertions(+), 15 deletions(-)
 
-v5.7
-- HID patch + this diff -> ok
-- HID patch -> not ok
-- HID + acked i2c-dw patch -> acked i2c-dw patch doesn't apply
-
-v5.8-rc3
-- acked i2c-dw patch -> ok
-- HID patch -> nok
-- HID patch + acked i2c-dw patch -> nok
-- HID patch + this diff -> diff doesn't apply
-
-Hopefully gives some glue. I'll be out of office for a few weeks and 
-unfortunately cannot test patches meanwhile.
-
-Jarkko
+-- 
+v2: fix a bad test within the i2c-stm32f7 driver leading to decrease of
+    available slave slot
