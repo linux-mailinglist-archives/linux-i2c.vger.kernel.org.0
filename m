@@ -2,257 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6488F2135BF
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jul 2020 10:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8B6213866
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jul 2020 12:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726147AbgGCIGU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Jul 2020 04:06:20 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:46349 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725891AbgGCIGT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Jul 2020 04:06:19 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id rGi2j86C1mVFqrGi5j7GWZ; Fri, 03 Jul 2020 10:06:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1593763575; bh=b4jvdZMiRl+wQlE8aK7iGvK92VjV3a/6aX4pFQUlAY4=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=uqKM0qgkfVWerqlbG6o3xBiv6+lkwTSdn60vng7VtUX2pCKAfz2b12dNbn4UJ5vsi
-         /B3ivaZOlPPDlw+I9/SyuEsyK9WRAdLWaQ+O/4mfNSw49CA0uoFERSqBRcpNXwADUU
-         s2DYzRfN8c1z9hSRV8JWH8szoCVvgtfCFZy0lsDDaQyYSbb2dOQZvHYY4F6HRnA2fm
-         p/knxlfOEA3ND2IsaeHeX87zsidWl/1CprmWYbzWMu5NCm+X+gspdYYjA+/lIH6ipM
-         F2J4TffZHGM6u99C2dz41Z6HQADENLofvftmn1nACb499MaCVYEomW1emX8Y/7ExNv
-         QMNhQ80petZlw==
-Subject: Re: [RFC PATCH v2 12/18] media: tegra-video: Add support for
- selection ioctl ops
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
-        sakari.ailus@iki.fi, robh+dt@kernel.org, helen.koike@collabora.com
-Cc:     digetx@gmail.com, sboyd@kernel.org, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
- <1592358094-23459-13-git-send-email-skomatineni@nvidia.com>
- <efc84cff-76d5-78a2-e84e-0342459d3756@xs4all.nl>
- <c82a000a-7766-c933-fd69-24eb4885fc14@nvidia.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <a95717b6-e2ee-78df-5145-de265805b3d4@xs4all.nl>
-Date:   Fri, 3 Jul 2020 10:06:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1725810AbgGCKJA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Jul 2020 06:09:00 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:39116 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725796AbgGCKJA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 3 Jul 2020 06:09:00 -0400
+Received: from p5b127e6f.dip0.t-ipconnect.de ([91.18.126.111] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1jrIco-0005Z1-B5; Fri, 03 Jul 2020 12:08:54 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     John Keeping <john@metanate.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: rk3x: support master_xfer_atomic
+Date:   Fri, 03 Jul 2020 12:08:53 +0200
+Message-ID: <2391901.EFyQHPvyDf@phil>
+In-Reply-To: <20200623120646.2175569-1-john@metanate.com>
+References: <20200623120646.2175569-1-john@metanate.com>
 MIME-Version: 1.0
-In-Reply-To: <c82a000a-7766-c933-fd69-24eb4885fc14@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfJibOq/j4tqoc36sc4WrtRfP/A0osTMUl1TNKLANrgu56/SySM9PwU8/7zlFaI92I2Zm+b7yAimCBtoVhEq0JGdG/Qu6rWHiZR2VRfdU8v3TAesoYmCf
- 12+lmuLHRoPvH8otC/RKqgD6o2UUMxNGygKPVInnM34BF/htxuI8rRF6jG8IbW+Y05Ebu5IdKMwEu/FtgiAnQCvhSLMvGxIVTMF01lScqwjNQ/P/elK9XYLK
- DCsRPHwA+4jMO4dF+3QmpcHeAsKsAdN3bjqSYSho3E6zHZYEP9a7V4HEjL2J66sJ/IYpfJD8zVYapSUiU9Si6ArWPuN1OkLmpmzy+07A1MybGJJf5TrZuz4/
- mvSK/CItcwqWHuLoxQDh2IbdL7+Hp52d7L6QTMFWZQoXBXQujIRJckCIgnZDvueyk+AyhjMt8ZGAViX6dB01sBUyIzznC1nEweu7Rw5EkEJmj2UFrhJJfHUN
- 5HtqnX3wzLVieIf0NHPwb0Fdj1ddMehpgkMmA4w0PzD1DLe4Ideui72Y7suyfaEy7GXK0/WwkTTu1C7/wlrLvMwUrQEVIMcxMyc080Eyo6CeFoje9z4iuiHy
- USmgj20dEE+T9RxO/0IEl8dU61xTek0qZACAwgVjimcDDrD4JCV+RfscsZjN3urSkOLgUPAQlyOySgTitx1SJKDV
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 02/07/2020 23:20, Sowjanya Komatineni wrote:
+Am Dienstag, 23. Juni 2020, 14:06:46 CEST schrieb John Keeping:
+> Enable i2c transactions in irq disabled contexts like poweroff where the
+> PMIC is connected via i2c.
 > 
-> On 7/2/20 6:54 AM, Hans Verkuil wrote:
->> On 17/06/2020 03:41, Sowjanya Komatineni wrote:
->>> This patch adds selection v4l2 ioctl operations to allow configuring
->>> a selection rectangle in the sensor through the Tegra video device
->>> node.
->>>
->>> Some sensor drivers supporting crop uses try_crop rectangle from
->>> v4l2_subdev_pad_config during try format for computing binning.
->>>
->>> So with selection ops support, this patch also updates try format
->>> to use try crop rectangle either from subdev frame size enumeration
->>> or from subdev crop boundary.
->>>
->>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->>> ---
->>>   drivers/staging/media/tegra-video/vi.c | 106 +++++++++++++++++++++++++++++++++
->>>   1 file changed, 106 insertions(+)
->>>
->>> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
->>> index 506c263..f9eb96b 100644
->>> --- a/drivers/staging/media/tegra-video/vi.c
->>> +++ b/drivers/staging/media/tegra-video/vi.c
->>> @@ -427,6 +427,13 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
->>>   	struct v4l2_subdev *subdev;
->>>   	struct v4l2_subdev_format fmt;
->>>   	struct v4l2_subdev_pad_config *pad_cfg;
->>> +	struct v4l2_subdev_frame_size_enum fse = {
->>> +		.which = V4L2_SUBDEV_FORMAT_TRY,
->>> +	};
->>> +	struct v4l2_subdev_selection sdsel = {
->>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
->>> +		.target = V4L2_SEL_TGT_CROP_BOUNDS,
->>> +	};
->>>   	int ret;
->>>   
->>>   	subdev = tegra_channel_get_remote_subdev(chan, true);
->>> @@ -449,6 +456,24 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
->>>   	fmt.which = V4L2_SUBDEV_FORMAT_TRY;
->>>   	fmt.pad = 0;
->>>   	v4l2_fill_mbus_format(&fmt.format, pix, fmtinfo->code);
->>> +
->>> +	/*
->>> +	 * Attempt to obtain the format size from subdev.
->>> +	 * If not available, try to get crop boundary from subdev.
->>> +	 */
->>> +	fse.code = fmtinfo->code;
->>> +	ret = v4l2_subdev_call(subdev, pad, enum_frame_size, pad_cfg, &fse);
->>> +	if (ret) {
->>> +		ret = v4l2_subdev_call(subdev, pad, get_selection, NULL, &sdsel);
->>> +		if (ret)
->>> +			return -EINVAL;
->>> +		pad_cfg->try_crop.width = sdsel.r.width;
->>> +		pad_cfg->try_crop.height = sdsel.r.height;
->>> +	} else {
->>> +		pad_cfg->try_crop.width = fse.max_width;
->>> +		pad_cfg->try_crop.height = fse.max_height;
->>> +	}
->>> +
->>>   	ret = v4l2_subdev_call(subdev, pad, set_fmt, pad_cfg, &fmt);
->>>   	if (ret < 0)
->>>   		return ret;
->>> @@ -540,6 +565,85 @@ static int tegra_channel_set_subdev_active_fmt(struct tegra_vi_channel *chan)
->>>   	return 0;
->>>   }
->>>   
->>> +static int tegra_channel_g_selection(struct file *file, void *priv,
->>> +				     struct v4l2_selection *sel)
->>> +{
->>> +	struct tegra_vi_channel *chan = video_drvdata(file);
->>> +	struct v4l2_subdev *subdev;
->>> +	struct v4l2_subdev_format fmt = {
->>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
->>> +	};
->>> +	struct v4l2_subdev_selection sdsel = {
->>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
->>> +		.target = sel->target,
->>> +	};
->>> +	int ret;
->>> +
->>> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->>> +		return -ENOTTY;
->>> +
->>> +	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
->>> +		return -EINVAL;
->>> +	/*
->>> +	 * Try the get selection operation and fallback to get format if not
->>> +	 * implemented.
->>> +	 */
->>> +	subdev = tegra_channel_get_remote_subdev(chan, true);
->>> +	ret = v4l2_subdev_call(subdev, pad, get_selection, NULL, &sdsel);
->>> +	if (!ret)
->>> +		sel->r = sdsel.r;
->>> +	if (ret != -ENOIOCTLCMD)
->>> +		return ret;
->>> +
->>> +	ret = v4l2_subdev_call(subdev, pad, get_fmt, NULL, &fmt);
->>> +	if (ret < 0)
->>> +		return ret;
->>> +
->>> +	sel->r.left = 0;
->>> +	sel->r.top = 0;
->>> +	sel->r.width = fmt.format.width;
->>> +	sel->r.height = fmt.format.height;
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int tegra_channel_s_selection(struct file *file, void *fh,
->>> +				     struct v4l2_selection *sel)
->>> +{
->>> +	struct tegra_vi_channel *chan = video_drvdata(file);
->>> +	struct v4l2_subdev *subdev;
->>> +	int ret;
->>> +	struct v4l2_subdev_selection sdsel = {
->>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
->>> +		.target = sel->target,
->>> +		.flags = sel->flags,
->>> +		.r = sel->r,
->>> +	};
->>> +
->> This function doesn't check if the subdev actually supports set_selection.
->> The imx219 is one such driver: it supports get_selection, but not set_selection.
->>
->> So this code should add these lines to fix the v4l2-compliance fail:
->>
->>         subdev = tegra_channel_get_remote_subdev(chan, true);
->>
->>         if (!v4l2_subdev_has_op(subdev, pad, set_selection))
->>                 return -ENOTTY;
->>
-> v4l2_subdev_call() does that check and returns -ENOIOCTLCMD when 
-> specified subdev ops does not exist.
+> Signed-off-by: John Keeping <john@metanate.com>
 
-But that test happens too late. In the v4l2-compliance test it fails in the
-sel->type test below, so it returns EINVAL instead of ENOTTY.
+on a rk3288:
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
->>> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->>> +		return -ENOTTY;
-
-I think this test should come before the v4l2_subdev_has_op test since there
-is probably no subdev if the TPG is enabled. So:
-
-	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-		return -ENOTTY;
-
-        subdev = tegra_channel_get_remote_subdev(chan, true);
-        if (!v4l2_subdev_has_op(subdev, pad, set_selection))
-                return -ENOTTY;
+> ---
+>  drivers/i2c/busses/i2c-rk3x.c | 39 +++++++++++++++++++++++++++++++----
+>  1 file changed, 35 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
+> index 15324bfbc6cb..8e3cc85d1921 100644
+> --- a/drivers/i2c/busses/i2c-rk3x.c
+> +++ b/drivers/i2c/busses/i2c-rk3x.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/module.h>
+>  #include <linux/i2c.h>
+>  #include <linux/interrupt.h>
+> +#include <linux/iopoll.h>
+>  #include <linux/errno.h>
+>  #include <linux/err.h>
+>  #include <linux/platform_device.h>
+> @@ -1040,8 +1041,21 @@ static int rk3x_i2c_setup(struct rk3x_i2c *i2c, struct i2c_msg *msgs, int num)
+>  	return ret;
+>  }
+>  
+> -static int rk3x_i2c_xfer(struct i2c_adapter *adap,
+> -			 struct i2c_msg *msgs, int num)
+> +static int rk3x_i2c_wait_xfer_poll(struct rk3x_i2c *i2c)
+> +{
+> +	ktime_t timeout = ktime_add_ms(ktime_get(), WAIT_TIMEOUT);
+> +
+> +	while (READ_ONCE(i2c->busy) &&
+> +	       ktime_compare(ktime_get(), timeout) < 0) {
+> +		udelay(5);
+> +		rk3x_i2c_irq(0, i2c);
+> +	}
+> +
+> +	return !i2c->busy;
+> +}
+> +
+> +static int rk3x_i2c_xfer_common(struct i2c_adapter *adap,
+> +				struct i2c_msg *msgs, int num, bool polling)
+>  {
+>  	struct rk3x_i2c *i2c = (struct rk3x_i2c *)adap->algo_data;
+>  	unsigned long timeout, flags;
+> @@ -1075,8 +1089,12 @@ static int rk3x_i2c_xfer(struct i2c_adapter *adap,
+>  
+>  		rk3x_i2c_start(i2c);
+>  
+> -		timeout = wait_event_timeout(i2c->wait, !i2c->busy,
+> -					     msecs_to_jiffies(WAIT_TIMEOUT));
+> +		if (!polling) {
+> +			timeout = wait_event_timeout(i2c->wait, !i2c->busy,
+> +						     msecs_to_jiffies(WAIT_TIMEOUT));
+> +		} else {
+> +			timeout = rk3x_i2c_wait_xfer_poll(i2c);
+> +		}
+>  
+>  		spin_lock_irqsave(&i2c->lock, flags);
+>  
+> @@ -1110,6 +1128,18 @@ static int rk3x_i2c_xfer(struct i2c_adapter *adap,
+>  	return ret < 0 ? ret : num;
+>  }
+>  
+> +static int rk3x_i2c_xfer(struct i2c_adapter *adap,
+> +			 struct i2c_msg *msgs, int num)
+> +{
+> +	return rk3x_i2c_xfer_common(adap, msgs, num, false);
+> +}
+> +
+> +static int rk3x_i2c_xfer_polling(struct i2c_adapter *adap,
+> +				 struct i2c_msg *msgs, int num)
+> +{
+> +	return rk3x_i2c_xfer_common(adap, msgs, num, true);
+> +}
+> +
+>  static __maybe_unused int rk3x_i2c_resume(struct device *dev)
+>  {
+>  	struct rk3x_i2c *i2c = dev_get_drvdata(dev);
+> @@ -1126,6 +1156,7 @@ static u32 rk3x_i2c_func(struct i2c_adapter *adap)
+>  
+>  static const struct i2c_algorithm rk3x_i2c_algorithm = {
+>  	.master_xfer		= rk3x_i2c_xfer,
+> +	.master_xfer_atomic	= rk3x_i2c_xfer_polling,
+>  	.functionality		= rk3x_i2c_func,
+>  };
+>  
+> 
 
 
-Regards,
 
-	Hans
-
->>> +
->>> +	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
->>> +		return -EINVAL;
->>> +
->>> +	if (vb2_is_busy(&chan->queue))
->>> +		return -EBUSY;
->>> +
->>> +	subdev = tegra_channel_get_remote_subdev(chan, true);
->> And this line can be dropped.
->>
->> Regards,
->>
->> 	Hans
->>
->>> +	ret = v4l2_subdev_call(subdev, pad, set_selection, NULL, &sdsel);
->>> +	if (!ret) {
->>> +		sel->r = sdsel.r;
->>> +		/*
->>> +		 * Subdev active format resolution may have changed during
->>> +		 * set selection operation. So, update channel format to
->>> +		 * the sub-device active format.
->>> +		 */
->>> +		return tegra_channel_set_subdev_active_fmt(chan);
->>> +	}
->>> +
->>> +	return ret;
->>> +}
->>> +
->>>   static int tegra_channel_enum_input(struct file *file, void *fh,
->>>   				    struct v4l2_input *inp)
->>>   {
->>> @@ -597,6 +701,8 @@ static const struct v4l2_ioctl_ops tegra_channel_ioctl_ops = {
->>>   	.vidioc_streamoff		= vb2_ioctl_streamoff,
->>>   	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
->>>   	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
->>> +	.vidioc_g_selection		= tegra_channel_g_selection,
->>> +	.vidioc_s_selection		= tegra_channel_s_selection,
->>>   };
->>>   
->>>   /*
->>>
 
