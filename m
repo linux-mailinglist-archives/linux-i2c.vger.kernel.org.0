@@ -2,91 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E1B214443
-	for <lists+linux-i2c@lfdr.de>; Sat,  4 Jul 2020 08:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7973521444A
+	for <lists+linux-i2c@lfdr.de>; Sat,  4 Jul 2020 08:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726253AbgGDGIs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 4 Jul 2020 02:08:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55904 "EHLO mail.kernel.org"
+        id S1726157AbgGDGRL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 4 Jul 2020 02:17:11 -0400
+Received: from www.zeus03.de ([194.117.254.33]:56786 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725822AbgGDGIs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 4 Jul 2020 02:08:48 -0400
-Received: from localhost (p54b3324c.dip0.t-ipconnect.de [84.179.50.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 16996206B7;
-        Sat,  4 Jul 2020 06:08:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593842927;
-        bh=GGjkbnJd0OJjv8J/wufgjHaf/6St/TJrcCosu6np+sM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LkljAJerEOwB310ZUiczUhYdOfIct3NA2pCY28KWBezfOx6WsvoO/Hdf5bV1t8kOK
-         C80ZLx6nOC1yUsp3ErFm2VyZtRqkkiF35zkjlKYW3f3ovZ+3rRH5etATjHHuJcNzCE
-         oXQQSny5W/FE4OdhM69/tv9urYf+Do1CFXJP1wHk=
-Date:   Sat, 4 Jul 2020 08:08:45 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Ricardo Ribalda <ribalda@kernel.org>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] i2c: designware: platdrv: Set class based on DMI
-Message-ID: <20200704060845.GC1041@kunai>
-References: <20200702103321.2092254-1-ribalda@kernel.org>
+        id S1725843AbgGDGRL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 4 Jul 2020 02:17:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=ZwxpgYBZZ3FK889sOToGoOny+Rw/
+        KnHsG9+lGhVoT4c=; b=D426eOo94g5c60j9n2hylGXRktcKM39XeMw2V0i1GKMa
+        3kZFWIiBy7pyxlKky1F8usvrTtcjyTqeLWpfu/sbOvFIU2RBn3Yxs/h1/dGL6Wk5
+        zIRNNIWsJr3IyXmIbqhL5WWmKXzEozhwA9Qe/VLZbnsPfD1oaiC/4zOrhP8fUs0=
+Received: (qmail 1447946 invoked from network); 4 Jul 2020 08:17:09 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Jul 2020 08:17:09 +0200
+X-UD-Smtp-Session: l3s3148p1@6pFyl5epzqcgAwDPXx1yAKkmpyXOLnhi
+Date:   Sat, 4 Jul 2020 08:17:09 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: slave-eeprom: update documentation
+Message-ID: <20200704061709.GD1041@kunai>
+References: <20200628185426.5733-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eRtJSFbw+EEWtPj3"
+        protocol="application/pgp-signature"; boundary="d01dLTUuW90fS44H"
 Content-Disposition: inline
-In-Reply-To: <20200702103321.2092254-1-ribalda@kernel.org>
+In-Reply-To: <20200628185426.5733-1-wsa+renesas@sang-engineering.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---eRtJSFbw+EEWtPj3
+--d01dLTUuW90fS44H
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 02, 2020 at 12:33:21PM +0200, Ricardo Ribalda wrote:
-> Current AMD's zen-based APUs use this core for some of its i2c-buses.
+On Sun, Jun 28, 2020 at 08:54:26PM +0200, Wolfram Sang wrote:
+> Add more details which have either been missing ever since or describe
+> recent additions.
 >=20
-> With this patch we re-enable autodetection of hwmon-alike devices, so
-> lm-sensors will be able to work automatically.
->=20
-> It does not affect the boot-time of embedded devices, as the class is
-> set based on the DMI information.
->=20
-> DMI is probed only on Qtechnology QT5222 Industrial Camera Platform.
->=20
-> DocLink: https://qtec.com/camera-technology-camera-platforms/
-> Fixes: 3eddad96c439 ("i2c: designware: reverts "i2c: designware: Add supp=
-ort for AMD I2C controller"")
-> Signed-off-by: Ricardo Ribalda <ribalda@kernel.org>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Applied to for-current, thanks!
 
 
---eRtJSFbw+EEWtPj3
+--d01dLTUuW90fS44H
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8AHO0ACgkQFA3kzBSg
-Kba2vhAAnfUuiL7C0VB5NB+/FImQRw1ufT1VtYCmMJIoG+CVLvjwAQWApn5RHYDt
-JOvRVLninVv9PI/PlfY7j/VEnQvMaAJy616jFtJ2d+iXvOOXvhMW8oNltBEZ7F2H
-5uDPVPaaJvtCJwVzWa9KAackYBA1KWFoGJpznihdKieK9Bw+8Os0IjTxRLknGyXO
-lUahNjbyQb1eUhQPSFzQhcO8URvj7RC8lIawHl9z+LB3t0GuvHJ4WVYFQwx2yxQl
-3mtwjXrwAKfuI1L40kYrGgKu/0qwdka5uNj+TK8aKNzqvZK3HYBGDghDW+puoTEd
-KuOTNwvFPVIaQ7BzGlWDo7WZM5YhS0oNyB6F/tqrlp38Y6/x+jtvNRK0sZgtBtlY
-vrO7QELGkwkcXBCGicx7UgRoki2PbQkEbaM4GFjsCf9WO96PHQgA6r7Wjb/SWdMA
-HTV+biIgR40d85KxEk4NAP3d2SOQEKf9i1mGonvnL40VKz1vs7zCKiWR9ZSIlQ/l
-ipihn2ysyJgfaKdqNNh15Y/TUQOKDo7ljJz9IhlByKjxaFIQPHtNGqdEP/zCxQj5
-TZ2WoLJxixghScSFfThIQ5OQT9ggA7t4Emtt/qYRxhY1pyTTDsejlJ6BDmfutPB2
-rYIrIf1Jg49exDWCT/YO0FcoLHclCILaEYIQFmN/fn1PeU70e8g=
-=uc6L
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8AHuUACgkQFA3kzBSg
+KbZPnQ//QwHfhk0/iekIo5QXi04U98idMLG54BY0qLntfEHF8ohjN+Bzw7vjKqlv
+S+F9aYlIBb7gJogErJEp4O9WPVo9athfkAF/DFL33nVIabSfVZkwoF3bnlUzkFMy
+McZB1oEZYinkwUUQdYUs5d8nQo7xkjF1JPpA3rNfgfBqRsPcT/3yrh975g3KxxX7
+20SxRX5wmrACaW25EfYxRQWEDCnAxlq5jPmAssupBiEUrDJCnRJYHz0RRy7zN1iO
++qyaBlWxV/Ikwz8mq95vlfo1QAkpRKK0MiE9YPkHIQzbCdzDi/E5y8BL3sfjv0Fo
+lKviMTXRE6WMovtW+t+Xr0WywuwCYiwz05l7b8KXDj9JkhYd5YRtSOMQ2tLFrDXJ
+bdTGG8lmFqY8yHdMjNFZtzHYlLXFP1Mvg9GUsjGgvGGyT7y+GjsyxmCbsLOdFxnO
+TopVNyDX+yTvpYKYoQ++RlzefgFNtCU+0QjmxKfRcmpMs7MXjC8nBEwGSsT1YxAt
+FveadfrtNJeUpmazVYPK+8RbwlVSQJNZXu183tlZM894Ko39ghYf3J3rPRWcr9Sp
+72Kz7KQBPGtezFu0UdEOeV8x0eziEPVfb6Dg5rpmdiGZjnhrN4u3DyvoNVTQRkdc
+31LbGKubklFwjRDjOnKwic6pCigjgw+pKoFBoen6t6AyWHd7mbs=
+=6NUz
 -----END PGP SIGNATURE-----
 
---eRtJSFbw+EEWtPj3--
+--d01dLTUuW90fS44H--
