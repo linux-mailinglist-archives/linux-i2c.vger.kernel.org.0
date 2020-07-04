@@ -2,262 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 028C0213E40
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jul 2020 19:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 937EC21443D
+	for <lists+linux-i2c@lfdr.de>; Sat,  4 Jul 2020 08:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbgGCRJ4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Jul 2020 13:09:56 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:2398 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726803AbgGCRJz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Jul 2020 13:09:55 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5eff66550001>; Fri, 03 Jul 2020 10:09:42 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Fri, 03 Jul 2020 10:09:54 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Fri, 03 Jul 2020 10:09:54 -0700
-Received: from [10.2.167.4] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 3 Jul
- 2020 17:09:53 +0000
-Subject: Re: [RFC PATCH v2 12/18] media: tegra-video: Add support for
- selection ioctl ops
-To:     Hans Verkuil <hverkuil@xs4all.nl>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <sakari.ailus@iki.fi>,
-        <robh+dt@kernel.org>, <helen.koike@collabora.com>
-CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
-        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
- <1592358094-23459-13-git-send-email-skomatineni@nvidia.com>
- <efc84cff-76d5-78a2-e84e-0342459d3756@xs4all.nl>
- <c82a000a-7766-c933-fd69-24eb4885fc14@nvidia.com>
- <a95717b6-e2ee-78df-5145-de265805b3d4@xs4all.nl>
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-Message-ID: <5db8cc27-d1a6-4cdf-4974-65ccd8328f74@nvidia.com>
-Date:   Fri, 3 Jul 2020 10:12:04 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1725911AbgGDGEG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 4 Jul 2020 02:04:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54312 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725822AbgGDGEG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 4 Jul 2020 02:04:06 -0400
+Received: from localhost (p54b3324c.dip0.t-ipconnect.de [84.179.50.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1BFB4207D4;
+        Sat,  4 Jul 2020 06:04:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593842645;
+        bh=ZT3irlGnF64WXNfcKAnWdFCfdFgdVgmo10q2DEsJCYE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QuCiK9IzZSYW13gK+m0JyUSq9kMsaZ26t7KQ+HvZK4G30NEFUQqu0YV+eh9WWwB0v
+         uc6SIsroWYiUzvTBCrU6YRKQUkFFHfla8YYN9sqzuz6M1GEF2+6XY95svOtFy+XbGf
+         7ZAcNSFkNVgTQ3PziMlX/lRr24/RTyfglGU4T43c=
+Date:   Sat, 4 Jul 2020 08:03:59 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     andriy.shevchenko@linux.intel.com,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: algo-pca: Add 0x78 as SCL stuck low status
+Message-ID: <20200704060359.GA1041@kunai>
+References: <20200701223912.30864-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-In-Reply-To: <a95717b6-e2ee-78df-5145-de265805b3d4@xs4all.nl>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1593796182; bh=z3ubYMdxm5GM7bjfyrT2sTe7DwgcgLSwUPRS4maOLPk=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=ngSp8V3YIr+/iilUNwIAV9bPIzcw7DjZX76OB7kPkMvJhftOu7eFuyGXMe9+LNNJ7
-         Br/hOgL5MUkWj+p+YPtV4e9f5hZW8JiX7qVbIWBzaGDj325k+T9RohnDydRcuA6ISZ
-         Tw+gQlVFx73kifiiBXyTXB6i7uyWAdSfLKP4kxBQ39gpUlYY0jfSyKO2qjp+D1dGzO
-         3Pr3/zsUEk7t5Y0UYTl2kL2snprxXa3rlls1L5q3IayRSv7daIRrvHKa6rENvCRTen
-         IgaLD7ppXt8L2Tw/8nIGdKZrm9hB2QQ8XFu63dgU18ApzOzcyV1mNkk0oy6v4V3/+7
-         /3nQ7zURuyJnA==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Qxx1br4bt0+wmkIi"
+Content-Disposition: inline
+In-Reply-To: <20200701223912.30864-1-chris.packham@alliedtelesis.co.nz>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-On 7/3/20 1:06 AM, Hans Verkuil wrote:
-> On 02/07/2020 23:20, Sowjanya Komatineni wrote:
->> On 7/2/20 6:54 AM, Hans Verkuil wrote:
->>> On 17/06/2020 03:41, Sowjanya Komatineni wrote:
->>>> This patch adds selection v4l2 ioctl operations to allow configuring
->>>> a selection rectangle in the sensor through the Tegra video device
->>>> node.
->>>>
->>>> Some sensor drivers supporting crop uses try_crop rectangle from
->>>> v4l2_subdev_pad_config during try format for computing binning.
->>>>
->>>> So with selection ops support, this patch also updates try format
->>>> to use try crop rectangle either from subdev frame size enumeration
->>>> or from subdev crop boundary.
->>>>
->>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->>>> ---
->>>>    drivers/staging/media/tegra-video/vi.c | 106 +++++++++++++++++++++++++++++++++
->>>>    1 file changed, 106 insertions(+)
->>>>
->>>> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
->>>> index 506c263..f9eb96b 100644
->>>> --- a/drivers/staging/media/tegra-video/vi.c
->>>> +++ b/drivers/staging/media/tegra-video/vi.c
->>>> @@ -427,6 +427,13 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
->>>>    	struct v4l2_subdev *subdev;
->>>>    	struct v4l2_subdev_format fmt;
->>>>    	struct v4l2_subdev_pad_config *pad_cfg;
->>>> +	struct v4l2_subdev_frame_size_enum fse = {
->>>> +		.which = V4L2_SUBDEV_FORMAT_TRY,
->>>> +	};
->>>> +	struct v4l2_subdev_selection sdsel = {
->>>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
->>>> +		.target = V4L2_SEL_TGT_CROP_BOUNDS,
->>>> +	};
->>>>    	int ret;
->>>>    
->>>>    	subdev = tegra_channel_get_remote_subdev(chan, true);
->>>> @@ -449,6 +456,24 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
->>>>    	fmt.which = V4L2_SUBDEV_FORMAT_TRY;
->>>>    	fmt.pad = 0;
->>>>    	v4l2_fill_mbus_format(&fmt.format, pix, fmtinfo->code);
->>>> +
->>>> +	/*
->>>> +	 * Attempt to obtain the format size from subdev.
->>>> +	 * If not available, try to get crop boundary from subdev.
->>>> +	 */
->>>> +	fse.code = fmtinfo->code;
->>>> +	ret = v4l2_subdev_call(subdev, pad, enum_frame_size, pad_cfg, &fse);
->>>> +	if (ret) {
->>>> +		ret = v4l2_subdev_call(subdev, pad, get_selection, NULL, &sdsel);
->>>> +		if (ret)
->>>> +			return -EINVAL;
->>>> +		pad_cfg->try_crop.width = sdsel.r.width;
->>>> +		pad_cfg->try_crop.height = sdsel.r.height;
->>>> +	} else {
->>>> +		pad_cfg->try_crop.width = fse.max_width;
->>>> +		pad_cfg->try_crop.height = fse.max_height;
->>>> +	}
->>>> +
->>>>    	ret = v4l2_subdev_call(subdev, pad, set_fmt, pad_cfg, &fmt);
->>>>    	if (ret < 0)
->>>>    		return ret;
->>>> @@ -540,6 +565,85 @@ static int tegra_channel_set_subdev_active_fmt(struct tegra_vi_channel *chan)
->>>>    	return 0;
->>>>    }
->>>>    
->>>> +static int tegra_channel_g_selection(struct file *file, void *priv,
->>>> +				     struct v4l2_selection *sel)
->>>> +{
->>>> +	struct tegra_vi_channel *chan = video_drvdata(file);
->>>> +	struct v4l2_subdev *subdev;
->>>> +	struct v4l2_subdev_format fmt = {
->>>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
->>>> +	};
->>>> +	struct v4l2_subdev_selection sdsel = {
->>>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
->>>> +		.target = sel->target,
->>>> +	};
->>>> +	int ret;
->>>> +
->>>> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->>>> +		return -ENOTTY;
->>>> +
->>>> +	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
->>>> +		return -EINVAL;
->>>> +	/*
->>>> +	 * Try the get selection operation and fallback to get format if not
->>>> +	 * implemented.
->>>> +	 */
->>>> +	subdev = tegra_channel_get_remote_subdev(chan, true);
->>>> +	ret = v4l2_subdev_call(subdev, pad, get_selection, NULL, &sdsel);
->>>> +	if (!ret)
->>>> +		sel->r = sdsel.r;
->>>> +	if (ret != -ENOIOCTLCMD)
->>>> +		return ret;
->>>> +
->>>> +	ret = v4l2_subdev_call(subdev, pad, get_fmt, NULL, &fmt);
->>>> +	if (ret < 0)
->>>> +		return ret;
->>>> +
->>>> +	sel->r.left = 0;
->>>> +	sel->r.top = 0;
->>>> +	sel->r.width = fmt.format.width;
->>>> +	sel->r.height = fmt.format.height;
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static int tegra_channel_s_selection(struct file *file, void *fh,
->>>> +				     struct v4l2_selection *sel)
->>>> +{
->>>> +	struct tegra_vi_channel *chan = video_drvdata(file);
->>>> +	struct v4l2_subdev *subdev;
->>>> +	int ret;
->>>> +	struct v4l2_subdev_selection sdsel = {
->>>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
->>>> +		.target = sel->target,
->>>> +		.flags = sel->flags,
->>>> +		.r = sel->r,
->>>> +	};
->>>> +
->>> This function doesn't check if the subdev actually supports set_selection.
->>> The imx219 is one such driver: it supports get_selection, but not set_selection.
->>>
->>> So this code should add these lines to fix the v4l2-compliance fail:
->>>
->>>          subdev = tegra_channel_get_remote_subdev(chan, true);
->>>
->>>          if (!v4l2_subdev_has_op(subdev, pad, set_selection))
->>>                  return -ENOTTY;
->>>
->> v4l2_subdev_call() does that check and returns -ENOIOCTLCMD when
->> specified subdev ops does not exist.
-> But that test happens too late. In the v4l2-compliance test it fails in the
-> sel->type test below, so it returns EINVAL instead of ENOTTY.
->
->>>> +	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->>>> +		return -ENOTTY;
-> I think this test should come before the v4l2_subdev_has_op test since there
-> is probably no subdev if the TPG is enabled. So:
->
-> 	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
-> 		return -ENOTTY;
->
->          subdev = tegra_channel_get_remote_subdev(chan, true);
->          if (!v4l2_subdev_has_op(subdev, pad, set_selection))
->                  return -ENOTTY;
->
->
-> Regards,
->
-> 	Hans
-OK Will update in v3. Thanks Hans
->>>> +
->>>> +	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
->>>> +		return -EINVAL;
->>>> +
->>>> +	if (vb2_is_busy(&chan->queue))
->>>> +		return -EBUSY;
->>>> +
->>>> +	subdev = tegra_channel_get_remote_subdev(chan, true);
->>> And this line can be dropped.
->>>
->>> Regards,
->>>
->>> 	Hans
->>>
->>>> +	ret = v4l2_subdev_call(subdev, pad, set_selection, NULL, &sdsel);
->>>> +	if (!ret) {
->>>> +		sel->r = sdsel.r;
->>>> +		/*
->>>> +		 * Subdev active format resolution may have changed during
->>>> +		 * set selection operation. So, update channel format to
->>>> +		 * the sub-device active format.
->>>> +		 */
->>>> +		return tegra_channel_set_subdev_active_fmt(chan);
->>>> +	}
->>>> +
->>>> +	return ret;
->>>> +}
->>>> +
->>>>    static int tegra_channel_enum_input(struct file *file, void *fh,
->>>>    				    struct v4l2_input *inp)
->>>>    {
->>>> @@ -597,6 +701,8 @@ static const struct v4l2_ioctl_ops tegra_channel_ioctl_ops = {
->>>>    	.vidioc_streamoff		= vb2_ioctl_streamoff,
->>>>    	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
->>>>    	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
->>>> +	.vidioc_g_selection		= tegra_channel_g_selection,
->>>> +	.vidioc_s_selection		= tegra_channel_s_selection,
->>>>    };
->>>>    
->>>>    /*
->>>>
+--Qxx1br4bt0+wmkIi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jul 02, 2020 at 10:39:11AM +1200, Chris Packham wrote:
+> The PCA9665 datasheet says that I2CSTA =3D 78h indicates that SCL is stuck
+> low, this differs to the PCA9564 which uses 90h for this indication.
+> Treat either 0x78 or 0x90 as an indication that the SCL line is stuck.
+>=20
+> Based on looking through the PCA9564 and PCA9665 datasheets this should
+> be safe for both chips. The PCA9564 should not return 0x78 for any valid
+> state and the PCA9665 should not return 0x90.
+>=20
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+
+Applied to for-current, thanks!
+
+
+--Qxx1br4bt0+wmkIi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8AG8sACgkQFA3kzBSg
+KbaPjA//ZA4V8vkqdM6BI+DnOYhbryJlJ3/Xh8FydkFeE76OSvY1oXzTdsYHbbM5
+VUn5ypXdpSvmqlIG1d30simcZqf57R1CFyxEzknA6O8TQ1wuztsDqMXyL5Rv3k2w
+vvwuAWOrcS/DVZCf23upPUMnZpVAfgW8wa1SIE1dayLZmx8K8c3hKSIWYDSAr8l/
+EfjurQ6jAyCombwF9tEP3A9hUEnU0Ij2cbwtEsQE47Li/op9/qWEZ6dO8WXesOSN
+iX5lJR3v593c6jSMm2YHsk9r4w7wkZruSKWtkv1iu1Q0c1Qut9r+luDWixmymxvA
+g+5TM9AjmLILUI48NacnozRIcYcr6BlQpBxN/LxV5irYl42Gts37J1qqB4nxeNEo
+erRtscT8c6Ul2zwiEra8aFjBDSnpGt5/YURdObyQptdZVKfEqO3U3nNRf0cX3dL8
+y/MD0s42A8XsaWo8BtdkaX4gPpvlDQdGxfy0AWZ5XCnSFzXspHPyyFd728aVS8op
+Vu5ofH3whLohnBICdek3oOdNjP2txkHYxThHg3p81ajLu6q4AKmBaES9W+69fPkq
+27UTd5xCfEtaiHesDOYxH8HbwYMiGJGwqZhJ+dHYrORCgdsOHrq7WfHaI5ZyQjMJ
+mZANXdiq60a7kpAfVkBYJBjxZ1N4OOavkIr/exWFaEGPoyeeVrI=
+=aSbN
+-----END PGP SIGNATURE-----
+
+--Qxx1br4bt0+wmkIi--
