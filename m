@@ -2,74 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B4021462C
-	for <lists+linux-i2c@lfdr.de>; Sat,  4 Jul 2020 15:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C01214ABE
+	for <lists+linux-i2c@lfdr.de>; Sun,  5 Jul 2020 08:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727084AbgGDNit (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 4 Jul 2020 09:38:49 -0400
-Received: from www.zeus03.de ([194.117.254.33]:56390 "EHLO mail.zeus03.de"
+        id S1725979AbgGEG4k (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 5 Jul 2020 02:56:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37802 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727070AbgGDNit (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 4 Jul 2020 09:38:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=fEQv6Q07DavjIOOrdC81loITw77
-        GxzEYU7AfCmKB2MU=; b=YDircEVxifTCxZpk6ANQv2xwxClmMtMPPhV+nwldzpO
-        RldSs2PVTc6YFvO/XrwNKyh1XleawWUAoG2PhH/NPhwwVYTWzGm23+8fcnzzSEls
-        8uG0QD9uTy4GpjuDq2vzcW0SwyZvZi2X6K6B9YyBxrz4AzCwN27kyyxuonv9z8nE
-        =
-Received: (qmail 1545784 invoked from network); 4 Jul 2020 15:38:46 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Jul 2020 15:38:46 +0200
-X-UD-Smtp-Session: l3s3148p1@kRPPwp2pto8gAwDPXx1yANRj5lEGkcGq
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH] i2c: rcar: always clear ICSAR to avoid side effects
-Date:   Sat,  4 Jul 2020 15:38:29 +0200
-Message-Id: <20200704133829.7015-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
+        id S1725873AbgGEG4k (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 5 Jul 2020 02:56:40 -0400
+Received: from localhost (p54b33111.dip0.t-ipconnect.de [84.179.49.17])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 88F1420786;
+        Sun,  5 Jul 2020 06:56:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593932199;
+        bh=aAnhab5Td6gyYsvl9oPoynXib/ICM9SQvl8ML3UYUro=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RDvNdu2b5k8bicUwG02dE1ms6AvTLCS0JRKGZaF4Tp4/JvMpardboWK3c7jbDsOWl
+         FoA1SUsMNgWKf0qtisbCm6cmwvF7cSszu+iN1zBw1vmdf+8Wpr2jTcQ85kLKSWmxJ1
+         /LjXMyCWdgRD8zxvjh48M49i6KJs6ByMFF4vM5eA=
+Date:   Sun, 5 Jul 2020 08:56:33 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for 5.8
+Message-ID: <20200705065633.GA1175@kunai>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mP3DRpeJDSE+ciuQ"
+Content-Disposition: inline
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On R-Car Gen2, we get a timeout when reading from the address set in
-ICSAR, even though the slave interface is disabled. Clearing it fixes
-this situation. Note that Gen3 is not affected.
 
-To reproduce: bind and undbind an I2C slave on some bus, run
-'i2cdetect' on that bus.
+--mP3DRpeJDSE+ciuQ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/i2c/busses/i2c-rcar.c | 3 +++
- 1 file changed, 3 insertions(+)
+Linus,
 
-diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
-index 5b70047c6589..2c7c4afc15d4 100644
---- a/drivers/i2c/busses/i2c-rcar.c
-+++ b/drivers/i2c/busses/i2c-rcar.c
-@@ -874,6 +874,7 @@ static int rcar_unreg_slave(struct i2c_client *slave)
- 	/* disable irqs and ensure none is running before clearing ptr */
- 	rcar_i2c_write(priv, ICSIER, 0);
- 	rcar_i2c_write(priv, ICSCR, 0);
-+	rcar_i2c_write(priv, ICSAR, 0); /* Gen2: must be 0 if not using slave */
- 
- 	synchronize_irq(priv->irq);
- 	priv->slave = NULL;
-@@ -982,6 +983,8 @@ static int rcar_i2c_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto out_pm_put;
- 
-+	rcar_i2c_write(priv, ICSAR, 0); /* Gen2: must be 0 if not using slave */
-+
- 	if (priv->devtype == I2C_RCAR_GEN3) {
- 		priv->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
- 		if (!IS_ERR(priv->rstc)) {
--- 
-2.20.1
+I2C has some usual driver fixes and documentation updates.
 
+Please pull.
+
+Thanks,
+
+   Wolfram
+
+
+The following changes since commit 9ebcfadb0610322ac537dd7aa5d9cbc2b2894c68:
+
+  Linux 5.8-rc3 (2020-06-28 15:00:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-curre=
+nt
+
+for you to fetch changes up to 597911287fcd13c3a4b4aa3e0a52b33d431e0a8e:
+
+  i2c: mlxcpld: check correct size of maximum RECV_LEN packet (2020-07-04 0=
+8:20:38 +0200)
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      i2c: eg20t: Load module automatically if ID matches
+
+Chris Packham (1):
+      i2c: algo-pca: Add 0x78 as SCL stuck low status for PCA9665
+
+Ricardo Ribalda (1):
+      i2c: designware: platdrv: Set class based on DMI
+
+Wolfram Sang (3):
+      i2c: slave-eeprom: update documentation
+      i2c: add Kconfig help text for slave mode
+      i2c: mlxcpld: check correct size of maximum RECV_LEN packet
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andy Shevchenko (2):
+      (Rev.) i2c: designware: platdrv: Set class based on DMI
+      (Rev.) i2c: algo-pca: Add 0x78 as SCL stuck low status for PCA9665
+
+Geert Uytterhoeven (1):
+      (Rev.) i2c: add Kconfig help text for slave mode
+
+Luca Ceresoli (1):
+      (Rev.) i2c: slave-eeprom: update documentation
+
+Michael Shych (2):
+      (Rev.) i2c: mlxcpld: check correct size of maximum RECV_LEN packet
+      (Test) i2c: mlxcpld: check correct size of maximum RECV_LEN packet
+
+Niklas S=C3=B6derlund (2):
+      (Rev.) i2c: add Kconfig help text for slave mode
+      (Rev.) i2c: slave-eeprom: update documentation
+
+ Documentation/i2c/slave-eeprom-backend.rst  | 22 +++++++++++++++++-----
+ drivers/i2c/Kconfig                         |  7 +++++++
+ drivers/i2c/algos/i2c-algo-pca.c            |  3 ++-
+ drivers/i2c/busses/i2c-designware-platdrv.c | 15 ++++++++++++++-
+ drivers/i2c/busses/i2c-eg20t.c              |  1 +
+ drivers/i2c/busses/i2c-mlxcpld.c            |  4 ++--
+ 6 files changed, 43 insertions(+), 9 deletions(-)
+
+--mP3DRpeJDSE+ciuQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8BeZsACgkQFA3kzBSg
+KbYlcg/+JoVj4W2jIPGKRpCznsQtnBxCFC2M4AZvk5lOM0coxKIlwVTcbLVS9NQT
+pyYwt9ybrrMfl2XEC3xO2IBLg3YDRGk6/dqjJ5bBU+kZDRPA0r+90baulAcul2LD
+BB7DcsLcf7TG0E0EnyYheqk1YxbpRtXhMv+BU7z3Gxc7FymgKyfQ2sBw+Tpjs9Mt
+VlyIl5yjkStg0h44g7XOi2s28oHNSNVYuDRZRxWsZN+q2Wf6mHGQBg62fxTm58sZ
+/hyvWaOcHDJBT3TX/SQjQ4i+imjKWPg5ST6OdmBpB8zLH1vS93OADLUFd2wlw/a7
+vvBrP08OssCy9Z62Hjd9kMthU6zih3xdWOgdhtuxuKJaSyGVJ/kolSEMjDlwO3Tx
+C2/RFtSS9iEPub8RuR23AZgZVyL7oEZJve3psM9WuCyxFae5TidyuQ/pByhgwLEd
+akZ+jq8GkB9QEPjD6abvShrF/ZXNLbY9i057UmBkFF0ccHWOsBCJ5YR7K5HqawX5
+vEaAakW3M+osd1MDA1ubKQ0uikPp+Fw02kZUqFyeHU+/ateVSkTAUhqWe5RGBt/2
+bOtRXSfKibOuiobl9gdRRxfj0lTRUicj/br+WzPCDAQ5LOEHi1xxnco7Z6/jLjg0
+tJhfNkxKOOTrAxxfpbgtfkaGu4S1dKNSRZsryD1rjAtiDoEo4JA=
+=ezI0
+-----END PGP SIGNATURE-----
+
+--mP3DRpeJDSE+ciuQ--
