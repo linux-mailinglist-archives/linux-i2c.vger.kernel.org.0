@@ -2,73 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8422160C8
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jul 2020 23:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F491216292
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jul 2020 01:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725942AbgGFVEQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Jul 2020 17:04:16 -0400
-Received: from sauhun.de ([88.99.104.3]:33300 "EHLO pokefinder.org"
+        id S1727077AbgGFXwm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Jul 2020 19:52:42 -0400
+Received: from crapouillou.net ([89.234.176.41]:55458 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725860AbgGFVEP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 6 Jul 2020 17:04:15 -0400
-Received: from localhost (p54b33253.dip0.t-ipconnect.de [84.179.50.83])
-        by pokefinder.org (Postfix) with ESMTPSA id 6014B2C1FDC;
-        Mon,  6 Jul 2020 23:04:13 +0200 (CEST)
-Date:   Mon, 6 Jul 2020 23:04:13 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     linux-i2c@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Subject: Two weeks off..
-Message-ID: <20200706210412.GA11492@ninjato>
+        id S1726805AbgGFXwm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 6 Jul 2020 19:52:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1594079559; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=URFquOorttvpmiJ+lfEVDd1Ropa0DJF6BFwngAVN5HY=;
+        b=GzSZ+Ncoik/RV1tbn1NQ3agvUwXCTL9DJKl7RAqleMSt4WcQ1iQoEoIwKraltvtlXwdjT5
+        PkrD9b1xBa/M3zTUj7NfrnQxGdwdEu/cKr8jGdxhmWBfebYr6cGEbaZ8GZj4gN4AKQgyKR
+        bQlJTTRr6cSm5X73rU1bb+18AKVwuhk=
+Date:   Tue, 07 Jul 2020 01:52:29 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] i2c: jz4780: remove redundant assignment to variable i
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Colin King <colin.king@canonical.com>, linux-i2c@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <HNN2DQ.3HHBK0781A0A1@crapouillou.net>
+In-Reply-To: <20200704063217.GG1041@kunai>
+References: <20200610125901.1134204-1-colin.king@canonical.com>
+        <20200704063217.GG1041@kunai>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2oS5YaxWCcQjTEyO"
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi,
 
---2oS5YaxWCcQjTEyO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Le sam. 4 juil. 2020 =E0 8:32, Wolfram Sang <wsa@kernel.org> a =E9crit :
+> On Wed, Jun 10, 2020 at 01:59:01PM +0100, Colin King wrote:
+>>  From: Colin Ian King <colin.king@canonical.com>
+>>=20
+>>  The variable i is being initialized with a value that is
+>>  never read and it is being updated later with a new value. The
+>>  initialization is redundant and can be removed.
+>>=20
+>>  Addresses-Coverity: ("Unused value")
+>>  Signed-off-by: Colin Ian King <colin.king@canonical.com>
+>=20
+> What about 'ret'? Doesn't the same reasoning apply for it?
+>=20
 
-Hiya all,
+That's correct.
 
-I hope you are well!
+Colin, could you respin the patch and do the same for the 'ret'=20
+variable?
 
-I'll be off the internet for the next two weeks. My for current-queue is
-empty and my for-next not very full, but I hope I have provided enough
-feedback for some series, so they can be applied easily when I am back.
-
-If there is something super urgent, I guess you will find a tree it can
-go through. Probably Greg KH, as the driver maintainer (Hi Greg! :)) Or
-just wait the two weeks.
-
-See you soon and all the best,
-
-   Wolfram
+Thanks,
+-Paul
 
 
---2oS5YaxWCcQjTEyO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8DkckACgkQFA3kzBSg
-KbZztA/9GJObU6wS4fwduFS06zmknieLxWLQp7wVgSua8Tqddk+yv+fYY4BqYqww
-Tf7usKFvf0rov8st5Le4SeTV/EW6iz+GJ1GtKFPVnhDV2LUy2R2ONpHUQHuV5DVI
-DVLtCaQc/IUf7qKupYwApICN6w0UNiu+TuDasPo8HAgpNfvGMSg9EWQKrZMpQN73
-CaKV8TBRMfnF++tQkZtfHFS9KwjFSaLUI7kS1BWBForLFyZaY2gE66IOz9NhLS5I
-B6Qh1+VrZSIzG2nAdbroFxZewOyvgZEQ9AoeM6el8Revx/0zEloLMutALRnOl1vX
-AlkmnVaYgWr0dsB70q5xfiXm0KyALpWEtUMOfKh4OoC67JO+cIWrF/c5WI2J1pnq
-tVE6nWyFbvlOBHLSSRRuhbG/A1qBuxxtt5L6Zq9q3i8kG5I8ImdYGaJ4N2Nmm7EQ
-HoGausZaN9Wavt+34PFDB2iKOD5sD7u5LGKlajbG1oWXP2HNl/4+YwZ+RuN14H0L
-n9cVR0NbPxYWvxFDBFJBSgVPvrd7+pR6DI5LbTDK6MlRKP+azyMh6j25P+kmqzdb
-H66K5C4bQ7wzD7ho2ULBUB3S7vW4qckY4L9hXD9DtA9xYOCMv/I5QHS0p82hTGcA
-0GRTN/mBQw+1vXQLYf6FsKz9JFIPDc1f7fKT4ov+WwXk2UCaCeQ=
-=ijLE
------END PGP SIGNATURE-----
-
---2oS5YaxWCcQjTEyO--
