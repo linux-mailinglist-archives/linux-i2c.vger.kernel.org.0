@@ -2,118 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1602176CC
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jul 2020 20:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6951217802
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jul 2020 21:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728388AbgGGSdZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Jul 2020 14:33:25 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:39731 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728232AbgGGSdZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jul 2020 14:33:25 -0400
-Received: by mail-wm1-f66.google.com with SMTP id w3so119937wmi.4;
-        Tue, 07 Jul 2020 11:33:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=VmP8szPEkxiHeyf+0eBKORKozprQKxCy4pGc7rULiWQ=;
-        b=b8mtu9sLNkHRTiQzsxhuPsSUeyd24FNhN/SroqfIS3GuGO+fuDNGTO9b+8LL1XS4z0
-         2Lvg+/zZzMgrCBRbjs96r4IA/JCohu/lHxSvvoj1npOXsGO9zpDkipROrB4tQ94sKjs5
-         ictxBnLPd2WHEo0xrL8tm1/HuP2GJj3+A3EO1RuSSt0bcbDrGM6BdCv3MPktTENPSapN
-         6BcXerr1F1xRgxKNpnXdhnneA81fZA1CR1YQwn9BgqBdq74hmmIBXm7jDwRFPAPW675q
-         FvsJVW7GJ9hvexa3XnO10Fe9KnY0W2dXQb5fo6TnwtYZzMqIgb8gDLfzZMXoxX8wmNov
-         EerQ==
-X-Gm-Message-State: AOAM532y+EFsoxonJQSWiK+hlEKH697Rjgys9vdoPsCixQEWYXfq3r5I
-        5onhNBO4onrMgWLyP65QineVDh0p
-X-Google-Smtp-Source: ABdhPJxXmNpEE7ZSzC7CoOjODE0Pk58NtoKpx9ZPZXgTFFRyRnbU2aTENsnxHI0ccD9fXLv6r6a0yQ==
-X-Received: by 2002:a1c:6289:: with SMTP id w131mr5221362wmb.64.1594146803436;
-        Tue, 07 Jul 2020 11:33:23 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.195])
-        by smtp.googlemail.com with ESMTPSA id q7sm2359182wrs.27.2020.07.07.11.33.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 07 Jul 2020 11:33:22 -0700 (PDT)
-Date:   Tue, 7 Jul 2020 20:33:20 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] i2c: imx: Fix external abort on interrupt in exit
- paths
-Message-ID: <20200707183320.GA3442@kozik-lap>
-References: <1592130544-19759-1-git-send-email-krzk@kernel.org>
- <1592130544-19759-2-git-send-email-krzk@kernel.org>
+        id S1728061AbgGGTfU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Jul 2020 15:35:20 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:33185 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726805AbgGGTfT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jul 2020 15:35:19 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id stN2jdgqMudYLstN5jGBlk; Tue, 07 Jul 2020 21:35:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1594150516; bh=UOPB1MiDbf2BNt8huZ0O3vNz4hwNVClrWHPizzmlF6U=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=TpFD7cKY6Hc/29uAfk2e1LQcauw9XVNA3Y0xQcxRHpGmKEESaSC+9GLnz7zNeOA5v
+         AIvLXXDIiH+oqOZ9Lsy34a3NlYZaCJrqLaBF85W8IkJcSdwp0JdIVdW9r6Un5XWnXw
+         sAuI1ILMgBDSQCssXNJXdqjddwAd4oAuMX6eZldxgKFJ3lTHiBC0C7QQwzWcdG2xK/
+         3OZvQCj7d9wtTKuD8LYkGt9wy4avseaSBe2my61TxZ8wysZqcEmNT67lTIxvpZDMRf
+         FHikiise4P4oBwYQ1uVCGDDPh8Qcov2bYhcV8d+6EuDOE5XMW+JyBNUXt8W7DiZ1ds
+         0Y2eURCC1bd3w==
+Subject: Re: [RFC PATCH v2 11/18] media: tegra-video: Add support for external
+ sensor capture
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
+        sakari.ailus@iki.fi, robh+dt@kernel.org, helen.koike@collabora.com
+Cc:     digetx@gmail.com, sboyd@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
+ <1592358094-23459-12-git-send-email-skomatineni@nvidia.com>
+ <50deca28-c198-703c-96e2-82c53f48cd65@xs4all.nl>
+ <6ee18b4d-b63b-8053-1b7e-c3ec7c1d4956@nvidia.com>
+ <6846e5bb-db1d-c2ff-c52c-70a2094c5b50@nvidia.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <af11cb24-57b2-7326-ca29-e168dcbb8006@xs4all.nl>
+Date:   Tue, 7 Jul 2020 21:35:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
+In-Reply-To: <6846e5bb-db1d-c2ff-c52c-70a2094c5b50@nvidia.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1592130544-19759-2-git-send-email-krzk@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfEbKQ3MlxCTk+8kIzmdPmM9lsK3d2NWLAz8lS/LdblDynfg33nR4irTd97JEL1AAPqUF3Ry/Saa3Zn45IMAxwA7KFqlZ8xch9juTFQzB/8WZisg8h463
+ ByFDJTrjCK5kf6QSaNpQjcCNZ94yl+uaBRnWV/5J2UEclZBPnN3rQ9w3aNpSrxy4nkjQC6UDcSLrmm8PO/fHx7RRy/eKteBwJlyDT/EuUEK/1jcixSGARCeG
+ /3csdj7NYjZobrOgekpYl7XK7W2z6qso/HZJkCloxjFyjL6jrsihCVpzjFMDIvEwx1/yVY96GMcYI/WMNfBcKe+Oew5sAJji0BLV1zHu2RYOvem49Fzjbiq4
+ ubNz6unUPQTq05a7Wjp4pdF76pjqKaP/ctzW8f4dkCic7QdsU2SCDVtGlyaA+iSg5OSTM1qnFkn89rjudpUAoUPgAFGbd83cOYC3V9lX9gXjfrWorHgFaeL5
+ YXqMf+hH2kUah4wUjenKI8NLcX39C1erUNClXs3VH37tfr0ch6AHmwY2d/y266Jd7i3+aEdZP3Jz+I0ap/Q7k1rqFeVE3rkX5gwetNZixsYIkO0L3H5bIxk5
+ 6ylMQ3awwEoh6TzbxCcc26+YpHYOQLSzMjUTt4/GOT++a20CmOEUsmkxfc4cBIDuLqK931We0WC8jHSQ4iQvWJ2q
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Jun 14, 2020 at 12:29:04PM +0200, Krzysztof Kozlowski wrote:
-> If interrupt comes late, during probe error path or device remove (could
-> be triggered with CONFIG_DEBUG_SHIRQ), the interrupt handler
-> i2c_imx_isr() will access registers with the clock being disabled.  This
-> leads to external abort on non-linefetch on Toradex Colibri VF50 module
-> (with Vybrid VF5xx):
+On 07/07/2020 21:25, Sowjanya Komatineni wrote:
 > 
-> Unhandled fault: external abort on non-linefetch (0x1008) at 0x8882d003
-> Internal error: : 1008 [#1] ARM
-> Modules linked in:
-> CPU: 0 PID: 1 Comm: swapper Not tainted 5.7.0 #607
-> Hardware name: Freescale Vybrid VF5xx/VF6xx (Device Tree)
->   (i2c_imx_isr) from [<8017009c>] (free_irq+0x25c/0x3b0)
->   (free_irq) from [<805844ec>] (release_nodes+0x178/0x284)
->   (release_nodes) from [<80580030>] (really_probe+0x10c/0x348)
->   (really_probe) from [<80580380>] (driver_probe_device+0x60/0x170)
->   (driver_probe_device) from [<80580630>] (device_driver_attach+0x58/0x60)
->   (device_driver_attach) from [<805806bc>] (__driver_attach+0x84/0xc0)
->   (__driver_attach) from [<8057e228>] (bus_for_each_dev+0x68/0xb4)
->   (bus_for_each_dev) from [<8057f3ec>] (bus_add_driver+0x144/0x1ec)
->   (bus_add_driver) from [<80581320>] (driver_register+0x78/0x110)
->   (driver_register) from [<8010213c>] (do_one_initcall+0xa8/0x2f4)
->   (do_one_initcall) from [<80c0100c>] (kernel_init_freeable+0x178/0x1dc)
->   (kernel_init_freeable) from [<80807048>] (kernel_init+0x8/0x110)
->   (kernel_init) from [<80100114>] (ret_from_fork+0x14/0x20)
+> On 7/7/20 12:01 PM, Sowjanya Komatineni wrote:
+>>
+>>
+>> On 7/6/20 2:10 AM, Hans Verkuil wrote:
+>>>> +static void tegra_vi_graph_cleanup(struct tegra_vi *vi)
+>>>> +{
+>>>> +	struct tegra_vi_channel *chan;
+>>>> +
+>>>> +	list_for_each_entry(chan, &vi->vi_chans, list) {
+>>>> +		video_unregister_device(&chan->video);
+>>>> +		mutex_lock(&chan->video_lock);
+>>>> +		vb2_queue_release(&chan->queue);
+>>> No need for this since this is done in vb2_fop_release().
+>>>
+>>> In fact, vb2_queue_release should never be called by drivers. Just using
+>>> vb2_fop_release or __vb2_fop_release is sufficient.
+>>>
+>>> The confusion is due to the fact that the name suggests that vb2_queue_release
+>>> has to be balanced with vb2_queue_init, but that's not the case. Perhaps
+>>> vb2_queue_stop or something like that might be a better name. I'll have to
+>>> think about this since I see that a lot of drivers do this wrong.
+>>>
+>>>> +		mutex_unlock(&chan->video_lock);
+>>>> +		v4l2_async_notifier_unregister(&chan->notifier);
+>>>> +		v4l2_async_notifier_cleanup(&chan->notifier);
+>>>> +	}
+>>>> +}
+>>>> +
+>>
+>> vb2_queue_release() here is called to stop streaming a head before media links are removed in case of when driver unbind happens while
+>> userspace application holds video device with active streaming in progress.
+>>
+>> Without vb2_queue_release() here streaming will be active during the driver unbind and by the time vb2_queue_release() happens from
+>> vb2_fop_release(), async notifiers gets unregistered and media links will be removed which causes channel stop stream to crash as we can't
+>> retrieve sensor subdev  thru media entity pads to execute s_stream on subdev.
+>>
+> I think we don't need async notifier unbind. Currently media links are removed during unbind so during notifier unregister all subdevs gets
+> unbind and links removed.
 > 
-> Additionally, the i2c_imx_isr() could wake up the wait queue
-> (imx_i2c_struct->queue) before its initialization happens.
+> media_device_unregister during video device release callback takes care of media entity unregister and removing links.
 > 
-> The resource-managed framework should not be used for interrupt handling,
-> because the resource will be released too late - after disabling clocks.
-> The interrupt handler is not prepared for such case.
+> So, will try by removing notifier unbind along with removing vb2_queue_release during cleanup.
 > 
-> Fixes: 1c4b6c3bcf30 ("i2c: imx: implement bus recovery")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Remove the devm- and use regular methods.
 
-Hi everyone,
+I actually wonder if vb2_queue_release shouldn't be called from video_unregister_device.
 
-Similar patch for SPI driver was already merged [1]. Any comments here?
+I'll look into this tomorrow.
 
-Best regards,
-Krzysztof
+Regards,
 
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3d87b613d6a3c6f0980e877ab0895785a2dde581
-
-> ---
->  drivers/i2c/busses/i2c-imx.c | 25 ++++++++++++++-----------
->  1 file changed, 14 insertions(+), 11 deletions(-)
-> 
+	Hans
