@@ -2,199 +2,209 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47580217A03
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jul 2020 23:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F64217A11
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jul 2020 23:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728299AbgGGVKr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Jul 2020 17:10:47 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:55318 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728385AbgGGVKr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jul 2020 17:10:47 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A32958011F;
-        Wed,  8 Jul 2020 09:10:40 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1594156240;
-        bh=LIZaTJsVpo0fc9R6NrZDyGHqCTXkr77kbJtYcUTyeeY=;
-        h=From:To:Cc:Subject:Date;
-        b=VoeWPTYkyjGp1TCIpSRUpTYa41WqdVf2g2Yif/cCo1GmlQOFmMjCI+DSjGUY6oqvr
-         aZGPedZbELz40rAmV06xDppbX7DBnak/JgCqzyoL1jaczE2xqLJBld1o2yxUUh+5ho
-         gglKWRFKGkGA6gVWVhzjLSRiQ8ts2aV4YSo6tlXbu9PIw51H2GlNGSUl39vjalOMA7
-         cmi/HeOD3RX9owELCSXuACs3jXkdSWUJFf3+pNJswwUD9SHGPjTMKnsenCSgMWN/U3
-         HIa93UUSEg1NT8WnIniRloQ7ECy9Lzo4r9/zOnBlYMQvbgr5tdWzA2Lshr1Kkzfzl/
-         cEF2HdcZiCkdA==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f04e4d00000>; Wed, 08 Jul 2020 09:10:40 +1200
-Received: from markto-dl.ws.atlnz.lc (markto-dl.ws.atlnz.lc [10.33.23.25])
-        by smtp (Postfix) with ESMTP id 2720D13EDDC;
-        Wed,  8 Jul 2020 09:10:39 +1200 (NZST)
-Received: by markto-dl.ws.atlnz.lc (Postfix, from userid 1155)
-        id 3C327341145; Wed,  8 Jul 2020 09:10:40 +1200 (NZST)
-From:   Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-To:     gregory.clement@bootlin.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-Subject: [PATCH] i2c: mv64xxx: Add bus error recovery
-Date:   Wed,  8 Jul 2020 09:10:36 +1200
-Message-Id: <20200707211036.12896-1-mark.tomlinson@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.27.0
+        id S1728466AbgGGVPQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Jul 2020 17:15:16 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:9965 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728201AbgGGVPQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Jul 2020 17:15:16 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f04e5790000>; Tue, 07 Jul 2020 14:13:29 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Tue, 07 Jul 2020 14:15:15 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Tue, 07 Jul 2020 14:15:15 -0700
+Received: from [10.2.173.217] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jul
+ 2020 21:15:14 +0000
+Subject: Re: [RFC PATCH v2 11/18] media: tegra-video: Add support for external
+ sensor capture
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <sakari.ailus@iki.fi>,
+        <robh+dt@kernel.org>, <helen.koike@collabora.com>
+CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
+ <1592358094-23459-12-git-send-email-skomatineni@nvidia.com>
+ <50deca28-c198-703c-96e2-82c53f48cd65@xs4all.nl>
+ <6ee18b4d-b63b-8053-1b7e-c3ec7c1d4956@nvidia.com>
+ <6846e5bb-db1d-c2ff-c52c-70a2094c5b50@nvidia.com>
+ <af11cb24-57b2-7326-ca29-e168dcbb8006@xs4all.nl>
+ <c08ea38f-7629-1800-fb74-a2f75daf2eb0@nvidia.com>
+ <47134481-1aec-9c1b-0ed2-8e39158d69b5@nvidia.com>
+Message-ID: <3e4a467a-7ef8-7b96-58dd-31c7a834acb7@nvidia.com>
+Date:   Tue, 7 Jul 2020 14:15:17 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <47134481-1aec-9c1b-0ed2-8e39158d69b5@nvidia.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1594156409; bh=UYxjfYM6bnTQ9rahaE5n5SqLSCOzWX15/wpBnNkI5kY=;
+        h=X-PGP-Universal:Subject:From:To:CC:References:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=MLUWVlBbGnTiKJq4HIq8USESFWh66T39uZXbTMEHnVEzyQkMXqZA3aP5zwezug2UH
+         HUfZsXpRNEMK4ZIiaHc6v6fiLkgpqZDIFRCXfo7RZ6L76R0qDkGkDpBxQyIHPC/Sw8
+         wfcAWaFRkIqIiG4PMOmDCjlzWtUEJroRzfB7CphiQOdSNbisvop4osnS0ogii3xGc9
+         oMQpgsEgdwBz1InT07cg6yjL//vet+WUdP9rblH/iB37iaEGbyn5h9bUHXU+9UctID
+         YWp72l/tu+Eiq3qQ2OeZH8qqBFcr1VRl4+hWMOEyot2VCmacYF3G1Tf3iTYght9usq
+         VJ00nG4Zgt5Mw==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This adds i2c bus recovery to the mv64xxx driver.
 
-Implement bus recovery to recover from SCL/SDA stuck low.
+On 7/7/20 1:41 PM, Sowjanya Komatineni wrote:
+>
+> On 7/7/20 1:29 PM, Sowjanya Komatineni wrote:
+>>
+>> On 7/7/20 12:35 PM, Hans Verkuil wrote:
+>>> On 07/07/2020 21:25, Sowjanya Komatineni wrote:
+>>>> On 7/7/20 12:01 PM, Sowjanya Komatineni wrote:
+>>>>>
+>>>>> On 7/6/20 2:10 AM, Hans Verkuil wrote:
+>>>>>>> +static void tegra_vi_graph_cleanup(struct tegra_vi *vi)
+>>>>>>> +{
+>>>>>>> +=C2=A0=C2=A0=C2=A0 struct tegra_vi_channel *chan;
+>>>>>>> +
+>>>>>>> +=C2=A0=C2=A0=C2=A0 list_for_each_entry(chan, &vi->vi_chans, list) =
+{
+>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 video_unregister_device=
+(&chan->video);
+>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mutex_lock(&chan->video=
+_lock);
+>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vb2_queue_release(&chan=
+->queue);
+>>>>>> No need for this since this is done in vb2_fop_release().
+>>>>>>
+>>>>>> In fact, vb2_queue_release should never be called by drivers.=20
+>>>>>> Just using
+>>>>>> vb2_fop_release or __vb2_fop_release is sufficient.
+>>>>>>
+>>>>>> The confusion is due to the fact that the name suggests that=20
+>>>>>> vb2_queue_release
+>>>>>> has to be balanced with vb2_queue_init, but that's not the case.=20
+>>>>>> Perhaps
+>>>>>> vb2_queue_stop or something like that might be a better name.=20
+>>>>>> I'll have to
+>>>>>> think about this since I see that a lot of drivers do this wrong.
+>>>>>>
+>>>>>>> + mutex_unlock(&chan->video_lock);
+>>>>>>> + v4l2_async_notifier_unregister(&chan->notifier);
+>>>>>>> + v4l2_async_notifier_cleanup(&chan->notifier);
+>>>>>>> +=C2=A0=C2=A0=C2=A0 }
+>>>>>>> +}
+>>>>>>> +
+>>>>> vb2_queue_release() here is called to stop streaming a head before=20
+>>>>> media links are removed in case of when driver unbind happens while
+>>>>> userspace application holds video device with active streaming in=20
+>>>>> progress.
+>>>>>
+>>>>> Without vb2_queue_release() here streaming will be active during=20
+>>>>> the driver unbind and by the time vb2_queue_release() happens from
+>>>>> vb2_fop_release(), async notifiers gets unregistered and media=20
+>>>>> links will be removed which causes channel stop stream to crash as=20
+>>>>> we can't
+>>>>> retrieve sensor subdev=C2=A0 thru media entity pads to execute s_stre=
+am=20
+>>>>> on subdev.
+>>>>>
+>>>> I think we don't need async notifier unbind. Currently media links=20
+>>>> are removed during unbind so during notifier unregister all subdevs=20
+>>>> gets
+>>>> unbind and links removed.
+>>>>
+>>>> media_device_unregister during video device release callback takes=20
+>>>> care of media entity unregister and removing links.
+>>>>
+>>>> So, will try by removing notifier unbind along with removing=20
+>>>> vb2_queue_release during cleanup.
+>>>>
+>>> I actually wonder if vb2_queue_release shouldn't be called from=20
+>>> video_unregister_device.
+>>>
+>>> I'll look into this tomorrow.
+>>>
+>>> Regards,
+>>>
+>>> =C2=A0=C2=A0=C2=A0=C2=A0Hans
+>>
+>> Thanks Hans.
+>>
+>> Tried without notifier unbind to remove media links and I still see=20
+>> crash due to below diff reason now.
+>>
+>> With userspace app holding video device node with active streaming in=20
+>> progress when I do driver unbind, v4l2_device release callback=20
+>> tegra_v4l2_dev_release() happens prior to vb2_fops_release() ->=20
+>> vb2_queue_release().
+>>
+>> All channels resources and channel memory is freed during v4l2_device=20
+>> release callback.
+>>
+>> Letting vb2_queue_release() to happen thru vb2_fops_release() causes=20
+>> crash as stop streaming tries to retrieve subdev thru channel media=20
+>> pads and channel memory is freed by that time.
+>>
+>> So, doing vb2_queue_release() during driver unbind -> tegra_vi_exit()=20
+>> -> tegra_vi_graph_cleanup(), stops subdev stream properly and then on=20
+>> v4l2_device release channel memory gets freed and this works which is=20
+>> the existing implementation in the patch.
+>>
+>> I remember adding vb2_queue_release() during graph cleanup for TPG as=20
+>> well for the same reason to allow driver unbind while holding video=20
+>> device from user space so media pad can be accessible to stop stream=20
+>> before channel cleanup.
+>
+> v4l2_dev release() should definitely happen in the last after=20
+> vb2_fops_release(). Will add more debugs and confirm on what I=20
+> observed as something happened with timestamps on log on my side so I=20
+> doubt my above observation after removing notifier unbind to remove=20
+> media links.
+>
+> Will check and get back..
+>
+Hi Hans,
 
-This uses the generic recovery function, setting the clock/data lines as
-GPIO pins, and sending 9 clocks to try and recover the bus.
+Please ignore=C2=A0 above observation on channel cleanup during v4l2_dev=20
+release and vb2_fops_release. I misunderstood from timestamps.
 
-Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
----
- drivers/i2c/busses/i2c-mv64xxx.c | 77 +++++++++++++++++++++++++++++++-
- 1 file changed, 76 insertions(+), 1 deletion(-)
+Looking into vdev->dev release callback v4l2_device_release(), it=20
+unregisters media entity and links gets removed.
 
-diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv=
-64xxx.c
-index 829b8c98ae51..e58853ba3ef0 100644
---- a/drivers/i2c/busses/i2c-mv64xxx.c
-+++ b/drivers/i2c/busses/i2c-mv64xxx.c
-@@ -21,6 +21,7 @@
- #include <linux/io.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-+#include <linux/of_gpio.h>
- #include <linux/of_irq.h>
- #include <linux/clk.h>
- #include <linux/err.h>
-@@ -147,6 +148,10 @@ struct mv64xxx_i2c_data {
- 	bool			irq_clear_inverted;
- 	/* Clk div is 2 to the power n, not 2 to the power n + 1 */
- 	bool			clk_n_base_0;
-+	struct pinctrl		*pinctrl;
-+	struct i2c_bus_recovery_info	rinfo;
-+	struct pinctrl_state	*pin_default_state;
-+	struct pinctrl_state	*pin_gpio_state;
- };
-=20
- static struct mv64xxx_i2c_regs mv64xxx_i2c_regs_mv64xxx =3D {
-@@ -325,7 +330,8 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u3=
-2 status)
- 			 drv_data->msg->flags);
- 		drv_data->action =3D MV64XXX_I2C_ACTION_SEND_STOP;
- 		mv64xxx_i2c_hw_init(drv_data);
--		drv_data->rc =3D -EIO;
-+		i2c_recover_bus(&drv_data->adapter);
-+		drv_data->rc =3D -EAGAIN;
- 	}
- }
-=20
-@@ -563,6 +569,7 @@ mv64xxx_i2c_wait_for_completion(struct mv64xxx_i2c_da=
-ta *drv_data)
- 				"time_left: %d\n", drv_data->block,
- 				(int)time_left);
- 			mv64xxx_i2c_hw_init(drv_data);
-+			i2c_recover_bus(&drv_data->adapter);
- 		}
- 	} else
- 		spin_unlock_irqrestore(&drv_data->lock, flags);
-@@ -872,6 +879,69 @@ mv64xxx_of_config(struct mv64xxx_i2c_data *drv_data,
- }
- #endif /* CONFIG_OF */
-=20
-+/*
-+ * Switch to bit bang mode to prepare for i2c generic recovery.
-+ */
-+static void mv64xxx_i2c_prepare_recovery(struct i2c_adapter *adap)
-+{
-+	struct mv64xxx_i2c_data *drv_data =3D i2c_get_adapdata(adap);
-+
-+	pinctrl_select_state(drv_data->pinctrl, drv_data->pin_gpio_state);
-+}
-+
-+/*
-+ * Return to normal i2c operation following recovery.
-+ */
-+static void mv64xxx_i2c_unprepare_recovery(struct i2c_adapter *adap)
-+{
-+	struct mv64xxx_i2c_data *drv_data =3D i2c_get_adapdata(adap);
-+
-+	pinctrl_select_state(drv_data->pinctrl, drv_data->pin_default_state);
-+}
-+
-+static int mv64xxx_i2c_init_recovery_info(struct mv64xxx_i2c_data *drv_d=
-ata,
-+					  struct platform_device *pd)
-+{
-+	struct i2c_bus_recovery_info *rinfo =3D &drv_data->rinfo;
-+	struct device *dev =3D &pd->dev;
-+
-+	drv_data->pinctrl =3D devm_pinctrl_get(dev);
-+	if (!drv_data->pinctrl || IS_ERR(drv_data->pinctrl)) {
-+		dev_err(dev, "can't get pinctrl, bus recovery not supported\n");
-+		return PTR_ERR(drv_data->pinctrl);
-+	}
-+
-+	drv_data->pin_default_state =3D pinctrl_lookup_state(drv_data->pinctrl,
-+			PINCTRL_STATE_DEFAULT);
-+	drv_data->pin_gpio_state =3D pinctrl_lookup_state(drv_data->pinctrl,
-+			"gpio");
-+	rinfo->scl_gpiod =3D devm_gpiod_get(dev, "scl",
-+					  GPIOD_OUT_HIGH_OPEN_DRAIN);
-+	rinfo->sda_gpiod =3D devm_gpiod_get(dev, "sda", GPIOD_IN);
-+	if (PTR_ERR(rinfo->scl_gpiod) =3D=3D -EPROBE_DEFER ||
-+	    PTR_ERR(rinfo->sda_gpiod) =3D=3D -EPROBE_DEFER)
-+		return -EPROBE_DEFER;
-+
-+	if (IS_ERR(rinfo->sda_gpiod) ||
-+	    IS_ERR(rinfo->scl_gpiod) ||
-+	    IS_ERR(drv_data->pin_default_state) ||
-+	    IS_ERR(drv_data->pin_gpio_state)) {
-+		dev_dbg(dev, "recovery information incomplete\n");
-+		return 0;
-+	}
-+
-+	dev_dbg(dev, "using scl-gpio %d and sda-gpio %d for recovery\n",
-+		rinfo->scl_gpiod ? desc_to_gpio(rinfo->scl_gpiod) : -1,
-+		rinfo->sda_gpiod ? desc_to_gpio(rinfo->sda_gpiod) : -1);
-+
-+	rinfo->prepare_recovery =3D mv64xxx_i2c_prepare_recovery;
-+	rinfo->unprepare_recovery =3D mv64xxx_i2c_unprepare_recovery;
-+	rinfo->recover_bus =3D i2c_generic_scl_recovery;
-+	drv_data->adapter.bus_recovery_info =3D rinfo;
-+
-+	return 0;
-+}
-+
- static int
- mv64xxx_i2c_probe(struct platform_device *pd)
- {
-@@ -939,6 +1009,10 @@ mv64xxx_i2c_probe(struct platform_device *pd)
-=20
- 	mv64xxx_i2c_hw_init(drv_data);
-=20
-+	rc =3D mv64xxx_i2c_init_recovery_info(drv_data, pd);
-+	if (rc =3D=3D -EPROBE_DEFER)
-+		goto exit_reset;
-+
- 	rc =3D request_irq(drv_data->irq, mv64xxx_i2c_intr, 0,
- 			 MV64XXX_I2C_CTLR_NAME, drv_data);
- 	if (rc) {
-@@ -951,6 +1025,7 @@ mv64xxx_i2c_probe(struct platform_device *pd)
- 			"mv64xxx: Can't add i2c adapter, rc: %d\n", -rc);
- 		goto exit_free_irq;
- 	}
-+	i2c_recover_bus(&drv_data->adapter);
-=20
- 	return 0;
-=20
---=20
-2.27.0
+So, by the time vb2_queue_release() happen thru vb2_fops_release(),=20
+links are removed so subdev can't be retrieve thru media entity pads=20
+unless video driver maintains subdev pointers to use them instead of=20
+retrieving from media entity pads.
 
+To fix this, instead of maintaining subdev pointers in Tegra video=20
+driver channel structure, probably we can leave vb2_queue_release() call=20
+to happen during driver unbind graph cleanup which does stream stop=20
+where Tegra channel stop stream retrieves subdev thru media pad entities=20
+when media links are still present.
+
+
+Thanks
+
+Sowjanya
+
+>>
+>> Regards,
+>>
+>> Sowjanya
+>>
