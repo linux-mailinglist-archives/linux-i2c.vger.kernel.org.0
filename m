@@ -2,88 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB5F218198
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jul 2020 09:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C193F21852C
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jul 2020 12:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbgGHHpw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Jul 2020 03:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726936AbgGHHpv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jul 2020 03:45:51 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3203FC08C5DC;
-        Wed,  8 Jul 2020 00:45:51 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id q15so1857423wmj.2;
-        Wed, 08 Jul 2020 00:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yvlYiPks6mhJ8cxYaoK6/i2US4+IgEbdzDKr7+cJ8uU=;
-        b=c8zH5rhPF+phZfOSXO2gDlN1DVl+v/Cx3tp71GVcxczbkc9prklYE502HeCl0glvy6
-         Z09D+iEq9UGcfSb1a+Mf5hdFW2kSYRq5dFk3pMDdgASp3i31c8uUpF2gg1s3hlAvH+JR
-         UeHsGHrHrBE9C3c8ngoZ2Sc51llOQhaNDHXJkEM/60yS52jr1OJuqKH4ujGoY5Fnxl7u
-         zJE1L7f98lSbSh0wJSbFRdGexe0fXqxTc3uScLviud8SaxkjPBP6jfRrR0P3n6lfLIYo
-         bMXKLmGeXt/PYevPZZYiYsE61OdxNMFgYvN0X9WtE1addVd/85HbCIuEl7p82T+E/g0e
-         4vBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yvlYiPks6mhJ8cxYaoK6/i2US4+IgEbdzDKr7+cJ8uU=;
-        b=kNqbzBNMrbd148eY2ayj8oOvhv6iUoanWYk8hsFBSdPqWDJjiey7QiKfrCyJRFfL29
-         X4sFRNyisGz6LyNmKQ9VwJ732ESuZk81roe3SYT5pyLBKlXcSKZKVsQUMAiqoLis3fiH
-         xDmC699gVZozV2GU/u840fe4YV/hS1wSBAH/ocmraS3aB2lSvueR8opqGUjN5nfV0sip
-         FLmN7Larqtw9UHDJrndIOTcoksXNYDYzQvspgJZ/e7I7nZscRkkEsaIs450ffimy4emm
-         U35iBSvCu72lkQiyPvIyKzKNlyftp2OQxQdveZB8bab85C095GUuMDJX3gjs5XUn2/bZ
-         lJSg==
-X-Gm-Message-State: AOAM530fm/F5Md6ZfH1CybysJWkXIdfXDjjAke66EFw1AmbZ3DT8Q7xh
-        CREu5KS4doGftS0CQgYNQBs=
-X-Google-Smtp-Source: ABdhPJyfCRKV9aKG3yjwH2QZVnVF+A1H/3zVPGdu0ei4zSGkOGEIMvWFCSdjaZrYu71+eOEVdiEAug==
-X-Received: by 2002:a05:600c:2249:: with SMTP id a9mr7625316wmm.163.1594194349997;
-        Wed, 08 Jul 2020 00:45:49 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:2e56:dcff:fed2:c6d6])
-        by smtp.googlemail.com with ESMTPSA id 65sm5495212wre.6.2020.07.08.00.45.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2020 00:45:49 -0700 (PDT)
-Date:   Wed, 8 Jul 2020 09:45:47 +0200
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     Frank Lee <frank@allwinnertech.com>
-Cc:     robh+dt@kernel.org, mripard@kernel.org, wens@csie.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        gregory.clement@bootlin.com, tglx@linutronix.de,
-        jason@lakedaemon.net, maz@kernel.org,
-        srinivas.kandagatla@linaro.org, linus.walleij@linaro.org,
-        anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        lee.jones@linaro.org, p.zabel@pengutronix.de, clabbe@baylibre.com,
-        icenowy@aosc.io, megous@megous.com, stefan@olimex.com,
-        bage@linutronix.de, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, liyong@allwinnertech.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        huangshuosheng@allwinnertech.com, linux-i2c@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 00/16] Allwinner A100 Initial support
-Message-ID: <20200708074547.GA19609@Red>
-References: <20200708071942.22595-1-frank@allwinnertech.com>
+        id S1728451AbgGHKlR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Jul 2020 06:41:17 -0400
+Received: from mail.elsol.com.pe ([170.231.82.35]:53584 "EHLO
+        mail.elsol.com.pe" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728346AbgGHKlQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Jul 2020 06:41:16 -0400
+X-Greylist: delayed 10938 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Jul 2020 06:41:15 EDT
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.elsol.com.pe (Postfix) with ESMTP id 54CF2606DC4;
+        Wed,  8 Jul 2020 02:15:17 -0500 (-05)
+Received: from mail.elsol.com.pe ([127.0.0.1])
+        by localhost (mail.elsol.com.pe [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id X2rha9gaKsnI; Wed,  8 Jul 2020 02:15:17 -0500 (-05)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.elsol.com.pe (Postfix) with ESMTP id C17E96065A1;
+        Wed,  8 Jul 2020 02:15:15 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.elsol.com.pe C17E96065A1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=elsol.com.pe;
+        s=17F39D2A-FFD0-11E7-BCBF-081969246B0E; t=1594192515;
+        bh=7Y6RtNhSVAIVHdJEU2gHHWYvaP8LRgEAhMNj0EoKaAA=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=FJnh9v33MrdeGbjL9p7d9lfZWM+DGefUGM8V80MR1qtduo/O9TXFvVFBhcqr2pH6+
+         3WohEPUM7ASbhoNDUpl39+nkPUHHQ0vTkuupG0u+nVJSOmOJfSzolwDqPeg72YuxEN
+         22w+QVzjgjWljgHviZ2zob63KDx5aA9W+7+R+cRAEbFD2SN7UWvNpLbAlSbhvn6K4n
+         TlId4zmW+WveSDblePV08zLqPGJzcg2sevdWFJBPqs1rZMniOhXZukBinszBkzKDAR
+         I5QJtTgOlWCAfHjog4+KuAQMdEKsZD2pBG4njI30kPbTRNnUEIi2IFN9NCl3BDAT+u
+         YHcbwmtmGyCHw==
+X-Virus-Scanned: amavisd-new at elsol.com.pe
+Received: from mail.elsol.com.pe ([127.0.0.1])
+        by localhost (mail.elsol.com.pe [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id SEc_KBTqby-s; Wed,  8 Jul 2020 02:15:15 -0500 (-05)
+Received: from [10.86.65.172] (unknown [105.8.7.225])
+        by mail.elsol.com.pe (Postfix) with ESMTPSA id 0C0BE608595;
+        Wed,  8 Jul 2020 02:15:01 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200708071942.22595-1-frank@allwinnertech.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
+To:     Recipients <dreyes@elsol.com.pe>
+From:   ''Tayeb Souami'' <dreyes@elsol.com.pe>
+Date:   Wed, 08 Jul 2020 09:11:11 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20200708071502.0C0BE608595@mail.elsol.com.pe>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jul 08, 2020 at 03:19:26PM +0800, Frank Lee wrote:
-> This patch set adds initial support for allwinner a100 soc,
-> which is a 64-bit tablet chip.
-> 
+Lieber Freund,
 
-Hello
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der =
+Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zu=
+f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
+il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
+meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
+und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
+Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
+ spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen, sehen Sie bitte meine Y=
+ou Tube Seite unten.
 
-Does a product already exists with it ? I couldnt found any.
-Does a datasheet is availlable ?
+UHR MICH HIER: https://www.youtube.com/watch?v=3DZ6ui8ZDQ6Ks
 
-Regards
+
+
+Das ist dein Spendencode: [TS530342018]
+
+
+
+Antworten Sie mit dem SPENDE-CODE an diese
+
+E-Mail:Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
+
+Gr=C3=BC=C3=9Fe
+Herr Tayeb Souami
