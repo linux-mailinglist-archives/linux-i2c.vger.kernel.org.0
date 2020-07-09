@@ -2,104 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF5221A5A3
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jul 2020 19:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01A121AB7E
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jul 2020 01:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728278AbgGIRRR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Jul 2020 13:17:17 -0400
-Received: from vps.xff.cz ([195.181.215.36]:52446 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727110AbgGIRRR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 9 Jul 2020 13:17:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1594315034; bh=3gV7jbp/PfKuXvsiiUXQuSbzC+4R90WKkgDUbSbOroA=;
-        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
-        b=T8w15sgaUVglRVUStLjyOBe5kD6r6ILjnGJfRaIwX30oPX3HkV/WG0tir90B7u8Tn
-         cwaI33E1ldqktkSPsiixkN2P9H9gkRxRVczxvTT/cGA3ybOv6S8vs2mflJ4EGQLURd
-         IdchOT3qguFiAcjCF1YgaUueWR3ccklPvnTELtUM=
-Date:   Thu, 9 Jul 2020 19:17:13 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Frank Lee <frank@allwinnertech.com>
-Cc:     robh+dt@kernel.org, mripard@kernel.org, wens@csie.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        gregory.clement@bootlin.com, tglx@linutronix.de,
-        jason@lakedaemon.net, maz@kernel.org,
-        srinivas.kandagatla@linaro.org, linus.walleij@linaro.org,
-        anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        lee.jones@linaro.org, p.zabel@pengutronix.de, clabbe@baylibre.com,
-        icenowy@aosc.io, stefan@olimex.com, bage@linutronix.de,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        liyong@allwinnertech.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, huangshuosheng@allwinnertech.com,
-        linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 04/16] dt-bindings: pinctrl: sunxi: make gpio banks
- supplies required
-Message-ID: <20200709171713.tutnlchji4e6i5pv@core.my.home>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
-        Frank Lee <frank@allwinnertech.com>, robh+dt@kernel.org,
-        mripard@kernel.org, wens@csie.org, mturquette@baylibre.com,
-        sboyd@kernel.org, gregory.clement@bootlin.com, tglx@linutronix.de,
-        jason@lakedaemon.net, maz@kernel.org,
-        srinivas.kandagatla@linaro.org, linus.walleij@linaro.org,
-        anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        lee.jones@linaro.org, p.zabel@pengutronix.de, clabbe@baylibre.com,
-        icenowy@aosc.io, stefan@olimex.com, bage@linutronix.de,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        liyong@allwinnertech.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, huangshuosheng@allwinnertech.com,
-        linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20200708071942.22595-1-frank@allwinnertech.com>
- <20200708071942.22595-5-frank@allwinnertech.com>
+        id S1726268AbgGIXYN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Jul 2020 19:24:13 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:34166 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726222AbgGIXYN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Jul 2020 19:24:13 -0400
+Received: by mail-il1-f196.google.com with SMTP id t4so3543761iln.1;
+        Thu, 09 Jul 2020 16:24:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C6gSA0EI8NAhedbaWCpzy+MxtCmLEWdTx98rM6v2aJ4=;
+        b=OEw4z0ZrvKIeE86PaNyqbgvHrD2gdadNMMYvMKKJFXFJZNBAvJeYGhDum3diHVYbkt
+         1TaeJedpGot0NUU6GJjlGSpa7iItiTsZ0QVYIZpba318wfdVLmuG2RvurrKhU0txQ5W9
+         4Q3iUfnV4+wnq7MMVL2zBa0q5ruwyHQGkZB7KyXqX7Ov9SOdiDPRn+XNGMxYo5HeTXHV
+         v5E+gvZW6xOz2QDBvv+x8jTeY2pa4kFxvVaCnjsZfjvmtJUixHhJfez1gKb+MwDcgESB
+         VkLWe7RgIS5lGH1rIYyIgzVZfFxkPKmbJJ9oIqrbBuEOC+KhVyLvNRI/w1/pRi4lVDC9
+         g81g==
+X-Gm-Message-State: AOAM533+cB1nG+ymjNsxX0zYe4gg68RuhdlcmdIx1alA/1J2K34NFf+e
+        wNtTQvarLFJPRF1XtQ7SEpnDqzpaQw+A
+X-Google-Smtp-Source: ABdhPJwEi7a4BGxBFM0+WHbiO9IAQ/fGgukfTCWRV9BsdyHWsYFlnELlOQw3UQTchsNsqcLRiabjUA==
+X-Received: by 2002:a92:8585:: with SMTP id f127mr48293818ilh.207.1594337052516;
+        Thu, 09 Jul 2020 16:24:12 -0700 (PDT)
+Received: from xps15 ([64.188.179.254])
+        by smtp.gmail.com with ESMTPSA id w15sm2743064ila.65.2020.07.09.16.24.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2020 16:24:11 -0700 (PDT)
+Received: (nullmailer pid 1091574 invoked by uid 1000);
+        Thu, 09 Jul 2020 23:24:09 -0000
+Date:   Thu, 9 Jul 2020 17:24:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     wolfram@the-dreams.de, linux@rempel-privat.de, shawnguo@kernel.org,
+        festevam@gmail.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Linux-imx@nxp.com,
+        kernel@pengutronix.de, linux-i2c@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        s.hauer@pengutronix.de
+Subject: Re: [PATCH V3 1/2] dt-bindings: i2c: Convert mxs i2c to json-schema
+Message-ID: <20200709232409.GA1091519@bogus>
+References: <1592279454-32551-1-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200708071942.22595-5-frank@allwinnertech.com>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
+In-Reply-To: <1592279454-32551-1-git-send-email-Anson.Huang@nxp.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello,
-
-On Wed, Jul 08, 2020 at 03:19:30PM +0800, Frank Lee wrote:
-> Since we don't really have to care about the existing DT for boards,
-> it would be great to make the gpio banks supplies required.
-
-What if the borad doesn't use one of the banks? How would
-I describe such a board if defining supplies for all banks
-is required?
-
-regards,
-	o.
-
-> Signed-off-by: Frank Lee <frank@allwinnertech.com>
+On Tue, 16 Jun 2020 11:50:53 +0800, Anson Huang wrote:
+> Convert the MXS I2C binding to DT schema format using json-schema
+> 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 > ---
->  .../devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml         | 1 +
->  1 file changed, 1 insertion(+)
+> Changes since V2:
+> 	- remove 'clock-frequency' property's typs and use enum for it, as it ONLY support 100KHz/400KHz.
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-mxs.txt  | 25 -----------
+>  Documentation/devicetree/bindings/i2c/i2c-mxs.yaml | 51 ++++++++++++++++++++++
+>  2 files changed, 51 insertions(+), 25 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-mxs.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-mxs.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-> index 226aba0..c30a7b7 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-> @@ -134,6 +134,7 @@ patternProperties:
->  required:
->    - "#gpio-cells"
->    - "#interrupt-cells"
-> +  - "^vcc-p[a-hlm]-supply$"
->    - compatible
->    - reg
->    - interrupts
-> -- 
-> 1.9.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+Applied, thanks!
