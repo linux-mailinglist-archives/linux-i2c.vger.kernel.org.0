@@ -2,65 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD8021DAD7
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jul 2020 17:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CB421E00C
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jul 2020 20:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729700AbgGMPxn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 Jul 2020 11:53:43 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:39412 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729027AbgGMPxn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jul 2020 11:53:43 -0400
-Received: by mail-il1-f193.google.com with SMTP id k6so11584955ili.6;
-        Mon, 13 Jul 2020 08:53:43 -0700 (PDT)
+        id S1726356AbgGMStP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Jul 2020 14:49:15 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:42617 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726318AbgGMStP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jul 2020 14:49:15 -0400
+Received: by mail-io1-f66.google.com with SMTP id c16so14615258ioi.9;
+        Mon, 13 Jul 2020 11:49:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Eh4Jfvrxh30JZFN3zn23LE73ofmFxJNLzHKS7kQqIek=;
-        b=l2XTiYD3r8qp40qVgfYfu0vcGBXeZdile/zE5WwZ+Rtz83grzu4RntFCmg8XmUVVuR
-         YT9HU4GtbOdPlzC36nvn9uP5GlsbTshYsuwuPKDw7LiRSBh5TajTIb9XUTjTG0j1RjPI
-         wh6EaL5bnb1kfgLE7ebhoVMRUl5ysrU1KEi16KS4EsCRNZCIMkZg3VdvlYO8dK2zOTHU
-         6HQYsbg6/lAvcBW7oG/O0dYbhnZbRmbPxAGYP0OP/j1YwB/6y1s7FweA6ZSV/IgmzDDG
-         Wr7+LY4WNfwHvJ9AWbWr4nHk5aBwLXVf8m+4N9UESh4qsKqph6zUx6WmPKst5IsNTrxk
-         5iBw==
-X-Gm-Message-State: AOAM533BMiXQuy1ZLqVj35e1UeHpreHFtJLgn+oG3HSXibZ72ZRT0eE4
-        X9KT9WtmLrQkj2BN1guEZHLqp6FKIg==
-X-Google-Smtp-Source: ABdhPJyV4byNLhAzfeoSE8G8Ux0T5S28B1WJxkW/WZA5EOdpvd7G0QJkWVDjwUUnAWoAG2O11jIljw==
-X-Received: by 2002:a92:408c:: with SMTP id d12mr328781ill.304.1594655622798;
-        Mon, 13 Jul 2020 08:53:42 -0700 (PDT)
+        bh=aCiNzIRb/i94Ziy734zDNgavUVaioKgtYqD7ynObnzs=;
+        b=cr54V41iD9tHY4LzUb2WF14//fCINN6nW+m+eJ3JJvh0XXahlqEdtGIVKl7VxmKT/S
+         n7cg2BXl8hCV4HbLGmMiNjXgBHaQeDhVL7eo/q4W/uc3fVpvot54RQtiNnYJveSwYTzW
+         YAPb4wwc3DDI+mDedtKKq7RITKcg5xGgGsrPax6N/nVVLgW5JCpq26qIp0aSBhSTGuJ/
+         FDwqXywFIdqTLl5vJVJlcnZWVmMETfNWsIBfkUMF144nWu0fBZixGB9LCu3XXg+UA1rv
+         /fYvcEl7CN1nyUpqGPQwczwj/CFNCRMBlY/H5t4+EPhQyo0yDl7btJ+2ZoR8G8OMUAjJ
+         tn1Q==
+X-Gm-Message-State: AOAM532U6+OwN4+uSZwiJLwfbizxKxjJdQwnmBCC6xJUgtY6F3asyAaj
+        ryTY+kElo4PCE82ZglF25VRShCVXfw==
+X-Google-Smtp-Source: ABdhPJyVVOPkjyR90yMteRSvUYPNKDibQo0H6E/faM4KxNHcY8WN8jZW0+XXxFQSfGxNOEFzwbd61w==
+X-Received: by 2002:a5e:a60d:: with SMTP id q13mr1124826ioi.199.1594666153909;
+        Mon, 13 Jul 2020 11:49:13 -0700 (PDT)
 Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id p124sm7776210iod.32.2020.07.13.08.53.41
+        by smtp.gmail.com with ESMTPSA id s12sm9067267ilk.58.2020.07.13.11.49.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 08:53:42 -0700 (PDT)
-Received: (nullmailer pid 282784 invoked by uid 1000);
-        Mon, 13 Jul 2020 15:53:41 -0000
-Date:   Mon, 13 Jul 2020 09:53:41 -0600
+        Mon, 13 Jul 2020 11:49:13 -0700 (PDT)
+Received: (nullmailer pid 527876 invoked by uid 1000);
+        Mon, 13 Jul 2020 18:49:11 -0000
+Date:   Mon, 13 Jul 2020 12:49:11 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Frank Lee <frank@allwinnertech.com>
-Cc:     tiny.windzz@gmail.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, gregory.clement@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 13/16] dt-bindings: i2c: mv64xxx: Add compatible for
- the A100 i2c node.
-Message-ID: <20200713155341.GA282731@bogus>
-References: <20200713022049.22555-1-frank@allwinnertech.com>
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     linux-i2c@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH v3 1/5] dt-bindings: gpio: Convert mrvl-gpio to
+ json-schema
+Message-ID: <20200713184911.GA527802@bogus>
+References: <20200616223353.993567-1-lkundrak@v3.sk>
+ <20200616223353.993567-2-lkundrak@v3.sk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200713022049.22555-1-frank@allwinnertech.com>
+In-Reply-To: <20200616223353.993567-2-lkundrak@v3.sk>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 13 Jul 2020 10:20:49 +0800, Frank Lee wrote:
-> Allwinner A100 have a mv64xxx i2c interface available to be used.
+On Wed, 17 Jun 2020 00:33:49 +0200, Lubomir Rintel wrote:
+> This converts the mrvl-gpio binding to DT schema format using json-schema.
 > 
-> Signed-off-by: Frank Lee <frank@allwinnertech.com>
+> Various fixes were done during the conversion, such as adding more
+> properties that are in fact mandatory or extending the examples to
+> include child nodes with extra GPIO blocks.
+> 
+> The compatible strings are a mess. It is not clear why so many of them
+> are needed; the driver doesn't really seem to differentiate between the
+> models. Some of them, like marvell,pxa93x-gpio and marvell,pxa1928-gpio
+> are not used at all, so it's not known how many interrupts they utilize.
+> On the other hand, mrvl,pxa-gpio has been seen in the tree, but it
+> doesn't end up in any actual DTB file.
+> 
+> In any case -- the schema merely copies whatever was in the original
+> binding document, so it's hopefully no more wrong that the original.
+> 
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+> 
 > ---
->  Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+> Changes since v2:
+> - Don't make ranges property mandatory
+> 
+> Changes since v1:
+> - Drop marvell,pxa1928-gpio
+> - Drop ranges from example with no gcb child nodes
+> - Add default GPL-2.0-only license tag
+> - Fill in maintainers from MAINTAINERS file
+> 
+>  .../devicetree/bindings/gpio/mrvl-gpio.txt    |  48 -----
+>  .../devicetree/bindings/gpio/mrvl-gpio.yaml   | 173 ++++++++++++++++++
+>  2 files changed, 173 insertions(+), 48 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/gpio/mrvl-gpio.txt
+>  create mode 100644 Documentation/devicetree/bindings/gpio/mrvl-gpio.yaml
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Applied, thanks!
