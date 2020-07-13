@@ -2,101 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80CB421E00C
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jul 2020 20:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3090821E012
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jul 2020 20:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726356AbgGMStP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 Jul 2020 14:49:15 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:42617 "EHLO
+        id S1726624AbgGMSt2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Jul 2020 14:49:28 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:40982 "EHLO
         mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbgGMStP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jul 2020 14:49:15 -0400
-Received: by mail-io1-f66.google.com with SMTP id c16so14615258ioi.9;
-        Mon, 13 Jul 2020 11:49:14 -0700 (PDT)
+        with ESMTP id S1726318AbgGMSt2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jul 2020 14:49:28 -0400
+Received: by mail-io1-f66.google.com with SMTP id p205so6079588iod.8;
+        Mon, 13 Jul 2020 11:49:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=aCiNzIRb/i94Ziy734zDNgavUVaioKgtYqD7ynObnzs=;
-        b=cr54V41iD9tHY4LzUb2WF14//fCINN6nW+m+eJ3JJvh0XXahlqEdtGIVKl7VxmKT/S
-         n7cg2BXl8hCV4HbLGmMiNjXgBHaQeDhVL7eo/q4W/uc3fVpvot54RQtiNnYJveSwYTzW
-         YAPb4wwc3DDI+mDedtKKq7RITKcg5xGgGsrPax6N/nVVLgW5JCpq26qIp0aSBhSTGuJ/
-         FDwqXywFIdqTLl5vJVJlcnZWVmMETfNWsIBfkUMF144nWu0fBZixGB9LCu3XXg+UA1rv
-         /fYvcEl7CN1nyUpqGPQwczwj/CFNCRMBlY/H5t4+EPhQyo0yDl7btJ+2ZoR8G8OMUAjJ
-         tn1Q==
-X-Gm-Message-State: AOAM532U6+OwN4+uSZwiJLwfbizxKxjJdQwnmBCC6xJUgtY6F3asyAaj
-        ryTY+kElo4PCE82ZglF25VRShCVXfw==
-X-Google-Smtp-Source: ABdhPJyVVOPkjyR90yMteRSvUYPNKDibQo0H6E/faM4KxNHcY8WN8jZW0+XXxFQSfGxNOEFzwbd61w==
-X-Received: by 2002:a5e:a60d:: with SMTP id q13mr1124826ioi.199.1594666153909;
-        Mon, 13 Jul 2020 11:49:13 -0700 (PDT)
+        bh=WpeYQUMwj5FW9OutksMiaaeD0G6oI/PxDGyWumbAV1c=;
+        b=tr2Lec6/dgWr1TMP15bC7fAJ1kJFCvbHzRR1n18WgheTTYoJENd3HAD5Zd7fJ1nOGH
+         R9slY+EmOwgDKYvPBICTgUrn797RWFuB8yJIZHJUba/btmFsWZ8fyYA/TE8gxyXK503y
+         VlrY6AWHXpQhohI6SFfvNl13vm8+IewfO+s8QXt+yYZVgUM0Y8iK2cRdPC0NNoUmXN2a
+         3/8Krt3mn3y96pqovyEa0yHXsWXVsjsjjE1Ga4ia+JZ85DPoGT+jdMPD1V6udbR9PWBm
+         xhswhXHL56INGneZySGDlwHi43oBYKfmM0VkOzND4HDN9/hp0+rVjrdY+IiUdlKnB/Wf
+         9YGA==
+X-Gm-Message-State: AOAM532heks1dxsqtNKj3sQgJveW6Dhk1ycxULfGZkYxPHhtF64cvEyh
+        wPqv6QemAbsRYP3x3Ueb8g==
+X-Google-Smtp-Source: ABdhPJxu+gqvcd5wPFL85eaNribV65nExAy/TIGBAyqM6m6EAXlxGwJo/s3aFQZfYPFh7kq4YvPoMA==
+X-Received: by 2002:a02:cd91:: with SMTP id l17mr1633141jap.88.1594666167050;
+        Mon, 13 Jul 2020 11:49:27 -0700 (PDT)
 Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id s12sm9067267ilk.58.2020.07.13.11.49.12
+        by smtp.gmail.com with ESMTPSA id t11sm8648543ils.3.2020.07.13.11.49.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 11:49:13 -0700 (PDT)
-Received: (nullmailer pid 527876 invoked by uid 1000);
-        Mon, 13 Jul 2020 18:49:11 -0000
-Date:   Mon, 13 Jul 2020 12:49:11 -0600
+        Mon, 13 Jul 2020 11:49:26 -0700 (PDT)
+Received: (nullmailer pid 528372 invoked by uid 1000);
+        Mon, 13 Jul 2020 18:49:25 -0000
+Date:   Mon, 13 Jul 2020 12:49:25 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     linux-i2c@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-rtc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH v3 1/5] dt-bindings: gpio: Convert mrvl-gpio to
- json-schema
-Message-ID: <20200713184911.GA527802@bogus>
+        devicetree@vger.kernel.org, Jason Cooper <jason@lakedaemon.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/5] dt-bindings: i2c: Convert i2c-pxa to json-schema
+Message-ID: <20200713184925.GA528293@bogus>
 References: <20200616223353.993567-1-lkundrak@v3.sk>
- <20200616223353.993567-2-lkundrak@v3.sk>
+ <20200616223353.993567-3-lkundrak@v3.sk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200616223353.993567-2-lkundrak@v3.sk>
+In-Reply-To: <20200616223353.993567-3-lkundrak@v3.sk>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 17 Jun 2020 00:33:49 +0200, Lubomir Rintel wrote:
-> This converts the mrvl-gpio binding to DT schema format using json-schema.
+On Wed, 17 Jun 2020 00:33:50 +0200, Lubomir Rintel wrote:
+> A conversion of the i2c-pxa binding to DT schema format using json-schema.
 > 
-> Various fixes were done during the conversion, such as adding more
-> properties that are in fact mandatory or extending the examples to
-> include child nodes with extra GPIO blocks.
-> 
-> The compatible strings are a mess. It is not clear why so many of them
-> are needed; the driver doesn't really seem to differentiate between the
-> models. Some of them, like marvell,pxa93x-gpio and marvell,pxa1928-gpio
-> are not used at all, so it's not known how many interrupts they utilize.
-> On the other hand, mrvl,pxa-gpio has been seen in the tree, but it
-> doesn't end up in any actual DTB file.
-> 
-> In any case -- the schema merely copies whatever was in the original
-> binding document, so it's hopefully no more wrong that the original.
+> This also cleans ups some errors in the binding: The compatible string
+> description suggested that "mmp" in "mrvl,mmp-twsi" is to be substituted
+> with a processor model, which wouldn't be a right thing to do and indeed
+> nobody seems to have been doing that. There also was "Recommended
+> properties" section that included optional as well as mandatory
+> properties. Missing mandatory properties were added to the example.
 > 
 > Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 > 
 > ---
 > Changes since v2:
-> - Don't make ranges property mandatory
+> - Add unevaluatedProperties: false
 > 
 > Changes since v1:
-> - Drop marvell,pxa1928-gpio
-> - Drop ranges from example with no gcb child nodes
 > - Add default GPL-2.0-only license tag
 > - Fill in maintainers from MAINTAINERS file
 > 
->  .../devicetree/bindings/gpio/mrvl-gpio.txt    |  48 -----
->  .../devicetree/bindings/gpio/mrvl-gpio.yaml   | 173 ++++++++++++++++++
->  2 files changed, 173 insertions(+), 48 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/gpio/mrvl-gpio.txt
->  create mode 100644 Documentation/devicetree/bindings/gpio/mrvl-gpio.yaml
+>  .../devicetree/bindings/i2c/i2c-pxa.txt       | 31 --------
+>  .../devicetree/bindings/i2c/i2c-pxa.yaml      | 74 +++++++++++++++++++
+>  2 files changed, 74 insertions(+), 31 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-pxa.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-pxa.yaml
 > 
 
 Applied, thanks!
