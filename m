@@ -2,89 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FC721E5AE
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jul 2020 04:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6913121E8AB
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jul 2020 08:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726409AbgGNCax (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 Jul 2020 22:30:53 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:43643 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbgGNCax (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jul 2020 22:30:53 -0400
-Received: by mail-il1-f195.google.com with SMTP id i18so13002043ilk.10;
-        Mon, 13 Jul 2020 19:30:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PIQmxPiwEmBfrqbUBFZETE9PAgGB7RmQQ0RmEk0XV2o=;
-        b=RYoG1x2+pv8cg4uWfokhXlJ0T0F6iOIjGOcUkZfgkpxYgbDBzAu5pdZ2I+9jBMJTWo
-         H/sESeoDp/huWygzfpKNeCKf4DmyHxkT2O7MPicDBYKlMefCEq0rZVygncdqnwmIdF52
-         eA4GhGiqTFLO5FBxasW0KLs237Q2B/xhga3GwRBE1t3kBAv8/NbsZGc6PPogJmJEUvpY
-         GxVXAilFM+gYENctPXiGZGwvNc55PiA0Bb7xHjPhfax6moK9Zn1Utbx8xV0N56lwmPbA
-         I8INyFu6k6Zf39B7qmuuOAIErX6RhlzPpgIdIM5p4wV4DC0KTcuXolnvmEDfjAx8opCc
-         Mp3g==
-X-Gm-Message-State: AOAM533xx3RNSDE5t9q2B7JEVVw/bJv+vs1qwsh/Ot/ZFrUSn/rjZYcN
-        U0eUOy5W8/imiwkrstbvEg==
-X-Google-Smtp-Source: ABdhPJxXsnuwtyRrz+snuTSfJAc/5Y1nlNxsR/FuJxzhcyWKWH7prPgt9D2+OmHoYyG5esy2UjixSg==
-X-Received: by 2002:a05:6e02:f85:: with SMTP id v5mr2688806ilo.31.1594693851894;
-        Mon, 13 Jul 2020 19:30:51 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id b2sm9386188ilf.0.2020.07.13.19.30.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 19:30:51 -0700 (PDT)
-Received: (nullmailer pid 1161968 invoked by uid 1000);
-        Tue, 14 Jul 2020 02:30:48 -0000
-Date:   Mon, 13 Jul 2020 20:30:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Alain Volmat <alain.volmat@st.com>, mark.rutland@arm.com,
-        pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@st.com
-Subject: Re: [PATCH v2 3/4] dt-bindings: i2c-stm32: add SMBus Alert bindings
-Message-ID: <20200714023048.GA1151665@bogus>
-References: <1593070769-9106-1-git-send-email-alain.volmat@st.com>
- <1593070769-9106-4-git-send-email-alain.volmat@st.com>
- <20200630194107.GA999@ninjato>
+        id S1725939AbgGNGzy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Jul 2020 02:55:54 -0400
+Received: from smtp2207-205.mail.aliyun.com ([121.197.207.205]:54969 "EHLO
+        smtp2207-205.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725778AbgGNGzx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Jul 2020 02:55:53 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07630626|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0607517-0.000518279-0.93873;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03303;MF=frank@allwinnertech.com;NM=1;PH=DS;RN=31;RT=31;SR=0;TI=SMTPD_---.I1TOQkU_1594709738;
+Received: from allwinnertech.com(mailfrom:frank@allwinnertech.com fp:SMTPD_---.I1TOQkU_1594709738)
+          by smtp.aliyun-inc.com(10.147.41.121);
+          Tue, 14 Jul 2020 14:55:44 +0800
+From:   Frank Lee <frank@allwinnertech.com>
+To:     robh+dt@kernel.org, mripard@kernel.org, wens@csie.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        gregory.clement@bootlin.com, tglx@linutronix.de,
+        jason@lakedaemon.net, maz@kernel.org,
+        srinivas.kandagatla@linaro.org, linus.walleij@linaro.org,
+        anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        lee.jones@linaro.org, p.zabel@pengutronix.de, clabbe@baylibre.com,
+        icenowy@aosc.io, megous@megous.com, stefan@olimex.com,
+        bage@linutronix.de, devicetree@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        Yangtao Li <frank@allwinnertech.com>
+Subject: [PATCH v4 00/16] Allwinner A100 Initial support
+Date:   Tue, 14 Jul 2020 14:55:22 +0800
+Message-Id: <cover.1594708863.git.frank@allwinnertech.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200630194107.GA999@ninjato>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 09:41:07PM +0200, Wolfram Sang wrote:
-> On Thu, Jun 25, 2020 at 09:39:28AM +0200, Alain Volmat wrote:
-> > Add a new binding of the i2c-stm32f7 driver to enable the handling
-> > of the SMBUS-Alert.
-> > 
-> > The I2C/SMBUS framework already provides a mechanism to enable SMBus-Alert
-> > by naming an IRQ line "smbus_alert". However, on stm32, the SMBus-Alert is
-> > part of the i2c IRQ. Using the smbus_alert naming here would lead to having
-> > 2 handlers (the handler of the driver and the smbus_alert handler
-> > from I2C/SMBUS framework) on the unique i2c IRQ of the stm32. Meaning that
-> > the smbus_alert handler would get called for all IRQ generated by the stm32
-> > I2C controller.
-> > 
-> > For that reason, the smbus_alert IRQ naming cannot be used and a dedicated
-> > binding is introduced.
-> 
-> What if we update the core to not register another irq handler if the
-> "smbus_alert" and main irq are the same?
-> 
-> I think it could work. However, while trying to make a proof-of-concept,
-> I found that irq descriptions in the generic i2c binding document are
-> probably mixed up. And before fixing that, I'd like to get HostNotify
-> done first.
+From: Yangtao Li <frank@allwinnertech.com>
 
-Why does this even need to be in DT? Can't the driver just register that 
-it supports SMBus alert or have some call to the core signaling an SMBus 
-alert? 
+This patch set adds initial support for allwinner a100 soc,
+which is a 64-bit tablet chip.
 
-Rob
+v4:
+-drop "dt-bindings: pinctrl: sunxi: make gpio banks supplies required"
+-fix dcdc1 regulator name
+-get rid of underscore in dts node name
+-Some trivial things in yaml files
+
+v3:
+-Add pmu and nmi support
+-Add read data mask for calibration
+-Code style
+-Some trivial things in yaml files
+
+v2:
+-Some naming consistency
+-Repair email address
+-Fix mmc clock
+-Don't export system clock
+-Fix checkpatch warning
+-Drop unneeded pin function, convert to jtag_gpu and i2s_x
+
+Yangtao Li (16):
+  dt-bindings: clk: sunxi-ccu: add compatible string for A100 CCU and
+    R-CCU
+  clk: sunxi-ng: add support for the Allwinner A100 CCU
+  dt-bindings: pinctrl: sunxi: Get rid of continual nesting
+  dt-bindings: pinctrl: sunxi: Add A100 pinctrl bindings
+  pinctrl: sunxi: add support for the Allwinner A100 pin controller
+  dt-bindings: nvmem: SID: add binding for A100's SID controller
+  dt-bindings: thermal: sun8i: Add binding for A100's THS controller
+  thermal: sun8i: add TEMP_CALIB_MASK for calibration data in
+    sun50i_h6_ths_calibrate
+  thermal: sun8i: Add A100's THS controller support
+  mfd: axp20x: Allow the AXP803 to be probed by I2C
+  dt-bindings: irq: sun7i-nmi: fix dt-binding for a80 nmi
+  dt-bindings: irq: sun7i-nmi: Add binding for A100's NMI controller
+  dt-bindings: i2c: mv64xxx: Add compatible for the A100 i2c node.
+  arm64: allwinner: A100: add the basical Allwinner A100 DTSI file
+  dt-bindings: arm: sunxi: Add Allwinner A100 Perf1 Board bindings
+  arm64: allwinner: A100: add support for Allwinner Perf1 board
+
+ .../devicetree/bindings/arm/sunxi.yaml        |    5 +
+ .../clock/allwinner,sun4i-a10-ccu.yaml        |    7 +-
+ .../bindings/i2c/marvell,mv64xxx-i2c.yaml     |    3 +
+ .../allwinner,sun7i-a20-sc-nmi.yaml           |    5 +-
+ .../nvmem/allwinner,sun4i-a10-sid.yaml        |   19 +-
+ .../pinctrl/allwinner,sun4i-a10-pinctrl.yaml  |  139 +-
+ .../thermal/allwinner,sun8i-a83t-ths.yaml     |    6 +-
+ arch/arm64/boot/dts/allwinner/Makefile        |    1 +
+ .../allwinner/sun50i-a100-allwinner-perf1.dts |  180 +++
+ .../arm64/boot/dts/allwinner/sun50i-a100.dtsi |  364 +++++
+ drivers/clk/sunxi-ng/Kconfig                  |   10 +
+ drivers/clk/sunxi-ng/Makefile                 |    2 +
+ drivers/clk/sunxi-ng/ccu-sun50i-a100-r.c      |  214 +++
+ drivers/clk/sunxi-ng/ccu-sun50i-a100-r.h      |   21 +
+ drivers/clk/sunxi-ng/ccu-sun50i-a100.c        | 1276 +++++++++++++++++
+ drivers/clk/sunxi-ng/ccu-sun50i-a100.h        |   56 +
+ drivers/mfd/axp20x-i2c.c                      |    2 +
+ drivers/pinctrl/sunxi/Kconfig                 |   10 +
+ drivers/pinctrl/sunxi/Makefile                |    2 +
+ drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c |  105 ++
+ drivers/pinctrl/sunxi/pinctrl-sun50i-a100.c   |  708 +++++++++
+ drivers/thermal/sun8i_thermal.c               |   16 +-
+ include/dt-bindings/clock/sun50i-a100-ccu.h   |  116 ++
+ include/dt-bindings/clock/sun50i-a100-r-ccu.h |   23 +
+ include/dt-bindings/reset/sun50i-a100-ccu.h   |   68 +
+ include/dt-bindings/reset/sun50i-a100-r-ccu.h |   18 +
+ 26 files changed, 3308 insertions(+), 68 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun50i-a100-r.c
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun50i-a100-r.h
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun50i-a100.c
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun50i-a100.h
+ create mode 100644 drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c
+ create mode 100644 drivers/pinctrl/sunxi/pinctrl-sun50i-a100.c
+ create mode 100644 include/dt-bindings/clock/sun50i-a100-ccu.h
+ create mode 100644 include/dt-bindings/clock/sun50i-a100-r-ccu.h
+ create mode 100644 include/dt-bindings/reset/sun50i-a100-ccu.h
+ create mode 100644 include/dt-bindings/reset/sun50i-a100-r-ccu.h
+
+-- 
+2.24.0
+
