@@ -2,70 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0147021E402
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jul 2020 01:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FC721E5AE
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jul 2020 04:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbgGMXt6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 Jul 2020 19:49:58 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:36780 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726750AbgGMXt5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jul 2020 19:49:57 -0400
-Received: by mail-io1-f66.google.com with SMTP id y2so15441491ioy.3;
-        Mon, 13 Jul 2020 16:49:57 -0700 (PDT)
+        id S1726409AbgGNCax (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Jul 2020 22:30:53 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:43643 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726150AbgGNCax (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 13 Jul 2020 22:30:53 -0400
+Received: by mail-il1-f195.google.com with SMTP id i18so13002043ilk.10;
+        Mon, 13 Jul 2020 19:30:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=UHyenos/gOjNznjgGtTMdPBde8a7doL/E2F5z4MsQK4=;
-        b=rI6Fv3hUNjXHgAmxqsRfe6RdxFUzmQGUF9dRvM3dsVMpD2AnOdWYyQK4R1K5DR6gOx
-         Cb91yogt7grNj3jp3qQ+s4kn9jszCms6AzRrEol/qtLs2yeL7+S6B23nfWEaMwl0/7yN
-         3QHlsVkhD0S/3AOivfxtTQh1T2nk6XpzeZ5Jba07yKpYd2/7+44CydPOAyGrLe4Z+ES8
-         G9mLDvI80rgEEpPL0bqYkV9SMJHtDDJJv77qgZESA1sppa4bobslATwc7YzslMT8XdPT
-         ylwLyvJ681pvJqkj2aVKc/1DdG1hLvZW2lTIo9FUqKJdXDEI8Rpo/jWEPHRI6va/mxdA
-         fn/g==
-X-Gm-Message-State: AOAM531ytaD6cAjQJXzacgxVbOIOpJ+mv+OMSHTCn4C5ZntGykFAQHgI
-        bjNA5FZqsFXLO0vBSrVkdpu/yTdihl9M
-X-Google-Smtp-Source: ABdhPJzfzaXdZE8vse9V7QWXDeRzevOTeaM6e8+2cA9sunwS0j0aDIbLLE5AFf0GuST9flOv9XFHgQ==
-X-Received: by 2002:a02:8816:: with SMTP id r22mr2939355jai.128.1594684197253;
-        Mon, 13 Jul 2020 16:49:57 -0700 (PDT)
+        bh=PIQmxPiwEmBfrqbUBFZETE9PAgGB7RmQQ0RmEk0XV2o=;
+        b=RYoG1x2+pv8cg4uWfokhXlJ0T0F6iOIjGOcUkZfgkpxYgbDBzAu5pdZ2I+9jBMJTWo
+         H/sESeoDp/huWygzfpKNeCKf4DmyHxkT2O7MPicDBYKlMefCEq0rZVygncdqnwmIdF52
+         eA4GhGiqTFLO5FBxasW0KLs237Q2B/xhga3GwRBE1t3kBAv8/NbsZGc6PPogJmJEUvpY
+         GxVXAilFM+gYENctPXiGZGwvNc55PiA0Bb7xHjPhfax6moK9Zn1Utbx8xV0N56lwmPbA
+         I8INyFu6k6Zf39B7qmuuOAIErX6RhlzPpgIdIM5p4wV4DC0KTcuXolnvmEDfjAx8opCc
+         Mp3g==
+X-Gm-Message-State: AOAM533xx3RNSDE5t9q2B7JEVVw/bJv+vs1qwsh/Ot/ZFrUSn/rjZYcN
+        U0eUOy5W8/imiwkrstbvEg==
+X-Google-Smtp-Source: ABdhPJxXsnuwtyRrz+snuTSfJAc/5Y1nlNxsR/FuJxzhcyWKWH7prPgt9D2+OmHoYyG5esy2UjixSg==
+X-Received: by 2002:a05:6e02:f85:: with SMTP id v5mr2688806ilo.31.1594693851894;
+        Mon, 13 Jul 2020 19:30:51 -0700 (PDT)
 Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id u9sm8737169iom.14.2020.07.13.16.49.55
+        by smtp.gmail.com with ESMTPSA id b2sm9386188ilf.0.2020.07.13.19.30.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 16:49:56 -0700 (PDT)
-Received: (nullmailer pid 948459 invoked by uid 1000);
-        Mon, 13 Jul 2020 23:49:55 -0000
-Date:   Mon, 13 Jul 2020 17:49:55 -0600
+        Mon, 13 Jul 2020 19:30:51 -0700 (PDT)
+Received: (nullmailer pid 1161968 invoked by uid 1000);
+        Tue, 14 Jul 2020 02:30:48 -0000
+Date:   Mon, 13 Jul 2020 20:30:48 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     sakari.ailus@iki.fi, gregkh@linuxfoundation.org, frankc@nvidia.com,
-        robh+dt@kernel.org, digetx@gmail.com, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        thierry.reding@gmail.com, sboyd@kernel.org,
-        linux-media@vger.kernel.org, hverkuil@xs4all.nl,
-        helen.koike@collabora.com, jonathanh@nvidia.com,
-        devicetree@vger.kernel.org
-Subject: Re: [RFC PATCH v2 01/18] dt-bindings: i2c: tegra: Document Tegra210
- VI I2C clocks and power-domains
-Message-ID: <20200713234955.GA948428@bogus>
-References: <1592358094-23459-1-git-send-email-skomatineni@nvidia.com>
- <1592358094-23459-2-git-send-email-skomatineni@nvidia.com>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Alain Volmat <alain.volmat@st.com>, mark.rutland@arm.com,
+        pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@st.com
+Subject: Re: [PATCH v2 3/4] dt-bindings: i2c-stm32: add SMBus Alert bindings
+Message-ID: <20200714023048.GA1151665@bogus>
+References: <1593070769-9106-1-git-send-email-alain.volmat@st.com>
+ <1593070769-9106-4-git-send-email-alain.volmat@st.com>
+ <20200630194107.GA999@ninjato>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1592358094-23459-2-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <20200630194107.GA999@ninjato>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 16 Jun 2020 18:41:17 -0700, Sowjanya Komatineni wrote:
-> This patch documents missing clocks and power-domains of Tegra210 VI I2C.
+On Tue, Jun 30, 2020 at 09:41:07PM +0200, Wolfram Sang wrote:
+> On Thu, Jun 25, 2020 at 09:39:28AM +0200, Alain Volmat wrote:
+> > Add a new binding of the i2c-stm32f7 driver to enable the handling
+> > of the SMBUS-Alert.
+> > 
+> > The I2C/SMBUS framework already provides a mechanism to enable SMBus-Alert
+> > by naming an IRQ line "smbus_alert". However, on stm32, the SMBus-Alert is
+> > part of the i2c IRQ. Using the smbus_alert naming here would lead to having
+> > 2 handlers (the handler of the driver and the smbus_alert handler
+> > from I2C/SMBUS framework) on the unique i2c IRQ of the stm32. Meaning that
+> > the smbus_alert handler would get called for all IRQ generated by the stm32
+> > I2C controller.
+> > 
+> > For that reason, the smbus_alert IRQ naming cannot be used and a dedicated
+> > binding is introduced.
 > 
-> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> ---
->  .../devicetree/bindings/i2c/nvidia,tegra20-i2c.txt    | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
+> What if we update the core to not register another irq handler if the
+> "smbus_alert" and main irq are the same?
 > 
+> I think it could work. However, while trying to make a proof-of-concept,
+> I found that irq descriptions in the generic i2c binding document are
+> probably mixed up. And before fixing that, I'd like to get HostNotify
+> done first.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Why does this even need to be in DT? Can't the driver just register that 
+it supports SMBus alert or have some call to the core signaling an SMBus 
+alert? 
+
+Rob
