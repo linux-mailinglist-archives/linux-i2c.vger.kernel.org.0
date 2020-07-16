@@ -2,95 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 099FA2219DD
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jul 2020 04:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E61221DDD
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jul 2020 10:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbgGPC2A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Jul 2020 22:28:00 -0400
-Received: from ipmail03.adl2.internode.on.net ([150.101.137.141]:6767 "EHLO
-        ipmail03.adl2.internode.on.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726479AbgGPC2A (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Jul 2020 22:28:00 -0400
-X-Greylist: delayed 302 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Jul 2020 22:27:58 EDT
-X-SMTP-MATCH: 0
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2B6BwBtuQ9f/5UxyQ5gHQEBPAEFBQE?=
- =?us-ascii?q?CAQkBHIFDAoNrX400hX6eGQsBPAECBAEBhEYEAoIMJTcGDgIQAQEGAQEBAQE?=
- =?us-ascii?q?GBIZUhigBIyMpJm8TgyaCfKwrhVGDXIFAgTgBiAKFCYIAgRGDTooRIgSbHpo?=
- =?us-ascii?q?RgmeBC5hBMIELni4BswGBezMaCCgIgyRQGQ2cdTQwNwIGCAEBAwlXAY9cAQE?=
-Received: from 14-201-49-149.tpgi.com.au (HELO silver.lan) ([14.201.49.149])
-  by ipmail03.adl2.internode.on.net with ESMTP; 16 Jul 2020 11:52:54 +0930
-From:   Paul Schulz <paul@mawsonlakes.org>
-To:     Jean Delvare <jdelvare@suse.com>
-Cc:     Paul Schulz <paul@mawsonlakes.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH] drivers/i2c: Removes 'blacklist' from file
-Date:   Thu, 16 Jul 2020 11:52:49 +0930
-Message-Id: <20200716022249.148043-1-paul@mawsonlakes.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726514AbgGPIIu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Jul 2020 04:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725897AbgGPIIt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jul 2020 04:08:49 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE437C061755
+        for <linux-i2c@vger.kernel.org>; Thu, 16 Jul 2020 01:08:48 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id t11so3297174pfq.11
+        for <linux-i2c@vger.kernel.org>; Thu, 16 Jul 2020 01:08:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=Q1NMSOrdmEBAoODvtBeWiT8XzpHbNfB6Y0FWPWAR6Ao=;
+        b=DepxCFxm7ID3zD8asyMdeo2OHoYRep9fEEaBt1u31Rm+EkGIlRUZHG4m6dn/vzgXW4
+         xiIdufe9s4RSt9eu4RvFRP6695QDvAHkwzRU2s2kQxHGdNF+TSccMFln30QwHjpjZCqn
+         Qe8+9x2GOXHdLcV4zcQ4EcgLapnlyT9M6/CWQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Q1NMSOrdmEBAoODvtBeWiT8XzpHbNfB6Y0FWPWAR6Ao=;
+        b=OILj/bnCK44mea4WdJI0xdaTbn+N1/Pw7RH9O5s/kOIWDH7mlsliUzjoxqVF1Q3igp
+         KmXiFJ4XofUEJIS22kfyAdgmee4gHagmkAjY0dmQvdP3FpY3M2AL2YxeRA626B9ZkgrW
+         /ItWKPV9LBiq/mN2SOwxN+drFo6wqtKDrLSBCGm/XyxPxZNJXH0X38wFLyYRAthfnRZ5
+         qyj3DySiE9fbE4ZEfbMitHjZBcVqTGtNf6JH+eH96ksWP55ykIr5cjlafNsTVvEXI5lO
+         AjLowsAuOyBzsKIy8t14Ic2kMELRVbqtTYs+GXawtEfJJwuJkukriZw8VtA4KGt27qpW
+         O5pg==
+X-Gm-Message-State: AOAM533t9aI8ZgPIOBsx8yX9wazKtN2O5iW0qiDuu4td/TbjfwMgWl3H
+        mo9UnMhmaB15rWfMHaS3ZPsltDXhUYg=
+X-Google-Smtp-Source: ABdhPJz5dxnbGGR/Zl7SKoHACsCiYpWWIE1uv3TQqThSvMRdNM7XbkWBeI+Zu8/IQX1kEz+mVF+SqQ==
+X-Received: by 2002:a63:725c:: with SMTP id c28mr3198841pgn.156.1594886927693;
+        Thu, 16 Jul 2020 01:08:47 -0700 (PDT)
+Received: from rayagonda.dhcp.broadcom.net ([192.19.234.250])
+        by smtp.gmail.com with ESMTPSA id a3sm4353085pgd.73.2020.07.16.01.08.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2020 01:08:46 -0700 (PDT)
+From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Lori Hikichi <lori.hikichi@broadcom.com>,
+        Robert Richter <rrichter@marvell.com>,
+        Nishka Dasgupta <nishkadg.linux@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Subject: [PATCH V1 0/2] add PEC support on slave side
+Date:   Thu, 16 Jul 2020 13:38:34 +0530
+Message-Id: <20200716080836.2279-1-rayagonda.kokatanur@broadcom.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This edit changes instances of 'blacklist' to 'blocklist'
+This patch set adds support for PEC on Slave side.
 
-This is a functionally trivial patch and has no other effect.
+Rayagonda Kokatanur (2):
+  i2c: add PEC error event
+  i2c: iproc: add slave pec support
 
-Signed-off-by: Paul Schulz <paul@mawsonlakes.org>
----
- Documentation/i2c/busses/i2c-sis5595.rst | 2 +-
- drivers/i2c/busses/i2c-sis5595.c         | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-bcm-iproc.c | 50 +++++++++++++++++++++++++++---
+ include/linux/i2c.h                |  1 +
+ 2 files changed, 47 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/i2c/busses/i2c-sis5595.rst b/Documentation/i2c/busses/i2c-sis5595.rst
-index b85630c84a96..a92ab4c3471b 100644
---- a/Documentation/i2c/busses/i2c-sis5595.rst
-+++ b/Documentation/i2c/busses/i2c-sis5595.rst
-@@ -21,7 +21,7 @@ Note: all have mfr. ID 0x1039.
- 
-    Note: these chips contain a 0008 device which is incompatible with the
-          5595. We recognize these by the presence of the listed
--         "blacklist" PCI ID and refuse to load.
-+         "blocklist" PCI ID and refuse to load.
- 
-    =============        ======          ================
-    NOT SUPPORTED        PCI ID          BLACKLIST PCI ID
-diff --git a/drivers/i2c/busses/i2c-sis5595.c b/drivers/i2c/busses/i2c-sis5595.c
-index c793a5c14cda..1da2560b418d 100644
---- a/drivers/i2c/busses/i2c-sis5595.c
-+++ b/drivers/i2c/busses/i2c-sis5595.c
-@@ -14,9 +14,9 @@
- 
-    Note: these chips contain a 0008 device which is incompatible with the
-          5595. We recognize these by the presence of the listed
--         "blacklist" PCI ID and refuse to load.
-+	  "blocklist" PCI ID and refuse to load.
- 
--   NOT SUPPORTED	PCI ID		BLACKLIST PCI ID	
-+	NOT SUPPORTED	PCI ID		BLOCKLIST PCI ID
- 	 540		0008		0540
- 	 550		0008		0550
- 	5513		0008		5511
-@@ -51,7 +51,7 @@
- #include <linux/acpi.h>
- #include <linux/io.h>
- 
--static int blacklist[] = {
-+static int blocklist[] = {
- 	PCI_DEVICE_ID_SI_540,
- 	PCI_DEVICE_ID_SI_550,
- 	PCI_DEVICE_ID_SI_630,
-@@ -138,7 +138,7 @@ static int sis5595_setup(struct pci_dev *SIS5595_dev)
- 	int retval;
- 
- 	/* Look for imposters */
--	for (i = blacklist; *i != 0; i++) {
-+	for (i = blocklist; *i != 0; i++) {
- 		struct pci_dev *dev;
- 		dev = pci_get_device(PCI_VENDOR_ID_SI, *i, NULL);
- 		if (dev) {
 -- 
-2.25.1
+2.17.1
 
