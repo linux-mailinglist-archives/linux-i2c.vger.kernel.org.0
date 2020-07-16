@@ -2,56 +2,147 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC77221FF6
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jul 2020 11:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09545222055
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jul 2020 12:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726201AbgGPJpF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Jul 2020 05:45:05 -0400
-Received: from mailrelay.armstrong.synacor.com ([64.8.71.22]:8562 "EHLO
-        smtp.zoominternet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbgGPJpE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jul 2020 05:45:04 -0400
-X-Greylist: delayed 1201 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Jul 2020 05:45:04 EDT
-DKIM-Signature: v=1; a=rsa-sha1; d=zoominternet.net; s=20180516; c=relaxed/simple;
-        q=dns/txt; i=@zoominternet.net; t=1594891503;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=9H6mIHY0KqDHMLL4LqkLLWUrgDY=;
-        b=RGYXvYqCRY+97gUqbIFMcr7MEtbX7W7eto01BJvmqTFqd2AwkGJ1LPb+AAg6mwHw
-        MzCtqoZwm14zHNm8Rd25WX8izouPGddWR/8/JS0LYkUI7xImf5qcqrvcxEjVYMzz
-        zPSB0be8O9EqL/C5isN0sFBcw95QZB2VseUxVRFerczJpLK1z4rZzTonkMD+2kym
-        rQdrievC/ai41WIFun+RDs/GfgwuYbqqMALAub3ejk/V8UKbnZG7dKNOyQg9W6Ge
-        QhcgLMEnHHI35/3enwFn8QBhmJ/8lwk9kUno5tyqhrgHhpWf9AQp3o5bctPHPr6s
-        t4hcf1rHdMSwvu7hsRqAJA==;
-X_CMAE_Category: , ,
-X-CNFS-Analysis: v=2.3 cv=H9SlPNQi c=1 sm=1 tr=0 a=VM7KJ31e1KNGh6xkEGse4A==:117 a=9cW_t1CCXrUA:10 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=PJS9qEZKnNwA:10 a=IkcTkHD0fZMA:10 a=_RQrkK6FrEwA:10 a=OirutkuoYOMA:10 a=R0eIVPL1rM4A:10 a=QwuuhjdnAAAA:8 a=mg0QT4ct15kTEZzOOeQA:9 a=QEXdDO2ut3YA:10 a=lSz4obFp_rgA:10 a=nSmHb-GnRAYA:10 a=-FEs8UIgK8oA:10 a=VxAk22fqlfwA:10 a=NWVoK91CQyQA:10 a=ZpP24Yj66TXli5MajnOD:22 a=xGIkrBXCkqNFDDDOJSQg:22 a=4nfBGtV56Pt7G6Qk4joU:22 a=p-dnK0njbqwfn1k4-x12:22 a=MURpYVOlrLSSKvKaDb7l:22
-X-CM-Score: 0
-X-Scanned-by: Cloudmark Authority Engine
-X-Authed-Username: YXBfaG9zcGl0YWxAem9vbWludGVybmV0Lm5ldA==
-X_CMAE_Category: , ,
-X-CNFS-Analysis: 
-X-CM-Score: 
-X-Scanned-by: Cloudmark Authority Engine
-Received: from [10.35.66.1] ([10.35.66.1:48082] helo=md05.armstrong.cmh.synacor.com)
-        by smtp.zoominternet.net (envelope-from <ap_hospital@zoominternet.net>)
-        (ecelerity 3.6.2.43620 r(Platform:3.6.2.0)) with ESMTP
-        id 4E/31-02415-CEC101F5; Thu, 16 Jul 2020 05:25:01 -0400
-Date:   Thu, 16 Jul 2020 05:25:00 -0400 (EDT)
-From:   ap_hospital@zoominternet.net
-Message-ID: <2119467535.88156924.1594891500667.JavaMail.zimbra@zoominternet.net>
-Subject: Re:
+        id S1726075AbgGPKOb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Jul 2020 06:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726027AbgGPKOb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jul 2020 06:14:31 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03868C061755;
+        Thu, 16 Jul 2020 03:14:31 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id t15so4421575pjq.5;
+        Thu, 16 Jul 2020 03:14:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZutxaYEpmEySv3UmHMi5+FROX85B8I1ijTI1ru6Ewl4=;
+        b=hIKvHRB/cueR0iOI58m532legrB8eMWxHzMvO9fAmlo5ViRbW3bpLZG1OXuUlO06LQ
+         f3swevYFeW3+p1KoKjcbf7Vf2lggHFR/IU00Kg6IStQAzvP6JbqSGWdOPNHA0AdWuieg
+         ZABrV/DfkxDoYNctqxtJU6D3jKvatjTZHKv+Ka0t8KkT4m0YjyOKE7E0bw9rCNgnMBxJ
+         vdnT3BjodKSYR3M911mzpQJlNGIHM+VWZya4n19X/Q5cdEEyPXar5a2V6K+82CagGNKm
+         BxuP2QghQ//+98N+z21AkJglg+Isb0WDFbwsmBKvpdVOfiT1g9e4wwXwEFCHEy/U2E0y
+         VryA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZutxaYEpmEySv3UmHMi5+FROX85B8I1ijTI1ru6Ewl4=;
+        b=kvhj5dldhOpdBIJlmFD5gj8eC1RUnc2aqAGqXqaTBoPMVUkYWxGurdIHPxXh+5eIhU
+         s7mqET74hM4HPyeDhiqJeQWk3hGQ5226aoAYX/NlBRV2pDKrJ1CZj2p235Qh34PFZNzO
+         8JFdle52vmefmy8B3bHDem1IFElqLMHqM+i3z0jtEoIc7djQZDuXM3MCc+g2VHzaPVEK
+         eJxJSmW9ChSckdgfuDvD181tnpun3BajJS3vDnE3fhjweUdBbizfKA83UCIZTPrjf9Wn
+         41s3g3eED00JE1g6KbQVC2arztLEvFr3oh2I1kyIUCp1KvcsLoirnT4LzSUXLbC2Xo4O
+         J0Dw==
+X-Gm-Message-State: AOAM532F1Yq5rPBNnXNmf9PR3WAJ8xZAK3aXzwwR1G3bF4LWnkamUuP/
+        cOSPBvIYOY8BwsZW6SXhyz1KjbPVSRQnvBnYwAtBzcEH
+X-Google-Smtp-Source: ABdhPJwQFoM4iZtiHWAuEwqpo/JQvqiBk0vdFRrwv7kOdg027V9PMwF0z+LQ2HpUSPOZy6PgjuOQ02qyFMJEcoYPLvo=
+X-Received: by 2002:a17:90b:1b52:: with SMTP id nv18mr4290355pjb.129.1594894470264;
+ Thu, 16 Jul 2020 03:14:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [64.62.187.80]
-X-Mailer: Zimbra 8.0.7_GA_6021 (zclient/8.0.7_GA_6021)
-Thread-Topic: 
-Thread-Index: BXrfchB2/q3eUlBuPYjATnnIgB+J7A==
-To:     unlisted-recipients:; (no To-header on input)
+References: <20200716080836.2279-1-rayagonda.kokatanur@broadcom.com> <20200716080836.2279-3-rayagonda.kokatanur@broadcom.com>
+In-Reply-To: <20200716080836.2279-3-rayagonda.kokatanur@broadcom.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 16 Jul 2020 13:14:13 +0300
+Message-ID: <CAHp75VeXBCqEhfna2mQaHv7bZKOrj+A6KkbCrMAfM=X9+boDjA@mail.gmail.com>
+Subject: Re: [PATCH V1 2/2] i2c: iproc: add slave pec support
+To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Lori Hikichi <lori.hikichi@broadcom.com>,
+        Robert Richter <rrichter@marvell.com>,
+        Nishka Dasgupta <nishkadg.linux@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Do you want to sell your kidney for money? contact us via email:(info@/kidneyshub.space) OR https://www.kidneyshub.space
-Dr Steevens .
-whatsApp +91-9585623470 .
+On Thu, Jul 16, 2020 at 11:14 AM Rayagonda Kokatanur
+<rayagonda.kokatanur@broadcom.com> wrote:
+>
+> Iproc supports PEC computation and checking in both Master
+> and Slave mode.
+>
+> This patch adds support for PEC in slave mode.
+
+...
+
+> -#define S_RX_PEC_ERR_SHIFT           29
+> +#define S_RX_PEC_ERR_SHIFT           28
+> +#define S_RX_PEC_ERR_MASK            0x3
+> +#define S_RX_PEC_ERR                 0x1
+
+This needs to be explained in the commit message, in particular why
+this change makes no regression.
+
+...
+
+> +static int bcm_iproc_smbus_check_slave_pec(struct bcm_iproc_i2c_dev *iproc_i2c,
+> +                                          u32 val)
+> +{
+> +       u8 err_status;
+
+> +       int ret = 0;
+
+Completely redundant variable.
+
+> +       if (!iproc_i2c->en_s_pec)
+> +               return ret;
+
+return 0;
+
+> +       err_status = (u8)((val >> S_RX_PEC_ERR_SHIFT) & S_RX_PEC_ERR_MASK);
+
+Why casting?
+
+> +       if (err_status == S_RX_PEC_ERR) {
+> +               dev_err(iproc_i2c->device, "Slave PEC error\n");
+
+> +               ret = -EBADMSG;
+
+return ...
+
+> +       }
+> +
+> +       return ret;
+
+return 0;
+
+> +}
+
+...
+
+> +                       if (rx_status == I2C_SLAVE_RX_END) {
+> +                               int ret;
+> +
+> +                               ret = bcm_iproc_smbus_check_slave_pec(iproc_i2c,
+> +                                                                     val);
+
+One line looks better.
+
+> +                               if (!ret)
+
+Why not positive conditional?
+
+> +                                       i2c_slave_event(iproc_i2c->slave,
+> +                                                       I2C_SLAVE_STOP, &value);
+> +                               else
+> +                                       i2c_slave_event(iproc_i2c->slave,
+> +                                                       I2C_SLAVE_PEC_ERR,
+> +                                                       &value);
+> +                       }
+
+-- 
+With Best Regards,
+Andy Shevchenko
