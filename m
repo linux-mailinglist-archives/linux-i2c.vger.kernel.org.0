@@ -2,34 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE38C222E25
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jul 2020 23:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F418222E31
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jul 2020 23:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726113AbgGPVtG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Jul 2020 17:49:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48378 "EHLO mail.kernel.org"
+        id S1726104AbgGPVya (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Jul 2020 17:54:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49066 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726070AbgGPVtG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 16 Jul 2020 17:49:06 -0400
+        id S1726002AbgGPVy3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 16 Jul 2020 17:54:29 -0400
 Received: from embeddedor (unknown [201.162.240.161])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ACA2020884;
-        Thu, 16 Jul 2020 21:49:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 30DF120760;
+        Thu, 16 Jul 2020 21:54:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594936145;
-        bh=7fP6dH5TD/3xNVb+QSbCWAiUHN2ghzRP4+H2BnHJxhI=;
+        s=default; t=1594936469;
+        bh=7Y79PlBLypjiGciQs1QDqok54Ha2YLGjS+r3ut4HDNg=;
         h=Date:From:To:Cc:Subject:From;
-        b=iPv6fRHaDROCuIF84yZsec82Gu6wloGalM6p5tTXh6asv5Anj3ovxXHZz73kA9DOX
-         Yfxn7XqfnjJ4o96m7mqQj2uR87UZoopGoRA3KzGxRa6E+9e58OBbjoX6fWyP16R74W
-         xTmTbvY7MEm+LBPXpfUKcmoEKE4JffPNJHzjLkmE=
-Date:   Thu, 16 Jul 2020 16:54:31 -0500
+        b=MngByaZG0kg0WZVtJ42cy/lgMbbecMBeapv3OPMc3HDpO/izT0MUY9RkIaTq7+6Pi
+         HqOJfBm9IcAEbK7IN/19PLo77nBwblKbuZMCBzxN4KL6QwHcXWMVJ1TetXoU6AXYxO
+         s4GXnMYYqIbiVciH0ztFzbxsA3z0rvyM2m4Add2s=
+Date:   Thu, 16 Jul 2020 16:59:54 -0500
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH][next] i2c: mv64xxx: Use fallthrough pseudo-keyword
-Message-ID: <20200716215431.GA19300@embeddedor>
+Subject: [PATCH][next] i2c: slave-eeprom: Use fallthrough pseudo-keyword
+Message-ID: <20200716215954.GA19481@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -46,49 +46,22 @@ the new pseudo-keyword macro fallthrough[1].
 
 Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/i2c/busses/i2c-mv64xxx.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/i2c/i2c-slave-eeprom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
-index 829b8c98ae51..8d9d4ffdcd24 100644
---- a/drivers/i2c/busses/i2c-mv64xxx.c
-+++ b/drivers/i2c/busses/i2c-mv64xxx.c
-@@ -251,7 +251,7 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
- 				MV64XXX_I2C_STATE_WAITING_FOR_ADDR_2_ACK;
- 			break;
- 		}
--		/* FALLTHRU */
+diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
+index 593f2fd39d17..5c7ae421cacf 100644
+--- a/drivers/i2c/i2c-slave-eeprom.c
++++ b/drivers/i2c/i2c-slave-eeprom.c
+@@ -66,7 +66,7 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
+ 	case I2C_SLAVE_READ_PROCESSED:
+ 		/* The previous byte made it to the bus, get next one */
+ 		eeprom->buffer_idx++;
+-		/* fallthrough */
 +		fallthrough;
- 	case MV64XXX_I2C_STATUS_MAST_WR_ADDR_2_ACK: /* 0xd0 */
- 	case MV64XXX_I2C_STATUS_MAST_WR_ACK: /* 0x28 */
- 		if ((drv_data->bytes_left == 0)
-@@ -282,14 +282,14 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
- 				MV64XXX_I2C_STATE_WAITING_FOR_ADDR_2_ACK;
- 			break;
- 		}
--		/* FALLTHRU */
-+		fallthrough;
- 	case MV64XXX_I2C_STATUS_MAST_RD_ADDR_2_ACK: /* 0xe0 */
- 		if (drv_data->bytes_left == 0) {
- 			drv_data->action = MV64XXX_I2C_ACTION_SEND_STOP;
- 			drv_data->state = MV64XXX_I2C_STATE_IDLE;
- 			break;
- 		}
--		/* FALLTHRU */
-+		fallthrough;
- 	case MV64XXX_I2C_STATUS_MAST_RD_DATA_ACK: /* 0x50 */
- 		if (status != MV64XXX_I2C_STATUS_MAST_RD_DATA_ACK)
- 			drv_data->action = MV64XXX_I2C_ACTION_CONTINUE;
-@@ -417,8 +417,7 @@ mv64xxx_i2c_do_action(struct mv64xxx_i2c_data *drv_data)
- 			"mv64xxx_i2c_do_action: Invalid action: %d\n",
- 			drv_data->action);
- 		drv_data->rc = -EIO;
--
--		/* FALLTHRU */
-+		fallthrough;
- 	case MV64XXX_I2C_ACTION_SEND_STOP:
- 		drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_INTEN;
- 		writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_STOP,
+ 	case I2C_SLAVE_READ_REQUESTED:
+ 		spin_lock(&eeprom->buffer_lock);
+ 		*val = eeprom->buffer[eeprom->buffer_idx & eeprom->address_mask];
 -- 
 2.27.0
 
