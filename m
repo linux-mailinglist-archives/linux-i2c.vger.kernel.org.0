@@ -2,71 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4154B222B97
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jul 2020 21:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B63222CB3
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Jul 2020 22:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbgGPTJi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Jul 2020 15:09:38 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:47021 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728400AbgGPTJh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jul 2020 15:09:37 -0400
-Received: by mail-io1-f65.google.com with SMTP id a12so7171663ion.13;
-        Thu, 16 Jul 2020 12:09:37 -0700 (PDT)
+        id S1725926AbgGPUZX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Jul 2020 16:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725921AbgGPUZW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Jul 2020 16:25:22 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5285BC061755;
+        Thu, 16 Jul 2020 13:25:22 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id d17so9810950ljl.3;
+        Thu, 16 Jul 2020 13:25:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2B3j92dSMko8J2wSzj/MTkQ80Lgndi5SU2LXd/AvSxg=;
+        b=fKlGp8tNNQTRc2pZ/k7DJXl/e+y+EMOltfn0ctkc5TBjudSyx4+OmmzC1cPseIz5TZ
+         EhZ7SkVqtunfTCqDyTjnpz6enopRHyyFyicsv7j+SU1XozXwrLzP+j84rkTbX/9c5yag
+         rydqve0KDjL7dKEwcDpd7oSgHp+Ato4HPEAvlKdEJp63yTjr7a1wUlMCNrz5gRc/dz4x
+         2INFC8HTbOhvfnn7RMjv05K2XU/hrDQnPf1WHFo3IUn+hoRW3w23q+wrNabjbG+6zZ/H
+         SjLTz7a4dTsXazlzCfKd8IPqfa0/ZL/rt7Nt/RE3iqc6VFScfw5RosF/CBvwsshburFx
+         7zig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WmN0I5jfW0bngGda6eqXsjReLWui8Z/KXRe8dH1gHbE=;
-        b=NtfI65fjrYZsp7P9PHJeVhmj8r5K40inEZuyuSLng/sKCa/y1Xybxe+ehi7tkDwpjl
-         FIFMWE2hGZqnYKQXaJcn4f3ul/HhU3g6Va3yzg2wj5bvUvJHY06JjB2LqYdrOSxZla+i
-         ARK+/cbw2fV0HpXclzXJWinAe0gbZTX8tZ/R071CzJ0273iMMKTVX6idFaJtNE8pwYFU
-         tE4immoRqq1pzFGWS2eD4JzerR+3iYkpcmd++tzMDD5W4WibPcCQG2q4eOKlfUA/sLJe
-         WsDky73fdGuwZq50QsJcFKdUBjAElRbKQgJfiqsFzSkZjCyI+OHNVV5iGyfi1WOjTwr3
-         vBZw==
-X-Gm-Message-State: AOAM5333BGxIljnVq1oOeeLcbBeZ1W+vrZ3QYOGLMGbpVD9itap10eK/
-        HWxwjl3zV2ux8Cuv5CscGQ==
-X-Google-Smtp-Source: ABdhPJz170yVZyP5HHq8yZ4vT1JgTt7Qg8B1Oju34HwKnwbZ5cGMadOJBmV9Tpy+Dj0KutJq5I1K3A==
-X-Received: by 2002:a6b:8b11:: with SMTP id n17mr5857639iod.155.1594926576428;
-        Thu, 16 Jul 2020 12:09:36 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id o64sm3126510ilb.12.2020.07.16.12.09.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2020 12:09:35 -0700 (PDT)
-Received: (nullmailer pid 2680082 invoked by uid 1000);
-        Thu, 16 Jul 2020 19:09:34 -0000
-Date:   Thu, 16 Jul 2020 13:09:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     digetx@gmail.com, frankc@nvidia.com, hverkuil@xs4all.nl,
-        gregkh@linuxfoundation.org, sboyd@kernel.org, sakari.ailus@iki.fi,
-        devicetree@vger.kernel.org, helen.koike@collabora.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2B3j92dSMko8J2wSzj/MTkQ80Lgndi5SU2LXd/AvSxg=;
+        b=HXcHexAI6XI+zJ5SeO782Wwr1vCJ2LnwgfuEpwlubaEHYNQgmHzSYj14C0xRWNCvGN
+         L0GxIcohiFiZKyCjY8wkAlvkXkAAljhUCLBcXH8rTiAHzRyOsdyEjR8KriEwsBCrcgfx
+         JDWcKRH1EDkNAJ2fndmW1r/Oha+h1ZbsoASn7UquqilekY3qMAkAyX7Cc8bbqzYeIE4C
+         OuzwjKxgNVcG4RUGK8FMu0ybQSChSFGlv6Ay9aFuREPfEoHPmPyIWve7xaXRx6i5dEe6
+         Y2N2KYhq0LvSz1LHUwW55fL9CT5sClakkXeNDRrozp01vneisoyABE3UA3M8PiUpPBfd
+         f9cA==
+X-Gm-Message-State: AOAM530B2Ii4eybm7t8mhOLY6KoMC9gL/UjwYv3AVl6dCwylaRuJ7zLz
+        4Ot9MNfWYI1Dn71l547hTB8ixMj+
+X-Google-Smtp-Source: ABdhPJyy6GDksC2tHtwyAvGIf4mNUlDUF9P1X/kNsZoQJmE7dlwHaYHrNOQbrgaWGK4EiTSpdMRW7A==
+X-Received: by 2002:a2e:92d7:: with SMTP id k23mr2566872ljh.117.1594931120478;
+        Thu, 16 Jul 2020 13:25:20 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-76-4-184.pppoe.mtu-net.ru. [91.76.4.184])
+        by smtp.googlemail.com with ESMTPSA id j26sm1396678lfm.11.2020.07.16.13.25.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jul 2020 13:25:19 -0700 (PDT)
+Subject: Re: [RFC PATCH v3 04/18] i2c: tegra: Remove NULL pointer check before
+ clk_enable/disable/prepare/unprepare
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
+        hverkuil@xs4all.nl, sakari.ailus@iki.fi, robh+dt@kernel.org,
+        helen.koike@collabora.com
+Cc:     sboyd@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
-        robh+dt@kernel.org
-Subject: Re: [RFC PATCH v3 11/18] dt-bindings: tegra: Update VI and CSI
- bindings with port info
-Message-ID: <20200716190934.GA2680032@bogus>
+        linux-i2c@vger.kernel.org
 References: <1594786855-26506-1-git-send-email-skomatineni@nvidia.com>
- <1594786855-26506-12-git-send-email-skomatineni@nvidia.com>
+ <1594786855-26506-5-git-send-email-skomatineni@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <16e08405-8b71-e427-e675-6499e012a5b6@gmail.com>
+Date:   Thu, 16 Jul 2020 23:25:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1594786855-26506-12-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <1594786855-26506-5-git-send-email-skomatineni@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 14 Jul 2020 21:20:48 -0700, Sowjanya Komatineni wrote:
-> Update VI and CSI bindings to add port and endpoint nodes as per
-> media video-interfaces DT binding document.
+15.07.2020 07:20, Sowjanya Komatineni пишет:
+> clk_enable, clk_disable, clk_prepare, and clk_unprepare APIs have
+> implementation for checking clk pointer not NULL and clock consumers
+> can safely call these APIs without NULL pointer check.
+> 
+> So, this patch cleans up Tegra i2c driver to remove explicit checks
+> before these APIs.
 > 
 > Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 > ---
->  .../display/tegra/nvidia,tegra20-host1x.txt        | 92 +++++++++++++++++++++-
->  1 file changed, 90 insertions(+), 2 deletions(-)
-> 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Thanks!
+
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
