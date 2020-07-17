@@ -2,136 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB923223F28
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Jul 2020 17:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BBD223FC9
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Jul 2020 17:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726947AbgGQPLL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Jul 2020 11:11:11 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60292 "EHLO mx2.suse.de"
+        id S1727919AbgGQPkC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Jul 2020 11:40:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58844 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726945AbgGQPLL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 17 Jul 2020 11:11:11 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 53A09B1C4;
-        Fri, 17 Jul 2020 15:11:14 +0000 (UTC)
-Date:   Fri, 17 Jul 2020 17:11:08 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     "Saheed O. Bolarinwa" <refactormyself@gmail.com>
-Cc:     helgaas@kernel.org, bjorn@helgaas.com, skhan@linuxfoundation.org,
-        linux-pci@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [RFC PATCH 15/35] i2c/busses: Tidy Success/Failure checks
-Message-ID: <20200717171108.6e9f1b16@endymion>
-In-Reply-To: <20200713122247.10985-16-refactormyself@gmail.com>
-References: <20200713122247.10985-1-refactormyself@gmail.com>
-        <20200713122247.10985-16-refactormyself@gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726256AbgGQPkC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 17 Jul 2020 11:40:02 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D94742076A;
+        Fri, 17 Jul 2020 15:40:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595000401;
+        bh=oUWXy3XEEdACj4VXB3S0A8gloCT8UAGtaaANZlTOhcY=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=egmxPzhCJaO5Pklo2wFUgCisrdBaL7j2ncVrgoys66Ov9LXhgVzxXGFqIlODz/BYm
+         SBeDYsmknwq4gkwP74D2/j5goaQrPlJbtdJY2ErVv8nPqEDRjP6D+aAJZpnM8njnoZ
+         FRAkq9i/JLIztXRgN6hLt6p5JYwLKxyZ+Mt0PWp4=
+Date:   Fri, 17 Jul 2020 16:39:50 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        dmaengine@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-ide@vger.kernel.org
+In-Reply-To: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH 00/20] Add support for SATA/PCIe/USB2[3]/VIN/CSI on R8A774E1
+Message-Id: <159500037996.27597.9512992990495217445.b4-ty@kernel.org>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 13 Jul 2020 14:22:27 +0200, Saheed O. Bolarinwa wrote:
-> Signed-off-by: "Saheed O. Bolarinwa" <refactormyself@gmail.com>
-> ---
-> This patch depends on PATCH 15/35
-
-Not possible, as this *is* patch 15/35. Not really worth mentioning
-anyway, as it is expected that patches in a given series may depend on
-any earlier patch in the same series.
-
+On Thu, 16 Jul 2020 18:18:15 +0100, Lad Prabhakar wrote:
+> This patch series adds support for the following peripherals on RZ/G2H SoC
+>  * PCIe
+>  * SATA
+>  * USB2
+>  * USB3
+>  * Audio
+>  * VIN
+>  * CSI
 > 
->  drivers/i2c/busses/i2c-ali15x3.c |  5 ++---
->  drivers/i2c/busses/i2c-nforce2.c |  3 +--
->  drivers/i2c/busses/i2c-sis5595.c | 15 +++++----------
->  3 files changed, 8 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-ali15x3.c b/drivers/i2c/busses/i2c-ali15x3.c
-> index 359ee3e0864a..c9e779cc184e 100644
-> --- a/drivers/i2c/busses/i2c-ali15x3.c
-> +++ b/drivers/i2c/busses/i2c-ali15x3.c
-> @@ -167,11 +167,10 @@ static int ali15x3_setup(struct pci_dev *ALI15X3_dev)
->  	if(force_addr) {
->  		dev_info(&ALI15X3_dev->dev, "forcing ISA address 0x%04X\n",
->  			ali15x3_smba);
-> -		if (0 != pci_write_config_word(ALI15X3_dev,
-> -								SMBBA,
-> +		if (pci_write_config_word(ALI15X3_dev, SMBBA,
->  								ali15x3_smba))
->  			goto error;
+> [...]
 
-You can't possibly leave the code with such a ugly alignment and run
-away. The whole point of tidying patches it to have more readable code
-in the end, right?
+Applied to
 
-> -		if (0 != pci_read_config_word(ALI15X3_dev,
-> +		if (pci_read_config_word(ALI15X3_dev,
->  								SMBBA, &a))
->  			goto error;
->  		if ((a & ~(ALI15X3_SMB_IOSIZE - 1)) != ali15x3_smba) {
-> diff --git a/drivers/i2c/busses/i2c-nforce2.c b/drivers/i2c/busses/i2c-nforce2.c
-> index 385f4f446f36..54d2985b7aaf 100644
-> --- a/drivers/i2c/busses/i2c-nforce2.c
-> +++ b/drivers/i2c/busses/i2c-nforce2.c
-> @@ -327,8 +327,7 @@ static int nforce2_probe_smb(struct pci_dev *dev, int bar, int alt_reg,
->  		/* Older incarnations of the device used non-standard BARs */
->  		u16 iobase;
->  
-> -		if (pci_read_config_word(dev, alt_reg, &iobase)
-> -		    != 0) {
-> +		if (pci_read_config_word(dev, alt_reg, &iobase)) {
->  			dev_err(&dev->dev, "Error reading PCI config for %s\n",
->  				name);
->  			return -EIO;
-> diff --git a/drivers/i2c/busses/i2c-sis5595.c b/drivers/i2c/busses/i2c-sis5595.c
-> index fbe3ee31eae3..b016f48519d3 100644
-> --- a/drivers/i2c/busses/i2c-sis5595.c
-> +++ b/drivers/i2c/busses/i2c-sis5595.c
-> @@ -175,11 +175,9 @@ static int sis5595_setup(struct pci_dev *SIS5595_dev)
->  
->  	if (force_addr) {
->  		dev_info(&SIS5595_dev->dev, "forcing ISA address 0x%04X\n", sis5595_base);
-> -		if (pci_write_config_word(SIS5595_dev, ACPI_BASE, sis5595_base)
-> -		    != 0)
-> +		if (pci_write_config_word(SIS5595_dev, ACPI_BASE, sis5595_base))
->  			goto error;
-> -		if (pci_read_config_word(SIS5595_dev, ACPI_BASE, &a)
-> -		    != 0)
-> +		if (pci_read_config_word(SIS5595_dev, ACPI_BASE, &a))
->  			goto error;
->  		if ((a & ~(SIS5595_EXTENT - 1)) != sis5595_base) {
->  			/* doesn't work for some chips! */
-> @@ -188,16 +186,13 @@ static int sis5595_setup(struct pci_dev *SIS5595_dev)
->  		}
->  	}
->  
-> -	if (pci_read_config_byte(SIS5595_dev, SIS5595_ENABLE_REG, &val)
-> -	    != 0)
-> +	if (pci_read_config_byte(SIS5595_dev, SIS5595_ENABLE_REG, &val))
->  		goto error;
->  	if ((val & 0x80) == 0) {
->  		dev_info(&SIS5595_dev->dev, "enabling ACPI\n");
-> -		if (pci_write_config_byte(SIS5595_dev, SIS5595_ENABLE_REG, val | 0x80)
-> -		    != 0)
-> +		if (pci_write_config_byte(SIS5595_dev, SIS5595_ENABLE_REG, val | 0x80))
->  			goto error;
-> -		if (pci_read_config_byte(SIS5595_dev, SIS5595_ENABLE_REG, &val)
-> -		    != 0)
-> +		if (pci_read_config_byte(SIS5595_dev, SIS5595_ENABLE_REG, &val))
->  			goto error;
->  		if ((val & 0x80) == 0) {
->  			/* doesn't work for some chips? */
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Overall I'd be happy to have a more consistent style for checking
-errors on PCI config registers access, so this seems to be going into
-the right direction.
+Thanks!
 
--- 
-Jean Delvare
-SUSE L3 Support
+[1/1] dt-bindings: sound: renesas, rsnd: Document r8a774e1 bindings
+      commit: 92e37407811b98a7eb54eb6a6b3d65847a46e0e6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
