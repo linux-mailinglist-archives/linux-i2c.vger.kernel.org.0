@@ -2,158 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B73C223F06
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Jul 2020 17:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017A8223F1C
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Jul 2020 17:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbgGQPCD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Jul 2020 11:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
+        id S1726198AbgGQPGb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Jul 2020 11:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726351AbgGQPCD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Jul 2020 11:02:03 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE457C0619D2;
-        Fri, 17 Jul 2020 08:02:02 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id j11so13037913ljo.7;
-        Fri, 17 Jul 2020 08:02:02 -0700 (PDT)
+        with ESMTP id S1726351AbgGQPGa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Jul 2020 11:06:30 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DA1C0619D2;
+        Fri, 17 Jul 2020 08:06:30 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id w2so6787821pgg.10;
+        Fri, 17 Jul 2020 08:06:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Vj0THxkooDRCDITDoMqnCXMjOzpdY/9P9Eqdw05OK34=;
-        b=hdnZHm8bQ27NGLjoAEe+1uO25eN/PNI7VSElQYNWPhPlc8jPq4tKeRf4fNyFn8ZDvx
-         9/dx2ZJ96awCrq88v0nhlSjzj493SBM8KPyQgrP2/XfmDO9okpVXwx2YH3qZSS0CmzRe
-         tl963gqGdzJkYkrLYHInABOyoHwyJb4atjwysl6/N0lcud2YhH75l3pNrGsI/EnT/E4j
-         qKGf0aPyM4H0/wg27JAL2Od2WUbyof85heAsQkJvR0/NTqvLZYcS0+9JEtqPaTm0HOqx
-         mzdyLQt/vg07TTg/5V1r9AjpqbxbLzEso6X7s1019Gy+uO23Xr4NBtsmrqB0AxGFh02y
-         mFLw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=/55xejbSKs5P2qZfoxI33J7Lj9nDih8aJt+Pc7uME3w=;
+        b=L5K9EFCe1MPCuvD36c2gIhoIKa4A+0rKa1Gi9Hk62t0mYU7AYE/GnZ4/a8zwdmEfDe
+         Ikd3UzGXEYoHg46w9nROcTeIXoVBaJ/j4iQo6vv34QgCDi1Qrd0TRBy/40VCsYGQTAb+
+         ddfH1YWY0GhaBfBcI+3EI22VIBBfo4T7XLAUtiu8SoDWz4NYbaQ3CvzE10jGM30zp7uq
+         ko387szjjT9IIliX+ruAfmt37EEI+J1K6XUiutTYK48kHKMuTdiQDMSVUYvAyBXhjp7Z
+         GxqbAe2kyEz48+yYOYA4l2KON1GDXyDctOXkL/AjWhAUYUVWzlwNiNYH0iySsBUrMiNS
+         +ZAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Vj0THxkooDRCDITDoMqnCXMjOzpdY/9P9Eqdw05OK34=;
-        b=CTFINH1aaDXoInauwWRcbomWWXGJYp1/nodLxQWn+dmDHMwpXeAoojeX6xfHlSq21N
-         HRivBtGblY6wsLquw+kO8cvXB1oz/s1220Ik+sJnUUbmTNF2P9xnPU9lmN/YNavVPcJy
-         XM8F/xSRVoQU/YTx7zTHsUqLq0VcX/akCyB+sugfjPnqVUI6E6nPnjmThuzL2Vb4E7qY
-         Hr3QllMAwUdwp8VoAGSBOUCUZlW5m++U+7yzERukMcYViFXBeEwCNQ3ohICgxRVMe8ut
-         r+pfz4AczHZFRKlQ89hpxUqky9tmCtIAOggHlcmsp/z96TLxmMgQygUvSdU/ADFDdI3k
-         Fl/g==
-X-Gm-Message-State: AOAM533lHpP7kd0gUwkjnM8+47TNjmiWRAFxL5zBQ9kR/2IiSAMAZVNn
-        8IxDeYnV/cTq3jWmJ3/PdsCyAe7X
-X-Google-Smtp-Source: ABdhPJyQ+WCihOlXt8PupgeNCC7ANZ6gdFcfhNDBl4mxjPolZLOSXDJiSWkHQhdjI0Pmd2yZHYxryg==
-X-Received: by 2002:a2e:8758:: with SMTP id q24mr4389912ljj.109.1594998120753;
-        Fri, 17 Jul 2020 08:02:00 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-76-4-184.pppoe.mtu-net.ru. [91.76.4.184])
-        by smtp.googlemail.com with ESMTPSA id u7sm2281772lfi.45.2020.07.17.08.01.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jul 2020 08:01:59 -0700 (PDT)
-Subject: Re: [RFC PATCH v3 16/18] gpu: host1x: mipi: Split
- tegra_mipi_calibrate and tegra_mipi_wait
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
-        hverkuil@xs4all.nl, sakari.ailus@iki.fi, robh+dt@kernel.org,
-        helen.koike@collabora.com
-Cc:     sboyd@kernel.org, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <1594786855-26506-1-git-send-email-skomatineni@nvidia.com>
- <1594786855-26506-17-git-send-email-skomatineni@nvidia.com>
- <a06dec8f-7042-767b-545b-048685a7683d@gmail.com>
- <20d63eca-4b2b-584e-a391-a4fb64a16b40@nvidia.com>
- <c4945c77-5de1-e9b1-9f4f-cdd78bca18c7@gmail.com>
- <ce0c5ffb-f859-0eab-1ea5-044623dff221@nvidia.com>
- <a2b8169c-c4a3-4862-cd27-8c1a51ddc558@gmail.com>
- <4690e682-8495-2327-87c7-c2f06a7a479d@nvidia.com>
- <66812127-38cf-2af3-51c0-50edbe446e73@nvidia.com>
- <9b4fbf9d-d651-aa35-c0a6-b8f16aeb0900@gmail.com>
- <550f1796-67ca-5856-223d-c68360243954@nvidia.com>
- <ca8f2184-de30-03ec-9caf-e20a22d96a77@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <080b30c7-1dce-dd2f-dd96-40f6e25da4d6@gmail.com>
-Date:   Fri, 17 Jul 2020 18:01:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/55xejbSKs5P2qZfoxI33J7Lj9nDih8aJt+Pc7uME3w=;
+        b=dNt1PGl0xyZWdsHBfPIgdPI1jTG0Gh3zZNsC4ZAku2cpFhVBh1RntejthSs04+zg20
+         C2R8VbGufxU+qI7RXWWq72co9nxAlBjcNOPGVe4bGtnvvp9ys/TxEWPAdw749PDJ2Hwl
+         sJFbJiegWHa44Ql2VqraeukBnjy42zwTej5f7CLbyVx49dHW8cxECplLgCqK9nHzL29e
+         ANL2kto5Q3S7mC3NzIXLgBMOYGywor7TI6ZzEsL7Rg1ppNEf2M2RLPHS+WTr9rbP8Gac
+         2rO99nJe1gH2iGMGUdkyxrIPFQuZMgaOwgzLTiEwmhvPRmek2ISp00oVw49ccNb5RXA4
+         xAVg==
+X-Gm-Message-State: AOAM530/xVlXd5tN6ozXeHsjAX4xkAIHXjv3HzcuHiGYu/kbU0VPD4DQ
+        cQYufxFxbfdNtWKFQ3dKndcnl+bR
+X-Google-Smtp-Source: ABdhPJzGLDOJwDXXJwn5K0ilD1hGIdyKv676ZxeyxRLhx+5muDSP2CJ7RmxWK8kgropg5bT2I+M+VQ==
+X-Received: by 2002:aa7:9422:: with SMTP id y2mr8627037pfo.211.1594998390253;
+        Fri, 17 Jul 2020 08:06:30 -0700 (PDT)
+Received: from localhost ([89.208.244.139])
+        by smtp.gmail.com with ESMTPSA id t73sm8144973pfc.78.2020.07.17.08.06.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 17 Jul 2020 08:06:29 -0700 (PDT)
+Date:   Fri, 17 Jul 2020 23:06:25 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     corbet@lwn.net, michal.simek@xilinx.com,
+        wsa+renesas@sang-engineering.com, linus.walleij@linaro.org,
+        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH v3 1/2] drivers: provide devm_platform_request_irq()
+Message-ID: <20200717150625.GA26342@nuc8i5>
+References: <20200527142611.9006-1-zhengdejin5@gmail.com>
+ <20200717143030.GB25998@nuc8i5>
+ <20200717145946.GC3008378@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <ca8f2184-de30-03ec-9caf-e20a22d96a77@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200717145946.GC3008378@kroah.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-17.07.2020 07:46, Sowjanya Komatineni пишет:
-...
-> Looks like sequence posted in TRM need to be updated clearly for proper
-> MIPI CAL start and wait.
+On Fri, Jul 17, 2020 at 04:59:46PM +0200, Greg KH wrote:
+> On Fri, Jul 17, 2020 at 10:30:30PM +0800, Dejin Zheng wrote:
+> > On Wed, May 27, 2020 at 10:26:10PM +0800, Dejin Zheng wrote:
+> > Hi Jonathan, Greg, Rafael, Linus, Michal and Wolfram:
+> > 
+> > Could you help me review this patch if you have free time?
 > 
-> Correct steps should be like below
+> It's not anywhere in queue, sorry, please resend it?
+>
+Ok, I will resend it. Thanks very much!
+
+BR,
+Dejin
+
+> thanks,
 > 
-> 1. Set up CSI registers for use case such as number of lanes, virtual 
-> channel, etc.
-> 2. Initialize and power up CSI CIL interface
-> 3. Program MIPI CAL bias pads, cal configs, cal control registers and
-> enable calibration start
-> 4. Power up camera through the I2C interface and start sensor streaming
-> through the I2C
-> 
-> Note: All sensors might not leave pads in LP-11 state as sensor may be
-> power down when not in use.
-> 
-> So start streaming prior to checking for calibration done status as
-> LP-11 -> HS transition happens during sensor stream and calibration
-> logic can apply results to pads and update done status,
-> 
-> 5. Wait for done signal from calibration logic
-> 
-> 6. perform frame capture thru VI
-> 7. Frame done, CSI goes back to stop state, LP11
-> 
-> Will work internally to correct sequence in TRM ...
-
-Will be nice to have an updated TRM, thank you!
-
-Also, what about the auto-calibration? Isn't it needed to be enabled for
-CSI?
-
-> In mipi driver will update as below to have mipi clk enabled till
-> calibration status check is done.
-> 
-> Always tegra_mipi_wait() followes tegra_mipi_calibrate() in both DSI and
-> CSI. So below sequence should work good.
-> 
-> tegra_mipi_calibrate()
-> 
-> - clk_enable mipi cal
-> - program mipi cal registers (bias pads cfgs, mipi cal ctrl and trigger
-> calibration start)
-> 
-> tegra_mipi_wait()
-> - read mipi cal status and wait for active and done bits
-> - clk_disable mipi cal
-
-
-Maybe then it should be better to rename the functions like this:
-
-tegra_mipi_calibrate() -> tegra_mipi_start_calibration()
-tegra_mipi_wait()      -> tegra_mipi_finish_calibration().
-
-and there also should be tegra_mipi_cancel_calibration().
-
-
-Example:
-
-	tegra_mipi_start_calibration();
-
-	ret = v4l2_subdev_call(subdev, video, s_stream, on);
-	if (ret < 0) {
-		tegra_mipi_cancel_calibration();
-		goto err;
-	}
-
-	tegra_mipi_finish_calibration();
-
-
+> greg k-h
