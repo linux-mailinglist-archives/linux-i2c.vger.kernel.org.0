@@ -2,82 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80712223C33
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Jul 2020 15:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B175A223C55
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Jul 2020 15:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbgGQNTK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Jul 2020 09:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
+        id S1726928AbgGQNWS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Jul 2020 09:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726335AbgGQNTH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Jul 2020 09:19:07 -0400
+        with ESMTP id S1726383AbgGQNWR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Jul 2020 09:22:17 -0400
 Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B009C08C5DF
-        for <linux-i2c@vger.kernel.org>; Fri, 17 Jul 2020 06:19:07 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id e4so12599255ljn.4
-        for <linux-i2c@vger.kernel.org>; Fri, 17 Jul 2020 06:19:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F2DC08C5CE
+        for <linux-i2c@vger.kernel.org>; Fri, 17 Jul 2020 06:22:17 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id s9so12577791ljm.11
+        for <linux-i2c@vger.kernel.org>; Fri, 17 Jul 2020 06:22:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=npEG3Q8JCnzZnur7Cq6JNk21xogenaqhRA7YjsM9ezY=;
-        b=WJr5l5M97ciW2c/gjJQoeEJGmETPzM7Qr5IRBgUn1YBScg98hUkSzHSeJTg3OUPsqN
-         2Scj6G4YGWug3QNMtbZFC3QoKcWR/SfrE+ZlfdaUJN+16ebomabpyO890QKs0TfSwssg
-         GlwRJGVRacdblC9JpOlqVPmVq4YaiPWGimGKkIvrIMvoClA502INAywjscaO+jMQtYNV
-         FrdLzlPp8YBw4RfuDqDeOxlxXRKz4NzqUy+mC4V9pnVDfAFmeYBYR87xX8F1retQgweA
-         OtrVCgFfRj6hzdkmswIkViUTlADJQfm9E7KSYC+qLFxp8Njn3jYAupxNP8CkZ765YQba
-         sztw==
+        bh=Ss28C0+mM4ryhX0kbHHIUQ4RNo3GN12IhkPjDaqzOeE=;
+        b=NKRXiZK5Vg4lLt6JNcSMS4fVRZqGLbiD3ALj2er8z+jz02t/Me0ivmqvp1Eq4f7cto
+         iSCkX0wRPi8LV3a5neyPSxraBBE4AN80wprYFLY9UCrz8D/D0GmWu0Cvr7RSNz5TTQfy
+         O42+2QyiWUhRw462YRkD8gdgOs8f6GxEZIf1MLRpn6UV+LxJg0+4eZHnA8kUfaoVfV3v
+         fjyPwJSTHsX9XINiTWOt1p0/4oL6AsKumloGbenY15J2SvslvUBg1xIC0bVH5ORZxuMZ
+         2grQrDkqAtCVXtvSstlPbK9ERHW2+ZPX35PPQO5Z6elS8vuDABLJKbuilb5nmyf3rLCX
+         bh5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=npEG3Q8JCnzZnur7Cq6JNk21xogenaqhRA7YjsM9ezY=;
-        b=ndwVi8EMFtCTXYqXYySuoD53/d573CC27FI4NtoE4WZKjKf8y2vZ8dIguPlxPanvW3
-         q/H7Xq/Y32OoPXlDdhpp/OXwL/+TdSSIFbg+YOQMHuclhKamtY4oMwLw2lFmlkU8YxQW
-         rXh7B3c+pRcOyiZv08mNUikr3TgLKR6vRyHu34ZEeLxHon31faLT7nyBI/gU9jL83s6m
-         VOZ0Bdf6LNIu1mfouGIDELqKzFjKtwHeuexCPc3kdwHhnMrN0uXrfHL7DiFom8GICk1V
-         he7G0NhtgbdWzuMN/mJGDkrkw7r67bp70J0CiZDZDV4JgZEk2IbSLclseG3H6OEwuiIR
-         ANLw==
-X-Gm-Message-State: AOAM530GL1SdE7k19MW1ItceO4F1NL9wAfqE1dSbgBe4J2SoWjUKh0tK
-        GjjLlE2M7YU3BP/PQXM7uANthw==
-X-Google-Smtp-Source: ABdhPJxEMQOqJH/bssfF2AGyslt8NjbQrH6kwGSmbOflAyOcRsfWYlCaG5NnnWf5rAblr67M877IMw==
-X-Received: by 2002:a05:651c:c5:: with SMTP id 5mr4934690ljr.9.1594991945447;
-        Fri, 17 Jul 2020 06:19:05 -0700 (PDT)
+        bh=Ss28C0+mM4ryhX0kbHHIUQ4RNo3GN12IhkPjDaqzOeE=;
+        b=hYklZNyZbz+r8TqWt7uM9fp5MY/FuRa3XoR1Fiz7fAPbr68I/tZ+jI5dyK95vqT7lE
+         i2BvmChZCkgy7OHZ3PI0vqvPNTqKaEyUWXTB9t+b7AdvJVvsWsdUdc2EQ2zxKTZbB9is
+         rGtjebIJuXCRWKpiYVN7PPotYAnsS4baeQtuA92rXsOnrXjIBN9e9ZF3ZL8SnoOngo0r
+         RzHvsSIIHd64xLXovZdYIYBxK7HQyRjf4jtDAPYeUeXYDp9YRwRHYSRX8MdF5XBvIwzL
+         PneKdsjzbGLAvOPTPkPTr/IhFVenOZCsWzGXRsNBjiwgMkVfMX4J2HA4deXmD0FFrv5U
+         /5jQ==
+X-Gm-Message-State: AOAM531YZSAlwPRs7UJd4L1qdnP9p8Ukp+1giferATNYWxe5DkWNJeED
+        Ri0KRSjgzzdgso8VS+A2hh8j3g==
+X-Google-Smtp-Source: ABdhPJyQdCUcPwXAnEcnnv4mCw6GTSBF7SR7eCeWoXfWqYtwdr9WVEBVseii+1OEhPnuCx8eUP3JQw==
+X-Received: by 2002:a2e:760f:: with SMTP id r15mr4331219ljc.275.1594992135764;
+        Fri, 17 Jul 2020 06:22:15 -0700 (PDT)
 Received: from localhost (h-209-203.A463.priv.bahnhof.se. [155.4.209.203])
-        by smtp.gmail.com with ESMTPSA id y69sm1861534lfa.86.2020.07.17.06.19.04
+        by smtp.gmail.com with ESMTPSA id 203sm1649722ljf.14.2020.07.17.06.22.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2020 06:19:04 -0700 (PDT)
-Date:   Fri, 17 Jul 2020 15:19:04 +0200
+        Fri, 17 Jul 2020 06:22:15 -0700 (PDT)
+Date:   Fri, 17 Jul 2020 15:22:14 +0200
 From:   Niklas <niklas.soderlund@ragnatech.se>
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Magnus Damm <magnus.damm@gmail.com>,
-        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH 19/20] media: rcar-vin: Enable support for R8A774E1
-Message-ID: <20200717131904.GC175137@oden.dyn.berto.se>
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-20-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH 02/20] dt-bindings: thermal: rcar-gen3-thermal: Add
+ r8a774e1 support
+Message-ID: <20200717132214.GA177462@oden.dyn.berto.se>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1594919915-5225-20-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1594811350-14066-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
@@ -87,81 +92,29 @@ Hi Lad,
 
 Thanks for your work.
 
-On 2020-07-16 18:18:34 +0100, Lad Prabhakar wrote:
-> Add the SoC specific information for RZ/G2H (R8A774E1) SoC. Also add
-> the routing information between CSI2 and VIN (which is similar to
-> R-Car H3 except it lacks CSI41).
+On 2020-07-15 12:08:52 +0100, Lad Prabhakar wrote:
+> Document RZ/G2H (R8A774E1) SoC bindings.
 > 
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-
-I do not have access to the datasheet so I can't verify the routing 
-table so I trust it is correct.
 
 Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
 > ---
->  drivers/media/platform/rcar-vin/rcar-core.c | 40 +++++++++++++++++++++
->  1 file changed, 40 insertions(+)
+>  Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-> index 7440c8965d27..4fb76d1df308 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-core.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-core.c
-> @@ -944,6 +944,42 @@ static const struct rvin_info rcar_info_gen2 = {
->  	.max_height = 2048,
->  };
->  
-> +static const struct rvin_group_route rcar_info_r8a774e1_routes[] = {
-> +	{ .csi = RVIN_CSI40, .channel = 0, .vin = 0, .mask = BIT(0) | BIT(3) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 0, .mask = BIT(1) | BIT(4) },
-> +	{ .csi = RVIN_CSI40, .channel = 1, .vin = 0, .mask = BIT(2) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 1, .mask = BIT(0) },
-> +	{ .csi = RVIN_CSI40, .channel = 1, .vin = 1, .mask = BIT(1) | BIT(3) },
-> +	{ .csi = RVIN_CSI40, .channel = 0, .vin = 1, .mask = BIT(2) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 1, .mask = BIT(4) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 2, .mask = BIT(0) },
-> +	{ .csi = RVIN_CSI40, .channel = 0, .vin = 2, .mask = BIT(1) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 2, .mask = BIT(2) },
-> +	{ .csi = RVIN_CSI40, .channel = 2, .vin = 2, .mask = BIT(3) },
-> +	{ .csi = RVIN_CSI20, .channel = 2, .vin = 2, .mask = BIT(4) },
-> +	{ .csi = RVIN_CSI40, .channel = 1, .vin = 3, .mask = BIT(0) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 3, .mask = BIT(1) | BIT(2) },
-> +	{ .csi = RVIN_CSI40, .channel = 3, .vin = 3, .mask = BIT(3) },
-> +	{ .csi = RVIN_CSI20, .channel = 3, .vin = 3, .mask = BIT(4) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 4, .mask = BIT(1) | BIT(4) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 5, .mask = BIT(0) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 5, .mask = BIT(4) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 6, .mask = BIT(0) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 6, .mask = BIT(2) },
-> +	{ .csi = RVIN_CSI20, .channel = 2, .vin = 6, .mask = BIT(4) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 7, .mask = BIT(1) | BIT(2) },
-> +	{ .csi = RVIN_CSI20, .channel = 3, .vin = 7, .mask = BIT(4) },
-> +	{ /* Sentinel */ }
-> +};
-> +
-> +static const struct rvin_info rcar_info_r8a774e1 = {
-> +	.model = RCAR_GEN3,
-> +	.use_mc = true,
-> +	.max_width = 4096,
-> +	.max_height = 4096,
-> +	.routes = rcar_info_r8a774e1_routes,
-> +};
-> +
->  static const struct rvin_group_route rcar_info_r8a7795_routes[] = {
->  	{ .csi = RVIN_CSI40, .channel = 0, .vin = 0, .mask = BIT(0) | BIT(3) },
->  	{ .csi = RVIN_CSI20, .channel = 0, .vin = 0, .mask = BIT(1) | BIT(4) },
-> @@ -1220,6 +1256,10 @@ static const struct of_device_id rvin_of_id_table[] = {
->  		.compatible = "renesas,vin-r8a774c0",
->  		.data = &rcar_info_r8a77990,
->  	},
-> +	{
-> +		.compatible = "renesas,vin-r8a774e1",
-> +		.data = &rcar_info_r8a774e1,
-> +	},
->  	{
->  		.compatible = "renesas,vin-r8a7778",
->  		.data = &rcar_info_m1,
+> diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+> index b1a55ae497de..f386f2a7c06c 100644
+> --- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+> @@ -20,6 +20,7 @@ properties:
+>      enum:
+>        - renesas,r8a774a1-thermal # RZ/G2M
+>        - renesas,r8a774b1-thermal # RZ/G2N
+> +      - renesas,r8a774e1-thermal # RZ/G2H
+>        - renesas,r8a7795-thermal  # R-Car H3
+>        - renesas,r8a7796-thermal  # R-Car M3-W
+>        - renesas,r8a77961-thermal # R-Car M3-W+
 > -- 
 > 2.17.1
 > 
