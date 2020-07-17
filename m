@@ -2,128 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF1A223C64
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Jul 2020 15:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D0B223E0A
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Jul 2020 16:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726626AbgGQNXX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Jul 2020 09:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
+        id S1726204AbgGQOaf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Jul 2020 10:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726617AbgGQNXR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Jul 2020 09:23:17 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEDCC08C5DD
-        for <linux-i2c@vger.kernel.org>; Fri, 17 Jul 2020 06:23:16 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id d17so12644607ljl.3
-        for <linux-i2c@vger.kernel.org>; Fri, 17 Jul 2020 06:23:16 -0700 (PDT)
+        with ESMTP id S1726079AbgGQOaf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Jul 2020 10:30:35 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C76DC0619D2;
+        Fri, 17 Jul 2020 07:30:35 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id ls15so6606016pjb.1;
+        Fri, 17 Jul 2020 07:30:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=r5HS07ICf7E3a3QJxXXjTIF72wcfgMRIm+vhJsEtkcw=;
-        b=G/PDUzaIqdp1Gjj31VxhrrYLJsacpjKxAAeitpvz2KCk8yGUDLzVXlJ3q8zbAFP57j
-         r9tjyIvZkl67/BTM0oesxWME9XtuWS+46jAX+1t27JSS56lOyCbBDij7xZXHOa0dVyuh
-         7FiV92akZrkKRS6MZXvmgsB0stALd/vxBZU13pULuaIUK+0sVBzOXorHxtl227Nbmq6v
-         1uiigkmHl8tttEMfHoQVrbPXVQprxr/JmOjBIyTwAbPoVSPNRu9dqL2MOJAWM0bUcge0
-         RXWVCIoq2wClrs/UG/zsTqBNKGO7IieNNdBfsIyJSyiMRaT3pkmAj24448EPmt1d+j9I
-         m6tg==
+         :content-disposition:in-reply-to:user-agent;
+        bh=yaYi6h5B07rG4qeTioPMA8wvtoyirSTqGxPbp9nZgr0=;
+        b=NXVxk+YlNj2Eam6zrVgjF0M4+RBDbyoBR9TVuKV9iKiNEXXMbsznnDpgzHmNo0QVkk
+         FvVN2zikv8iZiT65/2RSrVb2MZlMnV4Q+prItsKSqekuu8t4y8FButbsVMyVT4IVYhxX
+         Kg5RW9MLCQzrsvBSqVI+sh+cBOzrpqNodI10vi+DpAWRdCsJyw5g482am//xgazEFb2X
+         ueUFfFJGPBhv92/tFMZgllhWDDfR9DHK5A4ixDGPQPZ0a6hTaETMowE888FbWutWhqiX
+         biH7n/ngAM8Gn6jl7hJ4OwLSX524YJXshUEh/UvKycGJmWxAGFUsTl8Z6IsUNuVCRLw1
+         vlEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=r5HS07ICf7E3a3QJxXXjTIF72wcfgMRIm+vhJsEtkcw=;
-        b=Rx0UpqdQDDvxx5YiBAHuyCu+FfRT7LWo5Sbg8mx3VUwx2FZL5Bqapgw6KRFx3mZHfM
-         4LwEQW/ta6ROY9sSdx+KXMwGomq7MRVuf+uDSYe2QnaGPCtPnCutFxLZCx3ZFcVirHYm
-         mMgPFsTiJLSL+4WgayjUxeidBZUHr1rzMnAJecbbVM8IqoXpERygBsER9LcfmMAg9S93
-         PKa8vidIy+1SshE9X8BSYbcZkWTJni1TgJH+rkw05mqaKZUDhmvir+82S0Ryc4IIQUh2
-         /yt+zgtDrvu4dZq+5gUJFf5YSMW+xsN03o3M7nopsqxbOBDjfcoUCPDzDyDHGvRYCxha
-         vL2g==
-X-Gm-Message-State: AOAM530bd2MoBYihG2j0shfIdPH7fcWtrZ8BvLEKPT4b/J2/Gz3FkNYe
-        JgOJrxZyqJ3823zhtLwbEmtQ3w==
-X-Google-Smtp-Source: ABdhPJzUBTptxuJTLZ8lzud6Q9kGgaD4DEmyeJiAqkYBb3btArneE3fHcpaQCMg8v1lLUysLkIvUDg==
-X-Received: by 2002:a2e:1441:: with SMTP id 1mr4364600lju.93.1594992194884;
-        Fri, 17 Jul 2020 06:23:14 -0700 (PDT)
-Received: from localhost (h-209-203.A463.priv.bahnhof.se. [155.4.209.203])
-        by smtp.gmail.com with ESMTPSA id w5sm1648620lji.49.2020.07.17.06.23.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2020 06:23:14 -0700 (PDT)
-Date:   Fri, 17 Jul 2020 15:23:13 +0200
-From:   Niklas <niklas.soderlund@ragnatech.se>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH 03/20] thermal: rcar_gen3_thermal: Add r8a774e1 support
-Message-ID: <20200717132313.GB177462@oden.dyn.berto.se>
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=yaYi6h5B07rG4qeTioPMA8wvtoyirSTqGxPbp9nZgr0=;
+        b=OftskObNsnVWVSzdt/iw2fxsmN6ZTppyR9OyDjfNTNN3kc5P3pmoUcBJdQj8wm3wBh
+         fYS5kU0+o01Ty1Ew5d3aFOW5I9iD4I7LRbglzI26qCHKTq8olzHslnbXoQiht7RtF9r9
+         Bt7hHrGkbYkVK+hqIAdcHVY44ZyNb9cOKOtDVtZ/zwV7cUdt8yw+i0SNCBIdSDmXFAtR
+         BjLmaCOD561uG0rgKTb+lxnhg1N7vrPi1W6dSwK0S24hAZ+RSnoDHs81enFnPU71Sw0R
+         Rf705zcB/JA61C0EMIiPRuEJMplx0LKaQ+PKWy5/WnsCB+PazCviT181YCMtme7q16F9
+         NU8g==
+X-Gm-Message-State: AOAM530Ya1GEDbj+yJmfBvbOarZ2Cj7iyCOc0l7LaiBzwKZ9d+vT45M2
+        E8YchoxLt00NCNUWJ6f8AkA=
+X-Google-Smtp-Source: ABdhPJwDrmJiLhA2SZTMj3XfHOsOUgrx43kJPrUeWY8fwYz+3Bagj07sK2ZvjRzGhbroviQYMv7sTQ==
+X-Received: by 2002:a17:902:547:: with SMTP id 65mr7767642plf.191.1594996234764;
+        Fri, 17 Jul 2020 07:30:34 -0700 (PDT)
+Received: from localhost ([89.208.244.139])
+        by smtp.gmail.com with ESMTPSA id y19sm7946672pgj.35.2020.07.17.07.30.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 17 Jul 2020 07:30:34 -0700 (PDT)
+Date:   Fri, 17 Jul 2020 22:30:30 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     corbet@lwn.net, gregkh@linuxfoundation.org,
+        michal.simek@xilinx.com, wsa+renesas@sang-engineering.com,
+        linus.walleij@linaro.org, linux-doc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH v3 1/2] drivers: provide devm_platform_request_irq()
+Message-ID: <20200717143030.GB25998@nuc8i5>
+References: <20200527142611.9006-1-zhengdejin5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1594811350-14066-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20200527142611.9006-1-zhengdejin5@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Lad,
+On Wed, May 27, 2020 at 10:26:10PM +0800, Dejin Zheng wrote:
+Hi Jonathan, Greg, Rafael, Linus, Michal and Wolfram:
 
-Thanks for your work.
+Could you help me review this patch if you have free time?
+Thank you very very much!
 
-On 2020-07-15 12:08:53 +0100, Lad Prabhakar wrote:
-> From: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+BR,
+Dejin
+> It will call devm_request_irq() after platform_get_irq() function
+> in many drivers, sometimes, it is not right for the error handling
+> of these two functions in some drivers. so provide this function
+> to simplify the driver.
 > 
-> Add r8a774e1 specific compatible string.
-> 
-> Signed-off-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
+> Cc: Michal Simek <michal.simek@xilinx.com>
+> Cc: Wolfram Sang <wsa@the-dreams.de>
+> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
 > ---
->  drivers/thermal/rcar_gen3_thermal.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> v2 -> v3:
+> 	- add devm_platform_request_irq() to devres.rst by Grygorii's
+> 	  suggestion.
+> v1 -> v2:
+> 	- The patch content has not changed. just resend it by this discussion:
+> 	  https://patchwork.ozlabs.org/project/linux-i2c/patch/20200520144821.8069-1-zhengdejin5@gmail.com/
 > 
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> index c48c5e9b8f20..3f129ce4adc0 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -314,6 +314,10 @@ static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
->  		.compatible = "renesas,r8a774b1-thermal",
->  		.data = &rcar_gen3_ths_tj_1,
->  	},
-> +	{
-> +		.compatible = "renesas,r8a774e1-thermal",
-> +		.data = &rcar_gen3_ths_tj_1,
-> +	},
->  	{
->  		.compatible = "renesas,r8a7795-thermal",
->  		.data = &rcar_gen3_ths_tj_1,
-> -- 
-> 2.17.1
-> 
-
--- 
-Regards,
-Niklas Söderlund
+ 
