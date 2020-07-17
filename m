@@ -2,94 +2,155 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BBD223FC9
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Jul 2020 17:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA543223FBB
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Jul 2020 17:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727919AbgGQPkC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Jul 2020 11:40:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58844 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726256AbgGQPkC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 17 Jul 2020 11:40:02 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D94742076A;
-        Fri, 17 Jul 2020 15:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595000401;
-        bh=oUWXy3XEEdACj4VXB3S0A8gloCT8UAGtaaANZlTOhcY=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=egmxPzhCJaO5Pklo2wFUgCisrdBaL7j2ncVrgoys66Ov9LXhgVzxXGFqIlODz/BYm
-         SBeDYsmknwq4gkwP74D2/j5goaQrPlJbtdJY2ErVv8nPqEDRjP6D+aAJZpnM8njnoZ
-         FRAkq9i/JLIztXRgN6hLt6p5JYwLKxyZ+Mt0PWp4=
-Date:   Fri, 17 Jul 2020 16:39:50 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        dmaengine@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-ide@vger.kernel.org
-In-Reply-To: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 00/20] Add support for SATA/PCIe/USB2[3]/VIN/CSI on R8A774E1
-Message-Id: <159500037996.27597.9512992990495217445.b4-ty@kernel.org>
+        id S1727010AbgGQPii (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Jul 2020 11:38:38 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:4423 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726293AbgGQPih (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Jul 2020 11:38:37 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f11c5c10001>; Fri, 17 Jul 2020 08:37:37 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Fri, 17 Jul 2020 08:38:37 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Fri, 17 Jul 2020 08:38:37 -0700
+Received: from [10.2.163.115] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 17 Jul
+ 2020 15:38:36 +0000
+Subject: Re: [RFC PATCH v3 16/18] gpu: host1x: mipi: Split
+ tegra_mipi_calibrate and tegra_mipi_wait
+To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
+        <helen.koike@collabora.com>
+CC:     <sboyd@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+References: <1594786855-26506-1-git-send-email-skomatineni@nvidia.com>
+ <1594786855-26506-17-git-send-email-skomatineni@nvidia.com>
+ <a06dec8f-7042-767b-545b-048685a7683d@gmail.com>
+ <20d63eca-4b2b-584e-a391-a4fb64a16b40@nvidia.com>
+ <c4945c77-5de1-e9b1-9f4f-cdd78bca18c7@gmail.com>
+ <ce0c5ffb-f859-0eab-1ea5-044623dff221@nvidia.com>
+ <a2b8169c-c4a3-4862-cd27-8c1a51ddc558@gmail.com>
+ <4690e682-8495-2327-87c7-c2f06a7a479d@nvidia.com>
+ <66812127-38cf-2af3-51c0-50edbe446e73@nvidia.com>
+ <9b4fbf9d-d651-aa35-c0a6-b8f16aeb0900@gmail.com>
+ <550f1796-67ca-5856-223d-c68360243954@nvidia.com>
+ <ca8f2184-de30-03ec-9caf-e20a22d96a77@nvidia.com>
+ <080b30c7-1dce-dd2f-dd96-40f6e25da4d6@gmail.com>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <b125deab-7900-6266-d405-4d7f029089b4@nvidia.com>
+Date:   Fri, 17 Jul 2020 08:41:58 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <080b30c7-1dce-dd2f-dd96-40f6e25da4d6@gmail.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1595000257; bh=BwQ54mkMiNyfXprqWjplx8huez0ofYFZmAj/V7xmfOg=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=MmFR4hMIZLpNgjGiHyv/ZezFZqR2R973bwrM7NbK947LTpR87DZCHpQ4IAVIJzpye
+         WkiP6wYzl9Z2M8OJTAeJdzO5oCwk7zqrNZN3lf1zqGGpO6kGBw2S69xdTV5W0FulN3
+         G4VUQpKP/NJgaVFeuV3hscuu+1h0IOz75tsMrgiuZwKNwXcY7eWBuovgj4oCyfYJLg
+         /roJVJVnudOOpuC/ceTL/73FEIduJboJtIngXdd6Gmzfou57zcBRmggwbgiuNI3uXN
+         0HOd4HdPcCb8HKhNpjHl1xyeb+lCJrhIFKVmq9stGs7qSK3N19jxxHL+BgRZwrtDy1
+         EfoT6jLaO3WrA==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 16 Jul 2020 18:18:15 +0100, Lad Prabhakar wrote:
-> This patch series adds support for the following peripherals on RZ/G2H SoC
->  * PCIe
->  * SATA
->  * USB2
->  * USB3
->  * Audio
->  * VIN
->  * CSI
-> 
-> [...]
 
-Applied to
+On 7/17/20 8:01 AM, Dmitry Osipenko wrote:
+> 17.07.2020 07:46, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> ...
+>> Looks like sequence posted in TRM need to be updated clearly for proper
+>> MIPI CAL start and wait.
+>>
+>> Correct steps should be like below
+>>
+>> 1. Set up CSI registers for use case such as number of lanes, virtual
+>> channel, etc.
+>> 2. Initialize and power up CSI CIL interface
+>> 3. Program MIPI CAL bias pads, cal configs, cal control registers and
+>> enable calibration start
+>> 4. Power up camera through the I2C interface and start sensor streaming
+>> through the I2C
+>>
+>> Note: All sensors might not leave pads in LP-11 state as sensor may be
+>> power down when not in use.
+>>
+>> So start streaming prior to checking for calibration done status as
+>> LP-11 -> HS transition happens during sensor stream and calibration
+>> logic can apply results to pads and update done status,
+>>
+>> 5. Wait for done signal from calibration logic
+>>
+>> 6. perform frame capture thru VI
+>> 7. Frame done, CSI goes back to stop state, LP11
+>>
+>> Will work internally to correct sequence in TRM ...
+> Will be nice to have an updated TRM, thank you!
+>
+> Also, what about the auto-calibration? Isn't it needed to be enabled for
+> CSI?
+STARTCAL does one time calibration and with AUTOCAL calibration will be=20
+triggered periodically.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+For pads PULLUP/PULLDN/TERM impedance calibration, we only need one-time=20
+calibration on pads power up.
 
-Thanks!
+We always use one time pads calibration for CSI.
 
-[1/1] dt-bindings: sound: renesas, rsnd: Document r8a774e1 bindings
-      commit: 92e37407811b98a7eb54eb6a6b3d65847a46e0e6
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+>
+>> In mipi driver will update as below to have mipi clk enabled till
+>> calibration status check is done.
+>>
+>> Always tegra_mipi_wait() followes tegra_mipi_calibrate() in both DSI and
+>> CSI. So below sequence should work good.
+>>
+>> tegra_mipi_calibrate()
+>>
+>> - clk_enable mipi cal
+>> - program mipi cal registers (bias pads cfgs, mipi cal ctrl and trigger
+>> calibration start)
+>>
+>> tegra_mipi_wait()
+>> - read mipi cal status and wait for active and done bits
+>> - clk_disable mipi cal
+>
+> Maybe then it should be better to rename the functions like this:
+>
+> tegra_mipi_calibrate() -> tegra_mipi_start_calibration()
+> tegra_mipi_wait()      -> tegra_mipi_finish_calibration().
+>
+> and there also should be tegra_mipi_cancel_calibration().
+>
+>
+> Example:
+>
+> 	tegra_mipi_start_calibration();
+>
+> 	ret =3D v4l2_subdev_call(subdev, video, s_stream, on);
+> 	if (ret < 0) {
+> 		tegra_mipi_cancel_calibration();
+> 		goto err;
+> 	}
+>
+> 	tegra_mipi_finish_calibration();
+>
+>
