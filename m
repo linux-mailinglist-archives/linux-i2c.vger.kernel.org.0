@@ -2,137 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BA022507C
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 Jul 2020 09:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EAD3225218
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 Jul 2020 15:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726024AbgGSH7g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 19 Jul 2020 03:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S1726146AbgGSN7l (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 19 Jul 2020 09:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726021AbgGSH7g (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 Jul 2020 03:59:36 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2057C0619D4
-        for <linux-i2c@vger.kernel.org>; Sun, 19 Jul 2020 00:59:35 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id j21so8181047lfe.6
-        for <linux-i2c@vger.kernel.org>; Sun, 19 Jul 2020 00:59:35 -0700 (PDT)
+        with ESMTP id S1725988AbgGSN7l (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 Jul 2020 09:59:41 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2108C0619D2;
+        Sun, 19 Jul 2020 06:59:40 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id m22so9045784pgv.9;
+        Sun, 19 Jul 2020 06:59:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uA/tElCwH30ICqo0HsDr0006JRE1RTl1ltyIJoP+IYs=;
-        b=JLodqvhRJryKw7MP1WebX9TWzZO9Cyyuo5zWsJSM/ZaXprHq5Z8tnfMFPb5hnsPN+f
-         wXXHDogN7+7v8xTzjoDtfE/UsCgeYj6MjompG0DFTCSQ6arvkeZFM5OyxLKXFq5qtK6V
-         zHOtlFj9p6gAU3lE8fcEyi8929tq0xVpGJfBw=
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=eAMuwrdgZT+muWB0jbfvOv3S8Lq4I5ca8nN0yy/ukz0=;
+        b=gQUNuyKuer2aVg+6zju4B6jW7FIv2GqsAgJ+M8TgSIPMdHFHkBjH1FGBEOtK3hR6fR
+         OA8w7cGg9AMlxtp1fign1fIN7Ez5zjqP+qpCVvCgvKnx4Vj7IgZzMUciGtTkX1jgOC+o
+         +1ae8Dw7u7tKH7O3VuTB0hP5ZJt2zcppNmiBRQCr5C7BYTP7UskNINiPTL3EYF+a2S+d
+         K0HVaUuftzhK4lyu/QwKa78yeAQ+IIgZiitzKNxJpc3GIWUteYIJ5dW4nOKTPAu5bDOL
+         zMeGzYozRgLB851TiCD1HLvFFblkR4j1WQlZYrdVm0mgO8eNR3BQ2LEqrZ1jhyAl5P0Z
+         goNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uA/tElCwH30ICqo0HsDr0006JRE1RTl1ltyIJoP+IYs=;
-        b=cD0xstg68neFqqog7bHnjLrixEPyvzqp506GU3mCiqTQRSxdME77HMXNUoM6ni279y
-         BKuHToyC0n1jeVyWsXyYtfH0y3I/yxoT3JYzx7i3Er4G/DaETB1Z4bA2RI/N3b3CDfE0
-         9YJ2i32iM/gwSKLFOlMVEA5TZ47g/sOQ3G33hcgAX2BSgJomlUtxe1SL4XSL9it9XBK2
-         KUVEFpkhGRXC8PDed3077eAqHCYvQGMYWluM5+5A0jOVVf5AmIt7kKb71DIr5jUSwPmx
-         PaqsDZ7enxZENStkK02iDoNbn7hdoRIInEEjuVQvAi/X7pRBixBD4nKOrCZ9r0QnR66p
-         uxoA==
-X-Gm-Message-State: AOAM532263jRDF3UYqzzCXR9vMKKx/VW9PyHdW78n2MBw3fnr+qPXic0
-        b93bXVs/ykt0qlSIRKz2NbVzRaOhMjJ43BbHs0sNtw==
-X-Google-Smtp-Source: ABdhPJwPQScejqOcNk37vjQoYZiYu9cG/oplCTLUp7LUHByI5OAlsR9eWwwDdsRm0CdypE/Fwft/tJHaTL+P6CmCMxg=
-X-Received: by 2002:a19:fc14:: with SMTP id a20mr429329lfi.0.1595145573696;
- Sun, 19 Jul 2020 00:59:33 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=eAMuwrdgZT+muWB0jbfvOv3S8Lq4I5ca8nN0yy/ukz0=;
+        b=c1zh4R40VYT9Sa50a8NxGPHGYZyeOzyWP/JLlc6u2/G1z2tlUeYYzTo8xhNVjKJ75Q
+         FXMAkQW8uTjYJjzjVK5P2ruKacNhG3fEQj2vE/gWKxUUbImHV5GGUTgKQL9/NQyxzDDk
+         2A+JuI8AKmrv3UOsNo1i41YuRkf/+HaeT65BGrxyJYPRdUllnymrgx7kqYBjxSLOE+r3
+         TZEZerVwD96TWJlS3JOYeNcyZm9Du8n5flrb32iK5J/qEEqIUsXsa3HJIQsZOM9FzS4r
+         Ne4IBDvFaW7Itz95/hVSmK+oYb8O4fANBAkSg0fThahY5ffKFiCrjXB1GBYTlZ8iY/2s
+         kORg==
+X-Gm-Message-State: AOAM533TpjDqUblOUpURbuaKKnAIbOeYXhNfV2NiglIO/g2YPRktK7y9
+        knXJaRbu2W6bwb2VYx2RBQU=
+X-Google-Smtp-Source: ABdhPJzAcSGTRrLFOmP79A7ggudrEJgXuKyu8xMVkv0QQMyCBYdTZ/AamCIx35vhcp1GbD6dWOo6aA==
+X-Received: by 2002:a62:ce83:: with SMTP id y125mr14969637pfg.181.1595167180458;
+        Sun, 19 Jul 2020 06:59:40 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y24sm14438897pfp.217.2020.07.19.06.59.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 19 Jul 2020 06:59:40 -0700 (PDT)
+Date:   Sun, 19 Jul 2020 06:59:39 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 16/20] dt-bindings: watchdog: renesas,wdt: Document
+ r8a774e1 support
+Message-ID: <20200719135939.GA37256@roeck-us.net>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-17-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-References: <1595115599-100054-1-git-send-email-dphadke@linux.microsoft.com>
-In-Reply-To: <1595115599-100054-1-git-send-email-dphadke@linux.microsoft.com>
-From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Date:   Sun, 19 Jul 2020 13:29:21 +0530
-Message-ID: <CAHO=5PFGqyacnneCp76brDymyZK0axG+4n3RPThFp6w=-xP7hA@mail.gmail.com>
-Subject: Re: [PATCH] i2c: iproc: fix race between client unreg and isr
-To:     Dhananjay Phadke <dphadke@linux.microsoft.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Ray Jui <rjui@broadcom.com>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1594811350-14066-17-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Jul 19, 2020 at 5:10 AM Dhananjay Phadke
-<dphadke@linux.microsoft.com> wrote:
->
-> When i2c client unregisters, synchronize irq before setting
-> iproc_i2c->slave to NULL.
->
-> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000318
->
-> [  371.020421] pc : bcm_iproc_i2c_isr+0x530/0x11f0
-> [  371.025098] lr : __handle_irq_event_percpu+0x6c/0x170
-> [  371.030309] sp : ffff800010003e40
-> [  371.033727] x29: ffff800010003e40 x28: 0000000000000060
-> [  371.039206] x27: ffff800010ca9de0 x26: ffff800010f895df
-> [  371.044686] x25: ffff800010f18888 x24: ffff0008f7ff3600
-> [  371.050165] x23: 0000000000000003 x22: 0000000001600000
-> [  371.055645] x21: ffff800010f18888 x20: 0000000001600000
-> [  371.061124] x19: ffff0008f726f080 x18: 0000000000000000
-> [  371.066603] x17: 0000000000000000 x16: 0000000000000000
-> [  371.072082] x15: 0000000000000000 x14: 0000000000000000
-> [  371.077561] x13: 0000000000000000 x12: 0000000000000001
-> [  371.083040] x11: 0000000000000000 x10: 0000000000000040
-> [  371.088519] x9 : ffff800010f317c8 x8 : ffff800010f317c0
-> [  371.093999] x7 : ffff0008f805b3b0 x6 : 0000000000000000
-> [  371.099478] x5 : ffff0008f7ff36a4 x4 : ffff8008ee43d000
-> [  371.104957] x3 : 0000000000000000 x2 : ffff8000107d64c0
-> [  371.110436] x1 : 00000000c00000af x0 : 0000000000000000
->
-> [  371.115916] Call trace:
-> [  371.118439]  bcm_iproc_i2c_isr+0x530/0x11f0
-> [  371.122754]  __handle_irq_event_percpu+0x6c/0x170
-> [  371.127606]  handle_irq_event_percpu+0x34/0x88
-> [  371.132189]  handle_irq_event+0x40/0x120
-> [  371.136234]  handle_fasteoi_irq+0xcc/0x1a0
-> [  371.140459]  generic_handle_irq+0x24/0x38
-> [  371.144594]  __handle_domain_irq+0x60/0xb8
-> [  371.148820]  gic_handle_irq+0xc0/0x158
-> [  371.152687]  el1_irq+0xb8/0x140
-> [  371.155927]  arch_cpu_idle+0x10/0x18
-> [  371.159615]  do_idle+0x204/0x290
-> [  371.162943]  cpu_startup_entry+0x24/0x60
-> [  371.166990]  rest_init+0xb0/0xbc
-> [  371.170322]  arch_call_rest_init+0xc/0x14
-> [  371.174458]  start_kernel+0x404/0x430
->
-> Fixes: c245d94ed106 ("i2c: iproc: Add multi byte read-write support for slave mode")
-> Signed-off-by: Dhananjay Phadke <dphadke@linux.microsoft.com>
+On Wed, Jul 15, 2020 at 12:09:06PM +0100, Lad Prabhakar wrote:
+> RZ/G2H (a.k.a. R8A774E1) watchdog implementation is compatible
+> with R-Car Gen3, therefore add the relevant documentation.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  drivers/i2c/busses/i2c-bcm-iproc.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-> index b58224b7b..37d2a79e7 100644
-> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
-> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-> @@ -1074,14 +1074,15 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
->         if (!iproc_i2c->slave)
->                 return -EINVAL;
->
-> -       iproc_i2c->slave = NULL;
-> -
->         /* disable all slave interrupts */
->         tmp = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
->         tmp &= ~(IE_S_ALL_INTERRUPT_MASK <<
->                         IE_S_ALL_INTERRUPT_SHIFT);
->         iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, tmp);
->
-> +       synchronize_irq(iproc_i2c->irq);
-> +       iproc_i2c->slave = NULL;
-> +
->         /* Erase the slave address programmed */
->         tmp = iproc_i2c_rd_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET);
->         tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
-
-Looks good to me. Thank you for the patch.
-Reviewed-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-
-Regards,
-Rayagonda
+>  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> index 572f4c912fef..6933005b52bd 100644
+> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> @@ -41,6 +41,7 @@ properties:
+>                - renesas,r8a774a1-wdt     # RZ/G2M
+>                - renesas,r8a774b1-wdt     # RZ/G2N
+>                - renesas,r8a774c0-wdt     # RZ/G2E
+> +              - renesas,r8a774e1-wdt     # RZ/G2H
+>                - renesas,r8a7795-wdt      # R-Car H3
+>                - renesas,r8a7796-wdt      # R-Car M3-W
+>                - renesas,r8a77961-wdt     # R-Car M3-W+
