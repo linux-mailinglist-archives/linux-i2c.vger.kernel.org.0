@@ -2,137 +2,393 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C93232253B4
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 Jul 2020 21:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD232256B8
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Jul 2020 06:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726097AbgGSTgC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 19 Jul 2020 15:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbgGSTgC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 19 Jul 2020 15:36:02 -0400
-Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E4BC0619D2;
-        Sun, 19 Jul 2020 12:36:02 -0700 (PDT)
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id AA300BC065;
-        Sun, 19 Jul 2020 19:35:59 +0000 (UTC)
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     jdelvare@suse.com, wsa@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH for v5.9] i2c: Replace HTTP links with HTTPS ones
-Date:   Sun, 19 Jul 2020 21:35:53 +0200
-Message-Id: <20200719193553.61319-1-grandmaster@al2klimov.de>
+        id S1725815AbgGTElS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 Jul 2020 00:41:18 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:15044 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725287AbgGTElS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Jul 2020 00:41:18 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f151ff60000>; Sun, 19 Jul 2020 21:39:18 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Sun, 19 Jul 2020 21:41:17 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Sun, 19 Jul 2020 21:41:17 -0700
+Received: from [10.2.168.236] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 20 Jul
+ 2020 04:41:16 +0000
+Subject: Re: [RFC PATCH v3 00/18] Support for Tegra video capture from
+ external sensor
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <sakari.ailus@iki.fi>,
+        <robh+dt@kernel.org>, <helen.koike@collabora.com>
+CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+References: <1594786855-26506-1-git-send-email-skomatineni@nvidia.com>
+ <f03bdb89-df7c-e9e8-1512-d57e5d2332bf@xs4all.nl>
+ <d258fb56-14f6-a091-64e9-48294073c696@nvidia.com>
+ <458db01d-3c9c-1aec-0d28-edcbf0265aa4@xs4all.nl>
+ <5694f74a-be8e-7a95-1739-0a5fc9820597@nvidia.com>
+ <9aa8be89-d181-2dca-36ca-ea118bd5b0a7@nvidia.com>
+ <2f9ecba7-3d05-8a68-f2ad-546470780642@nvidia.com>
+Message-ID: <0e5b26b6-031a-c07c-0295-4cce0712779d@nvidia.com>
+Date:   Sun, 19 Jul 2020 21:41:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +++++
-X-Spam-Level: *****
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+In-Reply-To: <2f9ecba7-3d05-8a68-f2ad-546470780642@nvidia.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1595219958; bh=Y2hnBSi/9zICMzuo0hZ0Zmeo249UyL6uH8Lo0H246MA=;
+        h=X-PGP-Universal:Subject:From:To:CC:References:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=RPSQYiDQt2NvvSzMZmgUB17Srisiy60FwsjfA4ZNf2opnhoEmUfC/7svuW6WIQgzr
+         4kq2FSONFeyfmiArDT4nExaAqF1kZYYgpJHsv0ccRXDKzjPY0tn4jADh/R3nH30FGN
+         7KfoI0DLzagwroL0/786W6Ugc3gm/FdRr3+XUWnXxoyu8MNapxKhXcuqUtIAQQtClt
+         JxDdOtuEkFnZHS/1N2qcQJeez5IcASic50cilhB9Dp9WFl1yzi3LHhPvyvdxWn2/cW
+         Ys9heU6rzIcKuZnxfn6KiSTb7oU7uhwDPtCk+3v2oC9pkBKALcTW2hKAK10fvcrI7K
+         brXB9rEQor07Q==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Rationale:
-Reduces attack surface on kernel devs opening the links for MITM
-as HTTPS traffic is much harder to manipulate.
 
-Deterministic algorithm:
-For each file:
-  If not .svg:
-    For each line:
-      If doesn't contain `\bxmlns\b`:
-        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
-            If both the HTTP and HTTPS versions
-            return 200 OK and serve the same content:
-              Replace HTTP with HTTPS.
+On 7/17/20 10:48 AM, Sowjanya Komatineni wrote:
+>
+> On 7/17/20 10:38 AM, Sowjanya Komatineni wrote:
+>>
+>> On 7/17/20 10:23 AM, Sowjanya Komatineni wrote:
+>>>
+>>> On 7/17/20 10:08 AM, Hans Verkuil wrote:
+>>>> On 17/07/2020 18:34, Sowjanya Komatineni wrote:
+>>>>> On 7/17/20 3:54 AM, Hans Verkuil wrote:
+>>>>>> Hi Sowjanya,
+>>>>>>
+>>>>>> On 15/07/2020 06:20, Sowjanya Komatineni wrote:
+>>>>>>> This series adds support for video capture from external camera=20
+>>>>>>> sensor to
+>>>>>>> Tegra video driver.
+>>>>>>>
+>>>>>>> Jetson TX1 has camera expansion connector and supports custom=20
+>>>>>>> camera module
+>>>>>>> designed as per TX1 design specification.
+>>>>>>>
+>>>>>>> This series also enables camera capture support for Jetson Nano=20
+>>>>>>> which has
+>>>>>>> Raspberry PI camera header.
+>>>>>>>
+>>>>>>> This series is tested with IMX219 camera sensor.
+>>>>>>>
+>>>>>>> This series include,
+>>>>>>>
+>>>>>>> VI I2C related fixes
+>>>>>>> - Camera sensor programming happens through VI I2C which is on=20
+>>>>>>> host1x bus.
+>>>>>>> - These patches includes device tree and I2C driver fixes for VI=20
+>>>>>>> I2C.
+>>>>>>>
+>>>>>>> Tegra video driver updates
+>>>>>>> - TPG Vs Non-TPG based on Kconfig
+>>>>>>> - Support for external sensor video capture based on device=20
+>>>>>>> graph from DT.
+>>>>>>> - Support for selection ioctl operations
+>>>>>>> - Tegra MIPI CSI pads calibration
+>>>>>>> - CSI T-CLK and T-HS settle time computation based on clock rates.
+>>>>>>>
+>>>>>>> Host1x driver updates
+>>>>>>> - Adds API to allow creating mipi device for specific device node.
+>>>>>>> - Splits MIPI pads calibrate start and waiting for calibration=20
+>>>>>>> to be done.
+>>>>>>>
+>>>>>>> Device tree updates
+>>>>>>> - Adds camera connector 2V8, 1V8, 1V2 regulator supplies to=20
+>>>>>>> Jetson TX1 DT.
+>>>>>>> - Enabled VI and CSI support in Jetson Nano DT.
+>>>>>> I'm doing a bit of stress testing with:
+>>>>>>
+>>>>>> while true; do v4l2-ctl --stream-mmap --stream-count=3D1; done
+>>>>>>
+>>>>>> and I see that the imx274 has often streaming failures:
+>>>>>>
+>>>>>> [=C2=A0 172.025144] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 179.025192] IMX274 8-001a: imx274_write_mbreg : i2c bulk wri=
+te=20
+>>>>>> failed, 3132 =3D 870 (2 bytes)
+>>>>>> [=C2=A0 179.033575] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 226.525378] IMX274 8-001a: imx274_write_mbreg : i2c bulk wri=
+te=20
+>>>>>> failed, 3130 =3D 878 (2 bytes)
+>>>>>> [=C2=A0 226.533761] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 227.029325] IMX274 8-001a: imx274_write_mbreg : i2c bulk wri=
+te=20
+>>>>>> failed, 30f6 =3D 107 (2 bytes)
+>>>>>> [=C2=A0 227.037758] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 247.025218] IMX274 8-001a: imx274_write_mbreg : i2c bulk wri=
+te=20
+>>>>>> failed, 30f6 =3D 107 (2 bytes)
+>>>>>> [=C2=A0 247.033658] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 293.025517] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 309.024727] IMX274 8-001a: imx274_write_mbreg : i2c bulk wri=
+te=20
+>>>>>> failed, 30e0 =3D 0 (2 bytes)
+>>>>>> [=C2=A0 309.032969] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 309.529506] IMX274 8-001a: imx274_write_mbreg : i2c bulk wri=
+te=20
+>>>>>> failed, 30f8 =3D 11d2 (3 bytes)
+>>>>>> [=C2=A0 309.538103] IMX274 8-001a: imx274_set_frame_length error =3D=
+ -121
+>>>>>> [=C2=A0 309.544102] IMX274 8-001a: imx274_set_frame_interval error =
+=3D -121
+>>>>>> [=C2=A0 309.550243] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 314.025561] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 329.025586] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 340.529567] IMX274 8-001a: imx274_write_mbreg : i2c bulk wri=
+te=20
+>>>>>> failed, 303a =3D f0c (2 bytes)
+>>>>>> [=C2=A0 340.538009] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 347.525627] IMX274 8-001a: imx274_write_mbreg : i2c bulk wri=
+te=20
+>>>>>> failed, 30f6 =3D 107 (2 bytes)
+>>>>>> [=C2=A0 347.534008] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 365.033640] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 437.525788] IMX274 8-001a: imx274_write_mbreg : i2c bulk wri=
+te=20
+>>>>>> failed, 3038 =3D c (2 bytes)
+>>>>>> [=C2=A0 437.533997] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 456.029780] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 472.025862] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 498.025861] IMX274 8-001a: s_stream failed
+>>>>>> [=C2=A0 500.025905] IMX274 8-001a: s_stream failed
+>>>>>>
+>>>>>> where v4l2-ctl returns:
+>>>>>>
+>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 VIDIOC_STREAMON returned -1 (Remote I/=
+O error)
+>>>>>>
+>>>>>> I don't see this with the imx219.
+>>>>>>
+>>>>>> I also see this occasionally:
+>>>>>>
+>>>>>> [Fri Jul 17 12:51:42 2020] video4linux video1: failed to run=20
+>>>>>> capture start kthread: -4
+>>>>>>
+>>>>>> Something is not stable here.
+>>>>>>
+>>>>>> Regards,
+>>>>>>
+>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0Hans
+>>>>> Hi Hans,
+>>>>>
+>>>>> Running the same single frame continuous loop for more than 2=20
+>>>>> hours now
+>>>>> and I don't see any failure.
+>>>>>
+>>>>> Above failure shows i2c bulk writes to IMX274 failure due to which
+>>>>> s_stream also failed.
+>>>>>
+>>>>> Not sure if its due to i2c mux in the path to sensor on your module
+>>>>> causing some issue when there is more i2c write traffic as we are=20
+>>>>> doing
+>>>>> single stream in continuous loop. Also IMX219 does not show on=20
+>>>>> your side
+>>>>> so something specific to IMX274 setup probably.
+>>>> I'll take a closer look next week. Good to know that it works fine=20
+>>>> for you.
+>>>>
+>>>>>
+>>>>> Regarding kthread_run failure where kthread_run() returned -EINTR=20
+>>>>> during
+>>>>> capture start thread, I always see this happen at the point of=20
+>>>>> stopping
+>>>>> the continuous single stream while loop by pressing ctrl+c after few
+>>>>> loops of execution.
+>>>> Hmm, if this is normal behavior, then should this message be a=20
+>>>> debug message
+>>>> only? Or perhaps only show the message if the error code !=3D EINTR.
+>>>
+>>> I believe its good to still show this as its reported by kthread_run=20
+>>> -> kthread_create_on_node.
+>>>
+>>> But not sure in real usecase we will ever use while true like this=20
+>>> and we should use script to also break while loop along with=20
+>>> v4l2-ctl termination when ctrl-c terminate request happens.
+>>>
+>> Hi Hans, As this happens only during this type of case, I can update=20
+>> to show message only when error code !=3D EINTR.
+>>
+>> Thanks
+>>
+>> Sowjanya
+>
+>
+> Sorry, Was thinking to not mask debug message for -EINTR in case if it=20
+> happens in any other valid scenarios. If you still want to mask, will=20
+> update in next version.
+>
+As we are running application that uses threads depending on when ctrl-c=20
+gets hit I see sigkill happens during kthread run even with break=20
+causing this.
 
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
----
- Continuing my work started at 93431e0607e5.
- See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
- (Actually letting a shell for loop submit all this stuff for me.)
+Good way I see it working all the time is to use crtl-z and then kill=20
+application as below
 
- If there are any URLs to be removed completely
- or at least not (just) HTTPSified:
- Just clearly say so and I'll *undo my change*.
- See also: https://lkml.org/lkml/2020/6/27/64
+Command to run
 
- If there are any valid, but yet not changed URLs:
- See: https://lkml.org/lkml/2020/6/26/837
+while true; do ./v4l2-ctl --stream-mmap --stream-count=3D1; done
 
- If you apply the patch, please let me know.
+To stop ,
 
- Sorry again to all maintainers who complained about subject lines.
- Now I realized that you want an actually perfect prefixes,
- not just subsystem ones.
- I tried my best...
- And yes, *I could* (at least half-)automate it.
- Impossible is nothing! :)
+press ctrl-z and then execute kill %%
 
 
- Documentation/i2c/busses/i2c-ali1535.rst | 2 +-
- Documentation/i2c/busses/i2c-ali15x3.rst | 2 +-
- Documentation/i2c/busses/i2c-piix4.rst   | 4 ++--
- drivers/i2c/busses/i2c-ali1535.c         | 2 +-
- drivers/i2c/busses/i2c-ali15x3.c         | 2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/i2c/busses/i2c-ali1535.rst b/Documentation/i2c/busses/i2c-ali1535.rst
-index 6941064730dc..3fe2bad63597 100644
---- a/Documentation/i2c/busses/i2c-ali1535.rst
-+++ b/Documentation/i2c/busses/i2c-ali1535.rst
-@@ -28,7 +28,7 @@ Additionally, the sequencing of the SMBus transactions has been modified to
- be more consistent with the sequencing recommended by the manufacturer and
- observed through testing.  These changes are reflected in this driver and
- can be identified by comparing this driver to the i2c-ali15x3 driver. For
--an overview of these chips see http://www.acerlabs.com
-+an overview of these chips see https://www.acerlabs.com
- 
- The SMB controller is part of the M7101 device, which is an ACPI-compliant
- Power Management Unit (PMU).
-diff --git a/Documentation/i2c/busses/i2c-ali15x3.rst b/Documentation/i2c/busses/i2c-ali15x3.rst
-index d4c1a2a419cb..4e67715c0b1f 100644
---- a/Documentation/i2c/busses/i2c-ali15x3.rst
-+++ b/Documentation/i2c/busses/i2c-ali15x3.rst
-@@ -67,7 +67,7 @@ They are part of the following ALI chipsets:
-   * "Aladdin IV" includes the M1541 Socket 7 North bridge
-     with host bus up to 83.3 MHz.
- 
--For an overview of these chips see http://www.acerlabs.com. At this time the
-+For an overview of these chips see https://www.acerlabs.com. At this time the
- full data sheets on the web site are password protected, however if you
- contact the ALI office in San Jose they may give you the password.
- 
-diff --git a/drivers/i2c/busses/i2c-ali1535.c b/drivers/i2c/busses/i2c-ali1535.c
-index a43deea390f5..9600d98296fa 100644
---- a/drivers/i2c/busses/i2c-ali1535.c
-+++ b/drivers/i2c/busses/i2c-ali1535.c
-@@ -20,7 +20,7 @@
-     the manufacturer and observed through testing.  These
-     changes are reflected in this driver and can be identified
-     by comparing this driver to the i2c-ali15x3 driver.
--    For an overview of these chips see http://www.acerlabs.com
-+    For an overview of these chips see https://www.acerlabs.com
- 
-     The SMB controller is part of the 7101 device, which is an
-     ACPI-compliant Power Management Unit (PMU).
-diff --git a/drivers/i2c/busses/i2c-ali15x3.c b/drivers/i2c/busses/i2c-ali15x3.c
-index 02185a1cfa77..7156499df800 100644
---- a/drivers/i2c/busses/i2c-ali15x3.c
-+++ b/drivers/i2c/busses/i2c-ali15x3.c
-@@ -19,7 +19,7 @@
-        with AGP and 100MHz CPU Front Side bus
-        "Aladdin IV": Includes the M1541 Socket 7 North bridge
-        with host bus up to 83.3 MHz.
--    For an overview of these chips see http://www.acerlabs.com
-+    For an overview of these chips see https://www.acerlabs.com
- 
-     The M1533/M1543C devices appear as FOUR separate devices
-     on the PCI bus. An output of lspci will show something similar
--- 
-2.27.0
-
+>>
+>>>
+>>>>
+>>>> Regards,
+>>>>
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0Hans
+>>>>
+>>>>> while true; do v4l2-ctl --stream-mmap --stream-count=3D1; done
+>>>>>
+>>>>> when we stop loop with ctrl+c, v4l2-ctl terminates but loop does not
+>>>>> terminate immediately and probably SIGKILLed=C2=A0 is seen prior to=20
+>>>>> complete.
+>>>>>
+>>>>> Using below can help to terminate loop as well when we stop ctrl-c=20
+>>>>> and
+>>>>> with this I don't see any repro of EINTR error from kthread_run=20
+>>>>> when run
+>>>>> in infinite loop.
+>>>>>
+>>>>> while true; do ./v4l2-ctl --stream-mmap --stream-count=3D1 || break;=
+=20
+>>>>> done
+>>>>>
+>>>>>
+>>>>>
+>>>>>>> Delta between patch versions:
+>>>>>>>
+>>>>>>> [v3]:=C2=A0=C2=A0=C2=A0 Includes v2 feedback
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0- Uses separate helper function for retriev=
+ing remote csi=20
+>>>>>>> subdevice
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 and source subdevice.
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0- Added check for presence of subdevice ops=
+ set/get_selection
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0- dropped vb2_queue_release from driver and=
+ using
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vb2_video_unregister_device instead =
+of=20
+>>>>>>> video_unregister_device.
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0- video device register should happen in th=
+e last after all=20
+>>>>>>> video
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 device related setup is done in the =
+driver. This is being=20
+>>>>>>> addressed
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 in below RFC patch. Once proper impl=
+ementation of this is=20
+>>>>>>> available
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 will update Tegra video driver to us=
+e split APIs and do=20
+>>>>>>> all setup
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 prior to device register. Added this=
+ as TODO in the driver.
+>>>>>>> https://www.spinics.net/lists/linux-media/msg172761.html
+>>>>>>>
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0Note:
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0Patch-0012 has compilation dependency on
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0https://patchwork.kernel.org/patch/11659521=
+/
+>>>>>>>
+>>>>>>>
+>>>>>>> [v2]:=C2=A0=C2=A0=C2=A0 Includes below changes based on v1 feedback
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0- dt-binding document and the driver update=
+ for device graph=20
+>>>>>>> to use
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 separate ports for sink endpoint and=
+ source endpoint for csi.
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0- Use data-lanes endpoint property for csi.
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0- Update tegra_mipi_request() to take devic=
+e node pointer=20
+>>>>>>> argument
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rather than adding extra API.
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0- Remove checking for clk pointer before cl=
+k_disable.
+>>>>>>>
+>>>>>>>
+>>>>>>> Sowjanya Komatineni (18):
+>>>>>>> =C2=A0=C2=A0=C2=A0 dt-bindings: i2c: tegra: Document Tegra210 VI I2=
+C clocks and
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 power-domains
+>>>>>>> =C2=A0=C2=A0=C2=A0 arm64: tegra: Add missing clocks and power-domai=
+ns to=20
+>>>>>>> Tegra210 VI I2C
+>>>>>>> =C2=A0=C2=A0=C2=A0 i2c: tegra: Don't mark VI I2C as IRQ safe runtim=
+e PM
+>>>>>>> =C2=A0=C2=A0=C2=A0 i2c: tegra: Remove NULL pointer check before
+>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clk_enable/disable/prepare/unprepare
+>>>>>>> =C2=A0=C2=A0=C2=A0 i2c: tegra: Fix the error path in tegra_i2c_runt=
+ime_resume
+>>>>>>> =C2=A0=C2=A0=C2=A0 i2c: tegra: Fix runtime resume to re-init VI I2C
+>>>>>>> =C2=A0=C2=A0=C2=A0 i2c: tegra: Avoid tegra_i2c_init_dma() for Tegra=
+210 vi i2c
+>>>>>>> =C2=A0=C2=A0=C2=A0 media: tegra-video: Fix channel format alignment
+>>>>>>> =C2=A0=C2=A0=C2=A0 media: tegra-video: Enable TPG based on kernel c=
+onfig
+>>>>>>> =C2=A0=C2=A0=C2=A0 media: tegra-video: Update format lookup to offs=
+et based
+>>>>>>> =C2=A0=C2=A0=C2=A0 dt-bindings: tegra: Update VI and CSI bindings w=
+ith port info
+>>>>>>> =C2=A0=C2=A0=C2=A0 media: tegra-video: Add support for external sen=
+sor capture
+>>>>>>> =C2=A0=C2=A0=C2=A0 media: tegra-video: Add support for selection io=
+ctl ops
+>>>>>>> =C2=A0=C2=A0=C2=A0 gpu: host1x: mipi: Update tegra_mipi_request() t=
+o be node based
+>>>>>>> =C2=A0=C2=A0=C2=A0 gpu: host1x: mipi: Use readl_relaxed_poll_timeou=
+t in=20
+>>>>>>> tegra_mipi_wait
+>>>>>>> =C2=A0=C2=A0=C2=A0 gpu: host1x: mipi: Split tegra_mipi_calibrate an=
+d=20
+>>>>>>> tegra_mipi_wait
+>>>>>>> =C2=A0=C2=A0=C2=A0 media: tegra-video: Add CSI MIPI pads calibratio=
+n
+>>>>>>> =C2=A0=C2=A0=C2=A0 media: tegra-video: Compute settle times based o=
+n the clock=20
+>>>>>>> rate
+>>>>>>>
+>>>>>>> =C2=A0=C2=A0 .../display/tegra/nvidia,tegra20-host1x.txt | 92 ++-
+>>>>>>> =C2=A0=C2=A0 .../devicetree/bindings/i2c/nvidia,tegra20-i2c.txt | 1=
+9 +-
+>>>>>>> =C2=A0=C2=A0 arch/arm64/boot/dts/nvidia/tegra210.dtsi | 6 +
+>>>>>>> =C2=A0=C2=A0 drivers/gpu/drm/tegra/dsi.c | 9 +-
+>>>>>>> =C2=A0=C2=A0 drivers/gpu/host1x/mipi.c | 37 +-
+>>>>>>> =C2=A0=C2=A0 drivers/i2c/busses/i2c-tegra.c | 101 +--
+>>>>>>> =C2=A0=C2=A0 drivers/staging/media/tegra-video/Kconfig | 7 +
+>>>>>>> =C2=A0=C2=A0 drivers/staging/media/tegra-video/csi.c | 247 ++++++-
+>>>>>>> =C2=A0=C2=A0 drivers/staging/media/tegra-video/csi.h | 8 +
+>>>>>>> =C2=A0=C2=A0 drivers/staging/media/tegra-video/tegra210.c | 25 +-
+>>>>>>> =C2=A0=C2=A0 drivers/staging/media/tegra-video/vi.c | 793=20
+>>>>>>> +++++++++++++++++++--
+>>>>>>> =C2=A0=C2=A0 drivers/staging/media/tegra-video/vi.h | 25 +-
+>>>>>>> =C2=A0=C2=A0 drivers/staging/media/tegra-video/video.c | 23 +-
+>>>>>>> =C2=A0=C2=A0 include/linux/host1x.h | 4 +-
+>>>>>>> =C2=A0=C2=A0 14 files changed, 1242 insertions(+), 154 deletions(-)
+>>>>>>>
