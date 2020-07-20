@@ -2,99 +2,172 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E97E225D26
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Jul 2020 13:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3A6226186
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Jul 2020 16:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727853AbgGTLMO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 Jul 2020 07:12:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52084 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727094AbgGTLMN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 20 Jul 2020 07:12:13 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 689E92073A;
-        Mon, 20 Jul 2020 11:12:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595243533;
-        bh=9Yy+1VjcfL5aQqBqsh+BDfHhT28teG125L+0sNy5ehc=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=hAnDisAU5CkKAmHpE/TlDXaSa61cF0JA6RYkNQwVsbS2KHEPnHbsA064m/XFR1u/T
-         z//PW9qlfb6Lwl2oAr78zQ6ONpyQ79rnqVCxfhGpQ0WbjKfNRt5Zp9J68zrYhDPdF8
-         wriqqXI+iRwPMIMpW2FBryFhRaNOpStEuiSEMfmY=
-Date:   Mon, 20 Jul 2020 12:12:00 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     devicetree@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-spi@vger.kernel.org, Prabhakar <prabhakar.csengg@gmail.com>,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Amit Kucheria <amit.kucheria@verdurent.com>
-In-Reply-To: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 00/20] Add support for [H]SCIF/TMU/CMT/THS/SDHI/MSIOF/CAN[FD]/I2C/IIC/RWDT on R8A774E1
-Message-Id: <159524352070.8289.9628744508547399473.b4-ty@kernel.org>
+        id S1726012AbgGTODM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 Jul 2020 10:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbgGTODM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Jul 2020 10:03:12 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67118C061794;
+        Mon, 20 Jul 2020 07:03:12 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id f16so10150712pjt.0;
+        Mon, 20 Jul 2020 07:03:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NvjcerpoGbzCqh4PiBTodpMKQRC6COJGb/XldQjhF8w=;
+        b=vdp2OlVtYtgwwNvWfxMZw0hNeAtgQ8Ohk4zCvTDYnF9fvZR8A/bM5eaUWE5WClGGMB
+         Z9r8SVjpQCXZ05FMcQ6rDEAKzHo4qx/Q6dCuOX9U/EJCXyOoavZEC50SJkoJjGWUyk0A
+         IUQh/xCh5zY616an3Ng6ObsbhT52rw7DPnzZi2kMVhsYzbPEif0qniIB6JKEQPNrD6O+
+         XbU46obyQLZ3apRH0ByW4x8oRrJ0A/8yIXONFA8Sup7PNu2VTKtVhz+wHTDZeKUFmTpB
+         hrb5b56yPlcOvEoQTM5DH/dhTbx39GNThWzVoi8v9TBAc7r4CpUYCA18trSRC/tiQqIk
+         vdPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NvjcerpoGbzCqh4PiBTodpMKQRC6COJGb/XldQjhF8w=;
+        b=SMZHOW3ODRPMYjwHkrmG9JdlQ4zmYobROeAOmdjwjDF7HE1iGYtR/tAuGM54STStNV
+         adq9yGBwWA5Ebo0JcE3Yv0D32sIOUcZvoLlItd+5vr17R6JvKR5ePJlfMEJsc42kiQ6t
+         mClhNyM/e7jzFoXSnsfmdt63GH1Fnl65zIG5EqlMTKKwtBNedGWsRyE866kaK4o0mtP/
+         CYVwngA2qYzBTNY0K/Al83M1TDdmoXPfFXIEwo5AMfCkRsiU8yyfVU868oHayINwgMOm
+         ETjPMMLr8HEDQ2KUWb34nE7xhlSqIDDh/wThm4QxzC0Yd3ZCavEOB7FB0MiIOGJRQii2
+         F/+w==
+X-Gm-Message-State: AOAM533cyW1a614xTtT9bXRwBgcE7FAbgxC9s1roLZcRE4rtogO7FZO5
+        VLhLlwFh7VHuJxZXPDWpoj4=
+X-Google-Smtp-Source: ABdhPJxmJIiCYPj771LA4jyig7s/69E5m+L8g5e6jC85VSMnNWB9HAh1laUPagA6BvOlZiLnm2FXVQ==
+X-Received: by 2002:a17:90a:1a13:: with SMTP id 19mr21689484pjk.167.1595253791829;
+        Mon, 20 Jul 2020 07:03:11 -0700 (PDT)
+Received: from varodek.iballbatonwifi.com ([103.105.153.67])
+        by smtp.gmail.com with ESMTPSA id w64sm15773459pgd.67.2020.07.20.07.03.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2020 07:03:10 -0700 (PDT)
+From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Helgaas <bjorn@helgaas.com>,
+        Vaibhav Gupta <vaibhav.varodek@gmail.com>
+Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v1] i2c: eg20t: use generic power management
+Date:   Mon, 20 Jul 2020 19:30:32 +0530
+Message-Id: <20200720140031.511830-1-vaibhavgupta40@gmail.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 15 Jul 2020 12:08:50 +0100, Lad Prabhakar wrote:
-> This patch series enables support for following on RZ/G2H SoC,
-> * CPU OPP
-> * THS
-> * CMT/TMU
-> * I2C/IIC
-> * MSIOF
-> * RWDT
-> * SDHI
-> * SCIF/HSCIF
-> * CAN/CANFD
-> 
-> [...]
+Drivers using legacy PM have to manage PCI states and device's PM states
+themselves. They also need to take care of configuration registers.
 
-Applied to
+With improved and powerful support of generic PM, PCI Core takes care of
+above mentioned, device-independent, jobs.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+This driver makes use of PCI helper functions like
+pci_save/restore_state(), pci_enable/disable_device(),
+pci_enable_wake() and pci_set_power_state() to do required operations. In
+generic mode, they are no longer needed.
 
-Thanks!
+Change function parameter in both .suspend() and .resume() to
+"struct device*" type. Use to_pci_dev() and dev_get_drvdata() to get
+"struct pci_dev*" variable and drv data.
 
-[1/1] spi: renesas,sh-msiof: Add r8a774e1 support
-      commit: b4f7f5f5470588e45e5d004f1dc4887af20f18c0
+Compile-tested only.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+---
+ drivers/i2c/busses/i2c-eg20t.c | 39 ++++++++--------------------------
+ 1 file changed, 9 insertions(+), 30 deletions(-)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+diff --git a/drivers/i2c/busses/i2c-eg20t.c b/drivers/i2c/busses/i2c-eg20t.c
+index 73f139690e4e..c0ddc4cc2ce7 100644
+--- a/drivers/i2c/busses/i2c-eg20t.c
++++ b/drivers/i2c/busses/i2c-eg20t.c
+@@ -846,11 +846,10 @@ static void pch_i2c_remove(struct pci_dev *pdev)
+ 	kfree(adap_info);
+ }
+ 
+-#ifdef CONFIG_PM
+-static int pch_i2c_suspend(struct pci_dev *pdev, pm_message_t state)
++static int __maybe_unused pch_i2c_suspend(struct device *dev)
+ {
+-	int ret;
+ 	int i;
++	struct pci_dev *pdev = to_pci_dev(dev);
+ 	struct adapter_info *adap_info = pci_get_drvdata(pdev);
+ 	void __iomem *p = adap_info->pch_data[0].pch_base_address;
+ 
+@@ -872,34 +871,17 @@ static int pch_i2c_suspend(struct pci_dev *pdev, pm_message_t state)
+ 		ioread32(p + PCH_I2CSR), ioread32(p + PCH_I2CBUFSTA),
+ 		ioread32(p + PCH_I2CESRSTA));
+ 
+-	ret = pci_save_state(pdev);
+-
+-	if (ret) {
+-		pch_pci_err(pdev, "pci_save_state\n");
+-		return ret;
+-	}
+-
+-	pci_enable_wake(pdev, PCI_D3hot, 0);
+-	pci_disable_device(pdev);
+-	pci_set_power_state(pdev, pci_choose_state(pdev, state));
++	device_wakeup_disable(dev);
+ 
+ 	return 0;
+ }
+ 
+-static int pch_i2c_resume(struct pci_dev *pdev)
++static int __maybe_unused pch_i2c_resume(struct device *dev)
+ {
+ 	int i;
+-	struct adapter_info *adap_info = pci_get_drvdata(pdev);
+-
+-	pci_set_power_state(pdev, PCI_D0);
+-	pci_restore_state(pdev);
++	struct adapter_info *adap_info = dev_get_drvdata(dev);
+ 
+-	if (pci_enable_device(pdev) < 0) {
+-		pch_pci_err(pdev, "pch_i2c_resume:pci_enable_device FAILED\n");
+-		return -EIO;
+-	}
+-
+-	pci_enable_wake(pdev, PCI_D3hot, 0);
++	device_wakeup_disable(dev);
+ 
+ 	for (i = 0; i < adap_info->ch_num; i++)
+ 		pch_i2c_init(&adap_info->pch_data[i]);
+@@ -908,18 +890,15 @@ static int pch_i2c_resume(struct pci_dev *pdev)
+ 
+ 	return 0;
+ }
+-#else
+-#define pch_i2c_suspend NULL
+-#define pch_i2c_resume NULL
+-#endif
++
++static SIMPLE_DEV_PM_OPS(pch_i2c_pm_ops, pch_i2c_suspend, pch_i2c_resume);
+ 
+ static struct pci_driver pch_pcidriver = {
+ 	.name = KBUILD_MODNAME,
+ 	.id_table = pch_pcidev_id,
+ 	.probe = pch_i2c_probe,
+ 	.remove = pch_i2c_remove,
+-	.suspend = pch_i2c_suspend,
+-	.resume = pch_i2c_resume
++	.driver.pm = &pch_i2c_pm_ops,
+ };
+ 
+ module_pci_driver(pch_pcidriver);
+-- 
+2.27.0
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
