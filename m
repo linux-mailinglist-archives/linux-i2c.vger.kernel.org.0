@@ -2,142 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD538227DED
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Jul 2020 12:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424E8227E72
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Jul 2020 13:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbgGUK6g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 Jul 2020 06:58:36 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:47848 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726611AbgGUK6e (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Jul 2020 06:58:34 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1595329113; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=VU4DqtwT3aYjFZK+vCZ6Mf063e7LJok4TZ4IWKWCI9E=; b=Rvr46IoERBoazNH2oAMmetJDZ3UttwXGdtuP8MuPSycUyyWMpqtZaIl/qOBR1KF3TVMeifRQ
- vZcFZ6O0uLmv0qy3Os8zejcoMBCgTc5e99F7+V2YJyERMz7fRVeihyC7L231aiTA7oqlQaFn
- WzaVkgT3G3BVPfgXijdK0RFUc4c=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n16.prod.us-east-1.postgun.com with SMTP id
- 5f16ca501e603dbb4472bad1 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 21 Jul 2020 10:58:24
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 1E22AC43395; Tue, 21 Jul 2020 10:58:24 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.43.8] (unknown [106.213.150.157])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: msavaliy)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7271BC433C6;
-        Tue, 21 Jul 2020 10:58:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7271BC433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=msavaliy@codeaurora.org
-Subject: Re: [PATCH] i2c: i2c-qcom-geni: Fix DMA transfer race
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        Alok Chauhan <alokc@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200720172448.1.I7efdf6efaa6edadbb690196cd4fbe3392a582c89@changeid>
- <159531115483.3847286.18280088484118119899@swboyd.mtv.corp.google.com>
- <159531527579.3847286.1254956818647049462@swboyd.mtv.corp.google.com>
-From:   "Mukesh, Savaliya" <msavaliy@codeaurora.org>
-Message-ID: <6d90f383-54d7-cee1-d064-dca51ce39e14@codeaurora.org>
-Date:   Tue, 21 Jul 2020 16:28:11 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729559AbgGULKP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 Jul 2020 07:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729864AbgGULKO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Jul 2020 07:10:14 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60ED4C0619DC
+        for <linux-i2c@vger.kernel.org>; Tue, 21 Jul 2020 04:10:14 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id k1so1405536pjt.5
+        for <linux-i2c@vger.kernel.org>; Tue, 21 Jul 2020 04:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pesu-pes-edu.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=3CBZPGL5d6hwqUDVQf1lPGnGhUogur2vcGo2sPX9F9E=;
+        b=l6+3xCMydvzwsMfOzMRMKYiv1Z74ACZaoVLaVjS/qH/cR58TlQT4Uj/mUXoRXIvSvp
+         mElmGqxQjHNq9oOujpcDKjMUoie11dYWJfQr3WyTBKqlRXqOg4aEWafUHioQ5jXVAp4b
+         suaIGbKdWaH9yLGwiX7FnTmOY2vvLi9ikykgb/rXr6DBNaDFqMyb/Obqf5r+BfN9vwhy
+         lCo5MraQ4DWWwpkF9rpvxD4cOAb3yl36NFk91voNYo05rNzx+iwn+lX67vb16zFYCU+A
+         4aYcxKJf0xbH6NI9eIqoeFfbLp6LYpfq/BJ1pU4wU2duKO14zkPmjCCtj98CpRDiCylX
+         yVZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=3CBZPGL5d6hwqUDVQf1lPGnGhUogur2vcGo2sPX9F9E=;
+        b=eIKVWQRMZG3psYyVMLbEwcAOVzPftsiWpeaqemdR0v91RYOlKKmp1FR8JAGKPTLTg8
+         21xhDKxHHy37yI8tfeHFsPF9GolLPv0MlD2eArFerC+FNnud301W8OZfADCEQ3NttBhG
+         CScuuoe/TxC5KnnkE9tj2ZbP4tMvKgo8eQEbayECsCbv23HB7EXvkl9mbMvvUU1V1wmS
+         AjwWGcHegvNfpKPQaT6NSjuZXRAvwc8kiRptKRi/cd1qiE8BnShtSFhde8JysIigBPc5
+         Tdcllx58m0pHrrWAAD2QAQ6D22xKTaZC1l7PwkkshhdbCEQt7+5y+d7tmMp7mXNoNzW/
+         IF4w==
+X-Gm-Message-State: AOAM5334+GAQdDpOZfn0wXC/HAvT9ijSfirIV6MLyp4JBzhUk/JqO4jB
+        nWBnMLXqj8xATULy0hvHAgM83A==
+X-Google-Smtp-Source: ABdhPJzoDkvC2oMdbgPOg0rH0eKjMrwxi1AGt41QnQjR7P4TZDmlCcIh7dmckU2TxKJ6LbwMkruLDg==
+X-Received: by 2002:a17:902:b943:: with SMTP id h3mr22286097pls.38.1595329813520;
+        Tue, 21 Jul 2020 04:10:13 -0700 (PDT)
+Received: from localhost ([2406:7400:73:d7b6:d055:3e56:d1e4:ce99])
+        by smtp.gmail.com with ESMTPSA id h3sm2874310pjz.23.2020.07.21.04.10.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2020 04:10:12 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 16:40:07 +0530
+From:   B K Karthik <bkkarthik@pesu.pes.edu>
+To:     syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, gregkh@linuxfoundation.org,
+        skhan@linuxfoundation.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Mike Isely <isely@pobox.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: fix WARNING in pvr2_i2c_core_done
+Message-ID: <20200721111007.hwwdveqxeqcry4wn@pesu.pes.edu>
 MIME-Version: 1.0
-In-Reply-To: <159531527579.3847286.1254956818647049462@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ut3ssk6bs5fsawxc"
+Content-Disposition: inline
+User-Agent: NeoMutt/20180716
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-On 7/21/2020 12:37 PM, Stephen Boyd wrote:
-> Quoting Stephen Boyd (2020-07-20 22:59:14)
->> I worry that we also need a dmb() here to make sure the dma buffer is
->> properly mapped before this write to the device is attempted. But it may
->> only matter to be before the I2C_READ.
->>
-> I'm suggesting this patch instead where we make geni_se_setup_m_cmd()
-> use a writel() so that it has the proper barrier semantics to wait for
-> the other memory writes that happened in program order before this point
-> to complete before the device is kicked to do a read or a write.
+--ut3ssk6bs5fsawxc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Not sure if the issue was because of the barrier, but fundamentally for 
-read operation, before FIFO data gets written by the DMA to memory,
+#syz test: https://github.com/google/kasan.git usb-fuzzer
 
-buffer should be present. Hence the previous change from Doug seem to be 
-fine as well.
+fix WARNING in pvr2_i2c_core_done by
+unregistering device in the release handler
+instead of the disconnect handler.
 
-> ----8<----
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 18d1e4fd4cf3..7f130829bf01 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -367,7 +367,6 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
->   		geni_se_select_mode(se, GENI_SE_FIFO);
->   
->   	writel_relaxed(len, se->base + SE_I2C_RX_TRANS_LEN);
-> -	geni_se_setup_m_cmd(se, I2C_READ, m_param);
->   
->   	if (dma_buf && geni_se_rx_dma_prep(se, dma_buf, len, &rx_dma)) {
->   		geni_se_select_mode(se, GENI_SE_FIFO);
-> @@ -375,6 +374,8 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
->   		dma_buf = NULL;
->   	}
->   
-> +	geni_se_setup_m_cmd(se, I2C_READ, m_param);
-> +
->   	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
->   	if (!time_left)
->   		geni_i2c_abort_xfer(gi2c);
-> @@ -408,7 +409,6 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
->   		geni_se_select_mode(se, GENI_SE_FIFO);
->   
->   	writel_relaxed(len, se->base + SE_I2C_TX_TRANS_LEN);
-> -	geni_se_setup_m_cmd(se, I2C_WRITE, m_param);
->   
->   	if (dma_buf && geni_se_tx_dma_prep(se, dma_buf, len, &tx_dma)) {
->   		geni_se_select_mode(se, GENI_SE_FIFO);
-> @@ -416,6 +416,8 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
->   		dma_buf = NULL;
->   	}
->   
-> +	geni_se_setup_m_cmd(se, I2C_WRITE, m_param);
-> +
->   	if (!dma_buf) /* Get FIFO IRQ */
->   		writel_relaxed(1, se->base + SE_GENI_TX_WATERMARK_REG);
->   
-> diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
-> index dd464943f717..1dc134e9eb36 100644
-> --- a/include/linux/qcom-geni-se.h
-> +++ b/include/linux/qcom-geni-se.h
-> @@ -262,7 +262,7 @@ static inline void geni_se_setup_m_cmd(struct geni_se *se, u32 cmd, u32 params)
->   	u32 m_cmd;
->   
->   	m_cmd = (cmd << M_OPCODE_SHFT) | (params & M_PARAMS_MSK);
-> -	writel_relaxed(m_cmd, se->base + SE_GENI_M_CMD0);
-> +	writel(m_cmd, se->base + SE_GENI_M_CMD0);
->   }
->   
->   /**
+Reported-by: syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com
+Signed-off-by: B K Karthik <bkkarthik@pesu.pes.edu>
+---
+ drivers/i2c/i2c-core-base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 26f03a14a478..2d377d2e89f1 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -462,6 +462,7 @@ static void i2c_device_shutdown(struct device *dev)
+=20
+ static void i2c_client_dev_release(struct device *dev)
+ {
++	i2c_unregister_device(to_i2c_client(dev));
+ 	kfree(to_i2c_client(dev));
+ }
+=20
+@@ -1527,7 +1528,6 @@ void i2c_del_adapter(struct i2c_adapter *adap)
+ 		dev_dbg(&adap->dev, "Removing %s at 0x%x\n", client->name,
+ 			client->addr);
+ 		list_del(&client->detected);
+-		i2c_unregister_device(client);
+ 	}
+ 	mutex_unlock(&adap->userspace_clients_lock);
+=20
+--=20
+2.20.1
+
+
+--ut3ssk6bs5fsawxc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEIF+jd5Z5uS7xKTfpQZdt+T1HgiEFAl8WzQ4ACgkQQZdt+T1H
+giHdCgv/R4BJLHuPsoUuC8vZDeVvtdVKXC5EZyGFmlVFnlBontVfMBrg5azCTEXv
+QtjdDpjpmJ5fK6KOcS0nk9AWqRueMGg8eW1pkE8uiCR30ERA9ZEdsW5SyH9d3BzS
+2jOp5WQvbnEsdub+adY4DTQHXusNoly5+F/Dd2eT2wJGXMsiYySrwQ3TeQwgNZhn
+EQJbMTjEoHWYEMcB6CgnIKSjRjfGT6tD4Rn9EKSNypQri0L8HbbdFd46br6dXvKp
+FOYheMB5HHGWhgVjBSztTz+YZyHgogM+oVTLVU2AQCSZ7lHFpN+0ImfFeh5qOiQN
+F5qK0soYYB7+ffuCABF+qwChK6lUzX5baavMoFNSsFmY6ZnHnF6Lmg+DJh4t9oku
+4/qqn8JctjgZqqfzErKGou7LbZvqOzvo5+iDDHi9skxa8tlrCEF0oTYgdkROqGzq
+RGhTMRZY2pS8sd5I2h6daK7UV4dboBOB9SJGtv6QLoBwR4WTfQuMrEj3FQeaQDpa
+iRRFHUV5
+=aiG8
+-----END PGP SIGNATURE-----
+
+--ut3ssk6bs5fsawxc--
