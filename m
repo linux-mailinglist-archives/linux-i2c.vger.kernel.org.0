@@ -2,103 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BC122940F
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jul 2020 10:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD89229429
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jul 2020 10:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726997AbgGVIxL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Jul 2020 04:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726892AbgGVIxL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Jul 2020 04:53:11 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E50AC0619DC;
-        Wed, 22 Jul 2020 01:53:11 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id k1so818346pjt.5;
-        Wed, 22 Jul 2020 01:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ka/5B4XRoVBmAt67iPN2Z7sgxTFm48YODme+2RimFZE=;
-        b=s87Z385hZ5l+b/oIspabCEyqUEkKhQIX9Wi1g6CN5r/JNB/21zVc6tOvcl0oGU/2TD
-         Z8kDRye9okGm1naX3gouEQEEga5gL+JG7U8E2PPOEMmkg38RmacKXJzdIziq3/6wGIrr
-         Aoe+msfaONNAq1j2rjQrUcNp3aruR7G6Wv0ucg1o9NOpdcZRR58lef0jE9Fz26orzynH
-         /5Coy0NXwu9cFTmSNNEYEjU0DA1YdXG9+ixBE6Vj6jo8iSSsecFsz1xomgrxa4VhSDF8
-         t92CIABEwTp+IxUgBDPme+XbXH4Ig8z+8Y5Q7Nqjr2CqsEXwjOemP4xa+ccigTddWaXY
-         SD2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ka/5B4XRoVBmAt67iPN2Z7sgxTFm48YODme+2RimFZE=;
-        b=EpD8P3WsOKKfzB/Pc2RsNbZiViTCWLwNTHwR69OFurIVMuKFqJs3zYBvJS2qh9gPIA
-         705DgoOFW8rQjYgZp4uxm+i1MQnQypEuW7oJiAii86hLdoeCjvkPelcXwd3F7r6D+ICb
-         bpdmjh7TTnFByI1V8cQ3GUmCIP/npgFOUbEGrhdlC6wBvh9z7P1roa3BiN0BwYhP1c0p
-         ym6teo3l+7I2LiY1DaDkDFCen3ciw3WfwfHgs53JNA1KTCDCyY9hp7CAM6yOWSKgE2AE
-         Rrc/EfZmCG3zm7f735BPD0ViUeIDv5+WbN/r5ukgT/L/u4eIkxT+fnj6dwRLvQuW4a1s
-         Bgyg==
-X-Gm-Message-State: AOAM530pNDAPhgyyBRFb1SqxUFNV4dBzRpcxqWz+eRL1cPhTQUFQlwFH
-        MkL4pul2Qs10iJ8qkJlIPSfH7LK+Fb8JMWlq1F0+fvXJ
-X-Google-Smtp-Source: ABdhPJxz0ZAJ0aHy5furHHpzY9F5tAklILXmF9Mb3Ra2G6CiJicgkp19/NfrXFg7rW6Ht6NEGCeYyxG8FMpQUaTeEOY=
-X-Received: by 2002:a17:902:9a4b:: with SMTP id x11mr25751245plv.255.1595407990982;
- Wed, 22 Jul 2020 01:53:10 -0700 (PDT)
+        id S1726997AbgGVI6x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Jul 2020 04:58:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50118 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726254AbgGVI6x (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 22 Jul 2020 04:58:53 -0400
+Received: from localhost (p54b33083.dip0.t-ipconnect.de [84.179.48.131])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 718E92077D;
+        Wed, 22 Jul 2020 08:58:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595408332;
+        bh=R0xVdgqiB7s3O/DqEs6GN9dYzeeYY+lcRy+1jPlzd70=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W9pwhuYHxVLA9WFvIszWER7midOVsx2uDEZoEd7TXs7QtDMzaybMeyOsADVuqMixq
+         8C9QMQnw9W7brJHXh/UP+CTjQYwzdX6Xnwns3sb58eLqFWn1nspNwOdSNRFNo7rfF/
+         2yWgceNvAxLbxamBwNA/XlbfB8F3vLj4kDrDDu5w=
+Date:   Wed, 22 Jul 2020 10:58:49 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 02/20] arm64: dts: renesas: r8a774e1: Add PCIe device
+ nodes
+Message-ID: <20200722085849.GF1030@ninjato>
+References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594919915-5225-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-References: <20200721233814.GA3058@embeddedor>
-In-Reply-To: <20200721233814.GA3058@embeddedor>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 22 Jul 2020 11:52:56 +0300
-Message-ID: <CAHp75VcinO2QrQfk-GqfFic=Ktah5s-ndLigmVNdfvfo5cS_Pw@mail.gmail.com>
-Subject: Re: [PATCH][next] i2c: designware: Use fallthrough pseudo-keyword
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1Y7d0dPL928TPQbc"
+Content-Disposition: inline
+In-Reply-To: <1594919915-5225-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 2:48 AM Gustavo A. R. Silva
-<gustavoars@kernel.org> wrote:
->
-> Replace the existing /* fall through */ comments and its variants with
-> the new pseudo-keyword macro fallthrough[1].
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+--1Y7d0dPL928TPQbc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jul 16, 2020 at 06:18:17PM +0100, Lad Prabhakar wrote:
+> Add PCIe{0,1} device nodes for R8A774E1 SoC.
+>=20
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renes=
+as.com>
 
-> [1] https://www.kernel.org/doc/html/v5.7/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
-
-Perhaps you may do it as Link: tag?
-
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  drivers/i2c/busses/i2c-designware-pcidrv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-> index 8522134f9ea9..55c83a7a24f3 100644
-> --- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-> @@ -90,7 +90,7 @@ static int mfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
->         switch (pdev->device) {
->         case 0x0817:
->                 dev->timings.bus_freq_hz = I2C_MAX_STANDARD_MODE_FREQ;
-> -               /* fall through */
-> +               fallthrough;
->         case 0x0818:
->         case 0x0819:
->                 c->bus_num = pdev->device - 0x817 + 3;
-> --
-> 2.27.0
->
+Hmm, doesn't apply on top of 5.8-rc6 for me. Is there a branch to pull
+for easier review?
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+--1Y7d0dPL928TPQbc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8X/8QACgkQFA3kzBSg
+Kbb+qw//biayHVrdtr2LDibooHUV8qi0GGMOUqYzn6LSC97+YHSK+LuSg3RfHW28
+WF9bREAuLpDfZj7B7VKkjk1UN+MBrzOtXvXMmVhenztZQQxBHd8HX+axLFK1HrZ/
+K+3X+jbEsCB/NTac43d0yYFj9IkFBIPVcExN83vJcn4MWYpk6kUPN1yFz5bdLO76
+Jh56YvRaeVbxKfU6rwv4Oho5JjJxbpmjZ3m+yyuT8dp+VEE3cV9aesW3R3Rl2d71
+pV7hc5gr7zIgadYfWUovWX1MzgD4Q0e5H5nLjjOIGYwhj8A6l1JT8n5vw6b3ERbM
+MPBgNHQbohKl9HWcD48LWNQBhH8j4AM9tD7iXxXFeC8olpn+aFFKLV0YK1fqocXE
+EZXT7Pv544SZPZetGfHNEkq9fQkkJ/IzcomQIIfWLCTLw0wc67QwDpE11pphkHg/
+fwcYu54T/WhlUGrmFQmbrXYboytT7CzXFSuZ5VeJZqgi1zDtFqThHjPr/us5E0SA
+Jghh/PHZnWDIYS2MB+revceePGtrEnK8Chu0XMDnfyrh4Naspk88ISX5WLDq8juh
+FBb4W335vVfUJ0ByD1kgErUH6/qxrvcYC5QH0Txk40i2WBt8ISyeEugJir2uS2U6
+M8fJEh5lzVQeKdG8zyI6i+aD+xhktGR66DbOLncW8feW2NB0m9Q=
+=RR4j
+-----END PGP SIGNATURE-----
+
+--1Y7d0dPL928TPQbc--
