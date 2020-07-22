@@ -2,75 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6040229A6F
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jul 2020 16:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB22229A96
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jul 2020 16:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728837AbgGVOnL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Jul 2020 10:43:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50664 "EHLO mail.kernel.org"
+        id S1732568AbgGVOvC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Jul 2020 10:51:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53994 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731000AbgGVOnL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 22 Jul 2020 10:43:11 -0400
-Received: from embeddedor (unknown [201.166.157.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1729642AbgGVOvC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 22 Jul 2020 10:51:02 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EE39020771;
-        Wed, 22 Jul 2020 14:43:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1537020781;
+        Wed, 22 Jul 2020 14:51:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595428991;
-        bh=G/0+PS1ME2vNfMTZZAKnHzJi7Fk3q+kRCbaGcdc8iMA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q1yPpCsLEiExymVzLhCSxCNnNPDoatndMjyK2USKmQFDU5QOFTGzn5mjZeF1A+4/l
-         YMb1p3/tmFV9TtV5SJsa+LzWn1iPGYBljEli8aZKcKBEuf3kEB/gN30a54hUwJ5qZW
-         E484Erm8Xe2kHzsqNFsxeaUlt3juKo72XnogzK7o=
-Date:   Wed, 22 Jul 2020 09:48:48 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: Re: [PATCH][next] i2c: designware: Use fallthrough pseudo-keyword
-Message-ID: <20200722144848.GC22267@embeddedor>
-References: <20200721233814.GA3058@embeddedor>
- <CAHp75VcinO2QrQfk-GqfFic=Ktah5s-ndLigmVNdfvfo5cS_Pw@mail.gmail.com>
- <20200722143713.GB22267@embeddedor>
- <20200722143814.GS1030@ninjato>
+        s=default; t=1595429462;
+        bh=UFg8p6XUT3wel8u+pTVmAEQCqcMZyxNqpCVV4vZzVMc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VcRRbZrD6WNnKeyKewcJj9tHSrLiYKaq6m364i5sVnALdpBTaDVlKnhHT0t8WBf3K
+         E9PvkOgMkx4Fh5HLEq8fzsRlTkYNy+GV0xC5uwgJaZm3meFbN0iC/3VY8Dr4GSViYo
+         jTWlSXbIWnPZp3Jm3OtmqjO/Ngmz1S0tdyysRyyg=
+Received: by mail-qt1-f180.google.com with SMTP id w9so1999860qts.6;
+        Wed, 22 Jul 2020 07:51:02 -0700 (PDT)
+X-Gm-Message-State: AOAM5338apLtI3/ZvFV8XDWlaNzGFGMPwVNBsc310l4e9W+kR4hIXoav
+        ogzwX75J/G8C378JZcmf6DAzw2ZqoH35zBJruA==
+X-Google-Smtp-Source: ABdhPJxethsoctJJB0o77sxPGUSotqTgfoUhSN0xia9aMDrxFanpo8xBBYO162v9hQXL4xR8Wr9VZjmxIPSoRoE1XL0=
+X-Received: by 2002:ac8:3981:: with SMTP id v1mr33942454qte.134.1595429461258;
+ Wed, 22 Jul 2020 07:51:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200722143814.GS1030@ninjato>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200717160407.378140-1-robh@kernel.org> <20200722105036.GN1030@ninjato>
+In-Reply-To: <20200722105036.GN1030@ninjato>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 22 Jul 2020 08:50:48 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLVpzo6hoycwbne7td8x8un54y0X0qm-_+EqnV+D3SqWA@mail.gmail.com>
+Message-ID: <CAL_JsqLVpzo6hoycwbne7td8x8un54y0X0qm-_+EqnV+D3SqWA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: i2c-gpio: Use 'deprecated' keyword on
+ deprecated properties
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     devicetree@vger.kernel.org, Wolfram Sang <wolfram@the-dreams.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+On Wed, Jul 22, 2020 at 4:50 AM Wolfram Sang <wsa@kernel.org> wrote:
+>
+> On Fri, Jul 17, 2020 at 10:04:07AM -0600, Rob Herring wrote:
+> > The i2c-gpio binding is the only case of 'not: true' being used for a
+> > deprecated property. Update it to use the json-schema 2019.09
+> > 'deprecated' keyword instead. Define the type too in order to keep the
+> > meta-schema happy.
+> >
+> > This will disable warnings for these properties until the dtschema tools
+> > are updated to handle 'deprecated', but they are only used in a few at91
+> > dts files.
+> >
+> > Cc: Wolfram Sang <wolfram@the-dreams.de>
+> > Cc: linux-i2c@vger.kernel.org
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+>
+> Your tree or mine? for the latter case:
+>
+> Acked-by: Wolfram Sang <wsa@kernel.org>
 
-On Wed, Jul 22, 2020 at 04:38:14PM +0200, Wolfram Sang wrote:
-> 
-> > > > [1] https://www.kernel.org/doc/html/v5.7/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
-> > > 
-> > > Perhaps you may do it as Link: tag?
-> > > 
-> > 
-> > mmh... that's a good suggestion; thanks, Andy.
-> 
-> If you want to resend, please only one patch for all I2C drivers. The
-> change is "cosmetic" enough to do that IMO.
-> 
+Thanks, I've applied it.
 
-The reason why I'm sending separate patches for this is because
-the drivers have different maintainers.
-
-Also, I think theses patches are fine as is; and I will consider
-using a link tag for new patches.
-
-Thanks
---
-Gustavo
-
+Rob
