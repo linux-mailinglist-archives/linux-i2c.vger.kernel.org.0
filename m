@@ -2,41 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EECE229608
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jul 2020 12:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BCE22960F
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jul 2020 12:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732084AbgGVK3E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Jul 2020 06:29:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43026 "EHLO mail.kernel.org"
+        id S1732153AbgGVK3L (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Jul 2020 06:29:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43210 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730417AbgGVK3D (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 22 Jul 2020 06:29:03 -0400
+        id S1732151AbgGVK3K (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 22 Jul 2020 06:29:10 -0400
 Received: from localhost (p54b33083.dip0.t-ipconnect.de [84.179.48.131])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 12AA320729;
-        Wed, 22 Jul 2020 10:29:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CC15E20729;
+        Wed, 22 Jul 2020 10:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595413742;
-        bh=lTc4TRlHDScl5Z1G4HHxd8eHjd5BknTeB2jTOiImhU4=;
+        s=default; t=1595413749;
+        bh=KMLpaxcePCpXp4URNPpOHVjKKc7YKBwOyGmXdo5i96Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0yFUs6b3bNer+1h93+pB9OHGrqgmBCKXlv2B+Fr6ioy4KEsMc+q9WO1UkCQuNY/g2
-         J46BbsE3+n/aHgR7etj2QOZ2GUPn7abrI094s00GTr03+gp32yAmFM0ooFnIJ5dtRt
-         MWbLN+pKd+robgVcRKusbrpCRzXO+MmWLzOPklcg=
-Date:   Wed, 22 Jul 2020 12:29:00 +0200
+        b=PMggXTytoMX2+ayoPs8fR6Re/9yytPEBRg2AWVXRH496o7Yc/Jl4Pc05AJTi2TvUI
+         JqT+eGzcamn4d89RaQDf1rJZw+YxMKXtPPztmfHLgeGJAchlFdlBPvf+XoFvPXVMpV
+         kfaqS2zfBzQENcOVSqbGwEoQuK7jPRLjMJBmayh4=
+Date:   Wed, 22 Jul 2020 12:29:06 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Raviteja Narayanam <raviteja.narayanam@xilinx.com>
 Cc:     linux-i2c@vger.kernel.org, michal.simek@xilinx.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         git@xilinx.com
-Subject: Re: [PATCH 1/2] Revert "i2c: cadence: Fix the hold bit setting"
-Message-ID: <20200722102859.GI1030@ninjato>
-References: <1593784549-21489-1-git-send-email-raviteja.narayanam@xilinx.com>
+Subject: Re: [PATCH 2/2] i2c: cadence: Clear HOLD bit at correct time in Rx
+ path
+Message-ID: <20200722102906.GJ1030@ninjato>
+References: <1593784572-21910-1-git-send-email-raviteja.narayanam@xilinx.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BWWlCdgt6QLN7tv3"
+        protocol="application/pgp-signature"; boundary="8tZVdKiiYitVG083"
 Content-Disposition: inline
-In-Reply-To: <1593784549-21489-1-git-send-email-raviteja.narayanam@xilinx.com>
+In-Reply-To: <1593784572-21910-1-git-send-email-raviteja.narayanam@xilinx.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -44,60 +45,51 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---BWWlCdgt6QLN7tv3
+--8tZVdKiiYitVG083
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 03, 2020 at 07:25:49PM +0530, Raviteja Narayanam wrote:
-> This reverts commit d358def706880defa4c9e87381c5bf086a97d5f9.
+On Fri, Jul 03, 2020 at 07:26:12PM +0530, Raviteja Narayanam wrote:
+> There are few issues on Zynq SOC observed in the stress tests causing
+> timeout errors. Even though all the data is received, timeout error
+> is thrown. This is due to an IP bug in which the COMP bit in ISR is
+> not set at end of transfer and completion interrupt is not generated.
 >=20
-> There are two issues with "i2c: cadence: Fix the hold bit setting" commit.
+> This bug is seen on Zynq platforms when the following condition occurs:
+> Master read & HOLD bit set & Transfer size register reaches '0'.
 >=20
-> 1. In case of combined message request from user space, when the HOLD
-> bit is cleared in cdns_i2c_mrecv function, a STOP condition is sent
-> on the bus even before the last message is started. This is because when
-> the HOLD bit is cleared, the FIFOS are empty and there is no pending
-> transfer. The STOP condition should occur only after the last message
-> is completed.
+> One workaround is to clear the HOLD bit before the transfer size
+> register reaches '0'. The current implementation checks for this at
+> the start of the loop and also only for less than FIFO DEPTH case
+> (ignoring the equal to case).
 >=20
-> 2. The code added by the commit is redundant. Driver is handling the
-> setting/clearing of HOLD bit in right way before the commit.
->=20
-> The setting of HOLD bit based on 'bus_hold_flag' is taken care in
-> cdns_i2c_master_xfer function even before cdns_i2c_msend/cdns_i2c_recv
-> functions.
->=20
-> The clearing of HOLD bit is taken care at the end of cdns_i2c_msend and
-> cdns_i2c_recv functions based on bus_hold_flag and byte count.
-> Since clearing of HOLD bit is done after the slave address is written to
-> the register (writing to address register triggers the message transfer),
-> it is ensured that STOP condition occurs at the right time after
-> completion of the pending transfer (last message).
+> So clear the HOLD bit when the data yet to receive is less than or
+> equal to the FIFO DEPTH. This avoids the IP bug condition.
 >=20
 > Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
 
 Applied to for-current, thanks!
 
 
---BWWlCdgt6QLN7tv3
+--8tZVdKiiYitVG083
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8YFOsACgkQFA3kzBSg
-KbZT0BAAj7CTkxywHYj4mY+dcRZVfFPQUg5hgqR23yDUWFDdg7vy7tbjqUXHvnXh
-AtmREV11AUlyUbDjC+0nrC42HKxVd4BXfqSfXnMZ27jDZ8RVGrUBkfq2TTnaVrwn
-JYQSihhIojqqOWfVLWeCKjFoonrYCEUyEWucf6WGgFAm1A4+VKHwX74As9dlsRDL
-5Tb8K3r33hC//HuuJbR30Vp1zVDH7jLj/Uv5fp+y8v5uFHc2bjYqN+2mSu6194YX
-yAbZejkFjqK5J7bxlLlM79lyNmMnjw6ahnus8+QP/FoN+/D8tpdqZJZMLz+Efgv+
-wj+VmVmO7zWtoOg1jFTAserdcNJ4o+swCYP43Ur1fuECGZjWyOo/9KJoFWLBMPke
-1EToZZLuQsLxOgeDf1wvb9KM5pPzDuAcSw5INuCHvTIhYxN8Gss8UmBEbykukUld
-JRBvDY3jhc8cgNRMhZnVa4yGPk4AVJU/AzhfUyjR7uUrqJGEmE4jMWljwmPTyrH1
-vEMUUSlVDwxCd4eeWDJwdhK1+d29+RyH7Sr9m3LNGRmau569nnMJV79UUHO66oBv
-xzFS2maiwT7Fwv54PjqBKTULjD7Itnvs9/EERIKLtDp4yLEmreNV+3uiNy/RLm3s
-YbSc2UXp037LXDjIUJwn6WcYHtwfUmbwG/5j5CfGFkPY66l5Vt8=
-=iU1Q
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8YFPIACgkQFA3kzBSg
+KbZ6gRAAk+U1RJWBmsO1kg17hPWLV4CKbeQwkokAO7OxQ+Xz4eMBTlAZX9T3vqh5
+8bsrQ/oiFTFWqEaKrtkK2kgvUIZqOAwdmXKvEL676ft3cjjg/4oJjr/zfRZWhlq+
+FrRHbVo+U1BjiuLmBm/D/hdR/p2AuekW899KrM/ZszFW5+RFcYQRoCF2eMwilLuH
+5ZxHAdK66xbOof71C6jlsQOWpFUXDVjRN1Qy7k9iE7tpwscZ4YT/+IJk/h3dQFFH
+Mgrh05rH4z5vu7ED6Iu3WKjlG1+IUjPbBFB2Ay+Ulc2SZunLKHQw6oNzjp2LxyNu
+1lRYwt4xCwkEe8eGXSM5gw+wcS+w0rnZMtDaUWyxzQTCDouykj49Kbt/f8jxawIN
+6HVGMZeJvUSioiXEOSOPBtLe9Ra3Wd3FI7G0UfDJAhsBKX2Xn2Jt+HsPs0X2Ey3o
+cU7xHaIK+oI66RLC+IWzXXXk4wOyBHVNRatacwRGNS9KBPpCDYlv7N5L0Y690y4N
+FO5iSKxYJKA5k2MypsBLHG/2aiK6RPEYOi2GkNPmEx6wKOuniPtonsOU80Vwrb7m
+f+DMNmEkiEniGihZGEj4vLwI4ZMgH9JVLKzj5S6ygu7wPqnYEdxZXUYossBmR+rk
+gt8C1EpIJvFlFioaTSMIR/sdNr5wnuGPpJ+68V+WnPwAwtoSDjA=
+=uPhR
 -----END PGP SIGNATURE-----
 
---BWWlCdgt6QLN7tv3--
+--8tZVdKiiYitVG083--
