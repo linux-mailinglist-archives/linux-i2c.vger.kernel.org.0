@@ -2,44 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0C922966D
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jul 2020 12:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E699B22968F
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Jul 2020 12:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725878AbgGVKlc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Jul 2020 06:41:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50370 "EHLO mail.kernel.org"
+        id S1726462AbgGVKqk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Jul 2020 06:46:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52010 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726012AbgGVKlb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 22 Jul 2020 06:41:31 -0400
+        id S1726390AbgGVKqj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 22 Jul 2020 06:46:39 -0400
 Received: from localhost (p54b33083.dip0.t-ipconnect.de [84.179.48.131])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 37C8B2065E;
-        Wed, 22 Jul 2020 10:41:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D3B5920771;
+        Wed, 22 Jul 2020 10:46:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595414490;
-        bh=ALDy45uCdZe3Ayi9GNp5dgiErhBW4lkKC52BVf5tDXY=;
+        s=default; t=1595414799;
+        bh=zMxayXnb+T8km0X7Uj3qdpIhgAE1GlzJu4QstLolnz0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cQ4AmN8uaWfnEgeWwL2absr7V4VQ2TdebuVBocFbptouvLILfg+7HIN1IR6AA9t1B
-         yDRUcNmKpM3vP9KQkui6NnL3rhZ0s+FmnQMz/zxHw/Hc1PqDUCs6EtYhNU2hVpVx6L
-         qtCWLbkSZ1J4S+N7EhvE8AJQ1XFPZFkMl5SFez9U=
-Date:   Wed, 22 Jul 2020 12:41:28 +0200
+        b=EhVpf+FpJNE/5E47yFwx7CYR5vDQ1ymQoiPzoUj02gzfilvvvNls+e8Vm7PfFdS+L
+         SSyYNtnlzWOmClONmOZMs02AZR8OQf2iqNrgLiY79MEJUR5M2UsxP+TGJ/dZBJHiqd
+         +hRa8hubeNlj3x5Bp6g7VzA9Pg/F8gCvjElkNs4I=
+Date:   Wed, 22 Jul 2020 12:46:36 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Ray Jui <ray.jui@broadcom.com>
-Cc:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ray Jui <rjui@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [PATCH] i2c: iproc: fix race between client unreg and isr
-Message-ID: <20200722104128.GK1030@ninjato>
-References: <1595115599-100054-1-git-send-email-dphadke@linux.microsoft.com>
- <116ac90c-8b49-ca89-90a4-9a28f43a7c50@broadcom.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] I2C: linux/i2c.h: drop duplicated word in a comment
+Message-ID: <20200722104636.GL1030@ninjato>
+References: <1d07a587-83b5-0bcb-2185-48ddb5dbc9d0@infradead.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LHvWgpbS7VDUdu2f"
+        protocol="application/pgp-signature"; boundary="4oF+6Ged69J0+4/e"
 Content-Disposition: inline
-In-Reply-To: <116ac90c-8b49-ca89-90a4-9a28f43a7c50@broadcom.com>
+In-Reply-To: <1d07a587-83b5-0bcb-2185-48ddb5dbc9d0@infradead.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -47,49 +43,41 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LHvWgpbS7VDUdu2f
+--4oF+6Ged69J0+4/e
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > +	synchronize_irq(iproc_i2c->irq);
+On Fri, Jul 17, 2020 at 04:38:15PM -0700, Randy Dunlap wrote:
+> From: Randy Dunlap <rdunlap@infradead.org>
 >=20
-> If one takes a look at the I2C slave ISR routine, there are places where
-> IRQ can be re-enabled in the ISR itself. What happens after we mask all
-> slave interrupt and when 'synchronize_irq' is called, which I suppose is
-> meant to wait for inflight interrupt to finish where there's a chance
-> the interrupt can be re-enable again? How is one supposed to deal with th=
-at?
+> Drop the doubled word "be" in a comment.
+>=20
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Wolfram Sang <wsa@kernel.org>
+> Cc: linux-i2c@vger.kernel.org
 
-I encountered the same problem with the i2c-rcar driver before I left
-for my holidays.
+Applied to for-current, thanks!
 
-> > +	iproc_i2c->slave =3D NULL;
-> > +
-> >  	/* Erase the slave address programmed */
-> >  	tmp =3D iproc_i2c_rd_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET);
-> >  	tmp &=3D ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
-> >=20
 
---LHvWgpbS7VDUdu2f
+--4oF+6Ged69J0+4/e
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8YF9cACgkQFA3kzBSg
-Kba6cQ//fw45mvFWfHa/AsTWYtBZPnPvi5JJhzzrCqP+3q3bs6ewwzjoCrqGZXyI
-KhIJKqbPFhwQOA2mjEbbioPcCJ4Z71mtq0s1IblmUlSL6NzMb0hgMBgdVYKmuEBE
-27AwTz6oUzulBfejYPPo9LxVsmY+ZiNA6m6uOhhqkp/SKNbye9Tdy1ZnxwTLmwFV
-dXGqEyQoxQK+LBtuzpSCsg/Z1/PYJAM41Ya+F+PZhy616Hkn8f3iW2rYez+oejpc
-HjLRER6TLNRewsytxMKGae4AsjA04JQ6PtHfMMrfGdq5WNPY12otZKDx1w6jYC3e
-WljQUBdNiD7G3EquvDGyG4KOWub1NhNXMk/RrMsgAqOhH6ErbqwJJYRZpy/7UCao
-MYI9cXa93Qfq1LHNGZcrRFaw5pIja8VAD0MKhJG+vtooi5ZTiFdcsUqece2CzoMZ
-Dz3WzvDlJOi7CLQEBDng5YmrHO+GrAZNbkcf6SApjss8FGy+qhjx9vasHXkKG6ca
-blgY9qHThn5vWYwJ/xe1n6lJywKnSek7EkhkjGqWf8tmww766gQ2fcowSmoGJcdD
-gQhq2EZYqhNKeLnL0U2D3t+szaunbbOISNHeyw/E2XI5BtC+knliWe6kaOu3tBKG
-xYypzgHmeNzQisBDx3nQV7tnMGkQKrGt0hBAdAGM21lHJmgDtb4=
-=5q5r
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8YGQgACgkQFA3kzBSg
+KbZffA//eZvnRc4my01DBH8ZF78vnulGtE0ksUnvvguffPhcstLCd/6oTYtqg69z
+9PUei8yDFiD5RTajNLSsup4RxxvakXuYZpmTtXPWpcpXxf2Yzr7OeqxT5mFy0/Rw
+XHwSyGJAtXSuRmXDK3kgBnfSbOqeIbP4YODxyy129let0Pi8SsGkyd6LSwXceJJ0
+xfGWrEc8jkjsLaVV6Cdb96FoZxtY/rUKEHdvjGYGtAldtwEbTsiddiCum7bYj2tP
+iR/csNlI0Tk5x6RpK7p+W/taSi/GUMcx4moSHlBmFSnL0I2Fq0bHT+j0hRmSNSoe
+V+4z58hjm8mOhgBzSGctjEgW5jKvXrYLbWzXmaBPtdM9N6AcjTcjafaVu6SK2/Sd
+YDnl4zHwL9uOOVv3hcyraljdmq59JlRq643V09PToiZBWl9aH+sxUqtdFgdk7m2r
+DfK9J4XtlwSeQo8xOM8nWoQm9/rbdrbgJWzcDRm/G1H+zMQT4GIJgqQHxt7z3O2X
+msYz3sCssqzb50UC5cFVNHrWNIRWQzri9KhbdNh57ZH59DdoPtVorP7pXejQPaWm
+Vvvht42wYD/d/jlkqSTuCqrKIxxwFIAaibABg5v00fc0FsTZS3T0C+a+Obcv1sNY
+0q7+xyrUSQTbAleKlhy9bQCAjEhpNBWtiRa3kmqUWL25sXs0c60=
+=K1GN
 -----END PGP SIGNATURE-----
 
---LHvWgpbS7VDUdu2f--
+--4oF+6Ged69J0+4/e--
