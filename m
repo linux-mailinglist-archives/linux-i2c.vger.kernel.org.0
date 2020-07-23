@@ -2,98 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C7022A3F8
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jul 2020 02:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2905522A480
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jul 2020 03:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732755AbgGWA6p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Jul 2020 20:58:45 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:58652 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728607AbgGWA6p (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Jul 2020 20:58:45 -0400
-Received: by linux.microsoft.com (Postfix, from userid 1046)
-        id D288C20B4908; Wed, 22 Jul 2020 17:58:43 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D288C20B4908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1595465924;
-        bh=COad48i7F7Ppim6j74aTQgCPv4ntgv9CarhdXkZqMSI=;
-        h=Date:To:Subject:Cc:References:In-Reply-To:From:From;
-        b=niMgtu2U1MhpmWIEO3cGbPKV10cWPPsqIFr07inBG1vKDl0zmHzqzlc8qrAmggp2N
-         5mGg9NdqEaGD+eIpTEWZ0ouRM1eH5z9gQbJNjRSwV9FBMxtwI2d29qezbxuw6rvMwg
-         +KIyK7esmDdlGvp/2oHrdVwlXhUvjNel8nOaNzEg=
-Date:   Wed, 22 Jul 2020 17:58:43 -0700
-To:     wsa@kernel.org, ray.jui@broadcom.com
-Subject: Re: [PATCH] i2c: iproc: fix race between client unreg and isr
-Cc:     rjui@broadcom.com, rayagonda.kokatanur@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        dphadke@linux.microsoft.com, bcm-kernel-feedback-list@broadcom.com
-References: <1595115599-100054-1-git-send-email-dphadke@linux.microsoft.com>
- <116ac90c-8b49-ca89-90a4-9a28f43a7c50@broadcom.com>
- <20200722104128.GK1030@ninjato>
- <5048cf44-e2c2-ee31-a9fb-b823f16c2c7d@broadcom.com>
-In-Reply-To: <5048cf44-e2c2-ee31-a9fb-b823f16c2c7d@broadcom.com>
-User-Agent: Heirloom mailx 12.5 7/5/10
+        id S1733174AbgGWBYZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Jul 2020 21:24:25 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:47999 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728607AbgGWBYZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Jul 2020 21:24:25 -0400
+X-UUID: fb6f332359f340ae8025c27774f9e1a7-20200723
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=bbgQJNRcgmdZNRjAfyTf3xC6QTg1bKjqlo6CpIRT/nU=;
+        b=Tst37tB1yF+kEBSzXJq7Xt8nlzX0veU2Auiqo7v1e5I+hPuMR+AytQ7+Cn52kwvwyfDqSTU0dIlQNlMsKoGkzAHhn9U2GJ/ajbzBEZAh2mleOQl2ZNGayh5HQb+D9mkbvC5aK4k7wp4fU6zSw2VVb/MdUSYwBTeOK/kzarpzxHY=;
+X-UUID: fb6f332359f340ae8025c27774f9e1a7-20200723
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <yingjoe.chen@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1599116157; Thu, 23 Jul 2020 09:24:22 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 23 Jul 2020 09:24:21 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 23 Jul 2020 09:24:17 +0800
+Message-ID: <1595467461.7332.3.camel@mtksdaap41>
+Subject: Re: [PATCH 2/4] i2c: mediatek: Support DMA mask range over 33-bits
+From:   Yingjoe Chen <yingjoe.chen@mediatek.com>
+To:     Qii Wang <qii.wang@mediatek.com>
+CC:     <wsa@the-dreams.de>, <qiangming.xia@mediatek.com>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <leilk.liu@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <robh+dt@kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-i2c@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Date:   Thu, 23 Jul 2020 09:24:21 +0800
+In-Reply-To: <1595421106-10017-3-git-send-email-qii.wang@mediatek.com>
+References: <1595421106-10017-1-git-send-email-qii.wang@mediatek.com>
+         <1595421106-10017-3-git-send-email-qii.wang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-Id: <20200723005844.D288C20B4908@linux.microsoft.com>
-From:   dphadke@linux.microsoft.com (Dhananjay Phadke)
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Ray Jui <ray.jui@broadcom.com> wrote:
+T24gV2VkLCAyMDIwLTA3LTIyIGF0IDIwOjMxICswODAwLCBRaWkgV2FuZyB3cm90ZToNCj4gUmVw
+bGFjZSAnc3VwcG9ydF8zM2JpdHMgd2l0aCAnZG1hX21heF9zdXBwb3J0JyBmb3IgRE1BIG1hc2sN
+Cj4gb3BlcmF0aW9uLCBhbmQgcmVwbGFjZSAnbXRrX2kyY19zZXRfNGdfbW9kZScgd2l0aCAndXBw
+ZXJfMzJfYml0cycuDQoNClRoaXMgZG9lc24ndCBleHBsYWluIHdoeSB3ZSBuZWVkIHRoaXMgcGF0
+Y2guIEhvdyBhYm91dDoNCg0KTmV3ZXIgTVRLIGNoaXAgc3VwcG9ydCBtb3JlIHRoYW4gOEdCIG9m
+IGRyYW0uIFJlcGxhY2Ugc3VwcG9ydF8zM2JpdHMNCndpdGggbW9yZSBnZW5lcmFsIGRtYV9tYXhf
+c3VwcG9ydC4NCg0KDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBRaWkgV2FuZyA8cWlpLndhbmdAbWVk
+aWF0ZWsuY29tPg0KPiAtLS0NCj4gIGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXQ2NXh4LmMgfCAz
+NyArKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ICAxIGZpbGUgY2hhbmdl
+ZCwgMTcgaW5zZXJ0aW9ucygrKSwgMjAgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMt
+bXQ2NXh4LmMNCj4gaW5kZXggZTZiOTg0YS4uZTQ3NTg3NyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVy
+cy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYw0KPiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJj
+LW10NjV4eC5jDQo+IEBAIC0yMDksNiArMjA5LDcgQEAgc3RydWN0IG10a19pMmNfY29tcGF0aWJs
+ZSB7DQo+ICAJdW5zaWduZWQgY2hhciBkbWFfc3luYzogMTsNCj4gIAl1bnNpZ25lZCBjaGFyIGx0
+aW1pbmdfYWRqdXN0OiAxOw0KPiAgCXVuc2lnbmVkIGNoYXIgYXBkbWFfc3luYzogMTsNCj4gKwl1
+bnNpZ25lZCBjaGFyIG1heF9kbWFfc3VwcG9ydDsNCg0Kc3VwcG9ydF8zM2JpdHMgaXMgbm8gbG9u
+Z2VyIHVzZWQuIFBsZWFzZSByZW1vdmUgaXQuDQoNCkpvZS5DDQoNCg==
 
->
-> On 7/22/2020 3:41 AM, Wolfram Sang wrote:
-> > 
-> >>> +	synchronize_irq(iproc_i2c->irq);
-> >>
-> >> If one takes a look at the I2C slave ISR routine, there are places where
-> >> IRQ can be re-enabled in the ISR itself. What happens after we mask all
-> >> slave interrupt and when 'synchronize_irq' is called, which I suppose is
-> >> meant to wait for inflight interrupt to finish where there's a chance
-> >> the interrupt can be re-enable again? How is one supposed to deal with that?
-> > 
-> > I encountered the same problem with the i2c-rcar driver before I left
-> > for my holidays.
-> > 
->
-> I think the following sequence needs to be implemented to make this
-> safe, i.e., after 'synchronize_irq', no further slave interrupt will be
-> fired.
->
-> In 'bcm_iproc_i2c_unreg_slave':
->
-> 1. Set an atomic variable 'unreg_slave' (I'm bad in names so please come
-> up with a better name than this)
->
-> 2. Disable all slave interrupts
->
-> 3. synchronize_irq
->
-> 4. Set slave to NULL
->
-> 5. Erase slave addresses
->
-> In the ISR routine, it should always check against 'unreg_slave' before
-> enabling any slave interrupt. If 'unreg_slave' is set, no slave
-> interrupt should be re-enabled from within the ISR.
->
-> I think the above sequence can ensure no further slave interrupt after
-> 'synchronize_irq'. I suggested using an atomic variable instead of
-> variable + spinlock due to the way how sync irq works, i.e., "If you use
-> this function while holding a resource the IRQ handler may need you will
-> deadlock.".
->
-> Thanks,
->
-> Ray
->
-> >>> +	iproc_i2c->slave = NULL;
-> >>> +
-> >>>  	/* Erase the slave address programmed */
-> >>>  	tmp = iproc_i2c_rd_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET);
-> >>>  	tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
-> >>>
