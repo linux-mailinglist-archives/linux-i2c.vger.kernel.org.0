@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA59E22AEE9
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jul 2020 14:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB85022AEE2
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jul 2020 14:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728787AbgGWMTW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Jul 2020 08:19:22 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:10728 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728780AbgGWMTV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Jul 2020 08:19:21 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f19803b0001>; Thu, 23 Jul 2020 05:19:07 -0700
+        id S1728816AbgGWMTZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Jul 2020 08:19:25 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:19180 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728806AbgGWMTY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Jul 2020 08:19:24 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f197fd10001>; Thu, 23 Jul 2020 05:17:21 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Thu, 23 Jul 2020 05:19:20 -0700
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 23 Jul 2020 05:19:23 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Thu, 23 Jul 2020 05:19:20 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 23 Jul
- 2020 12:19:19 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Thu, 23 Jul 2020 12:19:19 +0000
+        by hqpgpgate101.nvidia.com on Thu, 23 Jul 2020 05:19:23 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 23 Jul
+ 2020 12:19:23 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 23 Jul 2020 12:19:22 +0000
 Received: from kyarlagadda-linux.nvidia.com (Not Verified[10.19.64.169]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5f1980440001>; Thu, 23 Jul 2020 05:19:18 -0700
+        id <B5f1980470000>; Thu, 23 Jul 2020 05:19:22 -0700
 From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
 To:     <digetx@gmail.com>, <linux-i2c@vger.kernel.org>,
         <thierry.reding@gmail.com>
@@ -33,174 +33,129 @@ CC:     <jonathanh@nvidia.com>, <linux-tegra@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <ldewangan@nvidia.com>,
         <smohammed@nvidia.com>, <rgumasta@nvidia.com>,
         Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: [PATCH 5/7] i2c: tegra: enable second level clock gating
-Date:   Thu, 23 Jul 2020 17:48:51 +0530
-Message-ID: <1595506733-10307-5-git-send-email-kyarlagadda@nvidia.com>
+Subject: [PATCH 6/7] i2c: tegra: DMA support for t186 and t194
+Date:   Thu, 23 Jul 2020 17:48:52 +0530
+Message-ID: <1595506733-10307-6-git-send-email-kyarlagadda@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1595506733-10307-1-git-send-email-kyarlagadda@nvidia.com>
 References: <1595506733-10307-1-git-send-email-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1595506747; bh=YtW5ONuxQcaNg5+GvR7yBueoYCGlYcr9525vggzlM5Q=;
+        t=1595506641; bh=lbncHwO3OLR/eiajOIMGJWlwqCWr+tFZpr51JViAPWc=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:MIME-Version:Content-Type;
-        b=eseKmqrlY/enO0KSXaanUL2AKHEuZ1u3zDUrTCD7w5U4VmCNMXxDLdKnKHC7BRqz0
-         SMCn1OldRpl4TsmNXASWOcwS5rxsb4MBEv4BhcqtJaGgxr6JgAOjShVHA4tfxtwQAe
-         fsarR6S2zMoMchKoubouT5QaoKc92ld4Rfb32xTK+5jx44M/eanIdrBF7uHeZTFWcB
-         Pxsf0eaU7P5KMT2wPUQzr5UxMnIbY8rfBi1vIVbfZiNH2mf0wCdXs0LYu+aypESjGu
-         qNMJWVcl7dR9hoRnO67OxcFxk+d+9pp7j+0t+wSdD2Yk+KbC87g6cQj/wFdoeYQLm6
-         XAd2YBbRnuXXA==
+        b=XXcRiwmSauA6ff2cOSQpKunHfb2/28oVTWDfPcuWiebyd1kAp7nsalRWH2ugrBk3U
+         ZmkXutLc0gS9w3YWyC6LmKV7WWaXFDiyufiUQHLzetUtbjxBFgV4JD0DBE/atiOLts
+         CsTbaPPS9G6wYGRzWX/UHrC2ILIkrqIV2cpWGHsp+1O7O64d8IcZTsmMXn32Qhy8I8
+         TCkBxSwtuWBPrcf43j7QqrzCpU7lrW181xjBXbhT0etvMjYpmneG+FcgdlRpOPLFxA
+         mySbe2q1dADrBpOFFJL0VC8+msVsAzCJfWvbQSjFSZbL+qX9xacP3oeZidYHDkcr6R
+         JYb7cIHqQjtpQ==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Enable Second Level Clock Gating feature for supported chips.
-With SLCG enabled, software need not control clocks anymore
-and leave clocks enabled always on.
+Enable GPC DMA support for Tegra186 and Tegra194
 
-Signed-off-by: Shardar Shariff Md <smohammed@nvidia.com>
-Signed-off-by: Laxman Dewangan <ldewangan@nvidia.com>
+Signed-off-by: Rajesh Gumasta <rgumasta@nvidia.com>
 Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 32 ++++++++++++++++++++++++++++----
- 1 file changed, 28 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 2f654ed..8ab968e 100644
+index 8ab968e..77198fc 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -235,6 +235,7 @@ struct tegra_i2c_hw_feature {
- 	u32 setup_hold_time_fast_fast_plus_mode;
+@@ -236,6 +236,7 @@ struct tegra_i2c_hw_feature {
  	u32 setup_hold_time_hs_mode;
  	bool has_interface_timing_reg;
-+	bool has_slcg_support;
+ 	bool has_slcg_support;
++	bool has_gpc_dma;
  };
  
  /**
-@@ -299,6 +300,7 @@ struct tegra_i2c_dev {
- 	struct completion dma_complete;
- 	bool is_curr_atomic_xfer;
- 	int clk_divisor_hs_mode;
-+	bool is_clkon_always;
+@@ -432,11 +433,18 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
+ 	dma_addr_t dma_phys;
+ 	int err;
+ 
+-	if (!i2c_dev->hw->has_apb_dma)
+-		return 0;
+-
+-	if (!IS_ENABLED(CONFIG_TEGRA20_APB_DMA)) {
+-		dev_dbg(i2c_dev->dev, "Support for APB DMA not enabled!\n");
++	if (i2c_dev->hw->has_gpc_dma) {
++		if (!IS_ENABLED(CONFIG_TEGRA_GPC_DMA)) {
++			dev_dbg(i2c_dev->dev, "Support for GPC DMA not enabled!\n");
++			return 0;
++		}
++	} else if (i2c_dev->hw->has_apb_dma) {
++		if (!IS_ENABLED(CONFIG_TEGRA20_APB_DMA)) {
++			dev_dbg(i2c_dev->dev, "Support for APB DMA not enabled!\n");
++			return 0;
++		}
++	} else {
++		dev_dbg(i2c_dev->dev, "DMA is not enabled!\n");
+ 		return 0;
+ 	}
+ 
+@@ -1490,6 +1498,7 @@ static const struct tegra_i2c_hw_feature tegra20_i2c_hw = {
+ 	.setup_hold_time_fast_fast_plus_mode = 0x0,
+ 	.setup_hold_time_hs_mode = 0x0,
+ 	.has_interface_timing_reg = false,
++	.has_gpc_dma = false,
  };
  
- static void dvc_writel(struct tegra_i2c_dev *i2c_dev, u32 val,
-@@ -1478,6 +1480,7 @@ static const struct tegra_i2c_hw_feature tegra20_i2c_hw = {
- 	.supports_bus_clear = false,
- 	.has_reg_write_buffering = true,
- 	.has_hs_mode_support = false,
-+	.has_slcg_support = false,
- 	.has_apb_dma = true,
- 	.tlow_std_mode = 0x4,
- 	.thigh_std_mode = 0x2,
-@@ -1506,6 +1509,7 @@ static const struct tegra_i2c_hw_feature tegra30_i2c_hw = {
- 	.supports_bus_clear = false,
- 	.has_reg_write_buffering = true,
- 	.has_hs_mode_support = false,
-+	.has_slcg_support = false,
- 	.has_apb_dma = true,
- 	.tlow_std_mode = 0x4,
- 	.thigh_std_mode = 0x2,
-@@ -1534,6 +1538,7 @@ static const struct tegra_i2c_hw_feature tegra114_i2c_hw = {
- 	.supports_bus_clear = true,
- 	.has_reg_write_buffering = true,
- 	.has_hs_mode_support = false,
-+	.has_slcg_support = false,
- 	.has_apb_dma = true,
- 	.tlow_std_mode = 0x4,
- 	.thigh_std_mode = 0x2,
-@@ -1562,6 +1567,7 @@ static const struct tegra_i2c_hw_feature tegra124_i2c_hw = {
- 	.supports_bus_clear = true,
- 	.has_reg_write_buffering = true,
- 	.has_hs_mode_support = false,
-+	.has_slcg_support = false,
- 	.has_apb_dma = true,
- 	.tlow_std_mode = 0x4,
- 	.thigh_std_mode = 0x2,
-@@ -1590,6 +1596,7 @@ static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
- 	.supports_bus_clear = true,
- 	.has_reg_write_buffering = true,
- 	.has_hs_mode_support = false,
-+	.has_slcg_support = false,
- 	.has_apb_dma = true,
- 	.tlow_std_mode = 0x4,
- 	.thigh_std_mode = 0x2,
-@@ -1618,6 +1625,7 @@ static const struct tegra_i2c_hw_feature tegra186_i2c_hw = {
- 	.supports_bus_clear = true,
- 	.has_reg_write_buffering = false,
- 	.has_hs_mode_support = false,
-+	.has_slcg_support = true,
- 	.has_apb_dma = false,
- 	.tlow_std_mode = 0x4,
- 	.thigh_std_mode = 0x3,
-@@ -1646,6 +1654,7 @@ static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
- 	.supports_bus_clear = true,
- 	.has_reg_write_buffering = false,
- 	.has_hs_mode_support = true,
-+	.has_slcg_support = true,
- 	.has_apb_dma = false,
- 	.tlow_std_mode = 0x8,
- 	.thigh_std_mode = 0x7,
-@@ -1822,7 +1831,12 @@ static int tegra_i2c_probe(struct platform_device *pdev)
- 		}
- 	}
+ static const struct tegra_i2c_hw_feature tegra30_i2c_hw = {
+@@ -1519,6 +1528,7 @@ static const struct tegra_i2c_hw_feature tegra30_i2c_hw = {
+ 	.setup_hold_time_fast_fast_plus_mode = 0x0,
+ 	.setup_hold_time_hs_mode = 0x0,
+ 	.has_interface_timing_reg = false,
++	.has_gpc_dma = false,
+ };
  
--	if (i2c_dev->is_multimaster_mode) {
-+	if (i2c_dev->is_multimaster_mode || i2c_dev->hw->has_slcg_support)
-+		i2c_dev->is_clkon_always = true;
-+	else
-+		i2c_dev->is_clkon_always = false;
-+
-+	if (i2c_dev->is_clkon_always) {
- 		ret = clk_enable(i2c_dev->div_clk);
- 		if (ret < 0) {
- 			dev_err(i2c_dev->dev, "div_clk enable failed %d\n",
-@@ -1875,7 +1889,7 @@ static int tegra_i2c_probe(struct platform_device *pdev)
- 	tegra_i2c_release_dma(i2c_dev);
+ static const struct tegra_i2c_hw_feature tegra114_i2c_hw = {
+@@ -1548,6 +1558,7 @@ static const struct tegra_i2c_hw_feature tegra114_i2c_hw = {
+ 	.setup_hold_time_fast_fast_plus_mode = 0x0,
+ 	.setup_hold_time_hs_mode = 0x0,
+ 	.has_interface_timing_reg = false,
++	.has_gpc_dma = false,
+ };
  
- disable_div_clk:
--	if (i2c_dev->is_multimaster_mode)
-+	if (i2c_dev->is_clkon_always)
- 		clk_disable(i2c_dev->div_clk);
+ static const struct tegra_i2c_hw_feature tegra124_i2c_hw = {
+@@ -1577,6 +1588,7 @@ static const struct tegra_i2c_hw_feature tegra124_i2c_hw = {
+ 	.setup_hold_time_fast_fast_plus_mode = 0x0,
+ 	.setup_hold_time_hs_mode = 0x0,
+ 	.has_interface_timing_reg = true,
++	.has_gpc_dma = false,
+ };
  
- put_rpm:
-@@ -1908,7 +1922,7 @@ static int tegra_i2c_remove(struct platform_device *pdev)
+ static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
+@@ -1606,6 +1618,7 @@ static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
+ 	.setup_hold_time_fast_fast_plus_mode = 0,
+ 	.setup_hold_time_hs_mode = 0,
+ 	.has_interface_timing_reg = true,
++	.has_gpc_dma = true,
+ };
  
- 	i2c_del_adapter(&i2c_dev->adapter);
+ static const struct tegra_i2c_hw_feature tegra186_i2c_hw = {
+@@ -1635,6 +1648,7 @@ static const struct tegra_i2c_hw_feature tegra186_i2c_hw = {
+ 	.setup_hold_time_fast_fast_plus_mode = 0,
+ 	.setup_hold_time_hs_mode = 0,
+ 	.has_interface_timing_reg = true,
++	.has_gpc_dma = true,
+ };
  
--	if (i2c_dev->is_multimaster_mode)
-+	if (i2c_dev->is_clkon_always)
- 		clk_disable(i2c_dev->div_clk);
+ static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
+@@ -1664,6 +1678,7 @@ static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
+ 	.setup_hold_time_fast_fast_plus_mode = 0x02020202,
+ 	.setup_hold_time_hs_mode = 0x090909,
+ 	.has_interface_timing_reg = true,
++	.has_gpc_dma = true,
+ };
  
- 	pm_runtime_disable(&pdev->dev);
-@@ -1932,7 +1946,8 @@ static int __maybe_unused tegra_i2c_suspend(struct device *dev)
- 	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
- 	int err = 0;
- 
--	i2c_mark_adapter_suspended(&i2c_dev->adapter);
-+	if (i2c_dev->is_clkon_always)
-+		clk_disable(i2c_dev->div_clk);
- 
- 	if (!pm_runtime_status_suspended(dev))
- 		err = tegra_i2c_runtime_suspend(dev);
-@@ -1968,6 +1983,15 @@ static int __maybe_unused tegra_i2c_resume(struct device *dev)
- 			return err;
- 	}
- 
-+	if (i2c_dev->is_clkon_always) {
-+		err = clk_enable(i2c_dev->div_clk);
-+		if (err < 0) {
-+			dev_err(i2c_dev->dev, "clock enable failed %d\n",
-+				err);
-+			return err;
-+		}
-+	}
-+
- 	i2c_mark_adapter_resumed(&i2c_dev->adapter);
- 
- 	return 0;
+ /* Match table for of_platform binding */
 -- 
 2.7.4
 
