@@ -2,133 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 774B522AEE6
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jul 2020 14:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D52422B03D
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jul 2020 15:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728841AbgGWMT1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Jul 2020 08:19:27 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:19183 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728806AbgGWMT1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Jul 2020 08:19:27 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f197fd40000>; Thu, 23 Jul 2020 05:17:24 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 23 Jul 2020 05:19:26 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 23 Jul 2020 05:19:26 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 23 Jul
- 2020 12:19:26 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Thu, 23 Jul 2020 12:19:26 +0000
-Received: from kyarlagadda-linux.nvidia.com (Not Verified[10.19.64.169]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5f19804b0001>; Thu, 23 Jul 2020 05:19:25 -0700
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     <digetx@gmail.com>, <linux-i2c@vger.kernel.org>,
-        <thierry.reding@gmail.com>
-CC:     <jonathanh@nvidia.com>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <ldewangan@nvidia.com>,
-        <smohammed@nvidia.com>, <rgumasta@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: [PATCH 7/7] i2c: tegra: dump I2C registers on timeout
-Date:   Thu, 23 Jul 2020 17:48:53 +0530
-Message-ID: <1595506733-10307-7-git-send-email-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1595506733-10307-1-git-send-email-kyarlagadda@nvidia.com>
+        id S1729094AbgGWNQ5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Jul 2020 09:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728995AbgGWNQ5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Jul 2020 09:16:57 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6E3C0619DC;
+        Thu, 23 Jul 2020 06:16:57 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id k13so3265331lfo.0;
+        Thu, 23 Jul 2020 06:16:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GmCMT34g8ctOCOCVfFM1nrNLazMMxhc+MB6jd0U3TGo=;
+        b=umpSVN09bzTJrl03wDhE2YgP69AnhrgQBqU8w9n95xuU/mhp2jW1dqD3zGl5UXgSL3
+         A9wR5tNA1p2IGvh14M7R3qNCUqH9dSiHPexXp+dDJnhxeaI4f5pF1AT+Go1OYjAn+ddH
+         vXWRW9TO/zGrnysXkXIK5QWlB3IjU8mci91DLWCj1YMgesOyeFt03CedbS1Lbwzwi5OW
+         dECzEewa/BNzmD+zKVityDakq04OGvaRNA1dKopkBo4naWd+tWJSSuGeObJPsbSfajKQ
+         yljj7Xctvtfyv6TUyk25ZTkhSxrZQqK5pqPZHvv0YH1N6jvVioEq1zFJpxZzN0Q4wf8U
+         hKUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GmCMT34g8ctOCOCVfFM1nrNLazMMxhc+MB6jd0U3TGo=;
+        b=NzaJzmQcw9zBaUZtuAgFID2vOurJfeODdhDyIATQbFa8DYuBDSgwKl5GEsTN50BSbt
+         6Khw2ZJBjHh2VpX2y5DrKeBfxzV++gL+iL8hN7EvFjfc6wNboiGAlzYJT2QMG7EWXK70
+         xwCx2xO6jn9Wc25JnadYUF3r0TVvcCZs4d/i9LeoD+0y1+m9hFT/S/x2BG6M+lAhMrXA
+         VZAt962IpsValP82QN2BE+r7ACiv4UmoY8iykQeiw18rn7ZDsshID5E14pOEOc8o6xIK
+         MAFdqcyurqnfS9Xj1MjaA3Vhy2as2Ino7jwoETK4UZOy9HEDXmbyKRX2Tv1F3IveDfF5
+         K/jg==
+X-Gm-Message-State: AOAM533sZShVu+DAsBKQpU3hzRbMnHvIA5cIYaZzluPqxrNken2/dpFi
+        M75NVVgt9em/K/vHmMUZEqs=
+X-Google-Smtp-Source: ABdhPJw+qE88m/u4eqT5nEXl9rJpjx85vTvdr8Lim7ln0KVNM1LpmNjHhXwKKKk9bXKH8NayUnNbDQ==
+X-Received: by 2002:a19:7111:: with SMTP id m17mr2315025lfc.156.1595510215559;
+        Thu, 23 Jul 2020 06:16:55 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-76-12-16.pppoe.mtu-net.ru. [91.76.12.16])
+        by smtp.googlemail.com with ESMTPSA id j2sm2740719lji.115.2020.07.23.06.16.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jul 2020 06:16:54 -0700 (PDT)
+Subject: Re: [PATCH 6/7] i2c: tegra: DMA support for t186 and t194
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        linux-i2c@vger.kernel.org, thierry.reding@gmail.com
+Cc:     jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ldewangan@nvidia.com,
+        smohammed@nvidia.com, rgumasta@nvidia.com
 References: <1595506733-10307-1-git-send-email-kyarlagadda@nvidia.com>
+ <1595506733-10307-6-git-send-email-kyarlagadda@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <b71ae942-6d9e-f609-f4f6-87d0ce117175@gmail.com>
+Date:   Thu, 23 Jul 2020 16:16:52 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1595506644; bh=R11Ga9WFE2Eiv4ttDZrrlRWyR6LeF2U8LlGpsShfusY=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:Content-Type;
-        b=c5DauvVDYBkxNG6Rd4TruvpOuOmBI8mIup3ch/VzXJrwnYN42hMmTlkhxAAAVI14r
-         H4rj/QBSFxt1N8zSYsr5Z6MiMam+697tDp4rC5I2fIO+y7ZEU8m4ZTDqw3nhRuKFU3
-         RBRNeAb/DUbSvpMrLRTRwRVRKgmnhgocj9h4kM3zmQN92mOvtKyOpdk0rme32WqM0i
-         um0MCis4U5obZd9e5NP2xBle1rZ7qFheseow3ljjDvAntcATOEjtbZyT+gqm8VtDcb
-         bLLM0azOwzw1PeYq9LE6RrpaRSkMWu1Qzc41sjPfl9tqOu9B3hucLMUSrVnzn3DfA9
-         uvUQ1qyWjP+oA==
+In-Reply-To: <1595506733-10307-6-git-send-email-kyarlagadda@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Rajesh Gumasta <rgumasta@nvidia.com>
+Hello Krishna,
 
-Dump I2C regsiters for debug when transfer timeout occurs.
+23.07.2020 15:18, Krishna Yarlagadda пишет:
+...
+>  static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
+> @@ -1606,6 +1618,7 @@ static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
+>  	.setup_hold_time_fast_fast_plus_mode = 0,
+>  	.setup_hold_time_hs_mode = 0,
+>  	.has_interface_timing_reg = true,
+> +	.has_gpc_dma = true,
 
-Signed-off-by: Rajesh Gumasta <rgumasta@nvidia.com>
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
----
- drivers/i2c/busses/i2c-tegra.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+false
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 77198fc..cdc8664 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -126,6 +126,8 @@
- #define  I2C_HS_INTERFACE_TIMING_THD_STA	GENMASK(13, 8)
- #define  I2C_HS_INTERFACE_TIMING_TSU_STA	GENMASK(5, 0)
- 
-+#define I2C_MST_PACKET_TRANSFER_CNT_STATUS	0x0b0
-+
- #define I2C_MST_FIFO_CONTROL			0x0b4
- #define I2C_MST_FIFO_CONTROL_RX_FLUSH		BIT(0)
- #define I2C_MST_FIFO_CONTROL_TX_FLUSH		BIT(1)
-@@ -1178,6 +1180,33 @@ static int tegra_i2c_issue_bus_clear(struct i2c_adapter *adap)
- 	return -EAGAIN;
- }
- 
-+static void tegra_i2c_reg_dump(struct tegra_i2c_dev *i2c_dev)
-+{
-+	dev_dbg(i2c_dev->dev, "--- register dump for debugging ----\n");
-+	dev_dbg(i2c_dev->dev, "I2C_CNFG - 0x%x\n",
-+		i2c_readl(i2c_dev, I2C_CNFG));
-+	dev_dbg(i2c_dev->dev, "I2C_PACKET_TRANSFER_STATUS - 0x%x\n",
-+		i2c_readl(i2c_dev, I2C_PACKET_TRANSFER_STATUS));
-+	dev_dbg(i2c_dev->dev, "I2C_FIFO_CONTROL - 0x%x\n",
-+		i2c_readl(i2c_dev, I2C_FIFO_CONTROL));
-+	dev_dbg(i2c_dev->dev, "I2C_FIFO_STATUS - 0x%x\n",
-+		i2c_readl(i2c_dev, I2C_FIFO_STATUS));
-+
-+	if (i2c_dev->hw->has_mst_fifo) {
-+		dev_dbg(i2c_dev->dev, "I2C_MST_FIFO_CONTROL - 0x%x\n",
-+			i2c_readl(i2c_dev, I2C_MST_FIFO_CONTROL));
-+		dev_dbg(i2c_dev->dev, "I2C_MST_FIFO_STATUS - 0x%x\n",
-+			i2c_readl(i2c_dev, I2C_MST_FIFO_STATUS));
-+		dev_dbg(i2c_dev->dev, "I2C_MST_PACKET_TRANSFER_CNT - 0x%x\n",
-+			i2c_readl(i2c_dev,
-+				  I2C_MST_PACKET_TRANSFER_CNT_STATUS));
-+	}
-+	dev_dbg(i2c_dev->dev, "I2C_INT_MASK - 0x%x\n",
-+		i2c_readl(i2c_dev, I2C_INT_MASK));
-+	dev_dbg(i2c_dev->dev, "I2C_INT_STATUS - 0x%x\n",
-+		i2c_readl(i2c_dev, I2C_INT_STATUS));
-+}
-+
- static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 			      struct i2c_msg *msg,
- 			      enum msg_end_type end_state)
-@@ -1331,6 +1360,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 
- 		if (!time_left && !completion_done(&i2c_dev->dma_complete)) {
- 			dev_err(i2c_dev->dev, "DMA transfer timeout\n");
-+			tegra_i2c_reg_dump(i2c_dev);
- 			tegra_i2c_init(i2c_dev, true);
- 			return -ETIMEDOUT;
- 		}
-@@ -1352,6 +1382,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 
- 	if (time_left == 0) {
- 		dev_err(i2c_dev->dev, "i2c transfer timed out\n");
-+		tegra_i2c_reg_dump(i2c_dev);
- 		tegra_i2c_init(i2c_dev, true);
- 		return -ETIMEDOUT;
- 	}
--- 
-2.7.4
-
+>  };
