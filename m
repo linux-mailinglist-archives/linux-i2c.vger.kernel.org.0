@@ -2,37 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0CF722CEE3
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Jul 2020 21:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E935622CEEC
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Jul 2020 21:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbgGXTwI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Jul 2020 15:52:08 -0400
-Received: from www.zeus03.de ([194.117.254.33]:59092 "EHLO mail.zeus03.de"
+        id S1726617AbgGXT4p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Jul 2020 15:56:45 -0400
+Received: from www.zeus03.de ([194.117.254.33]:59996 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726085AbgGXTwI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 24 Jul 2020 15:52:08 -0400
+        id S1726411AbgGXT4o (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 24 Jul 2020 15:56:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=bNIby+nW8sgH3vCDAzYUuWgOjA6n
-        Xrq3osKrKwO71K0=; b=jeX0+76Bb7h3xRtZuCfSqPxKqC9zqlFMoIozyTDgx8wS
-        vDmLh3VOUd1nz9bsf+1iT7YsEXaMuw6MqOtwbXybW9ZhfWK+m2p2Yi6/KaeIHNTr
-        Put6MVsIuTPAkiS9ZHvRxIsjiflxMhCU9zog/WBCsrhLKdQheySKKn/VFmhOZdw=
-Received: (qmail 3786999 invoked from network); 24 Jul 2020 21:52:06 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Jul 2020 21:52:06 +0200
-X-UD-Smtp-Session: l3s3148p1@7M7GTjWrKp8gAwDPXwcRAJKYSnl1dekZ
-Date:   Fri, 24 Jul 2020 21:52:06 +0200
+        :content-type:in-reply-to; s=k1; bh=De9qJk+UWFtcXvKCFRa1VA8MN6GK
+        du/iSQllqn+uHSQ=; b=Dh3GZQjGYfqUrddlvdRNrAk6MTBcay5Tt2w8MQHcgr8L
+        1EF1mo5dJOjRs0gPEEpiLZfl+QIR3bzCt1U8g0cQPdE+7ow1Ok69dgSMeK83V5Ci
+        ipqSKNJuJsbyI2POrOFbOuFpc70fF2tIEAx1TTYbrm0qWUxUXMhntGsNT8327ks=
+Received: (qmail 3787874 invoked from network); 24 Jul 2020 21:56:43 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Jul 2020 21:56:43 +0200
+X-UD-Smtp-Session: l3s3148p1@x2s9XzWrPJ8gAwDPXwcRAJKYSnl1dekZ
+Date:   Fri, 24 Jul 2020 21:56:42 +0200
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-i2c@vger.kernel.org
 Subject: Re: [PATCH] i2c: revert "i2c: core: Allow drivers to disable
  i2c-core irq mapping"
-Message-ID: <20200724195206.GG1227@ninjato>
+Message-ID: <20200724195642.GH1227@ninjato>
 References: <20200630162440.8453-1-wsa+renesas@sang-engineering.com>
+ <02adeb3f-761a-32e8-6596-81ccb7cafa6e@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0qt3EE9wi45a2ZFX"
+        protocol="application/pgp-signature"; boundary="2oox5VnwalALFvA7"
 Content-Disposition: inline
-In-Reply-To: <20200630162440.8453-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <02adeb3f-761a-32e8-6596-81ccb7cafa6e@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -40,40 +41,62 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---0qt3EE9wi45a2ZFX
+--2oox5VnwalALFvA7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 30, 2020 at 06:24:40PM +0200, Wolfram Sang wrote:
-> This manually reverts commit d1d84bb95364ed604015c2b788caaf3dbca0262f.
-> The only user has gone two years ago with commit 589edb56b424 ("ACPI /
-> scan: Create platform device for INT33FE ACPI nodes") and no new user
-> has showed up. Remove and hope we will never need it again.
+Hi Hans,
+
+> > Build tested only. Looking for Hans' opinion here.
 >=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> I'm fine with removing this.
 
-Applied to for-next, thanks!
+Thanks!
+
+[semi off-topic case]
+
+> So basically allow board_info to say:
+>=20
+> "There is no IRQ and do not try to find one"
+>=20
+> This could be as simple as having the instantiating code do:
+>=20
+> 	board_info.irq =3D -ENOENT;
+
+=2E..
+
+> ATM I do not have a use-case for this, still I think this would be
+> useful to have. Would you be willing to take a patch with the above
+> change for this?
+
+I haven't checked your code change in detail to check for side-effects.
+In general, I think we could have something like this. However, I am a
+bit conservative when it comes to changing something without a use case.
+
+All the best,
+
+   Wolfram
 
 
---0qt3EE9wi45a2ZFX
+--2oox5VnwalALFvA7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8bO+YACgkQFA3kzBSg
-KbZJjA/+JhWi+T1nIol01d96qMqdogmBhi9MwgrnetkXMJ+aCYU/UBsIzCWbxoxn
-a+awZ85n+Qds2YS9c/J/NcNWi1X1/8iiNx2Hn0Sq7yh/cHjiy3Z1FJoXnHt7CAWy
-KZiiTRA6MR3qCH0CGd3Ems6a0DuuLwNMzhvLJZ2YrZqLyiX/UCTdMt40tuoFlPJF
-GHjX/SWp8Fjj3C+Dk6uXlce4qTVpGxWZ3Er3+eLLljhHzeGw18X1C2lXdZPeq4C6
-3SZVSoYHbhKnm9f0IKQkK/6LXn2elVZ940eV6Ju5UIPJdG2OAN31aO/wG6E5XGsa
-UXVYmdjnDhBw6MqltFO5HYsdeGJN6OAUc1iqze4oLXajWFfADrJ3NqNN06bNrFHp
-mPVJ7K8P6iBD1diJv1/130pLRhieOYjh5INACkLpsilj25KS25ulW0LsWdeQARli
-9NgDSw/QeBFrcB7crjbFduWINo45v+sLYYuFfFWyqvuRGuPkpY6LgBu6RVuN4RLJ
-d/uq6zSxQ4NuRSNn6nXXDOWzxfcXy6i+DG+tEDugpYWH96GpZ3L/WLiVrMd4BDPW
-YbGY3d2Kjbx2nyMDqPOUpb3DPD28lOoQj/yXtXRCahXdXlo0ix4vIKFU8x4VBTfA
-uhKqFqcT2Bhu/xWEmObXL18ipHtNDjO13Ih0PVZ6fC4PwP81wF4=
-=3Wys
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8bPPoACgkQFA3kzBSg
+KbZOuRAAjirGTofgq/q9sprb0SZ3sfkZ1d9VqGeEFZbVBSMLC44m5A0qckGrF2p9
+AMRoQhV+cbGnQD/LrfXzv8uxLvI67/Sf8kL0Uw4uFVRtuFTajZkPEnjhb8TbWN8P
+cEIukOxIY0aBrBFsM7MVaUO2E/JR12/MUD+7LY5S1Sg3hCyV3mAyNzuP6lHslDqw
+0/lnQ3M5WOBVFy+IZp7cFQxfAVzSPY0vS0l8ew7fwepBhqCyYe7cFb0WqqsKr5uj
+2rK/p4TJDaUjQy9j7BwYlObQzPEekdz+V+oDe3Uk+gxCmkPoHrnGPONvEtfsrMTD
+Z34l1mtGpDNo/Wf6t3WdY6p9347jwZbwNWxS2YwWohMHB08itro1898+nztEiaMc
+U/Xk3RBJ/gVE/zGk0Q+R2e213C2rnrQAHVffPktgiYXHjS2wlkuWUy2tgFMwxoZJ
+1HmjbWeq2cml4yapk1snU7ccgYJoLjBRyrThu7wf7cwZU7KwA0nv3S+JJN1XiLte
+oSoKwMgTyhLPmr+ThjpsZH1aS9WcHlSACISeGjWupc6kICfo00M38/xeVpE3Kxqf
+pW700Zl4mAzSl+Sc3FOtBwYMfJJNlPZdx49LWb9lFCv6VNeaNTmhi0fVuHPS8MtE
+ZbcTAFuIyeUKAmKzoURbdEsGsj7PM/oLsM6SCk7rpuKET7RQH3I=
+=zDUB
 -----END PGP SIGNATURE-----
 
---0qt3EE9wi45a2ZFX--
+--2oox5VnwalALFvA7--
