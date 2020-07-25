@@ -2,97 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D211922D831
-	for <lists+linux-i2c@lfdr.de>; Sat, 25 Jul 2020 16:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2654B22D87A
+	for <lists+linux-i2c@lfdr.de>; Sat, 25 Jul 2020 17:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726944AbgGYOqI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 25 Jul 2020 10:46:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50430 "EHLO mail.kernel.org"
+        id S1726727AbgGYPjn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 25 Jul 2020 11:39:43 -0400
+Received: from mga12.intel.com ([192.55.52.136]:57289 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726652AbgGYOqH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 25 Jul 2020 10:46:07 -0400
-Received: from localhost (p5486c508.dip0.t-ipconnect.de [84.134.197.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5CE2220674;
-        Sat, 25 Jul 2020 14:46:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595688367;
-        bh=vcSG7943G073w6Pwb+rh5rVweLM7A/kq7rjNuL+rk/4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VzxpYRw+ElVEjP9xb0LM+GztZNW3DKWGGFlu4AOvxHHKTHxstvxrs9A1jSRaSVrTt
-         htpsL1fjUHqZhZRBT2EelQ2cQL9zT8FD3hrieR+zjhZQ6t2wSCdsx75G1/QT84WdME
-         xLwGfIiAxvcfZaHWsUb1v8krvayBgV/puFY4ehq0=
-Date:   Sat, 25 Jul 2020 16:46:03 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PULL REQUEST] i2c for v5.8
-Message-ID: <20200725144603.GA4013@kunai>
-References: <20200724192728.GA1596@ninjato>
- <CAHk-=wjaHZKQnOuGLWukvMrTmDrDd6iyiq5toQumB2uX1nR9Xw@mail.gmail.com>
+        id S1726567AbgGYPjn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 25 Jul 2020 11:39:43 -0400
+IronPort-SDR: z2LVcyuuCqU77035vR7XDNpsWGB8A4Aag6j1NAwaeBxlEf1r/SOsx6HYLJeUk6pBLJGPMHJ81s
+ 7+3qLbPcp1Fw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9693"; a="130397563"
+X-IronPort-AV: E=Sophos;i="5.75,395,1589266800"; 
+   d="scan'208";a="130397563"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2020 08:39:42 -0700
+IronPort-SDR: Ga7AVMpyLsiPYE/5MiFSmGw5wzqOfBaSs1IrClb6F6dkF1YZ2585Cxzn10p5/0ljbe7GJJ679R
+ mwrUSEnQmR9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,395,1589266800"; 
+   d="scan'208";a="289286463"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga006.jf.intel.com with ESMTP; 25 Jul 2020 08:39:41 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jzMGz-003ysV-DA; Sat, 25 Jul 2020 18:39:41 +0300
+Date:   Sat, 25 Jul 2020 18:39:41 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: also convert placeholder function to return errno
+Message-ID: <20200725153941.GI3703480@smile.fi.intel.com>
+References: <20200725140736.3629-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PNTmBPCT7hxwcZjr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wjaHZKQnOuGLWukvMrTmDrDd6iyiq5toQumB2uX1nR9Xw@mail.gmail.com>
+In-Reply-To: <20200725140736.3629-1-wsa+renesas@sang-engineering.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Sat, Jul 25, 2020 at 04:07:36PM +0200, Wolfram Sang wrote:
+> All i2c_new_device-alike functions return ERR_PTR these days, but this
+> fallback function was missed.
 
---PNTmBPCT7hxwcZjr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I think either will work.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Thanks!
 
-Linus,
+> Fixes: 2dea645ffc21 ("i2c: acpi: Return error pointers from i2c_acpi_new_device()")
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> I recall that -ENOSYS is returned in case something is not compiled in.
+> I am open for -ENODEV if this is deemed better...
+> 
+>  include/linux/i2c.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index b8b8963f8bb9..83fe48304781 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -1001,7 +1001,7 @@ static inline u32 i2c_acpi_find_bus_speed(struct device *dev)
+>  static inline struct i2c_client *i2c_acpi_new_device(struct device *dev,
+>  					int index, struct i2c_board_info *info)
+>  {
+> -	return NULL;
+> +	return ERR_PTR(-ENOSYS);
+>  }
+>  static inline struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle)
+>  {
+> -- 
+> 2.27.0
+> 
 
-> Do you have a lot of pending fixes? Because things _seem_ fairly quiet
-> for this release, and right now it doesn't seem to make much sense to
-> delay 5.8.
-
-No, it is not about fixes. I have one fix pending and I am quite sure we
-make it for 5.8.
-
-It would simply give me one more week to get some not-so-complex I2C
-driver updates into 5.9 which I couldn't apply before because of my
-holidays. With the next merge window this soon, I can now choose to let
-people wait 3 more months or to put some stress on my side (bye bye
-holiday relaxation).
-
-So, I wondered if maybe more maintainers would be in a similar siuation
-and we could get an extra week to catch up (I know this is not a
-technical reason).
-
-Anyhow, given your response, this seems not the case.
-
-Kind regards,
-
-   Wolfram
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---PNTmBPCT7hxwcZjr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8cRacACgkQFA3kzBSg
-KbaPXg//bU7uyvbHxTOXq2iXko57j42kewqZbf5hy3Gjfkjad5RLzSRfQaJiYq/C
-jCL2e+RpB87yp65U035PyVSzzw5/v/BEZu6ulF//ZDPMBX5T7U+FEMp26IsnNH6Z
-rDAC7/T9gjgALcGl/Ux8lca9BcI7APxh1wFPzAKtIc43pEWlXC+yu/0MmTewxZO7
-B4wbXO2wYhKFxEVJ29JFz2I9YJTyk/PyEgk/pYPn5yN5s6Dkz4QNAwoHzwd8Sulw
-RNTC0wahwplwUThzvrCnIPBMxNP8bGHTe2bCwQSkKhcEL9ng1pO8PodZSfsa5em0
-VT/KMucDQpkZ3xOk1OWRZaGOgZLsqVOs3OT2IRZT7bfAcH/jbPHG/CVmS+SYB8J2
-HipnN8f7rwtrUGrhc8bcuPHtq+4pUUsd1yhMCwfI6wKW0Xk2Atdz0cBXI5vZeFXH
-Q7TTJcdgwh7o85tQZhP9RpURe03klkuJ/WW1WoDbbts7M6Y15sbso3lLt0SCGnOi
-6xb0IiqM0tWD7g8sGxAaZRwuwT62BqvYpkx73NK+gFOdN1G8z5Epkzvmy9T5V2dl
-e+C8yYkeKfjaHHtVJ3007t1QxxIHDnMDjDw3WaoKCiCKus5TT/LvLWf7fPdDqoMI
-VyPJn2q5pepha8sXUOxOVYC9klZJ/xxXie3S6RIaQYDV9zFNEME=
-=U/Zx
------END PGP SIGNATURE-----
-
---PNTmBPCT7hxwcZjr--
