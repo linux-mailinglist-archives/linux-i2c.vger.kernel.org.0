@@ -2,37 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E9522DF04
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Jul 2020 14:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C8322DF10
+	for <lists+linux-i2c@lfdr.de>; Sun, 26 Jul 2020 14:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbgGZMcj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 26 Jul 2020 08:32:39 -0400
-Received: from www.zeus03.de ([194.117.254.33]:39224 "EHLO mail.zeus03.de"
+        id S1726824AbgGZMfW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 26 Jul 2020 08:35:22 -0400
+Received: from www.zeus03.de ([194.117.254.33]:39912 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725848AbgGZMcj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 26 Jul 2020 08:32:39 -0400
+        id S1725848AbgGZMfW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 26 Jul 2020 08:35:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=rV48EOw/XHZgIh8Rf3XOuwwLGTBQ
-        mqpNtP9V3+sf2NI=; b=pjhGarbzjhZa3JegYtTIOJKnPx9pwW/Nebyp+uktSTIQ
-        +ELjdIfUVut7laF/PogFtng4AxQn9UgTFSVmWH50nlunzre/QSWQ9zbQi7CBjlhU
-        QoN5sBh0dPp3yWi4YCJd9mg5gQ56ALVVnOB6ucC34OxY5MSEW2+K7+lvE4d+spA=
-Received: (qmail 39817 invoked from network); 26 Jul 2020 14:32:37 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Jul 2020 14:32:37 +0200
-X-UD-Smtp-Session: l3s3148p1@Drq+Zler5I8gAwDPXy27AOM4pzPBFrIA
-Date:   Sun, 26 Jul 2020 14:32:37 +0200
+        :content-type:in-reply-to; s=k1; bh=onAeRnhffhF8ckRwRk4DsGKcuZ5Z
+        A3FW02cG3cQyVvk=; b=xOPdX7zIGdV+hLDlDtvJQrla1xgvXVqgjudDwZNJcY/y
+        UxH6Uxc3rBrfVuJ6qwDWL6hBSBtWw2GhDWVjKC9p7CtD5q6fULK7WI9rNWEzztj8
+        c6QmeBMw5XkrgpSXrqPG+G4nlMniocnv8rbnHt5MagEQJ3i3L88k/ge12XmPocY=
+Received: (qmail 40298 invoked from network); 26 Jul 2020 14:35:19 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Jul 2020 14:35:19 +0200
+X-UD-Smtp-Session: l3s3148p1@D31ocFer/I8gAwDPXy27AOM4pzPBFrIA
+Date:   Sun, 26 Jul 2020 14:35:19 +0200
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] i2c: rcar: slave: only send STOP event when we have been
- addressed
-Message-ID: <20200726123237.GB2484@ninjato>
-References: <20200629153807.15744-1-wsa+renesas@sang-engineering.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 11/20] dt-bindings: i2c: renesas,i2c: Document r8a774e1
+ support
+Message-ID: <20200726123519.GC2484@ninjato>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-12-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BwCQnh7xodEAoBMC"
+        protocol="application/pgp-signature"; boundary="ZwgA9U+XZDXt4+m+"
 Content-Disposition: inline
-In-Reply-To: <20200629153807.15744-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <1594811350-14066-12-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -40,41 +62,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---BwCQnh7xodEAoBMC
+--ZwgA9U+XZDXt4+m+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 29, 2020 at 05:38:07PM +0200, Wolfram Sang wrote:
-> When the SSR interrupt is activated, it will detect every STOP condition
-> on the bus, not only the ones after we have been addressed. So, enable
-> this interrupt only after we have been addressed, and disable it
-> otherwise.
+On Wed, Jul 15, 2020 at 12:09:01PM +0100, Lad Prabhakar wrote:
+> Document i2c controller for RZ/G2H (R8A774E1) SoC, which is compatible
+> with R-Car Gen3 SoC family.
 >=20
-> Fixes: de20d1857dd6 ("i2c: rcar: add slave support")
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renes=
+as.com>
 
 Applied to for-next, thanks!
 
 
---BwCQnh7xodEAoBMC
+--ZwgA9U+XZDXt4+m+
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8dd+UACgkQFA3kzBSg
-KbaAjg/+LF0OnVmmVoGioK9iz+OqH75HU7g9ZMKAyk+7jYr6rO6zdAkzPnNPbSRV
-ngV++KELB2eEH5jKPb604v9oYhSkcZkJhofkpubZ5WOaD5EAS0++Gl4mMh6rF39c
-BwQIXJUNmaXFbAFSX/NPQUAyelwWZnFemYsCY4xftq3gjSoj8d22RsKqLZdZAWVq
-VNZ5bgrdnx0blftHp65O4HrwzS2xuFUzVGLfBE3BPH+grkFIc/i6OHl18B5T/4A3
-YPvs7qxhZOOolSAOz72HBMvc0Y9XRhD4DugQi+yLih2j0wu7Od5iSqxu6Oz2GJgT
-Q2b2OKjZsbR6aPhTnMPs6+6QQxOe9TRfhvAiNI1WsywUpHa3f90gsiQWZLdXJfGA
-h55O/zkaZinzz657YaTKG8t1B+MtyweLiHuUQcFEa/xH9rX++U957hvdxwyfC8Zu
-JR7/t9DbgMa9VTw0jb+z4g99AfzgURdPR8zDt/PAgtQLnPLCv8azS8wztxYnc9KW
-tvj3bi4yqtizC5bj771jX4k4SzaOdLyDq7QZQmn0W6LMSWsq6cpVzbHVAqqI6Gxy
-HuJ+824NnQo74bLngYHTYANN5jkQlo2WeTYJQ+GvSYmzTnGGwsVEFMpfR1neS9oN
-6HQ4TYSOGJhMGIRxHrfqjWFrLOJaJCd02RZuubahAiq8odTWv78=
-=2uPx
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8deIcACgkQFA3kzBSg
+KbZbZA//W705bUta/I2fFJX9THCgPXeyts2P3gy1nQcBJvGROOzL6jZJne4W6nHR
+fJdAUnOfyZMTkCvfgnGGrnCa2QRrIgIYmnx1ZpF+dONaPYJPkZOOXoven13LjohY
+0lswiHVVEsKsESNlA8agcPm9Gniuvb8jpzUfpaTOZd2VQr6vV7YSoq53HXOKka+s
+mXwwe5J31Mc/DnJ7Yu0bZYo9jyFdKg4xSXrTwAz5FK+OqdYEyY9Qnu3ne0JZ4k99
+xPaCx5h0DQcoR4rOqIi21dedGiJ7iRuao1sDBgq5X1BxHIzJ5q+1HW1xiwMTdj/d
+6xA2PN1HxqaZ3Ff6p0tamC5AgmjgMQrFJj2cFI+fF/1VWp62V3O8oNZ/5b3f7bP4
+4f5ZwCfNYTcGB9tJnDxqTsAHAXAhnxlNc56kCWEZhTzKDzE7gW+H6+90OZEtzeA5
+Akq7504HPVrlgmL52JBbNcunDvs1eTc9ROjPVYJPGu5BKrcB+m2a0HCwhi2nJRBT
+XE//0zGPvPpiq+wYvUiyxmrBWTE/qKJekKoyLUmEIYlaDy9IdDEes5m9yJFlmsAy
+tvXt/lsCak31bfhyHa6HQQ3O8tjC5h+DTpJ4G1zp4u3d1yqBJcobgbySqibzKalP
+BdwAoJP8ng3+Q1MBRngxSYyKZvv7J3uderjW7yq8BN8+KwjU+uE=
+=FNmn
 -----END PGP SIGNATURE-----
 
---BwCQnh7xodEAoBMC--
+--ZwgA9U+XZDXt4+m+--
