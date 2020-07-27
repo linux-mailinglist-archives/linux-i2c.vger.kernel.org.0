@@ -2,100 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C779822E380
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jul 2020 02:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A885822E4FA
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jul 2020 06:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726797AbgG0AZw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 26 Jul 2020 20:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
+        id S1726590AbgG0EcZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Jul 2020 00:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726636AbgG0AZw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 26 Jul 2020 20:25:52 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0396EC0619D2;
-        Sun, 26 Jul 2020 17:25:51 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id v4so5642259ljd.0;
-        Sun, 26 Jul 2020 17:25:51 -0700 (PDT)
+        with ESMTP id S1725775AbgG0EcX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Jul 2020 00:32:23 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA02C0619D2
+        for <linux-i2c@vger.kernel.org>; Sun, 26 Jul 2020 21:32:22 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id k13so8261013lfo.0
+        for <linux-i2c@vger.kernel.org>; Sun, 26 Jul 2020 21:32:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GKnOu6p3RfixuqRD3S1qs+Z1A7aJHu+EzkEkVp7wuI4=;
-        b=Shm0qTlIgExezzQDG02ewiytrxTdTlFNuf81amBugZdEAACLhDAnQJFlN5TWe7GTl/
-         rHNWDAlfHOrfIU9sZXwGiHL08BDIJHWOhumvV3SB04XIYHVdGzsI7yhtAYshn0D68syI
-         AAqd0f+IjpucFGfFNTvaexbuqqrlczUrFNC7QZSWvQMGyq0zV8N4mpE3m5pEL4DgOnEY
-         r5suHNBPgNDT9sfVVpNREEGKktZBsC0i4BztDx3p40TGVqKjGdY5eEDZZR886F2ugiR/
-         uDBnPay8bCRyPpbEPLgNIMhkdN93mpiFyN+kcTK6GM+dskvzFxIKpl8twF2yCxKSUD4k
-         JJUQ==
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y2MT8K7LJP0h4HIjUSHIF3kx72ZyLwnnER3/s7uorqE=;
+        b=D8HCNvbbfeCXTArUC4WY1QDrs9HjLspd9XS6l+ZIduQcykgLo9mIag8AEPoxijQdxx
+         N0I6GZ6ggif98PyvczFJQTezcR085wLtKWpW32z+fnl1YcUMRliE2ieD4PCcJ+Af9qM5
+         XgNj7w46y1O7ff2pkN657Rpag5lZjbuv52oqk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=GKnOu6p3RfixuqRD3S1qs+Z1A7aJHu+EzkEkVp7wuI4=;
-        b=WLThu9xaflXIjgg38w31gvKPbbVBu66RjYaT7Q0202GLh+NoplkCswDYd94GyCMbqC
-         jpQOIojkjJUln34CQ6DP8kaSGDoKzIZpTHvSz4j8A05kv0+HKMCJ3VStyt8/7d2LDhKT
-         Jdw6bnqBSSnaAWhA1Dj92yhpFID0yrnEpBwdPCPzpyfYgt/uu2kfUE20dEmUKt66jILt
-         cDO2xNKm6uTjljlI/pAGY84Dwjf6RSc7ddvdlmjji7+ZFOfpd5iTunO/qCx/Oyp87FJb
-         QivLM51Y8tntKh2GHT4G+4AP+yY90Ps3hmOL2hGh2hJm3eNXZsULA0KMyLU/UKqStoU6
-         SlEA==
-X-Gm-Message-State: AOAM532W8btD4DJafSZT0JIrXSu0qqO5+ccDOrpPQHljEzCFnjfLUJfR
-        SJes73gGijbsBd6j6zWrGrZ9zZnM
-X-Google-Smtp-Source: ABdhPJxwmNHqgZ0KpbLsAZAfgqCcfjiJWhzQTm93xQrBExY7mKMKds0N90A6ux1p4RD7yyJn7eGXfw==
-X-Received: by 2002:a2e:6c0d:: with SMTP id h13mr8629273ljc.394.1595809550157;
-        Sun, 26 Jul 2020 17:25:50 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-76-12-16.pppoe.mtu-net.ru. [91.76.12.16])
-        by smtp.googlemail.com with ESMTPSA id p13sm3021471lfc.63.2020.07.26.17.25.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jul 2020 17:25:49 -0700 (PDT)
-Subject: Re: [RFC PATCH v4 00/14] Support for Tegra video capture from
- external sensor
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
-        sakari.ailus@iki.fi, robh+dt@kernel.org, helen.koike@collabora.com
-Cc:     sboyd@kernel.org, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <1595548272-9809-1-git-send-email-skomatineni@nvidia.com>
- <cb080da3-5ae5-bb83-8f5c-65d1fe17cb67@xs4all.nl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <e7fd1d23-ea4d-2c17-e3cb-b27f9eb4f687@gmail.com>
-Date:   Mon, 27 Jul 2020 03:25:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y2MT8K7LJP0h4HIjUSHIF3kx72ZyLwnnER3/s7uorqE=;
+        b=Fh379OWxA3MfrGVmIzGA/qgH5hr0Yu69eP9xp8R6xkTBq8CVyTy7AiqkahmnozgqXi
+         jwApj8S12twKglzKLR1xkmtu71KutbF/oGRFnCk11SiYTLQK/ZwgYI2A9sblAkCxispL
+         f5lvNO0tauBD8tZpfJlJs1OS+6+OI6tx9qCeZ/squidJ+5E4pOPIiYdVsigrAN+NARYE
+         0nkAq/ndpNY2uislJMmtKQwPuV6/ZpoG9E7aMFri0c6vgtcVecA748EFA/eIuw8UAfQE
+         2zB5Om0a1O18Idj/xUQAQ7ftF5qkLeN4PFChhXxLU4Z1LtoEmGvzhb57i3/ry80DovqJ
+         cNdA==
+X-Gm-Message-State: AOAM531WAw60RIYqpW7EUp2sZXomOHIAjpCctFI2N0n8W0L26B2rDkZM
+        8vOZBTh6/2zg6fFlvkPZdBlwRlYen3HRTwylgzZCJA==
+X-Google-Smtp-Source: ABdhPJyPqCU/OdRwDZPqwlMkGbnhgQCLKdZNaMgRtj9kGkbaFfHHszQybGc/isZ4yrfqqymo2EzDGJjUEh54mtwmKWg=
+X-Received: by 2002:ac2:5502:: with SMTP id j2mr9290650lfk.50.1595824340928;
+ Sun, 26 Jul 2020 21:32:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <cb080da3-5ae5-bb83-8f5c-65d1fe17cb67@xs4all.nl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1595115599-100054-1-git-send-email-dphadke@linux.microsoft.com>
+ <116ac90c-8b49-ca89-90a4-9a28f43a7c50@broadcom.com> <20200722104128.GK1030@ninjato>
+ <5048cf44-e2c2-ee31-a9fb-b823f16c2c7d@broadcom.com> <20200725101815.GA1519@ninjato>
+In-Reply-To: <20200725101815.GA1519@ninjato>
+From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Date:   Mon, 27 Jul 2020 10:02:09 +0530
+Message-ID: <CAHO=5PF6WmgTYAA8vVd86cx0YTx0CKouJ2k+13hNVCPiEtMVYA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: iproc: fix race between client unreg and isr
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Ray Jui <ray.jui@broadcom.com>,
+        Dhananjay Phadke <dphadke@linux.microsoft.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-24.07.2020 12:43, Hans Verkuil пишет:
-> Thierry, Dmitry,
-> 
-> I'm happy with this series from a media perspective. However, patches 1-5 fix
-> various i2c-tegra.c issues and patch 12 changes mipi calibration functions in
-> drivers/gpu that patch 13 relies on.
-> 
-> I think the i2c-tegra.c patches can be merged independently into the i2c
-> subsystem, but patch 12 needs to be merged with the media patches. So for patch
-> 12 I need an Acked-by from Thierry.
-> 
-> I can also take the i2c-tegra patches if preferred, but there too I need Acks.
-> Dmitry, can you either take these i2c patches, or reply with Acks if you want
-> me to take it?
+On Sat, Jul 25, 2020 at 3:48 PM Wolfram Sang <wsa@kernel.org> wrote:
+>
+>
+> > I think the following sequence needs to be implemented to make this
+> > safe, i.e., after 'synchronize_irq', no further slave interrupt will be
+> > fired.
+> >
+> > In 'bcm_iproc_i2c_unreg_slave':
+> >
+> > 1. Set an atomic variable 'unreg_slave' (I'm bad in names so please come
+> > up with a better name than this)
+> >
+> > 2. Disable all slave interrupts
+> >
+> > 3. synchronize_irq
+> >
+> > 4. Set slave to NULL
+> >
+> > 5. Erase slave addresses
+>
+> What about this in unreg_slave?
+>
+> 1. disable_irq()
+>         This includes synchronize_irq() and avoids the race. Because irq
+>         will be masked at interrupt controller level, interrupts coming
+>         in at the I2C IP core level should still be pending once we
+>         reenable the irq.
+>
+> 2. disable all slave interrupts
+>
+> 3. enable_irq()
+>
+> 4. clean up the rest (pointer, address)
+>
+> Or am I overlooking something?
 
-Hello, Hans and everyone! The I2C patches are good to me.
+This sequence will take care of all cases.
 
-Either way of merging the patches should be fine since it's a hardware
-bring up phase, and thus, it's not critical if patches will be applied
-in a wrong order.
+@Dhananjay Phadke is it possible to verify this from your side once.
 
-I'm listed as a reviewer and not a maintainer of the Tegra I2C driver,
-so it should be up to Thierry and Wolfram to decide how to merge the I2C
-patches.
+Best regards,
+Raaygonda
