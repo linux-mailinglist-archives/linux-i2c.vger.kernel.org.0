@@ -2,39 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 265E522FD65
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jul 2020 01:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E78022FD4E
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jul 2020 01:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728117AbgG0X1X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Jul 2020 19:27:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36112 "EHLO mail.kernel.org"
+        id S1728524AbgG0XZL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Jul 2020 19:25:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36438 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728420AbgG0XYy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 27 Jul 2020 19:24:54 -0400
+        id S1728508AbgG0XZK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 27 Jul 2020 19:25:10 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EEAD920A8B;
-        Mon, 27 Jul 2020 23:24:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4233D21744;
+        Mon, 27 Jul 2020 23:25:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595892293;
+        s=default; t=1595892309;
         bh=jgApG1A37oBtiR5CjwiKak+vQK6WNvNl+JWHPVFcpb4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0ntuRDQRtEPMZfCveMRaVZ/gR2fRwX2qm6PFLq1NjsMK2MGu6VpX3/MtYDeCZK2XQ
-         CNfjfVG60l3RKUEeYFN4hq16ZEoVEjWt2P1tGi2Fypd8wmDrw1/CP0grVka8WpcPYf
-         0KUEa4nWjPgNqGSOUnSigh8amZouA4JKpuRTy8Ew=
+        b=ePwog14thwFyKs1pib5l4Ee451K1cpoCpJfhX3aUAXlBM8dojjM/1lJxj8MzDANs+
+         X2nTL5dhJV/8wDu7x2PYphq0aPrEJG853OyMNXgM0YP8WCYOdt7FSRsSfY1O79d4tP
+         8rbjXyyWgOR8R+9LUlHYXHBm5cNxOSAJrujsD89Q=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Raviteja Narayanam <raviteja.narayanam@xilinx.com>,
         Michal Simek <michal.simek@xilinx.com>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 07/10] Revert "i2c: cadence: Fix the hold bit setting"
-Date:   Mon, 27 Jul 2020 19:24:40 -0400
-Message-Id: <20200727232443.718000-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 07/10] Revert "i2c: cadence: Fix the hold bit setting"
+Date:   Mon, 27 Jul 2020 19:24:55 -0400
+Message-Id: <20200727232458.718131-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200727232443.718000-1-sashal@kernel.org>
-References: <20200727232443.718000-1-sashal@kernel.org>
+In-Reply-To: <20200727232458.718131-1-sashal@kernel.org>
+References: <20200727232458.718131-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
