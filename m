@@ -2,39 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 084EC22FD89
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jul 2020 01:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265E522FD65
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jul 2020 01:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728550AbgG0X2O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Jul 2020 19:28:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35710 "EHLO mail.kernel.org"
+        id S1728117AbgG0X1X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Jul 2020 19:27:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36112 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728291AbgG0XYg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 27 Jul 2020 19:24:36 -0400
+        id S1728420AbgG0XYy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 27 Jul 2020 19:24:54 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A60512173E;
-        Mon, 27 Jul 2020 23:24:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EEAD920A8B;
+        Mon, 27 Jul 2020 23:24:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595892275;
-        bh=+J6fOoLK985RugK/lghNk9b0GLsZJS34xZ+SIvL3Gdo=;
+        s=default; t=1595892293;
+        bh=jgApG1A37oBtiR5CjwiKak+vQK6WNvNl+JWHPVFcpb4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CIlnm/BGpsR2r4jHFhTzm93BWTKDMoqDUAowxJSXzh0ZwF0fhPLUC6LPQOWcNpa/u
-         mzlJCtBQLGqFfBNZOeoa1MPbI96x6GgZd7ISqhN7DCO9sQ2ZXSHqQTciqxGF2wtmLJ
-         QLleUULIZ9E2UfEa174glVh5dtgXlwOBxq7o4B2o=
+        b=0ntuRDQRtEPMZfCveMRaVZ/gR2fRwX2qm6PFLq1NjsMK2MGu6VpX3/MtYDeCZK2XQ
+         CNfjfVG60l3RKUEeYFN4hq16ZEoVEjWt2P1tGi2Fypd8wmDrw1/CP0grVka8WpcPYf
+         0KUEa4nWjPgNqGSOUnSigh8amZouA4JKpuRTy8Ew=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Raviteja Narayanam <raviteja.narayanam@xilinx.com>,
         Michal Simek <michal.simek@xilinx.com>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 11/17] Revert "i2c: cadence: Fix the hold bit setting"
-Date:   Mon, 27 Jul 2020 19:24:14 -0400
-Message-Id: <20200727232420.717684-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 07/10] Revert "i2c: cadence: Fix the hold bit setting"
+Date:   Mon, 27 Jul 2020 19:24:40 -0400
+Message-Id: <20200727232443.718000-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200727232420.717684-1-sashal@kernel.org>
-References: <20200727232420.717684-1-sashal@kernel.org>
+In-Reply-To: <20200727232443.718000-1-sashal@kernel.org>
+References: <20200727232443.718000-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -82,10 +82,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 9d71ce15db050..a51d3b7957701 100644
+index d917cefc5a19c..b136057182916 100644
 --- a/drivers/i2c/busses/i2c-cadence.c
 +++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -377,10 +377,8 @@ static void cdns_i2c_mrecv(struct cdns_i2c *id)
+@@ -382,10 +382,8 @@ static void cdns_i2c_mrecv(struct cdns_i2c *id)
  	 * Check for the message size against FIFO depth and set the
  	 * 'hold bus' bit if it is greater than FIFO depth.
  	 */
@@ -97,7 +97,7 @@ index 9d71ce15db050..a51d3b7957701 100644
  
  	cdns_i2c_writereg(ctrl_reg, CDNS_I2C_CR_OFFSET);
  
-@@ -437,11 +435,8 @@ static void cdns_i2c_msend(struct cdns_i2c *id)
+@@ -442,11 +440,8 @@ static void cdns_i2c_msend(struct cdns_i2c *id)
  	 * Check for the message size against FIFO depth and set the
  	 * 'hold bus' bit if it is greater than FIFO depth.
  	 */
