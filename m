@@ -2,72 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE48E230FFD
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jul 2020 18:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524BC23105F
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jul 2020 19:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731425AbgG1QkM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Jul 2020 12:40:12 -0400
-Received: from www.zeus03.de ([194.117.254.33]:33258 "EHLO mail.zeus03.de"
+        id S1731616AbgG1REi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Jul 2020 13:04:38 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38740 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731191AbgG1QkM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 28 Jul 2020 12:40:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Ga47dE2toEE61ZeysUrm6EKRMr8m
-        UK66/nzPw9Fm3Vg=; b=Asz17iICJ8DKa9xu1FUOoHqCP1vHODX4ME0n28QWoYEb
-        SIWJNbAj4NSA3BCRS/L+dklci/L6k2kB5G6JdhUWMbSJJAUoLpFhQEpSWYshQ/FW
-        3DUOiPq7VEQ2FGxTKHUSCXEZOk6y/T1mcLCoqkvuATeGGA6sUZvvg/DMtomJjk0=
-Received: (qmail 708321 invoked from network); 28 Jul 2020 18:40:10 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Jul 2020 18:40:10 +0200
-X-UD-Smtp-Session: l3s3148p1@0AO5F4OruKggAwDPXw7pAIxt9EGuW/0q
-Date:   Tue, 28 Jul 2020 18:40:10 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Alain Volmat <alain.volmat@st.com>
-Subject: Re: [PATCH 2/2] i2c: slave: add sanity check when unregistering
-Message-ID: <20200728164010.GH3736@ninjato>
-References: <20200725195053.14334-1-wsa+renesas@sang-engineering.com>
- <20200725195053.14334-3-wsa+renesas@sang-engineering.com>
+        id S1731070AbgG1REi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 28 Jul 2020 13:04:38 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 9110BB14B;
+        Tue, 28 Jul 2020 17:04:47 +0000 (UTC)
+Date:   Tue, 28 Jul 2020 19:04:35 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     daniel.stodden@gmail.com, linux-i2c@vger.kernel.org,
+        Daniel Stodden <dns@arista.com>
+Subject: Re: [RFC PATCH] i2c: Support Smbus 3.0 block sizes up to 255 bytes.
+Message-ID: <20200728190435.3c4f5d5e@endymion>
+In-Reply-To: <20200728094037.GA980@ninjato>
+References: <20200728004708.4430-1-daniel.stodden@gmail.com>
+        <20200728094037.GA980@ninjato>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KscVNZbUup0vZz0f"
-Content-Disposition: inline
-In-Reply-To: <20200725195053.14334-3-wsa+renesas@sang-engineering.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram, Daniel,
 
---KscVNZbUup0vZz0f
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Tue, 28 Jul 2020 11:40:37 +0200, Wolfram Sang wrote:
+> > -	__u8 block[I2C_SMBUS_BLOCK_MAX + 2]; /* block[0] is used for length */
+> > +	__u8 block[I2C_SMBUS3_BLOCK_MAX + 2]; /* block[0] is used for length */
+> >  			       /* and one more for user-space compatibility */  
+> 
+> I thought about this, too, and wondered if this isn't a size regression
+> in userspace with every i2c_smbus_data getting 8 times the size? But
+> maybe it is worth if backwards compatibility is maintained in an
+> otherwise not so intrusive manner? Jean, what do you think?
 
-On Sat, Jul 25, 2020 at 09:50:53PM +0200, Wolfram Sang wrote:
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+In i2c-tools these are always allocated on the stack and one at a time.
+Size isn't an issue in my opinion.
 
-Applied to for-current, thanks!
+The only thing I'm truly concerned about here is compatibility. You
+need to ensure that:
 
+* User-space binaries that are around today (obviously compiled with
+  the old versions of the kernel uapi headers) will work the same with
+  kernels including your changes.
 
---KscVNZbUup0vZz0f
-Content-Type: application/pgp-signature; name="signature.asc"
+* User-space binaries compiled with the new kernel uapi headers will
+  work with both old and new kernels.
 
------BEGIN PGP SIGNATURE-----
+For all transfer types. You will have to keep in mind that SMBus-style
+and I2C-style read block transfers differ in who decides the length.
+For I2C, it is the caller (I want to read N bytes from this location),
+for SMBus it is the slave (I want to read a block from this location,
+tell me how long it is). In both cases you need to ensure you do not
+write beyond the buffer, no matter what, and return a proper error code
+if it wouldn't fit.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8gVOoACgkQFA3kzBSg
-KbZCOBAAsnYib3V8dKOWqn1hZszQNK1OngdYgi+XDBKoTiqzcdD2YKRnOeBGTpJr
-QjnH9pDM7ydqA7i56CvSvkkkzlipXaJ8jL2ZMgiPp4tzXmnQx8szdayV21nn9ExM
-XSTIj3QOP9ipkNXu7fWM7RVzCXNtaN+oJmpicLzt/yMItCIjm60CFi5pobkm7tGk
-4sx0L/z+aFT6yiHoLF4p0tbtEEJv2zCh5MXEawMBHuhuvQSa638q0caDxgF6y+0J
-pqxCBqjXi2pwfr04K0uwAGj5oFArHTRLJp6Q159/dPhLbpl/QG+MwX78CfZejUfU
-oPX5/QNRXu+U775QLlBD5LyF5NWVw3IQAHmo2wZPu6W2tyFr4uc35p6sqiU0p4QT
-MHbjDMXQIavGfcTkpPFs8rnWtRtLolKUZfiPh9SIJrHQ8Ah697JNmmx9epmOYzPM
-3NOo7nAKY9IKV0rXO8oLBZq5lSPbaXS3Nh4I2mku0qrtfvDD97xREVPS1ADmH+h+
-6XYxtLmPzj3YH14WccyrgGP/iYQI8JCooHyPYZxICB5D3hNdEoiW1RDtSoEbMW9E
-16Z6rL35E2rhPUC3K//mpewGntL8E2TQCm8qGfaMVv9WZnojD1Yk8MFbaQOlLebj
-WmVdGn5gcT9ydvVkSYhHj1mxH75Nnozsk3hBF9B1TqYALx5Bt8k=
-=h1Ls
------END PGP SIGNATURE-----
+The other compatibility type you need to care about is inside the
+kernel itself: SMBus 2 and SMBus 3 controllers and devices may be mixed
+up. Some (I expect most) SMBus 3 devices may be able to work with SMBus
+2 controllers in "degraded" mode, in which case it will be the driver's
+responsibility to check the capabilities of the controller and only use
+transfer types that are supported. If such "degraded" mode is not
+possible then the driver would simply refuse to bind. For such checks
+to be possible, I would expect either one global I2C_FUNC_SMBUS* flag
+to be added to denote SMBus 3 compliance, or possibly several flags for
+finer grained control (seems overkill to me but you may have a
+different opinion - also depends on what else SMBus 3 is introducing,
+I admit I did not check). However I did not see that in your prototype.
+Do you believe we can do without it? If so, please explain how.
 
---KscVNZbUup0vZz0f--
+-- 
+Jean Delvare
+SUSE L3 Support
