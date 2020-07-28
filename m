@@ -2,133 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFE5230783
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jul 2020 12:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B73F2307B3
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Jul 2020 12:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728697AbgG1KSj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Jul 2020 06:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
+        id S1728661AbgG1Kav (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Jul 2020 06:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728050AbgG1KSi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Jul 2020 06:18:38 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2021C061794
-        for <linux-i2c@vger.kernel.org>; Tue, 28 Jul 2020 03:18:38 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id t6so11610087pgq.1
-        for <linux-i2c@vger.kernel.org>; Tue, 28 Jul 2020 03:18:38 -0700 (PDT)
+        with ESMTP id S1728547AbgG1Kav (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Jul 2020 06:30:51 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF5DC061794;
+        Tue, 28 Jul 2020 03:30:50 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id q7so20565126ljm.1;
+        Tue, 28 Jul 2020 03:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=okI/a0w/ScKWYlbTYxY5UbnfKpymPj2M1PZmmOAj2mM=;
-        b=FUt9V1FsiCEIqcqgeHM683cwEXwh3tDY4qaBOcFoSDUuBdGxlrXJGS9MWPJBTcFKlQ
-         YpHeSzRWkopM3MhPhK9YdrbRBIXzYCLJPD7AeOmRUUeJm4c1nk9di41V9tT0SOr4dXW6
-         K8IggC1hbooip3Z1jYsHMPm5k0HjHdHJUYEZHTnzn6jb2r7OELsbIMtUVFoeps8COqoq
-         /SJ0h8EDxQnRLVEvK9fTBip29YW9oudtsYrnjbU1iMiNIM+aJ4V+xZy3FmCzlm52Bhyc
-         c3XJSuM/AOsbEsuLsoJC+bnd+Lzd24G0Av91nOLG8UXWQeE8kM8/1w0ejj1vfO7TGTQw
-         KC2g==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=e64gRt1McL8oFj3/qgie+MEUtDHl7yc27Ox+TPY2v1w=;
+        b=UQpw3Dg2VBKkCK7p31udbkD4bwRyUahlHGrHBTN3d8xe290GQuPr9vqvRcVUGcjjmX
+         ZhKQSf9sS01aMoQAUlH/DjtuNWlxsMzvViO0rHeWcnGNNHLwtg1ZieX6MNEnIu0tfxAj
+         vN01FJpHJN8HorVG7AgtlLMq2LfblspGUQ0Tkw3nUcMHTDAISy1vOBctLeN11ckAqDSF
+         vdihpYtv0z2ZnXqlSXe/VtiADzx46//7OEj825OnBCYxbGy4PdEHIsMSWy2koGwsSYee
+         EWqvDkbkFUDSEuqyx2QOlUnE4mzqtWHBn+vyrMp6EOUyli5easKTAk2tyEAtEIjiumHQ
+         mdGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=okI/a0w/ScKWYlbTYxY5UbnfKpymPj2M1PZmmOAj2mM=;
-        b=jpwpTe2UXd7hhNbqSsRy5Fx7YgjKBWy+tI4+es4V0d6S8JXjzUd4QFxW564Qx0J4Km
-         d9LfWM3MfMqfJyDKooNcyIX9q3t9YYSWkIV+0Ln6WIMqrTT+dOaSzfZtcSBcZw9RW6Ob
-         zuf0l/5cLiElzRGoNuVfiduTyhAV9fN0iWukOg1W6EgVngAOICbx6cL6mzZ8YEt6s8x8
-         FMDwtIG8RGkf2lPjwl+9UmlOrzVQ7Nj1yxTqAe1El5D42zS9khyzNPfLs9OvN02JaVrH
-         byuZL4ymR1PT872+yItPSMnL9SAWR3CpEsZ9lusWDr6/OoWm4rPEtYn9+j+jgbMNQKwW
-         nhdA==
-X-Gm-Message-State: AOAM532hVjWR1mSMADsAkBaDF92IEhNoched4mB5FH2IwR3Ah+cZSVQa
-        owMLkslOiui2BVYCEvFozTm/Cg9gVGk=
-X-Google-Smtp-Source: ABdhPJwuwOpZhYuhdzJA+RYh4bXFyuD0+MJzElfbzO1bWS8WuOPaLUwEhe5p6rm9YjXSxczjGIoOJA==
-X-Received: by 2002:a63:e04c:: with SMTP id n12mr22798579pgj.388.1595931518231;
-        Tue, 28 Jul 2020 03:18:38 -0700 (PDT)
-Received: from [192.168.173.154] (76-10-188-40.dsl.teksavvy.com. [76.10.188.40])
-        by smtp.gmail.com with ESMTPSA id 30sm2750213pjz.24.2020.07.28.03.18.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 Jul 2020 03:18:37 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
-Subject: Re: [RFC PATCH] i2c: Support Smbus 3.0 block sizes up to 255 bytes.
-From:   Daniel Stodden <daniel.stodden@gmail.com>
-In-Reply-To: <20200728094037.GA980@ninjato>
-Date:   Tue, 28 Jul 2020 03:18:35 -0700
-Cc:     linux-i2c@vger.kernel.org, jdelvare@suse.de
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <88D24A81-513C-4CA2-9AC8-FB156E992F34@gmail.com>
-References: <20200728004708.4430-1-daniel.stodden@gmail.com>
- <20200728094037.GA980@ninjato>
-To:     Wolfram Sang <wsa@kernel.org>
-X-Mailer: Apple Mail (2.3608.120.23.2.1)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=e64gRt1McL8oFj3/qgie+MEUtDHl7yc27Ox+TPY2v1w=;
+        b=EGiwCXr+kTaJgW5lbcF7OSWDxegQXDommYTzv53P4SHjn5Yuqsu80YCZsPqr5tIWAq
+         3p+8Jurz4mf1jBURmUj7fhjfCrwpUqIZP/65hhrnqswOZpUFV8klyMzYc9hBiQPfTuHK
+         sCwnMb+wuvEnveBroW7B50xzhAYf39tAmIFrwFVGCf7keMqzlltOEQUBpADdxF+nUOPd
+         u/e86H20XumXLI6SysBwkZvPszWoiHyKTrUyPzvFDCDdrE/73kSaaeaV8Wq3GKMWTwJ8
+         uwluxHicTPTfBD1JI5N0rN44P/aQSdy1xb/2xtiY3rfbB8qKelOwCor2iafpgd/OcgLH
+         /pEA==
+X-Gm-Message-State: AOAM530L2f4OnU4lcgcoe99zSN1KG4QRI6imah9ifBb2nnwq5bjiDsPa
+        L5vRAA5zDWFObTyWGYpqs6u8Q/TN
+X-Google-Smtp-Source: ABdhPJz46tCr6CW+PTJsXEbxKg9+0sMlL264bMhMsnNpyA2iOhGHds2jS25HqrU7xyrwFKqVUm8+WA==
+X-Received: by 2002:a2e:b4bb:: with SMTP id q27mr8024317ljm.277.1595932249003;
+        Tue, 28 Jul 2020 03:30:49 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-76-12-16.pppoe.mtu-net.ru. [91.76.12.16])
+        by smtp.googlemail.com with ESMTPSA id u9sm2884825ljk.44.2020.07.28.03.30.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jul 2020 03:30:48 -0700 (PDT)
+Subject: Re: [RFC PATCH v5 13/14] media: tegra-video: Add CSI MIPI pads
+ calibration
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
+        hverkuil@xs4all.nl, sakari.ailus@iki.fi, robh+dt@kernel.org,
+        helen.koike@collabora.com
+Cc:     sboyd@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <1595883452-17343-1-git-send-email-skomatineni@nvidia.com>
+ <1595883452-17343-14-git-send-email-skomatineni@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <c3d40261-9d77-3634-3e04-f20efad9d3d8@gmail.com>
+Date:   Tue, 28 Jul 2020 13:30:46 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <1595883452-17343-14-git-send-email-skomatineni@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+27.07.2020 23:57, Sowjanya Komatineni пишет:
+> +	/*
+> +	 * TRM has incorrectly documented to wait for done status from
+> +	 * calibration logic after CSI interface power on.
+> +	 * As per the design, calibration results are latched and applied
+> +	 * to the pads only when the link is in LP11 state which will happen
+> +	 * during the sensor stream-on.
+> +	 * CSI subdev stream-on triggers start of MIPI pads calibration.
+> +	 * Wait for calibration to finish here after sensor subdev stream-on
+> +	 * and in case of sensor stream-on failure, cancel the calibration.
+> +	 */
+>  	subdev = on ? src_subdev : csi_subdev;
+>  	ret = v4l2_subdev_call(subdev, video, s_stream, on);
+> -	if (ret < 0 && ret != -ENOIOCTLCMD)
+> +	if (ret < 0 && ret != -ENOIOCTLCMD) {
 
+I assume -ENOIOCTLCMD means that camera wasn't turned ON, so why
+-ENOIOCTLCMD is special?
 
-> On Jul 28, 2020, at 2:40 AM, Wolfram Sang <wsa@kernel.org> wrote:
->=20
-> Hi Daniel,
->=20
-> wow, that was fast! Thanks for the prototype.
->=20
->> * I suggest to just settle on '3' for new macro and type names
->>   (I2C_SMBUS3_*, i2c_smbus3_*)
->=20
-> Yes, I agree.
->=20
->>=20
->> * Block size definitions maintain I2C_SMBUS_BLOCK_MAX (32). Only adds
->>   I2C_SMBUS3_BLOCK_MAX (255)
->>=20
->>   - Means that drivers in drivers/i2c/busses/ default to their safe
->>     32B block limit without refactoring.
->=20
-> This is totally fine for this patch. However, I still think I will do
-> the renaming to I2C_SMBUS2_BLOCK_MAX in kernel space later. Just so
-> people will understand by looking at the code that this is an old =
-limit
-> which can be removed if there is interest.
->=20
->> -	__u8 block[I2C_SMBUS_BLOCK_MAX + 2]; /* block[0] is used for =
-length */
->> +	__u8 block[I2C_SMBUS3_BLOCK_MAX + 2]; /* block[0] is used for =
-length */
->> 			       /* and one more for user-space =
-compatibility */
->=20
-> I thought about this, too, and wondered if this isn't a size =
-regression
-> in userspace with every i2c_smbus_data getting 8 times the size? But
-> maybe it is worth if backwards compatibility is maintained in an
-> otherwise not so intrusive manner? Jean, what do you think?
+> +		if (on && csi_chan->mipi)
+> +			tegra_mipi_cancel_calibration(csi_chan->mipi);
+>  		return ret;
+> +	}
+> +
+> +	if (on && csi_chan->mipi) {
 
-Yep, exactly. It just made for a nice drop-in replacement for me to
-focus on i2c-dev.c first.
+Does finish_calibration() really need to be called for ret=-ENOIOCTLCMD?
 
-A lot of clients will stack-allocate these. I suppose i2-tools doesn=E2=80=
-=99t
-load more than one at a time, but haven=E2=80=99t looked.
+Shouldn't it be cancel_calibration( for the -ENOIOCTLCMD?
 
-Retrospectively
-- i2c_smbus_ioctl_data.data shouldn=E2=80=99t have been a pointer type, =
-but is.
-- i2c_smbus_data.block should have been pointer, but isn=E2=80=99t
+> +		ret = tegra_mipi_finish_calibration(csi_chan->mipi);
+> +		if (ret < 0)
+> +			dev_err(csi_chan->csi->dev,
+> +				"MIPI calibration failed: %d\n", ret);
 
-And then the kernel would pass around an 32-bit-only i2c_smbus_data =
-union -- by value.
-Which would have been much leaner, and leave the right buffer choice
-entirely to the client.
+Doesn't v4l2_subdev_call(OFF) need to be invoked here on error?
 
-One could explore this in kernel space. Let me know how you=E2=80=99d =
-like to experiment.
-But in userspace that means we=E2=80=99re looking at a new call number. =
->:)
-
-Cheers,
-Daniel
-
-
+> +		return ret;
+> +	}
+>  
+>  	return 0;
+>  }
 
