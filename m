@@ -2,249 +2,158 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4A9231AB6
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jul 2020 10:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74306231AFC
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jul 2020 10:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727846AbgG2H7t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Jul 2020 03:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727059AbgG2H7s (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jul 2020 03:59:48 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9A0C061794;
-        Wed, 29 Jul 2020 00:59:48 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id z18so17113999wrm.12;
-        Wed, 29 Jul 2020 00:59:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Z5da3dx2SAn+bVOvyHxQOVatBrN8Ykye0kzHE6DAqV0=;
-        b=NfyQpnB9G7M/mRumGDa4PyxncFONzIQPe4J7blxFyH+Ryj3ihh197KaeLo2Y13CHai
-         II013x6AH4Qcod8ylw9wYU3Ni/7ZX1nLS9McnJX5VSkDwait471nEyHD0MmjTw7XM57/
-         pgPzc6Ir7A/rYPtPEkJANVVCB2hxCVX6fU9GpaRGuTU0ycD+9iO6ufFJ7JBSU0iJH5ip
-         en4ZpzG5Pt5bRmW95dZklfUg4vQpjHPnrIWVT1vebuCcYv7+l6WkWbL/sBH+GZH7X+7C
-         WujIRwi1JrAyz4IpHL5SP56lNX9sZDzuQgS/hAlaYmUACjMrguj/HOy+3SxMUdDZfwY4
-         sl/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Z5da3dx2SAn+bVOvyHxQOVatBrN8Ykye0kzHE6DAqV0=;
-        b=nn8aMwy8YLAoMywsAC6Gs5Je7vxlH87cK2X22QUVNsYizpXryen/RW5ekh8mXe1Ih0
-         8fAbYym6AbQExEhBPIvgJFt3bgCTgYi5veUyLNlG0MewwcITyl4Nli5ILJXVdArZvFwH
-         ixNCIto3LWPAwYrQDq9w7PIrC4JuXnsY06yQ7Mxv8gJXv6oA9cENVdTXPPmQvBMewowr
-         Ab48dmceCpoNKABYbulavCyPp2avz7fTehws5YdyUSrJ2pYDOQA8GezLqDVxHQW07Ce1
-         LJtBlxU1PIMKlKb0uOSIY7m71beT/S1DYQuaAj1wA7ZQXuBzFnacKV+iHX/qhqT48Ixi
-         craQ==
-X-Gm-Message-State: AOAM532QdiEL0YtD3jZdZvAxNkaYxGFn8F5X4FcComC90PpQbmYBFfy2
-        37onyoAq18tPLe1fDtuQL/M=
-X-Google-Smtp-Source: ABdhPJwGStf0UKkkT0IHuZkO3DIghNUfUWpgTVBI4oN+HOrXJy1ffPv96tWb7B+ddXIu3I6Ov4OccQ==
-X-Received: by 2002:a5d:526d:: with SMTP id l13mr26968687wrc.279.1596009587006;
-        Wed, 29 Jul 2020 00:59:47 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.122.158])
-        by smtp.gmail.com with ESMTPSA id w14sm3418220wrt.55.2020.07.29.00.59.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2020 00:59:46 -0700 (PDT)
-Subject: Re: [PATCH v2 2/4] i2c: mediatek: Add access to more than 8GB dram in
- i2c driver
-To:     Qii Wang <qii.wang@mediatek.com>, wsa@the-dreams.de
-Cc:     qiangming.xia@mediatek.com, devicetree@vger.kernel.org,
-        srv_heupstream@mediatek.com, leilk.liu@mediatek.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        linux-mediatek@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
+        id S1728030AbgG2IQO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Jul 2020 04:16:14 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:2483 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726336AbgG2IQO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jul 2020 04:16:14 -0400
+X-UUID: 01add7d0eb32443882282057d4c4dd76-20200729
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=06GK2JTdQ1SvtMDRHD0KvuRZ7VV+xNpxs5G1mC0Ujrk=;
+        b=p4CdLlpQYhRF3qTRX7krXaYIJqHLLj2IjROgNSk0hFEsIX4uH1wUTUQAykk+7dbfVV5HlSdpQeKM1kXdNiilziKGcp1jqj0F02Fzm47XHodjtLgWps5lb8OYNhL8xXt1iobdjtN7cOEz7eqWfNOY0pyaCPKiBKBZ5/XlgXY3Soc=;
+X-UUID: 01add7d0eb32443882282057d4c4dd76-20200729
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 231597314; Wed, 29 Jul 2020 16:15:24 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 29 Jul
+ 2020 16:15:23 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 29 Jul 2020 16:15:22 +0800
+Message-ID: <1596010499.4371.3.camel@mhfsdcap03>
+Subject: Re: [PATCH v2 2/4] i2c: mediatek: Add access to more than 8GB dram
+ in i2c driver
+From:   Qii Wang <qii.wang@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <wsa@the-dreams.de>, <qiangming.xia@mediatek.com>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <leilk.liu@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <robh+dt@kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-i2c@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 29 Jul 2020 16:14:59 +0800
+In-Reply-To: <25ff4899-5e7d-f6e5-599c-4bf368a731e1@gmail.com>
 References: <1595939446-5484-1-git-send-email-qii.wang@mediatek.com>
- <1595939446-5484-3-git-send-email-qii.wang@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <25ff4899-5e7d-f6e5-599c-4bf368a731e1@gmail.com>
-Date:   Wed, 29 Jul 2020 09:59:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+         <1595939446-5484-3-git-send-email-qii.wang@mediatek.com>
+         <25ff4899-5e7d-f6e5-599c-4bf368a731e1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <1595939446-5484-3-git-send-email-qii.wang@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 70F1CC4F31D103886D43D036457B11BC8B3C9EC6FA9F3592F8C887E84160DE0C2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+T24gV2VkLCAyMDIwLTA3LTI5IGF0IDA5OjU5ICswMjAwLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3Rl
+Og0KPiANCj4gT24gMjgvMDcvMjAyMCAxNDozMCwgUWlpIFdhbmcgd3JvdGU6DQo+ID4gTmV3ZXIg
+TVRLIGNoaXAgc3VwcG9ydCBtb3JlIHRoYW4gOEdCIG9mIGRyYW0uIFJlcGxhY2Ugc3VwcG9ydF8z
+M2JpdHMNCj4gPiB3aXRoIG1vcmUgZ2VuZXJhbCBkbWFfbWF4X3N1cHBvcnQgYW5kIHJlbW92ZSBt
+dGtfaTJjX3NldF80Z19tb2RlLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IFFpaSBXYW5nIDxx
+aWkud2FuZ0BtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gICBkcml2ZXJzL2kyYy9idXNzZXMv
+aTJjLW10NjV4eC5jIHwgMzggKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0tLS0N
+Cj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspLCAyMSBkZWxldGlvbnMoLSkN
+Cj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYyBi
+L2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXQ2NXh4LmMNCj4gPiBpbmRleCBlNmI5ODRhLi40OTc3
+N2E2IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXQ2NXh4LmMNCj4g
+PiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jDQo+ID4gQEAgLTIwNCwxMSAr
+MjA0LDExIEBAIHN0cnVjdCBtdGtfaTJjX2NvbXBhdGlibGUgew0KPiA+ICAgCXVuc2lnbmVkIGNo
+YXIgZGNtOiAxOw0KPiA+ICAgCXVuc2lnbmVkIGNoYXIgYXV0b19yZXN0YXJ0OiAxOw0KPiA+ICAg
+CXVuc2lnbmVkIGNoYXIgYXV4X2xlbl9yZWc6IDE7DQo+ID4gLQl1bnNpZ25lZCBjaGFyIHN1cHBv
+cnRfMzNiaXRzOiAxOw0KPiA+ICAgCXVuc2lnbmVkIGNoYXIgdGltaW5nX2FkanVzdDogMTsNCj4g
+PiAgIAl1bnNpZ25lZCBjaGFyIGRtYV9zeW5jOiAxOw0KPiA+ICAgCXVuc2lnbmVkIGNoYXIgbHRp
+bWluZ19hZGp1c3Q6IDE7DQo+ID4gICAJdW5zaWduZWQgY2hhciBhcGRtYV9zeW5jOiAxOw0KPiA+
+ICsJdW5zaWduZWQgY2hhciBtYXhfZG1hX3N1cHBvcnQ7DQo+ID4gICB9Ow0KPiA+ICAgDQo+ID4g
+ICBzdHJ1Y3QgbXRrX2kyY19hY190aW1pbmcgew0KPiA+IEBAIC0zMTEsMTEgKzMxMSwxMSBAQCBz
+dHJ1Y3QgaTJjX3NwZWNfdmFsdWVzIHsNCj4gPiAgIAkuZGNtID0gMSwNCj4gPiAgIAkuYXV0b19y
+ZXN0YXJ0ID0gMSwNCj4gPiAgIAkuYXV4X2xlbl9yZWcgPSAxLA0KPiA+IC0JLnN1cHBvcnRfMzNi
+aXRzID0gMSwNCj4gPiAgIAkudGltaW5nX2FkanVzdCA9IDEsDQo+ID4gICAJLmRtYV9zeW5jID0g
+MCwNCj4gPiAgIAkubHRpbWluZ19hZGp1c3QgPSAwLA0KPiA+ICAgCS5hcGRtYV9zeW5jID0gMCwN
+Cj4gPiArCS5tYXhfZG1hX3N1cHBvcnQgPSAzMywNCj4gPiAgIH07DQo+ID4gICANCj4gPiAgIHN0
+YXRpYyBjb25zdCBzdHJ1Y3QgbXRrX2kyY19jb21wYXRpYmxlIG10NjU3N19jb21wYXQgPSB7DQo+
+ID4gQEAgLTMyNSwxMSArMzI1LDExIEBAIHN0cnVjdCBpMmNfc3BlY192YWx1ZXMgew0KPiA+ICAg
+CS5kY20gPSAxLA0KPiA+ICAgCS5hdXRvX3Jlc3RhcnQgPSAwLA0KPiA+ICAgCS5hdXhfbGVuX3Jl
+ZyA9IDAsDQo+ID4gLQkuc3VwcG9ydF8zM2JpdHMgPSAwLA0KPiA+ICAgCS50aW1pbmdfYWRqdXN0
+ID0gMCwNCj4gPiAgIAkuZG1hX3N5bmMgPSAwLA0KPiA+ICAgCS5sdGltaW5nX2FkanVzdCA9IDAs
+DQo+ID4gICAJLmFwZG1hX3N5bmMgPSAwLA0KPiA+ICsJLm1heF9kbWFfc3VwcG9ydCA9IDMyLA0K
+PiA+ICAgfTsNCj4gPiAgIA0KPiA+ICAgc3RhdGljIGNvbnN0IHN0cnVjdCBtdGtfaTJjX2NvbXBh
+dGlibGUgbXQ2NTg5X2NvbXBhdCA9IHsNCj4gPiBAQCAtMzM5LDExICszMzksMTEgQEAgc3RydWN0
+IGkyY19zcGVjX3ZhbHVlcyB7DQo+ID4gICAJLmRjbSA9IDAsDQo+ID4gICAJLmF1dG9fcmVzdGFy
+dCA9IDAsDQo+ID4gICAJLmF1eF9sZW5fcmVnID0gMCwNCj4gPiAtCS5zdXBwb3J0XzMzYml0cyA9
+IDAsDQo+ID4gICAJLnRpbWluZ19hZGp1c3QgPSAwLA0KPiA+ICAgCS5kbWFfc3luYyA9IDAsDQo+
+ID4gICAJLmx0aW1pbmdfYWRqdXN0ID0gMCwNCj4gPiAgIAkuYXBkbWFfc3luYyA9IDAsDQo+ID4g
+KwkubWF4X2RtYV9zdXBwb3J0ID0gMzIsDQo+ID4gICB9Ow0KPiA+ICAgDQo+ID4gICBzdGF0aWMg
+Y29uc3Qgc3RydWN0IG10a19pMmNfY29tcGF0aWJsZSBtdDc2MjJfY29tcGF0ID0gew0KPiA+IEBA
+IC0zNTMsMTEgKzM1MywxMSBAQCBzdHJ1Y3QgaTJjX3NwZWNfdmFsdWVzIHsNCj4gPiAgIAkuZGNt
+ID0gMSwNCj4gPiAgIAkuYXV0b19yZXN0YXJ0ID0gMSwNCj4gPiAgIAkuYXV4X2xlbl9yZWcgPSAx
+LA0KPiA+IC0JLnN1cHBvcnRfMzNiaXRzID0gMCwNCj4gPiAgIAkudGltaW5nX2FkanVzdCA9IDAs
+DQo+ID4gICAJLmRtYV9zeW5jID0gMCwNCj4gPiAgIAkubHRpbWluZ19hZGp1c3QgPSAwLA0KPiA+
+ICAgCS5hcGRtYV9zeW5jID0gMCwNCj4gPiArCS5tYXhfZG1hX3N1cHBvcnQgPSAzMiwNCj4gPiAg
+IH07DQo+ID4gICANCj4gPiAgIHN0YXRpYyBjb25zdCBzdHJ1Y3QgbXRrX2kyY19jb21wYXRpYmxl
+IG10ODE3M19jb21wYXQgPSB7DQo+ID4gQEAgLTM2NiwxMSArMzY2LDExIEBAIHN0cnVjdCBpMmNf
+c3BlY192YWx1ZXMgew0KPiA+ICAgCS5kY20gPSAxLA0KPiA+ICAgCS5hdXRvX3Jlc3RhcnQgPSAx
+LA0KPiA+ICAgCS5hdXhfbGVuX3JlZyA9IDEsDQo+ID4gLQkuc3VwcG9ydF8zM2JpdHMgPSAxLA0K
+PiA+ICAgCS50aW1pbmdfYWRqdXN0ID0gMCwNCj4gPiAgIAkuZG1hX3N5bmMgPSAwLA0KPiA+ICAg
+CS5sdGltaW5nX2FkanVzdCA9IDAsDQo+ID4gICAJLmFwZG1hX3N5bmMgPSAwLA0KPiA+ICsJLm1h
+eF9kbWFfc3VwcG9ydCA9IDMzLA0KPiA+ICAgfTsNCj4gPiAgIA0KPiA+ICAgc3RhdGljIGNvbnN0
+IHN0cnVjdCBtdGtfaTJjX2NvbXBhdGlibGUgbXQ4MTgzX2NvbXBhdCA9IHsNCj4gPiBAQCAtMzgw
+LDExICszODAsMTEgQEAgc3RydWN0IGkyY19zcGVjX3ZhbHVlcyB7DQo+ID4gICAJLmRjbSA9IDAs
+DQo+ID4gICAJLmF1dG9fcmVzdGFydCA9IDEsDQo+ID4gICAJLmF1eF9sZW5fcmVnID0gMSwNCj4g
+PiAtCS5zdXBwb3J0XzMzYml0cyA9IDEsDQo+ID4gICAJLnRpbWluZ19hZGp1c3QgPSAxLA0KPiA+
+ICAgCS5kbWFfc3luYyA9IDEsDQo+ID4gICAJLmx0aW1pbmdfYWRqdXN0ID0gMSwNCj4gPiAgIAku
+YXBkbWFfc3luYyA9IDAsDQo+ID4gKwkubWF4X2RtYV9zdXBwb3J0ID0gMzMsDQo+ID4gICB9Ow0K
+PiA+ICAgDQo+ID4gICBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBtdGtfaTJjX29m
+X21hdGNoW10gPSB7DQo+ID4gQEAgLTc5NiwxMSArNzk2LDYgQEAgc3RhdGljIGludCBtdGtfaTJj
+X3NldF9zcGVlZChzdHJ1Y3QgbXRrX2kyYyAqaTJjLCB1bnNpZ25lZCBpbnQgcGFyZW50X2NsaykN
+Cj4gPiAgIAlyZXR1cm4gMDsNCj4gPiAgIH0NCj4gPiAgIA0KPiA+IC1zdGF0aWMgaW5saW5lIHUz
+MiBtdGtfaTJjX3NldF80Z19tb2RlKGRtYV9hZGRyX3QgYWRkcikNCj4gPiAtew0KPiA+IC0JcmV0
+dXJuIChhZGRyICYgQklUX1VMTCgzMikpID8gSTJDX0RNQV80R19NT0RFIDogSTJDX0RNQV9DTFJf
+RkxBRzsNCj4gDQo+IEkgdGhpbmsgeW91IG1pc3NlZCBteSBjb21tZW50IGluIHRoZSBsYXN0IHZl
+cnNpb246DQo+IEkyQ19ETUFfNEdfTU9ERSBpcyBubyBsb25nZXIgbmVlZGVkLCB5b3UgY2FuIGRl
+bGV0ZSBpdC4NCj4gDQo+IFJlZ2FyZHMsDQo+IE1hdHRoaWFzDQo+IA0KDQpTb3JyeSBmb3IgbWlz
+c2luZyB0aGF0IGNvbW1lbnQsIEkgd2lsbCByZW1vdmUgaXQuDQpUaGFuayB5b3UgZm9yIHlvdXIg
+Y29tbWVudHMgYW5kIHJlbWluZGVycy4NCg0KPiA+IC19DQo+ID4gLQ0KPiA+ICAgc3RhdGljIGlu
+dCBtdGtfaTJjX2RvX3RyYW5zZmVyKHN0cnVjdCBtdGtfaTJjICppMmMsIHN0cnVjdCBpMmNfbXNn
+ICptc2dzLA0KPiA+ICAgCQkJICAgICAgIGludCBudW0sIGludCBsZWZ0X251bSkNCj4gPiAgIHsN
+Cj4gPiBAQCAtODg1LDggKzg4MCw4IEBAIHN0YXRpYyBpbnQgbXRrX2kyY19kb190cmFuc2Zlcihz
+dHJ1Y3QgbXRrX2kyYyAqaTJjLCBzdHJ1Y3QgaTJjX21zZyAqbXNncywNCj4gPiAgIAkJCXJldHVy
+biAtRU5PTUVNOw0KPiA+ICAgCQl9DQo+ID4gICANCj4gPiAtCQlpZiAoaTJjLT5kZXZfY29tcC0+
+c3VwcG9ydF8zM2JpdHMpIHsNCj4gPiAtCQkJcmVnXzRnX21vZGUgPSBtdGtfaTJjX3NldF80Z19t
+b2RlKHJwYWRkcik7DQo+ID4gKwkJaWYgKGkyYy0+ZGV2X2NvbXAtPm1heF9kbWFfc3VwcG9ydCA+
+IDMyKSB7DQo+ID4gKwkJCXJlZ180Z19tb2RlID0gdXBwZXJfMzJfYml0cyhycGFkZHIpOw0KPiA+
+ICAgCQkJd3JpdGVsKHJlZ180Z19tb2RlLCBpMmMtPnBkbWFiYXNlICsgT0ZGU0VUX1JYXzRHX01P
+REUpOw0KPiA+ICAgCQl9DQo+ID4gICANCj4gPiBAQCAtOTA4LDggKzkwMyw4IEBAIHN0YXRpYyBp
+bnQgbXRrX2kyY19kb190cmFuc2ZlcihzdHJ1Y3QgbXRrX2kyYyAqaTJjLCBzdHJ1Y3QgaTJjX21z
+ZyAqbXNncywNCj4gPiAgIAkJCXJldHVybiAtRU5PTUVNOw0KPiA+ICAgCQl9DQo+ID4gICANCj4g
+PiAtCQlpZiAoaTJjLT5kZXZfY29tcC0+c3VwcG9ydF8zM2JpdHMpIHsNCj4gPiAtCQkJcmVnXzRn
+X21vZGUgPSBtdGtfaTJjX3NldF80Z19tb2RlKHdwYWRkcik7DQo+ID4gKwkJaWYgKGkyYy0+ZGV2
+X2NvbXAtPm1heF9kbWFfc3VwcG9ydCA+IDMyKSB7DQo+ID4gKwkJCXJlZ180Z19tb2RlID0gdXBw
+ZXJfMzJfYml0cyh3cGFkZHIpOw0KPiA+ICAgCQkJd3JpdGVsKHJlZ180Z19tb2RlLCBpMmMtPnBk
+bWFiYXNlICsgT0ZGU0VUX1RYXzRHX01PREUpOw0KPiA+ICAgCQl9DQo+ID4gICANCj4gPiBAQCAt
+OTU0LDExICs5NDksMTEgQEAgc3RhdGljIGludCBtdGtfaTJjX2RvX3RyYW5zZmVyKHN0cnVjdCBt
+dGtfaTJjICppMmMsIHN0cnVjdCBpMmNfbXNnICptc2dzLA0KPiA+ICAgCQkJcmV0dXJuIC1FTk9N
+RU07DQo+ID4gICAJCX0NCj4gPiAgIA0KPiA+IC0JCWlmIChpMmMtPmRldl9jb21wLT5zdXBwb3J0
+XzMzYml0cykgew0KPiA+IC0JCQlyZWdfNGdfbW9kZSA9IG10a19pMmNfc2V0XzRnX21vZGUod3Bh
+ZGRyKTsNCj4gPiArCQlpZiAoaTJjLT5kZXZfY29tcC0+bWF4X2RtYV9zdXBwb3J0ID4gMzIpIHsN
+Cj4gPiArCQkJcmVnXzRnX21vZGUgPSB1cHBlcl8zMl9iaXRzKHdwYWRkcik7DQo+ID4gICAJCQl3
+cml0ZWwocmVnXzRnX21vZGUsIGkyYy0+cGRtYWJhc2UgKyBPRkZTRVRfVFhfNEdfTU9ERSk7DQo+
+ID4gICANCj4gPiAtCQkJcmVnXzRnX21vZGUgPSBtdGtfaTJjX3NldF80Z19tb2RlKHJwYWRkcik7
+DQo+ID4gKwkJCXJlZ180Z19tb2RlID0gdXBwZXJfMzJfYml0cyhycGFkZHIpOw0KPiA+ICAgCQkJ
+d3JpdGVsKHJlZ180Z19tb2RlLCBpMmMtPnBkbWFiYXNlICsgT0ZGU0VUX1JYXzRHX01PREUpOw0K
+PiA+ICAgCQl9DQo+ID4gICANCj4gPiBAQCAtMTIzMiw4ICsxMjI3LDkgQEAgc3RhdGljIGludCBt
+dGtfaTJjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ID4gICAJCXJldHVy
+biAtRUlOVkFMOw0KPiA+ICAgCX0NCj4gPiAgIA0KPiA+IC0JaWYgKGkyYy0+ZGV2X2NvbXAtPnN1
+cHBvcnRfMzNiaXRzKSB7DQo+ID4gLQkJcmV0ID0gZG1hX3NldF9tYXNrKCZwZGV2LT5kZXYsIERN
+QV9CSVRfTUFTSygzMykpOw0KPiA+ICsJaWYgKGkyYy0+ZGV2X2NvbXAtPm1heF9kbWFfc3VwcG9y
+dCA+IDMyKSB7DQo+ID4gKwkJcmV0ID0gZG1hX3NldF9tYXNrKCZwZGV2LT5kZXYsDQo+ID4gKwkJ
+CQlETUFfQklUX01BU0soaTJjLT5kZXZfY29tcC0+bWF4X2RtYV9zdXBwb3J0KSk7DQo+ID4gICAJ
+CWlmIChyZXQpIHsNCj4gPiAgIAkJCWRldl9lcnIoJnBkZXYtPmRldiwgImRtYV9zZXRfbWFzayBy
+ZXR1cm4gZXJyb3IuXG4iKTsNCj4gPiAgIAkJCXJldHVybiByZXQ7DQo+ID4gDQoNCg==
 
-
-On 28/07/2020 14:30, Qii Wang wrote:
-> Newer MTK chip support more than 8GB of dram. Replace support_33bits
-> with more general dma_max_support and remove mtk_i2c_set_4g_mode.
-> 
-> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
-> ---
->   drivers/i2c/busses/i2c-mt65xx.c | 38 +++++++++++++++++---------------------
->   1 file changed, 17 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-> index e6b984a..49777a6 100644
-> --- a/drivers/i2c/busses/i2c-mt65xx.c
-> +++ b/drivers/i2c/busses/i2c-mt65xx.c
-> @@ -204,11 +204,11 @@ struct mtk_i2c_compatible {
->   	unsigned char dcm: 1;
->   	unsigned char auto_restart: 1;
->   	unsigned char aux_len_reg: 1;
-> -	unsigned char support_33bits: 1;
->   	unsigned char timing_adjust: 1;
->   	unsigned char dma_sync: 1;
->   	unsigned char ltiming_adjust: 1;
->   	unsigned char apdma_sync: 1;
-> +	unsigned char max_dma_support;
->   };
->   
->   struct mtk_i2c_ac_timing {
-> @@ -311,11 +311,11 @@ struct i2c_spec_values {
->   	.dcm = 1,
->   	.auto_restart = 1,
->   	.aux_len_reg = 1,
-> -	.support_33bits = 1,
->   	.timing_adjust = 1,
->   	.dma_sync = 0,
->   	.ltiming_adjust = 0,
->   	.apdma_sync = 0,
-> +	.max_dma_support = 33,
->   };
->   
->   static const struct mtk_i2c_compatible mt6577_compat = {
-> @@ -325,11 +325,11 @@ struct i2c_spec_values {
->   	.dcm = 1,
->   	.auto_restart = 0,
->   	.aux_len_reg = 0,
-> -	.support_33bits = 0,
->   	.timing_adjust = 0,
->   	.dma_sync = 0,
->   	.ltiming_adjust = 0,
->   	.apdma_sync = 0,
-> +	.max_dma_support = 32,
->   };
->   
->   static const struct mtk_i2c_compatible mt6589_compat = {
-> @@ -339,11 +339,11 @@ struct i2c_spec_values {
->   	.dcm = 0,
->   	.auto_restart = 0,
->   	.aux_len_reg = 0,
-> -	.support_33bits = 0,
->   	.timing_adjust = 0,
->   	.dma_sync = 0,
->   	.ltiming_adjust = 0,
->   	.apdma_sync = 0,
-> +	.max_dma_support = 32,
->   };
->   
->   static const struct mtk_i2c_compatible mt7622_compat = {
-> @@ -353,11 +353,11 @@ struct i2c_spec_values {
->   	.dcm = 1,
->   	.auto_restart = 1,
->   	.aux_len_reg = 1,
-> -	.support_33bits = 0,
->   	.timing_adjust = 0,
->   	.dma_sync = 0,
->   	.ltiming_adjust = 0,
->   	.apdma_sync = 0,
-> +	.max_dma_support = 32,
->   };
->   
->   static const struct mtk_i2c_compatible mt8173_compat = {
-> @@ -366,11 +366,11 @@ struct i2c_spec_values {
->   	.dcm = 1,
->   	.auto_restart = 1,
->   	.aux_len_reg = 1,
-> -	.support_33bits = 1,
->   	.timing_adjust = 0,
->   	.dma_sync = 0,
->   	.ltiming_adjust = 0,
->   	.apdma_sync = 0,
-> +	.max_dma_support = 33,
->   };
->   
->   static const struct mtk_i2c_compatible mt8183_compat = {
-> @@ -380,11 +380,11 @@ struct i2c_spec_values {
->   	.dcm = 0,
->   	.auto_restart = 1,
->   	.aux_len_reg = 1,
-> -	.support_33bits = 1,
->   	.timing_adjust = 1,
->   	.dma_sync = 1,
->   	.ltiming_adjust = 1,
->   	.apdma_sync = 0,
-> +	.max_dma_support = 33,
->   };
->   
->   static const struct of_device_id mtk_i2c_of_match[] = {
-> @@ -796,11 +796,6 @@ static int mtk_i2c_set_speed(struct mtk_i2c *i2c, unsigned int parent_clk)
->   	return 0;
->   }
->   
-> -static inline u32 mtk_i2c_set_4g_mode(dma_addr_t addr)
-> -{
-> -	return (addr & BIT_ULL(32)) ? I2C_DMA_4G_MODE : I2C_DMA_CLR_FLAG;
-
-I think you missed my comment in the last version:
-I2C_DMA_4G_MODE is no longer needed, you can delete it.
-
-Regards,
-Matthias
-
-> -}
-> -
->   static int mtk_i2c_do_transfer(struct mtk_i2c *i2c, struct i2c_msg *msgs,
->   			       int num, int left_num)
->   {
-> @@ -885,8 +880,8 @@ static int mtk_i2c_do_transfer(struct mtk_i2c *i2c, struct i2c_msg *msgs,
->   			return -ENOMEM;
->   		}
->   
-> -		if (i2c->dev_comp->support_33bits) {
-> -			reg_4g_mode = mtk_i2c_set_4g_mode(rpaddr);
-> +		if (i2c->dev_comp->max_dma_support > 32) {
-> +			reg_4g_mode = upper_32_bits(rpaddr);
->   			writel(reg_4g_mode, i2c->pdmabase + OFFSET_RX_4G_MODE);
->   		}
->   
-> @@ -908,8 +903,8 @@ static int mtk_i2c_do_transfer(struct mtk_i2c *i2c, struct i2c_msg *msgs,
->   			return -ENOMEM;
->   		}
->   
-> -		if (i2c->dev_comp->support_33bits) {
-> -			reg_4g_mode = mtk_i2c_set_4g_mode(wpaddr);
-> +		if (i2c->dev_comp->max_dma_support > 32) {
-> +			reg_4g_mode = upper_32_bits(wpaddr);
->   			writel(reg_4g_mode, i2c->pdmabase + OFFSET_TX_4G_MODE);
->   		}
->   
-> @@ -954,11 +949,11 @@ static int mtk_i2c_do_transfer(struct mtk_i2c *i2c, struct i2c_msg *msgs,
->   			return -ENOMEM;
->   		}
->   
-> -		if (i2c->dev_comp->support_33bits) {
-> -			reg_4g_mode = mtk_i2c_set_4g_mode(wpaddr);
-> +		if (i2c->dev_comp->max_dma_support > 32) {
-> +			reg_4g_mode = upper_32_bits(wpaddr);
->   			writel(reg_4g_mode, i2c->pdmabase + OFFSET_TX_4G_MODE);
->   
-> -			reg_4g_mode = mtk_i2c_set_4g_mode(rpaddr);
-> +			reg_4g_mode = upper_32_bits(rpaddr);
->   			writel(reg_4g_mode, i2c->pdmabase + OFFSET_RX_4G_MODE);
->   		}
->   
-> @@ -1232,8 +1227,9 @@ static int mtk_i2c_probe(struct platform_device *pdev)
->   		return -EINVAL;
->   	}
->   
-> -	if (i2c->dev_comp->support_33bits) {
-> -		ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(33));
-> +	if (i2c->dev_comp->max_dma_support > 32) {
-> +		ret = dma_set_mask(&pdev->dev,
-> +				DMA_BIT_MASK(i2c->dev_comp->max_dma_support));
->   		if (ret) {
->   			dev_err(&pdev->dev, "dma_set_mask return error.\n");
->   			return ret;
-> 
