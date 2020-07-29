@@ -2,156 +2,249 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A7A2317F2
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jul 2020 05:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4A9231AB6
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jul 2020 10:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730373AbgG2DL2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Jul 2020 23:11:28 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:54147 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729997AbgG2DL2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Jul 2020 23:11:28 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 04AEA8066C;
-        Wed, 29 Jul 2020 15:11:23 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1595992283;
-        bh=sM+KrmY3WOU8L/ZS1k+NWdBz7cBUxHr8G+rFhcVUeqU=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=sGPJgNzYhAEtiofKoz6NPlXjzQGLBSqGgbnSo32KIo+ovZBA/CcZ8sPkxj7WeeA0V
-         t581nWWfrlHWohZhXbXeZAelhaHCdAvGRQDG+z7T4xONNfN4wOfYRri+NujoJeUtVg
-         KHn4P9v5PYSappS3XKXelNLK92+C5m6xAd06NNBaWeeKTOYQpe5XdkO1bDqsFG+PQV
-         wQb1C+UeFYgpZfj8Fw1JIXXUxEiTSQ3Etwz1IJovppkYxRSZtYn5MXdmtuDvbfVYU1
-         AjYFDgVVS2k9P0zprKm0CqqIFbKUZq/8JmRpqp7AyQbTNcbpBH9x0D8YvUJ122JtEb
-         xb7bDjWS2fLyg==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f20e8db0001>; Wed, 29 Jul 2020 15:11:23 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Wed, 29 Jul 2020 15:11:22 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.006; Wed, 29 Jul 2020 15:11:22 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Mark Tomlinson <Mark.Tomlinson@alliedtelesis.co.nz>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: mv64xxx: Add bus error recovery
-Thread-Topic: [PATCH] i2c: mv64xxx: Add bus error recovery
-Thread-Index: AQHWZVXvhTA0ImruIUmTOKEyZ1Tv4Q==
-Date:   Wed, 29 Jul 2020 03:11:21 +0000
-Message-ID: <e7004338-20ba-8c1d-aa75-2bd5e997da3f@alliedtelesis.co.nz>
-References: <20200707211036.12896-1-mark.tomlinson@alliedtelesis.co.nz>
-In-Reply-To: <20200707211036.12896-1-mark.tomlinson@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E264F0330C37744F80EC1C16EDF50AEE@atlnz.lc>
-Content-Transfer-Encoding: base64
+        id S1727846AbgG2H7t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Jul 2020 03:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727059AbgG2H7s (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jul 2020 03:59:48 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9A0C061794;
+        Wed, 29 Jul 2020 00:59:48 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id z18so17113999wrm.12;
+        Wed, 29 Jul 2020 00:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Z5da3dx2SAn+bVOvyHxQOVatBrN8Ykye0kzHE6DAqV0=;
+        b=NfyQpnB9G7M/mRumGDa4PyxncFONzIQPe4J7blxFyH+Ryj3ihh197KaeLo2Y13CHai
+         II013x6AH4Qcod8ylw9wYU3Ni/7ZX1nLS9McnJX5VSkDwait471nEyHD0MmjTw7XM57/
+         pgPzc6Ir7A/rYPtPEkJANVVCB2hxCVX6fU9GpaRGuTU0ycD+9iO6ufFJ7JBSU0iJH5ip
+         en4ZpzG5Pt5bRmW95dZklfUg4vQpjHPnrIWVT1vebuCcYv7+l6WkWbL/sBH+GZH7X+7C
+         WujIRwi1JrAyz4IpHL5SP56lNX9sZDzuQgS/hAlaYmUACjMrguj/HOy+3SxMUdDZfwY4
+         sl/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Z5da3dx2SAn+bVOvyHxQOVatBrN8Ykye0kzHE6DAqV0=;
+        b=nn8aMwy8YLAoMywsAC6Gs5Je7vxlH87cK2X22QUVNsYizpXryen/RW5ekh8mXe1Ih0
+         8fAbYym6AbQExEhBPIvgJFt3bgCTgYi5veUyLNlG0MewwcITyl4Nli5ILJXVdArZvFwH
+         ixNCIto3LWPAwYrQDq9w7PIrC4JuXnsY06yQ7Mxv8gJXv6oA9cENVdTXPPmQvBMewowr
+         Ab48dmceCpoNKABYbulavCyPp2avz7fTehws5YdyUSrJ2pYDOQA8GezLqDVxHQW07Ce1
+         LJtBlxU1PIMKlKb0uOSIY7m71beT/S1DYQuaAj1wA7ZQXuBzFnacKV+iHX/qhqT48Ixi
+         craQ==
+X-Gm-Message-State: AOAM532QdiEL0YtD3jZdZvAxNkaYxGFn8F5X4FcComC90PpQbmYBFfy2
+        37onyoAq18tPLe1fDtuQL/M=
+X-Google-Smtp-Source: ABdhPJwGStf0UKkkT0IHuZkO3DIghNUfUWpgTVBI4oN+HOrXJy1ffPv96tWb7B+ddXIu3I6Ov4OccQ==
+X-Received: by 2002:a5d:526d:: with SMTP id l13mr26968687wrc.279.1596009587006;
+        Wed, 29 Jul 2020 00:59:47 -0700 (PDT)
+Received: from ziggy.stardust ([213.195.122.158])
+        by smtp.gmail.com with ESMTPSA id w14sm3418220wrt.55.2020.07.29.00.59.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jul 2020 00:59:46 -0700 (PDT)
+Subject: Re: [PATCH v2 2/4] i2c: mediatek: Add access to more than 8GB dram in
+ i2c driver
+To:     Qii Wang <qii.wang@mediatek.com>, wsa@the-dreams.de
+Cc:     qiangming.xia@mediatek.com, devicetree@vger.kernel.org,
+        srv_heupstream@mediatek.com, leilk.liu@mediatek.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        linux-mediatek@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <1595939446-5484-1-git-send-email-qii.wang@mediatek.com>
+ <1595939446-5484-3-git-send-email-qii.wang@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <25ff4899-5e7d-f6e5-599c-4bf368a731e1@gmail.com>
+Date:   Wed, 29 Jul 2020 09:59:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
+In-Reply-To: <1595939446-5484-3-git-send-email-qii.wang@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGkgTWFyaywNCg0KT24gOC8wNy8yMCA5OjEwIGFtLCBNYXJrIFRvbWxpbnNvbiB3cm90ZToNCj4g
-VGhpcyBhZGRzIGkyYyBidXMgcmVjb3ZlcnkgdG8gdGhlIG12NjR4eHggZHJpdmVyLg0KPg0KPiBJ
-bXBsZW1lbnQgYnVzIHJlY292ZXJ5IHRvIHJlY292ZXIgZnJvbSBTQ0wvU0RBIHN0dWNrIGxvdy4N
-Cj4NCj4gVGhpcyB1c2VzIHRoZSBnZW5lcmljIHJlY292ZXJ5IGZ1bmN0aW9uLCBzZXR0aW5nIHRo
-ZSBjbG9jay9kYXRhIGxpbmVzIGFzDQo+IEdQSU8gcGlucywgYW5kIHNlbmRpbmcgOSBjbG9ja3Mg
-dG8gdHJ5IGFuZCByZWNvdmVyIHRoZSBidXMuDQo+DQo+IFNpZ25lZC1vZmYtYnk6IE1hcmsgVG9t
-bGluc29uIDxtYXJrLnRvbWxpbnNvbkBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KDQpSZXZpZXdlZC1i
-eTogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KDQpP
-bmUgYWRkaXRpb25hbCBjb21tZW50IGJlbG93DQoNCj4gLS0tDQo+ICAgZHJpdmVycy9pMmMvYnVz
-c2VzL2kyYy1tdjY0eHh4LmMgfCA3NyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLQ0K
-PiAgIDEgZmlsZSBjaGFuZ2VkLCA3NiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+DQo+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW12NjR4eHguYyBiL2RyaXZlcnMv
-aTJjL2J1c3Nlcy9pMmMtbXY2NHh4eC5jDQo+IGluZGV4IDgyOWI4Yzk4YWU1MS4uZTU4ODUzYmEz
-ZWYwIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW12NjR4eHguYw0KPiAr
-KysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW12NjR4eHguYw0KPiBAQCAtMjEsNiArMjEsNyBA
-QA0KPiAgICNpbmNsdWRlIDxsaW51eC9pby5oPg0KPiAgICNpbmNsdWRlIDxsaW51eC9vZi5oPg0K
-PiAgICNpbmNsdWRlIDxsaW51eC9vZl9kZXZpY2UuaD4NCj4gKyNpbmNsdWRlIDxsaW51eC9vZl9n
-cGlvLmg+DQo+ICAgI2luY2x1ZGUgPGxpbnV4L29mX2lycS5oPg0KPiAgICNpbmNsdWRlIDxsaW51
-eC9jbGsuaD4NCj4gICAjaW5jbHVkZSA8bGludXgvZXJyLmg+DQo+IEBAIC0xNDcsNiArMTQ4LDEw
-IEBAIHN0cnVjdCBtdjY0eHh4X2kyY19kYXRhIHsNCj4gICAJYm9vbAkJCWlycV9jbGVhcl9pbnZl
-cnRlZDsNCj4gICAJLyogQ2xrIGRpdiBpcyAyIHRvIHRoZSBwb3dlciBuLCBub3QgMiB0byB0aGUg
-cG93ZXIgbiArIDEgKi8NCj4gICAJYm9vbAkJCWNsa19uX2Jhc2VfMDsNCj4gKwlzdHJ1Y3QgcGlu
-Y3RybAkJKnBpbmN0cmw7DQo+ICsJc3RydWN0IGkyY19idXNfcmVjb3ZlcnlfaW5mbwlyaW5mbzsN
-Cj4gKwlzdHJ1Y3QgcGluY3RybF9zdGF0ZQkqcGluX2RlZmF1bHRfc3RhdGU7DQo+ICsJc3RydWN0
-IHBpbmN0cmxfc3RhdGUJKnBpbl9ncGlvX3N0YXRlOw0KPiAgIH07DQo+ICAgDQo+ICAgc3RhdGlj
-IHN0cnVjdCBtdjY0eHh4X2kyY19yZWdzIG12NjR4eHhfaTJjX3JlZ3NfbXY2NHh4eCA9IHsNCj4g
-QEAgLTMyNSw3ICszMzAsOCBAQCBtdjY0eHh4X2kyY19mc20oc3RydWN0IG12NjR4eHhfaTJjX2Rh
-dGEgKmRydl9kYXRhLCB1MzIgc3RhdHVzKQ0KPiAgIAkJCSBkcnZfZGF0YS0+bXNnLT5mbGFncyk7
-DQo+ICAgCQlkcnZfZGF0YS0+YWN0aW9uID0gTVY2NFhYWF9JMkNfQUNUSU9OX1NFTkRfU1RPUDsN
-Cj4gICAJCW12NjR4eHhfaTJjX2h3X2luaXQoZHJ2X2RhdGEpOw0KPiAtCQlkcnZfZGF0YS0+cmMg
-PSAtRUlPOw0KPiArCQlpMmNfcmVjb3Zlcl9idXMoJmRydl9kYXRhLT5hZGFwdGVyKTsNCj4gKwkJ
-ZHJ2X2RhdGEtPnJjID0gLUVBR0FJTjsNCj4gICAJfQ0KPiAgIH0NCj4gICANCj4gQEAgLTU2Myw2
-ICs1NjksNyBAQCBtdjY0eHh4X2kyY193YWl0X2Zvcl9jb21wbGV0aW9uKHN0cnVjdCBtdjY0eHh4
-X2kyY19kYXRhICpkcnZfZGF0YSkNCj4gICAJCQkJInRpbWVfbGVmdDogJWRcbiIsIGRydl9kYXRh
-LT5ibG9jaywNCj4gICAJCQkJKGludCl0aW1lX2xlZnQpOw0KPiAgIAkJCW12NjR4eHhfaTJjX2h3
-X2luaXQoZHJ2X2RhdGEpOw0KPiArCQkJaTJjX3JlY292ZXJfYnVzKCZkcnZfZGF0YS0+YWRhcHRl
-cik7DQo+ICAgCQl9DQo+ICAgCX0gZWxzZQ0KPiAgIAkJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgm
-ZHJ2X2RhdGEtPmxvY2ssIGZsYWdzKTsNCj4gQEAgLTg3Miw2ICs4NzksNjkgQEAgbXY2NHh4eF9v
-Zl9jb25maWcoc3RydWN0IG12NjR4eHhfaTJjX2RhdGEgKmRydl9kYXRhLA0KPiAgIH0NCj4gICAj
-ZW5kaWYgLyogQ09ORklHX09GICovDQo+ICAgDQo+ICsvKg0KPiArICogU3dpdGNoIHRvIGJpdCBi
-YW5nIG1vZGUgdG8gcHJlcGFyZSBmb3IgaTJjIGdlbmVyaWMgcmVjb3ZlcnkuDQo+ICsgKi8NCj4g
-K3N0YXRpYyB2b2lkIG12NjR4eHhfaTJjX3ByZXBhcmVfcmVjb3Zlcnkoc3RydWN0IGkyY19hZGFw
-dGVyICphZGFwKQ0KPiArew0KPiArCXN0cnVjdCBtdjY0eHh4X2kyY19kYXRhICpkcnZfZGF0YSA9
-IGkyY19nZXRfYWRhcGRhdGEoYWRhcCk7DQo+ICsNCj4gKwlwaW5jdHJsX3NlbGVjdF9zdGF0ZShk
-cnZfZGF0YS0+cGluY3RybCwgZHJ2X2RhdGEtPnBpbl9ncGlvX3N0YXRlKTsNCj4gK30NCj4gKw0K
-PiArLyoNCj4gKyAqIFJldHVybiB0byBub3JtYWwgaTJjIG9wZXJhdGlvbiBmb2xsb3dpbmcgcmVj
-b3ZlcnkuDQo+ICsgKi8NCj4gK3N0YXRpYyB2b2lkIG12NjR4eHhfaTJjX3VucHJlcGFyZV9yZWNv
-dmVyeShzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXApDQo+ICt7DQo+ICsJc3RydWN0IG12NjR4eHhf
-aTJjX2RhdGEgKmRydl9kYXRhID0gaTJjX2dldF9hZGFwZGF0YShhZGFwKTsNCj4gKw0KPiArCXBp
-bmN0cmxfc2VsZWN0X3N0YXRlKGRydl9kYXRhLT5waW5jdHJsLCBkcnZfZGF0YS0+cGluX2RlZmF1
-bHRfc3RhdGUpOw0KPiArfQ0KPiArDQo+ICtzdGF0aWMgaW50IG12NjR4eHhfaTJjX2luaXRfcmVj
-b3ZlcnlfaW5mbyhzdHJ1Y3QgbXY2NHh4eF9pMmNfZGF0YSAqZHJ2X2RhdGEsDQo+ICsJCQkJCSAg
-c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGQpDQo+ICt7DQo+ICsJc3RydWN0IGkyY19idXNfcmVj
-b3ZlcnlfaW5mbyAqcmluZm8gPSAmZHJ2X2RhdGEtPnJpbmZvOw0KPiArCXN0cnVjdCBkZXZpY2Ug
-KmRldiA9ICZwZC0+ZGV2Ow0KPiArDQo+ICsJZHJ2X2RhdGEtPnBpbmN0cmwgPSBkZXZtX3BpbmN0
-cmxfZ2V0KGRldik7DQo+ICsJaWYgKCFkcnZfZGF0YS0+cGluY3RybCB8fCBJU19FUlIoZHJ2X2Rh
-dGEtPnBpbmN0cmwpKSB7DQo+ICsJCWRldl9lcnIoZGV2LCAiY2FuJ3QgZ2V0IHBpbmN0cmwsIGJ1
-cyByZWNvdmVyeSBub3Qgc3VwcG9ydGVkXG4iKTsNCj4gKwkJcmV0dXJuIFBUUl9FUlIoZHJ2X2Rh
-dGEtPnBpbmN0cmwpOw0KPiArCX0NCj4gKw0KPiArCWRydl9kYXRhLT5waW5fZGVmYXVsdF9zdGF0
-ZSA9IHBpbmN0cmxfbG9va3VwX3N0YXRlKGRydl9kYXRhLT5waW5jdHJsLA0KPiArCQkJUElOQ1RS
-TF9TVEFURV9ERUZBVUxUKTsNCj4gKwlkcnZfZGF0YS0+cGluX2dwaW9fc3RhdGUgPSBwaW5jdHJs
-X2xvb2t1cF9zdGF0ZShkcnZfZGF0YS0+cGluY3RybCwNCj4gKwkJCSJncGlvIik7DQo+ICsJcmlu
-Zm8tPnNjbF9ncGlvZCA9IGRldm1fZ3Bpb2RfZ2V0KGRldiwgInNjbCIsDQo+ICsJCQkJCSAgR1BJ
-T0RfT1VUX0hJR0hfT1BFTl9EUkFJTik7DQo+ICsJcmluZm8tPnNkYV9ncGlvZCA9IGRldm1fZ3Bp
-b2RfZ2V0KGRldiwgInNkYSIsIEdQSU9EX0lOKTsNCg0KU2hvdWxkIHRoZXNlIGJlIG1lbnRpb25l
-ZCBpbiANCkRvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvbWFydmVsbCxtdjY0
-eHh4LWkyYy55YW1sPw0KDQo+ICsJaWYgKFBUUl9FUlIocmluZm8tPnNjbF9ncGlvZCkgPT0gLUVQ
-Uk9CRV9ERUZFUiB8fA0KPiArCSAgICBQVFJfRVJSKHJpbmZvLT5zZGFfZ3Bpb2QpID09IC1FUFJP
-QkVfREVGRVIpDQo+ICsJCXJldHVybiAtRVBST0JFX0RFRkVSOw0KPiArDQo+ICsJaWYgKElTX0VS
-UihyaW5mby0+c2RhX2dwaW9kKSB8fA0KPiArCSAgICBJU19FUlIocmluZm8tPnNjbF9ncGlvZCkg
-fHwNCj4gKwkgICAgSVNfRVJSKGRydl9kYXRhLT5waW5fZGVmYXVsdF9zdGF0ZSkgfHwNCj4gKwkg
-ICAgSVNfRVJSKGRydl9kYXRhLT5waW5fZ3Bpb19zdGF0ZSkpIHsNCj4gKwkJZGV2X2RiZyhkZXYs
-ICJyZWNvdmVyeSBpbmZvcm1hdGlvbiBpbmNvbXBsZXRlXG4iKTsNCj4gKwkJcmV0dXJuIDA7DQo+
-ICsJfQ0KPiArDQo+ICsJZGV2X2RiZyhkZXYsICJ1c2luZyBzY2wtZ3BpbyAlZCBhbmQgc2RhLWdw
-aW8gJWQgZm9yIHJlY292ZXJ5XG4iLA0KPiArCQlyaW5mby0+c2NsX2dwaW9kID8gZGVzY190b19n
-cGlvKHJpbmZvLT5zY2xfZ3Bpb2QpIDogLTEsDQo+ICsJCXJpbmZvLT5zZGFfZ3Bpb2QgPyBkZXNj
-X3RvX2dwaW8ocmluZm8tPnNkYV9ncGlvZCkgOiAtMSk7DQo+ICsNCj4gKwlyaW5mby0+cHJlcGFy
-ZV9yZWNvdmVyeSA9IG12NjR4eHhfaTJjX3ByZXBhcmVfcmVjb3Zlcnk7DQo+ICsJcmluZm8tPnVu
-cHJlcGFyZV9yZWNvdmVyeSA9IG12NjR4eHhfaTJjX3VucHJlcGFyZV9yZWNvdmVyeTsNCj4gKwly
-aW5mby0+cmVjb3Zlcl9idXMgPSBpMmNfZ2VuZXJpY19zY2xfcmVjb3Zlcnk7DQo+ICsJZHJ2X2Rh
-dGEtPmFkYXB0ZXIuYnVzX3JlY292ZXJ5X2luZm8gPSByaW5mbzsNCj4gKw0KPiArCXJldHVybiAw
-Ow0KPiArfQ0KPiArDQo+ICAgc3RhdGljIGludA0KPiAgIG12NjR4eHhfaTJjX3Byb2JlKHN0cnVj
-dCBwbGF0Zm9ybV9kZXZpY2UgKnBkKQ0KPiAgIHsNCj4gQEAgLTkzOSw2ICsxMDA5LDEwIEBAIG12
-NjR4eHhfaTJjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkKQ0KPiAgIA0KPiAgIAlt
-djY0eHh4X2kyY19od19pbml0KGRydl9kYXRhKTsNCj4gICANCj4gKwlyYyA9IG12NjR4eHhfaTJj
-X2luaXRfcmVjb3ZlcnlfaW5mbyhkcnZfZGF0YSwgcGQpOw0KPiArCWlmIChyYyA9PSAtRVBST0JF
-X0RFRkVSKQ0KPiArCQlnb3RvIGV4aXRfcmVzZXQ7DQo+ICsNCj4gICAJcmMgPSByZXF1ZXN0X2ly
-cShkcnZfZGF0YS0+aXJxLCBtdjY0eHh4X2kyY19pbnRyLCAwLA0KPiAgIAkJCSBNVjY0WFhYX0ky
-Q19DVExSX05BTUUsIGRydl9kYXRhKTsNCj4gICAJaWYgKHJjKSB7DQo+IEBAIC05NTEsNiArMTAy
-NSw3IEBAIG12NjR4eHhfaTJjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkKQ0KPiAg
-IAkJCSJtdjY0eHh4OiBDYW4ndCBhZGQgaTJjIGFkYXB0ZXIsIHJjOiAlZFxuIiwgLXJjKTsNCj4g
-ICAJCWdvdG8gZXhpdF9mcmVlX2lycTsNCj4gICAJfQ0KPiArCWkyY19yZWNvdmVyX2J1cygmZHJ2
-X2RhdGEtPmFkYXB0ZXIpOw0KPiAgIA0KPiAgIAlyZXR1cm4gMDsNCj4gICA=
+
+
+On 28/07/2020 14:30, Qii Wang wrote:
+> Newer MTK chip support more than 8GB of dram. Replace support_33bits
+> with more general dma_max_support and remove mtk_i2c_set_4g_mode.
+> 
+> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
+> ---
+>   drivers/i2c/busses/i2c-mt65xx.c | 38 +++++++++++++++++---------------------
+>   1 file changed, 17 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+> index e6b984a..49777a6 100644
+> --- a/drivers/i2c/busses/i2c-mt65xx.c
+> +++ b/drivers/i2c/busses/i2c-mt65xx.c
+> @@ -204,11 +204,11 @@ struct mtk_i2c_compatible {
+>   	unsigned char dcm: 1;
+>   	unsigned char auto_restart: 1;
+>   	unsigned char aux_len_reg: 1;
+> -	unsigned char support_33bits: 1;
+>   	unsigned char timing_adjust: 1;
+>   	unsigned char dma_sync: 1;
+>   	unsigned char ltiming_adjust: 1;
+>   	unsigned char apdma_sync: 1;
+> +	unsigned char max_dma_support;
+>   };
+>   
+>   struct mtk_i2c_ac_timing {
+> @@ -311,11 +311,11 @@ struct i2c_spec_values {
+>   	.dcm = 1,
+>   	.auto_restart = 1,
+>   	.aux_len_reg = 1,
+> -	.support_33bits = 1,
+>   	.timing_adjust = 1,
+>   	.dma_sync = 0,
+>   	.ltiming_adjust = 0,
+>   	.apdma_sync = 0,
+> +	.max_dma_support = 33,
+>   };
+>   
+>   static const struct mtk_i2c_compatible mt6577_compat = {
+> @@ -325,11 +325,11 @@ struct i2c_spec_values {
+>   	.dcm = 1,
+>   	.auto_restart = 0,
+>   	.aux_len_reg = 0,
+> -	.support_33bits = 0,
+>   	.timing_adjust = 0,
+>   	.dma_sync = 0,
+>   	.ltiming_adjust = 0,
+>   	.apdma_sync = 0,
+> +	.max_dma_support = 32,
+>   };
+>   
+>   static const struct mtk_i2c_compatible mt6589_compat = {
+> @@ -339,11 +339,11 @@ struct i2c_spec_values {
+>   	.dcm = 0,
+>   	.auto_restart = 0,
+>   	.aux_len_reg = 0,
+> -	.support_33bits = 0,
+>   	.timing_adjust = 0,
+>   	.dma_sync = 0,
+>   	.ltiming_adjust = 0,
+>   	.apdma_sync = 0,
+> +	.max_dma_support = 32,
+>   };
+>   
+>   static const struct mtk_i2c_compatible mt7622_compat = {
+> @@ -353,11 +353,11 @@ struct i2c_spec_values {
+>   	.dcm = 1,
+>   	.auto_restart = 1,
+>   	.aux_len_reg = 1,
+> -	.support_33bits = 0,
+>   	.timing_adjust = 0,
+>   	.dma_sync = 0,
+>   	.ltiming_adjust = 0,
+>   	.apdma_sync = 0,
+> +	.max_dma_support = 32,
+>   };
+>   
+>   static const struct mtk_i2c_compatible mt8173_compat = {
+> @@ -366,11 +366,11 @@ struct i2c_spec_values {
+>   	.dcm = 1,
+>   	.auto_restart = 1,
+>   	.aux_len_reg = 1,
+> -	.support_33bits = 1,
+>   	.timing_adjust = 0,
+>   	.dma_sync = 0,
+>   	.ltiming_adjust = 0,
+>   	.apdma_sync = 0,
+> +	.max_dma_support = 33,
+>   };
+>   
+>   static const struct mtk_i2c_compatible mt8183_compat = {
+> @@ -380,11 +380,11 @@ struct i2c_spec_values {
+>   	.dcm = 0,
+>   	.auto_restart = 1,
+>   	.aux_len_reg = 1,
+> -	.support_33bits = 1,
+>   	.timing_adjust = 1,
+>   	.dma_sync = 1,
+>   	.ltiming_adjust = 1,
+>   	.apdma_sync = 0,
+> +	.max_dma_support = 33,
+>   };
+>   
+>   static const struct of_device_id mtk_i2c_of_match[] = {
+> @@ -796,11 +796,6 @@ static int mtk_i2c_set_speed(struct mtk_i2c *i2c, unsigned int parent_clk)
+>   	return 0;
+>   }
+>   
+> -static inline u32 mtk_i2c_set_4g_mode(dma_addr_t addr)
+> -{
+> -	return (addr & BIT_ULL(32)) ? I2C_DMA_4G_MODE : I2C_DMA_CLR_FLAG;
+
+I think you missed my comment in the last version:
+I2C_DMA_4G_MODE is no longer needed, you can delete it.
+
+Regards,
+Matthias
+
+> -}
+> -
+>   static int mtk_i2c_do_transfer(struct mtk_i2c *i2c, struct i2c_msg *msgs,
+>   			       int num, int left_num)
+>   {
+> @@ -885,8 +880,8 @@ static int mtk_i2c_do_transfer(struct mtk_i2c *i2c, struct i2c_msg *msgs,
+>   			return -ENOMEM;
+>   		}
+>   
+> -		if (i2c->dev_comp->support_33bits) {
+> -			reg_4g_mode = mtk_i2c_set_4g_mode(rpaddr);
+> +		if (i2c->dev_comp->max_dma_support > 32) {
+> +			reg_4g_mode = upper_32_bits(rpaddr);
+>   			writel(reg_4g_mode, i2c->pdmabase + OFFSET_RX_4G_MODE);
+>   		}
+>   
+> @@ -908,8 +903,8 @@ static int mtk_i2c_do_transfer(struct mtk_i2c *i2c, struct i2c_msg *msgs,
+>   			return -ENOMEM;
+>   		}
+>   
+> -		if (i2c->dev_comp->support_33bits) {
+> -			reg_4g_mode = mtk_i2c_set_4g_mode(wpaddr);
+> +		if (i2c->dev_comp->max_dma_support > 32) {
+> +			reg_4g_mode = upper_32_bits(wpaddr);
+>   			writel(reg_4g_mode, i2c->pdmabase + OFFSET_TX_4G_MODE);
+>   		}
+>   
+> @@ -954,11 +949,11 @@ static int mtk_i2c_do_transfer(struct mtk_i2c *i2c, struct i2c_msg *msgs,
+>   			return -ENOMEM;
+>   		}
+>   
+> -		if (i2c->dev_comp->support_33bits) {
+> -			reg_4g_mode = mtk_i2c_set_4g_mode(wpaddr);
+> +		if (i2c->dev_comp->max_dma_support > 32) {
+> +			reg_4g_mode = upper_32_bits(wpaddr);
+>   			writel(reg_4g_mode, i2c->pdmabase + OFFSET_TX_4G_MODE);
+>   
+> -			reg_4g_mode = mtk_i2c_set_4g_mode(rpaddr);
+> +			reg_4g_mode = upper_32_bits(rpaddr);
+>   			writel(reg_4g_mode, i2c->pdmabase + OFFSET_RX_4G_MODE);
+>   		}
+>   
+> @@ -1232,8 +1227,9 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+>   		return -EINVAL;
+>   	}
+>   
+> -	if (i2c->dev_comp->support_33bits) {
+> -		ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(33));
+> +	if (i2c->dev_comp->max_dma_support > 32) {
+> +		ret = dma_set_mask(&pdev->dev,
+> +				DMA_BIT_MASK(i2c->dev_comp->max_dma_support));
+>   		if (ret) {
+>   			dev_err(&pdev->dev, "dma_set_mask return error.\n");
+>   			return ret;
+> 
