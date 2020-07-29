@@ -2,252 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2002232664
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jul 2020 22:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDFF23280C
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jul 2020 01:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727003AbgG2Uor (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Jul 2020 16:44:47 -0400
-Received: from mx.aristanetworks.com ([162.210.129.12]:60753 "EHLO
-        smtp.aristanetworks.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726869AbgG2Uor (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jul 2020 16:44:47 -0400
-X-Greylist: delayed 450 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Jul 2020 16:44:46 EDT
-Received: from dns-buster.sjc.aristanetworks.com. (us178.sjc.aristanetworks.com [10.243.128.5])
-        by smtp.aristanetworks.com (Postfix) with ESMTPS id DEF32401893;
-        Wed, 29 Jul 2020 13:37:15 -0700 (PDT)
-From:   daniel.stodden@gmail.com
-To:     linux-i2c@vger.kernel.org
-Cc:     dns@arista.com, jdelvare@suse.de
-Subject: [RFC PATCH v2] i2c: Support Smbus 3.0 block sizes up to 255 bytes.
-Date:   Wed, 29 Jul 2020 20:36:58 +0000
-Message-Id: <20200729203658.411-1-daniel.stodden@gmail.com>
+        id S1727896AbgG2XZ7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Jul 2020 19:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726718AbgG2XZ7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jul 2020 19:25:59 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C200CC061794;
+        Wed, 29 Jul 2020 16:25:58 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id k13so13986610lfo.0;
+        Wed, 29 Jul 2020 16:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=NCa+6+FpulnqctzU8RoW4eAJcOOgsGCS7xmaanI8k+U=;
+        b=MLw9Yjpk5gOX5QxhRfNeA+9SDbpCJxENmouOcbiiLJv79EO4oLesW9CKC1+FBZhR0v
+         FP0ljRnhKGVDXozyGFn8FdFxNU42wfoRzgxkoUHQisdctU5hMeQZsnE6A+oYQHQT5aqz
+         lkW4Hym5BtxdmeaxrN/zjiLZYTCDGdeKGTfQxueE2jYnBOsVqQpmVVNoJ5llubnL88y+
+         cvXeVtmGLFU2zPOw04EwUSiRdwIiFWjwmFTRSmJHTC4UJ4PNgORnGPBLD+6JA7mbl16l
+         lGgK/rqwkz/8YDH7fkm4TP9HBmlRilyTQzQs6rIcYfEBV1uc0Kw9bQax8ls6btFFP7cq
+         WCOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=NCa+6+FpulnqctzU8RoW4eAJcOOgsGCS7xmaanI8k+U=;
+        b=GJTTEDGL76LC+X0mn/oYiW7JzH5HFyxw9lBAsAvkEEziXEiVgWen8jmup8hESoi6QU
+         oTHKSdON8zJ+Lwgi+8T+dJR2X8DfsGIrgPx1bDu+y7tn32xi8yOAC/0mVgl6NTxgRDYj
+         elkUMmy1a2TgIsTaj6jEXVtbUN/HhB5piIpoRUxoLxj+Cz2136JY6xOf/tVuqWCQvhKt
+         lkfZGNZGkmYdw4ok4whgDf2rRN+b0tWfBrWQNL0ZSL0PPUrEGy+/0tkPcQtmC2oRhr0i
+         vdwEYtDizSe9bxOTCqlNrfdeiAETNBbz7qAAD6Qj9RGcmY9l9SJ0UQOSd/0LbnUVG+iP
+         9z5A==
+X-Gm-Message-State: AOAM530xr8OsjMSq8UFoaTapaBd+V4AZ+Hx+i9IYCLvAwNZqhzGjyWLW
+        z8uUBxoKc86W2datiVUhd/TYzlI6
+X-Google-Smtp-Source: ABdhPJziJ+s1t3LvOqj08h4deyFSCu7mAhp88bfPJj5sw3l6yR7zwiq83ewDPJZHfQ5/eocS9hQmdg==
+X-Received: by 2002:a19:830a:: with SMTP id f10mr165618lfd.28.1596065157014;
+        Wed, 29 Jul 2020 16:25:57 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-76-12-16.pppoe.mtu-net.ru. [91.76.12.16])
+        by smtp.googlemail.com with ESMTPSA id v23sm768693lfa.5.2020.07.29.16.25.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jul 2020 16:25:56 -0700 (PDT)
+Subject: Re: [RFC PATCH v5 13/14] media: tegra-video: Add CSI MIPI pads
+ calibration
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
+        hverkuil@xs4all.nl, sakari.ailus@iki.fi, robh+dt@kernel.org,
+        helen.koike@collabora.com
+Cc:     sboyd@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <1595883452-17343-1-git-send-email-skomatineni@nvidia.com>
+ <1595883452-17343-14-git-send-email-skomatineni@nvidia.com>
+ <c3d40261-9d77-3634-3e04-f20efad9d3d8@gmail.com>
+ <01ee0805-3d57-d857-48e3-5c2245cd4500@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <2ec535c9-55e8-8834-6002-36c75aeb097c@gmail.com>
+Date:   Thu, 30 Jul 2020 02:25:55 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <01ee0805-3d57-d857-48e3-5c2245cd4500@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Daniel Stodden <dns@arista.com>
+28.07.2020 18:59, Sowjanya Komatineni пишет:
+...
+>>> +        ret = tegra_mipi_finish_calibration(csi_chan->mipi);
+>>> +        if (ret < 0)
+>>> +            dev_err(csi_chan->csi->dev,
+>>> +                "MIPI calibration failed: %d\n", ret);
+>> Doesn't v4l2_subdev_call(OFF) need to be invoked here on error?
+> 
+> Not required as on error streaming fails and runtime PM will turn off
+> power anyway.
 
-WIP, v2. (And still haven't had an opportunity to verify, but rsn.)
+I see that camera drivers bump theirs RPM on s_stream=1, and thus,
+s_stream=0 should be invoked in order to balance the RPM. What am I missing?
 
-Updates since v1:
+https://elixir.bootlin.com/linux/v5.8-rc4/source/drivers/media/i2c/ov2740.c#L634
 
- * Prefer stack storage for user_len[] in i2cdev_ioctl_rdwr. Sized 84
-   bytes, small enough to not kmalloc.
+> Also we only did csi subdev s_stream on and during sensor subdev
+> s_stream on fail, actual stream dont happen and on tegra side frame
+> capture by HW happens only when kthreads run.
+Secondly, perhaps a failed calibration isn't a very critical error?
+Hence just printing a warning message should be enough.
 
- * Keep original transfer type values around. For reference, and
-   possibly for reverse compatibility (new code on old kernels).
-
- * Renames old transfer types to I2C_SMBUS1_*, assigns new transfer
-   type values to old names.
-
- * Promotes new transfer types via source compatibility. This is not
-   necessarily the agreed solution, just a proposed one.
-
- * Define I2C_FUNC_SMBUS3_BLOCKSIZE 0x20000000.  No use yet, assuming
-   only adapter implementations will employ it.
-
-Ongoing:
-
- * Like v1, I2C_SMBUS and I2C_RDWR return -EMSGSIZE to legacy clients,
-   if the client buffer is 32 bytes but the device produced > 32
-   bytes.
-
-   Like the -EFAULT case, code will truncate data, but copy what can
-   be copied before returning. Not 100% sure if this is really useful,
-   or if truncated data should return 0 and rely on the client to
-   figure it out.
-
-   PS: I didn't notice the 'while (res >= 0..' in I2C_RDWR when I
-       wrote that. But one could make it so...? (Or give up.)
-
-   PPS: The old behavior was driver dependent. Some would fail
-   	(e.g. piix4, -EPROTO), some would truncate (e.g. viapro).
-
-   I'm starting to lean toward silent truncate, return 0.
-   Most permissive.
----
- drivers/i2c/i2c-dev.c    | 77 +++++++++++++++++++++++++++++++++-------
- include/uapi/linux/i2c.h | 16 ++++++---
- 2 files changed, 76 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index cb07651f4b46..581b7309210f 100644
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -242,6 +242,7 @@ static noinline int i2cdev_ioctl_rdwr(struct i2c_client *client,
- 		unsigned nmsgs, struct i2c_msg *msgs)
- {
- 	u8 __user **data_ptrs;
-+	u16 user_len[I2C_RDWR_IOCTL_MAX_MSGS];
- 	int i, res;
- 
- 	data_ptrs = kmalloc_array(nmsgs, sizeof(u8 __user *), GFP_KERNEL);
-@@ -268,16 +269,34 @@ static noinline int i2cdev_ioctl_rdwr(struct i2c_client *client,
- 		msgs[i].flags |= I2C_M_DMA_SAFE;
- 
- 		/*
--		 * If the message length is received from the slave (similar
--		 * to SMBus block read), we must ensure that the buffer will
--		 * be large enough to cope with a message length of
--		 * I2C_SMBUS_BLOCK_MAX as this is the maximum underlying bus
--		 * drivers allow. The first byte in the buffer must be
--		 * pre-filled with the number of extra bytes, which must be
--		 * at least one to hold the message length, but can be
--		 * greater (for example to account for a checksum byte at
--		 * the end of the message.)
-+		 * If the block length is received from the slave
-+		 * (similar to SMBus block read), we ensure that
-+		 *
-+		 *  - the user buffer is large enough to hold a
-+		 *    message length of I2C_SMBUS_BLOCK_MAX (32), as
-+		 *    this is what any Smbus version allows.
-+		 *
-+		 *  - the kernel buffer is large enough to hold a
-+		 *    message length of I2C_SMBUS3_BLOCK_MAX (255),
-+		 *    which is what Smbus >= 3.0 allows.
-+		 *
-+		 * Kernel block lengths up to I2SMBUS3_BLOCK_MAX
-+		 * ensure that drivers can always return up to 255
-+		 * bytes safely.
-+		 *
-+		 * User block lengths up to only I2C_SMBUS_BLOCK_MAX
-+		 * are supported for backward compatibility. If an
-+		 * Smbus 3.0 slave produces a longer message than
-+		 * userspace provides for, we truncate the user copy
-+		 * and return -EMSGSIZE.
-+		 *
-+		 * The first byte in the user buffer must be
-+		 * pre-filled with the number of extra bytes, at least
-+		 * one to hold the message length, but can be greater
-+		 * (for example to account for a checksum byte at the
-+		 * end of the message.)
- 		 */
-+		user_len[i] = msgs[i].len;
- 		if (msgs[i].flags & I2C_M_RECV_LEN) {
- 			if (!(msgs[i].flags & I2C_M_RD) ||
- 			    msgs[i].len < 1 || msgs[i].buf[0] < 1 ||
-@@ -288,6 +307,21 @@ static noinline int i2cdev_ioctl_rdwr(struct i2c_client *client,
- 				break;
- 			}
- 
-+			if (msgs[i].len < msgs[i].buf[0] +
-+					   I2C_SMBUS3_BLOCK_MAX) {
-+				u8* buf =
-+					krealloc(msgs[i].buf,
-+						 msgs[i].buf[0] +
-+						 I2C_SMBUS3_BLOCK_MAX,
-+						 GFP_KERNEL);
-+				if (!buf) {
-+					i++;
-+					res = -ENOMEM;
-+					break;
-+				}
-+				msgs[i].buf = buf;
-+			}
-+
- 			msgs[i].len = msgs[i].buf[0];
- 		}
- 	}
-@@ -304,8 +338,10 @@ static noinline int i2cdev_ioctl_rdwr(struct i2c_client *client,
- 	while (i-- > 0) {
- 		if (res >= 0 && (msgs[i].flags & I2C_M_RD)) {
- 			if (copy_to_user(data_ptrs[i], msgs[i].buf,
--					 msgs[i].len))
-+					 min(msgs[i].len, user_len[i])))
- 				res = -EFAULT;
-+			if (msgs[i].len > user_len[i])
-+				res = res ? : -EMSGSIZE;
- 		}
- 		kfree(msgs[i].buf);
- 	}
-@@ -319,7 +355,22 @@ static noinline int i2cdev_ioctl_smbus(struct i2c_client *client,
- 		union i2c_smbus_data __user *data)
- {
- 	union i2c_smbus_data temp = {};
--	int datasize, res;
-+	int block_max, datasize, res;
-+
-+	if (size <= I2C_SMBUS1_I2C_BLOCK_DATA) {
-+		switch (size) {
-+		case I2C_SMBUS1_BLOCK_DATA:
-+			size = I2C_SMBUS_BLOCK_DATA;
-+			break;
-+		case I2C_SMBUS1_BLOCK_PROC_CALL:
-+			size = I2C_SMBUS_BLOCK_PROC_CALL;
-+			break;
-+		case I2C_SMBUS1_I2C_BLOCK_DATA:
-+			size = I2C_SMBUS_I2C_BLOCK_DATA;
-+		}
-+		block_max = I2C_SMBUS_BLOCK_MAX;
-+	} else
-+		block_max = I2C_SMBUS3_BLOCK_MAX;
- 
- 	if ((size != I2C_SMBUS_BYTE) &&
- 	    (size != I2C_SMBUS_QUICK) &&
-@@ -368,7 +419,7 @@ static noinline int i2cdev_ioctl_smbus(struct i2c_client *client,
- 		 (size == I2C_SMBUS_PROC_CALL))
- 		datasize = sizeof(data->word);
- 	else /* size == smbus block, i2c block, or block proc. call */
--		datasize = sizeof(data->block);
-+		datasize = block_max + 2;
- 
- 	if ((size == I2C_SMBUS_PROC_CALL) ||
- 	    (size == I2C_SMBUS_BLOCK_PROC_CALL) ||
-@@ -391,6 +442,8 @@ static noinline int i2cdev_ioctl_smbus(struct i2c_client *client,
- 		     (read_write == I2C_SMBUS_READ))) {
- 		if (copy_to_user(data, &temp, datasize))
- 			return -EFAULT;
-+		if (temp.block[0] > block_max)
-+			return -EMSGSIZE;
- 	}
- 	return res;
- }
-diff --git a/include/uapi/linux/i2c.h b/include/uapi/linux/i2c.h
-index f71a1751cacf..885372f24a3c 100644
---- a/include/uapi/linux/i2c.h
-+++ b/include/uapi/linux/i2c.h
-@@ -107,6 +107,7 @@ struct i2c_msg {
- #define I2C_FUNC_SMBUS_READ_I2C_BLOCK	0x04000000 /* I2C-like block xfer  */
- #define I2C_FUNC_SMBUS_WRITE_I2C_BLOCK	0x08000000 /* w/ 1-byte reg. addr. */
- #define I2C_FUNC_SMBUS_HOST_NOTIFY	0x10000000
-+#define I2C_FUNC_SMBUS3_BLOCKSIZE	0x20000000
- 
- #define I2C_FUNC_SMBUS_BYTE		(I2C_FUNC_SMBUS_READ_BYTE | \
- 					 I2C_FUNC_SMBUS_WRITE_BYTE)
-@@ -131,11 +132,13 @@ struct i2c_msg {
- /*
-  * Data for SMBus Messages
-  */
--#define I2C_SMBUS_BLOCK_MAX	32	/* As specified in SMBus standard */
-+#define I2C_SMBUS_BLOCK_MAX	32	/* As specified in SMBus standard <= 3.0 */
-+#define I2C_SMBUS3_BLOCK_MAX	255	/* As specified in SMBus 3.0 */
-+
- union i2c_smbus_data {
- 	__u8 byte;
- 	__u16 word;
--	__u8 block[I2C_SMBUS_BLOCK_MAX + 2]; /* block[0] is used for length */
-+	__u8 block[I2C_SMBUS3_BLOCK_MAX + 2]; /* block[0] is used for length */
- 			       /* and one more for user-space compatibility */
- };
- 
-@@ -150,9 +153,12 @@ union i2c_smbus_data {
- #define I2C_SMBUS_BYTE_DATA	    2
- #define I2C_SMBUS_WORD_DATA	    3
- #define I2C_SMBUS_PROC_CALL	    4
--#define I2C_SMBUS_BLOCK_DATA	    5
-+#define I2C_SMBUS1_BLOCK_DATA	    5 /* Legacy 32 byte block limit */
- #define I2C_SMBUS_I2C_BLOCK_BROKEN  6
--#define I2C_SMBUS_BLOCK_PROC_CALL   7		/* SMBus 2.0 */
--#define I2C_SMBUS_I2C_BLOCK_DATA    8
-+#define I2C_SMBUS1_BLOCK_PROC_CALL  7 /* SMBus 2.0, legacy 32 byte block limit */
-+#define I2C_SMBUS1_I2C_BLOCK_DATA   8 /* Legacy 32 byte block limit */
-+#define I2C_SMBUS_BLOCK_DATA        9 /* Smbus 3.0, 255 byte limit */
-+#define I2C_SMBUS_BLOCK_PROC_CALL  10 /* Smbus 3.0, 255 byte limit */
-+#define I2C_SMBUS_I2C_BLOCK_DATA   11 /* Smbus 3.0, 255 byte limit */
- 
- #endif /* _UAPI_LINUX_I2C_H */
--- 
-2.20.1
-
+Could you please make a patch that factors all ON/OFF code paths into a
+separate functions? It's a bit difficult to follow the combined code,
+especially partial changes in the patches. Thanks in advance!
