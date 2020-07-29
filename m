@@ -2,158 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74306231AFC
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jul 2020 10:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40450231CEF
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jul 2020 12:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728030AbgG2IQO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Jul 2020 04:16:14 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:2483 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726336AbgG2IQO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 29 Jul 2020 04:16:14 -0400
-X-UUID: 01add7d0eb32443882282057d4c4dd76-20200729
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=06GK2JTdQ1SvtMDRHD0KvuRZ7VV+xNpxs5G1mC0Ujrk=;
-        b=p4CdLlpQYhRF3qTRX7krXaYIJqHLLj2IjROgNSk0hFEsIX4uH1wUTUQAykk+7dbfVV5HlSdpQeKM1kXdNiilziKGcp1jqj0F02Fzm47XHodjtLgWps5lb8OYNhL8xXt1iobdjtN7cOEz7eqWfNOY0pyaCPKiBKBZ5/XlgXY3Soc=;
-X-UUID: 01add7d0eb32443882282057d4c4dd76-20200729
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <qii.wang@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 231597314; Wed, 29 Jul 2020 16:15:24 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 29 Jul
- 2020 16:15:23 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 29 Jul 2020 16:15:22 +0800
-Message-ID: <1596010499.4371.3.camel@mhfsdcap03>
-Subject: Re: [PATCH v2 2/4] i2c: mediatek: Add access to more than 8GB dram
- in i2c driver
-From:   Qii Wang <qii.wang@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <wsa@the-dreams.de>, <qiangming.xia@mediatek.com>,
-        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
-        <leilk.liu@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        <robh+dt@kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-i2c@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-Date:   Wed, 29 Jul 2020 16:14:59 +0800
-In-Reply-To: <25ff4899-5e7d-f6e5-599c-4bf368a731e1@gmail.com>
-References: <1595939446-5484-1-git-send-email-qii.wang@mediatek.com>
-         <1595939446-5484-3-git-send-email-qii.wang@mediatek.com>
-         <25ff4899-5e7d-f6e5-599c-4bf368a731e1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726449AbgG2KwI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Jul 2020 06:52:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39816 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726800AbgG2KwE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 29 Jul 2020 06:52:04 -0400
+Received: from localhost (p54b330b6.dip0.t-ipconnect.de [84.179.48.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 77E1420663;
+        Wed, 29 Jul 2020 10:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596019924;
+        bh=nZS4p36m3R83VoUiw+ZEwPiyAVCEBtSWxNPwbA1TXzQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wgZo4hgL4WaKk71JTm/935IODYq6H70baewYcI/IZKKdNhq+/kBAP7PnGQSHMeivC
+         1zZMj/x79aZNjLpJMsdic2p0VuuoT/pfr53hAKE/se7/z6RgpXl8kU0Kgl7ILohBEZ
+         OVgGI404Zx2HXPn6DUwW1Nq71mKLAneuojkc9I5Q=
+Date:   Wed, 29 Jul 2020 12:51:57 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Daniel Stodden <daniel.stodden@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org
+Subject: Re: [RFC PATCH] i2c: Support Smbus 3.0 block sizes up to 255 bytes.
+Message-ID: <20200729105156.GA1015@ninjato>
+References: <20200728004708.4430-1-daniel.stodden@gmail.com>
+ <20200728094037.GA980@ninjato>
+ <20200728190435.3c4f5d5e@endymion>
+ <5E3EA2AC-83B1-4B7B-87DB-DBC4FAB2B7D0@gmail.com>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 70F1CC4F31D103886D43D036457B11BC8B3C9EC6FA9F3592F8C887E84160DE0C2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1yeeQ81UyVL57Vl7"
+Content-Disposition: inline
+In-Reply-To: <5E3EA2AC-83B1-4B7B-87DB-DBC4FAB2B7D0@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gV2VkLCAyMDIwLTA3LTI5IGF0IDA5OjU5ICswMjAwLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3Rl
-Og0KPiANCj4gT24gMjgvMDcvMjAyMCAxNDozMCwgUWlpIFdhbmcgd3JvdGU6DQo+ID4gTmV3ZXIg
-TVRLIGNoaXAgc3VwcG9ydCBtb3JlIHRoYW4gOEdCIG9mIGRyYW0uIFJlcGxhY2Ugc3VwcG9ydF8z
-M2JpdHMNCj4gPiB3aXRoIG1vcmUgZ2VuZXJhbCBkbWFfbWF4X3N1cHBvcnQgYW5kIHJlbW92ZSBt
-dGtfaTJjX3NldF80Z19tb2RlLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IFFpaSBXYW5nIDxx
-aWkud2FuZ0BtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gICBkcml2ZXJzL2kyYy9idXNzZXMv
-aTJjLW10NjV4eC5jIHwgMzggKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0tLS0N
-Cj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspLCAyMSBkZWxldGlvbnMoLSkN
-Cj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYyBi
-L2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXQ2NXh4LmMNCj4gPiBpbmRleCBlNmI5ODRhLi40OTc3
-N2E2IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXQ2NXh4LmMNCj4g
-PiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jDQo+ID4gQEAgLTIwNCwxMSAr
-MjA0LDExIEBAIHN0cnVjdCBtdGtfaTJjX2NvbXBhdGlibGUgew0KPiA+ICAgCXVuc2lnbmVkIGNo
-YXIgZGNtOiAxOw0KPiA+ICAgCXVuc2lnbmVkIGNoYXIgYXV0b19yZXN0YXJ0OiAxOw0KPiA+ICAg
-CXVuc2lnbmVkIGNoYXIgYXV4X2xlbl9yZWc6IDE7DQo+ID4gLQl1bnNpZ25lZCBjaGFyIHN1cHBv
-cnRfMzNiaXRzOiAxOw0KPiA+ICAgCXVuc2lnbmVkIGNoYXIgdGltaW5nX2FkanVzdDogMTsNCj4g
-PiAgIAl1bnNpZ25lZCBjaGFyIGRtYV9zeW5jOiAxOw0KPiA+ICAgCXVuc2lnbmVkIGNoYXIgbHRp
-bWluZ19hZGp1c3Q6IDE7DQo+ID4gICAJdW5zaWduZWQgY2hhciBhcGRtYV9zeW5jOiAxOw0KPiA+
-ICsJdW5zaWduZWQgY2hhciBtYXhfZG1hX3N1cHBvcnQ7DQo+ID4gICB9Ow0KPiA+ICAgDQo+ID4g
-ICBzdHJ1Y3QgbXRrX2kyY19hY190aW1pbmcgew0KPiA+IEBAIC0zMTEsMTEgKzMxMSwxMSBAQCBz
-dHJ1Y3QgaTJjX3NwZWNfdmFsdWVzIHsNCj4gPiAgIAkuZGNtID0gMSwNCj4gPiAgIAkuYXV0b19y
-ZXN0YXJ0ID0gMSwNCj4gPiAgIAkuYXV4X2xlbl9yZWcgPSAxLA0KPiA+IC0JLnN1cHBvcnRfMzNi
-aXRzID0gMSwNCj4gPiAgIAkudGltaW5nX2FkanVzdCA9IDEsDQo+ID4gICAJLmRtYV9zeW5jID0g
-MCwNCj4gPiAgIAkubHRpbWluZ19hZGp1c3QgPSAwLA0KPiA+ICAgCS5hcGRtYV9zeW5jID0gMCwN
-Cj4gPiArCS5tYXhfZG1hX3N1cHBvcnQgPSAzMywNCj4gPiAgIH07DQo+ID4gICANCj4gPiAgIHN0
-YXRpYyBjb25zdCBzdHJ1Y3QgbXRrX2kyY19jb21wYXRpYmxlIG10NjU3N19jb21wYXQgPSB7DQo+
-ID4gQEAgLTMyNSwxMSArMzI1LDExIEBAIHN0cnVjdCBpMmNfc3BlY192YWx1ZXMgew0KPiA+ICAg
-CS5kY20gPSAxLA0KPiA+ICAgCS5hdXRvX3Jlc3RhcnQgPSAwLA0KPiA+ICAgCS5hdXhfbGVuX3Jl
-ZyA9IDAsDQo+ID4gLQkuc3VwcG9ydF8zM2JpdHMgPSAwLA0KPiA+ICAgCS50aW1pbmdfYWRqdXN0
-ID0gMCwNCj4gPiAgIAkuZG1hX3N5bmMgPSAwLA0KPiA+ICAgCS5sdGltaW5nX2FkanVzdCA9IDAs
-DQo+ID4gICAJLmFwZG1hX3N5bmMgPSAwLA0KPiA+ICsJLm1heF9kbWFfc3VwcG9ydCA9IDMyLA0K
-PiA+ICAgfTsNCj4gPiAgIA0KPiA+ICAgc3RhdGljIGNvbnN0IHN0cnVjdCBtdGtfaTJjX2NvbXBh
-dGlibGUgbXQ2NTg5X2NvbXBhdCA9IHsNCj4gPiBAQCAtMzM5LDExICszMzksMTEgQEAgc3RydWN0
-IGkyY19zcGVjX3ZhbHVlcyB7DQo+ID4gICAJLmRjbSA9IDAsDQo+ID4gICAJLmF1dG9fcmVzdGFy
-dCA9IDAsDQo+ID4gICAJLmF1eF9sZW5fcmVnID0gMCwNCj4gPiAtCS5zdXBwb3J0XzMzYml0cyA9
-IDAsDQo+ID4gICAJLnRpbWluZ19hZGp1c3QgPSAwLA0KPiA+ICAgCS5kbWFfc3luYyA9IDAsDQo+
-ID4gICAJLmx0aW1pbmdfYWRqdXN0ID0gMCwNCj4gPiAgIAkuYXBkbWFfc3luYyA9IDAsDQo+ID4g
-KwkubWF4X2RtYV9zdXBwb3J0ID0gMzIsDQo+ID4gICB9Ow0KPiA+ICAgDQo+ID4gICBzdGF0aWMg
-Y29uc3Qgc3RydWN0IG10a19pMmNfY29tcGF0aWJsZSBtdDc2MjJfY29tcGF0ID0gew0KPiA+IEBA
-IC0zNTMsMTEgKzM1MywxMSBAQCBzdHJ1Y3QgaTJjX3NwZWNfdmFsdWVzIHsNCj4gPiAgIAkuZGNt
-ID0gMSwNCj4gPiAgIAkuYXV0b19yZXN0YXJ0ID0gMSwNCj4gPiAgIAkuYXV4X2xlbl9yZWcgPSAx
-LA0KPiA+IC0JLnN1cHBvcnRfMzNiaXRzID0gMCwNCj4gPiAgIAkudGltaW5nX2FkanVzdCA9IDAs
-DQo+ID4gICAJLmRtYV9zeW5jID0gMCwNCj4gPiAgIAkubHRpbWluZ19hZGp1c3QgPSAwLA0KPiA+
-ICAgCS5hcGRtYV9zeW5jID0gMCwNCj4gPiArCS5tYXhfZG1hX3N1cHBvcnQgPSAzMiwNCj4gPiAg
-IH07DQo+ID4gICANCj4gPiAgIHN0YXRpYyBjb25zdCBzdHJ1Y3QgbXRrX2kyY19jb21wYXRpYmxl
-IG10ODE3M19jb21wYXQgPSB7DQo+ID4gQEAgLTM2NiwxMSArMzY2LDExIEBAIHN0cnVjdCBpMmNf
-c3BlY192YWx1ZXMgew0KPiA+ICAgCS5kY20gPSAxLA0KPiA+ICAgCS5hdXRvX3Jlc3RhcnQgPSAx
-LA0KPiA+ICAgCS5hdXhfbGVuX3JlZyA9IDEsDQo+ID4gLQkuc3VwcG9ydF8zM2JpdHMgPSAxLA0K
-PiA+ICAgCS50aW1pbmdfYWRqdXN0ID0gMCwNCj4gPiAgIAkuZG1hX3N5bmMgPSAwLA0KPiA+ICAg
-CS5sdGltaW5nX2FkanVzdCA9IDAsDQo+ID4gICAJLmFwZG1hX3N5bmMgPSAwLA0KPiA+ICsJLm1h
-eF9kbWFfc3VwcG9ydCA9IDMzLA0KPiA+ICAgfTsNCj4gPiAgIA0KPiA+ICAgc3RhdGljIGNvbnN0
-IHN0cnVjdCBtdGtfaTJjX2NvbXBhdGlibGUgbXQ4MTgzX2NvbXBhdCA9IHsNCj4gPiBAQCAtMzgw
-LDExICszODAsMTEgQEAgc3RydWN0IGkyY19zcGVjX3ZhbHVlcyB7DQo+ID4gICAJLmRjbSA9IDAs
-DQo+ID4gICAJLmF1dG9fcmVzdGFydCA9IDEsDQo+ID4gICAJLmF1eF9sZW5fcmVnID0gMSwNCj4g
-PiAtCS5zdXBwb3J0XzMzYml0cyA9IDEsDQo+ID4gICAJLnRpbWluZ19hZGp1c3QgPSAxLA0KPiA+
-ICAgCS5kbWFfc3luYyA9IDEsDQo+ID4gICAJLmx0aW1pbmdfYWRqdXN0ID0gMSwNCj4gPiAgIAku
-YXBkbWFfc3luYyA9IDAsDQo+ID4gKwkubWF4X2RtYV9zdXBwb3J0ID0gMzMsDQo+ID4gICB9Ow0K
-PiA+ICAgDQo+ID4gICBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBtdGtfaTJjX29m
-X21hdGNoW10gPSB7DQo+ID4gQEAgLTc5NiwxMSArNzk2LDYgQEAgc3RhdGljIGludCBtdGtfaTJj
-X3NldF9zcGVlZChzdHJ1Y3QgbXRrX2kyYyAqaTJjLCB1bnNpZ25lZCBpbnQgcGFyZW50X2NsaykN
-Cj4gPiAgIAlyZXR1cm4gMDsNCj4gPiAgIH0NCj4gPiAgIA0KPiA+IC1zdGF0aWMgaW5saW5lIHUz
-MiBtdGtfaTJjX3NldF80Z19tb2RlKGRtYV9hZGRyX3QgYWRkcikNCj4gPiAtew0KPiA+IC0JcmV0
-dXJuIChhZGRyICYgQklUX1VMTCgzMikpID8gSTJDX0RNQV80R19NT0RFIDogSTJDX0RNQV9DTFJf
-RkxBRzsNCj4gDQo+IEkgdGhpbmsgeW91IG1pc3NlZCBteSBjb21tZW50IGluIHRoZSBsYXN0IHZl
-cnNpb246DQo+IEkyQ19ETUFfNEdfTU9ERSBpcyBubyBsb25nZXIgbmVlZGVkLCB5b3UgY2FuIGRl
-bGV0ZSBpdC4NCj4gDQo+IFJlZ2FyZHMsDQo+IE1hdHRoaWFzDQo+IA0KDQpTb3JyeSBmb3IgbWlz
-c2luZyB0aGF0IGNvbW1lbnQsIEkgd2lsbCByZW1vdmUgaXQuDQpUaGFuayB5b3UgZm9yIHlvdXIg
-Y29tbWVudHMgYW5kIHJlbWluZGVycy4NCg0KPiA+IC19DQo+ID4gLQ0KPiA+ICAgc3RhdGljIGlu
-dCBtdGtfaTJjX2RvX3RyYW5zZmVyKHN0cnVjdCBtdGtfaTJjICppMmMsIHN0cnVjdCBpMmNfbXNn
-ICptc2dzLA0KPiA+ICAgCQkJICAgICAgIGludCBudW0sIGludCBsZWZ0X251bSkNCj4gPiAgIHsN
-Cj4gPiBAQCAtODg1LDggKzg4MCw4IEBAIHN0YXRpYyBpbnQgbXRrX2kyY19kb190cmFuc2Zlcihz
-dHJ1Y3QgbXRrX2kyYyAqaTJjLCBzdHJ1Y3QgaTJjX21zZyAqbXNncywNCj4gPiAgIAkJCXJldHVy
-biAtRU5PTUVNOw0KPiA+ICAgCQl9DQo+ID4gICANCj4gPiAtCQlpZiAoaTJjLT5kZXZfY29tcC0+
-c3VwcG9ydF8zM2JpdHMpIHsNCj4gPiAtCQkJcmVnXzRnX21vZGUgPSBtdGtfaTJjX3NldF80Z19t
-b2RlKHJwYWRkcik7DQo+ID4gKwkJaWYgKGkyYy0+ZGV2X2NvbXAtPm1heF9kbWFfc3VwcG9ydCA+
-IDMyKSB7DQo+ID4gKwkJCXJlZ180Z19tb2RlID0gdXBwZXJfMzJfYml0cyhycGFkZHIpOw0KPiA+
-ICAgCQkJd3JpdGVsKHJlZ180Z19tb2RlLCBpMmMtPnBkbWFiYXNlICsgT0ZGU0VUX1JYXzRHX01P
-REUpOw0KPiA+ICAgCQl9DQo+ID4gICANCj4gPiBAQCAtOTA4LDggKzkwMyw4IEBAIHN0YXRpYyBp
-bnQgbXRrX2kyY19kb190cmFuc2ZlcihzdHJ1Y3QgbXRrX2kyYyAqaTJjLCBzdHJ1Y3QgaTJjX21z
-ZyAqbXNncywNCj4gPiAgIAkJCXJldHVybiAtRU5PTUVNOw0KPiA+ICAgCQl9DQo+ID4gICANCj4g
-PiAtCQlpZiAoaTJjLT5kZXZfY29tcC0+c3VwcG9ydF8zM2JpdHMpIHsNCj4gPiAtCQkJcmVnXzRn
-X21vZGUgPSBtdGtfaTJjX3NldF80Z19tb2RlKHdwYWRkcik7DQo+ID4gKwkJaWYgKGkyYy0+ZGV2
-X2NvbXAtPm1heF9kbWFfc3VwcG9ydCA+IDMyKSB7DQo+ID4gKwkJCXJlZ180Z19tb2RlID0gdXBw
-ZXJfMzJfYml0cyh3cGFkZHIpOw0KPiA+ICAgCQkJd3JpdGVsKHJlZ180Z19tb2RlLCBpMmMtPnBk
-bWFiYXNlICsgT0ZGU0VUX1RYXzRHX01PREUpOw0KPiA+ICAgCQl9DQo+ID4gICANCj4gPiBAQCAt
-OTU0LDExICs5NDksMTEgQEAgc3RhdGljIGludCBtdGtfaTJjX2RvX3RyYW5zZmVyKHN0cnVjdCBt
-dGtfaTJjICppMmMsIHN0cnVjdCBpMmNfbXNnICptc2dzLA0KPiA+ICAgCQkJcmV0dXJuIC1FTk9N
-RU07DQo+ID4gICAJCX0NCj4gPiAgIA0KPiA+IC0JCWlmIChpMmMtPmRldl9jb21wLT5zdXBwb3J0
-XzMzYml0cykgew0KPiA+IC0JCQlyZWdfNGdfbW9kZSA9IG10a19pMmNfc2V0XzRnX21vZGUod3Bh
-ZGRyKTsNCj4gPiArCQlpZiAoaTJjLT5kZXZfY29tcC0+bWF4X2RtYV9zdXBwb3J0ID4gMzIpIHsN
-Cj4gPiArCQkJcmVnXzRnX21vZGUgPSB1cHBlcl8zMl9iaXRzKHdwYWRkcik7DQo+ID4gICAJCQl3
-cml0ZWwocmVnXzRnX21vZGUsIGkyYy0+cGRtYWJhc2UgKyBPRkZTRVRfVFhfNEdfTU9ERSk7DQo+
-ID4gICANCj4gPiAtCQkJcmVnXzRnX21vZGUgPSBtdGtfaTJjX3NldF80Z19tb2RlKHJwYWRkcik7
-DQo+ID4gKwkJCXJlZ180Z19tb2RlID0gdXBwZXJfMzJfYml0cyhycGFkZHIpOw0KPiA+ICAgCQkJ
-d3JpdGVsKHJlZ180Z19tb2RlLCBpMmMtPnBkbWFiYXNlICsgT0ZGU0VUX1JYXzRHX01PREUpOw0K
-PiA+ICAgCQl9DQo+ID4gICANCj4gPiBAQCAtMTIzMiw4ICsxMjI3LDkgQEAgc3RhdGljIGludCBt
-dGtfaTJjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ID4gICAJCXJldHVy
-biAtRUlOVkFMOw0KPiA+ICAgCX0NCj4gPiAgIA0KPiA+IC0JaWYgKGkyYy0+ZGV2X2NvbXAtPnN1
-cHBvcnRfMzNiaXRzKSB7DQo+ID4gLQkJcmV0ID0gZG1hX3NldF9tYXNrKCZwZGV2LT5kZXYsIERN
-QV9CSVRfTUFTSygzMykpOw0KPiA+ICsJaWYgKGkyYy0+ZGV2X2NvbXAtPm1heF9kbWFfc3VwcG9y
-dCA+IDMyKSB7DQo+ID4gKwkJcmV0ID0gZG1hX3NldF9tYXNrKCZwZGV2LT5kZXYsDQo+ID4gKwkJ
-CQlETUFfQklUX01BU0soaTJjLT5kZXZfY29tcC0+bWF4X2RtYV9zdXBwb3J0KSk7DQo+ID4gICAJ
-CWlmIChyZXQpIHsNCj4gPiAgIAkJCWRldl9lcnIoJnBkZXYtPmRldiwgImRtYV9zZXRfbWFzayBy
-ZXR1cm4gZXJyb3IuXG4iKTsNCj4gPiAgIAkJCXJldHVybiByZXQ7DQo+ID4gDQoNCg==
 
+--1yeeQ81UyVL57Vl7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Daniel, hi Jean,
+
+some more bits from me.
+
+> Cool. Meaning we may then leave it at a single i2c_smbus_data.block[257]
+> declaration in the headers, and i2c_smbus_data can be 255 bytes.
+
+I think we all agree on this one.
+
+> That doesn=E2=80=99t mean we shut the door on 32-byte buffers. After all,=
+ backward
+> compat requires we maintain support for those. Just that we need not
+> bother declaring or promoting dedicated small vs large transfer types
+> while noone wants one.
+
+That's how I see it as well.
+
+> This would also mean we=E2=80=99re likely to add an I2C_FUNC_ to indicate=
+d smbus3
+> support at runtime. It=E2=80=99s probably what you already have in mind.
+
+I suggest I2C_FUNC_SMBUS3_BLOCKSIZE. I have seen the datasheet of one
+client device where you could set a bit to select how many bytes should
+be sent by the device in a block read (32 or 255). So, you could set
+this bit according to the presence of the above FUNC. Also, I suggest to
+do it finegrained, because SMBus3 also specifies 32- and 64-bit
+transfers. If those are ever implemented, they should also get seperate
+FUNC bits. All of them can then be ORed into I2C_FUNC_SMBUS3 if needed.
+
+> We=E2=80=99d probably still prefer to move all kernel/driver buffers to 2=
+55 bytes
+> unconditionally. However, I2C_FUNC_ presence normally indicates lower lev=
+el
+> driver + hardware support, right? Not just a kernel upgrade. Which makes=
+=20
+> sense here, too.
+
+Yes. I am all for using 257 byte buffers in-kernel only. a) defensive
+programming b) for most I2C controllers only emulating SMBus, it will be
+super easy to support the new block size. I expect it to become it kinda
+default soon (for bus master drivers, that is).
+
+> I=E2=80=99m just pointing it out because if we want an I2C_FUNC_SMBUS3, a=
+nd at
+> the driver=E2=80=99s discretion, not just indicating kernel + compatibili=
+ty
+> support presence, and if i2c_utils uses that to pick safe size values,
+> that again means we=E2=80=99re yet again less likely to actually deprecat=
+e the
+> old transfer numbers. Some drivers will never be SMBUS3.
+
+Yes, they will stay around. When I said "deprecated", I didn't mean it
+in the way of "will be removed" but more in "please use the new ones".
+
+> I2C_FUNC_SMBUS3 is nice to have. I=E2=80=99m not against it, I=E2=80=99m =
+for it.
+> For i2c-tools and all clients, it can be valuable to confirm conflicts.
+>=20
+> Still, one can keep it indicative only, and not synthesize faults=20
+> because of a perceived client/adapter/device feature mismatch.=20
+
+That's always been the case for I2C_FUNC_*. It helps people not to shoot
+in their feet, but when ignored things happen.
+
+> I=E2=80=99m not even sure if my new -EMSGSIZE condition in i2c-dev.c is s=
+uch
+> a good idea.
+
+I'd need to see this in a new patch to comment on it. For me, it is
+really easier to talk over code. But we are not right there yet, or?
+
+Kind regards,
+
+   Wolfram
+
+
+--1yeeQ81UyVL57Vl7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8hVMkACgkQFA3kzBSg
+KbZrIw//fMgG5nreRdcUCc6HA+1INCKnuMqtrU+HJtBaQf0sm8rJ2n9wfy5Jq2vM
+VfZ1Pp0IzVd1A88DRB8a9TZ+yCrKKNA5uQSUegglZAUJEyA0nJ3mOMwnNfbGW5it
+CHVedNtFGfexlkSkjYsv7LmDIawxhIrn2G5yH19a1aA9bip/kwbT/PIeAVsWRBiy
+VOPz+1OAShfyqxuyuLL3RGlKcr9Rq+TbPYab3/G8zbdQhXZrj1oGT3BjBwUkxdG+
+XWHU6eqQm7OkEKpfvGzOufG1/4ocDnB1eYyNIu76STtZUBGKSajR/g1Knj0RCetZ
+Huttl4e32motafCxCVmB17Mvk9h2Ze8lwPMc4XP5gzPiffStR7867LboMuph4OmS
+hk179Xb/LDGqLmPpJgr62xDpyap8ImQtTJvwDJMvAKWZ641/GjAglCWUXBDtJSAt
+Jw1VDLQ/V+JjwlTfP+RczpCGDbnEvcWrKDBrboZMw19FmRPhjk/77q7DY4tRFclt
+RNJqRHJeyIeT4QSWafWZye7yJwwVEM7Up4aV3epZcA0A0rtQIf23ixdmbcD2seBL
+g0H1GIX/O+pp4EzYAKACU6ek5RbIF3NtfisyuuzVc+Xljci5B5qk96APJJ5oKBmE
+bbAJVzI3CDZWD6LDJ3Hdms75ButD0z8rosqeqzmQ1/CbZ59Hm9I=
+=F5j/
+-----END PGP SIGNATURE-----
+
+--1yeeQ81UyVL57Vl7--
