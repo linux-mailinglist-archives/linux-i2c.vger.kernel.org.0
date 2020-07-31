@@ -2,81 +2,120 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B1D234714
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 15:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D33A234730
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 15:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728244AbgGaNkv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 31 Jul 2020 09:40:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42690 "EHLO mail.kernel.org"
+        id S1728262AbgGaNtx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 31 Jul 2020 09:49:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54456 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727851AbgGaNkv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 31 Jul 2020 09:40:51 -0400
+        id S1727851AbgGaNtx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 31 Jul 2020 09:49:53 -0400
 Received: from localhost (router.4pisysteme.de [80.79.225.122])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 06C37208E4;
-        Fri, 31 Jul 2020 13:40:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0694C208E4;
+        Fri, 31 Jul 2020 13:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596202850;
-        bh=riof81UgLdZ5axTp6J4xR8oi2LabGN/mqTM5OX3Fh/M=;
+        s=default; t=1596203392;
+        bh=IXwFqQHjP2sDj/CKwA+w73Rr9wgrcjVyVnpFMoC7OjU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g8ysFyQqaVcSpSIdvRUMr5R3BABkOWypD4M46SccCky92oCrgUL0d8ko3C7hJ3suQ
-         jQg+Si2gK2vktoLknjAhepLhg/bCwOmE/GaVetbU6fUJXMtwh9S/lsr3PtHTX596AE
-         uH4Cf7z+G9TI3XrCziJuOC1ryxB1Pz/IlourZU20=
-Date:   Fri, 31 Jul 2020 15:40:45 +0200
+        b=UBriO0JOczpijNoQcc6SIWS7AffbF+7ldQJy+zYnulcMLP8iwwdjPVVMcChn/guKy
+         F0oJ95Rwx8ArimT40TgjCIAGGNEf9lj8jsaCOBs1UDCZRbrDoSU9W4peFokXG1XMDw
+         0jsXfWF8aCKUM9PYHIfbiZ/10bvc4F0YjrtZyaYA=
+Date:   Fri, 31 Jul 2020 15:49:50 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
-        hverkuil@xs4all.nl, sakari.ailus@iki.fi, robh+dt@kernel.org,
-        helen.koike@collabora.com, digetx@gmail.com, sboyd@kernel.org,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [RFC PATCH v6 00/10] Support for Tegra video capture from
- external sensor
-Message-ID: <20200731134045.GA1679@kunai>
-References: <1596186169-18729-1-git-send-email-skomatineni@nvidia.com>
+To:     Pu Wen <puwen@hygon.cn>
+Cc:     rjw@rjwysocki.net, lenb@kernel.org, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: designware: Add device HID for Hygon I2C controller
+Message-ID: <20200731134950.GB1679@kunai>
+References: <20200731084845.24459-1-puwen@hygon.cn>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="17pEHd4RhPHOinZp"
+        protocol="application/pgp-signature"; boundary="K8nIJk4ghYZn606h"
 Content-Disposition: inline
-In-Reply-To: <1596186169-18729-1-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <20200731084845.24459-1-puwen@hygon.cn>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---17pEHd4RhPHOinZp
+--K8nIJk4ghYZn606h
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 31, 2020 at 02:02:39AM -0700, Sowjanya Komatineni wrote:
-> This series adds support for video capture from external camera sensor to
-> Tegra video driver.
+On Fri, Jul 31, 2020 at 04:48:45PM +0800, Pu Wen wrote:
+> Add device HID HYGO0010 to match the Hygon ACPI Vendor ID (HYGO) that
+> was registered in http://www.uefi.org/acpi_id_list, and the I2C
+> controller on Hygon paltform will use the HID.
+>=20
+> Signed-off-by: Pu Wen <puwen@hygon.cn>
 
-No need anymore to CC me or the i2c-list, I think? Also, is this series
-really still RFC?
+I can take this via I2C, but I'd need an ack from Rafael or Len.
 
+Or it can go via ACPI, fine with me
 
---17pEHd4RhPHOinZp
+Acked-by: Wolfram Sang <wsa@kernel.org>
+
+> ---
+>  drivers/acpi/acpi_apd.c                     | 1 +
+>  drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
+>  2 files changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
+> index ba2612e9a0eb..f24f6d3f1fa5 100644
+> --- a/drivers/acpi/acpi_apd.c
+> +++ b/drivers/acpi/acpi_apd.c
+> @@ -240,6 +240,7 @@ static const struct acpi_device_id acpi_apd_device_id=
+s[] =3D {
+>  	{ "AMDI0020", APD_ADDR(cz_uart_desc) },
+>  	{ "AMD0030", },
+>  	{ "AMD0040", APD_ADDR(st_misc_desc)},
+> +	{ "HYGO0010", APD_ADDR(wt_i2c_desc) },
+>  #endif
+>  #ifdef CONFIG_ARM64
+>  	{ "APMC0D0F", APD_ADDR(xgene_i2c_desc) },
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/bu=
+sses/i2c-designware-platdrv.c
+> index a71bc58fc03c..0dfeb2d11603 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -55,6 +55,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] =
+=3D {
+>  	{ "HISI02A1", 0 },
+>  	{ "HISI02A2", 0 },
+>  	{ "HISI02A3", 0 },
+> +	{ "HYGO0010", ACCESS_INTR_MASK },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(acpi, dw_i2c_acpi_match);
+> --=20
+> 2.23.0
+>=20
+
+--K8nIJk4ghYZn606h
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8kH1kACgkQFA3kzBSg
-Kbb2/A/9FLStog9+LDCFSypkjVVSofsann8AzQpWSWrl/rE78UpM4cNWs1erhcYM
-1UicYFZvmc6AGZHH6hFWx5prq+gyZzAhu26zNbRzscwtiOraCYE/6PvIvMKoqGVE
-HVwqQEQ6692jRLl8xvGqUfYmk7LfW7hpyAjK7CzHcrm3OIat6VBKmpoKX+K9J/ZV
-n9OH/eQW73rguUmq7R4NppeZzPXiDET8J22gqI9i3Pd0JEzFZs/5H7D/+B1UwaSU
-Nbb+BPGd0sXcp1Zhk93lNfFAPrkEv+GbMGtKgucqNoD5qYe7A7IvYxkM9e2+Zv61
-L+eM0pP/LM9esWIRxiFYVEQKw70X0ADQYICFgbgttn8gWnNoD6E74ZxhCopO1xM+
-LFHacxKl6kqy1pgQqRwh7Q8w9PbsdIQJf8gD2g8GvQpSjtKKa/yj+p26waMZSjQy
-513ETISiNAOh1Cz0fRgKr9NpmU/PuF1U7JH8tsqdjHl17A/v/q7+aElf5f55Me67
-wzwG/wXdTJXBycxXlrXxzP++NcFMKkhZ1tdFYuwxk4gdSLM+OSu9cIqsc6zXfNx6
-ZurpLW9TwAi8HoYu7A3k9ECcj2k5Xt/V4PrsCfnkFRxxr78dv70HYUclowzrOuPM
-k2q1a4dISCqVsHPATs6hdmiDGnvJVFWxKxD8jnVVhlIOgfdt+X0=
-=y7Wv
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8kIX4ACgkQFA3kzBSg
+Kbapvg//XojrXKWxAnwxZ4yM08TGa5ZO4BFLsrF2TAc/GlLtSahmH5JO7t9fkYOB
+jn5HbtxIGEqYEP6uQLVMgT+WGdAdCu1kXI9BbzZNYG2Gm7J8EI7ui1CWrdXkXm8/
+R1yQ/AhszXe1BUm9Y3UWaioqpyTqN8bB5fgsgWTFEjuxneLNoA0T+kduXPiRsyTA
+nUqL/7rl/8BWCvpVd26aPGIUgQFXftFBXhjMBzyPRrBEZUcDITAdhYG5LoATQjz1
+O6kcRszY3wcNFtxiC84oI4KbMErnExHSvcugI7x7jIAFGyEeQBUubdRychckMLEN
+Oma3uXCDWt/AfkUc67fWAF75sToFV830StjoKmT+pqMQiLI7c8Nv4FjHdz/p/Quv
+UyrYhh2hynaq0+4UQATEqvCMulGdw5tchPhOVIMkNFGyw24iQkTh7guFkmA5jAwB
+/i7sPVt3AzyJ/u/JyG/aFPkHa3xAVD4RZd0EPwMNisL+tBnUQlTedaMkUMPuBEFU
+5/OymFfNhKYMjTAn/EHsVJtEZir3dT9bQyeCPyulOpo0SHHlBY87CbY0b74wMRNj
+m5J+TCn0xtiiILXe1+p6iwbj6vdALpsbQcLHx96JQxy9gfgUMmlx8MNZm4V3pucg
+KtlfyUfaUkw+/eSbCPm0U3iQWSVZTLCR7wscP6dlje+98+tz8Q8=
+=gqTO
 -----END PGP SIGNATURE-----
 
---17pEHd4RhPHOinZp--
+--K8nIJk4ghYZn606h--
