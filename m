@@ -2,96 +2,153 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 203E123430F
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 11:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A96F2344A7
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 13:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732411AbgGaJ16 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 31 Jul 2020 05:27:58 -0400
-Received: from mga18.intel.com ([134.134.136.126]:29986 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732894AbgGaJ15 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 31 Jul 2020 05:27:57 -0400
-IronPort-SDR: Kq1THVboy2ZTq3BzuGWffR7QnSC9BBpTVxZWlitxDxmLkH91EPbPi2v4SFVj3nA9SxT+GQY8Th
- TpO7MNs7TN3A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9698"; a="139313870"
-X-IronPort-AV: E=Sophos;i="5.75,417,1589266800"; 
-   d="scan'208";a="139313870"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2020 02:27:56 -0700
-IronPort-SDR: HiRETURUYAFFCi4ERosfDa9BkOJ6cbb0yEB4vjxGi37lUxFz5NW70sBex5Io8ipFIFsn4mYvix
- GgSnCZX17l7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,417,1589266800"; 
-   d="scan'208";a="274466351"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga008.fm.intel.com with ESMTP; 31 Jul 2020 02:27:53 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1k1RKT-005HPB-He; Fri, 31 Jul 2020 12:27:53 +0300
-Date:   Fri, 31 Jul 2020 12:27:53 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Pu Wen <puwen@hygon.cn>
-Cc:     rjw@rjwysocki.net, lenb@kernel.org, jarkko.nikula@linux.intel.com,
-        mika.westerberg@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: designware: Add device HID for Hygon I2C controller
-Message-ID: <20200731092753.GL3703480@smile.fi.intel.com>
-References: <20200731084845.24459-1-puwen@hygon.cn>
+        id S1732618AbgGaLjF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 31 Jul 2020 07:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732297AbgGaLjF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 Jul 2020 07:39:05 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272D4C061574;
+        Fri, 31 Jul 2020 04:39:05 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id x9so32131332ljc.5;
+        Fri, 31 Jul 2020 04:39:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=e83eJTcVv/UaeyPlCsr6UUJefX33U2iVn2MgdxsKQTQ=;
+        b=X9V6zA56PqyXwOT0CNOco7VPG50Pkbt7KmbI/ojIgjq+CFYp9qHMCY6bdOTnK3x3QR
+         OE+41YFe8nwh73tpj+YDYVwNBrRap4JePkrUOhKd4jaWk7wSnBWCl7732Jd7H6DaGbnw
+         zYZznHVkJ+wzuPxNavlP1QnUHUl4L/5CnblTm0LKK4baDeLDU7iO0MvH1d5WF49frrNV
+         4s4Z7gSD9t/AK5UjBUcXCUQgwkHXsFpS5YxHjXRkueVpGgFZ19L24ENrdnL2MpZ35z0i
+         bEruw/yDZ7CttkXNOu5ZFif5fmKXTFCMfyO8/YF8ZucVV6ESxnHc5KUMmUtQPSQdUUY2
+         v06A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=e83eJTcVv/UaeyPlCsr6UUJefX33U2iVn2MgdxsKQTQ=;
+        b=ej8bhhUdAkEttZUthgtmpb7y7Ex3JCulFPgGQkAJ8paI9kH47mZJIhl0AwJiyOEeuc
+         1HhhJSRxoKT78T6IgcTop0IQeXeJ2+4fu1KihOh9+GxFxnSVW5bRLAfXFVrcLzFurR68
+         AesxLWVL1aMSREzbRMfRaux4SKlulISWSntT4UqIu+ueuT4VXMGuRxpqdMH1ktSmIjfF
+         IC9EF/bh2VvyklGE5kTEmK7CqpNMVy9aBIS41FuB3fnTXLtqyLca+4rWq+xZJYddGdQT
+         NLyXzUqO9jFuTFUL52fqzrhcbWfMrYBf2ag5lJrI8l6VlmmiLwM5GWAtPjbiGXy/KChi
+         S/aA==
+X-Gm-Message-State: AOAM5337xIupLhJ+CJNo/dnKdOtmHk2O+bsHOERXXJQOLbuZrdNsdEwT
+        lswJLbhag41NN5CDcIBqVxAWFztQ
+X-Google-Smtp-Source: ABdhPJyGjMx9FtTEpEohXiAFoq57WavNYhs3eJc0pNbnjhC7LxeGw815xYO7ZEtnLAVlZoq41lXvWQ==
+X-Received: by 2002:a2e:991:: with SMTP id 139mr1647045ljj.314.1596195543293;
+        Fri, 31 Jul 2020 04:39:03 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-41-50.dynamic.spd-mgts.ru. [94.29.41.50])
+        by smtp.googlemail.com with ESMTPSA id k12sm1870240lfe.68.2020.07.31.04.39.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Jul 2020 04:39:02 -0700 (PDT)
+Subject: Re: [RFC PATCH v6 09/10] media: tegra-video: Add CSI MIPI pads
+ calibration
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
+        hverkuil@xs4all.nl, sakari.ailus@iki.fi, robh+dt@kernel.org,
+        helen.koike@collabora.com
+Cc:     sboyd@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <1596186169-18729-1-git-send-email-skomatineni@nvidia.com>
+ <1596186169-18729-10-git-send-email-skomatineni@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <3ac158c4-7df7-e3c1-f0e1-33e7ef017762@gmail.com>
+Date:   Fri, 31 Jul 2020 14:39:01 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200731084845.24459-1-puwen@hygon.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <1596186169-18729-10-git-send-email-skomatineni@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 04:48:45PM +0800, Pu Wen wrote:
-> Add device HID HYGO0010 to match the Hygon ACPI Vendor ID (HYGO) that
-> was registered in http://www.uefi.org/acpi_id_list, and the I2C
-> controller on Hygon paltform will use the HID.
+31.07.2020 12:02, Sowjanya Komatineni пишет:
+...
+> @@ -249,13 +249,47 @@ static int tegra_csi_enable_stream(struct v4l2_subdev *subdev)
+>  		return ret;
+>  	}
+>  
+> +	if (csi_chan->mipi) {
+> +		ret = tegra_mipi_enable(csi_chan->mipi);
+> +		if (ret < 0) {
+> +			dev_err(csi->dev,
+> +				"failed to enable MIPI pads: %d\n", ret);
+> +			goto rpm_put;
+> +		}
+> +
+> +		/*
+> +		 * CSI MIPI pads PULLUP, PULLDN and TERM impedances need to
+> +		 * be calibrated after power on.
+> +		 * So, trigger the calibration start here and results will
+> +		 * be latched and applied to the pads when link is in LP11
+> +		 * state during start of sensor streaming.
+> +		 */
+> +		ret = tegra_mipi_start_calibration(csi_chan->mipi);
+> +		if (ret < 0) {
+> +			dev_err(csi->dev,
+> +				"failed to start MIPI calibration: %d\n", ret);
+> +			goto disable_mipi;
+> +		}
 
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+What would happen if CSI stream is enabled and then immediately disabled
+without enabling camera sensor?
 
-> Signed-off-by: Pu Wen <puwen@hygon.cn>
-> ---
->  drivers/acpi/acpi_apd.c                     | 1 +
->  drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
->  2 files changed, 2 insertions(+)
+> +	}
+> +
+...
+>  static int tegra_channel_enable_stream(struct tegra_vi_channel *chan)
+>  {
+>  	struct v4l2_subdev *csi_subdev, *src_subdev;
+> +	struct tegra_csi_channel *csi_chan;
+>  	int ret;
+>  
+>  	/*
+> @@ -206,13 +207,30 @@ static int tegra_channel_enable_stream(struct tegra_vi_channel *chan)
+>  	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+>  		return 0;
+>  
+> +	csi_chan = v4l2_get_subdevdata(csi_subdev);
+> +	/*
+> +	 * TRM has incorrectly documented to wait for done status from
+> +	 * calibration logic after CSI interface power on.
+> +	 * As per the design, calibration results are latched and applied
+> +	 * to the pads only when the link is in LP11 state which will happen
+> +	 * during the sensor stream-on.
+> +	 * CSI subdev stream-on triggers start of MIPI pads calibration.
+> +	 * Wait for calibration to finish here after sensor subdev stream-on
+> +	 * and in case of sensor stream-on failure, cancel the calibration.
+> +	 */
+>  	src_subdev = tegra_channel_get_remote_source_subdev(chan);
+
+Is it possible to move the start_calibration() here?
+
+>  	ret = v4l2_subdev_call(src_subdev, video, s_stream, true);
+>  	if (ret < 0 && ret != -ENOIOCTLCMD) {
+> +		tegra_mipi_cancel_calibration(csi_chan->mipi);
+>  		v4l2_subdev_call(csi_subdev, video, s_stream, false);
+>  		return ret;
+>  	}
+>  
+> +	ret = tegra_mipi_finish_calibration(csi_chan->mipi);
+> +	if (ret < 0)
+> +		dev_warn(csi_chan->csi->dev,
+> +			 "MIPI calibration failed: %d\n", ret);
+> +
+>  	return 0;
+>  }
+>  
 > 
-> diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
-> index ba2612e9a0eb..f24f6d3f1fa5 100644
-> --- a/drivers/acpi/acpi_apd.c
-> +++ b/drivers/acpi/acpi_apd.c
-> @@ -240,6 +240,7 @@ static const struct acpi_device_id acpi_apd_device_ids[] = {
->  	{ "AMDI0020", APD_ADDR(cz_uart_desc) },
->  	{ "AMD0030", },
->  	{ "AMD0040", APD_ADDR(st_misc_desc)},
-> +	{ "HYGO0010", APD_ADDR(wt_i2c_desc) },
->  #endif
->  #ifdef CONFIG_ARM64
->  	{ "APMC0D0F", APD_ADDR(xgene_i2c_desc) },
-> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-> index a71bc58fc03c..0dfeb2d11603 100644
-> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-> @@ -55,6 +55,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
->  	{ "HISI02A1", 0 },
->  	{ "HISI02A2", 0 },
->  	{ "HISI02A3", 0 },
-> +	{ "HYGO0010", ACCESS_INTR_MASK },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(acpi, dw_i2c_acpi_match);
-> -- 
-> 2.23.0
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
 
