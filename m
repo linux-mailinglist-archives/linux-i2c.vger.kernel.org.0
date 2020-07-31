@@ -2,256 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A53A12341D8
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 11:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203E123430F
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 11:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732087AbgGaJDD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 31 Jul 2020 05:03:03 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17518 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732076AbgGaJDB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 Jul 2020 05:03:01 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f23de160003>; Fri, 31 Jul 2020 02:02:14 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Fri, 31 Jul 2020 02:03:01 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Fri, 31 Jul 2020 02:03:01 -0700
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 Jul
- 2020 09:03:00 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 31 Jul 2020 09:03:00 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.167.221]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5f23de440000>; Fri, 31 Jul 2020 02:03:00 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
-        <helen.koike@collabora.com>
-CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
-        <gregkh@linuxfoundation.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-Subject: [RFC PATCH v6 10/10] media: tegra-video: Compute settle times based on the clock rate
-Date:   Fri, 31 Jul 2020 02:02:49 -0700
-Message-ID: <1596186169-18729-11-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1596186169-18729-1-git-send-email-skomatineni@nvidia.com>
-References: <1596186169-18729-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        id S1732411AbgGaJ16 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 31 Jul 2020 05:27:58 -0400
+Received: from mga18.intel.com ([134.134.136.126]:29986 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732894AbgGaJ15 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 31 Jul 2020 05:27:57 -0400
+IronPort-SDR: Kq1THVboy2ZTq3BzuGWffR7QnSC9BBpTVxZWlitxDxmLkH91EPbPi2v4SFVj3nA9SxT+GQY8Th
+ TpO7MNs7TN3A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9698"; a="139313870"
+X-IronPort-AV: E=Sophos;i="5.75,417,1589266800"; 
+   d="scan'208";a="139313870"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2020 02:27:56 -0700
+IronPort-SDR: HiRETURUYAFFCi4ERosfDa9BkOJ6cbb0yEB4vjxGi37lUxFz5NW70sBex5Io8ipFIFsn4mYvix
+ GgSnCZX17l7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,417,1589266800"; 
+   d="scan'208";a="274466351"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga008.fm.intel.com with ESMTP; 31 Jul 2020 02:27:53 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1k1RKT-005HPB-He; Fri, 31 Jul 2020 12:27:53 +0300
+Date:   Fri, 31 Jul 2020 12:27:53 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Pu Wen <puwen@hygon.cn>
+Cc:     rjw@rjwysocki.net, lenb@kernel.org, jarkko.nikula@linux.intel.com,
+        mika.westerberg@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: designware: Add device HID for Hygon I2C controller
+Message-ID: <20200731092753.GL3703480@smile.fi.intel.com>
+References: <20200731084845.24459-1-puwen@hygon.cn>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1596186134; bh=xySsE7za0xO75KrkGetk9BUyrbtaRgHSf5U9ahjodHM=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=U9tFsmt+xScoE4yNJYn+NAGvcMzXDbosXgTI+i7UE/ceXbVGEGBvtOXKmCqiUZ8NG
-         Hta0DAk2zf05f7gbnhSrGqDFwChCYLtdgcfQfKsLMeavvqml2pOS7IZIKsCUaSxpS/
-         mGqOKoB8pAT1C6YiRf1LDWekG2xCVEq5tpt6f04BTtxsR5cMRBPA7u08/eGELk6wu4
-         huUlMDAS+nU3jUuCWcZArM9eS1VR7G4ecymLd+un8FTvnnwVoB6d4KMJwa0ycjuTUO
-         nW3dLsVQo6rNCOVRggt2jfzav2PjJrFqa8VgkfJGnIgVsnVAGI8ZZ2O0nKj7hMsuyx
-         uGTyHBgsQWxOw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200731084845.24459-1-puwen@hygon.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Settle time determines the number of cil clock cyles to wait after
-LP00 when moving from LP to HS.
+On Fri, Jul 31, 2020 at 04:48:45PM +0800, Pu Wen wrote:
+> Add device HID HYGO0010 to match the Hygon ACPI Vendor ID (HYGO) that
+> was registered in http://www.uefi.org/acpi_id_list, and the I2C
+> controller on Hygon paltform will use the HID.
 
-This patch computes T-CLK-SETTLE and T-HS-SETTLE times based on cil
-clock rate and pixel rate from the sensor and programs them during
-streaming.
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-T-CLK-SETTLE time is the interval during which receiver will ignore
-any HS transitions on clock lane starting from the beginning of
-T-CLK-PREPARE.
+> Signed-off-by: Pu Wen <puwen@hygon.cn>
+> ---
+>  drivers/acpi/acpi_apd.c                     | 1 +
+>  drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
+> index ba2612e9a0eb..f24f6d3f1fa5 100644
+> --- a/drivers/acpi/acpi_apd.c
+> +++ b/drivers/acpi/acpi_apd.c
+> @@ -240,6 +240,7 @@ static const struct acpi_device_id acpi_apd_device_ids[] = {
+>  	{ "AMDI0020", APD_ADDR(cz_uart_desc) },
+>  	{ "AMD0030", },
+>  	{ "AMD0040", APD_ADDR(st_misc_desc)},
+> +	{ "HYGO0010", APD_ADDR(wt_i2c_desc) },
+>  #endif
+>  #ifdef CONFIG_ARM64
+>  	{ "APMC0D0F", APD_ADDR(xgene_i2c_desc) },
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> index a71bc58fc03c..0dfeb2d11603 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -55,6 +55,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
+>  	{ "HISI02A1", 0 },
+>  	{ "HISI02A2", 0 },
+>  	{ "HISI02A3", 0 },
+> +	{ "HYGO0010", ACCESS_INTR_MASK },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(acpi, dw_i2c_acpi_match);
+> -- 
+> 2.23.0
+> 
 
-T-HS-SETTLE time is the interval during which recevier will ignore
-any HS transitions on data lane starting from the beginning of
-T-HS-PREPARE.
-
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- drivers/staging/media/tegra-video/TODO       |  1 -
- drivers/staging/media/tegra-video/csi.c      | 55 ++++++++++++++++++++++++++++
- drivers/staging/media/tegra-video/csi.h      |  5 +++
- drivers/staging/media/tegra-video/tegra210.c | 17 ++++++++-
- 4 files changed, 75 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/staging/media/tegra-video/TODO b/drivers/staging/media/tegra-video/TODO
-index 98d3c7d..c821081 100644
---- a/drivers/staging/media/tegra-video/TODO
-+++ b/drivers/staging/media/tegra-video/TODO
-@@ -1,5 +1,4 @@
- TODO list
--* Add MIPI clock Settle time computation based on the data rate.
- * Add support for Ganged mode.
- * Add RAW10 packed video format support to Tegra210 video formats.
- * Add support for suspend and resume.
-diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
-index ea0f941..1b24ebf 100644
---- a/drivers/staging/media/tegra-video/csi.c
-+++ b/drivers/staging/media/tegra-video/csi.c
-@@ -19,6 +19,8 @@
- #include "csi.h"
- #include "video.h"
- 
-+#define MHZ			1000000
-+
- static inline struct tegra_csi *
- host1x_client_to_csi(struct host1x_client *client)
- {
-@@ -235,6 +237,59 @@ static int tegra_csi_g_frame_interval(struct v4l2_subdev *subdev,
- 	return 0;
- }
- 
-+static unsigned int csi_get_pixel_rate(struct tegra_csi_channel *csi_chan)
-+{
-+	struct tegra_vi_channel *chan;
-+	struct v4l2_subdev *src_subdev;
-+	struct v4l2_ctrl *ctrl;
-+
-+	chan = v4l2_get_subdev_hostdata(&csi_chan->subdev);
-+	src_subdev = tegra_channel_get_remote_source_subdev(chan);
-+	ctrl = v4l2_ctrl_find(src_subdev->ctrl_handler, V4L2_CID_PIXEL_RATE);
-+	if (ctrl)
-+		return v4l2_ctrl_g_ctrl_int64(ctrl);
-+
-+	return 0;
-+}
-+
-+void tegra_csi_calc_settle_time(struct tegra_csi_channel *csi_chan,
-+				u8 *clk_settle_time,
-+				u8 *ths_settle_time)
-+{
-+	struct tegra_csi *csi = csi_chan->csi;
-+	unsigned int cil_clk_mhz;
-+	unsigned int pix_clk_mhz;
-+	int clk_idx = (csi_chan->csi_port_num >> 1) + 1;
-+
-+	cil_clk_mhz = clk_get_rate(csi->clks[clk_idx].clk) / MHZ;
-+	pix_clk_mhz = csi_get_pixel_rate(csi_chan) / MHZ;
-+
-+	/*
-+	 * CLK Settle time is the interval during which HS receiver should
-+	 * ignore any clock lane HS transitions, starting from the beginning
-+	 * of T-CLK-PREPARE.
-+	 * Per DPHY specification, T-CLK-SETTLE should be between 95ns ~ 300ns
-+	 *
-+	 * 95ns < (clk-settle-programmed + 7) * lp clk period < 300ns
-+	 * midpoint = 197.5 ns
-+	 */
-+	*clk_settle_time = ((95 + 300) * cil_clk_mhz - 14000) / 2000;
-+
-+	/*
-+	 * THS Settle time is the interval during which HS receiver should
-+	 * ignore any data lane HS transitions, starting from the beginning
-+	 * of THS-PREPARE.
-+	 *
-+	 * Per DPHY specification, T-HS-SETTLE should be between 85ns + 6UI
-+	 * and 145ns+10UI.
-+	 * 85ns + 6UI < (Ths-settle-prog + 5) * lp_clk_period < 145ns + 10UI
-+	 * midpoint = 115ns + 8UI
-+	 */
-+	if (pix_clk_mhz)
-+		*ths_settle_time = (115 * cil_clk_mhz + 8000 * cil_clk_mhz
-+				   / (2 * pix_clk_mhz) - 5000) / 1000;
-+}
-+
- static int tegra_csi_enable_stream(struct v4l2_subdev *subdev)
- {
- 	struct tegra_vi_channel *chan = v4l2_get_subdev_hostdata(subdev);
-diff --git a/drivers/staging/media/tegra-video/csi.h b/drivers/staging/media/tegra-video/csi.h
-index 0d50fc3..c65ff73 100644
---- a/drivers/staging/media/tegra-video/csi.h
-+++ b/drivers/staging/media/tegra-video/csi.h
-@@ -51,6 +51,7 @@ struct tegra_csi;
-  * @h_blank: horizontal blanking for TPG active format
-  * @v_blank: vertical blanking for TPG active format
-  * @mipi: mipi device for corresponding csi channel pads
-+ * @pixel_rate: active pixel rate from the sensor on this channel
-  */
- struct tegra_csi_channel {
- 	struct list_head list;
-@@ -67,6 +68,7 @@ struct tegra_csi_channel {
- 	unsigned int h_blank;
- 	unsigned int v_blank;
- 	struct tegra_mipi_device *mipi;
-+	unsigned int pixel_rate;
- };
- 
- /**
-@@ -147,4 +149,7 @@ extern const struct tegra_csi_soc tegra210_csi_soc;
- #endif
- 
- void tegra_csi_error_recover(struct v4l2_subdev *subdev);
-+void tegra_csi_calc_settle_time(struct tegra_csi_channel *csi_chan,
-+				u8 *clk_settle_time,
-+				u8 *ths_settle_time);
- #endif
-diff --git a/drivers/staging/media/tegra-video/tegra210.c b/drivers/staging/media/tegra-video/tegra210.c
-index 253bf33..ac066c0 100644
---- a/drivers/staging/media/tegra-video/tegra210.c
-+++ b/drivers/staging/media/tegra-video/tegra210.c
-@@ -7,6 +7,7 @@
-  * This source file contains Tegra210 supported video formats,
-  * VI and CSI SoC specific data, operations and registers accessors.
-  */
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/clk/tegra.h>
- #include <linux/delay.h>
-@@ -98,6 +99,8 @@
- #define   BRICK_CLOCK_B_4X				(0x2 << 16)
- #define TEGRA_CSI_CIL_PAD_CONFIG1                       0x004
- #define TEGRA_CSI_CIL_PHY_CONTROL                       0x008
-+#define   CLK_SETTLE_MASK				GENMASK(13, 8)
-+#define   THS_SETTLE_MASK				GENMASK(5, 0)
- #define TEGRA_CSI_CIL_INTERRUPT_MASK                    0x00c
- #define TEGRA_CSI_CIL_STATUS                            0x010
- #define TEGRA_CSI_CILX_STATUS                           0x014
-@@ -770,8 +773,14 @@ static int tegra210_csi_start_streaming(struct tegra_csi_channel *csi_chan)
- {
- 	struct tegra_csi *csi = csi_chan->csi;
- 	unsigned int portno = csi_chan->csi_port_num;
-+	u8 clk_settle_time = 0;
-+	u8 ths_settle_time = 10;
- 	u32 val;
- 
-+	if (!csi_chan->pg_mode)
-+		tegra_csi_calc_settle_time(csi_chan, &clk_settle_time,
-+					   &ths_settle_time);
-+
- 	csi_write(csi, portno, TEGRA_CSI_CLKEN_OVERRIDE, 0);
- 
- 	/* clean up status */
-@@ -782,7 +791,9 @@ static int tegra210_csi_start_streaming(struct tegra_csi_channel *csi_chan)
- 
- 	/* CIL PHY registers setup */
- 	cil_write(csi, portno, TEGRA_CSI_CIL_PAD_CONFIG0, 0x0);
--	cil_write(csi, portno, TEGRA_CSI_CIL_PHY_CONTROL, 0xa);
-+	cil_write(csi, portno, TEGRA_CSI_CIL_PHY_CONTROL,
-+		  FIELD_PREP(CLK_SETTLE_MASK, clk_settle_time) |
-+		  FIELD_PREP(THS_SETTLE_MASK, ths_settle_time));
- 
- 	/*
- 	 * The CSI unit provides for connection of up to six cameras in
-@@ -801,7 +812,9 @@ static int tegra210_csi_start_streaming(struct tegra_csi_channel *csi_chan)
- 			  BRICK_CLOCK_A_4X);
- 		cil_write(csi, portno + 1, TEGRA_CSI_CIL_PAD_CONFIG0, 0x0);
- 		cil_write(csi, portno + 1, TEGRA_CSI_CIL_INTERRUPT_MASK, 0x0);
--		cil_write(csi, portno + 1, TEGRA_CSI_CIL_PHY_CONTROL, 0xa);
-+		cil_write(csi, portno + 1, TEGRA_CSI_CIL_PHY_CONTROL,
-+			  FIELD_PREP(CLK_SETTLE_MASK, clk_settle_time) |
-+			  FIELD_PREP(THS_SETTLE_MASK, ths_settle_time));
- 		csi_write(csi, portno, TEGRA_CSI_PHY_CIL_COMMAND,
- 			  CSI_A_PHY_CIL_ENABLE | CSI_B_PHY_CIL_ENABLE);
- 	} else {
 -- 
-2.7.4
+With Best Regards,
+Andy Shevchenko
+
 
