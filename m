@@ -2,120 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D33A234730
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 15:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A79A23473B
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 15:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728262AbgGaNtx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 31 Jul 2020 09:49:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54456 "EHLO mail.kernel.org"
+        id S1730706AbgGaNzc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 31 Jul 2020 09:55:32 -0400
+Received: from www.zeus03.de ([194.117.254.33]:36594 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727851AbgGaNtx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 31 Jul 2020 09:49:53 -0400
-Received: from localhost (router.4pisysteme.de [80.79.225.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0694C208E4;
-        Fri, 31 Jul 2020 13:49:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596203392;
-        bh=IXwFqQHjP2sDj/CKwA+w73Rr9wgrcjVyVnpFMoC7OjU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UBriO0JOczpijNoQcc6SIWS7AffbF+7ldQJy+zYnulcMLP8iwwdjPVVMcChn/guKy
-         F0oJ95Rwx8ArimT40TgjCIAGGNEf9lj8jsaCOBs1UDCZRbrDoSU9W4peFokXG1XMDw
-         0jsXfWF8aCKUM9PYHIfbiZ/10bvc4F0YjrtZyaYA=
-Date:   Fri, 31 Jul 2020 15:49:50 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Pu Wen <puwen@hygon.cn>
-Cc:     rjw@rjwysocki.net, lenb@kernel.org, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: designware: Add device HID for Hygon I2C controller
-Message-ID: <20200731134950.GB1679@kunai>
-References: <20200731084845.24459-1-puwen@hygon.cn>
+        id S1732402AbgGaNzc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 31 Jul 2020 09:55:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=UowO9dFG8ngxMdaq5/AOFmxXrA6A
+        eQawaeMQ0zmHxF4=; b=GpljosT9Ypquy0Qcromr280Wvy+KC6z4es7GuG9iafoL
+        Xc6doXewqAWTmug2z9rrxmnDNws9PHfCti42W7t5QllKDVUrIk3C8AcK5eEWAJAn
+        dh8xILiR4Y5rJ4vb3l7TEPYkRuA/4iehDk7asn5YHoINRCJhOisd9L42WIkG4QQ=
+Received: (qmail 1608537 invoked from network); 31 Jul 2020 15:55:30 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 31 Jul 2020 15:55:30 +0200
+X-UD-Smtp-Session: l3s3148p1@nAJWJL2rhOhQT+F6
+Date:   Fri, 31 Jul 2020 15:55:30 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, Ray Jui <ray.jui@broadcom.com>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Dhananjay Phadke <dphadke@linux.microsoft.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Subject: Re: [PATCH] i2c: rcar: avoid race when unregistering slave
+Message-ID: <20200731135530.GC1679@kunai>
+References: <20200726161606.15315-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="K8nIJk4ghYZn606h"
+        protocol="application/pgp-signature"; boundary="CblX+4bnyfN0pR09"
 Content-Disposition: inline
-In-Reply-To: <20200731084845.24459-1-puwen@hygon.cn>
+In-Reply-To: <20200726161606.15315-1-wsa+renesas@sang-engineering.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---K8nIJk4ghYZn606h
+--CblX+4bnyfN0pR09
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 31, 2020 at 04:48:45PM +0800, Pu Wen wrote:
-> Add device HID HYGO0010 to match the Hygon ACPI Vendor ID (HYGO) that
-> was registered in http://www.uefi.org/acpi_id_list, and the I2C
-> controller on Hygon paltform will use the HID.
+On Sun, Jul 26, 2020 at 06:16:06PM +0200, Wolfram Sang wrote:
+> Due to the lockless design of the driver, it is theoretically possible
+> to access a NULL pointer, if a slave interrupt was running while we were
+> unregistering the slave. To make this rock solid, disable the interrupt
+> for a short time while we are clearing the interrupt_enable register.
+> This patch is purely based on code inspection. The OOPS is super-hard to
+> trigger because clearing SAR (the address) makes interrupts even more
+> unlikely to happen as well. While here, reinit SCR to SDBS because this
+> bit should always be set according to documentation. There is no effect,
+> though, because the interface is disabled.
 >=20
-> Signed-off-by: Pu Wen <puwen@hygon.cn>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-I can take this via I2C, but I'd need an ack from Rafael or Len.
+Applied to for-next, thanks!
 
-Or it can go via ACPI, fine with me
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
-
-> ---
->  drivers/acpi/acpi_apd.c                     | 1 +
->  drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
->  2 files changed, 2 insertions(+)
->=20
-> diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
-> index ba2612e9a0eb..f24f6d3f1fa5 100644
-> --- a/drivers/acpi/acpi_apd.c
-> +++ b/drivers/acpi/acpi_apd.c
-> @@ -240,6 +240,7 @@ static const struct acpi_device_id acpi_apd_device_id=
-s[] =3D {
->  	{ "AMDI0020", APD_ADDR(cz_uart_desc) },
->  	{ "AMD0030", },
->  	{ "AMD0040", APD_ADDR(st_misc_desc)},
-> +	{ "HYGO0010", APD_ADDR(wt_i2c_desc) },
->  #endif
->  #ifdef CONFIG_ARM64
->  	{ "APMC0D0F", APD_ADDR(xgene_i2c_desc) },
-> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/bu=
-sses/i2c-designware-platdrv.c
-> index a71bc58fc03c..0dfeb2d11603 100644
-> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-> @@ -55,6 +55,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] =
-=3D {
->  	{ "HISI02A1", 0 },
->  	{ "HISI02A2", 0 },
->  	{ "HISI02A3", 0 },
-> +	{ "HYGO0010", ACCESS_INTR_MASK },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(acpi, dw_i2c_acpi_match);
-> --=20
-> 2.23.0
->=20
-
---K8nIJk4ghYZn606h
+--CblX+4bnyfN0pR09
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8kIX4ACgkQFA3kzBSg
-Kbapvg//XojrXKWxAnwxZ4yM08TGa5ZO4BFLsrF2TAc/GlLtSahmH5JO7t9fkYOB
-jn5HbtxIGEqYEP6uQLVMgT+WGdAdCu1kXI9BbzZNYG2Gm7J8EI7ui1CWrdXkXm8/
-R1yQ/AhszXe1BUm9Y3UWaioqpyTqN8bB5fgsgWTFEjuxneLNoA0T+kduXPiRsyTA
-nUqL/7rl/8BWCvpVd26aPGIUgQFXftFBXhjMBzyPRrBEZUcDITAdhYG5LoATQjz1
-O6kcRszY3wcNFtxiC84oI4KbMErnExHSvcugI7x7jIAFGyEeQBUubdRychckMLEN
-Oma3uXCDWt/AfkUc67fWAF75sToFV830StjoKmT+pqMQiLI7c8Nv4FjHdz/p/Quv
-UyrYhh2hynaq0+4UQATEqvCMulGdw5tchPhOVIMkNFGyw24iQkTh7guFkmA5jAwB
-/i7sPVt3AzyJ/u/JyG/aFPkHa3xAVD4RZd0EPwMNisL+tBnUQlTedaMkUMPuBEFU
-5/OymFfNhKYMjTAn/EHsVJtEZir3dT9bQyeCPyulOpo0SHHlBY87CbY0b74wMRNj
-m5J+TCn0xtiiILXe1+p6iwbj6vdALpsbQcLHx96JQxy9gfgUMmlx8MNZm4V3pucg
-KtlfyUfaUkw+/eSbCPm0U3iQWSVZTLCR7wscP6dlje+98+tz8Q8=
-=gqTO
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8kItEACgkQFA3kzBSg
+Kba2aQ//fRf6nU1nrdjBSoh1xn8AYxG2COLDQLMxFYmJdV/TBziC0+QG4rieUhk9
+KAdTu02ZAuKFPAzFryWEwoGKu1cDgXsM7OJdnlK3TVDu3LRKnEo4rctkspKnVuBp
+VXL6nYyKCC4Uon0Vsq4RsonFk3V6Xp6X00xhVWOMAGbL9OizftDE3bbjnGtiL5ls
+oqYqT9IkYalZUh6O6uLqZVAavcZ06yA0anemKEqkmvwf9w0+F5uiMt5TEktnceZf
+H0Q4JCEwVW5iFT6o1yhRwo4H/1BqZAaXtqntj0/MXX2Gtzorpnsy28aWGYvLZIy7
+8PEPPXCZN/s44q4DSdPBOokAPwtQ0Kdc2a4DUj5W0TRtLwRmB0B7SbG22MDAsNz/
+dJ2ya4hPjZ+bh833+E6nVseR559cQ6yHheb5gvvjjxGLzCXBO2Ul3UnQqRVzmOOo
+hLN7/FRmimS2gNi40a/DS0NdvhJuNS3hEjaHjzG80hRdfPn1v+bzF1X0in68bbtT
+rrEfB4qh6IXXX9kqwgpU3B8JCKOPHLFZDyLSbIcYekh962Mx79rnlLHiCiisD5/y
+CmCsHORRpseaX36vXcDLV9rMPXDyhqm8gywhrF61zasrzWKxhz6mRhfGPYuaziYw
+AvsElvVTPGYzokf8op93geU1uKw4FHk12aONc90UTKAFBRwEnRQ=
+=iKy9
 -----END PGP SIGNATURE-----
 
---K8nIJk4ghYZn606h--
+--CblX+4bnyfN0pR09--
