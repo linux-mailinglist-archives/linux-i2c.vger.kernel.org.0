@@ -2,54 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A96F2344A7
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 13:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D29C234548
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 14:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732618AbgGaLjF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 31 Jul 2020 07:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        id S1732942AbgGaMGq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 31 Jul 2020 08:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732297AbgGaLjF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 Jul 2020 07:39:05 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272D4C061574;
-        Fri, 31 Jul 2020 04:39:05 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id x9so32131332ljc.5;
-        Fri, 31 Jul 2020 04:39:05 -0700 (PDT)
+        with ESMTP id S1732734AbgGaMGp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 Jul 2020 08:06:45 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B523C061574;
+        Fri, 31 Jul 2020 05:06:45 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id t6so19247609ljk.9;
+        Fri, 31 Jul 2020 05:06:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=e83eJTcVv/UaeyPlCsr6UUJefX33U2iVn2MgdxsKQTQ=;
-        b=X9V6zA56PqyXwOT0CNOco7VPG50Pkbt7KmbI/ojIgjq+CFYp9qHMCY6bdOTnK3x3QR
-         OE+41YFe8nwh73tpj+YDYVwNBrRap4JePkrUOhKd4jaWk7wSnBWCl7732Jd7H6DaGbnw
-         zYZznHVkJ+wzuPxNavlP1QnUHUl4L/5CnblTm0LKK4baDeLDU7iO0MvH1d5WF49frrNV
-         4s4Z7gSD9t/AK5UjBUcXCUQgwkHXsFpS5YxHjXRkueVpGgFZ19L24ENrdnL2MpZ35z0i
-         bEruw/yDZ7CttkXNOu5ZFif5fmKXTFCMfyO8/YF8ZucVV6ESxnHc5KUMmUtQPSQdUUY2
-         v06A==
+        bh=wGIEotVJMeoJNihU6O/r/OV8ckdtdoLNEofry0Bb5ZI=;
+        b=Eu6LagJEiGtloI+tapn2ZSSDVFePwtRLBjkeKZCRDmhT8YehnOqPsbRtseSEUw+m0J
+         7BqIQnayf8uOibZ4NIlX7MtgdppwdrRnaH8j/rPnCmykRBBS/r0ii16CW0F5PK/PjD3L
+         A4RxmOxw9kT2ffT9oqYBt7bR9A0FdhPJ6DzRS12vQ7yZnXTqhU/Axf3RFyAFVCqQOcrR
+         zshy6WcV4WwOQ7YmqlTz3OUYfp6u8OVM57o4OKyzl7XxyOSyzg9uHtZUXexDGNWUX4W1
+         2xUICVbQSp+roZsjC1g2TQzuN/NI3HJHYc+++0kQWbiVrodYfUQv1BRaCU7XL4mjn8m0
+         FhHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=e83eJTcVv/UaeyPlCsr6UUJefX33U2iVn2MgdxsKQTQ=;
-        b=ej8bhhUdAkEttZUthgtmpb7y7Ex3JCulFPgGQkAJ8paI9kH47mZJIhl0AwJiyOEeuc
-         1HhhJSRxoKT78T6IgcTop0IQeXeJ2+4fu1KihOh9+GxFxnSVW5bRLAfXFVrcLzFurR68
-         AesxLWVL1aMSREzbRMfRaux4SKlulISWSntT4UqIu+ueuT4VXMGuRxpqdMH1ktSmIjfF
-         IC9EF/bh2VvyklGE5kTEmK7CqpNMVy9aBIS41FuB3fnTXLtqyLca+4rWq+xZJYddGdQT
-         NLyXzUqO9jFuTFUL52fqzrhcbWfMrYBf2ag5lJrI8l6VlmmiLwM5GWAtPjbiGXy/KChi
-         S/aA==
-X-Gm-Message-State: AOAM5337xIupLhJ+CJNo/dnKdOtmHk2O+bsHOERXXJQOLbuZrdNsdEwT
-        lswJLbhag41NN5CDcIBqVxAWFztQ
-X-Google-Smtp-Source: ABdhPJyGjMx9FtTEpEohXiAFoq57WavNYhs3eJc0pNbnjhC7LxeGw815xYO7ZEtnLAVlZoq41lXvWQ==
-X-Received: by 2002:a2e:991:: with SMTP id 139mr1647045ljj.314.1596195543293;
-        Fri, 31 Jul 2020 04:39:03 -0700 (PDT)
+        bh=wGIEotVJMeoJNihU6O/r/OV8ckdtdoLNEofry0Bb5ZI=;
+        b=oPOQtUXtKPusTXIAskJgx8wgJYCvq5fw3fRZxa2ccSE0+cOkl1QpU2eY+/x5DSaqjD
+         6FU/jwj3PGTNwrLFCx4/LUfqrCznnm8JLGBK+etXC4Jv4lA21yGBn4VQVjoedK1bQAJ0
+         aZSWUXNlnVk8QVhRXtHV033OtLtJrPl/DnPK/cGVYyDNndty4dAIanjibL7fYCcgvgPd
+         84ZLVBwiJxzIK5lXixEJLbAudJHQCFxtKXOe8WElvGd8Dfs0oBQGt6ziOGzXBfoMc1iy
+         b3xZu/5D7MAEDd7rPcEuCHttGE2+aRyb0FEM888WN4k98+WGyYT0a+N1NrAoj6zPkusB
+         3VoQ==
+X-Gm-Message-State: AOAM5332w9rijTIZIFq1HrQ0KKZkmkOsGcC21lBuDjiggAJBQq+6b1FJ
+        H24RQAAxcwZp2kOyVFdYRLe59CCK
+X-Google-Smtp-Source: ABdhPJxk0BTj8qxc+FqtzWhzEa6QTQpNzeE5UIlC5aV2Fwy1reVwOKg+TWzTfJDz0BXs77vl+vw5bA==
+X-Received: by 2002:a2e:2ac5:: with SMTP id q188mr1824671ljq.179.1596197203320;
+        Fri, 31 Jul 2020 05:06:43 -0700 (PDT)
 Received: from [192.168.2.145] (94-29-41-50.dynamic.spd-mgts.ru. [94.29.41.50])
-        by smtp.googlemail.com with ESMTPSA id k12sm1870240lfe.68.2020.07.31.04.39.01
+        by smtp.googlemail.com with ESMTPSA id p9sm1629043ljg.76.2020.07.31.05.06.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jul 2020 04:39:02 -0700 (PDT)
-Subject: Re: [RFC PATCH v6 09/10] media: tegra-video: Add CSI MIPI pads
- calibration
+        Fri, 31 Jul 2020 05:06:42 -0700 (PDT)
+Subject: Re: [RFC PATCH v6 05/10] media: tegra-video: Separate CSI stream
+ enable and disable implementations
 To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
         thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
         hverkuil@xs4all.nl, sakari.ailus@iki.fi, robh+dt@kernel.org,
@@ -59,14 +59,14 @@ Cc:     sboyd@kernel.org, gregkh@linuxfoundation.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-i2c@vger.kernel.org
 References: <1596186169-18729-1-git-send-email-skomatineni@nvidia.com>
- <1596186169-18729-10-git-send-email-skomatineni@nvidia.com>
+ <1596186169-18729-6-git-send-email-skomatineni@nvidia.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <3ac158c4-7df7-e3c1-f0e1-33e7ef017762@gmail.com>
-Date:   Fri, 31 Jul 2020 14:39:01 +0300
+Message-ID: <cdc22071-9e61-1098-803a-d7c674972b6f@gmail.com>
+Date:   Fri, 31 Jul 2020 15:06:41 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1596186169-18729-10-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <1596186169-18729-6-git-send-email-skomatineni@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -76,79 +76,90 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 31.07.2020 12:02, Sowjanya Komatineni пишет:
-...
-> @@ -249,13 +249,47 @@ static int tegra_csi_enable_stream(struct v4l2_subdev *subdev)
->  		return ret;
->  	}
->  
-> +	if (csi_chan->mipi) {
-> +		ret = tegra_mipi_enable(csi_chan->mipi);
-> +		if (ret < 0) {
-> +			dev_err(csi->dev,
-> +				"failed to enable MIPI pads: %d\n", ret);
-> +			goto rpm_put;
-> +		}
-> +
-> +		/*
-> +		 * CSI MIPI pads PULLUP, PULLDN and TERM impedances need to
-> +		 * be calibrated after power on.
-> +		 * So, trigger the calibration start here and results will
-> +		 * be latched and applied to the pads when link is in LP11
-> +		 * state during start of sensor streaming.
-> +		 */
-> +		ret = tegra_mipi_start_calibration(csi_chan->mipi);
-> +		if (ret < 0) {
-> +			dev_err(csi->dev,
-> +				"failed to start MIPI calibration: %d\n", ret);
-> +			goto disable_mipi;
-> +		}
-
-What would happen if CSI stream is enabled and then immediately disabled
-without enabling camera sensor?
-
-> +	}
-> +
-...
->  static int tegra_channel_enable_stream(struct tegra_vi_channel *chan)
->  {
->  	struct v4l2_subdev *csi_subdev, *src_subdev;
-> +	struct tegra_csi_channel *csi_chan;
->  	int ret;
->  
->  	/*
-> @@ -206,13 +207,30 @@ static int tegra_channel_enable_stream(struct tegra_vi_channel *chan)
->  	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
->  		return 0;
->  
-> +	csi_chan = v4l2_get_subdevdata(csi_subdev);
-> +	/*
-> +	 * TRM has incorrectly documented to wait for done status from
-> +	 * calibration logic after CSI interface power on.
-> +	 * As per the design, calibration results are latched and applied
-> +	 * to the pads only when the link is in LP11 state which will happen
-> +	 * during the sensor stream-on.
-> +	 * CSI subdev stream-on triggers start of MIPI pads calibration.
-> +	 * Wait for calibration to finish here after sensor subdev stream-on
-> +	 * and in case of sensor stream-on failure, cancel the calibration.
-> +	 */
->  	src_subdev = tegra_channel_get_remote_source_subdev(chan);
-
-Is it possible to move the start_calibration() here?
-
->  	ret = v4l2_subdev_call(src_subdev, video, s_stream, true);
->  	if (ret < 0 && ret != -ENOIOCTLCMD) {
-> +		tegra_mipi_cancel_calibration(csi_chan->mipi);
->  		v4l2_subdev_call(csi_subdev, video, s_stream, false);
->  		return ret;
->  	}
->  
-> +	ret = tegra_mipi_finish_calibration(csi_chan->mipi);
-> +	if (ret < 0)
-> +		dev_warn(csi_chan->csi->dev,
-> +			 "MIPI calibration failed: %d\n", ret);
-> +
+> This patch separates implementation of CSI stream enable and disable
+> into separate functions for readability.
+> 
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> ---
+>  drivers/staging/media/tegra-video/csi.c | 51 ++++++++++++++++++++++-----------
+>  1 file changed, 35 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
+> index fb667df..cfe6187 100644
+> --- a/drivers/staging/media/tegra-video/csi.c
+> +++ b/drivers/staging/media/tegra-video/csi.c
+> @@ -232,34 +232,53 @@ static int tegra_csi_g_frame_interval(struct v4l2_subdev *subdev,
 >  	return 0;
+>  }
+>  
+> -static int tegra_csi_s_stream(struct v4l2_subdev *subdev, int enable)
+> +static int tegra_csi_enable_stream(struct v4l2_subdev *subdev)
+>  {
+>  	struct tegra_vi_channel *chan = v4l2_get_subdev_hostdata(subdev);
+>  	struct tegra_csi_channel *csi_chan = to_csi_chan(subdev);
+>  	struct tegra_csi *csi = csi_chan->csi;
+> -	int ret = 0;
+> +	int ret;
+> +
+> +	ret = pm_runtime_get_sync(csi->dev);
+> +	if (ret < 0) {
+> +		dev_err(csi->dev, "failed to get runtime PM: %d\n", ret);
+> +		pm_runtime_put_noidle(csi->dev);
+> +		return ret;
+> +	}
+>  
+>  	csi_chan->pg_mode = chan->pg_mode;
+> -	if (enable) {
+> -		ret = pm_runtime_get_sync(csi->dev);
+> -		if (ret < 0) {
+> -			dev_err(csi->dev,
+> -				"failed to get runtime PM: %d\n", ret);
+> -			pm_runtime_put_noidle(csi->dev);
+> -			return ret;
+> -		}
+> +	ret = csi->ops->csi_start_streaming(csi_chan);
+> +	if (ret < 0)
+> +		goto rpm_put;
+>  
+> -		ret = csi->ops->csi_start_streaming(csi_chan);
+> -		if (ret < 0)
+> -			goto rpm_put;
+> +	return 0;
+>  
+> -		return 0;
+> -	}
+> +rpm_put:
+> +	pm_runtime_put(csi->dev);
+> +	return ret;
+> +}
+> +
+> +static int tegra_csi_disable_stream(struct v4l2_subdev *subdev)
+> +{
+> +	struct tegra_csi_channel *csi_chan = to_csi_chan(subdev);
+> +	struct tegra_csi *csi = csi_chan->csi;
+>  
+>  	csi->ops->csi_stop_streaming(csi_chan);
+>  
+> -rpm_put:
+>  	pm_runtime_put(csi->dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int tegra_csi_s_stream(struct v4l2_subdev *subdev, int enable)
+> +{
+> +	int ret;
+> +
+> +	if (enable)
+> +		ret = tegra_csi_enable_stream(subdev);
+> +	else
+> +		ret = tegra_csi_disable_stream(subdev);
+> +
+>  	return ret;
 >  }
 >  
 > 
 
+Thanks!
+
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
