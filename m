@@ -2,85 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A79A23473B
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 15:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441232348A1
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 Jul 2020 17:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730706AbgGaNzc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 31 Jul 2020 09:55:32 -0400
-Received: from www.zeus03.de ([194.117.254.33]:36594 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732402AbgGaNzc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 31 Jul 2020 09:55:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=UowO9dFG8ngxMdaq5/AOFmxXrA6A
-        eQawaeMQ0zmHxF4=; b=GpljosT9Ypquy0Qcromr280Wvy+KC6z4es7GuG9iafoL
-        Xc6doXewqAWTmug2z9rrxmnDNws9PHfCti42W7t5QllKDVUrIk3C8AcK5eEWAJAn
-        dh8xILiR4Y5rJ4vb3l7TEPYkRuA/4iehDk7asn5YHoINRCJhOisd9L42WIkG4QQ=
-Received: (qmail 1608537 invoked from network); 31 Jul 2020 15:55:30 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 31 Jul 2020 15:55:30 +0200
-X-UD-Smtp-Session: l3s3148p1@nAJWJL2rhOhQT+F6
-Date:   Fri, 31 Jul 2020 15:55:30 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org, Ray Jui <ray.jui@broadcom.com>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Subject: Re: [PATCH] i2c: rcar: avoid race when unregistering slave
-Message-ID: <20200731135530.GC1679@kunai>
-References: <20200726161606.15315-1-wsa+renesas@sang-engineering.com>
+        id S1728222AbgGaPqi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 31 Jul 2020 11:46:38 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:17452 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727933AbgGaPqi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 31 Jul 2020 11:46:38 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f243cd00000>; Fri, 31 Jul 2020 08:46:25 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 31 Jul 2020 08:46:38 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 31 Jul 2020 08:46:38 -0700
+Received: from [10.2.167.221] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 Jul
+ 2020 15:46:37 +0000
+Subject: Re: [RFC PATCH v6 09/10] media: tegra-video: Add CSI MIPI pads
+ calibration
+To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
+        <sakari.ailus@iki.fi>, <robh+dt@kernel.org>,
+        <helen.koike@collabora.com>
+CC:     <sboyd@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+References: <1596186169-18729-1-git-send-email-skomatineni@nvidia.com>
+ <1596186169-18729-10-git-send-email-skomatineni@nvidia.com>
+ <3ac158c4-7df7-e3c1-f0e1-33e7ef017762@gmail.com>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <f483329d-b5fe-fda5-e235-b8edb5fce440@nvidia.com>
+Date:   Fri, 31 Jul 2020 08:46:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CblX+4bnyfN0pR09"
-Content-Disposition: inline
-In-Reply-To: <20200726161606.15315-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <3ac158c4-7df7-e3c1-f0e1-33e7ef017762@gmail.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1596210385; bh=LT7Rum+TVQ8i+yg00HUXL4JpRxYnF2QyXbgXIWuPmeU=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=lFNkPzZP4nsuT2DXNN2EEOT0x95rCZEZVWQhkkOPFwtAjVPdHvlgRLpjZkE6WQ2bm
+         2008IJ0xIH2P1z1nNG/29TvpGL5sAhfjtMcaeE3QP+NlNHhF6Bwy7Xay7VbiyRSuMb
+         unl5Wlgq6K7JaLQJGIj0hyL6Yin09OycAu/1Bxw5j6G8RbL9nyqQ5TYyjP6TGQiOX9
+         Qs+wtOhLYsATerUT9trZ76xuTL+DweM+PsDpdHdbM5h4ksTQ2HrtOE1yr61fm+HOXU
+         IKQN0jjnGNDOSEreOeoo93WFnk7EWwj7Z0eKLg4P3EZGcBajuDTDZC61MMbvWgFGx1
+         aTt+jHx0VNctg==
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---CblX+4bnyfN0pR09
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 7/31/20 4:39 AM, Dmitry Osipenko wrote:
+> 31.07.2020 12:02, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> ...
+>> @@ -249,13 +249,47 @@ static int tegra_csi_enable_stream(struct v4l2_sub=
+dev *subdev)
+>>   		return ret;
+>>   	}
+>>  =20
+>> +	if (csi_chan->mipi) {
+>> +		ret =3D tegra_mipi_enable(csi_chan->mipi);
+>> +		if (ret < 0) {
+>> +			dev_err(csi->dev,
+>> +				"failed to enable MIPI pads: %d\n", ret);
+>> +			goto rpm_put;
+>> +		}
+>> +
+>> +		/*
+>> +		 * CSI MIPI pads PULLUP, PULLDN and TERM impedances need to
+>> +		 * be calibrated after power on.
+>> +		 * So, trigger the calibration start here and results will
+>> +		 * be latched and applied to the pads when link is in LP11
+>> +		 * state during start of sensor streaming.
+>> +		 */
+>> +		ret =3D tegra_mipi_start_calibration(csi_chan->mipi);
+>> +		if (ret < 0) {
+>> +			dev_err(csi->dev,
+>> +				"failed to start MIPI calibration: %d\n", ret);
+>> +			goto disable_mipi;
+>> +		}
+> What would happen if CSI stream is enabled and then immediately disabled
+> without enabling camera sensor?
 
-On Sun, Jul 26, 2020 at 06:16:06PM +0200, Wolfram Sang wrote:
-> Due to the lockless design of the driver, it is theoretically possible
-> to access a NULL pointer, if a slave interrupt was running while we were
-> unregistering the slave. To make this rock solid, disable the interrupt
-> for a short time while we are clearing the interrupt_enable register.
-> This patch is purely based on code inspection. The OOPS is super-hard to
-> trigger because clearing SAR (the address) makes interrupts even more
-> unlikely to happen as well. While here, reinit SCR to SDBS because this
-> bit should always be set according to documentation. There is no effect,
-> though, because the interface is disabled.
->=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Nothing will happen as during stream enable csi receiver is kept ready.
 
-Applied to for-next, thanks!
+But actual capture will not happen during that point.
 
+>
+>> +	}
+>> +
+> ...
+>>   static int tegra_channel_enable_stream(struct tegra_vi_channel *chan)
+>>   {
+>>   	struct v4l2_subdev *csi_subdev, *src_subdev;
+>> +	struct tegra_csi_channel *csi_chan;
+>>   	int ret;
+>>  =20
+>>   	/*
+>> @@ -206,13 +207,30 @@ static int tegra_channel_enable_stream(struct tegr=
+a_vi_channel *chan)
+>>   	if (IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+>>   		return 0;
+>>  =20
+>> +	csi_chan =3D v4l2_get_subdevdata(csi_subdev);
+>> +	/*
+>> +	 * TRM has incorrectly documented to wait for done status from
+>> +	 * calibration logic after CSI interface power on.
+>> +	 * As per the design, calibration results are latched and applied
+>> +	 * to the pads only when the link is in LP11 state which will happen
+>> +	 * during the sensor stream-on.
+>> +	 * CSI subdev stream-on triggers start of MIPI pads calibration.
+>> +	 * Wait for calibration to finish here after sensor subdev stream-on
+>> +	 * and in case of sensor stream-on failure, cancel the calibration.
+>> +	 */
+>>   	src_subdev =3D tegra_channel_get_remote_source_subdev(chan);
+> Is it possible to move the start_calibration() here?
 
---CblX+4bnyfN0pR09
-Content-Type: application/pgp-signature; name="signature.asc"
+I think we can do start here as well I guess but currently I am=20
+following steps order as per design document.
 
------BEGIN PGP SIGNATURE-----
+This is the reason I have updated in above comment as well.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8kItEACgkQFA3kzBSg
-Kba2aQ//fRf6nU1nrdjBSoh1xn8AYxG2COLDQLMxFYmJdV/TBziC0+QG4rieUhk9
-KAdTu02ZAuKFPAzFryWEwoGKu1cDgXsM7OJdnlK3TVDu3LRKnEo4rctkspKnVuBp
-VXL6nYyKCC4Uon0Vsq4RsonFk3V6Xp6X00xhVWOMAGbL9OizftDE3bbjnGtiL5ls
-oqYqT9IkYalZUh6O6uLqZVAavcZ06yA0anemKEqkmvwf9w0+F5uiMt5TEktnceZf
-H0Q4JCEwVW5iFT6o1yhRwo4H/1BqZAaXtqntj0/MXX2Gtzorpnsy28aWGYvLZIy7
-8PEPPXCZN/s44q4DSdPBOokAPwtQ0Kdc2a4DUj5W0TRtLwRmB0B7SbG22MDAsNz/
-dJ2ya4hPjZ+bh833+E6nVseR559cQ6yHheb5gvvjjxGLzCXBO2Ul3UnQqRVzmOOo
-hLN7/FRmimS2gNi40a/DS0NdvhJuNS3hEjaHjzG80hRdfPn1v+bzF1X0in68bbtT
-rrEfB4qh6IXXX9kqwgpU3B8JCKOPHLFZDyLSbIcYekh962Mx79rnlLHiCiisD5/y
-CmCsHORRpseaX36vXcDLV9rMPXDyhqm8gywhrF61zasrzWKxhz6mRhfGPYuaziYw
-AvsElvVTPGYzokf8op93geU1uKw4FHk12aONc90UTKAFBRwEnRQ=
-=iKy9
------END PGP SIGNATURE-----
-
---CblX+4bnyfN0pR09--
+>
+>>   	ret =3D v4l2_subdev_call(src_subdev, video, s_stream, true);
+>>   	if (ret < 0 && ret !=3D -ENOIOCTLCMD) {
+>> +		tegra_mipi_cancel_calibration(csi_chan->mipi);
+>>   		v4l2_subdev_call(csi_subdev, video, s_stream, false);
+>>   		return ret;
+>>   	}
+>>  =20
+>> +	ret =3D tegra_mipi_finish_calibration(csi_chan->mipi);
+>> +	if (ret < 0)
+>> +		dev_warn(csi_chan->csi->dev,
+>> +			 "MIPI calibration failed: %d\n", ret);
+>> +
+>>   	return 0;
+>>   }
+>>  =20
+>>
