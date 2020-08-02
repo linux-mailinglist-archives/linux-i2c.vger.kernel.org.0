@@ -2,55 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9AA2359D8
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Aug 2020 20:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89AB8235A07
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Aug 2020 20:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbgHBS1g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 2 Aug 2020 14:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
+        id S1727069AbgHBSrY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 2 Aug 2020 14:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726920AbgHBS1f (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Aug 2020 14:27:35 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFDFC06174A;
-        Sun,  2 Aug 2020 11:27:35 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id v22so14915937edy.0;
-        Sun, 02 Aug 2020 11:27:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=ec+QZPQt4BI+HNScgjvbhAWx5U5Q2eYvCkS354frzh0=;
-        b=YtJLT8D3c903d3hsfGfmpRep4DyZJhzRytGWo/UssPWnsu4TDB7JZAkT1sTJMmJUH+
-         bq5rDlN4QtT+Xdj0JNzjtQ2QqTr2pVyC4JOlcnf9bRRCSyXgovVOl9FdgJQfsiPfkKzY
-         DWsX6GX1lxDOlwpnwJCtIh+GQ6RZkI/pzRvVJxUc5FGTjx+jay8s+7hZFlw796rU78Gc
-         7K1ApoysPqm8FRM+jQOGIRHengeFZ6xNP8mOw9mf8ONnQV8kOLpUVEJO7EpYgXqjQKbR
-         ZXY6Otij2DqA3PujrgbIOxTi9tcd/lHDFFPdppv1+HoL/eGjvY6ERK9eoJvC1OZ061lc
-         FmqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=ec+QZPQt4BI+HNScgjvbhAWx5U5Q2eYvCkS354frzh0=;
-        b=K83uV3irkoUMjiaYGxaIKS/7/Xhw9LmAzT7GEm14xlebX6o+ahYRqHbiMaUg91zym0
-         HOCPVuhQFvtyGr5sKMZ3VhY5avZJ3J0dVI3uEXdHfVHfig8ldeOikWvKCM8+E1bnUje6
-         G/2FKjqgmGFDuSn2GyziNsKTy4iraIy9TOXl3SKC+PujmY1oSm/6HcRfncJ6C8YW2FGY
-         Km/qhgofMmzTdBnhcOEh0R4V9pXI8vWWXUC2khNhxez7M0PSfQyiK6llzGQ952ESzuXB
-         ZusXTc+b95kxkHR72i9XG/IoQU3EUle4GttbIa1qAAdfKtjMbvTDrCQrParNiHz1fCFS
-         yGeQ==
-X-Gm-Message-State: AOAM532cCpjZiyS08P3ApXbDPMB2E+dwfN+U5Qy7ScIzWByrjx7/CRnq
-        Tr3hLoPvYHymHVvS49nNY94=
-X-Google-Smtp-Source: ABdhPJzPSVl/d4yXQb9tARqdTsGpw8tzteKDCnrRiPQdt2yWNobLwsKDJ8Loc5jmq7ZA1MaLrCqHCQ==
-X-Received: by 2002:aa7:c9c2:: with SMTP id i2mr12251380edt.326.1596392853909;
-        Sun, 02 Aug 2020 11:27:33 -0700 (PDT)
-Received: from net.saheed (95C84E0A.dsl.pool.telekom.hu. [149.200.78.10])
-        by smtp.gmail.com with ESMTPSA id b9sm2015326ejz.57.2020.08.02.11.27.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Aug 2020 11:27:33 -0700 (PDT)
-Subject: Re: [RFC PATCH 00/17] Drop uses of pci_read_config_*() return value
-To:     Borislav Petkov <bp@alien8.de>, trix@redhat.com
-Cc:     helgaas@kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        with ESMTP id S1725801AbgHBSrW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Aug 2020 14:47:22 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B30C06174A;
+        Sun,  2 Aug 2020 11:47:22 -0700 (PDT)
+Received: from nazgul.tnic (unknown [78.130.214.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6060E1EC027B;
+        Sun,  2 Aug 2020 20:47:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1596394040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=6tNJPljLjNx2x9QEIVJnns37NMBlLLp4EAbpTzGkx/k=;
+        b=km2ppJ9W1lKPkeogNByCZRPPB90pQ77y1xFpzqsz5v2Gw4jUrJuG2BUGC6FlwifBWKp5xA
+        i/pwFuidiFCe1IAhyK7PX67NxCd1gqUPGlQREtpW/WPoHky93LT53Q3Zqf5RRY0CErhAu0
+        8YCnO7sm9NOsIwnrSCtwGhnf6GzAdAw=
+Date:   Sun, 2 Aug 2020 20:46:48 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Saheed Bolarinwa <refactormyself@gmail.com>
+Cc:     trix@redhat.com, helgaas@kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
@@ -71,45 +53,76 @@ Cc:     helgaas@kernel.org, Kalle Valo <kvalo@codeaurora.org>,
         linux-edac@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-crypto@vger.kernel.org,
         linux-atm-general@lists.sourceforge.net
+Subject: Re: [RFC PATCH 00/17] Drop uses of pci_read_config_*() return value
+Message-ID: <20200802184648.GA23190@nazgul.tnic>
 References: <20200801112446.149549-1-refactormyself@gmail.com>
  <20200801125657.GA25391@nazgul.tnic>
-From:   Saheed Bolarinwa <refactormyself@gmail.com>
-Message-ID: <b720aa44-895a-203b-e220-ecdb3acd9278@gmail.com>
-Date:   Sun, 2 Aug 2020 19:28:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+ <b720aa44-895a-203b-e220-ecdb3acd9278@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200801125657.GA25391@nazgul.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b720aa44-895a-203b-e220-ecdb3acd9278@gmail.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Sun, Aug 02, 2020 at 07:28:00PM +0200, Saheed Bolarinwa wrote:
+> Because the value ~0 has a meaning to some drivers and only
 
-On 8/1/20 2:56 PM, Borislav Petkov wrote:
-> On Sat, Aug 01, 2020 at 01:24:29PM +0200, Saheed O. Bolarinwa wrote:
->> The return value of pci_read_config_*() may not indicate a device error.
->> However, the value read by these functions is more likely to indicate
->> this kind of error. This presents two overlapping ways of reporting
->> errors and complicates error checking.
-> So why isn't the *value check done in the pci_read_config_* functions
-> instead of touching gazillion callers?
-Because the value ~0 has a meaning to some drivers and only
-drivers have this knowledge. For those cases more checks will
-be needed to ensure that it is an error that has actually
-happened.
-> For example, pci_conf{1,2}_read() could check whether the u32 *value it
-> just read depending on the access method, whether that value is ~0 and
-> return proper PCIBIOS_ error in that case.
+No, ~0 means that the PCI read failed. For *every* PCI device I know.
 
-The primary goal is to make pci_config_read*() return void, so
-that there is *only* one way to check for error i.e. through the
-obtained value.
-Again, only the drivers can determine if ~0 is a valid value. This
-information is not available inside pci_config_read*().
+Here's me reading from 0xf0 offset of my hostbridge:
 
-- Saheed
+# setpci -s 00:00.0 0xf0.l
+01000000
 
+That device doesn't have extended config space, so the last valid byte
+is 0xff. Let's read beyond that:
+
+# setpci -s 00:00.0 0x100.l
+ffffffff
+
+> Again, only the drivers can determine if ~0 is a valid value. This
+> information is not available inside pci_config_read*().
+
+Of course it is.
+
+*every* change you've done in 6/17 - this is the only patch I have
+received - checks for == ~0. So that check can just as well be moved
+inside pci_config_read_*().
+
+Here's how one could do it:
+
+#define PCI_OP_READ(size, type, len) \
+int noinline pci_bus_read_config_##size \
+	(struct pci_bus *bus, unsigned int devfn, int pos, type *value)	\
+{									\
+	int res;							\
+	unsigned long flags;						\
+	u32 data = 0;							\
+	if (PCI_##size##_BAD) return PCIBIOS_BAD_REGISTER_NUMBER;	\
+	pci_lock_config(flags);						\
+	res = bus->ops->read(bus, devfn, pos, len, &data);		\
+
+	/* Check we actually read something which is not all 1s.*/
+	if (data == ~0)
+		return PCIBIOS_READ_FAILED;
+
+	*value = (type)data;						\
+	pci_unlock_config(flags);					\
+	return res;							\
+}
+
+Also, I'd prefer a function to *not* return void but return either
+an error or success. In the success case, the @value argument can be
+consumed by the caller and otherwise not.
+
+In any case, that change is a step in the wrong direction and I don't
+like it, sorry.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
