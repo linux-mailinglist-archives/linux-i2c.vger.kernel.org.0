@@ -2,115 +2,153 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41626235A2B
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Aug 2020 21:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95853235A3C
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Aug 2020 21:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725917AbgHBTP1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 2 Aug 2020 15:15:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37330 "EHLO mail.kernel.org"
+        id S1726883AbgHBT2w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 2 Aug 2020 15:28:52 -0400
+Received: from www.zeus03.de ([194.117.254.33]:54134 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725910AbgHBTP0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 2 Aug 2020 15:15:26 -0400
-Received: from localhost (router.4pisysteme.de [80.79.225.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A17FD206F6;
-        Sun,  2 Aug 2020 19:15:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596395726;
-        bh=XV4TUblKrr0Hr8yACYDhNcq4dzFvBlBYUya/0bgDY3g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hiGYbBCxgOHie81Y9BqP0nD+nhAU0gexTycJoQIOe9fBkQ9B1OeKPfyYIBZ6wIKZb
-         wPH+gwvZXU6j5Ql7JtG0OgrjYqFMOJp+R1v6YaE2rvN+/KU9dqhjNNRG29naT+w0a3
-         /7wWik4Y1pmXqbCACeHsgkCX58I8rnIePGo5dIdY=
-Date:   Sun, 2 Aug 2020 21:15:23 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Pierre Yves MORDRET <pierre-yves.mordret@st.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Fabrice GASNIER <fabrice.gasnier@st.com>
-Subject: Re: [PATCH v2 1/2] i2c: smbus: add core function handling SMBus
- host-notify
-Message-ID: <20200802191523.GA13339@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Pierre Yves MORDRET <pierre-yves.mordret@st.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        "linux-stm32@st-md-mailman.stormreply.com" <linux-stm32@st-md-mailman.stormreply.com>,
-        Fabrice GASNIER <fabrice.gasnier@st.com>
-References: <1593776168-17867-1-git-send-email-alain.volmat@st.com>
- <1593776168-17867-2-git-send-email-alain.volmat@st.com>
- <20200725202733.GA946@kunai>
- <20200728121050.GC8715@gnbcxd0016.gnb.st.com>
+        id S1725910AbgHBT2v (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 2 Aug 2020 15:28:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=iviGTYrF2GwjFPXyaMWHzGc64c2
+        XIQsPMpnT7p1fQeA=; b=rC//axUxhcrtdsPjRhi6OciHS3ssbJvKxwZsO0vv1TY
+        01Zx9rgeyRdUq3IDnExePmwkiHNdvoIKAu5LRECYhhld1KX/6E2gHwLOojff8k+d
+        jwkv61OwFAnIp6v/hu6gdxuWjkqXqq+e9AH5CDXF/Y/YO4xePvsg+r8ydwMzTOX0
+        =
+Received: (qmail 2167675 invoked from network); 2 Aug 2020 21:28:49 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 2 Aug 2020 21:28:49 +0200
+X-UD-Smtp-Session: l3s3148p1@sJQMCOqrKJNQT+F6
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Daniel Stodden <daniel.stodden@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH i2c-tools] i2ctransfer: add support for I2C_M_RECV_LEN
+Date:   Sun,  2 Aug 2020 21:28:42 +0200
+Message-Id: <20200802192842.13527-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Dxnq1zWXvFF0Q93v"
-Content-Disposition: inline
-In-Reply-To: <20200728121050.GC8715@gnbcxd0016.gnb.st.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Strictly spoken, this is for emulating SMBus transfers, not I2C. But
+hey, we still want to test devices supporting these transfers.
 
---Dxnq1zWXvFF0Q93v
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-> I've simplified the index handling as you suggested. The only impact is t=
-hat
-> finally we do not consider anymore the I2C_SLAVE_WRITE_REQUESTED event as=
- the
-> beginning of the transaction since we don't perform the "reset" of the
-> handling upon this event.
+I created this to be able to play around with I2C_M_RECV_LEN and with
+SMBUS2 and SMBUS3 max block sizes. Tested with a Renesas Lager board and
+my slave-testunit hacked with SMBus block transfer support (to be
+upstreamed later).
 
-One more comment on this one because I had to update the testunit, too.
-To be robust against multiple write messages in one transfer, we need to
-reset both, after STOP and when I2C_SLAVE_WRITE_REQUESTED. See here:
+Fun fact: printing the correct length in the output took longer than
+implementing the actual functionality.
 
- 96         case I2C_SLAVE_STOP:
- 97                 if (tu->reg_idx =3D=3D TU_NUM_REGS)
- 98                         queue_delayed_work(system_long_wq, &tu->worker,
- 99                                            msecs_to_jiffies(100 * tu->r=
-egs[TU_REG_DELAY]));
-100                 fallthrough;
-101=20
-102         case I2C_SLAVE_WRITE_REQUESTED:
-103                 tu->reg_idx =3D 0;
-104                 break;
+ tools/i2ctransfer.8 |  1 +
+ tools/i2ctransfer.c | 42 +++++++++++++++++++++++++++++++-----------
+ 2 files changed, 32 insertions(+), 11 deletions(-)
 
-As you see, I used 'fallthrough' to avoid code duplication and that only
-one reset part will be updated.
+diff --git a/tools/i2ctransfer.8 b/tools/i2ctransfer.8
+index d16e34e..152d20d 100644
+--- a/tools/i2ctransfer.8
++++ b/tools/i2ctransfer.8
+@@ -91,6 +91,7 @@ specifies if the message is read or write
+ .B <length_of_message>
+ specifies the number of bytes read or written in this message.
+ It is parsed as an unsigned 16 bit integer, but note that the Linux Kernel applies an additional upper limit (8192 as of v4.10).
++For read messages to targets which support SMBus Block transactions, it can also be '?', then the target will determine the length.
+ .TP
+ .B [@address]
+ specifies the 7-bit address of the chip to be accessed for this message, and is an integer.
+diff --git a/tools/i2ctransfer.c b/tools/i2ctransfer.c
+index 7b95d48..2b8a3fb 100644
+--- a/tools/i2ctransfer.c
++++ b/tools/i2ctransfer.c
+@@ -45,7 +45,8 @@ static void help(void)
+ 		"Usage: i2ctransfer [-f] [-y] [-v] [-V] [-a] I2CBUS DESC [DATA] [DESC [DATA]]...\n"
+ 		"  I2CBUS is an integer or an I2C bus name\n"
+ 		"  DESC describes the transfer in the form: {r|w}LENGTH[@address]\n"
+-		"    1) read/write-flag 2) LENGTH (range 0-65535) 3) I2C address (use last one if omitted)\n"
++		"    1) read/write-flag 2) LENGTH (range 0-65535, or '?')\n"
++		"    3) I2C address (use last one if omitted)\n"
+ 		"  DATA are LENGTH bytes for a write message. They can be shortened by a suffix:\n"
+ 		"    = (keep value constant until LENGTH)\n"
+ 		"    + (increase value by 1 until LENGTH)\n"
+@@ -84,17 +85,24 @@ static void print_msgs(struct i2c_msg *msgs, __u32 nmsgs, unsigned flags)
+ 
+ 	for (i = 0; i < nmsgs; i++) {
+ 		int read = msgs[i].flags & I2C_M_RD;
++		int recv_len = msgs[i].flags & I2C_M_RECV_LEN;
+ 		int print_buf = (read && (flags & PRINT_READ_BUF)) ||
+ 				(!read && (flags & PRINT_WRITE_BUF));
+-
+-		if (flags & PRINT_HEADER)
+-			fprintf(output, "msg %u: addr 0x%02x, %s, len %u",
+-				i, msgs[i].addr, read ? "read" : "write", msgs[i].len);
++		__u16 len = recv_len ? msgs[i].buf[0] + 1 : msgs[i].len;
++
++		if (flags & PRINT_HEADER) {
++			fprintf(output, "msg %u: addr 0x%02x, %s, len ",
++				i, msgs[i].addr, read ? "read" : "write");
++			if (!recv_len || flags & PRINT_READ_BUF)
++				fprintf(output, "%u", len);
++			else
++				fprintf(output, "TBD");
++		}
+ 
+ 		if (msgs[i].len && print_buf) {
+ 			if (flags & PRINT_HEADER)
+ 				fprintf(output, ", buf ");
+-			for (j = 0; j < msgs[i].len - 1; j++)
++			for (j = 0; j < len - 1; j++)
+ 				fprintf(output, "0x%02x ", msgs[i].buf[j]);
+ 			/* Print final byte with newline */
+ 			fprintf(output, "0x%02x\n", msgs[i].buf[j]);
+@@ -192,13 +200,23 @@ int main(int argc, char *argv[])
+ 				goto err_out_with_arg;
+ 			}
+ 
+-			len = strtoul(arg_ptr, &end, 0);
+-			if (len > 0xffff || arg_ptr == end) {
+-				fprintf(stderr, "Error: Length invalid\n");
+-				goto err_out_with_arg;
++			if (*arg_ptr == '?') {
++				if (!(flags & I2C_M_RD)) {
++					fprintf(stderr, "Error: variable length not allowed with write\n");
++					goto err_out_with_arg;
++				}
++				len = 256; /* SMBUS3_MAX_BLOCK_LEN + 1 */
++				flags |= I2C_M_RECV_LEN;
++				arg_ptr++;
++			} else {
++				len = strtoul(arg_ptr, &end, 0);
++				if (len > 0xffff || arg_ptr == end) {
++					fprintf(stderr, "Error: Length invalid\n");
++					goto err_out_with_arg;
++				}
++				arg_ptr = end;
+ 			}
+ 
+-			arg_ptr = end;
+ 			if (*arg_ptr) {
+ 				if (*arg_ptr++ != '@') {
+ 					fprintf(stderr, "Error: Unknown separator after length\n");
+@@ -237,6 +255,8 @@ int main(int argc, char *argv[])
+ 				}
+ 				memset(buf, 0, len);
+ 				msgs[nmsgs].buf = buf;
++				if (flags & I2C_M_RECV_LEN)
++					buf[0] = 1; /* number of extra bytes */
+ 			}
+ 
+ 			if (flags & I2C_M_RD || len == 0) {
+-- 
+2.27.0
 
-Dunno if you really need it, too, as I haven't seen your latest code yet.
-
-
---Dxnq1zWXvFF0Q93v
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8nEMcACgkQFA3kzBSg
-KbZqlA//YcdWQrdMtZVkEa0j7XyFwCOfHaTqDGUYviawbW4c0CEa9xBj3EEr+xKa
-Loo+BQtokIFmEDGxJfCKbhkPRS16I5jf/FWSSRgmARA1FLVaD1PJE32XVr8UcDLv
-c/LH1xgRG0+xq1DbvCwIxoUiNRtTWuGfec3JiS6uotPdRfiJWbgw9IZJAZXfclm/
-h0I9rWzO5jl5UTLZwtcZyqmV0p/os3MvGvlq9wkmLDwlVpvUgltu7inBtKJyREKC
-w95OaduiRX0ogJftW7VnR+dTryUamMM2SrhMMGyC7fn+6spJrD8N/NCQfGmQFOxm
-CU8ZxKN/8OtRxlDu1RlMSDhmpHvBLxztWUD6Z1VNgoqoTLUIpuowl2TKPV3uGymh
-HgjBU8jUddL63dtSgXnxxoLoskut8BbmRLJukLSj2Vto5Qq9W8r6U5R1neMoFhi+
-R6RhaNWL+n4+eDSF8j46o2ClUTiW2EW9pe+0QrLYGjZPaHkzkDLhtv+pYyeuRnug
-fn6PB28S7CHekraTIpY2/7gOFS550TUEik3TPhF/dGvKrNA5tV9/tvIHRycckBiq
-vvrISspAP57Dpm6Sw2XLQyd/C/39LLwplnWruVmxfDL3gLynoOR54y5UCqftEz9Y
-zvoUfNjQa4m7EVPOiJBLe71dEakwA3ZvDGOnhzcPyWA4iPNsovY=
-=ABxQ
------END PGP SIGNATURE-----
-
---Dxnq1zWXvFF0Q93v--
