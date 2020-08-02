@@ -2,153 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95853235A3C
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Aug 2020 21:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD58235A5F
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Aug 2020 22:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726883AbgHBT2w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 2 Aug 2020 15:28:52 -0400
-Received: from www.zeus03.de ([194.117.254.33]:54134 "EHLO mail.zeus03.de"
+        id S1727819AbgHBUSo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 2 Aug 2020 16:18:44 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:58748 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725910AbgHBT2v (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 2 Aug 2020 15:28:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=iviGTYrF2GwjFPXyaMWHzGc64c2
-        XIQsPMpnT7p1fQeA=; b=rC//axUxhcrtdsPjRhi6OciHS3ssbJvKxwZsO0vv1TY
-        01Zx9rgeyRdUq3IDnExePmwkiHNdvoIKAu5LRECYhhld1KX/6E2gHwLOojff8k+d
-        jwkv61OwFAnIp6v/hu6gdxuWjkqXqq+e9AH5CDXF/Y/YO4xePvsg+r8ydwMzTOX0
-        =
-Received: (qmail 2167675 invoked from network); 2 Aug 2020 21:28:49 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 2 Aug 2020 21:28:49 +0200
-X-UD-Smtp-Session: l3s3148p1@sJQMCOqrKJNQT+F6
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Daniel Stodden <daniel.stodden@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH i2c-tools] i2ctransfer: add support for I2C_M_RECV_LEN
-Date:   Sun,  2 Aug 2020 21:28:42 +0200
-Message-Id: <20200802192842.13527-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.27.0
+        id S1725910AbgHBUSo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 2 Aug 2020 16:18:44 -0400
+Received: from nazgul.tnic (unknown [78.130.214.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4D2291EC02A8;
+        Sun,  2 Aug 2020 22:18:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1596399520;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=z0K+vlWV9j7wfXLQcUnvdJhwiVrF38RAZueHzdmaci0=;
+        b=IpVr02DQwE3yYwTGqHzkePquczoIuB3CSh4JRazV28rb0yxVyTjgJHeFSYXLscJQCgocj+
+        YjGRmfK2vuZ4xdnOu8V6Bj4srNoX1QpTQVYAD0HdeQama4rhKTHzaxEhs3BC4FYYx+fxXN
+        dZeZiogCz7IvNzoJKsyyZMEOy76rM2w=
+Date:   Sun, 2 Aug 2020 22:18:06 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Saheed Bolarinwa <refactormyself@gmail.com>, trix@redhat.com,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Joerg Roedel <joro@8bytes.org>, bjorn@helgaas.com,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mtd@lists.infradead.org, iommu@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-fpga@vger.kernel.org,
+        linux-edac@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net
+Subject: Re: [RFC PATCH 00/17] Drop uses of pci_read_config_*() return value
+Message-ID: <20200802201806.GA24437@nazgul.tnic>
+References: <20200802184648.GA23190@nazgul.tnic>
+ <20200802191406.GA248232@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200802191406.GA248232@bjorn-Precision-5520>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Strictly spoken, this is for emulating SMBus transfers, not I2C. But
-hey, we still want to test devices supporting these transfers.
+On Sun, Aug 02, 2020 at 02:14:06PM -0500, Bjorn Helgaas wrote:
+> Wait, I'm not convinced yet.  I know that if a PCI read fails, you
+> normally get ~0 data because the host bridge fabricates it to complete
+> the CPU load.
+> 
+> But what guarantees that a PCI config register cannot contain ~0?
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+Well, I don't think you can differentiate that case, right?
 
-I created this to be able to play around with I2C_M_RECV_LEN and with
-SMBUS2 and SMBUS3 max block sizes. Tested with a Renesas Lager board and
-my slave-testunit hacked with SMBus block transfer support (to be
-upstreamed later).
+I guess this is where the driver knowledge comes into play: if the read
+returns ~0, the pci_read_config* should probably return in that case
+something like:
 
-Fun fact: printing the correct length in the output took longer than
-implementing the actual functionality.
+	PCIBIOS_READ_MAYBE_FAILED
 
- tools/i2ctransfer.8 |  1 +
- tools/i2ctransfer.c | 42 +++++++++++++++++++++++++++++++-----------
- 2 files changed, 32 insertions(+), 11 deletions(-)
+to denote it is all 1s and then the caller should be able to determine,
+based on any of domain:bus:slot.func and whatever else the driver knows
+about its hardware, whether the 1s are a valid value or an error.
+Hopefully.
 
-diff --git a/tools/i2ctransfer.8 b/tools/i2ctransfer.8
-index d16e34e..152d20d 100644
---- a/tools/i2ctransfer.8
-+++ b/tools/i2ctransfer.8
-@@ -91,6 +91,7 @@ specifies if the message is read or write
- .B <length_of_message>
- specifies the number of bytes read or written in this message.
- It is parsed as an unsigned 16 bit integer, but note that the Linux Kernel applies an additional upper limit (8192 as of v4.10).
-+For read messages to targets which support SMBus Block transactions, it can also be '?', then the target will determine the length.
- .TP
- .B [@address]
- specifies the 7-bit address of the chip to be accessed for this message, and is an integer.
-diff --git a/tools/i2ctransfer.c b/tools/i2ctransfer.c
-index 7b95d48..2b8a3fb 100644
---- a/tools/i2ctransfer.c
-+++ b/tools/i2ctransfer.c
-@@ -45,7 +45,8 @@ static void help(void)
- 		"Usage: i2ctransfer [-f] [-y] [-v] [-V] [-a] I2CBUS DESC [DATA] [DESC [DATA]]...\n"
- 		"  I2CBUS is an integer or an I2C bus name\n"
- 		"  DESC describes the transfer in the form: {r|w}LENGTH[@address]\n"
--		"    1) read/write-flag 2) LENGTH (range 0-65535) 3) I2C address (use last one if omitted)\n"
-+		"    1) read/write-flag 2) LENGTH (range 0-65535, or '?')\n"
-+		"    3) I2C address (use last one if omitted)\n"
- 		"  DATA are LENGTH bytes for a write message. They can be shortened by a suffix:\n"
- 		"    = (keep value constant until LENGTH)\n"
- 		"    + (increase value by 1 until LENGTH)\n"
-@@ -84,17 +85,24 @@ static void print_msgs(struct i2c_msg *msgs, __u32 nmsgs, unsigned flags)
- 
- 	for (i = 0; i < nmsgs; i++) {
- 		int read = msgs[i].flags & I2C_M_RD;
-+		int recv_len = msgs[i].flags & I2C_M_RECV_LEN;
- 		int print_buf = (read && (flags & PRINT_READ_BUF)) ||
- 				(!read && (flags & PRINT_WRITE_BUF));
--
--		if (flags & PRINT_HEADER)
--			fprintf(output, "msg %u: addr 0x%02x, %s, len %u",
--				i, msgs[i].addr, read ? "read" : "write", msgs[i].len);
-+		__u16 len = recv_len ? msgs[i].buf[0] + 1 : msgs[i].len;
-+
-+		if (flags & PRINT_HEADER) {
-+			fprintf(output, "msg %u: addr 0x%02x, %s, len ",
-+				i, msgs[i].addr, read ? "read" : "write");
-+			if (!recv_len || flags & PRINT_READ_BUF)
-+				fprintf(output, "%u", len);
-+			else
-+				fprintf(output, "TBD");
-+		}
- 
- 		if (msgs[i].len && print_buf) {
- 			if (flags & PRINT_HEADER)
- 				fprintf(output, ", buf ");
--			for (j = 0; j < msgs[i].len - 1; j++)
-+			for (j = 0; j < len - 1; j++)
- 				fprintf(output, "0x%02x ", msgs[i].buf[j]);
- 			/* Print final byte with newline */
- 			fprintf(output, "0x%02x\n", msgs[i].buf[j]);
-@@ -192,13 +200,23 @@ int main(int argc, char *argv[])
- 				goto err_out_with_arg;
- 			}
- 
--			len = strtoul(arg_ptr, &end, 0);
--			if (len > 0xffff || arg_ptr == end) {
--				fprintf(stderr, "Error: Length invalid\n");
--				goto err_out_with_arg;
-+			if (*arg_ptr == '?') {
-+				if (!(flags & I2C_M_RD)) {
-+					fprintf(stderr, "Error: variable length not allowed with write\n");
-+					goto err_out_with_arg;
-+				}
-+				len = 256; /* SMBUS3_MAX_BLOCK_LEN + 1 */
-+				flags |= I2C_M_RECV_LEN;
-+				arg_ptr++;
-+			} else {
-+				len = strtoul(arg_ptr, &end, 0);
-+				if (len > 0xffff || arg_ptr == end) {
-+					fprintf(stderr, "Error: Length invalid\n");
-+					goto err_out_with_arg;
-+				}
-+				arg_ptr = end;
- 			}
- 
--			arg_ptr = end;
- 			if (*arg_ptr) {
- 				if (*arg_ptr++ != '@') {
- 					fprintf(stderr, "Error: Unknown separator after length\n");
-@@ -237,6 +255,8 @@ int main(int argc, char *argv[])
- 				}
- 				memset(buf, 0, len);
- 				msgs[nmsgs].buf = buf;
-+				if (flags & I2C_M_RECV_LEN)
-+					buf[0] = 1; /* number of extra bytes */
- 			}
- 
- 			if (flags & I2C_M_RD || len == 0) {
+Or something better of which I cannot think of right now...
+
 -- 
-2.27.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
