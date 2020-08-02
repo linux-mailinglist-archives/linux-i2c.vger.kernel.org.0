@@ -2,120 +2,300 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C833B2357AC
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Aug 2020 16:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D23023595A
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Aug 2020 18:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbgHBOxy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 2 Aug 2020 10:53:54 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48593 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726354AbgHBOxy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Aug 2020 10:53:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596380033;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1kkoTewt7Fx4Q+2DDC1UGcR4JlqqtBcQK2oUP1r3rTc=;
-        b=h25uld9SIfoj5VjErXtMPmIqvlXPAtJ9JBM59o8fHH2lQ1S+DyLmOlX51gMTheqs8+RYFB
-        9ufHZJCdVWjJaYwpalTcdDMcE3z82dp85ISkgHWnzjWf4A5Leg2ztBE7DWr4nwgqTn9jU+
-        05CB8xgosBwf/jZez18nhURcbSzonbw=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-84-XYqGld5XMJaj_C6zrkusIA-1; Sun, 02 Aug 2020 10:53:51 -0400
-X-MC-Unique: XYqGld5XMJaj_C6zrkusIA-1
-Received: by mail-qk1-f198.google.com with SMTP id g4so14530433qki.8
-        for <linux-i2c@vger.kernel.org>; Sun, 02 Aug 2020 07:53:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=1kkoTewt7Fx4Q+2DDC1UGcR4JlqqtBcQK2oUP1r3rTc=;
-        b=PJQO2IA5ZwBoeAKLeBVSmbMd9FdFlbSBDTeHT4P7+sAsc1y2XMEDsfDpxUz2C8/2jJ
-         lpb9tdjpHCMXqaS73lE4+m6b5zcZDpYYsqPqGlr3JQSENc2l8pp4fmtXivKUift+V/6E
-         CQsKQkeYoO8EP8VXk3i81M+0RS8RH/vuMY/xJgZbAn5f8moui5r4Oj9uymZtevGjC0p1
-         EJC1nNTdYDXGnPVshXoEuUANxxqOHp8Z4MTFvLlnsNZeQa5Pdjv44on98DgFg5hWz0LU
-         q6vle71GfHPAsW9dg+rWZsrpqYJyNele4jGUHuj4aUBOsy9vVtWGH5z4k7xiKWHmsvSX
-         lWVQ==
-X-Gm-Message-State: AOAM530AwNmAAk7sq4wO2xvDFazdzydLUmuJeYAd8Pnp8Qfz34hUK0KD
-        kwyiylv/2QY8ueggec9GsNnsweBchkJHu0FN2F/uyItGGU6zLVw8Y3IhhkDtMF/e2QRBHI1DtyQ
-        iaoYzXERx7AmROCWRa3S7
-X-Received: by 2002:a0c:f007:: with SMTP id z7mr12711360qvk.53.1596380031292;
-        Sun, 02 Aug 2020 07:53:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzsaj772ZR8xxDSmSbCv1i3DbzhNyKSnnIAtdh3ZvECGhzafck69cLoHqLTgfamrb5jJgzXtg==
-X-Received: by 2002:a0c:f007:: with SMTP id z7mr12711349qvk.53.1596380031093;
-        Sun, 02 Aug 2020 07:53:51 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id t127sm16326265qkc.100.2020.08.02.07.53.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Aug 2020 07:53:50 -0700 (PDT)
-Subject: Re: [RFC PATCH 00/17] Drop uses of pci_read_config_*() return value
-To:     Borislav Petkov <bp@alien8.de>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>
-Cc:     helgaas@kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Joerg Roedel <joro@8bytes.org>, bjorn@helgaas.com,
-        skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mtd@lists.infradead.org, iommu@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-edac@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net
-References: <20200801112446.149549-1-refactormyself@gmail.com>
- <20200801125657.GA25391@nazgul.tnic>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <6ecce8f3-350a-b5d5-82c9-4609f2298e61@redhat.com>
-Date:   Sun, 2 Aug 2020 07:53:46 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1725877AbgHBQyu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 2 Aug 2020 12:54:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52994 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725768AbgHBQyu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 2 Aug 2020 12:54:50 -0400
+Received: from localhost (router.4pisysteme.de [80.79.225.122])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1A765206F6;
+        Sun,  2 Aug 2020 16:54:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596387289;
+        bh=ZUzDGoWNs3GQ3QxEHtBMPDaY1kjL/vWe87Ye6wuRO+0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ux3Oo1mGfed/QCSDKacE0vxIYWnQI7ex6oAFIdW15EXkrjxa1Yk02S004ctKPxnVW
+         AqwDDN1CbKmIiyVDvM59b5y2o8BqvaRboMyJEOraz+onpDJcdX9TpqaTDTIb/IFPin
+         wsIdxD3Mv9JOv+2BJpGovRV/u92qDE8CEtgabtGc=
+Date:   Sun, 2 Aug 2020 18:54:46 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org, ludovic.desroches@microchip.com,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        linux@armlinux.org.uk, kamel.bouhara@bootlin.com
+Subject: Re: [RFC PATCH 2/4] i2c: core: add generic I2C GPIO recovery
+Message-ID: <20200802165446.GA10193@kunai>
+References: <20200619141904.910889-1-codrin.ciubotariu@microchip.com>
+ <20200619141904.910889-3-codrin.ciubotariu@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <20200801125657.GA25391@nazgul.tnic>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2oS5YaxWCcQjTEyO"
+Content-Disposition: inline
+In-Reply-To: <20200619141904.910889-3-codrin.ciubotariu@microchip.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-On 8/1/20 5:56 AM, Borislav Petkov wrote:
-> On Sat, Aug 01, 2020 at 01:24:29PM +0200, Saheed O. Bolarinwa wrote:
->> The return value of pci_read_config_*() may not indicate a device error.
->> However, the value read by these functions is more likely to indicate
->> this kind of error. This presents two overlapping ways of reporting
->> errors and complicates error checking.
-> So why isn't the *value check done in the pci_read_config_* functions
-> instead of touching gazillion callers?
->
-> For example, pci_conf{1,2}_read() could check whether the u32 *value it
-> just read depending on the access method, whether that value is ~0 and
-> return proper PCIBIOS_ error in that case.
->
-> The check you're replicating
->
-> 	if (val32 == (u32)~0)
->
-> everywhere, instead, is just ugly and tests a naked value ~0 which
-> doesn't mean anything...
->
-I agree, if there is a change, it should be in the pci_read_* functions.
+--2oS5YaxWCcQjTEyO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Anything returning void should not fail and likely future users of the proposed change will not do the extra checks.
+On Fri, Jun 19, 2020 at 05:19:02PM +0300, Codrin Ciubotariu wrote:
+> Multiple I2C bus drivers use similar bindings to obtain information needed
+> for I2C recovery. For example, for platforms using device-tree, the
+> properties look something like this:
+>=20
+> &i2c {
+> 	...
+> 	pinctrl-names =3D "default", "gpio";
+> 	// or pinctrl-names =3D "default", "recovery";
+> 	pinctrl-0 =3D <&pinctrl_i2c_default>;
+> 	pinctrl-1 =3D <&pinctrl_i2c_gpio>;
+> 	sda-gpios =3D <&pio 0 GPIO_ACTIVE_HIGH>;
+> 	scl-gpios =3D <&pio 1 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> 	...
+> }
+>=20
+> For this reason, we can add this common initialization in the core. This
+> way, other I2C bus drivers will be able to support GPIO recovery just by
+> providing a pointer to platform's pinctrl and calling i2c_recover_bus()
+> when SDA is stuck low.
+>=20
+> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-Tom
+Thanks, it looks a lot like what I had in mind!
 
+> ---
+>  drivers/i2c/i2c-core-base.c | 119 ++++++++++++++++++++++++++++++++++++
+>  include/linux/i2c.h         |  11 ++++
+>  2 files changed, 130 insertions(+)
+>=20
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index d1f278f73011..4ee29fec4e93 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/of_device.h>
+>  #include <linux/of.h>
+>  #include <linux/of_irq.h>
+> +#include <linux/pinctrl/consumer.h>
+>  #include <linux/pm_domain.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/pm_wakeirq.h>
+> @@ -179,6 +180,8 @@ int i2c_generic_scl_recovery(struct i2c_adapter *adap)
+>  	struct i2c_bus_recovery_info *bri =3D adap->bus_recovery_info;
+>  	int i =3D 0, scl =3D 1, ret =3D 0;
+> =20
+> +	if (bri->pinctrl)
+> +		pinctrl_select_state(bri->pinctrl, bri->pins_gpio);
+
+I think this should come after 'prepare_recovery'. It may be that
+'prepare_recovery' already needs to select the pinctrl state to avoid a
+glitch. In this version, there would be a glitch then. If we move it
+down, the doubled 'pinctrl_select_state' would be a noop then.
+
+>  	if (bri->prepare_recovery)
+>  		bri->prepare_recovery(adap);
+> =20
+> @@ -236,6 +239,8 @@ int i2c_generic_scl_recovery(struct i2c_adapter *adap)
+> =20
+>  	if (bri->unprepare_recovery)
+>  		bri->unprepare_recovery(adap);
+> +	if (bri->pinctrl)
+> +		pinctrl_select_state(bri->pinctrl, bri->pins_default);
+
+Here it is OK and will still work with the PXA version which needs to
+select the state on its own.
+
+> =20
+>  	return ret;
+>  }
+> @@ -251,6 +256,118 @@ int i2c_recover_bus(struct i2c_adapter *adap)
+>  }
+>  EXPORT_SYMBOL_GPL(i2c_recover_bus);
+> =20
+> +static void i2c_gpio_init_pinctrl_recovery(struct i2c_adapter *adap)
+> +{
+> +	struct i2c_bus_recovery_info *bri =3D adap->bus_recovery_info;
+> +	struct device *dev =3D &adap->dev;
+> +	struct pinctrl *p =3D bri->pinctrl;
+> +
+> +	/*
+> +	 * we can't change states without pinctrl, so remove the states if
+> +	 * available
+
+s/available/populated/ ?
+
+> +	 */
+> +	if (!p) {
+> +		bri->pins_default =3D NULL;
+> +		bri->pins_gpio =3D NULL;
+> +		return;
+> +	}
+> +
+> +	if (!bri->pins_default) {
+> +		bri->pins_default =3D pinctrl_lookup_state(p,
+> +							 PINCTRL_STATE_DEFAULT);
+> +		if (IS_ERR(bri->pins_default)) {
+> +			dev_dbg(dev, PINCTRL_STATE_DEFAULT " state not found for GPIO recover=
+y\n");
+> +			bri->pins_default =3D NULL;
+> +
+> +			goto cleanup_pinctrl;
+
+I'd leave out the goto here. It is OK to check both parameters, I think.
+
+> +		}
+> +	}
+> +	if (!bri->pins_gpio) {
+> +		bri->pins_gpio =3D pinctrl_lookup_state(p, "gpio");
+> +		if (IS_ERR(bri->pins_gpio))
+> +			bri->pins_gpio =3D pinctrl_lookup_state(p, "recovery");
+> +
+> +		if (IS_ERR(bri->pins_gpio)) {
+> +			dev_dbg(dev, "no gpio or recovery state found for GPIO recovery\n");
+> +			bri->pins_gpio =3D NULL;
+> +
+> +			goto cleanup_pinctrl;
+
+This goto is not needed...
+
+> +		}
+> +	}
+> +
+> +cleanup_pinctrl:
+
+=2E.. and this label can go then. Also nicer to read, I'd say.
+
+> +	/* for pinctrl state changes, we need all the information */
+> +	if (!bri->pins_default || !bri->pins_gpio) {
+> +		bri->pinctrl =3D NULL;
+> +		bri->pins_default =3D NULL;
+> +		bri->pins_gpio =3D NULL;
+> +	} else {
+> +		dev_info(dev, "using pinctrl states for GPIO recovery");
+> +	}
+> +}
+> +
+> +static int i2c_gpio_init_generic_recovery(struct i2c_adapter *adap)
+> +{
+> +	struct i2c_bus_recovery_info *bri =3D adap->bus_recovery_info;
+> +	struct device *dev =3D &adap->dev;
+> +	struct gpio_desc *gpiod;
+> +	int ret =3D 0;
+> +
+> +	/* don't touch the recovery information if the driver is not using
+> +	 * generic SCL recovery
+> +	 */
+
+Not kernel comment style.
+
+> +	if (bri->recover_bus && bri->recover_bus !=3D i2c_generic_scl_recovery)
+> +		return 0;
+
+No need for the first condition. 'i2c_generic_scl_recovery' is
+definately not NULL :)
+
+> +
+> +	/*
+> +	 * pins might be taken as GPIO, so we might as well inform pinctrl about
+
+s/might as well/should/
+
+> +	 * this and move the state to GPIO
+> +	 */
+> +	if (bri->pinctrl)
+> +		pinctrl_select_state(bri->pinctrl, bri->pins_gpio);
+> +
+> +	/*
+> +	 * if there is incomplete or no recovery information, see if generic
+> +	 * GPIO recovery is available
+> +	 */
+> +	if (!bri->scl_gpiod) {
+> +		gpiod =3D devm_gpiod_get(dev, "scl", GPIOD_OUT_HIGH_OPEN_DRAIN);
+> +		if (PTR_ERR(gpiod) =3D=3D -EPROBE_DEFER) {
+> +			ret  =3D -EPROBE_DEFER;
+> +			goto cleanup_pinctrl_state;
+> +		}
+> +		if (!IS_ERR(gpiod)) {
+> +			bri->scl_gpiod =3D gpiod;
+> +			bri->recover_bus =3D i2c_generic_scl_recovery;
+> +			dev_info(dev, "using generic GPIOs for recovery\n");
+> +		}
+> +	}
+
+I think this extra code from the PXA driver makes sense in case SDA was
+released while we were executing this code:
+
+1383         /*
+1384          * We have SCL. Pull SCL low and wait a bit so that SDA glitch=
+es
+1385          * have no effect.
+1386          */
+1387         gpiod_direction_output(bri->scl_gpiod, 0);
+1388         udelay(10);
+1389         bri->sda_gpiod =3D devm_gpiod_get(dev, "sda", GPIOD_OUT_HIGH_O=
+PEN_DRAIN);
+1390=20
+1391         /* Wait a bit in case of a SDA glitch, and then release SCL. */
+1392         udelay(10);
+1393         gpiod_direction_output(bri->scl_gpiod, 1);
+
+> +
+> +	/* SDA GPIOD line is optional, so we care about DEFER only */
+> +	if (!bri->sda_gpiod) {
+> +		gpiod =3D devm_gpiod_get(dev, "sda", GPIOD_IN);
+> +		if (PTR_ERR(gpiod) =3D=3D -EPROBE_DEFER) {
+> +			ret =3D -EPROBE_DEFER;
+> +			goto cleanup_pinctrl_state;
+> +		}
+> +		if (!IS_ERR(gpiod))
+> +			bri->sda_gpiod =3D gpiod;
+> +	}
+> +
+> +cleanup_pinctrl_state:
+> +	/* change the state of the pins back to their default state */
+> +	if (bri->pinctrl)
+> +		pinctrl_select_state(bri->pinctrl, bri->pins_default);
+> +
+> +	return ret;
+> +}
+> +
+
+Rest looks good! If you have some time for this now, I will make sure to
+get it into 5.9. With these minor things fixed, this is good to go, me
+thinks.
+
+
+--2oS5YaxWCcQjTEyO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8m79IACgkQFA3kzBSg
+Kba+ZQ//X5vCRvtYx07JmuofxpcNnyCJKRoHp/MrYT/3RMLa6ofIroAsqTUVQYcX
+STI9inVLszdy6D+RRSawdX3A+0qiF0+2iCfraBEnmfynkOTIElv1WcUVW7iumC7G
+dkWt4GZ5CtKxDuggdx+XWvzH1HsOf1mjgJtpBULydLYrWOgs/a8c+MEZuKarX/0Q
+KB7W18YTMfokJfeVL067bexV0BJYCXjNRP3RmpGnR91nMcndg6qlntW9zyEYOw7R
+edXspncK5s0Cl7UTvGTSPy3kZXFQfZSOVXt8xZnpD9KChOi/mcH1aKg7iLaSKx50
+lubtzWCGp4h+dja638cMBxffvu8rx+OpZoSvTVpQRi4NjJOEnx00xW5HKLhpnDAT
+IKqmUni7uzzQGPe9ibpdOKSh9gr6+rHElXckE00EhPi9h8UFF6w75fpakZVXoqlw
+HVp3gLsRdOhM2wYfwBOsH/Dngr63Ae7t9EkgKxb5Ufuzpfdp/e1syStPs8Uu0kEy
+IYgsPGY4jemPaQy6d0aZxHG0e7ReBtlKpuUK+MGqq7nKyMNlSgYynyrxKPMeFzw/
+zmN21htjb7DktvS/engGf/FC1Pg5anw7a8obIAX9hQtrwu8P/hNaTCNiCyU0S1Sq
+mY34Vi+CES2sjnUKEWtiUJLTi1P9BCW31sjakQTVGn4Xeq1Dl5M=
+=xcJ8
+-----END PGP SIGNATURE-----
+
+--2oS5YaxWCcQjTEyO--
