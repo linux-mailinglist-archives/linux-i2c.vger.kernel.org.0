@@ -2,86 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 449F123596C
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Aug 2020 19:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9AA2359D8
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Aug 2020 20:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726722AbgHBRIX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 2 Aug 2020 13:08:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54066 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725793AbgHBRIX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 2 Aug 2020 13:08:23 -0400
-Received: from localhost (router.4pisysteme.de [80.79.225.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 37992206E7;
-        Sun,  2 Aug 2020 17:08:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596388102;
-        bh=Ueg/E/nPfiWqU92s3F8StP7QZAqD5EKpNriEqglQy6s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BcQu0fr14IdODrK0TSyznfrrcB1GtI3t4oB7WXb7dfNkXvCMLxpJ8zNFbwjvf1ggj
-         AhkainBW2YSxFEafQQc7YdFVpswtj0JkCHbeRLN47LkG+AvSl988WGdM9NpI6cK1qn
-         GzajU2vnYRcZMSK/NfwpRYjmsha82QzN6HJT66sM=
-Date:   Sun, 2 Aug 2020 19:08:20 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org, ludovic.desroches@microchip.com,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linux@armlinux.org.uk, kamel.bouhara@bootlin.com
-Subject: Re: [RFC PATCH 4/4] i2c: at91: Move to generic GPIO bus recovery
-Message-ID: <20200802170820.GC10193@kunai>
-References: <20200619141904.910889-1-codrin.ciubotariu@microchip.com>
- <20200619141904.910889-5-codrin.ciubotariu@microchip.com>
+        id S1727038AbgHBS1g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 2 Aug 2020 14:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726920AbgHBS1f (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Aug 2020 14:27:35 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFDFC06174A;
+        Sun,  2 Aug 2020 11:27:35 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id v22so14915937edy.0;
+        Sun, 02 Aug 2020 11:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=ec+QZPQt4BI+HNScgjvbhAWx5U5Q2eYvCkS354frzh0=;
+        b=YtJLT8D3c903d3hsfGfmpRep4DyZJhzRytGWo/UssPWnsu4TDB7JZAkT1sTJMmJUH+
+         bq5rDlN4QtT+Xdj0JNzjtQ2QqTr2pVyC4JOlcnf9bRRCSyXgovVOl9FdgJQfsiPfkKzY
+         DWsX6GX1lxDOlwpnwJCtIh+GQ6RZkI/pzRvVJxUc5FGTjx+jay8s+7hZFlw796rU78Gc
+         7K1ApoysPqm8FRM+jQOGIRHengeFZ6xNP8mOw9mf8ONnQV8kOLpUVEJO7EpYgXqjQKbR
+         ZXY6Otij2DqA3PujrgbIOxTi9tcd/lHDFFPdppv1+HoL/eGjvY6ERK9eoJvC1OZ061lc
+         FmqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=ec+QZPQt4BI+HNScgjvbhAWx5U5Q2eYvCkS354frzh0=;
+        b=K83uV3irkoUMjiaYGxaIKS/7/Xhw9LmAzT7GEm14xlebX6o+ahYRqHbiMaUg91zym0
+         HOCPVuhQFvtyGr5sKMZ3VhY5avZJ3J0dVI3uEXdHfVHfig8ldeOikWvKCM8+E1bnUje6
+         G/2FKjqgmGFDuSn2GyziNsKTy4iraIy9TOXl3SKC+PujmY1oSm/6HcRfncJ6C8YW2FGY
+         Km/qhgofMmzTdBnhcOEh0R4V9pXI8vWWXUC2khNhxez7M0PSfQyiK6llzGQ952ESzuXB
+         ZusXTc+b95kxkHR72i9XG/IoQU3EUle4GttbIa1qAAdfKtjMbvTDrCQrParNiHz1fCFS
+         yGeQ==
+X-Gm-Message-State: AOAM532cCpjZiyS08P3ApXbDPMB2E+dwfN+U5Qy7ScIzWByrjx7/CRnq
+        Tr3hLoPvYHymHVvS49nNY94=
+X-Google-Smtp-Source: ABdhPJzPSVl/d4yXQb9tARqdTsGpw8tzteKDCnrRiPQdt2yWNobLwsKDJ8Loc5jmq7ZA1MaLrCqHCQ==
+X-Received: by 2002:aa7:c9c2:: with SMTP id i2mr12251380edt.326.1596392853909;
+        Sun, 02 Aug 2020 11:27:33 -0700 (PDT)
+Received: from net.saheed (95C84E0A.dsl.pool.telekom.hu. [149.200.78.10])
+        by smtp.gmail.com with ESMTPSA id b9sm2015326ejz.57.2020.08.02.11.27.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Aug 2020 11:27:33 -0700 (PDT)
+Subject: Re: [RFC PATCH 00/17] Drop uses of pci_read_config_*() return value
+To:     Borislav Petkov <bp@alien8.de>, trix@redhat.com
+Cc:     helgaas@kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Joerg Roedel <joro@8bytes.org>, bjorn@helgaas.com,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mtd@lists.infradead.org, iommu@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-fpga@vger.kernel.org,
+        linux-edac@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net
+References: <20200801112446.149549-1-refactormyself@gmail.com>
+ <20200801125657.GA25391@nazgul.tnic>
+From:   Saheed Bolarinwa <refactormyself@gmail.com>
+Message-ID: <b720aa44-895a-203b-e220-ecdb3acd9278@gmail.com>
+Date:   Sun, 2 Aug 2020 19:28:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DIOMP1UsTsWJauNi"
-Content-Disposition: inline
-In-Reply-To: <20200619141904.910889-5-codrin.ciubotariu@microchip.com>
+In-Reply-To: <20200801125657.GA25391@nazgul.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---DIOMP1UsTsWJauNi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 8/1/20 2:56 PM, Borislav Petkov wrote:
+> On Sat, Aug 01, 2020 at 01:24:29PM +0200, Saheed O. Bolarinwa wrote:
+>> The return value of pci_read_config_*() may not indicate a device error.
+>> However, the value read by these functions is more likely to indicate
+>> this kind of error. This presents two overlapping ways of reporting
+>> errors and complicates error checking.
+> So why isn't the *value check done in the pci_read_config_* functions
+> instead of touching gazillion callers?
+Because the value ~0 has a meaning to some drivers and only
+drivers have this knowledge. For those cases more checks will
+be needed to ensure that it is an error that has actually
+happened.
+> For example, pci_conf{1,2}_read() could check whether the u32 *value it
+> just read depending on the access method, whether that value is ~0 and
+> return proper PCIBIOS_ error in that case.
 
-On Fri, Jun 19, 2020 at 05:19:04PM +0300, Codrin Ciubotariu wrote:
-> Make the Microchip at91 driver the first to use the generic GPIO bus
-> recovery support from the I2C core and discard the driver implementation.
->=20
-> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> ---
->  drivers/i2c/busses/i2c-at91-master.c | 69 ++--------------------------
->  drivers/i2c/busses/i2c-at91.h        |  3 --
+The primary goal is to make pci_config_read*() return void, so
+that there is *only* one way to check for error i.e. through the
+obtained value.
+Again, only the drivers can determine if ~0 is a valid value. This
+information is not available inside pci_config_read*().
 
-Nice diffstat! I will try using this new functionality with another
-controller next week.
+- Saheed
 
-
---DIOMP1UsTsWJauNi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8m8wQACgkQFA3kzBSg
-KbaBmw//QdK4p7QCdFMhEXMOhurIjSRsRgKD9/Lzj4Sz25CH8dfzr+r8irJ2xDO3
-5GGH4kWTNKO/+6BFDRroooDsvwqC/seiu2kF0f+pWh7m8fIzTWM/NetRTJuAJ+Cq
-tczzLPFFILaUDrw1IoeglkA8dUqLOGatc+gdKIHHI04uakoE+rrcq8AJbkoBHKif
-/NAePpfsVXYdhKIBPY/NCZtNrSBhOfSvUZ3jmA8X/1IyWXoBRb79TwsMHsvmiAJ9
-W/mnxWPvUKyATnxa6/jHpfaQyuCzJSZDtHoHRwMxPLpFMZrkiAIjY55DhCaoF+AK
-7fDzS/dHPf9Isu7UBldxtH4myA5YZJ3OaQ5mWEOafHcGBK3k0r4N0oZBDobowHGQ
-h1GLAtwoC8scqIx1KSYH4WsYphA/zVMR0vgPUw4k35fgptz0cGVOPaBVZVUM8AWa
-Q3FZujEHtTfuDOksNqjOouFFkmvOUd7Aa+OCeL3W2ybHOMJ/O39DcmqdvL3CiJRL
-Bf7aL1LE3yBhYhJ7dRMrKpUVoSbMKMHm9PV65zwfB+4R8sRDGwmeShPUTOXRklqG
-+bTkrSYIRwGhdeYJJ2WzTziFzizMw3lomU00rWyLXlarUwr053flbv65XxNgfAhq
-NDKvO6H2IOqhZzZglqXB5hWQ3vA6OJlomTuG46wY7FojKuCLr+w=
-=ae5q
------END PGP SIGNATURE-----
-
---DIOMP1UsTsWJauNi--
