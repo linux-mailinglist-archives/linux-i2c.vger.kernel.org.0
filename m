@@ -2,121 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 297B523A830
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Aug 2020 16:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6277C23A8EE
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Aug 2020 16:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726796AbgHCOQQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Aug 2020 10:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726767AbgHCOQP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Aug 2020 10:16:15 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779AAC06174A;
-        Mon,  3 Aug 2020 07:16:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Qag0mgZqT4bNueVSCcbNmY9WCf2Ib/QmqRu677bcwIw=; b=kSGrcoMkWr8Ja1keSlEfp60kY
-        P43VpVbqh45axG9v5UoRiB5LBDyE5T/C6vl4QTFD4c6VO8vx754cBGznLHIdd1GCKslyRoDjlVlJt
-        SlL/bGYkLIUXgJ44wYaTtn6EpEBwX9LOFXAifa3WsLsz1AAoQzmmNE88amEF80+feG+lTI6hQJiNl
-        /maSAJgNfJx2VOG9GdjVA0h4aMpbgwyT4QAm94N0KbjcFUZKd9JQ/IaK38Ti3BAbz5JkKEeJRkTU1
-        hjqNENuCeQEzZ4hYkPrV4/5dTp9Cg0QZcmo1TP7Abxypn66Vtj5dnQ23GmjgmgSLxTh06581vA4Kz
-        wy0UaH4WA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:47822)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1k2bGA-0001as-42; Mon, 03 Aug 2020 15:16:14 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1k2bG9-00039O-M1; Mon, 03 Aug 2020 15:16:13 +0100
-Date:   Mon, 3 Aug 2020 15:16:13 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Codrin.Ciubotariu@microchip.com
-Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, kamel.bouhara@bootlin.com
-Subject: Re: [RFC PATCH 1/4] dt-binding: i2c: add generic properties for GPIO
- bus recovery
-Message-ID: <20200803141613.GN1551@shell.armlinux.org.uk>
-References: <20200619141904.910889-1-codrin.ciubotariu@microchip.com>
- <20200619141904.910889-2-codrin.ciubotariu@microchip.com>
- <20200705211918.GB1055@kunai>
- <20200724193913.GD1227@ninjato>
- <20200724205209.GC1551@shell.armlinux.org.uk>
- <b3a04528-0053-16bf-f092-147685298ced@microchip.com>
- <20200727105029.GI1551@shell.armlinux.org.uk>
- <1e788319-c841-d1f1-b65c-d25052f7f90b@microchip.com>
+        id S1726585AbgHCOxZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Aug 2020 10:53:25 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41834 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726497AbgHCOxZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 3 Aug 2020 10:53:25 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 0D2AAB626;
+        Mon,  3 Aug 2020 14:53:38 +0000 (UTC)
+Date:   Mon, 3 Aug 2020 16:53:21 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: VAIO EEPROM support in at24
+Message-ID: <20200803165321.4334af05@endymion>
+In-Reply-To: <20200317150142.GA1134@ninjato>
+References: <20200317151409.7940926c@endymion>
+        <CAMRc=Mdoh5Sk3iS_CO4+++SG2jJOy1qrG4q2zOzbeYYMdJR0VA@mail.gmail.com>
+        <20200317150142.GA1134@ninjato>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1e788319-c841-d1f1-b65c-d25052f7f90b@microchip.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jul 30, 2020 at 09:00:36AM +0000, Codrin.Ciubotariu@microchip.com wrote:
-> On 27.07.2020 13:50, Russell King - ARM Linux admin wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > On Mon, Jul 27, 2020 at 10:44:57AM +0000, Codrin.Ciubotariu@microchip.com wrote:
-> >> On 24.07.2020 23:52, Russell King - ARM Linux admin wrote:
-> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >>>
-> >>> On Fri, Jul 24, 2020 at 09:39:13PM +0200, Wolfram Sang wrote:
-> >>>> On Sun, Jul 05, 2020 at 11:19:18PM +0200, Wolfram Sang wrote:
-> >>>>>
-> >>>>>> +- pinctrl
-> >>>>>> + add extra pinctrl to configure SCL/SDA pins to GPIO function for bus
-> >>>>>> + recovery, call it "gpio" or "recovery" state
-> >>>>>
-> >>>>> I think we should stick with "gpio" only. That is what at91 and imx have
-> >>>>> in their bindings. pxa uses "recovery" as a pinctrl state name but I
-> >>>>> can't find any further use or documentation of that. PXA is not fully
-> >>>>> converted to the best of my knowledge, so maybe it is no problem for PXA
-> >>>>> to switch to "gpio", too? We should ask Russell King (cced).
-> >>>
-> >>> Fully converted to what?  The generic handling where the i2c core layer
-> >>> handles everything to do with recovery, including the switch between
-> >>> modes?
-> >>>
-> >>> i2c-pxa _intentionally_ carefully handles the switch between i2c mode and
-> >>> GPIO mode, and I don't see a generic driver doing that to avoid causing
-> >>> any additional glitches on the bus.  Given the use case that this recovery
-> >>> is targetted at, avoiding glitches is very important to keep.
-> >>
-> >> Why is it not possbile to handle glitches in a generic way? I guess it
-> >> depends on the pinctl, but we could treat a worst-case scenario to
-> >> assure the switch between states is done properly.
-> > 
-> > Please look at how i2c-pxa switches between the two, and decide whether
-> > the generic implementation can do the same.
+Hi Wolfram,
+
+Sorry, somehow this message of yours slipped through the cracks.
+
+On Tue, 17 Mar 2020 16:01:42 +0100, Wolfram Sang wrote:
+> > And we could introduce a new macro called AT24_CHIP_DATA_MASKED that
+> > would automacially set the AT24_FLAG_MASKED_RANGE flag and take
+> > another argument that would contain the address and size of the masked
+> > register range (we'd put it into the "masked" resource)?  
 > 
-> The handling of glitches from initialization looks generic to me. I see 
-> that there are specific clear/reset routines that are in the 
-> (un)prepare_recovery() callbacks, but these callbacks are not replaced 
-> by the generic i2c recovery and will still be used if given by the 
-> driver. The only thing the generic recovery does is to switch the pinmux 
-> state. We can discuss whether we want to change the pinmux state first 
-> or call the (un)preapre_recovery().
+> I am all for generic solutions. One thing to consider here is that we
+> need a generic way to detect the various types. I guess it will
+> always(?) be decided on some memory locations having specific values?
 
-Right, the key point i2c-pxa does is that on prepare:
-- read the current state of the SCL and SDA lines and set the GPIO to
-  reflect those values.
-- then switch the pinmux state.
+In the case of Sony VAIO EEPROMs, they can be identified by the
+combination of the EEPROM's I2C address (always 0x57) and the value of
+the 4 bytes at register address 0x80 (would read either "PCG-" or
+"VGN-"). If that's not considered robust enough then I suppose we could
+improve it further by checking that the DMI vendor is "Sony
+Corporation".
 
-That must be preserved, otherwise if SCL is being held low by the I2C
-master, and we switch to GPIO mode, SCL will be released.  So the
-driver needs to be involved before the pinmux state is changed.
+That being said, automatic detection was not even on my mind
+originally. If we had a specific type defined for these EEPROMs, as we
+do with SPD EEPROMs, then one could easily instantiate them from
+user-space using the "new_device" sysfs attribute at the I2C bus level.
+This is exactly how we have been doing it for SPD EEPROMs until
+recently, as you have just merged my patch set to automate this
+recently. And even then, it's still limited to x86 and specific systems
+at the moment.
+
+Incidentally, instantiating these Sony VAIO EEPROMs automatically would
+share some code with that patch set, so that might be a good sign that
+it's the right time to look into that.
+
+I may give a try to Bartosz's idea to make it somewhat generic if
+everybody agrees that's the way to go. I'm not deeply familiar with the
+at24 driver so I'm not sure how to do it, but hopefully it will get
+clearer as I progress.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Jean Delvare
+SUSE L3 Support
