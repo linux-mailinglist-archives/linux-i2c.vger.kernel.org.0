@@ -2,80 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C548223C954
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 11:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5811123C963
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 11:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725963AbgHEJhs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Aug 2020 05:37:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33170 "EHLO mail.kernel.org"
+        id S1727808AbgHEJja (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Aug 2020 05:39:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36126 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728134AbgHEJhE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 5 Aug 2020 05:37:04 -0400
+        id S1726954AbgHEJj0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 5 Aug 2020 05:39:26 -0400
 Received: from localhost (router.4pisysteme.de [80.79.225.122])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE66B2067C;
-        Wed,  5 Aug 2020 09:37:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E22002075A;
+        Wed,  5 Aug 2020 09:39:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596620224;
-        bh=RYjfRuQ+zoktB3q8pEwiPSeB5u4sea/SWqiPKs+NKcE=;
+        s=default; t=1596620366;
+        bh=RIKJ7S9fw9O70aUBDXMNNO2mggVWTXReQ5mlFek/Dz8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HCle8FAt2Ia6fV7AVy9ad4/9jNY8fO6CEbLzIpVc64cbSKsHeKf2y9E33RH1LY1Zc
-         Uoj4npveU1PgdlnS7GPlsUfUTzsiRMMHU5pNzr6pPz9P0mty3mnqUWURAu8DgMOzce
-         n1XfXgiBDK27oGqbD7p4LEqKWBJLVmPubKduBj8w=
-Date:   Wed, 5 Aug 2020 11:37:02 +0200
+        b=jpjzs4HzM1Z6XYHbifYK2prin3a143IBXS/+PjfaB0bZEoYyBTad96twfRNEDSDQ/
+         TcOnYL5Rea0J7NWF108G4CGH3WvefNla+ji1CS2JwokMha4gckbqyCpDMGGu8s8oR7
+         pozn5PCux+WgE4n5/4ohSm6hvq+rUWk7tU1yAmMg=
+Date:   Wed, 5 Aug 2020 11:39:24 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH 2/2] i2c: i801: Add support for Intel Tiger Lake PCH-H
-Message-ID: <20200805093702.GO1229@kunai>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v1] i2c: ismt: Add support for Intel Emmitsburg PCH
+Message-ID: <20200805093924.GP1229@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-References: <20200618134240.4091271-1-jarkko.nikula@linux.intel.com>
- <20200618134240.4091271-2-jarkko.nikula@linux.intel.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org
+References: <20200615161001.12817-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XMHqbYJb993HXwLR"
+        protocol="application/pgp-signature"; boundary="WYfJCIN5rqlfy3K0"
 Content-Disposition: inline
-In-Reply-To: <20200618134240.4091271-2-jarkko.nikula@linux.intel.com>
+In-Reply-To: <20200615161001.12817-1-andriy.shevchenko@linux.intel.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---XMHqbYJb993HXwLR
+--WYfJCIN5rqlfy3K0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 18, 2020 at 04:42:40PM +0300, Jarkko Nikula wrote:
-> Add SMBus PCI ID on Intel Tiger Lake PCH-H.
+On Mon, Jun 15, 2020 at 07:10:01PM +0300, Andy Shevchenko wrote:
+> Add PCI ID for the Intel Emmitsburg PCH iSMT SMBus controller.
 >=20
-> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
 
-Applied to for-next, thanks!
+Seth, Neil?
 
+>  drivers/i2c/busses/i2c-ismt.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
+> index 2f95e25a10f7..cdba77f9ecb1 100644
+> --- a/drivers/i2c/busses/i2c-ismt.c
+> +++ b/drivers/i2c/busses/i2c-ismt.c
+> @@ -77,6 +77,7 @@
+>  #define PCI_DEVICE_ID_INTEL_S1200_SMT1	0x0c5a
+>  #define PCI_DEVICE_ID_INTEL_CDF_SMT	0x18ac
+>  #define PCI_DEVICE_ID_INTEL_DNV_SMT	0x19ac
+> +#define PCI_DEVICE_ID_INTEL_EBG_SMT	0x1bff
+>  #define PCI_DEVICE_ID_INTEL_AVOTON_SMT	0x1f15
+> =20
+>  #define ISMT_DESC_ENTRIES	2	/* number of descriptor entries */
+> @@ -184,6 +185,7 @@ static const struct pci_device_id ismt_ids[] =3D {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_S1200_SMT1) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CDF_SMT) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_DNV_SMT) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_EBG_SMT) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_AVOTON_SMT) },
+>  	{ 0, }
+>  };
+> --=20
+> 2.27.0.rc2
+>=20
 
---XMHqbYJb993HXwLR
+--WYfJCIN5rqlfy3K0
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8qfb4ACgkQFA3kzBSg
-KbaB9Q/+KGxJbN4zGOxE5psDW85EXQ8p1+UP9XBIMGi77rVDW8dEESOsvsiVKoGF
-uQ0q4VDr1qbpjPkVuhWzmYS+Tkb45NtfM0o8GcAXc0cPk2fP408LRUDhMuoXRLXm
-aTVP5nWP0ewkveGK2XTxumZVa74rTJ9cwl96K7EpcBm8BsArWL8l/b3eSpFSBref
-5sfRBZ0CQdfHIreId5GH5cw/Edm+pmjO9aRLS7Qz8r0xk4xpmQ1tQMrqCdnOUirS
-sIrLC2GvJhC2A/ORDzMim2KKBgpNdr9tOvSID8UewfS1hTk08AhuNsYNUTvNdoIC
-YT4G26tB5vLN6Ro0yMbMMEA7QoHML7d7y0WAu2GO59f4f8U4+6g9Yy0NzsD7hnor
-BVh0Wn0RxnZonU/xlTpZstQ5BgJo4x47yNLyinKp8oHSOD6nz1u0DjLLQHnCun/p
-qUupBQII2wm9uPhXokAnjQOwzmRqGXvr5zbD0A+RRbfFU5S4Opn86FtrXaC3Y/vy
-8ID7wRG2x6qntB1pdfAwptI2gIk4otLfp4QJFH3ZbytZBPbUg5tFPA62WXHTuUG0
-ztWQJeV+6aOUq7xh8XpY3956ZwCqchD/Kwyx3UJoxx2QMCzwlIDM/koED/3A43xA
-FXc6qAcTQPaWEO4Ysiq6GZ393beGlYl4DnvuZEhTDpuyQK21S0c=
-=TiNo
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8qfkwACgkQFA3kzBSg
+KbbK8Q//f35PG5sS02CGeIde7E4BDJry1rKteSrUQl29mHTJ2WA2TdcW0en2Xt+l
+ARaYuIlJXWztWJ8R5VQCSPWRtj6GZYFaYP0ngbxvkKVY8q4VBxlaqDi9z3XJ3Ldj
+yMcBwUOK1uWybCd0dFX4HtOco6W7upv4Ho6h4KhD+oizKD//ZNGdaMT7sabZ9I7x
+sGMky89hQzqYAYibK8QdNtT44J01v/Ky0QotVg7AicrE6GLHU9YmR3uOM+Hm/OY3
+cRni6xFr1mxP/PJpWI3LHa0XU58c0IxVRuZ/kq/FzWTRphtWARpm51UOUpuWjYNS
+6Hy9BrDB3u/8JDWDgsLEjGurMZglKS7TQEE40hmVutRUbnHkwZyDeu4WlKISE+oW
+BRzFhtY+hMqVMjApkgIvWB8DVfoPo4S4an8CKqzYktHxmEH+Fy2JzLMlC6k0gRAX
+NAVe4T5/5ZllQKb516JsSlUeJC4+oklUU3W63Qprf9B8rMyNMdVagTA/t7n5zfrx
+Uhi9lmKw9rdQGALobyFSr2gOasjcSiR97ALNJaeQWnds0Xnc2aQ93x/o1i/igS6y
+o1SeTKeSOw+XwuoTjS9kQtjKsLSn36d2dky57hNHEd/wSxhlII3dH2TSaCfewYac
+5aORRFYNXEWdGysnknEHpDCgY4J1ojFWw8RNDDwupkaRHgpjX7k=
+=tGZb
 -----END PGP SIGNATURE-----
 
---XMHqbYJb993HXwLR--
+--WYfJCIN5rqlfy3K0--
