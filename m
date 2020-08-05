@@ -2,88 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0CA23C843
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 10:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A88923C850
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 10:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726604AbgHEIzZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Aug 2020 04:55:25 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:34012 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725920AbgHEIzZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Aug 2020 04:55:25 -0400
-Received: by mail-oi1-f193.google.com with SMTP id z22so8352159oid.1;
-        Wed, 05 Aug 2020 01:55:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/eVy5u4NAV6m7SDVec08BEAa0WPHvO35iIGs1gluXZE=;
-        b=kLDXcoCqF7WLEX69wQFAZDqckfY2I9J6K8MpluBSyZdd2X9NIOSft7q9NmJCPnkW/P
-         fQgxbXWmz4o/bwFdhgeRuBKUlL71U3tzrZzEyFK5XHt6AW1XVF6BNm+bZjWQTtwZ4VUT
-         eXeWZNLVQ8Z65NZg8RCv2yiQyzkNcmx3FvYE/WDYsQen/WpibVIYU339PM2OPfSHtITv
-         ezC1piXSn09lZRaTIUVzcZaR+eNlJRxcxp42Zk8wn9k0p8YwhDNzxMGs9ZuCUr0GJeWm
-         0jLrSDeB1gx3kZiPQC62shbmQGdRCIoL2/peVKLXaXFZhzutdn1u4wpQ869ahv4a0/zS
-         VNcw==
-X-Gm-Message-State: AOAM533/GljgeS8Hz7EXRIwzLPEmn1KGlD+cA306ccAKXeCDxb3LqSGR
-        HEsJA0iA99MnVpeR739JPuUkV52u/8H/iUpuczg=
-X-Google-Smtp-Source: ABdhPJw+5y8NBMhF1ur/AzwqullEVwWngB+Qw8Bi13xS3qysZoHfYKnHs/ZOTSfP8kCWlWP4jWsJy1nezNy9iVKjItk=
-X-Received: by 2002:aca:b742:: with SMTP id h63mr1802953oif.148.1596617724132;
- Wed, 05 Aug 2020 01:55:24 -0700 (PDT)
+        id S1728042AbgHEI4i (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Aug 2020 04:56:38 -0400
+Received: from sauhun.de ([88.99.104.3]:49022 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725920AbgHEI4h (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 5 Aug 2020 04:56:37 -0400
+Received: from localhost (router.4pisysteme.de [80.79.225.122])
+        by pokefinder.org (Postfix) with ESMTPSA id C67C62C0829;
+        Wed,  5 Aug 2020 10:56:34 +0200 (CEST)
+Date:   Wed, 5 Aug 2020 10:56:34 +0200
+From:   <wsa@the-dreams.de>
+To:     Qii Wang <qii.wang@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <qiangming.xia@mediatek.com>, <devicetree@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <robh+dt@kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 2/4] i2c: mediatek: Add access to more than 8GB dram
+ in i2c driver
+Message-ID: <20200805085634.GF1229@kunai>
+Mail-Followup-To: <wsa@the-dreams.de>, Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <qiangming.xia@mediatek.com>, <devicetree@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <robh+dt@kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <1595939446-5484-1-git-send-email-qii.wang@mediatek.com>
+ <1595939446-5484-3-git-send-email-qii.wang@mediatek.com>
+ <25ff4899-5e7d-f6e5-599c-4bf368a731e1@gmail.com>
+ <1596010499.4371.3.camel@mhfsdcap03>
 MIME-Version: 1.0
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594919915-5225-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 5 Aug 2020 10:55:13 +0200
-Message-ID: <CAMuHMdVrrw=xQY5Yhp9uebCRVmqJzLLjTHc0MWvp7F3Mf0y92g@mail.gmail.com>
-Subject: Re: [PATCH 01/20] dt-bindings: pci: rcar-pci: Add device tree support
- for r8a774e1
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l+goss899txtYvYf"
+Content-Disposition: inline
+In-Reply-To: <1596010499.4371.3.camel@mhfsdcap03>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 7:18 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add PCIe support for the RZ/G2H (a.k.a. R8A774E1).
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+--l+goss899txtYvYf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Gr{oetje,eeting}s,
 
-                        Geert
+> > > -static inline u32 mtk_i2c_set_4g_mode(dma_addr_t addr)
+> > > -{
+> > > -	return (addr & BIT_ULL(32)) ? I2C_DMA_4G_MODE : I2C_DMA_CLR_FLAG;
+> >=20
+> > I think you missed my comment in the last version:
+> > I2C_DMA_4G_MODE is no longer needed, you can delete it.
+> >=20
+> > Regards,
+> > Matthias
+> >=20
+>=20
+> Sorry for missing that comment, I will remove it.
+> Thank you for your comments and reminders.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+If you send it real soon, I can still include it for 5.9.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+(and please guys, shorten mails to the relevant parts)
+
+
+--l+goss899txtYvYf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8qdEIACgkQFA3kzBSg
+Kba7Cg/+JUqvW+SS4lYtyhkAsyAQbKl2kRygi8PEJ7f9Ag9VkjtcvgcxHaycRiOO
+VXEr7OeKRzQpj0RSYLJXuEDfakHyorDNRDZGPBdLMrMsFh+xhuONqsv7chAQ8mhB
+ZqAJpEgVbUTlJKL3Jee2uAI69e5l2Gn3lz40zBKVeCwVM6HaNNzgxdJ+saDA/PjM
+p9ITszYHi4/DkA2KqeKFAW/NkQ/u1hPPqmPVmTgvj1Ez03w73rKEEUIyIF6URwOU
+jVazs7geKM/IaxxH+Zz8qwRy2t2AmqxAHKwM4WN+XT/nbSPAH6Zg98xLkTS3wi7k
+T3shPDV/R6al8+aths8ph0rf3ejNRoXTKx3FZzzfK9o5G/jmZqc4jz7PLgLxaTd0
++dcM46y/L30W0JfPJOKFswvycaOn8Z5/p/UAPzO8OF5hpG8r+6Ti3Qrp/lUULvP2
+cs6g5Loma47PFGrSM4VZqldJq3YUHLZOLF4Jh6H4b8ydigBXHrTdLGNlMm3dco8y
+3f/kg4ax5CwOrYy/bx+m8s9ZCdaEmGWcm/IIvrpMK2kKzBBOt8/Kkd3sG7kcGnwN
+zXHfJvpW/ognlMwSbfqO8SopyqtOHpmOnJDioNfgyzL7fO/OMjtKnnuw2kGz+5HL
+nRFdfSmAyrR3us3/xAH0VuKnGlSuEm/B8x7oxrhh6byZYsBQRFE=
+=xphH
+-----END PGP SIGNATURE-----
+
+--l+goss899txtYvYf--
