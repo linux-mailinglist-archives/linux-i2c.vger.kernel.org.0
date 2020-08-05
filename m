@@ -2,41 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB2F23C86E
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 10:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFAE23C879
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 11:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727873AbgHEI7F (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Aug 2020 04:59:05 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:39699 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725920AbgHEI7E (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Aug 2020 04:59:04 -0400
-Received: by mail-oi1-f196.google.com with SMTP id a24so18422635oia.6;
-        Wed, 05 Aug 2020 01:59:03 -0700 (PDT)
+        id S1728119AbgHEJBe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Aug 2020 05:01:34 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36433 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726191AbgHEJBc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Aug 2020 05:01:32 -0400
+Received: by mail-ot1-f66.google.com with SMTP id x24so8646357otp.3;
+        Wed, 05 Aug 2020 02:01:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3PEPkOHX4GNS8S5Rg4NoX/0Kkpu8DKvfoDJJeWRfc+c=;
-        b=YUs9VLzGfUAL2yXtWfaLcB1DJm1d7fkMhXY64A9pZQLAG6sY378iMT4zJG93rPo6Zb
-         32wbnHZdLdS/XfWjTQi+57kXu9VWLwej97FLYLm4wibKghgOZ8M2400xgm+Sfv7ITHFS
-         nWHLS2ptEFwth7uhPv/MZ90DKsB0MJ8R7G+vLyD0ym/lLwdfFNQb0KyO4r63wE3TMoN6
-         /CeuIvG3P4KruAqz48JJ6vVynXvJ0GcVX2d595mWd9jjDcigCk2f89FyESUH1skIuxGX
-         7RcT7oj80UDs2Gpq0FI0bV+SM/H6QnDW51+lopQcBEcUvTcgYoqb6jpXz6tLrTsocEBU
-         KLHA==
-X-Gm-Message-State: AOAM532BeLtsHUBmgPMAJZFHfbCgyNDbjqOAJMrJXWxCQYomZz7mQ0NO
-        QV0Y7cgQQO/Rr/wYgKLg4bTziUrewhinGZm9Rfg=
-X-Google-Smtp-Source: ABdhPJxOPpR3dk7VDSXYx6KKvjnoJv5/4tMZbEd2TqXt4CKHnoMUzx0WD2+9YVb/X64OZIidpkxnwCi/O01k1qJCr/c=
-X-Received: by 2002:aca:b742:: with SMTP id h63mr1809112oif.148.1596617943136;
- Wed, 05 Aug 2020 01:59:03 -0700 (PDT)
+        bh=0C2QPNz+RkDu9YLa9Z+rHGCS+ZeukaWrCXpvcs7hr4E=;
+        b=he8iscqwyO6rW9U6CxDpjZ1TOY7aaleTdokKCqHQp0Vj6/dTsWLdBvwDlo5NeLnItW
+         f0QdKq1DX9px+9tm0xnO6GkvoqZtiUB8ljo1kOQYxTXDw8SJbYA9rM9MpgDM8/HJ1zZk
+         8ZMxOEw03dKYjTc012qM7Tcp38Ph79YUL+j6lnWdqxq2dz/Jrd8dNrQT10u7Z1NxOFVr
+         cB98JnJKiUcfO591bPm5Na1Ci9pI62g+n4wzfzgeuMrxeUtCwovOPFro0mMA4fIx8dKG
+         kL2oP26oUGM+aw5QuQYgmINz8q7zhQ1hJ+S8gS4VRlx+2fqtdvG/sKGeITo6x/7wFwv+
+         FQkA==
+X-Gm-Message-State: AOAM533+4HgqrEi7aLA9em5np23n6pHrbRCtZZLukUsnZdMgvEgGaQNY
+        +P5LJwETlLoIDujOsT6P9hw+atc9zt0dBuMqYdk=
+X-Google-Smtp-Source: ABdhPJzwuWnWTa8dJV/m6He89KYBMO1Y4xUVDsn3hrJVOZjCaTh+iqtHvbnjEc9E84B1Jj0ycdia/XgV6GsfA8XjU7Q=
+X-Received: by 2002:a05:6830:1b79:: with SMTP id d25mr1662418ote.107.1596618091230;
+ Wed, 05 Aug 2020 02:01:31 -0700 (PDT)
 MIME-Version: 1.0
 References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-9-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594919915-5225-9-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594919915-5225-10-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1594919915-5225-10-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 5 Aug 2020 10:58:51 +0200
-Message-ID: <CAMuHMdVzVGmc=2d5B4AZ4-G--gvkF4H3D-PVxhj6o5mq875fig@mail.gmail.com>
-Subject: Re: [PATCH 08/20] dt-bindings: usb: usb-xhci: Document r8a774e1 support
+Date:   Wed, 5 Aug 2020 11:01:20 +0200
+Message-ID: <CAMuHMdW0LNihaPnSdv1RAkbBi6sm-MS5+d5n5jiCHwAEMKj+dw@mail.gmail.com>
+Subject: Re: [PATCH 09/20] dt-bindings: phy: renesas,usb3-phy: Add r8a774e1 support
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
@@ -69,30 +69,11 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Thu, Jul 16, 2020 at 7:19 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Document r8a774e1 xhci support. The driver will use the fallback
-> compatible string "renesas,rcar-gen3-xhci", therefore no driver
-> change is needed.
+> Document RZ/G2H (R8A774E1) SoC bindings.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> ---
->  Documentation/devicetree/bindings/usb/usb-xhci.txt | 1 +
 
-In the mean time, this file has been converted to dt-schema in Rob's
-tree: Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
-
-> --- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
-> +++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
-> @@ -13,6 +13,7 @@ Required properties:
->      - "renesas,xhci-r8a774a1" for r8a774a1 SoC
->      - "renesas,xhci-r8a774b1" for r8a774b1 SoC
->      - "renesas,xhci-r8a774c0" for r8a774c0 SoC
-> +    - "renesas,xhci-r8a774e1" for r8a774e1 SoC
->      - "renesas,xhci-r8a7790" for r8a7790 SoC
->      - "renesas,xhci-r8a7791" for r8a7791 SoC
->      - "renesas,xhci-r8a7793" for r8a7793 SoC
-
-For the logical change:
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
