@@ -2,41 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E89623CAF8
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 15:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BF623CAFA
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 15:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbgHEN1z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Aug 2020 09:27:55 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:46206 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726175AbgHEMfj (ORCPT
+        id S1728574AbgHEN16 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Aug 2020 09:27:58 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:42345 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728426AbgHEMfj (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Aug 2020 08:35:39 -0400
-Received: by mail-ot1-f65.google.com with SMTP id v6so22388522ota.13;
-        Wed, 05 Aug 2020 05:30:43 -0700 (PDT)
+Received: by mail-oi1-f196.google.com with SMTP id j7so23030665oij.9;
+        Wed, 05 Aug 2020 05:31:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GhwGBb3og4FBqTm6+fj02zyv7weIuiKRDAujBvepcdQ=;
-        b=AkCTLgRFlBR2CmRvGoQAVvX/lV7KyfhK79jyxszzJlYZan2QoNuQL4Plkk855FBko4
-         lsDPi5BQimZIkERi0758l8NgsKzJVWjMDWGDgtEE0yDCsC5dWIxJdBacmwjnC5+/WFoP
-         UzlqHjUEidFs1jkxmbEHjY+06PwJuuPTtity+3gNNtackjE8jXoo5l15LGlmJibksAU3
-         2ccjfnjkUqU08hN7HzKYQzouN3CaaaNxKSY+KFBCJ0TWwqrgO1NcicezI1dseM3llfOh
-         8s2jd78BNi4SjgLk8kaOegRrXhk8K0gtBJDiFJvK8AqURBpZqxa01GlW9u5t+KrG3s3L
-         rX/A==
-X-Gm-Message-State: AOAM532s5CWbSZ1Ul2MpUJyCG45r7V7yGxAwCJktwF0kwdI9kGW3ncQv
-        YzOBX2dDcPcfesL/Gj34bor/c2EHIzGAuyTdhwqlXQir
-X-Google-Smtp-Source: ABdhPJy6Few2JSpX34d8UWs2mHs62Jj4zoFqif/HtRZNiG9fgu0Yy1ArYH3I3/SVye0G2Oxi4tcy3VslWxu2yq+qpJs=
-X-Received: by 2002:a05:6830:1b79:: with SMTP id d25mr2025587ote.107.1596625767021;
- Wed, 05 Aug 2020 04:09:27 -0700 (PDT)
+        bh=5lnCZoNdrZNQbQaV/iF1DKtpBff6Ck+1xozm4eqaEmw=;
+        b=aOLS0YI9SWLSUoNLnu8p9qwzutJsdBBtkn2A5QoLlzTZUMf0jB7nD9mhVxQb6HN6z5
+         8kbL+Gmi8kOZZFORMBklZGWLFqvj/btZNAttkTRoMziwYmii4etM3Ed++hA9p1uFgkw6
+         wYluwBY2STm+TRUFk7uymZ3tyAjfsYUagmLNKPx4sLuuU0dLlZGqq/oPDiNMidNNz0Rp
+         LEd6pHxpoefFACtirha+4tcvNFyTM4uFhh6o4yFRzvq+qMgavBiDBo13rHCCFUkZDIMQ
+         bhYcOUHWGm7eULfhprpPdIwPK6AQx6c1MfU0lG70z+DnEoR6BAQ+0UidT2+8ynnGdEbl
+         xKFw==
+X-Gm-Message-State: AOAM5331Fa40cBaCCw6jmNEScmXnFn+iDmHomF9v/PK8YducSlygeP+8
+        YpnL62MYrUH516Fs6TUsaKvc3rFqqFuhV1i8EbULynsj
+X-Google-Smtp-Source: ABdhPJwhUm4QHaZz7xbR+lTUoUQuyCH4le0QF/k75iMvl2tButnuNI7+iEhEoJyqrnRXlecEQMMJHtDC6cCth7F51hU=
+X-Received: by 2002:aca:4b54:: with SMTP id y81mr2275594oia.54.1596626072299;
+ Wed, 05 Aug 2020 04:14:32 -0700 (PDT)
 MIME-Version: 1.0
 References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-5-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594919915-5225-5-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594919915-5225-11-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1594919915-5225-11-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 5 Aug 2020 13:09:14 +0200
-Message-ID: <CAMuHMdVTBWuDVueW4OJff5kC+=PF+Q5OnKAo5-M4+7g9WB-adA@mail.gmail.com>
-Subject: Re: [PATCH 04/20] arm64: dts: renesas: r8a774e1: Add SATA controller node
+Date:   Wed, 5 Aug 2020 13:14:20 +0200
+Message-ID: <CAMuHMdW5_yBdEidPiVNeQO0QwuJfTe0kSiHLg4hkQLzVuRM7VA@mail.gmail.com>
+Subject: Re: [PATCH 10/20] arm64: dts: renesas: r8a774e1: Add USB3.0 device nodes
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
@@ -69,7 +69,7 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Thu, Jul 16, 2020 at 7:19 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add the SATA controller node to the RZ/G2H SoC specific dtsi.
+> Add usb3.0 phy, host and function device nodes on RZ/G2H SoC dtsi.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
