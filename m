@@ -2,87 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C169623C89D
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 11:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8670223C8FA
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 11:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725963AbgHEJGQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Aug 2020 05:06:16 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:36616 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725920AbgHEJGK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Aug 2020 05:06:10 -0400
-Received: by mail-oi1-f195.google.com with SMTP id l204so10202536oib.3;
-        Wed, 05 Aug 2020 02:06:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D07PzLwIuFejcUZp+bYFZxntk7CBayvGPwvJsW9xBn4=;
-        b=L7106/Lr7REd9y04sPvcAzK1RzPAbPheJTiDwpqUmZvWwNlJzblUIuHLUUbcUGknM5
-         IqefdJdZnBsWiYCfM8Pv10JnK9ZxW9NAG5kDeUYyz/dupPbQFGNZfwGur5XYBxq9gID7
-         AWBT6EwQ6ED0k4XmYtJvruq9Ye9x9n/7H+FoDGwi9vVJ2RgHhpic8UP1hwLciCQ3ls5z
-         tJGP54hySjSZn3YEpCJTI1Wv3pAtos62rb0Hpb2lD/NGKTOglS6fwUjMFep7kav0foZV
-         4NOQ9OSGUuoWtjll01X2sNy7gn+Fv1nrst3cdJaxobZ3VjtwDg4JFmkpqcpa1aJx8cUH
-         o/sQ==
-X-Gm-Message-State: AOAM532mEh058UDJYYGE8x28mbmR0sj9w3SyUSbEwNoSkW/yYcbdJzpS
-        8IMP+2MXsMChGKv0xrDkA55UBmaU3MSAuQkhpTY=
-X-Google-Smtp-Source: ABdhPJzz2NPen+t9h7xbgmWFxKtxUGXZqxyqaY54ABg+DdffRiydd+UVAEPN4Grk6agAIWY5npdm1cM/UkLjxYDZp8Q=
-X-Received: by 2002:aca:adc4:: with SMTP id w187mr1824467oie.153.1596618368307;
- Wed, 05 Aug 2020 02:06:08 -0700 (PDT)
+        id S1728434AbgHEJQ1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Aug 2020 05:16:27 -0400
+Received: from www.zeus03.de ([194.117.254.33]:57734 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728512AbgHEJMW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 5 Aug 2020 05:12:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=fd5ujFxWzzr0n6x3eVmi2B9Cgj+M
+        0mYY00hZn2GeyV8=; b=Z7wZPN+6zB4GUKziyn1aTwenBqeHHbMszQzjXrGInZb6
+        Fad16C8nG9nsUtpWnPEQ+kM/Hu5jbYjuokuOsinBEWYnNjrYSnOuL6ladIMw7p47
+        Df8hsa9iTNp8b6GeSZA5TrY+SUqEzynlKqG9t/n1VZciBkif94BaHGAGiywRRmU=
+Received: (qmail 2979818 invoked from network); 5 Aug 2020 11:12:15 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Aug 2020 11:12:15 +0200
+X-UD-Smtp-Session: l3s3148p1@5HiYxB2soulQT+F6
+Date:   Wed, 5 Aug 2020 11:12:15 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.de>
+Subject: Re: [PATCH] Documentation: i2c: dev: 'block process call' is
+ supported
+Message-ID: <20200805091215.GG1229@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.de>
+References: <20200802082122.3863-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-15-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594919915-5225-15-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 5 Aug 2020 11:05:57 +0200
-Message-ID: <CAMuHMdWobsLUQ_Oa7i3zOMKw8XOWeVsOTrg8GF9iFaqKZQW_nw@mail.gmail.com>
-Subject: Re: [PATCH 14/20] dt-bindings: sound: renesas,rsnd: Document r8a774e1 bindings
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lHGcFxmlz1yfXmOs"
+Content-Disposition: inline
+In-Reply-To: <20200802082122.3863-1-wsa+renesas@sang-engineering.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 7:20 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Document SoC specific bindings for RZ/G2H (r8a774e1) SoC.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+--lHGcFxmlz1yfXmOs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Gr{oetje,eeting}s,
+On Sun, Aug 02, 2020 at 10:21:22AM +0200, Wolfram Sang wrote:
+> And it has been for a while (since 2012 at least), only it was not
+> documented. Add it.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-                        Geert
+Applied to for-next, thanks!
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--lHGcFxmlz1yfXmOs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8qd+sACgkQFA3kzBSg
+KbYOiBAAmHtHHa47GDx9mKDnsdtoD8SL2KcuLWDvNxoqL+lXSsr7aiznY85L5Bjn
+sGLpvUrc5wJ0cTUiVmmq0uGP5nIvneXzC2kFAvO3QuLgwujb7xRS6WEp58cq9rSA
+M2wQ2pSNMU/CvzXhRWK7faBsDFKzm2lBHnv7Xgsm48Ryf6pswM1B7vt7pTmwsAfz
+r/etMtDncsrfCoPVUwDQDAbzNVVZ9kYrdX/37F4WYoREiV4Y68uiJNx9cV4WaBYS
+eW/BZsRl1bdgOEPFoBYzkWfemrI0Ah1tUPa9hIPAj8m4WghL88+soGHVxRbhidjf
+RngoNCqM/MxHCZdd66ZFcw9kNrEaY/8Q7PrThRIzmAWfxbSzD/RwIXYMTqr9xe+8
+PGUA2JvpmHnu6THNNb9zDdxmAFp+AN5YoURO98aBtCPQp6HdtrEfeZmMbTCUZ1XR
+R+MWSZG1qyraRVwGrBmd1d7nJ2AojZ5B2WIwbdYF5Vj9TMwp7hA0P43ocuiPBGsn
+5VMR2S9DQTYub/3g6m/hOGksh3ttmgR9COOEmG6WQGVPz0uyMPD0nHcUhMphDN2y
+2FXg4uL9DbGJX7mUvY0FJJFrbSEU4ZcLN8JJ9PJiOoEJhE2bcmjB9Gce0B1cr/EW
+iZY+qZrHMIOV1ywg78XedWags1Gj2x/bJd7Zcb7Uj6urL5otSQ0=
+=nf+E
+-----END PGP SIGNATURE-----
+
+--lHGcFxmlz1yfXmOs--
