@@ -2,130 +2,231 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4B923CD53
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 19:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CC823CD36
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 19:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728727AbgHERXn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Aug 2020 13:23:43 -0400
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:45990 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728524AbgHERQJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Aug 2020 13:16:09 -0400
-Received: by mail-ua1-f66.google.com with SMTP id p27so9758806uaa.12;
-        Wed, 05 Aug 2020 10:16:08 -0700 (PDT)
+        id S1728428AbgHERWy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Aug 2020 13:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728114AbgHERVa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Aug 2020 13:21:30 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C497FC06179E;
+        Wed,  5 Aug 2020 10:21:21 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id 2so4877693pjx.5;
+        Wed, 05 Aug 2020 10:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ClBxmhMDW8/EvqLNuXj7OToao++oyiDhHUE3TT7mBds=;
+        b=psVRPR/sQ1D/EHzTjCqfMm49Kjs6jS5auCQQBuWbaa1ukcEDyAan+MKT7yZoc3sepE
+         EoqGblTTU4cr4TCQeCPp/im62vToSQLewk0u5eMCamxeSnJNHMpiCoReUYZSxzRPngu1
+         1PUQ+MMFRGpA4CUuOiUzBNwZaxXTTuUauYeD2V3wKoQZwQ7bwQ8+2biTqpaPDNAgq8Rz
+         5+au1GfTD1+3fTUoK7IALQA/eUtFt+9W3E4iMiikKnnsD0Xhfw9N22U86G3kYHDISlAt
+         o20tsTlfuuPQMKS2NMPO7rIyuXCOUHGemsNKMwJoCsjOrAoekgzG9GyjBezv50GGVbjT
+         sX7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AXKpgsbLcw7z2C6ljXHBYtvVN+NDPtHizk0roOICInI=;
-        b=HDxvQeBHBH6wHy2UhDpdh7Ye5pVuATgudTrV0WGoTKTtsB3KmrmihTUKbNbD0yrdDO
-         dHVa3LL4WMOVGQA52EuDPmV6DSLYnCHQHie11WNUCa523R2vtlAY3QCvzd1MkEHJTrkv
-         2DunOy3wZpxELNXhwogS+tMhpNgkznSi4FYNuP01t5INSR+nrzI9ay6aahOW4VN0mTVi
-         xIGVm1agQrl0VdPuKd6SccG/1OGT4MdFbbztZmJqeVsYnSLpoul3oRmY7TQi8C8ltqFo
-         DKn2AxAOyG37mcw1iV3mNalzmTa22t/ipLkSLfpcNlnJOuXqWN8UBPGVutfCUMcQ3VnE
-         YJPg==
-X-Gm-Message-State: AOAM530DutCgMwXmD0tg9LxU/xBiukDGat3oRtPSkCwIz6TjfKhV20Pm
-        QzJrAvBOTfTj+UvCIbucaEXV4vKNPPV4ixWH7bPld1gx
-X-Google-Smtp-Source: ABdhPJwV3n8tOAcfpMHynj9j+mQfpTpf9DYt0YtMCyg/CBd6L07ZVwpSWSi6SSwkA6/AmBSX9QS/9q9S3w/0cDUPDdY=
-X-Received: by 2002:a05:6830:1b79:: with SMTP id d25mr2057730ote.107.1596626350552;
- Wed, 05 Aug 2020 04:19:10 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ClBxmhMDW8/EvqLNuXj7OToao++oyiDhHUE3TT7mBds=;
+        b=eBSff30Fgum2ByIJIpAIwRA1yDLjWVFuwpIm309ALtnqwi9p6p0zLngy9SuGAitH3z
+         PFxH4/IqjO+/v2QjDJRnwev68H0M045uG73NVAVgGNuDbP9JIlo3n2pM8goKbQX4ejjE
+         1+P2uMMLYAklYg+keU96X/k2UFIWTF4fFxqiFmmDDLq0Y/GY5kgreRk32XY36bAvTUVn
+         XrVdjgzW1WWu6qZ+QfQ8dYnZ0p9AYdqZfST11cLbA+PU7bPsnhlA4xC4asPreWr0yBym
+         py2oGSrQUKx5z6qjqQIdrCg015kSXKTg4mW5Bd0LNKXFCXMkQEP77A2fbRKhPxkPkFWl
+         FMxA==
+X-Gm-Message-State: AOAM533Iaqj1Ri62BfxZqEE73xoz+Tz2bDPszB9sUFZMvAAuuvNrIyjs
+        qPyF7Fg3Kgfk9hqkI6mApec=
+X-Google-Smtp-Source: ABdhPJxzb/HUa4PssPf3WyZJk2/9fO9KwC5LbUHExxDSZz5HT6M3KGkwkKCGNwW8SVIKjQvLhzHLAw==
+X-Received: by 2002:a17:902:8495:: with SMTP id c21mr4240892plo.82.1596648081145;
+        Wed, 05 Aug 2020 10:21:21 -0700 (PDT)
+Received: from gmail.com ([103.105.152.86])
+        by smtp.gmail.com with ESMTPSA id d24sm4850758pfq.72.2020.08.05.10.21.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Aug 2020 10:21:20 -0700 (PDT)
+Date:   Wed, 5 Aug 2020 22:49:37 +0530
+From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Helgaas <bjorn@helgaas.com>,
+        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Tomoya MORINAGA <tomoya-linux@dsn.okisemi.com>,
+        Tomoya MORINAGA <tomoya.rohm@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ben Dooks <ben.dooks@codethink.co.uk>
+Subject: Re: [PATCH v1] i2c: eg20t: use generic power management
+Message-ID: <20200805171937.GA85392@gmail.com>
+References: <20200805162154.GA3179@gmail.com>
+ <20200805165611.GA516242@bjorn-Precision-5520>
 MIME-Version: 1.0
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-21-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594919915-5225-21-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 5 Aug 2020 13:18:59 +0200
-Message-ID: <CAMuHMdVriWnPK8-=w=0mq8yj9+1jbsg9yH8aV=ygyHsQ0f-CQQ@mail.gmail.com>
-Subject: Re: [PATCH 20/20] arm64: dts: renesas: r8a774e1: Add VIN and CSI-2 nodes
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200805165611.GA516242@bjorn-Precision-5520>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Prabhakar,
+On Wed, Aug 05, 2020 at 11:56:11AM -0500, Bjorn Helgaas wrote:
+> On Wed, Aug 05, 2020 at 09:51:54PM +0530, Vaibhav Gupta wrote:
+> > On Wed, Aug 05, 2020 at 10:28:32AM -0500, Bjorn Helgaas wrote:
+> > > On Wed, Aug 05, 2020 at 10:23:31AM -0500, Bjorn Helgaas wrote:
+> > > > On Mon, Jul 20, 2020 at 07:30:32PM +0530, Vaibhav Gupta wrote:
+> > > > > Drivers using legacy PM have to manage PCI states and device's PM states
+> > > > > themselves. They also need to take care of configuration registers.
+> > > > > 
+> > > > > With improved and powerful support of generic PM, PCI Core takes care of
+> > > > > above mentioned, device-independent, jobs.
+> > > > > 
+> > > > > This driver makes use of PCI helper functions like
+> > > > > pci_save/restore_state(), pci_enable/disable_device(),
+> > > > > pci_enable_wake() and pci_set_power_state() to do required operations. In
+> > > > > generic mode, they are no longer needed.
+> > > > > 
+> > > > > Change function parameter in both .suspend() and .resume() to
+> > > > > "struct device*" type. Use to_pci_dev() and dev_get_drvdata() to get
+> > > > > "struct pci_dev*" variable and drv data.
+> > > > > 
+> > > > > Compile-tested only.
+> > > > > 
+> > > > > Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+> > > > > ---
+> > > > >  drivers/i2c/busses/i2c-eg20t.c | 39 ++++++++--------------------------
+> > > > >  1 file changed, 9 insertions(+), 30 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/i2c/busses/i2c-eg20t.c b/drivers/i2c/busses/i2c-eg20t.c
+> > > > > index 73f139690e4e..c0ddc4cc2ce7 100644
+> > > > > --- a/drivers/i2c/busses/i2c-eg20t.c
+> > > > > +++ b/drivers/i2c/busses/i2c-eg20t.c
+> > > > > @@ -846,11 +846,10 @@ static void pch_i2c_remove(struct pci_dev *pdev)
+> > > > >  	kfree(adap_info);
+> > > > >  }
+> > > > >  
+> > > > > -#ifdef CONFIG_PM
+> > > > > -static int pch_i2c_suspend(struct pci_dev *pdev, pm_message_t state)
+> > > > > +static int __maybe_unused pch_i2c_suspend(struct device *dev)
+> > > > >  {
+> > > > > -	int ret;
+> > > > >  	int i;
+> > > > > +	struct pci_dev *pdev = to_pci_dev(dev);
+> > > > >  	struct adapter_info *adap_info = pci_get_drvdata(pdev);
+> > > > 
+> > > > Why don't you use "adap_info = dev_get_drvdata(dev)" as you did below,
+> > > > so you don't need to_pci_dev()?
+> > > >
+> > Actually, line 870, pch_pci_dbg() again needs "struct pci_dev*" type
+> > pointer.  Either way I had to use to_pci_dev(), so defined "pdev"
+> > which made less number of required changes in the code.
+> 
+> OK.  pch_pci_dbg() only needs the pdev in order to *get* the struct
+> device *, so it's all sort of in circles.  But it's fine to do as you
+> did here.
+> 
+> > > > >  	void __iomem *p = adap_info->pch_data[0].pch_base_address;
+> > > > >  
+> > > > > @@ -872,34 +871,17 @@ static int pch_i2c_suspend(struct pci_dev *pdev, pm_message_t state)
+> > > > >  		ioread32(p + PCH_I2CSR), ioread32(p + PCH_I2CBUFSTA),
+> > > > >  		ioread32(p + PCH_I2CESRSTA));
+> > > > >  
+> > > > > -	ret = pci_save_state(pdev);
+> > > > > -
+> > > > > -	if (ret) {
+> > > > > -		pch_pci_err(pdev, "pci_save_state\n");
+> > > > > -		return ret;
+> > > > > -	}
+> > > > > -
+> > > > > -	pci_enable_wake(pdev, PCI_D3hot, 0);
+> > > > > -	pci_disable_device(pdev);
+> > > > > -	pci_set_power_state(pdev, pci_choose_state(pdev, state));
+> > > > > +	device_wakeup_disable(dev);
+> > > > >  
+> > > > >  	return 0;
+> > > > >  }
+> > > > >  
+> > > > > -static int pch_i2c_resume(struct pci_dev *pdev)
+> > > > > +static int __maybe_unused pch_i2c_resume(struct device *dev)
+> > > > >  {
+> > > > >  	int i;
+> > > > > -	struct adapter_info *adap_info = pci_get_drvdata(pdev);
+> > > > > -
+> > > > > -	pci_set_power_state(pdev, PCI_D0);
+> > > > > -	pci_restore_state(pdev);
+> > > > > +	struct adapter_info *adap_info = dev_get_drvdata(dev);
+> > > > >  
+> > > > > -	if (pci_enable_device(pdev) < 0) {
+> > > > > -		pch_pci_err(pdev, "pch_i2c_resume:pci_enable_device FAILED\n");
+> > > > > -		return -EIO;
+> > > > > -	}
+> > > > > -
+> > > > > -	pci_enable_wake(pdev, PCI_D3hot, 0);
+> > > > > +	device_wakeup_disable(dev);
+> > > > 
+> > > > It *looks* wrong to disable wakeup in both suspend and resume.  I
+> > > > think the usual pattern is to enable wakeup in suspend and disable it
+> > > > in resume.
+> > > > 
+> > > > But it looks like it's been that way since the driver was added by
+> > > > e9bc8fa5df1c ("i2c-eg20t: add driver for Intel EG20T").
+> > > > 
+> > > > If the device doesn't support wakeup, I would not expect the driver to
+> > > > mention wakeup at all.
+> > > > 
+> > > > In any case, I think it's the right thing for *this* patch to preserve
+> > > > the previous wakeup behavior.  Maybe we want a follow-up patch to just
+> > > > remove both device_wakeup_disable() calls?
+> > > > 
+> > We have seen this issue earlier in other drivers too. I remember you even
+> > identified and listed them.
+> > The PCI core calls, pci_enable_wake(pci_dev, PCI_D0, false). And if the driver
+> > does not want to enable-wake on suspend, we discussed and concluded that the
+> > calls should be dropped.
+> > I am sending v2, to include dropping wakeup call.
+> 
+> Personally, I think I would do this in two patches, and in the reverse
+> order than what I first suggested:
+> 
+>   1) Drop pci_enable_wake() calls
+>   2) Convert to generic PM
+> 
+> Doing them in that order means patch 2 will be slightly simpler, and
+> if there's any issue with removing the wakeup stuff, we can debug it
+> in the context of the original PCI PM code we've been using for years
+> without muddying the water with the additional generic PM changes.
+> 
+Yeah, this seems more reasonable.
 
-On Thu, Jul 16, 2020 at 7:20 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add VIN and CSI-2 nodes to RZ/G2H (R8A774E1) SoC dtsi.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-However, before I queue this in renesas-devel for v5.10, I'd like to
-have some clarification about the issue below.
-
-> --- a/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
-
-> +               vin4: video@e6ef4000 {
-> +                       compatible = "renesas,vin-r8a774e1";
-> +                       reg = <0 0xe6ef4000 0 0x1000>;
-> +                       interrupts = <GIC_SPI 174 IRQ_TYPE_LEVEL_HIGH>;
-> +                       clocks = <&cpg CPG_MOD 807>;
-> +                       power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-> +                       resets = <&cpg 807>;
-> +                       renesas,id = <4>;
-> +                       status = "disabled";
-> +
-> +                       ports {
-> +                               #address-cells = <1>;
-> +                               #size-cells = <0>;
-> +
-> +                               port@1 {
-> +                                       #address-cells = <1>;
-> +                                       #size-cells = <0>;
-
-"make dtbs W=1" says:
-
-    arch/arm64/boot/dts/renesas/r8a774e1.dtsi:1562.12-1572.7: Warning
-(graph_child_address): /soc/video@e6ef4000/ports/port@1: graph node
-has single child node 'endpoint@0', #address-cells/#size-cells are not
-necessary
-
-(same for vin5-7 below)
-
-> +
-> +                                       reg = <1>;
-> +
-> +                                       vin4csi20: endpoint@0 {
-> +                                               reg = <0>;
-> +                                               remote-endpoint = <&csi20vin4>;
-> +                                       };
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks
+Vaibhav Gupta
+> > > > >  	for (i = 0; i < adap_info->ch_num; i++)
+> > > > >  		pch_i2c_init(&adap_info->pch_data[i]);
+> > > > > @@ -908,18 +890,15 @@ static int pch_i2c_resume(struct pci_dev *pdev)
+> > > > >  
+> > > > >  	return 0;
+> > > > >  }
+> > > > > -#else
+> > > > > -#define pch_i2c_suspend NULL
+> > > > > -#define pch_i2c_resume NULL
+> > > > > -#endif
+> > > > > +
+> > > > > +static SIMPLE_DEV_PM_OPS(pch_i2c_pm_ops, pch_i2c_suspend, pch_i2c_resume);
+> > > > >  
+> > > > >  static struct pci_driver pch_pcidriver = {
+> > > > >  	.name = KBUILD_MODNAME,
+> > > > >  	.id_table = pch_pcidev_id,
+> > > > >  	.probe = pch_i2c_probe,
+> > > > >  	.remove = pch_i2c_remove,
+> > > > > -	.suspend = pch_i2c_suspend,
+> > > > > -	.resume = pch_i2c_resume
+> > > > > +	.driver.pm = &pch_i2c_pm_ops,
+> > > > >  };
+> > > > >  
+> > > > >  module_pci_driver(pch_pcidriver);
+> > > > > -- 
+> > > > > 2.27.0
+> > > > > 
