@@ -2,106 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B59F023C835
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 10:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5708423C842
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 10:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728034AbgHEIwk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Aug 2020 04:52:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46900 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726635AbgHEIwi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 5 Aug 2020 04:52:38 -0400
-Received: from localhost (router.4pisysteme.de [80.79.225.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C2B482177B;
-        Wed,  5 Aug 2020 08:52:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596617558;
-        bh=vu4bu5z9/vfE+ysgdbkt/Or5Zq032DMLXZbVq+Roaf4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PZ5J/Q1QAa04Zp/Hcg+ox3ngVm2XSvHfsxvrKIvk61pj+BA84JABYkEgwI1NFnC+U
-         IQkOXSfR0XTas5rf5YxGLMLDaG22qhpDRKtWVkifTFiPcHgfeZSm9Ro6Dxsquu5rq3
-         4svlwLC5uCAa1nLjm2w2/PPgG0B27gSf2AQMx2TI=
-Date:   Wed, 5 Aug 2020 10:52:36 +0200
-From:   <wsa@kernel.org>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Cc:     <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
-        <ludovic.desroches@microchip.com>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <linux@armlinux.org.uk>,
-        <kamel.bouhara@bootlin.com>
-Subject: Re: [PATCH 0/4] i2c: core: add generic GPIO bus recovery
-Message-ID: <20200805085236.GE1229@kunai>
-Mail-Followup-To: <wsa@kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
-        <ludovic.desroches@microchip.com>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <linux@armlinux.org.uk>,
-        <kamel.bouhara@bootlin.com>
-References: <20200804095926.205643-1-codrin.ciubotariu@microchip.com>
+        id S1728134AbgHEIyP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Aug 2020 04:54:15 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:33874 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725920AbgHEIyO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Aug 2020 04:54:14 -0400
+Received: by mail-oi1-f196.google.com with SMTP id z22so8349748oid.1;
+        Wed, 05 Aug 2020 01:54:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o0Tmid+tnSvnAJzyNVALQOzFYE2lj4sH4UY2VIcOcWw=;
+        b=evPoqX7eLG1mRt4koFTUvjnzAIFzDLe1bmplBva7C2fYQ7MaTka1iYdpHfkHxQf3WN
+         5hJzboRrBjKRWzr+pNki8T0qfoDhghIuR/JUO+xkaqFJtNF0xxpQT4yTXrsqNg1k5FgY
+         UK/QTBBTgsKbFKbGr97V7L+1WmC46206kuqMeXDvGLcCYyLID4Gm+poz4IzRrwrdSbIW
+         WihGhuAVKNJ9oW8Ly1e+wgPGD8tCUuFr8D0WFppvz4q2C2fixbmm7FVj52oGbbvGhBch
+         0OuGalGMCVtZmcNy8av9Yt6kSHtXkPtD0prfipbbdD5DVty0m6YCdwTkgmMHFdt8BCi4
+         N4OQ==
+X-Gm-Message-State: AOAM533clIkVIDNYM7TamPpI0ofGD6MtboMC55H9LCAGjUKHr7BEwpFl
+        qzNAFweShSfyFF7H4RqnKGx8wuabt9PqzgQLlYU=
+X-Google-Smtp-Source: ABdhPJyljuIryu/u0UTk9F1+3SAnb1XU9mLUVZAv+khu6lPUjs8xyfZNkmrvKtA0yRGPniH4ZpNEEROFWOcNB2m+oEA=
+X-Received: by 2002:aca:adc4:: with SMTP id w187mr1794266oie.153.1596617653246;
+ Wed, 05 Aug 2020 01:54:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="imjhCm/Pyz7Rq5F2"
-Content-Disposition: inline
-In-Reply-To: <20200804095926.205643-1-codrin.ciubotariu@microchip.com>
+References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594919915-5225-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1594919915-5225-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 5 Aug 2020 10:54:02 +0200
+Message-ID: <CAMuHMdWebnd8yxLccaQtfaz8UJW3vkTr==2n_ZxT_tjYkBMSiA@mail.gmail.com>
+Subject: Re: [PATCH 05/20] dt-bindings: phy: renesas,usb2-phy: Add r8a774e1 support
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
+        dmaengine <dmaengine@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, Jul 16, 2020 at 7:19 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Document SoC specific bindings for RZ/G2H (r8a774e1) SoC.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
 
---imjhCm/Pyz7Rq5F2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Codrin, everyone
+Gr{oetje,eeting}s,
 
-> This patch series was previously sent as a RFC. Significant changes
-> since RFC:
-> - "recovery" pinctrl state marked as deprecared in bindings;
-> - move to "gpio" pinctrl state done after the call to prepare_recovery()
->   callback;
-> - glitch protection when SDA gpio is taken at initialization;
+                        Geert
 
-Thanks for the fast update, now all merged for inclusion into 5.9. I
-think it is really good, but to verify and double check, I think two
-things would be even better..
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-One thing, I'll definately be doing is to add this feature to
-i2c-sh_mobile.c and scope the results.
-
-The other thing would be to convert the PXA driver and see if our
-generic support can help their advanced use case or if we are missing
-something. Codrin, do you have maybe time and interest to do that? That
-would be awesome!
-
-Happy hacking and kind regards,
-
-   Wolfram
-
-
---imjhCm/Pyz7Rq5F2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8qc1QACgkQFA3kzBSg
-KbZCyg//Qg7gQ0nyIFtC1bC47ahB6lQVhGflL+6pItCAXkD7FMoEbFOTFDtDHAcy
-/Uz+AmMkv96HY0sI65t4LI2mJZZcOL9WXyO8Aas1/Y7wAB9IxKz3reECmodn305S
-PU0v4AlFTI3r0Zck7s4F0MPLQ3wVfNoyk6RYhJpAI8/aPEmC1im9BTq8MfAaXZEB
-ghxbnqWLAiNMAwWUBuqQOkH+yD1C5+WRdyiyrWbcwGDnrbZQUmZrsZFarfzG8BHY
-8bo4a49Nb1lZu0Y5Y06Iy6EerXEpeOWZza/J0T2pNfxW7yvZpKyDMgE2L2uww6GO
-BLdZMPSMJuhVRJmRdS/edJSoQKSG1P3rBUCmLyuv2eoo2HOO567SunGfjuOSboRV
-cgyQ6sXyN64YKfhvqtaLB1KAKJuLQ5vpJaqzEVZI3WA/Gn+6mBP4fh3XjhQhDEBt
-0n+URh0t8zmdBZvW95+wAzR5IIzNoo7TpIoJAkkkz00eLDOZxEh9iPOAaGARvFKL
-4tGLLFkCR4oPd7scvcySNFzqRFNSLlAXeDxcRMH4jddc3lY5Ntbq/mIoV5DUcUKo
-R3wnpLzDx7HNGO10dNjBP+1yakGz7WespmHJF8zJf7l1xQ5zIRqVSvTYWV2LmGoB
-uGTfGvISBXR5DQKmkk0V8a61Yqw94wckoO8Kn2JOrGzwLT2yu/k=
-=nFwm
------END PGP SIGNATURE-----
-
---imjhCm/Pyz7Rq5F2--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
