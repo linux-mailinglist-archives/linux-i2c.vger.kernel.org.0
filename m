@@ -2,102 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE1123C91E
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 11:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E0723C925
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 11:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728134AbgHEJZk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Aug 2020 05:25:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58930 "EHLO mail.kernel.org"
+        id S1727873AbgHEJ3Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Aug 2020 05:29:25 -0400
+Received: from www.zeus03.de ([194.117.254.33]:33090 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725809AbgHEJZf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 5 Aug 2020 05:25:35 -0400
-Received: from localhost (router.4pisysteme.de [80.79.225.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2599920792;
-        Wed,  5 Aug 2020 09:25:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596619534;
-        bh=ERRvfqEriokU7TkTN7wbLnT2FuGkg1l29VyZXOxiN7I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PjSgc3SZFpd+xtRwvrWVtY3lwE4NPJVm4XVgvSlI6xTUJZ187Nn/zXb9Xek+Nvli1
-         w+Lbg4ApC+JcWgF9mdF3uXfmhIU7gSagg3K4U6nBlRfdQWN6olaw94jL7ZshL7QRDZ
-         6k0kCN/6tP9/KiZLYQCz92UN/GmOGgbxH7wyULnE=
-Date:   Wed, 5 Aug 2020 11:25:32 +0200
-From:   wsa@kernel.org
-To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Cc:     nsaenzjulienne@suse.de, f.fainelli@gmail.com, rjui@broadcom.com,
-        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        wahrenst@gmx.net, ardb@kernel.org, chris.brandt@renesas.com,
-        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: bcm2835: Replace HTTP links with HTTPS ones
-Message-ID: <20200805092532.GK1229@kunai>
-Mail-Followup-To: wsa@kernel.org,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        nsaenzjulienne@suse.de, f.fainelli@gmail.com, rjui@broadcom.com,
-        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        wahrenst@gmx.net, ardb@kernel.org, chris.brandt@renesas.com,
-        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20200717185247.81988-1-grandmaster@al2klimov.de>
+        id S1728045AbgHEJ2p (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 5 Aug 2020 05:28:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=ReDQTRbquzPkYiC23U/tmRuZTyBU
+        I27uSILaz4Gm+Jk=; b=NHHoJmt/weHT6991tnk0RDzeftxJIHEww8hOuE1hC7FA
+        KHLQDcB/j/LgxLgcBpbZlRuhx8srm0jZlmHD/W5yfJygQH1GedOs9uyUuEYpuqkj
+        6QfC7Ly3X96AdL6HaOEAksZLC7HUaiS7lhqjEhuD4Bxlsv2L1IPMMrtMYiKUT4M=
+Received: (qmail 2984317 invoked from network); 5 Aug 2020 11:28:42 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Aug 2020 11:28:42 +0200
+X-UD-Smtp-Session: l3s3148p1@0FNq/x2sSOpQT+F6
+Date:   Wed, 5 Aug 2020 11:28:42 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Ajay Gupta <ajayg@nvidia.com>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v1] i2c: nvidia-gpu: Use put_unaligned_be24()
+Message-ID: <20200805092842.GL1229@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ajay Gupta <ajayg@nvidia.com>, linux-i2c@vger.kernel.org
+References: <20200716145319.53773-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cN0A5YokcrYPGsSB"
+        protocol="application/pgp-signature"; boundary="oOpJzULQ70+PGW7h"
 Content-Disposition: inline
-In-Reply-To: <20200717185247.81988-1-grandmaster@al2klimov.de>
+In-Reply-To: <20200716145319.53773-1-andriy.shevchenko@linux.intel.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---cN0A5YokcrYPGsSB
+--oOpJzULQ70+PGW7h
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 17, 2020 at 08:52:47PM +0200, Alexander A. Klimov wrote:
-> Rationale:
-> Reduces attack surface on kernel devs opening the links for MITM
-> as HTTPS traffic is much harder to manipulate.
+On Thu, Jul 16, 2020 at 05:53:19PM +0300, Andy Shevchenko wrote:
+> This makes the driver code slightly easier to read.
 >=20
-> Deterministic algorithm:
-> For each file:
->   If not .svg:
->     For each line:
->       If doesn't contain `\bxmlns\b`:
->         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
->             If both the HTTP and HTTPS versions
->             return 200 OK and serve the same content:
->               Replace HTTP with HTTPS.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+
+Ajay, any comments?
+
+>  drivers/i2c/busses/i2c-nvidia-gpu.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 >=20
-> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+> diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c=
+-nvidia-gpu.c
+> index f480105000b8..f9a69b109e5c 100644
+> --- a/drivers/i2c/busses/i2c-nvidia-gpu.c
+> +++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
+> @@ -125,8 +125,7 @@ static int gpu_i2c_read(struct gpu_i2c_dev *i2cd, u8 =
+*data, u16 len)
+>  		put_unaligned_be16(val, data);
+>  		break;
+>  	case 3:
+> -		put_unaligned_be16(val >> 8, data);
+> -		data[2] =3D val;
+> +		put_unaligned_be24(val, data);
+>  		break;
+>  	case 4:
+>  		put_unaligned_be32(val, data);
+> --=20
+> 2.27.0
+>=20
 
-Applied to for-next, thanks!
-
-
---cN0A5YokcrYPGsSB
+--oOpJzULQ70+PGW7h
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8qewwACgkQFA3kzBSg
-KbbmuA/9GyPdwQnTBTL8GnTKxOd6w5OA3yao0e0dNkRTXdF1+aFUrTOaMoGhEngl
-osR+RLfxjL5mVnaIUVF6VmCsbtsu65XnJbl+El4lKXKrpJRRIoINz5rkEEvI4IJq
-y/HMnCwINjuhUMWxpBXB9Z8YAfbZBsFgaPUcBBhaLvVLGHPVMc2FUJ9aHvb/dNoy
-jHVLyFEC/rYB+Axi77OYOfSRobVG9M40CfjPm2pt1Oe7CQ8k5SZ3q9tvHDgJEKaf
-yDlNtN9esKHVdySlWjXiaqbU82rogtDS86/8PMTK6N8FkPQXdOhU/WWQiWH/0wo/
-/bjs6Zlc3UpjkdMj1w5v8eFr9Ooufznr8s64dweVTyF7J76S+EZWQ1AuYzEjFD5t
-QPFYhZhnsPZRsrXd9clclKKr5UfR/+ZVn8TPl0XPATMOmb9a+PZydzMuPUK/5q7b
-zyO4JlDkJKcSP0akrLtwd0kGLbyq2a1V2QBiEx/d3BrjZyYFQ/uH4DLmyVdmQ9xC
-N0jtP6CzhJxqAyFJ9ke+V1mDJrofvU91+OqNUkbrcWKccQcuaPNZEwQOByxOK4kh
-3uNXXuW5w8Gd+dOQcrwNQv5QR2xLszy77EVbeeuwP7vPTndnkPU8vSwaDmnnX+z8
-V5+OJHHchEPeuqRZf8gRjC/C8JXW/XLm/XN1SWGwET3YrvznFDI=
-=HSH/
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8qe8oACgkQFA3kzBSg
+KbYmNg//S7Du+s9lTpUMFPI18FTeJx/+YLIqCXx22/i2ecAwrDI2ZhWNXvFNiY0x
+kRouMrXxFSWOSwIDwkycdhMb0ocJqxzrH2Tml0736YY/quHCDKEVBD+HR+ZY2upV
+Zv5/jOrOEv0aU+8VruEHhkDDXESpQPjlO6WSLwb6T34AvV4VBMIgQw4Buubz2k2d
+qZP9o0WpLhnE+H4DLaEi4b+0+k9DBxsSD0uzdC2KbiPQJawdqgMW/WHBtSn8TKv4
+JY+rll1hoNnhXGhORiOVVYsn9oUX2YhLCV7plxwmVIPJ8s1RFlvH7xTm8/BIToPw
+VpDz7K6ArXSxV8Erb6qoJMY/s2h4qcBLltctaj3+SGrUUH1NX85ByEQzcCngXeQU
+sVaDkexH1VEj3YybYgCb5j12PlwQuCuh5Oz/mSxjq/XheyeBKrOPVEzL/auk4osR
+cFnydIQiaxSJOAoN5aLC/+DXyZqdWS6jvrIME1pb1MJSZ5//JfWTZrNf5hI+8URa
+GTBD1YrMX/QT4Ikl1/5KR5jPP1SDoK79W4Dc1eS7WCbGE9NDdwZ1yxTfnVQecWcE
+PXn/KfWBRlZLUB/bkkSv0JS+53RWsFjwack6ZBxUGdSqaWQjyhpKS2PYnpHf37Bc
+VPWZx6mCSkzvIWCkqWV5Ea/kNXGj/Inf3QhBAHZ7ClrJbX3VNYA=
+=x0r5
 -----END PGP SIGNATURE-----
 
---cN0A5YokcrYPGsSB--
+--oOpJzULQ70+PGW7h--
