@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A7323D03D
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 21:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA7823D033
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Aug 2020 21:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728808AbgHETp7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Aug 2020 15:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
+        id S1727024AbgHETpK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Aug 2020 15:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729019AbgHETpG (ORCPT
+        with ESMTP id S1728982AbgHETpG (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Aug 2020 15:45:06 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DDEC06179E;
-        Wed,  5 Aug 2020 12:38:28 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id bh1so12893554plb.12;
-        Wed, 05 Aug 2020 12:38:28 -0700 (PDT)
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C651CC06179F;
+        Wed,  5 Aug 2020 12:38:50 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id f9so4995530pju.4;
+        Wed, 05 Aug 2020 12:38:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5TXcgEgAs4Nu34HXfjY3jbM5apQONV+NnIX864cNQWg=;
-        b=H0ISPGpLRV3y9tQ4W937aoZMWeGxz3wG5Byk04+BMcfetPTwhgVMR7//+YNlxmBPGR
-         Chyn7D6Hd51R/+LTW5MElsg4IUtIBfT7dNVom/CTGrj9xocK0ZmtEpCj4wANYO/Rjqwr
-         k1KMM/MM5xBsFiLKcPsctFreRvhT+efxV80jXwk3o/mcogbdnN5yqe9RQHghMcGsMIO5
-         YZ88bzfzzIeKWCTaGZ/NJJmttlOGkIzHhF8jVVUgNv6U0icjx+Rs61YQ1xGsKX87m+0c
-         hL7YiEJgmsudK2dy/zLWc6lcH+3eKJkIzuTC5tjKvhx/qKkRyflkKumSws07RuWwtRXZ
-         mOcw==
+        bh=q8aaXnFcZ4AT3389+t0qxS8pbT28OEw3qAsjmqDR3UE=;
+        b=BBOMnrtNFHReBjXDeCiLjMl9olE1dPUW9Qju+IcKdTK3+9GmtDNFNKlHOTHl1uT1iX
+         12vARS7LIHCPWquRGW42vrmScp10LsjoaOh9dHQ0Pkwx6nGWmfupqAO5cqk3TQjtZmCA
+         3oS96NPE7nvwK/tdJK7yxY+05tEuNJleTWQCgSqMAwuIj5P/Qk9yOFwq3zOF5SwGGSLs
+         O0lGc7m4Bo+I0Tr3PxKczoeIxuQx9Hh+UnUpM11dJDvm2RCMSS/ybQ/vscp7poo+tUki
+         0tZuc7tMl6Dyxb7+Vld7soicjuNyNE4iZb5B4jKe5m+yXmNDZGm6KyeWicaoco0Y7lYQ
+         splQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5TXcgEgAs4Nu34HXfjY3jbM5apQONV+NnIX864cNQWg=;
-        b=PKxwphHtgF/QSPPykjIsvaE9+Fv4qe9w+FjmC+fvElivSO4w1+t0R3XrwkTeVZoDuS
-         UipHIKMYYstZK9QPGxDfGwKjLgVs/Cx2KhRg2Bjn5OCDL59Qpe6vbCSr/Qiyp3E6LWW/
-         1t/iDDaqWrfnB1K5k2kEa2M6RyTw7JUUBBBYmZF8HvziLI8Ycjud5oC1Ju5hYZpnVFs5
-         La42vhESB4ye7YJqlZDE2xKCtw/FYetLGQJkPC0mQMJlTbNUyCanBjZc8q1kKMm+wvOD
-         SsGYnFdF8xqmoYjd881TWM6XC+OzqddRKpuZAwEq3VUm4HZhCXnBBZQjcilExAUVUNgF
-         i1xQ==
-X-Gm-Message-State: AOAM530yvyo0uDtnZqrO4Fr3uwaiFmPogGPaYiveY+ioRHo/kidRa9Tk
-        f0FmV4hMpMUzkpcFEMMEWh8lPRNB3WT9mA==
-X-Google-Smtp-Source: ABdhPJxpsNBrfC/tIWMSvSdeG5I8GbtN42x6d7YwWee5C39MithTk79rmmNir6Zz8cbOfIUAOW+IOw==
-X-Received: by 2002:a17:90a:3268:: with SMTP id k95mr4854944pjb.153.1596656306933;
-        Wed, 05 Aug 2020 12:38:26 -0700 (PDT)
+        bh=q8aaXnFcZ4AT3389+t0qxS8pbT28OEw3qAsjmqDR3UE=;
+        b=PY0dVr8T9InAQJqs9He8WY+Cq7lm8vNrRxFFEWQzB4fEMZGqw8ZxmmiM7iFC0tXa/2
+         9MmKU9jyCvsUYVu8Dk1beGo2C4fs++Cn8fVvdSwqDiLShE0MB3x50DPMUWtyqGYN20gD
+         yCAoiAIOM5WwBBrLbm1kj7/SFVjTKGdE66LpNV4hQHA6ZeVx+kZXLTf2tmsQNl5A34x4
+         j0Bc06pSX/0Q9QzNRq3gD7Pz+FhcmP+kWJxeZGpqlHxqg+ahvKjYevV4f88Zbm/rlXjq
+         nPNZ36/C0C1fcK1co2BmpL6q3hStuVSq7fAKrrv0hK1lmC8eJnb0ZRrYCCx2OJ7eAIkv
+         H3dA==
+X-Gm-Message-State: AOAM530/VixFErxqBzIJZaCqznO72jJrzUGOZuAKTaS8oqnybZzxxpBz
+        aIcvb1ZIUJ+DKzy6zlcXbgI=
+X-Google-Smtp-Source: ABdhPJzn7Bj7lt8lc5KhEfI4kSkNrIrHdD2blN71urAzi5cr8ZEUcmTH30mCT37gF5bvmXT1w9iMYA==
+X-Received: by 2002:a17:902:6bca:: with SMTP id m10mr4508470plt.210.1596656330165;
+        Wed, 05 Aug 2020 12:38:50 -0700 (PDT)
 Received: from varodek.iballbatonwifi.com ([103.105.152.86])
-        by smtp.gmail.com with ESMTPSA id f20sm4901764pfk.36.2020.08.05.12.38.13
+        by smtp.gmail.com with ESMTPSA id f20sm4901764pfk.36.2020.08.05.12.38.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2020 12:38:26 -0700 (PDT)
+        Wed, 05 Aug 2020 12:38:49 -0700 (PDT)
 From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
 To:     Bjorn Helgaas <helgaas@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
@@ -59,12 +59,13 @@ Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v2 0/2] i2c: eg20t: Power management upgrade and clean-ups
-Date:   Thu,  6 Aug 2020 01:06:14 +0530
-Message-Id: <20200805193616.384313-1-vaibhavgupta40@gmail.com>
+Subject: [PATCH v2 1/2] i2c: eg20t: Drop PCI wakeup calls from .suspend/.resume
+Date:   Thu,  6 Aug 2020 01:06:15 +0530
+Message-Id: <20200805193616.384313-2-vaibhavgupta40@gmail.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200805165611.GA516242@bjorn-Precision-5520>
+In-Reply-To: <20200805193616.384313-1-vaibhavgupta40@gmail.com>
 References: <20200805165611.GA516242@bjorn-Precision-5520>
+ <20200805193616.384313-1-vaibhavgupta40@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
@@ -72,34 +73,41 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Linux Kernel Mentee: Remove Legacy Power Management.
+The driver calls pci_enable_wake(...., false) in pch_i2c_suspend() as well
+as pch_i2c_resume(). Either it should enable-wake the device in .suspend()
+or should not invoke pci_enable_wake() at all.
 
-The purpose of this patch series is to upgrade power management in i2c-eg20t
-driver. This has been done by upgrading .suspend() and .resume() callbacks.
+Concluding that this driver doesn't support enable-wake and PCI core calls
+pci_enable_wake(pci_dev, PCI_D0, false) during resume, drop it from
+.suspend() and .resume().
 
-The upgrade makes sure that the involvement of PCI Core does not change the
-order of operations executed in a driver. Thus, does not change its behavior.
+Reported-by: Bjorn Helgaas <helgaas@kernel.org>
+Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+---
+ drivers/i2c/busses/i2c-eg20t.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Also, before upgrading PM, some cleanup is required. Both .suspend() and
-.resume() invoke pci_enable_wake() just to disable wakeup. This is not
-required as if .suspend() does not want to enable-wake the device, PCI core
-takes care of the required operations.
-
-v2 : An additional patch had to be added in v1 to drop PCI wakeup calls.
-
-All patches are compile-tested only.
-
-Test tools:
-    - Compiler: gcc (GCC) 10.1.0
-    - allmodconfig build: make -j$(nproc) W=1 all
-
-Vaibhav Gupta (2):
-  i2c: eg20t: Drop PCI wakeup calls from .suspend/.resume
-  i2c: eg20t: use generic power management
-
- drivers/i2c/busses/i2c-eg20t.c | 39 ++++++----------------------------
- 1 file changed, 7 insertions(+), 32 deletions(-)
-
+diff --git a/drivers/i2c/busses/i2c-eg20t.c b/drivers/i2c/busses/i2c-eg20t.c
+index 73f139690e4e..eb41de22d461 100644
+--- a/drivers/i2c/busses/i2c-eg20t.c
++++ b/drivers/i2c/busses/i2c-eg20t.c
+@@ -879,7 +879,6 @@ static int pch_i2c_suspend(struct pci_dev *pdev, pm_message_t state)
+ 		return ret;
+ 	}
+ 
+-	pci_enable_wake(pdev, PCI_D3hot, 0);
+ 	pci_disable_device(pdev);
+ 	pci_set_power_state(pdev, pci_choose_state(pdev, state));
+ 
+@@ -899,8 +898,6 @@ static int pch_i2c_resume(struct pci_dev *pdev)
+ 		return -EIO;
+ 	}
+ 
+-	pci_enable_wake(pdev, PCI_D3hot, 0);
+-
+ 	for (i = 0; i < adap_info->ch_num; i++)
+ 		pch_i2c_init(&adap_info->pch_data[i]);
+ 
 -- 
 2.27.0
 
