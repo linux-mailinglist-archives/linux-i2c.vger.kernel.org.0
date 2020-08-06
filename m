@@ -2,113 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E7223E32F
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Aug 2020 22:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 779A823E385
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Aug 2020 23:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725817AbgHFUa3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Aug 2020 16:30:29 -0400
-Received: from 2.mo2.mail-out.ovh.net ([188.165.53.149]:54377 "EHLO
-        2.mo2.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725535AbgHFUa3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Aug 2020 16:30:29 -0400
-X-Greylist: delayed 8267 seconds by postgrey-1.27 at vger.kernel.org; Thu, 06 Aug 2020 16:30:28 EDT
-Received: from player695.ha.ovh.net (unknown [10.108.42.170])
-        by mo2.mail-out.ovh.net (Postfix) with ESMTP id 943511E3AD3
-        for <linux-i2c@vger.kernel.org>; Thu,  6 Aug 2020 18:13:22 +0200 (CEST)
+        id S1726073AbgHFVcA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Aug 2020 17:32:00 -0400
+Received: from 10.mo1.mail-out.ovh.net ([178.32.96.102]:41040 "EHLO
+        10.mo1.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725947AbgHFVb4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Aug 2020 17:31:56 -0400
+X-Greylist: delayed 4200 seconds by postgrey-1.27 at vger.kernel.org; Thu, 06 Aug 2020 17:31:54 EDT
+Received: from player797.ha.ovh.net (unknown [10.110.115.215])
+        by mo1.mail-out.ovh.net (Postfix) with ESMTP id 5E4EE1D12E5
+        for <linux-i2c@vger.kernel.org>; Thu,  6 Aug 2020 22:12:45 +0200 (CEST)
 Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
         (Authenticated sender: steve@sk2.org)
-        by player695.ha.ovh.net (Postfix) with ESMTPSA id 41BAC14F12692;
-        Thu,  6 Aug 2020 16:13:16 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-96R0017a5c1c93-e9a5-4fdb-9f0b-f187a326bc09,
+        by player797.ha.ovh.net (Postfix) with ESMTPSA id 733BB11028092;
+        Thu,  6 Aug 2020 20:12:39 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-105G0062b87a758-947a-4325-be91-5786992cb203,
                     9D5F4B8471F7AF6BEF45141B8B52B4DEEC6DEFE4) smtp.auth=steve@sk2.org
-Date:   Thu, 6 Aug 2020 18:13:05 +0200
+Date:   Thu, 6 Aug 2020 22:12:32 +0200
 From:   Stephen Kitt <steve@sk2.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH] docs: remove the 2.6 "Upgrading I2C Drivers" guide
-Message-ID: <20200806181305.26777f7c@heffalump.sk2.org>
-In-Reply-To: <20200806083339.GA1549@kunai>
-References: <20200805183149.21647-1-steve@sk2.org>
-        <20200805215351.GB2182@kunai>
-        <20200806090800.08b77d4a@heffalump.sk2.org>
-        <20200806083339.GA1549@kunai>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon/pmbus: use simple i2c probe function
+Message-ID: <20200806221232.278c3878@heffalump.sk2.org>
+In-Reply-To: <5f7b5828-cb7c-127a-e454-6c8b8d98777b@roeck-us.net>
+References: <20200806161645.9437-1-steve@sk2.org>
+        <5f7b5828-cb7c-127a-e454-6c8b8d98777b@roeck-us.net>
 X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
- boundary="Sig_/GpoHHLK2k0P4x+Ck5RFNKd7"; protocol="application/pgp-signature"
-X-Ovh-Tracer-Id: 3179822812265467244
+ boundary="Sig_/FbGeJp=0MdtdV4bDqgXCQEv"; protocol="application/pgp-signature"
+X-Ovh-Tracer-Id: 7222929379186658574
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrkedtgddutdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvffukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeevledvueefvdeivefftdeugeekveethefftdffteelheejkeejjeduffeiudetkeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrieelhedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrkedtgdduhedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvffukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeevledvueefvdeivefftdeugeekveethefftdffteelheejkeejjeduffeiudetkeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjeeljedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---Sig_/GpoHHLK2k0P4x+Ck5RFNKd7
+--Sig_/FbGeJp=0MdtdV4bDqgXCQEv
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jon,
+On Thu, 6 Aug 2020 12:15:55 -0700, Guenter Roeck <linux@roeck-us.net> wrote:
+> On 8/6/20 9:16 AM, Stephen Kitt wrote:
+> > pmbus_do_probe doesn't use the id information provided in its second
+> > argument, so this can be removed, which then allows using the
+> > single-parameter i2c probe function ("probe_new") for probes which
+> > don't use the id information either.
+> >=20
+> > This avoids scanning the identifier tables during probes.
+> >=20
+> > Additionally, in cases where the id information (driver_data) isn't
+> > used, the corresponding declarations are removed from the id_table,
+> > and .name is specified explicitly.
+> >  =20
+>=20
+> The ultimate idea seems to be to remove the "old" i2c probe function
+> entirely. This means we'll have to touch the various drivers again
+> to make that happen if they are not converted to probe_new.
+>=20
+> With that in mind, since we are at it, why not use probe_new() in
+> every driver and call i2c_match_id() in cases where it is actually
+> needed/used ?
 
-You=E2=80=99ll see v2 of this patch show up soon, see the context below =E2=
-=80=94 this is a
-patch on top of Mauro=E2=80=99s conversion of the i2c docs to .rst.
+Yes, I was planning on doing that in a second phase, but I can do it right
+now (perhaps as a patch series) if that would be better.
+
+> Also, I am not convinced that replacements such as
+>=20
+> -	{ "ipsps1", 0 },
+> +	{ .name =3D "ipsps1" },
+>=20
+> are an improvement. I would suggest to leave that alone for
+> consistency (and to make it easier to add more devices to the
+> various drivers if that happens in the future).
+
+=46rom reading through all the drivers using id_table, it seems to me that we
+could do away with driver_data altogether and move all that to driver-local
+structures, in many cases covering more than just an id. By only initialisi=
+ng
+the elements of the structure that are really needed, I was hoping to (a)
+make it more obvious that driver_data isn=E2=80=99t used, and (b) allow rem=
+oving it
+without touching all the code again.
 
 Regards,
 
 Stephen
 
-
-On Thu, 6 Aug 2020 10:33:56 +0200, Wolfram Sang <wsa@the-dreams.de> wrote:
-
-> > > Maybe because I don't have the commit in my tree? Can you rebase on t=
-op
-> > > of 5.8? =20
-> >=20
-> > Ah, yes, the commit is on top of Linus=E2=80=99 current master, followi=
-ng the
-> > merge of docs-5.9 from Jon=E2=80=99s tree. In 5.8 the file is a .txt fi=
-le, but
-> > Mauro converted it to .rst for 5.9, and this patch removes the latter
-> > file (to avoid a merge conflict later on...). If you prefer, I can subm=
-it
-> > it to the docs tree instead! =20
->=20
-> I see. Thanks for the heads up!
->=20
-> > > And please also remove the reference in Documentation/i2c/index.rst =
-=20
-> >=20
-> > Oops, yes, I=E2=80=99ll do that in v2 once we decide where it should go=
-. =20
->=20
-> I am fine with either it going via the doc-tree or you sending me v2
-> again after 5.9-rc1. For the first case:
->=20
-> Acked-by: Wolfram Sang <wsa@kernel.org>
->=20
-
---Sig_/GpoHHLK2k0P4x+Ck5RFNKd7
+--Sig_/FbGeJp=0MdtdV4bDqgXCQEv
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAl8sLBEACgkQgNMC9Yht
-g5yRgg/9Epmyf8KbpXV7TBXzcezJGcky3j9GSC4cj7bQQxeV5Nlf8K0lvLQbSv7A
-tU5Ry0vhSJih1GbWvh9eL+UXmW8Lg/wKzl8mKP7Ni08MzUxsE77TD577zClaxk8R
-4bsWosh/J2gm0xiM7GobnDfiWaM0OwECb7i69x5Yg9NVJ6HVz+jvAlURCp1YzASP
-knLFewEVpVbbEEx0a8KewRMIXf1XzKT7DIOCb22zaEPlXKdgBjjfKfHpLmc0Mmoo
-sL95ukBOURiO7fePThg6OpxgkfE9rPyQy0kKmLhIkAbNXZeN/DLgfiFfm/S6ZLJA
-iwqbZPh6M8fP1ulJfPLUX+xY66YAILH3lA9ets8pISmExp08UFX8P3ngGDNClmgv
-p2l1u7VMH8X9zbIV5Q4y50r86/OJnBjAzBoIycuxsuIT78qCZ1pq0dD3lK09PrnG
-hQ9HRe6t0HB1hDGNlkGwv3ej1AcpzNkox8meqT49FWBSfDa2lobr8kbLgACyjFoa
-uhKJGjVb93d3E4PRZPFHxWiwhdf5X8mt4+MQ3mbJA/GRAZ+X74ZGeVbyIkHj4bx8
-HCLdoi8MuJBxhyH5/o2FSUVxkx9EmALhwS+oUOcT72owAG4+qIBtoQ3cySIA6LCw
-C5ZCU7mKw/9oMTkPR5VuPnLCQMcSeIyMYjdXsHcR8cxgvAsUvlw=
-=S2+b
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAl8sZDAACgkQgNMC9Yht
+g5zUtw//T4ogD7rGy/Ecq0wgWYSJcZ7q0mB+9R6Rs3hJ4/NvVTM6U7Bf+nvNIKwC
+TX6RvB1ucbbhxjwZXEzHy/+jOYYBD7/Cy+zDrJkizArvsfAvxcQ15nIBDtEJ/LdT
+zkcInTdWOZxbvPPfsvmkEiYVCaDrch8nN7wpbpWhaaDvMUYPKBPLYBM1YHkUcB6k
+/9t0kUj9vIQzeFQeqPMbVxD8sZH2wmjF9tL9uYhKqMTHH2jeWkOSOf65+khjxYJB
+y5y0sw1O0pRruDGpdjMEq9bw4TQLiElFvjQa3JGoV/VjHnDG3O/4FXb8oJd+Fsso
+W+B+rOp1a/i18CAd1Y+pptxx/t8YWPy4xPjX0zcJ7dcgWBdJng+CkyQdOvi1gQ6E
+2pX6dP7ve2l1n+WFqVZz5RRyEPEnr1ACK4W+MOZpwOmDxDFNOkRIv0+REF7n1qOx
+6XzaNnRt4rzcVQr0y/LdhNu9ZwNoDt9UsceJV6clBes8wrvLHXyTvBXjcIIKrZGW
+4BYhZEB7VzYMndG4VJAtga521ph7HV9J2RD3EbL9Ad+RyZ9vkqYUS5JizECEuvvO
+ofSBEaesYZgkaRVeF+bEaw42BmYR3bjr1K8hY4ZLqV6UPokV5sjL0mn4FfuWl+bA
+oV6cVxwVPirVYd7smYbViflVGmKBFw+nAYH8WFYoMWWAhbJwr/A=
+=1Q6B
 -----END PGP SIGNATURE-----
 
---Sig_/GpoHHLK2k0P4x+Ck5RFNKd7--
+--Sig_/FbGeJp=0MdtdV4bDqgXCQEv--
