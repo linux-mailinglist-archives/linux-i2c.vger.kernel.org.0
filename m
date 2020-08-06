@@ -2,126 +2,360 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B71023DC59
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Aug 2020 18:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2514B23DC9C
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Aug 2020 18:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729558AbgHFQvD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Aug 2020 12:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729130AbgHFQur (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Aug 2020 12:50:47 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A465C002145;
-        Thu,  6 Aug 2020 08:48:51 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id g33so9556133pgb.4;
-        Thu, 06 Aug 2020 08:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=O4fFNtupII4G3GGho31c/AZ+b/qF/UUJtsnTVBsXCWQ=;
-        b=Qe0AHxKYEd9paOfHikjpuE8sGQp696XvNaD8W3DahCu5M7sEFlNJNvAh9DJSbDzo2k
-         wLTyOY91Jl5e6ZHEnaARkpVYICAxLtbL93ynS+hilvB/gdQFh1a2nZ7/0N4OU03WUWQy
-         mE0F+8w5iI0rlA1rJZavPbSB/VZ+TK2D1cKsQArlVhvBIx8i1wIwDUX78REVE2AAGSzA
-         nk0aT0hCXgNkoE6fO2AnBmW/wWqPBwQxLeTbNys1MsXZ4goh6G+QgY1HLGZz6yr9B75f
-         fo9XxYBqcD0J+fvBKD7VLsLV6w7oHEgMtqGpa/PpjlFbo0AznYv/5Y70V4iCcVMZchBK
-         DPPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=O4fFNtupII4G3GGho31c/AZ+b/qF/UUJtsnTVBsXCWQ=;
-        b=eTe3+TNKuSiMxgGA44yc8CniXRXVJukqlO2mPWK4qhiu5cWos1fYYscaDez2X/L26v
-         2PXISZ4vgM92g0Nc9WzWmPrIiJdK10Pcw+4bYKfHwOu3QesjunbtmQgHG/3Vi6TuAxio
-         x7E5xukL9Ne3uN9+dpHIQ4AkhWSigXCr2rB/ucZ58fiJuc3ajH2+x8OeTNmA2JmEGZTJ
-         5zFE5cFqQ6W+Tk39a18USr1WWwcuiHsm6ELUAxD+I0z+Bt2XCwcX3ey42F0b6XmMXK8m
-         6DFL9c3yBTpL3BMNJtaqUvJWfGtJfacSRin75ot536b9xA/J3gmgSd1oJon7iCpnem+J
-         HU7A==
-X-Gm-Message-State: AOAM532xi3liQqv0xUtjrhi417+AX33hlBwM/KUV8q7ezULdmhVIHdFd
-        3+Sx3pfaQrRjgEPg/RNp3oHGs1efQrI=
-X-Google-Smtp-Source: ABdhPJwjxTDldD4lbT7Tg3xiJNgOhHHqyCxRvl290V9QfB+Zm4xmX12EtTp0dNKbfe7bxHFShHTOug==
-X-Received: by 2002:a62:c182:: with SMTP id i124mr2596803pfg.225.1596728930820;
-        Thu, 06 Aug 2020 08:48:50 -0700 (PDT)
-Received: from localhost.localdomain ([123.201.68.255])
-        by smtp.gmail.com with ESMTPSA id f6sm8375856pje.16.2020.08.06.08.48.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Aug 2020 08:48:50 -0700 (PDT)
-From:   Raag Jadav <raagjadav@gmail.com>
-To:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     wsa+renesas@sang-engineering.com, jacopo@jmondi.org,
-        akinobu.mita@gmail.com, sakari.ailus@linux.intel.com,
-        mchehab@kernel.org, Raag Jadav <raagjadav@gmail.com>
-Subject: [PATCH v2] media: ov7740: use SCCB regmap
-Date:   Thu,  6 Aug 2020 21:18:27 +0530
-Message-Id: <1596728907-32120-1-git-send-email-raagjadav@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S1729621AbgHFQyU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Aug 2020 12:54:20 -0400
+Received: from 7.mo68.mail-out.ovh.net ([46.105.63.230]:57287 "EHLO
+        7.mo68.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729532AbgHFQyP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Aug 2020 12:54:15 -0400
+X-Greylist: delayed 2209 seconds by postgrey-1.27 at vger.kernel.org; Thu, 06 Aug 2020 12:54:13 EDT
+Received: from player791.ha.ovh.net (unknown [10.110.171.50])
+        by mo68.mail-out.ovh.net (Postfix) with ESMTP id 76259172FD4
+        for <linux-i2c@vger.kernel.org>; Thu,  6 Aug 2020 18:15:19 +0200 (CEST)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player791.ha.ovh.net (Postfix) with ESMTPSA id 9F80915002624;
+        Thu,  6 Aug 2020 16:15:13 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-104R0059bfe411c-1641-46b4-891b-cf95eaa2adb0,
+                    9D5F4B8471F7AF6BEF45141B8B52B4DEEC6DEFE4) smtp.auth=steve@sk2.org
+From:   Stephen Kitt <steve@sk2.org>
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>
+Subject: [PATCH v2] docs: remove the 2.6 "Upgrading I2C Drivers" guide
+Date:   Thu,  6 Aug 2020 18:14:56 +0200
+Message-Id: <20200806161456.8680-1-steve@sk2.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 3213036861844639109
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrkedtgddutdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjeeluddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Make use of SCCB APIs for regmap operations.
-Remove i2c_check_functionality as devm_regmap_init_sccb
-does it for us.
+All the drivers have long since been upgraded, and all the important
+information here is also included in the "Implementing I2C device
+drivers" guide.
 
-Signed-off-by: Raag Jadav <raagjadav@gmail.com>
+Signed-off-by: Stephen Kitt <steve@sk2.org>
 ---
-Changes since v1:
-- Changed commit message.
-- Added SCCB config for ov7740.
+ Documentation/i2c/index.rst             |   1 -
+ Documentation/i2c/upgrading-clients.rst | 285 ------------------------
+ 2 files changed, 286 deletions(-)
+ delete mode 100644 Documentation/i2c/upgrading-clients.rst
 
- drivers/media/i2c/Kconfig  |  2 +-
- drivers/media/i2c/ov7740.c | 10 +---------
- 2 files changed, 2 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index da11036..c7d5722 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -1001,7 +1001,7 @@ config VIDEO_OV7670
- config VIDEO_OV7740
- 	tristate "OmniVision OV7740 sensor support"
- 	depends on I2C && VIDEO_V4L2
--	select REGMAP_I2C
-+	select REGMAP_SCCB
- 	help
- 	  This is a Video4Linux2 sensor driver for the OmniVision
- 	  OV7740 VGA camera sensor.
-diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
-index 732655f..5832461 100644
---- a/drivers/media/i2c/ov7740.c
-+++ b/drivers/media/i2c/ov7740.c
-@@ -1068,13 +1068,6 @@ static int ov7740_probe(struct i2c_client *client)
- 	struct v4l2_subdev *sd;
- 	int ret;
+diff --git a/Documentation/i2c/index.rst b/Documentation/i2c/index.rst
+index fee4744475df..8a2ad3845191 100644
+--- a/Documentation/i2c/index.rst
++++ b/Documentation/i2c/index.rst
+@@ -62,7 +62,6 @@ Legacy documentation
+ .. toctree::
+    :maxdepth: 1
  
--	if (!i2c_check_functionality(client->adapter,
--				     I2C_FUNC_SMBUS_BYTE_DATA)) {
--		dev_err(&client->dev,
--			"OV7740: I2C-Adapter doesn't support SMBUS\n");
--		return -EIO;
+-   upgrading-clients
+    old-module-parameters
+ 
+ .. only::  subproject and html
+diff --git a/Documentation/i2c/upgrading-clients.rst b/Documentation/i2c/upgrading-clients.rst
+deleted file mode 100644
+index 1708090d7b8f..000000000000
+--- a/Documentation/i2c/upgrading-clients.rst
++++ /dev/null
+@@ -1,285 +0,0 @@
+-=================================================
+-Upgrading I2C Drivers to the new 2.6 Driver Model
+-=================================================
+-
+-Ben Dooks <ben-linux@fluff.org>
+-
+-Introduction
+-------------
+-
+-This guide outlines how to alter existing Linux 2.6 client drivers from
+-the old to the new binding methods.
+-
+-
+-Example old-style driver
+-------------------------
+-
+-::
+-
+-  struct example_state {
+-	struct i2c_client	client;
+-	....
+-  };
+-
+-  static struct i2c_driver example_driver;
+-
+-  static unsigned short ignore[] = { I2C_CLIENT_END };
+-  static unsigned short normal_addr[] = { OUR_ADDR, I2C_CLIENT_END };
+-
+-  I2C_CLIENT_INSMOD;
+-
+-  static int example_attach(struct i2c_adapter *adap, int addr, int kind)
+-  {
+-	struct example_state *state;
+-	struct device *dev = &adap->dev;  /* to use for dev_ reports */
+-	int ret;
+-
+-	state = kzalloc(sizeof(struct example_state), GFP_KERNEL);
+-	if (state == NULL) {
+-		dev_err(dev, "failed to create our state\n");
+-		return -ENOMEM;
 -	}
 -
- 	ov7740 = devm_kzalloc(&client->dev, sizeof(*ov7740), GFP_KERNEL);
- 	if (!ov7740)
- 		return -ENOMEM;
-@@ -1091,7 +1084,7 @@ static int ov7740_probe(struct i2c_client *client)
- 	if (ret)
- 		return ret;
- 
--	ov7740->regmap = devm_regmap_init_i2c(client, &ov7740_regmap_config);
-+	ov7740->regmap = devm_regmap_init_sccb(client, &ov7740_regmap_config);
- 	if (IS_ERR(ov7740->regmap)) {
- 		ret = PTR_ERR(ov7740->regmap);
- 		dev_err(&client->dev, "Failed to allocate register map: %d\n",
-@@ -1100,7 +1093,6 @@ static int ov7740_probe(struct i2c_client *client)
- 	}
- 
- 	sd = &ov7740->subdev;
--	client->flags |= I2C_CLIENT_SCCB;
- 	v4l2_i2c_subdev_init(sd, client, &ov7740_subdev_ops);
- 
- #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
+-	example->client.addr    = addr;
+-	example->client.flags   = 0;
+-	example->client.adapter = adap;
+-
+-	i2c_set_clientdata(&state->i2c_client, state);
+-	strscpy(client->i2c_client.name, "example", sizeof(client->i2c_client.name));
+-
+-	ret = i2c_attach_client(&state->i2c_client);
+-	if (ret < 0) {
+-		dev_err(dev, "failed to attach client\n");
+-		kfree(state);
+-		return ret;
+-	}
+-
+-	dev = &state->i2c_client.dev;
+-
+-	/* rest of the initialisation goes here. */
+-
+-	dev_info(dev, "example client created\n");
+-
+-	return 0;
+-  }
+-
+-  static int example_detach(struct i2c_client *client)
+-  {
+-	struct example_state *state = i2c_get_clientdata(client);
+-
+-	i2c_detach_client(client);
+-	kfree(state);
+-	return 0;
+-  }
+-
+-  static int example_attach_adapter(struct i2c_adapter *adap)
+-  {
+-	return i2c_probe(adap, &addr_data, example_attach);
+-  }
+-
+-  static struct i2c_driver example_driver = {
+-	.driver		= {
+-		.owner		= THIS_MODULE,
+-		.name		= "example",
+-		.pm		= &example_pm_ops,
+-	},
+-	.attach_adapter = example_attach_adapter,
+-	.detach_client	= example_detach,
+-  };
+-
+-
+-Updating the client
+--------------------
+-
+-The new style binding model will check against a list of supported
+-devices and their associated address supplied by the code registering
+-the busses. This means that the driver .attach_adapter and
+-.detach_client methods can be removed, along with the addr_data,
+-as follows::
+-
+-  - static struct i2c_driver example_driver;
+-
+-  - static unsigned short ignore[] = { I2C_CLIENT_END };
+-  - static unsigned short normal_addr[] = { OUR_ADDR, I2C_CLIENT_END };
+-
+-  - I2C_CLIENT_INSMOD;
+-
+-  - static int example_attach_adapter(struct i2c_adapter *adap)
+-  - {
+-  - 	return i2c_probe(adap, &addr_data, example_attach);
+-  - }
+-
+-    static struct i2c_driver example_driver = {
+-  -	.attach_adapter = example_attach_adapter,
+-  -	.detach_client	= example_detach,
+-    }
+-
+-Add the probe and remove methods to the i2c_driver, as so::
+-
+-   static struct i2c_driver example_driver = {
+-  +	.probe		= example_probe,
+-  +	.remove		= example_remove,
+-   }
+-
+-Change the example_attach method to accept the new parameters
+-which include the i2c_client that it will be working with::
+-
+-  - static int example_attach(struct i2c_adapter *adap, int addr, int kind)
+-  + static int example_probe(struct i2c_client *client,
+-  +			   const struct i2c_device_id *id)
+-
+-Change the name of example_attach to example_probe to align it with the
+-i2c_driver entry names. The rest of the probe routine will now need to be
+-changed as the i2c_client has already been setup for use.
+-
+-The necessary client fields have already been setup before
+-the probe function is called, so the following client setup
+-can be removed::
+-
+-  -	example->client.addr    = addr;
+-  -	example->client.flags   = 0;
+-  -	example->client.adapter = adap;
+-  -
+-  -	strscpy(client->i2c_client.name, "example", sizeof(client->i2c_client.name));
+-
+-The i2c_set_clientdata is now::
+-
+-  -	i2c_set_clientdata(&state->client, state);
+-  +	i2c_set_clientdata(client, state);
+-
+-The call to i2c_attach_client is no longer needed, if the probe
+-routine exits successfully, then the driver will be automatically
+-attached by the core. Change the probe routine as so::
+-
+-  -	ret = i2c_attach_client(&state->i2c_client);
+-  -	if (ret < 0) {
+-  -		dev_err(dev, "failed to attach client\n");
+-  -		kfree(state);
+-  -		return ret;
+-  -	}
+-
+-
+-Remove the storage of 'struct i2c_client' from the 'struct example_state'
+-as we are provided with the i2c_client in our example_probe. Instead we
+-store a pointer to it for when it is needed.
+-
+-::
+-
+-  struct example_state {
+-  -	struct i2c_client	client;
+-  +	struct i2c_client	*client;
+-
+-the new i2c client as so::
+-
+-  -	struct device *dev = &adap->dev;  /* to use for dev_ reports */
+-  + 	struct device *dev = &i2c_client->dev;  /* to use for dev_ reports */
+-
+-And remove the change after our client is attached, as the driver no
+-longer needs to register a new client structure with the core::
+-
+-  -	dev = &state->i2c_client.dev;
+-
+-In the probe routine, ensure that the new state has the client stored
+-in it::
+-
+-  static int example_probe(struct i2c_client *i2c_client,
+-			 const struct i2c_device_id *id)
+-  {
+-	struct example_state *state;
+-	struct device *dev = &i2c_client->dev;
+-	int ret;
+-
+-	state = kzalloc(sizeof(struct example_state), GFP_KERNEL);
+-	if (state == NULL) {
+-		dev_err(dev, "failed to create our state\n");
+-		return -ENOMEM;
+-	}
+-
+-  +	state->client = i2c_client;
+-
+-Update the detach method, by changing the name to _remove and
+-to delete the i2c_detach_client call. It is possible that you
+-can also remove the ret variable as it is not needed for any
+-of the core functions.
+-
+-::
+-
+-  - static int example_detach(struct i2c_client *client)
+-  + static int example_remove(struct i2c_client *client)
+-  {
+-	struct example_state *state = i2c_get_clientdata(client);
+-
+-  -	i2c_detach_client(client);
+-
+-And finally ensure that we have the correct ID table for the i2c-core
+-and other utilities::
+-
+-  + struct i2c_device_id example_idtable[] = {
+-  +       { "example", 0 },
+-  +       { }
+-  +};
+-  +
+-  +MODULE_DEVICE_TABLE(i2c, example_idtable);
+-
+-  static struct i2c_driver example_driver = {
+-	.driver		= {
+-		.owner		= THIS_MODULE,
+-		.name		= "example",
+-	},
+-  +	.id_table	= example_ids,
+-
+-
+-Our driver should now look like this::
+-
+-  struct example_state {
+-	struct i2c_client	*client;
+-	....
+-  };
+-
+-  static int example_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
+-  {
+-	struct example_state *state;
+-	struct device *dev = &client->dev;
+-
+-	state = kzalloc(sizeof(struct example_state), GFP_KERNEL);
+-	if (state == NULL) {
+-		dev_err(dev, "failed to create our state\n");
+-		return -ENOMEM;
+-	}
+-
+-	state->client = client;
+-	i2c_set_clientdata(client, state);
+-
+-	/* rest of the initialisation goes here. */
+-
+-	dev_info(dev, "example client created\n");
+-
+-	return 0;
+-  }
+-
+-  static int example_remove(struct i2c_client *client)
+-  {
+-	struct example_state *state = i2c_get_clientdata(client);
+-
+-	kfree(state);
+-	return 0;
+-  }
+-
+-  static struct i2c_device_id example_idtable[] = {
+-	{ "example", 0 },
+-	{ }
+-  };
+-
+-  MODULE_DEVICE_TABLE(i2c, example_idtable);
+-
+-  static struct i2c_driver example_driver = {
+-	.driver		= {
+-		.owner		= THIS_MODULE,
+-		.name		= "example",
+-		.pm		= &example_pm_ops,
+-	},
+-	.id_table	= example_idtable,
+-	.probe		= example_probe,
+-	.remove		= example_remove,
+-  };
+
+base-commit: 2324d50d051ec0f14a548e78554fb02513d6dcef
 -- 
-2.7.4
+2.20.1
 
