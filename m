@@ -2,158 +2,127 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 860EE23F3BA
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Aug 2020 22:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E3C23F4BA
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Aug 2020 00:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726015AbgHGUXY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Aug 2020 16:23:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55216 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725893AbgHGUXX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 7 Aug 2020 16:23:23 -0400
-Received: from localhost (130.sub-72-107-113.myvzw.com [72.107.113.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C24172074D;
-        Fri,  7 Aug 2020 20:23:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596831803;
-        bh=eZ11znaZyBQszlg13DinqaMSmiV/14OwQJjM/YVoM+c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Q+hpo1S9CCaw7/RboOmuRIq5Ozpy9Hdj0Hf44V38d2eDCxlcW+VH8u6vVQkYUeyUl
-         flExzj3W5bnBE9Ff7v7xOJyfdoYbK1r0jQE8q9j1KEkFK6giGkFBUL2hekm9yOMFLn
-         8o2cIPiustbpSOxrNK9i+etfjHb3UYpZEsZSk0U0=
-Date:   Fri, 7 Aug 2020 15:23:21 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vaibhav Gupta <vaibhavgupta40@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        Tomoya MORINAGA <tomoya-linux@dsn.okisemi.com>,
-        Tomoya MORINAGA <tomoya.rohm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v2 2/2] i2c: eg20t: use generic power management
-Message-ID: <20200807202321.GA753887@bjorn-Precision-5520>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200805193616.384313-3-vaibhavgupta40@gmail.com>
+        id S1726155AbgHGWCW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Aug 2020 18:02:22 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:36060 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726038AbgHGWCW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Aug 2020 18:02:22 -0400
+Received: by linux.microsoft.com (Postfix, from userid 1046)
+        id 689F920B4908; Fri,  7 Aug 2020 15:02:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 689F920B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1596837741;
+        bh=tP/2fOtWxkpznzm5+efdZqc6aL8NJ+U2iK0gjmnE2uk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bvagcmBcS5wJ3js7XI0x9J+NCYjeHhfZgH+fdIqcNEFLBh8HcEypu5Ku2vdQ8+6Ff
+         oBDF4vxd3gSG5OyN1jhQMoV/rusMYOPgMptjW41t1RfzMnRD8gx1IX8XT5vOpetlRh
+         Xv6hKV/vX87+guoAmOER5IPIGCMYbCsTFGvcW4P4=
+From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
+To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>, Ray Jui <rjui@broadcom.com>
+Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dhananjay Phadke <dphadke@linux.microsoft.com>
+Subject: [PATCH v2] i2c: iproc: fix race between client unreg and isr
+Date:   Fri,  7 Aug 2020 15:02:06 -0700
+Message-Id: <1596837726-6859-1-git-send-email-dphadke@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-[+cc Jean for i801 question below]
+When i2c client unregisters, synchronize irq before setting
+iproc_i2c->slave to NULL.
 
-On Thu, Aug 06, 2020 at 01:06:16AM +0530, Vaibhav Gupta wrote:
-> Drivers using legacy power management .suspen()/.resume() callbacks
-> have to manage PCI states and device's PM states themselves. They also
-> need to take care of standard configuration registers.
-> 
-> Switch to generic power management framework using a single
-> "struct dev_pm_ops" variable to take the unnecessary load from the driver.
-> This also avoids the need for the driver to directly call most of the PCI
-> helper functions and device power state control functions, as through
-> the generic framework PCI Core takes care of the necessary operations,
-> and drivers are required to do only device-specific jobs.
-> 
-> Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+(1) disable_irq()
+(2) Mask event enable bits in control reg
+(3) Erase slave address (avoid further writes to rx fifo)
+(4) Flush tx and rx FIFOs
+(5) Clear pending event (interrupt) bits in status reg
+(6) enable_irq()
+(7) Set client pointer to NULL
 
-s/.suspen/.suspend/ above
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000318
 
-These both look right to me.
+[  371.020421] pc : bcm_iproc_i2c_isr+0x530/0x11f0
+[  371.025098] lr : __handle_irq_event_percpu+0x6c/0x170
+[  371.030309] sp : ffff800010003e40
+[  371.033727] x29: ffff800010003e40 x28: 0000000000000060
+[  371.039206] x27: ffff800010ca9de0 x26: ffff800010f895df
+[  371.044686] x25: ffff800010f18888 x24: ffff0008f7ff3600
+[  371.050165] x23: 0000000000000003 x22: 0000000001600000
+[  371.055645] x21: ffff800010f18888 x20: 0000000001600000
+[  371.061124] x19: ffff0008f726f080 x18: 0000000000000000
+[  371.066603] x17: 0000000000000000 x16: 0000000000000000
+[  371.072082] x15: 0000000000000000 x14: 0000000000000000
+[  371.077561] x13: 0000000000000000 x12: 0000000000000001
+[  371.083040] x11: 0000000000000000 x10: 0000000000000040
+[  371.088519] x9 : ffff800010f317c8 x8 : ffff800010f317c0
+[  371.093999] x7 : ffff0008f805b3b0 x6 : 0000000000000000
+[  371.099478] x5 : ffff0008f7ff36a4 x4 : ffff8008ee43d000
+[  371.104957] x3 : 0000000000000000 x2 : ffff8000107d64c0
+[  371.110436] x1 : 00000000c00000af x0 : 0000000000000000
 
-Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
+[  371.115916] Call trace:
+[  371.118439]  bcm_iproc_i2c_isr+0x530/0x11f0
+[  371.122754]  __handle_irq_event_percpu+0x6c/0x170
+[  371.127606]  handle_irq_event_percpu+0x34/0x88
+[  371.132189]  handle_irq_event+0x40/0x120
+[  371.136234]  handle_fasteoi_irq+0xcc/0x1a0
+[  371.140459]  generic_handle_irq+0x24/0x38
+[  371.144594]  __handle_domain_irq+0x60/0xb8
+[  371.148820]  gic_handle_irq+0xc0/0x158
+[  371.152687]  el1_irq+0xb8/0x140
+[  371.155927]  arch_cpu_idle+0x10/0x18
+[  371.159615]  do_idle+0x204/0x290
+[  371.162943]  cpu_startup_entry+0x24/0x60
+[  371.166990]  rest_init+0xb0/0xbc
+[  371.170322]  arch_call_rest_init+0xc/0x14
+[  371.174458]  start_kernel+0x404/0x430
 
-Looking at neighboring drivers, it looks like some already use generic
-PM but have unnecessary PCI code, e.g., amd_mp2_pci_suspend().
-Probably already on your list.
+Fixes: c245d94ed106 ("i2c: iproc: Add multi byte read-write support for slave mode")
 
-Also, i801_suspend() looks suspicious because it writes SMBHSTCFG, but
-I don't see anything corresponding in i801_resume().
+Signed-off-by: Dhananjay Phadke <dphadke@linux.microsoft.com>
+---
+ drivers/i2c/busses/i2c-bcm-iproc.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-> ---
->  drivers/i2c/busses/i2c-eg20t.c | 36 +++++++---------------------------
->  1 file changed, 7 insertions(+), 29 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-eg20t.c b/drivers/i2c/busses/i2c-eg20t.c
-> index eb41de22d461..843b31a0f752 100644
-> --- a/drivers/i2c/busses/i2c-eg20t.c
-> +++ b/drivers/i2c/busses/i2c-eg20t.c
-> @@ -846,11 +846,10 @@ static void pch_i2c_remove(struct pci_dev *pdev)
->  	kfree(adap_info);
->  }
->  
-> -#ifdef CONFIG_PM
-> -static int pch_i2c_suspend(struct pci_dev *pdev, pm_message_t state)
-> +static int __maybe_unused pch_i2c_suspend(struct device *dev)
->  {
-> -	int ret;
->  	int i;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
->  	struct adapter_info *adap_info = pci_get_drvdata(pdev);
->  	void __iomem *p = adap_info->pch_data[0].pch_base_address;
->  
-> @@ -872,31 +871,13 @@ static int pch_i2c_suspend(struct pci_dev *pdev, pm_message_t state)
->  		ioread32(p + PCH_I2CSR), ioread32(p + PCH_I2CBUFSTA),
->  		ioread32(p + PCH_I2CESRSTA));
->  
-> -	ret = pci_save_state(pdev);
-> -
-> -	if (ret) {
-> -		pch_pci_err(pdev, "pci_save_state\n");
-> -		return ret;
-> -	}
-> -
-> -	pci_disable_device(pdev);
-> -	pci_set_power_state(pdev, pci_choose_state(pdev, state));
-> -
->  	return 0;
->  }
->  
-> -static int pch_i2c_resume(struct pci_dev *pdev)
-> +static int __maybe_unused pch_i2c_resume(struct device *dev)
->  {
->  	int i;
-> -	struct adapter_info *adap_info = pci_get_drvdata(pdev);
-> -
-> -	pci_set_power_state(pdev, PCI_D0);
-> -	pci_restore_state(pdev);
-> -
-> -	if (pci_enable_device(pdev) < 0) {
-> -		pch_pci_err(pdev, "pch_i2c_resume:pci_enable_device FAILED\n");
-> -		return -EIO;
-> -	}
-> +	struct adapter_info *adap_info = dev_get_drvdata(dev);
->  
->  	for (i = 0; i < adap_info->ch_num; i++)
->  		pch_i2c_init(&adap_info->pch_data[i]);
-> @@ -905,18 +886,15 @@ static int pch_i2c_resume(struct pci_dev *pdev)
->  
->  	return 0;
->  }
-> -#else
-> -#define pch_i2c_suspend NULL
-> -#define pch_i2c_resume NULL
-> -#endif
-> +
-> +static SIMPLE_DEV_PM_OPS(pch_i2c_pm_ops, pch_i2c_suspend, pch_i2c_resume);
->  
->  static struct pci_driver pch_pcidriver = {
->  	.name = KBUILD_MODNAME,
->  	.id_table = pch_pcidev_id,
->  	.probe = pch_i2c_probe,
->  	.remove = pch_i2c_remove,
-> -	.suspend = pch_i2c_suspend,
-> -	.resume = pch_i2c_resume
-> +	.driver.pm = &pch_i2c_pm_ops,
->  };
->  
->  module_pci_driver(pch_pcidriver);
-> -- 
-> 2.27.0
-> 
+diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
+index 8a3c98866fb7..c576776ffb10 100644
+--- a/drivers/i2c/busses/i2c-bcm-iproc.c
++++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+@@ -1078,7 +1078,7 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
+ 	if (!iproc_i2c->slave)
+ 		return -EINVAL;
+ 
+-	iproc_i2c->slave = NULL;
++	disable_irq(iproc_i2c->irq);
+ 
+ 	/* disable all slave interrupts */
+ 	tmp = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
+@@ -1091,6 +1091,17 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
+ 	tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
+ 	iproc_i2c_wr_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET, tmp);
+ 
++	/* flush TX/RX FIFOs */
++	tmp = (BIT(S_FIFO_RX_FLUSH_SHIFT) | BIT(S_FIFO_TX_FLUSH_SHIFT));
++	iproc_i2c_wr_reg(iproc_i2c, S_FIFO_CTRL_OFFSET, tmp);
++
++	/* clear all pending slave interrupts */
++	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, ISR_MASK_SLAVE);
++
++	enable_irq(iproc_i2c->irq);
++
++	iproc_i2c->slave = NULL;
++
+ 	return 0;
+ }
+ 
+-- 
+2.17.1
+
