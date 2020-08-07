@@ -2,57 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F9023EF7C
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Aug 2020 16:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C6F23EFAF
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Aug 2020 16:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726881AbgHGOvr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Fri, 7 Aug 2020 10:51:47 -0400
-Received: from mail.furshetcrimea.ru ([193.27.243.220]:51882 "EHLO
-        furshetcrimea.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726793AbgHGOvq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Aug 2020 10:51:46 -0400
-X-Greylist: delayed 5015 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 10:51:24 EDT
-Received: from [154.118.61.214] (account info@furshetcrimea.ru HELO [192.168.8.100])
-  by furshetcrimea.ru (CommuniGate Pro SMTP 6.1.10)
-  with ESMTPA id 11132949; Fri, 07 Aug 2020 17:58:06 +0300
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1726131AbgHGOzh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Aug 2020 10:55:37 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50464 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726061AbgHGOzh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 7 Aug 2020 10:55:37 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 936B9AB7D;
+        Fri,  7 Aug 2020 14:55:54 +0000 (UTC)
+Date:   Fri, 7 Aug 2020 16:55:35 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH i2c-tools] tools: allow to preset TOOLS_CFLAGS and
+ TOOLS_LDFLAGS
+Message-ID: <20200807165535.3baca95d@endymion>
+In-Reply-To: <20200807094247.GB1178@kunai>
+References: <20200805220555.9050-1-wsa@kernel.org>
+        <20200807114051.099ee040@endymion>
+        <20200807094247.GB1178@kunai>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Bei Interesse antworten.
-To:     Recipients <info@furshetcrimea.ru>
-From:   info@furshetcrimea.ru
-Date:   Fri, 07 Aug 2020 15:45:29 +0100
-Reply-To: mattiassjoborg751@gmail.com
-X-Antivirus: Avast (VPS 200807-2, 08/07/2020), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <auto-000011132949@furshetcrimea.ru>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Schöne Grüße,
+On Fri, 7 Aug 2020 11:42:47 +0200, Wolfram Sang wrote:
+> > > Sometimes I need to add some flags (like -static for the linker), so
+> > > allow this.  
+> > 
+> > Does USE_STATIC_LIB=1 not work for you?  
+> 
+> For some embedded devices, I need full static because they use a libc I
+> don't have at hand.
 
-Mein Name ist MATTIAS SJOBORG, ich bin Schweizer Staatsbürger und (Vorsitzender des Vergütungs- und Nominierungsausschusses) von Tethys Petroleum, einem multinationalen Ölkonzern mit Sitz in London-England, Großbritannien. Ich bitte Sie um Ihre Hilfe, um die Summe von vierzig Millionen Dollar abzurufen, die aus zwei Sendungsboxen besteht.
-
-Dieses Geld wurde von der Firma erworben und von einem Diplomaten begleitet und korrekt in einer Sicherheitsfirma in Amerika hinterlegt. Mein Grund dafür ist, dass ich von der Firma zu lange um meine Ansprüche betrogen wurde, nur weil ich kein bin Britisch. Die Kontaktdaten des Diplomaten erhalten Sie, wenn Sie Ihr Interesse bekunden, mir zu helfen.
-
-Jede der Schachteln enthält 20 Mio. USD. Für Ihre Hilfe bin ich bereit, 40% an Sie freizugeben. Aus Sicherheitsgründen wurde die Sendung als VERTRAULICHE DIPLOMATISCHE DOKUMENTE registriert, und ich kann erklären, warum dies so erklärt wurde. Denken Sie daran, dass der Diplomat den Inhalt der Sendung nicht kennt. Er ist seit einem Monat dort, während ich nach einem zuverlässigen Partner suchen möchte. Ich werde das Land verlassen, sobald die Sendung für Sie an Sie geliefert wird Private Investitionen und ich haben geschworen, niemals nach London zurückzukehren. Bitte, ich brauche Ihre dringende Antwort, bevor meine Pläne, das Unternehmen zu verlassen, entdeckt werden.
-
-www.tethyspetroleum.com/tethys/static/EN_US/au_seniormanagement.html
-
-Im Moment ist die sicherste Form der Korrespondenz meine eigene E-Mail-Adresse. Bitte antworten Sie im Interesse der Vertraulichkeit nur über meine direkte E-Mail-Adresse. Antworten Sie zusammen mit Ihrer direkten Telefon- und Faxnummer, unter der ich Sie alternativ erreichen kann.
-
-Bitte, wenn Sie nicht bereit und interessiert sind, mir zu helfen, löschen Sie bitte diese E-Mail aus Ihrer E-Mail und tun Sie so, als hätten Sie sie nie erhalten.
-
-Freundliche Grüße,
-Mr.Mattias Sjoborg
-(Vorsitzender des Vergütungs- und Nominierungsausschusses)
-Tethys Petroleum.
-London, England
+OK, if you think there are more people interested, feel free to
+introduce another Makefile variable (STATIC_BUILD=1 for example) and
+use that. Whatever makes your life easier really.
 
 -- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
-
+Jean Delvare
+SUSE L3 Support
