@@ -2,60 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CF923EA5B
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Aug 2020 11:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49E723EA82
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Aug 2020 11:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726915AbgHGJbt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Aug 2020 05:31:49 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34548 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726511AbgHGJbt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 7 Aug 2020 05:31:49 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 992C1AC55;
-        Fri,  7 Aug 2020 09:32:05 +0000 (UTC)
-Date:   Fri, 7 Aug 2020 11:31:46 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: VAIO EEPROM support in at24
-Message-ID: <20200807113146.7557c18b@endymion>
-In-Reply-To: <20200805163655.6cfa6e17@endymion>
-References: <20200317151409.7940926c@endymion>
-        <CAMRc=Mdoh5Sk3iS_CO4+++SG2jJOy1qrG4q2zOzbeYYMdJR0VA@mail.gmail.com>
-        <20200805163655.6cfa6e17@endymion>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1727979AbgHGJih (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Aug 2020 05:38:37 -0400
+Received: from spam01.hygon.cn ([110.188.70.11]:58222 "EHLO spam2.hygon.cn"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726382AbgHGJib (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 7 Aug 2020 05:38:31 -0400
+Received: from MK-DB.hygon.cn ([172.23.18.60])
+        by spam2.hygon.cn with ESMTP id 0779b7L1041093;
+        Fri, 7 Aug 2020 17:37:07 +0800 (GMT-8)
+        (envelope-from puwen@hygon.cn)
+Received: from cncheex01.Hygon.cn ([172.23.18.10])
+        by MK-DB.hygon.cn with ESMTP id 0779b09i079166;
+        Fri, 7 Aug 2020 17:37:00 +0800 (GMT-8)
+        (envelope-from puwen@hygon.cn)
+Received: from ubuntu1604-2.higon.com (172.23.18.44) by cncheex01.Hygon.cn
+ (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Fri, 7 Aug 2020
+ 17:36:45 +0800
+From:   Pu Wen <puwen@hygon.cn>
+To:     <rjw@rjwysocki.net>, <lenb@kernel.org>,
+        <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <wsa@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, Pu Wen <puwen@hygon.cn>
+Subject: [PATCH RESEND] i2c: designware: Add device HID for Hygon I2C controller
+Date:   Fri, 7 Aug 2020 17:35:29 +0800
+Message-ID: <20200807093529.5343-1-puwen@hygon.cn>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.23.18.44]
+X-ClientProxiedBy: cncheex01.Hygon.cn (172.23.18.10) To cncheex01.Hygon.cn
+ (172.23.18.10)
+X-MAIL: spam2.hygon.cn 0779b7L1041093
+X-DNSRBL: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 5 Aug 2020 16:36:55 +0200, Jean Delvare wrote:
-> 1* Do we actually need to use a struct resource? With the current
->    requirements, that looks overkill to me. We really only need the
->    start and end offsets of the masked area (or start and length). Or
->    do you plan to ever support multiple masked ranges, and
->    resource.child would be used to daisy-chain these ranges? Personally
->    I would wait until the need exists.
+Add device HID HYGO0010 to match the Hygon ACPI Vendor ID (HYGO) that
+was registered in http://www.uefi.org/acpi_id_list, and the I2C
+controller on Hygon paltform will use the HID.
 
-Dang, turns out that the need already exists. I just found that the
-eeprom driver masks *2* areas of the Sony VAIO EEPROMs. I should know
-because I'm the one who made that change but that was 13 years ago and
-my memory doesn't go that far back.
+Signed-off-by: Pu Wen <puwen@hygon.cn>
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Wolfram Sang <wsa@kernel.org>
+---
+ drivers/acpi/acpi_apd.c                     | 1 +
+ drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-I'll think of a way to support that. Still not a big fan of
-daisy-chained resource structs though. Maybe a generic post-processing
-callback function would do... I'll give that a try.
-
+diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
+index ba2612e9a0eb..f24f6d3f1fa5 100644
+--- a/drivers/acpi/acpi_apd.c
++++ b/drivers/acpi/acpi_apd.c
+@@ -240,6 +240,7 @@ static const struct acpi_device_id acpi_apd_device_ids[] = {
+ 	{ "AMDI0020", APD_ADDR(cz_uart_desc) },
+ 	{ "AMD0030", },
+ 	{ "AMD0040", APD_ADDR(st_misc_desc)},
++	{ "HYGO0010", APD_ADDR(wt_i2c_desc) },
+ #endif
+ #ifdef CONFIG_ARM64
+ 	{ "APMC0D0F", APD_ADDR(xgene_i2c_desc) },
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index a71bc58fc03c..0dfeb2d11603 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -55,6 +55,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
+ 	{ "HISI02A1", 0 },
+ 	{ "HISI02A2", 0 },
+ 	{ "HISI02A3", 0 },
++	{ "HYGO0010", ACCESS_INTR_MASK },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(acpi, dw_i2c_acpi_match);
 -- 
-Jean Delvare
-SUSE L3 Support
+2.23.0
+
