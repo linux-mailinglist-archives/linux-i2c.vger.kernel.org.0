@@ -2,77 +2,120 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E2823E565
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Aug 2020 03:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DE323E737
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Aug 2020 08:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbgHGBGB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Aug 2020 21:06:01 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:61759 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726027AbgHGBGA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Aug 2020 21:06:00 -0400
-X-UUID: abd9c3f39a344fe5bf9d7bb293427d99-20200807
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=G4GxAPQqpd+NBS9oJCQUn487GFr6GbmdKg9Au8QZObs=;
-        b=ZRLmt8augMyTp+c3jXYI99SYRnMzNRYCfUmWSn/6LEyobabvLguovX6N5LEAH3PotQSYszq6ie+3oI1lXoDcUzSB4wg5t4o1nyCPT8nVX3RWcuhHg+18Kwa/7/K2e3oAmx7YNdWTWaLxKWqHSAz2VXbIKJRs0jaVfdH24qhnToo=;
-X-UUID: abd9c3f39a344fe5bf9d7bb293427d99-20200807
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <qii.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1348952034; Fri, 07 Aug 2020 09:05:58 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by mtkmbs02n1.mediatek.inc
- (172.21.101.77) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 Aug
- 2020 09:05:56 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 7 Aug 2020 09:05:55 +0800
-Message-ID: <1596762313.8263.9.camel@mhfsdcap03>
-Subject: Re: [PATCH] i2c: mediatek: Fix i2c_spec_values description
-From:   Qii Wang <qii.wang@mediatek.com>
-To:     Matthias Brugger <mbrugger@suse.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>, <wsa@the-dreams.de>,
-        <yingjoe.chen@mediatek.com>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Fri, 7 Aug 2020 09:05:13 +0800
-In-Reply-To: <6e029d96-6171-0006-a5bb-01d0d5a7391b@suse.com>
-References: <c410f784-7b51-0d65-7a41-3845214dd273@gmail.com>
-         <1596712005.8263.4.camel@mhfsdcap03>
-         <6e029d96-6171-0006-a5bb-01d0d5a7391b@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726307AbgHGGXi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Aug 2020 02:23:38 -0400
+Received: from 7.mo2.mail-out.ovh.net ([188.165.48.182]:55212 "EHLO
+        7.mo2.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725379AbgHGGXi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Aug 2020 02:23:38 -0400
+X-Greylist: delayed 47724 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 02:23:37 EDT
+Received: from player697.ha.ovh.net (unknown [10.108.35.119])
+        by mo2.mail-out.ovh.net (Postfix) with ESMTP id E29611E2FCE
+        for <linux-i2c@vger.kernel.org>; Fri,  7 Aug 2020 08:23:34 +0200 (CEST)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player697.ha.ovh.net (Postfix) with ESMTPSA id D71D3151467EB;
+        Fri,  7 Aug 2020 06:23:28 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-98R002924d5bf1-2994-4c8b-9b6c-5998cd15a743,
+                    B1FDDFD4E508142116FDFB9194C63E8FBE397CFD) smtp.auth=steve@sk2.org
+Date:   Fri, 7 Aug 2020 08:23:27 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon/pmbus: use simple i2c probe function
+Message-ID: <20200807082327.02e8a682@heffalump.sk2.org>
+In-Reply-To: <e378e4e6-73b3-0a11-bca6-ec0d4225a010@roeck-us.net>
+References: <20200806161645.9437-1-steve@sk2.org>
+        <5f7b5828-cb7c-127a-e454-6c8b8d98777b@roeck-us.net>
+        <20200806221232.278c3878@heffalump.sk2.org>
+        <e378e4e6-73b3-0a11-bca6-ec0d4225a010@roeck-us.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ boundary="Sig_/ZP=p/855_tqUdr_mQhb1AN/"; protocol="application/pgp-signature"
+X-Ovh-Tracer-Id: 17538705802184117518
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrkedugddutdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvffukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeevledvueefvdeivefftdeugeekveethefftdffteelheejkeejjeduffeiudetkeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrieeljedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA4LTA2IGF0IDE1OjM1ICswMjAwLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3Rl
-Og0KPiANCj4gT24gMDYvMDgvMjAyMCAxMzowNiwgUWlpIFdhbmcgd3JvdGU6DQo+ID4gT24gVGh1
-LCAyMDIwLTA4LTA2IGF0IDExOjQ4ICswMjAwLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3RlOg0KPiA+
-PiBUaGUgc3RydWN0IGkyY19zcGVjX3ZhbHVlcyBoYXZlIGl0J3MgbWVtYmVycyBkb2N1bWVudGVk
-IGJ1dCBpcyBtaXNzaW5nIHRoZQ0KPiA+PiBzdGFydGluZyAnQCcsIHdoaWNoIGxlYWRzIHRvIHdh
-cmluZ3MgbGlrZToNCj4gPj4NCj4gPj4gZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYzoy
-Njc6IHdhcm5pbmc6IEZ1bmN0aW9uIHBhcmFtZXRlciBvciBtZW1iZXINCj4gPj4gJ21pbl9sb3df
-bnMnIG5vdCBkZXNjcmliZWQgaW4gJ2kyY19zcGVjX3ZhbHVlcycNCj4gPj4NCj4gPj4gU2lnbmVk
-LW9mZi1ieTogTWF0dGhpYXMgQnJ1Z2dlciA8bWF0dGhpYXMuYmdnQGdtYWlsLmNvbT4NCj4gPj4g
-LS0tDQo+ID4+ICAgIGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXQ2NXh4LmMgfCA4ICsrKystLS0t
-DQo+ID4+ICAgIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0p
-DQo+ID4+DQo+ID4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5j
-IGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYw0KPiA+PiBpbmRleCBlODg5Zjc0NzAz
-ZTQuLmY1MWIzNWZjNDAwZiAxMDA2NDQNCj4gPj4gLS0tIGEvZHJpdmVycy9pMmMvYnVzc2VzL2ky
-Yy1tdDY1eHguYw0KPiA+PiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jDQo+
-ID4+IEBAIC0yNTMsMTAgKzI1MywxMCBAQCBzdHJ1Y3QgbXRrX2kyYyB7DQo+ID4+DQo+ID4+ICAg
-IC8qKg0KPiA+PiAgICAgKiBzdHJ1Y3QgaTJjX3NwZWNfdmFsdWVzOg0KPiA+PiAtICogbWluX2xv
-d19uczogbWluIExPVyBwZXJpb2Qgb2YgdGhlIFNDTCBjbG9jaw0KPiA+IA0KPiA+IENhbiB5b3Ug
-aGVscCBtZSBhZGQgYSBkZXNjcmlwdGlvbiBvZiBtaW5faGlnaF9ucy4gQXMNCj4gPiBAbWluX2hp
-Z2hfbnM6IG1pbiBISUdIIHBlcmlvZCBvZiB0aGUgU0NMIGNsb2NrDQo+IA0KPiBSaWdodCwgSSBm
-b3Jnb3QgYWJvdXQgdGhpcyBvbmUuDQo+IA0KPiBBY3R1YWxseSBJIGRvbid0IHNlZSBhbnkgY29k
-ZSB3aGljaCB1c2VzIHRoZSB2YWx1ZSwgc28gSSB0aGluayBpdCBzaG91bGQgYmUgDQo+IGRlbGV0
-ZWQgZnJvbSB0aGUgc3RydWN0Lg0KPiANCj4gRG8geW91IGhhdmUgYW55IHRob3VnaHRzIG9uIHRo
-aXMuDQo+IA0KDQpUaGF0IGlzIHJpZ2h0LCBpdCBpcyB1c2VkIGZvciBpbnRlcm5hbCB0ZXN0IGJl
-Zm9yZS4gWW91IGNhbiBkZWxldGVkIGl0Lg0KDQo=
+--Sig_/ZP=p/855_tqUdr_mQhb1AN/
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, 6 Aug 2020 14:48:58 -0700, Guenter Roeck <linux@roeck-us.net> wrote:
+> On 8/6/20 1:12 PM, Stephen Kitt wrote:
+> > On Thu, 6 Aug 2020 12:15:55 -0700, Guenter Roeck <linux@roeck-us.net>
+> > wrote: =20
+> >> On 8/6/20 9:16 AM, Stephen Kitt wrote: =20
+[...]
+> >> Also, I am not convinced that replacements such as
+> >>
+> >> -	{ "ipsps1", 0 },
+> >> +	{ .name =3D "ipsps1" },
+> >>
+> >> are an improvement. I would suggest to leave that alone for
+> >> consistency (and to make it easier to add more devices to the
+> >> various drivers if that happens in the future). =20
+> >=20
+> > From reading through all the drivers using id_table, it seems to me that
+> > we could do away with driver_data altogether and move all that to
+> > driver-local structures, in many cases covering more than just an id. By
+> > only initialising the elements of the structure that are really needed,=
+ I
+> > was hoping to (a) make it more obvious that driver_data isn=E2=80=99t u=
+sed, and
+> > (b) allow removing it without touching all the code again.
+> >  =20
+>=20
+> I don't see it as an improvement to replace a common data structure with
+> per-driver data structures. That sounds too much like "let's re-invent
+> the wheel over and over again". If that is where things are going, I'd
+> rather have it implemented everywhere else first. I am ok with the other
+> changes, but not with this.
+
+I agree, and I wasn=E2=80=99t intending on encouraging re-inventing the whe=
+el in each
+driver. Let=E2=80=99s focus on probe_new for now...
+
+What did you mean by =E2=80=9Cto make it easier to add more devices to the =
+various
+drivers if that happens in the future=E2=80=9D? There are already many driv=
+ers with
+multiple devices but no driver_data, dropping the explicit driver_data
+initialisation doesn=E2=80=99t necessarily make it harder to add devices, d=
+oes it?
+
+Regards,
+
+Stephen
+
+--Sig_/ZP=p/855_tqUdr_mQhb1AN/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAl8s818ACgkQgNMC9Yht
+g5wjxA//Ugr98eRz3F0dBjgb/dsdKZ2f7yN68V/HyjcOU+Qy/lKbqqhaICkDSBlz
+9qfG5Q6fZFzZTSIJKJMBdBX/LimJP8EdqqsvqMv+oTdFF2rk/xU+GEa5GO2GBGR4
+rY6fMZwkaQAT2tFrmjj9DkGyCN1oOXuTjESGWvRNZddNCG/0jn3JmjAI3cfRIJdm
+CFcpu5aPGO/kEBEM9iwWdY3BnGXisaxMkpqblJ3IfI+O+qNDu+I74TfHEKeuTbxv
+xwbew9yP8DveTOJmRaJqJLlHYVReWH4lw01u6XJ/oxeYwK5KvG1b52c9pBug6SlK
+HmKfr9fPBhd0jY11UJf6tdLbD6lYY4Sl4pXQ+MMOWYiyzkkxXHEx4RXrZGCtlhfQ
+vMfhpw1YtRvaye6D9cbiAbR/xlAtFp0FlA2dH9kepy352pAWjHa5LZg0nGqjYtE9
+zN0JJkTmumYjvyCzcia9XNJB83kz5vU5gvlDZpMvUO47jwHTBlpUWW1cy2K0WfTW
+Y3hhxGB+NkbfxbEUStbIiA4BEBn0yEK3LT3CZ7prExgLsy8SqulTCA3m2jdoIIVq
+P/S6ZMpMHZAhxEG4Ygjl77mJ6gZlrnGY3SL1POOUpwJ9F3yGbneNBXaywpSrEzQq
+IWFlrTjVIcg6MD97OR2muSRnTKKdcToMqwPSkHNRwtd9oCycZug=
+=sd2Z
+-----END PGP SIGNATURE-----
+
+--Sig_/ZP=p/855_tqUdr_mQhb1AN/--
