@@ -2,94 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B23D623F284
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Aug 2020 20:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C5A23F318
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Aug 2020 21:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727975AbgHGSI5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Aug 2020 14:08:57 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:35153 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725934AbgHGSI5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Aug 2020 14:08:57 -0400
-Received: by mail-ot1-f66.google.com with SMTP id 93so2305148otx.2;
-        Fri, 07 Aug 2020 11:08:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vlBLt0wVavmDZ5RFEsE+vCh0JS01F9HZx3Rc707e4Kw=;
-        b=d6mJgNWfX5o6T2N9E2ZV11Oc/wjLapES/dMSdzTwqWAZe5G/4i/3Sjr9cJgb81Brz+
-         RTCDoutlMnVUZnsTwuBqnoGrIpVmfHPEXiuKRg6BU5alzfZhJhJxsZx/GU+l3NYkxNiC
-         ZHG7t2q2DVz53gDqCe60YieNwRlwM4Exar4s0tYfP1mCmxwVhO/kHqd4jsvXykNPk7lY
-         m+/kY/8GmTleUO28VfZF7AicHeOR64SWr0RHgHzjfd4NzzeEI5iI/oDRhBUb1+gsNTAB
-         SapBNigx6t2H9+lcFRCPJeoI8PDuwlnxqvSV5oPVYNYBq85z629H6+40U2FCylhZvsbu
-         1mzw==
-X-Gm-Message-State: AOAM531x9kiWXbz/SIy3S3Vo1Vi0sO7K+IbCxlUwl+OlWFW1oSP2qVTe
-        6b6ASJzv07u5XAg03uCcndtJzQ7DaO32lR2ZPvs=
-X-Google-Smtp-Source: ABdhPJwS6Rs7JJC7qd1+eUP1wOhP9sPrOMJCwJ8G7Tro9YiSK2Elieu727o27cU/trsCY95ziwt2Qftnp7gkk1L3qkg=
-X-Received: by 2002:a05:6830:1e5c:: with SMTP id e28mr12255651otj.118.1596823735863;
- Fri, 07 Aug 2020 11:08:55 -0700 (PDT)
+        id S1726282AbgHGTdC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Aug 2020 15:33:02 -0400
+Received: from 2.mo178.mail-out.ovh.net ([46.105.39.61]:51796 "EHLO
+        2.mo178.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726045AbgHGTdC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Aug 2020 15:33:02 -0400
+X-Greylist: delayed 797 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 15:33:00 EDT
+Received: from player715.ha.ovh.net (unknown [10.110.115.143])
+        by mo178.mail-out.ovh.net (Postfix) with ESMTP id 773BCAC1D2
+        for <linux-i2c@vger.kernel.org>; Fri,  7 Aug 2020 21:07:20 +0200 (CEST)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player715.ha.ovh.net (Postfix) with ESMTPSA id 76BA814E9C8DB;
+        Fri,  7 Aug 2020 19:07:13 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-100R0038ca687ab-4f78-4da8-bbe2-7590c3ca912e,
+                    B1FDDFD4E508142116FDFB9194C63E8FBE397CFD) smtp.auth=steve@sk2.org
+Date:   Fri, 7 Aug 2020 21:07:07 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH v3] hwmon/pmbus: use simple i2c probe function
+Message-ID: <20200807210707.7dd1d9b9@heffalump.sk2.org>
+In-Reply-To: <20200807173231.GA47449@roeck-us.net>
+References: <20200807173231.GA47449@roeck-us.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20200807093529.5343-1-puwen@hygon.cn>
-In-Reply-To: <20200807093529.5343-1-puwen@hygon.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 7 Aug 2020 20:08:44 +0200
-Message-ID: <CAJZ5v0hJoJr5+GSZfoYXmTtH_TrY17P_xRABZg1YFnQ+WUaqmg@mail.gmail.com>
-Subject: Re: [PATCH RESEND] i2c: designware: Add device HID for Hygon I2C controller
-To:     Pu Wen <puwen@hygon.cn>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ boundary="Sig_/ZFB90kCEm=UKbNJ8Un9J6qQ"; protocol="application/pgp-signature"
+X-Ovh-Tracer-Id: 11990834011428048142
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrkedvgdduvdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvffukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeevledvueefvdeivefftdeugeekveethefftdffteelheejkeejjeduffeiudetkeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjeduhedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Aug 7, 2020 at 11:37 AM Pu Wen <puwen@hygon.cn> wrote:
->
-> Add device HID HYGO0010 to match the Hygon ACPI Vendor ID (HYGO) that
-> was registered in http://www.uefi.org/acpi_id_list, and the I2C
-> controller on Hygon paltform will use the HID.
->
-> Signed-off-by: Pu Wen <puwen@hygon.cn>
-> Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Wolfram Sang <wsa@kernel.org>
-> ---
->  drivers/acpi/acpi_apd.c                     | 1 +
->  drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
->  2 files changed, 2 insertions(+)
->
-> diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
-> index ba2612e9a0eb..f24f6d3f1fa5 100644
-> --- a/drivers/acpi/acpi_apd.c
-> +++ b/drivers/acpi/acpi_apd.c
-> @@ -240,6 +240,7 @@ static const struct acpi_device_id acpi_apd_device_ids[] = {
->         { "AMDI0020", APD_ADDR(cz_uart_desc) },
->         { "AMD0030", },
->         { "AMD0040", APD_ADDR(st_misc_desc)},
-> +       { "HYGO0010", APD_ADDR(wt_i2c_desc) },
->  #endif
->  #ifdef CONFIG_ARM64
->         { "APMC0D0F", APD_ADDR(xgene_i2c_desc) },
-> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-> index a71bc58fc03c..0dfeb2d11603 100644
-> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-> @@ -55,6 +55,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
->         { "HISI02A1", 0 },
->         { "HISI02A2", 0 },
->         { "HISI02A3", 0 },
-> +       { "HYGO0010", ACCESS_INTR_MASK },
->         { }
->  };
->  MODULE_DEVICE_TABLE(acpi, dw_i2c_acpi_match);
-> --
+--Sig_/ZFB90kCEm=UKbNJ8Un9J6qQ
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Applied as 5.9-rc1 material, thanks!
+On Fri, 7 Aug 2020 10:32:31 -0700, Guenter Roeck <linux@roeck-us.net> wrote:
+> On Fri, Aug 07, 2020 at 06:28:01PM +0200, Stephen Kitt wrote:
+> > =20
+> > -static int ltc2978_probe(struct i2c_client *client,
+> > -			 const struct i2c_device_id *id)
+> > +static int ltc2978_probe(struct i2c_client *client)
+> >  {
+> >  	int i, chip_id;
+> >  	struct ltc2978_data *data;
+> > @@ -670,10 +669,10 @@ static int ltc2978_probe(struct i2c_client *clien=
+t,
+> >  		return chip_id;
+> > =20
+> >  	data->id =3D chip_id;
+> > -	if (data->id !=3D id->driver_data)
+> > +	if (strcmp(client->name, ltc2978_id[data->id].name) !=3D 0) =20
+>=20
+> I was about to apply this patch, but this is problematic: It assumes that
+> __stringify(id) =3D=3D ltc2978_id[id].name and that ltc2978_id[id].driver=
+_data
+> =3D=3D id. While that is curently the case (as far as I can see), it is s=
+till
+> unsafe. I think it would be much safer to use i2c_match_id() here.
+
+I=E2=80=99m not following the __stringify assumption, but I do get your poi=
+nt about
+the driver_data being a valid index into the array; that was already baked
+into the code, as
+
+		dev_warn(&client->dev,
+			 "Device mismatch: Configured %s, detected %s\n",
+			 client->name,
+			 ltc2978_id[data->id].name);
+
+but I=E2=80=99ll fix both.
+
+Similar assumptions are present in other drivers here IIRC, I=E2=80=99ll fi=
+x those
+too.
+
+Regards,
+
+Stephen
+
+--Sig_/ZFB90kCEm=UKbNJ8Un9J6qQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAl8tplsACgkQgNMC9Yht
+g5zbIA//S0DouNct8J2rS/6Fe3PdwZrMiAJ7FNNKqTzQDbt7Il2R8rcdXM9HVPbH
+sxloEI7MB+HbiQFRFIXlHL5xR5oBb3cUkZzstyc+SvXo+AVjYV9B+v9vjWHKAP9Z
+GgWV65P20HCtbLAat9hDMFzTGaDcoEbBzrPOdCodPrT/mA+E287tLaubw97+uWWz
+aGaoub1huJvS4HO+DTNVX6uUBslilnZXhn/LKLDvgDOqtUMnsBIdrSI7b6bgO78r
+MVou0LxSaPOxl2+nr2xJDnQILUxzsWtOROIYWgGpU/K/xpufgHWmqk1ia0iV8lUE
+BVkF/C6uduW1Zip8QcG17c/eorIfFkkzstntnQGuicbSOWHlzvuomtUn64/zC54h
+u5gncBtmrF52+sp8YbLvhyT5EgyDDS6DY0QnPg31K+V2sfGQDACCNGeLuTGaXO5N
+qYhSzCbhYsnO4sAqonhFw4Jbyt6hbf0tLEz5ikEejRCj+7vL0BPiZYYkzEvV3qxy
+YoVDJyunjR9BIEn7DuxBRcr837TXL6gMU2ZyXB4Vu1NM/gv2VOwLoW+Ey8JcCNX9
+t4lszJmVaRseXHaNtxff0Yzp8JaLUK3v1t3NXSCsno5hGE4qTg84o9MLrW/yRGZu
+QcTEwA+udmbU8nX/Wdlm6Fih+31H95mO0ElljLfjgsUrKUP2fX8=
+=XC8G
+-----END PGP SIGNATURE-----
+
+--Sig_/ZFB90kCEm=UKbNJ8Un9J6qQ--
