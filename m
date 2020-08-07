@@ -2,56 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F12723F08F
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Aug 2020 18:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4506C23F12A
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Aug 2020 18:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbgHGQJq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Fri, 7 Aug 2020 12:09:46 -0400
-Received: from mail.furshetcrimea.ru ([193.27.243.220]:40572 "EHLO
-        furshetcrimea.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbgHGQJp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Aug 2020 12:09:45 -0400
-Received: from [154.118.61.214] (account info@furshetcrimea.ru HELO [192.168.8.100])
-  by furshetcrimea.ru (CommuniGate Pro SMTP 6.1.10)
-  with ESMTPA id 11168823; Fri, 07 Aug 2020 19:21:45 +0300
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1726130AbgHGQXg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Aug 2020 12:23:36 -0400
+Received: from 6.mo179.mail-out.ovh.net ([46.105.56.76]:54179 "EHLO
+        6.mo179.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727891AbgHGQX2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Aug 2020 12:23:28 -0400
+X-Greylist: delayed 2719 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 12:23:26 EDT
+Received: from player779.ha.ovh.net (unknown [10.110.103.211])
+        by mo179.mail-out.ovh.net (Postfix) with ESMTP id 839B7174A57
+        for <linux-i2c@vger.kernel.org>; Fri,  7 Aug 2020 18:23:19 +0200 (CEST)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player779.ha.ovh.net (Postfix) with ESMTPSA id 947061510A712;
+        Fri,  7 Aug 2020 16:23:13 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-106R006055f1bad-f0c4-4727-ae3b-7a63240df21a,
+                    B1FDDFD4E508142116FDFB9194C63E8FBE397CFD) smtp.auth=steve@sk2.org
+Date:   Fri, 7 Aug 2020 18:23:06 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon/pmbus: use simple i2c probe function
+Message-ID: <20200807182306.032376e5@heffalump.sk2.org>
+In-Reply-To: <caf1963d-860f-1b46-49e5-ad3acc8d7877@roeck-us.net>
+References: <20200807074526.14334-1-steve@sk2.org>
+        <caf1963d-860f-1b46-49e5-ad3acc8d7877@roeck-us.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Bei Interesse antworten.
-To:     Recipients <info@furshetcrimea.ru>
-From:   info@furshetcrimea.ru
-Date:   Fri, 07 Aug 2020 17:09:07 +0100
-Reply-To: mattiassjoborg751@gmail.com
-X-Antivirus: Avast (VPS 200807-2, 08/07/2020), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <auto-000011168823@furshetcrimea.ru>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ boundary="Sig_/bOUMBB6UC/Ekh34A4LpQ756"; protocol="application/pgp-signature"
+X-Ovh-Tracer-Id: 9220838763908451598
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrkedvgdeliecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvuffkjghfofggtgesghdtreerredtjeenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepveelvdeufedvieevffdtueegkeevteehffdtffetleehjeekjeejudffieduteeknecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejjeelrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Schöne Grüße,
+--Sig_/bOUMBB6UC/Ekh34A4LpQ756
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Mein Name ist MATTIAS SJOBORG, ich bin Schweizer Staatsbürger und (Vorsitzender des Vergütungs- und Nominierungsausschusses) von Tethys Petroleum, einem multinationalen Ölkonzern mit Sitz in London-England, Großbritannien. Ich bitte Sie um Ihre Hilfe, um die Summe von vierzig Millionen Dollar abzurufen, die aus zwei Sendungsboxen besteht.
+On Fri, 7 Aug 2020 08:23:29 -0700, Guenter Roeck <linux@roeck-us.net> wrote:
+> On 8/7/20 12:45 AM, Stephen Kitt wrote:
+> > pmbus_do_probe doesn't use the id information provided in its second
+> > argument, so this can be removed, which then allows using the
+> > single-parameter i2c probe function ("probe_new") for probes.
+> >=20
+> > This avoids scanning the identifier tables during probes.
+> >=20
+> > Drivers which didn't use the id are converted as-is; drivers which did
+> > are modified as follows:
+> >=20
+> > * if the information in i2c_client is sufficient, that's used instead
+> >   (client->name);
+> > * configured v. probed comparisons are performed by comparing the
+> >   configured name to the detected name, instead of the ids; this
+> >   involves strcmp but is still cheaper than comparing all the device
+> >   names when scanning the tables;
+> > * anything else is handled by calling i2c_match_id() with the same
+> >   level of error-handling (if any) as before.
+> >=20
+> > Signed-off-by: Stephen Kitt <steve@sk2.org> =20
+>=20
+> Please also update the documentation.
+>=20
+> Documentation/hwmon/pmbus-core.rst:  int pmbus_do_probe(struct i2c_client
+> *client, const struct i2c_device_id *id, Documentation/hwmon/pmbus.rst:
+> return pmbus_do_probe(client, id, &ds1200_info);
 
-Dieses Geld wurde von der Firma erworben und von einem Diplomaten begleitet und korrekt in einer Sicherheitsfirma in Amerika hinterlegt. Mein Grund dafür ist, dass ich von der Firma zu lange um meine Ansprüche betrogen wurde, nur weil ich kein bin Britisch. Die Kontaktdaten des Diplomaten erhalten Sie, wenn Sie Ihr Interesse bekunden, mir zu helfen.
+Aargh, I usually *start* from the documentation, but I didn=E2=80=99t think=
+ to check
+in this case.
 
-Jede der Schachteln enthält 20 Mio. USD. Für Ihre Hilfe bin ich bereit, 40% an Sie freizugeben. Aus Sicherheitsgründen wurde die Sendung als VERTRAULICHE DIPLOMATISCHE DOKUMENTE registriert, und ich kann erklären, warum dies so erklärt wurde. Denken Sie daran, dass der Diplomat den Inhalt der Sendung nicht kennt. Er ist seit einem Monat dort, während ich nach einem zuverlässigen Partner suchen möchte. Ich werde das Land verlassen, sobald die Sendung für Sie an Sie geliefert wird Private Investitionen und ich haben geschworen, niemals nach London zurückzukehren. Bitte, ich brauche Ihre dringende Antwort, bevor meine Pläne, das Unternehmen zu verlassen, entdeckt werden.
+> Also, please fix the checkpatch issue reported by Wolfram.
 
-www.tethyspetroleum.com/tethys/static/EN_US/au_seniormanagement.html
+Will do, v3 on its way.
 
-Im Moment ist die sicherste Form der Korrespondenz meine eigene E-Mail-Adresse. Bitte antworten Sie im Interesse der Vertraulichkeit nur über meine direkte E-Mail-Adresse. Antworten Sie zusammen mit Ihrer direkten Telefon- und Faxnummer, unter der ich Sie alternativ erreichen kann.
+Thanks for the reviews!
 
-Bitte, wenn Sie nicht bereit und interessiert sind, mir zu helfen, löschen Sie bitte diese E-Mail aus Ihrer E-Mail und tun Sie so, als hätten Sie sie nie erhalten.
+Regards,
 
-Freundliche Grüße,
-Mr.Mattias Sjoborg
-(Vorsitzender des Vergütungs- und Nominierungsausschusses)
-Tethys Petroleum.
-London, England
+Stephen
 
--- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+--Sig_/bOUMBB6UC/Ekh34A4LpQ756
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAl8tf+oACgkQgNMC9Yht
+g5xYKQ/+Jfm5rek1kCBwaXNseELt3KJsdhqQZTFwAS6yIwlikt+fdTma1O8/67uU
+epQtf5/PU6wt3Uu+W1u/ttGW8EPNB7zvJQqLrl4borySSbjgjTUOl/9fQ1MNyj8C
+YDjTa3RUqr9+QGo2Am2A5j2AzSDq2SqtiqyZWCJX95ROr8i8DEoJTu9hBx8yPO5O
+I3u0Kn6UPT9+wy9dGcAYsgggZco3KFkYNGNUL6dVJMzn8gCAJmz2cEdh3sHTFm32
+MMXBRdp9zRYGYBZxqbykQGdUlCQEX9GlX2p4HgRSMTqTadEFQu2V008uyy7wOuWE
+kF8ukuR5dzMVX2PlUdQCitgJ4AcrrzSmA2hem0mZvZvTdhLPDM79PHoTqlQzG4xw
+AZ78MRr88C0NBsSjGemEvcproNl5eospqIMizXoEzL5s3Pu0rlXbu1lb2T0SfhIc
+qEQD79cBltKP43fzCAzYKW3fKxcPAPYyKgcVEXeUUekEJ6QqgOYuBM9x7Sj4AS6D
+wgmn0SL5pjPutDO6VqOZEMPpNtxjFtUUtBjwvJTHlV5r6n+0VRjVfY6Q6fQprU0q
+QJYsYcU+aYjrh+x56/7PG0nFTrD23kaW/Z975f1BanKp31s8ZN5ClCT1+ZJQkTSZ
+/OMfu+/qQCOadXrNTxscuWnvpd0R6OYvupIbr3gafjDxIoj4xjc=
+=kmhA
+-----END PGP SIGNATURE-----
+
+--Sig_/bOUMBB6UC/Ekh34A4LpQ756--
