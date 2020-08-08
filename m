@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9221523F89E
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Aug 2020 21:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0CB23F8E1
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Aug 2020 23:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726442AbgHHTae (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Aug 2020 15:30:34 -0400
-Received: from 2.mo179.mail-out.ovh.net ([178.33.250.45]:48136 "EHLO
-        2.mo179.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726232AbgHHTae (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Aug 2020 15:30:34 -0400
-X-Greylist: delayed 1125 seconds by postgrey-1.27 at vger.kernel.org; Sat, 08 Aug 2020 15:30:21 EDT
-Received: from player726.ha.ovh.net (unknown [10.110.103.199])
-        by mo179.mail-out.ovh.net (Postfix) with ESMTP id BA5FE1727CC
-        for <linux-i2c@vger.kernel.org>; Sat,  8 Aug 2020 20:56:20 +0200 (CEST)
+        id S1726200AbgHHVAY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Aug 2020 17:00:24 -0400
+Received: from 1.mo178.mail-out.ovh.net ([178.33.251.53]:55079 "EHLO
+        1.mo178.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726212AbgHHVAY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Aug 2020 17:00:24 -0400
+X-Greylist: delayed 92818 seconds by postgrey-1.27 at vger.kernel.org; Sat, 08 Aug 2020 17:00:15 EDT
+Received: from player732.ha.ovh.net (unknown [10.110.103.225])
+        by mo178.mail-out.ovh.net (Postfix) with ESMTP id 6FC97A94D6
+        for <linux-i2c@vger.kernel.org>; Sat,  8 Aug 2020 23:00:13 +0200 (CEST)
 Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
         (Authenticated sender: steve@sk2.org)
-        by player726.ha.ovh.net (Postfix) with ESMTPSA id 8D70F1509CF4D;
-        Sat,  8 Aug 2020 18:56:14 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-99G003223e27ad-79b8-49cc-96ac-65057a133bfc,
+        by player732.ha.ovh.net (Postfix) with ESMTPSA id 614CB15009AA4;
+        Sat,  8 Aug 2020 21:00:07 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-99G0032a3d5e6d-b57c-487a-b2bf-909a8cbebcdf,
                     79D32C5DBA076DF52B56DF0DE49DD07428F72CA9) smtp.auth=steve@sk2.org
 From:   Stephen Kitt <steve@sk2.org>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Stephen Kitt <steve@sk2.org>
-Subject: [PATCH v4] hwmon/pmbus: use simple i2c probe function
-Date:   Sat,  8 Aug 2020 20:56:09 +0200
-Message-Id: <20200808185609.16309-1-steve@sk2.org>
+Subject: [PATCH v5] hwmon/pmbus: use simple i2c probe function
+Date:   Sat,  8 Aug 2020 23:00:04 +0200
+Message-Id: <20200808210004.30880-1-steve@sk2.org>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 17677754439882525966
+X-Ovh-Tracer-Id: 1323213866188229902
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrkeeggddutdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjedviedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrkeeggddufeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjeefvddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
@@ -74,6 +74,8 @@ Changes since v2:
 Changes since v3:
   - fix ltc2978 to avoid assuming names and driver_data are bijective,
     and that driver_data are indexes into ltc2978_id.
+Changes since v4:
+  - explicitly case id->driver_data to int in a printk call.
 
  Documentation/hwmon/pmbus-core.rst |  3 +--
  Documentation/hwmon/pmbus.rst      |  7 +++----
@@ -502,7 +504,7 @@ index 9e4cf0800186..429172a42902 100644
  	.id_table = lm25066_id,
  };
 diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
-index 7b0e6b37e247..1fe2170d9d0f 100644
+index 7b0e6b37e247..9a024cf70145 100644
 --- a/drivers/hwmon/pmbus/ltc2978.c
 +++ b/drivers/hwmon/pmbus/ltc2978.c
 @@ -649,12 +649,12 @@ static int ltc2978_get_id(struct i2c_client *client)
@@ -531,7 +533,7 @@ index 7b0e6b37e247..1fe2170d9d0f 100644
 +			 "Device mismatch: Configured %s (%d), detected %d\n",
  			 id->name,
 -			 ltc2978_id[data->id].name);
-+			 id->driver_data,
++			 (int) id->driver_data,
 +			 chip_id);
  
  	info = &data->info;
