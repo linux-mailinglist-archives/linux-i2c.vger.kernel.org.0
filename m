@@ -2,191 +2,122 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4B923F7D8
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Aug 2020 15:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD2223F7F7
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Aug 2020 16:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726214AbgHHNq2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Aug 2020 09:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S1726248AbgHHOr1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Aug 2020 10:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726190AbgHHNq0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Aug 2020 09:46:26 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A85BC061A27;
-        Sat,  8 Aug 2020 06:46:24 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id d188so2670877pfd.2;
-        Sat, 08 Aug 2020 06:46:24 -0700 (PDT)
+        with ESMTP id S1726238AbgHHOr0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Aug 2020 10:47:26 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC27C061756;
+        Sat,  8 Aug 2020 07:47:25 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id o22so3487616qtt.13;
+        Sat, 08 Aug 2020 07:47:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to;
-        bh=DZ9MeV3dTfJShUC6JWDZlqJ1PpbVcGHwTUFr7bZs05w=;
-        b=if9rqG1GCIB5k00PoPJRri9NmAjH2FdXj+IcYBuCGke6j3+wn9rdUgI7+g5r9Xd6UB
-         d1ech/fHKcLfU/lKW+RF0fj0cY3IL+/hIh3DQxcKPj6E9zrd9EoxYR385dv1kKvHEfPY
-         UqXFO7K1yjgk+pY356cdZCkyryh+MZ2OdqNxneTWWHdzjg2fQoLCGbNfKIgHPtxfA7ZO
-         v2vpWfbhhuW8aTN/3J9wRx20yTpn/9UcoAZtXsGdF2dlA3DPCBU0Os8No2YOuisz38+z
-         q/WvUgIimAd4OlWQesKRhlt7Z533cUVByukSv34QHGbIHhgspalzEOVxTZ9q7WA93um3
-         pPhQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oy7Ecf/dRDd49hyOLVsUhynlyl/pEIRUC0Q/sOTmdy8=;
+        b=et9y6iE6T9Ye/ujITgPqkg245uIQDUk1gUMIJcB+Z6dqRSqWMSwi7CVYW44eyMMIrt
+         ojguruz/WoTisG+SFgE1ORejrFYfm8406T63I/Sm1pjVEMkMly/B/brMfuWtV/BNzN0K
+         Ks5fdu/85V/KmIHZL9lttfjpXOkUY9xBsa0TfSgj7GsUT++gcMXu0cWaldnkxWhAw37k
+         ISlP3H6iVdmsYzO9A3o1qZaTJkFdknmkhL3mt7EOSqEijoJtn5VtsozTgTvAwpPGHUeV
+         ss0NVQp8NcFjpsedsFWhol28itwpGnSZKEATax+bzYPYmIvTZyZMDL3qNxV8NU2AYuuy
+         n/Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to;
-        bh=DZ9MeV3dTfJShUC6JWDZlqJ1PpbVcGHwTUFr7bZs05w=;
-        b=WNXKLmGGYtYtvZpFBKRVHjRuu9xAaAI7zQ1P+QF371lpEpdv3OyNnB4HXF/1V7+990
-         V47rqtFZFVMRi3RantatVfFN3YQJgcdex4D9OXLINgnAPKGyvGr7dS8E5muKXIHRjCOP
-         b36NjE9fpbMPuQf5R/exQxqnlFeTWoAofcgW4gCkdNX0HfbExi8wEqr+M6B65Vv92iFC
-         cSK1Qs8jANabPGcnrS3FlA9TL2h4VlhCKkFZINcjLrEQmf92RLczRv6pfnOO79/gblWx
-         4xrvwkyau/qK+TlLqubz0yDtvkAUVIMnvkVbwwKOUY3SoER5Uwi2NoKxgQk/cvAfD5Au
-         ZpnA==
-X-Gm-Message-State: AOAM5339iVAy3vb/dX9v5wBst9fxiQ0IblwmMSunUDfiqfmVB5XyhrmD
-        p/M1ECrvOX9veZMKS4IbhtUr26uT
-X-Google-Smtp-Source: ABdhPJw7Bx352g1P1MWJCXdajnkhT1GfkGLxwaHt2vY/4WApcTyPiB0Yg+hReOC3rN4B3STTOiu5fw==
-X-Received: by 2002:aa7:96ef:: with SMTP id i15mr18605859pfq.231.1596894379219;
-        Sat, 08 Aug 2020 06:46:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t2sm17351954pfb.123.2020.08.08.06.46.17
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oy7Ecf/dRDd49hyOLVsUhynlyl/pEIRUC0Q/sOTmdy8=;
+        b=uj2ktZm7ZqljdpoBi4BnjozEPWY9TQDJdCegnFBkPGQwLxLgMT+5DXUYhbmQqAdG51
+         s1BPQT1tyv+MrW3Y6EzLpj2Exy0opmzIFy/svqFLkR3mR0zprLOoKqkPbhzskJI3GGWY
+         +27IavPi0eKhucUz4zbs7HwTk3CMYE+tUD0297gYbnycJI/ODncR6LxraHyKsxw1Vc3Y
+         bafiRWUcmRJhKzxwDwXJjGk3NLlnSSLBaFFVY1T2ntGKE2oQY0DU+ItJJBTyTr9Mo+hr
+         GvEpNNq2NuATzgtSdgEtuSxW8sxCpIMyJd9FAYb2yNNllo+N5oNo2RTAVqqbRoB0GNqv
+         ZS4w==
+X-Gm-Message-State: AOAM530mSiI17hHzGeVmWMs4lzjmC2TPfhYpo2y7dSCf1V4nUH6fMWIa
+        X4YlbrAQirwQRfaawiMtJ1E=
+X-Google-Smtp-Source: ABdhPJy650xffuUDuio1syG4MlCMzzqUk689ijemjrQ1QqkFinKFcC2nctwhoOEab/Y47Xq1Zi4ynA==
+X-Received: by 2002:ac8:7454:: with SMTP id h20mr18843593qtr.84.1596898041978;
+        Sat, 08 Aug 2020 07:47:21 -0700 (PDT)
+Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
+        by smtp.gmail.com with ESMTPSA id t8sm11100627qtc.50.2020.08.08.07.47.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Aug 2020 06:46:17 -0700 (PDT)
-Subject: Re: [PATCH v3] hwmon/pmbus: use simple i2c probe function
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>
-References: <20200807173231.GA47449@roeck-us.net>
- <20200807210707.7dd1d9b9@heffalump.sk2.org>
- <20200808085329.4713bf38@heffalump.sk2.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <383af0fb-7eb9-dea8-291c-962c6b9eedd1@roeck-us.net>
-Date:   Sat, 8 Aug 2020 06:46:15 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sat, 08 Aug 2020 07:47:21 -0700 (PDT)
+Subject: Re: [PATCH v2] i2c: iproc: fix race between client unreg and isr
+To:     Dhananjay Phadke <dphadke@linux.microsoft.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rayagonda.kokatanur@broadcom.com,
+        rjui@broadcom.com, wsa@kernel.org
+References: <00a30ca7-d533-94ba-994a-9a133fadb045@gmail.com>
+ <1596858925-45763-1-git-send-email-dphadke@linux.microsoft.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <0f7063f5-8ca7-f469-574b-82382d49e266@gmail.com>
+Date:   Sat, 8 Aug 2020 07:47:16 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200808085329.4713bf38@heffalump.sk2.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="MgMKAT3V4AgHtgTrwXMCJznCysVxSvk76"
+In-Reply-To: <1596858925-45763-1-git-send-email-dphadke@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---MgMKAT3V4AgHtgTrwXMCJznCysVxSvk76
-Content-Type: multipart/mixed; boundary="F13B1wjmV06cEVcGtQ0aut0fpD0euq5ft"
 
---F13B1wjmV06cEVcGtQ0aut0fpD0euq5ft
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
 
-On 8/7/20 11:53 PM, Stephen Kitt wrote:
-> On Fri, 7 Aug 2020 21:07:07 +0200, Stephen Kitt <steve@sk2.org> wrote:
->=20
->> On Fri, 7 Aug 2020 10:32:31 -0700, Guenter Roeck <linux@roeck-us.net> =
-wrote:
->>> On Fri, Aug 07, 2020 at 06:28:01PM +0200, Stephen Kitt wrote: =20
->>>> =20
->>>> -static int ltc2978_probe(struct i2c_client *client,
->>>> -			 const struct i2c_device_id *id)
->>>> +static int ltc2978_probe(struct i2c_client *client)
->>>>  {
->>>>  	int i, chip_id;
->>>>  	struct ltc2978_data *data;
->>>> @@ -670,10 +669,10 @@ static int ltc2978_probe(struct i2c_client
->>>> *client, return chip_id;
->>>> =20
->>>>  	data->id =3D chip_id;
->>>> -	if (data->id !=3D id->driver_data)
->>>> +	if (strcmp(client->name, ltc2978_id[data->id].name) !=3D 0)   =20
+On 8/7/2020 8:55 PM, Dhananjay Phadke wrote:
+> On 8/7/2020, Florian Fainelli wrote:
+>>> When i2c client unregisters, synchronize irq before setting
+>>> iproc_i2c->slave to NULL.
 >>>
->>> I was about to apply this patch, but this is problematic: It assumes =
-that
->>> __stringify(id) =3D=3D ltc2978_id[id].name and that ltc2978_id[id].dr=
-iver_data
->>> =3D=3D id. While that is curently the case (as far as I can see), it =
-is still
->>> unsafe. I think it would be much safer to use i2c_match_id() here. =20
+>>> (1) disable_irq()
+>>> (2) Mask event enable bits in control reg
+>>> (3) Erase slave address (avoid further writes to rx fifo)
+>>> (4) Flush tx and rx FIFOs
+>>> (5) Clear pending event (interrupt) bits in status reg
+>>> (6) enable_irq()
+>>> (7) Set client pointer to NULL
+>>>
 >>
->> I=E2=80=99m not following the __stringify assumption
-> [...]
->=20
-> I get it, the code assumes there=E2=80=99s a bijection between the set =
-of names and
-> the set of driver_data values. So effectively we can=E2=80=99t log the =
-detected name
-> based on the chip_id...
+>>> @@ -1091,6 +1091,17 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
+>>>  	tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
+>>>  	iproc_i2c_wr_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET, tmp);
+>>>  
+>>> +	/* flush TX/RX FIFOs */
+>>> +	tmp = (BIT(S_FIFO_RX_FLUSH_SHIFT) | BIT(S_FIFO_TX_FLUSH_SHIFT));
+>>> +	iproc_i2c_wr_reg(iproc_i2c, S_FIFO_CTRL_OFFSET, tmp);
+>>> +
+>>> +	/* clear all pending slave interrupts */
+>>> +	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, ISR_MASK_SLAVE);
+>>> +
+>>> +	enable_irq(iproc_i2c->irq);
+>>> +
+>>> +	iproc_i2c->slave = NULL;
+>>
+>> There is nothing that checks on iproc_i2c->slave being valid within the
+>> interrupt handler, we assume that the pointer is valid which is fin,
+>> however non functional it may be, it may feel more natural to move the
+>> assignment before the enable_irq()?
+> 
+> As far as the teardown sequence ensures no more interrupts arrive after
+> enable_irq() and they are enabled only after setting pointer during
+> client register(); checking for NULL in ISR isn't necessary. 
 
-Exactly.
+Agreed.
 
-Thanks,
-Guenter
+> 
+> If The teardown sequence doesn't guarantee quiescing of interrupts,
+> setting NULL before or after enable_irq() is equally vulnerable.
 
-
---F13B1wjmV06cEVcGtQ0aut0fpD0euq5ft--
-
---MgMKAT3V4AgHtgTrwXMCJznCysVxSvk76
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEiHPvMQj9QTOCiqgVyx8mb86fmYEFAl8urKcACgkQyx8mb86f
-mYHjMw//fGlHUnjvUFI4zD3AvxxNVicO9gXp6qFRM2kV2FKGPaq3UpmOgKA3CE7w
-gCpmpAKrLZBDTtGNBs2CPLH7Y/6/j1AwH/bV6vfTwAopd9paMhX4K4qVoMSof7y/
-SqnWHASO5Jr6GIkCfL26kgUXg81ypAaSdeeKXqhQImfjMPk7tnmITQlHphc+Xw6C
-TJXAygAMoqBnm7WNt7YCvATPzRE6aTt2Z64UitNSr31uz4eEUT7mY9fzKk03ECwf
-IrSHC1YTMmKClaubz+rzguLkNO/QS08U7K0hMfqWKUW/lni1YcpW9ZB5L9DsOo6e
-CbbHL1r0ssPsWzw0UVziSS8z+CVcJttCEhDUY5PxBqmPBxBnCkDT+j9OWf5ZIoMK
-KHAXYkXCxd/lW049jH6p1gIFmr2ebVO1RW1Syjj3/LJ3GxycOtLMkBRR7Ie1Tk04
-VLAi0L2FEqwEGdcq5VzCG76qogX9kXiujYpAq89scxZFym9wvVIKsPyLieGi87QG
-ME9NHVDtRedoCVs9UAizd1joRfj/kRx+ZgD4k4Fxi2X7zZ32CBsSIkvvqPFGCxgw
-Z3QA41V6nYlNIBK9E3JgCRgM9YVnrQ6YI0vNpfx8nQ9DFMwAfx7dzLoxL/lN2CJw
-E0zhqf4kAuDsbVgp0nFVQMFlnWDLZaZfZMEyfAriLCOe/iRmP04=
-=psmC
------END PGP SIGNATURE-----
-
---MgMKAT3V4AgHtgTrwXMCJznCysVxSvk76--
+The teardown sequence is sort of a critical section if we may say, so
+ensuring that everything happens within it and that enable_irq() is the
+last operation would seem more natural to me at least. Thanks
+-- 
+Florian
