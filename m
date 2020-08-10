@@ -2,151 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EAD240D25
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Aug 2020 20:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3E224122E
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Aug 2020 23:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728143AbgHJSsA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Aug 2020 14:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S1726644AbgHJVRS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Aug 2020 17:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728135AbgHJSr7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Aug 2020 14:47:59 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D0BC061787
-        for <linux-i2c@vger.kernel.org>; Mon, 10 Aug 2020 11:47:59 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id s16so7570314qtn.7
-        for <linux-i2c@vger.kernel.org>; Mon, 10 Aug 2020 11:47:58 -0700 (PDT)
+        with ESMTP id S1726547AbgHJVRR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Aug 2020 17:17:17 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3E6C061756
+        for <linux-i2c@vger.kernel.org>; Mon, 10 Aug 2020 14:17:17 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id k8so891650wma.2
+        for <linux-i2c@vger.kernel.org>; Mon, 10 Aug 2020 14:17:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5nwMnMw3DbCMTn2Fuh9eAKa97/L+CWpRN1IQSKfIrY8=;
-        b=MH2gaLrd+ufZ8bGh/fpu4X/Fn6WrIMiNmClU1rLt2mwix16/dTxs5cvPwyjuWaZAv9
-         ny8pcHOpdZmbrUMgAk2WpNSV3ClKUu280iuq0GCyH0opTG2DXOf5/MMeNM4y2zEX8MyO
-         33K5A5v6VJjE3i5tb62cCOeHWnBvFtJh+eTJzeAABy9TPV5RhQSXdinWMpcE1+PgeInS
-         yTpaN7g9UexxUps7yD0kDaG4wZLrVrIr/NBqPGwnV3IGaalDqL2OeKd5GHFZ9pmszeG8
-         6VNyA6FQPcpGQT+eRxsYuelA2j+R6xZLBPFMcrCP6sHix4PoSt24AOWRq4KODFO2wJPL
-         jcHQ==
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Fj2es0dCEPOQUTQgxshXQADi10l+RVsAVXH1AGZUZrE=;
+        b=e049/iE5zjU3fuIZOmYEgRgRB8FElNKBQdO1T9yZ3dwFurZ/cVpoFb9P4ECfLn05Lh
+         CnbpAUYssYvu6J8zWlzF9f6z4HCdfPzEnoJDcwANUr75zB4tOR961Gt3VQ2wEJ3vqcHs
+         84jIaz953mb7RCN0Xhza3wxmNmSeVDjTc5nus=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5nwMnMw3DbCMTn2Fuh9eAKa97/L+CWpRN1IQSKfIrY8=;
-        b=r9k/+jXDYkK5rL6tsfzZlKm2NHftuSg4tnsctTKDfaWc6Uc4lxzO6uNHdAAhrptbf+
-         MYT6ln/LVGo334GHygM0cjn5UpAtMnzEzjMGhe9kG6mP0HmOOpfSRB9dfld5g2OVeLk6
-         wmXxNS7jQGymhzdCmzuY8lBZN4bf1eugkXnzmLlu12GblUFJcChrH7VwCCI2joz4yqrt
-         FTaL6+Zh0nhy+VmRPy5S4aDUtBJgoPqUk0AMBOl5Z8Edc3hOQGuqmwdocRvoVzUjDqO/
-         MNR00xsCPfrP6WTO0DeaNf3efdiE+ynFeOVsN0Wa4T/ZOw661K3eBiwiVPNDiwKUDNJu
-         6xoQ==
-X-Gm-Message-State: AOAM533gh3HpURFc+B+P5likf4mItoDYCLC6UftGdccdgczr9362qw0T
-        utJhSRPqx1Tl9kIvKaXw+Z1GlhvhQKkFO28ZfWOJXA==
-X-Google-Smtp-Source: ABdhPJzUFIIB7zZacQjcyBgpXBijPyFsFhCW5bngLlBmE5TsUrCisTyt73lEUBKPvEnILxlmIjOz+SnNtKoGYxLdbac=
-X-Received: by 2002:aed:21da:: with SMTP id m26mr29107739qtc.197.1597085277928;
- Mon, 10 Aug 2020 11:47:57 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Fj2es0dCEPOQUTQgxshXQADi10l+RVsAVXH1AGZUZrE=;
+        b=swyp8GorGc+0M8DGrbP1WN+cLlqc9mnAIx9vEELkA+jamMFXlcF/wOcTcDluOz1yBQ
+         5FK6ZNDEWCQr/z5p7dyOzBXRJbUWjqIjVpHK+o54MzEnSdYmAPLiJuEtsZw7EVWspaof
+         GUqkrKwu1Rv+hVA7iosJLBJY7hYoC9+DvUg+qvk0uFJD01gGHphcyMyMzgrOVC+wlLk9
+         Z///EBjLgPTMoKaDr4d4XzQRJdqwesdP2/riiDCahlSPORyk/oH81nrzeFhfERfKI4Pd
+         xtXR4CsmpoCT4l47sg4zfR++4iEUOrx7T1NTZmlGIYoheOgaPi3uOCPcTUZanvTtZUAC
+         GiKw==
+X-Gm-Message-State: AOAM530R7t+HHSYATymfM2WPfRuEWd8VP4Mxi1iKVoUJuFXMk8r0tHZh
+        EqsLeqZPhSjFH0iYOs/M7J50Wg==
+X-Google-Smtp-Source: ABdhPJxgf/jaiJBGUk2+J0Qe9jP7a+xe9d6Dd3Fiaxg86dtAjIMdS9jRQM0f3OPzMV3XcLuAfSYusw==
+X-Received: by 2002:a05:600c:258e:: with SMTP id 14mr929987wmh.141.1597094235871;
+        Mon, 10 Aug 2020 14:17:15 -0700 (PDT)
+Received: from [10.230.0.249] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id f63sm1372299wmf.9.2020.08.10.14.17.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Aug 2020 14:17:15 -0700 (PDT)
+Subject: Re: [PATCH v2] i2c: iproc: fix race between client unreg and isr
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Dhananjay Phadke <dphadke@linux.microsoft.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rayagonda.kokatanur@broadcom.com,
+        rjui@broadcom.com, wsa@kernel.org
+References: <00a30ca7-d533-94ba-994a-9a133fadb045@gmail.com>
+ <1596858925-45763-1-git-send-email-dphadke@linux.microsoft.com>
+ <0f7063f5-8ca7-f469-574b-82382d49e266@gmail.com>
+From:   Ray Jui <ray.jui@broadcom.com>
+Message-ID: <18cf439a-8fde-02b0-31b6-9ac42f7e972c@broadcom.com>
+Date:   Mon, 10 Aug 2020 14:17:10 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-References: <20200809172444.16019-1-steve@sk2.org>
-In-Reply-To: <20200809172444.16019-1-steve@sk2.org>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Mon, 10 Aug 2020 20:47:47 +0200
-Message-ID: <CAMpxmJXLELE7CmMpqvw_1jFJW80f_O2wQg08JAd0gv-XBrWq_Q@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: davinci: use simple i2c probe function
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, Russell King <linux@armlinux.org.uk>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <0f7063f5-8ca7-f469-574b-82382d49e266@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Aug 9, 2020 at 7:24 PM Stephen Kitt <steve@sk2.org> wrote:
->
-> The i2c probe functions here don't use the id information provided in
-> their second argument, so the single-parameter i2c probe function
-> ("probe_new") can be used instead.
->
-> This avoids scanning the identifier tables during probes.
->
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
-> ---
-> Changes since v1:
->   - split into per-sub-architecture patches.
->
->  arch/arm/mach-davinci/board-dm644x-evm.c |  5 ++---
->  arch/arm/mach-davinci/board-dm646x-evm.c | 10 ++++------
->  2 files changed, 6 insertions(+), 9 deletions(-)
->
-> diff --git a/arch/arm/mach-davinci/board-dm644x-evm.c b/arch/arm/mach-davinci/board-dm644x-evm.c
-> index a5d3708fedf6..d0dcf69cc76d 100644
-> --- a/arch/arm/mach-davinci/board-dm644x-evm.c
-> +++ b/arch/arm/mach-davinci/board-dm644x-evm.c
-> @@ -548,8 +548,7 @@ static const struct property_entry eeprom_properties[] = {
->   */
->  static struct i2c_client *dm6446evm_msp;
->
-> -static int dm6446evm_msp_probe(struct i2c_client *client,
-> -               const struct i2c_device_id *id)
-> +static int dm6446evm_msp_probe(struct i2c_client *client)
->  {
->         dm6446evm_msp = client;
->         return 0;
-> @@ -569,7 +568,7 @@ static const struct i2c_device_id dm6446evm_msp_ids[] = {
->  static struct i2c_driver dm6446evm_msp_driver = {
->         .driver.name    = "dm6446evm_msp",
->         .id_table       = dm6446evm_msp_ids,
-> -       .probe          = dm6446evm_msp_probe,
-> +       .probe_new      = dm6446evm_msp_probe,
->         .remove         = dm6446evm_msp_remove,
->  };
->
-> diff --git a/arch/arm/mach-davinci/board-dm646x-evm.c b/arch/arm/mach-davinci/board-dm646x-evm.c
-> index 4600b617f9b4..2dce16fff77e 100644
-> --- a/arch/arm/mach-davinci/board-dm646x-evm.c
-> +++ b/arch/arm/mach-davinci/board-dm646x-evm.c
-> @@ -160,8 +160,7 @@ static struct platform_device davinci_aemif_device = {
->  #define DM646X_EVM_ATA_PWD             BIT(1)
->
->  /* CPLD Register 0 Client: used for I/O Control */
-> -static int cpld_reg0_probe(struct i2c_client *client,
-> -                          const struct i2c_device_id *id)
-> +static int cpld_reg0_probe(struct i2c_client *client)
->  {
->         if (HAS_ATA) {
->                 u8 data;
-> @@ -197,7 +196,7 @@ static const struct i2c_device_id cpld_reg_ids[] = {
->  static struct i2c_driver dm6467evm_cpld_driver = {
->         .driver.name    = "cpld_reg0",
->         .id_table       = cpld_reg_ids,
-> -       .probe          = cpld_reg0_probe,
-> +       .probe_new      = cpld_reg0_probe,
->  };
->
->  /* LEDS */
-> @@ -402,8 +401,7 @@ static struct snd_platform_data dm646x_evm_snd_data[] = {
->  #ifdef CONFIG_I2C
->  static struct i2c_client *cpld_client;
->
-> -static int cpld_video_probe(struct i2c_client *client,
-> -                       const struct i2c_device_id *id)
-> +static int cpld_video_probe(struct i2c_client *client)
->  {
->         cpld_client = client;
->         return 0;
-> @@ -424,7 +422,7 @@ static struct i2c_driver cpld_video_driver = {
->         .driver = {
->                 .name   = "cpld_video",
->         },
-> -       .probe          = cpld_video_probe,
-> +       .probe_new      = cpld_video_probe,
->         .remove         = cpld_video_remove,
->         .id_table       = cpld_video_id,
->  };
->
-> base-commit: bcf876870b95592b52519ed4aafcf9d95999bc9c
-> --
-> 2.20.1
->
 
-Reviewed-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+
+On 8/8/2020 7:47 AM, Florian Fainelli wrote:
+> 
+> 
+> On 8/7/2020 8:55 PM, Dhananjay Phadke wrote:
+>> On 8/7/2020, Florian Fainelli wrote:
+>>>> When i2c client unregisters, synchronize irq before setting
+>>>> iproc_i2c->slave to NULL.
+>>>>
+>>>> (1) disable_irq()
+>>>> (2) Mask event enable bits in control reg
+>>>> (3) Erase slave address (avoid further writes to rx fifo)
+>>>> (4) Flush tx and rx FIFOs
+>>>> (5) Clear pending event (interrupt) bits in status reg
+>>>> (6) enable_irq()
+>>>> (7) Set client pointer to NULL
+>>>>
+>>>
+>>>> @@ -1091,6 +1091,17 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
+>>>>  	tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
+>>>>  	iproc_i2c_wr_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET, tmp);
+>>>>  
+>>>> +	/* flush TX/RX FIFOs */
+>>>> +	tmp = (BIT(S_FIFO_RX_FLUSH_SHIFT) | BIT(S_FIFO_TX_FLUSH_SHIFT));
+>>>> +	iproc_i2c_wr_reg(iproc_i2c, S_FIFO_CTRL_OFFSET, tmp);
+>>>> +
+>>>> +	/* clear all pending slave interrupts */
+>>>> +	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, ISR_MASK_SLAVE);
+>>>> +
+>>>> +	enable_irq(iproc_i2c->irq);
+>>>> +
+>>>> +	iproc_i2c->slave = NULL;
+>>>
+>>> There is nothing that checks on iproc_i2c->slave being valid within the
+>>> interrupt handler, we assume that the pointer is valid which is fin,
+>>> however non functional it may be, it may feel more natural to move the
+>>> assignment before the enable_irq()?
+>>
+>> As far as the teardown sequence ensures no more interrupts arrive after
+>> enable_irq() and they are enabled only after setting pointer during
+>> client register(); checking for NULL in ISR isn't necessary. 
+> 
+> Agreed.
+> 
+
+Okay I think we all agree that this teardown sequence will guarantee
+that no further "slave" interrupts will be fired after it.
+
+>>
+>> If The teardown sequence doesn't guarantee quiescing of interrupts,
+>> setting NULL before or after enable_irq() is equally vulnerable.
+> 
+> The teardown sequence is sort of a critical section if we may say, so
+> ensuring that everything happens within it and that enable_irq() is the
+> last operation would seem more natural to me at least. Thanks
+> 
+
+I tend to agree with Florian here.
+
+1. Enable/Disable IRQ is done on the interrupt line for both master and
+slave (or even other peripherals that share the same interrupt line,
+although that is not the case here since this interrupt is dedicated to
+I2C in all iProc based SoCs).
+
+2. The tear down sequence here wrapped by disable/enable_irq is slave
+specific
+
+The effect of 1. is temporary, and the purpose of it is to ensure slave
+interrupts are quiesced properly at the end of the sequence.
+
+If we consider both 1. and 2., I agree with Florian that while the end
+result is the same, it is indeed more natural to wrap the entire slave
+tear down sequence within disable/enable irq.
+
+Thanks,
+
+Ray
