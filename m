@@ -2,190 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 837DB2403E2
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Aug 2020 11:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB7724040B
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Aug 2020 11:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbgHJJTy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Aug 2020 05:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725846AbgHJJTx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Aug 2020 05:19:53 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682E5C061756;
-        Mon, 10 Aug 2020 02:19:53 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id k13so4447983plk.13;
-        Mon, 10 Aug 2020 02:19:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LG+fIp5OZ25It71Wra3d8yfu2prbPEMG5KpZ0CWWGCc=;
-        b=Ax7gqxfGIMFUTMwsQKBmRknt4QVEZlySJYJG1TRzYusE6XvTmcOEpv8tKf3kBk00cX
-         ElKMU+sWP7NxGBs4dvW8mIRqLwbUtKRX8tsgz+Qt/3N0vKNZ2cqqW0W4fiReomKI9khn
-         RKk8brgclZZsgdpuvH9NCvFkSy90nsuhWs/maKtp9738zFm47LNjKZmdDuOjxnDi6m4c
-         5jNvE+Z45Iqj9ky3pLQpBzps3ZU5/6Yfg7MBZL1yshWFIXSjeUolc+B+NytARzbwpdhC
-         8wyxvA6qwoJXixTxoyeBMnT+MZ8r+4pvM8u1uo3KJH6hj/+oa8hNfZaQX56qIBx/wNZ/
-         xi0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LG+fIp5OZ25It71Wra3d8yfu2prbPEMG5KpZ0CWWGCc=;
-        b=erNu6tuQZPM6o7Bk8rW4KkuLe6yP/tFva4pCwmW0AL/oh2A4Odhd4o1M37GDpyxPj6
-         VFxzf2hJQEXpmTDB7QR9xBsWCv68vAiUPblMk3NrX3rYi7q/P7ffZHs1U4Es73Ah8Zxc
-         2s3fUghDsYRm3BNUO2+XuXqosCromFsvvfTPCPxOC1U7zM4RF/6Q63DoRbSI4KZTGwxd
-         4TdwemoqbATXgPeDP9HYQEdCNojq7ZMx0znJvJEyMFHCXCrkmC2nQeaYG/EoaiooOW0q
-         Ud+ewB9fok/T3zqXaVvx2vbr3bQop0dWVKXuMGRL/U9gRbNocM2WPWtSebLwMAVKwHUL
-         +QLQ==
-X-Gm-Message-State: AOAM5325Mdu60tOlNt1tJLT2nvUfZgz8bA1aITiX1EL2x60vfyFCHeP+
-        FosnMjclhkKvKFXrCbcbqZA=
-X-Google-Smtp-Source: ABdhPJx7x4fvEeZF1zvMGSiHBSqpbplJv6jIiVbs9RahcOYpDup1KSq1TWn/T1OM81CeqnCBgD6+oA==
-X-Received: by 2002:a17:90b:a45:: with SMTP id gw5mr25112629pjb.80.1597051192832;
-        Mon, 10 Aug 2020 02:19:52 -0700 (PDT)
-Received: from gmail.com ([103.105.152.86])
-        by smtp.gmail.com with ESMTPSA id x12sm7776750pff.48.2020.08.10.02.19.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2020 02:19:52 -0700 (PDT)
-Date:   Mon, 10 Aug 2020 14:48:19 +0530
-From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        Tomoya MORINAGA <tomoya-linux@dsn.okisemi.com>,
-        Tomoya MORINAGA <tomoya.rohm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v2 2/2] i2c: eg20t: use generic power management
-Message-ID: <20200810091819.GA6615@gmail.com>
-References: <20200805193616.384313-3-vaibhavgupta40@gmail.com>
- <20200807202321.GA753887@bjorn-Precision-5520>
+        id S1726791AbgHJJcQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Aug 2020 05:32:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41800 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726029AbgHJJcP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 10 Aug 2020 05:32:15 -0400
+Received: from localhost (p54b3345b.dip0.t-ipconnect.de [84.179.52.91])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3A5592063A;
+        Mon, 10 Aug 2020 09:32:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597051934;
+        bh=rYQETMEuY/Gnmi3nPJ9bLKGcfo7ypYEaqWHmvIY24Tc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZI/odSDLJ46htbJHrtKOR4bSJyXdmSnl+ezLotbpkI4adzDtDDcKnlPwWNvQDfEre
+         MWW8hGpZ8+DATaSpJW9ecUCz+MsWwIBtyEpjiJPtKFJBfZ/itGxkbl/4nKiDm62+uf
+         bP4Iog99TecSpL6t6saehA78DrIR4ISeI9rL5+4w=
+Date:   Mon, 10 Aug 2020 11:32:09 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] hwmon/pmbus: use simple i2c probe function
+Message-ID: <20200810093209.GA1290@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Stephen Kitt <steve@sk2.org>, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200808210004.30880-1-steve@sk2.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BXVAT5kNtrzKuDFl"
 Content-Disposition: inline
-In-Reply-To: <20200807202321.GA753887@bjorn-Precision-5520>
+In-Reply-To: <20200808210004.30880-1-steve@sk2.org>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Aug 07, 2020 at 03:23:21PM -0500, Bjorn Helgaas wrote:
-> [+cc Jean for i801 question below]
-> 
-> On Thu, Aug 06, 2020 at 01:06:16AM +0530, Vaibhav Gupta wrote:
-> > Drivers using legacy power management .suspen()/.resume() callbacks
-> > have to manage PCI states and device's PM states themselves. They also
-> > need to take care of standard configuration registers.
-> > 
-> > Switch to generic power management framework using a single
-> > "struct dev_pm_ops" variable to take the unnecessary load from the driver.
-> > This also avoids the need for the driver to directly call most of the PCI
-> > helper functions and device power state control functions, as through
-> > the generic framework PCI Core takes care of the necessary operations,
-> > and drivers are required to do only device-specific jobs.
-> > 
-> > Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
-> 
-> s/.suspen/.suspend/ above
-> 
-> These both look right to me.
-> 
-> Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Looking at neighboring drivers, it looks like some already use generic
-> PM but have unnecessary PCI code, e.g., amd_mp2_pci_suspend().
-> Probably already on your list.
-Yes :)
-> 
-> Also, i801_suspend() looks suspicious because it writes SMBHSTCFG, but
-> I don't see anything corresponding in i801_resume().
-I will look into it.
 
-Thanks
-Vaibhav Gupta
-> 
-> > ---
-> >  drivers/i2c/busses/i2c-eg20t.c | 36 +++++++---------------------------
-> >  1 file changed, 7 insertions(+), 29 deletions(-)
-> > 
-> > diff --git a/drivers/i2c/busses/i2c-eg20t.c b/drivers/i2c/busses/i2c-eg20t.c
-> > index eb41de22d461..843b31a0f752 100644
-> > --- a/drivers/i2c/busses/i2c-eg20t.c
-> > +++ b/drivers/i2c/busses/i2c-eg20t.c
-> > @@ -846,11 +846,10 @@ static void pch_i2c_remove(struct pci_dev *pdev)
-> >  	kfree(adap_info);
-> >  }
-> >  
-> > -#ifdef CONFIG_PM
-> > -static int pch_i2c_suspend(struct pci_dev *pdev, pm_message_t state)
-> > +static int __maybe_unused pch_i2c_suspend(struct device *dev)
-> >  {
-> > -	int ret;
-> >  	int i;
-> > +	struct pci_dev *pdev = to_pci_dev(dev);
-> >  	struct adapter_info *adap_info = pci_get_drvdata(pdev);
-> >  	void __iomem *p = adap_info->pch_data[0].pch_base_address;
-> >  
-> > @@ -872,31 +871,13 @@ static int pch_i2c_suspend(struct pci_dev *pdev, pm_message_t state)
-> >  		ioread32(p + PCH_I2CSR), ioread32(p + PCH_I2CBUFSTA),
-> >  		ioread32(p + PCH_I2CESRSTA));
-> >  
-> > -	ret = pci_save_state(pdev);
-> > -
-> > -	if (ret) {
-> > -		pch_pci_err(pdev, "pci_save_state\n");
-> > -		return ret;
-> > -	}
-> > -
-> > -	pci_disable_device(pdev);
-> > -	pci_set_power_state(pdev, pci_choose_state(pdev, state));
-> > -
-> >  	return 0;
-> >  }
-> >  
-> > -static int pch_i2c_resume(struct pci_dev *pdev)
-> > +static int __maybe_unused pch_i2c_resume(struct device *dev)
-> >  {
-> >  	int i;
-> > -	struct adapter_info *adap_info = pci_get_drvdata(pdev);
-> > -
-> > -	pci_set_power_state(pdev, PCI_D0);
-> > -	pci_restore_state(pdev);
-> > -
-> > -	if (pci_enable_device(pdev) < 0) {
-> > -		pch_pci_err(pdev, "pch_i2c_resume:pci_enable_device FAILED\n");
-> > -		return -EIO;
-> > -	}
-> > +	struct adapter_info *adap_info = dev_get_drvdata(dev);
-> >  
-> >  	for (i = 0; i < adap_info->ch_num; i++)
-> >  		pch_i2c_init(&adap_info->pch_data[i]);
-> > @@ -905,18 +886,15 @@ static int pch_i2c_resume(struct pci_dev *pdev)
-> >  
-> >  	return 0;
-> >  }
-> > -#else
-> > -#define pch_i2c_suspend NULL
-> > -#define pch_i2c_resume NULL
-> > -#endif
-> > +
-> > +static SIMPLE_DEV_PM_OPS(pch_i2c_pm_ops, pch_i2c_suspend, pch_i2c_resume);
-> >  
-> >  static struct pci_driver pch_pcidriver = {
-> >  	.name = KBUILD_MODNAME,
-> >  	.id_table = pch_pcidev_id,
-> >  	.probe = pch_i2c_probe,
-> >  	.remove = pch_i2c_remove,
-> > -	.suspend = pch_i2c_suspend,
-> > -	.resume = pch_i2c_resume
-> > +	.driver.pm = &pch_i2c_pm_ops,
-> >  };
-> >  
-> >  module_pci_driver(pch_pcidriver);
-> > -- 
-> > 2.27.0
-> > 
+--BXVAT5kNtrzKuDFl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, Aug 08, 2020 at 11:00:04PM +0200, Stephen Kitt wrote:
+> pmbus_do_probe doesn't use the id information provided in its second
+> argument, so this can be removed, which then allows using the
+> single-parameter i2c probe function ("probe_new") for probes.
+>=20
+> This avoids scanning the identifier tables during probes.
+>=20
+> Drivers which didn't use the id are converted as-is; drivers which did
+> are modified as follows:
+>=20
+> * if the information in i2c_client is sufficient, that's used instead
+>   (client->name);
+> * configured v. probed comparisons are performed by comparing the
+>   configured name to the detected name, instead of the ids; this
+>   involves strcmp but is still cheaper than comparing all the device
+>   names when scanning the tables;
+> * anything else is handled by calling i2c_match_id() with the same
+>   level of error-handling (if any) as before.
+>=20
+> Additionally, the mismatch message in the ltc2978 driver is adjusted
+> so that it no longer assumes that the driver_data is an index into
+> ltc2978_id.
+>=20
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
+
+Still no detailed review, but I support (and even appreciate!) the
+conversion:
+
+Acked-by: Wolfram Sang <wsa@kernel.org>
+
+
+--BXVAT5kNtrzKuDFl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8xFBUACgkQFA3kzBSg
+KbanKg/7BAf/sKdiycBUflUoB+Aqwr8+6ECBg5faGYiLlco2Ho7OTFU5G3HbIc3+
+Ygj/5BON9feshnjbwmDu/0+Mm0T1Vr91XYHPSxq4WKTHuNZa4NiAARWfJQlZ+/h1
+a2dxBZlYrv9UT54THde7GIrJa/eScVclPa/QfQetzrEggM1D1Rjl8jlVETe7ZiuM
+AuXqLyILQwdfSvuL/sMfQ3LDPhvWmPACGhiwiJE6KuT5BKvRGYQzYVMltwHITX5a
+TqTST7AXlasj4+XBCmAbLsS8d4qodXvfSUTHnrsgAYoY6eBuV9ccnkX37TBxCDEL
+G8aG2VnEdU0glQ8EiReNZUYCswHXq7hQ9QzJz967qcounKsjchcTM+yR9Rdgj3xR
+oe71Mx37jNLozylq3mHX3MflCxR+MhuornB/r3hi76pg+VQbR3KM3o5HQxLwcmhS
+NHgUgo7E+ua0cH+/30iHrIWPJC+uVFwb/HL1ZlVOYGoexPt733EdOHRDKPRR5MQb
+EGD2WscVZwj5Gfopb+huUQmS+YsbeswH+waNIC7HFVa3lrpm78wEuFrs0rot/5Ui
+mmPx+IZBxTRGHP+RQa+dM4TTqk+KFWAul/s/puw928lvyEni5Nyv350F4F/aL8De
+Kdl75gR7rDcT/rambE4X9SJbwsqVG4ckR3FOdzu4xELKeCJnZmc=
+=P9Vd
+-----END PGP SIGNATURE-----
+
+--BXVAT5kNtrzKuDFl--
