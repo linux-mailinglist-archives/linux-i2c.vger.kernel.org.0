@@ -2,105 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB7724040B
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Aug 2020 11:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BC924041C
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Aug 2020 11:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbgHJJcQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Aug 2020 05:32:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41800 "EHLO mail.kernel.org"
+        id S1726173AbgHJJgZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Aug 2020 05:36:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43488 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726029AbgHJJcP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 10 Aug 2020 05:32:15 -0400
+        id S1725809AbgHJJgY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 10 Aug 2020 05:36:24 -0400
 Received: from localhost (p54b3345b.dip0.t-ipconnect.de [84.179.52.91])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3A5592063A;
-        Mon, 10 Aug 2020 09:32:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D560A206C3;
+        Mon, 10 Aug 2020 09:36:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597051934;
-        bh=rYQETMEuY/Gnmi3nPJ9bLKGcfo7ypYEaqWHmvIY24Tc=;
+        s=default; t=1597052184;
+        bh=Vw+Rj/rtZ0j1+KEfAc3glhp58FKitPQp/lGLqr3Wulg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZI/odSDLJ46htbJHrtKOR4bSJyXdmSnl+ezLotbpkI4adzDtDDcKnlPwWNvQDfEre
-         MWW8hGpZ8+DATaSpJW9ecUCz+MsWwIBtyEpjiJPtKFJBfZ/itGxkbl/4nKiDm62+uf
-         bP4Iog99TecSpL6t6saehA78DrIR4ISeI9rL5+4w=
-Date:   Mon, 10 Aug 2020 11:32:09 +0200
+        b=hmqoCBs8iQxnjVk5/oAp0r4eT7/PGqY6gkhr5rmIqktzxT2V2EFBKqczRWum+UfN9
+         6YWHkdAL1GlSYmk4d/R1F1mmqLDkDZViozqxN07M6+nmg2v9ZUtbRjJRkP0H4lyH6D
+         nnC7BEs7cPPgV0smgxdfqzZAitwmnM+eOrtgfFiI=
+Date:   Mon, 10 Aug 2020 11:36:19 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Stephen Kitt <steve@sk2.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Scott Wood <oss@buserror.net>, linuxppc-dev@lists.ozlabs.org,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] hwmon/pmbus: use simple i2c probe function
-Message-ID: <20200810093209.GA1290@kunai>
+Subject: Re: [PATCH] arch/powerpc: use simple i2c probe function
+Message-ID: <20200810093619.GB1290@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Stephen Kitt <steve@sk2.org>, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200808210004.30880-1-steve@sk2.org>
+        Stephen Kitt <steve@sk2.org>, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, Scott Wood <oss@buserror.net>,
+        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200807152713.381588-1-steve@sk2.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BXVAT5kNtrzKuDFl"
+        protocol="application/pgp-signature"; boundary="WYTEVAkct0FjGQmd"
 Content-Disposition: inline
-In-Reply-To: <20200808210004.30880-1-steve@sk2.org>
+In-Reply-To: <20200807152713.381588-1-steve@sk2.org>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---BXVAT5kNtrzKuDFl
+--WYTEVAkct0FjGQmd
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Aug 08, 2020 at 11:00:04PM +0200, Stephen Kitt wrote:
-> pmbus_do_probe doesn't use the id information provided in its second
-> argument, so this can be removed, which then allows using the
-> single-parameter i2c probe function ("probe_new") for probes.
+On Fri, Aug 07, 2020 at 05:27:13PM +0200, Stephen Kitt wrote:
+> The i2c probe functions here don't use the id information provided in
+> their second argument, so the single-parameter i2c probe function
+> ("probe_new") can be used instead.
 >=20
 > This avoids scanning the identifier tables during probes.
 >=20
-> Drivers which didn't use the id are converted as-is; drivers which did
-> are modified as follows:
->=20
-> * if the information in i2c_client is sufficient, that's used instead
->   (client->name);
-> * configured v. probed comparisons are performed by comparing the
->   configured name to the detected name, instead of the ids; this
->   involves strcmp but is still cheaper than comparing all the device
->   names when scanning the tables;
-> * anything else is handled by calling i2c_match_id() with the same
->   level of error-handling (if any) as before.
->=20
-> Additionally, the mismatch message in the ltc2978 driver is adjusted
-> so that it no longer assumes that the driver_data is an index into
-> ltc2978_id.
->=20
 > Signed-off-by: Stephen Kitt <steve@sk2.org>
 
-Still no detailed review, but I support (and even appreciate!) the
-conversion:
+This is useful, helps deprecating the old probe method:
 
 Acked-by: Wolfram Sang <wsa@kernel.org>
 
 
---BXVAT5kNtrzKuDFl
+--WYTEVAkct0FjGQmd
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8xFBUACgkQFA3kzBSg
-KbanKg/7BAf/sKdiycBUflUoB+Aqwr8+6ECBg5faGYiLlco2Ho7OTFU5G3HbIc3+
-Ygj/5BON9feshnjbwmDu/0+Mm0T1Vr91XYHPSxq4WKTHuNZa4NiAARWfJQlZ+/h1
-a2dxBZlYrv9UT54THde7GIrJa/eScVclPa/QfQetzrEggM1D1Rjl8jlVETe7ZiuM
-AuXqLyILQwdfSvuL/sMfQ3LDPhvWmPACGhiwiJE6KuT5BKvRGYQzYVMltwHITX5a
-TqTST7AXlasj4+XBCmAbLsS8d4qodXvfSUTHnrsgAYoY6eBuV9ccnkX37TBxCDEL
-G8aG2VnEdU0glQ8EiReNZUYCswHXq7hQ9QzJz967qcounKsjchcTM+yR9Rdgj3xR
-oe71Mx37jNLozylq3mHX3MflCxR+MhuornB/r3hi76pg+VQbR3KM3o5HQxLwcmhS
-NHgUgo7E+ua0cH+/30iHrIWPJC+uVFwb/HL1ZlVOYGoexPt733EdOHRDKPRR5MQb
-EGD2WscVZwj5Gfopb+huUQmS+YsbeswH+waNIC7HFVa3lrpm78wEuFrs0rot/5Ui
-mmPx+IZBxTRGHP+RQa+dM4TTqk+KFWAul/s/puw928lvyEni5Nyv350F4F/aL8De
-Kdl75gR7rDcT/rambE4X9SJbwsqVG4ckR3FOdzu4xELKeCJnZmc=
-=P9Vd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8xFRMACgkQFA3kzBSg
+KbZjrg/6A8HNLY0mqI61E0vXIx6q74Ls1JWWIlt+BNwoqOr2d5DWiprvBzgktbFA
+JHmPFgFWaWrSdn6oFz4sOIPRPbchcupAQ6HVJI9n3QxvkycCl0tAWx9hvd0/j72A
+lVQRvxOwid02Rtmsud4IKqGppm+FpyOh626IocTBbZZFn5+dZQLzt9L78/RND68S
+6lFvK1ybFmnIZMx0N886RTZBeuXDHI+SmfaP0R8za+0AUtNigUM0W6Uh+mQfc+LC
+7c7/4xSuf+7p6/kfWxTb1nclWBRcfNo22S0oODQCui/4AYUNOJohtS00Pr9eMH5N
+0Ov2NlE/wFjntSbyR1y02n6FgXT3hDSmR9Er61orn0EfFRBHztY/mrCE++4QTSvg
+XQsEJIxzzIXvKSonT9EO+0W/iYA1QJnjGG6LBKHKP8jVlaWCbryFPMILTJGEeJ3A
+BFA/5fdcdGmPoJJWLoWLXxDOamtl/DcvF4TNH3cxRvx6ZV6LYVBbYlAz+12+082u
+AQeXjT+oYLAB8ElSgRDHrbc622tw1AAQHDyJfchj8Mz71+P/mpKXJkYFwuk6GetU
+XKw8ZUIJZmao30jZ3a5e2VmrQTDCQ363q3H380EMfAMx+6m985jdcygbPRSni/aR
+X7YJpsdoBRcVRX+lPlE/Om97sdjd4NkXvSPpZdGzpwRnsDFoFBE=
+=nnuq
 -----END PGP SIGNATURE-----
 
---BXVAT5kNtrzKuDFl--
+--WYTEVAkct0FjGQmd--
