@@ -2,116 +2,127 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 875D82412EE
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Aug 2020 00:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D84A3241439
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Aug 2020 02:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726841AbgHJWWu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Aug 2020 18:22:50 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:37136 "EHLO
+        id S1727077AbgHKAnh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Aug 2020 20:43:37 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:53224 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726500AbgHJWWu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Aug 2020 18:22:50 -0400
+        with ESMTP id S1727014AbgHKAng (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Aug 2020 20:43:36 -0400
 Received: by linux.microsoft.com (Postfix, from userid 1046)
-        id A0D7120B4908; Mon, 10 Aug 2020 15:22:49 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A0D7120B4908
+        id C51CF20B4908; Mon, 10 Aug 2020 17:43:35 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C51CF20B4908
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1597098169;
-        bh=YX6zs56mpB20F9QGhA/q409LzILhsnF/rVT8T07hRsY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O8T0wGasaG3HSifLjhj90V7WehHpntMviC1004hcoJ6e4/eqHddnq6YgCwAgPDSYr
-         LDARm3g8IB+uzhDgcKugFPxAEOtJ1oMcKAY7Cclp0zICxF1vf1aJwEDgDSvgLMLwTp
-         Pfa+YRKerd2bUX4ERXSfNaICF/YKo3sPhQ1bQ3lc=
+        s=default; t=1597106615;
+        bh=AQjpSH/RpqiCpjXXY1Utw/bEGAAvb9t61EHpqwYleBU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=plhDb8/JF858TD3uKcs7VBBnRzGP2DCluApdoJ+H3M8SkhnM7vbfZ5f/hiS5ceisf
+         0TL6K1gZ6HH1AKZDvuQkO5zYZhcy8b9Ogv8qdWTZJBhP0qhG0i86/x2SC+wAd8IgWK
+         0O051Ve2FVaIN8JfYc0Pl60wBz0wovLcq4iTlKqQ=
 From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
-To:     ray.jui@broadcom.com
-Cc:     bcm-kernel-feedback-list@broadcom.com, dphadke@linux.microsoft.com,
-        f.fainelli@gmail.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rayagonda.kokatanur@broadcom.com,
-        rjui@broadcom.com, wsa@kernel.org
-Subject: Re: [PATCH v2] i2c: iproc: fix race between client unreg and isr
-Date:   Mon, 10 Aug 2020 15:22:49 -0700
-Message-Id: <18cf439a-8fde-02b0-31b6-9ac42f7e972c@broadcom.com>
+To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>, Ray Jui <rjui@broadcom.com>
+Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dhananjay Phadke <dphadke@linux.microsoft.com>
+Subject: [PATCH v3] i2c: iproc: fix race between client unreg and isr
+Date:   Mon, 10 Aug 2020 17:42:40 -0700
+Message-Id: <1597106560-79693-1-git-send-email-dphadke@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <18cf439a-8fde-02b0-31b6-9ac42f7e972c@broadcom.com>
-References: <18cf439a-8fde-02b0-31b6-9ac42f7e972c@broadcom.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+When i2c client unregisters, synchronize irq before setting
+iproc_i2c->slave to NULL.
 
-On 8/10/2020 02:17 PM, Ray Jui wrote:
->> On 8/7/2020 8:55 PM, Dhananjay Phadke wrote:
->>> On 8/7/2020, Florian Fainelli wrote:
->>>>> When i2c client unregisters, synchronize irq before setting
->>>>> iproc_i2c->slave to NULL.
->>>>>
->>>>> (1) disable_irq()
->>>>> (2) Mask event enable bits in control reg
->>>>> (3) Erase slave address (avoid further writes to rx fifo)
->>>>> (4) Flush tx and rx FIFOs
->>>>> (5) Clear pending event (interrupt) bits in status reg
->>>>> (6) enable_irq()
->>>>> (7) Set client pointer to NULL
->>>>>
->>>>
->>>>> @@ -1091,6 +1091,17 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
->>>>>  	tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
->>>>>  	iproc_i2c_wr_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET, tmp);
->>>>>  
->>>>> +	/* flush TX/RX FIFOs */
->>>>> +	tmp = (BIT(S_FIFO_RX_FLUSH_SHIFT) | BIT(S_FIFO_TX_FLUSH_SHIFT));
->>>>> +	iproc_i2c_wr_reg(iproc_i2c, S_FIFO_CTRL_OFFSET, tmp);
->>>>> +
->>>>> +	/* clear all pending slave interrupts */
->>>>> +	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, ISR_MASK_SLAVE);
->>>>> +
->>>>> +	enable_irq(iproc_i2c->irq);
->>>>> +
->>>>> +	iproc_i2c->slave = NULL;
->>>>
->>>> There is nothing that checks on iproc_i2c->slave being valid within the
->>>> interrupt handler, we assume that the pointer is valid which is fin,
->>>> however non functional it may be, it may feel more natural to move the
->>>> assignment before the enable_irq()?
->>>
->>> As far as the teardown sequence ensures no more interrupts arrive after
->>> enable_irq() and they are enabled only after setting pointer during
->>> client register(); checking for NULL in ISR isn't necessary. 
->> 
->> Agreed.
->> 
->
->Okay I think we all agree that this teardown sequence will guarantee
->that no further "slave" interrupts will be fired after it.
->
->>>
->>> If The teardown sequence doesn't guarantee quiescing of interrupts,
->>> setting NULL before or after enable_irq() is equally vulnerable.
->> 
->> The teardown sequence is sort of a critical section if we may say, so
->> ensuring that everything happens within it and that enable_irq() is the
->> last operation would seem more natural to me at least. Thanks
->> 
->
->I tend to agree with Florian here.
->
->1. Enable/Disable IRQ is done on the interrupt line for both master and
->slave (or even other peripherals that share the same interrupt line,
->although that is not the case here since this interrupt is dedicated to
->I2C in all iProc based SoCs).
->
->2. The tear down sequence here wrapped by disable/enable_irq is slave
->specific
->
->The effect of 1. is temporary, and the purpose of it is to ensure slave
->interrupts are quiesced properly at the end of the sequence.
->
->If we consider both 1. and 2., I agree with Florian that while the end
->result is the same, it is indeed more natural to wrap the entire slave
->tear down sequence within disable/enable irq.
+(1) disable_irq()
+(2) Mask event enable bits in control reg
+(3) Erase slave address (avoid further writes to rx fifo)
+(4) Flush tx and rx FIFOs
+(5) Clear pending event (interrupt) bits in status reg
+(6) enable_irq()
+(7) Set client pointer to NULL
 
-Ok, will send v3 with this change.
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000318
 
-Thanks,
-Dhananjay
+[  371.020421] pc : bcm_iproc_i2c_isr+0x530/0x11f0
+[  371.025098] lr : __handle_irq_event_percpu+0x6c/0x170
+[  371.030309] sp : ffff800010003e40
+[  371.033727] x29: ffff800010003e40 x28: 0000000000000060
+[  371.039206] x27: ffff800010ca9de0 x26: ffff800010f895df
+[  371.044686] x25: ffff800010f18888 x24: ffff0008f7ff3600
+[  371.050165] x23: 0000000000000003 x22: 0000000001600000
+[  371.055645] x21: ffff800010f18888 x20: 0000000001600000
+[  371.061124] x19: ffff0008f726f080 x18: 0000000000000000
+[  371.066603] x17: 0000000000000000 x16: 0000000000000000
+[  371.072082] x15: 0000000000000000 x14: 0000000000000000
+[  371.077561] x13: 0000000000000000 x12: 0000000000000001
+[  371.083040] x11: 0000000000000000 x10: 0000000000000040
+[  371.088519] x9 : ffff800010f317c8 x8 : ffff800010f317c0
+[  371.093999] x7 : ffff0008f805b3b0 x6 : 0000000000000000
+[  371.099478] x5 : ffff0008f7ff36a4 x4 : ffff8008ee43d000
+[  371.104957] x3 : 0000000000000000 x2 : ffff8000107d64c0
+[  371.110436] x1 : 00000000c00000af x0 : 0000000000000000
+
+[  371.115916] Call trace:
+[  371.118439]  bcm_iproc_i2c_isr+0x530/0x11f0
+[  371.122754]  __handle_irq_event_percpu+0x6c/0x170
+[  371.127606]  handle_irq_event_percpu+0x34/0x88
+[  371.132189]  handle_irq_event+0x40/0x120
+[  371.136234]  handle_fasteoi_irq+0xcc/0x1a0
+[  371.140459]  generic_handle_irq+0x24/0x38
+[  371.144594]  __handle_domain_irq+0x60/0xb8
+[  371.148820]  gic_handle_irq+0xc0/0x158
+[  371.152687]  el1_irq+0xb8/0x140
+[  371.155927]  arch_cpu_idle+0x10/0x18
+[  371.159615]  do_idle+0x204/0x290
+[  371.162943]  cpu_startup_entry+0x24/0x60
+[  371.166990]  rest_init+0xb0/0xbc
+[  371.170322]  arch_call_rest_init+0xc/0x14
+[  371.174458]  start_kernel+0x404/0x430
+
+Fixes: c245d94ed106 ("i2c: iproc: Add multi byte read-write support for slave mode")
+
+Signed-off-by: Dhananjay Phadke <dphadke@linux.microsoft.com>
+---
+ drivers/i2c/busses/i2c-bcm-iproc.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
+index 8a3c98866fb7..688e92818821 100644
+--- a/drivers/i2c/busses/i2c-bcm-iproc.c
++++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+@@ -1078,7 +1078,7 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
+ 	if (!iproc_i2c->slave)
+ 		return -EINVAL;
+ 
+-	iproc_i2c->slave = NULL;
++	disable_irq(iproc_i2c->irq);
+ 
+ 	/* disable all slave interrupts */
+ 	tmp = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
+@@ -1091,6 +1091,17 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
+ 	tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
+ 	iproc_i2c_wr_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET, tmp);
+ 
++	/* flush TX/RX FIFOs */
++	tmp = (BIT(S_FIFO_RX_FLUSH_SHIFT) | BIT(S_FIFO_TX_FLUSH_SHIFT));
++	iproc_i2c_wr_reg(iproc_i2c, S_FIFO_CTRL_OFFSET, tmp);
++
++	/* clear all pending slave interrupts */
++	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, ISR_MASK_SLAVE);
++
++	iproc_i2c->slave = NULL;
++
++	enable_irq(iproc_i2c->irq);
++
+ 	return 0;
+ }
+ 
+-- 
+2.17.1
 
