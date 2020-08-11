@@ -2,125 +2,163 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC8C2418A3
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Aug 2020 10:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E1A241D98
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Aug 2020 17:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728381AbgHKI5v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Aug 2020 04:57:51 -0400
-Received: from mga07.intel.com ([134.134.136.100]:33872 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728336AbgHKI5v (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 11 Aug 2020 04:57:51 -0400
-IronPort-SDR: hhrZbCcZRh0Sdybu/vfzBM6qAONDK1+1j3R6DppUJ3gqgUZ8YF3rjl//Jh+07QQcW8Qu2DnN4i
- bT7tXicfI20g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9709"; a="218030568"
-X-IronPort-AV: E=Sophos;i="5.75,460,1589266800"; 
-   d="scan'208";a="218030568"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2020 01:57:49 -0700
-IronPort-SDR: EmAtZuRpcdtRFUCT8R9mvEDeG40/XSjZz7NwrbIXaM72Jbh4UNwML1IGy6XVooLEowvXfWqy3P
- Zit6SPImqfOg==
-X-IronPort-AV: E=Sophos;i="5.75,460,1589266800"; 
-   d="scan'208";a="277522857"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2020 01:57:46 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 391D8206E3; Tue, 11 Aug 2020 11:57:44 +0300 (EEST)
-Date:   Tue, 11 Aug 2020 11:57:44 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>,
-        linux-media@vger.kernel.org,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
-        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 1/6] i2c: Allow driver to manage the device's power
- state during probe
-Message-ID: <20200811085744.GK16270@paasikivi.fi.intel.com>
-References: <20200810142747.12400-1-sakari.ailus@linux.intel.com>
- <20200810142747.12400-2-sakari.ailus@linux.intel.com>
- <20200810144148.GD31434@bogus>
+        id S1728911AbgHKPwJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Aug 2020 11:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728873AbgHKPwH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Aug 2020 11:52:07 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C100FC061787
+        for <linux-i2c@vger.kernel.org>; Tue, 11 Aug 2020 08:52:06 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id a14so11952783wra.5
+        for <linux-i2c@vger.kernel.org>; Tue, 11 Aug 2020 08:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9aCeAHh+tJpUW3mQW2V6JCgolza+sh48fpnGnwOnipk=;
+        b=IlWKI/fa9axZFDtAyM+nbd8f8M6K6q2uI3EF+7Oij+ty6MQl2FpMDa0V56rCfcgYJy
+         GPFbmS/eqnvpQSjFeoIcz9CErIRegacw40Q38xrhFAYWhY4mFO/HZNSKVvHM/38DuLVR
+         /Y9NCD0WavOjw+F1n4x5M61a2yLf6j0ZpAg4U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9aCeAHh+tJpUW3mQW2V6JCgolza+sh48fpnGnwOnipk=;
+        b=NFo0eipNEfmKu/2d7hTSssF9eA59ohtApCSqVO4s/0sFDrNmicZbUGPQIX088g+hk8
+         pL5c/Aof0JK1NGS+qIOisidPMyxaQ+mEEq4DCHK9GimETdLq0O+5GV4AQL63xETpOFmk
+         d7jRZAmnQa4f9nqp1jFJ0+6z7SI9Pi+ywyBMj+RSVRetqh//ECn7Otn8fjqNaTq81iMH
+         /SOjp1gliX7A2VhaaIPRT/k5QltF5UOOH3mWmah53B+1PnsH9ElX1PrnszrqY+zF53uk
+         sg84aHYq8D39I+blEsPyEAzMqNPm76X62bnZcTvpx+j3lqn2+mxZrXe3nI9qF/83zfo6
+         ns9Q==
+X-Gm-Message-State: AOAM532hcsg+FCxauilVxCFs8RYbI1B1R8JJMAye491d77mTrJcEXI5P
+        KiFUAndckzFimdAxjfswFnHIvw==
+X-Google-Smtp-Source: ABdhPJwmQ09pbVIsm5G6JWGLVVkrdVRK9rctTlUrcLL274znvsX2IIRJ6wCEsi6XW2KeK56vvoHHtw==
+X-Received: by 2002:adf:fd41:: with SMTP id h1mr31876509wrs.124.1597161125115;
+        Tue, 11 Aug 2020 08:52:05 -0700 (PDT)
+Received: from [10.230.0.249] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id b203sm6013680wmc.22.2020.08.11.08.52.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Aug 2020 08:52:04 -0700 (PDT)
+Subject: Re: [PATCH v3] i2c: iproc: fix race between client unreg and isr
+To:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>, Ray Jui <rjui@broadcom.com>
+Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com
+References: <1597106560-79693-1-git-send-email-dphadke@linux.microsoft.com>
+From:   Ray Jui <ray.jui@broadcom.com>
+Message-ID: <c7ef0a9e-e3c1-abcf-160b-4df4f523fa04@broadcom.com>
+Date:   Tue, 11 Aug 2020 08:52:00 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200810144148.GD31434@bogus>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1597106560-79693-1-git-send-email-dphadke@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Sudeep,
 
-Thanks for the review.
 
-On Mon, Aug 10, 2020 at 03:41:48PM +0100, Sudeep Holla wrote:
-> On Mon, Aug 10, 2020 at 05:27:42PM +0300, Sakari Ailus wrote:
-> > Enable drivers to tell ACPI that there's no need to power on a device for
-> > probe. Drivers should still perform this by themselves if there's a need
-> > to. In some cases powering on the device during probe is undesirable, and
-> > this change enables a driver to choose what fits best for it.
-> >
-> > Add a field called "flags" into struct i2c_driver for driver flags, and a
-> > flag I2C_DRV_FL_ALLOW_LOW_POWER_PROBE to tell a driver supports probe in
-> > low power state.
-> >
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  drivers/i2c/i2c-core-base.c | 17 ++++++++++++++---
-> >  include/linux/i2c.h         | 14 ++++++++++++++
-> >  2 files changed, 28 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> > index 34a9609f256da..cde9cf49a07e6 100644
-> > --- a/drivers/i2c/i2c-core-base.c
-> > +++ b/drivers/i2c/i2c-core-base.c
-> > @@ -436,6 +436,14 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
-> >  	return irq > 0 ? irq : -ENXIO;
-> >  }
-> >
-> > +static bool allow_low_power_probe(struct device *dev)
-> > +{
-> > +	struct i2c_driver *driver = to_i2c_driver(dev->driver);
-> > +
-> > +	return driver->flags & I2C_DRV_FL_ALLOW_LOW_POWER_PROBE &&
-> > +		device_property_present(dev, "allow-low-power-probe");
+On 8/10/2020 5:42 PM, Dhananjay Phadke wrote:
+> When i2c client unregisters, synchronize irq before setting
+> iproc_i2c->slave to NULL.
 > 
-> I assume this change makes even the DT property "allow-low-power-probe"
-> work in the same way. Should we have proper DT binding for that ?
+> (1) disable_irq()
+> (2) Mask event enable bits in control reg
+> (3) Erase slave address (avoid further writes to rx fifo)
+> (4) Flush tx and rx FIFOs
+> (5) Clear pending event (interrupt) bits in status reg
+> (6) enable_irq()
+> (7) Set client pointer to NULL
 > 
-> This comment applies for any property using device_property_* but has
-> no explicit DT binding ? Just asking the question to know the strategy
-> followed. Sorry if this is redundant question, feel free to point me
-> to the past discussions.
+> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000318
+> 
+> [  371.020421] pc : bcm_iproc_i2c_isr+0x530/0x11f0
+> [  371.025098] lr : __handle_irq_event_percpu+0x6c/0x170
+> [  371.030309] sp : ffff800010003e40
+> [  371.033727] x29: ffff800010003e40 x28: 0000000000000060
+> [  371.039206] x27: ffff800010ca9de0 x26: ffff800010f895df
+> [  371.044686] x25: ffff800010f18888 x24: ffff0008f7ff3600
+> [  371.050165] x23: 0000000000000003 x22: 0000000001600000
+> [  371.055645] x21: ffff800010f18888 x20: 0000000001600000
+> [  371.061124] x19: ffff0008f726f080 x18: 0000000000000000
+> [  371.066603] x17: 0000000000000000 x16: 0000000000000000
+> [  371.072082] x15: 0000000000000000 x14: 0000000000000000
+> [  371.077561] x13: 0000000000000000 x12: 0000000000000001
+> [  371.083040] x11: 0000000000000000 x10: 0000000000000040
+> [  371.088519] x9 : ffff800010f317c8 x8 : ffff800010f317c0
+> [  371.093999] x7 : ffff0008f805b3b0 x6 : 0000000000000000
+> [  371.099478] x5 : ffff0008f7ff36a4 x4 : ffff8008ee43d000
+> [  371.104957] x3 : 0000000000000000 x2 : ffff8000107d64c0
+> [  371.110436] x1 : 00000000c00000af x0 : 0000000000000000
+> 
+> [  371.115916] Call trace:
+> [  371.118439]  bcm_iproc_i2c_isr+0x530/0x11f0
+> [  371.122754]  __handle_irq_event_percpu+0x6c/0x170
+> [  371.127606]  handle_irq_event_percpu+0x34/0x88
+> [  371.132189]  handle_irq_event+0x40/0x120
+> [  371.136234]  handle_fasteoi_irq+0xcc/0x1a0
+> [  371.140459]  generic_handle_irq+0x24/0x38
+> [  371.144594]  __handle_domain_irq+0x60/0xb8
+> [  371.148820]  gic_handle_irq+0xc0/0x158
+> [  371.152687]  el1_irq+0xb8/0x140
+> [  371.155927]  arch_cpu_idle+0x10/0x18
+> [  371.159615]  do_idle+0x204/0x290
+> [  371.162943]  cpu_startup_entry+0x24/0x60
+> [  371.166990]  rest_init+0xb0/0xbc
+> [  371.170322]  arch_call_rest_init+0xc/0x14
+> [  371.174458]  start_kernel+0x404/0x430
+> 
+> Fixes: c245d94ed106 ("i2c: iproc: Add multi byte read-write support for slave mode")
+> 
+> Signed-off-by: Dhananjay Phadke <dphadke@linux.microsoft.com>
+> ---
+>  drivers/i2c/busses/i2c-bcm-iproc.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
+> index 8a3c98866fb7..688e92818821 100644
+> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
+> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+> @@ -1078,7 +1078,7 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
+>  	if (!iproc_i2c->slave)
+>  		return -EINVAL;
+>  
+> -	iproc_i2c->slave = NULL;
+> +	disable_irq(iproc_i2c->irq);
+>  
+>  	/* disable all slave interrupts */
+>  	tmp = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
+> @@ -1091,6 +1091,17 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
+>  	tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
+>  	iproc_i2c_wr_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET, tmp);
+>  
+> +	/* flush TX/RX FIFOs */
+> +	tmp = (BIT(S_FIFO_RX_FLUSH_SHIFT) | BIT(S_FIFO_TX_FLUSH_SHIFT));
+> +	iproc_i2c_wr_reg(iproc_i2c, S_FIFO_CTRL_OFFSET, tmp);
+> +
+> +	/* clear all pending slave interrupts */
+> +	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, ISR_MASK_SLAVE);
+> +
+> +	iproc_i2c->slave = NULL;
+> +
+> +	enable_irq(iproc_i2c->irq);
+> +
+>  	return 0;
+>  }
+>  
+> 
 
-It's not a redundant question, no.
+Thanks again, Dhananjay! Looks good to me.
 
-I²C drivers on OF are responsible for controlling device's power state
-already (using runtime PM or without) so I think the drivers could use the
-property directly on OF systems (and document the property in DT bindings
-first) if there's a need to. IOW this code isn't needed on OF.
-
-Note that the power_on or power_off arguments are not used by
-genpd_dev_pm_attach() or genpd_dev_pm_detach() so this patch only affects
-ACPI. I think I should check the device is an ACPI device above, for
-clarity.
-
-Cc also DT list. The entire set is here:
-
-<URL:https://lore.kernel.org/linux-acpi/20200810142747.12400-1-sakari.ailus@linux.intel.com/>
-
--- 
-Kind regards,
-
-Sakari Ailus
+Acked-by: Ray Jui <ray.jui@broadcom.com>
