@@ -2,122 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC206242503
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Aug 2020 07:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B6B242743
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Aug 2020 11:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726255AbgHLFju (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 12 Aug 2020 01:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgHLFju (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Aug 2020 01:39:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7479C06174A
-        for <linux-i2c@vger.kernel.org>; Tue, 11 Aug 2020 22:39:49 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1k5jUH-0001vV-48; Wed, 12 Aug 2020 07:39:45 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1k5jUF-0004fV-F7; Wed, 12 Aug 2020 07:39:43 +0200
-Date:   Wed, 12 Aug 2020 07:39:43 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     linux@rempel-privat.de, kernel@pengutronix.de, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Linux-imx@nxp.com
-Subject: Re: [PATCH] i2c: imx: Use dev_err_probe() to simplify error handling
-Message-ID: <20200812053943.oeiqz57turtdckal@pengutronix.de>
-References: <1597203954-1803-1-git-send-email-Anson.Huang@nxp.com>
+        id S1726712AbgHLJNm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 Aug 2020 05:13:42 -0400
+Received: from mga18.intel.com ([134.134.136.126]:40183 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726601AbgHLJNm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 12 Aug 2020 05:13:42 -0400
+IronPort-SDR: IfM3j/VTzCXBkQoI75MlQBxqfDzK01hSyuhaqHa7S2gAPk+o26uglB9/UJRKrEG+jR39aiW3GT
+ dd8+S8cZ1kAg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9710"; a="141534164"
+X-IronPort-AV: E=Sophos;i="5.76,303,1592895600"; 
+   d="scan'208";a="141534164"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2020 02:13:41 -0700
+IronPort-SDR: 52x4G4nxphbG7wbFf9Bhd4oVDxjk3eeTi2GzwyrdU60wWFA2d3CAQsChy4xOcdkN8m2MdKEtc0
+ MMvG43id3Lxw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,303,1592895600"; 
+   d="scan'208";a="318027426"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.196]) ([10.238.232.196])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Aug 2020 02:13:37 -0700
+Subject: Re: [PATCH v5 3/6] ov5670: Support probe whilst the device is in a
+ low power state
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>,
+        linux-media@vger.kernel.org,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>
+References: <20200810142747.12400-1-sakari.ailus@linux.intel.com>
+ <20200810142747.12400-4-sakari.ailus@linux.intel.com>
+From:   Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <7a1fa217-7fd1-1d36-0b1c-ad5d09ea11a0@linux.intel.com>
+Date:   Wed, 12 Aug 2020 17:12:28 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jijteoo6ouqerxuc"
-Content-Disposition: inline
-In-Reply-To: <1597203954-1803-1-git-send-email-Anson.Huang@nxp.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 07:38:58 up 270 days, 20:57, 245 users,  load average: 0.02, 0.03,
- 0.00
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20200810142747.12400-4-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---jijteoo6ouqerxuc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 12, 2020 at 11:45:54AM +0800, Anson Huang wrote:
-> dev_err_probe() can reduce code size, uniform error handling and record t=
-he
-> defer probe reason etc., use it to simplify the code.
->=20
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+On 8/10/20 10:27 PM, Sakari Ailus wrote:
+> Tell ACPI device PM code that the driver supports the device being in a
+> low power state when the driver's probe function is entered.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > ---
->  drivers/i2c/busses/i2c-imx.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index 0ab5381..63f4367 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1159,11 +1159,9 @@ static int i2c_imx_probe(struct platform_device *p=
-dev)
-> =20
->  	/* Get I2C clock */
->  	i2c_imx->clk =3D devm_clk_get(&pdev->dev, NULL);
-> -	if (IS_ERR(i2c_imx->clk)) {
-> -		if (PTR_ERR(i2c_imx->clk) !=3D -EPROBE_DEFER)
-> -			dev_err(&pdev->dev, "can't get I2C clock\n");
-> -		return PTR_ERR(i2c_imx->clk);
-> -	}
-> +	if (IS_ERR(i2c_imx->clk))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_imx->clk),
-> +				     "can't get I2C clock\n");
-> =20
->  	ret =3D clk_prepare_enable(i2c_imx->clk);
->  	if (ret) {
-> --=20
+>  drivers/media/i2c/ov5670.c | 23 ++++++++++++++---------
+>  1 file changed, 14 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
+> index f26252e35e08d..1f75b888d2a18 100644
+> --- a/drivers/media/i2c/ov5670.c
+> +++ b/drivers/media/i2c/ov5670.c
+> @@ -2456,6 +2456,7 @@ static int ov5670_probe(struct i2c_client *client)
+>  	struct ov5670 *ov5670;
+>  	const char *err_msg;
+>  	u32 input_clk = 0;
+> +	bool low_power;
+>  	int ret;
+>  
+>  	device_property_read_u32(&client->dev, "clock-frequency", &input_clk);
+> @@ -2472,11 +2473,14 @@ static int ov5670_probe(struct i2c_client *client)
+>  	/* Initialize subdev */
+>  	v4l2_i2c_subdev_init(&ov5670->sd, client, &ov5670_subdev_ops);
+>  
+> -	/* Check module identity */
+> -	ret = ov5670_identify_module(ov5670);
+> -	if (ret) {
+> -		err_msg = "ov5670_identify_module() error";
+> -		goto error_print;
+> +	low_power = acpi_dev_state_low_power(&client->dev);
+> +	if (!low_power) {
+> +		/* Check module identity */
+> +		ret = ov5670_identify_module(ov5670);
+> +		if (ret) {
+> +			err_msg = "ov5670_identify_module() error";
+> +			goto error_print;
+> +	
 
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Sakari, thanks for your patch.
+one question - With this change, there will be no chance for driver to guarantee
+that the camera sensor plugged in is the camera that the matched driver actually
+can drive until try to streaming the camera, so is it necessary to return
+appropriate error in .s_stream ops to notify user it is not the hardware that
+current driver can drive? if no other better way.
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---jijteoo6ouqerxuc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEERBNZvwSgvmcMY/T74omh9DUaUbMFAl8zgJYACgkQ4omh9DUa
-UbPa5A/+KlXDbb1pvMrWyT66unEtS9yFMs/oh2Yc4sCS/uN5d5fwEEcI+GRYqOxi
-IEpHJ/sihFh32RVMbY+YaL1RAcWOy8yZiYjwxCiWc6EreWsziuoC54gr4XAuH/h5
-mE2c0GKyrbr1jkBCh4rCWQvQSyopjnNNFVE3Xwq4gfl18//NCYfBccWJ86tJ4ZS1
-TKBOxu26BDbaqFo1xKuZaEQdtHY8ICnTrMtopOVFfH3Sn/BHn0en4KnyJ1oGdtbP
-8T5z4P0ML4IOaaorGmgPdvBwyEpSTLsuhrqpeC86t1EFw6yowZ5XQx34HETFvKPY
-AhbUE2m1d8ljKx3itj509+1lWamDVgFGZf0y1i+m/ihuLhfZca9cUjc9tDcduVSh
-PpVE9127XsM66aBRGQogMunu/G4qRshOp7Ockm+DoHaOaaqXr530MnYzCJJS1QqV
-NExxl7sHDaZ4Um0JapMc5ulinMOsK8kN1wJk4+/4Yxf/QBubcPS1cadmkTZQz+3V
-bQZBUccWCPuDG8HvDrLt1+xUsfyn6JMHSgDUpaxEer9zJZXIuOCbhMwLY/XORea0
-Xb2Ck4vcPrzKt6WE+/DugxN7k2JbTCzw5JxovT8WyFWSsVGQDIu4o79a90bZQI6c
-vAvMBDQZtlM4WsASHmHN6o+sBJiWe/9WGMsaBInRwRW6sP7Vcto=
-=MZ2A
------END PGP SIGNATURE-----
-
---jijteoo6ouqerxuc--
+-- 
+Best regards,
+Bingbu Cao
