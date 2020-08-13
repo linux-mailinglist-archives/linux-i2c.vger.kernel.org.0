@@ -2,105 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D04243D61
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Aug 2020 18:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC0D243EFB
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Aug 2020 20:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbgHMQ3H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Aug 2020 12:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726142AbgHMQ3G (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Aug 2020 12:29:06 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20445C061757
-        for <linux-i2c@vger.kernel.org>; Thu, 13 Aug 2020 09:29:06 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id d6so6845771ejr.5
-        for <linux-i2c@vger.kernel.org>; Thu, 13 Aug 2020 09:29:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=S3r0lDCw4aZ8lbwfCN/5/1eV8jZf9bM4JYaVEVxu/w0=;
-        b=gpePEsJ5+XjdzFqPh6isAUBFeUfvAgW3MivdiygC4/nouZq/fFLHuaic07padJo8m4
-         dsMD8CIi3ZgECKmJfPwAc312c7kE/YljC0HfUPgzmOSXFA4KYialotOqLVp2+PKlQJvU
-         2SpQfAek+wFNMs6bC/VBecU0GXshpM74XEm2wBzzscwViyfVsKOwUeG2lOcipRSNt6Be
-         Tpc8BXB+dKb8217tkYYst/JwPSLBTW9i3yfOhk3vSh2e7O2bPf8Lz0NLcqwQ61cKUk69
-         yjXqfNyD1W0VyBMJIptr9PuJ43nhs3nVHgkwdt0ShOWs4FR3tl1lCmpDiykbbOlVeC+D
-         9A/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:references:date
-         :in-reply-to:message-id:user-agent:mime-version;
-        bh=S3r0lDCw4aZ8lbwfCN/5/1eV8jZf9bM4JYaVEVxu/w0=;
-        b=Zpccb9nfd20/vk/HyRpNZYAhoYLV1n4VIpYT01u8o+w1XzgiG7NpdqL+yOVZOZiI5e
-         2ask+DD58muRaL6XxqomRzd2uTwD/SgsKDuFQVcLEyMeQSndfoFy1vISs2rMmCigGoY0
-         8D41THQNI3JD16knuhgb90hz/IeejvTCZ1ocWC+UEhhSr1WPBgD9nB/9xVZX0SXwTBw7
-         8Af8Y5pYl4JRVHYwW0lBFtFoWhupViQWmiDtClOQWPBa1KQXoo3iqxUWt1k5c4JfMDHg
-         d0i//oXnUGMbW4p2ZxKU+RzCCbW0VH7py2XNeU5RqO/nEZbsPQ/NBjJFsdGcA4NI2Ate
-         SBpQ==
-X-Gm-Message-State: AOAM530FGjfrva+FZ7nSrI/tp+hIh7jw33suOg2bU2gRMK38C934RBod
-        azzwANeguZQh/1MkmRWNO44=
-X-Google-Smtp-Source: ABdhPJwXOtZvllmy+AQYhoRf/IWMRcbPYK7A6k/tDAn75SZNDs69E1jvD6Fo2hmEByblLb4e1Tu2Gw==
-X-Received: by 2002:a17:906:d181:: with SMTP id c1mr5410506ejz.181.1597336144785;
-        Thu, 13 Aug 2020 09:29:04 -0700 (PDT)
-Received: from dell.be.48ers.dk ([195.162.189.230])
-        by smtp.gmail.com with ESMTPSA id q11sm4284735edn.12.2020.08.13.09.29.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2020 09:29:03 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
-        (envelope-from <peter@korsgaard.com>)
-        id 1k6G6A-0003ae-SX; Thu, 13 Aug 2020 18:29:02 +0200
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     Mohammed Billoo <mab@mab-labs.com>
-Cc:     linux-i2c@vger.kernel.org
+        id S1726249AbgHMSmX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Aug 2020 14:42:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46344 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726174AbgHMSmX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 13 Aug 2020 14:42:23 -0400
+Received: from localhost (p54b330f0.dip0.t-ipconnect.de [84.179.48.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BEFA32078B;
+        Thu, 13 Aug 2020 18:42:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597344143;
+        bh=LVhei2pZyPXNA9yHJhBvVTvhphsyWDdUfJi2hl5PCSU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f2jrACc0ns1TaKSHTw/hKKSlrV1qY6nD7vTXW1Kb96+UAdlgSEeMB+ybWc+u5G0oj
+         s6EL97G2XHPqYIShfMte2e0dY6p9+F+jYg1JhzkGoBp+lGnwNPIqfq1rcR7bficZOj
+         t7CQD/qPxHjWzYRLwNhKWmrWY1G5W54Xx8sWlsAQ=
+Date:   Thu, 13 Aug 2020 20:42:20 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Peter Korsgaard <peter@korsgaard.com>
+Cc:     Mohammed Billoo <mab@mab-labs.com>, linux-i2c@vger.kernel.org
 Subject: Re: [PATCH] i2c: ocores: add gaisler to platform data
+Message-ID: <20200813184220.GB30119@ninjato>
 References: <20200811134426.7613-1-mab@mab-labs.com>
-        <87lfii7i18.fsf@dell.be.48ers.dk>
-        <CALkjhPpF9wqaZGWQSZ9FphtcXD_obYubFX4te9xtcDdOP4M_gg@mail.gmail.com>
-        <CALkjhPrz=0q+sKsB9Y=i4LCCuFVg-bGSzGDyAHaE-XE=qBrVXQ@mail.gmail.com>
-Date:   Thu, 13 Aug 2020 18:29:02 +0200
-In-Reply-To: <CALkjhPrz=0q+sKsB9Y=i4LCCuFVg-bGSzGDyAHaE-XE=qBrVXQ@mail.gmail.com>
-        (Mohammed Billoo's message of "Thu, 13 Aug 2020 10:49:59 -0400")
-Message-ID: <87h7t67bn5.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+ <87lfii7i18.fsf@dell.be.48ers.dk>
+ <CALkjhPpF9wqaZGWQSZ9FphtcXD_obYubFX4te9xtcDdOP4M_gg@mail.gmail.com>
+ <CALkjhPrz=0q+sKsB9Y=i4LCCuFVg-bGSzGDyAHaE-XE=qBrVXQ@mail.gmail.com>
+ <87h7t67bn5.fsf@dell.be.48ers.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="i0/AhcQY5QxfSsSZ"
+Content-Disposition: inline
+In-Reply-To: <87h7t67bn5.fsf@dell.be.48ers.dk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
->>>>> "Mohammed" == Mohammed Billoo <mab@mab-labs.com> writes:
 
-Hi,
-
- > And the answer is a patch series (I couldn't figure out the appropriate
- > term to google).
-
-Indeed. Please send a patch series for the needed changes to linux-i2c
-and put me in CC.
-
- > Also, it looks like the linux-i2c mailing list no longer exists?
-
-It does. Perhaps you need to subscribe to be able to post? My earlier
-reply did make it to the list:
-
-https://marc.info/?l=linux-i2c&m=159732786421840&w=2
+--i0/AhcQY5QxfSsSZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
- > On Thu, Aug 13, 2020 at 10:33 AM Mohammed Billoo <mab@mab-labs.com> wrote:
+> It does. Perhaps you need to subscribe to be able to post? My earlier
 
- >> Peter,
- >> 
- >> Thanks for your comment. Would you like me to resubmit the patch with your
- >> suggestions?
- >> 
- >> Also, we'll need to incorporate big/little-endian with the GRLIB accessors
- >> as well (I ran into an issue where a vendor-specific AHB bridge had
- >> endianness conversion, but the IP designer didn't realize that and so I
- >> needed an accessor for both GRLIB and big-endian). I'm not sure what the
- >> best-practice for multiple patches is. Should I submit patch N assuming
- >> patch N-1 was applied?
+Nope.
 
--- 
-Bye, Peter Korsgaard
+
+--i0/AhcQY5QxfSsSZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl81iYUACgkQFA3kzBSg
+KbYp+RAAhC5wLVAV4bfeQso0z1s/B4Q7th6ebZpq1MlEdcel+Q6IL3Vjv+WjmHhh
+MhBojeLlC6hgNzhxiPVduVN5tUQXxqolldA6H4pAR6XqKIiHutCFPB8kym/Qwg7/
+6iEzOVz0iL0yhgsd8WfbAiUrxIP1cBKe4rebu6ayWXLfiDfFThrb0+Br8Np9necI
+vR3ArFJfGe3cM97gPyHHHqBhIGfjB6WX9+Y36gH9QW8m2IiFslk7hKxSKAOxYhIA
+NKB7HbCzi+Q8SHE/34gQ2NdJjstF7/sXneOD98F2y5Yd+GOQ1RFbMw49fEuREhGg
+vfV8cMPULbI89Sg1QC/p8+LPt8jQxKcWNnT9QBcbXarv0b/f8emHBTH6a5A5CHSR
+Z5m6daNNW8QojD5Jhhc33bGWhBwlBFT+kWaH5D1xocbPDPkPSzeL8xlJGaR67q1l
+8mKiNPnQiaOuCcWX6jKIOG8oKm3ex0v6oHONKpfhxpmaACQfKmouVZeqhQEVF6Rq
+6SxdEwiR1xnWWlcJkqUx9B4sAULujNwMwYQbFYId0njyqdO48cB5gOvnN/UDDH77
+XKuOqeuPSt98cdF7UKfVbwk1+KdBV5lJgqQoaYkvSf6Ft87iQvWU90RqQwlf4Rp6
+MaBZAu6H4ps5fACIecb9ERasqKZp3ypCqKY8v9Siz5KBCuZBl7g=
+=/3KI
+-----END PGP SIGNATURE-----
+
+--i0/AhcQY5QxfSsSZ--
