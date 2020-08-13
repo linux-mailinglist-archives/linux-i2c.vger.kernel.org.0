@@ -2,64 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 122F3243571
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Aug 2020 09:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566AD243886
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Aug 2020 12:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726724AbgHMHvK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Aug 2020 03:51:10 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:38760 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbgHMHvJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Aug 2020 03:51:09 -0400
-Received: by mail-ot1-f65.google.com with SMTP id q9so4110499oth.5;
-        Thu, 13 Aug 2020 00:51:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eU62SrftExeZEPFtSlHLsBRzbUkLx1KNOgZc6VKFeBQ=;
-        b=RKVY0mqqakUrEXk4TORV8A5/ZSMY0dexhKfXyaOKBp8tYT6+lN9tMY1gCu59dMSnI/
-         6Av5sXCLtCtfska6KBUfoUvPLN8QSlHGcwX+BKv8ZNWhNtirhMGElzBnWp56J7vtBCeA
-         RTsTm+tpM0JqO6hs1Zx9oL0KiDPnHu2wr8nXIFBaGz9jqMUEyZCYMyj21d8ckpZmX8IH
-         sIyh51oPoVvqSR3qDoGMDZJhbXuz4s9KHdaT9j4oPeIaqxws0OL9u53GcL8uZhE7hrov
-         ikjJM0LMxR/OG4BC9tZAySXGXWwQpPbcG9j3oyJJCCrBhecUJhWEIB5ZPymwSBlP+imO
-         EXuw==
-X-Gm-Message-State: AOAM531KpbVTNZA6DQGhlLakjE36ZGk11NQSWXrXhgb2m/BrbDAUDZAN
-        GTNNlK5/qceLxjH+paJhJQLuqYhFPre+GsLWPoc=
-X-Google-Smtp-Source: ABdhPJzAAKS8g3t/W5mSJd2Vboc2FEvoNvVXoru7u4kNP7jabPCwVCki2JjTk/fEfMzVv8QAFC24k07bLAU2LYhSK+k=
-X-Received: by 2002:a05:6830:1b79:: with SMTP id d25mr2990956ote.107.1597305067462;
- Thu, 13 Aug 2020 00:51:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200812203618.2656699-1-robh@kernel.org>
-In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 13 Aug 2020 09:50:55 +0200
-Message-ID: <CAMuHMdVXvSRF-G_TYu4P+Bqa2FZJWsUCyzqFur3Rb-tBExfbsw@mail.gmail.com>
+        id S1726292AbgHMKbf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 13 Aug 2020 06:31:35 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:35289 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726048AbgHMKbf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Aug 2020 06:31:35 -0400
+Received: from [37.161.87.136] (port=46755 helo=[192.168.42.162])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1k6AW9-000FlW-5k; Thu, 13 Aug 2020 12:31:29 +0200
 Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
-To:     Rob Herring <robh@kernel.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-input@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20200812203618.2656699-1-robh@kernel.org>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
+Date:   Thu, 13 Aug 2020 12:31:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8BIT
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
@@ -67,47 +57,83 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Rob,
 
-On Wed, Aug 12, 2020 at 10:36 PM Rob Herring <robh@kernel.org> wrote:
+On 12/08/20 22:36, Rob Herring wrote:
 > Clean-up incorrect indentation, extra spaces, long lines, and missing
 > EOF newline in schema files. Most of the clean-ups are for list
 > indentation which should always be 2 spaces more than the preceding
 > keyword.
->
+> 
 > Found with yamllint (which I plan to integrate into the checks).
 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+[...]
 
-Thanks for your patch!
+> diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> index 3d4e1685cc55..28c6461b9a9a 100644
+> --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> @@ -95,10 +95,10 @@ allOf:
+>        # Devices without builtin crystal
+>        properties:
+>          clock-names:
+> -            minItems: 1
+> -            maxItems: 2
+> -            items:
+> -              enum: [ xin, clkin ]
+> +          minItems: 1
+> +          maxItems: 2
+> +          items:
+> +            enum: [ xin, clkin ]
+>          clocks:
+>            minItems: 1
+>            maxItems: 2
 
-> --- a/Documentation/devicetree/bindings/clock/renesas,cpg-clocks.yaml
-> +++ b/Documentation/devicetree/bindings/clock/renesas,cpg-clocks.yaml
-> @@ -24,9 +24,9 @@ properties:
->        - const: renesas,r8a7778-cpg-clocks # R-Car M1
->        - const: renesas,r8a7779-cpg-clocks # R-Car H1
->        - items:
-> -        - enum:
-> -            - renesas,r7s72100-cpg-clocks # RZ/A1H
-> -        - const: renesas,rz-cpg-clocks    # RZ/A1
-> +          - enum:
-> +              - renesas,r7s72100-cpg-clocks # RZ/A1H
-> +          - const: renesas,rz-cpg-clocks    # RZ/A1
+Thanks for noticing, LGTM.
 
-This change breaks alignment of the comments at the end of each line.
+[...]
 
->        - const: renesas,sh73a0-cpg-clocks  # SH-Mobile AG5
+> diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> index d7dac16a3960..36dc7b56a453 100644
+> --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> @@ -33,8 +33,8 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>  
+>    touchscreen-min-pressure:
+> -    description: minimum pressure on the touchscreen to be achieved in order for the
+> -                 touchscreen driver to report a touch event.
+> +    description: minimum pressure on the touchscreen to be achieved in order
+> +      for the touchscreen driver to report a touch event.
 
-(I only checked the files I care about)
+Out of personal taste, I find the original layout more pleasant and
+readable. This third option is also good, especially for long descriptions:
 
-If you don't update commit  e0fe7fc6f2ca0781 ("dt-bindings: Whitespace
-clean-ups in schema files"), I can send a patch after v5.9-rc1.
+  description:
+    minimum pressure on the touchscreen to be achieved in order for the
+    touchscreen driver to report a touch event.
 
-Gr{oetje,eeting}s,
+At first glance yamllint seems to support exactly these two by default:
 
-                        Geert
+> With indentation: {spaces: 4, check-multi-line-strings: true}
+> 
+> the following code snippet would PASS:
+> 
+> Blaise Pascal:
+>     Je vous écris une longue lettre parce que
+>     je n'ai pas le temps d'en écrire une courte.
+> 
+> the following code snippet would PASS:
+> 
+> Blaise Pascal: Je vous écris une longue lettre parce que
+>                je n'ai pas le temps d'en écrire une courte.
+> 
+> the following code snippet would FAIL:
+> 
+> Blaise Pascal: Je vous écris une longue lettre parce que
+>   je n'ai pas le temps d'en écrire une courte.
+> 
+(https://yamllint.readthedocs.io/en/stable/rules.html#module-yamllint.rules.indentation)
+
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Luca
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
