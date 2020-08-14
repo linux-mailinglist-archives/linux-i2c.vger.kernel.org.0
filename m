@@ -2,99 +2,160 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F50A244EA7
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Aug 2020 21:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013CB244F6F
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Aug 2020 23:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727942AbgHNTFW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 14 Aug 2020 15:05:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55118 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726196AbgHNTFV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 14 Aug 2020 15:05:21 -0400
-Received: from localhost (p5486cfdc.dip0.t-ipconnect.de [84.134.207.220])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C94E62078D;
-        Fri, 14 Aug 2020 19:05:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597431921;
-        bh=01u43TGkIz3TmAdvqXr1K0R9o7+nQoyMK49BcGq6MTc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nPTsX+zxa26kqOluKI58sv7Ccxt4HMb1awE4+OHkF/xHQOWe7lojKB/7vqqvpS4rA
-         WxXHGZIkECtVB+98N/385KDjhcBAhJvJhbfhKUbMslSSeyXBNKcs8q0fr5RJQTlkLX
-         16BCK5tmtU1nS2JtOVXhebcebfjJBz6KkQxnGd7s=
-Date:   Fri, 14 Aug 2020 21:05:15 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Mohammed Billoo <mab@mab-labs.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 2/2] i2c: ocores: add be/le support for gaisler
-Message-ID: <20200814190515.GA1250@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Mohammed Billoo <mab@mab-labs.com>,
-        Peter Korsgaard <peter@korsgaard.com>, linux-i2c@vger.kernel.org
-References: <20200814163134.29493-1-mab@mab-labs.com>
- <20200814163134.29493-2-mab@mab-labs.com>
- <20200814165058.GC2239279@lunn.ch>
- <CALkjhPppeOwekp-ZJZ9QGfNGa=K5g6P+TWs42Anrb+QvFSrspQ@mail.gmail.com>
- <20200814190259.GD2239279@lunn.ch>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XsQoSWH+UP9D9v3l"
-Content-Disposition: inline
-In-Reply-To: <20200814190259.GD2239279@lunn.ch>
+        id S1726784AbgHNVCH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 14 Aug 2020 17:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726360AbgHNVCH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Aug 2020 17:02:07 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AF0C061385
+        for <linux-i2c@vger.kernel.org>; Fri, 14 Aug 2020 14:02:06 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id t23so7997459qto.3
+        for <linux-i2c@vger.kernel.org>; Fri, 14 Aug 2020 14:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mab-labs.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=ph26EcQ//gQfbD8SrjP9OM9uTkX+iGNX3XWz0JYL2/o=;
+        b=WC826glkRhniMPZMBKY6fs9uyQvpomhD7O1JRdFesjXSr+Sc6SslSYxWTKokpAGmP/
+         HNXmuC0Mt4hSGZJg6jE/IbBWzndFgn/GEl7TmxLx6rruWdrHiEwE+Cpm46t0Ju6afiRq
+         tjleyAV4TTfuT/NEMzK2SxWqEO/8nk6c+hEmEGcWCdzbRyyBHDeNc0chFjOLPzkE0yRU
+         L5h3PGxvGYJ6+gk5t//IFUqIReYUcEQo9Uqq3a+E0NO8N52bF5rlJeuYMnNtCT8F5+g2
+         8LP+iQJcI6UUEVVS4MByQaWu61aNJIfNaDo8Jr5Nq/VOHUcIXKvij7WVsIlMzPWH4PHj
+         au/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ph26EcQ//gQfbD8SrjP9OM9uTkX+iGNX3XWz0JYL2/o=;
+        b=SQRHUtI0ZrKEhzFQTvgdUEb9pgJe7UFb/gIFoCneKdLFQhmNlweLMGVhpJezM+qChc
+         g7DJ/d0bIThDfPdjlwH5RBuutvqPcdrxUZnh75y34ey5jYXf/bE2pRvgKh5w0/g9ZNzT
+         IFlL5awS93Jyx05L4zfeswTxYN1MKTlsF6vGF3mJ95K80TWsPEuPLEwuj6tScE6sp1eh
+         /dLTIjQmA2OrsqvuCBaTY1YSHf3mHTYRSx9ylFSB1JaF2x3ECArY8130O09E+CffehMO
+         /FwidW/bHc60y8NzzS5Gs5DPz+F3teseKKaNZdV4fuy5qtQ/yjAJdHjjq5EVlJlazn/+
+         /zvA==
+X-Gm-Message-State: AOAM530M9szD4vemFbje3h4xmW9gqMVxlZQXdFAytRsLX5yCrhhsYJLT
+        OlQlqhVsP/BXW/FQFntjB1631tmqDHpEoBIc
+X-Google-Smtp-Source: ABdhPJxQdCR1oVJiWFK32GY6f4uSl8WMxNS2jMF8j0C+rNc87glV70YuzTGnicDHsPIt9THZzoOXOA==
+X-Received: by 2002:ac8:6c5d:: with SMTP id z29mr3792754qtu.244.1597438925762;
+        Fri, 14 Aug 2020 14:02:05 -0700 (PDT)
+Received: from localhost.localdomain (ool-45752a48.dyn.optonline.net. [69.117.42.72])
+        by smtp.googlemail.com with ESMTPSA id g11sm9957389qke.128.2020.08.14.14.02.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Aug 2020 14:02:05 -0700 (PDT)
+From:   Mohammed Billoo <mab@mab-labs.com>
+Cc:     Mohammed Billoo <mab@mab-labs.com>, peter@korsgaard.com,
+        andrew@lunn.ch, linux-i2c@vger.kernel.org
+Subject: [PATCH] i2c: ocores: Allow endian-specific grlib accessors
+Date:   Fri, 14 Aug 2020 17:01:54 -0400
+Message-Id: <20200814210154.14402-1-mab@mab-labs.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Due to inconsistent/broken HW, SW may need to set the appropriate
+endianess of the grlib accessors (instead of defaulting to big endian).
+This patch adds such a capability.
 
---XsQoSWH+UP9D9v3l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Mohammed Billoo <mab@mab-labs.com>
+---
+ drivers/i2c/busses/i2c-ocores.c | 55 +++++++++++++++++++++++++++++----
+ 1 file changed, 49 insertions(+), 6 deletions(-)
 
-On Fri, Aug 14, 2020 at 09:02:59PM +0200, Andrew Lunn wrote:
-> On Fri, Aug 14, 2020 at 02:56:58PM -0400, Mohammed Billoo wrote:
-> > Sadly, this is a case of vendor-specific implementations causing indige=
-stion.
-> > When this was implemented on the FPGA, the vendor-specific AHB bridge (=
-we're
-> > going from PCI to AHB to grlib) had a built-in endianness conversion wh=
-ich we
-> > didn't want and found out later. Since it was easier to add the big end=
-ian
-> > accessor on the software side instead of redoing the FPGA design, we op=
-ted for
-> > the former.=C2=A0
->=20
-> O.K. So please document this is a workaround for broken hardware.
-> Otherwise other people are going to ask the same question. Add it to
-> the commit message at least.
+diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
+index f5fc75b65a19..2ef735f8c71f 100644
+--- a/drivers/i2c/busses/i2c-ocores.c
++++ b/drivers/i2c/busses/i2c-ocores.c
+@@ -488,11 +488,12 @@ MODULE_DEVICE_TABLE(of, ocores_i2c_match);
+ 
+ #ifdef CONFIG_OF
+ /*
+- * Read and write functions for the GRLIB port of the controller. Registers are
+- * 32-bit big endian and the PRELOW and PREHIGH registers are merged into one
++ * Read and write functions for the GRLIB port of the controller. Unfortunately,
++ * do to some broken/inconsistent HW, SW may need to account for different
++ * endianess of GRLIB. PRELOW and PREHIGH registers are merged into one
+  * register. The subsequent registers have their offsets decreased accordingly.
+  */
+-static u8 oc_getreg_grlib(struct ocores_i2c *i2c, int reg)
++static u8 oc_getreg_grlib_be(struct ocores_i2c *i2c, int reg)
+ {
+ 	u32 rd;
+ 	int rreg = reg;
+@@ -506,7 +507,21 @@ static u8 oc_getreg_grlib(struct ocores_i2c *i2c, int reg)
+ 		return (u8)rd;
+ }
+ 
+-static void oc_setreg_grlib(struct ocores_i2c *i2c, int reg, u8 value)
++static u8 oc_getreg_grlib_le(struct ocores_i2c *i2c, int reg)
++{
++	u32 rd;
++	int rreg = reg;
++
++	if (reg != OCI2C_PRELOW)
++		rreg--;
++	rd = ioread32(i2c->base + (rreg << i2c->reg_shift));
++	if (reg == OCI2C_PREHIGH)
++		return (u8)(rd >> 8);
++	else
++		return (u8)rd;
++}
++
++static void oc_setreg_grlib_be(struct ocores_i2c *i2c, int reg, u8 value)
+ {
+ 	u32 curr, wr;
+ 	int rreg = reg;
+@@ -525,6 +540,25 @@ static void oc_setreg_grlib(struct ocores_i2c *i2c, int reg, u8 value)
+ 	iowrite32be(wr, i2c->base + (rreg << i2c->reg_shift));
+ }
+ 
++static void oc_setreg_grlib_le(struct ocores_i2c *i2c, int reg, u8 value)
++{
++	u32 curr, wr;
++	int rreg = reg;
++
++	if (reg != OCI2C_PRELOW)
++		rreg--;
++	if (reg == OCI2C_PRELOW || reg == OCI2C_PREHIGH) {
++		curr = ioread32(i2c->base + (rreg << i2c->reg_shift));
++		if (reg == OCI2C_PRELOW)
++			wr = (curr & 0xff00) | value;
++		else
++			wr = (((u32)value) << 8) | (curr & 0xff);
++	} else {
++		wr = value;
++	}
++	iowrite32(wr, i2c->base + (rreg << i2c->reg_shift));
++}
++
+ static int ocores_i2c_of_probe(struct platform_device *pdev,
+ 				struct ocores_i2c *i2c)
+ {
+@@ -592,8 +626,17 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
+ 	match = of_match_node(ocores_i2c_match, pdev->dev.of_node);
+ 	if (match && (long)match->data == TYPE_GRLIB) {
+ 		dev_dbg(&pdev->dev, "GRLIB variant of i2c-ocores\n");
+-		i2c->setreg = oc_setreg_grlib;
+-		i2c->getreg = oc_getreg_grlib;
++		/*
++		 * This is a workaround for inconsistent/broken HW,
++		 * where SW has to set the appropriate endianess
++		 */
++		if (of_device_is_big_endian(pdev->dev.of_node)) {
++			i2c->setreg = oc_setreg_grlib_be;
++			i2c->getreg = oc_getreg_grlib_be;
++		} else {
++			i2c->setreg = oc_setreg_grlib_le;
++			i2c->getreg = oc_getreg_grlib_le;
++		}
+ 	}
+ 
+ 	return 0;
+-- 
+2.17.1
 
-Very true, this should be documented. I think a comment in the source
-code makes more sense.
-
-
---XsQoSWH+UP9D9v3l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl824GgACgkQFA3kzBSg
-KbY2WRAAqVBPO6PHsFmuAB9PRZokTvRWbUKaAWOr5zb+Gg6ymjhwmy5jNImIlj9/
-SFTLWotYnsRqUsHW7+qM+yoIbVa3piJsw7mzgE6d6pkMXIHj77LYfCp2RjA9Gxb9
-RvewydIs4kwuW6O+1Nozr2wYWHirBlBY0WHLQte8OvsPozVfd9zLGbU/c8Aw5Rr0
-GLYRoqVv/lIzQ+6zNm/6u7Sh5JUIMK9SZEbFPRhHd2Da+Y97gFNB5oAD0rifuCcL
-D/Uw5kR0VGLwhmAFNrFtqKps3ggH65zfFfNcaSAkhWOjZwnGxUpDW/B1uHElim4G
-80fvoCuVT00wrybAe04jMA6vwpKTxru0Q30V4XNeheSeAnU/ZykYeKkTBpV8ZWo9
-sOpXxrFloXN5tJa3z5U4i1MMRVFkweVfxjEwSpLvyT6/rJjnI3tqlEQrJEqh9QIr
-oju/3zBv+YBiNmqZlMTEdDXj0fxA+CHoc01HrSaX5vS1SrhBDDYoPqHtx3S2GkDc
-gDSEPxQySDDXcj0RxX/rE2zwUP2xuwCK3XdLijYwGXYFIdamqLUG2dTgQJgvY4r/
-GxnZx1cjvx9kdRYDcMkAzhmBhCJicJ6gstLedzwvP2bN7zXyGAfiloEIPGEM9I4G
-c+ZeH2MyZWAda0MW5jjxXNxBM8W5OyKA98Zd2aKe9KvR/ULCclQ=
-=JAzX
------END PGP SIGNATURE-----
-
---XsQoSWH+UP9D9v3l--
