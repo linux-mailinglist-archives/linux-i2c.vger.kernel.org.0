@@ -2,74 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB152441CA
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Aug 2020 01:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A812442C9
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Aug 2020 03:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbgHMXoB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 13 Aug 2020 19:44:01 -0400
-Received: from [186.47.21.114] ([186.47.21.114]:37856 "EHLO mail.hmvi.gob.ec"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726526AbgHMXoA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 13 Aug 2020 19:44:00 -0400
-X-Greylist: delayed 18849 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Aug 2020 19:43:59 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hmvi.gob.ec (Postfix) with ESMTP id CF8C6C033CA29;
-        Thu, 13 Aug 2020 12:13:41 -0500 (-05)
-Received: from mail.hmvi.gob.ec ([127.0.0.1])
-        by localhost (mail.hmvi.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id yWaxi3PMtCu5; Thu, 13 Aug 2020 12:13:41 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hmvi.gob.ec (Postfix) with ESMTP id AD064C0327984;
-        Thu, 13 Aug 2020 12:01:42 -0500 (-05)
-X-Virus-Scanned: amavisd-new at hmvi.gob.ec
-Received: from mail.hmvi.gob.ec ([127.0.0.1])
-        by localhost (mail.hmvi.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id tax5N8ci3F-r; Thu, 13 Aug 2020 12:01:42 -0500 (-05)
-Received: from [10.73.80.190] (unknown [105.8.3.183])
-        by mail.hmvi.gob.ec (Postfix) with ESMTPSA id 101F6C03214BD;
-        Thu, 13 Aug 2020 11:54:06 -0500 (-05)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
-To:     Recipients <danny.puetate@mail.hmvi.gob.ec>
-From:   ''Tayeb Souami'' <danny.puetate@mail.hmvi.gob.ec>
-Date:   Thu, 13 Aug 2020 18:53:45 +0200
-Reply-To: Tayebsouam.spende@gmail.com
-Message-Id: <20200813165407.101F6C03214BD@mail.hmvi.gob.ec>
+        id S1726604AbgHNBoU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Aug 2020 21:44:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60910 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726564AbgHNBoT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 13 Aug 2020 21:44:19 -0400
+Subject: Re: [PULL REQUEST] i2c for 5.9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597369459;
+        bh=aRbm11SZ+ak0VAOoWsO3Wzb88MmOnMnrD8Re5MaDRJk=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=Pn653ROdWt8JL/fxzOsV+qciDg4/5r60bVMqRw+obvP4t5EYjXbtEXnh24r/ohewQ
+         +WmUmUitD+wHAQqpCt8BAQDjM6/qEskkCP3JNhNszG0WHANmYWWzgbUpJ6GuHVpU44
+         ERq3+OnaS36aec5GRzlRz+eoQ+i3JdqxL5fQyMkA=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200813210906.GA4855@kunai>
+References: <20200813210906.GA4855@kunai>
+X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200813210906.GA4855@kunai>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-5.9
+X-PR-Tracked-Commit-Id: b1eef236f50ba6afea680da039ef3a2ca9c43d11
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e764a1e32337aaf325fc5b14a5bbd06eabba4699
+Message-Id: <159736945956.20401.2970445735817036786.pr-tracker-bot@kernel.org>
+Date:   Fri, 14 Aug 2020 01:44:19 +0000
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Lieber Freund,
+The pull request you sent on Thu, 13 Aug 2020 23:09:06 +0200:
 
-Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika,
-der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich
-an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre
-E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines
-Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und
-Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die
-Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden,
-um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite
-unten.
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-5.9
 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e764a1e32337aaf325fc5b14a5bbd06eabba4699
 
-UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
+Thank you!
 
-
-Das ist dein Spendencode: [TS530342018]
-
-
-Antworten Sie mit dem SPENDE-CODE an diese
-
-E-Mail:Tayebsouam.spende@gmail.com
-
-
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
-
-
-Grüße
-
-Herr Tayeb Souami
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
