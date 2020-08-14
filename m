@@ -2,33 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B056F244462
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Aug 2020 06:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD492444EE
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Aug 2020 08:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726122AbgHNEvC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 14 Aug 2020 00:51:02 -0400
-Received: from mga18.intel.com ([134.134.136.126]:34232 "EHLO mga18.intel.com"
+        id S1726269AbgHNGTW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 14 Aug 2020 02:19:22 -0400
+Received: from mga09.intel.com ([134.134.136.24]:15966 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726064AbgHNEvB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 14 Aug 2020 00:51:01 -0400
-IronPort-SDR: BwcYYFx6yCN7xMkToc2F1oIKaRLdcyOmeCL8zKvyQNC8XCPpNmCPQ+B+OxwH1CpUvrZxRqFmr+
- 3IEHdXQnyPrA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9712"; a="141983072"
+        id S1726185AbgHNGTW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 14 Aug 2020 02:19:22 -0400
+IronPort-SDR: qc3QO0RWv3PDkKWWUnzAvTB3m1g11J8gI61bOogi8VRRUGjjDdgIhsv142EBIXi6bIpJGyw9t9
+ Ku0mZ16r6Rxg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9712"; a="155474553"
 X-IronPort-AV: E=Sophos;i="5.76,311,1592895600"; 
-   d="scan'208";a="141983072"
+   d="scan'208";a="155474553"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2020 21:50:59 -0700
-IronPort-SDR: iHE0ym04AgGD1DdU62ejtD10zRIQWGuWcSNF6jvf7+sSqQIW/XJSo4VSpAq4SKk4rm4kqQf1Gx
- aXOKcIGS/eqA==
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2020 23:19:21 -0700
+IronPort-SDR: 545gqfD32bKwafgjhPqXEZJ/MY8MH2jMl8R6xD4Y1UwfyHWY5cxN1DzxA7dp7Ew+2hDGUaO/P8
+ hx+H8DlmnLWg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,311,1592895600"; 
-   d="scan'208";a="318768127"
+   d="scan'208";a="318784992"
 Received: from ipu5-build.bj.intel.com (HELO [10.238.232.196]) ([10.238.232.196])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Aug 2020 21:50:51 -0700
-Subject: Re: [PATCH v5 3/6] ov5670: Support probe whilst the device is in a
- low power state
+  by fmsmga004.fm.intel.com with ESMTP; 13 Aug 2020 23:19:17 -0700
+Subject: Re: [PATCH v5 0/6] Support running driver's probe for a device
+ powered off
 From:   Bingbu Cao <bingbu.cao@linux.intel.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-i2c@vger.kernel.org
@@ -44,17 +44,16 @@ Cc:     Wolfram Sang <wsa@the-dreams.de>,
         rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
         "Qiu, Tian Shu" <tian.shu.qiu@intel.com>
 References: <20200810142747.12400-1-sakari.ailus@linux.intel.com>
- <20200810142747.12400-4-sakari.ailus@linux.intel.com>
- <7a1fa217-7fd1-1d36-0b1c-ad5d09ea11a0@linux.intel.com>
-Message-ID: <71c513bb-f367-2cc7-24cd-ce7f17c1e07d@linux.intel.com>
-Date:   Fri, 14 Aug 2020 12:49:44 +0800
+ <5353041e-850f-05ad-3b20-35e91fc9501e@linux.intel.com>
+Message-ID: <aca32190-076e-d047-6988-1a5858f84945@linux.intel.com>
+Date:   Fri, 14 Aug 2020 14:18:10 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <7a1fa217-7fd1-1d36-0b1c-ad5d09ea11a0@linux.intel.com>
+In-Reply-To: <5353041e-850f-05ad-3b20-35e91fc9501e@linux.intel.com>
 Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
@@ -62,58 +61,49 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 
 
-On 8/12/20 5:12 PM, Bingbu Cao wrote:
+On 8/14/20 12:11 PM, Bingbu Cao wrote:
 > 
 > 
 > On 8/10/20 10:27 PM, Sakari Ailus wrote:
->> Tell ACPI device PM code that the driver supports the device being in a
->> low power state when the driver's probe function is entered.
+>> Hi all,
 >>
->> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->> ---
->>  drivers/media/i2c/ov5670.c | 23 ++++++++++++++---------
->>  1 file changed, 14 insertions(+), 9 deletions(-)
+> ...snip...
 >>
->> diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
->> index f26252e35e08d..1f75b888d2a18 100644
->> --- a/drivers/media/i2c/ov5670.c
->> +++ b/drivers/media/i2c/ov5670.c
->> @@ -2456,6 +2456,7 @@ static int ov5670_probe(struct i2c_client *client)
->>  	struct ov5670 *ov5670;
->>  	const char *err_msg;
->>  	u32 input_clk = 0;
->> +	bool low_power;
->>  	int ret;
->>  
->>  	device_property_read_u32(&client->dev, "clock-frequency", &input_clk);
->> @@ -2472,11 +2473,14 @@ static int ov5670_probe(struct i2c_client *client)
->>  	/* Initialize subdev */
->>  	v4l2_i2c_subdev_init(&ov5670->sd, client, &ov5670_subdev_ops);
->>  
->> -	/* Check module identity */
->> -	ret = ov5670_identify_module(ov5670);
->> -	if (ret) {
->> -		err_msg = "ov5670_identify_module() error";
->> -		goto error_print;
->> +	low_power = acpi_dev_state_low_power(&client->dev);
->> +	if (!low_power) {
->> +		/* Check module identity */
->> +		ret = ov5670_identify_module(ov5670);
->> +		if (ret) {
->> +			err_msg = "ov5670_identify_module() error";
->> +			goto error_print;
->> +	
+>> The use case is such that there is a privacy LED next to an integrated
+>> user-facing laptop camera, and this LED is there to signal the user that
+>> the camera is recording a video or capturing images. That LED also happens
+>> to be wired to one of the power supplies of the camera, so whenever you
+>> power on the camera, the LED will be lit, whether images are captured from
+>> the camera --- or not. There's no way to implement this differently
+>> without additional software control (allowing of which is itself a
+>> hardware design decision) on most CSI-2-connected camera sensors as they
+>> simply have no pin to signal the camera streaming state.
+>>
+>> This is also what happens during driver probe: the camera will be powered
+>> on by the I²C subsystem calling dev_pm_domain_attach() and the device is
+>> already powered on when the driver's own probe function is called. To the
+>> user this visible during the boot process as a blink of the privacy LED,
+>> suggesting that the camera is recording without the user having used an
+>> application to do that. From the end user's point of view the behaviour is
+>> not expected and for someone unfamiliar with internal workings of a
+>> computer surely seems quite suspicious --- even if images are not being
+>> actually captured.
+>>
+>> I've tested these on linux-next master. They also apply to Wolfram's
+>> i2c/for-next branch, there's a patch that affects the I²C core changes
+>> here (see below). The patches apart from that apply to Bartosz's
+>> at24/for-next as well as Mauro's linux-media master branch.
 > 
-> Sakari, thanks for your patch.
-> one question - With this change, there will be no chance for driver to guarantee
-> that the camera sensor plugged in is the camera that the matched driver actually
-> can drive until try to streaming the camera, so is it necessary to return
-> appropriate error in .s_stream ops to notify user it is not the hardware that
-> current driver can drive? if no other better way.
-
+> Sakari, we meet one issue - once the vcm sub-device registered, the user space
+> will try to open the VCM (I have not figure out who did that), it will also
+> trigger the acpi pm resume/suspend, as the VCM always shares same power rail
+> with camera sensor, so the privacy LED still has a blink.
 Sakari, please ignore my previous comment, it is not related to this change. I
 see the sub device open is caused by v4l_id program from udev.
 
+> 
+>>
+> ...snip...
 > 
 
 -- 
