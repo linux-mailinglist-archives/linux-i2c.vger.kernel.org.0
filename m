@@ -2,96 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 470CF24581A
-	for <lists+linux-i2c@lfdr.de>; Sun, 16 Aug 2020 16:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E26AC246632
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Aug 2020 14:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729581AbgHPObx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 16 Aug 2020 10:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729492AbgHPO25 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 16 Aug 2020 10:28:57 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0D2C061357
-        for <linux-i2c@vger.kernel.org>; Sun, 16 Aug 2020 07:28:35 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id k20so11864569wmi.5
-        for <linux-i2c@vger.kernel.org>; Sun, 16 Aug 2020 07:28:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=NAKDDu3zYGlp6/1rTFA3zLXzfLNUWElMFpld1DGXTqZ3f2C1G5vMMGgQBtzYdv61gR
-         j0gW2VjYzcAEQEK9JcrA+yGSHFEXNhE9RNkaz3uxkanP37gacJrIVytgT7/c7zGkA2Dy
-         XJB3L8ToVDoWAD9Rvm7U849RIrxncLk9xI9S/Uu5ZGT/cXsim2IUQmYeZsKFSBsv6kJT
-         3kDR9KLYjND6JPpx0YTAndrQaTelzP3558OkivI4ykhj79/nak1F6z80uX1/EQIXmTKV
-         I+kUa6Zt2XAbNuMItIuLndMdaWWyo32PYvWKoOywYCMLUV2UDlYdbpJ66arhF+MiPCa0
-         yMKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=Lb0MaMN/sqdH6eWLoM5WvylJSldefy+2KWSYjoZNMtBMDT21Aym3Rlx49kzZPf1oKy
-         S+uO66tGQXUjsAaFEz0EAKO8LynESup0vPYtgZk3+TXOLQwCBrPsvV7v2jozg/fUhezS
-         RWSkyJ1vDjj/SZf7Tqpt7/wUUIOpNBULvMUjQOC5I0ZnqCV7BtjP1iOYV6A4sJXyTAmf
-         Zi6wE+mdcq7v2cO2BFFBm7lhfUM8N3CMmcX23p5J5TJ8o5r84l1K7BLoZkqrVZJkXn6T
-         mLAV9owPy/FpXDYMELa7iWSYlgPDQ/3rurqfFzE3Gz+7hyBjIc6oLQYpCDjUfe+8jOid
-         6lLQ==
-X-Gm-Message-State: AOAM532DLM47LQ0lLZ8kF5CzCuHbRuRl5gjLGP6Z7WGVUS1R1FrOwim9
-        c/TCscmxWAb+dUReWzs0dimzrqaZuczA+zqFGYPvQp53/Ng=
-X-Google-Smtp-Source: ABdhPJydZZ8FQlFGmrB/EDLy0Z8gH5X03F6EFXypW4K1vf8iv94WhLhI3iwPKgeJEaRZZocHWED4lUmYPOBkTFPeX+4=
-X-Received: by 2002:a1c:a1c7:: with SMTP id k190mr10461870wme.1.1597588111746;
- Sun, 16 Aug 2020 07:28:31 -0700 (PDT)
+        id S1726871AbgHQMTl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Aug 2020 08:19:41 -0400
+Received: from www.zeus03.de ([194.117.254.33]:45670 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726194AbgHQMTj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 17 Aug 2020 08:19:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=wwTDOknCa1MVxbKplTjaRq5b+tt
+        U+ilFP0JANQFMUfY=; b=ZgLMcPaT4/2wgVer0cwZTTedXGcnXwHGNH5avOVx8mA
+        cL6TTh+xvCcS6ps8YXT0EGPmYTPnsNRHJmBUGDNmrnFI+UMMe4jj3b/QeMR6j0OJ
+        FC9tr4GPfjKRICq6gYZ33oGS4O1YZqUpYgGgN8m/sqPAX2z5DBnxiiUaZDDAVs6U
+        =
+Received: (qmail 2678416 invoked from network); 17 Aug 2020 14:19:34 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Aug 2020 14:19:34 +0200
+X-UD-Smtp-Session: l3s3148p1@qHSLyBGtJo0gAwDPXwRyAFDAMTTCvAzI
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH] i2c: rcar: in slave mode, clear NACK earlier
+Date:   Mon, 17 Aug 2020 14:19:30 +0200
+Message-Id: <20200817121930.4474-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Received: by 2002:a5d:6cd3:0:0:0:0:0 with HTTP; Sun, 16 Aug 2020 07:28:30
- -0700 (PDT)
-Reply-To: sctnld11170@tlen.pl
-From:   "Mr. Scott Donald" <confianzayrentabilidad@gmail.com>
-Date:   Sun, 16 Aug 2020 07:28:30 -0700
-Message-ID: <CANrrfX7wwL97G=jb--8nb9jH8oRO8T90L6NGSfg1HfnzMyyHcw@mail.gmail.com>
-Subject: Hello, Please
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---=20
-Dear Friend,
+Currently, a NACK in slave mode is set/cleared when SCL is held low by
+the IP core right before the bit is about to be pushed out. This is too
+late for clearing and then a NACK from the previous byte is still used
+for the current one. Now, let's clear the NACK right after we detected
+the STOP condition following the NACK.
 
-I'm Mr. Scott Donald a Successful businessMan dealing with
-Exportation, I got your mail contact through search to let you know my
-intension and my Ugly Situation Am a dying Man here in Los Angeles
-California Hospital Bed in (USA), I Lost my Wife and my only Daughter
-for Covid-19 and I also have a problem in my Health and I can die
-anytime I Know,
+Fixes: de20d1857dd6 ("i2c: rcar: add slave support")
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/i2c/busses/i2c-rcar.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I have a project that I am about to hand over to you. and I already
-instructed the Bankia S.A. Madrid, Spain(BSA) to transfer my fund sum
-of =C2=A33,7M GBP. Equivalent to =E2=82=AC4,077,033.91 EUR, to you as to en=
-able you
-to give 50% of this fund to Charitable Home in your State and take 50%
-don't think otherwise and why would anybody send someone you barely
-know to help you deliver a message, help me do this for the happiness
-of my soul and for God to mercy me and my Family and give Us a good
-place.
+diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
+index 284dc3edb9a1..0f73f0681a6e 100644
+--- a/drivers/i2c/busses/i2c-rcar.c
++++ b/drivers/i2c/busses/i2c-rcar.c
+@@ -594,6 +594,7 @@ static bool rcar_i2c_slave_irq(struct rcar_i2c_priv *priv)
+ 	/* master sent stop */
+ 	if (ssr_filtered & SSR) {
+ 		i2c_slave_event(priv->slave, I2C_SLAVE_STOP, &value);
++		rcar_i2c_write(priv, ICSCR, SIE | SDBS); /* clear our NACK */
+ 		rcar_i2c_write(priv, ICSIER, SAR);
+ 		rcar_i2c_write(priv, ICSSR, ~SSR & 0xff);
+ 	}
+-- 
+2.20.1
 
-please, do as I said there was someone from your State that I deeply
-love so very very much and I miss her so badly I have no means to
-reach any Charitable Home there. that is why I go for a personal
-search of the Country and State and I got your mail contact through
-search to let you know my Bitterness and please, help me is getting
-Dark I ask my Doctor to help me keep you notice failure for me to
-reach you in person Your urgent Response, here is my Doctor Whats-app
-Number for urgent notice +13019692737
-
-Hope To Hear From You. I'm sending this email to you for the second
-time yet no response from you.
-
-My Regards.
-
-Mr. Scott Donald
-CEO
