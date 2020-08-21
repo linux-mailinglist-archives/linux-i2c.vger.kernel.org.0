@@ -2,38 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE15424DDDD
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Aug 2020 19:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8327524DD16
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Aug 2020 19:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728622AbgHURXg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Aug 2020 13:23:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48090 "EHLO mail.kernel.org"
+        id S1728218AbgHURLp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Aug 2020 13:11:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49958 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727959AbgHUQPl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:15:41 -0400
+        id S1728147AbgHUQRI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 21 Aug 2020 12:17:08 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 101DC20FC3;
-        Fri, 21 Aug 2020 16:15:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 543CC2063A;
+        Fri, 21 Aug 2020 16:16:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598026540;
-        bh=DdoQvatDqTZIoDRIfxcl76Ibbop5/KP36qPswZ8z1P8=;
+        s=default; t=1598026620;
+        bh=ic9JKEOa90qWS909NEeeluVFq6XpThGmYmRWeY5QmJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e4RWoaWChSbPOQr/UzsTaLNnKfAGzcvdyQ+l20kCfd8jlqQ/YWHFhADLEQFPYqwkg
-         whDBrrFvtKccc2fmCB3akc520DTltQTHikz50UdsK7HOzgOAJ9qaokd5LW0OybzegN
-         hRKfecVwIcBtrgGBUmc30E7jl6ohFJ7YnbWkh3l4=
+        b=e7M1Q2vjQzEzhbnz4NvgRaARmcVpeCQyfWS15cbQvZz00roXDRzMSI0zoCw33k+S7
+         W6bMHR9vlnr+C/Lpea5HLobhT8MMnu9i6Ew4sh3/I6qGU2UoGe6Zx9TdX3lvEsu5cI
+         6XByb0Kq1H3hmbj5vRJ6llBJK1z+LB/oWkXhjPdA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 60/62] i2c: i801: Add support for Intel Tiger Lake PCH-H
-Date:   Fri, 21 Aug 2020 12:14:21 -0400
-Message-Id: <20200821161423.347071-60-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 59/61] i2c: i801: Add support for Intel Tiger Lake PCH-H
+Date:   Fri, 21 Aug 2020 12:15:43 -0400
+Message-Id: <20200821161545.347622-59-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200821161423.347071-1-sashal@kernel.org>
-References: <20200821161423.347071-1-sashal@kernel.org>
+In-Reply-To: <20200821161545.347622-1-sashal@kernel.org>
+References: <20200821161545.347622-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,7 +58,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index fea644921a768..f206e28af5831 100644
+index a9c03f5c34825..0b33a5f7ee50f 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
 @@ -67,6 +67,7 @@
@@ -85,7 +85,7 @@ index fea644921a768..f206e28af5831 100644
  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS) },
  	{ 0, }
  };
-@@ -1748,6 +1751,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+@@ -1742,6 +1745,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
  	case PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS:
  	case PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS:
  	case PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS:
