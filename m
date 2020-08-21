@@ -2,97 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8327524DD16
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Aug 2020 19:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C342D24DC7B
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Aug 2020 19:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728218AbgHURLp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 Aug 2020 13:11:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49958 "EHLO mail.kernel.org"
+        id S1726767AbgHURDq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 Aug 2020 13:03:46 -0400
+Received: from mga04.intel.com ([192.55.52.120]:26212 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728147AbgHUQRI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:17:08 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 543CC2063A;
-        Fri, 21 Aug 2020 16:16:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598026620;
-        bh=ic9JKEOa90qWS909NEeeluVFq6XpThGmYmRWeY5QmJ4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e7M1Q2vjQzEzhbnz4NvgRaARmcVpeCQyfWS15cbQvZz00roXDRzMSI0zoCw33k+S7
-         W6bMHR9vlnr+C/Lpea5HLobhT8MMnu9i6Ew4sh3/I6qGU2UoGe6Zx9TdX3lvEsu5cI
-         6XByb0Kq1H3hmbj5vRJ6llBJK1z+LB/oWkXhjPdA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 59/61] i2c: i801: Add support for Intel Tiger Lake PCH-H
-Date:   Fri, 21 Aug 2020 12:15:43 -0400
-Message-Id: <20200821161545.347622-59-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200821161545.347622-1-sashal@kernel.org>
-References: <20200821161545.347622-1-sashal@kernel.org>
+        id S1728752AbgHURDi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 21 Aug 2020 13:03:38 -0400
+IronPort-SDR: qjspIAUN+RjUqsLB+933GLRFm8vCOUOdtGWtCRYe3UyxnXGaLedBwgJ60ZeDIhPWi5Jg7wI+Wt
+ s2kKuoCcXc7g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9720"; a="152997098"
+X-IronPort-AV: E=Sophos;i="5.76,337,1592895600"; 
+   d="scan'208";a="152997098"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2020 10:03:37 -0700
+IronPort-SDR: gT4eKFERZhAbbCt3E1i+7wPq5zRhNRH1RNKZlxg/MSffAJqd1PPefWyHsZ3zn6R24emE5f07Il
+ Jk3uj6ohH43w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,337,1592895600"; 
+   d="scan'208";a="321323667"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 21 Aug 2020 10:03:36 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 372321FD; Fri, 21 Aug 2020 20:03:35 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-acpi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        linux-i2c@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/2] i2c: core: Don't fail PRP0001 enumeration when no ID table exist
+Date:   Fri, 21 Aug 2020 20:03:33 +0300
+Message-Id: <20200821170334.43555-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+When commit c64ffff7a9d1 ("i2c: core: Allow empty id_table in ACPI case
+as well") fixed the enumeration of I²C devices on ACPI enabled platforms
+when driver has no ID table, it missed the PRP0001 support.
 
-[ Upstream commit f46efbcad97bfb2caded0397eccce7c71402868c ]
+i2c_device_match() and i2c_acpi_match_device() differently match
+driver against given device. Use acpi_driver_match_device(), that is used
+in the former, in i2c_device_probe() and don't fail PRP0001 enumeration
+when no ID table exist.
 
-Add SMBus PCI ID on Intel Tiger Lake PCH-H.
-
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: c64ffff7a9d1 ("i2c: core: Allow empty id_table in ACPI case as well")
+BugLink: https://stackoverflow.com/q/63519678/2511795
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/i2c/i2c-core-base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index a9c03f5c34825..0b33a5f7ee50f 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -67,6 +67,7 @@
-  * Comet Lake-H (PCH)		0x06a3	32	hard	yes	yes	yes
-  * Elkhart Lake (PCH)		0x4b23	32	hard	yes	yes	yes
-  * Tiger Lake-LP (PCH)		0xa0a3	32	hard	yes	yes	yes
-+ * Tiger Lake-H (PCH)		0x43a3	32	hard	yes	yes	yes
-  * Jasper Lake (SOC)		0x4da3	32	hard	yes	yes	yes
-  * Comet Lake-V (PCH)		0xa3a3	32	hard	yes	yes	yes
-  *
-@@ -221,6 +222,7 @@
- #define PCI_DEVICE_ID_INTEL_GEMINILAKE_SMBUS		0x31d4
- #define PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS		0x34a3
- #define PCI_DEVICE_ID_INTEL_5_3400_SERIES_SMBUS		0x3b30
-+#define PCI_DEVICE_ID_INTEL_TIGERLAKE_H_SMBUS		0x43a3
- #define PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS		0x4b23
- #define PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS		0x4da3
- #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
-@@ -1074,6 +1076,7 @@ static const struct pci_device_id i801_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_V_SMBUS) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_H_SMBUS) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS) },
- 	{ 0, }
- };
-@@ -1742,6 +1745,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	case PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS:
-+	case PCI_DEVICE_ID_INTEL_TIGERLAKE_H_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS:
- 		priv->features |= FEATURE_BLOCK_PROC;
- 		priv->features |= FEATURE_I2C_BLOCK_READ;
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 34a9609f256d..5ec082e2039d 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -480,7 +480,7 @@ static int i2c_device_probe(struct device *dev)
+ 	 * or ACPI ID table is supplied for the probing device.
+ 	 */
+ 	if (!driver->id_table &&
+-	    !i2c_acpi_match_device(dev->driver->acpi_match_table, client) &&
++	    !acpi_driver_match_device(dev, dev->driver) &&
+ 	    !i2c_of_match_device(dev->driver->of_match_table, client)) {
+ 		status = -ENODEV;
+ 		goto put_sync_adapter;
 -- 
-2.25.1
+2.28.0
 
