@@ -2,56 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC48724F983
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Aug 2020 11:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EA524FD15
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Aug 2020 13:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728179AbgHXImT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Aug 2020 04:42:19 -0400
-Received: from mga06.intel.com ([134.134.136.31]:9766 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728931AbgHXImS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 24 Aug 2020 04:42:18 -0400
-IronPort-SDR: O8RVp6BZeMgNaqEndLaHF1V2W1Oouu5Zg6yqqvcJSAECI53nXSdwbl/u7hI48o8184TjbuO8dy
- /NFgUuQQvjVQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9722"; a="217396321"
-X-IronPort-AV: E=Sophos;i="5.76,347,1592895600"; 
-   d="scan'208";a="217396321"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2020 01:42:04 -0700
-IronPort-SDR: fJOwV6oGRIzeAvOuwPcgsFQ/H3gCOo7SWXsPrHSH1LHHc9Fbpvs5xXVqr+Pmvmlhd3l7Kfpt5L
- b/ex7vXvJV4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,347,1592895600"; 
-   d="scan'208";a="402251221"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 24 Aug 2020 01:42:02 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 24 Aug 2020 11:42:01 +0300
-Date:   Mon, 24 Aug 2020 11:42:01 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-acpi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] i2c: acpi: Remove dead code, i.e.
- i2c_acpi_match_device()
-Message-ID: <20200824084201.GA1375436@lahna.fi.intel.com>
-References: <20200821170334.43555-1-andriy.shevchenko@linux.intel.com>
- <20200821170334.43555-2-andriy.shevchenko@linux.intel.com>
+        id S1726495AbgHXL6b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Aug 2020 07:58:31 -0400
+Received: from mail-out.m-online.net ([212.18.0.9]:53040 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726075AbgHXL63 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Aug 2020 07:58:29 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4BZrHQ4dPjz1qs0n;
+        Mon, 24 Aug 2020 13:58:26 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4BZrHQ3vz4z1qxns;
+        Mon, 24 Aug 2020 13:58:26 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id rS8J2cstlduL; Mon, 24 Aug 2020 13:58:25 +0200 (CEST)
+X-Auth-Info: RsQ/V7EoCrKB0XA4gXIvcpGkg/YX2mSEQKW4H82Tuwc=
+Received: from [IPv6:::1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Mon, 24 Aug 2020 13:58:25 +0200 (CEST)
+Subject: Re: [PATCH 2/5] i2c: xiic: Drop broken interrupt handler
+To:     Raviteja Narayanam <rna@xilinx.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Cc:     Michal Simek <michals@xilinx.com>,
+        Shubhrajyoti Datta <shubhraj@xilinx.com>,
+        Wolfram Sang <wsa@kernel.org>, Srinivas Goud <sgoud@xilinx.com>
+References: <20200613150751.114595-1-marex@denx.de>
+ <20200613150751.114595-2-marex@denx.de>
+ <MWHPR0201MB3484A9A018788EA755645D2DCA930@MWHPR0201MB3484.namprd02.prod.outlook.com>
+ <9897de5e-0539-8125-7b3f-41a1c98468ae@denx.de>
+ <SN4PR0201MB348615BCD7E2C82DF7919303CA6E0@SN4PR0201MB3486.namprd02.prod.outlook.com>
+ <7cc8420d-c3a4-079b-42fc-90ac6e875d37@denx.de>
+ <SN4PR0201MB3486E5229B0E870E6336A969CA670@SN4PR0201MB3486.namprd02.prod.outlook.com>
+ <a15a3e60-4738-3d38-fefb-c550dd0b0364@denx.de>
+ <SN4PR0201MB3486CDCD30F78416D3325D2BCA560@SN4PR0201MB3486.namprd02.prod.outlook.com>
+From:   Marek Vasut <marex@denx.de>
+Message-ID: <1913c876-d7ec-6f66-e9eb-20b45a4afec4@denx.de>
+Date:   Mon, 24 Aug 2020 13:58:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200821170334.43555-2-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <SN4PR0201MB3486CDCD30F78416D3325D2BCA560@SN4PR0201MB3486.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Aug 21, 2020 at 08:03:34PM +0300, Andy Shevchenko wrote:
-> We have no users of i2c_acpi_match_device() anymore and seems
-> will not have them in the future, thus remove dead code.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 8/24/20 10:27 AM, Raviteja Narayanam wrote:
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+[...]
+
+>>>>> So, this local_irq_save()/local_irq_restore() is not related to
+>>>>> exclusive access in the driver (xiic_process vs xiic_start), but to
+>>>>> supply the
+>>>> byte count to controller before it completes transmitting START and
+>>>> slave address.
+>>>>
+>>>> But then shouldn't the XIIC IP be fixed / extended with support for
+>>>> such an atomic update instead ?
+>>>
+>>> I have started communicating with the hardware team on why the IP
+>> behavior is like this.
+>>
+>> Any news from the hardware team ?
+> 
+> " The expectation from the IP is un interrupted read i.e the read command should be un interrupted and max delay expected is not more than 35-40 us provided IIC frequency is 100 Khz. Please check if we can manage this in Software. If delay is not managed enable iic control only after stop related data is received"
+> That was the response as is. 
+> The workaround suggested above is to enable the AXI I2C only after second register write(STOP bit info with read count) is completed. This is not generic, so we couldn't move forward.
+> Our typical application scenario is like this "START WRITE, REPEATED START READ, STOP". So, we must enable AXI I2C before read count is sent.
+
+So, if I understand it correctly, the XIIC IP is broken and cannot be
+fixed in software reliably ? How shall we proceed then ?
