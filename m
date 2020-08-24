@@ -2,83 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2EA524FD15
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Aug 2020 13:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4ED824FD77
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Aug 2020 14:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726495AbgHXL6b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Aug 2020 07:58:31 -0400
-Received: from mail-out.m-online.net ([212.18.0.9]:53040 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbgHXL63 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Aug 2020 07:58:29 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4BZrHQ4dPjz1qs0n;
-        Mon, 24 Aug 2020 13:58:26 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4BZrHQ3vz4z1qxns;
-        Mon, 24 Aug 2020 13:58:26 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id rS8J2cstlduL; Mon, 24 Aug 2020 13:58:25 +0200 (CEST)
-X-Auth-Info: RsQ/V7EoCrKB0XA4gXIvcpGkg/YX2mSEQKW4H82Tuwc=
-Received: from [IPv6:::1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Mon, 24 Aug 2020 13:58:25 +0200 (CEST)
-Subject: Re: [PATCH 2/5] i2c: xiic: Drop broken interrupt handler
-To:     Raviteja Narayanam <rna@xilinx.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Cc:     Michal Simek <michals@xilinx.com>,
-        Shubhrajyoti Datta <shubhraj@xilinx.com>,
-        Wolfram Sang <wsa@kernel.org>, Srinivas Goud <sgoud@xilinx.com>
-References: <20200613150751.114595-1-marex@denx.de>
- <20200613150751.114595-2-marex@denx.de>
- <MWHPR0201MB3484A9A018788EA755645D2DCA930@MWHPR0201MB3484.namprd02.prod.outlook.com>
- <9897de5e-0539-8125-7b3f-41a1c98468ae@denx.de>
- <SN4PR0201MB348615BCD7E2C82DF7919303CA6E0@SN4PR0201MB3486.namprd02.prod.outlook.com>
- <7cc8420d-c3a4-079b-42fc-90ac6e875d37@denx.de>
- <SN4PR0201MB3486E5229B0E870E6336A969CA670@SN4PR0201MB3486.namprd02.prod.outlook.com>
- <a15a3e60-4738-3d38-fefb-c550dd0b0364@denx.de>
- <SN4PR0201MB3486CDCD30F78416D3325D2BCA560@SN4PR0201MB3486.namprd02.prod.outlook.com>
-From:   Marek Vasut <marex@denx.de>
-Message-ID: <1913c876-d7ec-6f66-e9eb-20b45a4afec4@denx.de>
-Date:   Mon, 24 Aug 2020 13:58:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726745AbgHXMHn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Aug 2020 08:07:43 -0400
+Received: from www.zeus03.de ([194.117.254.33]:42506 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725926AbgHXMHl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 24 Aug 2020 08:07:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=FdR4jm5F5Z57/fNoP7GbP3o8BTe0
+        1SeGyFzr5uf+Mjc=; b=2x55aK2z+U98UaGg0Qz0QZq2rgYhAt60zNi3Br6OvhWo
+        etczisSRyJJ3G6jpG40qxnu7dTTPS5wqPh3YAfrPqi6cbI+rTOfp81pCylJF5YqM
+        uQ/wDtmQHKfIGsQroTAGiDIBtOWpV8asDAZYug1WBBspXLMkqP34SVZ2kcl9/NU=
+Received: (qmail 1869772 invoked from network); 24 Aug 2020 14:07:38 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Aug 2020 14:07:38 +0200
+X-UD-Smtp-Session: l3s3148p1@3jPJbp6tvIAgAwDPXwQSAE8ZH2VjqKES
+Date:   Mon, 24 Aug 2020 14:07:35 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Eugeniu Rosca <roscaeugeniu@gmail.com>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Andy Lowe <andy_lowe@mentor.com>
+Subject: Re: [PATCH] i2c: i2c-rcar: Auto select RESET_CONTROLLER
+Message-ID: <20200824120734.GA2500@ninjato>
+References: <20200824062623.9346-1-erosca@de.adit-jv.com>
 MIME-Version: 1.0
-In-Reply-To: <SN4PR0201MB3486CDCD30F78416D3325D2BCA560@SN4PR0201MB3486.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UlVJffcvxoiEqYs2"
+Content-Disposition: inline
+In-Reply-To: <20200824062623.9346-1-erosca@de.adit-jv.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 8/24/20 10:27 AM, Raviteja Narayanam wrote:
 
-[...]
+--UlVJffcvxoiEqYs2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->>>>> So, this local_irq_save()/local_irq_restore() is not related to
->>>>> exclusive access in the driver (xiic_process vs xiic_start), but to
->>>>> supply the
->>>> byte count to controller before it completes transmitting START and
->>>> slave address.
->>>>
->>>> But then shouldn't the XIIC IP be fixed / extended with support for
->>>> such an atomic update instead ?
->>>
->>> I have started communicating with the hardware team on why the IP
->> behavior is like this.
->>
->> Any news from the hardware team ?
-> 
-> " The expectation from the IP is un interrupted read i.e the read command should be un interrupted and max delay expected is not more than 35-40 us provided IIC frequency is 100 Khz. Please check if we can manage this in Software. If delay is not managed enable iic control only after stop related data is received"
-> That was the response as is. 
-> The workaround suggested above is to enable the AXI I2C only after second register write(STOP bit info with read count) is completed. This is not generic, so we couldn't move forward.
-> Our typical application scenario is like this "START WRITE, REPEATED START READ, STOP". So, we must enable AXI I2C before read count is sent.
 
-So, if I understand it correctly, the XIIC IP is broken and cannot be
-fixed in software reliably ? How shall we proceed then ?
+> +	select RESET_CONTROLLER
+
+Only needed for Gen3, so 'if ARCH_RCAR_GEN3'?
+
+
+--UlVJffcvxoiEqYs2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9DrYMACgkQFA3kzBSg
+KbbSZQ/+PhuTLW6kqCSCd55WdUymNIJPFUzPNEyQa59oRhx0DHZsP+KfEVlV/zug
+vhM8gpwTWCenzuydgeV2f1tFI4lVYKNF3ER1ukl5hQI9QTjKarodaEnC3i40D5vN
+8JW1hIPl0KD1R/5mSr7/D7qEAZxPenNkmsrjN85pMz0BhYP4lV8If4pxf3BBPWqO
+kG27YT/jt4mfAeAEabP9iEJobaJaPEiZ7YPfkH53a/bttg1JZW+60BNfh4D9nD7+
+FwbfjyJ5dj6K3xdmpffs4hFqavKq/xO3drIvf+ALQ5AqD4i55YRWGpJai93VVtiu
+45t7guU1HCPcxIPphJCBSHODV0xuOoEcWOuvpelnd/+dJyeYZ4u0rsu8EEEdJpKt
+8tJSTqruY7Q+/GhAqk/J6pTc/wOjA//s6RCbreQPXIggsWg1H9u0/nWEVKEoVjhJ
+bgIcaDrpMocnw5maTQ95pS+ni4ekDbJ+i/H/tUSGWS/rS4wZYYVfFW+NOjyF0UpC
+FXz42WfpyaDNrTywaX1zU7W4nNUtYOC/ZnHE+P7jBWSD7pj7JRBCKHkWRKXZaM7+
+ET1ymMRV/T/6vgQqbFP+xCU6+HWV9diauWfo5UFEms39F3fjJS944ucw60m8e8kf
+T/HSvjWKefoY7D2QbsXJ0/izOBc5be05f9a/ycHiBK+/XkEkf24=
+=b6JU
+-----END PGP SIGNATURE-----
+
+--UlVJffcvxoiEqYs2--
