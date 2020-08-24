@@ -2,77 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0B924F281
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Aug 2020 08:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CE624F34C
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Aug 2020 09:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725906AbgHXG0z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Aug 2020 02:26:55 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:39095 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725817AbgHXG0y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Aug 2020 02:26:54 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 5EE303C0579;
-        Mon, 24 Aug 2020 08:26:52 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RL9EZsvaXaPk; Mon, 24 Aug 2020 08:26:45 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id E1DD23C0016;
-        Mon, 24 Aug 2020 08:26:45 +0200 (CEST)
-Received: from lxhi-065.adit-jv.com (10.72.94.11) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 24 Aug
- 2020 08:26:45 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Andy Lowe <andy_lowe@mentor.com>
-Subject: [PATCH] i2c: i2c-rcar: Auto select RESET_CONTROLLER
-Date:   Mon, 24 Aug 2020 08:26:23 +0200
-Message-ID: <20200824062623.9346-1-erosca@de.adit-jv.com>
-X-Mailer: git-send-email 2.28.0
+        id S1726306AbgHXHow (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Aug 2020 03:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgHXHow (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Aug 2020 03:44:52 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4EA5C061573;
+        Mon, 24 Aug 2020 00:44:51 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id j25so1436668ejk.9;
+        Mon, 24 Aug 2020 00:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WASiI+LGr+j54QgtHqz/Mb0c0vmWaC6GIOI+FQCQgEU=;
+        b=FmOKuFJxRGkxqHGOeaKpU20R1LskNofQqIBJmR8sT/FOg3eUyRjZLBGxKVhFXmyNtC
+         JMPjru8Om1g07nuLMeqXyPbbyVsQ6y8V79MA586PN6L+QbfAnPZSzrLz9E8H28a4C24j
+         DFYwa+q0+FCYQg30u0hU1Cf6w+0UOidt7K1YRE0Oxkmg6PArZq9phRt0NeSaScdKnz3L
+         Gpv+3Sc/clb3l72Mu+FlOK/Egrp3PWaU73eIfnqSJyF4si9e5Dp31PYS7c6x5I+mlBMG
+         i7mAEdQpCWOrcQ4YNg7o6mj48l+PT3e6Yf0U71prmYmilIRbfyIEqnTCAEc6Z9MkqfKz
+         b/4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WASiI+LGr+j54QgtHqz/Mb0c0vmWaC6GIOI+FQCQgEU=;
+        b=F/lxFFLOIEldgbZ92hwZcGSLAKxVOvmg5Hhu+S2YlcZ53zPWyGn/lahE7YCf22926X
+         cVvxo8wis/eXHX3ifD5r5Hx5y265b0cF9k9pFNepEPc7W41lmjBmEzOJX3Wra0UIyKVx
+         wRgFGgGvPNOpzZh/6dGRpyPIEddrOBqA2HoBs+g+8fI8b9b5H88884W/so+DgLWOCz7e
+         MViMBiFAMbgRaw0xtuaiuvJI5Taijvhye58Kz+Z92It6D9p3Mu8d11Uv/q5CzQ0ltwp+
+         RNqbrYG6cNGLSaNIShJbvTbskoCao+ux0Vvsue9oy6kNPbCfVvwquWPbzVmUAqRz+g+9
+         CknQ==
+X-Gm-Message-State: AOAM530lsqnGdaZkPJjrNrTqq5VicmB7UJC4+MOGiyqvPUjLXO8JsJLK
+        ev8GRF9Fyc2IjDDEnrp0C8xcdYIZOmZr0QA5nFs=
+X-Google-Smtp-Source: ABdhPJz3o/rSw7xjX+X7g4OBQlKl6NUWeb3EBCeMkgDFNZbGW7KExWm+ZDQrLuSd5piSgmhenUlhCdM17RM5RyhEMbg=
+X-Received: by 2002:a17:906:4dd4:: with SMTP id f20mr4645772ejw.170.1598255090240;
+ Mon, 24 Aug 2020 00:44:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.72.94.11]
+References: <cover.1595572867.git.frank@allwinnertech.com> <CAEExFWsvScMgi_Dftfq06HZiF8CFAmym8Z_tgQoHHAfiGxWt0g@mail.gmail.com>
+In-Reply-To: <CAEExFWsvScMgi_Dftfq06HZiF8CFAmym8Z_tgQoHHAfiGxWt0g@mail.gmail.com>
+From:   Frank Lee <tiny.windzz@gmail.com>
+Date:   Mon, 24 Aug 2020 15:44:39 +0800
+Message-ID: <CAEExFWuwjmqAh0c3kMLS3Gs6UC2A8TtY-9nJeWxFPRDugtR4pA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/16] Allwinner A100 Initial support
+To:     Frank Lee <frank@allwinnertech.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, gregory.clement@bootlin.com,
+        Thomas Gleixner <tglx@linutronix.de>, jason@lakedaemon.net,
+        Marc Zyngier <maz@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "p.zabel" <p.zabel@pengutronix.de>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megous@megous.com>,
+        clabbe@baylibre.com, bage@linutronix.de,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>, linux-i2c@vger.kernel.org,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Dirk Behme <dirk.behme@de.bosch.com>
-
-The i2c-rcar driver utilizes the Generic Reset Controller kernel
-feature, so select the RESET_CONTROLLER option when the I2C_RCAR
-option is selected.
-
-Fixes: 2b16fd63059ab9 ("i2c: rcar: handle RXDMA HW behaviour on Gen3")
-Cc: stable@vger.kernel.org
-Signed-off-by: Dirk Behme <dirk.behme@de.bosch.com>
-Signed-off-by: Andy Lowe <andy_lowe@mentor.com>
-Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
----
- drivers/i2c/busses/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 293e7a0760e7..bb80f0944d61 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1181,6 +1181,7 @@ config I2C_RCAR
- 	tristate "Renesas R-Car I2C Controller"
- 	depends on ARCH_RENESAS || COMPILE_TEST
- 	select I2C_SLAVE
-+	select RESET_CONTROLLER
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  R-Car I2C controller.
--- 
-2.28.0
-
+ping......
