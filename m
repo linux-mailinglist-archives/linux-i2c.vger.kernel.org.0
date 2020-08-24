@@ -2,75 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4ED824FD77
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Aug 2020 14:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9628725047F
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Aug 2020 19:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726745AbgHXMHn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Aug 2020 08:07:43 -0400
-Received: from www.zeus03.de ([194.117.254.33]:42506 "EHLO mail.zeus03.de"
+        id S1726874AbgHXRDH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Aug 2020 13:03:07 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40380 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725926AbgHXMHl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 24 Aug 2020 08:07:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=FdR4jm5F5Z57/fNoP7GbP3o8BTe0
-        1SeGyFzr5uf+Mjc=; b=2x55aK2z+U98UaGg0Qz0QZq2rgYhAt60zNi3Br6OvhWo
-        etczisSRyJJ3G6jpG40qxnu7dTTPS5wqPh3YAfrPqi6cbI+rTOfp81pCylJF5YqM
-        uQ/wDtmQHKfIGsQroTAGiDIBtOWpV8asDAZYug1WBBspXLMkqP34SVZ2kcl9/NU=
-Received: (qmail 1869772 invoked from network); 24 Aug 2020 14:07:38 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Aug 2020 14:07:38 +0200
-X-UD-Smtp-Session: l3s3148p1@3jPJbp6tvIAgAwDPXwQSAE8ZH2VjqKES
-Date:   Mon, 24 Aug 2020 14:07:35 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Andy Lowe <andy_lowe@mentor.com>
-Subject: Re: [PATCH] i2c: i2c-rcar: Auto select RESET_CONTROLLER
-Message-ID: <20200824120734.GA2500@ninjato>
-References: <20200824062623.9346-1-erosca@de.adit-jv.com>
+        id S1727034AbgHXRDF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 24 Aug 2020 13:03:05 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 8BA97B154;
+        Mon, 24 Aug 2020 17:03:34 +0000 (UTC)
+Date:   Mon, 24 Aug 2020 19:03:03 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 1/2] eeprom: at24: Add support for the Sony VAIO EEPROMs
+Message-ID: <20200824190303.38e80f0c@endymion>
+In-Reply-To: <CAMpxmJWUqCL=QRfrFdTh7E_PmJd8WL+yY5U+d1YBPtg8GRTuJg@mail.gmail.com>
+References: <20200807150005.48c8c89b@endymion>
+        <CAMpxmJWUqCL=QRfrFdTh7E_PmJd8WL+yY5U+d1YBPtg8GRTuJg@mail.gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UlVJffcvxoiEqYs2"
-Content-Disposition: inline
-In-Reply-To: <20200824062623.9346-1-erosca@de.adit-jv.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, 18 Aug 2020 15:41:32 +0200, Bartosz Golaszewski wrote:
+> On Fri, Aug 7, 2020 at 3:00 PM Jean Delvare <jdelvare@suse.de> wrote:
+> >
+> > Special handling of the Sony VAIO EEPROMs is the last feature of the
+> > legacy eeprom driver that the at24 driver does not support. Adding
+> > this would let us deprecate and eventually remove the legacy eeprom
+> > driver.
+> >
+> > So add the option to specify a post-processing callback function that
+> > is called after reading data from the EEPROM, before it is returned
+> > to the user. The 24c02-vaio type is the first use case of that option:
+> > the callback function will mask the sensitive data for non-root users
+> > exactly as the legacy eeprom driver was doing.
+> >
+> > Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> > Bartosz, this is a different approach to solving the problem compared
+> > to your suggestion. It's even more generic in a way. Let me know what
+> > you think.
+> 
+> Patch applied with a stray newline dropped.
 
---UlVJffcvxoiEqYs2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Oh, I see it now. Sorry and that and thanks for catching and fixing it.
 
-
-> +	select RESET_CONTROLLER
-
-Only needed for Gen3, so 'if ARCH_RCAR_GEN3'?
-
-
---UlVJffcvxoiEqYs2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9DrYMACgkQFA3kzBSg
-KbbSZQ/+PhuTLW6kqCSCd55WdUymNIJPFUzPNEyQa59oRhx0DHZsP+KfEVlV/zug
-vhM8gpwTWCenzuydgeV2f1tFI4lVYKNF3ER1ukl5hQI9QTjKarodaEnC3i40D5vN
-8JW1hIPl0KD1R/5mSr7/D7qEAZxPenNkmsrjN85pMz0BhYP4lV8If4pxf3BBPWqO
-kG27YT/jt4mfAeAEabP9iEJobaJaPEiZ7YPfkH53a/bttg1JZW+60BNfh4D9nD7+
-FwbfjyJ5dj6K3xdmpffs4hFqavKq/xO3drIvf+ALQ5AqD4i55YRWGpJai93VVtiu
-45t7guU1HCPcxIPphJCBSHODV0xuOoEcWOuvpelnd/+dJyeYZ4u0rsu8EEEdJpKt
-8tJSTqruY7Q+/GhAqk/J6pTc/wOjA//s6RCbreQPXIggsWg1H9u0/nWEVKEoVjhJ
-bgIcaDrpMocnw5maTQ95pS+ni4ekDbJ+i/H/tUSGWS/rS4wZYYVfFW+NOjyF0UpC
-FXz42WfpyaDNrTywaX1zU7W4nNUtYOC/ZnHE+P7jBWSD7pj7JRBCKHkWRKXZaM7+
-ET1ymMRV/T/6vgQqbFP+xCU6+HWV9diauWfo5UFEms39F3fjJS944ucw60m8e8kf
-T/HSvjWKefoY7D2QbsXJ0/izOBc5be05f9a/ycHiBK+/XkEkf24=
-=b6JU
------END PGP SIGNATURE-----
-
---UlVJffcvxoiEqYs2--
+-- 
+Jean Delvare
+SUSE L3 Support
