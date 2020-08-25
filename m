@@ -2,81 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4ADF251316
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 09:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A318251327
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 09:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729363AbgHYHX1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Aug 2020 03:23:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56782 "EHLO mail.kernel.org"
+        id S1729209AbgHYH2L (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Aug 2020 03:28:11 -0400
+Received: from mx2.suse.de ([195.135.220.15]:57792 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729301AbgHYHX0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 Aug 2020 03:23:26 -0400
-Received: from localhost (p54b333df.dip0.t-ipconnect.de [84.179.51.223])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B780820578;
-        Tue, 25 Aug 2020 07:23:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598340206;
-        bh=Wot+Np0GLyOzU+gmkDDw/WJJgyB2AmM4/4p+BnVMe1U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PALc3FehzdyPhF1SI5Dr7P4ua9q74t++DyMTmK0dVA4LovNWm+r6W1fAAnhfy+3Gi
-         0xhZ8HB3wr+z4U9tvIOylWHTTscwI4Ipnf+i+okZjFdUKBpktAuona2U8lfFoE76OH
-         rqPWJeH3HsJPaNU/CxDKa5xmkKYU3Ul/TzS4ktMM=
-Date:   Tue, 25 Aug 2020 09:23:23 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] i2c: acpi: Remove dead code, i.e.
- i2c_acpi_match_device()
-Message-ID: <20200825072323.GE1861@ninjato>
-References: <20200821170334.43555-1-andriy.shevchenko@linux.intel.com>
- <20200821170334.43555-2-andriy.shevchenko@linux.intel.com>
+        id S1729194AbgHYH2L (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 Aug 2020 03:28:11 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 88229AD39;
+        Tue, 25 Aug 2020 07:28:40 +0000 (UTC)
+Date:   Tue, 25 Aug 2020 09:28:09 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH] i2c: Remove 'default n' from busses/Kconfig
+Message-ID: <20200825092809.2d826758@endymion>
+In-Reply-To: <20200820080525.2767120-1-jarkko.nikula@linux.intel.com>
+References: <20200820080525.2767120-1-jarkko.nikula@linux.intel.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vmttodhTwj0NAgWp"
-Content-Disposition: inline
-In-Reply-To: <20200821170334.43555-2-andriy.shevchenko@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, 20 Aug 2020 11:05:25 +0300, Jarkko Nikula wrote:
+> The default value for a config option defaults to 'n' so it doesn't need
+> to be set here.
+> 
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> ---
+>  drivers/i2c/busses/Kconfig | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 085ca9b009ed..9731121ec561 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -840,7 +840,6 @@ config I2C_PASEMI
+>  config I2C_PCA_PLATFORM
+>  	tristate "PCA9564/PCA9665 as platform device"
+>  	select I2C_ALGOPCA
+> -	default n
+>  	help
+>  	  This driver supports a memory mapped Philips PCA9564/PCA9665
+>  	  parallel bus to I2C bus controller.
+> @@ -1251,7 +1250,6 @@ config I2C_TAOS_EVM
+>  	depends on TTY
+>  	select SERIO
+>  	select SERIO_SERPORT
+> -	default n
+>  	help
+>  	  This supports TAOS evaluation modules on serial port. In order to
+>  	  use this driver, you will need the inputattach tool, which is part
+> @@ -1335,7 +1333,6 @@ config I2C_PCA_ISA
+>  	tristate "PCA9564/PCA9665 on an ISA bus"
+>  	depends on ISA
+>  	select I2C_ALGOPCA
+> -	default n
+>  	help
+>  	  This driver supports ISA boards using the Philips PCA9564/PCA9665
+>  	  parallel bus to I2C bus controller.
 
---vmttodhTwj0NAgWp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Definitely a good move, this was on my informal to-do list for some
+time already...
 
-On Fri, Aug 21, 2020 at 08:03:34PM +0300, Andy Shevchenko wrote:
-> We have no users of i2c_acpi_match_device() anymore and seems
-> will not have them in the future, thus remove dead code.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Option I2C_STUB suffers from the same but uses a different syntax,
+which may explain why you missed it.
 
-Applied to for-current, thanks!
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-
---vmttodhTwj0NAgWp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9EvGsACgkQFA3kzBSg
-KbYZlg//T1HmfkCkNB11atcH+9MXU/6JrowTrDXiuhu+rC3R1WQRbvpDt/1BT562
-+QEXOyO2lYXqOdSMdg88B9e1Wzww3WwKNtgQrnUIRM8phupRVnlzmccBr4e1U1IK
-Q1Jw0Tck/VFfLI4E9DeeQpV7z3cF6GJKiZv5inYjHybXoct3TsJ3mAHPNO5+QXqT
-RzPR+9UpOC8gFEwH37Do2iR6NdvA13RpMpGB2OSiYVS/+puP/bo+XN8MQDyGyMeW
-jmEyy9cCNkdtw3ShpH+K1v8yFWObkLXX4PfayWFw+YgPXyZzPSHYrGJ36sIxDfXs
-dfjEon4oQPlvT9bykHsyolFzHK1MwwUEyz+D22f/kaiDPukn/q1h2+TnKRCga4dL
-xBCxJeQZL7nERW2MrkoehcMOAUV2ylbGBNjiSkAH2djmYg7/8FiY8MIqMJlnMzUp
-+PvOPqqzu16E/mBqov+szrAspiPt/bzsBPkjZD8qpz2sI2PXHP3U0OCY+QaCETd0
-exsPEbLI3y7qwadBKQWq3Txzvbk+0GuudYjiJNgj8ooUfSx4vrvfyaMLSckti0vS
-946HVzHHo2jievs0j2cXfGesNG/SRi2PjkkoIQFoQoBCMbcYL5xm/gO19Ir7mKOD
-c7v8JEOOEY1uvLCmLQKxmfIFz2/nGWazArUpQAEqbAFg6q0aPLc=
-=bPUP
------END PGP SIGNATURE-----
-
---vmttodhTwj0NAgWp--
+-- 
+Jean Delvare
+SUSE L3 Support
