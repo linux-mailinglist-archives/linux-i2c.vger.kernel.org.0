@@ -2,109 +2,133 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 649DA251999
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 15:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505A12519C6
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 15:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726015AbgHYN2w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Aug 2020 09:28:52 -0400
-Received: from sauhun.de ([88.99.104.3]:47938 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726429AbgHYN2v (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 Aug 2020 09:28:51 -0400
-Received: from localhost (p54b33ab6.dip0.t-ipconnect.de [84.179.58.182])
-        by pokefinder.org (Postfix) with ESMTPSA id 374132C04D5;
-        Tue, 25 Aug 2020 15:28:47 +0200 (CEST)
-Date:   Tue, 25 Aug 2020 15:28:46 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Phil Reid <preid@electromag.com.au>
-Cc:     Codrin.Ciubotariu@microchip.com, kamel.bouhara@bootlin.com,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com
-Subject: Re: [PATCH 2/4] i2c: at91: implement i2c bus recovery
-Message-ID: <20200825132846.GA1753@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Phil Reid <preid@electromag.com.au>,
-        Codrin.Ciubotariu@microchip.com, kamel.bouhara@bootlin.com,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com
-References: <20191002144658.7718-1-kamel.bouhara@bootlin.com>
- <20191002144658.7718-3-kamel.bouhara@bootlin.com>
- <20191021202044.GB3607@kunai>
- <724d3470-0561-1b3f-c826-bc16c74a8c0a@bootlin.com>
- <1e70ae35-052b-67cc-27c4-1077c211efd0@microchip.com>
- <20191024150726.GA1120@kunai>
- <65d83bb0-9a0c-c6e2-1c58-cb421c69816c@electromag.com.au>
+        id S1726817AbgHYNgy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Aug 2020 09:36:54 -0400
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:34481 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726749AbgHYNgX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Aug 2020 09:36:23 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id B57FBCCD;
+        Tue, 25 Aug 2020 09:36:20 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 25 Aug 2020 09:36:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=POEurteasFjtErahfEjgvleBxyP
+        Dp8wZRReEbv/IAys=; b=i8UhYGZnZjo037lPyii2wA/CX7LkgMwr9a3XbcVjYtH
+        Wmv4F/2SE2c8N6spUbl7zBloi9b8wwCB+yERBHAut3kTCUOpHgNgbOA4LR/Ew0vV
+        zHWRGcEy9u2JN0gE1wGX9XTkLkCrA7Mkx86YSG14ttmT+Uj6+qHU7u84BFVAS5sH
+        fXYnmp4r3f7OD7prv9BfPZedMze1b1hMbGqK9suB0YzsZo+r1Pwlb71TifHAQdcZ
+        T8olniVwYsB8msCX1/AJnol0C48g8QdEGfJm6UpKwcj6f5GUa8fq4cMTtm0kveAB
+        Q8qOXt9jXKfa556Nf62m8CjIn3OfmFnNPZlpFx0bL9g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=POEurt
+        easFjtErahfEjgvleBxyPDp8wZRReEbv/IAys=; b=XJMuObmrP1KF2fiCudIQoF
+        Uw9YdDA9nRFLxEgXw4Mjs9KyCgAEczVVNqFx6J1rHndHBdOO5lsN9hYTd5dtYd2o
+        SiQ+GHyPrGNtuolY4oY5F0wdDLm6p9aUtcwVif+FX4vxcDyt7PIfORygP+kHk+PU
+        5y82npqA9hHXInV1zafBoPumQHM2nxY8MkCgYYQDh0chHba0IOTKOzdhfCFpUmqr
+        mRM5PpYFzv8lUAPcy88JZ84iEz+emJjwyCr0JgsRaWbO7k2o/042PGFoKQHO+cX6
+        3W2gjd2837hYtUzxOdHL8tBTnRCazMAGQiti0R8NLNtESi0NhEQEDTSm2jxGeohQ
+        ==
+X-ME-Sender: <xms:1BNFX-4Ec6Wt06BBmqcZp-stJ36Ws-Pz6M9S0fH9vKfHtHaYRipLhQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedruddvtddgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepvddune
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:1BNFX34Jxf_MxSBsPQgv3osZA2IUOm9RuGW3he0GaDIb-Crt_jqsNQ>
+    <xmx:1BNFX9eW9OggrB-x6yam3EuKH9xSnH4r8TBzbmLawHnDvILI2Ef81w>
+    <xmx:1BNFX7LPwLSpf-QM7m7LqSbRD0zLgnVPKcNN9eWu5vFhQibCKW1fKQ>
+    <xmx:1BNFX6AWjA-EcPGV4346e34oYz6jt_QRUfA4kEdsWppp3Zws0d7Ei3LzJcE>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id ABAA63280059;
+        Tue, 25 Aug 2020 09:36:19 -0400 (EDT)
+Date:   Tue, 25 Aug 2020 10:55:32 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Frank Lee <tiny.windzz@gmail.com>,
+        Frank Lee <frank@allwinnertech.com>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, gregory.clement@bootlin.com,
+        Thomas Gleixner <tglx@linutronix.de>, jason@lakedaemon.net,
+        Marc Zyngier <maz@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        "p.zabel" <p.zabel@pengutronix.de>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
+        clabbe@baylibre.com, bage@linutronix.de,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>, linux-i2c@vger.kernel.org,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v5 00/16] Allwinner A100 Initial support
+Message-ID: <20200825085532.vv4dpuzmjnshm5qn@gilmour.lan>
+References: <cover.1595572867.git.frank@allwinnertech.com>
+ <CAEExFWsvScMgi_Dftfq06HZiF8CFAmym8Z_tgQoHHAfiGxWt0g@mail.gmail.com>
+ <CAEExFWuwjmqAh0c3kMLS3Gs6UC2A8TtY-9nJeWxFPRDugtR4pA@mail.gmail.com>
+ <20200824080327.GH3248864@dell>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7AUc2qLy4jB3hD7Z"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="auueqe22v4rtftcj"
 Content-Disposition: inline
-In-Reply-To: <65d83bb0-9a0c-c6e2-1c58-cb421c69816c@electromag.com.au>
+In-Reply-To: <20200824080327.GH3248864@dell>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---7AUc2qLy4jB3hD7Z
+--auueqe22v4rtftcj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Phil,
-
-yes, this thread is old but a similar issue came up again...
-
-On Fri, Oct 25, 2019 at 09:14:00AM +0800, Phil Reid wrote:
-
-> >=20
-> > > So at the beginning of a new transfer, we should check if SDA (or SCL=
-?)
-> > > is low and, if it's true, only then we should try recover the bus.
-> >=20
-> > Yes, this is the proper time to do it. Remember, I2C does not define a
-> > timeout.
-> >=20
+On Mon, Aug 24, 2020 at 09:03:27AM +0100, Lee Jones wrote:
+> On Mon, 24 Aug 2020, Frank Lee wrote:
 >=20
-> FYI: Just a single poll at the start of the transfer, for it being low, w=
-ill cause problems with multi-master buses.
-> Bus recovery should be attempted after a timeout when trying to communica=
-te, even thou i2c doesn't define a timeout.
+> > ping......
 >=20
-> I'm trying to fix the designware drivers handling of this at the moment.
+> "Please don't send content free pings and please allow a reasonable
+>  time for review.  People get busy, go on holiday, attend conferences
+>  and so on so unless there is some reason for urgency (like critical
+>  bug fixes) please allow at least a couple of weeks for review.  If
+>  there have been review comments then people may be waiting for those
+>  to be addressed.  Sending content free pings just adds to the mail
+>  volume (if they are seen at all) and if something has gone wrong
+>  you'll have to resend the patches anyway so [RESEND]ing with any
+>  comments addressed is generally a much better approach."
 
-I wonder what you ended up with? You are right, a single poll is not
-enough. It only might be if one applies the new "single-master" binding
-for a given bus. If that is not present, my best idea so far is to poll
-SDA for the time defined in adapter->timeout and if it is all low, then
-initiate a recovery.
+This is true to some extent, but pinging after a month doesn't seem
+unreasonable either.
 
-All the best,
+Maxime
 
-   Wolfram
-
-
---7AUc2qLy4jB3hD7Z
+--auueqe22v4rtftcj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9FEg4ACgkQFA3kzBSg
-KbZfXhAAgtg4dw1Y8ofe9LYQHp/xN3Z+LqaNGBmsKeC7XBv0/j/OuBqokWUtPeZ2
-LKs9hWvaKCiIBNZH8LElTWFS9XSlmiLD7Stw8pUm5Gcav/Hf8FRB3WJ93QGNQcA4
-/kQFrmO7Mxez+Yb3ndImfXQyexOJjzteaxVfbmVLIHC8V2L+LY+M7QiuzEG4vT9C
-/KhzaKVmfGevX0HL0lZcShLCf5Nk8Na/hMfxxK1GisaMvEacilOQBqWyFq5Z9oQd
-h7T0BKO0wn5Az3+lVVzI7qiCTQumy+9bhWJuSWXeVoxmCk2dklCFw/bUnjuVpzOk
-agaRh4BiBmp/zxDVtmS8rihL6htu+2JlFrSPEk1Pl5pfgx5oE2D+cuwRRqkgZwgZ
-EOe60+VfNVkQ5epcCBKRKNOqKnL8ZOG0Q0iVkuxqEVLCnhe4sM31nZ0Z8pioHb8P
-K2Mgr7GvqZCWQLdCHBy16B6LmsIqjwn2BwYcTo9EAGTWbhej7fGoykcuPI4r5QSO
-ivHhv8+sR795YmveXuV9OdXThHoZXVjhe2CQMxm8pQ17PW0M000X3j2FHj4qb5AL
-UQJfYd8o4WHPyJ8VtvdiPbeIQVhhkIysIg5FGJXgydrsMt/CyCuj6epLPWPRm+TB
-vtXTdWN2BLhXYFdxGtnkQdHZnqo58ZGxM3eDHPwywGsWpEr/wAc=
-=3nwt
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX0TSBAAKCRDj7w1vZxhR
+xQ6OAP9rRoEY6LGAwA8rIYGP9nqZkGQvX8jYgLKgy8LDGLzgHwD9FpLVh5zaq2PN
+wZuijCenTGRJcOzorN0M0qrwWwjOnwM=
+=/bST
 -----END PGP SIGNATURE-----
 
---7AUc2qLy4jB3hD7Z--
+--auueqe22v4rtftcj--
