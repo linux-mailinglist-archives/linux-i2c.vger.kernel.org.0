@@ -2,133 +2,122 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 505A12519C6
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 15:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF7D251A10
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 15:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgHYNgy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Aug 2020 09:36:54 -0400
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:34481 "EHLO
-        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726749AbgHYNgX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Aug 2020 09:36:23 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id B57FBCCD;
-        Tue, 25 Aug 2020 09:36:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 25 Aug 2020 09:36:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=POEurteasFjtErahfEjgvleBxyP
-        Dp8wZRReEbv/IAys=; b=i8UhYGZnZjo037lPyii2wA/CX7LkgMwr9a3XbcVjYtH
-        Wmv4F/2SE2c8N6spUbl7zBloi9b8wwCB+yERBHAut3kTCUOpHgNgbOA4LR/Ew0vV
-        zHWRGcEy9u2JN0gE1wGX9XTkLkCrA7Mkx86YSG14ttmT+Uj6+qHU7u84BFVAS5sH
-        fXYnmp4r3f7OD7prv9BfPZedMze1b1hMbGqK9suB0YzsZo+r1Pwlb71TifHAQdcZ
-        T8olniVwYsB8msCX1/AJnol0C48g8QdEGfJm6UpKwcj6f5GUa8fq4cMTtm0kveAB
-        Q8qOXt9jXKfa556Nf62m8CjIn3OfmFnNPZlpFx0bL9g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=POEurt
-        easFjtErahfEjgvleBxyPDp8wZRReEbv/IAys=; b=XJMuObmrP1KF2fiCudIQoF
-        Uw9YdDA9nRFLxEgXw4Mjs9KyCgAEczVVNqFx6J1rHndHBdOO5lsN9hYTd5dtYd2o
-        SiQ+GHyPrGNtuolY4oY5F0wdDLm6p9aUtcwVif+FX4vxcDyt7PIfORygP+kHk+PU
-        5y82npqA9hHXInV1zafBoPumQHM2nxY8MkCgYYQDh0chHba0IOTKOzdhfCFpUmqr
-        mRM5PpYFzv8lUAPcy88JZ84iEz+emJjwyCr0JgsRaWbO7k2o/042PGFoKQHO+cX6
-        3W2gjd2837hYtUzxOdHL8tBTnRCazMAGQiti0R8NLNtESi0NhEQEDTSm2jxGeohQ
-        ==
-X-ME-Sender: <xms:1BNFX-4Ec6Wt06BBmqcZp-stJ36Ws-Pz6M9S0fH9vKfHtHaYRipLhQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedruddvtddgieelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepvddune
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:1BNFX34Jxf_MxSBsPQgv3osZA2IUOm9RuGW3he0GaDIb-Crt_jqsNQ>
-    <xmx:1BNFX9eW9OggrB-x6yam3EuKH9xSnH4r8TBzbmLawHnDvILI2Ef81w>
-    <xmx:1BNFX7LPwLSpf-QM7m7LqSbRD0zLgnVPKcNN9eWu5vFhQibCKW1fKQ>
-    <xmx:1BNFX6AWjA-EcPGV4346e34oYz6jt_QRUfA4kEdsWppp3Zws0d7Ei3LzJcE>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id ABAA63280059;
-        Tue, 25 Aug 2020 09:36:19 -0400 (EDT)
-Date:   Tue, 25 Aug 2020 10:55:32 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Frank Lee <tiny.windzz@gmail.com>,
-        Frank Lee <frank@allwinnertech.com>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, gregory.clement@bootlin.com,
-        Thomas Gleixner <tglx@linutronix.de>, jason@lakedaemon.net,
-        Marc Zyngier <maz@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        "p.zabel" <p.zabel@pengutronix.de>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
-        clabbe@baylibre.com, bage@linutronix.de,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>, linux-i2c@vger.kernel.org,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v5 00/16] Allwinner A100 Initial support
-Message-ID: <20200825085532.vv4dpuzmjnshm5qn@gilmour.lan>
-References: <cover.1595572867.git.frank@allwinnertech.com>
- <CAEExFWsvScMgi_Dftfq06HZiF8CFAmym8Z_tgQoHHAfiGxWt0g@mail.gmail.com>
- <CAEExFWuwjmqAh0c3kMLS3Gs6UC2A8TtY-9nJeWxFPRDugtR4pA@mail.gmail.com>
- <20200824080327.GH3248864@dell>
+        id S1726580AbgHYNqq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 25 Aug 2020 09:46:46 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37714 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726551AbgHYNqn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 Aug 2020 09:46:43 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id BFBE8AE92;
+        Tue, 25 Aug 2020 13:47:10 +0000 (UTC)
+Date:   Tue, 25 Aug 2020 15:46:39 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Volker =?UTF-8?B?UsO8bWVsaW4=?= <volker.ruemelin@googlemail.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH resend] i2c-i801: fix resume bug
+Message-ID: <20200825154639.01a92ff2@endymion>
+In-Reply-To: <a2fc5a6d-a3bf-eaf0-bb75-1521be346333@googlemail.com>
+References: <a2fc5a6d-a3bf-eaf0-bb75-1521be346333@googlemail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="auueqe22v4rtftcj"
-Content-Disposition: inline
-In-Reply-To: <20200824080327.GH3248864@dell>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Volker,
 
---auueqe22v4rtftcj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry for the late... very late answer. What can I say...
 
-On Mon, Aug 24, 2020 at 09:03:27AM +0100, Lee Jones wrote:
-> On Mon, 24 Aug 2020, Frank Lee wrote:
->=20
-> > ping......
->=20
-> "Please don't send content free pings and please allow a reasonable
->  time for review.  People get busy, go on holiday, attend conferences
->  and so on so unless there is some reason for urgency (like critical
->  bug fixes) please allow at least a couple of weeks for review.  If
->  there have been review comments then people may be waiting for those
->  to be addressed.  Sending content free pings just adds to the mail
->  volume (if they are seen at all) and if something has gone wrong
->  you'll have to resend the patches anyway so [RESEND]ing with any
->  comments addressed is generally a much better approach."
+On Sun, 3 Dec 2017 16:42:42 +0100, Volker Rümelin wrote:
+> On suspend the original host configuration gets restored. The
+> resume routine has to undo this, otherwise the SMBus master
+> may be left in disabled state or in i2c mode.
+> 
+> Signed-off-by: Volker Rümelin <vr_qemu@t-online.de>
+> ---
+> 
+> I noticed this bug in a QEMU x86_64 q35 VM booted with OVMF. OVMF
+> doesn't intitialize the SMBus master. After 1s of SMBus inactivity
+> autosuspend disables the SMBus master. To reproduce please note QEMU's
+> ICH9 SMBus emulation does not handle interrupts and it's necessary
+> to pass the parameter disable_features=0x10 to the i2c_i801 driver.
+> 
+>  drivers/i2c/busses/i2c-i801.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index 9e12a53..ebd81bc 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -1489,6 +1489,13 @@ static void i801_acpi_remove(struct i801_priv *priv)
+>  static inline void i801_acpi_remove(struct i801_priv *priv) { }
+>  #endif
+>  
+> +static unsigned char i801_setup_hstcfg(unsigned char hstcfg)
+> +{
+> +	hstcfg &= ~SMBHSTCFG_I2C_EN;	/* SMBus timing */
+> +	hstcfg |= SMBHSTCFG_HST_EN;
+> +	return hstcfg;
+> +}
+> +
+>  static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  {
+>  	unsigned char temp;
+> @@ -1592,13 +1599,10 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  		return err;
+>  	}
+>  
+> -	pci_read_config_byte(priv->pci_dev, SMBHSTCFG, &temp);
+> -	priv->original_hstcfg = temp;
+> -	temp &= ~SMBHSTCFG_I2C_EN;	/* SMBus timing */
+> -	if (!(temp & SMBHSTCFG_HST_EN)) {
+> +	pci_read_config_byte(priv->pci_dev, SMBHSTCFG, &priv->original_hstcfg);
+> +	temp = i801_setup_hstcfg(priv->original_hstcfg);
+> +	if (~priv->original_hstcfg & temp & SMBHSTCFG_HST_EN)
 
-This is true to some extent, but pinging after a month doesn't seem
-unreasonable either.
+Took me some time to figure out what you were doing here, and while the
+result is correct, I think this is needlessly convoluted. We already
+know that "temp & SMBHSTCFG_HST_EN" evaluates to "SMBHSTCFG_HST_EN"
+after i801_setup_hstcfg(). So The above can be simplified to:
 
-Maxime
+	if (~priv->original_hstcfg & SMBHSTCFG_HST_EN)
 
---auueqe22v4rtftcj
-Content-Type: application/pgp-signature; name="signature.asc"
+or to the IMHO more readable:
 
------BEGIN PGP SIGNATURE-----
+	if (!(priv->original_hstcfg & SMBHSTCFG_HST_EN))
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX0TSBAAKCRDj7w1vZxhR
-xQ6OAP9rRoEY6LGAwA8rIYGP9nqZkGQvX8jYgLKgy8LDGLzgHwD9FpLVh5zaq2PN
-wZuijCenTGRJcOzorN0M0qrwWwjOnwM=
-=/bST
------END PGP SIGNATURE-----
+>  		dev_info(&dev->dev, "Enabling SMBus device\n");
+> -		temp |= SMBHSTCFG_HST_EN;
+> -	}
+>  	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, temp);
+>  
+>  	if (temp & SMBHSTCFG_SMB_SMI_EN) {
+> @@ -1709,7 +1713,9 @@ static int i801_resume(struct device *dev)
+>  {
+>  	struct pci_dev *pci_dev = to_pci_dev(dev);
+>  	struct i801_priv *priv = pci_get_drvdata(pci_dev);
+> +	unsigned char hstcfg = i801_setup_hstcfg(priv->original_hstcfg);
+>  
+> +	pci_write_config_byte(pci_dev, SMBHSTCFG, hstcfg);
+>  	i801_enable_host_notify(&priv->adapter);
+>  
+>  	return 0;
 
---auueqe22v4rtftcj--
+I had to adjust the above section as the context changed meanwhile, but
+nothing to worry about.
+
+Thank you for your contribution, I'll resend the updated patch later
+today. All credits to you.
+
+-- 
+Jean Delvare
+SUSE L3 Support
