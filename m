@@ -2,41 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7547B25138B
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 09:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537FB251396
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 09:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729469AbgHYHtG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Aug 2020 03:49:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39816 "EHLO mail.kernel.org"
+        id S1729194AbgHYHvI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Aug 2020 03:51:08 -0400
+Received: from www.zeus03.de ([194.117.254.33]:41238 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729194AbgHYHtG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 Aug 2020 03:49:06 -0400
-Received: from localhost (p54b333df.dip0.t-ipconnect.de [84.179.51.223])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B4004206EB;
-        Tue, 25 Aug 2020 07:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598341745;
-        bh=EAVPl8HI0qm5Z1E+GM1eitUP0eVWdhTAbiPxcjbxgeo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o42hzT6XNP1akB69Gj9FKiRANr1USTDNM4eElmGuJafsirozDmR3MxvzvQsZIjqJ8
-         ZD0ZSPiduI9MDF4ElIVV3LjmWJebWXvKTz7NtQPMJStU3nwXviNZvLKKZSwN6lspyI
-         alNSXsB9ESLx57Q5/mhQL8Kb4u3YtpNTx6pYqWoU=
-Date:   Tue, 25 Aug 2020 09:49:02 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Ray Jui <ray.jui@broadcom.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Subject: Re: [PATCH] i2c: iproc: Fix checkpatch warnings by using 'BIT' macro
-Message-ID: <20200825074902.GG1861@ninjato>
-References: <20200814224008.107430-1-ray.jui@broadcom.com>
+        id S1729558AbgHYHvD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 Aug 2020 03:51:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=RkmN5oQVYbSXBWOCgctuDP1Bwdaw
+        TRj4DTnGfBXTQjY=; b=D6I7TlJEvmoLzZRTJMWr7DaE9wrFzrNLskeHuTTomMlL
+        pSfQmaYMh6yH3zCLxoorxiX5c7QKbMp0HXYMhXy8RbjeZlZMfHM/iDd6wSN8wJH6
+        SQw3XzXrVGaCDExVgi4kAiZFSz0yRZSTC2YhT93Va0jN2pzjq55pSYfWAGUPvOQ=
+Received: (qmail 132884 invoked from network); 25 Aug 2020 09:51:01 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Aug 2020 09:51:01 +0200
+X-UD-Smtp-Session: l3s3148p1@BVrg9q6tXrwgAwDPXwyVALCfLslKKFLZ
+Date:   Tue, 25 Aug 2020 09:51:01 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: Remove 'default n' from busses/Kconfig
+Message-ID: <20200825075100.GH1861@ninjato>
+References: <20200820080525.2767120-1-jarkko.nikula@linux.intel.com>
+ <20200825092809.2d826758@endymion>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zGQnqpIoxlsbsOfg"
+        protocol="application/pgp-signature"; boundary="VkqCAaSJIySsbD6j"
 Content-Disposition: inline
-In-Reply-To: <20200814224008.107430-1-ray.jui@broadcom.com>
+In-Reply-To: <20200825092809.2d826758@endymion>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -44,42 +41,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---zGQnqpIoxlsbsOfg
+--VkqCAaSJIySsbD6j
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 14, 2020 at 03:40:08PM -0700, Ray Jui wrote:
-> Fix additional checkpatch warnings in the iProc I2C driver by using
-> 'BIT' marcro.
+
+> Option I2C_STUB suffers from the same but uses a different syntax,
+> which may explain why you missed it.
 >=20
-> Reported-by: Wolfram Sang <wsa@kernel.org>
-> Signed-off-by: Ray Jui <ray.jui@broadcom.com>
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-Changed the commit msg a little. This is not about 'checkpatch', this is
-about fixing undefined C behaviour.
-
-Applied to for-current, thanks!
+I removed that one, too, and added your tag. Thanks!
 
 
---zGQnqpIoxlsbsOfg
+--VkqCAaSJIySsbD6j
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9Ewm4ACgkQFA3kzBSg
-KbamgQ/7BM8jeTcEvAB4lW9JZQHtA+KGu9QgovN9T+TlFGPBzrlgrvc+0/hBk6Gy
-njNOnI4R3u+0Xyssrq/ROCpw9tsSyI5H1A4okP0uC/itM4P0bQNHZsXIiZrBTIyr
-L9+eXZLQddDTtYxRqnrMLtqS+BufAH1sykRTDyrPL/Z30WiGo7Gy9cs3JDbUVTOO
-pLbl44oBWjns0ZSeMf7l5hWOdnM7YGpfMwhmIHT8ftHZjk1yngjLyB/SOUZ7U2AG
-zYXlZXvXStMLddnUvKLf9IwDq4XHnTxukQ2eTVRDglnhMpCKylPDZLOgdRnyzrzw
-4pQQjGtWvknyhY7+ePwYKEa9Hu6NSsXvcTX8C5gb0oCikOg++Y4grM9lOUVy7w5+
-Z/uZCYmqfLuEW1uIvyYuELlxH3wChG5icdXpRPpCTyjFt6zRVWow3l23eJH444UL
-UCxd2+oxp15YpdLRSi3JSTADzWoloQ4YPTfftieEpuxVfzLSlj2mP1xnn4KA1RHK
-q6PObpQDQ78WRDyg5Zcj4scySH4v+1hiCAWGcjBTfL249cMp3h1uLE82ylBKwbeO
-NyBZHAe+jCeJboFeoiunSXdLwRkFNqec0czt+GxWTsXRpg9xm9f44CfYHwrNrWhW
-Yh0qnTnh25oMw++6zqTbj/v9mNOGwyG58vmUBCo9zgg7oQZLa1g=
-=8zAd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9EwuQACgkQFA3kzBSg
+Kbb++xAAlVokBwGMSWXhT4HMl8tMT9MlVijQnCgRn3+VJd3nVuUiRha+FEAYpQWm
+bmPW5oqVVz/8Gq9kPsFgEUH/xtcrhs2LLm2jdu0sI0ngdUp5BnK4vNCbOV+z92Ry
+/QJQZl5EvH98J7psNleuv9cP0BcAwSQQ7NCbpLirSuCY78FeLgHJ9rG4thpxi8pB
+uEIhXOFPwTI1v6c2pgl5tIctFZVfmm3AwVrkXmYFs3wxb7f0/VlKKsGjswpmYaSZ
+AoERMvzmx9hYFySHSFxK0drXKIZ9pXxDwipyovIh/d/0C1BC3Agg3nwe+YVPAGii
+AxBSyjdoqZsNSxA+qChq1GLg6grf3Znuv6xATLyFP+YneNhKsj6Bszu4yi6xIt2G
+Wfva+YhaPOV9XlW82OmWQNHyMcyhXkr9ux3/+BPx5eozRshjWOtM3Rq/ttORTJ8x
+oG5Koia5ahRT1AFuPc1urn7kjtP8afZUlp4UZxmrH59cmsrHabJPLsTotl7uLtzh
+vV30L6fGLDk3edm4Dr71R1659dHzEahpF1D2ldK+STohRjS9NHUEYaOkZdQF7FEZ
+MQ9ToyvQOzn43oNyd3ToQd6NcqJ74E77E6Xd6CAIuH+zJfTyxhRTKjdSyS3ky0P3
+paHOctbnPyOP92+QbLN34SiCWW5dNXWWEd3pxIfm3O1zsCwc9oo=
+=6ZPI
 -----END PGP SIGNATURE-----
 
---zGQnqpIoxlsbsOfg--
+--VkqCAaSJIySsbD6j--
