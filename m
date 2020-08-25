@@ -2,115 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BF525197B
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 15:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649DA251999
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 15:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726015AbgHYNYe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Aug 2020 09:24:34 -0400
-Received: from sauhun.de ([88.99.104.3]:47888 "EHLO pokefinder.org"
+        id S1726015AbgHYN2w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Aug 2020 09:28:52 -0400
+Received: from sauhun.de ([88.99.104.3]:47938 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725792AbgHYNYb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 Aug 2020 09:24:31 -0400
+        id S1726429AbgHYN2v (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 Aug 2020 09:28:51 -0400
 Received: from localhost (p54b33ab6.dip0.t-ipconnect.de [84.179.58.182])
-        by pokefinder.org (Postfix) with ESMTPSA id C875F2C04D5;
-        Tue, 25 Aug 2020 15:24:29 +0200 (CEST)
-Date:   Tue, 25 Aug 2020 15:24:27 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 374132C04D5;
+        Tue, 25 Aug 2020 15:28:47 +0200 (CEST)
+Date:   Tue, 25 Aug 2020 15:28:46 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Jaakko Laine <ext-jaakko.laine@vaisala.com>
-Cc:     shubhrajyoti.datta@gmail.com, linux-i2c@vger.kernel.org,
-        michal.simek@xilinx.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] i2c: xiic: Support forcing single-master in DT
-Message-ID: <20200825132427.GB991@kunai>
+To:     Phil Reid <preid@electromag.com.au>
+Cc:     Codrin.Ciubotariu@microchip.com, kamel.bouhara@bootlin.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com
+Subject: Re: [PATCH 2/4] i2c: at91: implement i2c bus recovery
+Message-ID: <20200825132846.GA1753@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Jaakko Laine <ext-jaakko.laine@vaisala.com>,
-        shubhrajyoti.datta@gmail.com, linux-i2c@vger.kernel.org,
-        michal.simek@xilinx.com, linux-arm-kernel@lists.infradead.org
-References: <20200820100241.96866-1-ext-jaakko.laine@vaisala.com>
- <20200820100241.96866-3-ext-jaakko.laine@vaisala.com>
+        Phil Reid <preid@electromag.com.au>,
+        Codrin.Ciubotariu@microchip.com, kamel.bouhara@bootlin.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com
+References: <20191002144658.7718-1-kamel.bouhara@bootlin.com>
+ <20191002144658.7718-3-kamel.bouhara@bootlin.com>
+ <20191021202044.GB3607@kunai>
+ <724d3470-0561-1b3f-c826-bc16c74a8c0a@bootlin.com>
+ <1e70ae35-052b-67cc-27c4-1077c211efd0@microchip.com>
+ <20191024150726.GA1120@kunai>
+ <65d83bb0-9a0c-c6e2-1c58-cb421c69816c@electromag.com.au>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MfFXiAuoTsnnDAfZ"
+        protocol="application/pgp-signature"; boundary="7AUc2qLy4jB3hD7Z"
 Content-Disposition: inline
-In-Reply-To: <20200820100241.96866-3-ext-jaakko.laine@vaisala.com>
+In-Reply-To: <65d83bb0-9a0c-c6e2-1c58-cb421c69816c@electromag.com.au>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---MfFXiAuoTsnnDAfZ
+--7AUc2qLy4jB3hD7Z
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 20, 2020 at 01:02:41PM +0300, Jaakko Laine wrote:
-> I2C master operating in multimaster mode can get stuck
-> indefinitely if I2C start is detected on bus, but no master
-> has a transaction going.
->=20
-> This is a weakness in I2C standard, which defines no way
-> to recover, since all masters are indefinitely disallowed
-> from interrupting the currently operating master. A start
-> condition can be created for example by an electromagnetic
-> discharge applied near physical I2C lines. Or a already
-> operating master could get reset immediately after sending
-> a start.
->=20
-> If it is known during device tree creation that only a single
-> I2C master will be present on the bus, this deadlock of the
-> I2C bus could be avoided in the driver by ignoring the
-> bus_is_busy register of the xiic, since bus can never be
-> reserved by any other master.
+Hi Phil,
 
-You could even initiate a recovery procedure if it is a device pulling
-SDA low.
+yes, this thread is old but a similar issue came up again...
 
-> This patch adds this support for detecting single-master flag
-> in device tree and when provided, improves I2C reliability by
-> ignoring the therefore unnecessary xiic bus_is_busy register.
->=20
-> Error can be reproduced by pulling I2C SDA -line temporarily low
-> by shorting it to ground, while linux I2C master is operating on
-> it using the xiic driver. The application using the bus will
-> start receiving linux error code 16: "Device or resource busy"
-> indefinitely:
->=20
-> kernel: pca953x 0-0020: failed writing register
-> app: Error writing file, error: 16
->=20
-> With multi-master disabled device will instead receive error
-> code 5: "I/O error" while SDA is grounded, but recover normal
-> operation once short is removed.
->=20
-> kernel: pca953x 0-0020: failed reading register
-> app: Error reading file, error: 5
->=20
-> Signed-off-by: Jaakko Laine <ext-jaakko.laine@vaisala.com>
+On Fri, Oct 25, 2019 at 09:14:00AM +0800, Phil Reid wrote:
 
-Again, looks good to me and matches what we discussed and prepared.
-Let's see what Michal et al. think.
+> >=20
+> > > So at the beginning of a new transfer, we should check if SDA (or SCL=
+?)
+> > > is low and, if it's true, only then we should try recover the bus.
+> >=20
+> > Yes, this is the proper time to do it. Remember, I2C does not define a
+> > timeout.
+> >=20
+>=20
+> FYI: Just a single poll at the start of the transfer, for it being low, w=
+ill cause problems with multi-master buses.
+> Bus recovery should be attempted after a timeout when trying to communica=
+te, even thou i2c doesn't define a timeout.
+>=20
+> I'm trying to fix the designware drivers handling of this at the moment.
 
-Happy hacking!
+I wonder what you ended up with? You are right, a single poll is not
+enough. It only might be if one applies the new "single-master" binding
+for a given bus. If that is not present, my best idea so far is to poll
+SDA for the time defined in adapter->timeout and if it is all low, then
+initiate a recovery.
+
+All the best,
+
+   Wolfram
 
 
---MfFXiAuoTsnnDAfZ
+--7AUc2qLy4jB3hD7Z
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9FEQsACgkQFA3kzBSg
-KbblAxAAtkD1CjaP62bB9CyfxhUsBDN7XLAYpQCAgxh3K+EFaoGzk8eUYOqyX+h6
-Yis6cnrrNEK5I817zwq4Jd50BfVYOpCmlfwEWbSIk2a4v9XHJszS86V1vFofwrRw
-Mqc56uGfJ+laG/WbyrpdcjZ5Ia4vl1vW38Oljj6hILRYKJ7WIQwdOjxbOy8+y3Ei
-QfdWzmVP/goQ1TxdCkOsyQLgiKdCpkQMilUi//t1yGczRFb1aKzTwrT79sYaYkvJ
-qBiu7qmRXhidbrza35PR4StYqaPlBz7jbdE9wkKSYvVPdk1/DGEJGBsnRaH5o6RJ
-pZOwK0ZYI7+LTGF6DW/36jCphrA+2BSDTfeEIEKtHi7ZlSzrka3IwqkbGiM8pyjr
-g1u7l63aOkteJcnvRF1wDRswp5Dwf7iCHyQmZiGsr7iW/C2yt+a1r/J3XrDseOCE
-u8tCXdo6kNjmI+e5A6WQUwWf2TUCnQJkQK50yH8FDqBShI2xFunS3Vwl2/O2LXi+
-fNFQaUosKXuokYurEl982NS289jk3VWqbdM7e7aaEklfiPdDNsKZrWmcjtNrtr2G
-2V0ZZRJD2W7GJrIMnvuPTL/W73E+gTzVKZvmYatZd8xjwHEj0yYSGvUYT0yzfI9h
-VJWCGMNr4S23AoI7zWISJJv2jdjEjYWp8S5/VNoXiKXOmNuvYvE=
-=Vwd4
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9FEg4ACgkQFA3kzBSg
+KbZfXhAAgtg4dw1Y8ofe9LYQHp/xN3Z+LqaNGBmsKeC7XBv0/j/OuBqokWUtPeZ2
+LKs9hWvaKCiIBNZH8LElTWFS9XSlmiLD7Stw8pUm5Gcav/Hf8FRB3WJ93QGNQcA4
+/kQFrmO7Mxez+Yb3ndImfXQyexOJjzteaxVfbmVLIHC8V2L+LY+M7QiuzEG4vT9C
+/KhzaKVmfGevX0HL0lZcShLCf5Nk8Na/hMfxxK1GisaMvEacilOQBqWyFq5Z9oQd
+h7T0BKO0wn5Az3+lVVzI7qiCTQumy+9bhWJuSWXeVoxmCk2dklCFw/bUnjuVpzOk
+agaRh4BiBmp/zxDVtmS8rihL6htu+2JlFrSPEk1Pl5pfgx5oE2D+cuwRRqkgZwgZ
+EOe60+VfNVkQ5epcCBKRKNOqKnL8ZOG0Q0iVkuxqEVLCnhe4sM31nZ0Z8pioHb8P
+K2Mgr7GvqZCWQLdCHBy16B6LmsIqjwn2BwYcTo9EAGTWbhej7fGoykcuPI4r5QSO
+ivHhv8+sR795YmveXuV9OdXThHoZXVjhe2CQMxm8pQ17PW0M000X3j2FHj4qb5AL
+UQJfYd8o4WHPyJ8VtvdiPbeIQVhhkIysIg5FGJXgydrsMt/CyCuj6epLPWPRm+TB
+vtXTdWN2BLhXYFdxGtnkQdHZnqo58ZGxM3eDHPwywGsWpEr/wAc=
+=3nwt
 -----END PGP SIGNATURE-----
 
---MfFXiAuoTsnnDAfZ--
+--7AUc2qLy4jB3hD7Z--
