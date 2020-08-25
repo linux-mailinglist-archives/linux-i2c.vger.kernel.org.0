@@ -2,119 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEA7252189
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 22:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F9D25223D
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 22:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726541AbgHYUFc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Aug 2020 16:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726158AbgHYUFc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Aug 2020 16:05:32 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339D3C061574;
-        Tue, 25 Aug 2020 13:05:32 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id d19so7570250pgl.10;
-        Tue, 25 Aug 2020 13:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ONP7fZ70W2uCdTHIa7UQWtYrSdBuzbghSeSM9bNYZbY=;
-        b=tgbmbD+wfpJT0QWPEnhlgQF5kw4Vo5saQ52d9A56Z8Nv6AXKi4ehf1K3DM9u/s2bgF
-         dTROYbcBlMs+/ptni+PJ0GjhZPMqvtTPGtl9YPsR2U80BWlbUqbs0BvOowHLqlcwqDSb
-         aMS0u/X/DRHH4mdqzt/Wiwm+TORwj6G1JoziCoNnlxN20hY6ceAGoOVoebxtTkyTsA/t
-         BT1ydtHIVivdjkMaIkMLzu6VyJmeJHd/pZY7fZ09qrDetg7EnCoiZsmx6r2J3R4zPnZB
-         NshksLlzD2CKL3iR00HiCu8kXf2uUVbt14A45g3Pvc9WHzqrJJX8quZr7L/tQVZb2ded
-         gaWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ONP7fZ70W2uCdTHIa7UQWtYrSdBuzbghSeSM9bNYZbY=;
-        b=GLMK+FjETPSa8w+CIYFoADF3D13hyhs2qLlYr2/EvKlGuAO9/tLvZJ0/ph9hAenMDV
-         A4tdclfZQXsRLfo5sv4GjXDO9IVl3APhUiSst0xTTsleqmAaD0xdAhSWqHtG24nMWa13
-         xlctVmakvy4HV76/e+9UA4JRjxPu3e50pk14gVOyph/Nrf0pOuQ6jaUId+s3cQm0MC09
-         NozBVpd2pbtE0Xt3bVVa7moyGzwmTB65Sip2Wikjcn/gh+JiMsLH571Xg1pDvFUC8ZQZ
-         XmMftb7y9ynfjWUaL3Z7HGvGaaDR1s/qSQmdwUaJDmjJmRQFqXkvtHr0igNZ1CTNY/v7
-         mQXg==
-X-Gm-Message-State: AOAM530Pqnr3Y58/IQ9pKeqTU5rs8IgMRlWG0Fw/nJojUFpxgVFX8Hy7
-        hfv58q+Yf/gvPPRrFP1pKkJotx7V9ckR/MZv
-X-Google-Smtp-Source: ABdhPJxEAAm69I+hmyQ36720FaKJ62zxQBG060VTuh1WKf2H2fqvAee9Hbj4xH/b8NAs6LgrJ92sOg==
-X-Received: by 2002:a62:1483:: with SMTP id 125mr8939252pfu.186.1598385931482;
-        Tue, 25 Aug 2020 13:05:31 -0700 (PDT)
-Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
-        by smtp.gmail.com with ESMTPSA id g8sm59446pfo.132.2020.08.25.13.05.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 25 Aug 2020 13:05:30 -0700 (PDT)
-Date:   Tue, 25 Aug 2020 13:05:24 -0700
-From:   Tao Ren <rentao.bupt@gmail.com>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        dmitry.torokhov@gmail.com,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, ryan_chen@aspeedtech.com
-Subject: Re: [PATCH 3/5] i2c: aspeed: Mask IRQ status to relevant bits
-Message-ID: <20200825200523.GA22083@taoren-ubuntu-R90MNF91>
-References: <20200820161152.22751-1-eajames@linux.ibm.com>
- <20200820161152.22751-4-eajames@linux.ibm.com>
- <CACPK8XdG1+3eQPQ71fZYZdHwcn8WNLQKF=5iKrOvGhLwispSQA@mail.gmail.com>
- <8fc365dd-8a89-9e5c-ed70-093ef2bf7265@linux.ibm.com>
+        id S1726294AbgHYUxz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Aug 2020 16:53:55 -0400
+Received: from mail-out.m-online.net ([212.18.0.9]:46801 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbgHYUxz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Aug 2020 16:53:55 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4Bbh6m1FSfz1qrfT;
+        Tue, 25 Aug 2020 22:53:52 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4Bbh6m0XJzz1r56j;
+        Tue, 25 Aug 2020 22:53:52 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id frAvwLHWBj5U; Tue, 25 Aug 2020 22:53:50 +0200 (CEST)
+X-Auth-Info: TnVIshKrx+198Bcguub235U3GcxYjqzFWinlVfq2rGE=
+Received: from [IPv6:::1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Tue, 25 Aug 2020 22:53:50 +0200 (CEST)
+Subject: Re: [PATCH 2/5] i2c: xiic: Drop broken interrupt handler
+To:     Raviteja Narayanam <rna@xilinx.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Cc:     Michal Simek <michals@xilinx.com>,
+        Shubhrajyoti Datta <shubhraj@xilinx.com>,
+        Wolfram Sang <wsa@kernel.org>, Srinivas Goud <sgoud@xilinx.com>
+References: <20200613150751.114595-1-marex@denx.de>
+ <20200613150751.114595-2-marex@denx.de>
+ <MWHPR0201MB3484A9A018788EA755645D2DCA930@MWHPR0201MB3484.namprd02.prod.outlook.com>
+ <9897de5e-0539-8125-7b3f-41a1c98468ae@denx.de>
+ <SN4PR0201MB348615BCD7E2C82DF7919303CA6E0@SN4PR0201MB3486.namprd02.prod.outlook.com>
+ <7cc8420d-c3a4-079b-42fc-90ac6e875d37@denx.de>
+ <SN4PR0201MB3486E5229B0E870E6336A969CA670@SN4PR0201MB3486.namprd02.prod.outlook.com>
+ <a15a3e60-4738-3d38-fefb-c550dd0b0364@denx.de>
+ <SN4PR0201MB3486CDCD30F78416D3325D2BCA560@SN4PR0201MB3486.namprd02.prod.outlook.com>
+ <1913c876-d7ec-6f66-e9eb-20b45a4afec4@denx.de>
+ <SN4PR0201MB3486689C38889DB9360D524ECA570@SN4PR0201MB3486.namprd02.prod.outlook.com>
+From:   Marek Vasut <marex@denx.de>
+Message-ID: <f34e3539-4f2a-669f-6bb1-0b95ebf6c51f@denx.de>
+Date:   Tue, 25 Aug 2020 22:50:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8fc365dd-8a89-9e5c-ed70-093ef2bf7265@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <SN4PR0201MB3486689C38889DB9360D524ECA570@SN4PR0201MB3486.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 02:47:51PM -0500, Eddie James wrote:
-> 
-> On 8/25/20 1:38 AM, Joel Stanley wrote:
-> > On Thu, 20 Aug 2020 at 16:12, Eddie James <eajames@linux.ibm.com> wrote:
-> > > Mask the IRQ status to only the bits that the driver checks. This
-> > > prevents excessive driver warnings when operating in slave mode
-> > > when additional bits are set that the driver doesn't handle.
-> > > 
-> > > Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> > > ---
-> > >   drivers/i2c/busses/i2c-aspeed.c | 1 +
-> > >   1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-> > > index 31268074c422..abf40f2af8b4 100644
-> > > --- a/drivers/i2c/busses/i2c-aspeed.c
-> > > +++ b/drivers/i2c/busses/i2c-aspeed.c
-> > > @@ -604,6 +604,7 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
-> > >          writel(irq_received & ~ASPEED_I2CD_INTR_RX_DONE,
-> > >                 bus->base + ASPEED_I2C_INTR_STS_REG);
-> > >          readl(bus->base + ASPEED_I2C_INTR_STS_REG);
-> > > +       irq_received &= 0xf000ffff;
-> > >          irq_remaining = irq_received;
-> > This would defeat the check for irq_remaining. I don't think we want to do this.
-> > 
-> > Can you explain why these bits are being set in slave mode?
-> 
-> 
-> No, I don't have any documentation for the bits that are masked off here, so
-> I don't know why they would get set.
-> 
-> The check for irq_remaining is still useful for detecting that the driver
-> state machine might be out of sync with what the master is doing.
+On 8/25/20 11:44 AM, Raviteja Narayanam wrote:
 
-I have a similar patch in my local tree, and the reason being: AST2600
-I2C Controller may set I2CD10[25:24] to report Current Slave Parking
-Status (defined in new register I2CS24) even though the new register
-mode is off. The 2 bits can be ignored in legacy mode, and Ryan from
-ASPEED could confirm it.
+Hi,
 
+[...]
 
-Cheers,
+>>>>>>> So, this local_irq_save()/local_irq_restore() is not related to
+>>>>>>> exclusive access in the driver (xiic_process vs xiic_start), but
+>>>>>>> to supply the
+>>>>>> byte count to controller before it completes transmitting START and
+>>>>>> slave address.
+>>>>>>
+>>>>>> But then shouldn't the XIIC IP be fixed / extended with support for
+>>>>>> such an atomic update instead ?
+>>>>>
+>>>>> I have started communicating with the hardware team on why the IP
+>>>> behavior is like this.
+>>>>
+>>>> Any news from the hardware team ?
+>>>
+>>> " The expectation from the IP is un interrupted read i.e the read command
+>> should be un interrupted and max delay expected is not more than 35-40 us
+>> provided IIC frequency is 100 Khz. Please check if we can manage this in
+>> Software. If delay is not managed enable iic control only after stop related
+>> data is received"
+>>> That was the response as is.
+>>> The workaround suggested above is to enable the AXI I2C only after
+>> second register write(STOP bit info with read count) is completed. This is not
+>> generic, so we couldn't move forward.
+>>> Our typical application scenario is like this "START WRITE, REPEATED START
+>> READ, STOP". So, we must enable AXI I2C before read count is sent.
+>>
+>> So, if I understand it correctly, the XIIC IP is broken and cannot be fixed in
+>> software reliably ? How shall we proceed then ?
+> 
+> We are thinking of two options.
+> 1. Trying for a SW fix to workaround this problem. Waiting on the HW IP team for any other suggestions.
+> 2. XIIC IP has two modes of operation as stated in the user guide - Dynamic and Standard modes.
+> Currently, the linux driver is using only dynamic mode and this bug appears here.
+> The SW programming for standard mode is different and we are testing it for all possible use cases. Once
+> That comes out successful, we will send out the patches.
 
-Tao
+Is this dynamic/standard mode switching what is already in the
+downstream xilinx kernel tree ?
+
+I think we should fix what is already upstream first, and only then add
+more complexity.
+
+[...]
