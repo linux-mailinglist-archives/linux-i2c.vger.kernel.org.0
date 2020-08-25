@@ -2,130 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A084C2520EB
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 21:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEA7252189
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 22:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbgHYTsH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Aug 2020 15:48:07 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18846 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726149AbgHYTsH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Aug 2020 15:48:07 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07PJVxDs006515;
-        Tue, 25 Aug 2020 15:47:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=7Rl2UklbYVkVJfBrMuiwtrmhml+iZDfjKAcAFsLmd3w=;
- b=IJO6wug5RqiSOpBic/JM2E7zcG24hhtuSpdf7fsjlf13Y0352A1nu+kKrvvp2FSFh/Zr
- YYT3cViGFZF4kSEiAwTfvT8w9RSHuv0swMNpR7FYX36wrzELn3nUa1fTCsdtMI7SaZDs
- cVFE9Fbp3ubrpuKKMAMRPXK3xmkPiaScjEAUncQbEIOfDnIu5r/gw2PIa/PqboRwdtEg
- +ZpaJXgWP5JC2D998EK/gnlk6HFPJfuhcrgMR709RgDnOV07PwcMjERlCpHThLI39aFf
- FmssUYM3Vrfw3tJ7hk1NnO9OUHHn5Rs+yCBgWX2oQtc4TGkP6GJgeUtSxHSZh8wpngY3 +Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3358kn0tpu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Aug 2020 15:47:55 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 07PJWGuu007381;
-        Tue, 25 Aug 2020 15:47:55 -0400
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3358kn0tpd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Aug 2020 15:47:55 -0400
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07PJl7xm014803;
-        Tue, 25 Aug 2020 19:47:54 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma01dal.us.ibm.com with ESMTP id 332uttb3mf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Aug 2020 19:47:54 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07PJlrQs16253940
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Aug 2020 19:47:53 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 688C7AC05E;
-        Tue, 25 Aug 2020 19:47:53 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5A8F2AC059;
-        Tue, 25 Aug 2020 19:47:52 +0000 (GMT)
-Received: from [9.211.52.131] (unknown [9.211.52.131])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Aug 2020 19:47:52 +0000 (GMT)
-Subject: Re: [PATCH 3/5] i2c: aspeed: Mask IRQ status to relevant bits
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     linux-input@vger.kernel.org,
+        id S1726541AbgHYUFc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Aug 2020 16:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726158AbgHYUFc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Aug 2020 16:05:32 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339D3C061574;
+        Tue, 25 Aug 2020 13:05:32 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id d19so7570250pgl.10;
+        Tue, 25 Aug 2020 13:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ONP7fZ70W2uCdTHIa7UQWtYrSdBuzbghSeSM9bNYZbY=;
+        b=tgbmbD+wfpJT0QWPEnhlgQF5kw4Vo5saQ52d9A56Z8Nv6AXKi4ehf1K3DM9u/s2bgF
+         dTROYbcBlMs+/ptni+PJ0GjhZPMqvtTPGtl9YPsR2U80BWlbUqbs0BvOowHLqlcwqDSb
+         aMS0u/X/DRHH4mdqzt/Wiwm+TORwj6G1JoziCoNnlxN20hY6ceAGoOVoebxtTkyTsA/t
+         BT1ydtHIVivdjkMaIkMLzu6VyJmeJHd/pZY7fZ09qrDetg7EnCoiZsmx6r2J3R4zPnZB
+         NshksLlzD2CKL3iR00HiCu8kXf2uUVbt14A45g3Pvc9WHzqrJJX8quZr7L/tQVZb2ded
+         gaWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ONP7fZ70W2uCdTHIa7UQWtYrSdBuzbghSeSM9bNYZbY=;
+        b=GLMK+FjETPSa8w+CIYFoADF3D13hyhs2qLlYr2/EvKlGuAO9/tLvZJ0/ph9hAenMDV
+         A4tdclfZQXsRLfo5sv4GjXDO9IVl3APhUiSst0xTTsleqmAaD0xdAhSWqHtG24nMWa13
+         xlctVmakvy4HV76/e+9UA4JRjxPu3e50pk14gVOyph/Nrf0pOuQ6jaUId+s3cQm0MC09
+         NozBVpd2pbtE0Xt3bVVa7moyGzwmTB65Sip2Wikjcn/gh+JiMsLH571Xg1pDvFUC8ZQZ
+         XmMftb7y9ynfjWUaL3Z7HGvGaaDR1s/qSQmdwUaJDmjJmRQFqXkvtHr0igNZ1CTNY/v7
+         mQXg==
+X-Gm-Message-State: AOAM530Pqnr3Y58/IQ9pKeqTU5rs8IgMRlWG0Fw/nJojUFpxgVFX8Hy7
+        hfv58q+Yf/gvPPRrFP1pKkJotx7V9ckR/MZv
+X-Google-Smtp-Source: ABdhPJxEAAm69I+hmyQ36720FaKJ62zxQBG060VTuh1WKf2H2fqvAee9Hbj4xH/b8NAs6LgrJ92sOg==
+X-Received: by 2002:a62:1483:: with SMTP id 125mr8939252pfu.186.1598385931482;
+        Tue, 25 Aug 2020 13:05:31 -0700 (PDT)
+Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
+        by smtp.gmail.com with ESMTPSA id g8sm59446pfo.132.2020.08.25.13.05.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 25 Aug 2020 13:05:30 -0700 (PDT)
+Date:   Tue, 25 Aug 2020 13:05:24 -0700
+From:   Tao Ren <rentao.bupt@gmail.com>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     Joel Stanley <joel@jms.id.au>,
         devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        linux-i2c@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        dmitry.torokhov@gmail.com,
         Brendan Higgins <brendanhiggins@google.com>,
-        dmitry.torokhov@gmail.com, Rob Herring <robh+dt@kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, ryan_chen@aspeedtech.com
+Subject: Re: [PATCH 3/5] i2c: aspeed: Mask IRQ status to relevant bits
+Message-ID: <20200825200523.GA22083@taoren-ubuntu-R90MNF91>
 References: <20200820161152.22751-1-eajames@linux.ibm.com>
  <20200820161152.22751-4-eajames@linux.ibm.com>
  <CACPK8XdG1+3eQPQ71fZYZdHwcn8WNLQKF=5iKrOvGhLwispSQA@mail.gmail.com>
-From:   Eddie James <eajames@linux.ibm.com>
-Message-ID: <8fc365dd-8a89-9e5c-ed70-093ef2bf7265@linux.ibm.com>
-Date:   Tue, 25 Aug 2020 14:47:51 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+ <8fc365dd-8a89-9e5c-ed70-093ef2bf7265@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <CACPK8XdG1+3eQPQ71fZYZdHwcn8WNLQKF=5iKrOvGhLwispSQA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-25_08:2020-08-25,2020-08-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- adultscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
- mlxlogscore=861 clxscore=1015 priorityscore=1501 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008250143
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8fc365dd-8a89-9e5c-ed70-093ef2bf7265@linux.ibm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Aug 25, 2020 at 02:47:51PM -0500, Eddie James wrote:
+> 
+> On 8/25/20 1:38 AM, Joel Stanley wrote:
+> > On Thu, 20 Aug 2020 at 16:12, Eddie James <eajames@linux.ibm.com> wrote:
+> > > Mask the IRQ status to only the bits that the driver checks. This
+> > > prevents excessive driver warnings when operating in slave mode
+> > > when additional bits are set that the driver doesn't handle.
+> > > 
+> > > Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> > > ---
+> > >   drivers/i2c/busses/i2c-aspeed.c | 1 +
+> > >   1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+> > > index 31268074c422..abf40f2af8b4 100644
+> > > --- a/drivers/i2c/busses/i2c-aspeed.c
+> > > +++ b/drivers/i2c/busses/i2c-aspeed.c
+> > > @@ -604,6 +604,7 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
+> > >          writel(irq_received & ~ASPEED_I2CD_INTR_RX_DONE,
+> > >                 bus->base + ASPEED_I2C_INTR_STS_REG);
+> > >          readl(bus->base + ASPEED_I2C_INTR_STS_REG);
+> > > +       irq_received &= 0xf000ffff;
+> > >          irq_remaining = irq_received;
+> > This would defeat the check for irq_remaining. I don't think we want to do this.
+> > 
+> > Can you explain why these bits are being set in slave mode?
+> 
+> 
+> No, I don't have any documentation for the bits that are masked off here, so
+> I don't know why they would get set.
+> 
+> The check for irq_remaining is still useful for detecting that the driver
+> state machine might be out of sync with what the master is doing.
 
-On 8/25/20 1:38 AM, Joel Stanley wrote:
-> On Thu, 20 Aug 2020 at 16:12, Eddie James <eajames@linux.ibm.com> wrote:
->> Mask the IRQ status to only the bits that the driver checks. This
->> prevents excessive driver warnings when operating in slave mode
->> when additional bits are set that the driver doesn't handle.
->>
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->> ---
->>   drivers/i2c/busses/i2c-aspeed.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
->> index 31268074c422..abf40f2af8b4 100644
->> --- a/drivers/i2c/busses/i2c-aspeed.c
->> +++ b/drivers/i2c/busses/i2c-aspeed.c
->> @@ -604,6 +604,7 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
->>          writel(irq_received & ~ASPEED_I2CD_INTR_RX_DONE,
->>                 bus->base + ASPEED_I2C_INTR_STS_REG);
->>          readl(bus->base + ASPEED_I2C_INTR_STS_REG);
->> +       irq_received &= 0xf000ffff;
->>          irq_remaining = irq_received;
-> This would defeat the check for irq_remaining. I don't think we want to do this.
->
-> Can you explain why these bits are being set in slave mode?
+I have a similar patch in my local tree, and the reason being: AST2600
+I2C Controller may set I2CD10[25:24] to report Current Slave Parking
+Status (defined in new register I2CS24) even though the new register
+mode is off. The 2 bits can be ignored in legacy mode, and Ryan from
+ASPEED could confirm it.
 
 
-No, I don't have any documentation for the bits that are masked off 
-here, so I don't know why they would get set.
+Cheers,
 
-The check for irq_remaining is still useful for detecting that the 
-driver state machine might be out of sync with what the master is doing.
-
-
-Thanks,
-
-Eddie
-
-
+Tao
