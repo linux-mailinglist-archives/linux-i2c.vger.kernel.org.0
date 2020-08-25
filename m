@@ -2,92 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D08802512E0
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 09:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2787C2512F1
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 09:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729277AbgHYHSg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Aug 2020 03:18:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47048 "EHLO mail.kernel.org"
+        id S1729245AbgHYHUj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Aug 2020 03:20:39 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51812 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729194AbgHYHSg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 Aug 2020 03:18:36 -0400
-Received: from localhost (p54b333df.dip0.t-ipconnect.de [84.179.51.223])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9847620706;
-        Tue, 25 Aug 2020 07:18:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598339915;
-        bh=mThe8ULfwqaL7QWVlbvoAiCrlkSf7dv+g0CvAzGAuB8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ApAn4SjCCsJn9awz5zh1lF2tEhxr1WpqnD8DNr32szyxDcwtpR3I4mOis5eNaLkd6
-         EgUXquJavwpFE9PDuUEhMnaXrhQFu7puiGe0sFluKO0tON6FiXtrguJf0E/wH/toKR
-         hoJgv94FvTnoTufRxerVdZHRBQlpqrBBlVx2H6hU=
-Date:   Tue, 25 Aug 2020 09:18:32 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, Biwen Li <biwen.li@nxp.com>
-Subject: Re: [PATCH v1] i2c: mux: pca954x: Fix trivia typo: busses -> buses
-Message-ID: <20200825071832.GC1861@ninjato>
-References: <20200820152729.74944-1-andriy.shevchenko@linux.intel.com>
- <44d27a41-9dd3-d8ba-eefc-da518df98ff8@axentia.se>
+        id S1729209AbgHYHUj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 Aug 2020 03:20:39 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id AB3DCB1AE;
+        Tue, 25 Aug 2020 07:21:08 +0000 (UTC)
+Date:   Tue, 25 Aug 2020 09:20:37 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Linux I2C <linux-i2c@vger.kernel.org>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v2] eeprom: at24: Tidy at24_read()
+Message-ID: <20200825092037.7ded996d@endymion>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hYooF8G/hrfVAmum"
-Content-Disposition: inline
-In-Reply-To: <44d27a41-9dd3-d8ba-eefc-da518df98ff8@axentia.se>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The elegant code in at24_read() has the drawback that we now need
+to make a copy of all parameters to pass them to the post-processing
+callback function if there is one. Rewrite the loop in such a way that
+the parameters are not modified, so saving them is no longer needed.
 
---hYooF8G/hrfVAmum
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+This has the drawback of creating an asymetry with at24_write(), so
+I'm not 100% if we want to apply this. If anyone has a better idea,
+please let me know.
 
-On Thu, Aug 20, 2020 at 10:02:04PM +0200, Peter Rosin wrote:
->=20
-> On 2020-08-20 17:27, Andy Shevchenko wrote:
-> > Fix trivia typo: busses -> buses. While at it, rearrange LOCs
->=20
-> I don't think it's a typo at all, it's just an old spelling. Not worth it
-> if you ask me, but then again, I'm not a native speaker. Anyway, unless I
-> get more input my call is to change this whenever drivers/i2c/busses/ is
-> renamed...
+Changes since v1:
+ * Turn the "while" loop into a "for" loop to make the code neater.
+   Suggested by Bartosz.
 
-I follow Peter's reasoning, especially with the directory name. From the
-Kernel top dir:
+ drivers/misc/eeprom/at24.c |   14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-$ git grep busses | wc -l
-653
-$ git grep buses | wc -l
-867
+--- linux-5.7.orig/drivers/misc/eeprom/at24.c	2020-08-24 19:25:52.967519228 +0200
++++ linux-5.7/drivers/misc/eeprom/at24.c	2020-08-25 08:25:23.033990857 +0200
+@@ -422,10 +422,7 @@ static int at24_read(void *priv, unsigne
+ 	struct at24_data *at24;
+ 	struct device *dev;
+ 	char *buf = val;
+-	int ret;
+-	unsigned int orig_off = off;
+-	char *orig_buf = buf;
+-	size_t orig_count = count;
++	int i, ret;
+ 
+ 	at24 = priv;
+ 	dev = at24_base_client_dev(at24);
+@@ -448,16 +445,13 @@ static int at24_read(void *priv, unsigne
+ 	 */
+ 	mutex_lock(&at24->lock);
+ 
+-	while (count) {
+-		ret = at24_regmap_read(at24, buf, off, count);
++	for (i = 0; count; i += ret, count -= ret) {
++		ret = at24_regmap_read(at24, buf + i, off + i, count);
+ 		if (ret < 0) {
+ 			mutex_unlock(&at24->lock);
+ 			pm_runtime_put(dev);
+ 			return ret;
+ 		}
+-		buf += ret;
+-		off += ret;
+-		count -= ret;
+ 	}
+ 
+ 	mutex_unlock(&at24->lock);
+@@ -465,7 +459,7 @@ static int at24_read(void *priv, unsigne
+ 	pm_runtime_put(dev);
+ 
+ 	if (unlikely(at24->read_post))
+-		at24->read_post(orig_off, orig_buf, orig_count);
++		at24->read_post(off, buf, i);
+ 
+ 	return 0;
+ }
 
-Not a typo in my book.
 
-
---hYooF8G/hrfVAmum
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9Eu0gACgkQFA3kzBSg
-KbYLvxAAoZYPu+0ElVDyESJBcuVWARv7CUVInE2fxqKbtUr4ur1xEM8mrbbtKHdp
-AKvrWn+1YX9Qg0SWoBSJje7+/aBYQNsKRrWYinH6wvjTFJaXbvfRbLAxCCvAC81g
-w+noXRFez9QYFkXXEb+q0wJ/5b6Ai87/7RnZ3LWiswL1H0aBzt9uaMUtUk0ZtoIZ
-FVzgnxE/Nlq5MogORZBfNzM1Q2qyhmDRXzVLWrOMO29UlBU7uTDQCc5wqGs3Iy5z
-4H3R3CAkbB52HlAgzHurF27dhcD4E8fKmHAyKSrA9k/VkdW3tbDsY6fU6WccuHks
-Uk26UOQj/kLJPS+hn89+t6173I7yIAoUD8gN7I7TMRDYThRp9nbRxIhn1Gaw2Fme
-i8WxSYXpXt+Zmkoy/FOvfRc/xZblWH1JIiRvRA/pe44qqY1J22691fFqyRJ38R6c
-mi5OED66CUkT3BSw7+Ldy81P3sRYMB3C7dgXTOApnRtIp7Et0TLS6zo8pioTuGXc
-+Be5Z63L1H8CGd4myJCjtlTiuHjphSbyo1IL11UmCwYMH5a5sVbC2WVtVE+wdfpa
-gLh/tZCsipoj5G2xGI0IE82/ICAsMM7RPJhYkC+Q+CMqSrAWrzi7z8Z43bStj2G4
-HHopdDBGsGphpOVskhMgD0Vopff+peo0r67MuRFfmbMo+1A0LTA=
-=bsLF
------END PGP SIGNATURE-----
-
---hYooF8G/hrfVAmum--
+-- 
+Jean Delvare
+SUSE L3 Support
