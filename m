@@ -2,32 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBA3251A2C
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 15:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACBE4251A33
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Aug 2020 15:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbgHYNvT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Aug 2020 09:51:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38588 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725926AbgHYNvS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 Aug 2020 09:51:18 -0400
-Received: from localhost (p54b33ab6.dip0.t-ipconnect.de [84.179.58.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1FC0920738;
-        Tue, 25 Aug 2020 13:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598363478;
-        bh=eIq1K4YwKevM0Z+xrupyI1e4rDXhwcMQbYLXwiGI9/k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c/nEA1x+7z5tdSDCHfM2LAtZREXzJ6s4HkGFN6S67BQdim72iZxz/GpoalDTz3RwP
-         /j2Xzj35IPHY1BTNwALSCQWqDUO384Y8Jjs50Goj8hZJ2OfihVB+iKk1N/B+vIdClc
-         amqwfY1JgAc6wOJPiKHGo+g48C6r7/OieN3ZJsNc=
-Date:   Tue, 25 Aug 2020 15:51:13 +0200
-From:   Wolfram Sang <wsa@kernel.org>
+        id S1726429AbgHYNxc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Aug 2020 09:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726347AbgHYNx0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Aug 2020 09:53:26 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE95C061574
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Aug 2020 06:53:25 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id t2so2536375wma.0
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Aug 2020 06:53:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=m5K7q4ntfOvCuWo9VcwV3Y8K7PEmWf/RHpOYApWqYOo=;
+        b=p6qMNMd5VglEdqFcIL1iv1XVKPRZ+sI70S8iThAOM+4AcOZuWdjDKeIKcuVwOrv97l
+         mlzPdyztvYgnW6wJDVCB3Zwj5L/YbWx44evE1cefrB4fkVlzOUNZGIK1bwBRlX34j8Vx
+         rop3HtmimD+WJ70KqcQt4D6PQzT1TvsMJ/x9dio43yiqkEcoej/f4of2ZQlmhTfC4p+n
+         WIxtyaIr6IzvFHkq73aPJzB8sua9bocWmlXJIpI7t5WUNXF+apZlgt3q1ncLtpusFoWn
+         NSctCbUnOTq51icB0I75NTaV26VnEpI1kjT4ICWIZXkbN4xEi1Hp16oDmEPe/fetgm3z
+         M2hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=m5K7q4ntfOvCuWo9VcwV3Y8K7PEmWf/RHpOYApWqYOo=;
+        b=oXnmoLMSi7aLcehovzmVlIQ5wLlufCMOwmMuYJoEpO2LiuyaolDPvz8JgTKR8C/23+
+         7yUcO3EAGPwgx23renFOF7y1sSs2bdetFzMQbaSWHh1trvNqCCwamTElNu/N5ogtXGf4
+         CQqCipTrneDq4b9g8SfzGnyv244d+kqLKTB7lX5VpBK4xRsIVPQ3OtBLDmYYUNG9eLPO
+         HKZVGh9KrE8snWCylyxa52ydUSiEDVN/+w0X0eM1eWgly3CzK9ko40ac/8O1XEfU8qej
+         ybeSNexlVRCZRK7RYyIsFDIy/N1W5ic6FNJNH+h6xjlZ2wjlknV5Hn79KOZ+5l2P9Acy
+         1ktA==
+X-Gm-Message-State: AOAM5311EzhVwnibfHEwfsvAG1v9j7Ee6eSRYf2Y631yljfASOa1leVg
+        xB3MeXMXP+J5hiy7yfayEF3tFA==
+X-Google-Smtp-Source: ABdhPJy8k9/Nb4tlj+y4Bq+1w/ACN3QGov3SCl+s4GMHcCRvFUwVSFwb3GgE8g5wKq+pB2bBXE/pBA==
+X-Received: by 2002:a1c:c90d:: with SMTP id f13mr2243927wmb.25.1598363603543;
+        Tue, 25 Aug 2020 06:53:23 -0700 (PDT)
+Received: from dell ([95.149.164.62])
+        by smtp.gmail.com with ESMTPSA id h10sm30075699wro.57.2020.08.25.06.53.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2020 06:53:22 -0700 (PDT)
+Date:   Tue, 25 Aug 2020 14:53:20 +0100
+From:   Lee Jones <lee.jones@linaro.org>
 To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Frank Lee <tiny.windzz@gmail.com>,
+Cc:     Frank Lee <tiny.windzz@gmail.com>,
         Frank Lee <frank@allwinnertech.com>,
         Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -51,58 +75,29 @@ Cc:     Lee Jones <lee.jones@linaro.org>,
         linux-gpio <linux-gpio@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>
 Subject: Re: [PATCH v5 00/16] Allwinner A100 Initial support
-Message-ID: <20200825135113.GB1753@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>, Lee Jones <lee.jones@linaro.org>,
-        Frank Lee <tiny.windzz@gmail.com>,
-        Frank Lee <frank@allwinnertech.com>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, gregory.clement@bootlin.com,
-        Thomas Gleixner <tglx@linutronix.de>, jason@lakedaemon.net,
-        Marc Zyngier <maz@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        "p.zabel" <p.zabel@pengutronix.de>, Icenowy Zheng <icenowy@aosc.io>,
-        =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
-        clabbe@baylibre.com, bage@linutronix.de,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>, linux-i2c@vger.kernel.org,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+Message-ID: <20200825135320.GM3248864@dell>
 References: <cover.1595572867.git.frank@allwinnertech.com>
  <CAEExFWsvScMgi_Dftfq06HZiF8CFAmym8Z_tgQoHHAfiGxWt0g@mail.gmail.com>
  <CAEExFWuwjmqAh0c3kMLS3Gs6UC2A8TtY-9nJeWxFPRDugtR4pA@mail.gmail.com>
  <20200824080327.GH3248864@dell>
  <20200825085532.vv4dpuzmjnshm5qn@gilmour.lan>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xgyAXRrhYN0wYx8y"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 In-Reply-To: <20200825085532.vv4dpuzmjnshm5qn@gilmour.lan>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, 25 Aug 2020, Maxime Ripard wrote:
 
---xgyAXRrhYN0wYx8y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Aug 25, 2020 at 10:55:32AM +0200, Maxime Ripard wrote:
 > On Mon, Aug 24, 2020 at 09:03:27AM +0100, Lee Jones wrote:
 > > On Mon, 24 Aug 2020, Frank Lee wrote:
-> >=20
+> > 
 > > > ping......
-> >=20
+> > 
 > > "Please don't send content free pings and please allow a reasonable
 > >  time for review.  People get busy, go on holiday, attend conferences
 > >  and so on so unless there is some reason for urgency (like critical
@@ -112,31 +107,19 @@ On Tue, Aug 25, 2020 at 10:55:32AM +0200, Maxime Ripard wrote:
 > >  volume (if they are seen at all) and if something has gone wrong
 > >  you'll have to resend the patches anyway so [RESEND]ing with any
 > >  comments addressed is generally a much better approach."
->=20
+> 
 > This is true to some extent, but pinging after a month doesn't seem
 > unreasonable either.
 
-Especially if resending would mean up to 16 patches sent again.
+Pinging is mostly a fruitless exercise.
 
+After a month, many Maintainers would have purged any un-serviced
+mails anyway.  If a patch-set is left hanging, still requiring
+attention before the next version, submitting a [RESEND] is generally
+a better option.
 
---xgyAXRrhYN0wYx8y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9FF00ACgkQFA3kzBSg
-KbaQCw/7B0HkLUNDaoRkScvwvMsZwnYphPCyyQwyYSGMOlmp9LUnRLs8wgHuKwvF
-U65QpySYVeF2oRjy1Q5u7oXEQUnprwXLXkVaHt832UpeCw6nvKs/i8Rs8H+0tWo9
-/O7pxPMFrUouMTUAkAqKuKsCOFRflr2R32JquWopYWi+MgzoPAWV1OAtOC0XHdqw
-lWnioiMvY3Japg4eaqxLWZ5nqp8XYy+qXGwJdtiWkFu8+LnTvTcK+stQqROhYlKm
-6Cm6Uy13ngTrnB4ait2I/+YKuwljumU6m8xuxyb7a/j2ZWO80LBwoCiRdGNE1A7V
-SEDzhfVmYNjeHqCBB3Vryx5N5Bkz4Be6paj8tthKHjAXxBbLYfheaXeO6aLpd4l0
-sshVn10Dv84yYcL8GR4baFQCrNiZivjEZiVFXeiA6ygkQeNkQPoT4jGVYiHiNzuO
-y2TAjUKypZ2Dst24Q+38o9HUTa38mSIKKcif0SwmbryPq6NL0elOgd2F68KQJzSk
-ob/zI8yw9nK9Kiz6JpjvKBv+Aaf25R1U7a/URD0VcgJVdUv3X0RJ0yk79HSNeP89
-fEz9mx9k6sK09qRFLZTcYJ/whlSa0SONFcfEma3W7iVmDzjFDW0ZftzMneSFVRbp
-HY/EadYE5G3VNklMSNhyT9Bf9ArEoxN9osMTzwSgpiHzAovoq+o=
-=iNuN
------END PGP SIGNATURE-----
-
---xgyAXRrhYN0wYx8y--
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
