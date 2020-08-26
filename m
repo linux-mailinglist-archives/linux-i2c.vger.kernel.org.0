@@ -2,138 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 828882532CB
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Aug 2020 17:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D0A253363
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Aug 2020 17:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727781AbgHZPFS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Aug 2020 11:05:18 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:36037 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727062AbgHZPFR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Aug 2020 11:05:17 -0400
-Received: by mail-io1-f69.google.com with SMTP id h8so1450297ioa.3
-        for <linux-i2c@vger.kernel.org>; Wed, 26 Aug 2020 08:05:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=C1fBo0AIIoeJmPcNkMxDvmpqmGHM1WeQR4a7YLEupM4=;
-        b=m9fzD+YSc/cXpqvCtnuyxZhUC56u2PTc3hsjNwO6ReTLfTMWfbK8qenZlrW6vIn7PY
-         EDTz3yFBCpIFbsxK7deKIjfyaUFv5INFzaZAHcRlpQX7h4Qr2IqEPsxJT44bAmcdzz1d
-         o3dOnR0KJatSLPsvOux7M0qVfgnAHfoNRWfbfdzmIyec63HELwsBzArxske5dGiIIO30
-         NpunFjB1Ed8Yqhaj4XEA2eSvyAN7qNq6LrL9opoCQ1QlhIiltHSNP8gxgGDXRfnfAvk+
-         D4Bh/KJ0mFmvYOUhAfP7FAkehBLGF0E470Bq7WYsLj381OlEgIH9LrfZKwtZj8haNN5W
-         kRfQ==
-X-Gm-Message-State: AOAM530iT9/i2X1rmFnNHzR4XXUXUWQ+SoDHMdTJtGWRs9ItsiDFFo3e
-        g7xQkhRP8kn2V4Dwvc5eaWnCNCaTJAFsURjMM05Lqb+9M2jl
-X-Google-Smtp-Source: ABdhPJytnBILIqgxXpimiQ1AWt02J0q1PZTp6FhK1UrFX4u/IZbp3zxEFj2yY6KHl12mU7/kfzBBDNyq6xJ9cHXq77eSqrwP2Kbw
+        id S1727948AbgHZPSq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Aug 2020 11:18:46 -0400
+Received: from mga04.intel.com ([192.55.52.120]:10523 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727883AbgHZPSp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 26 Aug 2020 11:18:45 -0400
+IronPort-SDR: sJR3OabF68OF93kicsNQIkyGv+qfkzmTQu234eocC/w8tKCQezOxiMXFnB0pdeV+TvTmaMvvgT
+ P8RPsjwpJqNQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9725"; a="153731861"
+X-IronPort-AV: E=Sophos;i="5.76,356,1592895600"; 
+   d="scan'208";a="153731861"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 08:18:44 -0700
+IronPort-SDR: LFOOq02faltDs2sF7gkQT/rBXsdGjaw5I+KcUpzLmZZ7XJ90mijCpdb1DfxpTxWkqP1M2jymH8
+ or4UJgSKhp6Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,356,1592895600"; 
+   d="scan'208";a="329260583"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 26 Aug 2020 08:18:42 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kAxA5-00BatB-CF; Wed, 26 Aug 2020 18:16:29 +0300
+Date:   Wed, 26 Aug 2020 18:16:29 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: do not acpi/of match device in i2c_device_probe()
+Message-ID: <20200826151629.GR1891694@smile.fi.intel.com>
+References: <20200826144920.110605-1-sergey.senozhatsky@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1406:: with SMTP id t6mr13679866iov.184.1598454316811;
- Wed, 26 Aug 2020 08:05:16 -0700 (PDT)
-Date:   Wed, 26 Aug 2020 08:05:16 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000be4b9d05adc925cb@google.com>
-Subject: KASAN: stack-out-of-bounds Write in i801_isr
-From:   syzbot <syzbot+c8ff0b6d6c73d81b610e@syzkaller.appspotmail.com>
-To:     jdelvare@suse.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200826144920.110605-1-sergey.senozhatsky@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello,
+On Wed, Aug 26, 2020 at 11:49:20PM +0900, Sergey Senozhatsky wrote:
+> i2c, apparently, can match the same device twice - the first
+> time in ->match bus hook (i2c_device_match()), and the second
+> one in ->probe (i2c_device_probe()) bus hook.
+> 
+> To make things more complicated, the second matching does not
+> do exactly same checks as the first one. Namely, i2c_device_match()
+> calls acpi_driver_match_device() which considers devices that
+> provide of_match_table and performs of_compatible() matching for
+> such devices. One important thing to note here is that ACPI
+> of_compatible() matching (acpi_of_match_device()) is part of ACPI
+> and does not depend on CONFIG_OF.
+> 
+> i2c_device_probe(), on the other hand, calls acpi_match_device()
+> which does not perform of_compatible() matching, but instead
+> i2c_device_probe() relies on CONFIG_OF API to perform of_match_table
+> matching, IOW ->probe matching, unlike ->match matching, depends on
+> CONFIG_OF. This can break i2c device probing on !CONFIG_OF systems
+> if the device does not provide .id_table.
+> 
+>  i2c_device_probe()
+>  ...
+>    if (!driver->id_table &&
+>        !i2c_acpi_match_device(dev->driver->acpi_match_table, client) &&
+>        !i2c_of_match_device(dev->driver->of_match_table, client)) {
+>        status = -ENODEV;
+>        goto put_sync_adapter;
+>    }
+> 
+> i2c_of_match_device() on !CONFIG_OF systems is always false, so we never
+> perform of_match_table matching. i2c_acpi_match_device() does ACPI match
+> only, no of_compatible() matching takes place, even though the device
+> provides .of_match_table and ACPI is capable of matching such device.
+> 
+> It is not entirely clear why the device is matched again in bus
+> ->probe after successful and proper matching in bus ->match. Let's
+> remove ->probe matching.
 
-syzbot found the following issue on:
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+(assuming it's okay to go)
 
-HEAD commit:    fffe3ae0 Merge tag 'for-linus-hmm' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=158e1f19900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=50463ec6729f9706
-dashboard link: https://syzkaller.appspot.com/bug?extid=c8ff0b6d6c73d81b610e
-compiler:       gcc (GCC) 10.1.0-syz 20200507
+> Signed-off-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/i2c/i2c-core-base.c | 11 -----------
+>  1 file changed, 11 deletions(-)
+> 
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 5ec082e2039d..77eea5c0bc71 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -475,17 +475,6 @@ static int i2c_device_probe(struct device *dev)
+>  
+>  	driver = to_i2c_driver(dev->driver);
+>  
+> -	/*
+> -	 * An I2C ID table is not mandatory, if and only if, a suitable OF
+> -	 * or ACPI ID table is supplied for the probing device.
+> -	 */
+> -	if (!driver->id_table &&
+> -	    !acpi_driver_match_device(dev, dev->driver) &&
+> -	    !i2c_of_match_device(dev->driver->of_match_table, client)) {
+> -		status = -ENODEV;
+> -		goto put_sync_adapter;
+> -	}
+> -
+>  	if (client->flags & I2C_CLIENT_WAKE) {
+>  		int wakeirq;
+>  
+> -- 
+> 2.28.0
+> 
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c8ff0b6d6c73d81b610e@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: stack-out-of-bounds in i801_isr_byte_done drivers/i2c/busses/i2c-i801.c:589 [inline]
-BUG: KASAN: stack-out-of-bounds in i801_isr drivers/i2c/busses/i2c-i801.c:660 [inline]
-BUG: KASAN: stack-out-of-bounds in i801_isr+0xb2d/0xbf0 drivers/i2c/busses/i2c-i801.c:641
-Write of size 1 at addr ffffc90006b8fd9e by task swapper/3/0
-
-CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.8.0-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x18f/0x20d lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0x5/0x436 mm/kasan/report.c:383
- __kasan_report mm/kasan/report.c:513 [inline]
- kasan_report.cold+0x1f/0x37 mm/kasan/report.c:530
- i801_isr_byte_done drivers/i2c/busses/i2c-i801.c:589 [inline]
- i801_isr drivers/i2c/busses/i2c-i801.c:660 [inline]
- i801_isr+0xb2d/0xbf0 drivers/i2c/busses/i2c-i801.c:641
- __handle_irq_event_percpu+0x223/0xa30 kernel/irq/handle.c:156
- handle_irq_event_percpu kernel/irq/handle.c:196 [inline]
- handle_irq_event+0x102/0x285 kernel/irq/handle.c:213
- handle_fasteoi_irq+0x22f/0x9f0 kernel/irq/chip.c:714
- run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:50 [inline]
- handle_irq arch/x86/kernel/irq.c:230 [inline]
- __common_interrupt arch/x86/kernel/irq.c:249 [inline]
- common_interrupt+0x96/0x1f0 arch/x86/kernel/irq.c:239
- asm_common_interrupt+0x1e/0x40 arch/x86/include/asm/idtentry.h:572
-RIP: 0010:__do_softirq+0x1c2/0xa24 kernel/softirq.c:284
-Code: c7 c0 18 fb b4 89 48 c1 e8 03 42 80 3c 30 00 0f 85 b9 07 00 00 48 83 3d 63 f9 94 01 00 0f 84 6f 06 00 00 fb 66 0f 1f 44 00 00 <48> c7 44 24 08 c0 90 a0 89 b8 ff ff ff ff 0f bc 04 24 83 c0 01 89
-RSP: 0018:ffffc90000598f70 EFLAGS: 00000282
-RAX: 1ffffffff1369f63 RBX: ffff88802c238400 RCX: 1ffffffff155e989
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff88200197
-RBP: ffffc9000043fd70 R08: 0000000000000001 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000000 R14: dffffc0000000000 R15: 0000000000000000
- asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:706
- </IRQ>
- __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
- run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
- do_softirq_own_stack+0x9d/0xd0 arch/x86/kernel/irq_64.c:77
- invoke_softirq kernel/softirq.c:393 [inline]
- __irq_exit_rcu kernel/softirq.c:423 [inline]
- irq_exit_rcu+0x1f3/0x230 kernel/softirq.c:435
- sysvec_apic_timer_interrupt+0x51/0xf0 arch/x86/kernel/apic/apic.c:1091
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:581
-RIP: 0010:native_safe_halt+0xe/0x10 arch/x86/include/asm/irqflags.h:61
-Code: ff 4c 89 ef e8 03 86 c8 f9 e9 8e fe ff ff 48 89 df e8 f6 85 c8 f9 eb 8a cc cc cc cc e9 07 00 00 00 0f 00 2d d4 9e 5d 00 fb f4 <c3> 90 e9 07 00 00 00 0f 00 2d c4 9e 5d 00 f4 c3 cc cc 55 53 e8 79
-RSP: 0018:ffffc9000043fe78 EFLAGS: 00000282
-RAX: 1ffffffff1369f64 RBX: ffff88802c238400 RCX: 1ffffffff155e989
-RDX: dffffc0000000000 RSI: 0000000000000000 RDI: ffffffff87eb1956
-RBP: dffffc0000000000 R08: 0000000000000001 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000000 R12: ffffed1005847080
-R13: 0000000000000003 R14: ffffffff8aaf8888 R15: 0000000000000000
- arch_safe_halt arch/x86/include/asm/paravirt.h:150 [inline]
- default_idle+0x40/0x70 arch/x86/kernel/process.c:688
- cpuidle_idle_call kernel/sched/idle.c:163 [inline]
- do_idle+0x38f/0x6d0 kernel/sched/idle.c:276
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:372
- secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:243
-
-
-Memory state around the buggy address:
- ffffc90006b8fc80: f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9
- ffffc90006b8fd00: f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9
->ffffc90006b8fd80: f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9
-                            ^
- ffffc90006b8fe00: f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9
- ffffc90006b8fe80: f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9 f9
-==================================================================
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
