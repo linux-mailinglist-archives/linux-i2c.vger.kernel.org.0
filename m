@@ -2,138 +2,185 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FC5252C63
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Aug 2020 13:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75381252CF6
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Aug 2020 13:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728661AbgHZLXy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Aug 2020 07:23:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34634 "EHLO mail.kernel.org"
+        id S1729194AbgHZLvN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Aug 2020 07:51:13 -0400
+Received: from mga09.intel.com ([134.134.136.24]:11360 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728927AbgHZLXn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 26 Aug 2020 07:23:43 -0400
-Received: from localhost (p54b33436.dip0.t-ipconnect.de [84.179.52.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7694720786;
-        Wed, 26 Aug 2020 11:23:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598441009;
-        bh=XjWiltlvDLTSBB6KiZZ8gzZ9+KLlp3UZ1iL481kqZXE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b4bV6T1XD1TxGTE4F0MhG2SNkFCwZPiSdpvziN65N5AMejO6NvAsROqZSUW4/O8wq
-         Jme7HlaZ7p1o32w6L/AKgC207JjlbwCw7oo69WMRDjIYc1tH29cTdXf79Ja8nRRDU/
-         kjiAK3gXhgIvuCQ/r993ie/yAdvqAZc4Gz85UpiM=
-Date:   Wed, 26 Aug 2020 13:23:26 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: consider devices with of_match_table during i2c
- device probing
-Message-ID: <20200826112326.GC1081@ninjato>
-References: <20200826042938.3259-1-sergey.senozhatsky@gmail.com>
- <20200826050851.GA1081@ninjato>
- <20200826052544.GA500@jagdpanzerIV.localdomain>
- <20200826095356.GG1891694@smile.fi.intel.com>
- <20200826095617.GH1891694@smile.fi.intel.com>
- <20200826102411.GC8849@jagdpanzerIV.localdomain>
- <20200826103807.GD8849@jagdpanzerIV.localdomain>
- <20200826105426.GJ1891694@smile.fi.intel.com>
+        id S1728694AbgHZLvH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 26 Aug 2020 07:51:07 -0400
+IronPort-SDR: QoL1X9Zv8ygquzcf1q6YR/VP9A3MyDquxbeNb/cScKbWiYomv5zusIvqTBQKMDok1i/d98uQ7L
+ qjehaw8xzbnw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="157312744"
+X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
+   d="scan'208";a="157312744"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 04:50:57 -0700
+IronPort-SDR: WqxWxlQSsn0D29XUJwq/VtW0V/4Ap+iZZryDAnZT9Ks+PAXfsKjow4WzqywIIGzFT0mkiK8GjL
+ 6L+EZBMTGa3g==
+X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
+   d="scan'208";a="444012955"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 04:50:53 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 4A2A32031C;
+        Wed, 26 Aug 2020 14:50:51 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1kAu0e-0001bH-Kg; Wed, 26 Aug 2020 14:54:32 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>,
+        linux-media@vger.kernel.org,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>
+Subject: [PATCH v6 0/6] Support running driver's probe for a device powered off
+Date:   Wed, 26 Aug 2020 14:54:26 +0300
+Message-Id: <20200826115432.6103-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FsscpQKzF/jJk6ya"
-Content-Disposition: inline
-In-Reply-To: <20200826105426.GJ1891694@smile.fi.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi all,
 
---FsscpQKzF/jJk6ya
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+These patches enable calling (and finishing) a driver's probe function
+without powering on the respective device on busses where the practice is
+to power on the device for probe. While it generally is a driver's job to
+check the that the device is there, there are cases where it might be
+undesirable. (In this case it stems from a combination of hardware design
+and user expectations; see below.) The downside with this change is that
+if there is something wrong with the device, it will only be found at the
+time the device is used. In this case (the camera sensors + EEPROM in a
+sensor) I don't see any tangible harm from that though.
 
-On Wed, Aug 26, 2020 at 01:54:26PM +0300, Andy Shevchenko wrote:
-> On Wed, Aug 26, 2020 at 07:38:07PM +0900, Sergey Senozhatsky wrote:
-> > On (20/08/26 19:24), Sergey Senozhatsky wrote:
-> > > > But then the question is why we have this code in the ->probe() at =
-all?
-> > > > ->match() is run before probe by bus core, no?
-> > >=20
-> > > That's a good question.
-> >=20
-> > Everything seem to be working OK on my test board with this patch:
->=20
-> I'm okay with it, but I want to hear Wolfram about this.
-> If it gets a green light to go, feel free to add
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+An indication both from the driver and the firmware is required to allow
+the device's power state to remain off during probe (see the first patch).
 
-Sergey,
 
-Can you send a proper patch (with patch description) and me and Jean
-Delvare <jdelvare@suse.de> in the To: field?
+The use case is such that there is a privacy LED next to an integrated
+user-facing laptop camera, and this LED is there to signal the user that
+the camera is recording a video or capturing images. That LED also happens
+to be wired to one of the power supplies of the camera, so whenever you
+power on the camera, the LED will be lit, whether images are captured from
+the camera --- or not. There's no way to implement this differently
+without additional software control (allowing of which is itself a
+hardware design decision) on most CSI-2-connected camera sensors as they
+simply have no pin to signal the camera streaming state.
 
-The origins of this matching code are pretty old and Jean is more
-experienced there than I am. Nonetheless, I will check it, too, of
-course.
+This is also what happens during driver probe: the camera will be powered
+on by the I²C subsystem calling dev_pm_domain_attach() and the device is
+already powered on when the driver's own probe function is called. To the
+user this visible during the boot process as a blink of the privacy LED,
+suggesting that the camera is recording without the user having used an
+application to do that. From the end user's point of view the behaviour is
+not expected and for someone unfamiliar with internal workings of a
+computer surely seems quite suspicious --- even if images are not being
+actually captured.
 
-Thanks for the work!
+I've tested these on linux-next master. They also apply to Wolfram's
+i2c/for-next branch, there's a patch that affects the I²C core changes
+here (see below). The patches apart from that apply to Bartosz's
+at24/for-next as well as Mauro's linux-media master branch.
 
->=20
-> > ---
-> >=20
-> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> > index 5ec082e2039d..77eea5c0bc71 100644
-> > --- a/drivers/i2c/i2c-core-base.c
-> > +++ b/drivers/i2c/i2c-core-base.c
-> > @@ -475,17 +475,6 @@ static int i2c_device_probe(struct device *dev)
-> > =20
-> >  	driver =3D to_i2c_driver(dev->driver);
-> > =20
-> > -	/*
-> > -	 * An I2C ID table is not mandatory, if and only if, a suitable OF
-> > -	 * or ACPI ID table is supplied for the probing device.
-> > -	 */
-> > -	if (!driver->id_table &&
-> > -	    !acpi_driver_match_device(dev, dev->driver) &&
-> > -	    !i2c_of_match_device(dev->driver->of_match_table, client)) {
-> > -		status =3D -ENODEV;
-> > -		goto put_sync_adapter;
-> > -	}
-> > -
-> >  	if (client->flags & I2C_CLIENT_WAKE) {
-> >  		int wakeirq;
-> > =20
->=20
-> --=20
-> With Best Regards,
-> Andy Shevchenko
->=20
->=20
+since v5 <URL:https://lore.kernel.org/linux-acpi/20200810142747.12400-1-sakari.ailus@linux.intel.com/>:
 
---FsscpQKzF/jJk6ya
-Content-Type: application/pgp-signature; name="signature.asc"
+- Identify sensors when they're first powered on. In previous versions, if
+  this wasn't in probe, it was not done at all.
 
------BEGIN PGP SIGNATURE-----
+- Return allow_low_power_probe() only for ACPI devices, i.e. OF systems
+  are not affected by these changes.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9GRioACgkQFA3kzBSg
-KbZy4RAAn6aFpd7s1gWp9gMH30jYS9LbwKQ3auZA2AtR+LZgzudzdlAjVeQ4HKlk
-XU1KRp5lw5HR5FdT8Ggsy2+89L/je5AkGr3ijJfbE6XNsBhPNQDrxnf0ljDeX/cA
-yBMCpqAPSyrl16KUXK42Fz9XaLgQxajbF0gtsmunLX2FpqE8pE4+SNMNTJnFJyNN
-280p/hxGja8qmONcDJFZlxaYP7aHwpMUy/YcOTFWgGBwyXzJFC+JU1qquDfQ90G+
-7v8V5eDfQJZaYLL2iFgrQmfBDMlp2kqPZxJrN5TmWsuHsz2lrsTnhPW5xf0CmiPk
-YZh1z+X7VVulc8vvOXuh1njSJkBth1U2e51GQzQdIVVTe7Is8DR6EDhiWymXQcZX
-L/iF6XkI7wgfOvbWUY5xitcXdTOVk8Dw6HKBFKbUa85Vmbj+yx8J9/0kbVsQiHK3
-2jGtON2FrjOrtG6DMga2xDH+SLp84WdKFdfICWBk+v7sDa8BUGgL9uFWROe8zr5/
-49Adgj2VHEc6oDgq83SWJkfbpJcEw7cvH6+YLZjINM/KaWkO96cBuoSOCHw6Pah9
-Sb6q98gZf/XkU2AHeBR8E4jbb1fx8z3mD0AupOoRVKtoBgjJYxODG0Nbf4LczlCt
-SiGBItQ6pdTPN4jRtvXOr2mCtg2rQ09PNoFMwlH6f35r0wJ+G5g=
-=dgCM
------END PGP SIGNATURE-----
+- Document that I2C_DRV_FL_ALLOW_LOW_POWER_PROBE flag only applies to ACPI
+  drivers.
 
---FsscpQKzF/jJk6ya--
+- Fix extra regulator_disable in at24 driver's remove function when the
+  device was already in low power state.
+
+since v4 <URL:https://lore.kernel.org/linux-acpi/20200121134157.20396-1-sakari.ailus@linux.intel.com/>:
+
+- Rename "probe-low-power" property as "allow-low-power-probe". This is
+  taken into account in function and file naming, too.
+
+- Turn probe_low_power field in struct i2c_driver into flags field.
+
+- Rebase on Wolfram's i2c/for-next branch that contains the removal of the
+  support for disabling I²C core IRQ mappings (commit
+  0c2a34937f7e4c4776bb261114c475392da2355c).
+
+- Change wording for "allow-low-power-probe" property in ACPI
+  documentation.
+
+since v3 <URL:https://lore.kernel.org/linux-acpi/20200109154529.19484-1-sakari.ailus@linux.intel.com/T/#t>:
+
+- Rework the 2nd patch based on Rafael's comments
+
+	- Rework description of the ACPI low power state helper function,
+	  according to Rafael's text.
+
+	- Rename and rework the same function as
+	  acpi_dev_state_low_power().
+
+	- Reflect the changes in commit message as well.
+
+- Added a patch to document the probe-low-power _DSD property.
+
+since v2 <URL:https://patchwork.kernel.org/cover/11114255/>:
+
+- Remove extra CONFIG_PM ifdefs; these are not needed.
+
+- Move the checks for power state hints from drivers/base/dd.c to
+  drivers/i2c/i2c-base-core.c; these are I²C devices anyway.
+
+- Move the probe_low_power field from struct device_driver to struct
+  i2c_driver.
+
+since v1:
+
+- Rename probe_powered_off struct device field as probe_low_power and
+  reflect the similar naming to the patches overall.
+
+- Work with CONFIG_PM disabled, too.
+
+Rajmohan Mani (1):
+  media: i2c: imx319: Support probe while the device is off
+
+Sakari Ailus (5):
+  i2c: Allow an ACPI driver to manage the device's power state during
+    probe
+  ACPI: Add a convenience function to tell a device is in low power
+    state
+  ov5670: Support probe whilst the device is in a low power state
+  at24: Support probing while off
+  Documentation: ACPI: Document allow-low-power-probe _DSD property
+
+ .../acpi/dsd/allow-low-power-probe.rst        | 28 +++++++
+ Documentation/firmware-guide/acpi/index.rst   |  1 +
+ drivers/acpi/device_pm.c                      | 31 ++++++++
+ drivers/i2c/i2c-core-base.c                   | 18 ++++-
+ drivers/media/i2c/imx319.c                    | 74 +++++++++++-------
+ drivers/media/i2c/ov5670.c                    | 76 +++++++++++--------
+ drivers/misc/eeprom/at24.c                    | 43 ++++++-----
+ include/linux/acpi.h                          |  5 ++
+ include/linux/i2c.h                           | 14 ++++
+ 9 files changed, 211 insertions(+), 79 deletions(-)
+ create mode 100644 Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
+
+-- 
+2.20.1
+
