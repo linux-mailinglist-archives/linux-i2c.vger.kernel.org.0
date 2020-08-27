@@ -2,54 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECDB254115
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Aug 2020 10:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EB5254206
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Aug 2020 11:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727883AbgH0IlX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 Aug 2020 04:41:23 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58062 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727772AbgH0IlX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 27 Aug 2020 04:41:23 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id F26A3B5E1
-        for <linux-i2c@vger.kernel.org>; Thu, 27 Aug 2020 08:41:53 +0000 (UTC)
-Date:   Thu, 27 Aug 2020 10:41:21 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Linux I2C <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] decode-dimms: Update the list of vendors to Jedec
- JEP106BB
-Message-ID: <20200827104121.5c2cd412@endymion>
-In-Reply-To: <20200804082543.1d22b28f@endymion>
-References: <20200804082543.1d22b28f@endymion>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1728508AbgH0JX5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 Aug 2020 05:23:57 -0400
+Received: from smtp1.de.adit-jv.com ([93.241.18.167]:43529 "EHLO
+        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728487AbgH0JX5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Aug 2020 05:23:57 -0400
+Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
+        by smtp1.de.adit-jv.com (Postfix) with ESMTP id F04863C057C;
+        Thu, 27 Aug 2020 11:23:53 +0200 (CEST)
+Received: from smtp1.de.adit-jv.com ([127.0.0.1])
+        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id HaCos8lTjjoA; Thu, 27 Aug 2020 11:23:48 +0200 (CEST)
+Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id D048D3C0016;
+        Thu, 27 Aug 2020 11:23:48 +0200 (CEST)
+Received: from lxhi-065.adit-jv.com (10.72.94.25) by HI2EXCH01.adit-jv.com
+ (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 27 Aug
+ 2020 11:23:48 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        <linux-i2c@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, Eugeniu Rosca <roscaeugeniu@gmail.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Andy Lowe <andy_lowe@mentor.com>
+Subject: [PATCH v2] i2c: i2c-rcar: Auto select RESET_CONTROLLER
+Date:   Thu, 27 Aug 2020 11:23:30 +0200
+Message-ID: <20200827092330.16435-1-erosca@de.adit-jv.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.72.94.25]
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 4 Aug 2020 08:25:43 +0200, Jean Delvare wrote:
-> Update the list of memory vendors as of June 2020, including 14
-> renames.
-> 
-> I also added a runtime sanity check on the number of vendors per
-> page, as it is very easy to get it wrong.
-> 
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> ---
-> As suggested by Paul Goyette.
-> 
->  eeprom/decode-dimms |  111 ++++++++++++++++++++++++++++++++++++++++++++--------
->  1 file changed, 95 insertions(+), 16 deletions(-)
-> (...)
+From: Dirk Behme <dirk.behme@de.bosch.com>
 
-Applied.
+The i2c-rcar driver utilizes the Generic Reset Controller kernel
+feature, so select the RESET_CONTROLLER option when the I2C_RCAR
+option is selected.
 
+Fixes: 2b16fd63059ab9 ("i2c: rcar: handle RXDMA HW behaviour on Gen3")
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Dirk Behme <dirk.behme@de.bosch.com>
+Signed-off-by: Andy Lowe <andy_lowe@mentor.com>
+[erosca: Add "if ARCH_RCAR_GEN3" on Wolfram's request]
+Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+---
+v2:
+ - Append "if ARCH_RCAR_GEN3" to "select", as requested by Wolfram
+   in https://lore.kernel.org/linux-i2c/20200824120734.GA2500@ninjato/
+
+v1:
+ - https://lore.kernel.org/linux-i2c/20200824062623.9346-1-erosca@de.adit-jv.com/
+---
+ drivers/i2c/busses/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 293e7a0760e7..7ccbfbcb02e9 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -1181,6 +1181,7 @@ config I2C_RCAR
+ 	tristate "Renesas R-Car I2C Controller"
+ 	depends on ARCH_RENESAS || COMPILE_TEST
+ 	select I2C_SLAVE
++	select RESET_CONTROLLER if ARCH_RCAR_GEN3
+ 	help
+ 	  If you say yes to this option, support will be included for the
+ 	  R-Car I2C controller.
 -- 
-Jean Delvare
-SUSE L3 Support
+2.28.0
+
