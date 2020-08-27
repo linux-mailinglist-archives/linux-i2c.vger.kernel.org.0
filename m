@@ -2,152 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D664F253A48
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Aug 2020 00:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E2A253D0B
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Aug 2020 07:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726790AbgHZWfY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Aug 2020 18:35:24 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:60500 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726765AbgHZWfX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Aug 2020 18:35:23 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id BD46184487;
-        Thu, 27 Aug 2020 10:35:17 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1598481317;
-        bh=ycykCFdPIC6LZn0ehVlw9+WRGNFit1c0Yq5jeQ6Rg2Q=;
-        h=From:To:Cc:Subject:Date;
-        b=PPFtp7JXmI0TiB147eVC6fBKuFcGBYEpsYf4LRHb1WQJHabHrza/wlP7Rb/Lz1QOD
-         3GIGdiQMUzjB7S6yB/qJzCgDoBhQY0N680BND/PM5EppVjlywOQA7eB8ttATsfe0oD
-         DyjwBg2dOB84znEzZ7ggPcNkjgIDMfDpn+X9/7TQUMIZMugjpomlwq4CM1JCcRNwc0
-         +U9SvBkcgifjFCl044v4jMU/4dkT7X1s5gIYTl4d2ZB6dI9tZOPJZexjB8BAJhEBsA
-         smzFvAxhUgoDzZhFUatLgc+voqOMSeICEOVgjCFTELkjGXXo+lDsu56R4qXyeBKvXI
-         Czb7J+MBm+d9Q==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f46e3a50000>; Thu, 27 Aug 2020 10:35:17 +1200
-Received: from markto-dl.ws.atlnz.lc (markto-dl.ws.atlnz.lc [10.33.23.25])
-        by smtp (Postfix) with ESMTP id E588F13ED33;
-        Thu, 27 Aug 2020 10:35:16 +1200 (NZST)
-Received: by markto-dl.ws.atlnz.lc (Postfix, from userid 1155)
-        id 9284234107C; Thu, 27 Aug 2020 10:35:17 +1200 (NZST)
-From:   Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-To:     wsa@kernel.org, gregory.clement@bootlin.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-Subject: [PATCH v3] i2c: mv64xxx: Add bus error recovery
-Date:   Thu, 27 Aug 2020 10:35:16 +1200
-Message-Id: <20200826223516.29737-1-mark.tomlinson@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.28.0
+        id S1726400AbgH0FGK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 Aug 2020 01:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725854AbgH0FGJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Aug 2020 01:06:09 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE45C061240;
+        Wed, 26 Aug 2020 22:06:09 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id d19so2483537pgl.10;
+        Wed, 26 Aug 2020 22:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7IhqloVaMibf2jlzA4WMOp2YL1jlSwNWW6bEUaEjE70=;
+        b=MM4m8VVL34hq0942VtiA6yVZWBnFE6qE2Nc4MymlFTZV67g9XvTBfU1MiU8HQlKQoS
+         Z2qEyLxFY6FUzNvUOQFeLPLruy6txqYKOIV0NXyKHST1ceZ96kzEEcor/EiirnEqvz9W
+         yC2d3AuWlQRyQ2PV490ityVLNiUUV+I+J4Cixc5ED6TqMy4yOn/lt1moJLqRMl1h5m9i
+         E1UasyiSxHGX2Hv5VKdth69XX9/O5beUehPugxZyjOUoaQTiWTskVb0E8SsHEenMIXi4
+         D8BK27J/FkVwkOLzrGq/j2sdagtYAvgPY8IRhbw06EvX1GVhAsZP2qSxO+GX+dqu4kIx
+         /6lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7IhqloVaMibf2jlzA4WMOp2YL1jlSwNWW6bEUaEjE70=;
+        b=PCeYqfnctwVa/ggu7IEv/ysA62Bq8K041vXkUkf29Qhk5fxDPrYSRNLeYIz1qyTyCZ
+         8w1h6qrWI2EYbP/UR6aSOXALXYwGesM0hIOw+ivn4qR5pzsM3hevaenvBS/WE/4MCWRV
+         LTi7K8VXw3QGgilDDT1h2FvsCWAQ15xGhHeLLpJayN9lBqZzPIMApJQ9ueXdRfFfVB11
+         s9COv/CpzzCmZ0F2dwpDuC1CuBo2PNktKe+ZQiAATDOFInz7B2ChOpRGtZin82+dwxZC
+         02ggpuVbiOTPEKvEfVh09u1WDOCZXqtruXxPX5Ru8ZcPMOLuJIUUSQzquFSv+kDAeITZ
+         aTQA==
+X-Gm-Message-State: AOAM531+T62M7QilmKqXyU2odM3FOQY3wX753qAXHZL5FhejKQlToRMo
+        ojkXEH/fkdYWKagcuGbv/30=
+X-Google-Smtp-Source: ABdhPJzjzzoY7Skt0zwRoFrIRfr0W5ogmgbRPGMxbAV7U8UUadv17Mke6ZwLr9hn9Sqv/G/bMGtLoA==
+X-Received: by 2002:a63:4cc:: with SMTP id 195mr10585879pge.376.1598504768573;
+        Wed, 26 Aug 2020 22:06:08 -0700 (PDT)
+Received: from localhost ([2409:10:2e40:5100:6e29:95ff:fe2d:8f34])
+        by smtp.gmail.com with ESMTPSA id w199sm933744pfc.191.2020.08.26.22.06.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2020 22:06:07 -0700 (PDT)
+Date:   Thu, 27 Aug 2020 14:06:05 +0900
+From:   Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: do not acpi/of match device in i2c_device_probe()
+Message-ID: <20200827050605.GA512@jagdpanzerIV.localdomain>
+References: <20200826144920.110605-1-sergey.senozhatsky@gmail.com>
+ <20200826151629.GR1891694@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200826151629.GR1891694@smile.fi.intel.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This adds i2c bus recovery to the mv64xxx driver.
+On (20/08/26 18:16), Andy Shevchenko wrote:
+> On Wed, Aug 26, 2020 at 11:49:20PM +0900, Sergey Senozhatsky wrote:
+> > i2c, apparently, can match the same device twice - the first
+> > time in ->match bus hook (i2c_device_match()), and the second
+> > one in ->probe (i2c_device_probe()) bus hook.
+> > 
+> > To make things more complicated, the second matching does not
+> > do exactly same checks as the first one. Namely, i2c_device_match()
+> > calls acpi_driver_match_device() which considers devices that
+> > provide of_match_table and performs of_compatible() matching for
+> > such devices. One important thing to note here is that ACPI
+> > of_compatible() matching (acpi_of_match_device()) is part of ACPI
+> > and does not depend on CONFIG_OF.
+> > 
+> > i2c_device_probe(), on the other hand, calls acpi_match_device()
+> > which does not perform of_compatible() matching, but instead
+> > i2c_device_probe() relies on CONFIG_OF API to perform of_match_table
+> > matching, IOW ->probe matching, unlike ->match matching, depends on
+> > CONFIG_OF. This can break i2c device probing on !CONFIG_OF systems
+> > if the device does not provide .id_table.
+> > 
+> >  i2c_device_probe()
+> >  ...
+> >    if (!driver->id_table &&
+> >        !i2c_acpi_match_device(dev->driver->acpi_match_table, client) &&
+> >        !i2c_of_match_device(dev->driver->of_match_table, client)) {
+> >        status = -ENODEV;
+> >        goto put_sync_adapter;
+> >    }
+> > 
+> > i2c_of_match_device() on !CONFIG_OF systems is always false, so we never
+> > perform of_match_table matching. i2c_acpi_match_device() does ACPI match
+> > only, no of_compatible() matching takes place, even though the device
+> > provides .of_match_table and ACPI is capable of matching such device.
+> > 
+> > It is not entirely clear why the device is matched again in bus
+> > ->probe after successful and proper matching in bus ->match. Let's
+> > remove ->probe matching.
+> 
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> (assuming it's okay to go)
 
-Implement bus recovery to recover from SCL/SDA stuck low.
+Thanks.
 
-This uses the generic recovery function, setting the clock/data lines as
-GPIO pins, and sending 9 clocks to try and recover the bus.
+I tested the patch on x86_64 (a mix of i2c devices with and without
+.id_table) and arm64 boards - didn't notice any difference, module
+probing wise.
 
-Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
----
-Changes in v2:
- - use generic GPIO recovery function.
-
-Changes in v3:
- - remove call to i2c_recover_bus() during probe.
- - change error message to info when pinctrl fails, matching other
-   similar code.
- - handle a lack of pinctrl information better.
-
- drivers/i2c/busses/i2c-mv64xxx.c | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv=
-64xxx.c
-index 8d9d4ffdcd24..5c5f1d797986 100644
---- a/drivers/i2c/busses/i2c-mv64xxx.c
-+++ b/drivers/i2c/busses/i2c-mv64xxx.c
-@@ -17,6 +17,7 @@
- #include <linux/interrupt.h>
- #include <linux/mv643xx_i2c.h>
- #include <linux/platform_device.h>
-+#include <linux/pinctrl/consumer.h>
- #include <linux/reset.h>
- #include <linux/io.h>
- #include <linux/of.h>
-@@ -147,6 +148,7 @@ struct mv64xxx_i2c_data {
- 	bool			irq_clear_inverted;
- 	/* Clk div is 2 to the power n, not 2 to the power n + 1 */
- 	bool			clk_n_base_0;
-+	struct i2c_bus_recovery_info	rinfo;
- };
-=20
- static struct mv64xxx_i2c_regs mv64xxx_i2c_regs_mv64xxx =3D {
-@@ -325,7 +327,8 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u3=
-2 status)
- 			 drv_data->msg->flags);
- 		drv_data->action =3D MV64XXX_I2C_ACTION_SEND_STOP;
- 		mv64xxx_i2c_hw_init(drv_data);
--		drv_data->rc =3D -EIO;
-+		i2c_recover_bus(&drv_data->adapter);
-+		drv_data->rc =3D -EAGAIN;
- 	}
- }
-=20
-@@ -562,6 +565,7 @@ mv64xxx_i2c_wait_for_completion(struct mv64xxx_i2c_da=
-ta *drv_data)
- 				"time_left: %d\n", drv_data->block,
- 				(int)time_left);
- 			mv64xxx_i2c_hw_init(drv_data);
-+			i2c_recover_bus(&drv_data->adapter);
- 		}
- 	} else
- 		spin_unlock_irqrestore(&drv_data->lock, flags);
-@@ -871,6 +875,24 @@ mv64xxx_of_config(struct mv64xxx_i2c_data *drv_data,
- }
- #endif /* CONFIG_OF */
-=20
-+static int mv64xxx_i2c_init_recovery_info(struct mv64xxx_i2c_data *drv_d=
-ata,
-+					  struct device *dev)
-+{
-+	struct i2c_bus_recovery_info *rinfo =3D &drv_data->rinfo;
-+
-+	rinfo->pinctrl =3D devm_pinctrl_get(dev);
-+	if (IS_ERR(rinfo->pinctrl)) {
-+		if (PTR_ERR(rinfo->pinctrl) =3D=3D -EPROBE_DEFER)
-+			return -EPROBE_DEFER;
-+		dev_info(dev, "can't get pinctrl, bus recovery not supported\n");
-+		return PTR_ERR(rinfo->pinctrl);
-+	} else if (!rinfo->pinctrl)
-+		return -ENODEV;
-+
-+	drv_data->adapter.bus_recovery_info =3D rinfo;
-+	return 0;
-+}
-+
- static int
- mv64xxx_i2c_probe(struct platform_device *pd)
- {
-@@ -927,6 +949,10 @@ mv64xxx_i2c_probe(struct platform_device *pd)
- 		goto exit_reset;
- 	}
-=20
-+	rc =3D mv64xxx_i2c_init_recovery_info(drv_data, &pd->dev);
-+	if (rc =3D=3D -EPROBE_DEFER)
-+		goto exit_reset;
-+
- 	drv_data->adapter.dev.parent =3D &pd->dev;
- 	drv_data->adapter.algo =3D &mv64xxx_i2c_algo;
- 	drv_data->adapter.owner =3D THIS_MODULE;
---=20
-2.28.0
-
+	-ss
