@@ -2,102 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1D8255941
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Aug 2020 13:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677A7255995
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Aug 2020 13:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729171AbgH1LW7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Aug 2020 07:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729173AbgH1LWs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Aug 2020 07:22:48 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAFDC061236;
-        Fri, 28 Aug 2020 04:20:42 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id ba12so830095edb.2;
-        Fri, 28 Aug 2020 04:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KGEywKnAVd/7RJTemAGpNeUCwMzvl8U0yMAeNAGkB+A=;
-        b=shriYB3pW6Ji3P2tXtVXq6xzGJe0LNr+8mfFOiPUVkx57QPmVvXTOTGFb0htkFze7Y
-         2v0c4EIBb0oav/RbMcJLGQfuDgwPgu/qEJ+y1gpi6I5Dgk5D+XaZCjt0xOoJCGBA+8Qm
-         kAj3XodzB19CoWxvyawj2FxA4aPoH65gSPyq5tlDNym9wpcp6z/HpD/4vP6yWl4Yn6gg
-         sdciGTkwW7IzjbqxQ/YpIOle8YleayqpeTzTziEusYe88ucETWUk7Czxll4vKhd12hPy
-         UK7O9s2hd7YszqsIdXG+/zZh5LWqQgBl3EyEKFXuAFQy6ZXhkOiy9wFdfJvMhUWZE2ca
-         ACkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KGEywKnAVd/7RJTemAGpNeUCwMzvl8U0yMAeNAGkB+A=;
-        b=XGXwtVloXQvb/0VRzVHnV8kLNX6Hb/OBGUoD9fTy2UQBolB4PsSupiKQav397kOl4v
-         ynfmVIVsFv/0DbM0NB6ZgtkTtEWJ1YC8fqxiQXI4bWvgTcAE0ZvC+gaBdHxYH2mIjVy4
-         q83xr+CyjwmVIsrhB2FwpMNbjh4DH442Wcrs9tXoRFcf6vIIopeyb8J1cHV/qaIC0HAm
-         YPHdvKzx16GzvgPLfdifHa1/wtKNSQcesW5h1Fh7OR6sgH/Tf43Zvc+wQdELbp3VQJSk
-         iu3Cbuan/lweI3eAf0iZsABDExwHG1QDprRBTmP8Dtyrrpy78BY7/b6D19LvfGu0lPso
-         H/Ow==
-X-Gm-Message-State: AOAM5301wL8NOwEUPirWNIylCifOtSoEghHJMHM5BbByvpujxd+ZHW3n
-        AszEwOJdY1dSWnbYappVzKhmc2ZKbJIpVHeL9m8=
-X-Google-Smtp-Source: ABdhPJxHU6efi6VP56oGN/Gh8MTTFv9XTrFYMw2OHFqrv85P8OtpsB8qpJMUBIjJbVCGFYF+pUj1wj0YES8n8n5LRp0=
-X-Received: by 2002:a05:6402:1a46:: with SMTP id bf6mr1307131edb.284.1598613640690;
- Fri, 28 Aug 2020 04:20:40 -0700 (PDT)
+        id S1729114AbgH1Lp5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Aug 2020 07:45:57 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:17370 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729028AbgH1Lpy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 28 Aug 2020 07:45:54 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1598615153; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=sNWgcqQR+6QhQGkc4LU06y2pSDolaw9TtjGFrjyf1bY=;
+ b=auyb5gIuQ1czI+quCjcZl+seR16VGGaRLxtqWzWFUzW5hQpUuhqER4atajN16pXH5lk8omrK
+ BQvAqd+T3FdJ79N4JyQU9NZVy2T66WoRz5GgOdVk6s7Th82K+MrMuIh3tb2wIW2dqNpcY90L
+ AL3jNTgEfJ+CEqmDRNMbdCafPzI=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 5f48ee694b620c27d3639dba (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 28 Aug 2020 11:45:45
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E9A37C4339C; Fri, 28 Aug 2020 11:45:44 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: rojay)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3B36EC433C6;
+        Fri, 28 Aug 2020 11:45:44 +0000 (UTC)
 MIME-Version: 1.0
-References: <cover.1595572867.git.frank@allwinnertech.com> <CACRpkdYOKOj4r-9U2iHCkdB74fWkm2J0xHqsnH_sE81SV5g1=w@mail.gmail.com>
-In-Reply-To: <CACRpkdYOKOj4r-9U2iHCkdB74fWkm2J0xHqsnH_sE81SV5g1=w@mail.gmail.com>
-From:   Frank Lee <tiny.windzz@gmail.com>
-Date:   Fri, 28 Aug 2020 19:20:29 +0800
-Message-ID: <CAEExFWuO06yBY+_Z33FHvi5B_y=haX5Q_LSH8zN8Sr3FUqkwKw@mail.gmail.com>
-Subject: Re: [PATCH v5 00/16] Allwinner A100 Initial support
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Frank Lee <frank@allwinnertech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Ondrej Jirman <megous@megous.com>,
-        Corentin Labbe <clabbe@baylibre.com>, bage@linutronix.de,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 28 Aug 2020 17:15:44 +0530
+From:   rojay@codeaurora.org
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     wsa@kernel.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, akashast@codeaurora.org,
+        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH V2 1/2] i2c: i2c-qcom-geni: Store DMA mapping data in
+ geni_i2c_dev struct
+In-Reply-To: <159796912574.334488.10846610259602895929@swboyd.mtv.corp.google.com>
+References: <20200820103522.26242-1-rojay@codeaurora.org>
+ <20200820103522.26242-2-rojay@codeaurora.org>
+ <159796912574.334488.10846610259602895929@swboyd.mtv.corp.google.com>
+Message-ID: <fe91d99821775d82c3bd8de9d0988548@codeaurora.org>
+X-Sender: rojay@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-HI Linus,
+On 2020-08-21 05:48, Stephen Boyd wrote:
+> Quoting Roja Rani Yarubandi (2020-08-20 03:35:21)
+>> Store DMA mapping data in geni_i2c_dev struct to enhance DMA mapping
+>> data scope. For example during shutdown callback to unmap DMA mapping,
+>> this stored DMA mapping data can be used to call geni_se_tx_dma_unprep
+>> and geni_se_rx_dma_unprep functions.
+>> 
+>> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+>> ---
+> 
+> Can this be squashed with the next patch? I don't see how this stands 
+> on
+> its own.
 
-On Fri, Aug 28, 2020 at 6:02 PM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Fri, Jul 24, 2020 at 8:53 AM Frank Lee <frank@allwinnertech.com> wrote:
->
-> > This patch set adds initial support for allwinner a100 soc,
-> > which is a 64-bit tablet chip.
->
-> Shall I commit the pinctrl patches (if Maxime ACKed) separately
-> or not? Once Maxime is happy, I am usually happy too.
-
-Maxime told me he wanted you to commit the pinctrl patches.
-
-Thx,
-Yangtao
+Okay.
