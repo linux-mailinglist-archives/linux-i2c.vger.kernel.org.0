@@ -2,61 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF4F255D49
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Aug 2020 17:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CC9255EBF
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Aug 2020 18:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbgH1PFA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Aug 2020 11:05:00 -0400
-Received: from mga05.intel.com ([192.55.52.43]:57521 "EHLO mga05.intel.com"
+        id S1726929AbgH1Q0n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Aug 2020 12:26:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33464 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726197AbgH1PE7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 28 Aug 2020 11:04:59 -0400
-IronPort-SDR: p7sfbRPNmj84KYrSgWHDw2zzpY/ZTjMIo5VqQOWT1J3l/DCQC8J3iyxsp85Lr8ynn99UisQDvp
- pugGdg54nSZw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9727"; a="241493276"
-X-IronPort-AV: E=Sophos;i="5.76,364,1592895600"; 
-   d="scan'208";a="241493276"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 08:04:52 -0700
-IronPort-SDR: 6et0OiDMIzv1MUGplu4+aXGbkV/iNLTsXtcNIG9Y/3UagwSzcrXW8tNGxvdjGQXqLRLOkzdZHq
- 4ofqV1g0Dcvg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,364,1592895600"; 
-   d="scan'208";a="329977446"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 28 Aug 2020 08:04:50 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kBftn-00C93p-CX; Fri, 28 Aug 2020 18:02:39 +0300
-Date:   Fri, 28 Aug 2020 18:02:39 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Seth Heasley <seth.heasley@intel.com>,
-        Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v1] i2c: ismt: Add support for Intel Emmitsburg PCH
-Message-ID: <20200828150239.GU1891694@smile.fi.intel.com>
-References: <20200615161001.12817-1-andriy.shevchenko@linux.intel.com>
+        id S1726033AbgH1Q0m (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 28 Aug 2020 12:26:42 -0400
+Received: from localhost (104.sub-72-107-126.myvzw.com [72.107.126.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 765D22080C;
+        Fri, 28 Aug 2020 16:26:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598632001;
+        bh=4Vnh1C/RoVVBKrT7SjMj6aee4KReTZw02BiPUaRhAQ0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=QVOV/M0eLCw2BVGQp4zvew/mE1Q4RL7hiEsH79cNpyPCxwSZe05WMETsy+9Db+hDj
+         sKvWOaB1vh6jVlK2lN5CmqNofr7zadr76rZ5qfeZphI3NzUxMq7O8ZX0a8uuo4+Hex
+         1gmGg+jCAvGxgygQHK+NpsxfUpiX7u90xwPUIC7M=
+Date:   Fri, 28 Aug 2020 11:26:40 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>
+Subject: Re: [PATCH 1/2] i2c: i801: Fix runtime PM
+Message-ID: <20200828162640.GA2160001@bjorn-Precision-5520>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200615161001.12817-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20180627212340.GA161569@bhelgaas-glaptop.roam.corp.google.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 07:10:01PM +0300, Andy Shevchenko wrote:
-> Add PCI ID for the Intel Emmitsburg PCH iSMT SMBus controller.
+[+cc Vaibhav]
 
-Seth, Neil, any tag for this?
-Wolfram, this is an ID and I don't think silence from maintainers prevent us to
-add it. What do you think?
+On Wed, Jun 27, 2018 at 04:23:40PM -0500, Bjorn Helgaas wrote:
+> [+cc Rafael, linux-pm, linux-kernel]
+> 
+> On Wed, Jun 27, 2018 at 10:15:50PM +0200, Jean Delvare wrote:
+> > Hi Jarkko,
+> > 
+> > On Tue, 26 Jun 2018 17:39:12 +0300, Jarkko Nikula wrote:
+> > > Commit 9c8088c7988 ("i2c: i801: Don't restore config registers on
+> > > runtime PM") nullified the runtime PM suspend/resume callback pointers
+> > > while keeping the runtime PM enabled. This causes that device stays in
+> > > D0 power state and sysfs /sys/bus/pci/devices/.../power/runtime_status
+> > > shows "error" when runtime PM framework attempts to autosuspend the
+> > > device.
+> > > 
+> > > This is due PCI bus runtime PM which checks for driver runtime PM
+> > > callbacks and returns with -ENOSYS if they are not set. Fix this by
+> > > having a shared dummy runtime PM callback that returns with success.
+> > > 
+> > > Fixes: a9c8088c7988 ("i2c: i801: Don't restore config registers on runtime PM")
+> > 
+> > I don't want to sound like I'm trying to decline all responsibility for
+> > a regression I caused, but frankly, if just using SIMPLE_DEV_PM_OPS()
+> > breaks runtime PM, then it's the PM model which is broken, not the
+> > i2c-i801 driver.
+> > 
+> > I will boldly claim that the PCI bus runtime code is simply wrong in
+> > returning -ENOSYS in the absence of runtime PM callbacks, and it should
+> > be changed to return 0 instead. Or whoever receives that -ENOSYS should
+> > not treat it as an error - whatever makes more sense.
+> > 
+> > Having to add dummy functions in every PCI driver that doesn't need to
+> > do anything special for runtime PM sounds plain stupid. It should be
+> > pretty obvious that a whole lot of drivers are going to use
+> > SIMPLE_DEV_PM_OPS() because it exists and seems to do what they want,
+> > and all of them will be bugged because the PCI core is doing something
+> > silly and unexpected.
+> > 
+> > So please let's fix it at the PCI subsystem core level. Adding Bjorn
+> > and the linux-pci list to Cc.
+> 
+> Thanks Jean.  What you describe does sound broken.  I think the PM
+> guys (cc'd) will have a better idea of how to deal with this.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Did we ever get anywhere with this?  It seems like the thread petered
+out.
