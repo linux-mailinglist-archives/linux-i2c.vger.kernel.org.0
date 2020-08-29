@@ -2,54 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 841C8256A06
-	for <lists+linux-i2c@lfdr.de>; Sat, 29 Aug 2020 22:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B47256A2D
+	for <lists+linux-i2c@lfdr.de>; Sat, 29 Aug 2020 22:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728544AbgH2URc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 29 Aug 2020 16:17:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47602 "EHLO mail.kernel.org"
+        id S1728464AbgH2UiX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 29 Aug 2020 16:38:23 -0400
+Received: from www.zeus03.de ([194.117.254.33]:58332 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728499AbgH2UR2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 29 Aug 2020 16:17:28 -0400
-Subject: Re: [PULL REQUEST] i2c for v5.9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598732247;
-        bh=3gX8PbABC9XMJuWAdbhiN+L6Y0zXbO5AdREcxcGHaaM=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=rKZedwBMw5i9TXu9mpIJ+7boe4ojf8cSBKF6DWyQji0XGfvXfB2KCWKBA9fMdDoGp
-         EE0ELo5/Bkm1lHcGbvWWsu1FDwX4c8IG8Hb5tjxD2QKLk2m3/qqbXypNDS9DGb1kjQ
-         glAdw75k1h28zCyWN/Lfppa/kHt8M+skv9IsFhS8=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200829155302.GA1147@ninjato>
-References: <20200829155302.GA1147@ninjato>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200829155302.GA1147@ninjato>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-X-PR-Tracked-Commit-Id: 0204081128d582965e9e39ca83ee6e4f7d27142b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e77aee1326f7691763aa968eee2f57db37840b9d
-Message-Id: <159873224764.9079.15649305978201724021.pr-tracker-bot@kernel.org>
-Date:   Sat, 29 Aug 2020 20:17:27 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        id S1728417AbgH2UiV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 29 Aug 2020 16:38:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=pJZUCj9w5+vSKM6Ivhj8CgFym5p
+        JvNN0wNJ5/NKq4R8=; b=Bp6bJJmuYXE4R7PF+V82Z64AAeJctIcGAJM+PKl+1z7
+        1y1uvQERNVsNcvSO6blgiM2pF+dHn0qXe72Nyz+i6ZSmDfDw0iI9g5tMG2bhR6m6
+        3KIIiebLqCJ792O/ODrc4N3PTZLfX/hyFdC1X7OI7m/pRYCI0l+MW3yO9tbSyc40
+        =
+Received: (qmail 1629923 invoked from network); 29 Aug 2020 22:38:19 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Aug 2020 22:38:19 +0200
+X-UD-Smtp-Session: l3s3148p1@yC9WJgqu+tAgAwDPXyCvAAFyN1rCWI+G
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH 0/2] i2c: rcar: use iopoll helpers for better timeout handling
+Date:   Sat, 29 Aug 2020 22:38:08 +0200
+Message-Id: <20200829203810.1467-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Sat, 29 Aug 2020 17:53:07 +0200:
+Originally, I noticed that the timeout value for initiating bus recovery
+was not optimal. While fixing it, I took the chance to convert its
+handling to the iopoll helpers. And then, I converted the timeout
+handling for resetting the device, too, while I was at it.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+Tested on a Renesas Lager board (H2) and Salvator-XS (M3-N).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e77aee1326f7691763aa968eee2f57db37840b9d
+Wolfram Sang (2):
+  i2c: rcar: improve bus busy detection
+  i2c: rcar: refactor and shorten timeout when resetting
 
-Thank you!
+ drivers/i2c/busses/i2c-rcar.c | 34 +++++++++++++---------------------
+ 1 file changed, 13 insertions(+), 21 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.20.1
+
