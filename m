@@ -2,138 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8578D2571B9
-	for <lists+linux-i2c@lfdr.de>; Mon, 31 Aug 2020 03:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C3425725F
+	for <lists+linux-i2c@lfdr.de>; Mon, 31 Aug 2020 05:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726454AbgHaB4i (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 30 Aug 2020 21:56:38 -0400
-Received: from mail-eopbgr60111.outbound.protection.outlook.com ([40.107.6.111]:41218
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726525AbgHaB4c (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 30 Aug 2020 21:56:32 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A14Ih+GBtu9yfpRafVKoWLGFh0R86ZXoALLqU+QUfkJ92FGAIf4p0/eOAdtK9/RYvPkjwXxOpAwTIgdCDOBn4QHampkss1DMpIXdiuegDMqkTgKPK0e55vkB2dhmQ8Yh/KMmu9Q4osdhKAkW0JAVQJSFHmTzGgRfPMqok6r0pthGoOUigXt6tLIWMqvo/oSoBg8EHzecyO81AFV1VVkVm0pZ/ghhvnF5jXmNjDa3ux9DQfGzfzpsbAs14rivwYr6mMrKvqTF8HuYxabOueohsdsn9Nz1bmYFvINM2nk4RdQt+O6iOLy7xlUcFcApAgknxgjdcDjpiaeKrKpAKB6w3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kj+4CzBQlEEC5JZw+s9n4i7z53k3L9dwXNwQNpYytbY=;
- b=TAEcaIlMAqDBG9Lt4Chud02qGGj4Bymf4YAl+8sJpzzg90YJE54OuPMVob1wKn8mqHRpRvFHXzuZXs0Z8URTrpZREvjqJL0ErufCxlLTvDQq/xVfW9XPheniKJJOTz68P4GF8fDGOjNqstqJhNzDmN9QpnHYPxAQlyfI/96bMVDx9VNKq8CjObkZwmWC+/I29IxtfaSPerCSbK3uFI7LN38q0Db7Ws0jCnFdJJZ+uQmX6hkEGZ6VlV3UwsPmZmn7xHyGumS0AXnvnFLemqw3plw0jJXH7GvoJ+dWtEyz7O3g2ggWGmz+SzDavLNydDHx51wG6U6ALY8YnRiFJ0tEKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kj+4CzBQlEEC5JZw+s9n4i7z53k3L9dwXNwQNpYytbY=;
- b=y4EMhONmoSY6L52+ilPY4vhrmhMPqlk6E8Zmbl4LzlU6viALjXG1CoKaCJnd+N8LiEWPh+EH6C/oVhZxW5sen805BPn/v1XK1MOktXraNsp4eVom9c6oASXgsu3s2YKksO7SER9B3Ft75QSbuCq9WXAeZVu82g6mm/2aaCfnE50=
-Authentication-Results: baylibre.com; dkim=none (message not signed)
- header.d=none;baylibre.com; dmarc=none action=none header.from=plvision.eu;
-Received: from HE1P190MB0539.EURP190.PROD.OUTLOOK.COM (2603:10a6:7:56::28) by
- HE1P190MB0364.EURP190.PROD.OUTLOOK.COM (2603:10a6:7:62::25) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3326.23; Mon, 31 Aug 2020 01:56:08 +0000
-Received: from HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
- ([fe80::b1a4:e5e3:a12b:1305]) by HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
- ([fe80::b1a4:e5e3:a12b:1305%6]) with mapi id 15.20.3326.025; Mon, 31 Aug 2020
- 01:56:08 +0000
-From:   Vadym Kochan <vadym.kochan@plvision.eu>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Maxime Ripard <maxime.ripard@free-electrons.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Vadym Kochan <vadym.kochan@plvision.eu>
-Subject: [PATCH v3 3/3] misc: eeprom: at24: register nvmem only after eeprom is ready to use
-Date:   Mon, 31 Aug 2020 04:55:39 +0300
-Message-Id: <20200831015539.26811-4-vadym.kochan@plvision.eu>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200831015539.26811-1-vadym.kochan@plvision.eu>
-References: <20200831015539.26811-1-vadym.kochan@plvision.eu>
-Content-Type: text/plain
-X-ClientProxiedBy: AM5PR0201CA0022.eurprd02.prod.outlook.com
- (2603:10a6:203:3d::32) To HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:7:56::28)
+        id S1726255AbgHaDfw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 30 Aug 2020 23:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726067AbgHaDfw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 30 Aug 2020 23:35:52 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9405AC061573;
+        Sun, 30 Aug 2020 20:35:51 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id ay8so4086690edb.8;
+        Sun, 30 Aug 2020 20:35:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Es49Pktfv7cyRBR2isn8kE0O0ZV8xR4yhOVye/VQUrk=;
+        b=Np8eJ16yZ5iMi3JnVsjqeMJX6+O7o5Ri0YyeWM6xIP2rHgwlMYXKwdrjJFPowbg/BA
+         Qnr2rsfVzQudIyB4cK4lD/oNRmPcWdr8Tm3bCZG9DNxyK38R0k0EkF38KUbtIzV7ScCs
+         44b/yRnPTi24WZi3x+sC4lM5sLHPLrC56iNp8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Es49Pktfv7cyRBR2isn8kE0O0ZV8xR4yhOVye/VQUrk=;
+        b=NGfsUVZa9FUQ6OxsUJy2KpKcR+J8+eRIi7nzCFkji9gCERmr/Gw1vGuY69pclKrlUJ
+         mt+KsfYM7I1hYEXnnJyxP4SzAOvF2XVWKtHvtbivkHVedW0hmOFjamiCfaMIoV87hDBh
+         kvoU/XrD1FUimroG2PZ3KBAZMnTDQk7WD/wqpsWcJMDdQ/N9lD+YH8lxsdfhbiGxH/jt
+         LUcBKdTvyhRW7pdGZbJpN6TNVWdh5pbPYkBz3oNGziO8b6hBQWaj06PCIJwrR1KbzLy8
+         x91f6sEtOkyTVp1vjL7GgWnTqoF/yiu7GxPw4NEReOxyO0oz4BqRT/02K4Dgpm3WRb9r
+         QOqQ==
+X-Gm-Message-State: AOAM531++k0FHyjGzDtRowb/NteYSFtA/uOuWvXf8Xl9c99OTuhPsr9D
+        iX1kUutSJRMNuFFamQO2A5udeTof0ZDtQfBloZs=
+X-Google-Smtp-Source: ABdhPJx7qh+mNkv4fszmTyhwOjH5PtQGv7TcGVXG2A3V0/1q8FyjFJn4lSFRahcWP+iQ09eNAAQjowrra3y2n+LSM3I=
+X-Received: by 2002:a05:6402:ca7:: with SMTP id cn7mr1902945edb.143.1598844949735;
+ Sun, 30 Aug 2020 20:35:49 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from pc60716vkochan.x.ow.s (217.20.186.93) by AM5PR0201CA0022.eurprd02.prod.outlook.com (2603:10a6:203:3d::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.20 via Frontend Transport; Mon, 31 Aug 2020 01:56:07 +0000
-X-Mailer: git-send-email 2.17.1
-X-Originating-IP: [217.20.186.93]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 91fb548b-d050-4e2d-50f3-08d84d510733
-X-MS-TrafficTypeDiagnostic: HE1P190MB0364:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <HE1P190MB0364692D21EF8D7B8DD8F88F95510@HE1P190MB0364.EURP190.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gdxeV35EGJ7F9hNqbae7txJ4sf/rdZRuSu4E2Bxglu01XQaSPnz94S2UaUb4hympQRbkaF+P3/fAXDtamoQzsGITjSK2mowxY0L+0PUvoDS6P/kOvtPeRFAX+aKEi88BYZfsfNA0rEnZqkcqmHitH+0FCVu4BXK0YxHg/I+ED5k9iHVA+y/BoE0QwSvy9XYHMZLYaheHzrIA6rmZ9D5IQWQ93A1TkaU/yVu3ExepZR6WYk6hcQZCWH7OLNgFFbrLdw8UKlceOzCpL56b9HDofe2Ao5kEEn9P7APADKUVTbmUlJb6ZhZrZDHbLcQENog/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1P190MB0539.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(376002)(136003)(39830400003)(366004)(396003)(346002)(36756003)(478600001)(6486002)(5660300002)(316002)(2906002)(110136005)(8936002)(8676002)(6512007)(6666004)(66476007)(1076003)(66556008)(44832011)(66946007)(107886003)(2616005)(956004)(26005)(86362001)(4326008)(6506007)(83380400001)(16526019)(186003)(52116002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: bOYMSZBUAIt/qZPbOC8YfmOQYchkeobtJsZskKbtmNNrg5oixnS0wx0mXupy67AP6AcJUlQprqFEZbQAQnfgg3cCzK8C6/PG9DUhCGSrjk8iY9ca1CmMkHtDz+hlppW/J5NNzkq2pxF6RKrN+yz1ccfQYqzglRqCE77fWKlQqOd92bm9UmkiQjNsy0irSPZCFFJLvSkJGLcQ8i0sBs4NQ7GBXmB47wBL2fkbbVGjl0eRAs/6q1zIoS1W9PCNYs5yCsvaC5Y+g7vJoBxPp1iPs2hhF6doq6LKg3wE+GoucDXnfVt8HXdIu441S/Gd0eyv7sbQNzkFclV9OM6hBmL+4zbbW3nuvwm7o7kA3owxEJhB3SekO6LsRnirZZ2VCBIAlZaHBwPy5t/J6hZmKWbmfoIj9cU/Gesl+MH7admrQOVccIMPYVIYQrpNC/ehH+wdU7cgm07LK9LdZ5RKmOdqiAgyUEfUqn7p5oTtgb3sNFudSDEHy1XMZOp3PJUmEOwAPHNKFh9p89XIfSQiL3gpt/be9tVTHH2eG9lk7I7j6R687EVNamS2bGlw+L62ZHU8hwWp/GzoD2koaGdzwJBALLgxTsHQk/dfg4EhjJLZLv6NdwFHSwa5w0P5Vs4ph3NZeXgrl+9pae8TjckxL8srqA==
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91fb548b-d050-4e2d-50f3-08d84d510733
-X-MS-Exchange-CrossTenant-AuthSource: HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2020 01:56:08.4016
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Aekus+6g10rRh+Xqwpx+cQzP+ER6ikDhlVUU0GQnalvBdal8i0fB8JsXZC8nc3+MPFD6OVcg4MGFd4tMdjVsBTcUtyNIjMfgLpeMEaT0JbE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1P190MB0364
+References: <20200830213121.239533-1-tali.perry1@gmail.com>
+In-Reply-To: <20200830213121.239533-1-tali.perry1@gmail.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 31 Aug 2020 03:35:36 +0000
+Message-ID: <CACPK8Xev4w4BxrxR1zQPk=wiHCK2fSGD9tEeAQwPe_uayGw_CA@mail.gmail.com>
+Subject: Re: [PATCH v3] i2c: npcm7xx: Fix timeout calculation
+To:     Tali Perry <tali.perry1@gmail.com>
+Cc:     Kun Yi <kunyi@google.com>, xqiu@google.com,
+        Benjamin Fair <benjaminfair@google.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-During nvmem_register() the nvmem core sends notifications when:
+On Sun, 30 Aug 2020 at 21:31, Tali Perry <tali.perry1@gmail.com> wrote:
+>
+> timeout_usec value calculation was wrong, the calculated value
+> was in msec instead of usec.
+>
+> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> Reviewed-by: Avi Fishman <avifishman70@gmail.com>
 
-    - cell added
-    - nvmem added
+Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-and during these notifications some callback func may access the nvmem
-device, which will fail in case of at24 eeprom because regulator and pm
-are enabled after nvmem_register().
+Cheers,
 
-Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
----
-v3:
-    1) at24 driver enables regulator and pm state machine after nvmem
-       registration which does not allow to use it on handing NVMEM_PRE_ADD event.
+Joel
 
- drivers/misc/eeprom/at24.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 2591c21b2b5d..26a23abc053d 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -692,10 +692,6 @@ static int at24_probe(struct i2c_client *client)
- 	nvmem_config.word_size = 1;
- 	nvmem_config.size = byte_len;
- 
--	at24->nvmem = devm_nvmem_register(dev, &nvmem_config);
--	if (IS_ERR(at24->nvmem))
--		return PTR_ERR(at24->nvmem);
--
- 	i2c_set_clientdata(client, at24);
- 
- 	err = regulator_enable(at24->vcc_reg);
-@@ -708,6 +704,13 @@ static int at24_probe(struct i2c_client *client)
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
- 
-+	at24->nvmem = devm_nvmem_register(dev, &nvmem_config);
-+	if (IS_ERR(at24->nvmem)) {
-+		pm_runtime_disable(dev);
-+		regulator_disable(at24->vcc_reg);
-+		return PTR_ERR(at24->nvmem);
-+	}
-+
- 	/*
- 	 * Perform a one-byte test read to verify that the
- 	 * chip is functional.
--- 
-2.17.1
-
+> ---
+>  drivers/i2c/busses/i2c-npcm7xx.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+> index 75f07138a6fa..dfcf04e1967f 100644
+> --- a/drivers/i2c/busses/i2c-npcm7xx.c
+> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
+> @@ -2093,8 +2093,12 @@ static int npcm_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+>                 }
+>         }
+>
+> -       /* Adaptive TimeOut: astimated time in usec + 100% margin */
+> -       timeout_usec = (2 * 10000 / bus->bus_freq) * (2 + nread + nwrite);
+> +       /*
+> +        * Adaptive TimeOut: estimated time in usec + 100% margin:
+> +        * 2: double the timeout for clock stretching case
+> +        * 9: bits per transaction (including the ack/nack)
+> +        */
+> +       timeout_usec = (2 * 9 * USEC_PER_SEC / bus->bus_freq) * (2 + nread + nwrite);
+>         timeout = max(msecs_to_jiffies(35), usecs_to_jiffies(timeout_usec));
+>         if (nwrite >= 32 * 1024 || nread >= 32 * 1024) {
+>                 dev_err(bus->dev, "i2c%d buffer too big\n", bus->num);
+>
+> base-commit: d012a7190fc1fd72ed48911e77ca97ba4521bccd
+> --
+> 2.22.0
+>
