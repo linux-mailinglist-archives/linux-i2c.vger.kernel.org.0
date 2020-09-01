@@ -2,115 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 688E9258A3D
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 10:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAE6258A44
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 10:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726124AbgIAITn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Sep 2020 04:19:43 -0400
-Received: from mga05.intel.com ([192.55.52.43]:35392 "EHLO mga05.intel.com"
+        id S1726947AbgIAIUv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Sep 2020 04:20:51 -0400
+Received: from mga11.intel.com ([192.55.52.93]:12016 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725848AbgIAITl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 1 Sep 2020 04:19:41 -0400
-IronPort-SDR: X0Wvf8wimY16R7gC3xoraD0NCRagIrDGhSXWOh9R82X85SnbPcAzs4vDYm5++Wujbsz35uN/FZ
- iYTQ4FcM8vdw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9730"; a="241939710"
+        id S1726946AbgIAIUv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 1 Sep 2020 04:20:51 -0400
+IronPort-SDR: fgM2m8JuMfIE8GH5CiNTqkpGbNzABFSMBvIXV36VCi/YVDPfJZABROtj1OVbUlZmEcBC/3qJyk
+ oL/VdcBPneoA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9730"; a="154639809"
 X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
-   d="scan'208";a="241939710"
+   d="scan'208";a="154639809"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 01:19:41 -0700
-IronPort-SDR: NXpBjrSeVHMCMdhfGfBLnvrMfuYNHl07U+ch2qk3t5MKV/eKLEdVe1unBu2xHER7rKfcFkPfOC
- dHadQhR6MNaA==
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 01:20:50 -0700
+IronPort-SDR: LVggzNWPXu1Bf7uu+OK1VELuWrpP2vKoT6TOptxUNRJKxtgmoyJSZ+p+3Fwq52tv2pLhTtR3mt
+ jII/QHBB9ZzA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
-   d="scan'208";a="338498788"
-Received: from mylly.fi.intel.com (HELO [10.237.72.198]) ([10.237.72.198])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Sep 2020 01:19:38 -0700
-Subject: Re: [PATCH 1/2] i2c: i801: Fix runtime PM
-To:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20180627212340.GA161569@bhelgaas-glaptop.roam.corp.google.com>
- <20200828162640.GA2160001@bjorn-Precision-5520>
- <20200831151159.GA11707@gmail.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <e40561b7-9b85-4f9d-48d5-7dc11bfb873c@linux.intel.com>
-Date:   Tue, 1 Sep 2020 11:19:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+   d="scan'208";a="330990492"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 01 Sep 2020 01:20:48 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kD1X4-00DFKA-Ku; Tue, 01 Sep 2020 11:20:46 +0300
+Date:   Tue, 1 Sep 2020 11:20:46 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>
+Cc:     wsa@kernel.org, jdelvare@suse.de, jarkko.nikula@linux.intel.com,
+        chris.packham@alliedtelesis.co.nz, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: algo-pca: Reapply i2c bus settings after reset
+Message-ID: <20200901082046.GO1891694@smile.fi.intel.com>
+References: <20200901005713.27453-1-evan.nimmo@alliedtelesis.co.nz>
 MIME-Version: 1.0
-In-Reply-To: <20200831151159.GA11707@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200901005713.27453-1-evan.nimmo@alliedtelesis.co.nz>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 8/31/20 6:15 PM, Vaibhav Gupta wrote:
-> On Fri, Aug 28, 2020 at 11:26:40AM -0500, Bjorn Helgaas wrote:
->> [+cc Vaibhav]
->>
->> On Wed, Jun 27, 2018 at 04:23:40PM -0500, Bjorn Helgaas wrote:
->>> [+cc Rafael, linux-pm, linux-kernel]
->>>
->>> On Wed, Jun 27, 2018 at 10:15:50PM +0200, Jean Delvare wrote:
->>>> Hi Jarkko,
->>>>
->>>> On Tue, 26 Jun 2018 17:39:12 +0300, Jarkko Nikula wrote:
->>>>> Commit 9c8088c7988 ("i2c: i801: Don't restore config registers on
->>>>> runtime PM") nullified the runtime PM suspend/resume callback pointers
->>>>> while keeping the runtime PM enabled. This causes that device stays in
->>>>> D0 power state and sysfs /sys/bus/pci/devices/.../power/runtime_status
->>>>> shows "error" when runtime PM framework attempts to autosuspend the
->>>>> device.
->>>>>
->>>>> This is due PCI bus runtime PM which checks for driver runtime PM
->>>>> callbacks and returns with -ENOSYS if they are not set. Fix this by
->>>>> having a shared dummy runtime PM callback that returns with success.
->>>>>
->>>>> Fixes: a9c8088c7988 ("i2c: i801: Don't restore config registers on runtime PM")
->>>>
->>>> I don't want to sound like I'm trying to decline all responsibility for
->>>> a regression I caused, but frankly, if just using SIMPLE_DEV_PM_OPS()
->>>> breaks runtime PM, then it's the PM model which is broken, not the
->>>> i2c-i801 driver.
->>>>
->>>> I will boldly claim that the PCI bus runtime code is simply wrong in
->>>> returning -ENOSYS in the absence of runtime PM callbacks, and it should
->>>> be changed to return 0 instead. Or whoever receives that -ENOSYS should
->>>> not treat it as an error - whatever makes more sense.
->>>>
->>>> Having to add dummy functions in every PCI driver that doesn't need to
->>>> do anything special for runtime PM sounds plain stupid. It should be
->>>> pretty obvious that a whole lot of drivers are going to use
->>>> SIMPLE_DEV_PM_OPS() because it exists and seems to do what they want,
->>>> and all of them will be bugged because the PCI core is doing something
->>>> silly and unexpected.
->>>>
->>>> So please let's fix it at the PCI subsystem core level. Adding Bjorn
->>>> and the linux-pci list to Cc.
->>>
->>> Thanks Jean.  What you describe does sound broken.  I think the PM
->>> guys (cc'd) will have a better idea of how to deal with this.
->>
->> Did we ever get anywhere with this?  It seems like the thread petered
->> out.
-> This does seems worrying. I remember, few days earlier you pointed out a driver
-> i2c-nvidia-gpuc.c. In the code, gpu_i2c_suspend() is an empty-body function. And
-> comment mentioned that empty stub is necessary for runtime_pm to work.
-> 
-> And this driver also uses UNIVERSAL_DEV_PM_OPS.
-> 
-This was fixed by c5eb1190074c ("PCI / PM: Allow runtime PM without 
-callback functions"). So no need for empty runtime PM callbacks anymore.
+On Tue, Sep 01, 2020 at 12:57:13PM +1200, Evan Nimmo wrote:
+
+Thanks for the patch, my nit-picks, comments below.
+
+> If something goes wrong (such as the SCL being stuck low) then we need
+> to reset the pca chip. The issue with this is that on reset we lose all
+
+pca -> PCA (here and where it applicable below).
+
+> config settings and the chip ends up in a disabled state which results
+> in a lock up/high cpu usage. We need to re-apply any configuration that
+> had previously been set and re-enable the chip.
+
+...
+
+> +		/* We need to apply any configuration settings that
+> +		 * were calculated in the pca_init function. The reset
+> +		 * results in these changes being set back to defaults.
+> +		 */
+
+	/*
+	 * Multi-line comments usually go
+	 * like this.
+	 */
+
+...
+
+> +		clock = pca_clock(pca_data);
+> +
+> +		/* Store settings as these will be needed when the pca chip is reset */
+> +		pca_data->bus_settings.clock_freq = clock;
+> +
+>  		pca_reset(pca_data);
+>  
+
+> -		clock = pca_clock(pca_data);
+>  		printk(KERN_INFO "%s: Clock frequency is %dkHz\n",
+>  		     adap->name, freqs[clock]);
+
+Seems this message is attached to above call. Can we move it as well?
+
+...
+
+> +/**
+> + * struct i2c_bus_settings - The configured i2c bus settings
+> + * @mode: Configured i2c bus mode (PCA9665)
+> + * @tlow: Configured SCL LOW period (PCA9665)
+> + * @thi: Configured SCL HIGH period (PCA9665)
+> + * @clock_freq: The configured clock frequency (PCA9564)
+> + */
+> +struct i2c_bus_settings {
+> +	int mode;
+> +	int tlow;
+> +	int thi;
+> +	int clock_freq;
+> +};
+
+This is a good candidate to have it in generic header for sake of the
+unification. Possible users:
+
+struct tegra_i2c_hw_feature
+struct cci_data::struct hw_params
+
 
 -- 
-Jarkko
+With Best Regards,
+Andy Shevchenko
+
+
