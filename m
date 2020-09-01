@@ -2,51 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCBB2587BA
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 08:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0870D2587C9
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 08:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbgIAGAi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Sep 2020 02:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
+        id S1726352AbgIAGBW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Sep 2020 02:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726078AbgIAGAi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Sep 2020 02:00:38 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB5FC0612A3;
-        Mon, 31 Aug 2020 23:00:37 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id c10so245494edk.6;
-        Mon, 31 Aug 2020 23:00:37 -0700 (PDT)
+        with ESMTP id S1726226AbgIAGBV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Sep 2020 02:01:21 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027E4C0612A3;
+        Mon, 31 Aug 2020 23:01:21 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id z22so839539ejl.7;
+        Mon, 31 Aug 2020 23:01:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=jms.id.au; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YG5VVLnr0PW/yZAIIXvrmgCG3qrxXpxZ6xJoDnhxDp8=;
-        b=I1Cl2FDVaVvaOSOfgtQ92iqMB0672fG0G4xJKICPc4tAG3bPNWYmcZAC48HM3JiKyd
-         oLAnsx6Z8+CW7CjXdqggMfMDaXGZAQAwAWOkEvYOqmABVzvNjcS1+g/1nsPV2qsJsaGX
-         3dTTEn2MWKQZ2EcnCx6rB+dHrADKNuYQwfz+M=
+        bh=XaHfsFFvsKz8Si4WdVVOjQJsf4E9yNDaoM4FPWbSNvE=;
+        b=Yrn5M09qMo7Ev8s79fvPnWTl2NFswv8DuA0HiCrXU9QyHiKt4/Q9LiFX09QFi10GZW
+         bPayA7qZ+7h9StZJ6G8Rzq/FUGwnovc+Abo/ZKNmcTxwIiUJi2uD/uvpELc8KQojWu6s
+         OAwRQUh16hX9et97nwHOUEx6hpkcFJ+Bk9O7I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YG5VVLnr0PW/yZAIIXvrmgCG3qrxXpxZ6xJoDnhxDp8=;
-        b=kAnRDKSzwqnIf4dpESupSYW95pdT8HZd+5QTIxJuVICJOl00mK/l0j5jCNAqm9Xcie
-         8GsEyJ/fRCg2LR/8WIdrBIUEstnsE2wxeSduCHu6LdkLN6cTvgN7IAFr65bsdo5P23Vj
-         v4jncIBueCeYDvEhJicSt54B+/OM9BqQF/zUkUXNOeoyOZRtLT8N8jukDwbvMp0IYdnt
-         Aix3LlZXv9YRlV8uaGHTf/Z3Zzw2aVfG53cIGX8fCxlUIF3ByNkQsWeZsoJ2Pxyo/EKt
-         du2VU0N5ltbkZ7FYBU9d5b8irptvKv9YazZWXPwNKrsdNO+M6imM611Q3CmFKQZHjAaX
-         hsww==
-X-Gm-Message-State: AOAM530MiAEVRth5kzRjW96HuvKa/IS1HJA2xnbGDokyMC6BjyA8vHPn
-        AcPI8J+/XNsMfPgNAz3hXGcnIchDqPuqZ9Nr3ig=
-X-Google-Smtp-Source: ABdhPJz9eU3v8XlDwZfFwqePNcy+jcI0AiJOMWa794CyKfXIs0MDCh9UQDA9Ak+JcJYKcyUTgG+a6ltohowcflXsO3A=
-X-Received: by 2002:a50:f403:: with SMTP id r3mr348556edm.260.1598940036519;
- Mon, 31 Aug 2020 23:00:36 -0700 (PDT)
+        bh=XaHfsFFvsKz8Si4WdVVOjQJsf4E9yNDaoM4FPWbSNvE=;
+        b=UKr8AJ3ofZsh/S2z2vtKquDAhNXQdlDAgRYmYK3APaWxRkV10432gizThFeLBLXskk
+         ty7BUXJ/l7no00gDqQl6QNwr6w4lzRUcB3/ig7qx14MsvzBOf1bgUEkgXe3KLxzcZXjv
+         +N/2MH6Qykw4C6Slibd3B4UXzkNlcrSIcMycARxCxEw5qcVBHKm4cChqmN7g6QVsszj1
+         KG3sEXJWXTs2Ug2XaPDLXoyx/kqfVIjO4nF/PZ+rVBgBVEjHFY/g9CRYK6NyMYVt+rZ5
+         MoVALOkjqoTB8LmgH+5sOStLhTC8jdzeBQyK4fF9gSSjt6vV20TQkqJg8quy0C1t8eS+
+         Nq5w==
+X-Gm-Message-State: AOAM533whvYH+RxA+/jSNC4iKTHhbjftJZC9lNlkuiBT0ArRGrRAWggm
+        YWdCTK8J/1O/MxRqMegG2wU90lKKEIGp8owL+RCxctp4BnY=
+X-Google-Smtp-Source: ABdhPJxqy/GN58FoQLdvnCX11Vvy8+zzlnuPo/ylntZPwFduXZjSx80mFGNsb6xczOXnJ2uuauRFvtkGNeRxJJbngzI=
+X-Received: by 2002:a17:906:4c58:: with SMTP id d24mr110959ejw.108.1598940079725;
+ Mon, 31 Aug 2020 23:01:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200820161152.22751-1-eajames@linux.ibm.com> <20200820161152.22751-5-eajames@linux.ibm.com>
-In-Reply-To: <20200820161152.22751-5-eajames@linux.ibm.com>
+References: <20200820161152.22751-1-eajames@linux.ibm.com> <20200820161152.22751-6-eajames@linux.ibm.com>
+In-Reply-To: <20200820161152.22751-6-eajames@linux.ibm.com>
 From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 1 Sep 2020 06:00:24 +0000
-Message-ID: <CACPK8XfeKiee-LAQZXs6jygr1Bj7pqGTGLUnTV1mzO5FBZ-XZQ@mail.gmail.com>
-Subject: Re: [PATCH 4/5] ARM: dts: Aspeed: Tacoma: Add IBM Operation Panel I2C device
+Date:   Tue, 1 Sep 2020 06:01:07 +0000
+Message-ID: <CACPK8XcW-LfJ6FBdKntod_F1dnRoSP=4D7=TLtM5yGkhTm79Rw@mail.gmail.com>
+Subject: Re: [PATCH 5/5] ARM: dts: Aspeed: Rainier: Add IBM Operation Panel
+ I2C device
 To:     Eddie James <eajames@linux.ibm.com>
 Cc:     linux-input@vger.kernel.org,
         devicetree <devicetree@vger.kernel.org>,
@@ -64,47 +65,43 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Thu, 20 Aug 2020 at 16:12, Eddie James <eajames@linux.ibm.com> wrote:
 >
-> Set I2C bus 0 to multi-master mode and add the panel device that will
+> Set I2C bus 7 to multi-master mode and add the panel device that will
 > register as a slave.
 >
 > Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
+Same comments as for Tacoma.
+
 Reviewed-by: Joel Stanley <joel@jms.id.au>
 
 > ---
->  arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts | 6 ++++++
+>  arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts | 6 ++++++
 >  1 file changed, 6 insertions(+)
 >
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts b/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
-> index 5f4ee67ac787..9cf2e02ae9e2 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
-> @@ -438,7 +438,13 @@ aliases {
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts
+> index b94421f6cbd5..f121f3c26a3a 100644
+> --- a/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts
+> +++ b/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts
+> @@ -698,6 +698,7 @@ eeprom@53 {
 >  };
 >
->  &i2c0 {
+>  &i2c7 {
 > +       multi-master;
 >         status = "okay";
-> +
+>
+>         si7021-a20@20 {
+> @@ -831,6 +832,11 @@ gpio@15 {
+>                 };
+>         };
+>
 > +       ibm-panel@62 {
 > +               compatible = "ibm,op-panel";
-> +               reg = <0x40000062>; /* I2C_OWN_SLAVE_ADDRESS */
-
-Other users of SLAVE_ADDRESS have included <dt-bindings/i2c/i2c.h> and
-written the reg as follows:
-
-reg = <(I2C_OWN_SLAVE_ADDRESS | 0x62)>
-
-Which obviously has the same result. I'll leave it up to you.
-
-Cheers,
-
-Joel
-
+> +               reg = <0x40000062>;     /* I2C_OWN_SLAVE_ADDRESS */
 > +       };
->  };
->
->  &i2c1 {
+> +
+>         dps: dps310@76 {
+>                 compatible = "infineon,dps310";
+>                 reg = <0x76>;
 > --
 > 2.26.2
 >
