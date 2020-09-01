@@ -2,145 +2,177 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCC5258273
-	for <lists+linux-i2c@lfdr.de>; Mon, 31 Aug 2020 22:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C81082584F4
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 02:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730021AbgHaUXm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 31 Aug 2020 16:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
+        id S1726020AbgIAA5v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 31 Aug 2020 20:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730012AbgHaUXi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 31 Aug 2020 16:23:38 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B06C061755;
-        Mon, 31 Aug 2020 13:23:38 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id t23so8246041ljc.3;
-        Mon, 31 Aug 2020 13:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5O0l+Bq/1wXJwQvYBDxAgJWZ0eTWjkmkrvvVOAIAir0=;
-        b=EZzqYpEO992KMUFaPjDM10IzYBgd2wd1BfoO4qpLA88MEuESOvEuC4k4PhwlB6VGLX
-         csjALF/iMczy/bt9yWYAhRDVxsLMKvV88Rq7FOiQJaqekqSBLMy3Lt6fCnp1p76oY0/D
-         MDqm8mw6poUaD8sSSVSdVfK5V6T17bl2Mr02WYIqVmaGSZ+/ZHGJtFlSGTWgcvqqr3ZA
-         rMVheDSxnfBqiTAxVBa4o0c+3mtzgr0TVib4zRVXjb1EMqp30y+Fa8OuQY9XXcHYgKem
-         NhRh7WdHzQe7qpco0xHHcZZ2Wd5OlVYxELWlWhP6MGByLN4Qh8pGUDAY6KcaJk1RJA3v
-         KTdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5O0l+Bq/1wXJwQvYBDxAgJWZ0eTWjkmkrvvVOAIAir0=;
-        b=a53Pc5jbalfo7SFfwbGGzO1RKmGPDxdbL9a5WTlOdUgRKVtUTbxOTFwxhzxGNsTJ72
-         Sh0JtrgSVl4BLm7chdITX6VM64WN7iiUqLC4gtejeLlQalPha7bdB9UmrxY8t6XEJ+14
-         m0M+e7auoeKen1fdquOUw/RVajflqZqWW5JAYeSYmBseCWJQEv3dIx726sCOMxcu0Ufu
-         C4KMhwOBq2kDkiX6NHSEDkzR1PwowPo268szYzVzXHaBAJmp4DHniQAx8MCeUvwI8csy
-         0kX4/S0L/Z39kWAOnQHYWH8MvLaqZS2mlacUXOyrM+xoC6YD6p/JlzG50X2SlYGa+j6b
-         aSOA==
-X-Gm-Message-State: AOAM533CnObwtYrNbU+84wza2INucIB2Zv15adw6UnLiH4xE42Sc0OCv
-        CJCsOQVteANsQz53mj7AyFc=
-X-Google-Smtp-Source: ABdhPJxkqPcqa95PPehmNojOvbeYBYkWZ/z5d1pbUE1VKbiuLHKegekHB2uGofevUy1PCMj8dop6PQ==
-X-Received: by 2002:a2e:7c0f:: with SMTP id x15mr1437701ljc.205.1598905416785;
-        Mon, 31 Aug 2020 13:23:36 -0700 (PDT)
-Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id z20sm1769054ljk.97.2020.08.31.13.23.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2020 13:23:36 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 12/12] i2c: tegra: Factor out error recovery from tegra_i2c_xfer_msg()
-Date:   Mon, 31 Aug 2020 23:23:03 +0300
-Message-Id: <20200831202303.15391-13-digetx@gmail.com>
+        with ESMTP id S1725941AbgIAA5u (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 31 Aug 2020 20:57:50 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23611C061575
+        for <linux-i2c@vger.kernel.org>; Mon, 31 Aug 2020 17:57:48 -0700 (PDT)
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 81573806B5;
+        Tue,  1 Sep 2020 12:57:41 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1598921861;
+        bh=61tA8ADfiUKIPzf4noCShchjQM84gHOrhzv61rsnI0o=;
+        h=From:To:Cc:Subject:Date;
+        b=yCaGR7qukdtDKMsGp7Q7j2QbxT9+XR8yJfvSCw+MB8tKM9rAIZVzrXCRJnItlf7xR
+         N/W59Af2pq/KurDYgzq1rkjQjO6Cek7t07ib2e3PKjkl8jJyVm3ZYDxoSUWHd5j5kI
+         4fVa4cVmXhItB8Ew2W8U+zPhhpRde93BXzMOF3cggfU4nKfMMW6C/jgKSYNFULEGFz
+         7DinQMG30LarX68ZMS77TU2wXHGNWxc3S9OOGqMekj1tiNvzj9OutnOF5HdbfYExEU
+         VsK9cNXYnKz1+jsGEqzFBhGeapHWnbgxA+Ze55LNRFQat2d2UWOrL/NA0FWwIbO68t
+         RLMPmg4zx319Q==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5f4d9c840000>; Tue, 01 Sep 2020 12:57:41 +1200
+Received: from evann-dl.ws.atlnz.lc (evann-dl.ws.atlnz.lc [10.33.23.31])
+        by smtp (Postfix) with ESMTP id 0B4AC13EEB7;
+        Tue,  1 Sep 2020 12:57:39 +1200 (NZST)
+Received: by evann-dl.ws.atlnz.lc (Postfix, from userid 1780)
+        id BD8421A4E97; Tue,  1 Sep 2020 12:57:39 +1200 (NZST)
+From:   Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>
+To:     wsa@kernel.org, andriy.shevchenko@linux.intel.com,
+        jdelvare@suse.de, jarkko.nikula@linux.intel.com,
+        chris.packham@alliedtelesis.co.nz
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>
+Subject: [PATCH] i2c: algo-pca: Reapply i2c bus settings after reset
+Date:   Tue,  1 Sep 2020 12:57:13 +1200
+Message-Id: <20200901005713.27453-1-evan.nimmo@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200831202303.15391-1-digetx@gmail.com>
-References: <20200831202303.15391-1-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Factor out error recovery code from tegra_i2c_xfer_msg() in order to
-make this function easier to read and follow.
+If something goes wrong (such as the SCL being stuck low) then we need
+to reset the pca chip. The issue with this is that on reset we lose all
+config settings and the chip ends up in a disabled state which results
+in a lock up/high cpu usage. We need to re-apply any configuration that
+had previously been set and re-enable the chip.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>
 ---
- drivers/i2c/busses/i2c-tegra.c | 46 ++++++++++++++++++++++------------
- 1 file changed, 30 insertions(+), 16 deletions(-)
+ drivers/i2c/algos/i2c-algo-pca.c | 36 +++++++++++++++++++++-----------
+ include/linux/i2c-algo-pca.h     | 15 +++++++++++++
+ 2 files changed, 39 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index d9b9fe6b5637..c2803fe9d834 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1161,6 +1161,32 @@ static int tegra_i2c_issue_bus_clear(struct i2c_adapter *adap)
- 	return -EAGAIN;
+diff --git a/drivers/i2c/algos/i2c-algo-pca.c b/drivers/i2c/algos/i2c-alg=
+o-pca.c
+index 710fbef9a9c2..2e4e27073f40 100644
+--- a/drivers/i2c/algos/i2c-algo-pca.c
++++ b/drivers/i2c/algos/i2c-algo-pca.c
+@@ -41,8 +41,22 @@ static void pca_reset(struct i2c_algo_pca_data *adap)
+ 		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_IPRESET);
+ 		pca_outw(adap, I2C_PCA_IND, 0xA5);
+ 		pca_outw(adap, I2C_PCA_IND, 0x5A);
++
++		/* We need to apply any configuration settings that
++		 * were calculated in the pca_init function. The reset
++		 * results in these changes being set back to defaults.
++		 */
++		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_IMODE);
++		pca_outw(adap, I2C_PCA_IND, adap->bus_settings.mode);
++		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_ISCLL);
++		pca_outw(adap, I2C_PCA_IND, adap->bus_settings.tlow);
++		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_ISCLH);
++		pca_outw(adap, I2C_PCA_IND, adap->bus_settings.thi);
++
++		pca_set_con(adap, I2C_PCA_CON_ENSIO);
+ 	} else {
+ 		adap->reset_chip(adap->data);
++		pca_set_con(adap, I2C_PCA_CON_ENSIO | adap->bus_settings.clock_freq);
+ 	}
  }
- 
-+static int tegra_i2c_error_recover(struct tegra_i2c_dev *i2c_dev,
-+				   struct i2c_msg *msg)
-+{
-+	if (i2c_dev->msg_err == I2C_ERR_NONE)
-+		return 0;
+=20
+@@ -423,13 +437,15 @@ static int pca_init(struct i2c_adapter *adap)
+ 				" Use the nominal frequency.\n", adap->name);
+ 		}
+=20
++		clock =3D pca_clock(pca_data);
 +
-+	tegra_i2c_init(i2c_dev, true);
++		/* Store settings as these will be needed when the pca chip is reset *=
+/
++		pca_data->bus_settings.clock_freq =3D clock;
 +
-+	/* start recovery upon arbitration loss in single master mode */
-+	if (i2c_dev->msg_err == I2C_ERR_ARBITRATION_LOST) {
-+		if (!i2c_dev->is_multimaster_mode)
-+			return i2c_recover_bus(&i2c_dev->adapter);
-+
-+		return -EAGAIN;
-+	}
-+
-+	if (i2c_dev->msg_err == I2C_ERR_NO_ACK) {
-+		if (msg->flags & I2C_M_IGNORE_NAK)
-+			return 0;
-+
-+		return -EREMOTEIO;
-+	}
-+
-+	return -EIO;
-+}
-+
- static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 			      struct i2c_msg *msg,
- 			      enum msg_end_type end_state)
-@@ -1341,24 +1367,12 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 		i2c_dev->msg_err);
- 
- 	i2c_dev->is_curr_dma_xfer = false;
--	if (i2c_dev->msg_err == I2C_ERR_NONE)
--		return 0;
- 
--	tegra_i2c_init(i2c_dev, true);
--	/* start recovery upon arbitration loss in single master mode */
--	if (i2c_dev->msg_err == I2C_ERR_ARBITRATION_LOST) {
--		if (!i2c_dev->is_multimaster_mode)
--			return i2c_recover_bus(&i2c_dev->adapter);
--		return -EAGAIN;
--	}
+ 		pca_reset(pca_data);
+=20
+-		clock =3D pca_clock(pca_data);
+ 		printk(KERN_INFO "%s: Clock frequency is %dkHz\n",
+ 		     adap->name, freqs[clock]);
 -
--	if (i2c_dev->msg_err == I2C_ERR_NO_ACK) {
--		if (msg->flags & I2C_M_IGNORE_NAK)
--			return 0;
--		return -EREMOTEIO;
--	}
-+	err = tegra_i2c_error_recover(i2c_dev, msg);
-+	if (err)
-+		return err;
- 
--	return -EIO;
-+	return 0;
- }
- 
- static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
--- 
+-		pca_set_con(pca_data, I2C_PCA_CON_ENSIO | clock);
+ 	} else {
+ 		int clock;
+ 		int mode;
+@@ -496,19 +512,15 @@ static int pca_init(struct i2c_adapter *adap)
+ 			thi =3D tlow * min_thi / min_tlow;
+ 		}
+=20
++		/* Store settings as these will be needed when the pca chip is reset *=
+/
++		pca_data->bus_settings.mode =3D mode;
++		pca_data->bus_settings.tlow =3D tlow;
++		pca_data->bus_settings.thi =3D thi;
++
+ 		pca_reset(pca_data);
+=20
+ 		printk(KERN_INFO
+ 		     "%s: Clock frequency is %dHz\n", adap->name, clock * 100);
+-
+-		pca_outw(pca_data, I2C_PCA_INDPTR, I2C_PCA_IMODE);
+-		pca_outw(pca_data, I2C_PCA_IND, mode);
+-		pca_outw(pca_data, I2C_PCA_INDPTR, I2C_PCA_ISCLL);
+-		pca_outw(pca_data, I2C_PCA_IND, tlow);
+-		pca_outw(pca_data, I2C_PCA_INDPTR, I2C_PCA_ISCLH);
+-		pca_outw(pca_data, I2C_PCA_IND, thi);
+-
+-		pca_set_con(pca_data, I2C_PCA_CON_ENSIO);
+ 	}
+ 	udelay(500); /* 500 us for oscillator to stabilise */
+=20
+diff --git a/include/linux/i2c-algo-pca.h b/include/linux/i2c-algo-pca.h
+index d03071732db4..ebeadb80c797 100644
+--- a/include/linux/i2c-algo-pca.h
++++ b/include/linux/i2c-algo-pca.h
+@@ -53,6 +53,20 @@
+ #define I2C_PCA_CON_SI		0x08 /* Serial Interrupt */
+ #define I2C_PCA_CON_CR		0x07 /* Clock Rate (MASK) */
+=20
++/**
++ * struct i2c_bus_settings - The configured i2c bus settings
++ * @mode: Configured i2c bus mode (PCA9665)
++ * @tlow: Configured SCL LOW period (PCA9665)
++ * @thi: Configured SCL HIGH period (PCA9665)
++ * @clock_freq: The configured clock frequency (PCA9564)
++ */
++struct i2c_bus_settings {
++	int mode;
++	int tlow;
++	int thi;
++	int clock_freq;
++};
++
+ struct i2c_algo_pca_data {
+ 	void 				*data;	/* private low level data */
+ 	void (*write_byte)		(void *data, int reg, int val);
+@@ -64,6 +78,7 @@ struct i2c_algo_pca_data {
+ 	 * For PCA9665, use the frequency you want here. */
+ 	unsigned int			i2c_clock;
+ 	unsigned int			chip;
++	struct i2c_bus_settings		bus_settings;
+ };
+=20
+ int i2c_pca_add_bus(struct i2c_adapter *);
+--=20
 2.27.0
 
