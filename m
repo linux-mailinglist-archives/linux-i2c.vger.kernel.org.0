@@ -2,145 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D962587CC
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 08:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070C42587E0
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 08:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbgIAGBy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Sep 2020 02:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726212AbgIAGBy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Sep 2020 02:01:54 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB90C0612A3;
-        Mon, 31 Aug 2020 23:01:53 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id bo3so11609274ejb.11;
-        Mon, 31 Aug 2020 23:01:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EkupweJqHLfmFCxLHqeG68vNKrHPfrtIjt4kzmPcnsI=;
-        b=EyFbK6eF8UZibuQKO0GC9NV71maFJP6Lk1Amk++dT0OGoetZLaE5FVeFT89z08eGzl
-         f1A1cfzS6GKc8Cer9n4YrPL6GEjN02/ul1cZdv2y5G8EcfxqJIjRnUb6WJgO5ji7nIOg
-         dSiB0q/ear5rjcGRSl54tmtYIBNfyS9v5FTNI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EkupweJqHLfmFCxLHqeG68vNKrHPfrtIjt4kzmPcnsI=;
-        b=c23WyUwnFtAim9NpfK/fXGtcsYgmKn83EV+r/NK1uGw0CttKoNOEljxMrFDXm5vef3
-         tRi2YU8C0Gr+N+FMPt3ZKi8GBZJ1S39wajg9zNOvZDTuZhmSdY24iJYgVm0ZAaQs3JtY
-         v2TV2bLwrWlnm9em+Gd75FMaPThaatJl3cSYNRBR8t+3F9XSPs8tbUa/rGGRPGU9PdQn
-         WzYZIrRHEBKXTDKG9uiO++UxDtXRJd31lJz7yh3TYP5kAw7cAxhzTt5RT93DzgP9USgX
-         ZMZF/HjCVj8Ub7um6/Os+l9KnnHvo0wth0aJr6ak+OssyrTcddSF6+75rOgrY0ZRe279
-         IG+Q==
-X-Gm-Message-State: AOAM531RrYyonP/LvZrkBsFp6PjmwNc3/pwe4bAv48Qch1UITMEt1I/O
-        ODJS7RcpQ06LUBrFYr7WUi7Quq9p0jlZnGmh5G5+rHgaP3k=
-X-Google-Smtp-Source: ABdhPJwfJvRaHnwieIAyxhCfgXEjfwjIFQEZOY8ooA0sW1prdZMe1Dgnswd09o3V5KVBKldbrjWf7uszgsVtQBqTa+o=
-X-Received: by 2002:a17:906:8401:: with SMTP id n1mr76455ejx.215.1598940112575;
- Mon, 31 Aug 2020 23:01:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200820161152.22751-1-eajames@linux.ibm.com> <20200820161152.22751-2-eajames@linux.ibm.com>
-In-Reply-To: <20200820161152.22751-2-eajames@linux.ibm.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 1 Sep 2020 06:01:39 +0000
-Message-ID: <CACPK8Xe6CWgs555t_TCkwv2fZ9Aev9bFH6P8dHYnp9u6Pt0dVg@mail.gmail.com>
-Subject: Re: [PATCH 1/5] dt-bindings: input: Add documentation for IBM
- Operation Panel
+        id S1726112AbgIAGLM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Sep 2020 02:11:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54572 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726006AbgIAGLM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 1 Sep 2020 02:11:12 -0400
+Received: from localhost (p5486cc57.dip0.t-ipconnect.de [84.134.204.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D61DC208DB;
+        Tue,  1 Sep 2020 06:11:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598940671;
+        bh=YsDbACSX8CnRhHRZGrmXUc3sEBWwyLNxZmT5l9Rde84=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CLKRRC3FAZcPv5wieBFaYC4/EIyrAe7n9Rwvf9RaPKLFuCsEguaLgth/kwWICOt/T
+         uZDzm0qqCGT00++bb/x44FoBogEmMASrHh7/S875Er/fji8IUqH5XAED8hN1jB9n7L
+         PjuXCq+nuZ9cL7SbFAShV8+1oA55Jn55fCJb3zrA=
+Date:   Tue, 1 Sep 2020 08:11:08 +0200
+From:   Wolfram Sang <wsa@kernel.org>
 To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-input@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        linux-i2c@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        dmitry.torokhov@gmail.com, Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        benh@kernel.crashing.org, brendanhiggins@google.com,
+        dmitry.torokhov@gmail.com, robh+dt@kernel.org
+Subject: Re: [PATCH 2/5] input: misc: Add IBM Operation Panel driver
+Message-ID: <20200901061108.GB1148@ninjato>
+References: <20200820161152.22751-1-eajames@linux.ibm.com>
+ <20200820161152.22751-3-eajames@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IiVenqGWf+H9Y6IX"
+Content-Disposition: inline
+In-Reply-To: <20200820161152.22751-3-eajames@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 20 Aug 2020 at 16:12, Eddie James <eajames@linux.ibm.com> wrote:
->
-> Document the bindings for the IBM Operation Panel, which provides
-> a simple interface to control a server. It has a display and three
-> buttons.
-> Also update MAINTAINERS for the new file.
->
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-Acked-by: Joel Stanley <joel@jms.id.au>
+--IiVenqGWf+H9Y6IX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> ---
->  .../bindings/input/ibm,op-panel.yaml          | 38 +++++++++++++++++++
->  MAINTAINERS                                   |  6 +++
->  2 files changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/ibm,op-panel.yaml
->
-> diff --git a/Documentation/devicetree/bindings/input/ibm,op-panel.yaml b/Documentation/devicetree/bindings/input/ibm,op-panel.yaml
-> new file mode 100644
-> index 000000000000..86a32e8f3ef0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/ibm,op-panel.yaml
-> @@ -0,0 +1,38 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/input/ibm,op-panel.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: IBM Operation Panel
-> +
-> +maintainers:
-> +  - Eddie James <eajames@linux.ibm.com>
-> +
-> +description: |
-> +  The IBM Operation Panel provides a simple interface to control the connected
-> +  server. It has a display and three buttons: two directional arrows and one
-> +  'Enter' button.
-> +
-> +properties:
-> +  compatible:
-> +    const: ibm,op-panel
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ibm-op-panel@62 {
-> +            compatible = "ibm,op-panel";
-> +            reg = <0x40000062>; /* I2C_OWN_SLAVE_ADDRESS */
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ac79fdbdf8d0..a9fd08e9cd54 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -8278,6 +8278,12 @@ T:       git git://git.kernel.org/pub/scm/linux/kernel/git/aegl/linux.git
->  F:     Documentation/ia64/
->  F:     arch/ia64/
->
-> +IBM Operation Panel Input Driver
-> +M:     Eddie James <eajames@linux.ibm.com>
-> +L:     linux-input@vger.kernel.org
-> +S:     Maintained
-> +F:     Documentation/devicetree/bindings/input/ibm,op-panel.yaml
-> +
->  IBM Power 842 compression accelerator
->  M:     Haren Myneni <haren@us.ibm.com>
->  S:     Supported
-> --
-> 2.26.2
->
+
+> +	switch (event) {
+> +	case I2C_SLAVE_STOP:
+> +		command_size = panel->idx;
+> +		fallthrough;
+> +	case I2C_SLAVE_WRITE_REQUESTED:
+> +		panel->idx = 0;
+> +		break;
+> +	case I2C_SLAVE_WRITE_RECEIVED:
+> +		if (panel->idx < sizeof(panel->command))
+> +			panel->command[panel->idx++] = *val;
+> +		else
+> +			dev_dbg(&panel->input->dev, "command truncated\n");
+
+Just double checking: Do you really want to process truncated commands?
+Since you detect the state here, you could also choose to reject such
+commands?
+
+
+--IiVenqGWf+H9Y6IX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9N5fwACgkQFA3kzBSg
+KbblGxAAqtep5GwduBK2FEY7BHP1N8rC4iVTZ7zJcUIwulC+F5Yp1xRPKz1qSQ/S
+7FiKoSb+PCIbaxb4y6XninMvEp1wd0Tg+3LJTiKf2GLbYP+SbAOEHIAPMONFudmL
+d252Sfh+8arrvDfU7xgRVwnMQZEd86y7qQv3l6iAWHUps4Xq1xrJ4cWE9P5FoUOW
+ZBVW+4snG0Df1FE8FI0K1IR6ubQzFTa01ihq1ua2VRA1Jxt2X2eSKNp0CP0hfOjY
+yAFXmqxMU7mG+t2TgzVJawdDqSJSm+rXDDF6VOTudT4FQh6R34HEC5b7T5Z6x090
+vJfXV3sYTtdnb7Pa2v3TnnF7dR/K0we7GZlXtI1ssgx/+7MioXqX2/2zgPTJtrnl
+0lAN8B0tWz2bucSxb0e2DK3MYnO6GmK1QHMI+Q/aDHjOXjHx2qsfpy3DHxZdmV0h
+DwEZxGR+RZ9/gsPMot2ahQhC/cR9EKHPnhu5+t2dQvyeRYo95Y3gfTm52U+/qbg1
+aPTLqJHZXcLE8hLh2wzmjoaRl/lULyizU3IGvI/aFIA+dzRdQHe00QVe6b13LmrK
+ABQW2hBfV2XYo7l8H11evDVJ9PNDK32Lj/askz7F4+xC4yq7B02X+zb8r2mNpN7e
+FOY1/3ShXPSrQAEiTeu0oKjWY+mzjqPngc8xRhasn4nrM/5RKj8=
+=Mnzn
+-----END PGP SIGNATURE-----
+
+--IiVenqGWf+H9Y6IX--
