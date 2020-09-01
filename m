@@ -2,96 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 974DF258AC8
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 10:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EB5258BB3
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 11:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727972AbgIAIvq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Sep 2020 04:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727915AbgIAIvI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Sep 2020 04:51:08 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C259CC061244;
-        Tue,  1 Sep 2020 01:51:06 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id t11so209647plr.5;
-        Tue, 01 Sep 2020 01:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xD7AOhYrDQ8kkfdgEvt/y0u2Xdwvh6fCgyljU9EIUyY=;
-        b=FABgGNgVrC2WMjW6y8hwbXiuAPDyunDXT3GaLiIjvPsfYjB44e4eMEph/2pKD0Pe4e
-         1zRS2pRn35ajG+jI42hIvtEIluvLJiQMOHOWoiC7kujTDm2kf8YDCEWgTWt2Zrs8u/Th
-         U9PyZ7uvDi9Lxl5FaWgekWxmvgjMgizz65UUcQJKH3i0PLeAeFhwqtbVu8sf49nSoEsQ
-         t5bi3wmPefDBB2LVUII2CdAZ0BoV0Mnn/eNj1/9kMLdPduaK3KCUUCQrYsgU3TdtWRsk
-         2ceFG9pCOeScNIN3YOiD+eCb11t8KEBYvz5q1gpxvAXLGfvNxX6d3JQ71gMiSd2OQyzx
-         g5AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xD7AOhYrDQ8kkfdgEvt/y0u2Xdwvh6fCgyljU9EIUyY=;
-        b=To0Sy0YPX5KYwi/KVrsjPWVB0BPBNGgjH2811aDw9N0TmoO1FK1vYzytTeHI1awF6y
-         zf9XElZX+/NbYa3ZUJ13mBTyv78auMK8iBVqMZpGJZzoWtNG72cB7KLl2GWgFL45HIfg
-         tSHR/LKHoeEKsETxMc9s+WlXaUAaDgMEr/Xv5/ZldI3wpMlaDNSrSkKWarFl2OGfVoJ6
-         dP+T3gySc5k8k4ZtcOsQCMoIvlOYyvWO/FyWU/RiABRIWgfVq5wUB268rLF/Y9+BP5s9
-         fUUYDWSGvs71TxBI9N7hoBlqwGELq8vMMSc3lN0N0On0TnZV/SI2YzwcFoOyg43HwqdR
-         vDig==
-X-Gm-Message-State: AOAM531QBsqZ20ZW4bIVPn2b6wEH3NUI7XbOqWOo8DRFd0wPPvQmdjWR
-        lmq16ucL8Xv83TC8eRs3Kd0ln241IMUtObjn1V8=
-X-Google-Smtp-Source: ABdhPJyksbW8OmcVYhvI14Fj54C4ihpatgb1J0h7uGF9RmYSFYWKfDks9WtvUKyN5qid4RP56VPjpQK04UwFSUAGBaM=
-X-Received: by 2002:a17:902:bc85:: with SMTP id bb5mr481240plb.303.1598950265536;
- Tue, 01 Sep 2020 01:51:05 -0700 (PDT)
+        id S1726124AbgIAJfI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Sep 2020 05:35:08 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41080 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726112AbgIAJfI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 1 Sep 2020 05:35:08 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 448D0B7DB;
+        Tue,  1 Sep 2020 09:35:07 +0000 (UTC)
+Date:   Tue, 1 Sep 2020 11:35:05 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Vaibhav Gupta <vaibhavgupta40@gmail.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Volker =?UTF-8?B?UsO8bWVsaW4=?= <vr_qemu@t-online.de>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Subject: Re: [PATCH] i2c: i801: Fix resume bug
+Message-ID: <20200901113505.68faaa49@endymion>
+In-Reply-To: <20200831145929.GA11480@gmail.com>
+References: <20200825191303.4a258073@endymion>
+        <20200828085753.GH1343@ninjato>
+        <20200831145929.GA11480@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20200901005713.27453-1-evan.nimmo@alliedtelesis.co.nz>
- <20200901082046.GO1891694@smile.fi.intel.com> <20200901084619.GA897@ninjato>
-In-Reply-To: <20200901084619.GA897@ninjato>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 1 Sep 2020 11:50:48 +0300
-Message-ID: <CAHp75VdGkHqr_bJ5f2hf0yfk5rTAdpNkBUzcM=JGHKgnhyo-=Q@mail.gmail.com>
-Subject: Re: [PATCH] i2c: algo-pca: Reapply i2c bus settings after reset
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Sep 1, 2020 at 11:48 AM Wolfram Sang <wsa@kernel.org> wrote:
-> > > +/**
-> > > + * struct i2c_bus_settings - The configured i2c bus settings
-> > > + * @mode: Configured i2c bus mode (PCA9665)
-> > > + * @tlow: Configured SCL LOW period (PCA9665)
-> > > + * @thi: Configured SCL HIGH period (PCA9665)
-> > > + * @clock_freq: The configured clock frequency (PCA9564)
-> > > + */
-> > > +struct i2c_bus_settings {
-> > > +   int mode;
-> > > +   int tlow;
-> > > +   int thi;
-> > > +   int clock_freq;
-> > > +};
-> >
-> > This is a good candidate to have it in generic header for sake of the
-> > unification. Possible users:
-> >
-> > struct tegra_i2c_hw_feature
-> > struct cci_data::struct hw_params
+On Mon, 31 Aug 2020 20:29:29 +0530, Vaibhav Gupta wrote:
+> On Fri, Aug 28, 2020 at 10:57:53AM +0200, Wolfram Sang wrote:
+> > On Tue, Aug 25, 2020 at 07:13:03PM +0200, Jean Delvare wrote:  
+> > > @@ -1961,8 +1965,11 @@ static int i801_suspend(struct device *d
+> > >  
+> > >  static int i801_resume(struct device *dev)
+> > >  {
+> > > -	struct i801_priv *priv = dev_get_drvdata(dev);
+> > > +	struct pci_dev *pci_dev = to_pci_dev(dev);
+> > > +	struct i801_priv *priv = pci_get_drvdata(pci_dev);
+> > > +	unsigned char hstcfg = i801_setup_hstcfg(priv->original_hstcfg);
+> > >  
+> > > +	pci_write_config_byte(pci_dev, SMBHSTCFG, hstcfg);  
+> > 
+> > And on top of that, we could skip the 'hstcfg' variable here.
 >
-> Could be evaluated, but outside the scope of this patch, I think. This
-> is a bugfix, so a self-contained patch makes backporting a lot easier.
+> Add extra parameter of "struct pci_dev*" type in i801_setup_hstcfg().
 
-True, my point here is to think if we were beneficial of this
-definition in the i2c.h.
+That was my first approach, yes. But then I tried passing the struct
+i801_priv * instead, and it looks even neater to me (but I'm biased
+because I did it). I'll post that for review shortly.
 
+> We can
+> also skip the introduction of "struct pci_dev*" type variable in .resume()
+> then. Just use to_pci_dev(dev) .
+
+I don't really mind keeping the pci_dev variable, for symmetry with
+.suspend(), and the compiler will optimize it away anyway. There's a
+minor cleanup possible in this area though, to which I'll give a try.
+
+Thanks,
 -- 
-With Best Regards,
-Andy Shevchenko
+Jean Delvare
+SUSE L3 Support
