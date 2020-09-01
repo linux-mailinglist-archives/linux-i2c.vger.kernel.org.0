@@ -2,154 +2,190 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 849FF25A050
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 22:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1605725A068
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 23:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728972AbgIAU6s (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Sep 2020 16:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727788AbgIAU6r (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Sep 2020 16:58:47 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2683C061244
-        for <linux-i2c@vger.kernel.org>; Tue,  1 Sep 2020 13:58:46 -0700 (PDT)
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 87A5684488;
-        Wed,  2 Sep 2020 08:58:41 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1598993921;
-        bh=pwwOTo4HjFxEhPfVBMM5/92LuLyxOWSNLA1cU8rOBYo=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=02H760kZKDvRLVPFCyqHZKQ1hg4g2He0ETd5//0atDfRwCsuEkBt/HLXAGpOYegP0
-         k+xsnhise8JrnjMMaWO8lSBhqVVnSNiVPcoC4ClRKo+UGG51daZFNELt8UNPsEagWG
-         tk2TO2y0jDcaOekRE6AmhDTVEj/aSpNH3ngyhfgi6vP71xgwrmzTPC489NvDv9835l
-         wYfDGaYF7Q2J/Egbh0n/3u8y86ISKPH0CkyjXM799srXJ42ZQc5VrevBYSXjyp+Zfq
-         DDDgZMHbQDySR8umg7n2098kb2IZRO2x821q0p0vbzzBiOqPzV3rrx2GcykJkyVSpd
-         6NPpyUAvaBU9Q==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f4eb5ff0001>; Wed, 02 Sep 2020 08:58:39 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Wed, 2 Sep 2020 08:58:41 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.006; Wed, 2 Sep 2020 08:58:41 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Evan Nimmo <Evan.Nimmo@alliedtelesis.co.nz>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "jdelvare@suse.de" <jdelvare@suse.de>,
-        "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: algo-pca: Reapply i2c bus settings after reset
-Thread-Topic: [PATCH] i2c: algo-pca: Reapply i2c bus settings after reset
-Thread-Index: AQHWf/rlsLodCzGj+0ymaR+eTrtgJqlTfDYA
-Date:   Tue, 1 Sep 2020 20:58:41 +0000
-Message-ID: <842bf7c4-3677-4182-4def-89f198e81fb7@alliedtelesis.co.nz>
-References: <20200901005713.27453-1-evan.nimmo@alliedtelesis.co.nz>
-In-Reply-To: <20200901005713.27453-1-evan.nimmo@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C0679069F136714B85EA9B9BBDDDDE1B@atlnz.lc>
-Content-Transfer-Encoding: base64
+        id S1728160AbgIAVDf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Sep 2020 17:03:35 -0400
+Received: from mga09.intel.com ([134.134.136.24]:20771 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727877AbgIAVDa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 1 Sep 2020 17:03:30 -0400
+IronPort-SDR: dZmoiONWZo0S4II7846BX7cyRAi18qQ6RzopuGIgnM5E4MFd2GB42UocT+EAlkqWHXlQUzFkBp
+ NuGZNnwt2bMw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="158268521"
+X-IronPort-AV: E=Sophos;i="5.76,380,1592895600"; 
+   d="scan'208";a="158268521"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 14:03:29 -0700
+IronPort-SDR: 8o66MeRpmyywhthKFSm6W2bY64Ul2UbhNkZuGaHBuJdknkzIEvJCKF7Qy8xrlHR+nPlvObi2uN
+ PEBrRclHoK8A==
+X-IronPort-AV: E=Sophos;i="5.76,380,1592895600"; 
+   d="scan'208";a="314874351"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 14:03:26 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 735A22034D;
+        Wed,  2 Sep 2020 00:03:24 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1kDDRF-0002DJ-95; Wed, 02 Sep 2020 00:03:33 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v7 0/6] Support running driver's probe for a device powered off
+Date:   Wed,  2 Sep 2020 00:03:27 +0300
+Message-Id: <20200901210333.8462-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGkgRXZhbiwNCg0KT25lIG1pbm9yIGNvbW1lbnQgZnJvbSBtZSBiZWxvdy4gV2l0aCB0aGF0DQoN
-ClJldmlld2VkLWJ5OiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMu
-Y28ubno+DQoNCk9uIDEvMDkvMjAgMTI6NTcgcG0sIEV2YW4gTmltbW8gd3JvdGU6DQo+IElmIHNv
-bWV0aGluZyBnb2VzIHdyb25nIChzdWNoIGFzIHRoZSBTQ0wgYmVpbmcgc3R1Y2sgbG93KSB0aGVu
-IHdlIG5lZWQNCj4gdG8gcmVzZXQgdGhlIHBjYSBjaGlwLiBUaGUgaXNzdWUgd2l0aCB0aGlzIGlz
-IHRoYXQgb24gcmVzZXQgd2UgbG9zZSBhbGwNCj4gY29uZmlnIHNldHRpbmdzIGFuZCB0aGUgY2hp
-cCBlbmRzIHVwIGluIGEgZGlzYWJsZWQgc3RhdGUgd2hpY2ggcmVzdWx0cw0KPiBpbiBhIGxvY2sg
-dXAvaGlnaCBjcHUgdXNhZ2UuIFdlIG5lZWQgdG8gcmUtYXBwbHkgYW55IGNvbmZpZ3VyYXRpb24g
-dGhhdA0KPiBoYWQgcHJldmlvdXNseSBiZWVuIHNldCBhbmQgcmUtZW5hYmxlIHRoZSBjaGlwLg0K
-Pg0KPiBTaWduZWQtb2ZmLWJ5OiBFdmFuIE5pbW1vIDxldmFuLm5pbW1vQGFsbGllZHRlbGVzaXMu
-Y28ubno+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvaTJjL2FsZ29zL2kyYy1hbGdvLXBjYS5jIHwgMzYg
-KysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0NCj4gICBpbmNsdWRlL2xpbnV4L2kyYy1h
-bGdvLXBjYS5oICAgICB8IDE1ICsrKysrKysrKysrKysNCj4gICAyIGZpbGVzIGNoYW5nZWQsIDM5
-IGluc2VydGlvbnMoKyksIDEyIGRlbGV0aW9ucygtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVy
-cy9pMmMvYWxnb3MvaTJjLWFsZ28tcGNhLmMgYi9kcml2ZXJzL2kyYy9hbGdvcy9pMmMtYWxnby1w
-Y2EuYw0KPiBpbmRleCA3MTBmYmVmOWE5YzIuLjJlNGUyNzA3M2Y0MCAxMDA2NDQNCj4gLS0tIGEv
-ZHJpdmVycy9pMmMvYWxnb3MvaTJjLWFsZ28tcGNhLmMNCj4gKysrIGIvZHJpdmVycy9pMmMvYWxn
-b3MvaTJjLWFsZ28tcGNhLmMNCj4gQEAgLTQxLDggKzQxLDIyIEBAIHN0YXRpYyB2b2lkIHBjYV9y
-ZXNldChzdHJ1Y3QgaTJjX2FsZ29fcGNhX2RhdGEgKmFkYXApDQo+ICAgCQlwY2Ffb3V0dyhhZGFw
-LCBJMkNfUENBX0lORFBUUiwgSTJDX1BDQV9JUFJFU0VUKTsNCj4gICAJCXBjYV9vdXR3KGFkYXAs
-IEkyQ19QQ0FfSU5ELCAweEE1KTsNCj4gICAJCXBjYV9vdXR3KGFkYXAsIEkyQ19QQ0FfSU5ELCAw
-eDVBKTsNCj4gKw0KPiArCQkvKiBXZSBuZWVkIHRvIGFwcGx5IGFueSBjb25maWd1cmF0aW9uIHNl
-dHRpbmdzIHRoYXQNCj4gKwkJICogd2VyZSBjYWxjdWxhdGVkIGluIHRoZSBwY2FfaW5pdCBmdW5j
-dGlvbi4gVGhlIHJlc2V0DQo+ICsJCSAqIHJlc3VsdHMgaW4gdGhlc2UgY2hhbmdlcyBiZWluZyBz
-ZXQgYmFjayB0byBkZWZhdWx0cy4NCj4gKwkJICovDQoNCiJ0aGVzZSBjaGFuZ2VzIiBkb2Vzbid0
-IHJlYWQgd2VsbC4gSG93IGFib3V0DQoNCi8qDQogwqAqIEFmdGVyIGEgcmVzZXQgd2UgbmVlZCB0
-byByZS1hcHBseSBhbnkgY29uZmlndXJhdGlvbiAoY2FsY3VsYXRlZCBpbiANCnBjYV9pbml0KQ0K
-IMKgKiB0byBnZXQgdGhlIGJ1cyBpbiBhIHdvcmtpbmcgc3RhdGUuDQogwqAqLw0KDQo+ICsJCXBj
-YV9vdXR3KGFkYXAsIEkyQ19QQ0FfSU5EUFRSLCBJMkNfUENBX0lNT0RFKTsNCj4gKwkJcGNhX291
-dHcoYWRhcCwgSTJDX1BDQV9JTkQsIGFkYXAtPmJ1c19zZXR0aW5ncy5tb2RlKTsNCj4gKwkJcGNh
-X291dHcoYWRhcCwgSTJDX1BDQV9JTkRQVFIsIEkyQ19QQ0FfSVNDTEwpOw0KPiArCQlwY2Ffb3V0
-dyhhZGFwLCBJMkNfUENBX0lORCwgYWRhcC0+YnVzX3NldHRpbmdzLnRsb3cpOw0KPiArCQlwY2Ff
-b3V0dyhhZGFwLCBJMkNfUENBX0lORFBUUiwgSTJDX1BDQV9JU0NMSCk7DQo+ICsJCXBjYV9vdXR3
-KGFkYXAsIEkyQ19QQ0FfSU5ELCBhZGFwLT5idXNfc2V0dGluZ3MudGhpKTsNCj4gKw0KPiArCQlw
-Y2Ffc2V0X2NvbihhZGFwLCBJMkNfUENBX0NPTl9FTlNJTyk7DQo+ICAgCX0gZWxzZSB7DQo+ICAg
-CQlhZGFwLT5yZXNldF9jaGlwKGFkYXAtPmRhdGEpOw0KPiArCQlwY2Ffc2V0X2NvbihhZGFwLCBJ
-MkNfUENBX0NPTl9FTlNJTyB8IGFkYXAtPmJ1c19zZXR0aW5ncy5jbG9ja19mcmVxKTsNCj4gICAJ
-fQ0KPiAgIH0NCj4gICANCj4gQEAgLTQyMywxMyArNDM3LDE1IEBAIHN0YXRpYyBpbnQgcGNhX2lu
-aXQoc3RydWN0IGkyY19hZGFwdGVyICphZGFwKQ0KPiAgIAkJCQkiIFVzZSB0aGUgbm9taW5hbCBm
-cmVxdWVuY3kuXG4iLCBhZGFwLT5uYW1lKTsNCj4gICAJCX0NCj4gICANCj4gKwkJY2xvY2sgPSBw
-Y2FfY2xvY2socGNhX2RhdGEpOw0KPiArDQo+ICsJCS8qIFN0b3JlIHNldHRpbmdzIGFzIHRoZXNl
-IHdpbGwgYmUgbmVlZGVkIHdoZW4gdGhlIHBjYSBjaGlwIGlzIHJlc2V0ICovDQo+ICsJCXBjYV9k
-YXRhLT5idXNfc2V0dGluZ3MuY2xvY2tfZnJlcSA9IGNsb2NrOw0KPiArDQo+ICAgCQlwY2FfcmVz
-ZXQocGNhX2RhdGEpOw0KPiAgIA0KPiAtCQljbG9jayA9IHBjYV9jbG9jayhwY2FfZGF0YSk7DQo+
-ICAgCQlwcmludGsoS0VSTl9JTkZPICIlczogQ2xvY2sgZnJlcXVlbmN5IGlzICVka0h6XG4iLA0K
-PiAgIAkJICAgICBhZGFwLT5uYW1lLCBmcmVxc1tjbG9ja10pOw0KPiAtDQo+IC0JCXBjYV9zZXRf
-Y29uKHBjYV9kYXRhLCBJMkNfUENBX0NPTl9FTlNJTyB8IGNsb2NrKTsNCj4gICAJfSBlbHNlIHsN
-Cj4gICAJCWludCBjbG9jazsNCj4gICAJCWludCBtb2RlOw0KPiBAQCAtNDk2LDE5ICs1MTIsMTUg
-QEAgc3RhdGljIGludCBwY2FfaW5pdChzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXApDQo+ICAgCQkJ
-dGhpID0gdGxvdyAqIG1pbl90aGkgLyBtaW5fdGxvdzsNCj4gICAJCX0NCj4gICANCj4gKwkJLyog
-U3RvcmUgc2V0dGluZ3MgYXMgdGhlc2Ugd2lsbCBiZSBuZWVkZWQgd2hlbiB0aGUgcGNhIGNoaXAg
-aXMgcmVzZXQgKi8NCj4gKwkJcGNhX2RhdGEtPmJ1c19zZXR0aW5ncy5tb2RlID0gbW9kZTsNCj4g
-KwkJcGNhX2RhdGEtPmJ1c19zZXR0aW5ncy50bG93ID0gdGxvdzsNCj4gKwkJcGNhX2RhdGEtPmJ1
-c19zZXR0aW5ncy50aGkgPSB0aGk7DQo+ICsNCj4gICAJCXBjYV9yZXNldChwY2FfZGF0YSk7DQo+
-ICAgDQo+ICAgCQlwcmludGsoS0VSTl9JTkZPDQo+ICAgCQkgICAgICIlczogQ2xvY2sgZnJlcXVl
-bmN5IGlzICVkSHpcbiIsIGFkYXAtPm5hbWUsIGNsb2NrICogMTAwKTsNCj4gLQ0KPiAtCQlwY2Ff
-b3V0dyhwY2FfZGF0YSwgSTJDX1BDQV9JTkRQVFIsIEkyQ19QQ0FfSU1PREUpOw0KPiAtCQlwY2Ff
-b3V0dyhwY2FfZGF0YSwgSTJDX1BDQV9JTkQsIG1vZGUpOw0KPiAtCQlwY2Ffb3V0dyhwY2FfZGF0
-YSwgSTJDX1BDQV9JTkRQVFIsIEkyQ19QQ0FfSVNDTEwpOw0KPiAtCQlwY2Ffb3V0dyhwY2FfZGF0
-YSwgSTJDX1BDQV9JTkQsIHRsb3cpOw0KPiAtCQlwY2Ffb3V0dyhwY2FfZGF0YSwgSTJDX1BDQV9J
-TkRQVFIsIEkyQ19QQ0FfSVNDTEgpOw0KPiAtCQlwY2Ffb3V0dyhwY2FfZGF0YSwgSTJDX1BDQV9J
-TkQsIHRoaSk7DQo+IC0NCj4gLQkJcGNhX3NldF9jb24ocGNhX2RhdGEsIEkyQ19QQ0FfQ09OX0VO
-U0lPKTsNCj4gICAJfQ0KPiAgIAl1ZGVsYXkoNTAwKTsgLyogNTAwIHVzIGZvciBvc2NpbGxhdG9y
-IHRvIHN0YWJpbGlzZSAqLw0KPiAgIA0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9pMmMt
-YWxnby1wY2EuaCBiL2luY2x1ZGUvbGludXgvaTJjLWFsZ28tcGNhLmgNCj4gaW5kZXggZDAzMDcx
-NzMyZGI0Li5lYmVhZGI4MGM3OTcgMTAwNjQ0DQo+IC0tLSBhL2luY2x1ZGUvbGludXgvaTJjLWFs
-Z28tcGNhLmgNCj4gKysrIGIvaW5jbHVkZS9saW51eC9pMmMtYWxnby1wY2EuaA0KPiBAQCAtNTMs
-NiArNTMsMjAgQEANCj4gICAjZGVmaW5lIEkyQ19QQ0FfQ09OX1NJCQkweDA4IC8qIFNlcmlhbCBJ
-bnRlcnJ1cHQgKi8NCj4gICAjZGVmaW5lIEkyQ19QQ0FfQ09OX0NSCQkweDA3IC8qIENsb2NrIFJh
-dGUgKE1BU0spICovDQo+ICAgDQo+ICsvKioNCj4gKyAqIHN0cnVjdCBpMmNfYnVzX3NldHRpbmdz
-IC0gVGhlIGNvbmZpZ3VyZWQgaTJjIGJ1cyBzZXR0aW5ncw0KPiArICogQG1vZGU6IENvbmZpZ3Vy
-ZWQgaTJjIGJ1cyBtb2RlIChQQ0E5NjY1KQ0KPiArICogQHRsb3c6IENvbmZpZ3VyZWQgU0NMIExP
-VyBwZXJpb2QgKFBDQTk2NjUpDQo+ICsgKiBAdGhpOiBDb25maWd1cmVkIFNDTCBISUdIIHBlcmlv
-ZCAoUENBOTY2NSkNCj4gKyAqIEBjbG9ja19mcmVxOiBUaGUgY29uZmlndXJlZCBjbG9jayBmcmVx
-dWVuY3kgKFBDQTk1NjQpDQo+ICsgKi8NCj4gK3N0cnVjdCBpMmNfYnVzX3NldHRpbmdzIHsNCj4g
-KwlpbnQgbW9kZTsNCj4gKwlpbnQgdGxvdzsNCj4gKwlpbnQgdGhpOw0KPiArCWludCBjbG9ja19m
-cmVxOw0KPiArfTsNCj4gKw0KPiAgIHN0cnVjdCBpMmNfYWxnb19wY2FfZGF0YSB7DQo+ICAgCXZv
-aWQgCQkJCSpkYXRhOwkvKiBwcml2YXRlIGxvdyBsZXZlbCBkYXRhICovDQo+ICAgCXZvaWQgKCp3
-cml0ZV9ieXRlKQkJKHZvaWQgKmRhdGEsIGludCByZWcsIGludCB2YWwpOw0KPiBAQCAtNjQsNiAr
-NzgsNyBAQCBzdHJ1Y3QgaTJjX2FsZ29fcGNhX2RhdGEgew0KPiAgIAkgKiBGb3IgUENBOTY2NSwg
-dXNlIHRoZSBmcmVxdWVuY3kgeW91IHdhbnQgaGVyZS4gKi8NCj4gICAJdW5zaWduZWQgaW50CQkJ
-aTJjX2Nsb2NrOw0KPiAgIAl1bnNpZ25lZCBpbnQJCQljaGlwOw0KPiArCXN0cnVjdCBpMmNfYnVz
-X3NldHRpbmdzCQlidXNfc2V0dGluZ3M7DQo+ICAgfTsNCj4gICANCj4gICBpbnQgaTJjX3BjYV9h
-ZGRfYnVzKHN0cnVjdCBpMmNfYWRhcHRlciAqKTs=
+Hi all,
+
+These patches enable calling (and finishing) a driver's probe function
+without powering on the respective device on busses where the practice is
+to power on the device for probe. While it generally is a driver's job to
+check the that the device is there, there are cases where it might be
+undesirable. (In this case it stems from a combination of hardware design
+and user expectations; see below.) The downside with this change is that
+if there is something wrong with the device, it will only be found at the
+time the device is used. In this case (the camera sensors + EEPROM in a
+sensor) I don't see any tangible harm from that though.
+
+An indication both from the driver and the firmware is required to allow
+the device's power state to remain off during probe (see the first patch).
+
+
+The use case is such that there is a privacy LED next to an integrated
+user-facing laptop camera, and this LED is there to signal the user that
+the camera is recording a video or capturing images. That LED also happens
+to be wired to one of the power supplies of the camera, so whenever you
+power on the camera, the LED will be lit, whether images are captured from
+the camera --- or not. There's no way to implement this differently
+without additional software control (allowing of which is itself a
+hardware design decision) on most CSI-2-connected camera sensors as they
+simply have no pin to signal the camera streaming state.
+
+This is also what happens during driver probe: the camera will be powered
+on by the I²C subsystem calling dev_pm_domain_attach() and the device is
+already powered on when the driver's own probe function is called. To the
+user this visible during the boot process as a blink of the privacy LED,
+suggesting that the camera is recording without the user having used an
+application to do that. From the end user's point of view the behaviour is
+not expected and for someone unfamiliar with internal workings of a
+computer surely seems quite suspicious --- even if images are not being
+actually captured.
+
+I've tested these on linux-next master. They also apply to Wolfram's
+i2c/for-next branch, there's a patch that affects the I²C core changes
+here (see below). The patches apart from that apply to Bartosz's
+at24/for-next as well as Mauro's linux-media master branch.
+
+since v6 <URL:https://lore.kernel.org/linux-acpi/20200826115432.6103-1-sakari.ailus@linux.intel.com/>:
+
+- Use u32 for the flags field in struct i2c_driver.
+
+- Use acpi_dev_get_property to read the allow-low-power-probe property.
+
+since v5 <URL:https://lore.kernel.org/linux-acpi/20200810142747.12400-1-sakari.ailus@linux.intel.com/>:
+
+- Identify sensors when they're first powered on. In previous versions, if
+  this wasn't in probe, it was not done at all.
+
+- Return allow_low_power_probe() only for ACPI devices, i.e. OF systems
+  are not affected by these changes.
+
+- Document that I2C_DRV_FL_ALLOW_LOW_POWER_PROBE flag only applies to ACPI
+  drivers.
+
+- Fix extra regulator_disable in at24 driver's remove function when the
+  device was already in low power state.
+
+since v4 <URL:https://lore.kernel.org/linux-acpi/20200121134157.20396-1-sakari.ailus@linux.intel.com/>:
+
+- Rename "probe-low-power" property as "allow-low-power-probe". This is
+  taken into account in function and file naming, too.
+
+- Turn probe_low_power field in struct i2c_driver into flags field.
+
+- Rebase on Wolfram's i2c/for-next branch that contains the removal of the
+  support for disabling I²C core IRQ mappings (commit
+  0c2a34937f7e4c4776bb261114c475392da2355c).
+
+- Change wording for "allow-low-power-probe" property in ACPI
+  documentation.
+
+since v3 <URL:https://lore.kernel.org/linux-acpi/20200109154529.19484-1-sakari.ailus@linux.intel.com/T/#t>:
+
+- Rework the 2nd patch based on Rafael's comments
+
+	- Rework description of the ACPI low power state helper function,
+	  according to Rafael's text.
+
+	- Rename and rework the same function as
+	  acpi_dev_state_low_power().
+
+	- Reflect the changes in commit message as well.
+
+- Added a patch to document the probe-low-power _DSD property.
+
+since v2 <URL:https://patchwork.kernel.org/cover/11114255/>:
+
+- Remove extra CONFIG_PM ifdefs; these are not needed.
+
+- Move the checks for power state hints from drivers/base/dd.c to
+  drivers/i2c/i2c-base-core.c; these are I²C devices anyway.
+
+- Move the probe_low_power field from struct device_driver to struct
+  i2c_driver.
+
+since v1:
+
+- Rename probe_powered_off struct device field as probe_low_power and
+  reflect the similar naming to the patches overall.
+
+- Work with CONFIG_PM disabled, too.
+
+Rajmohan Mani (1):
+  media: i2c: imx319: Support probe while the device is off
+
+Sakari Ailus (5):
+  i2c: Allow an ACPI driver to manage the device's power state during
+    probe
+  ACPI: Add a convenience function to tell a device is in low power
+    state
+  ov5670: Support probe whilst the device is in a low power state
+  at24: Support probing while off
+  Documentation: ACPI: Document allow-low-power-probe _DSD property
+
+ .../acpi/dsd/allow-low-power-probe.rst        | 28 +++++++
+ Documentation/firmware-guide/acpi/index.rst   |  1 +
+ drivers/acpi/device_pm.c                      | 31 ++++++++
+ drivers/i2c/i2c-core-base.c                   | 19 ++++-
+ drivers/media/i2c/imx319.c                    | 74 +++++++++++-------
+ drivers/media/i2c/ov5670.c                    | 76 +++++++++++--------
+ drivers/misc/eeprom/at24.c                    | 43 ++++++-----
+ include/linux/acpi.h                          |  5 ++
+ include/linux/i2c.h                           | 14 ++++
+ 9 files changed, 212 insertions(+), 79 deletions(-)
+ create mode 100644 Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
+
+-- 
+2.20.1
+
