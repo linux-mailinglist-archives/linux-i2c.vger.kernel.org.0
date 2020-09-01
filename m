@@ -2,118 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4E925A05E
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 23:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEAC25A0AA
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Sep 2020 23:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728730AbgIAVDh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Sep 2020 17:03:37 -0400
-Received: from mga12.intel.com ([192.55.52.136]:23422 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728098AbgIAVDf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 1 Sep 2020 17:03:35 -0400
-IronPort-SDR: +Mr+6vVp5TJcvdxd+Pd3f/P+4f6nPYNghpaOWlLO115JuqYUs+Q5Z+8QnWapQEHZRPjVuPZK6H
- z8D2hMACKukw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="136786013"
-X-IronPort-AV: E=Sophos;i="5.76,380,1592895600"; 
-   d="scan'208";a="136786013"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 14:03:35 -0700
-IronPort-SDR: XEZWkK12m3NRurgxOZ0Ler6s1GjrNyuUSTV2HECMOdTxCR64tDMXiREISajPYuDtfexl3iBdJk
- Xnq+rSUltiSA==
-X-IronPort-AV: E=Sophos;i="5.76,380,1592895600"; 
-   d="scan'208";a="477343364"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 14:03:31 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id A383722AF1;
-        Wed,  2 Sep 2020 00:03:24 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1kDDRF-0002Da-HG; Wed, 02 Sep 2020 00:03:33 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v7 6/6] Documentation: ACPI: Document allow-low-power-probe _DSD property
-Date:   Wed,  2 Sep 2020 00:03:33 +0300
-Message-Id: <20200901210333.8462-7-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200901210333.8462-1-sakari.ailus@linux.intel.com>
-References: <20200901210333.8462-1-sakari.ailus@linux.intel.com>
+        id S1728204AbgIAVL3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Sep 2020 17:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727927AbgIAVL1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Sep 2020 17:11:27 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C105C061244;
+        Tue,  1 Sep 2020 14:11:26 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id b12so465793lfp.9;
+        Tue, 01 Sep 2020 14:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=84MPreMuR2/T3yIOiZ/2P9Fj1HLxAFnVjtsguhtVnHk=;
+        b=jZO9hYcymOzuenDVMRBEJxSwecPQAP9LrYB5scHsZVAR+SqLC1rNtGtRXEBwH1f/Cp
+         UW5PQJdA3aA+6OxbegLO6K7YaW+wFxycI9/jDwz/M4B8MVG2pEml41g1J5ZcUw11mLCt
+         EBxrGpmNDJBLKCbcXnE+2ZkKrJKh1obCgNipXb4mwglYjyL/kdmW9EJwdQv9uqUZ1YRT
+         jp8MRuXR6+wHi6hkMDlosCM1R4TAinP7ZHgb8Nhx/53XAx39ukkBCv8n9u7n0tcCkhMX
+         /BteBL8BhbgJYZDIfKZDf76Bx3bvQJ7zivpOweYXFDVBviE5grHoRBXztc/0RQyyzLqg
+         TK8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=84MPreMuR2/T3yIOiZ/2P9Fj1HLxAFnVjtsguhtVnHk=;
+        b=PbkMAIiyCxPedV4VOvBDGmaG2ubR6uMPWiW+hpGIQs+Mi3SZETXZjrZgpRzQuzdq6b
+         +JidjcaBOycHiAEO4+AWtKtihTC6YGCX20POqoVNFz1G9uh0xcE7tUZXU6Vvps1jKzyr
+         MfheGQzaXMmGkXAyPPINJ9+z8SKkoGfPA6zolEVPz2Ix5rSBt76vEJLK7PUmb6hqyEsB
+         Gby0PChBah1PtSR+UZTPFwJ1AGWC7SzKh+i7HrMON5WLTksHoG0Nu4WCrp/tNSG26a2I
+         7z+zrkKO518QMTaXefK/yoU+Dud5F0RdPKW0XJRxCnFHRo7OrJX3BByXp5byh/IACOar
+         RNhQ==
+X-Gm-Message-State: AOAM533OQe3+Tin9a1m1SjCOUWC4fYI2GmjjtEUYGPYgxfA7RRz0ZvFo
+        rF9jK2fyIsf09EBVW9fZGjs=
+X-Google-Smtp-Source: ABdhPJx6UYt5kPQ7boJpEv3lj8V4IiEwS52R1CZ2imLoJEADp0rp1OMFFh89lPObOv8y0TbZftqmwg==
+X-Received: by 2002:a19:f245:: with SMTP id d5mr1545418lfk.97.1598994683653;
+        Tue, 01 Sep 2020 14:11:23 -0700 (PDT)
+Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.gmail.com with ESMTPSA id g19sm502656ljk.125.2020.09.01.14.11.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2020 14:11:22 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/17] Improvements for Tegra I2C driver
+Date:   Wed,  2 Sep 2020 00:10:45 +0300
+Message-Id: <20200901211102.11072-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Document the probe-low-power _DSD property and how it is used with I²C
-drivers.
+Hello!
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- .../acpi/dsd/allow-low-power-probe.rst        | 28 +++++++++++++++++++
- Documentation/firmware-guide/acpi/index.rst   |  1 +
- 2 files changed, 29 insertions(+)
- create mode 100644 Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
+This series performs a small refactoring of the Tegra I2C driver code and
+hardens the atomic-transfer mode.
 
-diff --git a/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst b/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
-new file mode 100644
-index 0000000000000..6fcc89162b898
---- /dev/null
-+++ b/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
-@@ -0,0 +1,28 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======================================
-+Probing I²C devices in low power state
-+======================================
-+
-+Introduction
-+============
-+
-+In some cases it may be preferred to leave certain devices powered off for the
-+entire system bootup if powering on these devices has adverse side effects,
-+beyond just powering on the said device. Linux recognizes the _DSD property
-+"allow-low-power-probe" that can be used for this purpose.
-+
-+How it works
-+============
-+
-+The property "allow-low-power-probe" boolean property may be used to tell Linux
-+that the I²C framework should instruct the kernel ACPI framework to leave the
-+device in the low power state. If the driver indicates its support for this by
-+setting the I2C_DRV_FL_ALLOW_LOW_POWER_PROBE flag in struct i2c_driver.flags
-+field and the "allow-low-power-probe" property is present, the device will not
-+be powered on for probe.
-+
-+The downside is that as the device is not powered on, even if there's a problem
-+with the device, the driver likely probes just fine but the first user will
-+find out the device doesn't work, instead of a failure at probe time. This
-+feature should thus be used sparingly.
-diff --git a/Documentation/firmware-guide/acpi/index.rst b/Documentation/firmware-guide/acpi/index.rst
-index ad3b5afdae77e..0070fcde9e669 100644
---- a/Documentation/firmware-guide/acpi/index.rst
-+++ b/Documentation/firmware-guide/acpi/index.rst
-@@ -11,6 +11,7 @@ ACPI Support
-    dsd/graph
-    dsd/data-node-references
-    dsd/leds
-+   dsd/allow-low-power-probe
-    enumeration
-    osi
-    method-customizing
+Changelog:
+
+v2: - Cleaned more messages in the "Clean up messages in the code" patch.
+
+    - The error code of reset_control_reset() is checked now.
+
+    - Added these new patches to clean up couple more things:
+
+        i2c: tegra: Check errors for both positive and negative values
+        i2c: tegra: Improve coding style of tegra_i2c_wait_for_config_load()
+        i2c: tegra: Remove unnecessary whitespaces and newlines
+        i2c: tegra: Rename variable in tegra_i2c_issue_bus_clear()
+        i2c: tegra: Improve driver module description
+
+Dmitry Osipenko (17):
+  i2c: tegra: Make tegra_i2c_flush_fifos() usable in atomic transfer
+  i2c: tegra: Add missing newline before returns
+  i2c: tegra: Clean up messages in the code
+  i2c: tegra: Don't ignore tegra_i2c_flush_fifos() error
+  i2c: tegra: Use reset_control_reset()
+  i2c: tegra: Improve formatting of function variables
+  i2c: tegra: Use dev_err_probe()
+  i2c: tegra: Runtime PM always available on Tegra
+  i2c: tegra: Clean up probe function
+  i2c: tegra: Drop '_timeout' from wait/poll function names
+  i2c: tegra: Remove likely/unlikely from the code
+  i2c: tegra: Factor out error recovery from tegra_i2c_xfer_msg()
+  i2c: tegra: Check errors for both positive and negative values
+  i2c: tegra: Improve coding style of tegra_i2c_wait_for_config_load()
+  i2c: tegra: Remove unnecessary whitespaces and newlines
+  i2c: tegra: Rename variable in tegra_i2c_issue_bus_clear()
+  i2c: tegra: Improve driver module description
+
+ drivers/i2c/busses/i2c-tegra.c | 686 ++++++++++++++++++---------------
+ 1 file changed, 379 insertions(+), 307 deletions(-)
+
 -- 
-2.20.1
+2.27.0
 
