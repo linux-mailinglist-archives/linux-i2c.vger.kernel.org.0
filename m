@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0FE25AE79
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Sep 2020 17:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54C525AE5A
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Sep 2020 17:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727962AbgIBPLk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Sep 2020 11:11:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43972 "EHLO mail.kernel.org"
+        id S1728216AbgIBPHT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Sep 2020 11:07:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44088 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728149AbgIBPHH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 2 Sep 2020 11:07:07 -0400
+        id S1727897AbgIBPHO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 2 Sep 2020 11:07:14 -0400
 Received: from kozik-lap.mshome.net (unknown [194.230.155.106])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5904D207D3;
-        Wed,  2 Sep 2020 15:07:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 63A872098B;
+        Wed,  2 Sep 2020 15:07:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599059226;
-        bh=d/sTQ5yzFwXEJEHgq/56l3IhxWk0SqmDdAYgZ97oGLc=;
+        s=default; t=1599059232;
+        bh=cSQFmywcXooFcP8VNV2UCrqNvF5ouq7dUikOFo9zEuE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K/zUDBdIP3PPMqY7dOzPHDAvrIyHmr5a94+wMAA+GArrXXeEutxsJgbYxbLyqq5/C
-         E2uOTwHJpDZFD5orZyyIdP/7KY/VvPScasiEZgLWJhPj6XZph3ID7VW5AQpWQN1KXo
-         nVLBNNpMdVGH9BOe6mD+vAdrJJcxgsrNTQ+15lZ8=
+        b=HbkL8XGjlZRIsnFjTWTb8qGh7g6TA7XNjmlnpLsW6jen2ejlREFL339vj7TAxnvIE
+         Wm0UUO3He96/92GV1im9eWcxkprkOuAb+PHY8CHUpgOq1DEhLH0ya0vRS/Q632PTR+
+         3K+ywjp4pqrqiWIsSqKLLtjF27yD5l/9OL2ccxik=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -48,9 +48,9 @@ To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         linux-rockchip@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH 3/9] i2c: bcm2835: Simplify with dev_err_probe()
-Date:   Wed,  2 Sep 2020 17:06:37 +0200
-Message-Id: <20200902150643.14839-3-krzk@kernel.org>
+Subject: [PATCH 4/9] i2c: cadence: Simplify with dev_err_probe()
+Date:   Wed,  2 Sep 2020 17:06:38 +0200
+Message-Id: <20200902150643.14839-4-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200902150643.14839-1-krzk@kernel.org>
 References: <20200902150643.14839-1-krzk@kernel.org>
@@ -64,28 +64,29 @@ dev_err_probe().  Less code and the error value gets printed.
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/i2c/busses/i2c-bcm2835.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-cadence.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-index 5dc519516292..37443edbf754 100644
---- a/drivers/i2c/busses/i2c-bcm2835.c
-+++ b/drivers/i2c/busses/i2c-bcm2835.c
-@@ -421,11 +421,9 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
- 		return PTR_ERR(i2c_dev->regs);
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index e4b7f2a951ad..eefde554c50c 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -1214,11 +1214,10 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 		 "Cadence I2C at %08lx", (unsigned long)r_mem->start);
  
- 	mclk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(mclk)) {
--		if (PTR_ERR(mclk) != -EPROBE_DEFER)
--			dev_err(&pdev->dev, "Could not get clock\n");
--		return PTR_ERR(mclk);
+ 	id->clk = devm_clk_get(&pdev->dev, NULL);
+-	if (IS_ERR(id->clk)) {
+-		if (PTR_ERR(id->clk) != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "input clock not found.\n");
+-		return PTR_ERR(id->clk);
 -	}
-+	if (IS_ERR(mclk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(mclk),
-+				     "Could not get clock\n");
- 
- 	i2c_dev->bus_clk = bcm2835_i2c_register_div(&pdev->dev, mclk, i2c_dev);
- 
++	if (IS_ERR(id->clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(id->clk),
++				     "input clock not found.\n");
++
+ 	ret = clk_prepare_enable(id->clk);
+ 	if (ret)
+ 		dev_err(&pdev->dev, "Unable to enable clock.\n");
 -- 
 2.17.1
 
