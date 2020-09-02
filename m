@@ -2,195 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AAD825B5BB
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Sep 2020 23:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C358225B5BE
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Sep 2020 23:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbgIBVPy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Sep 2020 17:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        id S1726269AbgIBVRF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Sep 2020 17:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726762AbgIBVPv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Sep 2020 17:15:51 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99F6C061244
-        for <linux-i2c@vger.kernel.org>; Wed,  2 Sep 2020 14:15:50 -0700 (PDT)
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E9EC3806B5;
-        Thu,  3 Sep 2020 09:15:47 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1599081347;
-        bh=q4GGIkhlaHm4FjxDpDQ2kOnfg6glCs3Rp8TegxtnfVc=;
-        h=From:To:Cc:Subject:Date;
-        b=YdLCm4KWILAlaI8gu5XuIk1aHYamrcPPVZHPKFEIq71gibxDMQOUF4y0jHgyJ6vS1
-         RAvVqNUqrHEkdsyYQSTq+Je8faAjVw9i0UKp+6hq4MbTtXS6p6Kpr0yUi+lBgQckWc
-         RbkQIrHe+PnqYzM6urUqVW6GhdPEskdpGtJSrIwA5d20IbyQfohPzu1QBJHIoPPOk+
-         EdplCz6nZXbNjxQVgl4YV6aP2XZyHuv7ae3ec7FUHBbrC7p5bSFoV8nEvxIa6Ekvzs
-         o5zUrhidByNHMo8rks9eOoJImIP5IPAjb/R2WIs7XYzdT7ZlfZYIzHEb8QgUEeMCBN
-         H6GW4TvG6iM4A==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f500b820000>; Thu, 03 Sep 2020 09:15:46 +1200
-Received: from evann-dl.ws.atlnz.lc (evann-dl.ws.atlnz.lc [10.33.23.31])
-        by smtp (Postfix) with ESMTP id C0BFE13EEB7;
-        Thu,  3 Sep 2020 09:15:46 +1200 (NZST)
-Received: by evann-dl.ws.atlnz.lc (Postfix, from userid 1780)
-        id 687C11A4E97; Thu,  3 Sep 2020 09:15:47 +1200 (NZST)
-From:   Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>
-To:     wsa@kernel.org, andriy.shevchenko@linux.intel.com,
-        jarkko.nikula@linux.intel.com, jdelvare@suse.de,
-        chris.packham@alliedtelesis.co.nz
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>
-Subject: [PATCH v3 1/1] i2c: algo-pca: Reapply i2c bus settings after reset
-Date:   Thu,  3 Sep 2020 09:15:32 +1200
-Message-Id: <20200902211532.22684-1-evan.nimmo@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S1726247AbgIBVRE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Sep 2020 17:17:04 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D46C061244;
+        Wed,  2 Sep 2020 14:17:03 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id t23so921547ljc.3;
+        Wed, 02 Sep 2020 14:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9w7TjWSjut7AH8tI3qRlPXARV8i+lYRGnZwZXR1Udoo=;
+        b=E5T2tg/RZBaQMjL5Ws3EVYNhltu2hHbUFaWauv6Vs/lK6ypKSSbXSkT59TnFH7bOYt
+         EpeqafHcZp7EH7/G4zUxPOoUTndad7gNmvpSLtOjR6hKzuR+RrodinEKc/e7OXAnnqj0
+         6kZZ/EA8ZvI+hrR3zNjDsaDle7NdoZoiGzLMMFS3m11HGOTD9PdLp3qIoQSjGhzm1Lv9
+         Do5RtBwU0eC5WJzKfDWoLPgp9JYyyDJd4krE4zIhEmxEvQmsYVcDFawGTCDfOU9cjPrd
+         m58xUg4Q7LDAxAPGUEeiW+NSGAN5x2FyO58Yhtnqwt0peDwAwTSN950fdoz8bqJ4IXOu
+         051A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9w7TjWSjut7AH8tI3qRlPXARV8i+lYRGnZwZXR1Udoo=;
+        b=BTRlpvJp+g4rnQ3S5DIRWLHGhXJf93Lpfmpz0w43d78eDRZfEKtMO29SFEmh/cf6nO
+         ksDhalsSc6gYQ6GHZaZqawWcLn+h3p+lYTV5DpjKP7rY8khimN/7FVzWPsx68gRZZpas
+         418MgSW0pVMAGEY5+NV1hiXRaEle6w+Y3ip4JMUeRSsypxpvL8oXwD41vdLPp03Wv+7F
+         LBrVENNvOcA0KuwIrCd9/LRnmdz0d9MYsdqmKyyQ0HfF+J30LahMVJUDsuWKjnWsxqYS
+         4yksW9EmcXGbgRcXGg9Tpm3+eCElQAoj6O5rTr9ywSEaTCbqa2GDTNo1Ma7MRjU3JaoB
+         Al0Q==
+X-Gm-Message-State: AOAM532Wz5KeGlA5AT6F8GtV4poSoSvm5YI1Q6U9ZncdJpE2HrAOI7s1
+        LLpjS0IXOC92CKh1cDhdKYmdX8mwWVs=
+X-Google-Smtp-Source: ABdhPJy/fWkbCVWxR/LMIarIgm8iRq1K0B2HgD3F1Jcms1H2WnZvXaKFX0YOQvKfJSmLrsswAlQfNQ==
+X-Received: by 2002:a2e:8157:: with SMTP id t23mr4247138ljg.417.1599081420512;
+        Wed, 02 Sep 2020 14:17:00 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id e15sm162463ljn.49.2020.09.02.14.16.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Sep 2020 14:16:59 -0700 (PDT)
+Subject: Re: [PATCH v1 03/12] i2c: tegra: Clean up messages in the code
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200831202303.15391-1-digetx@gmail.com>
+ <20200831202303.15391-4-digetx@gmail.com>
+ <20200902204255.GB1624@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <638ea963-f150-2947-9d32-36fe85410cba@gmail.com>
+Date:   Thu, 3 Sep 2020 00:16:58 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+In-Reply-To: <20200902204255.GB1624@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If something goes wrong (such as the SCL being stuck low) then we need
-to reset the PCA chip. The issue with this is that on reset we lose all
-config settings and the chip ends up in a disabled state which results
-in a lock up/high CPU usage. We need to re-apply any configuration that
-had previously been set and re-enable the chip.
+02.09.2020 23:42, Michał Mirosław пишет:
+> On Mon, Aug 31, 2020 at 11:22:54PM +0300, Dmitry Osipenko wrote:
+>> Use lowercase and consistent wording for all messages in the code.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  drivers/i2c/busses/i2c-tegra.c | 50 ++++++++++++++++------------------
+>>  1 file changed, 24 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+>> index 9bd91b6f32f4..efbb20049cf8 100644
+>> --- a/drivers/i2c/busses/i2c-tegra.c
+>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>> @@ -427,7 +427,7 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
+>>  		return 0;
+>>  
+>>  	if (!IS_ENABLED(CONFIG_TEGRA20_APB_DMA)) {
+>> -		dev_dbg(i2c_dev->dev, "Support for APB DMA not enabled!\n");
+>> +		dev_dbg(i2c_dev->dev, "dma support not enabled\n");
+>>  		return 0;
+> [...]
+> 
+> DMA is an acronym and so I would usually write it in uppercase for grammatical
+> correctness unless in a function's name.
 
-Signed-off-by: Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>
-Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
----
-changes in v2:
-- changed lowercase "pca to uppercase "PCA".
-- reworded and reformatted the multiline comment.
-- moved the clock frequency KERN_INFO closer to the call that sets this.
-- moved the i2c_bus_settings struct to the more generic i2c.h and removed
-- the comments indicating this as being for the pca chip.
-
-changes in v3:
-- changed lowercase "cpu" to uppercase "CPU".
-
- drivers/i2c/algos/i2c-algo-pca.c | 36 +++++++++++++++++++++-----------
- include/linux/i2c-algo-pca.h     |  1 +
- include/linux/i2c.h              | 14 +++++++++++++
- 3 files changed, 39 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/i2c/algos/i2c-algo-pca.c b/drivers/i2c/algos/i2c-alg=
-o-pca.c
-index 710fbef9a9c2..8b98b737b499 100644
---- a/drivers/i2c/algos/i2c-algo-pca.c
-+++ b/drivers/i2c/algos/i2c-algo-pca.c
-@@ -41,8 +41,22 @@ static void pca_reset(struct i2c_algo_pca_data *adap)
- 		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_IPRESET);
- 		pca_outw(adap, I2C_PCA_IND, 0xA5);
- 		pca_outw(adap, I2C_PCA_IND, 0x5A);
-+
-+		/*
-+		 * After a reset we need to re-apply any configuration
-+		 * (calculated in pca_init) to get the bus in a working state.
-+		 */
-+		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_IMODE);
-+		pca_outw(adap, I2C_PCA_IND, adap->bus_settings.mode);
-+		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_ISCLL);
-+		pca_outw(adap, I2C_PCA_IND, adap->bus_settings.tlow);
-+		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_ISCLH);
-+		pca_outw(adap, I2C_PCA_IND, adap->bus_settings.thi);
-+
-+		pca_set_con(adap, I2C_PCA_CON_ENSIO);
- 	} else {
- 		adap->reset_chip(adap->data);
-+		pca_set_con(adap, I2C_PCA_CON_ENSIO | adap->bus_settings.clock_freq);
- 	}
- }
-=20
-@@ -423,13 +437,15 @@ static int pca_init(struct i2c_adapter *adap)
- 				" Use the nominal frequency.\n", adap->name);
- 		}
-=20
--		pca_reset(pca_data);
--
- 		clock =3D pca_clock(pca_data);
-+
- 		printk(KERN_INFO "%s: Clock frequency is %dkHz\n",
- 		     adap->name, freqs[clock]);
-=20
--		pca_set_con(pca_data, I2C_PCA_CON_ENSIO | clock);
-+		/* Store settings as these will be needed when the PCA chip is reset *=
-/
-+		pca_data->bus_settings.clock_freq =3D clock;
-+
-+		pca_reset(pca_data);
- 	} else {
- 		int clock;
- 		int mode;
-@@ -496,19 +512,15 @@ static int pca_init(struct i2c_adapter *adap)
- 			thi =3D tlow * min_thi / min_tlow;
- 		}
-=20
-+		/* Store settings as these will be needed when the PCA chip is reset *=
-/
-+		pca_data->bus_settings.mode =3D mode;
-+		pca_data->bus_settings.tlow =3D tlow;
-+		pca_data->bus_settings.thi =3D thi;
-+
- 		pca_reset(pca_data);
-=20
- 		printk(KERN_INFO
- 		     "%s: Clock frequency is %dHz\n", adap->name, clock * 100);
--
--		pca_outw(pca_data, I2C_PCA_INDPTR, I2C_PCA_IMODE);
--		pca_outw(pca_data, I2C_PCA_IND, mode);
--		pca_outw(pca_data, I2C_PCA_INDPTR, I2C_PCA_ISCLL);
--		pca_outw(pca_data, I2C_PCA_IND, tlow);
--		pca_outw(pca_data, I2C_PCA_INDPTR, I2C_PCA_ISCLH);
--		pca_outw(pca_data, I2C_PCA_IND, thi);
--
--		pca_set_con(pca_data, I2C_PCA_CON_ENSIO);
- 	}
- 	udelay(500); /* 500 us for oscillator to stabilise */
-=20
-diff --git a/include/linux/i2c-algo-pca.h b/include/linux/i2c-algo-pca.h
-index d03071732db4..97d1f4cd8e56 100644
---- a/include/linux/i2c-algo-pca.h
-+++ b/include/linux/i2c-algo-pca.h
-@@ -64,6 +64,7 @@ struct i2c_algo_pca_data {
- 	 * For PCA9665, use the frequency you want here. */
- 	unsigned int			i2c_clock;
- 	unsigned int			chip;
-+	struct i2c_bus_settings		bus_settings;
- };
-=20
- int i2c_pca_add_bus(struct i2c_adapter *);
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index fc55ea41d323..8c5138fbe532 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -724,6 +724,20 @@ struct i2c_adapter {
- };
- #define to_i2c_adapter(d) container_of(d, struct i2c_adapter, dev)
-=20
-+/**
-+ * struct i2c_bus_settings - The configured i2c bus settings
-+ * @mode: Configured i2c bus mode
-+ * @tlow: Configured SCL LOW period
-+ * @thi: Configured SCL HIGH period
-+ * @clock_freq: The configured clock frequency
-+ */
-+struct i2c_bus_settings {
-+	int mode;
-+	int tlow;
-+	int thi;
-+	int clock_freq;
-+};
-+
- static inline void *i2c_get_adapdata(const struct i2c_adapter *adap)
- {
- 	return dev_get_drvdata(&adap->dev);
---=20
-2.27.0
-
+Andy Shevchenko suggested the same thing in other reply, I'll change it
+in v3. Thanks!
