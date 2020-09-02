@@ -2,96 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9252425B5C2
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Sep 2020 23:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8936325B5C7
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Sep 2020 23:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726298AbgIBVRM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Sep 2020 17:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbgIBVRJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Sep 2020 17:17:09 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F12CC061244;
-        Wed,  2 Sep 2020 14:17:09 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id c2so842251ljj.12;
-        Wed, 02 Sep 2020 14:17:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=kJwdaciwlzmHxgPhtXBhgo/SewTY8c1fcNKes/1opk8=;
-        b=e69T9ONaUGjzJ6MKYlr8VKRezvw6wJxhvusIEdkssmNYSdMlEeo1OXmn18DEORwG1S
-         CxyaYYDUv/k6jEaZfQ9SOINFjbLnK0/cL+22brwI0MZIWUVlhjqX8+WWM6rQ6X/9UvUn
-         77wePZau1jp9zAosH0ODfqaVqmJ3g98Ngn9y5XYEI8C3KLR9Zb7FclSV3hAfyG9waLZ0
-         l1qQX9EzfHGVEg9QXi/rSfZfJ4cRBtEzv9bKAT+NKNMFGJiAHV+34G9d4foDyDy34XrA
-         plxCMHAo8rfaX88O2EV466r/jm1+jb3cYpHkRRPKIzJejNJHZhJwoBwsWeSYnRJNBmyl
-         PLOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=kJwdaciwlzmHxgPhtXBhgo/SewTY8c1fcNKes/1opk8=;
-        b=CsT/pNJKeXPxDDcoE2wdc8SmhhY4i7E9d9U7rYVQ+GhJ9juw9c/QKqk76jfeNGD3Qb
-         iPDwN7k1O2KkXe4t2jFg9h4f4lOpyO33gtG2I/N7PWptGfrLzQkI+/z2zkm49fQHtvmu
-         5tnyIfZ+GdJHSF4bmzGePcvLya+R2cSPko9kiuj/KOz9vv3sesczmlbFBlmSgagBY+6L
-         wLF2tl04NQBdyABb8fwocJuGvefdblhYJyCm01ETVRvlAAc3QER4TWArIG5yVNGodMqN
-         O94m1ylp+g7x8ekL0iEVlgXwLmehmsJsHy4jNByLxcD83ltVNkDSB7/YdUVwp9rx8/N0
-         c/wA==
-X-Gm-Message-State: AOAM531uSIRG7jhj3LbFiewJ3nCY4E7t+m5DWtBDsTh8PM481iH9uomO
-        DhV1VDtXb0WnI/mPhd1WNBo6q6I4Oec=
-X-Google-Smtp-Source: ABdhPJwDoCVaVtrrRbpS6jg+XoX3itcd78Sy7aCO5GG8dmFoPlynpvFnsdDn8WzZFJvCIoABlrzb9g==
-X-Received: by 2002:a2e:5857:: with SMTP id x23mr4300713ljd.360.1599081427360;
-        Wed, 02 Sep 2020 14:17:07 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id y5sm104174lff.60.2020.09.02.14.17.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Sep 2020 14:17:06 -0700 (PDT)
-Subject: Re: [PATCH v1 09/12] i2c: tegra: Clean up probe function
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+        id S1726312AbgIBVUa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Sep 2020 17:20:30 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:53377 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726269AbgIBVU3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 2 Sep 2020 17:20:29 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4BhcKl3bdzz98;
+        Wed,  2 Sep 2020 23:20:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1599081627; bh=juSFVrPV1FQtu+3aCUszpkCiSY3tbm0FGZb9XQy+czY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bzfPwXi2bF4w/wiotcxcrjPynKWjJcxIQQU1evflPTgWVLCW0CtUMoBsnSl/lQzHl
+         mdoYQKAxZYVhae6fZN1wlsKtG62tOk/rnRX43bVgaXHmYpZX6FeRBsiuWRPIKsoTdm
+         d3KeO/TQVWI73ms1MhSi+ccylLPsPOJA4DsAFNCpiC4ZqtDWE7j6CrpLawbeCdLSDt
+         lPkFJjn3XUDJCh5onh30YlJokFHsK96VJB3KFi0LkK5KMl0evIhqTcRekC8E/ghbnR
+         I4hJs2Q7x0OOkbGP5zpYLhPqs8X3YsDK/VDEq/Wa+r5SRlEj9+64s8A9rgvSv5Lm+i
+         1DvWr+EAY6OHw==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.4 at mail
+Date:   Wed, 2 Sep 2020 23:20:26 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 00/12] Improvements for Tegra I2C driver
+Message-ID: <20200902212026.GD1624@qmqm.qmqm.pl>
 References: <20200831202303.15391-1-digetx@gmail.com>
- <20200831202303.15391-10-digetx@gmail.com>
- <20200902210611.GC1624@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <47d8b629-708f-de82-1118-054200331ef9@gmail.com>
-Date:   Thu, 3 Sep 2020 00:17:06 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200902210611.GC1624@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200831202303.15391-1-digetx@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-03.09.2020 00:06, MichaÅ‚ MirosÅ‚aw Ð¿Ð¸ÑˆÐµÑ‚:
-> On Mon, Aug 31, 2020 at 11:23:00PM +0300, Dmitry Osipenko wrote:
->> The driver's probe function code is difficult to read and follow. This
->> patch splits probe function into several logical parts that are easy to
->> work with.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/i2c/busses/i2c-tegra.c | 398 ++++++++++++++++++++-------------
->>  1 file changed, 240 insertions(+), 158 deletions(-)
-> [...]
+On Mon, Aug 31, 2020 at 11:22:51PM +0300, Dmitry Osipenko wrote:
+> Hello!
 > 
-> I can see why you want to extract clock setup and combine DT-parsing parts,
-> but the rest is not that clear. At least the clock setup split should be
-> a separate patch, as it seems to require massive code motion.
-> For eg. runtime PM setup/disable or interrupt setup, I would actually suggest
-> to drop the parts as they make the code harder to follow (you have
-> a function doing nothing but calling another one).
+> This series performs a small refactoring of the Tegra I2C driver code and
+> hardens the atomic-transfer mode.
+> 
+> Dmitry Osipenko (12):
+>   i2c: tegra: Make tegra_i2c_flush_fifos() usable in atomic transfer
+>   i2c: tegra: Add missing newline before returns
+>   i2c: tegra: Clean up messages in the code
+>   i2c: tegra: Don't ignore tegra_i2c_flush_fifos() error
+>   i2c: tegra: Use reset_control_reset()
+>   i2c: tegra: Improve formatting of function variables
+>   i2c: tegra: Use dev_err_probe()
+>   i2c: tegra: Runtime PM always available on Tegra
+>   i2c: tegra: Clean up probe function
+>   i2c: tegra: Drop '_timeout' from wait/poll function names
+>   i2c: tegra: Remove likely/unlikely from the code
+>   i2c: tegra: Factor out error recovery from tegra_i2c_xfer_msg()
 
-Okay, I guess indeed it will be better to squash couple functions back,
-but excluding functions that help to make error unwinding cleaner. Thank
-you for the suggestion!
+For all, but #3 and #9:
+Reviewed-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
+
+BTW, I wonder if you could expose i2c_in_atomic_xfer_mode() and use it
+to differentiate atomic_xfer from normal and get rid of the internal
+flag and .master_xfer_atomic callback.
+
+Best Regards,
+Micha³ Miros³aw
