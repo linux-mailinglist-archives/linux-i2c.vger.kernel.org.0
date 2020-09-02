@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D8125AE78
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Sep 2020 17:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23F425AE61
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Sep 2020 17:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726994AbgIBPLG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Sep 2020 11:11:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44266 "EHLO mail.kernel.org"
+        id S1728005AbgIBPHh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Sep 2020 11:07:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44360 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728224AbgIBPHY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 2 Sep 2020 11:07:24 -0400
+        id S1726936AbgIBPHa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 2 Sep 2020 11:07:30 -0400
 Received: from kozik-lap.mshome.net (unknown [194.230.155.106])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EAEA62098B;
-        Wed,  2 Sep 2020 15:07:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 90A5020BED;
+        Wed,  2 Sep 2020 15:07:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599059244;
-        bh=azJbbvQpPzlwv+q2q+Vn+EyZtjmZ+jL2xMHIRA0iboE=;
+        s=default; t=1599059249;
+        bh=1wDzsIvqEmh0pqxFo+9zk4zvz7882K5a4bGeyJ0UQmc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BHny/LTO7MaXqopyFxrY7JJce/QAHhTSRkCN0dAYzbwpNcDmd75ECRW7X8d20oECB
-         SS4Jvs4QMfpdSwXf2BoKEbvaYMqnbRfPUFEnv9xOADrTDuJ0NPBRkviz3YyBvY/kSc
-         rWXrKYD0aJsWok3oVHQM3uz07U/I1nqzNPLK3mv4=
+        b=ztUNWmM5zICC9f48vfggjisSVZEJU8LsiriJlenxRJxUIv03Gx1Ao7kamxEZPq2nT
+         nk3be9qdGJiQ+MmIe+BDLL2wH8ue3JtAA4ql3XMdeC9PIuDY3mFjLm2ptpjBfJ0HKu
+         /E5F0xGZvKMdWO5K74z7Zy5BBQqFh0Hf/cOqpQak=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -48,9 +48,9 @@ To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         linux-rockchip@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH 6/9] i2c: imx: Simplify with dev_err_probe()
-Date:   Wed,  2 Sep 2020 17:06:40 +0200
-Message-Id: <20200902150643.14839-6-krzk@kernel.org>
+Subject: [PATCH 7/9] i2c: rk3x: Simplify with dev_err_probe()
+Date:   Wed,  2 Sep 2020 17:06:41 +0200
+Message-Id: <20200902150643.14839-7-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200902150643.14839-1-krzk@kernel.org>
 References: <20200902150643.14839-1-krzk@kernel.org>
@@ -64,28 +64,39 @@ dev_err_probe().  Less code and the error value gets printed.
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/i2c/busses/i2c-imx.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-rk3x.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index 0ab5381aa012..63f4367c312b 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1159,11 +1159,9 @@ static int i2c_imx_probe(struct platform_device *pdev)
+diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
+index 8e3cc85d1921..819ab4ee517e 100644
+--- a/drivers/i2c/busses/i2c-rk3x.c
++++ b/drivers/i2c/busses/i2c-rk3x.c
+@@ -1312,18 +1312,13 @@ static int rk3x_i2c_probe(struct platform_device *pdev)
+ 		i2c->pclk = devm_clk_get(&pdev->dev, "pclk");
+ 	}
  
- 	/* Get I2C clock */
- 	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(i2c_imx->clk)) {
--		if (PTR_ERR(i2c_imx->clk) != -EPROBE_DEFER)
--			dev_err(&pdev->dev, "can't get I2C clock\n");
--		return PTR_ERR(i2c_imx->clk);
+-	if (IS_ERR(i2c->clk)) {
+-		ret = PTR_ERR(i2c->clk);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "Can't get bus clk: %d\n", ret);
+-		return ret;
 -	}
-+	if (IS_ERR(i2c_imx->clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_imx->clk),
-+				     "can't get I2C clock\n");
+-	if (IS_ERR(i2c->pclk)) {
+-		ret = PTR_ERR(i2c->pclk);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "Can't get periph clk: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(i2c->clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(i2c->clk),
++				     "Can't get bus clk\n");
++
++	if (IS_ERR(i2c->pclk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(i2c->pclk),
++				     "Can't get periph clk\n");
  
- 	ret = clk_prepare_enable(i2c_imx->clk);
- 	if (ret) {
+ 	ret = clk_prepare(i2c->clk);
+ 	if (ret < 0) {
 -- 
 2.17.1
 
