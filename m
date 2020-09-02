@@ -2,138 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B36B525B4F2
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Sep 2020 21:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2A325B56C
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Sep 2020 22:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726312AbgIBT7q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Sep 2020 15:59:46 -0400
-Received: from mga11.intel.com ([192.55.52.93]:59337 "EHLO mga11.intel.com"
+        id S1726312AbgIBUnD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Sep 2020 16:43:03 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:9648 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726285AbgIBT7p (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 2 Sep 2020 15:59:45 -0400
-IronPort-SDR: TNrL2OULHNquJpE5XtUKJwv069sSP6qfjhqmiHlDEtmnCg1MmvXd/XCQ68sQsTjZDidWlsk/Iq
- U22QHDu5hjFw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="154979343"
-X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
-   d="scan'208";a="154979343"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 12:59:44 -0700
-IronPort-SDR: Qb+TmmiGe+/w1Cy++Hd5ueLANvX6LvRs9O5Xd2VRZ0PWeiY1F7Vzo41yM86iEqgd12BaxfuEJW
- /4BktnFHU+BA==
-X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
-   d="scan'208";a="477772867"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 12:59:41 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 502932071B; Wed,  2 Sep 2020 22:59:39 +0300 (EEST)
-Date:   Wed, 2 Sep 2020 22:59:39 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v7 6/6] Documentation: ACPI: Document
- allow-low-power-probe _DSD property
-Message-ID: <20200902195939.GG32646@paasikivi.fi.intel.com>
-References: <20200901210333.8462-1-sakari.ailus@linux.intel.com>
- <20200901210333.8462-7-sakari.ailus@linux.intel.com>
- <CAJZ5v0jFceTFRTD55cz3ZHRZpuNRK_z9=_DxWexc8ArsGU3cog@mail.gmail.com>
- <20200902163121.GE32646@paasikivi.fi.intel.com>
- <CAJZ5v0jmetD2N0-ZrNh8C8oOCFwdwwH9s6FqHOQApMdFa_AZ1A@mail.gmail.com>
+        id S1726226AbgIBUnD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 2 Sep 2020 16:43:03 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4BhbVX4Ft5z98;
+        Wed,  2 Sep 2020 22:43:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1599079380; bh=9NgK8QfqKdwnoJb+ln01fWVLOgxSvgVM5fXq8d1X9m4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BGX72BphZghAaJjS3M5uDgAs7++BJx8xWsTCvGZgYM+4IVtWIt0rRAAwCG1qUMsud
+         W53jw7iAD88wqXmbOrYVI88NJLhc1yjWwP1zBCZgH+hfE/p5ii2Ld9JJYuly/6klhy
+         +lg+QK4/2HGOntTXzTEmj6vMhpfop3IcVLyePdau0dCq/v9e1lLkUpsuuYHepoxfXD
+         ZXFa8/rRqDxFgrXCh0Fq6HskXbuu13qsoPxJWg+KbibkSswyWYuXJVcWBYAXKMMwlr
+         2mvQBkFfITVTRsFJYWSCNCCMbZ4xxEEBmVSF7aisxZEP+tEcPz22p8qFCYeUsSyw4L
+         91sxQrLUgoboQ==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.4 at mail
+Date:   Wed, 2 Sep 2020 22:42:55 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 03/12] i2c: tegra: Clean up messages in the code
+Message-ID: <20200902204255.GB1624@qmqm.qmqm.pl>
+References: <20200831202303.15391-1-digetx@gmail.com>
+ <20200831202303.15391-4-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=iso-8859-2
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jmetD2N0-ZrNh8C8oOCFwdwwH9s6FqHOQApMdFa_AZ1A@mail.gmail.com>
+In-Reply-To: <20200831202303.15391-4-digetx@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 06:34:30PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Sep 2, 2020 at 6:31 PM Sakari Ailus
-> <sakari.ailus@linux.intel.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > Thank you for the review.
-> >
-> > On Wed, Sep 02, 2020 at 05:57:01PM +0200, Rafael J. Wysocki wrote:
-> > > On Tue, Sep 1, 2020 at 11:03 PM Sakari Ailus
-> > > <sakari.ailus@linux.intel.com> wrote:
-> > > >
-> > > > Document the probe-low-power _DSD property and how it is used with I²C
-> > > > drivers.
-> > >
-> > > I would reorder the series to make this go right after the [1/6] or
-> > > maybe even fold it into that patch.
-> > >
-> > > The point is that the changes in [1/6] clearly depend on the property
-> > > defined here.
-> >
-> > Ack.
-> >
-> > >
-> > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > ---
-> > > >  .../acpi/dsd/allow-low-power-probe.rst        | 28 +++++++++++++++++++
-> > > >  Documentation/firmware-guide/acpi/index.rst   |  1 +
-> > > >  2 files changed, 29 insertions(+)
-> > > >  create mode 100644 Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
-> > > >
-> > > > diff --git a/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst b/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
-> > > > new file mode 100644
-> > > > index 0000000000000..6fcc89162b898
-> > > > --- /dev/null
-> > > > +++ b/Documentation/firmware-guide/acpi/dsd/allow-low-power-probe.rst
-> > > > @@ -0,0 +1,28 @@
-> > > > +.. SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +======================================
-> > > > +Probing I²C devices in low power state
-> > > > +======================================
-> > > > +
-> > > > +Introduction
-> > > > +============
-> > > > +
-> > > > +In some cases it may be preferred to leave certain devices powered off for the
-> > > > +entire system bootup if powering on these devices has adverse side effects,
-> > > > +beyond just powering on the said device. Linux recognizes the _DSD property
-> > > > +"allow-low-power-probe" that can be used for this purpose.
-> > >
-> > > It would be good to refer to the document defining the generic _DSD
-> > > properties mechanism and the GUID used for that from here.
-> >
-> > I'll add a reference to the device properties UUID for _DSD spec.
-> >
-> > >
-> > > The meaning of  "_DSD property" may not be entirely clear to the
-> > > reader as it stands.
-> > >
-> > > And maybe call the property "i2c-allow-low-power-probe" or similar, to
-> > > indicate that it is specific to i2c.
-> >
-> > The bus determines that already, and it's only defined for I²C here. Should
-> > we need this in the future for e.g. I3C, there would be no need to think of
-> > renaming it, just changing the documentation and implementation.
-> >
-> > I don't have a strong opinion on that though.
+On Mon, Aug 31, 2020 at 11:22:54PM +0300, Dmitry Osipenko wrote:
+> Use lowercase and consistent wording for all messages in the code.
 > 
-> The point is that the property is not going to be recognized beyond i2c.
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/i2c/busses/i2c-tegra.c | 50 ++++++++++++++++------------------
+>  1 file changed, 24 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index 9bd91b6f32f4..efbb20049cf8 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -427,7 +427,7 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
+>  		return 0;
+>  
+>  	if (!IS_ENABLED(CONFIG_TEGRA20_APB_DMA)) {
+> -		dev_dbg(i2c_dev->dev, "Support for APB DMA not enabled!\n");
+> +		dev_dbg(i2c_dev->dev, "dma support not enabled\n");
+>  		return 0;
+[...]
 
-Not right now, that is true. Sure, I can change it for v8.
+DMA is an acronym and so I would usually write it in uppercase for grammatical
+correctness unless in a function's name.
 
--- 
-Sakari Ailus
+Best Regards,
+Micha³ Miros³aw
