@@ -2,55 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E42EC25C000
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 13:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DABA25C00E
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 13:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726678AbgICLRU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Sep 2020 07:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
+        id S1728402AbgICLLq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Sep 2020 07:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728444AbgICLRS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Sep 2020 07:17:18 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5BFC061251;
-        Thu,  3 Sep 2020 04:03:05 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id v196so2053454pfc.1;
-        Thu, 03 Sep 2020 04:03:05 -0700 (PDT)
+        with ESMTP id S1728372AbgICLKN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Sep 2020 07:10:13 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A20C061247;
+        Thu,  3 Sep 2020 04:10:11 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id u13so1875384pgh.1;
+        Thu, 03 Sep 2020 04:10:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Yc4wkCo7MeYrmmnwisSRarxaaBJAo1GNuY3VsM322Kg=;
-        b=V+NLN2f/oumXmYED9CGhvzHg1A3k7uzbduXR5eZhQX9/LB452xGmGWatlhugioh3fn
-         C2jDtT6Rc46kWS8I2VMaaQ0YJ2cUJ0sW+0WJexHovLKoPUHB35BiDayz+5LOPKPRh7jN
-         LDbNcnYH6pS9mK4fFj6e+3Ohv0X/OBTORciTRAxc+4tQXi6M5vmL49DLqUTh1O7Zc1gZ
-         TShC6BYGRuSfGHezFoj+FzbZQ7DRptRhuSXsAOWIOYn9IzCI1Vi1paFBp6LrQFxA8AKs
-         j6lwADHrIN66e/OyJTVsiNNhAn6Y0D5eGSoKsL2bPAWMUbdWHdvzKfkOF+cewY9GN8/b
-         pdTw==
+         :cc:content-transfer-encoding;
+        bh=J1i57IRdZhg4OVu4ihUxUTPehYMdVSv4veIZG06bWXs=;
+        b=qTSjE1pPHNfO1QDYQ9Ia409UNvEpYppa854Dj58KuStsVelX/b9ITDHVNcirMfta1V
+         w9sMOaXM3THG/sQMt4q9TzrIsptXA7M7JX/2SvizD5bBgc+Dpo7k9/KKe5vUoUNuf/Q+
+         H3tVkBVFaC0fQqdMevV/2ouY7TNxI0oL8W00lK+f9B4hlyU3u+3xD65RjDjn0PwaW/pB
+         hjyIKnX1RwhSmqmIjyNhnUR1PD4T0i9JO4PhmwAh5BNp7cVe1f4DkQLRBoAt7DvFqZRK
+         AeOKT3/aCXeYvZIonJSlQ9kA9z4TaJDcKy1mh1thc46CtXdz7ky8VrSiSPFVuMUE0Vzz
+         zkag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Yc4wkCo7MeYrmmnwisSRarxaaBJAo1GNuY3VsM322Kg=;
-        b=X9EbEKKDQ7SKr3hFldkD+96BSiInMEBHd4MdeRZ14RnTstUIJ4NfcM5Y6PNBmBKyIU
-         O4EGi5hLLaCDFxjyR0FHsea/D2JeCkMwokcoBBjybz6Qm5FMpmuVOMO+Oe3RjuhwvIR9
-         /YEKSriqSn/e270yD0GvE9tZMSH03QFL/tVV2QbqcbGgtj6I2jpZBdhSGgeCJQ/Gdfze
-         PtaM3RkaYib82tbNM2Mewz+CW6jEC+MOfSLf5Wzfdp9EsCoHwdfPx3VgzyjNfSWrkrno
-         7tdUYBtBeZP5XNyCDCfHwtlrROV1oqV/X4+LcVeSqWaEYS3+G+YTp6tkZPx91MNtoyPr
-         UtxA==
-X-Gm-Message-State: AOAM530mWtu7OGKgKaLUAcg6aJTuBA2jOjorX+29sIpQ9LOhCBB7ejXc
-        1NDsQcxKzTcej4UyqihzrdoC9thx9I4DrMUO5II=
-X-Google-Smtp-Source: ABdhPJwDzelAtXwzu1AP2Sck+DOJdO2HFfZJWEguZGryUdrzqFlNyIe50UOUdMIYN72Gvo8JpjKeqGFXAeY1JyeFBFc=
-X-Received: by 2002:a63:d648:: with SMTP id d8mr2513798pgj.4.1599130985426;
- Thu, 03 Sep 2020 04:03:05 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=J1i57IRdZhg4OVu4ihUxUTPehYMdVSv4veIZG06bWXs=;
+        b=XLMV7kxLQY61JhoSiGl264lnAdzISFNAlgUL1p8+1mdwQvQtiSpGh5M6HivYA5KUo3
+         ilTwOR+KWV8Un2ZmIkE96rXpUtKQVJhpfJmo1WcpuT1M5eOI/tIvGhLZv+P3WtOnm9Tq
+         yfIDWHo6cG8T7FKzklEwP9H5almE+7z5kfAQrey+QccuuAb0X/4ROpvMCz1m04cYuGom
+         bImZ0iJ5LbTJ6xONTIJaaqLo5EDTgGnjd19jOOXfmsWIHteKdjU/GkNzqLq6xSA/cyMk
+         aatHQR4lmykh/UsoGN+r8+k3rJNr9Vidnds07KRVuj4Awq/xDsxc6hZkbYHw7FMoY3Vv
+         QxLQ==
+X-Gm-Message-State: AOAM532lpI++sdnFLnUHDvC849l8iWlVWoQlq3xdRPFjCFkwBBG2cTox
+        GvKnPqpdQyxXTKrlMyDTF+OTxFbwkdSQB9TVurA=
+X-Google-Smtp-Source: ABdhPJyCwXKGVjz91KGqfY0UKqnCfamjPLQ+Z7zKhx0zAlE0rMJ8Yq95QIAr45mRcsOTIo66t9x+0vzxg/lDu+ElLS8=
+X-Received: by 2002:a17:902:b289:: with SMTP id u9mr3407159plr.226.1599131410681;
+ Thu, 03 Sep 2020 04:10:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200903005300.7894-1-digetx@gmail.com> <20200903005300.7894-2-digetx@gmail.com>
-In-Reply-To: <20200903005300.7894-2-digetx@gmail.com>
+References: <20200903005300.7894-1-digetx@gmail.com> <20200903005300.7894-5-digetx@gmail.com>
+In-Reply-To: <20200903005300.7894-5-digetx@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 3 Sep 2020 14:02:48 +0300
-Message-ID: <CAHp75VcLk9pVRefA7cTgVQcX3-9EgcW6c-VUSpSOut0Y1B7J5Q@mail.gmail.com>
-Subject: Re: [PATCH v3 01/22] i2c: tegra: Make tegra_i2c_flush_fifos() usable
- in atomic transfer
+Date:   Thu, 3 Sep 2020 14:09:53 +0300
+Message-ID: <CAHp75Vf9P9L1uM+he63D5H+-V3Zwv3jRiKTrXmtB4Sxuk9SC9A@mail.gmail.com>
+Subject: Re: [PATCH v3 04/22] i2c: tegra: Don't ignore tegra_i2c_flush_fifos() error
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -61,6 +60,7 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-tegra@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
@@ -68,51 +68,40 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Thu, Sep 3, 2020 at 3:53 AM Dmitry Osipenko <digetx@gmail.com> wrote:
 >
-> The tegra_i2c_flush_fifos() shouldn't sleep in atomic transfer and jiffies
-> are not updating if interrupts are disabled. Hence let's use proper delay
-> functions and use ktime API in order not to hang atomic transfer. Note
-> that this patch doesn't fix any known problem because normally FIFO is
-> flushed at the time of starting a new transfer.
+> The tegra_i2c_flush_fifos() may fail and transfer should be aborted in
+> this case.
 
-> +       /*
-> +        * ktime_get() may take up to couple milliseconds in a worst case
-> +        * and normally FIFOs are flushed, hence let's check the state before
-> +        * proceeding to polling.
-> +        */
+Sounds like a fix. To add to previous comment, fixes that are likely
+to be backported should have Fixes: tags.
 
-Everything, including above can be done by using macros from iopoll.h. Why not?
-
-> +       if (!(i2c_readl(i2c_dev, offset) & mask))
-> +               return 0;
-> +
-> +       ktime = ktime_get();
-> +       ktimeout = ktime_add_ms(ktime, 1000);
-> +
->         while (i2c_readl(i2c_dev, offset) & mask) {
-> -               if (time_after(jiffies, timeout)) {
-> -                       dev_warn(i2c_dev->dev, "timeout waiting for fifo flush\n");
-> -                       return -ETIMEDOUT;
-> -               }
-> -               usleep_range(1000, 2000);
-> +               if (ktime_after(ktime, ktimeout))
-> +                       goto err_timeout;
-> +
-> +               if (i2c_dev->is_curr_atomic_xfer)
-> +                       mdelay(1);
-> +               else
-> +                       fsleep(1000);
-> +
-> +               ktime = ktime_get();
->         }
->         return 0;
-> +
-> +err_timeout:
-> +       dev_err(i2c_dev->dev, "FIFO flushing timed out\n");
-> +
-> +       return -ETIMEDOUT;
->  }
+> Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/i2c/busses/i2c-tegra.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegr=
+a.c
+> index 79e542cf3e59..b912a7153e3b 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -1189,7 +1189,9 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev =
+*i2c_dev,
+>         bool dma;
+>         u16 xfer_time =3D 100;
+>
+> -       tegra_i2c_flush_fifos(i2c_dev);
+> +       err =3D tegra_i2c_flush_fifos(i2c_dev);
+> +       if (err)
+> +               return err;
+>
+>         i2c_dev->msg_buf =3D msg->buf;
+>         i2c_dev->msg_buf_remaining =3D msg->len;
+> --
+> 2.27.0
+>
 
 
--- 
+--=20
 With Best Regards,
 Andy Shevchenko
