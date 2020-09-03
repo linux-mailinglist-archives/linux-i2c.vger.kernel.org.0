@@ -2,196 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7F325B7D3
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 02:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45ECD25B825
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 03:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727801AbgICAyn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Sep 2020 20:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
+        id S1726312AbgICBMT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Sep 2020 21:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727929AbgICAyO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Sep 2020 20:54:14 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D66C061260;
-        Wed,  2 Sep 2020 17:54:13 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id 12so816845lfb.11;
-        Wed, 02 Sep 2020 17:54:13 -0700 (PDT)
+        with ESMTP id S1726377AbgICBMR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Sep 2020 21:12:17 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA59C061244;
+        Wed,  2 Sep 2020 18:12:16 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id e11so1454264ljn.6;
+        Wed, 02 Sep 2020 18:12:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9WNZAy5d8w/2aZQaSppgQxzu4NzUo1Ls4jIsDPeeyAE=;
-        b=cL8gaMkP/qIe5jIburqRzxHjDtaEvXk8r00yeDxJLi4kosFKKTgwGthfIhpsYFwzU9
-         LuznNryaNMV/wQ/F1EiFPzwYKBtalDbhJCMBUwkXLxX6h2ZZw/yXOjtj1v2XeZfzEkLa
-         rV+qh7U11K05I9+6kRgsQf+0sOoDegZbzjQ57z0NWZczIUn4reQn/8sGL2b7t9NNHozO
-         hBzRVnNRn1RCt8JkhsqAxg2KEnU9V68tM2dw2h3EKXsWYVlLNOPCzgX8IaELUMQXtRQ4
-         Y8w0+3Y/dOW1yPwFUBGke6+373ERELzT3ExVvVFjgp+v+yL0T+EhjoC7cnnyUa9piu5P
-         phSA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HWyY2LFPccisa6ogmHUBexCKCnlNWwIX+nu+DoCYsmE=;
+        b=guqaV0S4Ftuo9redYgE2a8Zz9W5ZSsmbGAWy799wCCYoKEW67OHNdroEs3VvNnqlTN
+         D2kVVURzkkDEDdbvx+GA/LG1/65M8Wmh0a4Kzpf7o3yLgBHt9VqUdz1CDhdwnkxiNVG7
+         7HqIDGdCSgPGSb2jiysO4U8AB5qoiX7mdRDhswEIXPOkSi3CN6K3JmqhqEDDV2/YwNls
+         SWsDU27WP8zzFb3m1+32gHqEtUsIcg1qSRMnQ24md5ZEhiQzzWFRd1UUg80bs1ibw3oy
+         hZNOKAj6dHGbC/96QTCqB5HuB7ZMm6/bTFdi7HDLk7jpzHuwZiy7Zp5C76+JmILSHPn8
+         VxOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9WNZAy5d8w/2aZQaSppgQxzu4NzUo1Ls4jIsDPeeyAE=;
-        b=A24ABjlzTQpvTd3xNTYAL2LURaW6UA5NDyr262uQ0PzWCDCrxRZIgvcFyc0tFjNnWo
-         hzRFBbjoMPfvU/gO81CxNAH2nl/IdYTcixT9W+MLHjeypqvM4vy2V+Abq4mEDY5nlKnn
-         DioUhbcJmVi1MhwN2XK8dSb0DIV7+5wUsANuhplbquTXGr4dN1gfJeAVkiTHGvEeVMV/
-         wOPQdNuIrI23r5pL0TUCTqirvPGsD1Sa2VIMHZTIDjHyB66Qjw7/ijTknweTPMRE/mo7
-         DK95iWNb6oYLyp40eh2CPefuCTdC8nd9G17h+OBYiFz9I78hs7af7sFkqaVwIL6g6Nig
-         x9gg==
-X-Gm-Message-State: AOAM532ilD9EDjpMSH6z+G4GJW+YAlfUiRFyvHekKo0OgYjZ72KaR9ps
-        AAhehkxkpNic+ZUBuUNuwrE=
-X-Google-Smtp-Source: ABdhPJw5rTqeH77amUjG22ecDVv57oKV7/8lxjbux8BAiymEhT0sZROtLoCrIiuaF9YtBFkOdMY4OQ==
-X-Received: by 2002:a19:6e45:: with SMTP id q5mr292110lfk.104.1599094452095;
-        Wed, 02 Sep 2020 17:54:12 -0700 (PDT)
-Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id g1sm250321ljj.56.2020.09.02.17.54.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2020 17:54:11 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HWyY2LFPccisa6ogmHUBexCKCnlNWwIX+nu+DoCYsmE=;
+        b=nJjyt/G5TkmbMlZ8BtfQJGj9TH5O6EIpizFsPrg1mRV11Om84Pd9FGOCCarL7BA0qs
+         qR5ElPiQyRovAVL4H8rXGBz2w3F1TeWnMeVONZpDbJFN4kTfIRDMq2oEYiRpE8TiMpkF
+         8qg5UPaTQCk88x4a597HrtDRAKGQZUb6c6yVdirp6ykuCT1TKqwDplg+na3yYOE/vVgq
+         NvK3zEAJOOphuuLDKqPbF8NMlHi453NrXJmMBcqKkyYtzIDjcqp7FpqB+OVwg0gVokgm
+         nFoPSpCY5QvWBNo+CmIg5h9uQtk8XYWBDx3n9oJDXMbHrVup7SUeYYsZ6RyeCq/F71UU
+         JA+A==
+X-Gm-Message-State: AOAM530Z6K7YyWEzr1WQHYMoXpBuUdKOgbQwbx5RhnfYuGFoNircZ0wG
+        Ua7DGsrsuAa29zRri3VwdDLazQN0EY8=
+X-Google-Smtp-Source: ABdhPJxSBoHNBHXCOVuESr6mZH1Iq0HdxLcj4NGHT5uuFI0KKA61Xx3SAspeaWg+PiEGMnqWnY3xlQ==
+X-Received: by 2002:a2e:711:: with SMTP id 17mr270235ljh.462.1599095534639;
+        Wed, 02 Sep 2020 18:12:14 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id 18sm216680lfg.29.2020.09.02.18.12.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Sep 2020 18:12:14 -0700 (PDT)
+Subject: Re: [PATCH v1 00/12] Improvements for Tegra I2C driver
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 22/22] i2c: tegra: Remove i2c_dev.clk_divisor_non_hs_mode member
-Date:   Thu,  3 Sep 2020 03:53:00 +0300
-Message-Id: <20200903005300.7894-23-digetx@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200903005300.7894-1-digetx@gmail.com>
-References: <20200903005300.7894-1-digetx@gmail.com>
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200831202303.15391-1-digetx@gmail.com>
+ <20200902212026.GD1624@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <04aae642-80f9-d22e-1d80-bb206bb27a8b@gmail.com>
+Date:   Thu, 3 Sep 2020 04:12:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20200902212026.GD1624@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The "non_hs_mode" divisor value is fixed, thus there is no need to have
-the variable i2c_dev.clk_divisor_non_hs_mode struct member. Let's remove
-it and move the mode selection into tegra_i2c_init() where it can be
-united with the timing selection.
+03.09.2020 00:20, Michał Mirosław пишет:
+> BTW, I wonder if you could expose i2c_in_atomic_xfer_mode() and use it
+> to differentiate atomic_xfer from normal and get rid of the internal
+> flag and .master_xfer_atomic callback.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/i2c/busses/i2c-tegra.c | 52 ++++++++++++++--------------------
- 1 file changed, 21 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index bc7954c8a5a0..f3540dcb0e06 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -250,7 +250,6 @@ struct tegra_i2c_hw_feature {
-  * @msg_buf_remaining: size of unsent data in the message buffer
-  * @msg_read: identifies read transfers
-  * @bus_clk_rate: current I2C bus clock rate
-- * @clk_divisor_non_hs_mode: clock divider for non-high-speed modes
-  * @is_multimaster_mode: track if I2C controller is in multi-master mode
-  * @tx_dma_chan: DMA transmit channel
-  * @rx_dma_chan: DMA receive channel
-@@ -281,7 +280,6 @@ struct tegra_i2c_dev {
- 	size_t msg_buf_remaining;
- 	int msg_read;
- 	u32 bus_clk_rate;
--	u16 clk_divisor_non_hs_mode;
- 	bool is_multimaster_mode;
- 	struct dma_chan *tx_dma_chan;
- 	struct dma_chan *rx_dma_chan;
-@@ -603,7 +601,7 @@ static int tegra_i2c_flush_fifos(struct tegra_i2c_dev *i2c_dev)
- 
- static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
- {
--	u32 val, clk_divisor, clk_multiplier, tsu_thd, tlow, thigh;
-+	u32 val, clk_divisor, clk_multiplier, tsu_thd, tlow, thigh, non_hs_mode;
- 	int err;
- 
- 	err = reset_control_reset(i2c_dev->rst);
-@@ -625,24 +623,32 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
- 	if (i2c_dev->is_vi)
- 		tegra_i2c_vi_init(i2c_dev);
- 
--	/* Make sure clock divisor programmed correctly */
--	clk_divisor = FIELD_PREP(I2C_CLK_DIVISOR_HSMODE,
--				 i2c_dev->hw->clk_divisor_hs_mode) |
--		      FIELD_PREP(I2C_CLK_DIVISOR_STD_FAST_MODE,
--				 i2c_dev->clk_divisor_non_hs_mode);
--	i2c_writel(i2c_dev, clk_divisor, I2C_CLK_DIVISOR);
--
--	if (i2c_dev->bus_clk_rate > I2C_MAX_STANDARD_MODE_FREQ &&
--	    i2c_dev->bus_clk_rate <= I2C_MAX_FAST_MODE_PLUS_FREQ) {
-+	switch (i2c_dev->bus_clk_rate) {
-+	case I2C_MAX_STANDARD_MODE_FREQ + 1 ... I2C_MAX_FAST_MODE_PLUS_FREQ:
- 		tlow = i2c_dev->hw->tlow_fast_fastplus_mode;
- 		thigh = i2c_dev->hw->thigh_fast_fastplus_mode;
- 		tsu_thd = i2c_dev->hw->setup_hold_time_fast_fast_plus_mode;
--	} else {
-+
-+		if (i2c_dev->bus_clk_rate > I2C_MAX_FAST_MODE_FREQ)
-+			non_hs_mode = i2c_dev->hw->clk_divisor_fast_plus_mode;
-+		else
-+			non_hs_mode = i2c_dev->hw->clk_divisor_fast_mode;
-+		break;
-+
-+	default:
- 		tlow = i2c_dev->hw->tlow_std_mode;
- 		thigh = i2c_dev->hw->thigh_std_mode;
- 		tsu_thd = i2c_dev->hw->setup_hold_time_std_mode;
-+		non_hs_mode = i2c_dev->hw->clk_divisor_std_mode;
-+		break;
- 	}
- 
-+	/* Make sure clock divisor programmed correctly */
-+	clk_divisor = FIELD_PREP(I2C_CLK_DIVISOR_HSMODE,
-+				 i2c_dev->hw->clk_divisor_hs_mode) |
-+		      FIELD_PREP(I2C_CLK_DIVISOR_STD_FAST_MODE, non_hs_mode);
-+	i2c_writel(i2c_dev, clk_divisor, I2C_CLK_DIVISOR);
-+
- 	if (i2c_dev->hw->has_interface_timing_reg) {
- 		val = FIELD_PREP(I2C_INTERFACE_TIMING_THIGH, thigh) |
- 		      FIELD_PREP(I2C_INTERFACE_TIMING_TLOW, tlow);
-@@ -657,7 +663,7 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
- 		i2c_writel(i2c_dev, tsu_thd, I2C_INTERFACE_TIMING_1);
- 
- 	clk_multiplier  = tlow + thigh + 2;
--	clk_multiplier *= i2c_dev->clk_divisor_non_hs_mode + 1;
-+	clk_multiplier *= non_hs_mode + 1;
- 
- 	err = clk_set_rate(i2c_dev->div_clk,
- 			   i2c_dev->bus_clk_rate * clk_multiplier);
-@@ -1633,7 +1639,7 @@ static int tegra_i2c_init_clocks(struct tegra_i2c_dev *i2c_dev)
- 	const struct tegra_i2c_hw_feature *hw = i2c_dev->hw;
- 	struct device *dev = i2c_dev->dev;
- 	struct clk *clk;
--	int err, mode;
-+	int err;
- 
- 	clk = devm_clk_get(dev, "div-clk");
- 	if (IS_ERR(clk))
-@@ -1686,22 +1692,6 @@ static int tegra_i2c_init_clocks(struct tegra_i2c_dev *i2c_dev)
- 		}
- 	}
- 
--	switch (i2c_dev->bus_clk_rate) {
--	case I2C_MAX_FAST_MODE_FREQ + 1 ... I2C_MAX_FAST_MODE_PLUS_FREQ:
--		mode = hw->clk_divisor_fast_plus_mode;
--		break;
--
--	case I2C_MAX_STANDARD_MODE_FREQ + 1 ... I2C_MAX_FAST_MODE_FREQ:
--		mode = hw->clk_divisor_fast_mode;
--		break;
--
--	default:
--		mode = hw->clk_divisor_std_mode;
--		break;
--	}
--
--	i2c_dev->clk_divisor_non_hs_mode = mode;
--
- 	return 0;
- 
- unprepare_div_clk:
--- 
-2.27.0
-
+The atomic transfer uses 90% of the code path that a non-atomic transfer
+uses. I don't see how it could be exposed without duplicated lots of the
+code, unless I'm not missing what you're suggesting.
