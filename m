@@ -2,232 +2,204 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0B125BECF
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 12:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8972125BEF8
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 12:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726162AbgICKJa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Sep 2020 06:09:30 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46142 "EHLO mx2.suse.de"
+        id S1726268AbgICKUS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Sep 2020 06:20:18 -0400
+Received: from mga03.intel.com ([134.134.136.65]:23262 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725984AbgICKJa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 3 Sep 2020 06:09:30 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 979E7B685
-        for <linux-i2c@vger.kernel.org>; Thu,  3 Sep 2020 10:09:29 +0000 (UTC)
-Date:   Thu, 3 Sep 2020 12:09:27 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Linux I2C <linux-i2c@vger.kernel.org>
-Subject: [PATCH v2] libi2c: Add a manual page to document the API
-Message-ID: <20200903120927.482b6eae@endymion>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1726109AbgICKUQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 3 Sep 2020 06:20:16 -0400
+IronPort-SDR: HW/hTd2GOWEwDB6eyiJKKDdqRsoFd9Wv414YoKUBY0Eo4srHGf07UWDo5F8QBH7Fv6Nz5X1bmU
+ UgS0/ZAEes9A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="157554412"
+X-IronPort-AV: E=Sophos;i="5.76,386,1592895600"; 
+   d="scan'208";a="157554412"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 03:20:15 -0700
+IronPort-SDR: acaoowsTjA5RVrtKbFxzUHplXC2xaCrUjWDZb9t4vxLl+4qUNV3OvubBTwvJDW1WGOx//mGF8h
+ zFOFE+YeSYkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,386,1592895600"; 
+   d="scan'208";a="331747749"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2020 03:20:11 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kDmLg-00Dzgr-1N; Thu, 03 Sep 2020 13:20:08 +0300
+Date:   Thu, 3 Sep 2020 13:20:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jie Deng <jie.deng@intel.com>
+Cc:     linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        wsa+renesas@sang-engineering.com, wsa@kernel.org,
+        jarkko.nikula@linux.intel.com, jdelvare@suse.de,
+        Sergey.Semin@baikalelectronics.ru, krzk@kernel.org,
+        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
+        bjorn.andersson@linaro.org, shuo.a.liu@intel.com,
+        conghui.chen@intel.com, yu1.wang@intel.com
+Subject: Re: [PATCH] i2c: virtio: add a virtio i2c frontend driver
+Message-ID: <20200903102008.GY1891694@smile.fi.intel.com>
+References: <0efc2605c8c06b4b1bf68cbad5536c4a900dc019.1599110284.git.jie.deng@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0efc2605c8c06b4b1bf68cbad5536c4a900dc019.1599110284.git.jie.deng@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-It is good practice for a library to come with a complete API description.
+On Thu, Sep 03, 2020 at 01:34:45PM +0800, Jie Deng wrote:
+> Add an I2C bus driver for virtio para-virtualization.
+> 
+> The controller can be emulated by the backend driver in
+> any device model software by following the virtio protocol.
+> 
+> This driver communicates with the backend driver through a
+> virtio I2C message structure which includes following parts:
+> 
+> - Header: i2c_msg addr, flags, len.
+> - Data buffer: the pointer to the i2c msg data.
+> - Status: the processing result from the backend.
+> 
+> People may implement different backend drivers to emulate
+> different controllers according to their needs. A backend
+> example can be found in the device model of the open source
+> project ACRN. For more information, please refer to
+> https://projectacrn.org.
+> 
+> The virtio device ID 34 is used for this I2C adpter since IDs
+> before 34 have been reserved by other virtio devices.
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
----
- Makefile      |    1 
- lib/Module.mk |    6 +-
- lib/libi2c.3  |  137 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 142 insertions(+), 2 deletions(-)
+Seems it's slightly different version to what I have reviewed internally.
+My comments below. (I admit that some of them maybe new)
 
-Changes since v1:
- * Integrated the new manual page with the Makefiles so that it gets installed
-   and uninstalled properly.
- * Updated date and copyright years.
+...
 
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ i2c-tools/lib/libi2c.3	2020-09-03 12:06:57.547427314 +0200
-@@ -0,0 +1,137 @@
-+.\" Copyright (C) 2019-2020  Jean Delvare <jdelvare@suse.de>
-+.\" libi2c is distributed under the LGPL
-+.TH libi2c 3  "September 2020" "i2c-tools" "Linux Programmer's Manual"
-+
-+.SH NAME
-+libi2c \- publicly accessible functions provided by the i2c library
-+
-+.SH SYNOPSIS
-+.nf
-+.B #include <linux/i2c.h>
-+.B #include <i2c/smbus.h>
-+
-+/* Universal SMBus transaction */
-+.BI "__s32 i2c_smbus_access(int " file ", char " read_write ", __u8 " command ","
-+.BI "                       int " size ", union i2c_smbus_data *" data ");"
-+
-+/* Simple SMBus transactions */
-+.BI "__s32 i2c_smbus_write_quick(int " file ", __u8 " value ");"
-+.BI "__s32 i2c_smbus_read_byte(int " file ");"
-+.BI "__s32 i2c_smbus_write_byte(int " file ", __u8 " value ");"
-+.BI "__s32 i2c_smbus_read_byte_data(int " file ", __u8 " command ");"
-+.BI "__s32 i2c_smbus_write_byte_data(int " file ", __u8 " command ", __u8 " value ");"
-+.BI "__s32 i2c_smbus_read_word_data(int " file ", __u8 " command ");"
-+.BI "__s32 i2c_smbus_write_word_data(int " file ", __u8 " command ", __u16 " value ");"
-+.BI "__s32 i2c_smbus_process_call(int " file ", __u8 " command ", __u16 " value ");"
-+
-+/* Block SMBus (and non-SMBus) transactions */
-+.BI "__s32 i2c_smbus_read_block_data(int " file ", __u8 " command ", __u8 *" values ");"
-+.BI "__s32 i2c_smbus_write_block_data(int " file ", __u8 " command ", __u8 " length ","
-+.BI "                                 const __u8 *" values ");"
-+.BI "__s32 i2c_smbus_block_process_call(int " file ", __u8 " command ", __u8 " length ","
-+.BI "                                   __u8 *" values ");"
-+.BI "__s32 i2c_smbus_read_i2c_block_data(int " file ", __u8 " command ", __u8 " length ","
-+.BI "                                    __u8 *" values ");"
-+.BI "__s32 i2c_smbus_write_i2c_block_data(int " file ", __u8 " command ", __u8 " length ","
-+.BI "                                     const __u8 *" values ");"
-+
-+.SH DESCRIPTION
-+This library offers to user-space an SMBus-level API similar to the in-kernel
-+one.
-+Each function is a wrapper around the appropriate ioctl call for i2c-dev to
-+process.
-+The i2c-dev kernel driver will convert the ioctl to its in-kernel
-+equivalent function call, and pass the result back to the user-space caller.
-+
-+.B i2c_smbus_access()
-+is the universal function to run any SMBus transaction.
-+You have to fill out and link the data structures yourself.
-+It returns 0 on success, or a negative \fBerrno\fR value on error.
-+In practice you should never need to call this function directly, instead use
-+one of the specific functions below, which will prepare the data and then
-+call it for you.
-+
-+.B i2c_smbus_write_quick()
-+runs an SMBus "Quick command" transaction.
-+
-+.B i2c_smbus_write_byte()
-+runs an SMBus "Send byte" transaction.
-+
-+.B i2c_smbus_write_byte_data()
-+runs an SMBus "Write byte" transaction.
-+
-+.B i2c_smbus_write_word_data()
-+runs an SMBus "Write word" transaction.
-+
-+These write transaction functions return 0 on success.
-+On error, a negative \fBerrno\fR value is returned.
-+
-+.B i2c_smbus_read_byte()
-+runs an SMBus "Receive byte" transaction.
-+
-+.B i2c_smbus_read_byte_data()
-+runs an SMBus "Read byte" transaction.
-+
-+.B i2c_smbus_read_word_data()
-+runs an SMBus "Read word" transaction.
-+
-+.B i2c_smbus_process_call()
-+runs an SMBus "Process call" transaction.
-+
-+These read transaction functions return the read byte or word value on success.
-+On error, a negative \fBerrno\fR value is returned.
-+
-+.B i2c_smbus_write_block_data()
-+runs an SMBus "Block write" transaction.
-+
-+.B i2c_smbus_read_block_data()
-+runs an SMBus "Block read" transaction.
-+
-+.B i2c_smbus_block_process_call()
-+runs an SMBus "Block write-block read process call" transaction.
-+
-+These block transaction functions return 0 on success.
-+On error, a negative \fBerrno\fR value is returned.
-+The block length is limited to 32 bytes.
-+
-+.B i2c_smbus_write_i2c_block_data()
-+runs an "I2C block write" transaction. This is typically used to write to
-+an EEPROM up to 4 kb in size.
-+
-+.B i2c_smbus_read_i2c_block_data()
-+runs an "I2C block read" transaction. This is typically used to read from
-+an EEPROM up to 4 kb in size.
-+
-+While technically not part of the SMBus specification, these I2C block
-+transactions are supported by many SMBus host controllers.
-+These block transaction functions return 0 on success.
-+On error, a negative \fBerrno\fR value is returned.
-+Like their SMBus counterparts, the block length is limited to 32 bytes.
-+
-+.SH DATA STRUCTURES
-+
-+Structure \fBi2c_smbus_ioctl_data\fR is used to send data to and retrieve
-+data from the kernel through the i2c-dev driver.
-+It will be filled out for you by \fBi2c_smbus_access()\fR so you do not need
-+to care about the details.
-+
-+Union \fBi2c_smbus_data\fR is used to store all possible SMBus data.
-+
-+union \fBi2c_smbus_data\fR {
-+.br
-+	\fB__u8\fR byte;
-+.br
-+	\fB__u16\fR word;
-+.br
-+	\fB__u8\fR block[I2C_SMBUS_BLOCK_MAX + 2];
-+.br
-+};
-+
-+\fBblock[0]\fR is used for length and the last byte is reserved.
-+If you use the higher-level functions, this structure will be filled out for
-+you so you do not have to care about the details.
-+Only if you call \fBi2c_smbus_access()\fR directly, you need to fill it out
-+yourself.
-+
-+.SH AUTHOR
-+Simon G. Vogl, Frodo Looijaard, Jean Delvare and others
---- i2c-tools.orig/Makefile	2020-08-03 16:27:42.617814857 +0200
-+++ i2c-tools/Makefile	2020-09-03 11:47:27.636476491 +0200
-@@ -12,6 +12,7 @@ PREFIX	?= /usr/local
- bindir	= $(PREFIX)/bin
- sbindir	= $(PREFIX)/sbin
- mandir	= $(PREFIX)/share/man
-+man3dir	= $(mandir)/man3
- man8dir	= $(mandir)/man8
- incdir	= $(PREFIX)/include
- libdir	= $(PREFIX)/lib
---- i2c-tools.orig/lib/Module.mk	2020-08-27 10:28:33.059366343 +0200
-+++ i2c-tools/lib/Module.mk	2020-09-03 12:06:40.696210031 +0200
-@@ -1,6 +1,6 @@
- # I2C library for Linux
- #
--# Copyright (C) 2012  Jean Delvare <jdelvare@suse.de>
-+# Copyright (C) 2012-2020  Jean Delvare <jdelvare@suse.de>
- #
- # This program is free software; you can redistribute it and/or modify
- # it under the terms of the GNU Lesser General Public License as published
-@@ -87,7 +87,7 @@ strip-lib: $(addprefix $(LIB_DIR)/,$(LIB
- 	$(RM) $(addprefix $(LIB_DIR)/,*.o *.ao $(LIB_TARGETS) $(LIB_LINKS))
- 
- install-lib: $(addprefix $(LIB_DIR)/,$(LIB_TARGETS))
--	$(INSTALL_DIR) $(DESTDIR)$(libdir)
-+	$(INSTALL_DIR) $(DESTDIR)$(libdir) $(DESTDIR)$(man3dir)
- ifeq ($(BUILD_DYNAMIC_LIB),1)
- 	$(INSTALL_PROGRAM) $(LIB_DIR)/$(LIB_SHLIBNAME) $(DESTDIR)$(libdir)
- 	$(LN) $(LIB_SHLIBNAME) $(DESTDIR)$(libdir)/$(LIB_SHSONAME)
-@@ -96,10 +96,12 @@ endif
- ifeq ($(BUILD_STATIC_LIB),1)
- 	$(INSTALL_DATA) $(LIB_DIR)/$(LIB_STLIBNAME) $(DESTDIR)$(libdir)
- endif
-+	$(INSTALL_DATA) $(LIB_DIR)/libi2c.3 $(DESTDIR)$(man3dir)
- 
- uninstall-lib:
- 	for library in $(LIB_TARGETS) $(LIB_LINKS) ; do \
- 	$(RM) $(DESTDIR)$(libdir)/$$library ; done
-+	$(RM) $(DESTDIR)$(man3dir)/libi2c.3
- 
- all: all-lib
- 
+> +/**
+> + * struct virtio_i2c_hdr - the virtio I2C message header structure
+> + * @addr: i2c_msg addr, the slave address
+> + * @flags: i2c_msg flags
+> + * @len: i2c_msg len
+> + */
+> +struct virtio_i2c_hdr {
+> +	__virtio16 addr;
+> +	__virtio16 flags;
+> +	__virtio16 len;
+> +} __packed;
+
+As Misha noticed and somewhere I saw 0-day reports these should be carefully
+taken care of.
+
+...
+
+> +static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+> +{
+> +	struct virtio_i2c *vi = i2c_get_adapdata(adap);
+> +	struct virtio_i2c_msg *vmsg_o, *vmsg_i;
+> +	struct virtqueue *vq = vi->vq;
+> +	unsigned long time_left;
+> +	int len, i, ret = 0;
+> +
+> +	vmsg_o = kzalloc(sizeof(*vmsg_o), GFP_KERNEL);
+> +	if (!vmsg_o)
+> +		return -ENOMEM;
+> +
+> +	mutex_lock(&vi->i2c_lock);
+> +	vmsg_o->buf = NULL;
+> +	for (i = 0; i < num; i++) {
+> +		ret = virtio_i2c_add_msg(vq, vmsg_o, &msgs[i]);
+> +		if (ret) {
+> +			dev_err(&adap->dev, "failed to add msg[%d] to virtqueue.\n", i);
+
+> +			goto err_unlock_free;
+
+break;
+
+> +		}
+> +
+> +		virtqueue_kick(vq);
+> +
+> +		time_left = wait_for_completion_timeout(&vi->completion, adap->timeout);
+> +		if (!time_left) {
+> +			dev_err(&adap->dev, "msg[%d]: addr=0x%x timeout.\n", i, msgs[i].addr);
+> +			ret = i;
+
+> +			goto err_unlock_free;
+
+break;
+
+And so on.
+
+> +		}
+> +
+> +		vmsg_i = (struct virtio_i2c_msg *)virtqueue_get_buf(vq, &len);
+> +		if (vmsg_i) {
+> +			/* vmsg_i should point to the same address with vmsg_o */
+> +			if (vmsg_i != vmsg_o) {
+> +				dev_err(&adap->dev, "msg[%d]: addr=0x%x virtqueue error.\n",
+> +					i, vmsg_i->hdr.addr);
+> +				ret = i;
+> +				goto err_unlock_free;
+> +			}
+> +			if (vmsg_i->status != VIRTIO_I2C_MSG_OK) {
+> +				dev_err(&adap->dev, "msg[%d]: addr=0x%x error=%d.\n",
+> +					i, vmsg_i->hdr.addr, vmsg_i->status);
+> +				ret = i;
+> +				goto err_unlock_free;
+> +			}
+> +			if ((vmsg_i->hdr.flags & I2C_M_RD) && vmsg_i->hdr.len)
+> +				memcpy(msgs[i].buf, vmsg_i->buf, vmsg_i->hdr.len);
+> +
+> +			kfree(vmsg_i->buf);
+> +			vmsg_i->buf = NULL;
+> +		}
+> +		reinit_completion(&vi->completion);
+> +	}
+
+> +	if (i == num)
+> +		ret = num;
+
+And this conditional seems a dup of the for-loop successfully iterating over
+entire queue.
+
+> +err_unlock_free:
+
+Redundant.
+
+> +	mutex_unlock(&vi->i2c_lock);
+> +	kfree(vmsg_o->buf);
+> +	kfree(vmsg_o);
+> +	return ret;
+> +}
+
+...
+
+> +	vi->adap.timeout = HZ / 10;
+
++ Blank line.
+
+> +	ret = i2c_add_adapter(&vi->adap);
+> +	if (ret) {
+
+> +		dev_err(&vdev->dev, "failed to add virtio-i2c adapter.\n");
+> +		virtio_i2c_del_vqs(vdev);
+
+Usually we do clean up followed by message.
+
+> +	}
+> +
+> +	return ret;
 
 
 -- 
-Jean Delvare
-SUSE L3 Support
+With Best Regards,
+Andy Shevchenko
+
+
