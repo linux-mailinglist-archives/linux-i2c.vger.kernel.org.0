@@ -2,84 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FB725CAF5
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 22:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD08125CD52
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Sep 2020 00:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729735AbgICUgx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Sep 2020 16:36:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45432 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729406AbgICUgr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 3 Sep 2020 16:36:47 -0400
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D424320678;
-        Thu,  3 Sep 2020 20:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599165407;
-        bh=1SAc/pkQ+YvF2FbSZWmb9yACOrCSFl+Cocz2H8qQb9s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GBkpHkU2mNLKVOS/n/yqttR70A8MEzwnA9pn1u05EHDkX4XcWUSfUVZkx7ThPoXOc
-         cOmPUjFm5o0MmRK6kvTOhILNt0h3An0CEiW3YsoWfXt110ZrjP+Rf5jCjnm4Fnjs87
-         8Ex/F7hfg91BygIg8YxrY4JHq3CyVTmZXo0DMmAU=
-Received: by mail-ed1-f50.google.com with SMTP id n13so3986700edo.10;
-        Thu, 03 Sep 2020 13:36:46 -0700 (PDT)
-X-Gm-Message-State: AOAM531RyyFbMZHaVev3FRsiSj78+oZplZI5pzwkXEHdj54bfStT7xvX
-        IwnnzOI/aH30WIeGWD6dLzj7HecBOfF1rMCvpsI=
-X-Google-Smtp-Source: ABdhPJzxpPlGTe4YpW+4SBi3UyLCfVVsjl/2HCF6ABdQkyPpZO/E8Ki7WEbnMMz1NKYFTDSRsOdBqsPbQLS79oRkX0c=
-X-Received: by 2002:a05:6402:1a48:: with SMTP id bf8mr5017832edb.298.1599165405346;
- Thu, 03 Sep 2020 13:36:45 -0700 (PDT)
+        id S1728491AbgICWSU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Sep 2020 18:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727065AbgICWST (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Sep 2020 18:18:19 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CAAC061244;
+        Thu,  3 Sep 2020 15:18:19 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id v23so5661552ljd.1;
+        Thu, 03 Sep 2020 15:18:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=L6OYjrBWLMGkLZUDNUHAcsUTScuiU6WSVwlqzVd6Pzc=;
+        b=TWyRrvJAvb5keY81T6x3lfqcDecwPzWx87ybAGWLnxTvc0Rha1udM7jn+nGN8AbBoX
+         /PPf1Jd2rpVcEBSnypYGZTUFD8BZoNRbJPQjnHXQphg4fL0cLyA3WB+SmZOB9DvHkH1s
+         2pje8dwelv9GhEcpHe/t1X6caFRA75du5buyYrB/0o6kdzGdyg4w05FVo3l6Af6iPKEl
+         DkfCwypiyhMfHKUEq9OSDThzRqYH5aCTQ/nIloDqhLezdVbDD2dfIAAQiYGucHtFY0yl
+         mbFNZUh7A9Fm9fL2eJrmeSyrp2mF3C22jcATK3HfQ+q/hx5dWhWRoWguSBy34/nG+rxO
+         hRzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=L6OYjrBWLMGkLZUDNUHAcsUTScuiU6WSVwlqzVd6Pzc=;
+        b=eFVaeUHOuvODiP4bKhjtTdaTPodYq24idoKW7mRYHI5kZKlFveu/HyU86OTq+cdGRd
+         6bG17rL8nXYQu0N6KhS+1jPYSqZaHFsnCr23+JH9Cn0jThJWOUnIpjV0ydGI0XBLaSpP
+         /CElyTO0HtMe802Ahczhnmc2aE7Vt70sVj6Rhmy/4dbgGJMITbp4R9SjfSvguW77kQ8M
+         dUGYx1U+JY+21BAy0I+EFfMdDgzRRuzqmW3OjoRKAZE8fqjMeaRdvdL2omXLb4CROGIt
+         77EfcfybIG3fajFg488X+StUnuSG094vcGmoWk2Nr1lCotcldiXE42jODS8D4fsayUYI
+         WhwA==
+X-Gm-Message-State: AOAM531fE3P4v4xG5zsetOZQuBmSVjW/CkM4z9InhnwWAyPXCs7baNG+
+        TfqNABHvQ6sBo2ie345rw2nGt6piB/M=
+X-Google-Smtp-Source: ABdhPJz5Ov+gqdpL+IzGjoOMfvZX5CXv7ChYUyHXwOI1HZaIVfBMeKzxeSNXqrpHCrWgQ4/DFUn0Xw==
+X-Received: by 2002:a2e:9d8e:: with SMTP id c14mr1019646ljj.135.1599171497517;
+        Thu, 03 Sep 2020 15:18:17 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id c13sm855258lfi.76.2020.09.03.15.18.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Sep 2020 15:18:16 -0700 (PDT)
+Subject: Re: [PATCH v1 00/12] Improvements for Tegra I2C driver
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200831202303.15391-1-digetx@gmail.com>
+ <20200902212026.GD1624@qmqm.qmqm.pl>
+ <04aae642-80f9-d22e-1d80-bb206bb27a8b@gmail.com>
+ <20200903164709.GA7406@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <e1b7a9fc-e638-8576-a79e-7c2cf1cfbfe2@gmail.com>
+Date:   Fri, 4 Sep 2020 01:18:15 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20200829111800.2786-1-krzk@kernel.org> <20200829111800.2786-6-krzk@kernel.org>
- <20200903164117.GA2922218@bogus>
-In-Reply-To: <20200903164117.GA2922218@bogus>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Thu, 3 Sep 2020 22:36:34 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPc_abP=YU9cWFfPsFLrnb9N1PBEEbaSWPLLvYHZ_GmsGQ@mail.gmail.com>
-Message-ID: <CAJKOXPc_abP=YU9cWFfPsFLrnb9N1PBEEbaSWPLLvYHZ_GmsGQ@mail.gmail.com>
-Subject: Re: [PATCH 6/7] dt-bindings: i2c: imx: Use unevaluatedProperties
-To:     Rob Herring <robh@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Wolfram Sang <wolfram@the-dreams.de>,
-        Dong Aisheng <aisheng.dong@nxp.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200903164709.GA7406@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 3 Sep 2020 at 18:41, Rob Herring <robh@kernel.org> wrote:
->
-> On Sat, Aug 29, 2020 at 01:17:59PM +0200, Krzysztof Kozlowski wrote:
-> > Additional properties actually might appear (e.g. power-domains or child
-> > nodes) so use unevaluatedProperties to fix dtbs_check warnings like:
-> >
-> >   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: i2c@30a20000:
-> >     '#address-cells', '#size-cells', 'pmic@25' do not match any of the regexes: 'pinctrl-[0-9]+'
-> >
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/i2c/i2c-imx.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> NAK. See https://lore.kernel.org/r/CAL_JsqKPXJxsHPS34_TCf9bwgKxZNSV4mvQR-WKRnknQVtGGxQ@mail.gmail.com/
+03.09.2020 19:47, Michał Mirosław пишет:
+> On Thu, Sep 03, 2020 at 04:12:13AM +0300, Dmitry Osipenko wrote:
+>> 03.09.2020 00:20, Michał Mirosław пишет:
+>>> BTW, I wonder if you could expose i2c_in_atomic_xfer_mode() and use it
+>>> to differentiate atomic_xfer from normal and get rid of the internal
+>>> flag and .master_xfer_atomic callback.
+>>
+>> The atomic transfer uses 90% of the code path that a non-atomic transfer
+>> uses. I don't see how it could be exposed without duplicated lots of the
+>> code, unless I'm not missing what you're suggesting.
+> 
+> The I2C core falls back to .master_xfer even in atomic mode if
+> .master_xfer_atomic is NULL, so what I'm suggesting is to make
+> i2c_in_atomic_xfer_mode() public (from i2c-core.h) and use it in
+> normal .master_xfer to choose atomic wait variants.
 
-I can reference the generic i2c-controller schema and add missing
-properties but what to do with children (pmic@25 and many other)? I
-see that all of the other I2C controller dtschema files solve it by
-skipping "additionalProperties: false". Is this the way to go with I2C
-controllers?
-
-Best regards,
-Krzysztof
+Okay, I see now. But the I2C core prints a noisy warning if
+master_xfer_atomic is NULL in atomic transfer, so I'm not sure whether
+changing all that code will bring much benefits to us and anyone else.
+It's a bit too questionable change to me, but maybe I'm still missing
+something. Will be great if you could provide an example patch.
