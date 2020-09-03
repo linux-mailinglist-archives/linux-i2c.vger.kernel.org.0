@@ -2,106 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D495325C270
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 16:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6024A25C340
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 16:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729189AbgICOZB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Sep 2020 10:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729282AbgICOWV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Sep 2020 10:22:21 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994E9C061A24;
-        Thu,  3 Sep 2020 06:49:05 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id b19so3745392lji.11;
-        Thu, 03 Sep 2020 06:49:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zkLcvzjsZMsDvpRQU3jHjFP8Yr88KcRdlm2mmCx3YTk=;
-        b=nY2l9IWJKgkWPxifTCBR6SEmTAlx9zKKtHunGXaNkGJtYWWcvWctiXI95wktIGXgZh
-         i3qw4Fjca59HKPSlWfeeGz5xY9Ls8+yM89sO+iUQJCvaLt3N2otQCXmMPx3+LYKDbfwe
-         5BspSAa6QxWFpFcuNFFE2dsupLc8ujMDEGUX+bQ2j8sJd6PyuHFiyB0UWsT0C7qYTxOP
-         m9zxfeM37bL/KvphOt0S8shvC7HjzKUFwg/LtNCcEu5p34gBbFsbs2TeStr9XW+kH6PP
-         fDM9ktaXPDjjHuF9KO1AjFyLqIhDUqexiAEGgBC9DCl1OstfS5pVC+j9oiH8fU2KlZkR
-         Wc4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zkLcvzjsZMsDvpRQU3jHjFP8Yr88KcRdlm2mmCx3YTk=;
-        b=C1magXPpvXOIkULTKnTJt2gZ5+OSsx/IyPtfpjiJ4A7dNUq2maNl62B546RSSMJvnk
-         KW1xIrXz0Roxt+QTHpU7ixQds7DiCrrOZPjVuUqsZvtiFyRrq3EbLpZ+pfXVlCh2Nr27
-         xxN2vR5+u6cHMoiEBVdaDNB+tsosy5yg95DndhLi9Tdc5kg58fRjzHQN4DvVUblS9ANS
-         trXCXOspuaKeM3i5gkcCcESu1xQ6+NMmFBQrjunrE2Ep/38tAPNm0ppsAJm9vCaqsWUE
-         xxKmpcSoWDOKccB44x/CAkPjPlYva9L0rYKAWaixMmHP92INx7Nq0utSwG5I42OSdcTI
-         y7lQ==
-X-Gm-Message-State: AOAM5305O8UpvwShcnPIkx0LQf3iYJXoStRlUfecFqTfYvBKTyuo/SmO
-        mfjmyF1fiSfX2u5ZRnz/q2R3UrGZEmo=
-X-Google-Smtp-Source: ABdhPJzbWmq9RXiL6t7SlRAjbNetSCNFKOavX9x+b4Ppkhydn2ZME6yUC5TtOixwQK+1SS/vqD+hkQ==
-X-Received: by 2002:a2e:9c15:: with SMTP id s21mr1324479lji.27.1599140943764;
-        Thu, 03 Sep 2020 06:49:03 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id b16sm97320ljh.139.2020.09.03.06.49.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2020 06:49:03 -0700 (PDT)
-Subject: Re: [PATCH v3 01/22] i2c: tegra: Make tegra_i2c_flush_fifos() usable
- in atomic transfer
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-tegra@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200903005300.7894-1-digetx@gmail.com>
- <20200903005300.7894-2-digetx@gmail.com>
- <CAHp75VcLk9pVRefA7cTgVQcX3-9EgcW6c-VUSpSOut0Y1B7J5Q@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <957928b1-0b74-f263-b699-5a83db77df62@gmail.com>
-Date:   Thu, 3 Sep 2020 16:49:02 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728856AbgICOr6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Sep 2020 10:47:58 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38064 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729207AbgICOXu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 3 Sep 2020 10:23:50 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 5CE64AD33;
+        Thu,  3 Sep 2020 13:34:25 +0000 (UTC)
+Date:   Thu, 3 Sep 2020 15:34:23 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH i2c-tools] add BUGS section to manpages
+Message-ID: <20200903153423.0cf6d9c6@endymion>
+In-Reply-To: <20200806145421.1389-1-wsa+renesas@sang-engineering.com>
+References: <20200806145421.1389-1-wsa+renesas@sang-engineering.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VcLk9pVRefA7cTgVQcX3-9EgcW6c-VUSpSOut0Y1B7J5Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-03.09.2020 14:02, Andy Shevchenko пишет:
-> On Thu, Sep 3, 2020 at 3:53 AM Dmitry Osipenko <digetx@gmail.com> wrote:
->>
->> The tegra_i2c_flush_fifos() shouldn't sleep in atomic transfer and jiffies
->> are not updating if interrupts are disabled. Hence let's use proper delay
->> functions and use ktime API in order not to hang atomic transfer. Note
->> that this patch doesn't fix any known problem because normally FIFO is
->> flushed at the time of starting a new transfer.
+Hi Wolfram,
+
+On Thu,  6 Aug 2020 16:54:21 +0200, Wolfram Sang wrote:
+> For all manpages installed on my Debian system, add a BUGS section, so
+> people can easily find whom to contact.
 > 
->> +       /*
->> +        * ktime_get() may take up to couple milliseconds in a worst case
->> +        * and normally FIFOs are flushed, hence let's check the state before
->> +        * proceeding to polling.
->> +        */
-> 
-> Everything, including above can be done by using macros from iopoll.h. Why not?
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> (...)
+> --- a/eeprom/decode-dimms.1
+> +++ b/eeprom/decode-dimms.1
+> @@ -62,6 +62,9 @@ Same as -x except treat multibyte hex data as little endian
+>  .TP
+>  .B \-h, --help
+>  Display the usage summary
+> +.SH BUGS
+> +To report bugs or send fixes, please write to the Linux I2C mailing list
+> +<linux-i2c@vger.kernel.org>.
+>  .SH SEE ALSO
+>  .BR decode-vaio (1)
+>  .SH AUTHORS
 
-Perhaps indeed it should be possible to use the common macros, at least
-I can't recall why I chose not to use them. Maybe because it appeared to
-me that the current variant is a bit nicer than:
+On second thought... I see an issue with this.
 
-if (atomic)
-	read_poll_atomic()
-else
-	read_poll()
+So far, the contact information for reporting bugs was in the README
+file:
 
+Please post your questions and bug reports to the linux-i2c mailing list:
+  linux-i2c@vger.kernel.org
+with Cc to the current maintainer:
+  Jean Delvare <jdelvare@suse.de>
 
-I'll consider to use the common iopoll macros in v4, thanks!
+Now the manual pages point to the mailing list only, which I am not
+reading. It seems kind of wrong to tell users to report bugs on a list
+which the current maintainer isn't reading.
+
+I can see 3 solutions to that:
+
+1a* I subscribe to linux-i2c again. I'm afraid this won't go well
+though, as I unsubscribed for a reason - I no longer had time to read
+that list and most of the traffic had no interest for me. These reasons
+did not change. So even if I do subscribe, chances are that I won't
+read the list and thus miss the relevant reports.
+
+1b* Same as 1a but we explicitly ask people to add "i2c-tools" to the
+subject, so that I can filter out everything else. That's not bullet
+proof, and causes useless traffic to my mail box, but could work.
+
+2* Add my address to the BUGS section of the manual pages, together
+with the list's address. That should work for the time being, but I
+don't feel too comfortable with my name being put forward that way,
+plus this will require updating all files whenever the maintainer
+changes (don't panic, I have no plan to leave, but no one can tell what
+the future holds).
+
+3* Create a separate list for linux-i2c tools. I think the VGER admins
+are more open to creating additional lists than they were 13 years ago
+when i2c-tools saw existence as a separate project. I would - obviously
+- subscribe to that list. The advantage is that we then have a clear
+separation between kernel-space topics and user-space topics, and
+everyone can subscribe to either or both lists depending on their
+needs, which is more flexible. The drawback is that people who are
+interested in everything have twice as much work to subscribe, manage
+their subscription and unsubscribe. Another issue is that it will take
+some time before the information propagates and users start using the
+new list for i2c-tools questions and bug reports.
+
+And of course there's always the status quo option:
+
+4* Do nothing. You get to let me know whenever something hits the list
+that I should look into. That's fine with me, but this adds another
+single point of failure on the path, and means extra work for you too.
+
+What do you think?
+
+Thanks,
+-- 
+Jean Delvare
+SUSE L3 Support
