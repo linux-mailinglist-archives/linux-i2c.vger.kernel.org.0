@@ -2,53 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 284C525C459
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 17:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A5E25C423
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 17:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729355AbgICPJe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Sep 2020 11:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
+        id S1728604AbgICPEG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Sep 2020 11:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728999AbgICN6P (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Sep 2020 09:58:15 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB295C061A1D;
-        Thu,  3 Sep 2020 06:47:13 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id t7so3069865ljo.13;
-        Thu, 03 Sep 2020 06:47:13 -0700 (PDT)
+        with ESMTP id S1728984AbgICN60 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Sep 2020 09:58:26 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE185C061A20;
+        Thu,  3 Sep 2020 06:48:37 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id s205so3789984lja.7;
+        Thu, 03 Sep 2020 06:48:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=k3qzuThp72U/KRxwqVBmH8skw7M3iKBLI2uUGRnjLys=;
-        b=L8mP/a6IrjsOnBUJNLH9gtRvDP+4OMbHI+ZwhcrchPmprm1bWwSXCF3qdpZNSLZitr
-         5vxo1+pmmZE4aqpsEmb9R44gchROZJsr06CkDcuqrYl2QZJuhGs2QZpQ3dhuJkfnkkyp
-         drHo4YDPArnj1+J49nUababBHTtwnFLT0B5m//G0fxwxB/gKJHtQtLIKtgs4CbdZfkge
-         SO1qNNzSOsZLrGVzu2UB6UkuJ/emvvSSx0zcPF5cLIJjv9LQlc5q34Erkx5cL3E46lZU
-         i+hpfnP8g/Nm4s66rEd5vhzeG+kMEWSztvvit157Lw7hGQBHSK7WWoyKqlgwaSSEWCDf
-         fqhg==
+        bh=LaqCbRyYwj+hXeNs4Rfcy15/efkgJqt2Cesa41CCq68=;
+        b=pFqpNhWNj4qz5FszdeKCO0DovSJF9igdv0sKaSivGNh1VvmDLPOJ2rVuVtDSOn9zZV
+         5tbik1hIIgqy04EDMRQ3NMuHvhu7FlLQz+wUAjmVDBFSFkR9PgVZOFJONMHTxo84I43H
+         K5VhgNgMdds6pfYJBoww/b+eiYOTiOhK1ZOTnzv+BveFKlyUOolamDkKm2blJbO6uPfw
+         ypekU/Bx1o85t+RyeTWpkAKnz+WZVog0AaReHQ7kjKsS01R+LztnFevJCwHFwPUwxxZg
+         TtKboFvpMlSXgqH/9owS8ConHNcYoX72N3imv6VsGCoDB+cDklcIQGCzaECSADbrMNEq
+         vsxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=k3qzuThp72U/KRxwqVBmH8skw7M3iKBLI2uUGRnjLys=;
-        b=jwBk7gYLNiMAxzl0VacAbMtAjdcKiNqnbStDTWbvhkxd10FwezL1DXN0WTecIW/9hO
-         b+18eKz1c0EvzTrr6b1xhqVM7+bBm1LnDlLirseu48WS4nMVRPI5Ei2cHRXLt0Y41q9m
-         VnkGFnCvkG1JMHWgiavaNVCBWT6ofLZeSrfG4kewL7pKmlBECtLy5XfI8I0Ww6r8Ol3J
-         XWoVROlFrTg0+iY2yNLfnbCqYCO04kVe+ZQ04kuMqZ7IdyA0okUdljaPBiaQx6eYc07B
-         LrnxwjNhHOht5xGxBFMTLHjbKzhozeMYry3vBAi1SrTrJ4t1d6Fu4F5HYpUgFF48Ww9Z
-         mh2g==
-X-Gm-Message-State: AOAM532tFxt1LQufFJk+tHhE0suHQBsciM15Lw/2Vce1VNrvirhAIw7T
-        VCrYWC50LHKiTR531Wri0Mg=
-X-Google-Smtp-Source: ABdhPJy8eL2bmmPblOvXEyLk1+3kYW10KFUyH34uTWW02OusL+7ojvhtmrJ/zedSljYSdLAXGPWwGg==
-X-Received: by 2002:a2e:574c:: with SMTP id r12mr1398000ljd.302.1599140832286;
-        Thu, 03 Sep 2020 06:47:12 -0700 (PDT)
+        bh=LaqCbRyYwj+hXeNs4Rfcy15/efkgJqt2Cesa41CCq68=;
+        b=TtBuX/cypAOqiOQ4VPqLSyF393UE3zGZeD2Dq9ZBA3Yv/jRBzHP8r560EapfwtZwvQ
+         wuUVQONSum0vFXwhiGZHWbQrwGJsQ/gSWktCq5n365vt5kRc4ha/CR5uLrDwZWMfJ4FR
+         trLwEHcKTDipfeRuqrxZ0VtdPh03vndoK88l5SWI066oX3Cc500iYORE4WQ5ItEmUKgk
+         +xUgD+TXMFvS3JWso412bXUKCU6KvSZZYW7G2zBPuFl28IEenBbkt/LkWxBPcOtmCHVg
+         NJi8RcIam+67F+Qu3BuZWT5kvRNR1hpytjv+XigS13mPP05Q0duUbXBSX7zqd6x9sMnW
+         4piA==
+X-Gm-Message-State: AOAM531iOOltLwk5qalkv3kaEKALR3Mmp1C7hQKaRaGq6Q2EqP0s1Bu/
+        sa3x4oFHgKwF3gLjjJ5KMOnsE54qrO8=
+X-Google-Smtp-Source: ABdhPJysBNIOjzHtL+VhmNkg+NelDDnocAgSZYpjvcLtfIhQVLeWlsH5s72PcLFzEMhLzr7ci/8TXw==
+X-Received: by 2002:a2e:a0d5:: with SMTP id f21mr1448443ljm.364.1599140916133;
+        Thu, 03 Sep 2020 06:48:36 -0700 (PDT)
 Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id k12sm614296ljh.95.2020.09.03.06.47.11
+        by smtp.googlemail.com with ESMTPSA id k205sm605178lfk.19.2020.09.03.06.48.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2020 06:47:11 -0700 (PDT)
-Subject: Re: [PATCH v3 05/22] i2c: tegra: Use reset_control_reset()
+        Thu, 03 Sep 2020 06:48:35 -0700 (PDT)
+Subject: Re: [PATCH v3 09/22] i2c: tegra: Clean up probe function
 To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,18 +57,17 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         linux-i2c <linux-i2c@vger.kernel.org>,
         linux-tegra@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 References: <20200903005300.7894-1-digetx@gmail.com>
- <20200903005300.7894-6-digetx@gmail.com>
- <CAHp75VefJMxAoGxN8muTxLUJ=bwcMyjzX4uEGvYdckE6xYJvjw@mail.gmail.com>
+ <20200903005300.7894-10-digetx@gmail.com>
+ <CAHp75VdPoJFNC+MntKu-CL8jFMEe85ZT3R9DF0aaNC4KjqWXyg@mail.gmail.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <07e418bb-77c1-a3bc-bb8b-b930b8c723df@gmail.com>
-Date:   Thu, 3 Sep 2020 16:47:10 +0300
+Message-ID: <4bd12095-7a29-bcb4-6b49-83eca285c897@gmail.com>
+Date:   Thu, 3 Sep 2020 16:48:34 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VefJMxAoGxN8muTxLUJ=bwcMyjzX4uEGvYdckE6xYJvjw@mail.gmail.com>
+In-Reply-To: <CAHp75VdPoJFNC+MntKu-CL8jFMEe85ZT3R9DF0aaNC4KjqWXyg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -77,22 +76,53 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-03.09.2020 14:11, Andy Shevchenko пишет:
-> On Thu, Sep 3, 2020 at 3:53 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+03.09.2020 14:17, Andy Shevchenko пишет:
+> On Thu, Sep 3, 2020 at 3:54 AM Dmitry Osipenko <digetx@gmail.com> wrote:
 >>
->> Use a single reset_control_reset() instead of assert/deasset couple in
->> order to make code cleaner a tad.
+>> The driver's probe function code is difficult to read and follow. This
+>> patch reorders code of the probe function, forming logical groups that are
+>> easy to work with. The clock and hardware initializations are factored
+>> out into separate functions in order to keep code clean and ease error
+>> unwinding.
+>>
+>> Driver now makes use of devm_platform_get_and_ioremap_resource() and
+>> platform_get_irq() which are replacing boilerplate parts of the code.
+>>
+>> The dev_err_probe() is now used for reset control retrieval because reset
+>> is now requested before clocks, and thus, BPMP driver that provides reset
+>> controls for newer SoCs may cause the probe defer.
 > 
->> Note that the reset_control_reset()
->> uses 1 microsecond delay instead of 2 that was used previously, but this
->> shouldn't matter.
+>> The error message of devm_request_irq() is removed because this function
+>> takes care of printing the message by itself.
 > 
-> What datasheet says about this delay?
+> I see no evidence of this.
 
-The public datasheet doesn't say anything specific about the I2C
-controller reset time. IIUC, controller logic runs at 200/400 MHz, so
-1us should be enough for the reset.
+Good catch! I confused it with the platform_get_irq() which prints the
+message! I'll correct it in v4, thanks!
 
-I'm sure that somebody from NVIDIA should know the exact answer and will
-correct me if I'm wrong. I CC'd Peter De Schrijver who is a maintainer
-of the Tegra's clock-and-reset driver.
+Anyways, the message of devm_request_irq() needs a correction since it
+prints the number of vIRQ instead of the error code.
+
+> ...
+> 
+>> +       of_property_read_u32(np, "clock-frequency", &bus_clk_rate);
+>> +       i2c_dev->bus_clk_rate = bus_clk_rate;
+> 
+> Hmm... I dunno if Wolfram is going to implement a special helper
+> exactly for this. I remember we discussed that with him during v5.8
+> (?) times.
+
+I now see that there is a i2c_parse_fw_timings() which parses
+"clock-frequency" and other common properties. I could switch to use
+that helper, but not sure whether it would be really worthwhile because
+only one property is needed to be parsed. I'll consider this change for
+v4, thank you for the suggestion!
+
+> ...
+> 
+>> +static int tegra_i2c_init_clocks(struct tegra_i2c_dev *i2c_dev)
+> 
+> Hmm... Don't we have something like devm_clk_bulk_get_all() or so?
+> 
+
+Sounds like a good suggestion! I'll consider it for the v4, thanks!
