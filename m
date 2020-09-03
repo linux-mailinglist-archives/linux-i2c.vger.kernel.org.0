@@ -2,152 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C39925BCE8
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 10:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3563825BE01
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 11:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728696AbgICIQI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Sep 2020 04:16:08 -0400
-Received: from mga11.intel.com ([192.55.52.93]:55058 "EHLO mga11.intel.com"
+        id S1727872AbgICJA5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Sep 2020 05:00:57 -0400
+Received: from mx2.suse.de ([195.135.220.15]:36946 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727989AbgICIPy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 3 Sep 2020 04:15:54 -0400
-IronPort-SDR: 5oOH+ZPZztPFdDLTCqdSZEq5r0kEg8nkslTQcE+ndc2slE5NqhMcdo+fiVUoSO/PhwpdwyUXrt
- NB5KFWx+CGAA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="155042691"
-X-IronPort-AV: E=Sophos;i="5.76,385,1592895600"; 
-   d="scan'208";a="155042691"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 01:15:48 -0700
-IronPort-SDR: qpH7qqIgiU/Xm+EZ7oh4dQJ88rJpY2Qm0IQQJbfwmXfmKyLeCmgLxGo+R7qUHFe79vxuaC/gvf
- mnxy6hW2NYQg==
-X-IronPort-AV: E=Sophos;i="5.76,385,1592895600"; 
-   d="scan'208";a="477963191"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 01:15:45 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id A722121485;
-        Thu,  3 Sep 2020 11:15:38 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1kDkPO-0001cU-PE; Thu, 03 Sep 2020 11:15:50 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH v8 6/6] at24: Support probing while off
-Date:   Thu,  3 Sep 2020 11:15:50 +0300
-Message-Id: <20200903081550.6012-7-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
-References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
+        id S1726268AbgICJA5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 3 Sep 2020 05:00:57 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 16AE8AC4C;
+        Thu,  3 Sep 2020 09:00:56 +0000 (UTC)
+Date:   Thu, 3 Sep 2020 11:00:54 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Linux I2C <linux-i2c@vger.kernel.org>
+Cc:     David Jedynak <sileasresearch@gmail.com>
+Subject: [PATCH] i2cset: Fix short writes with mask
+Message-ID: <20200903110054.52a3a69f@endymion>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In certain use cases (where the chip is part of a camera module, and the
-camera module is wired together with a camera privacy LED), powering on
-the device during probe is undesirable. Add support for the at24 to
-execute probe while being powered off. For this to happen, a hint in form
-of a device property is required from the firmware.
+Short writes used "daddress" for the value, but the masking code did
+not expect that, and instead applied the mask to a variable that was
+never used.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+So change short writes to use "value" for the value, as all other
+commands do. Adjust all code paths accordingly.
+
+Reported by David Jedynak.
+
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
 ---
- drivers/misc/eeprom/at24.c | 43 +++++++++++++++++++++++---------------
- 1 file changed, 26 insertions(+), 17 deletions(-)
+I was finally able to give this some (convoluted) testing using
+i2c-stub, so it's about time to get this fix merged.
 
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 8f5de5f10bbea..2d24e33788d7d 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -595,6 +595,7 @@ static int at24_probe(struct i2c_client *client)
- 	bool i2c_fn_i2c, i2c_fn_block;
- 	unsigned int i, num_addresses;
- 	struct at24_data *at24;
-+	bool low_power;
- 	struct regmap *regmap;
- 	bool writable;
- 	u8 test_byte;
-@@ -733,25 +734,30 @@ static int at24_probe(struct i2c_client *client)
- 
- 	i2c_set_clientdata(client, at24);
- 
--	err = regulator_enable(at24->vcc_reg);
--	if (err) {
--		dev_err(dev, "Failed to enable vcc regulator\n");
--		return err;
--	}
-+	low_power = acpi_dev_state_low_power(&client->dev);
-+	if (!low_power) {
-+		err = regulator_enable(at24->vcc_reg);
-+		if (err) {
-+			dev_err(dev, "Failed to enable vcc regulator\n");
-+			return err;
-+		}
- 
--	/* enable runtime pm */
--	pm_runtime_set_active(dev);
-+		pm_runtime_set_active(dev);
-+	}
- 	pm_runtime_enable(dev);
- 
- 	/*
--	 * Perform a one-byte test read to verify that the
--	 * chip is functional.
-+	 * Perform a one-byte test read to verify that the chip is functional,
-+	 * unless powering on the device is to be avoided during probe (i.e.
-+	 * it's powered off right now).
- 	 */
--	err = at24_read(at24, 0, &test_byte, 1);
--	if (err) {
--		pm_runtime_disable(dev);
--		regulator_disable(at24->vcc_reg);
--		return -ENODEV;
-+	if (!low_power) {
-+		err = at24_read(at24, 0, &test_byte, 1);
-+		if (err) {
-+			pm_runtime_disable(dev);
-+			regulator_disable(at24->vcc_reg);
-+			return -ENODEV;
-+		}
+ tools/i2cset.c |   25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
+
+--- i2c-tools.orig/tools/i2cset.c	2020-08-03 16:27:42.557814067 +0200
++++ i2c-tools/tools/i2cset.c	2020-09-03 10:32:40.842931585 +0200
+@@ -125,11 +125,11 @@ static int confirm(const char *filename,
  	}
  
- 	pm_runtime_idle(dev);
-@@ -771,9 +777,11 @@ static int at24_remove(struct i2c_client *client)
- 	struct at24_data *at24 = i2c_get_clientdata(client);
+ 	fprintf(stderr, "I will write to device file %s, chip address "
+-		"0x%02x, data address\n0x%02x, ", filename, address, daddress);
+-	if (size == I2C_SMBUS_BYTE)
+-		fprintf(stderr, "no data.\n");
+-	else if (size == I2C_SMBUS_BLOCK_DATA ||
+-		 size == I2C_SMBUS_I2C_BLOCK_DATA) {
++		"0x%02x,\n", filename, address);
++	if (size != I2C_SMBUS_BYTE)
++		fprintf(stderr, "data address 0x%02x, ", daddress);
++	if (size == I2C_SMBUS_BLOCK_DATA ||
++	    size == I2C_SMBUS_I2C_BLOCK_DATA) {
+ 		int i;
  
- 	pm_runtime_disable(&client->dev);
--	if (!pm_runtime_status_suspended(&client->dev))
--		regulator_disable(at24->vcc_reg);
--	pm_runtime_set_suspended(&client->dev);
-+	if (!acpi_dev_state_low_power(&client->dev)) {
-+		if (!pm_runtime_status_suspended(&client->dev))
-+			regulator_disable(at24->vcc_reg);
-+		pm_runtime_set_suspended(&client->dev);
-+	}
+ 		fprintf(stderr, "data");
+@@ -140,7 +140,7 @@ static int confirm(const char *filename,
+ 	} else
+ 		fprintf(stderr, "data 0x%02x%s, mode %s.\n", value,
+ 			vmask ? " (masked)" : "",
+-			size == I2C_SMBUS_BYTE_DATA ? "byte" : "word");
++			size == I2C_SMBUS_WORD_DATA ? "word" : "byte");
+ 	if (pec)
+ 		fprintf(stderr, "PEC checking enabled.\n");
  
- 	return 0;
- }
-@@ -810,6 +818,7 @@ static struct i2c_driver at24_driver = {
- 	.probe_new = at24_probe,
- 	.remove = at24_remove,
- 	.id_table = at24_ids,
-+	.flags = I2C_DRV_FL_ALLOW_LOW_POWER_PROBE,
- };
+@@ -264,6 +264,10 @@ int main(int argc, char *argv[])
  
- static int __init at24_init(void)
--- 
-2.20.1
+ 	/* read values from command line */
+ 	switch (size) {
++	case I2C_SMBUS_BYTE:
++		/* short write: data address was not really data address */
++		value = daddress;
++		break;
+ 	case I2C_SMBUS_BYTE_DATA:
+ 	case I2C_SMBUS_WORD_DATA:
+ 		value = strtol(argv[flags+4], &end, 0);
+@@ -344,12 +348,10 @@ int main(int argc, char *argv[])
+ 
+ 		if (!yes) {
+ 			fprintf(stderr, "Old value 0x%0*x, write mask "
+-				"0x%0*x: Will write 0x%0*x to register "
+-				"0x%02x\n",
++				"0x%0*x, will write 0x%0*x\n",
+ 				size == I2C_SMBUS_WORD_DATA ? 4 : 2, oldvalue,
+ 				size == I2C_SMBUS_WORD_DATA ? 4 : 2, vmask,
+-				size == I2C_SMBUS_WORD_DATA ? 4 : 2, value,
+-				daddress);
++				size == I2C_SMBUS_WORD_DATA ? 4 : 2, value);
+ 
+ 			fprintf(stderr, "Continue? [Y/n] ");
+ 			fflush(stderr);
+@@ -369,7 +371,7 @@ int main(int argc, char *argv[])
+ 
+ 	switch (size) {
+ 	case I2C_SMBUS_BYTE:
+-		res = i2c_smbus_write_byte(file, daddress);
++		res = i2c_smbus_write_byte(file, value);
+ 		break;
+ 	case I2C_SMBUS_WORD_DATA:
+ 		res = i2c_smbus_write_word_data(file, daddress, value);
+@@ -407,7 +409,6 @@ int main(int argc, char *argv[])
+ 	switch (size) {
+ 	case I2C_SMBUS_BYTE:
+ 		res = i2c_smbus_read_byte(file);
+-		value = daddress;
+ 		break;
+ 	case I2C_SMBUS_WORD_DATA:
+ 		res = i2c_smbus_read_word_data(file, daddress);
 
+
+-- 
+Jean Delvare
+SUSE L3 Support
