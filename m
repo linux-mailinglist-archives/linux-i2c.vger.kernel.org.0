@@ -2,204 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8972125BEF8
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 12:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E42EC25C000
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Sep 2020 13:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbgICKUS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Sep 2020 06:20:18 -0400
-Received: from mga03.intel.com ([134.134.136.65]:23262 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726109AbgICKUQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 3 Sep 2020 06:20:16 -0400
-IronPort-SDR: HW/hTd2GOWEwDB6eyiJKKDdqRsoFd9Wv414YoKUBY0Eo4srHGf07UWDo5F8QBH7Fv6Nz5X1bmU
- UgS0/ZAEes9A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="157554412"
-X-IronPort-AV: E=Sophos;i="5.76,386,1592895600"; 
-   d="scan'208";a="157554412"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 03:20:15 -0700
-IronPort-SDR: acaoowsTjA5RVrtKbFxzUHplXC2xaCrUjWDZb9t4vxLl+4qUNV3OvubBTwvJDW1WGOx//mGF8h
- zFOFE+YeSYkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,386,1592895600"; 
-   d="scan'208";a="331747749"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2020 03:20:11 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kDmLg-00Dzgr-1N; Thu, 03 Sep 2020 13:20:08 +0300
-Date:   Thu, 3 Sep 2020 13:20:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
-        wsa+renesas@sang-engineering.com, wsa@kernel.org,
-        jarkko.nikula@linux.intel.com, jdelvare@suse.de,
-        Sergey.Semin@baikalelectronics.ru, krzk@kernel.org,
-        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
-        bjorn.andersson@linaro.org, shuo.a.liu@intel.com,
-        conghui.chen@intel.com, yu1.wang@intel.com
-Subject: Re: [PATCH] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20200903102008.GY1891694@smile.fi.intel.com>
-References: <0efc2605c8c06b4b1bf68cbad5536c4a900dc019.1599110284.git.jie.deng@intel.com>
+        id S1726678AbgICLRU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Sep 2020 07:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728444AbgICLRS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Sep 2020 07:17:18 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5BFC061251;
+        Thu,  3 Sep 2020 04:03:05 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id v196so2053454pfc.1;
+        Thu, 03 Sep 2020 04:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Yc4wkCo7MeYrmmnwisSRarxaaBJAo1GNuY3VsM322Kg=;
+        b=V+NLN2f/oumXmYED9CGhvzHg1A3k7uzbduXR5eZhQX9/LB452xGmGWatlhugioh3fn
+         C2jDtT6Rc46kWS8I2VMaaQ0YJ2cUJ0sW+0WJexHovLKoPUHB35BiDayz+5LOPKPRh7jN
+         LDbNcnYH6pS9mK4fFj6e+3Ohv0X/OBTORciTRAxc+4tQXi6M5vmL49DLqUTh1O7Zc1gZ
+         TShC6BYGRuSfGHezFoj+FzbZQ7DRptRhuSXsAOWIOYn9IzCI1Vi1paFBp6LrQFxA8AKs
+         j6lwADHrIN66e/OyJTVsiNNhAn6Y0D5eGSoKsL2bPAWMUbdWHdvzKfkOF+cewY9GN8/b
+         pdTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yc4wkCo7MeYrmmnwisSRarxaaBJAo1GNuY3VsM322Kg=;
+        b=X9EbEKKDQ7SKr3hFldkD+96BSiInMEBHd4MdeRZ14RnTstUIJ4NfcM5Y6PNBmBKyIU
+         O4EGi5hLLaCDFxjyR0FHsea/D2JeCkMwokcoBBjybz6Qm5FMpmuVOMO+Oe3RjuhwvIR9
+         /YEKSriqSn/e270yD0GvE9tZMSH03QFL/tVV2QbqcbGgtj6I2jpZBdhSGgeCJQ/Gdfze
+         PtaM3RkaYib82tbNM2Mewz+CW6jEC+MOfSLf5Wzfdp9EsCoHwdfPx3VgzyjNfSWrkrno
+         7tdUYBtBeZP5XNyCDCfHwtlrROV1oqV/X4+LcVeSqWaEYS3+G+YTp6tkZPx91MNtoyPr
+         UtxA==
+X-Gm-Message-State: AOAM530mWtu7OGKgKaLUAcg6aJTuBA2jOjorX+29sIpQ9LOhCBB7ejXc
+        1NDsQcxKzTcej4UyqihzrdoC9thx9I4DrMUO5II=
+X-Google-Smtp-Source: ABdhPJwDzelAtXwzu1AP2Sck+DOJdO2HFfZJWEguZGryUdrzqFlNyIe50UOUdMIYN72Gvo8JpjKeqGFXAeY1JyeFBFc=
+X-Received: by 2002:a63:d648:: with SMTP id d8mr2513798pgj.4.1599130985426;
+ Thu, 03 Sep 2020 04:03:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0efc2605c8c06b4b1bf68cbad5536c4a900dc019.1599110284.git.jie.deng@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20200903005300.7894-1-digetx@gmail.com> <20200903005300.7894-2-digetx@gmail.com>
+In-Reply-To: <20200903005300.7894-2-digetx@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 3 Sep 2020 14:02:48 +0300
+Message-ID: <CAHp75VcLk9pVRefA7cTgVQcX3-9EgcW6c-VUSpSOut0Y1B7J5Q@mail.gmail.com>
+Subject: Re: [PATCH v3 01/22] i2c: tegra: Make tegra_i2c_flush_fifos() usable
+ in atomic transfer
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-tegra@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 01:34:45PM +0800, Jie Deng wrote:
-> Add an I2C bus driver for virtio para-virtualization.
-> 
-> The controller can be emulated by the backend driver in
-> any device model software by following the virtio protocol.
-> 
-> This driver communicates with the backend driver through a
-> virtio I2C message structure which includes following parts:
-> 
-> - Header: i2c_msg addr, flags, len.
-> - Data buffer: the pointer to the i2c msg data.
-> - Status: the processing result from the backend.
-> 
-> People may implement different backend drivers to emulate
-> different controllers according to their needs. A backend
-> example can be found in the device model of the open source
-> project ACRN. For more information, please refer to
-> https://projectacrn.org.
-> 
-> The virtio device ID 34 is used for this I2C adpter since IDs
-> before 34 have been reserved by other virtio devices.
+On Thu, Sep 3, 2020 at 3:53 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> The tegra_i2c_flush_fifos() shouldn't sleep in atomic transfer and jiffies
+> are not updating if interrupts are disabled. Hence let's use proper delay
+> functions and use ktime API in order not to hang atomic transfer. Note
+> that this patch doesn't fix any known problem because normally FIFO is
+> flushed at the time of starting a new transfer.
 
-Seems it's slightly different version to what I have reviewed internally.
-My comments below. (I admit that some of them maybe new)
+> +       /*
+> +        * ktime_get() may take up to couple milliseconds in a worst case
+> +        * and normally FIFOs are flushed, hence let's check the state before
+> +        * proceeding to polling.
+> +        */
 
-...
+Everything, including above can be done by using macros from iopoll.h. Why not?
 
-> +/**
-> + * struct virtio_i2c_hdr - the virtio I2C message header structure
-> + * @addr: i2c_msg addr, the slave address
-> + * @flags: i2c_msg flags
-> + * @len: i2c_msg len
-> + */
-> +struct virtio_i2c_hdr {
-> +	__virtio16 addr;
-> +	__virtio16 flags;
-> +	__virtio16 len;
-> +} __packed;
-
-As Misha noticed and somewhere I saw 0-day reports these should be carefully
-taken care of.
-
-...
-
-> +static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
-> +{
-> +	struct virtio_i2c *vi = i2c_get_adapdata(adap);
-> +	struct virtio_i2c_msg *vmsg_o, *vmsg_i;
-> +	struct virtqueue *vq = vi->vq;
-> +	unsigned long time_left;
-> +	int len, i, ret = 0;
+> +       if (!(i2c_readl(i2c_dev, offset) & mask))
+> +               return 0;
 > +
-> +	vmsg_o = kzalloc(sizeof(*vmsg_o), GFP_KERNEL);
-> +	if (!vmsg_o)
-> +		return -ENOMEM;
+> +       ktime = ktime_get();
+> +       ktimeout = ktime_add_ms(ktime, 1000);
 > +
-> +	mutex_lock(&vi->i2c_lock);
-> +	vmsg_o->buf = NULL;
-> +	for (i = 0; i < num; i++) {
-> +		ret = virtio_i2c_add_msg(vq, vmsg_o, &msgs[i]);
-> +		if (ret) {
-> +			dev_err(&adap->dev, "failed to add msg[%d] to virtqueue.\n", i);
-
-> +			goto err_unlock_free;
-
-break;
-
-> +		}
+>         while (i2c_readl(i2c_dev, offset) & mask) {
+> -               if (time_after(jiffies, timeout)) {
+> -                       dev_warn(i2c_dev->dev, "timeout waiting for fifo flush\n");
+> -                       return -ETIMEDOUT;
+> -               }
+> -               usleep_range(1000, 2000);
+> +               if (ktime_after(ktime, ktimeout))
+> +                       goto err_timeout;
 > +
-> +		virtqueue_kick(vq);
+> +               if (i2c_dev->is_curr_atomic_xfer)
+> +                       mdelay(1);
+> +               else
+> +                       fsleep(1000);
 > +
-> +		time_left = wait_for_completion_timeout(&vi->completion, adap->timeout);
-> +		if (!time_left) {
-> +			dev_err(&adap->dev, "msg[%d]: addr=0x%x timeout.\n", i, msgs[i].addr);
-> +			ret = i;
-
-> +			goto err_unlock_free;
-
-break;
-
-And so on.
-
-> +		}
+> +               ktime = ktime_get();
+>         }
+>         return 0;
 > +
-> +		vmsg_i = (struct virtio_i2c_msg *)virtqueue_get_buf(vq, &len);
-> +		if (vmsg_i) {
-> +			/* vmsg_i should point to the same address with vmsg_o */
-> +			if (vmsg_i != vmsg_o) {
-> +				dev_err(&adap->dev, "msg[%d]: addr=0x%x virtqueue error.\n",
-> +					i, vmsg_i->hdr.addr);
-> +				ret = i;
-> +				goto err_unlock_free;
-> +			}
-> +			if (vmsg_i->status != VIRTIO_I2C_MSG_OK) {
-> +				dev_err(&adap->dev, "msg[%d]: addr=0x%x error=%d.\n",
-> +					i, vmsg_i->hdr.addr, vmsg_i->status);
-> +				ret = i;
-> +				goto err_unlock_free;
-> +			}
-> +			if ((vmsg_i->hdr.flags & I2C_M_RD) && vmsg_i->hdr.len)
-> +				memcpy(msgs[i].buf, vmsg_i->buf, vmsg_i->hdr.len);
+> +err_timeout:
+> +       dev_err(i2c_dev->dev, "FIFO flushing timed out\n");
 > +
-> +			kfree(vmsg_i->buf);
-> +			vmsg_i->buf = NULL;
-> +		}
-> +		reinit_completion(&vi->completion);
-> +	}
-
-> +	if (i == num)
-> +		ret = num;
-
-And this conditional seems a dup of the for-loop successfully iterating over
-entire queue.
-
-> +err_unlock_free:
-
-Redundant.
-
-> +	mutex_unlock(&vi->i2c_lock);
-> +	kfree(vmsg_o->buf);
-> +	kfree(vmsg_o);
-> +	return ret;
-> +}
-
-...
-
-> +	vi->adap.timeout = HZ / 10;
-
-+ Blank line.
-
-> +	ret = i2c_add_adapter(&vi->adap);
-> +	if (ret) {
-
-> +		dev_err(&vdev->dev, "failed to add virtio-i2c adapter.\n");
-> +		virtio_i2c_del_vqs(vdev);
-
-Usually we do clean up followed by message.
-
-> +	}
-> +
-> +	return ret;
+> +       return -ETIMEDOUT;
+>  }
 
 
 -- 
 With Best Regards,
 Andy Shevchenko
-
-
