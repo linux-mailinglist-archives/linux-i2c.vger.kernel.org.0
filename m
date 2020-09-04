@@ -2,554 +2,160 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E466F25D6F9
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Sep 2020 13:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B181E25D75B
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Sep 2020 13:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726171AbgIDLEg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Sep 2020 07:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730092AbgIDLDB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Sep 2020 07:03:01 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3805C061244
-        for <linux-i2c@vger.kernel.org>; Fri,  4 Sep 2020 04:02:48 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id m6so6349049wrn.0
-        for <linux-i2c@vger.kernel.org>; Fri, 04 Sep 2020 04:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=0UDGJrKEEMRct4izkIDPvi2dv+dhojogXFf/CukREHY=;
-        b=nBrsuXu3TlREU+UkdWov0/MWQiKr1ppVGUIYSI8UJ35ZgBYV63+AwtbMz2oSsx18eW
-         swklEouKf1ZQeze7VJdC0dRC76CxSog5iM0xNP+pQAM3canVrBPUWWfeMefHVe3Cgyeg
-         yqbEBR87ekOfVkmkmVbmso7yeV2YP+OtRd5rb47gHMwUSO9OtavxoQyWgBLv6iIpnCOd
-         Woj0aRxiLBCg7cAboXvKjuPKkNN5443t7NlB35/28YuwSo3QaGw1+tdqI6qn7zwyrG74
-         jtgGxxHsZHAM7Jgu1xoT49nHzQhcoxUePiuJM007QnWi41G/Y2wmq7tfsKr45uZtrH6p
-         F3LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0UDGJrKEEMRct4izkIDPvi2dv+dhojogXFf/CukREHY=;
-        b=t2hItxgPRxJ7ulreAKExlb5gRHyF3cptJStwIkp918t2MkhPn4KOBsJiZJ4ZCxgF31
-         ui60ymddQ2NpyBs7L50GJcrHQjv9yKK+lZfSwy/qU2MPB6wtcSdtvrqyCx59/Oy5d8Dk
-         1NJyLTNl5GzqxinCWqhlcmNv7JkqbqdQc4p4uRuvaHOLMOjgnYL61/bcAIyMmtW2PG09
-         2tHSEzuUDIDG9DHFLAJKaoUln5GGHs0amWoXhHMef/KFkavgB0OpTxKPT4Kl0el7yOch
-         7VGrVnc2mMDK/nO6QkugjXnDDrOQCB3fWYiyHP2kl0OhZcnyqvEOIq4z6bouz9P9tqDe
-         kPyQ==
-X-Gm-Message-State: AOAM531Dg9FYghRVA0y2vP5FwvavI8q8IbGQd0oUBVQUrkvG8TIqEYqV
-        iPV/5chxN4sMOM1RArVogB8lpg==
-X-Google-Smtp-Source: ABdhPJxb7ZJsbFQGtuY6eJJzmlIdvnB+T4SPxrTXcX7q27fwOgGPts6JmNsveK4Z66ZuJn2+zCKZUw==
-X-Received: by 2002:a5d:6caf:: with SMTP id a15mr7064739wra.344.1599217367377;
-        Fri, 04 Sep 2020 04:02:47 -0700 (PDT)
-Received: from [192.168.86.34] (cpc86377-aztw32-2-0-cust226.18-1.cable.virginm.net. [92.233.226.227])
-        by smtp.googlemail.com with ESMTPSA id t4sm10334818wre.30.2020.09.04.04.02.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 04 Sep 2020 04:02:46 -0700 (PDT)
-Subject: Re: [PATCH v3 2/3] nvmem: add ONIE NVMEM cells support
-To:     Vadym Kochan <vadym.kochan@plvision.eu>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        id S1730168AbgIDLav (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Sep 2020 07:30:51 -0400
+Received: from mail-eopbgr00102.outbound.protection.outlook.com ([40.107.0.102]:13283
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730069AbgIDLYG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 4 Sep 2020 07:24:06 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XW4E13skJ0etb8G+3RJzHY0Jc0MQ8OOBg8Hntg/uvbzsKMjWw1mbC0jixYO2z0lcFeykmKdtQrp0zRA8tXezKgWyFg7NquJdTly0puMF0B1wG0zteCH8pRNvrFCj9Wfg+GuCjvF4TF1FCbDRIfV5nXZVoqzqdIDFD/iOEBaP9AdOAPYsI7UivM+mHGc6gCX0TCnxoldcfZuNz07Onxd1DKAdXlhtm/I7lueC24vsATLYL5KtNNEYaDZfr88A9KKpyTnowa66PCyfAGM52kEKqb9xPNSek74wd8sueJFZ2TJcMDc2FaENVZ+BBw9PspuhE6i1Q8RvHIDaXV+Gc8pN0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dKZ7p81PcyPdAihQDAkR2rjbSCflKL4sE3bsr2fcqwg=;
+ b=lsBO30R1aKzefszACpdobkPeA0tlNtQU/wkMrcphAMXvoSd6kRTp/T+XFwR6aARoJ0ux/k5ReB5+gZkR+YWs9Pa9buU3kW15UezoJpspJJUGUITQGvqSl8HSKcAhaTFHZcEOD7XAfgr5LzOCNt7NhaHFSOb0izCWcKcLCaL9kGMGjpyy7pyfi7bzIcFNoaEU6sm6PrKdAikqTwqOvLz3n+7cvpJVJHke/9jlmQzrk/LDYsoUju76Jtpwo+JOQ/qE6ZmOyJ1jps0m6rrDnRwwRG0cR64TrIrUUJ157bqoAvPG1+LqAVeD5Fw6BbIrVbbujkAVTOn8mlHw9hE6OHfCVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dKZ7p81PcyPdAihQDAkR2rjbSCflKL4sE3bsr2fcqwg=;
+ b=pUd8m9mUmG33xGjWN9ZkouhKZ3IIGI1HNvUztRJ9WfMxpFYaX3h4taJSkcw6EDBA3Cg40JUMqCjNaezQL49NmrBTjc8lVe872ZBh/msgB8jdC80ryCSzajxIS9jvNpoMvOTDmEWRi6EYX5OJ7zWCSocvCwotlbbqQZuDh4Ckcu0=
+Authentication-Results: linaro.org; dkim=none (message not signed)
+ header.d=none;linaro.org; dmarc=none action=none header.from=plvision.eu;
+Received: from DB6P190MB0535.EURP190.PROD.OUTLOOK.COM (2603:10a6:6:3e::26) by
+ DB6P190MB0008.EURP190.PROD.OUTLOOK.COM (2603:10a6:4:88::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3348.16; Fri, 4 Sep 2020 11:23:13 +0000
+Received: from DB6P190MB0535.EURP190.PROD.OUTLOOK.COM
+ ([fe80::9cbe:fafc:3c8a:3765]) by DB6P190MB0535.EURP190.PROD.OUTLOOK.COM
+ ([fe80::9cbe:fafc:3c8a:3765%4]) with mapi id 15.20.3348.016; Fri, 4 Sep 2020
+ 11:23:13 +0000
+Date:   Fri, 4 Sep 2020 14:23:10 +0300
+From:   Vadym Kochan <vadym.kochan@plvision.eu>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Maxime Ripard <maxime.ripard@free-electrons.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] nvmem: core: allow to register cells during nvmem
+ registration
+Message-ID: <20200904112310.GD10654@plvision.eu>
 References: <20200831015539.26811-1-vadym.kochan@plvision.eu>
- <20200831015539.26811-3-vadym.kochan@plvision.eu>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <c829c654-b83d-c37c-f065-3211e6b4ce64@linaro.org>
-Date:   Fri, 4 Sep 2020 12:02:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ <20200831015539.26811-2-vadym.kochan@plvision.eu>
+ <6ab47f55-af66-f035-d8d9-82d0c831b5b8@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6ab47f55-af66-f035-d8d9-82d0c831b5b8@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: AM5PR1001CA0009.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:206:2::22) To DB6P190MB0535.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:6:3e::26)
 MIME-Version: 1.0
-In-Reply-To: <20200831015539.26811-3-vadym.kochan@plvision.eu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from plvision.eu (217.20.186.93) by AM5PR1001CA0009.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:206:2::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.15 via Frontend Transport; Fri, 4 Sep 2020 11:23:12 +0000
+X-Originating-IP: [217.20.186.93]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1c366b2f-0605-44a1-c86c-08d850c4e949
+X-MS-TrafficTypeDiagnostic: DB6P190MB0008:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DB6P190MB00088AD3AF780BDA22FDED4B952D0@DB6P190MB0008.EURP190.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ojFFkTOMeqQj+3TwgIjs0n/vM83hepoKwYbBvhq915GDTBTWVBBkC4CDq3uRPt1ukNuJ966FjNbzwrwyp5eYaD1KkcXuRYLgMBniKMUF0JiYQH+Rf/egvYv+kRXtEPo4BfmzhhkfqrdtBy+kKmkizucv97suRZl97U93EcxatoxfXLzfkrCxPQn62WIsQSxVUAXNxJ6vDj+bEO+5kWDvno3/ktNF7DdqgAffzMQ9minlZVtEzbM+PguPeYsMxjWCjZ5w4OgCSk2cS+v9ZWHfWc7u4Y3FwMFaE7/qSb6rWHg48rnPWRM9kjqJXJBXWzUbUeC8RhNtAVSe3OoyNkgXLA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6P190MB0535.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(136003)(376002)(346002)(396003)(366004)(39830400003)(6916009)(16526019)(66476007)(2906002)(2616005)(8676002)(956004)(1076003)(478600001)(66556008)(186003)(44832011)(86362001)(55016002)(8936002)(66946007)(8886007)(33656002)(26005)(36756003)(4326008)(83380400001)(5660300002)(52116002)(54906003)(53546011)(316002)(7696005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: DWOfA/QMH5mxtRn+bCU+NDdpyJq9m5hcz97c+wCzZrtJnkpETrczVUCTQkarwpkrZ4JC9N8ZwL29lPfJiVMMfT8GXjOghvMaYnXMrrubn/CViK81W6MaDBwh5DD/Qb8jrvEukpUMq27/d/ckwyUueKl09oMMe/ry3KqXRb1UPW1hNUeG40owSMnhlPjixXK4Vc0IDg8+qWEXex3TW5buuGo67VmfiII2Hlcu1VE27e07c99hnUsvPb6+fl9Jj/gyO6aj4yCzy+QM/iUl19x4a5Ts17Hj+lmlXkV1nkGO5DpphCeFGkibe1EV1Ct/J3lZM4X9aK6BwL6A6VM8ZWfSRbO4dNnKBuocC2550QT+Y2ZyMQYu1ylVQtY/SYiJ0IMV6NursfPQY8T1iV9BxreLsCjF8tXOdf0BTmJRW2WJ1BIRKlW06rzc9ThkBZPeeD11NGBBh2au2bp42/5vNwmi7QCvJgFvYv+6s3w+smIRtWpKiyCuk3hwh9VqNJBeYMOtA0Gew+/udlkzdcWvfyBiLRnX9ph5ZhQsnYSclJCa8q6S6Fby8WpTaG7SykX1eH5eYLC88appR2vwR+gg/zAZgTe9hLuIFymJoNa8GbbOdTL1Q1KnVJox3qUXRNnp6OtVyH6c8VNhGr2Z3ol+lgXAJQ==
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c366b2f-0605-44a1-c86c-08d850c4e949
+X-MS-Exchange-CrossTenant-AuthSource: DB6P190MB0535.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2020 11:23:13.4002
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z2aOpAqW3dWILirDsermHohEFWVMFUk85B/11sWq6ywr6BNMaQt4B+CYRLNwMQ8xEGgy1itq0wq8Y714siVlYxey07SUiPPPKEU9P3vrTzA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6P190MB0008
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Srinivas,
 
+On Fri, Sep 04, 2020 at 12:02:40PM +0100, Srinivas Kandagatla wrote:
+> Hi Vadym,
+> 
+> Thanks for the patch,
+> On 31/08/2020 02:55, Vadym Kochan wrote:
+> > Add NVMEM_PRE_ADD notification step which is called before any cells
+> > binding - from lookup table or config, this allows to register cells
+> > in some specific layout (tlv) which should be parsed first and then
+> > registered. So there might be a cell parser driver which can register
+> > lookup table during this notification step.
+> > 
+> This is going in right direction but totally not correct way to do it.
+> 
+> 1> this is not scalable as any consumer that will register for this even
+> will have no idea of which what kind of parsing that provider needs.
+> It can work in your case but not really useful.
+> 
+> 2> this is a consumer API, not the provider api.
+> 
+> How about adding a "parse_cells" callback in struct nvmem_config along with
+> encoding type.
+> 
+> 
+> thanks,
+> srini
+> 
 
-On 31/08/2020 02:55, Vadym Kochan wrote:
-> ONIE is a small operating system, pre-installed on bare metal network
-> switches, that provides an environment for automated provisioning.
-> 
-> This system requires that NVMEM (EEPROM) device holds various system
-> information (mac address, platform name, etc) in a special TLV layout.
-> 
-> The driver registers ONIE TLV attributes as NVMEM cells which can be
-> accessed by other platform driver. Also it allows to use
-> of_get_mac_address() to retrieve mac address for the netdev.
-> 
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> ---
-> v3:
->      1) Update onie-cells.c by using nvmem notification to parse and
->         register cells before device and cells are finally registered.
-> 
->      2) Use subsys_init() macro which allows to probe before nvmem drivers.
-> 
->   drivers/nvmem/Kconfig      |   9 +
->   drivers/nvmem/Makefile     |   3 +
->   drivers/nvmem/onie-cells.c | 410 +++++++++++++++++++++++++++++++++++++
+Looks like I missed main point here that this cells parser should be
+registered as nvmem provider. I will think on it.
 
-where is the device tree bindings for this driver?
+Thanks,
 
-And the nvmem provider driver for this?
-
---srini
-
-
->   3 files changed, 422 insertions(+)
->   create mode 100644 drivers/nvmem/onie-cells.c
-> 
-> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-> index 954d3b4a52ab..922d753519f7 100644
-> --- a/drivers/nvmem/Kconfig
-> +++ b/drivers/nvmem/Kconfig
-> @@ -270,4 +270,13 @@ config SPRD_EFUSE
->   	  This driver can also be built as a module. If so, the module
->   	  will be called nvmem-sprd-efuse.
->   
-> +config NVMEM_ONIE_CELLS
-> +	bool "ONIE TLV cells support"
-> +	help
-> +	  This is a driver to provide cells from ONIE TLV structure stored
-> +	  on NVME device.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called nvmem-onie-cells.
-> +
->   endif
-> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-> index a7c377218341..2199784a489f 100644
-> --- a/drivers/nvmem/Makefile
-> +++ b/drivers/nvmem/Makefile
-> @@ -55,3 +55,6 @@ obj-$(CONFIG_NVMEM_ZYNQMP)	+= nvmem_zynqmp_nvmem.o
->   nvmem_zynqmp_nvmem-y		:= zynqmp_nvmem.o
->   obj-$(CONFIG_SPRD_EFUSE)	+= nvmem_sprd_efuse.o
->   nvmem_sprd_efuse-y		:= sprd-efuse.o
-> +
-> +obj-$(CONFIG_NVMEM_ONIE_CELLS)	+= nvmem-onie-cells.o
-> +nvmem-onie-cells-y		:= onie-cells.o
-> diff --git a/drivers/nvmem/onie-cells.c b/drivers/nvmem/onie-cells.c
-> new file mode 100644
-> index 000000000000..bbb1e421f67c
-> --- /dev/null
-> +++ b/drivers/nvmem/onie-cells.c
-> @@ -0,0 +1,410 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * ONIE NVMEM cells provider
-> + *
-> + * Author: Vadym Kochan <vadym.kochan@plvision.eu>
-> + */
-> +
-> +#define ONIE_NVMEM_DRVNAME	"onie-nvmem-cells"
-> +
-> +#define pr_fmt(fmt) ONIE_NVMEM_DRVNAME ": " fmt
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/kref.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/nvmem-provider.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +#define ONIE_NVMEM_TLV_MAX_LEN	2048
-> +
-> +#define ONIE_NVMEM_HDR_ID	"TlvInfo"
-> +
-> +struct onie_nvmem_hdr {
-> +	u8 id[8];
-> +	u8 version;
-> +	__be16 data_len;
-> +} __packed;
-> +
-> +struct onie_nvmem_tlv {
-> +	u8 type;
-> +	u8 len;
-> +	u8 val[0];
-> +} __packed;
-> +
-> +struct onie_nvmem_attr {
-> +	struct list_head head;
-> +	const char *name;
-> +	unsigned int offset;
-> +	unsigned int len;
-> +};
-> +
-> +struct onie_nvmem {
-> +	struct platform_device *pdev;
-> +	struct notifier_block nvmem_nb;
-> +	unsigned int attr_count;
-> +	struct list_head attrs;
-> +	struct kref refcnt;
-> +	const char *nvmem_match;
-> +
-> +	struct nvmem_cell_lookup *cell_lookup;
-> +	struct nvmem_cell_table cell_tbl;
-> +	struct nvmem_device *nvmem;
-> +};
-> +
-> +static bool onie_nvmem_hdr_is_valid(struct onie_nvmem_hdr *hdr)
-> +{
-> +	if (memcmp(hdr->id, ONIE_NVMEM_HDR_ID, sizeof(hdr->id)) != 0)
-> +		return false;
-> +	if (hdr->version != 0x1)
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
-> +static void onie_nvmem_attrs_free(struct onie_nvmem *onie)
-> +{
-> +	struct onie_nvmem_attr *attr, *tmp;
-> +
-> +	list_for_each_entry_safe(attr, tmp, &onie->attrs, head) {
-> +		list_del(&attr->head);
-> +		kfree(attr);
-> +	}
-> +}
-> +
-> +static const char *onie_nvmem_attr_name(u8 type)
-> +{
-> +	switch (type) {
-> +	case 0x21: return "product-name";
-> +	case 0x22: return "part-number";
-> +	case 0x23: return "serial-number";
-> +	case 0x24: return "mac-address";
-> +	case 0x25: return "manufacture-date";
-> +	case 0x26: return "device-version";
-> +	case 0x27: return "label-revision";
-> +	case 0x28: return "platforn-name";
-> +	case 0x29: return "onie-version";
-> +	case 0x2A: return "num-macs";
-> +	case 0x2B: return "manufacturer";
-> +	case 0x2C: return "country-code";
-> +	case 0x2D: return "vendor";
-> +	case 0x2E: return "diag-version";
-> +	case 0x2F: return "service-tag";
-> +	case 0xFD: return "vendor-extension";
-> +	case 0xFE: return "crc32";
-> +
-> +	default: return "unknown";
-> +	}
-> +}
-> +
-> +static int onie_nvmem_tlv_parse(struct onie_nvmem *onie, u8 *data, u16 len)
-> +{
-> +	unsigned int hlen = sizeof(struct onie_nvmem_hdr);
-> +	unsigned int offset = 0;
-> +	int err;
-> +
-> +	while (offset < len) {
-> +		struct onie_nvmem_attr *attr;
-> +		struct onie_nvmem_tlv *tlv;
-> +
-> +		tlv = (struct onie_nvmem_tlv *)(data + offset);
-> +
-> +		if (offset + tlv->len >= len) {
-> +			struct nvmem_device *nvmem = onie->nvmem;
-> +
-> +			pr_err("%s: TLV len is too big(0x%x) at 0x%x\n",
-> +			       nvmem_dev_name(nvmem), tlv->len, hlen + offset);
-> +
-> +			/* return success in case something was parsed */
-> +			return 0;
-> +		}
-> +
-> +		attr = kmalloc(sizeof(*attr), GFP_KERNEL);
-> +		if (!attr) {
-> +			err = -ENOMEM;
-> +			goto err_attr_alloc;
-> +		}
-> +
-> +		attr->name = onie_nvmem_attr_name(tlv->type);
-> +		/* skip 'type' and 'len' */
-> +		attr->offset = hlen + offset + 2;
-> +		attr->len = tlv->len;
-> +
-> +		list_add(&attr->head, &onie->attrs);
-> +		onie->attr_count++;
-> +
-> +		offset += sizeof(*tlv) + tlv->len;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_attr_alloc:
-> +	onie_nvmem_attrs_free(onie);
-> +
-> +	return err;
-> +}
-> +
-> +static int onie_nvmem_decode(struct onie_nvmem *onie)
-> +{
-> +	struct nvmem_device *nvmem = onie->nvmem;
-> +	struct onie_nvmem_hdr hdr;
-> +	u8 *data;
-> +	u16 len;
-> +	int ret;
-> +
-> +	ret = nvmem_device_read(nvmem, 0, sizeof(hdr), &hdr);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (!onie_nvmem_hdr_is_valid(&hdr)) {
-> +		pr_err("%s: invalid ONIE TLV header\n", nvmem_dev_name(nvmem));
-> +		ret = -EINVAL;
-> +		goto err_invalid;
-> +	}
-> +
-> +	len = be16_to_cpu(hdr.data_len);
-> +
-> +	if (len > ONIE_NVMEM_TLV_MAX_LEN)
-> +		len = ONIE_NVMEM_TLV_MAX_LEN;
-> +
-> +	data = kmalloc(len, GFP_KERNEL);
-> +	if (!data) {
-> +		ret = -ENOMEM;
-> +		goto err_kmalloc;
-> +	}
-> +
-> +	ret = nvmem_device_read(nvmem, sizeof(hdr), len, data);
-> +	if (ret < 0)
-> +		goto err_data_read;
-> +
-> +	ret = onie_nvmem_tlv_parse(onie, data, len);
-> +	if (ret)
-> +		goto err_info_parse;
-> +
-> +	kfree(data);
-> +
-> +	return 0;
-> +
-> +err_info_parse:
-> +err_data_read:
-> +	kfree(data);
-> +err_kmalloc:
-> +err_invalid:
-> +	return ret;
-> +}
-> +
-> +static int onie_nvmem_cells_parse(struct onie_nvmem *onie)
-> +{
-> +	struct platform_device *pdev = onie->pdev;
-> +	struct nvmem_device *nvmem = onie->nvmem;
-> +	struct device *dev = &pdev->dev;
-> +	struct nvmem_cell_info *cells;
-> +	struct onie_nvmem_attr *attr;
-> +	unsigned int ncells = 0;
-> +	int err;
-> +
-> +	INIT_LIST_HEAD(&onie->attrs);
-> +	onie->attr_count = 0;
-> +
-> +	err = onie_nvmem_decode(onie);
-> +	if (err)
-> +		return err;
-> +
-> +	if (!onie->attr_count) {
-> +		pr_err("%s: has no ONIE attributes\n", nvmem_dev_name(nvmem));
-> +		return -EINVAL;
-> +	}
-> +
-> +	cells = kmalloc_array(onie->attr_count, sizeof(*cells), GFP_KERNEL);
-> +	if (!cells) {
-> +		err = -ENOMEM;
-> +		goto err_cells_alloc;
-> +	}
-> +
-> +	onie->cell_lookup = kmalloc_array(onie->attr_count,
-> +					  sizeof(struct nvmem_cell_lookup),
-> +					  GFP_KERNEL);
-> +	if (!onie->cell_lookup) {
-> +		err = -ENOMEM;
-> +		goto err_lookup_alloc;
-> +	}
-> +
-> +	list_for_each_entry(attr, &onie->attrs, head) {
-> +		struct nvmem_cell_lookup *lookup;
-> +		struct nvmem_cell_info *cell;
-> +
-> +		cell = &cells[ncells];
-> +
-> +		lookup = &onie->cell_lookup[ncells];
-> +		lookup->con_id = NULL;
-> +
-> +		cell->offset = attr->offset;
-> +		cell->name = attr->name;
-> +		cell->bytes = attr->len;
-> +		cell->bit_offset = 0;
-> +		cell->nbits = 0;
-> +
-> +		lookup->nvmem_name = nvmem_dev_name(onie->nvmem);
-> +		lookup->dev_id = dev_name(dev);
-> +		lookup->cell_name = cell->name;
-> +		lookup->con_id = cell->name;
-> +
-> +		ncells++;
-> +	}
-> +
-> +	onie->cell_tbl.nvmem_name = nvmem_dev_name(onie->nvmem);
-> +	onie->cell_tbl.ncells = ncells;
-> +	onie->cell_tbl.cells = cells;
-> +
-> +	nvmem_add_cell_table(&onie->cell_tbl);
-> +	nvmem_add_cell_lookups(onie->cell_lookup, ncells);
-> +
-> +	onie_nvmem_attrs_free(onie);
-> +
-> +	return 0;
-> +
-> +err_lookup_alloc:
-> +	kfree(onie->cell_tbl.cells);
-> +err_cells_alloc:
-> +	onie_nvmem_attrs_free(onie);
-> +
-> +	return err;
-> +}
-> +
-> +static void onie_nvmem_release(struct kref *kref)
-> +{
-> +	kfree(container_of(kref, struct onie_nvmem, refcnt));
-> +}
-> +
-> +static void onie_nvmem_get(struct onie_nvmem *onie)
-> +{
-> +	kref_get(&onie->refcnt);
-> +}
-> +
-> +static void onie_nvmem_put(struct onie_nvmem *onie)
-> +{
-> +	kref_put(&onie->refcnt, onie_nvmem_release);
-> +}
-> +
-> +static int onie_nvmem_notify(struct notifier_block *nb,
-> +			     unsigned long val, void *data)
-> +{
-> +	struct nvmem_device *nvmem = data;
-> +	struct onie_nvmem *onie;
-> +	int err;
-> +
-> +	if (val != NVMEM_PRE_ADD && val != NVMEM_REMOVE)
-> +		return NOTIFY_DONE;
-> +
-> +	onie = container_of(nb, struct onie_nvmem, nvmem_nb);
-> +
-> +	if (strcmp(onie->nvmem_match, nvmem_dev_name(nvmem)) != 0)
-> +		return NOTIFY_DONE;
-> +
-> +	switch (val) {
-> +	case NVMEM_PRE_ADD:
-> +		onie->nvmem = nvmem;
-> +
-> +		err = onie_nvmem_cells_parse(onie);
-> +		if (err)
-> +			return NOTIFY_BAD;
-> +
-> +		onie_nvmem_get(onie);
-> +		break;
-> +
-> +	case NVMEM_REMOVE:
-> +		nvmem_del_cell_lookups(onie->cell_lookup, onie->attr_count);
-> +		nvmem_del_cell_table(&onie->cell_tbl);
-> +
-> +		kfree(onie->cell_tbl.cells);
-> +		kfree(onie->cell_lookup);
-> +
-> +		onie_nvmem_put(onie);
-> +		break;
-> +
-> +	default:
-> +		return NOTIFY_DONE;
-> +	}
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static int onie_nvmem_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct onie_nvmem *onie;
-> +	const char *nvmem_match;
-> +	int err;
-> +
-> +	err = of_property_read_string(np, "nvmem-name", &nvmem_match);
-> +	if (err) {
-> +		dev_err(dev, "error while parsing 'nvmem-name' property\n");
-> +		return err;
-> +	}
-> +
-> +	onie = kmalloc(sizeof(*onie), GFP_KERNEL);
-> +	if (!onie)
-> +		return -ENOMEM;
-> +
-> +	kref_init(&onie->refcnt);
-> +
-> +	onie->nvmem_nb.notifier_call = onie_nvmem_notify;
-> +	onie->nvmem_match = nvmem_match;
-> +	onie->pdev = pdev;
-> +
-> +	dev_set_drvdata(dev, onie);
-> +
-> +	return nvmem_register_notifier(&onie->nvmem_nb);
-> +}
-> +
-> +static int onie_nvmem_remove(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct onie_nvmem *onie;
-> +
-> +	onie = dev_get_drvdata(dev);
-> +
-> +	nvmem_unregister_notifier(&onie->nvmem_nb);
-> +	onie_nvmem_put(onie);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id onie_nvmem_match[] = {
-> +	{
-> +		.compatible = "onie,nvmem-cells",
-> +	},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, onie_nvmem_match);
-> +
-> +static struct platform_driver onie_nvmem_driver = {
-> +	.probe = onie_nvmem_probe,
-> +	.remove = onie_nvmem_remove,
-> +	.driver = {
-> +		.name = ONIE_NVMEM_DRVNAME,
-> +		.of_match_table = onie_nvmem_match,
-> +	},
-> +};
-> +
-> +static int __init onie_nvmem_init(void)
-> +{
-> +	return platform_driver_register(&onie_nvmem_driver);
-> +}
-> +
-> +static void __exit onie_nvmem_exit(void)
-> +{
-> +	platform_driver_unregister(&onie_nvmem_driver);
-> +}
-> +
-> +subsys_initcall(onie_nvmem_init);
-> +module_exit(onie_nvmem_exit);
-> +
-> +MODULE_AUTHOR("Vadym Kochan <vadym.kochan@plvision.eu>");
-> +MODULE_DESCRIPTION("ONIE NVMEM cells driver");
-> +MODULE_LICENSE("GPL");
-> 
+> > Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> > ---
+> > v3:
+> >      1) Update core.c changes by extending notification mechanism
+> >         by adding new NVMEM_PRE_ADD event id which is called before lookup
+> >         table cells binding, this allows for notification handler to
+> >         register cells which require nvmem parsing.
+> > 
+> >   drivers/nvmem/core.c           | 2 ++
+> >   include/linux/nvmem-consumer.h | 1 +
+> >   2 files changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> > index 6cd3edb2eaf6..c48a69e0ebbe 100644
+> > --- a/drivers/nvmem/core.c
+> > +++ b/drivers/nvmem/core.c
+> > @@ -668,6 +668,8 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+> >   			goto err_device_del;
+> >   	}
+> > +	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_PRE_ADD, nvmem);
+> > +
+> >   	if (config->cells) {
+> >   		rval = nvmem_add_cells(nvmem, config->cells, config->ncells);
+> >   		if (rval)
+> > diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
+> > index 052293f4cbdb..0f7107276756 100644
+> > --- a/include/linux/nvmem-consumer.h
+> > +++ b/include/linux/nvmem-consumer.h
+> > @@ -50,6 +50,7 @@ enum {
+> >   	NVMEM_REMOVE,
+> >   	NVMEM_CELL_ADD,
+> >   	NVMEM_CELL_REMOVE,
+> > +	NVMEM_PRE_ADD,
+> >   };
+> >   #if IS_ENABLED(CONFIG_NVMEM)
+> > 
