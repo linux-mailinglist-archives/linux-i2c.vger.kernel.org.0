@@ -2,110 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B08CB25D498
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Sep 2020 11:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E664125D6FA
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Sep 2020 13:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730011AbgIDJUh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Sep 2020 05:20:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42446 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729628AbgIDJUg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 4 Sep 2020 05:20:36 -0400
-Received: from localhost (p5486cda5.dip0.t-ipconnect.de [84.134.205.165])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E6D5E2067C;
-        Fri,  4 Sep 2020 09:20:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599211235;
-        bh=tfvwXFZiU3UT3uCBI0eVIiaDepEZKUtj+JOTXPnmFsw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JVTj/hYdti7ZOguNrnw2iuzyeMxhWiP8cgeuhOAht8F02N5gmhfh2HxDDvcQj107h
-         4ifFx6nxVFzUesF8iXxBLPLKWUAw3BEtopz+mFS72Nmhnet+ySsDq2UKZsnxzsh6UB
-         ZLbw9GgVbEuLg/2GWAziBor2k7pJGg1pgBqGVI3U=
-Date:   Fri, 4 Sep 2020 11:20:32 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Codrin.Ciubotariu@microchip.com,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org, Ludovic.Desroches@microchip.com,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linux@armlinux.org.uk, kamel.bouhara@bootlin.com
-Subject: Re: Re: Re: [RFC PATCH 4/4] i2c: at91: Move to generic GPIO bus
- recovery
-Message-ID: <20200904092032.GA32080@ninjato>
-References: <20200619141904.910889-1-codrin.ciubotariu@microchip.com>
- <20200619141904.910889-5-codrin.ciubotariu@microchip.com>
- <20200802170820.GC10193@kunai>
- <65890aab-1d19-7e7e-abff-3c6ee05c8ade@microchip.com>
- <20200826061444.GB1081@ninjato>
- <15466c95-f1ea-63a4-1429-24d9b7567c1c@microchip.com>
+        id S1729992AbgIDLEg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Sep 2020 07:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730076AbgIDLCp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Sep 2020 07:02:45 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C14C061245
+        for <linux-i2c@vger.kernel.org>; Fri,  4 Sep 2020 04:02:43 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id s13so5662442wmh.4
+        for <linux-i2c@vger.kernel.org>; Fri, 04 Sep 2020 04:02:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=NfwkNFk09ZusBLOpLBTzQZi+H+vFvkYJED/TT3XgJYw=;
+        b=JZd50ylcdwr2PHwgwiiaZbZPtEwrGD9obMYXTwpZhmQPv/Lx0wB5KCsEfKIKGKv7ni
+         S0TL0ck/MMQKYiuWElIRT0D4FGT8AJ6zDeu2mMpdm1mzf3FKDmAceMkHYdmQSn8OZkVU
+         WYCL/bNmxjKSpU0YjiDiqFJzwHDIW/8oA5YwGb35qTuWFWL3pnnL8DMK/lfPXFqmR8VS
+         Ge1jpfi/BDhBGpau/jZqgYHFBjpUo9RWBh3BL2x+X46DPjOzmrYEWUWRK0GxHH6Ms5W7
+         XFO5XIpa4Y+4vtV2ytbTIiJKpkEbXF5SWJIeHjMpt7rIXEPmKV+g5tU55WRpK3AT+OZV
+         cDPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=NfwkNFk09ZusBLOpLBTzQZi+H+vFvkYJED/TT3XgJYw=;
+        b=sDsotwng79Qozrk+LDSEAnKrrIoCECfsz9ajDmkNPuGNPHlsD4vE2qNHJ55HSQ8SFc
+         sFCEEprR2GkjvbNAhTp2pn1VJS7xVLyI4jKI4v6X5E3AwSCAl2Ue4xxi1Rofzq1uQfEq
+         1NDRpRw2CN5w9GKQhvPfMZbzjjlWfmKHuriniw9vMJ8fd88Dqa+WC1L0yZgZ2Qq6lNrj
+         GGTXERapuqf6C4uHYM6vC/UukzNLvjaizJ4tDfQNNm+7yukw8KQcAOe+07rKsInQDK6O
+         ySapD8IpeAbiaopC16Ws2tl5Rka5DkSHrGlQuohWtu+jADxgpssmqqFsrsE43eMfI3/S
+         gtNQ==
+X-Gm-Message-State: AOAM533xkDt4VW6j6mW1GfVXrtuAQ5+1HQmOT9yuv4dc0qfvr8e6KKug
+        iKH3/O8128tutda5lhw/Yo30mA==
+X-Google-Smtp-Source: ABdhPJyDXc07W9KvlQK9EHpFRFv+t6KZPHfDW0yXqRKut/IryH4+skf+lxaDkSbM+QVtkaGdqqxNog==
+X-Received: by 2002:a1c:b4c1:: with SMTP id d184mr7475012wmf.26.1599217362207;
+        Fri, 04 Sep 2020 04:02:42 -0700 (PDT)
+Received: from [192.168.86.34] (cpc86377-aztw32-2-0-cust226.18-1.cable.virginm.net. [92.233.226.227])
+        by smtp.googlemail.com with ESMTPSA id a127sm10514447wmh.34.2020.09.04.04.02.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 04 Sep 2020 04:02:41 -0700 (PDT)
+Subject: Re: [PATCH v3 1/3] nvmem: core: allow to register cells during nvmem
+ registration
+To:     Vadym Kochan <vadym.kochan@plvision.eu>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maxime Ripard <maxime.ripard@free-electrons.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200831015539.26811-1-vadym.kochan@plvision.eu>
+ <20200831015539.26811-2-vadym.kochan@plvision.eu>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Message-ID: <6ab47f55-af66-f035-d8d9-82d0c831b5b8@linaro.org>
+Date:   Fri, 4 Sep 2020 12:02:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WIyZ46R2i8wDzkSu"
-Content-Disposition: inline
-In-Reply-To: <15466c95-f1ea-63a4-1429-24d9b7567c1c@microchip.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200831015539.26811-2-vadym.kochan@plvision.eu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Vadym,
 
---WIyZ46R2i8wDzkSu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the patch,
+On 31/08/2020 02:55, Vadym Kochan wrote:
+> Add NVMEM_PRE_ADD notification step which is called before any cells
+> binding - from lookup table or config, this allows to register cells
+> in some specific layout (tlv) which should be parsed first and then
+> registered. So there might be a cell parser driver which can register
+> lookup table during this notification step.
+> 
+This is going in right direction but totally not correct way to do it.
 
-Hi Codrin,
+1> this is not scalable as any consumer that will register for this even 
+will have no idea of which what kind of parsing that provider needs.
+It can work in your case but not really useful.
 
-> The pinmux driver needs to have strict set to false, otherwise the=20
-> switching is not available, not at this time at least. Perhaps there is=
-=20
-> room for improvement here, because the I2C bus is not using the pins=20
-> while we are doing GPIO recovery.
+2> this is a consumer API, not the provider api.
 
-Our driver doesn't use 'strict'. The thing is that I can't describe a
-pinctrl state for GPIO. GPIO is the default state until another function
-is requested. Back to GPIO currently means freeing the pin again, so it
-defaults back to GPIO. We are currently discussing it. Geert (CCed)
-isn't very happy of describing the same pins with 'function =3D "gpio"'
-because the Kernel already knows the mapping, just needs to revert it.
-Geert, please correct me if I am wrong.
-
-> I am not sure I'll have time the next week to work on what you asked me=
-=20
-> regarding sh_mobile and PXA, but I will look into it the week after that.
-> Sorry about my delayed reply, I was on vacation.
-
-Well, no need for sh_mobile, this is my todo item :) About PXA, well, I
-am still happy that you volunteered to do it, so I hope you had a
-relaxing vacation!
-
-Happy hacking,
-
-   Wolfram
+How about adding a "parse_cells" callback in struct nvmem_config along 
+with encoding type.
 
 
---WIyZ46R2i8wDzkSu
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
+srini
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9SBtwACgkQFA3kzBSg
-KbZeWw//e8idK/UaDDNoa1ayZzCtU5zt8qZiIxCEia10pmFsfb1uZkJ4nyybcIT2
-FcpsGjUsrDCWvVEu+3hAyILntIJF8949WUK7K7JhqMeH9o3T7ZJeUEgK7cB0o9s5
-wrjs2WMvBjP1TaPW2LhcAAlP3q4/Qy+4xQ6SpjLzQsTeNtv643vWo15V5lOUHjuK
-0s/VCmZtnrqvRXsbjrzAIk+XZ+m7IhWgNDY6MUfO7gxDCWq8q+KRcncBaHNopCIi
-wYGq2KReTYQ/nA+ACytH/SsiQvmXoYdfEiN6K1WnXviu0XwtkG1yTQPtpBetvpS7
-obzG2hDmOcN680XFZ9tOYiQdChEI4cqFlWAPpthZ0TtSjmZ+0Jv5spTVbP7M/DFJ
-61RCUdzZiPrTJiTwuQt5PGO39BnGbxbG64+x1a0qFrcd96FftmRi1CXwEoEF5dXc
-LBS3yE/GmHALiBDKwqK4RN5iF6P4ErdP6WDL0506uW/xFOp198BHOd+auHXt4+eY
-a2L4hOuAhl6w7BvjtIXogzX/0pGGqnzk2egyYNXOW1REtCrF/JInnxal+gBQpl9E
-v+ErBOZ+1+BRi01Dk0ytbC4mkCNvaMsRFz+O4Msm9PlF03V+utBfeRUzOOC32aMw
-2QuyngO580zJt/F8WPTvoH2CHIvtkKh92azHOo95+IPwjPjUYWs=
-=qgU2
------END PGP SIGNATURE-----
-
---WIyZ46R2i8wDzkSu--
+> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> ---
+> v3:
+>      1) Update core.c changes by extending notification mechanism
+>         by adding new NVMEM_PRE_ADD event id which is called before lookup
+>         table cells binding, this allows for notification handler to
+>         register cells which require nvmem parsing.
+> 
+>   drivers/nvmem/core.c           | 2 ++
+>   include/linux/nvmem-consumer.h | 1 +
+>   2 files changed, 3 insertions(+)
+> 
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 6cd3edb2eaf6..c48a69e0ebbe 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -668,6 +668,8 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+>   			goto err_device_del;
+>   	}
+>   
+> +	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_PRE_ADD, nvmem);
+> +
+>   	if (config->cells) {
+>   		rval = nvmem_add_cells(nvmem, config->cells, config->ncells);
+>   		if (rval)
+> diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
+> index 052293f4cbdb..0f7107276756 100644
+> --- a/include/linux/nvmem-consumer.h
+> +++ b/include/linux/nvmem-consumer.h
+> @@ -50,6 +50,7 @@ enum {
+>   	NVMEM_REMOVE,
+>   	NVMEM_CELL_ADD,
+>   	NVMEM_CELL_REMOVE,
+> +	NVMEM_PRE_ADD,
+>   };
+>   
+>   #if IS_ENABLED(CONFIG_NVMEM)
+> 
