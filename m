@@ -2,96 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD08125CD52
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Sep 2020 00:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6638725CFDD
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Sep 2020 05:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728491AbgICWSU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Sep 2020 18:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727065AbgICWST (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Sep 2020 18:18:19 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CAAC061244;
-        Thu,  3 Sep 2020 15:18:19 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id v23so5661552ljd.1;
-        Thu, 03 Sep 2020 15:18:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=L6OYjrBWLMGkLZUDNUHAcsUTScuiU6WSVwlqzVd6Pzc=;
-        b=TWyRrvJAvb5keY81T6x3lfqcDecwPzWx87ybAGWLnxTvc0Rha1udM7jn+nGN8AbBoX
-         /PPf1Jd2rpVcEBSnypYGZTUFD8BZoNRbJPQjnHXQphg4fL0cLyA3WB+SmZOB9DvHkH1s
-         2pje8dwelv9GhEcpHe/t1X6caFRA75du5buyYrB/0o6kdzGdyg4w05FVo3l6Af6iPKEl
-         DkfCwypiyhMfHKUEq9OSDThzRqYH5aCTQ/nIloDqhLezdVbDD2dfIAAQiYGucHtFY0yl
-         mbFNZUh7A9Fm9fL2eJrmeSyrp2mF3C22jcATK3HfQ+q/hx5dWhWRoWguSBy34/nG+rxO
-         hRzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=L6OYjrBWLMGkLZUDNUHAcsUTScuiU6WSVwlqzVd6Pzc=;
-        b=eFVaeUHOuvODiP4bKhjtTdaTPodYq24idoKW7mRYHI5kZKlFveu/HyU86OTq+cdGRd
-         6bG17rL8nXYQu0N6KhS+1jPYSqZaHFsnCr23+JH9Cn0jThJWOUnIpjV0ydGI0XBLaSpP
-         /CElyTO0HtMe802Ahczhnmc2aE7Vt70sVj6Rhmy/4dbgGJMITbp4R9SjfSvguW77kQ8M
-         dUGYx1U+JY+21BAy0I+EFfMdDgzRRuzqmW3OjoRKAZE8fqjMeaRdvdL2omXLb4CROGIt
-         77EfcfybIG3fajFg488X+StUnuSG094vcGmoWk2Nr1lCotcldiXE42jODS8D4fsayUYI
-         WhwA==
-X-Gm-Message-State: AOAM531fE3P4v4xG5zsetOZQuBmSVjW/CkM4z9InhnwWAyPXCs7baNG+
-        TfqNABHvQ6sBo2ie345rw2nGt6piB/M=
-X-Google-Smtp-Source: ABdhPJz5Ov+gqdpL+IzGjoOMfvZX5CXv7ChYUyHXwOI1HZaIVfBMeKzxeSNXqrpHCrWgQ4/DFUn0Xw==
-X-Received: by 2002:a2e:9d8e:: with SMTP id c14mr1019646ljj.135.1599171497517;
-        Thu, 03 Sep 2020 15:18:17 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id c13sm855258lfi.76.2020.09.03.15.18.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2020 15:18:16 -0700 (PDT)
-Subject: Re: [PATCH v1 00/12] Improvements for Tegra I2C driver
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200831202303.15391-1-digetx@gmail.com>
- <20200902212026.GD1624@qmqm.qmqm.pl>
- <04aae642-80f9-d22e-1d80-bb206bb27a8b@gmail.com>
- <20200903164709.GA7406@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <e1b7a9fc-e638-8576-a79e-7c2cf1cfbfe2@gmail.com>
-Date:   Fri, 4 Sep 2020 01:18:15 +0300
+        id S1729582AbgIDDjI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Sep 2020 23:39:08 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:45823 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729554AbgIDDjG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Sep 2020 23:39:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599190744;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EyAiC4eZwNkau3Y8SAq/5Z+4k7VTrQOqY9EtVuiJLAo=;
+        b=V67Xi82e9Qwve0TwFj6v1onSQLStwniYDG+qUpcI3SVo9FIXUHyawSYEQfKVhJ+Cqg2s9h
+        l3uKV7VQS78kMmG+iML/GVH/urpSQ6Qqx4QOs9Ju/KMw3Fv70VFKKxfjV37cGeV1Wwc60X
+        BX1VoFmG6UIc2+li/Nf+dtS1N4v0xzU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-448-O7FrjF36NT6sUEUv99XNOw-1; Thu, 03 Sep 2020 23:39:00 -0400
+X-MC-Unique: O7FrjF36NT6sUEUv99XNOw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A117B807344;
+        Fri,  4 Sep 2020 03:38:57 +0000 (UTC)
+Received: from [10.72.13.157] (ovpn-13-157.pek2.redhat.com [10.72.13.157])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 14FFC7EEBB;
+        Fri,  4 Sep 2020 03:38:46 +0000 (UTC)
+Subject: Re: [PATCH] i2c: virtio: add a virtio i2c frontend driver
+To:     Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     mst@redhat.com, wsa+renesas@sang-engineering.com, wsa@kernel.org,
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        jdelvare@suse.de, Sergey.Semin@baikalelectronics.ru,
+        krzk@kernel.org, rppt@kernel.org, loic.poulain@linaro.org,
+        tali.perry1@gmail.com, bjorn.andersson@linaro.org,
+        shuo.a.liu@intel.com, conghui.chen@intel.com, yu1.wang@intel.com
+References: <0efc2605c8c06b4b1bf68cbad5536c4a900dc019.1599110284.git.jie.deng@intel.com>
+ <f3ab5d7d-cce5-b34c-5931-dd5d74f065e7@redhat.com>
+ <6517879c-15d4-6265-761c-626cba9c95d6@intel.com>
+From:   Jason Wang <jasowang@redhat.com>
+Message-ID: <009d829d-907d-8884-ca71-00f78e9d6e2b@redhat.com>
+Date:   Fri, 4 Sep 2020 11:38:45 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200903164709.GA7406@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <6517879c-15d4-6265-761c-626cba9c95d6@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-03.09.2020 19:47, Michał Mirosław пишет:
-> On Thu, Sep 03, 2020 at 04:12:13AM +0300, Dmitry Osipenko wrote:
->> 03.09.2020 00:20, Michał Mirosław пишет:
->>> BTW, I wonder if you could expose i2c_in_atomic_xfer_mode() and use it
->>> to differentiate atomic_xfer from normal and get rid of the internal
->>> flag and .master_xfer_atomic callback.
->>
->> The atomic transfer uses 90% of the code path that a non-atomic transfer
->> uses. I don't see how it could be exposed without duplicated lots of the
->> code, unless I'm not missing what you're suggesting.
-> 
-> The I2C core falls back to .master_xfer even in atomic mode if
-> .master_xfer_atomic is NULL, so what I'm suggesting is to make
-> i2c_in_atomic_xfer_mode() public (from i2c-core.h) and use it in
-> normal .master_xfer to choose atomic wait variants.
 
-Okay, I see now. But the I2C core prints a noisy warning if
-master_xfer_atomic is NULL in atomic transfer, so I'm not sure whether
-changing all that code will bring much benefits to us and anyone else.
-It's a bit too questionable change to me, but maybe I'm still missing
-something. Will be great if you could provide an example patch.
+On 2020/9/3 下午3:19, Jie Deng wrote:
+>
+> On 2020/9/3 14:12, Jason Wang wrote:
+>>
+>> On 2020/9/3 下午1:34, Jie Deng wrote:
+>>> Add an I2C bus driver for virtio para-virtualization.
+>>>
+>>> The controller can be emulated by the backend driver in
+>>> any device model software by following the virtio protocol.
+>>>
+>>> This driver communicates with the backend driver through a
+>>> virtio I2C message structure which includes following parts:
+>>>
+>>> - Header: i2c_msg addr, flags, len.
+>>> - Data buffer: the pointer to the i2c msg data.
+>>> - Status: the processing result from the backend.
+>>>
+>>> People may implement different backend drivers to emulate
+>>> different controllers according to their needs. A backend
+>>> example can be found in the device model of the open source
+>>> project ACRN. For more information, please refer to
+>>> https://projectacrn.org.
+>>
+>>
+>> May I know the reason why don't you use i2c or virtio directly?
+>>
+> We don't want to add virtio drivers for every I2C devices in the guests.
+> This bus driver is designed to provide a way to flexibly expose the 
+> physical
+> I2C slave devices to the guest without adding or changing the drivers 
+> of the
+> I2C slave devices in the guest OS.
+
+
+Ok, if I understand this correctly, this is virtio transport of i2c 
+message (similar to virtio-scsi).
+
+
+>
+>
+>>
+>>>
+>>> The virtio device ID 34 is used for this I2C adpter since IDs
+>>> before 34 have been reserved by other virtio devices.
+>>
+>>
+>> Is there a link to the spec patch?
+>>
+>> Thanks
+>>
+> I haven't submitted the patch to reserve the ID in spec yet.
+> I write the ID here because I want to see your opinions first.
+
+
+It would be helpful to send a spec draft for early review.
+
+Thanks
+
+
+>
+> Thanks
+>
+>
+
