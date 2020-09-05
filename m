@@ -2,54 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CBB25EB6D
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Sep 2020 00:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40CB25EB7C
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Sep 2020 00:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728724AbgIEWYT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Sep 2020 18:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
+        id S1728713AbgIEWg1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Sep 2020 18:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728505AbgIEWYR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Sep 2020 18:24:17 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D25EC061244;
-        Sat,  5 Sep 2020 15:24:17 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id z17so5638269lfi.12;
-        Sat, 05 Sep 2020 15:24:17 -0700 (PDT)
+        with ESMTP id S1728727AbgIEWgZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Sep 2020 18:36:25 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA80C061244;
+        Sat,  5 Sep 2020 15:36:23 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id a15so12008238ljk.2;
+        Sat, 05 Sep 2020 15:36:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dJM2JSIPxt70hZICwP3ZHl2GgQVGWzpQ2xZTA1Io9ak=;
-        b=YEeHurpzJYZlUbvLnj6d/whuQFtRkTJCZcIsN7nPUx2aCtr8kaWaAnB0Di1pcYmTKS
-         e6pdSXgFdriudXZKiiMnXEAXSwGU/UExcoLlxywWMz5ndmfW8s9S9cQknUAndQrf/Iox
-         9M/mCs8Yvy+UjCHyuFr/odjYUErVs0FWZ1aMR931iOq5zbc9IqEoRSAQ8uHMDzv3HG05
-         xJi5u+qEvZIKVciC+N+6cc5DslHutfe8VfNBPBtVgn3W0EWXdgI/0w1x0JpiaMkHHAod
-         yyEsN46ggT1gK7oRYdoUy0lVrCNPCsI+v8Hg5XIwN0i27kPxxhCwC6KFRX+3qM9VRpAG
-         vVCw==
+        bh=wIgbCe+me6m/O/hCjjtMhyNJ1DzGS8TtOXQnp4EnPpc=;
+        b=hul0flwEwmUqgO6VhLHCqWqaMDOs5epAdmW0VnRXtDVG2gCUXITZGAGhxiKSOzLAFw
+         ZJ97VfqEmdxTCuBMu8sO4ccIrWQIzeJy0JT7yPfY8xDCFCKbS9IFy5fTXTYsM8Fp0gif
+         H98FTbzD2DloduoJWVtyiAzeyxdZ2WRSVuo5GApziIAouaWn9ODvgbVmVmpAP41Lpzex
+         14tULhyaO7eakDwuYzEZyTKh7hYnLBA0xJjre9rcROUNeeEWa+mk2PDyoXjUdjYTg1z2
+         yTxKxVEJum8skaAScAyO4IWCCCbkvj8UU7wk6BnaABue2EJ/jaXKxUsAuHfwA1jQ9ks5
+         818Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=dJM2JSIPxt70hZICwP3ZHl2GgQVGWzpQ2xZTA1Io9ak=;
-        b=mJ78dJlZC6BG1e+U4mHsxEp4UB0S5TeC0523KtNoF1akgEo4IYNBf7lOOObIX+B1sM
-         9+ger0kFs1o+qTy2lzcr8Ds1jJ8Q/9IJ64mEtUufEUwyI2kNStJzFfkTl8eEcLNu6PYe
-         iPt2XzuG8pDwAGiBy6Pknn2Zw/q2CPaIkSeKBhoFTzHzqqfk/clsrflams02kht79Y/F
-         JTUwx4IvImbDKM7/X055orlVi4Hritc74iqxX3lIQAg0KI9enhmKeeuMKSWmbev/jIqk
-         Cmg3DqWinjVUTwXnIE4Dx9Lh53kmCRQCCDAB42e6nXNWf208kuWa+NTVAgOtKv5877p5
-         2ivA==
-X-Gm-Message-State: AOAM531uaBC4PFl8IJjpCcvryLb6XZTX6Fvn2Yx094u1oGY26GOjbTGe
-        9k+LcC0h1ItTG7kCq2lg7hCyy5hdkoo=
-X-Google-Smtp-Source: ABdhPJyybwLGizwQ9BOusBV2V9qQfSBNY2dbepTk3yQTSBPotFFjy/O59aGldpfeQjxyaUHgFNZKcg==
-X-Received: by 2002:a19:6411:: with SMTP id y17mr6947238lfb.199.1599344655196;
-        Sat, 05 Sep 2020 15:24:15 -0700 (PDT)
+        bh=wIgbCe+me6m/O/hCjjtMhyNJ1DzGS8TtOXQnp4EnPpc=;
+        b=hqTtbTqYSjw1u5QaKctdPMDBfcN3kh4qu32ZYbIdlnZ3VpY5x3Jrpi4a3in9+cz/07
+         BF9gwpMNK4SYaH0ZsJi7SMNVKfR5lEme5Ej3U2r4cJxeTN7AHA97oxmXqVMkJtnAnyFc
+         hurB3B4Q8+mqWvO5Nb1O2dCsbVqMGBbveMmwsFW+mTV4Abnd1rv5Fxixl8jignYUHRyM
+         1EQudsNF9BtWJFIBSzm3fNf4R4n5bxDw7s0PqVYyIB0WK3bIlF97ryZIX/TuU7Uj2t7a
+         W14VHGWIJ54xx3wMX5sbQ04o0ypz+cca2P7ozWDBici1nOTdBTbRpRSbcmR4SGTvRlH7
+         PBnA==
+X-Gm-Message-State: AOAM531rIt2CJkQLE0o1EOKdxS7IhAUl8bW0cfsDBfxUwcWcbVOzrQBx
+        rudUCsq6aa8zUdHe9l56Y6syZTtWYwY=
+X-Google-Smtp-Source: ABdhPJw6FexgpuxJhF9GDPtLS9E9EAb+J6ML8Qr7A2QP/Kmio+lfu/hQvriWTAaS497MVUtVUAJZTA==
+X-Received: by 2002:a05:651c:1032:: with SMTP id w18mr7029893ljm.238.1599345381770;
+        Sat, 05 Sep 2020 15:36:21 -0700 (PDT)
 Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id l15sm2137185lfk.71.2020.09.05.15.24.14
+        by smtp.googlemail.com with ESMTPSA id v18sm2856633ljd.51.2020.09.05.15.36.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Sep 2020 15:24:14 -0700 (PDT)
-Subject: Re: [PATCH v4 11/31] i2c: tegra: Factor out runtime PM and hardware
- initialization
+        Sat, 05 Sep 2020 15:36:21 -0700 (PDT)
+Subject: Re: [PATCH v4 16/31] i2c: tegra: Remove "dma" variable from
+ tegra_i2c_xfer_msg()
 To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -59,15 +59,15 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20200905204151.25343-1-digetx@gmail.com>
- <20200905204151.25343-12-digetx@gmail.com>
- <20200905221042.GB18554@qmqm.qmqm.pl>
+ <20200905204151.25343-17-digetx@gmail.com>
+ <20200905222323.GC18554@qmqm.qmqm.pl>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <350949de-00ee-a664-d979-fd47803a80e4@gmail.com>
-Date:   Sun, 6 Sep 2020 01:24:14 +0300
+Message-ID: <7587704b-7bc1-d6a9-19b4-befcbcbce26c@gmail.com>
+Date:   Sun, 6 Sep 2020 01:36:20 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200905221042.GB18554@qmqm.qmqm.pl>
+In-Reply-To: <20200905222323.GC18554@qmqm.qmqm.pl>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -76,21 +76,26 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-06.09.2020 01:10, Michał Mirosław пишет:
-> On Sat, Sep 05, 2020 at 11:41:31PM +0300, Dmitry Osipenko wrote:
->> Factor out runtime PM and hardware initialization into separate function
->> in order have a cleaner error unwinding in the probe function.
+06.09.2020 01:23, Michał Mirosław пишет:
+> On Sat, Sep 05, 2020 at 11:41:36PM +0300, Dmitry Osipenko wrote:
+>> The "dma" variable of tegra_i2c_xfer_msg() function doesn't bring much in
+>> regards to readability and generation of the code, hence let's remove it
+>> to clean up code a tad.
 > [...]
->> +	ret = tegra_i2c_init_runtime_pm_and_hardware(i2c_dev);
+>> --- a/drivers/i2c/busses/i2c-tegra.c
+>> +++ b/drivers/i2c/busses/i2c-tegra.c
+> [...]
+>> +	if (i2c_dev->is_curr_dma_xfer) {
 > [...]
 > 
-> This one doesn't improve the code for me. The problems are: 1) putting two
-> unrelated parts in one function, 2) silently reordered initialization.
+> In this case I like the previous code better: just because there are
+> less letters to read. :-)
 
-The hardware initialization depends on the resumed RPM and the rest of
-the probe function doesn't care about the RPM. I don't quite understand
-why you're saying that they are unrelated, could you please explain?
+Besides readability, I also don't like much that the is_curr_dma_xfer is
+initialized in tegra_i2c_xfer_msg() and then could be overridden by
+tegra_i2c_config_fifo_trig(). In a result the "dma" variable confuses me
+since it's not instantly obvious why it's set after
+tegra_i2c_config_fifo_trig().
 
-The DMA/RPM initialization is intentionally reordered in order to clean
-up the error handling, like the commit message says. To me it's a clear
-improvement :)
+Looking at the final result, I think it's better to have the variable
+removed. It makes code more consistent, IMO.
