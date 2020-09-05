@@ -2,53 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFA825EB9C
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Sep 2020 00:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF8A25EB9F
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Sep 2020 00:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728505AbgIEWyD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Sep 2020 18:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
+        id S1728724AbgIEWyu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Sep 2020 18:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728680AbgIEWyB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Sep 2020 18:54:01 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEACC061244;
-        Sat,  5 Sep 2020 15:53:59 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id b12so5673855lfp.9;
-        Sat, 05 Sep 2020 15:53:59 -0700 (PDT)
+        with ESMTP id S1728103AbgIEWys (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Sep 2020 18:54:48 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E17C061244;
+        Sat,  5 Sep 2020 15:54:46 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id u4so11069376ljd.10;
+        Sat, 05 Sep 2020 15:54:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Mm0fLzL9mpwJH6qOtBIsC+iX0RP5tXSBI7mTIgBB+ko=;
-        b=b0dK+FM3WSNnzGu8EeSD+PT/Z5zal+7gHYGIWdphxbq0Ze31ULCXKVB9Tbv35WIr/y
-         JHCPoZFoer4oqz0vnYWTgyl48bH3rG5WyTrU3lHIbOu1P6VkCZHiouGcS8Y2EZbGw1RJ
-         u9gZv9MS2KBUiOPZJwzkVGZVm+xjujXJ21DZZLWE3GHED5E9Ars7mnQT0c3jwuWXwyzw
-         6NtoJrdi/+JowbGCx8FUwFcgjs521n6H2ohlVSRYBaa2se6l/QIFb7zSkWHn/Ly+nquo
-         5EbxoijLT7VWJKcgFWV68QtErGCgGYfAgdXeQc9cQgpVNSoV+1ltm2tjERd/j/jTHZcM
-         q7Ow==
+        bh=vTI6J+xPk7T+lf6FCXoQeoJc/+EMWwOYFsOxBwKOilw=;
+        b=RbMWzPqEGh47kflTLz4oIwEo4pE8qdrMoHpgJKf8sSy5F1MZno5s72uNrwHHVbpHwx
+         HvpMhgeshQ6MpaARPgAGqZj3FxOEYtxNhqUpco/oA7rK4LIWQP2XWjQsvWLbT6WSb6p9
+         oyFi41o7CfDU5F3Ce4lg2QMWkIZctqknJfbRK4UnD8Pxl5aqRZJMKNp7BjoycYlxZcf8
+         +qpvL/RCpOEk+QJMS5udgQNvk0Wz9ikNONiN2cAa9TsfkHgy97g3Zm5YwtUKSTYxhjaT
+         iCTDKzrMcFrvPT1wF/Cjjjvd/TgjLBRZCnD8zH5nRt9dsOfof2Y3DJGDaD0HEGM5c2lz
+         zotg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Mm0fLzL9mpwJH6qOtBIsC+iX0RP5tXSBI7mTIgBB+ko=;
-        b=qX+HPGt1ydnkxe9gq5EfsZpPTt+hdORNFQE5bUvNb299if9aCxm8rE/G9of6q/zOpj
-         624qxvtalFcW9ErL//7XKU2PkdAU9ymhLZRrflp8xuF8YEiXBU7HhXzicSHx3eARRN2R
-         9kt9l5O/B8y9YEqTLSPAZ7j1rSzjJAJFzYde/uh2kVD95FLYm5MW67RzsfglyoNTkj1D
-         9b1gHECHlRWXw8CkIE1I3OFlztIMJzYmTNfEXtkkEutzX9mEe/bdMP2qeII1+SCPbu50
-         6pjtTpdyLwwMFzo4Eeb6fPOwDy7yxPaUGms8Hlq5a8visANyAHvaEiQj7bN8N8UlYsF5
-         +W1w==
-X-Gm-Message-State: AOAM531sMX/pBck3cooWnuZrOOxSAuZ+EvbzkCm+kV+UuDsxqYdqDDRJ
-        lS2AZzu8ipcFNBLEmCCDRACND6+YkQ8=
-X-Google-Smtp-Source: ABdhPJx6VEV2buXjwab7UTyGt8ACVXT1Ud/GGOROQzk6/vNN77o3I+vM4Gi2D6bHNlHB7MY0dlwgow==
-X-Received: by 2002:a19:8ad4:: with SMTP id m203mr286277lfd.183.1599346437737;
-        Sat, 05 Sep 2020 15:53:57 -0700 (PDT)
+        bh=vTI6J+xPk7T+lf6FCXoQeoJc/+EMWwOYFsOxBwKOilw=;
+        b=IbjF7vhTqyB+zlRrVaibYY4HcWW/o7TrprfdK/TTN1HlsfEKddNUoOB4xVm6gLj9/2
+         BOr4+eB7bmiySsjH9/aiXGO3bOnfysHNtyQS5DppD+S6s9uXhV6JSkqXUafd0RMko4Vj
+         BMaL5CI/a8XsmzkgpilbaBpDlHxdHaBGgtqqzswV6oIYs/uWInZFtREa78Fvb34VgjiJ
+         2z7oGJLkML5EDGAJdDC4jpq9+ektVAHaCZJuT8BcnUy3Aly6p8XeEoteGVkUl3d3rkFs
+         OKwPeTP5623ra0fO/mVkL46/8jQU0Hoez5VfpCKNgBf45qp7gstra6wULDF40WCy5fLp
+         n6Tw==
+X-Gm-Message-State: AOAM533s731n8BH5axjYtMRfhcLa02Tl4bv6AgDkDToZ+5v3FQQGKzEA
+        oHRM2CFH/bw/Er1wpZ0tl2QN+lvmc8M=
+X-Google-Smtp-Source: ABdhPJxXd82oGvwIpVEGW+XeHBhdtwdIctfN5fDTookMsDI1algHunQ+osJZVGUlH5GTNxt4arrNCA==
+X-Received: by 2002:a2e:b530:: with SMTP id z16mr7258006ljm.143.1599346484550;
+        Sat, 05 Sep 2020 15:54:44 -0700 (PDT)
 Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id 18sm3107524lfg.29.2020.09.05.15.53.56
+        by smtp.googlemail.com with ESMTPSA id f12sm3107918lfp.69.2020.09.05.15.54.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Sep 2020 15:53:57 -0700 (PDT)
-Subject: Re: [PATCH v4 30/31] i2c: tegra: Clean up and improve comments
+        Sat, 05 Sep 2020 15:54:44 -0700 (PDT)
+Subject: Re: [PATCH v4 16/31] i2c: tegra: Remove "dma" variable from
+ tegra_i2c_xfer_msg()
 To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -58,15 +59,17 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20200905204151.25343-1-digetx@gmail.com>
- <20200905204151.25343-31-digetx@gmail.com>
- <20200905224702.GD18554@qmqm.qmqm.pl>
+ <20200905204151.25343-17-digetx@gmail.com>
+ <20200905222323.GC18554@qmqm.qmqm.pl>
+ <7587704b-7bc1-d6a9-19b4-befcbcbce26c@gmail.com>
+ <20200905224928.GE18554@qmqm.qmqm.pl>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <45bd0bc9-a3a8-c9fa-24aa-23ae7a4182c2@gmail.com>
-Date:   Sun, 6 Sep 2020 01:53:56 +0300
+Message-ID: <e7773ecc-f6ef-add7-b265-c95cd5089b13@gmail.com>
+Date:   Sun, 6 Sep 2020 01:54:43 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200905224702.GD18554@qmqm.qmqm.pl>
+In-Reply-To: <20200905224928.GE18554@qmqm.qmqm.pl>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -75,33 +78,33 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-06.09.2020 01:47, Michał Mirosław пишет:
-> On Sat, Sep 05, 2020 at 11:41:50PM +0300, Dmitry Osipenko wrote:
->> Make all comments to be consistent in regards to capitalization and
->> punctuation, correct spelling and grammar errors.
-> [...]
->> -	/* Rounds down to not include partial word at the end of buf */
->> +	/* rounds down to not include partial word at the end of buffer */
->>  	words_to_transfer = buf_remaining / BYTES_PER_FIFO_WORD;
->>  
->> -	/* It's very common to have < 4 bytes, so optimize that case. */
->> +	/* it's very common to have < 4 bytes, so optimize that case */
->>  	if (words_to_transfer) {
->>  		if (words_to_transfer > tx_fifo_avail)
->>  			words_to_transfer = tx_fifo_avail;
->>  
->>  		/*
->> -		 * Update state before writing to FIFO.  If this casues us
->> +		 * Update state before writing to FIFO.  If this causes us
->>  		 * to finish writing all bytes (AKA buf_remaining goes to 0) we
->>  		 * have a potential for an interrupt (PACKET_XFER_COMPLETE is
->>  		 * not maskable).  We need to make sure that the isr sees
->> @@ -800,8 +799,8 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
->>  	}
+06.09.2020 01:49, Michał Mirosław пишет:
+> On Sun, Sep 06, 2020 at 01:36:20AM +0300, Dmitry Osipenko wrote:
+>> 06.09.2020 01:23, Michał Mirosław пишет:
+>>> On Sat, Sep 05, 2020 at 11:41:36PM +0300, Dmitry Osipenko wrote:
+>>>> The "dma" variable of tegra_i2c_xfer_msg() function doesn't bring much in
+>>>> regards to readability and generation of the code, hence let's remove it
+>>>> to clean up code a tad.
+>>> [...]
+>>>> --- a/drivers/i2c/busses/i2c-tegra.c
+>>>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>>> [...]
+>>>> +	if (i2c_dev->is_curr_dma_xfer) {
+>>> [...]
+>>>
+>>> In this case I like the previous code better: just because there are
+>>> less letters to read. :-)
+>>
+>> Besides readability, I also don't like much that the is_curr_dma_xfer is
+>> initialized in tegra_i2c_xfer_msg() and then could be overridden by
+>> tegra_i2c_config_fifo_trig(). In a result the "dma" variable confuses me
+>> since it's not instantly obvious why it's set after
+>> tegra_i2c_config_fifo_trig().
+>>
+>> Looking at the final result, I think it's better to have the variable
+>> removed. It makes code more consistent, IMO.
 > 
-> Those first letters don't look consistently capitalized. :-)
+> If it could be changed in some callee, then indeed it is better. In this
+> case I would include this information in the commit msg.
 
-In my experience, the more common kernel style is a lowercase for
-single-line comments and the opposite for the multi-line comments.
-Hence, should be good. If you're meaning something else, then please
-clarify.
+That's a good suggestion, thanks.
