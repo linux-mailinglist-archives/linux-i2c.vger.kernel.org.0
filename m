@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3AB25EAB6
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Sep 2020 22:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6301C25EA77
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Sep 2020 22:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728977AbgIEUpq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Sep 2020 16:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
+        id S1728742AbgIEUmp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Sep 2020 16:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728720AbgIEUml (ORCPT
+        with ESMTP id S1728718AbgIEUml (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Sep 2020 16:42:41 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A10CC06125C;
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8639AC061249;
         Sat,  5 Sep 2020 13:42:39 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id c2so11745777ljj.12;
+Received: by mail-lj1-x241.google.com with SMTP id c2so11745797ljj.12;
         Sat, 05 Sep 2020 13:42:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yJ00lOCQCT7ORVZaWpSwIHQEVex93WHqEiG3flihqKQ=;
-        b=EcbBZPpWn5meJPwWS3VmdqlFq4RAakAgIwnyCFxWCnvipviMq2gHi2FnXZaSJlPnyV
-         cFqvUPTvEI2g2452PHIofFZfuoTygFhhrLHQc9lKtPnGCOgbG7bNztQlxEWTC7wQpqOr
-         x0KH3E2wSgAhintBWnFYxLpqRNU25Bf+2CffiXHGkqDqHxGYPErfIZLUD2fXAe1OqOBH
-         VkX87hlQX+MMSFexsM1yono1LsUCa7vugJK2T3LMEfMRR92CFJ9vG0elZGdq030AKICN
-         Q99I4mu7kkq308FTc2iYBGRGGqb7SzWjCYnxp1tgbz3IBYkvJtZIfCetCOWy/kq6O2QW
-         2g4g==
+        bh=HxuDydUSZoNI1+yqMsxkzReEarnq7zj4OINQ+mfVftk=;
+        b=j5qNZwmzjvOCpiECSExMfb+O0OOPERaXVl7QgSzXSOq48f0jKrmM2R7YHOusPdm05d
+         BDY/QyyEQjyMyGC/Ti0/MXOHWvBbKwwNR58oAj1oB7hJ8AFE1KctkeezVz30viCDZsBU
+         M9KUhkHsyv/U5XrLYlQzY4AE9hvYGPATVPZlCVRnA2EE3JbajPYcBp7n64uLxCj/Ej+L
+         rUizkebfgdWLS6u0lTrMn3FPmpnS21daRTxWXvWaCpsNXftCRws4UlrQCWnhkAMV+HTS
+         lK6U61nWxrmRUjS1CZeF9WqwCD3cEcMrha938nyE26C9H1duRtlXa+9plo6oetNjT8RY
+         EDug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yJ00lOCQCT7ORVZaWpSwIHQEVex93WHqEiG3flihqKQ=;
-        b=h8Iv2o66aQrxYLtOE7j0807P8ji+fmo//aGyz4ahI9lvnPD6H0Uz+2EBS1DHktf31d
-         Ijpici9xcZk+YOdW935xq7QFkNRz/VTj7B8jJS4p33Sa6zNvnf9FureVUxupmij8xyVf
-         uoL8kWmw9j3T4FiqXbMJ/mrQKekAC5ZzkfC4mZmiRwC0mHdtuBzyv/Ljzg6K8dug5SUR
-         ByH0YS6eGhwLk/n9dudBET1u1ztDBBpBVXDz5ICVgSMgNjmhYJuzIsWcbsDIvuNlky7v
-         kGbo4Ktvf5/THgcR0M+bjgzE0Sy7C5cU+gk6WzsD+XWIVDtHr6lxnA8PyF25+MCqAnMP
-         SVKg==
-X-Gm-Message-State: AOAM530FQDxL4ZF9rGo+c/MYwWchsZFHr5fehDA7y+unIehfamlN8yBj
-        3KN25Av9ZMmXzAzgtVIce6M=
-X-Google-Smtp-Source: ABdhPJxYZWfuktbdK+RbXnXlojjcRztyAe/wVCxitYso7h7vB8QOure5SDscGnN3gcFmOTm1yY2ZkA==
-X-Received: by 2002:a05:651c:32b:: with SMTP id b11mr1222693ljp.99.1599338556745;
-        Sat, 05 Sep 2020 13:42:36 -0700 (PDT)
+        bh=HxuDydUSZoNI1+yqMsxkzReEarnq7zj4OINQ+mfVftk=;
+        b=XMrW2gijpadGOXm2usVqEXpUNZwdXX+OxzKn0SIe8fFMzjbh4hwapj6okUszJpyhJk
+         xzQ/TTlX2/Z3oaEcTPj+a4M/nlG193wgu0JLo6cSkxOaP9x3RDwSTtNBGqiuTKfa48PX
+         eeHqH8nvNHb8OLV0PqluOlsqjfA0pi7760YqXmbNRIw3cRXSuuA+wIJ2RxgcFPJb/QLY
+         rir7f4WgPgAY/9ia3KpLiPI6FoHhukB1BynY8/SUm5WcAeCx1jwpS20PHIu1eW8/OKe1
+         t4AFYbf7TqVLSMTEZ1iL3D/I5B4Sf4wQAOlBrf4x0nbQZ1ubKotZS3gQvBXoFQwQ+B4n
+         HvzQ==
+X-Gm-Message-State: AOAM532NJtUCE+hRZpC+Q/ZK4ODT3rqxeJe/xQBzS4fK0DHJ4Q7dNWrB
+        2mpmfqsrXIrq4ad1/Z53Z+I=
+X-Google-Smtp-Source: ABdhPJzmcCMPtkC0n/mcrr/vCOS0MR2k7/LTSEX6mRWWdd9iUzDkGrJIQhh7BvPi47NOPhQTYJVZqQ==
+X-Received: by 2002:a05:651c:c6:: with SMTP id 6mr6925349ljr.237.1599338557668;
+        Sat, 05 Sep 2020 13:42:37 -0700 (PDT)
 Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id e17sm1677763ljn.18.2020.09.05.13.42.35
+        by smtp.gmail.com with ESMTPSA id e17sm1677763ljn.18.2020.09.05.13.42.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Sep 2020 13:42:36 -0700 (PDT)
+        Sat, 05 Sep 2020 13:42:37 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -56,200 +56,53 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 13/31] i2c: tegra: Clean up probe function
-Date:   Sat,  5 Sep 2020 23:41:33 +0300
-Message-Id: <20200905204151.25343-14-digetx@gmail.com>
+Subject: [PATCH v4 14/31] i2c: tegra: Remove likely/unlikely from the code
+Date:   Sat,  5 Sep 2020 23:41:34 +0300
+Message-Id: <20200905204151.25343-15-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200905204151.25343-1-digetx@gmail.com>
 References: <20200905204151.25343-1-digetx@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The driver's probe function code is a bit difficult to read. This patch
-reorders code of the probe function, forming groups of code that are easy
-to work with. The reset_control_get() now may return -EPROBE_DEFER on
-newer Tegra SoCs because they use BPMP driver that provides reset controls
-and BPMP doesn't come up early during boot, previously rst was protected
-by other checks error checks in the code, hence dev_err_probe() is used
-now for the rst.
+The likely/unlikely annotations should be used only in a hot paths of
+performance-critical code. The I2C driver doesn't have such paths, and
+thus, there is no justification for usage of likely/unlikely annotations
+in the code. Hence remove them.
 
+Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 120 +++++++++++++++++----------------
- 1 file changed, 63 insertions(+), 57 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index d6bc23bf765e..d8b7373673ea 100644
+index d8b7373673ea..33d37a40fa83 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -440,6 +440,9 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
- 
- 	i2c_dev->tx_dma_chan = chan;
- 
-+	i2c_dev->dma_buf_size = i2c_dev->hw->quirks->max_write_len +
-+				I2C_PACKET_HEADER_SIZE;
-+
- 	dma_buf = dma_alloc_coherent(i2c_dev->dev, i2c_dev->dma_buf_size,
- 				     &dma_phys, GFP_KERNEL | __GFP_NOWARN);
- 	if (!dma_buf) {
-@@ -1711,85 +1714,88 @@ static int tegra_i2c_probe(struct platform_device *pdev)
- {
- 	struct tegra_i2c_dev *i2c_dev;
- 	struct resource *res;
--	void __iomem *base;
--	phys_addr_t base_phys;
--	int irq;
--	int ret;
--
--	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
--	if (IS_ERR(base))
--		return PTR_ERR(base);
--
--	base_phys = res->start;
--
--	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
-+	int err;
- 
- 	i2c_dev = devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
- 	if (!i2c_dev)
- 		return -ENOMEM;
- 
--	i2c_dev->base = base;
--	i2c_dev->base_phys = base_phys;
--	i2c_dev->adapter.algo = &tegra_i2c_algo;
--	i2c_dev->adapter.retries = 1;
--	i2c_dev->adapter.timeout = 6 * HZ;
--	i2c_dev->irq = irq;
-+	platform_set_drvdata(pdev, i2c_dev);
-+
-+	init_completion(&i2c_dev->msg_complete);
-+	init_completion(&i2c_dev->dma_complete);
-+
-+	i2c_dev->hw = of_device_get_match_data(&pdev->dev);
- 	i2c_dev->cont_id = pdev->id;
- 	i2c_dev->dev = &pdev->dev;
- 
--	i2c_dev->rst = devm_reset_control_get_exclusive(&pdev->dev, "i2c");
-+	/* initialize virt base of hardware registers */
-+	i2c_dev->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(i2c_dev->base))
-+		return PTR_ERR(i2c_dev->base);
-+
-+	/* initialize phys base of hardware registers */
-+	i2c_dev->base_phys = res->start;
-+
-+	/* initialize controller's interrupt */
-+	err = platform_get_irq(pdev, 0);
-+	if (err < 0)
-+		return err;
-+
-+	i2c_dev->irq = err;
-+
-+	/* interrupt will be enabled during of transfer time */
-+	irq_set_status_flags(i2c_dev->irq, IRQ_NOAUTOEN);
-+
-+	err = devm_request_irq(i2c_dev->dev, i2c_dev->irq, tegra_i2c_isr,
-+			       IRQF_NO_SUSPEND, dev_name(i2c_dev->dev),
-+			       i2c_dev);
-+	if (err)
-+		return err;
-+
-+	/* initialize hardware reset control */
-+	i2c_dev->rst = devm_reset_control_get_exclusive(i2c_dev->dev, "i2c");
- 	if (IS_ERR(i2c_dev->rst)) {
--		dev_err(&pdev->dev, "missing controller reset\n");
-+		dev_err_probe(i2c_dev->dev, PTR_ERR(i2c_dev->rst),
-+			      "failed to get reset control\n");
- 		return PTR_ERR(i2c_dev->rst);
+@@ -890,7 +890,7 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+ 		goto err;
  	}
  
- 	tegra_i2c_parse_dt(i2c_dev);
+-	if (unlikely(status & status_err)) {
++	if (status & status_err) {
+ 		tegra_i2c_disable_packet_mode(i2c_dev);
+ 		if (status & I2C_INT_NO_ACK)
+ 			i2c_dev->msg_err |= I2C_ERR_NO_ACK;
+@@ -1330,7 +1330,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 		i2c_dev->msg_err);
  
--	ret = tegra_i2c_init_clocks(i2c_dev);
--	if (ret)
--		return ret;
--
--	i2c_dev->hw = of_device_get_match_data(&pdev->dev);
--	i2c_dev->adapter.quirks = i2c_dev->hw->quirks;
--	i2c_dev->dma_buf_size = i2c_dev->adapter.quirks->max_write_len +
--				I2C_PACKET_HEADER_SIZE;
--	init_completion(&i2c_dev->msg_complete);
--	init_completion(&i2c_dev->dma_complete);
--
--	platform_set_drvdata(pdev, i2c_dev);
--
--	if (i2c_dev->hw->supports_bus_clear)
--		i2c_dev->adapter.bus_recovery_info = &tegra_i2c_recovery_info;
-+	err = tegra_i2c_init_clocks(i2c_dev);
-+	if (err)
-+		return err;
+ 	i2c_dev->is_curr_dma_xfer = false;
+-	if (likely(i2c_dev->msg_err == I2C_ERR_NONE))
++	if (i2c_dev->msg_err == I2C_ERR_NONE)
+ 		return 0;
  
--	ret = tegra_i2c_init_dma(i2c_dev);
--	if (ret < 0)
-+	err = tegra_i2c_init_dma(i2c_dev);
-+	if (err)
- 		goto release_clocks;
- 
--	ret = tegra_i2c_init_runtime_pm_and_hardware(i2c_dev);
--	if (ret)
-+	err = tegra_i2c_init_runtime_pm_and_hardware(i2c_dev);
-+	if (err)
- 		goto release_dma;
- 
--	irq_set_status_flags(i2c_dev->irq, IRQ_NOAUTOEN);
--
--	ret = devm_request_irq(&pdev->dev, i2c_dev->irq, tegra_i2c_isr,
--			       IRQF_NO_SUSPEND, dev_name(&pdev->dev), i2c_dev);
--	if (ret)
--		goto release_rpm;
--
--	i2c_set_adapdata(&i2c_dev->adapter, i2c_dev);
-+	i2c_dev->adapter.dev.of_node = i2c_dev->dev->of_node;
-+	i2c_dev->adapter.dev.parent = i2c_dev->dev;
-+	i2c_dev->adapter.retries = 1;
-+	i2c_dev->adapter.timeout = 6 * HZ;
-+	i2c_dev->adapter.quirks = i2c_dev->hw->quirks;
- 	i2c_dev->adapter.owner = THIS_MODULE;
- 	i2c_dev->adapter.class = I2C_CLASS_DEPRECATED;
--	strlcpy(i2c_dev->adapter.name, dev_name(&pdev->dev),
-+	i2c_dev->adapter.algo = &tegra_i2c_algo;
-+	i2c_dev->adapter.nr = i2c_dev->cont_id;
-+
-+	if (i2c_dev->hw->supports_bus_clear)
-+		i2c_dev->adapter.bus_recovery_info = &tegra_i2c_recovery_info;
-+
-+	strlcpy(i2c_dev->adapter.name, dev_name(i2c_dev->dev),
- 		sizeof(i2c_dev->adapter.name));
--	i2c_dev->adapter.dev.parent = &pdev->dev;
--	i2c_dev->adapter.nr = pdev->id;
--	i2c_dev->adapter.dev.of_node = pdev->dev.of_node;
- 
--	ret = i2c_add_numbered_adapter(&i2c_dev->adapter);
--	if (ret)
--		goto release_dma;
-+	i2c_set_adapdata(&i2c_dev->adapter, i2c_dev);
-+
-+	err = i2c_add_numbered_adapter(&i2c_dev->adapter);
-+	if (err)
-+		goto release_rpm;
- 
- 	return 0;
- 
-@@ -1800,7 +1806,7 @@ static int tegra_i2c_probe(struct platform_device *pdev)
- release_clocks:
- 	tegra_i2c_release_clocks(i2c_dev);
- 
--	return ret;
-+	return err;
- }
- 
- static int tegra_i2c_remove(struct platform_device *pdev)
+ 	tegra_i2c_init(i2c_dev);
 -- 
 2.27.0
 
