@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6301C25EA77
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Sep 2020 22:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBBF25EABB
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Sep 2020 22:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728742AbgIEUmp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Sep 2020 16:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S1728824AbgIEUpo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Sep 2020 16:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728718AbgIEUml (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Sep 2020 16:42:41 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8639AC061249;
-        Sat,  5 Sep 2020 13:42:39 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id c2so11745797ljj.12;
-        Sat, 05 Sep 2020 13:42:39 -0700 (PDT)
+        with ESMTP id S1728726AbgIEUmm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Sep 2020 16:42:42 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F58C06125E;
+        Sat,  5 Sep 2020 13:42:40 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id k25so11759407ljg.9;
+        Sat, 05 Sep 2020 13:42:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HxuDydUSZoNI1+yqMsxkzReEarnq7zj4OINQ+mfVftk=;
-        b=j5qNZwmzjvOCpiECSExMfb+O0OOPERaXVl7QgSzXSOq48f0jKrmM2R7YHOusPdm05d
-         BDY/QyyEQjyMyGC/Ti0/MXOHWvBbKwwNR58oAj1oB7hJ8AFE1KctkeezVz30viCDZsBU
-         M9KUhkHsyv/U5XrLYlQzY4AE9hvYGPATVPZlCVRnA2EE3JbajPYcBp7n64uLxCj/Ej+L
-         rUizkebfgdWLS6u0lTrMn3FPmpnS21daRTxWXvWaCpsNXftCRws4UlrQCWnhkAMV+HTS
-         lK6U61nWxrmRUjS1CZeF9WqwCD3cEcMrha938nyE26C9H1duRtlXa+9plo6oetNjT8RY
-         EDug==
+        bh=6RRXFQ1kc/Y4nyCU/wNkP0keA+UqxgPIjRTZx+8dm4A=;
+        b=a+iZWQEuFYJXTbNB5GtxF3034zigYvAk8cvLJCSMCu6JOV9tI9/rSoTO5n6COVYOUv
+         UlVYahELxxiWU0sOvjbdzElJ7+7Khx6TXP2FOPlriEJhP7Py1jWDp6FbB2XXplu9hzci
+         4wGjglpXnL+NJ8ywMqyXOn5SLfNmXSw08FvhVGA+geydjgrnzVDiJe+YGq5y71p2AtI2
+         ERH4emHKOt9sK+wtDE9E9eHokJli+YE08Fg56QYEp4qGXx2hZvMUN6DC7JyBNjUF6foP
+         io6sIlFOcGOJDcZbVdvVCOOEOPcECs7zplkr5jrrubcE2N0BwhNN4Qp3kBYrGdA/EzIa
+         ocvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HxuDydUSZoNI1+yqMsxkzReEarnq7zj4OINQ+mfVftk=;
-        b=XMrW2gijpadGOXm2usVqEXpUNZwdXX+OxzKn0SIe8fFMzjbh4hwapj6okUszJpyhJk
-         xzQ/TTlX2/Z3oaEcTPj+a4M/nlG193wgu0JLo6cSkxOaP9x3RDwSTtNBGqiuTKfa48PX
-         eeHqH8nvNHb8OLV0PqluOlsqjfA0pi7760YqXmbNRIw3cRXSuuA+wIJ2RxgcFPJb/QLY
-         rir7f4WgPgAY/9ia3KpLiPI6FoHhukB1BynY8/SUm5WcAeCx1jwpS20PHIu1eW8/OKe1
-         t4AFYbf7TqVLSMTEZ1iL3D/I5B4Sf4wQAOlBrf4x0nbQZ1ubKotZS3gQvBXoFQwQ+B4n
-         HvzQ==
-X-Gm-Message-State: AOAM532NJtUCE+hRZpC+Q/ZK4ODT3rqxeJe/xQBzS4fK0DHJ4Q7dNWrB
-        2mpmfqsrXIrq4ad1/Z53Z+I=
-X-Google-Smtp-Source: ABdhPJzmcCMPtkC0n/mcrr/vCOS0MR2k7/LTSEX6mRWWdd9iUzDkGrJIQhh7BvPi47NOPhQTYJVZqQ==
-X-Received: by 2002:a05:651c:c6:: with SMTP id 6mr6925349ljr.237.1599338557668;
-        Sat, 05 Sep 2020 13:42:37 -0700 (PDT)
+        bh=6RRXFQ1kc/Y4nyCU/wNkP0keA+UqxgPIjRTZx+8dm4A=;
+        b=uTRmQfTbZZrbb1eU2qVPhxBvrvMSWTJDWul+kkyrqv/4zkfQesMZDwg9TBHSeCz+Wj
+         39D5QRx5XJ/Sc6h/7+Xfqip8ijmGaD6JO3UWxamZHvu6B+iBv74QLGN8Qax7xcrU8EoB
+         Vc8puAQIL6S+VlKxLjKEBRPQ8oFg5ZT6jz7WFFqaJjHc8JSZG04fp1t1mawr2CYRA2zM
+         uKoIovaacv5M05k+z1XRdZh0g8In25n5A0JH5A9zUMv4BfQwykW1RakhFFPWbb+gPf2h
+         i7PuzhuYrBMRj4BoLUWQQMw1FyH5tVo+epPuMKm0FVu+M25iLMqU6Yg5KElGrx2Snywu
+         aGOQ==
+X-Gm-Message-State: AOAM531EUk/7bMUPMpyHKJjpyfBZ4JPWTOvZGHKanzfAHEyPPxfi188t
+        iW+eo5VngO6xxx3NC8cb0l4=
+X-Google-Smtp-Source: ABdhPJzmkohcwp5n3Kob3QdltSsLijAXqaBw2ePopAD4H4AQWjOvGgqy74RUdcYLtgAXsoynphQhug==
+X-Received: by 2002:a2e:8606:: with SMTP id a6mr3712386lji.299.1599338558570;
+        Sat, 05 Sep 2020 13:42:38 -0700 (PDT)
 Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id e17sm1677763ljn.18.2020.09.05.13.42.36
+        by smtp.gmail.com with ESMTPSA id e17sm1677763ljn.18.2020.09.05.13.42.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Sep 2020 13:42:37 -0700 (PDT)
+        Sat, 05 Sep 2020 13:42:38 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -56,53 +56,49 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 14/31] i2c: tegra: Remove likely/unlikely from the code
-Date:   Sat,  5 Sep 2020 23:41:34 +0300
-Message-Id: <20200905204151.25343-15-digetx@gmail.com>
+Subject: [PATCH v4 15/31] i2c: tegra: Remove bogus barrier()
+Date:   Sat,  5 Sep 2020 23:41:35 +0300
+Message-Id: <20200905204151.25343-16-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200905204151.25343-1-digetx@gmail.com>
 References: <20200905204151.25343-1-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The likely/unlikely annotations should be used only in a hot paths of
-performance-critical code. The I2C driver doesn't have such paths, and
-thus, there is no justification for usage of likely/unlikely annotations
-in the code. Hence remove them.
+Apparently barrier() was intended to reduce possibility of racing
+with the interrupt handler, but driver's code evolved significantly
+and today's driver enables interrupt only when it waits for completion
+notification. Hence barrier() has no good use anymore, let's remove it.
 
-Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index d8b7373673ea..33d37a40fa83 100644
+index 33d37a40fa83..f69587ca163b 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -890,7 +890,7 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
- 		goto err;
+@@ -600,7 +600,6 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
+ 		i2c_dev->msg_buf_remaining = buf_remaining;
+ 		i2c_dev->msg_buf = buf +
+ 			words_to_transfer * BYTES_PER_FIFO_WORD;
+-		barrier();
+ 
+ 		i2c_writesl(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
+ 
+@@ -624,7 +623,6 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
+ 		/* Again update before writing to FIFO to make sure isr sees. */
+ 		i2c_dev->msg_buf_remaining = 0;
+ 		i2c_dev->msg_buf = NULL;
+-		barrier();
+ 
+ 		i2c_writel(i2c_dev, val, I2C_TX_FIFO);
  	}
- 
--	if (unlikely(status & status_err)) {
-+	if (status & status_err) {
- 		tegra_i2c_disable_packet_mode(i2c_dev);
- 		if (status & I2C_INT_NO_ACK)
- 			i2c_dev->msg_err |= I2C_ERR_NO_ACK;
-@@ -1330,7 +1330,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 		i2c_dev->msg_err);
- 
- 	i2c_dev->is_curr_dma_xfer = false;
--	if (likely(i2c_dev->msg_err == I2C_ERR_NONE))
-+	if (i2c_dev->msg_err == I2C_ERR_NONE)
- 		return 0;
- 
- 	tegra_i2c_init(i2c_dev);
 -- 
 2.27.0
 
