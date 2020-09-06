@@ -2,86 +2,214 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F1B25EDE4
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Sep 2020 15:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FC825EFDC
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Sep 2020 20:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726931AbgIFNBp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 6 Sep 2020 09:01:45 -0400
-Received: from eu-shark2.inbox.eu ([195.216.236.82]:55004 "EHLO
-        eu-shark2.inbox.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725803AbgIFNA7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Sep 2020 09:00:59 -0400
-Received: from eu-shark2.inbox.eu (localhost [127.0.0.1])
-        by eu-shark2-out.inbox.eu (Postfix) with ESMTP id AF5E1334677;
-        Sun,  6 Sep 2020 16:00:53 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.ee; s=20150108;
-        t=1599397253; bh=id2FYQ/su5IaCZ4nBxBdcSkTcyKP5zQWzkB81aFhy+U=;
-        h=Date:From:To:Cc:Subject;
-        b=rEt0pDLP6b6KEHL0AE4YJ7JZ+NWGGs3NKKPVAUaqXZAXCgSKJHzbw8mkdF6tCByxg
-         DhH7FrKuUS+Q0xE10BrLMSQhwrASfxQhNBVLJpwWFQt+cMWCxxNMRLoQF3yAAysbGB
-         MwcCSIXz3PjjyPXunC+WytZ6AgskzRzEgV6pbZ5w=
-Received: from mail.inbox.eu (eu-pop1 [127.0.0.1])
-        by eu-shark2-in.inbox.eu (Postfix) with ESMTP id 92DE4334675;
-        Sun,  6 Sep 2020 16:00:53 +0300 (EEST)
-Received: from hp15 (unknown [185.176.221.195])
-        (Authenticated sender: arzamas-16@mail.ee)
-        by mail.inbox.eu (Postfix) with ESMTPA id 006C21BE072A;
-        Sun,  6 Sep 2020 16:00:52 +0300 (EEST)
-Date:   Sun, 6 Sep 2020 16:00:47 +0300
-From:   Boris Lysov <arzamas-16@mail.ee>
-To:     linux-i2c@vger.kernel.org
-Cc:     qii.wang@mediatek.com, matthias.bgg@gmail.com
-Subject: [RFC] i2c: i2c-mt65xx and DMA on MT6577 (compatibility issue)
-Message-ID: <20200906160047.7c5fb42f@hp15>
+        id S1729175AbgIFSvw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 6 Sep 2020 14:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729094AbgIFSvp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Sep 2020 14:51:45 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08694C061573;
+        Sun,  6 Sep 2020 11:51:42 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id v23so13616700ljd.1;
+        Sun, 06 Sep 2020 11:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SVBjU4DFMR/Fo2W2cBTCdy0mIXGRqVHK48trniDB2M8=;
+        b=pmSuOmgseubrFzn3V7pyRQwf6Cwug5bUwjYCa9oKzCnEP4QPnnKI1vHf07QqjcADSv
+         dWhaA0mjYp2SginOqghmgjhU87nPLmKPAKTmMzKSuGunXgjWggoZ/F7ZLsJAQa1q6dUb
+         UYqElOY2miKTisOQ2lNr3jF4aQZf7bonxab0cxQF1z2wYeawtUE/LOm7HmcEKhfxrHV6
+         vSMsxyP6bVuKzEpnPuioj0yJqtiZGiXLnj0YAyP1odAKxT10HN72xDi/sSA8IgJbhY0F
+         nNx7JUL7XfUJzOQ2VMUv70e6/E9VKFQQgAHnC/DLbkxKK41nwvy7TOx6HGHa2Z3jLr/J
+         N+Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SVBjU4DFMR/Fo2W2cBTCdy0mIXGRqVHK48trniDB2M8=;
+        b=DYzKzVOG3WlN+VnVT+JYF+BPy0GTMtGK5/2/lBRLFWhE6p3DL7XjIrrGw+F4ffkYFN
+         Q734uQ9dL1X5spRxeAgL9jqEkIB8hrSnsmwN/poZzTOWiIEVeyU828huDECAnaFj8D3Q
+         fFhE61YjrNcBpCmmxAFQ+eW0iRS1GBeqkQP96LiVB07DtzAw58k14kGOP+TijH8PudsF
+         LLCP6SpuipaTHgxUhTnU2tbj05Ge1p751n9Rsfcd34wSIWdDDWjTCYehZwdNw+MM19Le
+         D/btnaoVXMxNtOdsM9VMsWITpjAfd3luEqpnPiC9HkjLW6GHOkLnDTV1gGkRrlHWvzqr
+         4HbA==
+X-Gm-Message-State: AOAM532lz+xFmOsh2tVOGnUYxisN0wTcc23FhXh6jCe0UF4CaPr+LbDf
+        U1Yckwa6R3tlVVEC+t54ODs=
+X-Google-Smtp-Source: ABdhPJwZ8OHtC4SYnWW+CAoU/4Zy26Uw9BxbIeaW1rPe8UaeklVeQKevhBUu3FXKij1EHr6v9IIvSA==
+X-Received: by 2002:a2e:5c09:: with SMTP id q9mr8484152ljb.423.1599418299287;
+        Sun, 06 Sep 2020 11:51:39 -0700 (PDT)
+Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.gmail.com with ESMTPSA id s3sm4883407ljd.44.2020.09.06.11.51.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Sep 2020 11:51:38 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 00/36] Improvements for Tegra I2C driver
+Date:   Sun,  6 Sep 2020 21:50:03 +0300
+Message-Id: <20200906185039.22700-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: OK
-X-ESPOL: 885mlYJLBD+jjECjQXrABA8ys1k6UZGD55TE3V0G3GeYQiOHYg==
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello,
+Hello!
 
-I ran into the issue with using i2c-mt65xx driver on MT6577 hardware.
-Device tree documentation for the driver says "reg" property requires 2 add=
-resses:
-> reg: physical base address of the controller and dma base
-Physical base address for MT6577 is 0xC1012000, but AFAIK MT6577 does not h=
-ave
-a DMA base dedicated especially to I2C.
+This series performs refactoring of the Tegra I2C driver code and hardens
+the atomic-transfer mode.
 
-What value has to be used as DMA base on MT6577?
+Changelog:
 
-For the sake of example, I did my own research and checked other SoC listed=
- as
-compatible in dt-binding doc. I compared the source code of Linux kernels f=
-or
-devices based on MT6589 and MT6577. See example below.
+v5: - Dropped the "Factor out runtime PM and hardware initialization"
+      patch, like it was suggested by Michał Mirosław. Instead a less
+      invasive "Factor out hardware initialization into separate function"
+      patch added, it doesn't touch the RPM initialization.
 
-MT6589, Lenovo A820: https://github.com/jawad6233/Lenovo_A820_Kernel
-There are IRQ IDs defined for I2C DMA:
-mediatek/platform/mt6589/kernel/core/include/mach/mt_irq.h (line 47)
-> #define MT_DMA_I2C1_ID                      (GIC_PRIVATE_SIGNALS + 62)
-> #define MT_DMA_I2C2_ID                      (GIC_PRIVATE_SIGNALS + 63)
-> #define MT_DMA_I2C3_ID                      (GIC_PRIVATE_SIGNALS + 64)
-> #define MT_DMA_I2C4_ID                      (GIC_PRIVATE_SIGNALS + 65)
-> #define MT_DMA_I2C5_ID                      (GIC_PRIVATE_SIGNALS + 66)
-> #define MT_DMA_I2C6_ID                      (GIC_PRIVATE_SIGNALS + 67)
-> #define MT_DMA_I2C7_ID                      (GIC_PRIVATE_SIGNALS + 68)
-There are DMA address calculations for various I2C busses:
-mediatek/platform/mt6589/kernel/drivers/i2c/i2c.c (line 1135)
-> i2c->pdmabase =3D AP_DMA_BASE + 0x300 + (0x80*(i2c->id));
+    - The "Remove outdated barrier()" patch now removes outdated comments.
 
-MT6577, ZTE v970: https://github.com/dragonpt/Kernel_3.4.67_KK_ZTE_v970
-There are no IRQ IDs defined for I2C DMA:
-mediatek/platform/mt6577/kernel/core/include/mach/mt_irq.h
-=46rom line 80 down to line 92 there are DMA addresses for various subsystems=
- except I2C.
-And there are no DMA address calculaltions either:
-mediatek/platform/mt6577/kernel/drivers/i2c/i2c.c
+    - Updated commit description of the "Remove "dma" variable" patch,
+      saying that the transfer mode may be changed by a callee. This was
+      suggested by Michał Mirosław.
 
-Please point me to DMA base I should use on MT6577.
-Thanks.
+    - Reworked the "Clean up and improve comments" patch. Couple more
+      comments are corrected and reworded now.
+
+    - Added r-b's from Michał Mirosław.
+
+    - New patches:
+
+        i2c: tegra: Mask interrupt in tegra_i2c_issue_bus_clear()
+        i2c: tegra: Remove redundant check in tegra_i2c_issue_bus_clear()
+        i2c: tegra: Don't fall back to PIO mode if DMA configuration fails
+        i2c: tegra: Clean up variable types
+        i2c: tegra: Improve tegra_i2c_dev structure
+
+v4: - Reordered patches in the fixes/features/cleanups order like it was
+      suggested by Andy Shevchenko.
+
+    - Now using clk-bulk API, which was suggested by Andy Shevchenko.
+
+    - Reworked "Make tegra_i2c_flush_fifos() usable in atomic transfer"
+      patch to use iopoll API, which was suggested by Andy Shevchenko.
+
+    - Separated "Clean up probe function" into several smaller patches.
+
+    - Squashed "Add missing newline before returns" patch into
+      "Clean up whitespaces, newlines and indentation".
+
+    - The "Drop '_timeout' from wait/poll function names" is renamed to
+      "Rename wait/poll functions".
+
+    - The "Use reset_control_reset()" is changed to not fail tegra_i2c_init(),
+      but only emit warning. This should be more friendly behaviour in oppose
+      to having a non-bootable machine if reset-control fails.
+
+    - New patches:
+
+        i2c: tegra: Remove error message used for devm_request_irq() failure
+        i2c: tegra: Use devm_platform_get_and_ioremap_resource()
+        i2c: tegra: Use platform_get_irq()
+        i2c: tegra: Use clk-bulk helpers
+        i2c: tegra: Remove bogus barrier()
+        i2c: tegra: Factor out register polling into separate function
+        i2c: tegra: Consolidate error handling in tegra_i2c_xfer_msg()
+        i2c: tegra: Clean up and improve comments
+        i2c: tegra: Rename couple "ret" variables to "err"
+
+v3: - Optimized "Make tegra_i2c_flush_fifos() usable in atomic transfer"
+      patch by pre-checking FIFO state before starting to poll using
+      ktime API, which may be expensive under some circumstances.
+
+    - The "Clean up messages in the code" patch now makes all messages
+      to use proper capitalization of abbreviations. Thanks to Andy Shevchenko
+      and Michał Mirosław for the suggestion.
+
+    - The "Remove unnecessary whitespaces and newlines" patch is transformed
+      into "Clean up whitespaces and newlines", it now also adds missing
+      newlines and spaces.
+
+    - Reworked the "Clean up probe function" patch in accordance to
+      suggestion from Michał Mirosław by factoring out only parts of
+      the code that make error unwinding cleaner.
+
+    - Added r-b from Michał Mirosław.
+
+    - Added more patches:
+
+        i2c: tegra: Reorder location of functions in the code
+        i2c: tegra: Factor out packet header setup from tegra_i2c_xfer_msg()
+        i2c: tegra: Remove "dma" variable
+        i2c: tegra: Initialization div-clk rate unconditionally
+        i2c: tegra: Remove i2c_dev.clk_divisor_non_hs_mode member
+
+v2: - Cleaned more messages in the "Clean up messages in the code" patch.
+
+    - The error code of reset_control_reset() is checked now.
+
+    - Added these new patches to clean up couple more things:
+
+        i2c: tegra: Check errors for both positive and negative values
+        i2c: tegra: Improve coding style of tegra_i2c_wait_for_config_load()
+        i2c: tegra: Remove unnecessary whitespaces and newlines
+        i2c: tegra: Rename variable in tegra_i2c_issue_bus_clear()
+        i2c: tegra: Improve driver module description
+
+Dmitry Osipenko (36):
+  i2c: tegra: Make tegra_i2c_flush_fifos() usable in atomic transfer
+  i2c: tegra: Handle potential error of tegra_i2c_flush_fifos()
+  i2c: tegra: Mask interrupt in tegra_i2c_issue_bus_clear()
+  i2c: tegra: Initialization div-clk rate unconditionally
+  i2c: tegra: Remove i2c_dev.clk_divisor_non_hs_mode member
+  i2c: tegra: Runtime PM always available on Tegra
+  i2c: tegra: Remove error message used for devm_request_irq() failure
+  i2c: tegra: Use reset_control_reset()
+  i2c: tegra: Use devm_platform_get_and_ioremap_resource()
+  i2c: tegra: Use platform_get_irq()
+  i2c: tegra: Use clk-bulk helpers
+  i2c: tegra: Move out all device-tree parsing into tegra_i2c_parse_dt()
+  i2c: tegra: Clean up probe function
+  i2c: tegra: Remove likely/unlikely from the code
+  i2c: tegra: Remove outdated barrier()
+  i2c: tegra: Remove "dma" variable from tegra_i2c_xfer_msg()
+  i2c: tegra: Remove redundant check in tegra_i2c_issue_bus_clear()
+  i2c: tegra: Don't fall back to PIO mode if DMA configuration fails
+  i2c: tegra: Improve formatting of function variables
+  i2c: tegra: Improve coding style of tegra_i2c_wait_for_config_load()
+  i2c: tegra: Rename wait/poll functions
+  i2c: tegra: Rename variable in tegra_i2c_issue_bus_clear()
+  i2c: tegra: Factor out error recovery from tegra_i2c_xfer_msg()
+  i2c: tegra: Factor out packet header setup from tegra_i2c_xfer_msg()
+  i2c: tegra: Factor out register polling into separate function
+  i2c: tegra: Factor out hardware initialization into separate function
+  i2c: tegra: Reorder location of functions in the code
+  i2c: tegra: Check errors for both positive and negative values
+  i2c: tegra: Consolidate error handling in tegra_i2c_xfer_msg()
+  i2c: tegra: Clean up printk messages
+  i2c: tegra: Clean up whitespaces, newlines and indentation
+  i2c: tegra: Clean up and improve comments
+  i2c: tegra: Clean up variable types
+  i2c: tegra: Improve driver module description
+  i2c: tegra: Rename couple "ret" variables to "err"
+  i2c: tegra: Improve tegra_i2c_dev structure
+
+ drivers/i2c/busses/i2c-tegra.c | 1396 ++++++++++++++++----------------
+ 1 file changed, 677 insertions(+), 719 deletions(-)
+
+-- 
+2.27.0
+
