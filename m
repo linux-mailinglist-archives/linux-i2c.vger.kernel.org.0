@@ -2,254 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0191225FB03
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 15:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0857F25FC26
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 16:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729368AbgIGNIu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Sep 2020 09:08:50 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:41689 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729418AbgIGNIj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 09:08:39 -0400
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 07 Sep 2020 06:08:15 -0700
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 07 Sep 2020 06:08:13 -0700
-Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 07 Sep 2020 18:37:35 +0530
-Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id C17E920F7; Mon,  7 Sep 2020 18:37:33 +0530 (IST)
-From:   Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     wsa@kernel.org
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Subject: [PATCH V3] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-Date:   Mon,  7 Sep 2020 18:37:31 +0530
-Message-Id: <20200907130731.2607-1-rojay@codeaurora.org>
-X-Mailer: git-send-email 2.26.2
+        id S1729927AbgIGOdY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Sep 2020 10:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729918AbgIGOdO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 10:33:14 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5694C061573;
+        Mon,  7 Sep 2020 07:33:09 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id s205so16400419lja.7;
+        Mon, 07 Sep 2020 07:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lUQpXpLMt/FfIsve0Z/AjL25/ErGBH8a8QJCnz6gjNc=;
+        b=btvDDsrdmdXdBWVnmAhgIwtbV6pyKmlyLgK2DtORZFq0suuB+M76jw58SA4eET14vH
+         QaB7NmCFWUSFc1Biei4XkUWl4a9F4OrQPjf54iGJBQnyCpaOosQUPlAaxagKv33Iucok
+         ppeDAVYZqoAzdgm4Ht4AKa0n6X41yzmR+0hXXlEsKeTkzLgKdzrXbBI3NEA+cHAyLAKE
+         /IvNIdw2a7wbjpVdOSCMFrDYMdbGGz5u/oijbxVFf3GxIWPRVXBGCMbwOu2Tfi1NaS0n
+         SiBHcGxjThJtsMLwSdcTZNu5CNfsxUL1sZQXbNonBGtPly+RYriIzaDwVYEG49eTOWpT
+         v/RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lUQpXpLMt/FfIsve0Z/AjL25/ErGBH8a8QJCnz6gjNc=;
+        b=DY3Gv4bwLYpDTjZiCsXwLH2SI8TpgcVZySdRvH8+iQ2OZaKNjK/SIreAerVs4mbx9Y
+         tYJj/ZeDJ4qVAbXQ4sCNgt69SCIQMSmf6lYfEfuOLH3f38YhO4a8Uo05LA3QHhc7cmWH
+         bmg7ZwVyS9VUuTiTw1PpWlqZAODcCYiNqW2qTqLQgi7Digmfy9fwfZVMbnuL1g1wNzxY
+         bJVNL7Pp5NRCwUMLi3WSdElZjymJy8vhvogdFuj6Uq5Opht2Z/Aq6LEnbsoAE+5l6GNC
+         tBzKY7uyS6CHrd3ef5mydKklor+gVdgCkRy8z2/PbK0ZGaw1w2z/NRrCBeyWDTmWR2TW
+         JG4w==
+X-Gm-Message-State: AOAM5334QQjk+Uoh2Tc/N3tYi30iSltjn+/Z6hg8sJsd+GT47O5ggoAh
+        6DUAzPq1W2G2PANWStPgGHAdaY24JkE=
+X-Google-Smtp-Source: ABdhPJy6Er6ce5XMN3wq8bqyhUi+n3uMvyXIhzCQSp+ZIJ6L/bAgmvBLN+6ZCdtec6FkjwhZGSh6Jw==
+X-Received: by 2002:a2e:b008:: with SMTP id y8mr9423150ljk.421.1599489186582;
+        Mon, 07 Sep 2020 07:33:06 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id r4sm6285876ljg.123.2020.09.07.07.33.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Sep 2020 07:33:06 -0700 (PDT)
+Subject: Re: [PATCH v5 08/36] i2c: tegra: Use reset_control_reset()
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-tegra@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200906185039.22700-1-digetx@gmail.com>
+ <20200906185039.22700-9-digetx@gmail.com>
+ <CAHp75VfeXqmc-YVk1tTHEPPXBPOZfDy9pKvW9QXom50dibkg8g@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <302ef1e3-30c3-68f8-7957-90c68be9d343@gmail.com>
+Date:   Mon, 7 Sep 2020 17:33:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <CAHp75VfeXqmc-YVk1tTHEPPXBPOZfDy9pKvW9QXom50dibkg8g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If the hardware is still accessing memory after SMMU translation
-is disabled (as part of smmu shutdown callback), then the
-IOVAs (I/O virtual address) which it was using will go on the bus
-as the physical addresses which will result in unknown crashes
-like NoC/interconnect errors.
+07.09.2020 11:13, Andy Shevchenko пишет:
+> On Sun, Sep 6, 2020 at 9:51 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> Use a single reset_control_reset() instead of assert/deasset couple in
+>> order to make code cleaner a tad. Note that the reset_control_reset()
+>> uses 1 microsecond delay instead of 2 that was used previously, but this
+>> shouldn't matter. In addition don't ignore potential error of the reset
+>> control by emitting a noisy warning if it fails, which shouldn't ever
+>> happen in practice.
+> 
+> Still it's not clear if you check the datasheet or not. Some
+> elaboration would be good to have.
 
-So, implement shutdown callback to i2c driver to stop on-going transfer
-and unmap DMA mappings during system "reboot" or "shutdown".
+I'll update the commit message with more details. Thanks!
 
-Store DMA mapping data in geni_i2c_dev struct to enhance DMA mapping
-data scope. For example during shutdown callback to unmap DMA mapping,
-this stored DMA mapping data can be used to call geni_se_tx_dma_unprep
-and geni_se_rx_dma_unprep functions.
+> ...
+> 
+>> +       WARN_ON_ONCE(err);
+> 
+> Why screaming here? Wouldn't be dev_warn() enough?
 
-Fixes: 37692de5d523 ("i2c: i2c-qcom-geni: Add bus driver for the Qualcomm GENI I2C controller")
-Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
----
-Changes in V2:
- - As per Stephen's comments added seperate function for stop transfer,
-   fixed minor nitpicks.
- - As per Stephen's comments, changed commit text.
-
-Changes in V3:
- - As per Stephen's comments, squashed patch 1 into patch 2, added Fixes tag.
- - As per Akash's comments, included FIFO case in stop_xfer, fixed minor nitpicks.
-
- drivers/i2c/busses/i2c-qcom-geni.c | 70 +++++++++++++++++++++++++++---
- include/linux/qcom-geni-se.h       |  5 +++
- 2 files changed, 69 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index dead5db3315a..b3609760909f 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -86,6 +86,9 @@ struct geni_i2c_dev {
- 	u32 clk_freq_out;
- 	const struct geni_i2c_clk_fld *clk_fld;
- 	int suspended;
-+	dma_addr_t tx_dma;
-+	dma_addr_t rx_dma;
-+	size_t xfer_len;
- };
- 
- struct geni_i2c_err_log {
-@@ -352,12 +355,12 @@ static void geni_i2c_tx_fsm_rst(struct geni_i2c_dev *gi2c)
- static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 				u32 m_param)
- {
--	dma_addr_t rx_dma;
- 	unsigned long time_left;
- 	void *dma_buf = NULL;
- 	struct geni_se *se = &gi2c->se;
- 	size_t len = msg->len;
- 
-+	gi2c->xfer_len = len;
- 	if (!of_machine_is_compatible("lenovo,yoga-c630"))
- 		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
- 
-@@ -368,7 +371,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 
- 	writel_relaxed(len, se->base + SE_I2C_RX_TRANS_LEN);
- 
--	if (dma_buf && geni_se_rx_dma_prep(se, dma_buf, len, &rx_dma)) {
-+	if (dma_buf && geni_se_rx_dma_prep(se, dma_buf, len, &gi2c->rx_dma)) {
- 		geni_se_select_mode(se, GENI_SE_FIFO);
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
- 		dma_buf = NULL;
-@@ -384,7 +387,8 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	if (dma_buf) {
- 		if (gi2c->err)
- 			geni_i2c_rx_fsm_rst(gi2c);
--		geni_se_rx_dma_unprep(se, rx_dma, len);
-+		geni_se_rx_dma_unprep(se, gi2c->rx_dma, len);
-+		gi2c->rx_dma = (dma_addr_t)NULL;
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
- 	}
- 
-@@ -394,12 +398,12 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 				u32 m_param)
- {
--	dma_addr_t tx_dma;
- 	unsigned long time_left;
- 	void *dma_buf = NULL;
- 	struct geni_se *se = &gi2c->se;
- 	size_t len = msg->len;
- 
-+	gi2c->xfer_len = len;
- 	if (!of_machine_is_compatible("lenovo,yoga-c630"))
- 		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
- 
-@@ -410,7 +414,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 
- 	writel_relaxed(len, se->base + SE_I2C_TX_TRANS_LEN);
- 
--	if (dma_buf && geni_se_tx_dma_prep(se, dma_buf, len, &tx_dma)) {
-+	if (dma_buf && geni_se_tx_dma_prep(se, dma_buf, len, &gi2c->tx_dma)) {
- 		geni_se_select_mode(se, GENI_SE_FIFO);
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
- 		dma_buf = NULL;
-@@ -429,7 +433,8 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	if (dma_buf) {
- 		if (gi2c->err)
- 			geni_i2c_tx_fsm_rst(gi2c);
--		geni_se_tx_dma_unprep(se, tx_dma, len);
-+		geni_se_tx_dma_unprep(se, gi2c->tx_dma, len);
-+		gi2c->tx_dma = (dma_addr_t)NULL;
- 		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
- 	}
- 
-@@ -479,6 +484,51 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 	return ret;
- }
- 
-+static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
-+{
-+	int ret;
-+	u32 dma;
-+	u32 val;
-+	u32 geni_status;
-+	struct geni_se *se = &gi2c->se;
-+
-+	ret = pm_runtime_get_sync(gi2c->se.dev);
-+	if (ret < 0) {
-+		dev_err(gi2c->se.dev, "Failed to resume device: %d\n", ret);
-+		return;
-+	}
-+
-+	geni_status = readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
-+	if (geni_status & M_GENI_CMD_ACTIVE) {
-+		geni_i2c_abort_xfer(gi2c);
-+		dma = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
-+		if (dma) {
-+			val = readl_relaxed(gi2c->se.base + SE_DMA_DEBUG_REG0);
-+			if (val & DMA_TX_ACTIVE) {
-+				gi2c->cur_wr = 0;
-+				if (gi2c->err)
-+					geni_i2c_tx_fsm_rst(gi2c);
-+				if (gi2c->tx_dma) {
-+					geni_se_tx_dma_unprep(se,
-+						 gi2c->tx_dma, gi2c->xfer_len);
-+					gi2c->tx_dma = (dma_addr_t)NULL;
-+				}
-+			} else if (val & DMA_RX_ACTIVE) {
-+				gi2c->cur_rd = 0;
-+				if (gi2c->err)
-+					geni_i2c_rx_fsm_rst(gi2c);
-+				if (gi2c->rx_dma) {
-+					geni_se_rx_dma_unprep(se,
-+						gi2c->rx_dma, gi2c->xfer_len);
-+					gi2c->rx_dma = (dma_addr_t)NULL;
-+				}
-+			}
-+		}
-+	}
-+
-+	pm_runtime_put_sync_suspend(gi2c->se.dev);
-+}
-+
- static u32 geni_i2c_func(struct i2c_adapter *adap)
- {
- 	return I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
-@@ -630,6 +680,13 @@ static int geni_i2c_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static void geni_i2c_shutdown(struct platform_device *pdev)
-+{
-+	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
-+
-+	geni_i2c_stop_xfer(gi2c);
-+}
-+
- static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
- {
- 	int ret;
-@@ -694,6 +751,7 @@ MODULE_DEVICE_TABLE(of, geni_i2c_dt_match);
- static struct platform_driver geni_i2c_driver = {
- 	.probe  = geni_i2c_probe,
- 	.remove = geni_i2c_remove,
-+	.shutdown = geni_i2c_shutdown,
- 	.driver = {
- 		.name = "geni_i2c",
- 		.pm = &geni_i2c_pm_ops,
-diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
-index 8f385fbe5a0e..7279d8b3b04c 100644
---- a/include/linux/qcom-geni-se.h
-+++ b/include/linux/qcom-geni-se.h
-@@ -96,6 +96,7 @@ struct geni_se {
- #define SE_DMA_RX_FSM_RST		0xd58
- #define SE_HW_PARAM_0			0xe24
- #define SE_HW_PARAM_1			0xe28
-+#define SE_DMA_DEBUG_REG0		0xe40
- 
- /* GENI_FORCE_DEFAULT_REG fields */
- #define FORCE_DEFAULT	BIT(0)
-@@ -226,6 +227,10 @@ struct geni_se {
- #define RX_GENI_CANCEL_IRQ		BIT(11)
- #define RX_GENI_GP_IRQ_EXT		GENMASK(13, 12)
- 
-+/* SE_DMA_DEBUG_REG0 Register fields */
-+#define DMA_TX_ACTIVE			BIT(0)
-+#define DMA_RX_ACTIVE			BIT(1)
-+
- /* SE_HW_PARAM_0 fields */
- #define TX_FIFO_WIDTH_MSK		GENMASK(29, 24)
- #define TX_FIFO_WIDTH_SHFT		24
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
-
+The error condition is an indicator of a severe problem because the
+reset shouldn't ever fail in practice, hence screaming is a preferred
+behavour. I'll a add a comment to the code, telling this.
