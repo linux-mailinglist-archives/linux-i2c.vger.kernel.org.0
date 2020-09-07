@@ -2,107 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D7C25FD63
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 17:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C22C25FF36
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 18:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730182AbgIGPfk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Sep 2020 11:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730180AbgIGPfO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 11:35:14 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F5FC061573;
-        Mon,  7 Sep 2020 08:35:13 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id j7so1797050plk.11;
-        Mon, 07 Sep 2020 08:35:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2iFqwT4LVt1GmMyaphEkLC+szKUS+5awlK2tO4HV4yY=;
-        b=LRKop/o+FlX1+zxDoN3dyTWIXA9Hufu8ozxbvEaVbPt4avhksSHg9gg9Xdjc2X4jCM
-         49L/Y5ssEHT3vyL4oaDQoiL4CwMpfWm8lufVeLBM0b4db9fWZWZdWDSOIUN1oXvajxGr
-         9J6CGcp9dg7y11Ag5XIMPKrq41dg5qxYgplmbqKnV4KTdfzzYZIKnTOF6B4mrZolfyU9
-         rP5Fp+oau2Ca8t1yKK6tNmDQfErqPodidON7Cq0FLIY/vdwXaMWpT4tFJBLx24MNR92V
-         hzzsuTBYphkb+1ndB+gV4FiJPIkVzWzjMRpt7jzevgWi8tTZCttpDSuGzPmI8ruzkF0F
-         vvWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2iFqwT4LVt1GmMyaphEkLC+szKUS+5awlK2tO4HV4yY=;
-        b=rANkHskJXYhSZsMntbyPmdI3emCWNKBZOL+Bd3dWqxEI973rF/H2nZb2/+floUrcHi
-         vG+0vCgIR/t2FgUraYSCOEQligGYXd/khU4Zoz8h1XLnxsQQPpc2UCV5wBjNMKTLnYgX
-         43v61JXHdi7QYn5Upmqa1AwzxYXEVJP/dUZz2Zr5ovcaI6AYgTPN2u/ju+A/M+ou3t+b
-         9jmq+JpJHHgggQ9M9sMwtwUN84CRj/TWh8hiOuxcUR6jxt4735ApWfrx+MLpDcDLm7wW
-         cWKLPiSkrX3KbL/jHMZk8/uHZ+Pf4mk/AIZ2nxLAC77h7ec/RjDFqMSUtNcGdGccThdj
-         P49w==
-X-Gm-Message-State: AOAM530s8Kf4NK4lwFTBqzb7eN8aETCPKESMm2gDPRsCuiBWxX2In753
-        n8QcuqlW8ewYPG/25oWLk14CCLWfmQF0fBoDhFw=
-X-Google-Smtp-Source: ABdhPJw166M/KQdh5DvSJ2ii7x1eL8g3Lg4xkKxVgvriGvUnalc2cdM9ihP20WgqavU85pKjXWFLcv4Aje1FYx6gK4s=
-X-Received: by 2002:a17:902:b289:: with SMTP id u9mr19923485plr.226.1599492913310;
- Mon, 07 Sep 2020 08:35:13 -0700 (PDT)
+        id S1729885AbgIGO3a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Sep 2020 10:29:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51658 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729759AbgIGO2t (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 7 Sep 2020 10:28:49 -0400
+Received: from localhost (p54b331dd.dip0.t-ipconnect.de [84.179.49.221])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D6662064B;
+        Mon,  7 Sep 2020 14:28:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599488928;
+        bh=RNbfAwKg808EmwHCSsYfFUQo6wpnABBo6mgSy7XA3/I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SP3rwR+E0gxpKOpgZb3C1djsmkGs9uGPktSrF5RNVaapzUEwkhEKqAQ0+TpgJY8Gg
+         viWpog1od5YDV0xoTD6OCoGMFCxrlueSyEytvm0LJzCV6NNfv/LceAnm1+V9AArfo+
+         +SVG4u+j/mkHlRvYQEAk/n4/LKUeEyBM5DG6xFGg=
+Date:   Mon, 7 Sep 2020 16:28:41 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     trix@redhat.com
+Cc:     syniurge@gmail.com, nehal-bakulchandra.shah@amd.com,
+        shyam-sundar.s-k@amd.com, natechancellor@gmail.com,
+        ndesaulniers@google.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: Re: [PATCH] i2c: amd_mp2: handle num is 0 input for i2c_amd_xfer
+Message-ID: <20200907142841.GA3931@ninjato>
+References: <20200904180647.21080-1-trix@redhat.com>
 MIME-Version: 1.0
-References: <20200906185039.22700-1-digetx@gmail.com> <20200906185039.22700-7-digetx@gmail.com>
- <CAHp75VevXe3c2LGF3jZyDfvPpRAz+-GQKvXEO4OKvuur=RgXCQ@mail.gmail.com>
- <f9ec5178-e38e-ed9a-25f8-21e53ccd31d1@gmail.com> <CAHp75Vdj7HYN0SWt9StqB8K6JrUCk7dtDhAUwYDkkBXc1R8ueg@mail.gmail.com>
- <c76f64c8-bd46-36f0-edb4-3ddca281a72b@gmail.com>
-In-Reply-To: <c76f64c8-bd46-36f0-edb4-3ddca281a72b@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 7 Sep 2020 18:34:56 +0300
-Message-ID: <CAHp75Vf3BirttCnW5KarsL0_MqofpWnEN5K5z+TY2YZV-R9fhQ@mail.gmail.com>
-Subject: Re: [PATCH v5 06/36] i2c: tegra: Runtime PM always available on Tegra
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-tegra@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mP3DRpeJDSE+ciuQ"
+Content-Disposition: inline
+In-Reply-To: <20200904180647.21080-1-trix@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Sep 7, 2020 at 6:25 PM Dmitry Osipenko <digetx@gmail.com> wrote:
-> 07.09.2020 18:05, Andy Shevchenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Mon, Sep 7, 2020 at 5:32 PM Dmitry Osipenko <digetx@gmail.com> wrote=
-:
-> >> 07.09.2020 11:10, Andy Shevchenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
 
-...
+--mP3DRpeJDSE+ciuQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >> Would be great if anyone could put effort into changing the default
-> >> get_sync() behaviour and add get_sync_nofail(). Otherwise this will be=
- a
-> >> never ending problem.
-> >
-> > I didn't get this. For time being the API (yes, with its all cons) has
-> > the clear usage:
-> > a) don't check for errors -- you are fine
-> > b) if you start checking errors, keep in mind refcounting.
-> >
-> > So, I don't see how nofail() can fix b) case.
-> >
->
-> It's a very unintuitive behaviour which none of other APIs have. I would
-> never expect the refcount to be bumped in a case of error, this is a
-> clear drawback of the API, IMO.
+On Fri, Sep 04, 2020 at 11:06:47AM -0700, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+>=20
+> clang static analyzer reports this problem
+>=20
+> i2c-amd-mp2-plat.c:174:9: warning: Branch condition evaluates
+>   to a garbage value
+>         return err ? err : num;
+>                ^~~
+>=20
+> err is not initialized, it depends on the being set in the
+> transfer loop which will not happen if num is 0.  Surveying
+> other master_xfer() implementations show all handle a 0 num.
+>=20
+> Because returning 0 is expected, initialize err to 0.
 
-I agree.
+Well, it is not expected. The core does:
 
-> Perhaps this is not seen as a problem by
-> people who have excellent memory and can easily remember about existence
-> of such non-standard quirks, or by people who're touching the RPM code
-> frequently.
+2019         if (WARN_ON(!msgs || num < 1))
+2020                 return -EINVAL;
 
-...or by running coccinelle script.
+Dunno if we should apply the patch nonetheless or add a comment that num
+is guaranteed to be at least 1.
 
---=20
-With Best Regards,
-Andy Shevchenko
+>=20
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/i2c/busses/i2c-amd-mp2-plat.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-amd-mp2-plat.c b/drivers/i2c/busses/i=
+2c-amd-mp2-plat.c
+> index 17df9e8845b6..506433bc0ff2 100644
+> --- a/drivers/i2c/busses/i2c-amd-mp2-plat.c
+> +++ b/drivers/i2c/busses/i2c-amd-mp2-plat.c
+> @@ -155,7 +155,7 @@ static int i2c_amd_xfer(struct i2c_adapter *adap, str=
+uct i2c_msg *msgs, int num)
+>  	struct amd_i2c_dev *i2c_dev =3D i2c_get_adapdata(adap);
+>  	int i;
+>  	struct i2c_msg *pmsg;
+> -	int err;
+> +	int err =3D 0;
+> =20
+>  	/* the adapter might have been deleted while waiting for the bus lock */
+>  	if (unlikely(!i2c_dev->common.mp2_dev))
+> --=20
+> 2.18.1
+>=20
+
+--mP3DRpeJDSE+ciuQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9WQ5UACgkQFA3kzBSg
+Kbb4lRAAqR+qYYGfBuYJNz9IlZD4fINTsBtP7KTjVgiMDIn11bUyT1xVHbld0Ut7
+Mj0juR4/0NVyWKL59HW/zU5qxcRs5q0VYK3VBfYlTYRaGMTrDkRjr6dK1s3TksFp
+3BF0nmwIL6H+UaBdWuh4nPuIJC8KOM6CpxfpukWoGlQlrgbDiDrnevA6QaA2i+br
+D+UynwNQ4naOYJ2JDzWeAZZ/ca5OTbezVhKWb5MqSIFzs188pSopFJlHAAjJsWhz
+2BBWibXh2syLzuTsFXgGaL0S5Bbs/reBG2Uit6H2kOSNp+EUZGWkE6ewAgV8Tm5d
+e4Jfww+NmrzWm28rPW4asVz6xI9BZm3kgWZS/BqZiahVu0cTFvgUtQntxRRNxg2U
+n3Xcxru2iMQn5/tE08Z6iKk8vsefAiC1MyoeRS4VqytAg8i/7Xjn61m/lC+X5XU0
+VkV/im6BfMFZ1s+N5R8gZ+nPcxkbvzw8ZA5hNJImbyu2F1rKwiipjtLtd/nMw12+
+C95ZqawbVsCKtYDPJFWYhyMeR0LpZd2gMskWzBHI6i5Um7Ba0lON4R9YbpAfc8X7
+8TYHB/xVnsIe+c1Sd857ZOOAm0otamj/i9FilxGQbgYVqRs83Z8dvRCc4+ikiQJR
++7MGAu1AJkKaxm2xNW6BW/3iS06vBFTreKuSkDxV+JRedsq8Gjc=
+=r3dn
+-----END PGP SIGNATURE-----
+
+--mP3DRpeJDSE+ciuQ--
