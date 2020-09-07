@@ -2,54 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD7E25F534
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 10:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3992D25F53D
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 10:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728142AbgIGI3w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Sep 2020 04:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
+        id S1728229AbgIGIax (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Sep 2020 04:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726971AbgIGI3u (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 04:29:50 -0400
+        with ESMTP id S1728019AbgIGIaq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 04:30:46 -0400
 Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEE3C061573;
-        Mon,  7 Sep 2020 01:29:50 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id d9so1984974pfd.3;
-        Mon, 07 Sep 2020 01:29:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D59C061755;
+        Mon,  7 Sep 2020 01:30:45 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id z19so6100493pfn.8;
+        Mon, 07 Sep 2020 01:30:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0f1kClEfUN9vOMlaH0+x51cMOCCsINHwvvJvVM37cBM=;
-        b=P3xD9cbZfHZPtFtsysOPCyYyp8eidyu8mE2PKXvWYD2Dx5cgoftG089JPc3WJvKwo1
-         BjDXq4oQ62sY1jw3s1MVG7mlP7MGZ2X+YziudfaGhrHssu6gPvRVg1Iy+sZ8jHcZscG+
-         DsfOtYCFwmS18hkue7qbT3yGsKSbsq0KRUj/qpjLCcKNOZErl3jxFyJ1ktZCtaJhx8uR
-         Tfl3gkyy/LS++V09WkXlnntxn4MFs2/3Aov9fMgEOjWXvQEbVya8XdfDEJHdlguHzQGt
-         +2dptrG4NRzK6QnNbJnivWYWynO8rU6mMBFHtZn6cqs72hpsjvQjGUTS5ThfigNZTvdK
-         3JoQ==
+        bh=9h0lDrPWdRbWiaNLkxl77HakkIHCpLAE0bHCcA5vmcs=;
+        b=bOGbMqniXGObpt2ofBeZZlBOy12k34ZVF9u94DBTUtAv4M7Ef/fpFgNKYvjqWbsm9i
+         PhUXY4h+SdHOOCBfZ5Mo263d3johR/Hx3VHe9rl5kAPd32KMqR7QRD2M1PYcMr4zELq9
+         i7X/Q6AqmQqrjqHbpoJeMTtR8O7lH80+C/QwIuNgWHqbyb96n2nw1hmZw4JRsih4q+fn
+         H+N1Evv8jGIbaeRtekkSa5wMoOHNn8dwSetI0kAHdFDOoOmpiCWZHuZ/uAdtC3Y2QtI2
+         y2cxC78uCD7m51+Q0wFq2Xby6TwxpBSGGgNyUbXLuLQ/TEjjjW+J6JuRegi2bz9MNv5a
+         i6bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0f1kClEfUN9vOMlaH0+x51cMOCCsINHwvvJvVM37cBM=;
-        b=coemdqqi1+ycZJpq4fNVw5WtZ+1SHFaZuOhjW6vkiRaWeRogoXohk/3QXrJ6gq/x9a
-         rhry8nU4p+NCwyz5KzOw6RPwlJAixNrlBHAv4cM2bLed4S7HUTpfl7PHFBbDPvPn6s7i
-         Qaay9ttDwPzP+33wnp/T/6bQL3BLsqFSo0J2DMZAh4k856HJaFumKx7Qx4gc4H4sa/cf
-         3NvQTOB1BrLww5XCTLz2G3CaWl4b5mW93vLOdF1gRazwnf67pQzW65prR7trbeFOFWEx
-         I81KcC/myz/FK6UofIEBYjfqgLCHlaB3vmD61I5uQCWnHWV59G0DJYn9f67iUXtaAZQ4
-         lW/w==
-X-Gm-Message-State: AOAM533EuoMVUa3xRkFaclXDMQfAE+s1GGmXcrc7jHLu1fZ64po1Mttk
-        QOAvBCML8WGiu6+9LilpJk/ql1doA2g+hULg1nF4oRp54l7Q6Q==
-X-Google-Smtp-Source: ABdhPJx+Joq+lJwsQ/veCATMRnu5nL+AvjOdE8iA0uIwKffjNG4yvO72nW1QcKUc12qAEjy3g1J6sjcwwT5+JRjBuDs=
-X-Received: by 2002:a63:d648:: with SMTP id d8mr15984014pgj.4.1599467389957;
- Mon, 07 Sep 2020 01:29:49 -0700 (PDT)
+        bh=9h0lDrPWdRbWiaNLkxl77HakkIHCpLAE0bHCcA5vmcs=;
+        b=cD5PFcEGg5ziXVPTDfidCCRURJoAu3LqG5o7OIAiz6+bMXh51/3pTeBBL1dtkJYy/v
+         WKYyKfEkLM4kS1dZ6/WGsLmvxg832yRqOLDa2Lm4CiOAPTBdW50Lg1lupu9AidLO39KB
+         d6hLjCSJPO0frmaadxjMoTwK2vixPl9gVvehNyGKCF00pgDLraV1CtEnt+94im+XOjl5
+         Jc0NIPANA6Xb3DWM4aXwkdQL4d0BnTmlrYEYz3keO+UD1mWmd/iUi+B7MCnC+O32FyKm
+         mxCp/LWI/weL7ciN3wMyGJnL4T9f6QdmlkV6Sq02n/+LvRiiYB9MVEAgpEDU2MI1Nw7j
+         vJBg==
+X-Gm-Message-State: AOAM533zQH+DVbHqqfabAuWmkmETIqDVbsmU6/R6x99j/+MVb3KWNOjB
+        wgfxHPZqJKhedHO3eNMKdWs2H+327MRkSJcEJQ4=
+X-Google-Smtp-Source: ABdhPJyf6VObopwl4l8DgveExV0UocJ0XlI+7qEUvCwsLILjSx5kiwA87VDN1pttWtczUNTMzN6YxGJbWemNqmiOKlE=
+X-Received: by 2002:a62:6083:0:b029:13c:1611:66c4 with SMTP id
+ u125-20020a6260830000b029013c161166c4mr18035876pfb.15.1599467444839; Mon, 07
+ Sep 2020 01:30:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200906185039.22700-1-digetx@gmail.com> <20200906185039.22700-33-digetx@gmail.com>
-In-Reply-To: <20200906185039.22700-33-digetx@gmail.com>
+References: <20200906185039.22700-1-digetx@gmail.com> <20200906185039.22700-34-digetx@gmail.com>
+In-Reply-To: <20200906185039.22700-34-digetx@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 7 Sep 2020 11:29:32 +0300
-Message-ID: <CAHp75VdMus_jZqb4d3t6qXcRzwfO7Ldz7W+pnaCS-7B+ys7WRA@mail.gmail.com>
-Subject: Re: [PATCH v5 32/36] i2c: tegra: Clean up and improve comments
+Date:   Mon, 7 Sep 2020 11:30:27 +0300
+Message-ID: <CAHp75VeM5Nd5aC5zLHPHS5rYouNJQoKRBziJAikKUoDzLWvCFQ@mail.gmail.com>
+Subject: Re: [PATCH v5 33/36] i2c: tegra: Clean up variable types
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,12 +68,11 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Sun, Sep 6, 2020 at 9:52 PM Dmitry Osipenko <digetx@gmail.com> wrote:
 >
-> Make all comments to be consistent in regards to capitalization and
-> punctuation, correct spelling and grammar errors, improve wording.
+> Don't use signed types for unsigned values.
 
-I consider this a bit more important than the previous one. It has an
-affection on kernel doc output. Thus, I would recommend moving it in
-the series early.
+This is a potential semantic changer, so should go even before all
+whitespace / comment cleanups.
+
 
 -- 
 With Best Regards,
