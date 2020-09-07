@@ -2,55 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 794D125F4C7
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 10:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DE625F4E6
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 10:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726928AbgIGIOD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Sep 2020 04:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
+        id S1727807AbgIGIUh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Sep 2020 04:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726978AbgIGIOC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 04:14:02 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CACAC061573;
-        Mon,  7 Sep 2020 01:14:00 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id w7so8249517pfi.4;
-        Mon, 07 Sep 2020 01:14:00 -0700 (PDT)
+        with ESMTP id S1726978AbgIGIUf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 04:20:35 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453ACC061573;
+        Mon,  7 Sep 2020 01:20:34 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id t7so3216263pjd.3;
+        Mon, 07 Sep 2020 01:20:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=z/owo2LiY5pCBUjFzlQoFYkmB1t53TMR60gw4kWIvCM=;
-        b=sBs9na7HipP6TCwdsifrxcLkPXiEOSidHyIhfh2X1fuz4VOtNYWbZ2iAz+V0xriDOW
-         Bq0+/OS5TSAU0shKujU6s2OGcSO9oLkT2r60+PT6nMojaMIbqubI7yHu06xLuKKzH0Cy
-         Uv7JsT8crx3ulmzOumniEprFe1s4OL2+Z4NvLwQS9qaWzdegQAWiBNDqIsDHS6qbUBn3
-         rCdiTpplnaoIPGkQYYpd222QfZOLRa4G/xBSzmQ3ltBeSholAKEKceOZA/d6NzFcaOyW
-         9HAxRoTcXp6yf2mjnlC4z6wKJVNwmySjDY9PUYaJl60Fa1sF0aplbsK1TUzMaaEPNCs7
-         22SA==
+        bh=Nu6QuL0UNannScwxHaH4kwF4j0IIHvrqbeNkNin/82s=;
+        b=PzFj48bv/qIAhvELdiZ74C5QGUi8+5rjEDPfgRSAsVP8huQiJ4hmO62fJe5bmbJDkE
+         36OtFZ/ELEOEOebftMm6KGBY1Tga6KOg0cfxi7Kxm0S4ItilLipzS++C4bFWG8xJ8lKz
+         AYtxainz/Wufxx1MPoGahWzHKo3TEw0pQa+7xJWnSSTDPZW9dUKW3k12xs3F8ca6xFp5
+         ajjh44fbqt+/FYuYVbk4L85GZ908OK5ZnVQMZB2ioBXEstA1BEmiL40lOnN7nsRhb4jp
+         QUTES/cpK+NYyXJOWplYFUzcn9PWpYvdlqLcgEWcrCyoNIqQcOLrh0YdDLsM2MIvDoWG
+         VogA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=z/owo2LiY5pCBUjFzlQoFYkmB1t53TMR60gw4kWIvCM=;
-        b=lWWRYRon6hLv+Hee2KQLHVjveVA/VXm84Z+Jml59MbzgJAvpAtTn565EHFBwsdBi95
-         NJ9sHPzN4XlUd4E3F3ef9jHQA1KfVg4qe9ihgyXtEUVJF4DuacHA/SkD7nluoIUaj39O
-         qnLT/CikZhiiWNFKisp4DnimzrEggWGN/CGytcp+yIRwpckK3NfHaSJfTpxagDbs6IEu
-         wuxPLNAbhMITd4dN5sjZNX1q8Uvth8dKWbzxCN0xjFYvMJlwDI6zo3O2D82E99JmS+Fb
-         OVVDcwL4nsGsbD/UQ9UwL90VY6KDFORQKolAfbkRqr8UEtDGA+y+aVQY8s9aw9sDjVlR
-         EumQ==
-X-Gm-Message-State: AOAM530BQBkpeHcQfPctzU/edrFqvFfzCu4bTlO2QQfNUXJ8o4RqsTch
-        uvbq9rOfALQI82bVxq74iTv7CxFi1rnGL6u6t04Jb8MoHC+EDw==
-X-Google-Smtp-Source: ABdhPJwHVaFMdA0ujHkXzjXMfKDwkw+TUxilMHeTMNVcirEXOC5t7cyh3fOSpUwWF3vcWqwXk1WNjIVoYrd7abjwUU8=
-X-Received: by 2002:a62:6083:0:b029:13c:1611:66c4 with SMTP id
- u125-20020a6260830000b029013c161166c4mr17988328pfb.15.1599466439808; Mon, 07
- Sep 2020 01:13:59 -0700 (PDT)
+        bh=Nu6QuL0UNannScwxHaH4kwF4j0IIHvrqbeNkNin/82s=;
+        b=mIaBg66u2r2NCTHsl4GxyXQoKoVY8Lfri3vEN1V+bsEg6WczHbVm9AsOilrAzToXUl
+         vVoHmnHKlNXj0kiMvJBx0zqnzm8gvWjktqgON9t6WeyuR7s4g9NPFg6U8BlnQLe8OeGI
+         fLn98Okq89+kLaQ34Zwn2r9oLp/S2DXxcvP1ACH3l+PUQbFv1F3G54Hf0rclGcU/Ucv8
+         uNapS4dx/o2KnoDacBte6E3+0aCX+lHc/MhNUImq1OOYmn6bCdqjAprndWqyIftcVQek
+         2cT9XkhyXUw7pj+WFJJYEMfBAL6TvNH8X4H5Hq696bzdGVxP7ykwPySaaP/B4nNPNwAj
+         tl8g==
+X-Gm-Message-State: AOAM5316DbAsWhDJb9cFeKBmlk2+/Duah3WSJtjyDUK9uHsMw9FWFdIT
+        9PHzkMesPxm9qEfnA9NvIRvUF3MLoVj62t/fC+oHhV/cs5SVpA==
+X-Google-Smtp-Source: ABdhPJzBR0PfxIU3vsChdsdh1MJZ6ehARwp8Ek1qsJCsAGcrTrmSpY9faeRJlIDXCBBRtY4qq8HpFXpSWzioimff/pM=
+X-Received: by 2002:a17:90b:fc4:: with SMTP id gd4mr13356863pjb.129.1599466832876;
+ Mon, 07 Sep 2020 01:20:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200906185039.22700-1-digetx@gmail.com> <20200906185039.22700-9-digetx@gmail.com>
-In-Reply-To: <20200906185039.22700-9-digetx@gmail.com>
+References: <20200906185039.22700-1-digetx@gmail.com> <20200906185039.22700-14-digetx@gmail.com>
+In-Reply-To: <20200906185039.22700-14-digetx@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 7 Sep 2020 11:13:42 +0300
-Message-ID: <CAHp75VfeXqmc-YVk1tTHEPPXBPOZfDy9pKvW9QXom50dibkg8g@mail.gmail.com>
-Subject: Re: [PATCH v5 08/36] i2c: tegra: Use reset_control_reset()
+Date:   Mon, 7 Sep 2020 11:20:15 +0300
+Message-ID: <CAHp75Vfm24pNS_OR5m4DSuxLfH_XA+uzGhC_egk+41gCPchNjg@mail.gmail.com>
+Subject: Re: [PATCH v5 13/36] i2c: tegra: Clean up probe function
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -68,21 +67,20 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Sun, Sep 6, 2020 at 9:51 PM Dmitry Osipenko <digetx@gmail.com> wrote:
 >
-> Use a single reset_control_reset() instead of assert/deasset couple in
-> order to make code cleaner a tad. Note that the reset_control_reset()
-> uses 1 microsecond delay instead of 2 that was used previously, but this
-> shouldn't matter. In addition don't ignore potential error of the reset
-> control by emitting a noisy warning if it fails, which shouldn't ever
-> happen in practice.
+> The driver's probe function code is a bit difficult to read. This patch
+> reorders code of the probe function, forming groups of code that are easy
+> to work with. The reset_control_get() now may return -EPROBE_DEFER on
+> newer Tegra SoCs because they use BPMP driver that provides reset controls
+> and BPMP doesn't come up early during boot, previously rst was protected
+> by other checks error checks in the code, hence dev_err_probe() is used
+> now for the rst. The probe tear-down order now matches the driver-removal
+> order.
 
-Still it's not clear if you check the datasheet or not. Some
-elaboration would be good to have.
+Seems that partially this can be done in the patches that converted to
+new/better APIs.
 
-...
-
-> +       WARN_ON_ONCE(err);
-
-Why screaming here? Wouldn't be dev_warn() enough?
+Also consider the use of a temporary variable for struct device
+pointer. It might make your life easier.
 
 -- 
 With Best Regards,
