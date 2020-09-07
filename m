@@ -2,55 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8855125FC34
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 16:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32A625FD13
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 17:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729820AbgIGOlC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Sep 2020 10:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
+        id S1730154AbgIGPRT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Sep 2020 11:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729966AbgIGOjL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 10:39:11 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E821FC061575;
-        Mon,  7 Sep 2020 07:36:33 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id z19so7611951lfr.4;
-        Mon, 07 Sep 2020 07:36:33 -0700 (PDT)
+        with ESMTP id S1730143AbgIGPRI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 11:17:08 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48B5C061573;
+        Mon,  7 Sep 2020 08:05:37 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id f18so8747755pfa.10;
+        Mon, 07 Sep 2020 08:05:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LbYatuVWRGYewGcDmiye1sSegUENy4SIbsUeZ7U/qG4=;
-        b=JpZGZSLNqRaE0exdU8CU465eqriG0RqHm2s6LczbPE71uOTMNdEZz2JGG4y3tK/LN6
-         y9z23DLcygyjqprpVkOT06L6PCQk7ujXbG2vpwyayBtKAx6x4S/N9Fz8Fo+RkcgBOxew
-         SsIrCfAsYkObkThkDYUhnCHbE21CoRRqUfeqtmKedhHMwRNy+nkcdNnpJpEBxmD8wG95
-         o3WDxGmVPtu4+n7pi1LD0AS3B3M/MTOub3vyAsO2IUZrHXIgToj4MI3m9COtHplDVFtN
-         sqjJs1GtnnWxbyO0ZtijkeJRWgOt+OqHYwHKJcMtmbVvZTIUubGSiJv7Fw6urR21wEsb
-         cumQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=g55vNSScTrnl+nisc0fzhDkhn78LFpHMxyI7HLx4yqM=;
+        b=OrbjCYeWU0twm1C/qjMLKL7D6tarVOqGoCfT0SpRgISsPGKNNGjHe+Px4V67XU5AqF
+         mZcLDbD81Ei0ZshuZGZXepXnc9fy1HokVN26MQbh1qyK0NpGwYnHu4DgLZYrnXFzZ2pj
+         bD5E1UBkVO+w2bq8WHMSYT0lNgHFGxSq88Mc5MQJnV7g7/eTL2hUGhLGTcwNbDCpwbOi
+         rAnoExVQA5qaYoeWgmsQ1AyILlZAba/mZyLKlV8UAy03JUocnKylC8FsMZpXbZTrzqqV
+         1Vy9ZbUADVrsg7v/R0fom51ZMmYdtFz95B/3O23UtyF+lFF/6A3mCaMA7W3Dt9mksx+G
+         mL5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LbYatuVWRGYewGcDmiye1sSegUENy4SIbsUeZ7U/qG4=;
-        b=G2zU1TzviXkEobesClo7cgXQjKm9EN7+foJrfYhkSlHrexEm9Ckc2N+Ld/5csytyiS
-         zD2LdINMHgAutuKR+DStS0vI2yB+VQGETxX06tWUoN8qDNNsdZkDynJfcBo72UPZQzq3
-         LWNqCaCL0Y/x74GhBdpb3HWKLccQDvt3s4Z6/3G/1PIzwe9N/xkhSioeQD7E8qQMbEgr
-         164TTwSktVAzXTBxrjfoXCLgzAmV5LTgkp8l76MZeiTc1mp8bp5HS98d4fFRTGJdBdqG
-         x4sN2NhxMGP5Zh3gnO0dgANenylkaPMp7oEt+34VBuy83SDDpnadaysQWYgAF6nAPppt
-         1z4g==
-X-Gm-Message-State: AOAM533DgXf7SpsdEQUNUWY56Hgxc3p5zprsbH3nmeXSmBmHF8JC1XkY
-        lmmtkF1RDiz8obN4PkhbkYQTAggXp50=
-X-Google-Smtp-Source: ABdhPJz9601EdKos+ms9H/SphtscTtUQmKponvS3+EYjzKvYmMOrE5RHyzgfpE/oiJUjRRrNVcr5nQ==
-X-Received: by 2002:a19:82c3:: with SMTP id e186mr10075422lfd.144.1599489391997;
-        Mon, 07 Sep 2020 07:36:31 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id t13sm7639481lfg.53.2020.09.07.07.36.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Sep 2020 07:36:31 -0700 (PDT)
-Subject: Re: [PATCH v5 27/36] i2c: tegra: Reorder location of functions in the
- code
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=g55vNSScTrnl+nisc0fzhDkhn78LFpHMxyI7HLx4yqM=;
+        b=msugEuevyEGAoDWOzkF51GN2uTh/xYMB3DXRpX2b8nsrhBx1/B2YYL59/tJgi+NJls
+         pr7XB4j7abGgoBaNnjClKK3eJonan1eqZ+nIKqLDSfcX/MD4hcJ+STt+c9CHzfPOAG4o
+         GTwd6sHIgqmKdV2FfdvvEvMApUnIQeF96iz+vU7DsGufw8XNoWjO/O2/62+UTGjP7JD+
+         zpSpct/fo0nsrSrfX0ZvBBqwoHwpTKRTxcJUVWUCFr6NqQzPVBll+G/AwcXou//SVku3
+         Xfhq6iHDEL6o/Un/S5Pe0UgN7L1kQfbYkLAYqimV4cQGeNcoWQsAk52jUNFupv6Cw0YP
+         ms6w==
+X-Gm-Message-State: AOAM530AVvK9zWDX3LL8S05izRYfWre/f2XndZiiAIgGK4Be7Vvy+oje
+        G6itDVTg/ExUTacqeAJADIzsBYTw9RDjMuCluGE52AY8HumR0g==
+X-Google-Smtp-Source: ABdhPJxzr2FY7bs9hys6mid148H/qqm5XvQo2/UwhF8Nv355RQMyi/UDgdQM79Sxmv11q0L8exV6O7seZ9b+LZgy7uc=
+X-Received: by 2002:a62:6083:0:b029:13c:1611:66c4 with SMTP id
+ u125-20020a6260830000b029013c161166c4mr19211310pfb.15.1599491137175; Mon, 07
+ Sep 2020 08:05:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200906185039.22700-1-digetx@gmail.com> <20200906185039.22700-7-digetx@gmail.com>
+ <CAHp75VevXe3c2LGF3jZyDfvPpRAz+-GQKvXEO4OKvuur=RgXCQ@mail.gmail.com> <f9ec5178-e38e-ed9a-25f8-21e53ccd31d1@gmail.com>
+In-Reply-To: <f9ec5178-e38e-ed9a-25f8-21e53ccd31d1@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 7 Sep 2020 18:05:19 +0300
+Message-ID: <CAHp75Vdj7HYN0SWt9StqB8K6JrUCk7dtDhAUwYDkkBXc1R8ueg@mail.gmail.com>
+Subject: Re: [PATCH v5 06/36] i2c: tegra: Runtime PM always available on Tegra
+To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
@@ -59,36 +61,47 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-i2c <linux-i2c@vger.kernel.org>,
         linux-tegra@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200906185039.22700-1-digetx@gmail.com>
- <20200906185039.22700-28-digetx@gmail.com>
- <CAHp75VfSyfJoEbFGEH32=841_2h4_8r+vVYO2BPHgSVvuatOag@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <61845513-bf41-1c15-126d-8470a23b178e@gmail.com>
-Date:   Mon, 7 Sep 2020 17:36:30 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CAHp75VfSyfJoEbFGEH32=841_2h4_8r+vVYO2BPHgSVvuatOag@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-07.09.2020 11:27, Andy Shevchenko пишет:
-> On Sun, Sep 6, 2020 at 9:52 PM Dmitry Osipenko <digetx@gmail.com> wrote:
->>
->> Reorder location of functions in the code in order to have definition
->> of functions closer to the place of the invocation. This change makes
->> easier to navigate around the code and removes the need to have a
->> prototype for tegra_i2c_init().
->>
-> 
-> This patch as 25th and one I commented before have a ping-pong style
-> of programming (you touch a lot of LOCs which you introduced in
-> previous patches). Please try to reorder series in a way that you
-> minimize the churn of shuffling the code.
+On Mon, Sep 7, 2020 at 5:32 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+> 07.09.2020 11:10, Andy Shevchenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Sun, Sep 6, 2020 at 9:51 PM Dmitry Osipenko <digetx@gmail.com> wrote=
+:
+> >>
+> >> The runtime PM is guaranteed to be always available on Tegra after com=
+mit
+> >> 40b2bb1b132a ("ARM: tegra: enforce PM requirement"). Hence let's remov=
+e
+> >> all the RPM-availability checking and handling from the code.
+> >
+> >> +       ret =3D pm_runtime_get_sync(i2c_dev->dev);
+> >> +       if (ret < 0) {
+> >> +               dev_err(dev, "runtime resume failed\n");
+> >> +               goto disable_rpm;
+> >
+> > As in the original code here is a refcount leak.
+> > Should call pm_runtime_put_noidle(). (Possible to use goto put_rpm;
+> > but in that case the code a bit confusing to the reader)
+>
+> Good point! I already forgot about this RPM API problem! I'll add a
+> patch to address this.
+>
+> Would be great if anyone could put effort into changing the default
+> get_sync() behaviour and add get_sync_nofail(). Otherwise this will be a
+> never ending problem.
 
-Okay, I'll improve the ordering in v6. Thanks!
+I didn't get this. For time being the API (yes, with its all cons) has
+the clear usage:
+a) don't check for errors -- you are fine
+b) if you start checking errors, keep in mind refcounting.
+
+So, I don't see how nofail() can fix b) case.
+
+--=20
+With Best Regards,
+Andy Shevchenko
