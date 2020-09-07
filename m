@@ -2,65 +2,301 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B0825F17B
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 03:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8925125F2A5
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 07:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbgIGBaH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 6 Sep 2020 21:30:07 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:36414 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726620AbgIGBaF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Sep 2020 21:30:05 -0400
-X-UUID: ccd8c52124f14886a9bbf999c88e3ed6-20200907
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=TgnMLc6W6HXqtA9fqTYfDPNEoYo39SkQDD2kUs7sHYg=;
-        b=gIRH+tfsdYpZAHUS9Dpz8ofNTjRGePsmL7ydBVzDWeiP5ju0BNLWETDsSBxw5X1WjZaOxipQmSkwBm/VR0Uq7syb1As3VpO+oxfOtZFqhQ61SR+53Vxo8K2r3+1YkhOn6R5ZBGbn0tclLj+RZKzULUKxAQTKMUSangzOtIsssWk=;
-X-UUID: ccd8c52124f14886a9bbf999c88e3ed6-20200907
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <qii.wang@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 674471685; Mon, 07 Sep 2020 09:29:57 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32DR.mediatek.inc
- (172.27.6.104) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Sep
- 2020 09:29:54 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 7 Sep 2020 09:29:51 +0800
-Message-ID: <1599442087.25719.2.camel@mhfsdcap03>
-Subject: Re: [PATCH] dt-bindings: i2c: i2c-mt65xx: Update binding example
-From:   Qii Wang <qii.wang@mediatek.com>
-To:     Boris Lysov <arzamas-16@mail.ee>
-CC:     <linux-i2c@vger.kernel.org>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <devicetree@vger.kernel.org>
-Date:   Mon, 7 Sep 2020 09:28:07 +0800
-In-Reply-To: <20200904223345.3daea5ad@hp15>
-References: <20200904223345.3daea5ad@hp15>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726733AbgIGFko (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Sep 2020 01:40:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56230 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726729AbgIGFkn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 01:40:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599457240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jVs6OBNIgqQK9iP2OirhXkE9npkIsWRhVViuh8tTbuI=;
+        b=GNM4cujihv2z8hsEt5UsHynXd7JvxD+d6QDn4/kOdx0uXjRuaNw/lJY8Uig49aP0uka4Mt
+        PoZMu24mTqwRgpTLJgFD7LKhMklnAgc2D+VG0+qceKLQpF6vRgTSc4LN+AlGin/2hpAsgG
+        npC/meF7hV/DmLjOVihMEVrFN9+Gs0k=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-50-ZjBFcCuwM2Oa0xEKcpUqdw-1; Mon, 07 Sep 2020 01:40:35 -0400
+X-MC-Unique: ZjBFcCuwM2Oa0xEKcpUqdw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 385EF800050;
+        Mon,  7 Sep 2020 05:40:33 +0000 (UTC)
+Received: from [10.72.13.151] (ovpn-13-151.pek2.redhat.com [10.72.13.151])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8EAB15D9D2;
+        Mon,  7 Sep 2020 05:40:22 +0000 (UTC)
+Subject: Re: [PATCH] i2c: virtio: add a virtio i2c frontend driver
+To:     Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     mst@redhat.com, wsa+renesas@sang-engineering.com, wsa@kernel.org,
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        jdelvare@suse.de, Sergey.Semin@baikalelectronics.ru,
+        krzk@kernel.org, rppt@kernel.org, loic.poulain@linaro.org,
+        tali.perry1@gmail.com, bjorn.andersson@linaro.org,
+        shuo.a.liu@intel.com, conghui.chen@intel.com, yu1.wang@intel.com
+References: <0efc2605c8c06b4b1bf68cbad5536c4a900dc019.1599110284.git.jie.deng@intel.com>
+ <18828d17-c3ac-31bd-2dcf-ecdbd4ad844e@redhat.com>
+ <e63a96bf-65d2-ed03-dadc-42d1d8808c9d@intel.com>
+From:   Jason Wang <jasowang@redhat.com>
+Message-ID: <3dc0d61c-9345-2b61-828c-89ca96555e5e@redhat.com>
+Date:   Mon, 7 Sep 2020 13:40:20 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: FD92D2E6DA5294274C41022820C3C6026CA7D0C81EF6E1B85EAA24DD0C25AD0C2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <e63a96bf-65d2-ed03-dadc-42d1d8808c9d@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTA5LTA0IGF0IDIyOjMzICswMzAwLCBCb3JpcyBMeXNvdiB3cm90ZToNCj4g
-RXhhbXBsZSB1c2VzIHZhbHVlcyBmb3IgTVQ2NTg5IFNvQywgYnV0IE1UNjU3NyB3YXMgc3BlY2lm
-aWVkIGluICJjb21wYXRpYmxlIiBwcm9wZXJ0eS4NCj4gDQoNCldoeSBkbyB5b3UgdGhpbmsgdGhl
-IGV4YW1wbGUgaXMgTVQ2NTg5IFNvQywgbm90IE1UNjU3Nz8NCg0KPiBTaWduZWQtb2ZmLWJ5OiBC
-b3JpcyBMeXNvdiA8YXJ6YW1hcy0xNkBtYWlsLmVlPg0KPiAtLS0NCj4gIERvY3VtZW50YXRpb24v
-ZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLW10NjV4eC50eHQgfCAyICstDQo+ICAxIGZpbGUg
-Y2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQg
-YS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2kyYy1tdDY1eHgudHh0IGIv
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMtbXQ2NXh4LnR4dA0KPiBp
-bmRleCA3ZjAxOTRmZGQwY2MuLmFjZjNkNGQyOGI5OCAxMDA2NDQNCj4gLS0tIGEvRG9jdW1lbnRh
-dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMtbXQ2NXh4LnR4dA0KPiArKysgYi9Eb2N1
-bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2kyYy1tdDY1eHgudHh0DQo+IEBAIC0z
-Niw3ICszNiw3IEBAIE9wdGlvbmFsIHByb3BlcnRpZXM6DQo+ICBFeGFtcGxlOg0KPiAgDQo+ICAJ
-aTJjMDogaTJjQDExMDBkMDAwIHsNCj4gLQkJCWNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ2NTc3
-LWkyYyI7DQo+ICsJCQljb21wYXRpYmxlID0gIm1lZGlhdGVrLG10NjU4OS1pMmMiOw0KPiAgCQkJ
-cmVnID0gPDB4MTEwMGQwMDAgMHg3MD4sDQo+ICAJCQkgICAgICA8MHgxMTAwMDMwMCAweDgwPjsN
-Cj4gIAkJCWludGVycnVwdHMgPSA8R0lDX1NQSSA0NCBJUlFfVFlQRV9MRVZFTF9MT1c+Ow0KDQo=
+
+On 2020/9/4 下午9:21, Jie Deng wrote:
+>
+> On 2020/9/4 12:06, Jason Wang wrote:
+>>
+>>> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+>>> index 293e7a0..70c8e30 100644
+>>> --- a/drivers/i2c/busses/Kconfig
+>>> +++ b/drivers/i2c/busses/Kconfig
+>>> @@ -21,6 +21,17 @@ config I2C_ALI1535
+>>>         This driver can also be built as a module.  If so, the module
+>>>         will be called i2c-ali1535.
+>>>   +config I2C_VIRTIO
+>>> +    tristate "Virtio I2C Adapter"
+>>> +    depends on VIRTIO
+>>
+>>
+>> I guess it should depend on some I2C module here.
+>>
+> The dependency of I2C is included in the Kconfig in its parent directory.
+> So there is nothing special to add here.
+
+
+Ok.
+
+
+>
+>
+>>
+>>>
+>>> +struct virtio_i2c_msg {
+>>> +    struct virtio_i2c_hdr hdr;
+>>> +    char *buf;
+>>> +    u8 status;
+>>
+>>
+>> Any reason for separating status out of virtio_i2c_hdr?
+>>
+> The status is not from i2c_msg. 
+
+
+You meant ic2_hdr? You embed status in virtio_i2c_msg anyway.
+
+
+> So I put it out of virtio_i2c_hdr.
+
+
+Something like status or response is pretty common in virtio request 
+(e.g net or scsi), if no special reason, it's better to keep it in the hdr.
+
+
+>
+>>
+>>> +};
+>>> +
+>>> +/**
+>>> + * struct virtio_i2c - virtio I2C data
+>>> + * @vdev: virtio device for this controller
+>>> + * @completion: completion of virtio I2C message
+>>> + * @adap: I2C adapter for this controller
+>>> + * @i2c_lock: lock for virtqueue processing
+>>> + * @vq: the virtio virtqueue for communication
+>>> + */
+>>> +struct virtio_i2c {
+>>> +    struct virtio_device *vdev;
+>>> +    struct completion completion;
+>>> +    struct i2c_adapter adap;
+>>> +    struct mutex i2c_lock;
+>>> +    struct virtqueue *vq;
+>>> +};
+>>> +
+>>> +static void virtio_i2c_msg_done(struct virtqueue *vq)
+>>> +{
+>>> +    struct virtio_i2c *vi = vq->vdev->priv;
+>>> +
+>>> +    complete(&vi->completion);
+>>> +}
+>>> +
+>>> +static int virtio_i2c_add_msg(struct virtqueue *vq,
+>>> +                  struct virtio_i2c_msg *vmsg,
+>>> +                  struct i2c_msg *msg)
+>>> +{
+>>> +    struct scatterlist *sgs[3], hdr, bout, bin, status;
+>>> +    int outcnt = 0, incnt = 0;
+>>> +
+>>> +    if (!msg->len)
+>>> +        return -EINVAL;
+>>> +
+>>> +    vmsg->hdr.addr = msg->addr;
+>>> +    vmsg->hdr.flags = msg->flags;
+>>> +    vmsg->hdr.len = msg->len;
+>>
+>>
+>> Missing endian conversion?
+>>
+> You are right. Need conversion here.
+>>
+>>> +
+>>> +    vmsg->buf = kzalloc(vmsg->hdr.len, GFP_KERNEL);
+>>> +    if (!vmsg->buf)
+>>> +        return -ENOMEM;
+>>> +
+>>> +    sg_init_one(&hdr, &vmsg->hdr, sizeof(struct virtio_i2c_hdr));
+>>> +    sgs[outcnt++] = &hdr;
+>>> +    if (vmsg->hdr.flags & I2C_M_RD) {
+>>> +        sg_init_one(&bin, vmsg->buf, msg->len);
+>>> +        sgs[outcnt + incnt++] = &bin;
+>>> +    } else {
+>>> +        memcpy(vmsg->buf, msg->buf, msg->len);
+>>> +        sg_init_one(&bout, vmsg->buf, msg->len);
+>>> +        sgs[outcnt++] = &bout;
+>>> +    }
+>>> +    sg_init_one(&status, &vmsg->status, sizeof(vmsg->status));
+>>> +    sgs[outcnt + incnt++] = &status;
+>>> +
+>>> +    return virtqueue_add_sgs(vq, sgs, outcnt, incnt, vmsg, 
+>>> GFP_KERNEL);
+>>> +}
+>>> +
+>>> +static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg 
+>>> *msgs, int num)
+>>> +{
+>>> +    struct virtio_i2c *vi = i2c_get_adapdata(adap);
+>>> +    struct virtio_i2c_msg *vmsg_o, *vmsg_i;
+>>> +    struct virtqueue *vq = vi->vq;
+>>> +    unsigned long time_left;
+>>> +    int len, i, ret = 0;
+>>> +
+>>> +    vmsg_o = kzalloc(sizeof(*vmsg_o), GFP_KERNEL);
+>>> +    if (!vmsg_o)
+>>> +        return -ENOMEM;
+>>
+>>
+>> It looks to me we can avoid the allocation by embedding 
+>> virtio_i2c_msg into struct virtio_i2c;
+>>
+> Yeah... That's better. Thanks.
+>
+>
+>>
+>>> +
+>>> +    mutex_lock(&vi->i2c_lock);
+>>> +    vmsg_o->buf = NULL;
+>>> +    for (i = 0; i < num; i++) {
+>>> +        ret = virtio_i2c_add_msg(vq, vmsg_o, &msgs[i]);
+>>> +        if (ret) {
+>>> +            dev_err(&adap->dev, "failed to add msg[%d] to 
+>>> virtqueue.\n", i);
+>>> +            goto err_unlock_free;
+>>> +        }
+>>> +
+>>> +        virtqueue_kick(vq);
+>>> +
+>>> +        time_left = wait_for_completion_timeout(&vi->completion, 
+>>> adap->timeout);
+>>> +        if (!time_left) {
+>>> +            dev_err(&adap->dev, "msg[%d]: addr=0x%x timeout.\n", i, 
+>>> msgs[i].addr);
+>>> +            ret = i;
+>>> +            goto err_unlock_free;
+>>> +        }
+>>> +
+>>> +        vmsg_i = (struct virtio_i2c_msg *)virtqueue_get_buf(vq, &len);
+>>> +        if (vmsg_i) {
+>>> +            /* vmsg_i should point to the same address with vmsg_o */
+>>> +            if (vmsg_i != vmsg_o) {
+>>> +                dev_err(&adap->dev, "msg[%d]: addr=0x%x virtqueue 
+>>> error.\n",
+>>> +                    i, vmsg_i->hdr.addr);
+>>> +                ret = i;
+>>> +                goto err_unlock_free;
+>>> +            }
+>>
+>>
+>> Does this imply in order completion of i2c device?  (E.g what happens 
+>> if multiple virtio i2c requests are submitted)
+>>
+>> Btw, this always use a single descriptor once a time which makes me 
+>> suspect if a virtqueue(virtio) is really needed. It looks to me we 
+>> can utilize the virtqueue by submit the request in a batch.
+>>
+> I'm afraid not all physical devices support batch. 
+
+
+Yes but I think I meant for the virtio device not the physical one. It's 
+impossible to forbid batching if you have a queue anyway ...
+
+
+> I'd like to keep the current design and consider
+> your suggestion as a possible optimization in the future.
+>
+> Thanks.
+>
+>
+>>>
+>>> +}
+>>> +
+>>> +static void virtio_i2c_del_vqs(struct virtio_device *vdev)
+>>> +{
+>>> +    vdev->config->reset(vdev);
+>>
+>>
+>> Why need reset here?
+>>
+>> Thanks
+>>
+> I'm following what other virtio drivers do.
+> They reset the devices before they clean up the queues.
+
+
+You're ring.
+
+Thanks
+
+
+>
+>
+>>
+>>> +    vdev->config->del_vqs(vdev);
+>>> +}
+>>> +
+>>> +static int virtio_i2c_setup_vqs(struct virtio_i2c *vi)
+>>> +{
+>>> +    struct virtio_device *vdev = vi->vdev;
+>>> +
+>>> +    vi->vq = virtio_find_single_vq(vdev, virtio_i2c_msg_done, 
+>>> "i2c-msg");
+>>
+>>
+>> We've in the scope of ic2, so "msg" should be sufficient.
+>>
+>>
+> OK. Will change this name. Thanks.
+>
+>
+>>> +    return PTR_ERR_OR_ZERO(vi->vq);
+>
 
