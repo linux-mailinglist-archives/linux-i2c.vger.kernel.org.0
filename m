@@ -2,54 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3D925F545
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 10:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD84025F54A
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Sep 2020 10:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728171AbgIGIbl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Sep 2020 04:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S1727874AbgIGIce (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Sep 2020 04:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727906AbgIGIbk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 04:31:40 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C842FC061573;
-        Mon,  7 Sep 2020 01:31:40 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id v196so8280379pfc.1;
-        Mon, 07 Sep 2020 01:31:40 -0700 (PDT)
+        with ESMTP id S1727807AbgIGIce (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 04:32:34 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A665C061573;
+        Mon,  7 Sep 2020 01:32:32 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id mm21so6380739pjb.4;
+        Mon, 07 Sep 2020 01:32:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=raMg+ZSUIovYhnJRZHPdsSxRiKrmsuNdVzy4GC7ybkw=;
-        b=MqC1thIzB8xxpbWi5Hql0Y+4cU0U6d+GjaFsCGpTCrHe99YmDDRZzJRxPHuPmZbc1V
-         yBfyPKdal/O0L/b8MnNd1DsQmqW0rst6gPTkqlLoKNOrgEpXF+iV1T30XXfK7BNd2JAe
-         keMT4gGAiW4ueqvWGv3xadiGcQSm1c8QDC6Mp9RbSR9ZXTY+cSaH96sLBnZD0JLdMy9N
-         1fCRK55iDBCx9jBsaOPwGQqhGxdyLJCUowA/NBuNNJ5+l426kfEL78n+p8ccQzeL9jwK
-         kE0PCyiIaUCUT1BvYcRIYs6QxRxxeuRvBFTUQ3HTAkwbXXn0hVDg6YE3XLFlLClMDtsz
-         3BYw==
+        bh=0kLW5Y5jxw0TW/g+38xiE8cSYLcd3/NtwgT6Jz0KRbE=;
+        b=pWYuDWDKai3qEj3Nc14HE/TxyW1+/AuFPIGTiJ1QDkh2VVsZgpCqPXdqS+sAf5ekb0
+         5xLdrdhOtZ46JLYEzOH2gei7RY9T2GEqJ3zuYE3M9mti3tdt8UHnaMHg+7VtnIo0LdxI
+         TVyC1QpioAuL0TfyJQCL2/++wL+9j8EExzXwcqm2ZHaphq09C3do7QaH90XgPrt3OZMd
+         WXNpbHJrmqZ+JdHkQJJTq7rP8RCjO+096tm3yJKB+qMn3usqGEuwWla9XSaObDdJU2sE
+         OWVNbJNoyGtCa0PXndUWWSYdI/9YbQUPXRXSJdQJ6P5tjJgfrtR/s2ccVGiGHIja8akt
+         Zwxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=raMg+ZSUIovYhnJRZHPdsSxRiKrmsuNdVzy4GC7ybkw=;
-        b=bL1uNK8y7r78EtkSQt0d8k4vuA6+DTlfr9Qe1HBHpqxGufGOW0SddEfa9K6fWXFq+0
-         lQMkr2LvCqM/BxT9hVLIwyPh3TJ5pR0xECpvSpnwPoOB3xNUTrm2RWs0rq7wsqUugd3+
-         FQZsRrtOzIv9n/AyFyRTyNELKid3z1QMNjpvaZNbSfN9NOw0QsE3LcXZrMB0woKQ5K8Q
-         bBxAzipP/84L5qC5btYAh2COy/bFWMgu1QU5cX0mz3h0vR5hh08IGY8rGr4EQgGd2s4H
-         l2ywbMGNsHMjZy/hxQgrpFyIhSao67D496qYVdLS+KnD+nHez7QkRPKAsUX0eMj9lfT9
-         knzg==
-X-Gm-Message-State: AOAM530VqJlr6IEGO605y7RLtJGSDnFRyIzSUrZMZ0wBh755u+yIp3N8
-        1gyw78kuDMecIxqqEAQAzVVxxqYLfQ6VmJTjTklrDRzXk70dyw==
-X-Google-Smtp-Source: ABdhPJxl9PpwZtjUcXwvjYSoit4K15o3ULXO9GItuOBMypPQi5ccGgFkIfrvJI0I0kOAgItqFjRk6P2ON5wv/IEW0Es=
-X-Received: by 2002:a63:d648:: with SMTP id d8mr15988989pgj.4.1599467500305;
- Mon, 07 Sep 2020 01:31:40 -0700 (PDT)
+        bh=0kLW5Y5jxw0TW/g+38xiE8cSYLcd3/NtwgT6Jz0KRbE=;
+        b=ZyanaTwD05EBnxnOzM6PIcnVSkk5dGZ41QnbS0bqfaOWrYw4IlXBGTwMxBXeOU4w76
+         FMxcw+etV3HUsfebXDyCd9xQ5iuxXyRIr4Yq7Bp66U300NDrJdU8ilCAZCMjknyB7Nts
+         7YKx/20xfBN8uJaE2WN7+IjByfMqhKc2YzcaJABK64EYRYhAh0pFi3iXSUBeXAtWt7va
+         z+5g8mpiZrT8UX4AvuGSaXETDrGfIKTg7lkp2LJAFXXDfdXD8LibyP1mJJGrFIO+D9eQ
+         rbzt9PdOMwjaDo6Y3esz/tBbdeNc/6obZ8cw/y67c8pKAufee6drTdXigUoz69VZdIJu
+         a3pQ==
+X-Gm-Message-State: AOAM531xgRx0P4J5spxL6FfHyG3pwPv1jZEX8JLN3qXT9rZVpfA68xQQ
+        ixTCV1yPWF7C7hTvUiqlzyW/E9woDM9VozkzlaQ=
+X-Google-Smtp-Source: ABdhPJw4D3rglgLu0nrgT52NBe8Iw7n02nwj88iERjQUIsyt5l54rmTLp600wtYn80naTZ1gaa2MDrp844BfQZfzBDc=
+X-Received: by 2002:a17:90b:fc4:: with SMTP id gd4mr13392870pjb.129.1599467552145;
+ Mon, 07 Sep 2020 01:32:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200906185039.22700-1-digetx@gmail.com> <20200906185039.22700-36-digetx@gmail.com>
-In-Reply-To: <20200906185039.22700-36-digetx@gmail.com>
+References: <20200906185039.22700-1-digetx@gmail.com> <20200906185039.22700-37-digetx@gmail.com>
+In-Reply-To: <20200906185039.22700-37-digetx@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 7 Sep 2020 11:31:23 +0300
-Message-ID: <CAHp75VcFA97CTJVJ_7m=BDp_Jqsf2O1EOVDZ3ju2ieQhMKG_8g@mail.gmail.com>
-Subject: Re: [PATCH v5 35/36] i2c: tegra: Rename couple "ret" variables to "err"
+Date:   Mon, 7 Sep 2020 11:32:15 +0300
+Message-ID: <CAHp75Vdgc9HPQ5JYRoTa4Xt0-UngLiqGNXi_SPJh3PZeT81EsA@mail.gmail.com>
+Subject: Re: [PATCH v5 36/36] i2c: tegra: Improve tegra_i2c_dev structure
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,12 +67,12 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Sun, Sep 6, 2020 at 9:52 PM Dmitry Osipenko <digetx@gmail.com> wrote:
 >
-> Rename "ret" variables to "err" in order to make code a bit more
-> expressive, emphasizing that the returned value is a error code.
+> Rename, reorder and change type of a few members of the tegra_i2c_dev
+> structure in order to improve readability of the code and have consistent
+> typing of the variables.
 
-an error
-
-Should go before whitespace changes.
+Again ping-pong.
+Should go before kernel doc changes.
 
 -- 
 With Best Regards,
