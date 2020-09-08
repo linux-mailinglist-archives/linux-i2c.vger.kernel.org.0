@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 285D4260875
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Sep 2020 04:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F326260879
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Sep 2020 04:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728465AbgIHCP0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Sep 2020 22:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
+        id S1728317AbgIHCPX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Sep 2020 22:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728318AbgIHCMA (ORCPT
+        with ESMTP id S1728324AbgIHCMA (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 22:12:00 -0400
 Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AABFC06179E;
-        Mon,  7 Sep 2020 19:11:53 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id k25so5443756ljk.0;
-        Mon, 07 Sep 2020 19:11:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7963AC06179F;
+        Mon,  7 Sep 2020 19:11:54 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id s205so18039122lja.7;
+        Mon, 07 Sep 2020 19:11:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZD78APQi2tl+Q5v9LPhVtkKJ+nkgMadC4O/adVR437Y=;
-        b=QRYnJvB2Xk4lEuxhbrvoRgLEa8EJBATNxek0RSWfb4bvuk4aSpU2P3l2ouyHTA8Oxt
-         SLn9rT5W86DbaVMwOOjilIMKT8LvaSw21PK527ZVCYdSf3bnBf7GA+DNZlyxQK5zrkQe
-         U3BrMkrRfWkUvHmyl3Iq4uJEXTVeKTTUVzB2XRCVflh3yHcYMDOQy9tiF4ernZMojBKu
-         +PxLoSo3cDwqu/m6CQXgsq3lRlZ3qTL9Dol5yo04Esqlii9fnGq+eGmpRDtnJ6VdtcwF
-         n87TtCFRihXHnKZZDFay7rOFRfTwOW9B5FVty8o21MBTfla0+J/Ht4vMj4rUS+kQ12cz
-         EXug==
+        bh=ssXvtmU8WdM4pL4rp/dgR6uSS2Fq2XHwxYSCuPbIYk0=;
+        b=tyKhR3OTV1qz9wjOI40GJJjPDMk7mw338EgTN1MgP/oT1/0yDuBBTWFsgy4FGLnhqD
+         nyUmHYc3QgcUahravEB/ndZ2Z/NNs+g7gcu8e4FJOBqVs6OwTxprL6Ka9dTSaqAf4HLy
+         Mul8PK+Yo943WiHP9IpIUlNqHUKlfdZDu9EHJfBJTxqXLfEH7Q54H+lB6HpiIts9ma8C
+         hpCLyjn8Zbm9JYllguxvBOMT186w/mt3YiQmjnEz53p/oHBmC+IvdLuheF5Bpjvb0OAC
+         fsLt4p0DXeRcKIbJFkjcNqHdls1arsO4NJWXA8C1cEKDLQHOqeYvP9jAy+tg6G+xquX2
+         +vYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZD78APQi2tl+Q5v9LPhVtkKJ+nkgMadC4O/adVR437Y=;
-        b=RxYb/PnCPKvce3VSQM358O8lmwWlb2d4U9VZnwSVJS7iE77FR28OaP3neXcdh4qz1J
-         OX3hjVFEUAJ9YJEvqFwvDh9rAfvXMvSqaNzQWLIvC8L6WqnGM0RU6Cq87+51Wsugemog
-         DXXgCTkB/EbpUuH4iQQ869zZYjN+b2kmERETsjinKcu3ucfyP6PClaOgFmyZUrC1a6qc
-         Na6uFNQpICzQQvWD8tZKuJ5t2No69Tz9hkDc5aTfWFPyDseBMbql17LuO91NfcBJRx4V
-         +CZyeLA7OMAH0WH2f8DtyHJlK67sJ04xPQ7yxfj5UmtS0YTLcXROiUVpud5N587Jc4U7
-         Stcw==
-X-Gm-Message-State: AOAM530bn4DwMfzbnuag96ouASU1fQ8UmqCAQtfZoYMhl4hYEI8gOpYH
-        3KRT0P+42DHXa5nshNyH2YA=
-X-Google-Smtp-Source: ABdhPJwB8Q7wMPq+S95EwPVyJUWL+R8o/AXZZuONJzAtJ9YGW8K0CwX9XZvy62lUvkjqFE5Zi62akw==
-X-Received: by 2002:a2e:8904:: with SMTP id d4mr12454862lji.322.1599531112122;
+        bh=ssXvtmU8WdM4pL4rp/dgR6uSS2Fq2XHwxYSCuPbIYk0=;
+        b=PgQXcy1aP8n9g3mDFOKcEC76uKj9Jh0tpdcw+3EJfXQgGuoLU5tRp8jckIDqqDXvLy
+         grb6icKJVGBKwwuGs6Q01Sactz9Nfrbqd1irr7jvxjqO7OzChs/Ewd90nTToxTkiTxzA
+         IlqHI03BDttv0LD2xXMu6dNgWeY0j1dl+/y1o8R3L+uE8V+6w7n8dER/9MpMolQdFzfN
+         7dK7xbtK/gAagOtQJMdZZbo2fCUtw+omOq9j/eBR/cK4SLfpTwweMfbwjohsu9DxwYXw
+         acnyaXWC2emi6G3K/30eZ8XExdOXc0l15I5YJ7zlL9vbucL7WChlsWCOlsXDjtBYjDw+
+         MO+Q==
+X-Gm-Message-State: AOAM532caR93oL/5n6QaV3c/gesGqF5N6PsplBVWGTbgt2mY1yz8CrFe
+        gqSBto68/Sh4FIDAeI9NzeYCRocMjO4=
+X-Google-Smtp-Source: ABdhPJzUue1PWgb38U/8GIweq/QAWNJBnHxQG60y5Dj7MTGmURo6LOJgX1aAbVlcvovKPwK0e8TXwA==
+X-Received: by 2002:a2e:98cf:: with SMTP id s15mr12646456ljj.446.1599531112986;
         Mon, 07 Sep 2020 19:11:52 -0700 (PDT)
 Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id j12sm9070085lfj.5.2020.09.07.19.11.51
+        by smtp.gmail.com with ESMTPSA id j12sm9070085lfj.5.2020.09.07.19.11.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2020 19:11:51 -0700 (PDT)
+        Mon, 07 Sep 2020 19:11:52 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -56,70 +56,47 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 18/35] i2c: tegra: Remove outdated barrier()
-Date:   Tue,  8 Sep 2020 05:10:04 +0300
-Message-Id: <20200908021021.9123-19-digetx@gmail.com>
+Subject: [PATCH v6 19/35] i2c: tegra: Remove redundant check in tegra_i2c_issue_bus_clear()
+Date:   Tue,  8 Sep 2020 05:10:05 +0300
+Message-Id: <20200908021021.9123-20-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200908021021.9123-1-digetx@gmail.com>
 References: <20200908021021.9123-1-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The barrier() was intended to reduce possibility of racing with the
-interrupt handler, but driver's code evolved significantly and today's
-driver enables interrupt only when it waits for completion notification.
-Hence barrier() has no good use anymore, let's remove it.
+The tegra_i2c_wait_for_config_load() checks for 'has_config_load_reg' by
+itself, hence there is no need to duplicate the check.
 
-Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 29e096422b95..2393f52fc584 100644
+index 2393f52fc584..4e8514696b0c 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -795,18 +795,17 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
- 			words_to_transfer = tx_fifo_avail;
+@@ -1082,11 +1082,10 @@ static int tegra_i2c_issue_bus_clear(struct i2c_adapter *adap)
+ 	reg = FIELD_PREP(I2C_BC_SCLK_THRESHOLD, 9) | I2C_BC_STOP_COND |
+ 	      I2C_BC_TERMINATE;
+ 	i2c_writel(i2c_dev, reg, I2C_BUS_CLEAR_CNFG);
+-	if (i2c_dev->hw->has_config_load_reg) {
+-		err = tegra_i2c_wait_for_config_load(i2c_dev);
+-		if (err)
+-			return err;
+-	}
++
++	err = tegra_i2c_wait_for_config_load(i2c_dev);
++	if (err)
++		return err;
  
- 		/*
--		 * Update state before writing to FIFO.  If this casues us
--		 * to finish writing all bytes (AKA buf_remaining goes to 0) we
--		 * have a potential for an interrupt (PACKET_XFER_COMPLETE is
--		 * not maskable).  We need to make sure that the isr sees
--		 * buf_remaining as 0 and doesn't call us back re-entrantly.
-+		 * Update state before writing to FIFO.  Note that this may
-+		 * cause us to finish writing all bytes (AKA buf_remaining
-+		 * goes to 0), hence we have a potential for an interrupt
-+		 * (PACKET_XFER_COMPLETE is not maskable), but GIC interrupt
-+		 * is disabled at this point.
- 		 */
- 		buf_remaining -= words_to_transfer * BYTES_PER_FIFO_WORD;
- 		tx_fifo_avail -= words_to_transfer;
- 		i2c_dev->msg_buf_remaining = buf_remaining;
- 		i2c_dev->msg_buf = buf +
- 			words_to_transfer * BYTES_PER_FIFO_WORD;
--		barrier();
- 
- 		i2c_writesl(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
- 
-@@ -827,10 +826,8 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
- 		memcpy(&val, buf, buf_remaining);
- 		val = le32_to_cpu(val);
- 
--		/* Again update before writing to FIFO to make sure isr sees. */
- 		i2c_dev->msg_buf_remaining = 0;
- 		i2c_dev->msg_buf = NULL;
--		barrier();
- 
- 		i2c_writel(i2c_dev, val, I2C_TX_FIFO);
- 	}
+ 	reg |= I2C_BC_ENABLE;
+ 	i2c_writel(i2c_dev, reg, I2C_BUS_CLEAR_CNFG);
 -- 
 2.27.0
 
