@@ -2,49 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E0D260886
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Sep 2020 04:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6337526087E
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Sep 2020 04:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728215AbgIHCQR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Sep 2020 22:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
+        id S1728287AbgIHCP4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Sep 2020 22:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728277AbgIHCLq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 22:11:46 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DD3C061795;
+        with ESMTP id S1728282AbgIHCLu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 22:11:50 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D61C061796;
         Mon,  7 Sep 2020 19:11:46 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id b12so8304879lfp.9;
-        Mon, 07 Sep 2020 19:11:45 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id k25so17981521ljg.9;
+        Mon, 07 Sep 2020 19:11:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HtsscUVX9USqMNRXBDByuYOqMY2muh1bB3NfySu7tl8=;
-        b=fa2KeXtAHAMJQOqBaP5RMOJTBSw+cDEK6ojVorwGCj4qKTPLaDySziuD5peEJGTu7k
-         cD20ecHaj5uUdDOjratvenhjB9If0XSmdqzGfSBAhB9RkdcTTnbRG7WlsF2C1a4Y7Ay7
-         AD/vk5sdfBfl1rNtrX5njAcU+iiLpMR8jsmkzhVGAZ3g3a8Fj4olBN9MB9ZvSWN1SEf3
-         0Vg4fYgk4T6cKISxEPua4jzV+3uHw57W1055TYEL+WQf2mqEMTV4KTbQfuclQq7pU5he
-         XJqJnyb/nJ/hxpRIsbmzG1t7E/QXFrvENHYfHa7QKiwNRsB4YMkZ6V+xfVTkWhiWbAEH
-         oo9Q==
+        bh=hUUPRBULDiyvblMhx4V1F89haxR9rFzQ0ynZsEU3uxo=;
+        b=nRGyRvM39J7Dc0NKd4+T9T4q9xmMp5RPRHo5+CUnrLdaLF7fTamBp89GlCu9bYtQPs
+         ji7f3iu8HUO0Zap9c43X7AEtbNfdN2RBI3kOm9lBx0rVQZrEwN61rGD5GBur/ddYhTlq
+         3ZaPxUMFiT5uKiKiLeJs3zbyzhudtNy2LsBeZ5i4O58uiFyTXM9KLfkHYoKjb61+hqI4
+         vKcePjfmvfinzbQ6vctR11ihcoTaPl2lqwCSDPPXoOK6Mk6W66JRIE0MPuAKuFZSh3hR
+         JwD/loQLHdRhi4dB0v6Jr7Jr6cXuXS0O2lU/fan8TRJxgpttTCFO9t2Fx9QzmXLv5wC1
+         WDiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HtsscUVX9USqMNRXBDByuYOqMY2muh1bB3NfySu7tl8=;
-        b=tLEZG+hEDz9Y3w/cNFHcjlmwC9Fii2TY9zckVQSoBYeI/EgsNo8m4n7rs9X4CZTAAg
-         kWUGzuZxxjmgzKxJh2Y/CRkHQBlmtsiOmFqQPX4+bcj3p9gitPcsPiPVs5JKRmgqeOjY
-         Zp5pcVKrJdFPzKeWmaC8TeKctvRH2TyeJR2s3JKd4QbnC2voYQkMmSYUgq3Ddsqwz9MU
-         IjVhjHGeVP5zbhKT8EdxZNt8ZKyc82uD8P5/lkaHXA8NT5dH5HHGCjHRkBIs79xuaC/a
-         OywQlPSzkvyVzm05RjbZVO8LALpHpAUFxwP4GRpXmdqgLdq6uMziCp4ubcZINTw/OEbS
-         nXKg==
-X-Gm-Message-State: AOAM531MxTBxvVB7OgGzcNVCwLKxkxC5O3e05KRvd73ZkyLHCZXpVVFG
-        aG/pUrH2MJXXjfNRPqXxGcA=
-X-Google-Smtp-Source: ABdhPJx7gNa1jKMbZzebHb1QwcP2ueIhpoe7fO7AvO/g6zQT/AFsGuEWw9z3y5QO8cYAUNxLt+a62A==
-X-Received: by 2002:a19:7604:: with SMTP id c4mr11501739lff.132.1599531104430;
-        Mon, 07 Sep 2020 19:11:44 -0700 (PDT)
+        bh=hUUPRBULDiyvblMhx4V1F89haxR9rFzQ0ynZsEU3uxo=;
+        b=LHN18FKWii0b7BiIVNzt2ynYslejPrEKPvp3WvDFuJK6IZIMaDSoatWQPPoJf4nq0n
+         xHn21dJk3lr6WyR0/wHfFm5TV0dHLmB+O7UK9GNvyJE9t4mpfou+fni7iq+2c2VaxQhm
+         nf+cwQfLE6sAdJUW2o2pWczHmnz8j2D7GZYMxXgRg9sDf+Mxri0K57jZY6PXoQB8lkit
+         Xj2CqgmLleRHdYZTRI1WCeGnp7xhKK+PJGNzpbTHwwIfv27uAlAhi2jsD0gjT2LgGaZr
+         PIHvhrFJFXkQ2TPYoccnLB/FL6/9d9m+RDuiCoPtFiX3+nnkKatZ73iHMvA63EuCRlZ0
+         YN3Q==
+X-Gm-Message-State: AOAM533jAJ2tI8WAj+FG9ho6TiepNOf4WBrpDbgaampvItC+F2hUjoCO
+        3Q/FbgHgX7EEfqnkkAxKizI=
+X-Google-Smtp-Source: ABdhPJzqJzpQh1N+5SKPnHfngu+Z5Ok1l46TN7zqP9VJfHlNyyjrMU0f435od7m7CG21nzSiI4+EBQ==
+X-Received: by 2002:a2e:b543:: with SMTP id a3mr11879754ljn.19.1599531105278;
+        Mon, 07 Sep 2020 19:11:45 -0700 (PDT)
 Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id j12sm9070085lfj.5.2020.09.07.19.11.43
+        by smtp.gmail.com with ESMTPSA id j12sm9070085lfj.5.2020.09.07.19.11.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 07 Sep 2020 19:11:44 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
@@ -56,9 +56,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 10/35] i2c: tegra: Use devm_platform_get_and_ioremap_resource()
-Date:   Tue,  8 Sep 2020 05:09:56 +0300
-Message-Id: <20200908021021.9123-11-digetx@gmail.com>
+Subject: [PATCH v6 11/35] i2c: tegra: Use platform_get_irq()
+Date:   Tue,  8 Sep 2020 05:09:57 +0300
+Message-Id: <20200908021021.9123-12-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200908021021.9123-1-digetx@gmail.com>
 References: <20200908021021.9123-1-digetx@gmail.com>
@@ -70,35 +70,35 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Driver now uses devm_platform_get_and_ioremap_resource() which replaces
-the typical boilerplate code and makes code cleaner.
+Use common helper for retrieval of the interrupt number in order to make
+code cleaner. Note that platform_get_irq() prints error message by itself.
 
 Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 90ba2f5327c5..c2bbdf92b11f 100644
+index c2bbdf92b11f..505b5d37077d 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1678,12 +1678,12 @@ static int tegra_i2c_probe(struct platform_device *pdev)
- 	int irq;
- 	int ret;
+@@ -1684,12 +1684,9 @@ static int tegra_i2c_probe(struct platform_device *pdev)
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	base_phys = res->start;
--	base = devm_ioremap_resource(&pdev->dev, res);
-+	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
+ 	base_phys = res->start;
  
-+	base_phys = res->start;
-+
- 	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
- 	if (!res) {
- 		dev_err(&pdev->dev, "no irq resource\n");
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res) {
+-		dev_err(&pdev->dev, "no irq resource\n");
+-		return -EINVAL;
+-	}
+-	irq = res->start;
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
+ 
+ 	div_clk = devm_clk_get(&pdev->dev, "div-clk");
+ 	if (IS_ERR(div_clk)) {
 -- 
 2.27.0
 
