@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 749D5260848
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Sep 2020 04:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8260A26084E
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Sep 2020 04:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728576AbgIHCNo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S1728562AbgIHCNo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Mon, 7 Sep 2020 22:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40090 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728395AbgIHCMU (ORCPT
+        with ESMTP id S1728396AbgIHCMU (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Sep 2020 22:12:20 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3FEC061795;
-        Mon,  7 Sep 2020 19:12:05 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id b19so17987115lji.11;
-        Mon, 07 Sep 2020 19:12:05 -0700 (PDT)
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CA1C061797;
+        Mon,  7 Sep 2020 19:12:06 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id w3so18003237ljo.5;
+        Mon, 07 Sep 2020 19:12:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=m0S/4Np9sPc793jkBRlsI+/R5oCadbPZM3MSvc8MO1k=;
-        b=d66VIMLIdRTu/WczmtN9OLBNrmwlgdh8KQuzEf8jGVtx0jG+zZeEbTJHHHG+C2MAXu
-         2kU6i4pI0FcGnzSLIpjschNRqdk33JMSXzAt/HWvQjWriV0MYGaYZnpyjcKjNS9JRlNZ
-         FWQykMFFJwJ3A+XJQHfwms5GGDq4/Fi0/AStCA3F7thDJygoHZLMUVHfBTkaqMHJ8zHH
-         A4GiTaP2B0y/3SvGYRli3kJhMbECk616jTTKxXoKxyUhKRowIOPy1zlnUJXu5nSndFiK
-         t+SLykfMFDV4Sf1NYxswcd3fwx2C5d9jtpNv0kGxN7pgo/wfsw4p8LSrHDGKdi75Y8TL
-         siyg==
+        bh=s4OxMYUpxrlcvwprS6HxjKIWRXowGXnjPJZcDCzog/A=;
+        b=l81cf+0HznD8alqlUtXXqzHqe7+BbckiDenUb2EZD9Xq4wt0nmTRYVGbDdePbYSmB1
+         167I/3ko1QV3lHz0BcW7F6OMQnInRquw5n1ow0xdkai0zbq8qsVxWVeg2f9ovzMrg8rj
+         Mn4ej61MXSmRnsjX8Lug/+5rE4Daw9jUKmU46S+6+QUGLYiv0U6ha+j4ygZDF3A0hbts
+         tZujrm6mV0wGAafP6eTczXOcQtmLZySBLHjgn3YX/rMxWaa1rwffzvO3a5ib8bonHND8
+         l6tNGcqNF2S9KVmSxs2RLMZgOU1zSqwhMJJUp/+weHpr2LKsGeKeXtw7BmfGfcM/vtuA
+         XevQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=m0S/4Np9sPc793jkBRlsI+/R5oCadbPZM3MSvc8MO1k=;
-        b=a3i9GQwS0Gv6SH0/W4CoLnkPCrd5KmWkjfKPKc7pCVyWEFku+QvPLfTTgMn7K0h+uo
-         f6DDmlL934Zc2a6UwpDHSbKaaQYvYRPsIT1/y1GtN0buWoScFu3GI/9ghnFRkggmNeOT
-         HPe5wkTi+3OJnsEd9Qq6cr4akCtG+yzaWj7mHRCoILue9o3XX+sgsMz2YECflW9jWRHW
-         6pCRkOMc1euLVux+3CofEyv/d07xvzk1Sv3VN/moEuvvaAlnAF25GruUEDuL8wdZXPS6
-         67MEtYbwBIV2h02YpS4SlIwaYpq0StWAQlx9vXifjPQmpGC7bAH8wKnmfMuvivgAWj1h
-         j+Hw==
-X-Gm-Message-State: AOAM531g0vaQQbXj7ilG2lJRWG7uBtGinT+mtufRMTT6Da2+JaK1S4ay
-        OrcJPBKMXwLVH4YRhFaXEPXKnhOCQG0=
-X-Google-Smtp-Source: ABdhPJx5l2LYH+Ky2qRjckzgavI9WQfVIHJxhjIMkhTXTBFAw5bhHaG1YnHYelB6EWsWBgJb1e5OaA==
-X-Received: by 2002:a2e:87d9:: with SMTP id v25mr11849428ljj.171.1599531124310;
-        Mon, 07 Sep 2020 19:12:04 -0700 (PDT)
+        bh=s4OxMYUpxrlcvwprS6HxjKIWRXowGXnjPJZcDCzog/A=;
+        b=ag8iYX4KCBubNdpMFY1k5T6kvLE2RXxQopFhN89lxbBeK1Wr5XzgoyK/dnypli0TVb
+         zjubCNJUkaSoKOeYrilMXfPrzSpsbRCQHcosCf2oHBWYLMTwmQ6nN6PfEfV3HjRpdRKn
+         RkvHdH0326iWVehFqhaSIU6vi/4H9a4J6rmymj2+A1Ua4lDEQ7JBLso/hvqu29R/tJ76
+         tVJyD2WEvQmJy0I6yE/PGwkMVqKZl+m5TTiNxajuTMz02rja9umMTR/0DPWAVQ/Gvr40
+         MGdwX+/3dRY+Z7/EksHqmJkTH9ivKG3B9hovpgQkwCFDUbNB1aZZOrEMS23ZirRVpPQ9
+         c3vQ==
+X-Gm-Message-State: AOAM5337WTrEsQAHMU2nQn+cSKFZCqoREw6mqcOxmljPw6e8bhRhIlJR
+        4wFnMd7DAyXaxt36iXPa3j4=
+X-Google-Smtp-Source: ABdhPJx0nfVAgMLqfwSqS3Drn/GW5CfhFfZveTn0FVFYKxwygDNGWLCBG50M+8nEx9+Si9lj4Yn5UA==
+X-Received: by 2002:a2e:93cd:: with SMTP id p13mr12020958ljh.460.1599531125309;
+        Mon, 07 Sep 2020 19:12:05 -0700 (PDT)
 Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id j12sm9070085lfj.5.2020.09.07.19.12.03
+        by smtp.gmail.com with ESMTPSA id j12sm9070085lfj.5.2020.09.07.19.12.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2020 19:12:03 -0700 (PDT)
+        Mon, 07 Sep 2020 19:12:04 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -56,162 +56,290 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 32/35] i2c: tegra: Clean up printk messages
-Date:   Tue,  8 Sep 2020 05:10:18 +0300
-Message-Id: <20200908021021.9123-33-digetx@gmail.com>
+Subject: [PATCH v6 33/35] i2c: tegra: Clean up and improve comments
+Date:   Tue,  8 Sep 2020 05:10:19 +0300
+Message-Id: <20200908021021.9123-34-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200908021021.9123-1-digetx@gmail.com>
 References: <20200908021021.9123-1-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This patch unifies style of all messages in the driver by starting them
-with a lowercase letter and using consistent capitalization and wording
-for all messages.
+Make all comments to be consistent in regards to capitalization and
+punctuation, correct spelling and grammar errors, improve wording.
 
-Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 37 +++++++++++++---------------------
- 1 file changed, 14 insertions(+), 23 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 88 ++++++++++++++++++----------------
+ 1 file changed, 47 insertions(+), 41 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 44c75595a173..56a7f696e425 100644
+index 56a7f696e425..8b2be44cec2f 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -381,7 +381,8 @@ static int tegra_i2c_dma_submit(struct tegra_i2c_dev *i2c_dev, size_t len)
- 					       len, dir, DMA_PREP_INTERRUPT |
- 					       DMA_CTRL_ACK);
- 	if (!dma_desc) {
--		dev_err(i2c_dev->dev, "failed to get DMA descriptor\n");
-+		dev_err(i2c_dev->dev, "failed to get %s DMA descriptor\n",
-+			i2c_dev->msg_read ? "RX" : "TX");
+@@ -136,7 +136,7 @@
+ /* configuration load timeout in microseconds */
+ #define I2C_CONFIG_LOAD_TIMEOUT			1000000
+ 
+-/* Packet header size in bytes */
++/* packet header size in bytes */
+ #define I2C_PACKET_HEADER_SIZE			12
+ 
+ /*
+@@ -148,11 +148,10 @@
+ #define I2C_PIO_MODE_PREFERRED_LEN		32
+ 
+ /*
+- * msg_end_type: The bus control which need to be send at end of transfer.
+- * @MSG_END_STOP: Send stop pulse at end of transfer.
+- * @MSG_END_REPEAT_START: Send repeat start at end of transfer.
+- * @MSG_END_CONTINUE: The following on message is coming and so do not send
+- *		stop or repeat start.
++ * msg_end_type: The bus control which needs to be sent at end of transfer.
++ * @MSG_END_STOP: Send stop pulse.
++ * @MSG_END_REPEAT_START: Send repeat-start.
++ * @MSG_END_CONTINUE: Don't send stop or repeat-start.
+  */
+ enum msg_end_type {
+ 	MSG_END_STOP,
+@@ -161,10 +160,10 @@ enum msg_end_type {
+ };
+ 
+ /**
+- * struct tegra_i2c_hw_feature : Different HW support on Tegra
+- * @has_continue_xfer_support: Continue transfer supports.
++ * struct tegra_i2c_hw_feature : per hardware generation features
++ * @has_continue_xfer_support: Continue-transfer supported.
+  * @has_per_pkt_xfer_complete_irq: Has enable/disable capability for transfer
+- *		complete interrupt per packet basis.
++ *		completion interrupt on per packet basis.
+  * @has_config_load_reg: Has the config load register to load the new
+  *		configuration.
+  * @clk_divisor_hs_mode: Clock divisor in HS mode.
+@@ -184,7 +183,7 @@ enum msg_end_type {
+  * @has_mst_fifo: The I2C controller contains the new MST FIFO interface that
+  *		provides additional features and allows for longer messages to
+  *		be transferred in one go.
+- * @quirks: i2c adapter quirks for limiting write/read transfer size and not
++ * @quirks: I2C adapter quirks for limiting write/read transfer size and not
+  *		allowing 0 length transfers.
+  * @supports_bus_clear: Bus Clear support to recover from bus hang during
+  *		SDA stuck low from device for some unknown reasons.
+@@ -245,7 +244,7 @@ struct tegra_i2c_hw_feature {
+  * @msg_err: error code for completed message
+  * @msg_buf: pointer to current message data
+  * @msg_buf_remaining: size of unsent data in the message buffer
+- * @msg_read: identifies read transfers
++ * @msg_read: indicates read direction of a transfer
+  * @bus_clk_rate: current I2C bus clock rate
+  * @multimaster_mode: indicates that I2C controller is in multi-master mode
+  * @tx_dma_chan: DMA transmit channel
+@@ -306,8 +305,8 @@ static u32 dvc_readl(struct tegra_i2c_dev *i2c_dev, u32 reg)
+ }
+ 
+ /*
+- * i2c_writel and i2c_readl will offset the register if necessary to talk
+- * to the I2C block inside the DVC block
++ * If necessary, i2c_writel() and i2c_readl() will offset the register
++ * in order to talk to the I2C block inside the DVC block.
+  */
+ static u32 tegra_i2c_reg_addr(struct tegra_i2c_dev *i2c_dev, u32 reg)
+ {
+@@ -322,7 +321,7 @@ static void i2c_writel(struct tegra_i2c_dev *i2c_dev, u32 val, u32 reg)
+ {
+ 	writel_relaxed(val, i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
+ 
+-	/* Read back register to make sure that register writes completed */
++	/* read back register to make sure that register writes completed */
+ 	if (reg != I2C_TX_FIFO)
+ 		readl_relaxed(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
+ }
+@@ -474,7 +473,7 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
+  * block.  This block is identical to the rest of the I2C blocks, except that
+  * it only supports master mode, it has registers moved around, and it needs
+  * some extra init to get it into I2C mode.  The register moves are handled
+- * by i2c_readl and i2c_writel
++ * by i2c_readl() and i2c_writel().
+  */
+ static void tegra_dvc_init(struct tegra_i2c_dev *i2c_dev)
+ {
+@@ -632,7 +631,7 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+ 		break;
+ 	}
+ 
+-	/* Make sure clock divisor programmed correctly */
++	/* make sure clock divisor programmed correctly */
+ 	clk_divisor = FIELD_PREP(I2C_CLK_DIVISOR_HSMODE,
+ 				 i2c_dev->hw->clk_divisor_hs_mode) |
+ 		      FIELD_PREP(I2C_CLK_DIVISOR_STD_FAST_MODE, non_hs_mode);
+@@ -645,8 +644,8 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+ 	}
+ 
+ 	/*
+-	 * configure setup and hold times only when tsu_thd is non-zero.
+-	 * otherwise, preserve the chip default values
++	 * Configure setup and hold times only when tsu_thd is non-zero.
++	 * Otherwise, preserve the chip default values.
+ 	 */
+ 	if (i2c_dev->hw->has_interface_timing_reg && tsu_thd)
+ 		i2c_writel(i2c_dev, tsu_thd, I2C_INTERFACE_TIMING_1);
+@@ -690,7 +689,7 @@ static int tegra_i2c_disable_packet_mode(struct tegra_i2c_dev *i2c_dev)
+ 
+ 	/*
+ 	 * NACK interrupt is generated before the I2C controller generates
+-	 * the STOP condition on the bus. So wait for 2 clock periods
++	 * the STOP condition on the bus.  So, wait for 2 clock periods
+ 	 * before disabling the controller so that the STOP condition has
+ 	 * been delivered properly.
+ 	 */
+@@ -711,8 +710,8 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
+ 	u32 val;
+ 
+ 	/*
+-	 * Catch overflow due to message fully sent
+-	 * before the check for RX FIFO availability.
++	 * Catch overflow due to message fully sent before the check for
++	 * RX FIFO availability.
+ 	 */
+ 	if (WARN_ON_ONCE(!(i2c_dev->msg_buf_remaining)))
  		return -EINVAL;
+@@ -725,7 +724,7 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
+ 		rx_fifo_avail = FIELD_GET(I2C_FIFO_STATUS_RX, val);
  	}
  
-@@ -422,7 +423,7 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
- 		return 0;
+-	/* Rounds down to not include partial word at the end of buf */
++	/* round down to exclude partial word at the end of buffer */
+ 	words_to_transfer = buf_remaining / BYTES_PER_FIFO_WORD;
+ 	if (words_to_transfer > rx_fifo_avail)
+ 		words_to_transfer = rx_fifo_avail;
+@@ -737,8 +736,8 @@ static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
+ 	rx_fifo_avail -= words_to_transfer;
  
- 	if (!IS_ENABLED(CONFIG_TEGRA20_APB_DMA)) {
--		dev_dbg(i2c_dev->dev, "Support for APB DMA not enabled!\n");
-+		dev_dbg(i2c_dev->dev, "DMA support not enabled\n");
- 		return 0;
+ 	/*
+-	 * If there is a partial word at the end of buf, handle it manually to
+-	 * prevent overwriting past the end of buf
++	 * If there is a partial word at the end of buffer, handle it
++	 * manually to prevent overwriting past the end of buffer.
+ 	 */
+ 	if (rx_fifo_avail > 0 && buf_remaining > 0) {
+ 		/*
+@@ -778,10 +777,15 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
+ 		tx_fifo_avail = FIELD_GET(I2C_FIFO_STATUS_TX, val);
  	}
  
-@@ -448,7 +449,7 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
- 	dma_buf = dma_alloc_coherent(i2c_dev->dev, i2c_dev->dma_buf_size,
- 				     &dma_phys, GFP_KERNEL | __GFP_NOWARN);
- 	if (!dma_buf) {
--		dev_err(i2c_dev->dev, "failed to allocate the DMA buffer\n");
-+		dev_err(i2c_dev->dev, "failed to allocate DMA buffer\n");
- 		err = -ENOMEM;
- 		goto err_out;
- 	}
-@@ -572,7 +573,7 @@ static int tegra_i2c_wait_for_config_load(struct tegra_i2c_dev *i2c_dev)
- 	err = tegra_i2c_poll_register(i2c_dev, I2C_CONFIG_LOAD, 0xffffffff,
- 				      1000, I2C_CONFIG_LOAD_TIMEOUT);
- 	if (err) {
--		dev_warn(i2c_dev->dev, "timeout waiting for config load\n");
-+		dev_err(i2c_dev->dev, "failed to load config\n");
- 		return err;
- 	}
+-	/* Rounds down to not include partial word at the end of buf */
++	/* round down to exclude partial word at the end of buffer */
+ 	words_to_transfer = buf_remaining / BYTES_PER_FIFO_WORD;
  
-@@ -835,7 +836,7 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
- 	status = i2c_readl(i2c_dev, I2C_INT_STATUS);
- 
- 	if (status == 0) {
--		dev_warn(i2c_dev->dev, "irq status 0 %08x %08x %08x\n",
-+		dev_warn(i2c_dev->dev, "IRQ status 0 %08x %08x %08x\n",
- 			 i2c_readl(i2c_dev, I2C_PACKET_TRANSFER_STATUS),
- 			 i2c_readl(i2c_dev, I2C_STATUS),
- 			 i2c_readl(i2c_dev, I2C_CNFG));
-@@ -978,8 +979,7 @@ static int tegra_i2c_config_fifo_trig(struct tegra_i2c_dev *i2c_dev, size_t len)
- 		slv_config.device_fc = true;
- 		err = dmaengine_slave_config(chan, &slv_config);
- 		if (err) {
--			dev_err(i2c_dev->dev, "DMA slave config failed: %d\n",
--				err);
-+			dev_err(i2c_dev->dev, "DMA config failed: %d\n", err);
- 			return err;
- 		}
- 
-@@ -1079,14 +1079,13 @@ static int tegra_i2c_issue_bus_clear(struct i2c_adapter *adap)
- 	tegra_i2c_mask_irq(i2c_dev, I2C_INT_BUS_CLR_DONE);
- 
- 	if (time_left == 0) {
--		dev_err(i2c_dev->dev, "timed out for bus clear\n");
-+		dev_err(i2c_dev->dev, "failed to clear bus\n");
- 		return -ETIMEDOUT;
+-	/* It's very common to have < 4 bytes, so optimize that case. */
++	/*
++	 * This hunk pushes 4 bytes at a time into the TX FIFO.
++	 *
++	 * It's very common to have < 4 bytes, hence there is no word
++	 * to push if we have less than 4 bytes to transfer.
++	 */
+ 	if (words_to_transfer) {
+ 		if (words_to_transfer > tx_fifo_avail)
+ 			words_to_transfer = tx_fifo_avail;
+@@ -805,8 +809,8 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
  	}
  
- 	val = i2c_readl(i2c_dev, I2C_BUS_CLEAR_STATUS);
- 	if (!(val & I2C_BC_STATUS)) {
--		dev_err(i2c_dev->dev,
--			"un-recovered arbitration lost\n");
-+		dev_err(i2c_dev->dev, "un-recovered arbitration lost\n");
- 		return -EIO;
+ 	/*
+-	 * If there is a partial word at the end of buf, handle it manually to
+-	 * prevent reading past the end of buf, which could cross a page
++	 * If there is a partial word at the end of buffer, handle it manually
++	 * to prevent reading past the end of buffer, which could cross a page
+ 	 * boundary and fault.
+ 	 */
+ 	if (tx_fifo_avail > 0 && buf_remaining > 0) {
+@@ -854,7 +858,7 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
  	}
  
-@@ -1218,12 +1217,8 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 						   xfer_size,
- 						   DMA_FROM_DEVICE);
- 			err = tegra_i2c_dma_submit(i2c_dev, xfer_size);
--			if (err) {
--				dev_err(i2c_dev->dev,
--					"starting RX DMA failed, err %d\n",
--					err);
-+			if (err)
- 				return err;
--			}
- 
- 		} else {
- 			dma_sync_single_for_cpu(i2c_dev->dev,
-@@ -1243,12 +1238,8 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 						   xfer_size,
- 						   DMA_TO_DEVICE);
- 			err = tegra_i2c_dma_submit(i2c_dev, xfer_size);
--			if (err) {
--				dev_err(i2c_dev->dev,
--					"starting TX DMA failed, err %d\n",
--					err);
-+			if (err)
- 				return err;
--			}
- 		} else {
- 			tegra_i2c_fill_tx_fifo(i2c_dev);
- 		}
-@@ -1264,7 +1255,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 	/*
+-	 * I2C transfer is terminated during the bus clear so skip
++	 * I2C transfer is terminated during the bus clear, so skip
+ 	 * processing the other interrupts.
+ 	 */
+ 	if (i2c_dev->hw->supports_bus_clear && (status & I2C_INT_BUS_CLR_DONE))
+@@ -890,7 +894,8 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+ 	 * During message read XFER_COMPLETE interrupt is triggered prior to
+ 	 * DMA completion and during message write XFER_COMPLETE interrupt is
+ 	 * triggered after DMA completion.
+-	 * PACKETS_XFER_COMPLETE indicates completion of all bytes of transfer.
++	 *
++	 * PACKETS_XFER_COMPLETE indicates completion of all bytes of transfer,
+ 	 * so forcing msg_buf_remaining to 0 in DMA mode.
+ 	 */
+ 	if (status & I2C_INT_PACKET_XFER_COMPLETE) {
+@@ -908,7 +913,7 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
  	}
+ 	goto done;
+ err:
+-	/* An error occurred, mask all interrupts */
++	/* mask all interrupts on error */
+ 	tegra_i2c_mask_irq(i2c_dev, I2C_INT_NO_ACK | I2C_INT_ARBITRATION_LOST |
+ 		I2C_INT_PACKET_XFER_COMPLETE | I2C_INT_TX_FIFO_DATA_REQ |
+ 		I2C_INT_RX_FIFO_DATA_REQ);
+@@ -1338,6 +1343,7 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 		enum msg_end_type end_type = MSG_END_STOP;
  
- 	tegra_i2c_unmask_irq(i2c_dev, int_mask);
--	dev_dbg(i2c_dev->dev, "unmasked irq: %02x\n",
-+	dev_dbg(i2c_dev->dev, "unmasked IRQ: %02x\n",
- 		i2c_readl(i2c_dev, I2C_INT_MASK));
+ 		if (i < (num - 1)) {
++			/* check whether follow up message is coming */
+ 			if (msgs[i + 1].flags & I2C_M_NOSTART)
+ 				end_type = MSG_END_CONTINUE;
+ 			else
+@@ -1567,7 +1573,6 @@ static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
+ 	.has_interface_timing_reg = true,
+ };
  
- 	if (i2c_dev->dma_mode) {
-@@ -1286,7 +1277,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 					 i2c_dev->tx_dma_chan);
+-/* Match table for of_platform binding */
+ static const struct of_device_id tegra_i2c_of_match[] = {
+ 	{ .compatible = "nvidia,tegra194-i2c", .data = &tegra194_i2c_hw, },
+ 	{ .compatible = "nvidia,tegra186-i2c", .data = &tegra186_i2c_hw, },
+@@ -1591,7 +1596,7 @@ static void tegra_i2c_parse_dt(struct tegra_i2c_dev *i2c_dev)
+ 	err = of_property_read_u32(np, "clock-frequency",
+ 				   &i2c_dev->bus_clk_rate);
+ 	if (err)
+-		i2c_dev->bus_clk_rate = I2C_MAX_STANDARD_MODE_FREQ; /* default clock rate */
++		i2c_dev->bus_clk_rate = I2C_MAX_STANDARD_MODE_FREQ;
  
- 		if (!time_left && !completion_done(&i2c_dev->dma_complete)) {
--			dev_err(i2c_dev->dev, "DMA transfer timeout\n");
-+			dev_err(i2c_dev->dev, "DMA transfer timed out\n");
- 			err = -ETIMEDOUT;
- 			goto reset_hardware;
- 		}
-@@ -1307,7 +1298,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 	tegra_i2c_mask_irq(i2c_dev, int_mask);
+ 	multi_mode = of_property_read_bool(np, "multi-master");
+ 	i2c_dev->multimaster_mode = multi_mode;
+@@ -1723,11 +1728,13 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 		goto release_clocks;
  
- 	if (time_left == 0) {
--		dev_err(i2c_dev->dev, "i2c transfer timed out\n");
-+		dev_err(i2c_dev->dev, "I2C transfer timed out\n");
- 		err = -ETIMEDOUT;
- 		goto reset_hardware;
- 	}
+ 	/*
+-	 * VI I2C is in VE power domain which is not always on and not
+-	 * an IRQ safe. So, IRQ safe device can't be attached to a non-IRQ
+-	 * safe domain as it prevents powering off the PM domain.
+-	 * Also, VI I2C device don't need to use runtime IRQ safe as it will
+-	 * not be used for atomic transfers.
++	 * VI I2C is in VE power domain which is not always ON and not
++	 * IRQ-safe.  Thus, IRQ-safe device shouldn't be attached to a
++	 * non IRQ-safe domain because this prevents powering off the power
++	 * domain.
++	 *
++	 * VI I2C device shouldn't be marked as IRQ-safe because VI I2C won't
++	 * be used for atomic transfers.
+ 	 */
+ 	if (!i2c_dev->is_vi)
+ 		pm_runtime_irq_safe(i2c_dev->dev);
+@@ -1800,9 +1807,8 @@ static int __maybe_unused tegra_i2c_runtime_resume(struct device *dev)
+ 
+ 	/*
+ 	 * VI I2C device is attached to VE power domain which goes through
+-	 * power ON/OFF during PM runtime resume/suspend. So, controller
+-	 * should go through reset and need to re-initialize after power
+-	 * domain ON.
++	 * power ON/OFF during of runtime PM resume/suspend, meaning that
++	 * controller needs to be re-initialized after power ON.
+ 	 */
+ 	if (i2c_dev->is_vi) {
+ 		err = tegra_i2c_init(i2c_dev);
 -- 
 2.27.0
 
