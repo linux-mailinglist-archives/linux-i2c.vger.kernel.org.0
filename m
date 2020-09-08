@@ -2,224 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E938F261D09
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Sep 2020 21:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EC0261F00
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Sep 2020 21:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731086AbgIHTaj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Sep 2020 15:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
+        id S1732545AbgIHT57 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Sep 2020 15:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732249AbgIHTaW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Sep 2020 15:30:22 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7B4C061757
-        for <linux-i2c@vger.kernel.org>; Tue,  8 Sep 2020 12:30:21 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id l126so3835pfd.5
-        for <linux-i2c@vger.kernel.org>; Tue, 08 Sep 2020 12:30:21 -0700 (PDT)
+        with ESMTP id S1730223AbgIHPfq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Sep 2020 11:35:46 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8372C0612EF;
+        Tue,  8 Sep 2020 05:55:34 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id u21so9639277ljl.6;
+        Tue, 08 Sep 2020 05:55:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=SsOjzOVIq97WOAc6WZeXaOq483i3DuOEILRijMKc8+c=;
-        b=I2A6OrWWp9ZhN3tycDzSBFzxFhAVc4uVVlf6QeuGM+05TNovmH2B+uVYHRSjh8Tfa4
-         3rbgHqE43zixo0WWMEH/uPn6zQ+k8rp6mukpfWZWv8M5OQw4plGz5nLDUFU8TKhOG76x
-         kbIHeGgSSQCfV0ICNIztWj0FF4yY6nAq3J+2c=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2ehLwXNK3WBwCU+2CN9jFbvN8+npPBE1XX1ZSoVrUTA=;
+        b=ohS68j1Qosw8sk+DbiaADlMklzrZcqzn+IrJkLUf5OKRiKa6DdhU0QJxMHJV2Xu4d1
+         3YEV8DE5gN07uNXvfX+YuIigPks3hFtW5ZFFVB8w0ZpiIQqHxI3Q8xbbXrorA8zVp58m
+         XpDpv9QTXT3XEeyLDikG1rG4DzZ9sJHbR+zzkfiehV1WRjfuDu3/UypVIMIpK3+OrPAO
+         jNqQPdRbatlNKaUvClzx5+aSFofLgubH8Bidc0fAVZJpQ4K8PmU2n2vh16AFKW9uXSbB
+         Qvnk79kTMAmkNbl6jdABjNXLGdmZleuoS11k5CoE7bXVxO0fhxGISkiNnw1PBHRRjs20
+         3Wmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=SsOjzOVIq97WOAc6WZeXaOq483i3DuOEILRijMKc8+c=;
-        b=eKBL4TJ2Md737WY4Vmi8EM2Z/Stm+5mSh+js7PvYxtLJ2OQLzWx7ZSs2b2KwuOkxPq
-         h8xgJV3CDyJWqDd+/mMxSjNg+gPe3IwaJOdGs/BABw4Co2bdnm9OdoA5OTJwU2iFJe1J
-         +iF9yesqh8Z0fPnBYGyaZ/KEd/RBvl2TBp3/R0xeuJ9tg3Pvc8cdemxMlwoIPbv6nEix
-         KWyDFUX+J7wvnIKMX+1ZVwTVxyj9iFIZ46qJAU4F19s4kGbbaE1dZHzO6ySy3D/7KsYi
-         fg6kxf8BNwHInWULv3VspQqlV44Wez4JYVboRmqGKwv0+EqivVhOlrEtf4/TO4lBwssV
-         J4EQ==
-X-Gm-Message-State: AOAM533LStWkFmCYdpVRcd44VcW4Ls1aRM7ERSY5l7wNCAM0kV4ig/Rr
-        6dJOtyj2F/ZRVhT9WM8KmKcUVw==
-X-Google-Smtp-Source: ABdhPJxHIdKSrBuYxJO9MpvlN9pOkwSjhGrSBHPFd2611Mm9W5IYS0c3yvOL6x5Xbpknc67grJnfiw==
-X-Received: by 2002:a62:6003:: with SMTP id u3mr279604pfb.55.1599593421304;
-        Tue, 08 Sep 2020 12:30:21 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
-        by smtp.gmail.com with ESMTPSA id r3sm208389pfh.88.2020.09.08.12.30.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2020 12:30:20 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2ehLwXNK3WBwCU+2CN9jFbvN8+npPBE1XX1ZSoVrUTA=;
+        b=Wh4Pq1TZvJY1QWZih8YDpO4q+cHdex90CVkXO5wjlpYo3wG81O2sofGcFCdSYB4ZYj
+         1rKYzqLB2sa8lAN4OH7CM1ssjlje4Qeejs7jMLK1pKVgArdqF4VRXp82LEstertX+fLL
+         jQjBPNsBE/P1MRW8m0jstX5Gtto+MswutXkiJ8p1eOzdT02EiFaV/EGrhDihLURQMlaF
+         XMk3JhzvE713nIl6IVo/N2sJio0bPIg95rgvD4wAkffBR6DUX4lyjM2wlEobJp11B0Ko
+         MKk5MMfi4TZwItilFoN4lyMQa25ZGwRjJI6bs2i+/pRKCIkr3mxxnj4PFq9FUVkkR5f5
+         g0CA==
+X-Gm-Message-State: AOAM531ECdHdIRIR/aEXpCkDWMtJmNcnMxa23lPzS2J1PSvThz1R1Aib
+        nFpLcqOaErKHxl1uwh5VyuopN7y4g9w=
+X-Google-Smtp-Source: ABdhPJy25Zmvv8ZSp1nEAFAtHswk2JSRcw6OzDPS5ICaqEVMzyPELa9Qi30aAs4QWFaZHKS3aReLxw==
+X-Received: by 2002:a2e:4e09:: with SMTP id c9mr13415557ljb.283.1599569732057;
+        Tue, 08 Sep 2020 05:55:32 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id n20sm10553687lfh.1.2020.09.08.05.55.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Sep 2020 05:55:31 -0700 (PDT)
+Subject: Re: [PATCH v6 16/35] i2c: tegra: Reorder location of functions in the
+ code
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-tegra@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200908021021.9123-1-digetx@gmail.com>
+ <20200908021021.9123-17-digetx@gmail.com>
+ <CAHp75VefU+iXpngPnzQRBfrg3OgLUBqhOCJpPo8natfCBr6Q5w@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <3fce58d0-eac6-bbea-74e3-098cb079e9b5@gmail.com>
+Date:   Tue, 8 Sep 2020 15:55:30 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200907130731.2607-1-rojay@codeaurora.org>
-References: <20200907130731.2607-1-rojay@codeaurora.org>
-Subject: Re: [PATCH V3] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     dianders@chromium.org, saiprakash.ranjan@codeaurora.org,
-        gregkh@linuxfoundation.org, mka@chromium.org,
-        akashast@codeaurora.org, msavaliy@qti.qualcomm.com,
-        skakit@codeaurora.org, rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     Roja Rani Yarubandi <rojay@codeaurora.org>, wsa@kernel.org
-Date:   Tue, 08 Sep 2020 12:30:18 -0700
-Message-ID: <159959341894.454335.3250696075143737399@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+In-Reply-To: <CAHp75VefU+iXpngPnzQRBfrg3OgLUBqhOCJpPo8natfCBr6Q5w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Why is dri-devel on here? And linaro-mm-sig?
+08.09.2020 11:43, Andy Shevchenko пишет:
+> On Tue, Sep 8, 2020 at 5:11 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> Reorder location of functions in the code in order to have definition
+>> of functions closer to the place of the invocation. This change makes
+>> easier to navigate around the code and removes the need to have a
+>> prototype for tegra_i2c_init().
+> 
+> Still seems to have ordering issues (it moves pieces you actually
+> change in the next patches).
 
-Quoting Roja Rani Yarubandi (2020-09-07 06:07:31)
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-=
-qcom-geni.c
-> index dead5db3315a..b3609760909f 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
->  struct geni_i2c_err_log {
-> @@ -384,7 +387,8 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *g=
-i2c, struct i2c_msg *msg,
->         if (dma_buf) {
->                 if (gi2c->err)
->                         geni_i2c_rx_fsm_rst(gi2c);
-> -               geni_se_rx_dma_unprep(se, rx_dma, len);
-> +               geni_se_rx_dma_unprep(se, gi2c->rx_dma, len);
-> +               gi2c->rx_dma =3D (dma_addr_t)NULL;
->                 i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
->         }
-> =20
-> @@ -394,12 +398,12 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev =
-*gi2c, struct i2c_msg *msg,
->  static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg=
- *msg,
->                                 u32 m_param)
->  {
-> -       dma_addr_t tx_dma;
->         unsigned long time_left;
->         void *dma_buf =3D NULL;
->         struct geni_se *se =3D &gi2c->se;
->         size_t len =3D msg->len;
-> =20
-> +       gi2c->xfer_len =3D len;
->         if (!of_machine_is_compatible("lenovo,yoga-c630"))
->                 dma_buf =3D i2c_get_dma_safe_msg_buf(msg, 32);
-> =20
-> @@ -410,7 +414,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *g=
-i2c, struct i2c_msg *msg,
-> =20
->         writel_relaxed(len, se->base + SE_I2C_TX_TRANS_LEN);
-> =20
-> -       if (dma_buf && geni_se_tx_dma_prep(se, dma_buf, len, &tx_dma)) {
-> +       if (dma_buf && geni_se_tx_dma_prep(se, dma_buf, len, &gi2c->tx_dm=
-a)) {
->                 geni_se_select_mode(se, GENI_SE_FIFO);
->                 i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
->                 dma_buf =3D NULL;
-> @@ -429,7 +433,8 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *g=
-i2c, struct i2c_msg *msg,
->         if (dma_buf) {
->                 if (gi2c->err)
->                         geni_i2c_tx_fsm_rst(gi2c);
-> -               geni_se_tx_dma_unprep(se, tx_dma, len);
-> +               geni_se_tx_dma_unprep(se, gi2c->tx_dma, len);
-> +               gi2c->tx_dma =3D (dma_addr_t)NULL;
->                 i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
->         }
-> =20
-> @@ -479,6 +484,51 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
->         return ret;
->  }
-> =20
-> +static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
-> +{
-> +       int ret;
-> +       u32 dma;
-> +       u32 val;
-> +       u32 geni_status;
-> +       struct geni_se *se =3D &gi2c->se;
-> +
-> +       ret =3D pm_runtime_get_sync(gi2c->se.dev);
-> +       if (ret < 0) {
-> +               dev_err(gi2c->se.dev, "Failed to resume device: %d\n", re=
-t);
+It's unavoidable that this patch either touches previous or next
+changes. You actually had an opposite complaint to v5.
 
-Is this print really necessary? Doesn't PM core already print this sort
-of information?
+This diver has a long overdue for the refactoring. I think it's a good
+time to do it right now because driver works stable and it's quite
+unlikely that there will ever be fixes for the older code. Hence it
+should be good to have the code reordered now, so that we could have a
+nicer code base for the future changes.
 
-> +               return;
-> +       }
-> +
-> +       geni_status =3D readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
-> +       if (geni_status & M_GENI_CMD_ACTIVE) {
+> Have you considered which one looks neat this variant or if you move
+> it closer to the end of the series?
+> 
 
-Please try to de-indent all this.
+This variant should be more logical because changes have this order:
 
-	if (!(geni_status & M_GENI_CMD_ACTIVE))
-		goto out;
+1. fixes
+2. features
+3. code reorder
+4. more important cleanups
+5. less important cleanups
 
-> +               geni_i2c_abort_xfer(gi2c);
-> +               dma =3D readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
-> +               if (dma) {
+The 3 merely shuffles code around without any changes to the code, hence
+it's a safe change.
 
-	if (!dma)
-		goto out;
-
-> +                       val =3D readl_relaxed(gi2c->se.base + SE_DMA_DEBU=
-G_REG0);
-> +                       if (val & DMA_TX_ACTIVE) {
-> +                               gi2c->cur_wr =3D 0;
-> +                               if (gi2c->err)
-> +                                       geni_i2c_tx_fsm_rst(gi2c);
-> +                               if (gi2c->tx_dma) {
-> +                                       geni_se_tx_dma_unprep(se,
-> +                                                gi2c->tx_dma, gi2c->xfer=
-_len);
-> +                                       gi2c->tx_dma =3D (dma_addr_t)NULL;
-
-Almost nobody does this. In fact, grep shows me one hit in the kernel.
-If nobody else is doing it something is probably wrong. When would dma
-mode be active and tx_dma not be set to something that should be
-stopped? If it really is necessary I suppose we should assign this to
-DMA_MAPPING_ERROR instead of casting NULL. Then the check above for
-tx_dma being valid can be dropped because geni_se_tx_dma_unprep()
-already checks for a valid mapping before doing anything. But really, we
-should probably be tracking the dma buffer mapped to the CPU as well as
-the dma address that was used for the mapping. Not storing both is a
-problem, see below.
-
-> +                               }
-> +                       } else if (val & DMA_RX_ACTIVE) {
-> +                               gi2c->cur_rd =3D 0;
-> +                               if (gi2c->err)
-> +                                       geni_i2c_rx_fsm_rst(gi2c);
-> +                               if (gi2c->rx_dma) {
-> +                                       geni_se_rx_dma_unprep(se,
-> +                                               gi2c->rx_dma, gi2c->xfer_=
-len);
-
-Looking closely it seems that the geni dma wrappers shouldn't even be
-checking for an iova being non-zero. Instead they should make sure that
-it just isn't invalid with !dma_mapping_error().
-
-> +                                       gi2c->rx_dma =3D (dma_addr_t)NULL;
-
-If we're stopping some dma transaction doesn't that mean the=20
-
-                 i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
-
-code needs to run also? I fail to see where we free the buffer that has
-been mapped for DMA.
-
-> +                               }
-> +                       }
-> +               }
-> +       }
-> +
-
-out:
-
-> +       pm_runtime_put_sync_suspend(gi2c->se.dev);
-> +}
-> +
+The 4 has a potential danger since there are cleanups of the outdated
+features and some changes may change semantic in a case of a bug. Hence,
+if in the future we'll happen to find a problem in one of the 4 patches,
+then there is a better chance that the problem could be fixed with a
+simple revert. If 3 is placed after 4, then the chance is completely gone.
