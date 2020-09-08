@@ -2,114 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4F2260B85
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Sep 2020 09:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E6C260C0E
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Sep 2020 09:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728654AbgIHHGk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Sep 2020 03:06:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37908 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728115AbgIHHGj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 8 Sep 2020 03:06:39 -0400
-Received: from localhost (p5486cc72.dip0.t-ipconnect.de [84.134.204.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A56542078E;
-        Tue,  8 Sep 2020 07:06:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599548798;
-        bh=fqYvBYmENcUKuM05hBKTFF4834yUPOhVdHnQb6n0AlQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S1FWuPl0lCeMAFrCseZLRH5u42zbxXf8aFyHvBionCIvL7rP9HrMAhFnR2DlZLSDC
-         SUFOVFAWrvq5nqtjw+ra4FGAUniVLWY6D/E1fK3xPmvmSq2uNrTA8+TQ2UPpfp+YFM
-         WF+7FAaLdP5DQ0o4nBLybvrBcoB3Vs9H6cu33PjI=
-Date:   Tue, 8 Sep 2020 09:06:35 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>
-Cc:     andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        jdelvare@suse.de, chris.packham@alliedtelesis.co.nz,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] i2c: algo-pca: Reapply i2c bus settings after
- reset
-Message-ID: <20200908070634.GC5936@ninjato>
-References: <20200902211532.22684-1-evan.nimmo@alliedtelesis.co.nz>
+        id S1729400AbgIHHco (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Sep 2020 03:32:44 -0400
+Received: from mail-io1-f77.google.com ([209.85.166.77]:53004 "EHLO
+        mail-io1-f77.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729347AbgIHHcY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Sep 2020 03:32:24 -0400
+Received: by mail-io1-f77.google.com with SMTP id m4so9188722iov.19
+        for <linux-i2c@vger.kernel.org>; Tue, 08 Sep 2020 00:32:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=B5Ws/Ynq+wCk8d6oGXHx7cxlIQLiWvpyaF11bTnW1Gs=;
+        b=Kg/3j1riPcVy1P9UON9B+GK6iu4SBn0h3CKs1iDtql8nUIt97Ico1IFGs9uPacXJdO
+         UqlMAZhRlYNlQTfpTCbIAYnDOAnkSLS3SQeKFda32Q0TPbab0b7okxAFanDSNVFpAnWU
+         eIGQ9V7FujA/s9WJonHCkAXk0AWLqVfDFDbtvbC8h7sJeFfiASiAkzv3ZQW1+jJIjge+
+         mZ174EeGTw/VbNOlRN+oxxdIRhSxbjyktJjckvyAZSxRs9Hx+R5GnnAw6QH9wOUtTHoa
+         ptj5tsRy1I77S8ovoojP1h8NDf5r8OT4/t+VogZTVay+4ommcB7rbpFF8aUhY7h7MAG1
+         BxBA==
+X-Gm-Message-State: AOAM533LyxXVXz6MWel1234W0TLn1o5h6cDCzH7hx1OmpbYkR6UFdVR1
+        LHVuyFKlePGaGN+WEVCN69BBrI2/blQTkq//4tCRld62shRy
+X-Google-Smtp-Source: ABdhPJzF5RJaWXaK2Wqqm9avurAuHZUABdVz4e0UHscvv8uToevqEacCL+UMhvPjvrECjG05FcRfoB/SZb76YGg+ZVVSSSwKt4fV
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="c3bfwLpm8qysLVxt"
-Content-Disposition: inline
-In-Reply-To: <20200902211532.22684-1-evan.nimmo@alliedtelesis.co.nz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a05:6638:1616:: with SMTP id x22mr10493690jas.110.1599550342906;
+ Tue, 08 Sep 2020 00:32:22 -0700 (PDT)
+Date:   Tue, 08 Sep 2020 00:32:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fd49fb05aec855a8@google.com>
+Subject: KASAN: out-of-bounds Write in i801_isr
+From:   syzbot <syzbot+be15dc0b1933f04b043a@syzkaller.appspotmail.com>
+To:     jdelvare@suse.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hello,
 
---c3bfwLpm8qysLVxt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-Hi Evan,
+HEAD commit:    b765a32a Merge tag 'scsi-fixes' of git://git.kernel.org/pu..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12d86515900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=669314b9008f6680
+dashboard link: https://syzkaller.appspot.com/bug?extid=be15dc0b1933f04b043a
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+userspace arch: i386
 
-> changes in v2:
-> - changed lowercase "pca to uppercase "PCA".
-> - reworded and reformatted the multiline comment.
-> - moved the clock frequency KERN_INFO closer to the call that sets this.
-> - moved the i2c_bus_settings struct to the more generic i2c.h and removed
-> - the comments indicating this as being for the pca chip.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-As mentioned in v1, I think we should not have it in the generic i2c
-headers yet. a) it makes backporting more difficult and b) we need to
-find the optimal generic set of parameters which is a seperate issue.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+be15dc0b1933f04b043a@syzkaller.appspotmail.com
 
-> =20
-> -		pca_reset(pca_data);
-> -
->  		clock =3D pca_clock(pca_data);
-> +
->  		printk(KERN_INFO "%s: Clock frequency is %dkHz\n",
->  		     adap->name, freqs[clock]);
+BUG: KASAN: out-of-bounds in i801_isr_byte_done drivers/i2c/busses/i2c-i801.c:593 [inline]
+BUG: KASAN: out-of-bounds in i801_isr drivers/i2c/busses/i2c-i801.c:664 [inline]
+BUG: KASAN: out-of-bounds in i801_isr+0xb2d/0xbf0 drivers/i2c/busses/i2c-i801.c:645
+Write of size 1 at addr ffffc900039c7d7a by task udevd/9302
 
-Minor nit: I think there is no need for the extra blank line, but I'll
-let you decide.
+CPU: 1 PID: 9302 Comm: udevd Not tainted 5.9.0-rc3-syzkaller #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x198/0x1fd lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0x5/0x497 mm/kasan/report.c:383
+ __kasan_report mm/kasan/report.c:513 [inline]
+ kasan_report.cold+0x1f/0x37 mm/kasan/report.c:530
+ i801_isr_byte_done drivers/i2c/busses/i2c-i801.c:593 [inline]
+ i801_isr drivers/i2c/busses/i2c-i801.c:664 [inline]
+ i801_isr+0xb2d/0xbf0 drivers/i2c/busses/i2c-i801.c:645
+ __handle_irq_event_percpu+0x223/0xaa0 kernel/irq/handle.c:156
+ handle_irq_event_percpu kernel/irq/handle.c:196 [inline]
+ handle_irq_event+0x102/0x285 kernel/irq/handle.c:213
+ handle_fasteoi_irq+0x22f/0x9f0 kernel/irq/chip.c:714
+ run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:50 [inline]
+ handle_irq arch/x86/kernel/irq.c:230 [inline]
+ __common_interrupt arch/x86/kernel/irq.c:249 [inline]
+ common_interrupt+0x96/0x1f0 arch/x86/kernel/irq.c:239
+ asm_common_interrupt+0x1e/0x40 arch/x86/include/asm/idtentry.h:572
+RIP: 0010:__do_softirq+0x1ba/0xa91 kernel/softirq.c:284
+Code: c7 c0 58 3c b6 89 48 c1 e8 03 42 80 3c 30 00 0f 85 ea 07 00 00 48 83 3d ab 3a 96 01 00 0f 84 b7 06 00 00 fb 66 0f 1f 44 00 00 <48> c7 44 24 08 c0 90 a0 89 b8 ff ff ff ff 0f bc 04 24 83 c0 01 89
+RSP: 0018:ffffc900004e8f70 EFLAGS: 00000282
+RAX: 1ffffffff136c78b RBX: ffff88805ed1d6c0 RCX: 0000000000000002
+RDX: 0000000000000000 RSI: 0000000000000100 RDI: 0000000000000000
+RBP: ffffc900028e7b50 R08: 0000000000000001 R09: ffffffff8c5f1a87
+R10: fffffbfff18be350 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: dffffc0000000000 R15: 0000000000000000
+ asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:706
+ </IRQ>
+ __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
+ run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
+ do_softirq_own_stack+0x9d/0xd0 arch/x86/kernel/irq_64.c:77
+ invoke_softirq kernel/softirq.c:393 [inline]
+ __irq_exit_rcu kernel/softirq.c:423 [inline]
+ irq_exit_rcu+0x235/0x280 kernel/softirq.c:435
+ sysvec_apic_timer_interrupt+0x51/0xf0 arch/x86/kernel/apic/apic.c:1091
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:581
+RIP: 0010:generic_write_check_limits+0x0/0x2a0 mm/filemap.c:3001
+Code: 48 2b 04 25 28 00 00 00 75 0e 48 81 c4 a0 00 00 00 5b 5d 41 5c 41 5d c3 e8 7d 34 5f 06 0f 1f 00 66 2e 0f 1f 84 00 00 00 00 00 <41> 56 49 89 fe 41 55 49 89 f5 41 54 55 48 89 d5 53 e8 fa d2 df ff
+RSP: 0018:ffffc900028e7c58 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffffc900028e7db8 RCX: ffffffff81957817
+RDX: ffffc900028e7ca0 RSI: 0000000000000000 RDI: ffff888027b1fa80
+RBP: ffffc900028e7d68 R08: 0000000000000001 R09: ffff888018e7908f
+R10: 0000000000000080 R11: 0000000000000000 R12: ffff888018e79080
+R13: 1ffff9200051cf90 R14: 00000000ffffff80 R15: ffff888027b1fa80
+ generic_write_checks mm/filemap.c:3053 [inline]
+ generic_file_write_iter+0x2d3/0x5c0 mm/filemap.c:3562
+ call_write_iter include/linux/fs.h:1882 [inline]
+ new_sync_write+0x422/0x650 fs/read_write.c:503
+ vfs_write+0x5ad/0x730 fs/read_write.c:578
+ ksys_write+0x12d/0x250 fs/read_write.c:631
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7f292cccc370
+Code: 73 01 c3 48 8b 0d c8 4a 2b 00 31 d2 48 29 c2 64 89 11 48 83 c8 ff eb ea 90 90 83 3d 85 a2 2b 00 00 75 10 b8 01 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 0e 8a 01 00 48 89 04 24
+RSP: 002b:00007ffed324d908 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 000000000000001b RCX: 00007f292cccc370
+RDX: 000000000000001b RSI: 00007f292d5cb000 RDI: 0000000000000005
+RBP: 00007f292d5cb000 R08: 00007f292d5c47a0 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000cb8140
+R13: 000000000000001b R14: 00007ffed324d9f0 R15: 0000000000000001
 
-> +/**
-> + * struct i2c_bus_settings - The configured i2c bus settings
-> + * @mode: Configured i2c bus mode
-> + * @tlow: Configured SCL LOW period
-> + * @thi: Configured SCL HIGH period
-> + * @clock_freq: The configured clock frequency
-> + */
-> +struct i2c_bus_settings {
 
-'pca_i2c_bus_settings' or similar?
-
-Rest looks good!
-
-Thanks,
-
-   Wolfram
+Memory state around the buggy address:
+ ffffc900039c7c00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc900039c7c80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>ffffc900039c7d00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                                                                ^
+ ffffc900039c7d80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc900039c7e00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
 
 
---c3bfwLpm8qysLVxt
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9XLXcACgkQFA3kzBSg
-KbYlJQ//S6vZ98amQPpR33oXQtLX0cUQPC0OE9kkMetgOLuJlvVt5bDF8y7FsPwn
-BS/Bt6JLD2UPptlxLzRfB7t7LcerN1vhqS4pHPoqArhJioI1oOS62Luje1Ae4+vN
-cRigGgr5UUCUkCSVfiIP1n7f1eDdrmhkEs2LSiSEdUHJPtsXeMJaT/485lnGXyID
-wviXyjrAaobvSPcm0QtvvqT4gPhnQZS7DVxyTY9sDdQat+azMxE358KxOwvcBdKs
-pEQxhlnubSoA9PMmXsz6HIqyA4vtSEB0afBsz3qVzKm6nzDB5CJbve3YymBsIiYH
-n+gpMnt2sxPZ6AVHLCWH/mrqBJXgkxlBKZX0g9zZsnQmnl7ilX7GjVBxh5wyFgwq
-2U108E0OX1p6I6eu6GOWJFwKKGZC1Oc0rS3NTs4ez7Y5vpmd6ILB8glfx4TTwFRK
-5Y5qekyrjHHH40JGm/tJpjjs4jPwKjt8u+kQscoMr0TTncgSCTdKySYJ34SZ2r9y
-b7LtUeqktrqbZm9y3ull71O7PG/ZwCVKJm8TCwJdFRsNeTT+KnCJSynbfL8rThPg
-vjVSRHbFB/gc9HZD10vrDiaCanoZeLYDkUQk3opNvmu2oF8spSLFA2kfKanQL5q0
-hTCa8wTtFWe0mnY+bBMm6dnKduEx6WljyuRxwF7rP7eCLnz1FAs=
-=lT2Z
------END PGP SIGNATURE-----
-
---c3bfwLpm8qysLVxt--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
