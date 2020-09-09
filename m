@@ -2,91 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FF9263791
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Sep 2020 22:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2296263805
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Sep 2020 22:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgIIUkJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Sep 2020 16:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726426AbgIIUkI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Sep 2020 16:40:08 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340ABC061573
-        for <linux-i2c@vger.kernel.org>; Wed,  9 Sep 2020 13:40:07 -0700 (PDT)
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        id S1728443AbgIIU4F (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Sep 2020 16:56:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58626 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726534AbgIIU4E (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 9 Sep 2020 16:56:04 -0400
+Received: from dhcp-10-100-145-180.wdl.wdc.com (unknown [199.255.45.60])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id F08EC80719;
-        Thu, 10 Sep 2020 08:39:51 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1599683991;
-        bh=NHjUxeEhMMCSoluiwizAPmsG3H1noXImr/miOLmn704=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=Q6xToLnINjCuZ7tW/YZdrjasaA2KbwwMUxmJmvJI/wWWR4eIZAR8OtnLGPvyYEXJu
-         xV/bW0UK9iExFVUgT/YR4lK5Z/3+RkqNdWLl8mJcPTQTJG9/RQRnenPue9tIAzoU+7
-         JjPtdlRgx3AtUPmFvvM/6djzkbL1Gk7+2N0DRZxf3vXZyUby3UQzDUIYNB/vAmdXrZ
-         E30S5RqKMjCbJc8ljOeF1v0JeGikX6BCIgIx6kNpXqU/grwebJSde+f4OSMIvOPMks
-         yM/fEPcGgJln/hkJXHawoFkNnJVkGp9xqQVX0RL/Au0umfoeUZKj9Ifnp5dKeuLo/C
-         Z9KkiiV7w87zQ==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f593d970000>; Thu, 10 Sep 2020 08:39:51 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Thu, 10 Sep 2020 08:39:51 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.006; Thu, 10 Sep 2020 08:39:51 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Evan Nimmo <Evan.Nimmo@alliedtelesis.co.nz>
-CC:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
-        "jdelvare@suse.de" <jdelvare@suse.de>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/1] i2c: algo-pca: Reapply i2c bus settings after
- reset
-Thread-Topic: [PATCH v4 1/1] i2c: algo-pca: Reapply i2c bus settings after
- reset
-Thread-Index: AQHWhh88ZbCxr7/vmEC2Fb58jxyqGqlfL6AAgADNsQA=
-Date:   Wed, 9 Sep 2020 20:39:50 +0000
-Message-ID: <5410e288-e369-0310-1b8e-061c95e46164@alliedtelesis.co.nz>
-References: <20200908203247.14374-1-evan.nimmo@alliedtelesis.co.nz>
- <20200909082338.GC2272@ninjato>
-In-Reply-To: <20200909082338.GC2272@ninjato>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <1291A7C6A2B28C4F846F672BC47AF75D@atlnz.lc>
-Content-Transfer-Encoding: quoted-printable
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A2AC920BED;
+        Wed,  9 Sep 2020 20:56:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599684963;
+        bh=HOi/gRnNWCADuH3C2tuPouagH6ACKRSW8Me9mQGESc8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MIR0n2v6jYMLvL9ylCeswSmSkNjM38pD+hUWnq3QNBxdxavUAFW1nFlTLHe2pybfD
+         odrRmpSK6VaBtY4y/JW5mI6voxGDP7xP7wyaKsNWcxcK7TIQVymwmw1HPj8MEaIJrr
+         wYpwdfF4aTXncxhcjdHkCnRIxxiQ6/mo+8A6FHH4=
+Date:   Wed, 9 Sep 2020 13:55:58 -0700
+From:   Keith Busch <kbusch@kernel.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Kees Cook <kees.cook@canonical.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
+        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
+        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        storagedev@microchip.com, sparclinux@vger.kernel.org,
+        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
+        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
+        alsa-devel <alsa-devel@alsa-project.org>
+Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
+ break;
+Message-ID: <20200909205558.GA3384631@dhcp-10-100-145-180.wdl.wdc.com>
+References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, Sep 09, 2020 at 01:06:39PM -0700, Joe Perches wrote:
+> diff --git a/crypto/tcrypt.c b/crypto/tcrypt.c
+> index eea0f453cfb6..8aac5bc60f4c 100644
+> --- a/crypto/tcrypt.c
+> +++ b/crypto/tcrypt.c
+> @@ -2464,7 +2464,7 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
+>  		test_hash_speed("streebog512", sec,
+>  				generic_hash_speed_template);
+>  		if (mode > 300 && mode < 400) break;
+> -		fallthrough;
+> +		break;
+>  	case 399:
+>  		break;
 
-On 9/09/20 8:23 pm, Wolfram Sang wrote:
-> On Wed, Sep 09, 2020 at 08:32:47AM +1200, Evan Nimmo wrote:
->> If something goes wrong (such as the SCL being stuck low) then we need
->> to reset the PCA chip. The issue with this is that on reset we lose all
->> config settings and the chip ends up in a disabled state which results
->> in a lock up/high CPU usage. We need to re-apply any configuration that
->> had previously been set and re-enable the chip.
->>
->> Signed-off-by: Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>
->> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
->> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> Reviewed-by: Wolfram Sang <wsa@kernel.org>
-> Applied to for-current, thanks!
->
-> For the record, were you able to test both, PCA9564 and PCA9665?
->
-Our hardware platforms only have PCA9665 so that's all we can test.=
+Just imho, this change makes the preceding 'if' look even more
+pointless. Maybe the fallthrough was a deliberate choice? Not that my
+opinion matters here as I don't know this module, but it looked a bit
+odd to me.
