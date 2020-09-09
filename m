@@ -2,37 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E300262AFC
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Sep 2020 10:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A00262B39
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Sep 2020 11:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728350AbgIIIy4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Sep 2020 04:54:56 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:56715 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728214AbgIIIyz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Sep 2020 04:54:55 -0400
+        id S1726169AbgIIJC3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Sep 2020 05:02:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36831 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725948AbgIIJC3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Sep 2020 05:02:29 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599641694;
+        s=mimecast20190719; t=1599642148;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=v1J7anzfs0x90xPTUoNfpAZn+NVUcNxeloajMKaQs88=;
-        b=O8S75w7e/l9dGcV062rKMhJjxXK6zsR8IbqBolTp5t2EllNWZyHFafGHyz9/ywnig4TR68
-        ZefSSNB3Xx3pfvG2Bta6K8dxUPOu09OeeSZA+EgXTvovBz9SN47zxKqxstuS7jf7wLLPmO
-        9DTiLIziHfTmq4hxenEiB+uBQBUqv/c=
+        bh=UwK/UCn7nj/bDtxyg3u6KBsLtSFGCtiaPO7yxlcqvrQ=;
+        b=LQwbwBbDQTK1dJWqheR46LeuwQe+scys0zvUqDtk2SGjwlMMkXUvadMgC2ANOtf4aEzLv8
+        +SVcyhiB1rysBlmjig9cs3Xr5VO4CMYt1vdtZJwDoqjBXNCxSmQOQffoIQYcfHZJwRqJ71
+        0VWcNvVMTPEaZ66RggbTB6sGCP1lHkU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-452-V9dOtQlONK2TiuIUhnEkEQ-1; Wed, 09 Sep 2020 04:54:50 -0400
-X-MC-Unique: V9dOtQlONK2TiuIUhnEkEQ-1
+ us-mta-121-mdNZZnLJOlelVXruIZe3Xg-1; Wed, 09 Sep 2020 05:02:24 -0400
+X-MC-Unique: mdNZZnLJOlelVXruIZe3Xg-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1A29B1091061;
-        Wed,  9 Sep 2020 08:54:48 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4C0BC801AE5;
+        Wed,  9 Sep 2020 09:02:21 +0000 (UTC)
 Received: from [10.72.12.24] (ovpn-12-24.pek2.redhat.com [10.72.12.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E1AFB60C87;
-        Wed,  9 Sep 2020 08:54:37 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7BAC560C87;
+        Wed,  9 Sep 2020 09:02:09 +0000 (UTC)
 Subject: Re: [PATCH] i2c: virtio: add a virtio i2c frontend driver
 To:     Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
@@ -44,17 +44,13 @@ Cc:     mst@redhat.com, wsa+renesas@sang-engineering.com, wsa@kernel.org,
         tali.perry1@gmail.com, bjorn.andersson@linaro.org,
         shuo.a.liu@intel.com, conghui.chen@intel.com, yu1.wang@intel.com
 References: <0efc2605c8c06b4b1bf68cbad5536c4a900dc019.1599110284.git.jie.deng@intel.com>
- <18828d17-c3ac-31bd-2dcf-ecdbd4ad844e@redhat.com>
- <e63a96bf-65d2-ed03-dadc-42d1d8808c9d@intel.com>
- <3dc0d61c-9345-2b61-828c-89ca96555e5e@redhat.com>
- <c9be298b-c51b-f7f3-994b-b7bd9ae53b99@intel.com>
 From:   Jason Wang <jasowang@redhat.com>
-Message-ID: <f89142e6-a92d-b417-5e1c-bbe813636023@redhat.com>
-Date:   Wed, 9 Sep 2020 16:54:36 +0800
+Message-ID: <acf0e13d-3080-81e8-9cb1-82af6935d402@redhat.com>
+Date:   Wed, 9 Sep 2020 17:02:07 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <c9be298b-c51b-f7f3-994b-b7bd9ae53b99@intel.com>
+In-Reply-To: <0efc2605c8c06b4b1bf68cbad5536c4a900dc019.1599110284.git.jie.deng@intel.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -65,49 +61,65 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-On 2020/9/8 上午9:40, Jie Deng wrote:
->
->
-> On 2020/9/7 13:40, Jason Wang wrote:
->>
->>>
->>>
->>>>
->>>>>
->>>>> +struct virtio_i2c_msg {
->>>>> +    struct virtio_i2c_hdr hdr;
->>>>> +    char *buf;
->>>>> +    u8 status;
->>>>
->>>>
->>>> Any reason for separating status out of virtio_i2c_hdr?
->>>>
->>> The status is not from i2c_msg. 
->>
->>
->> You meant ic2_hdr? You embed status in virtio_i2c_msg anyway.
->>
->>
-> The "i2c_msg" structure defined in i2c.h.
->
->>> So I put it out of virtio_i2c_hdr.
->>
->>
->> Something like status or response is pretty common in virtio request 
->> (e.g net or scsi), if no special reason, it's better to keep it in 
->> the hdr.
->>
-> Mainly based on IN or OUT.
->
-> The addr, flags and len are from "i2c_msg". They are put in one 
-> structure as an OUT**scatterlist.
-> The buf can be an OUT**or an IN scatterlist depending on write or read.
-> The status is a result from the backend  which is defined as an IN 
-> scatterlis. 
+On 2020/9/3 下午1:34, Jie Deng wrote:
+> --- a/drivers/i2c/busses/Makefile
+> +++ b/drivers/i2c/busses/Makefile
+> @@ -6,6 +6,9 @@
+>   # ACPI drivers
+>   obj-$(CONFIG_I2C_SCMI)		+= i2c-scmi.o
+>   
+> +# VIRTIO I2C host controller driver
+> +obj-$(CONFIG_I2C_VIRTIO)	+= i2c-virtio.o
+> +
+>   # PC SMBus host controller drivers
+>   obj-$(CONFIG_I2C_ALI1535)	+= i2c-ali1535.o
+>   obj-$(CONFIG_I2C_ALI1563)	+= i2c-ali1563.o
+> diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
+> new file mode 100644
+> index 0000000..47f9fd1
+> --- /dev/null
+> +++ b/drivers/i2c/busses/i2c-virtio.c
+> @@ -0,0 +1,276 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Virtio I2C Bus Driver
+> + *
+> + * Copyright (c) 2020 Intel Corporation. All rights reserved.
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/completion.h>
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/io.h>
+> +#include <linux/jiffies.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/wait.h>
+> +
+> +#include <linux/virtio.h>
+> +#include <linux/virtio_ids.h>
+> +#include <linux/virtio_config.h>
+> +
+> +#define VIRTIO_I2C_MSG_OK	0
+> +#define VIRTIO_I2C_MSG_ERR	1
+> +
+> +/**
+> + * struct virtio_i2c_hdr - the virtio I2C message header structure
+> + * @addr: i2c_msg addr, the slave address
+> + * @flags: i2c_msg flags
+> + * @len: i2c_msg len
+> + */
+> +struct virtio_i2c_hdr {
+> +	__virtio16 addr;
+> +	__virtio16 flags;
+> +	__virtio16 len;
+> +} __packed;
 
 
-Ok. I get this.
+Btw, this part should belong to uAPI, and you need to define the status 
+in uAPI.
 
 Thanks
-
 
