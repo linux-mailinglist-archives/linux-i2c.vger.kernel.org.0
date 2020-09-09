@@ -2,139 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E5026261D
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Sep 2020 06:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA52262781
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Sep 2020 08:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725821AbgIIENM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Sep 2020 00:13:12 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:11286 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725767AbgIIENL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 9 Sep 2020 00:13:11 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 861915EBC3146D599CB2;
-        Wed,  9 Sep 2020 12:13:09 +0800 (CST)
-Received: from SWX921481.china.huawei.com (10.126.200.172) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.487.0; Wed, 9 Sep 2020 12:12:58 +0800
-From:   Barry Song <song.bao.hua@hisilicon.com>
-To:     <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <linuxarm@huawei.com>, Barry Song <song.bao.hua@hisilicon.com>,
-        "Gregory CLEMENT" <gregory.clement@bootlin.com>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH] i2c: busses: replace spin_lock_irqsave by spin_lock in hard IRQ
-Date:   Wed, 9 Sep 2020 16:10:01 +1200
-Message-ID: <20200909041001.5612-1-song.bao.hua@hisilicon.com>
-X-Mailer: git-send-email 2.21.0.windows.1
+        id S1726801AbgIIG5M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Sep 2020 02:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726399AbgIIG5L (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Sep 2020 02:57:11 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF174C061573;
+        Tue,  8 Sep 2020 23:57:10 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id q21so1531692edv.1;
+        Tue, 08 Sep 2020 23:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aucFnAaA6n54SqN2ylDW2Uq1+nK592raJ0MmLzBKiSs=;
+        b=mYuIK7PT4ChKZXdBvVrAd7YKq7i/4lwweyhypREg+ye6C6cYuYWQo2zLiWiUGH+tWe
+         6q6Clmjyx92I7Ed1bHBx7IQzZQc90V8ILbwtoZk/4SAT8ccv3Jo/4cM6wi8z41LJ4v3l
+         DSWkf02+8QQ86flhs7lTLOQvzv0X58zrRLhLo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aucFnAaA6n54SqN2ylDW2Uq1+nK592raJ0MmLzBKiSs=;
+        b=g9mlM9R9Hx9Id5uOFiKHhS/o/RuRP/glVKQnZdUJTGP1XsdANsB3VfXP20ux3BSUdW
+         jcjHVi0qO6EcAMHAFjyZNghpGX3kQgYMtu8eTO1iRPem4cf5L3Gh84ihj3VJ01ZddNtx
+         SLnto1z+yEZthl74w+GYBbHNYb8WEl/V3izJx1LDVOVq04nokh01Dsu44hlF2/d5yphj
+         28uyM8seCa1xNgqQE08caVo/n0OPcUUCwg0s8YRN+cGMyVlB5mwh8HPuIUR3WQZNVxFG
+         r5wa6AIs4tTVyFipzBYG/pFnPPD3qzmHMJNlSWTnp4C6k5Z/7MHDkh8kx0YelWI8UuJo
+         Wwnw==
+X-Gm-Message-State: AOAM530ZRZHoN+gx1GkdbaW6FD9ZzgZ/be0nMbp6Ic6dEWS9WJDPAAi0
+        cA/G9/GZacPrhkq353h7+5cC0Hit7VwiR7pOa3g=
+X-Google-Smtp-Source: ABdhPJwPlzh1DnLGo9MSTT8J/yrnEnx7UmuC9FQVeFtz+arOOvvLH5XkI0R9H39kuPOE/iZLcwtZShJUK72WQR+TAXI=
+X-Received: by 2002:a05:6402:ca7:: with SMTP id cn7mr2599331edb.143.1599634629657;
+ Tue, 08 Sep 2020 23:57:09 -0700 (PDT)
 MIME-Version: 1.0
+References: <20200908200101.64974-1-eajames@linux.ibm.com> <20200908200101.64974-5-eajames@linux.ibm.com>
+In-Reply-To: <20200908200101.64974-5-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 9 Sep 2020 06:56:57 +0000
+Message-ID: <CACPK8Xf0z4kz9JkTWPKveQsmEpKq0YtEQ+1Jracndu9g9UW7ZQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] ARM: dts: Aspeed: Tacoma: Add IBM Operation Panel
+ I2C device
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-input@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        linux-i2c@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        dmitry.torokhov@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        wsa@kernel.org, Tao Ren <rentao.bupt@gmail.com>,
+        Ryan Chen <ryan_chen@aspeedtech.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.126.200.172]
-X-CFilter-Loop: Reflected
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The code has been in a irq-disabled context since it is hard IRQ. There
-is no necessity to do it again.
+On Tue, 8 Sep 2020 at 20:01, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> Set I2C bus 0 to multi-master mode and add the panel device that will
+> register as a slave.
+>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: "Andreas Färber" <afaerber@suse.de>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: Akash Asthana <akashast@codeaurora.org>
-Cc: Mukesh Savaliya <msavaliy@codeaurora.org>
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
----
- drivers/i2c/busses/i2c-mv64xxx.c   | 5 ++---
- drivers/i2c/busses/i2c-owl.c       | 5 ++---
- drivers/i2c/busses/i2c-qcom-geni.c | 5 ++---
- 3 files changed, 6 insertions(+), 9 deletions(-)
+I will take this and the rainier dts patch through the aspeed tree so
+we don't get conflicts.
 
-diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
-index 8d9d4ffdcd24..e0e45fc19b8f 100644
---- a/drivers/i2c/busses/i2c-mv64xxx.c
-+++ b/drivers/i2c/busses/i2c-mv64xxx.c
-@@ -496,11 +496,10 @@ static irqreturn_t
- mv64xxx_i2c_intr(int irq, void *dev_id)
- {
- 	struct mv64xxx_i2c_data	*drv_data = dev_id;
--	unsigned long	flags;
- 	u32		status;
- 	irqreturn_t	rc = IRQ_NONE;
- 
--	spin_lock_irqsave(&drv_data->lock, flags);
-+	spin_lock(&drv_data->lock);
- 
- 	if (drv_data->offload_enabled)
- 		rc = mv64xxx_i2c_intr_offload(drv_data);
-@@ -517,7 +516,7 @@ mv64xxx_i2c_intr(int irq, void *dev_id)
- 
- 		rc = IRQ_HANDLED;
- 	}
--	spin_unlock_irqrestore(&drv_data->lock, flags);
-+	spin_unlock(&drv_data->lock);
- 
- 	return rc;
- }
-diff --git a/drivers/i2c/busses/i2c-owl.c b/drivers/i2c/busses/i2c-owl.c
-index 672f1f239bd6..618d3013d0b6 100644
---- a/drivers/i2c/busses/i2c-owl.c
-+++ b/drivers/i2c/busses/i2c-owl.c
-@@ -165,10 +165,9 @@ static irqreturn_t owl_i2c_interrupt(int irq, void *_dev)
- {
- 	struct owl_i2c_dev *i2c_dev = _dev;
- 	struct i2c_msg *msg = i2c_dev->msg;
--	unsigned long flags;
- 	unsigned int stat, fifostat;
- 
--	spin_lock_irqsave(&i2c_dev->lock, flags);
-+	spin_lock(&i2c_dev->lock);
- 
- 	i2c_dev->err = 0;
- 
-@@ -208,7 +207,7 @@ static irqreturn_t owl_i2c_interrupt(int irq, void *_dev)
- 			   OWL_I2C_STAT_IRQP, true);
- 
- 	complete_all(&i2c_dev->msg_complete);
--	spin_unlock_irqrestore(&i2c_dev->lock, flags);
-+	spin_unlock(&i2c_dev->lock);
- 
- 	return IRQ_HANDLED;
- }
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index dead5db3315a..8b4c35f47a70 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -210,9 +210,8 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
- 	u32 dma;
- 	u32 val;
- 	struct i2c_msg *cur;
--	unsigned long flags;
- 
--	spin_lock_irqsave(&gi2c->lock, flags);
-+	spin_lock(&gi2c->lock);
- 	m_stat = readl_relaxed(base + SE_GENI_M_IRQ_STATUS);
- 	rx_st = readl_relaxed(base + SE_GENI_RX_FIFO_STATUS);
- 	dm_tx_st = readl_relaxed(base + SE_DMA_TX_IRQ_STAT);
-@@ -294,7 +293,7 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
- 	    dm_rx_st & RX_DMA_DONE || dm_rx_st & RX_RESET_DONE)
- 		complete(&gi2c->done);
- 
--	spin_unlock_irqrestore(&gi2c->lock, flags);
-+	spin_unlock(&gi2c->lock);
- 
- 	return IRQ_HANDLED;
- }
--- 
-2.25.1
+Eddie, when you send v3, you can omit them.
 
+Cheers,
 
+Joel
+
+> ---
+>  arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts b/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
+> index 5f4ee67ac787..4d070d6ba09f 100644
+> --- a/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
+> +++ b/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
+> @@ -4,6 +4,7 @@
+>
+>  #include "aspeed-g6.dtsi"
+>  #include <dt-bindings/gpio/aspeed-gpio.h>
+> +#include <dt-bindings/i2c/i2c.h>
+>  #include <dt-bindings/leds/leds-pca955x.h>
+>
+>  / {
+> @@ -438,7 +439,13 @@ aliases {
+>  };
+>
+>  &i2c0 {
+> +       multi-master;
+>         status = "okay";
+> +
+> +       ibm-panel@62 {
+> +               compatible = "ibm,op-panel";
+> +               reg = <(0x62 | I2C_OWN_SLAVE_ADDRESS)>;
+> +       };
+>  };
+>
+>  &i2c1 {
+> --
+> 2.26.2
+>
