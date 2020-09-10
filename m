@@ -2,46 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0AC263D28
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Sep 2020 08:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61ED2263D36
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Sep 2020 08:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726426AbgIJGVD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Sep 2020 02:21:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48470 "EHLO mail.kernel.org"
+        id S1725971AbgIJGYw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Sep 2020 02:24:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51512 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725971AbgIJGVD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 10 Sep 2020 02:21:03 -0400
+        id S1726228AbgIJGYu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 10 Sep 2020 02:24:50 -0400
 Received: from localhost (p5486ceec.dip0.t-ipconnect.de [84.134.206.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BED97207DE;
-        Thu, 10 Sep 2020 06:21:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C5BCF207DE;
+        Thu, 10 Sep 2020 06:24:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599718862;
-        bh=JWNUxWZbGJJ1fihwnRRpBTK9XQnFPsAPD0+ab1fseg0=;
+        s=default; t=1599719089;
+        bh=YYdbufaGVHlqO4nKD2x3a6t2VMqS5rsZ1vep5b/qwAU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fbiWPiLGCvPfrqWWZo5JFgb0/Uw26pu9zVq68ZQqhDRwSWZe7agcZkOIx1SnYzMrh
-         hnkhvpGayepHpld0KmFCoOuDnFXWPZ3SrV6glb+8+a81MN0AIqWOSVgFBX+/2a7T7+
-         cFq8vyvDSlE68w43+QHICEgzMmKiGQGYDpZIWA38=
-Date:   Thu, 10 Sep 2020 08:20:58 +0200
+        b=aTAXkxtLEunJFDT7fR21mpntjBM1h5RX7bLwZGytsLNRI6f9ocxRQhQ3P1zD9DYAi
+         hKiIw0BWQy+ig7qo9I/QWmxojJQ7ybNsK/S+m3pCv2dBD0gVFTmozjlhPJiG6XDPjx
+         285R+8i4zWAgog4LQ+tLw3BkQzLJEu8AG3RmQ66U=
+Date:   Thu, 10 Sep 2020 08:24:46 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        dmitry.torokhov@gmail.com, joel@jms.id.au, andrew@aj.id.au,
-        benh@kernel.crashing.org, brendanhiggins@google.com,
-        rentao.bupt@gmail.com, ryan_chen@aspeedtech.com
-Subject: Re: [PATCH v3 3/5] i2c: aspeed: Mask IRQ status to relevant bits
-Message-ID: <20200910062058.GC1031@ninjato>
-References: <20200909203059.23427-1-eajames@linux.ibm.com>
- <20200909203059.23427-4-eajames@linux.ibm.com>
- <20200910061813.GB1031@ninjato>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Michal Simek <michal.simek@xilinx.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 8/9] i2c: mux: gpmux: Simplify with dev_err_probe()
+Message-ID: <20200910062446.GD1031@ninjato>
+References: <20200902150643.14839-1-krzk@kernel.org>
+ <20200902150643.14839-8-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="adJ1OR3c6QgCpb/j"
+        protocol="application/pgp-signature"; boundary="ZARJHfwaSJQLOEUz"
 Content-Disposition: inline
-In-Reply-To: <20200910061813.GB1031@ninjato>
+In-Reply-To: <20200902150643.14839-8-krzk@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -49,45 +65,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---adJ1OR3c6QgCpb/j
+--ZARJHfwaSJQLOEUz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 10, 2020 at 08:18:13AM +0200, Wolfram Sang wrote:
-> On Wed, Sep 09, 2020 at 03:30:57PM -0500, Eddie James wrote:
-> > Mask the IRQ status to only the bits that the driver checks. This
-> > prevents excessive driver warnings when operating in slave mode
-> > when additional bits are set that the driver doesn't handle.
-> >=20
-> > Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> > Reviewed-by: Tao Ren <rentao.bupt@gmail.com>
+On Wed, Sep 02, 2020 at 05:06:42PM +0200, Krzysztof Kozlowski wrote:
+> Common pattern of handling deferred probe can be simplified with
+> dev_err_probe().  Less code and the error value gets printed.
 >=20
-> I reconsidered and applied it now because this helps whenever slave mode
-> is used. So, applied to for-current, thanks!
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-If someone could provide a Fixes tag, that would be welcome. For me, not
-knowing the HW it doesn't look trivial to determine.
+Applied to for-next, thanks!
 
 
---adJ1OR3c6QgCpb/j
+--ZARJHfwaSJQLOEUz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9ZxckACgkQFA3kzBSg
-KbZ3iA//cQfh41pbKdqYAo099C5IRm15SZnDi0WxKZpIYlYR22XokN01zfTYj/vX
-AIy+9J85UNFbLBhrASWn/Zuu7/4VkAKQgBPZChEH6EJ4wRe9RGHg6+Em21n0gqR9
-pyWNMkX4S/iSeLdhsi0HZ23Lg9KyN8tFUiw1Wj4DCcQGEDe8W1oOBkW1X1r2YLTk
-p99q/blvdOcfPUqfSFRxBYCKFYwipTllZMAklQ52sHDKpabgIxdNtUsffSrZaabr
-4UNtkX4cf+S5KZb87uXXb3zeVFRpr/tls4CQDAMyJHiqvrMT9gLGmpmKAX93RDy9
-dln32Q1uJbhiTjQc/tTuxQiiCiexc0vpk0uf1yliEbToVzb7rLCXz/ms9sY+oPZM
-tOzbG8/ERYdkUAbdkMIrgASNgDgrQvISH8pyLIIGfrGsiz2FcFBHUCBCONeyZgR8
-kndwyqr0plUr0RsCibBkkyRRKT/D9SkJAAMDBaAg68j2Uj+PEr+ccagf/AH+Fdbb
-gTLE64Mx1awSmGF6RpOHEgvEG+o62GDbZk/TmKD7GIWjeXqpZwoG1OySHc/gmFrJ
-lB4SN2kjxbHhcOB+D0YatsuVmrwEbQFTMMTH01gWjwLRpjNQ9TOxrMgmOhtiMyh/
-C7jkwvhOCiwtvd5zmD2JTn7r/0GhZXU6dg3DLlZQzMsh9NhV45s=
-=24Fn
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9Zxq4ACgkQFA3kzBSg
+KbbgJg/9GSHP1qRdFGhNdLgjcwkknpOwbjsZrYyXVYeYuUFbx9XQPf55dRd2yB28
+h6D02c/8cGep4CPrKQQDUpg/yFqTXV16AniUtjv8w0mP+BlBsyZ/GWhjUIsYxnHG
+Ff9l2LogCfDSoy3ZV5GLyELiGN0Ex3W1m6X5vjj+u3/pBMANwC6sUp89CmqgCic7
+IBX2wORSVUtvnA1cfA9ecn556CmTIWg9UzbGGV5/bPPItVALZ9gejg8CjHjaol/6
+mSUYdfaawrNZE9GYWP0iypPzu1qIdvPCcV38nbVp1/Y5DRA5bYD+NV3Yfc9MpLpK
+Ws+kpqElTyzcqorAABjk9TYUMa0CwEMfH40YysuupfdFRrZqkxMTtHQQ1DDhd//a
+p35eewasMSRaFzPalg5jAYX1WylSCi68O/o7tcmetO+4O0/z2yjTKrHsynaGKDpP
+6wy1pRywMx7ppAWamk1/4JQiq6KbpfjDK/0cbHVTigzUfCVvw0F6stAmUwqfV4dg
+/Osc9IuAXWlyax4rOcbWB5HsYXuPf5m3nqTNlHyYpFEThj0S8AfeyM8Zy1sDZ1SY
+Zk7VVFPPAIfDqfWlNMLhYTGrynwXjsDXW5gUUE71PccXJ2P1ZsbRO91fGDoZ+sIq
+ZOWfSEl1GHIwbSEmf06MM+fQNRg8WM3zA7EReBpW5GSntii3vpY=
+=CslT
 -----END PGP SIGNATURE-----
 
---adJ1OR3c6QgCpb/j--
+--ZARJHfwaSJQLOEUz--
