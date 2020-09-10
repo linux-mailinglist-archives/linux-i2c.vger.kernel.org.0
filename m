@@ -2,105 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C78264075
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Sep 2020 10:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAE02640D5
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Sep 2020 11:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730178AbgIJIrv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Sep 2020 04:47:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33962 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726847AbgIJIru (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 10 Sep 2020 04:47:50 -0400
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi [91.155.214.58])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C4F920770;
-        Thu, 10 Sep 2020 08:47:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599727668;
-        bh=RPokpgxyglYjppmxdwE4ETpgoWb+FLMn8txdhEbALdk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=caMPoUSKexLI6/Cqhtg8fT99cl3GRCJBgwM+b8CDUH4fpndiULhN2ZxxlePCqMtm8
-         o+PPIhKL0Yab4dKBUBJb9PAX9HTFJdHyhq4ZrB98n0hws/gO34J2oo99WhyXQG8LAo
-         ih4L+nIDe5nvGNhsdtsxYZAUrexQb+0pD4TKBRdk=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Joe Perches <joe@perches.com>, LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>
-Cc:     Kees Cook <kees.cook@canonical.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
-        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
-        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        storagedev@microchip.com, sparclinux@vger.kernel.org,
-        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
-        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
-        alsa-devel <alsa-devel@alsa-project.org>
-Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
- break;
-In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-Date:   Thu, 10 Sep 2020 11:47:27 +0300
-Message-ID: <878sdikogw.fsf@kernel.org>
+        id S1729521AbgIJJBW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Sep 2020 05:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729986AbgIJJBG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Sep 2020 05:01:06 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D09C061757
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Sep 2020 02:01:05 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id n14so4254899pff.6
+        for <linux-i2c@vger.kernel.org>; Thu, 10 Sep 2020 02:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ikzS6RYjoj2agknRb+4ptOX5afJxX0ugn9/c1CJ7PGY=;
+        b=susunWFFKwqMfxgI6ByE2bxzf0efOUepi18FJy0I3JaGM6PyRxlr5pWK3ZQrDC2hnN
+         ReIMsZIjJ33de7BpVFfN6XqNS2jyfb9GZ4K4h/I+P+A/84lrh4EPnpGm+66JuThreZhq
+         iAMtKUT4cO0Ytr/lL4S5Sgtjvq1DbmwGLc9mWMpW0LEU+uV0uBZdkKDexwQrIXp5JxOQ
+         RA7+krRJzRP7PBsEmcwR2pTSvNWBUhC9PH7lfT+vnhnZJ2EJ/bJDi6mlKCS+wRvd9Aam
+         hrjVglwXEJHhNVjheCVAFPlrQygD9qBLmsofYecD5zPuBl8kXkIXPqbFzTT4CDb1bFpn
+         vioA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ikzS6RYjoj2agknRb+4ptOX5afJxX0ugn9/c1CJ7PGY=;
+        b=hVbJawvyHucDtL/iLCijfhEBe7egXz1C1A9eNz0n+roqNTibXivCAl5shmsllZ0IcS
+         OSgxjzypx7cFpWDL0sNevEIOa440dElNS+VytS15l/+vWbz4mKFPK//P/kLvvlHjQkFz
+         vbhMUJZWrpFhuH11X9eCrI2qGilRnOkNc1g8L7EcTm3Mwy+w7/L4tyQpq0fVMW2o76Lx
+         sfjLu8Nzl80T8Hrovk4W+Z2dHmpIENVd7w6s06PRcLjYBMjN3j/As/eBsrbu92HjliC0
+         ySJCMkM8zOI92+1+BEGtuC+Jxn6HW8J80hl9e1KKB6I5cwP8+2CeHPl+NbgUSN181uTm
+         eJmQ==
+X-Gm-Message-State: AOAM533CgU5bwTfhs0ZwvqTdfvA+D+v9sJIj+cBVcab9tMxmE5VzlWN/
+        KyiY4shgESF1d7eSaqUWPdtxmhIsmP7H5X1VqDSO7Q==
+X-Google-Smtp-Source: ABdhPJyz+lxVXWAN3RjhjfBgNFqBMssrHGsYLq26O3vVlwR5Eg9ERiehVAHVqUqpwEj5gFDwZOX+ebtv3+a8IJuSeMA=
+X-Received: by 2002:a63:fd03:: with SMTP id d3mr3605973pgh.201.1599728464251;
+ Thu, 10 Sep 2020 02:01:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+References: <20200909203059.23427-1-eajames@linux.ibm.com> <20200909203059.23427-4-eajames@linux.ibm.com>
+In-Reply-To: <20200909203059.23427-4-eajames@linux.ibm.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 10 Sep 2020 02:00:53 -0700
+Message-ID: <CAFd5g46ghV7ArmM8LnMkGa-Nip_fT934+3cPOkVxS-b5odZXYw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] i2c: aspeed: Mask IRQ status to relevant bits
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-input@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        linux-i2c@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        wsa@kernel.org, rentao.bupt@gmail.com,
+        Ryan Chen <ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Wed, Sep 9, 2020 at 1:31 PM Eddie James <eajames@linux.ibm.com> wrote:
+>
+> Mask the IRQ status to only the bits that the driver checks. This
+> prevents excessive driver warnings when operating in slave mode
+> when additional bits are set that the driver doesn't handle.
+>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Reviewed-by: Tao Ren <rentao.bupt@gmail.com>
 
-Hi,
+Sorry, looks like I didn't get my comment in in time.
 
-Joe Perches <joe@perches.com> writes:
->  drivers/usb/dwc3/core.c                                   |  2 +-
->  drivers/usb/gadget/legacy/inode.c                         |  2 +-
->  drivers/usb/gadget/udc/pxa25x_udc.c                       |  4 ++--
->  drivers/usb/phy/phy-fsl-usb.c                             |  2 +-
+Looks good in principle. One minor comment below:
 
-for the drivers above:
+> ---
+>  drivers/i2c/busses/i2c-aspeed.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+> index 31268074c422..724bf30600d6 100644
+> --- a/drivers/i2c/busses/i2c-aspeed.c
+> +++ b/drivers/i2c/busses/i2c-aspeed.c
+> @@ -69,6 +69,7 @@
+>   * These share bit definitions, so use the same values for the enable &
+>   * status bits.
+>   */
+> +#define ASPEED_I2CD_INTR_RECV_MASK                     0xf000ffff
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+Could we define ASPEED_I2CD_INTR_RECV_MASK to be ASPEED_I2CD_INTR_ALL ?
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl9Z6B8RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZSCRAAuTv1hrqhd9iVfnwXFrfx8dYquoCMc3VI
-y1IiULV6avnZvLQTqKviHDvZw05WY6dna714mpLFW1laW3WuhLSD4elIu6cqHaiz
-ZgtvtA4bZ/s7ipV+jlZ86S9oIz4MMBbZYhqSN1ZVk50NsUA/1thpcjS0aLI5SAgX
-j2dV6BEEHBSgMDwcWLPNwr6f5R/ycEBx3i6HYSSdNtBr1SK+UhbSkwNxdCA9IzH8
-1WCugmJdohP26DIYNzFZcssjcSFb5wu2iuHXQXuvOmmAfQmro+gRcnq1SOElae7v
-cas67L69RQ5fxskM/XpIYH2AURFnRUNondcJWViUQXHwXF1U0r+FdwXUr8OeFi19
-sVEI4FNu7ZqgvhfUlKMpldyUZRIrWb+WZZ5toBQAKFee/3tqTs4Tqh9cwfLL9IU4
-ho4tG7J/bd6hASfr0x2dH5Pm7oXKskxmtUpmmSVlNaTpXytiD30+pUvOl9Qg7A+X
-tc9h6N3Z6kdVxkJlm1KpUUccPeUtHox549ukAtzKQL4x6PDCdNqBkNDVSIx04FA4
-dgyt4O7w4HaWT1GPHH322pG5nNT1dsGT0CC9QA/2AJkoXTY03YGR3dgDw89GNUrP
-WPj73gtBbWTwRFuwHQQs8F/E8x2UjBC005aawoKcK2bxBR1fzqz1y8daUaiCftnV
-ocu1QwRIgL8=
-=BFTp
------END PGP SIGNATURE-----
---=-=-=--
+>  #define ASPEED_I2CD_INTR_SDA_DL_TIMEOUT                        BIT(14)
+>  #define ASPEED_I2CD_INTR_BUS_RECOVER_DONE              BIT(13)
+>  #define ASPEED_I2CD_INTR_SLAVE_MATCH                   BIT(7)
+> @@ -604,6 +605,7 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
+>         writel(irq_received & ~ASPEED_I2CD_INTR_RX_DONE,
+>                bus->base + ASPEED_I2C_INTR_STS_REG);
+>         readl(bus->base + ASPEED_I2C_INTR_STS_REG);
+> +       irq_received &= ASPEED_I2CD_INTR_RECV_MASK;
+>         irq_remaining = irq_received;
+>
+>  #if IS_ENABLED(CONFIG_I2C_SLAVE)
+> --
+> 2.26.2
+>
