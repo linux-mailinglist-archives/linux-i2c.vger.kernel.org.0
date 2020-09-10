@@ -2,101 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E66263A6E
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Sep 2020 04:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC88263AC3
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Sep 2020 04:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730154AbgIJC07 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Sep 2020 22:26:59 -0400
-Received: from smtprelay0192.hostedemail.com ([216.40.44.192]:41384 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729413AbgIJCYQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Sep 2020 22:24:16 -0400
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave01.hostedemail.com (Postfix) with ESMTP id 55AC918027FA3;
-        Wed,  9 Sep 2020 22:47:33 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id A42B7181D337B;
-        Wed,  9 Sep 2020 22:47:32 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:2898:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:3873:4321:5007:6742:6743:8700:10004:10400:10848:11232:11658:11914:12043:12297:12740:12760:12895:13069:13311:13357:13439:14181:14659:14721:21080:21433:21627:21939:30054:30070:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: sort28_6003546270e1
-X-Filterd-Recvd-Size: 3292
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf20.hostedemail.com (Postfix) with ESMTPA;
-        Wed,  9 Sep 2020 22:47:25 +0000 (UTC)
-Message-ID: <b3d6f71aea87f4bb88554f1a3fdaee0b2feb158c.camel@perches.com>
-Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
- break;
-From:   Joe Perches <joe@perches.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Kees Cook <kees.cook@canonical.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
-        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
-        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        storagedev@microchip.com, sparclinux@vger.kernel.org,
-        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
-        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
-        alsa-devel <alsa-devel@alsa-project.org>
-Date:   Wed, 09 Sep 2020 15:47:24 -0700
-In-Reply-To: <20200909223602.GJ87483@ziepe.ca>
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-         <20200909223602.GJ87483@ziepe.ca>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.4-0ubuntu1 
+        id S1730145AbgIJCoC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Sep 2020 22:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730699AbgIJCmE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Sep 2020 22:42:04 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3920C061756;
+        Wed,  9 Sep 2020 19:42:03 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id u21so6467320eja.2;
+        Wed, 09 Sep 2020 19:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NqwpRLg4PT44jhpT//Uf1w2MoxgHWm0NwZNCgoTWYaQ=;
+        b=SzbeO7Oa0OQJSMhsqoY5ZVWwaerWZtBxMvU91a4ZbLSIjrnT/wA/jxzt9sw1LWMGWg
+         MR13QS591LgNNIInj50Q+kz8yNMCRw08k0PnyEa0ts12t7O+VSo9CsnK1c9akMFFkMSu
+         C3JuOqI5xeP4ZEbgA+ikOy3PHSXgtGgZU85ok=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NqwpRLg4PT44jhpT//Uf1w2MoxgHWm0NwZNCgoTWYaQ=;
+        b=S7kLjoz7yfPQownPM4pmK1omA3moG32ZAMxFNcTGp+EepkCob+NUaudGW+uUjtM2N8
+         In6Z5lWgUUB4fWul99GS+YOIScFs5rL/zHwEggXwN1MsKXyzAvWatoubcqMdlh65Z57h
+         s4IUSuVuDO4Ihy483OdOqzZz6Q5OkH7ElQSRR9a/G4ia92PtA/AqE9gSVyqcUIFpxKbi
+         e9tOQ+TO3dL4gb5OGZC3Q8FE3EWpp0lCy9J6Se5AohTxxoZoh5v3iVEZXxuD49gIuRGF
+         np2joc7J5JSYrhq6m0XHjok8Zck/ORbSpRNiv1C57FOkWNCD9F5+42Zcqp8OKeWlHoVI
+         MMtg==
+X-Gm-Message-State: AOAM533pOQpfGoVote4SNhjY0rfJgDDKKac+qKU4tkq9sopYjzUcPqPo
+        bwQqKzVlIwX58gR+KGSteZoE+m9AzkYfkD7ODmFM7OjPYmA=
+X-Google-Smtp-Source: ABdhPJwcXluGz3hInva1gKy4bM6y+M5N5Gn1vQaAuMY9KP0ILDgfzMQslOJeSPPJbmHsAfiiGjCmfeI9GQntCW6JJLg=
+X-Received: by 2002:a17:906:e918:: with SMTP id ju24mr6428814ejb.442.1599705722453;
+ Wed, 09 Sep 2020 19:42:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20200909203059.23427-1-eajames@linux.ibm.com> <20200909203059.23427-5-eajames@linux.ibm.com>
+In-Reply-To: <20200909203059.23427-5-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Thu, 10 Sep 2020 02:41:49 +0000
+Message-ID: <CACPK8XdSUAiShnY2CZOb8_6YfaMxXnbUg0k=mWctYbRWEUpyBg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] ARM: dts: Aspeed: Tacoma: Add IBM Operation Panel
+ I2C device
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-input@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        linux-i2c@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, dmitry.torokhov@gmail.com,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brendan Higgins <brendanhiggins@google.com>, wsa@kernel.org,
+        Tao Ren <rentao.bupt@gmail.com>,
+        Ryan Chen <ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 2020-09-09 at 19:36 -0300, Jason Gunthorpe wrote:
-> On Wed, Sep 09, 2020 at 01:06:39PM -0700, Joe Perches wrote:
-> > fallthrough to a separate case/default label break; isn't very readable.
-> > 
-> > Convert pseudo-keyword fallthrough; statements to a simple break; when
-> > the next label is case or default and the only statement in the next
-> > label block is break;
-> > 
-> > Found using:
-> > 
-> > $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
-> > 
-> > Miscellanea:
-> > 
-> > o Move or coalesce a couple label blocks above a default: block.
-> > 
-> > Signed-off-by: Joe Perches <joe@perches.com>
-> > ---
-> > 
-> > Compiled allyesconfig x86-64 only.
-> > A few files for other arches were not compiled.
-> 
-> IB part looks OK, I prefer it like this
-> 
-> You could do the same for continue as well, I saw a few of those..
+On Wed, 9 Sep 2020 at 20:31, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> Set I2C bus 0 to multi-master mode and add the panel device that will
+> register as a slave.
+>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-I saw some continue uses as well but wasn't sure
-and didn't look to see if the switch/case with
-continue was in a for/while loop.
+Applied to the aspeed tree for v5.10.
 
+Cheers,
 
+Joel
+
+> ---
+>  arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts b/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
+> index 5f4ee67ac787..4d070d6ba09f 100644
+> --- a/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
+> +++ b/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
+> @@ -4,6 +4,7 @@
+>
+>  #include "aspeed-g6.dtsi"
+>  #include <dt-bindings/gpio/aspeed-gpio.h>
+> +#include <dt-bindings/i2c/i2c.h>
+>  #include <dt-bindings/leds/leds-pca955x.h>
+>
+>  / {
+> @@ -438,7 +439,13 @@ aliases {
+>  };
+>
+>  &i2c0 {
+> +       multi-master;
+>         status = "okay";
+> +
+> +       ibm-panel@62 {
+> +               compatible = "ibm,op-panel";
+> +               reg = <(0x62 | I2C_OWN_SLAVE_ADDRESS)>;
+> +       };
+>  };
+>
+>  &i2c1 {
+> --
+> 2.26.2
+>
