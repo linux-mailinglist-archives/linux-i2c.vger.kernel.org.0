@@ -2,119 +2,158 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C69E264CA2
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Sep 2020 20:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2605264CB0
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Sep 2020 20:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726755AbgIJSRk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Sep 2020 14:17:40 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:6933 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726815AbgIJSPz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Sep 2020 14:15:55 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f5a6cc30001>; Thu, 10 Sep 2020 11:13:23 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 10 Sep 2020 11:15:39 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 10 Sep 2020 11:15:39 -0700
-Received: from [10.26.73.219] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 10 Sep
- 2020 18:15:37 +0000
-Subject: Re: [PATCH 1/5] misc: eeprom: at24: Initialise AT24 NVMEM ID field
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>
-References: <20200910134239.192030-1-jonathanh@nvidia.com>
- <20200910134239.192030-2-jonathanh@nvidia.com>
- <CAMpxmJXbhrmJJn4f3zk4=Y2tCwLzpFc+c6NbxcqVe8eaLSRvtw@mail.gmail.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <88021f57-b8cf-d3d6-0e9c-19ed0bccb729@nvidia.com>
-Date:   Thu, 10 Sep 2020 19:15:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726480AbgIJSTn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Sep 2020 14:19:43 -0400
+Received: from a27-21.smtp-out.us-west-2.amazonses.com ([54.240.27.21]:34982
+        "EHLO a27-21.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726760AbgIJSSa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Sep 2020 14:18:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1599761901;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        bh=lRAPHjWvKyRWaQeHqfuQ9E5zPv36vToohIg1OFxLDGc=;
+        b=iqfY4gjLV1FjWjBoxUwB5higW+m4kjGgWJwPwcxl0Ycuu7APK6CrxWXS3deFKAzH
+        1d9skkT7NOvPn0/UvSE7+GTutiIQPOukqASQn1dr+qXilbQdjHKNho/US2T+sCMUteb
+        9OCoqY7kz0f3V1KCq0nyODwGw2zQ6r+Y5O3v482A=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1599761901;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+        bh=lRAPHjWvKyRWaQeHqfuQ9E5zPv36vToohIg1OFxLDGc=;
+        b=OG1KwDsJdzJjxcxfBCYZmpnbB4ZLYmkb84VKU+CMQwrbHkPRLm4KJ7jSUTSV+CIK
+        cWtVwo/+udA/hT5y/WUCi8evl026xeWImaXNmjc6y6CANisPJgPbhyD8IqU/MMdIbC7
+        Y/ZisKV/vwh978pPw8bYFhrLeKDt4GcxxoyxGZNk=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-6.5 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D818EC433F0
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=msavaliy@codeaurora.org
+Subject: Re: [PATCH] i2c: busses: replace spin_lock_irqsave by spin_lock in
+ hard IRQ
+To:     Barry Song <song.bao.hua@hisilicon.com>, linux-i2c@vger.kernel.org,
+        wsa@kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     linuxarm@huawei.com, Gregory CLEMENT <gregory.clement@bootlin.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20200909041001.5612-1-song.bao.hua@hisilicon.com>
+From:   "Mukesh, Savaliya" <msavaliy@codeaurora.org>
+Message-ID: <01010174793d6869-f4d92e20-3972-422b-ba42-c4de4ac605a6-000000@us-west-2.amazonses.com>
+Date:   Thu, 10 Sep 2020 18:18:21 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAMpxmJXbhrmJJn4f3zk4=Y2tCwLzpFc+c6NbxcqVe8eaLSRvtw@mail.gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20200909041001.5612-1-song.bao.hua@hisilicon.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1599761603; bh=ImR9HM3BwJEKpNyfruoguFeSWEoxHgvjFybBk6AmQU0=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=eXvx6CIyrI5L+OdV6Zej3o+rca6Oewxr2SSuWeVpOeViCx/3Dl7Ja2p/1ITtYfayx
-         8ClLlt3KkMLeXxYfgf+vh1kkatjpUM2wH7fckD2NEfhvcyiwT+CLWDy0GG4ni+uyWy
-         b3uO+3zLB/MJbqDUdLSD+GxdshgGLetfPRjsKsTS9s+/H+lrFSqphJu+11WoeC0isC
-         NhdiAF179skqhL0uKVmRSw3iNf737tFt+VC7Cv5t7DuEwW6f8Pe1i6+k0/79mBL59a
-         F5bltTKd6/pSS4vNtz/c0Oe+8ns+toQfxo8w1ysNW2F9RfMh6jmnztir5bGxWcH+jy
-         Y2TfTc1O+ANSQ==
+X-SES-Outgoing: 2020.09.10-54.240.27.21
+Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-On 10/09/2020 16:35, Bartosz Golaszewski wrote:
-> On Thu, Sep 10, 2020 at 3:43 PM Jon Hunter <jonathanh@nvidia.com> wrote:
->>
->> The AT24 EEPROM driver does not initialise the 'id' field of the
->> nvmem_config structure and because the entire structure is not
->> initialised, it ends up with a random value. This causes the NVMEM
->> driver to append the device 'devid' value to name of the NVMEM
->> device. Although this is not a problem per-se, for I2C devices such as
->> the AT24, that already have a device unique name, there does not seem
->> much value in appending an additional 0 to the I2C name. For example,
->> appending a 0 to an I2C device name such as 1-0050 does not seem
->> necessary and maybe even a bit confusing. Therefore, fix this by
->> setting the NVMEM config.id to NVMEM_DEVID_NONE for AT24 EEPROMs.
->>
->> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
->> ---
->>  drivers/misc/eeprom/at24.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
->> index e9df1ca251df..3f7a3bb6a36c 100644
->> --- a/drivers/misc/eeprom/at24.c
->> +++ b/drivers/misc/eeprom/at24.c
->> @@ -715,6 +715,7 @@ static int at24_probe(struct i2c_client *client)
->>
->>         nvmem_config.name = dev_name(dev);
->>         nvmem_config.dev = dev;
->> +       nvmem_config.id = NVMEM_DEVID_NONE;
->>         nvmem_config.read_only = !writable;
->>         nvmem_config.root_only = !(flags & AT24_FLAG_IRUGO);
->>         nvmem_config.owner = THIS_MODULE;
->> --
->> 2.25.1
->>
-> 
-> This patch is correct and thanks for catching it. I vaguely recall
-> wondering at some point why the appended 0 in the nvmem name for at24.
-> Unfortunately this change would affect how the device is visible in
-> user-space in /sys/bus/nvmem/devices/ and this could break existing
-> users. Also: there are many in-kernel users that would need to be
-> updated. I'm afraid we'll need some sort of backward compatibility.
-
-
-Thanks, yes that is a problem. I guess for now we could explicitly init
-to NVMEM_DEVID_AUTO or maybe just 0 so that it defaults to the same path
-in the NVMEM driver. However, I am not sure how we can make allow some
-devices to use NVMEM_DEVID_NONE and others use something else. This is
-not really something that we can describe in DT because it has nothing
-to do with h/w.
-
-Cheers
-Jon
-
--- 
-nvpublic
+On 9/9/2020 9:40 AM, Barry Song wrote:
+> The code has been in a irq-disabled context since it is hard IRQ. There
+> is no necessity to do it again.
+>
+> Cc: Gregory CLEMENT <gregory.clement@bootlin.com>
+> Cc: "Andreas Färber" <afaerber@suse.de>
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Cc: Akash Asthana <akashast@codeaurora.org>
+> Cc: Mukesh Savaliya <msavaliy@codeaurora.org>
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
+> ---
+Reviewed-by: Mukesh Kumar Savaliya <msavaliy@codeaurora.org>
+>   drivers/i2c/busses/i2c-mv64xxx.c   | 5 ++---
+>   drivers/i2c/busses/i2c-owl.c       | 5 ++---
+>   drivers/i2c/busses/i2c-qcom-geni.c | 5 ++---
+>   3 files changed, 6 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
+> index 8d9d4ffdcd24..e0e45fc19b8f 100644
+> --- a/drivers/i2c/busses/i2c-mv64xxx.c
+> +++ b/drivers/i2c/busses/i2c-mv64xxx.c
+> @@ -496,11 +496,10 @@ static irqreturn_t
+>   mv64xxx_i2c_intr(int irq, void *dev_id)
+>   {
+>   	struct mv64xxx_i2c_data	*drv_data = dev_id;
+> -	unsigned long	flags;
+>   	u32		status;
+>   	irqreturn_t	rc = IRQ_NONE;
+>   
+> -	spin_lock_irqsave(&drv_data->lock, flags);
+> +	spin_lock(&drv_data->lock);
+>   
+>   	if (drv_data->offload_enabled)
+>   		rc = mv64xxx_i2c_intr_offload(drv_data);
+> @@ -517,7 +516,7 @@ mv64xxx_i2c_intr(int irq, void *dev_id)
+>   
+>   		rc = IRQ_HANDLED;
+>   	}
+> -	spin_unlock_irqrestore(&drv_data->lock, flags);
+> +	spin_unlock(&drv_data->lock);
+>   
+>   	return rc;
+>   }
+> diff --git a/drivers/i2c/busses/i2c-owl.c b/drivers/i2c/busses/i2c-owl.c
+> index 672f1f239bd6..618d3013d0b6 100644
+> --- a/drivers/i2c/busses/i2c-owl.c
+> +++ b/drivers/i2c/busses/i2c-owl.c
+> @@ -165,10 +165,9 @@ static irqreturn_t owl_i2c_interrupt(int irq, void *_dev)
+>   {
+>   	struct owl_i2c_dev *i2c_dev = _dev;
+>   	struct i2c_msg *msg = i2c_dev->msg;
+> -	unsigned long flags;
+>   	unsigned int stat, fifostat;
+>   
+> -	spin_lock_irqsave(&i2c_dev->lock, flags);
+> +	spin_lock(&i2c_dev->lock);
+>   
+>   	i2c_dev->err = 0;
+>   
+> @@ -208,7 +207,7 @@ static irqreturn_t owl_i2c_interrupt(int irq, void *_dev)
+>   			   OWL_I2C_STAT_IRQP, true);
+>   
+>   	complete_all(&i2c_dev->msg_complete);
+> -	spin_unlock_irqrestore(&i2c_dev->lock, flags);
+> +	spin_unlock(&i2c_dev->lock);
+>   
+>   	return IRQ_HANDLED;
+>   }
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index dead5db3315a..8b4c35f47a70 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -210,9 +210,8 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
+>   	u32 dma;
+>   	u32 val;
+>   	struct i2c_msg *cur;
+> -	unsigned long flags;
+>   
+> -	spin_lock_irqsave(&gi2c->lock, flags);
+> +	spin_lock(&gi2c->lock);
+>   	m_stat = readl_relaxed(base + SE_GENI_M_IRQ_STATUS);
+>   	rx_st = readl_relaxed(base + SE_GENI_RX_FIFO_STATUS);
+>   	dm_tx_st = readl_relaxed(base + SE_DMA_TX_IRQ_STAT);
+> @@ -294,7 +293,7 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
+>   	    dm_rx_st & RX_DMA_DONE || dm_rx_st & RX_RESET_DONE)
+>   		complete(&gi2c->done);
+>   
+> -	spin_unlock_irqrestore(&gi2c->lock, flags);
+> +	spin_unlock(&gi2c->lock);
+>   
+>   	return IRQ_HANDLED;
+>   }
