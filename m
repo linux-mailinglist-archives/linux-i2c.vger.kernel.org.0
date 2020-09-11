@@ -2,165 +2,136 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2840E266557
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Sep 2020 18:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC08266604
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Sep 2020 19:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725875AbgIKQ70 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Sep 2020 12:59:26 -0400
-Received: from mail-eopbgr30101.outbound.protection.outlook.com ([40.107.3.101]:7528
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726229AbgIKQ7N (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 11 Sep 2020 12:59:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BhAk+Ve//ZxLn0cdP+rbHaO9M8zleQFQxsNAP2Kbvpr5fTk28BJbyb7W1WbGm+fuRnJgFaCVYQJhuRHOtbihv4u1v1tsYdIKljnAxgLhv6u1jglyhneOL4zDKIJMQF04yKXhxy4LL5MFLPOWvVgzQcF4rYR1MeUta+aTCn3HrMK0rvPgskpBj2mthAwWjBv0d6FeUjxWTD06s/tNT+Hc2U3SPoN/HB14f8Y1SfygdaCwWFz8IS0R6/NTaQ9jfw07DGUIpLv7blyTupOeFtoRpouXuHUw7xxsFgfmfH6LW/g/WY3hFR1XZxEeDXXTelJBhO61n20vcikKOHPLuk0UOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8VsHC+PH2kSasOk8sQehSXQzPMbjsA+SVap6jXAWOwY=;
- b=SMPi1bq5AVkENrvuZGa/84Yrg3odDsAZUWxvNXhplFd/vt7IcYBZY5nISrbypXV5/lVvYlWxuMFZouRZGMmVl+Uw3VMyrygh6K2jkS8LJsSwwd4LDyRf673Z/z38uqUDrT31Gw8cs3fgXo3Mi3UritwXEJDY/neJM7p4y0vvOxautISLoHgNtwQxHWNzW5j284smTDk3OjGpbD1U3uRCxOyLeM9snj9xh/Njf39S0CKu6B70b8im8V3swA10LeUyrqlO1F5Jy1WE34xsEXloBgkpjjH7iCuHJLHUcpaqmd6D/TEAtNpL3jWilWDfa4fxPv1CsnV7AfMEDShUP7epUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8VsHC+PH2kSasOk8sQehSXQzPMbjsA+SVap6jXAWOwY=;
- b=wrW7kPu0GrQ+qCTx8I+ofAOX7rCyRDUvnIc8UvThL6yksgeYrpDwUj97k1kNuhmMWet7r0k0BTumL2O/j0nlsHxaL78RzA0VK9sQSB88a4HlBtb663SFJWW4KiIkq6h9TEMcuUCz5FoeS9inRgfq++0iYYet5KXAMeMkWlS4UOs=
-Authentication-Results: linaro.org; dkim=none (message not signed)
- header.d=none;linaro.org; dmarc=none action=none header.from=plvision.eu;
-Received: from HE1P190MB0539.EURP190.PROD.OUTLOOK.COM (2603:10a6:7:56::28) by
- HE1P190MB0089.EURP190.PROD.OUTLOOK.COM (2603:10a6:3:c0::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3370.17; Fri, 11 Sep 2020 16:59:10 +0000
-Received: from HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
- ([fe80::c1ab:71de:6bc2:89fe]) by HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
- ([fe80::c1ab:71de:6bc2:89fe%6]) with mapi id 15.20.3370.017; Fri, 11 Sep 2020
- 16:59:09 +0000
-Date:   Fri, 11 Sep 2020 19:59:02 +0300
-From:   Vadym Kochan <vadym.kochan@plvision.eu>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S1726175AbgIKRUF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Sep 2020 13:20:05 -0400
+Received: from mga18.intel.com ([134.134.136.126]:7727 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726112AbgIKNBW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 11 Sep 2020 09:01:22 -0400
+IronPort-SDR: qU1Myo23D5f37oaj6ObzdJnXF+ufxjOHHHjduzNMFCudDWyc+GE9ysoHOTcTACv5IQuztpk+o1
+ HbCZYbqk1yDQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9740"; a="146480194"
+X-IronPort-AV: E=Sophos;i="5.76,415,1592895600"; 
+   d="scan'208";a="146480194"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2020 06:01:10 -0700
+IronPort-SDR: pSkF8o7IrwSY4WaejqoFue/Z30b2gALlCc0/uXEY+Z0WH4n4jNXl+LDvZjY4nFik46DcuhlSPR
+ y0KMue55LBWQ==
+X-IronPort-AV: E=Sophos;i="5.76,415,1592895600"; 
+   d="scan'208";a="505494251"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2020 06:01:06 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 968752079D; Fri, 11 Sep 2020 16:01:04 +0300 (EEST)
+Date:   Fri, 11 Sep 2020 16:01:04 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Ripard <maxime.ripard@free-electrons.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] nvmem: core: allow to register cells during nvmem
- registration
-Message-ID: <20200911165902.GA20711@plvision.eu>
-References: <20200831015539.26811-1-vadym.kochan@plvision.eu>
- <20200831015539.26811-2-vadym.kochan@plvision.eu>
- <6ab47f55-af66-f035-d8d9-82d0c831b5b8@linaro.org>
- <20200904112310.GD10654@plvision.eu>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200904112310.GD10654@plvision.eu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: AM6PR01CA0070.eurprd01.prod.exchangelabs.com
- (2603:10a6:20b:e0::47) To HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:7:56::28)
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v8 0/6] Support running driver's probe for a device
+ powered off
+Message-ID: <20200911130104.GF26842@paasikivi.fi.intel.com>
+References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
+ <f4b82baa-66b7-464e-fd39-66d2243a05ef@lucaceresoli.net>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from plvision.eu (217.20.186.93) by AM6PR01CA0070.eurprd01.prod.exchangelabs.com (2603:10a6:20b:e0::47) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16 via Frontend Transport; Fri, 11 Sep 2020 16:59:08 +0000
-X-Originating-IP: [217.20.186.93]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 96176d5f-f897-4e5d-976d-08d856740034
-X-MS-TrafficTypeDiagnostic: HE1P190MB0089:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <HE1P190MB0089484D9C0B557EBF7700FF95240@HE1P190MB0089.EURP190.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qZdiQGYpULdk+Kaqw+h/HQ3DfulWfxmuHLtE+Fq2EQGz3IcaCqms8ffBQZGGHRzVeVx9D0NAyzfxRXsVb/BnSpKYwmkHOsmna/iig0gBBy7aoOyvZTwgSO6bFypYCLiq/TGkvRguaJdj1Qb70cSJe/GtkoOFhiZZIHMOnf0Jgd7aXPS29sGQnLPm17LYRzFcQkQByJPOeAyCtKvt4EcE2p2QJRj+Uoltf1Ib7UTJxKoSMThSyk33op2rR0MtqZBpEBGYexLT5GATgk5asQorKR8eR6mRAgOhN8wwfLrZqucMJpHr1VprZbrQiQEVr5wLJHRBqWQu1lDaPLUOZLcKMQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1P190MB0539.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(396003)(376002)(346002)(366004)(39830400003)(136003)(8936002)(54906003)(478600001)(316002)(956004)(55016002)(2616005)(2906002)(44832011)(8886007)(8676002)(83380400001)(5660300002)(6666004)(26005)(86362001)(4326008)(186003)(7696005)(52116002)(66946007)(6916009)(66476007)(66556008)(1076003)(36756003)(33656002)(16526019)(53546011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: DTJnaWvHqFkjnRm/7fuLuWzN2JUBFcaX4CkgEV/oWN1+zGJRBhglShLpWn0iiOnpTCgF+/wRshmnXmIq4+F0BodLhSjpcmRCeGcXR1KvJIryWFeeFclYx8DI7Xr2tNK54ATqQ005ye6bVK8WTcqgI5VACg+TiGv7s4LPchH3pr6riYSOkYmVDIaGLxcD36S6Ovb2AOU6TuXhvYeucTvdBWXZ0jt6FXRS8Ace+qx2lsarQ3MyQgxAVfSmcgmdG6xqJGnrVNaXKZ0sNr55TUKPYcVN1B0fC7r5cdCrendvtd+Iw/yy1Jqff3rY5HCE8V4ImdNBigPs+oX4DNzo1P1AUMOpqYJoFQAFt4CGyhj6kNMKbPAQlk+ZkNUjrKGixMwhQWparxq2MifvsC39qGF2qmdqj9ijCNnO9Dg68zjoamZx2lD7MtYzsu9q//msnrwrk/zUYns+Xj2t08Fdb9uvnNIx3jk1TO0OE5zVxEDlnHSo8Ri/Fl9AfqjGRfKE8MK9+Z3t5nPFF0+IPbqtOW52RP3nffo0oWINZ0xalapz9kDAUHKrdQXNlfjor3kK+IiJfBm22cD/9mOJi0N7GM7Bk/WpqhWHykP3V0fo0wmxY3t2mogErY91tEnMgfjFFg+6vEIA/fQy62TNrg+jHMc7gg==
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96176d5f-f897-4e5d-976d-08d856740034
-X-MS-Exchange-CrossTenant-AuthSource: HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2020 16:59:09.5665
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uuxS0qe/NoHtdDzRrYC7XHCRdyDa75M+RiNPfxBqWb70TfNXPra4YI/PvpXXygAGPiO3kySe4lM0h7PJF591th8KucxcamzWrnc2QxrZcvk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1P190MB0089
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f4b82baa-66b7-464e-fd39-66d2243a05ef@lucaceresoli.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Srinivas,
+Hi Luca,
 
-On Fri, Sep 04, 2020 at 02:23:10PM +0300, Vadym Kochan wrote:
-> Hi Srinivas,
+On Fri, Sep 11, 2020 at 02:49:26PM +0200, Luca Ceresoli wrote:
+> Hi Sakari,
 > 
-> On Fri, Sep 04, 2020 at 12:02:40PM +0100, Srinivas Kandagatla wrote:
-> > Hi Vadym,
+> On 03/09/20 10:15, Sakari Ailus wrote:
 > > 
-> > Thanks for the patch,
-> > On 31/08/2020 02:55, Vadym Kochan wrote:
-> > > Add NVMEM_PRE_ADD notification step which is called before any cells
-> > > binding - from lookup table or config, this allows to register cells
-> > > in some specific layout (tlv) which should be parsed first and then
-> > > registered. So there might be a cell parser driver which can register
-> > > lookup table during this notification step.
-> > > 
-> > This is going in right direction but totally not correct way to do it.
+> > Hi all,
 > > 
-> > 1> this is not scalable as any consumer that will register for this even
-> > will have no idea of which what kind of parsing that provider needs.
-> > It can work in your case but not really useful.
+> > These patches enable calling (and finishing) a driver's probe function
+> > without powering on the respective device on busses where the practice is
+> > to power on the device for probe. While it generally is a driver's job to
+> > check the that the device is there, there are cases where it might be
+> > undesirable. (In this case it stems from a combination of hardware design
+> > and user expectations; see below.) The downside with this change is that
+> > if there is something wrong with the device, it will only be found at the
+> > time the device is used. In this case (the camera sensors + EEPROM in a
+> > sensor) I don't see any tangible harm from that though.
 > > 
-> > 2> this is a consumer API, not the provider api.
-> > 
-> > How about adding a "parse_cells" callback in struct nvmem_config along with
-> > encoding type.
+> > An indication both from the driver and the firmware is required to allow
+> > the device's power state to remain off during probe (see the first patch).
 > > 
 > > 
-> > thanks,
-> > srini
+> > The use case is such that there is a privacy LED next to an integrated
+> > user-facing laptop camera, and this LED is there to signal the user that
+> > the camera is recording a video or capturing images. That LED also happens
+> > to be wired to one of the power supplies of the camera, so whenever you
+> > power on the camera, the LED will be lit, whether images are captured from
+> > the camera --- or not. There's no way to implement this differently
+> > without additional software control (allowing of which is itself a
+> > hardware design decision) on most CSI-2-connected camera sensors as they
+> > simply have no pin to signal the camera streaming state.
 > > 
+> > This is also what happens during driver probe: the camera will be powered
+> > on by the I²C subsystem calling dev_pm_domain_attach() and the device is
+> > already powered on when the driver's own probe function is called. To the
+> > user this visible during the boot process as a blink of the privacy LED,
+> > suggesting that the camera is recording without the user having used an
+> > application to do that. From the end user's point of view the behaviour is
+> > not expected and for someone unfamiliar with internal workings of a
+> > computer surely seems quite suspicious --- even if images are not being
+> > actually captured.
+> > 
+> > I've tested these on linux-next master. They also apply to Wolfram's
+> > i2c/for-next branch, there's a patch that affects the I²C core changes
+> > here (see below). The patches apart from that apply to Bartosz's
+> > at24/for-next as well as Mauro's linux-media master branch.
 > 
-> Looks like I missed main point here that this cells parser should be
-> registered as nvmem provider. I will think on it.
+> Apologies for having joined this discussion this late.
+
+No worries. But thanks for the comments.
+
 > 
-> Thanks,
+> This patchset seems a good base to cover a different use case, where I
+> also cannot access the physical device at probe time.
 > 
+> I'm going to try these patches, but in my case there are a few
+> differences that need a better understanding.
+> 
+> First, I'm using device tree, not ACPI. In addition to adding OF support
+> similar to the work you've done for ACPI, I think instead of
+> acpi_dev_state_low_power() we should have a function that works for both
+> ACPI and DT.
 
-I am trying to re-work this approach, but still I need to clarify
-something.
+acpi_dev_state_low_power() is really ACPI specific: it does tell the ACPI
+power state of the device during probe or remove. It is not needed on DT
+since the power state of the device is controlled directly by the driver.
+On I²C ACPI devices, it's the framework that powers them on for probe.
 
-It looks strange that this cells parser should be a nvmem provider (or I
-missed something) but I remember that you suggested about introducing
-something like nvmem parser. And adding nvmem parser looks more clear
-for me, because what it should do is just access the nvmem device during
-its registration and provide list of cells, that's all:
+You could have a helper function on DT to tell a driver what to do in
+probe, but the functionality in that case is unrelated.
 
-struct nvmem_device *nvmem_register(const struct nvmem_config *config)
-{
-    struct nvmem_cell_table table = { };
-...
-    parser = find_nvmem_parser();
-    /* I think that cell lookups may be added on the parser's probe
-       statically */
-    parser->parse_cells(parser->priv, nvmem, &table);
-...
-}
+I'll answer to the second point later on.
 
-/* here I used struct nvmem_config, not sure it is a right way to
-   mix nvmem's and parser's struct fields, so may be something like
-   struct nvmem_parser_config might be introduced or fill the struct
-   nvmem_parser directly by the driver and pass it to the registration func */
-struct nvmem_parser *nvmem_parser_register(const struct nvmem_config *config)
-{
-...
-}
+-- 
+Kind regards,
 
-void nvmem_parser_unregister(struct nvmem_parser *parser)
-{
-...
-}
-
-Regards,
-Vadym Kochan
+Sakari Ailus
