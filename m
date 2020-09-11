@@ -2,39 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C856C266884
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Sep 2020 21:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A492D266915
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Sep 2020 21:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725790AbgIKTF4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Sep 2020 15:05:56 -0400
-Received: from www.zeus03.de ([194.117.254.33]:41096 "EHLO mail.zeus03.de"
+        id S1725787AbgIKTnl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Sep 2020 15:43:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40760 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725787AbgIKTFz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 11 Sep 2020 15:05:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=/uUbtp7hUG/VyVj3myOj7u1wlZUm
-        SRscYv/Xxrxy5i8=; b=Dl8uQkjjfzBg7pibrIZniB7ifW+VX//TRmmXVElF+mgg
-        rj/0T2Vudb4in1j7fPXI+DnQlZnLXx9VPNRm1EGqkZPO6FbeFFpd9RSwERKAfkfC
-        gC9FC/Y5LwJAjKhHClM5HeCTBph+Kbg6z4RZNWQVKTlnHSZQZ9r0FMNBV1rgExw=
-Received: (qmail 1083521 invoked from network); 11 Sep 2020 21:05:52 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Sep 2020 21:05:52 +0200
-X-UD-Smtp-Session: l3s3148p1@6sidXw6vwMQgAwDPXwg3AOu94Zz7tvsj
-Date:   Fri, 11 Sep 2020 21:05:49 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Alain Volmat <alain.volmat@st.com>
-Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: Re: [PATCH 1/1] i2c: add slave testunit driver
-Message-ID: <20200911190549.GA909@ninjato>
-References: <20200911071658.13966-1-wsa+renesas@sang-engineering.com>
- <20200911071658.13966-2-wsa+renesas@sang-engineering.com>
- <20200911125419.GE23480@gnbcxd0016.gnb.st.com>
+        id S1725779AbgIKTnk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 11 Sep 2020 15:43:40 -0400
+Received: from localhost (p54b331d7.dip0.t-ipconnect.de [84.179.49.215])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8518921D6C;
+        Fri, 11 Sep 2020 19:43:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599853420;
+        bh=2fV5YPRAOsv2GDWDbhx3RjScHFIk8rHvyfwRHv5CKIQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EhL38Cr0cMvh+csxo8gz5+VHg8Vc+7P+i1OPJimC2lnlmluD0Jjm/jqgbq2s3TYDS
+         QKH3u50sKTDqM0pPtf8JPwZoyEqCJtBtc3kBsB2Nf7EIHmkGNYrQvxKOXVUjxo9oJe
+         00R7UGUICw7hNarJstPdcBIngxtybFPf5rhW6ebA=
+Date:   Fri, 11 Sep 2020 21:43:36 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.9
+Message-ID: <20200911194333.GA2270@ninjato>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RnlQjJ0d97Da+TV1"
+        protocol="application/pgp-signature"; boundary="ew6BAiZeqk4r7MaW"
 Content-Disposition: inline
-In-Reply-To: <20200911125419.GE23480@gnbcxd0016.gnb.st.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -42,64 +42,88 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---RnlQjJ0d97Da+TV1
+--ew6BAiZeqk4r7MaW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi Alain,
+Linus,
 
-> great that you published your slave-unittest driver.
-> I gave it a try rapidly and can confirm it works as expected on the stm32
-> platform. I tested with a loopback between 2 i2c controllers.
+here are some "usual" driver bugfixes for the I2C subsystem.
 
-Thanks, much appreciated! I read this as Tested-by :)
+Please pull.
 
-> > +config I2C_SLAVE_TESTUNIT
-> > +	tristate "I2C eeprom testunit driver"
->=20
-> Should be tristate "I2C testunit driver" I believe (no eeprom)
-
-Oops, yes.
-
-> > +	switch (tu->regs[TU_REG_CMD]) {
-> > +	case TU_CMD_READ_BYTES:
-> > +		msg.addr =3D tu->regs[TU_REG_DATAL];
-> > +		msg.flags =3D I2C_M_RD;
-> > +		msg.len =3D tu->regs[TU_REG_DATAH];
->=20
-> Some protection might be needed here since the size is coming straight fr=
-om
-> the i2cset command while the buffer is limited to 256 bytes.
-
-Well, the size is not a problem because all the regs are u8. But for the
-address, we should mask the lower 7 bits, in deed. We could use the free
-8th bit to double the length, but we probably better keep it reserved for
-something yet unknown.
-
-Thanks for the review!
+Thanks,
 
    Wolfram
 
 
---RnlQjJ0d97Da+TV1
+The following changes since commit f4d51dffc6c01a9e94650d95ce0104964f8ae822:
+
+  Linux 5.9-rc4 (2020-09-06 17:11:40 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+for you to fetch changes up to 0a355aeb24081e4538d4d424cd189f16c0bbd983:
+
+  i2c: algo: pca: Reapply i2c bus settings after reset (2020-09-09 10:22:40 +0200)
+
+----------------------------------------------------------------
+Evan Nimmo (1):
+      i2c: algo: pca: Reapply i2c bus settings after reset
+
+Tali Perry (1):
+      i2c: npcm7xx: Fix timeout calculation
+
+Vadym Kochan (1):
+      misc: eeprom: at24: register nvmem only after eeprom is ready to use
+
+Wolfram Sang (1):
+      Merge tag 'at24-fixes-for-v5.9-rc5' of git://git.kernel.org/.../brgl/linux into i2c/for-current
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Alex Qiu (1):
+      (Rev.) i2c: npcm7xx: Fix timeout calculation
+
+Andy Shevchenko (1):
+      (Rev.) i2c: algo: pca: Reapply i2c bus settings after reset
+
+Avi Fishman (1):
+      (Rev.) i2c: npcm7xx: Fix timeout calculation
+
+Chris Packham (1):
+      (Rev.) i2c: algo: pca: Reapply i2c bus settings after reset
+
+Joel Stanley (1):
+      (Rev.) i2c: npcm7xx: Fix timeout calculation
+
+ drivers/i2c/algos/i2c-algo-pca.c | 35 +++++++++++++++++++++++------------
+ drivers/i2c/busses/i2c-npcm7xx.c |  8 ++++++--
+ drivers/misc/eeprom/at24.c       | 11 +++++++----
+ include/linux/i2c-algo-pca.h     | 15 +++++++++++++++
+ 4 files changed, 51 insertions(+), 18 deletions(-)
+
+--ew6BAiZeqk4r7MaW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9byokACgkQFA3kzBSg
-KbYW1g//bLG2yGVpprXPwG1EhjIPQjitxovRUlNPscd4HuJNaRVyF4mUdwLNTYHm
-x519fAWgyG/lEuRZO72XYr5bc8ZFT1K7R6DjM2AC1hyXXN8B7wlA+EqxYsE09QDz
-SYhET5r/YQLqo6XV8liKhhYUyPmzDrVTBugF2zhbxiCLe1+pCv+StfcSMgHUt4Y6
-jK+yRV7cVYeRpaKhI6nDwDboHhsknCcIknOBCgPhCCOwFbVtXJv66AIcAhL2AOms
-pKJhmNzeASDUKK8dMRM7l0Bh0vLMyB7SMfpk07Kgt2EOEYhC3DhMSoTdAjTTGzd4
-WkGu6RQT5F32u2NVpVE74RzDroiAjaUw7eYyH2MF+JG6Pc5GWdXXcPuU4qzIGDF0
-4apJVMERQUTxhyf5kvdWsHHmJ+Dn0kt94wif1AH+UKNpyAzZkuVbw+WHf67ptZYV
-MIQriUR4YbTk+QhgYm5viHvMA3fhFJexn5Q6EigY49asrPm/9fEc1khqRTC3KOrX
-EWuGmfLdyMuZy61C68F6+k2nU1KY5S4WyOvc/fUBq1VB0SylPgVSoVBM3iGpJPJ9
-g3z1E/zKPJIPPJBvsfqVdOQRq8MP6RXZikQPAegDPlWMFUEnT/rpQSpQgJD3NW2F
-4NvQhTloe0OS6RBebXvjNTeuDCjxiNl56h6LRcpJdnK8YpmxL+k=
-=zda8
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9b02AACgkQFA3kzBSg
+KbYNchAAre/GnSj7dj3q8R7u/Dcp0nrqO2FGlr+IJu8kWa6+NX+PwQceNBYcUHgY
+nLaRUjnEyHW8skOoXPI7ruj0eYE0h1a3k0Ka5q7dSa+jcZg9/BQ0eWjLApK7Zoy2
+7SNZonDAJxWO7Mqe9Vi69e6Cu0ofd2NyXTVv71SIbwhOQkipWRcQ8fZaOEZTo5p8
+uPL/yLlzeyki5hQTtK9vfYxdENidMkGtYuahBc0ONPs61zeeR0IKD31IX99HFSDi
+HC2F+2qb35ezM8UKI4PLBKqD3msQkaoUXjvhmOW6DOwluG22vxsq4LK47QqA3IbB
+oZV9EpKpPgYnqhHmP5+P6Al1E5EZpBkM9r6V5Nt9AoCWLsy2jfGwFil9/I6nklwy
+2FO+8Iv9Ql73CaPyZwTnenPpZ1Jd6JNVLDbQEUYwHdEQSdy8+vlKUyacba9Y8u00
+Yisdi6Uyd+73lpf89SFJ147GVRSrBqEhhnkK7HL0tOUGeH90yMr73wfC3LYpq4jT
+eLmn7NmA01aMchDsNSX/nZjIh/oDcOuAjByz38a3ZAE4n/G4pHhp6IChSDrzcu+B
+kQokZ/sTkZbTl0wu8HamkqdKzgo4gVuEHXt3nGSHm8jtFUD4ht7SsSAFsrWV2pQc
+0A5vxsTZzNOlWpR94/hsNNugBYK5Q3CB1jULbPRQPyCXLwktjyk=
+=FNUA
 -----END PGP SIGNATURE-----
 
---RnlQjJ0d97Da+TV1--
+--ew6BAiZeqk4r7MaW--
