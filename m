@@ -2,79 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D7B265A51
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Sep 2020 09:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751EE265A42
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Sep 2020 09:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725819AbgIKHSc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Fri, 11 Sep 2020 03:18:32 -0400
-Received: from mail.flex.co.jp ([211.8.82.123]:58416 "EHLO www.flex.co.jp"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725536AbgIKHSX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 11 Sep 2020 03:18:23 -0400
-Received: from live.com.mx ([103.89.89.225])
-        (authenticated bits=0)
-        by www.flex.co.jp (MTA) with ESMTP id 0898ndvt009386
-        for <linux-i2c@vger.kernel.org>; Wed, 9 Sep 2020 17:49:51 +0900
-Reply-To: powerinthewords@yahoo.co.jp
-From:   piyin.crhe@live.com.mx
+        id S1725730AbgIKHRP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Sep 2020 03:17:15 -0400
+Received: from www.zeus03.de ([194.117.254.33]:56908 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725535AbgIKHRO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 11 Sep 2020 03:17:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=s9Wsi71ptI+z1i5AsHQ0CG9Cd01
+        KjmxpN6hXVoKxUa8=; b=2pz/Ez+sZ+jXhN8tMYJtyEc7z7xjck5lJ+tk7vpuGu6
+        OcIehgGxyPTFUrUQDB0L3d4ceosrL/2a7WmniK8MungMvimEv2MEKF+o1Q+R3NPG
+        3RP3FL4qXsS5gp17HP1YQF+MEmTFktshz+4Hz57kQR4x8L/66I7RaHWlel6eG9lY
+        =
+Received: (qmail 914084 invoked from network); 11 Sep 2020 09:17:09 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Sep 2020 09:17:09 +0200
+X-UD-Smtp-Session: l3s3148p1@IYgUeQSvzqsgAwDPXwg3AOu94Zz7tvsj
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
-Subject: =?utf-8?Q?=5BSpam=5D?=
- We are still waiting for your email...
-Date:   09 Sep 2020 01:49:50 -0700
-Message-ID: <20200909014950.B482167722DC874A@live.com.mx>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Alain Volmat <alain.volmat@st.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH 0/1] i2c: add slave testunit driver
+Date:   Fri, 11 Sep 2020 09:16:57 +0200
+Message-Id: <20200911071658.13966-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-SpamInfo: FortiGuard-AntiSpam ip, connection black ip 103.89.89.225
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dear Beneficiary,
+Motivated by a series by Alain Volmat which implements SMBus Host Notify
+support as a slave backend (already upstream), I wondered how I could
+actually test it. Then, I picked up my old idea of a "custom remote
+device" and implemented it as another slave backend. This is the outcome
+and it works quite well on my Renesas Lager board where I connected two
+I2C busses where both I2C controllers are master and slave. One slave is
+the testunit, one slave is the HostNotify listener.
 
-We wish to inform you that a power of attorney was forwarded to 
-our office  by two gentlemen regarding your unclaimed fund of $56 
-Million Dollar. One of them is an American citizen named Mr. 
-Robert Porter and the other is Mr. Wilhelm Berg a Swedish 
-citizen.We have be waiting for you to contact us since last year.
+As mentioned elsewhere, support for SMBus Alert and I2C_M_RECV_LEN are
+already planned. But I guess you can do much more.
 
-The document claims these gentlemen to be your authorized 
-representatives, and the power of attorney states that you are 
-already deceased.  It further states that your death was due to 
-lung cancer, with your date of death being January 27th, 2020.
+Ideas and comments welcome!
 
-They have now submitted a new account to replace the receiving 
-account that was in the original claim of funds. These funds have 
-remained unclaimed for quite some time and the need for 
-resolution is pressing. Below is the new account they have 
-submitted.
+Happy hacking,
 
-Account Name's :  Robert Porter /Wilhelm Berg
-Account: 5007-29 438 66
-IBAN-nr: SE4150000000050072943866
-Bic-kod: ESSESESS
-Skandinaviska Enskilda Banken. (SEB :)
-SWEDEN .
+   Wolfram
 
-In the event that you are in fact still alive, we ask that you 
-confirm your existence by responding to this email. You are to 
-view this as a matter requiring immediate attention and response. 
-We have 48 hr monitoring of all activities within Federal Reserve 
-Bank.On this regard,you will be directed to any of our office 
-center that you will go in person to sign the final papers,
-because we have our payment center in Europe,Asia,America and 
-Canada.You will go to any of the office that you will be directed 
-to with the copy of the documents of your fund.
+Wolfram Sang (1):
+  i2c: add slave testunit driver
 
-We have contacted the bank in the Sweden asking them to wait for 
-further directives from Federal Reserve Bank, prior to 
-authorizing any withdrawals in any form.  Our request is based 
-entirely on our attempt to verify that you are in fact deceased, 
-before money is wrongly disbursed.
+ Documentation/i2c/slave-testunit-backend.rst |  66 +++++++
+ drivers/i2c/Kconfig                          |   8 +
+ drivers/i2c/Makefile                         |   1 +
+ drivers/i2c/i2c-slave-testunit.c             | 175 +++++++++++++++++++
+ 4 files changed, 250 insertions(+)
+ create mode 100644 Documentation/i2c/slave-testunit-backend.rst
+ create mode 100644 drivers/i2c/i2c-slave-testunit.c
 
-Your in Service,
+-- 
+2.20.1
 
-Robert Steven Kaplan
-2200 N Pearl St, Dallas, TX 75201, United States
