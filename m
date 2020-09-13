@@ -2,96 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF82C267995
-	for <lists+linux-i2c@lfdr.de>; Sat, 12 Sep 2020 12:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A47267FDE
+	for <lists+linux-i2c@lfdr.de>; Sun, 13 Sep 2020 17:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725874AbgILKgn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 12 Sep 2020 06:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725834AbgILKgg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 12 Sep 2020 06:36:36 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC10DC061757
-        for <linux-i2c@vger.kernel.org>; Sat, 12 Sep 2020 03:36:34 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id x77so8426132lfa.0
-        for <linux-i2c@vger.kernel.org>; Sat, 12 Sep 2020 03:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RF8m2xC4JB4qyW3nCqkmJE2v3IVbH777DHP9r98chVU=;
-        b=ZdAifYhj2ckBuaqC7gwZR7Hupf7v18XeH6Ksh6kg+yA5O8P0Qnbfx9ZEFfkqW0fTOy
-         lNszaKVc2NrsIDl1Egk7zLIrGNG0Ldo9UZJUcVS9IZVJkzXjn8CU8VVFivI17aeYfd+T
-         Jw9pNYWslgFu/FSgrEuYYb4RkkkzEPjBhUexfGTSPM0KnPb3qZxqBmZdq/2k3u04i6Qs
-         4Kst372V4IhEqb/0UqRTctNzZNV3duEfTaf7tKIlJl1AgMGryVizSQvmm6QuyWqLotes
-         ToifTRd3uH4Bz/BY28YZp5rWMeB9KXGmdnWQn1rhIugm5IKnafz7O0t1dTBhevtbIr6X
-         wZpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RF8m2xC4JB4qyW3nCqkmJE2v3IVbH777DHP9r98chVU=;
-        b=URYWDdun8E8LqlDf8xcWpsA48aJL2LDndwHbFnKdVU+dKgtnOttflHcY+WdNhdZNKn
-         iifn8CUPwHZisdzGrvvGbfpeEklXFQjuFrSt1gAyJrWH1WCV4sCgUJKI705bz8dxC5FW
-         OrzymVzzI3JcI+5QmkI3VriE844deVwdzr+xgB1bHFtjI7SMk1a+ghE5xqjfjKbU/cXQ
-         KkO0BpnLbXMIqMSqvP7p+Q8sM75U3KDcCBPejNVT+NbO1ooPdJFeT13LQuKsMR70umCq
-         w+NUi3MF1x1EXiUoo8K8rDRddgXHJmSews0G+pkb6vDMgd6+y3aQtLHH0vn6n5tnZCwR
-         0HOA==
-X-Gm-Message-State: AOAM530Bsx0mNN18JYDs6Zt0WTYuqfvHo07IH1d0ZJi9UmUbYFnnnIPe
-        t8LNkPgDo6tPFwMoJGDin/LbZCYLtiv9zjvS2/MMWQ==
-X-Google-Smtp-Source: ABdhPJyoD2XPyfxM3troBciEM2Mczg6M+QUgoHKVC37fUndkhJdOxvWEyjUmNDBgtw0N6y9hRBKROUhaDN/qwicI9KA=
-X-Received: by 2002:a05:6512:370b:: with SMTP id z11mr1453851lfr.571.1599906993330;
- Sat, 12 Sep 2020 03:36:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1595572867.git.frank@allwinnertech.com>
-In-Reply-To: <cover.1595572867.git.frank@allwinnertech.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 12 Sep 2020 12:36:22 +0200
-Message-ID: <CACRpkdZqNSGkDCm6HGpS63iWp5b4WrZpdqz8QEeu4CVzkhGQ=Q@mail.gmail.com>
-Subject: Re: [PATCH v5 00/16] Allwinner A100 Initial support
-To:     Frank Lee <frank@allwinnertech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Frank Lee <tiny.windzz@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Ondrej Jirman <megous@megous.com>,
-        Corentin Labbe <clabbe@baylibre.com>, bage@linutronix.de,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
+        id S1725941AbgIMPQM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 13 Sep 2020 11:16:12 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:46785 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725938AbgIMPQJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 13 Sep 2020 11:16:09 -0400
+X-UUID: 716c3fe6aa01478f8abaa068543f7d59-20200913
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=tLwz3eUexrO8VmtKUD5bwX6LfX6CNIxcQtdRTSWer2M=;
+        b=jGrWJuUPURVjpcGq8PB1gpwmZGtRNXYjTMzpcIaEfwE9PUn7D38dAWaaLdGYJxc62mSMl7SdFTplv0fO7TxyKp+DvJf/ptD0ygQUzbAGL4SKOxfF/2D4nxOb9w1IN15S4rhiZAgCdmkbd5ZKbdJYYvNhb4eCsJoc6tYDaVnELUE=;
+X-UUID: 716c3fe6aa01478f8abaa068543f7d59-20200913
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <yingjoe.chen@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 131063010; Sun, 13 Sep 2020 23:15:58 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sun, 13 Sep 2020 23:15:54 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 13 Sep 2020 23:15:54 +0800
+Message-ID: <1600010156.3039.5.camel@mtksdaap41>
+Subject: Re: [PATCH] i2c: mediatek: Fix generic definitions for bus
+ frequencies
+From:   Yingjoe Chen <yingjoe.chen@mediatek.com>
+To:     <qii.wang@mediatek.com>
+CC:     <wsa@the-dreams.de>, <devicetree@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Date:   Sun, 13 Sep 2020 23:15:56 +0800
+In-Reply-To: <1599890246-21191-1-git-send-email-qii.wang@mediatek.com>
+References: <1599890246-21191-1-git-send-email-qii.wang@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jul 24, 2020 at 8:53 AM Frank Lee <frank@allwinnertech.com> wrote:
+T24gU2F0LCAyMDIwLTA5LTEyIGF0IDEzOjU3ICswODAwLCBxaWkud2FuZ0BtZWRpYXRlay5jb20g
+d3JvdGU6DQo+IEZyb206IFFpaSBXYW5nIDxxaWkud2FuZ0BtZWRpYXRlay5jb20+DQo+IA0KPiBU
+aGUgbWFzdGVyIGNvZGUgbmVlZHMgdG8gYmVpbmcgc2VudCB3aGVuIHRoZSBzcGVlZCBpcyBtb3Jl
+IHRoYW4NCj4gSTJDX01BWF9GQVNUX01PREVfUExVU19GUkVRIGluc3RlYWQgb2YNCj4gSTJDX01B
+WF9ISUdIX1NQRUVEX01PREVfRlJFUS4gRml4IGl0Lg0KDQpUaGlzIHdhcyBpbnRyb2R1Y2VkIGJ5
+ICJpMmM6IGRyaXZlcnM6IFVzZSBnZW5lcmljIGRlZmluaXRpb25zIGZvciBidXMNCmZyZXF1ZW5j
+aWVzIi4gWW91IHNob3VsZCBoYXZlDQpGaXhlczogOTAyMjRlNjQ2OGUxICgiaTJjOiBkcml2ZXJz
+OiBVc2UgZ2VuZXJpYyBkZWZpbml0aW9ucyBmb3IgYnVzDQpmcmVxdWVuY2llcyIpDQoNCllvdSBj
+YW4gaGF2ZSBteSByZXZpZXdlZCBieSBhZnRlciB5b3UgYWRkIGZpeGVzLg0KUmV2aWV3ZWQtYnk6
+IFlpbmdqb2UgQ2hlbiA8eWluZ2pvZS5jaGVuQG1lZGlhdGVrLmNvbT4NCg0KSm9lLkMNCg0KPiAN
+Cj4gU2lnbmVkLW9mZi1ieTogUWlpIFdhbmcgPHFpaS53YW5nQG1lZGlhdGVrLmNvbT4NCj4gLS0t
+DQo+ICBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jIHwgNiArKystLS0NCj4gIDEgZmls
+ZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYyBiL2RyaXZlcnMvaTJjL2J1c3Nl
+cy9pMmMtbXQ2NXh4LmMNCj4gaW5kZXggZWZjMTQwNC4uMGNiZGZiZSAxMDA2NDQNCj4gLS0tIGEv
+ZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYw0KPiArKysgYi9kcml2ZXJzL2kyYy9idXNz
+ZXMvaTJjLW10NjV4eC5jDQo+IEBAIC02ODEsOCArNjgxLDggQEAgc3RhdGljIGludCBtdGtfaTJj
+X2NhbGN1bGF0ZV9zcGVlZChzdHJ1Y3QgbXRrX2kyYyAqaTJjLCB1bnNpZ25lZCBpbnQgY2xrX3Ny
+YywNCj4gIAl1bnNpZ25lZCBpbnQgY250X211bDsNCj4gIAlpbnQgcmV0ID0gLUVJTlZBTDsNCj4g
+IA0KPiAtCWlmICh0YXJnZXRfc3BlZWQgPiBJMkNfTUFYX0ZBU1RfTU9ERV9QTFVTX0ZSRVEpDQo+
+IC0JCXRhcmdldF9zcGVlZCA9IEkyQ19NQVhfRkFTVF9NT0RFX1BMVVNfRlJFUTsNCj4gKwlpZiAo
+dGFyZ2V0X3NwZWVkID4gSTJDX01BWF9ISUdIX1NQRUVEX01PREVfRlJFUSkNCj4gKwkJdGFyZ2V0
+X3NwZWVkID0gSTJDX01BWF9ISUdIX1NQRUVEX01PREVfRlJFUTsNCj4gIA0KPiAgCW1heF9zdGVw
+X2NudCA9IG10a19pMmNfbWF4X3N0ZXBfY250KHRhcmdldF9zcGVlZCk7DQo+ICAJYmFzZV9zdGVw
+X2NudCA9IG1heF9zdGVwX2NudDsNCj4gQEAgLTc1OSw3ICs3NTksNyBAQCBzdGF0aWMgaW50IG10
+a19pMmNfc2V0X3NwZWVkKHN0cnVjdCBtdGtfaTJjICppMmMsIHVuc2lnbmVkIGludCBwYXJlbnRf
+Y2xrKQ0KPiAgCWZvciAoY2xrX2RpdiA9IDE7IGNsa19kaXYgPD0gbWF4X2Nsa19kaXY7IGNsa19k
+aXYrKykgew0KPiAgCQljbGtfc3JjID0gcGFyZW50X2NsayAvIGNsa19kaXY7DQo+ICANCj4gLQkJ
+aWYgKHRhcmdldF9zcGVlZCA+IEkyQ19NQVhfRkFTVF9NT0RFX0ZSRVEpIHsNCj4gKwkJaWYgKHRh
+cmdldF9zcGVlZCA+IEkyQ19NQVhfRkFTVF9NT0RFX1BMVVNfRlJFUSkgew0KPiAgCQkJLyogU2V0
+IG1hc3RlciBjb2RlIHNwZWVkIHJlZ2lzdGVyICovDQo+ICAJCQlyZXQgPSBtdGtfaTJjX2NhbGN1
+bGF0ZV9zcGVlZChpMmMsIGNsa19zcmMsDQo+ICAJCQkJCQkgICAgICBJMkNfTUFYX0ZBU1RfTU9E
+RV9GUkVRLA0KDQo=
 
->   dt-bindings: pinctrl: sunxi: Get rid of continual nesting
->   dt-bindings: pinctrl: sunxi: Add A100 pinctrl bindings
->   pinctrl: sunxi: add support for the Allwinner A100 pin controller
-
-These three patches (3,4,5) are now applied to the pinctrl tree.
-
-Yours,
-Linus Walleij
