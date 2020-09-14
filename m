@@ -2,92 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EFC2696FE
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Sep 2020 22:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E312826989F
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Sep 2020 00:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725961AbgINUui (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Sep 2020 16:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725978AbgINUuf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Sep 2020 16:50:35 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EEFC06174A
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Sep 2020 13:50:34 -0700 (PDT)
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id BA030891B0;
-        Tue, 15 Sep 2020 08:50:26 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1600116626;
-        bh=j7CmXB7N3coyBKmnpBrosy5XOW7xAh3/RRHRC6TUQZY=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=1QQu9V4Yrh+/362SKEPh3ruzX5dfEW+KWIKIYbwH7kbp5/xXv9SnsO81FtXV6+Pdt
-         HQHXKvqJC80r6g68YV4avTdJYpW6WLgmhpTmLTLJW4LC9kfzhX3RonWShqxSlAc/fE
-         pZmYc0qj+xSI6gRxUeg3XUY16ANzyKs62QTFdwW9vQghRvfa+axsZQgo/q/ErggiY3
-         R9YF9fFhymMSYdYjUrg5+/7KNCRowC+/hpfNr56xrPTcK+JRNp1PHozZgyBXrDGotx
-         x1mhQhMT0gupr4+A7Ynt/W4O/bMDpINEXw72nhGA/vUoH4+Eh/KcgNMofSiyY64+IY
-         iH+n3pHj0QNSA==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5f5fd7920001>; Tue, 15 Sep 2020 08:50:26 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Tue, 15 Sep 2020 08:50:26 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.006; Tue, 15 Sep 2020 08:50:26 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Wolfram Sang <wsa@kernel.org>
-CC:     Evan Nimmo <Evan.Nimmo@alliedtelesis.co.nz>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
-        "jdelvare@suse.de" <jdelvare@suse.de>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/1] i2c: algo-pca: Reapply i2c bus settings after
- reset
-Thread-Topic: [PATCH v4 1/1] i2c: algo-pca: Reapply i2c bus settings after
- reset
-Thread-Index: AQHWhh88ZbCxr7/vmEC2Fb58jxyqGqlfL6AAgADNsQCAAxV2AIADP/WAgACeMwCAAOr/gA==
-Date:   Mon, 14 Sep 2020 20:50:26 +0000
-Message-ID: <39483c5c-398e-82a1-6297-fa2dc48fcd07@alliedtelesis.co.nz>
-References: <20200908203247.14374-1-evan.nimmo@alliedtelesis.co.nz>
- <20200909082338.GC2272@ninjato>
- <5410e288-e369-0310-1b8e-061c95e46164@alliedtelesis.co.nz>
- <20200911194526.GB909@ninjato>
- <61c139a0-26fc-8cd1-0b54-b7cb9d9c0648@alliedtelesis.co.nz>
- <20200914064920.GA1088@ninjato>
-In-Reply-To: <20200914064920.GA1088@ninjato>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <0A02511D3894C04DAB853CF8B0A9C5D8@atlnz.lc>
-Content-Transfer-Encoding: quoted-printable
+        id S1725961AbgINWMe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Sep 2020 18:12:34 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:44882 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725926AbgINWMd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Sep 2020 18:12:33 -0400
+Received: by mail-io1-f67.google.com with SMTP id g128so1822832iof.11;
+        Mon, 14 Sep 2020 15:12:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Z+qSwNUkHNOo72Qbw1JME5fFnhiiheFUy8wUUZB0Lrw=;
+        b=qufn+EOHGi3WAhfPFtJKjeAkA3hcObpRARsmJTs54heAfVGvB7njIEdu+NNQmUmiAs
+         rPqlM9CTO4/RLycxA32I1a1DgjY2jbBvwVo59fEGMgoC5TXlEOUBgG74qILKCRrRANGT
+         +hjbjdiU3Ma2N8Pr1RuKIO39m2eWvvDU/ILcLCfX9+j/zVvvpa7LDwHGeLgHEkutV474
+         2eaJUzc9FQ5CWRiXFpLEn53NRJeJmYN0SG1TgF4H1wexMKwJakJZa8lygK4NX9qaMB9a
+         uFesZX/W/lTkqYTMlCdHV5+U1FvFLhZAK5k+FQge6wkD+nPDW83k0hvoC0fMm5VaGKvU
+         XEKg==
+X-Gm-Message-State: AOAM5307VJ64qw72S96bajySFKMQcfgLNiTOpnu/yk1G2XehDPw6A3sr
+        mIeBdyiYy2veZmMfqamDlG5qEA2UDKAC
+X-Google-Smtp-Source: ABdhPJysHKNt8T7c2v44FhcVvreRsv3LO9EBSDoouJkZ5T5GLGQGPYrN+p7J2mwdjP1SyIgIZC3s5Q==
+X-Received: by 2002:a05:6638:2a6:: with SMTP id d6mr15486944jaq.132.1600121552368;
+        Mon, 14 Sep 2020 15:12:32 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id z18sm7919814ill.1.2020.09.14.15.12.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2020 15:12:31 -0700 (PDT)
+Received: (nullmailer pid 353325 invoked by uid 1000);
+        Mon, 14 Sep 2020 22:12:30 -0000
+Date:   Mon, 14 Sep 2020 16:12:30 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     od@zcrc.me, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] i2c: jz4780: Remove of_match_ptr()
+Message-ID: <20200914221230.GA349829@bogus>
+References: <20200904131152.17390-1-paul@crapouillou.net>
+ <20200904131152.17390-3-paul@crapouillou.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200904131152.17390-3-paul@crapouillou.net>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, Sep 04, 2020 at 03:11:52PM +0200, Paul Cercueil wrote:
+> CONFIG_OF is selected by CONFIG_MACH_INGENIC, therefore we don't need to
+> handle the case where Device Tree is not supported.
 
-On 14/09/20 6:49 pm, Wolfram Sang wrote:
->> I'm happy to route it to stable@ if you think it's worth it but I don't
->> think there's a specific Fixes: reference that can be used. The current
->> behavior appears to have been that way since before git (looks like we
->> noticed in 2014 but it's taken me 6 years to nag people into sending
->> their fixes upstream).
-> Better late than never :) Thanks for sending and the heads up. If you
-> don't need it for stable, then we should maybe not send it. It would be
-> nice for 9665 but we haven't tested it on 9564. But I'll let it be your
-> call.
->
-Looks like it's been picked up already. If anyone does hit problems on=20
-the 9564 hopefully the interweb will lead them to this mailing list=20
-thread and they'll have some people to hassle.=
+What about COMPILE_TEST? If not supported, why not?
+
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  drivers/i2c/busses/i2c-jz4780.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-jz4780.c b/drivers/i2c/busses/i2c-jz4780.c
+> index ed2ec86f6f1a..cb4a25ebb890 100644
+> --- a/drivers/i2c/busses/i2c-jz4780.c
+> +++ b/drivers/i2c/busses/i2c-jz4780.c
+> @@ -857,7 +857,7 @@ static struct platform_driver jz4780_i2c_driver = {
+>  	.remove		= jz4780_i2c_remove,
+>  	.driver		= {
+>  		.name	= "jz4780-i2c",
+> -		.of_match_table = of_match_ptr(jz4780_i2c_of_matches),
+> +		.of_match_table = jz4780_i2c_of_matches,
+>  	},
+>  };
+>  
+> -- 
+> 2.28.0
+> 
