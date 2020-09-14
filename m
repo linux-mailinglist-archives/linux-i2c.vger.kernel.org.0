@@ -2,354 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8A926859A
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Sep 2020 09:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16C62686A4
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Sep 2020 09:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725957AbgINHSA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Sep 2020 03:18:00 -0400
-Received: from www.zeus03.de ([194.117.254.33]:48156 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725984AbgINHRp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 14 Sep 2020 03:17:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=3BzhpD7mmRRZ+e
-        Ck1bniCRDNCZl5C4dzdK+uTj2Nt/A=; b=G4Eie+5Ryw5qQ1S43VQfEjMgdGRFmf
-        srSG3nr2+yd5wzfD3pYNCg7rVvO+6/9ctcd9onwrxxOkPG5/HjGY1CSm7rrENUN9
-        vEg0CbIeVJiPtidwQPb16hARXteL+fwBS94hHCzH/oE3zYDadCLJUcg7NXkgaVAX
-        oyLvV5N3fiCgI=
-Received: (qmail 1770423 invoked from network); 14 Sep 2020 09:17:41 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Sep 2020 09:17:41 +0200
-X-UD-Smtp-Session: l3s3148p1@AB6B1ECvmOAgAwDPXwXYAPlEQEA0NVnc
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Alain Volmat <alain.volmat@st.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH v2 1/1] i2c: add slave testunit driver
-Date:   Mon, 14 Sep 2020 09:17:37 +0200
-Message-Id: <20200914071737.6354-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200914071737.6354-1-wsa+renesas@sang-engineering.com>
-References: <20200914071737.6354-1-wsa+renesas@sang-engineering.com>
+        id S1726122AbgINH6c convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 14 Sep 2020 03:58:32 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:52653 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726068AbgINH6a (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Sep 2020 03:58:30 -0400
+Received: from [78.134.51.148] (port=41494 helo=[192.168.77.62])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1kHjNZ-000BOy-9w; Mon, 14 Sep 2020 09:58:25 +0200
+Subject: Re: [PATCH v8 0/6] Support running driver's probe for a device
+ powered off
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
+ <f4b82baa-66b7-464e-fd39-66d2243a05ef@lucaceresoli.net>
+ <20200911130104.GF26842@paasikivi.fi.intel.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <6dea1206-cfaa-bfc5-d57e-4dcddadc03c7@lucaceresoli.net>
+Date:   Mon, 14 Sep 2020 09:58:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200911130104.GF26842@paasikivi.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8BIT
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Here is an I2C slave backend driver which allows to test some uncommon
-functionalities of the I2C and SMBus world. Usually, you need specific
-devices to test e.g. SMBus Host Notify and such. With this driver you
-just need the slave interface of another I2C controller.
+Hi Sakari,
 
-This initial version has testcases for multi-master and SMBus Host
-Notify. Already planned but not yet implemented are SMBus Alert and
-messages with I2C_M_RECV_LEN.
+On 11/09/20 15:01, Sakari Ailus wrote:
+> Hi Luca,
+> 
+> On Fri, Sep 11, 2020 at 02:49:26PM +0200, Luca Ceresoli wrote:
+>> Hi Sakari,
+>>
+>> On 03/09/20 10:15, Sakari Ailus wrote:
+>>>
+>>> Hi all,
+>>>
+>>> These patches enable calling (and finishing) a driver's probe function
+>>> without powering on the respective device on busses where the practice is
+>>> to power on the device for probe. While it generally is a driver's job to
+>>> check the that the device is there, there are cases where it might be
+>>> undesirable. (In this case it stems from a combination of hardware design
+>>> and user expectations; see below.) The downside with this change is that
+>>> if there is something wrong with the device, it will only be found at the
+>>> time the device is used. In this case (the camera sensors + EEPROM in a
+>>> sensor) I don't see any tangible harm from that though.
+>>>
+>>> An indication both from the driver and the firmware is required to allow
+>>> the device's power state to remain off during probe (see the first patch).
+>>>
+>>>
+>>> The use case is such that there is a privacy LED next to an integrated
+>>> user-facing laptop camera, and this LED is there to signal the user that
+>>> the camera is recording a video or capturing images. That LED also happens
+>>> to be wired to one of the power supplies of the camera, so whenever you
+>>> power on the camera, the LED will be lit, whether images are captured from
+>>> the camera --- or not. There's no way to implement this differently
+>>> without additional software control (allowing of which is itself a
+>>> hardware design decision) on most CSI-2-connected camera sensors as they
+>>> simply have no pin to signal the camera streaming state.
+>>>
+>>> This is also what happens during driver probe: the camera will be powered
+>>> on by the I²C subsystem calling dev_pm_domain_attach() and the device is
+>>> already powered on when the driver's own probe function is called. To the
+>>> user this visible during the boot process as a blink of the privacy LED,
+>>> suggesting that the camera is recording without the user having used an
+>>> application to do that. From the end user's point of view the behaviour is
+>>> not expected and for someone unfamiliar with internal workings of a
+>>> computer surely seems quite suspicious --- even if images are not being
+>>> actually captured.
+>>>
+>>> I've tested these on linux-next master. They also apply to Wolfram's
+>>> i2c/for-next branch, there's a patch that affects the I²C core changes
+>>> here (see below). The patches apart from that apply to Bartosz's
+>>> at24/for-next as well as Mauro's linux-media master branch.
+>>
+>> Apologies for having joined this discussion this late.
+> 
+> No worries. But thanks for the comments.
+> 
+>>
+>> This patchset seems a good base to cover a different use case, where I
+>> also cannot access the physical device at probe time.
+>>
+>> I'm going to try these patches, but in my case there are a few
+>> differences that need a better understanding.
+>>
+>> First, I'm using device tree, not ACPI. In addition to adding OF support
+>> similar to the work you've done for ACPI, I think instead of
+>> acpi_dev_state_low_power() we should have a function that works for both
+>> ACPI and DT.
+> 
+> acpi_dev_state_low_power() is really ACPI specific: it does tell the ACPI
+> power state of the device during probe or remove. It is not needed on DT
+> since the power state of the device is controlled directly by the driver.
+> On I²C ACPI devices, it's the framework that powers them on for probe.
 
-Please read the documentation for further details.
+I see, thanks for clarifying. I'm not used to ACPI so I didn't get that.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+> You could have a helper function on DT to tell a driver what to do in
+> probe, but the functionality in that case is unrelated.
 
-Changes since v1:
-* fixed typo in Kconfig text
-* for READ_BYTES, mask the user supplied address to 7 bits
-  (Thanks to Alain for pointing out these two!)
-* removed unneeded of.h-include
+So in case of DT we might think of a function that just tells whether
+the device is marked to allow low-power probe, but it's just an info
+from DT:
 
+int mydriver_probe(struct i2c_client *client)
+{
+	...
+	low_power = of_dev_state_low_power(&client->dev);
+	if (!low_power) {
+		mydriver_initialize(); /* power+clocks, write regs */
+ 	}
+	...
+}
 
- Documentation/i2c/slave-testunit-backend.rst |  66 +++++++
- drivers/i2c/Kconfig                          |   8 +
- drivers/i2c/Makefile                         |   1 +
- drivers/i2c/i2c-slave-testunit.c             | 174 +++++++++++++++++++
- 4 files changed, 249 insertions(+)
- create mode 100644 Documentation/i2c/slave-testunit-backend.rst
- create mode 100644 drivers/i2c/i2c-slave-testunit.c
+...and, if (low_power), call mydriver_initialize() at first usage.
 
-diff --git a/Documentation/i2c/slave-testunit-backend.rst b/Documentation/i2c/slave-testunit-backend.rst
-new file mode 100644
-index 000000000000..f537c62a8a83
---- /dev/null
-+++ b/Documentation/i2c/slave-testunit-backend.rst
-@@ -0,0 +1,66 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+================================
-+Linux I2C slave testunit backend
-+================================
-+
-+by Wolfram Sang <wsa@sang-engineering.com> in 2020
-+
-+This backend can be used to trigger test cases for I2C bus masters which
-+require a remote device with certain capabilities (and which are usually not so
-+easy to obtain). Examples include multi-master testing, and SMBus Host Notify
-+testing. For some tests, the I2C slave controller must be able to switch
-+between master and slave mode because it needs to send data, too.
-+
-+Note that this is a device for testing and debugging. It should not be enabled
-+in a production build. And while there is some versioning and we try hard to
-+keep backward compatibility, there is no stable ABI guaranteed!
-+
-+Instantiating the device is regular. Example for bus 0, address 0x30:
-+
-+# echo "slave-testunit 0x1030" > /sys/bus/i2c/devices/i2c-0/new_device
-+
-+After that, you will have a write-only device listening. Reads will return an
-+8-bit version number. The device consists of 4 8-bit registers and all must be
-+written to start a testcase, i.e. you must always write 4 bytes to the device.
-+The registers are:
-+
-+0x00 CMD   - which test to trigger
-+0x01 DATAL - configuration byte 1 for the test
-+0x02 DATAH - configuration byte 2 for the test
-+0x03 DELAY - delay in n * 10ms until test is started
-+
-+Using 'i2cset' from the i2c-tools package, the generic command looks like:
-+
-+# i2cset -y <bus_num> <testunit_address> <CMD> <DATAL> <DATAH> <DELAY> i
-+
-+DELAY is a generic parameter which will delay the execution of the test in CMD.
-+The commands are described in the following section. An invalid command will
-+result in the transfer not being acknowledged.
-+
-+Commands
-+--------
-+
-+0x00 NOOP (reserved for future use)
-+
-+0x01 READ_BYTES (also needs master mode)
-+   DATAL - address to read data from
-+   DATAH - number of bytes to read
-+
-+This is useful to test if your bus master driver is handling multi-master
-+correctly. You can trigger the testunit to read bytes from another device on
-+the bus. If the bus master under test also wants to access the bus at the same
-+time, the bus will be busy. Example to read 128 bytes from device 0x50 after
-+50ms of delay:
-+
-+# i2cset -y 0 0x30 0x01 0x50 0x80 0x05 i
-+
-+0x02 SMBUS_HOST_NOTIFY (also needs master mode)
-+   DATAL - low byte of the status word to send
-+   DATAH - high byte of the status word to send
-+
-+This test will send an SMBUS_HOST_NOTIFY message to the host. Note that the
-+status word is currently ignored in the Linux Kernel. Example to send a
-+notification after 10ms:
-+
-+# i2cset -y 0 0x30 0x02 0x42 0x64 0x01 i
-diff --git a/drivers/i2c/Kconfig b/drivers/i2c/Kconfig
-index 5449729cdb87..121bf6fc1165 100644
---- a/drivers/i2c/Kconfig
-+++ b/drivers/i2c/Kconfig
-@@ -125,6 +125,14 @@ config I2C_SLAVE_EEPROM
- 	  This backend makes Linux behave like an I2C EEPROM. Please read
- 	  Documentation/i2c/slave-eeprom-backend.rst for further details.
- 
-+config I2C_SLAVE_TESTUNIT
-+	tristate "I2C testunit slave driver"
-+	help
-+	  This backend can be used to trigger test cases for I2C bus masters
-+	  which require a remote device with certain capabilities, e.g.
-+	  multi-master, SMBus Host Notify, etc. Please read
-+	  Documentation/i2c/slave-testunit-backend.rst for further details.
-+
- endif
- 
- config I2C_DEBUG_CORE
-diff --git a/drivers/i2c/Makefile b/drivers/i2c/Makefile
-index bed6ba63c983..c1d493dc9bac 100644
---- a/drivers/i2c/Makefile
-+++ b/drivers/i2c/Makefile
-@@ -16,5 +16,6 @@ obj-$(CONFIG_I2C_MUX)		+= i2c-mux.o
- obj-y				+= algos/ busses/ muxes/
- obj-$(CONFIG_I2C_STUB)		+= i2c-stub.o
- obj-$(CONFIG_I2C_SLAVE_EEPROM)	+= i2c-slave-eeprom.o
-+obj-$(CONFIG_I2C_SLAVE_TESTUNIT)	+= i2c-slave-testunit.o
- 
- ccflags-$(CONFIG_I2C_DEBUG_CORE) := -DDEBUG
-diff --git a/drivers/i2c/i2c-slave-testunit.c b/drivers/i2c/i2c-slave-testunit.c
-new file mode 100644
-index 000000000000..c4ebb2632c84
---- /dev/null
-+++ b/drivers/i2c/i2c-slave-testunit.c
-@@ -0,0 +1,174 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * I2C slave mode testunit
-+ *
-+ * Copyright (C) 2020 by Wolfram Sang, Sang Engineering <wsa@sang-engineering.com>
-+ * Copyright (C) 2020 by Renesas Electronics Corporation
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/workqueue.h> /* FIXME: is system_long_wq the best choice? */
-+
-+#define TU_CUR_VERSION 0x01
-+
-+enum testunit_cmds {
-+	TU_CMD_READ_BYTES = 1,	/* save 0 for ABORT, RESET or similar */
-+	TU_CMD_HOST_NOTIFY,
-+	TU_NUM_CMDS
-+};
-+
-+enum testunit_regs {
-+	TU_REG_CMD,
-+	TU_REG_DATAL,
-+	TU_REG_DATAH,
-+	TU_REG_DELAY,
-+	TU_NUM_REGS
-+};
-+
-+enum testunit_flags {
-+	TU_FLAG_IN_PROCESS,
-+};
-+
-+struct testunit_data {
-+	unsigned long flags;
-+	u8 regs[TU_NUM_REGS];
-+	u8 reg_idx;
-+	struct i2c_client *client;
-+	struct delayed_work worker;
-+};
-+
-+static void i2c_slave_testunit_work(struct work_struct *work)
-+{
-+	struct testunit_data *tu = container_of(work, struct testunit_data, worker.work);
-+	struct i2c_msg msg;
-+	u8 msgbuf[256];
-+	int ret = 0;
-+
-+	msg.addr = I2C_CLIENT_END;
-+	msg.buf = msgbuf;
-+
-+	switch (tu->regs[TU_REG_CMD]) {
-+	case TU_CMD_READ_BYTES:
-+		msg.addr = tu->regs[TU_REG_DATAL] & 0x7f;
-+		msg.flags = I2C_M_RD;
-+		msg.len = tu->regs[TU_REG_DATAH];
-+		break;
-+
-+	case TU_CMD_HOST_NOTIFY:
-+		msg.addr = 0x08;
-+		msg.flags = 0;
-+		msg.len = 3;
-+		msgbuf[0] = tu->client->addr;
-+		msgbuf[1] = tu->regs[TU_REG_DATAL];
-+		msgbuf[2] = tu->regs[TU_REG_DATAH];
-+		break;
-+
-+	default:
-+		break;
-+	}
-+
-+	if (msg.addr != I2C_CLIENT_END) {
-+		ret = i2c_transfer(tu->client->adapter, &msg, 1);
-+		/* convert '0 msgs transferred' to errno */
-+		ret = (ret == 0) ? -EIO : ret;
-+	}
-+
-+	if (ret < 0)
-+		dev_err(&tu->client->dev, "CMD%02X failed (%d)\n", tu->regs[TU_REG_CMD], ret);
-+
-+	clear_bit(TU_FLAG_IN_PROCESS, &tu->flags);
-+}
-+
-+static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
-+				     enum i2c_slave_event event, u8 *val)
-+{
-+	struct testunit_data *tu = i2c_get_clientdata(client);
-+	int ret = 0;
-+
-+	switch (event) {
-+	case I2C_SLAVE_WRITE_RECEIVED:
-+		if (test_bit(TU_FLAG_IN_PROCESS, &tu->flags))
-+			return -EBUSY;
-+
-+		if (tu->reg_idx < TU_NUM_REGS)
-+			tu->regs[tu->reg_idx] = *val;
-+		else
-+			ret = -EMSGSIZE;
-+
-+		if (tu->reg_idx <= TU_NUM_REGS)
-+			tu->reg_idx++;
-+
-+		/* TU_REG_CMD always written at this point */
-+		if (tu->regs[TU_REG_CMD] >= TU_NUM_CMDS)
-+			ret = -EINVAL;
-+
-+		break;
-+
-+	case I2C_SLAVE_STOP:
-+		if (tu->reg_idx == TU_NUM_REGS) {
-+			set_bit(TU_FLAG_IN_PROCESS, &tu->flags);
-+			queue_delayed_work(system_long_wq, &tu->worker,
-+					   msecs_to_jiffies(10 * tu->regs[TU_REG_DELAY]));
-+		}
-+		fallthrough;
-+
-+	case I2C_SLAVE_WRITE_REQUESTED:
-+		tu->reg_idx = 0;
-+		break;
-+
-+	case I2C_SLAVE_READ_REQUESTED:
-+	case I2C_SLAVE_READ_PROCESSED:
-+		*val = TU_CUR_VERSION;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int i2c_slave_testunit_probe(struct i2c_client *client)
-+{
-+	struct testunit_data *tu;
-+
-+	tu = devm_kzalloc(&client->dev, sizeof(struct testunit_data), GFP_KERNEL);
-+	if (!tu)
-+		return -ENOMEM;
-+
-+	tu->client = client;
-+	i2c_set_clientdata(client, tu);
-+	INIT_DELAYED_WORK(&tu->worker, i2c_slave_testunit_work);
-+
-+	return i2c_slave_register(client, i2c_slave_testunit_slave_cb);
-+};
-+
-+static int i2c_slave_testunit_remove(struct i2c_client *client)
-+{
-+	struct testunit_data *tu = i2c_get_clientdata(client);
-+
-+	cancel_delayed_work_sync(&tu->worker);
-+	i2c_slave_unregister(client);
-+	return 0;
-+}
-+
-+static const struct i2c_device_id i2c_slave_testunit_id[] = {
-+	{ "slave-testunit", 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, i2c_slave_testunit_id);
-+
-+static struct i2c_driver i2c_slave_testunit_driver = {
-+	.driver = {
-+		.name = "i2c-slave-testunit",
-+	},
-+	.probe_new = i2c_slave_testunit_probe,
-+	.remove = i2c_slave_testunit_remove,
-+	.id_table = i2c_slave_testunit_id,
-+};
-+module_i2c_driver(i2c_slave_testunit_driver);
-+
-+MODULE_AUTHOR("Wolfram Sang <wsa@sang-engineering.com>");
-+MODULE_DESCRIPTION("I2C slave mode test unit");
-+MODULE_LICENSE("GPL v2");
+I'm wondering whether this might make sense in mainline.
+
 -- 
-2.20.1
+Luca
 
