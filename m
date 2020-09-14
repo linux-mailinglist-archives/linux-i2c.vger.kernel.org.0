@@ -2,210 +2,206 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E79542691FF
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Sep 2020 18:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22583269218
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Sep 2020 18:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726239AbgINQqZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Sep 2020 12:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725914AbgINQoG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Sep 2020 12:44:06 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB31C06174A;
-        Mon, 14 Sep 2020 09:43:43 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id i17so516864oig.10;
-        Mon, 14 Sep 2020 09:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lXMk4QeQIMhGNoMx4cVDajUP7rFeHi/N5faNXUWz4B8=;
-        b=fhkF0ai/iqsFgS5J0BSy3VjIz0gdC22qT46YgH3DCATOjggT4rXpOAv0Rbw0BbkhcI
-         UdCwm8nMkjg0d94M2F07TCZXlz+n62fvzLs0gxwKvpF+srZI8D1UMkL6Yci0CDpGs6bf
-         KG56cmwEXNo3f1K9asd3qMLXcjP+CCWexbJ7+5Udj9fCnsrTSsw8Qy4O4RjlbIQyFQpZ
-         /DFHa0xZHUVpDYEZNRcZ13Ee/lLrB3mbVZ0iR31T7fbge+487e+5+BoqwlvcvN6q8IUW
-         jyQxhlnNq8U51NYZmytctqTrfZJyH3L9cMS5iiUTzLVV8l6Ey9LzGuM8TGm4qEawp+KU
-         o9+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=lXMk4QeQIMhGNoMx4cVDajUP7rFeHi/N5faNXUWz4B8=;
-        b=jK+IINQe+jrl/0liyMq5lBe5ipluMFy3bv9ADPSh1eEVfTzxoeJVJdZo7TXvxrPZLf
-         JErJofHvligp6QgK4ccXbmHOljGV0OKPIttd42DPiXRKoZLUCfvd7Jbh0JX66HZndKgX
-         ip97dNrZTSwJDRMPy17mJuNafUuf4yI2tZL67MnxbLBGrUyOkHlwz9fN4Kzdzvj5Qcsr
-         UFl26p0Pi+5Jj+rEmTATOTXsX05iGKFJnqLY3mNAHhtE6rP+AaYYYh2xHM9gBOAjA78Z
-         zQexqfwguraUd9/s+B4xl2ThZmzaNVGaQdFoxtdqBWKyaDZDejIS+54Ox7slRN8G1pzu
-         eYBg==
-X-Gm-Message-State: AOAM530YPmmne/9mRCBGnSabu3VhwgC7sq+XFwUY18hLzoH340H5S73Y
-        ecY2hL8g6PK94tyRbzuStQkb4C1I6Bk=
-X-Google-Smtp-Source: ABdhPJxzV/HiPhato6PguWo5Vrm/DcxOZrM7TdwbM6gHDFnHMsDr9pbWK9WSj8zX9lX/PlQpWq4jlg==
-X-Received: by 2002:aca:c7d6:: with SMTP id x205mr161324oif.51.1600101822235;
-        Mon, 14 Sep 2020 09:43:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v7sm3951468oie.9.2020.09.14.09.43.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Sep 2020 09:43:41 -0700 (PDT)
-Subject: Re: [RFC PATCH 0/2] Throttle I2C transfers to UCD9000 devices
-To:     Andrew Jeffery <andrew@aj.id.au>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Cc:     jdelvare@suse.com, wsa@kernel.org, joel@jms.id.au,
-        linux-kernel@vger.kernel.org
-References: <20200914122811.3295678-1-andrew@aj.id.au>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <e7a64983-fe1d-1ba2-b0c3-ae4a791f7a75@roeck-us.net>
-Date:   Mon, 14 Sep 2020 09:43:40 -0700
+        id S1726252AbgINQtu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 14 Sep 2020 12:49:50 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:35754 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726094AbgINQtt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Sep 2020 12:49:49 -0400
+Received: from [78.134.51.148] (port=46080 helo=[192.168.77.62])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1kHrfX-0002jl-8u; Mon, 14 Sep 2020 18:49:31 +0200
+Subject: Re: [PATCH v8 0/6] Support running driver's probe for a device
+ powered off
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
+ <f4b82baa-66b7-464e-fd39-66d2243a05ef@lucaceresoli.net>
+ <20200911130104.GF26842@paasikivi.fi.intel.com>
+ <6dea1206-cfaa-bfc5-d57e-4dcddadc03c7@lucaceresoli.net>
+ <20200914094727.GM26842@paasikivi.fi.intel.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <de017bfd-8908-f5ba-afa7-469a0059a5a7@lucaceresoli.net>
+Date:   Mon, 14 Sep 2020 18:49:29 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200914122811.3295678-1-andrew@aj.id.au>
+In-Reply-To: <20200914094727.GM26842@paasikivi.fi.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 9/14/20 5:28 AM, Andrew Jeffery wrote:
-> Hello,
+Hi Sakari,
+
+On 14/09/20 11:47, Sakari Ailus wrote:
+> Hi Luca,
 > 
-> While working with system designs making use of TI's UCD90320 Power
-> Sequencer we've found that communication with the device isn't terribly
-> reliable.
+> On Mon, Sep 14, 2020 at 09:58:24AM +0200, Luca Ceresoli wrote:
+>> Hi Sakari,
+>>
+>> On 11/09/20 15:01, Sakari Ailus wrote:
+>>> Hi Luca,
+>>>
+>>> On Fri, Sep 11, 2020 at 02:49:26PM +0200, Luca Ceresoli wrote:
+>>>> Hi Sakari,
+>>>>
+>>>> On 03/09/20 10:15, Sakari Ailus wrote:
+>>>>>
+>>>>> Hi all,
+>>>>>
+>>>>> These patches enable calling (and finishing) a driver's probe function
+>>>>> without powering on the respective device on busses where the practice is
+>>>>> to power on the device for probe. While it generally is a driver's job to
+>>>>> check the that the device is there, there are cases where it might be
+>>>>> undesirable. (In this case it stems from a combination of hardware design
+>>>>> and user expectations; see below.) The downside with this change is that
+>>>>> if there is something wrong with the device, it will only be found at the
+>>>>> time the device is used. In this case (the camera sensors + EEPROM in a
+>>>>> sensor) I don't see any tangible harm from that though.
+>>>>>
+>>>>> An indication both from the driver and the firmware is required to allow
+>>>>> the device's power state to remain off during probe (see the first patch).
+>>>>>
+>>>>>
+>>>>> The use case is such that there is a privacy LED next to an integrated
+>>>>> user-facing laptop camera, and this LED is there to signal the user that
+>>>>> the camera is recording a video or capturing images. That LED also happens
+>>>>> to be wired to one of the power supplies of the camera, so whenever you
+>>>>> power on the camera, the LED will be lit, whether images are captured from
+>>>>> the camera --- or not. There's no way to implement this differently
+>>>>> without additional software control (allowing of which is itself a
+>>>>> hardware design decision) on most CSI-2-connected camera sensors as they
+>>>>> simply have no pin to signal the camera streaming state.
+>>>>>
+>>>>> This is also what happens during driver probe: the camera will be powered
+>>>>> on by the I²C subsystem calling dev_pm_domain_attach() and the device is
+>>>>> already powered on when the driver's own probe function is called. To the
+>>>>> user this visible during the boot process as a blink of the privacy LED,
+>>>>> suggesting that the camera is recording without the user having used an
+>>>>> application to do that. From the end user's point of view the behaviour is
+>>>>> not expected and for someone unfamiliar with internal workings of a
+>>>>> computer surely seems quite suspicious --- even if images are not being
+>>>>> actually captured.
+>>>>>
+>>>>> I've tested these on linux-next master. They also apply to Wolfram's
+>>>>> i2c/for-next branch, there's a patch that affects the I²C core changes
+>>>>> here (see below). The patches apart from that apply to Bartosz's
+>>>>> at24/for-next as well as Mauro's linux-media master branch.
+>>>>
+>>>> Apologies for having joined this discussion this late.
+>>>
+>>> No worries. But thanks for the comments.
+>>>
+>>>>
+>>>> This patchset seems a good base to cover a different use case, where I
+>>>> also cannot access the physical device at probe time.
+>>>>
+>>>> I'm going to try these patches, but in my case there are a few
+>>>> differences that need a better understanding.
+>>>>
+>>>> First, I'm using device tree, not ACPI. In addition to adding OF support
+>>>> similar to the work you've done for ACPI, I think instead of
+>>>> acpi_dev_state_low_power() we should have a function that works for both
+>>>> ACPI and DT.
+>>>
+>>> acpi_dev_state_low_power() is really ACPI specific: it does tell the ACPI
+>>> power state of the device during probe or remove. It is not needed on DT
+>>> since the power state of the device is controlled directly by the driver.
+>>> On I²C ACPI devices, it's the framework that powers them on for probe.
+>>
+>> I see, thanks for clarifying. I'm not used to ACPI so I didn't get that.
+>>
+>>> You could have a helper function on DT to tell a driver what to do in
+>>> probe, but the functionality in that case is unrelated.
+>>
+>> So in case of DT we might think of a function that just tells whether
+>> the device is marked to allow low-power probe, but it's just an info
+>> from DT:
+>>
+>> int mydriver_probe(struct i2c_client *client)
+>> {
+>> 	...
+>> 	low_power = of_dev_state_low_power(&client->dev);
+>> 	if (!low_power) {
+>> 		mydriver_initialize(); /* power+clocks, write regs */
+>>  	}
+>> 	...
+>> }
+>>
+>> ...and, if (low_power), call mydriver_initialize() at first usage.
+>>
+>> I'm wondering whether this might make sense in mainline.
 > 
-> It appears that back-to-back transfers where commands addressed to the
-> device are put onto the bus with intervals between STOP and START in the
-> neighbourhood of 250us or less can cause bad behaviour. This primarily
-> happens during driver probe while scanning the device to determine its
-> capabilities.
+> Quite possibly, if there are drivers that would need it.
 > 
-> We have observed the device causing excessive clock stretches and bus
-> lockups, and also corruption of the device's volatile state (requiring it
-> to be reset).  The latter is particularly disruptive in that the controlled
-> rails are brought down either by:
+> The function should probably be called differently though as what it does
+> is quite different after all.
 > 
-> 1. The corruption causing a fault condition, or
-> 2. Asserting the device's reset line to recover
+> Unless... we did the following:
 > 
-> A further observation is that pacing transfers to the device appears to
-> mitigate the bad behaviour. We're in discussion with TI to better
-> understand the limitations and at least get the behaviour documented.
+> - Redefine the I²C driver flag added by this patchset into what tells the
+>   I²C framework whether the driver does its own power management
+>   independently of the I²C framework. It could be called e.g.
+>   I2C_DRV_FL_FULL_PM, to indicate the driver is responsible for all power
+>   management of the device, and the I²C framework would not power on the
+>   device for probe or remove.
 > 
-> This short series implements the mitigation in terms of a throttle in the
-> i2c_client associated with the device's driver. Before the first
-> communication with the device in the probe() of ucd9000 we configure the
-> i2c_client to throttle transfers with a minimum of a 1ms delay (with the
-> delay exposed as a module parameter).
+> - Add a firmware function to tell whether the device identification should
+>   take place during probe or not. For this is what we're really doing here
+>   from driver's point of view: lazy device probing.
+
+Indeed my needs have nothing to do with power management. What I need is
+lazy device probing as the I2C bus may need time before it can be used.
+From the driver code point of view it looks similar (there's an if()
+around initializations in probe() and init is done later if needed), but
+the usage is different.
+
+Another approach would be to add a new I2C driver operation [say
+init_hw()], then move code for lazy init out of probe() into init_hw().
+probe() would still allocate resources. init_hw() would be called by the
+framework (or the controller driver?) when it knows eveything is ready.
+Just wild thoughts while I'm trying to focus the problem...
+
+> There are no dependencies between the two but they can be used together to
+> implement the same functionality as this patchset currently does. This way
+> also the differences between driver implementations for ACPI and DT can be
+> reduced as the logic is the same.
 > 
-> The series is RFC for several reasons:
+> Further on, with this approach, if other busses happen to need this
+> functionality in the future, it would be straightforward to add support ---
+> it only takes to query whether it's indicated by the DT or ACPI property.
 > 
-> The first is to sus out feelings on the general direction. The problem is
-> pretty unfortunate - are there better ways to implement the mitigation?
-> 
-> If there aren't, then:
-> 
-> I'd like thoughts on whether we want to account for i2c-dev clients.
-> Implementing throttling in i2c_client feels like a solution-by-proxy as the
-> throttling is really a property of the targeted device, but we don't have a
-> coherent representation between platform devices and devices associated
-> with i2c-dev clients. At the moment we'd have to resort to address-based
-> lookups for platform data stashed in the transfer functions.
-> 
-> Next is that I've only implemented throttling for SMBus devices. I don't
-> yet have a use-case for throttling non-SMBus devices so I'm not sure it's
-> worth poking at it, but would appreciate thoughts there.
-> 
-> Further, I've had a bit of a stab at dealing with atomic transfers that's
-> not been tested. Hopefully it makes sense.
-> 
-> Finally I'm also interested in feedback on exposing the control in a little
-> more general manner than having to implement a module parameter in all
-> drivers that want to take advantage of throttling. This isn't a big problem
-> at the moment, but if anyone has thoughts there then I'm happy to poke at
-> those too.
+> Thoughts, opinions?
 > 
 
-As mentioned in patch 2/2, I don't think a module parameter is a good idea.
-I think this should be implemented on driver level, similar to zl6100.c,
-it should be limited to affected devices and not be user controllable.
-
-In respect to implementation in the i2c core vs in drivers: So far we
-encountered this problem for some Zilker labs devices and for some LTC
-devices. While the solution needed here looks similar to the solution
-implemented for Zilker labs devices, the solution for LTC devices is
-different. I am not sure if an implementation in the i2c core is
-desirable. It looks quite invasive to me, and it won't solve the problem
-for all devices since it isn't always a simple "wait <n> microseconds
-between accesses". For example, some devices may require a wait after
-a write but not after a read, or a wait only after certain commands (such
-as commands writing to an EEPROM). Other devices may require a mechanism
-different to "wait a certain period of time". It seems all but impossible
-to implement a generic mechanism on i2c level.
-
-Thanks,
-Guenter
-
-> Please review!
-> 
-> Andrew
-> 
-> Andrew Jeffery (2):
->   i2c: smbus: Allow throttling of transfers to client devices
->   hwmon: (pmbus/ucd9000) Throttle SMBus transfers to avoid poor
->     behaviour
-> 
->  drivers/hwmon/pmbus/ucd9000.c |   6 ++
->  drivers/i2c/i2c-core-base.c   |   8 +-
->  drivers/i2c/i2c-core-smbus.c  | 149 +++++++++++++++++++++++++++-------
->  drivers/i2c/i2c-core.h        |  22 +++++
->  include/linux/i2c.h           |   3 +
->  5 files changed, 157 insertions(+), 31 deletions(-)
-> 
+-- 
+Luca
 
