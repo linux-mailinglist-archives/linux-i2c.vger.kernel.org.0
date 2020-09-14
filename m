@@ -2,172 +2,179 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 450BF268D38
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Sep 2020 16:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FA0268D1C
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Sep 2020 16:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726373AbgINOSz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Sep 2020 10:18:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32912 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726700AbgINNHL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:07:11 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1398622227;
-        Mon, 14 Sep 2020 13:05:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600088756;
-        bh=FdcLDIpj7/cpMfR2qbqwN7TxTM3UDHbRkP2BwTRqlMo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=00ANBOhB9QdwguPzRecTCAjT2B+YVOcFyIghdF40RKE2KidoeKAjXFYmYYnfblAQm
-         79VwiT1yJltuJvSKJSVBMR0BH4AFSp4iisgvUEfQzH++W1HLqk6Ui32IKeIwf1AiMl
-         ZnKx7OKCciY2MF2RtybJV1xhoXdVkRtVQ3RSCl8E=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        id S1726300AbgINOOs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Sep 2020 10:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726721AbgINOOJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Sep 2020 10:14:09 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED6DC061788;
+        Mon, 14 Sep 2020 07:14:07 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id c13so14814oiy.6;
+        Mon, 14 Sep 2020 07:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cjdVkoWwc0/5Igc1ptSAdjkjxT++/T4F/9KSuux4LWI=;
+        b=kdwxSn19yJOT55a9+z1IQ+FDD2NFNiJPXfPRhY/MAOJ2EEqM1mryIJnXaDL2JWd/30
+         HhnCVjcep5F756Vq2Uj7phPiq1QtEeRsHuAwtUn0vRwCfuEoNeB9sYiKAE46PWiYz801
+         FNasaL5C1sBxkddYIU4H1n/0IKhC50nWGysTHxkiaaqxYLHZd0EP6eCOebsfwTLsISV1
+         lq42qmR+Dta8ID/+PY/Krqhk7pMdyAP4W4o9VY9R6R4epUxrLhjEhcekDceR1ShWBZvf
+         /3O2fRkBx+wR8smBGZ+qaLGaXKj5LJYDLmkdDQnjGheGrwCN1v5VV0s7MWHvQDnF+STr
+         MzuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=cjdVkoWwc0/5Igc1ptSAdjkjxT++/T4F/9KSuux4LWI=;
+        b=aGAvqzLX//GezJSVX/PGhcz0uObEaJNrJUF/n5/e1qCrp3MzrA04e6i/k2IqGox5Bx
+         70JJqfyt/kcurRBHuECNICTXIccIjwvNneYCBnjF98iQn2A+kdqIT07f6yX1JmzCqmos
+         8JuSHFwEk1Z2HO02wwifBZBe72BhRCHvHw7HF2fiu6AdXbw/BGmoQv6ObbvoYZd3fsIj
+         +Bi110smgf1g0yOCs9ZQX0wirv/tUZVksttEtRTFydQuevHXa40eMfll4hBfh/0Zs/I8
+         18iHsYw8GjQnvfSmitAE7LqDzVROV/jhAvTlVUVLedD44afXZTsrRkg25ipLng021T9C
+         OUqA==
+X-Gm-Message-State: AOAM532Wbx8qchY8M1WNsEgVzER7r4tRVGU+copgSRlP3kWwg+5yqunJ
+        u9JxdNZTy6/X2KD1x/Ti2EcfO9XS798=
+X-Google-Smtp-Source: ABdhPJxrB/7TsCg/PODh7gd7puPAwReqZK90Y/XvlqjthIGRRtDRk5QHEnseXdZvCHHXvtd89l8dYw==
+X-Received: by 2002:a05:6808:574:: with SMTP id j20mr9203997oig.158.1600092846475;
+        Mon, 14 Sep 2020 07:14:06 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w124sm3696169oib.36.2020.09.14.07.14.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Sep 2020 07:14:05 -0700 (PDT)
+Subject: Re: [RFC PATCH 2/2] hwmon: (pmbus/ucd9000) Throttle SMBus transfers
+ to avoid poor behaviour
+To:     Andrew Jeffery <andrew@aj.id.au>, linux-hwmon@vger.kernel.org,
         linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 09/10] i2c: algo: pca: Reapply i2c bus settings after reset
-Date:   Mon, 14 Sep 2020 09:05:44 -0400
-Message-Id: <20200914130545.1805084-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200914130545.1805084-1-sashal@kernel.org>
-References: <20200914130545.1805084-1-sashal@kernel.org>
+Cc:     jdelvare@suse.com, wsa@kernel.org, joel@jms.id.au,
+        linux-kernel@vger.kernel.org
+References: <20200914122811.3295678-1-andrew@aj.id.au>
+ <20200914122811.3295678-3-andrew@aj.id.au>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <71067b18-c4bc-533a-0069-f21069c5fd0d@roeck-us.net>
+Date:   Mon, 14 Sep 2020 07:14:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+In-Reply-To: <20200914122811.3295678-3-andrew@aj.id.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>
+On 9/14/20 5:28 AM, Andrew Jeffery wrote:
+> Short turn-around times between transfers to e.g. the UCD90320 can lead
+> to problematic behaviour, including excessive clock stretching, bus
+> lockups and potential corruption of the device's volatile state.
+> 
+> Introduce transfer throttling for the device with a minimum access
+> delay of 1ms.
+> 
 
-[ Upstream commit 0a355aeb24081e4538d4d424cd189f16c0bbd983 ]
+Some Zilker labs devices have the same problem, though not as bad
+to need a 1ms delay. See zl6100.c. Various LTS devices have a similar
+problem, but there it is possible to poll the device until it is ready.
+See ltc2978.c.
 
-If something goes wrong (such as the SCL being stuck low) then we need
-to reset the PCA chip. The issue with this is that on reset we lose all
-config settings and the chip ends up in a disabled state which results
-in a lock up/high CPU usage. We need to re-apply any configuration that
-had previously been set and re-enable the chip.
+> Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
+> ---
+>  drivers/hwmon/pmbus/ucd9000.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
+> index 81f4c4f166cd..a0b97d035326 100644
+> --- a/drivers/hwmon/pmbus/ucd9000.c
+> +++ b/drivers/hwmon/pmbus/ucd9000.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/debugfs.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> +#include <linux/moduleparam.h>
+>  #include <linux/of_device.h>
+>  #include <linux/init.h>
+>  #include <linux/err.h>
+> @@ -18,6 +19,9 @@
+>  #include <linux/gpio/driver.h>
+>  #include "pmbus.h"
+>  
+> +static unsigned long smbus_delay_us = 1000;
 
-Signed-off-by: Evan Nimmo <evan.nimmo@alliedtelesis.co.nz>
-Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/algos/i2c-algo-pca.c | 35 +++++++++++++++++++++-----------
- include/linux/i2c-algo-pca.h     | 15 ++++++++++++++
- 2 files changed, 38 insertions(+), 12 deletions(-)
+Is that to be on the super-safe side ? Patch 0 talks about needing 250 uS.
 
-diff --git a/drivers/i2c/algos/i2c-algo-pca.c b/drivers/i2c/algos/i2c-algo-pca.c
-index 3a9db4626cb60..1886588b9ea3e 100644
---- a/drivers/i2c/algos/i2c-algo-pca.c
-+++ b/drivers/i2c/algos/i2c-algo-pca.c
-@@ -50,8 +50,22 @@ static void pca_reset(struct i2c_algo_pca_data *adap)
- 		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_IPRESET);
- 		pca_outw(adap, I2C_PCA_IND, 0xA5);
- 		pca_outw(adap, I2C_PCA_IND, 0x5A);
-+
-+		/*
-+		 * After a reset we need to re-apply any configuration
-+		 * (calculated in pca_init) to get the bus in a working state.
-+		 */
-+		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_IMODE);
-+		pca_outw(adap, I2C_PCA_IND, adap->bus_settings.mode);
-+		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_ISCLL);
-+		pca_outw(adap, I2C_PCA_IND, adap->bus_settings.tlow);
-+		pca_outw(adap, I2C_PCA_INDPTR, I2C_PCA_ISCLH);
-+		pca_outw(adap, I2C_PCA_IND, adap->bus_settings.thi);
-+
-+		pca_set_con(adap, I2C_PCA_CON_ENSIO);
- 	} else {
- 		adap->reset_chip(adap->data);
-+		pca_set_con(adap, I2C_PCA_CON_ENSIO | adap->bus_settings.clock_freq);
- 	}
- }
- 
-@@ -435,13 +449,14 @@ static int pca_init(struct i2c_adapter *adap)
- 				" Use the nominal frequency.\n", adap->name);
- 		}
- 
--		pca_reset(pca_data);
--
- 		clock = pca_clock(pca_data);
- 		printk(KERN_INFO "%s: Clock frequency is %dkHz\n",
- 		     adap->name, freqs[clock]);
- 
--		pca_set_con(pca_data, I2C_PCA_CON_ENSIO | clock);
-+		/* Store settings as these will be needed when the PCA chip is reset */
-+		pca_data->bus_settings.clock_freq = clock;
-+
-+		pca_reset(pca_data);
- 	} else {
- 		int clock;
- 		int mode;
-@@ -508,19 +523,15 @@ static int pca_init(struct i2c_adapter *adap)
- 			thi = tlow * min_thi / min_tlow;
- 		}
- 
-+		/* Store settings as these will be needed when the PCA chip is reset */
-+		pca_data->bus_settings.mode = mode;
-+		pca_data->bus_settings.tlow = tlow;
-+		pca_data->bus_settings.thi = thi;
-+
- 		pca_reset(pca_data);
- 
- 		printk(KERN_INFO
- 		     "%s: Clock frequency is %dHz\n", adap->name, clock * 100);
--
--		pca_outw(pca_data, I2C_PCA_INDPTR, I2C_PCA_IMODE);
--		pca_outw(pca_data, I2C_PCA_IND, mode);
--		pca_outw(pca_data, I2C_PCA_INDPTR, I2C_PCA_ISCLL);
--		pca_outw(pca_data, I2C_PCA_IND, tlow);
--		pca_outw(pca_data, I2C_PCA_INDPTR, I2C_PCA_ISCLH);
--		pca_outw(pca_data, I2C_PCA_IND, thi);
--
--		pca_set_con(pca_data, I2C_PCA_CON_ENSIO);
- 	}
- 	udelay(500); /* 500 us for oscillator to stabilise */
- 
-diff --git a/include/linux/i2c-algo-pca.h b/include/linux/i2c-algo-pca.h
-index a3c3ecd59f08c..7a43afd273655 100644
---- a/include/linux/i2c-algo-pca.h
-+++ b/include/linux/i2c-algo-pca.h
-@@ -52,6 +52,20 @@
- #define I2C_PCA_CON_SI		0x08 /* Serial Interrupt */
- #define I2C_PCA_CON_CR		0x07 /* Clock Rate (MASK) */
- 
-+/**
-+ * struct pca_i2c_bus_settings - The configured PCA i2c bus settings
-+ * @mode: Configured i2c bus mode
-+ * @tlow: Configured SCL LOW period
-+ * @thi: Configured SCL HIGH period
-+ * @clock_freq: The configured clock frequency
-+ */
-+struct pca_i2c_bus_settings {
-+	int mode;
-+	int tlow;
-+	int thi;
-+	int clock_freq;
-+};
-+
- struct i2c_algo_pca_data {
- 	void 				*data;	/* private low level data */
- 	void (*write_byte)		(void *data, int reg, int val);
-@@ -63,6 +77,7 @@ struct i2c_algo_pca_data {
- 	 * For PCA9665, use the frequency you want here. */
- 	unsigned int			i2c_clock;
- 	unsigned int			chip;
-+	struct pca_i2c_bus_settings		bus_settings;
- };
- 
- int i2c_pca_add_bus(struct i2c_adapter *);
--- 
-2.25.1
+> +module_param(smbus_delay_us, ulong, 0664);
+> +
+
+I would not want to have this in user control, and it should not affect devices
+not known to be affected. I would suggest an implementation similar to other
+affected devices; again, see zl6100.c or ltc2978.c for examples.
+
+Thanks,
+Guenter
+
+>  enum chips { ucd9000, ucd90120, ucd90124, ucd90160, ucd90320, ucd9090,
+>  	     ucd90910 };
+>  
+> @@ -502,6 +506,8 @@ static int ucd9000_probe(struct i2c_client *client,
+>  				     I2C_FUNC_SMBUS_BLOCK_DATA))
+>  		return -ENODEV;
+>  
+> +	i2c_smbus_throttle_client(client, smbus_delay_us);
+> +
+>  	ret = i2c_smbus_read_block_data(client, UCD9000_DEVICE_ID,
+>  					block_buffer);
+>  	if (ret < 0) {
+> 
 
