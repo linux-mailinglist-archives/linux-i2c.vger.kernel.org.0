@@ -2,176 +2,187 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D2626AB15
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Sep 2020 19:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E06326ACA4
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Sep 2020 20:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728005AbgIORtI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Sep 2020 13:49:08 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43163 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727982AbgIORsz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Sep 2020 13:48:55 -0400
-Received: by mail-pg1-f195.google.com with SMTP id t14so2353689pgl.10;
-        Tue, 15 Sep 2020 10:48:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GJrc7L7xARd/cJ7B9yfEoRZLcez5mWpcMvPXZidt6iA=;
-        b=s65f5R5D6oK5jK3wNnIGS8HxEY4gvSLTGUYUf5MHntFN8OmRPtMUxZ3OpQZtf42ZvZ
-         CnSN+Lmz4RCf64qBezeluntYJyvWR2VMM+Ub6JByz9uxZOCg9tAnnYwWyACiRar+Fduq
-         7NNNcyTfAmVTfyT6g5G8pbzq1qM9KW83Q+kJvBgvq95TEiP3zME9lYkzcDWDZr/Dwlv/
-         iugYgxSFrMCAm1sAhAmKO8fJIxo+xJYFACXlL/0UQP/uuHvHR8wtZ5Pp4vFXsI+IsIgA
-         ZG8r/qCuyAZv366Ftx8HFJlR2LQ03ZSmw7hdXXgaJRoV1VCz/pCvlr5LoVh21+D+YcLR
-         PSfg==
-X-Gm-Message-State: AOAM531lRhtWQ4kKW1lt5Tv8G3iH4KVSN/B+JjI8JXm8DiUIVdEvziRq
-        C0V6JPO6VmmgbNYMz9wkQo4=
-X-Google-Smtp-Source: ABdhPJw9WGc1oMLtS3osJmujvSGkASamKyr07Nky9A099oUnOhXcHEUdpeT6YtaegTT2qflCJ3WasA==
-X-Received: by 2002:a62:14d2:0:b029:142:2501:39f2 with SMTP id 201-20020a6214d20000b0290142250139f2mr3014851pfu.65.1600192127276;
-        Tue, 15 Sep 2020 10:48:47 -0700 (PDT)
-Received: from sultan-box.localdomain ([104.200.129.212])
-        by smtp.gmail.com with ESMTPSA id il14sm143693pjb.54.2020.09.15.10.48.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 10:48:46 -0700 (PDT)
-Date:   Tue, 15 Sep 2020 10:48:44 -0700
-From:   Sultan Alsawaf <sultan@kerneltoast.com>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     aaron.ma@canonical.com, admin@kryma.net,
-        andriy.shevchenko@linux.intel.com, benjamin.tissoires@redhat.com,
-        hdegoede@redhat.com, hn.chen@weidahitech.com, jikos@kernel.org,
-        kai.heng.feng@canonical.com, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mika.westerberg@linux.intel.com, vicamo.yang@canonical.com,
-        wsa@kernel.org
-Subject: Re: [PATCH v3] i2c: Squash of SMBus block read patchset to save power
-Message-ID: <20200915174844.GA16807@sultan-box.localdomain>
-References: <b3b751fc-668d-91e2-220b-0d7edd231e01@linux.intel.com>
- <20200914001523.3878-1-sultan@kerneltoast.com>
- <bcf9cd02-13d1-8f87-8ef9-2f05f0b54808@linux.intel.com>
+        id S1727732AbgIOSzO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Sep 2020 14:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727817AbgIOSyi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Sep 2020 14:54:38 -0400
+X-Greylist: delayed 451 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Sep 2020 11:54:38 PDT
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F496C061788;
+        Tue, 15 Sep 2020 11:54:37 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20::7c6])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 0C4B3806F7;
+        Tue, 15 Sep 2020 11:47:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 thorn.bewilderbeest.net 0C4B3806F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1600195621;
+        bh=FJZOAN5p863bC4FM+I+qvDnKOPec7IEYDsPnpusvWKU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IshQ+GArRiw/dXPoWZQdc4tiy1LTt+uLkEQtzhFjgCKnZ0MD88YHEgo7DlosaSYWL
+         efk5DOCxDBtnSPOPxgv8LC8rhx+6sVJxOiWwDcbqrVLsp2xaKJu+JkNup+D8Wdtk+y
+         Ur8dkOjEgjj+VCI5ESwH8o8I0hvWXA/xjKTFys0k=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     Zev Weiss <zev@bewilderbeest.net>
+Subject: [PATCH] i2c: aspeed: disable additional device addresses on ast2[56]xx
+Date:   Tue, 15 Sep 2020 13:45:25 -0500
+Message-Id: <20200915184525.29665-1-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bcf9cd02-13d1-8f87-8ef9-2f05f0b54808@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 02:55:48PM +0300, Jarkko Nikula wrote:
-> Hi
-> 
-> On 9/14/20 3:15 AM, Sultan Alsawaf wrote:
-> > From: Sultan Alsawaf <sultan@kerneltoast.com>
-> > 
-> > This is a squash of the following:
-> > 
-> > i2c: designware: Fix transfer failures for invalid SMBus block reads
-> > 
-> > SMBus block reads can be broken because the read function will just skip
-> > over bytes it doesn't like until reaching a byte that conforms to the
-> > length restrictions for block reads. This is problematic when it isn't
-> > known if the incoming payload is indeed a conforming block read.
-> > 
-> > According to the SMBus specification, block reads will only send the
-> > payload length in the first byte, so we can fix this by only considering
-> > the first byte in a sequence for block read length purposes.
-> > 
-> > In addition, when the length byte is invalid, the original transfer
-> > length still needs to be adjusted to avoid a controller timeout.
-> > 
-> > Fixes: c3ae106050b9 ("i2c: designware: Implement support for SMBus block read and write")
-> > Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
-> > 
-> > i2c: designware: Ensure tx_buf_len is nonzero for SMBus block reads
-> > 
-> > The point of adding a byte to len in i2c_dw_recv_len() is to make sure
-> > that tx_buf_len is nonzero, so that i2c_dw_xfer_msg() can let the i2c
-> > controller know that the i2c transaction can end. Otherwise, the i2c
-> > controller will think that the transaction can never end for block
-> > reads, which results in the stop-detection bit never being set and thus
-> > the transaction timing out.
-> > 
-> > Adding a byte to len is not a reliable way to do this though; sometimes
-> > it lets tx_buf_len become zero, which results in the scenario described
-> > above. Therefore, just directly ensure tx_buf_len cannot be zero to fix
-> > the issue.
-> > 
-> > Fixes: c3ae106050b9 ("i2c: designware: Implement support for SMBus block read and write")
-> > Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
-> > 
-> > i2c: designware: Allow SMBus block reads up to 255 bytes in length
-> > 
-> > According to the SMBus 3.0 protocol specification, block transfer limits
-> > were increased from 32 bytes to 255 bytes. Remove the obsolete 32-byte
-> > limitation.
-> > 
-> > Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
-> > 
-> > HID: i2c-hid: Use block reads when possible to save power
-> > 
-> > We have no way of knowing how large an incoming payload is going to be,
-> > so the only strategy available up until now has been to always retrieve
-> > the maximum possible report length over i2c, which can be quite
-> > inefficient. For devices that send reports in block read format, the i2c
-> > controller driver can read the payload length on the fly and terminate
-> > the i2c transaction early, resulting in considerable power savings.
-> > 
-> > On a Dell Precision 15 5540 with an i9-9880H, resting my finger on the
-> > touchpad causes psys power readings to go up by about 4W and hover there
-> > until I remove my finger. With this patch, my psys readings go from 4.7W
-> > down to 3.1W, yielding about 1.6W in savings. This is because my
-> > touchpad's max report length is 60 bytes, but all of the regular reports
-> > it sends for touch events are only 32 bytes, so the i2c transfer is
-> > roughly halved for the common case.
-> > 
-> > Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
-> > ---
-> > Hi Jarkko,
-> > 
-> > Sorry for the delayed response. Life gets in the way of the things that really
-> > matter, like kernel hacking ;)
-> > 
-> > I fixed the issue with the i2c block reads on 5.8. I've squashed all 4 of my i2c
-> > commits into this email for simplicity; please apply this patch on either 5.8 or
-> > 5.9 (it applies cleanly to both) and let me know if it works with your i2c-hid
-> > touchscreen. If all is well, I will resubmit these patches individually in one
-> > patchset, in a new thread.
-> > 
-> I tested this on top of fc4f28bb3daf ("Merge tag 'for-5.9-rc5-tag' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux") and seems to be
-> working fine. What was the key change compared to previous version that was
-> regressing for me?
+The ast25xx and ast26xx have, respectively, two and three configurable
+slave device addresses to the ast24xx's one.  We only support using
+one at a time, but the others may come up in an indeterminate state
+depending on hardware/bootloader behavior, so we need to make sure we
+disable them so as to avoid ending up with phantom devices on the bus.
 
-This change fixed your issue (and my issue with 5.8):
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -395,8 +395,9 @@ i2c_dw_recv_len(struct dw_i2c_dev *dev, u8 len)
- 	 * Adjust the buffer length and mask the flag
- 	 * after receiving the first byte.
- 	 */
--	len += (flags & I2C_CLIENT_PEC) ? 2 : 1;
--	dev->tx_buf_len = len - min_t(u8, len, dev->rx_outstanding);
-+	if (flags & I2C_CLIENT_PEC)
-+		len++;
-+	dev->tx_buf_len = len - min_t(u8, len - 1, dev->rx_outstanding);
- 	msgs[dev->msg_read_idx].len = len;
- 	msgs[dev->msg_read_idx].flags &= ~I2C_M_RECV_LEN;
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+---
+ drivers/i2c/busses/i2c-aspeed.c | 50 +++++++++++++++++++++++++++------
+ 1 file changed, 41 insertions(+), 9 deletions(-)
 
-I've attributed this change with the following commit message:
-"i2c: designware: Ensure tx_buf_len is nonzero for SMBus block reads
+diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+index a7be6f24450b..20028a7a9f67 100644
+--- a/drivers/i2c/busses/i2c-aspeed.c
++++ b/drivers/i2c/busses/i2c-aspeed.c
+@@ -117,6 +117,8 @@
+ 
+ /* 0x18 : I2CD Slave Device Address Register   */
+ #define ASPEED_I2CD_DEV_ADDR_MASK			GENMASK(6, 0)
++#define ASPEED_I2CD_DEV_ADDR2_ENABLE			BIT(15)
++#define ASPEED_I2CD_DEV_ADDR3_ENABLE			BIT(23)
+ 
+ enum aspeed_i2c_master_state {
+ 	ASPEED_I2C_MASTER_INACTIVE,
+@@ -139,6 +141,16 @@ enum aspeed_i2c_slave_state {
+ 	ASPEED_I2C_SLAVE_STOP,
+ };
+ 
++struct aspeed_i2c_model {
++	u32 (*get_clk_reg_val)(struct device *dev, u32 divisor);
++
++	/*
++	 * Some models support multiple device addresses -- we only support
++	 * using one, but we need to disable the others if they're present.
++	 */
++	unsigned int num_device_addrs;
++};
++
+ struct aspeed_i2c_bus {
+ 	struct i2c_adapter		adap;
+ 	struct device			*dev;
+@@ -147,8 +159,7 @@ struct aspeed_i2c_bus {
+ 	/* Synchronizes I/O mem access to base. */
+ 	spinlock_t			lock;
+ 	struct completion		cmd_complete;
+-	u32				(*get_clk_reg_val)(struct device *dev,
+-							   u32 divisor);
++	const struct aspeed_i2c_model	*model;
+ 	unsigned long			parent_clk_frequency;
+ 	u32				bus_frequency;
+ 	/* Transaction state. */
+@@ -726,6 +737,13 @@ static void __aspeed_i2c_reg_slave(struct aspeed_i2c_bus *bus, u16 slave_addr)
+ 	addr_reg_val = readl(bus->base + ASPEED_I2C_DEV_ADDR_REG);
+ 	addr_reg_val &= ~ASPEED_I2CD_DEV_ADDR_MASK;
+ 	addr_reg_val |= slave_addr & ASPEED_I2CD_DEV_ADDR_MASK;
++
++	/* Disable additional addresses on hardware that has them. */
++	if (bus->model->num_device_addrs > 1)
++		addr_reg_val &= ~ASPEED_I2CD_DEV_ADDR2_ENABLE;
++	if (bus->model->num_device_addrs > 2)
++		addr_reg_val &= ~ASPEED_I2CD_DEV_ADDR3_ENABLE;
++
+ 	writel(addr_reg_val, bus->base + ASPEED_I2C_DEV_ADDR_REG);
+ 
+ 	/* Turn on slave mode. */
+@@ -863,6 +881,11 @@ static u32 aspeed_i2c_24xx_get_clk_reg_val(struct device *dev, u32 divisor)
+ 	return aspeed_i2c_get_clk_reg_val(dev, GENMASK(2, 0), divisor);
+ }
+ 
++static const struct aspeed_i2c_model aspeed_i2c_24xx_bus = {
++	.get_clk_reg_val = aspeed_i2c_24xx_get_clk_reg_val,
++	.num_device_addrs = 1,
++};
++
+ static u32 aspeed_i2c_25xx_get_clk_reg_val(struct device *dev, u32 divisor)
+ {
+ 	/*
+@@ -872,6 +895,16 @@ static u32 aspeed_i2c_25xx_get_clk_reg_val(struct device *dev, u32 divisor)
+ 	return aspeed_i2c_get_clk_reg_val(dev, GENMASK(3, 0), divisor);
+ }
+ 
++static const struct aspeed_i2c_model aspeed_i2c_25xx_bus = {
++	.get_clk_reg_val = aspeed_i2c_25xx_get_clk_reg_val,
++	.num_device_addrs = 2,
++};
++
++static const struct aspeed_i2c_model aspeed_i2c_26xx_bus = {
++	.get_clk_reg_val = aspeed_i2c_25xx_get_clk_reg_val,
++	.num_device_addrs = 3,
++};
++
+ /* precondition: bus.lock has been acquired. */
+ static int aspeed_i2c_init_clk(struct aspeed_i2c_bus *bus)
+ {
+@@ -882,7 +915,7 @@ static int aspeed_i2c_init_clk(struct aspeed_i2c_bus *bus)
+ 	clk_reg_val &= (ASPEED_I2CD_TIME_TBUF_MASK |
+ 			ASPEED_I2CD_TIME_THDSTA_MASK |
+ 			ASPEED_I2CD_TIME_TACST_MASK);
+-	clk_reg_val |= bus->get_clk_reg_val(bus->dev, divisor);
++	clk_reg_val |= bus->model->get_clk_reg_val(bus->dev, divisor);
+ 	writel(clk_reg_val, bus->base + ASPEED_I2C_AC_TIMING_REG1);
+ 	writel(ASPEED_NO_TIMEOUT_CTRL, bus->base + ASPEED_I2C_AC_TIMING_REG2);
+ 
+@@ -946,15 +979,15 @@ static int aspeed_i2c_reset(struct aspeed_i2c_bus *bus)
+ static const struct of_device_id aspeed_i2c_bus_of_table[] = {
+ 	{
+ 		.compatible = "aspeed,ast2400-i2c-bus",
+-		.data = aspeed_i2c_24xx_get_clk_reg_val,
++		.data = &aspeed_i2c_24xx_bus,
+ 	},
+ 	{
+ 		.compatible = "aspeed,ast2500-i2c-bus",
+-		.data = aspeed_i2c_25xx_get_clk_reg_val,
++		.data = &aspeed_i2c_25xx_bus,
+ 	},
+ 	{
+ 		.compatible = "aspeed,ast2600-i2c-bus",
+-		.data = aspeed_i2c_25xx_get_clk_reg_val,
++		.data = &aspeed_i2c_26xx_bus,
+ 	},
+ 	{ },
+ };
+@@ -1002,10 +1035,9 @@ static int aspeed_i2c_probe_bus(struct platform_device *pdev)
+ 
+ 	match = of_match_node(aspeed_i2c_bus_of_table, pdev->dev.of_node);
+ 	if (!match)
+-		bus->get_clk_reg_val = aspeed_i2c_24xx_get_clk_reg_val;
++		bus->model = &aspeed_i2c_24xx_bus;
+ 	else
+-		bus->get_clk_reg_val = (u32 (*)(struct device *, u32))
+-				match->data;
++		bus->model = match->data;
+ 
+ 	/* Initialize the I2C adapter */
+ 	spin_lock_init(&bus->lock);
+-- 
+2.28.0
 
-The point of adding a byte to len in i2c_dw_recv_len() is to make sure
-that tx_buf_len is nonzero, so that i2c_dw_xfer_msg() can let the i2c
-controller know that the i2c transaction can end. Otherwise, the i2c
-controller will think that the transaction can never end for block
-reads, which results in the stop-detection bit never being set and thus
-the transaction timing out.
-
-Adding a byte to len is not a reliable way to do this though; sometimes
-it lets tx_buf_len become zero, which results in the scenario described
-above. Therefore, just directly ensure tx_buf_len cannot be zero to fix
-the issue."
-
-Does the patch series look good to submit?
-
-Sultan
