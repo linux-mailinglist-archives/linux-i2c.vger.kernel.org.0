@@ -2,162 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8000269A5A
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Sep 2020 02:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626B9269B04
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Sep 2020 03:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbgIOATe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Sep 2020 20:19:34 -0400
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:41081 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726122AbgIOATd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Sep 2020 20:19:33 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 4C44BD3B;
-        Mon, 14 Sep 2020 20:19:32 -0400 (EDT)
-Received: from imap2 ([10.202.2.52])
-  by compute3.internal (MEProxy); Mon, 14 Sep 2020 20:19:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm3; bh=vX1pFnhbIBzXQa2l8jrntsGgk3Q5UmP
-        7jCafClE7Hgo=; b=KH4N2pvdomgLPmSLP6DwsoQksbgjq+1HmS02GZw0PVlW7wJ
-        7eRbnkXNQyjS1qp50xJTYJTJIiDxZR3Fb2AFB83jb9Y/ZtXm6mCxjtAUSTM5RG8x
-        FecRyTX4NpASSe85SlpVjzgshFpklUCk8Q+BV+vQBRfMdKi9SkBggajLKcgUlzUd
-        b0DNIderw3vssz5ettckkgR2Mnyc+lMEevsJy2VJXkTW0djlpt5O8EydxZrHP8TR
-        kxkw/djIXGyUvTfF+4YEPKT9Vwubr3k+cFfjogCP3oMcuo6TO9Gw9orGJZ/lpgw6
-        NO4Gy2AF54PyOiqHWfRWxgi00J/jCp/lrko/hVA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=vX1pFn
-        hbIBzXQa2l8jrntsGgk3Q5UmP7jCafClE7Hgo=; b=VcUQJVy44hFI1unHR3BUM7
-        lTy4QL+/Gh0k1KU4//AbOGucOx0l8HfD36WUAXGBE9lync5Kv+sj3rJ2NSkO3cvN
-        JqZ0eygL1qb+xjO3mmjs0bX3tV48QeI4e/qMrzFzoK20qStPQDAuG3tgyfoLYU6s
-        /M3mJMAj/0/B9BboFXKhy4cvXN+FnEmkVPCcFkJXTtSQsD4ofd90Bm63wy6Kln7g
-        OIFZGYN9eLq1JVT1Qq8+iEv5x4IRBX7N27elmGhmsBpi1dmciyAdm0NxQPgLucSi
-        5D82tlD+OEL/v8+/KBR8h1PdkRObPyPSpfikNtv0SBV2X/yWBxJhsYyM/0KmoVjg
-        ==
-X-ME-Sender: <xms:kghgX99dRYOfJmbIU2wka8w5UR-QK2UZO9ISUrp2D-fHbXsWGVUUZQ>
-    <xme:kghgXxtuaWprmeB_Ss84dyvmN28exDTKl0eiQlGYpM6GGqxaXS706Xs5ho4KyqG4T
-    jWldm9UPfNl_jH09Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudeijedgvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
-    grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
-    hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghnughrvgifsegrjhdrihgurdgruh
-X-ME-Proxy: <xmx:kghgX7B7FOq23585XEUK3AOBQ23I_YInMg7AZEXqF-JmlqFqskq-5Q>
-    <xmx:kghgXxc2_PzR_vuX4nR6Az1AUZuEr3Mxq4uwtc4Vk_HUgLNoExHqWA>
-    <xmx:kghgXyN2c1sUoodgZY9ri5HDAvH6kRLec65WjgXc7IOYAdbX6FhsHA>
-    <xmx:kwhgX_ob7dhTXLjy5nNTDphiY4DdtnGlWLpw8cnuyuf2o4r5UFNRjw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 56C88E00BF; Mon, 14 Sep 2020 20:19:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-259-g88fbbfa-fm-20200903.003-g88fbbfa3
-Mime-Version: 1.0
-Message-Id: <6e14e75f-f9c1-4d33-b95d-0c7dd7131a9f@www.fastmail.com>
-In-Reply-To: <e7a64983-fe1d-1ba2-b0c3-ae4a791f7a75@roeck-us.net>
-References: <20200914122811.3295678-1-andrew@aj.id.au>
- <e7a64983-fe1d-1ba2-b0c3-ae4a791f7a75@roeck-us.net>
-Date:   Tue, 15 Sep 2020 09:49:10 +0930
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Guenter Roeck" <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Cc:     "Jean Delvare" <jdelvare@suse.com>, wsa@kernel.org,
-        "Joel Stanley" <joel@jms.id.au>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] Throttle I2C transfers to UCD9000 devices
-Content-Type: text/plain
+        id S1726024AbgIOB0h (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Sep 2020 21:26:37 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:30473 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725999AbgIOB0g (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Sep 2020 21:26:36 -0400
+X-UUID: 618224d777264c818e3900a54fe92d30-20200915
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=v1LAQZT/+da26rpDxPw8oEAIptxIIsuOkmEvO0weCVA=;
+        b=saX+E0ITo7RPpXuo6nhwQ3xxkMZViPxpWSDX9sVGN1cm7YMpkYb35kLKmnkw9WU/co5FhKV/emydW0fuMfYTSCzcuqTahtCwuvy1Nn5AO/UrnGm9xff9sWAZDMW9pYMsYg7VDLG4/YPdlv5zSn8C6Ab9sjzqjPobb1vmSxfxYM0=;
+X-UUID: 618224d777264c818e3900a54fe92d30-20200915
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1807177968; Tue, 15 Sep 2020 09:26:31 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 15 Sep
+ 2020 09:26:30 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Sep 2020 09:26:29 +0800
+Message-ID: <1600133066.25719.9.camel@mhfsdcap03>
+Subject: Re: [PATCH] i2c: mediatek: Fix generic definitions for bus
+ frequencies
+From:   Qii Wang <qii.wang@mediatek.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Wolfram Sang <wsa@the-dreams.de>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Leilk Liu <leilk.liu@mediatek.com>
+Date:   Tue, 15 Sep 2020 09:24:26 +0800
+In-Reply-To: <CAHp75VeBuR4fkVk0z=+d7EonHz0h=4=eRj3Wfe8R_8T=eyHaeA@mail.gmail.com>
+References: <1599890246-21191-1-git-send-email-qii.wang@mediatek.com>
+         <CAHp75VeBuR4fkVk0z=+d7EonHz0h=4=eRj3Wfe8R_8T=eyHaeA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: 72A8E3EE9FC676B4DD2AB151602F01D4F7A087AFF58CB94C603E5F97AE3294AF2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+T24gTW9uLCAyMDIwLTA5LTE0IGF0IDE1OjQ4ICswMzAwLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6
+DQo+IE9uIFNhdCwgU2VwIDEyLCAyMDIwIGF0IDk6MDIgQU0gPHFpaS53YW5nQG1lZGlhdGVrLmNv
+bT4gd3JvdGU6DQo+ID4NCj4gPiBGcm9tOiBRaWkgV2FuZyA8cWlpLndhbmdAbWVkaWF0ZWsuY29t
+Pg0KPiA+DQo+ID4gVGhlIG1hc3RlciBjb2RlIG5lZWRzIHRvIGJlaW5nIHNlbnQgd2hlbiB0aGUg
+c3BlZWQgaXMgbW9yZSB0aGFuDQo+ID4gSTJDX01BWF9GQVNUX01PREVfUExVU19GUkVRIGluc3Rl
+YWQgb2YNCj4gPiBJMkNfTUFYX0hJR0hfU1BFRURfTU9ERV9GUkVRLiBGaXggaXQuDQo+ID4NCj4g
+PiBTaWduZWQtb2ZmLWJ5OiBRaWkgV2FuZyA8cWlpLndhbmdAbWVkaWF0ZWsuY29tPg0KPiA+IC0t
+LQ0KPiA+ICBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jIHwgNiArKystLS0NCj4gPiAg
+MSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4gPg0KPiA+
+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jIGIvZHJpdmVycy9p
+MmMvYnVzc2VzL2kyYy1tdDY1eHguYw0KPiA+IGluZGV4IGVmYzE0MDQuLjBjYmRmYmUgMTAwNjQ0
+DQo+ID4gLS0tIGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYw0KPiA+ICsrKyBiL2Ry
+aXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXQ2NXh4LmMNCj4gPiBAQCAtNjgxLDggKzY4MSw4IEBAIHN0
+YXRpYyBpbnQgbXRrX2kyY19jYWxjdWxhdGVfc3BlZWQoc3RydWN0IG10a19pMmMgKmkyYywgdW5z
+aWduZWQgaW50IGNsa19zcmMsDQo+ID4gICAgICAgICB1bnNpZ25lZCBpbnQgY250X211bDsNCj4g
+PiAgICAgICAgIGludCByZXQgPSAtRUlOVkFMOw0KPiA+DQo+ID4gLSAgICAgICBpZiAodGFyZ2V0
+X3NwZWVkID4gSTJDX01BWF9GQVNUX01PREVfUExVU19GUkVRKQ0KPiA+IC0gICAgICAgICAgICAg
+ICB0YXJnZXRfc3BlZWQgPSBJMkNfTUFYX0ZBU1RfTU9ERV9QTFVTX0ZSRVE7DQo+ID4gKyAgICAg
+ICBpZiAodGFyZ2V0X3NwZWVkID4gSTJDX01BWF9ISUdIX1NQRUVEX01PREVfRlJFUSkNCj4gPiAr
+ICAgICAgICAgICAgICAgdGFyZ2V0X3NwZWVkID0gSTJDX01BWF9ISUdIX1NQRUVEX01PREVfRlJF
+UTsNCj4gDQo+IFRoYW5rcyBmb3IgZml4aW5nIHRoaXMuIEluZGVlZCwgc29tZWhvdyBJIG1lc3Nl
+ZCB0aGVzZSB1cC4NCj4gDQo+ID4NCj4gPiAgICAgICAgIG1heF9zdGVwX2NudCA9IG10a19pMmNf
+bWF4X3N0ZXBfY250KHRhcmdldF9zcGVlZCk7DQo+ID4gICAgICAgICBiYXNlX3N0ZXBfY250ID0g
+bWF4X3N0ZXBfY250Ow0KPiA+IEBAIC03NTksNyArNzU5LDcgQEAgc3RhdGljIGludCBtdGtfaTJj
+X3NldF9zcGVlZChzdHJ1Y3QgbXRrX2kyYyAqaTJjLCB1bnNpZ25lZCBpbnQgcGFyZW50X2NsaykN
+Cj4gPiAgICAgICAgIGZvciAoY2xrX2RpdiA9IDE7IGNsa19kaXYgPD0gbWF4X2Nsa19kaXY7IGNs
+a19kaXYrKykgew0KPiA+ICAgICAgICAgICAgICAgICBjbGtfc3JjID0gcGFyZW50X2NsayAvIGNs
+a19kaXY7DQo+ID4NCj4gPiAtICAgICAgICAgICAgICAgaWYgKHRhcmdldF9zcGVlZCA+IEkyQ19N
+QVhfRkFTVF9NT0RFX0ZSRVEpIHsNCj4gPiArICAgICAgICAgICAgICAgaWYgKHRhcmdldF9zcGVl
+ZCA+IEkyQ19NQVhfRkFTVF9NT0RFX1BMVVNfRlJFUSkgew0KPiANCj4gQnV0IHRoaXMgb25lIGlz
+IG5vdCByZWxhdGVkLiBPcmlnaW5hbCBjb2RlIHVzZWQgdG8gaGF2ZQ0KPiANCj4gI2RlZmluZSBN
+QVhfRlNfTU9ERV9TUEVFRCAgICAgICAgICAgICAgNDAwMDAwDQo+IA0KPiAgICAgICAgaWYgKHRh
+cmdldF9zcGVlZCA+IE1BWF9GU19NT0RFX1NQRUVEKSB7DQo+IA0KPiBBbmQgdGhpcyBjaGFuZ2Ug
+ZG9lc24ndCBmaXggdGhlIGFib3ZlIG1lbnRpb25lZCBwcm9ibGVtLg0KPiANCj4gU28sIHBsZWFz
+ZSBzcGxpdCBpbnRvIHR3byBzZXBhcmF0ZSBjaGFuZ2VzLg0KPiANCg0Kb2ssIFRoYW5rIHlvdSBm
+b3IgeW91ciBjb21tZW50cw0KDQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgLyogU2V0IG1h
+c3RlciBjb2RlIHNwZWVkIHJlZ2lzdGVyICovDQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAg
+cmV0ID0gbXRrX2kyY19jYWxjdWxhdGVfc3BlZWQoaTJjLCBjbGtfc3JjLA0KPiA+ICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEkyQ19NQVhfRkFT
+VF9NT0RFX0ZSRVEsDQo+ID4gLS0NCj4gPiAxLjkuMQ0KPiANCj4gDQo+IA0KDQo=
 
-
-On Tue, 15 Sep 2020, at 02:13, Guenter Roeck wrote:
-> On 9/14/20 5:28 AM, Andrew Jeffery wrote:
-> > Hello,
-> > 
-> > While working with system designs making use of TI's UCD90320 Power
-> > Sequencer we've found that communication with the device isn't terribly
-> > reliable.
-> > 
-> > It appears that back-to-back transfers where commands addressed to the
-> > device are put onto the bus with intervals between STOP and START in the
-> > neighbourhood of 250us or less can cause bad behaviour. This primarily
-> > happens during driver probe while scanning the device to determine its
-> > capabilities.
-> > 
-> > We have observed the device causing excessive clock stretches and bus
-> > lockups, and also corruption of the device's volatile state (requiring it
-> > to be reset).  The latter is particularly disruptive in that the controlled
-> > rails are brought down either by:
-> > 
-> > 1. The corruption causing a fault condition, or
-> > 2. Asserting the device's reset line to recover
-> > 
-> > A further observation is that pacing transfers to the device appears to
-> > mitigate the bad behaviour. We're in discussion with TI to better
-> > understand the limitations and at least get the behaviour documented.
-> > 
-> > This short series implements the mitigation in terms of a throttle in the
-> > i2c_client associated with the device's driver. Before the first
-> > communication with the device in the probe() of ucd9000 we configure the
-> > i2c_client to throttle transfers with a minimum of a 1ms delay (with the
-> > delay exposed as a module parameter).
-> > 
-> > The series is RFC for several reasons:
-> > 
-> > The first is to sus out feelings on the general direction. The problem is
-> > pretty unfortunate - are there better ways to implement the mitigation?
-> > 
-> > If there aren't, then:
-> > 
-> > I'd like thoughts on whether we want to account for i2c-dev clients.
-> > Implementing throttling in i2c_client feels like a solution-by-proxy as the
-> > throttling is really a property of the targeted device, but we don't have a
-> > coherent representation between platform devices and devices associated
-> > with i2c-dev clients. At the moment we'd have to resort to address-based
-> > lookups for platform data stashed in the transfer functions.
-> > 
-> > Next is that I've only implemented throttling for SMBus devices. I don't
-> > yet have a use-case for throttling non-SMBus devices so I'm not sure it's
-> > worth poking at it, but would appreciate thoughts there.
-> > 
-> > Further, I've had a bit of a stab at dealing with atomic transfers that's
-> > not been tested. Hopefully it makes sense.
-> > 
-> > Finally I'm also interested in feedback on exposing the control in a little
-> > more general manner than having to implement a module parameter in all
-> > drivers that want to take advantage of throttling. This isn't a big problem
-> > at the moment, but if anyone has thoughts there then I'm happy to poke at
-> > those too.
-> > 
-> 
-> As mentioned in patch 2/2, I don't think a module parameter is a good idea.
-> I think this should be implemented on driver level, similar to zl6100.c,
-> it should be limited to affected devices and not be user controllable.
-
-Yep. I will look at zl6100.c.
-
-> 
-> In respect to implementation in the i2c core vs in drivers: So far we
-> encountered this problem for some Zilker labs devices and for some LTC
-> devices. While the solution needed here looks similar to the solution
-> implemented for Zilker labs devices, the solution for LTC devices is
-> different. I am not sure if an implementation in the i2c core is
-> desirable. It looks quite invasive to me, and it won't solve the problem
-> for all devices since it isn't always a simple "wait <n> microseconds
-> between accesses". For example, some devices may require a wait after
-> a write but not after a read, or a wait only after certain commands (such
-> as commands writing to an EEPROM). Other devices may require a mechanism
-> different to "wait a certain period of time". It seems all but impossible
-> to implement a generic mechanism on i2c level.
-
-Yep, that's fair. I went this route to avoid implementing two sets of handlers 
-providing the pacing in the driver (for before and after we register with the 
-pmbus core), but it is invasive as you point out. Let me look at your suggested 
-alternatives and get back to you.
-
-Andrew
