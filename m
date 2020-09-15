@@ -2,115 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BE526A1C9
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Sep 2020 11:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC4926A1EA
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Sep 2020 11:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726403AbgIOJMW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Sep 2020 05:12:22 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:7320 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726357AbgIOJLv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Sep 2020 05:11:51 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08F98V8l023596;
-        Tue, 15 Sep 2020 11:11:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=g4kST7SsfaViCNlFfZ08siUj72Yl/Jmwp5npYZfdOOc=;
- b=KscuE9KcDMkqxGs6xutCqIVOYdI42kni92TwIIURoiWVp5BKT7Q0q2QmcRk9JZb7qbwn
- 0IYMs22AIsmRaCNw3Mwu4BuT871ZxF4CL+jXkNZXGnBINA1RuWaCrSElBb/dB10nv7VA
- ID/xEOw0osqoKk07lDbLlGGJjj/Ppt8IPnUgIqFyV3H4A86OUsUrvbweCU1lZX6QnykZ
- 2HRKyzGFxj8I9ZlN6hqncw6aywc2EtirGMDB1TN95gtAQ/i/ePxjfUub+wdXL65V086I
- rHOct/T3DB8SFFjwXnqZiGFOxFgk0P/doRRsTTtgDKZCrrKgPfsduWKNVNn6CJSfldcq oA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 33gkf9f1rt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Sep 2020 11:11:42 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3127910002A;
-        Tue, 15 Sep 2020 11:11:42 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1D1732A4483;
-        Tue, 15 Sep 2020 11:11:42 +0200 (CEST)
-Received: from localhost (10.75.127.50) by SFHDAG3NODE2.st.com (10.75.127.8)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 15 Sep 2020 11:11:41
- +0200
-From:   Alain Volmat <alain.volmat@st.com>
-To:     <wsa@kernel.org>, <pierre-yves.mordret@st.com>
-CC:     <alexandre.torgue@st.com>, <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@st.com>,
-        <alain.volmat@st.com>
-Subject: [PATCH 2/2] i2c: stm32: name slave slot to ease maintenance
-Date:   Tue, 15 Sep 2020 11:11:41 +0200
-Message-ID: <1600161101-9941-1-git-send-email-alain.volmat@st.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726174AbgIOJRz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Sep 2020 05:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726208AbgIOJRm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Sep 2020 05:17:42 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50103C06178B
+        for <linux-i2c@vger.kernel.org>; Tue, 15 Sep 2020 02:17:42 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id b12so2299779lfp.9
+        for <linux-i2c@vger.kernel.org>; Tue, 15 Sep 2020 02:17:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=1/4JPb+qyZHZrcotwK7O29U3MTuAJPswe26YQQLoaeI=;
+        b=d1YVqwB8Cz0cMNPX6fN6wizi3UsZJftqgAUwnlh53zqZ87HgGBzbHdxX1Bq15ErtI7
+         r1Q3hxvf+3oKlbnEJZcuy3rjWKeGpP0QR2gQnOW4iKf/Y27lJdPk9h+d4Uzvqt/Gx4Pg
+         JxUbsBL52gzlb02QZjX9453BgqFQVz1AI+JGI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=1/4JPb+qyZHZrcotwK7O29U3MTuAJPswe26YQQLoaeI=;
+        b=KsG9xwkEqib5pjez7dhEw6RRHOezyE6BemqdR7uCulHGy61PhEpNTPJxI4p+t/e+AJ
+         7/PMnrkXNlhRlJAU99Y/nFTxHQRGZeMGHeNgmsy2kw1FgUX6+8nlziMY1oTEeYTxOFVp
+         Mdr/5UQATdyW7YHUVn7LPhhKYB+XTqKQf6vLGsVhEBX819dclXRk0FF37Yo/BYgpn/IE
+         q8I9AZJwtVefxzwYx6+b+UmgbJmg6wBaj+Ie3e5KspitAm6AjB5yleElfqMlJLdqXjbv
+         ckERxSK1rTVgFVpI81LiLueZkGj85TLRLe3z6GdKtaCTBUA3c0THQizwUWMk+Eauwj6w
+         FdWw==
+X-Gm-Message-State: AOAM532S2n/fGRT/Ss8SYs0Sf/h3en9Y26ZfeYP5TxeCVEvFASr1fNqq
+        EklDGTwBFKtb2C/665OB2c7LeZAKsFYcOhVldjr2KUhsI7/U8Q==
+X-Google-Smtp-Source: ABdhPJxavpKOCr9XPvMS3/1dzn34aJlO/M4dtJ+w8lEkySZvOfgK5pjBZu9JUKxm/dQAfNgUProUv+U8J347usOsgpQ=
+X-Received: by 2002:a19:8001:: with SMTP id b1mr6064835lfd.122.1600161460136;
+ Tue, 15 Sep 2020 02:17:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG5NODE2.st.com (10.75.127.14) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-15_05:2020-09-15,2020-09-15 signatures=0
+From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Date:   Tue, 15 Sep 2020 14:47:29 +0530
+Message-ID: <CAHO=5PHaJbNxQk3DN0wxD0ZaftrQDe4qMZc4L79vgwQpjHL8qg@mail.gmail.com>
+Subject: Question on SMBUS slave transmit with PEC enabled
+To:     linux-i2c <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Name slave slots in order to ease code maintenance.
+Hello All,
 
-Signed-off-by: Alain Volmat <alain.volmat@st.com>
----
- drivers/i2c/busses/i2c-stm32f7.c | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
+I have the following questions wrt SMBUS PEC support on the SLAVE side,
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 0880f6a4cd44..a7432ec7d992 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -155,7 +155,12 @@
- 
- #define STM32F7_I2C_MAX_LEN			0xff
- #define STM32F7_I2C_DMA_LEN_MIN			0x16
--#define STM32F7_I2C_MAX_SLAVE			0x3
-+enum {
-+	STM32F7_SLAVE_HOSTNOTIFY,
-+	STM32F7_SLAVE_7_10_BITS_ADDR,
-+	STM32F7_SLAVE_7_BITS_ADDR,
-+	STM32F7_I2C_MAX_SLAVE
-+};
- 
- #define STM32F7_I2C_DNF_DEFAULT			0
- #define STM32F7_I2C_DNF_MAX			16
-@@ -1343,19 +1348,20 @@ static int stm32f7_i2c_get_free_slave_id(struct stm32f7_i2c_dev *i2c_dev,
- 	int i;
- 
- 	/*
--	 * slave[0] support only SMBus Host address (0x8)
--	 * slave[1] supports 7-bit and 10-bit slave address
--	 * slave[2] supports 7-bit slave address only
-+	 * slave[STM32F7_SLAVE_HOSTNOTIFY] support only SMBus Host address (0x8)
-+	 * slave[STM32F7_SLAVE_7_10_BITS_ADDR] supports 7-bit and 10-bit slave address
-+	 * slave[STM32F7_SLAVE_7_BITS_ADDR] supports 7-bit slave address only
- 	 */
- 	if (i2c_dev->smbus_mode && (slave->addr == 0x08)) {
--		if (i2c_dev->slave[0])
-+		if (i2c_dev->slave[STM32F7_SLAVE_HOSTNOTIFY])
- 			goto fail;
--		*id = 0;
-+		*id = STM32F7_SLAVE_HOSTNOTIFY;
- 		return 0;
- 	}
- 
--	for (i = STM32F7_I2C_MAX_SLAVE - 1; i > 0; i--) {
--		if (i == 2 && (slave->flags & I2C_CLIENT_TEN))
-+	for (i = STM32F7_I2C_MAX_SLAVE - 1; i > STM32F7_SLAVE_HOSTNOTIFY; i--) {
-+		if ((i == STM32F7_SLAVE_7_BITS_ADDR) &&
-+		    (slave->flags & I2C_CLIENT_TEN))
- 			continue;
- 		if (!i2c_dev->slave[i]) {
- 			*id = i;
--- 
-2.7.4
+As we know when Master sends a read request, Slave keeps on
+transferring data until STOP/NACK is received from Master.
+This means Slave doesn't have a prior idea about how many bytes to
+transmit to Master.
 
+Let's say, the Master wants to read 1 byte of data with PEC enabled,
+in this case Slave needs to send a total of two bytes (1st byte data
+and 2nd byte PEC).
+When Master puts this request on Bus, following events will happens,
+
+1. Slave sends 1st bytes
+2. Master receives 1st byte and sends ACK
+3. Since no STOP is received from Master, slave send 2nd byte (But
+Master is expecting PEC bytes as 2nd byte)
+4. Master receives 2nd byte and sends NACK/STOP.
+
+This means Slave didn't send PEC byte and is no longer driving the SDA
+line to send PEC bytes.
+When Master checks PEC it will not match and Master read will fail.
+
+How do we handle this case, what is the expected behavior from Slave
+as per SMBUS protocol ?
+In this case when should Slave send PEC bytes ?
+
+Please let me know.
+
+Best regards,
+Rayagonda
