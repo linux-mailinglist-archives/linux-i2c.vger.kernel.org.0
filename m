@@ -2,88 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0F326B04F
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Sep 2020 00:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E3826B194
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Sep 2020 00:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728018AbgIOWGY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Sep 2020 18:06:24 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:32985 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727977AbgIOUZc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Sep 2020 16:25:32 -0400
-Received: by mail-il1-f194.google.com with SMTP id x2so4327384ilm.0;
-        Tue, 15 Sep 2020 13:25:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hqrDKh/wQTHsjpamDIm7+3eHpp2tofZ94H9jUy28gw0=;
-        b=FJiSYHDrb4G+Kfhvx53ksMNzAWsC3A19koW6Wu1qBxmHGCRgeo9c/kVADzqjUqn3zE
-         SPLrR6parJtY/lpCBeqLvyOLByhnPuuhnXWB5yYfFglcua9gh0lE43TK2Xyh3wv/SBda
-         LUew6SP6RnzYvzcsl6/B51ceEH77g3TeMLte0VdBqywgXLHKJ4xMXlfoKh9yrra6oupw
-         XkzAqxZLCmm+aBuXIeMm2bObrqn8GlkGEwXD2E3HEL1hspTdrFzTnZoLpyIZuMLMC9HE
-         D5ktN0yf1BYRbwSjBFUHzujYQ7PtIXAyMwqLPTIksSYPJ2UuDOiK2QBTmGtP9DjWa0yl
-         63GQ==
-X-Gm-Message-State: AOAM533K+F/4jRQUBaFcB320/LN0GjY7lGKSPEL7pS0BPqBajJLzT1SW
-        cHSeqwzFP5wPWNV8mgAwMwz819prJmq7vVA=
-X-Google-Smtp-Source: ABdhPJzQEujayl0AnjerHGru4325MxbnU2cDr4EIKJMKs2nkbXcqIgtDujwc4j4UUUHjKfQS9RjVAw==
-X-Received: by 2002:a92:b74c:: with SMTP id c12mr18335573ilm.237.1600201513104;
-        Tue, 15 Sep 2020 13:25:13 -0700 (PDT)
-Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id j77sm1847287ili.31.2020.09.15.13.25.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 13:25:12 -0700 (PDT)
-Received: (nullmailer pid 2449085 invoked by uid 1000);
-        Tue, 15 Sep 2020 20:25:09 -0000
-Date:   Tue, 15 Sep 2020 14:25:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 2/5] dt-bindings: eeprom: at24: Add label property for
- AT24
-Message-ID: <20200915202509.GA2448287@bogus>
-References: <20200910134239.192030-1-jonathanh@nvidia.com>
- <20200910134239.192030-3-jonathanh@nvidia.com>
+        id S1727613AbgIOWcu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Sep 2020 18:32:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58880 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727601AbgIOQRQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 15 Sep 2020 12:17:16 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A9EE220756;
+        Tue, 15 Sep 2020 16:03:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600185814;
+        bh=q42+/wpUmN4eZ0yu5PlUG685rGa98SKdmIV9BMHWRDQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RWf6/tCCvS0qMs/lq3DKOy4wAnM2Ydbn4uVhTdC+xYNTp9T01BPh1hhDaXmbKfrxE
+         9BS2Sn8TOrnO0cR2dnohIIOBmL9S4a1gzEwGzWvj5M/rfNtzcyi2jnn7afttvpPiZa
+         FC7viIn7yJKQKnVnYp+Mth73OM9gq/HopRSz7/H4=
+Received: by mail-oi1-f178.google.com with SMTP id w16so4483485oia.2;
+        Tue, 15 Sep 2020 09:03:34 -0700 (PDT)
+X-Gm-Message-State: AOAM532t5RR5O8w3e1lqJYbbMCzo4eSoyb4cR+Yg60kBu1tM0mjU1Hhd
+        79cwknahTUuQ21xQwejx/1CXMCe37RA7nKpqXw==
+X-Google-Smtp-Source: ABdhPJyUKGvP0wG/kq4Hb79DLpxwODYN7/aFfqWCgGMAQfuXXCBLhCHDWE4ybg06z4KXQ4XmDknmNU4TjMY7z9SUGf0=
+X-Received: by 2002:aca:4cc7:: with SMTP id z190mr48013oia.147.1600185814063;
+ Tue, 15 Sep 2020 09:03:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200910134239.192030-3-jonathanh@nvidia.com>
+References: <20200904131152.17390-1-paul@crapouillou.net> <20200904131152.17390-3-paul@crapouillou.net>
+ <20200914221230.GA349829@bogus> <CS2PGQ.I4UMQBYTB15I2@crapouillou.net>
+In-Reply-To: <CS2PGQ.I4UMQBYTB15I2@crapouillou.net>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 15 Sep 2020 10:03:22 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLUSZFf_3zgFrapc7vJETG9+XDTZPtD_yEBvi4GO3xPSA@mail.gmail.com>
+Message-ID: <CAL_JsqLUSZFf_3zgFrapc7vJETG9+XDTZPtD_yEBvi4GO3xPSA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] i2c: jz4780: Remove of_match_ptr()
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     od@zcrc.me, Linux I2C <linux-i2c@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 02:42:36PM +0100, Jon Hunter wrote:
-> Add a label property for the AT24 EEPROM to allow a custom name to be
-> used for identifying the EEPROM on a board. This is useful when there
-> is more than one EEPROM present.
-> 
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> ---
->  Documentation/devicetree/bindings/eeprom/at24.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> index 4cee72d53318..5c00d8a146b0 100644
-> --- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-> +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> @@ -114,6 +114,10 @@ properties:
->            - const: renesas,r1ex24128
->            - const: atmel,24c128
->  
-> +  label:
-> +    description: Descriptive name of the EEPROM.
-> +    maxItems: 1
+On Tue, Sep 15, 2020 at 4:07 AM Paul Cercueil <paul@crapouillou.net> wrote:
+>
+> Hi Rob,
+>
+> Le lun. 14 sept. 2020 =C3=A0 16:12, Rob Herring <robh@kernel.org> a =C3=
+=A9crit :
+> > On Fri, Sep 04, 2020 at 03:11:52PM +0200, Paul Cercueil wrote:
+> >>  CONFIG_OF is selected by CONFIG_MACH_INGENIC, therefore we don't
+> >> need to
+> >>  handle the case where Device Tree is not supported.
+> >
+> > What about COMPILE_TEST? If not supported, why not?
+>
+> What about it? It will still compile fine with COMPILE_TEST.
 
-label is always a single string, so drop 'maxItems'.
+CONFIG_OF could be disabled in that case, so the above reasoning doesn't ho=
+ld.
 
-> +
->    reg:
->      maxItems: 1
->  
-> -- 
-> 2.25.1
-> 
+Rob
