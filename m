@@ -2,86 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 570A726AF08
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Sep 2020 22:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0F326B04F
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Sep 2020 00:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727923AbgIOU7q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Sep 2020 16:59:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41662 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728037AbgIOUpA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 15 Sep 2020 16:45:00 -0400
-Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C5B4720809;
-        Tue, 15 Sep 2020 20:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600202694;
-        bh=Ij/vY2AygUYW9NMEXUsqQbtQ4ionnnndTBEDQBd5nz4=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=w1or3URSKv21LQ8OWSHPYCailYOGScLktGhVjTKiMS3wN4Uh3MLj//c4J2hME5SgG
-         8wxsSnwcg/bXDaV6hTpgTRb+XR4yRVIQL+rerZ9SLSRbJkdIRlp2+PZDeYYTK31Ct7
-         pyBWQVP9q+KjDANMVPr1TYXCQUcTA+8xFoFoxSS0=
-Date:   Tue, 15 Sep 2020 22:44:36 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Sultan Alsawaf <sultan@kerneltoast.com>
-cc:     jarkko.nikula@linux.intel.com, aaron.ma@canonical.com,
-        admin@kryma.net, andriy.shevchenko@linux.intel.com,
-        benjamin.tissoires@redhat.com, hdegoede@redhat.com,
-        hn.chen@weidahitech.com, kai.heng.feng@canonical.com,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mika.westerberg@linux.intel.com,
-        vicamo.yang@canonical.com, wsa@kernel.org
-Subject: Re: [PATCH v3] i2c: Squash of SMBus block read patchset to save
- power
-In-Reply-To: <20200914001523.3878-1-sultan@kerneltoast.com>
-Message-ID: <nycvar.YFH.7.76.2009152243190.3336@cbobk.fhfr.pm>
-References: <b3b751fc-668d-91e2-220b-0d7edd231e01@linux.intel.com> <20200914001523.3878-1-sultan@kerneltoast.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S1728018AbgIOWGY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Sep 2020 18:06:24 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:32985 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727977AbgIOUZc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Sep 2020 16:25:32 -0400
+Received: by mail-il1-f194.google.com with SMTP id x2so4327384ilm.0;
+        Tue, 15 Sep 2020 13:25:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hqrDKh/wQTHsjpamDIm7+3eHpp2tofZ94H9jUy28gw0=;
+        b=FJiSYHDrb4G+Kfhvx53ksMNzAWsC3A19koW6Wu1qBxmHGCRgeo9c/kVADzqjUqn3zE
+         SPLrR6parJtY/lpCBeqLvyOLByhnPuuhnXWB5yYfFglcua9gh0lE43TK2Xyh3wv/SBda
+         LUew6SP6RnzYvzcsl6/B51ceEH77g3TeMLte0VdBqywgXLHKJ4xMXlfoKh9yrra6oupw
+         XkzAqxZLCmm+aBuXIeMm2bObrqn8GlkGEwXD2E3HEL1hspTdrFzTnZoLpyIZuMLMC9HE
+         D5ktN0yf1BYRbwSjBFUHzujYQ7PtIXAyMwqLPTIksSYPJ2UuDOiK2QBTmGtP9DjWa0yl
+         63GQ==
+X-Gm-Message-State: AOAM533K+F/4jRQUBaFcB320/LN0GjY7lGKSPEL7pS0BPqBajJLzT1SW
+        cHSeqwzFP5wPWNV8mgAwMwz819prJmq7vVA=
+X-Google-Smtp-Source: ABdhPJzQEujayl0AnjerHGru4325MxbnU2cDr4EIKJMKs2nkbXcqIgtDujwc4j4UUUHjKfQS9RjVAw==
+X-Received: by 2002:a92:b74c:: with SMTP id c12mr18335573ilm.237.1600201513104;
+        Tue, 15 Sep 2020 13:25:13 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id j77sm1847287ili.31.2020.09.15.13.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2020 13:25:12 -0700 (PDT)
+Received: (nullmailer pid 2449085 invoked by uid 1000);
+        Tue, 15 Sep 2020 20:25:09 -0000
+Date:   Tue, 15 Sep 2020 14:25:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 2/5] dt-bindings: eeprom: at24: Add label property for
+ AT24
+Message-ID: <20200915202509.GA2448287@bogus>
+References: <20200910134239.192030-1-jonathanh@nvidia.com>
+ <20200910134239.192030-3-jonathanh@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200910134239.192030-3-jonathanh@nvidia.com>
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, 13 Sep 2020, Sultan Alsawaf wrote:
-
-> From: Sultan Alsawaf <sultan@kerneltoast.com>
+On Thu, Sep 10, 2020 at 02:42:36PM +0100, Jon Hunter wrote:
+> Add a label property for the AT24 EEPROM to allow a custom name to be
+> used for identifying the EEPROM on a board. This is useful when there
+> is more than one EEPROM present.
 > 
-> This is a squash of the following:
-> 
-> i2c: designware: Fix transfer failures for invalid SMBus block reads
-[ .... ]
-> HID: i2c-hid: Use block reads when possible to save power
-[ .... ]
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 > ---
-> Hi Jarkko,
+>  Documentation/devicetree/bindings/eeprom/at24.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Sorry for the delayed response. Life gets in the way of the things that really
-> matter, like kernel hacking ;)
+> diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
+> index 4cee72d53318..5c00d8a146b0 100644
+> --- a/Documentation/devicetree/bindings/eeprom/at24.yaml
+> +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+> @@ -114,6 +114,10 @@ properties:
+>            - const: renesas,r1ex24128
+>            - const: atmel,24c128
+>  
+> +  label:
+> +    description: Descriptive name of the EEPROM.
+> +    maxItems: 1
+
+label is always a single string, so drop 'maxItems'.
+
+> +
+>    reg:
+>      maxItems: 1
+>  
+> -- 
+> 2.25.1
 > 
-> I fixed the issue with the i2c block reads on 5.8. I've squashed all 4 of my i2c
-> commits into this email for simplicity; please apply this patch on either 5.8 or
-> 5.9 (it applies cleanly to both) and let me know if it works with your i2c-hid
-> touchscreen. If all is well, I will resubmit these patches individually in one
-> patchset, in a new thread.
-> 
-> Thanks,
-> Sultan
->  drivers/hid/i2c-hid/i2c-hid-core.c         |  5 ++++-
->  drivers/i2c/busses/i2c-designware-master.c | 15 +++++++++------
->  2 files changed, 13 insertions(+), 7 deletions(-)
-
-I believe it makes most sense for this to go through i2c tree as a whole, 
-so feel free to add
-
-	Acked-by: Jiri Kosina <jkosina@suse.cz>
-
-for the drivers/hid/i2c-hid/i2c-hid-core.c hunk. Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
-
