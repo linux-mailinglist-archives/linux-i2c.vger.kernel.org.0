@@ -2,121 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA70826ADDD
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Sep 2020 21:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570A726AF08
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Sep 2020 22:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727822AbgIOToW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Sep 2020 15:44:22 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:36266 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727917AbgIOTnf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Sep 2020 15:43:35 -0400
-Received: by mail-io1-f67.google.com with SMTP id d190so5491148iof.3;
-        Tue, 15 Sep 2020 12:43:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eRZQhzTMmUeiuKlmoGBp2VVdP4CJK3/kYrIG+y2NeFo=;
-        b=FndszHdbYrZQNqsIosY+6r7P27hHS3zIteobKpRLAgbLBm1LfZsUS/3bT3leDHF258
-         bc+lSdyJ9f/xzo90Wv5IrQkuRxZSsdceqf1M3CLMWZl/VdrT2nMIzwZLNulnxX9LlEsd
-         f/QHhFv9EQXK214jl1FS0zCr7CbZ8//z/kCi9grbFDz/odfwltokEm5oPMCWCyZEiJvK
-         4tb0ylNqJltPAc6pFbxvCoIVTQGog2ps4vFFhJKsinDD0KVMtMcWtJN8uCLV1bf35LB9
-         pVyqH97OboEyonATKZGBtuCC09N9tFhIHHy+WW7U5SvF/H/7an7pWuJPJShu9hEW4h+L
-         Emeg==
-X-Gm-Message-State: AOAM531x3Qc+JwfFx8LHiisVMwsflab2cE8KJUxWymNZIMhR8NMdAXil
-        BLS/4luLWAOuiF39eYK7Fg==
-X-Google-Smtp-Source: ABdhPJxnXWTYKNffPmeuhGOFEm7G5Yf/fEtWzDxYMOeM7FZMNDfZGxx3N8Ni10M0QTyXrE9I8ZxqQA==
-X-Received: by 2002:a6b:700f:: with SMTP id l15mr16331604ioc.168.1600199006137;
-        Tue, 15 Sep 2020 12:43:26 -0700 (PDT)
-Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id n68sm9704118ila.43.2020.09.15.12.43.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 12:43:25 -0700 (PDT)
-Received: (nullmailer pid 2381919 invoked by uid 1000);
-        Tue, 15 Sep 2020 19:43:24 -0000
-Date:   Tue, 15 Sep 2020 13:43:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wolfram@the-dreams.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] dt-bindings: i2c: imx: Add properties and use
- unevaluatedProperties
-Message-ID: <20200915194324.GA2379924@bogus>
-References: <20200910182244.5815-1-krzk@kernel.org>
- <20200910182244.5815-3-krzk@kernel.org>
+        id S1727923AbgIOU7q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Sep 2020 16:59:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41662 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728037AbgIOUpA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 15 Sep 2020 16:45:00 -0400
+Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C5B4720809;
+        Tue, 15 Sep 2020 20:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600202694;
+        bh=Ij/vY2AygUYW9NMEXUsqQbtQ4ionnnndTBEDQBd5nz4=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=w1or3URSKv21LQ8OWSHPYCailYOGScLktGhVjTKiMS3wN4Uh3MLj//c4J2hME5SgG
+         8wxsSnwcg/bXDaV6hTpgTRb+XR4yRVIQL+rerZ9SLSRbJkdIRlp2+PZDeYYTK31Ct7
+         pyBWQVP9q+KjDANMVPr1TYXCQUcTA+8xFoFoxSS0=
+Date:   Tue, 15 Sep 2020 22:44:36 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Sultan Alsawaf <sultan@kerneltoast.com>
+cc:     jarkko.nikula@linux.intel.com, aaron.ma@canonical.com,
+        admin@kryma.net, andriy.shevchenko@linux.intel.com,
+        benjamin.tissoires@redhat.com, hdegoede@redhat.com,
+        hn.chen@weidahitech.com, kai.heng.feng@canonical.com,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mika.westerberg@linux.intel.com,
+        vicamo.yang@canonical.com, wsa@kernel.org
+Subject: Re: [PATCH v3] i2c: Squash of SMBus block read patchset to save
+ power
+In-Reply-To: <20200914001523.3878-1-sultan@kerneltoast.com>
+Message-ID: <nycvar.YFH.7.76.2009152243190.3336@cbobk.fhfr.pm>
+References: <b3b751fc-668d-91e2-220b-0d7edd231e01@linux.intel.com> <20200914001523.3878-1-sultan@kerneltoast.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200910182244.5815-3-krzk@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 08:22:43PM +0200, Krzysztof Kozlowski wrote:
-> Additional properties actually might appear (e.g. power-domains) so
-> describe all typical properties, reference generic i2c schema and use
-> unevaluatedProperties to fix dtbs_check warnings like:
-> 
->   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: i2c@30a20000:
->     '#address-cells', '#size-cells', 'pmic@25' do not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> 
-> ---
-> 
-> Changes since v2:
-> 1. None
-> 
-> Changes since v1:
-> 1. Add more properties and include /schemas/i2c/i2c-controller.yaml#
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-imx.yaml | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx.yaml b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-> index 810536953177..19c9daba6e9f 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-> @@ -9,6 +9,9 @@ title: Freescale Inter IC (I2C) and High Speed Inter IC (HS-I2C) for i.MX
->  maintainers:
->    - Wolfram Sang <wolfram@the-dreams.de>
->  
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
->  properties:
->    compatible:
->      oneOf:
-> @@ -38,6 +41,9 @@ properties:
->                - fsl,imx8mp-i2c
->            - const: fsl,imx21-i2c
->  
-> +  '#address-cells': true
-> +  '#size-cells': true
+On Sun, 13 Sep 2020, Sultan Alsawaf wrote:
 
-Drop these.
-
-> +
->    reg:
->      maxItems: 1
->  
-> @@ -75,7 +81,7 @@ required:
->    - interrupts
->    - clocks
->  
-> -additionalProperties: false
-> +unevaluatedProperties: false
->  
->  examples:
->    - |
-> -- 
-> 2.17.1
+> From: Sultan Alsawaf <sultan@kerneltoast.com>
 > 
+> This is a squash of the following:
+> 
+> i2c: designware: Fix transfer failures for invalid SMBus block reads
+[ .... ]
+> HID: i2c-hid: Use block reads when possible to save power
+[ .... ]
+> ---
+> Hi Jarkko,
+> 
+> Sorry for the delayed response. Life gets in the way of the things that really
+> matter, like kernel hacking ;)
+> 
+> I fixed the issue with the i2c block reads on 5.8. I've squashed all 4 of my i2c
+> commits into this email for simplicity; please apply this patch on either 5.8 or
+> 5.9 (it applies cleanly to both) and let me know if it works with your i2c-hid
+> touchscreen. If all is well, I will resubmit these patches individually in one
+> patchset, in a new thread.
+> 
+> Thanks,
+> Sultan
+>  drivers/hid/i2c-hid/i2c-hid-core.c         |  5 ++++-
+>  drivers/i2c/busses/i2c-designware-master.c | 15 +++++++++------
+>  2 files changed, 13 insertions(+), 7 deletions(-)
+
+I believe it makes most sense for this to go through i2c tree as a whole, 
+so feel free to add
+
+	Acked-by: Jiri Kosina <jkosina@suse.cz>
+
+for the drivers/hid/i2c-hid/i2c-hid-core.c hunk. Thanks,
+
+-- 
+Jiri Kosina
+SUSE Labs
+
