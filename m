@@ -2,125 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFCC26CC59
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Sep 2020 22:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F99A26CBD1
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Sep 2020 22:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728429AbgIPUnA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Sep 2020 16:43:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:37707 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726590AbgIPRD2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Sep 2020 13:03:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600275805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KWuNiHJM+3srt9mGCXZA/purfg1IvgYJY5TmJukU+/g=;
-        b=WSkmRC45RpIsaSNIJI8Bmqeeywlq2A1d0QiYcA3MUvhpiR0k4yOIZd6V1vobmKyX6rQK3w
-        dFbwpDPuf4tXAWIMjavqhHtbSjqs5SmFxJr4oEB3bjxk2im049n5HWmp4nFz8qnKXFqevd
-        yeiYJkWwp/gx4PUoNw01DaQ4+OS6IVg=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-573-NJCivWUaNqCvZv6UxrWeuw-1; Wed, 16 Sep 2020 11:56:58 -0400
-X-MC-Unique: NJCivWUaNqCvZv6UxrWeuw-1
-Received: by mail-ej1-f71.google.com with SMTP id dc22so3078778ejb.21
-        for <linux-i2c@vger.kernel.org>; Wed, 16 Sep 2020 08:56:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KWuNiHJM+3srt9mGCXZA/purfg1IvgYJY5TmJukU+/g=;
-        b=WjnYmI5n547FxWL6UiPObtk1y1p5Xj3AGquCwoVnkh5f1ccqrb6qBEUdmBk55nKGqo
-         2Ee1EbZ90HUfEyLMo03rnzBtUD1iFZnwj6mC38PkIgMhJcmZx8k/BYD8i/e+LKa3lBdE
-         u908hzaaGKxcEMKwBVq4n/zemULGgrNJq/OK6ef88vcZJgl2dxNwn7fAZHbwcZmGLjvl
-         FtQ8mvbvyrn67k/5ikgUnDq3bm/b/iuyW6BUW1i2+/XBzkO3/VEFHAwxIZ31A4QvbCyv
-         L9O7WYylDicxGmZdXtK8SDJ2bEVUBAqhn3kZkw9XvxGPnWSPZ1owdjUgT6j1dc7HAqyO
-         F0Zg==
-X-Gm-Message-State: AOAM533XavPXFssXtUMfqBJQdRfSSydhPpjR6fsWfpvvIwfSA2Ox01v4
-        A462LvCdhg6ZNThVzyopEX5TZTT9FBwc7MveET2hRHdmdclkUTJOgBMO0OPtm2dW8hOr2kM7yA4
-        7ZVwmr1H5T7WS3abhuYfG
-X-Received: by 2002:a50:ab1d:: with SMTP id s29mr29425950edc.246.1600271816051;
-        Wed, 16 Sep 2020 08:56:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyx7YenjX1uGYvGmnY0vIA9GEywN5m3HHb4c1OGgPPWq1JNUBtOjo032cN6g7JB4pvYOjG8FQ==
-X-Received: by 2002:a50:ab1d:: with SMTP id s29mr29425938edc.246.1600271815838;
-        Wed, 16 Sep 2020 08:56:55 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id nm7sm12974795ejb.70.2020.09.16.08.56.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2020 08:56:54 -0700 (PDT)
-Subject: Re: [PATCH] i2c: core: Call i2c_acpi_install_space_handler() before
- i2c_acpi_register_devices()
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Kai Heng Feng <kai.heng.feng@canonical.com>,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <20200909103233.58287-1-hdegoede@redhat.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <b1c0b39f-8115-5c27-614f-a31a2731111f@redhat.com>
-Date:   Wed, 16 Sep 2020 17:56:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726885AbgIPUfV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Sep 2020 16:35:21 -0400
+Received: from mail-am6eur05on2102.outbound.protection.outlook.com ([40.107.22.102]:51808
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726855AbgIPRKw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 16 Sep 2020 13:10:52 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QYeUeK0CMBCaXpjOGUCfFgnE4eybdksFIlxFG0hCfL5axGHUUHiRCLPYV739SFzaeFQ6YwH2wc33s36vRYA6KWtc7lhLqjK+1sud2aOXCs/ukKpPUTOWVxilv3lynfeMw/mP7c9hQharUZOUzg+Un9pUoXcA1yqvd+C2nbyZRzMtnpNG1nBW5HnVMMfsDKPMpzpd1ZMJxY79LxdGPREJCDkcBEuVnVkgkMaof4Zl3MnmPFNZxnFNAjclrS4ZJbOXMujXCXXfgYKEKfB1LcQZuNVlze3/6g4A0kTnjDc/rUGWeqUCyysb7lSYOuJj9qGmDlwtd+tRwlNY4oPTLDXPNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p+U3YsbTLCDgRA03fWoWHG94a7lbpGeioW5c+r78u7c=;
+ b=Y3Z3C8bVOanTa8j83c548zdioe1St7RMbnIqaIXd+gis3gPZYqjQYNCcTOdWyFI4MgB4s/IQr7b+ehfXtQL2y0KksVTmBJjdhDgHnRxx13BQPHigPGGlSk8Nw6uLfT1dGRiiwCXzpprdINQFXtgvSoTo+xGpm/ho0by5EGL33cP371fbGzARdu9ktyaAkf3copGWUGqnzWUhnzd5WJqvkidAvCG6hT9pL2wXP79jWV+4fTi7Bi7GATW/8rxI/49dJuV0WihELgVD1GbUgJHN1Z1mjx2c/lR5us6s61c+JswN/gWgdp7SRIy9r1yTwEiLXFakI1w9VV6COliSn0z8kw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p+U3YsbTLCDgRA03fWoWHG94a7lbpGeioW5c+r78u7c=;
+ b=lywbWPev5P7OFXMb+KKssWklWPtf4EqXRr1eppWEanjiVc42ulDexWhDxQAm2X3gstOmax7vFoh4rfiR78VlGvDjol5tfBcBIFXhsNhwkZgeOdEV3s1Jco/ra+/230gsqZcGk49MTEEDKBjz2Qp7GXcm6jpE3ts58s9U0KkrONA=
+Authentication-Results: baylibre.com; dkim=none (message not signed)
+ header.d=none;baylibre.com; dmarc=none action=none header.from=plvision.eu;
+Received: from HE1P190MB0539.EURP190.PROD.OUTLOOK.COM (2603:10a6:7:56::28) by
+ HE1P190MB0026.EURP190.PROD.OUTLOOK.COM (2603:10a6:3:c9::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3391.11; Wed, 16 Sep 2020 17:10:02 +0000
+Received: from HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
+ ([fe80::c1ab:71de:6bc2:89fe]) by HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
+ ([fe80::c1ab:71de:6bc2:89fe%6]) with mapi id 15.20.3370.019; Wed, 16 Sep 2020
+ 17:10:02 +0000
+From:   Vadym Kochan <vadym.kochan@plvision.eu>
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Vadym Kochan <vadym.kochan@plvision.eu>
+Subject: [PATCH 0/3] misc: eeprom: set type id as EEPROM for nvmem devices
+Date:   Wed, 16 Sep 2020 20:09:30 +0300
+Message-Id: <20200916170933.20302-1-vadym.kochan@plvision.eu>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: AM6PR10CA0016.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:209:89::29) To HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:7:56::28)
 MIME-Version: 1.0
-In-Reply-To: <20200909103233.58287-1-hdegoede@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from pc60716vkochan.x.ow.s (217.20.186.93) by AM6PR10CA0016.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:209:89::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16 via Frontend Transport; Wed, 16 Sep 2020 17:10:01 +0000
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [217.20.186.93]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 003b372c-f86a-47ef-043d-08d85a635989
+X-MS-TrafficTypeDiagnostic: HE1P190MB0026:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <HE1P190MB0026AF568E53207E8E1E72F295210@HE1P190MB0026.EURP190.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3044;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gxz42brIKKRpCmdf+ALtjHKJJc9vM+wcC4qov8R0ddiZEeCYGkmD2c+qN25Mu15ClKsw4biHzHMMUmhVxWQpPaf61lkIPhmNjtbq0hpVAVB5ZVAGvZl1SUFClefv3RaeZY6+MrP+Uc7XxTt1ha4MAV/BkpMThPXlo+LP580l/Vn7AVF8MkAI4wCIcFuQmLB5+Yoo5HxIUGcBeneLbSlCcTrYSevFJSE7ABaUFatUmqIbhytiHY3HoVmcasSZ8K8TC2oI3mPAyDNPlrgHl9Bxv6Z7cEQ/bYwppKYz3ih0npYXYVXOwiZ/SLsvBhZ6HS/NDBwRBmGh32hbKMNtPQNGPQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1P190MB0539.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(396003)(39830400003)(366004)(376002)(136003)(346002)(86362001)(316002)(8936002)(6666004)(52116002)(16526019)(8676002)(186003)(6512007)(2906002)(4744005)(1076003)(36756003)(5660300002)(26005)(66946007)(110136005)(44832011)(6506007)(4326008)(107886003)(956004)(66556008)(6486002)(66476007)(478600001)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: nB2AfeudQV1rBoKCF49fH1xsYQe1+zpVS3gWHq1/li83eTGOiGG3KXvWTdcE68S3lrDcZytQtUfJLAuB5r8BEIGvoAJs7q3h4C6FsVFuPkoUBDS0Gd+4sJfVqv0pIFjiG3ZYgPkZTkJVTVJIVGzgVBh+TbGN9/K4xtrrsB2xpzwB7OxNs0aMF477nrrqATbtO1CZSehwVCWQNWDPIjFVe0AoVCAP4HaFtlUhjw3vk/q3d6pXBhnzJJ//2hY8ZpjHaj+Ear6P5Y0dTNxv5pPxQdXG71PCmjfZonF8KBNAp9PU5TR4Oxl8XfmpCEONG3g+E540DGT3K4+yF3c5nQvxzCjnPPeslCui/92pydiCH/khoBnT7oX4RifpWIJjqRWmss9UrB1MovM1xXW9NSmeb3x9/7oMeTHwdJCGQ4k488t0sOXkF1T6mxumnOsKR9zU7JuKWvixNJeyTO9e4/eKJ8+QdID1SeJmvwcCNQjqcoCY5upB1r+dlG28vZNWJEYTjhd3EhyMtOCsNpKVETuEqZxrnerPk4XzQ0D55qST48lxI6XGWx248QqUO3Dfo/6eqOGkjztSkGKrDpdDT8PXHYS3lYbEf4bQM6liQnfIPAyzrzo+bcRYxqEBm+m9hwiIrCSrygU1oAr5AU1scVU+Ow==
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 003b372c-f86a-47ef-043d-08d85a635989
+X-MS-Exchange-CrossTenant-AuthSource: HE1P190MB0539.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2020 17:10:02.5737
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iak30tJy3etXUwvlvrXroy5QQkatrsLW7CTUBgjE6ylqP/8SG0wAnVC5iheVyiSjd3qXR1vRxMhBdCPi0H/Neb+GXq7xMpsZLEDh8N+kn+s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1P190MB0026
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Set type as NVMEM_TYPE_EEPROM to expose this info via
+sysfs:
 
-On 9/9/20 12:32 PM, Hans de Goede wrote:
-> Some ACPI i2c-devices _STA method (which is used to detect if the device
-> is present) use autodetection code which probes which device is present
-> over i2c. This requires the I2C ACPI OpRegion handler to be registered
-> before we enumerate i2c-clients under the i2c-adapter.
-> 
-> This fixes the i2c touchpad on the Lenovo ThinkBook 14-IIL and
-> ThinkBook 15 IIL not getting an i2c-client instantiated and thus not
-> working.
-> 
-> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1842039
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+$ cat /sys/bus/nvmem/devices/0-00560/type
+EEPROM
 
-Ping? This fixes a serious problem (non working touchpad on various
-laptop models) and is a pretty straight-forward fix.
+Tested only with at24 device.
 
-Arguably it should even go to stable, but I'm not 100% sure about that
-because these sorta ACPI enumeration problems can sometimes by
-tricky. With that said in this case the fix does seem to be
-very straight forward and obviously correct.
+Vadym Kochan (3):
+  eeprom: at24: set type id as EEPROM
+  eeprom: at25: set type id as EEPROM
+  eeprom: 93xx46: set type id as EEPROM
 
-Mika, since this deals with the ACPI bits of the i2c-core can
-you review this one please?
+ drivers/misc/eeprom/at24.c          | 1 +
+ drivers/misc/eeprom/at25.c          | 1 +
+ drivers/misc/eeprom/eeprom_93xx46.c | 1 +
+ 3 files changed, 3 insertions(+)
 
-Regards,
-
-Hans
-
-
-> ---
->   drivers/i2c/i2c-core-base.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 5ec082e2039d..573b5da145d1 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -1464,8 +1464,8 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
->   
->   	/* create pre-declared device nodes */
->   	of_i2c_register_devices(adap);
-> -	i2c_acpi_register_devices(adap);
->   	i2c_acpi_install_space_handler(adap);
-> +	i2c_acpi_register_devices(adap);
->   
->   	if (adap->nr < __i2c_first_dynamic_bus_num)
->   		i2c_scan_static_board_info(adap);
-> 
+-- 
+2.17.1
 
